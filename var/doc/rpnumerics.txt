@@ -1,0 +1,85 @@
+IMPA - Laboratorio de Dinamica de Fluidos 	Jan 2003
+Glossary for RP modeling
+version : 1.0
+Authors: Dan Marchesin, Mario de Sa Vera and Alexei Mailybaev
+
+
+	The RP Numerics library conceptual model defines a set of components
+which encapsulates the mathematics model elements following the theories behind
+Conservation Laws Dynbamics @1
+
+The most relevant elements in the Problem Domain are :
+
+* Phase Point
+
+	A point in the Phase Space.
+
+* Orbit Point
+
+	A point in the Phase Space with a time associated with an Orbit passing through the point.
+
+* Orbit
+
+	A set of Orbit points calculated through integration methods.
+
+* Manifold
+
+	A Manifold is an Orbit which tends to a stationary point.
+
+* Stationary Point
+
+	A point in the Phase Space where the only orbit is the point itself.
+
+There are 4 main types of Stationary Points :
+
+Attracting - m1 < m2 < 0
+Hyperbolic (or Saddle) - m1 < 0 < m2
+Repelling - 0 < m1 < m2
+Elliptical - m1 and m2 are complex
+
+(where m1 and m2 are the mu coeficients)
+
+* Wave State
+
+	A wave state is defined by an initial and a final Stationary points and an associated speed.
+
+* Wave Curve
+
+	A Wave Curve is a set of Wave states constructed appropriately by construction of Shock , Rarefaction or Composite subcurves.
+
+* Auxiliary Curves
+
+	Auxiliary curves help the evaluation of curves calculation by comparison to well known results. Example : Hugoniot Curve, Integral Curve, AuxComposite Curve etc...
+
+* Profile
+
+	A profile is a Phase Curve that has an initial and a final Stationary point. (review please ... TODO)
+
+* Physics
+
+	Defines the kind of physical problem being solved.
+
+* Flux Function
+
+	A Flux Function defines the interface for the Physics layer with the proper derivatives. Example : Quadratic Flux ,Triphase Flux etc...
+
+* Wave Flow
+
+	Waves are usually constructed by Integrating some kind of Flow. Example : Shock Flow, Rarefaction and Composite Flow.
+
+* Shock Curve
+
+
+* Rarefaction Curve
+
+* Composite Curve
+
+
+--------------------------------------------------------------------------------------------------------
+
+@1 see paper
+
+
+
+
+

@@ -1,0 +1,114 @@
+IMPA - Laboratorio de Dinamica de Fluidos 	Sep 2003
+RPn User Manual
+version : 1.2
+Author: Mario de Sa Vera
+
+I- Installation in UNIX systems @1
+
+1- Extract the rpn package from the directory where the
+jar file has being saved :
+
+# jar -xf rpn.jar 
+
+2- Configure your environment for rpn
+
+# source .cshrc-rpn
+
+3- Run the rpn Plotter application
+
+# rpn
+
+II- Instalation in Windows @2(Java and DOS prompt available)
+
+1- Unzip the rpn package from the directory where
+the Zip file has being saved :
+
+C% unzip rpn.zip
+
+2- Run the BATCH file :
+
+C% rpn.bat
+
+
+II- Application Functionalities
+
+We will define the major features of the application which are available
+via Control Frame interaction :
+
+1- Orbit Calculation
+
+	Select the Orbit Plotting button from the toolbar and
+specifiy the location in the Projected Planes to start the calculation
+
+2- Stationary Point Calculation
+
+	Select the Stationary Point Plotting button from the toolbar and
+specifiy the location in the Projected Planes to start the calculation. The
+program will locate the closest Equilibrium point from the user input
+location.
+
+3- Manifold Calculation
+
+	USER
+
+A. After StationaryPoint calculation completed select the Manifold Plotting
+button from the toolbar;
+
+B. Specifiy the location in the Projected Planes for the Manifold to include
+in it's orbit to start the calculation by mouse click in the phase space;
+
+	SYSTEM
+
+C. The button is toggled and any other calculation is unselected;
+
+D. The start point for the Manifold's orbit is the closest Stationary Point
+from the user input.
+
+4- Define Poincare Section
+
+	Select the Poincare Section button from the toolbar and
+specify n input coordinates where n = Domain Space dimension. For dimension
+higher than 2 the user will have to use the set of projection planes to
+specify one single input coordinate and follow the mouse cursor orientation.
+
+5- Saddle to Saddle Profile Calculation
+
+	After plotting time opposite directional Manifolds (forward/backward) the
+Find Profile menu item will be enable. @4
+
+7- Change Sigma Value
+
+	Select the Change Sigma Value from Menu and specify a coodinate for the sigma
+calculation. This configuration change will trigger a recalculation for the plotted 
+calculations. @4
+	
+8- Change Flux Params
+
+	From the Config menu select the Change Flux Params item and after specifying 
+the new values click the Update button.This configuration change will trigger a 
+recalculation for the plotted calculations.
+
+9- Change X0
+
+	Select the Change Sigma Value from Menu and specify a coodinate for the sigma
+calculation. This configuration change will trigger a recalculation for the plotted
+calculations.
+
+10- Fills the Phase Space
+	
+	The User can run the Fill Phase Space feature to analyze the distribution of 
+Orbits (forward/backward) over the Phase Space.
+
+-----------------------------------------------------------------------------
+@1 Java available and csh compatible
+@2 Java available.
+@3 Some Functionalities will not be available in Windows systems :
+
+- Save Image as JPEG
+
+@4 A Sequence Diagram is available for this item.
+
+
+
+
+

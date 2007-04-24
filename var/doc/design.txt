@@ -1,0 +1,152 @@
+IMPA - Laboratorio de Dinamica de Fluidos 	Sep 2003
+RPn beta release 1.1  Design Specification
+Author: Mario Henrique Vera
+
+
+	The RPn architecture is divided into two SUBSYSTEMS  : 
+
+1- NUMERICS SUBSYSTEM
+
+	The numerics module is implemented by two major packages :
+
+- wave package:
+
+	This package holds JAVA implementation for the WAVE library@0
+including the lower level graphical multidimensional visualization library Multid 
+which provides the infrastructure for visualization of rpn.components.
+The wave library also provides utilities classes (wave.util) and the
+ODE Solver implementation (wave.ode).
+
+- rpnumerics package:
+
+	This is the implementation for the components defined in the Conceptual
+Model @1 it's the numerics problem domain layer. The calculation classes 
+implement the interface RpCalculation 
+
+public interface RpCalculation {
+    RpSolution calc() throws RpException;
+    RpSolution recalc() throws RpException;
+}
+
+
+RpSolution is the ODE calculated solution and each calculation class will 
+have it's respective RpSolution implementing solution class.(Ex : Orbit is
+a solution for OrbitCalc).One important detail of these calculations is the
+fact that a recalculation of certain components does not necessarily correspond
+to the same process used in the standard calculation and therefore the two methods
+were differentiated.
+
+	A sub package rpnumerics.physics holds the Physics layer implementations.
+The Physics layer should be accessed through the upper Flow layer defined by classes
+implementing WaveFlow interface (ex : ShockFlow). The Access to the NUMERICS subsystem
+is done through :
+
+rpnumerics.RpAccessors
+
+
+2- APPLICATION SUBSYSTEM 
+
+	This module holds the presentation layer implemenations. It was divided into
+four packages :
+
+- rpn packages:
+
+	This is the package responsible for the presentation layer. The GUI components
+are located in this package and basically holds Swing based widgets (like Dialogs etc...). 
+The major components are :
+
+rpn.RPnUIFrame - The control Frame. Holds menus and tool bar. It's holds the central UI
+		controller defined below as a member and accessible through accessor method.
+
+rpn.RPnPhaseSpaceFrame - The Frame holding each projection panel.
+
+rpn.RPnPhaseSpacePanel - The plotting panel showing the Multi dimension 
+			projected scene for the Phase Space abstraction.
+
+rpn.RPnPhaseSpaceAbstraction - The Phase Space container which holds 
+				 the calculation solutions. It extends the
+				wave.multid.model.AbstractScene.@2
+					  
+- rpn.component :
+
+	The classes defined in this package will define the model for rpnumerics geometries 
+and their respective visual representation for each element of the Conceptual Model. The design
+makes usage of the wave.multid library for Multidimensional Graphical Visualization of the 
+NUMERICS solutions. Each component is created through a specific input and will represent a
+different Multidimensional geometry. The creation method is defined by rpn.component.RpGeomFactory
+derived classes. The NUMERICS source is accessible through accessor method. The calculated 
+geometry (from a RpCalculation calc) will be represented through rpn.component.RpGeometry derived
+class but created through rpn.component.RpCalcBasedGeomFactory derived class (Bridge Pattern applied).
+
+
+- rpn.controller :
+
+	This package holds the user interaction logic control implementations. The control approach
+is event oriented with a central user interaction controller layer (rpn.controller.ui) accessible
+through accessor method defined in rpn.RPnUIFrame which manages the delegation of events (both
+direction) between the plotting panels (rpn.RPnPhaseSpacePanel) as well as triggers the proper usecase
+selected (or the selection usecase itself) by the user. Events are handled by active components (plotted
+components) through controllers created by their respective rpn.component.RpGeometry derived component. 
+The base class for these controllers is rpn.controller.RpController. The PhaseSpace control was implemented
+using State pattern and the possible contexts behaviours are defined in rpn.controller.phasespace package. 
+
+The controllers base classes are :
+
+rpn.controller.PhaseSpaceController - controls the user interaction with the rpn.RPnPhaseSpacePanel instances.
+It's implemented by 2D/3D specific user interaction controllers for respective visualization. They manage
+the user orientation through the plotting panels.
+
+rpn.controller.ui.UIController - major control class. It is the mediator of user interaction input. As soon as
+user input complete is checked it triggers the proper usecase through rpn.controller.UserInputHandler.
+
+rpn.controller.RpController - configuration change usecase controller for events (extends 
+java.beans.PropertyChangeListener) trigged by user interaction (sigma change, u-minus change or 
+flux parameters changes for example) and how they should be treated by each component plotted.
+
+rpn.controller.ui.UndoActionController - enables undo action functionality.
+
+rpn.controller.phasespace.PhaseSpaceState - defines the possible states for rpn.RPnPhaseSpaceAbstraction.
+
+
+- rpn.usecase :
+
+	This package holds the use cases for the application. Each use case was implemented as 
+javax.swing.AbstractAction (extended by rpn.usecase.RpModelAction) derived class and implements
+the Command pattern behaviour and consequently enable UNDO functionality. These classes were implemented as Agents
+so we can switch availability from any scope. The execute method of each component will define the actions to be
+taken by each use case. The rpn.RPnUIFrame user interaction widgets (Menus and Tool Bar) will have their availability
+synchronized with their respective use cases.
+
+There are basically two possible use cases groups defined so far @4 :
+
+rpn.usecase.RpModelPlotAgent - base class for triggering the plotting of rpn.component package geometries.
+
+rpn.usecase.RpModelConfigChangeAgent - base class for triggering the numerics layer configuration changes. 
+
+
+------------------------------------------------------------------
+@0 See the WAVE documentation. 
+
+@1 see the Conceptual Model documentation
+
+@2 this was one of the reasons for the rpn.component package base
+class (rpn.component.RpGeometry) has implemented wave.multid.model.MultiGeometry.
+The container wave.multid.model.AbstractScene can only contain 
+wave.multid.model.MultiGeometry implementing classes and it also saves an extra
+level of history containers to enable recalculations.
+
+@3 This will enable recalculations.
+
+@4 See the User Manual for a description of each major use cases.
+
+
+
+
+
+
+
+
+
+
+
+
