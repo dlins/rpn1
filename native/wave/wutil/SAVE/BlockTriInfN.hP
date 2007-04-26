@@ -1,0 +1,164 @@
+// BlockTriInfN.hP:
+//
+// This file defines lower block-tridiagonal matrices.
+//
+// To use this class to define, e.g., 7-component lower block
+// triangular vectors and matrices, create the following files:
+//
+
+// BlockTriInf7.h:
+
+//	#ifndef _BlockTriInf7_h
+//	#define _BlockTriInf7_h
+//	#ifdef __GNUC__
+//	#pragma interface
+//	#endif
+//
+//	#include "Vector7Array.h"
+//
+//	typedef Vector7Array BlockTriInfVector7;
+//
+//	#define BlockTriInfVector BlockTriInfVector7
+//	#define BlockTriInfMatrix BlockTriInfMatrix7
+//	#define MatrixNArray Matrix7Array
+//
+//	#include "BlockTriInfN.hP"
+//
+//	#undef BlockTriInfVector
+//	#undef BlockTriInfMatrix
+//	#undef MatrixNArray
+//
+//	#endif /* _BlockTriInf7_h */
+
+// BlockTriInf7.cc:
+
+//	#ifdef __GNUC__
+//	#pragma implementation
+//	#endif
+//	#include "BlockTriInf7.h"
+//
+//	#define BlockTriInfVector BlockTriInfVector7
+//	#define BlockTriInfMatrix BlockTriInfMatrix7
+//	#define MatrixN Matrix7
+//	#define MatrixNArray Matrix7Array
+//	#define FactorMatrixN FactorMatrix7
+//
+//	#include "BlockTriInfN.ccP"
+
+// NOTE:  We use the C convention on indexing.  Thus the first equation
+// has index 0, and the block arrangement is as follows:
+//
+//	D(0)
+//	L(0)	D(1)
+//	LL(0)	L(1)	D(2)
+//		...	...	...
+//			LL(n-4)	L(n-3)	D(n-2)
+//				LL(n-3)	L(n-2)	D(n-1)
+//
+// where n = n_eqn is the number of equations to be solved.  Thus the size
+// of the matrix is n_eqn times the block size.
+
+class BlockTriInfMatrix
+{
+public:
+	BlockTriInfMatrix(void);
+	BlockTriInfMatrix(int n_eqn__ /* , bool is_upper_triangular = false */);
+	BlockTriInfMatrix(int n_eqn__,
+		MatrixNArray &diagonal,
+		MatrixNArray &lower_diagonal,
+		MatrixNArray &lower_lower_diagonal);
+	~BlockTriInfMatrix(void);
+
+	int n_eqn(void) const;
+
+	MatrixNArray &diagonal(void);
+	const MatrixNArray &diagonal(void) const;
+	MatrixNArray &lower_diagonal(void);
+	const MatrixNArray &lower_diagonal(void) const;
+	MatrixNArray &lower_lower_diagonal(void);
+	const MatrixNArray &lower_lower_diagonal(void) const;
+
+private:
+	/* bool is_upper_triangular; */
+	int n_eqn_;
+	MatrixNArray diag, lower, lower_lower;
+};
+
+void solve(BlockTriInfMatrix &M, BlockTriInfVector &x, BlockTriInfVector &y);
+
+inline
+BlockTriInfMatrix::BlockTriInfMatrix(void)
+	: n_eqn_(0),
+	  diag(),
+	  lower(),
+	  lower_lower()
+{
+}
+
+inline
+BlockTriInfMatrix::BlockTriInfMatrix(int n_eqn__)
+	: n_eqn_(n_eqn__),
+	  diag(n_eqn__),
+	  lower(n_eqn__),
+	  lower_lower(n_eqn__)
+{
+}
+
+inline
+BlockTriInfMatrix::BlockTriInfMatrix(int n_eqn__,
+		MatrixNArray &diagonal,
+		MatrixNArray &lower_diagonal,
+		MatrixNArray &lower_lower_diagonal)
+	: n_eqn_(n_eqn__),
+	  diag(diagonal),
+	  lower(lower_diagonal),
+	  lower_lower(lower_lower_diagonal)
+{
+}
+
+inline
+BlockTriInfMatrix::~BlockTriInfMatrix(void)
+{
+}
+
+inline int
+BlockTriInfMatrix::n_eqn(void) const
+{
+	return n_eqn_;
+}
+
+inline MatrixNArray &
+BlockTriInfMatrix::diagonal(void)
+{
+	return diag;
+}
+
+inline const MatrixNArray &
+BlockTriInfMatrix::diagonal(void) const
+{
+	return diag;
+}
+
+inline MatrixNArray &
+BlockTriInfMatrix::lower_diagonal(void)
+{
+	return lower;
+}
+
+inline const MatrixNArray &
+BlockTriInfMatrix::lower_diagonal(void) const
+{
+	return lower;
+}
+
+inline MatrixNArray &
+BlockTriInfMatrix::lower_lower_diagonal(void)
+{
+	return lower_lower;
+}
+
+inline const MatrixNArray &
+BlockTriInfMatrix::lower_lower_diagonal(void) const
+{
+	return lower_lower;
+}

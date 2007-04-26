@@ -1,0 +1,18 @@
+solaris/BlockTri3.o solaris/libwutil.a(BlockTri3.o) solaris/BlockTri3.d: BlockTri3.cc BlockTri3.h Vector3Array.h Vector3.h \
+ /usr/local/solaris/lib/gcc-lib/sparc-sun-solaris2.6/2.95.2/include/math.h \
+ /usr/include/math.h /usr/include/iso/math_iso.h /usr/include/stdlib.h \
+ /usr/include/iso/stdlib_iso.h /usr/include/sys/feature_tests.h \
+ /usr/include/sys/isa_defs.h \
+ /usr/local/solaris/lib/gcc-lib/sparc-sun-solaris2.6/2.95.2/../../../../include/g++-3/iostream.h \
+ /usr/local/solaris/lib/gcc-lib/sparc-sun-solaris2.6/2.95.2/../../../../include/g++-3/streambuf.h \
+ /usr/local/solaris/lib/gcc-lib/sparc-sun-solaris2.6/2.95.2/../../../../include/g++-3/libio.h \
+ /usr/local/solaris/lib/gcc-lib/sparc-sun-solaris2.6/2.95.2/../../../../sparc-sun-solaris2.6/include/_G_config.h \
+ /usr/local/solaris/lib/gcc-lib/sparc-sun-solaris2.6/2.95.2/include/stddef.h \
+ except.h \
+ /usr/local/solaris/lib/gcc-lib/sparc-sun-solaris2.6/2.95.2/include/exception \
+ eigen.h polyroot.h ScalarArray.h Vector.h /usr/include/memory.h \
+ /usr/include/sys/types.h /usr/include/sys/machtypes.h \
+ /usr/include/sys/int_types.h /usr/include/sys/select.h \
+ /usr/include/sys/time.h /usr/include/time.h \
+ /usr/include/iso/time_iso.h /usr/include/sys/time_impl.h bool.h \
+ VectorNArray.hP BlockTriN.hP BlockTriN.ccP

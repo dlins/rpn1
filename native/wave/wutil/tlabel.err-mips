@@ -1,0 +1,616 @@
+label(): searching for 'label 1: '
+label(): find_char():
+c = 108 = 'l'
+
+label(): get() found 'lasdfjk l'
+label(): find_char():
+c = 97 = 'a'
+c = 115 = 's'
+c = 100 = 'd'
+c = 102 = 'f'
+c = 106 = 'j'
+c = 107 = 'k'
+c = 32 = ' '
+c = 108 = 'l'
+
+label(): get() found 'laf H lks'
+label(): find_char():
+c = 97 = 'a'
+c = 102 = 'f'
+c = 32 = ' '
+c = 72 = 'H'
+c = 32 = ' '
+c = 108 = 'l'
+
+label(): get() found 'lksj'
+label(): find_char():
+c = 107 = 'k'
+c = 115 = 's'
+c = 106 = 'j'
+c = 10 = '
+'
+c = 108 = 'l'
+
+label(): get() found 'label 4: '
+label(): find_char():
+c = 97 = 'a'
+c = 98 = 'b'
+c = 101 = 'e'
+c = 108 = 'l'
+
+label(): get() found 'l 4: 44'
+label(): find_char():
+c = 32 = ' '
+c = 52 = '4'
+c = 58 = ':'
+c = 32 = ' '
+c = 52 = '4'
+c = 52 = '4'
+c = 10 = '
+'
+c = 97 = 'a'
+c = 108 = 'l'
+
+label(): get() found 'lkas'
+label(): find_char():
+c = 107 = 'k'
+c = 97 = 'a'
+c = 115 = 's'
+c = 10 = '
+'
+c = 108 = 'l'
+
+label(): get() found 'lasdfjk l'
+label(): find_char():
+c = 97 = 'a'
+c = 115 = 's'
+c = 100 = 'd'
+c = 102 = 'f'
+c = 106 = 'j'
+c = 107 = 'k'
+c = 32 = ' '
+c = 108 = 'l'
+
+label(): get() found 'laf H lks'
+label(): find_char():
+c = 97 = 'a'
+c = 102 = 'f'
+c = 32 = ' '
+c = 72 = 'H'
+c = 32 = ' '
+c = 108 = 'l'
+
+label(): get() found 'lksj'
+label(): find_char():
+c = 107 = 'k'
+c = 115 = 's'
+c = 106 = 'j'
+c = 10 = '
+'
+c = 108 = 'l'
+
+label(): get() found 'label 3: '
+label(): find_char():
+c = 97 = 'a'
+c = 98 = 'b'
+c = 101 = 'e'
+c = 108 = 'l'
+
+label(): get() found 'l 3: 33'
+label(): find_char():
+c = 32 = ' '
+c = 51 = '3'
+c = 58 = ':'
+c = 32 = ' '
+c = 51 = '3'
+c = 51 = '3'
+c = 10 = '
+'
+c = 97 = 'a'
+c = 108 = 'l'
+
+label(): get() found 'lkas'
+label(): find_char():
+c = 107 = 'k'
+c = 97 = 'a'
+c = 115 = 's'
+c = 10 = '
+'
+c = 10 = '
+'
+c = 108 = 'l'
+
+label(): get() found 'ljlakf'
+label(): find_char():
+c = 106 = 'j'
+c = 108 = 'l'
+
+label(): get() found 'lakf'
+label(): find_char():
+c = 97 = 'a'
+c = 107 = 'k'
+c = 102 = 'f'
+c = 10 = '
+'
+c = 10 = '
+'
+c = 72 = 'H'
+c = 111 = 'o'
+c = 119 = 'w'
+c = 10 = '
+'
+c = 97 = 'a'
+c = 108 = 'l'
+
+label(): get() found 'lkjf  How'
+label(): find_char():
+c = 107 = 'k'
+c = 106 = 'j'
+c = 102 = 'f'
+c = 32 = ' '
+c = 32 = ' '
+c = 72 = 'H'
+c = 111 = 'o'
+c = 119 = 'w'
+c = 100 = 'd'
+c = 121 = 'y'
+c = 33 = '!'
+c = 32 = ' '
+c = 108 = 'l'
+
+label(): get() found 'label 1: '
+label(): found it
+read_int(): after label(): is.rdstate() = 0
+read_int(): after insertion of int: is.rdstate() = 0, i = 11
+label(): searching for 'label 2: '
+label(): find_char():
+c = 97 = 'a'
+c = 108 = 'l'
+
+label(): get() found 'lkjaf a'
+label(): find_char():
+c = 107 = 'k'
+c = 106 = 'j'
+c = 97 = 'a'
+c = 102 = 'f'
+c = 32 = ' '
+c = 97 = 'a'
+c = 10 = '
+'
+
+label(): second pass through file
+label(): after first pass: is.rdstate() = 1
+label(): after seekg() to beginning: is.rdstate() = 0
+label(): after clearing eofbit: is.rdstate() = 0
+label(): find_char():
+c = 108 = 'l'
+
+label(): get() found 'lasdfjk l'
+label(): find_char():
+c = 97 = 'a'
+c = 115 = 's'
+c = 100 = 'd'
+c = 102 = 'f'
+c = 106 = 'j'
+c = 107 = 'k'
+c = 32 = ' '
+c = 108 = 'l'
+
+label(): get() found 'laf H lks'
+label(): find_char():
+c = 97 = 'a'
+c = 102 = 'f'
+c = 32 = ' '
+c = 72 = 'H'
+c = 32 = ' '
+c = 108 = 'l'
+
+label(): get() found 'lksj'
+label(): find_char():
+c = 107 = 'k'
+c = 115 = 's'
+c = 106 = 'j'
+c = 10 = '
+'
+c = 108 = 'l'
+
+label(): get() found 'label 4: '
+label(): find_char():
+c = 97 = 'a'
+c = 98 = 'b'
+c = 101 = 'e'
+c = 108 = 'l'
+
+label(): get() found 'l 4: 44'
+label(): find_char():
+c = 32 = ' '
+c = 52 = '4'
+c = 58 = ':'
+c = 32 = ' '
+c = 52 = '4'
+c = 52 = '4'
+c = 10 = '
+'
+c = 97 = 'a'
+c = 108 = 'l'
+
+label(): get() found 'lkas'
+label(): find_char():
+c = 107 = 'k'
+c = 97 = 'a'
+c = 115 = 's'
+c = 10 = '
+'
+c = 108 = 'l'
+
+label(): get() found 'lasdfjk l'
+label(): find_char():
+c = 97 = 'a'
+c = 115 = 's'
+c = 100 = 'd'
+c = 102 = 'f'
+c = 106 = 'j'
+c = 107 = 'k'
+c = 32 = ' '
+c = 108 = 'l'
+
+label(): get() found 'laf H lks'
+label(): find_char():
+c = 97 = 'a'
+c = 102 = 'f'
+c = 32 = ' '
+c = 72 = 'H'
+c = 32 = ' '
+c = 108 = 'l'
+
+label(): get() found 'lksj'
+label(): find_char():
+c = 107 = 'k'
+c = 115 = 's'
+c = 106 = 'j'
+c = 10 = '
+'
+c = 108 = 'l'
+
+label(): get() found 'label 3: '
+label(): find_char():
+c = 97 = 'a'
+c = 98 = 'b'
+c = 101 = 'e'
+c = 108 = 'l'
+
+label(): get() found 'l 3: 33'
+label(): find_char():
+c = 32 = ' '
+c = 51 = '3'
+c = 58 = ':'
+c = 32 = ' '
+c = 51 = '3'
+c = 51 = '3'
+c = 10 = '
+'
+c = 97 = 'a'
+c = 108 = 'l'
+
+label(): get() found 'lkas'
+label(): find_char():
+c = 107 = 'k'
+c = 97 = 'a'
+c = 115 = 's'
+c = 10 = '
+'
+c = 10 = '
+'
+c = 108 = 'l'
+
+label(): get() found 'ljlakf'
+label(): find_char():
+c = 106 = 'j'
+c = 108 = 'l'
+
+label(): get() found 'lakf'
+label(): find_char():
+c = 97 = 'a'
+c = 107 = 'k'
+c = 102 = 'f'
+c = 10 = '
+'
+c = 10 = '
+'
+c = 72 = 'H'
+c = 111 = 'o'
+c = 119 = 'w'
+c = 10 = '
+'
+c = 97 = 'a'
+c = 108 = 'l'
+
+label(): get() found 'lkjf  How'
+label(): find_char():
+c = 107 = 'k'
+c = 106 = 'j'
+c = 102 = 'f'
+c = 32 = ' '
+c = 32 = ' '
+c = 72 = 'H'
+c = 111 = 'o'
+c = 119 = 'w'
+c = 100 = 'd'
+c = 121 = 'y'
+c = 33 = '!'
+c = 32 = ' '
+c = 108 = 'l'
+
+label(): get() found 'label 1: '
+label(): find_char():
+c = 97 = 'a'
+c = 98 = 'b'
+c = 101 = 'e'
+c = 108 = 'l'
+
+label(): get() found 'l 1: 11al'
+label(): find_char():
+c = 32 = ' '
+c = 49 = '1'
+c = 58 = ':'
+c = 32 = ' '
+c = 49 = '1'
+c = 49 = '1'
+c = 97 = 'a'
+c = 108 = 'l'
+
+label(): get() found 'lkjaf a'
+label(): find_char():
+c = 107 = 'k'
+c = 106 = 'j'
+c = 97 = 'a'
+c = 102 = 'f'
+c = 32 = ' '
+c = 97 = 'a'
+c = 10 = '
+'
+
+label(): after second pass: is.rdstate() = 1
+label(): after seekg() to current position: is.rdstate() = 0
+label(): after clearing eofbit: is.rdstate() = 0
+label(): failed to find 'label 2: '
+read_int(): after label(): is.rdstate() = 2
+label(): searching for 'label 3: '
+label(): find_char():
+c = 97 = 'a'
+c = 108 = 'l'
+
+label(): get() found 'lkjaf a'
+label(): find_char():
+c = 107 = 'k'
+c = 106 = 'j'
+c = 97 = 'a'
+c = 102 = 'f'
+c = 32 = ' '
+c = 97 = 'a'
+c = 10 = '
+'
+
+label(): second pass through file
+label(): after first pass: is.rdstate() = 1
+label(): after seekg() to beginning: is.rdstate() = 0
+label(): after clearing eofbit: is.rdstate() = 0
+label(): find_char():
+c = 108 = 'l'
+
+label(): get() found 'lasdfjk l'
+label(): find_char():
+c = 97 = 'a'
+c = 115 = 's'
+c = 100 = 'd'
+c = 102 = 'f'
+c = 106 = 'j'
+c = 107 = 'k'
+c = 32 = ' '
+c = 108 = 'l'
+
+label(): get() found 'laf H lks'
+label(): find_char():
+c = 97 = 'a'
+c = 102 = 'f'
+c = 32 = ' '
+c = 72 = 'H'
+c = 32 = ' '
+c = 108 = 'l'
+
+label(): get() found 'lksj'
+label(): find_char():
+c = 107 = 'k'
+c = 115 = 's'
+c = 106 = 'j'
+c = 10 = '
+'
+c = 108 = 'l'
+
+label(): get() found 'label 4: '
+label(): find_char():
+c = 97 = 'a'
+c = 98 = 'b'
+c = 101 = 'e'
+c = 108 = 'l'
+
+label(): get() found 'l 4: 44'
+label(): find_char():
+c = 32 = ' '
+c = 52 = '4'
+c = 58 = ':'
+c = 32 = ' '
+c = 52 = '4'
+c = 52 = '4'
+c = 10 = '
+'
+c = 97 = 'a'
+c = 108 = 'l'
+
+label(): get() found 'lkas'
+label(): find_char():
+c = 107 = 'k'
+c = 97 = 'a'
+c = 115 = 's'
+c = 10 = '
+'
+c = 108 = 'l'
+
+label(): get() found 'lasdfjk l'
+label(): find_char():
+c = 97 = 'a'
+c = 115 = 's'
+c = 100 = 'd'
+c = 102 = 'f'
+c = 106 = 'j'
+c = 107 = 'k'
+c = 32 = ' '
+c = 108 = 'l'
+
+label(): get() found 'laf H lks'
+label(): find_char():
+c = 97 = 'a'
+c = 102 = 'f'
+c = 32 = ' '
+c = 72 = 'H'
+c = 32 = ' '
+c = 108 = 'l'
+
+label(): get() found 'lksj'
+label(): find_char():
+c = 107 = 'k'
+c = 115 = 's'
+c = 106 = 'j'
+c = 10 = '
+'
+c = 108 = 'l'
+
+label(): get() found 'label 3: '
+label(): found it
+read_int(): after label(): is.rdstate() = 0
+read_int(): after insertion of int: is.rdstate() = 0, i = 33
+label(): searching for 'label 4: '
+label(): find_char():
+c = 10 = '
+'
+c = 97 = 'a'
+c = 108 = 'l'
+
+label(): get() found 'lkas'
+label(): find_char():
+c = 107 = 'k'
+c = 97 = 'a'
+c = 115 = 's'
+c = 10 = '
+'
+c = 10 = '
+'
+c = 108 = 'l'
+
+label(): get() found 'ljlakf'
+label(): find_char():
+c = 106 = 'j'
+c = 108 = 'l'
+
+label(): get() found 'lakf'
+label(): find_char():
+c = 97 = 'a'
+c = 107 = 'k'
+c = 102 = 'f'
+c = 10 = '
+'
+c = 10 = '
+'
+c = 72 = 'H'
+c = 111 = 'o'
+c = 119 = 'w'
+c = 10 = '
+'
+c = 97 = 'a'
+c = 108 = 'l'
+
+label(): get() found 'lkjf  How'
+label(): find_char():
+c = 107 = 'k'
+c = 106 = 'j'
+c = 102 = 'f'
+c = 32 = ' '
+c = 32 = ' '
+c = 72 = 'H'
+c = 111 = 'o'
+c = 119 = 'w'
+c = 100 = 'd'
+c = 121 = 'y'
+c = 33 = '!'
+c = 32 = ' '
+c = 108 = 'l'
+
+label(): get() found 'label 1: '
+label(): find_char():
+c = 97 = 'a'
+c = 98 = 'b'
+c = 101 = 'e'
+c = 108 = 'l'
+
+label(): get() found 'l 1: 11al'
+label(): find_char():
+c = 32 = ' '
+c = 49 = '1'
+c = 58 = ':'
+c = 32 = ' '
+c = 49 = '1'
+c = 49 = '1'
+c = 97 = 'a'
+c = 108 = 'l'
+
+label(): get() found 'lkjaf a'
+label(): find_char():
+c = 107 = 'k'
+c = 106 = 'j'
+c = 97 = 'a'
+c = 102 = 'f'
+c = 32 = ' '
+c = 97 = 'a'
+c = 10 = '
+'
+
+label(): second pass through file
+label(): after first pass: is.rdstate() = 1
+label(): after seekg() to beginning: is.rdstate() = 0
+label(): after clearing eofbit: is.rdstate() = 0
+label(): find_char():
+c = 108 = 'l'
+
+label(): get() found 'lasdfjk l'
+label(): find_char():
+c = 97 = 'a'
+c = 115 = 's'
+c = 100 = 'd'
+c = 102 = 'f'
+c = 106 = 'j'
+c = 107 = 'k'
+c = 32 = ' '
+c = 108 = 'l'
+
+label(): get() found 'laf H lks'
+label(): find_char():
+c = 97 = 'a'
+c = 102 = 'f'
+c = 32 = ' '
+c = 72 = 'H'
+c = 32 = ' '
+c = 108 = 'l'
+
+label(): get() found 'lksj'
+label(): find_char():
+c = 107 = 'k'
+c = 115 = 's'
+c = 106 = 'j'
+c = 10 = '
+'
+c = 108 = 'l'
+
+label(): get() found 'label 4: '
+label(): found it
+read_int(): after label(): is.rdstate() = 0
+read_int(): after insertion of int: is.rdstate() = 0, i = 44

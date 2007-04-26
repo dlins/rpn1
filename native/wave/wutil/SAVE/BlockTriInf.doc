@@ -1,0 +1,90 @@
+Return-Path: <bleasby@email.iis.com.br>
+Received: from Pixinguinha.fluid.impa.br (pixinguinha.fluid.impa.br [147.65.7.201])
+	by catbert.ams.sunysb.edu (8.11.6+Sun/8.11.6) with ESMTP id h5E2KAm28655
+	for <marchesi@ams.sunysb.edu>; Fri, 13 Jun 2003 22:20:10 -0400 (EDT)
+Received: from home.iis.com.br (mail.iis.com.br [200.202.96.2])
+	by Pixinguinha.fluid.impa.br (8.11.6/8.11.6) with ESMTP id h5E2Lve28801
+	for <marchesi@fluid.impa.br>; Sat, 14 Jun 2003 02:21:57 GMT
+Received: from tico (RJ197146.user.veloxzone.com.br [200.165.197.146])
+	by home.iis.com.br (8.11.6/8.11.6/1.1.1.16) with SMTP id h5E2Ncj08050
+	for <marchesi@fluid.impa.br>; Fri, 13 Jun 2003 23:23:40 -0300
+Message-ID: <001201c3321b$f4cb8430$0100a8c0@tico>
+From: "bleasby" <bleasby@email.iis.com.br>
+To: "Dan Marchesin" <marchesi@fluid.impa.br>
+References: <200306121805.h5CI54Dv009279@Jobim.fluid.impa.br>
+Subject: Programa tridiagonal inferior
+Date: Fri, 13 Jun 2003 23:22:09 -0300
+MIME-Version: 1.0
+Content-Type: text/plain;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+X-AntiVirus: Antivirus for sendmail by Petr Rehor
+Content-Length: 1910
+Status: RO
+
+Prof. Dan
+
+        Decidi lhe escrever pois acho que alguns pontos a respeito do
+programa
+nao ficaram muito claros no meu ultimo email.
+
+        O programa para matrizes tridiagonais inferiores foi feito a partir
+de
+um trabalho que havia sido desenvolvido anteriormente no Impa para matrizes
+tridiagonais.
+        Dessa forma, o comportamento e a utilizacao do programa sao
+identicas a
+do programa anterior.
+
+        O programa funciona da seguinte forma:
+
+        - Sao definidos casos especiais para matrizes 2x2, 3x3 e 4x4
+        - Alem desses casos, sao definidas estruturas genericas para
+matrizes de
+tamanho N.
+
+        O usuario que desejar uma matriz de um tamanho definido (Exemplo
+n=7),
+devera seguir os seguintes passos:
+
+        1) Criar dois novos arquivos seguindo as instrucoes presentes nas
+primeiras linhas do arquivo VectorN.hP (Esses arquivos definirao as estrtura
+Vector7 , Matrix7, etc.)
+
+        2) Criar dois novos arquivos seguindo as intrucoes presentes nas
+primeiras linhas do arquivo BlockTriNInf.hP (Esses arquivos definirao a
+matriz
+tridiagonal inferior)
+
+        3) Adicionar a linha abaixo no programa que ira utilizar a matriz
+tridiagonal inferior
+                #include "BlockTriInf7.h"
+
+        4) Compilar o programa
+
+
+        Dessa forma o usuario nao pode utilizar uma matriz de tamanho
+indefindo
+no seu programa, uma vez que os arquivos devem estar pre-compilados.
+        Particularmente, eu nao acho que essa seja uma boa pratica, mas como
+o
+programa foi feito baseando-se no projeto anterior, ele herdou essas
+caracteristicas.
+
+        O projeto anterior ja havia sido incluido no evolve?
+        Se esse for o caso nao havera qualquer problema, caso contrario
+gostaria que o senhor me respondesse o mais rapido possivel para que, se for
+necessario eu possa fazer novas classes que permitam definir o tamanho da
+matriz
+em tempo de execucao.
+
+
+Um abraco
+    Fabio
+
+
+
