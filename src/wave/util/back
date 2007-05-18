@@ -1,0 +1,46 @@
+  
+    
+    double tempEigenR [3];
+    double tempEigenI [3];
+    double tempEigenVecRight [3][3];
+    double tempEigenVecLeft [3][3];
+    double work [15];
+    int lwork = 15, info, i, j;
+    
+    
+    dgeev_("N", "V", 3, this, 3, &tempEigenR[0], &tempEigenI[0],
+    &tempEigenVecLeft [0][0], 3, &tempEigenVecRight[0][0], 3, &work[0], &lwork,
+    &info); // only the right eigenvectors are needed.
+    
+    Vector3 eigenValuesResult = new Vector3(tempEigenR[0], tempEigenR[1], tempEigenR[2]);
+    
+    eigenValues=eigenValuesResult;
+    
+    eigenVectors.e11=tempEigenVecRight[0][0];
+    eigenVectors.e12=tempEigenVecRight[0][1];
+    eigenVectors.e13=tempEigenVecRight[0][2];
+
+    eigenVectors.e21=tempEigenVecRight[1][1];
+    eigenVectors.e22=tempEigenVecRight[1][1];
+    eigenVectors.e23=tempEigenVecRight[1][1];
+    eigenVectors.e11=tempEigenVecRight[1][1];
+    eigenVectors.e11=tempEigenVecRight[1][1];
+    eigenVectors.e11=tempEigenVecRight[1][1];
+    
+    
+    
+    for (i=0;i <3 ; i++){
+        eigenValues[i]=tempEigenR[i];
+        for (j=0;j <3 ;j++){
+            eigenVectors[i][j]= tempEigenVecRight[i][j];
+        }
+        
+    }
+    
+    
+    
+    cout << "Linkando com o lapack \n";
+    exit(-1);
+    
+    #endif
+    
