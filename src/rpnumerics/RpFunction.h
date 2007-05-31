@@ -10,13 +10,14 @@
 #define RPFUNCTION_H
 
 
+#define RP_SUCCESSFUL 1
+
 /*
 ** ---------------------------------------------------------------
 ** Includes:
 */
-#include "Polygon.h"
-#include "Vector3.h"
-#include "Vector4.h"
+#include "RealVector.h"
+#include "RealMatrix.h"
 
 /*
 ** ---------------------------------------------------------------
@@ -25,8 +26,9 @@
 
 //! Definition of class RpFunction. 
 /*!
-	The RpFunction class defines a generic derivable function prototype. Derived classes
-can choose the proper class to fit as a property of derivative order.
+	The RpFunction class defines a generic function prototype. 
+	
+	f:u C Rm -> v C Rn 
 
 TODO:
 NOTE : 
@@ -37,45 +39,62 @@ class RpFunction {
 
 public:
 
-	//! function evaluation at U
-	int f(const RealVector &U,RealVector &out) = 0;
+	//! m coordinates function evaluation at u
+	virtual int f(const RealVector &u,RealVector &v);
+	//! coordinate i function evaluation at u
+	virtual int f(int i,const RealVector &u,double &v) = 0;
 
 };
 
+
+inline int
+RpFunction::f(const RealVector &u,RealVector &v)
+{
+	int flag = RP_SUCESSFUL;
+	for (int i=0;i < u.length();i++)
+		if ((flag = f(i,u,v(i))) != RP_SUCCESSFUL)
+			return flag;
+
+	return RP_FUNCTION_SUCCESSFUL;
+}
+
 //! Definition of class RpFunctionDeriv. 
 /*!
-	The RpFunctionDeriv class defines a first order derivative for generic porpouses.
+	The RpFunctionDeriv class defines a first order derivative for generic porpouses. We will
+assume that a function with its first order derivative must have an f function obviously.
+
 
 TODO:
 NOTE : 
 
 @ingroup rpnumerics
 */
-class RpFunctionDeriv {
+class RpFunctionDeriv : RpFunction {
 
 public:
 
-	//! first order derivative at U
-	int df(const RealVector &U,Jacobian &out) = 0;
+	//! first order derivative at u
+	virtual int df(const RealVector &u,Jacobian &v) = 0;
 
 };
 
 
 //! Definition of class RpFunctionDeriv2. 
 /*!
-	The RpFunctionDeriv2 class defines a second order derivative for generic porpouses.
+	The RpFunctionDeriv2 class defines a second order derivative for generic porpouses. We will
+assume that a function with its second order derivative must have its first order derivative too.
 
 TODO:
 NOTE : 
 
 @ingroup rpnumerics
 */
-class RpFunctionDeriv2 {
+class RpFunctionDeriv2 : RpFunctionDeriv {
 
 public:
 
-	//! second order derivative at U
-	int d2f(const RealVector &U,Hessian &out) = 0;
+	//! second order derivative at u
+	virtual int d2f(const RealVector &u,Hessian &v) = 0;
 
 };
 
