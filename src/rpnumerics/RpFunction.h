@@ -41,22 +41,7 @@ public:
 
 	//! m coordinates function evaluation at u
 	virtual int f(const RealVector &u,RealVector &v);
-	//! coordinate i function evaluation at u
-	virtual int f(int i,const RealVector &u,double &v) = 0;
-
 };
-
-
-inline int
-RpFunction::f(const RealVector &u,RealVector &v)
-{
-	int flag = RP_SUCESSFUL;
-	for (int i=0;i < u.length();i++)
-		if ((flag = f(i,u,v(i))) != RP_SUCCESSFUL)
-			return flag;
-
-	return RP_FUNCTION_SUCCESSFUL;
-}
 
 //! Definition of class RpFunctionDeriv. 
 /*!
