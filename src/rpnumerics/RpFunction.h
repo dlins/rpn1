@@ -38,7 +38,7 @@ class RpFunction {
 public:
 
 	//! function evaluation at U
-	int f(const RealVector &U,RealVector &out);
+	int f(const RealVector &U,RealVector &out) = 0;
 
 };
 
@@ -56,7 +56,7 @@ class RpFunctionDeriv {
 public:
 
 	//! first order derivative at U
-	int df(const RealVector &U,Jacobian &out);
+	int df(const RealVector &U,Jacobian &out) = 0;
 
 };
 
@@ -75,7 +75,7 @@ class RpFunctionDeriv2 {
 public:
 
 	//! second order derivative at U
-	int d2f(const RealVector &U,Hessian &out);
+	int d2f(const RealVector &U,Hessian &out) = 0;
 
 };
 
