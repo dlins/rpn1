@@ -1,7 +1,6 @@
 #ifndef _VectorField_H
 #define	_VectorField_H
 #include "WavePoint.h"
-#include "RealVector.h"
 
 typedef int(*VectorFunction)(int, double, double*, double*);
 
