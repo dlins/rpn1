@@ -5,7 +5,7 @@
 *
 */
 
-package rpnumerics.facade;
+package rpnumerics;
 
 import wave.util.RealMatrix2;
 import wave.util.RealVector;
