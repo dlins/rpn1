@@ -9,8 +9,8 @@ package rpn.component;
 import rpn.RPnDesktopPlotter;
 import rpn.controller.RpCalcController;
 import rpn.controller.RpController;
-import rpnumerics.RpCalculation;
 import rpnumerics.RpException;
+import rpnumerics.RpCalculation;
 
 public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
     //

@@ -8,9 +8,8 @@ package rpn.controller.phasespace;
 
 import rpn.component.*;
 import rpn.RPnPhaseSpaceAbstraction;
-import rpnumerics.ConnectionOrbit;
 import rpn.usecase.FindProfileAgent;
-import rpn.controller.*;
+import rpnumerics.ConnectionOrbit;
 
 public class ProfileSetupReadyImpl extends PoincareReadyImpl
     	implements PROFILE_SETUP_READY {

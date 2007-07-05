@@ -8,13 +8,7 @@ package rpn.controller;
 
 import rpn.component.RpGeomFactory;
 import rpn.component.RpCalcBasedGeomFactory;
-import rpn.component.OrbitGeomFactory;
-import rpn.component.XZeroGeomFactory;
 import rpn.usecase.*;
-import rpnumerics.StationaryPoint;
-import rpnumerics.ConnectionOrbit;
-import rpnumerics.ConservationShockFlow;
-import java.util.ArrayList;
 import java.beans.PropertyChangeEvent;
 
 /** This class implements the methods to manipulate some calculus controllers, this calculus difines the geometric model ofa geometric visualization . When specifics elements (XZero , Profile and Hugoniot )changes its controllers, with methods implemented by this class, do the  visualization properties updates. */

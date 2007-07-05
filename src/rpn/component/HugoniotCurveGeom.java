@@ -47,7 +47,7 @@ public class HugoniotCurveGeom implements MultiGeometry, RpGeometry {
 
 
     public HugoniotCurveGeom(HugoniotCurve  hugoniotCurve, HugoniotCurveGeomFactory factory) {
-      hugoniotSegList_=hugoniotCurve.segments();
+//      hugoniotSegList_=hugoniotCurve.segments();
       factory_ = factory;
       space_ = rpnumerics.RPNUMERICS.domain();
       try {

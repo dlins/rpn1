@@ -1,32 +1,14 @@
 package rpn.parser;
 
 import rpn.*;
-import rpn.controller.*;
 import rpn.controller.phasespace.*;
-import rpn.controller.ui.*;
 import wave.util.RealVector;
 import wave.util.RealMatrix2;
 import wave.multid.CoordsArray;
 import wave.util.RealSegment;
-import rpnumerics.PhasePoint;
-import rpnumerics.OrbitPoint;
-import rpnumerics.Orbit;
-import rpnumerics.ShockFlow;
-
-import rpnumerics.StationaryPoint;
 import rpn.component.OrbitGeom;
 import rpn.component.XZeroGeom;
-import wave.util.SimplexPoincareSection;
-import rpn.component.PoincareSectionGeom;
-import rpn.component.HugoniotCurveGeom;
-
-import rpnumerics.HugoniotSegment;
-import rpnumerics.StationaryPoint;
-import rpnumerics.NativeShockFlow;
-import rpnumerics.OrbitCalc;
-import rpnumerics.ConservationShockFlow;
 import rpnumerics.RPNUMERICS;
-import rpn.usecase.*;
 import org.xml.sax.HandlerBase;
 import org.xml.sax.AttributeList;
 import org.xml.sax.SAXException;
@@ -38,6 +20,12 @@ import java.util.ArrayList;
 import java.util.StringTokenizer;
 import java.io.*;
 import java.awt.event.ActionEvent;
+import rpnumerics.PhasePoint;
+import rpnumerics.ShockFlow;
+import rpnumerics.ConservationShockFlow;
+import rpnumerics.Orbit;
+import rpnumerics.OrbitPoint;
+import rpnumerics.StationaryPoint;
 
 /** With this class the calculus made in a previous session can be reloaded. A previous state can be reloaded reading a XML file that is used by this class */
 
@@ -128,7 +116,7 @@ public class RPnDataModule {
                 calcReady_ = new Boolean(att.getValue(1)).booleanValue();
 
                 ShockFlow flow = (ShockFlow) rpnumerics.RPNUMERICS.flow();
-                flow.setSigma(new Double(att.getValue(0)).doubleValue());
+//                flow.setSigma(new Double(att.getValue(0)).doubleValue());
 
             }
 
@@ -239,7 +227,7 @@ public class RPnDataModule {
             if (name.equals("FLUXPARAMSCHANGE")) {
                 int indx = new Integer(att.getValue(0)).intValue();
                 int value = new Double(att.getValue(1)).intValue();
-                RPNUMERICS.fluxFunction().fluxParams().setParam(indx, value);
+//                RPNUMERICS.fluxFunction().fluxParams().setParam(indx, value);
             }
         }
 
@@ -507,27 +495,6 @@ public class RPnDataModule {
             writer.write(PHASESPACE.toXML());
             writer.write("</RPDATA>\n");
         }
-
-        if ((RPNUMERICS.flow() instanceof NativeShockFlow) && (RPNUMERICS.flow() != null)) {
-
-            writer.write("<RPDATA>\n");
-            writer.write("<FLOWDATA>\n");
-
-            writer.write("<SHOCKFLOWDATA sigma=\"" +
-                         ((NativeShockFlow) RPNUMERICS.flow()).getSigma() +
-                         "\" calcready=\"" + rpn.parser.RPnDataModule.RESULTS +
-                         "\">\n");
-            writer.write("<XZERO>\n");
-            writer.write(((NativeShockFlow) RPNUMERICS.flow()).getXZero().toXML());
-            writer.write("</XZERO>\n");
-            writer.write("</SHOCKFLOWDATA>\n");
-
-            writer.write("</FLOWDATA>\n");
-            writer.write(PHASESPACE.toXML());
-            writer.write("</RPDATA>\n");
-
-        }
-
 
     }
 }

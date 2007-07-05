@@ -9,9 +9,9 @@ package rpn.controller;
 import rpn.component.RpGeomFactory;
 import rpn.component.HugoniotCurveGeomFactory;
 import rpn.usecase.*;
-import rpnumerics.HugoniotCurveCalc;
 import rpnumerics.PhasePoint;
 import java.beans.PropertyChangeEvent;
+import rpnumerics.HugoniotCurveCalc;
 
 public class HugoniotController extends RpCalcController {
     //

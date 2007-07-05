@@ -3,14 +3,14 @@ package rpn.parser;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import wave.util.RealVector;
-import rpnumerics.OrbitPoint;
 import wave.multid.CoordsArray;
-import rpnumerics.Orbit;
 import rpn.component.OrbitGeom;
 import rpn.component.OrbitGeomFactory;
-import rpnumerics.OrbitCalc;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.GEOM_SELECTION;
+import rpnumerics.Orbit;
+import rpnumerics.OrbitCalc;
+import rpnumerics.OrbitPoint;
 
 
 public class OrbitParser implements ActionListener {

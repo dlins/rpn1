@@ -14,7 +14,6 @@ import wave.util.SimplexPoincareSection;
 import wave.util.RealVector;
 import javax.swing.ImageIcon;
 import wave.util.RealVector;
-import wave.ode.Rk4BPProfile;
 import rpn.controller.PhaseSpacePanel2DController;
 import rpn.RPnConfigReader;
 

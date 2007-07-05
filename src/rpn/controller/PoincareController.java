@@ -11,18 +11,20 @@ import rpn.component.RpGeomFactory;
 import rpn.controller.phasespace.*;
 import rpn.usecase.*;
 import rpn.parser.RPnDataModule;
-import rpnumerics.ConnectionOrbit;
 import wave.util.SimplexPoincareSection;
 import wave.util.RealVector;
 import java.beans.PropertyChangeEvent;
+import rpnumerics.ConnectionOrbit;
+import rpnumerics.ode.ODESolverProfile;
+
 
 public class PoincareController implements RpController {
     private PoincareSectionGeomFactory geomFactory_;
-
+    
     public PoincareController() {
         ChangeFluxParamsAgent.instance().addPropertyChangeListener(this);
     }
-
+    
     public void propertyChange(PropertyChangeEvent change) {
         if (RPnDataModule.PHASESPACE.state() instanceof PROFILE_READY) {
             PROFILE_READY profileHolder = (PROFILE_READY)RPnDataModule.PHASESPACE.state();
@@ -30,25 +32,25 @@ public class PoincareController implements RpController {
             RealVector center = connOrbit.orbitCenter();
             RealVector normal = rpnumerics.RPNUMERICS.flow().flux(center);
             ((SimplexPoincareSection)geomFactory_.geomSource()).shift(center, normal);
-
+            
             geomFactory_.updateGeom();
-
+            
             // updates the numerics layers
-            ((wave.ode.Rk4BPProfile)
-                rpnumerics.RPNUMERICS.odeSolver().getProfile())
-                .setPoincareSection((SimplexPoincareSection)geomFactory_.geomSource());
+            ((ODESolverProfile)
+            rpnumerics.RPNUMERICS.odeSolver().getProfile())
+            .setPoincareSection((SimplexPoincareSection)geomFactory_.geomSource());
         }
     }
-
+    
     public void install(RpGeomFactory geom) {
         geomFactory_ = (PoincareSectionGeomFactory)geom;
-        ((wave.ode.Rk4BPProfile) rpnumerics.RPNUMERICS.odeSolver().getProfile()).setPoincareSection((SimplexPoincareSection)geomFactory_.geomSource());
+        ((ODESolverProfile) rpnumerics.RPNUMERICS.odeSolver().getProfile()).setPoincareSection((SimplexPoincareSection)geomFactory_.geomSource());
     }
-
+    
     public void uninstall(RpGeomFactory geom) {
         if (geomFactory_ == geom) {
             geomFactory_ = null;
-            ((wave.ode.Rk4BPProfile) rpnumerics.RPNUMERICS.odeSolver().getProfile()).setPoincareSectionFlag(false);
+            ((ODESolverProfile) rpnumerics.RPNUMERICS.odeSolver().getProfile()).setPoincareSectionFlag(false);
             ChangeFluxParamsAgent.instance().removePropertyChangeListener(this);
         }
     }

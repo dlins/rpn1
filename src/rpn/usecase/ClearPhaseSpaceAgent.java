@@ -11,7 +11,6 @@ import rpn.component.RpCalcBasedGeomFactory;
 import rpn.component.PoincareSectionGeomFactory;
 import rpn.controller.ui.UndoActionController;
 import rpn.RPnUIFrame;
-import wave.ode.Rk4BPProfile;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import rpn.controller.ui.*;

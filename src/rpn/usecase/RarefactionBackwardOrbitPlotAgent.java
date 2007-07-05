@@ -2,8 +2,8 @@ package rpn.usecase;
 
 import rpn.component.*;
 import wave.util.*;
-import rpnumerics.OrbitPoint;
 import rpnumerics.OrbitCalc;
+import rpnumerics.OrbitPoint;
 
 public class RarefactionBackwardOrbitPlotAgent extends RpModelPlotAgent {
 

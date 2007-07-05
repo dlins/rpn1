@@ -6,6 +6,8 @@ import java.util.*;
 import rpn.component.*;
 import rpn.controller.ui.*;
 import rpnumerics.*;
+import rpnumerics.StationaryPoint;
+import rpnumerics.StationaryPointCalc;
 import wave.multid.*;
 import wave.util.*;
 

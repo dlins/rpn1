@@ -9,7 +9,6 @@ import org.xml.sax.SAXParseException;
 import rpn.*;
 
 import rpnumerics.RPNumericsProfile;
-import rpnumerics.physics.FluxParams;
 import wave.util.RealVector;
 import rpnumerics.RPNUMERICS;
 import rpnumerics.PhasePoint;
@@ -113,7 +112,7 @@ public class RPnNumericsModule {
                     doubleList[i++] = new Double(tokenizer.nextToken()).
                                       doubleValue();
                 }
-                RPNUMERICS.fluxFunction().fluxParams().setParams(doubleList);
+//                RPNUMERICS.fluxFunction().fluxParams().setParams(doubleList);
 
             }
 
@@ -257,32 +256,5 @@ public class RPnNumericsModule {
 
     public static void export(FileWriter writer) throws java.io.IOException {
 
-        writer.write("<NUMERICS  contour=\"" +
-                     RPNUMERICS.getProfile().isContourMethod() + "\"" +
-                     " specifichugoniot=\"" +
-                     RPNUMERICS.getProfile().isSpecificHugoniot() + "\"" +
-                     " specificflow=\"" +
-                     RPNUMERICS.getProfile().isSpecificShockFlow() + "\"" +
-                     ">\n");
-
-        writer.write("<PHYSICS physid=\"" + RPNUMERICS.physicsID() + "\"" +
-                     " isnative=\"" + RPNUMERICS.isNativePhysics() + "\"" +
-                     " libname=\"" + RPNUMERICS.getProfile().libName() + "\"" +
-                     "></PHYSICS>\n");
-//                 " familyindex=\""+RPNUMERICS.getProfile().getFamilyIndex().intValue()+"\""+
-        writer.write("<FLOWTYPE type=\"" + RPNUMERICS.getProfile().getFlowType() +
-                     "\">" + "</FLOWTYPE>\n");
-        writer.write("</NUMERICS>\n");
-
-        // export the physics params if different than default...
-        FluxParams current = RPNUMERICS.fluxFunction().fluxParams();
-        if (!(current.equals(RPNUMERICS.fluxFunction().fluxParams().
-                             defaultParams()))) {
-            writer.write("<FLUXPARAMS paramsarray=\"");
-            for (int i = 0; i < current.getParams().getSize(); i++) {
-                writer.write(current.getParams().getElement(i) + " ");
-            }
-            writer.write("\">\n</FLUXPARAMS>\n");
-        }
     }
 }

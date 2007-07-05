@@ -12,20 +12,14 @@ import wave.multid.view.ViewingAttr;
 import wave.multid.model.MultiGeometryImpl;
 import wave.multid.CoordsArray;
 import wave.multid.Coords2D;
-import wave.multid.model.AbstractScene;
 import wave.multid.DimMismatchEx;
-import wave.multid.view.ShapedGeometry;
-import wave.multid.model.MultiPoint;
-import rpnumerics.StationaryPoint;
 import wave.util.Arrow;
-import wave.util.MathUtil;
 import java.awt.Color;
 import java.awt.Shape;
-import java.awt.BasicStroke;
 import java.awt.geom.GeneralPath;
-import javax.swing.AbstractAction;
 import wave.util.RealVector;
 import java.awt.Graphics2D;
+import rpnumerics.StationaryPoint;
 
 public class StationaryPointView extends PointMark {
     //

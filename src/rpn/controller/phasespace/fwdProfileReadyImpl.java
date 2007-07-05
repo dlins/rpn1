@@ -9,7 +9,6 @@ package rpn.controller.phasespace;
 import rpn.component.*;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpnumerics.ManifoldOrbit;
-import wave.util.RealVector;
 
 
 public class fwdProfileReadyImpl extends PoincareReadyImpl

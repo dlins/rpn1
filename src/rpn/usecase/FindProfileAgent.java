@@ -13,6 +13,10 @@ import rpn.component.*;
 import java.awt.event.ActionEvent;
 import rpn.controller.phasespace.*;
 import rpn.controller.ui.*;
+import rpnumerics.ConnectionOrbitCalc;
+import rpnumerics.ManifoldOrbit;
+import rpnumerics.ManifoldOrbitCalc;
+import rpnumerics.StationaryPoint;
 
 public class FindProfileAgent extends RpModelPlotAgent {
     //
@@ -126,7 +130,7 @@ public class FindProfileAgent extends RpModelPlotAgent {
 
     public void findProfile(){
   //        double oldSigma = ((GenericShockFlow)RPNUMERICS.flow()).getSigma();
-        double oldSigma = ((ShockFlow)RPNUMERICS.flow()).getSigma();
+//        double oldSigma = ((ShockFlow)RPNUMERICS.flow()).getSigma();
 
         /*
          * THIS IS THE CONTROL FOR PROFILE CREATION
@@ -183,9 +187,9 @@ public class FindProfileAgent extends RpModelPlotAgent {
             // PROFILE_SETUP_READY
                 execute();
 	//        double newSigma = ((GenericShockFlow)RPNUMERICS.flow()).getSigma();
-        double newSigma = ((ShockFlow)RPNUMERICS.flow()).getSigma();
-        ChangeSigmaAgent.instance().applyChange(
-            new java.beans.PropertyChangeEvent(this, ChangeSigmaAgent.DESC_TEXT, new Double(oldSigma), new Double(newSigma)));
+//        double newSigma = ((ShockFlow)RPNUMERICS.flow()).getSigma();
+//        ChangeSigmaAgent.instance().applyChange(
+//            new java.beans.PropertyChangeEvent(this, ChangeSigmaAgent.DESC_TEXT, new Double(oldSigma), new Double(newSigma)));
         setEnabled(false);
 
     }

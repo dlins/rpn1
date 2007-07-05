@@ -13,6 +13,7 @@ import rpnumerics.OrbitPoint;
 import rpnumerics.StationaryPoint;
 import rpnumerics.StationaryPointCalc;
 import rpnumerics.PhasePoint;
+import rpnumerics.OrbitCalc;
 import wave.util.RealVector;
 import javax.swing.ImageIcon;
 import rpn.controller.PhaseSpacePanel2DController;

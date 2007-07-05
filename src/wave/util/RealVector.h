@@ -20,8 +20,6 @@ class RealVector :public Vector{
         RealVector (double *);
         bool operator==(const RealVector &);
     
-    
-    
 };
 #endif	/* _RealVector_H */
 

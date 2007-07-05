@@ -7,7 +7,6 @@ import rpn.component.HugoniotCurveGeomFactory;
 import rpn.component.XZeroGeomFactory;
 import java.awt.event.ActionListener;
 import rpn.component.XZeroGeom;
-import rpnumerics.StationaryPointCalc;
 import rpn.component.HugoniotSegGeom;
 import rpn.controller.phasespace.NumConfigReadyImpl;
 import rpn.controller.ui.UIController;
@@ -16,6 +15,7 @@ import java.util.List;
 import wave.multid.CoordsArray;
 import rpn.component.HugoniotCurveGeom;
 import rpn.controller.ui.GEOM_SELECTION;
+import rpnumerics.StationaryPointCalc;
 
 
     public class HugoniotParser implements ActionListener{
@@ -34,32 +34,32 @@ import rpn.controller.ui.GEOM_SELECTION;
                         CoordsArray(RPnDataModule.InputHandler.tempPhasePoint_.
                                     getCoords()), xZeroFactory);
 
-                HugoniotCurve hCurve = new HugoniotCurve(RPnDataModule.
-                        InputHandler.tempPhasePoint_,
-                        RPnDataModule.InputHandler.segmentList_);
-                List hugoniotSegs = hCurve.segments();
-                HugoniotSegGeom[] segmentsArray = new HugoniotSegGeom[
-                                                  hugoniotSegs.
-                                                  size()];
-                for (int i = 0; i < segmentsArray.length; i++) {
-                    segmentsArray[i] = new HugoniotSegGeom((HugoniotSegment)
-                            hugoniotSegs.get(i));
+//                HugoniotCurve hCurve = new HugoniotCurve(RPnDataModule.
+//                        InputHandler.tempPhasePoint_,
+//                        RPnDataModule.InputHandler.segmentList_);
+//                List hugoniotSegs = hCurve.segments();
+//                HugoniotSegGeom[] segmentsArray = new HugoniotSegGeom[
+//                                                  hugoniotSegs.
+//                                                  size()];
+//                for (int i = 0; i < segmentsArray.length; i++) {
+//                    segmentsArray[i] = new HugoniotSegGeom((HugoniotSegment)
+//                            hugoniotSegs.get(i));
                 }
                 HugoniotCurveGeomFactory factory = new HugoniotCurveGeomFactory(
                         rpnumerics.RPNUMERICS.hugoniotCurveCalc());
-                HugoniotParser.tempHugoniot = new
-                        HugoniotCurveGeom(segmentsArray,
-                                          factory);
-                RPnDataModule.PHASESPACE.join(HugoniotParser.tempHugoniot);
-                RPnDataModule.PHASESPACE.join(RPnDataModule.InputHandler.
-                                              xZeroGeom_);
-                RPnDataModule.PHASESPACE.changeState(new NumConfigReadyImpl(
-                        HugoniotParser.tempHugoniot,
-                        RPnDataModule.InputHandler.xZeroGeom_));
-                UIController.instance().setState(new GEOM_SELECTION());
+//                HugoniotParser.tempHugoniot = new
+//                        HugoniotCurveGeom(segmentsArray,
+//                                          factory);
+//                RPnDataModule.PHASESPACE.join(HugoniotParser.tempHugoniot);
+//                RPnDataModule.PHASESPACE.join(RPnDataModule.InputHandler.
+//                                              xZeroGeom_);
+//                RPnDataModule.PHASESPACE.changeState(new NumConfigReadyImpl(
+//                        HugoniotParser.tempHugoniot,
+//                        RPnDataModule.InputHandler.xZeroGeom_));
+//                UIController.instance().setState(new GEOM_SELECTION());
 
-                System.out.println("Fechando Hugoniot");
+
             }
         }
 
-}
+

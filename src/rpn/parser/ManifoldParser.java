@@ -1,6 +1,6 @@
 package rpn.parser;
 
-import rpnumerics.ManifoldOrbit;
+
 import rpn.component.ManifoldGeom;
 import rpn.component.ManifoldGeomFactory;
 import rpnumerics.PhasePoint;
@@ -9,10 +9,11 @@ import rpn.controller.ui.UIController;
 import rpn.controller.phasespace.fwdProfileReadyImpl;
 import wave.multid.CoordsArray;
 import java.awt.event.ActionListener;
-import rpnumerics.OrbitPoint;
 import rpn.controller.phasespace.bwdProfileReadyImpl;
 import rpn.controller.ui.GEOM_SELECTION;
+import rpnumerics.ManifoldOrbit;
 import rpnumerics.ManifoldOrbitCalc;
+import rpnumerics.OrbitPoint;
 
 public class ManifoldParser implements ActionListener {
 

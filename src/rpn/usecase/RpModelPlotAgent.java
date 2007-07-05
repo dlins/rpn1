@@ -8,19 +8,12 @@ package rpn.usecase;
 
 import wave.util.RealVector;
 import rpn.parser.RPnDataModule;
-import rpn.component.RpGeomFactory;
 import rpn.component.RpGeometry;
-import wave.ode.Rk4BPProfile;
-import javax.swing.AbstractAction;
 import javax.swing.Action;
-import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JToggleButton;
 import java.util.Iterator;
-import java.util.List;
-import rpn.controller.PhaseSpacePanel2DController;
-import rpn.RPnConfigReader;
 import rpn.controller.ui.*;
 
 

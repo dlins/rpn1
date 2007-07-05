@@ -7,19 +7,18 @@
 package rpn.controller.phasespace;
 
 import rpn.component.*;
-import rpnumerics.ManifoldOrbit;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.usecase.*;
+import rpnumerics.ManifoldOrbit;
 import wave.util.RealVector;
-import rpn.controller.*;
 
 public class PoincareReadyImpl extends NumConfigReadyImpl
-    		implements POINCARE_READY {
+        implements POINCARE_READY {
     //
     // Members
     //
     private PoincareSectionGeom simplexGeom_;
-
+    
     //
     // Constructors
     //
@@ -32,37 +31,37 @@ public class PoincareReadyImpl extends NumConfigReadyImpl
         // DISABLED
         FindProfileAgent.instance().setEnabled(false);
     }
-
+    
     //
     // Accessors/Mutators
     //
     public PoincareSectionGeom poincareGeom() { return simplexGeom_; }
-
+    
     //
     // Methods
     //
     
-
+    
     public void delete(RPnPhaseSpaceAbstraction phaseSpace, RpGeometry geom) {
-            super.delete(phaseSpace, geom);
-            if (geom instanceof PoincareSectionGeom)
-                phaseSpace.changeState(new NumConfigReadyImpl(hugoniotGeom(), xzeroGeom()));
-        }
-
+        super.delete(phaseSpace, geom);
+        if (geom instanceof PoincareSectionGeom)
+            phaseSpace.changeState(new NumConfigReadyImpl(hugoniotGeom(), xzeroGeom()));
+    }
+    
     public void plot(RPnPhaseSpaceAbstraction phaseSpace, RpGeometry geom) {
         super.plot(phaseSpace, geom);
         if (geom.geomFactory().geomSource() instanceof ManifoldOrbit)
-                if (((ManifoldOrbit)geom.geomFactory().geomSource()).getTimeDirection() == OrbitGeom.BACKWARD_DIR)
-                    phaseSpace.changeState(
+            if (((ManifoldOrbit)geom.geomFactory().geomSource()).getTimeDirection() == OrbitGeom.BACKWARD_DIR)
+                phaseSpace.changeState(
                         new bwdProfileReadyImpl(hugoniotGeom(), xzeroGeom(), poincareGeom(), (ManifoldGeom)geom));
-                else
-                    phaseSpace.changeState(
+            else
+                phaseSpace.changeState(
                         new fwdProfileReadyImpl(hugoniotGeom(), xzeroGeom(), poincareGeom(), (ManifoldGeom)geom));
-
+        
     }
-
+    
     public void select(RPnPhaseSpaceAbstraction phaseSpace, RealVector coords) {
         super.select(phaseSpace, coords);
-		rpn.usecase.FindProfileAgent.instance().setEnabled(true);        
+        rpn.usecase.FindProfileAgent.instance().setEnabled(true);
     }
 }

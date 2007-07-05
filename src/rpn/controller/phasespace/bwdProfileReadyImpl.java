@@ -11,7 +11,6 @@ import rpn.component.ManifoldGeom;
 import rpn.component.*;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpnumerics.ManifoldOrbit;
-import wave.util.RealVector;
 
 
 public class bwdProfileReadyImpl extends PoincareReadyImpl

@@ -1,6 +1,7 @@
 package rpn.component;
 
-import rpnumerics.*;
+import rpnumerics.Orbit;
+import rpnumerics.OrbitCalc;
 
 
 public class RarefactionOrbitFactory extends OrbitGeomFactory {

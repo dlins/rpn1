@@ -49,10 +49,10 @@ public class ChangeSigmaAgent extends RpModelConfigChangeAgent {
         }
         else
           ((ShockFlow)RPNUMERICS.flow()).setSigma(lastPointAdded);
-        System.out.println("OLD SIGMA = " + oldValue);
+//        System.out.println("OLD SIGMA = " + oldValue);
         Double newValue = new Double(((ShockFlow)RPNUMERICS.flow()).getSigma());
-        System.out.println("NEW SIGMA = " + newValue);
-        applyChange(new PropertyChangeEvent(this, DESC_TEXT, oldValue, newValue));
+//        System.out.println("NEW SIGMA = " + newValue);
+//        applyChange(new PropertyChangeEvent(this, DESC_TEXT, oldValue, newValue));
     }
 
     public void unexecute() {

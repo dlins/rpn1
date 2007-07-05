@@ -6,16 +6,9 @@
 
 package rpn.component;
 
-import rpnumerics.StationaryPointCalc;
-import wave.multid.model.MultiGeometryImpl;
-import wave.multid.model.MultiPoint;
-import wave.multid.view.ViewingTransform;
-import wave.multid.CoordsArray;
-import wave.multid.view.ViewingAttr;
-import wave.multid.view.GeomObjView;
-import wave.multid.DimMismatchEx;
 import rpnumerics.StationaryPoint;
-import java.awt.Color;
+import rpnumerics.StationaryPointCalc;
+import wave.multid.CoordsArray;
 
 public class StationaryPointGeomFactory extends RpCalcBasedGeomFactory {
   //

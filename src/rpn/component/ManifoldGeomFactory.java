@@ -6,17 +6,8 @@
 
 package rpn.component;
 
-import rpn.usecase.ChangeSigmaAgent;
-import rpn.controller.RpController;
-import rpn.controller.RpCalcController;
-import rpn.controller.ProfileController;
-import rpnumerics.*;
-import wave.multid.model.MultiGeometryImpl;
-import wave.multid.model.MultiPolyLine;
-import wave.multid.view.*;
-import wave.multid.CoordsArray;
-import wave.multid.DimMismatchEx;
-import java.awt.Color;
+import rpnumerics.ManifoldOrbit;
+import rpnumerics.ManifoldOrbitCalc;
 
 public class ManifoldGeomFactory extends RpCalcBasedGeomFactory {
     //

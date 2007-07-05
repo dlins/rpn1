@@ -10,13 +10,13 @@ package rpn.component;
 
 import java.awt.*;
 import java.awt.geom.*;
-
-import rpnumerics.*;
 import wave.multid.*;
 import wave.multid.model.*;
 import wave.multid.view.*;
 import wave.util.*;
 import java.util.ArrayList;
+import rpnumerics.Orbit;
+import rpnumerics.OrbitPoint;
 
 
 public class OrbitGeomView extends PolyLine {

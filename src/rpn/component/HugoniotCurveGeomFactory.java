@@ -9,6 +9,7 @@ package rpn.component;
 import rpnumerics.*;
 import rpn.controller.HugoniotController;
 import rpn.controller.RpController;
+import rpnumerics.facade.*;
 
 public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
     public HugoniotCurveGeomFactory(HugoniotCurveCalc calc) {
@@ -28,12 +29,15 @@ public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
       HugoniotCurve curve = (HugoniotCurve)geomSource();
 
         // assuming a container with HugoniotSegment elements
-        int resultSize = curve.segments().size();
+//        int resultSize = curve.segments().size();
 
-        HugoniotSegGeom[] hugoniotArray = new HugoniotSegGeom[resultSize];
-        for (int i = 0; i < resultSize; i++)
-          hugoniotArray[i] = new HugoniotSegGeom( (HugoniotSegment) curve.segments().get(i));
-        return new HugoniotCurveGeom(hugoniotArray, this);
+//        HugoniotSegGeom[] hugoniotArray = new HugoniotSegGeom[resultSize];
+//        for (int i = 0; i < resultSize; i++)
+//          hugoniotArray[i] = new HugoniotSegGeom( (HugoniotSegment) curve.segments().get(i));
+
+      
+      return null;
+//      return new HugoniotCurveGeom(hugoniotArray, this); 
 
     }
 
@@ -41,7 +45,7 @@ public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
 
       StringBuffer buffer = new StringBuffer();
 
-      buffer.append(((HugoniotCurve)geomSource()).toXML(rpn.parser.RPnDataModule.RESULTS));
+//      buffer.append(((HugoniotCurve)geomSource()).toXML(rpn.parser.RPnDataModule.RESULTS));
 
       return  buffer.toString();
 

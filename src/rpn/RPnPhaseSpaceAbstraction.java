@@ -6,8 +6,8 @@
 
 package rpn;
 
-import rpn.component.*;
 import rpn.controller.phasespace.*;
+import rpnumerics.ShockFlow;
 import wave.multid.model.AbstractScene;
 import wave.multid.Space;
 import rpnumerics.*;
@@ -15,6 +15,8 @@ import rpn.component.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
+import rpnumerics.StationaryPoint;
+import rpnumerics.StationaryPoint;
 import wave.util.RealVector;
 
 public class RPnPhaseSpaceAbstraction extends AbstractScene {

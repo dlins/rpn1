@@ -6,16 +6,12 @@
 
 package rpn.usecase;
 
-import rpn.RPnPhaseSpaceAbstraction;
 import rpn.component.*;
-import rpn.RPnDesktopPlotter;
-import rpnumerics.StationaryPoint;
 import rpnumerics.PhasePoint;
-import rpnumerics.ManifoldOrbitCalc;
 import wave.util.RealVector;
-import javax.swing.ImageIcon;
-import rpn.controller.PhaseSpacePanel2DController;
 import rpn.RPnConfigReader;
+import rpnumerics.ManifoldOrbitCalc;
+import rpnumerics.StationaryPoint;
 
 public class BackwardManifoldPlotAgent extends RpModelPlotAgent {
     //

@@ -4,7 +4,7 @@
 
 #include "Vector2.h"
 
-typedef Jacobian Matrix2
+typedef  Matrix2 Jacobian
 
 #endif	/* _Jacobian_H */
 

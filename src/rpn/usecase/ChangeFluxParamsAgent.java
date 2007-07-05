@@ -7,17 +7,13 @@
 package rpn.usecase;
 
 import wave.util.RealVector;
-import rpn.component.RpGeomFactory;
 import rpnumerics.RPNUMERICS;
-import rpnumerics.physics.FluxParams;
-import rpnumerics.ConservationShockFlow;
-import javax.swing.AbstractAction;
 import javax.swing.JDialog;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.awt.Dimension;
 import java.awt.Point;
-import rpn.controller.PhaseSpacePanel2DController;
+import rpnumerics.ConservationShockFlow;
 
 public class ChangeFluxParamsAgent extends RpModelConfigChangeAgent {
     //
@@ -44,8 +40,8 @@ public class ChangeFluxParamsAgent extends RpModelConfigChangeAgent {
     public void unexecute() {
         RealVector newValue = (RealVector)log().getOldValue();
         RealVector oldValue = (RealVector)log().getNewValue();
-        rpnumerics.RPNUMERICS.fluxFunction().fluxParams().setParams(newValue);
-        ((ConservationShockFlow)RPNUMERICS.flow()).updateXZeroTerms();
+//        rpnumerics.RPNUMERICS.fluxFunction().fluxParams().setParams(newValue);
+//        ((ConservationShockFlow)RPNUMERICS.flow()).updateXZeroTerms();
         applyChange(new PropertyChangeEvent(this, DESC_TEXT, oldValue, newValue));
     }
 

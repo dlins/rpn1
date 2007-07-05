@@ -5,10 +5,10 @@ import wave.multid.model.MultiGeometryImpl;
 import wave.multid.view.ViewingTransform;
 import wave.multid.DimMismatchEx;
 import wave.multid.view.ViewingAttr;
-import rpnumerics.Orbit;
 import java.util.ArrayList;
-import rpnumerics.OrbitPoint;
 import java.awt.Shape;
+import rpnumerics.Orbit;
+import rpnumerics.OrbitPoint;
 
 public class RarefactionOrbitView extends PolyLine {
 

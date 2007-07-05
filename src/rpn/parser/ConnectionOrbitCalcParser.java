@@ -3,14 +3,14 @@ package rpn.parser;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import rpnumerics.ConnectionOrbit;
-import rpnumerics.ConnectionOrbitCalc;
 import rpn.component.ProfileGeom;
 import rpn.component.ProfileGeomFactory;
 import rpn.component.MultidAdapter;
 import rpn.controller.phasespace.ProfileReadyImpl;
 import rpn.controller.phasespace.ProfileSetupReadyImpl;
 import rpn.usecase.FindProfileAgent;
+import rpnumerics.ConnectionOrbit;
+import rpnumerics.ConnectionOrbitCalc;
 
 
 

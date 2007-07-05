@@ -307,8 +307,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         dialog.setModal(true);
         dialog.pack();
         dialog.setVisible(true);
-        rpnumerics.RPNUMERICS.errorControl().reset(dialog.getEps(),
-                rpnumerics.RPNUMERICS.boundary());
+//        rpnumerics.RPNUMERICS.errorControl().reset(dialog.getEps(),
+//                rpnumerics.RPNUMERICS.boundary());
     }
 
 

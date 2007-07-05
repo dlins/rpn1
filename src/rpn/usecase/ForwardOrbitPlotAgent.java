@@ -10,7 +10,6 @@ import rpn.component.*;
 import rpnumerics.OrbitCalc;
 import rpnumerics.OrbitPoint;
 import wave.util.RealVector;
-import rpn.RPnConfigReader;
 
 public class ForwardOrbitPlotAgent extends RpModelPlotAgent {
     //
