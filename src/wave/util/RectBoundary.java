@@ -6,7 +6,6 @@
 
 package wave.util;
 
-import wave.util.graphs.*;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 

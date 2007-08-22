@@ -6,7 +6,11 @@
 
 package rpn;
 
-import wave.util.graphs.*;
+import wave.multid.graphs.ClippedShape;
+import wave.multid.graphs.Iso2EquiTransform;
+import wave.multid.graphs.ViewPlane;
+import wave.multid.graphs.dcViewport;
+import wave.multid.graphs.wcWindow;
 import wave.multid.view.Viewing2DTransform;
 import wave.multid.view.Viewing3DTransform;
 import wave.multid.view.ViewingTransform;

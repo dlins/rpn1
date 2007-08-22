@@ -6,7 +6,7 @@
 
 package wave.util;
 
-import wave.util.graphs.ViewPlane;
+import wave.multid.graphs.ViewPlane;
 import java.awt.Point;
 
 /*

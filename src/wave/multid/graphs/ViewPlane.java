@@ -5,7 +5,7 @@
 *
 */
 
-package wave.util.graphs;
+package wave.multid.graphs;
 
 import wave.util.RealMatrix2;
 import wave.util.RealVector;

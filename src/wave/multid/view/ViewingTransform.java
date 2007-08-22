@@ -11,7 +11,7 @@ import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
 import wave.multid.map.ProjectionMap;
 import wave.multid.map.Map;
-import wave.util.graphs.ViewPlane;
+import wave.multid.graphs.ViewPlane;
 
 /** A interface that declares basics methods to create a 2D or 3D transformation to obtain a visual form of a multidimensional object. */
 

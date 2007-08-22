@@ -313,7 +313,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
 
     protected void phaseSpaceFramesInit(Boundary boundary) {
-        wave.util.graphs.ClippedShape clipping = new wave.util.graphs.
+        wave.multid.graphs.ClippedShape clipping = new wave.multid.graphs.
                                                  ClippedShape(boundary);
         int numOfPanels = RPnVisualizationModule.DESCRIPTORS.size();
         frames_ = new RPnPhaseSpaceFrame[numOfPanels];

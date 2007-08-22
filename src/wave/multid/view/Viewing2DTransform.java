@@ -10,7 +10,7 @@ import wave.multid.map.*;
 import wave.multid.CoordsArray;
 import wave.multid.Coords2D;
 import wave.multid.Multid;
-import wave.util.graphs.ViewPlane;
+import wave.multid.graphs.ViewPlane;
 
 public class Viewing2DTransform implements ViewingTransform {
     //

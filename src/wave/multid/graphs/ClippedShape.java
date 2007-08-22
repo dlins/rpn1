@@ -4,7 +4,7 @@
  *
  */
 
-package wave.util.graphs;
+package wave.multid.graphs;
 
 import java.awt.geom.Line2D;
 import java.awt.geom.GeneralPath;

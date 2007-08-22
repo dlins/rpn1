@@ -5,7 +5,7 @@
 *
 */
 
-package wave.util.graphs;
+package wave.multid.graphs;
 
 public class ViewVolume {
     //

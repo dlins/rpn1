@@ -7,13 +7,13 @@
 package rpn.controller;
 
 import wave.util.RealVector;
-import wave.util.graphs.ViewPlane;
+import wave.multid.graphs.ViewPlane;
 import wave.multid.view.Viewing2DTransform;
 import wave.multid.view.Viewing3DTransform;
 import java.awt.Dimension;
-import wave.util.graphs.Iso2EquiTransform;
+import wave.multid.graphs.Iso2EquiTransform;
 import java.awt.Graphics2D;
-import wave.util.graphs.dcViewport;
+import wave.multid.graphs.dcViewport;
 import rpn.RPnPhaseSpaceFrame;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;

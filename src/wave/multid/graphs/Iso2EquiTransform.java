@@ -4,7 +4,7 @@
  *
  */
 
-package wave.util.graphs;
+package wave.multid.graphs;
 
 import wave.multid.map.ProjectionMap;
 import wave.multid.view.Viewing2DTransform;

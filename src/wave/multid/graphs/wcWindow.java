@@ -5,7 +5,7 @@
 *
 */
 
-package wave.util.graphs;
+package wave.multid.graphs;
 
 import wave.multid.map.Map;
 import wave.multid.view.Viewing2DTransform;

@@ -6,7 +6,7 @@
 
 package rpnumerics;
 
-import rpnumerics.facade.*;
+
 import wave.util.RealVector;
 import wave.util.RealSegment;
 import java.util.List;

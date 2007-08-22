@@ -5,7 +5,7 @@
 *
 */
 
-package wave.util.graphs;
+package wave.multid.graphs;
 
 import java.awt.Rectangle;
 import java.awt.Point;
