@@ -9,7 +9,7 @@ package rpn.component;
 import rpnumerics.*;
 import rpn.controller.HugoniotController;
 import rpn.controller.RpController;
-import rpnumerics.facade.*;
+
 
 public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
     public HugoniotCurveGeomFactory(HugoniotCurveCalc calc) {
