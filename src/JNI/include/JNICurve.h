@@ -33,7 +33,7 @@ public:
 //     "(Lrpnumerics/PhasePoint;[D[D[Lwave/util/RealVector;ILwave/util/RealMatrix2;Lwave/util/RealMatrix2;ILwave/util/RealMatrix2;I)V");
     
     
-    jobject stationaryPointConstructor(const double *, const int, const double *, const int,  const double *, const int , jobjectArray , const int , jobject, jobject, const int, jobject, jobject , const int) const ;
+    jobject stationaryPointConstructor( double *,  int, double *,  int,  double *, const int , jobjectArray ,  int , jobject, jobject,  int, jobject, jobject ,  int)  ;
 
     JNICurve(JNIEnv *);
     

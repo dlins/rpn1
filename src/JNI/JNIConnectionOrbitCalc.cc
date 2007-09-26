@@ -14,22 +14,22 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ConnectionOrbitCalc_calc
     
     jobject stationaryPointA, stationaryPointB, orbit;
     
-    RealVector nativeRealVector(2);
+//    RealVector nativeRealVector(2);
+//    
+//    nativeRealVector(0)=0.25;
+//    nativeRealVector(1)=0.25;
+//    
+//    int timeDirection =0;
     
-    nativeRealVector(0)=0.25;
-    nativeRealVector(1)=0.25;
-    
-    int timeDirection =0;
-    
-    ShockRarefaction function ;
-    
-    ODESolverProfile  profile(2, 0.01, function);
-    
-    RK4BPMethod odeSolver(profile);
-    
-    ODESolution * solution = odeSolver.solve(nativeRealVector, timeDirection);
-    
-    orbit =  curveInstance->orbitConstructor(solution->getCoords(), timeDirection);
+//    ShockRarefaction function ;
+//    
+//    ODESolverProfile  profile(2, 0.01, function);
+//    
+//    RK4BPMethod odeSolver(profile);
+//    
+//    ODESolution * solution = odeSolver.solve(nativeRealVector, timeDirection);
+//    
+//    orbit =  curveInstance->orbitConstructor(solution->getCoords(), timeDirection);
     
     
     

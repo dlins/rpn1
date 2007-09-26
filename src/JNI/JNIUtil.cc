@@ -78,7 +78,7 @@ void JNIUtil::arrayListAdd(jobject list , jobject element )const {
 
 }
 
-jobject JNIUtil::phasePointConstructor(const double * coords, const int coordsSize ) const {
+jobject JNIUtil::phasePointConstructor(double * coords, const int coordsSize ) const {
     
     jdoubleArray tempArray = envPointer->NewDoubleArray(coordsSize);
     

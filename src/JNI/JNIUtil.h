@@ -13,7 +13,7 @@ class JNIUtil {
     
 public:
     
-    jobject phasePointConstructor(const double * coords, const int coordssize) const;
+    jobject phasePointConstructor( double * coords, const int coordssize) const;
     
     jobjectArray realVectorArrayConstructor(double ** data, const int datazise, const int elementsize) const;
     

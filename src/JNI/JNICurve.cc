@@ -131,16 +131,6 @@ jobject JNICurve::orbitConstructorTesteArray( double ** coords, const int timeDi
 }
 
 
-
-
-
-
-
-
-
-
-
-
 jobject JNICurve::orbitConstructor(const vector<RealVector> coords, const int timeDirection) const {
     
     int i, j;
@@ -182,13 +172,13 @@ jobject JNICurve::orbitConstructor(const vector<RealVector> coords, const int ti
     
 }
 
-jobject JNICurve::stationaryPointConstructor(const double * phasePoint, const int phasePointSize, const double * eigenValR, const int eigenValRSize,
+jobject JNICurve::stationaryPointConstructor(double * phasePoint,  int phasePointSize,  double * eigenValR,  int eigenValRSize,
         
-        const double *eigenValI, const int eigenValISize, jobjectArray realVectorArray, const int DimP ,
+         double *eigenValI,  int eigenValISize, jobjectArray realVectorArray,  int DimP ,
         
         jobject schurFormP , jobject schurVecP, const int DimN, jobject schurFormN,
         
-        jobject schurVecN, const int integrationFlag) const {
+        jobject schurVecN,  int integrationFlag)  {
     
     
     jobject localPhasePoint = utilInstance->phasePointConstructor(phasePoint, phasePointSize); //phasePoint
