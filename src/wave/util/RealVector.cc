@@ -1,6 +1,9 @@
 #include "RealVector.h"
 
-RealVector::RealVector(int size):Vector(size){}
+RealVector::RealVector(int size):Vector(size){
+
+
+}
 
 RealVector::RealVector(){}
 
@@ -12,6 +15,12 @@ bool RealVector::operator ==(const RealVector &test){
         if (test.component(i)!=component(i))
             return false;
     }
-        return true;
+    return true;
+    
+}
+void RealVector::setVal(int vindx [], double val){
+    
+}
+double RealVector::getVal(int vindex []) const{
     
 }

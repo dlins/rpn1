@@ -2,10 +2,18 @@
 
 HessianMatrix::HessianMatrix(const int n){
     
-    data_= new double[n];
+    
 }
 
 
 HessianMatrix::~HessianMatrix(){
-    delete (data_);
+    
+}
+
+void HessianMatrix::setVal(int vindx [], double val){
+    
+}
+
+double HessianMatrix::getVal(int vindex []) const{
+    
 }
