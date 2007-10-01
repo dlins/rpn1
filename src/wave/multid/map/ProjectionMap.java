@@ -6,11 +6,7 @@
 
 package wave.multid.map;
 
-import wave.multid.CoordsArray;
-import wave.multid.DimMismatchEx;
 import wave.multid.Space;
-import wave.multid.Multid;
-import wave.multid.model.AbstractGeomObj;
 import wave.util.RealMatrix2;
 
 public class ProjectionMap extends HomogeneousMap {

@@ -10,7 +10,7 @@
 #define FactorMatrixN FactorMatrix4
 #define RangeViolationN RangeViolation4
 
-//#include <VectorN.hP>
+#include <VectorN.hP>
 
 #undef VectorN
 #undef MatrixN

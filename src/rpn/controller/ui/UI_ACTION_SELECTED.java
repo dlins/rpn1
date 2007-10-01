@@ -10,7 +10,6 @@ import wave.util.RealVector;
 import rpn.usecase.*;
 import java.util.ArrayList;
 import java.util.List;
-import rpn.controller.ui.*;
 
 public class UI_ACTION_SELECTED implements UserInputHandler {
     //
@@ -18,18 +17,18 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
     //
     private RpModelActionAgent actionSelected_;
     private List userInputList_;
-
+    
     public UI_ACTION_SELECTED(RpModelActionAgent action) {
         actionSelected_ = action;
         userInputList_ = new ArrayList();
     }
-
+    
     public RealVector[] userInputList(rpn.controller.ui.UIController ui) {
         return ui.inputConvertion(userInputList_);
     }
-
+    
     public void userInputComplete(rpn.controller.ui.UIController ui,
-                                  RealVector userInput) {
+            RealVector userInput) {
         userInputList_.add(new RealVector(userInput));
         if (actionSelected_ instanceof PoincareSectionPlotAgent) {
             if (isPoincareInputReady()) {
@@ -37,7 +36,7 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
                 //		actionSelected_.getValue(javax.swing.Action.SHORT_DESCRIPTION).toString());
                 UIController.instance().setWaitCursor();
                 actionSelected_.execute();
-
+                
                 //rpn.RPnUIFrame.instance().setTitle("");
                 UIController.instance().resetCursor();
                 userInputList_.clear();
@@ -45,12 +44,12 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
                 rpn.parser.RPnDataModule.PHASESPACE.unselectAll();
             }
         } else {
-
+            
             //rpn.RPnUIFrame.instance().setTitle(" completing ...  " +
             //	    actionSelected_.getValue(javax.swing.Action.SHORT_DESCRIPTION).toString());
             UIController.instance().setWaitCursor();
             actionSelected_.execute();
-
+            
             //      rpn.RPnUIFrame.instance().setTitle("");
             UIController.instance().resetCursor();
             userInputList_.clear();
@@ -58,14 +57,14 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
             rpn.parser.RPnDataModule.PHASESPACE.unselectAll();
         }
     }
-
+    
     protected boolean isPoincareInputReady() {
         if (userInputList_.size() == rpnumerics.RPNUMERICS.domainDim()) {
             return true;
         }
         return false;
     }
-
+    
     public RpModelActionAgent getAction() {
         return actionSelected_;
     }

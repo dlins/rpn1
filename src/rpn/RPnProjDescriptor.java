@@ -6,19 +6,18 @@
 
 package rpn;
 
+import wave.multid.view.Viewing2DTransform;
+import wave.multid.view.Viewing3DTransform;
+import wave.multid.view.ViewingTransform;
+import wave.multid.Space;
+import wave.multid.Multid;
 import wave.multid.graphs.ClippedShape;
 import wave.multid.graphs.Iso2EquiTransform;
 import wave.multid.graphs.ViewPlane;
 import wave.multid.graphs.dcViewport;
 import wave.multid.graphs.wcWindow;
-import wave.multid.view.Viewing2DTransform;
-import wave.multid.view.Viewing3DTransform;
-import wave.multid.view.ViewingTransform;
-import wave.multid.view.ViewingAttr;
-import wave.multid.Space;
-import wave.multid.Multid;
 import wave.multid.map.ProjectionMap;
-
+//
 public class RPnProjDescriptor {
     //
     // Constants

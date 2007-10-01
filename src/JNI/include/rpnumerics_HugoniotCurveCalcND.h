@@ -11,19 +11,19 @@ extern "C" {
 #define rpnumerics_HugoniotCurveCalcND_UMINUS_SHIFT 0.01
 /*
  * Class:     rpnumerics_HugoniotCurveCalcND
- * Method:    calc
- * Signature: ()Lrpnumerics/RpSolution;
+ * Method:    setUMinus
+ * Signature: (Lrpnumerics/PhasePoint;)V
  */
-JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
-  (JNIEnv *, jobject);
+JNIEXPORT void JNICALL Java_rpnumerics_HugoniotCurveCalcND_setUMinus
+  (JNIEnv *, jobject, jobject);
 
 /*
  * Class:     rpnumerics_HugoniotCurveCalcND
- * Method:    recalc
- * Signature: ()Lrpnumerics/RpSolution;
+ * Method:    calc
+ * Signature: (Lwave/util/RealVector;)Lrpnumerics/RpSolution;
  */
-JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_recalc
-  (JNIEnv *, jobject);
+JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
+  (JNIEnv *, jobject, jobject);
 
 #ifdef __cplusplus
 }

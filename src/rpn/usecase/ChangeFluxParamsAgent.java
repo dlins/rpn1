@@ -13,7 +13,6 @@ import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.awt.Dimension;
 import java.awt.Point;
-import rpnumerics.ConservationShockFlow;
 
 public class ChangeFluxParamsAgent extends RpModelConfigChangeAgent {
     //
@@ -40,8 +39,7 @@ public class ChangeFluxParamsAgent extends RpModelConfigChangeAgent {
     public void unexecute() {
         RealVector newValue = (RealVector)log().getOldValue();
         RealVector oldValue = (RealVector)log().getNewValue();
-//        rpnumerics.RPNUMERICS.fluxFunction().fluxParams().setParams(newValue);
-//        ((ConservationShockFlow)RPNUMERICS.flow()).updateXZeroTerms();
+        RPNUMERICS.changeFluxParams(newValue.toDouble());
         applyChange(new PropertyChangeEvent(this, DESC_TEXT, oldValue, newValue));
     }
 

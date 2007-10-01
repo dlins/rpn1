@@ -89,7 +89,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_calc  (JNIEnv * env, jobject
     
     jmethodID    orbitConstructor_ = (env)->GetMethodID(classOrbit_, "<init>", "([Lrpnumerics/OrbitPoint;I)V");
     
-    jobjectArray  orbitPointArray  = (env)->NewObjectArray(resultList.size(), classOrbitPoint_, NULL);
+    jobjectArray  orbitPointArray  = (jobjectArray)(env)->NewObjectArray(resultList.size(), classOrbitPoint_, NULL);
     
     
     for(i=0;i < resultList.size();i++ ){

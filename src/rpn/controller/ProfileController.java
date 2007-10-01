@@ -1,5 +1,5 @@
 /*
-  * Instituto de Matematica Pura e Aplicada - IMPA
+ * Instituto de Matematica Pura e Aplicada - IMPA
  * Departamento de Dinamica dos Fluidos
  *
  */
@@ -11,22 +11,22 @@ import rpn.usecase.*;
 import rpnumerics.RPNUMERICS;
 
 import java.beans.PropertyChangeEvent;
-import rpnumerics.ConservationShockFlow;
+
 
 public class ProfileController extends RpCalcController {
-
+    
     //
     // Members
     //
-
+    
     //
     // Constructors
     //
-
+    
     //
     // Accessors/Mutators
     //
-
+    
     //
     // Methods
     //
@@ -34,27 +34,31 @@ public class ProfileController extends RpCalcController {
         ChangeFluxParamsAgent.instance().addPropertyChangeListener(this);
         ChangeXZeroAgent.instance().addPropertyChangeListener(this);
     }
-
+    
     protected void unregister() {
         ChangeFluxParamsAgent.instance().removePropertyChangeListener(this);
         ChangeXZeroAgent.instance().removePropertyChangeListener(this);
     }
-
+    
     public void propertyChange(PropertyChangeEvent change) {
         // this is to avoid void notifications of enabled/disbled
         if (change.getPropertyName().compareTo("enabled") != 0) {
+            
+            // fires ChangeSigma event...
 
-           // fires ChangeSigma event...
-//           double oldSigma = ((ConservationShockFlow)RPNUMERICS.flow()).getSigma();
-
-//           super.propertyChange(change);
+            
+            double oldSigma = RPNUMERICS.getSigma();
+            
+            super.propertyChange(change);
 //
-//           double newSigma = ((ConservationShockFlow)RPNUMERICS.flow()).getSigma();
-//           ChangeSigmaAgent.instance().applyChange(
-//              new java.beans.PropertyChangeEvent(this,
-//              						ChangeSigmaAgent.DESC_TEXT,
-//                                    new Double(oldSigma),
-//                                    new Double(newSigma)));
+            double newSigma =  RPNUMERICS.getSigma();
+            ChangeSigmaAgent.instance().applyChange(              new java.beans.PropertyChangeEvent(this,
+                    ChangeSigmaAgent.DESC_TEXT,
+                    new Double(oldSigma),
+                    new Double(newSigma)));
+            
+            
+            
         }
     }
 }

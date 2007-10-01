@@ -7,11 +7,8 @@
 package rpn.controller.ui;
 
 import rpn.usecase.*;
-import rpn.message.*;
 import rpnumerics.RPNumericsProfile;
 import rpn.RPnPhaseSpacePanel;
-import rpn.RPnPhaseSpaceFrame;
-import rpn.component.RpGeomFactory;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
 import wave.util.RealVector;
@@ -19,18 +16,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.awt.Point;
 import javax.swing.plaf.ComponentUI;
-import javax.swing.JToggleButton;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ChangeEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Cursor;
 import rpn.controller.*;
-import java.io.*;
 import java.net.*;
 import rpn.message.*;
-import rpn.*;
 
 /** This class implements a general controller to the application. With the UIController class, the state of the application is changed, the controllers of each panel are installed or removed and the user inputs are stored in a global table. */
 

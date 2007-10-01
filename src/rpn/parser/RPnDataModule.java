@@ -21,8 +21,6 @@ import java.util.StringTokenizer;
 import java.io.*;
 import java.awt.event.ActionEvent;
 import rpnumerics.PhasePoint;
-import rpnumerics.ShockFlow;
-import rpnumerics.ConservationShockFlow;
 import rpnumerics.Orbit;
 import rpnumerics.OrbitPoint;
 import rpnumerics.StationaryPoint;
@@ -115,8 +113,7 @@ public class RPnDataModule {
             if (name.equals("SHOCKFLOWDATA")) {
                 calcReady_ = new Boolean(att.getValue(1)).booleanValue();
 
-                ShockFlow flow = (ShockFlow) rpnumerics.RPNUMERICS.flow();
-//                flow.setSigma(new Double(att.getValue(0)).doubleValue());
+                RPNUMERICS.changeSigma(new Double(att.getValue(0)).doubleValue());
 
             }
 
@@ -475,19 +472,13 @@ public class RPnDataModule {
 
     static public void export(FileWriter writer) throws java.io.IOException {
 
-        if ((RPNUMERICS.flow() instanceof ConservationShockFlow) &&
-            (RPNUMERICS.flow() != null)) {
-
+        if ((RPNUMERICS.getProfile().getFlowType().equals("shockflow"))) {
             writer.write("<RPDATA>\n");
             writer.write("<FLOWDATA>\n");
 
-            writer.write("<SHOCKFLOWDATA sigma=\"" +
-                         ((ConservationShockFlow) RPNUMERICS.flow()).getSigma() +
-                         "\" calcready=\"" + rpn.parser.RPnDataModule.RESULTS +
-                         "\">\n");
+            writer.write("<SHOCKFLOWDATA sigma=\"" +RPNUMERICS.getSigma() + "\" calcready=\"" + rpn.parser.RPnDataModule.RESULTS + "\">\n");
             writer.write("<XZERO>\n");
-            writer.write(((ConservationShockFlow) RPNUMERICS.flow()).getXZero().
-                         toXML());
+            writer.write(RPNUMERICS.getXZero().toXML());
             writer.write("</XZERO>\n");
             writer.write("</SHOCKFLOWDATA>\n");
 

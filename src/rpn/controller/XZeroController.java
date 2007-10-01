@@ -12,7 +12,6 @@ import rpn.usecase.*;
 import rpnumerics.RPNUMERICS;
 import rpnumerics.PhasePoint;
 import java.beans.PropertyChangeEvent;
-import rpnumerics.ConservationShockFlow;
 import rpnumerics.StationaryPointCalc;
 
 public class XZeroController
@@ -68,12 +67,12 @@ public class XZeroController
        * TO BE NOTIFIED !!! THIS WILL FORCE THE XZERO TERMS UPDATE TOO !
        * IT HSA TO GET FROM STATIONARY POINT CALC
        */
-            
-            
-            if (RPNUMERICS.flow() instanceof ConservationShockFlow) {
+
+                if (RPNUMERICS.getProfile().getFlowType().equals("shockflow")){
                 
-//                ( (ConservationShockFlow) RPNUMERICS.flow()).setXZero( ( (
-//                        StationaryPointCalc) geomFactory_.rpCalc()).getInitPoint());
+                
+                RPNUMERICS.setXZero(((StationaryPointCalc) geomFactory_.rpCalc()).getInitPoint());
+
             }
                     
             // UPDATES EIGENS

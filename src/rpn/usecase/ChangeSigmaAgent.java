@@ -11,7 +11,6 @@ import rpn.controller.phasespace.NUMCONFIG;
 import rpn.parser.RPnDataModule;
 import rpnumerics.RPNUMERICS;
 import rpnumerics.PhasePoint;
-import rpnumerics.ShockFlow;
 import rpnumerics.HugoniotCurve;
 import wave.util.RealVector;
 import java.beans.PropertyChangeEvent;
@@ -37,29 +36,30 @@ public class ChangeSigmaAgent extends RpModelConfigChangeAgent {
 
     public void execute() {
 
-        Double oldValue = new Double(((ShockFlow)RPNUMERICS.flow()).getSigma());
+        Double oldValue = new Double(RPNUMERICS.getSigma());
+        
         RealVector[] userInputList = UIController.instance().userInputList();
         RealVector lastPointAdded = userInputList[userInputList.length - 1];
-        PhasePoint xzero = ((ShockFlow)RPNUMERICS.flow()).getXZero();
+        PhasePoint xzero = RPNUMERICS.getXZero();
         if (rpnumerics.RPNUMERICS.domainDim() == 2) {
             // finds the best point closest from Hugoniot curve
             HugoniotCurve hCurve = (HugoniotCurve)((NUMCONFIG)RPnDataModule.PHASESPACE.state()).hugoniotGeom().geomFactory().geomSource();
             double newSigma = hCurve.findSigma(new PhasePoint(lastPointAdded));
-            ((ShockFlow)RPNUMERICS.flow()).setSigma(newSigma);
+            RPNUMERICS.changeSigma(newSigma);
         }
         else
-          ((ShockFlow)RPNUMERICS.flow()).setSigma(lastPointAdded);
-//        System.out.println("OLD SIGMA = " + oldValue);
-        Double newValue = new Double(((ShockFlow)RPNUMERICS.flow()).getSigma());
-//        System.out.println("NEW SIGMA = " + newValue);
-//        applyChange(new PropertyChangeEvent(this, DESC_TEXT, oldValue, newValue));
+          RPNUMERICS.changeSigma(lastPointAdded);
+        System.out.println("OLD SIGMA = " + oldValue);
+        Double newValue = new Double(RPNUMERICS.getSigma());
+        System.out.println("NEW SIGMA = " + newValue);
+        applyChange(new PropertyChangeEvent(this, DESC_TEXT, oldValue, newValue));
     }
 
     public void unexecute() {
         Double oldValue = (Double)log().getNewValue();
         System.out.println("OLD SIGMA = " + oldValue);
         Double newValue = (Double)log().getOldValue();
-        ((ShockFlow)RPNUMERICS.flow()).setSigma(newValue.doubleValue());
+        RPNUMERICS.changeSigma(newValue.doubleValue());
         System.out.println("NEW SIGMA = " + newValue);
         applyChange(new PropertyChangeEvent(this, DESC_TEXT, oldValue, newValue));
     }

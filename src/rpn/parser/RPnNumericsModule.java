@@ -6,8 +6,9 @@
 package rpn.parser;
 
 import org.xml.sax.SAXParseException;
-import rpn.*;
 
+
+import rpn.RPnMenuCommand;
 import rpnumerics.RPNumericsProfile;
 import wave.util.RealVector;
 import rpnumerics.RPNUMERICS;
@@ -19,7 +20,7 @@ import org.xml.sax.Parser;
 import org.xml.sax.InputSource;
 import java.io.FileWriter;
 import java.util.StringTokenizer;
-import java.io.*;
+import java.io.InputStream;
 import java.util.ArrayList;
 import wave.util.RectBoundary;
 import wave.util.IsoTriang2DBoundary;
@@ -51,28 +52,10 @@ public class RPnNumericsModule {
 
             if (name.equals("NUMERICS")) {
 
-                try {
-                    profile_.initSpecificHugoniotAndFlow(new Boolean(att.
-                            getValue(1)).
-                            booleanValue(),
-                            new Boolean(att.getValue(2)).
-                            booleanValue());
-                } catch (Exception ex) {
-                    System.out.println("Error in Hugoniot or Flow Method Setup");
-                }
-                profile_.setContourMethod(new Boolean(att.getValue(0)).
-                                          booleanValue());
-
             }
 
             if (name.equals("PHYSICS")) {
-                profile_.initPhysics(att.getValue(0),
-                                     new Boolean(att.getValue(1)),
-                                     att.getValue(2),new Integer(att.getValue(3)),new Integer(att.getValue(4)));
-
-
-
-
+                profile_.initPhysics(att.getValue(0),att.getValue(1),att.getValue(2));
             }
 
             if (name.equals("BOUNDARY")) {
@@ -82,7 +65,6 @@ public class RPnNumericsModule {
 
             if (name.equals("CURVE")) {
 
-
                 StringTokenizer tokenizer = new StringTokenizer(att.getValue(1));
                 int [] variations = new int[tokenizer.countTokens()];
                 int i = 0;
@@ -90,8 +72,6 @@ public class RPnNumericsModule {
                     variations[i]= (new Integer(tokenizer.nextToken())).intValue();
                        i++;
                    }
-                   profile_.setVariations(variations);
-                   profile_.setCurveName(att.getValue(0));
             }
 
             if (name.equals("FLOWTYPE")) {
@@ -112,8 +92,8 @@ public class RPnNumericsModule {
                     doubleList[i++] = new Double(tokenizer.nextToken()).
                                       doubleValue();
                 }
-//                RPNUMERICS.fluxFunction().fluxParams().setParams(doubleList);
-
+                
+                RPNUMERICS.changeFluxParams(doubleList);
             }
 
             if (name.equals("PHASEPOINT")) {
@@ -182,16 +162,12 @@ public class RPnNumericsModule {
 
             if (name.equals("CURVE")) {
 
-//                for (int i=0;i < variations_.length; i++){
-//
-//                    System.out.println("Variation " + i + " " + variations_[i]);
-//                }
 
             }
 
             if (name.equals("SHOCKFLOWDATA")) {
 
-                RPNUMERICS.resetShockFlow(bufferedPhasePoint_, sigma_);
+                RPNUMERICS.setShockFlow(bufferedPhasePoint_, sigma_);
 
             }
 

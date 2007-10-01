@@ -1,19 +1,15 @@
 package wave.multid;
 
-import wave.multid.graphs.ViewPlane;
-import wave.multid.graphs.dcViewport;
-import wave.multid.graphs.wcWindow;
 import wave.multid.model.*;
-import wave.multid.*;
 import wave.multid.view.*;
 import java.awt.Color;
 import wave.multid.map.*;
 import wave.util.*;
-import java.awt.geom.*;
-import wave.util.*;
 import java.awt.*;
 import javax.swing.*;
-
+import wave.multid.graphs.ViewPlane;
+import wave.multid.graphs.dcViewport;
+import wave.multid.graphs.wcWindow;
 
 class    ScenePanel extends JPanel {
 

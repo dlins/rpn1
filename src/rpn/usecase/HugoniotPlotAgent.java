@@ -6,17 +6,11 @@
 
 package rpn.usecase;
 
-import rpn.RPnPhaseSpaceAbstraction;
 import rpn.component.*;
 import rpnumerics.*;
 import wave.util.RealVector;
 import wave.util.Boundary;
 import wave.util.GridProfile;
-import javax.swing.ImageIcon;
-import java.awt.event.ActionEvent;
-import rpn.controller.PhaseSpacePanel2DController;
-import rpn.RPnConfigReader;
-import java.net.*;
 
 public class HugoniotPlotAgent extends RpModelPlotAgent {
     //
@@ -42,6 +36,9 @@ public class HugoniotPlotAgent extends RpModelPlotAgent {
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {
+        
+        System.out.println("Chamando create Rp. Dentro de execute");
+
 
         Boundary bound = RPNUMERICS.boundary();
         GridProfile xProfile = new GridProfile(bound.getMinimums().getElement(0), bound.getMaximums().getElement(0), 100);

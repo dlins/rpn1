@@ -39,73 +39,6 @@ public class FindProfileAgent extends RpModelPlotAgent {
      findProfile();
      if (UIController.instance().getNetStatusHandler().isOnline())
      RPnActionMediator.instance().setState(DESC_TEXT);
-
-
-// 	//        double oldSigma = ((GenericShockFlow)RPNUMERICS.flow()).getSigma();
-//         double oldSigma = ((ShockFlow)RPNUMERICS.flow()).getSigma();
-
-//         /*
-//          * THIS IS THE CONTROL FOR PROFILE CREATION
-//          *
-//          * IF ONE OF THE MANIFOLDS IS NULL WE SHOULD TRY TO
-//          * FIND IT USING THE MIDPOINT BETWEEN U- AND THE
-//          * SELECTED STATIONARY POINT
-//          *
-//          * IF BOTH ARE NULL SO WE FIND BOTH OF THEM
-//          */
-
-//         if (!(rpn.RPnDataModule.PHASESPACE.state() instanceof ProfileSetupReadyImpl)) {
-//             // U- MANIFOLD CHECK
-//             if (rpn.RPnDataModule.PHASESPACE.state() instanceof fwdProfileReadyImpl) {
-//                 PhasePoint midPoint = rpn.RPnDataModule.PHASESPACE.findSelectionMidPoint();
-//                 // U+ MANIFOLD CALCULATION
-//                 StationaryPoint bwdstatPoint = (StationaryPoint)
-//                     rpn.RPnDataModule.PHASESPACE.getSelectedGeom().geomFactory().geomSource();
-//                 ManifoldGeomFactory bwdFactory = new ManifoldGeomFactory(
-//                     new ManifoldOrbitCalc(bwdstatPoint, new PhasePoint(midPoint), OrbitGeom.BACKWARD_DIR));
-//                 rpn.RPnDataModule.PHASESPACE.plot(bwdFactory.geom());
-//                 execute();
-//             } else
-//                 // U+ MANIFOLD CHECK
-//                 if (rpn.RPnDataModule.PHASESPACE.state() instanceof bwdProfileReadyImpl) {
-//                     PhasePoint midPoint = rpn.RPnDataModule.PHASESPACE.findSelectionMidPoint();
-//                     // U+ MANIFOLD CALCULATION
-//                     StationaryPoint fwdstatPoint = (StationaryPoint)((NUMCONFIG_READY)
-//                         rpn.RPnDataModule.PHASESPACE.state()).xzeroGeom().geomFactory().geomSource();
-//                     ManifoldGeomFactory fwdFactory = new
-//                         ManifoldGeomFactory(
-//                         new ManifoldOrbitCalc(fwdstatPoint, new PhasePoint(midPoint), OrbitGeom.FORWARD_DIR));
-//                     rpn.RPnDataModule.PHASESPACE.plot(fwdFactory.geom());
-//                     execute();
-//             } else {
-//                 // NO MANIFOLD AVAILABLE
-//                 PhasePoint midPoint = rpn.RPnDataModule.PHASESPACE.findSelectionMidPoint();
-//                 // U- MANIFOLD CALCULATION
-//                 StationaryPoint fwdstatPoint = (StationaryPoint)((NUMCONFIG_READY)
-//                     rpn.RPnDataModule.PHASESPACE.state()).xzeroGeom().geomFactory().geomSource();
-//                 ManifoldGeomFactory fwdFactory = new ManifoldGeomFactory(
-//                     new ManifoldOrbitCalc(fwdstatPoint, new PhasePoint(midPoint), OrbitGeom.FORWARD_DIR));
-//                 rpn.RPnDataModule.PHASESPACE.plot(fwdFactory.geom());
-//                 // U+ MANIFOLD CALCULATION
-//                 StationaryPoint bwdstatPoint = (StationaryPoint)
-//                     rpn.RPnDataModule.PHASESPACE.getSelectedGeom().geomFactory().geomSource();
-//                 ManifoldGeomFactory bwdFactory = new ManifoldGeomFactory(
-//                     new ManifoldOrbitCalc(bwdstatPoint, new PhasePoint(midPoint), OrbitGeom.BACKWARD_DIR));
-//                 rpn.RPnDataModule.PHASESPACE.plot(bwdFactory.geom());
-//                 // PROFILE CALCULATION
-//                 execute();
-//             }
-//         } else
-//             // PROFILE_SETUP_READY
-//                 execute();
-// 	//        double newSigma = ((GenericShockFlow)RPNUMERICS.flow()).getSigma();
-//         double newSigma = ((ShockFlow)RPNUMERICS.flow()).getSigma();
-//         ChangeSigmaAgent.instance().applyChange(
-//             new java.beans.PropertyChangeEvent(this, ChangeSigmaAgent.DESC_TEXT, new Double(oldSigma), new Double(newSigma)));
-//         setEnabled(false);
-
-
-
     }
 
     public void execute() {
@@ -193,13 +126,6 @@ public class FindProfileAgent extends RpModelPlotAgent {
         setEnabled(false);
 
     }
-
-
-
-
-
-
-
 
     static public FindProfileAgent instance() {
         if (instance_ == null)

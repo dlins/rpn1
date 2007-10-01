@@ -60,7 +60,7 @@ jobject JNICurve::orbitConstructorTeste(const vector<double *> coords, const int
     
     int i;
     
-    jobjectArray  orbitPointArray  = (envPointer)->NewObjectArray(coords.size(), classOrbitPoint_, NULL);
+    jobjectArray  orbitPointArray  = (jobjectArray)(envPointer)->NewObjectArray(coords.size(), classOrbitPoint_, NULL);
     
     
     for(i=0;i < coords.size();i++ ){
@@ -98,7 +98,7 @@ jobject JNICurve::orbitConstructorTesteArray( double ** coords, const int timeDi
     int i,size=100;// Tamanho 100 !!!
     
     
-    jobjectArray  orbitPointArray  = (envPointer)->NewObjectArray(size, classOrbitPoint_, NULL);
+    jobjectArray  orbitPointArray  = (jobjectArray)(envPointer)->NewObjectArray(size, classOrbitPoint_, NULL);
     
     
     for(i=0;i < size;i++ ){ 
@@ -135,7 +135,7 @@ jobject JNICurve::orbitConstructor(const vector<RealVector> coords, const int ti
     
     int i, j;
     
-    jobjectArray  orbitPointArray  = (envPointer)->NewObjectArray(coords.size(), classOrbitPoint_, NULL);
+    jobjectArray  orbitPointArray  = (jobjectArray)(envPointer)->NewObjectArray(coords.size(), classOrbitPoint_, NULL);
     
     for(i=0;i < coords.size();i++ ){
         

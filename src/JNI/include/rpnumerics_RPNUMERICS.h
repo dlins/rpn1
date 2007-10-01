@@ -7,10 +7,136 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-/* Inaccessible static: INCREASING_LAMBDA */
-/* Inaccessible static: odeSolver_ */
 /* Inaccessible static: profile_ */
 /* Inaccessible static: hugoniotCurveCalc_ */
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    init
+ * Signature: (Lrpnumerics/RPNumericsProfile;)V
+ */
+JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_init
+  (JNIEnv *, jclass, jobject);
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    initShockFlow
+ * Signature: (Lrpnumerics/PhasePoint;D)V
+ */
+JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initShockFlow
+  (JNIEnv *, jclass, jobject, jdouble);
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    initRarefactionFlow
+ * Signature: (Lrpnumerics/PhasePoint;Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initRarefactionFlow
+  (JNIEnv *, jclass, jobject, jstring);
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    changePoincareSection
+ * Signature: (Lrpnumerics/ConnectionOrbit;)Lwave/util/PoincareSection;
+ */
+JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_changePoincareSection
+  (JNIEnv *, jclass, jobject);
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    setPoincareSectionFlag
+ * Signature: (Z)V
+ */
+JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setPoincareSectionFlag
+  (JNIEnv *, jclass, jboolean);
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    changeFluxParams
+ * Signature: ([D)V
+ */
+JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_changeFluxParams
+  (JNIEnv *, jclass, jdoubleArray);
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    changeErrorControl
+ * Signature: (D)V
+ */
+JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_changeErrorControl
+  (JNIEnv *, jclass, jdouble);
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    changeSigma
+ * Signature: (D)V
+ */
+JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_changeSigma__D
+  (JNIEnv *, jclass, jdouble);
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    changeSigma
+ * Signature: (Lwave/util/RealVector;)V
+ */
+JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_changeSigma__Lwave_util_RealVector_2
+  (JNIEnv *, jclass, jobject);
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    getSigma
+ * Signature: ()D
+ */
+JNIEXPORT jdouble JNICALL Java_rpnumerics_RPNUMERICS_getSigma
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    getXZero
+ * Signature: ()Lrpnumerics/PhasePoint;
+ */
+JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getXZero
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    setXZero
+ * Signature: (Lrpnumerics/PhasePoint;)D
+ */
+JNIEXPORT jdouble JNICALL Java_rpnumerics_RPNUMERICS_setXZero
+  (JNIEnv *, jclass, jobject);
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    getFluxParams
+ * Signature: ()[D
+ */
+JNIEXPORT jdoubleArray JNICALL Java_rpnumerics_RPNUMERICS_getFluxParams
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    setShockFlow
+ * Signature: (Lrpnumerics/PhasePoint;D)V
+ */
+JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setShockFlow
+  (JNIEnv *, jclass, jobject, jdouble);
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    setRarefactionFlow
+ * Signature: (Lrpnumerics/PhasePoint;)V
+ */
+JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setRarefactionFlow
+  (JNIEnv *, jclass, jobject);
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    boundary
+ * Signature: ()Lwave/util/Boundary;
+ */
+JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_boundary
+  (JNIEnv *, jclass);
+
 #ifdef __cplusplus
 }
 #endif

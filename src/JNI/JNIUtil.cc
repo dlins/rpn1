@@ -104,7 +104,7 @@ jobjectArray JNIUtil::realVectorArrayConstructor( double ** data , const int dat
     
     int i;
     
-    jobjectArray result = envPointer->NewObjectArray(dataSize, realVectorClass_, NULL);
+    jobjectArray result = (jobjectArray)envPointer->NewObjectArray(dataSize, realVectorClass_, NULL);
     
     for (i=0; i < dataSize;i++){
         

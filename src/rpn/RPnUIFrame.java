@@ -13,6 +13,7 @@ import rpn.message.*;
 import rpn.parser.*;
 import rpnumerics.RPNUMERICS;
 import wave.util.Boundary;
+import wave.multid.graphs.ClippedShape;
 import java.awt.print.PrinterJob;
 import javax.swing.*;
 import java.awt.*;
@@ -22,6 +23,7 @@ import java.beans.PropertyChangeEvent;
 import java.io.FileWriter;
 import rpn.controller.ui.*;
 import rpn.message.*;
+
 
 public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     //
@@ -313,8 +315,12 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
 
     protected void phaseSpaceFramesInit(Boundary boundary) {
-        wave.multid.graphs.ClippedShape clipping = new wave.multid.graphs.
-                                                 ClippedShape(boundary);
+
+  ClippedShape clipping = new ClippedShape(boundary);
+   
+        
+        
+        
         int numOfPanels = RPnVisualizationModule.DESCRIPTORS.size();
         frames_ = new RPnPhaseSpaceFrame[numOfPanels];
         for (int i = 0; i < numOfPanels; i++) {

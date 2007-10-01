@@ -27,7 +27,7 @@ public class RAREFACTION_CONFIG extends UI_ACTION_SELECTED {
     public void userInputComplete(rpn.controller.ui.UIController ui,
                                   RealVector userInput) {
 
-        RPNUMERICS.resetRarefactionFlow(new PhasePoint(userInput));
+        RPNUMERICS.setRarefactionFlow(new PhasePoint(userInput));
 
         super.userInputComplete(ui, userInput);
 

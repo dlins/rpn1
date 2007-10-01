@@ -7,9 +7,6 @@
 
 package wave.multid.graphs;
 
-import wave.util.RealMatrix2;
-import wave.util.RealVector;
-
 public class ViewPlane {
     private dcViewport viewport_;
     private wcWindow window_;
