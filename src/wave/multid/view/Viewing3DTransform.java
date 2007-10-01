@@ -6,12 +6,12 @@
 
 package wave.multid.view;
 
-import wave.multid.graphs.ViewPlane;
 import wave.multid.map.*;
 import wave.multid.CoordsArray;
 import wave.multid.Coords2D;
-import wave.multid.Coords3D;
 import wave.multid.Multid;
+import wave.multid.graphs.ViewPlane;
+
 
 public class Viewing3DTransform implements ViewingTransform {
     //
