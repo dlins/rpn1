@@ -13,9 +13,9 @@
 class ODESigmaSolution:public ODESolution{
     
     public:
-        ODESigmaSolution();
+//        ODESigmaSolution();
         
-        ODESigmaSolution(RealVector const * ,  double const * times, double const * sigma);
+//        ODESigmaSolution(RealVector const * ,  double const * times, double const * sigma);
         double * getSigmaArray();
         
         private:

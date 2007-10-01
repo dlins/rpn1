@@ -1,7 +1,7 @@
 #include "RK4SolverProfile.h"
 
 
-RK4SolverProfile::RK4SolverProfile(ODEStopEvaluator & sGenerator):ODESolverProfile(sGenerator){}
+//RK4SolverProfile::RK4SolverProfile(ODEStopEvaluator & sGenerator):ODESolverProfile(sGenerator){}
 
     
 

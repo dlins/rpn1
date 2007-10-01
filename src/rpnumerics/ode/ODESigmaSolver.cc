@@ -22,9 +22,9 @@ ODESolution  ODESigmaSolver::solve(const RealVector & initialPoint, int times){
     
     while(getProfile().getStopEvaluator().getMaxSteps()<steps && !stop){
         
-        rk4(initialPoint.size(), 0, getProfile().getDeltat(), current, next, getVectorField().getFunction());
+//        rk4(initialPoint.size(), 0, getProfile().getDeltat(), current, next, getVectorField().getFunction());
         
-        sigma[steps]= getVectorField().sigmaCalc(next);
+//        sigma[steps]= getVectorField().sigmaCalc(next);
         
         result[steps]=next;
         stop=getProfile().getStopEvaluator().check(next);
@@ -33,7 +33,7 @@ ODESolution  ODESigmaSolver::solve(const RealVector & initialPoint, int times){
         
     }
     
-    return  ODESigmaSolution(result,sigma,timesArray);
+    return  ODESigmaSolution();//result,sigma,timesArray);
     
     
 }

@@ -4,17 +4,18 @@
 //
 // Created on May 17, 2007, 1:58 PM
 //
-#include "RealVector.h"
+//#include "RealVector.h"
 
 #ifndef _ODEStopGenerator_H
 #define	_ODEStopGenerator_H
 
+#include "RealVector.h"
 class ODEStopEvaluator{
     
     
     public :
         
-        int getMaxSteps();
+        const int getMaxSteps();
         bool check(const RealVector &);
     
       private:
@@ -30,7 +31,7 @@ class ODEStopEvaluator{
             
             bool checkBoundary_; // check b
             
-            RealVector yScales_; // scales for state
+            RealVector & yScales_; // scales for state
             
             int timeDirection_;
             int MaxStepN_; // maximum number of steps
@@ -39,7 +40,8 @@ class ODEStopEvaluator{
     
 };
 
-inline bool ODEStopEvaluator::check(const RealVector &){return true;}
+
+inline const int ODEStopEvaluator::getMaxSteps(){return MaxStepN_;}
 
 #endif	/* _ODEStopGenerator_H */
 

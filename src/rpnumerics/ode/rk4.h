@@ -2,6 +2,7 @@
 #define RK4_H
 
 #include "testvar.h"
+#include "RpFunction.h"
 
 
 #ifdef TESTRK4
@@ -14,11 +15,14 @@
 #define ABORTED_PROCEDURE !SUCCESSFUL_PROCEDURE
 
 #include <stdio.h>
-#include "VectorField.h"
+//#include "VectorField.h"
 
 
 
-int RK4(int, double, double, double *, double *, int(*)(int, double, double*, double*));
+int rk4(int, double, double, double *, double *, int(*)(int, double, double*, double*));
+
+
+int rk4_teste(int, double, double, double *, double *, RpFunction &function);
 
 
 #endif // RK4_H

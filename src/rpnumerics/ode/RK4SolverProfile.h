@@ -1,21 +1,25 @@
-#include "ODESolverProfile.h"
+
 
 #ifndef _RK4SolverProfile_H
 #define	_RK4SolverProfile_H
 
+
+#include "ODESolverProfile.h"
+
 class RK4SolverProfile:public ODESolverProfile {
+
     //
     // Members
     //
     
     public:
 
-        RK4SolverProfile(ODEStopEvaluator& );
+        RK4SolverProfile(ODEStopEvaluator & );
         double getDeltat();
       
         
         private:
-            ODEStopEvaluator stopGenerator_;
+            ODEStopEvaluator stopEvaluator_;
 
             double deltat_;
         
