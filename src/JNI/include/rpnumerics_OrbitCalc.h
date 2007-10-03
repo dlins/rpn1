@@ -9,19 +9,11 @@ extern "C" {
 #endif
 /*
  * Class:     rpnumerics_OrbitCalc
- * Method:    recalc
- * Signature: ()Lrpnumerics/RpSolution;
- */
-JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_recalc
-  (JNIEnv *, jobject);
-
-/*
- * Class:     rpnumerics_OrbitCalc
  * Method:    calc
- * Signature: ()Lrpnumerics/RpSolution;
+ * Signature: (Lrpnumerics/OrbitPoint;I)Lrpnumerics/RpSolution;
  */
 JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_calc
-  (JNIEnv *, jobject);
+  (JNIEnv *, jobject, jobject, jint);
 
 #ifdef __cplusplus
 }

@@ -51,7 +51,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_calc  (JNIEnv * env, jobject
     
     deque<double *> resultList;
     
-    while ( i < 1000){ //Criterio de parada
+    while ( i < 10){ //Criterio de parada
         
 //        rk4method_teste(profile_.getDimension(), 0, profile_.getDeltat(), in, in, profile_.getFunction());
         
@@ -83,14 +83,18 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_calc  (JNIEnv * env, jobject
 // Construindo a orbita
     
     jclass    classOrbitPoint_ = (env)->FindClass(ORBITPOINT_LOCATION);
+    
     jclass    classOrbit_ = (env)->FindClass(ORBIT_LOCATION);
     
     jmethodID    orbitPointConstructor_ = (env)->GetMethodID(classOrbitPoint_, "<init>", "([D)V");
     
     jmethodID    orbitConstructor_ = (env)->GetMethodID(classOrbit_, "<init>", "([Lrpnumerics/OrbitPoint;I)V");
     
-    jobjectArray  orbitPointArray  = (jobjectArray)(env)->NewObjectArray(resultList.size(), classOrbitPoint_, NULL);
+    env->ExceptionDescribe();
     
+    jobjectArray  orbitPointArray  = (env)->NewObjectArray(resultList.size(), classOrbitPoint_, NULL);
+    
+    env->ExceptionDescribe();
     
     for(i=0;i < resultList.size();i++ ){
         

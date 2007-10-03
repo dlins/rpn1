@@ -20,7 +20,7 @@ JNIUtil::JNIUtil(JNIEnv * env):envPointer(env){
     
     arrayListClass_=env->FindClass("java/util/ArrayList");
     
-    arrayListAddMethod_=env->GetMethodID(arrayListClass_, "add", "(Ljava/lang/Object;)Z"); 
+    arrayListAddMethod_=env->GetMethodID(arrayListClass_, "add", "(Ljava/lang/Object;)Z");
     
     phasePointConstructor_ = (env)->GetMethodID(phasePointClass_, "<init>", "(Lwave/util/RealVector;)V");
     
@@ -37,7 +37,7 @@ JNIUtil::JNIUtil(JNIEnv * env):envPointer(env){
 
 
 // JNIUtil * JNIUtil::instance(JNIEnv * env){
-//    
+//
 ////    if (instance_==NULL)
 //        instance_= new JNIUtil(env);
 //        return instance_;
@@ -73,9 +73,9 @@ jobject JNIUtil::arrayListConstructor() {
 }
 
 void JNIUtil::arrayListAdd(jobject list , jobject element )const {
-
+    
     envPointer->CallBooleanMethod(list, arrayListAddMethod_, element);
-
+    
 }
 
 jobject JNIUtil::phasePointConstructor(double * coords, const int coordsSize ) const {
@@ -85,15 +85,15 @@ jobject JNIUtil::phasePointConstructor(double * coords, const int coordsSize ) c
     envPointer->SetDoubleArrayRegion(tempArray, 0, coordsSize, coords);
     
     jobject realVector=  envPointer->NewObject(realVectorClass_, realVectorConstructorDoubleArray_, tempArray);
-   
+    
     
 //    envPointer->ExceptionDescribe();
     jobject phasePoint = envPointer->NewObject(phasePointClass_, phasePointConstructor_, realVector);
-
+    
     envPointer->ExceptionDescribe();
     
     envPointer->DeleteLocalRef(tempArray);
-
+    
     //TODO Limpar tambem o RealVector ???
     return phasePoint;
     
@@ -102,22 +102,40 @@ jobject JNIUtil::phasePointConstructor(double * coords, const int coordsSize ) c
 
 jobjectArray JNIUtil::realVectorArrayConstructor( double ** data , const int dataSize,  const int elementsSize) const {
     
+    JavaVM **vmBuf;
+    
+//    JavaVM *jvm; /* already set */
+    
+    jsize bufLen;
+    
+    jsize *nVMs;
+    
+    JNI_GetCreatedJavaVMs(vmBuf,  bufLen, nVMs);
+    
+    JNIEnv *env;
+    
+//    vmBuf[0]->AttachCurrentThread((void **)&env, NULL);
+    
+
+    jclass    realVectorClass_= env->FindClass(REALVECTOR_LOCATION);
+    jmethodID    realVectorConstructorDoubleArray_= env->GetMethodID(realVectorClass_, "<init>", "([D)V");
+    
     int i;
     
-    jobjectArray result = (jobjectArray)envPointer->NewObjectArray(dataSize, realVectorClass_, NULL);
+    jobjectArray result = (jobjectArray)env->NewObjectArray(dataSize, realVectorClass_, NULL);
     
     for (i=0; i < dataSize;i++){
         
-        jdoubleArray tempArray = envPointer->NewDoubleArray(elementsSize) ;
+        jdoubleArray tempArray = env->NewDoubleArray(elementsSize) ;
         
-        envPointer->SetDoubleArrayRegion(tempArray, 0, elementsSize, data[i]);
+        env->SetDoubleArrayRegion(tempArray, 0, elementsSize, data[i]);
         
-        jobject tempRealVector = envPointer->NewObject(realVectorClass_, realVectorConstructorDoubleArray_, tempArray);
+        jobject tempRealVector = env->NewObject(realVectorClass_, realVectorConstructorDoubleArray_, tempArray);
         
-        envPointer->SetObjectArrayElement(result, i, tempRealVector);
+        env->SetObjectArrayElement(result, i, tempRealVector);
         
-        envPointer->DeleteLocalRef(tempArray);
-        envPointer->DeleteLocalRef(tempRealVector);
+        env->DeleteLocalRef(tempArray);
+        env->DeleteLocalRef(tempRealVector);
     }
     
     return result;
@@ -129,7 +147,7 @@ jobject JNIUtil::realMatrixConstructor(double * data, int dataSize) const{
     
     envPointer->SetDoubleArrayRegion(tempArray, 0, dataSize, data);
     
-    jobject result=  envPointer->NewObject(realMatrix2Class_, realMatrix2Constructor_,2, 2, tempArray );
+    jobject result=  envPointer->NewObject(realMatrix2Class_, realMatrix2Constructor_, 2, 2, tempArray );
     
     envPointer->DeleteLocalRef(tempArray);
     
@@ -196,7 +214,7 @@ double * JNIUtil::orbitPointToDouble(const jobject orbitPoint, int & size) const
     double * result = new double [size];
     
     (envPointer)->GetDoubleArrayRegion(phasePointArray, 0, size, result);
-
+    
     envPointer->DeleteLocalRef(phasePointArray);
     
     return result;

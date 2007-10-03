@@ -6,8 +6,7 @@
 
 package wave.util;
 
-import wave.multid.graphs.ViewPlane;
-import java.awt.Point;
+import wave.multid.view.Viewing2DTransform;
 
 /*
  * In terms of visualization we are assuming this

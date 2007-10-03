@@ -5,12 +5,12 @@
 
 JNIEXPORT void JNICALL Java_rpnumerics_HugoniotCurveCalcND_setUMinus
         (JNIEnv * env, jobject obj , jobject uMinus){
-
+    
     printf("Chamando setUMinus\n");
-
+    
 //    JNIUtil * utilInstance = JNIUtil::instance(env);
     
-
+    
 //    int size;
     
 //    double * nativeUMinus= utilInstance->phasePointToDouble(uMinus, size);
@@ -39,8 +39,18 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
     
     jclass hugoniotSegmentClass = (env)->FindClass(HUGONIOTSEGMENTCLASS_LOCATION);
     
+    jclass    realVectorClass_= env->FindClass(REALVECTOR_LOCATION);
+    
+    jclass   arrayListClass_=env->FindClass("java/util/ArrayList");
+    
+    jmethodID    realVectorConstructorDoubleArray_= env->GetMethodID(realVectorClass_, "<init>", "([D)V");
+    
     jmethodID hugoniotSegmentConstructor = (env)->GetMethodID(hugoniotSegmentClass, "<init>", "(Lwave/util/RealVector;DLwave/util/RealVector;DLrpnumerics/HugoniotPointType;)V");
     
+    jmethodID arrayListConstructor_= env->GetMethodID(arrayListClass_, "<init>", "()V");
+    
+    
+    jmethodID  arrayListAddMethod_=env->GetMethodID(arrayListClass_, "add", "(Ljava/lang/Object;)Z");
 //    env->ExceptionDescribe();
     
     jclass hugoniotPointTypeClass = (env)->FindClass(HUGONIOTPOINTTYPE_LOCATION);
@@ -61,7 +71,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
     
     jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
     
-    jobject segmentsArray = utilInstance->arrayListConstructor();
+    jobject segmentsArray = env->NewObject(arrayListClass_,arrayListConstructor_,NULL);
     
     
     testeLeftPoint[0]=0.1;
@@ -90,9 +100,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
         jobject pointType = env->NewObject(hugoniotPointTypeClass, hugoniotPointTypeConstructor, eigenValRLeft, eigenValRRight);
         
         //Construindo left e right points
-        jobject realVectorLeftPoint =utilInstance->realVectorConstructor(testeLeftPoint, 2);
+        jobject realVectorLeftPoint = env->NewObject(realVectorClass_,realVectorConstructorDoubleArray_,eigenValRLeft);
         
-        jobject realVectorRightPoint =utilInstance->realVectorConstructor(testeRightPoint, 2);
+        jobject realVectorRightPoint =env->NewObject(realVectorClass_,realVectorConstructorDoubleArray_,eigenValRRight);
         
         //Construindo o segmento
         
@@ -100,7 +110,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
         
         // Adicionando o segmento a lista
         
-        utilInstance->arrayListAdd(segmentsArray, hugoniotSegment); //TODO adicionar o segmento a lista de segmentos. Relacionado com o TODO  do .h de JNIUtil
+        env->CallObjectMethod(segmentsArray,arrayListAddMethod_,hugoniotSegment);
+        
+//        utilInstance->arrayListAdd(segmentsArray, hugoniotSegment); //TODO adicionar o segmento a lista de segmentos. Relacionado com o TODO  do .h de JNIUtil
         
         // Limpando
         
@@ -119,7 +131,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
     env->DeleteLocalRef(eigenValRLeft);
     env->DeleteLocalRef(eigenValRRight);
     
-    printf ("Passei pelo hugoniot curve calc\n");
+    printf("Passei pelo hugoniot curve calc\n");
     return result;
     
     
