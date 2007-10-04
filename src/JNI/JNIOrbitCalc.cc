@@ -9,6 +9,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_calc  (JNIEnv * env, jobject
     
     int i=0, orbitPointSize=2;
     
+    jclass    classOrbitPoint = (env)->FindClass(ORBITPOINT_LOCATION);
+    jclass    classOrbit = (env)->FindClass(ORBIT_LOCATION);
+    
 //    JNIUtil *utilInstance = new JNIUtil(env);
     
 //    JNICurve * curveInstance = new JNICurve(envPointer);
@@ -20,15 +23,19 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_calc  (JNIEnv * env, jobject
     
 //    env->ExceptionDescribe();
     
-//    jmethodID toDoubleMethodID = (env)->GetMethodID(classOrbitPoint,"toDouble", "()[D");
+    jmethodID toDoubleMethodID = (env)->GetMethodID(classOrbitPoint, "toDouble", "()[D");
     
-//
-//    jdoubleArray phasePointArray =(jdoubleArray) (env)->CallObjectMethod(initialPoint, toDoubleMethodID);
+    jdoubleArray phasePointArray =(jdoubleArray) (env)->CallObjectMethod(initialPoint, toDoubleMethodID);
+    
+    double input [2];
+    
+    env->GetDoubleArrayRegion(phasePointArray,0,2,input);
+    
+    
 //
 //    orbitPointSize = (env)->GetArrayLength(phasePointArray);
 //
 //    double phasePointArrayBuffer[orbitPointSize];
-    
     
 //    RealVector nativeRealVector(orbitPointSize);
 //
@@ -51,50 +58,50 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_calc  (JNIEnv * env, jobject
     
     deque<double *> resultList;
     
-    while ( i < 10){ //Criterio de parada
+    while ( i < 1000){ //Criterio de parada
         
 //        rk4method_teste(profile_.getDimension(), 0, profile_.getDeltat(), in, in, profile_.getFunction());
         
         
 //        double * coord = new double [2];
-        double coord[2];
+//        double coord[2];
         
 //        coord[0]=orbitPointArrayBuffer[0]+0.00001*i;
 //        coord[1]=orbitPointArrayBuffer[1]+0.00001*i;
         
-        coord[0]=0.001*i;
-        coord[1]=0.001*i;
+//        coord[0]=0.001*i;
+//        coord[1]=0.001*i;
+        
+        input[0]=0.001*i;
+        input[1]=0.001*i;
+        
+
         
 //        resultList
-        resultList.push_back(coord);
+        resultList.push_back(input);
         
 //        ret->addCoords(in);
         
 //        ret->addCoords(teste);
         
-//        cout << "Saida x: " << coord[0] << endl;
+        cout << "Saida x: " << input[0] << endl;
 //
-//        cout << "Saida y: " << coord[1] << endl;
+        cout << "Saida y: " << input[1] << endl;
         
         i++;
         
     }
     
 // Construindo a orbita
+//
+//    jclass    classOrbitPoint_ = (env)->FindClass(ORBITPOINT_LOCATION);
+//    jclass    classOrbit_ = (env)->FindClass(ORBIT_LOCATION);
     
-    jclass    classOrbitPoint_ = (env)->FindClass(ORBITPOINT_LOCATION);
+    jmethodID    orbitPointConstructor_ = (env)->GetMethodID(classOrbitPoint, "<init>", "([D)V");
     
-    jclass    classOrbit_ = (env)->FindClass(ORBIT_LOCATION);
+    jmethodID    orbitConstructor_ = (env)->GetMethodID(classOrbit, "<init>", "([Lrpnumerics/OrbitPoint;I)V");
     
-    jmethodID    orbitPointConstructor_ = (env)->GetMethodID(classOrbitPoint_, "<init>", "([D)V");
-    
-    jmethodID    orbitConstructor_ = (env)->GetMethodID(classOrbit_, "<init>", "([Lrpnumerics/OrbitPoint;I)V");
-    
-    env->ExceptionDescribe();
-    
-    jobjectArray  orbitPointArray  = (env)->NewObjectArray(resultList.size(), classOrbitPoint_, NULL);
-    
-    env->ExceptionDescribe();
+    jobjectArray  orbitPointArray  = (env)->NewObjectArray(resultList.size(), classOrbitPoint, NULL);
     
     for(i=0;i < resultList.size();i++ ){
         
@@ -104,7 +111,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_calc  (JNIEnv * env, jobject
         
         (env)->SetDoubleArrayRegion(jTempArray, 0, 2, dataCoords);
         
-        jobject orbitPoint = (env)->NewObject(classOrbitPoint_, orbitPointConstructor_, jTempArray);
+        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor_, jTempArray);
         
         (env)->SetObjectArrayElement(orbitPointArray, i, orbitPoint);
         
@@ -117,12 +124,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_calc  (JNIEnv * env, jobject
 //Building the orbit
     resultList.clear();
     
-    jobject orbit = (env)->NewObject(classOrbit_, orbitConstructor_, orbitPointArray, timeDirection);
+    jobject orbit = (env)->NewObject(classOrbit, orbitConstructor_, orbitPointArray, timeDirection);
     
 //    env->DeleteLocalRef(orbitPointArray);
     
-    env->DeleteLocalRef(classOrbitPoint_);
-    env->DeleteLocalRef(classOrbit_);
+    env->DeleteLocalRef(classOrbitPoint);
+    env->DeleteLocalRef(classOrbit);
     
     
     return orbit;
