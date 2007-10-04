@@ -32,9 +32,9 @@ public class ForwardOrbitPlotAgent extends RpModelPlotAgent {
     public RpGeometry createRpGeometry(RealVector[] input) {
         OrbitPoint oPoint = new OrbitPoint(input[input.length - 1]);
 
-//        OrbitGeomFactory factory = new BlowUpOrbitGeomFactory(new OrbitCalc(oPoint, OrbitGeom.FORWARD_DIR));
-
         OrbitGeomFactory factory = new OrbitGeomFactory(new OrbitCalc(oPoint, OrbitGeom.FORWARD_DIR));
+        
+
         return factory.geom();
     }
 
