@@ -7,14 +7,8 @@
 package rpnumerics;
 
 
-import wave.util.RealVector;
 import wave.util.RealSegment;
 import java.util.List;
-import wave.multid.CoordsArray;
-import java.util.ArrayList;
-import wave.multid.model.MultiPolyLine;
-import wave.multid.view.ViewingAttr;
-import java.awt.Color;
 
 public class HugoniotCurve implements RpSolution {
     //

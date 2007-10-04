@@ -89,8 +89,8 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_changeSigma__Lwave_util_RealVe
  */
 JNIEXPORT jdouble JNICALL Java_rpnumerics_RPNUMERICS_getSigma
         (JNIEnv * env, jclass cls){
-
-    printf ("Chamando getSigma\n");
+    
+    printf("Chamando getSigma\n");
     
     return 0.1;
     
@@ -231,8 +231,14 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_boundary
         
         //Hardcoded para quad2 !!
         
-        double minimum [2]={-0.5, -0.5};
-        double maximum [2]={0.5, 0.5};
+//        double minimum [2]={-0.5, -0.5};
+//        double maximum [2]={0.5, 0.5};
+//
+        
+     
+        
+        double minimum [2]={-1, -1};
+        double maximum [2]={1, 1};
         
         //---------------------------------
         

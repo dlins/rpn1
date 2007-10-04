@@ -35,7 +35,18 @@ public class OrbitCalc implements RpCalculation {
     //
     // Methods
     //
-    public native RpSolution recalc() throws RpException;
+    
+    
+    public  RpSolution recalc() throws RpException{
+        
+        return calc (start_,timeDirection_);
+        
+    }
+    
+     public   RpSolution calc() throws RpException {
+          return calc (start_,timeDirection_);
+     }
+//    private native RpSolution recalc(OrbitPoint initialPoint, int timeDirection) throws RpException;
 
-    public native  RpSolution calc() throws RpException ;
+    private native  RpSolution calc(OrbitPoint initialpoint, int timeDirection) throws RpException ;
 }
