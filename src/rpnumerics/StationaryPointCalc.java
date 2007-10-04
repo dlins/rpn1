@@ -44,18 +44,11 @@ public class StationaryPointCalc implements RpCalculation {
     //
     public   RpSolution recalc() throws RpException{
         return calc();
-        
-        
     }
     
     public   RpSolution calc() throws RpException{
-    
-        
         return calc(initial_);
-            
-  
     }
-    
     
     private native RpSolution calc(PhasePoint initialPoint);
     

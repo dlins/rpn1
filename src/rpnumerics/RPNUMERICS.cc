@@ -237,8 +237,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_boundary
         
      
         
-        double minimum [2]={-1, -1};
-        double maximum [2]={1, 1};
+        double minimum [2]={-0.5, -0.5};
+        double maximum [2]={0.5, 0.5};
         
         //---------------------------------
         
