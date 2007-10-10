@@ -3,9 +3,6 @@
  *
  */
 
-
-
-
 package rpn.component;
 
 import java.awt.*;

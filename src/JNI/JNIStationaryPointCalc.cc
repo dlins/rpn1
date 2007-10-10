@@ -37,7 +37,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_StationaryPointCalc_calc(JNIEnv *env, 
     
 //    jobjectArray eigenVec = utilInstance->realVectorArrayConstructor(dataTeste, 2, 2);//TODO Array de RealVectors usados no construtor . Checar o tamanho desse array !!!
     
-    jobjectArray eigenVec = env->NewObjectArray(2, realVectorClass_, NULL);
+    jobjectArray eigenVec =(jobjectArray) env->NewObjectArray(2, realVectorClass_, NULL);
     
     jdoubleArray tempArray = env->NewDoubleArray(2) ;
     

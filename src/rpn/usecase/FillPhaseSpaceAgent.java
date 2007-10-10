@@ -22,12 +22,13 @@ public class FillPhaseSpaceAgent extends AbstractAction {
     static public final String DESC_TEXT = "Fills up the Phase Space";
     static public final int DEFAULT_NUMOFNODES = 100;
     private static FillPhaseSpaceAgent instance_ = null;
-
+    
     protected FillPhaseSpaceAgent() {
         super(DESC_TEXT, null);
     }
-
+    
     public void actionPerformed(ActionEvent action) {
+
         Boundary bounds = RPNUMERICS.boundary();
         GridProfile[] profiles = new GridProfile[RPNUMERICS.domainDim()];
         for (int i = 0; i < RPNUMERICS.domainDim(); i++)
@@ -60,7 +61,7 @@ public class FillPhaseSpaceAgent extends AbstractAction {
             }
         }
     }
-
+    
     public static FillPhaseSpaceAgent instance() {
         if (instance_ == null) {
             instance_ = new FillPhaseSpaceAgent();
