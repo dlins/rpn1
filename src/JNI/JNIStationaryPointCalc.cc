@@ -7,24 +7,36 @@
  * Method:    calc
  * Signature: (Lrpnumerics/PhasePoint;)Lrpnumerics/RpSolution;
  */
-JNIEXPORT jobject JNICALL Java_rpnumerics_StationaryPointCalc_calc(JNIEnv *env, jobject obj, jobject initialpoint){
+JNIEXPORT jobject JNICALL Java_rpnumerics_StationaryPointCalc_calc(JNIEnv *env, jobject obj, jobject initialPoint){
     
-    int dimension = 2; //TODO O tamanho eh a dimensao da fisica ???
-    
-    jclass    realVectorClass_= env->FindClass(REALVECTOR_LOCATION);
+    jclass  realVectorClass_= env->FindClass(REALVECTOR_LOCATION);
     jclass  realMatrix2Class_= env->FindClass(REALMATRIX2_LOCATION);
     jclass  classStationaryPoint_=env->FindClass(STATIONARYPOINT_LOCATION);
+    jclass    classOrbitPoint = (env)->FindClass(ORBITPOINT_LOCATION);
     
     jmethodID    stationaryPointConstructor_=env->GetMethodID(classStationaryPoint_, "<init>", "(Lrpnumerics/PhasePoint;[D[D[Lwave/util/RealVector;ILwave/util/RealMatrix2;Lwave/util/RealMatrix2;ILwave/util/RealMatrix2;Lwave/util/RealMatrix2;I)V");
     jmethodID    realVectorConstructorDoubleArray_= env->GetMethodID(realVectorClass_, "<init>", "([D)V");
-    jmethodID     realMatrix2Constructor_= env->GetMethodID(realMatrix2Class_, "<init>", "(II[D)V");
+    jmethodID    realMatrix2Constructor_= env->GetMethodID(realMatrix2Class_, "<init>", "(II[D)V");
+    jmethodID toDoubleMethodID = (env)->GetMethodID(classOrbitPoint, "toDouble", "()[D");
+    
+     //Input processing
+    jdoubleArray phasePointArray =(jdoubleArray) (env)->CallObjectMethod(initialPoint, toDoubleMethodID);
+    
+    int dimension = env->GetArrayLength(phasePointArray);
+    
+    double input [dimension];
+    
+    env->GetDoubleArrayRegion(phasePointArray, 0, dimension, input);
+    
+    env->DeleteLocalRef(phasePointArray);
+    
+    //Calculations 
     
     double * teste = new double [2];
     
     teste[0]=0.1;
     teste[1]=0.1;
-    
-    
+
     double  * realMatrixTeste= new double [4];
     
     realMatrixTeste[0]=0.1;
@@ -32,16 +44,16 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_StationaryPointCalc_calc(JNIEnv *env, 
     realMatrixTeste[2]=0.1;
     realMatrixTeste[3]=0.1;
     
-    //Parametros para o construtor
+    //Constructor parameters
     
     
-//    jobjectArray eigenVec = utilInstance->realVectorArrayConstructor(dataTeste, 2, 2);//TODO Array de RealVectors usados no construtor . Checar o tamanho desse array !!!
+    //RealVector [] eigenVec creation 
     
-    jobjectArray eigenVec =(jobjectArray) env->NewObjectArray(2, realVectorClass_, NULL);
+    jobjectArray eigenVec =(jobjectArray) env->NewObjectArray(dimension, realVectorClass_, NULL);
     
-    jdoubleArray tempArray = env->NewDoubleArray(2) ;
+    jdoubleArray tempArray = env->NewDoubleArray(dimension) ;
     
-    env->SetDoubleArrayRegion(tempArray, 0, 2, teste);
+    env->SetDoubleArrayRegion(tempArray, 0,dimension, teste);
     
     jobject tempRealVector1 = env->NewObject(realVectorClass_, realVectorConstructorDoubleArray_, tempArray);
     
@@ -50,8 +62,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_StationaryPointCalc_calc(JNIEnv *env, 
     env->SetObjectArrayElement(eigenVec, 0, tempRealVector1);
     env->SetObjectArrayElement(eigenVec, 1, tempRealVector2);
     
+    // DimP
     int DimP=2;
     
+    // RealMatirx schurFormP, schurVecP, schurFormN, schurVecN creation
     jdoubleArray tempArrayMATRIX = env->NewDoubleArray(4);
     
     env->SetDoubleArrayRegion(tempArrayMATRIX, 0, 4, realMatrixTeste);
@@ -64,14 +78,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_StationaryPointCalc_calc(JNIEnv *env, 
     
     jobject schurVecN=  env->NewObject(realMatrix2Class_, realMatrix2Constructor_, 2, 2, tempArrayMATRIX );
     
+    // Integration flag
     
     int integrationFlag=1;
     
-    jobject result = env->NewObject(classStationaryPoint_, stationaryPointConstructor_, initialpoint, tempArray, tempArray, eigenVec, DimP, schurFormP, schurVecP, DimP, schurFormN, schurVecN, integrationFlag);
+    jobject result = env->NewObject(classStationaryPoint_, stationaryPointConstructor_, initialPoint, tempArray, tempArray, eigenVec, DimP, schurFormP, schurVecP, DimP, schurFormN, schurVecN, integrationFlag);
     
     return result;
-    
-//    return NULL;
     
     
 //    public StationaryPoint(PhasePoint point, double[] eigenValR, double[] eigenValI, RealVector[] eigenVec, int DimP,
