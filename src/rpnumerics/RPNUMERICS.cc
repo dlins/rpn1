@@ -90,8 +90,6 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_changeSigma__Lwave_util_RealVe
 JNIEXPORT jdouble JNICALL Java_rpnumerics_RPNUMERICS_getSigma
         (JNIEnv * env, jclass cls){
     
-    printf("Chamando getSigma\n");
-    
     return 0.1;
     
 }
@@ -106,7 +104,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getXZero
     
     JNIUtil *utilInstance = new JNIUtil(env);
     
-    printf("Chamando get XZero\n");
     double teste[2];
     
     teste[0]=0.1;
@@ -128,36 +125,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getXZero
     
     jobject realVector=  env->NewObject(realVectorClass_, realVectorConstructorDoubleArray_, tempArray);
     
-    
-//    envPointer->ExceptionDescribe();
     jobject phasePoint = env->NewObject(phasePointClass_, phasePointConstructor_, realVector);
-    
-    
     
     env->DeleteLocalRef(tempArray);
     
     //TODO Limpar tambem o RealVector ???
     return phasePoint;
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-//    return    utilInstance->phasePointConstructor(teste, 2);
-    
-    
-    
-    
 }
 
 /*
@@ -183,10 +156,6 @@ JNIEXPORT jdoubleArray JNICALL Java_rpnumerics_RPNUMERICS_getFluxParams
  */
 JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setShockFlow
         (JNIEnv * env, jclass cls, jobject obj, jdouble sigma){
-    
-    printf("Setando shockFlow\n");
-    
-    
     
 }
 
@@ -230,11 +199,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_boundary
         jmethodID boundaryConstructor = (env)->GetMethodID(boundaryClass, "<init>", "(Lwave/util/RealVector;Lwave/util/RealVector;)V");
         
         //Hardcoded para quad2 !!
-        
-//        double minimum [2]={-0.5, -0.5};
-//        double maximum [2]={0.5, 0.5};
-//
-        
      
         
         double minimum [2]={-0.5, -0.5};
