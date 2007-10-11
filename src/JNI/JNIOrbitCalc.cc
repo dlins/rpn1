@@ -37,9 +37,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_calc  (JNIEnv * env, jobject
         coord[1]=input[1]+ix;
         
         resultList.push_back(coord);
-        ix+=0.0125;
-        
-        
+        ix+=0.005;
     }
     
     //Orbit memebers creation
