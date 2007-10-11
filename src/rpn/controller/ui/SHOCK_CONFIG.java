@@ -13,30 +13,30 @@ import wave.util.RealVector;
 import rpn.usecase.ChangeXZeroAgent;
 
 public class SHOCK_CONFIG extends UI_ACTION_SELECTED {
-
+    
     //
     // Constructors
     //
     public SHOCK_CONFIG() {
         super(HugoniotPlotAgent.instance());
-
+        
     }
-
+    
     //
     // Methods
     //
     public void userInputComplete(rpn.controller.ui.UIController ui,
-                                  RealVector userInput) {
+            RealVector userInput) {
         if (!(RPNUMERICS.getProfile().isFlowInitialized())) {
-
+            
             RPNUMERICS.setShockFlow(new PhasePoint(userInput), 0);
         }
-
+        
         super.userInputComplete(ui, userInput);
-
+        
         ChangeXZeroAgent.instance().setEnabled(true);
         ui.setState(new SIGMA_CONFIG());
     }
-
-
+    
+    
 }
