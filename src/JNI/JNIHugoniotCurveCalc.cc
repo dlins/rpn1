@@ -1,5 +1,4 @@
 #include "rpnumerics_HugoniotCurveCalcND.h"
-#include "JNIUtil.h"
 #include "JNIDefs.h"
 #include <vector>
 
@@ -8,7 +7,7 @@ using std::vector;
 JNIEXPORT void JNICALL Java_rpnumerics_HugoniotCurveCalcND_setUMinus
         (JNIEnv * env, jobject obj , jobject uMinus){
     
-    printf("Chamando setUMinus\n");
+    printf("Seting UMinus\n");
     
 }
 
@@ -125,7 +124,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
     
     coords.clear();
     
-    printf("Passei pelo hugoniot curve calc\n");
     return result;
     
     

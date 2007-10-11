@@ -6,10 +6,11 @@
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_ManifoldOrbitCalc_calc  (JNIEnv * env, jobject obj, jobject stationaryPoint, jobject phasePoint, jint timeDirection){
     
+    jclass   classManifold_= (env)->FindClass(MANIFOLD_LOCATION);
     
-    JNICurve *curveInstance = new JNICurve(env);
+    jmethodID manifoldConstructor_=env->GetMethodID(classManifold_, "<init>", "(Lrpnumerics/StationaryPoint;Lrpnumerics/PhasePoint;Lrpnumerics/Orbit;I)V");
     
-    return  curveInstance->manifoldConstructor(stationaryPoint, phasePoint, timeDirection);
+    return env->NewObject(classManifold_, manifoldConstructor_, stationaryPoint, phasePoint, timeDirection);
     
     
 }

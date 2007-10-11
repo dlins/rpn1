@@ -1,9 +1,8 @@
 #include "rpnumerics_OrbitCalc.h"
-#include "RealVector.h"
-#include "RK4BPMethod.h"
-#include "ODESolution.h"
-#include "JNICurve.h"
+#include "JNIDefs.h"
 #include <vector>
+
+using std::vector;
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_calc  (JNIEnv * env, jobject obj , jobject initialPoint, jint timeDirection){
     

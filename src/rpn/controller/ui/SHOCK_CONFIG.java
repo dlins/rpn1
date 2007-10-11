@@ -27,13 +27,8 @@ public class SHOCK_CONFIG extends UI_ACTION_SELECTED {
     //
     public void userInputComplete(rpn.controller.ui.UIController ui,
                                   RealVector userInput) {
-
-
-        
         if (!(RPNUMERICS.getProfile().isFlowInitialized())) {
 
-            System.out.println("Chamando setShockFlow");
-            
             RPNUMERICS.setShockFlow(new PhasePoint(userInput), 0);
         }
 

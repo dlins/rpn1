@@ -1,8 +1,5 @@
 #include "rpnumerics_ConnectionOrbitCalc.h"
-#include "JNICurve.h"
-#include "RealVector.h"
-#include "RK4BPMethod.h"
-#include "ODESolution.h"
+#include "JNIDefs.h"
 
 /* Signature: (Lrpnumerics/ManifoldOrbit;Lrpnumerics/ManifoldOrbit;)Lrpnumerics/RpSolution;
  */
@@ -10,30 +7,15 @@
 JNIEXPORT jobject JNICALL Java_rpnumerics_ConnectionOrbitCalc_calc
         (JNIEnv *env , jobject obj , jobject manifoldA, jobject manifoldB){
     
-    JNICurve * curveInstance= new JNICurve(env);
     
     jobject stationaryPointA, stationaryPointB, orbit;
     
-//    RealVector nativeRealVector(2);
-//    
-//    nativeRealVector(0)=0.25;
-//    nativeRealVector(1)=0.25;
-//    
-//    int timeDirection =0;
+    jclass  classConnectionOrbit=env->FindClass(CONNECTIONORBIT_LOCATION);
     
-//    ShockRarefaction function ;
-//    
-//    ODESolverProfile  profile(2, 0.01, function);
-//    
-//    RK4BPMethod odeSolver(profile);
-//    
-//    ODESolution * solution = odeSolver.solve(nativeRealVector, timeDirection);
-//    
-//    orbit =  curveInstance->orbitConstructor(solution->getCoords(), timeDirection);
+    jmethodID  connectionOrbitConstructor=env->GetMethodID(classConnectionOrbit, "<init>", "(Lrpnumerics/StationaryPoint;Lrpnumerics/StationaryPoint;Lrpnumerics/Orbit;)V");
     
+    env->DeleteLocalRef(classConnectionOrbit);
     
-    
-    return curveInstance->connectionOrbitConstructor(stationaryPointA, stationaryPointB, orbit);
-    
+    return env->NewObject(classConnectionOrbit, connectionOrbitConstructor, stationaryPointA, stationaryPointB, orbit);
     
 }

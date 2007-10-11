@@ -37,9 +37,6 @@ public class HugoniotPlotAgent extends RpModelPlotAgent {
 
     public RpGeometry createRpGeometry(RealVector[] input) {
         
-        System.out.println("Chamando create Rp. Dentro de execute");
-
-
         Boundary bound = RPNUMERICS.boundary();
         GridProfile xProfile = new GridProfile(bound.getMinimums().getElement(0), bound.getMaximums().getElement(0), 100);
         GridProfile yProfile = new GridProfile(bound.getMinimums().getElement(1), bound.getMaximums().getElement(1), 100);
