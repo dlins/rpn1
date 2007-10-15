@@ -1,7 +1,5 @@
 #include "rpnumerics_StationaryPointCalc.h"
-#include "JNIUtil.h"
 #include "JNIDefs.h"
-#include "JNICurve.h"
 /*
  * Class:     rpnumerics_StationaryPointCalc
  * Method:    calc

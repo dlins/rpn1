@@ -51,7 +51,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_calc  (JNIEnv * env, jobject
         
         (env)->SetDoubleArrayRegion(jTempArray, 0, 2, dataCoords);
         
-        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor_, jTempArray);
+        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor_, jTempArray,timeDirection);
         
         (env)->SetObjectArrayElement(orbitPointArray, i, orbitPoint);
         
