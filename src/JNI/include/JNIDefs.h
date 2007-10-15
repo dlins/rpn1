@@ -26,5 +26,7 @@
 #define HUGONIOTSEGMENTCLASS_LOCATION         "rpnumerics/HugoniotSegment"
 #define HUGONIOTCURVE_LOCATION                "rpnumerics/HugoniotCurve"
 
+
+#define NUMERICSPROFILE_LOCATION              "rpnumerics/RPNumericsProfile"
 #endif	/* _JNIDEFS_H */
 
