@@ -1,5 +1,6 @@
 #include "rpnumerics_RPNUMERICS.h"
-
+#include "JNIDefs.h"
+#include <iostream.h>
 /* Inaccessible static: profile_ */
 /* Inaccessible static: hugoniotCurveCalc_ */
 /*
@@ -7,15 +8,24 @@
  * Method:    init
  * Signature: (Lrpnumerics/RPNumericsProfile{})V
  */
-JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_init(JNIEnv * env, jclass cls, jobject obj){}
-
-/*
- * Class:     rpnumerics_RPNUMERICS
- * Method:    initPhysics
- * Signature: ()Lrpnumerics/Physics;
- */
-JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_initPhysics
-        (JNIEnv * env, jclass cls){}
+JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_init(JNIEnv * env, jclass cls, jobject numericsProfile){
+    
+    jclass numericsProfileClass = env->FindClass(NUMERICSPROFILE_LOCATION);
+    jmethodID getPhysIDMethod = env->GetMethodID(numericsProfileClass, "getPhysicsID", "()Ljava/lang/String;");
+    jstring ID=  (jstring)env->CallObjectMethod(numericsProfile, getPhysIDMethod);
+    
+    const char *physicsID;
+    physicsID = env->GetStringUTFChars(ID, NULL);
+    
+    if (physicsID == NULL) {
+        return; /* OutOfMemoryError already thrown */
+    }
+    
+    cout <<"Physics: "<< physicsID <<endl;
+    
+    env->ReleaseStringUTFChars(ID, physicsID);
+    
+}
 
 /*
  * Class:     rpnumerics_RPNUMERICS
@@ -196,7 +206,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_boundary
         jmethodID boundaryConstructor = (env)->GetMethodID(boundaryClass, "<init>", "(Lwave/util/RealVector;Lwave/util/RealVector;)V");
         
         //Hardcoded para quad2 !!
-     
+        
         
         double minimum [2]={-0.5, -0.5};
         double maximum [2]={0.5, 0.5};

@@ -31,8 +31,7 @@ public class RPNumericsProfile {
     // Constructors/Initializers
     
     public void initPhysics(String physicsId,String nativeLibName,String domainSize) {
-        
-        
+
         System.loadLibrary(nativeLibName);
         
         physicsId_ = physicsId;
@@ -46,24 +45,12 @@ public class RPNumericsProfile {
         flowType_ = flowType;
         
         if (flowType.equals("shockflow")) {
-            //TODO setar o estado inicial para Shock Config
             setInitialState(new SHOCK_CONFIG());
-            
-            
-            //--------TESTE------------------------------------
-//            BackwardOrbitPlotAgent.instance().setEnabled(true);
-//            ForwardOrbitPlotAgent.instance().setEnabled(true);
-            
-//            setInitialState(new GEOM_SELECTION());
-            //----------------------------------------------------
         }
         
         if (flowType.equals("rarefactionflow")|| flowType.equals("blowuprarefactionflow")) {
             setInitialState(new RAREFACTION_CONFIG());
-            
         }
-        
-        
         if (initialState_ == null) {
             System.out.println("Wrong flow type!");
         }
