@@ -1,5 +1,4 @@
 #include "rpnumerics_RPNUMERICS.h"
-#include "JNIUtil.h"
 
 /* Inaccessible static: profile_ */
 /* Inaccessible static: hugoniotCurveCalc_ */
@@ -101,8 +100,6 @@ JNIEXPORT jdouble JNICALL Java_rpnumerics_RPNUMERICS_getSigma
  */
 JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getXZero
         (JNIEnv * env, jclass cls ){
-    
-    JNIUtil *utilInstance = new JNIUtil(env);
     
     double teste[2];
     
