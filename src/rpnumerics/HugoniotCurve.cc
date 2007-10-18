@@ -1,10 +1,27 @@
-#include "rpnumerics_HugoniotCurve.h"
+/**
+ * IMPA - Fluid Dynamics Laboratory
+ *
+ * RPn Project
+ *
+ * @(#) HugoniotCurve.cc
+ **/
 
-/*
- * Class:     rpnumerics_HugoniotCurve
- * Method:    findSigma
- * Signature: (Lrpnumerics/PhasePoint;)D
- */
+
+
+//! Definition of HugoniotCurve
+/*!
+	
+TODO:
+	
+NOTE : 
+
+@ingroup JNI
+*/
+
+
+
+
+#include "rpnumerics_HugoniotCurve.h"
 
 JNIEXPORT jdouble JNICALL Java_rpnumerics_HugoniotCurve_findSigma
         (JNIEnv * env , jobject obj, jobject phasePoint){

@@ -1,13 +1,27 @@
+/**
+ * IMPA - Fluid Dynamics Laboratory
+ *
+ * RPn Project
+ *
+ * @(#) RPNUMERICS.cc
+ **/
+
+
+//! Definition of RPNUMERICS.
+/*!
+ *
+ * TODO:
+ * NOTE :
+ *
+ * @ingroup rpnumerics
+ */
+
 #include "rpnumerics_RPNUMERICS.h"
 #include "JNIDefs.h"
-#include <iostream.h>
-/* Inaccessible static: profile_ */
-/* Inaccessible static: hugoniotCurveCalc_ */
-/*
- * Class:     rpnumerics_RPNUMERICS
- * Method:    init
- * Signature: (Lrpnumerics/RPNumericsProfile{})V
- */
+#include <iostream>
+
+using namespace std;
+
 JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_init(JNIEnv * env, jclass cls, jobject numericsProfile){
     
     jclass numericsProfileClass = env->FindClass(NUMERICSPROFILE_LOCATION);

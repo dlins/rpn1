@@ -21,11 +21,11 @@ import java.awt.Color;
 import rpn.component.MultidAdapter;
 import rpnumerics.PhasePoint;
 import rpnumerics.RPNUMERICS;
-import rpnumerics.RPnCurve;
 
 
 
-public class ManifoldOrbit extends RPnCurve implements RpSolution {
+
+public class ManifoldOrbit implements RpSolution {
     //
     // Members
     //
@@ -40,7 +40,6 @@ public class ManifoldOrbit extends RPnCurve implements RpSolution {
     // Constructor
     //
     public ManifoldOrbit(StationaryPoint stationaryPoint, PhasePoint firstPoint, Orbit orbit, int timeDirection) {
-      super(MultidAdapter.converseOrbitPointsToCoordsArray(orbit.getPoints()),new ViewingAttr (Color.ORANGE));
         stationaryPoint_ = new StationaryPoint(stationaryPoint);
         orbit_ = orbit;
         firstPoint_ = firstPoint;

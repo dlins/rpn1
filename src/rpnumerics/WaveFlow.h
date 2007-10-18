@@ -11,7 +11,6 @@
 #define	_WaveFlow_H
 
 #include "RpFunction.h"
-#include "RealVector.h"
 
 //! Definition of class WaveFlow.
 /*!
@@ -22,19 +21,14 @@
  @ingroup rpnumerics
  */
 
-class WaveFlow : public RpFunctionDeriv2{
+class WaveFlow : public RpFunction {
     
     
-    public :
+      PhasePoint getXZero();
 
-        //! XZero accessor 
-        const  RealVector getXZero();
+    void setXZero (PhasePoint  & xzero);
 
-        //! XZero mutator 
-        void setXZero(const RealVector &);
-        
 };
-
 
 #endif	/* _WaveFlow_H */
 
