@@ -50,8 +50,8 @@ int rk4_teste(int n, double t , double deltat , double *p, double * out, RpFunct
             for (j = 0; j < n; j++) tmp(j) = p[j];
 
 //    flag = (*f)(n, t, &tmp[0], &k1[0]);
-
-    flag = function.f(tmp, k1);
+    // Usar RpFunction 
+//    flag = function.f(tmp, k1);
     
     if (flag == ABORTED_PROCEDURE){
         #ifdef TEST_RK4
@@ -62,8 +62,8 @@ int rk4_teste(int n, double t , double deltat , double *p, double * out, RpFunct
     
     /* K2 */
     for (j = 0; j < n; j++) tmp(j) = p[j] + deltat*k1(j)/2.0;
-
-    flag = function.f(tmp, k2);
+    // Usar RpFunction 
+//    flag = function.f(tmp, k2);
     
 //    flag = (*f)(n, t, &tmp[0], &k2[0]);
     if (flag == ABORTED_PROCEDURE){
@@ -75,8 +75,8 @@ int rk4_teste(int n, double t , double deltat , double *p, double * out, RpFunct
     
     /* K3 */
     for (j = 0; j < n; j++) tmp(j) = p[j] + deltat*k2(j)/2.0;
-    
-    flag = function.f(tmp, k3);
+    // Usar RpFunction 
+//    flag = function.f(tmp, k3);
     
     
 //    flag = (*f)(n, t, &tmp[0], &k3[0]);
@@ -89,8 +89,10 @@ int rk4_teste(int n, double t , double deltat , double *p, double * out, RpFunct
     
     /* K4 */
     for (j = 0; j < n; j++) tmp(j) = p[j] + deltat*k3(j);
+        // Usar RpFunction 
+//    flag = function.f(tmp, k4);
     
-    flag = function.f(tmp, k4);
+    
 //    flag = (*f)(n, t, &tmp[0], &k4[0]);
     if (flag == ABORTED_PROCEDURE){
         #ifdef TEST_RK4
