@@ -1,3 +1,23 @@
+/**
+ * IMPA - Fluid Dynamics Laboratory
+ *
+ * RPn Project
+ *
+ * @(#) JNIOrbitCalc.cc
+ **/
+
+
+//! Definition of JNIOrbitCalc
+/*!
+	
+TODO:
+	
+NOTE : 
+
+@ingroup JNI
+*/
+
+
 #include "rpnumerics_OrbitCalc.h"
 #include "JNIDefs.h"
 #include <vector>

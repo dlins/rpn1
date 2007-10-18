@@ -1,3 +1,23 @@
+/**
+ * IMPA - Fluid Dynamics Laboratory
+ *
+ * RPn Project
+ *
+ * @(#) JNIHugoniotCurveCalc.cc
+ **/
+
+
+//! Definition of JNIHugoniotCurveCalc
+/*!
+	
+TODO:
+	
+NOTE : 
+
+@ingroup JNI
+*/
+
+
 #include "rpnumerics_HugoniotCurveCalcND.h"
 #include "JNIDefs.h"
 #include <vector>

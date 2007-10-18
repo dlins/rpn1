@@ -14,7 +14,7 @@
 
 
 
-class HessianMatrix: public Matrix2,public JetMatrix {
+class HessianMatrix{//: public Matrix2,public JetMatrix {
     
 public :
     //!Constructor

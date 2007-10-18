@@ -1,10 +1,25 @@
+/**
+ * IMPA - Fluid Dynamics Laboratory
+ *
+ * RPn Project
+ *
+ * @(#) JNIStationaryPointCalc.cc
+ **/
+
+
+//! Definition of JNIStationaryPointCalc
+/*!
+	
+TODO:
+	
+NOTE : 
+
+@ingroup JNI
+*/
+
 #include "rpnumerics_StationaryPointCalc.h"
 #include "JNIDefs.h"
-/*
- * Class:     rpnumerics_StationaryPointCalc
- * Method:    calc
- * Signature: (Lrpnumerics/PhasePoint;)Lrpnumerics/RpSolution;
- */
+
 JNIEXPORT jobject JNICALL Java_rpnumerics_StationaryPointCalc_calc(JNIEnv *env, jobject obj, jobject initialPoint){
     
     jclass  realVectorClass_= env->FindClass(REALVECTOR_LOCATION);

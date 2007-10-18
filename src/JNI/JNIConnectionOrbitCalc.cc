@@ -1,12 +1,31 @@
+
+/**
+ * IMPA - Fluid Dynamics Laboratory
+ *
+ * RPn Project
+ *
+ * @(#) JNIConnectionOrbitCalc.cc
+ **/
+
+
+
+
+//! Definition of JNIConnectionOrbitCalc
+/*!
+	
+TODO:
+	
+NOTE : 
+
+@ingroup JNI
+*/
+
 #include "rpnumerics_ConnectionOrbitCalc.h"
 #include "JNIDefs.h"
 
-/* Signature: (Lrpnumerics/ManifoldOrbit;Lrpnumerics/ManifoldOrbit;)Lrpnumerics/RpSolution;
- */
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_ConnectionOrbitCalc_calc
         (JNIEnv *env , jobject obj , jobject manifoldA, jobject manifoldB){
-    
     
     jobject stationaryPointA, stationaryPointB, orbit;
     

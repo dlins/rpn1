@@ -31,7 +31,7 @@ NOTE :
 class JetMatrix {
 
 public:
-
+    
 	//! the value accessor at vindx index
 	virtual void setVal(int vindx [],double val)=0;
 	//! the value mutator at vindx index

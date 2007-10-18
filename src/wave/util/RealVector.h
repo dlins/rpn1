@@ -11,9 +11,9 @@
 #define	_RealVector_H
 
 #include "Vector.h"
-#include "JetMatrix.h"
+//#include "JetMatrix.h"
 
-class RealVector :public Vector, public JetMatrix{
+class RealVector :public Vector{//, public JetMatrix{
     
 public:
     RealVector();

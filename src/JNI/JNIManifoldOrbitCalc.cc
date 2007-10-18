@@ -1,8 +1,29 @@
+
+/**
+ * IMPA - Fluid Dynamics Laboratory
+ *
+ * RPn Project
+ *
+ * @(#) JNIManifoldOrbitCalc.cc
+ **/
+
+
+
+
+//! Definition of JNIManifoldOrbitCalc
+/*!
+	
+TODO:
+	
+NOTE : 
+
+@ingroup JNI
+*/
+
+
 #include "rpnumerics_ManifoldOrbitCalc.h"
 #include "JNIDefs.h"
 
-/* Signature: (Lrpnumerics/StationaryPoint;Lrpnumerics/PhasePoint;I)Lrpnumerics/RpSolution;
- */
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_ManifoldOrbitCalc_calc  (JNIEnv * env, jobject obj){
             
@@ -19,7 +40,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ManifoldOrbitCalc_calc  (JNIEnv * env,
     
     return NULL;
     
-//    return env->NewObject(classManifold_, manifoldConstructor_, stationaryPoint, phasePoint, timeDirection);
+
     
     
 }
