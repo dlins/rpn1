@@ -11,9 +11,6 @@ import rpnumerics.OrbitPoint;
 import wave.multid.CoordsArray;
 
 import wave.util.RealVector;
-
-
-import wave.util.PointNDimension;
 import java.util.ArrayList;
 import wave.util.RealSegment;
 
