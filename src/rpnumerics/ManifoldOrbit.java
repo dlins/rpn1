@@ -14,17 +14,6 @@
 
 package rpnumerics;
 
-import wave.util.RealVector;
-import wave.util.RealMatrix2;
-import wave.multid.view.ViewingAttr;
-import java.awt.Color;
-import rpn.component.MultidAdapter;
-import rpnumerics.PhasePoint;
-import rpnumerics.RPNUMERICS;
-
-
-
-
 public class ManifoldOrbit implements RpSolution {
     //
     // Members

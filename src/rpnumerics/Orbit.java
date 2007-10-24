@@ -7,13 +7,6 @@
 
 package rpnumerics;
 
-import wave.util.RealVector;
-
-
-import wave.multid.view.ViewingAttr;
-import java.awt.Color;
-import rpn.component.MultidAdapter;
-
 public class Orbit implements RpSolution {
     //
     // Members
