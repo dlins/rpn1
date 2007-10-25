@@ -1,0 +1,59 @@
+/* IMPA - Fluid Dynamics Laboratory
+ *
+ * RPn Project
+ *
+ * @(#) QuadWaveState.h
+ **/
+
+
+
+//! Definition of QuadWaveState
+/*!
+ *
+ * TODO:
+ * NOTE :
+ *
+ * @ingroup rpnumerics
+ */
+
+#ifndef _QUAD2STATE_H
+#define	_QUAD2STATE_H
+#include "RealVector.h"
+
+typedef double sigma;
+
+
+class QuadWaveState {
+    
+public:
+    
+    QuadWaveState(const int dim);
+    
+    QuadWaveState(const int dim, const sigma sig);
+        
+    virtual ~QuadWaveState();
+    
+    double operator ()(const int comp) const ;
+    
+    sigma getSigma() const ;
+    
+    void setSigma(const sigma sig) ;
+    
+private:
+    
+    
+    RealVector * data_;
+    
+    sigma sigma_;
+    
+    
+};
+
+
+inline sigma QuadWaveState::getSigma()const {return sigma_;}
+inline void QuadWaveState::setSigma(const sigma sig ) { sigma_=sig;}
+
+
+
+#endif	/* _QUAD2STATE_H */
+
