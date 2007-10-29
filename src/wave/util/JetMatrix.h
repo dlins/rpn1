@@ -30,14 +30,10 @@ private:
 
 	class RangeViolation : public exception { };
 public:
-<<<<<<< .mine
 	JetMatrix(void);
 	JetMatrix(const int n_comps);
 	JetMatrix(const JetMatrix & jetMatrix);
 
-=======
-    
->>>>>>> .r211
 	int n_comps(void) const;
 	void resize(int n_comps);
 	void range_check(int comp) const;
