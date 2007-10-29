@@ -1,19 +1,19 @@
+/*
+ * IMPA - Fluid Dynamics Laboratory
+ *
+ * RPn Project
+ *
+ * @(#) HessianMatrix.cc
+ */
+
+/*
+ * ---------------------------------------------------------------
+ * Includes:
+ */
 #include "HessianMatrix.h"
 
-HessianMatrix::HessianMatrix(const int n){
-    
-    
-}
+/*
+ * ---------------------------------------------------------------
+ * Definitions:
+ */
 
-
-HessianMatrix::~HessianMatrix(){
-    
-}
-
-void HessianMatrix::setVal(int vindx [], double val){
-    
-}
-
-double HessianMatrix::getVal(int vindex []) const{
-    
-}
