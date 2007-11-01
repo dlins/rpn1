@@ -1,9 +1,3 @@
-//
-// File:   ODESigmaSolution.h
-// Author: edsonlan
-//
-// Created on May 17, 2007, 2:10 PM
-//
 
 #ifndef _ODESigmaSolution_H
 #define	_ODESigmaSolution_H

@@ -1,9 +1,3 @@
-// 
-// File:   ODEStopGenerator.h
-// Author: edsonlan
-//
-// Created on May 17, 2007, 1:58 PM
-//
 #include "RealVector.h"
 
 #ifndef _ODEStopGenerator_H
