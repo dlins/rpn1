@@ -1,9 +1,10 @@
-//
-// File:   JNIDefs.h
-// Author: edsonlan
-//
-// Created on August 29, 2007, 3:06 PM
-//
+/**
+ * IMPA - Fluid Dynamics Laboratory
+ *
+ * RPn Project
+ *
+ * @(#) JNIDefs.h
+ **/
 
 #ifndef _JNIDEFS_H
 #define	_JNIDEFS_H
