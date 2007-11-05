@@ -13,7 +13,7 @@
  * ---------------------------------------------------------------
  * Includes:
  */
-#include "Vector.h"
+#include "RealVector.h"
 
 /*
  * ---------------------------------------------------------------
@@ -21,10 +21,18 @@
  */
 
 class WaveState {
-
 private:
 
 public:
+	WaveState(const int dim);
+	virtual ~WaveState();
+	
+	//TODO  mudar component para operator 
+	double operator()(const int comp) const ;
+	double & operator()(const int comp);
+
+protected:
+	RealVector * coords_;
 
 };
 
