@@ -30,7 +30,7 @@ public:
 	Quad2FluxFunction(const Quad2FluxParams &);
 	~Quad2FluxFunction(void);
 
-	int jet(const int deriv, const WaveState & s, JetMatrix & m);
+	int jet(const WaveState &u, JetMatrix &m, int degree);
 
 	FluxParams fluxParams(void);
 };
