@@ -28,7 +28,4 @@ public:
 
 };
 
-const Space Multid::PLANE = Space("PLANE", 2);
-const Space Multid::SPACE = Space("SPACE", 3);
-
 #endif //! _Multid_H
