@@ -1,0 +1,21 @@
+vpath %.cc $(RPNUMERICSDIR)
+
+C++SRC = PhasePoint.cc		\
+	RpCurve.cc		\
+	RpFunction.cc 		\
+	RpSolution.cc 		\
+	RarefactionCurve.cc	\
+	RarefactionFlow.cc	\
+	ShockFlow.cc 		\
+	WaveFlow.cc 		\
+	WavePoint.cc		\
+	WaveState.cc		
+
+CPPFLAGS += -I $(RPNUMERICSDIR)
+
+PHYSICSDIR = $(RPNUMERICSDIR)/physics
+METHODSDIR = $(RPNUMERICSDIR)/methods
+
+include $(PHYSICSDIR)/defs
+include $(METHODSDIR)/defs
+

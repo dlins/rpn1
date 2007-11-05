@@ -1,0 +1,6 @@
+vpath %.cc $(METHODSDIR)
+
+C++SRC += RarefactionMethod.cc \
+	RpMethod.cc 
+
+CPPFLAGS += -I $(METHODSDIR)
