@@ -14,25 +14,27 @@
 
 //! Definition of class FluxFunction.
 /*!
- TODO:
- NOTE :
-
- @ingroup rpnumerics
+ * TODO:
+ * NOTE :
+ *
+ * @ingroup rpnumerics
  */
 
 class FluxFunction: public RpFunction {
-
+    
 private:
 	FluxParams params_;
     
 public:
 	FluxFunction(void);
 	FluxFunction(const FluxParams & params);
-	~FluxFunction(void);
-
+	virtual ~FluxFunction(void);
+    
+//	int jet( const WaveState &u, JetMatrix &m, int degree);
+    
 	const FluxParams & fluxParams(void);
 	void fluxParams(const FluxParams & params);
-        
+    
 };
 
 #endif	//! _FluxFunction_H

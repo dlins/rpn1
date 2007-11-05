@@ -13,10 +13,11 @@
  * ---------------------------------------------------------------
  * Includes:
  */
-#include "Boundary.h"
-#include "Space.h"
 //#include "AccumulationFunction.h"
+#include "Boundary.h"
 #include "FluxFunction.h"
+#include "Space.h"
+#include "WaveFlow.h"
 
 //! Definition of class Physics.
 /*!
@@ -32,16 +33,18 @@ class Physics {
 public :
 	virtual ~Physics();
         
-        virtual const FluxFunction & fluxFunction() const = 0;
-
         //virtual const AccumulationFunction & accumulation() const = 0;
-
-        virtual const Space & domain() const = 0;
 
         virtual const Boundary & boundary() const= 0;
 
 	virtual void boundary(const Boundary & boundary) = 0;
         
+        virtual const FluxFunction & fluxFunction() const = 0;
+
+        virtual const Space & domain() const = 0;
+
+	virtual const WaveFlow & flow() const = 0;
+
 };
 
 inline Physics::~Physics() { };
