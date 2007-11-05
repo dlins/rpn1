@@ -199,7 +199,7 @@ int eigen_rl(int n, Matrix3 &A, Vector3 &eigenValues, Matrix3 &eigenVectors){
     double work[5*n], wi[n], wr[n];
     struct eigen e[EIG_MAX];
     double B[n][n];
-    
+
     Matrix3 transposedA;
     // Create a transposed copy of A to be used by LAPACK's dgeev:
     transposedA=transpose(A);
@@ -207,9 +207,9 @@ int eigen_rl(int n, Matrix3 &A, Vector3 &eigenValues, Matrix3 &eigenVectors){
     for (i = 0; i < n; i++){
         for (j = 0; j < n; j++) B[i][j] = transposedA(i, j);
     }
-//     dgeev_("V", "V", &n, &B[0][0], &lda, &wr[0], &wi[0],
-//    &vl[0][0], &ldvl, &vr[0][0], &ldvr, &work[0], &lwork,
-//    &info);
+    dgeev_("V", "V", &n, &B[0][0], &lda, &wr[0], &wi[0],
+    &vl[0][0], &ldvl, &vr[0][0], &ldvr, &work[0], &lwork,
+    &info);
     
     // Process the results
     if (info != 0) return 1;

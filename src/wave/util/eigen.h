@@ -1,7 +1,6 @@
 #ifndef EIGEN_H
 #define EIGEN_H
 
-
 #ifdef TESTEIGEN
 #define TEST_EIGEN
 #endif 

@@ -68,9 +68,11 @@ inline Vector3 operator+(const Vector3 &a, const Vector3 &b);
 inline Vector3 operator-(const Vector3 &a, const Vector3 &b);
 inline double operator*(const Vector3 &a, const Vector3 &b);
 
+extern"C" {
   void dgeev_(char * , char *, int *, double *, int*, double *, double *, 
                double *, int *, double *, int *, double *, int *, 
                int *);
+}
   
 int eigen_rl(int , Matrix3 & , Vector3 &, Matrix3 &);//(int, double*, struct eigen*);
 
