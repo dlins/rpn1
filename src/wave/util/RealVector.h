@@ -19,6 +19,7 @@ public:
     RealVector();
     RealVector(int );
     RealVector(double *);
+    RealVector (int,double *);
     bool operator==(const RealVector &);
     
     void setVal(int vindx [], double val);
