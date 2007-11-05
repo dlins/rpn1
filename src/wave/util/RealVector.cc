@@ -5,6 +5,13 @@ RealVector::RealVector(int size):Vector(size){
 
 }
 
+RealVector::RealVector(int size, double * coords):Vector(size,coords){
+    
+    
+    
+}
+
+
 RealVector::RealVector(){}
 
 bool RealVector::operator ==(const RealVector &test){
