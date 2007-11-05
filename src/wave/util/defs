@@ -1,3 +1,31 @@
-WUTILINC = -I$(WUTILDIR) -DLAPACKLINK
-WUTILLIB = $(WUTILDIR)/$(RPHOSTTYPE)/libwutil.a
-WUTILLIBS = -L$(WUTILDIR)/$(RPHOSTTYPE) -lwutil  -L/impa/home/f/edsonlan/C/Lapack/lapack-3.1.1/ -llapack_LINUX
+vpath %.cc $(UTILDIR)
+
+C++SRC += ADTADV.cc		\
+	BlockTri1.cc		\
+	BlockTri2.cc		\
+	BlockTri3.cc		\
+	bool.cc			\
+	Boundary.cc		\
+	eigen2.cc		\
+	eigen.cc		\
+	errorhandler.cc		\
+	except.cc		\
+	HessianMatrix.cc	\
+	IntArray.cc		\
+	JacobianMatrix.cc	\
+	JetMatrix.cc		\
+	mathutil.cc		\
+	new.cc			\
+	polyroot.cc		\
+	RealVector.cc		\
+	RectBoundary.cc		\
+	Vector1Array.cc		\
+	Vector1.cc		\
+	Vector2Array.cc		\
+	Vector2.cc		\
+	Vector3Array.cc		\
+	Vector3.cc		\
+	Vector.cc
+
+CPPFLAGS += -I $(UTILDIR)
+
