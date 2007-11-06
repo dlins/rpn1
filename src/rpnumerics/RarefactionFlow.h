@@ -15,6 +15,10 @@
  */
 #include "WaveFlow.h"
 #include "PhasePoint.h"
+#include "RealVector.h"
+#include "JacobianMatrix.h"
+#include "HessianMatrix.h"
+#include "ReturnCodes.h"
 
 /*
  * ---------------------------------------------------------------

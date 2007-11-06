@@ -16,6 +16,7 @@
 ** ---------------------------------------------------------------
 ** Includes:
 */
+#include "ReturnCodes.h"
 #include "RealVector.h"
 #include "JetMatrix.h"
 #include "WaveState.h"
@@ -43,10 +44,12 @@ NOTE :
 class RpFunction {
 
 public:
+	virtual ~RpFunction(void);
 	//! m coordinates function evaluation at u
 	//! this is the nth derivative calculation that might be available or not
 	virtual int jet(const WaveState &u,JetMatrix &m,int degree) = 0;
 };
 
-
+inline RpFunction::~RpFunction(void) {
+}
 #endif //RPFUNCTION_H

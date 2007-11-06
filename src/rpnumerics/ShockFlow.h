@@ -13,7 +13,7 @@
  * ---------------------------------------------------------------
  * Includes:
  */
-#include "RpFunction.h"
+#include "WaveFlow.h"
 
 /*
  * ---------------------------------------------------------------
@@ -21,12 +21,16 @@
  */
 
 class ShockFlow : public WaveFlow {
-
     
 public: 
     
-    int jet(const int degree, const RealVector &u, JetMatrix &m) ;
+    int jet(const int degree, const RealVector &u, JetMatrix &m);
 
 };
+
+
+inline int ShockFlow::jet(const int degree, const RealVector &u, JetMatrix &m) {
+	return OK;
+}
 
 #endif //! _ShockFlow_H

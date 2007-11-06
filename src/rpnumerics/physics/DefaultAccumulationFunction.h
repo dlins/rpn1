@@ -14,6 +14,7 @@
  * Includes:
  */
 #include "RealVector.h"
+#include "JacobianMatrix.h"
 #include "HessianMatrix.h"
 #include "AccumulationFunction.h"
 #include "DefaultAccumulationParams.h"
