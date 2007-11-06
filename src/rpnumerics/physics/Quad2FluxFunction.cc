@@ -23,7 +23,10 @@ Quad2FluxFunction::Quad2FluxFunction(const Quad2FluxParams & params) :
 {
 }
 
-int Quad2FluxFunction::jet(const WaveState & x, JetMatrix & y, int degree)
+//
+//TODO  set degree = 2 as default value
+//
+int Quad2FluxFunction::jet(const WaveState & x, JetMatrix & y, int degree = 2)
 {
 
 	double u = x(0);

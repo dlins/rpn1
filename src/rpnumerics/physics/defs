@@ -7,10 +7,11 @@ C++SRC += AccumulationFunction.cc 	\
 	DefaultAccumulationParams.cc	\
 	FluxFunction.cc 	\
 	FluxParams.cc		\
-	Physics.cc 		\
 	Quad2.cc 		\
 	Quad2FluxFunction.cc 	\
-	Quad2FluxParams.cc 
+	Quad2FluxParams.cc 	\
+	QuadWaveState.cc	\
+	WaveState.cc
 
 CPPFLAGS += -I $(PHYSICSDIR)
 
