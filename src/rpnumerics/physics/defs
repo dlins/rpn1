@@ -1,17 +1,11 @@
 vpath %.cc $(PHYSICSDIR)
 
 
-C++SRC += AccumulationFunction.cc 	\
-	AccumulationParams.cc		\
-	DefaultAccumulationFunction.cc	\
-	DefaultAccumulationParams.cc	\
-	FluxFunction.cc 	\
-	FluxParams.cc		\
+C++SRC += \
 	Quad2.cc 		\
 	Quad2FluxFunction.cc 	\
 	Quad2FluxParams.cc 	\
-	QuadWaveState.cc	\
-	WaveState.cc
+	QuadWaveState.cc
 
 CPPFLAGS += -I $(PHYSICSDIR)
 

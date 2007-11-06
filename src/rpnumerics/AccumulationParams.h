@@ -9,42 +9,69 @@
 #define	_AccumulationParams_H
 #include "RealVector.h"
 
-class AccumulationParams{
-    public:
-        
-        AccumulationParams(const char *, const RealVector &, const int);
-        
-        
-        //! Individual Accumulation parameters  accessor
-        const double  getElement(const int ) const ;
-        //! Complete Accumulation parameters  accessor
-        const  RealVector & getParams() const ;
-        //! Accumulation parameters  mutator
-        void setParams(const double * params);
-        //! Accumulation parameters mutator
-        void setParams(const RealVector params);
-        //! Accumulation parameters mutator
-        void setParam(const int , const double );
-        //! Physics ID accessor
-        const char * getPhysicsID() const;
-        //! Default Accumulation parameters accessor
-        virtual  AccumulationParams defaultParams();
-        
-        private:
-            
-            RealVector params_;
+class AccumulationParams {
+
+private:
+
+	RealVector params_;
+	RealVector initParams_;
+
+public:
+	
+	AccumulationParams();
+	AccumulationParams(const RealVector & params);
+	virtual ~AccumulationParams();
+
+	const RealVector & params(void) const;
+	const double component(int index) const;
+	void params(int size, double * coords);
+	void params(const RealVector & params);
+	void component(int index, double value);
+
+	AccumulationParams defaultParams(void);
+
 };
 
+inline AccumulationParams::AccumulationParams() :
+	params_(params())
+{
+}
 
-inline const RealVector & AccumulationParams::getParams(){ return params_;}
+inline AccumulationParams::AccumulationParams(const RealVector & params) :
+	params_(params)
+{
+}
 
-inline void AccumulationParams::setParams(const double * params){ params_= new RealVector(params);}
+inline AccumulationParams::~AccumulationParams()
+{
+}
 
-inline void AccumulationParams::setParams(const RealVector params){ params_=params;}
+inline const RealVector & AccumulationParams::params(void) const
+{
+	return params_;
+}
 
-inline void AccumulationParams::setParam(const int index, const double value){params_(index)=value;}
+inline const double AccumulationParams::component(int index) const
+{
+	return params_(index);
+}
 
-inline double AccumulationParams::getElement(int index){ return params_(index);}
+inline void AccumulationParams::params(int size, double * coords)
+{
+	RealVector p_(size, coords);
+	params_ = p_;
+
+}
+
+inline void AccumulationParams::params(const RealVector & params)
+{
+	params_ = params;
+}
+
+inline void AccumulationParams::component(int index, double value)
+{
+	params_(index) = value;
+}
 
 
 #endif	/* _AccumulationParams_H */

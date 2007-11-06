@@ -18,26 +18,47 @@
  @ingroup rpnumerics
  */
 
+#include "RpFunction.h"
+#include "AccumulationParams.h"
 
-class AccumulationFunction:public RpFuntionDeriv2{
+class AccumulationFunction : public RpFunction {
     
-    public:
-        
-        
-        //! Accumulation params accessor
-        
-        const  AccumulationParams & accumulationParams() const  = 0;
-        
-        
-        private:
+private:
+	AccumulationParams params_;
+	
+public:
+	AccumulationFunction(void);
+	AccumulationFunction(const AccumulationParams & params);
+	~AccumulationFunction(void);
+	
+	void accumulationParams(const AccumulationParams & params);
+	const AccumulationParams & accumulationParams(void);
 
-            AccumulationParams params_;
-        
 };
 
+inline AccumulationFunction::AccumulationFunction(void) :
+	params_(AccumulationParams())
+{
+}
 
-inline const AccumulationParams AccumulationFunction::accumulationParams(){return params_;}
+inline AccumulationFunction::AccumulationFunction(const AccumulationParams & params) :
+	params_(params)
+{
+}
 
+inline AccumulationFunction::~AccumulationFunction(void) 
+{
+}
+
+inline void AccumulationFunction::accumulationParams(const AccumulationParams & params)
+{
+	params_ = params;
+}
+
+inline const AccumulationParams & AccumulationFunction::accumulationParams(void)
+{
+	return params_;
+}
 
 #endif	/* _AccumulationFunction_H */
 

@@ -1,7 +1,14 @@
 vpath %.cc $(RPNUMERICSDIR)
 
 
-C++SRC = PhasePoint.cc		\
+C++SRC = \
+	AccumulationFunction.cc 	\
+	AccumulationParams.cc		\
+	DefaultAccumulationFunction.cc	\
+	DefaultAccumulationParams.cc	\
+	FluxFunction.cc 	\
+	FluxParams.cc		\
+	PhasePoint.cc		\
 	Physics.cc		\
 	RarefactionCurve.cc	\
 	RarefactionFlow.cc	\
