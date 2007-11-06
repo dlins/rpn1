@@ -1,15 +1,20 @@
 vpath %.cc $(RPNUMERICSDIR)
 
+
 C++SRC = PhasePoint.cc		\
+	Physics.cc		\
+	RarefactionCurve.cc	\
+	RarefactionFlow.cc	\
 	RpCurve.cc		\
 	RpFunction.cc 		\
 	RpSolution.cc 		\
-	RarefactionCurve.cc	\
-	RarefactionFlow.cc	\
 	ShockFlow.cc 		\
 	WaveFlow.cc 		\
 	WavePoint.cc		\
 	WaveState.cc		
+
+#	HugoniotCurve.cc	\
+#	RpNumerics.cc		\
 
 CPPFLAGS += -I $(RPNUMERICSDIR)
 
