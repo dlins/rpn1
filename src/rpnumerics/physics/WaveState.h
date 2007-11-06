@@ -20,13 +20,12 @@ public:
     
     virtual ~WaveState();
     
-    double operator()(const int comp) const ;
+    double operator()(const int comp) const;
     double & operator()(const int comp);
     
     
 protected:
-    
-    
+
     RealVector * coords_;
     
 };
