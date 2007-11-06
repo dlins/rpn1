@@ -12,6 +12,7 @@ LIBNAME = librpnumerics.so
 LIBARC = $(RPNDIR)/src/$(OBJDIR)/$(LIBNAME)
 CLEANSRC += $(LIBARC)
 
+
 all: $(LIBARC)
 
 $(LIBARC): $(LIBOBJ)
@@ -21,6 +22,7 @@ $(LIBARC): $(LIBOBJ)
 #$(LIBARC): $(LIBOBJ)
 #	ar -ruv $(LIBARC) $(LIBOBJ)
 #	$(RANLIB) $(LIBARC)
+
 
 .PRECIOUS: $(LIBARC)
 
