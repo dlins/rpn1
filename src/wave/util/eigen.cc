@@ -1,6 +1,5 @@
 #include "eigen.h"
 
-
 // To fill an array of eigen structs. It is assumed that the matrix containing the
 // eigenvectors returned by Lapack was tranposed before being fed to
 // this function.

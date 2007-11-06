@@ -25,16 +25,12 @@
 class JetMatrix
 {
 private:
-	int n_comps_, size_;
-	Vector v_;
-private:
     int n_comps_, size_;
     Vector v_;
+    bool c0_, c1_, c2_;
     
     class RangeViolation : public exception { };
     
-    
-	class RangeViolation : public exception { };
 public:
     JetMatrix(void);
     JetMatrix(const int n_comps);
@@ -44,49 +40,41 @@ public:
     void resize(int n_comps);
     void range_check(int comp) const;
     JetMatrix &zero(void);
-    
-    
+
+    double * operator()(void);
     double operator()(int i);
     double operator()(int i, int j);
     double operator()(int i, int j, int k);
-    
+
     void operator()(int i, double value);
     void operator()(int i, int j, double value);
     void operator()(int i, int j, int k, double value);
     
-    
-private:
-    
-    bool c0_, c1_, c2_;
-    
-protected:
-    
-    double * operator()(void);
-	int n_comps(void) const;
-	void resize(int n_comps);
-	void range_check(int comp) const;
-	JetMatrix &zero(void);
-
-	double * operator()(void);
-	double operator()(int i);
-	double operator()(int i, int j);
-	double operator()(int i, int j, int k);
-
-	void operator()(int i, double value);
-	void operator()(int i, int j, double value);
-	void operator()(int i, int j, int k, double value);
-
 };
 
-inline JetMatrix::JetMatrix(void) : n_comps_(1), size_(3), v_(size_), c0_(false), c1_(false), c2_(false) {
+inline JetMatrix::JetMatrix(void) : 
+	n_comps_(1), 
+	size_(3), 
+	v_(size_), 
+	c0_(false), 
+	c1_(false), 
+	c2_(false) {
 }
 
-inline JetMatrix::JetMatrix(const int n_comps) : n_comps_(n_comps), size_(n_comps * (1 + n_comps * (1 + n_comps))),
-        v_(size_), c0_(false), c1_(false), c2_(false) {
+inline JetMatrix::JetMatrix(const int n_comps) : 
+	n_comps_(n_comps), size_(n_comps * (1 + n_comps * (1 + n_comps))),
+        v_(size_), 
+	c0_(false), 
+	c1_(false), 
+	c2_(false) {
 }
 
-inline JetMatrix::JetMatrix(const JetMatrix & jetMatrix) :n_comps_(jetMatrix.n_comps_), size_(n_comps_ * (1 + n_comps_ * (1 + n_comps_))),
-        v_(jetMatrix.v_), c0_(false), c1_(false), c2_(false) {
+inline JetMatrix::JetMatrix(const JetMatrix & jetMatrix) :
+	n_comps_(jetMatrix.n_comps_), size_(n_comps_ * (1 + n_comps_ * (1 + n_comps_))),
+        v_(jetMatrix.v_), 
+	c0_(false), 
+	c1_(false), 
+	c2_(false) {
 }
 
 inline int JetMatrix::n_comps(void) const {

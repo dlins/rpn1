@@ -11,19 +11,19 @@
 #define	_RealVector_H
 
 #include "Vector.h"
-//#include "JetMatrix.h"
 
-class RealVector :public Vector{//, public JetMatrix{
+class RealVector :public Vector {
     
 public:
-    RealVector();
-    RealVector(int );
+    RealVector(void);
+    RealVector(int);
     RealVector(double *);
-    RealVector (int,double *);
+    RealVector(int,double *);
     bool operator==(const RealVector &);
     
-    void setVal(int vindx [], double val);
-    double getVal(int vindex []) const;
+    // No need for accessor and mutator methods! Use 'Vector' methods to access components.
+    //void setVal(int vindx [], double val);
+    //double getVal(int vindex []) const;
     
 
     

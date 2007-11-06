@@ -8,7 +8,6 @@
 #define EPS 1e-30
 
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h> // To use fabs
