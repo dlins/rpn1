@@ -1,9 +1,0 @@
-#!/bin/ksh
-
-for file in $*
-do
-
-  rm -f $file
-  cvs remove $file
-
-done

@@ -1,9 +1,0 @@
-#!/bin/ksh
-
-for dirname in $*
-do
-  ~/bin/cvsrm `find  $dirname -name "*" | grep -v CVS`
-  cd $dirname/..;cvs update -P;cd -
-done 
-
-
