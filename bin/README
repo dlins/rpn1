@@ -18,7 +18,16 @@
          +- var
 
 
-2. Compiling
+2. Pre-requisites
+
+To compile and run RPn you must install:
+
+   GCC 3.4 or newer
+   lapack3 (library of linear algebra routines 3)
+   refblas3 (Basic Linear Algebra Subroutines 3)
+
+
+3. Compiling
 
 Before compiling RPn code, you have to set up some environmental variables. There are
 two configuration script to help you with that: one for csh shell and another one if
