@@ -1,4 +1,4 @@
-vpath %.cc $(PHYSICSDIR)
+vpath %.cc $(QUADDIR)
 
 
 C++SRC += \
@@ -7,5 +7,5 @@ C++SRC += \
 	Quad2FluxParams.cc 	\
 	QuadWaveState.cc
 
-CPPFLAGS += -I $(PHYSICSDIR)
+CPPFLAGS += -I $(QUADDIR)
 
