@@ -1,0 +1,42 @@
+
+	IMPA - Fluid Dynamics Laboratory
+	http://www.fluid.impa.br
+
+	RPn Project - Riemann Problem N-Dimensional
+
+
+1. Directory structure
+
+  trunk -+
+         +- bin
+         +- lib
+         +- src -+
+         |       +- JNI
+         |       +- rpn
+         |       +- rpnumerics
+         |       +- wave
+         +- var
+
+
+2. Compiling
+
+Before compiling RPn code, you have to set up some environmental variables. There are
+two configuration script to help you with that: one for csh shell and another one if
+you are using the bash. 
+
+If you use csh, edit 'bin/env-cshrc' file and change the line:
+
+   setenv RPNHOME /example/of/rpnhome/directory
+
+to your RPn home directory. If you are using bash, edit 'bin/env-bash' file and change
+the following line:
+
+   export RPNHOME=/example/of/rpnhome/directory
+
+After running one of these scripts, you'll be prepared to compile RPn. Now, you just
+have to go to 'src' directory and type:
+
+   make
+
+
+

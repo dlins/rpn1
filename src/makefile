@@ -1,15 +1,17 @@
-include $(RPNDIR)/var/make/defs
+include $(RPNHOME)/var/make/defs
 
 C++SRC += 
-RPNUMERICSDIR = $(RPNDIR)/src/rpnumerics
-WAVEDIR       = $(RPNDIR)/src/wave
+RPNUMERICSDIR = $(RPNHOME)/src/rpnumerics
+WAVEDIR       = $(RPNHOME)/src/wave
 include $(RPNUMERICSDIR)/defs
 include $(WAVEDIR)/defs
 
+LIBNAME = librpnumerics.so
+OBJDIR = ../lib/$(RPHOSTTYPE)
 LIBOBJ = $(C++SRC:%.cc=$(OBJDIR)/%.o)
 DEPENDOBJ = $(C++SRC:%.cc=$(OBJDIR)/%.d)
-LIBNAME = librpnumerics.so
-LIBARC = $(RPNDIR)/src/$(OBJDIR)/$(LIBNAME)
+#LIBARC = $(RPNHOME)/src/$(OBJDIR)/$(LIBNAME)
+LIBARC = $(OBJDIR)/$(LIBNAME)
 CLEANSRC += $(LIBARC)
 
 
@@ -26,7 +28,7 @@ $(LIBARC): $(LIBOBJ)
 
 .PRECIOUS: $(LIBARC)
 
-include $(RPNDIR)/var/make/rules
+include $(RPNHOME)/var/make/rules
 ifneq ($(RPHOSTTYPE),mingw32)
 -include $(DEPENDOBJ)
 endif

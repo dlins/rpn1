@@ -1,0 +1,94 @@
+#################################################################################################3
+#
+#	bashrc-rpn
+#
+
+#################################################################################################3
+#
+#	Put personal stuff here ...
+#
+# Change the following variable for your own directory
+export RPNHOME=/example/of/rpnhome/directory
+
+#################################################################################################3
+#
+#	Set up local aliases for environment setting
+#
+function csetenv    () { [ -z ${!1:-''} ] && eval $1=$2; export $1; }
+function ifecsetenv () { [ -z ${!1:-''} -a -d ${2} ] && eval $1=$2; export $1; }
+function ifeappend  () { [ -d ${2} ] && eval $1=`echo ${!1}`:$2; export $1; }
+
+#
+#	Set up host identification
+#
+if [ ! $RPHOSTTYPE ]; then
+	case `uname -s` in
+	SunOS)
+		case `uname -r` in
+		5*)
+			export RPHOSTTYPE=solaris;
+			;;
+		esac
+		;;
+	Linux)
+		export RPHOSTTYPE=linux_`uname -m`;
+		;;
+	esac
+fi
+csetenv RPHOSTNAME `uname -n`
+
+#
+#	Set up linux distribution identification
+#
+[ `uname -s` == "Linux" ] && export RPLINUXDIST=`head -1 /etc/issue| cut -d" " -f1`
+
+
+############################################################################
+#
+#	Set up development variables for rpn's makefile
+#
+csetenv RPGNU yes
+csetenv CVS_RSH	 ssh
+csetenv SVN_SERVER svn://brahms.fluid.impa.br
+csetenv BUILDARCH `uname -m`
+
+case $RPLINUXDIST in
+Ubuntu)
+	csetenv BUILDGCCVER "-4.1"
+	csetenv DEBIAN_BUILDGCCVER $BUILDGCCVER
+	csetenv DEBIAN_BUILDARCH $BUILDARCH
+	;;
+*) # CentOS and (probably) RHEL5 distributions
+	csetenv BUILDGCCVER "4"
+	;;
+esac
+
+############################################################################
+#
+#	Set command path
+#
+export PATH=.:./$RPHOSTTYPE:$PATH
+ifeappend PATH $RPNHOME/bin
+
+#
+#	Set ld library path
+#
+[ ! $LD_LIBRARY_PATH ] && export LD_LIBRARY_PATH=
+ifeappend LD_LIBRARY_PATH .
+ifeappend LD_LIBRARY_PATH /usr/lib
+ifeappend LD_LIBRARY_PATH $RPNHOME/lib
+ifeappend LD_LIBRARY_PATH $RPNHOME/lib/$RPHOSTTYPE
+
+#
+#	Set cdpath
+#
+[ ! $CDPATH ] && export CDPATH=
+ifeappend CDPATH .
+ifeappend CDPATH ..
+ifeappend CDPATH ~
+ifeappend CDPATH $RPNHOME
+ifeappend CDPATH $RPNHOME/src
+ifeappend CDPATH $RPNHOME/src/rpnumerics
+ifeappend CDPATH $RPNHOME/src/wave
+
+

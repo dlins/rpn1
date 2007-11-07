@@ -1,0 +1,104 @@
+#################################################################################################3
+#
+#	cshrc-rpn
+#
+
+#################################################################################################3
+#
+#	Put personal stuff here ...
+#
+# Change the following variable for your own directory
+setenv RPNHOME /example/of/rpnhome/directory
+
+#################################################################################################3
+#
+#	Set up local aliases for environment setting
+#
+alias csetenv		'if ( \! $?\!:1 ) setenv \!:1 \!:2'
+alias ifecsetenv        'if ( -e \!:2 && \! $?\!:1 ) setenv \!:1 \!:2'
+alias echonpath		'echo set \!:1 = \( ${\!:1} \!:2 \)'
+alias ifeappend		'if ( -e \!:2 ) eval `echonpath \!*`'
+alias echoNPATH		'echo setenv \!:1 ${\!:1}\:\!:2'
+alias ifeappendPATH	'if ( -e \!:2 ) eval `echoNPATH \!*`'
+
+#
+#	Set up host identification
+#
+if (! $?RPHOSTTYPE) then
+	switch (`uname -s`)
+	case SunOS:
+		setenv HOSTNAME `uname -n`
+		switch (`uname -r`)
+		case 5*:
+			setenv RPHOSTTYPE solaris
+			breaksw
+		endsw
+		breaksw
+	case Linux:
+		setenv HOSTNAME `uname -n`
+		setenv RPHOSTTYPE linux_`uname -m`
+		breaksw
+	endsw
+endif
+csetenv RPHOSTNAME `uname -n`
+
+#
+#	Set up linux distribution identification
+#
+if (`uname -s` == "Linux" ) setenv RPLINUXDIST `head -1 /etc/issue| cut -d" " -f1`
+
+############################################################################
+#
+#	Set up development variables for rpn's makefile
+#
+csetenv RPGNU yes
+csetenv CVS_RSH	 ssh
+csetenv SVN_SERVER svn://brahms.fluid.impa.br
+csetenv BUILDARCH `uname -m`
+
+switch ($RPLINUXDIST)
+case Ubuntu:
+	csetenv BUILDGCCVER "-4.1"
+	csetenv DEBIAN_BUILDGCCVER $BUILDGCCVER
+	csetenv DEBIAN_BUILDARCH $BUILDARCH
+	;;
+default: # CentOS and (probably) RHEL5 distributions
+	csetenv BUILDGCCVER "4"
+	;;
+endsw
+
+############################################################################
+#
+#	Set command path
+#
+if (! $?path) setenv path ".:./$RPHOSTTYPE"
+ifeappend path .
+ifeappend path $RPHOSTTYPE
+ifeappend path $RPNHOME/bin
+
+#
+#	Set ld library path
+#
+if (! $?LD_LIBRARY_PATH) then
+	setenv LD_LIBRARY_PATH ""
+else
+	setenv LD_LIBRARY_PATH "."
+endif
+ifeappendPATH LD_LIBRARY_PATH /usr/lib
+ifeappendPATH LD_LIBRARY_PATH $RPNHOME/lib
+ifeappendPATH LD_LIBRARY_PATH $RPNHOME/lib/$RPHOSTTYPE
+
+
+#
+#	Set cdpath
+#
+if (! $?cdpath) then
+	setenv cdpath "" 
+else 
+	setenv cdpath ".:..:~:$path"
+endif
+ifeappend cdpath $RPNHOME
+ifeappend cdpath $RPNHOME/src
+ifeappend cdpath $RPNHOME/src/rpnumerics
+ifeappend cdpath $RPNHOME/src/wave
+
