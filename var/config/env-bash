@@ -8,7 +8,7 @@
 #	Put personal stuff here ...
 #
 # Change the following variable for your own directory
-export RPNHOME=/example/of/rpnhome/directory
+export RPNHOME=/example/of/rpnhome/trunk/directory
 
 #################################################################################################3
 #

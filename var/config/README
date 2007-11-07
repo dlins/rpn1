@@ -14,6 +14,7 @@
          |       +- JNI
          |       +- rpn
          |       +- rpnumerics
+         |       +- test
          |       +- wave
          +- var
 
@@ -33,14 +34,14 @@ Before compiling RPn code, you have to set up some environmental variables. Ther
 two configuration script to help you with that: one for csh shell and another one if
 you are using the bash. 
 
-If you use csh, edit 'bin/env-cshrc' file and change the line:
+If you use csh, edit 'var/config/env-cshrc' file and change the line:
 
-   setenv RPNHOME /example/of/rpnhome/directory
+   setenv RPNHOME /example/of/rpnhome/trunk/directory
 
-to your RPn home directory. If you are using bash, edit 'bin/env-bash' file and change
+to your RPn home directory. If you are using bash, edit 'var/config/env-bash' file and change
 the following line:
 
-   export RPNHOME=/example/of/rpnhome/directory
+   export RPNHOME=/example/of/rpnhome/trunk/directory
 
 After running one of these scripts, you'll be prepared to compile RPn. Now, you just
 have to go to 'src' directory and type:
