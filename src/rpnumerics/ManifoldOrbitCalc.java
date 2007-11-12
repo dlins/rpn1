@@ -13,7 +13,7 @@ import org.netlib.lapack.DTRSYL;
 import org.netlib.util.intW;
 import org.netlib.util.doubleW;
 import rpnumerics.PhasePoint;
-import rpnumerics.RPNUMERICS;
+import rpnumerics.RpNumerics;
 import rpnumerics.RpException;
 import wave.util.RealVector;
 import wave.util.RealMatrix2;

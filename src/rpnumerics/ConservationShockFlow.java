@@ -7,7 +7,7 @@
 package rpnumerics;
 
 import rpnumerics.PhasePoint;
-import rpnumerics.RPNUMERICS;
+import rpnumerics.RpNumerics;
 import wave.util.HessianMatrix;
 import wave.util.RealVector;
 import wave.util.RealMatrix2;

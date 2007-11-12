@@ -8,7 +8,7 @@
 package rpnumerics;
 
 import rpnumerics.PhasePoint;
-import rpnumerics.RPNUMERICS;
+import rpnumerics.RpNumerics;
 import rpnumerics.RpException;
 import wave.util.RealMatrix2;
 import wave.util.RealVector;

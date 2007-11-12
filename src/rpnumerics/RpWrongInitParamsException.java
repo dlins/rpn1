@@ -6,9 +6,9 @@
 
 package rpnumerics;
 
-public class RPWrongInitParamsException extends Exception {
+public class RpWrongInitParamsException extends Exception {
 
-    public  RPWrongInitParamsException (String parameter){
+    public  RpWrongInitParamsException (String parameter){
 
 	super (parameter +":Wrong Parameter");
 

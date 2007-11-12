@@ -9,7 +9,7 @@ package rpnumerics;
 import wave.util.*;
 import wave.multid.Space;
 
-public class RPNUMERICS {
+public class RpNumerics {
     //
     // Constants
     //

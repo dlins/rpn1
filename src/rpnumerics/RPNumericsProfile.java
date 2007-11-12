@@ -36,7 +36,7 @@ public class RPNumericsProfile {
         
         physicsId_ = physicsId;
         nativeLibName_ = nativeLibName;
-        RPNUMERICS.setProfile(this);
+        RpNumerics.setProfile(this);
         domain_= new Space("", new Integer(domainSize).intValue());
     }
     
@@ -79,7 +79,7 @@ public class RPNumericsProfile {
             return boundary_;
         } else {
             
-            return RPNUMERICS.boundary();
+            return RpNumerics.boundary();
         }
     }
     
