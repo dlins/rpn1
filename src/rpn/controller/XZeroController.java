@@ -9,7 +9,7 @@ package rpn.controller;
 import rpn.component.RpGeomFactory;
 import rpn.component.XZeroGeomFactory;
 import rpn.usecase.*;
-import rpnumerics.RPNUMERICS;
+import rpnumerics.RpNumerics;
 import rpnumerics.PhasePoint;
 import java.beans.PropertyChangeEvent;
 import rpnumerics.StationaryPointCalc;
@@ -68,10 +68,10 @@ public class XZeroController
        * IT HSA TO GET FROM STATIONARY POINT CALC
        */
 
-                if (RPNUMERICS.getProfile().getFlowType().equals("shockflow")){
+                if (RpNumerics.getProfile().getFlowType().equals("shockflow")){
                 
                 
-                RPNUMERICS.setXZero(((StationaryPointCalc) geomFactory_.rpCalc()).getInitPoint());
+                RpNumerics.setXZero(((StationaryPointCalc) geomFactory_.rpCalc()).getInitPoint());
 
             }
                     

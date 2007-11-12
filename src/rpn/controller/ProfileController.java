@@ -8,7 +8,7 @@ package rpn.controller;
 
 import rpn.usecase.*;
 
-import rpnumerics.RPNUMERICS;
+import rpnumerics.RpNumerics;
 
 import java.beans.PropertyChangeEvent;
 
@@ -47,11 +47,11 @@ public class ProfileController extends RpCalcController {
             // fires ChangeSigma event...
 
             
-            double oldSigma = RPNUMERICS.getSigma();
+            double oldSigma = RpNumerics.getSigma();
             
             super.propertyChange(change);
 //
-            double newSigma =  RPNUMERICS.getSigma();
+            double newSigma =  RpNumerics.getSigma();
             ChangeSigmaAgent.instance().applyChange(              new java.beans.PropertyChangeEvent(this,
                     ChangeSigmaAgent.DESC_TEXT,
                     new Double(oldSigma),

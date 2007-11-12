@@ -11,7 +11,7 @@ import rpn.component.RpGeomFactory;
 import rpn.controller.phasespace.*;
 import rpn.usecase.*;
 import rpn.parser.RPnDataModule;
-import rpnumerics.RPNUMERICS;
+import rpnumerics.RpNumerics;
 import java.beans.PropertyChangeEvent;
 import rpnumerics.ConnectionOrbit;
 
@@ -27,7 +27,7 @@ public class PoincareController implements RpController {
             PROFILE_READY profileHolder = (PROFILE_READY)RPnDataModule.PHASESPACE.state();
             ConnectionOrbit connOrbit = (ConnectionOrbit)profileHolder.connectionGeom().geomFactory().geomSource();
             
-            RPNUMERICS.changePoincareSection(connOrbit);
+            RpNumerics.changePoincareSection(connOrbit);
             
             /*To native layer */
             
@@ -66,7 +66,7 @@ public class PoincareController implements RpController {
             
 //            ((ODESolverProfile) rpnumerics.RPNUMERICS.odeSolver().getProfile()).setPoincareSectionFlag(false);
             
-            RPNUMERICS.setPoincareSectionFlag(false);
+            RpNumerics.setPoincareSectionFlag(false);
             
             ChangeFluxParamsAgent.instance().removePropertyChangeListener(this);
         }
