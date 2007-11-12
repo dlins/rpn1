@@ -1,7 +1,7 @@
 package rpn.parser;
 
 import java.awt.event.ActionEvent;
-import rpnumerics.RPNUMERICS;
+import rpnumerics.RpNumerics;
 import rpnumerics.HugoniotSegment;
 import rpn.component.HugoniotCurveGeomFactory;
 import rpn.component.XZeroGeomFactory;
@@ -28,7 +28,7 @@ import rpnumerics.StationaryPointCalc;
                 XZeroGeomFactory xZeroFactory = new XZeroGeomFactory(new
                         StationaryPointCalc(RPnDataModule.InputHandler.
                                             tempPhasePoint_));
-                RPNUMERICS.hugoniotCurveCalc().uMinusChangeNotify(RPnDataModule.
+                RpNumerics.hugoniotCurveCalc().uMinusChangeNotify(RPnDataModule.
                         InputHandler.tempPhasePoint_);
                 RPnDataModule.InputHandler.xZeroGeom_ = new XZeroGeom(new
                         CoordsArray(RPnDataModule.InputHandler.tempPhasePoint_.
@@ -46,7 +46,7 @@ import rpnumerics.StationaryPointCalc;
 //                            hugoniotSegs.get(i));
                 }
                 HugoniotCurveGeomFactory factory = new HugoniotCurveGeomFactory(
-                        rpnumerics.RPNUMERICS.hugoniotCurveCalc());
+                        rpnumerics.RpNumerics.hugoniotCurveCalc());
 //                HugoniotParser.tempHugoniot = new
 //                        HugoniotCurveGeom(segmentsArray,
 //                                          factory);

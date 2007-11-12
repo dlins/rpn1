@@ -8,7 +8,7 @@ import wave.multid.CoordsArray;
 import wave.util.RealSegment;
 import rpn.component.OrbitGeom;
 import rpn.component.XZeroGeom;
-import rpnumerics.RPNUMERICS;
+import rpnumerics.RpNumerics;
 import org.xml.sax.HandlerBase;
 import org.xml.sax.AttributeList;
 import org.xml.sax.SAXException;
@@ -99,7 +99,7 @@ public class RPnDataModule {
             calcReady_ = false;
             // initialize phase space state
             PHASESPACE = new RPnPhaseSpaceAbstraction("Phase Space",
-                    RPNUMERICS.domain(),
+                    RpNumerics.domain(),
                     new NumConfigImpl());
 
 
@@ -113,7 +113,7 @@ public class RPnDataModule {
             if (name.equals("SHOCKFLOWDATA")) {
                 calcReady_ = new Boolean(att.getValue(1)).booleanValue();
 
-                RPNUMERICS.changeSigma(new Double(att.getValue(0)).doubleValue());
+                RpNumerics.changeSigma(new Double(att.getValue(0)).doubleValue());
 
             }
 
@@ -472,13 +472,13 @@ public class RPnDataModule {
 
     static public void export(FileWriter writer) throws java.io.IOException {
 
-        if ((RPNUMERICS.getProfile().getFlowType().equals("shockflow"))) {
+        if ((RpNumerics.getProfile().getFlowType().equals("shockflow"))) {
             writer.write("<RPDATA>\n");
             writer.write("<FLOWDATA>\n");
 
-            writer.write("<SHOCKFLOWDATA sigma=\"" +RPNUMERICS.getSigma() + "\" calcready=\"" + rpn.parser.RPnDataModule.RESULTS + "\">\n");
+            writer.write("<SHOCKFLOWDATA sigma=\"" +RpNumerics.getSigma() + "\" calcready=\"" + rpn.parser.RPnDataModule.RESULTS + "\">\n");
             writer.write("<XZERO>\n");
-            writer.write(RPNUMERICS.getXZero().toXML());
+            writer.write(RpNumerics.getXZero().toXML());
             writer.write("</XZERO>\n");
             writer.write("</SHOCKFLOWDATA>\n");
 

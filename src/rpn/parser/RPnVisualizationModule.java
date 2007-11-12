@@ -8,7 +8,7 @@ package rpn.parser;
 import rpn.*;
 
 import wave.multid.Space;
-import rpnumerics.RPNUMERICS;
+import rpnumerics.RpNumerics;
 import org.xml.sax.HandlerBase;
 import org.xml.sax.Parser;
 import org.xml.sax.SAXException;
@@ -112,7 +112,7 @@ public class RPnVisualizationModule {
     /** Writes the actual visualization configuration into a XML file. */
 
     static public void export(FileWriter writer) throws java.io.IOException {
-        writer.write("<VIEWINGPARAMS modeldomain=\"" + RPNUMERICS.domainDim() + "\">\n");
+        writer.write("<VIEWINGPARAMS modeldomain=\"" + RpNumerics.domainDim() + "\">\n");
         for (int i = 0; i < DESCRIPTORS.size(); i++)
             writer.write(((RPnProjDescriptor)DESCRIPTORS.get(i)).toXML() + "\n");
         writer.write("</VIEWINGPARAMS>\n");

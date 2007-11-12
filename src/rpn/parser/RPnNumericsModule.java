@@ -11,7 +11,7 @@ import org.xml.sax.SAXParseException;
 import rpn.RPnMenuCommand;
 import rpnumerics.RPNumericsProfile;
 import wave.util.RealVector;
-import rpnumerics.RPNUMERICS;
+import rpnumerics.RpNumerics;
 import rpnumerics.PhasePoint;
 import org.xml.sax.HandlerBase;
 import org.xml.sax.AttributeList;
@@ -93,7 +93,7 @@ public class RPnNumericsModule {
                             doubleValue();
                 }
                 
-                RPNUMERICS.changeFluxParams(doubleList);
+                RpNumerics.changeFluxParams(doubleList);
             }
             
             if (name.equals("PHASEPOINT")) {
@@ -142,7 +142,7 @@ public class RPnNumericsModule {
             if (name.equals("PHYSICS")) {
                 
                 try {
-                    RPNUMERICS.init(profile_);
+                    RpNumerics.init(profile_);
                     
                 } catch (rpnumerics.RpException e) {
                     e.printStackTrace();
@@ -167,7 +167,7 @@ public class RPnNumericsModule {
             
             if (name.equals("SHOCKFLOWDATA")) {
                 
-                RPNUMERICS.setShockFlow(bufferedPhasePoint_, sigma_);
+                RpNumerics.setShockFlow(bufferedPhasePoint_, sigma_);
                 
             }
             

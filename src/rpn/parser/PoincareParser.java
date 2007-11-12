@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.GEOM_SELECTION;
-import rpnumerics.RPNUMERICS;
+import rpnumerics.RpNumerics;
 import rpnumerics.PhasePoint;
 import rpn.controller.ui.UI_ACTION_SELECTED;
 import rpn.usecase.PoincareSectionPlotAgent;
@@ -32,7 +32,7 @@ public class PoincareParser implements ActionListener{
                ArrayList poincareList = new ArrayList();
                // number of input points must match phys dim
 
-               for (int i = 1; i <= RPNUMERICS.domainDim(); i++) {
+               for (int i = 1; i <= RpNumerics.domainDim(); i++) {
 
                    PhasePoint last = (PhasePoint) RPnDataModule.InputHandler.pPointList_.get(RPnDataModule.InputHandler.pPointList_.size() -
                            i);
