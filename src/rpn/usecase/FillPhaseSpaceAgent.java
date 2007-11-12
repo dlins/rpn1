@@ -29,11 +29,11 @@ public class FillPhaseSpaceAgent extends AbstractAction {
     
     public void actionPerformed(ActionEvent action) {
 
-        Boundary bounds = RPNUMERICS.boundary();
-        GridProfile[] profiles = new GridProfile[RPNUMERICS.domainDim()];
-        for (int i = 0; i < RPNUMERICS.domainDim(); i++)
+        Boundary bounds = RpNumerics.boundary();
+        GridProfile[] profiles = new GridProfile[RpNumerics.domainDim()];
+        for (int i = 0; i < RpNumerics.domainDim(); i++)
             profiles[i] = new GridProfile(bounds.getMinimums().getElement(i), bounds.getMaximums().getElement(i), DEFAULT_NUMOFNODES);
-        MultiGrid grid = new MultiGrid(profiles,rpnumerics.RPNUMERICS.domainDim());
+        MultiGrid grid = new MultiGrid(profiles,rpnumerics.RpNumerics.domainDim());
         GridIterator iterator = grid.iterator();
         while (iterator.hasNext()) {
             // Orbits needs just one input

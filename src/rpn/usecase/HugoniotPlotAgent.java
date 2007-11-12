@@ -37,13 +37,13 @@ public class HugoniotPlotAgent extends RpModelPlotAgent {
 
     public RpGeometry createRpGeometry(RealVector[] input) {
         
-        Boundary bound = RPNUMERICS.boundary();
+        Boundary bound = RpNumerics.boundary();
         GridProfile xProfile = new GridProfile(bound.getMinimums().getElement(0), bound.getMaximums().getElement(0), 100);
         GridProfile yProfile = new GridProfile(bound.getMinimums().getElement(1), bound.getMaximums().getElement(1), 100);
 
         // input is the current Shock Flow U minus
-        RPNUMERICS.hugoniotCurveCalc().uMinusChangeNotify(new PhasePoint(input[0]));
-        HugoniotCurveGeomFactory factory = new HugoniotCurveGeomFactory(RPNUMERICS.hugoniotCurveCalc());
+        RpNumerics.hugoniotCurveCalc().uMinusChangeNotify(new PhasePoint(input[0]));
+        HugoniotCurveGeomFactory factory = new HugoniotCurveGeomFactory(RpNumerics.hugoniotCurveCalc());
         return factory.geom();
 
     }

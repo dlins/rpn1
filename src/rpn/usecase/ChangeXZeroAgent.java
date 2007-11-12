@@ -8,7 +8,7 @@ package rpn.usecase;
 
 import rpnumerics.PhasePoint;
 
-import rpnumerics.RPNUMERICS;
+import rpnumerics.RpNumerics;
 import wave.util.RealVector;
 import java.beans.PropertyChangeEvent;
 import rpn.controller.ui.*;
@@ -43,7 +43,7 @@ public class ChangeXZeroAgent extends RpModelConfigChangeAgent {
         
 //        RPNUMERICS.flow().setXZero(newXZero);
         
-        RPNUMERICS.setXZero(newXZero);
+        RpNumerics.setXZero(newXZero);
         
         applyChange(new PropertyChangeEvent(this, DESC_TEXT, oldXZero, newXZero));
     }
