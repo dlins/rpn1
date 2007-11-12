@@ -9,7 +9,7 @@ package rpn.controller.ui;
 import java.util.ArrayList;
 import java.util.List;
 import rpn.component.StationaryPointGeomFactory;
-import rpnumerics.RPNUMERICS;
+import rpnumerics.RpNumerics;
 import rpn.parser.RPnDataModule;
 import rpn.usecase.ChangeSigmaAgent;
 import rpn.component.XZeroGeomFactory;
@@ -36,7 +36,7 @@ public class SIGMA_CONFIG extends UI_ACTION_SELECTED {
 //
 //        // XZERO
         XZeroGeomFactory xzeroFactory = new XZeroGeomFactory(new rpnumerics.StationaryPointCalc(
-                (RPNUMERICS.getXZero())));
+                (RpNumerics.getXZero())));
         RPnDataModule.PHASESPACE.plot(xzeroFactory.geom());
 //        // plots all other singularities
         

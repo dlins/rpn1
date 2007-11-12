@@ -59,7 +59,7 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
     }
     
     protected boolean isPoincareInputReady() {
-        if (userInputList_.size() == rpnumerics.RPNUMERICS.domainDim()) {
+        if (userInputList_.size() == rpnumerics.RpNumerics.domainDim()) {
             return true;
         }
         return false;

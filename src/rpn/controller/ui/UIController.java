@@ -52,7 +52,7 @@ public class UIController extends ComponentUI {
         setState(state);
         installedPanels_ = new ArrayList();
         mouseController_ = new MouseController();
-        globalInputTable_ = new UserInputTable(rpnumerics.RPNUMERICS.domainDim());
+        globalInputTable_ = new UserInputTable(rpnumerics.RpNumerics.domainDim());
 
 	initNetStatus();
 

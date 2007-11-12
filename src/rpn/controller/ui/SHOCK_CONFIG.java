@@ -8,7 +8,7 @@ package rpn.controller.ui;
 
 import rpn.usecase.HugoniotPlotAgent;
 import rpnumerics.PhasePoint;
-import rpnumerics.RPNUMERICS;
+import rpnumerics.RpNumerics;
 import wave.util.RealVector;
 import rpn.usecase.ChangeXZeroAgent;
 
@@ -27,9 +27,9 @@ public class SHOCK_CONFIG extends UI_ACTION_SELECTED {
     //
     public void userInputComplete(rpn.controller.ui.UIController ui,
             RealVector userInput) {
-        if (!(RPNUMERICS.getProfile().isFlowInitialized())) {
+        if (!(RpNumerics.getProfile().isFlowInitialized())) {
             
-            RPNUMERICS.setShockFlow(new PhasePoint(userInput), 0);
+            RpNumerics.setShockFlow(new PhasePoint(userInput), 0);
         }
         
         super.userInputComplete(ui, userInput);
