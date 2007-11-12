@@ -11,7 +11,7 @@ import rpn.usecase.*;
 import rpn.RPnConfigReader;
 import rpn.message.*;
 import rpn.parser.*;
-import rpnumerics.RPNUMERICS;
+import rpnumerics.RpNumerics;
 import wave.util.Boundary;
 import wave.multid.graphs.ClippedShape;
 import java.awt.print.PrinterJob;
@@ -65,7 +65,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             commandMenu_ = command;
             RPnNetworkStatusController.instance().addPropertyChangeListener(this);
             uiController_ = UIController.instance();
-            phaseSpaceFramesInit(RPNUMERICS.boundary());
+            phaseSpaceFramesInit(RpNumerics.boundary());
             createModelInteractionMenu();
             createToolBar();
             UndoActionController.createInstance();
@@ -97,7 +97,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
     protected void createToolBar() {
 
-        if (RPNUMERICS.getProfile().getFlowType().equals("shockflow")) {
+        if (RpNumerics.getProfile().getFlowType().equals("shockflow")) {
             toolBar.add(ForwardOrbitPlotAgent.instance().getContainer());
             toolBar.add(BackwardOrbitPlotAgent.instance().getContainer());
             toolBar.add(ForwardManifoldPlotAgent.instance().getContainer());
@@ -107,8 +107,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             return;
         }
 
-        if (RPNUMERICS.getProfile().getFlowType().equals("rarefactionflow") ||
-            RPNUMERICS.getProfile().getFlowType().equals("blowuprarefactionflow")) {
+        if (RpNumerics.getProfile().getFlowType().equals("rarefactionflow") ||
+            RpNumerics.getProfile().getFlowType().equals("blowuprarefactionflow")) {
 
             toolBar.add(RarefactionForwardOrbitPlotAgent.instance().
                         getContainer());

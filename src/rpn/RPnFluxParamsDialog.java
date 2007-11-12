@@ -6,7 +6,7 @@
 
 package rpn;
 
-import rpnumerics.RPNUMERICS;
+import rpnumerics.RpNumerics;
 import rpn.usecase.ChangeFluxParamsAgent;
 import wave.util.RealVector;
 import javax.swing.*;
