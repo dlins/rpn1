@@ -39,7 +39,7 @@ public class HugoniotCurveGeom implements MultiGeometry, RpGeometry {
         for (int i = 0; i < segArray.length; i++)
             hugoniotSegList_.add(segArray[i]);
         factory_ = factory;
-        space_ = rpnumerics.RPNUMERICS.domain();
+        space_ = rpnumerics.RpNumerics.domain();
         try {
             boundary_ = new BoundingBox(new CoordsArray(space_), new CoordsArray(space_));
         } catch (DimMismatchEx dex) { dex.printStackTrace(); }
@@ -49,7 +49,7 @@ public class HugoniotCurveGeom implements MultiGeometry, RpGeometry {
     public HugoniotCurveGeom(HugoniotCurve  hugoniotCurve, HugoniotCurveGeomFactory factory) {
 //      hugoniotSegList_=hugoniotCurve.segments();
       factory_ = factory;
-      space_ = rpnumerics.RPNUMERICS.domain();
+      space_ = rpnumerics.RpNumerics.domain();
       try {
         boundary_ = new BoundingBox(new CoordsArray(space_), new CoordsArray(space_));
       } catch (DimMismatchEx dex) { dex.printStackTrace(); }

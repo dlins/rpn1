@@ -87,6 +87,6 @@ static public ArrayList converseCoordsArrayToRealSegments (CoordsArray [] coords
 
 
     static public CoordsArray createCoords() {
-        return new CoordsArray(rpnumerics.RPNUMERICS.domain());
+        return new CoordsArray(rpnumerics.RpNumerics.domain());
     }
 }
