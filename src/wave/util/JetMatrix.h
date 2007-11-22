@@ -38,13 +38,14 @@ public:
     JetMatrix(const int n_comps);
     JetMatrix(const JetMatrix & jetMatrix);
     
-    RealVector * f();
-    JacobianMatrix *jacobian();
-    HessianMatrix * hessian() ;
+    void f(RealVector &);
+    void jacobian(JacobianMatrix & jMatrix);
+    void hessian(HessianMatrix & hMatrix);
     
     
-    void jacobian( JacobianMatrix & jMatrix);
-    void hessian (HessianMatrix & hMatrix);
+    void f(const RealVector &);
+    void jacobian(const JacobianMatrix & jMatrix);
+    void hessian(const HessianMatrix & hMatrix);
     
     int n_comps(void) const;
     void resize(int n_comps);
@@ -61,7 +62,6 @@ public:
     void operator()(int i, int j, int k, double value);
     
 };
-
 inline JetMatrix::JetMatrix(void) :
     n_comps_(1),
             size_(3),
@@ -159,48 +159,12 @@ inline JetMatrix::JetMatrix(void) :
                 *value_ = value;
             }
             
+            inline void JetMatrix::f(RealVector & vector){
                 
-
-            
-            inline RealVector * JetMatrix::f(){
-                
-                int i ;
-                RealVector * value = new RealVector(n_comps());
+                int i;
                 for (i=0; i < n_comps();i++){
-                    value->operator ()(i)= operator()(i);
+                    operator()(i, vector(i));
                 }
-                return value;
-            }
-            
-            inline JacobianMatrix * JetMatrix::jacobian(){
-                int i, j;
-                JacobianMatrix * jMatrix = new JacobianMatrix(n_comps());
-                for (i=0;i < n_comps(); i++){
-                    for (j=0; j < n_comps();j++ ){
-                        double value = operator()(i, j);
-                        jMatrix->operator()(i, j, value);
-                    }
-                }
-                return jMatrix;
-            }
-            
-            inline HessianMatrix * JetMatrix::hessian(){
-                
-                int i, j, k;
-                
-                HessianMatrix * hMatrix = new HessianMatrix(n_comps());
-                
-                for (i=0;i < n_comps() ; i++){
-                    for (j=0; j < n_comps() ; j++){
-                        for (k=0 ;k < n_comps(); k++){
-                            
-                            double value = operator ()(i, j, k);
-                            hMatrix ->operator ()(i, j, k, value);
-                        }
-                    }
-                }
-                return hMatrix;
-                
             }
             
             inline void JetMatrix::jacobian(JacobianMatrix &jMatrix){
@@ -208,21 +172,36 @@ inline JetMatrix::JetMatrix(void) :
                 int i, j;
                 for (i=0;i < n_comps(); i++){
                     for (j=0; j < n_comps();j++ ){
-                        double value = operator()(i, j);
-                        jMatrix.operator ()(i,j,value);
+                        double value = jMatrix.operator()(i, j);
+                        operator ()(i, j, value);
                     }
                 }
             }
-             inline void JetMatrix::hessian(HessianMatrix & hMatrix){
+            
+            inline void JetMatrix::hessian(const HessianMatrix & hMatrix){
                 
                 int i, j, k;
                 
                 for (i=0;i < n_comps() ; i++){
                     for (j=0; j < n_comps() ; j++){
                         for (k=0 ;k < n_comps(); k++){
-                             double value = operator()(i, j,k);
                             
-                            hMatrix.operator ()(i, j, k, value);
+                            double value = hMatrix.operator()(i, j, k);
+                            operator()(i, j, k, value);
+                        }
+                    }
+                }
+            }
+            
+            
+            inline void JetMatrix::hessian(HessianMatrix & hMatrix){
+                int i, j, k;
+                for (i=0;i < n_comps() ; i++){
+                    for (j=0; j < n_comps() ; j++){
+                        for (k=0 ;k < n_comps(); k++){
+                            double value = hMatrix.operator()(i, j, k);
+                            
+                            operator ()(i, j, k, value);
                         }
                     }
                 }
