@@ -1,12 +1,11 @@
 vpath %.cc $(JNIDIR)
 
 C++SRC += JNIConnectionOrbitCalc.cc\
-	JNIHugoniotCurveCalc.cc\
-	JNIManifoldOrbitCalc.cc\
-	JNIOrbitCalc.cc\
-	JNIStationaryPointCalc.cc
-
-#	HugoniotCurve.cc	\
+	JNIOrbitCalc.cc             \
+	JNIHugoniotCurveCalc.cc    \
+	JNIManifoldOrbitCalc.cc \
+	JNIStationaryPointCalc.cc \
+	HugoniotCurve.cc	\
 #	RpNumerics.cc		\
 
 CPPFLAGS += -I $(JNIDIR)/include

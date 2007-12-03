@@ -17,7 +17,6 @@
 ** Includes:
 */
 #include "ReturnCodes.h"
-#include "RealVector.h"
 #include "JetMatrix.h"
 #include "WaveState.h"
 

@@ -1,7 +1,7 @@
 vpath %.cc $(RPNUMERICSDIR)
 
 
-C++SRC = \
+C++SRC += \
 	AccumulationFunction.cc 	\
 	AccumulationParams.cc		\
 	DefaultAccumulationFunction.cc	\
@@ -18,10 +18,10 @@ C++SRC = \
 	ShockFlow.cc 		\
 	WaveFlow.cc 		\
 	WavePoint.cc		\
-	WaveState.cc		
+	WaveState.cc		\
+#	RpNumerics.cc		
 
 #	HugoniotCurve.cc	\
-#	RpNumerics.cc		\
 
 CPPFLAGS += -I $(RPNUMERICSDIR)
 

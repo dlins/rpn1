@@ -23,17 +23,16 @@
 class PhasePoint : public RealVector {
 
 public:
-	PhasePoint(const PhasePoint & phasePoint);
-	PhasePoint(const RealVector & phaseCoods);
+	
+	PhasePoint(const RealVector & phaseCoods); //TODO Fix implementation
 
 	RealVector operator()(void);
 
+
+
 };
 
-inline PhasePoint::PhasePoint(const PhasePoint & copy)
-	: RealVector(copy)
-{
-}
+
 
 
 inline PhasePoint::PhasePoint(const RealVector & phaseCoords)

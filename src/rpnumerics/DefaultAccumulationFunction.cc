@@ -10,7 +10,7 @@
  * ---------------------------------------------------------------
  * Includes:
  */
-#include "DefaultAccumulationFunction.h"
+//#include "DefaultAccumulationFunction.h"
 
 /*
  * ---------------------------------------------------------------

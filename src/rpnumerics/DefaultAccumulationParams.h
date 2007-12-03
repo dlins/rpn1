@@ -31,15 +31,15 @@ public:
 	AccumulationParams defaultParams(void);
 
 };
-
-inline DefaultAccumulationParams::DefaultAccumulationParams(void)
-	: AccumulationParams(* new RealVector())
-{
+//
+//inline DefaultAccumulationParams::DefaultAccumulationParams(void)
+//	: AccumulationParams(* new RealVector())
+//{
 	// JAVA CODE! daniel@impa.br
 	//   // can´t call RPNUMERICS methods before complete physics initalization !
 	//   super (rpnumerics.RPNUMERICS.physicsID(),new RealVector(rpnumerics.RPNUMERICS.domainDim()));
 
-}
+//}
 
 inline AccumulationParams DefaultAccumulationParams::defaultParams(void)
 {

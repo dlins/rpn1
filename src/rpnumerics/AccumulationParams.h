@@ -7,6 +7,7 @@
 
 #ifndef _AccumulationParams_H
 #define	_AccumulationParams_H
+
 #include "RealVector.h"
 
 class AccumulationParams {
@@ -32,19 +33,11 @@ public:
 
 };
 
-inline AccumulationParams::AccumulationParams() :
-	params_(params())
-{
-}
+inline AccumulationParams::AccumulationParams() :params_(params()){}
 
-inline AccumulationParams::AccumulationParams(const RealVector & params) :
-	params_(params)
-{
-}
+inline AccumulationParams::AccumulationParams(const RealVector & params) :params_(params){}
 
-inline AccumulationParams::~AccumulationParams()
-{
-}
+inline AccumulationParams::~AccumulationParams(){}
 
 inline const RealVector & AccumulationParams::params(void) const
 {

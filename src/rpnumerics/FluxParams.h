@@ -21,104 +21,98 @@
 
 
 class FluxParams {
-
+    
 private:
-	RealVector params_;
-	RealVector initParams_;
-
+    RealVector *params_;
+    
+    
 public:
-	FluxParams(void);
-	FluxParams(const int size, const double *coords);
-	FluxParams(const RealVector & params);
-	FluxParams(const FluxParams & params);
-	virtual ~FluxParams(void);
 
-	const RealVector &params(void);
-	const RealVector &operator()(void);
-	const RealVector operator()(void) const;
+    FluxParams(const int size, double *coords);
+    FluxParams(RealVector & params);
+    
+    FluxParams(const FluxParams & params);
+    virtual ~FluxParams(void);
+    
+    RealVector &params(void) const ;
+    RealVector &operator()(void); //TODO Fix implementation
+    RealVector operator()(void) const;
+    
 
-	void params(int size, double * coords);
-	void params(const RealVector & params);
-
-	double component(int index);
-	void component(int index, double value);
-
-	//virtual FluxParams defaultParams(void) const = 0;
-
-	bool operator==(const FluxParams & fluxParams);
-	void reset(void);
-
+    void params(const RealVector & params);
+    
+    double component(int index) const ;
+    void component(int index, double value);
+    
+    bool operator==(const FluxParams & fluxParams); 
+    
+    
 };
 
-inline FluxParams::FluxParams(void) :
-	params_(),
-	initParams_()
-{
+FluxParams::FluxParams(RealVector & params) :params_(new RealVector(params.size())) {
+
+int i ;
+
+for (i=0; i< params_->size();i++){
+    
+    params_->component(i)=params.component(i);
 }
 
-inline FluxParams::FluxParams(const RealVector & params) :
-	params_(params),
-	initParams_(params)
-{
+
 }
 
-inline FluxParams::FluxParams(const FluxParams & params) :
-	params_(params()),
-	initParams_(params())
-{
+FluxParams::FluxParams(const int size,  double * coords):params_(new RealVector(size,coords)){}
+
+FluxParams::FluxParams(const FluxParams &params){//TODO Create a range check
+    
+    int i;
+    for (i=0; i < params_->size();i++){
+        params_->component(i)=params.component(i);
+    }
+
 }
 
-inline FluxParams::~FluxParams()
-{
+
+inline FluxParams::~FluxParams() {
+    delete params_;
+    
 }
 
-inline const RealVector & FluxParams::params(void)
-{
-	return params_;
+inline  RealVector & FluxParams::params(void) const {
+    return *params_;
 }
 
-inline const RealVector & FluxParams::operator()(void)
-{
-	return params_;
+inline void FluxParams::params(const RealVector & params){//TODO Create a range check
+    
+    int i;
+    
+    for (i=0; i < params_->size();i++){
+        
+        params_->component(i)=params.component(i);
+        
+    }
+    
+    
 }
 
-inline const RealVector FluxParams::operator()(void) const
-{
-	return params_;
+inline double FluxParams::component(int index) const {
+    return params_->component(index);
 }
 
-inline void FluxParams::params(int size, double * coords) 
-{ 
-	RealVector p_(size, coords);
-	params_ = p_;
+inline void FluxParams::component(int index, double value) {
+    params_->component(index) = value;
 }
 
-inline void FluxParams::params(const RealVector & params)
-{
-	params_ = params;
+inline bool FluxParams::operator==(const FluxParams & fluxParams) {
+    int i ;
+    
+    for (i=0;i < params_->size();i++){
+        
+        if (params_->component(i)!=fluxParams.component(i))
+            return false;
+    }
+    return true;
 }
 
-inline double FluxParams::component(int index)
-{
-	return params_(index);
-}
-
-inline void FluxParams::component(int index, double value)
-{
-	params_(index) = value;
-}
-
-inline bool FluxParams::operator==(const FluxParams & fluxParams)
-{ 
-	if ( params_ == fluxParams() )
-		return true;	
-	else
-		return false;
-}
-
-inline void FluxParams::reset(void)
-{
-	params_ = initParams_;
-}
 
 #endif	//! _FluxParams_H

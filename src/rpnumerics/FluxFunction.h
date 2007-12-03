@@ -23,18 +23,30 @@
 class FluxFunction: public RpFunction {
     
 private:
-	FluxParams params_;
+    FluxParams params_;
     
 public:
-	FluxFunction(void);
-	FluxFunction(const FluxParams & params);
-	virtual ~FluxFunction(void);
     
-//	int jet( const WaveState &u, JetMatrix &m, int degree);
-    
-	const FluxParams & fluxParams(void);
-	void fluxParams(const FluxParams & params);
+    FluxFunction(const FluxParams & params);
+    virtual ~FluxFunction(void);
+    FluxParams  fluxParams(void) const ;
+    void fluxParams(const FluxParams & params);
     
 };
+
+FluxFunction::FluxFunction(const FluxParams & params):params_(params){}
+
+FluxFunction::~FluxFunction(void) {
+}
+
+FluxParams FluxFunction::fluxParams(void) const {
+    return params_;
+}
+
+void FluxFunction::fluxParams(const FluxParams & params) {
+    params_ = params;
+}
+
+
 
 #endif	//! _FluxFunction_H

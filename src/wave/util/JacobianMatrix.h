@@ -13,16 +13,16 @@
  * ---------------------------------------------------------------
  * Includes:
  */
-#include "Vector.h"
+//#include "Vector.h"
 #include "except.h"
-
+#include "RealMatrix2.h"
 /*
  * ---------------------------------------------------------------
  * Definitions:
  */
 
 
-class JacobianMatrix
+class JacobianMatrix: public RealMatrix2
 {
 private:
 	int n_comps_, size_;

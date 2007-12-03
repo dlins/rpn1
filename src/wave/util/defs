@@ -18,6 +18,7 @@ C++SRC += ADTADV.cc		\
 	new.cc			\
 	polyroot.cc		\
 	RealVector.cc		\
+	RealMatrix2.cc		\
 	RectBoundary.cc		\
 	Vector1Array.cc		\
 	Vector1.cc		\

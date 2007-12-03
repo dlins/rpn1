@@ -13,7 +13,7 @@
  * ---------------------------------------------------------------
  * Includes:
  */
-//#include "AccumulationFunction.h"
+#include "AccumulationFunction.h"
 #include "Boundary.h"
 #include "FluxFunction.h"
 #include "Space.h"
@@ -33,7 +33,7 @@ class Physics {
 public :
 	virtual ~Physics();
         
-        //virtual const AccumulationFunction & accumulation() const = 0;
+        virtual const AccumulationFunction & accumulation() const = 0;
 
         virtual const Boundary & boundary() const= 0;
 

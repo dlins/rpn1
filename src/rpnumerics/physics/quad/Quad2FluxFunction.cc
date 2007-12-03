@@ -18,7 +18,7 @@
  * Definitions:
  */
 
-Quad2FluxFunction::Quad2FluxFunction(const Quad2FluxParams & params) :
+Quad2FluxFunction::Quad2FluxFunction(const Quad2FluxParams & params) : FluxFunction (params),
 	params_(params)
 {
 }

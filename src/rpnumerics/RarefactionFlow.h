@@ -28,68 +28,111 @@
 class RarefactionFlow : WaveFlow {
 
 private:
+
 	static const int FIRST = 1;
-	static const int familyIndex_ = 1;
-	PhasePoint referenceVector_;
+
+	PhasePoint * referenceVector_;
+	int familyIndex_;// = 1;
 
 public:
+
+	//! default constructor
 	RarefactionFlow(void);
+
+	//! reference vector constructor
 	RarefactionFlow(const PhasePoint & phasePoint);
-	RarefactionFlow(const RealVector phaseCoods);
 
-	int f(const RealVector & u, RealVector & v);
-	int df(const RealVector & u, JacobianMatrix & v);
-	int d2f(const RealVector & u, HessianMatrix & v);
+	//! reference vector and family index constructor
+	RarefactionFlow(const PhasePoint & phasePoint,int familyIndex);
 
-	// These functions just create aliases to f, df, d2f functions
-	int flux(const RealVector & u, RealVector & v)      { return f(u, v); }
-	int dflux(const RealVector & u, JacobianMatrix & v) { return df(u, v); }
-	int d2flux(const RealVector & u, HessianMatrix & v) { return d2f(u, v); }
+	//! the jet methods
+	virtual int jet(const WaveState &u,JetMatrix &out,int degree);
 
-	const PhasePoint & referenceVector(void);
+	//! the reference vector accessor 
+        PhasePoint & referenceVector() const;
+
+        RarefactionFlow & operator=(const RarefactionFlow &source);
 
 };
 
 inline RarefactionFlow::RarefactionFlow() :
-	referenceVector_(PhasePoint(RealVector()))
+	referenceVector_(new PhasePoint(2)),familyIndex_(1)//TODO Fix implementation
 {
 }
 
 inline RarefactionFlow::RarefactionFlow(const PhasePoint & phasePoint) :
-	referenceVector_(phasePoint)
+	referenceVector_(new PhasePoint(phasePoint)),familyIndex_(1)
 {
 }
 
-inline RarefactionFlow::RarefactionFlow(const RealVector phaseCoods) :
-	referenceVector_(PhasePoint(phaseCoods))
+inline PhasePoint & RarefactionFlow::referenceVector(void)const 
 {
+	return *referenceVector_;
 }
 
-inline int RarefactionFlow::f(const RealVector & u, RealVector & v)
-{
-	// To be implemented by external C or Fortran code
-	v = u;
-	return OK;
+inline RarefactionFlow & RarefactionFlow::operator =(const RarefactionFlow &source ){
+    
+    if (this==&source) return *this;
+    delete referenceVector_;
+    referenceVector_=new PhasePoint(source.referenceVector_->size());
+    int i;
+    for (i=0; i < referenceVector_->size();i++){
+        referenceVector_->component(i)=source.referenceVector().component(i);
+    }
+    return *this;
+    
 }
 
-inline int RarefactionFlow::df(const RealVector & u, JacobianMatrix & v)
-{
-	// To be implemented by external C or Fortran code
-	//v.equals_multiple_of_identity(1.);
-	return OK;
+int RarefactionFlow::jet(const WaveState &u, JetMatrix &out, int degree = 0) {
+    
+    WaveState  in = u;
+    
+//    int stateSpaceDim = u.stateSpace();
+    
+    int stateSpaceDim= in.stateSpace();
+
+    JetMatrix df(stateSpaceDim);
+    
+    // TODO should WaveFlow have a FluxFunction associated now ???
+//    flux().jet(u, df, 1); //TODO Acessar via RpNumerics
+    
+    double * eigenValR = new double[stateSpaceDim];
+    double * eigenValI = new double[stateSpaceDim];
+    RealVector * eigenVec  = new RealVector[stateSpaceDim];
+    
+    // TODO should JacobianMatrix be a RealMatrix2 ? (an alias ??)
+
+    JacobianMatrix  eigenCalcMatrix(2);
+    
+    df.jacobian(eigenCalcMatrix);
+    
+//      void fillEigenData(int stateSpaceDim, RealMatrix2 * df, double * eigenValR, double * eigenValI, RealVector * eigenVec);
+    
+    eigenCalcMatrix.fillEigenData(stateSpaceDim, eigenCalcMatrix, *eigenValR, *eigenValI,* eigenVec);
+    
+    // getting eigenvalues and eigenvectors sorted
+    // with increasing absolute value of real part
+    RealVector::sortEigenData(stateSpaceDim, eigenValR, eigenValI, eigenVec);
+    
+    RealVector rarefactionVector = eigenVec[familyIndex_];
+    
+    if (rarefactionVector.dot(referenceVector_->operator()()) < 0.)
+        rarefactionVector.negate();
+
+    delete referenceVector_;
+    referenceVector_= new  PhasePoint(rarefactionVector);//(rarefactionVector);
+      
+    out.f(rarefactionVector);
+    
+    delete [] eigenValR;
+    delete [] eigenValI;
+    delete [] eigenVec;
+    
+    return OK;
+    
+    
+    
 }
 
-inline int RarefactionFlow::d2f(const RealVector & u, HessianMatrix & v)
-{
-	// To be implemented by external C or Fortran code
-	//v = * new HessianMatrix(u.size());
-	return OK;
-}
-
-
-inline const PhasePoint & RarefactionFlow::referenceVector(void)
-{
-	return referenceVector_;
-}
 
 #endif //! _RarefactionFlow_H

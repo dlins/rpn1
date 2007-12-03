@@ -28,7 +28,7 @@ private:
 
 public:
 	Quad2FluxFunction(const Quad2FluxParams &);
-	~Quad2FluxFunction(void);
+	virtual ~Quad2FluxFunction(void);
 
 	int jet(const WaveState &u, JetMatrix &m, int degree);
 

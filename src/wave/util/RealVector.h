@@ -18,8 +18,19 @@ public:
     RealVector(void);
     RealVector(int);
     RealVector(double *);
-    RealVector(int,double *);
+    RealVector(const  int,double *);
+    RealVector (const RealVector &);
+    
+    virtual ~RealVector(void);
     bool operator==(const RealVector &);
+    RealVector & operator =(const RealVector &);
+    
+    
+    void negate();
+    double dot(const RealVector);
+    
+    
+static void sortEigenData(int n, double * eigenValR, double * eigenValI, RealVector * eigenVec);
     
     // No need for accessor and mutator methods! Use 'Vector' methods to access components.
     //void setVal(int vindx [], double val);

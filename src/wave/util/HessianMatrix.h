@@ -39,8 +39,8 @@ public:
 	void range_check(int comp) const;
 	HessianMatrix &zero(void);
 
-	double * operator()(void);
-	double operator()(int i, int j, int k);
+	double * operator()(void) ;
+	double operator()(int i, int j, int k) const ;
 	void operator()(int i, int j, int k, double value);
 
 };
@@ -94,7 +94,7 @@ inline double * HessianMatrix::operator()(void)
 	return v_.components();
 }
 
-inline double HessianMatrix::operator()(int i, int j, int k)
+inline double HessianMatrix::operator()(int i, int j, int k) const 
 {
 	range_check(i);
 	range_check(j);
