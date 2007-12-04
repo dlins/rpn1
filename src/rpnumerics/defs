@@ -19,8 +19,6 @@ C++SRC += \
 	WaveFlow.cc 		\
 	WavePoint.cc		\
 	WaveState.cc		\
-#	RpNumerics.cc		
-
 #	HugoniotCurve.cc	\
 
 CPPFLAGS += -I $(RPNUMERICSDIR) -g3
