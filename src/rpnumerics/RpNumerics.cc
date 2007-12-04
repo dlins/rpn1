@@ -16,13 +16,13 @@
  * @ingroup rpnumerics
  */
 
-#include "rpnumerics_RPNUMERICS.h"
+#include "rpnumerics_RpNumerics.h"
 #include "JNIDefs.h"
 #include <iostream>
 
 using namespace std;
 
-JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_init(JNIEnv * env, jclass cls, jobject numericsProfile){
+JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_init(JNIEnv * env, jclass cls, jobject numericsProfile){
     
     jclass numericsProfileClass = env->FindClass(NUMERICSPROFILE_LOCATION);
     jmethodID getPhysIDMethod = env->GetMethodID(numericsProfileClass, "getPhysicsID", "()Ljava/lang/String;");
@@ -46,7 +46,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_init(JNIEnv * env, jclass cls,
  * Method:    initShockFlow
  * Signature: (Lrpnumerics/PhasePoint;D)V
  */
-JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initShockFlow
+JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_initShockFlow
         (JNIEnv * env, jclass cls, jobject obj , jdouble jdarray){}
 
 /*
@@ -54,7 +54,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initShockFlow
  * Method:    initRarefactionFlow
  * Signature: (Lrpnumerics/PhasePoint;Ljava/lang/String;)V
  */
-JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initRarefactionFlow
+JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_initRarefactionFlow
         (JNIEnv * env, jclass cls, jobject obj, jstring str){}
 
 /*
@@ -62,7 +62,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initRarefactionFlow
  * Method:    changePoincareSection
  * Signature: (Lrpnumerics/ConnectionOrbit;)Lwave/util/PoincareSection;
  */
-JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_changePoincareSection
+JNIEXPORT jobject JNICALL Java_rpnumerics_RpNumerics_changePoincareSection
         (JNIEnv * env, jclass cls, jobject obj){}
 
 /*
@@ -70,7 +70,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_changePoincareSection
  * Method:    setPoincareSectionFlag
  * Signature: (Z)V
  */
-JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setPoincareSectionFlag
+JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_setPoincareSectionFlag
         (JNIEnv * env, jclass cls, jboolean bol){}
 
 /*
@@ -78,7 +78,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setPoincareSectionFlag
  * Method:    changeFluxParams
  * Signature: ([D)V
  */
-JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_changeFluxParams
+JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_changeFluxParams
         (JNIEnv * env, jclass cls, jdoubleArray jdarray){}
 
 /*
@@ -86,7 +86,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_changeFluxParams
  * Method:    changeErrorControl
  * Signature: (D)V
  */
-JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_changeErrorControl
+JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_changeErrorControl
         (JNIEnv * env, jclass cls, jdouble eps){}
 
 /*
@@ -94,7 +94,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_changeErrorControl
  * Method:    changeSigma
  * Signature: (D)V
  */
-JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_changeSigma__D
+JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_changeSigma__D
         (JNIEnv * env, jclass cls, jdouble sigma){}
 
 /*
@@ -102,7 +102,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_changeSigma__D
  * Method:    changeSigma
  * Signature: (Lwave/util/RealVector;)V
  */
-JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_changeSigma__Lwave_util_RealVector_2
+JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_changeSigma__Lwave_util_RealVector_2
         (JNIEnv * env, jclass cls, jobject obj){}
 
 /*
@@ -110,7 +110,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_changeSigma__Lwave_util_RealVe
  * Method:    getSigma
  * Signature: ()D
  */
-JNIEXPORT jdouble JNICALL Java_rpnumerics_RPNUMERICS_getSigma
+JNIEXPORT jdouble JNICALL Java_rpnumerics_RpNumerics_getSigma
         (JNIEnv * env, jclass cls){
     
     return 0.1;
@@ -122,7 +122,7 @@ JNIEXPORT jdouble JNICALL Java_rpnumerics_RPNUMERICS_getSigma
  * Method:    getXZero
  * Signature: ()Lrpnumerics/PhasePoint;
  */
-JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getXZero
+JNIEXPORT jobject JNICALL Java_rpnumerics_RpNumerics_getXZero
         (JNIEnv * env, jclass cls ){
     
     double teste[2];
@@ -159,7 +159,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getXZero
  * Method:    setXZero
  * Signature: (Lrpnumerics/PhasePoint;)D
  */
-JNIEXPORT jdouble JNICALL Java_rpnumerics_RPNUMERICS_setXZero
+JNIEXPORT jdouble JNICALL Java_rpnumerics_RpNumerics_setXZero
         (JNIEnv * env, jclass cls, jobject obj);
 
 /*
@@ -167,7 +167,7 @@ JNIEXPORT jdouble JNICALL Java_rpnumerics_RPNUMERICS_setXZero
  * Method:    getFluxParams
  * Signature: ()[D
  */
-JNIEXPORT jdoubleArray JNICALL Java_rpnumerics_RPNUMERICS_getFluxParams
+JNIEXPORT jdoubleArray JNICALL Java_rpnumerics_RpNumerics_getFluxParams
         (JNIEnv * env, jclass cls){}
 
 /*
@@ -175,7 +175,7 @@ JNIEXPORT jdoubleArray JNICALL Java_rpnumerics_RPNUMERICS_getFluxParams
  * Method:    setShockFlow
  * Signature: (Lrpnumerics/PhasePoint;D)V
  */
-JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setShockFlow
+JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_setShockFlow
         (JNIEnv * env, jclass cls, jobject obj, jdouble sigma){
     
 }
@@ -185,7 +185,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setShockFlow
  * Method:    setRarefactionFlow
  * Signature: (Lrpnumerics/PhasePoint;)V
  */
-JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setRarefactionFlow
+JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_setRarefactionFlow
         (JNIEnv * env, jclass cls, jobject obj){}
 
 /*
@@ -197,7 +197,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setRarefactionFlow
 //        (JNIEnv * env, jclass cls){}
 
 
-JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_boundary
+JNIEXPORT jobject JNICALL Java_rpnumerics_RpNumerics_boundary
         (JNIEnv * env, jclass cls){
     jclass realVectorClass = env->FindClass("wave/util/RealVector");
     

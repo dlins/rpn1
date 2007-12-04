@@ -22,7 +22,7 @@ NOTE :
 #include "JNIDefs.h"
 #include <vector>
 
-//using std::vector;
+using std::vector;
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_calc  (JNIEnv * env, jobject obj , jobject initialPoint, jint timeDirection){
     
@@ -54,7 +54,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_calc  (JNIEnv * env, jobject
         
         coord[0]=input[0]+ix;
         coord[1]=input[1]+ix;
-        b
         resultList.push_back(coord);
         ix+=0.005;
     }

@@ -6,6 +6,6 @@ C++SRC += JNIConnectionOrbitCalc.cc\
 	JNIManifoldOrbitCalc.cc \
 	JNIStationaryPointCalc.cc \
 	HugoniotCurve.cc	\
-#	RpNumerics.cc		\
+	RpNumerics.cc		\
 
 CPPFLAGS += -I $(JNIDIR)/include

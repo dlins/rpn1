@@ -6,7 +6,7 @@ WAVEDIR       = $(RPNHOME)/src/wave
 JNIDIR        = $(RPNHOME)/src/JNI
 include $(RPNUMERICSDIR)/defs
 include $(WAVEDIR)/defs
-#include $(JNIDIR)/defs 
+include $(JNIDIR)/defs 
 
 LIBNAME = librpnumerics.so
 OBJDIR = ../lib/$(RPHOSTTYPE)

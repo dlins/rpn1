@@ -16,35 +16,12 @@
  * @ingroup rpnumerics
  */
 
-#include "rpnumerics_RPNUMERICS.h"
+#include "rpnumerics_RpNumerics.h"
 #include "JNIDefs.h"
 #include "Quad2FluxFunction.h"
 #include <iostream>
 
-using namespace std;
 
-class RpNumerics{
-    
-private:
-    
-    
-   
-    
-    
-public:
-    
-    static FluxFunction & flux() ;
-      static FluxFunction * flux_;
-    
-};
-
-
-FluxFunction & RpNumerics::flux() {
-    
-    return *flux_;
-    
-    
-}
 
 JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_init(JNIEnv * env, jclass cls, jobject numericsProfile){
     
