@@ -23,7 +23,7 @@ C++SRC += \
 
 #	HugoniotCurve.cc	\
 
-CPPFLAGS += -I $(RPNUMERICSDIR)
+CPPFLAGS += -I $(RPNUMERICSDIR) -g3
 
 PHYSICSDIR = $(RPNUMERICSDIR)/physics
 METHODSDIR = $(RPNUMERICSDIR)/methods

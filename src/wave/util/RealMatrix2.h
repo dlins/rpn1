@@ -22,11 +22,11 @@
  */
 //#define RP_... 1
 
-extern"C" {
-    void dgeev_(char * , char *, int *, double *, int*, double *, double *,
-            double *, int *, double *, int *, double *, int *,
-            int *);
-}
+//extern"C" {
+//    void dgeev_(char * , char *, int *, double *, int*, double *, double *,
+//            double *, int *, double *, int *, double *, int *,
+//            int *);
+//}
 
 
 
@@ -120,9 +120,9 @@ void RealMatrix2::fillEigenData(int stateSpaceDim, RealMatrix2 &df, double & eig
 //            &vl[0][0], &ldvl, &vr[0][0], &ldvr, &work[0], &lwork,
 //            &info); // only the right eigenvectors are needed.
     
-    dgeev_("N", "V", &stateSpaceDim, &J[0][0], &stateSpaceDim, &eigenValR, &eigenValI,
-            &vl[0][0], &stateSpaceDim, &vr[0][0], &stateSpaceDim, &work[0], &lwork,
-            &info); // only the right eigenvectors are needed.
+//    dgeev_("N", "V", &stateSpaceDim, &J[0][0], &stateSpaceDim, &eigenValR, &eigenValI,
+//            &vl[0][0], &stateSpaceDim, &vr[0][0], &stateSpaceDim, &work[0], &lwork,
+//            &info); // only the right eigenvectors are needed.
     
 }
 

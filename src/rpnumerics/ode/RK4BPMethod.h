@@ -10,6 +10,7 @@
 #define	_RK4Solver_H
 
 #include "ODESolver.h"
+#include <iostream>
 #include "rk4.h"
 
 #define SUCCESSFUL_PROCEDURE 0

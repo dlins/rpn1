@@ -6,7 +6,7 @@ $(OBJDIR)/%.o: %.c
 	$(COMPILE.c) -o $@ $<
 
 $(OBJDIR)/%.o: %.cc
-	$(COMPILE.cc) -o $@ $<
+	$(COMPILE.cc) -g3 -o $@ $<
 
 $(OBJDIR)/%.o: %.F
 	$(COMPILE.F) -o $@ $<

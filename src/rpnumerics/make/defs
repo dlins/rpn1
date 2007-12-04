@@ -15,11 +15,11 @@ ifeq ($(RPGNU),)
 CC = cc
 CPP = cc -E
 else
-CC = gcc -ansi -Wall
+CC = gcc -ansi -Wall 
 CPP = gcc -E
 endif
 CFLAGS =
-CPPFLAGS =
+CPPFLAGS = 
 COMPILE.c = $(CC) $(CFLAGS) $(CPPFLAGS) $(DEBUGFLAG) -c
 LINK.c = $(CC) $(CFLAGS) $(DEBUGFLAG) $(LDFLAGS)
 ifeq ($(RPGNU),)
@@ -58,19 +58,19 @@ ifeq ($(RPGNU),)
 ifeq ($(RPHOSTTYPE),osf_alpha)
 CCC = cxx
 else
-CCC = CC
+CCC = CC 
 endif
 else
-CCC = c++ -Wall -Wno-deprecated
+CCC = g++ -Wall -Wno-deprecated
 endif
 ifeq ($(RPHOSTTYPE),solaris)
 # The -D_XOPEN_SOURCE flag is needed if __SUNPRO_CC == 0x540
 # because, without it, math.h defines struct exception.
 CCFLAGS = -D_XOPEN_SOURCE
 else
-CCFLAGS =
+CCFLAGS = 
 endif
-CPPFLAGS +=
+CPPFLAGS += 
 COMPILE.cc = $(CCC) $(CCFLAGS) $(CPPFLAGS) $(DEBUGFLAG) -c
 LINK.cc = $(CCC) $(CCFLAGS) $(DEBUGFLAG) $(LDFLAGS)
 ifeq ($(RPGNU),)
@@ -332,7 +332,8 @@ include $(WUTILDIR)/defs
 #	System Library locations
 #
 
-SYSLIBS = -lm
+SYSLIBS = -lm -lstdc++
+
 
 ifeq ($(RPGL),mesa)
 ifneq ($(GLDIR),/usr)

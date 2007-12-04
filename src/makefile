@@ -20,7 +20,7 @@ CLEANSRC += $(LIBARC)
 all: $(LIBARC)
 
 $(LIBARC): $(LIBOBJ)
-	$(CC) -shared -fPIC -Wl,-soname,$(LIBNAME) -o $(LIBARC) $(LIBOBJ)
+	$(CC)  -shared -fPIC -Wl,-soname,$(LIBNAME) -o $(LIBARC) $(LIBOBJ)
 
 # Static library target.
 #$(LIBARC): $(LIBOBJ)

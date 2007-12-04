@@ -3,6 +3,7 @@
 
 #include "WavePoint.h"
 #include <vector>
+#include <iostream>
 #include "RealVector.h"
 
 class ODESolution {

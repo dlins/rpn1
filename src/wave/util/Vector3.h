@@ -17,7 +17,7 @@
 #include <stdlib.h>	// only needed for exit()
 #include <iostream>
 #include "except.h"
-#include "eigen.h"
+//#include "eigen.h"
 
 using namespace std; 
 
@@ -68,13 +68,13 @@ inline Vector3 operator+(const Vector3 &a, const Vector3 &b);
 inline Vector3 operator-(const Vector3 &a, const Vector3 &b);
 inline double operator*(const Vector3 &a, const Vector3 &b);
 
-extern"C" {
-  void dgeev_(char * , char *, int *, double *, int*, double *, double *, 
-               double *, int *, double *, int *, double *, int *, 
-               int *);
-}
+//extern"C" {
+//  void dgeev_(char * , char *, int *, double *, int*, double *, double *, 
+//               double *, int *, double *, int *, double *, int *, 
+//               int *); TODO Use this lapack function
+//}
   
-int eigen_rl(int , Matrix3 & , Vector3 &, Matrix3 &);//(int, double*, struct eigen*);
+//int eigen_rl(int , Matrix3 & , Vector3 &, Matrix3 &);//(int, double*, struct eigen*); TODO Use this function ???
 
 inline istream &operator>>(istream &is, Vector3 &vector);
 inline ostream &operator<<(ostream &os, const Vector3 &vector);
@@ -478,12 +478,12 @@ Matrix3::add_multiple_of_identity(double s) {
 }
 
 inline void
-Matrix3::eigen(Vector3 &eigenValues /* evals */, Matrix3 &eigenVectors /* evects */) {
+Matrix3::eigen(Vector3 &eigenValues /* evals */, Matrix3 &eigenVectors /* evects */) { //TODO Fix this function to use Lapack to calculate eigenvalues
     
 #ifndef LAPACKLINK
     
     
-    eigen_rl(3, *this,eigenValues, eigenVectors);
+//    eigen_rl(3, *this,eigenValues, eigenVectors);
     
 #else
 
