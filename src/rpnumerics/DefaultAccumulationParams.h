@@ -41,9 +41,5 @@ public:
 
 //}
 
-inline AccumulationParams DefaultAccumulationParams::defaultParams(void)
-{
-	return * new DefaultAccumulationParams();
-}
 
 #endif //! _DefaultAccumulationParams_H

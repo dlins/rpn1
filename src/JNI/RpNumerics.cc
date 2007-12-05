@@ -63,7 +63,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_initRarefactionFlow
  * Signature: (Lrpnumerics/ConnectionOrbit;)Lwave/util/PoincareSection;
  */
 JNIEXPORT jobject JNICALL Java_rpnumerics_RpNumerics_changePoincareSection
-        (JNIEnv * env, jclass cls, jobject obj){}
+        (JNIEnv * env, jclass cls, jobject obj){return NULL;}
 
 /*
  * Class:     rpnumerics_RPNUMERICS
@@ -168,7 +168,7 @@ JNIEXPORT jdouble JNICALL Java_rpnumerics_RpNumerics_setXZero
  * Signature: ()[D
  */
 JNIEXPORT jdoubleArray JNICALL Java_rpnumerics_RpNumerics_getFluxParams
-        (JNIEnv * env, jclass cls){}
+        (JNIEnv * env, jclass cls){ return NULL;}
 
 /*
  * Class:     rpnumerics_RPNUMERICS

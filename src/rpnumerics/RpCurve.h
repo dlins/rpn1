@@ -29,10 +29,5 @@ public:
 
 };
 
-inline const RpCurve RpCurve::cat(const RpCurve & rpCurve)
-{
-	// TODO: This method is empty!
-	return rpCurve;
-}
 
 #endif //_RpCurve_H

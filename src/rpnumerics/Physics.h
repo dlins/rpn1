@@ -31,7 +31,7 @@
 class Physics {
     
 public :
-	virtual ~Physics();
+//	virtual ~Physics();
         
         virtual const AccumulationFunction & accumulation() const = 0;
 
@@ -47,6 +47,6 @@ public :
 
 };
 
-inline Physics::~Physics() { };
+//inline Physics::~Physics() { };
 
 #endif	//! _Physics_H

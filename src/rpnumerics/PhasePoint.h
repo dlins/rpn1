@@ -28,22 +28,10 @@ public:
 
 	RealVector operator()(void);
 
-
-
 };
 
 
 
-
-inline PhasePoint::PhasePoint(const RealVector & phaseCoords)
-	: RealVector(phaseCoords)
-{
-}
-
-inline RealVector PhasePoint::operator()(void)
-{
-	return * this;
-}
 
 
 

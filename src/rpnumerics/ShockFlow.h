@@ -29,8 +29,6 @@ public:
 };
 
 
-inline int ShockFlow::jet(const int degree, const RealVector &u, JetMatrix &m) {
-	return OK;
-}
+
 
 #endif //! _ShockFlow_H

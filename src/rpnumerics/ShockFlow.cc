@@ -10,10 +10,13 @@
  * ---------------------------------------------------------------
  * Includes:
  */
-//#include "ShockFlow.h"
+#include "ShockFlow.h"
 
 /*
  * ---------------------------------------------------------------
  * Definitions:
  */
 
+inline int ShockFlow::jet(const int degree, const RealVector &u, JetMatrix &m) {
+	return OK;
+}

@@ -17,3 +17,7 @@
  * Definitions:
  */
 
+inline AccumulationParams DefaultAccumulationParams::defaultParams(void)
+{
+	return * new DefaultAccumulationParams();
+}

@@ -49,6 +49,6 @@ public:
 	virtual int jet(const WaveState &u,JetMatrix &m,int degree) = 0;
 };
 
-inline RpFunction::~RpFunction(void) {
-}
+
+
 #endif //RPFUNCTION_H

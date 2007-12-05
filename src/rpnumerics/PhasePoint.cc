@@ -18,3 +18,13 @@
  */
 
 
+
+PhasePoint::PhasePoint(const RealVector & phaseCoords)
+	: RealVector(phaseCoords)
+{
+}
+
+ RealVector PhasePoint::operator()(void)
+{
+	return * this;
+}
