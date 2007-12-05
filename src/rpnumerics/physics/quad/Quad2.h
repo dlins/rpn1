@@ -15,22 +15,24 @@
  */
 #include "Physics.h"
 #include "Quad2FluxFunction.h"
-//#include "AccumulationFunction.h"
+#include "Quad2AccumulationFunction.h"
 #include "Quad2FluxParams.h"
 #include "RectBoundary.h"
 #include "Multid.h"
 #include "Space.h"
 
-class Quad2 : Physics {
+class Quad2 :public Physics {
 
 private:
-	Quad2FluxParams params_;
-	Quad2FluxFunction fluxFunction_;
-	//AccumulationFunction accumulationFunction_;
+	Quad2FluxParams * params_;
+	Quad2FluxFunction *fluxFunction_;
+        Quad2AccumulationFunction * accumulationFunction_;
+        
 	Boundary * boundary_;
 
 public:
 	Quad2(const Quad2FluxParams &);
+
 
 	const char * FLUX_ID;
 	const char * DEFAULT_SIGMA;
@@ -39,7 +41,9 @@ public:
 
 	const FluxParams & params(void) const;
 	const FluxFunction & fluxFunction(void) const;
-        //const AccumulationFunction & accumulation() const;
+        const AccumulationFunction & accumulation() const;
+        const WaveFlow & flow() const;
+        
 	const Space & domain(void) const;
 	const Boundary & boundary(void) const;
 	void boundary (const Boundary & boundary);

@@ -23,6 +23,11 @@ Quad2FluxFunction::Quad2FluxFunction(const Quad2FluxParams & params) : FluxFunct
 {
 }
 
+inline Quad2FluxFunction::~Quad2FluxFunction(void)
+{
+}
+
+
 //
 //TODO  set degree = 2 as default value
 //

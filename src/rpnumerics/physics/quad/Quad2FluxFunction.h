@@ -35,8 +35,5 @@ public:
 	FluxParams fluxParams(void);
 };
 
-inline Quad2FluxFunction::~Quad2FluxFunction(void)
-{
-}
 
 #endif //! _Quad2FluxFunction_H

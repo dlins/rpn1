@@ -1,31 +1,39 @@
 
 #include "FluxParams.h"
 
-FluxParams::FluxParams(RealVector & params) :params_(new RealVector(params.size())) {
 
-int i ;
-
-for (i=0; i< params_->size();i++){
+FluxParams::FluxParams(const RealVector & params) {
     
-    params_->component(i)=params.component(i);
-}
-
-
-}
-
-FluxParams::FluxParams(const int size,  double * coords):params_(new RealVector(size,coords)){}
-
-FluxParams::FluxParams(const FluxParams &params){//TODO Create a range check
+    int i ;
     
-    int i;
-    for (i=0; i < params_->size();i++){
+    params_= new RealVector(params.size());
+
+    for (i=0; i< params_->size();i++){
+        
         params_->component(i)=params.component(i);
     }
+    
+    
+}
 
+FluxParams::FluxParams(const int size,  double * coords):params_(new RealVector(size, coords)){}
+
+FluxParams::FluxParams(const FluxParams &params){//TODO Aqui eh o erro
+
+    set(params.params());
+    
+//    int i;
+//    
+//    params_= new RealVector(params.params().size());
+//   
+//    for (i=0; i < params_->size();i++){
+//        params_->component(i)=params.component(i);
+//    }
+    
 }
 
 
- FluxParams::~FluxParams() {
+FluxParams::~FluxParams() {
     delete params_;
     
 }
@@ -34,23 +42,46 @@ inline  RealVector & FluxParams::params(void) const {
     return *params_;
 }
 
-inline void FluxParams::params(const RealVector & params){//TODO Create a range check
+ void FluxParams::set(const RealVector & params){//TODO Create a range check
     
-    int i;
+//    int i;
+//    delete params_;
+    params_= new RealVector(params);
     
-    for (i=0; i < params_->size();i++){
-        
-        params_->component(i)=params.component(i);
-        
-    }
+//    for (i=0; i < params_->size();i++){
+//        
+//        params_->component(i)=params.component(i);
+//        
+//    }
 }
 
-inline double FluxParams::component(int index) const {
+double FluxParams::component(int index) const {
     return params_->component(index);
 }
 
-inline void FluxParams::component(int index, double value) {
+void FluxParams::component(int index, double value) {
     params_->component(index) = value;
+}
+
+FluxParams & FluxParams::operator=(const FluxParams & source){
+    
+    if (*this== source)
+        return *this;
+    
+//    int i;
+    
+    set(source.params());
+    
+//    params_= new RealVector(source.params().size());
+//    
+//    for (i=0;i < params_->size();i++){
+//        
+//        params_->component(i)=source.params().component(i);
+//        
+//    }
+    
+    return *this;
+    
 }
 
 inline bool FluxParams::operator==(const FluxParams & fluxParams) {
@@ -63,3 +94,4 @@ inline bool FluxParams::operator==(const FluxParams & fluxParams) {
     }
     return true;
 }
+

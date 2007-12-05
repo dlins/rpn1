@@ -29,9 +29,10 @@ private:
 public:
 
     FluxParams(const int size, double *coords);
-    FluxParams(RealVector & params);
+    FluxParams(const RealVector & params);
     
     FluxParams(const FluxParams & params);
+
     virtual ~FluxParams(void);
     
     RealVector &params(void) const ;
@@ -39,16 +40,16 @@ public:
     RealVector operator()(void) const;
     
 
-    void params(const RealVector & params);
+    void set(const RealVector & params);
     
     double component(int index) const ;
     void component(int index, double value);
     
     bool operator==(const FluxParams & fluxParams); 
+    FluxParams & operator=(const FluxParams &);
     
     
 };
-
 
 
 

@@ -17,10 +17,37 @@
  */
 
 #include "rpnumerics_RpNumerics.h"
+#include "RpNumerics.h"
+#include "Quad2.h"
+#include "Quad2FluxParams.h"
+
 #include "JNIDefs.h"
+#include <string.h>
 #include <iostream>
 
 using namespace std;
+
+Physics * RpNumerics::physics_=NULL;
+
+WaveFlow * RpNumerics::flow_=NULL;
+
+Physics * RpNumerics::getPhysics(){return physics_;}
+const FluxFunction & RpNumerics::getFlux() {return physics_->fluxFunction();}
+WaveFlow *  RpNumerics::getFlow() {return flow_;}
+//ODESolver * RpNumerics::getODESolver(){return solver_;}
+
+void RpNumerics::setPhysics(Physics *physics){physics_=physics;}
+void RpNumerics::setFlow(WaveFlow * flow) {flow_=flow;}
+//void RpNumerics::setODESolver(ODESolver *solver){solver_=solver;}
+
+
+
+RpNumerics::~RpNumerics(){
+    delete physics_;
+    delete flow_;
+}
+
+
 
 JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_init(JNIEnv * env, jclass cls, jobject numericsProfile){
     
@@ -29,11 +56,31 @@ JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_init(JNIEnv * env, jclass cls,
     jstring ID=  (jstring)env->CallObjectMethod(numericsProfile, getPhysIDMethod);
     
     const char *physicsID;
+    
     physicsID = env->GetStringUTFChars(ID, NULL);
     
     if (physicsID == NULL) {
         return; /* OutOfMemoryError already thrown */
     }
+    
+    //Physics instatiation
+    
+    
+    if (!strcmp(physicsID, "QuadraticR2")){
+        
+        RpNumerics::setPhysics(new Quad2( Quad2FluxParams()));
+        
+        cout <<"Instaciando Quad2"<<endl;
+        
+    }
+    
+    
+    
+    
+    
+    
+    
+    
     
     cout <<"Physics: "<< physicsID <<endl;
     

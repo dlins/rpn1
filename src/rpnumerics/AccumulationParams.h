@@ -14,8 +14,8 @@ class AccumulationParams {
 
 private:
 
-	RealVector params_;
-	RealVector initParams_;
+	RealVector *params_;
+	RealVector  *initParams_;
 
 public:
 	

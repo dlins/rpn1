@@ -20,9 +20,12 @@ NOTE :
 
 #include "rpnumerics_HugoniotCurveCalcND.h"
 #include "JNIDefs.h"
+#include "RpNumerics.h"
 #include <vector>
+#include <iostream>
 
 using std::vector;
+using namespace std;
 
 JNIEXPORT void JNICALL Java_rpnumerics_HugoniotCurveCalcND_setUMinus
         (JNIEnv * env, jobject obj , jobject uMinus){
