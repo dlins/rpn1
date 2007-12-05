@@ -43,8 +43,6 @@ inline void FluxParams::params(const RealVector & params){//TODO Create a range 
         params_->component(i)=params.component(i);
         
     }
-    
-    
 }
 
 inline double FluxParams::component(int index) const {

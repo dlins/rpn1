@@ -9,6 +9,7 @@ C++SRC += \
 	FluxFunction.cc 	\
 	FluxParams.cc		\
 	PhasePoint.cc		\
+	Physics.cc           	\
 	RarefactionCurve.cc	\
 	RarefactionFlow.cc	\
 	RpCurve.cc		\
@@ -17,8 +18,8 @@ C++SRC += \
 	WaveFlow.cc 		\
 	WavePoint.cc		\
 	WaveState.cc		\
-        RpFunction.cc           \
-#	HugoniotCurve.cc	\
+        RpFunction.cc        
+
 
 CPPFLAGS += -I $(RPNUMERICSDIR) -g3
 
