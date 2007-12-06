@@ -45,7 +45,7 @@ public:
         const WaveFlow & flow() const;
         
 	const Space & domain(void) const;
-	const Boundary & boundary(void) const;
+	const Boundary * boundary(void) const;
 	void boundary (const Boundary & boundary);
 };
 

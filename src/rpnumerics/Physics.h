@@ -35,7 +35,7 @@ public :
         
         virtual const AccumulationFunction & accumulation() const = 0;
 
-        virtual const Boundary & boundary() const= 0;
+        virtual const Boundary * boundary() const= 0;
 
 	virtual void boundary(const Boundary & boundary) = 0;
         

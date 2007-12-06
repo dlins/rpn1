@@ -23,7 +23,7 @@ public:
     
     virtual ~RealVector(void);
     bool operator==(const RealVector &);
-    RealVector & operator =(const RealVector &);
+//    RealVector & operator =(const RealVector &);
     
     
     void negate();

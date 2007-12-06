@@ -28,8 +28,6 @@ public class RpNumerics {
     
     public native static void init(RPNumericsProfile profile) throws RpException;
     
-//    private native static Physics initPhysics();
-    
     private native static void initShockFlow(PhasePoint xZero,double sigma);
     
     private native static void initRarefactionFlow(PhasePoint xZero,String flowType);

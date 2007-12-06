@@ -35,15 +35,15 @@ public:
     virtual bool inside(const RealVector &y) const = 0;
     
     //! Minimums boundary values accessor 
-    virtual const  RealVector minimums() const = 0;
+    virtual const  RealVector & minimums() const = 0;
     
     //! Maximums boundary values accessor
-    virtual const  RealVector maximums() const = 0;
+    virtual const  RealVector & maximums() const = 0;
     
     virtual const  RealVector intersect(RealVector &y1, RealVector &y2) const = 0;
 };
 
-inline Boundary::~Boundary() { };
+
 
 
 #endif	/* _Boundary_H */

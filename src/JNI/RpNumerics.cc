@@ -65,21 +65,10 @@ JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_init(JNIEnv * env, jclass cls,
     
     //Physics instatiation
     
-    
     if (!strcmp(physicsID, "QuadraticR2")){
         
         RpNumerics::setPhysics(new Quad2( Quad2FluxParams()));
-        
-        cout <<"Instaciando Quad2"<<endl;
-        
     }
-    
-    
-    
-    
-    
-    
-    
     
     
     cout <<"Physics: "<< physicsID <<endl;
@@ -244,21 +233,18 @@ JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_setRarefactionFlow
 //        (JNIEnv * env, jclass cls){}
 
 
-JNIEXPORT jobject JNICALL Java_rpnumerics_RpNumerics_boundary
-        (JNIEnv * env, jclass cls){
+JNIEXPORT jobject JNICALL Java_rpnumerics_RpNumerics_boundary(JNIEnv * env, jclass cls){
+    
     jclass realVectorClass = env->FindClass("wave/util/RealVector");
     
     jmethodID realVectorConstructor = (env)->GetMethodID(realVectorClass, "<init>", "([D)V");
+        
+    const Boundary * boundary;
     
-    //Hardcoded para quad2 !!
+    boundary= RpNumerics::getPhysics()->boundary();
+
     
-    int borderLength =2;
-    
-    //TODO pegar os limites do boundary da fisica
-    
-    //  Boundary boundary = physics_->getBoundary();
-    
-    //  borderLength =boundary->getMinimums().size();
+    int borderLength =2; //TODO Saber se boundary eh um RectBoundary ???
     
     if (borderLength ==2){
         
@@ -267,10 +253,16 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RpNumerics_boundary
         jmethodID boundaryConstructor = (env)->GetMethodID(boundaryClass, "<init>", "(Lwave/util/RealVector;Lwave/util/RealVector;)V");
         
         //Hardcoded para quad2 !!
+            
+        double minimum [2];
+        double maximum [2];        
         
+        minimum[0]=boundary->minimums().component(0);
+        minimum[1]=boundary->minimums().component(1);
+
+        maximum[0]=boundary->maximums().component(0);
+        maximum[1]=boundary->maximums().component(1);
         
-        double minimum [2]={-0.5, -0.5};
-        double maximum [2]={0.5, 0.5};
         
         //---------------------------------
         
