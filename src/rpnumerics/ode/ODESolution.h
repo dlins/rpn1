@@ -6,6 +6,8 @@
 #include <iostream>
 #include "RealVector.h"
 
+using std::vector;
+
 class ODESolution {
 public:
     
@@ -17,28 +19,29 @@ public:
     static int STOP_ON_POINCARE_SECTION;
     static int MADE_MAXIMUM_STEP_NUMBER;
     
-    ODESolution(const RealVector *, double *, int);
+    ODESolution(vector<RealVector> , vector<double>, int);
     ODESolution();
     virtual ~ODESolution();
     
-    double getTimes();
+    vector<double> getTimes();
     int getFlag() ;
-   
-    void addCoords(const RealVector coord);
+    
+    void addCoords(const RealVector);
+    void addTimes(const double );
     
     vector<RealVector> getCoords();
     
 protected :
+        
+    vector <RealVector> coords_;
     
-    vector<RealVector> coords_;
-    
-    double * times_;
+    vector <double> times_;
+        
+
     int flag_;
     
 };
 
-inline vector<RealVector> ODESolution::getCoords(){return coords_;}
-inline void ODESolution::addCoords(const RealVector coord){ coords_.push_back(coord);}
 
 #endif	/* _ODESolution_H */
 

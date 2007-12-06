@@ -29,6 +29,8 @@ public:
     Quad2AccumulationFunction(const AccumulationParams & params);
     ~Quad2AccumulationFunction(void);
     
+    Quad2AccumulationFunction * clone() const;
+    
     int jet(const WaveState&, JetMatrix&, int);
     
     

@@ -1,6 +1,21 @@
 #include "ODESolverProfile.h"
 
-//ODESolverProfile::ODESolverProfile(){}
 
-ODESolverProfile::ODESolverProfile(int dimension, double delta, RpFunction & function):dimension_(dimension),delta_(delta),function_(function){}
-//ODESolverProfile::ODESolverProfile():function_(new ShockRarefaction()){}
+ODESolverProfile::ODESolverProfile(const RpFunction & function):function_(function.clone()){}
+
+ODESolverProfile::ODESolverProfile(const ODESolverProfile & copy){ function_=copy.getFunction().clone();}
+
+ODESolverProfile & ODESolverProfile::operator=(const ODESolverProfile & source ){
+    if (this==&source)
+        return *this;
+    function_=source.getFunction().clone();
+    return *this;
+}
+
+
+ODESolverProfile::~ODESolverProfile(){delete function_;}
+
+RpFunction & ODESolverProfile::getFunction()const {return *function_;}
+
+
+

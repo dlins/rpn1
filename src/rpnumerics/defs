@@ -25,7 +25,9 @@ CPPFLAGS += -I $(RPNUMERICSDIR) -g3
 
 PHYSICSDIR = $(RPNUMERICSDIR)/physics
 METHODSDIR = $(RPNUMERICSDIR)/methods
+ODEDIR = $(RPNUMERICSDIR)/ode
 
 include $(PHYSICSDIR)/defs
 include $(METHODSDIR)/defs
+include $(ODEDIR)/defs
 

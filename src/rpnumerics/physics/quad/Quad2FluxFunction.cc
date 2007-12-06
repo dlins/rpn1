@@ -23,6 +23,10 @@ Quad2FluxFunction::Quad2FluxFunction(const Quad2FluxParams & params) : FluxFunct
 {
 }
 
+Quad2FluxFunction * Quad2FluxFunction::clone() const {
+    return new Quad2FluxFunction(*this);
+}
+
 inline Quad2FluxFunction::~Quad2FluxFunction(void)
 {
 }
