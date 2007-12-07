@@ -38,7 +38,7 @@ int LSODE::function(int * neq , double * xi , double* U , double * out){
     WaveState  wState(*neq) ;
     
     for (i=0;i < *neq;i++){
-        wState.operator ()(i)=U[i];
+        wState(i)=U[i];
     }
     
     JetMatrix jMatrix(*neq);
