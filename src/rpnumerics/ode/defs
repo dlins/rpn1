@@ -2,7 +2,11 @@ vpath %.cc $(ODEDIR)
 
 
 C++SRC += ODESolverProfile.cc \
-          ODESolution.cc 
+          ODESolution.cc      \
+          ODESolver.cc        \
+          LSODE.cc            \
+          LSODEProfile.cc     \
+          LSODESolution.cc
           
 
 CPPFLAGS += -I $(ODEDIR) -g3

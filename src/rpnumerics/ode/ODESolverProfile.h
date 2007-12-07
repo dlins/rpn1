@@ -9,12 +9,13 @@ class ODESolverProfile{
 public:
     
     ODESolverProfile(const RpFunction &);
+    ODESolverProfile();
     virtual ~ODESolverProfile();
     
     ODESolverProfile(const ODESolverProfile &);
     ODESolverProfile & operator=(const ODESolverProfile &);
     
-    RpFunction & getFunction() const ;
+    RpFunction * getFunction() const ;
     
 private:
     

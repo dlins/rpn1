@@ -32,7 +32,7 @@ public:
         
         Quad2FluxFunction * clone() const ;
 
-	int jet(const WaveState &u, JetMatrix &m, int degree);
+	int jet(const WaveState &u, JetMatrix &m, int degree) const;
 
 	FluxParams fluxParams(void);
 };

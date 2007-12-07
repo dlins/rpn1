@@ -31,7 +31,7 @@ public:
     
     Quad2AccumulationFunction * clone() const;
     
-    int jet(const WaveState&, JetMatrix&, int);
+    int jet(const WaveState&, JetMatrix&, int) const;
     
     
 };

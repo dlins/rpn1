@@ -11,7 +11,7 @@ inline Quad2AccumulationFunction::Quad2AccumulationFunction(const AccumulationPa
 
 Quad2AccumulationFunction::~Quad2AccumulationFunction(void) {}
 
-int Quad2AccumulationFunction::jet(const WaveState&, JetMatrix&, int){
+int Quad2AccumulationFunction::jet(const WaveState&, JetMatrix&, int) const {
     return 0;
 }
 
