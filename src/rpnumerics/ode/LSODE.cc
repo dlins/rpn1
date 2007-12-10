@@ -18,7 +18,6 @@
  * Definitions:
  */
 
-
 LSODE::LSODE(const LSODEProfile & profile): profile_(new LSODEProfile(profile)), rpFunction_(profile.getFunction()){}
 
 
@@ -29,14 +28,10 @@ LSODE::~LSODE() {
 
 ODESolution & LSODE::solve(const RealVector & , int ) const{
     
-
-    
-    
-    
-    
+       
 }
 
-ODESolverProfile & LSODE::getProfile(){ return *profile_;}
+const ODESolverProfile & LSODE::getProfile()const { return *profile_;}
 
 
 void LSODE::setProfile(const LSODEProfile & profile) {

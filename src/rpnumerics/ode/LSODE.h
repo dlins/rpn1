@@ -23,12 +23,27 @@
  */
 
 
+// extern "C"{
+//    
+//    lsode_(int (*)(int *, double *, double *, double *), int *, double *, double *, double *,
+//            int *, double *, double *, int *, int *, int *, double *, int *,
+//            int *, int *, int(*)(int *, double *, double *, int *, int *, double *, int *), int *, int*, double*);
+//    
+//    
+//}
+
+
 class LSODE:public ODESolver {
+    
+    
+   
     
 private:
     
-    LSODEProfile * profile_;
+    const LSODEProfile * profile_;
+    
     const RpFunction * rpFunction_;
+    
     int function (int *,double *,double *,double *);
     
 public:
@@ -38,7 +53,7 @@ public:
     
     
     ODESolution & solve(const RealVector & , int ) const;
-    ODESolverProfile & getProfile() ;
+    const ODESolverProfile & getProfile() const ;
     void setProfile(const LSODEProfile &);
     
     

@@ -1,7 +1,7 @@
 #include "ODESolverProfile.h"
 
 
-ODESolverProfile::ODESolverProfile(const RpFunction & function,const ODEStopGenerator  &sGenerator):function_(function.clone()),stopGenerator_(sGenerator.clone()){}
+ODESolverProfile::ODESolverProfile(const RpFunction & function, const ODEStopGenerator  &sGenerator):function_(function.clone()), stopGenerator_(sGenerator.clone()){}
 ODESolverProfile::ODESolverProfile(){}
 
 ODESolverProfile::ODESolverProfile(const ODESolverProfile & copy){ function_=copy.getFunction()->clone();}
@@ -15,9 +15,9 @@ ODESolverProfile & ODESolverProfile::operator=(const ODESolverProfile & source )
 
 
 ODESolverProfile::~ODESolverProfile(){
- delete function_;
- delete stopGenerator_;
-
+    delete function_;
+    delete stopGenerator_;
+    
 }
 
 const RpFunction  * ODESolverProfile::getFunction() const {return function_->clone();}

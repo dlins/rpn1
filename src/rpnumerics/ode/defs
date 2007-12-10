@@ -8,7 +8,10 @@ C++SRC += ODESolverProfile.cc \
           LSODEProfile.cc     \
           LSODESolution.cc    \
           ODEStopGenerator.cc  \
-          LSODEStopGenerator.cc       
+          LSODEStopGenerator.cc \
+          #lsode.F              \
+          #lsode2.F             \
+          #lsode3.F
           
 
 CPPFLAGS += -I $(ODEDIR) -g3
