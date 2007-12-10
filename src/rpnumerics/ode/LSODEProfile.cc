@@ -19,9 +19,9 @@
 
 
 //neq  , itol, rtol, itask, istate, iopt , rwork , lrw , iwork, liw , mf,
-LSODEProfile::LSODEProfile(const RpFunction & function, int neq , int itol , double rtol, int itask,
+LSODEProfile::LSODEProfile(const RpFunction & function, const LSODEStopGenerator & sGenerator, int neq , int itol , double rtol, int itask,
         
-        int  iopt,  const double * rwork, int lrw, const int *iwork, int liw, int mf):ODESolverProfile(function){
+        int  iopt,  const double * rwork, int lrw, const int *iwork, int liw, int mf):ODESolverProfile(function,sGenerator){
             int i;
             rtol_=rtol;
             itask_=itask;
@@ -50,6 +50,10 @@ LSODEProfile::LSODEProfile(const RpFunction & function, int neq , int itol , dou
         LSODEProfile:: LSODEProfile(const LSODEProfile & copy){
             
             int i;
+
+            function_=copy.getFunction();
+            stopGenerator_=copy.getStopGenerator();
+            
             rwork_= new double[copy.lengthRWork()];
             
             iwork_=new int [copy.lengthIWork()];
@@ -72,8 +76,6 @@ LSODEProfile::LSODEProfile(const RpFunction & function, int neq , int itol , dou
             neq_=copy.numberOfEquations();
             itol_=copy.absoluteTolerance();
             
-            
-            
         }
         
         LSODEProfile::~LSODEProfile(){
@@ -86,6 +88,11 @@ LSODEProfile::LSODEProfile(const RpFunction & function, int neq , int itol , dou
                 return *this;
             delete rwork_;
             delete iwork_;
+            delete function_;
+            delete stopGenerator_;
+
+            function_=source.getFunction();
+            stopGenerator_=source.getStopGenerator();
             
             int i;
             rwork_= new double[source.lengthRWork()];
@@ -131,6 +138,9 @@ LSODEProfile::LSODEProfile(const RpFunction & function, int neq , int itol , dou
         int LSODEProfile::lengthIWork() const{return liw_;}
         
         int LSODEProfile::methodFlag() const{return mf_;}
+        
+        
+        
         
         
         

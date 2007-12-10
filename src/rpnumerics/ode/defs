@@ -6,7 +6,9 @@ C++SRC += ODESolverProfile.cc \
           ODESolver.cc        \
           LSODE.cc            \
           LSODEProfile.cc     \
-          LSODESolution.cc
+          LSODESolution.cc    \
+          ODEStopGenerator.cc  \
+          LSODEStopGenerator.cc       
           
 
 CPPFLAGS += -I $(ODEDIR) -g3

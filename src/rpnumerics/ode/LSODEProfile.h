@@ -14,6 +14,7 @@
  * Includes:
  */
 #include "ODESolverProfile.h"
+#include "LSODEStopGenerator.h"
 
 /*
  * ---------------------------------------------------------------
@@ -81,25 +82,26 @@ private:
     double rtol_;
     double atol_;
     
-    
     int  neq_;
     int itol_;
     int itask_;
-
+    
     int  iopt_;
     int   lrw_;
     int   liw_;
     int    mf_;
-    
+
     int * iwork_;
-    
     double *  rwork_;
     
+
     
 public:
 //              neq  ,  itol, rtol, itask,istate, iopt , rwork , lrw ,iwork, liw , mf,
-    LSODEProfile(const RpFunction &, int ,  int , double, int  , int  ,  const double *, int , const int *, int , int );
+    LSODEProfile(const RpFunction &, const LSODEStopGenerator &, int ,  int , double, int  , int  ,  const double *, int , const int *, int , int );
     LSODEProfile(const LSODEProfile &);
+    
+    ~LSODEProfile();
     
     LSODEProfile & operator=(const LSODEProfile &);
     
@@ -108,14 +110,20 @@ public:
     int lengthRWork() const ;
     int lengthIWork() const ;
     int task() const ;
-
+    
     int opt()const ;
     int methodFlag()const  ;
     double relativeTolerance() const ;
     int  iworkComponent(const int )const;
     double  rworkComponent(const int)const  ;
     
-    ~LSODEProfile();
+    
+    
+    
+    
+    
+    
+    
     
     
     

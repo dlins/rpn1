@@ -31,7 +31,7 @@ public:
     
     virtual ~ODESolver();
     virtual ODESolution & solve(const RealVector & , int ) const=0;
-    virtual ODESolverProfile & getProfile() =0;
+    virtual ODESolverProfile & getProfile() const =0;
     
     
 };

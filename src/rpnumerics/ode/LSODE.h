@@ -28,6 +28,7 @@ class LSODE:public ODESolver {
 private:
     
     LSODEProfile * profile_;
+    const RpFunction * rpFunction_;
     int function (int *,double *,double *,double *);
     
 public:

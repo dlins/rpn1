@@ -2,24 +2,32 @@
 #define	_ODESolverProfile_H
 
 #include "RpFunction.h"
+#include "ODEStopGenerator.h"
 
 
 class ODESolverProfile{
     
 public:
     
-    ODESolverProfile(const RpFunction &);
+    ODESolverProfile(const RpFunction &, const ODEStopGenerator &);
+    
     ODESolverProfile();
     virtual ~ODESolverProfile();
     
     ODESolverProfile(const ODESolverProfile &);
     ODESolverProfile & operator=(const ODESolverProfile &);
     
-    RpFunction * getFunction() const ;
+    void setStopGenerator(const ODEStopGenerator &);
     
-private:
+    const ODEStopGenerator * getStopGenerator()const ;
     
-     RpFunction * function_;
+    const RpFunction * getFunction() const ;
+    
+    
+    
+protected:
+    const    RpFunction * function_;
+    const    ODEStopGenerator * stopGenerator_;
     
     
 };
