@@ -1,542 +1,102 @@
 <project name="RPN" default="compile" basedir="..">
-
-  <!-- set global properties for this build -->
-  <property name="src" location="rpn"/>
-  <property name="build" location="build"/>
-<!--  <property name="nativelibdir"  value="/native"/> -->
-  <property name="libdir"  value="rpn/lib"/>
-  <property name="docdir"  value="doc"/>
-  <property name="nativedir"  value="rpn/native"/>
-  <property name="JNIdir"  value="rpn/native/JNI"/>
-  <property name="includedir"  value="${JNIdir}/include"/>
-  <property environment="env"/>
-  <property name="linuxinclude" value="${env.JAVA_HOME}/include/linux"/>
-  <property name="solarisinclude" value="${env.JAVA_HOME}/include/solaris"/>
-
-  <target name="init">
-    <!-- Create the time stamp -->
-    <tstamp/>
-    <!-- Create the build directory structure used by compile -->
-    <mkdir dir="${build}"/>
-    <mkdir dir="${build}/images"/>
-    <mkdir dir="${build}/native"/>
-
-  </target>
-
-  <target name="compile" depends="init" description="compile the source " >
-
-   <depend srcdir="${src}" destdir="${build}" cache="depcache" closure="yes"/>
-
-    <javac  deprecation="off" debug="true" source="1.4" target="1.4" classpath="${libdir}/log4j.jar:${libdir}/jbossall-client.jar:${libdir}/vecmath.jar:${libdir}/pdflib.jar:${libdir}/xml4j.jar:${libdir}/jlapack-0.6.jar:${build}:${libdir}/msv.jar:${libdir}/iso-relax.jar" srcdir="${src}" sourcepath="${src}" destdir="${build}">
-    </javac>
-
-  <copy todir="build/images">
-    <fileset dir="rpn/images"/>
-  </copy>
-
-   </target>
-
-  <target name="doc" depends="compile" description="creates of all packages html documentation">
-   <javadoc  destdir="${docdir}" classpath="${build}" >
-      <packageset dir="${src}" defaultexcludes="yes">
-        <include name="rpn/**" />
-        <include name="rpnumerics/**" />
-        <include name="wave/**" />
-      </packageset>
-
-   </javadoc>
-  </target>
-
- <target name="rpndoc" depends="compile" description="creates of RPn  package html documentation">
-   <javadoc  destdir="${docdir}" classpath="${build}" >
-      <packageset dir="${src}" defaultexcludes="yes">
-        <include name="rpn/**" />
-      </packageset>
-
-   </javadoc>
-  </target>
-
-<target name="Flowheader" depends="compile" description="creates JNI header to native wave flow implementation">
-  <javah destdir="${includedir}" classpath="${build}">
-    <class name="rpnumerics.NativeShockFlowFacade"/>
-
-  </javah>
-
-</target>
-
-
-<target name="Accumulationheader" depends="compile" description="creates JNI header to native accumulation function implementation">
-  <javah destdir="${includedir}" classpath="${build}">
-    <class name="rpnumerics.physics.NativeAccumulationFunctionFacade"/>
-
-  </javah>
-
-</target>
-
-
-<target name="Hugoniotheader" depends="compile" description="creates JNI header to native Hugoniot implementation" >
-  <javah destdir="${includedir}" classpath="${build}">
-    <class name="rpnumerics.NativeHugoniotFacade"/>
-
-  </javah>
-
-</target>
-
-<target name="Fluxheader" depends="compile"  description="creates JNI header to native flux implementation">
-  <javah destdir="${includedir}" classpath="${build}">
-    <class name="rpnumerics.physics.NativeFluxFunctionFacade"/>
-
-  </javah>
-  </target>
-
-
-  <target name="FluxheaderTeste" depends="compile"  description="creates JNI header to native flux implementation">
-  <javah destdir="${includedir}" classpath="${build}">
-    <class name="rpnumerics.physics.NativeFluxFunctionFacadeTeste"/>
-
-  </javah>
-
-</target>
-
-<target name="Cubeheader" depends="compile"  description="creates JNI header to cube function implementation">
-  <javah destdir="${includedir}" classpath="${build}">
-    <class name="rpnumerics.methods.contour.NativeCubeFunctionFacade"/>
-
-  </javah>
-
-</target>
-
-
-<target name="VectorFunctionheader" depends="compile"  description="creates JNI header to vector function implementation">
-  <javah destdir="${includedir}" classpath="${build}">
-    <class name="rpnumerics.NativeVectorFunctionFacade"/>
-  </javah>
-</target>
-
-
- <target name ="SteamC" depends ="compile,Cubeheader" description ="compile a C source code to cube function implementation">
-  <mkdir dir="${build}/native/Steam/${env.RPHOSTTYPE}"/>
-  <exec executable="gcc" >
-  <arg line ="-shared -I${env.JAVA_HOME}/include -I${linuxinclude} -I${includedir}  -I ${basedir}/${nativedir}/Steam  -I ${basedir}/${nativedir}/Steam/Oil ${JNIdir}/JNICube.c  -o ${build}/native/Steam/${env.RPHOSTTYPE}/libSteam.so">
-  </arg>
-</exec>
-  </target>
-
-<target name ="SteamOilFullC" depends ="compile,Fluxheader,VectorFunctionheader,Flowheader" description ="compile a C source code for Hugoniot Functions and Flow">
-
-  <mkdir dir="${build}/native/Steam/Oil/${env.RPHOSTTYPE}"/>
-
-
-<exec executable="gcc" >
-    <arg line ="-c    -I${basedir}/${nativedir}/Steam/Oil/ ${basedir}/${nativedir}/Steam/Oil/Oil.c -o  ${build}/native/Steam/Oil/Oil.o">
-    </arg>
-  </exec>
-
-
-<exec executable="gcc" >
-   <arg line ="-c   -I${basedir}/${nativedir}/Steam/Oil/ -I${env.JAVA_HOME}/include -I${linuxinclude} -I${includedir} ${JNIdir}/JNIFlux.c  -o ${JNIdir}/JNIFlux.o" >
-   </arg>
-  </exec>
-
-
- <exec executable="gcc" >
-   <arg line ="-c   -I${basedir}/${nativedir}/Steam/Oil/ -I${env.JAVA_HOME}/include -I${linuxinclude} -I${includedir} ${JNIdir}/JNIWaveFlow.c  -o ${JNIdir}/JNIWaveFlow.o" >
-   </arg>
-  </exec>
-
-<exec executable="gcc" >
-   <arg line ="-c  -Wall -I${basedir}/${nativedir}/Steam/ -I${env.JAVA_HOME}/include -I${linuxinclude} -I${includedir} ${JNIdir}/JNIVectorFunction.c  -o ${JNIdir}/JNIVectorFunction.o" >
-   </arg>
-  </exec>
-
-
-  <exec executable="gcc" >
-  <arg line ="-shared   ${build}/native/Steam/Oil/Oil.o  ${JNIdir}/JNIFlux.o ${JNIdir}/JNIWaveFlow.o  ${JNIdir}/JNIVectorFunction.o -o  ${build}/native/Steam/Oil/${env.RPHOSTTYPE}/libSteamOil.so">
-  </arg>
-   </exec>
-</target>
-
-
-<target name ="SteamOilFullC64" depends ="compile,Fluxheader,VectorFunctionheader,Flowheader" description ="compile a C source code for Hugoniot Functions and Flow">
-
-  <mkdir dir="${build}/native/Steam/Oil/${env.RPHOSTTYPE}"/>
-
-
-<exec executable="gcc" >
-    <arg line ="-c   -fPIC -I${basedir}/${nativedir}/Steam/Oil/ ${basedir}/${nativedir}/Steam/Oil/Oil.c -o  ${build}/native/Steam/Oil/Oil.o">
-    </arg>
-  </exec>
-
-
-<exec executable="gcc" >
-   <arg line ="-c  -fPIC -I${basedir}/${nativedir}/Steam/Oil/ -I${env.JAVA_HOME}/include -I${linuxinclude} -I${includedir} ${JNIdir}/JNIFlux.c  -o ${JNIdir}/JNIFlux.o" >
-   </arg>
-  </exec>
-
-
- <exec executable="gcc" >
-   <arg line ="-c  -fPIC -I${basedir}/${nativedir}/Steam/Oil/ -I${env.JAVA_HOME}/include -I${linuxinclude} -I${includedir} ${JNIdir}/JNIWaveFlow.c  -o ${JNIdir}/JNIWaveFlow.o" >
-   </arg>
-  </exec>
-
-<exec executable="gcc" >
-   <arg line ="-c  -fPIC -Wall -I${basedir}/${nativedir}/Steam/ -I${env.JAVA_HOME}/include -I${linuxinclude} -I${includedir} ${JNIdir}/JNIVectorFunction.c  -o ${JNIdir}/JNIVectorFunction.o" >
-   </arg>
-  </exec>
-
-
-  <exec executable="gcc" >
-  <arg line ="-shared   ${build}/native/Steam/Oil/Oil.o  ${JNIdir}/JNIFlux.o ${JNIdir}/JNIWaveFlow.o  ${JNIdir}/JNIVectorFunction.o -o  ${build}/native/Steam/Oil/${env.RPHOSTTYPE}/libSteamOilX.so">
-  </arg>
-   </exec>
-</target>
-
-  <target name ="SteamVectorFunctionC" depends ="compile,VectorFunctionheader" description ="compile a C source code to cube function implementation">
-  <mkdir dir="${build}/native/Steam/${env.RPHOSTTYPE}"/>
-
-
-
-    <exec executable="gcc" >
-    <arg line ="-c  -Wall -I${basedir}/${nativedir}/Steam/ ${basedir}/${nativedir}/Steam/TestaVector.c -o  ${build}/native/Steam/TestaVector.o">
-    </arg>
-  </exec>
-
-<exec executable="gcc" >
-   <arg line ="-c  -Wall -I${basedir}/${nativedir}/Steam/ -I${env.JAVA_HOME}/include -I${linuxinclude} -I${includedir} ${JNIdir}/JNIVectorFunction.c  -o ${JNIdir}/JNIVectorFunction.o" >
-   </arg>
-  </exec>
-
-
-  <exec executable="gcc" >
-  <arg line ="-shared -Wall ${build}/native/Steam/TestaVector.o  ${JNIdir}/JNIVectorFunction.o  -o ${build}/native/Steam/${env.RPHOSTTYPE}/libSteam.so">
-  </arg>
-</exec>
-  </target>
-
-  <target name ="Quad2NovaFullC" depends ="compile,Fluxheader,VectorFunctionheader,Flowheader" description ="compile a C source code for Hugoniot Functions and Flow">
-
-  <mkdir dir="${build}/native/Quad2C/${env.RPHOSTTYPE}"/>
-
-<exec executable="gcc" >
-    <arg line ="-c   -I${JNIdir} -I${basedir}/${nativedir}/Quad2C/ ${basedir}/${nativedir}/Quad2C/example/functionsFluxNova.c -o  ${build}/native/Quad2C/functionsFluxNova.o">
-    </arg>
-  </exec>
-
-
- <exec executable="gcc" >
-    <arg line ="-c  -Wall -I${basedir}/${nativedir}/Quad2C/ -I${basedir}/${JNIdir} ${basedir}/${nativedir}/Quad2C/example/functionsHugoniotNova.c -o  ${build}/native/Quad2C/functionsHugoniotNova.o">
-    </arg>
-  </exec>
-
-<exec executable="gcc" >
-    <arg line ="-c   -I${basedir}/${nativedir}/Quad2C/ ${basedir}/${nativedir}/Quad2C/example/functionsFlowNova.c -o  ${build}/native/Quad2C/functionsFlowNova.o">
-    </arg>
-  </exec>
-
-
-<exec executable="gcc" >
-   <arg line ="-c  -I${basedir}/${nativedir}/Quad2C/ -I${env.JAVA_HOME}/include -I${linuxinclude} -I${includedir} ${JNIdir}/JNIFlux.c  -o ${JNIdir}/JNIFlux.o" >
-   </arg>
-  </exec>
-
-
- <exec executable="gcc" >
-   <arg line ="-c  -I${basedir}/${nativedir}/Quad2C/ -I${env.JAVA_HOME}/include -I${linuxinclude} -I${includedir} ${JNIdir}/JNIWaveFlow.c  -o ${JNIdir}/JNIWaveFlow.o" >
-   </arg>
-  </exec>
-
-
-<exec executable="gcc" >
-   <arg line ="-c  -Wall -I${basedir}/${nativedir}/Steam/ -I${env.JAVA_HOME}/include -I${linuxinclude} -I${includedir} ${JNIdir}/JNIVectorFunction.c  -o ${JNIdir}/JNIVectorFunction.o" >
-   </arg>
-  </exec>
-
-     <exec executable="gcc" >
-  <arg line ="-shared   -ggdb -g ${JNIdir}/JNIFlux.o  ${JNIdir}/JNIWaveFlow.o ${JNIdir}/JNIVectorFunction.o ${build}/native/Quad2C/functionsFluxNova.o ${build}/native/Quad2C/functionsHugoniotNova.o ${build}/native/Quad2C/functionsFlowNova.o -o  ${build}/native/Quad2C/${env.RPHOSTTYPE}/libQuad.so">
-  </arg>
-   </exec>
-
-</target>
-
-
- <target name ="MultiExample" depends ="compile,Fluxheader,VectorFunctionheader,Flowheader" description ="compile a C source code for Hugoniot Functions and Flow">
-
-  <mkdir dir="${build}/native/Quad2C/${env.RPHOSTTYPE}"/>
-
-<exec executable="g++" >
-    <arg line ="-c   -Wall -I${JNIdir} -I${includedir}/ ${basedir}/${nativedir}/Example/MultiFluxFunctionExample.cc -o  ${build}/native/MultiFluxFunctionExample.o">
-    </arg>
-  </exec>
-
-
-<exec executable="g++" >
-   <arg line ="-c  -Wall -I${basedir}/${nativedir}/Quad2C/ -I${env.JAVA_HOME}/include -I${linuxinclude} -I${includedir} ${JNIdir}/JNIFluxMulti.cc  -o ${build}/native/JNIFluxMulti.o" >
-   </arg>
-  </exec>
-
-     <exec executable="g++" >
-  <arg line ="-shared   -ggdb -g ${build}/native/JNIFluxMulti.o  ${build}/native/MultiFluxFunctionExample.o -o  ${build}/native/Quad2C/${env.RPHOSTTYPE}/libFluxMulti.so">
-  </arg>
-   </exec>
-
-
-   <delete >
-     <fileset dir="${build}/native" includes="*.o"/>
-       </delete>
-
-</target>
-
-
-
-
-
-<target name ="MultiTeste" depends ="compile,Fluxheader,VectorFunctionheader,Flowheader" description ="compile a C source code for Hugoniot Functions and Flow">
-
-  <mkdir dir="${build}/native/Quad2C/${env.RPHOSTTYPE}"/>
-
-<exec executable="g++" >
-    <arg line ="-c   -Wall -I${JNIdir} -I${includedir}/ ${basedir}/${nativedir}/Example/MultiFluxFunctionExample.cc -o  ${build}/native/MultiFluxFunctionExample.o">
-    </arg>
-  </exec>
-
-
-<exec executable="g++" >
-   <arg line ="-c  -Wall -I${basedir}/${nativedir}/Quad2C/ -I${env.JAVA_HOME}/include -I${linuxinclude} -I${includedir} ${JNIdir}/JNIFluxMulti.cc  -o ${build}/native/JNIFluxMulti.o" >
-   </arg>
-  </exec>
-
-
-     <exec executable="g++" >
-  <arg line ="-shared   -g  ${build}/native/JNIFluxMulti.o  ${build}/native/MultiFluxFunctionExample.o -o  ${build}/native/Quad2C/${env.RPHOSTTYPE}/libFluxMulti.so">
-  </arg>
-   </exec>
-
-
-   <delete >
-     <fileset dir="${build}/native" includes="*.o"/>
-       </delete>
-
-</target>
-
-
-<target name ="Quad2RodrigoC" depends ="compile,Fluxheader,VectorFunctionheader,Flowheader" description ="compile a C source code for Hugoniot Functions and Flow">
-
-  <mkdir dir="${build}/native/Quad2C/Rodrigo/${env.RPHOSTTYPE}"/>
-
-<exec executable="gcc" >
-    <arg line ="-c   -I${JNIdir} -I${basedir}/${nativedir}/Quad2C/Rodrigo ${basedir}/${nativedir}/Quad2C/Rodrigo/Quad2FluxFunction.c -o  ${build}/native/Quad2C/Rodrigo/Quad2FluxFunction.o">
-    </arg>
-  </exec>
-
-
- <!-- <exec executable="gcc" >
-    <arg line ="-c  -I${basedir}/${nativedir}/Quad2C/ -I${basedir}/${JNIdir} ${basedir}/${nativedir}/Quad2C/functionsHugoniot.c -o  ${build}/native/Quad2C/functionsHugoniot.o">
-    </arg>
-  </exec> -->
-
-<!--<exec executable="gcc" >
-    <arg line ="-c   -I${basedir}/${nativedir}/Quad2C/ ${basedir}/${nativedir}/Quad2C/functionsFlow.c -o  ${build}/native/Quad2C/functionsFlow.o">
-    </arg>
-  </exec>-->
-
-
-<exec executable="gcc" >
-   <arg line ="-c  -I${basedir}/${nativedir}/Quad2C/Rodrigo -I${env.JAVA_HOME}/include -I${linuxinclude} -I${includedir} ${JNIdir}/JNIFlux.c  -o ${JNIdir}/JNIFlux.o" >
-   </arg>
-  </exec>
-
-
-
-<!-- <exec executable="gcc" >
+    
+    <!-- set global properties for this build -->
+    <property name="src" location="src"/>
+    <property name="build" location="build"/>
+    <!--  <property name="nativelibdir"  value="/native"/> -->
+    <property name="libdir"  value="lib"/>
+    <property name="rpngrouphome"  value="lib"/>
+    <property name="docdir"  value="doc"/>
+    <property name="JNIdir"  value="JNI"/>
+    <property name="includedir"  value="${JNIdir}/include"/>
+    <property environment="env"/>
+    <property name="linuxinclude" value="${env.JAVA_HOME}/include/linux"/>
+    <property name="solarisinclude" value="${env.JAVA_HOME}/include/solaris"/>
+    
+    <target name="init">
+        <!-- Create the time stamp -->
+        <tstamp/>
+        <!-- Create the build directory structure used by compile -->
+        <mkdir dir="${build}"/>
+        <mkdir dir="${build}/images"/>
+        
+        
+    </target>
+    
+    <target name="compile" depends="init" description="compile the source " >
+        
+        <depend srcdir="${src}" destdir="${build}" cache="depcache" closure="yes"/>
+        
+        <javac  deprecation="off" debug="true" source="1.4" target="1.4" classpath="${libdir}/log4j.jar:${libdir}/jbossall-client.jar:${libdir}/vecmath.jar:${libdir}/pdflib.jar:${libdir}/xml4j.jar:${libdir}/jlapack-0.6.jar:${build}:${libdir}/msv.jar:${libdir}/iso-relax.jar" srcdir="${src}" sourcepath="${src}" destdir="${build}">
+        </javac>
+        
+        <!--   <copy todir="build/images">
+            <fileset dir="rpn/images"/>
+        </copy>--> <!-- TODO  Include images into jar project --> 
+        
+        <jar destfile="lib/rpn.jar"
+             basedir="${build}"
+        />
+        
+        <!--<exec executable="make" >
+            <arg line="-f makefile"></arg>
+
+            </arg>
+        </exec> --> <!-- TODO Call make to compile C++ sources -->
+        
+    </target>
+    
+    <target name="doc" depends="compile" description="creates of all packages html documentation">
+        <javadoc  destdir="${docdir}" classpath="${build}" >
+            <packageset dir="${src}" defaultexcludes="yes">
+                <include name="rpn/**" />
+                <include name="rpnumerics/**" />
+                <include name="wave/**" />
+            </packageset>
+            
+        </javadoc>
+    </target>
+    
+    <target name="rpndoc" depends="compile" description="creates of RPn  package html documentation">
+        <javadoc  destdir="${docdir}" classpath="${build}" >
+            <packageset dir="${src}" defaultexcludes="yes">
+                <include name="rpn/**" />
+            </packageset>
+            
+        </javadoc>
+    </target>
+    
+    <target name="multiddoc" depends="compile" description="creates of Multid package html documentation">
+        <javadoc  destdir="${docdir}" classpath="${build}" >
+            <packageset dir="${src}" defaultexcludes="yes">
+                <include name="wave/multid/**" />
+            </packageset>
+            
+        </javadoc>
+    </target>
+    
+    <target name="clean"
+            description="clean up" >
+        <!-- Delete the ${build} and ${dist} directory trees -->
+        <delete dir="${build}"/>
+    </target>
+    
+    
+    <!-- <exec executable="gcc" >
    <arg line ="-c  -I${basedir}/${nativedir}/Quad2C/ -I${env.JAVA_HOME}/include -I${linuxinclude} -I${includedir} ${JNIdir}/JNIWaveFlow.c  -o ${JNIdir}/JNIWaveFlow.o" >
    </arg>
   </exec> -->
 
 
- <!--<exec executable="gcc" >
+    <!--<exec executable="gcc" >
    <arg line ="-c  -Wall -I${basedir}/${nativedir}/Steam/ -I${env.JAVA_HOME}/include -I${linuxinclude} -I${includedir} ${JNIdir}/JNIVectorFunction.c  -o ${JNIdir}/JNIVectorFunction.o" >
    </arg>
   </exec> -->
 
-  <exec executable="gcc" >
-  <arg line ="-shared ${JNIdir}/JNIFlux.o ${build}/native/Quad2C/Rodrigo/Quad2FluxFunction.o  -o  ${build}/native/Quad2C/${env.RPHOSTTYPE}/libQuadRodrigo.so">
-  </arg>
-   </exec>
-</target>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<target name ="Quad2FullC" depends ="compile,Fluxheader,VectorFunctionheader,Flowheader" description ="compile a C source code for Hugoniot Functions and Flow">
-
-  <mkdir dir="${build}/native/Quad2C/${env.RPHOSTTYPE}"/>
-
-<exec executable="gcc" >
-    <arg line ="-c   -I${JNIdir} -I${basedir}/${nativedir}/Quad2C/ ${basedir}/${nativedir}/Quad2C/functionsFlux.c -o  ${build}/native/Quad2C/functionsFlux.o">
-    </arg>
-  </exec>
-
-
-  <exec executable="gcc" >
-    <arg line ="-c  -I${basedir}/${nativedir}/Quad2C/ -I${basedir}/${JNIdir} ${basedir}/${nativedir}/Quad2C/functionsHugoniot.c -o  ${build}/native/Quad2C/functionsHugoniot.o">
-    </arg>
-  </exec>
-
-<exec executable="gcc" >
-    <arg line ="-c   -I${basedir}/${nativedir}/Quad2C/ ${basedir}/${nativedir}/Quad2C/functionsFlow.c -o  ${build}/native/Quad2C/functionsFlow.o">
-    </arg>
-  </exec>
-
-
-<exec executable="gcc" >
-   <arg line ="-c  -I${basedir}/${nativedir}/Quad2C/ -I${env.JAVA_HOME}/include -I${linuxinclude} -I${includedir} ${JNIdir}/JNIFlux.c  -o ${JNIdir}/JNIFlux.o" >
-   </arg>
-  </exec>
-
-
- <exec executable="gcc" >
-   <arg line ="-c  -I${basedir}/${nativedir}/Quad2C/ -I${env.JAVA_HOME}/include -I${linuxinclude} -I${includedir} ${JNIdir}/JNIWaveFlow.c  -o ${JNIdir}/JNIWaveFlow.o" >
-   </arg>
-  </exec>
-
-
-<exec executable="gcc" >
-   <arg line ="-c  -Wall -I${basedir}/${nativedir}/Steam/ -I${env.JAVA_HOME}/include -I${linuxinclude} -I${includedir} ${JNIdir}/JNIVectorFunction.c  -o ${JNIdir}/JNIVectorFunction.o" >
-   </arg>
-  </exec>
-
-
-<!--  <exec executable="gcc" >
- <arg line ="-c  -I${basedir}/${nativedir}/Quad2C/ -I${env.JAVA_HOME}/include -I${linuxinclude} -I${includedir} ${JNIdir}/JNIHugoniot.c  -o ${JNIdir}/JNIHugoniot.o" >
-  </arg>
- </exec>-->
-
-
-  <exec executable="gcc" >
-  <arg line ="-shared    ${JNIdir}/JNIFlux.o ${build}/native/Quad2C/functionsFlux.o  ${JNIdir}/JNIWaveFlow.o  ${build}/native/Quad2C/functionsFlow.o ${JNIdir}/JNIVectorFunction.o ${build}/native/Quad2C/functionsHugoniot.o  -o  ${build}/native/Quad2C/${env.RPHOSTTYPE}/libQuad.so">
-  </arg>
-   </exec>
-</target>
-
-
-<target name ="Quad2FullCMemCheck" depends ="compile,VectorFunctionheader,Flowheader" description ="compile a C source code for native implementation with memory leak verification">
-
-  <mkdir dir="${build}/${nativedir}/Quad2C/${env.RPHOSTTYPE}"/>
-
-
-<exec executable="gcc" >
-    <arg line ="-c   -I${basedir}/${nativedir}/Quad2C/ ${basedir}/${nativedir}/Quad2C/functionsFlux.c -o  ${build}/${nativedir}/Quad2C/functionsFlux.o">
-    </arg>
-  </exec>
-
-
-  <exec executable="gcc" >
-    <arg line ="-c  -I${basedir}/${nativedir}/Quad2C/ ${basedir}/${nativedir}/Quad2C/functionsHugoniot.c -o  ${build}/${nativedir}/Quad2C/functionsHugoniot.o">
-    </arg>
-  </exec>
-
-<exec executable="gcc" >
-    <arg line ="-c   -I${basedir}/${nativedir}/Quad2C/ ${basedir}/${nativedir}/Quad2C/functionsFlow.c -o  ${build}/${nativedir}/Quad2C/functionsFlow.o">
-    </arg>
-  </exec>
-
-
-<exec executable="gcc" >
-   <arg line ="-c  -DMCD_VERBOSE -D_MCD_CHECK  -I${basedir}/${nativedir}/Quad2C/ -I${env.JAVA_HOME}/include -I${linuxinclude} -I${includedir} ${JNIdir}/JNIFlux.c  -o ${JNIdir}/JNIFlux.o" >
-   </arg>
-  </exec>
-
-
-
- <exec executable="gcc" >
+    
+    <!-- <exec executable="gcc" >
    <arg line ="-c  -DMCD_VERBOSE -D_MCD_CHECK  -I${basedir}/${nativedir}/Quad2C/ -I${env.JAVA_HOME}/include -I${linuxinclude} -I${includedir} ${JNIdir}/JNIWaveFlow.c  -o ${JNIdir}/JNIWaveFlow.o" >
    </arg>
-  </exec>
-
-
-  <exec executable="gcc" >
-   <arg line ="-c  -DMCD_VERBOSE -D_MCD_CHECK   -I${basedir}/${nativedir}/Quad2C/ -I${env.JAVA_HOME}/include -I${linuxinclude} -I${includedir} ${JNIdir}/JNIHugoniot.c  -o ${JNIdir}/JNIHugoniot.o" >
-   </arg>
-  </exec>
-
-
-<exec executable="gcc" >
-    <arg line ="-c  ${basedir}/${nativedir}/Quad2C/mcd.c -o  ${build}/native/Quad2C/mcd.o">
-    </arg>
-  </exec>
-
-  <exec executable="gcc" >
-  <arg line ="-shared ${JNIdir}/JNIFlux.o ${build}/native/Quad2C/functionsFlux.o  ${JNIdir}/JNIWaveFlow.o  ${build}/${nativedir}/Quad2C/functionsFlow.o ${JNIdir}/JNIHugoniot.o ${build}/${nativedir}/Quad2C/functionsHugoniot.o ${build}/native/Quad2C/mcd.o  -o  ${build}/native/Quad2C/${env.RPHOSTTYPE}/libQuad.so">
-  </arg>
-   </exec>
-</target>
-
-  <target name="multiddoc" depends="compile" description="creates of Multid package html documentation">
-   <javadoc  destdir="${docdir}" classpath="${build}" >
-      <packageset dir="${src}" defaultexcludes="yes">
-        <include name="wave/multid/**" />
-      </packageset>
-
-   </javadoc>
-  </target>
-
-    <target name="clean"
-        description="clean up" >
-    <!-- Delete the ${build} and ${dist} directory trees -->
-    <delete dir="${build}"/>
-  </target>
+  </exec> -->
+    
 </project>

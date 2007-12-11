@@ -11,9 +11,9 @@ C++SRC += ODESolverProfile.cc \
           ODEStopGenerator.cc  \
           LSODEStopGenerator.cc
 
-ForSRC += lsode.F	\
-          lsode2.F	\
-          lsode3.F
+ForSRC += #lsode.F	\
+          #lsode2.F	\
+          #lsode3.F
           
 
 CPPFLAGS += -I $(ODEDIR) -g3
