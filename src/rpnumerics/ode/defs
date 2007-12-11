@@ -1,4 +1,5 @@
 vpath %.cc $(ODEDIR)
+vpath %.F $(ODEDIR)
 
 
 C++SRC += ODESolverProfile.cc \
@@ -8,10 +9,12 @@ C++SRC += ODESolverProfile.cc \
           LSODEProfile.cc     \
           LSODESolution.cc    \
           ODEStopGenerator.cc  \
-          LSODEStopGenerator.cc \
-          #lsode.F              \
-          #lsode2.F             \
-          #lsode3.F
+          LSODEStopGenerator.cc
+
+ForSRC += lsode.F	\
+          lsode2.F	\
+          lsode3.F
           
 
 CPPFLAGS += -I $(ODEDIR) -g3
+

@@ -14,7 +14,6 @@ C++SRC += ADTADV.cc		\
 	JacobianMatrix.cc	\
 	JetMatrix.cc		\
 	mathutil.cc		\
-	new.cc			\
 	polyroot.cc		\
 	RealVector.cc		\
 	RealMatrix2.cc		\
@@ -27,6 +26,7 @@ C++SRC += ADTADV.cc		\
 	Vector3.cc		\
 	Vector.cc               \
 	#eigen.cc
+	#new.cc			\
 
 CPPFLAGS += -I $(UTILDIR)
 
