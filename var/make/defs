@@ -69,7 +69,8 @@ else
 ifeq ($(BUILDGCCVER),)
 CCC = c++ -Wall -Wno-deprecated
 else
-CCC = g++$(BUILDGCCVER) -march=$(BUILDARCH) -Wall -Wno-deprecated
+#CCC = g++$(BUILDGCCVER) -march=$(BUILDARCH) -Wall -Wno-deprecated
+CCC = g++$(BUILDGCCVER) -Wall -Wno-deprecated
 endif
 endif
 ifeq ($(RPHOSTTYPE),solaris)
