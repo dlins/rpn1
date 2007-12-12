@@ -8,4 +8,4 @@ C++SRC += JNIConnectionOrbitCalc.cc\
 	HugoniotCurve.cc	\
 	RpNumerics.cc		\
 
-CPPFLAGS += -I $(JNIDIR)/include
+CPPFLAGS += -I $(JNIDIR)/include -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux

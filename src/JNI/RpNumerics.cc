@@ -63,7 +63,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_init(JNIEnv * env, jclass cls,
         return; /* OutOfMemoryError already thrown */
     }
     
-    //Physics instatiation
+    //Physics instantiation
     
     if (!strcmp(physicsID, "QuadraticR2")){
         
