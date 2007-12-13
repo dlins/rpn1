@@ -6,7 +6,8 @@ include $(RPNUMERICSDIR)/defs
 include $(WAVEDIR)/defs
 
 CPPFLAGS += -I. -Wconversion
-LDLIBS = $(SYSLIBS) -L../../lib/$(OBJDIR) -L/usr/lib -lrpnumerics -llapack
+#LDLIBS = $(SYSLIBS) -L../../lib/$(OBJDIR) -L/usr/lib -lrpnumerics -llapack
+LDLIBS = $(SYSLIBS)  -lrpnumerics
 CLEANSRC += $(PROGEXE)
 
 C++SRC = t.cc

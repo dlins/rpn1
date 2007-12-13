@@ -7,8 +7,8 @@ C++SRC += ADTADV.cc		\
 	bool.cc			\
 	Boundary.cc		\
 	eigen2.cc		\
-	errorhandler.cc		\
 	except.cc		\
+	errorhandler.cc		\
 	HessianMatrix.cc	\
 	IntArray.cc		\
 	JacobianMatrix.cc	\
@@ -25,7 +25,8 @@ C++SRC += ADTADV.cc		\
 	Vector3Array.cc		\
 	Vector3.cc		\
 	Vector.cc               \
-	#eigen.cc
+	eigen.cc
+
 	#new.cc			\
 
 CPPFLAGS += -I $(UTILDIR)

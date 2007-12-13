@@ -68,13 +68,19 @@ inline Vector3 operator+(const Vector3 &a, const Vector3 &b);
 inline Vector3 operator-(const Vector3 &a, const Vector3 &b);
 inline double operator*(const Vector3 &a, const Vector3 &b);
 
-//extern"C" {
-//  void dgeev_(char * , char *, int *, double *, int*, double *, double *, 
-//               double *, int *, double *, int *, double *, int *, 
-//               int *); TODO Use this lapack function
-//}
-  
-//int eigen_rl(int , Matrix3 & , Vector3 &, Matrix3 &);//(int, double*, struct eigen*); TODO Use this function ???
+//
+// TODO Use this lapack function
+//
+extern"C" {
+  void dgeev_(char * , char *, int *, double *, int*, double *, double *, 
+               double *, int *, double *, int *, double *, int *, 
+               int *); 
+}
+
+//
+//  TODO Use this function ??? 
+//
+int eigen_rl(int , Matrix3 & , Vector3 &, Matrix3 &);//(int, double*, struct eigen*); 
 
 inline istream &operator>>(istream &is, Vector3 &vector);
 inline ostream &operator<<(ostream &os, const Vector3 &vector);

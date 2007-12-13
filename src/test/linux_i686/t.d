@@ -106,12 +106,12 @@ linux_i686/t.o (t.o) linux_i686/t.d: t.cc \
   /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/typeinfo \
   /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/istream \
   /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/bits/istream.tcc \
-  /impa/home/f/edsonlan/C/rpnTrunk/trunk/src/wave/util/JetMatrix.h \
-  /impa/home/f/edsonlan/C/rpnTrunk/trunk/src/wave/util/Vector.h \
+  /impa/home/w/daniel/oficina/rpn/trunk/src/wave/util/JetMatrix.h \
+  /impa/home/w/daniel/oficina/rpn/trunk/src/wave/util/Vector.h \
   /usr/include/memory.h \
-  /impa/home/f/edsonlan/C/rpnTrunk/trunk/src/wave/util/bool.h \
-  /impa/home/f/edsonlan/C/rpnTrunk/trunk/src/wave/util/except.h \
-  /impa/home/f/edsonlan/C/rpnTrunk/trunk/src/wave/util/JacobianMatrix.h \
-  /impa/home/f/edsonlan/C/rpnTrunk/trunk/src/wave/util/HessianMatrix.h \
-  /impa/home/f/edsonlan/C/rpnTrunk/trunk/src/wave/util/RealVector.h \
-  /impa/home/f/edsonlan/C/rpnTrunk/trunk/src/wave/util/except.h
+  /impa/home/w/daniel/oficina/rpn/trunk/src/wave/util/bool.h \
+  /impa/home/w/daniel/oficina/rpn/trunk/src/wave/util/except.h \
+  /impa/home/w/daniel/oficina/rpn/trunk/src/wave/util/JacobianMatrix.h \
+  /impa/home/w/daniel/oficina/rpn/trunk/src/wave/util/RealMatrix2.h \
+  /impa/home/w/daniel/oficina/rpn/trunk/src/wave/util/RealVector.h \
+  /impa/home/w/daniel/oficina/rpn/trunk/src/wave/util/HessianMatrix.h
