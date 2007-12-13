@@ -26,7 +26,7 @@
 //
 //         f: The field's function
 //       neq: The number of equations
-//         y: The point where the solution is to be computed -- para ODESolution
+//         y: The point where the solution is to be computed --  entrada !!
 //         t: The time at which the solution will begin to be computed  -- para ODESolution
 //      tout: The time at which the solution stops being computed -- para ODESolution
 //      itol: 1 (scalar) or 2 (array), see atol (below)
@@ -36,12 +36,12 @@
 //    istate: Integer flag. Set istate = 1.
 //      iopt: 0 to indicate no optional inputs are used
 //     rwork: Array of reals, of length at least:
-//            20 + 16*neq                      for mf = 10,
+//       lrw= 20 + 16*neq                      for mf = 10,
 //            22 +  9*neq + neq**2             for mf = 21 or 22,
 //            22 + 10*neq + (2*ml + mu)*neq    for mf = 24 or 25.
 //       lrw: Declared length of rwork
 //     iwork: Array of integers of length at least:
-//            20                               for mf = 10,
+//      liw=  20                               for mf = 10,
 //            20 + neq                         for mf = 21, 22, 24 or 25.
 //            If mf = 24 or 25, iwork(0) = ml and iwork(1) = mu.
 //       liw: Declared length of iwork
@@ -98,7 +98,7 @@ private:
     
 public:
 //              neq  ,  itol, rtol, itask,istate, iopt , rwork , lrw ,iwork, liw , mf,
-    LSODEProfile(const RpFunction &, const LSODEStopGenerator &, int ,  int , double, int  , int  ,  const double *, int , const int *, int , int );
+    LSODEProfile(const RpFunction &, const LSODEStopGenerator &, int ,  int , double, int  , int   , int );
     LSODEProfile(const LSODEProfile &);
     
     ~LSODEProfile();

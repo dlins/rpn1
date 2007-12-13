@@ -20,13 +20,13 @@ DEPENDOBJ += $(ForSRC:%.F=$(OBJDIR)/%.d)
 LIBARC = $(OBJDIR)/$(LIBNAME)
 CPPFLAGS += -fPIC
 CLEANSRC += $(LIBARC)
-LIBLAPACK = /usr/lib/liblapack.a /usr/lib/libblas.a /usr/lib/gcc/i386-redhat-linux/4.1.1/libgfortran.a
+LIBLAPACK = /usr/lib/liblapack.a /usr/lib/libblas.a /usr/lib/gcc/i386-redhat-linux/4.1.1/libgfortran.a /usr/lib/libdl.a /usr/lib/gcc/i386-redhat-linux/3.4.6/libg2c.a
 
 
 all: $(LIBARC)
 
 $(LIBARC): $(LIBOBJ)
-	@echo hi
+	
 	$(CCC)  -shared -fPIC -Wl,-soname,$(LIBNAME) -o $(LIBARC) $(LIBOBJ) $(LIBLAPACK)
 
 t:

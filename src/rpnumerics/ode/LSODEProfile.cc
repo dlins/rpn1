@@ -18,17 +18,56 @@
  */
 
 
-//neq  , itol, rtol, itask, istate, iopt , rwork , lrw , iwork, liw , mf,
+//neq  , itol, rtol, itask, istate, iopt , mf,
 LSODEProfile::LSODEProfile(const RpFunction & function, const LSODEStopGenerator & sGenerator, int neq , int itol , double rtol, int itask,
         
-        int  iopt,  const double * rwork, int lrw, const int *iwork, int liw, int mf):ODESolverProfile(function,sGenerator){
-            int i;
+        int  iopt,  int mf):ODESolverProfile(function, sGenerator){
+            
+            //Choosing lrw
+            
+            int mu =0; // TODO  How to choose these values ???
+            int ml =0;
+            
+            
+            switch (mf){
+                
+                case 10:
+                    
+                    lrw_= 20 + 16*neq ;
+                    liw_=20;
+                    break;
+                    
+                case 21:
+                    
+                    lrw_= 22 +  9*neq + neq*neq;
+                    liw_=20+neq;
+                    break;
+                    
+                case 22:
+                    
+                    lrw_= 22 +  9*neq + neq*neq;
+                    liw_=20+neq;
+                    break;
+                    
+                case 24:
+                    
+                    lrw_= 22 + 10*neq + (2*ml + mu)*neq;
+                    liw_= 20 + neq;
+                    
+                case 25:
+                    
+                    lrw_= 22 + 10*neq + (2*ml + mu)*neq;
+                    liw_= 20 + neq;
+                    
+                default:
+                    cout << "Erro in lrw or liw choose"<<endl;
+                    
+            }
             rtol_=rtol;
             itask_=itask;
             
             iopt_=iopt ;
-            lrw_=lrw;
-            liw_=liw;
+            
             mf_=mf;
             neq_=neq;
             itol_=itol;
@@ -36,21 +75,12 @@ LSODEProfile::LSODEProfile(const RpFunction & function, const LSODEStopGenerator
             rwork_= new double[lrw_];
             
             iwork_=new int [liw_];
-            
-            for (i=0; i <lrw_;i++){
-                rwork_[i]=rwork[i];
-            }
-            
-            for (i=0;i<liw_;i++){
-                iwork_[i]=iwork[i];
-            }
-            
         }
         
         LSODEProfile:: LSODEProfile(const LSODEProfile & copy){
             
             int i;
-
+            
             function_=copy.getFunction();
             stopGenerator_=copy.getStopGenerator();
             
@@ -90,7 +120,7 @@ LSODEProfile::LSODEProfile(const RpFunction & function, const LSODEStopGenerator
             delete iwork_;
             delete function_;
             delete stopGenerator_;
-
+            
             function_=source.getFunction();
             stopGenerator_=source.getStopGenerator();
             
