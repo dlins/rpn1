@@ -37,11 +37,20 @@ class LSODE:public ODESolver {
     
 private:
     
-    const LSODEProfile * profile_;
+    LSODEProfile * profile_;
     
-    const RpFunction * rpFunction_;
+    static  const RpFunction * rpFunction_;
     
-    int function(int *, double *, double *, double *);
+    static int function(int *, double *, double *, double *);
+    
+    static   int jacrarefaction(int *neq, double *t, double *y, int *ml, int *mu, double *pd, int *nrpd);//int *nparam,  double *param);
+    
+    
+    
+    int solver(int (*)(int *, double *, double *, double *), int *neq, double *y, double *t, double *tout,
+            int *itol, double *rtol, double *atol, int *itask, int *istate, int *iopt, double *rwork, int *lrw,
+            int *iwork, int *liw, int(*)(int *, double *, double *, int *, int *, double *, int *),
+            int *mf, int *nparam, double *param) const;
     
 public:
     

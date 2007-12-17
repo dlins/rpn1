@@ -50,7 +50,10 @@ public:
     LSODEStopGenerator * clone() const ;
     virtual ~LSODEStopGenerator();
     
-    void setFunctionStatus(const int);
+    
+    void increaseTotalPoints();
+    
+    void setFunctionStatus( int) ;
     int getFunctionStatus() const ;
     
     int totalPoints() const ;

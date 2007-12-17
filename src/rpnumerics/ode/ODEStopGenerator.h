@@ -31,6 +31,8 @@ public:
     
     virtual bool getStatus() const =0;
     
+
+    
 };
 
 #endif //! _ODEStopGenerator_H

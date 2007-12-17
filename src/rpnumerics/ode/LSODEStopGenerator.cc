@@ -29,11 +29,13 @@ int LSODEStopGenerator::getFunctionStatus() const {return functionStatus_;}
 
 int LSODEStopGenerator::totalPoints() const {return totalPoints_;}
 
+void LSODEStopGenerator::increaseTotalPoints() { totalPoints_++;}
+
 bool LSODEStopGenerator::getStatus() const {
     
     if ((functionStatus_ == SUCCESSFUL_PROCEDURE) && (totalPoints_ < maxPoints_))
-        return false;
-    return true;
+        return true;
+    return false;
 }
 
 

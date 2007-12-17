@@ -80,7 +80,8 @@ private:
     
     
     double rtol_;
-    double atol_;
+    double * atol_;
+    double deltaxi_;
     
     int  neq_;
     int itol_;
@@ -90,15 +91,17 @@ private:
     int   lrw_;
     int   liw_;
     int    mf_;
-
+    int paramLength_;
+    
     int * iwork_;
     double *  rwork_;
+    double *  param_;
     
-
+    
     
 public:
 //              neq  ,  itol, rtol, itask,istate, iopt , rwork , lrw ,iwork, liw , mf,
-    LSODEProfile(const RpFunction &, const LSODEStopGenerator &, int ,  int , double, int  , int   , int );
+    LSODEProfile(const RpFunction &, const LSODEStopGenerator &, int ,  int , double, int ,double , int , const double * );
     LSODEProfile(const LSODEProfile &);
     
     ~LSODEProfile();
@@ -106,7 +109,8 @@ public:
     LSODEProfile & operator=(const LSODEProfile &);
     
     int numberOfEquations() const ;
-    int absoluteTolerance() const ;
+    
+    int absoluteToleranceType() const ;
     int lengthRWork() const ;
     int lengthIWork() const ;
     int task() const ;
@@ -114,8 +118,17 @@ public:
     int opt()const ;
     int methodFlag()const  ;
     double relativeTolerance() const ;
+    int paramLength() const;    
+    double absoluteToleranceComponent(const int) const ;    
+    double deltaTime()const ;
+    
+
     int  iworkComponent(const int )const;
     double  rworkComponent(const int)const  ;
+    
+
+    double paramComponent(const int) const ;
+    
     
     
     

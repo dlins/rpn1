@@ -47,6 +47,7 @@ public:
         // ! virtual constructor 
         virtual RpFunction * clone() const =0;
 	//! m coordinates function evaluation at u
+        
 	//! this is the nth derivative calculation that might be available or not
 	virtual int jet(const WaveState &u,JetMatrix &m,int degree) const  = 0;
 };

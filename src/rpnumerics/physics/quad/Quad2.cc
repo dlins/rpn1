@@ -29,8 +29,10 @@ inline const AccumulationFunction & Quad2::accumulation() const {
     return *accumulationFunction_;
 }
 
+void Quad2::flow(const WaveFlow & flow){
+    flow_=(WaveFlow *)flow.clone();}
 
-inline  const WaveFlow & Quad2::flow() const { }
+inline  const WaveFlow & Quad2::flow() const { return *flow_;  } // It is not WaveFlow * ??
 
 inline const Space & Quad2::domain(void) const {
     return Multid::PLANE;

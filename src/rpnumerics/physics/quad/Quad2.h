@@ -29,6 +29,7 @@ private:
         Quad2AccumulationFunction * accumulationFunction_;
         
 	Boundary * boundary_;
+        WaveFlow * flow_;
 
 public:
 	Quad2(const Quad2FluxParams &);
@@ -42,6 +43,7 @@ public:
 	const FluxParams & params(void) const;
 	const FluxFunction & fluxFunction(void) const;
         const AccumulationFunction & accumulation() const;
+        void  flow(const WaveFlow &);
         const WaveFlow & flow() const;
         
 	const Space & domain(void) const;
