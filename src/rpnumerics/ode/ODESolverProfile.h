@@ -19,15 +19,13 @@ public:
     
     void setStopGenerator(const ODEStopGenerator &);
     
-    const ODEStopGenerator * getStopGenerator()const ;
+     ODEStopGenerator * getStopGenerator()const ;
     
-    const RpFunction * getFunction() const ;
-    
-    
+     RpFunction * getFunction() const ;
     
 protected:
-    const    RpFunction * function_;
-    const    ODEStopGenerator * stopGenerator_;
+    RpFunction * function_;
+    ODEStopGenerator * stopGenerator_;
     
     
 };

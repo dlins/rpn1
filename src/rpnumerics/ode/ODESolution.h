@@ -24,6 +24,7 @@ public:
     virtual ~ODESolution();
     
     vector<double> getTimes();
+
     int getFlag() ;
     
     void addCoords(const RealVector);

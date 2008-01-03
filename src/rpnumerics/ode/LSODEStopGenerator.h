@@ -43,16 +43,19 @@ private:
     
     
 public:
-    
-    
+        
     LSODEStopGenerator(const int );
+    LSODEStopGenerator (const LSODEStopGenerator &);
 
     LSODEStopGenerator * clone() const ;
     virtual ~LSODEStopGenerator();
     
     
-    void increaseTotalPoints();
+    void ncreaseTotalPoints();
     
+    int getMaxPoints() const ;
+          
+    void increaseTotalPoints();
     void setFunctionStatus( int) ;
     int getFunctionStatus() const ;
     

@@ -39,10 +39,7 @@ JetMatrix::JetMatrix(const JetMatrix & jetMatrix) :
         n_comps_ = n_comps;
     }
     
-    void JetMatrix::range_check(int comp) const {
-        if (comp < 0 || comp >= n_comps())
-            THROW(JetMatrix::RangeViolation());
-    }
+    
     
     JetMatrix & JetMatrix::zero(void) {
         v_.zero();
@@ -68,45 +65,13 @@ JetMatrix::JetMatrix(const JetMatrix & jetMatrix) :
         return v_.component((n_comps_) + (i*n_comps_ + j));
     }
     
-    double JetMatrix::operator()(int i, int j, int k) {
-        range_check(i);
-        range_check(j);
-        range_check(k);
-        if (!c2_)
-            THROW(JetMatrix::RangeViolation());
-        return v_.component((n_comps_ * (1 + n_comps_)) + (i*n_comps_*n_comps_ + j*n_comps_ + k));
-    }
     
-    void JetMatrix::operator()(int i, double value) {
-        range_check(i);
-        c0_=true;
-        double * value_ = & v_.component(i);
-        *value_ = value;
-    }
-    
-    void JetMatrix::operator()(int i, int j, double value) {
-        range_check(i);
-        range_check(j);
-        c1_=true;
-        
-        double * value_ = & v_.component((n_comps_) + (i*n_comps_ + j));
-        *value_ = value;
-    }
-    
-    void JetMatrix::operator()(int i, int j, int k, double value) {
-        range_check(i);
-        range_check(j);
-        range_check(k);
-        c2_=true;
-        double * value_ = & v_.component((n_comps_ * (1 + n_comps_)) + (i*n_comps_*n_comps_ + j*n_comps_ + k));
-        *value_ = value;
-    }
     
     void JetMatrix::f(RealVector & vector){
         
         int i;
         for (i=0; i < n_comps();i++){
-            operator()(i, vector(i));
+            operator()(i, vector.component(i));
         }
     }
     

@@ -15,6 +15,7 @@
  */
 #include "ODESolverProfile.h"
 #include "LSODEStopGenerator.h"
+#include <math.h>
 
 /*
  * ---------------------------------------------------------------
@@ -79,9 +80,15 @@ private:
 //         a dummy function.
     
     
-    double rtol_;
+    
     double * atol_;
+    double *  rwork_;
+    double *  param_;
+    
+    int * iwork_;
+    
     double deltaxi_;
+    double rtol_;
     
     int  neq_;
     int itol_;
@@ -93,18 +100,16 @@ private:
     int    mf_;
     int paramLength_;
     
-    int * iwork_;
-    double *  rwork_;
-    double *  param_;
+    
     
     
     
 public:
 //              neq  ,  itol, rtol, itask,istate, iopt , rwork , lrw ,iwork, liw , mf,
-    LSODEProfile(const RpFunction &, const LSODEStopGenerator &, int ,  int , double, int ,double , int , const double * );
+    LSODEProfile(const RpFunction &, const LSODEStopGenerator &, int ,  int , double, int , double , int , const double * );
     LSODEProfile(const LSODEProfile &);
     
-    ~LSODEProfile();
+    virtual ~LSODEProfile();
     
     LSODEProfile & operator=(const LSODEProfile &);
     
@@ -118,31 +123,59 @@ public:
     int opt()const ;
     int methodFlag()const  ;
     double relativeTolerance() const ;
-    int paramLength() const;    
-    double absoluteToleranceComponent(const int) const ;    
+    int paramLength() const;
+    double absoluteToleranceComponent(const int) const ;
     double deltaTime()const ;
     
-
+    
     int  iworkComponent(const int )const;
     double  rworkComponent(const int)const  ;
     
-
     double paramComponent(const int) const ;
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 };
+
+
+
+
+inline double LSODEProfile::relativeTolerance()const{return rtol_;}
+inline int LSODEProfile::task()const{return itask_;}
+inline int LSODEProfile::opt()const{return iopt_;}
+
+inline double  LSODEProfile::rworkComponent(const int i) const {return rwork_[i];}
+inline int  LSODEProfile::iworkComponent(const int i) const {return iwork_[i];}
+
+inline int LSODEProfile::lengthRWork()const {return lrw_;}
+inline int LSODEProfile::lengthIWork() const{return liw_;}
+
+inline  int LSODEProfile::methodFlag() const{return mf_;}
+
+inline double LSODEProfile::deltaTime() const {return deltaxi_;}
+
+inline int LSODEProfile::paramLength() const {return paramLength_;}
+
+inline double  LSODEProfile::paramComponent(const int index) const {
+    
+    if (index < 0 || index > paramLength_){
+        
+        cout << "Erro in param length! "<< endl;
+        return 0;
+    }
+    
+    return param_[index];
+}
+inline int LSODEProfile::absoluteToleranceType() const {return itol_;}
+inline int LSODEProfile::numberOfEquations()const{return neq_;}
+
+inline double LSODEProfile::absoluteToleranceComponent(const int index)const{
+    
+    if (index <0 || index > neq_) {
+        
+        cout << "Error in absolute tolerance index" << endl;
+        return 0;
+    }
+    
+    return atol_[index];
+}
 
 #endif //! _LSODEProfile_H

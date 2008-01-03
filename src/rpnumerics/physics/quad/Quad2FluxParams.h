@@ -20,10 +20,12 @@ class Quad2FluxParams : public FluxParams {
 public:
 	Quad2FluxParams(void);
 	Quad2FluxParams(const RealVector &);
+        
+        virtual ~Quad2FluxParams();
 
-	static const double DEFAULT_A[2];
-	static const double DEFAULT_B[2][2];
-	static const double DEFAULT_C[2][2][2];
+//	static const double DEFAULT_A[2];
+//	static const double DEFAULT_B[2][2];
+//	static const double DEFAULT_C[2][2][2];
 
 	Quad2FluxParams defaultParams(void);
 

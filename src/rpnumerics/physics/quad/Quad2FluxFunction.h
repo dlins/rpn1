@@ -23,18 +23,17 @@
 
 class Quad2FluxFunction : public FluxFunction {
 
-private:
-	Quad2FluxParams params_;
 
 public:
 	Quad2FluxFunction(const Quad2FluxParams &);
-	virtual ~Quad2FluxFunction(void);
+
+        virtual ~Quad2FluxFunction(void);
         
         Quad2FluxFunction * clone() const ;
 
 	int jet(const WaveState &u, JetMatrix &m, int degree) const;
 
-	FluxParams fluxParams(void);
+
 };
 
 

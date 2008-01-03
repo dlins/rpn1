@@ -13,6 +13,7 @@
  * ---------------------------------------------------------------
  * Includes:
  */
+#include <iostream>
 
 
 /*
@@ -20,6 +21,7 @@
  * Definitions:
  */
 
+using namespace std;
 
 class ODEStopGenerator {
     

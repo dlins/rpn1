@@ -51,6 +51,7 @@ public:
     int n_comps(void) const;
     void resize(int n_comps);
     void range_check(int comp) const;
+    
     JetMatrix &zero(void);
     
     double * operator()(void);
@@ -64,7 +65,42 @@ public:
     
 };
 
-            
-            
-            
+inline void JetMatrix::range_check(int comp) const {
+    if (comp < 0 || comp >= n_comps())
+        THROW(JetMatrix::RangeViolation());
+}
+
+inline double JetMatrix::operator()(int i, int j, int k) {
+    range_check(i);
+    range_check(j);
+    range_check(k);
+    if (!c2_)
+        THROW(JetMatrix::RangeViolation());
+    return v_.component((n_comps_ * (1 + n_comps_)) + (i*n_comps_*n_comps_ + j*n_comps_ + k));
+}
+
+inline  void JetMatrix::operator()(int i, double value) {
+    range_check(i);
+    c0_=true;
+    double * value_ = & v_.component(i);
+    *value_ = value;
+}
+
+inline  void JetMatrix::operator()(int i, int j, double value) {
+    range_check(i);
+    range_check(j);
+    c1_=true;
+    
+    double * value_ = & v_.component((n_comps_) + (i*n_comps_ + j));
+    *value_ = value;
+}
+
+inline  void JetMatrix::operator()(int i, int j, int k, double value) {
+    range_check(i);
+    range_check(j);
+    range_check(k);
+    c2_=true;
+    double * value_ = & v_.component((n_comps_ * (1 + n_comps_)) + (i*n_comps_*n_comps_ + j*n_comps_ + k));
+    *value_ = value;
+}
 #endif //! _JetMatrix_H

@@ -21,17 +21,17 @@
 RectBoundary::RectBoundary(void) {
     // Default Rectangular boundary has the following values for
     // minimums and maximums.
-//	double mins[2] = { -5, -5 };
-//	double maxs[2] = {  5,  5 };
+	double mins[2] = { -5, -5 };
+	double maxs[2] = {  5,  5 };
     
-    double * mins = new double[2];
-    double * maxs= new double [2];
+//    double * mins = new double[2];
+//    double * maxs= new double [2];
     
-    mins [0]=-0.5;
-    mins[1]=-0.5;
-    
-    maxs[0]=0.5;
-    maxs[1]=0.5;
+//    mins [0]=-0.5;
+//    mins[1]=-0.5;
+//    
+//    maxs[0]=0.5;
+//    maxs[1]=0.5;
     
     minimums_ = new RealVector(2, mins);
     maximums_ = new RealVector(2, maxs);

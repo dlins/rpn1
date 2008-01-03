@@ -58,13 +58,13 @@ void WavePoint::operator=(double sigma)
 	sigma_ = sigma;
 }
 
-void WavePoint::operator=(RealVector & coords)
-{
-	copy((Vector)coords);
-}
+//void WavePoint::operator=(RealVector & coords)
+//{
+//	copy((Vector)coords);
+//}
 
-void WavePoint::operator=(WavePoint & copy)
-{
-	ref(copy);
-	sigma_ = copy.sigma();
-}
+//void WavePoint::operator=(WavePoint & copy)
+//{
+//	ref(copy);
+//	sigma_ = copy.sigma();
+//}

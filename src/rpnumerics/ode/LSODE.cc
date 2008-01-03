@@ -24,15 +24,14 @@ using std::vector;
 
 const RpFunction * LSODE::rpFunction_=NULL;
 
-
-LSODE::LSODE(const LSODEProfile & profile): profile_(new LSODEProfile(profile)){
-    
-    rpFunction_=profile.getFunction();}
+LSODE::LSODE(const LSODEProfile & profile):profile_(new LSODEProfile(profile)){
+    rpFunction_=profile_->getFunction();
+}
 
 
 LSODE::~LSODE() {
     delete profile_;
-    delete rpFunction_;
+//    delete rpFunction_;
 }
 
 ODESolution & LSODE::solve(const RealVector & input, int ) const{
@@ -51,9 +50,9 @@ ODESolution & LSODE::solve(const RealVector & input, int ) const{
     xi=1;       // Only to remove warnings
     
     
-    double t;
+    double t=0;
     
-    double tout;
+    double tout=0.05;
     double * param;
     double  * atol;
     
@@ -76,7 +75,6 @@ ODESolution & LSODE::solve(const RealVector & input, int ) const{
     switch (itol){
         
         case 1:
-            
             
             break;
         case 2:
@@ -108,13 +106,11 @@ ODESolution & LSODE::solve(const RealVector & input, int ) const{
         param[i]=profile_->paramComponent(i);
     }
     
-    
     for (i=0;i < input.size();i++){
         
-        U[i]=input(i);
+        U[i]=input.component(i);
         
     }
-    
     
     while (stopGenerator->getStatus()){
         
@@ -128,16 +124,20 @@ ODESolution & LSODE::solve(const RealVector & input, int ) const{
             RealVector realVector(profile_->numberOfEquations());
             
             for (i=0;i < realVector.size();i++)
-                realVector(i)=U[i];
+                realVector.component(i)=U[i];
             
             coords.push_back(realVector);
-            times.push_back(tout);
+            
             tout=t+profile_->deltaTime();
+
+            times.push_back(tout);
             
             stopGenerator->increaseTotalPoints();
+            
+
+            
+           
         }
-        
-        
     }
     
     
@@ -184,11 +184,7 @@ int LSODE::function(int * neq , double * xi , double* U , double * out){
     
     return status;
     
-    
 }
-
-
-
 
 int LSODE::jacrarefaction(int *neq, double *t, double *y, int *ml, int *mu, double *pd, int *nrpd){
     return SUCCESSFUL_PROCEDURE;
@@ -199,9 +195,10 @@ int LSODE::solver(int (*f)(int *, double *, double *, double *), int *neq, doubl
         int *iwork, int *liw, int(*j)(int *, double *, double *, int *, int *, double *, int *),
         int *mf, int *nparam, double *param) const{
     
-    
     lsode_(f, neq, y, t, tout, itol, rtol, atol, itask, istate,
             iopt, rwork, lrw, iwork, liw, j, mf, nparam, param);
+    
+    
     if (*istate == 2){
         return SUCCESSFUL_PROCEDURE;
     }

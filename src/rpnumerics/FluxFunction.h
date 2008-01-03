@@ -23,13 +23,13 @@
 class FluxFunction: public RpFunction {
     
 private:
-    FluxParams params_;
+    FluxParams *params_;
     
 public:
     
     FluxFunction(const FluxParams & params);
     virtual ~FluxFunction(void);
-    FluxParams  fluxParams(void) const ;
+    FluxParams & fluxParams(void) ;
     void fluxParams(const FluxParams & params);
     
 };

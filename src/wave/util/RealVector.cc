@@ -1,8 +1,8 @@
 #include "RealVector.h"
 
-RealVector::RealVector(void) : Vector(2) { }
+RealVector::RealVector(void) : Vector(2) {}
 
-RealVector::RealVector(int size) :  Vector(size) { }
+RealVector::RealVector(int size) :  Vector(size) {}
 
 RealVector::RealVector(const int size, double * coords) :  Vector(size, coords) { }
 

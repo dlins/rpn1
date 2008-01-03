@@ -5,15 +5,10 @@ int ODESolution::STOP_ON_POINCARE_SECTION=2;
 int ODESolution::MADE_MAXIMUM_STEP_NUMBER=0;
 
 
-ODESolution::ODESolution(vector <RealVector>  coords , vector <double> times , int flag ):coords_(coords),times_(times),flag_(flag){
-    
-    
-    
-    
-}
+ODESolution::ODESolution(vector <RealVector>  coords , vector <double> times , int flag ):coords_(coords),times_(times),flag_(flag){}
+
 
 ODESolution::~ODESolution(){
-    
     coords_.clear();
     times_.clear();
     
@@ -22,6 +17,7 @@ ODESolution::~ODESolution(){
 int ODESolution::getFlag(){return flag_;}
 
 vector<RealVector> ODESolution::getCoords(){return coords_;}
+vector <double> ODESolution::getTimes(){return times_;}
 
 inline void ODESolution::addCoords(const RealVector coord){ coords_.push_back(coord);}
 

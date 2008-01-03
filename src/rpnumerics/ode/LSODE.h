@@ -33,8 +33,6 @@ extern "C"{
 class LSODE:public ODESolver {
     
     
-    
-    
 private:
     
     LSODEProfile * profile_;
@@ -45,8 +43,6 @@ private:
     
     static   int jacrarefaction(int *neq, double *t, double *y, int *ml, int *mu, double *pd, int *nrpd);//int *nparam,  double *param);
     
-    
-    
     int solver(int (*)(int *, double *, double *, double *), int *neq, double *y, double *t, double *tout,
             int *itol, double *rtol, double *atol, int *itask, int *istate, int *iopt, double *rwork, int *lrw,
             int *iwork, int *liw, int(*)(int *, double *, double *, int *, int *, double *, int *),
@@ -55,7 +51,8 @@ private:
 public:
     
     LSODE(const LSODEProfile &);
-    ~LSODE();
+
+    virtual ~LSODE();
     
     ODESolution & solve(const RealVector & , int ) const;
     const ODESolverProfile & getProfile() const ;
