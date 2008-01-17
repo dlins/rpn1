@@ -9,6 +9,8 @@ extern "C" {
 #endif
 /* Inaccessible static: profile_ */
 /* Inaccessible static: hugoniotCurveCalc_ */
+/* Inaccessible static: rarefactionMethodName_ */
+/* Inaccessible static: familyIndex_ */
 /*
  * Class:     rpnumerics_RpNumerics
  * Method:    init
@@ -100,9 +102,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RpNumerics_getXZero
 /*
  * Class:     rpnumerics_RpNumerics
  * Method:    setXZero
- * Signature: (Lrpnumerics/PhasePoint;)D
+ * Signature: (Lrpnumerics/PhasePoint;)V
  */
-JNIEXPORT jdouble JNICALL Java_rpnumerics_RpNumerics_setXZero
+JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_setXZero
   (JNIEnv *, jclass, jobject);
 
 /*

@@ -18,6 +18,7 @@
 #define PHASEPOINT_LOCATION                   "rpnumerics/PhasePoint"
 #define ORBITPOINT_LOCATION                   "rpnumerics/OrbitPoint"
 #define ORBIT_LOCATION                        "rpnumerics/Orbit"
+#define RAREFACTIONORBIT_LOCATION             "rpnumerics/RarefactionOrbit"
 
 #define MANIFOLD_LOCATION                      "rpnumerics/ManifoldOrbit"
 #define CONNECTIONORBIT_LOCATION               "rpnumerics/ConnectionOrbit"
@@ -29,5 +30,6 @@
 
 
 #define NUMERICSPROFILE_LOCATION              "rpnumerics/RPNumericsProfile"
+#define RPNUMERICS_LOCATION                   "rpnumerics/RpNumerics"
 #endif	/* _JNIDEFS_H */
 
