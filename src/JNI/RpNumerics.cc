@@ -119,8 +119,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_init(JNIEnv * env, jclass cls,
     RarefactionFlow rarefactionFlow(1); //TODO Hardcoded flow set
     
     RpNumerics::setRarefactionFlow(rarefactionFlow);
-    
-    
+
     //Rarefaction curve plot method setting
     
     ContinuationRarefactionMethod  rarefactionMethod;

@@ -30,15 +30,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc  (JNIEnv * e
     
     jclass    classOrbitPoint = (env)->FindClass(ORBITPOINT_LOCATION);
     jclass    classRarefactionOrbit = (env)->FindClass(RAREFACTIONORBIT_LOCATION);
-    jclass    classRpNumerics = env->FindClass(RPNUMERICS_LOCATION);
     
-    jmethodID    rarefactionOrbitConstructor = (env)->GetMethodID(classRarefactionOrbit, "<init>", "([Lrpnumerics/OrbitPoint;I)V");
+    jmethodID rarefactionOrbitConstructor = (env)->GetMethodID(classRarefactionOrbit, "<init>", "([Lrpnumerics/OrbitPoint;I)V");
     jmethodID orbitPointConstructor = (env)->GetMethodID(classOrbitPoint, "<init>", "([D)V");
     jmethodID toDoubleMethodID = (env)->GetMethodID(classOrbitPoint, "toDouble", "()[D");
-    
-    jmethodID familyIndexMethod = env->GetStaticMethodID(classRpNumerics, "getFamilyIndex", "()I");
-    
-    
     
     //Input processing
     jdoubleArray inputPhasePointArray =(jdoubleArray) (env)->CallObjectMethod(initialPoint, toDoubleMethodID);
@@ -57,29 +52,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc  (JNIEnv * e
     
     env->DeleteLocalRef(inputPhasePointArray);
     
-    //Choosing the calculations method
-    const char * method = env->GetStringUTFChars(methodName, NULL);
+    //Getting the method
     
-    //Getting the family index
+    RarefactionMethod * rarefactionMethod=  RpNumerics::getRarefactionMethod();
     
-    RpNumerics::setFamilyIndex(env->CallStaticIntMethod(classRpNumerics, familyIndexMethod));
+    //Calculations
     
-    if (method == NULL) {
-        cout <<"Error in method name !"<<endl;
-        /* OutOfMemoryError already thrown */
-    }
-    
-    vector<RealVector>coords;
-    
-    if (!strcmp(method, "rarefaction")){ //TODO Choose a name for each method
-        
-        RarefactionMethod * rarefactionMethod=  RpNumerics::getRarefactionMethod();
-        
-        //Calculations
-        coords = rarefactionMethod->curve(realVectorInput, timeDirection);
-        
-    }
-    env->ReleaseStringUTFChars(methodName, method);
+    vector <RealVector> coords = rarefactionMethod->curve(realVectorInput, timeDirection);
     
     //Orbit memebers creation
     
@@ -107,6 +86,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc  (JNIEnv * e
         (env)->SetObjectArrayElement(orbitPointArray, i, orbitPoint);
         
         env->DeleteLocalRef(jTempArray);
+        
         env->DeleteLocalRef(orbitPoint);
         
         delete  dataCoords;
@@ -121,9 +101,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc  (JNIEnv * e
     //Cleaning up
     
     coords.clear();
-    
-    
-    
+
     env->DeleteLocalRef(orbitPointArray);
     env->DeleteLocalRef(classOrbitPoint);
     env->DeleteLocalRef(classRarefactionOrbit);
