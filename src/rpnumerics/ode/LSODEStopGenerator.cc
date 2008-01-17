@@ -17,9 +17,16 @@
  * Definitions:
  */
 
-LSODEStopGenerator::LSODEStopGenerator(const int maxPoints):maxPoints_(maxPoints){}
+LSODEStopGenerator::LSODEStopGenerator(const int maxPoints):totalPoints_(0), maxPoints_(maxPoints), functionStatus_(SUCCESSFUL_PROCEDURE){}
 
-LSODEStopGenerator::LSODEStopGenerator(const LSODEStopGenerator & copy) {maxPoints_=copy.getMaxPoints();}
+LSODEStopGenerator::LSODEStopGenerator(const LSODEStopGenerator & copy) {
+    
+    functionStatus_=copy.getFunctionStatus();
+    
+    totalPoints_=copy.totalPoints();
+    
+    maxPoints_=copy.getMaxPoints();
+}
 
 LSODEStopGenerator * LSODEStopGenerator::clone()const  {return new LSODEStopGenerator(*this);}
 
@@ -37,10 +44,11 @@ void LSODEStopGenerator::increaseTotalPoints() { totalPoints_++;}
 
 bool LSODEStopGenerator::getStatus() const {
     
+//    cout <<"Checando status da funcao: "<<functionStatus_<<endl;
     
-//   if ((functionStatus_ == SUCCESSFUL_PROCEDURE) && (totalPoints_ < maxPoints_))
-    
-    if (totalPoints_ < maxPoints_)
+    if ((functionStatus_ == SUCCESSFUL_PROCEDURE) && (totalPoints_ < maxPoints_))
+        
+//    if (totalPoints_ < maxPoints_)
         return true;
     return false;
 }

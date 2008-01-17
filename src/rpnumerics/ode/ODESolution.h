@@ -23,14 +23,14 @@ public:
     ODESolution();
     virtual ~ODESolution();
     
-    vector<double> getTimes();
+    vector<double> getTimes() const ;
 
     int getFlag() ;
     
     void addCoords(const RealVector);
     void addTimes(const double );
     
-    vector<RealVector> getCoords();
+    vector<RealVector> getCoords()  const;
     
 protected :
         
@@ -42,6 +42,9 @@ protected :
     
 };
 
+inline void ODESolution::addCoords(const RealVector coord){ coords_.push_back(coord);}
+
+inline void ODESolution::addTimes(const double time){times_.push_back(time);}
 
 #endif	/* _ODESolution_H */
 

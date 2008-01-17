@@ -13,23 +13,30 @@
  * ---------------------------------------------------------------
  * Includes:
  */
-#include "RpMethod.h"
-#include "RpCurve.h"
 
+#include <vector>
+#include "RealVector.h"
 /*
  * ---------------------------------------------------------------
  * Definitions:
  */
 
-class RarefactionMethod : RpMethod{
-
-private:
-	RpCurve curve_;
-
+class RarefactionMethod {
+    
+    
 public:
-	RarefactionMethod();
-	RpCurve curve();
+
+virtual vector<RealVector> curve(const RealVector &, int ) =0 ;
+
+virtual RarefactionMethod * clone() const =0;
+
+virtual int direction() const =0;
+
+virtual ~RarefactionMethod();
+
 
 };
+
+
 
 #endif //! _RarefactionMethod_H

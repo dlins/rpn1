@@ -1,12 +1,12 @@
 package rpn.usecase;
 
+import rpn.component.RarefactionOrbitGeomFactory;
 import rpn.component.RpGeometry;
 import wave.util.RealVector;
-import rpnumerics.OrbitPoint;
-import rpnumerics.OrbitCalc;
-import rpn.component.OrbitGeom;
 
-import rpn.component.RarefactionOrbitFactory;
+
+import rpnumerics.PhasePoint;
+import rpnumerics.RarefactionOrbitCalc;
 
 public class RarefactionForwardOrbitPlotAgent extends RpModelPlotAgent {
 
@@ -23,9 +23,8 @@ public class RarefactionForwardOrbitPlotAgent extends RpModelPlotAgent {
 
     public RpGeometry createRpGeometry(RealVector[] input) {
 
-        OrbitPoint oPoint = new OrbitPoint(input[input.length - 1]);
-        RarefactionOrbitFactory factory = new RarefactionOrbitFactory(new OrbitCalc(oPoint,
-                OrbitGeom.FORWARD_DIR));
+        PhasePoint oPoint = new PhasePoint(input[input.length - 1]);
+        RarefactionOrbitGeomFactory factory = new RarefactionOrbitGeomFactory(new RarefactionOrbitCalc(oPoint,1));
         return factory.geom();
 
     }

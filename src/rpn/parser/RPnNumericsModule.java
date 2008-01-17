@@ -76,6 +76,8 @@ public class RPnNumericsModule {
             
             if (name.equals("FLOWTYPE")) {
                 profile_.initFlowType(att.getValue(0));
+//                profile_.setFamilyIndexFlow(new Integer(att.getValue(1)));
+//                System.out.println("Valor do familyIndex apos parser: "+ profile_.getFamilyIndex());
                 
             }
             

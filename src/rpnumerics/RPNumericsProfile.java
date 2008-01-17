@@ -22,7 +22,6 @@ public class RPNumericsProfile {
     private static boolean flowInitialized_ = false;
     private static UserInputHandler initialState_ = null;
     private String nativeLibName_;
-    private String flowType_;
     private String physicsId_;
     private static Space domain_;
     
@@ -31,7 +30,7 @@ public class RPNumericsProfile {
     // Constructors/Initializers
     
     public void initPhysics(String physicsId,String nativeLibName,String domainSize) {
-
+        
         System.loadLibrary(nativeLibName);
         
         physicsId_ = physicsId;
@@ -41,8 +40,6 @@ public class RPNumericsProfile {
     }
     
     public void initFlowType(String flowType) {
-        
-        flowType_ = flowType;
         
         if (flowType.equals("shockflow")) {
             setInitialState(new SHOCK_CONFIG());
@@ -94,18 +91,6 @@ public class RPNumericsProfile {
     
     public String libName() {
         return nativeLibName_;
-    }
-    
-    public boolean isFlowInitialized() {
-        return flowInitialized_;
-    }
-    
-    public int getFamilyIndex() {
-        return familyIndex_.intValue();
-    }
-    
-    public String getFlowType() {
-        return flowType_;
     }
     
     public static UserInputHandler getInitialState() {

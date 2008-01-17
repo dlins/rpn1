@@ -27,10 +27,10 @@ public class SHOCK_CONFIG extends UI_ACTION_SELECTED {
     //
     public void userInputComplete(rpn.controller.ui.UIController ui,
             RealVector userInput) {
-        if (!(RpNumerics.getProfile().isFlowInitialized())) {
+//        if (!(RpNumerics.getProfile().isFlowInitialized())) {
             
             RpNumerics.setShockFlow(new PhasePoint(userInput), 0);
-        }
+//        }
         
         super.userInputComplete(ui, userInput);
         

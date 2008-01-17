@@ -9,7 +9,7 @@ FluxFunction::~FluxFunction(void) {
 }
 
 
-FluxParams & FluxFunction::fluxParams(void)  {
+FluxParams & FluxFunction::fluxParams(void) const {
     return *params_;
 }
 

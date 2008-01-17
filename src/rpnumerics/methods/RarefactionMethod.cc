@@ -17,9 +17,8 @@
  * Definitions:
  */
 
-RarefactionMethod::RarefactionMethod() {
-}
 
-RpCurve RarefactionMethod::curve() {
-	return curve_;
-}
+ RarefactionMethod::~RarefactionMethod(){};
+
+
+

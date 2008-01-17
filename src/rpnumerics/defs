@@ -10,24 +10,21 @@ C++SRC += \
 	FluxParams.cc		\
 	PhasePoint.cc		\
 	Physics.cc           	\
-	RarefactionCurve.cc	\
 	RarefactionFlow.cc	\
-	RpCurve.cc		\
 	RpSolution.cc 		\
 	ShockFlow.cc 		\
-	WaveFlow.cc 		\
 	WavePoint.cc		\
 	WaveState.cc		\
-        RpFunction.cc        
+        RpFunction.cc           
 
 
 CPPFLAGS += -I $(RPNUMERICSDIR) -g3
 
 PHYSICSDIR = $(RPNUMERICSDIR)/physics
-METHODSDIR = $(RPNUMERICSDIR)/methods
 ODEDIR = $(RPNUMERICSDIR)/ode
+METHODSDIR = $(RPNUMERICSDIR)/methods
 
-include $(PHYSICSDIR)/defs
 include $(METHODSDIR)/defs
+include $(PHYSICSDIR)/defs
 include $(ODEDIR)/defs
 

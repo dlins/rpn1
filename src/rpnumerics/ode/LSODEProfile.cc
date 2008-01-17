@@ -39,7 +39,7 @@ LSODEProfile::LSODEProfile(const RpFunction & function, const LSODEStopGenerator
             break;
             
         default:
-            cout << "atol eh um escalar"<< endl;
+            cout << "atol is scalar"<< endl;
     }
     
     switch (mf){
@@ -107,10 +107,6 @@ LSODEProfile:: LSODEProfile(const LSODEProfile & copy):ODESolverProfile(*copy.ge
     
     int i;
     
-    
-//    function_=copy.getFunction()->clone();
-//    stopGenerator_=copy.getStopGenerator()->clone();
-    
     rwork_= new double[copy.lengthRWork()];
     
     iwork_=new int [copy.lengthIWork()];
@@ -139,6 +135,7 @@ LSODEProfile:: LSODEProfile(const LSODEProfile & copy):ODESolverProfile(*copy.ge
     mf_=copy.methodFlag();
     neq_=copy.numberOfEquations();
     itol_=copy.absoluteToleranceType();
+    paramLength_=copy.paramLength();
     
     if (itol_==2){
         atol_= new double [neq_];
@@ -170,6 +167,7 @@ LSODEProfile & LSODEProfile::operator=(const LSODEProfile & source){
     stopGenerator_=source.getStopGenerator();
     neq_=source.numberOfEquations();
     itol_=source.absoluteToleranceType();
+    paramLength_=source.paramLength();
     
     int i;
     
@@ -207,11 +205,6 @@ LSODEProfile & LSODEProfile::operator=(const LSODEProfile & source){
     
     return *this;
 }
-
-
-
-
-
 
 //! Code comes here! daniel@impa.br
 

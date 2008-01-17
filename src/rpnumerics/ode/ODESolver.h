@@ -29,10 +29,12 @@ private:
     
 public:
     
-    virtual ~ODESolver();
+
     virtual ODESolution & solve(const RealVector & , int ) const=0;
+    virtual RealVector & solve (const RealVector &) const =0;
     virtual const ODESolverProfile & getProfile() const =0;
-    
+    virtual ODESolver * clone()const =0;
+    virtual ~ODESolver();    
     
 };
 

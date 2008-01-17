@@ -39,10 +39,11 @@ public:
     JetMatrix(const JetMatrix & jetMatrix);
     virtual ~JetMatrix();
     
+    
+    void setF(RealVector &);
     void f(RealVector &);
     void jacobian(JacobianMatrix & jMatrix);
     void hessian(HessianMatrix & hMatrix);
-    
     
     void f(const RealVector &);
     void jacobian(const JacobianMatrix & jMatrix);
@@ -68,6 +69,15 @@ public:
 inline void JetMatrix::range_check(int comp) const {
     if (comp < 0 || comp >= n_comps())
         THROW(JetMatrix::RangeViolation());
+}
+
+inline void JetMatrix::setF(RealVector & input){
+    
+    int i;
+    
+    for (i=0; i < input.size();i++){
+        v_.component(i)=input.component(i);
+    }
 }
 
 inline double JetMatrix::operator()(int i, int j, int k) {

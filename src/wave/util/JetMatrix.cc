@@ -65,13 +65,12 @@ JetMatrix::JetMatrix(const JetMatrix & jetMatrix) :
         return v_.component((n_comps_) + (i*n_comps_ + j));
     }
     
-    
-    
-    void JetMatrix::f(RealVector & vector){
-        
+    void JetMatrix::f(RealVector & vector){//TODO Checar esse metodo !!!
+
         int i;
         for (i=0; i < n_comps();i++){
-            operator()(i, vector.component(i));
+           
+            vector.component(i)=operator()(i);
         }
     }
     
@@ -80,8 +79,8 @@ JetMatrix::JetMatrix(const JetMatrix & jetMatrix) :
         int i, j;
         for (i=0;i < n_comps(); i++){
             for (j=0; j < n_comps();j++ ){
-                double value = jMatrix.operator()(i, j);
-                operator ()(i, j, value);
+                double value = operator()(i, j);
+                jMatrix.operator ()(i, j, value);
             }
         }
     }
@@ -93,7 +92,6 @@ JetMatrix::JetMatrix(const JetMatrix & jetMatrix) :
         for (i=0;i < n_comps() ; i++){
             for (j=0; j < n_comps() ; j++){
                 for (k=0 ;k < n_comps(); k++){
-                    
                     double value = hMatrix.operator()(i, j, k);
                     operator()(i, j, k, value);
                 }
@@ -107,9 +105,8 @@ JetMatrix::JetMatrix(const JetMatrix & jetMatrix) :
         for (i=0;i < n_comps() ; i++){
             for (j=0; j < n_comps() ; j++){
                 for (k=0 ;k < n_comps(); k++){
-                    double value = hMatrix.operator()(i, j, k);
-                    
-                    operator ()(i, j, k, value);
+                    double value = operator()(i, j, k);
+                    hMatrix.operator ()(i, j, k, value);
                 }
             }
         }

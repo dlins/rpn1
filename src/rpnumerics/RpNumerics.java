@@ -18,13 +18,27 @@ public class RpNumerics {
     //
     static private RPNumericsProfile profile_;
     static private HugoniotCurveCalc hugoniotCurveCalc_ = new HugoniotCurveCalcND();
-    
-//    private static WaveFlow flow_;
+    static private String rarefactionMethodName_;
+    static private int familyIndex_;
     
     
     //
     // Constructors/Initializers
     //
+    
+//    public static  int getFamilyIndex(){return familyIndex_;}
+    
+    public static int getFamilyIndex(){return 1;}//TODO Hardcoded family index 
+    
+    public void setFamilyIndex(int familyIndex){familyIndex_=familyIndex;}//TODO Called by GUI
+    
+    public static void setRarefactionMethodName(String methodName){rarefactionMethodName_=methodName;} //TODO Called by GUI
+    
+    public static String getRarefactionMethodName(){ //TODO Called by RarefactionCalc class
+        
+        return "rarefaction";}
+    
+//        return rarefactionMethodName_;}
     
     public native static void init(RPNumericsProfile profile) throws RpException;
     
@@ -48,7 +62,7 @@ public class RpNumerics {
     
     public static native PhasePoint getXZero();
     
-    public static native double setXZero(PhasePoint xzero);
+    public static native void setXZero(PhasePoint xzero);
     
     public static native double [] getFluxParams();
     
@@ -57,7 +71,7 @@ public class RpNumerics {
     public static native void setRarefactionFlow(PhasePoint xZero);
     
     public static native Boundary boundary();
- 
+    
     //
     // Accessors
     //

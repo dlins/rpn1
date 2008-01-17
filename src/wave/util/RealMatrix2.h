@@ -59,6 +59,19 @@ public:
 };
 
 
+inline void RealMatrix2::range_check(int i, int j) const {
+    if ( ((i < 0) && (i> row_)) || ((j < 0) && (j > col_))  )
+        THROW(RealMatrix2::RangeViolation());
+}
+inline double RealMatrix2::operator()(int i, int j) const {
+    range_check(i, j);
+    return data_.component((row_) + (i*col_ + j));
+}
+
+inline void RealMatrix2::operator ()(int i, int j , double value){
+    range_check(i, j);
+    data_.component((row_) + (i*col_ + j))=value;
+}
 
 
 #endif //! _RealMatrix2_H

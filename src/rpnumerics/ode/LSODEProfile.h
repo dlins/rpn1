@@ -79,8 +79,6 @@ private:
 //         j: The field's Jacobian, for mf = 24 or 25. Otherwise, pass
 //         a dummy function.
     
-    
-    
     double * atol_;
     double *  rwork_;
     double *  param_;
@@ -99,10 +97,6 @@ private:
     int   liw_;
     int    mf_;
     int paramLength_;
-    
-    
-    
-    
     
 public:
 //              neq  ,  itol, rtol, itask,istate, iopt , rwork , lrw ,iwork, liw , mf,

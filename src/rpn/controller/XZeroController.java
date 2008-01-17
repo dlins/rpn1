@@ -68,12 +68,12 @@ public class XZeroController
        * IT HSA TO GET FROM STATIONARY POINT CALC
        */
 
-                if (RpNumerics.getProfile().getFlowType().equals("shockflow")){
+//                if (RpNumerics.getProfile().getFlowType().equals("shockflow")){
                 
                 
                 RpNumerics.setXZero(((StationaryPointCalc) geomFactory_.rpCalc()).getInitPoint());
 
-            }
+//            }
                     
             // UPDATES EIGENS
             super.propertyChange(change);

@@ -1,5 +1,6 @@
 package rpn.component;
 
+import rpnumerics.RarefactionOrbit;
 import wave.multid.view.PolyLine;
 import wave.multid.model.MultiGeometryImpl;
 import wave.multid.view.ViewingTransform;
@@ -7,14 +8,14 @@ import wave.multid.DimMismatchEx;
 import wave.multid.view.ViewingAttr;
 import java.util.ArrayList;
 import java.awt.Shape;
-import rpnumerics.Orbit;
+import java.awt.geom.GeneralPath;
 import rpnumerics.OrbitPoint;
 
 public class RarefactionOrbitView extends PolyLine {
 
 
-    private ArrayList arrowList_;
-    private OrbitPoint[] points_;
+//    private ArrayList arrowList_;
+//    private OrbitPoint[] points_;
 
 
     public RarefactionOrbitView(MultiGeometryImpl geom, ViewingTransform transf,
@@ -25,17 +26,20 @@ public class RarefactionOrbitView extends PolyLine {
 
     public Shape createShape() {
 
-        Orbit source = (Orbit) (((RpGeometry) getAbstractGeom()).geomFactory().
+        
+         GeneralPath composite = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
+          RarefactionOrbit source = (RarefactionOrbit) (((RpGeometry) getAbstractGeom()).geomFactory().
                                 geomSource());
 
+        try {
+            composite.append(super.createShape(), false);
+            
+        } catch (DimMismatchEx ex) {
 
-        System.out.println("Chamando create view");
+            ex.printStackTrace();
 
+        }
 
-
-
-        return null;
-
-
+        return composite;
     }
 }

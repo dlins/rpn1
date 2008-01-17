@@ -94,7 +94,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         }
         for (int i = 0; i < deleteList.size(); i++)
             delete((RpGeometry)deleteList.get(i));
-            if (RpNumerics.getProfile().getFlowType().equals("showflow"))
+//            if (RpNumerics.getProfile().getFlowType().equals("showflow"))
                 
                 changeState(new NumConfigReadyImpl(((NUMCONFIG_READY)state_).hugoniotGeom(), ((NUMCONFIG_READY)state_).xzeroGeom()));
     }

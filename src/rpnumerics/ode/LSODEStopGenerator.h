@@ -37,16 +37,16 @@ private:
     
     //Stop Criterion
     
-    int functionStatus_;
+    
     int totalPoints_;
     int maxPoints_;
-    
+    int functionStatus_;
     
 public:
-        
+    
     LSODEStopGenerator(const int );
-    LSODEStopGenerator (const LSODEStopGenerator &);
-
+    LSODEStopGenerator(const LSODEStopGenerator &);
+    
     LSODEStopGenerator * clone() const ;
     virtual ~LSODEStopGenerator();
     
@@ -54,7 +54,7 @@ public:
     void ncreaseTotalPoints();
     
     int getMaxPoints() const ;
-          
+    
     void increaseTotalPoints();
     void setFunctionStatus( int) ;
     int getFunctionStatus() const ;

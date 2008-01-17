@@ -472,20 +472,20 @@ public class RPnDataModule {
 
     static public void export(FileWriter writer) throws java.io.IOException {
 
-        if ((RpNumerics.getProfile().getFlowType().equals("shockflow"))) {
-            writer.write("<RPDATA>\n");
-            writer.write("<FLOWDATA>\n");
-
-            writer.write("<SHOCKFLOWDATA sigma=\"" +RpNumerics.getSigma() + "\" calcready=\"" + rpn.parser.RPnDataModule.RESULTS + "\">\n");
-            writer.write("<XZERO>\n");
-            writer.write(RpNumerics.getXZero().toXML());
-            writer.write("</XZERO>\n");
-            writer.write("</SHOCKFLOWDATA>\n");
-
-            writer.write("</FLOWDATA>\n");
-            writer.write(PHASESPACE.toXML());
-            writer.write("</RPDATA>\n");
-        }
+//        if ((RpNumerics.getProfile().getFlowType().equals("shockflow"))) {
+//            writer.write("<RPDATA>\n");
+//            writer.write("<FLOWDATA>\n");
+//
+//            writer.write("<SHOCKFLOWDATA sigma=\"" +RpNumerics.getSigma() + "\" calcready=\"" + rpn.parser.RPnDataModule.RESULTS + "\">\n");
+//            writer.write("<XZERO>\n");
+//            writer.write(RpNumerics.getXZero().toXML());
+//            writer.write("</XZERO>\n");
+//            writer.write("</SHOCKFLOWDATA>\n");
+//
+//            writer.write("</FLOWDATA>\n");
+//            writer.write(PHASESPACE.toXML());
+//            writer.write("</RPDATA>\n");
+//        }
 
     }
 }

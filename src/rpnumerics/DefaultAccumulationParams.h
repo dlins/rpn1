@@ -31,6 +31,12 @@ public:
 	AccumulationParams defaultParams(void);
 
 };
+
+inline AccumulationParams DefaultAccumulationParams::defaultParams(void)
+{
+	return * new DefaultAccumulationParams();
+}
+
 //
 //inline DefaultAccumulationParams::DefaultAccumulationParams(void)
 //	: AccumulationParams(* new RealVector())

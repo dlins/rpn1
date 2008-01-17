@@ -23,14 +23,18 @@ public:
         
         virtual ~Quad2FluxParams();
 
-//	static const double DEFAULT_A[2];
-//	static const double DEFAULT_B[2][2];
-//	static const double DEFAULT_C[2][2][2];
+	static const double DEFAULT_A[2];
+	static const double DEFAULT_B[2][2];
+	static const double DEFAULT_C[2][2][2];
 
 	Quad2FluxParams defaultParams(void);
 
 };
 
+inline Quad2FluxParams Quad2FluxParams::defaultParams(void)
+{
+	return Quad2FluxParams();
+}
 
 
 #endif //! _Quad2FluxParams_H

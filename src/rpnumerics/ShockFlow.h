@@ -13,20 +13,35 @@
  * ---------------------------------------------------------------
  * Includes:
  */
-#include "WaveFlow.h"
+#include "RpFunction.h"
 
 /*
  * ---------------------------------------------------------------
  * Definitions:
  */
 
-class ShockFlow : public WaveFlow {
+class ShockFlow : public RpFunction {
+
+protected:
     
-public: 
+    RealVector * xZero_;
+    
+    
+public:
     
     int jet(const int degree, const RealVector &u, JetMatrix &m);
 
+    ShockFlow(const RealVector &);
+    
+    const RealVector * XZero(void) const;
+    void setXZero(const RealVector & xzero) ;
+    virtual ~ShockFlow();
+    
 };
+
+inline int ShockFlow::jet(const int degree, const RealVector &u, JetMatrix &m) {
+    return OK;
+}
 
 
 

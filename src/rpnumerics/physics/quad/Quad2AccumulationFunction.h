@@ -32,10 +32,11 @@ public:
     Quad2AccumulationFunction * clone() const;
     
     int jet(const WaveState&, JetMatrix&, int) const;
-    
-    
+
 };
 
+
+inline Quad2AccumulationFunction::Quad2AccumulationFunction(const AccumulationParams & params) :AccumulationFunction(params) {}
 
 #endif	/* _AccumulationFunction_H */
 

@@ -35,6 +35,12 @@ public:
 	const AccumulationParams & accumulationParams(void);
 
 };
+inline void AccumulationFunction::accumulationParams(const AccumulationParams & params){params_ = params;}
+
+inline const AccumulationParams & AccumulationFunction::accumulationParams(void){return params_;}
+
+inline AccumulationFunction::AccumulationFunction(const AccumulationParams & params) :	params_(params){}
+
 
 
 #endif	/* _AccumulationFunction_H */

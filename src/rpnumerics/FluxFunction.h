@@ -29,7 +29,7 @@ public:
     
     FluxFunction(const FluxParams & params);
     virtual ~FluxFunction(void);
-    FluxParams & fluxParams(void) ;
+    FluxParams & fluxParams(void) const;
     void fluxParams(const FluxParams & params);
     
 };

@@ -18,27 +18,27 @@ public class BackwardManifoldPlotAgent extends RpModelPlotAgent {
     // Constants
     //
     static public final String DESC_TEXT = "Backward Manifold";
-
+    
     //
     // Members
     //
     static private BackwardManifoldPlotAgent instance_ = null;
-
+    
     //
     // Constructors/Initializers
     //
     protected BackwardManifoldPlotAgent() {
         super(DESC_TEXT, RPnConfigReader.MANIFOLD_BWD);
     }
-
+    
     public RpGeometry createRpGeometry(RealVector[] input) {
         RealVector lastPointAdded = input[input.length - 1];
         StationaryPoint statPoint = (StationaryPoint)rpn.parser.RPnDataModule.PHASESPACE.find(lastPointAdded).geomFactory().geomSource();
         ManifoldGeomFactory factory = new ManifoldGeomFactory(
-            new ManifoldOrbitCalc(statPoint, new PhasePoint(lastPointAdded), OrbitGeom.BACKWARD_DIR));
+                new ManifoldOrbitCalc(statPoint, new PhasePoint(lastPointAdded), OrbitGeom.BACKWARD_DIR));
         return factory.geom();
     }
-
+    
     //
     // Accessors/Mutators
     //
