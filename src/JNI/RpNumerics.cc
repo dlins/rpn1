@@ -21,38 +21,81 @@
 #include "Quad2.h"
 #include "Quad2FluxParams.h"
 
+#include "ContinuationRarefactionMethod.h"
+
+#include "LSODEStopGenerator.h"
+#include "LSODEProfile.h"
+#include "LSODE.h"
+
 #include "JNIDefs.h"
 #include <string.h>
 #include <iostream>
 
 using namespace std;
 
-Physics * RpNumerics::physics_=NULL;
+const Physics * RpNumerics::physics_=NULL;
 
-WaveFlow * RpNumerics::flow_=NULL;
+const ShockFlow * RpNumerics::shockFlow_=NULL;
 
-Physics * RpNumerics::getPhysics(){return physics_;}
-const FluxFunction & RpNumerics::getFlux() {return physics_->fluxFunction();}
-WaveFlow *  RpNumerics::getFlow() {return flow_;}
-//ODESolver * RpNumerics::getODESolver(){return solver_;}
+const RarefactionFlow * RpNumerics::rarefactionFlow_=NULL;
 
-void RpNumerics::setPhysics(Physics *physics){physics_=physics;}
-void RpNumerics::setFlow(WaveFlow * flow) {flow_=flow;}
-//void RpNumerics::setODESolver(ODESolver *solver){solver_=solver;}
+RarefactionMethod * RpNumerics::rarefactionMethod_=NULL;
+
+const ODESolver * RpNumerics::odeSolver_=NULL;
+
+double RpNumerics::sigma=0;
+
+int RpNumerics::familyIndex_=0;
 
 
-
-RpNumerics::~RpNumerics(){
-    delete physics_;
-    delete flow_;
+void RpNumerics::initODESolver(){
+    
+    LSODEStopGenerator stopGenerator(1000);
+    
+    int dimension=2;
+    
+    int itol=2;
+    
+    double rtol=1e-4;
+    
+    int mf =22;
+    
+    double deltaxi = 0.001; // Minha escolha
+    
+    int nparam = 1 + dimension;
+    
+    double param [nparam];
+    
+    param[0] = 1; // Family Minha escolha
+    
+    int ii;
+    
+    for (ii = 0; ii < dimension; ii++) param[1 + ii] = 0.1;// Minha escolha  // Reference vector
+    
+    
+    LSODEProfile lsodeProfile(*RpNumerics::getFlux(), stopGenerator, dimension, itol, rtol, mf, deltaxi, nparam, param); // o solver apenas passa nparam e param para a funcao 
+    
+    odeSolver_= new LSODE(lsodeProfile);
+    
+    
+    
 }
-
+void RpNumerics::clean(){
+    
+    delete physics_;
+    delete shockFlow_;
+    delete rarefactionFlow_;
+    delete odeSolver_;
+}
 
 
 JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_init(JNIEnv * env, jclass cls, jobject numericsProfile){
     
     jclass numericsProfileClass = env->FindClass(NUMERICSPROFILE_LOCATION);
     jmethodID getPhysIDMethod = env->GetMethodID(numericsProfileClass, "getPhysicsID", "()Ljava/lang/String;");
+    
+//    jmethodID getFamilyIndexMethod = env->GetMethodID(numericsProfileClass, "getFamilyIndex", "()I");
+    
     jstring ID=  (jstring)env->CallObjectMethod(numericsProfile, getPhysIDMethod);
     
     const char *physicsID;
@@ -67,9 +110,26 @@ JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_init(JNIEnv * env, jclass cls,
     
     if (!strcmp(physicsID, "QuadraticR2")){
         
-        RpNumerics::setPhysics(new Quad2( Quad2FluxParams()));
+        RpNumerics::setPhysics(Quad2(Quad2FluxParams())); //TODO  Create a Quad2 destructor !!
+        
     }
     
+    
+    // Flow instantiation
+    RarefactionFlow rarefactionFlow(1); //TODO Hardcoded flow set
+    
+    RpNumerics::setRarefactionFlow(rarefactionFlow);
+    
+    
+    //Rarefaction curve plot method setting
+    
+    ContinuationRarefactionMethod  rarefactionMethod;
+    
+    RpNumerics::setRarefactionMethod(rarefactionMethod);
+    
+    //ODE solver instantiation
+    
+    RpNumerics::initODESolver();
     
     cout <<"Physics: "<< physicsID <<endl;
     
@@ -195,8 +255,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RpNumerics_getXZero
  * Method:    setXZero
  * Signature: (Lrpnumerics/PhasePoint;)D
  */
-JNIEXPORT jdouble JNICALL Java_rpnumerics_RpNumerics_setXZero
-        (JNIEnv * env, jclass cls, jobject obj);
+JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_setXZero
+        (JNIEnv * env, jclass cls, jobject obj){ }
 
 /*
  * Class:     rpnumerics_RPNUMERICS
@@ -238,11 +298,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RpNumerics_boundary(JNIEnv * env, jcla
     jclass realVectorClass = env->FindClass("wave/util/RealVector");
     
     jmethodID realVectorConstructor = (env)->GetMethodID(realVectorClass, "<init>", "([D)V");
-        
+    
     const Boundary * boundary;
     
     boundary= RpNumerics::getPhysics()->boundary();
-
+    
     
     int borderLength =2; //TODO Saber se boundary eh um RectBoundary ???
     
@@ -252,14 +312,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RpNumerics_boundary(JNIEnv * env, jcla
         
         jmethodID boundaryConstructor = (env)->GetMethodID(boundaryClass, "<init>", "(Lwave/util/RealVector;Lwave/util/RealVector;)V");
         
-        //Hardcoded para quad2 !!
-            
         double minimum [2];
-        double maximum [2];        
+        double maximum [2];
         
         minimum[0]=boundary->minimums().component(0);
+        
         minimum[1]=boundary->minimums().component(1);
-
+        
         maximum[0]=boundary->maximums().component(0);
         maximum[1]=boundary->maximums().component(1);
         

@@ -39,9 +39,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_calc  (JNIEnv * env, jobject
     //Input processing
     jdoubleArray phasePointArray =(jdoubleArray) (env)->CallObjectMethod(initialPoint, toDoubleMethodID);
     
-    double input [2];
+    double input [env->GetArrayLength(phasePointArray)];
     
-    env->GetDoubleArrayRegion(phasePointArray, 0, 2, input);
+    env->GetDoubleArrayRegion(phasePointArray, 0, env->GetArrayLength(phasePointArray), input);
     
     env->DeleteLocalRef(phasePointArray);
     //Calculations
