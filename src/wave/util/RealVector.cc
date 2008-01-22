@@ -118,11 +118,3 @@ void RealVector::sortEigenData(int n, double * eigenValR, double * eigenValI, Re
     }
 }
 
-//
-// No need for accessor and mutator methods! Use 'Vector' methods to access components.
-//
-//void RealVector::setVal(int vindx [], double val){
-//}
-//
-//double RealVector::getVal(int vindex []) const{
-//}

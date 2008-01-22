@@ -39,7 +39,7 @@ public:
     JacobianMatrix &zero(void);
     
     double * operator()(void);
-    double operator()(int i, int j);
+    double operator()(int i, int j) const ;
     void operator()(int i, int j, double value);
     
 };
@@ -66,7 +66,7 @@ inline double * JacobianMatrix::operator()(void) {
     return v_.components();
 }
 
-inline double JacobianMatrix::operator()(int i, int j) {
+inline double JacobianMatrix::operator()(int i, int j) const  {
     range_check(i);
     range_check(j);
     return v_.component(i * n_comps_ + j);

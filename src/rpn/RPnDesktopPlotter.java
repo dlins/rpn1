@@ -82,8 +82,6 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
                 RPnActionMediator.instance().sendMasterOffline();
             }
             
-            System.out.println("Saindo");
-            
             libraryCleanUp();
             
             System.exit(0);

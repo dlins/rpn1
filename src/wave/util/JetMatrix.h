@@ -40,14 +40,14 @@ public:
     virtual ~JetMatrix();
     
     
-    void setF(RealVector &);
+//    void setF(RealVector &);
     void f(RealVector &);
     void jacobian(JacobianMatrix & jMatrix);
     void hessian(HessianMatrix & hMatrix);
     
-    void f(const RealVector &);
-    void jacobian(const JacobianMatrix & jMatrix);
-    void hessian(const HessianMatrix & hMatrix);
+    void setf(const RealVector &);
+    void setjacobian(const JacobianMatrix & jMatrix);
+    void sethessian(const HessianMatrix & hMatrix);
     
     int n_comps(void) const;
     void resize(int n_comps);
@@ -71,14 +71,31 @@ inline void JetMatrix::range_check(int comp) const {
         THROW(JetMatrix::RangeViolation());
 }
 
-inline void JetMatrix::setF(RealVector & input){
-    
-    int i;
-    
-    for (i=0; i < input.size();i++){
-        v_.component(i)=input.component(i);
-    }
+
+inline   JetMatrix & JetMatrix::zero(void) {
+    v_.zero();
+    return *this;
 }
+
+inline  double * JetMatrix::operator()(void) {
+    return v_.components();
+}
+
+inline  double JetMatrix::operator()(int i) {
+    range_check(i);
+    if (!c0_)
+        THROW(JetMatrix::RangeViolation());
+    return v_.component(i);
+}
+
+inline  double JetMatrix::operator()(int i, int j) {
+    range_check(i);
+    range_check(j);
+    if (!c1_)
+        THROW(JetMatrix::RangeViolation());
+    return v_.component((n_comps_) + (i*n_comps_ + j));
+}
+
 
 inline double JetMatrix::operator()(int i, int j, int k) {
     range_check(i);
@@ -97,10 +114,10 @@ inline  void JetMatrix::operator()(int i, double value) {
 }
 
 inline  void JetMatrix::operator()(int i, int j, double value) {
+    
     range_check(i);
     range_check(j);
     c1_=true;
-    
     double * value_ = & v_.component((n_comps_) + (i*n_comps_ + j));
     *value_ = value;
 }
@@ -113,4 +130,81 @@ inline  void JetMatrix::operator()(int i, int j, int k, double value) {
     double * value_ = & v_.component((n_comps_ * (1 + n_comps_)) + (i*n_comps_*n_comps_ + j*n_comps_ + k));
     *value_ = value;
 }
+
+
+
+inline void JetMatrix::sethessian(const HessianMatrix & input){
+    
+    int i, j, k;
+    for (i=0;i < n_comps() ; i++){
+        for (j=0; j < n_comps() ; j++){
+            for (k=0 ;k < n_comps(); k++){
+                
+                operator()(i, j, k, input.operator()(i, j, k));
+                
+            }
+        }
+    }
+}
+
+
+inline void JetMatrix::hessian(HessianMatrix & hMatrix){
+    int i, j, k;
+    for (i=0;i < n_comps() ; i++){
+        for (j=0; j < n_comps() ; j++){
+            for (k=0 ;k < n_comps(); k++){
+                double value = operator()(i, j, k);
+                hMatrix.operator ()(i, j, k, value);
+            }
+        }
+    }
+}
+
+inline void JetMatrix::setf(const RealVector &input){
+    int i;
+    for (i=0;i< n_comps();i++){
+        operator()(i, input.component(i));
+    }
+    
+    
+}
+
+inline void JetMatrix::f(RealVector & vector){
+    
+    int i;
+    for (i=0; i < n_comps();i++){
+        
+        vector.component(i)=operator()(i);
+    }
+}
+
+
+inline void JetMatrix::setjacobian(const JacobianMatrix & input){
+    
+    int i, j;
+    for(i=0;i< n_comps();i++){
+        for (j=0; j < n_comps();j++){
+            operator()(i, j, input.operator ()(i, j));
+        }
+    }
+    
+    
+}
+
+inline void JetMatrix::jacobian(JacobianMatrix &jMatrix){
+    
+    int i, j;
+    for (i=0;i < n_comps(); i++){
+        for (j=0; j < n_comps();j++ ){
+            double value = operator()(i, j);
+            jMatrix.operator ()(i, j, value);
+        }
+    }
+}
+
+
+
+
+
+
 #endif //! _JetMatrix_H
