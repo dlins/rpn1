@@ -114,19 +114,10 @@ JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_init(JNIEnv * env, jclass cls,
         
     }
     
-    
     // Flow instantiation
     RarefactionFlow rarefactionFlow(1); //TODO Hardcoded flow set
     
-//    rarefactionFlow.setReferenceVector(RealVector(2));
-    
     RpNumerics::setRarefactionFlow(rarefactionFlow);
-
-    //Rarefaction curve plot method setting
-    
-    ContinuationRarefactionMethod  rarefactionMethod;
-    
-    RpNumerics::setRarefactionMethod(rarefactionMethod);
     
     //ODE solver instantiation
     

@@ -18,7 +18,9 @@
  */
 
 
- RarefactionMethod::~RarefactionMethod(){};
+RarefactionMethod::RarefactionMethod(const RarefactionFlow & flow):rarefactionFlow_((RarefactionFlow*)flow.clone()){}
+
+RarefactionMethod::~RarefactionMethod(){ delete rarefactionFlow_;}
 
 
 

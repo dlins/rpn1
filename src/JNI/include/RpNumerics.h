@@ -52,10 +52,6 @@ public:
     
     static const ODESolver * getODESolver();
     
-    static void setRarefactionMethod(const RarefactionMethod &);
-    
-    static const RarefactionMethod * getRarefactionMethod(const char *);
-    
     static  void initODESolver();
     
     static void setSigma(double );
@@ -74,18 +70,9 @@ public:
     
 };
 
-inline void RpNumerics::setRarefactionMethod(const RarefactionMethod & rarefactionMethod){
-    delete rarefactionMethod_;
-    rarefactionMethod_= rarefactionMethod.clone();
-}
 
-inline  const RarefactionMethod * RpNumerics::getRarefactionMethod(const char * methodName) {
-    
-    if (!strcmp(methodName,"ContinuationRarefactionMethod")){
-        
-    }
-    return rarefactionMethod_;
-}
+
+
 
 inline void RpNumerics::setFamilyIndex(int familyIndex){familyIndex_=familyIndex;}
 

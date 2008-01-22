@@ -13,7 +13,6 @@
  * ---------------------------------------------------------------
  * Includes:
  */
-//#include "RpNumerics.h"
 #include "RpFunction.h"
 #include "WaveState.h"
 

@@ -33,7 +33,7 @@ public:
     
     RarefactionMethod * clone() const;
     
-    ContinuationRarefactionMethod();
+    ContinuationRarefactionMethod(const RarefactionFlow &);
     
     ContinuationRarefactionMethod(const ContinuationRarefactionMethod &);
     

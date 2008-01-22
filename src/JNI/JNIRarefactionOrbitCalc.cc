@@ -11,6 +11,8 @@
  * Includes:
  */
 #include "rpnumerics_RarefactionOrbitCalc.h"
+#include "RarefactionMethodFactory.h"
+#include "RarefactionFlowFactory.h"
 #include "RpNumerics.h"
 #include "RealVector.h"
 #include "JNIDefs.h"
@@ -24,7 +26,7 @@ using std::vector;
  */
 
 
-JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc  (JNIEnv * env, jobject obj, jstring methodName, jobject initialPoint, jint timeDirection ){
+JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc  (JNIEnv * env, jobject obj, jstring methodName, jstring flowName, jobject initialPoint, jint timeDirection ){
     
     unsigned int i;
     
@@ -60,17 +62,32 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc  (JNIEnv * e
         cerr <<"Error in method string name ! "<<endl;
     }
     
-    const RarefactionMethod * rarefactionMethod=  RpNumerics::getRarefactionMethod(method);
     
-    RarefactionMethod * localRarefactionMethod = rarefactionMethod->clone();
+    cout <<"Method name: "<<method<<endl;
+    //Getting the flow
+    
+    const char * flow= env->GetStringUTFChars(flowName, NULL);
+    
+    if (flow == NULL) {
+        cerr <<"Error in flow string name ! "<<endl;
+    }
+    
+    cout <<"Flow name: "<<flow<<endl;
+    
+    RarefactionFlow *  rarefactionFlow = RarefactionFlowFactory::getRarefactionFlow(flow, timeDirection);
+    
+    RarefactionMethod * rarefactionMethod=  RarefactionMethodFactory::getRarefactionMethod(method, *rarefactionFlow);
     
     env->ReleaseStringUTFChars(methodName, method);
     
+    env->ReleaseStringUTFChars(flowName, flow);
+    
     //Calculations
     
-    vector <RealVector> coords = localRarefactionMethod->curve(realVectorInput, timeDirection);
+    vector <RealVector> coords = rarefactionMethod->curve(realVectorInput,rarefactionFlow->getFamilyIndex());
     
-    delete localRarefactionMethod;
+    delete rarefactionFlow;
+    delete rarefactionMethod;
     
     //Orbit memebers creation
     

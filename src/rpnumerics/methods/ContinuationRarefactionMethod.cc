@@ -22,11 +22,14 @@
 //! Code comes here! daniel@impa.br
 
 
-ContinuationRarefactionMethod::ContinuationRarefactionMethod(){}
+ContinuationRarefactionMethod::ContinuationRarefactionMethod(const RarefactionFlow & flow ):RarefactionMethod((RarefactionFlow &)*flow.clone()){}
 
-ContinuationRarefactionMethod::ContinuationRarefactionMethod(const ContinuationRarefactionMethod & copy){
+ContinuationRarefactionMethod::ContinuationRarefactionMethod(const ContinuationRarefactionMethod & copy):RarefactionMethod(*copy.getFlow()){
     
     increase_=copy.direction();
+
+    
+    
 }
 
 
@@ -59,9 +62,11 @@ vector<RealVector> ContinuationRarefactionMethod::curve(const RealVector & initi
     
     // 1. Find the eigenvalue and the eigenvector at in (the initial point)
     
-    RarefactionFlow rarefactionFlow(*RpNumerics::getRarefactionFlow());
+    RarefactionFlow * rarefactionFlow  =(RarefactionFlow *)getFlow()->clone();
+   
+   
     
-    rarefactionFlow.setReferenceVector(initialPoint);
+    rarefactionFlow->setReferenceVector(initialPoint);
     
     int dimensionSize= initialPoint.size();
     
@@ -71,7 +76,7 @@ vector<RealVector> ContinuationRarefactionMethod::curve(const RealVector & initi
     
     JetMatrix output(dimensionSize);
     
-    status = rarefactionFlow.jet(input, output, 0);
+    status = rarefactionFlow->jet(input, output, 0);
     
     RealVector refVector(dimensionSize);
     
@@ -88,7 +93,7 @@ vector<RealVector> ContinuationRarefactionMethod::curve(const RealVector & initi
     vector<RealVector> returned;
     
     
-    double lambda = rarefactionFlow.lambdaCalc(input, rarefactionFlow.getFamilyIndex()); // lambda
+    double lambda = rarefactionFlow->lambdaCalc(input, rarefactionFlow->getFamilyIndex()); // lambda
     
     if (lambda == COMPLEX_EIGENVALUE) return returned;
     
@@ -106,17 +111,17 @@ vector<RealVector> ContinuationRarefactionMethod::curve(const RealVector & initi
         tempWaveState.operator ()(ii)=initialPoint.operator ()(ii)+epsilon*refVector.component(ii);
     }
     
-    lambdap=rarefactionFlow.lambdaCalc(tempWaveState, rarefactionFlow.getFamilyIndex());
+    lambdap=rarefactionFlow->lambdaCalc(tempWaveState, rarefactionFlow->getFamilyIndex());
     
     if (lambdap == COMPLEX_EIGENVALUE) return returned;
     
     for (ii = 0; ii < dimensionSize; ii++){
         
-        tempWaveState.operator ()(ii)=initialPoint.operator ()(ii)-epsilon*rarefactionFlow.getReferenceVector().component(ii);
+        tempWaveState.operator ()(ii)=initialPoint.operator ()(ii)-epsilon*rarefactionFlow->getReferenceVector().component(ii);
         
     }
     
-    lambdam=rarefactionFlow.lambdaCalc(tempWaveState, rarefactionFlow.getFamilyIndex());
+    lambdam=rarefactionFlow->lambdaCalc(tempWaveState, rarefactionFlow->getFamilyIndex());
     
     if (lambdam == COMPLEX_EIGENVALUE) return returned;
     
@@ -130,14 +135,14 @@ vector<RealVector> ContinuationRarefactionMethod::curve(const RealVector & initi
         }
         else if (lambda < lambdap && lambda > lambdam){
             
-            rarefactionFlow.setReferenceVector(refVector);
+            rarefactionFlow->setReferenceVector(refVector);
 //            // Nothing to do, the eigenvector is rev.
         }
         else if (lambda > lambdap && lambda < lambdam){
 //            for (ii = 0; ii < n; ii++) rev[ii] = -rev[ii];
             
             refVector.negate();
-            rarefactionFlow.setReferenceVector(refVector);
+            rarefactionFlow->setReferenceVector(refVector);
             
         }
         else {
@@ -156,12 +161,12 @@ vector<RealVector> ContinuationRarefactionMethod::curve(const RealVector & initi
         }
         else if (lambda > lambdap && lambda < lambdam){
             // Nothing to do, the eigenvector is rev.
-            rarefactionFlow.setReferenceVector(refVector);
+            rarefactionFlow->setReferenceVector(refVector);
         }
         else if (lambda < lambdap && lambda > lambdam){
             //for (ii = 0; ii < n; ii++) rev[ii] = -rev[ii];
             refVector.negate();
-            rarefactionFlow.setReferenceVector(refVector);
+            rarefactionFlow->setReferenceVector(refVector);
             
         }
         else {

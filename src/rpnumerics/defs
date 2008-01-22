@@ -23,8 +23,10 @@ CPPFLAGS += -I $(RPNUMERICSDIR) -g3
 PHYSICSDIR = $(RPNUMERICSDIR)/physics
 ODEDIR = $(RPNUMERICSDIR)/ode
 METHODSDIR = $(RPNUMERICSDIR)/methods
+FACTORIESDIR = $(RPNUMERICSDIR)/factories
 
 include $(METHODSDIR)/defs
+include $(FACTORIESDIR)/defs
 include $(PHYSICSDIR)/defs
 include $(ODEDIR)/defs
 

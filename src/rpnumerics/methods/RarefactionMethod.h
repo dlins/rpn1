@@ -16,6 +16,7 @@
 
 #include <vector>
 #include "RealVector.h"
+#include "RarefactionFlow.h"
 /*
  * ---------------------------------------------------------------
  * Definitions:
@@ -23,20 +24,30 @@
 
 class RarefactionMethod {
     
+private:
+    
+    RarefactionFlow * rarefactionFlow_;
     
 public:
+    RarefactionMethod(const RarefactionFlow &);
+    
+    
+    virtual vector<RealVector> curve(const RealVector &, int ) =0 ;
+    
+    virtual RarefactionMethod * clone() const =0;
+    
+    virtual int direction() const =0;
+    
+    virtual ~RarefactionMethod();
+    
+    const RarefactionFlow * getFlow()const ;
+    
 
-virtual vector<RealVector> curve(const RealVector &, int ) =0 ;
-
-virtual RarefactionMethod * clone() const =0;
-
-virtual int direction() const =0;
-
-virtual ~RarefactionMethod();
-
-
+    
+    
 };
 
+inline const RarefactionFlow * RarefactionMethod::getFlow() const {return rarefactionFlow_;}
 
 
 #endif //! _RarefactionMethod_H
