@@ -54,11 +54,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc  (JNIEnv * e
     
     //Getting the method
     
-    RarefactionMethod * rarefactionMethod=  RpNumerics::getRarefactionMethod();
+    RarefactionMethod * rarefactionMethod=  RpNumerics::getRarefactionMethod()->clone();
     
     //Calculations
     
     vector <RealVector> coords = rarefactionMethod->curve(realVectorInput, timeDirection);
+    
+    delete rarefactionMethod;
     
     //Orbit memebers creation
     
@@ -101,7 +103,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc  (JNIEnv * e
     //Cleaning up
     
     coords.clear();
-
+    
     env->DeleteLocalRef(orbitPointArray);
     env->DeleteLocalRef(classOrbitPoint);
     env->DeleteLocalRef(classRarefactionOrbit);

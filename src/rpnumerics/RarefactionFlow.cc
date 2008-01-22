@@ -18,11 +18,62 @@
  */
 
 
-double RarefactionFlow::lambda_=0;
+//double RarefactionFlow::lambda_=0;
 
-RealVector * RarefactionFlow::referenceVector_=NULL;
+//RealVector * RarefactionFlow::referenceVector_=NULL;
 
 RpFunction * RarefactionFlow::clone() const {return new RarefactionFlow(*this);}
+
+
+
+double RarefactionFlow::lambdaCalc(const WaveState & in, int family){
+    
+    int n=in.stateSpaceDim();
+    
+    int i, j, status, info;
+    
+    double J[n][n];
+    
+    int lda = n, lwork = 5*n, ldvr = n, ldvl = n;
+    
+    double vr[n][n], vl[n][n];
+    double work[5*n], wi[n], wr[n];
+    
+    
+    JetMatrix jetMatrix(n);
+    
+    const FluxFunction * fluxFunction= RpNumerics::getFlux();
+    
+    status=fluxFunction->jet(in, jetMatrix, 1); //This function must return the same codes of LSODE s functions
+    
+    for(i=0;i< n;i++){
+        for(j=0;j< n;j++){
+            J[i][j]=jetMatrix.operator ()(i, j);
+        }
+    }
+    //    DF(n, in, &J[0][0]);
+    
+    // Find J's eigencouples and sort them.
+    
+    struct eigen e[n];
+    
+    dgeev_("N", "N", &n, &J[0][0], &lda, &wr[0], &wi[0],
+            &vl[0][0], &ldvl, &vr[0][0], &ldvr, &work[0], &lwork,
+            &info);
+    
+// Process the results
+    if (info != 0) return ABORTED_PROCEDURE;
+    
+    transpose(&vl[0][0], n); // ...or else...
+    transpose(&vr[0][0], n); // ...or else...
+    fill_eigen(e, &wr[0], &wi[0], &vl[0][0], &vr[0][0]);
+    sort_eigen(e);
+    
+    if (e[family].i != 0) return COMPLEX_EIGENVALUE;
+    
+    return e[family].r;
+    
+}
 
 
 int RarefactionFlow::flux(int n,  int family,  double *in, double *out)const {
@@ -46,7 +97,7 @@ int RarefactionFlow::flux(int n,  int family,  double *in, double *out)const {
     
     for(i=0;i< n;i++){
         for(j=0;j< n;j++){
-            J[i][j]=jetMatrix(i, j);
+            J[i][j]=jetMatrix.operator ()(i, j);
         }
     }
     //    DF(n, in, &J[0][0]);
@@ -59,8 +110,6 @@ int RarefactionFlow::flux(int n,  int family,  double *in, double *out)const {
     info = cdgeev(n, &J[0][0], &e[0]);
     
     if (e[family].i != 0) return COMPLEX_EIGENVALUE;
-    
-    setLambda(e[family].r);
     
 //        *lambda = e[family].r;
     
@@ -193,33 +242,34 @@ int RarefactionFlow::jet(const WaveState &u, JetMatrix &m, int degree)const {
         in[i]=u(i);
     }
     
-    RealVector output(dimensionSize);
+    RealVector outputVector(dimensionSize);
     
     switch (degree){
-        
         case 0:
+            
             returnValue = flux(dimensionSize, familyIndex_, &in[0], &out[0]);
             for (i=0;i < dimensionSize;i++){
-                output.component(i)=out[i];
                 m.operator()(i, out[i]);
             }
             
             break;
             
         case 1:
-//            cout << "Chamando Jacobiano do rarefaction"<<endl;
-            returnValue= -7;
+            
+            //TODO
+            
+            returnValue=-7;
             break;
             
         case 2:
+            //TODO
             
-//            cout <<"Chamando hessiano do rarefaction"<<endl;
             returnValue= -7;
             
             break;
             
-//        default:
-////            cout <<"Erro na escolha do grau"<<endl;
+        default:
+            cout <<"Erro na escolha do grau"<<endl;
     }
     
     return returnValue;
@@ -227,25 +277,23 @@ int RarefactionFlow::jet(const WaveState &u, JetMatrix &m, int degree)const {
 
 
 RarefactionFlow::RarefactionFlow(const RarefactionFlow & copy ){
-    
     familyIndex_=copy.getFamilyIndex();
-    
+    referenceVector_= new RealVector(copy.getReferenceVector());
 }
+
 
 RarefactionFlow::RarefactionFlow(const int familyIndex){
     
     //TODO Pegar o family index do RpNumerics
-    familyIndex_= RpNumerics::getFamilyIndex();
-//    familyIndex_=1;
     
-//    familyIndex_=familyIndex;
+    familyIndex_= familyIndex;
+    referenceVector_= new RealVector(RpNumerics::getPhysics()->domain().dim());
 }
 
 RarefactionFlow::RarefactionFlow(const RealVector & referenceVector, const int familyIndex){
     
     //TODO Pegar o family index do RpNumerics
-    familyIndex_= RpNumerics::getFamilyIndex();
-//    familyIndex_=familyIndex;
+    familyIndex_= familyIndex;
     referenceVector_=new RealVector(referenceVector);
 }
 
@@ -255,6 +303,39 @@ RarefactionFlow::~RarefactionFlow(){
     
 }
 
+
+//double RarefactionFlow::lambdaCalc(int family,JetMatrix  & J) {
+//
+//    int n=RpNumerics::getPhysics()->domain().dim();
+//
+//    int lda = n, lwork = 5*n, ldvr = n, ldvl = n;
+//    int i, j,info;
+//    double vr[n][n], vl[n][n];
+//    double work[5*n], wi[n], wr[n];
+//
+//    struct eigen e[n];
+//
+//    double B[n][n];
+//    for (i = 0; i < n; i++){
+//        for (j = 0; j < n; j++) B[j][i] = J.operator ()(i,j);
+//    }
+//
+//    dgeev_("N", "N", &n, &B[0][0], &lda, &wr[0], &wi[0],
+//            &vl[0][0], &ldvl, &vr[0][0], &ldvr, &work[0], &lwork,
+//            &info);
+//// Process the results
+//
+//    transpose(&vl[0][0], n); // ...or else...
+//    transpose(&vr[0][0], n); // ...or else...
+//    fill_eigen(e, &wr[0], &wi[0], &vl[0][0], &vr[0][0]);
+//    sort_eigen(e);
+//
+//    if (e[family].i != 0 && info!=0)
+//        return COMPLEX_EIGENVALUE;
+//
+//    return (e[family].r);
+//
+//}
 
 int RarefactionFlow::cdgeev(int n, double *A, struct eigen *e)const {
     int lda = n, lwork = 5*n, ldvr = n, ldvl = n;

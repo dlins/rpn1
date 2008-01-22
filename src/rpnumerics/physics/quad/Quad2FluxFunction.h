@@ -26,6 +26,8 @@ class Quad2FluxFunction : public FluxFunction {
 
 public:
 	Quad2FluxFunction(const Quad2FluxParams &);
+        
+        Quad2FluxFunction (const Quad2FluxFunction &);
 
         virtual ~Quad2FluxFunction(void);
         

@@ -10,7 +10,7 @@ ODESolverProfile::ODESolverProfile(){}
 ODESolverProfile::ODESolverProfile(const ODESolverProfile & copy){ function_=copy.getFunction()->clone();}
 
 ODESolverProfile & ODESolverProfile::operator=(const ODESolverProfile & source ){
-
+    
     if (this==&source)
         return *this;
     function_=source.getFunction()->clone();
@@ -19,8 +19,8 @@ ODESolverProfile & ODESolverProfile::operator=(const ODESolverProfile & source )
 
 
 ODESolverProfile::~ODESolverProfile(){
-
-//    delete function_;
+    
+    delete function_;
     delete stopGenerator_;
     
 }

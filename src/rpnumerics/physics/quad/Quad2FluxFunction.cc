@@ -23,6 +23,16 @@ Quad2FluxFunction::Quad2FluxFunction(const Quad2FluxParams & params) : FluxFunct
 {
 }
 
+
+Quad2FluxFunction::Quad2FluxFunction(const Quad2FluxFunction & copy):FluxFunction(copy.fluxParams()){
+    
+
+
+    
+}
+
+
+
 Quad2FluxFunction * Quad2FluxFunction::clone() const {
     return new Quad2FluxFunction(*this);
 }

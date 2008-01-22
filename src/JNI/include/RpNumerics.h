@@ -30,7 +30,7 @@ private:
     
     static const RarefactionFlow * rarefactionFlow_;
     
-    static RarefactionMethod * rarefactionMethod_;
+    static const RarefactionMethod * rarefactionMethod_;
     
     static const ODESolver * odeSolver_;
     
@@ -46,16 +46,15 @@ public:
     
     static const ShockFlow * getShockFlow();
     
-    static const RarefactionFlow * getRarefactionFlow();
+    static const   RarefactionFlow * getRarefactionFlow();
     
     static void setRarefactionFlow(const RarefactionFlow &);
     
     static const ODESolver * getODESolver();
     
-    
     static void setRarefactionMethod(const RarefactionMethod &);
     
-    static RarefactionMethod * getRarefactionMethod();
+    static const RarefactionMethod * getRarefactionMethod();
     
     static  void initODESolver();
     
@@ -80,7 +79,7 @@ inline void RpNumerics::setRarefactionMethod(const RarefactionMethod & rarefacti
     rarefactionMethod_= rarefactionMethod.clone();
 }
 
-inline  RarefactionMethod * RpNumerics::getRarefactionMethod() {return rarefactionMethod_;}
+inline  const RarefactionMethod * RpNumerics::getRarefactionMethod() {return rarefactionMethod_;}
 
 inline void RpNumerics::setFamilyIndex(int familyIndex){familyIndex_=familyIndex;}
 

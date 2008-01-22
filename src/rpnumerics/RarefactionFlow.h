@@ -99,9 +99,9 @@ private:
     
     int flux(int n, int family, double *in,  double *out) const;
     
-    static RealVector * referenceVector_;
+    RealVector * referenceVector_;
     
-    static double lambda_;
+    double lambda_;
     
     
     
@@ -112,18 +112,20 @@ public:
     
     RarefactionFlow(const int);
     
-    static  const RealVector & getReferenceVector();
-
-    static void setReferenceVector(const RealVector & );
-    
     RarefactionFlow(const RarefactionFlow &);
+    
+    const RealVector & getReferenceVector() const;
+    
+    void setReferenceVector(const RealVector & );
     
     RpFunction * clone() const;
     
+    double lambdaCalc(const WaveState & , int );
+    
     virtual ~RarefactionFlow();
     
-    static void setLambda(const double );
-    static  double getLambda();
+    void setLambda(const double );
+    double getLambda();
     
     int getFamilyIndex()const;
     void setFamilyIndex(int);
@@ -132,7 +134,9 @@ public:
 
 
 inline void RarefactionFlow::setLambda(const double lambda){lambda_=lambda;}
+
 inline double RarefactionFlow::getLambda(){return lambda_;}
+
 inline int RarefactionFlow::getFamilyIndex()const {return familyIndex_;}
 
 inline void RarefactionFlow::setFamilyIndex(int familyIndex ) {familyIndex_=familyIndex;}
@@ -143,7 +147,7 @@ inline double RarefactionFlow::prodint(int n, double *a, double *b)const {
 }
 
 
-inline const RealVector & RarefactionFlow::getReferenceVector(){return *referenceVector_;}
+inline const RealVector & RarefactionFlow::getReferenceVector() const {return *referenceVector_;}
 //
 inline void RarefactionFlow::setReferenceVector(const RealVector & referenceVector){
     delete referenceVector_;

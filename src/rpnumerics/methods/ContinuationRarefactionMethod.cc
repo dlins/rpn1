@@ -59,11 +59,9 @@ vector<RealVector> ContinuationRarefactionMethod::curve(const RealVector & initi
     
     // 1. Find the eigenvalue and the eigenvector at in (the initial point)
     
-    //    double lambda,  rev[n];  // Lambda, reference eigenvector
+    RarefactionFlow rarefactionFlow(*RpNumerics::getRarefactionFlow());
     
-    const RarefactionFlow * rarefactionFlow = RpNumerics::getRarefactionFlow();
-    
-    rarefactionFlow->setReferenceVector(initialPoint);
+    rarefactionFlow.setReferenceVector(initialPoint);
     
     int dimensionSize= initialPoint.size();
     
@@ -73,56 +71,54 @@ vector<RealVector> ContinuationRarefactionMethod::curve(const RealVector & initi
     
     JetMatrix output(dimensionSize);
     
-    status = rarefactionFlow->jet(input, output, 0);
+    status = rarefactionFlow.jet(input, output, 0);
     
     RealVector refVector(dimensionSize);
     
     for (i=0;i < dimensionSize; i++){
         
-        refVector.component(i)=output.operator()(i);
+        refVector.component(i)=output.operator()(i); //e
         
     }
-    double lambda = rarefactionFlow->getLambda();
-    
-//    cout <<"Valor de lambda: "<<lambda<<endl;
-    
-//    if (flux(n, indx, in, &lambda, &rev[0]) == COMPLEX_EIGENVALUE) return COMPLEX_EIGENVALUE;
     
     
+    
+    
+    
+    vector<RealVector> returned;
+    
+    
+    double lambda = rarefactionFlow.lambdaCalc(input, rarefactionFlow.getFamilyIndex()); // lambda
+    
+    if (lambda == COMPLEX_EIGENVALUE) return returned;
     
     // 2. and 3. Find the eigencouples at in_plus and in_minus.
     double epsilon = 1e-5;
+    
     double lambdap, lambdam; // Lambda_plus, lambda_minus
-//    double inp[n], inm[n];   // In_plus and in_minus
-//    double rep[n], rem[n];   // Eigenvectors at in_plus and in_minus
     
     WaveState tempWaveState(dimensionSize);
     
     int ii;
     
     for (ii = 0; ii < dimensionSize; ii++){
+        
         tempWaveState.operator ()(ii)=initialPoint.operator ()(ii)+epsilon*refVector.component(ii);
     }
     
-    status=rarefactionFlow->jet(tempWaveState, output, 0);
+    lambdap=rarefactionFlow.lambdaCalc(tempWaveState, rarefactionFlow.getFamilyIndex());
     
-//    if (status ==COMPLEX_EIGENVALUE) return NULL;//COMPLEX_EIGENVALUE;
-    
-    lambdap=rarefactionFlow->getLambda();
+    if (lambdap == COMPLEX_EIGENVALUE) return returned;
     
     for (ii = 0; ii < dimensionSize; ii++){
         
-        tempWaveState.operator ()(ii)=initialPoint.operator ()(ii)-epsilon*rarefactionFlow->getReferenceVector().component(ii);
+        tempWaveState.operator ()(ii)=initialPoint.operator ()(ii)-epsilon*rarefactionFlow.getReferenceVector().component(ii);
         
     }
-    status=rarefactionFlow->jet(tempWaveState, output, 0);
     
-//    if (status ==COMPLEX_EIGENVALUE) return NULL;//COMPLEX_EIGENVALUE;
+    lambdam=rarefactionFlow.lambdaCalc(tempWaveState, rarefactionFlow.getFamilyIndex());
     
-    lambdam=rarefactionFlow->getLambda();
-    
-//    if (flux(n, indx, inp, &lambdap, &rep[0]) == COMPLEX_EIGENVALUE) return COMPLEX_EIGENVALUE;
-//    if (flux(n, indx, inm, &lambdam, &rem[0]) == COMPLEX_EIGENVALUE) return COMPLEX_EIGENVALUE;
+    if (lambdam == COMPLEX_EIGENVALUE) return returned;
     
 //    // 4. Find the reference eigenvector.
     if (increase == 1){ // Eigenvalues should increase as the orbit advances
@@ -133,13 +129,15 @@ vector<RealVector> ContinuationRarefactionMethod::curve(const RealVector & initi
 //            return NULL;//LAMBDA_NOT_INCREASING;
         }
         else if (lambda < lambdap && lambda > lambdam){
+            
+            rarefactionFlow.setReferenceVector(refVector);
 //            // Nothing to do, the eigenvector is rev.
         }
         else if (lambda > lambdap && lambda < lambdam){
 //            for (ii = 0; ii < n; ii++) rev[ii] = -rev[ii];
             
             refVector.negate();
-            rarefactionFlow->setReferenceVector(refVector);
+            rarefactionFlow.setReferenceVector(refVector);
             
         }
         else {
@@ -158,11 +156,12 @@ vector<RealVector> ContinuationRarefactionMethod::curve(const RealVector & initi
         }
         else if (lambda > lambdap && lambda < lambdam){
             // Nothing to do, the eigenvector is rev.
+            rarefactionFlow.setReferenceVector(refVector);
         }
         else if (lambda < lambdap && lambda > lambdam){
             //for (ii = 0; ii < n; ii++) rev[ii] = -rev[ii];
             refVector.negate();
-            rarefactionFlow->setReferenceVector(refVector);
+            rarefactionFlow.setReferenceVector(refVector);
             
         }
         else {

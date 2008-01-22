@@ -39,7 +39,7 @@ const ShockFlow * RpNumerics::shockFlow_=NULL;
 
 const RarefactionFlow * RpNumerics::rarefactionFlow_=NULL;
 
-RarefactionMethod * RpNumerics::rarefactionMethod_=NULL;
+const RarefactionMethod * RpNumerics::rarefactionMethod_=NULL;
 
 const ODESolver * RpNumerics::odeSolver_=NULL;
 
@@ -117,6 +117,8 @@ JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_init(JNIEnv * env, jclass cls,
     
     // Flow instantiation
     RarefactionFlow rarefactionFlow(1); //TODO Hardcoded flow set
+    
+//    rarefactionFlow.setReferenceVector(RealVector(2));
     
     RpNumerics::setRarefactionFlow(rarefactionFlow);
 
