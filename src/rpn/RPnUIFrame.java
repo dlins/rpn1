@@ -118,10 +118,14 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         toolBar.add(BackwardManifoldPlotAgent.instance().getContainer());
         toolBar.add(StationaryPointPlotAgent.instance().getContainer());
         toolBar.add(PoincareSectionPlotAgent.instance().getContainer());
-        toolBar.add(RarefactionForwardOrbitPlotAgent.instance().
-                getContainer());
-        toolBar.add(RarefactionBackwardOrbitPlotAgent.instance().
-                getContainer());
+//        toolBar.add(RarefactionForwardOrbitPlotAgent.instance().
+//                getContainer());
+//        toolBar.add(RarefactionBackwardOrbitPlotAgent.instance().
+//                getContainer());
+//      
+        
+        
+        
         
     }
     
@@ -157,6 +161,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         
 
         curveButtonPanel.add(CurvePlotAgent.instance().getContainer());
+        
+        
+        CurvePlotAgent.instance().setEnabled(true); //TODO Remove from here !
         
         
         
