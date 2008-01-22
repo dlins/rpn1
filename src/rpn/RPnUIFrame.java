@@ -6,10 +6,7 @@
 
 package rpn;
 
-import rpn.controller.ui.*;
 import rpn.usecase.*;
-import rpn.RPnConfigReader;
-import rpn.message.*;
 import rpn.parser.*;
 import rpnumerics.RpNumerics;
 import wave.util.Boundary;
@@ -29,7 +26,11 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     //
     // Members
     //
-    JPanel contentPane;
+    JPanel contentPane, dropDownPanel, curveButtonPanel;
+    
+    Choice methodChoice, flowChoice;
+
+    
     JMenuBar jMenuBar1 = new JMenuBar();
     JCheckBox resultsOption = new JCheckBox("Save With Results");
     JMenu jMenuFile = new JMenu();
@@ -44,6 +45,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     
     JMenu modelInteractionMenu = new JMenu();
     JToolBar toolBar = new JToolBar();
+    
     JMenuItem createJPEGImageMenuItem = new JMenuItem();
     JMenuItem printMenuItem = new JMenuItem();
     JMenuItem clearPhaseSpaceMenuItem = new JMenuItem();
@@ -98,26 +100,18 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     
     protected void createToolBar() {
         
-//        if (RpNumerics.getProfile().getFlowType().equals("shockflow")) {
-            toolBar.add(ForwardOrbitPlotAgent.instance().getContainer());
-            toolBar.add(BackwardOrbitPlotAgent.instance().getContainer());
-            toolBar.add(ForwardManifoldPlotAgent.instance().getContainer());
-            toolBar.add(BackwardManifoldPlotAgent.instance().getContainer());
-            toolBar.add(StationaryPointPlotAgent.instance().getContainer());
-            toolBar.add(PoincareSectionPlotAgent.instance().getContainer());
-//            return;
-//        }
+        toolBar.setFloatable(false);
         
-//        if (RpNumerics.getProfile().getFlowType().equals("rarefactionflow") ||
-//                RpNumerics.getProfile().getFlowType().equals("blowuprarefactionflow")) {
-            
-            toolBar.add(RarefactionForwardOrbitPlotAgent.instance().
-                    getContainer());
-            toolBar.add(RarefactionBackwardOrbitPlotAgent.instance().
-                    getContainer());
-//            return;
-//        }
-        
+        toolBar.add(ForwardOrbitPlotAgent.instance().getContainer());
+        toolBar.add(BackwardOrbitPlotAgent.instance().getContainer());
+        toolBar.add(ForwardManifoldPlotAgent.instance().getContainer());
+        toolBar.add(BackwardManifoldPlotAgent.instance().getContainer());
+        toolBar.add(StationaryPointPlotAgent.instance().getContainer());
+        toolBar.add(PoincareSectionPlotAgent.instance().getContainer());
+        toolBar.add(RarefactionForwardOrbitPlotAgent.instance().
+                getContainer());
+        toolBar.add(RarefactionBackwardOrbitPlotAgent.instance().
+                getContainer());
         toolBar.add(ForwardOrbitPlotAgent.instance().getContainer());
         toolBar.add(BackwardOrbitPlotAgent.instance().getContainer());
         toolBar.add(ForwardManifoldPlotAgent.instance().getContainer());
@@ -136,7 +130,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private void jbInit() throws Exception {
         //setIconImage(Toolkit.getDefaultToolkit().createImage(ShockFlowControlFrame.class.getResource("[Your Icon]")));
         
-        
+        borderLayout1.setHgap(10);
+        borderLayout1.setVgap(10);
         contentPane = (JPanel)this.getContentPane();
         contentPane.setLayout(borderLayout1);
         this.setSize(new Dimension(400, 300));
@@ -144,6 +139,26 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         this.setTitle("");
         jMenuFile.setText("File");
         jMenuFileExit.setText("Exit");
+        
+        GridLayout dropDownPanelLayout = new GridLayout(2,1,20,20);
+        dropDownPanel = new JPanel(dropDownPanelLayout);
+        dropDownPanel.setSize(300,300);
+        
+        methodChoice= new Choice();
+        flowChoice  = new Choice();
+
+        dropDownPanel.add(methodChoice);
+        dropDownPanel.add(flowChoice);
+        
+        curveButtonPanel= new JPanel();
+        
+        contentPane.add(dropDownPanel,BorderLayout.EAST);
+        contentPane.add(curveButtonPanel,BorderLayout.SOUTH);
+        
+
+        curveButtonPanel.add(CurvePlotAgent.instance().getContainer());
+        
+        
         
         resultsOption.addActionListener(
                 new ActionListener() {
@@ -227,7 +242,14 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         jMenuBar1.add(modelInteractionMenu);
         jMenuBar1.add(jMenuHelp);
         setJMenuBar(jMenuBar1);
-        contentPane.add(toolBar, BorderLayout.NORTH);
+        
+        GridLayout gridLayout = new GridLayout(4,2,10,10);
+        
+        toolBar.setLayout(gridLayout);
+        
+        
+        
+        contentPane.add(toolBar, BorderLayout.WEST);
         jMenu1.add(UndoActionController.instance());
         jMenu1.addSeparator();
         jMenu1.add(layoutMenuItem);
@@ -310,18 +332,25 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         dialog.setModal(true);
         dialog.pack();
         dialog.setVisible(true);
-//        rpnumerics.RPNUMERICS.errorControl().reset(dialog.getEps(),
-//                rpnumerics.RPNUMERICS.boundary());
+    }
+    
+    public void addFlowName(String flowName){
+        
+        flowChoice.add(flowName);
+        
+    }
+    
+    
+    public void addMethodName(String methodName){
+        
+        methodChoice.add(methodName);
+        
     }
     
     
     protected void phaseSpaceFramesInit(Boundary boundary) {
         
         ClippedShape clipping = new ClippedShape(boundary);
-        
-        
-        
-        
         int numOfPanels = RPnVisualizationModule.DESCRIPTORS.size();
         frames_ = new RPnPhaseSpaceFrame[numOfPanels];
         for (int i = 0; i < numOfPanels; i++) {

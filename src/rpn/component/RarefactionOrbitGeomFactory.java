@@ -35,18 +35,8 @@ public class RarefactionOrbitGeomFactory extends RpCalcBasedGeomFactory {
 
         RarefactionOrbit orbit = (RarefactionOrbit)geomSource();
         
-//        Object orbit = geomSource();
-//        
-//        if (orbit instanceof Orbit ){
-//            Orbit orbit2 =(Orbit)geomSource();
-//            System.out.println("Eh orbita");
-//            return new RarefactionGeom(MultidAdapter.converseOrbitToCoordsArray(orbit2), this);
-//            
-//        } else
-//            System.out.println("Nao eh orbita");
-        
         return new RarefactionGeom(MultidAdapter.converseOrbitPointsToCoordsArray(orbit.getPoints()), this);
-//        return null;
+
     }
     
     public String toXML() {

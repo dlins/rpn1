@@ -36,7 +36,7 @@ public class RpNumerics {
     
     public static String getRarefactionMethodName(){ //TODO Called by RarefactionCalc class
         
-        return "rarefaction";}
+        return "ContinuationRarefactionMethod";}
     
 //        return rarefactionMethodName_;}
     
