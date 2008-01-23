@@ -1,22 +1,32 @@
 /*
- * RPnCurveConfigPanel.java
+ * Instituto de Matematica Pura e Aplicada - IMPA
+ * Departamento de Dinamica dos Fluidos
  *
- * Created on January 23, 2008, 11:51 AM
  */
 
 package rpn;
 
-/**
- *
- * @author  edsonlan
- */
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JComboBox;
+import rpnumerics.RpNumerics;
+
 public class RPnCurveConfigPanel extends javax.swing.JPanel {
     
-    /** Creates new form RPnCurveConfigPanel */
+    String activeMethod_,activeFlow_;
+    Integer activeFamilyIndex_;
+    
+    
     public RPnCurveConfigPanel() {
         initComponents();
         addMethodNames();
         addFlowNames();
+        addFamilyIndex();
+        
+        activeMethod_=(String)methodComboBox.getSelectedItem();
+        activeFlow_=(String)flowComboBox.getSelectedItem();
+        activeFamilyIndex_= (Integer) familyIndexComboBox.getSelectedItem();
+        
     }
     
     /** This method is called from within the constructor to
@@ -88,19 +98,59 @@ public class RPnCurveConfigPanel extends javax.swing.JPanel {
     private void addMethodNames(){
         
         methodComboBox.addItem("ContinuationRarefactionMethod");
-        methodComboBox.addItem("AnhotherRarefactionMethod");
-        
-        
-        
+        methodComboBox.addItem("RarefactionMethod");
+        methodComboBox.addActionListener(new MethodAction());
     }
     private void addFlowNames(){
         
         flowComboBox.addItem("RarefactionFlow");
         flowComboBox.addItem("ShockFlow");
-        
-        
+        flowComboBox.addActionListener(new FlowAction());
     }
     
     
+    private void addFamilyIndex(){
+        
+        for (int i =0;i < RpNumerics.domainDim();i++)
+            familyIndexComboBox.addItem(i);
+        familyIndexComboBox.addActionListener(new FamilyIndexAction());
+        
+    }
+    
+    private class MethodAction implements ActionListener{
+        
+        public void actionPerformed(ActionEvent e) {
+            JComboBox combo = (JComboBox) e.getSource();
+            activeMethod_=(String)methodComboBox.getSelectedItem();
+            System.out.println(activeMethod_); //TODO Remove
+            
+        }
+        
+    }
+    
+    private class FlowAction implements ActionListener {
+        
+        public void actionPerformed(ActionEvent e) {
+            JComboBox combo = (JComboBox) e.getSource();
+            activeFlow_=(String)flowComboBox.getSelectedItem();
+            System.out.println(activeFlow_); //TODO Remove
+            if (activeFlow_.matches(".*Shock.*"))//TODO HardCoded !!Only to show a possible behaviour
+                familyIndexComboBox.setEnabled(false);
+            else
+                familyIndexComboBox.setEnabled(true);
+        }
+        
+    }
+    
+    private class FamilyIndexAction implements ActionListener {
+        
+        public void actionPerformed(ActionEvent e) {
+            JComboBox combo = (JComboBox) e.getSource();
+            activeFamilyIndex_= (Integer) familyIndexComboBox.getSelectedItem();
+            System.out.println(activeFamilyIndex_); // TODO Remove
+            
+        }
+        
+    }
     
 }

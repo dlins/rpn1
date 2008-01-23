@@ -140,11 +140,11 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         curvePlotConstraints.gridx=1;
         curvePlotConstraints.gridx=0;
         
-        Insets insets = new Insets(10,80,20,80);
+        Insets insets = new Insets(10,240,5,240);
         
         curvePlotConstraints.insets=insets;
         
-        curvePlotConstraints.ipady=20;
+        curvePlotConstraints.ipady=60;
 
         curvePlotConstraints.fill=GridBagConstraints.BOTH;
 
