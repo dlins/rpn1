@@ -139,6 +139,14 @@ JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_setRarefactionFlow
 JNIEXPORT jobject JNICALL Java_rpnumerics_RpNumerics_boundary
   (JNIEnv *, jclass);
 
+/*
+ * Class:     rpnumerics_RpNumerics
+ * Method:    domainDim
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_rpnumerics_RpNumerics_domainDim
+  (JNIEnv *, jclass);
+
 #ifdef __cplusplus
 }
 #endif

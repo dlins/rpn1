@@ -73,7 +73,7 @@ void RpNumerics::initODESolver(){
     for (ii = 0; ii < dimension; ii++) param[1 + ii] = 0.1;// Minha escolha  // Reference vector
     
     
-    LSODEProfile lsodeProfile(*RpNumerics::getFlux(), stopGenerator, dimension, itol, rtol, mf, deltaxi, nparam, param); // o solver apenas passa nparam e param para a funcao 
+    LSODEProfile lsodeProfile(*RpNumerics::getFlux(), stopGenerator, dimension, itol, rtol, mf, deltaxi, nparam, param); // o solver apenas passa nparam e param para a funcao
     
     odeSolver_= new LSODE(lsodeProfile);
     
@@ -283,6 +283,10 @@ JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_setRarefactionFlow
  */
 //JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_boundary
 //        (JNIEnv * env, jclass cls){}
+
+
+JNIEXPORT jint JNICALL Java_rpnumerics_RpNumerics_domainDim(JNIEnv *, jclass cls){    return  RpNumerics::getPhysics()->domain().dim();}
+
 
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_RpNumerics_boundary(JNIEnv * env, jclass cls){

@@ -72,6 +72,8 @@ public class RpNumerics {
     
     public static native Boundary boundary();
     
+    public static native int domainDim();
+    
     //
     // Accessors
     //
@@ -82,7 +84,7 @@ public class RpNumerics {
     
     static public final RPNumericsProfile getProfile() { return profile_;}
     
-    static public final int domainDim() { return domain().getDim();    }
+//    static public final int domainDim() { return domain().getDim();    }
     
     public static String physicsID() {
         return profile_.getPhysicsID();
