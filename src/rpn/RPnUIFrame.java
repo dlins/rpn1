@@ -26,10 +26,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     //
     // Members
     //
-    JPanel contentPane, dropDownPanel, curveButtonPanel;
+    JPanel contentPane, curvePanel;
     
-    Choice methodChoice, flowChoice;
-
+    RPnCurveConfigPanel configPanel;
     
     JMenuBar jMenuBar1 = new JMenuBar();
     JCheckBox resultsOption = new JCheckBox("Save With Results");
@@ -108,25 +107,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         toolBar.add(BackwardManifoldPlotAgent.instance().getContainer());
         toolBar.add(StationaryPointPlotAgent.instance().getContainer());
         toolBar.add(PoincareSectionPlotAgent.instance().getContainer());
-        toolBar.add(RarefactionForwardOrbitPlotAgent.instance().
-                getContainer());
-        toolBar.add(RarefactionBackwardOrbitPlotAgent.instance().
-                getContainer());
-        toolBar.add(ForwardOrbitPlotAgent.instance().getContainer());
-        toolBar.add(BackwardOrbitPlotAgent.instance().getContainer());
-        toolBar.add(ForwardManifoldPlotAgent.instance().getContainer());
-        toolBar.add(BackwardManifoldPlotAgent.instance().getContainer());
-        toolBar.add(StationaryPointPlotAgent.instance().getContainer());
-        toolBar.add(PoincareSectionPlotAgent.instance().getContainer());
-//        toolBar.add(RarefactionForwardOrbitPlotAgent.instance().
-//                getContainer());
-//        toolBar.add(RarefactionBackwardOrbitPlotAgent.instance().
-//                getContainer());
-//      
-        
-        
-        
-        
     }
     
     
@@ -144,28 +124,51 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         jMenuFile.setText("File");
         jMenuFileExit.setText("Exit");
         
-        GridLayout dropDownPanelLayout = new GridLayout(2,1,20,20);
-        dropDownPanel = new JPanel(dropDownPanelLayout);
-        dropDownPanel.setSize(300,300);
+        curvePanel= new JPanel();
         
-        methodChoice= new Choice();
-        flowChoice  = new Choice();
+        configPanel = new RPnCurveConfigPanel();
+        
+        GridBagLayout curvePanelLayout = new GridBagLayout();
+        
+        GridBagConstraints configPanelConstraints = new GridBagConstraints();
+        
+        GridBagConstraints curvePlotConstraints = new GridBagConstraints();
+        
+        configPanelConstraints.gridx=0;
+        configPanelConstraints.gridy=0;
+        
+        curvePlotConstraints.gridx=1;
+        curvePlotConstraints.gridx=0;
+        
+        Insets insets = new Insets(10,80,20,80);
+        
+        curvePlotConstraints.insets=insets;
+        
+        curvePlotConstraints.ipady=20;
 
-        dropDownPanel.add(methodChoice);
-        dropDownPanel.add(flowChoice);
-        
-        curveButtonPanel= new JPanel();
-        
-        contentPane.add(dropDownPanel,BorderLayout.EAST);
-        contentPane.add(curveButtonPanel,BorderLayout.SOUTH);
-        
+        curvePlotConstraints.fill=GridBagConstraints.BOTH;
 
-        curveButtonPanel.add(CurvePlotAgent.instance().getContainer());
+        curvePlotConstraints.anchor=GridBagConstraints.CENTER;
         
+        curvePanelLayout.setConstraints(configPanel,configPanelConstraints);
+        
+        curvePanelLayout.setConstraints(CurvePlotAgent.instance().getContainer(),curvePlotConstraints);
+        
+        curvePanel.setLayout(curvePanelLayout);
+        
+        curvePanel.add(configPanel);
+        
+        curvePanel.add(CurvePlotAgent.instance().getContainer());
+        
+        JSeparator separator = new JSeparator();
+        
+        separator.setOrientation(SwingConstants.VERTICAL);
+        
+        contentPane.add(separator,BorderLayout.CENTER);
+        
+        contentPane.add(curvePanel,BorderLayout.EAST);
         
         CurvePlotAgent.instance().setEnabled(true); //TODO Remove from here !
-        
-        
         
         resultsOption.addActionListener(
                 new ActionListener() {
@@ -250,11 +253,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         jMenuBar1.add(jMenuHelp);
         setJMenuBar(jMenuBar1);
         
-        GridLayout gridLayout = new GridLayout(4,2,10,10);
+        GridLayout gridLayout = new GridLayout(2,4,10,10);
         
         toolBar.setLayout(gridLayout);
-        
-        
         
         contentPane.add(toolBar, BorderLayout.WEST);
         jMenu1.add(UndoActionController.instance());
@@ -341,18 +342,18 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         dialog.setVisible(true);
     }
     
-    public void addFlowName(String flowName){
-        
-        flowChoice.add(flowName);
-        
-    }
+//    public void addFlowName(String flowName){
+//
+//        flowComboBox.addItem(flowName);
+//
+//    }
     
     
-    public void addMethodName(String methodName){
-        
-        methodChoice.add(methodName);
-        
-    }
+//    public void addMethodName(String methodName){
+//
+//        methodComboBox.addItem(methodName);
+//
+//    }
     
     
     protected void phaseSpaceFramesInit(Boundary boundary) {
