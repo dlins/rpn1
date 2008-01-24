@@ -26,7 +26,7 @@ using std::vector;
  */
 
 
-JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc  (JNIEnv * env, jobject obj, jstring methodName, jstring flowName, jobject initialPoint, jint timeDirection ){
+JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc  (JNIEnv * env, jobject obj, jstring methodName, jstring flowName, jobject initialPoint,jint familyIndex, jint timeDirection ){
     
     unsigned int i;
     
@@ -74,7 +74,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc  (JNIEnv * e
     
     cout <<"Flow name: "<<flow<<endl;
     
-    RarefactionFlow *  rarefactionFlow = RarefactionFlowFactory::getRarefactionFlow(flow, timeDirection);
+    RarefactionFlow *  rarefactionFlow = RarefactionFlowFactory::getRarefactionFlow(flow, familyIndex, timeDirection);
     
     RarefactionMethod * rarefactionMethod=  RarefactionMethodFactory::getRarefactionMethod(method, *rarefactionFlow);
     

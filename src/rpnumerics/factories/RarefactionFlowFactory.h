@@ -19,7 +19,6 @@
  * ---------------------------------------------------------------
  * Definitions:
  */
-#define RP_... 1
 
 class RarefactionFlowFactory {
 
@@ -27,18 +26,18 @@ private:
 
 public:
     
-    static RarefactionFlow * getRarefactionFlow(const char *,int);
+    static RarefactionFlow * getRarefactionFlow(const char *,int,int);
 
 };
 
 
-inline RarefactionFlow * RarefactionFlowFactory::getRarefactionFlow(const char * flowName,int familyIndex){
+inline RarefactionFlow * RarefactionFlowFactory::getRarefactionFlow(const char * flowName,int familyIndex,int timeDirection){
     
     
     if (!strcmp(flowName,"RarefactionFlow")){
         
         
-        return new RarefactionFlow(1);
+        return new RarefactionFlow(familyIndex,timeDirection);
         
     }
     

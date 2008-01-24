@@ -9,23 +9,46 @@ package rpn;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JComboBox;
+import rpn.usecase.CurvePlotAgent;
 import rpnumerics.RpNumerics;
 
 public class RPnCurveConfigPanel extends javax.swing.JPanel {
     
-    String activeMethod_,activeFlow_;
-    Integer activeFamilyIndex_;
-    
-    
     public RPnCurveConfigPanel() {
         initComponents();
+        
+        //Adding names
+        
         addMethodNames();
         addFlowNames();
         addFamilyIndex();
+        directionNames();
         
-        activeMethod_=(String)methodComboBox.getSelectedItem();
-        activeFlow_=(String)flowComboBox.getSelectedItem();
-        activeFamilyIndex_= (Integer) familyIndexComboBox.getSelectedItem();
+        
+        //Initial configuration of plot agent
+        
+        if (((String)flowComboBox.getSelectedItem()).matches(".*Shock.*")){//TODO HardCoded !!Only to show a possible behaviour
+            familyIndexComboBox.setEnabled(false);
+            directionComboBox.setEnabled(false);
+            CurvePlotAgent.instance().setType("shock");
+        }
+        
+        else{
+            directionComboBox.setEnabled(true);
+            familyIndexComboBox.setEnabled(true);
+            CurvePlotAgent.instance().setType("rarefaction");
+        }
+        
+        
+        if (((String)directionComboBox.getSelectedItem()).matches("Forward"))
+            CurvePlotAgent.instance().setTimeDirection(1);
+        else
+            CurvePlotAgent.instance().setTimeDirection(-1);
+        
+        
+        CurvePlotAgent.instance().setMethodName((String)methodComboBox.getSelectedItem());
+        CurvePlotAgent.instance().setFlowName((String)flowComboBox.getSelectedItem());
+        CurvePlotAgent.instance().setFamilyIndex(((Integer) familyIndexComboBox.getSelectedItem()).intValue());
         
     }
     
@@ -42,6 +65,8 @@ public class RPnCurveConfigPanel extends javax.swing.JPanel {
         methodComboBox = new javax.swing.JComboBox();
         flowComboBox = new javax.swing.JComboBox();
         familyIndexComboBox = new javax.swing.JComboBox();
+        directionLabel = new javax.swing.JLabel();
+        directionComboBox = new javax.swing.JComboBox();
 
         methodLabel.setText("Method");
 
@@ -49,44 +74,54 @@ public class RPnCurveConfigPanel extends javax.swing.JPanel {
 
         familyIndexLabel.setText("Family Index");
 
+        directionLabel.setText("Direction");
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
-                .add(23, 23, 23)
+                .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(methodLabel)
-                    .add(methodComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .add(43, 43, 43)
+                    .add(methodComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(methodLabel))
+                .add(22, 22, 22)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(flowLabel)
-                    .add(flowComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .add(34, 34, 34)
+                    .add(flowComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(flowLabel))
+                .add(42, 42, 42)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(directionComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(directionLabel))
+                .add(29, 29, 29)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(familyIndexLabel)
                     .add(familyIndexComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(83, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
-                .addContainerGap()
+                .add(21, 21, 21)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(flowLabel)
                     .add(methodLabel)
+                    .add(flowLabel)
+                    .add(directionLabel)
                     .add(familyIndexLabel))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(methodComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(flowComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(directionComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(familyIndexComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox directionComboBox;
+    private javax.swing.JLabel directionLabel;
     private javax.swing.JComboBox familyIndexComboBox;
     private javax.swing.JLabel familyIndexLabel;
     private javax.swing.JComboBox flowComboBox;
@@ -108,6 +143,12 @@ public class RPnCurveConfigPanel extends javax.swing.JPanel {
         flowComboBox.addActionListener(new FlowAction());
     }
     
+    private void directionNames(){
+        
+        directionComboBox.addItem("Forward");
+        directionComboBox.addItem("Backward");
+    }
+    
     
     private void addFamilyIndex(){
         
@@ -121,8 +162,7 @@ public class RPnCurveConfigPanel extends javax.swing.JPanel {
         
         public void actionPerformed(ActionEvent e) {
             JComboBox combo = (JComboBox) e.getSource();
-            activeMethod_=(String)methodComboBox.getSelectedItem();
-            System.out.println(activeMethod_); //TODO Remove
+            CurvePlotAgent.instance().setMethodName((String)methodComboBox.getSelectedItem());
             
         }
         
@@ -132,12 +172,18 @@ public class RPnCurveConfigPanel extends javax.swing.JPanel {
         
         public void actionPerformed(ActionEvent e) {
             JComboBox combo = (JComboBox) e.getSource();
-            activeFlow_=(String)flowComboBox.getSelectedItem();
-            System.out.println(activeFlow_); //TODO Remove
-            if (activeFlow_.matches(".*Shock.*"))//TODO HardCoded !!Only to show a possible behaviour
+            CurvePlotAgent.instance().setFlowName((String)flowComboBox.getSelectedItem());
+            if (((String)flowComboBox.getSelectedItem()).matches(".*Shock.*")){//TODO HardCoded !!Only to show a possible behaviour
                 familyIndexComboBox.setEnabled(false);
-            else
+                directionComboBox.setEnabled(false);
+                CurvePlotAgent.instance().setType("shock");
+            }
+            
+            else{
+                directionComboBox.setEnabled(true);
                 familyIndexComboBox.setEnabled(true);
+                CurvePlotAgent.instance().setType("rarefaction");
+            }
         }
         
     }
@@ -146,11 +192,22 @@ public class RPnCurveConfigPanel extends javax.swing.JPanel {
         
         public void actionPerformed(ActionEvent e) {
             JComboBox combo = (JComboBox) e.getSource();
-            activeFamilyIndex_= (Integer) familyIndexComboBox.getSelectedItem();
-            System.out.println(activeFamilyIndex_); // TODO Remove
+            CurvePlotAgent.instance().setFamilyIndex(((Integer) familyIndexComboBox.getSelectedItem()).intValue());
             
         }
         
     }
+    
+    private class DirectionAction implements ActionListener{
+        public void actionPerformed(ActionEvent e) {
+            JComboBox combo = (JComboBox) e.getSource();
+            
+            if (((String)combo.getSelectedItem()).matches("Forward"))
+                CurvePlotAgent.instance().setTimeDirection(1);
+            else
+                CurvePlotAgent.instance().setTimeDirection(-1);
+        }
+    }
+    
     
 }

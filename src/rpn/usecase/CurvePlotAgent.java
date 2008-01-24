@@ -20,6 +20,9 @@ public class CurvePlotAgent extends RpModelPlotAgent {
     private String methodName_;
     private String type_;
     private String flowName_;
+    private int familyIndex_;
+    private int timeDirection_;
+    
     
     
     //
@@ -36,7 +39,7 @@ public class CurvePlotAgent extends RpModelPlotAgent {
     
     public RpGeometry createRpGeometry(RealVector[] input) {
         return  plot(methodName_,flowName_,input);
-
+        
     }
     
     static public CurvePlotAgent instance() {
@@ -46,28 +49,25 @@ public class CurvePlotAgent extends RpModelPlotAgent {
     }
     
     
-    private RpGeometry plot (String methodName,String flowName,RealVector [] input){
-
-        type_="rarefaction"; //TODO  Hardcoded !
+    private RpGeometry plot(String methodName,String flowName,RealVector [] input){
         
-        if (type_.equals("shock")){
-
+//        setType("rarefaction"); //TODO  Hardcoded !
+        
+        if (getType().equals("shock")){
+            
             System.out.println("Plotando curva de shock");
             return null;
         }
         
-        if (type_.equals("rarefaction")){
-              
-        PhasePoint oPoint = new PhasePoint(input[input.length - 1]);
-        RarefactionOrbitGeomFactory factory = new RarefactionOrbitGeomFactory(new RarefactionOrbitCalc(methodName,flowName,oPoint,-1));
-        return factory.geom();
-        
+        if (getType().equals("rarefaction")){
+            
+            PhasePoint oPoint = new PhasePoint(input[input.length - 1]);
+            RarefactionOrbitGeomFactory factory = new RarefactionOrbitGeomFactory(new RarefactionOrbitCalc(methodName_,flowName_,oPoint,familyIndex_,timeDirection_));
+            return factory.geom();
         }
         
         return null;
-        
     }
-    
     
     public void setMethodName(String methodName) {
         methodName_ = methodName;
@@ -75,5 +75,29 @@ public class CurvePlotAgent extends RpModelPlotAgent {
     
     public void setFlowName(String flowName) {
         flowName_ = flowName;
+    }
+    
+    public String getType() {
+        return type_;
+    }
+    
+    public void setType(String type) {
+        type_ = type;
+    }
+    
+    public int getFamilyIndex() {
+        return familyIndex_;
+    }
+    
+    public void setFamilyIndex(int familyIndex) {
+        familyIndex_ = familyIndex;
+    }
+
+    public int getTimeDirection() {
+        return timeDirection_;
+    }
+
+    public void setTimeDirection(int timeDirection) {
+        this.timeDirection_ = timeDirection;
     }
 }

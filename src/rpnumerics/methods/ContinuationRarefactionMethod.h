@@ -25,7 +25,7 @@ class ContinuationRarefactionMethod: public RarefactionMethod {
     
 private:
 
-    int increase_;
+
 
 public:
     
@@ -37,11 +37,11 @@ public:
     
     ContinuationRarefactionMethod(const ContinuationRarefactionMethod &);
     
-    int direction() const;
+
     
 };
 
-inline int ContinuationRarefactionMethod::direction() const {return increase_;}
+
 
 inline RarefactionMethod * ContinuationRarefactionMethod::clone() const { return new ContinuationRarefactionMethod(*this);}
 

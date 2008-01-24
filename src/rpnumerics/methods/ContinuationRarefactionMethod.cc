@@ -26,10 +26,6 @@ ContinuationRarefactionMethod::ContinuationRarefactionMethod(const RarefactionFl
 
 ContinuationRarefactionMethod::ContinuationRarefactionMethod(const ContinuationRarefactionMethod & copy):RarefactionMethod(*copy.getFlow()){
     
-    increase_=copy.direction();
-
-    
-    
 }
 
 
@@ -63,8 +59,6 @@ vector<RealVector> ContinuationRarefactionMethod::curve(const RealVector & initi
     // 1. Find the eigenvalue and the eigenvector at in (the initial point)
     
     RarefactionFlow * rarefactionFlow  =(RarefactionFlow *)getFlow()->clone();
-   
-   
     
     rarefactionFlow->setReferenceVector(initialPoint);
     
@@ -85,10 +79,6 @@ vector<RealVector> ContinuationRarefactionMethod::curve(const RealVector & initi
         refVector.component(i)=output.operator()(i); //e
         
     }
-    
-    
-    
-    
     
     vector<RealVector> returned;
     
@@ -126,7 +116,7 @@ vector<RealVector> ContinuationRarefactionMethod::curve(const RealVector & initi
     if (lambdam == COMPLEX_EIGENVALUE) return returned;
     
 //    // 4. Find the reference eigenvector.
-    if (increase == 1){ // Eigenvalues should increase as the orbit advances
+    if (rarefactionFlow->direction() == 1){ // Eigenvalues should increase as the orbit advances
         if (lambda <= lambdap && lambda <= lambdam){
 //            #ifdef TEST_RARERFACTION
             printf("Inside rarefactioncurve(): Cannot initialize, lambda doesn't increase!\n");

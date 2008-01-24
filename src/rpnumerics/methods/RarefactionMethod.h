@@ -36,8 +36,6 @@ public:
     
     virtual RarefactionMethod * clone() const =0;
     
-    virtual int direction() const =0;
-    
     virtual ~RarefactionMethod();
     
     const RarefactionFlow * getFlow()const ;

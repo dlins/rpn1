@@ -35,17 +35,11 @@ using namespace std;
 
 const Physics * RpNumerics::physics_=NULL;
 
-const ShockFlow * RpNumerics::shockFlow_=NULL;
-
-const RarefactionFlow * RpNumerics::rarefactionFlow_=NULL;
-
-const RarefactionMethod * RpNumerics::rarefactionMethod_=NULL;
-
 const ODESolver * RpNumerics::odeSolver_=NULL;
 
 double RpNumerics::sigma=0;
 
-int RpNumerics::familyIndex_=0;
+
 
 
 void RpNumerics::initODESolver(){
@@ -83,8 +77,6 @@ void RpNumerics::initODESolver(){
 void RpNumerics::clean(){
     
     delete physics_;
-    delete shockFlow_;
-    delete rarefactionFlow_;
     delete odeSolver_;
 }
 
@@ -113,11 +105,6 @@ JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_init(JNIEnv * env, jclass cls,
         RpNumerics::setPhysics(Quad2(Quad2FluxParams())); //TODO  Create a Quad2 destructor !!
         
     }
-    
-    // Flow instantiation
-    RarefactionFlow rarefactionFlow(1); //TODO Hardcoded flow set
-    
-    RpNumerics::setRarefactionFlow(rarefactionFlow);
     
     //ODE solver instantiation
     

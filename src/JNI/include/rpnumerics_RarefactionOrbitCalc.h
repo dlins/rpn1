@@ -10,10 +10,10 @@ extern "C" {
 /*
  * Class:     rpnumerics_RarefactionOrbitCalc
  * Method:    calc
- * Signature: (Ljava/lang/String;Ljava/lang/String;Lrpnumerics/PhasePoint;I)Lrpnumerics/RpSolution;
+ * Signature: (Ljava/lang/String;Ljava/lang/String;Lrpnumerics/PhasePoint;II)Lrpnumerics/RpSolution;
  */
 JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc
-  (JNIEnv *, jobject, jstring, jstring, jobject, jint);
+  (JNIEnv *, jobject, jstring, jstring, jobject, jint, jint);
 
 #ifdef __cplusplus
 }

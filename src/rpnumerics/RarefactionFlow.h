@@ -46,6 +46,7 @@ private:
     
     
     int familyIndex_;
+    int timeDirection_;
     
     
     int rarefaction(int *neq, double *xi, double *in, double *out, int *nparam, double *param) const ;
@@ -107,9 +108,9 @@ private:
 public:
     int jet(const WaveState &u, JetMatrix &m, int degree) const ;
     
-    RarefactionFlow(const RealVector &, const int);
+//    RarefactionFlow(const RealVector &, const int);
     
-    RarefactionFlow(const int);
+    RarefactionFlow(const int, const int );
     
     RarefactionFlow(const RarefactionFlow &);
     
@@ -126,8 +127,11 @@ public:
     void setLambda(const double );
     double getLambda();
     
-    int getFamilyIndex()const;
+    int getFamilyIndex() const;
     void setFamilyIndex(int);
+    
+    int direction()const ;
+    void setDirection(int);
     
 };
 
@@ -136,9 +140,14 @@ inline void RarefactionFlow::setLambda(const double lambda){lambda_=lambda;}
 
 inline double RarefactionFlow::getLambda(){return lambda_;}
 
-inline int RarefactionFlow::getFamilyIndex()const {return familyIndex_;}
+inline int RarefactionFlow::getFamilyIndex() const{return familyIndex_;}
 
 inline void RarefactionFlow::setFamilyIndex(int familyIndex ) {familyIndex_=familyIndex;}
+
+inline int RarefactionFlow::direction() const{return timeDirection_;}
+
+inline void RarefactionFlow::setDirection(int timeDirection){timeDirection_=timeDirection;}
+
 
 inline double RarefactionFlow::prodint(int n, double *a, double *b)const {
     int incx = 1, incy = 1;
@@ -147,7 +156,7 @@ inline double RarefactionFlow::prodint(int n, double *a, double *b)const {
 
 
 inline const RealVector & RarefactionFlow::getReferenceVector() const {return *referenceVector_;}
-//
+
 inline void RarefactionFlow::setReferenceVector(const RealVector & referenceVector){
     delete referenceVector_;
     referenceVector_=new RealVector(referenceVector);

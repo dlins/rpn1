@@ -20,6 +20,7 @@ public class RarefactionOrbitCalc implements RpCalculation {
     private int timeDirection_;
     private String methodName_;
     private String flowName_;
+    private int familyIndex_;
     
     
     //
@@ -30,12 +31,13 @@ public class RarefactionOrbitCalc implements RpCalculation {
         timeDirection_ = timeDirection;
     }
     
-    public RarefactionOrbitCalc(String methodName, String flowName, PhasePoint point, int timeDirection){
+    public RarefactionOrbitCalc(String methodName, String flowName, PhasePoint point,int familyIndex, int timeDirection){
         
         methodName_=methodName;
         flowName_=flowName;
         start_=point;
         timeDirection_=timeDirection;
+        familyIndex_=familyIndex;
         
         flowName_="RarefactionFlow";//TODO Remove !
         methodName_="ContinuationRarefactionMethod";
@@ -54,16 +56,16 @@ public class RarefactionOrbitCalc implements RpCalculation {
     
     public  RpSolution recalc() throws RpException{
         
-        return calc(methodName_,flowName_,start_,timeDirection_);
+        return calc(methodName_,flowName_,start_,familyIndex_,timeDirection_);
         
     }
     
     public RpSolution calc() throws RpException {
         
-        RpSolution result =calc(methodName_,flowName_,start_,timeDirection_);
+        RpSolution result =calc(methodName_,flowName_,start_,familyIndex_,timeDirection_);
         
         return result;
     }
     
-    private native  RpSolution calc(String methodName,String flowName,PhasePoint initialpoint, int timeDirection) throws RpException ;
+    private native  RpSolution calc(String methodName,String flowName,PhasePoint initialpoint, int familyIndex, int timeDirection) throws RpException ;
 }

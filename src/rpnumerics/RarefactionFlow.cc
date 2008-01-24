@@ -278,24 +278,25 @@ int RarefactionFlow::jet(const WaveState &u, JetMatrix &m, int degree)const {
 
 RarefactionFlow::RarefactionFlow(const RarefactionFlow & copy ){
     familyIndex_=copy.getFamilyIndex();
+    timeDirection_=copy.direction();
     referenceVector_= new RealVector(copy.getReferenceVector());
 }
 
 
-RarefactionFlow::RarefactionFlow(const int familyIndex){
+RarefactionFlow::RarefactionFlow(const int familyIndex, const int timeDirection){
     
     //TODO Pegar o family index do RpNumerics
-    
+    timeDirection_=timeDirection;
     familyIndex_= familyIndex;
     referenceVector_= new RealVector(RpNumerics::getPhysics()->domain().dim());
 }
 
-RarefactionFlow::RarefactionFlow(const RealVector & referenceVector, const int familyIndex){
-    
-    //TODO Pegar o family index do RpNumerics
-    familyIndex_= familyIndex;
-    referenceVector_=new RealVector(referenceVector);
-}
+//RarefactionFlow::RarefactionFlow(const RealVector & referenceVector, const int familyIndex){
+//    
+//    //TODO Pegar o family index do RpNumerics
+//    familyIndex_= familyIndex;
+//    referenceVector_=new RealVector(referenceVector);
+//}
 
 RarefactionFlow::~RarefactionFlow(){
     
@@ -304,38 +305,6 @@ RarefactionFlow::~RarefactionFlow(){
 }
 
 
-//double RarefactionFlow::lambdaCalc(int family,JetMatrix  & J) {
-//
-//    int n=RpNumerics::getPhysics()->domain().dim();
-//
-//    int lda = n, lwork = 5*n, ldvr = n, ldvl = n;
-//    int i, j,info;
-//    double vr[n][n], vl[n][n];
-//    double work[5*n], wi[n], wr[n];
-//
-//    struct eigen e[n];
-//
-//    double B[n][n];
-//    for (i = 0; i < n; i++){
-//        for (j = 0; j < n; j++) B[j][i] = J.operator ()(i,j);
-//    }
-//
-//    dgeev_("N", "N", &n, &B[0][0], &lda, &wr[0], &wi[0],
-//            &vl[0][0], &ldvl, &vr[0][0], &ldvr, &work[0], &lwork,
-//            &info);
-//// Process the results
-//
-//    transpose(&vl[0][0], n); // ...or else...
-//    transpose(&vr[0][0], n); // ...or else...
-//    fill_eigen(e, &wr[0], &wi[0], &vl[0][0], &vr[0][0]);
-//    sort_eigen(e);
-//
-//    if (e[family].i != 0 && info!=0)
-//        return COMPLEX_EIGENVALUE;
-//
-//    return (e[family].r);
-//
-//}
 
 int RarefactionFlow::cdgeev(int n, double *A, struct eigen *e)const {
     int lda = n, lwork = 5*n, ldvr = n, ldvl = n;
