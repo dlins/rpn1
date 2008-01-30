@@ -20,13 +20,20 @@ ODESolverProfile & ODESolverProfile::operator=(const ODESolverProfile & source )
 
 ODESolverProfile::~ODESolverProfile(){
     
-    delete function_;
-    delete stopGenerator_;
+//    delete function_;  //TODO How to delete these members witout crash the lib ???
+//    delete stopGenerator_;
     
 }
 
-RpFunction  * ODESolverProfile::getFunction() const {return function_->clone();}
-ODEStopGenerator * ODESolverProfile::getStopGenerator()const {return stopGenerator_->clone();}
+const RpFunction  * ODESolverProfile::getFunction() const {return function_;}
+const ODEStopGenerator * ODESolverProfile::getStopGenerator()const {return stopGenerator_;}
+
+void ODESolverProfile::setFunction(const RpFunction & function){
+    delete function_;
+    function_=function.clone();
+}
+
+
 
 void ODESolverProfile::setStopGenerator(const ODEStopGenerator & sGenerator){
     delete stopGenerator_;

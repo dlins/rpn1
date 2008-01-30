@@ -158,13 +158,11 @@ LSODEProfile & LSODEProfile::operator=(const LSODEProfile & source){
         return *this;
     delete rwork_;
     delete iwork_;
-    delete function_;
-    delete stopGenerator_;
     delete atol_;
     delete param_;
     
-    function_=source.getFunction();
-    stopGenerator_=source.getStopGenerator();
+    setFunction(*source.getFunction());
+    setStopGenerator(*source.getStopGenerator());
     neq_=source.numberOfEquations();
     itol_=source.absoluteToleranceType();
     paramLength_=source.paramLength();

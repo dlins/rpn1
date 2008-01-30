@@ -43,8 +43,10 @@
 class RpFunction {
     
 public:
+   
     virtual ~RpFunction(void);
     // ! virtual constructor
+   
     virtual RpFunction * clone() const =0;
     //! m coordinates function evaluation at u
     

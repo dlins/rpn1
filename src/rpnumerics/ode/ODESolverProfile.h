@@ -7,28 +7,36 @@
 
 class ODESolverProfile{
     
+private:
+    
+    RpFunction * function_;
+    ODEStopGenerator * stopGenerator_;
+    
+    
 public:
     
     ODESolverProfile(const RpFunction &, const ODEStopGenerator &);
     
     ODESolverProfile();
+    
     virtual ~ODESolverProfile();
     
     ODESolverProfile(const ODESolverProfile &);
+    
     ODESolverProfile & operator=(const ODESolverProfile &);
     
     void setStopGenerator(const ODEStopGenerator &);
     
-     ODEStopGenerator * getStopGenerator()const ;
+    const ODEStopGenerator * getStopGenerator()const ;
     
-     RpFunction * getFunction() const ;
+    const RpFunction * getFunction() const ;
     
-protected:
-    RpFunction * function_;
-    ODEStopGenerator * stopGenerator_;
-    
+    void setFunction(const RpFunction &);
     
 };
+
+
+
 
 #endif	/* _ODESolverProfile_H */
 

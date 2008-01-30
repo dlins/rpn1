@@ -31,21 +31,20 @@ private:
 public:
     RarefactionMethod(const RarefactionFlow &);
     
-    
     virtual vector<RealVector> curve(const RealVector &, int ) =0 ;
     
     virtual RarefactionMethod * clone() const =0;
     
     virtual ~RarefactionMethod();
     
-    const RarefactionFlow * getFlow()const ;
+    const RarefactionFlow & getFlow()const ;
     
 
     
     
 };
 
-inline const RarefactionFlow * RarefactionMethod::getFlow() const {return rarefactionFlow_;}
+inline const RarefactionFlow & RarefactionMethod::getFlow() const {return *rarefactionFlow_;}
 
 
 #endif //! _RarefactionMethod_H
