@@ -42,9 +42,9 @@ double RarefactionFlow::lambdaCalc(const WaveState & in, int family){
     
     JetMatrix jetMatrix(n);
     
-    const FluxFunction * fluxFunction= RpNumerics::getFlux();
+    const FluxFunction & fluxFunction= RpNumerics::getFlux();
     
-    status=fluxFunction->jet(in, jetMatrix, 1); //This function must return the same codes of LSODE s functions
+    status=fluxFunction.jet(in, jetMatrix, 1); //This function must return the same codes of LSODE s functions
     
     for(i=0;i< n;i++){
         for(j=0;j< n;j++){
@@ -91,9 +91,9 @@ int RarefactionFlow::flux(int n,  int family,  double *in, double *out)const {
         waveState(i)=in[i];
     }
     
-    const FluxFunction * fluxFunction= RpNumerics::getFlux();
+    const FluxFunction & fluxFunction= RpNumerics::getFlux();
     
-    status=fluxFunction->jet(waveState, jetMatrix, 1); //This function must return the same codes of LSODE s functions
+    status=fluxFunction.jet(waveState, jetMatrix, 1); //This function must return the same codes of LSODE s functions
     
     for(i=0;i< n;i++){
         for(j=0;j< n;j++){
@@ -188,7 +188,7 @@ int RarefactionFlow::flux(int n,  int family,  double *in, double *out)const {
     
     
     JetMatrix outputJetMatrix(n);
-    fluxFunction->jet(inputWaveState, outputJetMatrix, 2);
+    fluxFunction.jet(inputWaveState, outputJetMatrix, 2);
     
     for (i=0;i <n;i++){
         
@@ -288,7 +288,7 @@ RarefactionFlow::RarefactionFlow(const int familyIndex, const int timeDirection)
     //TODO Pegar o family index do RpNumerics
     timeDirection_=timeDirection;
     familyIndex_= familyIndex;
-    referenceVector_= new RealVector(RpNumerics::getPhysics()->domain().dim());
+    referenceVector_= new RealVector(RpNumerics::getPhysics().domain().dim());
 }
 
 //RarefactionFlow::RarefactionFlow(const RealVector & referenceVector, const int familyIndex){

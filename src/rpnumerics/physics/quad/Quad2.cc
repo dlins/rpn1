@@ -26,9 +26,9 @@ Quad2::~Quad2(){
 
 Quad2::Quad2(const Quad2 & copy){
     
-    params_=new Quad2FluxParams((Quad2FluxParams &)copy.fluxFunction()->fluxParams());
+    params_=new Quad2FluxParams((Quad2FluxParams &)copy.fluxFunction().fluxParams());
     fluxFunction_=new Quad2FluxFunction(*params_);
     accumulationFunction_= new Quad2AccumulationFunction((Quad2AccumulationFunction &)copy.accumulation());
-    boundary_=copy.boundary()->clone();
+    boundary_=copy.boundary().clone();
     
 }

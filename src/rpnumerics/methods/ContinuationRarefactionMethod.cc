@@ -170,13 +170,7 @@ vector<RealVector> ContinuationRarefactionMethod::curve(const RealVector & initi
     
 //TODO O vetor de referencia do RarefactionFlow e a familia sao passados para o solver. Como fazer isso ??
     
-    const ODESolver * odeSolver = RpNumerics::getODESolver();
-    
-    ODESolver * localODESolver = odeSolver->clone();
-    
-    ODESolverProfile * localProfile = new ODESolverProfile(localODESolver->getProfile());
-    
-    localProfile->setFunction(rarefactionFlow);
+    const ODESolver & odeSolver = RpNumerics::getODESolver();
     
     RealVector inputPoint(initialPoint);
     
@@ -184,15 +178,14 @@ vector<RealVector> ContinuationRarefactionMethod::curve(const RealVector & initi
     
     for (i=0;i < 100;i++){
         
-        RealVector coord= localODESolver->solve(inputPoint);
+        RealVector coord(dimensionSize);
+        
+        odeSolver.solve(inputPoint,coord);
         
         inputPoint=coord;
         
         out.push_back(coord);
-        
     }
-    
-    delete localODESolver;
-    delete localProfile;
+
     return out;
 }

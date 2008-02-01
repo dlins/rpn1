@@ -35,11 +35,11 @@ private:
     
 public:
     
-    static const Physics * getPhysics();
+    static const Physics & getPhysics();
     
-    static const FluxFunction * getFlux();
+    static const FluxFunction & getFlux();
     
-    static const ODESolver * getODESolver();
+    static const ODESolver & getODESolver();
     
     static  void initODESolver();
     
@@ -53,9 +53,9 @@ public:
     
 };
 
-inline const Physics * RpNumerics::getPhysics(){return physics_;}
+inline const Physics & RpNumerics::getPhysics(){return *physics_;}
 
-inline const  FluxFunction * RpNumerics::getFlux() {return physics_->fluxFunction();}
+inline const  FluxFunction & RpNumerics::getFlux() {return physics_->fluxFunction();}
 
 inline void RpNumerics::setPhysics(const Physics & physics){
     delete physics_;
@@ -66,7 +66,7 @@ inline void RpNumerics::setSigma(double s){sigma=s;}
 
 inline double RpNumerics::getSigma(){return sigma;}
 
-inline const ODESolver * RpNumerics::getODESolver(){return odeSolver_;}
+inline const ODESolver & RpNumerics::getODESolver(){return *odeSolver_;}
 
 
 

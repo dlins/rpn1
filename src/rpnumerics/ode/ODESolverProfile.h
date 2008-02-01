@@ -27,9 +27,9 @@ public:
     
     void setStopGenerator(const ODEStopGenerator &);
     
-    const ODEStopGenerator * getStopGenerator()const ;
+    const ODEStopGenerator & getStopGenerator()const ;
     
-    const RpFunction * getFunction() const ;
+    const RpFunction & getFunction() const ;
     
     void setFunction(const RpFunction &);
     

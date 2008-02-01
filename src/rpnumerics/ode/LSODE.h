@@ -35,11 +35,11 @@ class LSODE:public ODESolver {
     
 private:
     
-    LSODEProfile * profile_;
+    static  LSODEProfile * profile_;
     
     static double tout_;
     
-    static  const RpFunction * rpFunction_;
+//    static  const RpFunction * rpFunction_;
     
     static int function(int *, double *, double *, double *);
     
@@ -53,15 +53,17 @@ private:
 public:
     
     LSODE(const LSODEProfile &);
-    LSODE (const LSODE &);
-
+    LSODE(const LSODE &);
+    
     virtual ~LSODE();
     
     ODESolver * clone()const;
     
-    ODESolution & solve(const RealVector & , int ) const;
-
-    virtual RealVector & solve(const RealVector &) const ;
+//    ODESolution & solve(const RealVector & , int ) const;
+    
+    int solve(const RealVector & , ODESolution & , int ) const;
+    
+    int solve(const RealVector &, RealVector & ) const ;
     
     const ODESolverProfile & getProfile() const ;
     void setProfile(const LSODEProfile &);

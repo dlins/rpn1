@@ -48,13 +48,13 @@ public:
     Physics * clone() const;
     
     const FluxParams & params(void) const;
-    const FluxFunction * fluxFunction(void) const;
+    const FluxFunction & fluxFunction(void) const;
     const AccumulationFunction & accumulation() const;
 
 
     
     const Space & domain(void) const;
-    const Boundary * boundary(void) const;
+    const Boundary & boundary(void) const;
     void boundary(const Boundary & boundary);
 };
 
@@ -66,8 +66,8 @@ inline const FluxParams & Quad2::params(void) const {
     return *params_;
 }
 
-inline const FluxFunction * Quad2::fluxFunction(void) const {
-    return fluxFunction_;
+inline const FluxFunction & Quad2::fluxFunction(void) const {
+    return *fluxFunction_;
 }
 
 
@@ -79,14 +79,14 @@ inline const Space & Quad2::domain(void) const {
     return Multid::PLANE;
 }
 
-inline const Boundary * Quad2::boundary(void) const {
-    return boundary_;
+inline const Boundary & Quad2::boundary(void) const {
+    return *boundary_;
 }
 
 inline void Quad2::boundary(const Boundary & boundary) {
     //TODO: not working properly - daniel@impa.br
-    
-    *boundary_ = boundary;
+    delete boundary_;
+    boundary_ = boundary.clone();
 }
 
 inline Boundary * Quad2::defaultBoundary(){

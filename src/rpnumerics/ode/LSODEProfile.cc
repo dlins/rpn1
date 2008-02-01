@@ -103,7 +103,7 @@ LSODEProfile::LSODEProfile(const RpFunction & function, const LSODEStopGenerator
     
 }
 
-LSODEProfile:: LSODEProfile(const LSODEProfile & copy):ODESolverProfile(*copy.getFunction(), *copy.getStopGenerator()){
+LSODEProfile:: LSODEProfile(const LSODEProfile & copy):ODESolverProfile(copy.getFunction(), copy.getStopGenerator()){
     
     int i;
     
@@ -161,8 +161,8 @@ LSODEProfile & LSODEProfile::operator=(const LSODEProfile & source){
     delete atol_;
     delete param_;
     
-    setFunction(*source.getFunction());
-    setStopGenerator(*source.getStopGenerator());
+    setFunction(source.getFunction());
+    setStopGenerator(source.getStopGenerator());
     neq_=source.numberOfEquations();
     itol_=source.absoluteToleranceType();
     paramLength_=source.paramLength();

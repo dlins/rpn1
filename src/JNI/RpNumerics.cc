@@ -67,7 +67,7 @@ void RpNumerics::initODESolver(){
     for (ii = 0; ii < dimension; ii++) param[1 + ii] = 0.1;// Minha escolha  // Reference vector
     
     
-    LSODEProfile lsodeProfile(*RpNumerics::getFlux(), stopGenerator, dimension, itol, rtol, mf, deltaxi, nparam, param); // o solver apenas passa nparam e param para a funcao
+    LSODEProfile lsodeProfile(RpNumerics::getFlux(), stopGenerator, dimension, itol, rtol, mf, deltaxi, nparam, param); // o solver apenas passa nparam e param para a funcao
     
     odeSolver_= new LSODE(lsodeProfile);
     
@@ -102,7 +102,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_init(JNIEnv * env, jclass cls,
     
     if (!strcmp(physicsID, "QuadraticR2")){
         
-        RpNumerics::setPhysics(Quad2(Quad2FluxParams())); //TODO  Create a Quad2 destructor !!
+        RpNumerics::setPhysics(Quad2(Quad2FluxParams())); 
         
     }
     
@@ -272,7 +272,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_setRarefactionFlow
 //        (JNIEnv * env, jclass cls){}
 
 
-JNIEXPORT jint JNICALL Java_rpnumerics_RpNumerics_domainDim(JNIEnv *, jclass cls){    return  RpNumerics::getPhysics()->domain().dim();}
+JNIEXPORT jint JNICALL Java_rpnumerics_RpNumerics_domainDim(JNIEnv *, jclass cls){ return  RpNumerics::getPhysics().domain().dim();}
 
 
 
@@ -282,12 +282,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RpNumerics_boundary(JNIEnv * env, jcla
     
     jmethodID realVectorConstructor = (env)->GetMethodID(realVectorClass, "<init>", "([D)V");
     
-    const Boundary * boundary;
+
+    const Boundary & boundary= RpNumerics::getPhysics().boundary();
     
-    boundary= RpNumerics::getPhysics()->boundary();
     
-    
-    int borderLength =2; //TODO Saber se boundary eh um RectBoundary ???
+    int borderLength =2; //TODO How to know if this is a  RectBoundary ???
     
     if (borderLength ==2){
         
@@ -298,12 +297,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RpNumerics_boundary(JNIEnv * env, jcla
         double minimum [2];
         double maximum [2];
         
-        minimum[0]=boundary->minimums().component(0);
+        minimum[0]=boundary.minimums().component(0);
         
-        minimum[1]=boundary->minimums().component(1);
+        minimum[1]=boundary.minimums().component(1);
         
-        maximum[0]=boundary->maximums().component(0);
-        maximum[1]=boundary->maximums().component(1);
+        maximum[0]=boundary.maximums().component(0);
+        maximum[1]=boundary.maximums().component(1);
         
         
         //---------------------------------

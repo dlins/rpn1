@@ -37,11 +37,11 @@ public :
     
     virtual const AccumulationFunction & accumulation() const = 0;
     
-    virtual const Boundary * boundary() const= 0;
+    virtual const Boundary & boundary() const= 0;
     
     virtual void boundary(const Boundary & boundary) = 0;
     
-    virtual const FluxFunction * fluxFunction() const = 0;
+    virtual const FluxFunction & fluxFunction() const = 0;
     
     virtual const Space & domain() const = 0;
     

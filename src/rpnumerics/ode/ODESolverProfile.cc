@@ -7,26 +7,26 @@ ODESolverProfile::ODESolverProfile(const RpFunction & function, const ODEStopGen
 }
 ODESolverProfile::ODESolverProfile(){}
 
-ODESolverProfile::ODESolverProfile(const ODESolverProfile & copy){ function_=copy.getFunction()->clone();}
+ODESolverProfile::ODESolverProfile(const ODESolverProfile & copy){ function_=copy.getFunction().clone();}
 
 ODESolverProfile & ODESolverProfile::operator=(const ODESolverProfile & source ){
     
     if (this==&source)
         return *this;
-    function_=source.getFunction()->clone();
+    function_=source.getFunction().clone();
     return *this;
 }
 
 
 ODESolverProfile::~ODESolverProfile(){
     
-//    delete function_;  //TODO How to delete these members witout crash the lib ???
-//    delete stopGenerator_;
+    delete function_; 
+    delete stopGenerator_;
     
 }
 
-const RpFunction  * ODESolverProfile::getFunction() const {return function_;}
-const ODEStopGenerator * ODESolverProfile::getStopGenerator()const {return stopGenerator_;}
+const RpFunction  & ODESolverProfile::getFunction() const {return *function_;}
+const ODEStopGenerator & ODESolverProfile::getStopGenerator()const {return *stopGenerator_;}
 
 void ODESolverProfile::setFunction(const RpFunction & function){
     delete function_;

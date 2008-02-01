@@ -30,8 +30,8 @@ private:
 public:
     
 
-    virtual ODESolution & solve(const RealVector & , int ) const=0;
-    virtual RealVector & solve (const RealVector &) const =0;
+    virtual int  solve(const RealVector & , ODESolution & ,int ) const=0;
+    virtual int solve (const RealVector &,RealVector & ) const =0;
     virtual const ODESolverProfile & getProfile() const =0;
     virtual ODESolver * clone()const =0;
     virtual ~ODESolver();    
