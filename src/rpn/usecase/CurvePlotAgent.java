@@ -51,7 +51,7 @@ public class CurvePlotAgent extends RpModelPlotAgent {
     
     private RpGeometry plot(String methodName,String flowName,RealVector [] input){
         
-//        setType("rarefaction"); //TODO  Hardcoded !
+
         
         if (getType().equals("shock")){
             

@@ -126,10 +126,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         
         curvePanel= new JPanel();
         
-////        FlowLayout curvePanelLayout = new FlowLayout();
-////        
-////        curvePanel.setLayout(curvePanelLayout);
-        
+
         configPanel = new RPnCurveConfigPanel();
         
         curvePanel.add(configPanel);
@@ -137,46 +134,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         contentPane.add(curvePanel);
         
 
-//        
-//        GridBagConstraints configPanelConstraints = new GridBagConstraints();
-//        
-//        GridBagConstraints curvePlotConstraints = new GridBagConstraints();
-//        
-//        configPanelConstraints.gridx=0;
-//        configPanelConstraints.gridy=0;
-//        
-//        curvePlotConstraints.gridx=1;
-//        curvePlotConstraints.gridx=0;
-//        
-//        Insets insets = new Insets(10,240,5,240);
-//        
-//        curvePlotConstraints.insets=insets;
-//        
-//        curvePlotConstraints.ipady=60;
-//
-//        curvePlotConstraints.fill=GridBagConstraints.BOTH;
-//
-//        curvePlotConstraints.anchor=GridBagConstraints.CENTER;
-        
-//        curvePanelLayout.setConstraints(configPanel,configPanelConstraints);
-//        
-//        curvePanelLayout.setConstraints(CurvePlotAgent.instance().getContainer(),curvePlotConstraints);
-        
-
-        
-
-//        
-//        curvePanel.add(CurvePlotAgent.instance().getContainer());
-//        
-//        JSeparator separator = new JSeparator();
-//        
-//        separator.setOrientation(SwingConstants.VERTICAL);
-//        
-//        contentPane.add(separator,BorderLayout.CENTER);
-//        
-//        contentPane.add(curvePanel,BorderLayout.EAST);
-//        
-//        CurvePlotAgent.instance().setEnabled(true); //TODO Remove from here !
         
         resultsOption.addActionListener(
                 new ActionListener() {

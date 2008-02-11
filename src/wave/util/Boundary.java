@@ -6,8 +6,6 @@
 
 package wave.util;
 
-import wave.multid.view.Viewing2DTransform;
-
 /*
  * In terms of visualization we are assuming this
  * to be a Clipping Shape
@@ -16,7 +14,7 @@ import wave.multid.view.Viewing2DTransform;
 public interface Boundary {
     boolean inside(RealVector y);
 
-    // this is only needed by ODE ? TODO remove
+
     RealVector getMinimums();
 
     RealVector getMaximums();

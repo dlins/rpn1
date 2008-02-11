@@ -1,4 +1,8 @@
-//TODO : Usar dois Hashtables para armazenar altura e comprimento do frame e usar no redimensionamento
+/*
+ * Instituto de Matematica Pura e Aplicada - IMPA
+ * Departamento de Dinamica dos Fluidos
+ *
+ */
 
 package rpn;
 
@@ -9,9 +13,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
-import rpn.*;
 import java.util.*;
-import rpn.controller.ui.UIController;
 
 /**
  * <p>Title: RPn GUI</p> <p>Description: GUI components for </p> <p>Copyright: Copyright (c) 2002</p> <p>Company: FLUID</p>

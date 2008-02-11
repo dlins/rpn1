@@ -4,7 +4,7 @@ public class SegmentCanNotJoin extends Exception {
 
 	public SegmentCanNotJoin() {
 		super("Segment can not join to the list");
-		// TODO Auto-generated constructor stub
+
 	}
 
 }

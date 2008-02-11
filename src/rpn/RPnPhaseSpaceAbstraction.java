@@ -3,7 +3,6 @@
  * Departamento de Dinamica dos Fluidos
  *
  */
-
 package rpn;
 
 import rpn.controller.phasespace.*;
