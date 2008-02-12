@@ -208,7 +208,7 @@ public class RPnCurveConfigPanel extends javax.swing.JPanel {
     private void addFamilyIndex() {
 
         for (int i = 0; i < RpNumerics.domainDim(); i++) {
-            familyIndexComboBox.addItem(i);
+            familyIndexComboBox.addItem(new Integer(i));
         }
         familyIndexComboBox.addActionListener(new FamilyIndexAction());
 

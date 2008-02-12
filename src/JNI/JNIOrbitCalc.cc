@@ -48,7 +48,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_calc  (JNIEnv * env, jobject
     
     vector <double *> resultList;
     double ix=-0.5;
-    
+
     while (ix < 0.5){
         double * coord = new double [2];
         
