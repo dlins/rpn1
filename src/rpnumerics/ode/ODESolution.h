@@ -46,5 +46,9 @@ inline void ODESolution::addCoords(const RealVector coord){ coords_.push_back(co
 
 inline void ODESolution::addTimes(const double time){times_.push_back(time);}
 
+inline vector<RealVector> ODESolution::getCoords()const  {return coords_;}
+
+inline vector <double> ODESolution::getTimes() const {return times_;}
+
 #endif	/* _ODESolution_H */
 

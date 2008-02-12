@@ -41,8 +41,6 @@ public class ChangeXZeroAgent extends RpModelConfigChangeAgent {
         
         System.out.println("New XZero " + newXZero.getCoords());
         
-//        RPNUMERICS.flow().setXZero(newXZero);
-        
         RpNumerics.setXZero(newXZero);
         
         applyChange(new PropertyChangeEvent(this, DESC_TEXT, oldXZero, newXZero));

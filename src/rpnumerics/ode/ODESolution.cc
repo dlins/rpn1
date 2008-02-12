@@ -16,8 +16,7 @@ ODESolution::~ODESolution(){
 
 int ODESolution::getFlag(){return flag_;}
 
-vector<RealVector> ODESolution::getCoords()const  {return coords_;}
-vector <double> ODESolution::getTimes() const {return times_;}
+
 
 
 

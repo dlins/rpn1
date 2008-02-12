@@ -48,6 +48,11 @@ private:
     int familyIndex_;
     int timeDirection_;
     
+    RealVector * referenceVector_;
+    
+    double lambda_;
+    
+    
     
     int rarefaction(int *neq, double *xi, double *in, double *out, int *nparam, double *param) const ;
     
@@ -99,16 +104,11 @@ private:
     
     int flux(int n, int family, double *in,  double *out) const;
     
-    RealVector * referenceVector_;
-    
-    double lambda_;
     
     
     
 public:
     int jet(const WaveState &u, JetMatrix &m, int degree) const ;
-    
-//    RarefactionFlow(const RealVector &, const int);
     
     RarefactionFlow(const int, const int );
     

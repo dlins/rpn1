@@ -41,7 +41,7 @@ protected:
     
 };
 
-inline WaveState::WaveState(const RealVector & coords){ coords_=new RealVector(coords);}
+
 
 inline int WaveState::stateSpaceDim() const {
     
@@ -66,8 +66,6 @@ inline WaveState & WaveState::operator =(const WaveState & state){
 }
 
 
-inline WaveState::WaveState(const int dim ):coords_(new RealVector(dim)) {
-}
 
 
 inline double WaveState::operator() (const int comp) const {

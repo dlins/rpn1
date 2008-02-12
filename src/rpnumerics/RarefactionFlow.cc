@@ -24,8 +24,6 @@
 
 RpFunction * RarefactionFlow::clone() const {return new RarefactionFlow(*this);}
 
-
-
 double RarefactionFlow::lambdaCalc(const WaveState & in, int family){
     
     int n=in.stateSpaceDim();
@@ -38,8 +36,7 @@ double RarefactionFlow::lambdaCalc(const WaveState & in, int family){
     
     double vr[n][n], vl[n][n];
     double work[5*n], wi[n], wr[n];
-    
-    
+        
     JetMatrix jetMatrix(n);
     
     const FluxFunction & fluxFunction= RpNumerics::getFlux();
@@ -252,6 +249,8 @@ int RarefactionFlow::jet(const WaveState &u, JetMatrix &m, int degree)const {
                 m.operator()(i, out[i]);
             }
             
+            cout <<"Chamando flow 0"<<endl; //TODO Remove !!
+            
             break;
             
         case 1:
@@ -284,19 +283,15 @@ RarefactionFlow::RarefactionFlow(const RarefactionFlow & copy ){
 
 
 RarefactionFlow::RarefactionFlow(const int familyIndex, const int timeDirection){
-    
-    //TODO Pegar o family index do RpNumerics
+
     timeDirection_=timeDirection;
     familyIndex_= familyIndex;
-    referenceVector_= new RealVector(RpNumerics::getPhysics().domain().dim());
+//    referenceVector_= new RealVector(RpNumerics::getPhysics().domain().dim());
+    referenceVector_= new RealVector(2);
+    
 }
 
-//RarefactionFlow::RarefactionFlow(const RealVector & referenceVector, const int familyIndex){
-//    
-//    //TODO Pegar o family index do RpNumerics
-//    familyIndex_= familyIndex;
-//    referenceVector_=new RealVector(referenceVector);
-//}
+
 
 RarefactionFlow::~RarefactionFlow(){
     

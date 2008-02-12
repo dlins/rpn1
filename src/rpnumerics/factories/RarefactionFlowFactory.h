@@ -31,7 +31,7 @@ public:
 };
 
 
-inline RarefactionFlow * RarefactionFlowFactory::getRarefactionFlow(const char * flowName,int familyIndex,int timeDirection){
+inline RarefactionFlow * RarefactionFlowFactory::getRarefactionFlow(const char * flowName,int familyIndex,int timeDirection){//TODO return &
     
     
     if (!strcmp(flowName,"RarefactionFlow")){

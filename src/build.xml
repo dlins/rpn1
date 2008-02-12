@@ -27,7 +27,8 @@
         
         <depend srcdir="${src}" destdir="${build}" cache="depcache" closure="yes"/>
         
-        <javac  deprecation="off" debug="true" source="1.4" target="1.4" classpath="${libdir}/log4j.jar:${libdir}/jbossall-client.jar:${libdir}/vecmath.jar:${libdir}/pdflib.jar:${libdir}/xml4j.jar:${libdir}/jlapack-0.6.jar:${build}:${libdir}/msv.jar:${libdir}/iso-relax.jar:/usr/local/linux_i686/netbeans-6.0/platform7/modules/org-jdesktop-layout.jar" srcdir="${src}" sourcepath="${src}" destdir="${build}">
+
+        <javac  deprecation="off" debug="true" source="1.5" target="1.5" classpath="${libdir}/log4j.jar:${libdir}/jbossall-client.jar:${libdir}/vecmath.jar:${libdir}/pdflib.jar:${libdir}/xml4j.jar:${libdir}/jlapack-0.6.jar:${build}:${libdir}/msv.jar:${libdir}/iso-relax.jar:/usr/local/linux_i686/netbeans-6.0/platform7/modules/org-jdesktop-layout.jar" srcdir="${src}" sourcepath="${src}" destdir="${build}">
         </javac>
         
         <!--   <copy todir="build/images">
@@ -35,8 +36,14 @@
         </copy>--> <!-- TODO  Include images into jar project --> 
         
         <jar destfile="lib/rpn.jar"
-             basedir="${build}"
-        />
+             basedir="${build}">
+	
+        <manifest>
+        <attribute name="Main-Class" value="rpn/RPnDesktopPlotter"/>
+        <attribute name="Class-path" value="./vecmath.jar ./log4j.jar ./jbossall-client.jar ./pdflib.jar ./xml4j.jar ./jlapack-0.6.jar ./msv.jar ./iso-relax.jar /usr/local/linux_i686/netbeans-6.0/platform7/modules/org-jdesktop-layout.jar"/>
+        </manifest>
+
+        </jar>
         
         <!--<exec executable="make" >
             <arg line="-f makefile"></arg>
