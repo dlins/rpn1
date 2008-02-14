@@ -1,44 +1,28 @@
 package rpn;
 
-import wave.multid.model.AbstractScene;
 import wave.multid.view.*;
-import wave.multid.Coords2D;
-import wave.multid.CoordsArray;
-import wave.util.RealVector;
 import rpn.controller.PhaseSpacePanel2DController;
-import rpn.controller.ui.UserInputCompleteEvent;
 import rpn.controller.PhaseSpacePanelController;
 import rpn.controller.PhaseSpacePanel3DController;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
-import java.awt.Rectangle;
 import java.awt.BasicStroke;
-import java.awt.print.PrinterJob;
 import java.awt.print.Printable;
 import java.awt.print.PageFormat;
-import java.awt.geom.GeneralPath;
-import java.awt.geom.AffineTransform;
 import java.awt.GraphicsEnvironment;
 import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsConfigTemplate;
 import java.awt.GraphicsDevice;
 import java.awt.image.BufferedImage;
 import java.awt.Graphics;
 import java.awt.Point;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.Color;
-import java.util.ArrayList;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
 import com.sun.image.codec.jpeg.JPEGCodec;
 import javax.swing.JPanel;
-import javax.swing.JDialog;
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
-import javax.swing.plaf.*;
+//import javax.swing.plaf.*;
 import java.io.FileOutputStream;
 import java.awt.Shape;
-import java.awt.Polygon;
 import wave.multid.*;
 
 
