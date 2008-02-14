@@ -15,6 +15,7 @@
  */
 #include "ODESolver.h"
 #include "LSODEProfile.h"
+#include "LSODESolution.h"
 
 
 /*
@@ -39,8 +40,6 @@ private:
     
     static double tout_;
     
-//    static  const RpFunction * rpFunction_;
-    
     static int function(int *, double *, double *, double *);
     
     static   int jacrarefaction(int *neq, double *t, double *y, int *ml, int *mu, double *pd, int *nrpd);//int *nparam,  double *param);
@@ -59,15 +58,10 @@ public:
     
     ODESolver * clone()const;
     
-//    ODESolution & solve(const RealVector & , int ) const;
-    
-    int solve(const RealVector & , ODESolution & , int ) const;
-    
+    int solve(const RealVector & , ODESolution & ) const;
     int solve(const RealVector &, RealVector & ) const ;
-    
     const ODESolverProfile & getProfile() const ;
     void setProfile(const LSODEProfile &);
-    
     
 };
 

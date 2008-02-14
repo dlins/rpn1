@@ -19,12 +19,13 @@ public:
     static int STOP_ON_POINCARE_SECTION;
     static int MADE_MAXIMUM_STEP_NUMBER;
     
-    ODESolution(vector<RealVector> , vector<double> , int);
+    ODESolution(vector<RealVector> , vector<double> );
     ODESolution();
+    
     virtual ~ODESolution();
     
     vector<double> getTimes() const ;
-
+    
     int getFlag() ;
     
     void addCoords(const RealVector);
@@ -33,11 +34,11 @@ public:
     vector<RealVector> getCoords()  const;
     
 protected :
-        
+    
     vector <RealVector> coords_;
     
     vector <double> times_;
-
+    
     int flag_;
     
 };

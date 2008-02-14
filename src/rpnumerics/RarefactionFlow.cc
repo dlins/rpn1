@@ -181,9 +181,7 @@ int RarefactionFlow::flux(int n,  int family,  double *in, double *out)const {
     
     
     WaveState inputWaveState(input);
-    
-    
-    
+        
     JetMatrix outputJetMatrix(n);
     fluxFunction.jet(inputWaveState, outputJetMatrix, 2);
     
@@ -192,7 +190,7 @@ int RarefactionFlow::flux(int n,  int family,  double *in, double *out)const {
         for (j=0;j<n;j++){
             for (k=0;k<n;k++){
                 
-                H[i][j][k]=outputJetMatrix.operator()(i, j, k);
+                H[i][j][k]=outputJetMatrix(i, j, k);
                 
             }
         }
@@ -246,7 +244,7 @@ int RarefactionFlow::jet(const WaveState &u, JetMatrix &m, int degree)const {
             
             returnValue = flux(dimensionSize, familyIndex_, &in[0], &out[0]);
             for (i=0;i < dimensionSize;i++){
-                m.operator()(i, out[i]);
+                m(i, out[i]);
             }
             
             cout <<"Chamando flow 0"<<endl; //TODO Remove !!

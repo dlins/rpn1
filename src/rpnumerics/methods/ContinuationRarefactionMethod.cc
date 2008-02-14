@@ -24,9 +24,7 @@
 
 ContinuationRarefactionMethod::ContinuationRarefactionMethod(const RarefactionFlow & flow ):RarefactionMethod(flow){}
 
-ContinuationRarefactionMethod::ContinuationRarefactionMethod(const ContinuationRarefactionMethod & copy):RarefactionMethod(copy.getFlow()){
-    
-}
+ContinuationRarefactionMethod::ContinuationRarefactionMethod(const ContinuationRarefactionMethod & copy):RarefactionMethod(copy.getFlow()){}
 
 
 vector<RealVector> ContinuationRarefactionMethod::curve(const RealVector & initialPoint, int increase) {
@@ -76,12 +74,11 @@ vector<RealVector> ContinuationRarefactionMethod::curve(const RealVector & initi
     
     for (i=0;i < dimensionSize; i++){
         
-        refVector.component(i)=output.operator()(i); //e
+        refVector.component(i)=output(i); //e
         
     }
     
     vector<RealVector> returned;
-    
     
     double lambda = rarefactionFlow.lambdaCalc(input, rarefactionFlow.getFamilyIndex()); // lambda
     
@@ -124,7 +121,6 @@ vector<RealVector> ContinuationRarefactionMethod::curve(const RealVector & initi
 //            return NULL;//LAMBDA_NOT_INCREASING;
         }
         else if (lambda < lambdap && lambda > lambdam){
-            
             rarefactionFlow.setReferenceVector(refVector);
 //            // Nothing to do, the eigenvector is rev.
         }
@@ -167,8 +163,6 @@ vector<RealVector> ContinuationRarefactionMethod::curve(const RealVector & initi
         }
     }
     
-    
-//TODO O vetor de referencia do RarefactionFlow e a familia sao passados para o solver. Como fazer isso ??
     
     const ODESolver & odeSolver = RpNumerics::getODESolver();
     

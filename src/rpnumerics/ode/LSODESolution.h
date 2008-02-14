@@ -23,6 +23,7 @@
 class LSODESolution:public ODESolution {
 
 private:
+    
     double * y_;
     double t_;
     double tout_;

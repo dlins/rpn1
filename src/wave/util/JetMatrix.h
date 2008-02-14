@@ -140,7 +140,7 @@ inline void JetMatrix::sethessian(const HessianMatrix & input){
         for (j=0; j < n_comps() ; j++){
             for (k=0 ;k < n_comps(); k++){
                 
-                operator()(i, j, k, input.operator()(i, j, k));
+               operator()(i, j, k,input(i, j, k));
                 
             }
         }
@@ -154,7 +154,7 @@ inline void JetMatrix::hessian(HessianMatrix & hMatrix){
         for (j=0; j < n_comps() ; j++){
             for (k=0 ;k < n_comps(); k++){
                 double value = operator()(i, j, k);
-                hMatrix.operator ()(i, j, k, value);
+                hMatrix(i, j, k, value);
             }
         }
     }
@@ -184,7 +184,7 @@ inline void JetMatrix::setjacobian(const JacobianMatrix & input){
     int i, j;
     for(i=0;i< n_comps();i++){
         for (j=0; j < n_comps();j++){
-            operator()(i, j, input.operator ()(i, j));
+            operator()(i, j, input(i, j));
         }
     }
     
@@ -197,7 +197,7 @@ inline void JetMatrix::jacobian(JacobianMatrix &jMatrix){
     for (i=0;i < n_comps(); i++){
         for (j=0; j < n_comps();j++ ){
             double value = operator()(i, j);
-            jMatrix.operator ()(i, j, value);
+            jMatrix(i, j, value);
         }
     }
 }

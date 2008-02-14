@@ -9,6 +9,7 @@ C++SRC += \
 	FluxFunction.cc 	\
 	FluxParams.cc		\
 	PhasePoint.cc		\
+        RarefactionCurve.cc     \
 	Physics.cc           	\
 	RarefactionFlow.cc	\
 	RpSolution.cc 		\

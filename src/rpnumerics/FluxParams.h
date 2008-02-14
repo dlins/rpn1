@@ -36,7 +36,7 @@ public:
     virtual ~FluxParams(void);
     
     RealVector &params(void) const ;
-    RealVector &operator()(void); //TODO Fix implementation
+
     RealVector operator()(void) const;
     
     

@@ -162,13 +162,11 @@ int LSODE::function(int * neq , double * xi , double* U , double * out){
     
 }
 
-int LSODE::solve(const RealVector & input, ODESolution & output,int ) const{ //TODO Mudar para receber o objeto de retorno como parametro (const RealVector &, vector<RealVector> ,int) 
+int LSODE::solve(const RealVector & input,ODESolution & output ) const{ //TODO Mudar para receber o objeto de retorno como parametro (const RealVector &, vector<RealVector> ,int) 
     
     LSODEStopGenerator & stopGenerator = (LSODEStopGenerator &) profile_->getStopGenerator();
     
-//    vector <RealVector> coords;
-    
-    vector <double> times;
+
     
     int i;
     
@@ -231,22 +229,18 @@ int LSODE::solve(const RealVector & input, ODESolution & output,int ) const{ //T
         param[i]=profile_->paramComponent(i);
     }
     
-    
     for (i=0;i < input.size();i++){
         
         U[i]=input.component(i);
         
     }
-    
-    while (stopGenerator.getStatus()){
-        
         int info;
         
         info=solver(&LSODE::function, &neq, &U[0], &t, &tout, &itol, &rtol, &atol[0], &itask, &istate, &iopt, &rwork[0], &lrw, &iwork[0], &liw, &LSODE::jacrarefaction, &mf, &nparam, &param[0]);
         
         stopGenerator.setFunctionStatus(info);
         
-        if (info ==SUCCESSFUL_PROCEDURE){
+
             RealVector realVector(profile_->numberOfEquations());
             
             for (i=0;i < realVector.size();i++)
@@ -256,18 +250,15 @@ int LSODE::solve(const RealVector & input, ODESolution & output,int ) const{ //T
             
             tout=t+profile_->deltaTime();
             
-            times.push_back(tout);
+            output.addTimes(tout);
             
             stopGenerator.increaseTotalPoints();
-        }
-    }
+
 
     delete rwork;
     delete iwork;
     delete U;
     delete param;
-    
-  
 }
 
 const ODESolverProfile & LSODE::getProfile()const { return *profile_;}
