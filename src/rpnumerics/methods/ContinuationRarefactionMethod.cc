@@ -26,6 +26,17 @@ ContinuationRarefactionMethod::ContinuationRarefactionMethod(const RarefactionFl
 
 ContinuationRarefactionMethod::ContinuationRarefactionMethod(const ContinuationRarefactionMethod & copy):RarefactionMethod(copy.getFlow()){}
 
+struct RarefactionCurve ContinuationRarefactionMethod::plot(const RealVector & input,int increase){
+    
+    struct RarefactionCurve output;
+    
+    output.coords=curve(input,increase);
+
+    return output;
+    
+    
+    
+};
 
 vector<RealVector> ContinuationRarefactionMethod::curve(const RealVector & initialPoint, int increase) {
     

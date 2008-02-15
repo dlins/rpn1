@@ -14,6 +14,7 @@
  * Includes:
  */
 #include "RarefactionMethod.h"
+#include "RarefactionCurve.h"
 
 /*
  * ---------------------------------------------------------------
@@ -30,6 +31,8 @@ private:
 public:
     
     vector<RealVector> curve(const RealVector &, int );
+    
+    struct RarefactionCurve plot (const RealVector &,int );
     
     RarefactionMethod * clone() const;
     

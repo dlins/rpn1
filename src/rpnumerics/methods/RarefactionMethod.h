@@ -33,6 +33,8 @@ public:
     
     virtual vector<RealVector> curve(const RealVector &, int ) =0 ;
     
+    virtual struct RarefactionCurve plot(const RealVector &,int)=0;
+    
     virtual RarefactionMethod * clone() const =0;
     
     virtual ~RarefactionMethod();

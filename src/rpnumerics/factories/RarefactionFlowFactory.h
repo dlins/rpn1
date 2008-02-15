@@ -26,12 +26,12 @@ private:
 
 public:
     
-    static RarefactionFlow * getRarefactionFlow(const char *,int,int);
+    static RarefactionFlow * createRarefactionFlow(const char *,int,int);
 
 };
 
 
-inline RarefactionFlow * RarefactionFlowFactory::getRarefactionFlow(const char * flowName,int familyIndex,int timeDirection){//TODO return &
+inline RarefactionFlow * RarefactionFlowFactory::createRarefactionFlow(const char * flowName,int familyIndex,int timeDirection){//TODO return &
     
     
     if (!strcmp(flowName,"RarefactionFlow")){

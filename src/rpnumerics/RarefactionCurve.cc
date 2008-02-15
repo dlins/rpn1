@@ -17,7 +17,7 @@
  * Definitions:
  */
 
-RarefactionCurve::RarefactionCurve(vector<RealVector> points):coords_(points){}
+
 
 
 

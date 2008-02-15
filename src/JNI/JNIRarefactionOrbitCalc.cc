@@ -74,9 +74,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc  (JNIEnv * e
     
     cout <<"Flow name: "<<flow<<endl;
     
-    RarefactionFlow *  rarefactionFlow = RarefactionFlowFactory::getRarefactionFlow(flow, familyIndex, timeDirection);
+     RarefactionFlow *rarefactionFlow = RarefactionFlowFactory::createRarefactionFlow(flow, familyIndex, timeDirection);
     
-    RarefactionMethod * rarefactionMethod=  RarefactionMethodFactory::getRarefactionMethod(method, *rarefactionFlow);
+    RarefactionMethod * rarefactionMethod=  RarefactionMethodFactory::createRarefactionMethod(method, *rarefactionFlow);
     
     env->ReleaseStringUTFChars(methodName, method);
     

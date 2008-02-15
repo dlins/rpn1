@@ -22,20 +22,14 @@
  */
 
 
-class RarefactionCurve {
+struct RarefactionCurve {
     
-private:
+
     
-    vector <RealVector> coords_;
-    
-    
-public :
-    
-    RarefactionCurve(vector<RealVector>);
-    vector<RealVector> getPoints();
+    vector <RealVector> coords;
     
 };
 
-inline vector<RealVector> RarefactionCurve::getPoints(){return coords_;}
+
 
 #endif //! _RarefactionCurve_H

@@ -121,14 +121,7 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
         plotter.configReader_.init(plotter.configStream_);
         
         RPnUIFrame rpnUIFrame_ = new RPnUIFrame(plotter);
-        
-//        //=======================TEST==============================
-//        rpnUIFrame_.addFlowName("RarefactionFlow");
-//        
-//        rpnUIFrame_.addMethodName("ContinuationRarefactionMethod");
-//        //=========================================================
-        
-        
+         
         rpnUIFrame_.pack();
         
         rpnUIFrame_.setVisible(true);

@@ -82,21 +82,24 @@ public class RPnCurveConfigPanel extends javax.swing.JPanel {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridheight = 3;
-        gridBagConstraints.insets = new java.awt.Insets(13, 0, 0, 0);
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(7, 0, 2, 0);
         methodPanel.add(methodComboBox, gridBagConstraints);
 
         methodLabel.setText("Method");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTH;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(6, 0, 0, 0);
         methodPanel.add(methodLabel, gridBagConstraints);
 
         add(methodPanel, new java.awt.GridBagConstraints());
 
         curvePanel.setLayout(new java.awt.BorderLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTH;
@@ -105,48 +108,57 @@ public class RPnCurveConfigPanel extends javax.swing.JPanel {
         flowPanel.setLayout(new java.awt.GridBagLayout());
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 13;
-        gridBagConstraints.insets = new java.awt.Insets(13, 29, 0, 23);
+        gridBagConstraints.insets = new java.awt.Insets(16, 17, 0, 56);
         flowPanel.add(familyIndexComboBox, gridBagConstraints);
 
         familyIndexLabel.setText("Family Index");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(13, 16, 0, 8);
         flowPanel.add(familyIndexLabel, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 7;
-        gridBagConstraints.insets = new java.awt.Insets(13, 31, 0, 18);
+        gridBagConstraints.insets = new java.awt.Insets(9, 16, 0, 55);
         flowPanel.add(directionComboBox, gridBagConstraints);
 
         directionLabel.setText("Direction");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(1, 13, 0, 17);
         flowPanel.add(directionLabel, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.ipadx = 33;
-        gridBagConstraints.insets = new java.awt.Insets(13, 0, 0, 0);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 51;
+        gridBagConstraints.insets = new java.awt.Insets(12, 13, 10, 9);
         flowPanel.add(flowComboBox, gridBagConstraints);
 
         flowLabel.setText("Flow");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 47;
+        gridBagConstraints.insets = new java.awt.Insets(5, 13, 0, 13);
         flowPanel.add(flowLabel, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 6;
         gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 20);
         add(flowPanel, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents

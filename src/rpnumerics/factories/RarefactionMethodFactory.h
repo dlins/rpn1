@@ -27,12 +27,12 @@ private:
     
 public:
     
-    static RarefactionMethod * getRarefactionMethod(const char *,const RarefactionFlow &);
+    static RarefactionMethod * createRarefactionMethod(const char *,const RarefactionFlow &);
     
 };
 
 
-inline RarefactionMethod * RarefactionMethodFactory::getRarefactionMethod(const char * methodName,const RarefactionFlow & flow){
+inline RarefactionMethod * RarefactionMethodFactory::createRarefactionMethod(const char * methodName,const RarefactionFlow & flow){
     
     if (!strcmp(methodName, "ContinuationRarefactionMethod")){
         
