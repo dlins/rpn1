@@ -1,12 +1,14 @@
 <?xml version="1.0"?>
-<!DOCTYPE RPnConfig SYSTEM "./var/config/rpnconfig.dtd">
+<!DOCTYPE RPnConfig SYSTEM "rpnconfig.dtd">
 <rpnconfig>
-<NUMERICS  contour="false" specifichugoniot="false" specificflow="false">
-<PHYSICS physid="QuadraticR2" isnative="false" libname="null"></PHYSICS>
-<FLOWTYPE type="shockflow"></FLOWTYPE>
+<NUMERICS >
+<PHYSICS physid="QuadraticR2" libname="rpnumerics" domain="2"></PHYSICS>
+<FLOWTYPE type="rarefactionflow">
+
+</FLOWTYPE>
 </NUMERICS>
 <VIEWINGPARAMS modeldomain="2">
-<PROJDESC  projlabel="Axis0 X Axis1" projaxisid="0 1 " vpwidth="400" vpheight="400"></PROJDESC>
+<PROJDESC  projlabel="Axis0 X Axis1" projaxisid="0 1" vpwidth="400" vpheight="400"></PROJDESC>
 
 </VIEWINGPARAMS>
 </rpnconfig>
