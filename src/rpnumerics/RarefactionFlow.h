@@ -13,7 +13,7 @@
  * ---------------------------------------------------------------
  * Includes:
  */
-#include "RpFunction.h"
+#include "WaveFlow.h"
 #include "WaveState.h"
 
 #include <math.h>
@@ -40,12 +40,13 @@ extern "C" {
 }
 
 
-class RarefactionFlow: public RpFunction{
+class RarefactionFlow: public WaveFlow{
     
 private:
     
     
     int familyIndex_;
+    
     int timeDirection_;
     
     RealVector * referenceVector_;
@@ -102,7 +103,7 @@ private:
     
     void matrixmult(int m, int p, int n, double *A, double *B, double *C)const ;
     
-    int flux(int n, int family, double *in,  double *out) const;
+    int flow(int n, int family, double *in,  double *out) const;
     
     
     
@@ -110,7 +111,7 @@ private:
 public:
     int jet(const WaveState &u, JetMatrix &m, int degree) const ;
     
-    RarefactionFlow(const int, const int );
+    RarefactionFlow(const int, const int ,const FluxFunction &);
     
     RarefactionFlow(const RarefactionFlow &);
     

@@ -12,7 +12,7 @@
  */
 #include "ShockFlow.h"
 
-ShockFlow::ShockFlow(const RealVector & xzero){
+ShockFlow::ShockFlow(const RealVector & xzero,const FluxFunction &flux ):WaveFlow(flux){
     
     xZero_=new RealVector(xzero);
     

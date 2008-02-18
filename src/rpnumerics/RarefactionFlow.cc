@@ -36,7 +36,7 @@ double RarefactionFlow::lambdaCalc(const WaveState & in, int family){
     
     double vr[n][n], vl[n][n];
     double work[5*n], wi[n], wr[n];
-        
+    
     JetMatrix jetMatrix(n);
     
     const FluxFunction & fluxFunction= RpNumerics::getFlux();
@@ -73,7 +73,7 @@ double RarefactionFlow::lambdaCalc(const WaveState & in, int family){
 }
 
 
-int RarefactionFlow::flux(int n,  int family,  double *in, double *out)const {
+int RarefactionFlow::flow(int n,  int family,  double *in, double *out)const {
     // Fill the Jacobian
     
     double J[n][n];
@@ -88,9 +88,9 @@ int RarefactionFlow::flux(int n,  int family,  double *in, double *out)const {
         waveState(i)=in[i];
     }
     
-    const FluxFunction & fluxFunction= RpNumerics::getFlux();
+    const FluxFunction & fluxFunction= flux();
     
-    status=fluxFunction.jet(waveState, jetMatrix, 1); //This function must return the same codes of LSODE s functions
+    status=fluxFunction.jet(waveState, jetMatrix, 1);
     
     for(i=0;i< n;i++){
         for(j=0;j< n;j++){
@@ -168,9 +168,6 @@ int RarefactionFlow::flux(int n,  int family,  double *in, double *out)const {
     double H[EIG_MAX][EIG_MAX][EIG_MAX];
     double res[EIG_MAX];
     
-    
-    //TODO chamar jet->d2f
-    
     RealVector input(n);
     
     for (i=0;i < n;i++){
@@ -181,7 +178,7 @@ int RarefactionFlow::flux(int n,  int family,  double *in, double *out)const {
     
     
     WaveState inputWaveState(input);
-        
+    
     JetMatrix outputJetMatrix(n);
     fluxFunction.jet(inputWaveState, outputJetMatrix, 2);
     
@@ -203,7 +200,7 @@ int RarefactionFlow::flux(int n,  int family,  double *in, double *out)const {
     
     applyH(EIG_MAX, &(e[family].vrr[0]), &H[0][0][0], &(e[family].vrr[0]), &res[0]);
     double dlambda_dtk = prodint(EIG_MAX, &res[0], &(e[family].vlr[0]))/
-            prodint(EIG_MAX, &(e[family].vlr[0]), &(e[family].vrr[0]));
+    prodint(EIG_MAX, &(e[family].vlr[0]), &(e[family].vrr[0]));
     if (dlambda_dtk*ref_speed < 0){
 //        #ifdef TEST_RAREFACTION
         printf("At rarefaction(): rarefaction not monotonous!\n");
@@ -242,7 +239,7 @@ int RarefactionFlow::jet(const WaveState &u, JetMatrix &m, int degree)const {
     switch (degree){
         case 0:
             
-            returnValue = flux(dimensionSize, familyIndex_, &in[0], &out[0]);
+            returnValue = flow(dimensionSize, familyIndex_, &in[0], &out[0]);
             for (i=0;i < dimensionSize;i++){
                 m(i, out[i]);
             }
@@ -273,15 +270,15 @@ int RarefactionFlow::jet(const WaveState &u, JetMatrix &m, int degree)const {
 }
 
 
-RarefactionFlow::RarefactionFlow(const RarefactionFlow & copy ){
+RarefactionFlow::RarefactionFlow(const RarefactionFlow & copy ):WaveFlow(copy.flux()){
     familyIndex_=copy.getFamilyIndex();
     timeDirection_=copy.direction();
     referenceVector_= new RealVector(copy.getReferenceVector());
 }
 
 
-RarefactionFlow::RarefactionFlow(const int familyIndex, const int timeDirection){
-
+RarefactionFlow::RarefactionFlow(const int familyIndex, const int timeDirection, const FluxFunction & flux):WaveFlow(flux){
+    
     timeDirection_=timeDirection;
     familyIndex_= familyIndex;
 //    referenceVector_= new RealVector(RpNumerics::getPhysics().domain().dim());

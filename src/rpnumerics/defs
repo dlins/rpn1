@@ -16,6 +16,7 @@ C++SRC += \
 	ShockFlow.cc 		\
 	WavePoint.cc		\
 	WaveState.cc		\
+        WaveFlow.cc            \
         RpFunction.cc           
 
 
