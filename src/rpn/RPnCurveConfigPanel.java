@@ -9,6 +9,8 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JComboBox;
+import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
 import rpn.usecase.CurvePlotAgent;
 import rpnumerics.RpNumerics;
 
@@ -25,7 +27,18 @@ public class RPnCurveConfigPanel extends javax.swing.JPanel {
         directionNames();
 
         curvePanel.add(CurvePlotAgent.instance().getContainer(), BorderLayout.SOUTH);
+        
+        JSeparator separator1 = new JSeparator();
+        JSeparator separator2 = new JSeparator();
+        
+        separator1.setOrientation(SwingConstants.VERTICAL);
+        separator2.setOrientation(SwingConstants.VERTICAL);
+        
+        panelSeparator1.add(separator1,BorderLayout.CENTER);
+        panelSeparator2.add(separator2,BorderLayout.CENTER);
+        
 
+        
         CurvePlotAgent.instance().setEnabled(true);
         
 
@@ -75,6 +88,8 @@ public class RPnCurveConfigPanel extends javax.swing.JPanel {
         directionLabel = new javax.swing.JLabel();
         flowComboBox = new javax.swing.JComboBox();
         flowLabel = new javax.swing.JLabel();
+        panelSeparator1 = new javax.swing.JPanel();
+        panelSeparator2 = new javax.swing.JPanel();
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -95,13 +110,16 @@ public class RPnCurveConfigPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(6, 0, 0, 0);
         methodPanel.add(methodLabel, gridBagConstraints);
 
-        add(methodPanel, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        add(methodPanel, gridBagConstraints);
 
         curvePanel.setLayout(new java.awt.BorderLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTH;
         add(curvePanel, gridBagConstraints);
 
@@ -159,8 +177,25 @@ public class RPnCurveConfigPanel extends javax.swing.JPanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 20);
         add(flowPanel, gridBagConstraints);
+
+        panelSeparator1.setLayout(new java.awt.BorderLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 7, 0, 0);
+        add(panelSeparator1, gridBagConstraints);
+
+        panelSeparator2.setLayout(new java.awt.BorderLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 7);
+        add(panelSeparator2, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel curvePanel;
@@ -174,6 +209,8 @@ public class RPnCurveConfigPanel extends javax.swing.JPanel {
     private javax.swing.JComboBox methodComboBox;
     private javax.swing.JLabel methodLabel;
     private javax.swing.JPanel methodPanel;
+    private javax.swing.JPanel panelSeparator1;
+    private javax.swing.JPanel panelSeparator2;
     // End of variables declaration//GEN-END:variables
     private void addMethodNames() {
 
