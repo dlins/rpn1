@@ -37,8 +37,6 @@ public class RPnCurveConfigPanel extends javax.swing.JPanel {
         panelSeparator1.add(separator1,BorderLayout.CENTER);
         panelSeparator2.add(separator2,BorderLayout.CENTER);
         
-
-        
         CurvePlotAgent.instance().setEnabled(true);
         
 
