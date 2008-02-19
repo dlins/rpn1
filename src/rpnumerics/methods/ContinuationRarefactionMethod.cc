@@ -26,19 +26,19 @@ ContinuationRarefactionMethod::ContinuationRarefactionMethod(const RarefactionFl
 
 ContinuationRarefactionMethod::ContinuationRarefactionMethod(const ContinuationRarefactionMethod & copy):RarefactionMethod(copy.getFlow()){}
 
-struct RarefactionCurve ContinuationRarefactionMethod::plot(const RealVector & input,int increase){
-    
-    struct RarefactionCurve output;
-    
-    output.coords=curve(input,increase);
+//struct RarefactionCurve ContinuationRarefactionMethod::plot(const RealVector & input){
+//    
+//    struct RarefactionCurve output;
+//    
+//    output.coords=curve(input);
+//
+//    return output;
+//    
+//    
+//    
+//};
 
-    return output;
-    
-    
-    
-};
-
-vector<RealVector> ContinuationRarefactionMethod::curve(const RealVector & initialPoint, int increase) {
+struct RarefactionCurve ContinuationRarefactionMethod::curve(const RealVector & initialPoint) {
     
     // BEGIN{Initialize the reference eigenvector}
     
@@ -89,11 +89,13 @@ vector<RealVector> ContinuationRarefactionMethod::curve(const RealVector & initi
         
     }
     
-    vector<RealVector> returned;
+//    vector<RealVector> returned;
     
+      struct RarefactionCurve  curve;
+
     double lambda = rarefactionFlow.lambdaCalc(input, rarefactionFlow.getFamilyIndex()); // lambda
     
-    if (lambda == COMPLEX_EIGENVALUE) return returned;
+    if (lambda == COMPLEX_EIGENVALUE) return curve;
     
     // 2. and 3. Find the eigencouples at in_plus and in_minus.
     double epsilon = 1e-5;
@@ -111,7 +113,7 @@ vector<RealVector> ContinuationRarefactionMethod::curve(const RealVector & initi
     
     lambdap=rarefactionFlow.lambdaCalc(tempWaveState, rarefactionFlow.getFamilyIndex());
     
-    if (lambdap == COMPLEX_EIGENVALUE) return returned;
+    if (lambdap == COMPLEX_EIGENVALUE) return curve;
     
     for (ii = 0; ii < dimensionSize; ii++){
         
@@ -121,7 +123,7 @@ vector<RealVector> ContinuationRarefactionMethod::curve(const RealVector & initi
     
     lambdam=rarefactionFlow.lambdaCalc(tempWaveState, rarefactionFlow.getFamilyIndex());
     
-    if (lambdam == COMPLEX_EIGENVALUE) return returned;
+    if (lambdam == COMPLEX_EIGENVALUE) return curve;
     
 //    // 4. Find the reference eigenvector.
     if (rarefactionFlow.direction() == 1){ // Eigenvalues should increase as the orbit advances
@@ -181,6 +183,8 @@ vector<RealVector> ContinuationRarefactionMethod::curve(const RealVector & initi
     
     vector <RealVector> out;
     
+  
+    
     for (i=0;i < 100;i++){
         
         RealVector coord(dimensionSize);
@@ -189,8 +193,9 @@ vector<RealVector> ContinuationRarefactionMethod::curve(const RealVector & initi
         
         inputPoint=coord;
         
-        out.push_back(coord);
+        curve.coords.push_back(coord);
+//        out.push_back(coord);
     }
 
-    return out;
+    return curve;
 }

@@ -30,9 +30,7 @@ private:
 
 public:
     
-    vector<RealVector> curve(const RealVector &, int );
-    
-    struct RarefactionCurve plot (const RealVector &,int );
+    struct RarefactionCurve curve (const RealVector & );
     
     RarefactionMethod * clone() const;
     

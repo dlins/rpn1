@@ -84,7 +84,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc  (JNIEnv * e
     
     //Calculations
     
-    vector <RealVector> coords = rarefactionMethod->curve(realVectorInput,rarefactionFlow->getFamilyIndex());
+    struct RarefactionCurve curveCoords = rarefactionMethod->curve(realVectorInput);
+    
+    vector <RealVector> coords=curveCoords.coords;
     
     delete rarefactionFlow;
     delete rarefactionMethod;
