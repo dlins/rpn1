@@ -11,7 +11,6 @@
  * Includes:
  */
 #include "ContinuationRarefactionMethod.h"
-#include "RpNumerics.h"
 
 /*
  * ---------------------------------------------------------------
@@ -26,19 +25,7 @@ ContinuationRarefactionMethod::ContinuationRarefactionMethod(const RarefactionFl
 
 ContinuationRarefactionMethod::ContinuationRarefactionMethod(const ContinuationRarefactionMethod & copy):RarefactionMethod(copy.getFlow()){}
 
-//struct RarefactionCurve ContinuationRarefactionMethod::plot(const RealVector & input){
-//    
-//    struct RarefactionCurve output;
-//    
-//    output.coords=curve(input);
-//
-//    return output;
-//    
-//    
-//    
-//};
-
-struct RarefactionCurve ContinuationRarefactionMethod::curve(const RealVector & initialPoint) {
+struct RarefactionCurve ContinuationRarefactionMethod::curve(const RealVector & initialPoint,const ODESolver & solver) {
     
     // BEGIN{Initialize the reference eigenvector}
     
@@ -177,24 +164,17 @@ struct RarefactionCurve ContinuationRarefactionMethod::curve(const RealVector & 
     }
     
     
-    const ODESolver & odeSolver = RpNumerics::getODESolver();
-    
     RealVector inputPoint(initialPoint);
-    
-    vector <RealVector> out;
-    
-  
     
     for (i=0;i < 100;i++){
         
         RealVector coord(dimensionSize);
         
-        odeSolver.solve(inputPoint,coord);
+        solver.solve(inputPoint,coord);
         
         inputPoint=coord;
         
         curve.coords.push_back(coord);
-//        out.push_back(coord);
     }
 
     return curve;

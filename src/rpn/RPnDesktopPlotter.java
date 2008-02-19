@@ -19,7 +19,7 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
     public RPnDesktopPlotter(String configFile) {
         try {
 //        // create a VerifierFactory with the default SAX parser
-            System.out.println(DTDPATH);
+
             VerifierFactory factory = new com.sun.msv.verifier.jarv.TheFactoryImpl();
 
             // compile a RELAX schema (or whatever schema you like)

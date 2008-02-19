@@ -14,9 +14,9 @@
  * Includes:
  */
 
-#include <vector>
 #include "RealVector.h"
 #include "RarefactionFlow.h"
+#include "ODESolver.h"
 /*
  * ---------------------------------------------------------------
  * Definitions:
@@ -29,32 +29,30 @@ private:
     RarefactionFlow * rarefactionFlow_;
     
 public:
-
+    
     RarefactionMethod(const RarefactionFlow &);
     
-    virtual struct RarefactionCurve curve(const RealVector &)=0;
+    virtual struct RarefactionCurve curve(const RealVector &, const ODESolver &)=0;
     
     virtual RarefactionMethod * clone() const =0;
     
     virtual ~RarefactionMethod();
     
-  const   RarefactionFlow & getFlow() const;
+    const   RarefactionFlow & getFlow() const;
     
-  void setFlow(const RarefactionFlow &);
-
+    void setFlow(const RarefactionFlow &);
+    
     
     
 };
 
 inline  const RarefactionFlow & RarefactionMethod::getFlow() const  {return *rarefactionFlow_;}
+
 inline void RarefactionMethod::setFlow(const RarefactionFlow & flow){
     
     delete rarefactionFlow_;
     
     rarefactionFlow_= (RarefactionFlow *)flow.clone();
-    
-    
-    
 }
 
 

@@ -243,9 +243,6 @@ int RarefactionFlow::jet(const WaveState &u, JetMatrix &m, int degree)const {
             for (i=0;i < dimensionSize;i++){
                 m(i, out[i]);
             }
-            
-            cout <<"Chamando flow 0"<<endl; //TODO Remove !!
-            
             break;
             
         case 1:

@@ -30,7 +30,7 @@ private:
 
 public:
     
-    struct RarefactionCurve curve (const RealVector & );
+    struct RarefactionCurve curve (const RealVector & ,const ODESolver &);
     
     RarefactionMethod * clone() const;
     
