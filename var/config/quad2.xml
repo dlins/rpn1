@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE RPnConfig SYSTEM "rpnconfig.dtd">
+<!DOCTYPE RPnConfig>
 <rpnconfig>
 <NUMERICS >
 <PHYSICS physid="QuadraticR2" libname="rpnumerics" domain="2"></PHYSICS>
