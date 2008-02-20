@@ -104,7 +104,8 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
 
     public static void main(String[] args) {
 
-        String configFile = System.getProperty("rpngrouphome") + System.getProperty("file.separator") + args[0];
+        //String configFile = System.getProperty("rpngrouphome") + System.getProperty("file.separator") + args[0];
+        String configFile = args[0];
 
         RPnDesktopPlotter plotter = new RPnDesktopPlotter(configFile);
 
