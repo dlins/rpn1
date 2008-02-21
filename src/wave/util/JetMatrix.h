@@ -25,7 +25,6 @@
  */
 
 
-
 /*!@brief Utility class to store a function value and its derivatives
  * 
  * 
