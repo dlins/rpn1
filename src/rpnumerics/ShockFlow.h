@@ -20,6 +20,15 @@
  * Definitions:
  */
 
+
+
+/*!  Definition of class ShockFlow.
+ * TODO:
+ * NOTE :
+ *
+ * @ingroup rpnumerics
+ */
+
 class ShockFlow : public WaveFlow {
 
 protected:

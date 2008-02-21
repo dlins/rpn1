@@ -13,13 +13,24 @@
  * ---------------------------------------------------------------
  * Includes:
  */
-//#include "Vector.h"
+
 #include "except.h"
 #include "RealMatrix2.h"
 /*
  * ---------------------------------------------------------------
  * Definitions:
  */
+
+
+/*!@brief Utility class to a store second derivative matrix
+ * 
+ *  This matrix has n rows and n columns 
+ *
+ * @ingroup wave
+ */
+
+
+
 
 
 class JacobianMatrix: public RealMatrix2 {

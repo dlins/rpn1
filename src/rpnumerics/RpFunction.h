@@ -26,17 +26,18 @@
  ** Definitions:
  */
 
-//! Definition of class RpFunction.
-/*!
- * The RpFunction class defines a generic function prototype.
+
+/*!@brief  The RpFunction class defines a generic function prototype.
+ *
  *
  * f:u C Rm -> v C Rn
  *
  * The jet method returns the nth derivative
+ * 
  * TODO:
  * make the jet method return f by default. In order to do that we must have
  * RealVector v parameter for f as a static or dynamic cast !!!
- * NOTE :
+ * 
  *
  * @ingroup rpnumerics
  */
@@ -45,12 +46,15 @@ class RpFunction {
 public:
    
     virtual ~RpFunction(void);
-    // ! virtual constructor
+    /*! virtual constructor
+     */
    
     virtual RpFunction * clone() const =0;
-    //! m coordinates function evaluation at u
     
-    //! this is the nth derivative calculation that might be available or not
+    /*! m coordinates function evaluation at u
+     *this is the nth derivative calculation that might be available or not
+     */
+
     virtual int jet(const WaveState &u, JetMatrix &m, int degree) const   = 0;
 };
 

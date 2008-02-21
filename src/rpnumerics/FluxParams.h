@@ -20,38 +20,80 @@
  */
 
 
+//! Definition of class FluxParams.
+
+/*!
+ * TODO:
+ * NOTE :
+ *
+ * @ingroup rpnumerics
+ */
+
+
+
+
 class FluxParams {
     
 private:
+    
     RealVector *params_;
     
     
 public:
     
+    /*! Constructor with size length and data array
+     *@param size Length of coords array
+     *@param coords Array with parameter data 
+     */ 
+    
     FluxParams(const int size, double *coords);
+
+    /*! Constructor that uses a RealVector instance
+     *@param params RealVector with parameter data 
+     */
+    
     FluxParams(const RealVector & params);
+    
+    /*! Copy constructor
+     */
     
     FluxParams(const FluxParams & params);
     
     virtual ~FluxParams(void);
     
-    RealVector &params(void) const ;
-
-    RealVector operator()(void) const;
+    /*! Parameter accessor
+     */
     
+    const RealVector & params(void) const ;
+
+    /*! Parameters mutator
+     *
+     *@param params New parameter values 
+     */
     
     void set(const RealVector & params);
     
+    /*! Component parameter accessor 
+     *@param index The index of parameter data array
+     */
+    
     double component(int index) const ;
+
+    /*! Component parameter mutator 
+     *@param index The index of parameter data array
+     *@param value The new value of parameter component
+     */
+    
     void component(int index, double value);
     
     bool operator==(const FluxParams & fluxParams);
+
     FluxParams & operator=(const FluxParams &);
     
     
 };
 
-inline  RealVector & FluxParams::params(void) const {
+inline  const RealVector & FluxParams::params(void) const {
     return *params_;
 }
 

@@ -24,6 +24,8 @@
  */
 
 
+
+
 #define EIG_MAX 2
 #define ABORTED_PROCEDURE   (-7)
 #define COMPLEX_EIGENVALUE  (-7)
@@ -39,6 +41,12 @@ extern "C" {
             int *);
 }
 
+/*! Definition of class RarefactionFlow.
+ * TODO:
+ * NOTE :
+ *
+ * @ingroup rpnumerics
+ */
 
 class RarefactionFlow: public WaveFlow{
     
@@ -52,9 +60,7 @@ private:
     RealVector * referenceVector_;
     
     double lambda_;
-    
-    
-    
+
     int rarefaction(int *neq, double *xi, double *in, double *out, int *nparam, double *param) const ;
     
     struct eigen{
@@ -162,10 +168,5 @@ inline void RarefactionFlow::setReferenceVector(const RealVector & referenceVect
     delete referenceVector_;
     referenceVector_=new RealVector(referenceVector);
 }
-
-
-
-
-
 
 #endif //! _RarefactionFlow_H

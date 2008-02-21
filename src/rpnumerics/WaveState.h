@@ -21,6 +21,13 @@
  * Definitions:
  */
 
+
+/*! @brief  Definition of class WaveState.
+ * 
+ * 
+ * @ingroup rpnumerics
+ */
+
 class WaveState {
 private:
     

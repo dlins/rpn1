@@ -22,6 +22,14 @@
  */
 
 
+/*! @brief Utility class to store a second derivative matrix
+ * 
+ *  This matrix has n rows , n columns and deep n
+ *
+ * @ingroup wave
+ */
+
+
 class HessianMatrix
 {
 private:

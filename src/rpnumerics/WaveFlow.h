@@ -22,6 +22,16 @@
  */
 
 
+
+/*! Definition of class WaveFlow.
+ * TODO:
+ * NOTE :
+ *
+ * @ingroup rpnumerics
+ */
+
+
+
 class WaveFlow :public RpFunction{
     
 private:
@@ -31,9 +41,11 @@ private:
 public:
     
     WaveFlow(const FluxFunction &);
+
     virtual ~WaveFlow();
-    
+    //! Gets the flux function
     const FluxFunction & flux()const ;
+    //! Changes the flux function
     void setFlux(const FluxFunction &);
     
 };

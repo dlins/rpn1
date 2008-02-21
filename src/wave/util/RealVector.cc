@@ -13,26 +13,12 @@ RealVector::RealVector(const RealVector & copy):Vector(copy.size()){
     }
 }
 
-//RealVector & RealVector::operator =(const RealVector & source){
-//    
-//    if (this==&source) return *this;
-//    
-//    int i;
-//    
-//    for (i=0;i < size();i++){
-//        
-//        operator ()(i)=source.operator ()(i);
-//        
-//    }
-//    
-//    return *this;
-//    
-//    
-//}
-
 
 bool RealVector::operator ==(const RealVector &test) {
+    
+    if (size()!=test.size()) return false;
     int i ;
+    
     for (i=0;i < size();i++)
         if (test.component(i)!=component(i)) return false;
     return true;
@@ -48,13 +34,13 @@ void RealVector::negate(){
 }
 
 
-double RealVector::dot(const RealVector v1){
+double RealVector::dot(const RealVector & v1){
     
     
     if (size()!=v1.size()) THROW  (RealVector::RangeViolation());
     
     int i;
-    double result;
+    double result=0;
     
     for (i=0; i< v1.size();i++){
         
@@ -74,9 +60,9 @@ void RealVector::sortEigenData(int n, double * eigenValR, double * eigenValI, Re
     RealVector * sortVec = new RealVector[4];
     for (i = 0; i < 4; i++){
         sortVec[i] =  RealVector(n);
-    
+        
     }
-
+    
     double sortSpaceR [4] = {0, 0, 0, 0};
     double sortSpaceI [4] = {0, 0, 0, 0};
     while (flag) {

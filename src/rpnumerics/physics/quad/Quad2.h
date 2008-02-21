@@ -50,8 +50,6 @@ public:
     const FluxParams & params(void) const;
     const FluxFunction & fluxFunction(void) const;
     const AccumulationFunction & accumulation() const;
-
-
     
     const Space & domain(void) const;
     const Boundary & boundary(void) const;
@@ -84,7 +82,7 @@ inline const Boundary & Quad2::boundary(void) const {
 }
 
 inline void Quad2::boundary(const Boundary & boundary) {
-    //TODO: not working properly - daniel@impa.br
+
     delete boundary_;
     boundary_ = boundary.clone();
 }

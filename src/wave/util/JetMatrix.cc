@@ -29,23 +29,23 @@ JetMatrix::JetMatrix(const int n_comps) :n_comps_(n_comps), size_(n_comps * (1 +
 }
 
 JetMatrix::JetMatrix(const JetMatrix & jetMatrix) :
-    n_comps_(jetMatrix.n_comps_), size_(n_comps_ * (1 + n_comps_ * (1 + n_comps_))),
-            v_(Vector(jetMatrix.v_)), c0_(false), c1_(false), c2_(false) {  }
-    
-    int JetMatrix::n_comps(void) const { return n_comps_;  }
-    
-    JetMatrix::~JetMatrix(){};
-    
-    void JetMatrix::resize(int n_comps) {
-        v_.resize(n_comps * (1 + n_comps * (1 + n_comps)));
-        n_comps_ = n_comps;
-    }
+n_comps_(jetMatrix.n_comps_), size_(n_comps_ * (1 + n_comps_ * (1 + n_comps_))),
+        v_(Vector(jetMatrix.v_)), c0_(false), c1_(false), c2_(false) {  }
 
-    
-    
-    
-    
-    
-    
-    
-    
+int JetMatrix::n_comps(void) const { return n_comps_;  }
+
+JetMatrix::~JetMatrix(){};
+
+void JetMatrix::resize(int n_comps) {
+    v_.resize(n_comps * (1 + n_comps * (1 + n_comps)));
+    n_comps_ = n_comps;
+}
+
+
+
+
+
+
+
+
+

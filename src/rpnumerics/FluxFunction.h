@@ -26,10 +26,20 @@ private:
     FluxParams *params_;
     
 public:
+   
+    /*! Creates a flux function with flux parameters
+     * @param params  Flux parameters
+     */ 
     
     FluxFunction(const FluxParams & params);
     virtual ~FluxFunction(void);
-    FluxParams & fluxParams(void) const;
+    
+    //! Flux parameters accessor
+    const FluxParams & fluxParams(void) const;
+
+    //! Flux parameters mutator 
+    //\param params - New flux parameters 
+    
     void fluxParams(const FluxParams & params);
     
 };

@@ -12,29 +12,59 @@
 
 #include "Vector.h"
 
+//! 
+/*! @brief Class that represents a n dimension vector 
+ * 
+ * 
+ * @ingroup wave
+ */
+
+
 class RealVector :public Vector {
     
 public:
+    
+    /*!Default constructor 
+     *
+     *Will be created a vector with dimension two
+     *
+     */
     RealVector(void);
+
+    /*! Create a vector with a arbitrary dimension
+     */
     RealVector(int);
+
     RealVector(double *);
-    RealVector(const  int,double *);
+    
+    /*! Create a vector with a array of doubles 
+     *@param size Length of the array  
+     *@param data Array of doubles 
+    */
+    
+    RealVector(const  int size ,double * data );
+
     RealVector (const RealVector &);
     
     virtual ~RealVector(void);
-    bool operator==(const RealVector &);
-//    RealVector & operator =(const RealVector &);
     
+    bool operator==(const RealVector &);
+
+    /*! Multiply all components by -1
+     */
     
     void negate();
-    double dot(const RealVector);
+    
+    /*! Return the internal product with other RealVector
+     *@param vector A RealVector with the same size 
+     */
+    
+    double dot(const RealVector & vector);
     
     
 static void sortEigenData(int n, double * eigenValR, double * eigenValI, RealVector * eigenVec);
     
-    // No need for accessor and mutator methods! Use 'Vector' methods to access components.
-    //void setVal(int vindx [], double val);
-    //double getVal(int vindex []) const;
+   
     
 
     
