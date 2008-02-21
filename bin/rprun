@@ -27,4 +27,4 @@ ${libdir}/xsdlib.jar:\
 
 export CLASSPATH
 
-/usr/java/jdk1.5.0_07/bin/java -Djava.library.path=${libdir}/linux_i686 rpn.RPnDesktopPlotter ./var/config/quad2.xml 
+/usr/local/linux_i686/jdk1.5.0_04/bin/java -Djava.library.path=${libdir}/linux_i686 rpn.RPnDesktopPlotter ./var/config/quad2.xml 

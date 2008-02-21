@@ -1,50 +1,5 @@
-#!/bin/csh
-
-#
-#   set up aliases for all instantiations
-#
-
-setenv RPNDIR /impa/home/w/daniel/oficina/rpn/trunk
-setenv DEV_DIR ../build
-setenv DEV_NATIVELIB_DIR ../build/native/Quad2C/linux_i686
-setenv JAVA_HOME /usr/local/linux_i686/jdk1.5.0_04
-setenv PATH $JAVA_HOME/bin:$PATH
-setenv LIBS $RPNDIR/lib
-setenv ACTIVE_RELEASE $LIBS/rpn-1.2.1-beta.jar
+#!/bin/bash
 
 
-# this is for RPn developers
-setenv CLASSPATH ${DEV_DIR}:${CLASSPATH}
-
-# this is for enabling GVector and GMatrix
-setenv CLASSPATH ${RPNDIR}:${CLASSPATH}:${LIBS}/vecmath.jar
-
-# this is for enabling PDFLib
-setenv CLASSPATH ${CLASSPATH}:${LIBS}/lib/pdflib.jar
-setenv LD_LIBRARY_PATH ${LIBS}:${DEV_NATIVELIB_DIR}
-
-
-# this is for enabling LAPACK
-setenv CLASSPATH ${CLASSPATH}:${LIBS}/jlapack-0.6.jar
-
-# this is for enabling XML
-setenv CLASSPATH ${CLASSPATH}:${LIBS}/xml4j.jar:${LIBS}/xmlParserAPIs.jar
-
-# this is for enabling JBOSS
-setenv CLASSPATH ${CLASSPATH}:${LIBS}/jbossall-client.jar
-
-# this is for enabling LOG4J
-setenv CLASSPATH ${CLASSPATH}:${LIBS}/log4j.jar
-
-# this is for enabling DTD validation
-
-setenv CLASSPATH ${CLASSPATH}:${LIBS}/isorelax.jar
-setenv CLASSPATH ${CLASSPATH}:${LIBS}/msv.jar
-setenv CLASSPATH ${CLASSPATH}:${LIBS}/relaxngDatatype.jar
-setenv CLASSPATH ${CLASSPATH}:${LIBS}/xsdlib.jar
-
-
-
-alias rpn 'java  -Djava.compiler=shujit -Drpngrouphome=${RPNDIR}/ rpn.RPnDesktopPlotter ' 
-
-
+echo java -Djava.library.path=$RPNHOME/lib/$RPHOSTTYPE -Drpngrouphome=$RPNHOME -jar $RPNHOME/lib/rpn.jar $1
+java -Djava.library.path=$RPNHOME/lib/$RPHOSTTYPE -Drpngrouphome=$RPNHOME -jar $RPNHOME/lib/rpn.jar $1
