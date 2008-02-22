@@ -1,0 +1,38 @@
+###########################################################
+#
+#	RPn Environment Settings for C-SHELL
+#
+
+setenv RPNHOME ~/oficina/rpn/trunk
+
+#
+#	Architecture and OS variables
+#
+setenv BUILDARCH `uname -m`
+#setenv RPHOSTTYPE `uname -s | tr [:upper:] [:lower:]`"_"$BUILDARCH
+setenv RPHOSTTYPE "linux_"$BUILDARCH
+setenv RPLINUXDIST `head -1 /etc/issue| cut -d" " -f1`
+
+#
+#	Set up development variables
+#
+setenv CVS_RSH ssh
+setenv SVN_SERVER svn://brahms.fluid.impa.br
+
+#
+#	Compiler variables
+#
+#setenv JAVA_HOME /usr/jdk1.6.0_03
+setenv JAVA_HOME /usr/local/linux_i686/jdk1.5.0_04
+setenv BUILDGCCVER `gcc -v |& grep "gcc version" | cut -d" " -f3`
+setenv BUILDG77VER `g77 -v |& grep "gcc version" | cut -d" " -f3`
+setenv BUILDGCCTARGET `g++ -v |& grep ^Target: | cut -d" " -f2`
+
+#
+#	Paths for execution, library and interaction
+#	
+setenv PATH ". ./$RPHOSTTYPE $RPNHOME/bin $JAVA_HOME/bin $PATH"
+setenv LIBRARY_PATH "$LIBRARY_PATH . /usr/lib /usr/local/lib /usr/jdk1.2/lib $RPNHOME/lib $RPNHOME/lib/$RPHOSTTYPE"
+setenv CDPATH ". $CDPATH .. ~ $RPNHOME $RPNHOME/src $RPNHOME/rpnumerics $RPNHOME/wave"
+
+
