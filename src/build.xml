@@ -40,7 +40,7 @@
     </target>
     
     <!-- Compile C++ source -->
-    <target name="compile-c++" description="compile C++ source code" >
+    <target name="compile-c++" depends="init" description="compile C++ source code" >
 	<exec executable="make" dir="${srcdir}">
 	    <arg line ="-f  make/makefile"/>
     	</exec> 
