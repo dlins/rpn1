@@ -12,7 +12,7 @@ import org.xml.sax.SAXParseException;
 
 public class RPnDesktopPlotter implements RPnMenuCommand {
 
-    private String DTDPATH = System.getProperty("rpngrouphome") + System.getProperty("file.separator") + "var" + System.getProperty("file.separator") + "config" + System.getProperty("file.separator");
+    private String DTDPATH = System.getProperty("rpnhome") + System.getProperty("file.separator") + "share" + System.getProperty("file.separator") + "rpn-dtd" + System.getProperty("file.separator");
     private RPnConfigReader configReader_;
     private InputStream configStream_;
 
@@ -104,7 +104,7 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
 
     public static void main(String[] args) {
 
-        //String configFile = System.getProperty("rpngrouphome") + System.getProperty("file.separator") + args[0];
+        //String configFile = System.getProperty("rpnhome") + System.getProperty("file.separator") + args[0];
         String configFile = args[0];
 
         RPnDesktopPlotter plotter = new RPnDesktopPlotter(configFile);
