@@ -24,10 +24,10 @@ DEPENDOBJ += $(ForSRC:%.F=$(OBJDIR)/%.d)
 
 SHARELIBFLAG += -fPIC
 CPPFLAGS += $(SHARELIBFLAG)
-LIBLAPACK = /usr/lib/liblapack.a /usr/lib/libblas.a  /usr/lib/libdl.a \
-	    /usr/lib/gcc/$(BUILDGCCTARGET)/$(BUILDGCCVER)/libgfortran.a \
-	    /usr/lib/gcc/$(BUILDGCCTARGET)/$(BUILDG77VER)/libg2c.a
-#	    /usr/lib/libg2c.a
+LIBLAPACK = -L/usr/lib \
+	    -L/usr/lib/gcc/$(BUILDGCCTARGET)/$(BUILDGCCVER) \
+	    -L/usr/lib/gcc/$(BUILDGCCTARGET)/$(BUILDG77VER) \
+	    -lblas -ldl -lg2c -lgfortran -llapack
 
 
 all: $(LIBARC)
