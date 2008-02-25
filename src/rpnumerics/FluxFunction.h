@@ -12,7 +12,7 @@
 #include "RpFunction.h"
 #include "FluxParams.h"
 
-//! Definition of class FluxFunction.
+//! 
 /*!
  * TODO:
  * NOTE :
@@ -27,18 +27,22 @@ private:
     
 public:
    
-    /*! Creates a flux function with flux parameters
+    /*! @brief Creates a flux function with flux parameters
      * @param params  Flux parameters
      */ 
     
     FluxFunction(const FluxParams & params);
     virtual ~FluxFunction(void);
     
-    //! Flux parameters accessor
+    /*! @brief Flux parameters accessor
+     *@param
+     */
+    
     const FluxParams & fluxParams(void) const;
 
-    //! Flux parameters mutator 
-    //\param params - New flux parameters 
+    /*! @brief Flux parameters mutator 
+     * @param params  New flux parameters
+     */
     
     void fluxParams(const FluxParams & params);
     

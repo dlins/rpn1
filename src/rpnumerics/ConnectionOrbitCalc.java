@@ -7,19 +7,7 @@
 
 package rpnumerics;
 
-import rpnumerics.PhasePoint;
-import rpnumerics.RpNumerics;
 import rpnumerics.RpException;
-import wave.util.RealMatrix2;
-import wave.util.RealVector;
-
-/*
-Creates a connecting orbit using Newton s (or gradient) method for manifoldObitA and manifoldObitB.
-Spep in the method is based on equations (5.3), (5.4).
-New reference points are obtained using equation (5.1) and corrected by
-deleting a component proportional to f(x(t)).
-A gradient method is used is ||xPa - xPb|| > maxPSectionStepLength or |Ds| > maxSigmaStepLength.
- */
 
 public class ConnectionOrbitCalc implements RpCalculation {
     // bound for changing approximated part

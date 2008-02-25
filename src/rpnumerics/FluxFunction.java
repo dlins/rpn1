@@ -18,7 +18,4 @@ public  interface FluxFunction
 	
 	RealVector F( RealVector U );
 	
-//	FluxParams fluxParams( );
-	
-	
 }

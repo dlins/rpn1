@@ -20,7 +20,7 @@
  */
 
 
-//! Definition of class FluxParams.
+//!
 
 /*!
  * TODO:

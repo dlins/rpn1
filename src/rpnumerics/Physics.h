@@ -19,7 +19,7 @@
 #include "Space.h"
 
 
-//! Definition of class Physics.
+//!
 /*!
  *
  * TODO:

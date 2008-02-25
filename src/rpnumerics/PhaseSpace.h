@@ -7,7 +7,7 @@
  **/
 
 
-//! Definition of class PhaseSpace.
+//!
 /*!
  *
  * TODO:

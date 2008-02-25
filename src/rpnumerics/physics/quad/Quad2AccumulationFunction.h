@@ -8,7 +8,7 @@
 #ifndef _Quad2AccumulationFunction_H
 #define	_Quad2AccumulationFunction_H
 
-//! Definition of class AccumulationFunction.
+//!
 /*!
  *
  *

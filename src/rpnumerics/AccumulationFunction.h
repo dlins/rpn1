@@ -8,7 +8,7 @@
 #ifndef _AccumulationFunction_H
 #define	_AccumulationFunction_H
 
-//! Definition of class AccumulationFunction.
+//!
 /*!
 
 

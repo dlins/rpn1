@@ -15,7 +15,7 @@
  */
 #include "RealVector.h"
 
-//! Definition of class Boundary.
+//!
 /*!
  *
  * TODO:

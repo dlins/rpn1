@@ -22,7 +22,7 @@
  */
 
 
-/*! @brief  Definition of class WaveState.
+/*!
  * 
  * 
  * @ingroup rpnumerics
