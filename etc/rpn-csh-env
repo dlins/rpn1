@@ -9,8 +9,7 @@ setenv RPNHOME ~/oficina/rpn/trunk
 #	Architecture and OS variables
 #
 setenv BUILDARCH `uname -m`
-#setenv RPHOSTTYPE `uname -s | tr [:upper:] [:lower:]`"_"$BUILDARCH
-setenv RPHOSTTYPE "linux_"$BUILDARCH
+setenv RPHOSTTYPE `uname -s | tr "[:upper:]" "[:lower:]"`"_"$BUILDARCH
 setenv RPLINUXDIST `head -1 /etc/issue| cut -d" " -f1`
 
 #
