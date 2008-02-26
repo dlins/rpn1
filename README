@@ -4,17 +4,19 @@
  * RPn Project
  */
 
-To compile RPN, execute:
 
 Edit ./etc/rpn-csh-env (or ./etc/rpn-bash-env) and set up RPNHOME variable to reflect 
-your current RPn directory.
+your current RPn home directory.
+
+
+To compile RPN, type:
 
 > source ./etc/rpn-csh-env     (or source ./etc/rpn-bash-env if you use bash)
 > cd src
 > ant
 
 
-To run RPN, execute:
+To run RPN, type:
 
 > rpn <xml-input-file>
 
