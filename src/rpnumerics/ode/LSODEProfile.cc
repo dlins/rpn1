@@ -19,10 +19,9 @@
 
 
 //neq  , itol, rtol, itask, istate, iopt , mf,
-LSODEProfile::LSODEProfile(const RpFunction & function, const LSODEStopGenerator & sGenerator, int neq , int itol , double rtol, int mf, double deltaxi, int paramLength, const double * param):ODESolverProfile(function, sGenerator){
+LSODEProfile::LSODEProfile(const RpFunction & function, const Boundary & boundary,int NmaxSteps, int neq , int itol , double rtol, int mf, double deltaxi, int paramLength, const double * param):ODESolverProfile(function),boundary_(boundary.clone()),maxStepNumber_(NmaxSteps){
     
     //Choosing lrw
-    
     
     int mu =0; // TODO Used only in mf ==25 or mf == 24 HARDCODED !!
     int ml =0;
@@ -103,9 +102,12 @@ LSODEProfile::LSODEProfile(const RpFunction & function, const LSODEStopGenerator
     
 }
 
-LSODEProfile:: LSODEProfile(const LSODEProfile & copy):ODESolverProfile(copy.getFunction(), copy.getStopGenerator()){
+LSODEProfile:: LSODEProfile(const LSODEProfile & copy):ODESolverProfile(copy.getFunction()){
     
     int i;
+
+    boundary_=copy.boundary().clone();
+    maxStepNumber_=copy.maxStepNumber();
     
     rwork_= new double[copy.lengthRWork()];
     
@@ -149,6 +151,7 @@ LSODEProfile::~LSODEProfile(){
     delete iwork_;
     delete atol_;
     delete param_;
+    delete boundary_;
     
     
 }
@@ -162,7 +165,6 @@ LSODEProfile & LSODEProfile::operator=(const LSODEProfile & source){
     delete param_;
     
     setFunction(source.getFunction());
-    setStopGenerator(source.getStopGenerator());
     neq_=source.numberOfEquations();
     itol_=source.absoluteToleranceType();
     paramLength_=source.paramLength();

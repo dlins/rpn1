@@ -14,13 +14,17 @@
  * Includes:
  */
 #include "ODESolverProfile.h"
-#include "LSODEStopGenerator.h"
+#include  "Boundary.h"
 #include <math.h>
 
 /*
  * ---------------------------------------------------------------
  * Definitions:
  */
+
+#define SUCCESSFUL_PROCEDURE 2
+
+
 // The interface to the LSODE solver.
 //
 // The parameters are:
@@ -97,10 +101,14 @@ private:
     int   liw_;
     int    mf_;
     int paramLength_;
+    Boundary * boundary_;
+    int maxStepNumber_;
     
 public:
 //              neq  ,  itol, rtol, itask,istate, iopt , rwork , lrw ,iwork, liw , mf,
-    LSODEProfile(const RpFunction &, const LSODEStopGenerator &, int ,  int , double, int , double , int , const double * );
+//    LSODEProfile(const RpFunction &, const LSODEStopGenerator &, int ,  int , double, int , double , int , const double * );
+    
+    LSODEProfile(const RpFunction &, const Boundary &, int NmaxSteps, int ,  int , double, int , double , int , const double * );
     LSODEProfile(const LSODEProfile &);
     
     virtual ~LSODEProfile();
@@ -127,10 +135,16 @@ public:
     
     double paramComponent(const int) const ;
     
+    const Boundary & boundary()const ;
+    
+    int maxStepNumber()const;
+    
 };
 
 
+inline const Boundary & LSODEProfile::boundary()const {return *boundary_;}
 
+inline int LSODEProfile::maxStepNumber()const {return maxStepNumber_;}
 
 inline double LSODEProfile::relativeTolerance()const{return rtol_;}
 inline int LSODEProfile::task()const{return itask_;}

@@ -13,6 +13,7 @@
  * ---------------------------------------------------------------
  * Includes:
  */
+
 #include "Physics.h"
 #include "Quad2FluxFunction.h"
 #include "Quad2AccumulationFunction.h"
@@ -29,7 +30,6 @@ private:
     Quad2AccumulationFunction * accumulationFunction_;
     
     Boundary * defaultBoundary();
-    
     Boundary * boundary_;
 
     

@@ -66,8 +66,10 @@ void RpNumerics::initODESolver(){
     
     for (ii = 0; ii < dimension; ii++) param[1 + ii] = 0.1;// Minha escolha  // Reference vector
     
+    int maxStepsNumber=100;
     
-    LSODEProfile lsodeProfile(RpNumerics::getFlux(), stopGenerator, dimension, itol, rtol, mf, deltaxi, nparam, param); // o solver apenas passa nparam e param para a funcao
+    
+    LSODEProfile lsodeProfile(RpNumerics::getFlux(), RpNumerics::getPhysics().boundary(),maxStepsNumber, dimension, itol, rtol, mf, deltaxi, nparam, param); // o solver apenas passa nparam e param para a funcao
     
     odeSolver_= new LSODE(lsodeProfile);
     
@@ -85,9 +87,6 @@ JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_init(JNIEnv * env, jclass cls,
     
     jclass numericsProfileClass = env->FindClass(NUMERICSPROFILE_LOCATION);
     jmethodID getPhysIDMethod = env->GetMethodID(numericsProfileClass, "getPhysicsID", "()Ljava/lang/String;");
-    
-//    jmethodID getFamilyIndexMethod = env->GetMethodID(numericsProfileClass, "getFamilyIndex", "()I");
-    
     jstring ID=  (jstring)env->CallObjectMethod(numericsProfile, getPhysIDMethod);
     
     const char *physicsID;

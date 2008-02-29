@@ -20,21 +20,19 @@ using std::vector;
  * Definitions:
  */
 
- double LSODE::tout_=0.05;
- 
- LSODEProfile * LSODE::profile_=NULL;
+double LSODE::tout_=0.05;
+
+LSODEProfile * LSODE::profile_=NULL;
 
 //const RpFunction * LSODE::rpFunction_=NULL;
 
- LSODE::LSODE(const LSODEProfile & profile){
-     profile_=new LSODEProfile(profile);
-//    rpFunction_=profile_->getFunction();
+LSODE::LSODE(const LSODEProfile & profile){
+    profile_=new LSODEProfile(profile);
 }
 
 
- LSODE::LSODE(const LSODE & copy){
- profile_=new LSODEProfile((LSODEProfile &)copy.getProfile()); 
-//    rpFunction_=profile_->getFunction();
+LSODE::LSODE(const LSODE & copy){
+    profile_=new LSODEProfile((LSODEProfile &)copy.getProfile());
 }
 
 LSODE::~LSODE() {
@@ -43,8 +41,7 @@ LSODE::~LSODE() {
 }
 
 
-int LSODE::solve(const RealVector & input,RealVector & output) const{
-    
+int LSODE::solve(const RealVector & input, RealVector & output, double  & time) const{
     
     int i;
     
@@ -52,7 +49,7 @@ int LSODE::solve(const RealVector & input,RealVector & output) const{
     xi=1;       // Only to remove warnings
     
     double t=0;
-
+    
     double * param;
     double  * atol;
     
@@ -119,18 +116,20 @@ int LSODE::solve(const RealVector & input,RealVector & output) const{
     
     tout_=t+profile_->deltaTime();
     
+    time = tout_;
+    
     for (i=0;i< neq;i++){
         
-
+        
         output.component(i)=U[i];
     }
-
+    
     delete rwork;
     delete iwork;
     delete U;
     delete param;
     
-
+    
 }
 
 
@@ -155,111 +154,41 @@ int LSODE::function(int * neq , double * xi , double* U , double * out){
         out[i]=jMatrix(i);
         
     }
-    
     return status;
     
+}
+
+
+
+
+int LSODE::solve(const RealVector & input, ODESolution & output ) const{
     
+    int steps =0;
+    
+    RealVector outputVector(input);
+    RealVector inputVector(input);
+    
+    double time;
+    
+    
+    while (steps < profile_->maxStepNumber()&& profile_->boundary().inside(inputVector)){
+        
+        solve(inputVector, outputVector, time);
+        
+        output.addCoords(outputVector);
+
+        output.addTimes(time);
+        
+        inputVector=outputVector;
+        
+        steps++;
+    }
+    
+    tout_=0;
     
 }
 
-int LSODE::solve(const RealVector & input,ODESolution & output ) const{ //TODO Mudar para receber o objeto de retorno como parametro (const RealVector &, vector<RealVector> ,int) 
-    
-    LSODEStopGenerator & stopGenerator = (LSODEStopGenerator &) profile_->getStopGenerator();
-    
 
-    
-    int i;
-    
-    double xi=0; //HARDCODED Useless variable !!
-    xi=1;       // Only to remove warnings
-    
-    double t=0;
-    
-    double tout=0.05;
-    double * param;
-    double  * atol;
-    
-    int neq = profile_->numberOfEquations();
-    
-    int itol = profile_->absoluteToleranceType();
-    
-    int mf = profile_->methodFlag();
-    
-    int itask = profile_->task();
-    
-    int iopt= profile_->opt();
-    
-    int lrw = profile_->lengthRWork();
-    int liw = profile_->lengthIWork();
-    
-    int istate=1;//Initial value of istate !
-    
-    switch (itol){
-        
-        case 1:
-            
-            break;
-        case 2:
-            
-            atol = new double[profile_->numberOfEquations()];
-            for (i = 0; i < profile_->numberOfEquations(); i++)
-                atol[i] = profile_->absoluteToleranceComponent(i);
-            
-            break;
-        default:
-            
-            cout << "Error in tolerance choose" <<endl;
-    }
-    
-    
-    double *rwork = new double [profile_->lengthRWork()];
-    
-    int * iwork = new int[profile_->lengthIWork()];
-    
-    double rtol = profile_->relativeTolerance();
-    
-    double * U= new double [input.size()];
-    
-    int nparam=profile_->paramLength();
-    
-    param = new double[nparam];
-    
-    for (i=0; i < nparam;i++){
-        
-        param[i]=profile_->paramComponent(i);
-    }
-    
-    for (i=0;i < input.size();i++){
-        
-        U[i]=input.component(i);
-        
-    }
-        int info;
-        
-        info=solver(&LSODE::function, &neq, &U[0], &t, &tout, &itol, &rtol, &atol[0], &itask, &istate, &iopt, &rwork[0], &lrw, &iwork[0], &liw, &LSODE::jacrarefaction, &mf, &nparam, &param[0]);
-        
-        stopGenerator.setFunctionStatus(info);
-        
-
-            RealVector realVector(profile_->numberOfEquations());
-            
-            for (i=0;i < realVector.size();i++)
-                realVector.component(i)=U[i];
-            
-            output.addCoords(realVector);
-            
-            tout=t+profile_->deltaTime();
-            
-            output.addTimes(tout);
-            
-            stopGenerator.increaseTotalPoints();
-
-
-    delete rwork;
-    delete iwork;
-    delete U;
-    delete param;
-}
 
 const ODESolverProfile & LSODE::getProfile()const { return *profile_;}
 

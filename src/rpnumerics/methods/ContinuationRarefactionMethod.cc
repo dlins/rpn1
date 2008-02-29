@@ -11,7 +11,7 @@
  * Includes:
  */
 #include "ContinuationRarefactionMethod.h"
-
+#include "LSODE.h"
 /*
  * ---------------------------------------------------------------
  * Definitions:
@@ -25,7 +25,7 @@ ContinuationRarefactionMethod::ContinuationRarefactionMethod(const RarefactionFl
 
 ContinuationRarefactionMethod::ContinuationRarefactionMethod(const ContinuationRarefactionMethod & copy):RarefactionMethod(copy.getFlow()){}
 
-struct RarefactionCurve ContinuationRarefactionMethod::curve(const RealVector & initialPoint,const ODESolver & solver) {
+struct RarefactionCurve ContinuationRarefactionMethod::curve(const RealVector & initialPoint, const ODESolver & solver) {
     
     // BEGIN{Initialize the reference eigenvector}
     
@@ -54,6 +54,9 @@ struct RarefactionCurve ContinuationRarefactionMethod::curve(const RealVector & 
     
     // 1. Find the eigenvalue and the eigenvector at in (the initial point)
     
+    
+//    const LSODE  & lsode = (const LSODE &) solver;
+    
     RarefactionFlow & rarefactionFlow  =(RarefactionFlow &)getFlow();
     
     rarefactionFlow.setReferenceVector(initialPoint);
@@ -78,11 +81,11 @@ struct RarefactionCurve ContinuationRarefactionMethod::curve(const RealVector & 
     
 //    vector<RealVector> returned;
     
-      struct RarefactionCurve  curve;
-
+    struct RarefactionCurve  rarefactioncurve;
+    
     double lambda = rarefactionFlow.lambdaCalc(input, rarefactionFlow.getFamilyIndex()); // lambda
     
-    if (lambda == COMPLEX_EIGENVALUE) return curve;
+    if (lambda == COMPLEX_EIGENVALUE) return rarefactioncurve;
     
     // 2. and 3. Find the eigencouples at in_plus and in_minus.
     double epsilon = 1e-5;
@@ -100,7 +103,7 @@ struct RarefactionCurve ContinuationRarefactionMethod::curve(const RealVector & 
     
     lambdap=rarefactionFlow.lambdaCalc(tempWaveState, rarefactionFlow.getFamilyIndex());
     
-    if (lambdap == COMPLEX_EIGENVALUE) return curve;
+    if (lambdap == COMPLEX_EIGENVALUE) return rarefactioncurve;
     
     for (ii = 0; ii < dimensionSize; ii++){
         
@@ -110,7 +113,7 @@ struct RarefactionCurve ContinuationRarefactionMethod::curve(const RealVector & 
     
     lambdam=rarefactionFlow.lambdaCalc(tempWaveState, rarefactionFlow.getFamilyIndex());
     
-    if (lambdam == COMPLEX_EIGENVALUE) return curve;
+    if (lambdam == COMPLEX_EIGENVALUE) return rarefactioncurve;
     
 //    // 4. Find the reference eigenvector.
     if (rarefactionFlow.direction() == 1){ // Eigenvalues should increase as the orbit advances
@@ -164,18 +167,18 @@ struct RarefactionCurve ContinuationRarefactionMethod::curve(const RealVector & 
     }
     
     
+    
     RealVector inputPoint(initialPoint);
     
-    for (i=0;i < 100;i++){
-        
-        RealVector coord(dimensionSize);
-        
-        solver.solve(inputPoint,coord);
-        
-        inputPoint=coord;
-        
-        curve.coords.push_back(coord);
-    }
+    vector <double> times;
+    
+    vector<RealVector> result;
 
-    return curve;
+    ODESolution solution(result, times);
+    
+    solver.solve(inputPoint, solution);
+    
+    rarefactioncurve.coords=solution.getCoords();
+        
+    return rarefactioncurve;
 }

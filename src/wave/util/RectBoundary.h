@@ -60,7 +60,7 @@ inline double RectBoundary::coordinateSpan(int i) {
 inline bool RectBoundary::inside(const RealVector & y) const {
     // true if y inside rectangular boundary
     bool result = true;
-    for (int i = 0; i < size_; i++)
+    for (int i = 0; i < y.size(); i++)
         if ((y.component(i) < minimums_->component(i)) || (y.component(i) > maximums_->component(i)))
             result = false;
     

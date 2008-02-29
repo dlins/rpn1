@@ -2,7 +2,7 @@
 #define	_ODESolverProfile_H
 
 #include "RpFunction.h"
-#include "ODEStopGenerator.h"
+//#include "ODEStopGenerator.h"
 
 
 class ODESolverProfile{
@@ -10,12 +10,14 @@ class ODESolverProfile{
 private:
     
     RpFunction * function_;
-    ODEStopGenerator * stopGenerator_;
+//    ODEStopGenerator * stopGenerator_;
     
     
 public:
     
-    ODESolverProfile(const RpFunction &, const ODEStopGenerator &);
+//    ODESolverProfile(const RpFunction &, const ODEStopGenerator &);
+    
+    ODESolverProfile(const RpFunction &);
     
     ODESolverProfile();
     
@@ -25,9 +27,9 @@ public:
     
     ODESolverProfile & operator=(const ODESolverProfile &);
     
-    void setStopGenerator(const ODEStopGenerator &);
+//    void setStopGenerator(const ODEStopGenerator &);
     
-    const ODEStopGenerator & getStopGenerator()const ;
+//    const ODEStopGenerator & getStopGenerator()const ;
     
     const RpFunction & getFunction() const ;
     

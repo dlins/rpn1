@@ -33,7 +33,7 @@ public:
     
     vector<RealVector> getCoords()  const;
     
-protected :
+private :
     
     vector <RealVector> coords_;
     

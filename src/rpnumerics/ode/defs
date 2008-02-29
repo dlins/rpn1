@@ -7,7 +7,6 @@ C++SRC += ODESolverProfile.cc \
           ODESolver.cc        \
           LSODE.cc            \
           LSODEProfile.cc     \
-          LSODESolution.cc    \
           ODEStopGenerator.cc  \
           LSODEStopGenerator.cc
 

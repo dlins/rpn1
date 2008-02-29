@@ -84,6 +84,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc  (JNIEnv * e
     
     vector <RealVector> coords=curveCoords.coords;
     
+    cout<<"Tamanho da curva: "<<coords.size()<<endl;
+    
     delete rarefactionFlow;
     delete rarefactionMethod;
     
