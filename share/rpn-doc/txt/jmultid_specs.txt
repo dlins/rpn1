@@ -1,0 +1,310 @@
+IMPA - Fluid Dynamics August 2001 
+
+
+
+
+JMultiD - Redesign of Wave Multid library using the Java language 
+Release : beta 1.0 
+Authors: Mario de Sa Vera and Dan Marchesin 
+
+
+1- Motivation 
+------------- 
+
+
+Due to the current diversity of platforms and the complexity of 
+developing GUIs using C++ public graphics libraries for the Wave project it 
+is hereby introduced a proposal for redesigning the Multid graphics library 
+The JMultid isa pilot project for future versions of main Fluid applications 
+@1front endusing the Java language. 
+
+
+2- Functional Specification 
+--------------------------- 
+
+
+Concepts 
+
+
+
+
+The Multid library enables the graphical representation of geometric 
+objects of higher dimension. As part of the library we have a set of linear algebraic 
+transformation classes responsible for the mapping of abstract geometric objects 
+(or a collection of them) onto n dimension projections where n <= 3. 
+
+
+
+
+* Geometrical Objects 
+
+
+TODO (please define) 
+
+
+* Spaces: 
+
+
+A Space represents a coordinate space in which geometric objects live.As such it has a 
+dimension and a name. (Formally the World Coordinate Space) 
+
+
+
+
+* Scenes: 
+
+
+A Scene is a collection of geometric objects in a Space.A Scene can be empty or 
+have one or more geometric objects (@2Scene was designed following the Composite pattern). 
+
+
+
+
+* Maps: 
+
+
+A Map represents a generic map between two Spaces.It has a domain and codomain 
+and defines the numeric transformation that is applied to a Scene or to a specific geometrical 
+object. Projections are special kinds of maps which enables the visualization of n dimensional Geometries 
+by creating views in the Viewport Coordinate Space. The Projection maps are combined with the viewing 
+transformation maps in a single matrix multiplication operation (avoiding the two steps operation in the 
+previous design). 
+
+
+* Views: 
+
+
+A View is a graphical representation at the user interface level of a Scene and 
+can be interactively manipulated. There are two and three dimensions Views (Formally 
+the Viewport Coordinate Space). 
+
+
+
+
+Design considerations 
+
+
+
+
+Multid's high level design was originally divided in 3 levels : 
+
+
+* Actual geometric objects structure (abstract multidimensional layer) 
+* Geometric objects graphical representation (projected objects layer) 
+* Numeric transformations (Maps) 
+
+
+
+
+The Java version basically follows the initial design. One advantage we gain 
+right away by using Java is the extensive set of utility classes built in the 
+language, which reduces considerably the amount of infrastructure code. The use of 
+third party graphics libraries is completely surpressed and the standard Java SDK 
+graphics packages isused instead (Swing,AWT, Graphics2D and possibly Java 3D 
+for surface representation). 
+
+
+
+
+3- Technical Specification 
+---------------------------- 
+
+
+As described in the Functional Specification the main concepts in the original Multid 
+library design is followed where we have a layer representing the abstract multidimension 
+geometrical objects and a second hierarchy of projected components resulted from numerical 
+transformations applied to the abstract layer with 2 or 3 dimensions representation. 
+
+
+Target JDK and API versions 
+
+
+The Multid library was developed using the Java 2 SDK Standard Edition (J2SE) v1.3 
+and the following APIs: 
+
+
+- Swing packed with SDK 1.3 
+- Java2D packed with SDK 1.3 
+- Java3D 1.3 (package javax.vecmath in the first release) 
+Package Structure 
+
+
+The redesign of the Multid library is a pilot project as mentioned in the motivation 
+section. The Java package structure follows the basic organization : 
+
+
+wave.multid (common utilities classes included) 
+wave.multid.model 
+wave.multid.map 
+wave.multid.view 
+
+
+
+Low Level Considerations 
+
+
+
+
+In order to have a high resolution for coordinates in multi dimensions the library 
+takes advantage of Java 3D API structures GVector and GMatrix. GVector is the data 
+structure to hold the actual coordinates for a point in a dimension n Space (This data is 
+encapsulated in the CoordsArray class) : 
+
+
+public class CoordsArray { 
+private GVector coords_; 
+private Space space_; 
+} 
+
+
+Both GMatrix and GVector offer optimized Vectorial Algebra procedures and very useful double 
+precision calculation methods are offered (Matrix inversion, LU operation, Multiplication, Vectorial Product etc...) 
+
+
+
+
+Architecture 
+
+
+Conceptually the Multid architecture model is as simple as : 
+
+
+
+
+Map (projection + viewing transformations) 
+AbstractGeomObj ---------------------------> GeomObjView 
+
+
+
+
+* The Abstract Layer : 
+
+
+
+
+The class nomenclature has the prefixes rule reversed in the new design. Instead of prefixing the viewing layer 
+with the ?Actual? word like ?ActualPolygon? the new model applies the ?Abstract? prefix to the n dimensional geometrical objects root Interface : ?AbstractGeomObj? all derived classes uses no prefix. As such a wave.multid.model.Polygon component is an abstraction for a n dimensional Polygon. 
+
+
+The Abstract layer was designed following the SDK standard package java.awt.geom model for representation of geometrical objects. The Graphics2D API uses a java.awt.GeneralPath component to store the segments which compose the geometry path. The Segments oriented representation is a classic model followed by most graphics package (CORE,GKS) and the Multid extends this model by having Segments with multi dimensional coordinates vertices. This model enables the 
+usage of the java.awt.geom.Shape and it?s derived built in components (Line2D, Polygon) to simplify and speed up the construction of the viewing components. 
+
+
+public interface AbstractGeomObj { 
+
+
+void load(FileReader cin); 
+void print(FileWriter cout); 
+BoundingBox getBoundary(); 
+Space getSpace(); 
+AbstractPathIterator getPathIterator(Map map) throws DimMismatchEx; 
+AbstractPathIterator getPathIterator(); // Wire Frame representation 
+void applyMap(Map map) throws DimMismatchEx; 
+} 
+
+
+All geometry abstraction classes extends the base MultiGeometry abstract class which implements the basic generic methods : 
+
+
+public abstract class MultiGeometry implements AbstractGeomObj { 
+
+
+// in order to enable the path creation... 
+protected AbstractPath path_; 
+private ViewingAttr viewAttr_; 
+} 
+
+
+
+
+* Numeric Transformations : 
+
+
+The wave.multid.map package has the Map interface as the root structure : 
+
+
+public interface Map extends Inversible { 
+
+
+Space getDomain(); 
+Space getCodomain(); 
+void image(CoordsArray in,CoordsArray out); 
+void inverse(CoordsArray in,CoordsArray out) 
+throws NoInverseMapEx; 
+void concatenate(Map map); 
+GMatrix getTransfMatrix(); 
+GMatrix getInvTransfMatrix(); 
+void setTransfMatrix(GMatrix matrix); 
+
+
+} 
+
+
+Basically , a map is a matrix transformation applied to a coordinate through the multiplication method provided by the 
+GMatrix class. The inverse transformation matrix is retrieved by the inverse method provided by the GMatrix class and for 
+the cases where a specific inverse transformation matrix has to be used the accessor method getInvTransfMatrix() has to be overriden for all non inversible transformations the inverse call throws an exception. In order to provide @4Homogeneous Coordinates Transformations we have defined a base class HomogeneousMap that implements the design described. 
+The projection map is a special transformation which filters the coordinate axis that are to be viewed and have the 
+viewing transformations applied. As mentioned before one of the major design goals was to have the projection and viewing transformations combined into one single matrix multiplication. 
+
+
+* The Visualization Layer : 
+
+
+The visualization layer should offer a representation of the Scene in a 2/3 dimensions context that is specified 
+accordingly to the Viewing Transformation applied. The Projection map is concatenated with the Coordinate Transformation map to build the final transformation matrix. The 3D transformation follows a very simplified Camera Model@5 and the third projected coordinate is taken as the Z coordinate (discarded by the drawing routines). 
+A whole set of java.awt.geom.Shape derived class is available with the standard SDK. Like the original C++ implementation took advantage of OpenGL geometries the Java version follows the same approach. The root interface for 
+the wave.multid.view package is GeomObjView : 
+
+
+public interface GeomObjView { 
+MultiGeom getAbstractGeom(); 
+void setAbstractGeom(MultiGeom abstractGeom); 
+ViewingTransform getViewingTransform(); 
+void setViewingTransform(ViewingTransform transf); 
+void setBoundaryFlag(boolean flag); 
+boolean getBoundaryFlag(); 
+void draw(Graphics2D g); 
+void update(); 
+} 
+
+
+All geometry classes extends the base ShapedGeometry abstract class : 
+
+
+public abstract class ShapedGeometry implements GeomObjView { 
+private ViewingTransform viewingTransf_; 
+private boolean boundaryFlag_ = false; 
+private Shape shape_; 
+private Shape boundaryBox_; 
+private MultiGeometry abstractGeom_; 
+private ViewingAttr viewAttr_; 
+} 
+
+
+With this architecture in place the generic drawing algorithm implemented by the ShapedGeometry class is : 
+
+
+public void draw(Graphics2D g) { 
+Color previous = g.getColor(); 
+g.setColor(getAbstractGeom().getViewingAttr().getColor()); 
+g.draw(getShape()); 
+if (getBoundaryFlag()) 
+g.draw(getBoundaryBox()); 
+g.setColor(previous); 
+} 
+
+
+The ViewingAttr class specifies display attributes (Colors, Stroke values etc...) that a Geometry View should use and the display of a Boundary Box was left optional. 
+
+
+--------------------------------------------------------------------------------------------------------- 
+
+
+@1 It's currently under analysis the effectiveness of replacing numeric calculation implementations 
+currently written in C and Fortran for Java code. Some of the issues are the difficult interface 
+that Java provides for data exchange between different languages (JNI) versus Java performance penalties; 
+@2 Design Patterns; 
+@3 A description of the set of components implemented in the original C++ version can be found under the 
+multid base directory in multid.doc file; 
+@4 Homogeneous in terms of viewing transformations (Rotation,Scaling and Translation); 
+@5 for a detailed description of the parameters see the Viewing3DTransform class documentation; 

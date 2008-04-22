@@ -1,0 +1,7 @@
+vpath %.cc $(METHODSDIR)
+
+C++SRC +=RarefactionMethod.cc \
+         ContinuationRarefactionMethod.cc
+
+
+CPPFLAGS += -I $(METHODSDIR)

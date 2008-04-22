@@ -1,0 +1,7 @@
+
+UTILDIR = $(WAVEDIR)/util
+MULTIDDIR = $(WAVEDIR)/multid
+
+include $(UTILDIR)/defs
+include $(MULTIDDIR)/defs
+

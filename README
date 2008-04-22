@@ -1,0 +1,26 @@
+/**
+ * IMPA - Fluid Dynamics Laboratory
+ *
+ * RPn Project
+ */
+
+
+Edit ./etc/rpn-csh-env (or ./etc/rpn-bash-env) and set up RPNHOME variable to reflect 
+your current RPn home directory.
+
+
+To compile RPN, type:
+
+> source ./etc/rpn-csh-env     (or source ./etc/rpn-bash-env if you use bash)
+> cd src
+> ant
+
+
+To run RPN, type:
+
+> rpn <xml-input-file>
+
+You will find some input file examples in share/rpn-examples directory.
+
+
+
