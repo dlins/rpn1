@@ -1,4 +1,0 @@
-#!/bin/bash
-
-
-java -Djava.library.path=$RPNHOME/lib/$RPHOSTTYPE -Drpnhome=$RPNHOME -jar $RPNHOME/lib/rpn.jar $1
