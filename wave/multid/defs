@@ -1,0 +1,7 @@
+vpath %.cc $(MULTIDDIR)
+
+C++SRC += Multid.cc	\
+	Space.cc
+
+CPPFLAGS += -I $(MULTIDDIR)
+

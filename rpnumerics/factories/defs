@@ -1,0 +1,6 @@
+vpath %.cc $(FACTORIESDIR)
+
+C++SRC +=RarefactionMethodFactory.cc \
+
+
+CPPFLAGS += -I $(FACTORIESDIR)

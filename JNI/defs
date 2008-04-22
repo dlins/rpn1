@@ -1,0 +1,13 @@
+vpath %.cc $(JNIDIR)
+
+C++SRC += JNIConnectionOrbitCalc.cc\
+	JNIOrbitCalc.cc             \
+        JNIRarefactionOrbitCalc.cc \
+	JNIHugoniotCurveCalc.cc    \
+	JNIManifoldOrbitCalc.cc \
+	JNIStationaryPointCalc.cc \
+        JNIRPnDesktopPlotter.cc   \
+	RpNumerics.cc		\
+
+
+CPPFLAGS += -I $(JNIDIR)/include -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux

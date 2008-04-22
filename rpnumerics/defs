@@ -1,0 +1,34 @@
+vpath %.cc $(RPNUMERICSDIR)
+
+
+C++SRC += \
+	AccumulationFunction.cc 	\
+	AccumulationParams.cc		\
+	DefaultAccumulationFunction.cc	\
+	DefaultAccumulationParams.cc	\
+	FluxFunction.cc 	\
+	FluxParams.cc		\
+	PhasePoint.cc		\
+        RarefactionCurve.cc     \
+	Physics.cc           	\
+	RarefactionFlow.cc	\
+	RpSolution.cc 		\
+	ShockFlow.cc 		\
+	WavePoint.cc		\
+	WaveState.cc		\
+        WaveFlow.cc            \
+        RpFunction.cc           
+
+
+CPPFLAGS += -I $(RPNUMERICSDIR) -g3
+
+PHYSICSDIR = $(RPNUMERICSDIR)/physics
+ODEDIR = $(RPNUMERICSDIR)/ode
+METHODSDIR = $(RPNUMERICSDIR)/methods
+FACTORIESDIR = $(RPNUMERICSDIR)/factories
+
+include $(METHODSDIR)/defs
+include $(FACTORIESDIR)/defs
+include $(PHYSICSDIR)/defs
+include $(ODEDIR)/defs
+

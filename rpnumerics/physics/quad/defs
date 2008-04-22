@@ -1,0 +1,12 @@
+vpath %.cc $(QUADDIR)
+
+
+C++SRC += \
+	Quad2.cc 		\
+	Quad2FluxFunction.cc 	\
+	Quad2FluxParams.cc 	\
+	QuadWaveState.cc        \
+        Quad2AccumulationFunction.cc
+
+CPPFLAGS += -I $(QUADDIR)
+

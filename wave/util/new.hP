@@ -1,0 +1,11 @@
+#ifdef <T>new_h
+#define <T>new_h
+#ifdef __GNUC__
+#pragma interface
+#endif
+#include <sys/stdtypes.h>
+
+void *<T>::operator new(size_t size);
+void <T>::operator delete(void *p, size_t size);
+
+#endif /* <T>new_h */
