@@ -1,4 +1,0 @@
-
-QUADDIR = $(PHYSICSDIR)/quad
-
-include $(QUADDIR)/defs
