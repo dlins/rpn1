@@ -37,7 +37,8 @@ int JetMatrix::n_comps(void) const { return n_comps_;  }
 JetMatrix::~JetMatrix(){};
 
 void JetMatrix::resize(int n_comps) {
-    v_.resize(n_comps * (1 + n_comps * (1 + n_comps)));
+    size_ = (n_comps * (1 + n_comps * (1 + n_comps)));
+    v_.resize(size_);
     n_comps_ = n_comps;
 }
 

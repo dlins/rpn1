@@ -29,6 +29,8 @@ public class RPNumericsProfile {
     
     public void initPhysics(String physicsId,String nativeLibName,String domainSize) {
         
+        // TODO: Kludge! Shouldn't wave libname be a parameter? - daniel@impa.br
+        System.loadLibrary("wave");
         System.loadLibrary(nativeLibName);
         
         physicsId_ = physicsId;
