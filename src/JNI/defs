@@ -1,6 +1,6 @@
 vpath %.cc $(JNIDIR)
 
-C++SRC += JNIConnectionOrbitCalc.cc\
+RPNUMSRC += JNIConnectionOrbitCalc.cc\
 	JNIOrbitCalc.cc             \
         JNIRarefactionOrbitCalc.cc \
 	JNIHugoniotCurveCalc.cc    \

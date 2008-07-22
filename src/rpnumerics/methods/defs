@@ -1,6 +1,6 @@
 vpath %.cc $(METHODSDIR)
 
-C++SRC +=RarefactionMethod.cc \
+RPNUMSRC +=RarefactionMethod.cc \
          ContinuationRarefactionMethod.cc
 
 

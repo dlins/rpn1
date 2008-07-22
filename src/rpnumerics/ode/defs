@@ -2,7 +2,7 @@ vpath %.cc $(ODEDIR)
 vpath %.F $(ODEDIR)
 
 
-C++SRC += ODESolverProfile.cc \
+RPNUMSRC += ODESolverProfile.cc \
           ODESolution.cc      \
           ODESolver.cc        \
           LSODE.cc            \

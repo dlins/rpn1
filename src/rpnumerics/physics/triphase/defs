@@ -1,7 +1,7 @@
 vpath %.cc $(TRIPHASEDIR)
 
 
-C++SRC += Capillarity.cc\
+RPNUMSRC += Capillarity.cc\
           Permeability.cc \
           TriPhase.cc   \
           ViscosityParams.cc \

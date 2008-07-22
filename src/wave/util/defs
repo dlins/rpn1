@@ -1,6 +1,6 @@
 vpath %.cc $(UTILDIR)
 
-C++SRC += ADTADV.cc		\
+WAVESRC += ADTADV.cc		\
 	BlockTri1.cc		\
 	BlockTri2.cc		\
 	BlockTri3.cc		\

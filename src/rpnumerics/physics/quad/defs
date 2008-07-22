@@ -1,7 +1,7 @@
 vpath %.cc $(QUADDIR)
 
 
-C++SRC += \
+RPNUMSRC += \
 	Quad2.cc 		\
 	Quad2FluxFunction.cc 	\
 	Quad2FluxParams.cc 	\

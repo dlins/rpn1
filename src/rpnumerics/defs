@@ -1,7 +1,7 @@
 vpath %.cc $(RPNUMERICSDIR)
 
 
-C++SRC += \
+RPNUMSRC += \
 	AccumulationFunction.cc 	\
 	AccumulationParams.cc		\
 	DefaultAccumulationFunction.cc	\
