@@ -1,6 +1,7 @@
 include make/defs
 
-C++SRC += 
+RPNUMSRC += 
+WAVESRC += 
 ForSRC += 
 
 SRCDIR=.
@@ -15,25 +16,36 @@ include $(WAVEDIR)/defs
 include $(JNIDIR)/defs 
 
 
-LIBNAME = librpnumerics.so
-LIBARC = $(LIBDIR)/$(LIBNAME)
-LIBOBJ = $(C++SRC:%.cc=$(OBJDIR)/%.o)
-LIBOBJ += $(ForSRC:%.F=$(OBJDIR)/%.o)
-DEPENDOBJ = $(C++SRC:%.cc=$(OBJDIR)/%.d)
-DEPENDOBJ += $(ForSRC:%.F=$(OBJDIR)/%.d)
+RPNUMLIBNAME = librpnumerics.so
+RPNUMLIBARC = $(LIBDIR)/$(RPNUMLIBNAME)
+RPNUMLIBOBJ = $(RPNUMSRC:%.cc=$(OBJDIR)/%.o)
+RPNUMLIBOBJ += $(ForSRC:%.F=$(OBJDIR)/%.o)
+RPNUMDEPENDOBJ = $(RPNUMSRC:%.cc=$(OBJDIR)/%.d)
+RPNUMDEPENDOBJ += $(ForSRC:%.F=$(OBJDIR)/%.d)
+
+WAVELIBNAME = libwave.so
+WAVELIBARC = $(LIBDIR)/$(WAVELIBNAME)
+WAVELIBOBJ = $(WAVESRC:%.cc=$(OBJDIR)/%.o)
+WAVEDEPENDOBJ = $(WAVESRC:%.cc=$(OBJDIR)/%.d)
 
 SHARELIBFLAG += -fPIC
 CPPFLAGS += $(SHARELIBFLAG)
 LIBLAPACK = -L/usr/lib \
 	    -L/usr/lib/gcc/$(BUILDGCCTARGET)/$(BUILDGCCVER) \
 	    -L/usr/lib/gcc/$(BUILDGCCTARGET)/$(BUILDG77VER) \
-	    -lblas -ldl -lg2c -lgfortran -llapack
+	    -lblas -ldl -lg2c -lgfortran -llapack 
+LIBWAVE = -L $(LIBDIR) -lwave
 
 
-all: $(LIBARC)
 
-$(LIBARC): $(LIBOBJ)
-	$(CCC) -shared $(SHARELIBFLAG) -Wl,-soname,$(LIBNAME) -o $(LIBARC) $(LIBOBJ) $(LIBLAPACK)
+all: $(WAVELIBARC) $(RPNUMLIBARC)
+
+$(WAVELIBARC): $(WAVELIBOBJ)
+	$(CCC) -shared $(SHARELIBFLAG) -Wl,-soname,$(WAVELIBNAME) -o $(WAVELIBARC) $(WAVELIBOBJ)
+
+$(RPNUMLIBARC): $(RPNUMLIBOBJ)
+	$(CCC) -shared $(SHARELIBFLAG) -Wl,-soname,$(RPNUMLIBNAME) -o $(RPNUMLIBARC) $(RPNUMLIBOBJ) $(LIBLAPACK) $(LIBWAVE)
+
 
 
 .PRECIOUS: $(LIBARC)
