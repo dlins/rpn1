@@ -3,7 +3,12 @@
 #	RPn Environment Settings for BASH-SHELL
 #
 
-export RPNHOME=~/oficina/rpn/trunk
+#
+#	Personal enviroment variables
+#	(Set the variables below to reflect your personal settings)
+#
+export RPNHOME=~/Factory/rpn/trunk
+export JAVA_HOME=/usr/local/jdk1.6.0_03
 
 #
 #	Architecture and OS variables
@@ -21,8 +26,7 @@ export SVN_SERVER=svn://brahms.fluid.impa.br
 #
 #	Compiler variables
 #
-#export JAVA_HOME=/usr/jdk1.6.0_03
-export JAVA_HOME=/usr/local/linux_i686/jdk1.5.0_04
+export RPGNU=yes
 export BUILDGCCVER=`gcc -v 1>& /dev/stdout | grep "gcc version" | cut -d" " -f3`
 export BUILDG77VER=`g77 -v 1>& /dev/stdout | grep "gcc version" | cut -d" " -f3`
 export BUILDGCCTARGET=`g++ -v 1>& /dev/stdout | grep ^Target: | cut -d" " -f2`
@@ -32,5 +36,5 @@ export BUILDGCCTARGET=`g++ -v 1>& /dev/stdout | grep ^Target: | cut -d" " -f2`
 #	
 export PATH=.:./$RPHOSTTYPE:$RPNHOME/bin:$JAVA_HOME/bin:$PATH
 export LIBRARY_PATH=$LIBRARY_PATH:.:/usr/lib:/usr/local/lib:/usr/jdk1.2/lib:$RPNHOME/lib:$RPNHOME/lib/$RPHOSTTYPE
-export CDPATH=.:$CDPATH:..:~:$RPNHOME:$RPNHOME/src:$RPNHOME/rpnumerics:$RPNHOME/wave
+export CDPATH=.:$CDPATH:..:~:$RPNHOME/..:$RPNHOME:$RPNHOME/src:$RPNHOME/rpnumerics:$RPNHOME/wave
 

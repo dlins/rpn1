@@ -4,10 +4,19 @@
  * RPn Project
  */
 
+--------------------------------------------------------------------
+1. INSTALL
+
+Under Ubuntu or Debian:
+
+> sudo apt-get install refblas3 refblas3-dev lapack3 lapack3-dev gfortran
+
+
+--------------------------------------------------------------------
+2. COMPILE
 
 Edit ./etc/rpn-csh-env (or ./etc/rpn-bash-env) and set up RPNHOME variable to reflect 
 your current RPn home directory.
-
 
 To compile RPN, type:
 
@@ -15,6 +24,9 @@ To compile RPN, type:
 > cd src
 > ant
 
+
+--------------------------------------------------------------------
+3. RUN
 
 To run RPN, type:
 
