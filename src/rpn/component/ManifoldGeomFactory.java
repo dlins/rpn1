@@ -3,11 +3,10 @@
  * Departamento de Dinamica dos Fluidos
  *
  */
-
 package rpn.component;
 
-import rpnumerics.ManifoldOrbit;
-import rpnumerics.ManifoldOrbitCalc;
+import rpnumerics.*;
+import wave.multid.view.*;
 
 public class ManifoldGeomFactory extends RpCalcBasedGeomFactory {
     //
@@ -24,18 +23,22 @@ public class ManifoldGeomFactory extends RpCalcBasedGeomFactory {
     // Methods
     //
     protected RpGeometry createGeomFromSource() {
-        ManifoldOrbit orbit = (ManifoldOrbit)geomSource();
+        ManifoldOrbit orbit = (ManifoldOrbit) geomSource();
         return new ManifoldGeom(MultidAdapter.converseOrbitToCoordsArray(orbit.getOrbit()), this);
     }
 
     public String toXML() {
         StringBuffer str = new StringBuffer();
-        String tdir = "pos";
-        if (((ManifoldOrbitCalc)rpCalc()).tDirection() == OrbitGeom.BACKWARD_DIR)
-            tdir = "neg";
-        str.append("<MANIFOLDCALC tdirection=\"" + tdir + "\" calcready=\""+rpn.parser.RPnDataModule.RESULTS+"\">\n");
-        str.append(((ManifoldOrbit)geomSource()).getFirstPoint().toXML()+"\n");
-        str.append(((ManifoldOrbit)geomSource()).toXML(rpn.parser.RPnDataModule.RESULTS));
+        String timedir = "pos";
+        if (((ManifoldOrbitCalc) rpCalc()).tDirection() == OrbitGeom.BACKWARD_DIR) {
+            timedir = "neg";
+        }
+        str.append("<MANIFOLDCALC timedirection=\"" + timedir + "\"" + " initialpoint=\"" + ((ManifoldOrbit) geomSource()).getFirstPoint() + "\"" + " calcready=\"" + rpn.parser.RPnDataModule.RESULTS + "\"" + " flowname=\"" + ((ManifoldOrbitCalc) rpCalc()).getFlow().getName() + "\"" + " methodname=\"" + ((ManifoldOrbitCalc) rpCalc()).getCalcMethodName() + "\"" + ">\n");
+        
+    
+
+        str.append(((ManifoldOrbit) geomSource()).getStationaryPoint().toXML(true));
+        str.append(((ManifoldOrbit) geomSource()).toXML(rpn.parser.RPnDataModule.RESULTS));
         str.append("</MANIFOLDCALC>\n");
         return str.toString();
     }

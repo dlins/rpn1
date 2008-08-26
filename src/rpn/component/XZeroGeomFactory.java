@@ -8,8 +8,8 @@ package rpn.component;
 
 import rpn.controller.RpController;
 import rpn.controller.XZeroController;
-import rpnumerics.StationaryPoint;
 import rpnumerics.StationaryPointCalc;
+import rpnumerics.StationaryPoint;
 import wave.multid.CoordsArray;
 
 public class XZeroGeomFactory extends StationaryPointGeomFactory {

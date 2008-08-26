@@ -9,8 +9,8 @@ package rpn.component;
 import rpn.RPnDesktopPlotter;
 import rpn.controller.RpCalcController;
 import rpn.controller.RpController;
-import rpnumerics.RpException;
 import rpnumerics.RpCalculation;
+import rpnumerics.RpException;
 
 public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
     //
@@ -21,6 +21,7 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
     private Object geomSource_;
     private RpController ui_;
     private boolean isGeomOutOfDate_;
+  
 
     //
     // Constructors/Initializers
@@ -78,4 +79,6 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
             RPnDesktopPlotter.showCalcExceptionDialog(rex);
         }
     }
+
+    
 }

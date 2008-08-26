@@ -2,19 +2,17 @@
  * Departamento de Dinamica dos Fluidos
  *
  */
-
 package rpn.component;
 
 import java.awt.*;
 import java.awt.geom.*;
+
+import rpnumerics.*;
 import wave.multid.*;
 import wave.multid.model.*;
 import wave.multid.view.*;
 import wave.util.*;
 import java.util.ArrayList;
-import rpnumerics.Orbit;
-import rpnumerics.OrbitPoint;
-
 
 public class OrbitGeomView extends PolyLine {
 
@@ -23,9 +21,8 @@ public class OrbitGeomView extends PolyLine {
     private final static int ARROWS_STEP = 10;
     private final static int SCALE = 150;
 
-
     public OrbitGeomView(MultiGeometryImpl geom, ViewingTransform transf,
-                         ViewingAttr attr) throws DimMismatchEx {
+            ViewingAttr attr) throws DimMismatchEx {
 
         super(geom, transf, attr);
 
@@ -36,7 +33,7 @@ public class OrbitGeomView extends PolyLine {
         GeneralPath composite = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
 
         Orbit source = (Orbit) (((RpGeometry) getAbstractGeom()).geomFactory().
-                                geomSource());
+                geomSource());
 
         points_ = source.getPoints();
 
@@ -53,7 +50,6 @@ public class OrbitGeomView extends PolyLine {
         return composite;
 
     }
-
 
     public void draw(Graphics2D g) {
 
@@ -80,8 +76,8 @@ public class OrbitGeomView extends PolyLine {
                     1]), endPoint);
             endPoint.sub(startPoint);
             if (endPoint.norm() >
-                (getViewingTransform().viewPlane().getViewport().getWidth() /
-                 SCALE)) {
+                    (getViewingTransform().viewPlane().getViewport().getWidth() /
+                    SCALE)) {
 
                 Coords2D direction_dc = new Coords2D();
                 Coords2D start_dc = new Coords2D();
@@ -96,15 +92,14 @@ public class OrbitGeomView extends PolyLine {
                 direction_dc.setElement(1, direction_dc.getY() - start_dc.getY());
 
                 Arrow arrow = new Arrow(new RealVector(start_dc.getCoords()),
-                                        new RealVector(direction_dc.getCoords()),
-                                        getViewingTransform().viewPlane().
-                                        getViewport().getWidth() / SCALE,
-                                        getViewingTransform().viewPlane().
-                                        getViewport().getWidth() / SCALE);
+                        new RealVector(direction_dc.getCoords()),
+                        getViewingTransform().viewPlane().
+                        getViewport().getWidth() / SCALE,
+                        getViewingTransform().viewPlane().
+                        getViewport().getWidth() / SCALE);
 
                 arrowList_.add(arrow);
             }
         }
     }
-
 }
