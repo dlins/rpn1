@@ -19,7 +19,7 @@ public interface PhaseSpacePanelController {
 
     public void resetCursorCoords();
 
-    List pointMarkBuffer();
+    List  pointMarkBuffer();
 
     Point get_dc_CompletePoint();
 

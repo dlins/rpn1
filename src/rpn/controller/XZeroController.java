@@ -3,16 +3,16 @@
  * Departamento de Dinamica dos Fluidos
  *
  */
-
 package rpn.controller;
 
 import rpn.component.RpGeomFactory;
 import rpn.component.XZeroGeomFactory;
 import rpn.usecase.*;
-import rpnumerics.RpNumerics;
-import rpnumerics.PhasePoint;
-import java.beans.PropertyChangeEvent;
 import rpnumerics.StationaryPointCalc;
+import rpnumerics.RPNUMERICS;
+import rpnumerics.PhasePoint;
+import rpnumerics.ConservationShockFlow;
+import java.beans.PropertyChangeEvent;
 
 public class XZeroController
         extends RpCalcController {
@@ -20,7 +20,7 @@ public class XZeroController
     // Members
     //
     private XZeroGeomFactory geomFactory_;
-    
+
     //
     // Constructors
     //
@@ -34,49 +34,53 @@ public class XZeroController
         ChangeFluxParamsAgent.instance().addPropertyChangeListener(this);
         ChangeXZeroAgent.instance().addPropertyChangeListener(this);
     }
-    
+
     protected void unregister() {
         ChangeFluxParamsAgent.instance().removePropertyChangeListener(this);
         ChangeXZeroAgent.instance().removePropertyChangeListener(this);
     }
-    
+
     public void install(RpGeomFactory geom) {
         super.install(geom);
         geomFactory_ = (XZeroGeomFactory) geom;
     }
-    
+
     public void uninstall(RpGeomFactory geom) {
         super.uninstall(geom);
         geomFactory_ = null;
     }
-    
+
     public void propertyChange(PropertyChangeEvent change) {
-        
+
         // this is to avoid void notifications of enabled/disbled
         if (change.getPropertyName().compareTo("enabled") != 0) {
-            
+
             if (change.getSource() instanceof ChangeXZeroAgent) {
-                
+
                 // UPDATES THE CALC INIT POINT
-                ( (StationaryPointCalc) geomFactory_.rpCalc()).setInitPoint( (
-                        PhasePoint) change.getNewValue());
+                ((StationaryPointCalc) geomFactory_.rpCalc()).setInitPoint((PhasePoint) change.getNewValue());
             }
-            
-      /*
-       * WE ARE ASSUMING THAT THIS CONTROLLER IS THE FIRST
-       * TO BE NOTIFIED !!! THIS WILL FORCE THE XZERO TERMS UPDATE TOO !
-       * IT HSA TO GET FROM STATIONARY POINT CALC
-       */
 
-//                if (RpNumerics.getProfile().getFlowType().equals("shockflow")){
-                
-                
-                RpNumerics.setXZero(((StationaryPointCalc) geomFactory_.rpCalc()).getInitPoint());
+            /*
+             * WE ARE ASSUMING THAT THIS CONTROLLER IS THE FIRST
+             * TO BE NOTIFIED !!! THIS WILL FORCE THE XZERO TERMS UPDATE TOO !
+             * IT HSA TO GET FROM STATIONARY POINT CALC
+             */
 
-//            }
-                    
-            // UPDATES EIGENS
-            super.propertyChange(change);
-        }
+            if (((StationaryPointCalc) geomFactory_.rpCalc()).getFlow() instanceof ConservationShockFlow) {
+                ((StationaryPointCalc) geomFactory_.rpCalc()).getFlow().setXZero(((StationaryPointCalc) geomFactory_.rpCalc()).getInitPoint());
+
+            }
+//            if (RPNUMERICS.flow() instanceof ConservationShockFlow) {
+
+
+//            ((ConservationShockFlow) RPNUMERICS.flow()).setXZero(((StationaryPointCalc) geomFactory_.rpCalc()).getInitPoint());
+        
+
+
+        // UPDATES EIGENS
+        super.propertyChange(change);
     }
+    }
+
 }

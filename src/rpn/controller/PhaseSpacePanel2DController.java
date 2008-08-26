@@ -6,9 +6,11 @@
 
 package rpn.controller;
 
-//import wave.util.graphs.ViewPlane;
+import wave.multid.graphs.ViewPlane;
 import wave.multid.view.Viewing2DTransform;
 import wave.multid.view.Viewing3DTransform;
+import wave.multid.graphs.Iso2EquiTransform;
+import wave.multid.graphs.dcViewport;
 import rpn.RPnPhaseSpacePanel;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,9 +20,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.Point;
-import wave.multid.graphs.Iso2EquiTransform;
-import wave.multid.graphs.ViewPlane;
-import wave.multid.graphs.dcViewport;
 
 public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpacePanelController {
     //
