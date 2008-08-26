@@ -7,7 +7,6 @@
 package rpn.controller.ui;
 
 import rpn.usecase.*;
-import rpnumerics.RPNumericsProfile;
 import rpn.RPnPhaseSpacePanel;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
@@ -20,12 +19,13 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Cursor;
+import java.beans.PropertyChangeEvent;
 import rpn.controller.*;
 import java.net.*;
+import rpn.RPnDesktopPlotter;
 import rpn.message.*;
 
 /** This class implements a general controller to the application. With the UIController class, the state of the application is changed, the controllers of each panel are installed or removed and the user inputs are stored in a global table. */
-
 public class UIController extends ComponentUI {
     //
     // Constants
@@ -41,57 +41,89 @@ public class UIController extends ComponentUI {
     private MouseMotionController mouseMotionController_;
     private rpn.controller.ui.UserInputTable globalInputTable_;
     private static UIController instance_ = null;
-    private RPnNetworkStatus netStatus_= null;
+    private RPnNetworkStatus netStatus_ = null;
     private String clientID_;
-    
+    private RPnPhaseSpacePanel focusPanel_;
+    private StateInputController stateController_;
+    public static UI_ACTION_SELECTED INITSTATE = null;
+    private boolean showDialog_;
+
     //
     // Constructors
     //
-    protected  UIController(rpn.controller.ui.UserInputHandler state) {
+//    protected UIController(rpn.controller.ui.UserInputHandler state) {
+    protected UIController() {
+
         mouseMotionController_ = new MouseMotionController();
-        setState(state);
+        stateController_ = new StateInputController(RPnDesktopPlotter.getUIFrame());
+
         installedPanels_ = new ArrayList();
         mouseController_ = new MouseController();
-        globalInputTable_ = new UserInputTable(rpnumerics.RpNumerics.domainDim());
-        
+        globalInputTable_ = new UserInputTable(rpnumerics.RPNUMERICS.domainDim());
+
+        handler_ = new CURVES_CONFIG();
+        showDialog_ = true;
         initNetStatus();
-        
+
     }
-    
-    
-    
-    private void initNetStatus(){
-        
-        try{
+
+    private void initNetStatus() {
+
+        try {
             InetAddress ip_ = InetAddress.getLocalHost();
-            String from2_=ip_.getHostAddress();
-            clientID_=from2_.replace('.','_');
-            netStatus_= new RPnNetworkStatus(clientID_);
+            String from2_ = ip_.getHostAddress();
+            clientID_ = from2_.replace('.', '_');
+            netStatus_ = new RPnNetworkStatus(clientID_);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
-        
-        
+
     }
-    
+
+    public void resetApplication() {
+
+
+        if (INITSTATE == null) {
+//            handler_ = new CURVES_CONFIG();
+            UIController.instance().setState(new CURVES_CONFIG());
+
+        } else {
+            UIController.instance().setState(INITSTATE);
+        }
+
+        stateController_.propertyChange(new PropertyChangeEvent(this, "aplication state", 0,handler_));
+    }
+
     public static UIController instance() {
-        if (instance_ == null)
-            instance_ = new UIController(RPNumericsProfile.getInitialState());
-        
+        if (instance_ == null) {
+//            instance_ = new UIController(new CURVES_CONFIG());RPNumericsProfile.getInitialState());
+
+            instance_ = new UIController();
+            return instance_;
+        }
+
         return instance_;
     }
-    
-    
+
+    public boolean getUserDialogInput() {
+        return showDialog_;
+    }
+
+    public void setUserDialogInput(boolean showDialog_) {
+        this.showDialog_ = showDialog_;
+    }
+
     //
     // Inner Classes
     //
     class MouseMotionController extends MouseMotionAdapter {
+
         public void mouseDragged(MouseEvent event) {
+
             if (event.getComponent() instanceof RPnPhaseSpacePanel) {
-                //              if (netStatus_.isMaster()){
-                if (netStatus_.isMaster() || !(netStatus_.isOnline())){
-                    RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel)event.getComponent();
+
+                if (netStatus_.isMaster() || !(netStatus_.isOnline())) {
+                    RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
                     // this will automatically work only for 2D(isComplete())
                     updateUserInputTable(panel, event.getPoint());
                     evaluatePanelsCursorCoords(panel, event.getPoint());
@@ -100,22 +132,24 @@ public class UIController extends ComponentUI {
                         globalInputTable().reset();
                         resetPanelsCursorCoords();
                     }
-                    
+
+
                 }
             }
         }
     }
-    
-    
+
     class MouseController extends MouseAdapter {
+
         public MouseController() {
         }
-        
+
         public void mousePressed(MouseEvent event) {
+
             if (event.getComponent() instanceof RPnPhaseSpacePanel) {
-                if (netStatus_.isMaster() || !(netStatus_.isOnline())){
-                    
-                    RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel)event.getComponent();
+
+                if (netStatus_.isMaster() || !(netStatus_.isOnline())) {
+                    RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
                     updateUserInputTable(panel, event.getPoint());
                     evaluatePanelsCursorCoords(panel, event.getPoint());
                     // execute
@@ -123,152 +157,143 @@ public class UIController extends ComponentUI {
                         userInputComplete(globalInputTable().values());
                         globalInputTable().reset();
                         resetPanelsCursorCoords();
+
                     }
                 }
             }
         }
     }
-    
-    
+
     //
     // Accessors/Mutators
     //
-    
     /** Returns the values entered by the user for a specific action. */
-    
-    
-    public RealVector[] userInputList() { return handler_.userInputList(this); }
-    
-    
+    public RealVector[] userInputList() {
+        return handler_.userInputList(this);
+    }
+
     /** Returns a table with all the points entered by the user. The application holds a table with all points entered by the user. This points are taked by mouse clicks in all panels .*/
-    
-    public rpn.controller.ui.UserInputTable globalInputTable() { return globalInputTable_; }
-    
+    public rpn.controller.ui.UserInputTable globalInputTable() {
+        return globalInputTable_;
+    }
+
     //
     // Methods
     //
-    
     /** This method installs a listener into a panel of application.*/
-    
     public void install(RPnPhaseSpacePanel panel) {
         installedPanels_.add(panel);
         panel.addMouseListener(mouseController_);
         panel.addMouseMotionListener(mouseMotionController_);
+
     }
-    
-    
+
     /** This method removes  a listener of a  panel.*/
-    
     public void uninstall(RPnPhaseSpacePanel panel) {
         installedPanels_.remove(panel);
         panel.removeMouseListener(mouseController_);
         panel.removeMouseMotionListener(mouseMotionController_);
     }
-    
-    
+
     /** Takes the coordinates of a clicked point in a panel and adds this coordinates in a buffer . Each panel has a buffer to store points entered by the user , this method add points in this buffer. The variables absComplete_ and ordComplete_ controls if the pair X/Y are taked correctely.*/
-    
     protected void evaluatePanelsCursorCoords(RPnPhaseSpacePanel clickedPanel, Point point) {
         for (int i = 0; i < installedPanels_.size(); i++) {
-            RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel)installedPanels_.get(i);
+            RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) installedPanels_.get(i);
             panel.getCastedUI().evaluateCursorCoords(clickedPanel, point);
         }
     }
-    
+
     /** Sets the wait cursor to all panels .*/
-    
     public void setWaitCursor() {
         for (int i = 0; i < installedPanels_.size(); i++) {
-            RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel)installedPanels_.get(i);
+            RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) installedPanels_.get(i);
             panel.setCursor(WAIT_CURSOR);
-            
+
         }
     }
-    
-    
+
     /** Sets de default cursor to all panels. */
-    
     public void resetCursor() {
         for (int i = 0; i < installedPanels_.size(); i++) {
-            RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel)installedPanels_.get(i);
+            RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) installedPanels_.get(i);
             panel.setCursor(DEFAULT_CURSOR);
         }
     }
-    
+
     /** Updates the panels. This method is invoked when any atualization in the visuals objects shown by a panel is necessary. */
-    
     public void panelsUpdate() {
         for (int i = 0; i < installedPanels_.size(); i++) {
-            RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel)installedPanels_.get(i);
+            RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) installedPanels_.get(i);
             panel.invalidate();
             panel.repaint();
         }
     }
-    
+
     /** This method sets the absComplete_ and  ordComplete_ variables to false. This forces a new data input. */
-    
     protected void resetPanelsCursorCoords() {
         for (int i = 0; i < installedPanels_.size(); i++) {
-            RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel)installedPanels_.get(i);
+            RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) installedPanels_.get(i);
             panel.getCastedUI().resetCursorCoords();
         }
     }
-    
+
     /** Clear the list that holds the points entered by the user with mouse clicks .*/
-    
     public void panelsBufferClear() {
         for (int i = 0; i < installedPanels_.size(); i++) {
-            RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel)installedPanels_.get(i);
+            RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) installedPanels_.get(i);
             panel.getCastedUI().pointMarkBuffer().clear();
             panel.invalidate();
             panel.repaint();
         }
     }
-    
+
     /** Do a specific action when all user inputs are made. */
-    
     public void userInputComplete(RealVector userInput) {
         // state dependent
-
         handler_.userInputComplete(this, userInput);
-        
-        if (netStatus_.isOnline()){
+
+        if (netStatus_.isOnline()) {
             RPnActionMediator.instance().sendMessage(userInput);
         }
-        
+
     }
-    
-    
+
     /** Sets the state of the application. The application works as a state machine and this method changes the actual state.*/
-    
     public void setState(rpn.controller.ui.UserInputHandler newAction) {
-        
+
+//        System.out.println("Chamando set state(estado atual):" + handler_);
+//        System.out.println("Chamando set state(estado entrando):" + newAction);
+        stateController_.propertyChange(new PropertyChangeEvent(this, "aplication state", handler_, newAction));
+
         if (handler_ instanceof UI_ACTION_SELECTED) {
-            UI_ACTION_SELECTED currentSelection = (UI_ACTION_SELECTED)handler_;
+            UI_ACTION_SELECTED currentSelection = (UI_ACTION_SELECTED) handler_;
             if (newAction instanceof UI_ACTION_SELECTED) {
-                UI_ACTION_SELECTED selectedAction = (UI_ACTION_SELECTED)newAction;
+                UI_ACTION_SELECTED selectedAction = (UI_ACTION_SELECTED) newAction;
                 // either unselect or new selection
                 if (currentSelection.getAction() instanceof RpModelPlotAgent) {
-                    ((RpModelPlotAgent)currentSelection.getAction()).getContainer().setSelected(false);
+
+//
+                    ((RpModelPlotAgent) currentSelection.getAction()).getContainer().setSelected(false);
                 }
                 // Singletons !
-                if (currentSelection.getAction() == selectedAction.getAction())
-                    // unselect
+                if (currentSelection.getAction() == selectedAction.getAction()) // unselect
+                {
                     setState(new GEOM_SELECTION());
-                else
+                } else {
                     handler_ = newAction;
+                }
             } else {
                 handler_ = newAction;
-                // TODO we should have a checkbox for menu actions
+            // TODO we should have a checkbox for menu actions
             }
-        } else
+        } else {
             handler_ = newAction;
-        
+        }
+
+
     }
-    
+
     /** Updates the user input table. If the user input table is not completed yet this method adds a point to this table . */
-    
-    
     public void updateUserInputTable(RPnPhaseSpacePanel clickedPanel, Point point) {
         Coords2D dcPoint = new Coords2D(point.getX(), point.getY());
         CoordsArray wcProjectedPoint = rpn.component.MultidAdapter.createCoords();
@@ -284,30 +309,41 @@ public class UIController extends ComponentUI {
                     wcProjectedPoint.getElement(clickedPanel.getCastedUI().getOrdIndex()));
         }
         if (clickedPanel.getCastedUI() instanceof PhaseSpacePanel3DController) {
-            PhaseSpacePanel3DController panel3DUI = (PhaseSpacePanel3DController)clickedPanel.getCastedUI();
+            PhaseSpacePanel3DController panel3DUI = (PhaseSpacePanel3DController) clickedPanel.getCastedUI();
             if (!(globalInputTable().isComplete(panel3DUI.getDepthIndex()))) {
                 globalInputTable().setElement(panel3DUI.getDepthIndex(), PhaseSpacePanel3DController.userDepthInput());
             }
         }
     }
-    
+
     /** This method converts all user inputs to a RealVector array. */
-    
     static public RealVector[] inputConvertion(List userInputList) {
         // coords type convertion
         RealVector[] coords = new RealVector[userInputList.size()];
-        for (int i = 0; i < userInputList.size(); i++)
-            coords[i] = (RealVector)userInputList.get(i);
+        for (int i = 0; i < userInputList.size(); i++) {
+            coords[i] = (RealVector) userInputList.get(i);
+        }
         return coords;
     }
-    
-    public UserInputHandler getState(){ return handler_;}
-    
-    
-    public RPnNetworkStatus getNetStatusHandler(){return netStatus_;}
-    
-    
-    
-    
-    
+
+    public UserInputHandler getState() {
+        return handler_;
+    }
+
+    public RPnNetworkStatus getNetStatusHandler() {
+        return netStatus_;
+    }
+
+    public void setFocusPanel(RPnPhaseSpacePanel phaseSpacePanel) {
+        focusPanel_ = phaseSpacePanel;
+
+    }
+
+    public RPnPhaseSpacePanel getFocusPanel() {
+        return focusPanel_;
+    }
+
+    public void setStateController(StateInputController stateController) {
+        stateController_ = stateController;
+    }
 }

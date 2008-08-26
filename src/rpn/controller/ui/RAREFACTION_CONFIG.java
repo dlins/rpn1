@@ -6,10 +6,8 @@
 
 package rpn.controller.ui;
 
-import wave.util.RealVector;
 
-import rpnumerics.RpNumerics;
-import rpnumerics.PhasePoint;
+import wave.util.RealVector;
 
 import rpn.usecase.ChangeXZeroAgent;
 import rpn.usecase.RarefactionForwardOrbitPlotAgent;
@@ -27,14 +25,11 @@ public class RAREFACTION_CONFIG extends UI_ACTION_SELECTED {
     public void userInputComplete(rpn.controller.ui.UIController ui,
                                   RealVector userInput) {
 
-        RpNumerics.setRarefactionFlow(new PhasePoint(userInput));
-
         super.userInputComplete(ui, userInput);
 
         RarefactionForwardOrbitPlotAgent.instance().setEnabled(true);
         RarefactionBackwardOrbitPlotAgent.instance().setEnabled(true);
         ChangeXZeroAgent.instance().setEnabled(true);
-
         ui.setState(new GEOM_SELECTION());
 
     }

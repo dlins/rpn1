@@ -10,8 +10,6 @@ import rpn.component.*;
 import rpnumerics.*;
 import wave.util.RealVector;
 import rpn.RPnConfigReader;
-import rpnumerics.ManifoldOrbitCalc;
-import rpnumerics.StationaryPoint;
 
 public class ForwardManifoldPlotAgent extends RpModelPlotAgent {
     //
@@ -34,8 +32,8 @@ public class ForwardManifoldPlotAgent extends RpModelPlotAgent {
     public RpGeometry createRpGeometry(RealVector[] input) {
         RealVector lastPointAdded = input[input.length - 1];
         StationaryPoint statPoint = (StationaryPoint)rpn.parser.RPnDataModule.PHASESPACE.find(lastPointAdded).geomFactory().geomSource();
-        ManifoldGeomFactory factory = new ManifoldGeomFactory(
-            new ManifoldOrbitCalc(statPoint, new PhasePoint(lastPointAdded), OrbitGeom.FORWARD_DIR));
+        ManifoldGeomFactory factory = new ManifoldGeomFactory(RPNUMERICS.createManifoldCalc(statPoint, new PhasePoint(lastPointAdded), OrbitGeom.FORWARD_DIR));
+//            new ManifoldOrbitCalc(statPoint, new PhasePoint(lastPointAdded), OrbitGeom.FORWARD_DIR));
         return factory.geom();
     }
 

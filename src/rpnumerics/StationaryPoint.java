@@ -7,7 +7,22 @@
 
 package rpnumerics;
 
-import rpnumerics.PhasePoint;
+//
+// finds a stationary point of the vector field f
+// using Newton method with the starting point x0
+//
+// Output description
+//        DimN   Dimension of negative (attracting) invariant subspace
+//        DimP   Dimension of positive (repelling) invariant subspace
+//        eigenValR    Eigenvalues with negative real parts: Re
+//        eigenValI    Eigenvalues with negative real parts: Im
+//        eigenVec     Eigenvectors
+//        schurFormN   Schur form with negative real part eigenvalues first
+//        schurVecN    corresponding transformation matrix
+//        schurFormP   Schur form with positive real part eigenvalues first
+//        schurVecN    corresponding transformation matrix
+//
+import wave.util.*;
 import wave.util.RealVector;
 import wave.util.RealMatrix2;
 

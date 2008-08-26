@@ -45,10 +45,12 @@ public abstract class RpModelActionAgent extends AbstractAction implements Undoa
     public void actionPerformed(ActionEvent event) {
         // garbage collection is ok ?
         UI_ACTION_SELECTED action = new UI_ACTION_SELECTED(this);
-//	System.out.println(desc_);
+
 
         if (UIController.instance().getNetStatusHandler().isOnline()){ //Sending application state
             RPnActionMediator.instance().setState(desc_);
+            
+            System.out.println(desc_);
         }
 
 	UIController.instance().setState(action);

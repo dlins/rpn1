@@ -6,13 +6,11 @@
 
 package rpnumerics;
 
-import rpnumerics.PhasePoint;
-import rpnumerics.WavePoint;
 import wave.util.HessianMatrix;
 import wave.util.RealVector;
 import wave.util.RealMatrix2;
 
-public abstract interface WaveFlow {
+public interface WaveFlow {
     //
     // Members
     //
@@ -25,5 +23,7 @@ public abstract interface WaveFlow {
     PhasePoint getXZero();
 
     void setXZero (PhasePoint xzero);
+    
+    String getName();
 
 }

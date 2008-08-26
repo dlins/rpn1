@@ -7,33 +7,37 @@
 package rpn.usecase;
 
 import wave.util.RealVector;
+import wave.util.LoopConstruct;
+import wave.util.LoopIterator;
 import wave.util.Boundary;
 import wave.util.GridProfile;
 import wave.util.MultiGrid;
 import wave.util.GridIterator;
+import wave.multid.model.MultiGeometryImpl;
 import rpnumerics.*;
+import rpn.RPnPhaseSpaceAbstraction;
 import rpn.component.*;
 import javax.swing.AbstractAction;
 import java.awt.event.ActionEvent;
+import java.util.Iterator;
 import rpn.controller.ui.*;
-import rpnumerics.Orbit;
+import rpn.controller.PhaseSpacePanel2DController;
 
 public class FillPhaseSpaceAgent extends AbstractAction {
     static public final String DESC_TEXT = "Fills up the Phase Space";
     static public final int DEFAULT_NUMOFNODES = 100;
     private static FillPhaseSpaceAgent instance_ = null;
-    
+
     protected FillPhaseSpaceAgent() {
         super(DESC_TEXT, null);
     }
-    
-    public void actionPerformed(ActionEvent action) {
 
-        Boundary bounds = RpNumerics.boundary();
-        GridProfile[] profiles = new GridProfile[RpNumerics.domainDim()];
-        for (int i = 0; i < RpNumerics.domainDim(); i++)
+    public void actionPerformed(ActionEvent action) {
+        Boundary bounds = RPNUMERICS.boundary();
+        GridProfile[] profiles = new GridProfile[RPNUMERICS.domainDim()];
+        for (int i = 0; i < RPNUMERICS.domainDim(); i++)
             profiles[i] = new GridProfile(bounds.getMinimums().getElement(i), bounds.getMaximums().getElement(i), DEFAULT_NUMOFNODES);
-        MultiGrid grid = new MultiGrid(profiles,rpnumerics.RpNumerics.domainDim());
+        MultiGrid grid = new MultiGrid(profiles,rpnumerics.RPNUMERICS.domainDim());
         GridIterator iterator = grid.iterator();
         while (iterator.hasNext()) {
             // Orbits needs just one input
@@ -61,7 +65,7 @@ public class FillPhaseSpaceAgent extends AbstractAction {
             }
         }
     }
-    
+
     public static FillPhaseSpaceAgent instance() {
         if (instance_ == null) {
             instance_ = new FillPhaseSpaceAgent();

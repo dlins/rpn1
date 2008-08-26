@@ -3,107 +3,53 @@
  * Departamento de Dinamica dos Fluidos
  *
  */
-
 package rpnumerics;
 
-
+import rpnumerics.physics.*;
 import rpn.controller.ui.*;
-import wave.multid.Space;
+import rpnumerics.methods.*;
 import wave.util.Boundary;
 
 public class RPNumericsProfile {
-    
+    private String libName_;
+
+    public Physics physics_;
     private Boundary boundary_;
     private boolean hasBoundary_ = false;
-    private HugoniotCurveCalc hugoniotCurveCalc_;
-    private Integer familyIndex_;
-    private static boolean flowInitialized_ = false;
-    private static UserInputHandler initialState_ = null;
-    private String nativeLibName_;
     private String physicsId_;
-    private static Space domain_;
-    
-    
-    
+
     // Constructors/Initializers
-    
-    public void initPhysics(String physicsId,String nativeLibName,String domainSize) {
-        
-        // TODO: Kludge! Shouldn't wave libname be a parameter? - daniel@impa.br
-        System.loadLibrary("wave");
-        System.loadLibrary(nativeLibName);
-        
+    public void initPhysics(String physicsId,String libname) {
         physicsId_ = physicsId;
-        nativeLibName_ = nativeLibName;
-        RpNumerics.setProfile(this);
-        domain_= new Space("", new Integer(domainSize).intValue());
+        libName_=libname;
     }
-    
-    public void initFlowType(String flowType) {
-        
-        if (flowType.equals("shockflow")) {
-            setInitialState(new SHOCK_CONFIG());
-        }
-        
-        if (flowType.equals("rarefactionflow")|| flowType.equals("blowuprarefactionflow")) {
-            setInitialState(new RAREFACTION_CONFIG());
-        }
-        if (initialState_ == null) {
-            System.out.println("Wrong flow type!");
-        }
-        
-    }
-    
+
     //Acessors
-    
-    public void setFamilyIndexFlow(int familyIndex) {
-        familyIndex_ = new Integer(familyIndex);
-    }
-    
     public void setBoundary(Boundary boundary) {
         boundary_ = boundary;
         hasBoundary_ = true;
     }
-    
+
     public boolean hasBoundary() {
         return hasBoundary_;
     }
-    
-    public Boundary getBoundary() {
-        
+
+    public Boundary getBoundary() throws Exception {
+
         if (hasBoundary()) {
-            
+
             return boundary_;
         } else {
-            
-            return RpNumerics.boundary();
+            throw new Exception("RPNumericsProfile has no boundary");
+           
         }
     }
-    
-    public String getPhysicsID() {
+
+    public String getPhysicsID() { 
         return physicsId_;
     }
-    
-    
-    public HugoniotCurveCalc getHugoniotCurveCalc() {
-        return hugoniotCurveCalc_;
+
+    public String getLibName() {
+        return libName_;
     }
-    
-    public String libName() {
-        return nativeLibName_;
-    }
-    
-    public static UserInputHandler getInitialState() {
-        return initialState_;
-    }
-    
-    public  Space getDomain(){return domain_;}
-    
-    //Mutators
-    
-    public static void setInitialState(UserInputHandler userInput) {
-        initialState_ = userInput;
-    }
-    
-    
 }

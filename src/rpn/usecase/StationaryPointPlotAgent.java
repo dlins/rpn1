@@ -10,6 +10,8 @@ import rpn.component.*;
 import rpnumerics.PhasePoint;
 import wave.util.RealVector;
 import rpn.RPnConfigReader;
+import rpnumerics.RPNUMERICS;
+import rpnumerics.StationaryPointCalc;
 
 public class StationaryPointPlotAgent extends RpModelPlotAgent {
     //
@@ -31,9 +33,14 @@ public class StationaryPointPlotAgent extends RpModelPlotAgent {
 
     public RpGeometry createRpGeometry(RealVector[] input) {
 
-
-        return new StationaryPointGeomFactory(
-            new rpnumerics.StationaryPointCalc(new PhasePoint(input[input.length - 1]))).geom();
+        
+        
+        StationaryPointCalc sPointCalc = RPNUMERICS.createStationaryPointCalc(new PhasePoint(input[input.length-1]));
+        
+        return new StationaryPointGeomFactory(sPointCalc).geom();
+//
+//        return new StationaryPointGeomFactory(
+//            new rpnumerics.StationaryPointCalc(new PhasePoint(input[input.length - 1]))).geom();
     }
 
     static public StationaryPointPlotAgent instance() {

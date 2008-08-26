@@ -6,18 +6,13 @@
 
 package rpn.usecase;
 
-import rpn.RPnPhaseSpaceAbstraction;
 import rpn.component.*;
-import rpnumerics.OrbitCalc;
-import rpnumerics.OrbitPoint;
-import rpnumerics.StationaryPoint;
 import rpnumerics.StationaryPointCalc;
 import rpnumerics.PhasePoint;
-import rpnumerics.OrbitCalc;
 import wave.util.RealVector;
-import javax.swing.ImageIcon;
-import rpn.controller.PhaseSpacePanel2DController;
 import rpn.RPnConfigReader;
+import rpnumerics.RPNUMERICS;
+import rpnumerics.ShockFlow;
 
 public class XZeroPlotAgent extends RpModelPlotAgent {
     //
@@ -38,7 +33,7 @@ public class XZeroPlotAgent extends RpModelPlotAgent {
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {
-        return new XZeroGeomFactory(new StationaryPointCalc(new PhasePoint(input[input.length - 1]))).geom();
+        return  new XZeroGeomFactory(new StationaryPointCalc(new PhasePoint(input[input.length - 1]),(ShockFlow)RPNUMERICS.createShockFlow())).geom();
     }
 
     static public XZeroPlotAgent instance() {

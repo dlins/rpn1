@@ -7,9 +7,12 @@
 
 package rpnumerics;
 
-
 public interface RpCalculation {
     RpSolution calc() throws RpException;
 
     RpSolution recalc() throws RpException;
+    
+    WaveFlow getFlow();
+    
+    String getCalcMethodName();
 }

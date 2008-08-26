@@ -14,13 +14,13 @@ public class RarefactionOrbit implements RpSolution {
     private OrbitPoint[] points_;
     private int intFlag_;
     
-    private double[] times_;
+
     //
     // Constructor
     //
     
     public RarefactionOrbit(OrbitPoint[] points, int flag) {
-//        super(points,flag);
+
         intFlag_ = flag;
         points_=points;
     }

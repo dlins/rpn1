@@ -6,15 +6,9 @@
 
 package rpn.usecase;
 
-import rpn.component.RpGeomFactory;
-import rpn.component.RpCalcBasedGeomFactory;
-import rpn.component.PoincareSectionGeomFactory;
 import rpn.controller.ui.UndoActionController;
-import rpn.RPnUIFrame;
 import java.awt.event.ActionEvent;
-import java.beans.PropertyChangeEvent;
 import rpn.controller.ui.*;
-import rpn.controller.PhaseSpacePanel2DController;
 import rpn.message.RPnActionMediator;
 
 

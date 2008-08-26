@@ -4,32 +4,64 @@
  * Departamento de Dinamica dos Fluidos
  *
  */
-
 package rpnumerics;
 
-public class Orbit implements RpSolution {
+import wave.util.RealVector;
+
+import rpnumerics.OrbitPoint;
+
+import wave.multid.view.ViewingAttr;
+import java.awt.Color;
+import rpn.component.MultidAdapter;
+import rpn.component.OrbitGeom;
+
+public class Orbit extends RPnCurve implements RpSolution {
     //
     // Members
     //
     private OrbitPoint[] points_;
     private int intFlag_;
-
     private double[] times_;
+
+
     //
     // Constructor
     //
-
-    public Orbit(OrbitPoint[] points, int flag) {
+    public Orbit(RealVector[] coords, double[] times, int flag) {
+        super(MultidAdapter.converseRealVectorsToCoordsArray(coords), new ViewingAttr(Color.white));
 
         intFlag_ = flag;
-        points_=points;
+        times_ = times;
+        points_ = orbitPointsFromRealVectors(coords, times);
+    }
+
+    public Orbit(OrbitPoint[] points, int flag) {
+        super(MultidAdapter.converseOrbitPointsToCoordsArray(points), new ViewingAttr(Color.white));
+        intFlag_ = flag;
+        points_ = points;
     }
 
     public Orbit(Orbit orbit) {
 
+        super(MultidAdapter.converseOrbitPointsToCoordsArray(orbit.getPoints()), new ViewingAttr(Color.white));
+
         intFlag_ = orbit.getIntegrationFlag();
-        points_=orbit.getPoints();
+        points_ = orbit.getPoints();
     }
+
+    private static OrbitPoint[] orbitPointsFromRealVectors(RealVector[] coords,
+            double[] times) {
+        OrbitPoint[] result = new OrbitPoint[times.length];
+        for (int i = 0; i < times.length; i++) {
+            result[i] = new OrbitPoint(coords[i], times[i]);
+        }
+        return result;
+    }
+
+    public int findClosestSegment(wave.util.RealVector coords, double alpha) {
+        return 0;
+    }
+
 
     //
     // Accessors/Mutators
@@ -52,8 +84,31 @@ public class Orbit implements RpSolution {
 
     //
     // Methods
+    //
+    // there is a possibility that the concatenation of
+    // Orbits not exist...
+    static public Orbit cat(Orbit curve1, Orbit curve2) {
+        Orbit swap = new Orbit(curve1.getPoints(), RpSolution.DEFAULT_NULL_FLAG);
+        swap.cat(curve2);
+        return swap;
+    }
 
-   
+    public void cat(Orbit curve) {
+        // opposite time directions assumed...
+        OrbitPoint[] swap = new OrbitPoint[points_.length +
+                curve.getPoints().length - 1];
+        double deltat = lastPoint().getTime() - curve.lastPoint().getTime();
+        for (int i = 0,  j = curve.getPoints().length - 2; i < swap.length; i++) {
+            if (i >= points_.length) {
+                swap[i] = curve.getPoints()[j--];
+                swap[i].setTime(swap[i].getTime() + deltat);
+            } else {
+                swap[i] = (OrbitPoint) points_[i];
+            }
+        }
+        System.arraycopy(swap, 0, points_, 0, swap.length);
+    }
+
     public String toString() {
         StringBuffer buf = new StringBuffer();
         buf.append("\n points = ");
@@ -65,38 +120,41 @@ public class Orbit implements RpSolution {
     }
 
     public String toXML() {
-
         StringBuffer buffer = new StringBuffer();
-        buffer.append("<ORBIT flag=\"" + getIntegrationFlag() + "\">\n");
+
+        String timedir = "pos";
+        if (getIntegrationFlag() == OrbitGeom.BACKWARD_DIR) {
+            timedir = "neg";
+        }
+
+        buffer.append("<ORBIT timedirection=\"" + timedir + "\">\n");
+
         for (int i = 0; i < points_.length; i++) {
 
             buffer.append("<ORBITPOINT time=\"" +
-                          ((OrbitPoint) points_[i]).getTime() + "\">");
+                    ((OrbitPoint) points_[i]).getTime() + "\">");
             buffer.append(points_[i].toXML());
             buffer.append("</ORBITPOINT>\n");
-
         }
         buffer.append("</ORBIT>\n");
-        return buffer.toString();
 
+        return buffer.toString();
     }
 
     public String toXML(boolean calcReady) {
         StringBuffer buffer = new StringBuffer();
         if (calcReady) {
-
-            buffer.append("<ORBIT flag=\"" + getIntegrationFlag() + "\">\n");
+                buffer.append("<ORBIT timedirection=\""+intFlag_+"\""+">\n");
             for (int i = 0; i < points_.length; i++) {
 
+       
                 buffer.append("<ORBITPOINT time=\"" +
-                              ((OrbitPoint) points_[i]).getTime() + "\">");
+                        ((OrbitPoint) points_[i]).getTime() + "\">");
                 buffer.append(points_[i].toXML());
                 buffer.append("</ORBITPOINT>\n");
-
             }
-            buffer.append("</ORBIT>\n");
-        } else {}
+                buffer.append("</ORBIT>\n");
+        }
         return buffer.toString();
-
     }
 }

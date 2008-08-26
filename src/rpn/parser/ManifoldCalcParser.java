@@ -1,5 +1,7 @@
 package rpn.parser;
 
+import rpn.component.ManifoldGeom;
+import rpnumerics.ManifoldOrbit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import rpn.controller.ui.UIController;

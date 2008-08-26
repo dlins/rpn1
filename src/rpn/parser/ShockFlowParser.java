@@ -23,15 +23,18 @@ public class ShockFlowParser implements ActionListener {
                         instance()));
 
                 UIController.instance().userInputComplete(
-                        RPnDataModule.InputHandler.xZero_.
-                        getCoords());
-                // plots hugoniot
+                        RPnDataModule.XZERO.getCoords());
+//                InputHandler.xZero_.
+//                        getCoords());
+//                // plots hugoniot
                 UIController.instance().setState(new
                                                  UI_ACTION_SELECTED(
                         HugoniotPlotAgent.instance()));
-                UIController.instance().userInputComplete(
-                        RPnDataModule.InputHandler.xZero_.
-                        getCoords());
+                 UIController.instance().userInputComplete(
+                        RPnDataModule.XZERO.getCoords());
+//                UIController.instance().userInputComplete(
+//                        RPnDataModule.InputHandler.xZero_.
+//                        getCoords());
 
                 UIController.instance().setState(new
                                                  GEOM_SELECTION());

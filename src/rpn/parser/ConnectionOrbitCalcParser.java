@@ -3,14 +3,15 @@ package rpn.parser;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import rpnumerics.ConnectionOrbit;
+import rpnumerics.ConnectionOrbitCalc;
 import rpn.component.ProfileGeom;
 import rpn.component.ProfileGeomFactory;
 import rpn.component.MultidAdapter;
 import rpn.controller.phasespace.ProfileReadyImpl;
 import rpn.controller.phasespace.ProfileSetupReadyImpl;
 import rpn.usecase.FindProfileAgent;
-import rpnumerics.ConnectionOrbit;
-import rpnumerics.ConnectionOrbitCalc;
+import rpnumerics.RPNUMERICS;
 
 
 
@@ -31,10 +32,10 @@ public class ConnectionOrbitCalcParser implements ActionListener {
                                                   PoincareParser.tempPoincareSection,
                                                   ManifoldParser.manifoldGeomA,
                                                   ManifoldParser.manifoldGeomB));
-                    ConnectionOrbitCalc connectionCalc = new
-                            ConnectionOrbitCalc(
-                                    ManifoldParser.manifoldOrbitA,
-                                    ManifoldParser.manifoldOrbitB);
+                    ConnectionOrbitCalc connectionCalc = RPNUMERICS.createConnectionOrbitCalc(ManifoldParser.manifoldOrbitA, ManifoldParser.manifoldOrbitB);//new
+//                            ConnectionOrbitCalc(
+//                                    ManifoldParser.manifoldOrbitA,
+//                                    ManifoldParser.manifoldOrbitB);
                     ProfileGeomFactory factory = new ProfileGeomFactory(
                             connectionCalc);
                     ConnectionOrbit cOrbit = new ConnectionOrbit(

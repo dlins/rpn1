@@ -6,8 +6,6 @@
 
 package rpnumerics;
 
-
-import rpnumerics.PhasePoint;
 import wave.util.RealMatrix2;
 import wave.util.RealVector;
 

@@ -35,7 +35,7 @@ public:
 
 };
 
-inline Space::Space() { }
+inline Space::Space():name_("Space"),dim_(2) { }
 
 inline Space::Space(const char * name, const int dim)
 	: name_(name),

@@ -43,9 +43,7 @@ public:
     Quad2(const Quad2& );
     
     virtual ~Quad2();
-    
-    
-    
+
     const char * ID(void)const ;
     
     Physics * clone() const;

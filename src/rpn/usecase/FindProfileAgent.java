@@ -13,10 +13,6 @@ import rpn.component.*;
 import java.awt.event.ActionEvent;
 import rpn.controller.phasespace.*;
 import rpn.controller.ui.*;
-import rpnumerics.ConnectionOrbitCalc;
-import rpnumerics.ManifoldOrbit;
-import rpnumerics.ManifoldOrbitCalc;
-import rpnumerics.StationaryPoint;
 
 public class FindProfileAgent extends RpModelPlotAgent {
     //
@@ -54,7 +50,7 @@ public class FindProfileAgent extends RpModelPlotAgent {
     };
 
     public RpGeometry createRpGeometry(RealVector[] input) {
-        ConnectionOrbitCalc connCalc = new ConnectionOrbitCalc((ManifoldOrbit)
+        ConnectionOrbitCalc connCalc = RPNUMERICS.createConnectionOrbitCalc((ManifoldOrbit)
             ((PROFILE_SETUP_READY)rpn.parser.RPnDataModule.PHASESPACE.state()).fwdManifoldGeom().geomFactory().geomSource(),
             (ManifoldOrbit)((PROFILE_SETUP_READY)rpn.parser.RPnDataModule.PHASESPACE.state()).bwdManifoldGeom().geomFactory().geomSource());
         ProfileGeomFactory factory = new ProfileGeomFactory(connCalc);
@@ -64,6 +60,8 @@ public class FindProfileAgent extends RpModelPlotAgent {
     public void findProfile(){
   //        double oldSigma = ((GenericShockFlow)RPNUMERICS.flow()).getSigma();
 //        double oldSigma = ((ShockFlow)RPNUMERICS.flow()).getSigma();
+        
+        double oldSigma = RPNUMERICS.getShockProfile().getSigma();
 
         /*
          * THIS IS THE CONTROL FOR PROFILE CREATION
@@ -82,8 +80,14 @@ public class FindProfileAgent extends RpModelPlotAgent {
                 // U+ MANIFOLD CALCULATION
                 StationaryPoint bwdstatPoint = (StationaryPoint)
                     rpn.parser.RPnDataModule.PHASESPACE.getSelectedGeom().geomFactory().geomSource();
-                ManifoldGeomFactory bwdFactory = new ManifoldGeomFactory(
-                    new ManifoldOrbitCalc(bwdstatPoint, new PhasePoint(midPoint), OrbitGeom.BACKWARD_DIR));
+                ManifoldGeomFactory bwdFactory = new ManifoldGeomFactory(RPNUMERICS.createManifoldCalc(bwdstatPoint, midPoint, OrbitGeom.BACKWARD_DIR));
+//                new ManifoldGeomFactory(
+//                    new ManifoldOrbitCalc(bwdstatPoint, new PhasePoint(midPoint), OrbitGeom.BACKWARD_DIR));
+//                
+                
+                
+//                ManifoldGeomFactory bwdFactory = new ManifoldGeomFactory(
+//                    new ManifoldOrbitCalc(bwdstatPoint, new PhasePoint(midPoint), OrbitGeom.BACKWARD_DIR));
                 rpn.parser.RPnDataModule.PHASESPACE.plot(bwdFactory.geom());
                 execute();
             } else
@@ -93,9 +97,12 @@ public class FindProfileAgent extends RpModelPlotAgent {
                     // U+ MANIFOLD CALCULATION
                     StationaryPoint fwdstatPoint = (StationaryPoint)((NUMCONFIG_READY)
                         rpn.parser.RPnDataModule.PHASESPACE.state()).xzeroGeom().geomFactory().geomSource();
-                    ManifoldGeomFactory fwdFactory = new
-                        ManifoldGeomFactory(
-                        new ManifoldOrbitCalc(fwdstatPoint, new PhasePoint(midPoint), OrbitGeom.FORWARD_DIR));
+                    
+                    ManifoldGeomFactory fwdFactory = new ManifoldGeomFactory(RPNUMERICS.createManifoldCalc(fwdstatPoint, midPoint, OrbitGeom.FORWARD_DIR));
+//                        new ManifoldOrbitCalc(fwdstatPoint, new PhasePoint(midPoint), OrbitGeom.FORWARD_DIR));
+//                    ManifoldGeomFactory fwdFactory = new
+//                        ManifoldGeomFactory(
+//                        new ManifoldOrbitCalc(fwdstatPoint, new PhasePoint(midPoint), OrbitGeom.FORWARD_DIR));
                     rpn.parser.RPnDataModule.PHASESPACE.plot(fwdFactory.geom());
                     execute();
             } else {
@@ -104,14 +111,19 @@ public class FindProfileAgent extends RpModelPlotAgent {
                 // U- MANIFOLD CALCULATION
                 StationaryPoint fwdstatPoint = (StationaryPoint)((NUMCONFIG_READY)
                     rpn.parser.RPnDataModule.PHASESPACE.state()).xzeroGeom().geomFactory().geomSource();
-                ManifoldGeomFactory fwdFactory = new ManifoldGeomFactory(
-                    new ManifoldOrbitCalc(fwdstatPoint, new PhasePoint(midPoint), OrbitGeom.FORWARD_DIR));
+                
+                ManifoldGeomFactory fwdFactory = new ManifoldGeomFactory(RPNUMERICS.createManifoldCalc(fwdstatPoint, midPoint, OrbitGeom.FORWARD_DIR));
+//                ManifoldGeomFactory fwdFactory = new ManifoldGeomFactory(
+//                    new ManifoldOrbitCalc(fwdstatPoint, new PhasePoint(midPoint), OrbitGeom.FORWARD_DIR));
                 rpn.parser.RPnDataModule.PHASESPACE.plot(fwdFactory.geom());
                 // U+ MANIFOLD CALCULATION
                 StationaryPoint bwdstatPoint = (StationaryPoint)
                     rpn.parser.RPnDataModule.PHASESPACE.getSelectedGeom().geomFactory().geomSource();
-                ManifoldGeomFactory bwdFactory = new ManifoldGeomFactory(
-                    new ManifoldOrbitCalc(bwdstatPoint, new PhasePoint(midPoint), OrbitGeom.BACKWARD_DIR));
+               
+                  ManifoldGeomFactory bwdFactory = new ManifoldGeomFactory(RPNUMERICS.createManifoldCalc(bwdstatPoint, midPoint, OrbitGeom.BACKWARD_DIR));
+                
+//                ManifoldGeomFactory bwdFactory = new ManifoldGeomFactory(
+//                    new ManifoldOrbitCalc(bwdstatPoint, new PhasePoint(midPoint), OrbitGeom.BACKWARD_DIR));
                 rpn.parser.RPnDataModule.PHASESPACE.plot(bwdFactory.geom());
                 // PROFILE CALCULATION
                 execute();
@@ -120,12 +132,21 @@ public class FindProfileAgent extends RpModelPlotAgent {
             // PROFILE_SETUP_READY
                 execute();
 	//        double newSigma = ((GenericShockFlow)RPNUMERICS.flow()).getSigma();
+        double newSigma =  RPNUMERICS.getShockProfile().getSigma();
+        
 //        double newSigma = ((ShockFlow)RPNUMERICS.flow()).getSigma();
-//        ChangeSigmaAgent.instance().applyChange(
-//            new java.beans.PropertyChangeEvent(this, ChangeSigmaAgent.DESC_TEXT, new Double(oldSigma), new Double(newSigma)));
+        ChangeSigmaAgent.instance().applyChange(
+            new java.beans.PropertyChangeEvent(this, ChangeSigmaAgent.DESC_TEXT, new Double(oldSigma), new Double(newSigma)));
         setEnabled(false);
 
     }
+
+
+
+
+
+
+
 
     static public FindProfileAgent instance() {
         if (instance_ == null)

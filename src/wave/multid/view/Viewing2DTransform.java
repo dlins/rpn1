@@ -12,6 +12,8 @@ import wave.multid.Coords2D;
 import wave.multid.Multid;
 import wave.multid.graphs.ViewPlane;
 
+       
+
 
 
 public class Viewing2DTransform implements ViewingTransform {
@@ -28,6 +30,8 @@ public class Viewing2DTransform implements ViewingTransform {
     private ViewPlane viewPlane_;
     private IdentityMap compositeTransform_;
 
+  
+
     //
     // Constructors
     //
@@ -38,7 +42,8 @@ public class Viewing2DTransform implements ViewingTransform {
         makeCompositeTransform();
 
     }
-
+    
+    
     //
     // Accessors/Mutators
     //

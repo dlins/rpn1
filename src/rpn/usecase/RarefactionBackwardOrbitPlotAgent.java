@@ -1,8 +1,9 @@
 package rpn.usecase;
 
 import rpn.component.*;
+import rpnumerics.OrbitPoint;
 import rpnumerics.PhasePoint;
-import rpnumerics.RarefactionOrbitCalc;
+import rpnumerics.RPNUMERICS;
 import wave.util.*;
 
 public class RarefactionBackwardOrbitPlotAgent extends RpModelPlotAgent {
@@ -21,8 +22,11 @@ public class RarefactionBackwardOrbitPlotAgent extends RpModelPlotAgent {
     
     public RpGeometry createRpGeometry(RealVector[] input) {
         
-        PhasePoint oPoint = new PhasePoint(input[input.length - 1]);
-        RarefactionOrbitGeomFactory factory = new RarefactionOrbitGeomFactory(new RarefactionOrbitCalc(oPoint,-1));
+//        PhasePoint oPoint = new PhasePoint(input[input.length - 1]);
+        
+        OrbitPoint oPoint = new OrbitPoint(input[input.length - 1]);
+        
+        RarefactionOrbitGeomFactory factory = new RarefactionOrbitGeomFactory(RPNUMERICS.createRarefactionCalc(oPoint, -1));//timeDirection)new RarefactionOrbitCalc(oPoint,-1));
         return factory.geom();
     }
     

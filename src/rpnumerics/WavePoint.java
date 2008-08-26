@@ -36,5 +36,11 @@ public class WavePoint extends RealVector {
 
    public double getSigma(){return sigma_;}
 
+   public void set(RealVector data,double sigma){
+
+       super.set(data);
+       sigma_=sigma;
+   }
+
 
 }

@@ -7,7 +7,8 @@
 package rpn.usecase;
 
 import wave.util.RealVector;
-import rpnumerics.RpNumerics;
+import rpnumerics.RPNUMERICS;
+import rpnumerics.ConservationShockFlow;
 import javax.swing.JDialog;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
@@ -30,7 +31,7 @@ public class ChangeFluxParamsAgent extends RpModelConfigChangeAgent {
     //
     protected ChangeFluxParamsAgent() {
         super(DESC_TEXT);
-        if (rpnumerics.RpNumerics.physicsID().startsWith("Quad"))
+        if (rpnumerics.RPNUMERICS.physicsID().startsWith("Quad"))
             dialog_ = new rpn.RPnQuadParamsDialog();
         else
             dialog_ = new rpn.RPnFluxParamsDialog();
@@ -39,7 +40,7 @@ public class ChangeFluxParamsAgent extends RpModelConfigChangeAgent {
     public void unexecute() {
         RealVector newValue = (RealVector)log().getOldValue();
         RealVector oldValue = (RealVector)log().getNewValue();
-        RpNumerics.changeFluxParams(newValue.toDouble());
+        rpnumerics.RPNUMERICS.fluxFunction().fluxParams().setParams(newValue);
         applyChange(new PropertyChangeEvent(this, DESC_TEXT, oldValue, newValue));
     }
 

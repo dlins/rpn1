@@ -8,7 +8,6 @@ import wave.multid.CoordsArray;
 import wave.util.RealSegment;
 import rpn.component.OrbitGeom;
 import rpn.component.XZeroGeom;
-import rpnumerics.RpNumerics;
 import org.xml.sax.HandlerBase;
 import org.xml.sax.AttributeList;
 import org.xml.sax.SAXException;
@@ -20,50 +19,46 @@ import java.util.ArrayList;
 import java.util.StringTokenizer;
 import java.io.*;
 import java.awt.event.ActionEvent;
+import java.util.Iterator;
+import rpn.component.RpGeometry;
+import rpn.controller.ui.SIGMA_CONFIG;
+import rpn.controller.ui.UIController;
+import rpnumerics.HugoniotCurve;
 import rpnumerics.PhasePoint;
 import rpnumerics.Orbit;
 import rpnumerics.OrbitPoint;
+import rpnumerics.RPNUMERICS;
 import rpnumerics.StationaryPoint;
 
 /** With this class the calculus made in a previous session can be reloaded. A previous state can be reloaded reading a XML file that is used by this class */
-
 public class RPnDataModule {
-    static public RPnPhaseSpaceAbstraction PHASESPACE = null;
 
+    static public RPnPhaseSpaceAbstraction PHASESPACE = null;
     public static Orbit ORBIT = null;
     public static boolean RESULTS = false;
+    private static HugoniotCurve hugoniotCurve_;
+    protected static PhasePoint XZERO;
+
+    public static HugoniotCurve getHugoniotCurve() {
+        return hugoniotCurve_;
+    }
 
     static protected class InputHandler extends HandlerBase {
         // for PoincareData
-
-        protected static ArrayList pPointList_, oPointsList_, vectorList_;
-
+        protected static ArrayList pPointList_,  orbitPointsList_,  vectorList_;
         protected static List segmentList_;
-
         private String currentElement_;
-
         protected static RealMatrix2 tempMatrix_;
-
-        protected static RealVector tempVector_, point1_, point2_;
-
+        protected static RealVector tempVector_,  point1_,  point2_;
         protected static RealVector[] vectorArray_;
-
         protected static XZeroGeom xZeroGeom_;
-
         protected static CoordsArray[] tempCoords_;
-
         protected static OrbitGeom tempOrbit_;
-
-        protected static PhasePoint tempPoint_,tempPhasePoint_, xZero_;
-
-        protected static int phaseSize_, ncol_, nrow_;
-
+        protected static PhasePoint tempPoint_,  tempPhasePoint_;
+        protected static int phaseSize_,  ncol_,  nrow_;
         private double tempPTime_;
         private HugoniotParser hugolistener_;
         private OrbitParser orbitListener_;
-
-
-
         private StationaryPointParser statPointListener_;
         private ManifoldParser manifoldListener_;
         private PoincareParser poincareListener_;
@@ -71,19 +66,16 @@ public class RPnDataModule {
         private OrbitCalcParser orbitCalcListener_;
         private ShockFlowParser shockFlowParser_;
         private ManifoldCalcParser manifoldCalcParser_;
-
-
-        protected static boolean pointOneOK_, calcReady_, plotProfile_;
-
+        protected static boolean pointOneOK_,  calcReady_,  plotProfile_;
 
         public InputHandler() {
-            orbitListener_=new OrbitParser();
-            hugolistener_ = new HugoniotParser();
+            orbitListener_ = new OrbitParser();
+            hugolistener_ = new HugoniotParser(new RPnDataModule());
 
             statPointListener_ = new StationaryPointParser();
-            manifoldListener_= new ManifoldParser();
-            poincareListener_= new PoincareParser();
-            shockFlowParser_=new ShockFlowParser();
+            manifoldListener_ = new ManifoldParser();
+            poincareListener_ = new PoincareParser();
+            shockFlowParser_ = new ShockFlowParser();
             connectionCalcListener_ = new ConnectionOrbitCalcParser();
             orbitCalcListener_ = new OrbitCalcParser();
             manifoldCalcParser_ = new ManifoldCalcParser();
@@ -92,15 +84,23 @@ public class RPnDataModule {
             pPointList_ = new ArrayList();
             segmentList_ = new ArrayList();
             vectorList_ = new ArrayList();
-            oPointsList_ = new ArrayList();
+            orbitPointsList_ = new ArrayList();
             ManifoldParser.manifoldNumber = 0;
 
             plotProfile_ = false;
             calcReady_ = false;
             // initialize phase space state
             PHASESPACE = new RPnPhaseSpaceAbstraction("Phase Space",
-                    RpNumerics.domain(),
-                    new NumConfigImpl());
+                    RPNUMERICS.domain(), new NumConfigImpl());//  RpNumerics.domain(),
+
+
+
+        }
+
+        public void endDocument() {
+
+
+//            System.out.println("Fim do documento");//TODO Set the initial state here
 
 
         }
@@ -110,18 +110,12 @@ public class RPnDataModule {
 
             currentElement_ = name;
 
-            if (name.equals("SHOCKFLOWDATA")) {
-                calcReady_ = new Boolean(att.getValue(1)).booleanValue();
-
-                RpNumerics.changeSigma(new Double(att.getValue(0)).doubleValue());
-
-            }
 
             if (name.equals("STATPOINT")) {
 
-                System.out.println("Abrindo statpoint");
+//                System.out.println("Abrindo statpoint");
 
-                tempPoint_ = new PhasePoint(tempVector_);
+//                tempPoint_ = new PhasePoint(tempVector_);
 
             }
 
@@ -139,7 +133,8 @@ public class RPnDataModule {
             }
 
             if ((name.equals("ORBITCALC"))) {
-                oPointsList_.clear();
+                orbitPointsList_.clear();
+
 
                 calcReady_ = new Boolean(att.getValue(1)).booleanValue();
 
@@ -152,8 +147,11 @@ public class RPnDataModule {
             }
             if (name.equals("STATPOINTCALC")) {
 
-                calcReady_ = new Boolean(att.getValue(0)).booleanValue();
-                System.out.println("Abrindo StatPoint com calcready:" + calcReady_);
+//                calcReady_ = new Boolean(att.getValue(1)).booleanValue();
+//                tempPoint_=new PhasePoint(new RealVector(att.getValue(0)));
+//                RPNUMERICS.getShockProfile().setFlowName(att.getValue(2));
+//                
+//                System.out.println("Abrindo StatPoint com calcready:" + calcReady_);
 
             }
 
@@ -170,23 +168,32 @@ public class RPnDataModule {
             }
 
             if (name.equals("ORBIT")) {
+
                 OrbitParser.flag = (new Integer(att.getValue(0))).intValue();
             }
 
-            if (name.equals("HUGONIOTCURVE")) {
+            if (name.equals("HUGONIOTCALC")) {
 
                 StringTokenizer tokenizer = new StringTokenizer(att.getValue(0));
                 double doubleList[] = new double[tokenizer.countTokens()];
                 int i = 0;
                 while (tokenizer.hasMoreTokens()) {
-                    doubleList[i] = new Double(tokenizer.nextToken()).
-                                    doubleValue();
+                    doubleList[i] = new Double(tokenizer.nextToken()).doubleValue();
                     i++;
                 }
 
                 RealVector vector = new RealVector(doubleList);
-                tempPhasePoint_ = new PhasePoint(vector);
+                XZERO = new PhasePoint(vector);
+                RPNUMERICS.getShockProfile().setXZero(XZERO);
+                RPNUMERICS.getShockProfile().setUminus(XZERO);//TODO It s necessary ??
+                RPNUMERICS.getShockProfile().setHugoniotMethodName(att.getValue(1));
+                RPNUMERICS.getShockProfile().setFlowName(att.getValue(2));
 
+            }
+
+            if (name.equals("HUGONIOTCURVE")) {
+
+                segmentList_.clear();
             }
 
             if (name.equals("PHASEPOINT")) {
@@ -203,8 +210,8 @@ public class RPnDataModule {
             }
 
             if (name.equals("REALVECTOR")) {
-                tempVector_ = new RealVector((new Integer(att.getValue(0))).
-                                             intValue());
+                tempVector_ = new RealVector((new Integer(att.getValue(0))).intValue());
+
             }
 
             if (name.equals("REALMATRIX")) {
@@ -215,17 +222,11 @@ public class RPnDataModule {
             }
 
             if (name.equals("MANIFOLD")) {
-                OrbitParser.timeDirection = (new Integer(att.getValue(0))).
-                                            intValue();
+                OrbitParser.timeDirection = (new Integer(att.getValue(0))).intValue();
                 StationaryPointParser.plotStatPoint = false;
                 OrbitParser.plotOrbit = false;
             }
 
-            if (name.equals("FLUXPARAMSCHANGE")) {
-                int indx = new Integer(att.getValue(0)).intValue();
-                int value = new Double(att.getValue(1)).intValue();
-//                RPNUMERICS.fluxFunction().fluxParams().setParam(indx, value);
-            }
         }
 
         public void characters(char[] buff, int offset, int len) throws
@@ -261,13 +262,11 @@ public class RPnDataModule {
                     }
 
                     if (currentElement_.equals("EIGENVALR")) {
-                        StationaryPointParser.eigenvalr = StationaryPointParser.
-                                parserEingenVal(data);
+                        StationaryPointParser.eigenvalr = StationaryPointParser.parserEingenVal(data);
                     }
 
                     if (currentElement_.equals("EIGENVALI")) {
-                        StationaryPointParser.eigenvali = StationaryPointParser.
-                                parserEingenVal(data);
+                        StationaryPointParser.eigenvali = StationaryPointParser.parserEingenVal(data);
                     }
                     if (currentElement_.equals("DIMP")) {
 
@@ -281,8 +280,7 @@ public class RPnDataModule {
 
                     if (currentElement_.equals("INTEGRATIONFLAG")) {
 
-                        OrbitParser.integrationFlag = (new Integer(data)).
-                                intValue();
+                        OrbitParser.integrationFlag = (new Integer(data)).intValue();
                     }
 
                     if (currentElement_.equals("UMINUS")) {
@@ -302,24 +300,19 @@ public class RPnDataModule {
 
         public void endElement(String name) throws SAXException {
 
-            if (name.equals("XZERO")) {
-                xZero_ = new PhasePoint(tempVector_);
-                pPointList_.clear();
-
-            }
-
             if (name.equals("HUGONIOTCURVE")) {
                 try {
+                    hugoniotCurve_ = new HugoniotCurve(XZERO, segmentList_);
 
                     hugolistener_.actionPerformed(new ActionEvent(this, 0,
-                            "endHugoniot"));
+                            "endHugoniotCurve"));
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             }
 
             if (name.equals("STATPOINT")) {
-                statPointListener_.actionPerformed(new ActionEvent(this,0,"endStatPoint"));
+//                statPointListener_.actionPerformed(new ActionEvent(this, 0, "endStatPoint"));
             }
 
             if (name.equals("UMINUS")) {
@@ -362,15 +355,15 @@ public class RPnDataModule {
             }
 
             if (name.equals("ORBITPOINT")) {
-                oPointsList_.add(new OrbitPoint(tempVector_, tempPTime_));
+                orbitPointsList_.add(new OrbitPoint(tempVector_, tempPTime_));
             }
 
             if (name.equals("MANIFOLD")) {
-                manifoldListener_.actionPerformed(new ActionEvent(this,0,"endManifold"));
+                manifoldListener_.actionPerformed(new ActionEvent(this, 0, "endManifold"));
             }
 
             if (name.equals("ORBIT")) {
-                orbitListener_.actionPerformed(new ActionEvent(this,0,"endOrbit"));
+                orbitListener_.actionPerformed(new ActionEvent(this, 0, "endOrbit"));
             }
 
             if (name.equals("SCHURFORMN")) {
@@ -391,7 +384,7 @@ public class RPnDataModule {
 
             if (name.equals("SHOCKFLOWDATA")) {
                 // plots XZero
-                  shockFlowParser_.actionPerformed(new ActionEvent(this, 0,
+                shockFlowParser_.actionPerformed(new ActionEvent(this, 0,
                         "endShockFlowData"));
             }
 
@@ -407,7 +400,7 @@ public class RPnDataModule {
             }
 
             if (name.equals("MANIFOLDCALC")) {
-                    manifoldCalcParser_.actionPerformed(new ActionEvent(this, 0,
+                manifoldCalcParser_.actionPerformed(new ActionEvent(this, 0,
                         "endManifoldCalc"));
             }
 
@@ -419,16 +412,13 @@ public class RPnDataModule {
             }
 
         }
-
     }
 
 
     //
     // Initializers
     //
-
     /** Initializes the XML parser to reload a previous session. */
-
     public static void init(Parser parser, String configFile) {
         try {
             parser.setDocumentHandler(new InputHandler());
@@ -441,7 +431,6 @@ public class RPnDataModule {
     }
 
     /** Initializes the XML parser to reload a previous session. */
-
     public static void init(Parser parser, InputStream configFileStream) {
         try {
             parser.setDocumentHandler(new InputHandler());
@@ -453,11 +442,9 @@ public class RPnDataModule {
 
             if (saxex instanceof org.xml.sax.SAXParseException) {
                 System.out.println("Line: " +
-                                   ((org.xml.sax.SAXParseException) saxex).
-                                   getLineNumber());
+                        ((org.xml.sax.SAXParseException) saxex).getLineNumber());
                 System.out.println("Column: " +
-                                   ((org.xml.sax.SAXParseException) saxex).
-                                   getColumnNumber());
+                        ((org.xml.sax.SAXParseException) saxex).getColumnNumber());
             }
 
             saxex.printStackTrace();
@@ -467,25 +454,16 @@ public class RPnDataModule {
     //
     // Methods
     //
-
     /** Writes the data of actual session into a XML file. */
-
     static public void export(FileWriter writer) throws java.io.IOException {
 
-//        if ((RpNumerics.getProfile().getFlowType().equals("shockflow"))) {
-//            writer.write("<RPDATA>\n");
-//            writer.write("<FLOWDATA>\n");
-//
-//            writer.write("<SHOCKFLOWDATA sigma=\"" +RpNumerics.getSigma() + "\" calcready=\"" + rpn.parser.RPnDataModule.RESULTS + "\">\n");
-//            writer.write("<XZERO>\n");
-//            writer.write(RpNumerics.getXZero().toXML());
-//            writer.write("</XZERO>\n");
-//            writer.write("</SHOCKFLOWDATA>\n");
-//
-//            writer.write("</FLOWDATA>\n");
-//            writer.write(PHASESPACE.toXML());
-//            writer.write("</RPDATA>\n");
-//        }
+        Iterator geomIterator = RPnDataModule.PHASESPACE.getGeomObjIterator();
+
+        while (geomIterator.hasNext()) {
+
+            writer.write(((RpGeometry) geomIterator.next()).geomFactory().toXML());
+
+        }
 
     }
 }

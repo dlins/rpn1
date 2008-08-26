@@ -8,7 +8,6 @@ package rpn.parser;
 import rpn.*;
 
 import wave.multid.Space;
-import rpnumerics.RpNumerics;
 import org.xml.sax.HandlerBase;
 import org.xml.sax.Parser;
 import org.xml.sax.SAXException;
@@ -19,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.io.*;
+import rpnumerics.RPNUMERICS;
 
 /** This class configures the initial visualization properties. Reading a XML file that contains the necessary information, this class sets the axis, labels , domain, etc to represents correctly the physics. */
 
@@ -61,12 +61,6 @@ public class RPnVisualizationModule {
                     new Integer(vph_).intValue(), projIndices, iso2equi_));
             }
         }
-
-
-
-
-
-
     }
 
 
@@ -103,8 +97,6 @@ public class RPnVisualizationModule {
         }
     }
 
-
-
     //
     // Methods
     //
@@ -112,7 +104,7 @@ public class RPnVisualizationModule {
     /** Writes the actual visualization configuration into a XML file. */
 
     static public void export(FileWriter writer) throws java.io.IOException {
-        writer.write("<VIEWINGPARAMS modeldomain=\"" + RpNumerics.domainDim() + "\">\n");
+        writer.write("<VIEWINGPARAMS modeldomain=\"" + RPNUMERICS.domainDim() + "\">\n");
         for (int i = 0; i < DESCRIPTORS.size(); i++)
             writer.write(((RPnProjDescriptor)DESCRIPTORS.get(i)).toXML() + "\n");
         writer.write("</VIEWINGPARAMS>\n");

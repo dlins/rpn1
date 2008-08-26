@@ -6,6 +6,7 @@
 
 package rpnumerics;
 
+import rpnumerics.physics.FluxParams;
 import wave.util.RealVector;
 import wave.util.RealMatrix2;
 import wave.util.HessianMatrix;
@@ -17,5 +18,6 @@ public  interface FluxFunction
 	RealMatrix2 DF( RealVector U );
 	
 	RealVector F( RealVector U );
+        FluxParams fluxParams();
 	
 }

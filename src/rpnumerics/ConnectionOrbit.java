@@ -8,8 +8,11 @@
 package rpnumerics;
 
 import wave.util.RealVector;
+import wave.multid.view.ViewingAttr;
+import java.awt.Color;
+import rpn.component.MultidAdapter;
 
-public class ConnectionOrbit implements RpSolution {
+public class ConnectionOrbit extends RPnCurve implements RpSolution {
     //
     // Members
     //
@@ -21,6 +24,7 @@ public class ConnectionOrbit implements RpSolution {
     // Constructors
     //
     public ConnectionOrbit(StationaryPoint uMinus, StationaryPoint uPlus, Orbit orbit) {
+      super(MultidAdapter.converseOrbitPointsToCoordsArray(orbit.getPoints()),new ViewingAttr (Color.orange));
         uMinus_ = uMinus;
         uPlus_ = uPlus;
         orbit_ = orbit;
@@ -30,7 +34,30 @@ public class ConnectionOrbit implements RpSolution {
     //
     // Methods
     //
-    public native RealVector orbitCenter();
+    
+    public RealVector orbitCenter() {
+        
+
+        OrbitPoint centerOPoint = orbit_.getPoints() [0];
+        RealVector center = new RealVector(centerOPoint.getCoords());
+        ShockFlow flow = (ShockFlow)RPNUMERICS.createShockFlow();
+        RealVector fCenter = flow.flux(center);
+//        RealVector fCenter = RPNUMERICS.flow().flux(center);
+        for (int i = 1; i < orbit_.getPoints().length; i++) {
+            centerOPoint = orbit_.getPoints() [i];
+            RealVector nextCenter = new RealVector(centerOPoint.getCoords());
+            RealVector nextFCenter = flow.flux(nextCenter);
+//            RealVector nextFCenter = RPNUMERICS.flow().flux(nextCenter);
+            if (fCenter.norm() < nextFCenter.norm()) {
+                fCenter.set(nextFCenter);
+                center.set(nextCenter);
+            }
+        }
+        return center;
+    }
+
+
+public int findClosestSegment (RealVector point,double alpha){ return 0;}
 
 
     public String toXML(){

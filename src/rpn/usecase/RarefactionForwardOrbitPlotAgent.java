@@ -2,19 +2,18 @@ package rpn.usecase;
 
 import rpn.component.RarefactionOrbitGeomFactory;
 import rpn.component.RpGeometry;
+import rpnumerics.OrbitPoint;
 import wave.util.RealVector;
 
 
 import rpnumerics.PhasePoint;
+import rpnumerics.RPNUMERICS;
 import rpnumerics.RarefactionOrbitCalc;
 
 public class RarefactionForwardOrbitPlotAgent extends RpModelPlotAgent {
 
-
     static public final String DESC_TEXT = "Rarefaction Forward Orbit";
-
     static private RarefactionForwardOrbitPlotAgent instance_ = null;
-
 
     public RarefactionForwardOrbitPlotAgent() {
 
@@ -23,21 +22,24 @@ public class RarefactionForwardOrbitPlotAgent extends RpModelPlotAgent {
 
     public RpGeometry createRpGeometry(RealVector[] input) {
 
-        PhasePoint oPoint = new PhasePoint(input[input.length - 1]);
-        RarefactionOrbitGeomFactory factory = new RarefactionOrbitGeomFactory(new RarefactionOrbitCalc(oPoint,1));
+
+
+        OrbitPoint oPoint = new OrbitPoint(input[input.length - 1]);
+
+        RarefactionOrbitGeomFactory factory = new RarefactionOrbitGeomFactory(RPNUMERICS.createRarefactionCalc(oPoint, 1));//timeDirection)new RarefactionOrbitCalc(oPoint,-1));
+
+
+//        PhasePoint oPoint = new PhasePoint(input[input.length - 1]);
+//        RarefactionOrbitGeomFactory factory = new RarefactionOrbitGeomFactory(new RarefactionOrbitCalc(oPoint,1));
         return factory.geom();
 
     }
 
     static public RarefactionForwardOrbitPlotAgent instance() {
-        if (instance_ == null)
+        if (instance_ == null) {
             instance_ = new RarefactionForwardOrbitPlotAgent();
+        }
         return instance_;
 
     }
-
-
-
-
-
 }

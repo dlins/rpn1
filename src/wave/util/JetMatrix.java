@@ -8,9 +8,6 @@
 
 package wave.util;
 
-import wave.util.RealVector;
-import wave.util.JacobianMatrix;
-import wave.util.HessianMatrix;
 import wave.util.exceptions.JetMatrixRangeViolation;
 import javax.vecmath.GVector; 
 
