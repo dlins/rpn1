@@ -14,6 +14,11 @@
 
 #define REALVECTOR_LOCATION                   "wave/util/RealVector"
 #define REALMATRIX2_LOCATION                  "wave/util/RealMatrix2"
+#define WAVESTATE_LOCATION                    "rpnumerics/WaveState"
+#define JETMATRIX_LOCATION                    "wave/util/JetMatrix"
+
+
+
 #define STATIONARYPOINT_LOCATION              "rpnumerics/StationaryPoint"
 #define PHASEPOINT_LOCATION                   "rpnumerics/PhasePoint"
 #define ORBITPOINT_LOCATION                   "rpnumerics/OrbitPoint"
@@ -30,6 +35,6 @@
 
 
 #define NUMERICSPROFILE_LOCATION              "rpnumerics/RPNumericsProfile"
-#define RPNUMERICS_LOCATION                   "rpnumerics/RpNumerics"
+#define RPNUMERICS_LOCATION                   "rpnumerics/RPNUMERICS"
 #endif	/* _JNIDEFS_H */
 
