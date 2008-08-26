@@ -17,6 +17,8 @@
  */
 
 #include "rpnumerics_RpNumerics.h"
+#include "rpnumerics_RPNUMERICS.h"
+
 #include "RpNumerics.h"
 #include "Quad2.h"
 #include "Quad2FluxParams.h"
@@ -28,6 +30,7 @@
 #include "ViscosityParams.h"
 
 #include "ContinuationRarefactionMethod.h"
+#include "WaveFlowFactory.h"
 
 #include "LSODEStopGenerator.h"
 #include "LSODEProfile.h"
@@ -56,13 +59,13 @@ void RpNumerics::initODESolver(){
     
     int mf =22;
     
-    double deltaxi = 0.001; 
+    double deltaxi = 0.001;
     
     int nparam = 1 + dimension;
     
     double param [nparam];
     
-    param[0] = 1; 
+    param[0] = 1;
     
     int ii;
     
@@ -71,20 +74,118 @@ void RpNumerics::initODESolver(){
     int maxStepsNumber=100;
     
     
-    LSODEProfile lsodeProfile(RpNumerics::getFlux(), RpNumerics::getPhysics().boundary(), maxStepsNumber, dimension, itol, rtol, mf, deltaxi, nparam, param); 
+    LSODEProfile lsodeProfile(RpNumerics::getFlux(), RpNumerics::getPhysics().boundary(), maxStepsNumber, dimension, itol, rtol, mf, deltaxi, nparam, param);
     
     
     odeSolver_= new LSODE(lsodeProfile);
     
     
+}
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    setFamilyIndex
+ * Signature: (I)V
+ */
+JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setFamilyIndex
+(JNIEnv *env , jobject obj, jint familyIndex){
+    
+    WaveFlowFactory::setFamilyIndex(familyIndex);
     
     
 }
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    setTimeDirection
+ * Signature: (I)V
+ */
+JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setTimeDirection
+(JNIEnv * env , jobject obj , jint timeDirection){
+    WaveFlowFactory::setTimeDirection(timeDirection);
+    
+}
+
+
+
+
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    clean
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_clean  (JNIEnv * env, jclass cls){RpNumerics::clean();}
+
 void RpNumerics::clean(){
     
     delete physics_;
     delete odeSolver_;
 }
+
+/* Class:     rpnumerics_RPNUMERICS
+ * Method:    physicsID
+ * Signature: ()Ljava/lang/String;
+ */
+
+
+JNIEXPORT jstring JNICALL Java_rpnumerics_RPNUMERICS_physicsID(JNIEnv * env, jclass cls){
+    return env->NewStringUTF(RpNumerics::getPhysics().ID());
+}
+
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    domain
+ * Signature: ()Lwave/multid/Space;
+ */
+JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_domain  (JNIEnv * env, jclass cls){
+    
+    jclass spaceClass = env->FindClass("wave/multid/Space");
+    
+    jmethodID spaceConstructor = (env)->GetMethodID(spaceClass, "<init>", "(Ljava/lang/String;I)V");
+    
+    jstring spaceName = env->NewStringUTF(RpNumerics::getPhysics().domain().name());
+    
+    jobject space = env->NewObject(spaceClass, spaceConstructor, spaceName, RpNumerics::getPhysics().domain().dim());
+    
+    return space;
+    
+    
+}
+
+/* Class:     rpnumerics_RPNUMERICS
+ * Method:    initNative
+ * Signature: (Ljava/lang/String;)V
+ */
+
+JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initNative(JNIEnv * env, jclass cls, jstring physicsName) {
+    
+    const char *physicsID;
+    
+    physicsID = env->GetStringUTFChars(physicsName, NULL);
+    
+    
+    if (physicsID == NULL) {
+        return; /* OutOfMemoryError already thrown */
+    }
+    
+    if (!strcmp(physicsID, "QuadraticR2")){
+//        cout <<"Criando quad2"<<endl;
+        
+        RpNumerics::setPhysics(Quad2(Quad2FluxParams()));
+        
+    }
+    
+    if(!strcmp(physicsID, "TriPhase")){
+        
+        RpNumerics::setPhysics(TriPhase( TriPhaseParams(), PermParams(), CapilParams(0.4, 3.0, 44.0, 8.0), ViscosityParams(0.5)));
+    }
+    
+    
+    
+}
+
 
 
 JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_init(JNIEnv * env, jclass cls, jobject numericsProfile){
@@ -124,78 +225,6 @@ JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_init(JNIEnv * env, jclass cls,
     
 }
 
-/*
- * Class:     rpnumerics_RPNUMERICS
- * Method:    initShockFlow
- * Signature: (Lrpnumerics/PhasePoint;D)V
- */
-JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_initShockFlow(JNIEnv * env, jclass cls, jobject obj , jdouble jdarray){}
-
-/*
- * Class:     rpnumerics_RPNUMERICS
- * Method:    initRarefactionFlow
- * Signature: (Lrpnumerics/PhasePoint;Ljava/lang/String;)V
- */
-JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_initRarefactionFlow(JNIEnv * env, jclass cls, jobject obj, jstring str){}
-
-/*
- * Class:     rpnumerics_RPNUMERICS
- * Method:    changePoincareSection
- * Signature: (Lrpnumerics/ConnectionOrbit;)Lwave/util/PoincareSection;
- */
-JNIEXPORT jobject JNICALL Java_rpnumerics_RpNumerics_changePoincareSection(JNIEnv * env, jclass cls, jobject obj){return NULL;}
-
-/*
- * Class:     rpnumerics_RPNUMERICS
- * Method:    setPoincareSectionFlag
- * Signature: (Z)V
- */
-JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_setPoincareSectionFlag(JNIEnv * env, jclass cls, jboolean bol){}
-
-/*
- * Class:     rpnumerics_RPNUMERICS
- * Method:    changeFluxParams
- * Signature: ([D)V
- */
-JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_changeFluxParams(JNIEnv * env, jclass cls, jdoubleArray jdarray){}
-
-/*
- * Class:     rpnumerics_RPNUMERICS
- * Method:    changeErrorControl
- * Signature: (D)V
- */
-JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_changeErrorControl(JNIEnv * env, jclass cls, jdouble eps){}
-
-/*
- * Class:     rpnumerics_RPNUMERICS
- * Method:    changeSigma
- * Signature: (D)V
- */
-JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_changeSigma__D(JNIEnv * env, jclass cls, jdouble sigma){}
-
-/*
- * Class:     rpnumerics_RPNUMERICS
- * Method:    changeSigma
- * Signature: (Lwave/util/RealVector;)V
- */
-JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_changeSigma__Lwave_util_RealVector_2(JNIEnv * env, jclass cls, jobject obj){}
-
-/*
- * Class:     rpnumerics_RPNUMERICS
- * Method:    getSigma
- * Signature: ()D
- */
-JNIEXPORT jdouble JNICALL Java_rpnumerics_RpNumerics_getSigma(JNIEnv * env, jclass cls){
-    
-    return 0.1;
-    
-}
-
-/*
- * Class:     rpnumerics_RPNUMERICS
- * Method:    getXZero
- * Signature: ()Lrpnumerics/PhasePoint;
- */
 JNIEXPORT jobject JNICALL Java_rpnumerics_RpNumerics_getXZero(JNIEnv * env, jclass cls ){
     
     double teste[2];
@@ -226,50 +255,36 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RpNumerics_getXZero(JNIEnv * env, jcla
     return phasePoint;
 }
 
-/*
- * Class:     rpnumerics_RPNUMERICS
- * Method:    setXZero
- * Signature: (Lrpnumerics/PhasePoint;)D
- */
-JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_setXZero(JNIEnv * env, jclass cls, jobject obj){ }
+
+
 
 /*
  * Class:     rpnumerics_RPNUMERICS
- * Method:    getFluxParams
- * Signature: ()[D
+ * Method:    createNativeRarefactionFlow
+ * Signature: (Ljava/lang/String;)V
  */
-JNIEXPORT jdoubleArray JNICALL Java_rpnumerics_RpNumerics_getFluxParams(JNIEnv * env, jclass cls){ return NULL;}
+
 
 /*
  * Class:     rpnumerics_RPNUMERICS
- * Method:    setShockFlow
- * Signature: (Lrpnumerics/PhasePoint;D)V
+ * Method:    domainDim
+ * Signature: ()I
  */
-JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_setShockFlow(JNIEnv * env, jclass cls, jobject obj, jdouble sigma){
-    
+
+JNIEXPORT jint JNICALL Java_rpnumerics_RPNUMERICS_domainDim(JNIEnv * env, jclass cls) {
+    return  RpNumerics::getPhysics().domain().dim();
 }
 
-/*
- * Class:     rpnumerics_RPNUMERICS
- * Method:    setRarefactionFlow
- * Signature: (Lrpnumerics/PhasePoint;)V
- */
-JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_setRarefactionFlow(JNIEnv * env, jclass cls, jobject obj){}
 
 /*
  * Class:     rpnumerics_RPNUMERICS
  * Method:    boundary
  * Signature: ()Lwave/util/Boundary;
  */
-//JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_boundary
-//        (JNIEnv * env, jclass cls){}
-
-
-JNIEXPORT jint JNICALL Java_rpnumerics_RpNumerics_domainDim(JNIEnv *, jclass cls){ return  RpNumerics::getPhysics().domain().dim();}
 
 
 
-JNIEXPORT jobject JNICALL Java_rpnumerics_RpNumerics_boundary(JNIEnv * env, jclass cls){
+JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_boundary(JNIEnv * env, jclass cls){
     
     jclass realVectorClass = env->FindClass("wave/util/RealVector");
     
