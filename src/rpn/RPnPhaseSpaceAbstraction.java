@@ -5,6 +5,7 @@
  */
 package rpn;
 
+import rpn.component.*;
 import rpn.controller.phasespace.*;
 import wave.multid.model.AbstractScene;
 import wave.multid.Space;
@@ -13,7 +14,6 @@ import rpn.component.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
-import rpnumerics.StationaryPoint;
 import wave.util.RealVector;
 
 public class RPnPhaseSpaceAbstraction extends AbstractScene {
@@ -33,75 +33,87 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         changeState(state);
         selectedGeom_ = null;
     }
-    
+
     //
     // Accessors/Mutators
     //
-    public void changeState(PhaseSpaceState state) {state_ = state;}
-    
+    public void changeState(PhaseSpaceState state) {
+        state_ = state;
+    }
+
     /**
      *@todo fix this... shouldn't have access to state_
      *
      */
-    
-    public PhaseSpaceState state() { return state_; }
-    
+    public PhaseSpaceState state() {
+        return state_;
+    }
+
     //
     // Methods
     //
     public void plot(RpGeometry geom) {
-        
+
         state_.plot(this, geom);
     }
-    
+
     public void delete(RpGeometry geom) {
         state_.delete(this, geom);
     }
-    
+
     public void update() {
-        
+
         Iterator geomList = getGeomObjIterator();
-        
+
         List removeList = new ArrayList();
         List joinList = new ArrayList();
         while (geomList.hasNext()) {
-            RpGeometry geom = (RpGeometry)geomList.next();
+            RpGeometry geom = (RpGeometry) geomList.next();
             RpGeomFactory factory = geom.geomFactory();
-            
+
             if (factory.isGeomOutOfDate()) {
-                
+
                 removeList.add(geom);
                 joinList.add(factory.geom());
                 factory.setGeomOutOfDate(false);
             }
         }
-        for (int i = 0; i < removeList.size(); i++)
-            super.remove((RpGeometry)removeList.get(i));
-        for (int i = 0; i < joinList.size(); i++)
-            super.join((RpGeometry)joinList.get(i));
+        for (int i = 0; i < removeList.size(); i++) {
+            super.remove((RpGeometry) removeList.get(i));
+        }
+        for (int i = 0; i < joinList.size(); i++) {
+            super.join((RpGeometry) joinList.get(i));
+        }
     }
-    
+
     // overwriting so we don't remove XZero and Hugoniot
     public void clear() {
-        
+
         ArrayList deleteList = new ArrayList();
         Iterator geomList = getGeomObjIterator();
         while (geomList.hasNext()) {
-            RpGeometry geom = (RpGeometry)geomList.next();
-            if (!(geom instanceof HugoniotCurveGeom) && !(geom instanceof XZeroGeom))
+            RpGeometry geom = (RpGeometry) geomList.next();
+            if (!(geom instanceof HugoniotCurveGeom) && !(geom instanceof XZeroGeom)) {
                 deleteList.add(geom);
+            }
         }
-        for (int i = 0; i < deleteList.size(); i++)
-            delete((RpGeometry)deleteList.get(i));
-//            if (RpNumerics.getProfile().getFlowType().equals("showflow"))
-                
-                changeState(new NumConfigReadyImpl(((NUMCONFIG_READY)state_).hugoniotGeom(), ((NUMCONFIG_READY)state_).xzeroGeom()));
+        for (int i = 0; i < deleteList.size(); i++) {
+            delete((RpGeometry) deleteList.get(i));
+        }
+
+        if (RPNUMERICS.getCurrentProfile() instanceof ShockProfile) {
+            changeState(new NumConfigReadyImpl(((NUMCONFIG_READY) state_).hugoniotGeom(), ((NUMCONFIG_READY) state_).xzeroGeom()));
+        }
     }
-    
-    public RpGeometry getSelectedGeom() { return selectedGeom_; }
-    
-    public void setSelectedGeom(RpGeometry selected) { selectedGeom_ = selected; }
-    
+
+    public RpGeometry getSelectedGeom() {
+        return selectedGeom_;
+    }
+
+    public void setSelectedGeom(RpGeometry selected) {
+        selectedGeom_ = selected;
+    }
+
     //
     // Methods
     //
@@ -110,115 +122,50 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         Iterator geomList = getGeomObjIterator();
         StationaryPointGeom closest = null;
         while (geomList.hasNext()) {
-            RpGeometry geom = (RpGeometry)geomList.next();
+            RpGeometry geom = (RpGeometry) geomList.next();
             if (geom instanceof StationaryPointGeom) {
-                StationaryPointGeom evaluate = (StationaryPointGeom)geom;
-                if (closest == null)
+                StationaryPointGeom evaluate = (StationaryPointGeom) geom;
+                if (closest == null) {
                     closest = evaluate;
-                else {
+                } else {
                     double closestDeltaSum = 0d;
                     double evaluateDeltaSum = 0d;
                     for (int i = 0; i < coords.getSize(); i++) {
                         double closestDelta = Math.pow(coords.getElement(i) -
-                                ((StationaryPoint)closest.geomFactory().geomSource()).getPoint().getCoords().getElement(i), 2);
+                                ((StationaryPoint) closest.geomFactory().geomSource()).getPoint().getCoords().getElement(i), 2);
                         double evaluateDelta = Math.pow(coords.getElement(i) -
-                                ((StationaryPoint)evaluate.geomFactory().geomSource()).getPoint().getCoords().getElement(i), 2);
+                                ((StationaryPoint) evaluate.geomFactory().geomSource()).getPoint().getCoords().getElement(i), 2);
                         closestDeltaSum += closestDelta;
                         evaluateDeltaSum += evaluateDelta;
                     }
-                    if (evaluateDeltaSum < closestDeltaSum)
+                    if (evaluateDeltaSum < closestDeltaSum) {
                         closest = evaluate;
+                    }
                 }
             }
         }
         return closest;
     }
-    
+
     public PhasePoint findSelectionMidPoint() {
         Iterator geomList = getGeomObjIterator();
-        PhasePoint selectionPoint = ((StationaryPoint)selectedGeom_.geomFactory().geomSource()).getPoint();
-        PhasePoint xzeroPoint = ((StationaryPoint)((NUMCONFIG_READY)state_).xzeroGeom().geomFactory().geomSource()).getPoint();
+        PhasePoint selectionPoint = ((StationaryPoint) selectedGeom_.geomFactory().geomSource()).getPoint();
+        PhasePoint xzeroPoint = ((StationaryPoint) ((NUMCONFIG_READY) state_).xzeroGeom().geomFactory().geomSource()).getPoint();
         PhasePoint midPoint = new PhasePoint(xzeroPoint);
         midPoint.getCoords().add(selectionPoint.getCoords(), xzeroPoint.getCoords());
         midPoint.getCoords().scale(.5);
         return midPoint;
     }
-    
+
     public void select(RealVector coords) {
         state_.select(this, coords);
     }
-    
+
     public void unselectAll() {
-        if (selectedGeom_ != null)
+        if (selectedGeom_ != null) {
             selectedGeom_.viewingAttr().setSelected(false);
+        }
     }
-    
-    public String toXML() {
-        StringBuffer str = new StringBuffer();
-        // checks for poincare first...
-        
-        java.util.Iterator geomEnum = getGeomObjIterator();
-        PoincareSectionGeom pSectionGeom = null;
-        
-        RpGeometry hugoniotGeom=null;
-        RpGeometry profileGeom=null;
-        
-        ArrayList orbitList = new ArrayList();
-        ArrayList manifoldList = new ArrayList();
-        ArrayList stationaryPointList = new ArrayList();
-        
-        while (geomEnum.hasNext()) {
-            
-            RpGeometry geom = (RpGeometry)geomEnum.next();
-            if (geom instanceof PoincareSectionGeom)
-                pSectionGeom = (PoincareSectionGeom)geom;
-            
-            if (geom instanceof HugoniotCurveGeom)
-                hugoniotGeom = geom;
-            
-            
-            if ((geom instanceof StationaryPointGeom) && !(geom instanceof XZeroGeom)){
-                stationaryPointList.add((StationaryPointGeom)geom);
-            }
-            
-            if (geom instanceof OrbitGeom)
-                orbitList.add(geom);
-            
-            if (geom instanceof ManifoldGeom)
-                manifoldList.add((ManifoldGeom)geom);
-            
-            if (geom instanceof ProfileGeom)
-                profileGeom=geom;
-            
-        }
-        
-        if (pSectionGeom != null)
-            str.append(pSectionGeom.geomFactory().toXML());
-        // now prints the calculations (TODO RpGeometry -> RpSolution)
-        str.append("<CALCDESC>\n");
-        
-        if (hugoniotGeom!=null)
-            
-            str.append(hugoniotGeom.geomFactory().toXML());
-        
-        for (int i = 0; i < stationaryPointList.size(); i++){
-            str.append(((RpGeometry)stationaryPointList.get(i)).geomFactory().toXML());
-        }
-        
-        for (int i = 0; i < orbitList.size(); i++)
-            
-            str.append(((RpGeometry)orbitList.get(i)).geomFactory().toXML());
-        
-        for (int i = 0; i < manifoldList.size(); i++){
-            str.append( ( (RpGeometry) manifoldList.get(i)).geomFactory().toXML());
-        }
-        
-        if (profileGeom!=null)
-            
-            str.append(profileGeom.geomFactory().toXML());
-        
-        str.append("</CALCDESC>\n");
-        return str.toString();
-        
-    }
+
+   
 }

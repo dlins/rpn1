@@ -1,10 +1,3 @@
-
-/*
- * Instituto de Matematica Pura e Aplicada - IMPA
- * Departamento de Dinamica dos Fluidos
- *
- */
-
 package rpn;
 
 import wave.multid.Coords2D;
@@ -16,6 +9,12 @@ import java.text.NumberFormat;
 import java.awt.event.*;
 import java.awt.*;
 
+/**
+ * <p>Title: Rp2K GUI</p> <p>Description: GUI components for Rp2K</p>
+ * <p>Copyright: Copyright (c) 2002</p> <p>Company: FLUID</p>
+ * @author Mario de Sa Vera
+ * @version 1.3
+ */
 public class RPnCursorMonitor extends JLabel {
     //
     // Members

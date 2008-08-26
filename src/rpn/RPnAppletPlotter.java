@@ -29,7 +29,7 @@ public class RPnAppletPlotter extends JApplet implements RPnMenuCommand {
 	if (rpnUIFrame_!=null){
 	    RPnPhaseSpaceFrame [] frames=rpnUIFrame_.getPhaseSpaceFrames();
 	    if ( frames==null){
-		rpnUIFrame_.phaseSpaceFramesInit(rpnumerics.RpNumerics.boundary());
+		rpnUIFrame_.phaseSpaceFramesInit(rpnumerics.RPNUMERICS.boundary());
 	    }
 	    rpnUIFrame_.setVisible(true);
 	    rpnUIFrame_.pack();

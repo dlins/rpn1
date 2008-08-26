@@ -6,6 +6,7 @@
 
 package rpn;
 
+
 import wave.multid.view.Viewing2DTransform;
 import wave.multid.view.Viewing3DTransform;
 import wave.multid.view.ViewingTransform;
@@ -17,7 +18,7 @@ import wave.multid.graphs.ViewPlane;
 import wave.multid.graphs.dcViewport;
 import wave.multid.graphs.wcWindow;
 import wave.multid.map.ProjectionMap;
-//
+
 public class RPnProjDescriptor {
     //
     // Constants

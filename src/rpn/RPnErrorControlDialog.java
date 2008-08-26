@@ -48,7 +48,7 @@ public class RPnErrorControlDialog extends JDialog {
         jPanel3.setLayout(flowLayout1);
         jLabel1.setText("EPSLON = ");
         epslonField.setPreferredSize(new Dimension(74, 17));
-//        epslonField.setText(new Double(rpnumerics.RPNUMERICS.errorControl().eps()).toString());
+        epslonField.setText(new Double(rpnumerics.RPNUMERICS.errorControl().eps()).toString());
         this.getContentPane().add(jPanel1, BorderLayout.CENTER);
         jPanel1.add(jPanel2, BorderLayout.SOUTH);
         jPanel2.add(jButton1, null);
@@ -63,7 +63,7 @@ public class RPnErrorControlDialog extends JDialog {
     }
 
     void jButton1_actionPerformed(ActionEvent e) {
-//        rpnumerics.RPNUMERICS.errorControl().reset(getEps(), rpnumerics.RPNUMERICS.boundary());
+        rpnumerics.RPNUMERICS.errorControl().reset(getEps(), rpnumerics.RPNUMERICS.boundary());
         this.dispose();
     }
 

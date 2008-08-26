@@ -35,7 +35,7 @@ public class RPnFluxParamsPanel extends JPanel {
         jPanel1.setLayout(flowLayout1);
         jLabel1.setText("Flux Params = ");
         paramValueField.setPreferredSize(new Dimension(274, 17));
-//        paramValueField.setText(rpnumerics.RPNUMERICS.fluxFunction().fluxParams().toString());
+        paramValueField.setText(rpnumerics.RPNUMERICS.fluxFunction().fluxParams().toString());
         this.add(jPanel1, null);
         jPanel1.add(jLabel1, null);
         jPanel1.add(paramValueField, null);

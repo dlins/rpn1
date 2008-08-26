@@ -3,14 +3,12 @@
  * Departamento de Dinamica dos Fluidos
  *
  */
-
 package rpn;
 
 import rpn.usecase.*;
 import rpn.parser.*;
-import rpnumerics.RpNumerics;
+import rpnumerics.RPNUMERICS;
 import wave.util.Boundary;
-import wave.multid.graphs.ClippedShape;
 import java.awt.print.PrinterJob;
 import javax.swing.*;
 import java.awt.*;
@@ -21,44 +19,36 @@ import java.io.FileWriter;
 import rpn.controller.ui.*;
 import rpn.message.*;
 
-
 public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     //
     // Members
     //
-    JPanel contentPane, curvePanel;
-    
-    RPnCurveConfigPanel configPanel;
-    
+    JPanel contentPane;
     JMenuBar jMenuBar1 = new JMenuBar();
+    JMenu editMenu = new JMenu();
+    JMenu fileMenu = new JMenu();
+    JMenu modelInteractionMenu = new JMenu();
+    JMenu helpMenu = new JMenu();
     JCheckBox resultsOption = new JCheckBox("Save With Results");
-    JMenu jMenuFile = new JMenu();
+    private JMenuItem shockMenuItem_ = new JMenuItem("Shock Configuration ...");
+    private JMenuItem bifurcationMenuItem_ = new JMenuItem("Bifurcation Configuration ...");
+    private JMenuItem rarefactionMenuItem_ = new JMenuItem("Rarefaction Config ...");
     JMenuItem jMenuFileExit = new JMenuItem();
-    JMenu jMenuHelp = new JMenu();
     JMenuItem jMenuHelpAbout = new JMenuItem();
     BorderLayout borderLayout1 = new BorderLayout();
     JMenuItem exportMenuItem = new JMenuItem();
-    JMenu jMenu1 = new JMenu();
     JMenuItem layoutMenuItem = new JMenuItem();
     JMenuItem errorControlMenuItem = new JMenuItem();
-    
-    JMenu modelInteractionMenu = new JMenu();
-    JToolBar toolBar = new JToolBar();
-    
     JMenuItem createJPEGImageMenuItem = new JMenuItem();
     JMenuItem printMenuItem = new JMenuItem();
     JMenuItem clearPhaseSpaceMenuItem = new JMenuItem();
     JMenuItem changeXZeroMenuItem = new JMenuItem();
-    private UIController uiController_ = null;
     private RPnPhaseSpaceFrame[] frames_ = null;
     private RPnMenuCommand commandMenu_ = null;
-    
-    
-    //    private static Dimension defaultFrameSize_;
-    
-    JMenuItem networkMenuItem = new JMenuItem();
-    
-    
+    private JMenuItem networkMenuItem = new JMenuItem();
+    private JToolBar toolBar_ = new JToolBar();
+
+
     //Construct the frame
     public RPnUIFrame(RPnMenuCommand command) {
         enableEvents(AWTEvent.WINDOW_EVENT_MASK);
@@ -66,28 +56,176 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             // TODO may be UIController should control PHASESPACE as well
             commandMenu_ = command;
             RPnNetworkStatusController.instance().addPropertyChangeListener(this);
-            uiController_ = UIController.instance();
-            phaseSpaceFramesInit(RpNumerics.boundary());
-            createModelInteractionMenu();
-            createToolBar();
+
+            UIController.instance().setStateController(new StateInputController(this));
+            UIController.instance().resetApplication();
+            phaseSpaceFramesInit(RPNUMERICS.boundary());
+
+            addPropertyChangeListener(this);
+
             UndoActionController.createInstance();
             jbInit();
-            
+
             if (commandMenu_ instanceof RPnAppletPlotter) { // Selecting itens to disable in Applet
-                
+
                 networkMenuItem.setEnabled(false);
                 createJPEGImageMenuItem.setEnabled(false);
                 printMenuItem.setEnabled(false);
                 exportMenuItem.setEnabled(false);
             }
-            
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
-    
-    protected void createModelInteractionMenu() {
+
+    private void uiFramePosition() {
+
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice gs = ge.getDefaultScreenDevice();
+        GraphicsConfiguration[] gc = gs.getConfigurations();
+        Rectangle bounds = gc[0].getBounds();
+        double hMargin = bounds.width * 0.3;
+        double vMargin = bounds.height * 0.2;
+        this.setLocation((int) hMargin, (int) vMargin);
+    }
+
+    //Component initialization
+    private void jbInit() throws Exception {
+        //setIconImage(Toolkit.getDefaultToolkit().createImage(ShockFlowControlFrame.class.getResource("[Your Icon]")));
+        uiFramePosition();
+
+        contentPane = (JPanel) this.getContentPane();
+        contentPane.setLayout(borderLayout1);
+        this.setSize(new Dimension(400, 300));
+        this.setResizable(false);
+        this.setTitle("");
+        fileMenu.setText("File");
+        jMenuFileExit.setText("Exit");
+
+        resultsOption.addActionListener(
+                new ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+                        JCheckBox checkB = (JCheckBox) e.getSource();
+                        rpn.parser.RPnDataModule.RESULTS = checkB.isSelected();
+                    }
+                });
+
+        jMenuFileExit.addActionListener(
+                new ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+                        jMenuFileExit_actionPerformed(e);
+                    }
+                });
+        helpMenu.setText("Help");
+        jMenuHelpAbout.setText("About");
+        jMenuHelpAbout.addActionListener(
+                new ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+                        jMenuHelpAbout_actionPerformed(e);
+                    }
+                });
+        exportMenuItem.setText("Save As...");
+        exportMenuItem.addActionListener(
+                new ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+                        export_actionPerformed(e);
+                    }
+                });
+        editMenu.setText("Edit");
+        errorControlMenuItem.setText("Error Control...");
+        layoutMenuItem.setText("Scene Layout...");
+        layoutMenuItem.addActionListener(
+                new java.awt.event.ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+                        layoutMenuItem_actionPerformed(e);
+                    }
+                });
+
+        errorControlMenuItem.addActionListener(
+                new java.awt.event.ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+                        errorControlMenuItem_actionPerformed(e);
+                    }
+                });
+        createJPEGImageMenuItem.setText("Create JPEG Image...");
+        createJPEGImageMenuItem.addActionListener(
+                new java.awt.event.ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+                        createJPEGImage_actionPerformed(e);
+                    }
+                });
+        printMenuItem.setText("Print...");
+        printMenuItem.addActionListener(
+                new java.awt.event.ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+                        printMenuItem_actionPerformed(e);
+                    }
+                });
+        modelInteractionMenu.setText("RP");
+        fileMenu.addSeparator();
+        networkMenuItem.setText("Network ...");
+        networkMenuItem.addActionListener(new java.awt.event.ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                networkMenuItem_actionPerformed(e);
+            }
+        });
+        fileMenu.add(exportMenuItem);
+        fileMenu.addSeparator();
+        fileMenu.add(networkMenuItem);
+        fileMenu.addSeparator();
+        fileMenu.add(createJPEGImageMenuItem);
+        fileMenu.addSeparator();
+        fileMenu.add(printMenuItem);
+        fileMenu.addSeparator();
+        fileMenu.add(jMenuFileExit);
+        helpMenu.add(jMenuHelpAbout);
+        jMenuBar1.add(fileMenu);
+        jMenuBar1.add(editMenu);
+        jMenuBar1.add(modelInteractionMenu);
+
+        toolBar_.setFloatable(false);
+
+
+        jMenuBar1.add(helpMenu);
+        setJMenuBar(jMenuBar1);
+        contentPane.add(toolBar_, BorderLayout.NORTH);
+        editMenu.add(UndoActionController.instance());
+        editMenu.addSeparator();
+        editMenu.add(layoutMenuItem);
+        editMenu.addSeparator();
+
+        editMenu.add(ClearPhaseSpaceAgent.instance());
+        editMenu.addSeparator();
+        editMenu.add(FillPhaseSpaceAgent.instance());
+
+
+
+    }
+
+    private void shockConfigMenu() {
+        shockMenuItem_.addActionListener(
+                new java.awt.event.ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+
+                        RPnShockConfigDialog shockConfigDialog = new RPnShockConfigDialog(false);
+                        shockConfigDialog.setVisible(true);
+
+                    }
+                });
+
+        modelInteractionMenu.removeAll();
         modelInteractionMenu.add(ChangeXZeroAgent.instance());
         modelInteractionMenu.addSeparator();
         modelInteractionMenu.add(ChangeSigmaAgent.instance());
@@ -95,183 +233,121 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         modelInteractionMenu.add(FindProfileAgent.instance());
         modelInteractionMenu.addSeparator();
         modelInteractionMenu.add(ChangeFluxParamsAgent.instance());
-    }
-    
-    protected void createToolBar() {
-        
-        toolBar.setFloatable(false);
-        
-        toolBar.add(ForwardOrbitPlotAgent.instance().getContainer());
-        toolBar.add(BackwardOrbitPlotAgent.instance().getContainer());
-        toolBar.add(ForwardManifoldPlotAgent.instance().getContainer());
-        toolBar.add(BackwardManifoldPlotAgent.instance().getContainer());
-        toolBar.add(StationaryPointPlotAgent.instance().getContainer());
-        toolBar.add(PoincareSectionPlotAgent.instance().getContainer());
-    }
-    
-    
-    //Component initialization
-    private void jbInit() throws Exception {
-        //setIconImage(Toolkit.getDefaultToolkit().createImage(ShockFlowControlFrame.class.getResource("[Your Icon]")));
-        
-        borderLayout1.setHgap(10);
-        borderLayout1.setVgap(10);
-        contentPane = (JPanel)this.getContentPane();
-        contentPane.setLayout(borderLayout1);
-        this.setSize(new Dimension(400, 300));
-        this.setResizable(false);
-        this.setTitle("");
-        jMenuFile.setText("File");
-        jMenuFileExit.setText("Exit");
-        
-        curvePanel= new JPanel();
-        
 
-        configPanel = new RPnCurveConfigPanel();
-        
-        curvePanel.add(configPanel);
-        
-        contentPane.add(curvePanel);
-        
-
-        
-        resultsOption.addActionListener(
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                JCheckBox checkB = (JCheckBox) e.getSource();
-                rpn.parser.RPnDataModule.RESULTS = checkB.isSelected();
-            }
-        });
-        
-        jMenuFileExit.addActionListener(
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                jMenuFileExit_actionPerformed(e);
-            }
-        });
-        jMenuHelp.setText("Help");
-        jMenuHelpAbout.setText("About");
-        jMenuHelpAbout.addActionListener(
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                jMenuHelpAbout_actionPerformed(e);
-            }
-        });
-        exportMenuItem.setText("Save As...");
-        exportMenuItem.addActionListener(
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                export_actionPerformed(e);
-            }
-        });
-        jMenu1.setText("Edit");
-        errorControlMenuItem.setText("Error Control...");
-        layoutMenuItem.setText("Scene Layout...");
-        layoutMenuItem.addActionListener(
-                new java.awt.event.ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                layoutMenuItem_actionPerformed(e);
-            }
-        });
-        
-        errorControlMenuItem.addActionListener(
-                new java.awt.event.ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                errorControlMenuItem_actionPerformed(e);
-            }
-        });
-        createJPEGImageMenuItem.setText("Create JPEG Image...");
-        createJPEGImageMenuItem.addActionListener(
-                new java.awt.event.ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                createJPEGImage_actionPerformed(e);
-            }
-        });
-        printMenuItem.setText("Print...");
-        printMenuItem.addActionListener(
-                new java.awt.event.ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                printMenuItem_actionPerformed(e);
-            }
-        });
-        modelInteractionMenu.setText("RP");
-        jMenuFile.addSeparator();
-        networkMenuItem.setText("Network ...");
-        networkMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                networkMenuItem_actionPerformed(e);
-            }
-        });
-        jMenuFile.add(exportMenuItem);
-        jMenuFile.addSeparator();
-        jMenuFile.add(networkMenuItem);
-        jMenuFile.addSeparator();
-        jMenuFile.add(createJPEGImageMenuItem);
-        jMenuFile.addSeparator();
-        jMenuFile.add(printMenuItem);
-        jMenuFile.addSeparator();
-        jMenuFile.add(jMenuFileExit);
-        jMenuHelp.add(jMenuHelpAbout);
-        jMenuBar1.add(jMenuFile);
-        jMenuBar1.add(jMenu1);
-        jMenuBar1.add(modelInteractionMenu);
-        jMenuBar1.add(jMenuHelp);
-        setJMenuBar(jMenuBar1);
-        
-        GridLayout gridLayout = new GridLayout(2,4,10,10);
-        
-        toolBar.setLayout(gridLayout);
-        
-        contentPane.add(toolBar, BorderLayout.WEST);
-        jMenu1.add(UndoActionController.instance());
-        jMenu1.addSeparator();
-        jMenu1.add(layoutMenuItem);
-        jMenu1.addSeparator();
-        jMenu1.add(errorControlMenuItem);
-        jMenu1.addSeparator();
-        jMenu1.add(ClearPhaseSpaceAgent.instance());
-        jMenu1.addSeparator();
-        jMenu1.add(FillPhaseSpaceAgent.instance());
+        modelInteractionMenu.add(shockMenuItem_);
+        modelInteractionMenu.add(errorControlMenuItem);
     }
-    
+
+    private void rarefactionConfigMenu() {
+
+        rarefactionMenuItem_.addActionListener(
+                new java.awt.event.ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+
+                        RPnRarefactionConfigDialog rarefactionConfigDialog = new RPnRarefactionConfigDialog(false);
+
+                        rarefactionConfigDialog.setVisible(true);
+                    }
+                });
+
+        modelInteractionMenu.removeAll();
+        modelInteractionMenu.add(ChangeXZeroAgent.instance());
+        modelInteractionMenu.addSeparator();
+        modelInteractionMenu.add(rarefactionMenuItem_);
+        modelInteractionMenu.addSeparator();
+        modelInteractionMenu.add(errorControlMenuItem);
+
+    }
+
+    private void bifurcationConfigMenu() {
+
+        bifurcationMenuItem_.addActionListener(
+                new java.awt.event.ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+
+                        RPnBifurcationConfigDialog bifurcationConfigDialog = new RPnBifurcationConfigDialog(false);
+                        bifurcationConfigDialog.setVisible(true);
+
+                    }
+                });
+
+        modelInteractionMenu.removeAll();
+        modelInteractionMenu.add(bifurcationMenuItem_);
+
+
+    }
+
     //
     // Accessors/Mutators
-    public UIController uiController() {
-        return uiController_;
-    }
-    
     public RPnPhaseSpaceFrame[] getPhaseSpaceFrames() {
         return frames_;
     }
-    
-    
+
+
     //
     // Methods
     //
-    
-    
     public void propertyChange(PropertyChangeEvent evt) {
+//        update();
+        if (evt.getPropertyName().equals("aplication state")) {
         
+            if (UIController.instance().getState() instanceof SHOCK_CONFIG ||(evt.getNewValue() instanceof SIGMA_CONFIG)) {
+                shockConfigMenu();
+                toolBar_.removeAll();
+                toolBar_.add(ForwardOrbitPlotAgent.instance().getContainer());
+                toolBar_.add(BackwardOrbitPlotAgent.instance().getContainer());
+                toolBar_.add(ForwardManifoldPlotAgent.instance().getContainer());
+                toolBar_.add(BackwardManifoldPlotAgent.instance().getContainer());
+                toolBar_.add(StationaryPointPlotAgent.instance().getContainer());
+                toolBar_.add(PoincareSectionPlotAgent.instance().getContainer());
+                toolBar_.add(ScratchAgent.instance().getContainer());
+                ScratchAgent.instance().setEnabled(true);
+                pack();
+
+            }
+
+            if (UIController.instance().getState() instanceof RAREFACTION_CONFIG) {
+                rarefactionConfigMenu();
+
+                toolBar_.removeAll();
+                toolBar_.add(RarefactionForwardOrbitPlotAgent.instance().getContainer());
+                toolBar_.add(RarefactionBackwardOrbitPlotAgent.instance().getContainer());
+                toolBar_.add(ScratchAgent.instance().getContainer());
+                ScratchAgent.instance().setEnabled(true);
+                pack();
+            }
+
+
+            if (UIController.instance().getState() instanceof BIFURCATION_CONFIG) {
+                bifurcationConfigMenu();
+                toolBar_.removeAll();
+            }
+        }
+
+
+
         if (evt.getPropertyName().equals("Network MenuItem Clicked")) {
             networkMenuItem.setEnabled(false);
         }
-        
+
         if (evt.getPropertyName().equals("Dialog Closed")) {
             networkMenuItem.setEnabled(true);
         }
-        
+
     }
-    
-    
+
+
     //File | Exit action performed
     public void jMenuFileExit_actionPerformed(ActionEvent e) {
         commandMenu_.finalizeApplication();
     }
-    
+
     //Help | About action performed
     public void jMenuHelpAbout_actionPerformed(ActionEvent e) {
     }
-    
+
     //Overridden so we can exit when window is closed
     protected void processWindowEvent(WindowEvent e) {
         super.processWindowEvent(e);
@@ -279,7 +355,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             jMenuFileExit_actionPerformed(null);
         }
     }
-    
+
     void layoutMenuItem_actionPerformed(ActionEvent e) {
         RPnLayoutDialog dialog = new RPnLayoutDialog();
         Dimension dlgSize = dialog.getPreferredSize();
@@ -292,9 +368,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         dialog.setVisible(true);
         // apply the layout changes
         RPnDataModule.PHASESPACE.update();
-        uiController().panelsUpdate();
+        UIController.instance().panelsUpdate();
     }
-    
+
     void errorControlMenuItem_actionPerformed(ActionEvent e) {
         RPnErrorControlDialog dialog = new RPnErrorControlDialog();
         Dimension dlgSize = dialog.getPreferredSize();
@@ -305,14 +381,12 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         dialog.setModal(true);
         dialog.pack();
         dialog.setVisible(true);
+        rpnumerics.RPNUMERICS.errorControl().reset(dialog.getEps(),
+                rpnumerics.RPNUMERICS.boundary());
     }
-    
 
-    
-    
     protected void phaseSpaceFramesInit(Boundary boundary) {
-        
-        ClippedShape clipping = new ClippedShape(boundary);
+        wave.multid.graphs.ClippedShape clipping = new wave.multid.graphs.ClippedShape(boundary);
         int numOfPanels = RPnVisualizationModule.DESCRIPTORS.size();
         frames_ = new RPnPhaseSpaceFrame[numOfPanels];
         for (int i = 0; i < numOfPanels; i++) {
@@ -320,13 +394,11 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                     ((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(
                     i)).createTransform(clipping);
             try {
-                wave.multid.view.Scene scene = RPnDataModule.PHASESPACE.
-                        createScene(viewingTransf,
+                wave.multid.view.Scene scene = RPnDataModule.PHASESPACE.createScene(viewingTransf,
                         new wave.multid.view.ViewingAttr(Color.black));
                 frames_[i] = new RPnPhaseSpaceFrame(scene, commandMenu_);
-                frames_[i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.
-                        DESCRIPTORS.get(i)).label());
-                
+                frames_[i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(i)).label());
+
                 /*
                  * controllers installation
                  *
@@ -335,31 +407,33 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                  * will be controlling all Panels.
                  * All Panels listen to all Panels...
                  */
-                
-                uiController_.install(frames_[i].phaseSpacePanel());
-                
+
+                UIController.instance().install(frames_[i].phaseSpacePanel());
+
+                frames_[i].setLocationRelativeTo(null);
+
                 frames_[i].pack();
+
                 frames_[i].setVisible(true);
             } catch (wave.multid.DimMismatchEx dex) {
                 dex.printStackTrace();
             }
-            
+
         }
     }
-    
+
     // from here on just for 2D for now...
     void createJPEGImage_actionPerformed(ActionEvent e) {
         JFileChooser chooser = new JFileChooser();
         int option = chooser.showSaveDialog(this);
-        
+
         try {
-            frames_[0].phaseSpacePanel().createJPEGImageFile(chooser.
-                    getSelectedFile().getAbsolutePath());
+            frames_[0].phaseSpacePanel().createJPEGImageFile(chooser.getSelectedFile().getAbsolutePath());
         } catch (java.lang.NullPointerException ex) {
-            
+
         }
     }
-    
+
     void printMenuItem_actionPerformed(ActionEvent e) {
         PrinterJob pj = PrinterJob.getPrinterJob();
         for (int i = 0; i < frames_.length; i++) {
@@ -373,12 +447,12 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             }
         }
     }
-    
+
     void export_actionPerformed(ActionEvent e) {
         try {
             JFileChooser chooser = new JFileChooser();
             chooser.setAccessory(resultsOption);
-            int option = chooser.showSaveDialog(this);
+            chooser.showSaveDialog(this);
             FileWriter writer = new FileWriter(chooser.getSelectedFile().
                     getAbsolutePath());
             writer.write(RPnConfigReader.XML_HEADER);
@@ -390,18 +464,75 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             writer.close();
         } catch (java.io.IOException ioex) {
             ioex.printStackTrace();
-        } catch (java.lang.NullPointerException nullEx) {}
+        } catch (java.lang.NullPointerException nullEx) {
+        }
     }
-    
-    
+
     void networkMenuItem_actionPerformed(ActionEvent e) {
-        
+
         RPnNetworkStatusController.instance().actionPerformed(new ActionEvent(this,
                 0, null));
-        
+
         commandMenu_.networkCommand();
-        
+
     }
-    
-    
+//    public class FlowDialog extends JDialog implements ActionListener {
+//
+//        JRadioButton shockRadioButton;
+//        JRadioButton rarefactionRadioButton;
+//
+//        public FlowDialog(Frame owner, String title, boolean modal) {
+//            super(owner, title, modal);
+//            this.setSize(230, 100);
+//
+//            setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+//
+//            GridLayout gridLayout = new GridLayout(2, 1);
+//            JPanel mainPanel = new JPanel();
+//            mainPanel.setLayout(gridLayout);
+//
+//            JPanel optionsPanel = new JPanel();
+//
+//            ButtonGroup optionButtonGroup = new ButtonGroup();
+//            shockRadioButton = new JRadioButton("Shock");
+//            rarefactionRadioButton = new JRadioButton("Rarefaction");
+//
+//            optionButtonGroup.add(shockRadioButton);
+//            optionButtonGroup.add(rarefactionRadioButton);
+//
+//            optionsPanel.add(shockRadioButton);
+//            optionsPanel.add(rarefactionRadioButton);
+//
+//            JPanel buttonsPanel = new JPanel();
+//
+//            JButton okButton = new JButton("OK");
+//            okButton.addActionListener(this);
+//
+//            buttonsPanel.add(okButton);
+//
+//            mainPanel.add(optionsPanel);
+//            mainPanel.add(buttonsPanel);
+//
+//            getRootPane().getContentPane().add(mainPanel, BorderLayout.CENTER);
+//            this.setLocationRelativeTo(owner);
+//
+//            this.setResizable(true);
+//
+//        }
+//
+//        public void actionPerformed(ActionEvent e) {
+//
+//            if (shockRadioButton.isSelected()) {
+//                shockOption.doClick();
+//
+//                dispose();
+//            }
+//
+//            if (rarefactionRadioButton.isSelected()) {
+//
+//                rarefactionOption.doClick();
+//                dispose();
+//            }
+//        }
+//    }
 }

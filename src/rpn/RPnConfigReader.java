@@ -1,3 +1,9 @@
+/*
+ * Instituto de Matematica Pura e Aplicada - IMPA
+ * Departamento de Dinamica dos Fluidos
+ *
+ */
+
 package rpn;
 
 import java.io.*;
@@ -59,6 +65,7 @@ public abstract class RPnConfigReader{
 	    // initialize visualization params
 
 	    configStream.reset();
+
 
 	    RPnVisualizationModule.init(parser, configStream);
 

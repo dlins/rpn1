@@ -9,7 +9,7 @@ public class RPnDesktopConfigReader extends RPnConfigReader{
     private FileInputStream configFileInputStream_1;
     private ByteArrayInputStream buff_;
 
-    public static String IMAGEPATH= System.getProperty("rpnhome") +System.getProperty("file.separator")+"share"+System.getProperty("file.separator")+"rpn-images"+System.getProperty("file.separator");
+    public static String IMAGEPATH= System.getProperty("rpngrouphome") +System.getProperty("file.separator")+"images"+System.getProperty("file.separator");
 
     static private void remoteImage (){
 
