@@ -194,7 +194,17 @@ public class ManifoldOrbitCalc implements RpCalculation {
         // ddf is a matrix with the (v*k+w)th column = d^2 f/ dx_v dx_w
         RealMatrix2 ddf = new RealMatrix2(m, m * m);
         RealVector ddf_v_w = new RealVector(m);
-        HessianMatrix D2X = getFlow().fluxDeriv2(point0);
+        
+        WaveState input = new WaveState (new PhasePoint(point0));
+
+        JetMatrix output = new JetMatrix(m);
+        
+        getFlow().jet(input, output, 2);
+        
+        HessianMatrix D2X =  output.hessian();
+        
+        
+//        HessianMatrix D2X = getFlow().fluxDeriv2(point0);
         for (int v = 0; v < m; v++) {
             for (int w = 0; w < m; w++) {
                 for (int u = 0; u < m; u++) {

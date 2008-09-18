@@ -303,6 +303,7 @@ inline void JetMatrix::jacobian(JacobianMatrix &jMatrix){
     int i, j;
     
      if (!c1_)
+         
         THROW(JetMatrix::RangeViolation());
     for (i=0;i < n_comps(); i++){
         for (j=0; j < n_comps();j++ ){

@@ -9,31 +9,44 @@ public class HugoniotParams {
     private RealVector uMinus_;
     private RealMatrix2 dFMinus_;
     private FluxFunction fluxFunction_;
+
     public HugoniotParams(PhasePoint xZero) {
 
         xZero_ = xZero;
 
     }
 
-    public HugoniotParams(PhasePoint xZero,FluxFunction fluxFunction) {
+    public HugoniotParams(PhasePoint xZero, FluxFunction fluxFunction) {
 
         xZero_ = xZero;
-        fluxFunction_=fluxFunction;
+        fluxFunction_ = fluxFunction;
 
     }
 
-    
-    
-     public void uMinusChangeNotify(PhasePoint uMinus) {
+    public void uMinusChangeNotify(PhasePoint uMinus) {
 
         setUMinus(uMinus);
 
     }
 
     public void setUMinus(PhasePoint pPoint) {
+
+        WaveState input = new WaveState(pPoint);
+        JetMatrix output = new JetMatrix(pPoint.getSize());
+        getFluxFunction().jet(input, output, 1);
+
+        dFMinus_ = new RealMatrix2(output.n_comps(), output.n_comps()); //TODO Replace for JacobianMatrix
+
+        for (int i = 0; i < output.n_comps(); i++) {
+            for (int j = 0; j < output.n_comps(); j++) {
+                dFMinus_.setElement(i, j, output.getElement(i, j));
+            }
+        }
+
         uMinus_ = pPoint.getCoords();
-        fMinus_ = getFluxFunction().F(uMinus_);
-        dFMinus_ = getFluxFunction().DF(uMinus_);
+        fMinus_ = output.f();
+//        fMinus_ = getFluxFunction().F(uMinus_);
+//        dFMinus_ = getFluxFunction().DF(uMinus_);
     }
 
     public PhasePoint getXZero() {

@@ -12,6 +12,8 @@ RPNUMSRC += \
         RarefactionCurve.cc     \
 	Physics.cc           	\
 	RarefactionFlow.cc	\
+        ConservationShockFlow.cc \
+        ShockFlowParams.cc      \
 	RpSolution.cc 		\
 	ShockFlow.cc 		\
 	WavePoint.cc		\

@@ -171,7 +171,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initNative(JNIEnv * env, jclas
     }
     
     if (!strcmp(physicsID, "QuadraticR2")){
-//        cout <<"Criando quad2"<<endl;
+        //cout <<"Criando quad2"<<endl;
         
         RpNumerics::setPhysics(Quad2(Quad2FluxParams()));
         

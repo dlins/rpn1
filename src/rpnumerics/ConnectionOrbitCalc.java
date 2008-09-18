@@ -7,8 +7,8 @@
 
 package rpnumerics;
 
-import wave.util.RealVector;
 import wave.ode.ODESolution;
+import wave.util.JetMatrix;
 import wave.util.RealMatrix2;
 import wave.util.RealVector;
 
@@ -281,7 +281,17 @@ public class ConnectionOrbitCalc implements RpCalculation {
         RealVector ddx0 = new RealVector(m);
         ddx0.mul(X_t0, xi);
 //        RealVector f0 = new RealVector(RPNUMERICS.flow().flux(x_t0));
-        RealVector f0 = flow_.flux((x_t0));
+
+        WaveState input = new WaveState(new PhasePoint(x_t0));
+        JetMatrix output = new JetMatrix (m);
+        
+        flow_.jet(input, output, 0);
+        
+        RealVector f0= output.f();
+        
+        
+        
+//        RealVector f0 = flow_.flux((x_t0));
         
         RealVector scaleF = new RealVector(m);
         scaleF.scale(f0.dot(ddx0) / f0.dot(f0), f0);

@@ -8,7 +8,6 @@
 
 package wave.util;
 
-import wave.util.RealVector;
 import wave.util.exceptions.JacobianMatrixRangeViolation;
 import javax.vecmath.GVector; 
 

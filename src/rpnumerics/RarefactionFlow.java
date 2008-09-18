@@ -5,9 +5,10 @@
  */
 package rpnumerics;
 
+
 import wave.util.*;
 
-public class RarefactionFlow implements WaveFlow {
+public class RarefactionFlow extends WaveFlow {
 
     public static int FIRST = 1;
 
@@ -17,15 +18,15 @@ public class RarefactionFlow implements WaveFlow {
     private PhasePoint referenceVector_;
     private int familyIndex_ = 1;
     private FluxFunction flux_;
-
+    
     //
     // Constructors
     //
-    public RarefactionFlow(PhasePoint xZero, int familyIndex,FluxFunction flux) {
+    public RarefactionFlow(PhasePoint xZero, int familyIndex, FluxFunction flux) {
 
         referenceVector_ = new PhasePoint(xZero);
         familyIndex_ = familyIndex;
-        flux_=flux;
+        flux_ = flux;
     }
 
     //
@@ -38,12 +39,24 @@ public class RarefactionFlow implements WaveFlow {
     //
     // Methods
     //
-    public WavePoint flux(RealVector u) {
+    public WavePoint flux(RealVector x) {
 
         //	System.out.println("rarefaction flux u = " + u);
 
-        RealMatrix2 df = getFlux().DF(u);
-        int stateSpaceDim = u.getSize();
+        WaveState input = new WaveState(new PhasePoint(x));
+        JetMatrix output = new JetMatrix(x.getSize());
+        getFlux().jet(input, output, 1);
+
+        RealMatrix2 df = new RealMatrix2(output.n_comps(), output.n_comps()); //TODO Replace for JacobianMatrix
+
+        for (int i = 0; i < output.n_comps(); i++) {
+            for (int j = 0; j < output.n_comps(); j++) {
+                df.setElement(i, j, output.getElement(i, j));
+            }
+        }
+
+//        RealMatrix2 df = getFlux().DF(u);
+        int stateSpaceDim = x.getSize();
 
         double[] eigenValR = new double[stateSpaceDim];
         double[] eigenValI = new double[stateSpaceDim];
@@ -51,7 +64,7 @@ public class RarefactionFlow implements WaveFlow {
 
         RealMatrix2 eigenCalcMatrix = new RealMatrix2(df);
         eigenCalcMatrix.fillEigenData(stateSpaceDim, df, eigenValR, eigenValI,
-                                      eigenVec);
+                eigenVec);
 
         // getting eigenvalues and eigenvectors sorted
         // with increasing absolute value of real part
@@ -68,12 +81,13 @@ public class RarefactionFlow implements WaveFlow {
         //	System.out.println("rarefaction flux new referenceVector  = " + referenceVector_);
 
 
-        WavePoint        returned = new WavePoint(rarefactionVector,eigenValR[familyIndex_]);
+        WavePoint returned = new WavePoint(rarefactionVector, eigenValR[familyIndex_]);
 
         return returned;
 
 //        return rarefactionVector;
     }
+
     public RealMatrix2 fluxDeriv(RealVector u) {
 
         /** @todo  not implemented yet...*/
@@ -90,7 +104,6 @@ public class RarefactionFlow implements WaveFlow {
     public PhasePoint getXZero() {
         return referenceVector_;
     }
-
 
     public void setXZero(PhasePoint xzero) {
 

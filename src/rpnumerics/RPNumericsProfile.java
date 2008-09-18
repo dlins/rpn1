@@ -5,7 +5,7 @@
  */
 package rpnumerics;
 
-import rpnumerics.physics.*;
+//import rpnumerics.physics.*;
 import rpn.controller.ui.*;
 import rpnumerics.methods.*;
 import wave.util.Boundary;
@@ -13,7 +13,7 @@ import wave.util.Boundary;
 public class RPNumericsProfile {
     private String libName_;
 
-    public Physics physics_;
+//    public Physics physics_;
     private Boundary boundary_;
     private boolean hasBoundary_ = false;
     private String physicsId_;

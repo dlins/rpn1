@@ -36,7 +36,7 @@ public class RPnNetworkStatus {
     private boolean isOnline_;
     private boolean serverOnline_;
 
-
+    private StringBuffer logBuffer_;
 
      public static int PORTNUMBER = 1099;
 
@@ -47,6 +47,7 @@ public class RPnNetworkStatus {
         clientID_ = clientID;
         isOnline_ = false;
         isMaster_ = false;
+        logBuffer_ = new StringBuffer();
 
     }
 
@@ -84,14 +85,16 @@ public class RPnNetworkStatus {
             serverOnline_ = true;
         }
 
-        catch (javax.naming.CommunicationException ex) {
-            System.out.println("Server not available");
-            serverOnline_ = false;
-            System.out.println(ex);
-        }
 
+        catch (javax.naming.CommunicationException ex) {
+            logBuffer_.append(Calendar.getInstance().getTime()+" "+SERVERNAME+ " is not available\n");
+            logBuffer_.append(Calendar.getInstance().getTime()+" "+ex.getMessage()+"\n");
+            serverOnline_ = false;
+
+        }
         catch (Exception ex) {
-            System.out.println("Error in init de NetWorkStatus");
+            logBuffer_.append(Calendar.getInstance().getTime()+ "Error in init de NetWorkStatus\n");
+            logBuffer_.append(Calendar.getInstance().getTime()+" "+ex.getMessage() + "\n");
             System.out.println(ex);
         }
 
@@ -260,5 +263,9 @@ public class RPnNetworkStatus {
             return returnedList;
 
         }
+
+    public String getLogMessages() {
+        return logBuffer_.toString();
+    }
 
     }

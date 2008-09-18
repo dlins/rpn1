@@ -5,7 +5,6 @@
  */
 package rpn.controller.ui;
 
-import rpnumerics.ShockFlow;
 import rpn.controller.phasespace.*;
 import rpn.usecase.ChangeSigmaAgent;
 import wave.util.RealVector;

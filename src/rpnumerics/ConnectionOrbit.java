@@ -1,16 +1,16 @@
 /*
-*
-* Instituto de Matematica Pura e Aplicada - IMPA
-* Departamento de Dinamica dos Fluidos
-*
-*/
-
+ *
+ * Instituto de Matematica Pura e Aplicada - IMPA
+ * Departamento de Dinamica dos Fluidos
+ *
+ */
 package rpnumerics;
 
 import wave.util.RealVector;
 import wave.multid.view.ViewingAttr;
 import java.awt.Color;
 import rpn.component.MultidAdapter;
+import wave.util.JetMatrix;
 
 public class ConnectionOrbit extends RPnCurve implements RpSolution {
     //
@@ -24,29 +24,39 @@ public class ConnectionOrbit extends RPnCurve implements RpSolution {
     // Constructors
     //
     public ConnectionOrbit(StationaryPoint uMinus, StationaryPoint uPlus, Orbit orbit) {
-      super(MultidAdapter.converseOrbitPointsToCoordsArray(orbit.getPoints()),new ViewingAttr (Color.orange));
+        super(MultidAdapter.converseOrbitPointsToCoordsArray(orbit.getPoints()), new ViewingAttr(Color.orange));
         uMinus_ = uMinus;
         uPlus_ = uPlus;
         orbit_ = orbit;
     }
-
-
     //
     // Methods
     //
-    
     public RealVector orbitCenter() {
-        
 
-        OrbitPoint centerOPoint = orbit_.getPoints() [0];
+
+        OrbitPoint centerOPoint = orbit_.getPoints()[0];
         RealVector center = new RealVector(centerOPoint.getCoords());
-        ShockFlow flow = (ShockFlow)RPNUMERICS.createShockFlow();
-        RealVector fCenter = flow.flux(center);
+        ShockFlow flow = (ShockFlow) RPNUMERICS.createShockFlow();
+
+        WaveState input = new WaveState(new PhasePoint(center));
+        JetMatrix output = new JetMatrix(center.getSize());
+
+        flow.jet(input, output, 0);
+
+        RealVector fCenter = output.f();
+
+//        RealVector fCenter = flow.flux(center);
 //        RealVector fCenter = RPNUMERICS.flow().flux(center);
         for (int i = 1; i < orbit_.getPoints().length; i++) {
-            centerOPoint = orbit_.getPoints() [i];
+            centerOPoint = orbit_.getPoints()[i];
             RealVector nextCenter = new RealVector(centerOPoint.getCoords());
-            RealVector nextFCenter = flow.flux(nextCenter);
+            
+            WaveState in = new WaveState(new PhasePoint(nextCenter));
+            
+            flow.jet(in, output, 0);
+//            RealVector nextFCenter = flow.flux(nextCenter);
+            RealVector nextFCenter = output.f();
 //            RealVector nextFCenter = RPNUMERICS.flow().flux(nextCenter);
             if (fCenter.norm() < nextFCenter.norm()) {
                 fCenter.set(nextFCenter);
@@ -56,61 +66,66 @@ public class ConnectionOrbit extends RPnCurve implements RpSolution {
         return center;
     }
 
+    public int findClosestSegment(RealVector point, double alpha) {
+        return 0;
+    }
 
-public int findClosestSegment (RealVector point,double alpha){ return 0;}
+    public String toXML() {
 
+        StringBuffer buffer = new StringBuffer();
 
-    public String toXML(){
+        buffer.append("<CONNECTIONORBIT>\n");
+        buffer.append("<UMINUS>\n");
+        buffer.append(uMinus().toXML());
+        buffer.append("</UMINUS>\n");
 
-      StringBuffer buffer = new StringBuffer();
+        buffer.append("<UPLUS>\n");
+        buffer.append(uPlus().toXML());
+        buffer.append("</UPLUS>\n");
 
-      buffer.append("<CONNECTIONORBIT>\n");
-      buffer.append("<UMINUS>\n");
-      buffer.append(uMinus().toXML());
-      buffer.append("</UMINUS>\n");
+        buffer.append(orbit().toXML());
 
-      buffer.append("<UPLUS>\n");
-      buffer.append(uPlus().toXML());
-      buffer.append("</UPLUS>\n");
+        buffer.append("</CONNECTIONORBIT>");
 
-      buffer.append(orbit().toXML());
-
-      buffer.append("</CONNECTIONORBIT>");
-
-      return  buffer.toString();
+        return buffer.toString();
 
 
     }
 
-    public String toXML(boolean calcReady){
+    public String toXML(boolean calcReady) {
 
-      StringBuffer buffer = new StringBuffer();
-      if (calcReady){
-      buffer.append("<CONNECTIONORBIT>\n");
-      buffer.append("<UMINUS>\n");
-      buffer.append(uMinus().toXML());
-      buffer.append("</UMINUS>\n");
+        StringBuffer buffer = new StringBuffer();
+        if (calcReady) {
+            buffer.append("<CONNECTIONORBIT>\n");
+            buffer.append("<UMINUS>\n");
+            buffer.append(uMinus().toXML());
+            buffer.append("</UMINUS>\n");
 
-      buffer.append("<UPLUS>\n");
-      buffer.append(uPlus().toXML());
-      buffer.append("</UPLUS>\n");
+            buffer.append("<UPLUS>\n");
+            buffer.append(uPlus().toXML());
+            buffer.append("</UPLUS>\n");
 
-      buffer.append(orbit().toXML());
+            buffer.append(orbit().toXML());
 
-      buffer.append("</CONNECTIONORBIT>");
-      }
+            buffer.append("</CONNECTIONORBIT>");
+        }
 
-      return  buffer.toString();
+        return buffer.toString();
 
     }
 
     //
     // Accessors/Mutators
     //
-    public StationaryPoint uMinus() { return uMinus_; }
+    public StationaryPoint uMinus() {
+        return uMinus_;
+    }
 
-    public StationaryPoint uPlus() { return uPlus_; }
+    public StationaryPoint uPlus() {
+        return uPlus_;
+    }
 
-    public Orbit orbit() { return orbit_; }
-
+    public Orbit orbit() {
+        return orbit_;
+    }
 }

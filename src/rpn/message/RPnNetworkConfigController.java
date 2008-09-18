@@ -48,9 +48,9 @@ public static RPnNetworkConfigController instance(){
     if (source instanceof RPnNetworkConfigDialog){
 
 
-        RPnNetworkStatus.SERVERNAME = RPnNetworkConfigDialog.serverTextBox.getText();
+//        RPnNetworkStatus.SERVERNAME = a.serverTextBox.getText();
 
-        RPnNetworkStatus.PORTNUMBER = (new Integer(RPnNetworkConfigDialog.portTextBox.getText())).intValue();
+//        RPnNetworkStatus.PORTNUMBER = (new Integer(RPnNetworkConfigDialog.portTextBox.getText())).intValue();
 
 
 //        System.out.println(RPnNetworkStatus.SERVERNAME);

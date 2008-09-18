@@ -1,6 +1,8 @@
 vpath %.cc $(FACTORIESDIR)
 
 RPNUMSRC +=RarefactionMethodFactory.cc \
+           WaveFlowFactory.cc \
+
 
 
 CPPFLAGS += -I $(FACTORIESDIR)

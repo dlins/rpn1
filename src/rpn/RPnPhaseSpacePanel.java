@@ -22,8 +22,6 @@ import com.sun.image.codec.jpeg.JPEGCodec;
 import javax.swing.JPanel;
 import java.io.FileOutputStream;
 import java.awt.Shape;
-import java.awt.geom.AffineTransform;
-import rpn.controller.ui.UIController;
 
 
 public class RPnPhaseSpacePanel extends JPanel implements Printable {

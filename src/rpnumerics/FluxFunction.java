@@ -3,21 +3,17 @@
  * Departamento de Dinamica dos Fluidos
  *
  */
-
 package rpnumerics;
 
-import rpnumerics.physics.FluxParams;
 import wave.util.RealVector;
-import wave.util.RealMatrix2;
-import wave.util.HessianMatrix;
 
-public  interface FluxFunction
-{
-	HessianMatrix D2F( RealVector U );
-	
-	RealMatrix2 DF( RealVector U );
-	
-	RealVector F( RealVector U );
-        FluxParams fluxParams();
-	
-}
+public class FluxFunction extends NativeRpFunction {
+//	HessianMatrix D2F( RealVector U );
+//	
+//	RealMatrix2 DF( RealVector U );
+//	
+//	RealVector F( RealVector U );
+    public FluxParams fluxParams() {
+        return new FluxParams("Quad2", new RealVector(2), 1);
+    }
+}  

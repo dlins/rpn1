@@ -6,8 +6,6 @@
  */
 package rpnumerics;
 
-import rpnumerics.PhasePoint;
-
 public class WaveState {
     //
     // Members
@@ -15,6 +13,7 @@ public class WaveState {
     private PhasePoint initial_;
     private PhasePoint final_;
     private double speed_;
+    private int dim_;
 
     //
     // Constructor
@@ -33,14 +32,15 @@ public class WaveState {
         initial_ = new PhasePoint(initialPoint);
         final_ = new PhasePoint(initialPoint);
         speed_ = 0;
+        dim_ = initialPoint.getSize();
     }
 
     public WaveState(PhasePoint initial, PhasePoint finit, double speed) {
         initial_ = new PhasePoint(initial);
         final_ = new PhasePoint(finit);
         speed_ = speed;
+        dim_ = initial.getSize();
     }
-
     //
     // Accessors/Mutators
     //
@@ -54,6 +54,10 @@ public class WaveState {
 
     public PhasePoint finalState() {
         return final_;
+    }
+
+    public int stateSpaceDim() {
+        return dim_;
     }
 
     //

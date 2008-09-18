@@ -39,9 +39,9 @@ double RarefactionFlow::lambdaCalc(const WaveState & in, int family){
     
     JetMatrix jetMatrix(n);
     
-    const FluxFunction & fluxFunction= RpNumerics::getFlux();
+//    const FluxFunction & fluxFunction= RpNumerics::getFlux();
     
-    status=fluxFunction.jet(in, jetMatrix, 1); //This function must return the same codes of LSODE s functions
+    status=fluxFunction().jet(in, jetMatrix, 1); //This function must return the same codes of LSODE s functions
     
     for(i=0;i< n;i++){
         for(j=0;j< n;j++){
@@ -88,9 +88,9 @@ int RarefactionFlow::flow(int n,  int family,  double *in, double *out)const {
         waveState(i)=in[i];
     }
     
-    const FluxFunction & fluxFunction= flux();
+//    const FluxFunction & fluxFunction= flux();
     
-    status=fluxFunction.jet(waveState, jetMatrix, 1);
+    status=fluxFunction().jet(waveState, jetMatrix, 1);
     
     for(i=0;i< n;i++){
         for(j=0;j< n;j++){
@@ -182,7 +182,7 @@ int RarefactionFlow::flow(int n,  int family,  double *in, double *out)const {
                                   // Rever a classe JetMatrix . Mais especificamente o significado do numero passado para o construtor
      JetMatrix outputJetMatrix(n);
    
-    fluxFunction.jet(inputWaveState, outputJetMatrix, 2);
+    fluxFunction().jet(inputWaveState, outputJetMatrix, 2);
     
     for (i=0;i <n;i++){
         
@@ -265,7 +265,7 @@ int RarefactionFlow::jet(const WaveState &u, JetMatrix &m, int degree)const {
 }
 
 
-RarefactionFlow::RarefactionFlow(const RarefactionFlow & copy ):WaveFlow(copy.flux()){
+RarefactionFlow::RarefactionFlow(const RarefactionFlow & copy ):WaveFlow(copy.fluxFunction()){
     familyIndex_=copy.getFamilyIndex();
     timeDirection_=copy.direction();
     referenceVector_= new RealVector(copy.getReferenceVector());

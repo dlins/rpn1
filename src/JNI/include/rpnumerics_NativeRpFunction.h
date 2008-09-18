@@ -15,6 +15,14 @@ extern "C" {
 JNIEXPORT jint JNICALL Java_rpnumerics_NativeRpFunction_nativeJet
   (JNIEnv *, jobject, jobject, jobject, jint);
 
+/*
+ * Class:     rpnumerics_NativeRpFunction
+ * Method:    nativeVectorJet
+ * Signature: (Lwave/util/RealVector;Lwave/util/JetMatrix;I)I
+ */
+JNIEXPORT jint JNICALL Java_rpnumerics_NativeRpFunction_nativeVectorJet
+  (JNIEnv *, jobject, jobject, jobject, jint);
+
 #ifdef __cplusplus
 }
 #endif

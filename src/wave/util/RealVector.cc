@@ -14,6 +14,16 @@ RealVector::RealVector(const RealVector & copy):Vector(copy.size()){
 }
 
 
+RealVector & RealVector::operator=(const Vector & copy){
+
+    for (int i=0;i < size(); i++){
+        operator ()(i)=copy.operator ()(i);
+    }
+    
+    return *this;
+    
+}
+
 bool RealVector::operator ==(const RealVector &test) {
     
     if (size()!=test.size()) return false;

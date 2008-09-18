@@ -97,12 +97,7 @@ public class HugoniotContinuation {
 //        RPNUMERICS.odeSolver().getProfile().setFunction(flowVF);
         solver_.getProfile().setFunction(flowVF);
 
-
         return new HugoniotCurve(new PhasePoint(continuationParams_.getUMinus()), statesResult);
-
-
-
-
 
     }
 

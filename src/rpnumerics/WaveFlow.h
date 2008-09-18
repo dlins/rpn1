@@ -44,12 +44,12 @@ public:
 
     virtual ~WaveFlow();
     //! Gets the flux function
-    const FluxFunction & flux()const ;
-    //! Changes the flux function
-    void setFlux(const FluxFunction &);
+    const FluxFunction & fluxFunction()const ;
+
+
     
 };
 
-inline const FluxFunction & WaveFlow::flux()const {return *fluxFunction_;}
+inline const FluxFunction & WaveFlow::fluxFunction()const {return *fluxFunction_;}
 
 #endif //! _WaveFlow_H

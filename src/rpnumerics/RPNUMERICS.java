@@ -6,25 +6,25 @@
 package rpnumerics;
 
 import rpnumerics.methods.HugoniotContinuationMethod;
-import rpnumerics.physics.CapilParams;
-import rpnumerics.physics.CombFluxParams;
-import rpnumerics.physics.CombHugoniotCurveCalc;
-import rpnumerics.physics.PGas;
-import rpnumerics.physics.PGasFluxParams;
-import rpnumerics.physics.PermParams;
+//import rpnumerics.physics.CapilParams;
+//import rpnumerics.physics.CombFluxParams;
+//import rpnumerics.physics.CombHugoniotCurveCalc;
+//import rpnumerics.physics.PGas;
+//import rpnumerics.physics.PGasFluxParams;
+//import rpnumerics.physics.PermParams;
 import wave.util.*;
 import wave.ode.*;
-import rpnumerics.physics.Physics;
-import rpnumerics.physics.Quad2;
-import rpnumerics.physics.Quad2FluxParams;
-import rpnumerics.physics.Quad2HugoniotCurveCalc;
-import rpnumerics.physics.Quad4;
-import rpnumerics.physics.Quad4FluxParams;
-import rpnumerics.physics.Steam;
-import rpnumerics.physics.SteamFluxParams;
-import rpnumerics.physics.TriPhase;
-import rpnumerics.physics.TriPhaseFluxParams;
-import rpnumerics.physics.ViscosityParams;
+//import rpnumerics.physics.Physics;
+//import rpnumerics.physics.Quad2;
+//import rpnumerics.physics.Quad2FluxParams;
+//import rpnumerics.physics.Quad2HugoniotCurveCalc;
+//import rpnumerics.physics.Quad4;
+//import rpnumerics.physics.Quad4FluxParams;
+//import rpnumerics.physics.Steam;
+//import rpnumerics.physics.SteamFluxParams;
+//import rpnumerics.physics.TriPhase;
+//import rpnumerics.physics.TriPhaseFluxParams;
+//import rpnumerics.physics.ViscosityParams;
 import wave.multid.Space;
 
 public class RPNUMERICS {
@@ -37,7 +37,7 @@ public class RPNUMERICS {
     //
     // Members
     //
-    static private Physics physics_ = null;
+//    static private Physics physics_ = null;
     static private String libName_ = null;
     static private RpErrorControl errorControl_ = null;
     static private ODESolver odeSolver_ = null;
@@ -45,6 +45,7 @@ public class RPNUMERICS {
     static private RarefactionProfile rarefactionProfile_ = RarefactionProfile.instance();
     static private BifurcationProfile bifurcationProfile_ = BifurcationProfile.instance();
     static private ShockRarefactionProfile shockRarefactionProfile_ = null;
+//    static private FluxFunction fluxFunction_;
 
     //
     // Constructors/Initializers
@@ -57,22 +58,21 @@ public class RPNUMERICS {
         libName_ = profile.getLibName();
 
         initNative(profile.getPhysicsID());
+//        fluxFunction_=new FluxFunction();
 
-        physics_ = physicsCreation(
-                profile);
+//        physics_ = physicsCreation(
+//                profile);
 
-        if (profile.hasBoundary()) {
-            try {
-
-                physics_.setBoundary(profile.getBoundary());
-            } catch (Exception ex) {
-                System.out.println(ex);
-            //Logger.getLogger(RPNUMERICS.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+//        if (profile.hasBoundary()) {
+//            try {
+//
+//                physics_.setBoundary(profile.getBoundary());
+//            } catch (Exception ex) {
+//                System.out.println(ex);
+//            //Logger.getLogger(RPNUMERICS.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//        }
     }
-
-   
 
     /**
      * 
@@ -82,26 +82,26 @@ public class RPNUMERICS {
 
     public static HugoniotCurveCalc createHugoniotCalc() {
 
-        HugoniotParams hparams = new HugoniotParams(shockProfile_.getXZero(),fluxFunction());
+        HugoniotParams hparams = new HugoniotParams(shockProfile_.getXZero(), new FluxFunction());
 
         ShockFlow shockFlow = (ShockFlow) createShockFlow();
 
 
-        if (shockProfile_.isHugoniotSpecific()) {
-
-            if (physicsID().equals("Quad2")) {
-
-                return new Quad2HugoniotCurveCalc(RPNUMERICS.fluxFunction().fluxParams(), hparams.getXZero());
-            }
-
-
-            if (physicsID().equals("Comb")) {
-
-                return new CombHugoniotCurveCalc((CombFluxParams) fluxFunction().fluxParams(), hparams.getXZero(), 1d);
-
-            }
-
-        }
+//        if (shockProfile_.isHugoniotSpecific()) { //TODO  Reactivate 
+//
+//            if (physicsID().equals("Quad2")) {
+//
+//                return new Quad2HugoniotCurveCalc(RPNUMERICS.fluxFunction().fluxParams(), hparams.getXZero());
+//            }
+//
+//
+//            if (physicsID().equals("Comb")) {
+//
+//                return new CombHugoniotCurveCalc((CombFluxParams) fluxFunction().fluxParams(), hparams.getXZero(), 1d);
+//
+//            }
+//
+//        }
         //Not specific
 
         if (shockProfile_.getHugoniotMethodName().equals("Continuation")) {
@@ -136,7 +136,7 @@ public class RPNUMERICS {
     public static StationaryPointCalc createStationaryPointCalc(PhasePoint initial) {
 
         ShockFlow shockFlow = (ShockFlow) createShockFlow();
-        createODESolver((WaveFlow)shockFlow);
+        createODESolver((WaveFlow) shockFlow);
 
         return new StationaryPointCalc(initial, shockFlow);
 
@@ -173,9 +173,9 @@ public class RPNUMERICS {
     public static WaveFlow createShockFlow() {
 
         if (shockProfile_.getFlowName().equals("Conservation Shock Flow")) {
-
+            FluxFunction flux = new FluxFunction();
             ShockFlowParams shockParams = new ShockFlowParams(shockProfile_.getXZero(), shockProfile_.getSigma());
-            ConservationShockFlow flow = new ConservationShockFlow(shockParams, fluxFunction());
+            ConservationShockFlow flow = new ConservationShockFlow(shockParams, flux);
             return flow;
         }
 
@@ -187,9 +187,9 @@ public class RPNUMERICS {
         if (shockProfile_.getFlowName().equals("Conservation Shock Flow")) {
 
 
-            ConservationShockFlow flow = new ConservationShockFlow(shockFlowParams, fluxFunction());
+            ConservationShockFlow flow = new ConservationShockFlow(shockFlowParams, new FluxFunction());
 
-            
+
             return flow;
         }
 
@@ -207,14 +207,14 @@ public class RPNUMERICS {
 
 
         if (rarefactionProfile_.getFlowName().equals("Blow Up")) {
-            BlowUpLineFieldVector blowUpUserInput = new BlowUpLineFieldVector(rarefactionProfile_.getXZero(), rarefactionProfile_.getFamily(), fluxFunction());
+            BlowUpLineFieldVector blowUpUserInput = new BlowUpLineFieldVector(rarefactionProfile_.getXZero(), rarefactionProfile_.getFamily(), new FluxFunction());
 
-            return new BlowUpFlow(blowUpUserInput, fluxFunction());
+            return new BlowUpFlow(blowUpUserInput, new FluxFunction());
         }
 
         if (rarefactionProfile_.getFlowName().equals("Rarefaction Flow")) {
 
-            return new RarefactionFlow(rarefactionProfile_.getXZero(), rarefactionProfile_.getFamily(), fluxFunction());
+            return new RarefactionFlow(rarefactionProfile_.getXZero(), rarefactionProfile_.getFamily(), new FluxFunction());
         }
 
         return null;
@@ -233,56 +233,49 @@ public class RPNUMERICS {
                 errorControl().ode().maxNumberOfSteps()));
         return odeSolver_;
     }
-    
-    
+
     /**
      * @deprecated Physics will be created in the native layer 
      *
      */
-     private static Physics physicsCreation(RPNumericsProfile profile) {
-
-        // Physics initialization
-
-        if (profile.getPhysicsID().equals("QuadraticR2")) {
-
-            return new Quad2(new Quad2FluxParams());
-
-        }
-
-        if (profile.getPhysicsID().equals("QuadraticR4")) {
-            return new Quad4(new Quad4FluxParams());
-        }
-
-        if (profile.getPhysicsID().equals("Triphase")) {
-
-            return new TriPhase(new TriPhaseFluxParams(), new PermParams(),
-                    new CapilParams(0.4d, 3d, 44d, 8d),
-                    new ViscosityParams(0.5d));
-
-        }
-
-        if (profile.getPhysicsID().equals("P Gas")) {
-
-            return new PGas(new PGasFluxParams());
-
-        }
-
-        if (profile.getPhysicsID().equals("Steam")) {
-            return new Steam(new SteamFluxParams());
-
-        }
-
-        return null;
-    }
-    
-    
-
+//     private static Physics physicsCreation(RPNumericsProfile profile) {
+//
+//        // Physics initialization
+//
+//        if (profile.getPhysicsID().equals("QuadraticR2")) {
+//
+//            return new Quad2(new Quad2FluxParams());
+//
+//        }
+//
+//        if (profile.getPhysicsID().equals("QuadraticR4")) {
+//            return new Quad4(new Quad4FluxParams());
+//        }
+//
+//        if (profile.getPhysicsID().equals("Triphase")) {
+//
+//            return new TriPhase(new TriPhaseFluxParams(), new PermParams(),
+//                    new CapilParams(0.4d, 3d, 44d, 8d),
+//                    new ViscosityParams(0.5d));
+//
+//        }
+//
+//        if (profile.getPhysicsID().equals("P Gas")) {
+//
+//            return new PGas(new PGasFluxParams());
+//
+//        }
+//
+//        if (profile.getPhysicsID().equals("Steam")) {
+//            return new Steam(new SteamFluxParams());
+//
+//        }
+//
+//        return null;
+//    }
     //
     // Accessors
     //
-     
-     
-     
     public static void setCurrentProfile(ShockRarefactionProfile aShockRarefactionProfile_) {
         shockRarefactionProfile_ = aShockRarefactionProfile_;
     }
@@ -310,9 +303,10 @@ public class RPNUMERICS {
      * 
      * @deprecated CHANGE TO RPFUNCTION REFERENCES !!
      */
-    static public final FluxFunction fluxFunction() {
-        return physics_.fluxFunction();
-    }
+//    static public final FluxFunction fluxFunction() {
+////        return physics_.fluxFunction();
+//        return fluxFunction_;
+//    }
 
     //TODO KEEP TO JAVA CALCS USE  !!
     /**
@@ -341,16 +335,16 @@ public class RPNUMERICS {
     static public final ODESolver odeSolver() {
         return odeSolver_;
     }
-    
+
     private native void setFamilyIndex(int familyIndex);
+
     private native void setTimeDirection(int timeDirection);
-    
-     /**
+
+    /**
      * Clean up the native layer
      */
-
     public static native void clean();
-    
+
     public static native String physicsID();
 
     public static native Boundary boundary();

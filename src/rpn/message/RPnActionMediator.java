@@ -41,10 +41,6 @@ public class RPnActionMediator {
     private String clientID_;
     private static RPnActionMediator instance_;
 
-
-    public static String SERVERNAME = new String("bach.fluid.impa.br");
-
-
     private static RPnNetworkStatus netStatus_;
 
     protected static String RMIADAPTOR = new String("jmx/invoker/RMIAdaptor");
@@ -66,6 +62,11 @@ public class RPnActionMediator {
             connFactory = (QueueConnectionFactory) ctx.lookup(
                     "ConnectionFactory");
             conn = connFactory.createQueueConnection();
+           
+            
+            
+            
+            
             session = conn.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
             clientID_ = UIController.instance().getNetStatusHandler().
                         getClientID();

@@ -3,27 +3,21 @@
  * Departamento de Dinamica dos Fluidos
  *
  */
-
 package rpnumerics;
 
-import wave.util.HessianMatrix;
-import wave.util.RealVector;
-import wave.util.RealMatrix2;
-
-public interface WaveFlow {
+public abstract class WaveFlow extends NativeRpFunction {
     //
     // Members
     //
-    WavePoint flux( RealVector x );
+//    WavePoint flux( RealVector x );
+//
+//    RealMatrix2 fluxDeriv( RealVector x );
+//
+//    HessianMatrix fluxDeriv2( RealVector x );
+//
+    abstract PhasePoint getXZero();
 
-    RealMatrix2 fluxDeriv( RealVector x );
+    public abstract void setXZero(PhasePoint xzero);
 
-    HessianMatrix fluxDeriv2( RealVector x );
-
-    PhasePoint getXZero();
-
-    void setXZero (PhasePoint xzero);
-    
-    String getName();
-
+    public abstract String getName();
 }

@@ -20,7 +20,13 @@ public class GenericHugoniotFunction implements VectorFunction {
     //
     public RealVector value(RealVector U) {
 
-        RealVector deltaF = fluxFunction_.F(U);//RPNUMERICS.fluxFunction().F(U);
+        WaveState input = new WaveState(new PhasePoint(U));
+        JetMatrix output = new JetMatrix(U.getSize());
+        fluxFunction_.jet(input, output, 1);
+
+//        RealVector deltaF = fluxFunction_.F(U);//RPNUMERICS.fluxFunction().F(U);
+
+        RealVector deltaF = output.f();
         deltaF.sub(getHugoniotParams().getFMinus());//RPNUMERICS.hugoniotCurveCalc().getFMinus());
         RealVector deltaU = new RealVector(U);
         deltaU.sub(getHugoniotParams().getUMinus());//RPNUMERICS.hugoniotCurveCalc().getUMinus().getCoords());
@@ -36,15 +42,31 @@ public class GenericHugoniotFunction implements VectorFunction {
 
     public RealMatrix2 deriv(RealVector U) {
 
+        WaveState input = new WaveState(new PhasePoint(U));
+        JetMatrix output = new JetMatrix(U.getSize());
+        fluxFunction_.jet(input, output, 1);
+
         int dim = U.getSize();
         RealVector deltaU = new RealVector(U);
 
         deltaU.sub(getHugoniotParams().getUMinus());//RPNUMERICS.hugoniotCurveCalc().getUMinus().getCoords());
-        RealVector deltaF = fluxFunction_.F(U);//RPNUMERICS.fluxFunction().F(U);
+//        RealVector deltaF = fluxFunction_.F(U);
+        RealVector deltaF = output.f();//RPNUMERICS.fluxFunction().F(U);
+
         deltaF.sub(getHugoniotParams().getFMinus());//RPNUMERICS.hugoniotCurveCalc().getFMinus());
 //        RealMatrix2 DF = RPNUMERICS.fluxFunction().DF(U);
 
-        RealMatrix2 DF = fluxFunction_.DF(U);
+//        RealMatrix2 DF = fluxFunction_.DF(U);
+
+        RealMatrix2 DF = new RealMatrix2(dim, dim); //TODO Replace for JacobianMatrix
+
+        for (int i = 0; i < output.n_comps(); i++) {
+            for (int j = 0; j < output.n_comps(); j++) {
+                DF.setElement(i, j, output.getElement(i, j));
+            }
+        }
+
+
 
         RealMatrix2 DU = new RealMatrix2(dim, dim);
         RealMatrix2 result = new RealMatrix2(dim - 1, dim);

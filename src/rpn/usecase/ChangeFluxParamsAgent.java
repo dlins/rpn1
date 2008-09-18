@@ -40,7 +40,7 @@ public class ChangeFluxParamsAgent extends RpModelConfigChangeAgent {
     public void unexecute() {
         RealVector newValue = (RealVector)log().getOldValue();
         RealVector oldValue = (RealVector)log().getNewValue();
-        rpnumerics.RPNUMERICS.fluxFunction().fluxParams().setParams(newValue);
+//        rpnumerics.RPNUMERICS.fluxFunction().fluxParams().setParams(newValue);
         applyChange(new PropertyChangeEvent(this, DESC_TEXT, oldValue, newValue));
     }
 

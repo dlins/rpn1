@@ -1,27 +1,22 @@
 /*
-*
-* Instituto de Matematica Pura e Aplicada - IMPA
-* Departamento de Dinamica dos Fluidos
-*
-*/
-
-// Orbit on the manifols
+ *
+ * Instituto de Matematica Pura e Aplicada - IMPA
+ * Departamento de Dinamica dos Fluidos
+ *
+ */// Orbit on the manifols
 //
 // stationaryPoint  the stationary point
 // firstPoint       point for an orbit to start
 // timDirection +1  for unstable manifold, -1 for stable manifold
 // orbit            orbit on the manifold starting with firstPoint
-
 package rpnumerics;
 
-import wave.util.RealMatrix2;
 import wave.util.RealVector;
 import wave.util.RealMatrix2;
 import wave.multid.view.ViewingAttr;
 import java.awt.Color;
 import rpn.component.MultidAdapter;
-
-
+import wave.util.JetMatrix;
 
 public class ManifoldOrbit extends RPnCurve implements RpSolution {
     //
@@ -38,7 +33,7 @@ public class ManifoldOrbit extends RPnCurve implements RpSolution {
     // Constructor
     //
     public ManifoldOrbit(StationaryPoint stationaryPoint, PhasePoint firstPoint, Orbit orbit, int timeDirection) {
-      super(MultidAdapter.converseOrbitPointsToCoordsArray(orbit.getPoints()),new ViewingAttr (Color.ORANGE));
+        super(MultidAdapter.converseOrbitPointsToCoordsArray(orbit.getPoints()), new ViewingAttr(Color.ORANGE));
         stationaryPoint_ = new StationaryPoint(stationaryPoint);
         orbit_ = orbit;
         firstPoint_ = firstPoint;
@@ -49,27 +44,41 @@ public class ManifoldOrbit extends RPnCurve implements RpSolution {
     //
     // Accessors/Mutators
     //
-    public void setStationaryPoint(StationaryPoint p) { stationaryPoint_ = new StationaryPoint(p); }
+    public void setStationaryPoint(StationaryPoint p) {
+        stationaryPoint_ = new StationaryPoint(p);
+    }
 
-    public PhasePoint getFirstPoint() { return firstPoint_; }
+    public PhasePoint getFirstPoint() {
+        return firstPoint_;
+    }
 
-    public void setTimeDirection(int tDir) { timeDirection_ = tDir; }
+    public void setTimeDirection(int tDir) {
+        timeDirection_ = tDir;
+    }
 
-    public StationaryPoint getStationaryPoint() { return stationaryPoint_; }
+    public StationaryPoint getStationaryPoint() {
+        return stationaryPoint_;
+    }
 
-    public Orbit getOrbit() { return orbit_; }
+    public Orbit getOrbit() {
+        return orbit_;
+    }
 
-    public int getTimeDirection() { return timeDirection_; }
+    public int getTimeDirection() {
+        return timeDirection_;
+    }
 
-    public int getFinishType() { return finishType_; }
+    public int getFinishType() {
+        return finishType_;
+    }
 
     //
     // Methods
     //
     public ManifoldSensitivity sensitivity() {
-        
-        ConservationShockFlow flow = (ConservationShockFlow)RPNUMERICS.createShockFlow();
-        
+
+        ConservationShockFlow flow = (ConservationShockFlow) RPNUMERICS.createShockFlow();
+
         // getting local information at the stationary point
         StationaryPoint stationaryPoint = getStationaryPoint();
         int timeDirection = getTimeDirection();
@@ -95,7 +104,7 @@ public class ManifoldOrbit extends RPnCurve implements RpSolution {
         RealVector G = flow.fluxDerivSigma(x_Stationary);//new RealVector(((ConservationShockFlow)RPNUMERICS.flow()).fluxDerivSigma(x_Stationary));
         Xp_Stationary.mul(F, G);
         // first point
-        RealVector x0 = new RealVector(getOrbit().getPoints() [0].getCoords());
+        RealVector x0 = new RealVector(getOrbit().getPoints()[0].getCoords());
         RealMatrix2 XZero = new RealMatrix2(Uu);
         // last point
         RealVector x1 = new RealVector(getOrbit().lastPoint().getCoords());
@@ -108,8 +117,8 @@ public class ManifoldOrbit extends RPnCurve implements RpSolution {
         RealVector x = new RealVector(m);
         double h;
         for (int i = 0; i < pointsNumber - 1; i++) {
-            x.set(getOrbit().getPoints() [i].getCoords());
-            h = getOrbit().getPoints() [i + 1].getTime() - getOrbit().getPoints() [i].getTime();
+            x.set(getOrbit().getPoints()[i].getCoords());
+            h = getOrbit().getPoints()[i + 1].getTime() - getOrbit().getPoints()[i].getTime();
             sens.set(rk4(x, sens, k, h));
         }
         // extracting the final information
@@ -179,9 +188,9 @@ public class ManifoldOrbit extends RPnCurve implements RpSolution {
     // the matrices Qx, Rx and vector Xp
     // as returned by Matrices2Vector function
     protected RealVector sensitivityFunction(RealVector x, RealVector sens, int k) {
-        
-        ConservationShockFlow flow =(ConservationShockFlow) RPNUMERICS.createShockFlow();
-        
+
+        ConservationShockFlow flow = (ConservationShockFlow) RPNUMERICS.createShockFlow();
+
         int m = x.getSize();
         RealMatrix2 Qx = new RealMatrix2(m, k);
         RealMatrix2 Rx = new RealMatrix2(k, k);
@@ -192,7 +201,7 @@ public class ManifoldOrbit extends RPnCurve implements RpSolution {
         RealMatrix2.Vector2Matrices(sens, Qx, Rx, Xp);
 //        RealMatrix2 F = new RealMatrix2(RPNUMERICS.flow().fluxDeriv(x));
         RealMatrix2 F = flow.fluxDeriv(x);//new RealMatrix2(RPNUMERICS.flow().fluxDeriv(x));
-        
+
         RealVector G = flow.fluxDerivSigma(x);//new RealVector(((ConservationShockFlow)RPNUMERICS.flow()).fluxDerivSigma(x));
         RealMatrix2.QRFunction(Qx, Rx, F, dQx, dRx);
         dXp.mul(F, Xp);
@@ -255,35 +264,82 @@ public class ManifoldOrbit extends RPnCurve implements RpSolution {
 //                dR.setElement(i, j, result.getElement(k * m + j * (j + 1) / 2 + i));
 //            }
 //    }
-
     protected RealVector rk4(RealVector x0, RealVector sens0, int k, double h) {
         // Runge-Kutta step 4 th order
-        ShockFlow flow = (ShockFlow)RPNUMERICS.createShockFlow();
-        
-        
-        RealVector x = new RealVector(x0);
+        ShockFlow flow = (ShockFlow) RPNUMERICS.createShockFlow();
+
+
+
+
+
+//        RealVector x = new RealVector(x0);
+
+        WaveState input = new WaveState(new PhasePoint(x0));
+
+
+        JetMatrix output = new JetMatrix(x0.getSize());
+
+
+
         RealVector sens = new RealVector(sens0);
         double halfH = 0.5 * h;
-        RealVector halfK1x = flow.flux(x);//new RealVector(RPNUMERICS.flow().flux(x));
-        RealVector halfK1sens = new RealVector(sensitivityFunction(x, sens, k));
+//        RealVector halfK1x = flow.flux(x);//new RealVector(RPNUMERICS.flow().flux(x));
+
+        flow.jet(input, output, 0);
+
+        RealVector halfK1x = output.f();
+
+//        RealVector halfK1sens = new RealVector(sensitivityFunction(x, sens, k));
+        RealVector halfK1sens = new RealVector(sensitivityFunction(input.initialState().getCoords(), sens, k));
         halfK1x.scale(halfH);
         halfK1sens.scale(halfH);
-        x.add(x0, halfK1x);
+
+//        x.add(x0, halfK1x);
+
+        input.initialState().getCoords().add(x0, halfK1x);
+
+
         sens.add(sens0, halfK1sens);
-        RealVector halfK2x = flow.flux(x);//new RealVector(RPNUMERICS.flow().flux(x));
-        RealVector halfK2sens = new RealVector(sensitivityFunction(x, sens, k));
+
+        flow.jet(input, output, 0);
+
+//        RealVector halfK2x = flow.flux(x);//new RealVector(RPNUMERICS.flow().flux(x));
+
+        RealVector halfK2x = output.f();
+
+
+//        RealVector halfK2sens = new RealVector(sensitivityFunction(x, sens, k));
+
+        RealVector halfK2sens = new RealVector(sensitivityFunction(input.initialState(), sens, k));
         halfK2x.scale(halfH);
         halfK2sens.scale(halfH);
-        x.add(x0, halfK2x);
+
+//        x.add(x0, halfK2x);
+        input.initialState().getCoords().add(x0, halfK2x);
+
+
         sens.add(sens0, halfK2sens);
-        RealVector k3x = flow.flux(x);//new RealVector(RPNUMERICS.flow().flux(x));
-        RealVector k3sens = new RealVector(sensitivityFunction(x, sens, k));
+        flow.jet(input, output, 0);
+
+        RealVector k3x = output.f();
+
+//        RealVector k3x = flow.flux(x);//new RealVector(RPNUMERICS.flow().flux(x));
+
+//        RealVector k3sens = new RealVector(sensitivityFunction(x, sens, k));
+        RealVector k3sens = new RealVector(sensitivityFunction(input.initialState().getCoords(), sens, k));
         k3x.scale(h);
         k3sens.scale(h);
-        x.add(x0, k3x);
+
+
+        input.initialState().getCoords().add(x0, k3x);
+//        x.add(x0, k3x);
         sens.add(sens0, k3sens);
-        RealVector k4x = flow.flux(x);//new RealVector(RPNUMERICS.flow().flux(x));
-        RealVector k4sens = new RealVector(sensitivityFunction(x, sens, k));
+        flow.jet(input, output, 0);
+//        RealVector k4x = flow.flux(x);//new RealVector(RPNUMERICS.flow().flux(x));
+        RealVector k4x = output.f();
+//        RealVector k4sens = new RealVector(sensitivityFunction(x, sens, k));
+
+        RealVector k4sens = new RealVector(sensitivityFunction(input.initialState().getCoords(), sens, k));
         k4x.scale(h);
         k4sens.scale(h);
         RealVector result = new RealVector(sens0);
@@ -298,38 +354,38 @@ public class ManifoldOrbit extends RPnCurve implements RpSolution {
         return result;
     }
 
-    public int findClosestSegment(RealVector point, double alfa){
-      return 0;
+    public int findClosestSegment(RealVector point, double alfa) {
+        return 0;
     }
 
-    public String toXML(){
+    public String toXML() {
 
-      StringBuffer  buffer = new StringBuffer();
+        StringBuffer buffer = new StringBuffer();
 
-      buffer.append("<MANIFOLD timedirection=\""+getTimeDirection()+"\">\n");
-      buffer.append(getStationaryPoint().toXML());
+        buffer.append("<MANIFOLD timedirection=\"" + getTimeDirection() + "\">\n");
+        buffer.append(getStationaryPoint().toXML());
 //      buffer.append(getFirstPoint().toXML());
-      buffer.append(getOrbit().toXML());
-      buffer.append("</MANIFOLD>");
+        buffer.append(getOrbit().toXML());
+        buffer.append("</MANIFOLD>");
 
-      return buffer.toString();
+        return buffer.toString();
 
 
     }
 
-    public String toXML(boolean calcReady){
+    public String toXML(boolean calcReady) {
 
-      StringBuffer  buffer = new StringBuffer();
-      if (calcReady){
+        StringBuffer buffer = new StringBuffer();
+        if (calcReady) {
 
-      buffer.append("<MANIFOLD timedirection=\""+getTimeDirection()+"\">\n");
-      buffer.append(getStationaryPoint().toXML());
+            buffer.append("<MANIFOLD timedirection=\"" + getTimeDirection() + "\">\n");
+            buffer.append(getStationaryPoint().toXML());
 //      buffer.append(getFirstPoint().toXML());
-      buffer.append(getOrbit().toXML());
-      buffer.append("</MANIFOLD>");
+            buffer.append(getOrbit().toXML());
+            buffer.append("</MANIFOLD>");
 
-      }
-      return buffer.toString();
+        }
+        return buffer.toString();
 
 
     }

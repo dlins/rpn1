@@ -7,8 +7,7 @@
 package rpn;
 
 import rpnumerics.RPNUMERICS;
-import rpnumerics.ConservationShockFlow;
-import rpnumerics.physics.QuadNDFluxParams;
+//import rpnumerics.physics.QuadNDFluxParams;
 import rpn.usecase.ChangeFluxParamsAgent;
 import javax.swing.*;
 import java.awt.*;
@@ -68,7 +67,7 @@ public class RPnQuadParamsDialog extends JDialog {
     }
 
     void applyButton_actionPerformed(ActionEvent e) {
-        RealVector oldValue = new RealVector(RPNUMERICS.fluxFunction().fluxParams().getParams());
+//        RealVector oldValue = new RealVector(RPNUMERICS.fluxFunction().fluxParams().getParams());
         int indxAField = new Integer(paramsPanel.paramAIndexField.getText()).intValue();
         int indxBField0 = new Integer(paramsPanel.paramBIndexField0.getText()).intValue();
         int indxBField1 = new Integer(paramsPanel.paramBIndexField1.getText()).intValue();
@@ -78,34 +77,34 @@ public class RPnQuadParamsDialog extends JDialog {
         double valueAField = new Double(paramsPanel.paramAValueField.getText()).doubleValue();
         double valueBField = new Double(paramsPanel.paramBValueField.getText()).doubleValue();
         double valueCField = new Double(paramsPanel.paramCValueField.getText()).doubleValue();
-        ((QuadNDFluxParams)RPNUMERICS.fluxFunction().fluxParams()).setAParam(indxAField, valueAField);
-        ((QuadNDFluxParams)RPNUMERICS.fluxFunction().fluxParams()).setBParam(indxBField0, indxBField1, valueBField);
-        ((QuadNDFluxParams)RPNUMERICS.fluxFunction().fluxParams()).setCParam(indxCField0, indxCField1, indxCField2, valueCField);
-        RealVector newValue = RPNUMERICS.fluxFunction().fluxParams().getParams();
+//        ((QuadNDFluxParams)RPNUMERICS.fluxFunction().fluxParams()).setAParam(indxAField, valueAField);
+//        ((QuadNDFluxParams)RPNUMERICS.fluxFunction().fluxParams()).setBParam(indxBField0, indxBField1, valueBField);
+//        ((QuadNDFluxParams)RPNUMERICS.fluxFunction().fluxParams()).setCParam(indxCField0, indxCField1, indxCField2, valueCField);
+//        RealVector newValue = RPNUMERICS.fluxFunction().fluxParams().getParams();
         // reset flow constants
         
         //TODO Check if this method is not needed anymore 
 //	((ConservationShockFlow)RPNUMERICS.flow()).updateXZeroTerms();
 
 
-        ChangeFluxParamsAgent.instance().applyChange(
-            new PropertyChangeEvent(this, ChangeFluxParamsAgent.DESC_TEXT, oldValue, newValue));
+//        ChangeFluxParamsAgent.instance().applyChange(
+//            new PropertyChangeEvent(this, ChangeFluxParamsAgent.DESC_TEXT, oldValue, newValue));
     }
 
     void fetchButton_actionPerformed(ActionEvent e) {
-        QuadNDFluxParams currentParams = (QuadNDFluxParams)RPNUMERICS.fluxFunction().fluxParams();
+//        QuadNDFluxParams currentParams = (QuadNDFluxParams)RPNUMERICS.fluxFunction().fluxParams();
         int indxAField = new Integer(paramsPanel.paramAIndexField.getText()).intValue();
         int indxBField0 = new Integer(paramsPanel.paramBIndexField0.getText()).intValue();
         int indxBField1 = new Integer(paramsPanel.paramBIndexField1.getText()).intValue();
         int indxCField0 = new Integer(paramsPanel.paramCIndexField0.getText()).intValue();
         int indxCField1 = new Integer(paramsPanel.paramCIndexField1.getText()).intValue();
         int indxCField2 = new Integer(paramsPanel.paramCIndexField2.getText()).intValue();
-        String newAValue = new Double(currentParams.getA() [indxAField]).toString();
-        paramsPanel.paramAValueField.setText(newAValue);
-        String newBValue = new Double(currentParams.getB() [indxBField0] [indxBField1]).toString();
-        paramsPanel.paramBValueField.setText(newBValue);
-        String newCValue = new Double(currentParams.getC() [indxCField0] [indxCField1] [indxCField2]).toString();
-        paramsPanel.paramCValueField.setText(newCValue);
+//        String newAValue = new Double(currentParams.getA() [indxAField]).toString();
+//        paramsPanel.paramAValueField.setText(newAValue);
+//        String newBValue = new Double(currentParams.getB() [indxBField0] [indxBField1]).toString();
+//        paramsPanel.paramBValueField.setText(newBValue);
+//        String newCValue = new Double(currentParams.getC() [indxCField0] [indxCField1] [indxCField2]).toString();
+//        paramsPanel.paramCValueField.setText(newCValue);
     }
 
     /*

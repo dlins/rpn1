@@ -3,14 +3,12 @@
  * Departamento de Dinamica dos Fluidos
  *
  */
-
 package rpnumerics;
 
-import wave.util.RealMatrix2;
 import wave.util.HessianMatrix;
+import wave.util.JetMatrix;
 import wave.util.RealVector;
 import wave.util.RealMatrix2;
-
 
 public class ConservationShockFlow extends ShockFlow {
     //
@@ -20,8 +18,6 @@ public class ConservationShockFlow extends ShockFlow {
     // Members
     //
     private RealVector fx0_;
-
-
     //
     // Constructors
     //
@@ -36,21 +32,17 @@ public class ConservationShockFlow extends ShockFlow {
 //        super(fParams);
 //        updateXZeroTerms();
 //    }
-    
-    public ConservationShockFlow(ShockFlowParams fParams,FluxFunction flux) {
+    public ConservationShockFlow(ShockFlowParams fParams, FluxFunction flux) {
 
-        super(fParams,flux);
+        super(fParams, flux);
 
         updateXZeroTerms();
 
     }
 
-   
     //
     // Accessors/Mutators
     //
-
-
     public void setXZero(PhasePoint x0) {
 
         super.setXZero(x0);
@@ -64,10 +56,17 @@ public class ConservationShockFlow extends ShockFlow {
     //
     // Methods
     //
-   
-   private void updateXZeroTerms() {
-        fx0_ = getFlux().F(flowParams_.getPhasePoint().
-                                           getCoords());
+    private void updateXZeroTerms() {
+
+
+        WaveState input = new WaveState(flowParams_.getPhasePoint());
+        JetMatrix output = new JetMatrix(flowParams_.getPhasePoint().getSize());
+        getFlux().jet(input, output, 0);
+
+        fx0_ = output.f();
+
+//        fx0_ = getFlux().F(flowParams_.getPhasePoint().
+//                                           getCoords());
 
     }
 
@@ -79,7 +78,13 @@ public class ConservationShockFlow extends ShockFlow {
 
     public WavePoint flux(RealVector x) {
 
-        RealVector fx = getFlux().F(x);//RPNUMERICS.fluxFunction().F(x);
+        WaveState input = new WaveState(new PhasePoint(x));
+        JetMatrix output = new JetMatrix(x.getSize());
+        getFlux().jet(input, output, 0);
+
+        RealVector fx = output.f();
+
+//        RealVector fx = getFlux().F(x);//RPNUMERICS.fluxFunction().F(x);
         // F(x) - F(x0)
         fx.sub(fx0_);
         // x - x0_
@@ -91,7 +96,7 @@ public class ConservationShockFlow extends ShockFlow {
         // (Fx - Fx0) - sigma*(x - x0)
         fx.sub(xMinusX0);
 
-        WavePoint returned = new WavePoint(fx,getSigma());
+        WavePoint returned = new WavePoint(fx, getSigma());
 
         return returned;
 
@@ -101,17 +106,37 @@ public class ConservationShockFlow extends ShockFlow {
     }
 
     public RealMatrix2 fluxDeriv(RealVector x) {
-        RealMatrix2 fluxDF_x = getFlux().DF(x);//RPNUMERICS.fluxFunction().DF(x);
+
+
+        WaveState input = new WaveState(new PhasePoint(x));
+        JetMatrix output = new JetMatrix(x.getSize());
+        getFlux().jet(input, output, 1);
+
+        RealMatrix2 fluxDF_x = new RealMatrix2(output.n_comps(), output.n_comps()); //TODO Replace for JacobianMatrix
+
+        for (int i = 0; i < output.n_comps(); i++) {
+            for (int j = 0; j < output.n_comps(); j++) {
+                fluxDF_x.setElement(i, j, output.getElement(i, j));
+            }
+        }
+
+
+//        RealMatrix2 fluxDF_x = getFlux().DF(x);//RPNUMERICS.fluxFunction().DF(x);
         // flux.DFX(x) - sigma scaled matrix
         RealMatrix2 identity = new RealMatrix2(fluxDF_x.getNumRow(),
-                                               fluxDF_x.getNumCol());
+                fluxDF_x.getNumCol());
         identity.scale(getSigma());
         fluxDF_x.sub(identity);
         return fluxDF_x;
     }
 
     public HessianMatrix fluxDeriv2(RealVector x) {
-        return getFlux().D2F(x);//RPNUMERICS.fluxFunction().D2F(x);
+
+        WaveState input = new WaveState(new PhasePoint(x));
+        JetMatrix output = new JetMatrix(x.getSize());
+        getFlux().jet(input, output, 2);
+        return output.hessian();
+//        return getFlux().D2F(x);//RPNUMERICS.fluxFunction().D2F(x);
     }
 
     public String getName() {

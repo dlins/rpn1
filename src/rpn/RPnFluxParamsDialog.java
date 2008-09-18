@@ -57,10 +57,10 @@ public class RPnFluxParamsDialog extends JDialog {
     }
 
     void applyButton_actionPerformed(ActionEvent e) {
-        RealVector oldValue = RPNUMERICS.fluxFunction().fluxParams().getParams();
+//        RealVector oldValue = RPNUMERICS.fluxFunction().fluxParams().getParams();
         RealVector newValue = paramsPanel.getParams();
-        ChangeFluxParamsAgent.instance().applyChange(
-            new PropertyChangeEvent(this, ChangeFluxParamsAgent.DESC_TEXT, oldValue, newValue));
+//        ChangeFluxParamsAgent.instance().applyChange(
+//            new PropertyChangeEvent(this, ChangeFluxParamsAgent.DESC_TEXT, oldValue, newValue));
     }
 
     void dismissButton_actionPerformed(ActionEvent e) {

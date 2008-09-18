@@ -20,9 +20,9 @@ public class BlowUpFlow extends RarefactionFlow {
     //
     // Constructors
     //
-    public BlowUpFlow(BlowUpLineFieldVector xZero,FluxFunction flux) {
+    public BlowUpFlow(BlowUpLineFieldVector xZero, FluxFunction flux) {
 
-        super(new PhasePoint(xZero.getFamilyVector()), xZero.getFamilyIndex(),flux);
+        super(new PhasePoint(xZero.getFamilyVector()), xZero.getFamilyIndex(), flux);
         blowUpXZero_ = xZero;
 
     }
@@ -39,8 +39,7 @@ public class BlowUpFlow extends RarefactionFlow {
         /**
          * x = blowuplinefield is a 2n + 2 dim vector... (u,lambda,r,ll)
          */
-
-        BlowUpLineFieldVector x = new BlowUpLineFieldVector(input, 1,getFlux());
+        BlowUpLineFieldVector x = new BlowUpLineFieldVector(input, 1, getFlux());
 
         int blowUpDim = x.getSize();
         int stateSpaceDim = (blowUpDim - 2) / 2;
@@ -59,8 +58,35 @@ public class BlowUpFlow extends RarefactionFlow {
         /*
          * we now build the blow up matrix
          */
-        RealMatrix2 df = getFlux().DF(u);
-        HessianMatrix d2f =getFlux().D2F(u);// RPNUMERICS.fluxFunction().D2F(u);
+
+        WaveState in = new WaveState(new PhasePoint(x));
+        JetMatrix out = new JetMatrix(x.getSize());
+        getFlux().jet(in, out, 2);
+
+        RealMatrix2 df = new RealMatrix2(out.n_comps(), out.n_comps()); //TODO Replace for JacobianMatrix
+
+        HessianMatrix d2f = new HessianMatrix(out.n_comps());
+
+        for (int i = 0; i < out.n_comps(); i++) {
+            for (int j = 0; j < out.n_comps(); j++) {
+                for (int k = 0; k < out.n_comps(); k++)  {
+                    d2f.setElement(i, j, k, out.getElement(i, j, k));
+                }
+            }
+
+        }
+
+        for (int i = 0; i < out.n_comps(); i++) {
+            for (int j = 0; j < out.n_comps(); j++) {
+                df.setElement(i, j, out.getElement(i, j));
+            }
+        }
+
+
+
+
+//        RealMatrix2 df = getFlux().DF(u);
+//        HessianMatrix d2f = getFlux().D2F(u);// RPNUMERICS.fluxFunction().D2F(u);
 
         BlowUpLineFieldMatrix B = new BlowUpLineFieldMatrix(stateSpaceDim, df,
                 d2f, lambda, rVec);
@@ -118,18 +144,17 @@ public class BlowUpFlow extends RarefactionFlow {
 
 
     // Accessors/Mutators
-
-
     public PhasePoint getXZero() {
         return new PhasePoint(blowUpXZero_.getFamilyVector());
     }
 
     public void setXZero(PhasePoint xzero) {
 
-        blowUpXZero_ = new BlowUpLineFieldVector(xzero.getCoords(), 1,getFlux());
+        blowUpXZero_ = new BlowUpLineFieldVector(xzero.getCoords(), 1, getFlux());
 
     }
 
-    public String getName(){return "Blow Up";}
-
+    public String getName() {
+        return "Blow Up";
+    }
 }

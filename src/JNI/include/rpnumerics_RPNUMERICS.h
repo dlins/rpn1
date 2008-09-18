@@ -8,7 +8,6 @@
 extern "C" {
 #endif
 /* Inaccessible static: INCREASING_LAMBDA */
-/* Inaccessible static: physics_ */
 /* Inaccessible static: libName_ */
 /* Inaccessible static: errorControl_ */
 /* Inaccessible static: odeSolver_ */
