@@ -8,7 +8,8 @@ RPNUMSRC += JNIConnectionOrbitCalc.cc\
 	JNIStationaryPointCalc.cc \
         JNIRPnDesktopPlotter.cc   \
         JNINativeRpFunction.cc   \
+        JNIRPnPluginManager.cc  \
 	RpNumerics.cc		\
 
 
-CPPFLAGS += -I $(JNIDIR)/include -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux
+CPPFLAGS += -I $(JNIDIR)/include -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux -I $(RPNUMERICSDIR)/plugin
