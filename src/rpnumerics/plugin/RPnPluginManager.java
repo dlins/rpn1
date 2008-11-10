@@ -13,7 +13,7 @@ public class RPnPluginManager {
 
     
     public native static void setPluginDir(String pluginDir);
-    public native static void addClass(String libName, String className, String constructorMethod);
+    public native static void configPlugin(String pluginType,String libName, String className, String constructorMethod);
 
 }
 

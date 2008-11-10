@@ -23,32 +23,32 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     //
     // Members
     //
-    JPanel contentPane;
-    JMenuBar jMenuBar1 = new JMenuBar();
-    JMenu editMenu = new JMenu();
-    JMenu fileMenu = new JMenu();
-    JMenu modelInteractionMenu = new JMenu();
-    JMenu helpMenu = new JMenu();
-    JCheckBox resultsOption = new JCheckBox("Save With Results");
+    private JPanel contentPane;
+    private JMenuBar jMenuBar1 = new JMenuBar();
+    private JMenu editMenu = new JMenu();
+    private JMenu fileMenu = new JMenu();
+    private JMenu modelInteractionMenu = new JMenu();
+    private JMenu helpMenu = new JMenu();
+    private JCheckBox resultsOption = new JCheckBox("Save With Results");
     private JMenuItem shockMenuItem_ = new JMenuItem("Shock Configuration ...");
     private JMenuItem bifurcationMenuItem_ = new JMenuItem("Bifurcation Configuration ...");
     private JMenuItem rarefactionMenuItem_ = new JMenuItem("Rarefaction Config ...");
-    JMenuItem jMenuFileExit = new JMenuItem();
-    JMenuItem jMenuHelpAbout = new JMenuItem();
-    BorderLayout borderLayout1 = new BorderLayout();
-    JMenuItem exportMenuItem = new JMenuItem();
-    JMenuItem layoutMenuItem = new JMenuItem();
-    JMenuItem errorControlMenuItem = new JMenuItem();
-    JMenuItem createJPEGImageMenuItem = new JMenuItem();
-    JMenuItem printMenuItem = new JMenuItem();
-    JMenuItem clearPhaseSpaceMenuItem = new JMenuItem();
-    JMenuItem changeXZeroMenuItem = new JMenuItem();
+    private JMenuItem jMenuFileExit = new JMenuItem();
+    private JMenuItem jMenuHelpAbout = new JMenuItem();
+    private BorderLayout borderLayout1 = new BorderLayout();
+    private JMenuItem exportMenuItem = new JMenuItem();
+    private JMenuItem layoutMenuItem = new JMenuItem();
+    private JMenuItem errorControlMenuItem = new JMenuItem();
+    private JMenuItem createJPEGImageMenuItem = new JMenuItem();
+    private JMenuItem printMenuItem = new JMenuItem();
+    private JMenuItem clearPhaseSpaceMenuItem = new JMenuItem();
+    private JMenuItem changeXZeroMenuItem = new JMenuItem();
+    private JMenuItem pluginMenuItem = new JMenuItem();
     private RPnPhaseSpaceFrame[] frames_ = null;
     private RPnMenuCommand commandMenu_ = null;
     private JMenuItem networkMenuItem = new JMenuItem();
     private JToolBar toolBar_ = new JToolBar();
-
-
+    
     //Construct the frame
     public RPnUIFrame(RPnMenuCommand command) {
         enableEvents(AWTEvent.WINDOW_EVENT_MASK);
@@ -102,7 +102,18 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         this.setResizable(false);
         this.setTitle("");
         fileMenu.setText("File");
+        pluginMenuItem.setText("Plugins ...");
         jMenuFileExit.setText("Exit");
+
+
+        pluginMenuItem.addActionListener(
+                new ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+                        RPnPluginDialog pluginDialog = new RPnPluginDialog();
+                        pluginDialog.setVisible(true);
+                    }
+                });
 
         resultsOption.addActionListener(
                 new ActionListener() {
@@ -172,7 +183,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                     }
                 });
         modelInteractionMenu.setText("RP");
-        fileMenu.addSeparator();
+//        fileMenu.addSeparator();
         networkMenuItem.setText("Network ...");
         networkMenuItem.addActionListener(new java.awt.event.ActionListener() {
 
@@ -180,9 +191,11 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 networkMenuItem_actionPerformed(e);
             }
         });
+
         fileMenu.add(exportMenuItem);
         fileMenu.addSeparator();
         fileMenu.add(networkMenuItem);
+        fileMenu.add(pluginMenuItem);
         fileMenu.addSeparator();
         fileMenu.add(createJPEGImageMenuItem);
         fileMenu.addSeparator();
@@ -284,16 +297,14 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     public RPnPhaseSpaceFrame[] getPhaseSpaceFrames() {
         return frames_;
     }
-
-
     //
     // Methods
     //
     public void propertyChange(PropertyChangeEvent evt) {
 //        update();
         if (evt.getPropertyName().equals("aplication state")) {
-        
-            if (UIController.instance().getState() instanceof SHOCK_CONFIG ||(evt.getNewValue() instanceof SIGMA_CONFIG)) {
+
+            if (UIController.instance().getState() instanceof SHOCK_CONFIG || (evt.getNewValue() instanceof SIGMA_CONFIG)) {
                 shockConfigMenu();
                 toolBar_.removeAll();
                 toolBar_.add(ForwardOrbitPlotAgent.instance().getContainer());
@@ -337,8 +348,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         }
 
     }
-
-
     //File | Exit action performed
     public void jMenuFileExit_actionPerformed(ActionEvent e) {
         commandMenu_.finalizeApplication();
@@ -349,6 +358,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     }
 
     //Overridden so we can exit when window is closed
+    
+    @Override
     protected void processWindowEvent(WindowEvent e) {
         super.processWindowEvent(e);
         if (e.getID() == WindowEvent.WINDOW_CLOSING) {
@@ -430,7 +441,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         try {
             frames_[0].phaseSpacePanel().createJPEGImageFile(chooser.getSelectedFile().getAbsolutePath());
         } catch (java.lang.NullPointerException ex) {
-
         }
     }
 
@@ -476,63 +486,4 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         commandMenu_.networkCommand();
 
     }
-//    public class FlowDialog extends JDialog implements ActionListener {
-//
-//        JRadioButton shockRadioButton;
-//        JRadioButton rarefactionRadioButton;
-//
-//        public FlowDialog(Frame owner, String title, boolean modal) {
-//            super(owner, title, modal);
-//            this.setSize(230, 100);
-//
-//            setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-//
-//            GridLayout gridLayout = new GridLayout(2, 1);
-//            JPanel mainPanel = new JPanel();
-//            mainPanel.setLayout(gridLayout);
-//
-//            JPanel optionsPanel = new JPanel();
-//
-//            ButtonGroup optionButtonGroup = new ButtonGroup();
-//            shockRadioButton = new JRadioButton("Shock");
-//            rarefactionRadioButton = new JRadioButton("Rarefaction");
-//
-//            optionButtonGroup.add(shockRadioButton);
-//            optionButtonGroup.add(rarefactionRadioButton);
-//
-//            optionsPanel.add(shockRadioButton);
-//            optionsPanel.add(rarefactionRadioButton);
-//
-//            JPanel buttonsPanel = new JPanel();
-//
-//            JButton okButton = new JButton("OK");
-//            okButton.addActionListener(this);
-//
-//            buttonsPanel.add(okButton);
-//
-//            mainPanel.add(optionsPanel);
-//            mainPanel.add(buttonsPanel);
-//
-//            getRootPane().getContentPane().add(mainPanel, BorderLayout.CENTER);
-//            this.setLocationRelativeTo(owner);
-//
-//            this.setResizable(true);
-//
-//        }
-//
-//        public void actionPerformed(ActionEvent e) {
-//
-//            if (shockRadioButton.isSelected()) {
-//                shockOption.doClick();
-//
-//                dispose();
-//            }
-//
-//            if (rarefactionRadioButton.isSelected()) {
-//
-//                rarefactionOption.doClick();
-//                dispose();
-//            }
-//        }
-//    }
 }

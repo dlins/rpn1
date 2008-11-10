@@ -60,7 +60,8 @@ public abstract class RPnDialog extends JDialog {
 
     public RPnDialog(boolean enableResetButton) {
         this();
-        beginButton.setEnabled(enableResetButton);
+        if (!enableResetButton)
+        buttonsPanel.remove(beginButton);
         cancelButton.setEnabled(true);
 
 
@@ -89,9 +90,6 @@ public abstract class RPnDialog extends JDialog {
         dispose();
 
         UIController.instance().resetApplication();
-
-//        RPnCurvesConfigDialog curvesDialog = new RPnCurvesConfigDialog();
-//        curvesDialog.setVisible(true);
 
     }
 

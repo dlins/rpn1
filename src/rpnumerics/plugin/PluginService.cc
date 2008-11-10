@@ -21,7 +21,7 @@ PluginService::PluginService(const string libFileName) {
 
 PluginService::~PluginService() {
     delete libFileName_;
-    dlclose(pluginlib_);
+//    dlclose(pluginlib_);
     //    delete pluginsNames_;
     //    delete libNames_;
 }
@@ -56,17 +56,15 @@ PluginService::~PluginService() {
 //}
 
 RpnPlugin * PluginService::load(const string createMethod) {
-    cout << "Service load" << "\n";
+
     create_t* create_plugin = (create_t*) dlsym(pluginlib_, createMethod.c_str());
     return create_plugin();
 }
 
 void PluginService::unload(RpnPlugin * plugin) {
-    cout <<"Service unload"<<"\n";
+
     destroy_t* destroy_plugin = (destroy_t*) dlsym(pluginlib_, "destroy");
-
     destroy_plugin(plugin);
-
-
+    dlclose(pluginlib_);
 
 }

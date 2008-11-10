@@ -7,7 +7,6 @@ package rpn;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 import rpnumerics.RPNUMERICS;
 
 public class RPnBifurcationConfigDialog extends RPnDialog {

@@ -1,103 +1,90 @@
 #include "RPnPluginManager.h"
 
-map<string, map<string, string> * > * RPnPluginManager:: libMap_=NULL;
-string * RPnPluginManager::pluginDir_=new string();
+map<string, map <string, map<string, string> * > > * RPnPluginManager::configMap_ = NULL;
+
+string * RPnPluginManager::pluginDir_ = new string();
 
 RPnPluginManager::~RPnPluginManager() {
+
     delete pluginDir_;
-    delete libMap_;
+    delete configMap_;
 
 }
 
-void RPnPluginManager::search() { //TODO Assuming file name starting with lib and with .so extension
+void RPnPluginManager::unload(RpnPlugin * plugin, const string pluginType) {
+
+    map<string, map <string, map <string, string> *> >::iterator it;
+
+    it = configMap_->find(pluginType);
+
+    if (it == configMap_->end()) {
+
+        cout << "Plugin " << pluginType << " not configured yet " << "\n";
 
 
-    libMap_->clear();
-    DIR * dirp = opendir(pluginDir_->c_str());
-    struct dirent* dp;
+    } else {
 
-    while ((dp = readdir(dirp))) {
+        map <string, map<string, string> * > pluginTypeMap = it->second;
 
-        string fileName(dp->d_name);
-        size_t found = fileName.find_last_of(".");
-        string libString(fileName.substr(0, 3));
-        string extensionSting(fileName.substr(found + 1));
+        map <string, map<string, string> * >::iterator pluginMapIterator = pluginTypeMap.begin();
 
-        if (libString.compare("lib") == 0 && extensionSting.compare("so") == 0) {
+        string dirPath(*pluginDir_);
 
-            map<string, string> * mapClasses = new map <string, string > ();
-            libMap_->operator[](fileName) = mapClasses;
-        }
+        dirPath += pluginMapIterator->first;
+        PluginService service(dirPath);
+        service.unload(plugin);
     }
-    cout <<libMap_->size() << " plugin(s) found:" << "\n";
+}
 
-    map<string, map <string, string> *>::iterator it=libMap_->begin();
-    
-    while (it!=libMap_->end()){
-        cout<<it->first<<"\n";
-        it++;
+RpnPlugin * RPnPluginManager::getPluginInstance(const string pluginType) {
+
+    map<string, map <string, map <string, string> *> >::iterator it;
+
+    it = configMap_->find(pluginType);
+
+    if (it == configMap_->end()) {
+
+        cout << "Plugin " << pluginType << " not configured yet " << "\n";
+        return NULL;
+
+    } else {
+
+        map <string, map<string, string> * > pluginTypeMap = it->second;
+
+        map <string, map<string, string> * >::iterator pluginMapIterator = pluginTypeMap.begin();
+
+        map <string, string> * classMap = pluginMapIterator->second;
+
+        map <string, string> ::iterator classIterator = classMap->begin();
+
+        string dirPath(*pluginDir_);
+
+        dirPath += pluginMapIterator->first;
+
+        PluginService service(dirPath);
+
+        return service.load(classIterator->second);
+
     }
-
-
-    closedir(dirp);
-
 }
 
 void RPnPluginManager::setPluginDir(const string pluginDir) {
     delete pluginDir_;
-    delete libMap_;
+    delete configMap_;
     pluginDir_ = new string(pluginDir);
-    libMap_ = new map<string, map<string, string> * >();
-    search();
-
-}
-
-
-map<string, string> * RPnPluginManager::accessClasses(const string libName) {
-
-    map<string, map <string, string> *>::iterator it;
-
-    it = libMap_->find(libName);
-
-    if (it == libMap_->end()) {
-
-        cout << "Library " << libName << " not found" << "\n";
-        return NULL;
-
-
-    } else {
-        return it->second;
-    }
+    configMap_ = new map<string, map <string, map<string, string> * > > ();
 
 
 }
 
-void RPnPluginManager::addClass(const string libName, const string className, const string constructorMethod) {
+void RPnPluginManager::configPlugin(const string pluginType, const string libName, const string className, const string constructorMethod) {
+    
+    map<string, string> * classMap = new map<string, string > ();
 
-    map<string, string> * classesMap = accessClasses(libName);
-    classesMap->operator[](className) = constructorMethod;
-    cout << "Quantidade de classes: " << classesMap->size() << "\n";
+    classMap->operator[](className) = constructorMethod;
 
-}
+    configMap_->erase(pluginType);
 
-string RPnPluginManager::getConstructorMethod(const string libName, const string className) {
-
-    map<string, string> * classesMap = accessClasses(libName);
-
-    map<string, string>::iterator it;
-
-    it = classesMap->find(className);
-
-    if (it == classesMap->end()) {
-
-        cout << "Class " << className << " not found" << "in "<<libName<<" library" "\n";
-        return NULL;
-
-
-    } else {
-
-        return it->second;
-
-    }
+    configMap_->operator[](pluginType)[libName] = classMap;
 
 }

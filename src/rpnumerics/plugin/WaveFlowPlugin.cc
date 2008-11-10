@@ -12,6 +12,6 @@ WaveFlowPlugin::~WaveFlowPlugin(){}
 
 RpFunction * WaveFlowPlugin::clone() const {
 
-    return new WaveFlowPlugin(flux());
+    return new WaveFlowPlugin(fluxFunction());
 }
 

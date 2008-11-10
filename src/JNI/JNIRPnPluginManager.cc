@@ -32,7 +32,6 @@
 JNIEXPORT void JNICALL Java_rpnumerics_plugin_RPnPluginManager_setPluginDir
 (JNIEnv * env , jclass cls , jstring pluginDir){
 
-    cout <<"Chamando setPluginDir"<<"\n";
     const char *pluginDirNative;
     pluginDirNative = env->GetStringUTFChars(pluginDir, NULL);
     
@@ -41,25 +40,28 @@ JNIEXPORT void JNICALL Java_rpnumerics_plugin_RPnPluginManager_setPluginDir
     
 }
 
+
+
 /*
  * Class:     rpnumerics_plugin_RPnPluginManager
- * Method:    addClass
- * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+ * Method:    configPlugin
+ * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
  */
-JNIEXPORT void JNICALL Java_rpnumerics_plugin_RPnPluginManager_addClass
-(JNIEnv *env , jclass cls , jstring libName, jstring className, jstring constructorMethod) {
+JNIEXPORT void JNICALL Java_rpnumerics_plugin_RPnPluginManager_configPlugin
+(JNIEnv *env , jclass cls, jstring pluginType, jstring libName, jstring className, jstring constructorMethod){
 
-    cout << "Chamando addClass" << "\n";
     const char *libNameNative;
     const char *classNameNative;
     const char *constructorMethodNative;
-
+    const char *pluginTypeNative;
 
     libNameNative = env->GetStringUTFChars(libName, NULL);
     classNameNative = env->GetStringUTFChars(className, NULL);
     constructorMethodNative = env->GetStringUTFChars(constructorMethod, NULL);
 
-    RPnPluginManager::addClass(string(libNameNative), string(classNameNative), string(constructorMethodNative));
+    pluginTypeNative = env->GetStringUTFChars(pluginType, NULL);
+    
+    RPnPluginManager::configPlugin(string (pluginTypeNative),string(libNameNative), string(classNameNative), string(constructorMethodNative));
     
     
     
