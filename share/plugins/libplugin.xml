@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rpnplugin SYSTEM "./pluginDTD.dtd">
+<rpnplugin>
+    <NAME id="WaveTeste" version="0.1"/>
+    <LIBRARY name="libRpnPluginLib.so">
+        <CLASS name="WaveFlowPlugin" plugintype="WaveFlow" constructormethod="create"/>
+        <CLASS name="Class2" plugintype="FluxFunction" constructormethod="create2"/>
+        <CLASS name="Class5" plugintype="FluxFunction" constructormethod="create5"/>
+        <CLASS name="Class3" plugintype="FluxFunction" constructormethod="create3"/>
+    </LIBRARY>
+</rpnplugin>
+
+
