@@ -13,7 +13,7 @@
     <property name="objc++dir" location="${build}/${hosttype}"/>
     <property name="libc++dir" location="${libdir}/${hosttype}"/>
 
-    <target name="all" depends="compile-java,compile-c++"/>
+    <target name="all" depends="compile-java,compile-c++,compile-plugins"/>
     
     <target name="init">
         <tstamp/>
@@ -72,6 +72,13 @@
         </javadoc>
     </target>
     
+    <!-- Compile C++ plugins -->
+    <target name="compile-plugins" depends="compile-c++" description="compile C++ plugins" >
+	<exec executable="make" dir="${srcdir}">
+	    <arg line ="-f  plugins/makefile"/>
+    	</exec> 
+    </target>
+
     <!-- clean up java classes, jar, C++ objects and libraries -->
     <target name="clean" depends="clean-java,clean-c++" description="clean up java and C++ objects"/>
 
