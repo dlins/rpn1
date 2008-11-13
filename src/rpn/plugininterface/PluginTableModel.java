@@ -6,15 +6,14 @@
  */
 package rpn.plugininterface;
 
+import java.io.File;
 import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 
 public class PluginTableModel extends DefaultTableModel {
 
     private static PluginTableModel instance_;
-    private static String pluginDir_="/"; //TODO Change initial value
-
-   
+    private static String pluginDir_ = "/"; //TODO Change initial value
 
     private PluginTableModel(Vector<Vector<String>> pluginNames, Vector<String> columnNames) {
 
@@ -59,13 +58,19 @@ public class PluginTableModel extends DefaultTableModel {
 
 
     }
-    
-     public static String getPluginDir() {
+
+    public static String getPluginDir() {
         return pluginDir_;
     }
 
     public static void setPluginDir(String aPluginDir_) {
-        pluginDir_ = aPluginDir_;
+
+        char slash = aPluginDir_.charAt(aPluginDir_.length() - 1);
+
+        if (slash == File.separatorChar) {
+            pluginDir_ = aPluginDir_;
+        } else {
+            pluginDir_ = aPluginDir_ + "/";
+        }
     }
-    
 }

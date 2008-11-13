@@ -48,6 +48,8 @@ public abstract class RPnDialog extends JDialog {
                 });
         addBackButton();
         cancelButton.setEnabled(false);
+
+
         this.getContentPane().add(buttonsPanel, BorderLayout.SOUTH);
 
         setLocationRelativeTo(null);
@@ -60,8 +62,9 @@ public abstract class RPnDialog extends JDialog {
 
     public RPnDialog(boolean enableResetButton) {
         this();
-        if (!enableResetButton)
-        buttonsPanel.remove(beginButton);
+        if (!enableResetButton) {
+            buttonsPanel.remove(beginButton);
+        }
         cancelButton.setEnabled(true);
 
 

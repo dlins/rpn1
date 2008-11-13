@@ -7,6 +7,9 @@
 package rpn.plugininterface;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Rectangle;
+import java.awt.Window;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -33,7 +36,7 @@ public class PluginInfoPanel extends JPanel {
     private DefaultMutableTreeNode rootNode_;
     private BorderLayout layout = new BorderLayout();
     private JSplitPane splitPane;
-    private JScrollPane pluginTreePanel, tableConfigPanel;
+    private JScrollPane pluginTreePanel,  tableConfigPanel;
 
     public PluginInfoPanel() {
 
@@ -48,14 +51,16 @@ public class PluginInfoPanel extends JPanel {
         pluginTree_.setDropMode(DropMode.ON);
         pluginTree_.addMouseListener(new TreeMouseListener());
 
-
         configPluginTable_ = new JTable(PluginTableModel.instance());
         configPluginTable_.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         configPluginTable_.getTableHeader().setReorderingAllowed(false);
 
         tableConfigPanel = new JScrollPane(configPluginTable_);
-
         pluginTreePanel = new JScrollPane(pluginTree_);
+        Dimension minimumSize = new Dimension(150, 150);
+
+        pluginTreePanel.setPreferredSize(minimumSize);
+
         configPluginTable_.setFillsViewportHeight(true);
 
         TableColumn tableColumn = null;
@@ -72,7 +77,6 @@ public class PluginInfoPanel extends JPanel {
         configPluginTable_.setTransferHandler(new TableTransferHandler());
         configPluginTable_.setDropMode(DropMode.ON);
         splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, tableConfigPanel, pluginTreePanel);
-
         this.add(splitPane, BorderLayout.CENTER);
 
     }
@@ -140,13 +144,22 @@ public class PluginInfoPanel extends JPanel {
         DefaultTreeModel newModel = (DefaultTreeModel) pluginTree_.getModel();
         newModel.setRoot(rootNode_);
 
-
         pluginTree_.setModel(newModel);
         pluginTree_.expandRow(0);
+
+
+        TableColumn tableColumn = null;
+        TableModel configTableModel = configPluginTable_.getModel();
+        for (int i = 0; i < configTableModel.getColumnCount(); i++) {
+            tableColumn = configPluginTable_.getColumnModel().getColumn(i);
+            String headerValue = (String) tableColumn.getHeaderValue();
+            tableColumn.setPreferredWidth(headerValue.length() + 1);
+            tableColumn.sizeWidthToFit();
+        }
+
     }
 
     public static void transferTreeToTable(JTree tree) {
-
         TreePath path = tree.getSelectionPath();
 
         String className;
@@ -169,8 +182,6 @@ public class PluginInfoPanel extends JPanel {
                 className = libNode.toString() + " " + node.getParent().toString() + " " + node.toString() + " " + node.getFirstChild().toString();
 
             }
-
-
             TableModel configModel = configPluginTable_.getModel();
 
             String[] infos = className.split(" ");

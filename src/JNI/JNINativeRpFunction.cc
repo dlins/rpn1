@@ -20,7 +20,10 @@
 #include "RpNumerics.h"
 #include "rpnumerics_NativeRpFunction.h"
 #include "JNIDefs.h"
-#include "WaveFlowFactory.h"
+#include "PluginService.h"
+#include "WaveFlowPlugin.h"
+#include "RPnPluginManager.h"
+//#include "WaveFlowFactory.h"
 #include <iostream>
 
 JNIEXPORT jint JNICALL Java_rpnumerics_NativeRpFunction_nativeJet(JNIEnv * env, jobject obj, jobject waveState, jobject jetMatrix, jint degree) {
@@ -87,9 +90,14 @@ JNIEXPORT jint JNICALL Java_rpnumerics_NativeRpFunction_nativeJet(JNIEnv * env, 
 
     } else {
 
-        WaveFlow * waveFlow = WaveFlowFactory::createWaveFlow(objectClassName, fluxFunction);
-        waveFlow->jet(nativeWaveState, nativeJetMatrix, degree);
-        delete waveFlow;
+        RpnPlugin * plug = RPnPluginManager::getPluginInstance("WaveFlow");
+
+        WaveFlowPlugin * flow = (WaveFlowPlugin *) plug;
+
+        flow->jet(nativeWaveState, nativeJetMatrix, degree);
+
+        RPnPluginManager::unload(plug, "WaveFlow");
+
     }
 
     env->ReleaseStringUTFChars(className, objectClassName);
@@ -200,16 +208,24 @@ JNIEXPORT jint JNICALL Java_rpnumerics_NativeRpFunction_nativeVectorJet(JNIEnv *
 
 
     const FluxFunction & fluxFunction = RpNumerics::getFlux();
-    
+
     if (!strcmp(objectClassName, "FluxFunction")) {
 
         fluxFunction.jet(nativeWaveState, nativeJetMatrix, degree);
 
     } else {
 
-        WaveFlow * waveFlow = WaveFlowFactory::createWaveFlow(objectClassName, fluxFunction);
-        waveFlow->jet(nativeWaveState, nativeJetMatrix, degree);
-        delete waveFlow;
+
+
+        RpnPlugin * plug = RPnPluginManager::getPluginInstance("WaveFlow");
+
+        WaveFlowPlugin * flow = (WaveFlowPlugin *) plug;
+
+        flow->jet(nativeWaveState, nativeJetMatrix, degree);
+
+        RPnPluginManager::unload(plug, "WaveFlow");
+
+     
 
     }
 
