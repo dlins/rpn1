@@ -58,6 +58,15 @@ public:
      */
     
     JetMatrix(const JetMatrix & jetMatrix);
+
+    /*! Constructs a Jet matrix filling initial values
+     *@param n_comps Dimension of the function stored into the JetMatrix
+     *@param degree Derivative degree associated with the initial array
+     *@param values The new array of function, first and second derivative values
+     */
+
+    JetMatrix(int degree, int n_comps, double * values);
+    
     virtual ~JetMatrix();
     
     /*! Fills a RealVector with the function components values
@@ -117,6 +126,9 @@ public:
      */
     
     JetMatrix &zero(void);
+
+    /*! Returns a pointer component array
+     */
     
     double * operator()(void);
     
@@ -127,7 +139,7 @@ public:
     
     /*! Returns a first derivative component value
      *@param i The first derivative component row
-     * *@param j The first derivative component  column
+     *@param j The first derivative component  column
      */
     
     double operator()(int i, int j);
@@ -173,23 +185,23 @@ inline void JetMatrix::range_check(int comp) const {
 }
 
 
-inline   JetMatrix & JetMatrix::zero(void) {
+inline JetMatrix & JetMatrix::zero(void) {
     v_.zero();
     return *this;
 }
 
-inline  double * JetMatrix::operator()(void) {
+inline double * JetMatrix::operator()(void) {
     return v_.components();
 }
 
-inline  double JetMatrix::operator()(int i) {
+inline double JetMatrix::operator()(int i) {
     range_check(i);
     if (!c0_)
         THROW(JetMatrix::RangeViolation());
     return v_.component(i);
 }
 
-inline  double JetMatrix::operator()(int i, int j) {
+inline double JetMatrix::operator()(int i, int j) {
     range_check(i);
     range_check(j);
     if (!c1_)
@@ -207,15 +219,14 @@ inline double JetMatrix::operator()(int i, int j, int k) {
     return v_.component((n_comps_ * (1 + n_comps_)) + (i*n_comps_*n_comps_ + j*n_comps_ + k));
 }
 
-inline  void JetMatrix::operator()(int i, double value) {
+inline void JetMatrix::operator()(int i, double value) {
     range_check(i);
     c0_=true;
     double * value_ = & v_.component(i);
     *value_ = value;
 }
 
-inline  void JetMatrix::operator()(int i, int j, double value) {
-    
+inline void JetMatrix::operator()(int i, int j, double value) {
     range_check(i);
     range_check(j);
     c1_=true;
@@ -223,7 +234,7 @@ inline  void JetMatrix::operator()(int i, int j, double value) {
     *value_ = value;
 }
 
-inline  void JetMatrix::operator()(int i, int j, int k, double value) {
+inline void JetMatrix::operator()(int i, int j, int k, double value) {
     range_check(i);
     range_check(j);
     range_check(k);
@@ -235,7 +246,6 @@ inline  void JetMatrix::operator()(int i, int j, int k, double value) {
 
 
 inline void JetMatrix::setHessian(const HessianMatrix & input){
-    
     int i, j, k;
     for (i=0;i < n_comps() ; i++){
         for (j=0; j < n_comps() ; j++){
@@ -250,9 +260,7 @@ inline void JetMatrix::setHessian(const HessianMatrix & input){
 
 
 inline void JetMatrix::hessian(HessianMatrix & hMatrix){
-
-    
-     if (!c2_)
+    if (!c2_)
         THROW(JetMatrix::RangeViolation());
      
          int i, j, k;
@@ -275,35 +283,29 @@ inline void JetMatrix::setF(const RealVector &input){
 }
 
 inline void JetMatrix::f(RealVector & vector){
-      if (!c0_)
+    if (!c0_)
         THROW(JetMatrix::RangeViolation());
     int i;
     
     for (i=0; i < n_comps();i++){
-        
         vector.component(i)=operator()(i);
     }
 }
 
 
 inline void JetMatrix::setJacobian(const JacobianMatrix & input){
-    
     int i, j;
     for(i=0;i< n_comps();i++){
         for (j=0; j < n_comps();j++){
             operator()(i, j, input(i, j));
         }
     }
-    
-    
 }
 
 inline void JetMatrix::jacobian(JacobianMatrix &jMatrix){
-    
     int i, j;
     
-     if (!c1_)
-         
+    if (!c1_)
         THROW(JetMatrix::RangeViolation());
     for (i=0;i < n_comps(); i++){
         for (j=0; j < n_comps();j++ ){
@@ -312,10 +314,6 @@ inline void JetMatrix::jacobian(JacobianMatrix &jMatrix){
         }
     }
 }
-
-
-
-
 
 
 #endif //! _JetMatrix_H
