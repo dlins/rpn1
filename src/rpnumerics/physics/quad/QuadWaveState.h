@@ -29,8 +29,9 @@ class QuadWaveState : public WaveState{
 public:
     
     QuadWaveState(const int dim);
-    
     QuadWaveState(const int dim, const sigma sig);
+    QuadWaveState(const RealVector & vector);
+    QuadWaveState(const RealVector & vector, const sigma sig);
         
     virtual ~QuadWaveState();
 

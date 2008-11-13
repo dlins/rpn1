@@ -23,13 +23,6 @@
 
 class Quad2FluxFunction : public FluxFunction {
     
-private:
-    
-    int F(const WaveState &, JetMatrix &)const ;
-    int DF(const WaveState &, JetMatrix &)const ;
-    int D2F(const WaveState &, JetMatrix &)const ;
-    
-    
 public:
     Quad2FluxFunction(const Quad2FluxParams &);
     
