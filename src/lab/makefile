@@ -1,4 +1,5 @@
-include rpn/make/defs
+RPN=..
+include ${RPN}/make/defs
 vpath %.cc generic myfunction
 
 
@@ -19,7 +20,7 @@ RPNUMSRC +=
 WAVESRC += 
 ForSRC += 
 
-SRCDIR = ./rpn
+SRCDIR = ${RPN}
 OBJDIR = ./lib
 LIBDIR = $(OBJDIR)
 
@@ -67,10 +68,11 @@ $(RPNUMLIBARC): $(RPNUMLIBOBJ)
 $(EXEC):  $(WAVELIBARC) $(RPNUMLIBARC) $(OBJ)
 	$(CCC) -o $(EXEC) $(OBJ) $(WAVELIBARC) $(RPNUMLIBARC)
 
-pack:
-	mkdir -p lab/{lib,lib-rpn}
-	cp makefile *.cc lab
-	cp -r ../rpnumerics ../wave ../JNI lab/lib-rpn
+pack: clean
+	mkdir -p lab/lib lab/rpn
+	sed -e "s/^RPN=\.\./RPN=rpn/g" makefile > lab/makefile
+	cp -r *.cc *.h generic myfunction lab
+	cp -r ../rpnumerics ../wave ../JNI ../make lab/rpn
 	tar zcf lab.tar.gz lab
 	\rm -rf lab
 
@@ -79,7 +81,7 @@ z:
 
 .PRECIOUS: $(LIBARC)
 
-include rpn/make/rules
+include ${RPN}/make/rules
 ifneq ($(RPHOSTTYPE),mingw32)
 -include $(DEPENDOBJ)
 endif
