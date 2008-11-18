@@ -6,8 +6,6 @@
  */
 package rpn.plugininterface;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.JMenuItem;
@@ -26,26 +24,6 @@ public class TreeMouseListener implements MouseListener {
         if (tree.getSelectionCount() != 0) {
 
             TreePath path = tree.getSelectionPath();
-            if (path.getPathCount() == 1 && e.isPopupTrigger()) {
-
-                JPopupMenu popMenu = new JPopupMenu();
-
-                JMenuItem menuItem = new JMenuItem("Change plugin Directory ...");
-
-                menuItem.addActionListener(
-                        new ActionListener() {
-
-                            public void actionPerformed(ActionEvent e) {
-                                PluginDirectoryDialog dialog = new PluginDirectoryDialog();
-                                dialog.setVisible(true);
-                            }
-                        });
-
-                popMenu.add(menuItem);
-                popMenu.show(e.getComponent(), e.getX(), e.getY());
-            }
-
-
             if (path.getPathCount() > 3 && e.isPopupTrigger()) {
                 JPopupMenu popMenu = new JPopupMenu();
                 JMenuItem installItem = new JMenuItem("Use this plugin");

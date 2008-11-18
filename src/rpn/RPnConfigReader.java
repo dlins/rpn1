@@ -46,6 +46,7 @@ public abstract class RPnConfigReader{
 
     }
 
+   
     /** Initializes the XML parser that reads the configuration file */
 
     public void init (InputStream configStream){

@@ -13,7 +13,6 @@ import org.xml.sax.AttributeList;
 import org.xml.sax.SAXException;
 import org.xml.sax.InputSource;
 import org.xml.sax.Parser;
-import java.io.FileWriter;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
@@ -21,8 +20,6 @@ import java.io.*;
 import java.awt.event.ActionEvent;
 import java.util.Iterator;
 import rpn.component.RpGeometry;
-import rpn.controller.ui.SIGMA_CONFIG;
-import rpn.controller.ui.UIController;
 import rpnumerics.HugoniotCurve;
 import rpnumerics.PhasePoint;
 import rpnumerics.Orbit;
@@ -97,6 +94,7 @@ public class RPnDataModule {
 
         }
 
+        @Override
         public void endDocument() {
 
 
@@ -105,6 +103,7 @@ public class RPnDataModule {
 
         }
 
+        @Override
         public void startElement(String name, AttributeList att) throws
                 SAXException {
 
@@ -229,6 +228,7 @@ public class RPnDataModule {
 
         }
 
+        @Override
         public void characters(char[] buff, int offset, int len) throws
                 SAXException {
 
@@ -298,6 +298,7 @@ public class RPnDataModule {
 
         }
 
+        @Override
         public void endElement(String name) throws SAXException {
 
             if (name.equals("HUGONIOTCURVE")) {

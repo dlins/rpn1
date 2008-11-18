@@ -12,6 +12,7 @@ import rpn.plugininterface.PluginInfoController;
 import rpn.plugininterface.PluginInfoPanel;
 import rpn.plugininterface.PluginInfoParser;
 
+
 public class RPnPluginDialog extends RPnDialog {
 
     private PluginInfoController controller_;
@@ -22,7 +23,6 @@ public class RPnPluginDialog extends RPnDialog {
         PluginInfoParser parser = new PluginInfoParser();
         PluginInfoController controller = new PluginInfoController(pluginPanel, parser);
         controller_ = controller;
-//        applyButton.addActionListener(controller);
         this.getContentPane().add(pluginPanel, BorderLayout.NORTH);
 
         pack();

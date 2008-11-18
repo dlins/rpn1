@@ -13,11 +13,15 @@ import javax.swing.table.DefaultTableModel;
 public class PluginTableModel extends DefaultTableModel {
 
     private static PluginTableModel instance_;
-    private static String pluginDir_ = "/"; //TODO Change initial value
+
+    private static String pluginDir_ = System.getProperty("rpnhome") + System.getProperty("file.separator")+"lib"+System.getProperty("file.separator")+"plugins";
+
+
 
     private PluginTableModel(Vector<Vector<String>> pluginNames, Vector<String> columnNames) {
 
         super(pluginNames, columnNames);
+        setPluginDir(pluginDir_);
 
     }
 
@@ -50,6 +54,11 @@ public class PluginTableModel extends DefaultTableModel {
         Vector<String> type1 = new Vector<String>();
 
         type1.add("WaveFlow");
+        
+        type1.add("rpnLibPlugin.so");
+        type1.add("WaveFlowPlugin");
+        type1.add("create");
+
 
         data_.add(type1);
 
@@ -70,7 +79,7 @@ public class PluginTableModel extends DefaultTableModel {
         if (slash == File.separatorChar) {
             pluginDir_ = aPluginDir_;
         } else {
-            pluginDir_ = aPluginDir_ + "/";
+            pluginDir_ = aPluginDir_ + File.separatorChar;
         }
     }
 }

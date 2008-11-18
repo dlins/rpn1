@@ -92,7 +92,7 @@ JNIEXPORT jint JNICALL Java_rpnumerics_NativeRpFunction_nativeJet(JNIEnv * env, 
 
         RpnPlugin * plug = RPnPluginManager::getPluginInstance("WaveFlow");
 
-        WaveFlowPlugin * flow = (WaveFlowPlugin *) plug;
+        WaveFlow* flow = (WaveFlow*) plug;
 
         flow->jet(nativeWaveState, nativeJetMatrix, degree);
 
@@ -215,11 +215,9 @@ JNIEXPORT jint JNICALL Java_rpnumerics_NativeRpFunction_nativeVectorJet(JNIEnv *
 
     } else {
 
-
-
         RpnPlugin * plug = RPnPluginManager::getPluginInstance("WaveFlow");
 
-        WaveFlowPlugin * flow = (WaveFlowPlugin *) plug;
+        WaveFlow * flow = (WaveFlow *) plug;
 
         flow->jet(nativeWaveState, nativeJetMatrix, degree);
 

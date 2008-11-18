@@ -6,10 +6,8 @@
 package rpn.usecase;
 
 import rpn.component.*;
-import rpnumerics.OrbitCalc;
 import rpnumerics.OrbitPoint;
 import wave.util.RealVector;
-import rpn.RPnConfigReader;
 import rpnumerics.RPNUMERICS;
 
 public class ForwardOrbitPlotAgent extends RpModelPlotAgent {
