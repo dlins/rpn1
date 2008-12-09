@@ -1,73 +1,39 @@
-include rpn/make/defs
-vpath %.cc generic myfunction
+include make/defs
 
+vpath %.cc ./plugins
 
-# The following line can be set by user
-SRC = Lab.cc \
-      RealVectorUse.cc \
-      GenericFluxParams.cc \
-      GenericFluxFunction.cc \
-      GenericFluxCalc.cc \
-      My.cc \
-      MyFluxFunction.cc \
-      MyFluxParams.cc \
-      MyWaveState.cc
-
-# Do not change the following lines
-RPNUMSRC += 
-WAVESRC += 
-
-SRCDIR = ./rpn
-OBJDIR = ./lib
-LIBDIR = $(OBJDIR)
+SRCDIR = .
+OBJDIR = $(SRCDIR)/build/$(RPHOSTTYPE)
+LIBDIR = $(SRCDIR)/../lib/$(RPHOSTTYPE)
 
 RPNUMERICSDIR = $(SRCDIR)/rpnumerics
 WAVEDIR       = $(SRCDIR)/wave
-JNIDIR        = $(SRCDIR)/JNI
 include $(RPNUMERICSDIR)/defs
 include $(WAVEDIR)/defs
-include $(JNIDIR)/defs
 
-OBJ = $(SRC:%.cc=$(OBJDIR)/%.o)
-DEP = $(SRC:%.cc=$(OBJDIR)/%.d)
+PLUG_SRC = ConservationShockFlow.cc
 
-RPNUMLIBNAME = librpnumerics.a
-RPNUMLIBARC = $(LIBDIR)/$(RPNUMLIBNAME)
-RPNUMLIBOBJ = $(RPNUMSRC:%.cc=$(OBJDIR)/%.o)
-RPNUMDEPENDOBJ = $(RPNUMSRC:%.cc=$(OBJDIR)/%.d)
-
-WAVELIBNAME = libwave.a
-WAVELIBARC = $(LIBDIR)/$(WAVELIBNAME)
-WAVELIBOBJ = $(WAVESRC:%.cc=$(OBJDIR)/%.o)
-WAVEDEPENDOBJ = $(WAVESRC:%.cc=$(OBJDIR)/%.d)
+PLUG_LIBNAME = RPnDefaultPlugins.so
+PLUG_LIBARC = $(LIBDIR)/plugins/$(PLUG_LIBNAME)
+PLUG_LIBOBJ = $(PLUG_SRC:%.cc=$(OBJDIR)/%.o)
+PLUG_DEPENDOBJ = $(PLUG_SRC:%.cc=$(OBJDIR)/%.d)
 
 SHARELIBFLAG += -fPIC
-CPPFLAGS += $(SHARELIBFLAG) -Igeneric -Imyfunction
+CPPFLAGS += $(SHARELIBFLAG)
+LIBRPN = -L $(LIBDIR) -lwave -lrpnumerics
 
-LIBLAPACK = -L/usr/lib/gcc/$(BUILDGCCTARGET)/$(BUILDGCCVER) \
-	    -L/usr/lib/gcc/$(BUILDGCCTARGET)/$(BUILDG77VER) \
-	    -lblas -ldl -lg2c -lgfortran -llapack 
-LIBWAVE = -L $(LIBDIR) -lwave
+all: $(PLUG_LIBARC)
 
-all:
-	@echo HIHO
+$(PLUG_LIBARC): $(PLUG_LIBOBJ)
+	$(CCC) -shared $(SHARELIBFLAG) -Wl,-soname,$(PLUG_LIBNAME) -o $(PLUG_LIBARC) $(PLUG_LIBOBJ) $(LIBRPN)
 
-#all: $(WAVELIBARC) $(RPNUMLIBARC) $(EXEC)
-
-$(WAVELIBARC): $(WAVELIBOBJ)
-	ar -ruv $(WAVELIBARC)  $(WAVELIBOBJ)
-
-$(RPNUMLIBARC): $(RPNUMLIBOBJ)
-	ar -ruv $(RPNUMLIBARC)  $(RPNUMLIBOBJ)
-
-$(EXEC):  $(WAVELIBARC) $(RPNUMLIBARC) $(OBJ)
-	$(CCC) -o $(EXEC) $(OBJ) $(WAVELIBARC) $(RPNUMLIBARC)
 
 .PRECIOUS: $(LIBARC)
 
-include rpn/make/rules
+include make/rules
 ifneq ($(RPHOSTTYPE),mingw32)
 -include $(DEPENDOBJ)
 endif
 
-CLEANSRC += $(LIBARC) $(EXEC)
+CLEANSRC += $(LIBARC)
+

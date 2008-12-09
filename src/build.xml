@@ -12,6 +12,7 @@
     <property name="depdir"   location="${build}/depcache"/>
     <property name="objc++dir" location="${build}/${hosttype}"/>
     <property name="libc++dir" location="${libdir}/${hosttype}"/>
+    <property name="plugindir" location="${libc++dir}/plugins"/>
 
     <target name="all" depends="compile-java,compile-c++,compile-plugins"/>
     
@@ -21,6 +22,7 @@
         <mkdir dir="${depdir}"/>
         <mkdir dir="${objc++dir}"/>
         <mkdir dir="${libc++dir}"/>
+        <mkdir dir="${plugindir}"/>
     </target>
     
     <!-- Compile java source -->

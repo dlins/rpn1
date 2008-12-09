@@ -8,7 +8,7 @@
 #ifndef _PLUGINSERVICE_H
 #define	_PLUGINSERVICE_H
 
-#include "RpnPlugin.h"
+#include "RPnPlugin.h"
 #include <sys/types.h>
 #include <dirent.h>
 #include <dlfcn.h>

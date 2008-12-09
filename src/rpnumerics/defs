@@ -12,7 +12,6 @@ RPNUMSRC += \
         RarefactionCurve.cc     \
 	Physics.cc           	\
 	RarefactionFlow.cc	\
-        ConservationShockFlow.cc \
         ShockFlowParams.cc      \
 	RpSolution.cc 		\
 	ShockFlow.cc 		\
@@ -27,13 +26,14 @@ CPPFLAGS += -I $(RPNUMERICSDIR) -g3
 PHYSICSDIR = $(RPNUMERICSDIR)/physics
 ODEDIR = $(RPNUMERICSDIR)/ode
 METHODSDIR = $(RPNUMERICSDIR)/methods
-FACTORIESDIR = $(RPNUMERICSDIR)/factories
 PLUGINDIR = $(RPNUMERICSDIR)/plugin
 
 include $(METHODSDIR)/defs
-include $(FACTORIESDIR)/defs
 include $(PHYSICSDIR)/defs
 include $(ODEDIR)/defs
 include $(PLUGINDIR)/defs
 
+# 
+# FACTORIESDIR = $(RPNUMERICSDIR)/factories
+# include $(FACTORIESDIR)/defs
 

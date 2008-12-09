@@ -1,7 +1,7 @@
 vpath %.cc $(FACTORIESDIR)
 
 RPNUMSRC +=RarefactionMethodFactory.cc \
-           WaveFlowFactory.cc \
+          WaveFlowFactory.cc \
 
 
 

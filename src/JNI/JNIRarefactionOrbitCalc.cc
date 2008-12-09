@@ -11,8 +11,8 @@
  * Includes:
  */
 #include "rpnumerics_RarefactionOrbitCalc.h"
-#include "RarefactionMethodFactory.h"
-#include "RarefactionFlowFactory.h"
+//#include "RarefactionMethodFactory.h"
+//#include "RarefactionFlowFactory.h"
 #include "RpNumerics.h"
 #include "RealVector.h"
 #include "JNIDefs.h"
@@ -27,6 +27,7 @@ using std::vector;
 
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc  (JNIEnv * env, jobject obj, jstring methodName, jstring flowName, jobject initialPoint, jint familyIndex, jint timeDirection ){
+/*
     
     unsigned int i;
     
@@ -133,13 +134,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc  (JNIEnv * e
     
     return rarefactionOrbit;
     
+    */
+    return NULL;
+
     
 }
 
 
 
-
-
-
-//! Code comes here! daniel@impa.br
 

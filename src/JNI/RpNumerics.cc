@@ -30,7 +30,7 @@
 #include "ViscosityParams.h"
 
 #include "ContinuationRarefactionMethod.h"
-#include "WaveFlowFactory.h"
+//#include "WaveFlowFactory.h"
 
 #include "LSODEStopGenerator.h"
 #include "LSODEProfile.h"
@@ -90,7 +90,7 @@ void RpNumerics::initODESolver(){
 JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setFamilyIndex
 (JNIEnv *env , jobject obj, jint familyIndex){
     
-    WaveFlowFactory::setFamilyIndex(familyIndex);
+    //WaveFlowFactory::setFamilyIndex(familyIndex);
     
     
 }
@@ -102,7 +102,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setFamilyIndex
  */
 JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setTimeDirection
 (JNIEnv * env , jobject obj , jint timeDirection){
-    WaveFlowFactory::setTimeDirection(timeDirection);
+    //WaveFlowFactory::setTimeDirection(timeDirection);
     
 }
 

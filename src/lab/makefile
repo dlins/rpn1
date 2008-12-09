@@ -1,3 +1,7 @@
+RPGNU=yes
+RPLOCATION=impa
+RPGROUPHOME=~/rp
+BUILDARCH=`uname -m`
 RPN=..
 include ${RPN}/make/defs
 vpath %.cc generic myfunction
@@ -74,7 +78,7 @@ pack: clean
 	cp -r *.cc *.h generic myfunction lab
 	cp -r ../rpnumerics ../wave ../JNI ../make lab/rpn
 	tar zcf lab.tar.gz lab
-	\rm -rf lab
+#	\rm -rf lab
 
 z:
 	$(CCC) -o z z.cc zfuncs.c
