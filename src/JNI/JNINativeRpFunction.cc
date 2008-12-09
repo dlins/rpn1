@@ -22,7 +22,7 @@
 #include "Quad2FluxParams.h"
 #include "JNIDefs.h"
 #include "PluginService.h"
-#include "WaveFlowPlugin.h"
+#include "ShockFlow.h"
 #include "RPnPluginManager.h"
 #include <iostream>
 
@@ -30,7 +30,7 @@ JNIEXPORT jint JNICALL Java_rpnumerics_NativeRpFunction_nativeJet(JNIEnv * env, 
 
     //Classes references
 
-    jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
+//    jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
     jclass phasePointClass = env->FindClass(PHASEPOINT_LOCATION);
 
     jclass waveStateClass = env->FindClass(WAVESTATE_LOCATION);
@@ -153,17 +153,22 @@ JNIEXPORT jint JNICALL Java_rpnumerics_NativeRpFunction_nativeJet(JNIEnv * env, 
 
         double nativeXZeroArray [xzeroLength]; // <--- XZero
 
+        env->GetDoubleArrayRegion(xzeroArray, 0, xzeroLength, nativeXZeroArray);
 
         for (int i = 0; i < xzeroLength; i++) {
             cout << "XZero: " << nativeXZeroArray [i] << "\n";
         }
-
-
-        env->GetDoubleArrayRegion(xzeroArray, 0, xzeroLength, nativeXZeroArray);
-
+        
+        
         RpnPlugin * plug = RPnPluginManager::getPluginInstance("ShockFlow");
 
-        WaveFlow* flow = (WaveFlow*) plug;
+        ShockFlow* flow = (ShockFlow*) plug;
+
+        PhasePoint phasePoint(RealVector(xzeroLength, nativeXZeroArray));
+        
+        ShockFlowParams newParams (phasePoint,sigma);
+
+        flow->setParams(newParams);
 
         flow->jet(nativeWaveState, nativeJetMatrix, degree);
 
@@ -183,6 +188,8 @@ JNIEXPORT jint JNICALL Java_rpnumerics_NativeRpFunction_nativeJet(JNIEnv * env, 
         int referenceLength = env->GetArrayLength(referenceArray);
 
         double nativeReferenceArray [referenceLength]; // <--- Reference Vector
+
+        env->GetDoubleArrayRegion(referenceArray, 0, referenceLength, nativeReferenceArray);
 
         cout << "Family: " << family << "\n";
 

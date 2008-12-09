@@ -30,14 +30,15 @@
  * @ingroup rpnumerics
  */
 
-#include "ShockFlowParams.h"
-#include "WaveFlow.h"
+//#include "ShockFlowParams.h"
+//#include "WaveFlow.h"
+#include "ShockFlow.h"
 
-class ConservationShockFlow : public WaveFlow {
+class ConservationShockFlow : public ShockFlow {
 private:
 
 
-    ShockFlowParams * flowParams_;
+//    ShockFlowParams * flowParams_;
     int flux(const WaveState &, JetMatrix &) const;
     int fluxDeriv(const WaveState &, JetMatrix &)const;
     int fluxDeriv2(const WaveState &, JetMatrix &)const;
@@ -53,7 +54,7 @@ public:
 
     int jet(const WaveState &u, JetMatrix &m, int degree) const;
 
-    const ShockFlowParams & getParams()const;
+//    const ShockFlowParams & getParams()const;
 
     virtual ~ConservationShockFlow();
 
@@ -65,8 +66,8 @@ inline ConservationShockFlow * ConservationShockFlow::clone()const {
     return new ConservationShockFlow(*this);
 }
 
-inline const ShockFlowParams & ConservationShockFlow::getParams()const {
-    return *flowParams_;
-}
+//inline const ShockFlowParams & ConservationShockFlow::getParams()const {
+//    return *flowParams_;
+//}
 
 #endif //! _ConservationShockFlow_H

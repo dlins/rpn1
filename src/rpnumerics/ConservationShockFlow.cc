@@ -19,7 +19,9 @@
 
 //ConservationShockFlow::ConservationShockFlow(const ShockFlowParams & params,const FluxFunction & flux) :fluxFunction_((FluxFunction *) flux.clone()),flowParams_(new ShockFlowParams(params.getPhasePoint(),params.getSigma())) {
 
-ConservationShockFlow::ConservationShockFlow(const ShockFlowParams & params, const FluxFunction & flux) : WaveFlow(flux), flowParams_(new ShockFlowParams(params.getPhasePoint(), params.getSigma())) {
+ConservationShockFlow::ConservationShockFlow(const ShockFlowParams & params, const FluxFunction & flux) : ShockFlow(params,flux){
+//    , flowParams_(new ShockFlowParams(params.getPhasePoint(), params.getSigma())) {
+
 
     fx0_ = new RealVector(2); //TODO Hardcoded !! To be initalizated in updateZeroTerms method
 
@@ -27,14 +29,16 @@ ConservationShockFlow::ConservationShockFlow(const ShockFlowParams & params, con
 
 //ConservationShockFlow::ConservationShockFlow(const ConservationShockFlow & copy):fluxFunction_((FluxFunction *) copy.fluxFunction().clone()),flowParams_(new ShockFlowParams(copy.getParams())){
 
-ConservationShockFlow::ConservationShockFlow(const ConservationShockFlow & copy) : WaveFlow(copy.fluxFunction()), flowParams_(new ShockFlowParams(copy.getParams())) {
+ConservationShockFlow::ConservationShockFlow(const ConservationShockFlow & copy) : ShockFlow(copy.getParams(),copy.fluxFunction()){
+//    , flowParams_(new ShockFlowParams(copy.getParams())) {
+//}
     fx0_ = new RealVector(2);
 }
 
 ConservationShockFlow::~ConservationShockFlow() {
 
 
-    delete flowParams_;
+//    delete flowParams_;
     delete fx0_;
 }
 
@@ -48,10 +52,7 @@ int ConservationShockFlow::flux(const WaveState & input, JetMatrix &output) cons
 
     output.f(fx);
 
-
     fx = fx - (*fx0_);
-
-
 
     //        RealVector fx = getFlux().F(x);//RPNUMERICS.fluxFunction().F(x);
     // F(x) - F(x0)
@@ -59,13 +60,17 @@ int ConservationShockFlow::flux(const WaveState & input, JetMatrix &output) cons
     // x - x0_
     RealVector xMinusX0(input.stateSpaceDim());
 
-    xMinusX0 = xMinusX0 - flowParams_->getPhasePoint();
+//    xMinusX0 = xMinusX0 - flowParams_->getPhasePoint();
+
+    xMinusX0 = xMinusX0 - getParams().getPhasePoint();
 
 
     //    xMinusX0.sub(flowParams_.getPhasePoint().getCoords());
     // (x - x0_)*sigma
     //    xMinusX0.scale(getSigma());
-    xMinusX0 = flowParams_->getSigma() * xMinusX0; //Teste
+//    xMinusX0 = flowParams_->getSigma() * xMinusX0; //Teste
+
+    xMinusX0 = getParams().getSigma() * xMinusX0; 
 
 
     // (Fx - Fx0) - sigma*(x - x0)
@@ -115,7 +120,9 @@ int ConservationShockFlow::fluxDeriv(const WaveState & input, JetMatrix &output)
 
 
 
-    identity.scale(flowParams_->getSigma());
+//    identity.scale(flowParams_->getSigma());
+
+    identity.scale(getParams().getSigma());
 
 
     fluxDF_x - identity;

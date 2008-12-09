@@ -34,31 +34,32 @@ class ShockFlow : public WaveFlow {
 
 protected:
     
-    RealVector * xZero_;
-    ShockFlowParams  * params_;
-    
-    
 
+    ShockFlowParams  * params_;
     
 public:
     
-    int jet(const int degree, const RealVector &u, JetMatrix &m);
-
     ShockFlow(const RealVector &,const FluxFunction &);
     ShockFlow(const ShockFlowParams &, const FluxFunction &);
 
-    
-    
-    const RealVector & XZero(void) const;
-    void setXZero(const RealVector & xzero) ;
+    int jet(const WaveState &u, JetMatrix &m, int degree) const;
 
+    const ShockFlowParams & getParams()const;
+    
+    void setParams(const ShockFlowParams &);
+    
     virtual ~ShockFlow();
     
 };
 
-inline int ShockFlow::jet(const int degree, const RealVector &u, JetMatrix &m) {
+
+
+inline int ShockFlow::jet(const WaveState &u, JetMatrix &m, int degree) const {
+    
     return OK;
 }
+
+
 
 
 
