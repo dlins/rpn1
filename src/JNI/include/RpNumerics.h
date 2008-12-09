@@ -24,7 +24,7 @@ class RpNumerics {
     
 private:
     
-    static const Physics * physics_;
+    static  Physics * physics_;
     
     static const ShockFlow * shockFlow_;
         
@@ -35,9 +35,9 @@ private:
     
 public:
     
-    static const Physics & getPhysics();
+    static  Physics & getPhysics();
     
-    static const FluxFunction & getFlux();
+    static  const FluxFunction & getFlux();
     
     static const ODESolver & getODESolver();
     
@@ -53,9 +53,9 @@ public:
     
 };
 
-inline const Physics & RpNumerics::getPhysics(){return *physics_;}
+inline Physics & RpNumerics::getPhysics(){return *physics_;}
 
-inline const  FluxFunction & RpNumerics::getFlux() {return physics_->fluxFunction();}
+inline  const FluxFunction & RpNumerics::getFlux() {return physics_->fluxFunction();}
 
 inline void RpNumerics::setPhysics(const Physics & physics){
     delete physics_;

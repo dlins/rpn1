@@ -18,8 +18,6 @@
  * ---------------------------------------------------------------
  * Definitions:
  */
-#include <iostream.h>
-
 
 Quad2FluxFunction::Quad2FluxFunction(const Quad2FluxParams & params) : FluxFunction(params) {
 }
@@ -42,13 +40,17 @@ int Quad2FluxFunction::jet(const WaveState & x, JetMatrix & y, int degree = 2) c
 
     // Calculate F
     double a1, b1, c1, d1, e1, a2, b2, c2, d2, e2, out0, out1;
-    FluxParams params = fluxParams();
+    
+    
+   const FluxParams params=fluxParams();
+
     
     a1 = params.component(0);
     b1 = params.component(1);
     c1 = params.component(2);
     d1 = params.component(3);
     e1 = params.component(4);
+
     
     a2 = params.component(5);
     b2 = params.component(6);
@@ -64,6 +66,8 @@ int Quad2FluxFunction::jet(const WaveState & x, JetMatrix & y, int degree = 2) c
 
     y(0, out0);
     y(1, out1);
+
+
     
     if ( degree > 0 ) {
     	// Calculate DF
@@ -92,6 +96,7 @@ int Quad2FluxFunction::jet(const WaveState & x, JetMatrix & y, int degree = 2) c
 
 		if (degree > 2 ) {
 			return 0; //UNSUCCESSFUL_PROCEDURE;
+
 		}
 	}
     } 

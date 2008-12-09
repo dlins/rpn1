@@ -33,7 +33,9 @@ public class ManifoldGeomFactory extends RpCalcBasedGeomFactory {
         if (((ManifoldOrbitCalc) rpCalc()).tDirection() == OrbitGeom.BACKWARD_DIR) {
             timedir = "neg";
         }
-        str.append("<MANIFOLDCALC timedirection=\"" + timedir + "\"" + " initialpoint=\"" + ((ManifoldOrbit) geomSource()).getFirstPoint() + "\"" + " calcready=\"" + rpn.parser.RPnDataModule.RESULTS + "\"" + " flowname=\"" + ((ManifoldOrbitCalc) rpCalc()).getFlow().getName() + "\"" + " methodname=\"" + ((ManifoldOrbitCalc) rpCalc()).getCalcMethodName() + "\"" + ">\n");
+        
+        //TODO Insert plugin Name
+//        str.append("<MANIFOLDCALC timedirection=\"" + timedir + "\"" + " initialpoint=\"" + ((ManifoldOrbit) geomSource()).getFirstPoint() + "\"" + " calcready=\"" + rpn.parser.RPnDataModule.RESULTS + "\"" + " flowname=\"" + ((ManifoldOrbitCalc) rpCalc()).getFlow().getName() + "\"" + " methodname=\"" + ((ManifoldOrbitCalc) rpCalc()).getCalcMethodName() + "\"" + ">\n");
         
     
 

@@ -5,12 +5,10 @@
  */
 package rpn.usecase;
 
-import wave.util.RealVector;
 import rpn.controller.phasespace.NUMCONFIG;
 import rpn.parser.RPnDataModule;
 import rpnumerics.RPNUMERICS;
 import rpnumerics.PhasePoint;
-import rpnumerics.ShockFlow;
 import rpnumerics.HugoniotCurve;
 import wave.util.RealVector;
 import java.beans.PropertyChangeEvent;

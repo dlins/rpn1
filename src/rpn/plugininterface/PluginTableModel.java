@@ -7,16 +7,18 @@
 package rpn.plugininterface;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
+import rpnumerics.RarefactionProfile;
+import rpnumerics.ShockProfile;
+import rpnumerics.plugin.RPnPluginManager;
 
 public class PluginTableModel extends DefaultTableModel {
 
     private static PluginTableModel instance_;
-
-    private static String pluginDir_ = System.getProperty("rpnhome") + System.getProperty("file.separator")+"lib"+System.getProperty("file.separator")+"plugins";
-
-
+    private static String pluginDir_ = System.getProperty("rpnhome") + System.getProperty("file.separator") + "lib" + System.getProperty("file.separator") + "plugins" +System.getProperty("file.separator");
+    private static HashMap<String, PluginProfile> pluginConfigMap_;
 
     private PluginTableModel(Vector<Vector<String>> pluginNames, Vector<String> columnNames) {
 
@@ -53,23 +55,57 @@ public class PluginTableModel extends DefaultTableModel {
 
         Vector<String> type1 = new Vector<String>();
 
-        type1.add("WaveFlow");
-        
-        type1.add("rpnLibPlugin.so");
-        type1.add("WaveFlowPlugin");
+        type1.add(ShockProfile.SHOCKFLOW_NAME);
+
+        type1.add("libRpnPluginLib.so");
+        type1.add("ShockFlowPlugin");
         type1.add("create");
+        
+        
+        RPnPluginManager.configPlugin(ShockProfile.SHOCKFLOW_NAME, "libRpnPluginLib.so", "WaveFlowPlugin", "create");
+        
+        
+        
 
+        Vector<String> type2 = new Vector<String>();
+        
+        type2.add(RarefactionProfile.RAREFACTIONFLOW_NAME);
 
+        type2.add("libRpnPluginLib.so");
+        type2.add("RarefactionFlowPlugin");
+        type2.add("create");
+
+        
+        RPnPluginManager.configPlugin(RarefactionProfile.RAREFACTIONFLOW_NAME, "libRpnPluginLib.so", "ShockFlowPlugin", "create");
+        
+        
         data_.add(type1);
-
+        data_.add(type2);
 
         return new PluginTableModel(data_, columnNames_);
-
 
     }
 
     public static String getPluginDir() {
         return pluginDir_;
+    }
+
+    public static HashMap<String, PluginProfile> getPluginConfigMap() {
+        return pluginConfigMap_;
+    }
+
+    public static void setPluginConfig(String pluginType, PluginProfile profile) {
+
+        pluginConfigMap_.put(pluginType, profile);
+    }
+
+    public static PluginProfile getPluginConfig(String pluginType) {
+        return pluginConfigMap_.get(pluginType);
+
+    }
+
+    public static void setPluginConfigMap(HashMap<String, PluginProfile> pluginConfigMap) {
+        pluginConfigMap_ = pluginConfigMap;
     }
 
     public static void setPluginDir(String aPluginDir_) {

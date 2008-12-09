@@ -5,20 +5,16 @@
  */
 package rpnumerics;
 
-
 import wave.util.*;
 
 public class RarefactionFlow extends WaveFlow {
 
-    public static int FIRST = 1;
-
-    //
+    public static int FIRST = 1;    //
     // Members
     //
     private PhasePoint referenceVector_;
     private int familyIndex_ = 1;
     private FluxFunction flux_;
-    
     //
     // Constructors
     //
@@ -32,10 +28,6 @@ public class RarefactionFlow extends WaveFlow {
     //
     // Accessors/Mutators
     //
-    public PhasePoint getReferenceVector() {
-        return referenceVector_;
-    }
-
     //
     // Methods
     //
@@ -70,18 +62,18 @@ public class RarefactionFlow extends WaveFlow {
         // with increasing absolute value of real part
         RealVector.sortEigenData(stateSpaceDim, eigenValR, eigenValI, eigenVec);
 
-        RealVector rarefactionVector = eigenVec[familyIndex_];
+        RealVector rarefactionVector = eigenVec[getFamily()];
         //	System.out.println("rarefaction flux rarefactionVector  = " + rarefactionVector);
 
-        if (rarefactionVector.dot(referenceVector_.getCoords()) < 0.) {
+        if (rarefactionVector.dot(getReferenceVector().getCoords()) < 0.) {
             rarefactionVector.negate();
         }
 
-        referenceVector_ = new PhasePoint(rarefactionVector);
+        setReferenceVector(new PhasePoint(rarefactionVector));
         //	System.out.println("rarefaction flux new referenceVector  = " + referenceVector_);
 
 
-        WavePoint returned = new WavePoint(rarefactionVector, eigenValR[familyIndex_]);
+        WavePoint returned = new WavePoint(rarefactionVector, eigenValR[getFamily()]);
 
         return returned;
 
@@ -101,13 +93,17 @@ public class RarefactionFlow extends WaveFlow {
         return new HessianMatrix(stateSpaceDim);
     }
 
-    public PhasePoint getXZero() {
+    public PhasePoint getReferenceVector() {
         return referenceVector_;
+    }
+
+    public PhasePoint getXZero() {
+        return getReferenceVector();
     }
 
     public void setXZero(PhasePoint xzero) {
 
-        referenceVector_ = xzero;
+        setReferenceVector(xzero);
     }
 
     public String getName() {
@@ -117,5 +113,17 @@ public class RarefactionFlow extends WaveFlow {
 
     public FluxFunction getFlux() {
         return flux_;
+    }
+
+    public void setReferenceVector(PhasePoint referenceVector_) {
+        this.referenceVector_ = referenceVector_;
+    }
+
+    public int getFamily() {
+        return familyIndex_;
+    }
+
+    public void setFamily(int familyIndex_) {
+        this.familyIndex_ = familyIndex_;
     }
 }

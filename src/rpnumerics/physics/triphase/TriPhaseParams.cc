@@ -28,6 +28,6 @@ TriPhaseParams::TriPhaseParams(const RealVector & params, int index):FluxParams(
 //const FluxParams & TriPhaseParams::DEFAULT_FLUX_PARAMS=defaultParams();
 
 
-//! Code comes here! daniel@impa.br
+
 
 

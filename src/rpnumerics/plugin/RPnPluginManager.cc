@@ -19,7 +19,7 @@ void RPnPluginManager::unload(RpnPlugin * plugin, const string pluginType) {
 
     if (it == configMap_->end()) {
 
-        cout << "Plugin " << pluginType << " not configured yet " << "\n";
+        cout << "Plugin " << pluginType << " not configured yet (UNLOAD) " << "\n";
 
 
     } else {
@@ -44,7 +44,7 @@ RpnPlugin * RPnPluginManager::getPluginInstance(const string pluginType) {
 
     if (it == configMap_->end()) {
 
-        cout << "Plugin " << pluginType << " not configured yet " << "\n";
+        cout << "Plugin " << pluginType << " not configured yet (LOAD) " << "\n";
         return NULL;
 
     } else {

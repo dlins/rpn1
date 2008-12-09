@@ -69,10 +69,26 @@ void TriPhase::boundary(const Boundary & boundary){
 
 TriPhase::TriPhase(const TriPhase & copy){
     
-    fluxFunction_ = (FluxFunction *)copy.fluxFunction().clone();
-    boundary_=copy.boundary().clone();
-    accFunction_=(AccumulationFunction *)copy.accumulation().clone();
+    TriPhase * copy2 = (TriPhase *)copy.clone();
+
+
+    TriPhaseFluxFunction flux = (TriPhaseFluxFunction &) copy2->fluxFunction();
+    
+    RealVector paramsRealVector = flux.fluxParams().params();
+
+    TriPhaseParams triphaseParams(paramsRealVector,paramsRealVector.size());
+    
+    PermParams perm = flux.perm().params();
+    CapilParams capil = flux.capil().params();
+    ViscosityParams visc = flux.visc();
+    
+    
+    
+    fluxFunction_ = new TriPhaseFluxFunction(triphaseParams,perm,capil,visc);
+    boundary_=copy2->boundary().clone();
+    accFunction_=(AccumulationFunction *)copy2->accumulation().clone();
     FLUX_ID="TriPhase";
+    delete copy2;
     
 }
 
@@ -89,5 +105,5 @@ TriPhase::~TriPhase(){
 }
 
 
-//! Code comes here! daniel@impa.br
+
 

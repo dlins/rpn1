@@ -32,13 +32,14 @@ public:
      */ 
     
     FluxFunction(const FluxParams & params);
+   
     virtual ~FluxFunction(void);
     
     /*! @brief Flux parameters accessor
      *@param
      */
     
-    const FluxParams & fluxParams(void) const;
+     const FluxParams & fluxParams(void) const;
 
     /*! @brief Flux parameters mutator 
      * @param params  New flux parameters

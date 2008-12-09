@@ -5,6 +5,9 @@
 
 package rpnumerics;
 
+import rpn.plugininterface.PluginProfile;
+import rpn.plugininterface.PluginTableModel;
+
 public abstract class ShockRarefactionProfile {
     
     private PhasePoint xZero_;
@@ -19,7 +22,13 @@ public abstract class ShockRarefactionProfile {
     
     public  PhasePoint getXZero() {return xZero_;}
     
-    public  void setXZero(PhasePoint xZero){xZero_=xZero;}
+    public  void setXZero(PhasePoint xZero){
+        
+        
+        
+        
+        
+        xZero_=xZero;}
 
     public String getFlowName() {
         return flowName_;

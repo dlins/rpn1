@@ -19,22 +19,36 @@
 #include "FluxFunction.h"
 #include "RpNumerics.h"
 #include "rpnumerics_NativeRpFunction.h"
+#include "Quad2FluxParams.h"
 #include "JNIDefs.h"
 #include "PluginService.h"
 #include "WaveFlowPlugin.h"
 #include "RPnPluginManager.h"
-//#include "WaveFlowFactory.h"
 #include <iostream>
 
 JNIEXPORT jint JNICALL Java_rpnumerics_NativeRpFunction_nativeJet(JNIEnv * env, jobject obj, jobject waveState, jobject jetMatrix, jint degree) {
 
+    //Classes references
+
+    jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
+    jclass phasePointClass = env->FindClass(PHASEPOINT_LOCATION);
+
     jclass waveStateClass = env->FindClass(WAVESTATE_LOCATION);
     jclass jetMatrixClass = env->FindClass(JETMATRIX_LOCATION);
-    jclass phasePointClass = env->FindClass(PHASEPOINT_LOCATION);
+
+    jclass shockFlowClass = env->FindClass(SHOCKFLOW_LOCATION);
+    jclass rarefactionFlowClass = env->FindClass(RAREFACTIONFLOW_LOCATION);
+
+
+
+    jclass fluxFunctionClass = env->FindClass(FLUXFUNCTION_LOCATION);
+    jclass fluxParamsClass = env->FindClass(FLUXPARAMS_LOCATION);
 
     jclass objectClass = env->FindClass("java/lang/Object");
     jclass clsClass = env->FindClass("java/lang/Class");
 
+
+    //Methods references
 
     jmethodID toDoubleMethodID = (env)->GetMethodID(phasePointClass, "toDouble", "()[D");
 
@@ -44,6 +58,20 @@ JNIEXPORT jint JNICALL Java_rpnumerics_NativeRpFunction_nativeJet(JNIEnv * env, 
     jmethodID jetMatrixsetF = env->GetMethodID(jetMatrixClass, "setElement", "(ID)V");
     jmethodID jetMatrixsetDF = env->GetMethodID(jetMatrixClass, "setElement", "(IID)V");
     jmethodID jetMatrixsetD2F = env->GetMethodID(jetMatrixClass, "setElement", "(IIID)V");
+
+
+
+    jmethodID getfluxParamsMethodID = (env)->GetMethodID(fluxFunctionClass, "fluxParams", "()Lrpnumerics/FluxParams;");
+    jmethodID getParamsMethodID = (env)->GetMethodID(fluxParamsClass, "getParams", "()Lwave/util/RealVector;");
+    jmethodID getSigmaMethodID = (env)->GetMethodID(shockFlowClass, "getSigma", "()D");
+    jmethodID getXZeroMethodID = (env)->GetMethodID(shockFlowClass, "getXZero", "()Lrpnumerics/PhasePoint;");
+
+
+    jmethodID getReferenceVectorMethodID = (env)->GetMethodID(rarefactionFlowClass, "getReferenceVector", "()Lrpnumerics/PhasePoint;");
+    jmethodID getFamilyMethodID = (env)->GetMethodID(rarefactionFlowClass, "getFamily", "()I");
+
+
+
 
 
     jmethodID getClassID = (env)->GetMethodID(objectClass, "getClass", "()Ljava/lang/Class;");
@@ -84,21 +112,88 @@ JNIEXPORT jint JNICALL Java_rpnumerics_NativeRpFunction_nativeJet(JNIEnv * env, 
 
     const FluxFunction & fluxFunction = RpNumerics::getFlux();
 
+    //        cout << objectClassName << "\n";
+
+
     if (!strcmp(objectClassName, "FluxFunction")) {
+
+        jobject fluxParamsObj = (env)->CallObjectMethod(obj, getfluxParamsMethodID);
+
+        jobject realVectorObj = (env)->CallObjectMethod(fluxParamsObj, getParamsMethodID);
+
+        jdoubleArray paramsArray = (jdoubleArray) (env)->CallObjectMethod(realVectorObj, toDoubleMethodID);
+
+        int paramsLength = env->GetArrayLength(paramsArray);
+
+        double nativeParamsArray [paramsLength];
+
+        env->GetDoubleArrayRegion(paramsArray, 0, paramsLength, nativeParamsArray);
+
+        Physics & physics = RpNumerics::getPhysics();
+
+        FluxParams nativeFluxParams(paramsLength, nativeParamsArray);
+
+        physics.fluxParams(nativeFluxParams);
 
         fluxFunction.jet(nativeWaveState, nativeJetMatrix, degree);
 
-    } else {
+    }
 
-        RpnPlugin * plug = RPnPluginManager::getPluginInstance("WaveFlow");
+
+    if (!strcmp(objectClassName, "ShockFlow")) {
+
+
+        jdouble sigma = (env)->CallDoubleMethod(obj, getSigmaMethodID); // <--- sigma
+
+        jobject xzero = (env)->CallObjectMethod(obj, getXZeroMethodID);
+
+        jdoubleArray xzeroArray = (jdoubleArray) (env)->CallObjectMethod(xzero, toDoubleMethodID);
+
+        int xzeroLength = env->GetArrayLength(xzeroArray);
+
+        double nativeXZeroArray [xzeroLength]; // <--- XZero
+
+
+        for (int i = 0; i < xzeroLength; i++) {
+            cout << "XZero: " << nativeXZeroArray [i] << "\n";
+        }
+
+
+        env->GetDoubleArrayRegion(xzeroArray, 0, xzeroLength, nativeXZeroArray);
+
+        RpnPlugin * plug = RPnPluginManager::getPluginInstance("ShockFlow");
 
         WaveFlow* flow = (WaveFlow*) plug;
 
         flow->jet(nativeWaveState, nativeJetMatrix, degree);
 
-        RPnPluginManager::unload(plug, "WaveFlow");
+        RPnPluginManager::unload(plug, "ShockFlow");
 
     }
+
+    if (!strcmp(objectClassName, "RarefactionFlow")) {
+
+
+        jint family = (env)->CallIntMethod(obj, getFamilyMethodID); // <--- Family
+
+        jobject referenceVector = (env)->CallObjectMethod(obj, getReferenceVectorMethodID);
+
+        jdoubleArray referenceArray = (jdoubleArray) (env)->CallObjectMethod(referenceVector, toDoubleMethodID);
+
+        int referenceLength = env->GetArrayLength(referenceArray);
+
+        double nativeReferenceArray [referenceLength]; // <--- Reference Vector
+
+        cout << "Family: " << family << "\n";
+
+        for (int i = 0; i < referenceLength; i++) {
+            cout << "Reference Vector: " << nativeReferenceArray [i] << "\n";
+        }
+
+
+    }
+
+
 
     env->ReleaseStringUTFChars(className, objectClassName);
 
@@ -223,7 +318,7 @@ JNIEXPORT jint JNICALL Java_rpnumerics_NativeRpFunction_nativeVectorJet(JNIEnv *
 
         RPnPluginManager::unload(plug, "WaveFlow");
 
-     
+
 
     }
 

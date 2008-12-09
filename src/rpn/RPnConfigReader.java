@@ -13,6 +13,8 @@ import javax.swing.ImageIcon;
 import rpn.parser.*;
 import org.xml.sax.Parser;
 import org.xml.sax.helpers.ParserFactory;
+import rpn.plugininterface.PluginInfoController;
+import rpn.plugininterface.PluginInfoParser;
 
 /** This class contains methods to configure the applet and the desktop versions. */
 
@@ -54,6 +56,8 @@ public abstract class RPnConfigReader{
 	try {
 
    	    // initialize the XML parser
+            
+            
 
           Parser parser = ParserFactory.makeParser("com.ibm.xml.parsers.ValidatingSAXParser");
 
@@ -81,6 +85,9 @@ public abstract class RPnConfigReader{
 //	    configStream.reset();
 //
 //            RPnGeometryModule.init(parser, configStream);
+            
+            PluginInfoParser pluginParser = new PluginInfoParser();
+            PluginInfoController.updatePluginInfo(pluginParser);
 
 
 

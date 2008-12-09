@@ -1,3 +1,9 @@
+/*
+ *
+ * Instituto de Matematica Pura e Aplicada - IMPA
+ * Departamento de Dinamica dos Fluidos
+ *
+ */
 package rpn;
 
 import rpn.message.*;
@@ -87,8 +93,6 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
 
     public static void main(String[] args) {
 
-        System.out.println(System.getProperty("rpnhome") + "Valor");
-        
         RPnDesktopPlotter plotter = new RPnDesktopPlotter(args[0]);
         
         configReader_ = RPnConfigReader.getReader(args[0], false, null);

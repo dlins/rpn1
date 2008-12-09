@@ -5,10 +5,14 @@
  */
 package rpn;
 
+import java.awt.event.MouseEvent;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.MouseListener;
+import rpn.plugininterface.PluginConfigDialog;
+import rpn.plugininterface.PluginTableModel;
 import rpnumerics.RPNUMERICS;
+import rpnumerics.ShockProfile;
 
 public class RPnShockConfigDialog extends RPnDialog {
 
@@ -20,6 +24,7 @@ public class RPnShockConfigDialog extends RPnDialog {
     private JComboBox methodComboBox_;
     private JComboBox flowNameComboBox_ = new JComboBox();
     private JCheckBox specificMethodCheckBox_ = new JCheckBox("Specific Method");
+    private JLabel flowPluginName_ = new JLabel();
 
     public RPnShockConfigDialog() {
         try {
@@ -58,9 +63,7 @@ public class RPnShockConfigDialog extends RPnDialog {
 
     private void addFlowName() {
 
-        flowNameComboBox_.addItem("Conservation Shock Flow");
-
-
+        flowPluginName_.setText((String) PluginTableModel.instance().getValueAt(0, 2));
 
     }
 
@@ -69,9 +72,10 @@ public class RPnShockConfigDialog extends RPnDialog {
         this.setTitle("Shock Curve Configuration");
         addMethodName();
         addFlowName();
+        flowPluginName_.addMouseListener(new MouseHandler());
 
-        flowNamePanel_.add(new JLabel("Flow Name", SwingConstants.LEFT));
-        flowNamePanel_.add(flowNameComboBox_);
+        flowNamePanel_.add(new JLabel("Flow Name: ", SwingConstants.LEFT));
+        flowNamePanel_.add(flowPluginName_);
 
         methodTypePanel_.setLayout(borderLayout1);
         methodTypePanel_.add(specificMethodCheckBox_, BorderLayout.SOUTH);
@@ -81,13 +85,10 @@ public class RPnShockConfigDialog extends RPnDialog {
         this.getContentPane().add(methodTypePanel_, BorderLayout.CENTER);
         pack();
 
-
-
-
     }
 
     protected void apply() {
-        
+
         RPNUMERICS.getShockProfile().setHugoniotMethodName((String) methodComboBox_.getSelectedItem());
 
         if (specificMethodCheckBox_.isSelected()) {
@@ -102,4 +103,38 @@ public class RPnShockConfigDialog extends RPnDialog {
 
 
     }
+    
+    private class MouseHandler implements MouseListener{
+
+        public void mouseClicked(MouseEvent e) {
+
+            PluginConfigDialog dialog = new PluginConfigDialog(ShockProfile.SHOCKFLOW_NAME);
+            dialog.setVisible(true);
+                        
+        }
+
+        public void mousePressed(MouseEvent e) {
+
+        }
+
+        public void mouseReleased(MouseEvent e) {
+
+        }
+
+        public void mouseEntered(MouseEvent e) {
+
+            JLabel label = (JLabel) e.getSource();
+            label.setToolTipText("Click to configure");
+            Cursor cur = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
+            label.setCursor(cur);
+            
+        }
+
+        public void mouseExited(MouseEvent e) {
+
+            
+        }
+        
+    }
+    
 }

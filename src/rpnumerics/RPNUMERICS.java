@@ -5,31 +5,14 @@
  */
 package rpnumerics;
 
+import rpn.plugininterface.PluginProfile;
+import rpn.plugininterface.PluginTableModel;
 import rpnumerics.methods.HugoniotContinuationMethod;
-//import rpnumerics.physics.CapilParams;
-//import rpnumerics.physics.CombFluxParams;
-//import rpnumerics.physics.CombHugoniotCurveCalc;
-//import rpnumerics.physics.PGas;
-//import rpnumerics.physics.PGasFluxParams;
-//import rpnumerics.physics.PermParams;
 import wave.util.*;
 import wave.ode.*;
-//import rpnumerics.physics.Physics;
-//import rpnumerics.physics.Quad2;
-//import rpnumerics.physics.Quad2FluxParams;
-//import rpnumerics.physics.Quad2HugoniotCurveCalc;
-//import rpnumerics.physics.Quad4;
-//import rpnumerics.physics.Quad4FluxParams;
-//import rpnumerics.physics.Steam;
-//import rpnumerics.physics.SteamFluxParams;
-//import rpnumerics.physics.TriPhase;
-//import rpnumerics.physics.TriPhaseFluxParams;
-//import rpnumerics.physics.ViscosityParams;
 import wave.multid.Space;
 
 public class RPNUMERICS {
-
-
     //
     // Constants
     //
@@ -170,54 +153,69 @@ public class RPNUMERICS {
         return new BifurcationCurveCalc();
     }
 
-    public static WaveFlow createShockFlow() {
+    public static ShockFlow createShockFlow() {
 
-        if (shockProfile_.getFlowName().equals("Conservation Shock Flow")) {
-            FluxFunction flux = new FluxFunction();
-            ShockFlowParams shockParams = new ShockFlowParams(shockProfile_.getXZero(), shockProfile_.getSigma());
-            ConservationShockFlow flow = new ConservationShockFlow(shockParams, flux);
-            return flow;
-        }
 
-        return null;
+//        if (shockProfile_.getFlowName().equals("Conservation Shock Flow")) {
+        FluxFunction flux = new FluxFunction();
+
+        PluginProfile profile = PluginTableModel.getPluginConfig(ShockProfile.SHOCKFLOW_NAME);
+        
+        Double value = new Double(profile.getParamValue("sigma"));
+
+        ShockFlowParams shockParams = new ShockFlowParams(shockProfile_.getXZero(), value.doubleValue());
+
+        ShockFlow flow = new ShockFlow(shockParams, flux);
+        
+        System.out.println("Valor de sigma: "+value.doubleValue());
+
+
+//            ConservationShockFlow flow = new ConservationShocckFlow(shockParams, flux);
+        return flow;
+//        }
+
+//        return null;
     }
 
-    public static WaveFlow createShockFlow(ShockFlowParams shockFlowParams) {
+    public static ShockFlow createShockFlow(ShockFlowParams shockFlowParams) {
 
-        if (shockProfile_.getFlowName().equals("Conservation Shock Flow")) {
-
-
-            ConservationShockFlow flow = new ConservationShockFlow(shockFlowParams, new FluxFunction());
+//        if (shockProfile_.getFlowName().equals("Conservation Shock Flow")) {
 
 
-            return flow;
-        }
+        ShockFlow flow = new ShockFlow(shockFlowParams, new FluxFunction());
 
-        return null;
+//            ConservationShockFlow flow = new ConservationShockFlow(shockFlowParams, new FluxFunction());
+
+
+        return flow;
+//        }
+
+//        return null;
     }
 
     private static RarefactionFlow createRarefactionFlow() {
-
-
-        if (rarefactionProfile_.getFlowName().equals("Native Rarefaction Flow")) {
-            System.out.println("Flow Nativo");
-            return null;
-
-        }
-
-
-        if (rarefactionProfile_.getFlowName().equals("Blow Up")) {
-            BlowUpLineFieldVector blowUpUserInput = new BlowUpLineFieldVector(rarefactionProfile_.getXZero(), rarefactionProfile_.getFamily(), new FluxFunction());
-
-            return new BlowUpFlow(blowUpUserInput, new FluxFunction());
-        }
-
-        if (rarefactionProfile_.getFlowName().equals("Rarefaction Flow")) {
-
-            return new RarefactionFlow(rarefactionProfile_.getXZero(), rarefactionProfile_.getFamily(), new FluxFunction());
-        }
-
-        return null;
+        
+         return new RarefactionFlow(rarefactionProfile_.getXZero(), rarefactionProfile_.getFamily(), new FluxFunction());
+        
+//        if (rarefactionProfile_.getFlowName().equals("Native Rarefaction Flow")) {
+//            System.out.println("Flow Nativo");
+//            return null;
+//
+//        }
+//
+//
+//        if (rarefactionProfile_.getFlowName().equals("Blow Up")) {
+//            BlowUpLineFieldVector blowUpUserInput = new BlowUpLineFieldVector(rarefactionProfile_.getXZero(), rarefactionProfile_.getFamily(), new FluxFunction());
+//
+//            return new BlowUpFlow(blowUpUserInput, new FluxFunction());
+//        }
+//
+//        if (rarefactionProfile_.getFlowName().equals("Rarefaction Flow")) {
+//
+//            return new RarefactionFlow(rarefactionProfile_.getXZero(), rarefactionProfile_.getFamily(), new FluxFunction());
+//        }
+//
+//        return null;
 
     }
 

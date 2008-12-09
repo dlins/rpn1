@@ -34,6 +34,7 @@ public abstract class RpModelConfigChangeAgent extends RpModelActionAgent {
         UIController.instance().panelsUpdate();
     }
 
+    @Override
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         /*
          * MAKES SURE XZERO IS NOTIFIED FIRST
@@ -47,6 +48,7 @@ public abstract class RpModelConfigChangeAgent extends RpModelActionAgent {
         super.addPropertyChangeListener(listener);
     }
 
+    @Override
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         listenersList_.remove(listener);
     }

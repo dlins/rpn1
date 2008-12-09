@@ -7,9 +7,6 @@ package rpnumerics;
 
 import wave.util.*;
 import wave.util.RealVector;
-import org.netlib.lapack.DGEES;
-import org.netlib.lapack.DGEEV;
-import org.netlib.util.intW;
 
 public class HugoniotPoint extends RealVector {
     //
@@ -21,7 +18,7 @@ public class HugoniotPoint extends RealVector {
     private RealVector eigenValRLeft_;
     private RealVector eigenValRRight_;
     private HugoniotPointType type_;
-    private ConservationShockFlow myFlow_;
+    private ShockFlow myFlow_;
 
 
     //
@@ -32,12 +29,12 @@ public class HugoniotPoint extends RealVector {
        
 //      myFlow_ = (ConservationShockFlow) RPNUMERICS.createShockFlow();//new ConservationShockFlow(xZero, sigma);
         ShockFlowParams params = new ShockFlowParams(xZero, sigma);
-        myFlow_ = (ConservationShockFlow) RPNUMERICS.createShockFlow(params);
+        myFlow_ =   RPNUMERICS.createShockFlow(params);
         initType();
     }
 
     public HugoniotPoint(PhasePoint xZero, RealVector x) {
-        this(xZero, x,((ShockFlow) RPNUMERICS.createShockFlow(new ShockFlowParams(xZero))).sigmaCalc(xZero.getCoords(), x));
+        this(xZero, x,ShockFlow.sigmaCalc(xZero.getCoords(), x));
     }
 
      
@@ -46,7 +43,11 @@ public class HugoniotPoint extends RealVector {
     
     protected void initType() {
         RealMatrix2 dfLeft = myFlow_.fluxDeriv(myFlow_.getXZero().getCoords());
+        
+        
         RealMatrix2 dfRight = myFlow_.fluxDeriv(this);
+        
+        
         int stateSpaceDim = dfLeft.getNumRow();
         double[] eigenValRLeft = new double[stateSpaceDim];
         double[] eigenValRRight = new double[stateSpaceDim];

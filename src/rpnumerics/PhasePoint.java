@@ -6,7 +6,6 @@
 package rpnumerics;
 
 import wave.util.RealVector;
-import wave.util.RealVector;
 
 public class PhasePoint extends RealVector {
     //
@@ -37,8 +36,25 @@ public class PhasePoint extends RealVector {
     //
     // Methods
     //
-   
+    @Override
+    public String toString() {
 
+        StringBuffer str = new StringBuffer();
+        
+        for (int i=0;i < getCoords().getSize();i++){
+            
+            
+            str.append(getCoords().getElement(i));
+            str.append("\n");
+            
+        }
+        return str.toString();
+
+
+
+    }
+
+    @Override
     public String toXML() {
         StringBuffer str = new StringBuffer();
         str.append("<PHASEPOINT dimension=\"" + getCoords().getSize() + "\">");

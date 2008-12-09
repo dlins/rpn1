@@ -9,10 +9,9 @@ import rpn.component.RpGeomFactory;
 import rpn.component.XZeroGeomFactory;
 import rpn.usecase.*;
 import rpnumerics.StationaryPointCalc;
-import rpnumerics.RPNUMERICS;
 import rpnumerics.PhasePoint;
-import rpnumerics.ConservationShockFlow;
 import java.beans.PropertyChangeEvent;
+import rpnumerics.ShockFlow;
 
 public class XZeroController
         extends RpCalcController {
@@ -50,6 +49,7 @@ public class XZeroController
         geomFactory_ = null;
     }
 
+    @Override
     public void propertyChange(PropertyChangeEvent change) {
 
         // this is to avoid void notifications of enabled/disbled
@@ -67,7 +67,7 @@ public class XZeroController
              * IT HSA TO GET FROM STATIONARY POINT CALC
              */
 
-            if (((StationaryPointCalc) geomFactory_.rpCalc()).getFlow() instanceof ConservationShockFlow) {
+            if (((StationaryPointCalc) geomFactory_.rpCalc()).getFlow() instanceof ShockFlow) {
                 ((StationaryPointCalc) geomFactory_.rpCalc()).getFlow().setXZero(((StationaryPointCalc) geomFactory_.rpCalc()).getInitPoint());
 
             }

@@ -41,7 +41,9 @@ public :
     
     virtual void boundary(const Boundary & boundary) = 0;
     
-    virtual const FluxFunction & fluxFunction() const = 0;
+    virtual  const FluxFunction & fluxFunction() const  = 0;
+    
+    virtual void fluxParams(const FluxParams &) =0;
     
     virtual const Space & domain() const = 0;
     

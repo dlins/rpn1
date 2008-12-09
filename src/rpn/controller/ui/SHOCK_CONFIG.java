@@ -6,7 +6,6 @@
 
 package rpn.controller.ui;
 
-import wave.util.RealVector;
 import rpn.usecase.HugoniotPlotAgent;
 import rpnumerics.PhasePoint;
 import rpnumerics.RPNUMERICS;
@@ -26,6 +25,7 @@ public class SHOCK_CONFIG extends UI_ACTION_SELECTED {
     //
     // Methods
     //
+    @Override
     public void userInputComplete(rpn.controller.ui.UIController ui,
                                   RealVector userInput) {
         

@@ -5,7 +5,6 @@
  */
 package rpn;
 
-import rpn.component.*;
 import rpn.controller.phasespace.*;
 import wave.multid.model.AbstractScene;
 import wave.multid.Space;
@@ -61,6 +60,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         state_.delete(this, geom);
     }
 
+    @Override
     public void update() {
 
         Iterator geomList = getGeomObjIterator();
@@ -87,6 +87,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
     }
 
     // overwriting so we don't remove XZero and Hugoniot
+    @Override
     public void clear() {
 
         ArrayList deleteList = new ArrayList();
@@ -148,7 +149,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
     }
 
     public PhasePoint findSelectionMidPoint() {
-        Iterator geomList = getGeomObjIterator();
+
         PhasePoint selectionPoint = ((StationaryPoint) selectedGeom_.geomFactory().geomSource()).getPoint();
         PhasePoint xzeroPoint = ((StationaryPoint) ((NUMCONFIG_READY) state_).xzeroGeom().geomFactory().geomSource()).getPoint();
         PhasePoint midPoint = new PhasePoint(xzeroPoint);

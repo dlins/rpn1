@@ -77,7 +77,7 @@ public class ManifoldOrbit extends RPnCurve implements RpSolution {
     //
     public ManifoldSensitivity sensitivity() {
 
-        ConservationShockFlow flow = (ConservationShockFlow) RPNUMERICS.createShockFlow();
+        ShockFlow flow =  RPNUMERICS.createShockFlow();
 
         // getting local information at the stationary point
         StationaryPoint stationaryPoint = getStationaryPoint();
@@ -189,7 +189,7 @@ public class ManifoldOrbit extends RPnCurve implements RpSolution {
     // as returned by Matrices2Vector function
     protected RealVector sensitivityFunction(RealVector x, RealVector sens, int k) {
 
-        ConservationShockFlow flow = (ConservationShockFlow) RPNUMERICS.createShockFlow();
+        ShockFlow flow = RPNUMERICS.createShockFlow();
 
         int m = x.getSize();
         RealMatrix2 Qx = new RealMatrix2(m, k);

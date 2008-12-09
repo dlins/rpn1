@@ -19,14 +19,24 @@
 
 
 
+
 #define STATIONARYPOINT_LOCATION              "rpnumerics/StationaryPoint"
 #define PHASEPOINT_LOCATION                   "rpnumerics/PhasePoint"
 #define ORBITPOINT_LOCATION                   "rpnumerics/OrbitPoint"
 #define ORBIT_LOCATION                        "rpnumerics/Orbit"
 #define RAREFACTIONORBIT_LOCATION             "rpnumerics/RarefactionOrbit"
 
+
+
+#define SHOCKFLOW_LOCATION                     "rpnumerics/ShockFlow"
+#define RAREFACTIONFLOW_LOCATION               "rpnumerics/RarefactionFlow"
+
+#define FLUXFUNCTION_LOCATION                  "rpnumerics/FluxFunction"
+#define FLUXPARAMS_LOCATION                    "rpnumerics/FluxParams"
+
 #define MANIFOLD_LOCATION                      "rpnumerics/ManifoldOrbit"
 #define CONNECTIONORBIT_LOCATION               "rpnumerics/ConnectionOrbit"
+
 
 
 #define HUGONIOTPOINTTYPE_LOCATION            "rpnumerics/HugoniotPointType"

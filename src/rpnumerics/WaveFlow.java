@@ -15,9 +15,9 @@ public abstract class WaveFlow extends NativeRpFunction {
 //
 //    HessianMatrix fluxDeriv2( RealVector x );
 //
-    abstract PhasePoint getXZero();
+    public abstract PhasePoint getXZero();
 
     public abstract void setXZero(PhasePoint xzero);
 
-    public abstract String getName();
+//    public abstract String getName();
 }

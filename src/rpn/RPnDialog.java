@@ -7,7 +7,6 @@ package rpn;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -34,10 +33,10 @@ public abstract class RPnDialog extends JDialog {
 
         buttonsPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "Apply");
         buttonsPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "Cancel");
-        
 
-        buttonsPanel.getActionMap().put("Apply", new ActionTeste());
-        buttonsPanel.getActionMap().put("Cancel", cancelButton.getAction());
+
+        buttonsPanel.getActionMap().put("Apply", new ActionApply());
+        buttonsPanel.getActionMap().put("Cancel", new ActionCancel());
 
         
         buttonsPanel.add(applyButton);
@@ -113,24 +112,19 @@ public abstract class RPnDialog extends JDialog {
     protected void cancel() {
         dispose();
     }
-
-    private class TextFieldKeyListener extends KeyAdapter {
-
-        @Override
-        public void keyPressed(KeyEvent e) {
-
-            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                applyButton.doClick();
-                System.out.println("Apertando enter");
-            }
-        }
-    }
     
     
-      private class ActionTeste extends AbstractAction {
+      private class ActionApply extends AbstractAction {
 
         public void actionPerformed(ActionEvent e) {
-            System.out.println("Acao");
+            apply();
+        }
+    }
+      
+       private class ActionCancel extends AbstractAction {
+
+        public void actionPerformed(ActionEvent e) {
+            cancel();
         }
     }
    

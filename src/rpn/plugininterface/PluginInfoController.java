@@ -34,6 +34,14 @@ public class PluginInfoController implements ActionListener {
 
 
     }
+    
+    public static void updatePluginInfo(PluginInfoParser parser){
+        
+        parser_=parser;
+        parser_.parse();
+        RPnPluginManager.setPluginDir(PluginTableModel.getPluginDir());
+        
+    }
 
     public void actionPerformed(ActionEvent e) {
         

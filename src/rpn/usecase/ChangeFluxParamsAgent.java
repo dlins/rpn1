@@ -7,8 +7,6 @@
 package rpn.usecase;
 
 import wave.util.RealVector;
-import rpnumerics.RPNUMERICS;
-import rpnumerics.ConservationShockFlow;
 import javax.swing.JDialog;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
@@ -54,6 +52,7 @@ public class ChangeFluxParamsAgent extends RpModelConfigChangeAgent {
         dialog_.setVisible(true);
     }
 
+    @Override
     public void actionPerformed(ActionEvent event) {
         execute();
     }

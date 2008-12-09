@@ -28,22 +28,28 @@ public class PluginInfoParser {
     private String pluginVersion_;
     private HashMap<String, String> pluginClasses_;
     private HashMap<String, HashMap<String, Vector<HashMap<String, String>>>> library_;
+    private HashMap<String, PluginProfile> pluginProfileMap_;
+    private String currentPluginType_;
 
     public PluginInfoParser() {
-        pluginClasses_ = new HashMap<String, String>();
+        pluginClasses_ = new HashMap<String, String>();//ClassName,constructorMethod
         library_ = new HashMap<String, HashMap<String, Vector<HashMap<String, String>>>>();
+        //HashMap<LibName, HashMap<PluginType,Vector <HashMap<ClassName,constructorMethod>>>> 
+
+        pluginProfileMap_ = new HashMap<String, PluginProfile>(1);
+    //HashMap<PluginType,PluginProfile>;
     }
 
     public void parse() {
-        
+
         library_.clear();
 
         try {
 
             File pluginDir = new File(PluginTableModel.getPluginDir());
-            File [] filesArray = pluginDir.listFiles(new FileName());
-            
-            for (int i =0;i < filesArray.length;i++){
+            File[] filesArray = pluginDir.listFiles(new FileName());
+
+            for (int i = 0; i < filesArray.length; i++) {
                 XMLReader xmlReader = XMLReaderFactory.createXMLReader();
                 xmlReader.setContentHandler(new PluginInfoHandler());
                 InputStream inputStream = new FileInputStream(filesArray[i]);
@@ -82,22 +88,17 @@ public class PluginInfoParser {
         return library_;
     }
 
-    private class FileName implements FilenameFilter{
+    private class FileName implements FilenameFilter {
 
         public boolean accept(File dir, String name) {
-            
-            if (name.endsWith(".xml"))
+
+            if (name.endsWith(".xml")) {
                 return true;
+            }
             return false;
-            
-            
         }
-        
     }
-    
-    
-    
-    
+
     private class PluginInfoHandler extends DefaultHandler {
 
         public PluginInfoHandler() {
@@ -115,6 +116,23 @@ public class PluginInfoParser {
 
             }
 
+            if (localName.equals("PLUGINCONFIG")) {
+                currentPluginType_ = attributes.getValue(0);
+                PluginProfile profile = new PluginProfile();
+
+                pluginProfileMap_.put(currentPluginType_, profile);
+
+            }
+
+            if (localName.equals("PARAM")) {
+
+                PluginProfile profile = pluginProfileMap_.get(currentPluginType_);
+
+                profile.addPluginParam(attributes.getValue(0), attributes.getValue(1));
+
+                pluginProfileMap_.put(currentPluginType_, profile);
+
+            }
 
             if (localName.equals("LIBRARY")) {
                 pluginLibName_ = attributes.getValue(0);
@@ -152,55 +170,11 @@ public class PluginInfoParser {
 
         @Override
         public void endElement(String uri, String localName, String qName) throws SAXException {
-//            if (localName.equals("LIBRARY")) {
-//
-//                Set<Entry<String, HashMap<String, Vector<HashMap<String, String>>>>> libraryContentSet = library_.entrySet();
-//
-//                Iterator<Entry<String, HashMap<String, Vector<HashMap<String, String>>>>> libraryIterator = libraryContentSet.iterator();
-//                while (libraryIterator.hasNext()) {
-//
-//                    Entry<String, HashMap<String, Vector<HashMap<String, String>>>> libraryEntry = libraryIterator.next();
-//
-//                    HashMap<String, Vector<HashMap<String, String>>> pluginTypeClasses = libraryEntry.getValue();
-//
-//                    Set<Entry<String, Vector<HashMap<String, String>>>> classesSet = pluginTypeClasses.entrySet();
-//
-//                    Iterator<Entry<String, Vector<HashMap<String, String>>>> classesIterator = classesSet.iterator();
-//                    
-//                    while (classesIterator.hasNext()) {
-//
-//                        Entry<String, Vector<HashMap<String, String>>> pluginTypeEntry = classesIterator.next();
-//                        
-////                        System.out.println("Tipos dos plugins: " + pluginTypeEntry.getKey());
-//
-//                        Vector<HashMap<String, String>> classesVector = pluginTypeEntry.getValue();
-//
-//                        for (int i = 0; i < classesVector.size(); i++) {
-//
-//                            HashMap<String, String> classData = classesVector.get(i);
-//
-//                            Set<Entry<String, String>> classEntry = classData.entrySet();
-//                          
-//                            Iterator<Entry<String, String>> classIterator = classEntry.iterator();
-//
-//                            while (classIterator.hasNext()) {
-//
-//                                Entry<String, String> classEnt = classIterator.next();
-//
-////                                System.out.println("Nome da classe: " + classEnt.getKey());
-////                                System.out.println("Nome do metodo: " + classEnt.getValue());
-//                            }
-//
-//                        }
-//
-//
-//
-//                    }
-//                }
-//
-//                System.out.println("Quantidade de bibliotecas armazenadas: " + library_.size());
-//
-//            }
+            if (localName.equals("PLUGINCONFIG")) {
+                PluginTableModel.setPluginConfigMap(pluginProfileMap_);
+
+            }
+
         }
     }
 }

@@ -57,6 +57,7 @@ public class PluginInfoPanel extends JPanel {
 
         tableConfigPanel = new JScrollPane(configPluginTable_);
         pluginTreePanel = new JScrollPane(pluginTree_);
+        
         Dimension minimumSize = new Dimension(150, 150);
 
         pluginTreePanel.setPreferredSize(minimumSize);

@@ -14,6 +14,7 @@
  * Includes:
  */
 #include "WaveFlow.h"
+#include "ShockFlowParams.h"
 
 /*
  * ---------------------------------------------------------------
@@ -34,16 +35,23 @@ class ShockFlow : public WaveFlow {
 protected:
     
     RealVector * xZero_;
+    ShockFlowParams  * params_;
     
+    
+
     
 public:
     
     int jet(const int degree, const RealVector &u, JetMatrix &m);
 
     ShockFlow(const RealVector &,const FluxFunction &);
+    ShockFlow(const ShockFlowParams &, const FluxFunction &);
+
     
-    const RealVector * XZero(void) const;
+    
+    const RealVector & XZero(void) const;
     void setXZero(const RealVector & xzero) ;
+
     virtual ~ShockFlow();
     
 };

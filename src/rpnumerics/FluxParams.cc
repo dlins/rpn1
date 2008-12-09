@@ -4,11 +4,9 @@
 
 FluxParams::FluxParams(const RealVector & params) {
     
-    int i ;
-    
     params_= new RealVector(params.size());
     
-    for (i=0; i< params_->size();i++){
+    for (int i=0; i< params_->size();i++){
         
         params_->component(i)=params.component(i);
     }

@@ -25,11 +25,12 @@
 class Quad2 :public Physics {
     
 private:
-    Quad2FluxParams * params_;
+//    Quad2FluxParams * params_;
     Quad2FluxFunction *fluxFunction_;
     Quad2AccumulationFunction * accumulationFunction_;
     
     Boundary * defaultBoundary();
+
     Boundary * boundary_;
     char * FLUX_ID;
     
@@ -41,6 +42,8 @@ public:
     Quad2(const Quad2FluxParams &);
     
     Quad2(const Quad2& );
+
+    void fluxFunction(const FluxFunction &);
     
     virtual ~Quad2();
 
@@ -49,6 +52,9 @@ public:
     Physics * clone() const;
     
     const FluxParams & params(void) const;
+    
+     void fluxParams(const FluxParams &);
+    
     const FluxFunction & fluxFunction(void) const;
     const AccumulationFunction & accumulation() const;
     
@@ -61,11 +67,23 @@ inline Physics * Quad2::clone()const {
     return new Quad2(*this);
 }
 
-inline const FluxParams & Quad2::params(void) const {
-    return *params_;
+inline   void Quad2::fluxParams(const FluxParams & p){
+    
+//    delete params_;
+
+    Quad2FluxParams newparams (p.params());
+    
+    fluxFunction_->fluxParams(newparams);
+    
+    
 }
 
-inline const FluxFunction & Quad2::fluxFunction(void) const {
+
+inline const FluxParams & Quad2::params(void) const {
+    return  fluxFunction_->fluxParams();//*params_;
+}
+
+inline  const FluxFunction & Quad2::fluxFunction(void) const {
     return *fluxFunction_;
 }
 
