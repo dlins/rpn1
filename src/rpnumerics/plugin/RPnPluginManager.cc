@@ -29,9 +29,12 @@ void RPnPluginManager::unload(RpnPlugin * plugin, const string pluginType) {
         map <string, map<string, string> * >::iterator pluginMapIterator = pluginTypeMap.begin();
 
         string dirPath(*pluginDir_);
-
+        
         dirPath += pluginMapIterator->first;
         PluginService service(dirPath);
+        
+//        cout << "Unload Lib: " << dirPath << "\n";
+
         service.unload(plugin);
     }
 }
@@ -41,6 +44,9 @@ RpnPlugin * RPnPluginManager::getPluginInstance(const string pluginType) {
     map<string, map <string, map <string, string> *> >::iterator it;
 
     it = configMap_->find(pluginType);
+    
+
+    
 
     if (it == configMap_->end()) {
 
@@ -60,6 +66,9 @@ RpnPlugin * RPnPluginManager::getPluginInstance(const string pluginType) {
         string dirPath(*pluginDir_);
 
         dirPath += pluginMapIterator->first;
+
+//        cout << "Load Lib: " << dirPath << "\n";
+//        cout << "Load Method: " << classIterator->second<<"\n";
 
         PluginService service(dirPath);
 
