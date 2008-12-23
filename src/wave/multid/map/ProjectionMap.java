@@ -32,6 +32,7 @@ public class ProjectionMap extends HomogeneousMap {
     //
     // Accessors/Mutators
     //
+    @Override
     public RealMatrix2 getInvTransfMatrix() {
         //TODO we will use several matrix transforms
         return null;
@@ -39,6 +40,7 @@ public class ProjectionMap extends HomogeneousMap {
 
     public int[] getCompIndexes() { return compIndexes_; }
 
+    @Override
     public boolean hasInverse() { return false; }
     //
     // Methods

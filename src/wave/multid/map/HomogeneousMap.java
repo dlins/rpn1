@@ -10,7 +10,6 @@ import wave.multid.CoordsArray;
 import wave.multid.HomogeneousCoords;
 import wave.multid.DimMismatchEx;
 import wave.multid.Space;
-import wave.multid.model.AbstractGeomObj;
 import wave.util.RealMatrix2;
 
 public class HomogeneousMap implements Map {
