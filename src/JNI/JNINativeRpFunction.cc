@@ -22,15 +22,15 @@
 #include "Quad2FluxParams.h"
 #include "JNIDefs.h"
 #include "PluginService.h"
-#include "ShockFlow.h"
 #include "RPnPluginManager.h"
+#include "ConservationShockFlow.h"
 #include <iostream>
 
 JNIEXPORT jint JNICALL Java_rpnumerics_NativeRpFunction_nativeJet(JNIEnv * env, jobject obj, jobject waveState, jobject jetMatrix, jint degree) {
 
     //Classes references
 
-//    jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
+    //    jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
     jclass phasePointClass = env->FindClass(PHASEPOINT_LOCATION);
 
     jclass waveStateClass = env->FindClass(WAVESTATE_LOCATION);
@@ -112,7 +112,7 @@ JNIEXPORT jint JNICALL Java_rpnumerics_NativeRpFunction_nativeJet(JNIEnv * env, 
 
     const FluxFunction & fluxFunction = RpNumerics::getFlux();
 
-    //        cout << objectClassName << "\n";
+    //    cout << objectClassName << "\n";
 
 
     if (!strcmp(objectClassName, "FluxFunction")) {
@@ -142,7 +142,6 @@ JNIEXPORT jint JNICALL Java_rpnumerics_NativeRpFunction_nativeJet(JNIEnv * env, 
 
     if (!strcmp(objectClassName, "ShockFlow")) {
 
-
         jdouble sigma = (env)->CallDoubleMethod(obj, getSigmaMethodID); // <--- sigma
 
         jobject xzero = (env)->CallObjectMethod(obj, getXZeroMethodID);
@@ -155,20 +154,36 @@ JNIEXPORT jint JNICALL Java_rpnumerics_NativeRpFunction_nativeJet(JNIEnv * env, 
 
         env->GetDoubleArrayRegion(xzeroArray, 0, xzeroLength, nativeXZeroArray);
 
-        for (int i = 0; i < xzeroLength; i++) {
-            cout << "XZero: " << nativeXZeroArray [i] << "\n";
-        }
-        
-        
+//        for (int i = 0; i < xzeroLength; i++) {
+//            cout << "XZero: " << nativeXZeroArray [i] << "\n";
+//        }
+
         RpnPlugin * plug = RPnPluginManager::getPluginInstance("ShockFlow");
 
-        ShockFlow* flow = (ShockFlow*) plug;
+        ShockFlowPlugin* flow = (ShockFlowPlugin *) plug;
 
         PhasePoint phasePoint(RealVector(xzeroLength, nativeXZeroArray));
-        
-        ShockFlowParams newParams (phasePoint,sigma);
+
+        ShockFlowParams newParams(phasePoint, sigma);
 
         flow->setParams(newParams);
+
+        //-------------------------------Stub------------------------------
+//                RealVector F(dimension);
+//        
+//                JacobianMatrix jacobian(dimension);
+//        
+//                jacobian.operator ()(0, 0, 0.1);
+//                jacobian.operator ()(0, 1, 0.2);
+//                jacobian.operator ()(1, 0, 0.3);
+//                jacobian.operator ()(1, 1, 0.4);
+//        
+//                F.component(0) = 0.1;
+//                F.component(1) = 0.2;
+//        
+//                nativeJetMatrix.setF(F);
+//                nativeJetMatrix.setJacobian(jacobian);
+        //---------------------------------------------------------------
 
         flow->jet(nativeWaveState, nativeJetMatrix, degree);
 
@@ -196,11 +211,7 @@ JNIEXPORT jint JNICALL Java_rpnumerics_NativeRpFunction_nativeJet(JNIEnv * env, 
         for (int i = 0; i < referenceLength; i++) {
             cout << "Reference Vector: " << nativeReferenceArray [i] << "\n";
         }
-
-
     }
-
-
 
     env->ReleaseStringUTFChars(className, objectClassName);
 
@@ -261,6 +272,7 @@ JNIEXPORT jint JNICALL Java_rpnumerics_NativeRpFunction_nativeJet(JNIEnv * env, 
  */
 JNIEXPORT jint JNICALL Java_rpnumerics_NativeRpFunction_nativeVectorJet(JNIEnv * env, jobject obj, jobject realVector, jobject jetMatrix, jint degree) {
 
+    cout << "Native RpFunction RealVector" << "\n";
 
     jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
     jclass jetMatrixClass = env->FindClass(JETMATRIX_LOCATION);
@@ -316,6 +328,8 @@ JNIEXPORT jint JNICALL Java_rpnumerics_NativeRpFunction_nativeVectorJet(JNIEnv *
         fluxFunction.jet(nativeWaveState, nativeJetMatrix, degree);
 
     } else {
+
+
 
         RpnPlugin * plug = RPnPluginManager::getPluginInstance("WaveFlow");
 
