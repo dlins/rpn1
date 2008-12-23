@@ -1,73 +1,38 @@
-/*
- * IMPA - Fluid Dynamics Laboratory
+/* 
+ * File:   FlowPlugin.h
+ * Author: edsonlan
  *
- * RPn Project
- *
- * @(#) ConservationShockFlow.h
- */
-
-#ifndef _ConservationShockFlow_H
-#define _ConservationShockFlow_H
-
-/*
- * ---------------------------------------------------------------
- * Includes:
- */
-#include "RpFunction.h"
-#include "FluxFunction.h"
-
-/*
- * ---------------------------------------------------------------
- * Definitions:
+ * Created on September 22, 2008, 6:23 PM
  */
 
 
+#ifndef _CONSERVATIONSHOCKFLOW_H
+#define	_CONSERVATIONSHOCKFLOW_H
 
-/*! Definition of class ConservationShockFlow.
- * TODO:
- * NOTE :
- *
- * @ingroup rpnumerics
- */
 
-//#include "ShockFlowParams.h"
-//#include "WaveFlow.h"
+#include "RpnPlugin.h"
 #include "ShockFlow.h"
-
-class ConservationShockFlow : public ShockFlow {
-private:
+#include "Quad2FluxFunction.h"
 
 
-//    ShockFlowParams * flowParams_;
-    int flux(const WaveState &, JetMatrix &) const;
-    int fluxDeriv(const WaveState &, JetMatrix &)const;
-    int fluxDeriv2(const WaveState &, JetMatrix &)const;
-    RealVector * fx0_;
 
-    //    void updateXZeroTerms(); TODO Translate from Java
+class ShockFlowPlugin : public RpnPlugin,public ShockFlow{
 
 public:
+    
+    ShockFlowPlugin(const ShockFlowParams &,const FluxFunction &);
+    
+    int jet (const WaveState &,JetMatrix & ,int) const;
 
-    ConservationShockFlow(const ShockFlowParams &, const FluxFunction &);
+    const ShockFlowParams & getParams()const;
+    void setParams(const ShockFlowParams & params);
 
-    ConservationShockFlow(const ConservationShockFlow&);
-
-    int jet(const WaveState &u, JetMatrix &m, int degree) const;
-
-//    const ShockFlowParams & getParams()const;
-
-    virtual ~ConservationShockFlow();
-
-    ConservationShockFlow * clone() const;
-
+    virtual~ShockFlowPlugin();
+    RpFunction * clone() const;
+    
 };
 
-inline ConservationShockFlow * ConservationShockFlow::clone()const {
-    return new ConservationShockFlow(*this);
-}
 
-//inline const ShockFlowParams & ConservationShockFlow::getParams()const {
-//    return *flowParams_;
-//}
 
-#endif //! _ConservationShockFlow_H
+#endif	/* _FLOWPLUGIN_H */
+
