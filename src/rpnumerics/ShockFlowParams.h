@@ -36,7 +36,7 @@ public:
 
     ShockFlowParams(const ShockFlowParams &);
 
-    ~ShockFlowParams();
+    virtual ~ShockFlowParams();
 
     const PhasePoint & getPhasePoint() const;
 
