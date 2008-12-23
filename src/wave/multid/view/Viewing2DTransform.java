@@ -6,11 +6,15 @@
 
 package wave.multid.view;
 
-import wave.multid.map.*;
+
+import wave.multid.map.Map;
 import wave.multid.CoordsArray;
 import wave.multid.Coords2D;
 import wave.multid.Multid;
 import wave.multid.graphs.ViewPlane;
+import wave.multid.map.IdentityMap;
+import wave.multid.map.NoInverseMapEx;
+import wave.multid.map.ProjectionMap;
 
        
 
