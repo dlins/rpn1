@@ -78,7 +78,12 @@
     <target name="compile-plugins" depends="compile-c++" description="compile C++ plugins" >
 	<exec executable="make" dir="${srcdir}">
 	    <arg line ="-f  plugins/makefile"/>
-    	</exec> 
+    	</exec>
+        <copy  todir="${plugindir}">
+         <fileset dir="${basedir}/share/plugins/">
+            <filename name="**/*.xml"/>	
+          </fileset> 		
+        </copy>
     </target>
 
     <!-- clean up java classes, jar, C++ objects and libraries -->
