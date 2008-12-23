@@ -17,7 +17,7 @@ import rpnumerics.plugin.RPnPluginManager;
 public class PluginTableModel extends DefaultTableModel {
 
     private static PluginTableModel instance_;
-    private static String pluginDir_ = System.getProperty("rpnhome") + System.getProperty("file.separator") + "lib" + System.getProperty("file.separator") + "plugins" +System.getProperty("file.separator");
+    private static String pluginDir_ = System.getProperty("rpnhome") + System.getProperty("file.separator") + "lib" + System.getProperty("file.separator")+  "linux_i686"+System.getProperty("file.separator")+ "plugins" +System.getProperty("file.separator");
     private static HashMap<String, PluginProfile> pluginConfigMap_;
 
     private PluginTableModel(Vector<Vector<String>> pluginNames, Vector<String> columnNames) {
@@ -57,26 +57,24 @@ public class PluginTableModel extends DefaultTableModel {
 
         type1.add(ShockProfile.SHOCKFLOW_NAME);
 
-        type1.add("libRpnPluginLib.so");
+        type1.add("RPnDefaultPlugins.so");
         type1.add("ShockFlowPlugin");
         type1.add("create");
         
         
-        RPnPluginManager.configPlugin(ShockProfile.SHOCKFLOW_NAME, "libRpnPluginLib.so", "WaveFlowPlugin", "create");
-        
-        
+        RPnPluginManager.configPlugin(ShockProfile.SHOCKFLOW_NAME, "RPnDefaultPlugins.so", "ShockFlowPlugin", "create");
         
 
         Vector<String> type2 = new Vector<String>();
         
         type2.add(RarefactionProfile.RAREFACTIONFLOW_NAME);
 
-        type2.add("libRpnPluginLib.so");
+        type2.add("RPnDefaultPlugins.so");
         type2.add("RarefactionFlowPlugin");
         type2.add("create");
 
         
-        RPnPluginManager.configPlugin(RarefactionProfile.RAREFACTIONFLOW_NAME, "libRpnPluginLib.so", "ShockFlowPlugin", "create");
+        RPnPluginManager.configPlugin(RarefactionProfile.RAREFACTIONFLOW_NAME, "libRpnPluginLib.so", "RarefactionFlowPlugin", "create");
         
         
         data_.add(type1);
