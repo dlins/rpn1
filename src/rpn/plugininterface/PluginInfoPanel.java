@@ -8,8 +8,6 @@ package rpn.plugininterface;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Rectangle;
-import java.awt.Window;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -22,6 +20,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JTree;
 import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -32,7 +31,7 @@ import javax.swing.tree.TreePath;
 public class PluginInfoPanel extends JPanel {
 
     private JTree pluginTree_;
-    private static JTable configPluginTable_;
+    private static JTable configPluginTable_,  tempConfigPluginTable_;
     private DefaultMutableTreeNode rootNode_;
     private BorderLayout layout = new BorderLayout();
     private JSplitPane splitPane;
@@ -55,10 +54,19 @@ public class PluginInfoPanel extends JPanel {
         configPluginTable_.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         configPluginTable_.getTableHeader().setReorderingAllowed(false);
 
+        tempConfigPluginTable_ = new JTable(PluginTableModel.instance().getRowCount(), PluginTableModel.instance().getColumnCount());
+
+        for (int i = 0; i < configPluginTable_.getRowCount(); i++) {
+            for (int j = 0; j < configPluginTable_.getColumnCount(); j++) {
+                Object data = configPluginTable_.getModel().getValueAt(i, j);
+                tempConfigPluginTable_.setValueAt(data, i, j);
+            }
+        }
+
         tableConfigPanel = new JScrollPane(configPluginTable_);
         pluginTreePanel = new JScrollPane(pluginTree_);
         
-        Dimension minimumSize = new Dimension(150, 150);
+        Dimension minimumSize = new Dimension(200, 200);
 
         pluginTreePanel.setPreferredSize(minimumSize);
 
@@ -78,6 +86,8 @@ public class PluginInfoPanel extends JPanel {
         configPluginTable_.setTransferHandler(new TableTransferHandler());
         configPluginTable_.setDropMode(DropMode.ON);
         splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, tableConfigPanel, pluginTreePanel);
+        splitPane.setDividerLocation(800);
+
         this.add(splitPane, BorderLayout.CENTER);
 
     }
@@ -161,6 +171,7 @@ public class PluginInfoPanel extends JPanel {
     }
 
     public static void transferTreeToTable(JTree tree) {
+        
         TreePath path = tree.getSelectionPath();
 
         String className;
@@ -187,14 +198,14 @@ public class PluginInfoPanel extends JPanel {
 
             String[] infos = className.split(" ");
 
-
             for (int i = 0; i < configPluginTable_.getRowCount(); i++) {
 
                 if (configModel.getValueAt(i, 0).equals(infos[1])) {
 
                     configModel.setValueAt(infos[0], i, 1);
                     configModel.setValueAt(infos[2], i, 2);
-                    configModel.setValueAt(infos[3], i, 3);
+                    configModel.setValueAt(getMethodName(infos[3]), i, 3);
+                    configModel.setValueAt(getMethodName(infos[4]), i, 4);
 
                 }
 
@@ -203,8 +214,26 @@ public class PluginInfoPanel extends JPanel {
         }
 
     }
+    
+    
+    public static void unDoUpdateTable() {
+
+        for (int i = 0; i < configPluginTable_.getRowCount(); i++) {
+            for (int j = 0; j < configPluginTable_.getColumnCount(); j++) {
+                Object data = tempConfigPluginTable_.getModel().getValueAt(i, j);
+                configPluginTable_.setValueAt(data, i, j);
+            }
+        }
+
+    }
 
     public JTable getConfigTable() {
+        
         return configPluginTable_;
+    }
+    
+    private static String getMethodName(String inputString) {
+        String[] data = inputString.split("\"");
+        return data[1];
     }
 }

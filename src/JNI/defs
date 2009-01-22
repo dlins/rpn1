@@ -7,8 +7,9 @@ RPNUMSRC += JNIConnectionOrbitCalc.cc\
 	JNIManifoldOrbitCalc.cc \
 	JNIStationaryPointCalc.cc \
         JNIRPnDesktopPlotter.cc   \
-        JNINativeRpFunction.cc   \
+        JNINativeFluxFunction.cc   \
         JNIRPnPluginManager.cc  \
+        JNIWaveFlow.cc \
 	RpNumerics.cc		\
 
 

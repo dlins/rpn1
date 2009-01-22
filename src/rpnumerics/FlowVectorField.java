@@ -5,7 +5,6 @@
 
 package rpnumerics;
 
-import wave.util.JetMatrix;
 import wave.util.VectorField;
 import wave.util.RealVector;
 
@@ -32,12 +31,8 @@ public class FlowVectorField implements VectorField {
     //
     public WavePoint f(RealVector y) {
 
-        WaveState input = new WaveState(new PhasePoint(y));
-        JetMatrix output = new JetMatrix(y.getSize());
-        wave_.jet(input, output,0);
-        WavePoint point = new WavePoint(output.f(), 0);
-        
+        WavePoint point = new WavePoint( wave_.flux(y), 0);
         return point;
-//        return wave_.flux(y);
+
     }
 }

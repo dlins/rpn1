@@ -42,8 +42,6 @@ public:
     
     ShockFlow(const ShockFlowParams &, const FluxFunction &);
 
-//    int jet(const WaveState &u, JetMatrix &m, int degree) const;
-
     virtual const ShockFlowParams & getParams()const;
 
     virtual void setParams(const ShockFlowParams &);

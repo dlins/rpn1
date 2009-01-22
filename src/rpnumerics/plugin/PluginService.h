@@ -25,7 +25,7 @@ private:
 public:
 
     RpnPlugin * load(const string );
-    void unload(RpnPlugin *);
+    void unload(RpnPlugin *,const string);
     PluginService(const string );
     virtual ~PluginService();
 

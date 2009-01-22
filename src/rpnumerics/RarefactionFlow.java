@@ -80,11 +80,12 @@ public class RarefactionFlow extends WaveFlow {
 //        return rarefactionVector;
     }
 
-    public RealMatrix2 fluxDeriv(RealVector u) {
+    @Override
+    public JacobianMatrix fluxDeriv(RealVector u) {
 
         /** @todo  not implemented yet...*/
         int stateSpaceDim = u.getSize();
-        return new RealMatrix2(stateSpaceDim, stateSpaceDim);
+        return new JacobianMatrix(stateSpaceDim);
     }
 
     public HessianMatrix fluxDeriv2(RealVector u) {

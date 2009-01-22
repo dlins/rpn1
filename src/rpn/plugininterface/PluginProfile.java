@@ -72,10 +72,7 @@ public class PluginProfile {
             paramsNames[i] = data.getValue();
 
         }
-
-
         return paramsNames;
-
 
     }
 

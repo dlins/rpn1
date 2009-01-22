@@ -12,7 +12,6 @@
  */
 #include "CapilParams.h"
 #include  <iostream>
-#include  <iostream.h>
 /*
  * ---------------------------------------------------------------
  * Definitions:

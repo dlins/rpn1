@@ -11,7 +11,9 @@ WAVEDIR       = $(SRCDIR)/wave
 include $(RPNUMERICSDIR)/defs
 include $(WAVEDIR)/defs
 
-PLUG_SRC = ConservationShockFlow.cc
+PLUG_SRC = ConservationShockFlow.cc RarefactionFlowPlugin.cc
+
+
 
 PLUG_LIBNAME = RPnDefaultPlugins.so
 PLUG_LIBARC = $(LIBDIR)/plugins/$(PLUG_LIBNAME)
@@ -19,7 +21,7 @@ PLUG_LIBOBJ = $(PLUG_SRC:%.cc=$(OBJDIR)/%.o)
 PLUG_DEPENDOBJ = $(PLUG_SRC:%.cc=$(OBJDIR)/%.d)
 
 SHARELIBFLAG += -fPIC
-CPPFLAGS += $(SHARELIBFLAG) -I $(RPNUMERICSDIR)/plugin -I $(RPNUMERICSDIR)/physics/quad
+CPPFLAGS += $(SHARELIBFLAG) -I $(RPNUMERICSDIR) -I $(RPNUMERICSDIR)/plugin -I $(RPNUMERICSDIR)/physics/quad
 LIBRPN = -L $(LIBDIR) -lwave -lrpnumerics
 
 all: $(PLUG_LIBARC)

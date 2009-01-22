@@ -38,10 +38,7 @@ public class ChangeXZeroAgent extends RpModelConfigChangeAgent {
 
       PhasePoint oldXZero =null;
 
-      System.out.println("New XZero " + newXZero.getCoords());
-
         RPNUMERICS.getCurrentProfile().setXZero(newXZero);
-
 
       applyChange(new PropertyChangeEvent(this, DESC_TEXT, oldXZero, newXZero));
     }

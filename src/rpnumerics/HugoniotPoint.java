@@ -42,10 +42,34 @@ public class HugoniotPoint extends RealVector {
     
     
     protected void initType() {
-        RealMatrix2 dfLeft = myFlow_.fluxDeriv(myFlow_.getXZero().getCoords());
+//        RealMatrix2 dfLeft = myFlow_.fluxDeriv(myFlow_.getXZero().getCoords());
+//        JetMatrix output = new JetMatrix(myFlow_.getXZero().getSize());
+        RealMatrix2 dfLeft = new RealMatrix2(myFlow_.getXZero().getSize(), myFlow_.getXZero().getSize());
+
+//        myFlow_.jet(myFlow_.getXZero().getCoords(), output, 1);
         
         
-        RealMatrix2 dfRight = myFlow_.fluxDeriv(this);
+        JacobianMatrix jMatrix = myFlow_.fluxDeriv(myFlow_.getXZero().getCoords());
+        
+        for (int i = 0; i < dfLeft.getNumRow(); i++) {
+            for (int j = 0; j < dfLeft.getNumCol(); j++) {
+                dfLeft.setElement(i, j, jMatrix.getElement(i, j));
+            }
+        }
+        
+//        RealMatrix2 dfRight = myFlow_.fluxDeriv(this);
+        
+//        JetMatrix output = new JetMatrix(flow.getXZero().getSize());
+        RealMatrix2 dfRight = new  RealMatrix2(myFlow_.getXZero().getSize(), myFlow_.getXZero().getSize());
+
+//        myFlow_.jet(this, output, 1);
+        jMatrix = myFlow_.fluxDeriv(this);
+
+        for (int i = 0; i < dfRight.getNumRow(); i++) {
+            for (int j = 0; j < dfRight.getNumCol(); j++) {
+                dfRight.setElement(i, j, jMatrix.getElement(i, j));
+            }
+        }
         
         
         int stateSpaceDim = dfLeft.getNumRow();

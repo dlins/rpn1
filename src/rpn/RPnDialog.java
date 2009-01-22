@@ -12,10 +12,13 @@ import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.WindowConstants;
 import rpn.controller.ui.UIController;
+import rpn.usecase.ClearPhaseSpaceAgent;
+import rpnumerics.RPNUMERICS;
 
 public abstract class RPnDialog extends JDialog {
 
@@ -38,10 +41,10 @@ public abstract class RPnDialog extends JDialog {
         buttonsPanel.getActionMap().put("Apply", new ActionApply());
         buttonsPanel.getActionMap().put("Cancel", new ActionCancel());
 
-        
+
         buttonsPanel.add(applyButton);
         buttonsPanel.add(cancelButton);
-        
+
 
         cancelButton.addActionListener(
                 new java.awt.event.ActionListener() {
@@ -61,7 +64,7 @@ public abstract class RPnDialog extends JDialog {
                 });
         addBackButton();
         cancelButton.setEnabled(false);
-       
+
 
         this.getContentPane().add(buttonsPanel, BorderLayout.SOUTH);
 
@@ -73,18 +76,20 @@ public abstract class RPnDialog extends JDialog {
 
     }
 
-    public RPnDialog(boolean enableResetButton) {
+    public RPnDialog(boolean enableCancelButton) {
         this();
-        if (!enableResetButton) {
-            buttonsPanel.remove(beginButton);
+        if (!enableCancelButton) {
+
+            buttonsPanel.remove(cancelButton);
         }
-        cancelButton.setEnabled(true);
-
-
+        else{
+            buttonsPanel.remove(beginButton);
+            cancelButton.setEnabled(true);
+        }
 
     }
 
-    protected abstract void apply();
+
 
     private void addBackButton() {
 
@@ -102,30 +107,36 @@ public abstract class RPnDialog extends JDialog {
         buttonsPanel.add(beginButton);
     }
 
+    
+    protected abstract void apply();
+    
     protected void begin() {
-        dispose();
 
-        UIController.instance().resetApplication();
+        int option = JOptionPane.showConfirmDialog(this, "Change curve type", "Restart Application", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+        if (option == JOptionPane.YES_OPTION) {
+            UIController.instance().resetApplication();
+            ClearPhaseSpaceAgent.instance().clearAll();
+            dispose();
+        }
 
     }
 
     protected void cancel() {
         dispose();
     }
-    
-    
-      private class ActionApply extends AbstractAction {
+
+    private class ActionApply extends AbstractAction {
 
         public void actionPerformed(ActionEvent e) {
             apply();
         }
     }
-      
-       private class ActionCancel extends AbstractAction {
+
+    private class ActionCancel extends AbstractAction {
 
         public void actionPerformed(ActionEvent e) {
             cancel();
         }
     }
-   
 }

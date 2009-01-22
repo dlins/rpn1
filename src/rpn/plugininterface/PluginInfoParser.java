@@ -146,7 +146,7 @@ public class PluginInfoParser {
             if (localName.equals("CLASS")) {
 
                 HashMap<String, String> newClass = new HashMap<String, String>(1);
-                newClass.put(attributes.getValue(0), attributes.getValue(2));
+                newClass.put(attributes.getValue(0),"constructor=\""+ attributes.getValue(2)+"\""+" "+"destructor=\""+attributes.getValue(3)+"\"");
                 HashMap<String, Vector<HashMap<String, String>>> actualLibraryContent = library_.get(pluginLibName_);
 
                 if (actualLibraryContent.containsKey((String) attributes.getValue(1))) {// This plugin type exists 

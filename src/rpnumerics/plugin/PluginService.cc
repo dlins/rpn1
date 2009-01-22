@@ -24,9 +24,9 @@ RpnPlugin * PluginService::load(const string createMethod) {
     return create_plugin();
 }
 
-void PluginService::unload(RpnPlugin * plugin) {
+void PluginService::unload(RpnPlugin * plugin,const string destroyMethod) {
 
-    destroy_t* destroy_plugin = (destroy_t*) dlsym(pluginlib_, "destroy");
+    destroy_t* destroy_plugin = (destroy_t*) dlsym(pluginlib_, destroyMethod.c_str());
     destroy_plugin(plugin);
     dlclose(pluginlib_);
 

@@ -48,20 +48,22 @@ JNIEXPORT void JNICALL Java_rpnumerics_plugin_RPnPluginManager_setPluginDir
  * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_rpnumerics_plugin_RPnPluginManager_configPlugin
-(JNIEnv *env , jclass cls, jstring pluginType, jstring libName, jstring className, jstring constructorMethod){
+(JNIEnv *env , jclass cls, jstring pluginType, jstring libName, jstring className, jstring constructorMethod, jstring destructorMethod){
 
     const char *libNameNative;
     const char *classNameNative;
     const char *constructorMethodNative;
     const char *pluginTypeNative;
+    const char *destructorMethodNative;
 
     libNameNative = env->GetStringUTFChars(libName, NULL);
     classNameNative = env->GetStringUTFChars(className, NULL);
     constructorMethodNative = env->GetStringUTFChars(constructorMethod, NULL);
+    destructorMethodNative = env->GetStringUTFChars(destructorMethod, NULL);
 
     pluginTypeNative = env->GetStringUTFChars(pluginType, NULL);
     
-    RPnPluginManager::configPlugin(string (pluginTypeNative),string(libNameNative), string(classNameNative), string(constructorMethodNative));
+    RPnPluginManager::configPlugin(string (pluginTypeNative),string(libNameNative), string(classNameNative), string(constructorMethodNative), string(destructorMethodNative));
     
     
     

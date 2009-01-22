@@ -6,10 +6,9 @@
 package rpnumerics;
 
 import wave.util.JetMatrix;
-import wave.util.RealMatrix2;
 import wave.util.RealVector;
 
-public  class ShockFlow extends  WaveFlow {
+public class ShockFlow extends WaveFlow {
 
     public static FluxFunction getFlux() {
         return flux_;
@@ -23,49 +22,67 @@ public  class ShockFlow extends  WaveFlow {
         flux_ = flux;
 
     }
-       /**
-     * @deprecated To be implemented in native layer (plugin)
-     * @param x Input
-     * @return
-     */
-    
-     public RealVector fluxDerivSigma(RealVector x) {
-        RealVector result = new RealVector(x.getSize());
-        result.sub(new RealVector(flowParams_.getPhasePoint().getCoords()), x);
-        return result;
-    }
-
 
     /**
      * @deprecated To be implemented in native layer (plugin)
      * @param x Input
      * @return
      */
-      public RealMatrix2 fluxDeriv(RealVector x) {
-
-
-        WaveState input = new WaveState(new PhasePoint(x));
-        JetMatrix output = new JetMatrix(x.getSize());
-        getFlux().jet(input, output, 1);
-
-        RealMatrix2 fluxDF_x = new RealMatrix2(output.n_comps(), output.n_comps()); //TODO Replace for JacobianMatrix
-
-        for (int i = 0; i < output.n_comps(); i++) {
-            for (int j = 0; j < output.n_comps(); j++) {
-                fluxDF_x.setElement(i, j, output.getElement(i, j));
-            }
-        }
-
-
-//        RealMatrix2 fluxDF_x = getFlux().DF(x);//RPNUMERICS.fluxFunction().DF(x);
-        // flux.DFX(x) - sigma scaled matrix
-        RealMatrix2 identity = new RealMatrix2(fluxDF_x.getNumRow(),
-                fluxDF_x.getNumCol());
-        identity.scale(getSigma());
-        fluxDF_x.sub(identity);
-        return fluxDF_x;
+    public RealVector fluxDerivSigma(RealVector x) {
+        RealVector result = new RealVector(x.getSize());
+        result.sub(new RealVector(flowParams_.getPhasePoint().getCoords()), x);
+        return result;
     }
-    
+
+//    /**
+//     * @deprecated To be implemented in native layer (plugin)
+//     * @param x Input
+//     * @return
+//     */
+//    public RealMatrix2 fluxDeriv(RealVector x) {
+//
+//        
+//        
+//        WaveState input = new WaveState(new PhasePoint(x));
+//        JetMatrix output = new JetMatrix(x.getSize());
+//        getFlux().jet(input, output, 1);
+//        
+//
+////        for (int i = 0; i < output.n_comps();i++){
+////            for (int j=0; j< output.n_comps();j++){
+////                 System.out.println(output.getElement(i, j));
+////            }
+////        }
+//        
+//
+//
+//        RealMatrix2 fluxDF_x = new RealMatrix2(output.n_comps(), output.n_comps()); //TODO Replace for JacobianMatrix
+//
+//        for (int i = 0; i < output.n_comps(); i++) {
+//            for (int j = 0; j < output.n_comps(); j++) {
+//                fluxDF_x.setElement(i, j, output.getElement(i, j));
+//            }
+//        }
+//
+//
+////        RealMatrix2 fluxDF_x = getFlux().DF(x);//RPNUMERICS.fluxFunction().DF(x);
+//        // flux.DFX(x) - sigma scaled matrix
+//        RealMatrix2 identity = new RealMatrix2(fluxDF_x.getNumRow(),
+//                fluxDF_x.getNumCol());
+//        identity.scale(getSigma());
+//        fluxDF_x.sub(identity);
+//        
+////        System.out.println("Saida");
+////        System.out.println(fluxDF_x);
+////        System.out.println("-------------Saida--------------------");
+//        
+//        return fluxDF_x;
+//        
+//        
+//        
+//        
+//    }
+
     static public double sigmaCalc(RealVector coords1, RealVector coords2) {
 
 
@@ -121,6 +138,4 @@ public  class ShockFlow extends  WaveFlow {
     public void setSigma(RealVector refPoint) {
         setSigma(ShockFlow.sigmaCalc(new RealVector(flowParams_.getPhasePoint().getCoords()), refPoint));
     }
-
-   
 }

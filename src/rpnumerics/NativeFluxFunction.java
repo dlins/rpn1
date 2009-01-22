@@ -9,7 +9,7 @@ package rpnumerics;
 import wave.util.JetMatrix;
 import wave.util.RealVector;
 
-public class NativeRpFunction implements RpFunction {
+public class NativeFluxFunction implements RpFunction {
 
     public int jet(WaveState input, JetMatrix output, int degree) {
         return nativeJet(input, output, degree);

@@ -6,7 +6,6 @@
  */
 package rpnumerics;
 
-import wave.multid.*;
 import wave.util.*;
 import wave.ode.ODESolution;
 import org.netlib.lapack.DGEES;
@@ -195,13 +194,13 @@ public class ManifoldOrbitCalc implements RpCalculation {
         RealMatrix2 ddf = new RealMatrix2(m, m * m);
         RealVector ddf_v_w = new RealVector(m);
         
-        WaveState input = new WaveState (new PhasePoint(point0));
+//        WaveState input = new WaveState (new PhasePoint(point0));
 
-        JetMatrix output = new JetMatrix(m);
+//        JetMatrix output = new JetMatrix(m);
         
-        getFlow().jet(input, output, 2);
+//        getFlow().jet(input, output, 2);
         
-        HessianMatrix D2X =  output.hessian();
+        HessianMatrix D2X =  getFlow().fluxDeriv2(point0);
         
         
 //        HessianMatrix D2X = getFlow().fluxDeriv2(point0);

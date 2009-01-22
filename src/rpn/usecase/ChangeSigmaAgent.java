@@ -35,7 +35,9 @@ public class ChangeSigmaAgent extends RpModelConfigChangeAgent {
 
 //        Double oldValue = new Double(((ShockFlow) RPNUMERICS.flow()).getSigma());
 
-        Double oldValue = new Double(RPNUMERICS.getShockProfile().getSigma());
+//        Double oldValue = new Double(RPNUMERICS.getShockProfile().getSigma());
+        Double oldValue = new Double(0);
+        
 
         RealVector[] userInputList = UIController.instance().userInputList();
         RealVector lastPointAdded = userInputList[userInputList.length - 1];
@@ -55,10 +57,14 @@ public class ChangeSigmaAgent extends RpModelConfigChangeAgent {
         }
         System.out.println("OLD SIGMA = " + oldValue);
 //        Double newValue = new Double(((ShockFlow) RPNUMERICS.flow()).getSigma());
-        Double newValue = new Double(RPNUMERICS.getShockProfile().getSigma());
+//        Double newValue = new Double(RPNUMERICS.getShockProfile().getSigma());
+        
+        Double newValue = new Double(newSigma);
+        
 
         System.out.println("NEW SIGMA = " + newValue);
-        applyChange(new PropertyChangeEvent(this, DESC_TEXT, oldValue, newValue));
+//        applyChange(new PropertyChangeEvent(this, DESC_TEXT, oldValue, newValue));
+        applyChange(new PropertyChangeEvent(this, DESC_TEXT, 0, newValue));
     }
 
     public void unexecute() {

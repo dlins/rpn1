@@ -16,6 +16,8 @@
 #define REALMATRIX2_LOCATION                  "wave/util/RealMatrix2"
 #define WAVESTATE_LOCATION                    "rpnumerics/WaveState"
 #define JETMATRIX_LOCATION                    "wave/util/JetMatrix"
+#define JACOBIANMATRIX_LOCATION               "wave/util/JacobianMatrix"
+#define HESSIANMATRIX_LOCATION                "wave/util/HessianMatrix"
 
 
 

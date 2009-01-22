@@ -118,7 +118,7 @@ public class RPNUMERICS {
 
     public static StationaryPointCalc createStationaryPointCalc(PhasePoint initial) {
 
-        ShockFlow shockFlow = (ShockFlow) createShockFlow();
+        ShockFlow shockFlow = createShockFlow();
         createODESolver((WaveFlow) shockFlow);
 
         return new StationaryPointCalc(initial, shockFlow);
@@ -162,14 +162,12 @@ public class RPNUMERICS {
         PluginProfile profile = PluginTableModel.getPluginConfig(ShockProfile.SHOCKFLOW_NAME);
         
         Double value = new Double(profile.getParamValue("sigma"));
+        
+//        System.out.println("Valor de sigma no profile:" + value );
 
         ShockFlowParams shockParams = new ShockFlowParams(shockProfile_.getXZero(), value.doubleValue());
 
         ShockFlow flow = new ShockFlow(shockParams, flux);
-        
-        System.out.println("Valor de sigma: "+value.doubleValue());
-
-
 //            ConservationShockFlow flow = new ConservationShocckFlow(shockParams, flux);
         return flow;
 //        }

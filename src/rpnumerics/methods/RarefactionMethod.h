@@ -30,7 +30,7 @@ private:
     
 public:
     
-    RarefactionMethod(const RarefactionFlow &);
+//    RarefactionMethod(const RarefactionFlow &);
     
     virtual struct RarefactionCurve curve(const RealVector &, const ODESolver &)=0;
     
@@ -50,9 +50,9 @@ inline  const RarefactionFlow & RarefactionMethod::getFlow() const  {return *rar
 
 inline void RarefactionMethod::setFlow(const RarefactionFlow & flow){
     
-    delete rarefactionFlow_;
-    
-    rarefactionFlow_= (RarefactionFlow *)flow.clone();
+//    delete rarefactionFlow_;
+//    
+//    rarefactionFlow_= (RarefactionFlow *)flow.clone();
 }
 
 

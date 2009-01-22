@@ -7,7 +7,7 @@ package rpnumerics;
 
 import wave.util.RealVector;
 
-public class FluxFunction extends NativeRpFunction {
+public class FluxFunction extends NativeFluxFunction {
 //	HessianMatrix D2F( RealVector U );
 //	
 //	RealMatrix2 DF( RealVector U );

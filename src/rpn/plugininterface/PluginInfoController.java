@@ -56,17 +56,11 @@ public class PluginInfoController implements ActionListener {
                 int j = 0;
 
                 while (j < configModel.getColumnCount()) {
-
-
                     data[j] = (String) configModel.getValueAt(i, j);
-
                     j++;
-
                 }
-
                 if (argsComplete(data)){
-
-                    RPnPluginManager.configPlugin(data[0], data[1], data[2], data[3]);
+                    RPnPluginManager.configPlugin(data[0], data[1], data[2], data[3],data[4]);
                 }
             }
     }

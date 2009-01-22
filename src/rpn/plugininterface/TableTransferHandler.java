@@ -17,7 +17,7 @@ import javax.swing.table.TableModel;
 public class TableTransferHandler extends TransferHandler {
 
     @Override
-    public boolean importData(TransferHandler.TransferSupport info) {
+    public boolean importData(TransferHandler.TransferSupport info) {//Put a plugin in use
         if (!info.isDrop()) {
             return false;
         }
@@ -37,7 +37,9 @@ public class TableTransferHandler extends TransferHandler {
 
             tModel.setValueAt(infos[0], dropLocation.getRow(), 1);
             tModel.setValueAt(infos[2], dropLocation.getRow(), 2);
-            tModel.setValueAt(infos[3], dropLocation.getRow(), 3);
+
+            tModel.setValueAt(getMethodName(infos[3]), dropLocation.getRow(), 3);
+            tModel.setValueAt(getMethodName(infos[4]), dropLocation.getRow(), 4);
 
 
         } catch (Exception e) {
@@ -48,6 +50,7 @@ public class TableTransferHandler extends TransferHandler {
         defaultModel.fireTableCellUpdated(dropLocation.getRow(), 1);
         defaultModel.fireTableCellUpdated(dropLocation.getRow(), 2);
         defaultModel.fireTableCellUpdated(dropLocation.getRow(), 3);
+        defaultModel.fireTableCellUpdated(dropLocation.getRow(), 4);
 
         return true;
 
@@ -55,7 +58,7 @@ public class TableTransferHandler extends TransferHandler {
     }
 
     @Override
-    public boolean canImport(TransferHandler.TransferSupport support) {
+    public boolean canImport(TransferHandler.TransferSupport support) {//Verifiy the plugin type
 
         JComponent targetComponent = (JComponent) support.getComponent();
 
@@ -88,5 +91,10 @@ public class TableTransferHandler extends TransferHandler {
 
             return false;
         }
+    }
+
+    private String getMethodName(String inputString) {
+        String[] data = inputString.split("\"");
+        return data[1];
     }
 }

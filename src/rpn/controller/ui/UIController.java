@@ -46,7 +46,7 @@ public class UIController extends ComponentUI {
     private RPnPhaseSpacePanel focusPanel_;
     private StateInputController stateController_;
     public static UI_ACTION_SELECTED INITSTATE = null;
-    private boolean showDialog_;
+//    private boolean showDialog_;
 
     //
     // Constructors
@@ -62,7 +62,7 @@ public class UIController extends ComponentUI {
         globalInputTable_ = new UserInputTable(rpnumerics.RPNUMERICS.domainDim());
 
         handler_ = new CURVES_CONFIG();
-        showDialog_ = true;
+
         initNetStatus();
 
     }
@@ -81,23 +81,15 @@ public class UIController extends ComponentUI {
     }
 
     public void resetApplication() {
+        UIController.instance().setState(new CURVES_CONFIG());
+        System.out.println("Resetando app");
 
 
-        if (INITSTATE == null) {
-//            handler_ = new CURVES_CONFIG();
-            UIController.instance().setState(new CURVES_CONFIG());
-
-        } else {
-            UIController.instance().setState(INITSTATE);
-        }
-
-        stateController_.propertyChange(new PropertyChangeEvent(this, "aplication state", 0,handler_));
+        stateController_.propertyChange(new PropertyChangeEvent(this, "reset application", 0, handler_));
     }
 
     public static UIController instance() {
         if (instance_ == null) {
-//            instance_ = new UIController(new CURVES_CONFIG());RPNumericsProfile.getInitialState());
-
             instance_ = new UIController();
             return instance_;
         }
@@ -105,19 +97,12 @@ public class UIController extends ComponentUI {
         return instance_;
     }
 
-    public boolean getUserDialogInput() {
-        return showDialog_;
-    }
-
-    public void setUserDialogInput(boolean showDialog_) {
-        this.showDialog_ = showDialog_;
-    }
-
     //
     // Inner Classes
     //
     class MouseMotionController extends MouseMotionAdapter {
 
+        @Override
         public void mouseDragged(MouseEvent event) {
 
             if (event.getComponent() instanceof RPnPhaseSpacePanel) {
@@ -144,6 +129,7 @@ public class UIController extends ComponentUI {
         public MouseController() {
         }
 
+        @Override
         public void mousePressed(MouseEvent event) {
 
             if (event.getComponent() instanceof RPnPhaseSpacePanel) {
@@ -261,8 +247,6 @@ public class UIController extends ComponentUI {
     /** Sets the state of the application. The application works as a state machine and this method changes the actual state.*/
     public void setState(rpn.controller.ui.UserInputHandler newAction) {
 
-//        System.out.println("Chamando set state(estado atual):" + handler_);
-//        System.out.println("Chamando set state(estado entrando):" + newAction);
         stateController_.propertyChange(new PropertyChangeEvent(this, "aplication state", handler_, newAction));
 
         if (handler_ instanceof UI_ACTION_SELECTED) {

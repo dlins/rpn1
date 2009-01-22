@@ -301,7 +301,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     // Methods
     //
     public void propertyChange(PropertyChangeEvent evt) {
-//        update();
+
         if (evt.getPropertyName().equals("aplication state")) {
 
             if (UIController.instance().getState() instanceof SHOCK_CONFIG || (evt.getNewValue() instanceof SIGMA_CONFIG)) {

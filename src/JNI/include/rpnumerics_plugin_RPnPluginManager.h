@@ -18,10 +18,10 @@ JNIEXPORT void JNICALL Java_rpnumerics_plugin_RPnPluginManager_setPluginDir
 /*
  * Class:     rpnumerics_plugin_RPnPluginManager
  * Method:    configPlugin
- * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+ * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_rpnumerics_plugin_RPnPluginManager_configPlugin
-  (JNIEnv *, jclass, jstring, jstring, jstring, jstring);
+  (JNIEnv *, jclass, jstring, jstring, jstring, jstring, jstring);
 
 #ifdef __cplusplus
 }

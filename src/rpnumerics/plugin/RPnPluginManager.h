@@ -20,13 +20,14 @@ using std::map;
 class RPnPluginManager {
 private:
     static map<string, map <string,map<string, string> * >  > *configMap_; // Representa a atual configuracao de plugins <pluginType,libname< <class,constructorMethod>>>
+    static map<string, map <string, map<string, string> * > > *destroyMap_; // Representa a atual configuracao de plugins <pluginType,libname< <class,destroyrMethod>>>
     static string * pluginDir_;
-//    static void  search();
+
     
 public:
 
     static void setPluginDir(const string);
-    static void configPlugin(const string,const string,const string, const string);
+    static void configPlugin(const string,const string,const string, const string,const string);
     static RpnPlugin * getPluginInstance(const string);
     static void unload(RpnPlugin *, const string);
     virtual ~RPnPluginManager();

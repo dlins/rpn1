@@ -14,11 +14,8 @@ import rpnumerics.ConnectionOrbit;
 import wave.util.SimplexPoincareSection;
 import wave.util.RealVector;
 import java.beans.PropertyChangeEvent;
-import rpnumerics.PhasePoint;
 import rpnumerics.RPNUMERICS;
 import rpnumerics.ShockFlow;
-import rpnumerics.WaveState;
-import wave.util.JetMatrix;
 
 public class PoincareController implements RpController {
 
@@ -36,11 +33,7 @@ public class PoincareController implements RpController {
 //            RealVector normal = rpnumerics.RPNUMERICS.flow().flux(center);
             ShockFlow flow = (ShockFlow) RPNUMERICS.createShockFlow();
             
-            WaveState input = new WaveState (new PhasePoint(center));
-            JetMatrix output = new JetMatrix(center.getSize());
-            
-            flow.jet(input, output, 0);
-            RealVector normal = output.f();
+            RealVector normal = flow.flux(center);
 //            RealVector normal = flow.flux(center);//rpnumerics.RPNUMERICS.flow().flux(center);
 
             ((SimplexPoincareSection) geomFactory_.geomSource()).shift(center, normal);

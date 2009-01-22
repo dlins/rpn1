@@ -39,12 +39,14 @@ public class ConnectionOrbit extends RPnCurve implements RpSolution {
         RealVector center = new RealVector(centerOPoint.getCoords());
         ShockFlow flow = (ShockFlow) RPNUMERICS.createShockFlow();
 
-        WaveState input = new WaveState(new PhasePoint(center));
-        JetMatrix output = new JetMatrix(center.getSize());
+//        WaveState input = new WaveState(new PhasePoint(center));
+//        JetMatrix output = new JetMatrix(center.getSize());
+//
+//        flow.jet(input, output, 0);
 
-        flow.jet(input, output, 0);
-
-        RealVector fCenter = output.f();
+        RealVector fCenter = flow.flux(center);
+        
+        
 
 //        RealVector fCenter = flow.flux(center);
 //        RealVector fCenter = RPNUMERICS.flow().flux(center);
@@ -52,11 +54,11 @@ public class ConnectionOrbit extends RPnCurve implements RpSolution {
             centerOPoint = orbit_.getPoints()[i];
             RealVector nextCenter = new RealVector(centerOPoint.getCoords());
             
-            WaveState in = new WaveState(new PhasePoint(nextCenter));
-            
-            flow.jet(in, output, 0);
+//            WaveState in = new WaveState(new PhasePoint(nextCenter));
+//            
+//            flow.jet(in, output, 0);
 //            RealVector nextFCenter = flow.flux(nextCenter);
-            RealVector nextFCenter = output.f();
+            RealVector nextFCenter = flow.flux(nextCenter);
 //            RealVector nextFCenter = RPNUMERICS.flow().flux(nextCenter);
             if (fCenter.norm() < nextFCenter.norm()) {
                 fCenter.set(nextFCenter);

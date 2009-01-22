@@ -18,6 +18,7 @@ public class RPnAppletPlotter extends JApplet implements RPnMenuCommand {
     private String configFileName_;
     private RPnUIFrame rpnUIFrame_=null;
 
+    @Override
     public void init() {
 	configFileName_= getParameter("configfile"); // The ConfigFile parameter will contain the name of the config file, e.g. "quad2.xml"
 	configReader_= RPnConfigReader.getReader(configFileName_,true,this);
@@ -25,6 +26,7 @@ public class RPnAppletPlotter extends JApplet implements RPnMenuCommand {
 	configReader_.init(configStream_);
 	rpnUIFrame_=new RPnUIFrame(this);
     }
+    @Override
     public void start (){
 	if (rpnUIFrame_!=null){
 	    RPnPhaseSpaceFrame [] frames=rpnUIFrame_.getPhaseSpaceFrames();
@@ -40,6 +42,7 @@ public class RPnAppletPlotter extends JApplet implements RPnMenuCommand {
 	    //	    UIController.instance().setState(new XZERO_CONFIG());
 	}
     }
+    @Override
     public void destroy(){
 	RPnPhaseSpaceFrame [] frames=rpnUIFrame_.getPhaseSpaceFrames();
 	if (frames !=null){
@@ -49,7 +52,7 @@ public class RPnAppletPlotter extends JApplet implements RPnMenuCommand {
 	}
 	rpnUIFrame_.dispose();
     }
-
+@Override
     public void stop(){
 
 	rpnUIFrame_.setVisible(false);

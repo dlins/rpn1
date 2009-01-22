@@ -99,6 +99,21 @@ void RealMatrix2::mul(const RealMatrix2 & m1) const {
     }
 }
 
+std::ostream & operator<<(std::ostream& o, const RealMatrix2& jMatrix) {
+
+    for (int i = 0; i < jMatrix.row_; i++) {
+        for (int j = 0; j < jMatrix.col_; j++) {
+
+            o << "("<<i<<","<<j<<")"<<jMatrix(i, j)<<"\n";
+        }
+    }
+
+    return o;
+}
+
+
+
+
 RealMatrix2::~RealMatrix2() {
     delete data_;
 }

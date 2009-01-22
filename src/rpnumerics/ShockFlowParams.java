@@ -13,14 +13,6 @@ public class ShockFlowParams {
         phasePoint_ = p;
 
     }
-
-    public ShockFlowParams(PhasePoint p) {
-
-        sigma_ = 0d;
-        phasePoint_ = p;
-
-    }
-
     public PhasePoint getPhasePoint() {
 
         return phasePoint_;

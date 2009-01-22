@@ -55,7 +55,8 @@ public class NumConfigReadyImpl extends NumConfigImpl
 
     public XZeroGeom xzeroGeom() { return xzeroGeom_; }
 
-    public void plot(RPnPhaseSpaceAbstraction phaseSpace, RpGeometry geom) {
+    @Override
+    public void plot(RPnPhaseSpaceAbstraction phaseSpace, RpGeometry geom) { 
         super.plot(phaseSpace, geom);
         if (geom instanceof PoincareSectionGeom)
             phaseSpace.changeState(new PoincareReadyImpl(hugoniotGeom(), xzeroGeom(), (PoincareSectionGeom)geom));

@@ -5,9 +5,6 @@
 
 package rpnumerics;
 
-import rpn.plugininterface.PluginProfile;
-import rpn.plugininterface.PluginTableModel;
-
 public abstract class ShockRarefactionProfile {
     
     private PhasePoint xZero_;

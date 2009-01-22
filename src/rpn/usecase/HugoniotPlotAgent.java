@@ -10,7 +10,6 @@ import rpnumerics.*;
 import wave.util.RealVector;
 import wave.util.Boundary;
 import wave.util.GridProfile;
-import java.net.*;
 
 public class HugoniotPlotAgent extends RpModelPlotAgent {
     //

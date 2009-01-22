@@ -6,7 +6,6 @@
  */
 package rpnumerics;
 
-import java.util.StringTokenizer;
 import rpn.plugininterface.PluginProfile;
 import rpn.plugininterface.PluginTableModel;
 import wave.util.RealVector;

@@ -17,8 +17,9 @@ import rpnumerics.plugin.RPnPluginManager;
 public class PluginTableModel extends DefaultTableModel {
 
     private static PluginTableModel instance_;
-    private static String pluginDir_ = System.getProperty("rpnhome") + System.getProperty("file.separator") + "lib" + System.getProperty("file.separator")+  "linux_i686"+System.getProperty("file.separator")+ "plugins" +System.getProperty("file.separator");
+    private static String pluginDir_ = System.getProperty("rpnhome") + System.getProperty("file.separator") + "lib" + System.getProperty("file.separator") + "linux_i686" + System.getProperty("file.separator") + "plugins" + System.getProperty("file.separator");
     private static HashMap<String, PluginProfile> pluginConfigMap_;
+    private static Vector<String> columnNames_ = new Vector<String>();
 
     private PluginTableModel(Vector<Vector<String>> pluginNames, Vector<String> columnNames) {
 
@@ -35,23 +36,21 @@ public class PluginTableModel extends DefaultTableModel {
     public static PluginTableModel instance() {
 
         if (instance_ == null) {
-
             instance_ = initModel();
-
         }
         return instance_;
-
     }
 
     private static PluginTableModel initModel() {
 
-        Vector<String> columnNames_ = new Vector<String>();
+//        Vector<String> columnNames_ = new Vector<String>();
         Vector<Vector<String>> data_ = new Vector<Vector<String>>();
 
-        columnNames_.add("Plugin Type");
-        columnNames_.add("Library");
-        columnNames_.add("Class");
-        columnNames_.add("Constructor Method");
+        getColumnNames().add("Plugin Type");
+        getColumnNames().add("Library");
+        getColumnNames().add("Class");
+        getColumnNames().add("Constructor Method");
+        getColumnNames().add("Destructor Method");
 
         Vector<String> type1 = new Vector<String>();
 
@@ -59,34 +58,42 @@ public class PluginTableModel extends DefaultTableModel {
 
         type1.add("RPnDefaultPlugins.so");
         type1.add("ShockFlowPlugin");
-        type1.add("create");
-        
-        
-        RPnPluginManager.configPlugin(ShockProfile.SHOCKFLOW_NAME, "RPnDefaultPlugins.so", "ShockFlowPlugin", "create");
-        
+        type1.add("createConservation");
+        type1.add("destroyConservation");
+
+
+        RPnPluginManager.configPlugin(ShockProfile.SHOCKFLOW_NAME, "RPnDefaultPlugins.so", "ShockFlowPlugin", "createConservation", "destroyConservation");
+
 
         Vector<String> type2 = new Vector<String>();
-        
+
         type2.add(RarefactionProfile.RAREFACTIONFLOW_NAME);
 
         type2.add("RPnDefaultPlugins.so");
         type2.add("RarefactionFlowPlugin");
-        type2.add("create");
+        type2.add("createRarefaction");
+        type2.add("destroyRarefaction");
 
-        
-        RPnPluginManager.configPlugin(RarefactionProfile.RAREFACTIONFLOW_NAME, "libRpnPluginLib.so", "RarefactionFlowPlugin", "create");
-        
-        
+
+        RPnPluginManager.configPlugin(RarefactionProfile.RAREFACTIONFLOW_NAME, "RPnDefaultPlugins.so", "RarefactionFlowPlugin", "createRarefaction", "destroyRarefaction");
+
+
         data_.add(type1);
         data_.add(type2);
 
-        return new PluginTableModel(data_, columnNames_);
+        return new PluginTableModel(data_, getColumnNames());
 
     }
 
     public static String getPluginDir() {
         return pluginDir_;
     }
+    
+    
+    public static Vector<String> getColumnNames() {
+        return columnNames_;
+    }
+
 
     public static HashMap<String, PluginProfile> getPluginConfigMap() {
         return pluginConfigMap_;

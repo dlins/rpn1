@@ -7,7 +7,6 @@ package rpn;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 import rpn.controller.ui.BIFURCATION_CONFIG;
 import rpn.controller.ui.RAREFACTION_CONFIG;
 import rpn.controller.ui.SHOCK_CONFIG;
@@ -22,6 +21,8 @@ public class RPnCurvesConfigDialog extends RPnDialog {
     private JComboBox curveComboBox_;
 
     public RPnCurvesConfigDialog() {
+        
+
         try {
             jbInit();
         } catch (Exception e) {
@@ -63,12 +64,13 @@ public class RPnCurvesConfigDialog extends RPnDialog {
 
     }
 
+    @Override
     protected void cancel() {
         int option = JOptionPane.showConfirmDialog(this, "Close aplication", "Exit RPn", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
         if (option == JOptionPane.YES_OPTION) {
             RPNUMERICS.clean();
-            System.exit(0);//TODO Limpar a memoria alocada pela camada nativa antes !!!
+            System.exit(0);
         }
 
     }
@@ -77,8 +79,8 @@ public class RPnCurvesConfigDialog extends RPnDialog {
 
 
         dispose();
-        UI_ACTION_SELECTED newState = null;
 
+        UI_ACTION_SELECTED newState = null;
 
         if (curveComboBox_.getSelectedItem().equals("Shock")) {
 

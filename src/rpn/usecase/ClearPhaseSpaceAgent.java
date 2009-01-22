@@ -3,14 +3,11 @@
  * Departamento de Dinamica dos Fluidos
  *
  */
-
 package rpn.usecase;
 
-import rpn.controller.ui.UndoActionController;
 import java.awt.event.ActionEvent;
 import rpn.controller.ui.*;
 import rpn.message.RPnActionMediator;
-
 
 public class ClearPhaseSpaceAgent extends javax.swing.AbstractAction {
     //
@@ -25,12 +22,12 @@ public class ClearPhaseSpaceAgent extends javax.swing.AbstractAction {
     //
     // Constructors
     //
-    protected ClearPhaseSpaceAgent() { super(DESC_TEXT, null); }
+    protected ClearPhaseSpaceAgent() {
+        super(DESC_TEXT, null);
+    }
 
-
-    public void clear (){
-
-      // rpn.RPnUIFrame.instance().setTitle(" completing ...  " + DESC_TEXT);
+    public void clear() {
+        // rpn.RPnUIFrame.instance().setTitle(" completing ...  " + DESC_TEXT);
         UIController.instance().setWaitCursor();
         UIController.instance().panelsBufferClear();
         rpn.parser.RPnDataModule.PHASESPACE.clear();
@@ -42,19 +39,25 @@ public class ClearPhaseSpaceAgent extends javax.swing.AbstractAction {
 
 
     }
-
+    public void clearAll(){
+        rpn.parser.RPnDataModule.PHASESPACE.clearAll();
+        
+    }
 
     public void actionPerformed(ActionEvent event) {
 
-      if (UIController.instance().getNetStatusHandler().isOnline() && UIController.instance().getNetStatusHandler().isMaster())
-          RPnActionMediator.instance().setState(DESC_TEXT);
-      clear();
+        if (UIController.instance().getNetStatusHandler().isOnline() && UIController.instance().getNetStatusHandler().isMaster()) {
+            RPnActionMediator.instance().setState(DESC_TEXT);
+        }
+
+        clear();
 
     }
 
     static public ClearPhaseSpaceAgent instance() {
-        if (instance_ == null)
+        if (instance_ == null) {
             instance_ = new ClearPhaseSpaceAgent();
+        }
         return instance_;
     }
 }

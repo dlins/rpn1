@@ -5,19 +5,23 @@
  */
 package rpnumerics;
 
-public abstract class WaveFlow extends NativeRpFunction {
+import wave.util.HessianMatrix;
+import wave.util.JacobianMatrix;
+import wave.util.RealVector;
+
+public abstract class WaveFlow {
     //
     // Members
     //
-//    WavePoint flux( RealVector x );
-//
-//    RealMatrix2 fluxDeriv( RealVector x );
-//
-//    HessianMatrix fluxDeriv2( RealVector x );
-//
+    
+    public native RealVector flux(RealVector x);
+
+    public native JacobianMatrix fluxDeriv(RealVector x);
+
+    public native HessianMatrix fluxDeriv2(RealVector x);
+
     public abstract PhasePoint getXZero();
 
     public abstract void setXZero(PhasePoint xzero);
 
-//    public abstract String getName();
 }

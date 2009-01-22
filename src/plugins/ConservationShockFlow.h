@@ -14,22 +14,36 @@
 #include "ShockFlow.h"
 #include "Quad2FluxFunction.h"
 
+class ShockFlowPlugin : public RpnPlugin, public ShockFlow {
+
+private:
 
 
-class ShockFlowPlugin : public RpnPlugin,public ShockFlow{
+   
+    RealVector * fx0_;
+
+
+
 
 public:
-    
-    ShockFlowPlugin(const ShockFlowParams &,const FluxFunction &);
-    
-    int jet (const WaveState &,JetMatrix & ,int) const;
+
+    ShockFlowPlugin(const ShockFlowParams &, const FluxFunction &);
 
     const ShockFlowParams & getParams()const;
+    void updateZeroTerms();
     void setParams(const ShockFlowParams & params);
 
-    virtual~ShockFlowPlugin();
-    RpFunction * clone() const;
+
+    int flux(const RealVector &, RealVector &) const;
+    int fluxDeriv(const RealVector &, JacobianMatrix &)const;
+    int fluxDeriv2(const RealVector &, HessianMatrix &)const;
+
     
+    
+
+    virtual~ShockFlowPlugin();
+    
+
 };
 
 

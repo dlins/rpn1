@@ -18,7 +18,6 @@ public class StateInputController implements PropertyChangeListener {
     public static boolean SHOWDIALOG = false;
 
     public StateInputController() {
-
     }
 
     public StateInputController(RPnUIFrame frame) {
@@ -29,9 +28,7 @@ public class StateInputController implements PropertyChangeListener {
 
 //        System.out.println("Novo valor: " + evt.getNewValue());
         if (evt.getPropertyName().equals("reset aplication")) {
-
             RPnCurvesConfigDialog curvesDialog = new RPnCurvesConfigDialog();
-
             curvesDialog.setLocationRelativeTo(null);
             curvesDialog.setVisible(true);
 
@@ -40,9 +37,6 @@ public class StateInputController implements PropertyChangeListener {
         if (evt.getPropertyName().equals("aplication state")) {
 
             try {
-
-//                uiFrame_.firePropertyChange("aplication state", 0, 1);
-                
                 uiFrame_.propertyChange(evt);
 
             } catch (NullPointerException ex) {
@@ -51,25 +45,19 @@ public class StateInputController implements PropertyChangeListener {
 
             }
 
-             if (evt.getNewValue() instanceof CURVES_CONFIG) {
-            RPnCurvesConfigDialog curvesDialog = new RPnCurvesConfigDialog();
+            if (evt.getNewValue() instanceof CURVES_CONFIG) {
+                RPnCurvesConfigDialog curvesDialog = new RPnCurvesConfigDialog();
 
-            curvesDialog.setLocationRelativeTo(null);
-            curvesDialog.setVisible(true);
-                 
-                 
-             }
-            
-
-            
-            
+                curvesDialog.setLocationRelativeTo(null);
+                curvesDialog.setVisible(true);
+            }
 
             if (evt.getNewValue() instanceof SHOCK_CONFIG) {
-                RPnShockConfigDialog shockDialog = new RPnShockConfigDialog();
+                RPnShockConfigDialog shockDialog = new RPnShockConfigDialog(false);
                 shockDialog.setVisible(true);
             }
             if (evt.getNewValue() instanceof RAREFACTION_CONFIG) {
-                RPnRarefactionConfigDialog rarefactionDialog = new RPnRarefactionConfigDialog();
+                RPnRarefactionConfigDialog rarefactionDialog = new RPnRarefactionConfigDialog(false);
                 rarefactionDialog.setVisible(true);
             }
             if (evt.getNewValue() instanceof BIFURCATION_CONFIG) {

@@ -27,7 +27,7 @@ public class PluginConfigDialog extends RPnDialog {
     private PluginProfile tempPluginProfile_;
 
     public PluginConfigDialog(String pluginType) {
-        super(false);
+        super(true);
 
         pluginType_ = pluginType;
 

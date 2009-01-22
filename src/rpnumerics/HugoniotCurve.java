@@ -291,6 +291,7 @@ public class HugoniotCurve extends RPnCurve implements RpSolution {
                 closestDistance = closest.norm();
             }
         }
+        
 
         return closestSegment;
     }
@@ -402,13 +403,12 @@ public class HugoniotCurve extends RPnCurve implements RpSolution {
 
     public double findSigma(PhasePoint targetPoint) {
 
-        double closestSigma = 0;
         int alpha = 0;
         int hugoniotSegmentIndx = findClosestSegment(targetPoint, alpha);
 
         HugoniotSegment segment = (HugoniotSegment) segments().get(
                 hugoniotSegmentIndx);
-
+        
         return (segment.leftSigma() * (1 - alpha) +
                 segment.rightSigma() * alpha);
 

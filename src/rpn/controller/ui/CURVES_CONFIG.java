@@ -5,7 +5,6 @@
  */
 package rpn.controller.ui;
 
-import rpn.controller.phasespace.*;
 import rpn.usecase.ChangeSigmaAgent;
 import wave.util.RealVector;
 
@@ -21,8 +20,8 @@ public class CURVES_CONFIG extends UI_ACTION_SELECTED {
         super(ChangeSigmaAgent.instance());
     }
 
+    @Override
     public void userInputComplete(rpn.controller.ui.UIController ui, RealVector userInput) {
-//
 
     }
 }

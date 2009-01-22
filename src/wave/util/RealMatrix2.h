@@ -13,7 +13,7 @@
  * ---------------------------------------------------------------
  * Includes:
  */
-#include "Vector.h"
+
 #include "RealVector.h"
 
 /*
@@ -42,11 +42,14 @@ public:
     RealMatrix2(int, int);
     RealMatrix2(int);
 
-    ~RealMatrix2();
+    virtual ~RealMatrix2();
     RealMatrix2();
     RealMatrix2(const RealMatrix2 &);
 
     void range_check(int i, int j) const;
+    
+
+    void resize(int row, int col);
 
     double operator ()(int i, int j) const;
 
@@ -59,11 +62,23 @@ public:
     void fillEigenData(int stateSpaceDim, RealMatrix2 & df, double & eigenValR, double & eigenValI, RealVector & eigenVec);
 
     void scale(double t);
+    
+    friend std::ostream & operator<<(std::ostream& , const RealMatrix2& );
+    
+    
+    RealMatrix2 & zero();
 
     int row()const;
+    
     int col()const;
 
 };
+
+inline void RealMatrix2::resize(int row,int col){
+    row_=row;
+    col_=col;
+    data_->resize(row*col);
+}
 
 inline void RealMatrix2::range_check(int i, int j) const {
     if (((i < 0) && (i > row_)) || ((j < 0) && (j > col_)))
@@ -85,6 +100,13 @@ inline RealMatrix2 & RealMatrix2::operator-(const RealMatrix2 & b) {
     return *this;
 
 }
+
+inline RealMatrix2 & RealMatrix2::zero(void) {
+    data_->zero();
+    return *this;
+}
+
+
 
 inline void RealMatrix2::operator ()(int i, int j, double value) {
     range_check(i, j);

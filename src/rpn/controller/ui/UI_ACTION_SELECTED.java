@@ -10,7 +10,6 @@ import wave.util.RealVector;
 import rpn.usecase.*;
 import java.util.ArrayList;
 import java.util.List;
-import rpn.controller.ui.*;
 
 public class UI_ACTION_SELECTED implements UserInputHandler {
     //
@@ -25,7 +24,7 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
     }
 
     public RealVector[] userInputList(rpn.controller.ui.UIController ui) {
-        return ui.inputConvertion(userInputList_);
+        return UIController.inputConvertion(userInputList_);
     }
 
     public void userInputComplete(rpn.controller.ui.UIController ui,

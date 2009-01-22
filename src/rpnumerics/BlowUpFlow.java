@@ -129,13 +129,15 @@ public class BlowUpFlow extends RarefactionFlow {
 
     }
 
-    public RealMatrix2 fluxDeriv(RealVector u) {
+    @Override
+    public JacobianMatrix fluxDeriv(RealVector u) {
 
         /** @todo  not implemented yet...*/
         int stateSpaceDim = u.getSize();
-        return new RealMatrix2(stateSpaceDim, stateSpaceDim);
+        return new JacobianMatrix(stateSpaceDim);
     }
 
+    @Override
     public HessianMatrix fluxDeriv2(RealVector u) {
         /** @todo  not implemented yet...*/
         int stateSpaceDim = u.getSize();
@@ -144,6 +146,7 @@ public class BlowUpFlow extends RarefactionFlow {
 
 
     // Accessors/Mutators
+    @Override
     public PhasePoint getXZero() {
         return new PhasePoint(blowUpXZero_.getFamilyVector());
     }

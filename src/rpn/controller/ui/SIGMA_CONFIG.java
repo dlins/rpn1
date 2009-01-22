@@ -7,7 +7,6 @@ package rpn.controller.ui;
 
 import rpnumerics.RPNUMERICS;
 
-import rpnumerics.ShockFlow;
 import rpn.controller.phasespace.*;
 import rpn.parser.RPnDataModule;
 import rpn.usecase.ChangeSigmaAgent;
@@ -30,6 +29,7 @@ public class SIGMA_CONFIG extends UI_ACTION_SELECTED {
         super(ChangeSigmaAgent.instance());
     }
 
+    @Override
     public void userInputComplete(rpn.controller.ui.UIController ui, RealVector userInput) {
 
         super.userInputComplete(ui, userInput);
@@ -60,6 +60,6 @@ public class SIGMA_CONFIG extends UI_ACTION_SELECTED {
 
         ui.setState(new GEOM_SELECTION());
     }
-    }
+}
 
 
