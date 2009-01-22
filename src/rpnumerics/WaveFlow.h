@@ -50,11 +50,19 @@ public:
     virtual ~WaveFlow();
     //! Gets the flux function
     const FluxFunction & fluxFunction()const ;
+    void setFluxFunction(const FluxFunction& );
 
 
     
 };
 
 inline const FluxFunction & WaveFlow::fluxFunction()const {return *fluxFunction_;}
+
+inline void WaveFlow::setFluxFunction(const FluxFunction & flux) {
+
+    delete fluxFunction_;
+    fluxFunction_ = (FluxFunction *) flux.clone();
+    
+}
 
 #endif //! _WaveFlow_H

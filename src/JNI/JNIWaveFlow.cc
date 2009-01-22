@@ -117,7 +117,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveFlow_flux(JNIEnv * env, jobject ob
 
         ShockFlowParams newParams(phasePoint, sigma);
 
+        //Setting the new parameters and flux function
         flow->setParams(newParams);
+        flow->setFluxFunction(fluxFunction);
 
         flow->flux(realVectorInput, realVectorOutput);
 
@@ -150,6 +152,16 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveFlow_flux(JNIEnv * env, jobject ob
 
         RarefactionFlowPlugin* flow = (RarefactionFlowPlugin *) plug;
 
+
+        //Setting the new parameters and flux function
+
+
+        flow->setFamilyIndex(family);
+
+        flow->setReferenceVector(RealVector(dimension, nativeReferenceArray));
+        
+        flow->setFluxFunction(fluxFunction);
+        
         flow->flux(realVectorInput, realVectorOutput);
 
         RPnPluginManager::unload(plug, "RarefactionFlow");
@@ -268,7 +280,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveFlow_fluxDeriv(JNIEnv * env, jobje
 
         ShockFlowParams newParams(phasePoint, sigma);
 
+
+        //Setting the new parameters and flux function
         flow->setParams(newParams);
+
+        flow->setFluxFunction(fluxFunction);
 
         flow->fluxDeriv(realVectorInput, jacobianMatrixOutput);
 
@@ -300,6 +316,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveFlow_fluxDeriv(JNIEnv * env, jobje
         RpnPlugin * plug = RPnPluginManager::getPluginInstance("RarefactionFlow");
 
         RarefactionFlowPlugin* flow = (RarefactionFlowPlugin *) plug;
+        
+        flow->setFamilyIndex(family);
+        flow->setReferenceVector(RealVector(dimension, nativeReferenceArray));
+        flow->setFluxFunction(fluxFunction);
+
 
         flow->fluxDeriv(realVectorInput, jacobianMatrixOutput);
 
@@ -321,7 +342,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveFlow_fluxDeriv(JNIEnv * env, jobje
 
 
 }
-
 /*
  * Class:     rpnumerics_WaveFlow
  * Method:    fluxDeriv2
@@ -421,7 +441,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveFlow_fluxDeriv2(JNIEnv * env, jobj
 
         ShockFlowParams newParams(phasePoint, sigma);
 
+        //Setting the new parameters
         flow->setParams(newParams);
+
+        flow->setFluxFunction(fluxFunction);
 
         flow->fluxDeriv2(realVectorInput, hessianMatrixOutput);
 
@@ -453,6 +476,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveFlow_fluxDeriv2(JNIEnv * env, jobj
         RpnPlugin * plug = RPnPluginManager::getPluginInstance("RarefactionFlow");
 
         RarefactionFlowPlugin* flow = (RarefactionFlowPlugin *) plug;
+
+        flow->setFamilyIndex(family);
+        flow->setReferenceVector(RealVector(dimension,nativeReferenceArray));
+        flow->setFluxFunction(fluxFunction);
 
         flow->fluxDeriv2(realVectorInput, hessianMatrixOutput);
 
