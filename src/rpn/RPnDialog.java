@@ -18,7 +18,6 @@ import javax.swing.KeyStroke;
 import javax.swing.WindowConstants;
 import rpn.controller.ui.UIController;
 import rpn.usecase.ClearPhaseSpaceAgent;
-import rpnumerics.RPNUMERICS;
 
 public abstract class RPnDialog extends JDialog {
 

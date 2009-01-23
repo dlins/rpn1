@@ -35,36 +35,25 @@ public class ChangeSigmaAgent extends RpModelConfigChangeAgent {
 
 //        Double oldValue = new Double(((ShockFlow) RPNUMERICS.flow()).getSigma());
 
-//        Double oldValue = new Double(RPNUMERICS.getShockProfile().getSigma());
-        Double oldValue = new Double(0);
-        
-
+        Double oldValue = new Double(RPNUMERICS.getShockProfile().getSigma());
         RealVector[] userInputList = UIController.instance().userInputList();
         RealVector lastPointAdded = userInputList[userInputList.length - 1];
-        double newSigma = 0d;
+        double newSigma;
         if (rpnumerics.RPNUMERICS.domainDim() == 2) {
             // finds the best point closest from Hugoniot curve
             HugoniotCurve hCurve = (HugoniotCurve) ((NUMCONFIG) RPnDataModule.PHASESPACE.state()).hugoniotGeom().geomFactory().geomSource();
-            newSigma = hCurve.findSigma(new PhasePoint(lastPointAdded));
+             newSigma = hCurve.findSigma(new PhasePoint(lastPointAdded));
 
             RPNUMERICS.getShockProfile().setSigma(newSigma);
-//            ((ShockFlow)RPNUMERICS.flow()).setSigma(newSigma);
         } else {
-        RPNUMERICS.getShockProfile().setSigma(newSigma);
-
-//            ((ShockFlow) RPNUMERICS.flow()).setSigma(lastPointAdded);
+//                    RPNUMERICS.getShockProfile().setSigma(newSigma);
 
         }
         System.out.println("OLD SIGMA = " + oldValue);
-//        Double newValue = new Double(((ShockFlow) RPNUMERICS.flow()).getSigma());
-//        Double newValue = new Double(RPNUMERICS.getShockProfile().getSigma());
-        
-        Double newValue = new Double(newSigma);
-        
-
+        Double newValue = new Double(RPNUMERICS.getShockProfile().getSigma());
         System.out.println("NEW SIGMA = " + newValue);
-//        applyChange(new PropertyChangeEvent(this, DESC_TEXT, oldValue, newValue));
-        applyChange(new PropertyChangeEvent(this, DESC_TEXT, 0, newValue));
+        applyChange(new PropertyChangeEvent(this, DESC_TEXT, oldValue, newValue));
+//        applyChange(new PropertyChangeEvent(this, DESC_TEXT, 0, newValue));
     }
 
     public void unexecute() {

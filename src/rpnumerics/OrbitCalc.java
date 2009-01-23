@@ -31,22 +31,11 @@ public class OrbitCalc implements RpCalculation {
         calcMethodName_ = "default";//TODO Put the correct method name
     }
 
-    OrbitCalc(OrbitPoint orbitPoint, int timeDirection, ODESolver odeSolver) {
+    public OrbitCalc(OrbitPoint orbitPoint, int timeDirection, ODESolver odeSolver) {
         start_ = orbitPoint;
         timeDirection_ = timeDirection;
         odeSolver_ = odeSolver;
         calcMethodName_ = "default";//TODO Put the correct method name
-
-
-    }
-    
-    
-     OrbitCalc(OrbitPoint orbitPoint, int timeDirection, ODESolver odeSolver,WaveFlow flow) {
-        start_ = orbitPoint;
-        timeDirection_ = timeDirection;
-        odeSolver_ = odeSolver;
-        calcMethodName_ = "default";//TODO Put the correct method name
-        flow_=flow;
 
 
     }
@@ -67,9 +56,9 @@ public class OrbitCalc implements RpCalculation {
 
     public RpSolution calc() throws RpException {
 
-//        ODESolution odeSol = AdvanceCurve.calc(start_.getCoords(), timeDirection_);
-
-        ODESolution odeSol = odeSolver_.solve(getStart(),timeDirection_);
+        FlowVectorField flowVectorField = (FlowVectorField) odeSolver_.getProfile().getFunction();
+        flowVectorField.setWaveFlow(RPNUMERICS.createShockFlow()); //Updating flow parameters
+        ODESolution odeSol = odeSolver_.solve(getStart(), timeDirection_);
         return new Orbit(odeSol.getWavePoints(), odeSol.getTimes(), odeSol.getFlag());
     }
 

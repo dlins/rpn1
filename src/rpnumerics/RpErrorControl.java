@@ -39,7 +39,7 @@ public class RpErrorControl {
         //
         // Members
         //
-        double maxStateStepLength_ = DEFAULT_MAX_STATE_STEP_LENGTH;
+        private double maxStateStepLength_ = DEFAULT_MAX_STATE_STEP_LENGTH;
 
         double[] statPointDistance_ = new double[] {
             DEFAULT_STATIONARY_POINT_MIN_DISTANCE, DEFAULT_STATIONARY_POINT_PREF_DISTANCE
@@ -99,6 +99,10 @@ public class RpErrorControl {
 
         // should access the norm function directly...
         public RealVector getScale() { return new RealVector(stateScalingFactors_); }
+
+        public void setMaxStateStepLength(double maxStateStepLength) {//<---Setar no setar para alterar a resolucao da curva de hugoniot
+            this.maxStateStepLength_ = maxStateStepLength;
+        }
     }
 
 

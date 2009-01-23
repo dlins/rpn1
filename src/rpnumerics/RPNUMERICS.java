@@ -41,6 +41,7 @@ public class RPNUMERICS {
         libName_ = profile.getLibName();
 
         initNative(profile.getPhysicsID());
+        errorControl_ = new RpErrorControl(boundary());
 //        fluxFunction_=new FluxFunction();
 
 //        physics_ = physicsCreation(
@@ -143,9 +144,7 @@ public class RPNUMERICS {
     public static OrbitCalc createOrbitCalc(OrbitPoint orbitPoint, int timeDirection) {
 
         ShockFlow flow = (ShockFlow) createShockFlow();
-
         return new OrbitCalc(orbitPoint, timeDirection, createODESolver(flow));
-
 
     }
 
@@ -155,72 +154,37 @@ public class RPNUMERICS {
 
     public static ShockFlow createShockFlow() {
 
-
-//        if (shockProfile_.getFlowName().equals("Conservation Shock Flow")) {
         FluxFunction flux = new FluxFunction();
 
         PluginProfile profile = PluginTableModel.getPluginConfig(ShockProfile.SHOCKFLOW_NAME);
         
-        Double value = new Double(profile.getParamValue("sigma"));
-        
-//        System.out.println("Valor de sigma no profile:" + value );
+        Double sigmaValue = new Double(profile.getParamValue("sigma"));
 
-        ShockFlowParams shockParams = new ShockFlowParams(shockProfile_.getXZero(), value.doubleValue());
+        ShockFlowParams shockParams = new ShockFlowParams(shockProfile_.getXZero(), sigmaValue.doubleValue());
 
         ShockFlow flow = new ShockFlow(shockParams, flux);
-//            ConservationShockFlow flow = new ConservationShocckFlow(shockParams, flux);
         return flow;
-//        }
 
-//        return null;
     }
 
     public static ShockFlow createShockFlow(ShockFlowParams shockFlowParams) {
 
-//        if (shockProfile_.getFlowName().equals("Conservation Shock Flow")) {
-
-
         ShockFlow flow = new ShockFlow(shockFlowParams, new FluxFunction());
 
-//            ConservationShockFlow flow = new ConservationShockFlow(shockFlowParams, new FluxFunction());
-
-
         return flow;
-//        }
 
-//        return null;
     }
 
     private static RarefactionFlow createRarefactionFlow() {
         
          return new RarefactionFlow(rarefactionProfile_.getXZero(), rarefactionProfile_.getFamily(), new FluxFunction());
-        
-//        if (rarefactionProfile_.getFlowName().equals("Native Rarefaction Flow")) {
-//            System.out.println("Flow Nativo");
-//            return null;
-//
-//        }
-//
-//
-//        if (rarefactionProfile_.getFlowName().equals("Blow Up")) {
-//            BlowUpLineFieldVector blowUpUserInput = new BlowUpLineFieldVector(rarefactionProfile_.getXZero(), rarefactionProfile_.getFamily(), new FluxFunction());
-//
-//            return new BlowUpFlow(blowUpUserInput, new FluxFunction());
-//        }
-//
-//        if (rarefactionProfile_.getFlowName().equals("Rarefaction Flow")) {
-//
-//            return new RarefactionFlow(rarefactionProfile_.getXZero(), rarefactionProfile_.getFamily(), new FluxFunction());
-//        }
-//
-//        return null;
 
     }
 
     private static ODESolver createODESolver(WaveFlow flow) {
 
 
-        errorControl_ = new RpErrorControl(boundary());
+//        errorControl_ = new RpErrorControl(boundary());
         odeSolver_ = new Rk4BPMethod(
                 new Rk4BPProfile(new FlowVectorField(flow),
                 errorControl().eps(),

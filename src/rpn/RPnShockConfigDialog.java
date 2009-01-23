@@ -50,9 +50,10 @@ public class RPnShockConfigDialog extends RPnDialog {
 
     private void addMethodName() {
         methodComboBox_ = new JComboBox();
+        methodComboBox_.addMouseListener(new MouseHandler());
 
 
-        methodComboBox_.addItem("Continuation");
+        methodComboBox_.addItem("Continuation");// TODO A better combo fill method
         methodComboBox_.addItem("Contour");
 
         methodPanel_.setLayout(flowLayout1);
@@ -107,9 +108,28 @@ public class RPnShockConfigDialog extends RPnDialog {
     private class MouseHandler implements MouseListener{
 
         public void mouseClicked(MouseEvent e) {
+            
+            if ((e.getSource()instanceof JLabel) && (e.getButton()==MouseEvent.BUTTON3) ){
 
-            PluginConfigDialog dialog = new PluginConfigDialog(ShockProfile.SHOCKFLOW_NAME);
-            dialog.setVisible(true);
+                PluginConfigDialog dialog = new PluginConfigDialog(ShockProfile.SHOCKFLOW_NAME);
+                dialog.setVisible(true);
+
+            }
+            
+            if ((e.getSource() instanceof JComboBox) && (e.getButton()==MouseEvent.BUTTON3)){
+                
+                Object selectedMethod = methodComboBox_.getSelectedItem();
+                
+                if (selectedMethod.equals("Continuation")){
+                RPnContinuationMethodConfigDialog dialog = new RPnContinuationMethodConfigDialog();
+                dialog.setVisible(true);
+
+                }
+
+                
+            }
+            
+
                         
         }
 
@@ -123,10 +143,10 @@ public class RPnShockConfigDialog extends RPnDialog {
 
         public void mouseEntered(MouseEvent e) {
 
-            JLabel label = (JLabel) e.getSource();
-            label.setToolTipText("Click to configure");
+            JComponent component = (JComponent) e.getSource();
+            component.setToolTipText("Right Click to configure");
             Cursor cur = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
-            label.setCursor(cur);
+            component.setCursor(cur);
             
         }
 

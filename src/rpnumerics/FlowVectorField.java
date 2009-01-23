@@ -26,6 +26,10 @@ public class FlowVectorField implements VectorField {
         wave_ = wave;
     }
 
+    public void setWaveFlow(WaveFlow flow){
+        wave_=flow;
+    }
+    
     //
     // Methods
     //
