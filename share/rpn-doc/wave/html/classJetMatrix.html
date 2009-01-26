@@ -1,6 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
-<title>Wave Package: JetMatrix Class Reference</title>
+<title>JetMatrix Class Reference</title>
 <link href="doxygen.css" rel="stylesheet" type="text/css">
 <link href="tabs.css" rel="stylesheet" type="text/css">
 </head><body>
@@ -29,13 +29,15 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classJetMatrix.html#6646da46d7040fbe329fdb5cbfa2cfd1">JetMatrix</a> (const <a class="el" href="classJetMatrix.html">JetMatrix</a> &amp;jetMatrix)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classJetMatrix.html#10497c0641e2c12b7d6adb78830cfe7e">f</a> (RealVector &amp;)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classJetMatrix.html#6ed90821a72851cbf8c8d81790841648">JetMatrix</a> (int degree, int n_comps, double *values)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classJetMatrix.html#10497c0641e2c12b7d6adb78830cfe7e">f</a> (<a class="el" href="classRealVector.html">RealVector</a> &amp;)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classJetMatrix.html#7b111f5dd830d31bc1ee466c32fb79b2">jacobian</a> (<a class="el" href="classJacobianMatrix.html">JacobianMatrix</a> &amp;jMatrix)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classJetMatrix.html#f8eb04fdc8baec6816e7a1f33b07340c">hessian</a> (<a class="el" href="classHessianMatrix.html">HessianMatrix</a> &amp;hMatrix)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classJetMatrix.html#ae3e53e40e5b14d98e3ea969071537d2">setF</a> (const RealVector &amp;fValues)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classJetMatrix.html#ae3e53e40e5b14d98e3ea969071537d2">setF</a> (const <a class="el" href="classRealVector.html">RealVector</a> &amp;fValues)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classJetMatrix.html#20718b2f743310e036c91db86a5f1835">setJacobian</a> (const <a class="el" href="classJacobianMatrix.html">JacobianMatrix</a> &amp;jMatrix)</td></tr>
 
@@ -50,8 +52,7 @@ void&nbsp;</td><td class="memItemRight" valign="bottom"><b>range_check</b> (int 
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="classJetMatrix.html">JetMatrix</a> &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classJetMatrix.html#3d6341e4a8ce45bc7d836d9e77f91025">zero</a> (void)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="41d58ceb4eaf40d9b27ea8c87afba971"></a><!-- doxytag: member="JetMatrix::operator()" ref="41d58ceb4eaf40d9b27ea8c87afba971" args="(void)" -->
-double *&nbsp;</td><td class="memItemRight" valign="bottom"><b>operator()</b> (void)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">double *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classJetMatrix.html#41d58ceb4eaf40d9b27ea8c87afba971">operator()</a> (void)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classJetMatrix.html#5857eb5749088c376cac15d24e010f9c">operator()</a> (int i)</td></tr>
 
@@ -120,6 +121,48 @@ Dimension is the number of components whose function are stored into the <a clas
 Copy constructor 
 </div>
 </div><p>
+<a class="anchor" name="6ed90821a72851cbf8c8d81790841648"></a><!-- doxytag: member="JetMatrix::JetMatrix" ref="6ed90821a72851cbf8c8d81790841648" args="(int degree, int n_comps, double *values)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">JetMatrix::JetMatrix           </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>degree</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>n_comps</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&nbsp;</td>
+          <td class="paramname"> <em>values</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Constructs a Jet matrix filling initial values <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>n_comps</em>&nbsp;</td><td>Dimension of the function stored into the <a class="el" href="classJetMatrix.html">JetMatrix</a> </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>degree</em>&nbsp;</td><td>Derivative degree associated with the initial array </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>values</em>&nbsp;</td><td>The new array of function, first and second derivative values </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
 <hr><h2>Member Function Documentation</h2>
 <a class="anchor" name="10497c0641e2c12b7d6adb78830cfe7e"></a><!-- doxytag: member="JetMatrix::f" ref="10497c0641e2c12b7d6adb78830cfe7e" args="(RealVector &amp;)" -->
 <div class="memitem">
@@ -128,7 +171,7 @@ Copy constructor
         <tr>
           <td class="memname">void JetMatrix::f           </td>
           <td>(</td>
-          <td class="paramtype">RealVector &amp;&nbsp;</td>
+          <td class="paramtype"><a class="el" href="classRealVector.html">RealVector</a> &amp;&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
           <td width="100%"><code> [inline]</code></td>
@@ -414,7 +457,7 @@ Returns a second derivative component value<p>
 <p>
 Returns a first derivative component value <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>i</em>&nbsp;</td><td>The first derivative component row *</td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>i</em>&nbsp;</td><td>The first derivative component row </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>j</em>&nbsp;</td><td>The first derivative component column </td></tr>
   </table>
 </dl>
@@ -446,6 +489,26 @@ Returns a function component value <dl compact><dt><b>Parameters:</b></dt><dd>
 
 </div>
 </div><p>
+<a class="anchor" name="41d58ceb4eaf40d9b27ea8c87afba971"></a><!-- doxytag: member="JetMatrix::operator()" ref="41d58ceb4eaf40d9b27ea8c87afba971" args="(void)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double * JetMatrix::operator()           </td>
+          <td>(</td>
+          <td class="paramtype">void&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Returns a pointer component array 
+</div>
+</div><p>
 <a class="anchor" name="6192f7186d5d14475a00cfc4dd7a40db"></a><!-- doxytag: member="JetMatrix::resize" ref="6192f7186d5d14475a00cfc4dd7a40db" args="(int n_comps)" -->
 <div class="memitem">
 <div class="memproto">
@@ -473,7 +536,7 @@ Changes the <a class="el" href="classJetMatrix.html">JetMatrix</a> dimension
         <tr>
           <td class="memname">void JetMatrix::setF           </td>
           <td>(</td>
-          <td class="paramtype">const RealVector &amp;&nbsp;</td>
+          <td class="paramtype">const <a class="el" href="classRealVector.html">RealVector</a> &amp;&nbsp;</td>
           <td class="paramname"> <em>fValues</em>          </td>
           <td>&nbsp;)&nbsp;</td>
           <td width="100%"><code> [inline]</code></td>
@@ -563,7 +626,7 @@ Sets all components to zero
 </div><p>
 <hr>The documentation for this class was generated from the following files:<ul>
 <li>trunk/src/wave/util/<a class="el" href="JetMatrix_8h-source.html">JetMatrix.h</a><li>trunk/src/wave/util/JetMatrix.cc</ul>
-<hr size="1"><address style="align: right;"><small>Generated on Mon Feb 25 13:35:33 2008 for Wave Package by&nbsp;
+<hr size="1"><address style="align: right;"><small>Generated on Mon Jan 26 14:24:48 2009 by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.4.7 </small></address>
 </body>

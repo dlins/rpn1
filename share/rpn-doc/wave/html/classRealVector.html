@@ -1,6 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
-<title>Wave Package: RealVector Class Reference</title>
+<title>RealVector Class Reference</title>
 <link href="doxygen.css" rel="stylesheet" type="text/css">
 <link href="tabs.css" rel="stylesheet" type="text/css">
 </head><body>
@@ -29,24 +29,24 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRealVector.html#33cf6725c49ce65d5d83d9cdcf6822d7">RealVector</a> (int)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="b87409cf08f1aeadd310aa5255a85f8b"></a><!-- doxytag: member="RealVector::RealVector" ref="b87409cf08f1aeadd310aa5255a85f8b" args="(double *)" -->
-&nbsp;</td><td class="memItemRight" valign="bottom"><b>RealVector</b> (double *)</td></tr>
-
 <tr><td class="memItemLeft" nowrap align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRealVector.html#cc7310e862283c0d89f5f8e806b550ba">RealVector</a> (const int size, double *data)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="621e205da268aa076eea02986cc3c11d"></a><!-- doxytag: member="RealVector::RealVector" ref="621e205da268aa076eea02986cc3c11d" args="(const RealVector &amp;)" -->
-&nbsp;</td><td class="memItemRight" valign="bottom"><b>RealVector</b> (const RealVector &amp;)</td></tr>
+&nbsp;</td><td class="memItemRight" valign="bottom"><b>RealVector</b> (const <a class="el" href="classRealVector.html">RealVector</a> &amp;)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="0e72a13673c6498a87f0b1b282ef71d0"></a><!-- doxytag: member="RealVector::operator==" ref="0e72a13673c6498a87f0b1b282ef71d0" args="(const RealVector &amp;)" -->
-bool&nbsp;</td><td class="memItemRight" valign="bottom"><b>operator==</b> (const RealVector &amp;)</td></tr>
+bool&nbsp;</td><td class="memItemRight" valign="bottom"><b>operator==</b> (const <a class="el" href="classRealVector.html">RealVector</a> &amp;)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="97c5791f523c7fce7ef89c64904129e5"></a><!-- doxytag: member="RealVector::operator=" ref="97c5791f523c7fce7ef89c64904129e5" args="(const Vector &amp;)" -->
+<a class="el" href="classRealVector.html">RealVector</a> &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const Vector &amp;)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRealVector.html#a5917c791493ab1c61b737cd4a754f9a">negate</a> ()</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRealVector.html#97612f405dfb225e77fc3d520ed1be56">dot</a> (const RealVector &amp;vector)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRealVector.html#97612f405dfb225e77fc3d520ed1be56">dot</a> (const <a class="el" href="classRealVector.html">RealVector</a> &amp;vector)</td></tr>
 
 <tr><td colspan="2"><br><h2>Static Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="83cf85511b9f75b8d2fb46774c40a254"></a><!-- doxytag: member="RealVector::sortEigenData" ref="83cf85511b9f75b8d2fb46774c40a254" args="(int n, double *eigenValR, double *eigenValI, RealVector *eigenVec)" -->
-static void&nbsp;</td><td class="memItemRight" valign="bottom"><b>sortEigenData</b> (int n, double *eigenValR, double *eigenValI, RealVector *eigenVec)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="f67649a1afdaffc8040812418b58b7dd"></a><!-- doxytag: member="RealVector::sortEigenData" ref="f67649a1afdaffc8040812418b58b7dd" args="(int n, double *eigenValR, double *eigenValI, RealVector *eigenVec)" -->
+static void&nbsp;</td><td class="memItemRight" valign="bottom"><b>sortEigenData</b> (int n, double *eigenValR, double *eigenValI, <a class="el" href="classRealVector.html">RealVector</a> *eigenVec)</td></tr>
 
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
@@ -137,7 +137,7 @@ Create a vector with a array of doubles <dl compact><dt><b>Parameters:</b></dt><
         <tr>
           <td class="memname">double RealVector::dot           </td>
           <td>(</td>
-          <td class="paramtype">const RealVector &amp;&nbsp;</td>
+          <td class="paramtype">const <a class="el" href="classRealVector.html">RealVector</a> &amp;&nbsp;</td>
           <td class="paramname"> <em>vector</em>          </td>
           <td>&nbsp;)&nbsp;</td>
           <td width="100%"></td>
@@ -174,9 +174,9 @@ Return the internal product with other <a class="el" href="classRealVector.html"
 Multiply all components by -1 
 </div>
 </div><p>
-<hr>The documentation for this class was generated from the following file:<ul>
-<li>trunk/src/wave/util/<a class="el" href="RealVector_8h-source.html">RealVector.h</a></ul>
-<hr size="1"><address style="align: right;"><small>Generated on Mon Feb 25 13:35:34 2008 for Wave Package by&nbsp;
+<hr>The documentation for this class was generated from the following files:<ul>
+<li>trunk/src/wave/util/<a class="el" href="RealVector_8h-source.html">RealVector.h</a><li>trunk/src/wave/util/RealVector.cc</ul>
+<hr size="1"><address style="align: right;"><small>Generated on Mon Jan 26 14:24:48 2009 by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.4.7 </small></address>
 </body>
