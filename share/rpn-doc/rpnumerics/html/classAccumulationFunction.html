@@ -1,6 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
-<title>Rpnumerics Package: AccumulationFunction Class Reference</title>
+<title>AccumulationFunction Class Reference</title>
 <link href="doxygen.css" rel="stylesheet" type="text/css">
 <link href="tabs.css" rel="stylesheet" type="text/css">
 </head><body>
@@ -22,8 +22,7 @@
 <p>Inheritance diagram for AccumulationFunction:
 <p><center><img src="classAccumulationFunction.png" usemap="#AccumulationFunction_map" border="0" alt=""></center>
 <map name="AccumulationFunction_map">
-<area href="classRpFunction.html" alt="RpFunction" shape="rect" coords="0,0,175,24">
-<area href="classQuad2AccumulationFunction.html" alt="Quad2AccumulationFunction" shape="rect" coords="0,112,175,136">
+<area href="classRpFunction.html" alt="RpFunction" shape="rect" coords="0,0,137,24">
 </map>
 <a href="classAccumulationFunction-members.html">List of all members.</a><table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
@@ -31,19 +30,85 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="58fffee323855fcf8f4f30d219d5a91e"></a><!-- doxytag: member="AccumulationFunction::AccumulationFunction" ref="58fffee323855fcf8f4f30d219d5a91e" args="(const AccumulationParams &amp;params)" -->
 &nbsp;</td><td class="memItemRight" valign="bottom"><b>AccumulationFunction</b> (const AccumulationParams &amp;params)</td></tr>
 
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="ef24281118ec9ddd6185e51beb503866"></a><!-- doxytag: member="AccumulationFunction::AccumulationFunction" ref="ef24281118ec9ddd6185e51beb503866" args="(const AccumulationFunction &amp;)" -->
+&nbsp;</td><td class="memItemRight" valign="bottom"><b>AccumulationFunction</b> (const <a class="el" href="classAccumulationFunction.html">AccumulationFunction</a> &amp;)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="classRpFunction.html">RpFunction</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAccumulationFunction.html#a410c77e91c59b8639529ccb90023451">clone</a> () const </td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAccumulationFunction.html#9ada9d7f34e5e744ec21cb33a237b30e">jet</a> (const WaveState &amp;u, JetMatrix &amp;m, int degree) const </td></tr>
+
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="97044204ddd874efd2834a90da2f6be8"></a><!-- doxytag: member="AccumulationFunction::accumulationParams" ref="97044204ddd874efd2834a90da2f6be8" args="(const AccumulationParams &amp;params)" -->
 void&nbsp;</td><td class="memItemRight" valign="bottom"><b>accumulationParams</b> (const AccumulationParams &amp;params)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="0e6bbad62773bc109a349acf9df6bb03"></a><!-- doxytag: member="AccumulationFunction::accumulationParams" ref="0e6bbad62773bc109a349acf9df6bb03" args="(void)" -->
-const AccumulationParams &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><b>accumulationParams</b> (void)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="59fc33c7839bf1527f4875e62cc3170f"></a><!-- doxytag: member="AccumulationFunction::accumulationParams" ref="59fc33c7839bf1527f4875e62cc3170f" args="(void) const " -->
+const AccumulationParams &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><b>accumulationParams</b> (void) const </td></tr>
 
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 TODO: NOTE : 
 <p>
+<hr><h2>Member Function Documentation</h2>
+<a class="anchor" name="a410c77e91c59b8639529ccb90023451"></a><!-- doxytag: member="AccumulationFunction::clone" ref="a410c77e91c59b8639529ccb90023451" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classRpFunction.html">RpFunction</a> * AccumulationFunction::clone           </td>
+          <td>(</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"> const<code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+virtual constructor 
+<p>
+Implements <a class="el" href="classRpFunction.html#125806434cf93f737bbf6d0e99766de6">RpFunction</a>.
+</div>
+</div><p>
+<a class="anchor" name="9ada9d7f34e5e744ec21cb33a237b30e"></a><!-- doxytag: member="AccumulationFunction::jet" ref="9ada9d7f34e5e744ec21cb33a237b30e" args="(const WaveState &amp;u, JetMatrix &amp;m, int degree) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int AccumulationFunction::jet           </td>
+          <td>(</td>
+          <td class="paramtype">const WaveState &amp;&nbsp;</td>
+          <td class="paramname"> <em>u</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">JetMatrix &amp;&nbsp;</td>
+          <td class="paramname"> <em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>degree</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"> const<code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+m coordinates function evaluation at u this is the nth derivative calculation that might be available or not 
+<p>
+Implements <a class="el" href="classRpFunction.html#882befd8e7f5f216da01a61f23bec9bf">RpFunction</a>.
+</div>
+</div><p>
 <hr>The documentation for this class was generated from the following files:<ul>
 <li>trunk/src/rpnumerics/<a class="el" href="AccumulationFunction_8h-source.html">AccumulationFunction.h</a><li>trunk/src/rpnumerics/AccumulationFunction.cc</ul>
-<hr size="1"><address style="align: right;"><small>Generated on Mon Feb 25 13:35:55 2008 for Rpnumerics Package by&nbsp;
+<hr size="1"><address style="align: right;"><small>Generated on Mon Jan 26 14:20:36 2009 by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.4.7 </small></address>
 </body>

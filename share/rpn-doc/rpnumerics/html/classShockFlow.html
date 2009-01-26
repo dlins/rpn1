@@ -1,6 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
-<title>Rpnumerics Package: ShockFlow Class Reference</title>
+<title>ShockFlow Class Reference</title>
 <link href="doxygen.css" rel="stylesheet" type="text/css">
 <link href="tabs.css" rel="stylesheet" type="text/css">
 </head><body>
@@ -22,26 +22,21 @@
 <p>Inheritance diagram for ShockFlow:
 <p><center><img src="classShockFlow.png" usemap="#ShockFlow_map" border="0" alt=""></center>
 <map name="ShockFlow_map">
-<area href="classWaveFlow.html" alt="WaveFlow" shape="rect" coords="0,56,76,80">
-<area href="classRpFunction.html" alt="RpFunction" shape="rect" coords="0,0,76,24">
+<area href="classWaveFlow.html" alt="WaveFlow" shape="rect" coords="0,0,74,24">
 </map>
 <a href="classShockFlow-members.html">List of all members.</a><table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
 <tr><td colspan="2"><br><h2>Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="322d7b28d69742af2e1c72e33ee500ef"></a><!-- doxytag: member="ShockFlow::jet" ref="322d7b28d69742af2e1c72e33ee500ef" args="(const int degree, const RealVector &amp;u, JetMatrix &amp;m)" -->
-int&nbsp;</td><td class="memItemRight" valign="bottom"><b>jet</b> (const int degree, const RealVector &amp;u, JetMatrix &amp;m)</td></tr>
-
 <tr><td class="memItemLeft" nowrap align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classShockFlow.html#d61acc4437163cef9b2f8e01a42544a5">ShockFlow</a> (const RealVector &amp;, const <a class="el" href="classFluxFunction.html">FluxFunction</a> &amp;)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="aa37ea0d9a028ab845e453e8048f8aa2"></a><!-- doxytag: member="ShockFlow::XZero" ref="aa37ea0d9a028ab845e453e8048f8aa2" args="(void) const " -->
-const RealVector *&nbsp;</td><td class="memItemRight" valign="bottom"><b>XZero</b> (void) const </td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="cc6f1ba315e1d6445898cf07fda1d295"></a><!-- doxytag: member="ShockFlow::ShockFlow" ref="cc6f1ba315e1d6445898cf07fda1d295" args="(const ShockFlowParams &amp;, const FluxFunction &amp;)" -->
+&nbsp;</td><td class="memItemRight" valign="bottom"><b>ShockFlow</b> (const <a class="el" href="classShockFlowParams.html">ShockFlowParams</a> &amp;, const <a class="el" href="classFluxFunction.html">FluxFunction</a> &amp;)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="16cb0c1843c5e035146617399d7c762a"></a><!-- doxytag: member="ShockFlow::setXZero" ref="16cb0c1843c5e035146617399d7c762a" args="(const RealVector &amp;xzero)" -->
-void&nbsp;</td><td class="memItemRight" valign="bottom"><b>setXZero</b> (const RealVector &amp;xzero)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="a48f7a35c57fb256c028ec7afc79355b"></a><!-- doxytag: member="ShockFlow::getParams" ref="a48f7a35c57fb256c028ec7afc79355b" args="() const " -->
+virtual const <a class="el" href="classShockFlowParams.html">ShockFlowParams</a> &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><b>getParams</b> () const </td></tr>
 
-<tr><td colspan="2"><br><h2>Protected Attributes</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="4e506053bd878facaae0bb32751fabcc"></a><!-- doxytag: member="ShockFlow::xZero_" ref="4e506053bd878facaae0bb32751fabcc" args="" -->
-RealVector *&nbsp;</td><td class="memItemRight" valign="bottom"><b>xZero_</b></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="3eb16b60fa2356451b2cb071d1878ca3"></a><!-- doxytag: member="ShockFlow::setParams" ref="3eb16b60fa2356451b2cb071d1878ca3" args="(const ShockFlowParams &amp;)" -->
+virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><b>setParams</b> (const <a class="el" href="classShockFlowParams.html">ShockFlowParams</a> &amp;)</td></tr>
 
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
@@ -81,7 +76,7 @@ RPn Project<p>
 </div><p>
 <hr>The documentation for this class was generated from the following files:<ul>
 <li>trunk/src/rpnumerics/<a class="el" href="ShockFlow_8h-source.html">ShockFlow.h</a><li>trunk/src/rpnumerics/ShockFlow.cc</ul>
-<hr size="1"><address style="align: right;"><small>Generated on Mon Feb 25 13:36:02 2008 for Rpnumerics Package by&nbsp;
+<hr size="1"><address style="align: right;"><small>Generated on Mon Jan 26 14:20:37 2009 by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.4.7 </small></address>
 </body>

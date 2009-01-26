@@ -1,6 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
-<title>Rpnumerics Package: trunk/src/rpnumerics/Physics.h Source File</title>
+<title>trunk/src/rpnumerics/Physics.h Source File</title>
 <link href="doxygen.css" rel="stylesheet" type="text/css">
 <link href="tabs.css" rel="stylesheet" type="text/css">
 </head><body>
@@ -39,18 +39,22 @@
 <a name="l00041"></a>00041     
 <a name="l00042"></a>00042     <span class="keyword">virtual</span> <span class="keywordtype">void</span> boundary(<span class="keyword">const</span> Boundary &amp; boundary) = 0;
 <a name="l00043"></a>00043     
-<a name="l00044"></a>00044     <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classFluxFunction.html">FluxFunction</a> &amp; fluxFunction() <span class="keyword">const </span>= 0;
+<a name="l00044"></a>00044     <span class="keyword">virtual</span>  <span class="keyword">const</span> <a class="code" href="classFluxFunction.html">FluxFunction</a> &amp; fluxFunction() <span class="keyword">const  </span>= 0;
 <a name="l00045"></a>00045     
-<a name="l00046"></a>00046     <span class="keyword">virtual</span> <span class="keyword">const</span> Space &amp; domain() <span class="keyword">const </span>= 0;
+<a name="l00046"></a>00046     <span class="keyword">virtual</span> <span class="keywordtype">void</span> fluxParams(<span class="keyword">const</span> <a class="code" href="classFluxParams.html">FluxParams</a> &amp;) =0;
 <a name="l00047"></a>00047     
-<a name="l00048"></a>00048 
+<a name="l00048"></a>00048     <span class="keyword">virtual</span> <span class="keyword">const</span> Space &amp; domain() <span class="keyword">const </span>= 0;
 <a name="l00049"></a>00049     
-<a name="l00050"></a>00050 };
-<a name="l00051"></a>00051 
+<a name="l00050"></a>00050     <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> * ID() <span class="keyword">const </span>=0;
+<a name="l00051"></a>00051     
 <a name="l00052"></a>00052 
-<a name="l00053"></a>00053 
-<a name="l00054"></a>00054 <span class="preprocessor">#endif  </span>
-</pre></div><hr size="1"><address style="align: right;"><small>Generated on Mon Feb 25 13:35:53 2008 for Rpnumerics Package by&nbsp;
+<a name="l00053"></a>00053     
+<a name="l00054"></a>00054 };
+<a name="l00055"></a>00055 
+<a name="l00056"></a>00056 
+<a name="l00057"></a>00057 
+<a name="l00058"></a>00058 <span class="preprocessor">#endif  </span>
+</pre></div><hr size="1"><address style="align: right;"><small>Generated on Mon Jan 26 14:20:36 2009 by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.4.7 </small></address>
 </body>

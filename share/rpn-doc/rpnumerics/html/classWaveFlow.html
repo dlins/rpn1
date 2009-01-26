@@ -1,6 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
-<title>Rpnumerics Package: WaveFlow Class Reference</title>
+<title>WaveFlow Class Reference</title>
 <link href="doxygen.css" rel="stylesheet" type="text/css">
 <link href="tabs.css" rel="stylesheet" type="text/css">
 </head><body>
@@ -17,14 +17,13 @@
     <li><a href="hierarchy.html"><span>Class&nbsp;Hierarchy</span></a></li>
     <li><a href="functions.html"><span>Class&nbsp;Members</span></a></li>
   </ul></div>
-<h1>WaveFlow Class Reference</h1><!-- doxytag: class="WaveFlow" --><!-- doxytag: inherits="RpFunction" --><code>#include &lt;<a class="el" href="WaveFlow_8h-source.html">WaveFlow.h</a>&gt;</code>
+<h1>WaveFlow Class Reference</h1><!-- doxytag: class="WaveFlow" --><code>#include &lt;<a class="el" href="WaveFlow_8h-source.html">WaveFlow.h</a>&gt;</code>
 <p>
 <p>Inheritance diagram for WaveFlow:
 <p><center><img src="classWaveFlow.png" usemap="#WaveFlow_map" border="0" alt=""></center>
 <map name="WaveFlow_map">
-<area href="classRpFunction.html" alt="RpFunction" shape="rect" coords="57,0,161,24">
-<area href="classRarefactionFlow.html" alt="RarefactionFlow" shape="rect" coords="0,112,104,136">
-<area href="classShockFlow.html" alt="ShockFlow" shape="rect" coords="114,112,218,136">
+<area href="classRarefactionFlow.html" alt="RarefactionFlow" shape="rect" coords="0,56,104,80">
+<area href="classShockFlow.html" alt="ShockFlow" shape="rect" coords="114,56,218,80">
 </map>
 <a href="classWaveFlow-members.html">List of all members.</a><table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
@@ -32,21 +31,29 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="08f45b541958d811370aabfc71c91daf"></a><!-- doxytag: member="WaveFlow::WaveFlow" ref="08f45b541958d811370aabfc71c91daf" args="(const FluxFunction &amp;)" -->
 &nbsp;</td><td class="memItemRight" valign="bottom"><b>WaveFlow</b> (const <a class="el" href="classFluxFunction.html">FluxFunction</a> &amp;)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="63fbf03b183cd662ead51bc48588139f"></a><!-- doxytag: member="WaveFlow::flux" ref="63fbf03b183cd662ead51bc48588139f" args="() const " -->
-const <a class="el" href="classFluxFunction.html">FluxFunction</a> &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWaveFlow.html#63fbf03b183cd662ead51bc48588139f">flux</a> () const </td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="a94a4bba216959b472a22b1cfc01c3ce"></a><!-- doxytag: member="WaveFlow::flux" ref="a94a4bba216959b472a22b1cfc01c3ce" args="(const RealVector &amp;, RealVector &amp;) const =0" -->
+virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><b>flux</b> (const RealVector &amp;, RealVector &amp;) const =0</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="8dc0f4412504b760f90caf931b8e0868"></a><!-- doxytag: member="WaveFlow::fluxDeriv" ref="8dc0f4412504b760f90caf931b8e0868" args="(const RealVector &amp;, JacobianMatrix &amp;) const =0" -->
+virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><b>fluxDeriv</b> (const RealVector &amp;, JacobianMatrix &amp;) const =0</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="21e8886f281d2b7a3f341cabf5c5fdbc"></a><!-- doxytag: member="WaveFlow::fluxDeriv2" ref="21e8886f281d2b7a3f341cabf5c5fdbc" args="(const RealVector &amp;, HessianMatrix &amp;) const =0" -->
+virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><b>fluxDeriv2</b> (const RealVector &amp;, HessianMatrix &amp;) const =0</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="a4636fe623fde3615ed7d7e0ee40e213"></a><!-- doxytag: member="WaveFlow::fluxFunction" ref="a4636fe623fde3615ed7d7e0ee40e213" args="() const " -->
+const <a class="el" href="classFluxFunction.html">FluxFunction</a> &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWaveFlow.html#a4636fe623fde3615ed7d7e0ee40e213">fluxFunction</a> () const </td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Gets the flux function. <br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="858437ebe664c39312ef8588221e3b9d"></a><!-- doxytag: member="WaveFlow::setFlux" ref="858437ebe664c39312ef8588221e3b9d" args="(const FluxFunction &amp;)" -->
-void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWaveFlow.html#858437ebe664c39312ef8588221e3b9d">setFlux</a> (const <a class="el" href="classFluxFunction.html">FluxFunction</a> &amp;)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="d134f53d38b51038e203d6e2032750f0"></a><!-- doxytag: member="WaveFlow::setFluxFunction" ref="d134f53d38b51038e203d6e2032750f0" args="(const FluxFunction &amp;)" -->
+void&nbsp;</td><td class="memItemRight" valign="bottom"><b>setFluxFunction</b> (const <a class="el" href="classFluxFunction.html">FluxFunction</a> &amp;)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Changes the flux function. <br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 Definition of class <a class="el" href="classWaveFlow.html">WaveFlow</a>. TODO: NOTE : 
 <p>
 <hr>The documentation for this class was generated from the following files:<ul>
 <li>trunk/src/rpnumerics/<a class="el" href="WaveFlow_8h-source.html">WaveFlow.h</a><li>trunk/src/rpnumerics/WaveFlow.cc</ul>
-<hr size="1"><address style="align: right;"><small>Generated on Mon Feb 25 13:36:02 2008 for Rpnumerics Package by&nbsp;
+<hr size="1"><address style="align: right;"><small>Generated on Mon Jan 26 14:20:37 2009 by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.4.7 </small></address>
 </body>
