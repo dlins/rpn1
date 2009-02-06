@@ -6,7 +6,6 @@
 
 package rpn.controller;
 
-import java.awt.event.ActionEvent;
 import rpn.component.RpGeomFactory;
 import rpn.component.RpCalcBasedGeomFactory;
 import rpn.usecase.*;
