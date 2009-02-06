@@ -17,7 +17,7 @@ import rpnumerics.plugin.RPnPluginManager;
 public class PluginTableModel extends DefaultTableModel {
 
     private static PluginTableModel instance_;
-    private static String pluginDir_ = System.getProperty("rpnhome") + System.getProperty("file.separator") + "lib" + System.getProperty("file.separator") + "linux_i686" + System.getProperty("file.separator") + "plugins" + System.getProperty("file.separator");
+    private static String pluginDir_ = System.getProperty("rpnhome") + System.getProperty("file.separator") + "lib" + System.getProperty("file.separator") + System.getenv("RPHOSTTYPE") + System.getProperty("file.separator") + "plugins" + System.getProperty("file.separator");
     private static HashMap<String, PluginProfile> pluginConfigMap_;
     private static Vector<String> columnNames_ = new Vector<String>();
 

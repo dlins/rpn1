@@ -7,7 +7,8 @@
 package rpn.plugininterface;
 
 import java.awt.BorderLayout;
-import java.awt.GridLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import javax.swing.JComponent;
@@ -27,9 +28,10 @@ public class PluginConfigDialog extends RPnDialog {
     private PluginProfile tempPluginProfile_;
 
     public PluginConfigDialog(String pluginType) {
-        super(true);
+        super(false, true);
 
         pluginType_ = pluginType;
+
 
         BorderLayout dialogLayout = (BorderLayout) this.getContentPane().getLayout();
 
@@ -42,9 +44,12 @@ public class PluginConfigDialog extends RPnDialog {
         String[] paramsNames = pluginProfile.getParamsName();
         String[] paramsValues = pluginProfile.getParamsDefValues();
 
-        GridLayout paramsPanelLayout = new GridLayout();
-        paramsPanelLayout.setHgap(10);
+
+        GridBagLayout paramsPanelLayout = new GridBagLayout();
         paramsPanel_ = new JPanel(paramsPanelLayout);
+        GridBagConstraints layoutConstraints = new GridBagConstraints();
+
+        paramsPanelLayout.setConstraints(paramsPanel_, layoutConstraints);
 
         titlePanel_ = new JPanel(new BorderLayout());
 
@@ -55,19 +60,15 @@ public class PluginConfigDialog extends RPnDialog {
 
         for (int i = 0; i < paramsNames.length; i++) {
 
-
-            JLabel paramName = new JLabel(paramsNames[i]);
+            JLabel paramName = new JLabel(paramsNames[i] + " :");
             JTextField paramValue = new JTextField(paramsValues[i]);
             paramValue.setName(paramsNames[i]);
             paramValue.addFocusListener(new ParamValueFocusListener());
             paramValue.getDocument().addDocumentListener(new TextFieldActionlistener());
-
-            paramValue.setColumns(4);
-
-
-            paramsPanel_.add(paramName);
+            paramValue.setColumns(paramValue.getText().length() + 5);
+            layoutConstraints.ipadx = 10;
+            paramsPanel_.add(paramName, layoutConstraints);
             paramsPanel_.add(paramValue);
-
 
         }
 

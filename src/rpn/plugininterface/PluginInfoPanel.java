@@ -20,7 +20,6 @@ import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JTree;
 import javax.swing.ListSelectionModel;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -31,7 +30,7 @@ import javax.swing.tree.TreePath;
 public class PluginInfoPanel extends JPanel {
 
     private JTree pluginTree_;
-    private static JTable configPluginTable_,  tempConfigPluginTable_;
+    private static JTable configPluginTable_,tempConfigPluginTable_;
     private DefaultMutableTreeNode rootNode_;
     private BorderLayout layout = new BorderLayout();
     private JSplitPane splitPane;
@@ -65,7 +64,7 @@ public class PluginInfoPanel extends JPanel {
 
         tableConfigPanel = new JScrollPane(configPluginTable_);
         pluginTreePanel = new JScrollPane(pluginTree_);
-        
+
         Dimension minimumSize = new Dimension(200, 200);
 
         pluginTreePanel.setPreferredSize(minimumSize);
@@ -171,7 +170,7 @@ public class PluginInfoPanel extends JPanel {
     }
 
     public static void transferTreeToTable(JTree tree) {
-        
+
         TreePath path = tree.getSelectionPath();
 
         String className;
@@ -214,8 +213,7 @@ public class PluginInfoPanel extends JPanel {
         }
 
     }
-    
-    
+
     public static void unDoUpdateTable() {
 
         for (int i = 0; i < configPluginTable_.getRowCount(); i++) {
@@ -228,10 +226,10 @@ public class PluginInfoPanel extends JPanel {
     }
 
     public JTable getConfigTable() {
-        
+
         return configPluginTable_;
     }
-    
+
     private static String getMethodName(String inputString) {
         String[] data = inputString.split("\"");
         return data[1];
