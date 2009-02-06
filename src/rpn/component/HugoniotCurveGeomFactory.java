@@ -15,6 +15,7 @@ public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
         super(calc);
     }
 
+    @Override
     protected RpController createUI() {
         return new HugoniotController();
     }
