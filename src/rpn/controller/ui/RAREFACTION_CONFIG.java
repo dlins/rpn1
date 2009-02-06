@@ -22,6 +22,7 @@ public class RAREFACTION_CONFIG extends UI_ACTION_SELECTED {
 
     }
 
+    @Override
     public void userInputComplete(rpn.controller.ui.UIController ui,
                                   RealVector userInput) {
 

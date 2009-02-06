@@ -29,8 +29,6 @@ public class SHOCK_CONFIG extends UI_ACTION_SELECTED {
     public void userInputComplete(rpn.controller.ui.UIController ui,
                                   RealVector userInput) {
         
-        
-        
         RPNUMERICS.getShockProfile().setXZero(new PhasePoint(userInput));
 
         super.userInputComplete(ui, userInput);

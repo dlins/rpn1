@@ -37,6 +37,22 @@ public class StateInputController implements PropertyChangeListener {
         if (evt.getPropertyName().equals("aplication state")) {
 
             try {
+                if ((evt.getNewValue() instanceof CURVES_CONFIG) || (evt.getOldValue() instanceof CURVES_CONFIG)) {
+                    RPnUIFrame.setStatusMessage(" ");
+                }
+                else {
+                    if (evt.getNewValue() instanceof SIGMA_CONFIG) {
+                        RPnUIFrame.setStatusMessage("Set Sigma");
+                    }
+                    else{
+                        RPnUIFrame.setStatusMessage("Enter coordinates");
+                    }                    
+                }
+
+//
+//                if (evt.getNewValue() instanceof GEOM_SELECTION) {
+//                    RPnUIFrame.setStatusMessage("Enter coordinates");
+//                }
                 uiFrame_.propertyChange(evt);
 
             } catch (NullPointerException ex) {
@@ -53,15 +69,15 @@ public class StateInputController implements PropertyChangeListener {
             }
 
             if (evt.getNewValue() instanceof SHOCK_CONFIG) {
-                RPnShockConfigDialog shockDialog = new RPnShockConfigDialog(false);
+                RPnShockConfigDialog shockDialog = new RPnShockConfigDialog(false,false);
                 shockDialog.setVisible(true);
             }
             if (evt.getNewValue() instanceof RAREFACTION_CONFIG) {
-                RPnRarefactionConfigDialog rarefactionDialog = new RPnRarefactionConfigDialog(false);
+                RPnRarefactionConfigDialog rarefactionDialog = new RPnRarefactionConfigDialog(false,false);
                 rarefactionDialog.setVisible(true);
             }
             if (evt.getNewValue() instanceof BIFURCATION_CONFIG) {
-                RPnBifurcationConfigDialog bifurcationConfigDialog = new RPnBifurcationConfigDialog();
+                RPnBifurcationConfigDialog bifurcationConfigDialog = new RPnBifurcationConfigDialog(false,false);
                 bifurcationConfigDialog.setVisible(true);
             }
 

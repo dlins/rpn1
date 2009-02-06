@@ -82,7 +82,7 @@ public class UIController extends ComponentUI {
 
     public void resetApplication() {
         UIController.instance().setState(new CURVES_CONFIG());
-        System.out.println("Resetando app");
+//        System.out.println("Resetando app");
 
 
         stateController_.propertyChange(new PropertyChangeEvent(this, "reset application", 0, handler_));
@@ -233,7 +233,7 @@ public class UIController extends ComponentUI {
         }
     }
 
-    /** Do a specific action when all user inputs are made. */
+    /** Do a specific action when all user inputs has been made. */
     public void userInputComplete(RealVector userInput) {
         // state dependent
         handler_.userInputComplete(this, userInput);
