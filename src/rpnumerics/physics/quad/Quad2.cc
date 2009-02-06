@@ -13,7 +13,6 @@ const char * Quad2::ID(void) const {
 
 Quad2::~Quad2() {
 
-    //    delete params_;
     delete fluxFunction_;
     delete accumulationFunction_;
     delete boundary_;
