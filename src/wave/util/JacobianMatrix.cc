@@ -27,7 +27,12 @@ JacobianMatrix::JacobianMatrix(const JacobianMatrix & jacobianMatrix) : RealMatr
 n_comps_(jacobianMatrix.n_comps_)
 
  {
-
+    for (int i=0;i < n_comps_;i++){
+        for (int j=0;j <n_comps_;j++) {
+            operator()(i, j, jacobianMatrix(i, j));
+        }
+    }
+    
 }
 
 
