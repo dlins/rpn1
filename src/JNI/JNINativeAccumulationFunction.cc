@@ -3,10 +3,10 @@
  *
  * RPn Project
  *
- * @(#) JNINativeFluxFunction.cc
+ * @(#) JNINativeAccumulationFunction.cc
  **/
 
-//! Definition of JNIFluxFuctionFacade
+//! Definition of JNIAccumulationFuctionFacade
 /*!
  *
  * TODO:
@@ -16,13 +16,13 @@
  * @ingroup JNI
  */
 
-#include "FluxFunction.h"
+#include "AccumulationFunction.h"
 #include "RpNumerics.h"
-#include "rpnumerics_FluxFunction.h"
+#include "rpnumerics_AccumulationFunction.h"
 #include "JNIDefs.h"
 #include <iostream>
 
-JNIEXPORT jint JNICALL Java_rpnumerics_FluxFunction_nativeJet(JNIEnv * env, jobject obj, jobject waveState, jobject jetMatrix, jint degree) {
+JNIEXPORT jint JNICALL Java_rpnumerics_AccumulationFunction_nativeJet(JNIEnv * env, jobject obj, jobject waveState, jobject jetMatrix, jint degree) {
 
     //Classes references
 
@@ -32,8 +32,8 @@ JNIEXPORT jint JNICALL Java_rpnumerics_FluxFunction_nativeJet(JNIEnv * env, jobj
     jclass jetMatrixClass = env->FindClass(JETMATRIX_LOCATION);
 
 
-    jclass fluxFunctionClass = env->FindClass(FLUXFUNCTION_LOCATION);
-    jclass fluxParamsClass = env->FindClass(FLUXPARAMS_LOCATION);
+    jclass accumulationFunctionClass = env->FindClass(ACCUMULATIONFUNCTION_LOCATION);
+    jclass accumulationParamsClass = env->FindClass(ACCUMULATIONPARAMS_LOCATION);
 
     //Methods references
 
@@ -46,8 +46,8 @@ JNIEXPORT jint JNICALL Java_rpnumerics_FluxFunction_nativeJet(JNIEnv * env, jobj
     jmethodID jetMatrixsetDF = env->GetMethodID(jetMatrixClass, "setElement", "(IID)V");
     jmethodID jetMatrixsetD2F = env->GetMethodID(jetMatrixClass, "setElement", "(IIID)V");
 
-    jmethodID getfluxParamsMethodID = (env)->GetMethodID(fluxFunctionClass, "fluxParams", "()Lrpnumerics/FluxParams;");
-    jmethodID getParamsMethodID = (env)->GetMethodID(fluxParamsClass, "getParams", "()Lwave/util/RealVector;");
+    jmethodID getaccumulationParamsMethodID = (env)->GetMethodID(accumulationFunctionClass, "accumulationParams", "()Lrpnumerics/AccumulationParams;");
+    jmethodID getParamsMethodID = (env)->GetMethodID(accumulationParamsClass, "getParams", "()Lwave/util/RealVector;");
 
 
     //Getting the dimension
@@ -73,13 +73,13 @@ JNIEXPORT jint JNICALL Java_rpnumerics_FluxFunction_nativeJet(JNIEnv * env, jobj
 
     JetMatrix nativeJetMatrix(dimension);
 
-    //Getting the native flux function
+    //Getting the native accumulation function
 
-    const FluxFunction & fluxFunction = RpNumerics::getFlux();
+    const AccumulationFunction & accumulationFunction = RpNumerics::getAccumulation();
 
-    jobject fluxParamsObj = (env)->CallObjectMethod(obj, getfluxParamsMethodID);
+    jobject accumulationParamsObj = (env)->CallObjectMethod(obj, getaccumulationParamsMethodID);
 
-    jobject realVectorObj = (env)->CallObjectMethod(fluxParamsObj, getParamsMethodID);
+    jobject realVectorObj = (env)->CallObjectMethod(accumulationParamsObj, getParamsMethodID);
 
     jdoubleArray paramsArray = (jdoubleArray) (env)->CallObjectMethod(realVectorObj, toDoubleMethodID);
 
@@ -91,13 +91,13 @@ JNIEXPORT jint JNICALL Java_rpnumerics_FluxFunction_nativeJet(JNIEnv * env, jobj
 
     Physics & physics = RpNumerics::getPhysics();
 
-    FluxParams nativeFluxParams(paramsLength, nativeParamsArray);
+    AccumulationParams nativeAccumulationParams(paramsLength, nativeParamsArray);
 
     //Setting the new parameters
     
-    physics.fluxParams(nativeFluxParams);
+    physics.accumulationParams(nativeAccumulationParams);
 
-    fluxFunction.jet(nativeWaveState, nativeJetMatrix, degree);
+    accumulationFunction.jet(nativeWaveState, nativeJetMatrix, degree);
 
 
     //Filling the output jet matrix
@@ -150,27 +150,27 @@ JNIEXPORT jint JNICALL Java_rpnumerics_FluxFunction_nativeJet(JNIEnv * env, jobj
 }
 
 /*
- * Class:     rpnumerics_NativeRpFunction
+ * Class:     rpnumerics_NativeAccumulationFunction
  * Method:    nativeJet
  * Signature: (Lwave/util/RealVector;Lwave/util/JetMatrix;I)I
  */
-JNIEXPORT jint JNICALL Java_rpnumerics_FluxFunction_nativeVectorJet(JNIEnv * env, jobject obj, jobject realVector, jobject jetMatrix, jint degree) {
+JNIEXPORT jint JNICALL Java_rpnumerics_AccumulationFunction_nativeVectorJet(JNIEnv * env, jobject obj, jobject realVector, jobject jetMatrix, jint degree) {
 
     //Classes references
     jclass jetMatrixClass = env->FindClass(JETMATRIX_LOCATION);
 
     jclass phasePointClass = env->FindClass(PHASEPOINT_LOCATION);
 
-    jclass fluxFunctionClass = env->FindClass(FLUXFUNCTION_LOCATION);
-    jclass fluxParamsClass = env->FindClass(FLUXPARAMS_LOCATION);
+    jclass accumulationFunctionClass = env->FindClass(ACCUMULATIONFUNCTION_LOCATION);
+    jclass accumulationParamsClass = env->FindClass(ACCUMULATIONPARAMS_LOCATION);
 
     //Methods ID
 
     jmethodID toDoubleMethodID = (env)->GetMethodID(phasePointClass, "toDouble", "()[D");
 
 
-    jmethodID getfluxParamsMethodID = (env)->GetMethodID(fluxFunctionClass, "fluxParams", "()Lrpnumerics/FluxParams;");
-    jmethodID getParamsMethodID = (env)->GetMethodID(fluxParamsClass, "getParams", "()Lwave/util/RealVector;");
+    jmethodID getaccumulationParamsMethodID = (env)->GetMethodID(accumulationFunctionClass, "accumulationParams", "()Lrpnumerics/AccumulationParams;");
+    jmethodID getParamsMethodID = (env)->GetMethodID(accumulationParamsClass, "getParams", "()Lwave/util/RealVector;");
 
 
     jmethodID jetMatrixsetF = env->GetMethodID(jetMatrixClass, "setElement", "(ID)V");
@@ -198,13 +198,13 @@ JNIEXPORT jint JNICALL Java_rpnumerics_FluxFunction_nativeVectorJet(JNIEnv * env
 
     JetMatrix nativeJetMatrix(dimension);
 
-    //Getting the native flux function
+    //Getting the native accumulation function
 
-    const FluxFunction & fluxFunction = RpNumerics::getFlux();
+    const AccumulationFunction & accumulationFunction = RpNumerics::getAccumulation();
 
-    jobject fluxParamsObj = (env)->CallObjectMethod(obj, getfluxParamsMethodID);
+    jobject accumulationParamsObj = (env)->CallObjectMethod(obj, getaccumulationParamsMethodID);
 
-    jobject realVectorObj = (env)->CallObjectMethod(fluxParamsObj, getParamsMethodID);
+    jobject realVectorObj = (env)->CallObjectMethod(accumulationParamsObj, getParamsMethodID);
 
     jdoubleArray paramsArray = (jdoubleArray) (env)->CallObjectMethod(realVectorObj, toDoubleMethodID);
 
@@ -216,13 +216,13 @@ JNIEXPORT jint JNICALL Java_rpnumerics_FluxFunction_nativeVectorJet(JNIEnv * env
 
     Physics & physics = RpNumerics::getPhysics();
 
-    FluxParams nativeFluxParams(paramsLength, nativeParamsArray);
+    AccumulationParams nativeaccumulationParams(paramsLength, nativeParamsArray);
 
     //Setting the new parameters
 
-    physics.fluxParams(nativeFluxParams);
+    physics.accumulationParams(nativeaccumulationParams);
 
-    fluxFunction.jet(nativeWaveState, nativeJetMatrix, degree);
+    accumulationFunction.jet(nativeWaveState, nativeJetMatrix, degree);
 
     //Filling the output jet matrix
     switch (degree) {

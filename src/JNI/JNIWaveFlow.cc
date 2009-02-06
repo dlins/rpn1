@@ -3,10 +3,10 @@
  *
  * RPn Project
  *
- * @(#) JNIOrbitCalc.cc
+ * @(#) JNIWaveFlow.cc
  **/
 
-//! Definition of JNIFluxFuctionFacade
+//! Definition of JNIWaveFlow
 /*!
  *
  * TODO:
@@ -15,13 +15,14 @@
  *
  * @ingroup JNI
  */
+
 #include "rpnumerics_WaveFlow.h"
 #include "FluxFunction.h"
 #include "RpNumerics.h"
 #include "JNIDefs.h"
 #include "PluginService.h"
 #include "RPnPluginManager.h"
-#include "ConservationShockFlow.h"
+#include "ShockFlowPlugin.h"
 #include "RarefactionFlowPlugin.h"
 #include <iostream>
 
@@ -30,7 +31,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveFlow_flux(JNIEnv * env, jobject ob
     //Classes references
 
     jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
-    //    jclass phasePointClass = env->FindClass(PHASEPOINT_LOCATION);
+
 
 
     jclass shockFlowClass = env->FindClass(SHOCKFLOW_LOCATION);
@@ -86,12 +87,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveFlow_flux(JNIEnv * env, jobject ob
 
     const FluxFunction & fluxFunction = RpNumerics::getFlux();
 
-    //        cout << objectClassName << "\n";
-
-
     if (!strcmp(objectClassName, "ShockFlow")) {
-
-        //        cout << "Entrando em shock flow" << "\n";
 
         jdouble sigma = (env)->CallDoubleMethod(obj, getSigmaMethodID); // <--- sigma
 
@@ -142,15 +138,15 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveFlow_flux(JNIEnv * env, jobject ob
 
         env->GetDoubleArrayRegion(referenceArray, 0, referenceLength, nativeReferenceArray);
 
-        //        cout << "Family: " << family << "\n";
-        //
-        //        for (int i = 0; i < referenceLength; i++) {
-        //            cout << "Reference Vector: " << nativeReferenceArray [i] << "\n";
-        //        }
+        cout << "Family: " << family << "\n";
+
+        for (int i = 0; i < referenceLength; i++) {
+            cout << "Reference Vector: " << nativeReferenceArray [i] << "\n";
+        }
 
         RpnPlugin * plug = RPnPluginManager::getPluginInstance("RarefactionFlow");
 
-        RarefactionFlowPlugin* flow = (RarefactionFlowPlugin *) plug;
+        RarefactionFlowPlugin* flow = (RarefactionFlowPlugin*) plug;
 
 
         //Setting the new parameters and flux function
@@ -159,9 +155,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveFlow_flux(JNIEnv * env, jobject ob
         flow->setFamilyIndex(family);
 
         flow->setReferenceVector(RealVector(dimension, nativeReferenceArray));
-        
+
         flow->setFluxFunction(fluxFunction);
-        
+
         flow->flux(realVectorInput, realVectorOutput);
 
         RPnPluginManager::unload(plug, "RarefactionFlow");
@@ -249,12 +245,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveFlow_fluxDeriv(JNIEnv * env, jobje
 
     const FluxFunction & fluxFunction = RpNumerics::getFlux();
 
-    //    cout << objectClassName << "\n";
+
 
 
     if (!strcmp(objectClassName, "ShockFlow")) {
-
-        //        cout << "Entrando em shock flow" << "\n";
 
         jdouble sigma = (env)->CallDoubleMethod(obj, getSigmaMethodID); // <--- sigma
 
@@ -307,16 +301,16 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveFlow_fluxDeriv(JNIEnv * env, jobje
 
         env->GetDoubleArrayRegion(referenceArray, 0, referenceLength, nativeReferenceArray);
 
-        //        cout << "Family: " << family << "\n";
-        //
-        //        for (int i = 0; i < referenceLength; i++) {
-        //            cout << "Reference Vector: " << nativeReferenceArray [i] << "\n";
-        //        }
+        cout << "Family: " << family << "\n";
+
+        for (int i = 0; i < referenceLength; i++) {
+            cout << "Reference Vector: " << nativeReferenceArray [i] << "\n";
+        }
 
         RpnPlugin * plug = RPnPluginManager::getPluginInstance("RarefactionFlow");
 
-        RarefactionFlowPlugin* flow = (RarefactionFlowPlugin *) plug;
-        
+        RarefactionFlowPlugin* flow = (RarefactionFlowPlugin*) plug;
+
         flow->setFamilyIndex(family);
         flow->setReferenceVector(RealVector(dimension, nativeReferenceArray));
         flow->setFluxFunction(fluxFunction);
@@ -342,6 +336,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveFlow_fluxDeriv(JNIEnv * env, jobje
 
 
 }
+
 /*
  * Class:     rpnumerics_WaveFlow
  * Method:    fluxDeriv2
@@ -410,12 +405,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveFlow_fluxDeriv2(JNIEnv * env, jobj
 
     const FluxFunction & fluxFunction = RpNumerics::getFlux();
 
-    //    cout << objectClassName << "\n";
-
-
     if (!strcmp(objectClassName, "ShockFlow")) {
-
-        //        cout << "Entrando em shock flow" << "\n";
 
         jdouble sigma = (env)->CallDoubleMethod(obj, getSigmaMethodID); // <--- sigma
 
@@ -467,18 +457,18 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveFlow_fluxDeriv2(JNIEnv * env, jobj
 
         env->GetDoubleArrayRegion(referenceArray, 0, referenceLength, nativeReferenceArray);
 
-        //        cout << "Family: " << family << "\n";
-        //
-        //        for (int i = 0; i < referenceLength; i++) {
-        //            cout << "Reference Vector: " << nativeReferenceArray [i] << "\n";
-        //        }
+        cout << "Family: " << family << "\n";
+
+        for (int i = 0; i < referenceLength; i++) {
+            cout << "Reference Vector: " << nativeReferenceArray [i] << "\n";
+        }
 
         RpnPlugin * plug = RPnPluginManager::getPluginInstance("RarefactionFlow");
 
         RarefactionFlowPlugin* flow = (RarefactionFlowPlugin *) plug;
 
         flow->setFamilyIndex(family);
-        flow->setReferenceVector(RealVector(dimension,nativeReferenceArray));
+        flow->setReferenceVector(RealVector(dimension, nativeReferenceArray));
         flow->setFluxFunction(fluxFunction);
 
         flow->fluxDeriv2(realVectorInput, hessianMatrixOutput);
