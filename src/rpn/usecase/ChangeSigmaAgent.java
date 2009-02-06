@@ -33,8 +33,6 @@ public class ChangeSigmaAgent extends RpModelConfigChangeAgent {
 
     public void execute() {
 
-//        Double oldValue = new Double(((ShockFlow) RPNUMERICS.flow()).getSigma());
-
         Double oldValue = new Double(RPNUMERICS.getShockProfile().getSigma());
         RealVector[] userInputList = UIController.instance().userInputList();
         RealVector lastPointAdded = userInputList[userInputList.length - 1];
@@ -42,18 +40,15 @@ public class ChangeSigmaAgent extends RpModelConfigChangeAgent {
         if (rpnumerics.RPNUMERICS.domainDim() == 2) {
             // finds the best point closest from Hugoniot curve
             HugoniotCurve hCurve = (HugoniotCurve) ((NUMCONFIG) RPnDataModule.PHASESPACE.state()).hugoniotGeom().geomFactory().geomSource();
-             newSigma = hCurve.findSigma(new PhasePoint(lastPointAdded));
+            newSigma = hCurve.findSigma(new PhasePoint(lastPointAdded));
 
             RPNUMERICS.getShockProfile().setSigma(newSigma);
         } else {
-//                    RPNUMERICS.getShockProfile().setSigma(newSigma);
-
         }
         System.out.println("OLD SIGMA = " + oldValue);
         Double newValue = new Double(RPNUMERICS.getShockProfile().getSigma());
         System.out.println("NEW SIGMA = " + newValue);
         applyChange(new PropertyChangeEvent(this, DESC_TEXT, oldValue, newValue));
-//        applyChange(new PropertyChangeEvent(this, DESC_TEXT, 0, newValue));
     }
 
     public void unexecute() {
@@ -61,7 +56,6 @@ public class ChangeSigmaAgent extends RpModelConfigChangeAgent {
         System.out.println("OLD SIGMA = " + oldValue);
         Double newValue = (Double) log().getOldValue();
         RPNUMERICS.getShockProfile().setSigma(newValue);
-//        ((ShockFlow) RPNUMERICS.flow()).setSigma(newValue.doubleValue());
         System.out.println("NEW SIGMA = " + newValue);
         applyChange(new PropertyChangeEvent(this, DESC_TEXT, oldValue, newValue));
     }

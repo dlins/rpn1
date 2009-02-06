@@ -55,6 +55,7 @@ public class ChangeFluxParamsAgent extends RpModelConfigChangeAgent {
     @Override
     public void actionPerformed(ActionEvent event) {
         execute();
+        System.out.println("apertando apply");
     }
 
     static public ChangeFluxParamsAgent instance() {

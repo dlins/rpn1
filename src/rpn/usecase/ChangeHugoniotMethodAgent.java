@@ -7,7 +7,6 @@
 package rpn.usecase;
 
 import java.beans.PropertyChangeEvent;
-import rpn.controller.ui.*;
 
 
 public class ChangeHugoniotMethodAgent extends RpModelConfigChangeAgent {
