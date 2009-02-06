@@ -1,14 +1,14 @@
+/*
+ * Instituto de Matematica Pura e Aplicada - IMPA
+ * Departamento de Dinamica dos Fluidos
+ *
+ */
 package rpn;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-/**
- * <p>Title: </p> <p>Description: </p> <p>Copyright: Copyright (c) 2002</p> <p>Company: </p>
- * @author unascribed
- * @version 1.3
- */
 public class RPnErrorControlDialog extends JDialog {
     JPanel jPanel1 = new JPanel();
     BorderLayout borderLayout1 = new BorderLayout();

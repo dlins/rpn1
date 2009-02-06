@@ -11,7 +11,6 @@ import rpnumerics.RPNUMERICS;
 
 public class RPnContinuationMethodConfigDialog extends RPnDialog {
 
-    private FlowLayout flowLayout1 = new FlowLayout();
     private JPanel paramsPanel_ = new JPanel();
     private JLabel stepsLengthLabel_ = new JLabel("Step Length");
     private JTextField stepsLengthJTextField_ = new JTextField();

@@ -1,9 +1,14 @@
+/*
+ * Instituto de Matematica Pura e Aplicada - IMPA
+ * Departamento de Dinamica dos Fluidos
+ *
+ */
+
 package rpn;
 
 import java.io.*;
 import java.net.*;
 import javax.swing.JApplet;
-import rpn.RPnConfigReader;
 import javax.swing.ImageIcon;
 
 public class RPnAppletConfigReader extends RPnConfigReader{

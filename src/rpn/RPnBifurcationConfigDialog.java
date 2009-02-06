@@ -21,6 +21,7 @@ public class RPnBifurcationConfigDialog extends RPnDialog {
     private JComboBox plusFamilyComboBox_;
 
     public RPnBifurcationConfigDialog() {
+        super(false);
         try {
             jbInit();
         } catch (Exception e) {
@@ -31,6 +32,16 @@ public class RPnBifurcationConfigDialog extends RPnDialog {
      public RPnBifurcationConfigDialog(boolean enableResetButton) {
          super(enableResetButton);
         try {
+            jbInit();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+   public RPnBifurcationConfigDialog(boolean b, boolean b0) {
+        super(b0, b0);
+         try {
             jbInit();
 
         } catch (Exception e) {
@@ -57,16 +68,10 @@ public class RPnBifurcationConfigDialog extends RPnDialog {
 
     private void jbInit() throws Exception {
         addFamilyIndex();
-
-
         jPanel1.setLayout(borderLayout1);
-
-
-
         this.getContentPane().add(plusfamilyPanel_, BorderLayout.NORTH);
         this.getContentPane().add(minusfamilyPanel_, BorderLayout.CENTER);
         pack();
-
     }
 
     protected void apply() {

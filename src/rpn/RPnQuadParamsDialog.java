@@ -6,13 +6,8 @@
 
 package rpn;
 
-import rpnumerics.RPNUMERICS;
-//import rpnumerics.physics.QuadNDFluxParams;
-import rpn.usecase.ChangeFluxParamsAgent;
 import javax.swing.*;
 import java.awt.*;
-import wave.util.RealVector;
-import java.beans.PropertyChangeEvent;
 import java.awt.event.*;
 
 public class RPnQuadParamsDialog extends JDialog {

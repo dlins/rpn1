@@ -46,6 +46,16 @@ public class RPnRarefactionConfigDialog extends RPnDialog {
         }
     }
 
+    public RPnRarefactionConfigDialog(boolean b, boolean b0) {
+        super(b0, b0);
+         try {
+            jbInit();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 //    private void addFamilyIndex() {
 //        familyPanel.add(new JLabel("Family Index", SwingConstants.LEFT));
 //        familyIndexComboBox = new JComboBox();
@@ -58,6 +68,7 @@ public class RPnRarefactionConfigDialog extends RPnDialog {
 
     private void jbInit() throws Exception {
         setTitle("Rarefaction Curve Configuration");
+        RPnUIFrame.setStatusMessage("Curve Configuration");
 //        addFamilyIndex();
         addFlowName();
 
@@ -94,6 +105,7 @@ public class RPnRarefactionConfigDialog extends RPnDialog {
 //        RPNUMERICS.getRarefactionProfile().setFamily(((Integer) familyIndexComboBox.getSelectedItem()).intValue());
 //        RPNUMERICS.getRarefactionProfile().setFlowName((String) flowNameComboBox.getSelectedItem());
         RPNUMERICS.setCurrentProfile(RPNUMERICS.getRarefactionProfile());
+        RPnUIFrame.setStatusMessage("Enter coordinates");
         dispose();
 
 

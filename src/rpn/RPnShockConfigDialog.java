@@ -48,6 +48,16 @@ public class RPnShockConfigDialog extends RPnDialog {
 
     }
 
+    public RPnShockConfigDialog(boolean b, boolean b0) {
+        super(b0, b0);
+        try {
+            jbInit();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void addMethodName() {
         methodComboBox_ = new JComboBox();
         methodComboBox_.addMouseListener(new MouseHandler());
@@ -71,6 +81,7 @@ public class RPnShockConfigDialog extends RPnDialog {
     private void jbInit() throws Exception {
 
         this.setTitle("Shock Curve Configuration");
+        RPnUIFrame.setStatusMessage("Curve Configuration");
         addMethodName();
         addFlowName();
         flowPluginName_.addMouseListener(new MouseHandler());
@@ -101,6 +112,8 @@ public class RPnShockConfigDialog extends RPnDialog {
         RPNUMERICS.getShockProfile().setFlowName((String) flowNameComboBox_.getSelectedItem());
 
         RPNUMERICS.setCurrentProfile(RPNUMERICS.getShockProfile());
+        
+        RPnUIFrame.setStatusMessage("Enter coordinates");
 
 
     }
@@ -125,11 +138,7 @@ public class RPnShockConfigDialog extends RPnDialog {
                 dialog.setVisible(true);
 
                 }
-
-                
             }
-            
-
                         
         }
 

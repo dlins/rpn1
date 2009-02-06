@@ -41,14 +41,14 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JMenuItem errorControlMenuItem = new JMenuItem();
     private JMenuItem createJPEGImageMenuItem = new JMenuItem();
     private JMenuItem printMenuItem = new JMenuItem();
-    private JMenuItem clearPhaseSpaceMenuItem = new JMenuItem();
-    private JMenuItem changeXZeroMenuItem = new JMenuItem();
     private JMenuItem pluginMenuItem = new JMenuItem();
     private RPnPhaseSpaceFrame[] frames_ = null;
     private RPnMenuCommand commandMenu_ = null;
     private JMenuItem networkMenuItem = new JMenuItem();
     private JToolBar toolBar_ = new JToolBar();
-    
+    private static JLabel statusLabel_ = new JLabel();
+    private JMenuItem curvesMenuItem_ = new JMenuItem("Change Curve");
+
     //Construct the frame
     public RPnUIFrame(RPnMenuCommand command) {
         enableEvents(AWTEvent.WINDOW_EVENT_MASK);
@@ -64,8 +64,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             addPropertyChangeListener(this);
 
             UndoActionController.createInstance();
-            jbInit();
 
+            jbInit();
+            getContentPane().add(statusLabel_, BorderLayout.SOUTH);
             if (commandMenu_ instanceof RPnAppletPlotter) { // Selecting itens to disable in Applet
 
                 networkMenuItem.setEnabled(false);
@@ -96,6 +97,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         //setIconImage(Toolkit.getDefaultToolkit().createImage(ShockFlowControlFrame.class.getResource("[Your Icon]")));
         uiFramePosition();
 
+
         contentPane = (JPanel) this.getContentPane();
         contentPane.setLayout(borderLayout1);
         this.setSize(new Dimension(400, 300));
@@ -105,7 +107,17 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         pluginMenuItem.setText("Plugins ...");
         jMenuFileExit.setText("Exit");
 
+        
+         curvesMenuItem_.addActionListener(
+                new java.awt.event.ActionListener() {
 
+                    public void actionPerformed(ActionEvent e) {
+
+                        RPnShockConfigDialog shockConfigDialog = new RPnShockConfigDialog(false,false);
+                        shockConfigDialog.begin();
+
+                    }
+                });
         pluginMenuItem.addActionListener(
                 new ActionListener() {
 
@@ -183,6 +195,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                     }
                 });
         modelInteractionMenu.setText("RP");
+
 //        fileMenu.addSeparator();
         networkMenuItem.setText("Network ...");
         networkMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -224,6 +237,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
 
 
+
     }
 
     private void shockConfigMenu() {
@@ -231,8 +245,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 new java.awt.event.ActionListener() {
 
                     public void actionPerformed(ActionEvent e) {
-
-                        RPnShockConfigDialog shockConfigDialog = new RPnShockConfigDialog(false);
+                        RPnShockConfigDialog shockConfigDialog = new RPnShockConfigDialog(false,false);
                         shockConfigDialog.setVisible(true);
 
                     }
@@ -249,6 +262,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         modelInteractionMenu.add(shockMenuItem_);
         modelInteractionMenu.add(errorControlMenuItem);
+        modelInteractionMenu.addSeparator();
+        modelInteractionMenu.add(curvesMenuItem_);
+
     }
 
     private void rarefactionConfigMenu() {
@@ -258,7 +274,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
                     public void actionPerformed(ActionEvent e) {
 
-                        RPnRarefactionConfigDialog rarefactionConfigDialog = new RPnRarefactionConfigDialog(false);
+                        RPnRarefactionConfigDialog rarefactionConfigDialog = new RPnRarefactionConfigDialog(false,false);
 
                         rarefactionConfigDialog.setVisible(true);
                     }
@@ -270,7 +286,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         modelInteractionMenu.add(rarefactionMenuItem_);
         modelInteractionMenu.addSeparator();
         modelInteractionMenu.add(errorControlMenuItem);
-
+        modelInteractionMenu.addSeparator();
+        modelInteractionMenu.add(curvesMenuItem_);
     }
 
     private void bifurcationConfigMenu() {
@@ -280,7 +297,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
                     public void actionPerformed(ActionEvent e) {
 
-                        RPnBifurcationConfigDialog bifurcationConfigDialog = new RPnBifurcationConfigDialog(false);
+                        RPnBifurcationConfigDialog bifurcationConfigDialog = new RPnBifurcationConfigDialog(false,false);
                         bifurcationConfigDialog.setVisible(true);
 
                     }
@@ -288,7 +305,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         modelInteractionMenu.removeAll();
         modelInteractionMenu.add(bifurcationMenuItem_);
-
+        modelInteractionMenu.addSeparator();
+        modelInteractionMenu.add(curvesMenuItem_);
 
     }
 
@@ -300,11 +318,14 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     //
     // Methods
     //
+    
     public void propertyChange(PropertyChangeEvent evt) {
 
         if (evt.getPropertyName().equals("aplication state")) {
 
+
             if (UIController.instance().getState() instanceof SHOCK_CONFIG || (evt.getNewValue() instanceof SIGMA_CONFIG)) {
+
                 shockConfigMenu();
                 toolBar_.removeAll();
                 toolBar_.add(ForwardOrbitPlotAgent.instance().getContainer());
@@ -358,7 +379,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     }
 
     //Overridden so we can exit when window is closed
-    
     @Override
     protected void processWindowEvent(WindowEvent e) {
         super.processWindowEvent(e);
@@ -476,6 +496,10 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             ioex.printStackTrace();
         } catch (java.lang.NullPointerException nullEx) {
         }
+    }
+
+    public static void setStatusMessage(String message) {
+        statusLabel_.setText(message);
     }
 
     void networkMenuItem_actionPerformed(ActionEvent e) {

@@ -19,7 +19,7 @@ public class RPnPluginDialog extends RPnDialog {
     private PluginInfoController controller_;
 
     public RPnPluginDialog() {
-        super(false);
+        super(false,true);
         setTitle("Plugins");
         PluginInfoPanel pluginPanel = new PluginInfoPanel();
         PluginInfoParser parser = new PluginInfoParser();
@@ -39,6 +39,7 @@ public class RPnPluginDialog extends RPnDialog {
     @Override
     protected void cancel(){
         PluginInfoPanel.unDoUpdateTable();
+        apply();
         dispose();
     }
 }

@@ -1,13 +1,14 @@
+/*
+ * Instituto de Matematica Pura e Aplicada - IMPA
+ * Departamento de Dinamica dos Fluidos
+ *
+ */
+
 package rpn;
 
 import java.awt.*;
 import javax.swing.*;
 
-/**
- * <p>Title:  GUI</p> <p>Description: GUI components for </p> <p>Copyright: Copyright (c) 2002</p> <p>Company: FLUID</p>
- * @author unascribed
- * @version 1.0
- */
 public class RPnViscosityPanel extends JPanel {
     FlowLayout flowLayout1 = new FlowLayout();
     JPanel jPanel1 = new JPanel();

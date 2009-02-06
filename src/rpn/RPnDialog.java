@@ -1,6 +1,7 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Instituto de Matematica Pura e Aplicada - IMPA
+ * Departamento de Dinamica dos Fluidos
+ *
  */
 package rpn;
 
@@ -75,19 +76,27 @@ public abstract class RPnDialog extends JDialog {
 
     }
 
-    public RPnDialog(boolean enableCancelButton) {
+    public RPnDialog(boolean displayBeginButton) {
         this();
-        if (!enableCancelButton) {
+        if (!displayBeginButton) {
+            buttonsPanel.remove(beginButton);
+        }
+        
+    }
 
+    public RPnDialog(boolean displayBeginButton, boolean displayCancelButton) {
+        this();
+        if (!displayBeginButton){
+            buttonsPanel.remove(beginButton);
+        }
+        if (!displayCancelButton) {
             buttonsPanel.remove(cancelButton);
         }
         else{
-            buttonsPanel.remove(beginButton);
             cancelButton.setEnabled(true);
         }
-
+        
     }
-
 
 
     private void addBackButton() {
