@@ -39,6 +39,8 @@ public:
     
     static  const FluxFunction & getFlux();
     
+    static  const AccumulationFunction & getAccumulation();
+    
     static const ODESolver & getODESolver();
     
     static  void initODESolver();
@@ -56,6 +58,8 @@ public:
 inline Physics & RpNumerics::getPhysics(){return *physics_;}
 
 inline  const FluxFunction & RpNumerics::getFlux() {return physics_->fluxFunction();}
+
+inline  const AccumulationFunction & RpNumerics::getAccumulation() {return physics_->accumulation();}
 
 inline void RpNumerics::setPhysics(const Physics & physics){
     delete physics_;

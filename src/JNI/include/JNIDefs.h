@@ -35,6 +35,8 @@
 
 #define FLUXFUNCTION_LOCATION                  "rpnumerics/FluxFunction"
 #define FLUXPARAMS_LOCATION                    "rpnumerics/FluxParams"
+#define ACCUMULATIONPARAMS_LOCATION            "rpnumerics/AccumulationParams"
+#define ACCUMULATIONFUNCTION_LOCATION          "rpnumerics/AccumulationFunction"
 
 #define MANIFOLD_LOCATION                      "rpnumerics/ManifoldOrbit"
 #define CONNECTIONORBIT_LOCATION               "rpnumerics/ConnectionOrbit"
