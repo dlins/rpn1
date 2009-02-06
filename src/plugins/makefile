@@ -11,7 +11,7 @@ WAVEDIR       = $(SRCDIR)/wave
 include $(RPNUMERICSDIR)/defs
 include $(WAVEDIR)/defs
 
-PLUG_SRC = ConservationShockFlow.cc RarefactionFlowPlugin.cc
+PLUG_SRC = ShockFlowPlugin.cc RarefactionFlowPlugin.cc
 
 
 

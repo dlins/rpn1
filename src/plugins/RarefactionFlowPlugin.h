@@ -1,13 +1,26 @@
-/* 
- * File:   FlowPlugin.h
- * Author: edsonlan
+
+/**
+ * IMPA - Fluid Dynamics Laboratory
  *
- * Created on September 22, 2008, 6:23 PM
- */
+ * RPn Project
+ *
+ * @(#) RarefactionFlowPlugin.h
+ **/
 
 
 #ifndef _RAREFACTIONFLOW_H
 #define	_RAREFACTIONFLOW_H
+
+/*!
+ *
+ *
+ * TODO:
+ * NOTE :
+ *
+ * @ingroup plugins
+ */
+
+
 
 
 #include "RpnPlugin.h"

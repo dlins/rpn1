@@ -1,4 +1,4 @@
-#include "ConservationShockFlow.h"
+#include "ShockFlowPlugin.h"
 
 int ShockFlowPlugin::flux(const RealVector & input, RealVector & output) const {
 

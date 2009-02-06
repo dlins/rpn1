@@ -1,13 +1,23 @@
-/* 
- * File:   FlowPlugin.h
- * Author: edsonlan
+/**
+ * IMPA - Fluid Dynamics Laboratory
  *
- * Created on September 22, 2008, 6:23 PM
+ * RPn Project
+ *
+ * @(#) ShockFlowPlugin.h
+ **/
+
+#ifndef _SHOCKFLOWPLUGIN_H
+#define	_SHOCKFLOWPLUGIN_H
+
+
+/*!
+ *
+ *
+ * TODO:
+ * NOTE :
+ *
+ * @ingroup plugins
  */
-
-
-#ifndef _CONSERVATIONSHOCKFLOW_H
-#define	_CONSERVATIONSHOCKFLOW_H
 
 
 #include "RpnPlugin.h"
@@ -18,12 +28,7 @@ class ShockFlowPlugin : public RpnPlugin, public ShockFlow {
 
 private:
 
-
-   
     RealVector * fx0_;
-
-
-
 
 public:
 
@@ -37,8 +42,6 @@ public:
     int flux(const RealVector &, RealVector &) const;
     int fluxDeriv(const RealVector &, JacobianMatrix &)const;
     int fluxDeriv2(const RealVector &, HessianMatrix &)const;
-
-    
     
 
     virtual~ShockFlowPlugin();
