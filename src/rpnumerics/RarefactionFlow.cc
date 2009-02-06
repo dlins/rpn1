@@ -34,7 +34,7 @@ RarefactionFlow::RarefactionFlow(const int familyIndex, const int timeDirection,
     
 }
 
-RarefactionFlow::~RarefactionFlow(){
+RarefactionFlow::~RarefactionFlow() {
     delete referenceVector_;
 }
 

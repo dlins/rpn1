@@ -41,14 +41,21 @@ public:
     double & operator()(const int comp);
     WaveState & operator =(const WaveState &);
     int stateSpaceDim() const ;
-    
+    void setCoords(const RealVector &);
     
 protected:
     RealVector * coords_;
     
 };
 
-
+inline void WaveState::setCoords(const RealVector &coords){
+    
+    for (int i=0;i < coords_->size();i++){
+        
+        coords_->operator()(i)=coords(i);
+    }
+    
+}
 
 inline int WaveState::stateSpaceDim() const {
     

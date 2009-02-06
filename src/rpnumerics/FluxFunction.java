@@ -5,16 +5,21 @@
  */
 package rpnumerics;
 
+import wave.util.HessianMatrix;
+import wave.util.JetMatrix;
+import wave.util.RealMatrix2;
 import wave.util.RealVector;
 
-public class FluxFunction extends NativeFluxFunction {
+    public class FluxFunction implements RpFunction{ //TODO Alterar a interface JNI !!!
+        
+        
 //	HessianMatrix D2F( RealVector U );
 //	
 //	RealMatrix2 DF( RealVector U );
 //	
 //	RealVector F( RealVector U );
     
-     static private final double[] DEFAULT_A = new double[] { 0d, 0d };
+     static private final double[] DEFAULT_A = new double[] { 0d, 0d };//TODO Passar para a classe QUAD2FLUXPARAMS
 
     static private final double[] [] DEFAULT_B = new double[] [] { { 0d, .1 }, { -.1, 0d }
     };
@@ -24,6 +29,43 @@ public class FluxFunction extends NativeFluxFunction {
         }, { { 0d, 1d }, { 1d, 0d }
         }
     };
+
+     public int jet(WaveState input, JetMatrix output, int degree) {
+        return nativeJet(input, output, degree);
+    }
+
+    public int jet(RealVector input, JetMatrix output, int degree) {
+        return nativeVectorJet(input, output, degree);
+    }
+
+    private native int nativeJet(WaveState input, JetMatrix output, int degree);
+
+    private native int nativeVectorJet(RealVector input, JetMatrix output, int degree);
+
+    
+    
+    
+    
+    
+    public HessianMatrix D2F(RealVector toRealVector) {
+        JetMatrix output = new JetMatrix(toRealVector.getSize());
+        jet(toRealVector, output, 2);
+        return output.hessian();
+
+    }
+
+    public RealMatrix2 DF(RealVector toRealVector) {
+
+        JetMatrix output= new JetMatrix(toRealVector.getSize());
+        jet(toRealVector, output, 1);
+        return output.jacobian();
+    }
+
+    public RealVector F(RealVector toRealVector) {
+        JetMatrix output = new JetMatrix(toRealVector.getSize());
+        jet(toRealVector, output, 1);
+        return output.f();
+    }
     
     
     

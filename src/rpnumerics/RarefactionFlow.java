@@ -31,9 +31,10 @@ public class RarefactionFlow extends WaveFlow {
     //
     // Methods
     //
-    public WavePoint flux(RealVector x) {
+    @Override
+  public WavePoint flux(RealVector x) {
 
-        //	System.out.println("rarefaction flux u = " + u);
+
 
         WaveState input = new WaveState(new PhasePoint(x));
         JetMatrix output = new JetMatrix(x.getSize());
@@ -47,7 +48,6 @@ public class RarefactionFlow extends WaveFlow {
             }
         }
 
-//        RealMatrix2 df = getFlux().DF(u);
         int stateSpaceDim = x.getSize();
 
         double[] eigenValR = new double[stateSpaceDim];
@@ -71,23 +71,22 @@ public class RarefactionFlow extends WaveFlow {
 
         setReferenceVector(new PhasePoint(rarefactionVector));
         //	System.out.println("rarefaction flux new referenceVector  = " + referenceVector_);
-
-
         WavePoint returned = new WavePoint(rarefactionVector, eigenValR[getFamily()]);
 
         return returned;
 
-//        return rarefactionVector;
     }
+
 
     @Override
     public JacobianMatrix fluxDeriv(RealVector u) {
-
         /** @todo  not implemented yet...*/
         int stateSpaceDim = u.getSize();
         return new JacobianMatrix(stateSpaceDim);
     }
+//
 
+    @Override
     public HessianMatrix fluxDeriv2(RealVector u) {
         /** @todo  not implemented yet...*/
         int stateSpaceDim = u.getSize();
@@ -105,11 +104,6 @@ public class RarefactionFlow extends WaveFlow {
     public void setXZero(PhasePoint xzero) {
 
         setReferenceVector(xzero);
-    }
-
-    public String getName() {
-        return "Rarefaction Flow";
-
     }
 
     public FluxFunction getFlux() {

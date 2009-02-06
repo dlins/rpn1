@@ -11,33 +11,28 @@
 #include "RealVector.h"
 
 class AccumulationParams {
-
 private:
 
-	RealVector *params_;
-//	RealVector  *initParams_;
+    RealVector *params_;
+
 
 public:
-	
-	AccumulationParams();
-	AccumulationParams(const RealVector & params);
-        AccumulationParams (const AccumulationParams &);
-	virtual ~AccumulationParams();
 
-	const RealVector & params(void) const;
-	const double component(int index) const;
-	void params(int size, double * coords);
-	void params(const RealVector & params);
-	void component(int index, double value);
+    AccumulationParams();
+    AccumulationParams(const RealVector & params);
+    AccumulationParams(const int size, double *);
+    AccumulationParams(const AccumulationParams &);
+    virtual ~AccumulationParams();
 
-	AccumulationParams defaultParams(void);
+    const RealVector & params(void) const;
+    const double component(int index) const;
+    void params(int size, double * coords);
+    void params(const RealVector & params);
+    void component(int index, double value);
+
+    AccumulationParams defaultParams(void);
 
 };
-
-
-
-
-
 
 inline const RealVector & AccumulationParams::params(void) const {
     return *params_;
@@ -50,7 +45,7 @@ inline const double AccumulationParams::component(int index) const {
 inline void AccumulationParams::params(int size, double * coords) {
     delete params_;
     params_ = new RealVector(size, coords);
-    
+
 }
 
 inline void AccumulationParams::params(const RealVector & params) {

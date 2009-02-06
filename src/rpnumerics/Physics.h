@@ -44,6 +44,8 @@ public :
     virtual  const FluxFunction & fluxFunction() const  = 0;
     
     virtual void fluxParams(const FluxParams &) =0;
+
+    virtual void accumulationParams(const AccumulationParams &) = 0;
     
     virtual const Space & domain() const = 0;
     

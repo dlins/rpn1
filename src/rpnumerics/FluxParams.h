@@ -87,6 +87,7 @@ public:
     void component(int index, double value);
     
     bool operator==(const FluxParams & fluxParams);
+    bool operator!=(const FluxParams & fluxParams);
 
     FluxParams & operator=(const FluxParams &);
     
@@ -123,10 +124,16 @@ inline FluxParams & FluxParams::operator=(const FluxParams & source){
     
 }
 
+inline bool FluxParams::operator!=(const FluxParams & fluxParams){
+    return (!(*this==fluxParams));
+}
+
 inline bool FluxParams::operator==(const FluxParams & fluxParams) {
-    int i ;
     
-    for (i=0;i < params_->size();i++){
+    if (params_->size()!=fluxParams.params().size())
+        return false;
+
+    for (int i=0;i < params_->size();i++){
         
         if (params_->component(i)!=fluxParams.component(i))
             return false;

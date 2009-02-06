@@ -32,14 +32,14 @@
 
 class RarefactionFlow: public WaveFlow{
     
-private:
+protected:
     
     int familyIndex_;
     
     int timeDirection_;
     
     RealVector * referenceVector_;
-    
+   
        
 public:
 
@@ -48,9 +48,9 @@ public:
     
     RarefactionFlow(const RarefactionFlow &);
 
-    const RealVector & getReferenceVector() const;
+    virtual const RealVector & getReferenceVector() const;
     
-    void setReferenceVector(const RealVector & );
+    virtual void setReferenceVector(const RealVector & );
     
     int getFamilyIndex() const;
     void setFamilyIndex(int);
@@ -74,9 +74,10 @@ inline void RarefactionFlow::setDirection(int timeDirection){timeDirection_=time
 
 inline const RealVector & RarefactionFlow::getReferenceVector() const {return *referenceVector_;}
 
-inline void RarefactionFlow::setReferenceVector(const RealVector & referenceVector){
-    delete referenceVector_;
-    referenceVector_=new RealVector(referenceVector);
+inline void RarefactionFlow::setReferenceVector(const RealVector & referenceVector) {
+    for (int i = 0; i < referenceVector_->size();i++){
+        referenceVector_->operator()(i)=referenceVector(i);
+    }
 }
 
 #endif //! _RarefactionFlow_H

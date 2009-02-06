@@ -28,6 +28,8 @@ public class RPNUMERICS {
     static private RarefactionProfile rarefactionProfile_ = RarefactionProfile.instance();
     static private BifurcationProfile bifurcationProfile_ = BifurcationProfile.instance();
     static private ShockRarefactionProfile shockRarefactionProfile_ = null;
+
+    
 //    static private FluxFunction fluxFunction_;
 
     //
