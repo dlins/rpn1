@@ -1,6 +1,23 @@
-
+/**
+ * IMPA - Fluid Dynamics Laboratory
+ *
+ * RPn Project
+ *
+ * @(#) PluginService.h
+ **/
 #ifndef _PLUGINSERVICE_H
 #define	_PLUGINSERVICE_H
+
+//!
+/*!
+ *
+ *
+ * TODO:
+ * NOTE :
+ *
+ * @ingroup plugin
+ */
+
 
 #include "RpnPlugin.h"
 #include <sys/types.h>
@@ -20,7 +37,6 @@ private:
     string  *libFileName_;
     void * pluginlib_;
     
-//    void search();
     
 public:
 

@@ -90,9 +90,6 @@ RpnPlugin * RPnPluginManager::getPluginInstance(const string pluginType) {
 
         dirPath += pluginMapIterator->first;
 
-        //        cout << "Load Lib: " << dirPath << "\n";
-        //        cout << "Load Method: " << classIterator->second<<"\n";
-
         PluginService service(dirPath);
 
         return service.load(classIterator->second);
