@@ -28,7 +28,7 @@ TriPhase::TriPhase(const TriPhaseParams & params, const PermParams & permParams,
     
     FLUX_ID="TriPhase";
 
-    accFunction_ = new AccumulationFunction(); //TODO Using default accumulationFunction
+    accFunction_ = new TriPhaseAccumulationFunction(); //TODO Using default accumulationFunction
     boundary_= defaultBoundary();
     
 }

@@ -9,6 +9,7 @@ RPNUMSRC += Capillarity.cc\
           PermParams.cc \
           TriPhaseParams.cc \
           TriPhaseFluxFunction.cc \
+          TriPhaseAccumulationFunction.cc \
           
 
 

@@ -20,6 +20,7 @@
 #include "ViscosityParams.h"
 #include "TriPhaseParams.h"
 #include  "TriPhaseFluxFunction.h"
+#include "TriPhaseAccumulationFunction.h"
 #include  "Multid.h"
 
 /*
@@ -56,6 +57,8 @@ public:
 
     const AccumulationFunction & accumulation() const;
 
+    void accumulationParams(const AccumulationParams &);
+
     const Boundary & boundary() const;
 
     void boundary(const Boundary & boundary);
@@ -74,7 +77,10 @@ inline const FluxFunction & TriPhase::fluxFunction() const{
 }
 
 inline  void TriPhase::fluxParams (const FluxParams & params){
+
+    TriPhaseParams newParams(params.params(),0); //TODO index ???
     
+    fluxFunction_->fluxParams(newParams);
 }
 
 inline const Boundary & TriPhase::boundary() const {
@@ -84,6 +90,13 @@ inline const Boundary & TriPhase::boundary() const {
 inline const AccumulationFunction & TriPhase::accumulation() const {
     return *accFunction_;
 }
+
+inline void TriPhase::accumulationParams(const AccumulationParams & params){
+    accFunction_->accumulationParams(params);
+    
+}
+    
+
 
 inline const Space & TriPhase::domain(void) const {
     return Multid::PLANE;
