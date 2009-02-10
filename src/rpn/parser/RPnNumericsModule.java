@@ -150,7 +150,7 @@ public class RPnNumericsModule {
     public static void export(FileWriter writer) throws java.io.IOException {
 
         writer.write("<NUMERICS>\n");
-        writer.write("<PHYSICS physicsid=\"" + RPNUMERICS.physicsID() + "\"" + " libname=\"" + RPNUMERICS.getLibName() + "\"" + ">" + "</PHYSICS>\n");
+        writer.write("<PHYSICS physicsid=\"" + RPNUMERICS.physicsID() + "\"" + " libname=\"" +  "\"" + ">" + "</PHYSICS>\n");
         writer.write("</NUMERICS>\n");
 
 
