@@ -6,7 +6,6 @@
 
 package wave.multid.model;
 
-import wave.multid.DimMismatchEx;
 import wave.multid.view.*;
 import wave.multid.*;
 
