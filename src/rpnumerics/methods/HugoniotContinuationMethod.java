@@ -42,7 +42,6 @@ public class HugoniotContinuationMethod extends HugoniotMethod {
 
         return continuation_.curve(initialPoint);
 
-
     }
 
     public HugoniotParams getParams() {
