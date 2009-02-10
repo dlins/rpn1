@@ -12,6 +12,7 @@ import wave.multid.CoordsArray;
 import java.util.ArrayList;
 import wave.multid.view.ViewingAttr;
 import java.awt.Color;
+import rpn.component.MultidAdapter;
 
 public class HugoniotCurve extends RPnCurve implements RpSolution {
     //
@@ -46,6 +47,18 @@ public class HugoniotCurve extends RPnCurve implements RpSolution {
         hugoniotSegments_ = HugoniotCurve.hugoniotSegsFromWaveState(xZero,
                 states);
 
+    }
+    
+    public HugoniotCurve(PhasePoint xZero,CoordsArray [] coords) {
+        
+        super(coords, new ViewingAttr(Color.RED));
+        
+        List realSegments = MultidAdapter.converseCoordsArrayToRealSegments(coords);
+        hugoniotSegments_ = hugoniotSegsFromRealSegs(xZero, realSegments);
+        
+        xZero_=new PhasePoint(xZero);
+        
+        
     }
 
     public static List interpolate(HugoniotPoint v1,
@@ -254,7 +267,6 @@ public class HugoniotCurve extends RPnCurve implements RpSolution {
 
     public int findClosestSegment(RealVector targetPoint, double alpha) {
 
-        //   RealVector target = new RealVector(targetPoint.getCoords());
         RealVector target = new RealVector(targetPoint);
         RealVector closest = null;
         RealVector segmentVector = null;
@@ -263,13 +275,7 @@ public class HugoniotCurve extends RPnCurve implements RpSolution {
         double closestDistance = -1;
 
         List hugoniotSegList = segments();
-
-//     for (int i = 0; i < segments_.size(); i++) {
-
         for (int i = 0; i < hugoniotSegments_.size(); i++) {
-
-//              HugoniotSegment segment = (HugoniotSegment)segments_.get(i);
-
 
             HugoniotSegment segment = (HugoniotSegment) hugoniotSegList.get(i);
             segmentVector = new RealVector(segment.rightPoint());
@@ -378,6 +384,7 @@ public class HugoniotCurve extends RPnCurve implements RpSolution {
         int inputSize = realSegs.size();
         for (int i = 0; i < inputSize; i++) {
             // type is set...
+            
             HugoniotPoint v1 = new HugoniotPoint(xZero_,
                     ((RealSegment) realSegs.get(i)).p1());
             HugoniotPoint v2 = new HugoniotPoint(xZero_,

@@ -5,9 +5,17 @@
  */
 package rpnumerics;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import rpn.plugininterface.PluginProfile;
 import rpn.plugininterface.PluginTableModel;
+import rpnumerics.methods.ContourParams;
 import rpnumerics.methods.HugoniotContinuationMethod;
+import rpnumerics.methods.HugoniotContourMethod;
+import rpnumerics.methods.contour.ContourHugoniot;
+import rpnumerics.methods.contour.functionsobjects.InvalidHugoniotFunctionsRelation;
+import rpnumerics.methods.contour.markedhypercubes.NullHyperCubeErrorTreatment;
+import rpnumerics.methods.contour.samplefunctions.Hugoniot2DTest;
 import wave.util.*;
 import wave.ode.*;
 import wave.multid.Space;
@@ -21,16 +29,14 @@ public class RPNUMERICS {
     // Members
     //
 //    static private Physics physics_ = null;
-    static private String libName_ = null;
+
     static private RpErrorControl errorControl_ = null;
     static private ODESolver odeSolver_ = null;
     static private ShockProfile shockProfile_ = ShockProfile.instance();
     static private RarefactionProfile rarefactionProfile_ = RarefactionProfile.instance();
     static private BifurcationProfile bifurcationProfile_ = BifurcationProfile.instance();
     static private ShockRarefactionProfile shockRarefactionProfile_ = null;
-
-    
-//    static private FluxFunction fluxFunction_;
+    static public int [] CONTOUR_RESOLUTION={100,100};
 
     //
     // Constructors/Initializers
@@ -40,24 +46,10 @@ public class RPNUMERICS {
 
         System.loadLibrary("wave");//TODO libwave is always loaded ?
         System.loadLibrary(profile.getLibName());
-        libName_ = profile.getLibName();
+
 
         initNative(profile.getPhysicsID());
         errorControl_ = new RpErrorControl(boundary());
-//        fluxFunction_=new FluxFunction();
-
-//        physics_ = physicsCreation(
-//                profile);
-
-//        if (profile.hasBoundary()) {
-//            try {
-//
-//                physics_.setBoundary(profile.getBoundary());
-//            } catch (Exception ex) {
-//                System.out.println(ex);
-//            //Logger.getLogger(RPNUMERICS.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//        }
     }
 
     /**
@@ -71,23 +63,6 @@ public class RPNUMERICS {
         HugoniotParams hparams = new HugoniotParams(shockProfile_.getXZero(), new FluxFunction());
 
         ShockFlow shockFlow = (ShockFlow) createShockFlow();
-
-
-//        if (shockProfile_.isHugoniotSpecific()) { //TODO  Reactivate 
-//
-//            if (physicsID().equals("Quad2")) {
-//
-//                return new Quad2HugoniotCurveCalc(RPNUMERICS.fluxFunction().fluxParams(), hparams.getXZero());
-//            }
-//
-//
-//            if (physicsID().equals("Comb")) {
-//
-//                return new CombHugoniotCurveCalc((CombFluxParams) fluxFunction().fluxParams(), hparams.getXZero(), 1d);
-//
-//            }
-//
-//        }
         //Not specific
 
         if (shockProfile_.getHugoniotMethodName().equals("Continuation")) {
@@ -103,6 +78,77 @@ public class RPNUMERICS {
             return hugoniotCurveCalc;
 
         }
+
+        if (shockProfile_.getHugoniotMethodName().equals("Contour")) {
+
+            Hugoniot2DTest hugoniot2DTest = null;
+
+            try {
+                hugoniot2DTest = new Hugoniot2DTest(hparams.getFluxFunction(), hparams);
+            } catch (InvalidHugoniotFunctionsRelation ex) {
+                ex.printStackTrace();
+                Logger.getLogger(RPNUMERICS.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            ContourHugoniot contourHugoniot = new ContourHugoniot(hugoniot2DTest, new NullHyperCubeErrorTreatment());
+
+            Boundary boundary = RPNUMERICS.boundary();
+            
+            double[] boundaryArray = null;
+            
+            if (boundary instanceof RectBoundary){
+
+                boundaryArray = new double[4];
+
+                RealVector minimums = boundary.getMinimums();
+                RealVector maximums = boundary.getMaximums();
+
+                double[] minimumsArray = minimums.toDouble();
+                double[] maximumsArray = maximums.toDouble();
+
+                boundaryArray[0] = minimumsArray[0];
+                boundaryArray[1] = maximumsArray[0];
+                boundaryArray[2] = minimumsArray[1];
+                boundaryArray[3] = maximumsArray[1];
+            }
+            else {
+                
+                System.out.println("Implementar para dominio triangular");
+                return null;
+            }
+
+            int[] resolution = CONTOUR_RESOLUTION;
+            
+//            System.out.println(resolution[0] + "  " + resolution[1]);
+
+            ContourParams contourParams = new ContourParams(contourHugoniot, hugoniot2DTest, boundaryArray, resolution);
+
+            HugoniotContourMethod contourMethod = new HugoniotContourMethod(contourParams, hparams);
+
+            HugoniotCurveCalcND hugoniotCurveCalcND = new HugoniotCurveCalcND(contourMethod);
+
+            hugoniotCurveCalcND.uMinusChangeNotify(shockProfile_.getUminus());
+
+            return hugoniotCurveCalcND;
+
+
+        }
+
+        //        if (shockProfile_.isHugoniotSpecific()) { //TODO  Reactivate 
+//
+//            if (physicsID().equals("Quad2")) {
+//
+//                return new Quad2HugoniotCurveCalc(RPNUMERICS.fluxFunction().fluxParams(), hparams.getXZero());
+//            }
+//
+//
+//            if (physicsID().equals("Comb")) {
+//
+//                return new CombHugoniotCurveCalc((CombFluxParams) fluxFunction().fluxParams(), hparams.getXZero(), 1d);
+//
+//            }
+//
+//        }
 
         return null;
     }
@@ -159,7 +205,7 @@ public class RPNUMERICS {
         FluxFunction flux = new FluxFunction();
 
         PluginProfile profile = PluginTableModel.getPluginConfig(ShockProfile.SHOCKFLOW_NAME);
-        
+
         Double sigmaValue = new Double(profile.getParamValue("sigma"));
 
         ShockFlowParams shockParams = new ShockFlowParams(shockProfile_.getXZero(), sigmaValue.doubleValue());
@@ -171,6 +217,7 @@ public class RPNUMERICS {
 
     public static ShockFlow createShockFlow(ShockFlowParams shockFlowParams) {
 
+
         ShockFlow flow = new ShockFlow(shockFlowParams, new FluxFunction());
 
         return flow;
@@ -178,8 +225,8 @@ public class RPNUMERICS {
     }
 
     private static RarefactionFlow createRarefactionFlow() {
-        
-         return new RarefactionFlow(rarefactionProfile_.getXZero(), rarefactionProfile_.getFamily(), new FluxFunction());
+
+        return new RarefactionFlow(rarefactionProfile_.getXZero(), rarefactionProfile_.getFamily(), new FluxFunction());
 
     }
 
@@ -195,46 +242,6 @@ public class RPNUMERICS {
                 errorControl().ode().maxNumberOfSteps()));
         return odeSolver_;
     }
-
-    /**
-     * @deprecated Physics will be created in the native layer 
-     *
-     */
-//     private static Physics physicsCreation(RPNumericsProfile profile) {
-//
-//        // Physics initialization
-//
-//        if (profile.getPhysicsID().equals("QuadraticR2")) {
-//
-//            return new Quad2(new Quad2FluxParams());
-//
-//        }
-//
-//        if (profile.getPhysicsID().equals("QuadraticR4")) {
-//            return new Quad4(new Quad4FluxParams());
-//        }
-//
-//        if (profile.getPhysicsID().equals("Triphase")) {
-//
-//            return new TriPhase(new TriPhaseFluxParams(), new PermParams(),
-//                    new CapilParams(0.4d, 3d, 44d, 8d),
-//                    new ViscosityParams(0.5d));
-//
-//        }
-//
-//        if (profile.getPhysicsID().equals("P Gas")) {
-//
-//            return new PGas(new PGasFluxParams());
-//
-//        }
-//
-//        if (profile.getPhysicsID().equals("Steam")) {
-//            return new Steam(new SteamFluxParams());
-//
-//        }
-//
-//        return null;
-//    }
     //
     // Accessors
     //
@@ -315,7 +322,5 @@ public class RPNUMERICS {
 
     public static native Space domain();
 
-    public static String getLibName() {
-        return libName_;
-    }
+    
 }

@@ -31,8 +31,6 @@ public class BifurcationCurveCalc implements RpCalculation{
 //        throw new UnsupportedOperationException("Not yet implemented");
     }
 
-
-
     //
     // Accessors/Mutators
     //
@@ -50,10 +48,6 @@ public class BifurcationCurveCalc implements RpCalculation{
     }
 
     public String getCalcMethodName() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public WaveFlow getFlow() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }

@@ -85,7 +85,6 @@ public class ShockFlow extends WaveFlow {
 
     static public double sigmaCalc(RealVector coords1, RealVector coords2) {
 
-
         WaveState input1 = new WaveState(new PhasePoint(coords1));
         WaveState input2 = new WaveState(new PhasePoint(coords2));
         JetMatrix output1 = new JetMatrix(coords1.getSize());

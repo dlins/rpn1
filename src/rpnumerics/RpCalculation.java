@@ -12,7 +12,5 @@ public interface RpCalculation {
 
     RpSolution recalc() throws RpException;
     
-    WaveFlow getFlow();
-    
     String getCalcMethodName();
 }

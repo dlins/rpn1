@@ -19,50 +19,32 @@ public class HugoniotPoint extends RealVector {
     private RealVector eigenValRRight_;
     private HugoniotPointType type_;
     private ShockFlow myFlow_;
-
-
     //
     // Constructors
     //
     public HugoniotPoint(PhasePoint xZero, RealVector x, double sigma) {
         super(x);
-       
-//      myFlow_ = (ConservationShockFlow) RPNUMERICS.createShockFlow();//new ConservationShockFlow(xZero, sigma);
         ShockFlowParams params = new ShockFlowParams(xZero, sigma);
-        myFlow_ =   RPNUMERICS.createShockFlow(params);
+        myFlow_ = RPNUMERICS.createShockFlow(params);
         initType();
     }
 
     public HugoniotPoint(PhasePoint xZero, RealVector x) {
-        this(xZero, x,ShockFlow.sigmaCalc(xZero.getCoords(), x));
+        this(xZero, x, ShockFlow.sigmaCalc(xZero.getCoords(), x));
     }
 
-     
-
-    
-    
     protected void initType() {
-//        RealMatrix2 dfLeft = myFlow_.fluxDeriv(myFlow_.getXZero().getCoords());
-//        JetMatrix output = new JetMatrix(myFlow_.getXZero().getSize());
-        RealMatrix2 dfLeft = new RealMatrix2(myFlow_.getXZero().getSize(), myFlow_.getXZero().getSize());
 
-//        myFlow_.jet(myFlow_.getXZero().getCoords(), output, 1);
-        
-        
+        RealMatrix2 dfLeft = new RealMatrix2(myFlow_.getXZero().getSize(), myFlow_.getXZero().getSize());
         JacobianMatrix jMatrix = myFlow_.fluxDeriv(myFlow_.getXZero().getCoords());
-        
+
         for (int i = 0; i < dfLeft.getNumRow(); i++) {
             for (int j = 0; j < dfLeft.getNumCol(); j++) {
                 dfLeft.setElement(i, j, jMatrix.getElement(i, j));
             }
         }
-        
-//        RealMatrix2 dfRight = myFlow_.fluxDeriv(this);
-        
-//        JetMatrix output = new JetMatrix(flow.getXZero().getSize());
-        RealMatrix2 dfRight = new  RealMatrix2(myFlow_.getXZero().getSize(), myFlow_.getXZero().getSize());
+        RealMatrix2 dfRight = new RealMatrix2(myFlow_.getXZero().getSize(), myFlow_.getXZero().getSize());
 
-//        myFlow_.jet(this, output, 1);
         jMatrix = myFlow_.fluxDeriv(this);
 
         for (int i = 0; i < dfRight.getNumRow(); i++) {
@@ -70,8 +52,7 @@ public class HugoniotPoint extends RealVector {
                 dfRight.setElement(i, j, jMatrix.getElement(i, j));
             }
         }
-        
-        
+
         int stateSpaceDim = dfLeft.getNumRow();
         double[] eigenValRLeft = new double[stateSpaceDim];
         double[] eigenValRRight = new double[stateSpaceDim];

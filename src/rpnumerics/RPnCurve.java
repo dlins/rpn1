@@ -10,7 +10,6 @@ package rpnumerics;
 import java.awt.Color;
 import rpnumerics.methods.contour.ContourCurve;
 import wave.multid.*;
-import wave.multid.model.*;
 import wave.multid.model.AbstractPathIterator;
 import wave.multid.model.AbstractSegment;
 import wave.multid.model.AbstractSegmentAtt;
@@ -143,11 +142,20 @@ public class RPnCurve extends MultiPolyLine {
 
     public RPnCurve(ContourCurve curve, ViewingAttr viewingAttr) {
 
-        super(new CoordsArray[1],viewingAttr);
+        super(RPnCurve.fromPointNDimensionCurveToSegment(curve.getCurve()),viewingAttr);
+
+        viewAttr=viewingAttr;
+        try {
+            polyLinesSetList_ = new RelaxedChainedPolylineSet(curve.getCurve());
+            //TODO Construtor para usar com o contour
+        } catch (Exception ex) {
+      
+            ex.printStackTrace();
+            
+        }
+
         
-        //TODO Construtor para usar com o contour
-        
-        throw new UnsupportedOperationException("Not yet implemented");
+
     }
 
 

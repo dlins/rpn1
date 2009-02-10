@@ -115,8 +115,5 @@ public class RarefactionOrbitCalc implements RpCalculation {
         return methodName_;
 
     }
-
-    public WaveFlow getFlow() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+  
 }

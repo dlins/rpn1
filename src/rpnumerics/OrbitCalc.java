@@ -20,7 +20,6 @@ public class OrbitCalc implements RpCalculation {
     private int timeDirection_;
     private ODESolver odeSolver_;
     private String calcMethodName_;
-    private WaveFlow flow_;
 
     //
     // Constructors/Initializers
@@ -69,11 +68,5 @@ public class OrbitCalc implements RpCalculation {
 
     public OrbitPoint getStart() {
         return start_;
-    }
-
-    public WaveFlow getFlow() {
-
-        return flow_;
-
     }
 }

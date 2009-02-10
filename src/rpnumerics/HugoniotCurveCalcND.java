@@ -7,6 +7,7 @@ package rpnumerics;
 
 import rpnumerics.methods.HugoniotMethod;
 import rpnumerics.methods.HugoniotContinuationMethod;
+import rpnumerics.methods.HugoniotContourMethod;
 import wave.util.RealVector;
 import wave.util.RealMatrix2;
 import wave.util.VectorFunction;
@@ -39,6 +40,10 @@ public class HugoniotCurveCalcND
 
     }
 
+    public HugoniotCurveCalcND(HugoniotContourMethod hugoniotMethod) {
+        hugoniotMethod_ = hugoniotMethod;
+        hugoniotParams_ = hugoniotMethod.getParams();
+    }
 
     //
     // Accessors/Mutators
@@ -54,7 +59,7 @@ public class HugoniotCurveCalcND
 //        Fminus_ = rpnumerics.RPNUMERICS.fluxFunction().F(Uminus_);
 
         hugoniotParams_.uMinusChangeNotify(pPoint);
-        
+
 //        hugoniotParams_.setFMinus(rpnumerics.RPNUMERICS.fluxFunction().F(Uminus_));
 
 //        DFminus_ = rpnumerics.RPNUMERICS.fluxFunction().DF(Uminus_);
@@ -65,7 +70,7 @@ public class HugoniotCurveCalcND
     }
 
     public PhasePoint getUMinus() {
-        
+
         return new PhasePoint(hugoniotParams_.getUMinus());
 //        return new PhasePoint(Uminus_);
     }
@@ -81,7 +86,7 @@ public class HugoniotCurveCalcND
     }
 
     public double[] getPrimitiveUMinus() {
-        return  hugoniotParams_.getUMinus().toDouble();
+        return hugoniotParams_.getUMinus().toDouble();
 //        return Uminus_.toDouble();
     }
 
@@ -103,12 +108,8 @@ public class HugoniotCurveCalcND
     }
 
     public String getCalcMethodName() {
-        
+
         return calcMethodName_;
 
-    }
-
-    public WaveFlow getFlow() {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

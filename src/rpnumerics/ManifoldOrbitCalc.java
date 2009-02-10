@@ -200,7 +200,7 @@ public class ManifoldOrbitCalc implements RpCalculation {
         
 //        getFlow().jet(input, output, 2);
         
-        HessianMatrix D2X =  getFlow().fluxDeriv2(point0);
+        HessianMatrix D2X =  flow_.fluxDeriv2(point0);
         
         
 //        HessianMatrix D2X = getFlow().fluxDeriv2(point0);
@@ -430,10 +430,5 @@ public class ManifoldOrbitCalc implements RpCalculation {
     public String getCalcMethodName() {
         return methodName_;
 
-    }
-
-   
-    public ShockFlow getFlow() {
-        return flow_;
     }
 }

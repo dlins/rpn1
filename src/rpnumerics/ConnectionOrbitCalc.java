@@ -304,9 +304,4 @@ public class ConnectionOrbitCalc implements RpCalculation {
         return methodCalcName_;
 
     }
-
-    public WaveFlow getFlow() {
-        return flow_;
-//        throw new UnsupportedOperationException("Not supported yet.");
-    }
 }
