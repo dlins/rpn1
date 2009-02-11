@@ -184,7 +184,6 @@ public class RPnDataModule {
                 RealVector vector = new RealVector(doubleList);
                 XZERO = new PhasePoint(vector);
                 RPNUMERICS.getShockProfile().setXZero(XZERO);
-                RPNUMERICS.getShockProfile().setUminus(XZERO);//TODO It s necessary ??
                 RPNUMERICS.getShockProfile().setHugoniotMethodName(att.getValue(1));
                 RPNUMERICS.getShockProfile().setFlowName(att.getValue(2));
 
