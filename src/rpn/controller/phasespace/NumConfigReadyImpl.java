@@ -38,6 +38,7 @@ public class NumConfigReadyImpl extends NumConfigImpl
         ChangeFluxParamsAgent.instance().setEnabled(true);
         ClearPhaseSpaceAgent.instance().setEnabled(true);
         FillPhaseSpaceAgent.instance().setEnabled(true);
+        HugoniotPlotAgent.instance().setEnabled(true);
         // DISABLED
         BackwardManifoldPlotAgent.instance().setEnabled(false);
         ForwardManifoldPlotAgent.instance().setEnabled(false);
