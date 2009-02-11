@@ -6,9 +6,7 @@ import rpnumerics.OrbitPoint;
 import wave.util.RealVector;
 
 
-import rpnumerics.PhasePoint;
 import rpnumerics.RPNUMERICS;
-import rpnumerics.RarefactionOrbitCalc;
 
 public class RarefactionForwardOrbitPlotAgent extends RpModelPlotAgent {
 
@@ -22,15 +20,10 @@ public class RarefactionForwardOrbitPlotAgent extends RpModelPlotAgent {
 
     public RpGeometry createRpGeometry(RealVector[] input) {
 
-
-
         OrbitPoint oPoint = new OrbitPoint(input[input.length - 1]);
 
         RarefactionOrbitGeomFactory factory = new RarefactionOrbitGeomFactory(RPNUMERICS.createRarefactionCalc(oPoint, 1));//timeDirection)new RarefactionOrbitCalc(oPoint,-1));
 
-
-//        PhasePoint oPoint = new PhasePoint(input[input.length - 1]);
-//        RarefactionOrbitGeomFactory factory = new RarefactionOrbitGeomFactory(new RarefactionOrbitCalc(oPoint,1));
         return factory.geom();
 
     }

@@ -39,10 +39,7 @@ public class ClearPhaseSpaceAgent extends javax.swing.AbstractAction {
 
 
     }
-    public void clearAll(){
-        rpn.parser.RPnDataModule.PHASESPACE.clearAll();
-        
-    }
+   
 
     public void actionPerformed(ActionEvent event) {
 

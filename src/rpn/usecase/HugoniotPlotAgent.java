@@ -32,22 +32,8 @@ public class HugoniotPlotAgent extends RpModelPlotAgent {
 
     public RpGeometry createRpGeometry(RealVector[] input) {
 
-        Boundary bound = RPNUMERICS.boundary();
-        GridProfile xProfile = new GridProfile(bound.getMinimums().getElement(0), bound.getMaximums().getElement(0), 100);
-        GridProfile yProfile = new GridProfile(bound.getMinimums().getElement(1), bound.getMaximums().getElement(1), 100);
 
-        // input is the current Shock Flow U minus
-
-//        if (input.length==0){ //TODO Hardcoded para testar Bifurcacao
-//
-//            RPNUMERICS.resetShockFlow(new PhasePoint(new RealVector(2)), 0);
-//            RPNUMERICS.hugoniotCurveCalc().uMinusChangeNotify(new PhasePoint(new RealVector(2)));
-//        }
-//        else
-
-//        RPNUMERICS.getShockProfile().hugoniotCurveCalc().uMinusChangeNotify(new PhasePoint(input[0]));
-
-        RPNUMERICS.getShockProfile().setUminus(new PhasePoint(input[0]));
+        RPNUMERICS.getShockProfile().setXZero(new PhasePoint(input[0]));
 
         HugoniotCurveCalc hugoniotCurveCalc = RPNUMERICS.createHugoniotCalc();
         HugoniotCurveGeomFactory factory = new HugoniotCurveGeomFactory(hugoniotCurveCalc);
