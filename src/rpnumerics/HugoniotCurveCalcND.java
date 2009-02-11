@@ -25,7 +25,7 @@ public class HugoniotCurveCalcND
     private HugoniotMethod hugoniotMethod_;
 //    private RealVector Uminus_;
     private HugoniotParams hugoniotParams_;
-    private String calcMethodName_;
+
 
     //
     // Constructors
@@ -36,7 +36,7 @@ public class HugoniotCurveCalcND
 
         hugoniotParams_ = hugoniotMethod.getParams();
         f_ = hugoniotMethod.getFunction();//(HugoniotContinuationParams) hugoniotParams_).getFunction();
-        calcMethodName_ = "Continuation";
+
 
     }
 
@@ -107,9 +107,5 @@ public class HugoniotCurveCalcND
         return calc();
     }
 
-    public String getCalcMethodName() {
-
-        return calcMethodName_;
-
-    }
+    
 }

@@ -5,17 +5,10 @@
  */
 package rpnumerics;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import rpn.plugininterface.PluginProfile;
 import rpn.plugininterface.PluginTableModel;
-import rpnumerics.methods.ContourParams;
 import rpnumerics.methods.HugoniotContinuationMethod;
 import rpnumerics.methods.HugoniotContourMethod;
-import rpnumerics.methods.contour.ContourHugoniot;
-import rpnumerics.methods.contour.functionsobjects.InvalidHugoniotFunctionsRelation;
-import rpnumerics.methods.contour.markedhypercubes.NullHyperCubeErrorTreatment;
-import rpnumerics.methods.contour.samplefunctions.Hugoniot2DTest;
 import wave.util.*;
 import wave.ode.*;
 import wave.multid.Space;
@@ -29,14 +22,13 @@ public class RPNUMERICS {
     // Members
     //
 //    static private Physics physics_ = null;
-
     static private RpErrorControl errorControl_ = null;
     static private ODESolver odeSolver_ = null;
     static private ShockProfile shockProfile_ = ShockProfile.instance();
     static private RarefactionProfile rarefactionProfile_ = RarefactionProfile.instance();
     static private BifurcationProfile bifurcationProfile_ = BifurcationProfile.instance();
     static private ShockRarefactionProfile shockRarefactionProfile_ = null;
-    static private int [] CONTOUR_RESOLUTION={100,100};
+    static private int[] CONTOUR_RESOLUTION = {100, 100};
 
     //
     // Constructors/Initializers
@@ -57,6 +49,7 @@ public class RPNUMERICS {
 
     public static HugoniotCurveCalc createHugoniotCalc() {
 
+        HugoniotCurveCalc hugoniotCurveCalc = null;
         HugoniotParams hparams = new HugoniotParams(shockProfile_.getXZero(), new FluxFunction());
 
         ShockFlow shockFlow = (ShockFlow) createShockFlow();
@@ -68,70 +61,21 @@ public class RPNUMERICS {
 
             HugoniotContinuationMethod method = new HugoniotContinuationMethod(hugoniotFunction, hparams, createODESolver(shockFlow));
 
-            HugoniotCurveCalc hugoniotCurveCalc = new HugoniotCurveCalcND((HugoniotContinuationMethod) method);
-
-            hugoniotCurveCalc.uMinusChangeNotify(shockProfile_.getUminus());
-
-            return hugoniotCurveCalc;
+            hugoniotCurveCalc = new HugoniotCurveCalcND((HugoniotContinuationMethod) method);
 
         }
 
         if (shockProfile_.getHugoniotMethodName().equals("Contour")) {
 
-            Hugoniot2DTest hugoniot2DTest = null;
+            HugoniotContourMethod contourMethod = new HugoniotContourMethod(hparams);
 
-            try {
-                hugoniot2DTest = new Hugoniot2DTest(hparams.getFluxFunction(), hparams);
-            } catch (InvalidHugoniotFunctionsRelation ex) {
-                ex.printStackTrace();
-                Logger.getLogger(RPNUMERICS.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-            ContourHugoniot contourHugoniot = new ContourHugoniot(hugoniot2DTest, new NullHyperCubeErrorTreatment());
-
-            Boundary boundary = RPNUMERICS.boundary();
-            
-            double[] boundaryArray = null;
-            
-            if (boundary instanceof RectBoundary){
-
-                boundaryArray = new double[4];
-
-                RealVector minimums = boundary.getMinimums();
-                RealVector maximums = boundary.getMaximums();
-
-                double[] minimumsArray = minimums.toDouble();
-                double[] maximumsArray = maximums.toDouble();
-
-                boundaryArray[0] = minimumsArray[0];
-                boundaryArray[1] = maximumsArray[0];
-                boundaryArray[2] = minimumsArray[1];
-                boundaryArray[3] = maximumsArray[1];
-            }
-            else {
-                
-                System.out.println("Implementar para dominio triangular");
-                return null;
-            }
-
-            int[] resolution = getContourResolution();
-            
-//            System.out.println(resolution[0] + "  " + resolution[1]);
-
-            ContourParams contourParams = new ContourParams(contourHugoniot, hugoniot2DTest, boundaryArray, resolution);
-
-            HugoniotContourMethod contourMethod = new HugoniotContourMethod(contourParams, hparams);
-
-            HugoniotCurveCalcND hugoniotCurveCalcND = new HugoniotCurveCalcND(contourMethod);
-
-            hugoniotCurveCalcND.uMinusChangeNotify(shockProfile_.getUminus());
-
-            return hugoniotCurveCalcND;
-
+            hugoniotCurveCalc = new HugoniotCurveCalcND(contourMethod);
 
         }
+        hugoniotCurveCalc.uMinusChangeNotify(shockProfile_.getUminus());
 
-        //        if (shockProfile_.isHugoniotSpecific()) { //TODO  Reactivate 
+        return hugoniotCurveCalc;
+    //        if (shockProfile_.isHugoniotSpecific()) { //TODO  Reactivate 
 //
 //            if (physicsID().equals("Quad2")) {
 //
@@ -147,7 +91,7 @@ public class RPNUMERICS {
 //
 //        }
 
-        return null;
+
     }
 
     public static RarefactionOrbitCalc createRarefactionCalc(OrbitPoint orbitPoint, int timeDirection) {
@@ -221,7 +165,7 @@ public class RPNUMERICS {
 
     }
 
-    private static RarefactionFlow createRarefactionFlow() {
+    public static RarefactionFlow createRarefactionFlow() {
 
         return new RarefactionFlow(rarefactionProfile_.getXZero(), rarefactionProfile_.getFamily(), new FluxFunction());
 
@@ -229,8 +173,6 @@ public class RPNUMERICS {
 
     private static ODESolver createODESolver(WaveFlow flow) {
 
-
-//        errorControl_ = new RpErrorControl(boundary());
         odeSolver_ = new Rk4BPMethod(
                 new Rk4BPProfile(new FlowVectorField(flow),
                 errorControl().eps(),
@@ -326,6 +268,4 @@ public class RPNUMERICS {
     public static native int domainDim();
 
     public static native Space domain();
-
-    
 }

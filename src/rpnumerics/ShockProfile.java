@@ -12,12 +12,13 @@ import wave.util.RealVector;
 
 public class ShockProfile extends ShockRarefactionProfile {
 
-    private static String hugoniotMethodName_;
-    private static boolean hugoniotSpecific_;
-    private static PhasePoint uminus_;
+    private static String hugoniotMethodName_="Continuation";
+    private static boolean hugoniotSpecific_=false;
     private static ShockProfile instance_ = null;
     private static RealVector fx0_ = null;
-    public static String SHOCKFLOW_NAME = "ShockFlow";
+
+    public static final String SHOCKFLOW_NAME = "ShockFlow";
+    public static final String [] HUGONIOT_METHOD_NAMES={"Continuation","Contour"}; //TODO Put this names into a better place
 
     public RealVector getFx0() {
         return fx0_;
@@ -29,12 +30,6 @@ public class ShockProfile extends ShockRarefactionProfile {
 
     private ShockProfile() {
         super(new PhasePoint(new RealVector(2)));
-
-
-        hugoniotMethodName_ = "continuation";
-        hugoniotSpecific_ = false;
-
-
     }
 
     public static ShockProfile instance() {
@@ -49,12 +44,13 @@ public class ShockProfile extends ShockRarefactionProfile {
     }
 
     public PhasePoint getUminus() {
-        return uminus_;
+//        return uminus_;
+        PluginProfile profile = PluginTableModel.getPluginConfig(SHOCKFLOW_NAME);
+        String data = profile.getParamValue("xzero");
+        return new PhasePoint(new RealVector(data));
     }
 
-    public void setUminus(PhasePoint aUminus_) {
-        uminus_ = aUminus_;
-    }
+    
 
     public double getSigma() {
         PluginProfile profile = PluginTableModel.getPluginConfig(SHOCKFLOW_NAME);
@@ -73,11 +69,13 @@ public class ShockProfile extends ShockRarefactionProfile {
     public void setXZero(PhasePoint xZero) {
         PluginProfile profile = PluginTableModel.getPluginConfig(SHOCKFLOW_NAME);
         profile.setPluginParm("xzero", xZero.toString());
+//        uminus_ = xZero;
     }
 
     @Override
     public PhasePoint getXZero() {
 
+//        return uminus_;
         PluginProfile profile = PluginTableModel.getPluginConfig(SHOCKFLOW_NAME);
         String data = profile.getParamValue("xzero");
         return new PhasePoint(new RealVector(data));

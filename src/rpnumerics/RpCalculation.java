@@ -11,6 +11,5 @@ public interface RpCalculation {
     RpSolution calc() throws RpException;
 
     RpSolution recalc() throws RpException;
-    
-    String getCalcMethodName();
+
 }
