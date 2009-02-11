@@ -33,8 +33,8 @@ public class RPnContourConfigDialog extends RPnDialog {
 
         setMinimumSize(new Dimension(getTitle().length()*10,40));
         
-        xResolutionJTextField_.setText(new Integer (RPNUMERICS.CONTOUR_RESOLUTION[0]).toString());
-        yResolutionJTextField_.setText(new Integer(RPNUMERICS.CONTOUR_RESOLUTION[1]).toString());
+        xResolutionJTextField_.setText(new Integer (RPNUMERICS.getContourResolution()[0]).toString());
+        yResolutionJTextField_.setText(new Integer(RPNUMERICS.getContourResolution()[1]).toString());
         
         xResolutionJTextField_.setColumns(xResolutionJTextField_.getText().length() + 4);
         yResolutionJTextField_.setColumns(yResolutionJTextField_.getText().length()+4);
@@ -56,8 +56,8 @@ public class RPnContourConfigDialog extends RPnDialog {
 
     protected void apply() {
         
-        RPNUMERICS.CONTOUR_RESOLUTION[0] = new Integer(xResolutionJTextField_.getText());
-        RPNUMERICS.CONTOUR_RESOLUTION[1] = new Integer(yResolutionJTextField_.getText());
+        RPNUMERICS.getContourResolution()[0] = new Integer(xResolutionJTextField_.getText());
+        RPNUMERICS.getContourResolution()[1] = new Integer(yResolutionJTextField_.getText());
 
         dispose();
 

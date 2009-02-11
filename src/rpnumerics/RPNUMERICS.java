@@ -36,18 +36,15 @@ public class RPNUMERICS {
     static private RarefactionProfile rarefactionProfile_ = RarefactionProfile.instance();
     static private BifurcationProfile bifurcationProfile_ = BifurcationProfile.instance();
     static private ShockRarefactionProfile shockRarefactionProfile_ = null;
-    static public int [] CONTOUR_RESOLUTION={100,100};
+    static private int [] CONTOUR_RESOLUTION={100,100};
 
     //
     // Constructors/Initializers
     //
     static public void init(RPNumericsProfile profile) throws RpException {
 
-
         System.loadLibrary("wave");//TODO libwave is always loaded ?
-        System.loadLibrary(profile.getLibName());
-
-
+        System.loadLibrary("rpnumerics");
         initNative(profile.getPhysicsID());
         errorControl_ = new RpErrorControl(boundary());
     }
@@ -117,7 +114,7 @@ public class RPNUMERICS {
                 return null;
             }
 
-            int[] resolution = CONTOUR_RESOLUTION;
+            int[] resolution = getContourResolution();
             
 //            System.out.println(resolution[0] + "  " + resolution[1]);
 
@@ -303,6 +300,14 @@ public class RPNUMERICS {
      */
     static public final ODESolver odeSolver() {
         return odeSolver_;
+    }
+
+    public static int[] getContourResolution() {
+        return CONTOUR_RESOLUTION;
+    }
+
+    public static void setContourResolution(int[] aCONTOUR_RESOLUTION) {
+        CONTOUR_RESOLUTION = aCONTOUR_RESOLUTION;
     }
 
     private native void setFamilyIndex(int familyIndex);
