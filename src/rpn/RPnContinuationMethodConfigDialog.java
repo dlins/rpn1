@@ -16,7 +16,7 @@ public class RPnContinuationMethodConfigDialog extends RPnDialog {
     private JTextField stepsLengthJTextField_ = new JTextField();
 
     public RPnContinuationMethodConfigDialog() {
-        super(true);
+        super(false,true);
 
         try {
             jbInit();
@@ -33,10 +33,8 @@ public class RPnContinuationMethodConfigDialog extends RPnDialog {
         
         setMinimumSize(new Dimension(getTitle().length()*10,40));
         
-        
-        
-        
         stepsLengthJTextField_.setText(new Double (RPNUMERICS.errorControl().ode().maxStateStepLength()).toString());
+        stepsLengthJTextField_.setColumns(stepsLengthJTextField_.getText().length()+4);
         
         paramsPanel_.add(stepsLengthLabel_);
         paramsPanel_.add(stepsLengthJTextField_);

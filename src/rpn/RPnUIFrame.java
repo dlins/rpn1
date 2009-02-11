@@ -281,7 +281,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 });
 
         modelInteractionMenu.removeAll();
-        modelInteractionMenu.add(ChangeXZeroAgent.instance());
+        modelInteractionMenu.add(ChangeRarefactionXZeroAgent.instance());
         modelInteractionMenu.addSeparator();
         modelInteractionMenu.add(rarefactionMenuItem_);
         modelInteractionMenu.addSeparator();
@@ -334,6 +334,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 toolBar_.add(BackwardManifoldPlotAgent.instance().getContainer());
                 toolBar_.add(StationaryPointPlotAgent.instance().getContainer());
                 toolBar_.add(PoincareSectionPlotAgent.instance().getContainer());
+                toolBar_.add(HugoniotPlotAgent.instance().getContainer());
                 toolBar_.add(ScratchAgent.instance().getContainer());
                 ScratchAgent.instance().setEnabled(true);
                 pack();

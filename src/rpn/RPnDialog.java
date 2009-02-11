@@ -18,7 +18,6 @@ import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.WindowConstants;
 import rpn.controller.ui.UIController;
-import rpn.usecase.ClearPhaseSpaceAgent;
 
 public abstract class RPnDialog extends JDialog {
 
@@ -118,13 +117,12 @@ public abstract class RPnDialog extends JDialog {
     
     protected abstract void apply();
     
-    protected void begin() {
+    protected  void begin() {
 
         int option = JOptionPane.showConfirmDialog(this, "Change curve type", "Restart Application", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
         if (option == JOptionPane.YES_OPTION) {
             UIController.instance().resetApplication();
-            ClearPhaseSpaceAgent.instance().clearAll();
             dispose();
         }
 

@@ -61,10 +61,10 @@ public class RPnShockConfigDialog extends RPnDialog {
     private void addMethodName() {
         methodComboBox_ = new JComboBox();
         methodComboBox_.addMouseListener(new MouseHandler());
-
-
-        methodComboBox_.addItem("Continuation");// TODO A better combo fill method
-        methodComboBox_.addItem("Contour");
+        
+        for (int i=0;i < ShockProfile.HUGONIOT_METHOD_NAMES.length;i++){
+        methodComboBox_.addItem(ShockProfile.HUGONIOT_METHOD_NAMES[i]);// TODO A better combo fill method            
+        }
 
         methodPanel_.setLayout(flowLayout1);
         methodPanel_.add(new JLabel("Hugoniot Plot Method"));
@@ -83,6 +83,7 @@ public class RPnShockConfigDialog extends RPnDialog {
         this.setTitle("Shock Curve Configuration");
         RPnUIFrame.setStatusMessage("Curve Configuration");
         addMethodName();
+        methodComboBox_.setSelectedItem(ShockProfile.instance().getHugoniotMethodName());
         addFlowName();
         flowPluginName_.addMouseListener(new MouseHandler());
 

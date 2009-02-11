@@ -106,21 +106,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
             changeState(new NumConfigReadyImpl(((NUMCONFIG_READY) state_).hugoniotGeom(), ((NUMCONFIG_READY) state_).xzeroGeom()));
         }
     }
-
-    public void clearAll() {
-
-        ArrayList deleteList = new ArrayList();
-        Iterator geomList = getGeomObjIterator();
-        while (geomList.hasNext()) {
-            RpGeometry geom = (RpGeometry) geomList.next();
-            deleteList.add(geom);
-
-        }
-        for (int i = 0; i < deleteList.size(); i++) {
-            delete((RpGeometry) deleteList.get(i));
-        }
-    
-    }
+   
     
     public RpGeometry getSelectedGeom() {
         return selectedGeom_;

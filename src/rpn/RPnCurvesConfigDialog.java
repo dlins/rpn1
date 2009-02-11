@@ -34,7 +34,7 @@ public class RPnCurvesConfigDialog extends RPnDialog {
         curveComboBox_ = new JComboBox();
 
 
-        curveComboBox_.addItem("Shock");
+        curveComboBox_.addItem("Shock Diagram");
         curveComboBox_.addItem("Rarefaction");
         curveComboBox_.addItem("Bifurcation");
 
@@ -77,12 +77,11 @@ public class RPnCurvesConfigDialog extends RPnDialog {
 
     protected void apply() {
 
-
         dispose();
 
         UI_ACTION_SELECTED newState = null;
 
-        if (curveComboBox_.getSelectedItem().equals("Shock")) {
+        if (curveComboBox_.getSelectedItem().equals("Shock Diagram")) {
 
             newState = new SHOCK_CONFIG();
 
