@@ -25,15 +25,6 @@ public class HugoniotContinuationMethod extends HugoniotMethod {
         continuation_ = new HugoniotContinuation(hugoniotFunction, hparams,solver);
     }
 
-//    public HugoniotContinuationMethod(VectorFunction function, HugoniotContinuationParams params,ODESolver solver) {
-//
-//        params_ = params;
-//        continuation_ = new HugoniotContinuation(function, params, solver);
-//        
-//        vectorFunction_ = function;
-//
-//    }
-
     public VectorFunction getFunction() {
         return vectorFunction_;
     }
