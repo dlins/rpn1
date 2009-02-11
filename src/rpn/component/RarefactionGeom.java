@@ -8,7 +8,7 @@ import wave.multid.view.*;
 public class RarefactionGeom  extends MultiPolyLine implements RpGeometry {
     
     private RpGeomFactory factory_;
-    public static ViewingAttr VIEWING_ATTR = new ViewingAttr(Color.white);
+    public static ViewingAttr VIEWING_ATTR = new ViewingAttr(Color.green);
     
     public RarefactionGeom(CoordsArray[] vertices, RarefactionOrbitGeomFactory factory) {
         super(vertices, VIEWING_ATTR);

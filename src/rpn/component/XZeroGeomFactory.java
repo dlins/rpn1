@@ -23,10 +23,12 @@ public class XZeroGeomFactory extends StationaryPointGeomFactory {
         super(calc);
     }
 
+    @Override
     protected RpController createUI() {
         return new XZeroController();
     }
 
+    @Override
     protected RpGeometry createGeomFromSource() {
         StationaryPoint point = (StationaryPoint)geomSource();
         CoordsArray coords = new CoordsArray(point.getPoint().getCoords());
