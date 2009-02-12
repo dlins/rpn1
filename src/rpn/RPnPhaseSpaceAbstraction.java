@@ -13,6 +13,7 @@ import rpn.component.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
+import wave.multid.model.AbstractPathIterator;
 import wave.util.RealVector;
 
 public class RPnPhaseSpaceAbstraction extends AbstractScene {
@@ -90,6 +91,19 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
     @Override
     public void clear() {
 
+
+        for (int i=0; i < groupArrayList_.size()-1;i++){
+            
+            ArrayList list = groupArrayList_.get(i);
+
+            for (int j = 0; j < list.size(); j++) {
+                
+                delete ((RpGeometry)list.get(j));
+            }
+            groupArrayList_.remove(i);
+            
+        }
+        
         ArrayList deleteList = new ArrayList();
         Iterator geomList = getGeomObjIterator();
         while (geomList.hasNext()) {
@@ -106,8 +120,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
             changeState(new NumConfigReadyImpl(((NUMCONFIG_READY) state_).hugoniotGeom(), ((NUMCONFIG_READY) state_).xzeroGeom()));
         }
     }
-   
-    
+
     public RpGeometry getSelectedGeom() {
         return selectedGeom_;
     }
@@ -145,9 +158,12 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
                     }
                 }
             }
+
         }
         return closest;
     }
+
+   
 
     public PhasePoint findSelectionMidPoint() {
 
@@ -168,6 +184,4 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
             selectedGeom_.viewingAttr().setSelected(false);
         }
     }
-
-   
 }
