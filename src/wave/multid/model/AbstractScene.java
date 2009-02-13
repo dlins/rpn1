@@ -18,7 +18,7 @@ public class AbstractScene implements AbstractGeomObj {
     //
     // Members
     //
-    private ArrayList geomList_;
+    protected ArrayList geomList_;
     private String name_;
     private ArrayList viewList_;
     private BoundingBox boundary_;
@@ -35,6 +35,7 @@ public class AbstractScene implements AbstractGeomObj {
         } catch (DimMismatchEx dex) { dex.printStackTrace(); }
         geomList_ = new ArrayList();
         viewList_ = new ArrayList();
+        
     }
 
     //
@@ -52,6 +53,7 @@ public class AbstractScene implements AbstractGeomObj {
     // Methods
     //
     public void join(MultiGeometry geom) {
+        
         try {
             geomList_.add(geom);
             boundary_.resize(geom.getPathIterator());
@@ -60,6 +62,8 @@ public class AbstractScene implements AbstractGeomObj {
         }
         for (int i = 0; i < viewList_.size(); i++)
             ((Scene)viewList_.get(i)).addViewFor(geom);
+        
+      
     }
 
     public void print(FileWriter cout) { }
@@ -68,6 +72,7 @@ public class AbstractScene implements AbstractGeomObj {
 
     public void remove(MultiGeometry geom) {
         geomList_.remove(geom);
+              
         try {
             boundary_.resize(geom.getPathIterator());
         } catch (DimMismatchEx dex) { dex.printStackTrace(); }
