@@ -1,0 +1,71 @@
+# Project: test
+# Makefile created by Dev-C++ 4.9.9.2
+
+CPP  = g++
+CC   = gcc
+F    = g77
+WINDRES = windres
+RES  = 
+OBJ1  = clsode.o eigen.o field.o init.o lsode1.o lsode2.o lsode3.o matrix.o rarefaction.o rs.o shock.o main.o $(RES)
+LINKOBJ1  = clsode.o eigen.o field.o init.o lsode1.o lsode2.o lsode3.o matrix.o rarefaction.o rs.o shock.o main.o $(RES)
+OBJ2  = eigen.o field.o init.o matrix.o rarefaction.o rk4.o rs.o shock.o main.o $(RES)
+LINKOBJ2  = eigen.o field.o init.o matrix.o rarefaction.o rk4.o rs.o shock.o main.o $(RES)
+LIBS =  -L /usr/lib -l lapack -l blas  -l g2c
+INCS =  -I /usr/include 
+BIN1  = stiff
+BIN2  = nonstiff
+CFLAGS = $(INCS)  
+RM = rm -f
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before main all-after
+
+clean: clean-custom
+	${RM} $(OBJ1) $(OBJ2) $(BIN)
+
+$(BIN1): $(OBJ1)
+	$(CC) $(LINKOBJ1) -o "main.exe" $(LIBS)
+
+$(BIN2): $(OBJ2)
+	$(CC) $(LINKOBJ2) -o "main.exe" $(LIBS)
+
+clsode.o: clsode.c
+	$(CC) -c clsode.c -o clsode.o $(CFLAGS)
+
+eigen.o: eigen.c
+	$(CC) -c eigen.c -o eigen.o $(CFLAGS)
+
+field.o: field.c
+	$(CC) -c field.c -o field.o $(CFLAGS)	
+	
+init.o: init.c
+	$(CC) -c init.c -o init.o $(CFLAGS)	
+	
+lsode2.o: lsode2.f
+	$(F) -c lsode2.f -o lsode2.o $(CFLAGS)
+
+lsode3.o: lsode3.f
+	$(F) -c lsode3.f -o lsode3.o $(CFLAGS)		
+
+main.o: main.c
+	$(CC) -c main.c -o main.o $(CFLAGS)	
+	
+matrix.o: matrix.c
+	$(CC) -c matrix.c -o matrix.o $(CFLAGS)		
+	
+rarefaction.o: rarefaction.c
+	$(CC) -c rarefaction.c -o rarefaction.o $(CFLAGS)			
+	
+rk4.o: rk4.c
+	$(CC) -c rk4.c -o rk4.o $(CFLAGS)	
+	
+rs.o: rs.c
+	$(CC) -c rs.c -o rs.o $(CFLAGS)
+	
+shock.o: shock.c
+	$(CC) -c shock.c -o shock.o $(CFLAGS)	
+	
+lsode1.o: lsode1.f
+	$(F) -c lsode1.f -o lsode1.o $(CFLAGS)
+	
