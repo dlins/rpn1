@@ -13,7 +13,7 @@ import rpn.component.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
-import wave.multid.model.AbstractPathIterator;
+import wave.multid.model.MultiGeometry;
 import wave.util.RealVector;
 
 public class RPnPhaseSpaceAbstraction extends AbstractScene {
@@ -25,6 +25,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
     //
     private PhaseSpaceState state_;
     private RpGeometry selectedGeom_;
+    private ArrayList<ArrayList> groupArrayList_;
     //
     // Constructors
     //
@@ -32,6 +33,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         super(id, domain);
         changeState(state);
         selectedGeom_ = null;
+        groupArrayList_= new ArrayList <ArrayList> ();
     }
 
     //
@@ -60,7 +62,49 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
     public void delete(RpGeometry geom) {
         state_.delete(this, geom);
     }
+    @Override
+   public void join(MultiGeometry geom) {
 
+        if (geom instanceof HugoniotCurveGeom) {
+            ArrayList activeList = new ArrayList();
+            groupArrayList_.add(activeList);
+            super.geomList_ = activeList;
+//            System.out.println("colocando nova hugoniot");
+
+        }
+        super.join(geom);
+        
+          
+        for (int i=0; i < groupArrayList_.size();i++){
+            
+            ArrayList list =  groupArrayList_.get(i);
+            
+//            System.out.println("Grupo " + i + " com " + list.size() + " geometrias");
+            
+        }
+
+//        System.out.println();
+//        System.out.println("Total de grupos de geometrias: " + groupArrayList_.size());
+        
+        
+        
+    }
+    
+    @Override
+    public void remove (MultiGeometry geom){
+        
+        super.remove(geom);
+          for (int i = 0; i < groupArrayList_.size(); i++) {
+            
+            ArrayList list = groupArrayList_.get(i);
+
+            if (list.size()==0){
+                groupArrayList_.remove(i);
+            }
+        }
+    }
+    
+    
     @Override
     public void update() {
 
