@@ -13,6 +13,7 @@ import rpn.controller.ui.SHOCK_CONFIG;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UI_ACTION_SELECTED;
 import rpnumerics.RPNUMERICS;
+import rpnumerics.ShockProfile;
 
 public class RPnCurvesConfigDialog extends RPnDialog {
 
@@ -34,9 +35,9 @@ public class RPnCurvesConfigDialog extends RPnDialog {
         curveComboBox_ = new JComboBox();
 
 
-        curveComboBox_.addItem("Shock Diagram");
-        curveComboBox_.addItem("Rarefaction");
-        curveComboBox_.addItem("Bifurcation");
+        curveComboBox_.addItem("Phase Diagram");
+        curveComboBox_.addItem("Wave Curves");
+        curveComboBox_.addItem("Bifurcation Curves");
 
         curvePanel.setLayout(flowLayout1);
 
@@ -48,20 +49,13 @@ public class RPnCurvesConfigDialog extends RPnDialog {
     private void jbInit() throws Exception {
         setTitle("Curves Choice");
         addCurveName();
-
         applyButton.setText("Ok");
         cancelButton.setText("Exit");
         buttonsPanel.remove(beginButton);
         cancelButton.setEnabled(true);
-
-
         this.getContentPane().add(curvePanel, BorderLayout.CENTER);
         setModal(false);
-
         pack();
-
-
-
     }
 
     @Override
@@ -81,17 +75,19 @@ public class RPnCurvesConfigDialog extends RPnDialog {
 
         UI_ACTION_SELECTED newState = null;
 
-        if (curveComboBox_.getSelectedItem().equals("Shock Diagram")) {
+        if (curveComboBox_.getSelectedItem().equals("Phase Diagram")) {
 
             newState = new SHOCK_CONFIG();
+            RPNUMERICS.getShockProfile().setHugoniotMethodName(ShockProfile.HUGONIOT_METHOD_NAMES[1]);
 
         }
 
-        if (curveComboBox_.getSelectedItem().equals("Rarefaction")) {
+        if (curveComboBox_.getSelectedItem().equals("Wave Curves")) {
             newState = new RAREFACTION_CONFIG();
+            RPNUMERICS.getShockProfile().setHugoniotMethodName(ShockProfile.HUGONIOT_METHOD_NAMES[0]);
 
         }
-        if (curveComboBox_.getSelectedItem().equals("Bifurcation")) {
+        if (curveComboBox_.getSelectedItem().equals("Bifurcation Curves")) {
             newState = new BIFURCATION_CONFIG();
 
         }

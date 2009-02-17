@@ -17,7 +17,6 @@ public class HugoniotPlotAgent extends RpModelPlotAgent {
     //
     static public final String DESC_TEXT = "Hugoniot Curve";
 
-    //     static public final String ICON_PATH = rpn.RPnConfigReader.IMAGEPATH + "hugoniot.jpg";
     //
     // Members
     //

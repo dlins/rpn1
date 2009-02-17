@@ -45,9 +45,11 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private RPnPhaseSpaceFrame[] frames_ = null;
     private RPnMenuCommand commandMenu_ = null;
     private JMenuItem networkMenuItem = new JMenuItem();
+    private JCheckBoxMenuItem showCursorMenuItem_ = new JCheckBoxMenuItem("Show Cursor Lines");
     private JToolBar toolBar_ = new JToolBar();
     private static JLabel statusLabel_ = new JLabel();
     private JMenuItem curvesMenuItem_ = new JMenuItem("Change Curve");
+    private JMenu viewMenu_ = new JMenu("View");
 
     //Construct the frame
     public RPnUIFrame(RPnMenuCommand command) {
@@ -56,16 +58,12 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             // TODO may be UIController should control PHASESPACE as well
             commandMenu_ = command;
             RPnNetworkStatusController.instance().addPropertyChangeListener(this);
-
             UIController.instance().setStateController(new StateInputController(this));
-            UIController.instance().resetApplication();
             phaseSpaceFramesInit(RPNUMERICS.boundary());
-
             addPropertyChangeListener(this);
-
             UndoActionController.createInstance();
-
             jbInit();
+            showCurvesConfigDialog();
             getContentPane().add(statusLabel_, BorderLayout.SOUTH);
             if (commandMenu_ instanceof RPnAppletPlotter) { // Selecting itens to disable in Applet
 
@@ -80,245 +78,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             e.printStackTrace();
         }
     }
-
-    private void uiFramePosition() {
-
-        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        GraphicsDevice gs = ge.getDefaultScreenDevice();
-        GraphicsConfiguration[] gc = gs.getConfigurations();
-        Rectangle bounds = gc[0].getBounds();
-        double hMargin = bounds.width * 0.3;
-        double vMargin = bounds.height * 0.2;
-        this.setLocation((int) hMargin, (int) vMargin);
-    }
-
-    //Component initialization
-    private void jbInit() throws Exception {
-        //setIconImage(Toolkit.getDefaultToolkit().createImage(ShockFlowControlFrame.class.getResource("[Your Icon]")));
-        uiFramePosition();
-
-
-        contentPane = (JPanel) this.getContentPane();
-        contentPane.setLayout(borderLayout1);
-        this.setSize(new Dimension(400, 300));
-        this.setResizable(false);
-        this.setTitle("");
-        fileMenu.setText("File");
-        pluginMenuItem.setText("Plugins ...");
-        jMenuFileExit.setText("Exit");
-
-        
-         curvesMenuItem_.addActionListener(
-                new java.awt.event.ActionListener() {
-
-                    public void actionPerformed(ActionEvent e) {
-
-                        RPnShockConfigDialog shockConfigDialog = new RPnShockConfigDialog(false,false);
-                        shockConfigDialog.begin();
-
-                    }
-                });
-        pluginMenuItem.addActionListener(
-                new ActionListener() {
-
-                    public void actionPerformed(ActionEvent e) {
-                        RPnPluginDialog pluginDialog = new RPnPluginDialog();
-                        pluginDialog.setVisible(true);
-                    }
-                });
-
-        resultsOption.addActionListener(
-                new ActionListener() {
-
-                    public void actionPerformed(ActionEvent e) {
-                        JCheckBox checkB = (JCheckBox) e.getSource();
-                        rpn.parser.RPnDataModule.RESULTS = checkB.isSelected();
-                    }
-                });
-
-        jMenuFileExit.addActionListener(
-                new ActionListener() {
-
-                    public void actionPerformed(ActionEvent e) {
-                        jMenuFileExit_actionPerformed(e);
-                    }
-                });
-        helpMenu.setText("Help");
-        jMenuHelpAbout.setText("About");
-        jMenuHelpAbout.addActionListener(
-                new ActionListener() {
-
-                    public void actionPerformed(ActionEvent e) {
-                        jMenuHelpAbout_actionPerformed(e);
-                    }
-                });
-        exportMenuItem.setText("Save As...");
-        exportMenuItem.addActionListener(
-                new ActionListener() {
-
-                    public void actionPerformed(ActionEvent e) {
-                        export_actionPerformed(e);
-                    }
-                });
-        editMenu.setText("Edit");
-        errorControlMenuItem.setText("Error Control...");
-        layoutMenuItem.setText("Scene Layout...");
-        layoutMenuItem.addActionListener(
-                new java.awt.event.ActionListener() {
-
-                    public void actionPerformed(ActionEvent e) {
-                        layoutMenuItem_actionPerformed(e);
-                    }
-                });
-
-        errorControlMenuItem.addActionListener(
-                new java.awt.event.ActionListener() {
-
-                    public void actionPerformed(ActionEvent e) {
-                        errorControlMenuItem_actionPerformed(e);
-                    }
-                });
-        createJPEGImageMenuItem.setText("Create JPEG Image...");
-        createJPEGImageMenuItem.addActionListener(
-                new java.awt.event.ActionListener() {
-
-                    public void actionPerformed(ActionEvent e) {
-                        createJPEGImage_actionPerformed(e);
-                    }
-                });
-        printMenuItem.setText("Print...");
-        printMenuItem.addActionListener(
-                new java.awt.event.ActionListener() {
-
-                    public void actionPerformed(ActionEvent e) {
-                        printMenuItem_actionPerformed(e);
-                    }
-                });
-        modelInteractionMenu.setText("RP");
-
-//        fileMenu.addSeparator();
-        networkMenuItem.setText("Network ...");
-        networkMenuItem.addActionListener(new java.awt.event.ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-                networkMenuItem_actionPerformed(e);
-            }
-        });
-
-        fileMenu.add(exportMenuItem);
-        fileMenu.addSeparator();
-        fileMenu.add(networkMenuItem);
-        fileMenu.add(pluginMenuItem);
-        fileMenu.addSeparator();
-        fileMenu.add(createJPEGImageMenuItem);
-        fileMenu.addSeparator();
-        fileMenu.add(printMenuItem);
-        fileMenu.addSeparator();
-        fileMenu.add(jMenuFileExit);
-        helpMenu.add(jMenuHelpAbout);
-        jMenuBar1.add(fileMenu);
-        jMenuBar1.add(editMenu);
-        jMenuBar1.add(modelInteractionMenu);
-
-        toolBar_.setFloatable(false);
-
-
-        jMenuBar1.add(helpMenu);
-        setJMenuBar(jMenuBar1);
-        contentPane.add(toolBar_, BorderLayout.NORTH);
-        editMenu.add(UndoActionController.instance());
-        editMenu.addSeparator();
-        editMenu.add(layoutMenuItem);
-        editMenu.addSeparator();
-
-        editMenu.add(ClearPhaseSpaceAgent.instance());
-        editMenu.addSeparator();
-        editMenu.add(FillPhaseSpaceAgent.instance());
-
-
-
-
-    }
-
-    private void shockConfigMenu() {
-        shockMenuItem_.addActionListener(
-                new java.awt.event.ActionListener() {
-
-                    public void actionPerformed(ActionEvent e) {
-                        RPnShockConfigDialog shockConfigDialog = new RPnShockConfigDialog(false,false);
-                        shockConfigDialog.setVisible(true);
-
-                    }
-                });
-
-        modelInteractionMenu.removeAll();
-        modelInteractionMenu.add(ChangeXZeroAgent.instance());
-        modelInteractionMenu.addSeparator();
-        modelInteractionMenu.add(ChangeSigmaAgent.instance());
-        modelInteractionMenu.addSeparator();
-        modelInteractionMenu.add(FindProfileAgent.instance());
-        modelInteractionMenu.addSeparator();
-        modelInteractionMenu.add(ChangeFluxParamsAgent.instance());
-
-        modelInteractionMenu.add(shockMenuItem_);
-        modelInteractionMenu.add(errorControlMenuItem);
-        modelInteractionMenu.addSeparator();
-        modelInteractionMenu.add(curvesMenuItem_);
-
-    }
-
-    private void rarefactionConfigMenu() {
-
-        rarefactionMenuItem_.addActionListener(
-                new java.awt.event.ActionListener() {
-
-                    public void actionPerformed(ActionEvent e) {
-
-                        RPnRarefactionConfigDialog rarefactionConfigDialog = new RPnRarefactionConfigDialog(false,false);
-
-                        rarefactionConfigDialog.setVisible(true);
-                    }
-                });
-
-        modelInteractionMenu.removeAll();
-        modelInteractionMenu.add(ChangeRarefactionXZeroAgent.instance());
-        modelInteractionMenu.addSeparator();
-        modelInteractionMenu.add(rarefactionMenuItem_);
-        modelInteractionMenu.addSeparator();
-        modelInteractionMenu.add(errorControlMenuItem);
-        modelInteractionMenu.addSeparator();
-        modelInteractionMenu.add(curvesMenuItem_);
-    }
-
-    private void bifurcationConfigMenu() {
-
-        bifurcationMenuItem_.addActionListener(
-                new java.awt.event.ActionListener() {
-
-                    public void actionPerformed(ActionEvent e) {
-
-                        RPnBifurcationConfigDialog bifurcationConfigDialog = new RPnBifurcationConfigDialog(false,false);
-                        bifurcationConfigDialog.setVisible(true);
-
-                    }
-                });
-
-        modelInteractionMenu.removeAll();
-        modelInteractionMenu.add(bifurcationMenuItem_);
-        modelInteractionMenu.addSeparator();
-        modelInteractionMenu.add(curvesMenuItem_);
-
-    }
-
-    //
-    // Accessors/Mutators
-    public RPnPhaseSpaceFrame[] getPhaseSpaceFrames() {
-        return frames_;
-    }
     //
     // Methods
     //
-    
     public void propertyChange(PropertyChangeEvent evt) {
 
         if (evt.getPropertyName().equals("aplication state")) {
@@ -347,6 +109,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 toolBar_.removeAll();
                 toolBar_.add(RarefactionForwardOrbitPlotAgent.instance().getContainer());
                 toolBar_.add(RarefactionBackwardOrbitPlotAgent.instance().getContainer());
+                toolBar_.add(HugoniotPlotAgent.instance().getContainer());
+                toolBar_.add(CompositeCurvePlotAgent.instance().getContainer());
                 toolBar_.add(ScratchAgent.instance().getContainer());
                 ScratchAgent.instance().setEnabled(true);
                 pack();
@@ -442,8 +206,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
                 UIController.instance().install(frames_[i].phaseSpacePanel());
 
-                frames_[i].setLocationRelativeTo(null);
-
+                setFramesPosition(frames_[i]);
                 frames_[i].pack();
 
                 frames_[i].setVisible(true);
@@ -453,12 +216,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         }
     }
-
     // from here on just for 2D for now...
     void createJPEGImage_actionPerformed(ActionEvent e) {
         JFileChooser chooser = new JFileChooser();
-        int option = chooser.showSaveDialog(this);
-
         try {
             frames_[0].phaseSpacePanel().createJPEGImageFile(chooser.getSelectedFile().getAbsolutePath());
         } catch (java.lang.NullPointerException ex) {
@@ -510,5 +270,284 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         commandMenu_.networkCommand();
 
+    }
+
+    private void jbInit() throws Exception {
+        //setIconImage(Toolkit.getDefaultToolkit().createImage(ShockFlowControlFrame.class.getResource("[Your Icon]")));
+        setUIFramePosition();
+
+
+        contentPane = (JPanel) this.getContentPane();
+        contentPane.setLayout(borderLayout1);
+        this.setSize(new Dimension(400, 300));
+        this.setResizable(false);
+        this.setTitle("");
+        fileMenu.setText("File");
+        pluginMenuItem.setText("Plugins ...");
+        jMenuFileExit.setText("Exit");
+
+        showCursorMenuItem_.setSelected(true);
+        
+        UIController.instance().showCursorLines(showCursorMenuItem_.isSelected());
+        
+        KeyStroke keyStroke = KeyStroke.getKeyStroke('l');
+        showCursorMenuItem_.setAccelerator(keyStroke);
+
+        curvesMenuItem_.addActionListener(
+                new java.awt.event.ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+
+                        RPnShockConfigDialog shockConfigDialog = new RPnShockConfigDialog(false, false);
+                        shockConfigDialog.begin();
+
+                    }
+                });
+
+
+        showCursorMenuItem_.addActionListener(
+                new java.awt.event.ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+                        UIController.instance().showCursorLines(showCursorMenuItem_.isSelected());
+                        
+
+                    }
+                });
+
+
+        pluginMenuItem.addActionListener(
+                new ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+                        RPnPluginDialog pluginDialog = new RPnPluginDialog();
+                        pluginDialog.setVisible(true);
+                    }
+                });
+
+        resultsOption.addActionListener(
+                new ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+                        JCheckBox checkB = (JCheckBox) e.getSource();
+                        rpn.parser.RPnDataModule.RESULTS = checkB.isSelected();
+                    }
+                });
+
+        jMenuFileExit.addActionListener(
+                new ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+                        jMenuFileExit_actionPerformed(e);
+                    }
+                });
+        helpMenu.setText("Help");
+        jMenuHelpAbout.setText("About");
+        jMenuHelpAbout.addActionListener(
+                new ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+                        jMenuHelpAbout_actionPerformed(e);
+                    }
+                });
+        exportMenuItem.setText("Save As...");
+        exportMenuItem.addActionListener(
+                new ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+                        export_actionPerformed(e);
+                    }
+                });
+        editMenu.setText("Edit");
+        errorControlMenuItem.setText("Error Control...");
+        layoutMenuItem.setText("Scene Layout...");
+        layoutMenuItem.addActionListener(
+                new java.awt.event.ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+                        layoutMenuItem_actionPerformed(e);
+                    }
+                });
+
+        errorControlMenuItem.addActionListener(
+                new java.awt.event.ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+                        errorControlMenuItem_actionPerformed(e);
+                    }
+                });
+        createJPEGImageMenuItem.setText("Create JPEG Image...");
+        createJPEGImageMenuItem.addActionListener(
+                new java.awt.event.ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+                        createJPEGImage_actionPerformed(e);
+                    }
+                });
+        printMenuItem.setText("Print...");
+        printMenuItem.addActionListener(
+                new java.awt.event.ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+                        printMenuItem_actionPerformed(e);
+                    }
+                });
+        modelInteractionMenu.setText("RP");
+
+        networkMenuItem.setText("Network ...");
+        networkMenuItem.addActionListener(new java.awt.event.ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                networkMenuItem_actionPerformed(e);
+            }
+        });
+
+        fileMenu.add(exportMenuItem);
+        fileMenu.addSeparator();
+        fileMenu.add(networkMenuItem);
+        fileMenu.add(pluginMenuItem);
+        fileMenu.addSeparator();
+        fileMenu.add(createJPEGImageMenuItem);
+        fileMenu.addSeparator();
+        fileMenu.add(printMenuItem);
+        fileMenu.addSeparator();
+        fileMenu.add(jMenuFileExit);
+        helpMenu.add(jMenuHelpAbout);
+        jMenuBar1.add(fileMenu);
+        jMenuBar1.add(editMenu);
+        jMenuBar1.add(viewMenu_);
+        viewMenu_.add(showCursorMenuItem_);
+        jMenuBar1.add(modelInteractionMenu);
+
+        toolBar_.setFloatable(false);
+
+
+        jMenuBar1.add(helpMenu);
+        setJMenuBar(jMenuBar1);
+        contentPane.add(toolBar_, BorderLayout.NORTH);
+        editMenu.add(UndoActionController.instance());
+        editMenu.addSeparator();
+        editMenu.add(layoutMenuItem);
+        editMenu.addSeparator();
+
+        editMenu.add(ClearPhaseSpaceAgent.instance());
+        editMenu.addSeparator();
+        editMenu.add(FillPhaseSpaceAgent.instance());
+
+
+
+
+    }
+
+    private void showCurvesConfigDialog() {
+
+        RPnCurvesConfigDialog curvesDialog = new RPnCurvesConfigDialog();
+        Point topLeftCorner = new Point(RPnUIFrame.getFrames()[0].getLocation());
+        topLeftCorner.x += 200;
+        curvesDialog.setLocation(topLeftCorner);
+        curvesDialog.setVisible(true);
+
+    }
+
+    private void shockConfigMenu() {
+        shockMenuItem_.addActionListener(
+                new java.awt 
+
+                        
+                            .event.ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+                        RPnShockConfigDialog shockConfigDialog = new RPnShockConfigDialog(false, false);
+                        shockConfigDialog.setVisible(true);
+
+                    }
+                });
+
+        modelInteractionMenu.removeAll();
+        modelInteractionMenu.add(ChangeXZeroAgent.instance());
+        modelInteractionMenu.addSeparator();
+        modelInteractionMenu.add(ChangeSigmaAgent.instance());
+        modelInteractionMenu.addSeparator();
+        modelInteractionMenu.add(FindProfileAgent.instance());
+        modelInteractionMenu.addSeparator();
+        modelInteractionMenu.add(ChangeFluxParamsAgent.instance());
+
+        modelInteractionMenu.add(shockMenuItem_);
+        modelInteractionMenu.add(errorControlMenuItem);
+        modelInteractionMenu.addSeparator();
+        modelInteractionMenu.add(curvesMenuItem_);
+
+    }
+
+    private void rarefactionConfigMenu() {
+
+        rarefactionMenuItem_.addActionListener(
+                new java.awt 
+
+                        
+                            .event.ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+
+                        RPnRarefactionConfigDialog rarefactionConfigDialog = new RPnRarefactionConfigDialog(false, false);
+
+                        rarefactionConfigDialog.setVisible(true);
+                    }
+                });
+
+        modelInteractionMenu.removeAll();
+        modelInteractionMenu.add(ChangeRarefactionXZeroAgent.instance());
+        modelInteractionMenu.add(ChangeXZeroAgent.instance());
+        modelInteractionMenu.addSeparator();
+        modelInteractionMenu.add(rarefactionMenuItem_);
+        modelInteractionMenu.addSeparator();
+        modelInteractionMenu.add(errorControlMenuItem);
+        modelInteractionMenu.addSeparator();
+        modelInteractionMenu.add(curvesMenuItem_);
+    }
+
+    private void bifurcationConfigMenu() {
+
+        bifurcationMenuItem_.addActionListener(
+                new java.awt 
+
+                        
+                            .event.ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+
+                        RPnBifurcationConfigDialog bifurcationConfigDialog = new RPnBifurcationConfigDialog(false, false);
+                        bifurcationConfigDialog.setVisible(true);
+
+                    }
+                });
+
+        modelInteractionMenu.removeAll();
+        modelInteractionMenu.add(bifurcationMenuItem_);
+        modelInteractionMenu.addSeparator();
+        modelInteractionMenu.add(curvesMenuItem_);
+
+    }
+
+    private void setUIFramePosition() {
+
+        Point topLeftCorner = frames_[0].getLocation();
+        topLeftCorner.y -= 120;
+        this.setLocation(topLeftCorner);
+
+    }
+
+    private void setFramesPosition(Component component) {
+
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice[] gs = ge.getScreenDevices();
+        DisplayMode displayMode = gs[0].getDisplayMode();
+        int height = displayMode.getHeight();
+        int width = displayMode.getWidth();
+        component.setLocation((int) (width - (width * .9)), (int) (height - (height * .8)));
+    }
+
+    public RPnPhaseSpaceFrame[] getPhaseSpaceFrames() {
+        return frames_;
     }
 }

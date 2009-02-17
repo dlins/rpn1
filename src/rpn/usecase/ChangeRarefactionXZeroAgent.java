@@ -15,7 +15,7 @@ public class ChangeRarefactionXZeroAgent extends RpModelConfigChangeAgent {
     //
     // Constants
     //
-    static public final String DESC_TEXT = "Change X-Zero";
+    static public final String DESC_TEXT = "Change Rarefaction X-Zero";
     //
     // Members
     //

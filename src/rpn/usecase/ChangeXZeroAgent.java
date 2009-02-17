@@ -5,7 +5,6 @@
  */
 package rpn.usecase;
 
-import wave.util.RealVector;
 import rpnumerics.PhasePoint;
 import rpnumerics.RPNUMERICS;
 import wave.util.RealVector;
@@ -16,7 +15,7 @@ public class ChangeXZeroAgent extends RpModelConfigChangeAgent {
     //
     // Constants
     //
-    static public final String DESC_TEXT = "Change X-Zero";
+    static public final String DESC_TEXT = "Change Shock X-Zero";
     //
     // Members
     //

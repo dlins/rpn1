@@ -39,6 +39,12 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     static final public Color DEFAULT_BOUNDARY_COLOR = Color.black;
     
     static final public Color DEFAULT_POINTMARK_COLOR = Color.white;
+
+    public static boolean isCursorLine() {
+        return cursorLine_;
+    }
+
+   
     //
     // Members
     //
@@ -47,6 +53,8 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     private JPEGImageEncoder encoder_;
     private boolean printFlag_ = false;
     private PhaseSpacePanelController ui_;
+    private static boolean showCursorLine_;
+    private static boolean cursorLine_;
     
     //
     // Constructors
@@ -104,9 +112,18 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         return cursorPos_;
     }
     
+     public static boolean isShowCursor() {
+        return showCursorLine_;
+    }
+
+    public static void setCursorLineVisible(boolean aSetCursorLine_) {
+        cursorLine_ = aSetCursorLine_;
+    }
+    
     //
     // Methods
     //
+    @Override
     public void paintComponent(Graphics g) {
         
         
@@ -150,7 +167,8 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
          * for printing and 3D projections we will not use cursor
          * orientation
          */
-        
+        if (showCursorLine_ && isCursorLine()){
+
         if ((!printFlag_) &&
                 (scene().getViewingTransform() instanceof Viewing2DTransform)) {
             g.setColor(Color.red);
@@ -161,6 +179,10 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         }
         g.setColor(prev);
         ((Graphics2D) g).setStroke(stroke);
+    }
+        
+        
+             
               
        
     }
@@ -227,5 +249,10 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         }
         return PAGE_EXISTS;
     }
-  
+
+    public static void setShowCursor(boolean showCursor) {
+        showCursorLine_ = showCursor;
+
+    }
+
 }

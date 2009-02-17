@@ -19,9 +19,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Cursor;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import rpn.controller.*;
 import java.net.*;
+import java.util.Iterator;
 import rpn.RPnDesktopPlotter;
 import rpn.message.*;
 
@@ -80,12 +83,31 @@ public class UIController extends ComponentUI {
 
     }
 
-    public void resetApplication() {
-        UIController.instance().setState(new CURVES_CONFIG());
-//        System.out.println("Resetando app");
+    private void toggleCursorLines() {
 
+        if (RPnPhaseSpacePanel.isShowCursor()) {
+            RPnPhaseSpacePanel.setShowCursor(false);
 
-        stateController_.propertyChange(new PropertyChangeEvent(this, "reset application", 0, handler_));
+        } else {
+            RPnPhaseSpacePanel.setShowCursor(true);
+        }
+        Iterator it = installedPanels_.iterator();
+        
+        while (it.hasNext()){
+            RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) it.next();
+            panel.repaint();
+        }
+
+    }
+    
+    public void showCursorLines(boolean showCursor){
+        RPnPhaseSpacePanel.setCursorLineVisible(showCursor);
+        Iterator it = installedPanels_.iterator();
+        
+        while (it.hasNext()){
+            RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) it.next();
+            panel.repaint();
+        }
     }
 
     public static UIController instance() {
@@ -148,8 +170,27 @@ public class UIController extends ComponentUI {
                 }
             }
         }
+
+        @Override
+        public void mouseEntered(MouseEvent event) {
+            if (event.getSource() instanceof RPnPhaseSpacePanel) {
+                toggleCursorLines();
+            }
+        }
+
+        @Override
+        public void mouseExited(MouseEvent event) {
+            if (event.getSource() instanceof RPnPhaseSpacePanel) {
+                toggleCursorLines();
+            }
+        }
     }
 
+    
+  
+    
+    
+    
     //
     // Accessors/Mutators
     //
@@ -179,6 +220,7 @@ public class UIController extends ComponentUI {
         installedPanels_.remove(panel);
         panel.removeMouseListener(mouseController_);
         panel.removeMouseMotionListener(mouseMotionController_);
+
     }
 
     /** Takes the coordinates of a clicked point in a panel and adds this coordinates in a buffer . Each panel has a buffer to store points entered by the user , this method add points in this buffer. The variables absComplete_ and ordComplete_ controls if the pair X/Y are taked correctely.*/

@@ -21,7 +21,7 @@ public class RPnShockConfigDialog extends RPnDialog {
     private FlowLayout flowLayout1 = new FlowLayout();
     private JPanel methodPanel_ = new JPanel();
     private JPanel methodTypePanel_ = new JPanel();
-    private JComboBox methodComboBox_;
+    private JLabel methodNameLabel_;
     private JComboBox flowNameComboBox_ = new JComboBox();
     private JCheckBox specificMethodCheckBox_ = new JCheckBox("Specific Method");
     private JLabel flowPluginName_ = new JLabel();
@@ -59,22 +59,19 @@ public class RPnShockConfigDialog extends RPnDialog {
     }
 
     private void addMethodName() {
-        methodComboBox_ = new JComboBox();
-        methodComboBox_.addMouseListener(new MouseHandler());
-        
-        for (int i=0;i < ShockProfile.HUGONIOT_METHOD_NAMES.length;i++){
-        methodComboBox_.addItem(ShockProfile.HUGONIOT_METHOD_NAMES[i]);// TODO A better combo fill method            
-        }
-
+        methodNameLabel_ = new JLabel(ShockProfile.instance().getHugoniotMethodName());
+        methodNameLabel_.setName("methodLabel");
+        methodNameLabel_.addMouseListener(new MouseHandler());
         methodPanel_.setLayout(flowLayout1);
-        methodPanel_.add(new JLabel("Hugoniot Plot Method"));
-        methodPanel_.add(methodComboBox_);
+        methodPanel_.add(new JLabel("Hugoniot Plot Method: "));
+        methodPanel_.add(methodNameLabel_);
 
     }
 
     private void addFlowName() {
 
         flowPluginName_.setText((String) PluginTableModel.instance().getValueAt(0, 2));
+        flowPluginName_.setName("pluginLabel");
 
     }
 
@@ -83,7 +80,6 @@ public class RPnShockConfigDialog extends RPnDialog {
         this.setTitle("Shock Curve Configuration");
         RPnUIFrame.setStatusMessage("Curve Configuration");
         addMethodName();
-        methodComboBox_.setSelectedItem(ShockProfile.instance().getHugoniotMethodName());
         addFlowName();
         flowPluginName_.addMouseListener(new MouseHandler());
 
@@ -96,13 +92,12 @@ public class RPnShockConfigDialog extends RPnDialog {
 
         this.getContentPane().add(methodPanel_, BorderLayout.NORTH);
         this.getContentPane().add(methodTypePanel_, BorderLayout.CENTER);
+        setPreferredSize(new Dimension(300, 100));
         pack();
 
     }
 
     protected void apply() {
-
-        RPNUMERICS.getShockProfile().setHugoniotMethodName((String) methodComboBox_.getSelectedItem());
 
         if (specificMethodCheckBox_.isSelected()) {
             RPNUMERICS.getShockProfile().setHugoniotSpecific(true);
@@ -123,16 +118,25 @@ public class RPnShockConfigDialog extends RPnDialog {
 
         public void mouseClicked(MouseEvent e) {
             
-            if ((e.getSource()instanceof JLabel) && (e.getButton()==MouseEvent.BUTTON3) ){
+            
+            JLabel label=null;
+            if (e.getSource() instanceof JLabel){
+                
+                label=(JLabel) e.getSource();
+                
+            }
+            
+            
+            if (label.getName().equals("pluginLabel") && (e.getButton()==MouseEvent.BUTTON3) ){
 
                 PluginConfigDialog dialog = new PluginConfigDialog(ShockProfile.SHOCKFLOW_NAME);
                 dialog.setVisible(true);
 
             }
             
-            if ((e.getSource() instanceof JComboBox) && (e.getButton()==MouseEvent.BUTTON3)){
+            if ((label.getName().equals("methodLabel")) && (e.getButton()==MouseEvent.BUTTON3)){
                 
-                Object selectedMethod = methodComboBox_.getSelectedItem();
+                String selectedMethod = methodNameLabel_.getText();
                 
                 if (selectedMethod.equals("Continuation")){
                 RPnContinuationMethodConfigDialog dialog = new RPnContinuationMethodConfigDialog();
