@@ -94,7 +94,7 @@ JNIEXPORT jint JNICALL Java_rpnumerics_FluxFunction_nativeJet(JNIEnv * env, jobj
     FluxParams nativeFluxParams(paramsLength, nativeParamsArray);
 
     //Setting the new parameters
-    
+
     physics.fluxParams(nativeFluxParams);
 
     fluxFunction.jet(nativeWaveState, nativeJetMatrix, degree);
