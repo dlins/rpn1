@@ -19,7 +19,7 @@ public class Quad2FluxParams extends FluxParams {
     }
 
     public Quad2FluxParams(){
-        super("Quad2", new RealVector(14), 0);//TODO (???)
+        super(new RealVector(14));
     }
 
     
