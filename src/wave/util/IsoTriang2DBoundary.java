@@ -6,9 +6,6 @@
 
 package wave.util;
 
-import java.awt.Point;
-import java.awt.geom.Point2D;
-
 public class IsoTriang2DBoundary implements Boundary {
     private RealVector minimums_;
     private RealVector maximums_;
