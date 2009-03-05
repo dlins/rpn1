@@ -13,21 +13,21 @@ public  class FluxParams {
     // Members
     //
     private RealVector params_;
-    private RealVector initParams_;
-    private String physicsID_;
-    private int index_;
+//    private RealVector initParams_;
+//    private String physicsID_;
+//    private int index_;
     //
     // Constructors
     //
     public FluxParams(FluxParams params) {
-        this(params.getPhysicsID(), params.getParams(),params.getIndex());
+        this(params.getParams());
     }
 
-    public FluxParams(String physID, RealVector params,int index) {
+    public FluxParams(RealVector params) {
         params_ = new RealVector(params);
-        physicsID_ = physID.toString();
-        initParams_ = new RealVector(params);
-        index_=index;
+//        physicsID_ = physID.toString();
+//        initParams_ = new RealVector(params);
+//        index_=index;
     }
 
     //
@@ -43,9 +43,6 @@ public  class FluxParams {
 
     public synchronized void setParam(int index, double value) { params_.setElement(index, value); }
 
-    public String getPhysicsID() {return physicsID_; }
-
-    public int getIndex() {return index_;}
 
 
 
@@ -53,16 +50,14 @@ public  class FluxParams {
     // Methods
     //
     public boolean equals(Object object) {
-        if ((object instanceof FluxParams) && (((FluxParams)object).getParams().equals(getParams())) &&
-            (((FluxParams)object).getPhysicsID().compareTo(getPhysicsID()) == 0))
+        if ((object instanceof FluxParams) && ((FluxParams)object).getParams().equals(getParams()))
+             
                 return true;
         return false;
     }
+    
 
-    public synchronized void reset() {
-        setParams(initParams_);
-    }
-
+    @Override
     public String toString() {
         StringBuffer buf = new StringBuffer();
         buf.append(params_.toString());

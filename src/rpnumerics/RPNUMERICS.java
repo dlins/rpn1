@@ -29,16 +29,26 @@ public class RPNUMERICS {
     static private BifurcationProfile bifurcationProfile_ = BifurcationProfile.instance();
     static private ShockRarefactionProfile shockRarefactionProfile_ = null;
     static private int[] CONTOUR_RESOLUTION = {100, 100};
-
+    static private FluxParams fluxParams_;
     //
     // Constructors/Initializers
     //
-    static public void init(RPNumericsProfile profile) throws RpException {
+    static public void init(RPNumericsProfile profile) {
 
         System.loadLibrary("wave");//TODO libwave is always loaded ?
         System.loadLibrary("rpnumerics");
         initNative(profile.getPhysicsID());
         errorControl_ = new RpErrorControl(boundary());
+        fluxParams_ = getFluxParams();
+    }
+
+    static public void init(String physicsID) {
+        System.loadLibrary("wave");//TODO libwave is always loaded ?
+        System.loadLibrary("rpnumerics");
+        initNative(physicsID);
+        errorControl_ = new RpErrorControl(boundary());
+        fluxParams_ = getFluxParams();
+
     }
 
     /**
@@ -50,7 +60,7 @@ public class RPNUMERICS {
     public static HugoniotCurveCalc createHugoniotCalc() {
 
         HugoniotCurveCalc hugoniotCurveCalc = null;
-        HugoniotParams hparams = new HugoniotParams(shockProfile_.getXZero(), new FluxFunction());
+        HugoniotParams hparams = new HugoniotParams(shockProfile_.getXZero(), new FluxFunction(fluxParams_));
 
         ShockFlow shockFlow = (ShockFlow) createShockFlow();
         //Not specific
@@ -143,7 +153,7 @@ public class RPNUMERICS {
 
     public static ShockFlow createShockFlow() {
 
-        FluxFunction flux = new FluxFunction();
+        FluxFunction flux = new FluxFunction(fluxParams_);
 
         PluginProfile profile = PluginTableModel.getPluginConfig(ShockProfile.SHOCKFLOW_NAME);
 
@@ -157,17 +167,13 @@ public class RPNUMERICS {
     }
 
     public static ShockFlow createShockFlow(ShockFlowParams shockFlowParams) {
-
-
-        ShockFlow flow = new ShockFlow(shockFlowParams, new FluxFunction());
-
+        ShockFlow flow = new ShockFlow(shockFlowParams, new FluxFunction(fluxParams_));
         return flow;
-
     }
 
     public static RarefactionFlow createRarefactionFlow() {
 
-        return new RarefactionFlow(rarefactionProfile_.getXZero(), rarefactionProfile_.getFamily(), new FluxFunction());
+        return new RarefactionFlow(rarefactionProfile_.getXZero(), rarefactionProfile_.getFamily(), new FluxFunction(fluxParams_));
 
     }
 
@@ -261,9 +267,17 @@ public class RPNUMERICS {
      */
     public static native void clean();
 
+    public static void setFluxParams(FluxParams fluxParams) {
+        fluxParams_ = fluxParams;
+    }
+
+    public static native FluxParams getFluxParams();
+
     public static native String physicsID();
 
     public static native Boundary boundary();
+
+    public static native void setBoundary(Boundary newBoundary);
 
     public static native int domainDim();
 
