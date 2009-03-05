@@ -3,58 +3,101 @@
  * Departamento de Dinamica dos Fluidos
  *
  */
-
 package rpn;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
+import java.util.Set;
 import javax.swing.*;
 import java.util.StringTokenizer;
+import rpn.parser.PhysicsProfile;
+import rpn.parser.RPnInterfaceParser;
+import rpnumerics.FluxParams;
+import rpnumerics.RPNUMERICS;
 import wave.util.RealVector;
 
 public class RPnFluxParamsPanel extends JPanel {
-    GridLayout gridLayout1 = new GridLayout();
-    JPanel jPanel1 = new JPanel();
-    FlowLayout flowLayout1 = new FlowLayout();
-    JLabel jLabel1 = new JLabel();
-    JTextField paramIndexField = new JTextField();
-    JLabel jLabel2 = new JLabel();
-    JLabel jLabel3 = new JLabel();
-    JTextField paramValueField = new JTextField();
+
+    private GridLayout gridLayout = new GridLayout(2, 2);
+    private ArrayList<JTextField> valuesArray = new ArrayList<JTextField>();
+    private PhysicsProfile physicsProfile_;
 
     public RPnFluxParamsPanel() {
-        try {
-            jbInit();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+
+        searchPhysics(RPNUMERICS.physicsID());
+        buildPanel(false);
     }
 
-    private void jbInit() throws Exception {
-        this.setLayout(flowLayout1);
-        jPanel1.setLayout(flowLayout1);
-        jLabel1.setText("Flux Params = ");
-        paramValueField.setPreferredSize(new Dimension(274, 17));
-//        paramValueField.setText(rpnumerics.RPNUMERICS.fluxFunction().fluxParams().toString());
-        this.add(jPanel1, null);
-        jPanel1.add(jLabel1, null);
-        jPanel1.add(paramValueField, null);
+    public RPnFluxParamsPanel(String physicsName) {
+        searchPhysics(physicsName);
+        buildPanel(true);
     }
 
-    public RealVector getParams() {
-        StringTokenizer tokenizer = new StringTokenizer(paramValueField.getText());
-        double[] values = new double[tokenizer.countTokens()];
-        int i = -1;
-        while (tokenizer.hasMoreElements()) {
-            i++;
-            String token = (String)tokenizer.nextElement();
-            Double doubleToken = new Double(token);
-            values[i] = doubleToken.doubleValue();
+    private void buildPanel(boolean useDefaults) {
+
+        ArrayList<HashMap<String, String>> fluxParamsArrayList = physicsProfile_.getFluxParamArrayList();
+        
+        for (int i = 0; i < fluxParamsArrayList.size(); i++) {
+            HashMap<String, String> fluxParams = fluxParamsArrayList.get(i);
+
+            Set<Entry<String, String>> fluxParamsSet = fluxParams.entrySet();
+
+            Iterator<Entry<String, String>> paramsIterator = fluxParamsSet.iterator();
+
+            while (paramsIterator.hasNext()) {
+                Entry<String, String> entry = paramsIterator.next();
+                JLabel fluxParamName = new JLabel(entry.getKey());
+                fluxParamName.setName(entry.getKey());
+                JTextField fluxValueField = new JTextField();
+                valuesArray.add(i,fluxValueField);
+                if (useDefaults) {
+                    fluxValueField.setText(entry.getValue());
+                }
+                else {
+                    
+                    FluxParams fluxParam = RPNUMERICS.getFluxParams();
+                    Double paramValue = fluxParam.getElement(i);
+                    valuesArray.get(i).setText(paramValue.toString());
+                    
+                }
+                fluxValueField.setName(entry.getKey());
+
+                this.add(fluxParamName);
+                this.add(fluxValueField);
+                
+            }
         }
-        return new RealVector(values);
+        this.setLayout(gridLayout);
     }
 
-    public void setParams(RealVector params) {
-        paramValueField.setText(params.toString());
+    private void searchPhysics(String physicsName) {
+
+        Iterator<PhysicsProfile> physics = RPnInterfaceParser.getPhysicsProfiles().iterator();
+
+        while (physics.hasNext()) {
+            PhysicsProfile physicsProfile = physics.next();
+            if (physicsProfile.getName().equals(physicsName)) {
+                physicsProfile_ = physicsProfile;
+            }
+        }
+
     }
+
+    public void applyParams() {
+
+        StringBuffer paramsBuffer = new StringBuffer();
+
+        for (int i = 0; i < valuesArray.size(); i++) {
+            JTextField jTextField = valuesArray.get(i);
+            paramsBuffer.append(jTextField.getText());
+            paramsBuffer.append(" ");
+        }
+
+        RealVector paramsVector = new RealVector(paramsBuffer.toString());
+        RPNUMERICS.setFluxParams(new FluxParams( paramsVector));
+    }
+    
 }

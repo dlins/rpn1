@@ -24,14 +24,14 @@ public abstract class RPnConfigReader{
     static  public Font MODELPLOT_BUTTON_FONT = new Font("Arial", 1, 8);
     static  public String XML_HEADER = "<?xml version=\"1.0\"?>\n<!DOCTYPE RPnConfig SYSTEM \"rpnconfig.dtd\">\n";
 
-    public static ImageIcon HUGONIOT,MANIFOLD_BWD,MANIFOLD_FWD,POINCARE,ORBIT_FWD,ORBIT_BWD,STATPOINT;
-
+  
 
     /** Constructs a configuration object to the applet or the desktop version */
 
 
     public static RPnConfigReader getReader (String  file,boolean isApplet,JApplet applet ){
 
+        RPnConfig.remoteImage();
 	if (isApplet){
 
 	    if (applet == null){
@@ -56,12 +56,7 @@ public abstract class RPnConfigReader{
 	try {
 
    	    // initialize the XML parser
-            
-            
-
           Parser parser = ParserFactory.makeParser("com.ibm.xml.parsers.ValidatingSAXParser");
-
-
 	    // initialize numerics (no Poincare)
 
 	    configStream.mark(0);

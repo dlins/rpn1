@@ -37,8 +37,6 @@ public class RPnPhaseSpaceFrame extends JFrame {
         enableEvents(AWTEvent.WINDOW_EVENT_MASK);
         enableEvents(AWTEvent.COMPONENT_EVENT_MASK);
         //	enableEvents(AWTEvent.FOCUS_EVENT_MASK);
-
-
         commandMenu_ = command;
         try {
             phaseSpacePanel = new RPnPhaseSpacePanel(scene);

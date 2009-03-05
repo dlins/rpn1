@@ -28,13 +28,13 @@ public class RPnAppletConfigReader extends RPnConfigReader{
 
     static private void remoteImage (JApplet applet){
 
-	RPnConfigReader.HUGONIOT=  new ImageIcon(applet.getImage(applet.getCodeBase(),"images/hugoniot.jpg"));
-	RPnConfigReader.MANIFOLD_BWD=  new ImageIcon(applet.getImage(applet.getCodeBase(),"images/manifold_bwd.jpg"));
-	RPnConfigReader.MANIFOLD_FWD=  new ImageIcon(applet.getImage(applet.getCodeBase(),"images/manifold_fwd.jpg"));
-	RPnConfigReader.POINCARE=  new ImageIcon(applet.getImage(applet.getCodeBase(),"images/poincare.jpg"));
-	RPnConfigReader.ORBIT_FWD=  new ImageIcon(applet.getImage(applet.getCodeBase(),"images/orbit_fwd.jpg"));
-	RPnConfigReader.ORBIT_BWD=  new ImageIcon(applet.getImage(applet.getCodeBase(),"images/orbit_bwd.jpg"));
-	RPnConfigReader.STATPOINT= new ImageIcon (applet.getImage(applet.getCodeBase(),"images/statpoint.jpg"));
+	RPnConfig.HUGONIOT=  new ImageIcon(applet.getImage(applet.getCodeBase(),"images/hugoniot.jpg"));
+	RPnConfig.MANIFOLD_BWD=  new ImageIcon(applet.getImage(applet.getCodeBase(),"images/manifold_bwd.jpg"));
+	RPnConfig.MANIFOLD_FWD=  new ImageIcon(applet.getImage(applet.getCodeBase(),"images/manifold_fwd.jpg"));
+	RPnConfig.POINCARE=  new ImageIcon(applet.getImage(applet.getCodeBase(),"images/poincare.jpg"));
+	RPnConfig.ORBIT_FWD=  new ImageIcon(applet.getImage(applet.getCodeBase(),"images/orbit_fwd.jpg"));
+	RPnConfig.ORBIT_BWD=  new ImageIcon(applet.getImage(applet.getCodeBase(),"images/orbit_bwd.jpg"));
+	RPnConfig.STATPOINT= new ImageIcon (applet.getImage(applet.getCodeBase(),"images/statpoint.jpg"));
 
     }
 

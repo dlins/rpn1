@@ -6,52 +6,57 @@
  */
 package rpn;
 
+import org.iso_relax.verifier.VerifierConfigurationException;
+import org.xml.sax.SAXException;
+
+
+
 import rpn.message.*;
 import rpnumerics.RpException;
 import javax.swing.JOptionPane;
 import java.io.*;
 import org.iso_relax.verifier.Verifier;
 import org.iso_relax.verifier.VerifierFactory;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXParseException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLReaderFactory;
 import rpn.controller.ui.UIController;
+import rpn.parser.RPnInterfaceParser;
 import rpnumerics.RPNUMERICS;
 
 public class RPnDesktopPlotter implements RPnMenuCommand {
 
-    public static String DTDPATH = System.getProperty("rpnhome") + System.getProperty("file.separator")+"share"+System.getProperty("file.separator")+"rpn-dtd"+System.getProperty("file.separator");
+    public static String DTDPATH = System.getProperty("rpnhome") + System.getProperty("file.separator") + "share" + System.getProperty("file.separator") + "rpn-dtd" + System.getProperty("file.separator");
+    public static String INTERFACE_CONFIG_PATH = System.getProperty("rpnhome") + System.getProperty("file.separator") + "share" + System.getProperty("file.separator") + "rpn-examples" + System.getProperty("file.separator");
     private static RPnConfigReader configReader_;
     private static InputStream configStream_;
     private static RPnUIFrame rpnUIFrame;
 
-    public RPnDesktopPlotter(String configFile) {
-        try {
-            // create a VerifierFactory with the default SAX parser
-            VerifierFactory factory = new com.sun.msv.verifier.jarv.TheFactoryImpl();
-            // compile a RELAX schema (or whatever schema you like)
-            org.iso_relax.verifier.Schema schema = factory.compileSchema(new File(DTDPATH + "rpnconfig.dtd"));
-            // obtain a verifier
-            Verifier verifier = schema.newVerifier();
-            // set an error handler
-            // this error handler will throw an exception if there is an error
-            verifier.setErrorHandler(com.sun.msv.verifier.util.ErrorHandlerImpl.theInstance);
-            try {
+    public RPnDesktopPlotter(String configFile) throws FileNotFoundException, VerifierConfigurationException, SAXException, IOException {
 
-                if (verifier.verify(new File(configFile))) {
-                    System.out.println("The document is valid");
-                }
-            } catch (SAXParseException e) {
-                System.out.println("The document is not valid");
-                System.out.println("Because:  " + e);
-                System.out.println("Line: " + e.getLineNumber());
-                System.out.println("Column: " + e.getColumnNumber());
-            // if the document is invalid, then the execution will reach here
-            // because we throw an exception for an error.
-            }
-        } catch (Throwable any) {
-            any.printStackTrace();
+        // create a VerifierFactory with the default SAX parser
+        VerifierFactory factory = new com.sun.msv.verifier.jarv.TheFactoryImpl();
+        // compile a RELAX schema (or whatever schema you like)
+        org.iso_relax.verifier.Schema schema = factory.compileSchema(new File(DTDPATH + "rpnconfig.dtd"));
+
+        // obtain a verifier
+        Verifier verifier = schema.newVerifier();
+//        Verifier interfaceVerifier = intefaceSchema.newVerifier();
+        // set an error handler
+        // this error handler will throw an exception if there is an error
+        verifier.setErrorHandler(com.sun.msv.verifier.util.ErrorHandlerImpl.theInstance);
+
+
+        if (verifier.verify(new File(configFile))) {
+            System.out.println("The input document is valid");
         }
 
-        
+
+
+    }
+
+    public RPnDesktopPlotter() {
     }
 
     public void finalizeApplication() {
@@ -93,19 +98,68 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
 
     public static void main(String[] args) {
 
-        RPnDesktopPlotter plotter = new RPnDesktopPlotter(args[0]);
-        
-        configReader_ = RPnConfigReader.getReader(args[0], false, null);
+        RPnDesktopPlotter plotter = null;
+        try {
 
-        configStream_ = configReader_.read();
+            XMLReader xmlReader = XMLReaderFactory.createXMLReader();
+            xmlReader.setContentHandler(new RPnInterfaceParser());
 
-        RPnDesktopPlotter.configReader_.init(RPnDesktopPlotter.configStream_);
+            File interfaceConfigFile = new File(INTERFACE_CONFIG_PATH + "rpninterfaceconfig.xml");
+            InputStream configStream = new FileInputStream(interfaceConfigFile);
+            xmlReader.parse(new InputSource(configStream));
 
-        rpnUIFrame = new RPnUIFrame(plotter);
+            if (args.length==0) throw new FileNotFoundException();
+            
+            plotter = new RPnDesktopPlotter(args[0]);
 
-        rpnUIFrame.pack();
+            configReader_ = RPnConfigReader.getReader(args[0], false, null);
 
-        rpnUIFrame.setVisible(true);
+            configStream_ = configReader_.read();
+
+            RPnDesktopPlotter.configReader_.init(RPnDesktopPlotter.configStream_);
+
+            rpnUIFrame = new RPnUIFrame(plotter);
+
+            rpnUIFrame.pack();
+
+            rpnUIFrame.setVisible(true);
+
+
+        } catch (FileNotFoundException ex) {
+
+            RPnConfigDialog configDialog = new RPnConfigDialog();
+            configDialog.setVisible(true);
+
+
+        } catch (VerifierConfigurationException ex) {
+            System.out.println("Error in configuration file");
+        } catch (SAXParseException e) {
+            System.out.println("The document is not valid");
+            System.out.println("Because:  " + e);
+            System.out.println("Line: " + e.getLineNumber());
+            System.out.println("Column: " + e.getColumnNumber());
+        // if the document is invalid, then the execution will reach here
+        // because we throw an exception for an error.
+
+
+        } catch (SAXException ex) {
+
+            ex.printStackTrace();
+
+
+
+        } catch (IOException exception) {
+        } finally {
+            try {
+
+                configStream_.close();
+            } catch (NullPointerException ex) {
+
+            } catch (IOException ex) {
+                System.out.println("IO Error");
+            }
+
+        }
 
     }
 }

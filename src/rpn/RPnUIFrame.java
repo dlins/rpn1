@@ -59,10 +59,10 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             commandMenu_ = command;
             RPnNetworkStatusController.instance().addPropertyChangeListener(this);
             UIController.instance().setStateController(new StateInputController(this));
+            jbInit();
             phaseSpaceFramesInit(RPNUMERICS.boundary());
             addPropertyChangeListener(this);
             UndoActionController.createInstance();
-            jbInit();
             showCurvesConfigDialog();
             getContentPane().add(statusLabel_, BorderLayout.SOUTH);
             if (commandMenu_ instanceof RPnAppletPlotter) { // Selecting itens to disable in Applet
@@ -287,9 +287,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         jMenuFileExit.setText("Exit");
 
         showCursorMenuItem_.setSelected(true);
-        
+
         UIController.instance().showCursorLines(showCursorMenuItem_.isSelected());
-        
+
         KeyStroke keyStroke = KeyStroke.getKeyStroke('l');
         showCursorMenuItem_.setAccelerator(keyStroke);
 
@@ -310,7 +310,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
                     public void actionPerformed(ActionEvent e) {
                         UIController.instance().showCursorLines(showCursorMenuItem_.isSelected());
-                        
+
 
                     }
                 });
@@ -442,7 +442,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private void showCurvesConfigDialog() {
 
         RPnCurvesConfigDialog curvesDialog = new RPnCurvesConfigDialog();
-        Point topLeftCorner = new Point(RPnUIFrame.getFrames()[0].getLocation());
+        Point topLeftCorner = this.getLocation();
         topLeftCorner.x += 200;
         curvesDialog.setLocation(topLeftCorner);
         curvesDialog.setVisible(true);
@@ -451,11 +451,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
     private void shockConfigMenu() {
         shockMenuItem_.addActionListener(
-                new java.awt 
-
-                        
-                            .event.ActionListener() {
-
+                new java.awt.event.ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         RPnShockConfigDialog shockConfigDialog = new RPnShockConfigDialog(false, false);
                         shockConfigDialog.setVisible(true);
@@ -482,10 +478,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private void rarefactionConfigMenu() {
 
         rarefactionMenuItem_.addActionListener(
-                new java.awt 
-
-                        
-                            .event.ActionListener() {
+                new java.awt.event.ActionListener() {
 
                     public void actionPerformed(ActionEvent e) {
 
@@ -509,10 +502,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private void bifurcationConfigMenu() {
 
         bifurcationMenuItem_.addActionListener(
-                new java.awt 
-
-                        
-                            .event.ActionListener() {
+                new java.awt.event.ActionListener() {
 
                     public void actionPerformed(ActionEvent e) {
 
@@ -531,20 +521,21 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
     private void setUIFramePosition() {
 
-        Point topLeftCorner = frames_[0].getLocation();
-        topLeftCorner.y -= 120;
-        this.setLocation(topLeftCorner);
-
-    }
-
-    private void setFramesPosition(Component component) {
-
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         GraphicsDevice[] gs = ge.getScreenDevices();
         DisplayMode displayMode = gs[0].getDisplayMode();
         int height = displayMode.getHeight();
         int width = displayMode.getWidth();
-        component.setLocation((int) (width - (width * .9)), (int) (height - (height * .8)));
+        this.setLocation((int) (width - (width * .9)), (int) (height - (height * .95)));
+
+    }
+
+    private void setFramesPosition(Component component) {
+
+        Point topLeftCorner = this.getLocation();
+        topLeftCorner.y += 120;
+        component.setLocation(topLeftCorner);
+
     }
 
     public RPnPhaseSpaceFrame[] getPhaseSpaceFrames() {
