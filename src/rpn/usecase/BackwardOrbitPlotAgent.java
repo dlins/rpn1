@@ -6,12 +6,11 @@
 
 package rpn.usecase;
 
+import rpn.RPnConfig;
 import rpn.component.*;
-import rpnumerics.OrbitCalc;
 import rpnumerics.OrbitPoint;
 import wave.util.RealVector;
 
-import rpn.RPnConfigReader;
 import rpnumerics.RPNUMERICS;
 
 
@@ -30,7 +29,7 @@ public class BackwardOrbitPlotAgent extends RpModelPlotAgent {
     // Constructors/Initializers
     //
     protected BackwardOrbitPlotAgent() {
-        super(DESC_TEXT,RPnConfigReader.ORBIT_BWD);
+        super(DESC_TEXT,RPnConfig.ORBIT_BWD);
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {

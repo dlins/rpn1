@@ -6,10 +6,10 @@
 
 package rpn.usecase;
 
+import rpn.RPnConfig;
 import rpn.component.*;
 import rpnumerics.*;
 import wave.util.RealVector;
-import rpn.RPnConfigReader;
 
 public class ForwardManifoldPlotAgent extends RpModelPlotAgent {
     //
@@ -26,7 +26,7 @@ public class ForwardManifoldPlotAgent extends RpModelPlotAgent {
     // Constructors/Initializers
     //
     protected ForwardManifoldPlotAgent() {
-        super(DESC_TEXT, RPnConfigReader.MANIFOLD_FWD);
+        super(DESC_TEXT, RPnConfig.MANIFOLD_FWD);
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {

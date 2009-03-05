@@ -6,17 +6,10 @@
 
 package rpn.usecase;
 
-import rpn.RPnPhaseSpaceAbstraction;
 import rpn.component.*;
-import rpnumerics.OrbitCalc;
-import rpnumerics.OrbitPoint;
 import wave.util.SimplexPoincareSection;
+import rpn.RPnConfig;
 import wave.util.RealVector;
-import javax.swing.ImageIcon;
-import wave.util.RealVector;
-import wave.ode.Rk4BPProfile;
-import rpn.controller.PhaseSpacePanel2DController;
-import rpn.RPnConfigReader;
 
 public class PoincareSectionPlotAgent extends RpModelPlotAgent {
     //
@@ -33,7 +26,7 @@ public class PoincareSectionPlotAgent extends RpModelPlotAgent {
     // Constructors/Initializers
     //
     protected PoincareSectionPlotAgent() {
-        super(DESC_TEXT, RPnConfigReader.POINCARE);
+        super(DESC_TEXT, RPnConfig.POINCARE);
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {

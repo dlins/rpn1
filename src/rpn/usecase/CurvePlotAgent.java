@@ -34,7 +34,7 @@ public class CurvePlotAgent extends RpModelPlotAgent {
     // Constructors/Initializers
     //
     protected CurvePlotAgent() {
-        super(DESC_TEXT, rpn.RPnConfigReader.ORBIT_FWD);
+        super(DESC_TEXT, rpn.RPnConfig.ORBIT_FWD);
     }
     
     public RpGeometry createRpGeometry(RealVector[] input) {

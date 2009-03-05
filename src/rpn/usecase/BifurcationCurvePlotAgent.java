@@ -27,7 +27,7 @@ public class BifurcationCurvePlotAgent extends RpModelPlotAgent {
     //
 
     protected BifurcationCurvePlotAgent() {
-	super(DESC_TEXT,rpn.RPnConfigReader.HUGONIOT);
+	super(DESC_TEXT,rpn.RPnConfig.HUGONIOT);
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {

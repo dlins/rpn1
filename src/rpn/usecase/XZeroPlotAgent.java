@@ -6,6 +6,7 @@
 
 package rpn.usecase;
 
+import rpn.RPnConfig;
 import rpn.component.*;
 import rpnumerics.StationaryPointCalc;
 import rpnumerics.PhasePoint;
@@ -29,7 +30,7 @@ public class XZeroPlotAgent extends RpModelPlotAgent {
     // Constructors/Initializers
     //
     protected XZeroPlotAgent() {
-        super(DESC_TEXT, RPnConfigReader.STATPOINT);
+        super(DESC_TEXT, RPnConfig.STATPOINT);
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {

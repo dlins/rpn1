@@ -16,7 +16,7 @@ public class RarefactionBackwardOrbitPlotAgent extends RpModelPlotAgent {
     
     public RarefactionBackwardOrbitPlotAgent() {
         
-        super(DESC_TEXT, rpn.RPnConfigReader.ORBIT_BWD);
+        super(DESC_TEXT, rpn.RPnConfig.ORBIT_BWD);
     }
     
     

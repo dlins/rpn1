@@ -5,11 +5,11 @@
  */
 package rpn.usecase;
 
+import rpn.RPnConfig;
 import rpn.component.*;
 import rpnumerics.StationaryPoint;
 import rpnumerics.PhasePoint;
 import wave.util.RealVector;
-import rpn.RPnConfigReader;
 import rpnumerics.RPNUMERICS;
 
 public class BackwardManifoldPlotAgent extends RpModelPlotAgent {
@@ -27,7 +27,7 @@ public class BackwardManifoldPlotAgent extends RpModelPlotAgent {
     // Constructors/Initializers
     //
     protected BackwardManifoldPlotAgent() {
-        super(DESC_TEXT, RPnConfigReader.MANIFOLD_BWD);
+        super(DESC_TEXT, RPnConfig.MANIFOLD_BWD);
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {

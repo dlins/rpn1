@@ -14,7 +14,7 @@ public class CompositeCurvePlotAgent extends RpModelPlotAgent {
     //
     static public final String DESC_TEXT = "Composite Curve";
 
-    //     static public final String ICON_PATH = rpn.RPnConfigReader.IMAGEPATH + "hugoniot.jpg";
+
     //
     // Members
     //
@@ -24,7 +24,7 @@ public class CompositeCurvePlotAgent extends RpModelPlotAgent {
     // Constructors/Initializers
     //
     protected CompositeCurvePlotAgent() {
-        super(DESC_TEXT, rpn.RPnConfigReader.HUGONIOT);
+        super(DESC_TEXT, rpn.RPnConfig.HUGONIOT);
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {

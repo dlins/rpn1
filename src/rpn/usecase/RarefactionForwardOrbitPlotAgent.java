@@ -15,7 +15,7 @@ public class RarefactionForwardOrbitPlotAgent extends RpModelPlotAgent {
 
     public RarefactionForwardOrbitPlotAgent() {
 
-        super(DESC_TEXT, rpn.RPnConfigReader.ORBIT_FWD);
+        super(DESC_TEXT, rpn.RPnConfig.ORBIT_FWD);
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {

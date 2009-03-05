@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.awt.Dimension;
 import java.awt.Point;
+import rpn.RPnFluxParamsDialog;
 
 public class ChangeFluxParamsAgent extends RpModelConfigChangeAgent {
     //
@@ -22,40 +23,31 @@ public class ChangeFluxParamsAgent extends RpModelConfigChangeAgent {
     // Members
     //
     static private ChangeFluxParamsAgent instance_ = null;
-    private JDialog dialog_;
+
 
     //
     // Constructors
     //
     protected ChangeFluxParamsAgent() {
         super(DESC_TEXT);
-        if (rpnumerics.RPNUMERICS.physicsID().startsWith("Quad"))
-            dialog_ = new rpn.RPnQuadParamsDialog();
-        else
-            dialog_ = new rpn.RPnFluxParamsDialog();
     }
 
     public void unexecute() {
         RealVector newValue = (RealVector)log().getOldValue();
         RealVector oldValue = (RealVector)log().getNewValue();
-//        rpnumerics.RPNUMERICS.fluxFunction().fluxParams().setParams(newValue);
         applyChange(new PropertyChangeEvent(this, DESC_TEXT, oldValue, newValue));
     }
 
     public void execute() {
-        Dimension dlgSize = dialog_.getPreferredSize();
-        Dimension frmSize = new Dimension(1280, 1024);
-        Point loc = new Point(0, 0);
-        dialog_.setLocation((frmSize.width - dlgSize.width) / 2 + loc.x, (frmSize.height - dlgSize.height) / 2 + loc.y);
-        dialog_.setModal(false);
-        dialog_.pack();
-        dialog_.setVisible(true);
+        
+        RPnFluxParamsDialog dialog = new RPnFluxParamsDialog();
+        dialog.setVisible(true);
+
     }
 
     @Override
     public void actionPerformed(ActionEvent event) {
         execute();
-        System.out.println("apertando apply");
     }
 
     static public ChangeFluxParamsAgent instance() {

@@ -6,6 +6,7 @@
 
 package rpn.usecase;
 
+import rpn.RPnConfig;
 import rpn.component.*;
 import rpnumerics.PhasePoint;
 import wave.util.RealVector;
@@ -28,7 +29,7 @@ public class StationaryPointPlotAgent extends RpModelPlotAgent {
     // Constructors/Initializers
     //
     protected StationaryPointPlotAgent() {
-        super(DESC_TEXT, RPnConfigReader.STATPOINT);
+        super(DESC_TEXT, RPnConfig.STATPOINT);
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {
