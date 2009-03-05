@@ -12,6 +12,8 @@
 // CLASSPATH
 
 
+
+#define BOUNDARY_LOCATION                     "wave/util/Boundary"
 #define REALVECTOR_LOCATION                   "wave/util/RealVector"
 #define REALMATRIX2_LOCATION                  "wave/util/RealMatrix2"
 #define WAVESTATE_LOCATION                    "rpnumerics/WaveState"

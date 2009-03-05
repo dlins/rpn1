@@ -8,13 +8,14 @@
 extern "C" {
 #endif
 /* Inaccessible static: INCREASING_LAMBDA */
-/* Inaccessible static: libName_ */
 /* Inaccessible static: errorControl_ */
 /* Inaccessible static: odeSolver_ */
 /* Inaccessible static: shockProfile_ */
 /* Inaccessible static: rarefactionProfile_ */
 /* Inaccessible static: bifurcationProfile_ */
 /* Inaccessible static: shockRarefactionProfile_ */
+/* Inaccessible static: CONTOUR_RESOLUTION */
+/* Inaccessible static: fluxParams_ */
 /*
  * Class:     rpnumerics_RPNUMERICS
  * Method:    initNative
@@ -49,6 +50,14 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_clean
 
 /*
  * Class:     rpnumerics_RPNUMERICS
+ * Method:    getFluxParams
+ * Signature: ()Lrpnumerics/FluxParams;
+ */
+JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getFluxParams
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
  * Method:    physicsID
  * Signature: ()Ljava/lang/String;
  */
@@ -62,6 +71,14 @@ JNIEXPORT jstring JNICALL Java_rpnumerics_RPNUMERICS_physicsID
  */
 JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_boundary
   (JNIEnv *, jclass);
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    setBoundary
+ * Signature: (Lwave/util/Boundary;)V
+ */
+JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setBoundary
+  (JNIEnv *, jclass, jobject);
 
 /*
  * Class:     rpnumerics_RPNUMERICS
