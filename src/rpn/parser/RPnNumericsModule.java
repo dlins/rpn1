@@ -81,13 +81,7 @@ public class RPnNumericsModule {
 
         public void endElement(String name) throws SAXException {
             if (name.equals("PHYSICS")) {
-
-                try {
                     RPNUMERICS.init(profile_);
-
-                } catch (rpnumerics.RpException e) {
-                    e.printStackTrace();
-                }
             }
 
             if (name.equals("BOUNDARY")) {

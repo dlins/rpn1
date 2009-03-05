@@ -13,7 +13,6 @@ import org.xml.sax.Parser;
 import org.xml.sax.SAXException;
 import org.xml.sax.AttributeList;
 import org.xml.sax.InputSource;
-import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -23,7 +22,7 @@ import rpnumerics.RPNUMERICS;
 /** This class configures the initial visualization properties. Reading a XML file that contains the necessary information, this class sets the axis, labels , domain, etc to represents correctly the physics. */
 
 public class RPnVisualizationModule {
-    static public List DESCRIPTORS;
+    static public List DESCRIPTORS=new ArrayList();
 
     static class InputHandler extends HandlerBase {
         String domain_;
@@ -49,6 +48,7 @@ public class RPnVisualizationModule {
             }
         }
 
+        @Override
         public void endElement(String name) throws SAXException {
             if (name.equals("PROJDESC")) {
                 StringTokenizer axisTokenizer = new StringTokenizer(axis_);
