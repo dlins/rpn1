@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE rpninterfaceconfig  SYSTEM "../share/rpn-dtd/rpnDTD.dtd">
+<rpninterfaceconfig>
+    <!--PHYSICS-->
+    <PHYSICS name="QuadraticR2">
+        <BOUNDARY dimension="2">
+            <REALVECTOR dimension="4">-0.5 -0.5 0.5 0.5
+            </REALVECTOR>
+        </BOUNDARY>
+        <FLUXFUNCTION >
+            <FLUXPARAMS name="a1" position="0" value ="1" />
+            <FLUXPARAMS name="b1" position="1" value ="2" />
+            <FLUXPARAMS name="c1" position="2" value ="3" />
+            <FLUXPARAMS name="d1" position="3" value ="4" />
+            <FLUXPARAMS name="e1" position="4" value ="5" />
+            <FLUXPARAMS name="a2" position="5" value ="6" />
+            <FLUXPARAMS name="b2" position="6" value ="-0.45" />
+            <FLUXPARAMS name="c2" position="7" value ="0.09" />
+            <FLUXPARAMS name="d2" position="8" value ="0.12" />
+            <FLUXPARAMS name="e2" position="9" value ="10" />
+        </FLUXFUNCTION>
+        
+    </PHYSICS>
+    
+    <PHYSICS name="TriPhase">
+        <BOUNDARY dimension="2">
+            <REALVECTOR dimension="4">-0.5 0.5 -0.5 0.5 0.4 0.60
+            </REALVECTOR>
+        </BOUNDARY>
+        <FLUXFUNCTION >
+            <FLUXPARAMS name="capil" position="0" value ="10" />
+            <FLUXPARAMS name="viscosity" position="1" value ="0.1" />
+        </FLUXFUNCTION>
+        
+        
+    </PHYSICS>
+    
+    
+    <!--METHODS-->
+    
+    <METHOD name="Continuation">
+        <METHODPARAM  name="step" value="0.01" />
+    </METHOD>
+    <METHOD name="Contour">
+        <METHODPARAM  name="x-resolution" value="100" />
+        <METHODPARAM  name="y-resolution" value="100" />
+    </METHOD>
+    
+    
+    <!--VIEW INFORMATIONS-->
+    
+    <VIEWINGPARAMS>
+        <PROJDESC projlabel="Axis 0 Axis 1" projaxisid="0 1" vpwidth="800" vpheight="800">
+            <ISO2EQUI_TRANSFORM value="no"/>
+        </PROJDESC>
+    </VIEWINGPARAMS>
+</rpninterfaceconfig>
