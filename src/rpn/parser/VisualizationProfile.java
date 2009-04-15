@@ -6,42 +6,22 @@
  */
 package rpn.parser;
 
-import java.util.HashMap;
+
 
 public class VisualizationProfile {
 
     
-    private int [] projectionAxis_;
-    private int [] viewPort_;
+
+    private String [] viewPort_;
     private boolean isoEquiTransform_;
 
-    public int[] getProjectionAxis() {
-        return projectionAxis_;
-    }
 
-    public void setProjectionAxis(int[] projectionAxis_) {
-        this.projectionAxis_ = projectionAxis_;
-    }
-
-    public int[] getViewPort() {
+    public String[] getViewPort() {
         return viewPort_;
     }
 
-    public void setViewPort(int[] viewPort_) {
+    public void setViewPort(String[] viewPort_) {
         this.viewPort_ = viewPort_;
     }
-
-    public boolean isIsoEquiTransform() {
-        return isoEquiTransform_;
-    }
-
-    public void setIsoEquiTransform(boolean isoEquiTransform_) {
-        this.isoEquiTransform_ = isoEquiTransform_;
-    }
-    
-
-    
-    
-    
    
 }

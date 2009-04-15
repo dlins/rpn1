@@ -13,8 +13,12 @@ public class MethodProfile {
     private  String name_;
     private  HashMap<String, String> paramsNames_ = new HashMap<String, String>();
 
-    public  void addParam(String paramName, String defaulValue, boolean isRanged) {
-        paramsNames_.put(getName(),defaulValue);
+    public MethodProfile(String name) {
+        name_ = name;
+    }
+    
+    public  void addParam(String paramName, String defaulValue) {
+        paramsNames_.put(paramName,defaulValue);
     }
 
     public  HashMap<String, String> getParams() {
@@ -24,8 +28,5 @@ public class MethodProfile {
     public  String getName() {
         return name_;
     }
-
-    public  void setName(String aName_) {
-        name_ = aName_;
-    }
+    
 }

@@ -19,6 +19,7 @@ public class PhysicsProfile {
     private  String [] boundary_;
     private  int dimension_;
     private int boundaryDimension_;
+    private boolean iso2equiBoundary_;
 
     public  String getName() {
         return name_;
@@ -46,15 +47,7 @@ public class PhysicsProfile {
     public int getFluxSize() {
         return fluxParamsArray_.size();
     }
-
-
-    public  int getDimension() {
-        return dimension_;
-    }
-
-    public  void setDimension(int aDimension_) {
-        dimension_ = aDimension_;
-    }
+    
     public  void setBoundary(String [] boundary){
         boundary_=boundary;
     }
@@ -69,6 +62,14 @@ public class PhysicsProfile {
 
     public void setBoundaryDimension(int boundaryDimension_) {
         this.boundaryDimension_ = boundaryDimension_;
+    }
+
+    public boolean isIso2equiBoundary() {
+        return iso2equiBoundary_;
+    }
+
+    public void setIso2equiBoundary(boolean iso2equiBoundary_) {
+        this.iso2equiBoundary_ = iso2equiBoundary_;
     }
 
 }

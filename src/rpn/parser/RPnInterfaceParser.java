@@ -13,9 +13,9 @@ import rpnumerics.RPNumericsProfile;
 import wave.util.RealVector;
 import org.xml.sax.SAXException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.StringTokenizer;
 import org.xml.sax.ContentHandler;
+import rpnumerics.RPNUMERICS;
 
 /** This class implements methods to configure the numeric layer. The values are taked from a XML file and this values are used to setup the physics and all others numerics parameters. */
 public class RPnInterfaceParser implements ContentHandler {
@@ -32,7 +32,7 @@ public class RPnInterfaceParser implements ContentHandler {
     //
     private RealVector tempVector_;
     private String currentElement_;
-    private ArrayList<String> boundsVectorArray_;
+
 
     @Override
     public void startElement(String uri, String localName, String name, Attributes att) throws SAXException {
@@ -45,10 +45,7 @@ public class RPnInterfaceParser implements ContentHandler {
             currentPhysicsProfile_ = physicsProfile;
             currentPhysicsProfile_.setName(att.getValue("name"));
 
-
         }
-
-
 
         if (name.equals("FLUXPARAMS")) {
             currentPhysicsProfile_.addFluxParam(att.getValue("name"), att.getValue("value"), new Integer(att.getValue("position")));
@@ -59,38 +56,24 @@ public class RPnInterfaceParser implements ContentHandler {
         }
 
 
-        if (name.equals("PROJDESC")) {
+        if (name.equals("VIEWPORT")) {
 
-            int[] viewPort = new int[2];
+            String[] viewPort = new String[2];
 
-            viewPort[0] = new Integer(att.getValue("vpwidth"));
-            viewPort[0] = new Integer(att.getValue("vpheight"));
+            viewPort[0] = att.getValue("vpwidth");
+            viewPort[1] = att.getValue("vpheight");
             currentVisualizationProfile_.setViewPort(viewPort);
-            StringTokenizer axisTokenizer = new StringTokenizer(att.getValue("projaxisid"));
-            int[] projIndices = new int[axisTokenizer.countTokens()];
-            int i = 0;
-            while (axisTokenizer.hasMoreTokens()) {
-                projIndices[i++] = new Integer(axisTokenizer.nextToken()).intValue();
-            }
-            currentVisualizationProfile_.setProjectionAxis(projIndices);
-        }
-
-        if (name.equals("ISO2EQUI_TRANSFORM")) {
-
-            if (att.getValue("value").equals("no")) {
-                currentVisualizationProfile_.setIsoEquiTransform(false);
-            }
-            if (att.getValue("value").equals("yes")) {
-                currentVisualizationProfile_.setIsoEquiTransform(true);
-            }
         }
 
 
         if (name.equals("METHOD")) {
-            MethodProfile methodProfile = new MethodProfile();
+            MethodProfile methodProfile = new MethodProfile(att.getValue("name"));
             currentMethodProfile_ = methodProfile;
-            currentMethodProfile_.setName(att.getValue("name"));
 
+        }
+        
+        if (name.equals("METHODPARAM")){
+            currentMethodProfile_.addParam(att.getValue("name"), att.getValue("value"));
         }
 
 
@@ -99,8 +82,16 @@ public class RPnInterfaceParser implements ContentHandler {
         }
 
         if (name.equals("BOUNDARY")) {
-            boundsVectorArray_ = new ArrayList();
+
             currentPhysicsProfile_.setBoundaryDimension(new Integer(att.getValue("dimension")));
+            
+            if (att.getValue("iso2equi").equals("yes")){
+                
+                currentPhysicsProfile_.setIso2equiBoundary(true);
+            }
+            else{
+                currentPhysicsProfile_.setIso2equiBoundary(false);
+            }
         }
 
 
@@ -133,8 +124,6 @@ public class RPnInterfaceParser implements ContentHandler {
 
         if (name.equals("BOUNDARY")) {
 
-
-
             StringTokenizer axisTokenizer = new StringTokenizer(tempVector_.toString());
             String[] dataArray = new String[axisTokenizer.countTokens()];
             int i = 0;
@@ -144,19 +133,19 @@ public class RPnInterfaceParser implements ContentHandler {
 
             currentPhysicsProfile_.setBoundary(dataArray);
 
-//                if (boundsVectorArray_.size() == 2) {
-//                    profile_.setBoundary(new RectBoundary((RealVector) boundsVectorArray_.get(0), (RealVector) boundsVectorArray_.get(1)));
-//                }
-//
-//                if (boundsVectorArray_.size() == 3) {
-//                    profile_.setBoundary(new IsoTriang2DBoundary((RealVector) boundsVectorArray_.get(0), (RealVector) boundsVectorArray_.get(1), (RealVector) boundsVectorArray_.get(2)));
-//                }
         }
 
         if (name.equals("VIEWINGPARAMS")) {
             getVisualizationProfiles().add(currentVisualizationProfile_);
         }
 
+        if (name.equals("METHOD")) {
+            
+            RPNUMERICS.addMethod(currentMethodProfile_.getName(), currentMethodProfile_);
+            
+        }
+        
+        
 
     }
     //
@@ -206,8 +195,6 @@ public class RPnInterfaceParser implements ContentHandler {
 
     public void endDocument() throws SAXException {
 
-//        System.out.println("Fisicas encontradas: " + physics_.size());
-//
 //        if (physics_.size() >= 0) {
 //
 //            Iterator<PhysicsProfile> physicsIterator = physics_.iterator();
@@ -251,10 +238,6 @@ public class RPnInterfaceParser implements ContentHandler {
 
 
 
-
-
-
-
     }
 
     public void startPrefixMapping(String prefix, String uri) throws SAXException {
@@ -278,5 +261,8 @@ public class RPnInterfaceParser implements ContentHandler {
 
     public static ArrayList<VisualizationProfile> getVisualizationProfiles() {
         return visualizationProfiles_;
+    }
+    public static ArrayList<MethodProfile> getMethodProfiles(){
+        return methods_;
     }
 }
