@@ -1,8 +1,8 @@
 vpath %.cc $(METHODSDIR)
 
-RPNUMSRC +=
-#RarefactionMethod.cc \
-#         ContinuationRarefactionMethod.cc
+RPNUMSRC += RarefactionMethod.cc \
+            RarefactionContinuationMethod.cc
+
 
 
 CPPFLAGS += -I $(METHODSDIR)
