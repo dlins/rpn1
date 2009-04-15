@@ -28,7 +28,7 @@ private:
     
     static const ShockFlow * shockFlow_;
         
-    static const ODESolver * odeSolver_;
+//    static const ODESolver * odeSolver_;
     
     static double sigma;
     
@@ -41,9 +41,9 @@ public:
     
     static  const AccumulationFunction & getAccumulation();
     
-    static const ODESolver & getODESolver();
+//    static const ODESolver & getODESolver();
     
-    static  void initODESolver();
+//    static  void initODESolver();
     
     static void setSigma(double );
     
@@ -70,7 +70,7 @@ inline void RpNumerics::setSigma(double s){sigma=s;}
 
 inline double RpNumerics::getSigma(){return sigma;}
 
-inline const ODESolver & RpNumerics::getODESolver(){return *odeSolver_;}
+//inline const ODESolver & RpNumerics::getODESolver(){return *odeSolver_;}
 
 
 
