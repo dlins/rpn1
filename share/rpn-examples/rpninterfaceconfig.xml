@@ -4,7 +4,7 @@
 <rpninterfaceconfig>
     <!--PHYSICS-->
     <PHYSICS name="QuadraticR2">
-        <BOUNDARY dimension="2">
+        <BOUNDARY dimension="2" iso2equi="false">
             <REALVECTOR dimension="4">-0.5 -0.5 0.5 0.5
             </REALVECTOR>
         </BOUNDARY>
@@ -24,7 +24,7 @@
     </PHYSICS>
     
     <PHYSICS name="TriPhase">
-        <BOUNDARY dimension="2">
+        <BOUNDARY dimension="2" iso2equi="true">
             <REALVECTOR dimension="4">-0.5 0.5 -0.5 0.5 0.4 0.60
             </REALVECTOR>
         </BOUNDARY>
@@ -51,8 +51,6 @@
     <!--VIEW INFORMATIONS-->
     
     <VIEWINGPARAMS>
-        <PROJDESC projlabel="Axis 0 Axis 1" projaxisid="0 1" vpwidth="800" vpheight="800">
-            <ISO2EQUI_TRANSFORM value="no"/>
-        </PROJDESC>
+        <VIEWPORT vpwidth="800" vpheight="800"/>
     </VIEWINGPARAMS>
 </rpninterfaceconfig>
