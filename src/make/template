@@ -1,6 +1,6 @@
 #!/bin/bash
 
-basedir=~daniel/oficina/rpn/branches/rpn/bin
+basedir=.
 
 if [ $# -lt 1 ]; then
 	echo "Usage: template <classname>"
