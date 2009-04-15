@@ -6,15 +6,12 @@
  */
 package rpn;
 
-import java.awt.Font;
 import javax.swing.ImageIcon;
 import rpn.controller.phasespace.NumConfigImpl;
 import rpn.parser.RPnDataModule;
-import rpn.parser.RPnVisualizationModule;
 import rpn.plugininterface.PluginInfoController;
 import rpn.plugininterface.PluginInfoParser;
 import rpnumerics.RPNUMERICS;
-import wave.multid.Space;
 
 public class RPnConfig {
 
@@ -39,18 +36,13 @@ public class RPnConfig {
     private static void visualConfig() {
 
         remoteImage();
-        int[] projIndices = new int[2];
-        projIndices[0] = 0;
-        projIndices[1] = 1;
-        boolean iso2equi_ = false;
+      
 
         RPnDataModule.PHASESPACE = new RPnPhaseSpaceAbstraction("Phase Space",
                 RPNUMERICS.domain(), new NumConfigImpl());//  RpNumerics.domain(),
 
 
-        RPnVisualizationModule.DESCRIPTORS.add(
-                new RPnProjDescriptor(new Space("", new Integer(2).intValue()), "Label", new Integer(800).intValue(),
-                new Integer(800).intValue(), projIndices, iso2equi_));
+       
 
     }
 

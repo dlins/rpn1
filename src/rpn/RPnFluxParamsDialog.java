@@ -32,6 +32,7 @@ public class RPnFluxParamsDialog extends RPnDialog{
     }
     @Override
     protected void begin(){
+
         getContentPane().remove(paramsPanel_);
         paramsPanel_ = new RPnFluxParamsPanel(RPNUMERICS.physicsID());
         getContentPane().add(paramsPanel_, BorderLayout.CENTER);
