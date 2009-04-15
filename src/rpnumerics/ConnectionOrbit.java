@@ -10,7 +10,6 @@ import wave.util.RealVector;
 import wave.multid.view.ViewingAttr;
 import java.awt.Color;
 import rpn.component.MultidAdapter;
-import wave.util.JetMatrix;
 
 public class ConnectionOrbit extends RPnCurve implements RpSolution {
     //

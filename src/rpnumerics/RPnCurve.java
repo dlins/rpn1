@@ -85,15 +85,6 @@ public class RPnCurve extends MultiPolyLine {
         // converter para chained
     }
 
-
-//    private static AbstractSegment[] fromContourCurveToSegment(ContourCurve
-//            curve) {
-//
-//        PointNDimension[][] multipolyline_ = curve.getCurve();
-//
-//        return fromPointNDimensionCurveToSegment(multipolyline_);
-//    }
-
     private static AbstractSegment[] fromPointNDimensionCurveToSegment(
             PointNDimension[][] polyline) {
         int numberOfPolylines = polyline.length;

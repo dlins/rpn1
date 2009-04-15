@@ -18,7 +18,9 @@ RPNUMSRC += \
 	WavePoint.cc		\
 	WaveState.cc		\
         WaveFlow.cc            \
-        RpFunction.cc           
+        RpFunction.cc           \
+        RarefactionCalc.cc           \
+        RpCalculation.cc           
 
 
 CPPFLAGS += -I $(RPNUMERICSDIR) -g3

@@ -5,6 +5,12 @@
  */
 package rpnumerics;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
+import java.util.Set;
+import rpn.parser.MethodProfile;
 import rpn.plugininterface.PluginProfile;
 import rpn.plugininterface.PluginTableModel;
 import rpnumerics.methods.HugoniotContinuationMethod;
@@ -21,6 +27,8 @@ public class RPNUMERICS {
     //
     // Members
     //
+    
+    private static HashMap<String,MethodProfile> methodsMap_=new HashMap<String, MethodProfile>();
 //    static private Physics physics_ = null;
     static private RpErrorControl errorControl_ = null;
     static private ODESolver odeSolver_ = null;
@@ -49,6 +57,70 @@ public class RPNUMERICS {
         errorControl_ = new RpErrorControl(boundary());
         fluxParams_ = getFluxParams();
 
+    }
+    
+    public static void addMethod(String methodName,MethodProfile profile){
+        
+        methodsMap_.put(methodName, profile);
+        
+    }
+    
+    public static void addParam(String methodName,String paramName,String paramValue){
+        
+        if ( !methodsMap_.containsKey(methodName)){
+            
+            MethodProfile newProfile =new MethodProfile(methodName);
+            
+            newProfile.addParam(paramName, paramValue);
+            
+            methodsMap_.put(methodName,newProfile);
+        }
+        
+        else{
+            
+            MethodProfile methodProfile = methodsMap_.get(methodName);
+            
+            methodProfile.addParam(paramName, paramValue);
+            
+            methodsMap_.put(methodName, methodProfile);
+            
+        }        
+        
+    }
+    
+    public static ArrayList<MethodProfile> getAllMethodsProfiles(){
+        
+        ArrayList <MethodProfile> returnedArrayList = new ArrayList<MethodProfile>();
+        
+        Set<Entry<String, MethodProfile>> methodSet = methodsMap_.entrySet();
+        
+        Iterator<Entry<String, MethodProfile>> methodIterator = methodSet.iterator();
+        
+        while (methodIterator.hasNext()) {
+            Entry<String, MethodProfile> entry = methodIterator.next();
+            
+            returnedArrayList.add(entry.getValue());
+            
+        }
+        
+        
+        System.out.println("Tamanho dos parametros em rpnumerics:" + returnedArrayList.size());
+        
+        return returnedArrayList;
+        
+    }
+    
+    
+    public static MethodProfile getMethodProfile(String methodName){
+        
+        return methodsMap_.get(methodName);
+        
+    }
+    
+    public static void removeMethod(String methodName){
+        
+        methodsMap_.remove(methodName);
+        
     }
 
     /**
