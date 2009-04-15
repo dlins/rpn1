@@ -71,6 +71,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc  (JNIEnv * e
         cerr <<"Error in flow string name ! "<<endl;
     }
     
+ *
+ *
+ *1 - Pegar a instancia do rarefaction flow (plugin) 
+ *2 - Passar a instancia do flow para o construtor do metodo de calculo
+ *3- O metodo cria o ODE solver , usando o flow . O profile do solver contem os parametros necessarios para o criterio de para especifico do metodo
+ *4 -  o metodo curve da classe do metodo de calculo calcula a curva 
+ *
     RarefactionFlow *rarefactionFlow = RarefactionFlowFactory::createRarefactionFlow(flow, familyIndex, timeDirection, RpNumerics::getFlux());
     
     RarefactionMethod * rarefactionMethod=  RarefactionMethodFactory::createRarefactionMethod(method, *rarefactionFlow);

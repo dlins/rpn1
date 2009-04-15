@@ -29,7 +29,7 @@
 #include "PermParams.h"
 #include "ViscosityParams.h"
 
-#include "ContinuationRarefactionMethod.h"
+//#include "ContinuationRarefactionMethod.h"
 
 
 #include "LSODEStopGenerator.h"
@@ -44,42 +44,42 @@ using namespace std;
 
 Physics * RpNumerics::physics_ = NULL;
 
-const ODESolver * RpNumerics::odeSolver_ = NULL;
+//const ODESolver * RpNumerics::odeSolver_ = NULL;
 
 double RpNumerics::sigma = 0;
 
-void RpNumerics::initODESolver() {
-
-    int dimension = 2;
-
-    int itol = 2;
-
-    double rtol = 1e-4;
-
-    int mf = 22;
-
-    double deltaxi = 0.001;
-
-    int nparam = 1 + dimension;
-
-    double param [nparam];
-
-    param[0] = 1;
-
-    int ii;
-
-    for (ii = 0; ii < dimension; ii++) param[1 + ii] = 0.1;
-
-    int maxStepsNumber = 100;
-
-
-    LSODEProfile lsodeProfile(RpNumerics::getFlux(), RpNumerics::getPhysics().boundary(), maxStepsNumber, dimension, itol, rtol, mf, deltaxi, nparam, param);
-
-
-    odeSolver_ = new LSODE(lsodeProfile);
-
-
-}
+//void RpNumerics::initODESolver() {
+//
+//    int dimension = 2;
+//
+//    int itol = 2;
+//
+//    double rtol = 1e-4;
+//
+//    int mf = 22;
+//
+//    double deltaxi = 0.001;
+//
+//    int nparam = 1 + dimension;
+//
+//    double param [nparam];
+//
+//    param[0] = 1;
+//
+//    int ii;
+//
+//    for (ii = 0; ii < dimension; ii++) param[1 + ii] = 0.1;
+//
+//    int maxStepsNumber = 100;
+//
+//
+//    LSODEProfile lsodeProfile(RpNumerics::getFlux(), RpNumerics::getPhysics().boundary(), maxStepsNumber, dimension, itol, rtol, mf, deltaxi, nparam, param);
+//
+//
+//    odeSolver_ = new LSODE(lsodeProfile);
+//
+//
+//}
 
 /*
  * Class:     rpnumerics_RPNUMERICS
@@ -223,7 +223,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_clean(JNIEnv * env, jclass cls
 void RpNumerics::clean() {
 
     delete physics_;
-    delete odeSolver_;
+//    delete odeSolver_;
 }
 
 /* Class:     rpnumerics_RPNUMERICS
@@ -317,7 +317,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_init(JNIEnv * env, jclass cls,
 
     //ODE solver instantiation
 
-    RpNumerics::initODESolver();
+//    RpNumerics::initODESolver();
 
     cout << "Physics: " << physicsID << endl;
 
