@@ -15,7 +15,7 @@
  */
 #include "ODESolver.h"
 #include "LSODEProfile.h"
-
+#include "LSODEStopGenerator.h"
 /*
  * ---------------------------------------------------------------
  * Definitions:
@@ -37,6 +37,8 @@ private:
     static  LSODEProfile * profile_;
     
     static double tout_;
+    
+    LSODEStopGenerator * stopGenerator_;
     
     static int function(int *, double *, double *, double *);
     
@@ -64,6 +66,7 @@ public:
     
     const ODESolverProfile & getProfile() const ;
     void setProfile(const LSODEProfile &);
+    void setStopGenerator (const LSODEStopGenerator &);
     
 };
 

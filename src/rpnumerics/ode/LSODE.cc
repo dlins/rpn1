@@ -129,7 +129,7 @@ int LSODE::solve(const RealVector & input, RealVector & output, double  & time) 
     delete U;
     delete param;
     
-    
+    return info;
 }
 
 
@@ -139,27 +139,19 @@ int LSODE::function(int * neq , double * xi , double* U , double * out){
     
     int i, status ;
     
-    WaveState  wState(*neq) ;
+    RealVector  input(*neq,U);
+    RealVector output(*neq);
     
-    for (i=0;i < *neq;i++){
-        wState(i)=U[i];
-    }
-    
-    JetMatrix jMatrix(*neq);
-    
-    status=profile_->getFunction().jet(wState, jMatrix, 0); //This function must return the same codes of LSODE s functions
+    status=profile_->getFunction().flux(input, output); //This function must return the same codes of LSODE s functions
     
     for(i=0;i< *neq;i++){
         
-        out[i]=jMatrix(i);
+        out[i]=output(i);
         
     }
     return status;
     
 }
-
-
-
 
 int LSODE::solve(const RealVector & input, ODESolution & output ) const{
     
@@ -170,25 +162,26 @@ int LSODE::solve(const RealVector & input, ODESolution & output ) const{
     
     double time;
     
+    int info = 2;
     
-    while (steps < profile_->maxStepNumber()&& profile_->boundary().inside(inputVector)){
-        
-        solve(inputVector, outputVector, time);
-        
-        output.addCoords(outputVector);
+    while ( steps < LSODE::profile_->maxStepNumber() && stopGenerator_->check(inputVector)) {
 
-        output.addTimes(time);
+
+        info = solve(inputVector, outputVector, time);
         
-        inputVector=outputVector;
+        if (info==2) {
+            output.addCoords(outputVector);
+            inputVector = outputVector;
+            steps++;
+        }
         
-        steps++;
-    }
-    
     tout_=0;
+    
+    return info;
     
 }
 
-
+}
 
 const ODESolverProfile & LSODE::getProfile()const { return *profile_;}
 
@@ -224,5 +217,5 @@ int LSODE::solver(int (*f)(int *, double *, double *, double *), int *neq, doubl
 }
 
 
-//! Code comes here! daniel@impa.br
+
 

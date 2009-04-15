@@ -14,7 +14,7 @@
  * Includes:
  */
 #include <iostream>
-
+#include "RealVector.h"
 
 /*
  * ---------------------------------------------------------------
@@ -30,8 +30,8 @@ public:
     virtual ~ODEStopGenerator();
     
     virtual ODEStopGenerator * clone() const =0;
-    
-    virtual bool getStatus() const =0;
+
+    virtual bool check(const RealVector &)const = 0;
     
 
     

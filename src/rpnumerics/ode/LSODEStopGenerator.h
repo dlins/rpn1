@@ -14,7 +14,7 @@
  * Includes:
  */
 #include "ODEStopGenerator.h"
-
+#include "LSODEProfile.h"
 #define SUCCESSFUL_PROCEDURE 2
 //#define ABORTED_PROCEDURE(-7)
 //#define COMPLEX_EIGENVALUE(-7)
@@ -41,11 +41,14 @@ private:
     int totalPoints_;
     int maxPoints_;
     int functionStatus_;
+    LSODEProfile * profile_;
     
 public:
     
     LSODEStopGenerator(const int );
     LSODEStopGenerator(const LSODEStopGenerator &);
+    LSODEStopGenerator(const LSODEProfile &);
+    
     
     LSODEStopGenerator * clone() const ;
     virtual ~LSODEStopGenerator();
@@ -62,7 +65,7 @@ public:
     int totalPoints() const ;
     void setTotalPoints(const int );
     
-    bool getStatus()const ;
+    bool check (const RealVector &)const ;
     
     
 };

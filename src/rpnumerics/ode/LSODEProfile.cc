@@ -19,7 +19,7 @@
 
 
 //neq  , itol, rtol, itask, istate, iopt , mf,
-LSODEProfile::LSODEProfile(const RpFunction & function, const Boundary & boundary,int NmaxSteps, int neq , int itol , double rtol, int mf, double deltaxi, int paramLength, const double * param):ODESolverProfile(function),boundary_(boundary.clone()),maxStepNumber_(NmaxSteps){
+LSODEProfile::LSODEProfile(const WaveFlow & function, const Boundary & boundary,int NmaxSteps, int neq , int itol , double rtol, int mf, double deltaxi, int paramLength, const double * param):ODESolverProfile(function),boundary_(boundary.clone()),maxStepNumber_(NmaxSteps){
     
     //Choosing lrw
     
@@ -54,7 +54,8 @@ LSODEProfile::LSODEProfile(const RpFunction & function, const Boundary & boundar
             lrw_= (int)(22 +  9*neq + (int)pow((double)neq, 2.0));// neq*neq;
             liw_=20+neq;
             break;
-            
+
+
         case 22:
             
             lrw_= 22 +  9*neq + neq*neq;

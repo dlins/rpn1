@@ -17,7 +17,15 @@
  * Definitions:
  */
 
-LSODEStopGenerator::LSODEStopGenerator(const int maxPoints):totalPoints_(0), maxPoints_(maxPoints), functionStatus_(SUCCESSFUL_PROCEDURE){}
+LSODEStopGenerator::LSODEStopGenerator(const int maxPoints):totalPoints_(0), maxPoints_(maxPoints), functionStatus_(SUCCESSFUL_PROCEDURE){
+}
+
+LSODEStopGenerator::LSODEStopGenerator(const LSODEProfile & profile){
+    profile_=new LSODEProfile(profile);
+}
+    
+
+
 
 LSODEStopGenerator::LSODEStopGenerator(const LSODEStopGenerator & copy) {
     
@@ -30,7 +38,7 @@ LSODEStopGenerator::LSODEStopGenerator(const LSODEStopGenerator & copy) {
 
 LSODEStopGenerator * LSODEStopGenerator::clone()const  {return new LSODEStopGenerator(*this);}
 
-LSODEStopGenerator::~LSODEStopGenerator(){}
+LSODEStopGenerator::~LSODEStopGenerator(){delete profile_;}
 
 void LSODEStopGenerator::setFunctionStatus(const int fStatus){ functionStatus_=fStatus;}
 
@@ -42,16 +50,15 @@ int LSODEStopGenerator::getMaxPoints() const {return maxPoints_;}
 
 void LSODEStopGenerator::increaseTotalPoints() { totalPoints_++;}
 
-bool LSODEStopGenerator::getStatus() const {
+
+
+bool LSODEStopGenerator::check(const RealVector & point) const {
     
-//    cout <<"Checando status da funcao: "<<functionStatus_<<endl;
+    return profile_->boundary().inside(point);
     
-    if ((functionStatus_ == SUCCESSFUL_PROCEDURE) && (totalPoints_ < maxPoints_))
-        
-//    if (totalPoints_ < maxPoints_)
-        return true;
-    return false;
 }
+
+
 
 
 //! Code comes here! daniel@impa.br

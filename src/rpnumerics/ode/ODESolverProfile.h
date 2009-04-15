@@ -2,31 +2,27 @@
 #define	_ODESolverProfile_H
 
 #include "RpFunction.h"
-//#include "ODEStopGenerator.h"
+#include "WaveFlow.h"
 
 
 class ODESolverProfile{
     
 private:
     
-    RpFunction * function_;
+
+    WaveFlow * waveFlow_;
     
 public:
-    
-    
-    ODESolverProfile(const RpFunction &);
+
+    ODESolverProfile(const WaveFlow &);
     
     ODESolverProfile();
     
     virtual ~ODESolverProfile();
     
-    ODESolverProfile(const ODESolverProfile &);
+    const WaveFlow & getFunction() const ;
+    void setFunction (const WaveFlow & );
     
-    ODESolverProfile & operator=(const ODESolverProfile &);
-    
-    const RpFunction & getFunction() const ;
-    
-    void setFunction(const RpFunction &);
     
 };
 

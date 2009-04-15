@@ -108,7 +108,7 @@ public:
 //              neq  ,  itol, rtol, itask,istate, iopt , rwork , lrw ,iwork, liw , mf,
 //    LSODEProfile(const RpFunction &, const LSODEStopGenerator &, int ,  int , double, int , double , int , const double * );
     
-    LSODEProfile(const RpFunction &, const Boundary &, int NmaxSteps, int ,  int , double, int , double , int , const double * );
+    LSODEProfile(const WaveFlow &, const Boundary &, int NmaxSteps, int ,  int , double, int , double , int , const double * );
     LSODEProfile(const LSODEProfile &);
     
     virtual ~LSODEProfile();

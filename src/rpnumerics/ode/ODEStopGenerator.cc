@@ -19,5 +19,4 @@
  */
 ODEStopGenerator::~ODEStopGenerator(){}
 
-//! Code comes here! daniel@impa.br
 
