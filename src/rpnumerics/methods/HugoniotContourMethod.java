@@ -6,6 +6,8 @@
  */
 package rpnumerics.methods;
 
+import java.util.*;
+
 import rpn.component.MultidAdapter;
 import rpnumerics.HugoniotCurve;
 import rpnumerics.HugoniotParams;
@@ -13,8 +15,10 @@ import rpnumerics.RPNUMERICS;
 import rpnumerics.RPnCurve;
 import rpnumerics.methods.contour.ContourHugoniot;
 import rpnumerics.methods.contour.functionsobjects.CanNotPerformCalculations;
+import wave.multid.CoordsArray;
 import wave.util.Boundary;
 import wave.util.PointNDimension;
+import wave.util.RealSegment;
 import wave.util.RealVector;
 import wave.util.RectBoundary;
 
@@ -62,7 +66,39 @@ public class HugoniotContourMethod extends HugoniotMethod {
             contourMethod_.setInitialPoint(new PointNDimension(RPNUMERICS.getShockProfile().getXZero()));
             RPnCurve curve = contourMethod_.curvND(boundaryArray_, resolution_);
 
-            hugoniotCurve = new HugoniotCurve(hugoniotParams_.getXZero(), MultidAdapter.converseRPnCurveToCoordsArray(curve));
+            PointNDimension[][] polyline = curve.getPolylines();
+
+            List realSegments = new ArrayList();
+            
+            RealVector p1 = null;
+            RealVector p2 = null;
+                        
+            for (int polyLineIndex = 0; polyLineIndex < polyline.length; polyLineIndex++) {
+            	            	
+                int size = polyline[polyLineIndex].length;
+                
+                CoordsArray[] coords = new CoordsArray[size];
+
+                for (int polyPoint = 0; polyPoint < size; polyPoint++) {                	
+                	coords[polyPoint] = polyline[polyLineIndex][polyPoint].toCoordsArray();                   
+                    
+                }
+               
+                for (int i = 0; i < coords.length - 2; i++) {           	
+                	
+                    p1 = new RealVector(coords[i].getCoords());
+                    p2 = new RealVector(coords[i + 1].getCoords());
+
+                    realSegments.add(new RealSegment(p1, p2));
+                }
+
+                p1 = new RealVector(coords[coords.length - 2].getCoords());
+                p2 = new RealVector(coords[coords.length - 1].getCoords());
+                realSegments.add(new RealSegment(p1, p2));
+            
+            }            
+            
+            hugoniotCurve = new HugoniotCurve(hugoniotParams_.getXZero(), realSegments);
 
         } catch (CanNotPerformCalculations ex) {
             ex.printStackTrace();

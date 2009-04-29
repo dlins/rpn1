@@ -6,12 +6,11 @@
  */
 package rpnumerics.methods;
 
-import rpnumerics.HugoniotParams;
-import rpnumerics.RPNUMERICS;
-import rpnumerics.methods.contour.ContourHugoniot;
-import rpnumerics.methods.contour.functionsobjects.InvalidHugoniotFunctionsRelation;
-import rpnumerics.methods.contour.markedhypercubes.NullHyperCubeErrorTreatment;
-import rpnumerics.methods.contour.samplefunctions.Hugoniot2DTest;
+import rpnumerics.*;
+import rpnumerics.methods.contour.*;
+import rpnumerics.methods.contour.functionsobjects.*;
+import rpnumerics.methods.contour.markedhypercubes.*;
+import rpnumerics.methods.contour.samplefunctions.*;
 
 public class ContourFactory {
 
@@ -40,5 +39,16 @@ public class ContourFactory {
         
         return contourHugoniot;
 
+    }
+    
+    public static ContourBifurcation createContourBifurcation(BifurcationParams bifurcationParams) {
+    	
+    	 switch(RPNUMERICS.domainDim()){
+         
+         case 2:
+        // preencher	 
+    	 }
+    	 
+    	return null;
     }
 }
