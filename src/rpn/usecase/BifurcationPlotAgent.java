@@ -11,7 +11,7 @@ public class BifurcationPlotAgent extends RpModelPlotAgent {
     static private BifurcationPlotAgent instance_ = null;
 	
 	public BifurcationPlotAgent() {
-		super(DESC_TEXT, rpn.RPnConfigReader.HUGONIOT);
+		super(DESC_TEXT, rpn.RPnConfig.HUGONIOT);
 	}
 
 	public RpGeometry createRpGeometry(RealVector[] coords) {
