@@ -4,7 +4,7 @@ RPNUMSRC +=
 WAVESRC += 
 ForSRC += 
 
-SRCDIR=/impa/home/g/cbevilac/workspace3/RPNOficial/trunk/src
+SRCDIR=.
 OBJDIR = $(SRCDIR)/build/$(RPHOSTTYPE)
 LIBDIR = $(SRCDIR)/../lib/$(RPHOSTTYPE)
 
