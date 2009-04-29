@@ -43,8 +43,8 @@ public class RPNUMERICS {
     //
     static public void init(RPNumericsProfile profile) {
 
-        System.loadLibrary("wave");//TODO libwave is always loaded ?
-        System.loadLibrary("rpnumerics");
+        System.load("/impa/home/g/cbevilac/workspace3/RPNOficial/trunk/lib/linux_i686/libwave.so");//TODO libwave is always loaded ?
+        System.load("/impa/home/g/cbevilac/workspace3/RPNOficial/trunk/lib/linux_i686/librpnumerics.so");
         initNative(profile.getPhysicsID());
         errorControl_ = new RpErrorControl(boundary());
         fluxParams_ = getFluxParams();
@@ -128,7 +128,7 @@ public class RPNUMERICS {
      * @deprecated
      */
     public static native void initNative(String physicsName);
-
+    
     public static HugoniotCurveCalc createHugoniotCalc() {
 
         HugoniotCurveCalc hugoniotCurveCalc = null;

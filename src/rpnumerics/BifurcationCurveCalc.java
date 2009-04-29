@@ -5,42 +5,41 @@
  */
 package rpnumerics;
 
-//import rpnumerics.methods.BifurcationContourMethod;
+import rpnumerics.methods.*;
 
 public class BifurcationCurveCalc implements RpCalculation{
-    //
-    // Constants
-
-    //
-    // Members
-    //
-
-//    private BifurcationContourMethod bifurcationMethod_;
+    
+    private BifurcationMethod bifurcationMethod_;
+    private BifurcationParams params_; 
 
     //
     // Constructors
     //
-//    public BifurcationCurveCalc(BifurcationContourMethod bifurcationMethod) {
-//
-//        bifurcationMethod_ = bifurcationMethod;
-//
-//    }
-
-    BifurcationCurveCalc() {
+    
+    public BifurcationCurveCalc (){
         
-//        throw new UnsupportedOperationException("Not yet implemented");
     }
-
+    
+    public BifurcationCurveCalc(BifurcationContourMethod bifurcationMethod) {
+        bifurcationMethod_ = bifurcationMethod;
+        params_ = bifurcationMethod.getParams();
+    }
+    
+    public BifurcationCurveCalc(BifurcationContinuationMethod bifurcationMethod) {
+        bifurcationMethod_ = bifurcationMethod;
+        params_ = bifurcationMethod.getParams();
+    }
+    
     //
     // Accessors/Mutators
     //
 
-
-    public RpSolution calc() {
-
-      
-        return null;// bifurcationMethod_.curve(new RealVector(2)); //TODO Using dummy value !!
-
+    public int getFamilyIndex() {
+        return params_.getFamilyIndex();
+    }
+    
+    public RpSolution calc() {    	
+        return bifurcationMethod_.curve();
     }
 
     public RpSolution recalc() {
@@ -48,6 +47,6 @@ public class BifurcationCurveCalc implements RpCalculation{
     }
 
     public String getCalcMethodName() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        throw new UnsupportedOperationException("Bifurcation");
     }
 }

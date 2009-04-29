@@ -1,6 +1,6 @@
 package rpnumerics;
 
-class BifurcationParams {
+public class BifurcationParams {
 
     private int familyIndex_;
     private static int DEFAULT_FAMILY_INDEX = 0;
