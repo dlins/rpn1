@@ -131,8 +131,8 @@ ifeq ($(RPHOSTTYPE),solaris_i86)
 FLIBS = -L/opt/SUNWspro/SC1.0 -lF77 -lM77
 endif
 else
-FC = g77 -Wall
-FLIBS = -lg2c
+FC = gfortran
+FLIBS =
 endif
 FFLAGS = -u -C
 CPPFLAGS +=

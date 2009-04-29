@@ -36,7 +36,7 @@ LIBLAPACK = -L/usr/lib \
 	    -L/usr/lib/gcc/i386-redhat-linux/4.1.1/ \
 	    -L/usr/lib/gcc/i386-redhat-linux/4.1.2/ \
             -L/usr/lib/gcc/i386-redhat-linux/3.4.6/\
-	    -lblas -ldl -lg2c -lgfortran -llapack 
+	    -lblas -ldl -llapack 
 LIBWAVE = -L $(LIBDIR) -lwave
 
 
