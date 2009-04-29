@@ -33,7 +33,7 @@ public class ContourCurve {
 			tmp1 = (ContourPolyline) i.next();
 			notJoined = false;
 			try { 
-				tmp1.add(polyline);
+				tmp1.add(polyline);				
 			} catch (SegmentCanNotJoin e) {
 				notJoined = true;
 			}
@@ -42,7 +42,7 @@ public class ContourCurve {
 		if (notJoined) {
 			segmentList.add(polyline);
 		} else {			
-			boolean notMerged = true;			
+			boolean notMerged = true;
 			while(i.hasNext() && notMerged) {
 				tmp2 = (ContourPolyline) i.next();
 				notMerged = false;				
