@@ -4,7 +4,7 @@ RPNUMSRC +=
 WAVESRC += 
 ForSRC += 
 
-SRCDIR=.
+SRCDIR=/impa/home/g/cbevilac/workspace3/RPNOficial/trunk/src
 OBJDIR = $(SRCDIR)/build/$(RPHOSTTYPE)
 LIBDIR = $(SRCDIR)/../lib/$(RPHOSTTYPE)
 
@@ -33,6 +33,8 @@ CPPFLAGS += $(SHARELIBFLAG)
 LIBLAPACK = -L/usr/lib \
 	    -L/usr/lib/gcc/$(BUILDGCCTARGET)/$(BUILDGCCVER) \
 	    -L/usr/lib/gcc/$(BUILDGCCTARGET)/$(BUILDG77VER) \
+	    -L/usr/lib/gcc/i386-redhat-linux/4.1.1/ \
+	    -L/usr/lib/gcc/i386-redhat-linux/4.1.2/ \
             -L/usr/lib/gcc/i386-redhat-linux/3.4.6/\
 	    -lblas -ldl -lg2c -lgfortran -llapack 
 LIBWAVE = -L $(LIBDIR) -lwave
