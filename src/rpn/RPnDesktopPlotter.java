@@ -32,7 +32,7 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
     private static RPnConfigReader configReader_;
     private static InputStream configStream_;
     private static RPnUIFrame rpnUIFrame;
-
+  
     public RPnDesktopPlotter(String configFile) throws FileNotFoundException, VerifierConfigurationException, SAXException, IOException {
 
         // create a VerifierFactory with the default SAX parser
