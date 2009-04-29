@@ -61,7 +61,9 @@ LIBWAVE = -L $(LIBDIR) -lwave
 
 
 
-all: $(WAVELIBARC) $(RPNUMLIBARC) $(EXEC)
+lib: $(WAVELIBARC) $(RPNUMLIBARC)
+
+test: lib $(EXEC)
 
 $(WAVELIBARC): $(WAVELIBOBJ)
 	ar -ruv $(WAVELIBARC)  $(WAVELIBOBJ)
@@ -76,9 +78,9 @@ pack: clean
 	mkdir -p lab/lib lab/rpn
 	sed -e "s/^RPN=\.\./RPN=rpn/g" makefile > lab/makefile
 	cp -r *.cc *.h generic myfunction lab
-	cp -r ../rpnumerics ../wave ../JNI ../make lab/rpn
+	cp -r ../rpnumerics ../wave ../JNI ../make ../plugins lab/rpn
 	tar zcf lab.tar.gz lab
-#	\rm -rf lab
+	\rm -rf lab
 
 z:
 	$(CCC) -o z z.cc zfuncs.c

@@ -115,6 +115,10 @@ public:
      */
     int n_comps(void) const;
     
+    /*! Returns the array size
+     */
+    int size(void) const;
+    
     /*! Changes the JetMatrix dimension
      */
     

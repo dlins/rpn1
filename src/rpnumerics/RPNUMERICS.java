@@ -43,8 +43,8 @@ public class RPNUMERICS {
     //
     static public void init(RPNumericsProfile profile) {
 
-        System.load("/impa/home/g/cbevilac/workspace3/RPNOficial/trunk/lib/linux_i686/libwave.so");//TODO libwave is always loaded ?
-        System.load("/impa/home/g/cbevilac/workspace3/RPNOficial/trunk/lib/linux_i686/librpnumerics.so");
+        System.loadLibrary("wave");//TODO libwave is always loaded ?
+        System.loadLibrary("rpnumerics");
         initNative(profile.getPhysicsID());
         errorControl_ = new RpErrorControl(boundary());
         fluxParams_ = getFluxParams();

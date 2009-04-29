@@ -41,9 +41,13 @@ JetMatrix::JetMatrix(int degree, int n_comps, double * values) :
 	if ( degree >= 2 ) c2_ = true;
 }
 
+JetMatrix::~JetMatrix(){};
+
+
 int JetMatrix::n_comps(void) const { return n_comps_;  }
 
-JetMatrix::~JetMatrix(){};
+int JetMatrix::size(void) const { return size_;  }
+
 
 void JetMatrix::resize(int n_comps) {
     size_ = (n_comps * (1 + n_comps * (1 + n_comps)));

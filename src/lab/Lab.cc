@@ -103,6 +103,20 @@ int main(int argc, char argv[])
 	                    << c_jet(1,0,0) << ", " << c_jet(1,0,1) << ", " << c_jet(1,1,0)<< ", " << c_jet(1,1,1) << "\n\n";
 
 
+	cout << "===============================================\n";
+	cout << "Jet: \n";
+	for (int i=0; i<=c_jet.size(); i++ )
+	cout <<  c[i]  << "\n";
+
+	double *j;
+	j = c_jet()+2;
+	cout << "===============================================\n";
+	cout << "Jet: \n";
+	//for (int i=0; i<=c_jet.size()-2; i++ )
+	//cout <<  (double[2][2])j[0][0]  << "\n";
+
+
+
 	return 0;
 }
 
