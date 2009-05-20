@@ -11,8 +11,13 @@
  * Includes:
  */
 #include "rpnumerics_RarefactionOrbitCalc.h"
-//#include "RarefactionMethodFactory.h"
+#include "RarefactionContinuationMethod.h"
+#include "LSODE.h"
+#include "LSODEProfile.h"
 //#include "RarefactionFlowFactory.h"
+#include "PluginService.h"
+#include "RPnPluginManager.h"
+#include "RarefactionFlowPlugin.h"
 #include "RpNumerics.h"
 #include "RealVector.h"
 #include "JNIDefs.h"
@@ -26,125 +31,198 @@ using std::vector;
  */
 
 
-JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc  (JNIEnv * env, jobject obj, jstring methodName, jstring flowName, jobject initialPoint, jint familyIndex, jint timeDirection ){
-/*
-    
+JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env, jobject obj, jstring methodName, jstring flowName, jobject initialPoint, jint familyIndex, jint timeDirection) {
+
+
     unsigned int i;
-    
-    jclass    classOrbitPoint = (env)->FindClass(ORBITPOINT_LOCATION);
-    jclass    classRarefactionOrbit = (env)->FindClass(RAREFACTIONORBIT_LOCATION);
-    
+
+    jclass classOrbitPoint = (env)->FindClass(ORBITPOINT_LOCATION);
+    jclass classRarefactionOrbit = (env)->FindClass(RAREFACTIONORBIT_LOCATION);
+
     jmethodID rarefactionOrbitConstructor = (env)->GetMethodID(classRarefactionOrbit, "<init>", "([Lrpnumerics/OrbitPoint;I)V");
     jmethodID orbitPointConstructor = (env)->GetMethodID(classOrbitPoint, "<init>", "([D)V");
     jmethodID toDoubleMethodID = (env)->GetMethodID(classOrbitPoint, "toDouble", "()[D");
-    
+
     //Input processing
-    jdoubleArray inputPhasePointArray =(jdoubleArray) (env)->CallObjectMethod(initialPoint, toDoubleMethodID);
-    
+    jdoubleArray inputPhasePointArray = (jdoubleArray) (env)->CallObjectMethod(initialPoint, toDoubleMethodID);
+
     double input [env->GetArrayLength(inputPhasePointArray)];
-    
+
     env->GetDoubleArrayRegion(inputPhasePointArray, 0, env->GetArrayLength(inputPhasePointArray), input);
-    
+
     RealVector realVectorInput(env->GetArrayLength(inputPhasePointArray));
-    
-    for (i=0;i< (unsigned int)realVectorInput.size();i++){
-        
-        realVectorInput.component(i)=input[i];
-        
-    }
-    
-    env->DeleteLocalRef(inputPhasePointArray);
-    
-    //Getting the method
-    
-    const char * method= env->GetStringUTFChars(methodName, NULL);
-    
-    if (method == NULL) {
-        cerr <<"Error in method string name ! "<<endl;
+
+    for (i = 0; i < (unsigned int) realVectorInput.size(); i++) {
+
+        realVectorInput.component(i) = input[i];
+
     }
 
+    env->DeleteLocalRef(inputPhasePointArray);
+
+    //Getting the method
+
+    //        const char * method= env->GetStringUTFChars(methodName, NULL);
+    //    
+    //        if (method == NULL) {
+    //            cerr <<"Error in method string name ! "<<endl;
+    //        }
+
     //Getting the flow name
+
+    //        const char * flow= env->GetStringUTFChars(flowName, NULL);
+    //    
+    //        if (flow == NULL) {
+    //            cerr <<"Error in flow string name ! "<<endl;
+    //        }
+
+    /*
+     *
+     *1 - Pegar a instancia do rarefaction flow (plugin) 
+     *2 - Passar a instancia do flow para o construtor do metodo de calculo
+     *3- O metodo cria o ODE solver , usando o flow . O profile do solver contem os parametros necessarios para o criterio de para especifico do metodo
+     *4 -  o metodo curve da classe do metodo de calculo calcula a curva 
+     *
+         RarefactionFlow *rarefactionFlow = RarefactionFlowFactory::createRarefactionFlow(flow, familyIndex, timeDirection, RpNumerics::getFlux());
     
-    const char * flow= env->GetStringUTFChars(flowName, NULL);
+         RarefactionMethod * rarefactionMethod=  RarefactionMethodFactory::createRarefactionMethod(method, *rarefactionFlow);
     
-    if (flow == NULL) {
-        cerr <<"Error in flow string name ! "<<endl;
-    }
+         env->ReleaseStringUTFChars(methodName, method);
     
- *
- *
- *1 - Pegar a instancia do rarefaction flow (plugin) 
- *2 - Passar a instancia do flow para o construtor do metodo de calculo
- *3- O metodo cria o ODE solver , usando o flow . O profile do solver contem os parametros necessarios para o criterio de para especifico do metodo
- *4 -  o metodo curve da classe do metodo de calculo calcula a curva 
- *
-    RarefactionFlow *rarefactionFlow = RarefactionFlowFactory::createRarefactionFlow(flow, familyIndex, timeDirection, RpNumerics::getFlux());
+         env->ReleaseStringUTFChars(flowName, flow);
     
-    RarefactionMethod * rarefactionMethod=  RarefactionMethodFactory::createRarefactionMethod(method, *rarefactionFlow);
+         //Calculations
+     *
+     *
+     */
+    Physics & physics = RpNumerics::getPhysics();
+
+    const Boundary & boundary = physics.boundary();
+
+
+    RpnPlugin * plug = RPnPluginManager::getPluginInstance("RarefactionFlow");
+
+    RarefactionFlowPlugin* flowPlugin = (RarefactionFlowPlugin*) plug;
+
+    //    const WaveFlow * flow = (const WaveFlow *) flowPlugin;
+
+    int dimension = 2;
+    //
+    int itol = 2;
+    //
+    double rtol = 1e-4;
+    //
+    int mf = 22;
+    //
+    double deltaxi = 0.001;
+    //
+    int nparam = 1 + dimension;
+    //
+    double * param = new double[nparam];
+
+    param[0] = 1;
+    //
+    int ii;
+
+    for (ii = 0; ii < dimension; ii++) param[1 + ii] = 0.1;
+    //
+    int maxStepsNumber = 100;
+    //
+    //
+
     
-    env->ReleaseStringUTFChars(methodName, method);
+
+//    RarefactionFlowPlugin  * flowP = new RarefactionFlowPlugin(0, 1, RpNumerics::getPhysics().fluxFunction());
     
-    env->ReleaseStringUTFChars(flowName, flow);
+    LSODEProfile lsodeProfile(*flowPlugin, RpNumerics::getPhysics().boundary(), maxStepsNumber, dimension, itol, rtol, mf, deltaxi, nparam, param);
+
+//    LSODEProfile lsodeProfile(*flowP, RpNumerics::getPhysics().boundary(), maxStepsNumber, dimension, itol, rtol, mf, deltaxi, nparam, param);
+    //
+    //
+    LSODE odeSolver(lsodeProfile);
+
     
-    //Calculations
-    
-    struct RarefactionCurve curveCoords = rarefactionMethod->curve(realVectorInput, RpNumerics::getODESolver());
-    
-    vector <RealVector> coords=curveCoords.coords;
-    
-    delete rarefactionFlow;
-    delete rarefactionMethod;
-    
+    odeSolver.setStopGenerator(LSODEStopGenerator(lsodeProfile));
+    cout << "Tamanho do vetor " << endl;
+
+    RarefactionContinuationMethod method(odeSolver);
+
+    RPnCurve curve = method.curve(realVectorInput, timeDirection);
+
+    vector <RealVector> coords = curve.getCoords();
+
+
+
+    //      
+    //      for (int i =0; i < 10;i++){
+    //
+    //        RealVector testeVector(2);
+    //        testeVector(0) = 0.1 * i;
+    //        testeVector(1) = 0.1 * i;
+    //
+    //        coords.push_back(testeVector);
+    //          
+    //          
+    //      }
+    //      
+
+
+
+    //      delete rarefactionFlow;
+    //      delete rarefactionMethod;
+
     //Orbit memebers creation
-    
-    jobjectArray  orbitPointArray  =(jobjectArray) (env)->NewObjectArray(coords.size(), classOrbitPoint, NULL);
-    
-    for(i=0;i < coords.size();i++ ){
-        
+
+    jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(coords.size(), classOrbitPoint, NULL);
+
+    for (i = 0; i < coords.size(); i++) {
+
         RealVector tempVector = coords.at(i);
-        
+
         double * dataCoords = new double [tempVector.size()];
-        
+
         unsigned int j;
-        
-        for (j=0;j < (unsigned int) tempVector.size();j++){
-            dataCoords[j]=tempVector.component(j);
-            
+
+        for (j = 0; j < (unsigned int) tempVector.size(); j++) {
+            dataCoords[j] = tempVector.component(j);
+
         }
-        
+
         jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size());
-        
+
         (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size(), dataCoords);
-        
+
+
         jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray, timeDirection);
-        
+
+
         (env)->SetObjectArrayElement(orbitPointArray, i, orbitPoint);
-        
+
         env->DeleteLocalRef(jTempArray);
-        
+
         env->DeleteLocalRef(orbitPoint);
-        
-        delete  dataCoords;
+
+        delete dataCoords;
     }
-    
+
     //Building the orbit
-    
+
     jobject rarefactionOrbit = (env)->NewObject(classRarefactionOrbit, rarefactionOrbitConstructor, orbitPointArray, timeDirection);
-    
+
+
     //Cleaning up
-    
+
     coords.clear();
-    
+
     env->DeleteLocalRef(orbitPointArray);
     env->DeleteLocalRef(classOrbitPoint);
     env->DeleteLocalRef(classRarefactionOrbit);
-    
-    return rarefactionOrbit;
-    
-    */
-    return NULL;
 
-    
+    return rarefactionOrbit;
+
+
+
+
 }
 
 
