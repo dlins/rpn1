@@ -45,7 +45,6 @@ private:
     
 public:
     
-    LSODEStopGenerator(const int );
     LSODEStopGenerator(const LSODEStopGenerator &);
     LSODEStopGenerator(const LSODEProfile &);
     

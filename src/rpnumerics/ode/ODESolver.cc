@@ -19,5 +19,4 @@
 
 
 ODESolver::~ODESolver(){}
-//! Code comes here! daniel@impa.br
 

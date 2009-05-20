@@ -27,7 +27,7 @@ LSODEProfile * LSODE::profile_=NULL;
 
 
 LSODE::LSODE(const LSODEProfile & profile){
-    profile_=new LSODEProfile(profile);
+profile_=new LSODEProfile(profile);
 }
 
 
@@ -42,7 +42,9 @@ LSODE::~LSODE() {
 
 
 int LSODE::solve(const RealVector & input, RealVector & output, double  & time) const{
+
     
+    cout <<"Chamando solve simples"<<endl;
     int i;
     
     double xi=0; //HARDCODED Useless variable !!
@@ -139,22 +141,23 @@ int LSODE::function(int * neq , double * xi , double* U , double * out){
     
     int i, status ;
     
+    cout <<"Chamando a funcao de LSODE"<<endl;
+    
     RealVector  input(*neq,U);
     RealVector output(*neq);
     
     status=profile_->getFunction().flux(input, output); //This function must return the same codes of LSODE s functions
-    
+
     for(i=0;i< *neq;i++){
         
         out[i]=output(i);
         
     }
     return status;
-    
 }
 
-int LSODE::solve(const RealVector & input, ODESolution & output ) const{
-    
+int LSODE::solve(const RealVector & input, ODESolution & output ) const {
+    cout << "Chamando solve" << endl;
     int steps =0;
     
     RealVector outputVector(input);
@@ -183,7 +186,7 @@ int LSODE::solve(const RealVector & input, ODESolution & output ) const{
 
 }
 
-const ODESolverProfile & LSODE::getProfile()const { return *profile_;}
+const LSODEProfile & LSODE::getProfile()const { return *profile_;}
 
 
 void LSODE::setProfile(const LSODEProfile & profile) {
@@ -192,6 +195,10 @@ void LSODE::setProfile(const LSODEProfile & profile) {
     profile_=new LSODEProfile(profile);
 }
 
+
+void LSODE::setStopGenerator(const LSODEStopGenerator & stopGen) {
+    stopGenerator_ = new LSODEStopGenerator(stopGen);
+}
 
 
 int LSODE::jacrarefaction(int *neq, double *t, double *y, int *ml, int *mu, double *pd, int *nrpd){

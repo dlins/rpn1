@@ -44,8 +44,6 @@ private:
     
     static   int jacrarefaction(int *neq, double *t, double *y, int *ml, int *mu, double *pd, int *nrpd);//int *nparam,  double *param);
     
-    int solve(const RealVector & , RealVector & ,double &) const;
-    
     int solver(int (*)(int *, double *, double *, double *), int *neq, double *y, double *t, double *tout,
             int *itol, double *rtol, double *atol, int *itask, int *istate, int *iopt, double *rwork, int *lrw,
             int *iwork, int *liw, int(*)(int *, double *, double *, int *, int *, double *, int *),
@@ -62,9 +60,11 @@ public:
     ODESolver * clone()const;
     
     int solve(const RealVector & , ODESolution & ) const;
+
+    int solve(const RealVector &, RealVector &, double &) const;
     
     
-    const ODESolverProfile & getProfile() const ;
+    const LSODEProfile & getProfile() const ;
     void setProfile(const LSODEProfile &);
     void setStopGenerator (const LSODEStopGenerator &);
     

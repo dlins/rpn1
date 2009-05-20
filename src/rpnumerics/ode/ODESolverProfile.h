@@ -15,12 +15,15 @@ private:
 public:
 
     ODESolverProfile(const WaveFlow &);
-    
-    ODESolverProfile();
+
+    ODESolverProfile(const ODESolverProfile &);
+
+    ODESolverProfile & operator=(const ODESolverProfile &);
     
     virtual ~ODESolverProfile();
     
     const WaveFlow & getFunction() const ;
+    
     void setFunction (const WaveFlow & );
     
     

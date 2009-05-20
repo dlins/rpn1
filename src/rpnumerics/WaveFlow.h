@@ -51,6 +51,7 @@ public:
     //! Gets the flux function
     const FluxFunction & fluxFunction()const ;
     void setFluxFunction(const FluxFunction& );
+    virtual WaveFlow * clone()const = 0;
 
 
     

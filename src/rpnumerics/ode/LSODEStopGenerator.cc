@@ -11,14 +11,15 @@
  * Includes:
  */
 #include "LSODEStopGenerator.h"
+#include "RectBoundary.h"
 
 /*
  * ---------------------------------------------------------------
  * Definitions:
  */
 
-LSODEStopGenerator::LSODEStopGenerator(const int maxPoints):totalPoints_(0), maxPoints_(maxPoints), functionStatus_(SUCCESSFUL_PROCEDURE){
-}
+//LSODEStopGenerator::LSODEStopGenerator(const int maxPoints):totalPoints_(0), maxPoints_(maxPoints), functionStatus_(SUCCESSFUL_PROCEDURE){
+//}
 
 LSODEStopGenerator::LSODEStopGenerator(const LSODEProfile & profile){
     profile_=new LSODEProfile(profile);
@@ -54,12 +55,21 @@ void LSODEStopGenerator::increaseTotalPoints() { totalPoints_++;}
 
 bool LSODEStopGenerator::check(const RealVector & point) const {
     
-    return profile_->boundary().inside(point);
+    cout<<"chamando inside"<<endl;
+
+    RealVector min(2);
+
+    min.component(0) = -0.5;
+    min.component(1) = -0.5;
+
+    RealVector max(2);
+
+    max.component(0) = 0.5;
+    max.component(1) = 0.5;
+
+    RectBoundary boundary(min, max);
+
+    return boundary.inside(point);
+    
     
 }
-
-
-
-
-//! Code comes here! daniel@impa.br
-

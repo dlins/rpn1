@@ -22,11 +22,6 @@ RarefactionContinuationMethod::RarefactionContinuationMethod(const RarefactionCo
 }
 
 RarefactionContinuationMethod::RarefactionContinuationMethod(const ODESolver & solver) : solver_(solver.clone()) {
-    
-    vector <RealVector> coords;
-    vector <double> times;
-    
-    solution_=new ODESolution(coords,times);
 }
 
 const ODESolver & RarefactionContinuationMethod::getSolver()const{
@@ -36,22 +31,34 @@ const ODESolver & RarefactionContinuationMethod::getSolver()const{
         
 RarefactionContinuationMethod::~RarefactionContinuationMethod() {
     delete solver_;
-    delete solution_;
-}
-
-void RarefactionContinuationMethod::curve(const RealVector &inputVector, int direction){
-
-    int info = 2;
-    int steps = 0;
-
-    info = solver_->solve(inputVector, *solution_);
-
 
 }
 
-vector <RealVector> RarefactionContinuationMethod::getCoords() const {
-    return solution_->getCoords();
+RPnCurve & RarefactionContinuationMethod::curve(const RealVector &inputVector, int direction){
+
+    vector <RealVector> coords;
+//    vector <double> times;
+
+//    ODESolution solution(coords, times);
+
+//   int info = solver_->solve(inputVector, solution);
+    for (int i = 0; i < 10; i++) {
+
+        RealVector testeVector(2);
+        testeVector(0) = 0.1 * i;
+        testeVector(1) = 0.1 * i;
+
+        coords.push_back(testeVector);
+    }
+
+    RPnCurve * result = new RPnCurve(coords);
+    
+    return *result;
+
+
+
 }
+
 
 RarefactionMethod * RarefactionContinuationMethod::clone() const{
     

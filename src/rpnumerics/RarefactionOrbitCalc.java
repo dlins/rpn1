@@ -71,20 +71,20 @@ public class RarefactionOrbitCalc implements RpCalculation {
 
         RpSolution result = null;
 
-        if (methodName_.equals("native")) {//TODO REMOVE !!!
+//        if (methodName_.equals("native")) {//TODO REMOVE !!!
             result = calc(methodName_, flowName_, start_, familyIndex_, timeDirection_);
-
-        } else {
-            ODESolution odeSol = solver_.solve(start_, timeDirection_);
-            WavePoint wavePointArray[] = odeSol.getWavePoints();
-            OrbitPoint orbitPointArray[] = new OrbitPoint[wavePointArray.length];
-            for (int i=0;i < wavePointArray.length;i++){
-                orbitPointArray[i]=new OrbitPoint((RealVector)wavePointArray[i]);
-            }
-            
-            
-            result = new RarefactionOrbit(orbitPointArray, timeDirection_);
-        }
+//
+//        } else {
+//            ODESolution odeSol = solver_.solve(start_, timeDirection_);
+//            WavePoint wavePointArray[] = odeSol.getWavePoints();
+//            OrbitPoint orbitPointArray[] = new OrbitPoint[wavePointArray.length];
+//            for (int i=0;i < wavePointArray.length;i++){
+//                orbitPointArray[i]=new OrbitPoint((RealVector)wavePointArray[i]);
+//            }
+//            
+//            
+//            result = new RarefactionOrbit(orbitPointArray, timeDirection_);
+//        }
         return result;
     }
 

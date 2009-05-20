@@ -8,7 +8,6 @@ package rpnumerics;
 
 import wave.util.RealVector;
 
-import rpnumerics.OrbitPoint;
 
 import wave.multid.view.ViewingAttr;
 import java.awt.Color;

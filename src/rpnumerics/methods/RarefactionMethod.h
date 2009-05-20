@@ -17,6 +17,7 @@
 #include "RealVector.h"
 #include "RarefactionFlow.h"
 #include "ODESolver.h"
+#include "RPnCurve.h"
 /*
  * ---------------------------------------------------------------
  * Definitions:
@@ -28,7 +29,7 @@ class RarefactionMethod {
 public:
     
     
-    virtual void curve(const RealVector &, int direction)=0;
+    virtual RPnCurve & curve(const RealVector &, int direction)=0;
     
     virtual RarefactionMethod * clone() const =0;
     

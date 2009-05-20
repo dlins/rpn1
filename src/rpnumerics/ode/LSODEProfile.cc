@@ -18,9 +18,8 @@
  */
 
 
-//neq  , itol, rtol, itask, istate, iopt , mf,
 LSODEProfile::LSODEProfile(const WaveFlow & function, const Boundary & boundary,int NmaxSteps, int neq , int itol , double rtol, int mf, double deltaxi, int paramLength, const double * param):ODESolverProfile(function),boundary_(boundary.clone()),maxStepNumber_(NmaxSteps){
-    
+
     //Choosing lrw
     
     int mu =0; // TODO Used only in mf ==25 or mf == 24 HARDCODED !!
@@ -103,58 +102,56 @@ LSODEProfile::LSODEProfile(const WaveFlow & function, const Boundary & boundary,
     
 }
 
-LSODEProfile:: LSODEProfile(const LSODEProfile & copy):ODESolverProfile(copy.getFunction()){
-    
+LSODEProfile::LSODEProfile(const LSODEProfile & copy):ODESolverProfile(copy.getFunction()) {
+
     int i;
 
-    boundary_=copy.boundary().clone();
-    maxStepNumber_=copy.maxStepNumber();
-    
-    rwork_= new double[copy.lengthRWork()];
-    
-    iwork_=new int [copy.lengthIWork()];
-    
-    param_= new double [copy.paramLength()];
-    
-    for (i=0; i < copy.paramLength();i++){
-        
-        param_[i]= copy.paramComponent(i);
+    boundary_ = copy.boundary().clone();
+    maxStepNumber_ = copy.maxStepNumber();
+
+    rwork_ = new double[copy.lengthRWork()];
+
+    iwork_ = new int [copy.lengthIWork()];
+
+    param_ = new double [copy.paramLength()];
+
+    for (i = 0; i < copy.paramLength(); i++) {
+
+        param_[i] = copy.paramComponent(i);
     }
-    
-    for (i=0; i <copy.lengthRWork();i++){
-        rwork_[i]=copy.rworkComponent(i);
+
+    for (i = 0; i < copy.lengthRWork(); i++) {
+        rwork_[i] = copy.rworkComponent(i);
     }
-    
-    for (i=0;i<copy.lengthIWork();i++){
-        iwork_[i]=copy.iworkComponent(i);
+
+    for (i = 0; i < copy.lengthIWork(); i++) {
+        iwork_[i] = copy.iworkComponent(i);
     }
-    
-    rtol_= copy.relativeTolerance();
-    itask_=copy.task();
-    deltaxi_=copy.deltaTime();
-    iopt_=copy.opt();
-    lrw_=copy.lengthRWork();
+
+    rtol_ = copy.relativeTolerance();
+    itask_ = copy.task();
+    deltaxi_ = copy.deltaTime();
+    iopt_ = copy.opt();
+    lrw_ = copy.lengthRWork();
     liw_=copy.lengthIWork();
-    mf_=copy.methodFlag();
-    neq_=copy.numberOfEquations();
-    itol_=copy.absoluteToleranceType();
-    paramLength_=copy.paramLength();
-    
-    if (itol_==2){
-        atol_= new double [neq_];
+    mf_ = copy.methodFlag();
+    neq_ = copy.numberOfEquations();
+    itol_ = copy.absoluteToleranceType();
+    paramLength_ = copy.paramLength();
+
+    if (itol_ == 2) {
+        atol_ = new double [neq_];
         for (i = 0; i < neq_; i++) atol_[i] = 1e-6; // HARDCODED !!
     }
 }
 
-LSODEProfile::~LSODEProfile(){
-    
+LSODEProfile::~LSODEProfile() {
+
     delete rwork_;
     delete iwork_;
     delete atol_;
     delete param_;
     delete boundary_;
-    
-    
 }
 
 LSODEProfile & LSODEProfile::operator=(const LSODEProfile & source){
@@ -164,7 +161,6 @@ LSODEProfile & LSODEProfile::operator=(const LSODEProfile & source){
     delete iwork_;
     delete atol_;
     delete param_;
-    
     setFunction(source.getFunction());
     neq_=source.numberOfEquations();
     itol_=source.absoluteToleranceType();
@@ -207,5 +203,4 @@ LSODEProfile & LSODEProfile::operator=(const LSODEProfile & source){
     return *this;
 }
 
-//! Code comes here! daniel@impa.br
 
