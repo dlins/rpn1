@@ -87,6 +87,23 @@ ShockFlowPlugin::~ShockFlowPlugin() {
 }
 
 
+WaveFlow * ShockFlowPlugin::clone()const {
+
+    PhasePoint phasePoint(RealVector(2));
+
+    phasePoint.component(0) = 0;
+
+    phasePoint.component(1) = 0;
+
+    ShockFlowParams newParams(phasePoint, 0);
+
+    Quad2FluxParams fluxParams;
+
+    Quad2FluxFunction fluxfunction(fluxParams);
+
+    return new ShockFlowPlugin(newParams, fluxfunction);
+}
+
 extern "C" RpnPlugin * createConservation() {
 
     PhasePoint phasePoint(RealVector(2));

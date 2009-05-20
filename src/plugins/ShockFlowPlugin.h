@@ -42,8 +42,9 @@ public:
     int flux(const RealVector &, RealVector &) const;
     int fluxDeriv(const RealVector &, JacobianMatrix &)const;
     int fluxDeriv2(const RealVector &, HessianMatrix &)const;
-    
 
+    WaveFlow * clone()const;
+    
     virtual~ShockFlowPlugin();
     
 

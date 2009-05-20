@@ -19,14 +19,20 @@ int RarefactionFlowPlugin::fluxDeriv2(const RealVector &, HessianMatrix &)const 
 }
 
 
-
-
 RarefactionFlowPlugin::RarefactionFlowPlugin(const int familyIndex, const int direction, const FluxFunction &flux) : RarefactionFlow(familyIndex, direction, flux) {
 
 }
 
 RarefactionFlowPlugin::~RarefactionFlowPlugin() {
 
+}
+
+
+WaveFlow * RarefactionFlowPlugin::clone()const {
+     Quad2FluxParams fluxParams;
+
+    Quad2FluxFunction fluxfunction(fluxParams);
+     return new RarefactionFlowPlugin(0, 1, fluxfunction);
 }
 
 

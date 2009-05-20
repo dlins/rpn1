@@ -41,7 +41,7 @@ public:
     
     virtual~RarefactionFlowPlugin();
    
-    RpFunction * clone() const;
+    WaveFlow * clone() const;
     
 };
 
