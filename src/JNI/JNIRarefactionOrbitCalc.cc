@@ -14,8 +14,6 @@
 #include "RarefactionContinuationMethod.h"
 #include "LSODE.h"
 #include "LSODEProfile.h"
-#include "FlowTeste.h"
-#include "FluxTeste.h"
 #include "ContinuationRarefactionFlow.h"
 //#include "RarefactionFlowFactory.h"
 #include "PluginService.h"

@@ -41,7 +41,7 @@ void RarefactionContinuationMethod::curve(const RealVector & inputVector, int di
     double testeDouble = 0;
     int i = 0;
 
-    ContinuationRarefactionFlow testeFlow;
+    ContinuationRarefactionFlow & testeFlow= (ContinuationRarefactionFlow &)solver_->getProfile().getFunction();
 
     int indx = 0; //TODO family index ??
     double deltaxi = 0.1;
