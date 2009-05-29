@@ -226,6 +226,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     }
 
     void printMenuItem_actionPerformed(ActionEvent e) {
+
         PrinterJob pj = PrinterJob.getPrinterJob();
         for (int i = 0; i < frames_.length; i++) {
             pj.setPrintable(frames_[i].phaseSpacePanel());

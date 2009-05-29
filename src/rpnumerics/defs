@@ -18,6 +18,7 @@ RPNUMSRC += \
 	WavePoint.cc		\
 	WaveState.cc		\
         WaveFlow.cc            \
+        ContinuationRarefactionFlow.cc \
         RpFunction.cc           \
         RarefactionCalc.cc           \
         RpCalculation.cc          \

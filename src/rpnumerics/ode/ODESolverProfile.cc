@@ -1,36 +1,31 @@
 #include "ODESolverProfile.h"
 
-ODESolverProfile::ODESolverProfile(const WaveFlow &flow):waveFlow_(flow.clone()){
+ODESolverProfile::ODESolverProfile(const WaveFlow &flow) : waveFlow_(flow.clone()) {
 }
 
-
-ODESolverProfile::ODESolverProfile(const ODESolverProfile & copy):waveFlow_(copy.getFunction().clone()){
-    
+ODESolverProfile::ODESolverProfile(const ODESolverProfile & copy) : waveFlow_(copy.getFunction().clone()) {
 }
 
-ODESolverProfile & ODESolverProfile::operator=(const ODESolverProfile & source ){
-    
-    if (this==&source)
+ODESolverProfile & ODESolverProfile::operator=(const ODESolverProfile & source) {
+
+    if (this == &source)
         return *this;
-    waveFlow_=source.getFunction().clone();
+    setFunction(source.getFunction());
     return *this;
 }
 
 
-ODESolverProfile::~ODESolverProfile(){
-
+ODESolverProfile::~ODESolverProfile() {
     delete waveFlow_;
-    
 }
 
-const WaveFlow  & ODESolverProfile::getFunction() const {return *waveFlow_;}
-
-void  ODESolverProfile::setFunction(const WaveFlow & function) {
-    delete waveFlow_;
-    waveFlow_=function.clone();
-    
+const WaveFlow & ODESolverProfile::getFunction() const {
+    return *waveFlow_;
 }
 
-
+void ODESolverProfile::setFunction(const WaveFlow & function) {
+    delete waveFlow_;
+    waveFlow_ = function.clone();
+}
 
 

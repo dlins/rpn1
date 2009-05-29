@@ -3,17 +3,17 @@
 
 
 
-int RarefactionFlowPlugin::flux(const RealVector &, RealVector &) const {
+int RarefactionFlowPlugin::flux(const RealVector &input , RealVector & output) const {
     cout <<"Chamando flux RarefactionPlugin"<<endl;
     return 2;
 }
 
-int RarefactionFlowPlugin::fluxDeriv(const RealVector &, JacobianMatrix &)const {
+int RarefactionFlowPlugin::fluxDeriv(const RealVector & input, JacobianMatrix & output)const {
     cout << "Chamando fluxDeriv RarefactionPlugin" << endl;
     return 2;
 }
 
-int RarefactionFlowPlugin::fluxDeriv2(const RealVector &, HessianMatrix &)const {
+int RarefactionFlowPlugin::fluxDeriv2(const RealVector & input, HessianMatrix & output)const {
     cout << "Chamando fluxDeriv2 RarefactionPlugin" << endl;
     return 2;
 }

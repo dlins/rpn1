@@ -15,6 +15,8 @@
  */
 
 #include "RarefactionMethod.h"
+    
+#include "ContinuationRarefactionFlow.h"
 #include "RPnCurve.h"
 /*
  * ---------------------------------------------------------------
@@ -34,6 +36,8 @@ public:
     RarefactionContinuationMethod (const RarefactionContinuationMethod &);
     
     RPnCurve & curve(const RealVector &, int direction);
+
+    void curve(const RealVector &, int direction,vector<RealVector> &);
     
     const ODESolver & getSolver()const;
 

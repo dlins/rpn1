@@ -33,11 +33,8 @@
 class LSODEStopGenerator :public ODEStopGenerator{
     
 private:
-    
-    
+
     //Stop Criterion
-    
-    
     int totalPoints_;
     int maxPoints_;
     int functionStatus_;

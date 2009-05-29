@@ -71,5 +71,12 @@ bool LSODEStopGenerator::check(const RealVector & point) const {
 
     return boundary.inside(point);
     
+//    return profile_->boundary().inside(point);
     
 }
+
+
+
+
+//! Code comes here! daniel@impa.br
+

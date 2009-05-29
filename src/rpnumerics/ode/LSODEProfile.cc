@@ -17,9 +17,100 @@
  * Definitions:
  */
 
+//LSODEProfile::LSODEProfile(const Boundary & boundary, int NmaxSteps, int neq, int itol, double rtol, int mf , double deltaxi, int paramLength, const double * param):boundary_(boundary.clone()){
+//      
+//    //Choosing lrw
+//    
+//    int mu =0; // TODO Used only in mf ==25 or mf == 24 HARDCODED !!
+//    int ml =0;
+//    
+//    int i;
+//    
+//    switch (itol){
+//        
+//        case 2:
+//            
+//            atol_= new double [neq];
+//            for (i = 0; i < neq; i++)
+//                atol_[i] = 1e-6; // HARDCODED !!
+//            break;
+//            
+//        default:
+//            cout << "atol is scalar"<< endl;
+//    }
+//    
+//    switch (mf){
+//        
+//        case 10:
+//            
+//            lrw_= 20 + 16*neq ;
+//            liw_=20;
+//            break;
+//            
+//        case 21:
+//            
+//            lrw_= (int)(22 +  9*neq + (int)pow((double)neq, 2.0));// neq*neq;
+//            liw_=20+neq;
+//            break;
+//
+//
+//        case 22:
+//            
+//            lrw_= 22 +  9*neq + neq*neq;
+//            liw_=20+neq;
+//            break;
+//            
+//        case 24:
+//            
+//            lrw_= 22 + 10*neq + (2*ml + mu)*neq;
+//            liw_= 20 + neq;
+//            
+//        case 25:
+//            
+//            lrw_= 22 + 10*neq + (2*ml + mu)*neq;
+//            liw_= 20 + neq;
+//            
+//        default:
+//            cout << "Erro in lrw or liw choose"<<endl;
+//            
+//    }
+//    
+//    rtol_=rtol;
+//    itask_=1; //HARDCODED for normal computation !!
+//    
+//    iopt_=0; //HARDCODED !!!
+//    
+//    mf_=mf;
+//    neq_=neq;
+//    itol_=itol;
+//    deltaxi_=deltaxi;
+//    
+//    rwork_= new double[lrw_];
+//    
+//    iwork_=new int [liw_];
+//    
+//    paramLength_=paramLength;
+//    
+//    param_= new double[paramLength];
+//    
+//    
+//    for (i=0; i < paramLength;i++){
+//        
+//        param_[i]=param[i];
+//    }
+//    
+//    
+//    
+//}
 
+
+
+//neq  , itol, rtol, itask, istate, iopt , mf,
 LSODEProfile::LSODEProfile(const WaveFlow & function, const Boundary & boundary,int NmaxSteps, int neq , int itol , double rtol, int mf, double deltaxi, int paramLength, const double * param):ODESolverProfile(function),boundary_(boundary.clone()),maxStepNumber_(NmaxSteps){
 
+    
+cout <<"Chamando construtor"<<endl;
+//    flow_ = new FlowTeste(FluxTeste()); //Para testar !!!
     //Choosing lrw
     
     int mu =0; // TODO Used only in mf ==25 or mf == 24 HARDCODED !!

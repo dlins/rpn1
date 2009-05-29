@@ -24,19 +24,20 @@ double LSODE::tout_=0.05;
 
 LSODEProfile * LSODE::profile_=NULL;
 
-
-
-LSODE::LSODE(const LSODEProfile & profile){
-profile_=new LSODEProfile(profile);
+LSODE::LSODE(const LSODEProfile & profile) {
+    profile_ = new LSODEProfile(profile);
+//    stopGenerator_ = new LSODEStopGenerator(profile);
 }
 
 
 LSODE::LSODE(const LSODE & copy){
     profile_=new LSODEProfile((LSODEProfile &)copy.getProfile());
+//    stopGenerator_ = new LSODEStopGenerator((LSODEProfile &)copy.getProfile());
 }
 
 LSODE::~LSODE() {
     delete profile_;
+//    delete stopGenerator_;
     
 }
 
@@ -141,52 +142,72 @@ int LSODE::function(int * neq , double * xi , double* U , double * out){
     
     int i, status ;
     
-    cout <<"Chamando a funcao de LSODE"<<endl;
     
-    RealVector  input(*neq,U);
+//    RealVector  input(*neq,U);
+//    RealVector output(*neq);
+
+//    cout <<"Valor da entrada "<< U[0]<<endl;
+//    cout << "Valor da entrada " << U[1] << endl;
+    
+    
+    
+//    RealVector input(2);
+//    input(0)=0.1;
+//    input(1)=0.2;
+    
+    
+//    RealVector output(2);
+
+
+    RealVector input(*neq, U);
     RealVector output(*neq);
+
+//    FluxTeste flux;
+//    FlowTeste flow(flux);
+//    flow.flux(input, output);
     
     status=profile_->getFunction().flux(input, output); //This function must return the same codes of LSODE s functions
-
+    
     for(i=0;i< *neq;i++){
         
         out[i]=output(i);
         
     }
     return status;
+    
 }
 
 int LSODE::solve(const RealVector & input, ODESolution & output ) const {
-    cout << "Chamando solve" << endl;
-    int steps =0;
-    
-    RealVector outputVector(input);
-    RealVector inputVector(input);
-    
-    double time;
-    
-    int info = 2;
-    
-    while ( steps < LSODE::profile_->maxStepNumber() && stopGenerator_->check(inputVector)) {
+//    cout << "Chamando solve" << endl;
+//    int steps =0;
+//    
+//    RealVector outputVector(input);
+//    RealVector inputVector(input);
+//    
+//    double time;
+//    
+//    int info = 2;
+//    
+//    while ( steps < LSODE::profile_->maxStepNumber() && stopGenerator_->check(inputVector)) {
+//
+//
+//        info = solve(inputVector, outputVector, time);
+//        
+//        if (info==2) {
+//            output.addCoords(outputVector);
+//            inputVector = outputVector;
+//            steps++;
+//        }
+//        
+//    tout_=0;
+//    
+//    return info;
+//    
+//}
 
-
-        info = solve(inputVector, outputVector, time);
-        
-        if (info==2) {
-            output.addCoords(outputVector);
-            inputVector = outputVector;
-            steps++;
-        }
-        
-    tout_=0;
-    
-    return info;
-    
 }
 
-}
-
-const LSODEProfile & LSODE::getProfile()const { return *profile_;}
+const ODESolverProfile & LSODE::getProfile()const { return *profile_;}
 
 
 void LSODE::setProfile(const LSODEProfile & profile) {
@@ -196,9 +217,10 @@ void LSODE::setProfile(const LSODEProfile & profile) {
 }
 
 
-void LSODE::setStopGenerator(const LSODEStopGenerator & stopGen) {
-    stopGenerator_ = new LSODEStopGenerator(stopGen);
-}
+//void LSODE::setStopGenerator(const LSODEStopGenerator & stopGen) {
+//    delete stopGenerator_;
+////    stopGenerator_ = new LSODEStopGenerator(stopGen);
+//}
 
 
 int LSODE::jacrarefaction(int *neq, double *t, double *y, int *ml, int *mu, double *pd, int *nrpd){

@@ -14,6 +14,9 @@
 #include "RarefactionContinuationMethod.h"
 #include "LSODE.h"
 #include "LSODEProfile.h"
+#include "FlowTeste.h"
+#include "FluxTeste.h"
+#include "ContinuationRarefactionFlow.h"
 //#include "RarefactionFlowFactory.h"
 #include "PluginService.h"
 #include "RPnPluginManager.h"
@@ -58,6 +61,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
 
     }
 
+    cout << "Vetor de entrada: " << realVectorInput << endl;
+
     env->DeleteLocalRef(inputPhasePointArray);
 
     //Getting the method
@@ -96,13 +101,15 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
      *
      */
     Physics & physics = RpNumerics::getPhysics();
-
+    //
     const Boundary & boundary = physics.boundary();
 
+    cout << "Tamanho do boundary" << boundary.minimums().size() << endl;
 
-    RpnPlugin * plug = RPnPluginManager::getPluginInstance("RarefactionFlow");
 
-    RarefactionFlowPlugin* flowPlugin = (RarefactionFlowPlugin*) plug;
+//    RpnPlugin * plug = RPnPluginManager::getPluginInstance("RarefactionFlow");
+
+//    RarefactionFlowPlugin* flowPlugin = (RarefactionFlowPlugin*) plug;
 
     //    const WaveFlow * flow = (const WaveFlow *) flowPlugin;
 
@@ -126,59 +133,39 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
 
     for (ii = 0; ii < dimension; ii++) param[1 + ii] = 0.1;
     //
-    int maxStepsNumber = 100;
+    int maxStepsNumber = 10;
     //
     //
 
-    
 
-//    RarefactionFlowPlugin  * flowP = new RarefactionFlowPlugin(0, 1, RpNumerics::getPhysics().fluxFunction());
-    
-    LSODEProfile lsodeProfile(*flowPlugin, RpNumerics::getPhysics().boundary(), maxStepsNumber, dimension, itol, rtol, mf, deltaxi, nparam, param);
+    ContinuationRarefactionFlow flow;
 
-//    LSODEProfile lsodeProfile(*flowP, RpNumerics::getPhysics().boundary(), maxStepsNumber, dimension, itol, rtol, mf, deltaxi, nparam, param);
-    //
-    //
+    LSODEProfile lsodeProfile(flow, RpNumerics::getPhysics().boundary(), maxStepsNumber, dimension, itol, rtol, mf, deltaxi, nparam, param);
+
     LSODE odeSolver(lsodeProfile);
 
-    
-    odeSolver.setStopGenerator(LSODEStopGenerator(lsodeProfile));
-    cout << "Tamanho do vetor " << endl;
+    //    odeSolver.setStopGenerator(LSODEStopGenerator(lsodeProfile));
 
     RarefactionContinuationMethod method(odeSolver);
+    vector <RealVector> coords;
 
-    RPnCurve curve = method.curve(realVectorInput, timeDirection);
-
-    vector <RealVector> coords = curve.getCoords();
-
-
-
-    //      
-    //      for (int i =0; i < 10;i++){
-    //
-    //        RealVector testeVector(2);
-    //        testeVector(0) = 0.1 * i;
-    //        testeVector(1) = 0.1 * i;
-    //
-    //        coords.push_back(testeVector);
-    //          
-    //          
-    //      }
-    //      
+    method.curve(realVectorInput, timeDirection, coords);
 
 
 
-    //      delete rarefactionFlow;
-    //      delete rarefactionMethod;
+    cout << "Tamanho do vetor "<<coords.size() << endl;
+    
+    //  Passando o conteudo de vector<RealVector>coords para orbit points e construir curva de rarefacao
+    //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //Orbit memebers creation
 
     jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(coords.size(), classOrbitPoint, NULL);
 
+
     for (i = 0; i < coords.size(); i++) {
 
         RealVector tempVector = coords.at(i);
-
         double * dataCoords = new double [tempVector.size()];
 
         unsigned int j;
@@ -192,9 +179,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
 
         (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size(), dataCoords);
 
-
         jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray, timeDirection);
-
 
         (env)->SetObjectArrayElement(orbitPointArray, i, orbitPoint);
 

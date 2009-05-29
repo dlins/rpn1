@@ -30,8 +30,6 @@
 // The parameters are:
 //
 //         f: The field's function
-//         j: The field's Jacobian, for mf = 24 or 25. Otherwise, pass
-//         a dummy function.
 //       neq: The number of equations
 //         y: The point where the solution is to be computed --  entrada !!
 //         t: The time at which the solution will begin to be computed  -- para ODESolution
@@ -80,6 +78,11 @@ class LSODEProfile:public ODESolverProfile{
     
 private:
     
+    
+//         f: The field's function
+//         j: The field's Jacobian, for mf = 24 or 25. Otherwise, pass
+//         a dummy function.
+    
     double * atol_;
     double *  rwork_;
     double *  param_;
@@ -104,9 +107,12 @@ private:
 //    WaveFlow *flow_;
     
 public:
-
+//              neq  ,  itol, rtol, itask,istate, iopt , rwork , lrw ,iwork, liw , mf,
+//    LSODEProfile(const RpFunction &, const LSODEStopGenerator &, int ,  int , double, int , double , int , const double * );
     
     LSODEProfile(const WaveFlow &, const Boundary &, int NmaxSteps, int ,  int , double, int , double , int , const double * );
+//    LSODEProfile(const Boundary &, int NmaxSteps, int, int, double, int, double, int, const double *);
+    
     
     LSODEProfile(const LSODEProfile &);
     
@@ -143,7 +149,7 @@ public:
 };
 
 //inline const WaveFlow & LSODEProfile::getFunction()const {return *flow_;}
-//
+
 //inline void LSODEProfile::setFunction(const WaveFlow & function) {
 //    delete flow_;
 //    flow_ = function.clone();

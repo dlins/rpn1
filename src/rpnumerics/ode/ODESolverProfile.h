@@ -15,15 +15,13 @@ private:
 public:
 
     ODESolverProfile(const WaveFlow &);
-
+    
     ODESolverProfile(const ODESolverProfile &);
-
     ODESolverProfile & operator=(const ODESolverProfile &);
     
     virtual ~ODESolverProfile();
-    
+    virtual int maxStepNumber()const =0;
     const WaveFlow & getFunction() const ;
-    
     void setFunction (const WaveFlow & );
     
     
