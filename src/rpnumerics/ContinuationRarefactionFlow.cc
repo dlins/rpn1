@@ -388,7 +388,6 @@ int ContinuationRarefactionFlow::cdgeev(int n, double *A, struct eigen *e)const{
 
 
 double ContinuationRarefactionFlow::prodint(int n, double *a, double *b)const {
-    extern double ddot_(int *, double *, int *, double *, int *);
     int incx = 1, incy = 1;
     return ddot_(&n, a, &incx, b, &incy);
 }

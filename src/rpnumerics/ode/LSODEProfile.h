@@ -139,6 +139,8 @@ public:
     double  rworkComponent(const int)const  ;
     
     double paramComponent(const int) const ;
+
+    void setParamComponent(int ,const double);
     
     const Boundary & boundary()const ;
     
@@ -174,6 +176,8 @@ inline  int LSODEProfile::methodFlag() const{return mf_;}
 inline double LSODEProfile::deltaTime() const {return deltaxi_;}
 
 inline int LSODEProfile::paramLength() const {return paramLength_;}
+
+inline  void LSODEProfile::setParamComponent(const int index,const double newValue){param_[index]=newValue;}
 
 inline double  LSODEProfile::paramComponent(const int index) const {
     

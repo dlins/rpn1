@@ -45,7 +45,6 @@ LSODE::~LSODE() {
 int LSODE::solve(const RealVector & input, RealVector & output, double  & time) const{
 
     
-    cout <<"Chamando solve simples"<<endl;
     int i;
     
     double xi=0; //HARDCODED Useless variable !!

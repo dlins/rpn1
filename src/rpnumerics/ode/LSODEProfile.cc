@@ -109,7 +109,6 @@
 LSODEProfile::LSODEProfile(const WaveFlow & function, const Boundary & boundary,int NmaxSteps, int neq , int itol , double rtol, int mf, double deltaxi, int paramLength, const double * param):ODESolverProfile(function),boundary_(boundary.clone()),maxStepNumber_(NmaxSteps){
 
     
-cout <<"Chamando construtor"<<endl;
 //    flow_ = new FlowTeste(FluxTeste()); //Para testar !!!
     //Choosing lrw
     

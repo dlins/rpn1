@@ -75,7 +75,6 @@ public:
 
 
 inline ODESolver * LSODE::clone()const {
-    cout <<"Chamando clone do LSODE"<<endl;
     return new LSODE(*this);
 }
 

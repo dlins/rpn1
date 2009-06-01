@@ -11,6 +11,7 @@
  * Includes:
  */
 #include "RarefactionContinuationMethod.h"
+#include "LSODEProfile.h"
 
 /*
  * ---------------------------------------------------------------
@@ -25,69 +26,117 @@ RarefactionContinuationMethod::RarefactionContinuationMethod(const ODESolver & s
 
 }
 
-const ODESolver & RarefactionContinuationMethod::getSolver()const{
+const ODESolver & RarefactionContinuationMethod::getSolver()const {
 
     return *solver_;
 }
-        
+
 RarefactionContinuationMethod::~RarefactionContinuationMethod() {
-  //    delete solver_; //TODO Memory leaking ???
+    //    delete solver_; //TODO Memory leaking ???
 
 }
 
 void RarefactionContinuationMethod::curve(const RealVector & inputVector, int direction, vector<RealVector> & output) {
 
     RealVector localInputVector(inputVector);
-    double testeDouble = 0;
-    int i = 0;
 
-    ContinuationRarefactionFlow & testeFlow= (ContinuationRarefactionFlow &)solver_->getProfile().getFunction();
+    int i = 0;
+    int info = SUCCESSFUL_PROCEDURE;
+    int dimension = inputVector.size();
+    ContinuationRarefactionFlow & testeFlow = (ContinuationRarefactionFlow &) solver_->getProfile().getFunction();
 
     int indx = 0; //TODO family index ??
     double deltaxi = 0.1;
-    double * in = new double[inputVector.size()];
-    
-    for (i=0;i < inputVector.size();i++) {
+    double  in[dimension];
+
+    for (i = 0; i < dimension; i++) {
         in[i] = inputVector(i);
     }
-    
-    double lambda;
-    double rev[inputVector.size()];
-    
-    testeFlow.rarinit(inputVector.size(),in,indx,direction,deltaxi,&lambda,&rev[0]);
-    
-     for (i=0;i < localInputVector.size();i++) {
-        localInputVector(i) = rev[i];
-    }
 
-//    for (i=0;i < inputVector.size();i++){
-//        cout <<"Vector de referencia "<<rev[i]<<endl;
-//    }
-    
-    while (i < solver_->getProfile().maxStepNumber()) {
-        RealVector outputVector(inputVector.size());
+    double lambda;
+    double rev[dimension];
+
+    testeFlow.rarinit(dimension, in, indx, direction, deltaxi, &lambda, &rev[0]);
+
+    double previouseigenvalue = lambda;
+
+    RealVector outputVector(dimension);
+
+    int step = 0;
+
+    while (step < solver_->getProfile().maxStepNumber() && info == SUCCESSFUL_PROCEDURE) {
+
+        double testeDouble =0; //TODO Dummy value !!
+        double nowIn[dimension];
+        double oldRefVec[dimension];
+        double tempRefVector[dimension];
+        double noweigenvalue;
+
+        for (i = 0; i < dimension; i++) {
+            oldRefVec[i] = rev[i];
+        }
+
+        LSODEProfile & lsodeProfile = (LSODEProfile &) solver_->getProfile();
+
+        for (i = 0; i < dimension; i++) {
+
+            lsodeProfile.setParamComponent(i, rev[i]); //Setando o vetor de referencia
+        }
+
+        info = solver_->solve(localInputVector, outputVector, testeDouble);
         
-        solver_->solve(localInputVector, outputVector, testeDouble);
+        
+        if (info== SUCCESSFUL_PROCEDURE){
+            
+
+
+        for (i = 0; i < dimension; i++) {
+            nowIn[i] = outputVector(i);
+        }
+
+        //--------------------------------Criterio de parada -----------------------------
+        
+        testeFlow.flux(dimension, indx, &nowIn[0], &noweigenvalue, &tempRefVector[0]);
+
+        // Eigenvalues should follow a monotonous trend. If they don't, abort.
+
+        if (noweigenvalue > previouseigenvalue && direction == -1) {
+            info = ABORTED_PROCEDURE;
+
+        }
+        if (noweigenvalue < previouseigenvalue && direction == 1) {
+            info = ABORTED_PROCEDURE;
+
+        }
+        
+        // Reference vector
+
+        if (testeFlow.prodint(dimension, oldRefVec, tempRefVector) > 0) for (int ii = 0; ii < dimension; ii++) rev[ii] = tempRefVector[ii];
+        else for (int ii = 0; ii < dimension; ii++) rev[ii] = -tempRefVector[ii];
+
+
+        previouseigenvalue = noweigenvalue;
 
         output.push_back(outputVector);
-        cout <<"Tamanho da saida "<<output.size()<<endl;
+        
+        cout << "Tamanho da saida " << output.size() << endl;
 
         localInputVector = outputVector;
-        i++;
-        cout <<"Saida do solver "<<outputVector<<endl;
+        
+        step++;
+        
+        cout << "Saida do solver " << outputVector << endl;
+        }
     }
-
 
 }
 
-
-
-RPnCurve & RarefactionContinuationMethod::curve(const RealVector &inputVector, int direction){
+RPnCurve & RarefactionContinuationMethod::curve(const RealVector &inputVector, int direction) {
 
     vector <RealVector> coords;
     RealVector outputVector(inputVector.size());
     RealVector localInputVector(inputVector);
-    int i=0;
+    int i = 0;
     double testeDouble = 0;
     RPnCurve * result = new RPnCurve(coords);
     while (i < solver_->getProfile().maxStepNumber()) {
@@ -98,16 +147,15 @@ RPnCurve & RarefactionContinuationMethod::curve(const RealVector &inputVector, i
 
         localInputVector = outputVector;
         i++;
-        cout <<"Saida do solver "<<outputVector<<endl;
+        cout << "Saida do solver " << outputVector << endl;
     }
-    
+
     return *result;
 
 }
 
+RarefactionMethod * RarefactionContinuationMethod::clone() const {
 
-RarefactionMethod * RarefactionContinuationMethod::clone() const{
-    
-    return new RarefactionContinuationMethod (*this);
-    
+    return new RarefactionContinuationMethod(*this);
+
 }

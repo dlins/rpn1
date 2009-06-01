@@ -61,6 +61,9 @@ extern"C" {
     void dgeev_(char *, char *, int *, double *, int*, double *, double *,
             double *, int *, double *, int *, double *, int *,
             int *);
+    
+    
+     double ddot_(int *, double *, int *, double *, int *);
 }
 
 
@@ -85,7 +88,7 @@ struct eigen{
     int DF(int n, double *in, double *out)const;
     int cdgeev(int n, double *A, struct eigen *e) const;
 
-    double prodint(int n, double *a, double *b)const;
+
     void transpose(double A[], int n)const;
     void fill_eigen(struct eigen e[], double rp[], double ip[], double vl[], double vr[])const;
     void sort_eigen(struct eigen e[])const;
@@ -124,6 +127,9 @@ public:
     int flux(const RealVector &, RealVector &) const;
     int fluxDeriv(const RealVector &, JacobianMatrix &)const;
     int fluxDeriv2(const RealVector &, HessianMatrix &)const;
+    
+
+    double prodint(int n, double *a, double *b)const;
 
     WaveFlow * clone()const;
     

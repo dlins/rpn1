@@ -98,11 +98,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
      *
      *
      */
-    Physics & physics = RpNumerics::getPhysics();
+//    Physics & physics = RpNumerics::getPhysics();
     //
-    const Boundary & boundary = physics.boundary();
 
-    cout << "Tamanho do boundary" << boundary.minimums().size() << endl;
 
 
 //    RpnPlugin * plug = RPnPluginManager::getPluginInstance("RarefactionFlow");
@@ -121,15 +119,16 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
     //
     double deltaxi = 0.001;
     //
-    int nparam = 1 + dimension;
+    int nparam =  dimension;
     //
-    double * param = new double[nparam];
+//    double * param = new double[nparam];
+    double param[dimension];
 
-    param[0] = 1;
+//    param[0] = 1;
     //
     int ii;
 
-    for (ii = 0; ii < dimension; ii++) param[1 + ii] = 0.1;
+    for (ii = 0; ii < dimension; ii++) param[ii] = 0;
     //
     int maxStepsNumber = 10;
     //

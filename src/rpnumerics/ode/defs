@@ -9,8 +9,6 @@ RPNUMSRC += ODESolverProfile.cc \
           LSODEProfile.cc     \
           ODEStopGenerator.cc  \
           LSODEStopGenerator.cc \
-          FluxTeste.cc \
-          FlowTeste.cc 
 
 ForSRC += lsode.F	\
           lsode2.F	\
