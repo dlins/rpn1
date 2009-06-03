@@ -45,8 +45,8 @@ void RarefactionContinuationMethod::curve(const RealVector & inputVector, int di
     int dimension = inputVector.size();
     ContinuationRarefactionFlow & testeFlow = (ContinuationRarefactionFlow &) solver_->getProfile().getFunction();
 
-    int indx = 0; //TODO family index ??
-    double deltaxi = 0.1;
+    int indx = 1; //TODO family index ??
+    double deltaxi = 0.05;
     double  in[dimension];
 
     for (i = 0; i < dimension; i++) {
@@ -56,7 +56,12 @@ void RarefactionContinuationMethod::curve(const RealVector & inputVector, int di
     double lambda;
     double rev[dimension];
 
-    testeFlow.rarinit(dimension, in, indx, direction, deltaxi, &lambda, &rev[0]);
+    info = testeFlow.rarinit(dimension, in, indx, direction, deltaxi, &lambda, &rev[0]);
+    
+    if (info==SUCCESSFUL_PROCEDURE) {
+        output.push_back(inputVector);
+    }
+        
 
     double previouseigenvalue = lambda;
 
@@ -87,8 +92,6 @@ void RarefactionContinuationMethod::curve(const RealVector & inputVector, int di
         
         
         if (info== SUCCESSFUL_PROCEDURE){
-            
-
 
         for (i = 0; i < dimension; i++) {
             nowIn[i] = outputVector(i);
@@ -96,7 +99,9 @@ void RarefactionContinuationMethod::curve(const RealVector & inputVector, int di
 
         //--------------------------------Criterio de parada -----------------------------
         
-        testeFlow.flux(dimension, indx, &nowIn[0], &noweigenvalue, &tempRefVector[0]);
+       info= testeFlow.flux(dimension, indx, &nowIn[0], &noweigenvalue, &tempRefVector[0]);
+
+            if (info == ABORTED_PROCEDURE) return;
 
         // Eigenvalues should follow a monotonous trend. If they don't, abort.
 

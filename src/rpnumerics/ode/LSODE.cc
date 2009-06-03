@@ -48,7 +48,7 @@ int LSODE::solve(const RealVector & input, RealVector & output, double  & time) 
     int i;
     
     double xi=0; //HARDCODED Useless variable !!
-    xi=1;       // Only to remove warnings
+//    xi=1;       // Only to remove warnings
     
     double t=0;
     
@@ -116,7 +116,9 @@ int LSODE::solve(const RealVector & input, RealVector & output, double  & time) 
     
     info=solver(&LSODE::function, &neq, &U[0], &t, &LSODE::tout_, &itol, &rtol, &atol[0], &itask, &istate, &iopt, &rwork[0], &lrw, &iwork[0], &liw, &LSODE::jacrarefaction, &mf, &nparam, &param[0]);
     
-    tout_=t+profile_->deltaTime();
+//    tout_=t+profile_->deltaTime();
+
+    tout_ = tout_ + profile_->deltaTime();
     
     time = tout_;
     

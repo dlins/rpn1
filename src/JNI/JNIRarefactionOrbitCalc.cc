@@ -130,10 +130,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
 
     for (ii = 0; ii < dimension; ii++) param[ii] = 0;
     //
-    int maxStepsNumber = 10;
+    int maxStepsNumber = 100;
     //
     //
-
 
     ContinuationRarefactionFlow flow;
 
@@ -144,11 +143,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
     //    odeSolver.setStopGenerator(LSODEStopGenerator(lsodeProfile));
 
     RarefactionContinuationMethod method(odeSolver);
+
     vector <RealVector> coords;
 
     method.curve(realVectorInput, timeDirection, coords);
-
-
 
     cout << "Tamanho do vetor "<<coords.size() << endl;
     
