@@ -6,9 +6,7 @@
  */
 package rpnumerics;
 
-import wave.ode.ODESolution;
 import wave.ode.ODESolver;
-import wave.util.RealVector;
 
 public class RarefactionOrbitCalc implements RpCalculation {
     //

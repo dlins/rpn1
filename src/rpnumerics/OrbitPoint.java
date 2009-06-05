@@ -39,6 +39,7 @@ public final class OrbitPoint extends PhasePoint {
     
     public OrbitPoint(double [] coords){
         super (new RealVector(coords));
+        pTime_=0;
     }
 
     public OrbitPoint(PhasePoint pPoint) {
