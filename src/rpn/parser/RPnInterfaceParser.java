@@ -85,16 +85,17 @@ public class RPnInterfaceParser implements ContentHandler {
 
             currentPhysicsProfile_.setBoundaryDimension(new Integer(att.getValue("dimension")));
             
-            if (att.getValue("iso2equi").equals("yes")){
+            if (att.getValue("boundary").equals("rect")){
                 
-                currentPhysicsProfile_.setIso2equiBoundary(true);
-            }
-            else{
                 currentPhysicsProfile_.setIso2equiBoundary(false);
             }
+
+            if (att.getValue("boundary").equals("triang")) {
+
+                currentPhysicsProfile_.setIso2equiBoundary(true);
+            }
+
         }
-
-
 
     }
 

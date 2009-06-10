@@ -26,6 +26,7 @@ private:
 	RealVector * minimums_;
 	RealVector * maximums_;
 	int size_;
+        const char * type_;
 
 public:
 
@@ -44,10 +45,14 @@ public:
 	const RealVector & minimums(void) const;
 	const RealVector & maximums(void) const;
 	RealVector intersect(RealVector & y1, RealVector & y2) const;
+
+        const char * boundaryType()const;
         
 };
 
 inline Boundary * RectBoundary::clone() const {return new RectBoundary(*this);}
+
+inline const char * RectBoundary::boundaryType()const {return type_;}
 
 inline double RectBoundary::coordinateSpan(int i) {
     return maximums_->component(i) - minimums_->component(i);

@@ -22,7 +22,8 @@
 #include "RpNumerics.h"
 #include "Quad2.h"
 #include "Quad2FluxParams.h"
-
+#include "Quad4.h"
+#include "Quad4FluxParams.h"
 #include "TriPhase.h"
 #include "TriPhaseParams.h"
 #include  "CapilParams.h"
@@ -273,11 +274,17 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initNative(JNIEnv * env, jclas
     }
 
     if (!strcmp(physicsID, "QuadraticR2")) {
-//        cout << "Criando quad2" << endl;
 
         RpNumerics::setPhysics(Quad2(Quad2FluxParams()));
 
     }
+
+      if (!strcmp(physicsID, "QuadraticR4")) {
+        RpNumerics::setPhysics(Quad4(Quad4FluxParams()));
+
+    }
+
+
 
     if (!strcmp(physicsID, "TriPhase")) {
 
@@ -310,14 +317,18 @@ JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_init(JNIEnv * env, jclass cls,
 
     }
 
+    if (!strcmp(physicsID, "QuadraticR4")) {
+        
+        RpNumerics::setPhysics(Quad4(Quad4FluxParams()));
+
+    }
+
+
+
     if (!strcmp(physicsID, "TriPhase")) {
 
         RpNumerics::setPhysics(TriPhase(TriPhaseParams(), PermParams(), CapilParams(0.4, 3.0, 44.0, 8.0), ViscosityParams(0.5)));
     }
-
-    //ODE solver instantiation
-
-//    RpNumerics::initODESolver();
 
     cout << "Physics: " << physicsID << endl;
 
@@ -390,30 +401,33 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_boundary(JNIEnv * env, jcla
 
     const Boundary & boundary = RpNumerics::getPhysics().boundary();
 
-    if (!strcmp(RpNumerics::getPhysics().ID(), "QuadraticR2")) {
+    const char * boundaryType = boundary.boundaryType();
+
+    if (!strcmp(boundaryType, "rect")) {
 
         jclass boundaryClass = env->FindClass("wave/util/RectBoundary");
 
         jmethodID boundaryConstructor = (env)->GetMethodID(boundaryClass, "<init>", "(Lwave/util/RealVector;Lwave/util/RealVector;)V");
 
-        double minimum [2];
-        double maximum [2];
+        const RectBoundary & rectBoundary =(RectBoundary &) boundary;
 
-        minimum[0] = boundary.minimums().component(0);
+        int boundaryDimension =rectBoundary.minimums().size();
 
-        minimum[1] = boundary.minimums().component(1);
+        double minimum [boundaryDimension];
+        double maximum [boundaryDimension];
 
-        maximum[0] = boundary.maximums().component(0);
-        maximum[1] = boundary.maximums().component(1);
+        for (int i=0; i < boundaryDimension;i++){
 
-
+        minimum[i] = boundary.minimums().component(i);
+        maximum[i] = boundary.maximums().component(i);
+        }
         //---------------------------------
 
-        jdoubleArray min = (env)->NewDoubleArray(2);
-        jdoubleArray max = (env)->NewDoubleArray(2);
+        jdoubleArray min = (env)->NewDoubleArray(boundaryDimension);
+        jdoubleArray max = (env)->NewDoubleArray(boundaryDimension);
 
-        (env)->SetDoubleArrayRegion(min, 0, 2, minimum);
-        (env)->SetDoubleArrayRegion(max, 0, 2, maximum);
+        (env)->SetDoubleArrayRegion(min, 0, boundaryDimension, minimum);
+        (env)->SetDoubleArrayRegion(max, 0, boundaryDimension, maximum);
 
         jobject minRealVector = (env)->NewObject(realVectorClass, realVectorConstructor, min);
         jobject maxRealVector = (env)->NewObject(realVectorClass, realVectorConstructor, max);
@@ -425,44 +439,43 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_boundary(JNIEnv * env, jcla
         (env)->DeleteLocalRef(minRealVector);
         (env)->DeleteLocalRef(maxRealVector);
 
-
         return boundary;
 
     }
 
-    if (!strcmp(RpNumerics::getPhysics().ID(), "TriPhase")) {
-
+    if (!strcmp(boundaryType, "triang")) {
         const IsoTriang2DBoundary & boundary = (const IsoTriang2DBoundary &) RpNumerics::getPhysics().boundary();
 
         jclass isoRect2DBboundaryClass = env->FindClass("wave/util/IsoTriang2DBoundary");
 
         jmethodID isoTriang2DBoundaryConstructor = (env)->GetMethodID(isoRect2DBboundaryClass, "<init>", "(Lwave/util/RealVector;Lwave/util/RealVector;Lwave/util/RealVector;)V");
 
-        jdoubleArray A = (env)->NewDoubleArray(2);
-        jdoubleArray B = (env)->NewDoubleArray(2);
-        jdoubleArray C = (env)->NewDoubleArray(2);
+
+        int boundaryDimension = boundary.minimums().size();
+
+
+        jdoubleArray A = (env)->NewDoubleArray(boundaryDimension);
+        jdoubleArray B = (env)->NewDoubleArray(boundaryDimension);
+        jdoubleArray C = (env)->NewDoubleArray(boundaryDimension);
 
         // Getting A,B and C
-        double Anative [2];
+        double Anative [boundaryDimension];
+        double Bnative [boundaryDimension];
+        double Cnative [boundaryDimension];
 
-        Anative[0] = boundary.getA().component(0);
-        Anative[1] = boundary.getA().component(1);
+        for (int i = 0; i < boundaryDimension; i++) {
+            Anative[i] = boundary.getA().component(i);
+            Bnative[i] = boundary.getB().component(i);
+            Cnative[i] = boundary.getC().component(i);
+        }
 
-        double Bnative [2];
 
-        Bnative[0] = boundary.getB().component(0);
-        Bnative[1] = boundary.getB().component(1);
-
-        double Cnative [2];
-
-        Cnative[0] = boundary.getC().component(0);
-        Cnative[1] = boundary.getC().component(1);
 
         //---------------------------
 
-        (env)->SetDoubleArrayRegion(A, 0, 2, Anative);
-        (env)->SetDoubleArrayRegion(B, 0, 2, Bnative);
-        (env)->SetDoubleArrayRegion(C, 0, 2, Cnative);
+        (env)->SetDoubleArrayRegion(A, 0, boundaryDimension, Anative);
+        (env)->SetDoubleArrayRegion(B, 0, boundaryDimension, Bnative);
+        (env)->SetDoubleArrayRegion(C, 0, boundaryDimension, Cnative);
 
         jobject ArealVector = (env)->NewObject(realVectorClass, realVectorConstructor, A);
         jobject BrealVector = (env)->NewObject(realVectorClass, realVectorConstructor, B);
@@ -480,12 +493,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_boundary(JNIEnv * env, jcla
 
         return isoTriang2DBoundary;
 
+
     }
 
+
 }
-
-
-
-
-
-

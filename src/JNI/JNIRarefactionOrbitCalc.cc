@@ -14,9 +14,7 @@
 #include "RarefactionContinuationMethod.h"
 #include "LSODE.h"
 #include "LSODEProfile.h"
-
 #include "ContinuationRarefactionFlow.h"
-
 //#include "RarefactionFlowFactory.h"
 #include "PluginService.h"
 #include "RPnPluginManager.h"
@@ -60,8 +58,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
         realVectorInput.component(i) = input[i];
 
     }
-    
-    cout<<"Vetor de entrada: "<<realVectorInput<<endl;
 
     cout << "Vetor de entrada: " << realVectorInput << endl;
 
@@ -104,8 +100,14 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
      */
 //    Physics & physics = RpNumerics::getPhysics();
     //
-    //
 
+
+
+//    RpnPlugin * plug = RPnPluginManager::getPluginInstance("RarefactionFlow");
+
+//    RarefactionFlowPlugin* flowPlugin = (RarefactionFlowPlugin*) plug;
+
+    //    const WaveFlow * flow = (const WaveFlow *) flowPlugin;
 
     int dimension = 2;
     //
@@ -117,18 +119,18 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
     //
     double deltaxi = 0.001;
     //
-    int nparam =  dimension;
+    int nparam =  dimension ;
     //
 //    double * param = new double[nparam];
-    double param[dimension];
+    double param[nparam];
 
 //    param[0] = 1;
     //
     int ii;
 
-    for (ii = 0; ii < dimension; ii++) param[ii] = 0;
+//    for (ii = 0; ii < dimension; ii++) param[ii] = 0;
     //
-    int maxStepsNumber = 100;
+    int maxStepsNumber = 10000;
     //
     //
 
@@ -138,44 +140,18 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
 
     LSODE odeSolver(lsodeProfile);
 
-    vector <RealVector> coords;
+    //    odeSolver.setStopGenerator(LSODEStopGenerator(lsodeProfile));
+
     RarefactionContinuationMethod method(odeSolver);
 
-    method.curve(realVectorInput, timeDirection, coords);
+    vector <RealVector> coords;
 
+    method.curve(realVectorInput, timeDirection, coords);
 
     cout << "Tamanho do vetor "<<coords.size() << endl;
     
     //  Passando o conteudo de vector<RealVector>coords para orbit points e construir curva de rarefacao
     //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-    //    vector <RealVector> coords = curve.getCoords();
-
-    RealVector testeVector(2);
-    testeVector(0) = 0.1;
-    testeVector(1) = 0.1;
-
-    RealVector testeOutputVector(2);
-
-    double testeDouble = 0;
-
-    for (int i = 0; i < 10; i++) {
-
-//        odeSolver.solve(testeVector, testeOutputVector, testeDouble);
-        RealVector testeOutputVector(2);
-        testeOutputVector(0)=0.1*i;
-        testeOutputVector(1)=0.1*i;
-
-
-        coords.push_back(testeOutputVector);
-        
-
-
-    }
-
-        cout <<"Tamanho do vetor calculado: "<<coords.size()<<endl;
-//  Passando o conteudo de vector<RealVector>coords para orbit points e construir curva de rarefacao
-//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //Orbit memebers creation
 
@@ -185,24 +161,20 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
     for (i = 0; i < coords.size(); i++) {
 
         RealVector tempVector = coords.at(i);
-        cout << "Valor calculado: " << tempVector << endl;
         double * dataCoords = new double [tempVector.size()];
 
         unsigned int j;
 
         for (j = 0; j < (unsigned int) tempVector.size(); j++) {
             dataCoords[j] = tempVector.component(j);
-            cout << "dataCoords " << dataCoords[i] << endl;
+
         }
 
         jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size());
 
         (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size(), dataCoords);
 
-
-        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray);
-
-//        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray, timeDirection);
+        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray, timeDirection);
 
         (env)->SetObjectArrayElement(orbitPointArray, i, orbitPoint);
 

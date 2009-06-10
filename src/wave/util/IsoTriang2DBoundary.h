@@ -32,8 +32,8 @@ private:
     RealVector  * A_;
     RealVector  * B_;
     RealVector  * C_;
-    
-    
+
+    const char * type_;
 public:
     
     virtual ~IsoTriang2DBoundary();
@@ -56,8 +56,8 @@ public:
     
     const RealVector  & getA()const ;
     const RealVector  & getB()const;
-    const RealVector  & getC()const ;
-    
+    const RealVector  & getC()const;
+    const char * boundaryType()const;
     
 };
 
@@ -72,6 +72,7 @@ inline bool IsoTriang2DBoundary::inside(const RealVector & U)const {
     
 }
 
+inline const char * IsoTriang2DBoundary::boundaryType()const {return type_;}
 
 inline const RealVector  &  IsoTriang2DBoundary::getA()const {return *A_;}
 inline const RealVector  &  IsoTriang2DBoundary::getB()const{return *B_;}

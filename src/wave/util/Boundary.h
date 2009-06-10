@@ -44,6 +44,8 @@ public:
     virtual const  RealVector & maximums() const = 0;
     
     virtual RealVector intersect(RealVector &y1, RealVector &y2) const = 0;
+    //! Returns the boundary type
+    virtual const char * boundaryType()const =0;
 };
 
 

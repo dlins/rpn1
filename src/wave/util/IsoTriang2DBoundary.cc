@@ -20,7 +20,7 @@ IsoTriang2DBoundary::~IsoTriang2DBoundary(){
     
     delete minimums_;
     delete maximums_;
-    
+
 }
 
 Boundary * IsoTriang2DBoundary::clone() const {return new IsoTriang2DBoundary(*this);}
@@ -34,7 +34,7 @@ IsoTriang2DBoundary::IsoTriang2DBoundary(const IsoTriang2DBoundary & copy){
     A_= new RealVector(copy.getA());
     B_= new RealVector(copy.getB());
     C_= new RealVector(copy.getC());
-    
+    type_ = "triang";
 }
 
 IsoTriang2DBoundary::IsoTriang2DBoundary(const RealVector & A, const RealVector & B, const RealVector & C){
@@ -83,10 +83,10 @@ IsoTriang2DBoundary::IsoTriang2DBoundary(const RealVector & A, const RealVector 
     minimums_ = new RealVector(2, minArray);
     
     maximums_ = new RealVector(2, maxArray);
-    
+
+    type_="triang";
     
 }
 
 RealVector IsoTriang2DBoundary::intersect(RealVector &y1, RealVector &y2)const{}     //TODO
-//! Code comes here! daniel@impa.br
 
