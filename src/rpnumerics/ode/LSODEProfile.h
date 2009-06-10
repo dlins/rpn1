@@ -104,15 +104,10 @@ private:
     Boundary * boundary_;
     int maxStepNumber_;
 
-//    WaveFlow *flow_;
     
 public:
-//              neq  ,  itol, rtol, itask,istate, iopt , rwork , lrw ,iwork, liw , mf,
-//    LSODEProfile(const RpFunction &, const LSODEStopGenerator &, int ,  int , double, int , double , int , const double * );
     
     LSODEProfile(const WaveFlow &, const Boundary &, int NmaxSteps, int ,  int , double, int , double , int , const double * );
-//    LSODEProfile(const Boundary &, int NmaxSteps, int, int, double, int, double, int, const double *);
-    
     
     LSODEProfile(const LSODEProfile &);
     
@@ -145,17 +140,9 @@ public:
     const Boundary & boundary()const ;
     
     int maxStepNumber()const;
-//    const WaveFlow & getFunction()const;
-//    void setFunction(const WaveFlow &);
+
     
 };
-
-//inline const WaveFlow & LSODEProfile::getFunction()const {return *flow_;}
-
-//inline void LSODEProfile::setFunction(const WaveFlow & function) {
-//    delete flow_;
-//    flow_ = function.clone();
-//}
 
 inline const Boundary & LSODEProfile::boundary()const {return *boundary_;}
 

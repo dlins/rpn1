@@ -53,7 +53,7 @@ RectBoundary & RectBoundary::operator=(const RectBoundary & source){
 RectBoundary::~RectBoundary(){
     delete minimums_;
     delete maximums_;
-
+//    delete type_;
 }
 
 

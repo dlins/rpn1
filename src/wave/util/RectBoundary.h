@@ -50,9 +50,11 @@ public:
         
 };
 
+inline const char * RectBoundary::boundaryType()const {
+    return type_;
+}
 inline Boundary * RectBoundary::clone() const {return new RectBoundary(*this);}
 
-inline const char * RectBoundary::boundaryType()const {return type_;}
 
 inline double RectBoundary::coordinateSpan(int i) {
     return maximums_->component(i) - minimums_->component(i);

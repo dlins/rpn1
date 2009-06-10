@@ -73,7 +73,6 @@ inline bool IsoTriang2DBoundary::inside(const RealVector & U)const {
 }
 
 inline const char * IsoTriang2DBoundary::boundaryType()const {return type_;}
-
 inline const RealVector  &  IsoTriang2DBoundary::getA()const {return *A_;}
 inline const RealVector  &  IsoTriang2DBoundary::getB()const{return *B_;}
 inline const RealVector  &  IsoTriang2DBoundary::getC()const {return *C_;}

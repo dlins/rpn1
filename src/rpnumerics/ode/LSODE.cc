@@ -43,7 +43,6 @@ LSODE::~LSODE() {
 
 
 int LSODE::solve(const RealVector & input, RealVector & output, double  & time) const{
-
     
     int i;
     
@@ -118,7 +117,7 @@ int LSODE::solve(const RealVector & input, RealVector & output, double  & time) 
     
 //    tout_=t+profile_->deltaTime();
 
-    tout_ = tout_ + profile_->deltaTime();
+//    tout_ = tout_ + profile_->deltaTime();
     
     time = tout_;
     
@@ -142,30 +141,9 @@ int LSODE::solve(const RealVector & input, RealVector & output, double  & time) 
 int LSODE::function(int * neq , double * xi , double* U , double * out){
     
     int i, status ;
-    
-    
-//    RealVector  input(*neq,U);
-//    RealVector output(*neq);
-
-//    cout <<"Valor da entrada "<< U[0]<<endl;
-//    cout << "Valor da entrada " << U[1] << endl;
-    
-    
-    
-//    RealVector input(2);
-//    input(0)=0.1;
-//    input(1)=0.2;
-    
-    
-//    RealVector output(2);
-
 
     RealVector input(*neq, U);
     RealVector output(*neq);
-
-//    FluxTeste flux;
-//    FlowTeste flow(flux);
-//    flow.flux(input, output);
     
     status=profile_->getFunction().flux(input, output); //This function must return the same codes of LSODE s functions
     
