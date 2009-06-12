@@ -89,6 +89,7 @@ public class RPnCurvesConfigDialog extends RPnDialog {
         }
         if (curveComboBox_.getSelectedItem().equals("Bifurcation Curves")) {
             newState = new BIFURCATION_CONFIG();
+            rpn.usecase.BifurcationCurvePlotAgent.instance().setEnabled(true);
 
         }
 

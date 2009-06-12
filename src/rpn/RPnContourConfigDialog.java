@@ -7,14 +7,19 @@ package rpn;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
+import java.util.Set;
+import rpn.parser.MethodProfile;
 import rpnumerics.RPNUMERICS;
 
 public class RPnContourConfigDialog extends RPnDialog {
 
     private JPanel paramsPanel_ = new JPanel();
-    private JLabel resolutionLabel_ = new JLabel("Resolution");
-    private JTextField xResolutionJTextField_ = new JTextField();
-    private JTextField yResolutionJTextField_ = new JTextField();
+    private JTextField [] textFieldsArray_;
+    private MethodProfile contourProfile_;
 
     public RPnContourConfigDialog() {
         super(false,true);
@@ -27,26 +32,44 @@ public class RPnContourConfigDialog extends RPnDialog {
     }
 
 
-
     private void jbInit() throws Exception {
         setTitle("Contour Method Configuration");
+    
+        ArrayList<MethodProfile> profiles = RPNUMERICS.getAllMethodsProfiles();
+        for (int i=0;i < profiles.size();i++){
+            if(profiles.get(i).getName().equals("Contour"))
+                contourProfile_ = profiles.get(i);
+        }
+        HashMap<String,String> paramsMap = contourProfile_.getParams();
+
+        textFieldsArray_=new JTextField[contourProfile_.getParams().size()];
+
+        Set<Entry<String, String> > paramsSet = paramsMap.entrySet();
+
+        Iterator <Entry<String,String>> paramsIterator=paramsSet.iterator();
+        int i = 0;
+        while (paramsIterator.hasNext()){
+
+            Entry<String,String> paramsEntry= paramsIterator.next();
+            JLabel label = new JLabel(paramsEntry.getKey());
+
+            if (RPNUMERICS.getContourConfiguration().getParams().size() != contourProfile_.getParams().size()) {
+                RPNUMERICS.getContourConfiguration().addParam(paramsEntry.getKey(), paramsEntry.getValue());
+
+            }
+
+            JTextField textField = new JTextField(paramsEntry.getValue());
+            textFieldsArray_[i]=textField;
+            textField.setName(paramsEntry.getKey());
+            paramsPanel_.add(label);
+            paramsPanel_.add(textField);
+            i++;
+        }
 
         setMinimumSize(new Dimension(getTitle().length()*10,40));
-        
-        xResolutionJTextField_.setText(new Integer (RPNUMERICS.getContourResolution()[0]).toString());
-        yResolutionJTextField_.setText(new Integer(RPNUMERICS.getContourResolution()[1]).toString());
-        
-        xResolutionJTextField_.setColumns(xResolutionJTextField_.getText().length() + 4);
-        yResolutionJTextField_.setColumns(yResolutionJTextField_.getText().length()+4);
-        
-        paramsPanel_.add(resolutionLabel_);
-        paramsPanel_.add(xResolutionJTextField_);
-        paramsPanel_.add(yResolutionJTextField_);
-        
         this.getContentPane().add(paramsPanel_, BorderLayout.CENTER);
 
         pack();
-
     }
 
     @Override
@@ -55,9 +78,11 @@ public class RPnContourConfigDialog extends RPnDialog {
     }
 
     protected void apply() {
-        
-        RPNUMERICS.getContourResolution()[0] = new Integer(xResolutionJTextField_.getText());
-        RPNUMERICS.getContourResolution()[1] = new Integer(yResolutionJTextField_.getText());
+
+        for (int i = 0; i < textFieldsArray_.length; i++) {
+            RPNUMERICS.getContourConfiguration().setParamValue(textFieldsArray_[i].getName(), textFieldsArray_[i].getText());
+        }
+
 
         dispose();
 

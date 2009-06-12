@@ -21,7 +21,11 @@ public class BifurcationContourMethod extends BifurcationMethod {
 		super();
 		
         contourMethod_ = ContourFactory.createContourBifurcation(params);
-        resolution_ = RPNUMERICS.getContourResolution();
+
+        resolution_=new int [2];
+        resolution_[0]=new Integer(RPNUMERICS.getContourConfiguration().getParamValue("x-resolution"));
+        resolution_[1] = new Integer(RPNUMERICS.getContourConfiguration().getParamValue("y-resolution"));
+
         familyIndex = params.getFamilyIndex();
 
         Boundary boundary = RPNUMERICS.boundary();

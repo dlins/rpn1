@@ -8,6 +8,7 @@ package rpn;
 import javax.swing.*;
 import java.awt.*;
 import rpnumerics.RPNUMERICS;
+import wave.util.RealVector;
 
 public class RPnBifurcationConfigDialog extends RPnDialog {
 
@@ -28,9 +29,9 @@ public class RPnBifurcationConfigDialog extends RPnDialog {
             e.printStackTrace();
         }
     }
-      
-     public RPnBifurcationConfigDialog(boolean enableResetButton) {
-         super(enableResetButton);
+
+    public RPnBifurcationConfigDialog(boolean enableResetButton) {
+        super(enableResetButton);
         try {
             jbInit();
 
@@ -39,9 +40,9 @@ public class RPnBifurcationConfigDialog extends RPnDialog {
         }
     }
 
-   public RPnBifurcationConfigDialog(boolean b, boolean b0) {
+    public RPnBifurcationConfigDialog(boolean b, boolean b0) {
         super(b0, b0);
-         try {
+        try {
             jbInit();
 
         } catch (Exception e) {

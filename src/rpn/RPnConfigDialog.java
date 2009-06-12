@@ -184,8 +184,6 @@ public class RPnConfigDialog extends RPnDialog {
 
     private void buildMethodPanel() {
 
-//        ArrayList<MethodProfile> methodsProfiles = RPnInterfaceParser.getMethodProfiles();
-        
         ArrayList<MethodProfile> methodsProfiles = RPNUMERICS.getAllMethodsProfiles();
 
         for (int i = 0; i < methodsProfiles.size(); i++) {

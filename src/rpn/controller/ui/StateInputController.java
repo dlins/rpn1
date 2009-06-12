@@ -4,9 +4,6 @@
  */
 package rpn.controller.ui;
 
-import java.awt.DisplayMode;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import rpn.RPnBifurcationConfigDialog;
@@ -42,10 +39,6 @@ public class StateInputController implements PropertyChangeListener {
                     }
                 }
 
-//
-//                if (evt.getNewValue() instanceof GEOM_SELECTION) {
-//                    RPnUIFrame.setStatusMessage("Enter coordinates");
-//                }
                 uiFrame_.propertyChange(evt);
 
             } catch (NullPointerException ex) {

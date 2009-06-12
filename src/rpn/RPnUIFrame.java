@@ -120,6 +120,10 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             if (UIController.instance().getState() instanceof BIFURCATION_CONFIG) {
                 bifurcationConfigMenu();
                 toolBar_.removeAll();
+                toolBar_.add(BifurcationCurvePlotAgent.instance().getContainer());
+                toolBar_.add(ScratchAgent.instance().getContainer());
+                ScratchAgent.instance().setEnabled(true);
+                pack();
             }
         }
 
@@ -134,6 +138,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         }
 
     }
+
+
     //File | Exit action performed
     public void jMenuFileExit_actionPerformed(ActionEvent e) {
         commandMenu_.finalizeApplication();

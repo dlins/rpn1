@@ -13,7 +13,6 @@ import rpn.plugininterface.PluginConfigDialog;
 import rpn.plugininterface.PluginTableModel;
 import rpnumerics.RPNUMERICS;
 import rpnumerics.RarefactionProfile;
-import rpnumerics.ShockProfile;
 
 public class RPnRarefactionConfigDialog extends RPnDialog {
 

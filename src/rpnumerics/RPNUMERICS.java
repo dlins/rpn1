@@ -37,6 +37,8 @@ public class RPNUMERICS {
     static private BifurcationProfile bifurcationProfile_ = BifurcationProfile.instance();
     static private ShockRarefactionProfile shockRarefactionProfile_ = null;
     static private int[] CONTOUR_RESOLUTION = {100, 100};
+    static private ContourConfiguration contourConfiguration_ = new ContourConfiguration();
+
     static private FluxParams fluxParams_;
     //
     // Constructors/Initializers
@@ -48,6 +50,8 @@ public class RPNUMERICS {
         initNative(profile.getPhysicsID());
         errorControl_ = new RpErrorControl(boundary());
         fluxParams_ = getFluxParams();
+
+        System.out.println("Inicializando");
     }
 
     static public void init(String physicsID) {
@@ -57,10 +61,11 @@ public class RPNUMERICS {
         errorControl_ = new RpErrorControl(boundary());
         fluxParams_ = getFluxParams();
 
+                System.out.println("Inicializando com o nome da fisica");
     }
     
     public static void addMethod(String methodName,MethodProfile profile){
-        
+
         methodsMap_.put(methodName, profile);
         
     }
@@ -157,23 +162,6 @@ public class RPNUMERICS {
         hugoniotCurveCalc.uMinusChangeNotify(shockProfile_.getUminus());
 
         return hugoniotCurveCalc;
-    //        if (shockProfile_.isHugoniotSpecific()) { //TODO  Reactivate 
-//
-//            if (physicsID().equals("Quad2")) {
-//
-//                return new Quad2HugoniotCurveCalc(RPNUMERICS.fluxFunction().fluxParams(), hparams.getXZero());
-//            }
-//
-//
-//            if (physicsID().equals("Comb")) {
-//
-//                return new CombHugoniotCurveCalc((CombFluxParams) fluxFunction().fluxParams(), hparams.getXZero(), 1d);
-//
-//            }
-//
-//        }
-
-
     }
 
     public static RarefactionOrbitCalc createRarefactionCalc(OrbitPoint orbitPoint, int timeDirection) {
@@ -322,12 +310,9 @@ public class RPNUMERICS {
         return odeSolver_;
     }
 
-    public static int[] getContourResolution() {
-        return CONTOUR_RESOLUTION;
-    }
-
-    public static void setContourResolution(int[] aCONTOUR_RESOLUTION) {
-        CONTOUR_RESOLUTION = aCONTOUR_RESOLUTION;
+   
+    public static ContourConfiguration getContourConfiguration() {
+        return contourConfiguration_;
     }
 
     private native void setFamilyIndex(int familyIndex);
