@@ -14,21 +14,25 @@ public class ContourConfiguration {
 
     private HashMap<String, String> params_ = new HashMap<String, String>();
 
-    public void addParam(String paramName, String value) {
-        params_.put(paramName, value);
+    public ContourConfiguration(HashMap<String, String> paramsAndValues) {
+        params_ = paramsAndValues;
+    }
+
+    public void removeParam(String paramName){
+        params_.remove(paramName);
     }
 
     public HashMap<String, String> getParams() {
         return params_;
     }
 
-    public void setParamValue (String paramName,String paramValue){
+    public void setParamValue(String paramName, String paramValue) {
 
         params_.put(paramName, paramValue);
     }
 
-    public String getParamValue(String paramName){
-        
+    public String getParamValue(String paramName) {
+
         return params_.get(paramName);
     }
 

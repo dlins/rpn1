@@ -13,13 +13,13 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Set;
 import rpn.parser.MethodProfile;
+import rpnumerics.ContourConfiguration;
 import rpnumerics.RPNUMERICS;
 
 public class RPnContourConfigDialog extends RPnDialog {
 
     private JPanel paramsPanel_ = new JPanel();
     private JTextField [] textFieldsArray_;
-    private MethodProfile contourProfile_;
 
     public RPnContourConfigDialog() {
         super(false,true);
@@ -31,18 +31,14 @@ public class RPnContourConfigDialog extends RPnDialog {
         }
     }
 
-
     private void jbInit() throws Exception {
         setTitle("Contour Method Configuration");
-    
-        ArrayList<MethodProfile> profiles = RPNUMERICS.getAllMethodsProfiles();
-        for (int i=0;i < profiles.size();i++){
-            if(profiles.get(i).getName().equals("Contour"))
-                contourProfile_ = profiles.get(i);
-        }
-        HashMap<String,String> paramsMap = contourProfile_.getParams();
 
-        textFieldsArray_=new JTextField[contourProfile_.getParams().size()];
+        ContourConfiguration contourConfiguration= RPNUMERICS.getContourConfiguration();
+
+        HashMap<String, String> paramsMap = contourConfiguration.getParams();
+
+        textFieldsArray_ = new JTextField[paramsMap.size()];
 
         Set<Entry<String, String> > paramsSet = paramsMap.entrySet();
 
@@ -52,12 +48,6 @@ public class RPnContourConfigDialog extends RPnDialog {
 
             Entry<String,String> paramsEntry= paramsIterator.next();
             JLabel label = new JLabel(paramsEntry.getKey());
-
-            if (RPNUMERICS.getContourConfiguration().getParams().size() != contourProfile_.getParams().size()) {
-                RPNUMERICS.getContourConfiguration().addParam(paramsEntry.getKey(), paramsEntry.getValue());
-
-            }
-
             JTextField textField = new JTextField(paramsEntry.getValue());
             textFieldsArray_[i]=textField;
             textField.setName(paramsEntry.getKey());

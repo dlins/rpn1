@@ -36,8 +36,7 @@ public class RPNUMERICS {
     static private RarefactionProfile rarefactionProfile_ = RarefactionProfile.instance();
     static private BifurcationProfile bifurcationProfile_ = BifurcationProfile.instance();
     static private ShockRarefactionProfile shockRarefactionProfile_ = null;
-    static private int[] CONTOUR_RESOLUTION = {100, 100};
-    static private ContourConfiguration contourConfiguration_ = new ContourConfiguration();
+    static private ContourConfiguration contourConfiguration_ = null;
 
     static private FluxParams fluxParams_;
     //
@@ -67,6 +66,8 @@ public class RPNUMERICS {
     public static void addMethod(String methodName,MethodProfile profile){
 
         methodsMap_.put(methodName, profile);
+        if (methodName.equals("Contour")||methodName.equals("contour"))
+            contourConfiguration_=new ContourConfiguration(profile.getParams());
         
     }
     
@@ -107,9 +108,6 @@ public class RPNUMERICS {
             returnedArrayList.add(entry.getValue());
             
         }
-        
-        
-        System.out.println("Tamanho dos parametros em rpnumerics:" + returnedArrayList.size());
         
         return returnedArrayList;
         

@@ -6,8 +6,6 @@
 package rpnumerics;
 
 //import rpnumerics.physics.*;
-import rpn.controller.ui.*;
-import rpnumerics.methods.*;
 import wave.util.Boundary;
 
 public class RPNumericsProfile {

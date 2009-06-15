@@ -152,45 +152,7 @@ public class RPnInterfaceParser implements ContentHandler {
         
 
     }
-    //
-    // Members
-    //
-    //
-    // Initializers
-    //
-//    public static void init(Parser parser, String file) {
-//        try {
-//            parser.setDocumentHandler(new InputHandler());
-//            parser.parse(file);
-//        } catch (Exception saxex) {
-//            saxex.printStackTrace();
-//        }
-//    }
 
-//    public static void init(Parser parser, InputStream configFileStream) {
-//        try {
-//
-//            parser.setDocumentHandler(new InputHandler());
-//            System.out.println("Interface Module");
-//
-//            System.out.println("Will parse !");
-//            parser.parse(new InputSource(configFileStream));
-//
-//            System.out.println("parsed !");
-//
-//        } catch (Exception saxex) {
-//
-//            if (saxex instanceof SAXParseException) {
-//
-//                SAXParseException e = (SAXParseException) saxex;
-//
-//                System.out.println("Line error: " + e.getLineNumber());
-//                System.out.println("Column error: " + e.getColumnNumber());
-//            }
-//
-//            saxex.printStackTrace();
-//        }
-//    }
     public void setDocumentLocator(Locator locator) {
     }
 
@@ -198,48 +160,6 @@ public class RPnInterfaceParser implements ContentHandler {
     }
 
     public void endDocument() throws SAXException {
-
-//        if (physics_.size() >= 0) {
-//
-//            Iterator<PhysicsProfile> physicsIterator = physics_.iterator();
-//
-//            while (physicsIterator.hasNext()) {
-//
-//                PhysicsProfile profile = physicsIterator.next();
-//
-//                System.out.println("Fisica: " + profile.getName());
-//
-//                System.out.print("Boundary: ");
-//                for (int i = 0; i < profile.getBoundary().length; i++) {
-//
-//                    System.out.print(profile.getBoundary()[i]);
-//
-//
-//                }
-//                System.out.println();
-
-
-//                HashMap<String, String> fluxParams = profile.getFluxParamArrayList();
-//
-//                Set<Entry<String, String>> entrySet = fluxParams.entrySet();
-//
-//                Iterator<Entry<String, String>> setIterator = entrySet.iterator();
-//
-//                while (setIterator.hasNext()) {
-//
-//
-//                    Entry<String, String> entry = setIterator.next();
-//
-//                    System.out.println("Parametro: " + entry.getKey() + " Valor: " + entry.getValue());
-//
-//                }
-
-//            }
-
-
-
-//        }
-
 
 
     }

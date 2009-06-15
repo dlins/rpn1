@@ -1,7 +1,6 @@
 package rpnumerics.methods;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import rpnumerics.*;
 import rpnumerics.methods.contour.*;
