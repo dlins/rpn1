@@ -8,7 +8,7 @@ package rpn.usecase;
 import rpn.component.*;
 import wave.util.RealVector;
 
-public class CompositeCurvePlotAgent extends RpModelPlotAgent {
+public class CompositePlotAgent extends RpModelPlotAgent {
     //
     // Constants
     //
@@ -18,12 +18,12 @@ public class CompositeCurvePlotAgent extends RpModelPlotAgent {
     //
     // Members
     //
-    static private CompositeCurvePlotAgent instance_ = null;
+    static private CompositePlotAgent instance_ = null;
 
     //
     // Constructors/Initializers
     //
-    protected CompositeCurvePlotAgent() {
+    protected CompositePlotAgent() {
         super(DESC_TEXT, rpn.RPnConfig.HUGONIOT);
     }
 
@@ -40,9 +40,9 @@ public class CompositeCurvePlotAgent extends RpModelPlotAgent {
 
     }
 
-    static public CompositeCurvePlotAgent instance() {
+    static public CompositePlotAgent instance() {
         if (instance_ == null) {
-            instance_ = new CompositeCurvePlotAgent();
+            instance_ = new CompositePlotAgent();
         }
         return instance_;
     }

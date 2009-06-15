@@ -16,20 +16,25 @@
 
 #include "RealVector.h"
 #include "RarefactionFlow.h"
+#include "RPnMethod.h"
 #include "ODESolver.h"
 #include "RPnCurve.h"
+//#include "RPnVectorField.h"
+//#include "RPnGrid.h"
 /*
  * ---------------------------------------------------------------
  * Definitions:
  */
 
-class RarefactionMethod {
+class RarefactionMethod : public RPnMethod {
     
         
 public:
     
     
     virtual RPnCurve & curve(const RealVector &, int direction)=0;
+    
+    //virtual RPnVectorField & vectorField(const RPnGrid &)=0;
     
     virtual RarefactionMethod * clone() const =0;
     

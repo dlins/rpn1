@@ -67,7 +67,6 @@ public class RPnFluxParamsPanel extends JPanel {
 
                 this.add(fluxParamName);
                 this.add(fluxValueField);
-                
             }
         }
         this.setLayout(gridLayout);

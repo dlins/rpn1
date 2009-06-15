@@ -110,7 +110,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 toolBar_.add(RarefactionForwardOrbitPlotAgent.instance().getContainer());
                 toolBar_.add(RarefactionBackwardOrbitPlotAgent.instance().getContainer());
                 toolBar_.add(HugoniotPlotAgent.instance().getContainer());
-                toolBar_.add(CompositeCurvePlotAgent.instance().getContainer());
+                toolBar_.add(CompositePlotAgent.instance().getContainer());
                 toolBar_.add(ScratchAgent.instance().getContainer());
                 ScratchAgent.instance().setEnabled(true);
                 pack();
@@ -120,7 +120,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             if (UIController.instance().getState() instanceof BIFURCATION_CONFIG) {
                 bifurcationConfigMenu();
                 toolBar_.removeAll();
-                toolBar_.add(BifurcationCurvePlotAgent.instance().getContainer());
+                toolBar_.add(BifurcationPlotAgent.instance().getContainer());
                 toolBar_.add(ScratchAgent.instance().getContainer());
                 ScratchAgent.instance().setEnabled(true);
                 pack();

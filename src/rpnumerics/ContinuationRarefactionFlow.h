@@ -20,6 +20,7 @@
 #include "HessianMatrix.h"
 #include "RarefactionFlow.h"
 #include "RpNumerics.h"
+#include "eigen.h"
 
 /*
  * ---------------------------------------------------------------
@@ -29,7 +30,7 @@
 
 // Maximum number of rows and columns of the matrix being considered, 
 // and consequently of the number of its eigenvalues
-#define EIG_MAX 2      
+////#define EIG_MAX 2      
 
 // Epsilon value, minimum threshold. 
 // Any number x such that abs(x) < EPS will be considered 
@@ -72,6 +73,7 @@ class ContinuationRarefactionFlow:public RarefactionFlow {
 private:
     
     // The structure that holds an eigencouple
+/*
 struct eigen{
     double r;            // Eigenvalue's real part
     double i;            // Eigenvalue's imaginary part
@@ -83,6 +85,7 @@ struct eigen{
     int n: EIG_MAX;     // Probably not necessary!
                         // See what is to be done in case of non-trivial Jordan canonical forms
 };
+*/
 
     int D2F(int n, double *in, double *out)const;
     int DF(int n, double *in, double *out)const;
@@ -119,7 +122,6 @@ double re[EIG_MAX];
 public:
     ContinuationRarefactionFlow();
 
-    int rarinit(int n, double *in, int indx, int increase, double deltaxi, double *lambda, double *rev)const ;
     int rarefaction(int *neq, double *xi, double *in, double *out, int *nparam, double *param);
     int flux(int n, int family, double *in, double *lambda, double *out)const;
     

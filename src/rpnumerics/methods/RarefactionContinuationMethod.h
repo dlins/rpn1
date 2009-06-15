@@ -29,6 +29,8 @@ private:
 
     ODESolver * solver_;
             
+    int init(ContinuationRarefactionFlow * flow, int n, double *in, int indx, int increase, double deltaxi, double *lambda, double *rev)const;
+
 public:
     
     RarefactionContinuationMethod (const ODESolver &);

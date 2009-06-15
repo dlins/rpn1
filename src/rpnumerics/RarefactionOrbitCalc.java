@@ -92,5 +92,6 @@ public class RarefactionOrbitCalc implements RpCalculation {
         return methodName_;
 
     }
+
   
 }

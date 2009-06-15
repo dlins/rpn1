@@ -15,7 +15,8 @@ ifeq ($(RPGNU),)
 CC = cc
 CPP = cc -E
 else
-CC = gcc -ansi -Wall
+#CC = gcc -ansi -Wall
+CC = gcc -Wall
 CPP = gcc -E
 endif
 CFLAGS =

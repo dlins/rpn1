@@ -112,8 +112,13 @@ int main(int argc, char argv[])
 	j = c_jet()+2;
 	cout << "===============================================\n";
 	cout << "Jet: \n";
-	//for (int i=0; i<=c_jet.size()-2; i++ )
+	
+	
+	//int n = 2;
+	//double Q[n*n], QQ[n][n];
 	//cout <<  (double[2][2])j[0][0]  << "\n";
+	// IT DOESN'T WORK
+	//Q = *j;
 
 
 
