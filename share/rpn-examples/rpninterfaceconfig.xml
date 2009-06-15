@@ -4,7 +4,7 @@
 <rpninterfaceconfig>
     <!--PHYSICS-->
     <PHYSICS name="QuadraticR2">
-        <BOUNDARY dimension="2" iso2equi="false">
+        <BOUNDARY dimension="2" boundary="rect">
             <REALVECTOR dimension="4">-0.5 -0.5 0.5 0.5
             </REALVECTOR>
         </BOUNDARY>
@@ -24,7 +24,7 @@
     </PHYSICS>
     
     <PHYSICS name="TriPhase">
-        <BOUNDARY dimension="2" iso2equi="true">
+        <BOUNDARY dimension="2" boundary="triang">
             <REALVECTOR dimension="4">-0.5 0.5 -0.5 0.5 0.4 0.60
             </REALVECTOR>
         </BOUNDARY>
@@ -44,6 +44,8 @@
     </METHOD>
     <METHOD name="Contour">
         <METHODPARAM  name="x-resolution" value="100" />
+        <METHODPARAM  name="x" value="100" />
+        <METHODPARAM  name="y" value="100" />
         <METHODPARAM  name="y-resolution" value="100" />
     </METHOD>
     
