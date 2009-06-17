@@ -8,6 +8,7 @@ package rpn;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -26,6 +27,8 @@ public abstract class RPnDialog extends JDialog {
     protected JButton applyButton;
     protected JButton cancelButton;
     protected JButton beginButton;
+    private DefaultApplyController defaultApplyAction_;
+    private DefaultCancelController defaultCancelAction_;
 
     public RPnDialog() {
         getContentPane().setLayout(new BorderLayout());
@@ -38,30 +41,21 @@ public abstract class RPnDialog extends JDialog {
         buttonsPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "Cancel");
 
 
-        buttonsPanel.getActionMap().put("Apply", new ActionApply());
-        buttonsPanel.getActionMap().put("Cancel", new ActionCancel());
+//        buttonsPanel.getActionMap().put("Apply", new ActionApply());//TODO Enable key events
+//        buttonsPanel.getActionMap().put("Cancel", new ActionCancel());
 
 
         buttonsPanel.add(applyButton);
         buttonsPanel.add(cancelButton);
 
+        defaultCancelAction_=new DefaultCancelController();
 
-        cancelButton.addActionListener(
-                new java.awt.event.ActionListener() {
+        cancelButton.addActionListener(defaultCancelAction_);
 
-                    public void actionPerformed(ActionEvent e) {
-                        cancel();
-                    }
-                });
+        defaultApplyAction_ = new DefaultApplyController();
 
-        applyButton.addActionListener(
-                new java.awt.event.ActionListener() {
+        applyButton.addActionListener(defaultApplyAction_);
 
-                    public void actionPerformed(ActionEvent e) {
-                        apply();
-                        dispose();
-                    }
-                });
         addBackButton();
         cancelButton.setEnabled(false);
 
@@ -81,23 +75,21 @@ public abstract class RPnDialog extends JDialog {
         if (!displayBeginButton) {
             buttonsPanel.remove(beginButton);
         }
-        
+
     }
 
     public RPnDialog(boolean displayBeginButton, boolean displayCancelButton) {
         this();
-        if (!displayBeginButton){
+        if (!displayBeginButton) {
             buttonsPanel.remove(beginButton);
         }
         if (!displayCancelButton) {
             buttonsPanel.remove(cancelButton);
-        }
-        else{
+        } else {
             cancelButton.setEnabled(true);
         }
-        
-    }
 
+    }
 
     private void addBackButton() {
 
@@ -115,15 +107,14 @@ public abstract class RPnDialog extends JDialog {
         buttonsPanel.add(beginButton);
     }
 
-    
     protected abstract void apply();
-    
-    protected  void begin() {
+
+    protected void begin() {
 
         int option = JOptionPane.showConfirmDialog(this, "Change curve type", "Restart Application", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
         if (option == JOptionPane.YES_OPTION) {
-             UIController.instance().setState(new CURVES_CONFIG());
+            UIController.instance().setState(new CURVES_CONFIG());
 
             dispose();
         }
@@ -132,6 +123,16 @@ public abstract class RPnDialog extends JDialog {
 
     protected void cancel() {
         dispose();
+    }
+
+    protected void removeDefaultApplyBehavior(){
+        applyButton.removeActionListener(defaultApplyAction_);
+
+    }
+
+
+    protected void removeDefaultCancelBehavior() {
+        cancelButton.removeActionListener(defaultCancelAction_);
     }
 
     private class ActionApply extends AbstractAction {
@@ -147,4 +148,22 @@ public abstract class RPnDialog extends JDialog {
             cancel();
         }
     }
+
+    private class DefaultApplyController implements ActionListener {
+
+        public void actionPerformed(ActionEvent e) {
+            apply();
+            dispose();
+        }
+    }
+
+    private class DefaultCancelController implements ActionListener {
+
+        public void actionPerformed(ActionEvent e) {
+            cancel();
+        }
+
+    }
+
+
 }

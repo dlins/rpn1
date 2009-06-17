@@ -7,11 +7,8 @@
 package rpn.usecase;
 
 import wave.util.RealVector;
-import javax.swing.JDialog;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
-import java.awt.Dimension;
-import java.awt.Point;
 import rpn.RPnFluxParamsDialog;
 
 public class ChangeFluxParamsAgent extends RpModelConfigChangeAgent {

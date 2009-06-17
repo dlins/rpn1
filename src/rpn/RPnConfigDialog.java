@@ -44,15 +44,16 @@ public class RPnConfigDialog extends RPnDialog {
     private JCheckBox[] axisCheckBoxArray_;
     private ArrayList<JTextField> boundaryTextArray_;
     private JTextField[] panelsSizeTextField_ = new JTextField[2];
-    private JTextField[] methodsParamTextField_;
-
     private JTextField[] panelsLabelTextField_;
     private ArrayList<PhysicsProfile> profilesArray_;
     private PhysicsProfile physicsProfile_;
     private JComboBox physicsComboBox_;
+    private boolean[] axisSelected_;
 
     public RPnConfigDialog() {
         profilesArray_ = RPnInterfaceParser.getPhysicsProfiles();
+        removeDefaultApplyBehavior();
+        applyButton.addActionListener(new ApplyButtonController());
         jbInit();
         buildVisualizationPanel();
         buildMethodPanel();
@@ -94,10 +95,8 @@ public class RPnConfigDialog extends RPnDialog {
 
     private void putBoundary() {
 
-
         firstPanel_.remove(boundaryPanel_);
         boundaryPanel_ = new JPanel(new BorderLayout());
-
 
         JLabel boundaryLabel = new JLabel("Boundary");
         JPanel boundaryLabelPanel = new JPanel();
@@ -115,7 +114,6 @@ public class RPnConfigDialog extends RPnDialog {
         }
 
         String[] boundaryArray = physicsProfile_.getBoundary();
-
 
         boundaryTextArray_ = new ArrayList<JTextField>();
 
@@ -186,17 +184,22 @@ public class RPnConfigDialog extends RPnDialog {
 
         ArrayList<MethodProfile> methodsProfiles = RPNUMERICS.getAllMethodsProfiles();
 
+        JTabbedPane methodTabbedPane = new JTabbedPane();
+
         for (int i = 0; i < methodsProfiles.size(); i++) {
 
             MethodProfile profile = methodsProfiles.get(i);
 
             System.out.println("Nome: " + profile.getName());
 
-            JLabel methodNameLabel = new JLabel(profile.getName());
-            JPanel methodPanel = new JPanel();
-            methodPanel.add(methodNameLabel);
+            JPanel methodPanel = new JPanel(new FlowLayout());
 
-            thirdPanel_.add(methodPanel);
+
+            JScrollPane methodScrolPane = new JScrollPane(methodPanel);
+
+            methodPanel.setLayout(new GridLayout(profile.getParams().size(), 2));
+
+            methodTabbedPane.addTab(profile.getName(), methodScrolPane);
 
             HashMap<String, String> params = profile.getParams();
 
@@ -221,6 +224,7 @@ public class RPnConfigDialog extends RPnDialog {
             }
 
         }
+        thirdPanel_.add(methodTabbedPane);
     }
 
     private void buildVisualizationPanel() {
@@ -256,10 +260,20 @@ public class RPnConfigDialog extends RPnDialog {
         }
 
         axisCheckBoxArray_ = new JCheckBox[combinations.size()];
+
         panelsLabelTextField_ = new JTextField[combinations.size()];
 
         for (int i = 0; i < combinations.size(); i++) {
-            axisCheckBoxArray_[i] = new JCheckBox(combinations.get(i), false);
+
+            if (axisSelected_[i] == true) {
+                axisCheckBoxArray_[i] = new JCheckBox(combinations.get(i), true);
+            } else {
+                axisCheckBoxArray_[i] = new JCheckBox(combinations.get(i), false);
+            }
+
+            axisCheckBoxArray_[i].addActionListener(new AxisCheckController());
+            axisCheckBoxArray_[i].setName("" + i);
+
             panelsLabelTextField_[i] = new JTextField("Axis " + combinations.get(i));
 
             axisCheckPanel.add(axisCheckBoxArray_[i]);
@@ -294,6 +308,8 @@ public class RPnConfigDialog extends RPnDialog {
         addPhysicsName();
         putBoundary();
         physicsComboBox_.addActionListener(new ComponentController());
+        axisSelected_ = new boolean[physicsProfile_.getBoundaryDimension()];
+
         tabbedPanel_.addChangeListener(new TabbedPanelController());
         applyButton.setText("Ok");
         cancelButton.setText("Exit");
@@ -361,6 +377,7 @@ public class RPnConfigDialog extends RPnDialog {
 
     protected void apply() {
 
+
         dispose();
 
         RPnConfig.configure((String) physicsComboBox_.getSelectedItem());
@@ -375,6 +392,7 @@ public class RPnConfigDialog extends RPnDialog {
         rpnUIFrame.pack();
 
         rpnUIFrame.setVisible(true);
+
     }
 
     private void setBoundary() {
@@ -442,6 +460,48 @@ public class RPnConfigDialog extends RPnDialog {
 
         public void stateChanged(ChangeEvent e) {
             buildVisualizationPanel();
+        }
+    }
+
+    private class AxisCheckController implements ActionListener {
+
+        public void actionPerformed(ActionEvent e) {
+
+            JCheckBox checkBox = (JCheckBox) e.getSource();
+            Integer axisOrder = new Integer(checkBox.getName());
+            if (checkBox.isSelected()) {
+
+                axisSelected_[axisOrder] = true;
+
+            } else {
+                axisSelected_[axisOrder] = false;
+            }
+
+
+        }
+    }
+
+    private class ApplyButtonController implements ActionListener {
+
+        public void actionPerformed(ActionEvent e) {
+
+
+            boolean oneAxisSelected = false;
+
+            for (int i = 0; i < axisSelected_.length; i++) {
+
+                if (axisSelected_[i] == true) {
+                    oneAxisSelected = true;
+                }
+            }
+
+            if (oneAxisSelected == false) {
+                JOptionPane.showMessageDialog(null, "No axis Selected", "Error", JOptionPane.ERROR_MESSAGE);
+
+            } else {
+
+                apply();
+            }
         }
     }
 }

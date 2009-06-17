@@ -1,7 +1,6 @@
 vpath %.cc $(METHODSDIR)
 
-RPNUMSRC += RPnMethod.cc \
-    	RarefactionMethod.cc \
+RPNUMSRC += RarefactionMethod.cc \
 	RarefactionContinuationMethod.cc
 
 

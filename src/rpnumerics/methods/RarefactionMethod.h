@@ -16,7 +16,7 @@
 
 #include "RealVector.h"
 #include "RarefactionFlow.h"
-#include "RPnMethod.h"
+//#include "RPnMethod.h"
 #include "ODESolver.h"
 #include "RPnCurve.h"
 //#include "RPnVectorField.h"
@@ -26,7 +26,7 @@
  * Definitions:
  */
 
-class RarefactionMethod : public RPnMethod {
+class RarefactionMethod {//: public RPnMethod {
     
         
 public:

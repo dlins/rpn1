@@ -43,7 +43,7 @@ protected:
        
 public:
 
-    
+
     RarefactionFlow(const int, const int ,const FluxFunction &);
     
     RarefactionFlow(const RarefactionFlow &);
