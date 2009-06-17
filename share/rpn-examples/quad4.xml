@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE rpnconfig >
+<rpnconfig>
+    <NUMERICS >
+        <PHYSICS physicsid="QuadraticR4" libname="rpnumerics">
+            
+        </PHYSICS>
+        
+    </NUMERICS>
+    <VIEWINGPARAMS modeldomain="4">
+        <PROJDESC  projlabel="Axis0 X Axis1" projaxisid="0 1" vpwidth="400" vpheight="400"></PROJDESC>
+        <PROJDESC  projlabel="Axis2 X Axis3" projaxisid="2 3" vpwidth="400" vpheight="400"></PROJDESC>
+
+    </VIEWINGPARAMS>
+    
+</rpnconfig>
+
