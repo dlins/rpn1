@@ -182,24 +182,28 @@ public class RPnConfigDialog extends RPnDialog {
 
     private void buildMethodPanel() {
 
+        thirdPanel_.removeAll();
+        
         ArrayList<MethodProfile> methodsProfiles = RPNUMERICS.getAllMethodsProfiles();
 
         JTabbedPane methodTabbedPane = new JTabbedPane();
+
 
         for (int i = 0; i < methodsProfiles.size(); i++) {
 
             MethodProfile profile = methodsProfiles.get(i);
 
             System.out.println("Nome: " + profile.getName());
-
-            JPanel methodPanel = new JPanel(new FlowLayout());
-
-
-            JScrollPane methodScrolPane = new JScrollPane(methodPanel);
+            
+            JPanel methodPanel = new JPanel(false);
 
             methodPanel.setLayout(new GridLayout(profile.getParams().size(), 2));
 
-            methodTabbedPane.addTab(profile.getName(), methodScrolPane);
+            JScrollPane methodScrollPane = new JScrollPane(methodPanel);
+            
+            methodScrollPane.setPreferredSize(new Dimension(400,200));
+
+            methodTabbedPane.addTab(profile.getName(),methodScrollPane);
 
             HashMap<String, String> params = profile.getParams();
 
@@ -224,7 +228,8 @@ public class RPnConfigDialog extends RPnDialog {
             }
 
         }
-        thirdPanel_.add(methodTabbedPane);
+        thirdPanel_.add(methodTabbedPane,BorderLayout.CENTER);
+
     }
 
     private void buildVisualizationPanel() {
@@ -233,6 +238,7 @@ public class RPnConfigDialog extends RPnDialog {
 
         JPanel physicsLabelPanel = new JPanel(new FlowLayout());
         JPanel axisCheckPanel = new JPanel(new GridLayout(2, 2));
+        JScrollPane axisScroll = new JScrollPane(axisCheckPanel);
         JPanel panelsSizePanel = new JPanel(new FlowLayout());
 
         panelsSizeTextField_[0] = new JTextField();
@@ -292,9 +298,9 @@ public class RPnConfigDialog extends RPnDialog {
         panelsSizeTextField_[0].setText(visProfile.getViewPort()[0]);
         panelsSizeTextField_[1].setText(visProfile.getViewPort()[1]);
 
-
         secondPanel_.add(physicsLabelPanel, BorderLayout.NORTH);
-        secondPanel_.add(axisCheckPanel, BorderLayout.CENTER);
+
+        secondPanel_.add(axisScroll, BorderLayout.CENTER);
         secondPanel_.add(panelsSizePanel, BorderLayout.SOUTH);
 
 
