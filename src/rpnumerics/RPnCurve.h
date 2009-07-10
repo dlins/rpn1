@@ -29,11 +29,12 @@ private:
     
 public:
     
-
+    RPnCurve ();
     RPnCurve (vector<RealVector>);
     RPnCurve & operator=(const RPnCurve &);
     void add(const RealVector &);
     vector<RealVector> getCoords() const;
+    int size() const;
     
 
 };

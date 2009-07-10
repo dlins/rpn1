@@ -19,7 +19,7 @@ ODESolverProfile::~ODESolverProfile() {
     delete waveFlow_;
 }
 
-const WaveFlow & ODESolverProfile::getFunction() const {
+ WaveFlow & ODESolverProfile::getFunction() const {
     return *waveFlow_;
 }
 

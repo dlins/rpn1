@@ -186,7 +186,7 @@ inline double LSODEProfile::absoluteToleranceComponent(const int index)const{
         cout << "Error in absolute tolerance index" << endl;
         return 0;
     }
-    
+//    cout <<"Valor de atol "<<index<<" "<<atol_[index]<<endl;
     return atol_[index];
 }
 

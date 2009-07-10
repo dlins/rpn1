@@ -21,7 +21,7 @@ public:
     
     virtual ~ODESolverProfile();
     virtual int maxStepNumber()const =0;
-    const WaveFlow & getFunction() const ;
+     WaveFlow & getFunction() const ;
     void setFunction (const WaveFlow & );
     
     

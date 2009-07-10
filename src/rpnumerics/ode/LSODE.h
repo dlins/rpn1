@@ -36,16 +36,13 @@ private:
     
     static  LSODEProfile * profile_;
     
-    static double tout_;
 
-//    LSODEStopGenerator * stopGenerator_;
+    static double t_;
     
     static int function(int *, double *, double *, double *);
     
     static   int jacrarefaction(int *neq, double *t, double *y, int *ml, int *mu, double *pd, int *nrpd);//int *nparam,  double *param);
-    
-//    int solve(const RealVector & , RealVector & ,double &) const;
-    
+
     int solver(int (*)(int *, double *, double *, double *), int *neq, double *y, double *t, double *tout,
             int *itol, double *rtol, double *atol, int *itask, int *istate, int *iopt, double *rwork, int *lrw,
             int *iwork, int *liw, int(*)(int *, double *, double *, int *, int *, double *, int *),
@@ -54,8 +51,10 @@ private:
 public:
     
     LSODE(const LSODEProfile &);
+
     LSODE(const LSODE &);
 
+    static double tout_;
     
     virtual ~LSODE();
     
@@ -65,10 +64,9 @@ public:
 
     int solve(const RealVector &, RealVector &, double &) const;
     
-    
     const ODESolverProfile & getProfile() const ;
+
     void setProfile(const LSODEProfile &);
-//    void setStopGenerator (const LSODEStopGenerator &);
     
 };
 

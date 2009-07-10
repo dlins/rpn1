@@ -25,6 +25,7 @@
 #include "RealVector.h"
 #include "JNIDefs.h"
 #include <vector>
+#include <fstream>
 
 using std::vector;
 
@@ -60,10 +61,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
         realVectorInput.component(i) = input[i];
 
     }
-    
-    cout<<"Vetor de entrada: "<<realVectorInput<<endl;
 
-    cout << "Vetor de entrada: " << realVectorInput << endl;
+//    cout << "Vetor de entrada: " << realVectorInput << endl;
+
+//    cout << "Vetor de entrada: " << realVectorInput << endl;
 
     env->DeleteLocalRef(inputPhasePointArray);
 
@@ -102,7 +103,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
      *
      *
      */
-//    Physics & physics = RpNumerics::getPhysics();
+    //    Physics & physics = RpNumerics::getPhysics();
     //
     //
 
@@ -117,83 +118,67 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
     //
     double deltaxi = 0.001;
     //
-    int nparam =  dimension;
+    int nparam = 1 + dimension;
     //
-//    double * param = new double[nparam];
-    double param[dimension];
 
-//    param[0] = 1;
+    double param[nparam];
+
     //
     int ii;
 
-    for (ii = 0; ii < dimension; ii++) param[ii] = 0;
+    for (ii = 0; ii < dimension; ii++) param[1 + ii] = 0.1;
     //
-    int maxStepsNumber = 100;
+    int maxStepsNumber = 10000;
     //
     //
 
-    ContinuationRarefactionFlow flow;
+    ContinuationRarefactionFlow flow(familyIndex, timeDirection, RpNumerics::getPhysics().fluxFunction());
 
     LSODEProfile lsodeProfile(flow, RpNumerics::getPhysics().boundary(), maxStepsNumber, dimension, itol, rtol, mf, deltaxi, nparam, param);
 
     LSODE odeSolver(lsodeProfile);
 
     vector <RealVector> coords;
+
     RarefactionContinuationMethod method(odeSolver);
 
     method.curve(realVectorInput, timeDirection, coords);
 
+//    cout << "Tamanho do vetor " << coords.size() << endl;
 
-    cout << "Tamanho do vetor "<<coords.size() << endl;
-    
+//    cout << "Tamanho do vetor calculado: " << coords.size() << endl;
+
     //  Passando o conteudo de vector<RealVector>coords para orbit points e construir curva de rarefacao
     //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-    //    vector <RealVector> coords = curve.getCoords();
-
-    RealVector testeVector(2);
-    testeVector(0) = 0.1;
-    testeVector(1) = 0.1;
-
-    RealVector testeOutputVector(2);
-
-    double testeDouble = 0;
-
-    for (int i = 0; i < 10; i++) {
-
-//        odeSolver.solve(testeVector, testeOutputVector, testeDouble);
-        RealVector testeOutputVector(2);
-        testeOutputVector(0)=0.1*i;
-        testeOutputVector(1)=0.1*i;
-
-
-        coords.push_back(testeOutputVector);
-        
-
-
-    }
-
-        cout <<"Tamanho do vetor calculado: "<<coords.size()<<endl;
-//  Passando o conteudo de vector<RealVector>coords para orbit points e construir curva de rarefacao
-//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //Orbit memebers creation
 
     jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(coords.size(), classOrbitPoint, NULL);
 
+    ofstream file("fig.m");
+
+    file << "clear all\nclose all\n";
+    file << "A = [";
+    //    for (int i = 0; i < curve.getCoords().size(); i++) file << curve.getCoords().at(i) << "\n";
+    for (int i = 0; i < coords.size(); i++) file << coords.at(i) << ";\n";
+    file << "];\n\n";
+    file << "plot (A(:,1), A(:,2))\n";
+    file.close();
+
 
     for (i = 0; i < coords.size(); i++) {
 
         RealVector tempVector = coords.at(i);
-        cout << "Valor calculado: " << tempVector << endl;
-        double * dataCoords = new double [tempVector.size()];
+//        cout << "Valor calculado: " << tempVector << endl;
+        //        double * dataCoords = new double [tempVector.size()];
+        double * dataCoords = tempVector;
+        //        unsigned int j;
 
-        unsigned int j;
-
-        for (j = 0; j < (unsigned int) tempVector.size(); j++) {
-            dataCoords[j] = tempVector.component(j);
-            cout << "dataCoords " << dataCoords[i] << endl;
-        }
+        //        for (j = 0; j < (unsigned int) tempVector.size(); j++) {
+        //            dataCoords[j] = tempVector.component(j);
+//        cout << "dataCoords 0 " << dataCoords[0] << endl;
+//        cout << "dataCoords 1 " << dataCoords[1] << endl;
+        //        }
 
         jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size());
 
@@ -202,7 +187,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
 
         jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray);
 
-//        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray, timeDirection);
+        //        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray, timeDirection);
 
         (env)->SetObjectArrayElement(orbitPointArray, i, orbitPoint);
 
@@ -210,7 +195,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
 
         env->DeleteLocalRef(orbitPoint);
 
-        delete dataCoords;
+        //        delete dataCoords;
     }
 
     //Building the orbit

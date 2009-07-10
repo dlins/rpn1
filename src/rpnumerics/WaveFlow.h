@@ -43,9 +43,9 @@ public:
     WaveFlow(const FluxFunction &);
 
 
-    virtual int flux(const RealVector &,RealVector &) const =0;
-    virtual int fluxDeriv(const RealVector &,JacobianMatrix &)const =0;
-    virtual int fluxDeriv2(const RealVector &,HessianMatrix &)const =0;
+    virtual int flux(const RealVector &,RealVector &) =0;
+    virtual int fluxDeriv(const RealVector &,JacobianMatrix &) =0;
+    virtual int fluxDeriv2(const RealVector &,HessianMatrix &) =0;
 
     virtual ~WaveFlow();
     //! Gets the flux function

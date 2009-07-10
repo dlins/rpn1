@@ -1,6 +1,6 @@
 #include "ShockFlowPlugin.h"
 
-int ShockFlowPlugin::flux(const RealVector & input, RealVector & output) const {
+int ShockFlowPlugin::flux(const RealVector & input, RealVector & output)  {
 
     WaveState tempInput(input);
     JetMatrix tempOutput(input.size());
@@ -25,7 +25,7 @@ int ShockFlowPlugin::flux(const RealVector & input, RealVector & output) const {
 
 }
 
-int ShockFlowPlugin::fluxDeriv(const RealVector & input, JacobianMatrix &output) const {
+int ShockFlowPlugin::fluxDeriv(const RealVector & input, JacobianMatrix &output)  {
 
     WaveState tempInput(input);
     JetMatrix tempOutput(input.size());
@@ -42,7 +42,7 @@ int ShockFlowPlugin::fluxDeriv(const RealVector & input, JacobianMatrix &output)
 
 }
 
-int ShockFlowPlugin::fluxDeriv2(const RealVector & input, HessianMatrix & output) const {
+int ShockFlowPlugin::fluxDeriv2(const RealVector & input, HessianMatrix & output)  {
 
     WaveState tempInput(input);
     JetMatrix tempOutput(input.size());

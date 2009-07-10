@@ -39,7 +39,7 @@ public:
     
     RPnCurve & curve(const RealVector &, int direction);
 
-    void curve(const RealVector &, int direction,vector<RealVector> &);
+    void curve(const RealVector &, int direction,vector<RealVector> & );
     
     const ODESolver & getSolver()const;
 

@@ -20,39 +20,32 @@ using std::vector;
  * Definitions:
  */
 
-double LSODE::tout_=0.05;
+double LSODE::tout_=0.01;
+double LSODE::t_=0;
 
 LSODEProfile * LSODE::profile_=NULL;
 
 LSODE::LSODE(const LSODEProfile & profile) {
     profile_ = new LSODEProfile(profile);
-//    stopGenerator_ = new LSODEStopGenerator(profile);
 }
 
 
 LSODE::LSODE(const LSODE & copy){
     profile_=new LSODEProfile((LSODEProfile &)copy.getProfile());
-//    stopGenerator_ = new LSODEStopGenerator((LSODEProfile &)copy.getProfile());
 }
 
 LSODE::~LSODE() {
     delete profile_;
-//    delete stopGenerator_;
-    
 }
 
 
 int LSODE::solve(const RealVector & input, RealVector & output, double  & time) const{
     
     int i;
-    
-    double xi=0; //HARDCODED Useless variable !!
-//    xi=1;       // Only to remove warnings
-    
-    double t=0;
-    
+
     double * param;
-    double  * atol;
+
+    double * atol;
     
     int neq = profile_->numberOfEquations();
     
@@ -65,24 +58,25 @@ int LSODE::solve(const RealVector & input, RealVector & output, double  & time) 
     int iopt= profile_->opt();
     
     int lrw = profile_->lengthRWork();
+
     int liw = profile_->lengthIWork();
-    
+
     int istate=1;//Initial value of istate !
-    
+
     switch (itol){
-        
+
         case 1:
-            
-            break;
+
         case 2:
-            
+
             atol = new double[profile_->numberOfEquations()];
-            for (i = 0; i < profile_->numberOfEquations(); i++)
+            for (i = 0; i < profile_->numberOfEquations(); i++){
                 atol[i] = profile_->absoluteToleranceComponent(i);
-            
+            }
             break;
+
         default:
-            
+
             cout << "Error in tolerance choose" <<endl;
     }
     
@@ -113,17 +107,9 @@ int LSODE::solve(const RealVector & input, RealVector & output, double  & time) 
     
     int info;
     
-    info=solver(&LSODE::function, &neq, &U[0], &t, &LSODE::tout_, &itol, &rtol, &atol[0], &itask, &istate, &iopt, &rwork[0], &lrw, &iwork[0], &liw, &LSODE::jacrarefaction, &mf, &nparam, &param[0]);
-    
-//    tout_=t+profile_->deltaTime();
+    info=solver(&LSODE::function, &neq, &U[0], &LSODE::t_, &LSODE::tout_, &itol, &rtol, &atol[0], &itask, &istate, &iopt, &rwork[0], &lrw, &iwork[0], &liw, &LSODE::jacrarefaction, &mf, &nparam, &param[0]);
 
-//    tout_ = tout_ + profile_->deltaTime();
-    
-    time = tout_;
-    
     for (i=0;i< neq;i++){
-        
-        
         output.component(i)=U[i];
     }
     
@@ -131,7 +117,7 @@ int LSODE::solve(const RealVector & input, RealVector & output, double  & time) 
     delete iwork;
     delete U;
     delete param;
-    
+    delete atol;
     return info;
 }
 
@@ -157,32 +143,6 @@ int LSODE::function(int * neq , double * xi , double* U , double * out){
 }
 
 int LSODE::solve(const RealVector & input, ODESolution & output ) const {
-//    cout << "Chamando solve" << endl;
-//    int steps =0;
-//    
-//    RealVector outputVector(input);
-//    RealVector inputVector(input);
-//    
-//    double time;
-//    
-//    int info = 2;
-//    
-//    while ( steps < LSODE::profile_->maxStepNumber() && stopGenerator_->check(inputVector)) {
-//
-//
-//        info = solve(inputVector, outputVector, time);
-//        
-//        if (info==2) {
-//            output.addCoords(outputVector);
-//            inputVector = outputVector;
-//            steps++;
-//        }
-//        
-//    tout_=0;
-//    
-//    return info;
-//    
-//}
 
 }
 
@@ -194,12 +154,6 @@ void LSODE::setProfile(const LSODEProfile & profile) {
     delete profile_;
     profile_=new LSODEProfile(profile);
 }
-
-
-//void LSODE::setStopGenerator(const LSODEStopGenerator & stopGen) {
-//    delete stopGenerator_;
-////    stopGenerator_ = new LSODEStopGenerator(stopGen);
-//}
 
 
 int LSODE::jacrarefaction(int *neq, double *t, double *y, int *ml, int *mu, double *pd, int *nrpd){
@@ -223,7 +177,3 @@ int LSODE::solver(int (*f)(int *, double *, double *, double *), int *neq, doubl
     }
     
 }
-
-
-
-

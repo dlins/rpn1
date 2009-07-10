@@ -4,7 +4,7 @@
 #ifdef TESTEIGEN
 #define TEST_EIGEN
 #endif 
-#define EIG_MAX 3
+#define EIG_MAX 2 //used to be 3
 #define EPS 1e-30
 
 
