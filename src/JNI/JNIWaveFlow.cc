@@ -115,6 +115,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveFlow_flux(JNIEnv * env, jobject ob
 
         //Setting the new parameters and flux function
         flow->setParams(newParams);
+       
         flow->setFluxFunction(fluxFunction);
 
         flow->flux(realVectorInput, realVectorOutput);
