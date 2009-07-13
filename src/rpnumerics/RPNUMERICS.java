@@ -321,13 +321,8 @@ public class RPNUMERICS {
      * Clean up the native layer
      */
     public static native void clean();
-
-
+  
     public static native void setFluxParams(FluxParams fluxParams);
-
-    //    public static void setFluxParams(FluxParams fluxParams) {
-//        fluxParams_ = fluxParams;
-//    }
 
     public static native FluxParams getFluxParams();
 

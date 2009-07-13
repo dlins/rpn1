@@ -30,8 +30,6 @@
  */
 
 
-
-
 class FluxParams {
     
 private:
