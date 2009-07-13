@@ -322,9 +322,12 @@ public class RPNUMERICS {
      */
     public static native void clean();
 
-    public static void setFluxParams(FluxParams fluxParams) {
-        fluxParams_ = fluxParams;
-    }
+
+    public static native void setFluxParams(FluxParams fluxParams);
+
+    //    public static void setFluxParams(FluxParams fluxParams) {
+//        fluxParams_ = fluxParams;
+//    }
 
     public static native FluxParams getFluxParams();
 

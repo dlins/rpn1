@@ -15,7 +15,7 @@ extern "C" {
 /* Inaccessible static: rarefactionProfile_ */
 /* Inaccessible static: bifurcationProfile_ */
 /* Inaccessible static: shockRarefactionProfile_ */
-/* Inaccessible static: CONTOUR_RESOLUTION */
+/* Inaccessible static: contourConfiguration_ */
 /* Inaccessible static: fluxParams_ */
 /*
  * Class:     rpnumerics_RPNUMERICS
@@ -48,6 +48,14 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setTimeDirection
  */
 JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_clean
   (JNIEnv *, jclass);
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    setFluxParams
+ * Signature: (Lrpnumerics/FluxParams;)V
+ */
+JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setFluxParams
+  (JNIEnv *, jclass, jobject);
 
 /*
  * Class:     rpnumerics_RPNUMERICS

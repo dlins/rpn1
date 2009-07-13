@@ -12,7 +12,6 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Set;
 import javax.swing.*;
-import java.util.StringTokenizer;
 import rpn.parser.PhysicsProfile;
 import rpn.parser.RPnInterfaceParser;
 import rpnumerics.FluxParams;

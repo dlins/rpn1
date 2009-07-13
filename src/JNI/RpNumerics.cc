@@ -45,42 +45,7 @@ using namespace std;
 
 Physics * RpNumerics::physics_ = NULL;
 
-//const ODESolver * RpNumerics::odeSolver_ = NULL;
-
 double RpNumerics::sigma = 0;
-
-//void RpNumerics::initODESolver() {
-//
-//    int dimension = 2;
-//
-//    int itol = 2;
-//
-//    double rtol = 1e-4;
-//
-//    int mf = 22;
-//
-//    double deltaxi = 0.001;
-//
-//    int nparam = 1 + dimension;
-//
-//    double param [nparam];
-//
-//    param[0] = 1;
-//
-//    int ii;
-//
-//    for (ii = 0; ii < dimension; ii++) param[1 + ii] = 0.1;
-//
-//    int maxStepsNumber = 100;
-//
-//
-//    LSODEProfile lsodeProfile(RpNumerics::getFlux(), RpNumerics::getPhysics().boundary(), maxStepsNumber, dimension, itol, rtol, mf, deltaxi, nparam, param);
-//
-//
-//    odeSolver_ = new LSODE(lsodeProfile);
-//
-//
-//}
 
 /*
  * Class:     rpnumerics_RPNUMERICS
@@ -128,6 +93,46 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getFluxParams
 
 
 }
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    setFluxParams
+ * Signature: (Lrpnumerics/FluxParams;)V
+ */
+JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setFluxParams (JNIEnv * env , jclass cls, jobject fluxParams){
+
+
+    jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
+
+    jclass fluxParamsClass = env->FindClass(FLUXPARAMS_LOCATION);
+
+
+    jmethodID getParamsMethodID = (env)->GetMethodID(fluxParamsClass,"getParams","()Lwave/util/RealVector;");
+
+    jmethodID toDoubleMethodID = (env)->GetMethodID(realVectorClass, "toDouble", "()[D");
+
+    jobject fluxParamRealVector = env->CallObjectMethod(fluxParams, getParamsMethodID);
+
+    jdoubleArray fluxParamRealVectorArray = (jdoubleArray) (env)->CallObjectMethod(fluxParamRealVector, toDoubleMethodID);
+
+    int fluxParamSize = env->GetArrayLength(fluxParamRealVectorArray);
+
+    double nativeFluxParamArray[fluxParamSize];
+
+     env->GetDoubleArrayRegion(fluxParamRealVectorArray, 0, fluxParamSize, nativeFluxParamArray);
+
+    RealVector nativeFluxParamRealVector (fluxParamSize,nativeFluxParamArray);
+    
+    FluxParams newFluxParams(nativeFluxParamRealVector);
+
+    RpNumerics::getPhysics().fluxParams(newFluxParams);
+
+}
+
+
+
+
+
 
 /*
  * Class:     rpnumerics_RPNUMERICS
