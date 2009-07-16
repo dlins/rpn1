@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import rpn.parser.MethodProfile;
 import rpn.plugininterface.PluginProfile;
 import rpn.plugininterface.PluginTableModel;
@@ -38,19 +40,27 @@ public class RPNUMERICS {
     static private ShockRarefactionProfile shockRarefactionProfile_ = null;
     static private ContourConfiguration contourConfiguration_ = null;
 
-    static private FluxParams fluxParams_;
     //
     // Constructors/Initializers
     //
     static public void init(RPNumericsProfile profile) {
+        try {
+            System.loadLibrary("wave"); //TODO libwave is always loaded ?
+            System.loadLibrary("rpnumerics");
+            initNative(profile.getPhysicsID());
+            if (profile.hasBoundary()) {
+                setBoundary(profile.getBoundary());
+            }
 
-        System.loadLibrary("wave");//TODO libwave is always loaded ?
-        System.loadLibrary("rpnumerics");
-        initNative(profile.getPhysicsID());
-        errorControl_ = new RpErrorControl(boundary());
-        fluxParams_ = getFluxParams();
+            if (profile.hasFluxParams()){
+                setFluxParams(profile.getFluxParams());
+            }
 
-        System.out.println("Inicializando");
+            errorControl_ = new RpErrorControl(boundary());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+
+        }
     }
 
     static public void init(String physicsID) {
@@ -58,9 +68,6 @@ public class RPNUMERICS {
         System.loadLibrary("rpnumerics");
         initNative(physicsID);
         errorControl_ = new RpErrorControl(boundary());
-        fluxParams_ = getFluxParams();
-
-                System.out.println("Inicializando com o nome da fisica");
     }
     
     public static void addMethod(String methodName,MethodProfile profile){
@@ -135,7 +142,7 @@ public class RPNUMERICS {
     public static HugoniotCurveCalc createHugoniotCalc() {
 
         HugoniotCurveCalc hugoniotCurveCalc = null;
-        HugoniotParams hparams = new HugoniotParams(shockProfile_.getXZero(), new FluxFunction(fluxParams_));
+        HugoniotParams hparams = new HugoniotParams(shockProfile_.getXZero(), new FluxFunction(getFluxParams()));
 
         ShockFlow shockFlow = (ShockFlow) createShockFlow();
         //Not specific
@@ -211,7 +218,7 @@ public class RPNUMERICS {
 
     public static ShockFlow createShockFlow() {
 
-        FluxFunction flux = new FluxFunction(fluxParams_);
+        FluxFunction flux = new FluxFunction(getFluxParams());
 
         PluginProfile profile = PluginTableModel.getPluginConfig(ShockProfile.SHOCKFLOW_NAME);
 
@@ -225,13 +232,13 @@ public class RPNUMERICS {
     }
 
     public static ShockFlow createShockFlow(ShockFlowParams shockFlowParams) {
-        ShockFlow flow = new ShockFlow(shockFlowParams, new FluxFunction(fluxParams_));
+        ShockFlow flow = new ShockFlow(shockFlowParams, new FluxFunction(getFluxParams()));
         return flow;
     }
 
     public static RarefactionFlow createRarefactionFlow() {
 
-        return new RarefactionFlow(rarefactionProfile_.getXZero(), rarefactionProfile_.getFamily(), new FluxFunction(fluxParams_));
+        return new RarefactionFlow(rarefactionProfile_.getXZero(), rarefactionProfile_.getFamily(), new FluxFunction(getFluxParams()));
 
     }
 
@@ -270,15 +277,6 @@ public class RPNUMERICS {
         return bifurcationProfile_;
     }
 
-    //TODO 
-    /**
-     * 
-     * @deprecated CHANGE TO RPFUNCTION REFERENCES !!
-     */
-//    static public final FluxFunction fluxFunction() {
-////        return physics_.fluxFunction();
-//        return fluxFunction_;
-//    }
 
     //TODO KEEP TO JAVA CALCS USE  !!
     /**

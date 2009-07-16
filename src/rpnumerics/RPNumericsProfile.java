@@ -14,7 +14,10 @@ public class RPNumericsProfile {
 //    public Physics physics_;
     private Boundary boundary_;
     private boolean hasBoundary_ = false;
+    private boolean hasFluxParams_=false;
     private String physicsId_;
+    private FluxParams fluxParams_;
+
 
     // Constructors/Initializers
     public void initPhysics(String physicsId,String libname) {
@@ -34,13 +37,9 @@ public class RPNumericsProfile {
 
     public Boundary getBoundary() throws Exception {
 
-        if (hasBoundary()) {
-
+        if (hasBoundary())
             return boundary_;
-        } else {
-            throw new Exception("RPNumericsProfile has no boundary");
-           
-        }
+        throw new Exception("RPNumericsProfile has no boundary");
     }
 
     public String getPhysicsID() { 
@@ -50,4 +49,21 @@ public class RPNumericsProfile {
     public String getLibName() {
         return libName_;
     }
+
+    public void setFluxParams (FluxParams fluxParams){
+        fluxParams_=fluxParams;
+        hasFluxParams_=true;
+    }
+
+    public FluxParams getFluxParams() throws Exception
+    {
+        if (hasFluxParams())
+            return fluxParams_;
+        throw new Exception("Profile has no flux params");
+    }
+
+    public boolean hasFluxParams() {
+        return hasFluxParams_;
+    }
+
 }
