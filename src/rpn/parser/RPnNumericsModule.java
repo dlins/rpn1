@@ -18,6 +18,7 @@ import org.xml.sax.InputSource;
 import java.io.FileWriter;
 import java.io.InputStream;
 import java.util.ArrayList;
+import rpnumerics.FluxParams;
 import rpnumerics.RPNUMERICS;
 import wave.util.RectBoundary;
 import wave.util.IsoTriang2DBoundary;
@@ -56,9 +57,7 @@ public class RPnNumericsModule {
             }
 
             if (name.equals("PHASEPOINT")) {
-
                 tempVector_ = new RealVector((new Integer(att.getValue(0))).intValue());
-
             }
 
         }
@@ -94,6 +93,11 @@ public class RPnNumericsModule {
                     profile_.setBoundary(new IsoTriang2DBoundary((RealVector) boundsVectorArray_.get(0), (RealVector) boundsVectorArray_.get(1), (RealVector) boundsVectorArray_.get(2)));
                 }
             }
+
+            if (name.equals("FLUXPARAMS")) {
+                profile_.setFluxParams(new FluxParams(tempVector_));
+            }
+
         }
     }
 
