@@ -52,6 +52,10 @@ Quad2FluxFunction::~Quad2FluxFunction(void) {
 //    }
 //    for (int i = 0; i < spaceDim; i++)
 //        output(i, res[i]);
+//    cout << "Valor da entrada: "<<x(0)<<" "<<x(1)<<endl;
+//    
+//    cout << "Valor da funcao matricial: "<< res[0]<< " " <<res[1] <<endl;
+//    
 //
 //    if (degree > 0) {
 //        // Calculate DF
@@ -142,10 +146,16 @@ int Quad2FluxFunction::jet(const WaveState & x, JetMatrix & y, int degree = 2) c
 //    out1 = 0.5 * (a2 * pow(u, (double) 2) + 2.0 * b2 * u * v + c2 * pow(v, (double) 2)) + d2 * u + e2*v;
 //
 
-    out0 = 0.5 * ((a1 * u * u)) + 2.0 * b1 * u * v + c1 * (v*v) + d1 * u + e1*v;
+    out0 = 0.5 * ( (a1 * u * u) + (2.0 * b1 * u * v) + (c1 * v * v) ) + d1 * u + e1*v;
 
-    out1 = 0.5 * ((a2 * u * u )) + 2.0 * b2 * u * v + c2 * (v*v) + d2 * u + e2*v;
-    
+    out1 = 0.5 * ( (a2 * u * u) + (2.0 * b2 * u * v) + (c2 * v * v) ) + d2 * u + e2*v;
+//    
+
+
+//    out0 = (a1 * u * u) + b1 * u * v + c1 * (v * v) + d1 * u + e1*v;
+//
+//    out1 = (a2 * u * u) + b2 * u * v + c2 * (v * v) + d2 * u + e2*v;
+//    
     
     y(0, out0);
     y(1, out1);

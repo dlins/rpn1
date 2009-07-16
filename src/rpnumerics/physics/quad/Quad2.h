@@ -74,18 +74,12 @@ inline void Quad2::fluxParams(const FluxParams & p) {
     Quad2FluxParams newparams(p.params());
 
     fluxFunction_->fluxParams(newparams);
-
-
 }
 
 inline void Quad2::accumulationParams(const AccumulationParams & p) {
 
-//    Quad2AccumulationParams newparams(p.params());
-
     accumulationFunction_->accumulationParams(p);
-
 }
-
 
 
 inline const FluxParams & Quad2::params(void) const {
