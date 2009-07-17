@@ -6,9 +6,11 @@
 package rpn;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.ItemEvent;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -36,6 +38,7 @@ public class RPnConfigDialog extends RPnDialog {
     private JPanel firstPanel_ = new JPanel(new BorderLayout());
     private JPanel secondPanel_ = new JPanel(new BorderLayout());
     private JPanel thirdPanel_ = new JPanel(new GridLayout(3, 1));
+    private JPanel methodsParamsPanel_=new JPanel();
     private JTabbedPane tabbedPanel_ = new JTabbedPane();
     private JLabel physicsNameLabel_ = new JLabel();
     private JLabel panelsSizeLabel_ = new JLabel("Panels size: ");
@@ -183,27 +186,45 @@ public class RPnConfigDialog extends RPnDialog {
     private void buildMethodPanel() {
 
         thirdPanel_.removeAll();
-        
+
         ArrayList<MethodProfile> methodsProfiles = RPNUMERICS.getAllMethodsProfiles();
 
-        JTabbedPane methodTabbedPane = new JTabbedPane();
+        GridBagLayout methodNamePanelLayout = new GridBagLayout();
 
+        thirdPanel_.setLayout(methodNamePanelLayout);
+
+        GridBagConstraints methodComboConstraints = new GridBagConstraints();
+
+        JPanel methodComboPanel = new JPanel(methodNamePanelLayout);
+
+        JComboBox methodCombo = new JComboBox();
+
+        methodComboConstraints.gridx=0;
+        methodComboConstraints.gridy = 0;
+
+        methodComboPanel.add(methodCombo,methodComboConstraints);
+
+        methodCombo.addItemListener(new MethodNameItemController());
+
+        CardLayout methodParamPanelLayout = new CardLayout();
+
+        methodsParamsPanel_.setLayout(methodParamPanelLayout);
 
         for (int i = 0; i < methodsProfiles.size(); i++) {
 
             MethodProfile profile = methodsProfiles.get(i);
 
             System.out.println("Nome: " + profile.getName());
+
+            methodCombo.addItem(profile.getName());
             
             JPanel methodPanel = new JPanel(false);
 
             methodPanel.setLayout(new GridLayout(profile.getParams().size(), 2));
 
             JScrollPane methodScrollPane = new JScrollPane(methodPanel);
-            
-            methodScrollPane.setPreferredSize(new Dimension(400,200));
 
-            methodTabbedPane.addTab(profile.getName(),methodScrollPane);
+            methodsParamsPanel_.add(methodScrollPane,profile.getName());
 
             HashMap<String, String> params = profile.getParams();
 
@@ -228,7 +249,13 @@ public class RPnConfigDialog extends RPnDialog {
             }
 
         }
-        thirdPanel_.add(methodTabbedPane,BorderLayout.CENTER);
+
+
+        thirdPanel_.add(methodComboPanel,methodComboConstraints);
+        methodComboConstraints.gridx=0;
+        methodComboConstraints.gridy = 1;
+
+        thirdPanel_.add(methodsParamsPanel_,methodComboConstraints);
 
     }
 
@@ -302,9 +329,6 @@ public class RPnConfigDialog extends RPnDialog {
 
         secondPanel_.add(axisScroll, BorderLayout.CENTER);
         secondPanel_.add(panelsSizePanel, BorderLayout.SOUTH);
-
-
-
 
     }
 
@@ -510,4 +534,17 @@ public class RPnConfigDialog extends RPnDialog {
             }
         }
     }
+
+    private class MethodNameItemController implements ItemListener{
+
+        public void itemStateChanged(ItemEvent e) {
+            CardLayout cardLayout = (CardLayout) (methodsParamsPanel_.getLayout());
+            cardLayout.show(methodsParamsPanel_, (String) e.getItem());
+
+        }
+
+    }
+
+
+
 }

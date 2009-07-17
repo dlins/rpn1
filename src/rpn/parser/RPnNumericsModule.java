@@ -37,6 +37,7 @@ public class RPnNumericsModule {
         private RealVector tempVector_;
         private String currentElement_;
         private ArrayList boundsVectorArray_;
+        private String boundaryType_;
 
         public void startElement(String name, AttributeList att) throws
                 SAXException {
@@ -52,8 +53,8 @@ public class RPnNumericsModule {
             }
 
             if (name.equals("BOUNDARY")) {
-                int boundsNumber = new Integer(att.getValue(0)).intValue();
-                boundsVectorArray_ = new ArrayList(boundsNumber);
+                boundaryType_= att.getValue(0);
+                boundsVectorArray_ = new ArrayList();
             }
 
             if (name.equals("PHASEPOINT")) {
@@ -85,11 +86,12 @@ public class RPnNumericsModule {
 
             if (name.equals("BOUNDARY")) {
 
-                if (boundsVectorArray_.size() == 2) {
+                if (boundaryType_.equals("rect")) {
                     profile_.setBoundary(new RectBoundary((RealVector) boundsVectorArray_.get(0), (RealVector) boundsVectorArray_.get(1)));
                 }
 
-                if (boundsVectorArray_.size() == 3) {
+                if (boundaryType_.equals("triang")) {
+
                     profile_.setBoundary(new IsoTriang2DBoundary((RealVector) boundsVectorArray_.get(0), (RealVector) boundsVectorArray_.get(1), (RealVector) boundsVectorArray_.get(2)));
                 }
             }

@@ -52,8 +52,6 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
             System.out.println("The input document is valid");
         }
 
-
-
     }
 
     public RPnDesktopPlotter() {
