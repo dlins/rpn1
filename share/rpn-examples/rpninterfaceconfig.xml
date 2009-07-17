@@ -41,6 +41,15 @@
     
     <METHOD name="Continuation">
         <METHODPARAM  name="step" value="0.01" />
+
+        <METHODPARAM  name="step1" value="0.01" />
+        <METHODPARAM  name="step2" value="0.01" />
+        <METHODPARAM  name="step3" value="0.01" />
+        <METHODPARAM  name="step4" value="0.01" />
+        <METHODPARAM  name="step5" value="0.01" />
+        <METHODPARAM  name="step6" value="0.01" />
+        <METHODPARAM  name="step7" value="0.01" />
+
     </METHOD>
     <METHOD name="Contour">
         <METHODPARAM  name="x-resolution" value="100" />
