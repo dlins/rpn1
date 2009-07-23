@@ -20,16 +20,13 @@ Quad2FluxParams::Quad2FluxParams(void) :FluxParams(RealVector(10))
 
     component(5, 0);//A2
 
-    component(6, 0.5);//B2
+    component(6, 1);//B2
 
     component(7, 0);//C2
 
     component(8, -.1);//D2
 
     component(9, 0); //E2
-
-    
-    
     
 }
 
