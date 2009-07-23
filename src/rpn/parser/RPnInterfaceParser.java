@@ -15,6 +15,7 @@ import org.xml.sax.SAXException;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 import org.xml.sax.ContentHandler;
+import rpn.RPnConfig;
 import rpnumerics.RPNUMERICS;
 
 /** This class implements methods to configure the numeric layer. The values are taked from a XML file and this values are used to setup the physics and all others numerics parameters. */
@@ -145,7 +146,7 @@ public class RPnInterfaceParser implements ContentHandler {
 
         if (name.equals("METHOD")) {
             
-            RPNUMERICS.addMethod(currentMethodProfile_.getName(), currentMethodProfile_);
+            RPnConfig.addMethod(currentMethodProfile_.getName(), currentMethodProfile_);
             
         }
         
@@ -161,6 +162,7 @@ public class RPnInterfaceParser implements ContentHandler {
 
     public void endDocument() throws SAXException {
 
+        RPNUMERICS.resetMethodsParams();
 
     }
 

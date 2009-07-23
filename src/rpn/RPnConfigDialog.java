@@ -10,6 +10,8 @@ import java.awt.event.ItemEvent;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,11 +21,15 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.BadLocationException;
 import rpn.parser.MethodProfile;
 import rpn.parser.PhysicsProfile;
 import rpn.parser.RPnInterfaceParser;
 import rpn.parser.RPnVisualizationModule;
 import rpn.parser.VisualizationProfile;
+import rpnumerics.MethodConfiguration;
 import rpnumerics.RPNUMERICS;
 import wave.multid.Space;
 import wave.util.IsoTriang2DBoundary;
@@ -32,13 +38,14 @@ import wave.util.RectBoundary;
 
 public class RPnConfigDialog extends RPnDialog {
 
-    private FlowLayout flowLayout1 = new FlowLayout();
+    private Dimension dialogDimension_ = new Dimension(480, 310);
+    private String currentParamEdit_;
     private JPanel physicsPanel_ = new JPanel();
     private JPanel boundaryPanel_ = new JPanel();
     private JPanel firstPanel_ = new JPanel(new BorderLayout());
     private JPanel secondPanel_ = new JPanel(new BorderLayout());
     private JPanel thirdPanel_ = new JPanel(new GridLayout(3, 1));
-    private JPanel methodsParamsPanel_=new JPanel();
+    private JPanel methodsParamsPanel_ = new JPanel();
     private JTabbedPane tabbedPanel_ = new JTabbedPane();
     private JLabel physicsNameLabel_ = new JLabel();
     private JLabel panelsSizeLabel_ = new JLabel("Panels size: ");
@@ -51,15 +58,45 @@ public class RPnConfigDialog extends RPnDialog {
     private ArrayList<PhysicsProfile> profilesArray_;
     private PhysicsProfile physicsProfile_;
     private JComboBox physicsComboBox_;
+    private JComboBox methodComboBox_;
     private boolean[] axisSelected_;
+    private HashMap<String, MethodConfiguration> methodConfigMap_;
 
     public RPnConfigDialog() {
         profilesArray_ = RPnInterfaceParser.getPhysicsProfiles();
+        methodConfigMap_ = new HashMap<String, MethodConfiguration>();
+        initLocalParamsConfigMap();
         removeDefaultApplyBehavior();
         applyButton.addActionListener(new ApplyButtonController());
         jbInit();
         buildVisualizationPanel();
         buildMethodPanel();
+
+    }
+
+    private void initLocalParamsConfigMap() {
+
+        ArrayList<MethodProfile> methodsProfiles = RPnConfig.getAllMethodsProfiles();
+
+        methodComboBox_ = new JComboBox();
+
+        for (int i = 0; i < methodsProfiles.size(); i++) {
+            methodComboBox_.addItem(methodsProfiles.get(i).getName());
+        }
+
+        for (int i = 0; i < methodsProfiles.size(); i++) {
+
+            MethodProfile profile = methodsProfiles.get(i);
+
+            String methodName = profile.getName();
+
+            HashMap<String, String> profileParams = profile.getParams();
+
+            MethodConfiguration methodConfiguration = new MethodConfiguration(profileParams);
+
+            methodConfigMap_.put(methodName, methodConfiguration);
+
+        }
 
     }
 
@@ -71,7 +108,7 @@ public class RPnConfigDialog extends RPnDialog {
             physicsComboBox_.addItem(profile.getName());
         }
 
-        physicsPanel_.setLayout(flowLayout1);
+
         physicsPanel_.add(new JLabel("Physics"));
         physicsPanel_.add(physicsComboBox_);
         firstPanel_.add(physicsPanel_, BorderLayout.NORTH);
@@ -80,7 +117,7 @@ public class RPnConfigDialog extends RPnDialog {
 
     }
 
-    private void putFluxParams() {
+    private void buildFluxParamsPanel() {
 
         for (int i = 0; i < profilesArray_.size(); i++) {//Selecting physics
             if (profilesArray_.get(i).getName().equals((String) physicsComboBox_.getSelectedItem())) {
@@ -96,7 +133,7 @@ public class RPnConfigDialog extends RPnDialog {
         getContentPane().validate();
     }
 
-    private void putBoundary() {
+    private void buildBoundaryPanel() {
 
         firstPanel_.remove(boundaryPanel_);
         boundaryPanel_ = new JPanel(new BorderLayout());
@@ -187,8 +224,6 @@ public class RPnConfigDialog extends RPnDialog {
 
         thirdPanel_.removeAll();
 
-        ArrayList<MethodProfile> methodsProfiles = RPNUMERICS.getAllMethodsProfiles();
-
         GridBagLayout methodNamePanelLayout = new GridBagLayout();
 
         thirdPanel_.setLayout(methodNamePanelLayout);
@@ -197,65 +232,73 @@ public class RPnConfigDialog extends RPnDialog {
 
         JPanel methodComboPanel = new JPanel(methodNamePanelLayout);
 
-        JComboBox methodCombo = new JComboBox();
+        methodComboConstraints.gridx = 0;
 
-        methodComboConstraints.gridx=0;
         methodComboConstraints.gridy = 0;
 
-        methodComboPanel.add(methodCombo,methodComboConstraints);
+        methodComboPanel.add(methodComboBox_, methodComboConstraints);
 
-        methodCombo.addItemListener(new MethodNameItemController());
+        methodComboBox_.addItemListener(new MethodNameItemController());
 
         CardLayout methodParamPanelLayout = new CardLayout();
 
         methodsParamsPanel_.setLayout(methodParamPanelLayout);
 
-        for (int i = 0; i < methodsProfiles.size(); i++) {
+        Set<Entry<String, MethodConfiguration>> configurationSet = methodConfigMap_.entrySet();
 
-            MethodProfile profile = methodsProfiles.get(i);
+        Iterator<Entry<String, MethodConfiguration>> methodIterator = configurationSet.iterator();
 
-            System.out.println("Nome: " + profile.getName());
+        while (methodIterator.hasNext()) {
 
-            methodCombo.addItem(profile.getName());
-            
-            JPanel methodPanel = new JPanel(false);
+            Entry<String, MethodConfiguration> entry = methodIterator.next();
 
-            methodPanel.setLayout(new GridLayout(profile.getParams().size(), 2));
+            MethodConfiguration methodConfiguration = entry.getValue();
 
-            JScrollPane methodScrollPane = new JScrollPane(methodPanel);
-
-            methodsParamsPanel_.add(methodScrollPane,profile.getName());
-
-            HashMap<String, String> params = profile.getParams();
+            HashMap<String, String> params = methodConfiguration.getParams();
 
             Set<Entry<String, String>> paramSet = params.entrySet();
 
             Iterator<Entry<String, String>> paramIterator = paramSet.iterator();
 
-            while (paramIterator.hasNext()) {
-                Entry<String, String> entry = paramIterator.next();
+            JPanel methodPanel = new JPanel(false);
 
-                JLabel paramNameLabel = new JLabel(entry.getKey());
-                paramNameLabel.setName(profile.getName());
-                JTextField paramTextField = new JTextField(entry.getValue());
-                paramTextField.setName(profile.getName());
+            methodPanel.setLayout(new GridLayout(params.size(), 2));
+
+            JScrollPane methodScrollPane = new JScrollPane(methodPanel);
+            
+            methodsParamsPanel_.add(methodScrollPane, entry.getKey());
+
+            while (paramIterator.hasNext()) {
+
+                Entry<String, String> paramEntry = paramIterator.next();
+
+                JTextField paramTextField = new JTextField(methodConfiguration.getParamValue(paramEntry.getKey()));
+
+                paramTextField.setName(paramEntry.getKey());
+
+                paramTextField.addFocusListener(new ParamValueFocusListener());
+                paramTextField.getDocument().addDocumentListener(new TextFieldActionlistener());
+
+                JLabel paramNameLabel = new JLabel(paramEntry.getKey());
 
                 methodPanel.add(paramNameLabel);
                 methodPanel.add(paramTextField);
 
-                System.out.println("Param name: " + entry.getKey());
-                System.out.println("Param value: " + entry.getValue());
-
             }
-
         }
 
-
-        thirdPanel_.add(methodComboPanel,methodComboConstraints);
-        methodComboConstraints.gridx=0;
+        thirdPanel_.add(methodComboPanel, methodComboConstraints);
+        methodComboConstraints.gridx = 0;
         methodComboConstraints.gridy = 1;
 
-        thirdPanel_.add(methodsParamsPanel_,methodComboConstraints);
+        methodComboConstraints.fill=GridBagConstraints.BOTH; 
+        
+        methodComboConstraints.gridwidth=GridBagConstraints.REMAINDER;
+        methodComboConstraints.gridheight=GridBagConstraints.REMAINDER;
+
+
+
+        thirdPanel_.add(methodsParamsPanel_, methodComboConstraints);
 
     }
 
@@ -336,7 +379,7 @@ public class RPnConfigDialog extends RPnDialog {
 
         setTitle("Rpn Configuration");
         addPhysicsName();
-        putBoundary();
+        buildBoundaryPanel();
         physicsComboBox_.addActionListener(new ComponentController());
         axisSelected_ = new boolean[physicsProfile_.getBoundaryDimension()];
 
@@ -357,9 +400,9 @@ public class RPnConfigDialog extends RPnDialog {
 
 
         setModal(false);
-        setPreferredSize(new Dimension(460, 240));
+        setPreferredSize(dialogDimension_);
         setResizable(true);
-        setMinimumSize(new Dimension(200, 100));
+        setMinimumSize(dialogDimension_);
         pack();
     }
 
@@ -373,7 +416,35 @@ public class RPnConfigDialog extends RPnDialog {
 
     }
 
-    private void visualConfiguration() {
+    private void setMethodConfiguration() {
+
+        Set<Entry<String, MethodConfiguration>> configurationSet = methodConfigMap_.entrySet();
+
+        Iterator<Entry<String, MethodConfiguration>> methodIterator = configurationSet.iterator();
+
+        while (methodIterator.hasNext()) {
+
+            Entry<String, MethodConfiguration> entry = methodIterator.next();
+
+            MethodConfiguration methodConfiguration = entry.getValue();
+
+            HashMap<String, String> params = methodConfiguration.getParams();
+
+            Set<Entry<String, String>> paramSet = params.entrySet();
+
+            Iterator<Entry<String, String>> paramIterator = paramSet.iterator();
+
+            while (paramIterator.hasNext()) {
+
+                Entry<String, String> paramEntry = paramIterator.next();
+
+                RPNUMERICS.setMethodParam(entry.getKey(), paramEntry.getKey(), paramEntry.getValue());
+
+            }
+        }
+    }
+
+    private void setVisualConfiguration() {
 
         boolean iso2equi_ = physicsProfile_.isIso2equiBoundary();
 
@@ -391,7 +462,6 @@ public class RPnConfigDialog extends RPnDialog {
                 }
                 int dimension = physicsProfile_.getBoundaryDimension();
 
-
                 Space space = new Space("", dimension);
 
                 RPnVisualizationModule.DESCRIPTORS.add(
@@ -402,25 +472,21 @@ public class RPnConfigDialog extends RPnDialog {
 
         }
 
-
     }
 
     protected void apply() {
 
-
         dispose();
 
         RPnConfig.configure((String) physicsComboBox_.getSelectedItem());
-        visualConfiguration();
+        setVisualConfiguration();
         fluxParamPanel_.applyParams();
         setBoundary();
-
+        setMethodConfiguration();
 
         RPnDesktopPlotter plotter = new RPnDesktopPlotter();
         RPnUIFrame rpnUIFrame = new RPnUIFrame(plotter);
-
         rpnUIFrame.pack();
-
         rpnUIFrame.setVisible(true);
 
     }
@@ -480,8 +546,8 @@ public class RPnConfigDialog extends RPnDialog {
     private class ComponentController implements ActionListener {
 
         public void actionPerformed(ActionEvent e) {
-            putFluxParams();
-            putBoundary();
+            buildFluxParamsPanel();
+            buildBoundaryPanel();
 
         }
     }
@@ -506,15 +572,12 @@ public class RPnConfigDialog extends RPnDialog {
             } else {
                 axisSelected_[axisOrder] = false;
             }
-
-
         }
     }
 
     private class ApplyButtonController implements ActionListener {
 
         public void actionPerformed(ActionEvent e) {
-
 
             boolean oneAxisSelected = false;
 
@@ -535,16 +598,54 @@ public class RPnConfigDialog extends RPnDialog {
         }
     }
 
-    private class MethodNameItemController implements ItemListener{
+    private class MethodNameItemController implements ItemListener {
 
         public void itemStateChanged(ItemEvent e) {
             CardLayout cardLayout = (CardLayout) (methodsParamsPanel_.getLayout());
             cardLayout.show(methodsParamsPanel_, (String) e.getItem());
 
         }
-
     }
 
+    private class ParamValueFocusListener implements FocusListener {
+
+        public void focusGained(FocusEvent e) {
+            JComponent source = (JComponent) e.getComponent();
+            currentParamEdit_ = source.getName();
+        }
+
+        public void focusLost(FocusEvent e) {
+        }
+    }
+
+    private class TextFieldActionlistener implements DocumentListener {
+
+        public void insertUpdate(DocumentEvent e) {
+
+            String newValue = null;
+            try {
+
+                newValue = e.getDocument().getText(0, e.getDocument().getLength());
+
+                String methodName = (String) methodComboBox_.getSelectedItem();
+
+                MethodConfiguration methodConfig = methodConfigMap_.get(methodName);
+
+                methodConfig.setParamValue(currentParamEdit_, newValue);
+
+                methodConfigMap_.put(methodName, methodConfig);
 
 
+            } catch (BadLocationException ex) {
+                ex.printStackTrace();
+
+            }
+        }
+
+        public void removeUpdate(DocumentEvent e) {
+        }
+
+        public void changedUpdate(DocumentEvent e) {
+        }
+    }
 }
