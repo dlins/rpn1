@@ -9,15 +9,15 @@
             </REALVECTOR>
         </BOUNDARY>
         <FLUXFUNCTION >
-            <FLUXPARAMS name="a1" position="0" value ="3" />
+            <FLUXPARAMS name="a1" position="0" value ="-1" />
             <FLUXPARAMS name="b1" position="1" value ="0" />
             <FLUXPARAMS name="c1" position="2" value ="1" />
             <FLUXPARAMS name="d1" position="3" value ="0" />
-            <FLUXPARAMS name="e1" position="4" value ="2" />
+            <FLUXPARAMS name="e1" position="4" value ="0.1" />
             <FLUXPARAMS name="a2" position="5" value ="0" />
             <FLUXPARAMS name="b2" position="6" value ="1" />
             <FLUXPARAMS name="c2" position="7" value ="0" />
-            <FLUXPARAMS name="d2" position="8" value ="0" />
+            <FLUXPARAMS name="d2" position="8" value ="-0.1" />
             <FLUXPARAMS name="e2" position="9" value ="0" />
         </FLUXFUNCTION>
         
@@ -42,13 +42,20 @@
     <METHOD name="Continuation">
         <METHODPARAM  name="step" value="0.01" />
 
-        <METHODPARAM  name="step1" value="0.01" />
-        <METHODPARAM  name="step2" value="0.01" />
+<!--        <METHODPARAM  name="step1" value="0.01" />
+     <METHODPARAM  name="step2" value="0.01" />
         <METHODPARAM  name="step3" value="0.01" />
         <METHODPARAM  name="step4" value="0.01" />
         <METHODPARAM  name="step5" value="0.01" />
         <METHODPARAM  name="step6" value="0.01" />
         <METHODPARAM  name="step7" value="0.01" />
+        <METHODPARAM  name="step8" value="0.01" />
+        <METHODPARAM  name="step9" value="0.01" />
+        <METHODPARAM  name="step10" value="0.01" />
+        <METHODPARAM  name="step11" value="0.01" />
+        <METHODPARAM  name="step12" value="0.01" />
+        <METHODPARAM  name="step13" value="0.01" /> -->
+
 
     </METHOD>
     <METHOD name="Contour">
