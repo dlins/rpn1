@@ -10,8 +10,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import rpn.RPnConfig;
 import rpn.parser.MethodProfile;
 import rpn.plugininterface.PluginProfile;
 import rpn.plugininterface.PluginTableModel;
@@ -25,13 +24,13 @@ public class RPNUMERICS {
     //
     // Constants
     //
+
     static public int INCREASING_LAMBDA = 0;
     //
     // Members
     //
-    
-    private static HashMap<String,MethodProfile> methodsMap_=new HashMap<String, MethodProfile>();
-//    static private Physics physics_ = null;
+
+    private static HashMap<String, MethodConfiguration> methodsConfigMap_ = new HashMap<String, MethodConfiguration>();
     static private RpErrorControl errorControl_ = null;
     static private ODESolver odeSolver_ = null;
     static private ShockProfile shockProfile_ = ShockProfile.instance();
@@ -52,7 +51,7 @@ public class RPNUMERICS {
                 setBoundary(profile.getBoundary());
             }
 
-            if (profile.hasFluxParams()){
+            if (profile.hasFluxParams()) {
                 setFluxParams(profile.getFluxParams());
             }
 
@@ -69,68 +68,51 @@ public class RPNUMERICS {
         initNative(physicsID);
         errorControl_ = new RpErrorControl(boundary());
     }
-    
-    public static void addMethod(String methodName,MethodProfile profile){
 
-        methodsMap_.put(methodName, profile);
-        if (methodName.equals("Contour")||methodName.equals("contour"))
-            contourConfiguration_=new ContourConfiguration(profile.getParams());
+
+    public static void resetMethodsParams(){
         
-    }
-    
-    public static void addParam(String methodName,String paramName,String paramValue){
-        
-        if ( !methodsMap_.containsKey(methodName)){
-            
-            MethodProfile newProfile =new MethodProfile(methodName);
-            
-            newProfile.addParam(paramName, paramValue);
-            
-            methodsMap_.put(methodName,newProfile);
+        ArrayList<MethodProfile> methodsProfiles = RPnConfig.getAllMethodsProfiles();
+
+        for (int i = 0; i < methodsProfiles.size(); i++) {
+            MethodProfile profile = methodsProfiles.get(i);
+            String methodName = profile.getName();
+
+            if (methodName.equals("Contour") || methodName.equals("contour")) {
+                contourConfiguration_ = new ContourConfiguration(profile.getParams());
+            } else {
+
+                HashMap<String, String> profileParams = profile.getParams();
+                MethodConfiguration methodConfiguration = new MethodConfiguration(profileParams);
+                RPNUMERICS.setMethodParam(methodName, methodConfiguration);
+
+            }
+
         }
-        
-        else{
-            
-            MethodProfile methodProfile = methodsMap_.get(methodName);
-            
-            methodProfile.addParam(paramName, paramValue);
-            
-            methodsMap_.put(methodName, methodProfile);
-            
-        }        
-        
+
     }
-    
-    public static ArrayList<MethodProfile> getAllMethodsProfiles(){
-        
-        ArrayList <MethodProfile> returnedArrayList = new ArrayList<MethodProfile>();
-        
-        Set<Entry<String, MethodProfile>> methodSet = methodsMap_.entrySet();
-        
-        Iterator<Entry<String, MethodProfile>> methodIterator = methodSet.iterator();
-        
-        while (methodIterator.hasNext()) {
-            Entry<String, MethodProfile> entry = methodIterator.next();
-            
-            returnedArrayList.add(entry.getValue());
-            
+
+    public static void setMethodParam(String methodName, MethodConfiguration methodConfiguration) {
+
+        methodsConfigMap_.put(methodName, methodConfiguration);
+
+    }
+
+    public static void setMethodParam(String methodName, String paramName, String paramValue) {
+
+        if (methodName.equals("Contour") || methodName.equals("contour")) {
+            contourConfiguration_.setParamValue(paramName, paramValue);
+        } else {
+
+        MethodConfiguration methodConfig = methodsConfigMap_.get(methodName);
+        methodConfig.setParamValue(paramName, paramValue);
+        methodsConfigMap_.put(methodName, methodConfig);
         }
-        
-        return returnedArrayList;
-        
+
     }
-    
-    
-    public static MethodProfile getMethodProfile(String methodName){
-        
-        return methodsMap_.get(methodName);
-        
-    }
-    
-    public static void removeMethod(String methodName){
-        
-        methodsMap_.remove(methodName);
-        
+
+    public static int methodsConfigurationSize() {
+        return methodsConfigMap_.size();
     }
 
     /**
@@ -138,7 +120,7 @@ public class RPNUMERICS {
      * @deprecated
      */
     public static native void initNative(String physicsName);
-    
+
     public static HugoniotCurveCalc createHugoniotCalc() {
 
         HugoniotCurveCalc hugoniotCurveCalc = null;
@@ -255,6 +237,7 @@ public class RPNUMERICS {
     //
     // Accessors
     //
+
     public static void setCurrentProfile(ShockRarefactionProfile aShockRarefactionProfile_) {
         shockRarefactionProfile_ = aShockRarefactionProfile_;
     }
@@ -276,7 +259,6 @@ public class RPNUMERICS {
     public static BifurcationProfile getBifurcationProfile() {
         return bifurcationProfile_;
     }
-
 
     //TODO KEEP TO JAVA CALCS USE  !!
     /**
@@ -306,7 +288,6 @@ public class RPNUMERICS {
         return odeSolver_;
     }
 
-   
     public static ContourConfiguration getContourConfiguration() {
         return contourConfiguration_;
     }
@@ -319,7 +300,7 @@ public class RPNUMERICS {
      * Clean up the native layer
      */
     public static native void clean();
-  
+
     public static native void setFluxParams(FluxParams fluxParams);
 
     public static native FluxParams getFluxParams();
