@@ -20,7 +20,8 @@ import wave.util.RealVector;
 
 public class RPnFluxParamsPanel extends JPanel {
 
-    private GridLayout gridLayout = new GridLayout(2, 2);
+//    private GridLayout gridLayout = new GridLayout(2, 2);
+    private GridBagLayout gridLayout = new GridBagLayout();
     private ArrayList<JTextField> valuesArray = new ArrayList<JTextField>();
     private PhysicsProfile physicsProfile_;
 
@@ -36,9 +37,14 @@ public class RPnFluxParamsPanel extends JPanel {
     }
 
     private void buildPanel(boolean useDefaults) {
+        this.setLayout(gridLayout);
 
-        ArrayList<HashMap<String, String>> fluxParamsArrayList = physicsProfile_.getFluxParamArrayList();
+        GridBagConstraints gridConstraints = new GridBagConstraints();
+
+        gridConstraints.ipadx=40;
         
+        ArrayList<HashMap<String, String>> fluxParamsArrayList = physicsProfile_.getFluxParamArrayList();
+
         for (int i = 0; i < fluxParamsArrayList.size(); i++) {
             HashMap<String, String> fluxParams = fluxParamsArrayList.get(i);
 
@@ -51,24 +57,26 @@ public class RPnFluxParamsPanel extends JPanel {
                 JLabel fluxParamName = new JLabel(entry.getKey());
                 fluxParamName.setName(entry.getKey());
                 JTextField fluxValueField = new JTextField();
-                valuesArray.add(i,fluxValueField);
+                valuesArray.add(i, fluxValueField);
                 if (useDefaults) {
                     fluxValueField.setText(entry.getValue());
-                }
-                else {
-                    
+                } else {
+
                     FluxParams fluxParam = RPNUMERICS.getFluxParams();
                     Double paramValue = fluxParam.getElement(i);
                     valuesArray.get(i).setText(paramValue.toString());
-                    
+
                 }
                 fluxValueField.setName(entry.getKey());
 
-                this.add(fluxParamName);
-                this.add(fluxValueField);
+                gridConstraints.gridx=0;
+
+                this.add(fluxParamName,gridConstraints);
+                gridConstraints.gridx = 1;
+                this.add(fluxValueField,gridConstraints);
             }
         }
-        this.setLayout(gridLayout);
+//        this.setLayout(gridLayout);
     }
 
     private void searchPhysics(String physicsName) {
@@ -95,7 +103,6 @@ public class RPnFluxParamsPanel extends JPanel {
         }
 
         RealVector paramsVector = new RealVector(paramsBuffer.toString());
-        RPNUMERICS.setFluxParams(new FluxParams( paramsVector));
+        RPNUMERICS.setFluxParams(new FluxParams(paramsVector));
     }
-    
 }

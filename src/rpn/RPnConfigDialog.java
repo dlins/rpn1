@@ -38,13 +38,17 @@ import wave.util.RectBoundary;
 
 public class RPnConfigDialog extends RPnDialog {
 
-    private Dimension dialogDimension_ = new Dimension(480, 310);
+    private Dimension dialogDimension_ = new Dimension(480, 380);
     private String currentParamEdit_;
     private JPanel physicsPanel_ = new JPanel();
     private JPanel boundaryPanel_ = new JPanel();
     private JPanel firstPanel_ = new JPanel(new BorderLayout());
     private JPanel secondPanel_ = new JPanel(new BorderLayout());
-    private JPanel thirdPanel_ = new JPanel(new GridLayout(3, 1));
+//    private JPanel thirdPanel_ = new JPanel(new GridLayout(3, 1));
+    private JPanel thirdPanel_ = new JPanel(new BorderLayout());
+
+
+
     private JPanel methodsParamsPanel_ = new JPanel();
     private JTabbedPane tabbedPanel_ = new JTabbedPane();
     private JLabel physicsNameLabel_ = new JLabel();
@@ -224,19 +228,9 @@ public class RPnConfigDialog extends RPnDialog {
 
         thirdPanel_.removeAll();
 
-        GridBagLayout methodNamePanelLayout = new GridBagLayout();
+        JPanel methodComboPanel = new JPanel(new BorderLayout());
 
-        thirdPanel_.setLayout(methodNamePanelLayout);
-
-        GridBagConstraints methodComboConstraints = new GridBagConstraints();
-
-        JPanel methodComboPanel = new JPanel(methodNamePanelLayout);
-
-        methodComboConstraints.gridx = 0;
-
-        methodComboConstraints.gridy = 0;
-
-        methodComboPanel.add(methodComboBox_, methodComboConstraints);
+        methodComboPanel.add(methodComboBox_, BorderLayout.CENTER);
 
         methodComboBox_.addItemListener(new MethodNameItemController());
 
@@ -262,11 +256,13 @@ public class RPnConfigDialog extends RPnDialog {
 
             JPanel methodPanel = new JPanel(false);
 
-            methodPanel.setLayout(new GridLayout(params.size(), 2));
+            GridBagLayout methodParamLayout = new GridBagLayout();
 
-            JScrollPane methodScrollPane = new JScrollPane(methodPanel);
-            
-            methodsParamsPanel_.add(methodScrollPane, entry.getKey());
+            GridBagConstraints methodPanelLayoutConstraints = new GridBagConstraints();
+
+            methodPanel.setLayout(methodParamLayout);
+
+            methodsParamsPanel_.add(methodPanel, entry.getKey());
 
             while (paramIterator.hasNext()) {
 
@@ -281,24 +277,23 @@ public class RPnConfigDialog extends RPnDialog {
 
                 JLabel paramNameLabel = new JLabel(paramEntry.getKey());
 
-                methodPanel.add(paramNameLabel);
-                methodPanel.add(paramTextField);
+
+                methodPanelLayoutConstraints.gridx=0;
+                methodPanel.add(paramNameLabel, methodPanelLayoutConstraints);
+
+                methodPanelLayoutConstraints.gridx=1;
+
+                methodPanel.add(paramTextField,methodPanelLayoutConstraints);
+
 
             }
         }
 
-        thirdPanel_.add(methodComboPanel, methodComboConstraints);
-        methodComboConstraints.gridx = 0;
-        methodComboConstraints.gridy = 1;
-
-        methodComboConstraints.fill=GridBagConstraints.BOTH; 
-        
-        methodComboConstraints.gridwidth=GridBagConstraints.REMAINDER;
-        methodComboConstraints.gridheight=GridBagConstraints.REMAINDER;
 
 
+        thirdPanel_.add(methodComboPanel, BorderLayout.NORTH);
 
-        thirdPanel_.add(methodsParamsPanel_, methodComboConstraints);
+        thirdPanel_.add(methodsParamsPanel_, BorderLayout.CENTER);
 
     }
 
@@ -307,7 +302,11 @@ public class RPnConfigDialog extends RPnDialog {
         secondPanel_.removeAll();
 
         JPanel physicsLabelPanel = new JPanel(new FlowLayout());
-        JPanel axisCheckPanel = new JPanel(new GridLayout(2, 2));
+//        JPanel axisCheckPanel = new JPanel(new GridLayout(2, 2));
+        
+        
+        JPanel axisCheckPanel = new JPanel(new GridBagLayout());
+
         JScrollPane axisScroll = new JScrollPane(axisCheckPanel);
         JPanel panelsSizePanel = new JPanel(new FlowLayout());
 
