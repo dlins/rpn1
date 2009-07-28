@@ -11,15 +11,11 @@ import rpn.RPnCurvesConfigDialog;
 import rpn.RPnRarefactionConfigDialog;
 import rpn.RPnShockConfigDialog;
 import rpn.RPnUIFrame;
-import rpn.parser.RPnDataModule;
 
 public class StateInputController implements PropertyChangeListener {
 
     private RPnUIFrame uiFrame_;
     public static boolean SHOWDIALOG = false;
-
-    public StateInputController() {
-    }
 
     public StateInputController(RPnUIFrame frame) {
         uiFrame_ = frame;

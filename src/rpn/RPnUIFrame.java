@@ -124,6 +124,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 toolBar_.add(BifurcationPlotAgent.instance().getContainer());
                 toolBar_.add(ScratchAgent.instance().getContainer());
                 ScratchAgent.instance().setEnabled(true);
+                setStatusMessage("");
                 pack();
             }
         }
