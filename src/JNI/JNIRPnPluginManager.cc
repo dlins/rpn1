@@ -65,9 +65,6 @@ JNIEXPORT void JNICALL Java_rpnumerics_plugin_RPnPluginManager_configPlugin
     
     RPnPluginManager::configPlugin(string (pluginTypeNative),string(libNameNative), string(classNameNative), string(constructorMethodNative), string(destructorMethodNative));
     
-    
-    
-    
 }
 
 

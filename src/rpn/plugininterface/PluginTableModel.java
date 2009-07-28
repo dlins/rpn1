@@ -18,8 +18,8 @@ public class PluginTableModel extends DefaultTableModel {
 
     private static PluginTableModel instance_;
 
-    private static String pluginDir_ = System.getProperty("rpnhome") + System.getProperty("file.separator") + "lib" + System.getProperty("file.separator") + System.getenv("RPHOSTTYPE") + System.getProperty("file.separator") + "plugins" + System.getProperty("file.separator");
-//    private static String pluginDir_ = "/home/edson/rpnRodrigo/rpnMerge2/trunk/lib/linux_i686/plugins/";
+//    private static String pluginDir_ = System.getProperty("rpnhome") + System.getProperty("file.separator") + "lib" + System.getProperty("file.separator") + System.getenv("RPHOSTTYPE") + System.getProperty("file.separator") + "plugins" + System.getProperty("file.separator");
+    private static String pluginDir_ = "/home/edson/rpnBifurcationInterface/trunk/lib/linux_i686/plugins/";
     private static HashMap<String, PluginProfile> pluginConfigMap_;
     private static Vector<String> columnNames_ = new Vector<String>();
 
@@ -45,7 +45,7 @@ public class PluginTableModel extends DefaultTableModel {
 
     private static PluginTableModel initModel() {
 
-//        Vector<String> columnNames_ = new Vector<String>();
+
         Vector<Vector<String>> data_ = new Vector<Vector<String>>();
 
         getColumnNames().add("Plugin Type");

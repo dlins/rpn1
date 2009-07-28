@@ -33,7 +33,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveFlow_flux(JNIEnv * env, jobject ob
     jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
 
 
-
     jclass shockFlowClass = env->FindClass(SHOCKFLOW_LOCATION);
     jclass rarefactionFlowClass = env->FindClass(RAREFACTIONFLOW_LOCATION);
 

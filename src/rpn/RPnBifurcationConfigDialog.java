@@ -7,8 +7,10 @@ package rpn;
 
 import javax.swing.*;
 import java.awt.*;
+import rpn.controller.ui.BIFURCATION_CONFIG;
+import rpn.controller.ui.UIController;
+import rpn.usecase.BifurcationPlotAgent;
 import rpnumerics.RPNUMERICS;
-import wave.util.RealVector;
 
 public class RPnBifurcationConfigDialog extends RPnDialog {
 

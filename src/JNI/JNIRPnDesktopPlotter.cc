@@ -25,5 +25,3 @@ JNIEXPORT void JNICALL Java_rpn_RPnDesktopPlotter_libraryCleanUp
     
 }
 
-//! Code comes here! daniel@impa.br
-

@@ -32,8 +32,6 @@ public abstract class RpModelPlotAgent extends RpModelActionAgent {
 
     public void execute() {
         RealVector[] userInputList = UIController.instance().userInputList();
-
-
         // stores the scene
         Iterator oldValue = RPnDataModule.PHASESPACE.getGeomObjIterator();
         RPnDataModule.PHASESPACE.plot(createRpGeometry(userInputList));

@@ -55,7 +55,6 @@ void LSODEStopGenerator::increaseTotalPoints() { totalPoints_++;}
 
 bool LSODEStopGenerator::check(const RealVector & point) const {
     
-    cout<<"chamando inside"<<endl;
 
     RealVector min(2);
 

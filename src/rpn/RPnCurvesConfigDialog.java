@@ -7,6 +7,7 @@ package rpn;
 
 import javax.swing.*;
 import java.awt.*;
+import java.beans.PropertyChangeEvent;
 import rpn.controller.ui.BIFURCATION_CONFIG;
 import rpn.controller.ui.RAREFACTION_CONFIG;
 import rpn.controller.ui.SHOCK_CONFIG;

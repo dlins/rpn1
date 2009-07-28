@@ -83,8 +83,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     //
     public void propertyChange(PropertyChangeEvent evt) {
 
-        if (evt.getPropertyName().equals("aplication state")) {
 
+        if (evt.getPropertyName().equals("aplication state")) {
 
             if (UIController.instance().getState() instanceof SHOCK_CONFIG || (evt.getNewValue() instanceof SIGMA_CONFIG)) {
 
@@ -117,7 +117,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             }
 
 
-            if (UIController.instance().getState() instanceof BIFURCATION_CONFIG) {
+            if (UIController.instance().getState() instanceof BIFURCATION_CONFIG || evt.getNewValue() instanceof BIFURCATION_CONFIG ) {
+
                 bifurcationConfigMenu();
                 toolBar_.removeAll();
                 toolBar_.add(BifurcationPlotAgent.instance().getContainer());

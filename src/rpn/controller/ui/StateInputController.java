@@ -11,6 +11,7 @@ import rpn.RPnCurvesConfigDialog;
 import rpn.RPnRarefactionConfigDialog;
 import rpn.RPnShockConfigDialog;
 import rpn.RPnUIFrame;
+import rpn.parser.RPnDataModule;
 
 public class StateInputController implements PropertyChangeListener {
 
@@ -43,7 +44,7 @@ public class StateInputController implements PropertyChangeListener {
 
             } catch (NullPointerException ex) {
 
-                System.out.println("Nulo Frame!!");
+                ex.printStackTrace();
 
             }
 
@@ -65,6 +66,7 @@ public class StateInputController implements PropertyChangeListener {
             if (evt.getNewValue() instanceof BIFURCATION_CONFIG) {
                 RPnBifurcationConfigDialog bifurcationConfigDialog = new RPnBifurcationConfigDialog(false, false);
                 bifurcationConfigDialog.setVisible(true);
+
             }
 
         }

@@ -19,8 +19,8 @@ using std::map;
 
 class RPnPluginManager {
 private:
-    static map<string, map <string,map<string, string> * >  > *configMap_; // Representa a atual configuracao de plugins <pluginType,libname< <class,constructorMethod>>>
-    static map<string, map <string, map<string, string> * > > *destroyMap_; // Representa a atual configuracao de plugins <pluginType,libname< <class,destroyrMethod>>>
+    static map<string, map <string,map<string, string> * >  > *configMap_; // Actual plugin configuration <pluginType,libname< <class,constructorMethod>>>
+    static map<string, map <string, map<string, string> * > > *destroyMap_; // Actual plugin configuration <pluginType,libname< <class,destroyrMethod>>>
     static string * pluginDir_;
 
     
@@ -33,6 +33,7 @@ public:
     virtual ~RPnPluginManager();
 
 };
+
 
 
 

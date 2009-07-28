@@ -13,6 +13,7 @@ import java.beans.PropertyChangeEvent;
 import javax.swing.ImageIcon;
 import rpn.controller.ui.*;
 import rpn.message.RPnActionMediator;
+import wave.util.RealVector;
 
 
 public abstract class RpModelActionAgent extends AbstractAction implements UndoableAction {
@@ -45,6 +46,10 @@ public abstract class RpModelActionAgent extends AbstractAction implements Undoa
     public void actionPerformed(ActionEvent event) {
         // garbage collection is ok ?
         UI_ACTION_SELECTED action = new UI_ACTION_SELECTED(this);
+
+        if (this instanceof BifurcationPlotAgent) {
+            action.userInputComplete(UIController.instance(), new RealVector(2));// No input needed
+        }
 
 
         if (UIController.instance().getNetStatusHandler().isOnline()){ //Sending application state

@@ -7,9 +7,6 @@ package rpnumerics;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map.Entry;
-import java.util.Set;
 import rpn.RPnConfig;
 import rpn.parser.MethodProfile;
 import rpn.plugininterface.PluginProfile;

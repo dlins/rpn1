@@ -25,6 +25,7 @@ import java.beans.PropertyChangeEvent;
 import rpn.controller.*;
 import java.net.*;
 import java.util.Iterator;
+import java.util.ListIterator;
 import rpn.RPnDesktopPlotter;
 import rpn.message.*;
 
@@ -33,6 +34,7 @@ public class UIController extends ComponentUI {
     //
     // Constants
     //
+
     static public final Cursor WAIT_CURSOR = Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR);
     static public final Cursor DEFAULT_CURSOR = Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR);
     //
@@ -49,12 +51,10 @@ public class UIController extends ComponentUI {
     private RPnPhaseSpacePanel focusPanel_;
     private StateInputController stateController_;
     public static UI_ACTION_SELECTED INITSTATE = null;
-//    private boolean showDialog_;
 
     //
     // Constructors
     //
-//    protected UIController(rpn.controller.ui.UserInputHandler state) {
     protected UIController() {
 
         mouseMotionController_ = new MouseMotionController();
@@ -92,19 +92,19 @@ public class UIController extends ComponentUI {
             RPnPhaseSpacePanel.setShowCursor(true);
         }
         Iterator it = installedPanels_.iterator();
-        
-        while (it.hasNext()){
+
+        while (it.hasNext()) {
             RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) it.next();
             panel.repaint();
         }
 
     }
-    
-    public void showCursorLines(boolean showCursor){
+
+    public void showCursorLines(boolean showCursor) {
         RPnPhaseSpacePanel.setCursorLineVisible(showCursor);
         Iterator it = installedPanels_.iterator();
-        
-        while (it.hasNext()){
+
+        while (it.hasNext()) {
             RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) it.next();
             panel.repaint();
         }
@@ -154,6 +154,7 @@ public class UIController extends ComponentUI {
         @Override
         public void mousePressed(MouseEvent event) {
 
+
             if (event.getComponent() instanceof RPnPhaseSpacePanel) {
 
                 if (netStatus_.isMaster() || !(netStatus_.isOnline())) {
@@ -186,11 +187,6 @@ public class UIController extends ComponentUI {
         }
     }
 
-    
-  
-    
-    
-    
     //
     // Accessors/Mutators
     //
@@ -298,7 +294,6 @@ public class UIController extends ComponentUI {
                 // either unselect or new selection
                 if (currentSelection.getAction() instanceof RpModelPlotAgent) {
 
-//
                     ((RpModelPlotAgent) currentSelection.getAction()).getContainer().setSelected(false);
                 }
                 // Singletons !
@@ -310,7 +305,7 @@ public class UIController extends ComponentUI {
                 }
             } else {
                 handler_ = newAction;
-            // TODO we should have a checkbox for menu actions
+                // TODO we should have a checkbox for menu actions
             }
         } else {
             handler_ = newAction;
@@ -372,4 +367,5 @@ public class UIController extends ComponentUI {
     public void setStateController(StateInputController stateController) {
         stateController_ = stateController;
     }
+
 }
