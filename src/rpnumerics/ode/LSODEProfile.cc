@@ -19,8 +19,13 @@
  */
 
 
-LSODEProfile::LSODEProfile(const WaveFlow & function, const Boundary & boundary,int NmaxSteps, int neq , int itol , double rtol, int mf, double deltaxi, int paramLength, const double * param):ODESolverProfile(function),boundary_(boundary.clone()),maxStepNumber_(NmaxSteps){
 
+
+
+LSODEProfile::LSODEProfile(const WaveFlow & function, const Boundary & boundary,int NmaxSteps, int neq , int itol , double rtol, int mf, double deltaxi, int paramLength, const double * param):ODESolverProfile(function),boundary_(boundary.clone()) {
+    
+
+    setMaxStepNumber(NmaxSteps);
     //Choosing lrw
     
     int mu =0; // TODO Used only in mf ==25 or mf == 24 HARDCODED !!
@@ -110,9 +115,10 @@ LSODEProfile::LSODEProfile(const LSODEProfile & copy):ODESolverProfile(copy.getF
     int i;
 
     boundary_ = copy.boundary().clone();
-    maxStepNumber_ = copy.maxStepNumber();
+    setMaxStepNumber(copy.maxStepNumber());
 
     rwork_ = new double[copy.lengthRWork()];
+
 
     iwork_ = new int [copy.lengthIWork()];
 
@@ -141,7 +147,7 @@ LSODEProfile::LSODEProfile(const LSODEProfile & copy):ODESolverProfile(copy.getF
     neq_ = copy.numberOfEquations();
     itol_ = copy.absoluteToleranceType();
     paramLength_ = copy.paramLength();
-
+    
     if (itol_ == 2) {
         atol_ = new double [neq_];
         for (i = 0; i < neq_; i++) atol_[i] = 1e-6; // HARDCODED !!
@@ -164,6 +170,7 @@ LSODEProfile & LSODEProfile::operator=(const LSODEProfile & source){
     delete iwork_;
     delete atol_;
     delete param_;
+
     setFunction(source.getFunction());
     neq_=source.numberOfEquations();
     itol_=source.absoluteToleranceType();

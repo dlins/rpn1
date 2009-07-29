@@ -28,6 +28,7 @@ public abstract class RpModelConfigChangeAgent extends RpModelActionAgent {
     }
 
     public void applyChange(PropertyChangeEvent change) {
+
         firePropertyChange(change);
         logAction(change);
         rpn.parser.RPnDataModule.PHASESPACE.update();

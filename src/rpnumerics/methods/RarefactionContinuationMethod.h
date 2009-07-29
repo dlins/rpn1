@@ -15,38 +15,36 @@
  */
 
 #include "RarefactionMethod.h"
-    
+
 #include "ContinuationRarefactionFlow.h"
 #include "RPnCurve.h"
+
 /*
  * ---------------------------------------------------------------
  * Definitions:
  */
 
-class RarefactionContinuationMethod:public RarefactionMethod {
-
+class RarefactionContinuationMethod : public RarefactionMethod {
 private:
 
     ODESolver * solver_;
-            
+
     int init(ContinuationRarefactionFlow * flow, int n, double *in, int indx, int increase, double deltaxi, double *lambda, double *rev)const;
 
 public:
-    
-    RarefactionContinuationMethod (const ODESolver &);
-    
-    RarefactionContinuationMethod (const RarefactionContinuationMethod &);
-    
-    RPnCurve & curve(const RealVector &, int direction);
 
-    void curve(const RealVector &, int direction,vector<RealVector> & );
-    
+    RarefactionContinuationMethod(const ODESolver &);
+
+    RarefactionContinuationMethod(const RarefactionContinuationMethod &);
+
+    void curve(const RealVector &, int direction, vector<RealVector> &);
+
     const ODESolver & getSolver()const;
 
     RarefactionMethod * clone() const;
-    
+
     virtual ~RarefactionContinuationMethod();
-    
-    
+
+
 };
 #endif //! _RarefactionMethod_H

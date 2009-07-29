@@ -6,6 +6,7 @@
 package rpn;
 
 import java.awt.*;
+import rpn.usecase.BifurcationPlotAgent;
 import rpnumerics.RPNUMERICS;
 
 public class RPnFluxParamsDialog extends RPnDialog{

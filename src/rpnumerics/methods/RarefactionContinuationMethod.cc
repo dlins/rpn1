@@ -108,7 +108,7 @@ void RarefactionContinuationMethod::curve(const RealVector & inputVector, int di
     ContinuationRarefactionFlow & testeFlow = (ContinuationRarefactionFlow &) solver_->getProfile().getFunction();
 
     int indx = testeFlow.getFamilyIndex();
-    
+
     double deltaxi = ((LSODEProfile &) solver_->getProfile()).deltaTime();
 
     double in[dimension];
@@ -122,7 +122,7 @@ void RarefactionContinuationMethod::curve(const RealVector & inputVector, int di
     double rev[dimension];
 
     info = init(&testeFlow, dimension, in, indx, direction, deltaxi, &lambda, &rev[0]);
-    
+
 
     for (int i = 0; i < dimension; i++) {
         testeFlow.setReferenceVectorComponent(i, rev[i]);
@@ -136,7 +136,7 @@ void RarefactionContinuationMethod::curve(const RealVector & inputVector, int di
     int step = 0;
 
     RealVector outputVector(2);
-    // -------------------------LOOP COM CHAMADA DO SOLVER - CALCULO DOS PONTOS DA CURVA----------------------------------
+    // -------------------------Invoke th solver     ----------------------------------
 
     double testeDouble = 0; //TODO Dummy value !!
     double nowIn[dimension];
@@ -158,7 +158,7 @@ void RarefactionContinuationMethod::curve(const RealVector & inputVector, int di
                 nowIn[i] = outputVector(i);
             }
 
-            //-----------------------------------Criterio de parada -----------------------------
+            //-----------------------------------Stop Criterion---------------------------
 
             info = testeFlow.flux(dimension, indx, &nowIn[0], &noweigenvalue, &tempRefVector[0]);
 
@@ -189,37 +189,14 @@ void RarefactionContinuationMethod::curve(const RealVector & inputVector, int di
 
             step++;
 
-            LSODE::tout_ += ((LSODEProfile &) solver_->getProfile()).deltaTime();
+            LSODE::increaseTime();
+
+
         }
     }
 
 }
 
-RPnCurve & RarefactionContinuationMethod::curve(const RealVector &inputVector, int direction) {
-
-    vector <RealVector> coords;
-    RealVector outputVector(inputVector.size());
-    RealVector localInputVector(inputVector);
-    int i = 0;
-    double testeDouble = 0;
-    RPnCurve * result = new RPnCurve(coords);
-
-    while (i < solver_->getProfile().maxStepNumber()) {
-
-        solver_->solve(localInputVector, outputVector, testeDouble);
-
-        result->add(outputVector);
-        LSODE::tout_ += ((LSODEProfile &) solver_->getProfile()).deltaTime();
-
-
-        localInputVector = outputVector;
-        i++;
-
-    }
-
-    return *result;
-
-}
 
 RarefactionMethod * RarefactionContinuationMethod::clone() const {
 

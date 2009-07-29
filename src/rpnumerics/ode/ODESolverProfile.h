@@ -4,30 +4,29 @@
 #include "RpFunction.h"
 #include "WaveFlow.h"
 
-
-class ODESolverProfile{
-    
+class ODESolverProfile {
 private:
-    
+
 
     WaveFlow * waveFlow_;
-    
+    int maxStepNumber_;
+
+
 public:
 
     ODESolverProfile(const WaveFlow &);
-    
+
     ODESolverProfile(const ODESolverProfile &);
     ODESolverProfile & operator=(const ODESolverProfile &);
-    
+
     virtual ~ODESolverProfile();
-    virtual int maxStepNumber()const =0;
-     WaveFlow & getFunction() const ;
-    void setFunction (const WaveFlow & );
-    
-    
+    int maxStepNumber()const;
+    void setMaxStepNumber(const int);
+    WaveFlow & getFunction() const;
+    void setFunction(const WaveFlow &);
+
+
 };
-
-
 
 
 #endif	/* _ODESolverProfile_H */

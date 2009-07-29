@@ -31,6 +31,7 @@ public class ClearPhaseSpaceAgent extends javax.swing.AbstractAction {
         UIController.instance().setWaitCursor();
         UIController.instance().panelsBufferClear();
         rpn.parser.RPnDataModule.PHASESPACE.clear();
+        BifurcationPlotAgent.instance().getContainer().setEnabled(true);
         // ClearScene is not undoable
         UndoActionController.instance().setEnabled(false);
         System.gc();

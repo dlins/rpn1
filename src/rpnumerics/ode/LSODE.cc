@@ -106,8 +106,9 @@ int LSODE::solve(const RealVector & input, RealVector & output, double  & time) 
     }
     
     int info;
-    
-    info=solver(&LSODE::function, &neq, &U[0], &LSODE::t_, &LSODE::tout_, &itol, &rtol, &atol[0], &itask, &istate, &iopt, &rwork[0], &lrw, &iwork[0], &liw, &LSODE::jacrarefaction, &mf, &nparam, &param[0]);
+
+
+   info=solver(&LSODE::function, &neq, &U[0], &LSODE::t_, &LSODE::tout_, &itol, &rtol, &atol[0], &itask, &istate, &iopt, &rwork[0], &lrw, &iwork[0], &liw, &LSODE::jacrarefaction, &mf, &nparam, &param[0]);
 
     for (i=0;i< neq;i++){
         output.component(i)=U[i];
@@ -142,9 +143,6 @@ int LSODE::function(int * neq , double * xi , double* U , double * out){
     
 }
 
-int LSODE::solve(const RealVector & input, ODESolution & output ) const {
-
-}
 
 const ODESolverProfile & LSODE::getProfile()const { return *profile_;}
 

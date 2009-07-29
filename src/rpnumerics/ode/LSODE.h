@@ -35,10 +35,11 @@ class LSODE:public ODESolver {
 private:
     
     static  LSODEProfile * profile_;
-    
 
     static double t_;
-    
+
+    static double tout_;
+
     static int function(int *, double *, double *, double *);
     
     static   int jacrarefaction(int *neq, double *t, double *y, int *ml, int *mu, double *pd, int *nrpd);//int *nparam,  double *param);
@@ -47,22 +48,20 @@ private:
             int *itol, double *rtol, double *atol, int *itask, int *istate, int *iopt, double *rwork, int *lrw,
             int *iwork, int *liw, int(*)(int *, double *, double *, int *, int *, double *, int *),
             int *mf, int *nparam, double *param) const;
-    
+
 public:
     
     LSODE(const LSODEProfile &);
 
     LSODE(const LSODE &);
-
-    static double tout_;
     
     virtual ~LSODE();
     
     ODESolver * clone()const;
     
-    int solve(const RealVector & , ODESolution & ) const;
-
     int solve(const RealVector &, RealVector &, double &) const;
+
+    static void increaseTime();
     
     const ODESolverProfile & getProfile() const ;
 
@@ -70,7 +69,9 @@ public:
     
 };
 
-
+inline void LSODE::increaseTime() {
+    LSODE::tout_ += profile_->deltaTime();
+}
 
 inline ODESolver * LSODE::clone()const {
     return new LSODE(*this);
