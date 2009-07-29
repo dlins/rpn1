@@ -289,7 +289,6 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initNative(JNIEnv * env, jclas
 
 
     if (!strcmp(physicsID, "TriPhase")) {
-
         RpNumerics::setPhysics(TriPhase(TriPhaseParams(), PermParams(), CapilParams(0.4, 3.0, 44.0, 8.0), ViscosityParams(0.5)));
     }
 

@@ -11,6 +11,9 @@
  * Includes:
  */
 #include "ViscosityParams.h"
+#include <iostream>
+
+using namespace std;
 
 /*
  * ---------------------------------------------------------------
@@ -19,11 +22,9 @@
 
 
 
-ViscosityParams::ViscosityParams( double eps ): epsl_(eps){}
+ViscosityParams::ViscosityParams(double eps) : epsl_(eps) {
+}
 
 
-//ViscosityParams:: ~ViscosityParams(){}
-
-
-//! Code comes here! daniel@impa.br
+ViscosityParams:: ~ViscosityParams(){}
 

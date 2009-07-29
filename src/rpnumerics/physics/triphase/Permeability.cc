@@ -11,7 +11,9 @@
  * Includes:
  */
 #include "Permeability.h"
+#include <iostream>
 
+using namespace std;
 /*
  * ---------------------------------------------------------------
  * Definitions:
@@ -19,7 +21,7 @@
 
 
 Permeability::Permeability(const PermParams & params):params_(new PermParams(params)) {
-    
+
     denkw_ = (params_->lw() + (1. - params_->lw()) * (1. - params_->cnw())) * (1. - params_->cnw());
     denkg_ = (params_->lg() + (1. - params_->lg()) * (1. - params_->cng())) * (1. - params_->cng());
     denkow_ = (params_->low() + (1. - params_->low()) * (1. - params_->cno())) * (1. - params_->cno());

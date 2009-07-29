@@ -20,7 +20,7 @@ IsoTriang2DBoundary::~IsoTriang2DBoundary(){
     
     delete minimums_;
     delete maximums_;
-    delete type_;
+//    delete type_;
 }
 
 Boundary * IsoTriang2DBoundary::clone() const {return new IsoTriang2DBoundary(*this);}

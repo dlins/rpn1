@@ -25,7 +25,7 @@ Capillarity::Capillarity(const Capillarity & copy) {
 }
 
 Capillarity::Capillarity(const CapilParams & params){
-    
+
     params_ = new CapilParams(params.acw(), params.acg(), params.lcw(), params.lcg());
     
 }

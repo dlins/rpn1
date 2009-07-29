@@ -18,7 +18,7 @@
  */
 
 TriPhaseFluxFunction::TriPhaseFluxFunction(const TriPhaseParams & params, const PermParams & permParams, const CapilParams & capilParams, const ViscosityParams & viscParams):FluxFunction(FluxParams(params.params())) {
-    
+
     capil_ = new Capillarity(capilParams);
     perm_ = new Permeability(permParams);
     viscParams_ = new ViscosityParams(viscParams.epsl());

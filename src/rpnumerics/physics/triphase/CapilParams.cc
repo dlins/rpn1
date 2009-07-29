@@ -12,18 +12,17 @@
  */
 #include "CapilParams.h"
 #include  <iostream>
+
+using namespace std;
 /*
  * ---------------------------------------------------------------
  * Definitions:
  */
 
-//const  double CapilParams::DEFAULT_ACG = 1.0;
-//const  double CapilParams::DEFAULT_ACW = 1.0;
-//const  double CapilParams::DEFAULT_LCG = 0.5;
-//const  double CapilParams::DEFAULT_LCW = 0.5;
+
 
 CapilParams::CapilParams( double acw, double acg, double lcw, double lcg ) {
-    
+
     acw_ = acw;
     acg_ = acg;
     lcw_ = lcw;
@@ -59,5 +58,5 @@ void CapilParams::reset( ) {
     lcw_ = 0.5;//DEFAULT_LCW;
     lcg_ = 0.5;//DEFAULT_LCG;
 }
-//! Code comes here! daniel@impa.br
+
 

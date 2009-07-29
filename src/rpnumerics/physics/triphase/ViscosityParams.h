@@ -14,30 +14,29 @@
  * Includes:
  */
 
-
 /*
  * ---------------------------------------------------------------
  * Definitions:
  */
 
 class ViscosityParams {
-    
 private:
-    
+
     double epsl_;
-    
+
 public:
-    
+
     const static double DEFAULT_EPSL = 0.1;
-    
-    ViscosityParams( double eps );
-    
-//    virtual ~ViscosityParams();
-    
-    double epsl( )const ;
-    
-    
+
+    ViscosityParams(double eps);
+
+    double epsl()const;
+    virtual ~ViscosityParams();
+
 };
-inline double ViscosityParams::epsl( ) const{ return epsl_; }
+
+inline double ViscosityParams::epsl() const {
+    return epsl_;
+}
 
 #endif //! _ViscosityParams_H

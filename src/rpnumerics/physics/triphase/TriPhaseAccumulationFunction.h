@@ -36,7 +36,10 @@ public:
 };
 
 
-inline TriPhaseAccumulationFunction::TriPhaseAccumulationFunction(const AccumulationParams & params) :AccumulationFunction(params) {}
+inline TriPhaseAccumulationFunction::TriPhaseAccumulationFunction(const AccumulationParams & params) :AccumulationFunction(params) {
+
+
+}
 
 #endif	/* _AccumulationFunction_H */
 
