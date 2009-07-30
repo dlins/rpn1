@@ -7,6 +7,10 @@
 package rpnumerics;
 
 import wave.util.RealVector;
+/**
+ *
+ * @deprecated Will exists in native layer only
+ */
 
 public  class FluxParams {
     //

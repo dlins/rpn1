@@ -10,14 +10,14 @@ import wave.util.JetMatrix;
 import wave.util.RealMatrix2;
 import wave.util.RealVector;
 
+/**
+ *
+ * @deprecated  Will exists in native layer only
+ */
+
 public class FluxFunction implements RpFunction {
 
     private FluxParams fluxParams_;//	HessianMatrix D2F( RealVector U );
-//	
-//	RealMatrix2 DF( RealVector U );
-//	
-//	RealVector F( RealVector U );
-    
     
     public FluxFunction (FluxParams fluxParams){
         fluxParams_=fluxParams;
@@ -31,19 +31,22 @@ public class FluxFunction implements RpFunction {
     
     
     public FluxFunction (){
-        // HARDCODED TO QUAD2
-        int m = 2;
-        RealVector params = new RealVector(m + m * m + m * m * m);
-        for (int i = 0; i < m; i++) {
-            params.setElement(i, DEFAULT_A[i]);
-            for (int j = 0; j < m; j++) {
-                params.setElement(m + i * m + j, DEFAULT_B[i][j]);
-                for (int k = 0; k < m; k++) {
-                    params.setElement(m + m * m + i * m * m + j * m + k, DEFAULT_C[i][j][k]);
-                }
-            }
-        }
-        fluxParams_ = new FluxParams(params);
+        // TODO HARDCODED TO QUAD2
+        System.out.println("Construindo flux function em Java");
+
+
+//        int m = 2;
+//        RealVector params = new RealVector(m + m * m + m * m * m);
+//        for (int i = 0; i < m; i++) {
+//            params.setElement(i, DEFAULT_A[i]);
+//            for (int j = 0; j < m; j++) {
+//                params.setElement(m + i * m + j, DEFAULT_B[i][j]);
+//                for (int k = 0; k < m; k++) {
+//                    params.setElement(m + m * m + i * m * m + j * m + k, DEFAULT_C[i][j][k]);
+//                }
+//            }
+//        }
+//        fluxParams_ = new FluxParams(params);
     }
     
     
@@ -80,18 +83,14 @@ public class FluxFunction implements RpFunction {
         jet(toRealVector, output, 1);
         return output.f();
     }
-
-    
-    
-    
     
     /**
      * 
      * @deprecated 
      */
+    
     public FluxParams fluxParams() { 
-        
-        return fluxParams_;
+        return RPNUMERICS.getFluxParams();
 
     }
 }  

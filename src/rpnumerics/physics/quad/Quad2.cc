@@ -19,9 +19,8 @@ Quad2::~Quad2() {
 }
 
 Quad2::Quad2(const Quad2 & copy) {
-
-    Quad2FluxParams params((Quad2FluxParams &) copy.fluxFunction().fluxParams());
-    fluxFunction_ = new Quad2FluxFunction(params);
+    cout << "Chamando construtor de copia" << endl;
+    fluxFunction_ = new Quad2FluxFunction(( Quad2FluxFunction&)copy.fluxFunction());
     accumulationFunction_ = new Quad2AccumulationFunction((Quad2AccumulationFunction &) copy.accumulation());
     boundary_ = copy.boundary().clone();
     FLUX_ID = "QuadraticR2";

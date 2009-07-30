@@ -28,8 +28,6 @@ private:
     
     static const ShockFlow * shockFlow_;
         
-//    static const ODESolver * odeSolver_;
-    
     static double sigma;
     
     
@@ -40,10 +38,6 @@ public:
     static  const FluxFunction & getFlux();
     
     static  const AccumulationFunction & getAccumulation();
-    
-//    static const ODESolver & getODESolver();
-    
-//    static  void initODESolver();
     
     static void setSigma(double );
     
@@ -69,9 +63,6 @@ inline void RpNumerics::setPhysics(const Physics & physics){
 inline void RpNumerics::setSigma(double s){sigma=s;}
 
 inline double RpNumerics::getSigma(){return sigma;}
-
-//inline const ODESolver & RpNumerics::getODESolver(){return *odeSolver_;}
-
 
 
 #endif	/* _JNIDEFS_H */

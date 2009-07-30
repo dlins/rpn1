@@ -86,6 +86,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveFlow_flux(JNIEnv * env, jobject ob
 
     const FluxFunction & fluxFunction = RpNumerics::getFlux();
 
+
     if (!strcmp(objectClassName, "ShockFlow")) {
 
         jdouble sigma = (env)->CallDoubleMethod(obj, getSigmaMethodID); // <--- sigma
@@ -99,10 +100,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveFlow_flux(JNIEnv * env, jobject ob
         double nativeXZeroArray [xzeroLength]; // <--- XZero
 
         env->GetDoubleArrayRegion(xzeroArray, 0, xzeroLength, nativeXZeroArray);
-
-        //                for (int i = 0; i < xzeroLength; i++) {
-        //                    cout << "XZero: " << nativeXZeroArray [i] << "\n";
-        //                }
 
         RpnPlugin * plug = RPnPluginManager::getPluginInstance("ShockFlow");
 
