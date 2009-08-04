@@ -83,12 +83,16 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     //
     public void propertyChange(PropertyChangeEvent evt) {
 
-
         if (evt.getPropertyName().equals("aplication state")) {
+
+            toolBar_.setLayout(new GridLayout(8, 2));
+            toolBar_.setOrientation(SwingConstants.VERTICAL);
 
             if (UIController.instance().getState() instanceof SHOCK_CONFIG || (evt.getNewValue() instanceof SIGMA_CONFIG)) {
 
                 shockConfigMenu();
+
+
                 toolBar_.removeAll();
                 toolBar_.add(ForwardOrbitPlotAgent.instance().getContainer());
                 toolBar_.add(BackwardOrbitPlotAgent.instance().getContainer());
@@ -120,6 +124,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             if (UIController.instance().getState() instanceof BIFURCATION_CONFIG || evt.getNewValue() instanceof BIFURCATION_CONFIG ) {
 
                 bifurcationConfigMenu();
+
                 toolBar_.removeAll();
                 toolBar_.add(BifurcationPlotAgent.instance().getContainer());
                 toolBar_.add(ScratchAgent.instance().getContainer());
@@ -500,6 +505,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         modelInteractionMenu.removeAll();
         modelInteractionMenu.add(ChangeRarefactionXZeroAgent.instance());
         modelInteractionMenu.add(ChangeXZeroAgent.instance());
+        modelInteractionMenu.addSeparator();
+        modelInteractionMenu.add(ChangeFluxParamsAgent.instance());
         modelInteractionMenu.addSeparator();
         modelInteractionMenu.add(rarefactionMenuItem_);
         modelInteractionMenu.addSeparator();

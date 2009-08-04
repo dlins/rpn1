@@ -38,7 +38,7 @@ private:
     
 public:
     
-    const static FluxParams & DEFAULT_FLUX_PARAMS;
+//    const static FluxParams & DEFAULT_FLUX_PARAMS;
     
     TriPhaseParams();
     
@@ -62,7 +62,8 @@ public:
 
 inline double TriPhaseParams::vel()const { return params().component(0); }
 
-inline double TriPhaseParams::muw()const { return params().component(1); }
+inline double TriPhaseParams::muw()const { return
+        params().component(1); }
 
 inline double TriPhaseParams::muo()const { return params().component(2); }
 
@@ -75,13 +76,15 @@ inline double TriPhaseParams::gro()const { return params().component(5); }
 inline double TriPhaseParams::grg()const { return params().component(6); }
 
 inline const FluxParams & TriPhaseParams::defaultParams()  {
-    
+
+
     RealVector  paramsVector(7);
       
     paramsVector.component(0)=1;
-    paramsVector.component(1)=1/3;
-    paramsVector.component(2)=1/3;
-    paramsVector.component(3)=1/3;
+
+    paramsVector.component(1)=(double)1/3;
+    paramsVector.component(2)=(double)1/3;
+    paramsVector.component(3)=(double)1/3;
     paramsVector.component(4)=0;
     paramsVector.component(5)=0;
     paramsVector.component(6)=0;

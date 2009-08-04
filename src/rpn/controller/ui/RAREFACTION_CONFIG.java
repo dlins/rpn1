@@ -7,6 +7,7 @@
 package rpn.controller.ui;
 
 
+import rpn.usecase.ChangeFluxParamsAgent;
 import rpn.usecase.ChangeRarefactionXZeroAgent;
 import rpn.usecase.ChangeXZeroAgent;
 import rpn.usecase.HugoniotPlotAgent;
@@ -35,6 +36,7 @@ public class RAREFACTION_CONFIG extends UI_ACTION_SELECTED {
         HugoniotPlotAgent.instance().setEnabled(true);
         ChangeRarefactionXZeroAgent.instance().setEnabled(true);
         ChangeXZeroAgent.instance().setEnabled(true);
+        ChangeFluxParamsAgent.instance().setEnabled(true);
         ui.setState(new GEOM_SELECTION());
 
     }

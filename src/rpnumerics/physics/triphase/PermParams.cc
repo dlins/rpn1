@@ -18,17 +18,14 @@
  */
 
 
-const double PermParams::DEFAULT_LW = 0;
-const  double PermParams:: DEFAULT_LOW = 0;
-const  double PermParams:: DEFAULT_LG = 0;
-const  double PermParams::DEFAULT_LOG = 0;
-const  double PermParams::DEFAULT_CNW = 0;
-const  double PermParams::DEFAULT_CNO = 0;
-const  double PermParams::DEFAULT_CNG = 0;
-const  double PermParams:: DEFAULT_EPSL = 0;
-
-
-
+const double PermParams::DEFAULT_LW = 0.;
+const  double PermParams:: DEFAULT_LOW = 0.;
+const  double PermParams:: DEFAULT_LG = 0.;
+const  double PermParams::DEFAULT_LOG = 0.;
+const  double PermParams::DEFAULT_CNW = 0.;
+const  double PermParams::DEFAULT_CNO = 0.;
+const  double PermParams::DEFAULT_CNG = 0.;
+const  double PermParams:: DEFAULT_EPSL = 0.;
 
 
 PermParams::PermParams(double lw, double low, double lg, double log, double cnw, double cno, double cng, double epsl) {
@@ -50,5 +47,5 @@ void PermParams::reset() {
     epsl_ = DEFAULT_EPSL;
 }
 
-//! Code comes here! daniel@impa.br
+
 

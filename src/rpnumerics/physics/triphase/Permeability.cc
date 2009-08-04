@@ -14,32 +14,64 @@
 #include <iostream>
 
 using namespace std;
+
 /*
  * ---------------------------------------------------------------
  * Definitions:
  */
 
 
-Permeability::Permeability(const PermParams & params):params_(new PermParams(params)) {
+Permeability::Permeability(const PermParams & params) : params_(new PermParams(params)) {
 
-    denkw_ = (params_->lw() + (1. - params_->lw()) * (1. - params_->cnw())) * (1. - params_->cnw());
+    denkw_ = (double) ((params_->lw() + (1. - params_->lw()) * (1. - params_->cnw())) * (1. - params_->cnw()));
+
     denkg_ = (params_->lg() + (1. - params_->lg()) * (1. - params_->cng())) * (1. - params_->cng());
+
     denkow_ = (params_->low() + (1. - params_->low()) * (1. - params_->cno())) * (1. - params_->cno());
+
     denkog_ = (params_->log() + (1. - params_->log()) * (1. - params_->cno())) * (1. - params_->cno());
+
+
 }
 
+Permeability::Permeability(const Permeability & copy) {
 
-Permeability::Permeability(const Permeability & copy){
-    
-    params_=new PermParams(copy.params());
-    
+    params_ = new PermParams(copy.params());
+
+    denkw_ = (double) ((params_->lw() + (1. - params_->lw()) * (1. - params_->cnw())) * (1. - params_->cnw()));
+
+    denkg_ = (params_->lg() + (1. - params_->lg()) * (1. - params_->cng())) * (1. - params_->cng());
+
+    denkow_ = (params_->low() + (1. - params_->low()) * (1. - params_->cno())) * (1. - params_->cno());
+
+    denkog_ = (params_->log() + (1. - params_->log()) * (1. - params_->cno())) * (1. - params_->cno());
+
+
 }
 
 double Permeability::kw(double sw, double so, double sg)const {
-    double swcnw = sw - params_->cnw();
-    if (swcnw <= 0.)
+
+//    cout << "Debugando kw" << endl;
+//    cout << "sw " << sw << endl;
+//    cout << "param->cnw() " << params_->cnw() << endl;
+//    cout << "param->lw() " << params_->lw() << endl;
+
+    double swcnw = (double) (sw - params_->cnw());
+//    cout << "swcnw " << swcnw << endl;
+//    cout << "denkw_ " << denkw_ << endl;
+
+    if (swcnw <= 0.) {
         return 0.;
-    return (params_->lw() + (1. - params_->lw()) * swcnw) * swcnw / denkw_;
+    } else {
+        double result = (double) ((params_->lw() + (1. - params_->lw()) * swcnw) * swcnw / denkw_);
+//
+//        cout << "result " << result << endl;
+//        cout << "------------------------" << endl;
+        return result;
+    }
+
+
+
 }
 
 double Permeability::kowden(double sw, double so, double sg)const {
@@ -49,14 +81,12 @@ double Permeability::kowden(double sw, double so, double sg)const {
     return (params_->low() + (1. - params_->low()) * sow) / denkow_;
 }
 
-
 double Permeability::kogden(double sw, double so, double sg)const {
     double sog = 1. - sg - params_->cno();
     if (sog <= 0.0)
         return 0.0;
     return (params_->log() + (1. - params_->log()) * sog) / denkog_;
 }
-
 
 double Permeability::ko(double sw, double so, double sg)const {
     double socno = so - params_->cno();
@@ -65,9 +95,6 @@ double Permeability::ko(double sw, double so, double sg)const {
     return (params_->epsl() * (1. - params_->cno()) * kogden(sw, so, sg) * kowden(sw, so, sg) +
             (1. - params_->epsl()) * socno) * socno;
 }
-
-
-
 
 double Permeability::kg(double sw, double so, double sg)const {
     double sgcng = sg - params_->cng();
@@ -88,6 +115,7 @@ double Permeability::dkwdsw(double sw, double so, double sg)const {
 }
 
 // computes the derivative of kow divided by den = 1. - sw + params_->cnw() relative to sw
+
 double Permeability::dkowdendsw(double sw, double so, double sg)const {
     double sow = 1. - sw - params_->cno();
     if (sow <= 0.0)
@@ -155,17 +183,20 @@ double Permeability::dkwdoo(double sw, double so, double sg)const {
 
 // computes the second derivative of kow divided by
 // den = 1. - sw + params_->cnw() relative to sw
+
 double Permeability::dkowdendww(double sw, double so, double sg)const {
     return 0.0;
 }
 
 // computes the second derivative of kog divided by
 // den = 1. - sg + params_->cng() relative to sg
+
 double Permeability::dkogdendgg(double sw, double so, double sg)const {
     return 0.0;
 }
 
 // computes the second derivative of ko relative to sw
+
 double Permeability::dkodww(double sw, double so, double sg)const {
     double socno = so - params_->cno();
     if (socno <= 0.)
@@ -175,6 +206,7 @@ double Permeability::dkodww(double sw, double so, double sg)const {
 }
 
 // computes the mixed second derivative of ko relative to sw and so
+
 double Permeability::dkodwo(double sw, double so, double sg)const {
     double socno = so - params_->cno();
     if (socno <= 0.)
@@ -182,11 +214,12 @@ double Permeability::dkodwo(double sw, double so, double sg)const {
     double dkowdendsw_ = dkowdendsw(sw, so, sg);
     double kowden_ = kowden(sw, so, sg);
     double dkogdendsg_ = dkogdendsg(sw, so, sg);
-    return (-dkogdendsg_ * kowden_ + kogden(sw, so, sg) * dkowdendsw_) + socno *
+    return (-dkogdendsg_ * kowden_ + kogden(sw, so, sg) * dkowdendsw_) +socno *
             (dkogdendgg(sw, so, sg) * kowden_ - dkogdendsg_ * dkowdendsw_) * (1. - params_->cno()) * params_->epsl();
 }
 
 // computes the second derivative of ko relative to so
+
 double Permeability::dkodoo(double sw, double so, double sg)const {
     double socno = so - params_->cno();
     if (socno <= 0.)
@@ -212,8 +245,7 @@ double Permeability::dkgdoo(double sw, double so, double sg)const {
         return 0.;
     return 2. * (1. - params_->lg()) / denkg_;
 }
-Permeability::~Permeability(){delete params_;}
 
-
-//! Code comes here! daniel@impa.br
-
+Permeability::~Permeability() {
+    delete params_;
+}

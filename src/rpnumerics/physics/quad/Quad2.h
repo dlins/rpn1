@@ -71,8 +71,6 @@ inline Physics * Quad2::clone()const {
 
 inline void Quad2::fluxParams(const FluxParams & p) {
 
-
-    cout <<"Flux params "<<p.params();
     Quad2FluxParams newparams(p.params());
 
     fluxFunction_->fluxParams(newparams);

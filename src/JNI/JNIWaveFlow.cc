@@ -89,6 +89,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveFlow_flux(JNIEnv * env, jobject ob
 
     if (!strcmp(objectClassName, "ShockFlow")) {
 
+
         jdouble sigma = (env)->CallDoubleMethod(obj, getSigmaMethodID); // <--- sigma
 
         jobject xzero = (env)->CallObjectMethod(obj, getXZeroMethodID);

@@ -19,7 +19,7 @@ Quad2::~Quad2() {
 }
 
 Quad2::Quad2(const Quad2 & copy) {
-    cout << "Chamando construtor de copia" << endl;
+
     fluxFunction_ = new Quad2FluxFunction(( Quad2FluxFunction&)copy.fluxFunction());
     accumulationFunction_ = new Quad2AccumulationFunction((Quad2AccumulationFunction &) copy.accumulation());
     boundary_ = copy.boundary().clone();

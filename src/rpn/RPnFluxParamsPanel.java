@@ -59,7 +59,9 @@ public class RPnFluxParamsPanel extends JPanel {
                 JTextField fluxValueField = new JTextField();
                 valuesArray_.add(i, fluxValueField);
                 if (useDefaults) {
-                    fluxValueField.setText(entry.getValue());
+                    Double paramValue = new Double(entry.getValue());
+//                    fluxValueField.setText(entry.getValue());
+                    fluxValueField.setText(paramValue.toString());
                 } else {
 
                     FluxParams fluxParam = RPNUMERICS.getFluxParams();
