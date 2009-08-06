@@ -6,23 +6,16 @@
 package rpn.usecase;
 
 import rpn.component.*;
-import rpnumerics.OrbitPoint;
-import rpnumerics.RPNUMERICS;
-import wave.multid.CoordsArray;
 import wave.util.RealVector;
 
 public class BifurcationPlotAgent extends RpModelPlotAgent {
     //
     // Constants
     //
-
     static public final String DESC_TEXT = "Bifurcation Curve";
     // Members
     //
     static private BifurcationPlotAgent instance_ = null;
-
-
-
     //
     // Constructors/Initializers
     //
@@ -32,7 +25,7 @@ public class BifurcationPlotAgent extends RpModelPlotAgent {
 
     public RpGeometry createRpGeometry(RealVector[] input) {
 
-getContainer().setEnabled(false);
+        getContainer().setEnabled(false);//KEEP IT !!
 
         return null;
 

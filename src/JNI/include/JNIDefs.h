@@ -14,6 +14,8 @@
 
 
 #define BOUNDARY_LOCATION                     "wave/util/Boundary"
+#define ISOTRIANG2DBOUNDARY_LOCATION           "wave/util/IsoTriang2DBoundary"
+#define RECTBOUNDARY_LOCATION                 "wave/util/RectBoundary"
 #define REALVECTOR_LOCATION                   "wave/util/RealVector"
 #define REALMATRIX2_LOCATION                  "wave/util/RealMatrix2"
 #define WAVESTATE_LOCATION                    "rpnumerics/WaveState"

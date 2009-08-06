@@ -28,12 +28,12 @@ public class RarefactionController
     //
     protected void register() {
         ChangeFluxParamsAgent.instance().addPropertyChangeListener(this);
-        ChangeRarefactionXZeroAgent.instance().addPropertyChangeListener(this);
+
     }
 
     protected void unregister() {
         ChangeFluxParamsAgent.instance().removePropertyChangeListener(this);
-        ChangeRarefactionXZeroAgent.instance().removePropertyChangeListener(this);
+
     }
 
     public void install(RpGeomFactory geom) {

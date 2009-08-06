@@ -17,7 +17,6 @@ public class PhysicsProfile {
     private String name_;
     private ArrayList<HashMap<String, String>> fluxParamsArray_ = new ArrayList<HashMap<String, String>>();
     private  String [] boundary_;
-    private  int dimension_;
     private int boundaryDimension_;
     private boolean iso2equiBoundary_;
 

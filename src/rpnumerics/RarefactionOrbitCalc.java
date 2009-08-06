@@ -33,7 +33,7 @@ public class RarefactionOrbitCalc implements RpCalculation {
     public RarefactionOrbitCalc(String methodName, String flowName, PhasePoint point, int familyIndex, int timeDirection) {
 
         methodName_ = methodName;
-        flowName_ = flowName;
+
         start_ = point;
         timeDirection_ = timeDirection;
         familyIndex_ = familyIndex;
@@ -60,29 +60,13 @@ public class RarefactionOrbitCalc implements RpCalculation {
     // Methods
     //
     public RpSolution recalc() throws RpException {
-        solver_.getProfile().setFunction(new FlowVectorField(RPNUMERICS.createRarefactionFlow()));
+//        solver_.getProfile().setFunction(new FlowVectorField(RPNUMERICS.createRarefactionFlow()));
         return calc();
 
     }
 
     public RpSolution calc() throws RpException {
-
-        RpSolution result = null;
-
-//        if (methodName_.equals("native")) {//TODO REMOVE !!!
-            result = calc(methodName_, flowName_, start_, familyIndex_, timeDirection_);
-//
-//        } else {
-//            ODESolution odeSol = solver_.solve(start_, timeDirection_);
-//            WavePoint wavePointArray[] = odeSol.getWavePoints();
-//            OrbitPoint orbitPointArray[] = new OrbitPoint[wavePointArray.length];
-//            for (int i=0;i < wavePointArray.length;i++){
-//                orbitPointArray[i]=new OrbitPoint((RealVector)wavePointArray[i]);
-//            }
-//            
-//            
-//            result = new RarefactionOrbit(orbitPointArray, timeDirection_);
-//        }
+        RpSolution    result = calc(methodName_, flowName_, start_, familyIndex_, timeDirection_);
         return result;
     }
 

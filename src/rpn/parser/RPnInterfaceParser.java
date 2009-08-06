@@ -9,7 +9,6 @@ import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
 
 
-import rpnumerics.RPNumericsProfile;
 import wave.util.RealVector;
 import org.xml.sax.SAXException;
 import java.util.ArrayList;
@@ -18,12 +17,11 @@ import org.xml.sax.ContentHandler;
 import rpn.RPnConfig;
 import rpnumerics.RPNUMERICS;
 
-/** This class implements methods to configure the numeric layer. The values are taked from a XML file and this values are used to setup the physics and all others numerics parameters. */
+/** This class parses the default values for physics, visual configuration and methods. */
 public class RPnInterfaceParser implements ContentHandler {
     //
     // Constants
     //
-    private static RPNumericsProfile profile_ = new RPNumericsProfile();
     private static ArrayList<PhysicsProfile> physics_ = new ArrayList<PhysicsProfile>(2);
     private static ArrayList<MethodProfile> methods_ = new ArrayList<MethodProfile>(2);
     private static ArrayList<VisualizationProfile> visualizationProfiles_ = new ArrayList<VisualizationProfile>(2);
@@ -33,7 +31,6 @@ public class RPnInterfaceParser implements ContentHandler {
     //
     private RealVector tempVector_;
     private String currentElement_;
-
 
     @Override
     public void startElement(String uri, String localName, String name, Attributes att) throws SAXException {
@@ -49,6 +46,7 @@ public class RPnInterfaceParser implements ContentHandler {
         }
 
         if (name.equals("FLUXPARAMS")) {
+            checkNumberFormat(att.getValue("value"));
             currentPhysicsProfile_.addFluxParam(att.getValue("name"), att.getValue("value"), new Integer(att.getValue("position")));
         }
 
@@ -72,8 +70,9 @@ public class RPnInterfaceParser implements ContentHandler {
             currentMethodProfile_ = methodProfile;
 
         }
-        
-        if (name.equals("METHODPARAM")){
+
+        if (name.equals("METHODPARAM")) {
+            checkNumberFormat(att.getValue("value"));
             currentMethodProfile_.addParam(att.getValue("name"), att.getValue("value"));
         }
 
@@ -85,9 +84,9 @@ public class RPnInterfaceParser implements ContentHandler {
         if (name.equals("BOUNDARY")) {
 
             currentPhysicsProfile_.setBoundaryDimension(new Integer(att.getValue("dimension")));
-            
-            if (att.getValue("boundary").equals("rect")){
-                
+
+            if (att.getValue("boundary").equals("rect")) {
+
                 currentPhysicsProfile_.setIso2equiBoundary(false);
             }
 
@@ -145,12 +144,12 @@ public class RPnInterfaceParser implements ContentHandler {
         }
 
         if (name.equals("METHOD")) {
-            
+
             RPnConfig.addMethod(currentMethodProfile_.getName(), currentMethodProfile_);
-            
+
         }
-        
-        
+
+
 
     }
 
@@ -188,7 +187,17 @@ public class RPnInterfaceParser implements ContentHandler {
     public static ArrayList<VisualizationProfile> getVisualizationProfiles() {
         return visualizationProfiles_;
     }
-    public static ArrayList<MethodProfile> getMethodProfiles(){
+
+    public static ArrayList<MethodProfile> getMethodProfiles() {
         return methods_;
+    }
+    
+    private void checkNumberFormat(String value) {
+        try {
+            Double teste = new Double(value);
+        } catch (NumberFormatException ex) {
+            System.err.println("Invalid number format in default values file: " + value);
+            System.exit(1);
+        }
     }
 }

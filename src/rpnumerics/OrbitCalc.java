@@ -57,7 +57,12 @@ public class OrbitCalc implements RpCalculation {
 
         FlowVectorField flowVectorField = (FlowVectorField) odeSolver_.getProfile().getFunction();
         flowVectorField.setWaveFlow(RPNUMERICS.createShockFlow()); //Updating flow parameters
+        if (timeDirection_==0){
+            System.out.println("Plotando ambas as orbitas");
+        }
+        
         ODESolution odeSol = odeSolver_.solve(getStart(), timeDirection_);
+        
         return new Orbit(odeSol.getWavePoints(), odeSol.getTimes(), odeSol.getFlag());
     }
 

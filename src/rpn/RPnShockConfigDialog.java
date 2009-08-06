@@ -108,58 +108,56 @@ public class RPnShockConfigDialog extends RPnDialog {
         RPNUMERICS.getShockProfile().setFlowName((String) flowNameComboBox_.getSelectedItem());
 
         RPNUMERICS.setCurrentProfile(RPNUMERICS.getShockProfile());
-        
+
         RPnUIFrame.setStatusMessage("Enter coordinates");
 
 
     }
-    
-    private class MouseHandler implements MouseListener{
+
+    private class MouseHandler implements MouseListener {
 
         public void mouseClicked(MouseEvent e) {
-            
-            
-            JLabel label=null;
-            if (e.getSource() instanceof JLabel){
-                
-                label=(JLabel) e.getSource();
-                
+
+
+            JLabel label = null;
+            if (e.getSource() instanceof JLabel) {
+
+                label = (JLabel) e.getSource();
+
             }
-            
-            
-            if (label.getName().equals("pluginLabel") && (e.getButton()==MouseEvent.BUTTON3) ){
+
+
+            if (label.getName().equals("pluginLabel") && (e.getButton() == MouseEvent.BUTTON3)) {
 
                 PluginConfigDialog dialog = new PluginConfigDialog(ShockProfile.SHOCKFLOW_NAME);
                 dialog.setVisible(true);
 
             }
-            
-            if ((label.getName().equals("methodLabel")) && (e.getButton()==MouseEvent.BUTTON3)){
-                
+
+            if ((label.getName().equals("methodLabel")) && (e.getButton() == MouseEvent.BUTTON3)) {
+
                 String selectedMethod = methodNameLabel_.getText();
-                
-                if (selectedMethod.equals("Continuation")){
-                RPnContinuationMethodConfigDialog dialog = new RPnContinuationMethodConfigDialog();
-                dialog.setVisible(true);
+
+                if (selectedMethod.equals("Continuation")) {
+                    RPnContinuationMethodConfigDialog dialog = new RPnContinuationMethodConfigDialog();
+                    dialog.setVisible(true);
 
                 }
-                
+
                 if (selectedMethod.equals("Contour")) {
-                RPnContourConfigDialog dialog = new RPnContourConfigDialog();
-                dialog.setVisible(true);
+                    RPnContourConfigDialog dialog = new RPnContourConfigDialog();
+                    dialog.setVisible(true);
 
                 }
-                
+
             }
-                        
+
         }
 
         public void mousePressed(MouseEvent e) {
-
         }
 
         public void mouseReleased(MouseEvent e) {
-
         }
 
         public void mouseEntered(MouseEvent e) {
@@ -168,14 +166,10 @@ public class RPnShockConfigDialog extends RPnDialog {
             component.setToolTipText("Right Click to configure");
             Cursor cur = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
             component.setCursor(cur);
-            
+
         }
 
         public void mouseExited(MouseEvent e) {
-
-            
         }
-        
     }
-    
 }

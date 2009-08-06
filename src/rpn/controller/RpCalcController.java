@@ -36,7 +36,7 @@ public class RpCalcController implements RpController {
         ChangeFluxParamsAgent.instance().addPropertyChangeListener(this);
         ChangeXZeroAgent.instance().addPropertyChangeListener(this);
         ChangeSigmaAgent.instance().addPropertyChangeListener(this);
-        ChangeRarefactionXZeroAgent.instance().addPropertyChangeListener(this);
+
     }
 
 
@@ -46,7 +46,7 @@ public class RpCalcController implements RpController {
         ChangeFluxParamsAgent.instance().removePropertyChangeListener(this);
         ChangeXZeroAgent.instance().removePropertyChangeListener(this);
         ChangeSigmaAgent.instance().removePropertyChangeListener(this);
-        ChangeRarefactionXZeroAgent.instance().removePropertyChangeListener(this);
+      
         
     }
 

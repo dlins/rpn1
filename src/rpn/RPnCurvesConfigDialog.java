@@ -7,7 +7,6 @@ package rpn;
 
 import javax.swing.*;
 import java.awt.*;
-import java.beans.PropertyChangeEvent;
 import rpn.controller.ui.BIFURCATION_CONFIG;
 import rpn.controller.ui.RAREFACTION_CONFIG;
 import rpn.controller.ui.SHOCK_CONFIG;
@@ -23,7 +22,7 @@ public class RPnCurvesConfigDialog extends RPnDialog {
     private JComboBox curveComboBox_;
 
     public RPnCurvesConfigDialog() {
-        
+
 
         try {
             jbInit();
@@ -86,7 +85,7 @@ public class RPnCurvesConfigDialog extends RPnDialog {
         if (curveComboBox_.getSelectedItem().equals("Wave Curves")) {
             newState = new RAREFACTION_CONFIG();
             RPNUMERICS.getShockProfile().setHugoniotMethodName(ShockProfile.HUGONIOT_METHOD_NAMES[0]);
-
+//          
         }
         if (curveComboBox_.getSelectedItem().equals("Bifurcation Curves")) {
             newState = new BIFURCATION_CONFIG();

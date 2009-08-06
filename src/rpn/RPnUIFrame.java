@@ -91,11 +91,10 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             if (UIController.instance().getState() instanceof SHOCK_CONFIG || (evt.getNewValue() instanceof SIGMA_CONFIG)) {
 
                 shockConfigMenu();
-
-
                 toolBar_.removeAll();
                 toolBar_.add(ForwardOrbitPlotAgent.instance().getContainer());
                 toolBar_.add(BackwardOrbitPlotAgent.instance().getContainer());
+                toolBar_.add(OrbitPlotAgent.instance().getContainer());
                 toolBar_.add(ForwardManifoldPlotAgent.instance().getContainer());
                 toolBar_.add(BackwardManifoldPlotAgent.instance().getContainer());
                 toolBar_.add(StationaryPointPlotAgent.instance().getContainer());
@@ -107,13 +106,18 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
             }
 
-            if (UIController.instance().getState() instanceof RAREFACTION_CONFIG) {
+            if (UIController.instance().getState() instanceof RAREFACTION_CONFIG || evt.getNewValue() instanceof RAREFACTION_CONFIG) {
                 rarefactionConfigMenu();
 
                 toolBar_.removeAll();
                 toolBar_.add(RarefactionForwardOrbitPlotAgent.instance().getContainer());
                 toolBar_.add(RarefactionBackwardOrbitPlotAgent.instance().getContainer());
                 toolBar_.add(HugoniotPlotAgent.instance().getContainer());
+                
+                toolBar_.add(BackwardShockCurvePlotAgent.instance().getContainer());
+                toolBar_.add(ForwardShockCurvePlotAgent.instance().getContainer());
+                
+                
                 toolBar_.add(CompositePlotAgent.instance().getContainer());
                 toolBar_.add(ScratchAgent.instance().getContainer());
                 ScratchAgent.instance().setEnabled(true);
@@ -121,7 +125,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             }
 
 
-            if (UIController.instance().getState() instanceof BIFURCATION_CONFIG || evt.getNewValue() instanceof BIFURCATION_CONFIG ) {
+            if (UIController.instance().getState() instanceof BIFURCATION_CONFIG || evt.getNewValue() instanceof BIFURCATION_CONFIG) {
 
                 bifurcationConfigMenu();
 
@@ -145,8 +149,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         }
 
     }
-
-
     //File | Exit action performed
     public void jMenuFileExit_actionPerformed(ActionEvent e) {
         commandMenu_.finalizeApplication();
@@ -456,9 +458,10 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private void showCurvesConfigDialog() {
 
         RPnCurvesConfigDialog curvesDialog = new RPnCurvesConfigDialog();
-        Point topLeftCorner = this.getLocation();
-        topLeftCorner.x += 200;
-        curvesDialog.setLocation(topLeftCorner);
+        curvesDialog.setLocationRelativeTo(null);
+//        Point topLeftCorner = this.getLocation(); //TODO Validate this dialog position
+//        topLeftCorner.x += 200;
+//        curvesDialog.setLocation(topLeftCorner);
         curvesDialog.setVisible(true);
 
     }
@@ -466,6 +469,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private void shockConfigMenu() {
         shockMenuItem_.addActionListener(
                 new java.awt.event.ActionListener() {
+
                     public void actionPerformed(ActionEvent e) {
                         RPnShockConfigDialog shockConfigDialog = new RPnShockConfigDialog(false, false);
                         shockConfigDialog.setVisible(true);
@@ -503,7 +507,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 });
 
         modelInteractionMenu.removeAll();
-        modelInteractionMenu.add(ChangeRarefactionXZeroAgent.instance());
         modelInteractionMenu.add(ChangeXZeroAgent.instance());
         modelInteractionMenu.addSeparator();
         modelInteractionMenu.add(ChangeFluxParamsAgent.instance());
@@ -542,15 +545,21 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         DisplayMode displayMode = gs[0].getDisplayMode();
         int height = displayMode.getHeight();
         int width = displayMode.getWidth();
-        this.setLocation((int) (width - (width * .9)), (int) (height - (height * .95)));
+        this.setLocation((int) (width - (width * .2)), (int) (height - (height * .8)));
 
     }
 
     private void setFramesPosition(Component component) {
 
-        Point topLeftCorner = this.getLocation();
-        topLeftCorner.y += 120;
-        component.setLocation(topLeftCorner);
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice[] gs = ge.getScreenDevices();
+        DisplayMode displayMode = gs[0].getDisplayMode();
+        int height = displayMode.getHeight();
+        int width = displayMode.getWidth();
+        
+        int newwidth = (int) (width - (width * .6));
+        int newheight = (int) (height - (height * .8));
+        component.setLocation(newwidth,newheight);
 
     }
 

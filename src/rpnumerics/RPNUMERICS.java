@@ -21,12 +21,10 @@ public class RPNUMERICS {
     //
     // Constants
     //
-
     static public int INCREASING_LAMBDA = 0;
     //
     // Members
     //
-
     private static HashMap<String, MethodConfiguration> methodsConfigMap_ = new HashMap<String, MethodConfiguration>();
     static private RpErrorControl errorControl_ = null;
     static private ODESolver odeSolver_ = null;
@@ -66,9 +64,8 @@ public class RPNUMERICS {
         errorControl_ = new RpErrorControl(boundary());
     }
 
+    public static void resetMethodsParams() {
 
-    public static void resetMethodsParams(){
-        
         ArrayList<MethodProfile> methodsProfiles = RPnConfig.getAllMethodsProfiles();
 
         for (int i = 0; i < methodsProfiles.size(); i++) {
@@ -101,9 +98,9 @@ public class RPNUMERICS {
             contourConfiguration_.setParamValue(paramName, paramValue);
         } else {
 
-        MethodConfiguration methodConfig = methodsConfigMap_.get(methodName);
-        methodConfig.setParamValue(paramName, paramValue);
-        methodsConfigMap_.put(methodName, methodConfig);
+            MethodConfiguration methodConfig = methodsConfigMap_.get(methodName);
+            methodConfig.setParamValue(paramName, paramValue);
+            methodsConfigMap_.put(methodName, methodConfig);
         }
 
     }
@@ -150,14 +147,8 @@ public class RPNUMERICS {
 
     public static RarefactionOrbitCalc createRarefactionCalc(OrbitPoint orbitPoint, int timeDirection) {
 
-        RarefactionFlow flow = createRarefactionFlow();
-        RealVector scales = new RealVector(rarefactionProfile_.getXZero().getSize());
-        for (int i = 0; i < scales.getSize(); i++) {
-            scales.setElement(i, 1);
-        }
+        return new RarefactionOrbitCalc("methodName", "flowName", orbitPoint, rarefactionProfile_.getFamily(), timeDirection);//TODO Is method and flowName needed ? 
 
-        errorControl_ = new RpErrorControl(scales);
-        return new RarefactionOrbitCalc(orbitPoint, timeDirection, createODESolver(flow), rarefactionProfile_.geRarefactiontMethodName());
     }
 
     public static StationaryPointCalc createStationaryPointCalc(PhasePoint initial) {
@@ -215,12 +206,6 @@ public class RPNUMERICS {
         return flow;
     }
 
-    public static RarefactionFlow createRarefactionFlow() {
-
-        return new RarefactionFlow(rarefactionProfile_.getXZero(), rarefactionProfile_.getFamily(), new FluxFunction(getFluxParams()));
-
-    }
-
     private static ODESolver createODESolver(WaveFlow flow) {
 
         odeSolver_ = new Rk4BPMethod(
@@ -234,7 +219,6 @@ public class RPNUMERICS {
     //
     // Accessors
     //
-
     public static void setCurrentProfile(ShockRarefactionProfile aShockRarefactionProfile_) {
         shockRarefactionProfile_ = aShockRarefactionProfile_;
     }

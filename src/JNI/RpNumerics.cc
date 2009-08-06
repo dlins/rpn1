@@ -136,6 +136,8 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setBoundary
     jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
     jclass boundaryClass = env->FindClass(BOUNDARY_LOCATION);
 
+    jclass rectBoundaryClass = env->FindClass(RECTBOUNDARY_LOCATION);
+    jboolean testeBoundaryType = env->IsInstanceOf(newBoundary, rectBoundaryClass);
 
     jmethodID getMinimumsMethodID = env->GetMethodID(boundaryClass, "getMinimums", "()Lwave/util/RealVector;");
     jmethodID getMaximumsMethodID = env->GetMethodID(boundaryClass, "getMaximums", "()Lwave/util/RealVector;");
@@ -163,23 +165,15 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setBoundary
     env->GetDoubleArrayRegion(minRealVectorArray, 0, minSize, minNativeArray);
     env->GetDoubleArrayRegion(maxRealVectorArray, 0, maxSize, maxNativeArray);
 
+    if (testeBoundaryType) { //         RectBoundary 
 
+        RealVector minNativeRealVector(minSize, minNativeArray);
+        RealVector maxNativeRealVector(maxSize, maxNativeArray);
+        RectBoundary nativeBoundary(minNativeRealVector, maxNativeRealVector);
 
-    /*
-     *
-     * RectBoundary 
-     **/
+        RpNumerics::getPhysics().boundary(nativeBoundary);
 
-
-    RealVector minNativeRealVector(minSize, minNativeArray);
-    RealVector maxNativeRealVector(maxSize, maxNativeArray);
-
-    RectBoundary nativeBoundary(minNativeRealVector, maxNativeRealVector);
-
-
-    RpNumerics::getPhysics().boundary(nativeBoundary);
-
-
+    } 
 
 
 }

@@ -46,9 +46,6 @@ public class RPnConfigDialog extends RPnDialog {
     private JPanel secondPanel_ = new JPanel(new BorderLayout());
 //    private JPanel thirdPanel_ = new JPanel(new GridLayout(3, 1));
     private JPanel thirdPanel_ = new JPanel(new BorderLayout());
-
-
-
     private JPanel methodsParamsPanel_ = new JPanel();
     private JTabbedPane tabbedPanel_ = new JTabbedPane();
     private JLabel physicsNameLabel_ = new JLabel();
@@ -161,11 +158,10 @@ public class RPnConfigDialog extends RPnDialog {
 
         boundaryTextArray_ = new ArrayList<JTextField>();
 
-        if (boundaryArray.length == 4 && physicsProfile_.getBoundaryDimension() == 2) { //RECT BOUNDARY
+        if (!physicsProfile_.isIso2equiBoundary()) {//RECT BOUNDARY
 
-
-            JLabel minLabel = new JLabel("Min");
-            JLabel maxLabel = new JLabel("Max");
+            JLabel minLabel = new JLabel("Min", SwingConstants.CENTER);
+            JLabel maxLabel = new JLabel("Max", SwingConstants.CENTER);
 
             boundaryDataPanel.setLayout(new GridLayout(2, physicsProfile_.getBoundaryDimension() + 1));
             boundaryDataPanel.add(minLabel);
@@ -185,35 +181,13 @@ public class RPnConfigDialog extends RPnDialog {
 
             boundaryPanel_.add(boundaryDataPanel, BorderLayout.CENTER);
 
-        }
 
+        } else {//ISO TRIANGULAR BOUNDARY
 
-        if (boundaryArray.length == 6 && physicsProfile_.getBoundaryDimension() == 2) { //ISO TRIANG BOUNDARY
+            JLabel triangularBoundaryLabel = new JLabel("Triangular Boundary", SwingConstants.CENTER);
 
-            JLabel aLabel = new JLabel("A");
-            JLabel bLabel = new JLabel("B");
-            JLabel cLabel = new JLabel("C");
-
-            boundaryDataPanel.setLayout(new GridLayout(3, physicsProfile_.getBoundaryDimension() + 1));
-            boundaryDataPanel.add(aLabel);
-
-
-
-            for (int i = 0; i < boundaryArray.length; i++) {
-
-                boundaryTextArray_.add(i, new JTextField((boundaryArray[i])));
-
-                if (i == boundaryArray.length / 3) {
-                    boundaryDataPanel.add(bLabel);
-                }
-
-                if (i == 2 * boundaryArray.length / 3) {
-                    boundaryDataPanel.add(cLabel);
-                }
-
-                boundaryDataPanel.add(boundaryTextArray_.get(i));
-
-            }
+            boundaryDataPanel.setLayout(new BorderLayout());
+            boundaryDataPanel.add(triangularBoundaryLabel, BorderLayout.CENTER);
 
             boundaryPanel_.add(boundaryDataPanel, BorderLayout.CENTER);
         }
@@ -278,12 +252,12 @@ public class RPnConfigDialog extends RPnDialog {
                 JLabel paramNameLabel = new JLabel(paramEntry.getKey());
 
 
-                methodPanelLayoutConstraints.gridx=0;
+                methodPanelLayoutConstraints.gridx = 0;
                 methodPanel.add(paramNameLabel, methodPanelLayoutConstraints);
 
-                methodPanelLayoutConstraints.gridx=1;
+                methodPanelLayoutConstraints.gridx = 1;
 
-                methodPanel.add(paramTextField,methodPanelLayoutConstraints);
+                methodPanel.add(paramTextField, methodPanelLayoutConstraints);
 
 
             }
@@ -303,8 +277,8 @@ public class RPnConfigDialog extends RPnDialog {
 
         JPanel physicsLabelPanel = new JPanel(new FlowLayout());
 //        JPanel axisCheckPanel = new JPanel(new GridLayout(2, 2));
-        
-        
+
+
         JPanel axisCheckPanel = new JPanel(new GridBagLayout());
 
         JScrollPane axisScroll = new JScrollPane(axisCheckPanel);
@@ -492,9 +466,7 @@ public class RPnConfigDialog extends RPnDialog {
 
     private void setBoundary() {
 
-
-        if (physicsProfile_.getBoundary().length == 4 && physicsProfile_.getBoundaryDimension() == 2) { //RECT BOUNDARY
-
+        if (!physicsProfile_.isIso2equiBoundary()) {//RECT BOUNDARY
             int i = 0;
             RealVector min = new RealVector(2);
             RealVector max = new RealVector(2);
@@ -514,32 +486,10 @@ public class RPnConfigDialog extends RPnDialog {
             RectBoundary newBoundary = new RectBoundary(min, max);
 
             RPNUMERICS.setBoundary(newBoundary);
-        }
-
-
-        if (physicsProfile_.getBoundary().length == 6 && physicsProfile_.getBoundaryDimension() == 2) { //ISO TRIANG 2D BOUNDARY
-
-            RealVector A = new RealVector(2);
-            RealVector B = new RealVector(2);
-            RealVector C = new RealVector(2);
-
-            A.setElement(0, new Double(boundaryTextArray_.get(0).getText()));
-            A.setElement(1, new Double(boundaryTextArray_.get(1).getText()));
-
-            B.setElement(0, new Double(boundaryTextArray_.get(2).getText()));
-            B.setElement(1, new Double(boundaryTextArray_.get(3).getText()));
-
-            C.setElement(0, new Double(boundaryTextArray_.get(4).getText()));
-            C.setElement(1, new Double(boundaryTextArray_.get(5).getText()));
-
-
-            IsoTriang2DBoundary newBoundary = new IsoTriang2DBoundary(A, B, C);
-
-
-            RPNUMERICS.setBoundary(newBoundary);
+            
 
         }
-
+    //If is triangular boundary, nothing to do . Default iso triangle domain in triphase physics will be used.
     }
 
     private class ComponentController implements ActionListener {

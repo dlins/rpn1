@@ -31,6 +31,7 @@ public class NumConfigReadyImpl extends NumConfigImpl
         // ENABLED
         BackwardOrbitPlotAgent.instance().setEnabled(true);
         ForwardOrbitPlotAgent.instance().setEnabled(true);
+        OrbitPlotAgent.instance().setEnabled(true);
         PoincareSectionPlotAgent.instance().setEnabled(true);
         StationaryPointPlotAgent.instance().setEnabled(true);
         ChangeXZeroAgent.instance().setEnabled(true);
