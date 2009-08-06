@@ -23,7 +23,6 @@
 #include "PluginService.h"
 #include "RPnPluginManager.h"
 #include "ShockFlowPlugin.h"
-#include "RarefactionFlowPlugin.h"
 #include <iostream>
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_WaveFlow_flux(JNIEnv * env, jobject obj, jobject realVector) {
@@ -31,15 +30,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveFlow_flux(JNIEnv * env, jobject ob
     //Classes references
 
     jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
-
-
     jclass shockFlowClass = env->FindClass(SHOCKFLOW_LOCATION);
-    jclass rarefactionFlowClass = env->FindClass(RAREFACTIONFLOW_LOCATION);
-
-
-    jclass objectClass = env->FindClass("java/lang/Object");
-    jclass clsClass = env->FindClass("java/lang/Class");
-
 
     //Methods references
 
@@ -52,20 +43,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveFlow_flux(JNIEnv * env, jobject ob
     jmethodID getSigmaMethodID = (env)->GetMethodID(shockFlowClass, "getSigma", "()D");
     jmethodID getXZeroMethodID = (env)->GetMethodID(shockFlowClass, "getXZero", "()Lrpnumerics/PhasePoint;");
 
-
-    jmethodID getReferenceVectorMethodID = (env)->GetMethodID(rarefactionFlowClass, "getReferenceVector", "()Lrpnumerics/PhasePoint;");
-    jmethodID getFamilyMethodID = (env)->GetMethodID(rarefactionFlowClass, "getFamily", "()I");
-
-
-    jmethodID getClassID = (env)->GetMethodID(objectClass, "getClass", "()Ljava/lang/Class;");
-    jmethodID getClassNameID = (env)->GetMethodID(clsClass, "getSimpleName", "()Ljava/lang/String;");
-
-    //Catching the object class name
-
-    jobject classObj = (env)->CallObjectMethod(obj, getClassID);
-    jstring className = (jstring) (env)->CallObjectMethod(classObj, getClassNameID);
-    const char *objectClassName;
-    objectClassName = env->GetStringUTFChars(className, NULL);
 
     //Getting the dimension
     int dimension = env->CallIntMethod(realVector, getSizeMethodID);
@@ -85,10 +62,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveFlow_flux(JNIEnv * env, jobject ob
 
 
     const FluxFunction & fluxFunction = RpNumerics::getFlux();
-
-
-    if (!strcmp(objectClassName, "ShockFlow")) {
-
 
         jdouble sigma = (env)->CallDoubleMethod(obj, getSigmaMethodID); // <--- sigma
 
@@ -119,48 +92,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveFlow_flux(JNIEnv * env, jobject ob
 
         RPnPluginManager::unload(plug, "ShockFlow");
 
-    }
-
-    if (!strcmp(objectClassName, "RarefactionFlow")) {
-
-
-        jint family = (env)->CallIntMethod(obj, getFamilyMethodID); // <--- Family
-
-        jobject referenceVector = (env)->CallObjectMethod(obj, getReferenceVectorMethodID);
-
-        jdoubleArray referenceArray = (jdoubleArray) (env)->CallObjectMethod(referenceVector, toDoubleMethodID);
-
-        int referenceLength = env->GetArrayLength(referenceArray);
-
-        double nativeReferenceArray [referenceLength]; // <--- Reference Vector
-
-        env->GetDoubleArrayRegion(referenceArray, 0, referenceLength, nativeReferenceArray);
-
-        cout << "Family: " << family << "\n";
-
-        for (int i = 0; i < referenceLength; i++) {
-            cout << "Reference Vector: " << nativeReferenceArray [i] << "\n";
-        }
-
-        RpnPlugin * plug = RPnPluginManager::getPluginInstance("RarefactionFlow");
-
-        RarefactionFlowPlugin* flow = (RarefactionFlowPlugin*) plug;
-
-
-        //Setting the new parameters and flux function
-
-
-        flow->setFamilyIndex(family);
-
-        flow->setReferenceVector(RealVector(dimension, nativeReferenceArray));
-
-        flow->setFluxFunction(fluxFunction);
-
-        flow->flux(realVectorInput, realVectorOutput);
-
-        RPnPluginManager::unload(plug, "RarefactionFlow");
-
-    }
 
     jobject returnedRealVector = env->NewObject(realVectorClass, realVectorConstructorID, dimension);
 
@@ -170,7 +101,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveFlow_flux(JNIEnv * env, jobject ob
 
     }
 
-    env->ReleaseStringUTFChars(className, objectClassName);
 
     return returnedRealVector;
 
@@ -188,13 +118,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveFlow_fluxDeriv(JNIEnv * env, jobje
     jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
     jclass jacobianMatrixClass = env->FindClass(JACOBIANMATRIX_LOCATION);
 
-
     jclass shockFlowClass = env->FindClass(SHOCKFLOW_LOCATION);
-    jclass rarefactionFlowClass = env->FindClass(RAREFACTIONFLOW_LOCATION);
-
-
-    jclass objectClass = env->FindClass("java/lang/Object");
-    jclass clsClass = env->FindClass("java/lang/Class");
 
 
     //Methods references
@@ -208,21 +132,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveFlow_fluxDeriv(JNIEnv * env, jobje
 
     jmethodID getSigmaMethodID = (env)->GetMethodID(shockFlowClass, "getSigma", "()D");
     jmethodID getXZeroMethodID = (env)->GetMethodID(shockFlowClass, "getXZero", "()Lrpnumerics/PhasePoint;");
-
-
-    jmethodID getReferenceVectorMethodID = (env)->GetMethodID(rarefactionFlowClass, "getReferenceVector", "()Lrpnumerics/PhasePoint;");
-    jmethodID getFamilyMethodID = (env)->GetMethodID(rarefactionFlowClass, "getFamily", "()I");
-
-
-    jmethodID getClassID = (env)->GetMethodID(objectClass, "getClass", "()Ljava/lang/Class;");
-    jmethodID getClassNameID = (env)->GetMethodID(clsClass, "getSimpleName", "()Ljava/lang/String;");
-
-    //Catching the object class name
-
-    jobject classObj = (env)->CallObjectMethod(obj, getClassID);
-    jstring className = (jstring) (env)->CallObjectMethod(classObj, getClassNameID);
-    const char *objectClassName;
-    objectClassName = env->GetStringUTFChars(className, NULL);
 
     //Getting the dimension
     int dimension = env->CallIntMethod(realVector, getSizeMethodID);
@@ -243,10 +152,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveFlow_fluxDeriv(JNIEnv * env, jobje
 
     const FluxFunction & fluxFunction = RpNumerics::getFlux();
 
-
-
-
-    if (!strcmp(objectClassName, "ShockFlow")) {
 
         jdouble sigma = (env)->CallDoubleMethod(obj, getSigmaMethodID); // <--- sigma
 
@@ -272,7 +177,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveFlow_fluxDeriv(JNIEnv * env, jobje
 
         ShockFlowParams newParams(phasePoint, sigma);
 
-
         //Setting the new parameters and flux function
         flow->setParams(newParams);
 
@@ -282,43 +186,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveFlow_fluxDeriv(JNIEnv * env, jobje
 
         RPnPluginManager::unload(plug, "ShockFlow");
 
-    }
 
-    if (!strcmp(objectClassName, "RarefactionFlow")) {
-
-
-        jint family = (env)->CallIntMethod(obj, getFamilyMethodID); // <--- Family
-
-        jobject referenceVector = (env)->CallObjectMethod(obj, getReferenceVectorMethodID);
-
-        jdoubleArray referenceArray = (jdoubleArray) (env)->CallObjectMethod(referenceVector, toDoubleMethodID);
-
-        int referenceLength = env->GetArrayLength(referenceArray);
-
-        double nativeReferenceArray [referenceLength]; // <--- Reference Vector
-
-        env->GetDoubleArrayRegion(referenceArray, 0, referenceLength, nativeReferenceArray);
-
-        cout << "Family: " << family << "\n";
-
-        for (int i = 0; i < referenceLength; i++) {
-            cout << "Reference Vector: " << nativeReferenceArray [i] << "\n";
-        }
-
-        RpnPlugin * plug = RPnPluginManager::getPluginInstance("RarefactionFlow");
-
-        RarefactionFlowPlugin* flow = (RarefactionFlowPlugin*) plug;
-
-        flow->setFamilyIndex(family);
-        flow->setReferenceVector(RealVector(dimension, nativeReferenceArray));
-        flow->setFluxFunction(fluxFunction);
-
-
-        flow->fluxDeriv(realVectorInput, jacobianMatrixOutput);
-
-        RPnPluginManager::unload(plug, "RarefactionFlow");
-
-    }
 
     jobject returnedJacobianMatrix = env->NewObject(jacobianMatrixClass, jacobianMatrixConstructorID, dimension);
 
@@ -327,11 +195,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveFlow_fluxDeriv(JNIEnv * env, jobje
             env->CallVoidMethod(returnedJacobianMatrix, setElementMethodID, i, j, jacobianMatrixOutput(i, j));
         }
     }
-    env->ReleaseStringUTFChars(className, objectClassName);
 
     return returnedJacobianMatrix;
-
-
 
 }
 
@@ -348,14 +213,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveFlow_fluxDeriv2(JNIEnv * env, jobj
     jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
     jclass hessianMatrixClass = env->FindClass(HESSIANMATRIX_LOCATION);
 
-
     jclass shockFlowClass = env->FindClass(SHOCKFLOW_LOCATION);
-    jclass rarefactionFlowClass = env->FindClass(RAREFACTIONFLOW_LOCATION);
-
-
-    jclass objectClass = env->FindClass("java/lang/Object");
-    jclass clsClass = env->FindClass("java/lang/Class");
-
 
     //Methods references
 
@@ -369,21 +227,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveFlow_fluxDeriv2(JNIEnv * env, jobj
     jmethodID getSigmaMethodID = (env)->GetMethodID(shockFlowClass, "getSigma", "()D");
     jmethodID getXZeroMethodID = (env)->GetMethodID(shockFlowClass, "getXZero", "()Lrpnumerics/PhasePoint;");
 
-
-    jmethodID getReferenceVectorMethodID = (env)->GetMethodID(rarefactionFlowClass, "getReferenceVector", "()Lrpnumerics/PhasePoint;");
-    jmethodID getFamilyMethodID = (env)->GetMethodID(rarefactionFlowClass, "getFamily", "()I");
-
-
-    jmethodID getClassID = (env)->GetMethodID(objectClass, "getClass", "()Ljava/lang/Class;");
-    jmethodID getClassNameID = (env)->GetMethodID(clsClass, "getSimpleName", "()Ljava/lang/String;");
-
-    //Catching the object class name
-
-    jobject classObj = (env)->CallObjectMethod(obj, getClassID);
-    jstring className = (jstring) (env)->CallObjectMethod(classObj, getClassNameID);
-    const char *objectClassName;
-    objectClassName = env->GetStringUTFChars(className, NULL);
-
+    
     //Getting the dimension
     int dimension = env->CallIntMethod(realVector, getSizeMethodID);
 
@@ -402,8 +246,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveFlow_fluxDeriv2(JNIEnv * env, jobj
 
 
     const FluxFunction & fluxFunction = RpNumerics::getFlux();
-
-    if (!strcmp(objectClassName, "ShockFlow")) {
 
         jdouble sigma = (env)->CallDoubleMethod(obj, getSigmaMethodID); // <--- sigma
 
@@ -438,43 +280,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveFlow_fluxDeriv2(JNIEnv * env, jobj
 
         RPnPluginManager::unload(plug, "ShockFlow");
 
-    }
-
-    if (!strcmp(objectClassName, "RarefactionFlow")) {
-
-
-        jint family = (env)->CallIntMethod(obj, getFamilyMethodID); // <--- Family
-
-        jobject referenceVector = (env)->CallObjectMethod(obj, getReferenceVectorMethodID);
-
-        jdoubleArray referenceArray = (jdoubleArray) (env)->CallObjectMethod(referenceVector, toDoubleMethodID);
-
-        int referenceLength = env->GetArrayLength(referenceArray);
-
-        double nativeReferenceArray [referenceLength]; // <--- Reference Vector
-
-        env->GetDoubleArrayRegion(referenceArray, 0, referenceLength, nativeReferenceArray);
-
-        cout << "Family: " << family << "\n";
-
-        for (int i = 0; i < referenceLength; i++) {
-            cout << "Reference Vector: " << nativeReferenceArray [i] << "\n";
-        }
-
-        RpnPlugin * plug = RPnPluginManager::getPluginInstance("RarefactionFlow");
-
-        RarefactionFlowPlugin* flow = (RarefactionFlowPlugin *) plug;
-
-        flow->setFamilyIndex(family);
-        flow->setReferenceVector(RealVector(dimension, nativeReferenceArray));
-        flow->setFluxFunction(fluxFunction);
-
-        flow->fluxDeriv2(realVectorInput, hessianMatrixOutput);
-
-        RPnPluginManager::unload(plug, "RarefactionFlow");
-
-    }
-
     jobject returnedHessianMatrix = env->NewObject(hessianMatrixClass, hessianMatrixConstructorID, dimension);
 
     for (int i = 0; i < dimension; i++) {
@@ -484,7 +289,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveFlow_fluxDeriv2(JNIEnv * env, jobj
             }
         }
     }
-    env->ReleaseStringUTFChars(className, objectClassName);
 
     return returnedHessianMatrix;
 }
