@@ -24,13 +24,13 @@
 class Permeability{
     
 private:
-    
-    
-    double denkw_, denkg_, denkow_, denkog_;
   
     PermParams * params_;
+    double denkw_, denkg_, denkow_, denkog_;
     
 public:
+    
+
     
     Permeability(const PermParams & params);
     
@@ -97,6 +97,19 @@ public:
     double dkgdwo(double sw, double so, double sg)const;
         
     double dkgdoo(double sw, double so, double sg)const;
+    
+    double denkw()const;
+
+    double denkg()const ;
+
+    double denkow()const;
+
+    double denkog()const;
+
+
+
+    
+    
         
 };
 

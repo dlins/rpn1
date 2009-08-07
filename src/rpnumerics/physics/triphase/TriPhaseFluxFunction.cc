@@ -45,119 +45,100 @@ TriPhaseFluxFunction::~TriPhaseFluxFunction() {
 
 }
 
-int TriPhaseFluxFunction::F(const WaveState &U, JetMatrix &M)const {
-
-    TriPhaseParams & triPhaseParams = (TriPhaseParams &) fluxParams();
-
-
-    double sw = U(0);
-    double so = U(1);
-    double sg = 1. - sw - so;
-    double lambdaw = (double)(perm().kw(sw, so, sg) / triPhaseParams.muw());
-    double lambdao =(double) (perm().ko(sw, so, sg) / triPhaseParams.muo());
-    double lambdag = (double)(perm().kg(sw, so, sg) / triPhaseParams.mug());
-    double lambda = (double)(lambdaw + lambdao + lambdag);
-
-    M(0, (lambdaw / lambda) * (triPhaseParams.vel() + lambdao * (triPhaseParams.grw() - triPhaseParams.gro()) + lambdag *
-            (triPhaseParams.grw() - triPhaseParams.grg())));
-    M(1, (lambdao / lambda) * (triPhaseParams.vel() + lambdaw * (triPhaseParams.gro() - triPhaseParams.grw()) + lambdag *
-            (triPhaseParams.gro() - triPhaseParams.grg())));
-}
-
-int TriPhaseFluxFunction::DF(const WaveState &U, JetMatrix &M)const {
-
-    TriPhaseParams & triPhaseParams = (TriPhaseParams &) fluxParams();
-
-    double sw = U(0);
-    double so = U(1);
-    double sg = 1. - sw - so;
-
-    double lambdaw = perm().kw(sw, so, sg) / triPhaseParams.muw();
-
-    double lambdao = perm().ko(sw, so, sg) / triPhaseParams.muo();
-    double lambdag = perm().kg(sw, so, sg) / triPhaseParams.mug();
-    double lambda = lambdaw + lambdao + lambdag;
-    double lambda2 = pow(lambda, 2);
-    double dlambdawdsw = perm().dkwdsw(sw, so, sg) / triPhaseParams.muw();
-    double dlambdaodsw = perm().dkodsw(sw, so, sg) / triPhaseParams.muo();
-    double dlambdagdsw = perm().dkgdsw(sw, so, sg) / triPhaseParams.mug();
-    double dlambdadsw = dlambdawdsw + dlambdaodsw + dlambdagdsw;
-    double dlambdawdso = perm().dkwdso(sw, so, sg) / triPhaseParams.muw();
-    double dlambdaodso = perm().dkodso(sw, so, sg) / triPhaseParams.muo();
-    double dlambdagdso = perm().dkgdso(sw, so, sg) / triPhaseParams.mug();
-    double dlambdadso = dlambdawdso + dlambdaodso + dlambdagdso;
-
-    M(0, 0, (lambdaw / lambda) * (dlambdaodsw * (triPhaseParams.grw() - triPhaseParams.gro()) + dlambdagdsw *
-            (triPhaseParams.grw() - triPhaseParams.grg())) + ((lambda * dlambdawdsw - lambdaw * dlambdadsw) / lambda2) *
-            (triPhaseParams.vel() + lambdao * (triPhaseParams.grw() - triPhaseParams.gro()) + lambdag * (triPhaseParams.grw() - triPhaseParams.grg())));
-
-
-    M(0, 1, (lambdaw / lambda) * (dlambdaodso * (triPhaseParams.grw() - triPhaseParams.gro()) + dlambdagdso *
-            (triPhaseParams.grw() - triPhaseParams.grg())) + ((lambda * dlambdawdso - lambdaw * dlambdadso) / lambda2) *
-            (triPhaseParams.vel() + lambdao * (triPhaseParams.grw() - triPhaseParams.gro()) + lambdag * (triPhaseParams.grw() - triPhaseParams.grg())));
-
-
-    M(1, 0, (lambdao / lambda) * (dlambdawdsw * (triPhaseParams.gro() - triPhaseParams.grw()) + dlambdagdsw *
-            (triPhaseParams.gro() - triPhaseParams.grg())) + ((lambda * dlambdaodsw - lambdao * dlambdadsw) / lambda2) *
-            (triPhaseParams.vel() + lambdaw * (triPhaseParams.gro() - triPhaseParams.grw()) + lambdag * (triPhaseParams.gro() - triPhaseParams.grg())));
-
-
-    M(1, 1, (lambdao / lambda) * (dlambdawdso * (triPhaseParams.gro() - triPhaseParams.grw()) + dlambdagdso *
-            (triPhaseParams.gro() - triPhaseParams.grg())) + ((lambda * dlambdaodso - lambdao * dlambdadso) / lambda2) *
-            (triPhaseParams.vel() + lambdaw * (triPhaseParams.gro() - triPhaseParams.grw()) + lambdag * (triPhaseParams.gro() - triPhaseParams.grg())));
-
-
-}
-
-int TriPhaseFluxFunction::D2F(const WaveState &U, JetMatrix &M)const {
-
-    int i, j, k;
-
-    for (i = 0; i < M.n_comps(); i++) {
-
-        for (j = 0; j < M.n_comps(); j++) {
-
-            for (k = 0; k < M.n_comps(); k++) {
-
-                if (i == j)
-
-                    M(i, j, k, 1);
-
-                else
-
-                    M(i, j, k, 0);
-
-            }
-        }
-    }
-
-
-}
-
 int TriPhaseFluxFunction::jet(const WaveState &U, JetMatrix &M, int degree) const {
 
-    switch (degree) {
+    double sw, so, sg, Grwg, Grwo, Grow, Grog, lambdaw, lambdao, lambdag, lambda;
 
-        case 0:
+    TriPhaseParams & triPhaseParams = (TriPhaseParams &) fluxParams();
 
-            F(U, M);
+    sw = U(0);
+    so = U(1);
+    sg = 1. - sw - so;
+    // acrescentei as 4 definicoes abaixo, e mudei as ultimas duas linhas desta funcao. Fazer o mesmo
+    // na DF. Isto nao eh por economia, mas por legibilidade das formulas.
 
-            break;
+    Grwg = triPhaseParams.grw() - triPhaseParams.grg();
+    Grwo = triPhaseParams.grw() - triPhaseParams.gro();
+    Grow = -1. * Grwo;
+    Grog = triPhaseParams.gro() - triPhaseParams.grg();
 
-        case 1:
+    lambdaw = perm().kw(sw, so, sg) / triPhaseParams.muw();
+    lambdao = perm().ko(sw, so, sg) / triPhaseParams.muo();
+    lambdag = perm().kg(sw, so, sg) / triPhaseParams.mug();
 
-            F(U, M);
-            DF(U, M);
+    lambda = lambdaw + lambdao + lambdag;
 
-            break;
+    double v = triPhaseParams.vel();
 
-        case 2:
-            F(U, M);
-            DF(U, M);
-            D2F(U, M);
+    M(0, (lambdaw / lambda) * (v + lambdao * Grwo + lambdag * Grwg));
+    M(1, (lambdao / lambda) * (v + lambdaw * Grow + lambdag * Grog));
 
-            break;
+
+    if (degree > 0) {
+
+        double lambda2, dlambdawdsw, dlambdaodsw, dlambdagdsw, dlambdadsw;
+        double dlambdawdso, dlambdaodso, dlambdagdso, dlambdadso;
+
+        dlambdawdsw = perm().dkwdsw(sw, so, sg) / triPhaseParams.muw();
+        dlambdaodsw = perm().dkodsw(sw, so, sg) / triPhaseParams.muo();
+        dlambdagdsw = perm().dkgdsw(sw, so, sg) / triPhaseParams.mug();
+        dlambdadsw = dlambdawdsw + dlambdaodsw + dlambdagdsw;
+        dlambdawdso = perm().dkwdso(sw, so, sg) / triPhaseParams.muw();
+        dlambdaodso = perm().dkodso(sw, so, sg) / triPhaseParams.muo();
+        dlambdagdso = perm().dkgdso(sw, so, sg) / triPhaseParams.mug();
+        dlambdadso = dlambdawdso + dlambdaodso + dlambdagdso;
+        lambda2=pow(lambda,2.);
+
+        M(0, 0, (lambdaw / lambda) * (dlambdaodsw * (Grwo) + dlambdagdsw *
+                (Grwg)) + ((lambda * dlambdawdsw - lambdaw * dlambdadsw) / lambda2) *
+                (v + lambdao * (Grwo) + lambdag * (Grwg)));
+
+        M(0, 1, (lambdaw / lambda) * (dlambdaodso * (Grwo) + dlambdagdso *
+                (Grwg)) + ((lambda * dlambdawdso - lambdaw * dlambdadso) / lambda2) *
+                (v + lambdao * (Grwo) + lambdag * (Grwg)));
+
+
+        M(1, 0, (lambdao / lambda) * (dlambdawdsw * (-Grwo) + dlambdagdsw *
+                (Grog)) + ((lambda * dlambdaodsw - lambdao * dlambdadsw) / lambda2) *
+                (v + lambdaw * (-Grwo) + lambdag * (Grog)));
+
+
+        M(1, 1, (lambdao / lambda) * (dlambdawdso * (-Grwo) + dlambdagdso *
+                (Grog)) + ((lambda * dlambdaodso - lambdao * dlambdadso) / lambda2) *
+                (v + lambdaw * (-Grwo) + lambdag * (Grog)));
+
+        
     }
+
+
+
+    if (degree > 1) {
+
+        int i, j, k;
+
+        for (i = 0; i < M.n_comps(); i++) {
+
+            for (j = 0; j < M.n_comps(); j++) {
+
+                for (k = 0; k < M.n_comps(); k++) {
+
+                    if (i == j)
+
+                        M(i, j, k, 1);
+
+                    else
+
+                        M(i, j, k, 0);
+
+                }
+            }
+        }
+
+
+
+    }
+
+
     return 0;
 
 }

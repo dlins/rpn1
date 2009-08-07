@@ -38,38 +38,24 @@ Permeability::Permeability(const Permeability & copy) {
 
     params_ = new PermParams(copy.params());
 
-    denkw_ = (double) ((params_->lw() + (1. - params_->lw()) * (1. - params_->cnw())) * (1. - params_->cnw()));
-
-    denkg_ = (params_->lg() + (1. - params_->lg()) * (1. - params_->cng())) * (1. - params_->cng());
-
-    denkow_ = (params_->low() + (1. - params_->low()) * (1. - params_->cno())) * (1. - params_->cno());
-
-    denkog_ = (params_->log() + (1. - params_->log()) * (1. - params_->cno())) * (1. - params_->cno());
+    denkw_ = copy.denkw();
+    denkg_ = copy.denkg();
+    denkow_ = copy.denkow();
+    denkog_ = copy.denkog();
 
 
 }
 
 double Permeability::kw(double sw, double so, double sg)const {
 
-//    cout << "Debugando kw" << endl;
-//    cout << "sw " << sw << endl;
-//    cout << "param->cnw() " << params_->cnw() << endl;
-//    cout << "param->lw() " << params_->lw() << endl;
-
     double swcnw = (double) (sw - params_->cnw());
-//    cout << "swcnw " << swcnw << endl;
-//    cout << "denkw_ " << denkw_ << endl;
 
     if (swcnw <= 0.) {
         return 0.;
     } else {
         double result = (double) ((params_->lw() + (1. - params_->lw()) * swcnw) * swcnw / denkw_);
-//
-//        cout << "result " << result << endl;
-//        cout << "------------------------" << endl;
         return result;
     }
-
 
 
 }
@@ -214,7 +200,7 @@ double Permeability::dkodwo(double sw, double so, double sg)const {
     double dkowdendsw_ = dkowdendsw(sw, so, sg);
     double kowden_ = kowden(sw, so, sg);
     double dkogdendsg_ = dkogdendsg(sw, so, sg);
-    return (-dkogdendsg_ * kowden_ + kogden(sw, so, sg) * dkowdendsw_) +socno *
+    return (-dkogdendsg_ * kowden_ + kogden(sw, so, sg) * dkowdendsw_)+socno *
             (dkogdendgg(sw, so, sg) * kowden_ - dkogdendsg_ * dkowdendsw_) * (1. - params_->cno()) * params_->epsl();
 }
 
@@ -244,6 +230,22 @@ double Permeability::dkgdoo(double sw, double so, double sg)const {
     if (sg <= params_->cng())
         return 0.;
     return 2. * (1. - params_->lg()) / denkg_;
+}
+
+double Permeability::denkw() const {
+    return denkw_;
+}
+
+double Permeability::denkg() const {
+    return denkg_;
+}
+
+double Permeability::denkow() const {
+    return denkow_;
+}
+
+double Permeability::denkog() const {
+    return denkog_;
 }
 
 Permeability::~Permeability() {

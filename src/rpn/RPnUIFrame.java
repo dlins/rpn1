@@ -113,11 +113,11 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 toolBar_.add(RarefactionForwardOrbitPlotAgent.instance().getContainer());
                 toolBar_.add(RarefactionBackwardOrbitPlotAgent.instance().getContainer());
                 toolBar_.add(HugoniotPlotAgent.instance().getContainer());
-                
+
                 toolBar_.add(BackwardShockCurvePlotAgent.instance().getContainer());
                 toolBar_.add(ForwardShockCurvePlotAgent.instance().getContainer());
-                
-                
+
+
                 toolBar_.add(CompositePlotAgent.instance().getContainer());
                 toolBar_.add(ScratchAgent.instance().getContainer());
                 ScratchAgent.instance().setEnabled(true);
@@ -500,6 +500,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
                     public void actionPerformed(ActionEvent e) {
 
+                        System.out.println("Chamando action");
+
                         RPnRarefactionConfigDialog rarefactionConfigDialog = new RPnRarefactionConfigDialog(false, false);
 
                         rarefactionConfigDialog.setVisible(true);
@@ -507,8 +509,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 });
 
         modelInteractionMenu.removeAll();
-        modelInteractionMenu.add(ChangeXZeroAgent.instance());
-        modelInteractionMenu.addSeparator();
         modelInteractionMenu.add(ChangeFluxParamsAgent.instance());
         modelInteractionMenu.addSeparator();
         modelInteractionMenu.add(rarefactionMenuItem_);
@@ -556,10 +556,10 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         DisplayMode displayMode = gs[0].getDisplayMode();
         int height = displayMode.getHeight();
         int width = displayMode.getWidth();
-        
+
         int newwidth = (int) (width - (width * .6));
         int newheight = (int) (height - (height * .8));
-        component.setLocation(newwidth,newheight);
+        component.setLocation(newwidth, newheight);
 
     }
 

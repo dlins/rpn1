@@ -40,16 +40,6 @@ private:
     Permeability * perm_;
     ViscosityParams * viscParams_;
     
-    
-    int F(const WaveState &, JetMatrix &)const ;
-    int DF(const WaveState &, JetMatrix &)const ;
-    int D2F(const WaveState &, JetMatrix &)const ;
-    
-    
-    
-    
-    
-    
 public:
     
     TriPhaseFluxFunction(const TriPhaseParams & params, const PermParams & permParams, const CapilParams & capilParams, const ViscosityParams & viscParams);

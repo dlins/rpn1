@@ -45,8 +45,7 @@ public class PluginTableModel extends DefaultTableModel {
 
     private static PluginTableModel initModel() {
 
-//        Vector<String> columnNames_ = new Vector<String>();
-        Vector<Vector<String>> data_ = new Vector<Vector<String>>();
+        Vector<Vector<String>> data = new Vector<Vector<String>>();
 
         getColumnNames().add("Plugin Type");
         getColumnNames().add("Library");
@@ -80,10 +79,10 @@ public class PluginTableModel extends DefaultTableModel {
         RPnPluginManager.configPlugin(RarefactionProfile.RAREFACTIONFLOW_NAME, "RPnDefaultPlugins.so", "RarefactionFlowPlugin", "createRarefaction", "destroyRarefaction");
 
 
-        data_.add(type1);
-        data_.add(type2);
+        data.add(type1);
+        data.add(type2);
 
-        return new PluginTableModel(data_, getColumnNames());
+        return new PluginTableModel(data, getColumnNames());
 
     }
 

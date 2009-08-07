@@ -21,10 +21,6 @@ public abstract class ShockRarefactionProfile {
     
     public  void setXZero(PhasePoint xZero){
         
-        
-        
-        
-        
         xZero_=xZero;}
 
     public String getFlowName() {

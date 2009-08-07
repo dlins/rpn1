@@ -26,28 +26,27 @@ public class RPnShockConfigDialog extends RPnDialog {
     private JCheckBox specificMethodCheckBox_ = new JCheckBox("Specific Method");
     private JLabel flowPluginName_ = new JLabel();
 
-    public RPnShockConfigDialog() {
-        try {
-
-            jbInit();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public RPnShockConfigDialog(boolean enableBackButton) {
-
-        super(enableBackButton);
-        try {
-            jbInit();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
+//    public RPnShockConfigDialog() {
+//        try {
+//
+//            jbInit();
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    public RPnShockConfigDialog(boolean enableBackButton) {
+//
+//        super(enableBackButton);
+//        try {
+//            jbInit();
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
     public RPnShockConfigDialog(boolean b, boolean b0) {
         super(b0, b0);
         try {
@@ -56,6 +55,7 @@ public class RPnShockConfigDialog extends RPnDialog {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
     private void addMethodName() {
@@ -104,14 +104,6 @@ public class RPnShockConfigDialog extends RPnDialog {
         } else {
             RPNUMERICS.getShockProfile().setHugoniotSpecific(false);
         }
-
-        RPNUMERICS.getShockProfile().setFlowName((String) flowNameComboBox_.getSelectedItem());
-
-        RPNUMERICS.setCurrentProfile(RPNUMERICS.getShockProfile());
-
-        RPnUIFrame.setStatusMessage("Enter coordinates");
-
-
     }
 
     private class MouseHandler implements MouseListener {

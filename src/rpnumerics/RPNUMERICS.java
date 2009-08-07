@@ -50,6 +50,7 @@ public class RPNUMERICS {
                 setFluxParams(profile.getFluxParams());
             }
 
+
             errorControl_ = new RpErrorControl(boundary());
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -62,6 +63,7 @@ public class RPNUMERICS {
         System.loadLibrary("rpnumerics");
         initNative(physicsID);
         errorControl_ = new RpErrorControl(boundary());
+     
     }
 
     public static void resetMethodsParams() {
@@ -187,6 +189,10 @@ public class RPNUMERICS {
     }
 
     public static ShockFlow createShockFlow() {
+
+        RPNUMERICS.getShockProfile().setFlowName((String) PluginTableModel.instance().getValueAt(0, 2));
+
+        RPNUMERICS.setCurrentProfile(RPNUMERICS.getShockProfile());
 
         FluxFunction flux = new FluxFunction(getFluxParams());
 
