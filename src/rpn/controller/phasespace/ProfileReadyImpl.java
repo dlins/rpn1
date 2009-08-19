@@ -27,7 +27,7 @@ public class ProfileReadyImpl extends ProfileSetupReadyImpl
             connectionGeom_ = connectionGeom;
 
         // ENABLED
-        ChangeXZeroAgent.instance().setEnabled(true);
+        ChangeDirectionAgent.instance().setEnabled(true);
         ChangeSigmaAgent.instance().setEnabled(true);
         ChangeFluxParamsAgent.instance().setEnabled(true);
         ClearPhaseSpaceAgent.instance().setEnabled(true);

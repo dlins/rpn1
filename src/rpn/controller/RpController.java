@@ -7,7 +7,6 @@
 package rpn.controller;
 
 import rpn.component.RpGeomFactory;
-import javax.swing.AbstractAction;
 import java.beans.PropertyChangeListener;
 
 /** This interface declares basic methods to add and remove controllers of  visual elements . When a orbit ,point , etc is recalculated the controller of this element sends a signal to change its visual properties . */ 

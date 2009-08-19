@@ -8,15 +8,8 @@ package rpn.component;
 
 import rpn.controller.PoincareController;
 import rpn.controller.RpController;
-import wave.multid.DimMismatchEx;
-import wave.multid.model.MultiGeometryImpl;
-import wave.multid.view.ViewingTransform;
-import wave.multid.view.ViewingAttr;
-import wave.multid.view.GeomObjView;
-import wave.multid.view.PolyLine;
 import wave.util.SimplexPoincareSection;
 import rpnumerics.PhasePoint;
-import java.awt.Color;
 
 public class PoincareSectionGeomFactory implements RpGeomFactory {
     //

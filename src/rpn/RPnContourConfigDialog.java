@@ -7,12 +7,10 @@ package rpn;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Set;
-import rpn.parser.MethodProfile;
 import rpnumerics.ContourConfiguration;
 import rpnumerics.RPNUMERICS;
 
@@ -76,5 +74,9 @@ public class RPnContourConfigDialog extends RPnDialog {
 
         dispose();
 
+    }
+
+    @Override
+    protected void begin() {
     }
 }

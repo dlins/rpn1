@@ -42,4 +42,11 @@ public class RPnPluginDialog extends RPnDialog {
         apply();
         dispose();
     }
+
+    @Override
+    protected void begin() {
+
+    }
+    
+    
 }

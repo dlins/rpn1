@@ -26,27 +26,6 @@ public class RPnShockConfigDialog extends RPnDialog {
     private JCheckBox specificMethodCheckBox_ = new JCheckBox("Specific Method");
     private JLabel flowPluginName_ = new JLabel();
 
-//    public RPnShockConfigDialog() {
-//        try {
-//
-//            jbInit();
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    public RPnShockConfigDialog(boolean enableBackButton) {
-//
-//        super(enableBackButton);
-//        try {
-//            jbInit();
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//    }
     public RPnShockConfigDialog(boolean b, boolean b0) {
         super(b0, b0);
         try {
@@ -163,5 +142,10 @@ public class RPnShockConfigDialog extends RPnDialog {
 
         public void mouseExited(MouseEvent e) {
         }
+    }
+
+    @Override
+    protected void begin() {
+
     }
 }

@@ -12,7 +12,7 @@ import wave.util.RealVector;
 
 public class ShockProfile extends ShockRarefactionProfile {
 
-    private static String hugoniotMethodName_="Continuation";
+    private static String hugoniotMethodName_="Contour";//Default method 
     private static boolean hugoniotSpecific_=false;
     private static ShockProfile instance_ = null;
     private static RealVector fx0_ = null;

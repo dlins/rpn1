@@ -45,7 +45,7 @@ public class OrbitParser implements ActionListener {
                     direction = OrbitGeom.BACKWARD_DIR;
                 }
 
-                OrbitGeomFactory factory = new OrbitGeomFactory(RPNUMERICS.createOrbitCalc(oPoint, direction));
+                OrbitGeomFactory factory = new OrbitGeomFactory(RPNUMERICS.createOrbitCalc(oPoint));
                 RPnDataModule.InputHandler.tempOrbit_ = new OrbitGeom(
                         RPnDataModule.InputHandler.tempCoords_, factory);
                 RPnDataModule.ORBIT = new Orbit(orbitPoints,

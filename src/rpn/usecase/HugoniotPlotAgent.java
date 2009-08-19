@@ -8,8 +8,6 @@ package rpn.usecase;
 import rpn.component.*;
 import rpnumerics.*;
 import wave.util.RealVector;
-import wave.util.Boundary;
-import wave.util.GridProfile;
 
 public class HugoniotPlotAgent extends RpModelPlotAgent {
     //

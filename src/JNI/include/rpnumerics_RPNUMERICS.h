@@ -8,7 +8,7 @@
 extern "C" {
 #endif
 /* Inaccessible static: INCREASING_LAMBDA */
-/* Inaccessible static: methodsMap_ */
+/* Inaccessible static: methodsConfigMap_ */
 /* Inaccessible static: errorControl_ */
 /* Inaccessible static: odeSolver_ */
 /* Inaccessible static: shockProfile_ */
@@ -16,7 +16,7 @@ extern "C" {
 /* Inaccessible static: bifurcationProfile_ */
 /* Inaccessible static: shockRarefactionProfile_ */
 /* Inaccessible static: contourConfiguration_ */
-/* Inaccessible static: fluxParams_ */
+/* Inaccessible static: direction_ */
 /*
  * Class:     rpnumerics_RPNUMERICS
  * Method:    initNative

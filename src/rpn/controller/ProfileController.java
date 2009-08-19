@@ -29,12 +29,12 @@ public class ProfileController extends RpCalcController {
     //
     protected void register() {
         ChangeFluxParamsAgent.instance().addPropertyChangeListener(this);
-        ChangeXZeroAgent.instance().addPropertyChangeListener(this);
+        ChangeDirectionAgent.instance().addPropertyChangeListener(this);
     }
 
     protected void unregister() {
         ChangeFluxParamsAgent.instance().removePropertyChangeListener(this);
-        ChangeXZeroAgent.instance().removePropertyChangeListener(this);
+        ChangeDirectionAgent.instance().removePropertyChangeListener(this);
     }
 
     public void propertyChange(PropertyChangeEvent change) {

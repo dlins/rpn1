@@ -116,4 +116,9 @@ public class PluginConfigDialog extends RPnDialog {
         public void changedUpdate(DocumentEvent e) {
         }
     }
+
+    @Override
+    protected void begin() {
+
+    }
 }

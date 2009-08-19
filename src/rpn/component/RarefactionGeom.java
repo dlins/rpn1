@@ -15,8 +15,8 @@ public class RarefactionGeom  extends MultiPolyLine implements RpGeometry {
         factory_=factory;
     }
     
+    @Override
     public GeomObjView createView(ViewingTransform transf) throws DimMismatchEx {
-//        return new OrbitGeomView(this,transf,viewingAttr());
         return new RarefactionOrbitView(this, transf, viewingAttr());
         
     }

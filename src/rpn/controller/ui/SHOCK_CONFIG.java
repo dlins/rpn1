@@ -6,12 +6,11 @@
 
 package rpn.controller.ui;
 
-import rpn.plugininterface.PluginTableModel;
 import rpn.usecase.HugoniotPlotAgent;
 import rpnumerics.PhasePoint;
 import rpnumerics.RPNUMERICS;
 import wave.util.RealVector;
-import rpn.usecase.ChangeXZeroAgent;
+import rpn.usecase.ChangeDirectionAgent;
 
 public class SHOCK_CONFIG extends UI_ACTION_SELECTED {
 
@@ -20,9 +19,6 @@ public class SHOCK_CONFIG extends UI_ACTION_SELECTED {
     //
     public SHOCK_CONFIG() {
         super(HugoniotPlotAgent.instance());
-        
-
-
     }
 
     //
@@ -36,7 +32,7 @@ public class SHOCK_CONFIG extends UI_ACTION_SELECTED {
 
         super.userInputComplete(ui, userInput);
 
-        ChangeXZeroAgent.instance().setEnabled(true);
+        ChangeDirectionAgent.instance().setEnabled(true);
 
         ui.setState(new SIGMA_CONFIG());
     }

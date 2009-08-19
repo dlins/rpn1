@@ -6,7 +6,6 @@
 package rpn;
 
 import java.awt.*;
-import rpn.usecase.BifurcationPlotAgent;
 import rpnumerics.RPNUMERICS;
 
 public class RPnFluxParamsDialog extends RPnDialog{
@@ -31,7 +30,7 @@ public class RPnFluxParamsDialog extends RPnDialog{
         dispose();
 
     }
-    @Override
+
     protected void begin(){
 
         getContentPane().remove(paramsPanel_);

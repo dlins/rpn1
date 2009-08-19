@@ -109,18 +109,9 @@ public abstract class RPnDialog extends JDialog {
 
     protected abstract void apply();
 
-    protected void begin() {
+    protected  abstract void begin();
 
-        int option = JOptionPane.showConfirmDialog(this, "Change curve type", "Restart Application", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-
-        if (option == JOptionPane.YES_OPTION) {
-            UIController.instance().setState(new CURVES_CONFIG());
-
-            dispose();
-        }
-
-    }
-
+    
     protected void cancel() {
         dispose();
     }

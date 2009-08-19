@@ -34,7 +34,7 @@ public class RpCalcController implements RpController {
     /** Registers  a controller to handle the numerics parameters changes .*/
     protected void register() {
         ChangeFluxParamsAgent.instance().addPropertyChangeListener(this);
-        ChangeXZeroAgent.instance().addPropertyChangeListener(this);
+        ChangeDirectionAgent.instance().addPropertyChangeListener(this);
         ChangeSigmaAgent.instance().addPropertyChangeListener(this);
 
     }
@@ -44,7 +44,7 @@ public class RpCalcController implements RpController {
 
     protected void unregister() {
         ChangeFluxParamsAgent.instance().removePropertyChangeListener(this);
-        ChangeXZeroAgent.instance().removePropertyChangeListener(this);
+        ChangeDirectionAgent.instance().removePropertyChangeListener(this);
         ChangeSigmaAgent.instance().removePropertyChangeListener(this);
       
         
@@ -55,7 +55,6 @@ public class RpCalcController implements RpController {
     public void propertyChange(PropertyChangeEvent change) {
         // this is to avoid void notifications of enabled/disbled
         if (change.getPropertyName().compareTo("enabled") != 0){
-            
             // updates only if visible
 	        if (geomFactory_.geom().viewingAttr().isVisible())
             	geomFactory_.updateGeom();

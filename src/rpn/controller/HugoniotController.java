@@ -29,18 +29,21 @@ public class HugoniotController extends RpCalcController {
     //
     // Methods
     //
+    @Override
     protected void register() {
         ChangeFluxParamsAgent.instance().addPropertyChangeListener(this);
-        ChangeXZeroAgent.instance().addPropertyChangeListener(this);
+        ChangeDirectionAgent.instance().addPropertyChangeListener(this);
 
     }
 
+    @Override
     protected void unregister() {
         ChangeFluxParamsAgent.instance().removePropertyChangeListener(this);
-        ChangeXZeroAgent.instance().removePropertyChangeListener(this);
+        ChangeDirectionAgent.instance().removePropertyChangeListener(this);
 
     }
 
+    @Override
     public void install(RpGeomFactory geom) {
         super.install(geom);
         geomFactory_ = (HugoniotCurveGeomFactory) geom;
@@ -51,13 +54,14 @@ public class HugoniotController extends RpCalcController {
         geomFactory_ = null;
     }
 
+    @Override
     public void propertyChange(PropertyChangeEvent change) {
         // this is to avoid void notifications of enabled/disbled
         if (change.getPropertyName().compareTo("enabled") != 0) {
-            if (change.getSource() instanceof ChangeXZeroAgent) {
+//            if (change.getSource() instanceof ChangeOrbitDirectionAgent) {
                 // updates the HugoniotFunction xzero
                 ((HugoniotCurveCalc) geomFactory_.rpCalc()).uMinusChangeNotify((PhasePoint) change.getNewValue());
-            }
+//            }
 
 //            if (change.getSource() instanceof ChangeHugoniotMethodAgent) {
 //                // updates the Hugoniot calc

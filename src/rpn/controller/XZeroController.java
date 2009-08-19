@@ -31,12 +31,12 @@ public class XZeroController
     //
     protected void register() {
         ChangeFluxParamsAgent.instance().addPropertyChangeListener(this);
-        ChangeXZeroAgent.instance().addPropertyChangeListener(this);
+        ChangeDirectionAgent.instance().addPropertyChangeListener(this);
     }
 
     protected void unregister() {
         ChangeFluxParamsAgent.instance().removePropertyChangeListener(this);
-        ChangeXZeroAgent.instance().removePropertyChangeListener(this);
+        ChangeDirectionAgent.instance().removePropertyChangeListener(this);
     }
 
     public void install(RpGeomFactory geom) {
@@ -55,7 +55,7 @@ public class XZeroController
         // this is to avoid void notifications of enabled/disbled
         if (change.getPropertyName().compareTo("enabled") != 0) {
 
-            if (change.getSource() instanceof ChangeXZeroAgent) {
+            if (change.getSource() instanceof ChangeDirectionAgent) {
 
                 // UPDATES THE CALC INIT POINT
                 ((StationaryPointCalc) geomFactory_.rpCalc()).setInitPoint((PhasePoint) change.getNewValue());

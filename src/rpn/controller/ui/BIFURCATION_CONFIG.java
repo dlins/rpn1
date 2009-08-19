@@ -10,14 +10,14 @@ package rpn.controller.ui;
 import wave.util.RealVector;
 
 
-import rpn.usecase.ChangeXZeroAgent;
+import rpn.usecase.ChangeDirectionAgent;
 
 
 public class BIFURCATION_CONFIG extends UI_ACTION_SELECTED {
 
     public BIFURCATION_CONFIG() {
 
-        super(ChangeXZeroAgent.instance());
+        super(ChangeDirectionAgent.instance());
 
     }
 

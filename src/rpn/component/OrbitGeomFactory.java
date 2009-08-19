@@ -27,6 +27,8 @@ public class OrbitGeomFactory extends RpCalcBasedGeomFactory {
     //
     // Methods
     //
+   
+
     protected RpGeometry createGeomFromSource() {
         Orbit orbit = (Orbit) geomSource();
 
@@ -39,7 +41,7 @@ public class OrbitGeomFactory extends RpCalcBasedGeomFactory {
         if (((OrbitCalc) rpCalc()).tDirection() == OrbitGeom.BACKWARD_DIR) {
             timedir = "neg";
         }
-        str.append("<ORBITCALC timedirection=\"" + timedir +"\""+" initialpoint=\""+ ((OrbitCalc)rpCalc()).getStart()+"\"" +" calcready=\"" + rpn.parser.RPnDataModule.RESULTS + "\"" + ">\n");
+        str.append("<ORBITCALC timedirection=\"" + timedir + "\"" + " initialpoint=\"" + ((OrbitCalc) rpCalc()).getStart() + "\"" + " calcready=\"" + rpn.parser.RPnDataModule.RESULTS + "\"" + ">\n");
         str.append(((Orbit) geomSource()).toXML(rpn.parser.RPnDataModule.RESULTS));
         str.append("</ORBITCALC>\n");
         return str.toString();

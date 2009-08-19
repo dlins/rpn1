@@ -91,4 +91,9 @@ public class RPnRarefactionConfigDialog extends RPnDialog {
         public void mouseExited(MouseEvent e) {
         }
     }
+
+    @Override
+    protected void begin() {
+
+    }
 }

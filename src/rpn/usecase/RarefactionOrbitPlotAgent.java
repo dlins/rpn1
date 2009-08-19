@@ -6,28 +6,28 @@ import rpnumerics.OrbitPoint;
 import wave.util.RealVector;
 import rpnumerics.RPNUMERICS;
 
-public class RarefactionBackwardOrbitPlotAgent extends RpModelPlotAgent {
-    
-    static public final String DESC_TEXT = "Rarefaction Backward Orbit";
-    static private RarefactionBackwardOrbitPlotAgent instance_ = null;
-    
-    public RarefactionBackwardOrbitPlotAgent() {
-        
-        super(DESC_TEXT, rpn.RPnConfig.ORBIT_BWD);
+public class RarefactionOrbitPlotAgent extends RpModelPlotAgent {
+
+    static public final String DESC_TEXT = "Rarefaction Orbit";
+    static private RarefactionOrbitPlotAgent instance_ = null;
+
+    public RarefactionOrbitPlotAgent() {
+
+        super(DESC_TEXT, rpn.RPnConfig.ORBIT_FWD);
     }
-    
+
     public RpGeometry createRpGeometry(RealVector[] input) {
-        
+
         OrbitPoint oPoint = new OrbitPoint(input[input.length - 1]);
         RarefactionOrbitGeomFactory factory = new RarefactionOrbitGeomFactory(RPNUMERICS.createRarefactionCalc(oPoint));
 
         return factory.geom();
-    }
-    
-    
-    static public RarefactionBackwardOrbitPlotAgent instance() {
+
+     }
+
+    static public RarefactionOrbitPlotAgent instance() {
         if (instance_ == null) {
-            instance_ = new RarefactionBackwardOrbitPlotAgent();
+            instance_ = new RarefactionOrbitPlotAgent();
         }
         return instance_;
     }

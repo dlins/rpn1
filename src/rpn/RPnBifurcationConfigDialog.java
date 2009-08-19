@@ -82,4 +82,9 @@ public class RPnBifurcationConfigDialog extends RPnDialog {
         dispose();
 
     }
+
+    @Override
+    protected void begin() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

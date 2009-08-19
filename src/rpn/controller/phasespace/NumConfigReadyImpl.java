@@ -29,12 +29,10 @@ public class NumConfigReadyImpl extends NumConfigImpl
         super(hugoniotGeom);
         xzeroGeom_ = geom;
         // ENABLED
-        BackwardOrbitPlotAgent.instance().setEnabled(true);
-        ForwardOrbitPlotAgent.instance().setEnabled(true);
         OrbitPlotAgent.instance().setEnabled(true);
         PoincareSectionPlotAgent.instance().setEnabled(true);
         StationaryPointPlotAgent.instance().setEnabled(true);
-        ChangeXZeroAgent.instance().setEnabled(true);
+        ChangeDirectionAgent.instance().setEnabled(true);
         ChangeSigmaAgent.instance().setEnabled(true);
         ChangeFluxParamsAgent.instance().setEnabled(true);
         ClearPhaseSpaceAgent.instance().setEnabled(true);

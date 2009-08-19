@@ -276,9 +276,6 @@ public class RPnConfigDialog extends RPnDialog {
         secondPanel_.removeAll();
 
         JPanel physicsLabelPanel = new JPanel(new FlowLayout());
-//        JPanel axisCheckPanel = new JPanel(new GridLayout(2, 2));
-
-
         JPanel axisCheckPanel = new JPanel(new GridBagLayout());
 
         JScrollPane axisScroll = new JScrollPane(axisCheckPanel);
@@ -596,5 +593,10 @@ public class RPnConfigDialog extends RPnDialog {
 
         public void changedUpdate(DocumentEvent e) {
         }
+    }
+
+    @Override
+    protected void begin() {
+
     }
 }

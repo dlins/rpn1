@@ -18,12 +18,16 @@ import java.beans.PropertyChangeEvent;
 import java.io.FileWriter;
 import rpn.controller.ui.*;
 import rpn.message.*;
+import rpnumerics.ShockProfile;
 
 public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     //
     // Members
     //
     private JPanel contentPane;
+    private JPanel configPanel_ = new JPanel(new GridLayout(2,1));
+    private JComboBox stateComboBox = new JComboBox();
+    
     private JMenuBar jMenuBar1 = new JMenuBar();
     private JMenu editMenu = new JMenu();
     private JMenu fileMenu = new JMenu();
@@ -48,7 +52,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JCheckBoxMenuItem showCursorMenuItem_ = new JCheckBoxMenuItem("Show Cursor Lines");
     private JToolBar toolBar_ = new JToolBar();
     private static JLabel statusLabel_ = new JLabel();
-    private JMenuItem curvesMenuItem_ = new JMenuItem("Change Curve");
+    
     private JMenu viewMenu_ = new JMenu("View");
 
     //Construct the frame
@@ -59,11 +63,13 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             commandMenu_ = command;
             RPnNetworkStatusController.instance().addPropertyChangeListener(this);
             UIController.instance().setStateController(new StateInputController(this));
+//            UIController.instance().setState(new SHOCK_CONFIG());
+            propertyChange(new PropertyChangeEvent(command, "aplication state", null, null));
             jbInit();
             phaseSpaceFramesInit(RPNUMERICS.boundary());
             addPropertyChangeListener(this);
             UndoActionController.createInstance();
-            showCurvesConfigDialog();
+
             getContentPane().add(statusLabel_, BorderLayout.SOUTH);
             if (commandMenu_ instanceof RPnAppletPlotter) { // Selecting itens to disable in Applet
 
@@ -88,12 +94,10 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             toolBar_.setLayout(new GridLayout(8, 2));
             toolBar_.setOrientation(SwingConstants.VERTICAL);
 
-            if (UIController.instance().getState() instanceof SHOCK_CONFIG || (evt.getNewValue() instanceof SIGMA_CONFIG)) {
+            if (UIController.instance().getState() instanceof SHOCK_CONFIG || (evt.getNewValue() instanceof SIGMA_CONFIG)|| evt.getNewValue() instanceof SHOCK_CONFIG) {
 
                 shockConfigMenu();
                 toolBar_.removeAll();
-                toolBar_.add(ForwardOrbitPlotAgent.instance().getContainer());
-                toolBar_.add(BackwardOrbitPlotAgent.instance().getContainer());
                 toolBar_.add(OrbitPlotAgent.instance().getContainer());
                 toolBar_.add(ForwardManifoldPlotAgent.instance().getContainer());
                 toolBar_.add(BackwardManifoldPlotAgent.instance().getContainer());
@@ -110,13 +114,11 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 rarefactionConfigMenu();
 
                 toolBar_.removeAll();
-                toolBar_.add(RarefactionForwardOrbitPlotAgent.instance().getContainer());
-                toolBar_.add(RarefactionBackwardOrbitPlotAgent.instance().getContainer());
                 toolBar_.add(HugoniotPlotAgent.instance().getContainer());
 
                 toolBar_.add(BackwardShockCurvePlotAgent.instance().getContainer());
                 toolBar_.add(ForwardShockCurvePlotAgent.instance().getContainer());
-
+                toolBar_.add(RarefactionOrbitPlotAgent.instance().getContainer());
 
                 toolBar_.add(CompositePlotAgent.instance().getContainer());
                 toolBar_.add(ScratchAgent.instance().getContainer());
@@ -292,7 +294,13 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         //setIconImage(Toolkit.getDefaultToolkit().createImage(ShockFlowControlFrame.class.getResource("[Your Icon]")));
         setUIFramePosition();
 
-
+        stateComboBox.addItem("Phase Diagram");
+        stateComboBox.addItem("Wave Curves");
+        stateComboBox.addItem("Bifurcation Curves");
+        stateComboBox.addActionListener(new StateHandler());
+        
+        configPanel_.add(stateComboBox);
+        
         contentPane = (JPanel) this.getContentPane();
         contentPane.setLayout(borderLayout1);
         this.setSize(new Dimension(400, 300));
@@ -309,17 +317,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         KeyStroke keyStroke = KeyStroke.getKeyStroke('l');
         showCursorMenuItem_.setAccelerator(keyStroke);
 
-        curvesMenuItem_.addActionListener(
-                new java.awt.event.ActionListener() {
-
-                    public void actionPerformed(ActionEvent e) {
-
-                        RPnShockConfigDialog shockConfigDialog = new RPnShockConfigDialog(false, false);
-                        shockConfigDialog.begin();
-
-                    }
-                });
-
+       
 
         showCursorMenuItem_.addActionListener(
                 new java.awt.event.ActionListener() {
@@ -437,10 +435,14 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         toolBar_.setFloatable(false);
 
-
         jMenuBar1.add(helpMenu);
         setJMenuBar(jMenuBar1);
-        contentPane.add(toolBar_, BorderLayout.NORTH);
+        contentPane.add(toolBar_, BorderLayout.CENTER);
+
+        configPanel_.add(stateComboBox);
+        configPanel_.add(new RPnCurvesConfigPanel());
+        contentPane.add(configPanel_, BorderLayout.NORTH);
+
         editMenu.add(UndoActionController.instance());
         editMenu.addSeparator();
         editMenu.add(layoutMenuItem);
@@ -449,20 +451,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         editMenu.add(ClearPhaseSpaceAgent.instance());
         editMenu.addSeparator();
         editMenu.add(FillPhaseSpaceAgent.instance());
-
-
-
-
-    }
-
-    private void showCurvesConfigDialog() {
-
-        RPnCurvesConfigDialog curvesDialog = new RPnCurvesConfigDialog();
-        curvesDialog.setLocationRelativeTo(null);
-//        Point topLeftCorner = this.getLocation(); //TODO Validate this dialog position
-//        topLeftCorner.x += 200;
-//        curvesDialog.setLocation(topLeftCorner);
-        curvesDialog.setVisible(true);
 
     }
 
@@ -478,8 +466,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 });
 
         modelInteractionMenu.removeAll();
-        modelInteractionMenu.add(ChangeXZeroAgent.instance());
-        modelInteractionMenu.addSeparator();
         modelInteractionMenu.add(ChangeSigmaAgent.instance());
         modelInteractionMenu.addSeparator();
         modelInteractionMenu.add(FindProfileAgent.instance());
@@ -488,8 +474,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         modelInteractionMenu.add(shockMenuItem_);
         modelInteractionMenu.add(errorControlMenuItem);
-        modelInteractionMenu.addSeparator();
-        modelInteractionMenu.add(curvesMenuItem_);
+
+
 
     }
 
@@ -515,7 +501,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         modelInteractionMenu.addSeparator();
         modelInteractionMenu.add(errorControlMenuItem);
         modelInteractionMenu.addSeparator();
-        modelInteractionMenu.add(curvesMenuItem_);
+
     }
 
     private void bifurcationConfigMenu() {
@@ -534,7 +520,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         modelInteractionMenu.removeAll();
         modelInteractionMenu.add(bifurcationMenuItem_);
         modelInteractionMenu.addSeparator();
-        modelInteractionMenu.add(curvesMenuItem_);
+
 
     }
 
@@ -566,4 +552,37 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     public RPnPhaseSpaceFrame[] getPhaseSpaceFrames() {
         return frames_;
     }
+    
+    
+    private class StateHandler implements ActionListener{
+
+        public void actionPerformed(ActionEvent e) {
+            
+              UI_ACTION_SELECTED newState = null;
+
+        if (stateComboBox.getSelectedItem().equals("Phase Diagram")) {
+
+            newState = new SHOCK_CONFIG();
+            RPNUMERICS.getShockProfile().setHugoniotMethodName(ShockProfile.HUGONIOT_METHOD_NAMES[1]);
+
+        }
+
+        if (stateComboBox.getSelectedItem().equals("Wave Curves")) {
+            newState = new RAREFACTION_CONFIG();
+            RPNUMERICS.getShockProfile().setHugoniotMethodName(ShockProfile.HUGONIOT_METHOD_NAMES[0]);
+
+        }
+        if (stateComboBox.getSelectedItem().equals("Bifurcation Curves")) {
+            newState = new BIFURCATION_CONFIG();
+            rpn.usecase.BifurcationPlotAgent.instance().setEnabled(true);
+
+        }
+
+        UIController.instance().setState(newState);
+            
+        }
+        
+    }
+    
+    
 }

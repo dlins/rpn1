@@ -19,13 +19,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Cursor;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import rpn.controller.*;
 import java.net.*;
 import java.util.Iterator;
-import java.util.ListIterator;
 import rpn.RPnDesktopPlotter;
 import rpn.message.*;
 
@@ -64,7 +61,7 @@ public class UIController extends ComponentUI {
         mouseController_ = new MouseController();
         globalInputTable_ = new UserInputTable(rpnumerics.RPNUMERICS.domainDim());
 
-        handler_ = new CURVES_CONFIG();
+        handler_ = new SHOCK_CONFIG();
 
         initNetStatus();
 
@@ -284,7 +281,7 @@ public class UIController extends ComponentUI {
 
     /** Sets the state of the application. The application works as a state machine and this method changes the actual state.*/
     public void setState(rpn.controller.ui.UserInputHandler newAction) {
-
+        
         stateController_.propertyChange(new PropertyChangeEvent(this, "aplication state", handler_, newAction));
 
         if (handler_ instanceof UI_ACTION_SELECTED) {

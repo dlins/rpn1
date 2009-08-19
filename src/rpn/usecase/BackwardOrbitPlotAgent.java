@@ -34,7 +34,7 @@ public class BackwardOrbitPlotAgent extends RpModelPlotAgent {
 
     public RpGeometry createRpGeometry(RealVector[] input) {
         OrbitPoint oPoint = new OrbitPoint(input[input.length - 1]);
-        OrbitGeomFactory factory = new OrbitGeomFactory(RPNUMERICS.createOrbitCalc(oPoint, OrbitGeom.BACKWARD_DIR));
+        OrbitGeomFactory factory = new OrbitGeomFactory(RPNUMERICS.createOrbitCalc(oPoint));
         return factory.geom();
     }
 

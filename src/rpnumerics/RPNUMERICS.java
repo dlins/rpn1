@@ -33,6 +33,7 @@ public class RPNUMERICS {
     static private BifurcationProfile bifurcationProfile_ = BifurcationProfile.instance();
     static private ShockRarefactionProfile shockRarefactionProfile_ = null;
     static private ContourConfiguration contourConfiguration_ = null;
+    static private Integer direction_;
 
     //
     // Constructors/Initializers
@@ -110,6 +111,8 @@ public class RPNUMERICS {
     public static int methodsConfigurationSize() {
         return methodsConfigMap_.size();
     }
+    
+    
 
     /**
      * 
@@ -147,9 +150,9 @@ public class RPNUMERICS {
         return hugoniotCurveCalc;
     }
 
-    public static RarefactionOrbitCalc createRarefactionCalc(OrbitPoint orbitPoint, int timeDirection) {
+    public static RarefactionOrbitCalc createRarefactionCalc(OrbitPoint orbitPoint) {
 
-        return new RarefactionOrbitCalc("methodName", "flowName", orbitPoint, rarefactionProfile_.getFamily(), timeDirection);//TODO Is method and flowName needed ? 
+        return new RarefactionOrbitCalc("methodName", "flowName", orbitPoint, rarefactionProfile_.getFamily(), direction_);//TODO Is method and flowName needed ? 
 
     }
 
@@ -177,10 +180,10 @@ public class RPNUMERICS {
 
     }
 
-    public static OrbitCalc createOrbitCalc(OrbitPoint orbitPoint, int timeDirection) {
+    public static OrbitCalc createOrbitCalc(OrbitPoint orbitPoint) {
 
         ShockFlow flow = (ShockFlow) createShockFlow();
-        return new OrbitCalc(orbitPoint, timeDirection, createODESolver(flow));
+        return new OrbitCalc(orbitPoint, direction_, createODESolver(flow));
 
     }
 
@@ -210,6 +213,10 @@ public class RPNUMERICS {
     public static ShockFlow createShockFlow(ShockFlowParams shockFlowParams) {
         ShockFlow flow = new ShockFlow(shockFlowParams, new FluxFunction(getFluxParams()));
         return flow;
+    }
+
+    public static void setDirection(Integer integer) {
+            direction_=integer;
     }
 
     private static ODESolver createODESolver(WaveFlow flow) {

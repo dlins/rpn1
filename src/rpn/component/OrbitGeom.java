@@ -20,6 +20,7 @@ public class OrbitGeom extends MultiPolyLine implements RpGeometry {
     //
     public static final int FORWARD_DIR = 1;
     public static final int BACKWARD_DIR = -1;
+    public static final int BOTH_DIR =0;
     public static ViewingAttr VIEWING_ATTR = new ViewingAttr(Color.white);
     //
     // Members

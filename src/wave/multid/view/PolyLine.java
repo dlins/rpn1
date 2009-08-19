@@ -7,13 +7,10 @@
 package wave.multid.view;
 
 import wave.multid.model.*;
-import wave.multid.map.Map;
 import wave.multid.DimMismatchEx;
 import wave.multid.CoordsArray;
 import java.awt.Shape;
-import java.awt.Graphics2D;
 import java.awt.geom.GeneralPath;
-import java.awt.geom.AffineTransform;
 
 public class PolyLine extends ShapedGeometry {
     //

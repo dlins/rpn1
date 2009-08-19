@@ -6,8 +6,6 @@
 
 package rpn.component;
 
-import rpn.controller.RarefactionController;
-import rpn.controller.RpController;
 import rpnumerics.Orbit;
 import rpnumerics.OrbitCalc;
 import rpnumerics.RarefactionOrbit;
@@ -41,11 +39,6 @@ public class RarefactionOrbitGeomFactory extends RpCalcBasedGeomFactory {
 
     }
     
-      @Override
-    protected RpController createUI() {
-          return new RarefactionController();
-    }
-
     
     public String toXML() {
         StringBuffer str = new StringBuffer();

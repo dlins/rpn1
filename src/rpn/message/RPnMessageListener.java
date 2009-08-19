@@ -261,7 +261,7 @@ public class RPnMessageListener implements MessageListener {
                     case 8:
                         
                         UIController.instance().setState(new UI_ACTION_SELECTED(
-                                ChangeXZeroAgent.instance()));
+                                ChangeDirectionAgent.instance()));
                         
                         break;
                         
