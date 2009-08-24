@@ -18,7 +18,7 @@ public class ChangeSigmaAgent extends RpModelConfigChangeAgent {
     //
     // Constants
     //
-    static public final String DESC_TEXT = "Change Flow Speed";
+    static public final String DESC_TEXT = "Change Hugoniot Speed";
     //
     // Members
     //

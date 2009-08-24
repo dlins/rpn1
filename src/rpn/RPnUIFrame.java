@@ -63,7 +63,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             commandMenu_ = command;
             RPnNetworkStatusController.instance().addPropertyChangeListener(this);
             UIController.instance().setStateController(new StateInputController(this));
-//            UIController.instance().setState(new SHOCK_CONFIG());
             propertyChange(new PropertyChangeEvent(command, "aplication state", null, null));
             jbInit();
             phaseSpaceFramesInit(RPNUMERICS.boundary());

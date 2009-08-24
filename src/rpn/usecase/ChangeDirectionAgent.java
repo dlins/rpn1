@@ -6,7 +6,6 @@
 package rpn.usecase;
 
 import rpn.RPnCurvesConfigPanel;
-import rpn.parser.RPnDataModule;
 import rpnumerics.RPNUMERICS;
 
 public class ChangeDirectionAgent extends RpModelConfigChangeAgent {
@@ -27,10 +26,7 @@ public class ChangeDirectionAgent extends RpModelConfigChangeAgent {
     }
 
     public void execute() {
-
-        RPNUMERICS.setDirection(RPnCurvesConfigPanel.getCurrentOrbitDirection());
-
-
+        RPNUMERICS.setDirection(RPnCurvesConfigPanel.getOrbitDirection());
     }
 
     public void unexecute() {

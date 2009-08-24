@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 import rpn.usecase.ChangeDirectionAgent;
+import rpnumerics.RPNUMERICS;
 
 public class RPnCurvesConfigPanel extends JPanel {
 
@@ -17,10 +18,11 @@ public class RPnCurvesConfigPanel extends JPanel {
     private JPanel familyPanel_;
     private JPanel directionPanel_;
     private JLabel familyLabel_;
-    private JSpinner familySpinner_;
+    private static JSpinner familySpinner_;
     private JCheckBox forwardCheckBox_;
     private JCheckBox backwardCheckBox_;
     private static Integer currentOrbitDirection_ = new Integer(1);
+
 
     public RPnCurvesConfigPanel() {
         buildPanel();
@@ -30,7 +32,8 @@ public class RPnCurvesConfigPanel extends JPanel {
     private void buildPanel() {
 
         familyLabel_ = new JLabel("Family", SwingConstants.CENTER);
-        familySpinner_ = new JSpinner();
+        
+        familySpinner_ = new JSpinner(new SpinnerNumberModel(1,1,RPNUMERICS.domainDim(),1));
 
         familyPanel_ = new JPanel(new GridLayout(2, 1));
         directionPanel_ = new JPanel(new GridLayout(2, 1));
@@ -66,9 +69,14 @@ public class RPnCurvesConfigPanel extends JPanel {
         this.add(familyPanel_, gridConstraints);
     }
 
-    public static Integer getCurrentOrbitDirection() {
+    public static Integer getOrbitDirection() {
         return currentOrbitDirection_;
     }
+    
+    public static Integer getFamilyIndex(){
+        return (Integer) familySpinner_.getModel().getValue();
+    }
+    
 
     private class OrbitDirectionListener implements ActionListener {
 

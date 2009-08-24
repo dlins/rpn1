@@ -12,9 +12,7 @@ package wave.multid.model;
 
 import java.util.LinkedList;
 import java.io.FileWriter;
-import java.util.ArrayList;
 import java.io.FileReader;
-import wave.multid.view.*;
 import wave.multid.*;
 import wave.multid.map.*;
 
