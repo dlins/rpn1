@@ -99,8 +99,11 @@ inline const AccumulationFunction & Quad4::accumulation() const {
     return *accumulationFunction_;
 }
 
+
+
 inline const Space & Quad4::domain(void) const {
-    return Multid::PLANE;
+
+    return *new Space("R4",4);
 }
 
 inline const Boundary & Quad4::boundary(void) const {
