@@ -31,6 +31,7 @@ private:
     Boundary * defaultBoundary();
 
     Boundary * boundary_;
+    Space * space_;
     char * FLUX_ID;
 
     const char * DEFAULT_SIGMA;
@@ -51,9 +52,7 @@ public:
     Physics * clone() const;
 
     const FluxParams & params(void) const;
-
     void fluxParams(const FluxParams &);
-    
     void accumulationParams(const AccumulationParams &);
 
     const FluxFunction & fluxFunction(void) const;
@@ -79,8 +78,6 @@ inline void Quad4::fluxParams(const FluxParams & p) {
 
 inline void Quad4::accumulationParams(const AccumulationParams & p) {
 
-//    Quad2AccumulationParams newparams(p.params());
-
     accumulationFunction_->accumulationParams(p);
 
 }
@@ -102,8 +99,7 @@ inline const AccumulationFunction & Quad4::accumulation() const {
 
 
 inline const Space & Quad4::domain(void) const {
-
-    return *new Space("R4",4);
+        return *space_;
 }
 
 inline const Boundary & Quad4::boundary(void) const {
