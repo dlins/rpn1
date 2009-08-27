@@ -8,7 +8,7 @@ package rpnumerics;
 
 import wave.ode.ODESolver;
 
-public class RarefactionOrbitCalc implements RpCalculation {
+public class ShockCurveCalc implements RpCalculation {
     //
     // Constants
     //
@@ -25,23 +25,23 @@ public class RarefactionOrbitCalc implements RpCalculation {
     //
     // Constructors/Initializers
     //
-    public RarefactionOrbitCalc(PhasePoint point, int timeDirection) {
+    public ShockCurveCalc(PhasePoint point, int timeDirection) {
         start_ = point;
         timeDirection_ = timeDirection;
     }
 
-    public RarefactionOrbitCalc(String methodName, String flowName, PhasePoint point, int familyIndex, int timeDirection) {
+    public ShockCurveCalc(String methodName, String flowName, PhasePoint point, int familyIndex, int timeDirection) {
 
         methodName_ = methodName;
 
         start_ = point;
         timeDirection_ = timeDirection;
         familyIndex_ = familyIndex;
-        methodName_ = "ContinuationRarefactionMethod";//TODO Put the correct method name
+        methodName_ = "ContinuationShockMethod";//TODO Put the correct method name
 
     }
 
-    RarefactionOrbitCalc(OrbitPoint orbitPoint, int timeDirection, ODESolver odeSolver, String methodName) {
+    ShockCurveCalc(OrbitPoint orbitPoint, int timeDirection, ODESolver odeSolver, String methodName) {
         start_ = orbitPoint;
         timeDirection_ = timeDirection;
         solver_ = odeSolver;

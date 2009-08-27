@@ -30,53 +30,63 @@
  * @ingroup rpnumerics
  */
 
-class RarefactionFlow: public WaveFlow{
-    
+class RarefactionFlow : public WaveFlow {
 protected:
-    
+
     int familyIndex_;
-    
+
     int timeDirection_;
-    
+
     RealVector * referenceVector_;
-   
-       
+
+
 public:
 
 
-    RarefactionFlow(const int, const int ,const FluxFunction &);
-    
+    RarefactionFlow(const int, const int, const FluxFunction &);
+
+    RarefactionFlow(const RealVector, const int, const int, const FluxFunction &);
+
     RarefactionFlow(const RarefactionFlow &);
 
     virtual const RealVector & getReferenceVector() const;
-    
-    virtual void setReferenceVector(const RealVector & );
-    
+
+    virtual void setReferenceVector(const RealVector &);
+
     int getFamilyIndex() const;
     void setFamilyIndex(int);
-    
-    int direction()const ;
+
+    int direction()const;
     void setDirection(int);
-    
+
 
     virtual ~RarefactionFlow();
-    
+
 };
 
+inline int RarefactionFlow::getFamilyIndex() const {
+    return familyIndex_;
+}
 
-inline int RarefactionFlow::getFamilyIndex() const{return familyIndex_;}
+inline void RarefactionFlow::setFamilyIndex(int familyIndex) {
+    familyIndex_ = familyIndex;
+}
 
-inline void RarefactionFlow::setFamilyIndex(int familyIndex ) {familyIndex_=familyIndex;}
+inline int RarefactionFlow::direction() const {
+    return timeDirection_;
+}
 
-inline int RarefactionFlow::direction() const{return timeDirection_;}
+inline void RarefactionFlow::setDirection(int timeDirection) {
+    timeDirection_ = timeDirection;
+}
 
-inline void RarefactionFlow::setDirection(int timeDirection){timeDirection_=timeDirection;}
-
-inline const RealVector & RarefactionFlow::getReferenceVector() const {return *referenceVector_;}
+inline const RealVector & RarefactionFlow::getReferenceVector() const {
+    return *referenceVector_;
+}
 
 inline void RarefactionFlow::setReferenceVector(const RealVector & referenceVector) {
-    for (int i = 0; i < referenceVector_->size();i++){
-        referenceVector_->operator()(i)=referenceVector(i);
+    for (int i = 0; i < referenceVector_->size(); i++) {
+        referenceVector_->operator()(i) = referenceVector(i);
     }
 }
 

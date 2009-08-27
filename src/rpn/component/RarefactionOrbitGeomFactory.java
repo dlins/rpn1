@@ -9,7 +9,7 @@ package rpn.component;
 import rpnumerics.Orbit;
 import rpnumerics.OrbitCalc;
 import rpnumerics.RarefactionOrbit;
-import rpnumerics.RarefactionOrbitCalc;
+import rpnumerics.ShockCurveCalc;
 
 public class RarefactionOrbitGeomFactory extends RpCalcBasedGeomFactory {
     //
@@ -21,7 +21,7 @@ public class RarefactionOrbitGeomFactory extends RpCalcBasedGeomFactory {
     //
     // Constructors/Initializers
     //
-    public RarefactionOrbitGeomFactory(RarefactionOrbitCalc calc) {
+    public RarefactionOrbitGeomFactory(ShockCurveCalc calc) {
         super(calc);
     }
     

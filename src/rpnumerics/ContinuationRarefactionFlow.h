@@ -85,9 +85,9 @@ private:
     };
      */
 
-    int D2F(int n, double *in, double *out)const;
-    int DF(int n, double *in, double *out)const;
     int cdgeev(int n, double *A, struct eigen *e) const;
+
+    void fill_with_jet(const FluxFunction & flux_object, int n, double *in, int degree, double *F, double *J, double *H);
 
 
     void transpose(double A[], int n)const;
@@ -115,16 +115,16 @@ private:
     // must be positive.
     double re[EIG_MAX];
 
-    int family_;
+
+    int rarefaction(int *neq, double *xi, double *in, double *out, int *nparam, double *param);
 
 
 
 public:
-    ContinuationRarefactionFlow(const int, const int, const FluxFunction & );
+    ContinuationRarefactionFlow(const int, const int, const FluxFunction &);
+    ContinuationRarefactionFlow(const RealVector, const int, const int, const FluxFunction &);
 
-    int rarefaction(int *neq, double *xi, double *in, double *out, int *nparam, double *param);
     int flux(int n, int family, double *in, double *lambda, double *out);
-
 
     int flux(const RealVector &, RealVector &);
     int fluxDeriv(const RealVector &, JacobianMatrix &);
@@ -135,8 +135,13 @@ public:
 
     WaveFlow * clone()const;
 
-    void setReferenceVectorComponent (const int , const double);
+
+    void setReferenceVectorComponent(const int, const double);
+
     double getReferenceVectorComponent(const int)const;
+
+
+
     virtual ~ContinuationRarefactionFlow();
 
 };

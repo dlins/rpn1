@@ -3,6 +3,7 @@ vpath %.cc $(JNIDIR)
 RPNUMSRC += JNIConnectionOrbitCalc.cc\
 	JNIOrbitCalc.cc             \
         JNIRarefactionOrbitCalc.cc \
+        JNIShockCurveCalc.cc \
 	JNIHugoniotCurveCalc.cc    \
 	JNIManifoldOrbitCalc.cc \
 	JNIStationaryPointCalc.cc \

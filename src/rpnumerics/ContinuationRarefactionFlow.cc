@@ -17,14 +17,16 @@
  * Definitions:
  */
 
-ContinuationRarefactionFlow::ContinuationRarefactionFlow(const int familyIndex,const int direction ,const FluxFunction & fluxFunction) : RarefactionFlow(familyIndex,direction,fluxFunction) {
-//    cout <<"Construindo o flow"<<endl;
+ContinuationRarefactionFlow::ContinuationRarefactionFlow(const int familyIndex, const int direction, const FluxFunction & fluxFunction) : RarefactionFlow(familyIndex, direction, fluxFunction) {
 }
 
-
-ContinuationRarefactionFlow::~ContinuationRarefactionFlow(){
-//cout <<"Destruindo o flow"<<endl;}
+ContinuationRarefactionFlow::~ContinuationRarefactionFlow() {
 }
+
+ContinuationRarefactionFlow::ContinuationRarefactionFlow(const RealVector referenceVector,const int familyIndex, const int direction, const FluxFunction & fluxFunction):RarefactionFlow(referenceVector,familyIndex, direction, fluxFunction){
+    
+}
+
 
 int ContinuationRarefactionFlow::flux(const RealVector & input, RealVector &output) {
 
@@ -38,12 +40,12 @@ int ContinuationRarefactionFlow::flux(const RealVector & input, RealVector &outp
         in[i] = input(i);
     }
 
-    double param [input.size()+1];
-    
-    param[0]=(int)getFamilyIndex();
+    double param [input.size() + 1];
 
-    for (int i = 1; i < input.size()+1; i++) {
-        param[i]=getReferenceVectorComponent(i);
+    param[0] = (int) getFamilyIndex();
+
+    for (int i = 1; i < input.size() + 1; i++) {
+        param[i] = getReferenceVectorComponent(i);
     }
     int nparam = 3;
 
@@ -70,42 +72,40 @@ WaveFlow * ContinuationRarefactionFlow::clone()const {
     return new ContinuationRarefactionFlow(*this);
 }
 
+void ContinuationRarefactionFlow::setReferenceVectorComponent(const int index, const double value) {
 
-void ContinuationRarefactionFlow::setReferenceVectorComponent(const int index, const double value){
-
-    re[index]=value;
+    re[index] = value;
 }
 
 double ContinuationRarefactionFlow::getReferenceVectorComponent(const int index)const {
     return re[index];
 }
 
-
 int ContinuationRarefactionFlow::flux(int n, int family, double *in, double *lambda, double *out) {
 
-       // Fill the Jacobianflux
-        double J[n][n];
-        DF(n, in, &J[0][0]);
-    //  cout<<"Valor da familia "<<family<<endl;
-        // Find J's eigencouples and sort them.
-        int info;
-        struct eigen e[n];
-    //    cout <<"Valor de lambda antes "<<*lambda<<endl;
-    
-        info = cdgeev(n, &J[0][0], &e[0]);
-    
-        if (e[family].i != 0) {
-//            cout << "Valor de lambda (complexo) " << *lambda << endl;
-            return COMPLEX_EIGENVALUE;
-        }
-        else {
-    
-            *lambda = e[family].r;
-//            cout << "Valor de lambda "<<*lambda<<endl;
-            int i;
-            for (i = 0; i < n; i++) out[i] = e[family].vrr[i];
-            return SUCCESSFUL_PROCEDURE;
-        }
+    // Fill the Jacobianflux
+    double J[n][n];
+
+    const FluxFunction & flux = fluxFunction();
+    fill_with_jet(flux, n, in, 1, 0, &J[0][0], 0);
+
+
+    // Find J's eigencouples and sort them.
+    int info;
+    struct eigen e[n];
+    info = cdgeev(n, &J[0][0], &e[0]);
+
+    if (e[family].i != 0) {
+
+        return COMPLEX_EIGENVALUE;
+    } else {
+
+        *lambda = e[family].r;
+
+        int i;
+        for (i = 0; i < n; i++) out[i] = e[family].vrr[i];
+        return SUCCESSFUL_PROCEDURE;
+    }
 
 }
 
@@ -123,11 +123,17 @@ int ContinuationRarefactionFlow::rarefaction(int *neq, double *xi, double *in, d
     int ii;
     //    for (ii = 0; ii < n; ii++) rev[ii] = param[1 + ii];
 
-    for (ii = 0; ii < n; ii++) rev[ii] = getReferenceVectorComponent(ii);//param[ 1+ii];
+    for (ii = 0; ii < n; ii++) rev[ii] = getReferenceVectorComponent(ii); //param[ 1+ii];
 
     // Fill the Jacobian
     double J[n][n];
-    DF(n, in, &J[0][0]);
+
+    double H[n][n][n];
+
+    const FluxFunction & flux = fluxFunction();
+
+    fill_with_jet(flux, n, in, 2, 0, &J[0][0], &H[0][0][0]);
+
 
     // Find J's eigencouples and sort them.
     int i, info;
@@ -141,10 +147,6 @@ int ContinuationRarefactionFlow::rarefaction(int *neq, double *xi, double *in, d
         // All eigenvalues must be real
         for (i = 0; i < n; i++) {
             if (fabs(e[i].i) > 0) {
-#ifdef TEST_RAREFACTION
-                printf("At rarefaction(): Imaginary eigenvalue!\n");
-                printf("Eigenvalue %d = % g %+g*i.\n", i, e[i].r, e[i].i);
-#endif
                 return COMPLEX_EIGENVALUE;
             }
         }
@@ -155,11 +157,6 @@ int ContinuationRarefactionFlow::rarefaction(int *neq, double *xi, double *in, d
         // are equal, one will come after the other.
         for (i = 0; i < n - 1; i++) {
             if (e[i].r == e[i + 1].r) {
-#ifdef TEST_RAREFACTION
-                printf("At rarefaction(): Eigenvalues are equal!\n");
-                printf("Eigenvalue %d = % f %+f*i.\n", i, e[i].r, e[i].i);
-                printf("Eigenvalue %d = % f %+f*i.\n", i + 1, e[i + 1].r, e[i + 1].i);
-#endif
                 return ABORTED_PROCEDURE;
             }
         }
@@ -179,17 +176,13 @@ int ContinuationRarefactionFlow::rarefaction(int *neq, double *xi, double *in, d
     // "An Introduction to Conservation Laws: 
     // Theory and Applications to Multi-Phase Flow" must not change
     // sign (that is, the rarefaction is monotonous).
-    double H[EIG_MAX][EIG_MAX][EIG_MAX];
+
     double res[EIG_MAX];
-    D2F(EIG_MAX, (double*) in, (double*) & H[0][0][0]);
+
     applyH(EIG_MAX, &(e[family].vrr[0]), &H[0][0][0], &(e[family].vrr[0]), &res[0]);
     double dlambda_dtk = prodint(EIG_MAX, &res[0], &(e[family].vlr[0])) /
             prodint(EIG_MAX, &(e[family].vlr[0]), &(e[family].vrr[0]));
     if (dlambda_dtk * ref_speed < 0) {
-#ifdef TEST_RAREFACTION
-        printf("At rarefaction(): rarefaction not monotonous!\n");
-        printf("At rarefaction(): dlambda_dtk = % f\n", dlambda_dtk);
-#endif
         return ABORTED_PROCEDURE;
     }
 
@@ -198,35 +191,8 @@ int ContinuationRarefactionFlow::rarefaction(int *neq, double *xi, double *in, d
 
     // Update the value of the reference eigenvector:
     for (i = 0; i < n; i++) {
-        re[i] = out[i]; //printf("re[%d] = % f\n", i, re[i]);
+        re[i] = out[i];
     }
-    return SUCCESSFUL_PROCEDURE;
-}
-
-int ContinuationRarefactionFlow::D2F(int n, double *in, double *out)const {
-    out[0] = 1;
-    out[1] = 1;
-    out[2] = 1;
-    out[3] = 0;
-    out[4] = 0;
-    out[5] = -1;
-    out[6] = -1;
-    out[7] = 1;
-    //    int i;
-    //for (i = 0; i < n*n*n; i++) out[i] = 0;
-    return SUCCESSFUL_PROCEDURE;
-}
-
-int ContinuationRarefactionFlow::DF(int neq, double *y, double *pd)const {
-    //    pd[0] =  y[0] + y[1];
-    //    pd[1] =  y[0];
-    //    pd[2] =        -y[1];
-    //    pd[3] = -y[0] + y[1];
-    pd[0] = 3 * y[0];
-    pd[1] = y[1];
-    pd[2] = y[1];
-    pd[3] = y[0];
-    //    pd[0] = 1; pd[1] = 1; pd[2] = 0; pd[3] = -1;
     return SUCCESSFUL_PROCEDURE;
 }
 
@@ -344,6 +310,46 @@ int ContinuationRarefactionFlow::cdgeev(int n, double *A, struct eigen *e)const 
         sort_eigen(e);
         return SUCCESSFUL_PROCEDURE;
     }
+}
+
+void ContinuationRarefactionFlow::fill_with_jet(const FluxFunction & flux_object, int n, double *in, int degree, double *F, double *J, double *H) {
+    RealVector r(n);
+    double *rp = r;
+    for (int i = 0; i < n; i++) rp[i] = in[i];
+
+    // Will this work? There is a const somewhere in fluxParams.
+    //FluxParams fp(r);
+    //flux_object->fluxParams(FluxParams(r)); // flux_object->fluxParams(fp);
+
+    WaveState state_c(r);
+    JetMatrix c_jet(n);
+
+    flux_object.jet(state_c, c_jet, degree);
+
+    // Fill F
+    if (F != 0) for (int i = 0; i < n; i++) F[i] = c_jet(i);
+
+    // Fill J
+    if (J != 0) {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                J[i * n + j] = c_jet(i, j);
+            }
+        }
+    }
+
+    // Fill H
+    if (H != 0) {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                for (int k = 0; k < n; k++) {
+                    H[(i * n + j) * n + k] = c_jet(i, j, k); // Check this!!!!!!!!
+                }
+            }
+        }
+    }
+
+    return;
 }
 
 double ContinuationRarefactionFlow::prodint(int n, double *a, double *b)const {

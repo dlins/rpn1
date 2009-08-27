@@ -61,34 +61,22 @@ int RarefactionContinuationMethod::init(ContinuationRarefactionFlow * flow, int 
     // 4. Find the reference eigenvector.
     if (increase == 1) { // Eigenvalues should increase as the orbit advances
         if (*lambda <= lambdap && *lambda <= lambdam) {
-#ifdef TEST_RAREFACTION
-            //            printf("Inside rarefactioncurve(): Cannot initialize, lambda doesn't increase!\n");
-#endif
             return LAMBDA_NOT_INCREASING;
         } else if (*lambda < lambdap && *lambda > lambdam) {
             // Nothing to do, the eigenvector is rev.
         } else if (*lambda > lambdap && *lambda < lambdam) {
             for (ii = 0; ii < n; ii++) rev[ii] = -rev[ii];
         } else {
-#ifdef TEST_RAREFACTION
-            //            printf("Inside rarefactioncurve(): Cannot initialize, unexpected!\n");
-#endif
             return LAMBDA_NOT_INCREASING;
         }
     } else { // Eigenvalues should decrease as the orbit advances
         if (*lambda >= lambdap && *lambda >= lambdam) {
-#ifdef TEST_RAREFACTION
-            //            printf("Inside rarefactioncurve(): Cannot initialize, lambda doesn't decrease!\n");
-#endif
             return LAMBDA_NOT_DECREASING;
         } else if (*lambda > lambdap && *lambda < lambdam) {
             // Nothing to do, the eigenvector is rev.
         } else if (*lambda < lambdap && *lambda > lambdam) {
             for (ii = 0; ii < n; ii++) rev[ii] = -rev[ii];
         } else {
-#ifdef TEST_RAREFACTION
-            //            printf("Inside rarefactioncurve(): Cannot initialize, unexpected!\n");
-#endif
             return LAMBDA_NOT_DECREASING;
         }
     }
@@ -135,7 +123,7 @@ void RarefactionContinuationMethod::curve(const RealVector & inputVector, int di
 
     int step = 0;
 
-    RealVector outputVector(2);
+    RealVector outputVector(inputVector.size());
     // -------------------------Invoke th solver     ----------------------------------
 
     double testeDouble = 0; //TODO Dummy value !!
