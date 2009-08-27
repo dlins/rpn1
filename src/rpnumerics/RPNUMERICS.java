@@ -150,9 +150,9 @@ public class RPNUMERICS {
         return hugoniotCurveCalc;
     }
 
-    public static ShockCurveCalc createRarefactionCalc(OrbitPoint orbitPoint) {
+    public static RarefactionOrbitCalc createRarefactionCalc(OrbitPoint orbitPoint) {
 
-        return new ShockCurveCalc("methodName", "flowName", orbitPoint, rarefactionProfile_.getFamily(), direction_);//TODO Is method and flowName needed ? 
+        return new RarefactionOrbitCalc("methodName", "flowName", orbitPoint, rarefactionProfile_.getFamily(), direction_);//TODO Is method and flowName needed ? 
 
     }
 
