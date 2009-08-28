@@ -71,6 +71,7 @@ public:
 
 inline void LSODE::increaseTime() {
     LSODE::tout_ += profile_->deltaTime();
+    cout <<"valor de tout"<<LSODE::tout_<<endl;
 }
 
 inline ODESolver * LSODE::clone()const {

@@ -40,31 +40,61 @@ private:
     int direction_;
     int cdgeev(int n, double *A, struct eigen *e) const;
     void fill_with_jet(const FluxFunction & flux_object, int n, double *in, int degree, double *F, double *J, double *H);
+    RealVector * startPoint_;
+    RealVector * referenceVector_;
 
 public:
 
-    ContinuationShockFlow(const int , const int , const FluxFunction &);
+    ContinuationShockFlow(const RealVector &, const int, const int, const FluxFunction &);
 
-    int getFamily();
-    
-    int direction();
-    
+    ContinuationShockFlow(const ContinuationShockFlow &);
+
+    virtual ~ContinuationShockFlow();
+
+    int getFamily()const;
+
+    int direction()const;
+
     double diff(int n, double x[], double y[]);
-    
+
     double inner_product(int n, double x[], double y[]);
 
     double shockspeed(int n, int family, int typeofspeed, double Um[], double Up[]);
 
     void dH(int n, double Um[], double U[], double *dHdu);
- 
+
     void normalize(int rows, int cols, double *v);
 
     int shockfield(int n, double Um[], int m, double *Up, int family, double *dHdu);
 
     int shock(int *neq, double *xi, double *in, double *out, int *nparam, double *param);
+    
+
+    const RealVector & getReferenceVector() const;
+
+    void setReferenceVector(const RealVector &);
+
+    int flux(const RealVector &, RealVector &);
+    int fluxDeriv(const RealVector &, JacobianMatrix &);
+    int fluxDeriv2(const RealVector &, HessianMatrix &);
+
+    WaveFlow * clone()const;
+    const RealVector & getStartPoint()const;
+
 };
 
-inline int ContinuationShockFlow::getFamily(){return familyIndex_;}
-inline int ContinuationShockFlow::direction(){return direction_;}
+inline int ContinuationShockFlow::getFamily()const {
+    return familyIndex_;
+}
+
+inline int ContinuationShockFlow::direction()const {
+    return direction_;
+}
+
+inline const RealVector & ContinuationShockFlow::getStartPoint()const {
+    return *startPoint_;
+}
+
+
 
 #endif //! _ContinuationShockFlow_H

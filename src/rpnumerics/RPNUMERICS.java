@@ -186,6 +186,12 @@ public class RPNUMERICS {
         return new OrbitCalc(orbitPoint, direction_, createODESolver(flow));
 
     }
+    
+      public static ShockCurveCalc createShockCurveCalc(OrbitPoint orbitPoint) {
+
+          return new ShockCurveCalc("methodname", "flowName", orbitPoint, 0, 1);
+
+    }
 
     public static BifurcationCurveCalc createBifurcationCalc() {
         return new BifurcationCurveCalc();

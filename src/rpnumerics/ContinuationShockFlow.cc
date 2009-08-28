@@ -17,8 +17,16 @@
  * Definitions:
  */
 
-ContinuationShockFlow::ContinuationShockFlow(const int familyIndex, const int direction, const FluxFunction & fluxFunction):WaveFlow(fluxFunction),familyIndex_(familyIndex),direction_(direction){
+ContinuationShockFlow::ContinuationShockFlow(const RealVector & startPoint, const int familyIndex, const int direction, const FluxFunction & fluxFunction) : startPoint_(new RealVector(startPoint)), WaveFlow(fluxFunction), familyIndex_(familyIndex), direction_(direction), referenceVector_(new RealVector(startPoint.size()))
+{
+
 }
+ContinuationShockFlow::ContinuationShockFlow(const ContinuationShockFlow & copy):WaveFlow(copy.fluxFunction()),familyIndex_(copy.getFamily()),direction_(copy.direction()),startPoint_(new RealVector(copy.getStartPoint())),referenceVector_(new RealVector(copy.getReferenceVector())){
+    
+    
+}
+
+
 
 // Computes the shock.
 // This function receives the following parameters:
@@ -65,6 +73,45 @@ int ContinuationShockFlow::shock(int *neq, double *xi, double *in, double *out, 
     
     return info;
 }
+
+
+
+// FUNCTION normalize
+//
+// This function normalizes a matrix's rows.
+// The list of parameters:
+//
+//     rows: The number of rows of the matrix.
+//     cols: The number of columns of the matrix.
+//        v: The matrix.
+//
+// On exit, the vectors forming the rows of the matrix
+// are normalized, that is,
+//
+//     v[i][j] = v[i][j]/norm[i], 
+//
+// where i = 0,..., (rows - 1); j = 0,..., (cols - 1) and
+//
+//     norm[i] = sqrt(v[i][0]^2 + ... + v[i][cols - 1]^2).
+//
+void ContinuationShockFlow::normalize(int rows, int cols, double *v){
+    int i, j;
+    for (i = 0; i < rows; i++){
+        double norm = 0;
+        for (j = 0; j < cols; j++){
+            norm += v[i*cols + j]*v[i*cols + j];
+        }
+
+        norm = sqrt(norm);
+        if (norm == 0) continue;
+        
+        for (j = 0; j < cols; j++){
+            v[i*cols + j] = v[i*cols + j]/norm;
+        }
+    }
+    return;
+}
+
 
 // FUNCTION shockfield
 //
@@ -141,6 +188,98 @@ int ContinuationShockFlow::shockfield(int n, double Um[], int m, double *Up, int
 
     return SUCCESSFUL_PROCEDURE;
 }
+
+
+int ContinuationShockFlow::flux(const RealVector &input, RealVector & output){
+
+
+    double in[input.size()];
+
+    double out[input.size()];
+
+    int dimension = input.size();
+    
+    double xi=0;
+
+    for (int i = 0; i < input.size(); i++) {
+        in[i] = input(i);
+    }
+
+    int nparam = 2 * dimension + 1;
+    
+    double param [nparam];
+    
+    const RealVector & initialPoint = getStartPoint();
+
+    param[0] = (double) getFamily();
+    
+    for (int i = 0; i < dimension; i++) {
+        param[i+1] = initialPoint(i);
+    }
+    cout << "Chamando flux" << endl;    
+
+    const RealVector & referenceVector = getReferenceVector();
+
+    for (int i = 0; i < input.size(); i++) {
+        
+        param[i + dimension + 1] = referenceVector(i);
+    }
+
+        for (int i = 0; i < 2*dimension+1; i++) {
+        
+        cout <<"Valor de param "<<i<<" "<< param[i]<<endl;
+        
+    }
+
+
+
+    shock (&dimension,&xi,in,out,&nparam,param);
+    
+    
+     for (int i = 0; i < input.size(); i++) {
+        output(i) = out[i];
+    }
+    
+    
+    
+    
+}
+int ContinuationShockFlow::fluxDeriv(const RealVector &, JacobianMatrix &){
+    
+}
+int ContinuationShockFlow::fluxDeriv2(const RealVector &, HessianMatrix &){
+    
+}
+
+
+
+WaveFlow * ContinuationShockFlow::clone()const {
+
+    return new ContinuationShockFlow(*this);
+}
+
+const RealVector & ContinuationShockFlow::getReferenceVector() const {
+    return *referenceVector_;
+}
+
+void ContinuationShockFlow::setReferenceVector(const RealVector & referenceVector) {
+
+    
+    for (int i = 0; i < referenceVector.size(); i++) {
+        referenceVector_->operator()(i) = referenceVector(i);
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
 
 int ContinuationShockFlow::cdgeev(int n, double *A, struct eigen *e)const {
 
@@ -258,6 +397,31 @@ int ContinuationShockFlow::cdgeev(int n, double *A, struct eigen *e)const {
         return SUCCESSFUL_PROCEDURE;
     }
 }
+
+
+// FUNCTION diff
+//
+// This function returns the absolute value of the difference
+// component-wise of two vectors.
+//
+double ContinuationShockFlow::diff(int n, double x[], double y[]){
+    double res = 0;
+    int i;
+    
+    for (i = 0; i < n; i++) res += fabs(x[i] - y[i]);
+    
+    return res;
+}
+
+
+double  ContinuationShockFlow::inner_product(int n, double x[], double y[]){
+    double s = 0; int i;
+    for (i = 0; i < n; i++) s+= x[i]*y[i];
+    return s;
+}
+
+
+
 
 
 void ContinuationShockFlow::fill_with_jet(const FluxFunction & flux_object, int n, double *in, int degree, double *F, double *J, double *H) {
@@ -408,7 +572,11 @@ double ContinuationShockFlow::shockspeed(int n, int family, int typeofspeed, dou
     }
 }
 
+ContinuationShockFlow::~ContinuationShockFlow() {
 
+    delete startPoint_;
+
+}
 
 
 //! Code comes here! daniel@impa.br

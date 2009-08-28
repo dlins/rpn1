@@ -28,11 +28,12 @@ public class ShockCurveGeomView extends PolyLine {
 
     }
 
+    @Override
     public Shape createShape() {
 
         GeneralPath composite = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
 
-        Orbit source = (Orbit) (((RpGeometry) getAbstractGeom()).geomFactory().
+        ShockCurve source = (ShockCurve) (((RpGeometry) getAbstractGeom()).geomFactory().
                 geomSource());
 
         points_ = source.getPoints();

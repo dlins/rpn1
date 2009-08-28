@@ -29,6 +29,8 @@ class ShockContinuationMethod {
 private:
 
     int shockinit(int n, double Um[], int family, int increase, double Unext[]);
+    void fill_with_jet(const FluxFunction & flux_object, int n, double *in, int degree, double *F, double *J, double *H);
+    int cdgeev(int n, double *A, struct eigen *e) const;
 
     ODESolver * solver_;
 

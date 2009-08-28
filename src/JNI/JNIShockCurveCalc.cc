@@ -17,9 +17,6 @@
 
 #include "ContinuationShockFlow.h"
 
-//#include "PluginService.h"
-//#include "RPnPluginManager.h"
-//#include "RarefactionFlowPlugin.h"
 #include "RpNumerics.h"
 #include "RealVector.h"
 #include "JNIDefs.h"
@@ -35,33 +32,37 @@ using std::vector;
 
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobject obj, jstring methodName, jstring flowName, jobject initialPoint, jint familyIndex, jint timeDirection) {
+    cout <<"chamando shock curve calc"<<endl;
+//
+    unsigned int i;
+//
+    jclass classOrbitPoint = (env)->FindClass(ORBITPOINT_LOCATION);
+    jclass classShockCurve = (env)->FindClass(SHOCKCURVE_LOCATION);
 
-//
-//    unsigned int i;
-//
-//    jclass classOrbitPoint = (env)->FindClass(ORBITPOINT_LOCATION);
-//    jclass classRarefactionOrbit = (env)->FindClass(RAREFACTIONORBIT_LOCATION);
-//
-//    jmethodID rarefactionOrbitConstructor = (env)->GetMethodID(classRarefactionOrbit, "<init>", "([Lrpnumerics/OrbitPoint;I)V");
-//    jmethodID orbitPointConstructor = (env)->GetMethodID(classOrbitPoint, "<init>", "([D)V");
-//    jmethodID toDoubleMethodID = (env)->GetMethodID(classOrbitPoint, "toDouble", "()[D");
+    jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
+
+    jmethodID realVectorConstructorDoubleArray = env->GetMethodID(realVectorClass, "<init>", "([D)V");
+
+    jmethodID shockCurveConstructor = (env)->GetMethodID(classShockCurve, "<init>", "([Lrpnumerics/OrbitPoint;I)V");
+    jmethodID orbitPointConstructor = (env)->GetMethodID(classOrbitPoint, "<init>", "(Lwave/util/RealVector;D)V");
+    jmethodID toDoubleMethodID = (env)->GetMethodID(classOrbitPoint, "toDouble", "()[D");
 //
 //    //Input processing
-//    jdoubleArray inputPhasePointArray = (jdoubleArray) (env)->CallObjectMethod(initialPoint, toDoubleMethodID);
+    jdoubleArray inputPhasePointArray = (jdoubleArray) (env)->CallObjectMethod(initialPoint, toDoubleMethodID);
+
+    double input [env->GetArrayLength(inputPhasePointArray)];
 //
-//    double input [env->GetArrayLength(inputPhasePointArray)];
+    env->GetDoubleArrayRegion(inputPhasePointArray, 0, env->GetArrayLength(inputPhasePointArray), input);
 //
-//    env->GetDoubleArrayRegion(inputPhasePointArray, 0, env->GetArrayLength(inputPhasePointArray), input);
+    RealVector realVectorInput(env->GetArrayLength(inputPhasePointArray));
 //
-//    RealVector realVectorInput(env->GetArrayLength(inputPhasePointArray));
+    for (i = 0; i < (unsigned int) realVectorInput.size(); i++) {
 //
-//    for (i = 0; i < (unsigned int) realVectorInput.size(); i++) {
+        realVectorInput.component(i) = input[i];
 //
-//        realVectorInput.component(i) = input[i];
+    }
 //
-//    }
-//
-//    env->DeleteLocalRef(inputPhasePointArray);
+    env->DeleteLocalRef(inputPhasePointArray);
 //    /*
 //     *
 //     *1 - Pegar a instancia do rarefaction flow (plugin) 
@@ -86,81 +87,85 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
 //    //
 //
 //
-//    int dimension = 2;
+    int dimension = 2;
 //    //
-//    int itol = 2;
+    int itol = 2;
 //    //
-//    double rtol = 1e-4;
+    double rtol = 1e-4;
 //    //
-//    int mf = 22;
+    int mf = 22;
 //    //
-//    double deltaxi = 0.001;
+    double deltaxi = 0.001;
 //    //
-//    int nparam = 1 + dimension;
-//    //
-//
-//    double param[nparam];
-//
-//    //
-//    int ii;
-//
-//    for (ii = 0; ii < dimension; ii++) param[1 + ii] = 0.1;
-//    //
-//    int maxStepsNumber = 10000;
-//    //
+    int nparam = 1 + dimension;
 //    //
 //
-//    ContinuationRarefactionFlow flow(familyIndex, timeDirection, RpNumerics::getPhysics().fluxFunction());
+    double param[nparam];
 //
-//    LSODEProfile lsodeProfile(flow, RpNumerics::getPhysics().boundary(), maxStepsNumber, dimension, itol, rtol, mf, deltaxi, nparam, param);
+//    //
+    int ii;
 //
-//    LSODE odeSolver(lsodeProfile);
+    for (ii = 0; ii < dimension; ii++) param[1 + ii] = 0.1;
+//    //
+    int maxStepsNumber = 10000;
+//    //
+//    //
 //
-//    vector <RealVector> coords;
+    ContinuationShockFlow flow(realVectorInput,familyIndex, timeDirection, RpNumerics::getPhysics().fluxFunction());
 //
-//    RarefactionContinuationMethod method(odeSolver);
+    LSODEProfile lsodeProfile(flow, RpNumerics::getPhysics().boundary(), maxStepsNumber, dimension, itol, rtol, mf, deltaxi, nparam, param);
 //
-//    method.curve(realVectorInput, timeDirection, coords);
+    LSODE odeSolver(lsodeProfile);
+//
+    vector <RealVector> coords;
+//
+    ShockContinuationMethod method(odeSolver);
+//
+    method.curve(realVectorInput, timeDirection, coords);
 //
 //    //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //
 //    //Orbit memebers creation
 //
-//    jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(coords.size(), classOrbitPoint, NULL);
+    jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(coords.size(), classOrbitPoint, NULL);
 //
-//    for (i = 0; i < coords.size(); i++) {
+    for (i = 0; i < coords.size(); i++) {
 //
-//        RealVector tempVector = coords.at(i);
+        RealVector tempVector = coords.at(i);
 //
-//        double * dataCoords = tempVector;
+        double * dataCoords = tempVector;
 //
-//        jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size());
+        jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size()-1);// Last element is the shock speed
 //
-//        (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size(), dataCoords);
+        (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size()-1, dataCoords);
+
+        double shockSpeed = dataCoords[tempVector.size() - 1];
+        
+        jobject realVector = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, jTempArray);
 //
-//        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray);
+        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, realVector,shockSpeed);
 //
-//        (env)->SetObjectArrayElement(orbitPointArray, i, orbitPoint);
+        (env)->SetObjectArrayElement(orbitPointArray, i, orbitPoint);
 //
-//        env->DeleteLocalRef(jTempArray);
+        env->DeleteLocalRef(jTempArray);
 //
-//        env->DeleteLocalRef(orbitPoint);
+        env->DeleteLocalRef(orbitPoint);
 //
-//    }
+    }
 //
 //    //Building the orbit
 //
-//    jobject rarefactionOrbit = (env)->NewObject(classRarefactionOrbit, rarefactionOrbitConstructor, orbitPointArray, timeDirection);
+    jobject shockCurve = (env)->NewObject(classShockCurve, shockCurveConstructor, orbitPointArray, timeDirection);
 //
 //
 //    //Cleaning up
 //
-//    coords.clear();
+    coords.clear();
 //
-//    env->DeleteLocalRef(orbitPointArray);
-//    env->DeleteLocalRef(classOrbitPoint);
-//    env->DeleteLocalRef(classRarefactionOrbit);
+    env->DeleteLocalRef(orbitPointArray);
+    env->DeleteLocalRef(classOrbitPoint);
+    env->DeleteLocalRef(classShockCurve);
 //
-//    return rarefactionOrbit;
+    return shockCurve;
 
 }
