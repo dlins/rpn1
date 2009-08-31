@@ -37,7 +37,7 @@ int Quad4FluxFunction::jet(const WaveState & x, JetMatrix & output, int degree =
     // Calculate F
     // F = A + B x + (1/2) x^T C x
 
-    int spaceDim = 2;
+    int spaceDim = 4;
     double q [spaceDim];
     double res [spaceDim];
     for (int i = 0; i < spaceDim; i++)

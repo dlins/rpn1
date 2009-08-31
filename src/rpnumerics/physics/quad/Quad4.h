@@ -24,7 +24,7 @@
 
 class Quad4 : public Physics {
 private:
-    //    Quad2FluxParams * params_;
+
     Quad4FluxFunction *fluxFunction_;
     Quad4AccumulationFunction * accumulationFunction_;
 

@@ -33,9 +33,9 @@ using std::vector;
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobject obj, jstring methodName, jstring flowName, jobject initialPoint, jint familyIndex, jint timeDirection) {
     cout <<"chamando shock curve calc"<<endl;
-//
+
     unsigned int i;
-//
+
     jclass classOrbitPoint = (env)->FindClass(ORBITPOINT_LOCATION);
     jclass classShockCurve = (env)->FindClass(SHOCKCURVE_LOCATION);
 
@@ -63,6 +63,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
     }
 //
     env->DeleteLocalRef(inputPhasePointArray);
+    
+     
 //    /*
 //     *
 //     *1 - Pegar a instancia do rarefaction flow (plugin) 

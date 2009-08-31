@@ -62,7 +62,7 @@
 // The output is stored at:
 //         y: Thus, y is a vector for input/output.
 //         t: Normally should be tout.
-//    istate: Takes one of the following at output:  -- para ODESolution
+//    istate: Takes one of the following at output: 
 //             2: Successful,
 //            -1: Excessive work performed at this call, perhaps mf is wrong,
 //            -2: Excessive accuracy requested (tolerance is too small),

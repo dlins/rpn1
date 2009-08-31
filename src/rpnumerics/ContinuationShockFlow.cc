@@ -55,13 +55,21 @@ int ContinuationShockFlow::shock(int *neq, double *xi, double *in, double *out, 
 
     // Find the field at Um
     double Um[*neq];
-    for (i = 0; i < *neq; i++) Um[i] = param[i + 1];
-    int info = shockfield(*neq, Um, 1, in, (int)param[0], out);
+    
+    const RealVector & startPoint = getStartPoint();
+    const RealVector & referenceVector = getReferenceVector();
+    cout << "Vetor de referencia no shock "<<referenceVector<<endl;
+    int familyIndex = getFamily();
+    for (i = 0; i < *neq; i++) Um[i] = startPoint(i);//param[i + 1];
+
+//    int info = shockfield(*neq, Um, 1, in, (int)param[0], out);
+    int info = shockfield(*neq, Um, 1, in, familyIndex, out);
 
     if (info == SUCCESSFUL_PROCEDURE){
         // Check if the field is pointing correctly according to the reference vector
         double ref[*neq];
-        for (i = 0; i < *neq; i++) ref[i] = param[(*neq) + i + 1];
+
+        for (i = 0; i < *neq; i++) ref[i] = referenceVector(i);// param[(*neq) + i + 1];
         if (inner_product(*neq, ref, out) < 0){
             for (i = 0; i < *neq; i++) out[i] = -out[i];
         }

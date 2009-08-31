@@ -56,8 +56,6 @@ LSODEProfile::LSODEProfile(const WaveFlow & function, const Boundary & boundary,
             
         case 21:
             
-//            lrw_= (int)(22 +  9*neq + (int)pow((double)neq, 2.0));// neq*neq;
-
             lrw_ = 22 + 9 * neq +  neq*neq;
             liw_=20+neq;
             break;

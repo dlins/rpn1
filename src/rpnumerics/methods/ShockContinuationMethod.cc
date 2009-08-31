@@ -374,20 +374,26 @@ void ShockContinuationMethod::curve(const RealVector & input, int direction, vec
 
     int indx = flow.getFamily();
     int increase = flow.direction();
+    const RealVector & startPoint = flow.getStartPoint();
+    
+
 
     // Common index for the loops
     int i;
     int n = input.size();
     RealVector localInputVector(input);
     double in[n];
+    double Um[n];
     for (i = 0; i < n; i++) {
         in[i] = input(i);
+        Um[i] = startPoint(i);
+        
     }
 
 
     // Initialize the shockcurve
     double Pn[n];
-    if (shockinit(n, in, indx, increase, Pn) == ABORTED_PROCEDURE) {
+    if (shockinit(n, Um, indx, increase, Pn) == ABORTED_PROCEDURE) {
         printf("Couldn't init shock!\n");
         return; //ABORTED_PROCEDURE;
     }
@@ -415,26 +421,29 @@ void ShockContinuationMethod::curve(const RealVector & input, int direction, vec
     // Parameters to be passed to shock():
     int nparam = 1 + 2 * n;
     double param[nparam];
-    param[0] = (double) indx; // Family index.
-    for (i = 0; i < n; i++) param[i + 1] = in[i]; // Um, the first point of the curve.
+//    param[0] = (double) indx; // Family index.
+//    for (i = 0; i < n; i++) param[i + 1] = in[i]; // Um, the first point of the curve.
 
     double dHdu[n];
+    
+
+    
     int shockinfo = flow.shockfield(n, in, 1, Pn, indx, dHdu);
 
     /* NEW Reference vector */
     double p = 0;
     for (i = 0; i < n; i++) p += (Pn[i] - in[i]) * dHdu[i];
-    if (p > 0) {
-        for (i = 0; i < n; i++) param[n + i + 1] = dHdu[i];
-    } else {
-        for (i = 0; i < n; i++) param[n + i + 1] = -dHdu[i];
-    }
+//    if (p > 0) {
+//        for (i = 0; i < n; i++) param[n + i + 1] = dHdu[i];
+//    } else {
+//        for (i = 0; i < n; i++) param[n + i + 1] = -dHdu[i];
+//    }
 
-    //    if (p < 0) for (i = 0; i < n; i++) dHdu[i] = -dHdu[i];
+    if (p < 0) for (i = 0; i < n; i++) dHdu[i] = -dHdu[i];
 
     RealVector newReferenceVector(n);
 
-    for (i = 0; i < n; i++) newReferenceVector(i) = param[n + i + 1];
+    for (i = 0; i < n; i++) newReferenceVector(i) = dHdu[i];
 
     flow.setReferenceVector(newReferenceVector);
 
@@ -588,20 +597,20 @@ void ShockContinuationMethod::curve(const RealVector & input, int direction, vec
             shockinfo = flow.shockfield(n, in, 1, Pn, indx, dHdu);
             p = 0;
             for (i = 0; i < n; i++) p += oldrefvec[i] * dHdu[i];
-            //            if (p < 0) for (i = 0; i < n; i++) dHdu[i] = -dHdu[i];
-
-
-            if (p > 0) {
-                for (i = 0; i < n; i++) param[n + i + 1] = dHdu[i];
-            } else {
-                for (i = 0; i < n; i++) param[n + i + 1] = -dHdu[i];
-            }
 
 
 
-            RealVector newReferenceVector(n);
+//            if (p > 0) {
+//                for (i = 0; i < n; i++) param[n + i + 1] = dHdu[i];
+//            } else {
+//                for (i = 0; i < n; i++) param[n + i + 1] = -dHdu[i];
+//            }
 
-            for (i = 0; i < n; i++) newReferenceVector(i) = param[n + i + 1];
+            if (p < 0) for (i = 0; i < n; i++) dHdu[i] = -dHdu[i];
+
+//            RealVector newReferenceVector(n);
+
+            for (i = 0; i < n; i++) newReferenceVector(i) = dHdu[i];//param[n + i + 1];
 
 
             flow.setReferenceVector(newReferenceVector);

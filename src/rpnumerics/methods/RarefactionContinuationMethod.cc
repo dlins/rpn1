@@ -185,7 +185,6 @@ void RarefactionContinuationMethod::curve(const RealVector & inputVector, int di
 
 }
 
-
 RarefactionMethod * RarefactionContinuationMethod::clone() const {
 
     return new RarefactionContinuationMethod(*this);
