@@ -13,7 +13,7 @@
  * ---------------------------------------------------------------
  * Includes:
  */
-#include "WaveFlow.h"
+#include "ShockFlow.h"
 #include "eigen.h"
 
 /*
@@ -33,15 +33,15 @@ extern"C" {
     double ddot_(int *, double *, int *, double *, int *);
 }
 
-class ContinuationShockFlow : public WaveFlow {
+class ContinuationShockFlow : public ShockFlow {
 private:
 
     int familyIndex_;
     int direction_;
     int cdgeev(int n, double *A, struct eigen *e) const;
     void fill_with_jet(const FluxFunction & flux_object, int n, double *in, int degree, double *F, double *J, double *H);
-    RealVector * startPoint_;
-    RealVector * referenceVector_;
+    RealVector *startPoint_;
+    RealVector *referenceVector_;
 
 public:
 
@@ -68,18 +68,19 @@ public:
     int shockfield(int n, double Um[], int m, double *Up, int family, double *dHdu);
 
     int shock(int *neq, double *xi, double *in, double *out, int *nparam, double *param);
-    
-
-    const RealVector & getReferenceVector() const;
-
-    void setReferenceVector(const RealVector &);
 
     int flux(const RealVector &, RealVector &);
     int fluxDeriv(const RealVector &, JacobianMatrix &);
     int fluxDeriv2(const RealVector &, HessianMatrix &);
 
+    const RealVector & getStartPoint() const;
+
+    const RealVector & getReferenceVector()const;
+
+    void setReferenceVector(const RealVector & );
+
+
     WaveFlow * clone()const;
-    const RealVector & getStartPoint()const;
 
 };
 
@@ -90,11 +91,6 @@ inline int ContinuationShockFlow::getFamily()const {
 inline int ContinuationShockFlow::direction()const {
     return direction_;
 }
-
-inline const RealVector & ContinuationShockFlow::getStartPoint()const {
-    return *startPoint_;
-}
-
 
 
 #endif //! _ContinuationShockFlow_H

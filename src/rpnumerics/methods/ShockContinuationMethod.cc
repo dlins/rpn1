@@ -17,15 +17,9 @@
  * Definitions:
  */
 
-
-
-
 ShockContinuationMethod::ShockContinuationMethod(const ODESolver & solver) : solver_(solver.clone()) {
 
 }
-
-
-
 
 // FUNCTION shockinit
 //
@@ -292,12 +286,6 @@ void ShockContinuationMethod::fill_with_jet(const FluxFunction & flux_object, in
 }
 
 
-
-
-
-
-
-
 // FUNCTION shockcurve
 //
 // This function computes the shockcurve.
@@ -353,299 +341,160 @@ void ShockContinuationMethod::fill_with_jet(const FluxFunction & flux_object, in
 //     ABORTED_PROCEDURE: Something went wrong.
 
 void ShockContinuationMethod::curve(const RealVector & input, int direction, vector<RealVector> & output) {
-    cout << "Chamando curve" << endl;
+
     output.clear();
-    //(int *numtotal,
-    //        double *xifinal,
-    //        struct store *out,
-    //        int n,
-    //        double *in,
-    //        int nummax,
-    //        int indx,
-    //        double xi0,
-    //        double deltaxi,
-    //        int increase,
-    //        const double domain[]) {
-
-    // Set the flux object
-
-
     ContinuationShockFlow & flow = (ContinuationShockFlow &) solver_->getProfile().getFunction();
-
+    //
     int indx = flow.getFamily();
     int increase = flow.direction();
     const RealVector & startPoint = flow.getStartPoint();
-    
-
 
     // Common index for the loops
+
     int i;
     int n = input.size();
     RealVector localInputVector(input);
+
     double in[n];
     double Um[n];
     for (i = 0; i < n; i++) {
-        in[i] = input(i);
         Um[i] = startPoint(i);
-        
+        in[i] = localInputVector(i);
     }
 
-
     // Initialize the shockcurve
+
     double Pn[n];
     if (shockinit(n, Um, indx, increase, Pn) == ABORTED_PROCEDURE) {
         printf("Couldn't init shock!\n");
         return; //ABORTED_PROCEDURE;
     }
-
+    //
     printf("After shock init:\n");
     for (int i = 0; i < n; i++) printf("P[%d] = %f\n", i, Pn[i]);
-
     // Store the first point
     //    double res[n + 1];
 
-    RealVector outputShockPoint(n + 1);
+    RealVector outputShockPoint(n);
     for (i = 0; i < n; i++) {
         //        res[i] = Pn[i];
         outputShockPoint(i) = Pn[i];
     }
-
-    // sn = s(Pn), the speed at Pn.
+    //
+    //    // nowspeed = s(Pn), the speed at Pn.
     double sn = flow.shockspeed(n, indx, 1, in, Pn);
     //    res[n] = sn;
-    outputShockPoint(n) = sn;
+    //    outputShockPoint(n) = sn;
     output.push_back(outputShockPoint);
-    //    add(out, res);
     printf("Speed at first point: %f\n", sn);
 
+    //--------------------------------------FIM INICIALIZACAO--------------------------------------------------------
+    //
     // Parameters to be passed to shock():
-    int nparam = 1 + 2 * n;
-    double param[nparam];
-//    param[0] = (double) indx; // Family index.
-//    for (i = 0; i < n; i++) param[i + 1] = in[i]; // Um, the first point of the curve.
-
+    //    int nparam = 1 + 2 * n;
+    //    double param[nparam];
+    //    //    param[0] = (double) indx; // Family index.
+    //    //    for (i = 0; i < n; i++) param[i + 1] = in[i]; // Um, the first point of the curve.
+    //
     double dHdu[n];
-    
-
-    
+    //
     int shockinfo = flow.shockfield(n, in, 1, Pn, indx, dHdu);
-
-    /* NEW Reference vector */
+    //
+    //    /* NEW Reference vector */
     double p = 0;
     for (i = 0; i < n; i++) p += (Pn[i] - in[i]) * dHdu[i];
-//    if (p > 0) {
-//        for (i = 0; i < n; i++) param[n + i + 1] = dHdu[i];
-//    } else {
-//        for (i = 0; i < n; i++) param[n + i + 1] = -dHdu[i];
-//    }
-
     if (p < 0) for (i = 0; i < n; i++) dHdu[i] = -dHdu[i];
-
+    //
     RealVector newReferenceVector(n);
-
+    //
     for (i = 0; i < n; i++) newReferenceVector(i) = dHdu[i];
-
+    //
     flow.setReferenceVector(newReferenceVector);
-
-
-    /* NEW Reference vector */
-
-
-    //
-    //    // Start the integration
-    //    // FOR THE SOLVER:
-    //
-    //    // The dimension of the space
-    //    int neq = n;
-    //
-    //    // ???
-    //    int ml;
-    //    int mu;
-    //
-    //    // ???
-    //    int nrpd = 4;
-
-    // Initial and final times
-    //    double t = xi0;
-    //    double tout = t + deltaxi;
-    //printf("Before while: t = %f, tout = %f, xi0 = %f\n", t, tout, xi0);
-
-    // Is the tolerance the same for all the elements of U (1) or not (2)?
-    //    int itol = 2; // 1: atol scalar; 2: atol array.
-    //    double rtol = 1e-4;
-    //    double atol[neq];
-    //    for (i = 0; i < neq; i++) atol[i] = 1e-6;
-
-    // The Jacobian is provided by the user.
-    // int mf = 21; 
-    // The Jacobian is NOT provided by the user.
-    //    int mf = 22;
-
-    // Lsode uses rwork to perform its computations.
-    // lrw is the declared length of rwork
-    //    int lrw;
-    //    if (mf == 10) lrw = 20 + 16 * neq;
-    //    else if (mf == 21 || mf == 22) lrw = 22 + 9 * neq + neq * neq;
-    //    else if (mf == 24 || mf == 25) lrw = 22 + 10 * neq + (2 * ml + mu) * neq;
-    //    double rwork[lrw];
-
-    // Normal computation of values at tout.
-    //    int itask = 1;
-
-    // Set to 1 initially.+
-    //    int istate = 1;
-
-    // No optional inputs
-    //    int iopt = 0;
-
-    // Lsode uses iwork to perform its computations.
-    // liw is the declared length of iwork
-    //    int liw;
-    //    if (mf == 10) liw = 20;
-    //    else if (mf == 21 || mf == 22 || mf == 24 || mf == 25) liw = 20 + neq;
-    //    int iwork[liw];
-
-    // Lsode returns an integer (that serves as a flag), to tell if the computation
-    // process was successful or not. Refer to clsode.c for details.
+    //---------------------------------------FIM DO CALCULO DO NOVO VETOR DE REFERENCIA-------------------------------
     int info = SUCCESSFUL_PROCEDURE;
-
-    // Reset numtotal:
-    //    (*numtotal) = 1;
-
-    // Main cicle: compute the curve
+    //
+    //    // Reset numtotal:
+    //    //    (*numtotal) = 1;
+    //
+    //    // Main cicle: compute the curve
     // Store a copy of the speed and of the reference vector
     double oldspeed;
     double oldrefvec[n];
-    RealVector outputVector(input.size());
+    RealVector outputVector(n);
+    RealVector inputVector(n);
     double testeDouble = 0; //TODO Dummy value !!
     int step = 0;
     while (step < solver_->getProfile().maxStepNumber() && info == SUCCESSFUL_PROCEDURE) {
-
-        // Store a copy of the reference vector, so that it can be compared later with the
-        // eigenvector at the point returned by the solver and thus prepare
-        // the reference vector for the next iteration
         oldspeed = sn;
-        for (i = 0; i < n; i++) oldrefvec[i] = flow.getReferenceVector()(i); //param[1 + n + i];
-
-
-        cout << "localInputVector " << localInputVector << endl;
-        cout << "outputVector " << outputVector << endl;
-        cout << "referenceVector " << flow.getReferenceVector() << endl;
-
-        // Invoke the solver
-        //printf("Before solver: tout = %lf, numtotal = %d\n", tout, *numtotal);
-        info = solver_->solve(localInputVector, outputVector, testeDouble);
-        cout << "Dentro do while" << endl;
-        //        info = solver(&shock, &neq, &Pn[0], &t, &tout, &itol, &rtol, &atol[0],
-        //                &itask, &istate, &iopt, &rwork[0], &lrw, &iwork[0], &liw,
-        //                //&jacrarefaction, &mf, &nparam, &param[0]);
-        //                0, &mf, &nparam, &param[0]);
-
-        //tout += deltaxi;
-        //printf("After solver: tout = %lf, numtotal = %d, info = %d\n", tout, *numtotal, info);
-
-
+        for (i = 0; i < n; i++) {
+            oldrefvec[i] = flow.getReferenceVector()(i); //param[1 + n + i];
+            inputVector(i) = Pn[i];
+        }
+        //        cout << "Input Vector: " << inputVector << endl;
+        info = solver_->solve(inputVector, outputVector, testeDouble);
+        //        cout << "Output: " << outputVector << endl;
+        LSODE::increaseTime();
         if (info == SUCCESSFUL_PROCEDURE) {
-            cout << "SUCCE" << endl;
-            // Is the speed monotonic?
+            //            cout << "SUCCE" << endl;
+            //
+            //            // Store a copy of the reference vector, so that it can be compared later with the
+            //            // eigenvector at the point returned by the solver and thus prepare
+            //            // the reference vector for the next iteration
+            for (i = 0; i < n; i++) {
+                Pn[i] = outputVector(i);
+            }
+
+            //
             double nowspeed = flow.shockspeed(n, indx, 1, in, Pn);
-            printf("nowspeed = %f, oldspeed = %f\n", nowspeed, oldspeed);
+            //            //
+            //            printf("Depois do solver nowspeed = %f, oldspeed = %f\n", nowspeed, oldspeed);
+            //            //            // Is the speed monotonic?
             if ((increase == 1 && nowspeed < oldspeed) ||
                     (increase == -1 && nowspeed > oldspeed)) {
-                //printf("nowspeed = %f, oldspeed = %f\n", nowspeed, oldspeed);
+                printf("nowspeed = %f, oldspeed = %f\n", nowspeed, oldspeed);
                 printf("Non-monotonous!\n");
                 return; // ABORTED_PROCEDURE;
             }
-
-            //            /* COLLISION DETECTION */
-            //            // Retrieve the previous U
-            //            double Uprev[3];
-            //            get(out, Uprev, out->count - 1);
-            //
-            //            // Check if the segment formed by the last two points is inside/outside/across 
-            //            // the domain. If inside, carry on. If outside, abort. If across, find
-            //            // the intersection point, add it to the curve and abort.                
-            //            double seg[4] = {Uprev[0], Uprev[1], Pn[0], Pn[1]};
-            //            double pnt[2];
-            //
-            //            int cllsn = collision(domain, seg, pnt);
-            //            if (cllsn == -1) {
-            //                return ABORTED_PROCEDURE;
-            //            } else if (cllsn == 0) {
-            //                // INSIDE:
-            //                for (i = 0; i < n; i++) res[i] = Pn[i];
-            //                res[n] = sn = nowspeed;
-            //                add(out, res);
-            //            } else if (cllsn == 1) {
-            //                // Store and get out
-            //                double ppnt[3] = {pnt[0], pnt[1], nowspeed};
-            //                add(out, ppnt);
-            //                return ABORTED_PROCEDURE;
-            //            }
-            //            /* COLLISION DETECTION */
-
-            /*
-            // Effectively add the point
-             *
-             *
-            for (i = 0; i < n; i++) res[i] = Pn[i];
-            res[n] = sn = nowspeed;
-            add(out, res);*/
-
-            // The reference vector
-            //double dHdu[n];
+            sn = nowspeed;
+            //         The reference vector
             shockinfo = flow.shockfield(n, in, 1, Pn, indx, dHdu);
+
             p = 0;
+
             for (i = 0; i < n; i++) p += oldrefvec[i] * dHdu[i];
-
-
-
-//            if (p > 0) {
-//                for (i = 0; i < n; i++) param[n + i + 1] = dHdu[i];
-//            } else {
-//                for (i = 0; i < n; i++) param[n + i + 1] = -dHdu[i];
-//            }
 
             if (p < 0) for (i = 0; i < n; i++) dHdu[i] = -dHdu[i];
 
-//            RealVector newReferenceVector(n);
+            RealVector newReferenceVector(n);
 
-            for (i = 0; i < n; i++) newReferenceVector(i) = dHdu[i];//param[n + i + 1];
+            RealVector outputPoint(n);
 
-
+            for (i = 0; i < n; i++) {
+                newReferenceVector(i) = dHdu[i]; //param[n + i + 1];
+                outputPoint(i) = Pn[i];
+                //                outputPoint(i) = dHdu[i];
+            }
             flow.setReferenceVector(newReferenceVector);
 
-            //            if (p > 0) {
-            //                for (i = 0; i < n; i++) param[n + i + 1] = dHdu[i];
-            //            } else {
-            //                for (i = 0; i < n; i++) param[n + i + 1] = -dHdu[i];
-            //            }
+            //            outputPoint(n) = sn;
 
-            // Update counter
-            //            (*numtotal)++;
+            output.push_back(outputPoint);
+
+            step++;
 
 
         } else {
-
             cout << "ELSE" << endl;
-            //            printf("Inside while, info = %d, numtotal = %d\n", info, *numtotal);
+            //                        printf("Inside while, info = %d, numtotal = %d\n", info, *numtotal);
             return; // ABORTED_PROCEDURE;
         }
-
-        output.push_back(outputVector);
-
-        localInputVector = outputVector;
-
-        step++;
-
-        LSODE::increaseTime();
-
     }
 
     return; // SUCCESSFUL_PROCEDURE;
 }
 
 ShockContinuationMethod::~ShockContinuationMethod() {
+    //    delete solver_;
 }
 
 

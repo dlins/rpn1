@@ -111,8 +111,6 @@ public class RPNUMERICS {
     public static int methodsConfigurationSize() {
         return methodsConfigMap_.size();
     }
-    
-    
 
     /**
      * 
@@ -188,8 +186,8 @@ public class RPNUMERICS {
     }
     
       public static ShockCurveCalc createShockCurveCalc(OrbitPoint orbitPoint) {
-
-          return new ShockCurveCalc("methodname", "flowName", orbitPoint, 0, 1);
+//TODO Family hardcoded to zero
+          return new ShockCurveCalc("methodname", "flowName", orbitPoint, 0, direction_);
 
     }
 

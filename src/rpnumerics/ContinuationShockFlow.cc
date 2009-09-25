@@ -17,16 +17,12 @@
  * Definitions:
  */
 
-ContinuationShockFlow::ContinuationShockFlow(const RealVector & startPoint, const int familyIndex, const int direction, const FluxFunction & fluxFunction) : startPoint_(new RealVector(startPoint)), WaveFlow(fluxFunction), familyIndex_(familyIndex), direction_(direction), referenceVector_(new RealVector(startPoint.size()))
-{
-
-}
-ContinuationShockFlow::ContinuationShockFlow(const ContinuationShockFlow & copy):WaveFlow(copy.fluxFunction()),familyIndex_(copy.getFamily()),direction_(copy.direction()),startPoint_(new RealVector(copy.getStartPoint())),referenceVector_(new RealVector(copy.getReferenceVector())){
-    
-    
+ContinuationShockFlow::ContinuationShockFlow(const RealVector & startPoint, const int familyIndex, const int direction, const FluxFunction & fluxFunction) :ShockFlow(startPoint,fluxFunction), familyIndex_(familyIndex), direction_(direction),startPoint_(new RealVector (startPoint)),referenceVector_(new RealVector(startPoint)) {
 }
 
 
+ContinuationShockFlow::ContinuationShockFlow(const ContinuationShockFlow & copy):ShockFlow(copy.getReferenceVector(),copy.fluxFunction()),familyIndex_(copy.getFamily()),direction_(copy.direction()),startPoint_(new RealVector(copy.getStartPoint())),referenceVector_(new RealVector(copy.getReferenceVector())) {
+}
 
 // Computes the shock.
 // This function receives the following parameters:
@@ -51,18 +47,19 @@ ContinuationShockFlow::ContinuationShockFlow(const ContinuationShockFlow & copy)
 // ABORTED_PROCEDURE: Something went wrong,
 // SUCCESSFUL_PROCEDURE: OK.
 int ContinuationShockFlow::shock(int *neq, double *xi, double *in, double *out, int *nparam, double *param){
-    int i;
 
+    int i;
     // Find the field at Um
     double Um[*neq];
-    
     const RealVector & startPoint = getStartPoint();
+
     const RealVector & referenceVector = getReferenceVector();
-    cout << "Vetor de referencia no shock "<<referenceVector<<endl;
+//    cout << "Vetor de referencia no shock " << referenceVector << endl;
     int familyIndex = getFamily();
     for (i = 0; i < *neq; i++) Um[i] = startPoint(i);//param[i + 1];
 
 //    int info = shockfield(*neq, Um, 1, in, (int)param[0], out);
+
     int info = shockfield(*neq, Um, 1, in, familyIndex, out);
 
     if (info == SUCCESSFUL_PROCEDURE){
@@ -73,16 +70,13 @@ int ContinuationShockFlow::shock(int *neq, double *xi, double *in, double *out, 
         if (inner_product(*neq, ref, out) < 0){
             for (i = 0; i < *neq; i++) out[i] = -out[i];
         }
-
         // Normalize the field
         normalize(1, *neq, out);
     }
     else printf("Shock failed!\n");
-    
+
     return info;
 }
-
-
 
 // FUNCTION normalize
 //
@@ -109,7 +103,6 @@ void ContinuationShockFlow::normalize(int rows, int cols, double *v){
         for (j = 0; j < cols; j++){
             norm += v[i*cols + j]*v[i*cols + j];
         }
-
         norm = sqrt(norm);
         if (norm == 0) continue;
         
@@ -141,6 +134,7 @@ void ContinuationShockFlow::normalize(int rows, int cols, double *v){
 
 int ContinuationShockFlow::shockfield(int n, double Um[], int m, double *Up, int family, double *dHdu) {
     // This will change in time.
+
     if (n != 2) return ABORTED_PROCEDURE;
 
     const FluxFunction & shock_flux_object = fluxFunction();
@@ -148,7 +142,6 @@ int ContinuationShockFlow::shockfield(int n, double Um[], int m, double *Up, int
     // The function evaluated at Um
     double fm[n];
     fill_with_jet(shock_flux_object, n, Um, 0, fm, 0, 0); // F(n, Um, fm);
-
     // For all the points:
     int i, j;
     for (i = 0; i < m; i++) {
@@ -198,94 +191,46 @@ int ContinuationShockFlow::shockfield(int n, double Um[], int m, double *Up, int
 }
 
 
-int ContinuationShockFlow::flux(const RealVector &input, RealVector & output){
-
+int ContinuationShockFlow::flux(const RealVector &input, RealVector & output) {
 
     double in[input.size()];
 
     double out[input.size()];
 
-    int dimension = input.size();
-    
     double xi=0;
 
     for (int i = 0; i < input.size(); i++) {
         in[i] = input(i);
     }
-
-    int nparam = 2 * dimension + 1;
-    
+    int dimension = input.size();
+    //Dummy !
+    int nparam = 2 ;
+    //Dummy !
     double param [nparam];
-    
-    const RealVector & initialPoint = getStartPoint();
+//    cout <<"Antes do shock"<<"Input "<<input<<"Output "<<output<<endl;
 
-    param[0] = (double) getFamily();
-    
-    for (int i = 0; i < dimension; i++) {
-        param[i+1] = initialPoint(i);
-    }
-    cout << "Chamando flux" << endl;    
-
-    const RealVector & referenceVector = getReferenceVector();
-
-    for (int i = 0; i < input.size(); i++) {
-        
-        param[i + dimension + 1] = referenceVector(i);
-    }
-
-        for (int i = 0; i < 2*dimension+1; i++) {
-        
-        cout <<"Valor de param "<<i<<" "<< param[i]<<endl;
-        
-    }
-
-
-
-    shock (&dimension,&xi,in,out,&nparam,param);
-    
-    
+    shock(&dimension, &xi, in, out, &nparam, param);
+//    cout << "Depois do shock" << endl;
      for (int i = 0; i < input.size(); i++) {
         output(i) = out[i];
     }
-    
-    
-    
-    
-}
-int ContinuationShockFlow::fluxDeriv(const RealVector &, JacobianMatrix &){
-    
-}
-int ContinuationShockFlow::fluxDeriv2(const RealVector &, HessianMatrix &){
-    
+
+//     cout <<"Saindo do flux "<<"Input "<<input<<"Output "<<output<<endl;
 }
 
+int ContinuationShockFlow::fluxDeriv(const RealVector &, JacobianMatrix &) {
 
+    cout <<"Chamando flux Deriv"<<endl;
+    
+}
+int ContinuationShockFlow::fluxDeriv2(const RealVector &, HessianMatrix &) {
+    cout << "Chamando flux Deriv2" << endl;
+}
 
 WaveFlow * ContinuationShockFlow::clone()const {
 
     return new ContinuationShockFlow(*this);
 }
-
-const RealVector & ContinuationShockFlow::getReferenceVector() const {
-    return *referenceVector_;
-}
-
-void ContinuationShockFlow::setReferenceVector(const RealVector & referenceVector) {
-
-    
-    for (int i = 0; i < referenceVector.size(); i++) {
-        referenceVector_->operator()(i) = referenceVector(i);
-    }
-
-}
-
-
-
-
-
-
-
-
 
 
 
@@ -429,13 +374,16 @@ double  ContinuationShockFlow::inner_product(int n, double x[], double y[]){
 }
 
 
-
-
-
 void ContinuationShockFlow::fill_with_jet(const FluxFunction & flux_object, int n, double *in, int degree, double *F, double *J, double *H) {
+
     RealVector r(n);
-    double *rp = r;
-    for (int i = 0; i < n; i++) rp[i] = in[i];
+
+    //    double *rp = r;
+    //    for (int i = 0; i < n; i++) rp[i] = in[i];
+
+    for (int i = 0; i < n; i++){
+        r(i) = in[i];
+    }
 
     // Will this work? There is a const somewhere in fluxParams.
     //FluxParams fp(r);
@@ -443,7 +391,6 @@ void ContinuationShockFlow::fill_with_jet(const FluxFunction & flux_object, int 
 
     WaveState state_c(r);
     JetMatrix c_jet(n);
-
     flux_object.jet(state_c, c_jet, degree);
 
     // Fill F
@@ -471,11 +418,6 @@ void ContinuationShockFlow::fill_with_jet(const FluxFunction & flux_object, int 
 
     return;
 }
-
-
-
-
-
 
 // FUNCTION dH
 //
@@ -521,8 +463,6 @@ void ContinuationShockFlow::dH(int n, double Um[], double U[], double *dHdu) {
 }
 
 
-
-
 // FUNCTION shockspeed
 //
 // This function computes the shock speed, given two points,
@@ -546,8 +486,6 @@ double ContinuationShockFlow::shockspeed(int n, int family, int typeofspeed, dou
     if (typeofspeed == 0) {
         struct eigen e[n];
         double J[n][n];
-        
-
         
         // This line was replaced:
         // DF(n, Um, &J[0][0]);
@@ -580,12 +518,25 @@ double ContinuationShockFlow::shockspeed(int n, int family, int typeofspeed, dou
     }
 }
 
-ContinuationShockFlow::~ContinuationShockFlow() {
+const RealVector & ContinuationShockFlow::getStartPoint()const {
+    return *startPoint_;
+}
 
-    delete startPoint_;
+const RealVector & ContinuationShockFlow::getReferenceVector()const {
+    return *referenceVector_;
+}
+
+void ContinuationShockFlow::setReferenceVector(const RealVector & newReferenceVector) {
+
+    for (int i = 0; i < newReferenceVector.size(); i++) {
+
+        referenceVector_->operator()(i) = newReferenceVector(i);
+    }
 
 }
 
+ContinuationShockFlow::~ContinuationShockFlow() {
 
-//! Code comes here! daniel@impa.br
-
+    delete referenceVector_;
+    delete startPoint_;
+}
