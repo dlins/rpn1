@@ -28,7 +28,6 @@ WAVESRC += ADTADV.cc		\
 	Vector.cc               \
 	eigen.cc
 
-	#new.cc			\
 
 CPPFLAGS += -I $(UTILDIR)
 
