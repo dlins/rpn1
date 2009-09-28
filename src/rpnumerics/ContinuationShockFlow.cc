@@ -234,7 +234,7 @@ WaveFlow * ContinuationShockFlow::clone()const {
 
 
 
-int ContinuationShockFlow::cdgeev(int n, double *A, struct eigen *e)const {
+int  ContinuationShockFlow::cdgeev(int n, double *A, struct eigen *e) {
 
     int lda = n, lwork = 5 * n, ldvr = n, ldvl = n;
     int i, j, info;
@@ -491,7 +491,7 @@ double ContinuationShockFlow::shockspeed(int n, int family, int typeofspeed, dou
         // DF(n, Um, &J[0][0]);
         fill_with_jet(shock_flux_object, n, Um, 1, 0, &J[0][0], 0);
 
-        cdgeev(n, &J[0][0], &e[0]);
+        ContinuationShockFlow::cdgeev(n, &J[0][0], &e[0]);
 
         return e[family].r;
     }// If Up != Um
