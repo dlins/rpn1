@@ -175,9 +175,6 @@ public class MPGridFunctionOnGridEvaluator extends
 
                                         }
 
-                                         System.out.println("Primeiro ponto: " + points[0][0] + ", " + points[0][1] + ", " + points[0][2] + ", " + points[0][3]);
-                                         System.out.println("Segundo ponto: " + points[1][0] + ", " + points[1][1] + ", " + points[1][2] + ", " + points[1][3]);
-
                                         if (thereIsOverlap) {
                                             throw new CanNotPerformCalculations();
                                         }

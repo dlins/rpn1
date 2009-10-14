@@ -18,12 +18,12 @@ public class ContourEdgesMultiPolyline {
 	private Exception hyperCubeErr = null;
 	
 	public ContourEdgesMultiPolyline(int nedges,
-									 int[][] edges_,
-							 		 double [][] sol_,
-									 FunctionParameters parameters,									 
-									 GridGenerator solution) throws ThereIsNoFeasibleSolution,
-									 									  DimensionOutOfBounds,
-									 									  HyperCubeErrorFound {
+		int[][] edges_,
+		double [][] sol_,
+		FunctionParameters parameters,									 
+		GridGenerator solution) throws ThereIsNoFeasibleSolution,
+		DimensionOutOfBounds,
+		HyperCubeErrorFound {
 		super();
 		this.sol_ = sol_;
 		
