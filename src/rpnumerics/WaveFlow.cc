@@ -17,10 +17,10 @@
  * Definitions:
  */
 
-WaveFlow::WaveFlow(const FluxFunction & flux):fluxFunction_((FluxFunction *)flux.clone()){}
-    
-WaveFlow::~WaveFlow(){
+WaveFlow::WaveFlow(const FluxFunction & flux) : fluxFunction_((FluxFunction *) flux.clone()) {
+}
 
-
-    delete fluxFunction_;}
+WaveFlow::~WaveFlow() {
+    delete fluxFunction_;
+}
 

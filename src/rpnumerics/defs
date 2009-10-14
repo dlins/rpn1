@@ -20,6 +20,7 @@ RPNUMSRC += \
         WaveFlow.cc            \
         ContinuationRarefactionFlow.cc \
         ContinuationShockFlow.cc \
+        CompositeFlow.cc \
         RpFunction.cc           \
         RarefactionCalc.cc           \
         RpCalculation.cc          \
