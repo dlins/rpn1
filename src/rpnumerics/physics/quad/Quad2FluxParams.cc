@@ -8,7 +8,7 @@ const double Quad2FluxParams::DEFAULT_C[2][2][2] = { { { -1., 0. }, { 0., 1. } }
 
 Quad2FluxParams::Quad2FluxParams(void) :FluxParams(RealVector(10))
 {
-    component(0, -1); //A1
+    component(0, 2); //A1
 
     component(1, 0); //B1
 

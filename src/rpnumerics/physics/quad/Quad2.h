@@ -112,13 +112,13 @@ inline Boundary * Quad2::defaultBoundary() {
 
     RealVector min(2);
 
-    min.component(0) = -0.5;
-    min.component(1) = -0.5;
+    min.component(0) = -10.0;
+    min.component(1) = -10.0;
 
     RealVector max(2);
 
-    max.component(0) = 0.5;
-    max.component(1) = 0.5;
+    max.component(0) = 10.0;
+    max.component(1) = 10.0;
 
 //    RealVector min(2);
 //

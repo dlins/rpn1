@@ -96,7 +96,6 @@ Quad2FluxFunction::~Quad2FluxFunction(void) {
 //    return 2; //SUCCESSFUL_PROCEDURE;
 //}
 
-
 int Quad2FluxFunction::jet(const WaveState & x, JetMatrix & y, int degree = 2) const {
 
     // Calculate F
@@ -104,82 +103,82 @@ int Quad2FluxFunction::jet(const WaveState & x, JetMatrix & y, int degree = 2) c
 
     const FluxParams params = fluxParams();
 
-//    RealVector parVector = params.params();
+    //    RealVector parVector = params.params();
 
-//    cout << parVector << "\n";
+    //    cout << parVector << "\n";
 
     a1 = params.component(0);
     b1 = params.component(1);
     c1 = params.component(2);
     d1 = params.component(3);
     e1 = params.component(4);
-
-//    cout << "a1 0: " << a1 << "\n";
-//    cout << "b1 1: " << b1 << "\n";
-//    cout << "c1 2: " << c1 << "\n";
-//    cout << "d1 3: " << d1 << "\n";
-//    cout << "e1 4: " << e1 << "\n";
+//
+//        cout << "a1 0: " << a1 << "\n";
+//        cout << "b1 1: " << b1 << "\n";
+//        cout << "c1 2: " << c1 << "\n";
+//        cout << "d1 3: " << d1 << "\n";
+//        cout << "e1 4: " << e1 << "\n";
 
     a2 = params.component(5);
     b2 = params.component(6);
     c2 = params.component(7);
     d2 = params.component(8);
     e2 = params.component(9);
-    
 
-//    cout << "a2 5: " << a2 << "\n";
-//    cout << "b2 6: " << b2 << "\n";
-//    cout << "c2 7: " << c2 << "\n";
-//    cout << "d2 8: " << d2 << "\n";
-//    cout << "e2 9: " << e2 << "\n";
-    
-    
+
+//        cout << "a2 5: " << a2 << "\n";
+//        cout << "b2 6: " << b2 << "\n";
+//        cout << "c2 7: " << c2 << "\n";
+//        cout << "d2 8: " << d2 << "\n";
+//        cout << "e2 9: " << e2 << "\n";
+
+
     double u = x(0);
     double v = x(1);
 
-    
-//    cout <<"Valor da entrada: "<<u<<" "<<v<<" "<<endl;
-    
-//    
-//    out0 = 0.5 * (a1 * pow(u, (double) 2) + 2.0 * b1 * u * v + c1 * pow(v, (double) 2)) + d1 * u + e1*v;
-//    
-//    out1 = 0.5 * (a2 * pow(u, (double) 2) + 2.0 * b2 * u * v + c2 * pow(v, (double) 2)) + d2 * u + e2*v;
-//
 
-//    out0 = 0.5 * ( (a1 * u * u) + (2.0 * b1 * u * v) + (c1 * v * v) ) + d1 * u + e1*v;
-//
-//    out1 = 0.5 * ( (a2 * u * u) + (2.0 * b2 * u * v) + (c2 * v * v) ) + d2 * u + e2*v;
-//    
+    //    cout <<"Valor da entrada: "<<u<<" "<<v<<" "<<endl;
+
+    //    
+    //    out0 = 0.5 * (a1 * pow(u, (double) 2) + 2.0 * b1 * u * v + c1 * pow(v, (double) 2)) + d1 * u + e1*v;
+    //    
+    //    out1 = 0.5 * (a2 * pow(u, (double) 2) + 2.0 * b2 * u * v + c2 * pow(v, (double) 2)) + d2 * u + e2*v;
+    //
+
+    //    out0 = 0.5 * ( (a1 * u * u) + (2.0 * b1 * u * v) + (c1 * v * v) ) + d1 * u + e1*v;
+    //
+    //    out1 = 0.5 * ( (a2 * u * u) + (2.0 * b2 * u * v) + (c2 * v * v) ) + d2 * u + e2*v;
+    //    
 
 
-    out0 = 3.0*u*u/2.0+v*v/2.0;
+    out0 = 3.0 * u * u / 2.0 + v * v / 2.0;
 
     out1 = u*v;
 
 
-//    out0 = (a1 * u * u) + b1 * u * v + c1 * (v * v) + d1 * u + e1*v;
-//
-//    out1 = (a2 * u * u) + b2 * u * v + c2 * (v * v) + d2 * u + e2*v;
-//    
-    
+    //    out0 = (a1 * u * u) + b1 * u * v + c1 * (v * v) + d1 * u + e1*v;
+    //
+    //    out1 = (a2 * u * u) + b2 * u * v + c2 * (v * v) + d2 * u + e2*v;
+    //    
+
     y(0, out0);
     y(1, out1);
 
 
-//    cout << "f (C++): " << y(0) << " "<< y(1)<<"\n";
-    
+    //    cout << "f (C++): " << y(0) << " "<< y(1)<<"\n";
+
 
     if (degree > 0) {
         // Calculate DF
         double out00, out01, out10, out11;
 
-//        out00 = a1 * u + b1 * v + d1;
-//        out01 = b1 * u + c1 * v + e1;
-//        out10 = a2 * u + b2 * v + d2;
-//        out11 = b2 * u + c2 * v + e2;
+        //        out00 = a1 * u + b1 * v + d1;
+        //        out01 = b1 * u + c1 * v + e1;
+        //        out10 = a2 * u + b2 * v + d2;
+        //        out11 = b2 * u + c2 * v + e2;
 
 
-        out00 = 3.0*u;
+        out00 = 3.0 * u;
         out01 = v;
         out10 = v;
         out11 = u;
@@ -194,14 +193,14 @@ int Quad2FluxFunction::jet(const WaveState & x, JetMatrix & y, int degree = 2) c
 
         if (degree > 1) {
             // Calculate D2F
-//            y(0, 0, 0, a1);
-//            y(1, 0, 0, b1);
-//            y(0, 1, 0, b1);
-//            y(1, 1, 0, c1);
-//            y(0, 0, 1, a2);
-//            y(1, 0, 1, b2);
-//            y(0, 1, 1, b2);
-//            y(1, 1, 1, c2);
+            //            y(0, 0, 0, a1);
+            //            y(1, 0, 0, b1);
+            //            y(0, 1, 0, b1);
+            //            y(1, 1, 0, c1);
+            //            y(0, 0, 1, a2);
+            //            y(1, 0, 1, b2);
+            //            y(0, 1, 1, b2);
+            //            y(1, 1, 1, c2);
 
             y(0, 0, 0, 3.0);
             y(1, 0, 0, 0.0);
