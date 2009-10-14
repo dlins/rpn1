@@ -127,6 +127,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_calc(JNIEnv * env, jobje
     CompositeContinuationMethod method(odeSolver);
 
     method.curve(realVectorInput, timeDirection, coords);
+    
 
     //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
