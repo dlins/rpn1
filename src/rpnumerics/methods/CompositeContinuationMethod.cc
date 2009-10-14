@@ -131,6 +131,9 @@ void CompositeContinuationMethod::curve(const RealVector & input, int direction,
             // Store the point
             for (int i = 0; i < 2 * n; i++) U[i] = Ulsode[i];
             U[2 * n] = lambda_u;
+            RealVector outputPoint(2 * n);
+            for (int i = 0; i < 2 * n; i++) outputPoint(i) = U[i];
+            output.push_back(outputPoint);
 //            add(out, U);
 
             // CHECK MONOTONICITY, DOMAIN

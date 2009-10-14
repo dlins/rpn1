@@ -137,7 +137,16 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_calc(JNIEnv * env, jobje
 
     for (i = 0; i < coords.size(); i++) {
 
-        RealVector tempVector = coords.at(i);
+
+
+        //TODO Plotando apenas as duas primeiras coordenadas
+
+        RealVector totalCoords = coords.at(i);
+        RealVector tempVector(2);
+
+        tempVector(0) = totalCoords(0);
+        tempVector(1) = totalCoords(1);
+        
 
         double * dataCoords = tempVector;
 
