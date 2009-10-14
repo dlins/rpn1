@@ -27,6 +27,10 @@ ContinuationRarefactionFlow::ContinuationRarefactionFlow(const RealVector refere
     
 }
 
+ContinuationRarefactionFlow::ContinuationRarefactionFlow(const ContinuationRarefactionFlow & copy):RarefactionFlow(copy.getFamilyIndex(),copy.direction(),copy.fluxFunction()) {
+    
+}
+
 
 int ContinuationRarefactionFlow::flux(const RealVector & input, RealVector &output) {
 
