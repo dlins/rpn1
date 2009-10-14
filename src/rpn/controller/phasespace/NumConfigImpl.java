@@ -38,11 +38,6 @@ public class NumConfigImpl implements NUMCONFIG {
     public void plot(RPnPhaseSpaceAbstraction phaseSpace, RpGeometry geom) {
         phaseSpace.join(geom);
 
-        if (geom instanceof BifurcationCurveGeom){
-            
-            System.out.println("Plotando bifurcação");
-            
-        }
         // TODO maybe we could have xzero part of hugoniot geom ?
         if (geom instanceof XZeroGeom)
             phaseSpace.changeState(new NumConfigReadyImpl(hugoniotGeom_, (XZeroGeom)geom));
