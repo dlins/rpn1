@@ -102,9 +102,46 @@ public class GridOnMatrix extends GridGenerator {
 				} catch (DimensionOutOfBounds e) {
 					throw e;
 				}
-				
+
+                                int dimensionOfHyperCube = cube.getDimension();
+
 				int numberOfVertices = cube.getNumberOfVertices();
 				double[] solution = new double[numberOfVertices];
+
+                                /*PointNDimension first = cube.getVertice(1);
+                                PointNDimension last = cube.getVertice(cube.getNumberOfVertices());
+
+                                int halfDimension = dimensionOfHyperCube / 2;
+
+                                for (int N = 0; N < halfDimension; N++) {
+
+                                    double fmN = first.getCoordinate(N + 1);
+                                    double smN = last.getCoordinate(N + 1);
+
+                                    double fpN = first.getCoordinate(N + 1 + halfDimension);
+                                    double spN = last.getCoordinate(N + 1 + halfDimension);
+
+                                    double deltaZero = Math.abs(fmN - fpN);
+                                    double deltaY = Math.abs(spN - fpN);
+
+                                    if (fpN >= fmN) {
+                                        if (fpN <= smN) {
+                                            throw new CanNotPerformCalculations();
+                                        }
+
+                                    } else {
+                                        if (deltaY >= deltaZero) {
+                                            throw new CanNotPerformCalculations();
+                                        }
+                                    }
+
+                                    if ((((fpN - fmN) * (fpN - smN)) >= 0) &&
+                                        (((spN - fmN) * (spN - smN)) >= 0)){
+
+                                        throw new CanNotPerformCalculations();
+                                    }
+
+                                }*/
 				
 				for (int pont_vertices = 1; pont_vertices <= numberOfVertices; pont_vertices++) {
 					PointNDimension vertice = cube.getVertice(pont_vertices);

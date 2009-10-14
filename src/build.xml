@@ -2,7 +2,8 @@
     
     <!-- set global properties for this build -->
     <property environment="env"/>
-    <property name="hosttype" value="${env.RPHOSTTYPE}"/>
+    <!--<property name="hosttype" value="${env.RPHOSTTYPE}"/>-->
+    <property name="hosttype" value="linux_i686"/>
     <property name="srcdir"   location="${basedir}/src"/>
     <property name="libdir"   location="${basedir}/lib"/>
     <property name="docdir"   location="${basedir}/doc"/>
@@ -46,7 +47,7 @@
     <!-- Compile C++ source -->
     <target name="compile-c++" depends="init" description="compile C++ source code" >
 	<exec executable="make" dir="${srcdir}">
-	    <arg line ="-f  make/makefile"/>
+	    <arg line ="-f  make/makefile RPGNU=yes"/>
     	</exec> 
     </target>
 
@@ -79,7 +80,7 @@
     <!-- Compile C++ plugins -->
     <target name="compile-plugins" depends="compile-c++" description="compile C++ plugins" >
 	<exec executable="make" dir="${srcdir}">
-	    <arg line ="-f  plugins/makefile"/>
+	    <arg line ="-f  plugins/makefile RPGNU=yes"/>
     	</exec>
         <copy  todir="${plugindir}">
          <fileset dir="${basedir}/share/plugins/">

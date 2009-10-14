@@ -6,16 +6,22 @@
 package rpn.usecase;
 
 import rpn.component.*;
-import wave.util.RealVector;
+import rpnumerics.*;
+import wave.multid.*;
+import wave.util.*;
 
 public class BifurcationPlotAgent extends RpModelPlotAgent {
     //
     // Constants
     //
+
     static public final String DESC_TEXT = "Bifurcation Curve";
     // Members
     //
     static private BifurcationPlotAgent instance_ = null;
+
+
+
     //
     // Constructors/Initializers
     //
@@ -25,9 +31,30 @@ public class BifurcationPlotAgent extends RpModelPlotAgent {
 
     public RpGeometry createRpGeometry(RealVector[] input) {
 
-        getContainer().setEnabled(false);//KEEP IT !!
+        
+//        OrbitPoint testePoint = new OrbitPoint(new RealVector(2));
+//        OrbitGeomFactory testeFactory = new OrbitGeomFactory(RPNUMERICS.createOrbitCalc(testePoint, 1));
 
-        return null;
+//        CoordsArray [] testeCoords = new CoordsArray[2];
+
+//        testeCoords[0]=new CoordsArray(new RealVector(2));
+//        testeCoords[1] = new CoordsArray(new RealVector(2));
+
+//        return new OrbitGeom(testeCoords, testeFactory);
+
+//        if (this.getContainer().isSelected()) {
+//            System.out.println("Chamando createGeometry");
+//
+//        } else {
+//            System.out.println(" Nao esta selecionado");
+//        }
+
+//        BifurcationCurveGeomFactory factory = new BifurcationCurveGeomFactory(RPNUMERICS.createBifurcationCalc());
+// return factory.geom();
+
+        BifurcationCurveCalc curveCalc = RPNUMERICS.createBifurcationCalc();
+        BifurcationCurveGeomFactory factory = new BifurcationCurveGeomFactory(curveCalc);
+        return factory.geom();        
 
     }
 

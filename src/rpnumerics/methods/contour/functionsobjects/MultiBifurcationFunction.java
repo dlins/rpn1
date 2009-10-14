@@ -36,9 +36,9 @@ public abstract class MultiBifurcationFunction extends  MDCompositeFunction {
 		return (componentFunctions[0].getFunctionAt(0)).getFluxFunction();
 	}
 	
-	protected void initFunctions(GridFunction[] functions) {
+	/*protected void initFunctions(GridFunction[] functions) {
 		// nothing to do		
-	}
+	}*/
 	
 	public void setGridFunctions(int[][] pointers) throws CanNotPerformCalculations {
 		
@@ -68,8 +68,8 @@ public abstract class MultiBifurcationFunction extends  MDCompositeFunction {
 	public RealVector calcValue(FunctionParameters point) throws CanNotPerformCalculations {
 		
 		GridFunction[] minusFunctions = this.getMinusFunctions();
-		GridFunction[] plusFunctions = this.getPlusFunctions();			
-				
+		GridFunction[] plusFunctions = this.getPlusFunctions();
+                
 		RealVector minusCoordinates = minusFunctions[0].getPointCoordinates(this.getMinusIndex(point));
 		RealVector plusCoordinates = plusFunctions[0].getPointCoordinates(this.getPlusIndex(point));
 		

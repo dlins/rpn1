@@ -17,15 +17,12 @@ public class BifurcationCurveCalc implements RpCalculation{
     //
     
     public BifurcationCurveCalc (){
-        
+        params_ = new BifurcationParams();
+        BifurcationProfile profile = RPNUMERICS.getBifurcationProfile();
+        bifurcationMethod_ = new BifurcationContourMethod(params_);
     }
     
     public BifurcationCurveCalc(BifurcationContourMethod bifurcationMethod) {
-        bifurcationMethod_ = bifurcationMethod;
-        params_ = bifurcationMethod.getParams();
-    }
-    
-    public BifurcationCurveCalc(BifurcationContinuationMethod bifurcationMethod) {
         bifurcationMethod_ = bifurcationMethod;
         params_ = bifurcationMethod.getParams();
     }

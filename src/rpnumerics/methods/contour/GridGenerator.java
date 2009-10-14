@@ -206,13 +206,41 @@ public class GridGenerator {
 			boolean foundZero = false;
 			
 			int dimensionOfHyperCube = cube.getDimension();
+
+                        PointNDimension first = cube.getVertice(1);
+                        PointNDimension last = cube.getVertice(cube.getNumberOfVertices());
+
+                        int halfDimension = dimensionOfHyperCube / 2;
+
+                        for (int pont_dimension = 0; pont_dimension < halfDimension; pont_dimension++) {
+
+                            double x0 = first.getCoordinate(pont_dimension + 1);
+                            double xf = last.getCoordinate(pont_dimension + 1);
+
+                            double y0 = first.getCoordinate(pont_dimension + 1 + halfDimension);
+                            double yf = last.getCoordinate(pont_dimension + 1 + halfDimension);
+
+                            double deltaZero = Math.abs(x0 - y0);
+                            double deltaY = Math.abs(yf - y0);
+
+                            if (y0 >= x0) {
+                                if (y0 <= xf) {
+                                    throw new CanNotPerformCalculations();
+                                } 
+
+                            } else {
+                                if (deltaY >= deltaZero) {
+                                    throw new CanNotPerformCalculations();
+                                }
+                            }
+                        }
 			
 			if (dimensionOfHyperCube == evaluationFunction.getFunctionDimension() ) {
 			
 				int numberOfSolutionVertices = getNumberOfVertices();
 				
 				solution = new double[numberOfSolutionVertices];
-				
+
 				for (int vertices_pont = 1; vertices_pont <= numberOfSolutionVertices; vertices_pont++) {
 					
 					PointNDimension vertice = null;

@@ -21,15 +21,26 @@ public class BifurcationContourMethod extends BifurcationMethod {
 		
         contourMethod_ = ContourFactory.createContourBifurcation(params);
 
-        resolution_=new int [2];
-        resolution_[0]=new Integer(RPNUMERICS.getContourConfiguration().getParamValue("x-resolution"));
+        //resolution_=new int [2];
+        resolution_=new int [4]; // acochambracao
+
+        /*resolution_[0]=new Integer(RPNUMERICS.getContourConfiguration().getParamValue("x-resolution"));
         resolution_[1] = new Integer(RPNUMERICS.getContourConfiguration().getParamValue("y-resolution"));
+
+        resolution_[2]= resolution_[0];
+        resolution_[3] = resolution_[1];*/
+
+        resolution_[0]= 20;
+        resolution_[1] = 20;
+
+        resolution_[2]= 20;
+        resolution_[3] = 20;
 
         familyIndex = params.getFamilyIndex();
 
         Boundary boundary = RPNUMERICS.boundary();
 
-        if (boundary instanceof RectBoundary) {
+        /*if (boundary instanceof RectBoundary) {
         	
         	int dim = RPNUMERICS.domainDim();
         	
@@ -50,25 +61,131 @@ public class BifurcationContourMethod extends BifurcationMethod {
 
             System.out.println("Implementar para dominio triangular");
 
-        }
+        }*/
+
+            if (boundary instanceof RectBoundary) {
+
+        	int dim = RPNUMERICS.domainDim();
+                boundaryArray_ = new double[2*2*dim];
+                
+                RealVector minimums = boundary.getMinimums();
+                RealVector maximums = boundary.getMaximums();
+
+                double[] minimumsArray = minimums.toDouble();
+                double[] maximumsArray = maximums.toDouble();
+
+                for(int pont_dim = 0; pont_dim < dim; pont_dim++) {
+
+                    int first  = 2*pont_dim;
+                    int second = 2*pont_dim + 1;
+
+                    boundaryArray_[first] = minimumsArray[pont_dim];
+                    boundaryArray_[second] = maximumsArray[pont_dim];
+
+                    boundaryArray_[first + (2*dim)] = minimumsArray[pont_dim];
+                    boundaryArray_[second + (2*dim)] = maximumsArray[pont_dim];
+                }
+
+            } else {
+
+                System.out.println("Implementar para dominio triangular");
+
+            }
 		
-		this.params_ = params;
+            this.params_ = params;
+            
 	}
 
 	public BifurcationCurve curve() {
-			
+
+                 //resolution_=new int [2];
+            resolution_ = new int[4]; // acochambracao
+
+           /* resolution_[0] = new Integer(RPNUMERICS.getContourConfiguration().getParamValue("x-resolution"));
+            resolution_[1] = new Integer(RPNUMERICS.getContourConfiguration().getParamValue("y-resolution"));
+
+            resolution_[2] = resolution_[0];
+            resolution_[3] = resolution_[1];*/
+            
+            resolution_[0] = 20;
+            resolution_[1] = 20;
+
+            resolution_[2] = 20;
+            resolution_[3] = 20;
+
+           // familyIndex = params.getFamilyIndex();
+
+            Boundary boundary = RPNUMERICS.boundary();
+
+            /* if (boundary instanceof RectBoundary) {
+
+                int dim = RPNUMERICS.domainDim();
+
+                boundaryArray_ = new double[2 * dim];
+
+                RealVector minimums = boundary.getMinimums();
+                RealVector maximums = boundary.getMaximums();
+
+                double[] minimumsArray = minimums.toDouble();
+                double[] maximumsArray = maximums.toDouble();
+
+                for (int pont_dim = 0; pont_dim < dim; pont_dim++) {
+                    boundaryArray_[2 * pont_dim] = minimumsArray[pont_dim];
+                    boundaryArray_[2 * pont_dim + 1] = maximumsArray[pont_dim];
+                }
+
+            } else {
+
+                System.out.println("Implementar para dominio triangular");
+
+            }*/
+
+            if (boundary instanceof RectBoundary) {
+
+        	int dim = RPNUMERICS.domainDim();
+                boundaryArray_ = new double[2*2*dim];
+
+                RealVector minimums = boundary.getMinimums();
+                RealVector maximums = boundary.getMaximums();
+
+                double[] minimumsArray = minimums.toDouble();
+                double[] maximumsArray = maximums.toDouble();
+
+                for(int pont_dim = 0; pont_dim < dim; pont_dim++) {
+
+                    int first  = 2*pont_dim;
+                    int second = 2*pont_dim + 1;
+
+                    boundaryArray_[first] = minimumsArray[pont_dim];
+                    boundaryArray_[second] = maximumsArray[pont_dim];
+
+                    boundaryArray_[first + (2*dim)] = minimumsArray[pont_dim];
+                    boundaryArray_[second + (2*dim)] = maximumsArray[pont_dim];
+                }
+
+            } else {
+
+                System.out.println("Implementar para dominio triangular");
+
+            }
+
 		BifurcationCurve bifurcationCurve = null;
 		
 		try {
 		
 			RPnCurve curve = contourMethod_.curvND(boundaryArray_, resolution_);
-	
+
+                        //filtrar
+
 	        PointNDimension[][] polyline = curve.getPolylines();
 	
 	        ArrayList realSegments = new ArrayList();
 	        
 	        RealVector p1 = null;
 	        RealVector p2 = null;
+
+                RealVector p3 = null;
+                RealVector p4 = null;
 	                    
 	        for (int polyLineIndex = 0; polyLineIndex < polyline.length; polyLineIndex++) {
 	        	            	
@@ -77,21 +194,34 @@ public class BifurcationContourMethod extends BifurcationMethod {
 	            CoordsArray[] coords = new CoordsArray[size];
 	
 	            for (int polyPoint = 0; polyPoint < size; polyPoint++) {                	
-	            	coords[polyPoint] = polyline[polyLineIndex][polyPoint].toCoordsArray();                   
-	                
+	            	coords[polyPoint] = polyline[polyLineIndex][polyPoint].toCoordsArray();      
 	            }
 	           
 	            for (int i = 0; i < coords.length - 2; i++) {           	
-	            	
-	                p1 = new RealVector(coords[i].getCoords());
-	                p2 = new RealVector(coords[i + 1].getCoords());
-	
+	            	double[] firstPoint = coords[i].getCoords();
+                        double[] secondPoint = coords[i + 1].getCoords();
+
+	                p1 = new RealVector(minusSide(firstPoint));
+	                p2 = new RealVector(minusSide(secondPoint));
+
+                        p3 = new RealVector(plusSide(firstPoint));
+	                p4 = new RealVector(plusSide(secondPoint));
+
 	                realSegments.add(new RealSegment(p1, p2));
+                        realSegments.add(new RealSegment(p3, p4));
 	            }
-	
-	            p1 = new RealVector(coords[coords.length - 2].getCoords());
-	            p2 = new RealVector(coords[coords.length - 1].getCoords());
-	            realSegments.add(new RealSegment(p1, p2));
+		           
+                    double[] firstPoint = coords[coords.length - 2].getCoords();
+                    double[] secondPoint = coords[coords.length - 1].getCoords();
+
+                    p1 = new RealVector(minusSide(firstPoint));
+                    p2 = new RealVector(minusSide(secondPoint));
+
+                    p3 = new RealVector(plusSide(firstPoint));
+                    p4 = new RealVector(plusSide(secondPoint));
+
+                    realSegments.add(new RealSegment(p1, p2));
+	            realSegments.add(new RealSegment(p3, p4));
 	        
 	        }            
 	        
@@ -104,8 +234,35 @@ public class BifurcationContourMethod extends BifurcationMethod {
 	    return bifurcationCurve;
 	}
 	
-	public BifurcationParams getParams() {
+    public BifurcationParams getParams() {
         return params_;
+    }
+
+    public double[] minusSide(double[] coordinates) {
+
+        int dim = coordinates.length;
+        int reducedDimension = dim / 2;
+
+        double[] filteredResult = new double[reducedDimension];
+
+        for (int pont_dimension = 0; pont_dimension < reducedDimension; pont_dimension++) {
+            filteredResult[pont_dimension] = coordinates[pont_dimension];
+        }
+
+        return filteredResult;
+    }
+
+    public double[] plusSide(double[] coordinates) {
+        int dim = coordinates.length;
+        int reducedDimension = dim / 2;
+
+        double[] filteredResult = new double[reducedDimension];
+
+        for (int pont_dimension = 0; pont_dimension < reducedDimension; pont_dimension++) {
+            filteredResult[pont_dimension] = coordinates[pont_dimension + reducedDimension];
+        }
+
+        return filteredResult;
     }
 
 }

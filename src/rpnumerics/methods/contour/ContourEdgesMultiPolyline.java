@@ -41,7 +41,7 @@ public class ContourEdgesMultiPolyline {
     		throw new DimensionOutOfBounds();
     	
     	if (hyperCubeErr != null) {
-    		throw new HyperCubeErrorFound(hyperCubeErr);
+    	//	throw new HyperCubeErrorFound(hyperCubeErr);
     	}
 	}
 	

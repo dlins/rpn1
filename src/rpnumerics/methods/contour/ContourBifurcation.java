@@ -14,11 +14,9 @@ public class ContourBifurcation extends ContourNDVectorialFunctions {
 	}
 	
 	protected GridGenerator initializeSolutionConstraints(int dimension, 
-														  Constraint[] constraints, 
-														  rpnumerics.methods.contour.functionsobjects.CubeFunction[] function,
-														  HyperCubeErrorTreatmentBehavior hyperCubeErrorTreatment) 
-																							throws DimensionOutOfBounds,
-																								   CanNotInitializeGrid {
+                                                              Constraint[] constraints,
+                                                              rpnumerics.methods.contour.functionsobjects.CubeFunction[] function,
+                                                              HyperCubeErrorTreatmentBehavior hyperCubeErrorTreatment) throws DimensionOutOfBounds, CanNotInitializeGrid {
 		
 		MDVectorFunction[] VectorFunctionArray = new MDVectorFunction[function.length];
 		

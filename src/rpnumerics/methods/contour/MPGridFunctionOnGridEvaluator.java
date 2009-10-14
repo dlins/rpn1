@@ -100,7 +100,88 @@ public class MPGridFunctionOnGridEvaluator extends
 				}
 				
 				try {
-					
+
+                                        FunctionParameters parameters = new FunctionParameters(dimension);
+
+					for (int dimension_pont = 0; dimension_pont < dimension; dimension_pont++) {
+						parameters.setIndex(position[dimension_pont], dimension_pont + 1);
+					}
+
+                                        HyperCubeND cube = null;
+                                        
+                                        try {
+                                                cube = this.getHyperCube(parameters);
+                                        } catch (DimensionOutOfBounds e) {
+                                                throw e;
+                                        }
+
+                                        int dimensionOfHyperCube = cube.getDimension();
+
+                                        PointNDimension first = cube.getVertice(1);
+                                        PointNDimension last = cube.getVertice(cube.getNumberOfVertices());
+
+                                        int halfDimension = dimensionOfHyperCube / 2;
+
+                                         boolean thereIsOverlap = true;
+
+                                         double[][] points = new double[2][4];
+                                        
+                                        for (int N = 0; ((N < halfDimension) && thereIsOverlap); N++) {
+
+                                            double fmN = first.getCoordinate(N + 1);
+                                            double smN = last.getCoordinate(N + 1);
+
+                                            double fpN = first.getCoordinate(N + 1 + halfDimension);
+                                            double spN = last.getCoordinate(N + 1 + halfDimension);
+
+                                            points[0][N] = fmN;
+                                            points[0][N + halfDimension] = fpN;
+                                            points[1][N] = smN;
+                                            points[1][N + halfDimension] = spN;
+
+                                           /* double deltaZero = Math.abs(fmN - fpN);
+                                            double deltaY = Math.abs(spN - fpN);
+
+                                            if (fpN >= fmN) {
+                                                if (fpN <= smN) {
+                                                    throw new CanNotPerformCalculations();
+                                                }
+
+                                            } else {
+                                                if (deltaY >= deltaZero) {
+                                                    throw new CanNotPerformCalculations();
+                                                }
+                                            }
+
+                                            if ((((fpN - fmN) * (fpN - smN)) >= 0) &&
+                                                (((spN - fmN) * (spN - smN)) >= 0)){
+
+                                                throw new CanNotPerformCalculations();
+                                            }*/
+
+                                            double Lm = Math.abs(smN - fmN);
+                                            double Lr = Math.abs(spN - fpN);
+
+                                            double Cm = 0.5 * (fmN + smN);
+                                            double Cr = 0.5 * (fpN + spN);
+
+                                            double distC = Math.abs(Cm - Cr);
+
+                                            thereIsOverlap = true;
+
+                                            if ((distC > (Lm + Lr))) {
+                                                thereIsOverlap = false;
+                                            }
+
+                                        }
+
+                                         System.out.println("Primeiro ponto: " + points[0][0] + ", " + points[0][1] + ", " + points[0][2] + ", " + points[0][3]);
+                                         System.out.println("Segundo ponto: " + points[1][0] + ", " + points[1][1] + ", " + points[1][2] + ", " + points[1][3]);
+
+                                        if (thereIsOverlap) {
+                                            throw new CanNotPerformCalculations();
+                                        }
+
 					FunctionParameters point = new FunctionParameters(coordinates);
 					
 					RealVector result = ((MDCompositeFunction) ((MDVectorFunctionDecorator) this.getFunctionsMap().get(String.valueOf(0))).getFunction()).value(point);
@@ -111,13 +192,13 @@ public class MPGridFunctionOnGridEvaluator extends
 					}
 					
 				} catch (CanNotPerformCalculations e) {
-					MarkedCubeItem markedCube = new MarkedCubeItem(this, new FunctionParameters(coordinates), e); 
+					MarkedCubeItem markedCube = new MarkedCubeItem(this, new FunctionParameters(coordinates), e);
 					try {
 						this.getMatrix().setElement(position, markedCube);
 					} catch (IndexOfArrayOutOfBounds e1) {
 						throw new DimensionOutOfBounds();
 					}
-					markHyperCube(markedCube);
+					//markHyperCube(markedCube);
 				} catch (IndexOfArrayOutOfBounds e) {
 					throw new DimensionOutOfBounds();
 				}
@@ -152,13 +233,13 @@ public class MPGridFunctionOnGridEvaluator extends
 				}
 				
 			} catch (CanNotPerformCalculations e) {
-				MarkedCubeItem markedCube = new MarkedCubeItem(this, new FunctionParameters(coordinates), e); 
+				MarkedCubeItem markedCube = new MarkedCubeItem(this, new FunctionParameters(coordinates), e);
 				try {
 					this.getMatrix().setElement(position, markedCube);
 				} catch (IndexOfArrayOutOfBounds e1) {
 					throw new DimensionOutOfBounds();
 				}
-				markHyperCube(markedCube);
+				//markHyperCube(markedCube);
 			} catch (IndexOfArrayOutOfBounds e) {
 				throw new DimensionOutOfBounds();
 			}
