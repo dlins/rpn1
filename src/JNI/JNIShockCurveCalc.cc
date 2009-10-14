@@ -58,7 +58,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
 
         realVectorInput.component(i) = input[i];
 
+
     }
+    
+
 
     env->DeleteLocalRef(inputPhasePointArray);
 
