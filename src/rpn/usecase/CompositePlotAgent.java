@@ -6,16 +6,15 @@
 package rpn.usecase;
 
 import rpn.component.*;
+import rpnumerics.OrbitPoint;
+import rpnumerics.RPNUMERICS;
 import wave.util.RealVector;
 
 public class CompositePlotAgent extends RpModelPlotAgent {
     //
     // Constants
     //
-    static public final String DESC_TEXT = "Composite Curve";
-
-
-    //
+    static public final String DESC_TEXT = "Composite Curve";    //
     // Members
     //
     static private CompositePlotAgent instance_ = null;
@@ -28,16 +27,9 @@ public class CompositePlotAgent extends RpModelPlotAgent {
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {
-        try {
-
-            throw new Exception("not implemented yet");
-        } catch (Exception ex) {
-            ex.printStackTrace();
-
-        }
-
-        return null;
-
+        OrbitPoint oPoint = new OrbitPoint(input[input.length - 1]);
+        CompositeGeomFactory factory = new CompositeGeomFactory(RPNUMERICS.createCompositeCalc(oPoint));
+        return factory.geom();
     }
 
     static public CompositePlotAgent instance() {
