@@ -195,6 +195,11 @@ public class RPNUMERICS {
         return new BifurcationCurveCalc();
     }
 
+    public static CompositeCalc createCompositeCalc(OrbitPoint orbitPoint) {
+        return new CompositeCalc(orbitPoint, direction_);
+    }
+    
+    
     public static ShockFlow createShockFlow() {
 
         RPNUMERICS.getShockProfile().setFlowName((String) PluginTableModel.instance().getValueAt(0, 2));
