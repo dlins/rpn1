@@ -90,8 +90,9 @@ int ContinuationRarefactionFlow::flux(int n, int family, double *in, double *lam
     // Fill the Jacobianflux
     double J[n][n];
 
-    const FluxFunction & flux = fluxFunction();
-    fill_with_jet(flux, n, in, 1, 0, &J[0][0], 0);
+    const FluxFunction & fluxF = fluxFunction();
+
+    fill_with_jet(fluxF, n, in, 1, 0, &J[0][0], 0);
 
 
     // Find J's eigencouples and sort them.

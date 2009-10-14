@@ -62,9 +62,9 @@ public:
     int fluxDeriv2(const RealVector &, HessianMatrix &);
     int getFamily() const;
 
-    RarefactionFlow & getRarefactionFlow();
+    const RarefactionFlow & getRarefactionFlow()const ;
     
-    ShockFlow & getShockFlow();
+    const ShockFlow & getShockFlow()const ;
     
     WaveFlow * clone()const;
 

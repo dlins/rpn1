@@ -21,7 +21,7 @@
 CompositeFlow::CompositeFlow(int family, const RarefactionFlow & rarefactionFlow, const ShockFlow & shockFlow, const FluxFunction & fluxFunction) : WaveFlow(fluxFunction), rarefactionFlow_((RarefactionFlow *)rarefactionFlow.clone()),shockFlow_((ShockFlow *)shockFlow.clone()),family_(family) {
 }
 
-CompositeFlow::CompositeFlow(const CompositeFlow & copy) : WaveFlow(copy.fluxFunction()), family_(copy.getFamily()) {
+CompositeFlow::CompositeFlow(const CompositeFlow & copy) : WaveFlow(copy.fluxFunction()), family_(copy.getFamily()), rarefactionFlow_((RarefactionFlow *)copy.getRarefactionFlow().clone()),shockFlow_((ShockFlow *)copy.getShockFlow().clone()) {
 
 }
 
@@ -42,11 +42,11 @@ WaveFlow * CompositeFlow::clone()const {
     return new CompositeFlow(*this);
 }
 
-RarefactionFlow & CompositeFlow::getRarefactionFlow() {
+const RarefactionFlow & CompositeFlow::getRarefactionFlow() const{
     return *rarefactionFlow_;
 }
 
-ShockFlow & CompositeFlow::getShockFlow() {
+const ShockFlow & CompositeFlow::getShockFlow() const{
     return *shockFlow_;
 }
 

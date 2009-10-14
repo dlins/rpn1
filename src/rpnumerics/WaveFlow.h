@@ -21,8 +21,6 @@
  * Definitions:
  */
 
-
-
 /*! Definition of class WaveFlow.
  * TODO:
  * NOTE :
@@ -33,37 +31,38 @@
 
 
 class WaveFlow {
-    
 private:
 
     FluxFunction * fluxFunction_;
-    
+
 public:
-    
+
     WaveFlow(const FluxFunction &);
 
 
-    virtual int flux(const RealVector &,RealVector &) =0;
-    virtual int fluxDeriv(const RealVector &,JacobianMatrix &) =0;
-    virtual int fluxDeriv2(const RealVector &,HessianMatrix &) =0;
+    virtual int flux(const RealVector &, RealVector &) = 0;
+    virtual int fluxDeriv(const RealVector &, JacobianMatrix &) = 0;
+    virtual int fluxDeriv2(const RealVector &, HessianMatrix &) = 0;
 
     virtual ~WaveFlow();
     //! Gets the flux function
-    const FluxFunction & fluxFunction()const ;
-    void setFluxFunction(const FluxFunction& );
+    const FluxFunction & fluxFunction()const;
+    void setFluxFunction(const FluxFunction&);
     virtual WaveFlow * clone()const = 0;
 
 
-    
+
 };
 
-inline const FluxFunction & WaveFlow::fluxFunction()const {return *fluxFunction_;}
+inline const FluxFunction & WaveFlow::fluxFunction()const {
+    return *fluxFunction_;
+}
 
 inline void WaveFlow::setFluxFunction(const FluxFunction & flux) {
 
     delete fluxFunction_;
     fluxFunction_ = (FluxFunction *) flux.clone();
-    
+
 }
 
 #endif //! _WaveFlow_H
