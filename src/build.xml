@@ -109,7 +109,7 @@
     </target>
 
 
-    <target name="run">
+    <target name="run" depends="compile-java,compile-c++,compile-plugins" description="Runs the programm" >
         <property name="run.class" value="rpn.RPnDesktopPlotter"/> 
 
         <path id="run.classpath">
@@ -130,9 +130,10 @@
 
             <sysproperty key="java.library.path" path="${libdir}/${hosttype}"/>
             <sysproperty key="rpnhome" path="${basedir}"/>
+            <sysproperty key="RPHOSTTYPE" value="${hosttype}"/>
             <jvmarg value="-Xmx256m"/>
 
-            <arg value="${srcdir}/in/quad2.xml"/>
+            <arg value="${basedir}/in/quad2.xml"/>
         </java>
     </target>
 
