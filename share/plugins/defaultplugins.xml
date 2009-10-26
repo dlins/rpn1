@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE rpnplugin SYSTEM "../rpn-dtd/pluginDTD.dtd">
+<!DOCTYPE rpnplugin SYSTEM "../share/rpn-dtd/pluginDTD.dtd">
 <rpnplugin>
     <NAME id="WaveTeste" version="0.1"/>
     <LIBRARY name="libRPnDefaultPlugin.so">
