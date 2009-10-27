@@ -1,3 +1,4 @@
+include make/env
 include make/defs
 
 RPNUMSRC += 
@@ -5,8 +6,9 @@ WAVESRC +=
 ForSRC += 
 
 SRCDIR=.
-OBJDIR = $(SRCDIR)/build/$(RPHOSTTYPE)
 LIBDIR = $(SRCDIR)/../lib/$(RPHOSTTYPE)
+#OBJDIR = $(SRCDIR)/build/$(RPHOSTTYPE)
+OBJDIR = $(LIBDIR)
 
 RPNUMERICSDIR = $(SRCDIR)/rpnumerics
 WAVEDIR       = $(SRCDIR)/wave
@@ -50,6 +52,9 @@ $(RPNUMLIBARC): $(RPNUMLIBOBJ)
 	$(CCC) -shared $(SHARELIBFLAG) -Wl,-soname,$(RPNUMLIBNAME) -o $(RPNUMLIBARC) $(RPNUMLIBOBJ)  $(LIBWAVE)
 
 
+test:
+	@echo $(JAVA_HOME)
+	@echo $(RPHOSTTYPE)
 
 .PRECIOUS: $(LIBARC)
 

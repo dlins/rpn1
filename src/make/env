@@ -1,0 +1,8 @@
+#
+# env - RPn makefile environment variable settings
+#       If left empty, makefile will get shell settings
+
+RPGNU=yes
+JAVA_HOME=/usr/lib/jvm/java-6-sun-1.6.0.16
+RPHOSTTYPE=linux_i686
+#RPHOSTTYPE=linux_x86_64

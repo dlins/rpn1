@@ -8,6 +8,9 @@ $(OBJDIR)/%.o: %.c
 $(OBJDIR)/%.o: %.cc
 	$(COMPILE.cc) -o $@ $<
 
+$(OBJDIR)/%.o: %.cpp
+	$(COMPILE.cc) -o $@ $<
+
 $(OBJDIR)/%.o: %.F
 	$(COMPILE.F) -o $@ $<
 

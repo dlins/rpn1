@@ -1,10 +1,12 @@
 include make/defs
+include make/env
 
 vpath %.cc ./plugins
 
 SRCDIR = .
-OBJDIR = $(SRCDIR)/build/$(RPHOSTTYPE)
 LIBDIR = $(SRCDIR)/../lib/$(RPHOSTTYPE)
+#OBJDIR = $(SRCDIR)/build/$(RPHOSTTYPE)
+OBJDIR = $(LIBDIR)
 
 RPNUMERICSDIR = $(SRCDIR)/rpnumerics
 WAVEDIR       = $(SRCDIR)/wave

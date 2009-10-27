@@ -2,7 +2,7 @@
 #	defs -- makefile macro definitions and implicit rules
 #
 
-SUFFIXES = .o .c .cc .F .f90 .F90
+SUFFIXES = .o .c .cc .cpp .F .f90 .F90
 .SUFFIXES:
 .SUFFIXES: $(SUFFIXES)
 
@@ -96,13 +96,25 @@ endif
 endif
 .cc:
 	$(LINK.cc) -o $@ $< $(LDLIBS)
+.cpp:
+	$(LINK.cc) -o $@ $< $(LDLIBS)
 .cc.o:
+	$(COMPILE.cc) $<
+.cpp.o:
 	$(COMPILE.cc) $<
 .cc.a:
 	$(COMPILE.cc) -o $% $<
 	$(AR) $(ARFLAGS) $@ $%
 	$(RM) $%
+.cpp.a:
+	$(COMPILE.cc) -o $% $<
+	$(AR) $(ARFLAGS) $@ $%
+	$(RM) $%
 (%.o): %.cc
+	$(COMPILE.cc) -o $% $<
+	$(AR) $(ARFLAGS) $@ $%
+	$(RM) $%
+(%.o): %.cpp
 	$(COMPILE.cc) -o $% $<
 	$(AR) $(ARFLAGS) $@ $%
 	$(RM) $%

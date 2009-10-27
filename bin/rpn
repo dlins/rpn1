@@ -1,4 +1,17 @@
 #!/bin/bash
 
 
-java -Djava.library.path=$RPNHOME/lib/$RPHOSTTYPE -Drpnhome=$RPNHOME -jar $RPNHOME/lib/rpn.jar $1
+PROGDIR=$(dirname $(readlink -f $0))
+CURRDIR=`pwd`
+RPNDIR=$(dirname $PROGDIR)
+if [ "`echo $1 | cut -c1`" == "/" ]; then
+    IN=$1
+else
+    IN=$CURRDIR/$1
+fi
+
+cd $PROGDIR
+[ -f ../src/make/env ] && . ../src/make/env
+
+$JAVA_HOME/bin/java -DRPHOSTTYPE=$RPHOSTTYPE -Djava.library.path=$RPNDIR/lib/$RPHOSTTYPE -Drpnhome=$RPNDIR -jar $RPNDIR/lib/rpn.jar $IN
+

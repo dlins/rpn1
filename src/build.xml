@@ -14,7 +14,6 @@
     <property name="build"    location="${libdir}/build"/>
     <property name="classdir" location="${build}/classes"/>
     <property name="depdir"   location="${build}/depcache"/>
-    <property name="objects"   location="${srcdir}/build/${hosttype}"/>
     <property name="libc++dir" location="${libdir}/${hosttype}"/>
     <property name="plugindir" location="${libc++dir}/plugins"/>
 
@@ -26,8 +25,7 @@
         <mkdir dir="${classdir}"/>
         <mkdir dir="${depdir}"/>
         <mkdir dir="${libc++dir}"/>
-        <mkdir dir="${objects}"/>
-	<mkdir dir="${plugindir}"/>
+        <mkdir dir="${plugindir}"/>
     </target>
     
     <!-- Compile java source -->
@@ -111,8 +109,8 @@
     </target>
 
 
-    <target name="run">
-        <property name="run.class" value="rpn.RPnDesktopPlotter"/> 
+    <target name="run" depends="compile-java,compile-c++,compile-plugins" description="Runs the programm" >
+        <property name="run.class" value="rpn.RPnDesktopPlotter"/>
 
         <path id="run.classpath">
             <pathelement path="${libdir}/rpn.jar"/>
@@ -132,9 +130,41 @@
 
             <sysproperty key="java.library.path" path="${libdir}/${hosttype}"/>
             <sysproperty key="rpnhome" path="${basedir}"/>
+            <sysproperty key="RPHOSTTYPE" value="${hosttype}"/>
             <jvmarg value="-Xmx256m"/>
 
-            <arg value="${srcdir}/in/quad2.xml"/>
+            <arg value="${basedir}/in/quad2.xml"/>
+        </java>
+    </target>
+
+    <target name="debug" depends="compile-java,compile-c++,compile-plugins" description="Runs the programm" >
+        <property name="run.class" value="rpn.RPnDesktopPlotter"/> 
+
+        <path id="run.classpath">
+            <pathelement path="${libdir}/rpn.jar"/>
+        </path>
+
+        <!-- this path tag is not necessary !
+        <path id="run.endorsed.dir">
+            <fileset dir="${libdir}">
+                <include name="*.jar"/>
+            </fileset>
+        </path> -->
+
+        <nbjpdastart addressproperty="jpda.address" name="RPn_Java" transport="dt_socket"/>
+        <java classpathref="run.classpath"
+            classname="${run.class}"
+            dir="${srcdir}"
+            fork="true">
+
+            <sysproperty key="java.library.path" path="${libdir}/${hosttype}"/>
+            <sysproperty key="rpnhome" path="${basedir}"/>
+            <sysproperty key="RPHOSTTYPE" value="${hosttype}"/>
+            <jvmarg value="-Xmx256m"/>
+            <jvmarg value="-Xdebug"/>
+            <jvmarg value="-Xrunjdwp:transport=dt_socket,address=${jpda.address}"/>
+
+            <arg value="${basedir}/in/quad2.xml"/>
         </java>
     </target>
 
