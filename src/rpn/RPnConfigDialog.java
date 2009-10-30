@@ -32,7 +32,6 @@ import rpn.parser.VisualizationProfile;
 import rpnumerics.MethodConfiguration;
 import rpnumerics.RPNUMERICS;
 import wave.multid.Space;
-import wave.util.IsoTriang2DBoundary;
 import wave.util.RealVector;
 import wave.util.RectBoundary;
 
@@ -44,7 +43,6 @@ public class RPnConfigDialog extends RPnDialog {
     private JPanel boundaryPanel_ = new JPanel();
     private JPanel firstPanel_ = new JPanel(new BorderLayout());
     private JPanel secondPanel_ = new JPanel(new BorderLayout());
-//    private JPanel thirdPanel_ = new JPanel(new GridLayout(3, 1));
     private JPanel thirdPanel_ = new JPanel(new BorderLayout());
     private JPanel methodsParamsPanel_ = new JPanel();
     private JTabbedPane tabbedPanel_ = new JTabbedPane();
