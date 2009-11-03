@@ -1,6 +1,7 @@
 #
 #   Jar files
 #
+LIBS=${RPNHOME}/lib
 
 # this is for enabling GVector and GMatrix
 ${LIBS}/vecmath.jar

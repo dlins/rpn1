@@ -96,21 +96,21 @@ endif
 endif
 .cc:
 	$(LINK.cc) -o $@ $< $(LDLIBS)
-.cpp:
-	$(LINK.cc) -o $@ $< $(LDLIBS)
 .cc.o:
-	$(COMPILE.cc) $<
-.cpp.o:
 	$(COMPILE.cc) $<
 .cc.a:
 	$(COMPILE.cc) -o $% $<
 	$(AR) $(ARFLAGS) $@ $%
 	$(RM) $%
-.cpp.a:
+(%.o): %.cc
 	$(COMPILE.cc) -o $% $<
 	$(AR) $(ARFLAGS) $@ $%
 	$(RM) $%
-(%.o): %.cc
+.cpp:
+	$(LINK.cc) -o $@ $< $(LDLIBS)
+.cpp.o:
+	$(COMPILE.cc) $<
+.cpp.a:
 	$(COMPILE.cc) -o $% $<
 	$(AR) $(ARFLAGS) $@ $%
 	$(RM) $%

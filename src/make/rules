@@ -60,7 +60,10 @@ endif
 #	C++ rules
 #
 
-$(OBJDIR)/%.d: %.cc
+#$(OBJDIR)/%.d: %.cc
+#	@echo 'Making dependency file $@ for $< using command $(DEPEND.cc) $<'
+
+$(OBJDIR)/%.d: %.cpp
 	@echo 'Making dependency file $@ for $< using command $(DEPEND.cc) $<'
 ifeq ($(RPGNU),)
 ifeq ($(RPHOSTTYPE),solaris)
@@ -170,7 +173,6 @@ endif
 
 clean: FORCE
 	$(CLEAN) $(CLEANSRC)
-
 
 print: FORCE
 	$(PRINT) $(PRINTSRC)

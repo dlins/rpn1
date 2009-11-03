@@ -17,4 +17,4 @@ RPNUMSRC += JNIConnectionOrbitCalc.cc\
 
 
 
-CPPFLAGS += -I $(JNIDIR)/include -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux  -I $(RPNUMERICSDIR)/plugin -I $(SRCDIR)/plugins
+CPPFLAGS += -I $(JNIDIR)/include -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux  -I $(RPNUMERICSDIR)/plugin -I $(RPNHOME)/plugins

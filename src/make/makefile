@@ -5,14 +5,14 @@ RPNUMSRC +=
 WAVESRC += 
 ForSRC += 
 
-SRCDIR=.
-LIBDIR = $(SRCDIR)/../lib/$(RPHOSTTYPE)
-#OBJDIR = $(SRCDIR)/build/$(RPHOSTTYPE)
+RPNHOME=.
+LIBDIR = $(RPNHOME)/../lib/$(RPHOSTTYPE)
+#OBJDIR = $(RPNHOME)/build/$(RPHOSTTYPE)
 OBJDIR = $(LIBDIR)
 
-RPNUMERICSDIR = $(SRCDIR)/rpnumerics
-WAVEDIR       = $(SRCDIR)/wave
-JNIDIR        = $(SRCDIR)/JNI
+RPNUMERICSDIR = $(RPNHOME)/rpnumerics
+WAVEDIR       = $(RPNHOME)/wave
+JNIDIR        = $(RPNHOME)/JNI
 include $(RPNUMERICSDIR)/defs
 include $(WAVEDIR)/defs
 include $(JNIDIR)/defs 
