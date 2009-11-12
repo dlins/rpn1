@@ -1,0 +1,81 @@
+RPGNU = yes
+include $(RPNHOME)/make/defs
+
+ifeq ($(OBJDIR),)
+OBJDIR=$(LIBDIR)
+endif
+
+RPNUMERICSDIR = $(RPNHOME)/rpnumerics
+PLUGINDIR     = $(RPNHOME)/plugins
+WAVEDIR       = $(RPNHOME)/wave
+JNIDIR        = $(RPNHOME)/JNI
+include $(RPNUMERICSDIR)/defs
+include $(WAVEDIR)/defs
+include $(JNIDIR)/defs
+
+vpath %.c   $(VPATH)
+vpath %.F   $(VPATH)
+vpath %.cc  $(VPATH)
+vpath %.cpp $(VPATH)
+
+PROGOBJ = $(CPROGSRC:%.c=$(OBJDIR)/%.o)
+PROGDEP = $(CPROGSRC:%.c=$(OBJDIR)/%.d)
+PROGOBJ += $(FPROGSRC:%.F=$(OBJDIR)/%.o)
+PROGOBJ += $(CCPROGSRC:%.cc=$(OBJDIR)/%.o)
+PROGDEP += $(CCPROGSRC:%.cc=$(OBJDIR)/%.d)
+PROGOBJ += $(CPPPROGSRC:%.cpp=$(OBJDIR)/%.o)
+PROGDEP += $(CPPPROGSRC:%.cpp=$(OBJDIR)/%.d)
+
+RPNUMLIBNAME = librpnumerics.a
+RPNUMLIBARC  = $(OBJDIR)/$(RPNUMLIBNAME)
+RPNUMLIBOBJ  = $(RPNUMSRC:%.cc=$(OBJDIR)/%.o)
+RPNUMLIBOBJ += $(ForSRC:%.F=$(OBJDIR)/%.o)
+RPNUMDEPENDOBJ  = $(RPNUMSRC:%.cc=$(OBJDIR)/%.d)
+RPNUMDEPENDOBJ += $(ForSRC:%.F=$(OBJDIR)/%.d)
+
+WAVELIBNAME   = libwave.a
+WAVELIBARC    = $(OBJDIR)/$(WAVELIBNAME)
+WAVELIBOBJ    = $(WAVESRC:%.cc=$(OBJDIR)/%.o)
+WAVEDEPENDOBJ = $(WAVESRC:%.cc=$(OBJDIR)/%.d)
+
+LIBS = -L/usr/lib -L/usr/local/lib -L/usr/X11R6/lib -lfltk_images -ljpeg -lfltk_gl -lfltk \
+	-lpng12 -lGLU -lGL -lX11 -ldl -llapack -lblas -lm -lgfortran -lXpm
+LIBRPN = $(OBJDIR)/$(RPNUMLIBNAME) $(OBJDIR)/$(WAVELIBNAME)
+LDLIBS = $(LIBS) $(LIBRPN)
+
+#
+# Targets
+#
+#$(EXEC): $(PROGOBJ) 
+$(EXEC): $(WAVELIBARC) $(RPNUMLIBARC) $(PROGOBJ) 
+	$(LINK.cc) -o $@ $(PROGOBJ) $(LDLIBS)
+
+$(WAVELIBARC): $(WAVELIBOBJ)
+	ar -ruv $(WAVELIBARC)  $(WAVELIBOBJ)
+
+$(RPNUMLIBARC): $(RPNUMLIBOBJ)
+	ar -ruv $(RPNUMLIBARC)  $(RPNUMLIBOBJ)
+
+SVNURL=svn://svn.fluid.impa.br/rpn/trunk/src/
+
+checkout:
+	#Comment out all 'include' directives above before running this target
+	@mkdir -p $(RPN)
+	@cd $(RPN); echo svn checkout $(SVNURL)/rpnumerics $(SVNURL)/wave $(SVNURL)/JNI $(SVNURL)/make
+
+update:
+	@cd $(RPNUMERICSDIR); echo -n $(RPNUMERICSDIR)" "; svn update
+	@cd $(WAVEDIR); echo -n $(WAVEDIR)" "; svn update
+	@cd $(JNIDIR); echo -n $(JNIDIR)" "; svn update
+	@cd $(RPN)/make; echo -n $(RPN)" "; svn update
+
+.PRECIOUS: $(LIBARC)
+
+include $(RPNHOME)/make/rules
+ifneq ($(RPHOSTTYPE),mingw32)
+-include $(DEPENDOBJ)
+endif
+
+CLEANSRC += *.o $(LIBARC) $(EXEC)
+
+
