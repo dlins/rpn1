@@ -5,7 +5,7 @@
  */
 package rpn;
 
-import rpn.controller.ui.*;
+import rpn.controller.ui.*;  
 
 import javax.swing.JApplet;
 
