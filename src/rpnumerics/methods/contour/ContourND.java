@@ -109,7 +109,23 @@ public class ContourND implements Serializable {
 					}
 					
 					try {
-												
+						
+	int myDimension = parameters.myDimensionIs();
+        
+        int even = myDimension % 2;
+        int dim_loop = myDimension / 2;
+        
+        if ( even == 0) {
+            for (int pont_loop = 0; pont_loop < dim_loop; pont_loop++) {
+                int first = parameters.getIndex(2*pont_loop + 1);
+                int second = parameters.getIndex(2*pont_loop + 2);
+                if ((first + second) > res[0]) {
+			// System.out.println("Leaving..." + first + " " + second);
+                    throw new CanNotPerformCalculations();
+                }
+                    
+            }
+        }						
 						foncub_ = evaluateFunctions(solution, parameters);
 						
 						double [][] sol_;

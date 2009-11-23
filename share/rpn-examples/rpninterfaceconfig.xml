@@ -65,8 +65,24 @@
 
     </METHOD>
     <METHOD name="Contour">
-        <METHODPARAM  name="x-resolution" value="100" />
-        <METHODPARAM  name="y-resolution" value="100" />
+        <METHODPARAM  name="xminus-resolution" value="50" />
+        <METHODPARAM  name="yminus-resolution" value="50" />
+
+        <METHODPARAM  name="xplus-resolution" value="50" />
+        <METHODPARAM  name="yplus-resolution" value="50" />
+
+        <METHODPARAM  name="x0minus-boundary" value="-4" />
+        <METHODPARAM  name="y0minus-boundary" value="-5" />
+
+        <METHODPARAM  name="x0plus-boundary" value="-4" />
+        <METHODPARAM  name="y0plus-boundary" value="-5" />
+
+        <METHODPARAM  name="xFminus-boundary" value="2" />
+        <METHODPARAM  name="yFminus-boundary" value="1" />
+
+        <METHODPARAM  name="xFplus-boundary" value="2" />
+        <METHODPARAM  name="yFplus-boundary" value="1" />
+
     </METHOD>
     
     
