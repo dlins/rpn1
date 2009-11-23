@@ -18,7 +18,6 @@ import wave.util.RealVector;
 import java.awt.*;
 
 
-import rpnumerics.methods.contour.ContourCurve;
 
 public class BifurcationCurve extends RPnCurve implements RpSolution {
     //
@@ -49,10 +48,10 @@ public class BifurcationCurve extends RPnCurve implements RpSolution {
          int closestSegment = 0;
          double closestDistance = -1;
 
-         List hugoniotSegList = segments();
+         List bifurcationSegment = segments();
          for (int i = 0; i < segments.size(); i++) {
 
-             RealSegment segment = (RealSegment) hugoniotSegList.get(i);
+             RealSegment segment = (RealSegment) bifurcationSegment.get(i);
              segmentVector = new RealVector(segment.p1());
              segmentVector.sub(segment.p1());
              closest = new RealVector(target);

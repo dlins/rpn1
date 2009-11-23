@@ -1,19 +1,13 @@
 /*
-* Instituto de Matematica Pura e Aplicada - IMPA
-* Departamento de Dinamica dos Fluidos
-*
-*/
-
+ * Instituto de Matematica Pura e Aplicada - IMPA
+ * Departamento de Dinamica dos Fluidos
+ *
+ */
 package wave.multid.view;
 
-import wave.multid.*;
 import wave.multid.model.*;
-import wave.multid.map.*;
 import wave.multid.DimMismatchEx;
 import java.awt.Graphics2D;
-import java.awt.Shape;
-import java.awt.geom.GeneralPath;
-import java.awt.Color;
 import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +16,7 @@ public class Scene implements GeomObjView {
     //
     // Members
     //
+
     private List viewList_;
     private ViewingTransform viewingTransf_;
     private AbstractGeomObj abstractGeom_;
@@ -41,32 +36,48 @@ public class Scene implements GeomObjView {
     //
     // Accessors/Mutators
     //
-    public AbstractGeomObj getAbstractGeom() { return abstractGeom_; }
+    public AbstractGeomObj getAbstractGeom() {
+        return abstractGeom_;
+    }
 
-    public void setAbstractGeom(AbstractGeomObj abstractGeom) { abstractGeom_ = abstractGeom; }
+    public void setAbstractGeom(AbstractGeomObj abstractGeom) {
+        abstractGeom_ = abstractGeom;
+    }
 
-    public ViewingTransform getViewingTransform() { return viewingTransf_; }
+    public ViewingTransform getViewingTransform() {
+        return viewingTransf_;
+    }
 
-    public void setViewingTransform(ViewingTransform transf) { viewingTransf_ = transf; }
+    public void setViewingTransform(ViewingTransform transf) {
+        viewingTransf_ = transf;
+    }
 
-    public ViewingAttr getViewingAttr() { return viewAttr_; }
+    public ViewingAttr getViewingAttr() {
+        return viewAttr_;
+    }
 
-    public void setViewingAttr(ViewingAttr viewAttr) { viewAttr_ = viewAttr; }
+    public void setViewingAttr(ViewingAttr viewAttr) {
+        viewAttr_ = viewAttr;
+    }
 
-    public Iterator geometries() { return viewList_.iterator(); }
+    public Iterator geometries() {
+        return viewList_.iterator();
+    }
 
     //
     // Methods
     //
     public void draw(Graphics2D g) {
-        for (int i = 0; i < viewList_.size(); i++)
-            if (((GeomObjView)viewList_.get(i)).getViewingAttr().isVisible())
-                ((GeomObjView)viewList_.get(i)).draw(g);
+        for (int i = 0; i < viewList_.size(); i++) {
+            if (((GeomObjView) viewList_.get(i)).getViewingAttr().isVisible()) {
+                ((GeomObjView) viewList_.get(i)).draw(g);
+            }
+        }
     }
 
     public void addViewFor(MultiGeometry geomObj) {
         try {
-            GeomObjView updatedGeomView = (GeomObjView)geomObj.createView(getViewingTransform());
+            GeomObjView updatedGeomView = (GeomObjView) geomObj.createView(getViewingTransform());
             viewList_.add(updatedGeomView);
         } catch (DimMismatchEx dex) {
             dex.printStackTrace();
@@ -76,7 +87,7 @@ public class Scene implements GeomObjView {
     public void removeViewOf(MultiGeometry geomObj) {
         Iterator viewListIterator = viewList_.iterator();
         while (viewListIterator.hasNext()) {
-            GeomObjView oldGeomView = (GeomObjView)viewListIterator.next();
+            GeomObjView oldGeomView = (GeomObjView) viewListIterator.next();
             if (oldGeomView.getAbstractGeom().equals(geomObj)) {
                 viewListIterator.remove();
                 break;
@@ -86,9 +97,9 @@ public class Scene implements GeomObjView {
 
     public void update() {
         viewList_.clear();
-        Iterator geomListIterator = ((AbstractScene)abstractGeom_).getGeomObjIterator();
+        Iterator geomListIterator = ((AbstractScene) abstractGeom_).getGeomObjIterator();
         while (geomListIterator.hasNext()) {
-            MultiGeometry geomObj = (MultiGeometry)geomListIterator.next();
+            MultiGeometry geomObj = (MultiGeometry) geomListIterator.next();
             addViewFor(geomObj);
         }
     }

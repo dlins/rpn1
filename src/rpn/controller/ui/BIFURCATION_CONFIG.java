@@ -21,9 +21,10 @@ public class BIFURCATION_CONFIG extends UI_ACTION_SELECTED {
 
     }
 
+    @Override
     public void userInputComplete(rpn.controller.ui.UIController ui,
                                   RealVector userInput) {
-
+        System.out.println("Chamando Bifurcation Config");
         ui.setState(new GEOM_SELECTION());
 
     }

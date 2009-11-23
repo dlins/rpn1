@@ -20,6 +20,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.Point;
+import java.awt.geom.Rectangle2D;
 
 public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpacePanelController {
     //
@@ -35,6 +36,8 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
     private boolean absComplete_;
     private boolean ordComplete_;
     private Point dcCompletePoint_;
+    private List <Rectangle2D> selectionAreas_;
+
 
 
     //
@@ -48,7 +51,9 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
         ordComplete_ = false;
         dcCompletePoint_ = new Point(0, 0);
         pointMarkBuffer_ = new ArrayList();
+        selectionAreas_ = new ArrayList<Rectangle2D>();
     }
+
 
     //
     // Inner Classes
@@ -90,10 +95,6 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
                   panel.scene().setViewingTransform(new3DTransform);
 
                 }
-
-
-
-
 
                 if (panel.scene().getViewingTransform() instanceof
                     Viewing2DTransform) {
@@ -137,6 +138,8 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
     public int getOrdIndex() { return ordIndex_; }
 
     public List pointMarkBuffer() { return pointMarkBuffer_; }
+
+    public List getSelectionAreas() { return selectionAreas_;  }
 
     public Point get_dc_CompletePoint() { return dcCompletePoint_; }
 

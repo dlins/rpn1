@@ -1,10 +1,23 @@
 package rpnumerics;
 
+import wave.util.Boundary;
+
 public class BifurcationProfile {
 
     private static int plusFamily_;
     private static int minusFamily_;
     private static BifurcationProfile instance_;
+
+    private Boundary boundary_;
+
+    public Boundary getBoundary() {
+        return boundary_;
+    }
+
+    public void setBoundary(Boundary boundary) {
+        this.boundary_ = boundary;
+    }
+
 
     private BifurcationProfile() {
         minusFamily_ = 0;

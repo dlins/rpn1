@@ -104,7 +104,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 toolBar_.add(PoincareSectionPlotAgent.instance().getContainer());
                 toolBar_.add(HugoniotPlotAgent.instance().getContainer());
                 toolBar_.add(ScratchAgent.instance().getContainer());
+                toolBar_.add(AreaSelectionAgent.instance().getContainer());
                 ScratchAgent.instance().setEnabled(true);
+
                 pack();
 
             }
@@ -121,6 +123,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
                 toolBar_.add(CompositePlotAgent.instance().getContainer());
                 toolBar_.add(ScratchAgent.instance().getContainer());
+                toolBar_.add(AreaSelectionAgent.instance().getContainer());
                 ScratchAgent.instance().setEnabled(true);
                 pack();
             }
@@ -133,6 +136,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 toolBar_.removeAll();
                 toolBar_.add(BifurcationPlotAgent.instance().getContainer());
                 toolBar_.add(ScratchAgent.instance().getContainer());
+                toolBar_.add(AreaSelectionAgent.instance().getContainer());
+                toolBar_.add(BifurcationRefineAgent.instance().getContainer());
                 ScratchAgent.instance().setEnabled(true);
                 setStatusMessage("");
                 pack();

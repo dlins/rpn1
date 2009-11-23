@@ -66,8 +66,6 @@
     </METHOD>
     <METHOD name="Contour">
         <METHODPARAM  name="x-resolution" value="100" />
-        <METHODPARAM  name="x" value="100" />
-        <METHODPARAM  name="y" value="100" />
         <METHODPARAM  name="y-resolution" value="100" />
     </METHOD>
     

@@ -7,7 +7,6 @@ package rpn.usecase;
 
 import rpn.component.*;
 import rpnumerics.*;
-import wave.multid.*;
 import wave.util.*;
 
 public class BifurcationPlotAgent extends RpModelPlotAgent {
@@ -19,9 +18,6 @@ public class BifurcationPlotAgent extends RpModelPlotAgent {
     // Members
     //
     static private BifurcationPlotAgent instance_ = null;
-
-
-
     //
     // Constructors/Initializers
     //
@@ -31,8 +27,11 @@ public class BifurcationPlotAgent extends RpModelPlotAgent {
 
     public RpGeometry createRpGeometry(RealVector[] input) {
 
+        System.out.println("Chamando createGeometry de BifurcationPlotAgent");
+
         BifurcationCurveCalc curveCalc = RPNUMERICS.createBifurcationCalc();
         BifurcationCurveGeomFactory factory = new BifurcationCurveGeomFactory(curveCalc);
+        BifurcationRefineAgent.instance().setEnabled(false);
         return factory.geom();        
     }
 

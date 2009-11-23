@@ -7,35 +7,37 @@ package rpnumerics;
 
 import rpnumerics.methods.*;
 
-public class BifurcationCurveCalc implements RpCalculation{
-    
+public class BifurcationCurveCalc implements RpCalculation {
+
     private BifurcationMethod bifurcationMethod_;
-    private BifurcationParams params_; 
+    private BifurcationParams params_;
 
     //
     // Constructors
     //
-    
-    public BifurcationCurveCalc (){
+    public BifurcationCurveCalc() {
         params_ = new BifurcationParams();
-        BifurcationProfile profile = RPNUMERICS.getBifurcationProfile();
         bifurcationMethod_ = new BifurcationContourMethod(params_);
     }
-    
+
+    public BifurcationCurveCalc(BifurcationParams params) {
+        params_ = params;
+        bifurcationMethod_ = new BifurcationContourMethod(params_);
+    }
+
     public BifurcationCurveCalc(BifurcationContourMethod bifurcationMethod) {
         bifurcationMethod_ = bifurcationMethod;
         params_ = bifurcationMethod.getParams();
     }
-    
+
     //
     // Accessors/Mutators
     //
-
     public int getFamilyIndex() {
         return params_.getFamilyIndex();
     }
-    
-    public RpSolution calc() {    	
+
+    public RpSolution calc() {
         return bifurcationMethod_.curve();
     }
 

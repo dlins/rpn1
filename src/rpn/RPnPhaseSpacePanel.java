@@ -3,7 +3,6 @@
  * Departamento de Dinamica dos Fluidos
  *
  */
-
 package rpn;
 
 import wave.multid.view.*;
@@ -28,23 +27,20 @@ import com.sun.image.codec.jpeg.JPEGCodec;
 import javax.swing.JPanel;
 import java.io.FileOutputStream;
 import java.awt.Shape;
-
+import java.awt.geom.Rectangle2D;
 
 public class RPnPhaseSpacePanel extends JPanel implements Printable {
     //
     // Constants
     //
+
     static final public Color DEFAULT_BACKGROUND_COLOR = Color.gray;
-    
     static final public Color DEFAULT_BOUNDARY_COLOR = Color.black;
-    
     static final public Color DEFAULT_POINTMARK_COLOR = Color.white;
 
     public static boolean isCursorLine() {
         return cursorLine_;
     }
-
-   
     //
     // Members
     //
@@ -55,15 +51,15 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     private PhaseSpacePanelController ui_;
     private static boolean showCursorLine_;
     private static boolean cursorLine_;
-    
+
     //
     // Constructors
     //
     public RPnPhaseSpacePanel(Scene scene) {
         scene_ = scene;
-        
 
-        
+
+
         if (scene_.getViewingTransform() instanceof Viewing3DTransform) {
             ui_ = new PhaseSpacePanel3DController(scene_.getViewingTransform().
                     projectionMap().
@@ -92,104 +88,116 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         setBackground(DEFAULT_BACKGROUND_COLOR);
         setPreferredSize(new java.awt.Dimension(myW, myH));
     }
-    
+
     //
     // Accessors/Mutators
     //
     public PhaseSpacePanelController getCastedUI() {
         return ui_;
     }
-    
-    
-    public Scene scene() {  return scene_;   }
-    
+
+    public Scene scene() {
+        return scene_;
+    }
+
     // cursor orientation
     public void setCursorPos(Point pos) {
         cursorPos_ = pos;
     }
-    
+
     public Point getCursorPos() {
         return cursorPos_;
     }
-    
-     public static boolean isShowCursor() {
+
+    public static boolean isShowCursor() {
         return showCursorLine_;
     }
 
     public static void setCursorLineVisible(boolean aSetCursorLine_) {
         cursorLine_ = aSetCursorLine_;
     }
-    
+
     //
     // Methods
     //
     @Override
     public void paintComponent(Graphics g) {
-        
-        
+
+
         super.paintComponent(g);
         Stroke stroke = ((Graphics2D) g).getStroke();
         BasicStroke newStroke = new BasicStroke(1.1f);
         ((Graphics2D) g).setStroke(newStroke);
         Color prev = g.getColor();
-        Graphics2D gra=  (Graphics2D)g;
-        
+        Graphics2D gra = (Graphics2D) g;
+
         /*
          * BOUNDARY WINDOW
          */
-        
+
         g.setColor(DEFAULT_BOUNDARY_COLOR);
-        Shape s =  scene_.getViewingTransform().viewPlane().getWindow().dcView(scene_.getViewingTransform());
+        Shape s = scene_.getViewingTransform().viewPlane().getWindow().dcView(scene_.getViewingTransform());
         ((Graphics2D) g).fill(s);
-        
-        
+
+
         /*
          * SCENE
          */
-        
+
         if (scene_ != null) {
             scene_.draw((Graphics2D) g);
         }
-        
+
         /*
          * POINT MARKS
          */
-        
+
         g.setColor(DEFAULT_POINTMARK_COLOR);
         for (int i = 0; i < getCastedUI().pointMarkBuffer().size(); i++) {
             g.fillRect(((Point) getCastedUI().pointMarkBuffer().get(i)).x,
                     ((Point) getCastedUI().pointMarkBuffer().get(i)).y, 5, 5);
         }
-        
+
+        /*
+         * SELECTED AREAS
+         */
+
+        g.setColor(DEFAULT_POINTMARK_COLOR);
+
+        for (Rectangle2D.Double rectangle : getCastedUI().getSelectionAreas()) {
+
+            g.drawRect((int) rectangle.getX(), (int) rectangle.getY(), (int) rectangle.width, (int) rectangle.height);
+
+        }
+
         /*
          * USER CURSOR ORIENTATION
          *
          * for printing and 3D projections we will not use cursor
          * orientation
          */
-        if (showCursorLine_ && isCursorLine()){
+        if (showCursorLine_ && isCursorLine()) {
 
-        if ((!printFlag_) &&
-                (scene().getViewingTransform() instanceof Viewing2DTransform)) {
-            g.setColor(Color.red);
-            int xCursor = new Double(cursorPos_.getX()).intValue();
-            int yCursor = new Double(cursorPos_.getY()).intValue();
-            g.drawLine(xCursor, 0, xCursor, getHeight());
-            g.drawLine(0, yCursor, getWidth(), yCursor);
+            if ((!printFlag_) &&
+                    (scene().getViewingTransform() instanceof Viewing2DTransform)) {
+                g.setColor(Color.red);
+                int xCursor = new Double(cursorPos_.getX()).intValue();
+                int yCursor = new Double(cursorPos_.getY()).intValue();
+                g.drawLine(xCursor, 0, xCursor, getHeight());
+                g.drawLine(0, yCursor, getWidth(), yCursor);
+            }
+            g.setColor(prev);
+            ((Graphics2D) g).setStroke(stroke);
         }
-        g.setColor(prev);
-        ((Graphics2D) g).setStroke(stroke);
+
+
+
+
+
     }
-        
-        
-             
-              
-       
-    }
-    
+
     public BufferedImage createOffSetImageBuffer() {
-        GraphicsEnvironment env = GraphicsEnvironment.
-                getLocalGraphicsEnvironment();
+        GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
         GraphicsDevice dev = env.getDefaultScreenDevice();
         GraphicsConfiguration[] configs = dev.getConfigurations();
         GraphicsConfiguration config = dev.getDefaultConfiguration();
@@ -203,7 +211,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         printFlag_ = false;
         return buffedImage;
     }
-    
+
     public void createJPEGImageFile(String targetAbsPath) {
         try {
             // First save it as JPEG
@@ -215,17 +223,17 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
             ex.printStackTrace();
         }
     }
-    
+
     public int print(Graphics g, PageFormat pf, int pageIndx) {
         /* TODO some operating systems (UNIX) offer the option
-            of local postscript file printing. This should *not*
-            be enabled assuming that the PrintJob behaviour is to
-            stop the callback for print only when the return value
-            is NO_SUCH_PAGE or the job is queued to a spooler
-         
-            we could possibly have a save to file option dialog instead.
+        of local postscript file printing. This should *not*
+        be enabled assuming that the PrintJob behaviour is to
+        stop the callback for print only when the return value
+        is NO_SUCH_PAGE or the job is queued to a spooler
+
+        we could possibly have a save to file option dialog instead.
          */
-        
+
         if (pageIndx != 0) {
             return NO_SUCH_PAGE;
         }
@@ -255,4 +263,15 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
 
     }
 
+    public void eraseSelectedArea() {
+
+        Graphics2D g = (Graphics2D) this.getGraphics();
+
+        g.setColor(Color.BLACK);
+
+        for (Rectangle2D.Double rectangle : getCastedUI().getSelectionAreas()) {
+        g.fill(rectangle);
+        }
+
+    }
 }

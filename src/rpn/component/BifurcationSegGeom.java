@@ -4,7 +4,6 @@ import java.awt.Color;
 
 import wave.util.*;
 import wave.multid.CoordsArray;
-import wave.multid.model.AbstractSegment;
 import wave.multid.model.MultiPolyLine;
 import wave.multid.view.ViewingAttr;
 

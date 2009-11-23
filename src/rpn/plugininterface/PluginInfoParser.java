@@ -47,6 +47,7 @@ public class PluginInfoParser {
         try {
 
             File pluginDir = new File(PluginTableModel.getPluginDir());
+
             File[] filesArray = pluginDir.listFiles(new FileName());
 
             for (int i = 0; i < filesArray.length; i++) {

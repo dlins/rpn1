@@ -148,9 +148,8 @@ public class UIController extends ComponentUI {
         public MouseController() {
         }
 
-        @Override
+            @Override
         public void mousePressed(MouseEvent event) {
-
 
             if (event.getComponent() instanceof RPnPhaseSpacePanel) {
 

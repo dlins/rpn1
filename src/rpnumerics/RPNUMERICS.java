@@ -16,12 +16,16 @@ import rpnumerics.methods.HugoniotContourMethod;
 import wave.util.*;
 import wave.ode.*;
 import wave.multid.Space;
+import wave.util.Boundary;
 
 public class RPNUMERICS {
     //
     // Constants
     //
+
     static public int INCREASING_LAMBDA = 0;
+    static public RealVector AREA_TOP;
+    static public RealVector AREA_DOWN;
     //
     // Members
     //
@@ -34,6 +38,7 @@ public class RPNUMERICS {
     static private ShockRarefactionProfile shockRarefactionProfile_ = null;
     static private ContourConfiguration contourConfiguration_ = null;
     static private Integer direction_;
+    public static boolean SELCTIONACTIVE;
 
     //
     // Constructors/Initializers
@@ -64,7 +69,7 @@ public class RPNUMERICS {
         System.loadLibrary("rpnumerics");
         initNative(physicsID);
         errorControl_ = new RpErrorControl(boundary());
-     
+
     }
 
     public static void resetMethodsParams() {
@@ -184,22 +189,54 @@ public class RPNUMERICS {
         return new OrbitCalc(orbitPoint, direction_, createODESolver(flow));
 
     }
-    
-      public static ShockCurveCalc createShockCurveCalc(OrbitPoint orbitPoint) {
+
+    public static ShockCurveCalc createShockCurveCalc(OrbitPoint orbitPoint) {
 //TODO Family hardcoded to zero
-          return new ShockCurveCalc("methodname", "flowName", orbitPoint, 0, direction_);
+        return new ShockCurveCalc("methodname", "flowName", orbitPoint, 0, direction_);
 
     }
 
     public static BifurcationCurveCalc createBifurcationCalc() {
-        return new BifurcationCurveCalc();
+        BifurcationCurveCalc bifurcationCurveCalc = null;
+        BifurcationParams params = null;
+
+        if (SELCTIONACTIVE) {
+
+            RealVector min = new RealVector(2);
+            RealVector max = new RealVector(2);
+
+            min.setElement(0, AREA_TOP.getElement(0));
+            min.setElement(1, AREA_DOWN.getElement(1));
+
+            max.setElement(0, AREA_DOWN.getElement(0));
+            max.setElement(1, AREA_TOP.getElement(1));
+
+            System.out.println(AREA_TOP);
+            System.out.println(AREA_DOWN);
+
+
+            Boundary boundary = new RectBoundary(min, max);
+            bifurcationProfile_.setBoundary(boundary);
+
+            params = new BifurcationParams(boundary);
+
+
+
+        } else {
+
+            params = new BifurcationParams(boundary());
+
+        }
+
+        bifurcationCurveCalc = new BifurcationCurveCalc(params);
+
+        return bifurcationCurveCalc;
     }
 
     public static CompositeCalc createCompositeCalc(OrbitPoint orbitPoint) {
         return new CompositeCalc(orbitPoint, direction_);
     }
-    
-    
+
     public static ShockFlow createShockFlow() {
 
         RPNUMERICS.getShockProfile().setFlowName((String) PluginTableModel.instance().getValueAt(0, 2));
@@ -225,7 +262,7 @@ public class RPNUMERICS {
     }
 
     public static void setDirection(Integer integer) {
-            direction_=integer;
+        direction_ = integer;
     }
 
     private static ODESolver createODESolver(WaveFlow flow) {
@@ -241,6 +278,7 @@ public class RPNUMERICS {
     //
     // Accessors
     //
+
     public static void setCurrentProfile(ShockRarefactionProfile aShockRarefactionProfile_) {
         shockRarefactionProfile_ = aShockRarefactionProfile_;
     }

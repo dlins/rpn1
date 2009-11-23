@@ -14,12 +14,9 @@ import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.WindowConstants;
-import rpn.controller.ui.CURVES_CONFIG;
-import rpn.controller.ui.UIController;
 
 public abstract class RPnDialog extends JDialog {
 

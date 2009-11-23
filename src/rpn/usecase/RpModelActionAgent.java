@@ -47,7 +47,7 @@ public abstract class RpModelActionAgent extends AbstractAction implements Undoa
         // garbage collection is ok ?
         UI_ACTION_SELECTED action = new UI_ACTION_SELECTED(this);
 
-        if (this instanceof BifurcationPlotAgent) {
+        if (this instanceof BifurcationPlotAgent || this instanceof BifurcationRefineAgent) {
             action.userInputComplete(UIController.instance(), new RealVector(2));// No input needed
         }
 

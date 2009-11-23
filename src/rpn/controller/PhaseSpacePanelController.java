@@ -9,6 +9,7 @@ package rpn.controller;
 import rpn.RPnPhaseSpacePanel;
 import java.util.List;
 import java.awt.Point;
+import java.awt.geom.Rectangle2D;
 
 public interface PhaseSpacePanelController {
     void install(RPnPhaseSpacePanel panel);
@@ -20,6 +21,7 @@ public interface PhaseSpacePanelController {
     public void resetCursorCoords();
 
     List  pointMarkBuffer();
+    List <Rectangle2D.Double> getSelectionAreas();
 
     Point get_dc_CompletePoint();
 
@@ -32,4 +34,5 @@ public interface PhaseSpacePanelController {
     boolean isAbsComplete();
 
     boolean isOrdComplete();
+
 }
