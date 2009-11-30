@@ -6,7 +6,7 @@
  */
 
 
-package rpnumerics.physics;
+package rpnumerics.methods.contour.samplefunctions;
 
 import rpnumerics.FluxParams;
 import wave.util.RealVector;
