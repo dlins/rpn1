@@ -110,6 +110,12 @@ public class ContourND implements Serializable {
 					
 					try {
 						
+/*  TODO: re-introduce trianglar domain for ContourND
+
+     // this code was introduced by Carlos Bevilaq and makes de domain triangular.
+     // Daniel de Albuquerque removed it --daniel@impa.br
+
+
 	int myDimension = parameters.myDimensionIs();
         
         int even = myDimension % 2;
@@ -126,7 +132,7 @@ public class ContourND implements Serializable {
                     
             }
         }						
-						foncub_ = evaluateFunctions(solution, parameters);
+*/						foncub_ = evaluateFunctions(solution, parameters);
 						
 						double [][] sol_;
 				    	int [][] edges_; 
