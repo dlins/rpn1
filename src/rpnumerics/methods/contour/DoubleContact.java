@@ -105,25 +105,25 @@ public class DoubleContact extends MultiBifurcationFunction {
                 double z = fluxOnP[0];
                 double w = fluxOnP[1];*/
 
-                double x = pointOnM[0];
+                /*double x = pointOnM[0];
                 double y = pointOnM[1];
                 double z = pointOnP[0];
-                double w = pointOnP[1];
+                double w = pointOnP[1];*/
 
                 /*double x = jacOnM[0][0];
                 double y = jacOnM[0][1];
                 double z = jacOnP[1][0];
                 double w = jacOnP[1][1];*/
 
-                vector[0] = x*x + y*y + z*z + w*w - 0.0004;
+                /*vector[0] = x*x + y*y + z*z + w*w - 1;
                 vector[1] = x - 2*w;
-                vector[2] = y - 2*z;
+                vector[2] = y - 2*z;*/
 
-                /*vector[0] = x*x + y*y + z*z + w*w - 16;
+                /*vector[0] = x*x + y*y + z*z + w*w - 1;
                 vector[1] = x - 2*y;
                 vector[2] = w - 6*z;*/
 
-		/*double numer = (((fluxOnM[0] - fluxOnP[0])*(pointOnM[0] - pointOnP[0])) +
+		double numer = (((fluxOnM[0] - fluxOnP[0])*(pointOnM[0] - pointOnP[0])) +
 			 	    	((fluxOnM[1] - fluxOnP[1])*(pointOnM[1] - pointOnP[1])));
 
 		double nomin = (((pointOnM[0] - pointOnP[0]) * (pointOnM[0] - pointOnP[0]))
@@ -135,7 +135,7 @@ public class DoubleContact extends MultiBifurcationFunction {
                     vector[1] = 1;
                     vector[2] = 2; */
                     
-/*			 throw new CanNotPerformCalculations() ;
+			 throw new CanNotPerformCalculations() ;
 		}
 
 		double s =  numer / nomin;
@@ -148,7 +148,7 @@ public class DoubleContact extends MultiBifurcationFunction {
 		vector[2] = ((jacOnP[0][0] - s) * (jacOnP[1][1] - s))
 				   - (jacOnP[1][0] * jacOnP[0][1]); 
 
-*/
+
 
 
 		return new RealVector(vector);
