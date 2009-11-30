@@ -1,4 +1,4 @@
-package rpnumerics.methods.contour.samplefunctions;
+package rpnumerics.methods.contour;
 
 import rpnumerics.HugoniotParams;
 import rpnumerics.methods.contour.functionsobjects.BifurcationFluxFunctionCluster;
