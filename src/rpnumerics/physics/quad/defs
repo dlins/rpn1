@@ -2,20 +2,19 @@ vpath %.cc $(QUADDIR)
 
 
 RPNUMSRC += \
+	QuadWaveState.cc        \
 	Quad2.cc 		\
 	Quad2FluxFunction.cc 	\
 	Quad2FluxParams.cc 	\
-	QuadWaveState.cc        \
         Quad2AccumulationFunction.cc \
+	Quad3.cc 		\
+	Quad3FluxFunction.cc 	\
+	Quad3FluxParams.cc 	\
+        Quad3AccumulationFunction.cc \
 	Quad4.cc 		\
 	Quad4FluxFunction.cc 	\
 	Quad4FluxParams.cc 	\
         Quad4AccumulationFunction.cc\
-
-
-
-
-
 
 
 CPPFLAGS += -I $(QUADDIR)
