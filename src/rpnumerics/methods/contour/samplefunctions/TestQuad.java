@@ -5,7 +5,7 @@ import rpnumerics.FluxParams;
 import wave.util.HessianMatrix;
 import wave.util.RealMatrix2;
 import wave.util.RealVector;
-import rpnumerics.physics.*;
+import rpnumerics.methods.contour.samplefunctions.Quad2FluxParams;
 
 public class TestQuad extends FluxFunction {
 

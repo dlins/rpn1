@@ -2,7 +2,7 @@ package rpnumerics.methods.contour.samplefunctions;
 
 import rpnumerics.FluxFunction;
 import rpnumerics.FluxParams;
-import rpnumerics.physics.Quad2FluxParams;
+import rpnumerics.methods.contour.samplefunctions.Quad2FluxParams;
 import wave.util.HessianMatrix;
 import wave.util.RealMatrix2;
 import wave.util.RealVector;
