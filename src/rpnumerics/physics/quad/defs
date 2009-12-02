@@ -11,7 +11,8 @@ RPNUMSRC += \
 	Quad4FluxFunction.cc 	\
 	Quad4FluxParams.cc 	\
         Quad4AccumulationFunction.cc\
-
+        Quad3FluxFunction.cc \
+	Quad3FluxParams.cc 	\
 
 CPPFLAGS += -I $(QUADDIR)
 

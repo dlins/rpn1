@@ -6,7 +6,6 @@ WAVESRC += ADTADV.cc		\
 	BlockTri3.cc		\
 	bool.cc			\
 	Boundary.cc		\
-	eigen2.cc		\
 	except.cc		\
 	errorhandler.cc		\
 	HessianMatrix.cc	\
@@ -14,8 +13,6 @@ WAVESRC += ADTADV.cc		\
         IsoTriang2DBoundary.cc  \
 	JacobianMatrix.cc	\
 	JetMatrix.cc		\
-	mathutil.cc		\
-	polyroot.cc		\
 	RealVector.cc		\
 	RealMatrix2.cc		\
 	RectBoundary.cc		\
@@ -26,7 +23,9 @@ WAVESRC += ADTADV.cc		\
 	Vector3Array.cc		\
 	Vector3.cc		\
 	Vector.cc               \
-	eigen.cc
+	eigen.cc                \
+	polyroot.cc		\
+	mathutil.cc		\
 
 
 CPPFLAGS += -I $(UTILDIR)
