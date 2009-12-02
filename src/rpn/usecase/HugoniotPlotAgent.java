@@ -29,6 +29,12 @@ public class HugoniotPlotAgent extends RpModelPlotAgent {
 
     public RpGeometry createRpGeometry(RealVector[] input) {
 
+for (RealVector element: input){
+    System.out.print("Dado de entrada: "+element+"\n");
+}
+
+
+
 
         RPNUMERICS.getShockProfile().setXZero(new PhasePoint(input[0]));
 

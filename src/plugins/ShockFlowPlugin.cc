@@ -1,7 +1,7 @@
 #include "ShockFlowPlugin.h"
 
-int ShockFlowPlugin::flux(const RealVector & input, RealVector & output)  {
-
+int ShockFlowPlugin::flux(const RealVector & input, RealVector & output) {
+    cout << "Entrada: " << input << endl;
     WaveState tempInput(input);
     JetMatrix tempOutput(input.size());
     fluxFunction().jet(tempInput, tempOutput, 0);
@@ -19,14 +19,14 @@ int ShockFlowPlugin::flux(const RealVector & input, RealVector & output)  {
 
     output = fx;
 
-
+    cout << "Saida: " << output << endl;
     return 2;
 
 
-}
+} 
 
-int ShockFlowPlugin::fluxDeriv(const RealVector & input, JacobianMatrix &output)  {
-
+int ShockFlowPlugin::fluxDeriv(const RealVector & input, JacobianMatrix &output) {
+    cout << "Entrada: " << input << endl;
     WaveState tempInput(input);
     JetMatrix tempOutput(input.size());
     fluxFunction().jet(tempInput, tempOutput, 1);
@@ -35,14 +35,14 @@ int ShockFlowPlugin::fluxDeriv(const RealVector & input, JacobianMatrix &output)
     JacobianMatrix identity(input.size());
     identity.scale(getParams().getSigma());
     output - identity;
-
+    cout << "Saida: " << output << endl;
     return 2;
 
 
 
 }
 
-int ShockFlowPlugin::fluxDeriv2(const RealVector & input, HessianMatrix & output)  {
+int ShockFlowPlugin::fluxDeriv2(const RealVector & input, HessianMatrix & output) {
 
     WaveState tempInput(input);
     JetMatrix tempOutput(input.size());
@@ -53,7 +53,6 @@ int ShockFlowPlugin::fluxDeriv2(const RealVector & input, HessianMatrix & output
 
     return 2;
 }
-
 
 const ShockFlowParams & ShockFlowPlugin::getParams()const {
     return ShockFlow::getParams();
@@ -86,7 +85,6 @@ ShockFlowPlugin::~ShockFlowPlugin() {
     delete fx0_;
 }
 
-
 WaveFlow * ShockFlowPlugin::clone()const {
 
     PhasePoint phasePoint(RealVector(2));
@@ -97,9 +95,9 @@ WaveFlow * ShockFlowPlugin::clone()const {
 
     ShockFlowParams newParams(phasePoint, 0);
 
-    Quad2FluxParams fluxParams;
+    Quad3FluxParams fluxParams;
 
-    Quad2FluxFunction fluxfunction(fluxParams);
+    Quad3FluxFunction fluxfunction(fluxParams);
 
     return new ShockFlowPlugin(newParams, fluxfunction);
 }
@@ -114,9 +112,9 @@ extern "C" RpnPlugin * createConservation() {
 
     ShockFlowParams newParams(phasePoint, 0);
 
-    Quad2FluxParams fluxParams;
+    Quad3FluxParams fluxParams;
 
-    Quad2FluxFunction fluxfunction(fluxParams);
+    Quad3FluxFunction fluxfunction(fluxParams);
 
     return new ShockFlowPlugin(newParams, fluxfunction);
 }

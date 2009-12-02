@@ -63,6 +63,8 @@ int Quad3FluxFunction::jet(const WaveState & x, JetMatrix & y, int degree = 2) c
     const FluxParams params = fluxParams();
 
 
+
+
     a0 = params.component(0);
     b0 = params.component(1);
     c0 = params.component(2);
