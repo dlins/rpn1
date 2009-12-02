@@ -2,7 +2,6 @@
 #include <stdio.h>
 
 Quad3AccumulationFunction::Quad3AccumulationFunction(void) {
-    printf("Acc\n");
 }
 
 Quad3AccumulationFunction * Quad3AccumulationFunction::clone() const {

@@ -24,19 +24,19 @@
 
 class Quad3 : public Physics {
 private:
-    Quad3FluxFunction *fluxFunction_;
 
+    Quad3FluxFunction *fluxFunction_;
     Quad3AccumulationFunction * accumulationFunction_;
 
     Boundary * defaultBoundary();
 
     Boundary * boundary_;
-    
+    Space * space_;
     char * FLUX_ID;
 
     const char * DEFAULT_SIGMA;
-    
     const char * DEFAULT_XZERO;
+
 
 public:
     Quad3(const Quad3FluxParams &);
@@ -52,9 +52,7 @@ public:
     Physics * clone() const;
 
     const FluxParams & params(void) const;
-
     void fluxParams(const FluxParams &);
-    
     void accumulationParams(const AccumulationParams &);
 
     const FluxFunction & fluxFunction(void) const;
@@ -74,12 +72,16 @@ inline void Quad3::fluxParams(const FluxParams & p) {
     Quad3FluxParams newparams(p.params());
 
     fluxFunction_->fluxParams(newparams);
+
+
 }
 
 inline void Quad3::accumulationParams(const AccumulationParams & p) {
 
     accumulationFunction_->accumulationParams(p);
+
 }
+
 
 
 inline const FluxParams & Quad3::params(void) const {
@@ -94,8 +96,10 @@ inline const AccumulationFunction & Quad3::accumulation() const {
     return *accumulationFunction_;
 }
 
+
+
 inline const Space & Quad3::domain(void) const {
-    return Multid::PLANE;
+        return *space_;
 }
 
 inline const Boundary & Quad3::boundary(void) const {
@@ -112,17 +116,16 @@ inline Boundary * Quad3::defaultBoundary() {
 
     RealVector min(3);
 
-    min.component(0) = -10.0;
-    min.component(1) = -10.0;
-    min.component(2) = -10.0;
+    min.component(0) = -0.5;
+    min.component(1) = -0.5;
+    min.component(2) = -0.5;
 
     RealVector max(3);
 
-    max.component(0) = 10.0;
-    max.component(1) = 10.0;
-    max.component(3) = 10.0;
+    max.component(0) = 0.5;
+    max.component(1) = 0.5;
+    max.component(2) = 0.5;
 
-    
     return new RectBoundary(min, max);
 
 }

@@ -274,12 +274,13 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initNative(JNIEnv * env, jclas
     }
 
     if (!strcmp(physicsID, "QuadraticR3")) {
-        printf("Hi\n");
+
         RpNumerics::setPhysics(Quad3(Quad3FluxParams()));
-        printf("Hi\n");
+
     }
 
     if (!strcmp(physicsID, "QuadraticR4")) {
+
         RpNumerics::setPhysics(Quad4(Quad4FluxParams()));
 
     }
