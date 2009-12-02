@@ -490,7 +490,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
                     public void actionPerformed(ActionEvent e) {
 
-                        System.out.println("Chamando action");
+                        //System.out.println("Calling action");
 
                         RPnRarefactionConfigDialog rarefactionConfigDialog = new RPnRarefactionConfigDialog(false, false);
 

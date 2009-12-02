@@ -482,7 +482,7 @@ void ShockContinuationMethod::curve(const RealVector & input, int direction, vec
             output.push_back(outputPoint);
 
             step++;
-            cout << "Step: " << step << endl;
+            //cout << "Step: " << step << endl;
 
         } else {
             cout << "ELSE" << endl;

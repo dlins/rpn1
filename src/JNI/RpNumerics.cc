@@ -17,11 +17,15 @@
  */
 
 //#include "rpnumerics_RpNumerics.h"
+#include <stdlib.h>
+
 #include "rpnumerics_RPNUMERICS.h"
 
 #include "RpNumerics.h"
 #include "Quad2.h"
 #include "Quad2FluxParams.h"
+#include "Quad3.h"
+#include "Quad3FluxParams.h"
 #include "Quad4.h"
 #include "Quad4FluxParams.h"
 #include "TriPhase.h"
@@ -269,6 +273,12 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initNative(JNIEnv * env, jclas
 
     }
 
+    if (!strcmp(physicsID, "QuadraticR3")) {
+        printf("Hi\n");
+        RpNumerics::setPhysics(Quad3(Quad3FluxParams()));
+        printf("Hi\n");
+    }
+
     if (!strcmp(physicsID, "QuadraticR4")) {
         RpNumerics::setPhysics(Quad4(Quad4FluxParams()));
 
@@ -304,6 +314,12 @@ JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_init(JNIEnv * env, jclass cls,
     if (!strcmp(physicsID, "QuadraticR2")) {
 
         RpNumerics::setPhysics(Quad2(Quad2FluxParams()));
+
+    }
+
+    if (!strcmp(physicsID, "QuadraticR3")) {
+
+        RpNumerics::setPhysics(Quad3(Quad3FluxParams()));
 
     }
 

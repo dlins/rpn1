@@ -219,12 +219,11 @@ int ContinuationShockFlow::flux(const RealVector &input, RealVector & output) {
 }
 
 int ContinuationShockFlow::fluxDeriv(const RealVector &, JacobianMatrix &) {
-
-    cout <<"Chamando flux Deriv"<<endl;
-    
+    //cout <<"Calling flux Deriv"<<endl;
 }
+
 int ContinuationShockFlow::fluxDeriv2(const RealVector &, HessianMatrix &) {
-    cout << "Chamando flux Deriv2" << endl;
+    //cout << "Calling flux Deriv2" << endl;
 }
 
 WaveFlow * ContinuationShockFlow::clone()const {

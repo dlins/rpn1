@@ -32,7 +32,7 @@ public class FluxFunction implements RpFunction {
     
     public FluxFunction (){
         // TODO HARDCODED TO QUAD2
-        System.out.println("Construindo flux function em Java");
+        //System.out.println("Construindo flux function em Java");
 
 
 //        int m = 2;
