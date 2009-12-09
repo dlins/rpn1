@@ -23,7 +23,6 @@
 #include "RpnPlugin.h"
 #include "ShockFlow.h"
 #include "Quad2FluxFunction.h"
-#include "Quad3FluxFunction.h"
 
 class ShockFlowPlugin : public RpnPlugin, public ShockFlow {
 

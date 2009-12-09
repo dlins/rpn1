@@ -133,7 +133,7 @@
             <sysproperty key="RPHOSTTYPE" value="${hosttype}"/>
             <jvmarg value="-Xmx256m"/>
 
-            <arg value="${basedir}/in/quad3.xml"/>
+            <arg value="${basedir}/in/quad2.xml"/>
         </java>
     </target>
 

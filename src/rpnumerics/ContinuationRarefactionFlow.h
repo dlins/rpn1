@@ -123,7 +123,6 @@ private:
 public:
     ContinuationRarefactionFlow(const int, const int, const FluxFunction &);
     ContinuationRarefactionFlow(const RealVector, const int, const int, const FluxFunction &);
-    ContinuationRarefactionFlow(const ContinuationRarefactionFlow &);
 
     int flux(int n, int family, double *in, double *lambda, double *out);
 
