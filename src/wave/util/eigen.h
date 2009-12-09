@@ -30,7 +30,7 @@ void fill_eigen(struct eigen* , double* , double*, double*, double*);
 //void print_eigen_struct(struct eigen*);
  int eigen_comp(const void*, const void*);
 void sort_eigen(struct eigen*);
-void transpose(double*, int);
+//void transpose(double*, int);
 
 
 //LAPACK prototype

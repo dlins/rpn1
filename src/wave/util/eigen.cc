@@ -160,19 +160,19 @@ void sort_eigen(struct eigen e[]){
 }
 
 // Transpose a square matrix, rewriting the original
-void transpose(double A[], int n){
-    int i, j;
-    double temp;
-    
-    for (i = 0; i < n; i++){
-        for (j = i; j < n; j++){
-            temp = A[i*n + j];
-            A[i*n + j] = A[j*n + i];
-            A[j*n + i] = temp;
-        }
-    }
-    return;
-}
+//void transpose(double A[], int n){
+//    int i, j;
+//    double temp;
+//
+//    for (i = 0; i < n; i++){
+//        for (j = i; j < n; j++){
+//            temp = A[i*n + j];
+//            A[i*n + j] = A[j*n + i];
+//            A[j*n + i] = temp;
+//        }
+//    }
+//    return;
+//}
 
 // Eigenproblem
 // This function computes the eigenvalues and right-eigenvectors of a matrix

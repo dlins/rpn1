@@ -31,7 +31,7 @@
  */
 
 class RarefactionFlow : public WaveFlow {
-protected:
+private:
 
     int familyIndex_;
 

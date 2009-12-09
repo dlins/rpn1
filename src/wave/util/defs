@@ -25,6 +25,7 @@ WAVESRC += ADTADV.cc		\
 	Vector.cc               \
 	polyroot.cc		\
 	mathutil.cc		\
+        eigenNovo.cc            \
 
 CPPFLAGS += -I $(UTILDIR)
 

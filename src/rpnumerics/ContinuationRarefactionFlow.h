@@ -20,6 +20,7 @@
 #include "HessianMatrix.h"
 #include "RarefactionFlow.h"
 #include "eigen.h"
+#include "eigenNovo.h"
 
 
 /*
@@ -49,12 +50,6 @@
 // a function invoking another function MUST check wether the invoked function
 // could or could not successfully perform its task.
 //
-#define SUCCESSFUL_PROCEDURE 2                    
-#define ABORTED_PROCEDURE (-7)
-#define COMPLEX_EIGENVALUE (-7)
-#define LAMBDA_ERROR (-7)
-#define LAMBDA_NOT_INCREASING (-7)
-#define LAMBDA_NOT_DECREASING (-7)
 
 
 
@@ -69,23 +64,6 @@ extern"C" {
 
 class ContinuationRarefactionFlow : public RarefactionFlow {
 private:
-
-    // The structure that holds an eigencouple
-    /*
-    struct eigen{
-        double r;            // Eigenvalue's real part
-        double i;            // Eigenvalue's imaginary part
-        double vlr[EIG_MAX]; // Left-eigenvector's real part
-        double vli[EIG_MAX]; // Left-eigenvector's imaginary part
-        double vrr[EIG_MAX]; // Right-eigenvector's real part
-        double vri[EIG_MAX]; // Right-eigenvector's imaginary part
-    
-        int n: EIG_MAX;     // Probably not necessary!
-                            // See what is to be done in case of non-trivial Jordan canonical forms
-    };
-     */
-
-    int cdgeev(int n, double *A, struct eigen *e) const;
 
     void fill_with_jet(const FluxFunction & flux_object, int n, double *in, int degree, double *F, double *J, double *H);
 
@@ -139,8 +117,6 @@ public:
     void setReferenceVectorComponent(const int, const double);
 
     double getReferenceVectorComponent(const int)const;
-
-
 
     virtual ~ContinuationRarefactionFlow();
 

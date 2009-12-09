@@ -53,8 +53,9 @@ int ShockContinuationMethod::shockinit(int n, double Um[], int family, int incre
     fill_with_jet(shock_flux_object, n, Um, 1, 0, &J[0][0], 0);
 
     // Find the eigenpairs of J:
-    struct eigen e[n];
-    if (cdgeev(n, &J[0][0], &e[0]) == ABORTED_PROCEDURE) {
+     vector<eigencouple> e;
+    int info = Eigen::eig(n, &J[0][0], e);
+        if (info == ABORTED_PROCEDURE) {
 #ifdef TEST_SHOCK
         printf("Inside shockinit(): cdgeev() aborted!\n");
 #endif
@@ -126,123 +127,6 @@ int ShockContinuationMethod::shockinit(int n, double Um[], int family, int incre
     } else return ABORTED_PROCEDURE;
 
     return SUCCESSFUL_PROCEDURE;
-}
-
-int ShockContinuationMethod::cdgeev(int n, double *A, struct eigen *e)const {
-
-    int lda = n, lwork = 5 * n, ldvr = n, ldvl = n;
-    int i, j, info;
-    double vr[n][n], vl[n][n];
-    double work[5 * n], wi[n], wr[n];
-
-    if (n == 1) {
-        double Delta = (A[0] - A[3])*(A[0] - A[3]) + 4 * A[1] * A[2];
-        if (Delta >= 0) {
-            // Eigenvalues and eigenvectors are real.
-
-            // Eigenvalues
-            double sqrtDelta = sqrt(Delta);
-            double bminus = A[0] + A[3];
-
-            if (bminus > 0) {
-                wr[0] = .5 * (bminus + sqrtDelta);
-                wr[1] = .5 * (bminus * bminus - Delta) / (bminus + sqrtDelta);
-            } else {
-                wr[0] = .5 * (bminus - sqrtDelta);
-                wr[1] = .5 * (bminus * bminus - Delta) / (bminus - sqrtDelta);
-            }
-
-            //wr[0] = (A[0] + A[3] - sqrtDelta)/2;
-            //wr[1] = (A[0] + A[3] + sqrtDelta)/2;
-
-            wi[0] = 0;
-            wi[1] = 0;
-
-            // First right-eigenvector
-            if (A[0] == wr[0]) {
-                vr[0][0] = 1;
-                vr[0][1] = 0;
-            } else {
-                vr[0][0] = A[1] / (wr[0] - A[0]);
-                vr[0][1] = 1;
-            }
-            // Second right-eigenvector
-            if (A[3] == wr[1]) {
-                vr[1][0] = 0;
-                vr[1][1] = 1;
-            } else {
-                vr[1][0] = 1;
-                vr[1][1] = A[2] / (wr[1] - A[3]);
-            }
-
-            // First left-eigenvector
-            if (A[0] == wr[0]) {
-                vl[0][0] = 1;
-                vl[0][1] = 0;
-            } else {
-                vl[0][0] = A[2] / (wr[0] - A[0]);
-                vl[0][1] = 1;
-            }
-            // Second left-eigenvector
-            if (A[3] == wr[1]) {
-                vl[1][0] = 0;
-                vl[1][1] = 1;
-            } else {
-                vl[1][0] = 1;
-                vl[1][1] = A[1] / (wr[1] - A[3]);
-            }
-
-            // Normalize
-            for (i = 0; i < 2; i++) {
-                double sqrtlength;
-
-                // Right-eigenvectors
-                sqrtlength = sqrt(vr[i][0] * vr[i][0] + vr[i][1] * vr[i][1]);
-                if (sqrtlength != 0) {
-                    vr[i][0] = vr[i][0] / sqrtlength;
-                    vr[i][1] = vr[i][1] / sqrtlength;
-                }
-
-                // Left-eigenvectors
-                sqrtlength = sqrt(vl[i][0] * vl[i][0] + vl[i][1] * vl[i][1]);
-                if (sqrtlength != 0) {
-                    vl[i][0] = vl[i][0] / sqrtlength;
-                    vl[i][1] = vl[i][1] / sqrtlength;
-                }
-            }
-        } else {
-            // Eigenvalues and eigenvectors are complex.
-            wr[0] = (A[0] + A[3]) / 2;
-            wr[1] = wr[0];
-
-            wi[0] = fabs(-sqrt(-Delta) / 2);
-            wi[1] = -wi[0];
-
-            // Eigenvectors will not be computed because
-            // they will not be used in this case anyway.
-        }
-        info = 0;
-    } else {
-        // Create a transposed copy of A to be used by LAPACK's dgeev:
-        double B[n][n];
-        for (i = 0; i < n; i++) {
-            for (j = 0; j < n; j++) B[j][i] = A[i * n + j];
-        }
-
-        dgeev_("V", "V", &n, &B[0][0], &lda, &wr[0], &wi[0],
-                &vl[0][0], &ldvl, &vr[0][0], &ldvr, &work[0], &lwork,
-                &info);
-    }
-
-    // Process the results
-    if (info != 0) return ABORTED_PROCEDURE;
-    else {
-        transpose(&vl[0][0], n); // ...or else...
-        transpose(&vr[0][0], n); // ...or else...
-        fill_eigen(e, &wr[0], &wi[0], &vl[0][0], &vr[0][0]);
-        sort_eigen(e);
-        return SUCCESSFUL_PROCEDURE;
-    }
 }
 
 void ShockContinuationMethod::fill_with_jet(const FluxFunction & flux_object, int n, double *in, int degree, double *F, double *J, double *H) {
@@ -495,7 +379,7 @@ void ShockContinuationMethod::curve(const RealVector & input, int direction, vec
 }
 
 ShockContinuationMethod::~ShockContinuationMethod() {
-    //    delete solver_;
+
 }
 
 

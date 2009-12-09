@@ -15,6 +15,7 @@
  */
 #include "ShockFlow.h"
 #include "eigen.h"
+#include "eigenNovo.h"
 
 /*
  * ---------------------------------------------------------------
@@ -38,7 +39,6 @@ private:
 
     int familyIndex_;
     int direction_;
-    int cdgeev(int n, double *A, struct eigen *e) const;
     void fill_with_jet(const FluxFunction & flux_object, int n, double *in, int degree, double *F, double *J, double *H);
     RealVector *startPoint_;
     RealVector *referenceVector_;

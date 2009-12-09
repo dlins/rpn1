@@ -17,6 +17,7 @@
 #include "RarefactionFlow.h"
 #include "ShockFlow.h"
 #include "eigen.h"
+#include "eigenNovo.h"
 
 /*
  * ---------------------------------------------------------------
@@ -43,7 +44,6 @@ private:
 
     void fill_with_jet(const FluxFunction & flux_object, int n, double *in, int degree, double *F, double *J, double *H);
 
-    int cdgeev(int n, double *A, struct eigen *e) const;
 
     int cdgesv(int n, double *A, double *b, double *x);
 
