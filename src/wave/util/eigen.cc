@@ -1,4 +1,4 @@
-#include "eigenNovo.h"
+#include "eigen.h"
 
 // Initialize the value of the epsilon
 double Eigen::epsilon(1e-10);

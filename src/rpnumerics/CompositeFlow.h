@@ -16,7 +16,7 @@
 #include "WaveFlow.h"
 #include "RarefactionFlow.h"
 #include "ShockFlow.h"
-#include "eigenNovo.h"
+#include "eigen.h"
 
 /*
  * ---------------------------------------------------------------

@@ -14,7 +14,7 @@
  * Includes:
  */
 #include "ShockFlow.h"
-#include "eigenNovo.h"
+#include "eigen.h"
 
 /*
  * ---------------------------------------------------------------

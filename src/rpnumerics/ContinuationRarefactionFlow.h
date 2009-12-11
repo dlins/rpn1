@@ -19,7 +19,7 @@
 #include "JacobianMatrix.h"
 #include "HessianMatrix.h"
 #include "RarefactionFlow.h"
-#include "eigenNovo.h"
+#include "eigen.h"
 
 
 /*
