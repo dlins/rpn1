@@ -19,7 +19,6 @@
 #include "JacobianMatrix.h"
 #include "HessianMatrix.h"
 #include "RarefactionFlow.h"
-#include "eigen.h"
 #include "eigenNovo.h"
 
 
@@ -36,7 +35,9 @@
 // Epsilon value, minimum threshold. 
 // Any number x such that abs(x) < EPS will be considered 
 // equal to zero in certain circumstances
-#define EPS 1e-30      
+#define EPS 1e-30
+
+#define EIG_MAX 2 //used to be 3
 
 // Maximum number of points in the orbit
 #define PNT_MAX 10000  
@@ -51,13 +52,7 @@
 // could or could not successfully perform its task.
 //
 
-
-
 extern"C" {
-    void dgeev_(char *, char *, int *, double *, int*, double *, double *,
-            double *, int *, double *, int *, double *, int *,
-            int *);
-
 
     double ddot_(int *, double *, int *, double *, int *);
 }
@@ -66,16 +61,9 @@ class ContinuationRarefactionFlow : public RarefactionFlow {
 private:
 
     void fill_with_jet(const FluxFunction & flux_object, int n, double *in, int degree, double *F, double *J, double *H);
-
-
-    void transpose(double A[], int n)const;
-    void fill_eigen(struct eigen e[], double rp[], double ip[], double vl[], double vr[])const;
-    void sort_eigen(struct eigen e[])const;
-    static int eigen_comp(const void *p1, const void *p2);
     void applyH(int n, double *xi, double *H, double *eta, double *out)const;
-
     void matrixmult(int m, int p, int n, double *A, double *B, double *C)const;
-
+  
 
     // Last viable eigenvalue
     double lasteigenvalue;
@@ -93,23 +81,18 @@ private:
     // must be positive.
     double re[EIG_MAX];
 
-
     int rarefaction(int *neq, double *xi, double *in, double *out, int *nparam, double *param);
-
-
 
 public:
     ContinuationRarefactionFlow(const int, const int, const FluxFunction &);
     ContinuationRarefactionFlow(const RealVector, const int, const int, const FluxFunction &);
 
     int flux(int n, int family, double *in, double *lambda, double *out);
+    double prodint(int n, double *a, double *b)const;
 
     int flux(const RealVector &, RealVector &);
     int fluxDeriv(const RealVector &, JacobianMatrix &);
     int fluxDeriv2(const RealVector &, HessianMatrix &);
-
-
-    double prodint(int n, double *a, double *b)const;
 
     WaveFlow * clone()const;
 

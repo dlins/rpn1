@@ -17,7 +17,6 @@
 #include <stdlib.h>	// only needed for exit()
 #include <iostream>
 #include "except.h"
-//#include "eigen.h"
 
 using namespace std;
 

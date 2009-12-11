@@ -14,7 +14,6 @@
  * Includes:
  */
 #include "ShockFlow.h"
-#include "eigen.h"
 #include "eigenNovo.h"
 
 /*
@@ -22,15 +21,8 @@
  * Definitions:
  */
 
-#define SUCCESSFUL_PROCEDURE 2                    
-#define ABORTED_PROCEDURE (-7)
 
 extern"C" {
-    void dgeev_(char *, char *, int *, double *, int*, double *, double *,
-            double *, int *, double *, int *, double *, int *,
-            int *);
-
-
     double ddot_(int *, double *, int *, double *, int *);
 }
 
