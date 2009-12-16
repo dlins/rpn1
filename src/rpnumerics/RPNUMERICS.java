@@ -200,33 +200,33 @@ public class RPNUMERICS {
         BifurcationCurveCalc bifurcationCurveCalc = null;
         BifurcationParams params = null;
 
-        if (SELCTIONACTIVE) {
-
-            RealVector min = new RealVector(2);
-            RealVector max = new RealVector(2);
-
-            min.setElement(0, AREA_TOP.getElement(0));
-            min.setElement(1, AREA_DOWN.getElement(1));
-
-            max.setElement(0, AREA_DOWN.getElement(0));
-            max.setElement(1, AREA_TOP.getElement(1));
-
-            System.out.println(AREA_TOP);
-            System.out.println(AREA_DOWN);
-
-
-            Boundary boundary = new RectBoundary(min, max);
-            bifurcationProfile_.setBoundary(boundary);
-
-            params = new BifurcationParams(boundary);
-
-
-
-        } else {
+//        if (SELCTIONACTIVE) {
+//
+//            RealVector min = new RealVector(2);
+//            RealVector max = new RealVector(2);
+//
+//            min.setElement(0, AREA_TOP.getElement(0));
+//            min.setElement(1, AREA_DOWN.getElement(1));
+//
+//            max.setElement(0, AREA_DOWN.getElement(0));
+//            max.setElement(1, AREA_TOP.getElement(1));
+//
+//            System.out.println(AREA_TOP);
+//            System.out.println(AREA_DOWN);
+//
+//
+//            Boundary boundary = new RectBoundary(min, max);
+//            bifurcationProfile_.setBoundary(boundary);
+//
+//            params = new BifurcationParams(boundary);
+//
+//
+//
+//        } else {
 
             params = new BifurcationParams(boundary());
 
-        }
+//        }
 
         bifurcationCurveCalc = new BifurcationCurveCalc(params);
 

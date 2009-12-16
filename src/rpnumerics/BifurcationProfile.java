@@ -1,5 +1,6 @@
 package rpnumerics;
 
+import java.util.ArrayList;
 import wave.util.Boundary;
 
 public class BifurcationProfile {
@@ -7,21 +8,13 @@ public class BifurcationProfile {
     private static int plusFamily_;
     private static int minusFamily_;
     private static BifurcationProfile instance_;
-
+    private ArrayList<Area> selectedAreas_;
     private Boundary boundary_;
-
-    public Boundary getBoundary() {
-        return boundary_;
-    }
-
-    public void setBoundary(Boundary boundary) {
-        this.boundary_ = boundary;
-    }
-
 
     private BifurcationProfile() {
         minusFamily_ = 0;
         plusFamily_ = 0;
+        selectedAreas_ = new ArrayList<Area>();
     }
 
     public static BifurcationProfile instance() {
@@ -34,11 +27,11 @@ public class BifurcationProfile {
         return instance_;
     }
 
-    public  int getPlusFamily() {
+    public int getPlusFamily() {
         return plusFamily_;
     }
 
-    public  void setPlusFamily(int aPlusFamily_) {
+    public void setPlusFamily(int aPlusFamily_) {
         plusFamily_ = aPlusFamily_;
     }
 
@@ -46,7 +39,23 @@ public class BifurcationProfile {
         return minusFamily_;
     }
 
-    public  void setMinusFamily(int aMinusFamily_) {
+    public void setMinusFamily(int aMinusFamily_) {
         minusFamily_ = aMinusFamily_;
+    }
+
+    public Boundary getBoundary() {
+        return boundary_;
+    }
+
+    public void setBoundary(Boundary boundary) {
+        this.boundary_ = boundary;
+    }
+
+    public ArrayList<Area> getSelectedAreas() {
+        return selectedAreas_;
+    }
+
+    public void addArea(Area area) {
+        selectedAreas_.add(area);
     }
 }

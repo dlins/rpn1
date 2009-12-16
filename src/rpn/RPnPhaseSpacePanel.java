@@ -27,7 +27,9 @@ import com.sun.image.codec.jpeg.JPEGCodec;
 import javax.swing.JPanel;
 import java.io.FileOutputStream;
 import java.awt.Shape;
+import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
+import rpnumerics.BifurcationProfile;
 
 public class RPnPhaseSpacePanel extends JPanel implements Printable {
     //
@@ -164,6 +166,13 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
 
         g.setColor(DEFAULT_POINTMARK_COLOR);
 
+        for (rpnumerics.Area selectedArea : BifurcationProfile.instance().getSelectedAreas()){
+
+        }
+
+
+
+
         for (Rectangle2D.Double rectangle : getCastedUI().getSelectionAreas()) {
 
             g.drawRect((int) rectangle.getX(), (int) rectangle.getY(), (int) rectangle.width, (int) rectangle.height);
@@ -274,4 +283,9 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         }
 
     }
+
+
+
+
+
 }

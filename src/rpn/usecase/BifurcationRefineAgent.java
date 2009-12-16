@@ -45,7 +45,7 @@ public class BifurcationRefineAgent extends RpModelPlotAgent {
         BifurcationCurveGeomFactory factory = new BifurcationCurveGeomFactory(curveCalc);
         AreaSelectionAgent.instance().getContainer().setSelected(false);
         AreaSelectionAgent.instance().eraseArea();
-        removeBifurcationError();
+//        removeBifurcationError();
         getContainer().setEnabled(false);
 
         return factory.geom();
@@ -59,91 +59,91 @@ public class BifurcationRefineAgent extends RpModelPlotAgent {
         return instance_;
     }
 
-    private void removeBifurcationError() {
-
-        Point topLeft = toDCcoords(RPNUMERICS.AREA_TOP);
-        Point downRight = toDCcoords(RPNUMERICS.AREA_DOWN);
-
-        double width = downRight.x - topLeft.x;
-        double heigh = downRight.y - topLeft.y;
-
-        Rectangle2D.Double rectangle = new Rectangle2D.Double(topLeft.x, topLeft.y, width, heigh);
-
-        Iterator geometriesIterator = RPnDataModule.PHASESPACE.getGeomObjIterator();
-
-        while (geometriesIterator.hasNext()) {
-
-            RpGeometry geometry = (RpGeometry) geometriesIterator.next();
-
-            if (geometry instanceof BifurcationCurveGeom) {
-
-                BifurcationCurveGeomFactory factory = (BifurcationCurveGeomFactory) geometry.geomFactory();
-                BifurcationCurve curve = (BifurcationCurve) factory.geomSource();
-
-                List segmentsList = curve.segments();
-                boolean toRemove = false;
-
-                for (int i = 0; i < segmentsList.size(); i++) {
-
-                    RealSegment segment = (RealSegment) segmentsList.get(i);
-
-                    RealVector point1 = segment.p1();
-                    RealVector point2 = segment.p2();
-
-                    Point dcPoint1 = toDCcoords(point1);
-                    Point dcPoint2 = toDCcoords(point2);
-
-                    Line2D.Double bifurcationSegment = new Line2D.Double(dcPoint1, dcPoint2);
-
-                    if (rectangle.intersectsLine(bifurcationSegment)) {
-                        segmentsList.remove(i);
-                        toRemove = true;
-                    }
-
-                }
-
-
-                if (toRemove) {
-                    RPnDataModule.PHASESPACE.delete(geometry);
-                    RPnDataModule.PHASESPACE.update();
-                    BifurcationSegGeom[] newBifurcationSegs = new BifurcationSegGeom[segmentsList.size()];
-
-                    for (int i = 0; i < segmentsList.size(); i++) {
-
-                        newBifurcationSegs[i] = new BifurcationSegGeom((RealSegment) segmentsList.get(i));
-                    }
-
-
-                    BifurcationCurveGeom bifurcationCurveGeom = new BifurcationCurveGeom(newBifurcationSegs, factory);
-                    RPnDataModule.PHASESPACE.join(bifurcationCurveGeom);
-                    RPnDataModule.PHASESPACE.update();
-
-                }
-
-
-            }
-
-        }
-
-
-
-
-
-
-    }
-
-    private Point toDCcoords(RealVector input) {
-
-        Coords2D wcCoords = new Coords2D(input.getElement(0), input.getElement(1));
-
-        Coords2D dcCoords = new Coords2D();
-        ViewingTransform viewingTransf = UIController.instance().getFocusPanel().scene().getViewingTransform();
-        viewingTransf.viewPlaneTransform(wcCoords, dcCoords);
-
-        Point point = new Point((int) dcCoords.getX(), (int) dcCoords.getY());
-
-        return point;
-
-
-    }
+//    private void removeBifurcationError() {
+//
+//        Point topLeft = toDCcoords(RPNUMERICS.AREA_TOP);
+//        Point downRight = toDCcoords(RPNUMERICS.AREA_DOWN);
+//
+//        double width = downRight.x - topLeft.x;
+//        double heigh = downRight.y - topLeft.y;
+//
+//        Rectangle2D.Double rectangle = new Rectangle2D.Double(topLeft.x, topLeft.y, width, heigh);
+//
+//        Iterator geometriesIterator = RPnDataModule.PHASESPACE.getGeomObjIterator();
+//
+//        while (geometriesIterator.hasNext()) {
+//
+//            RpGeometry geometry = (RpGeometry) geometriesIterator.next();
+//
+//            if (geometry instanceof BifurcationCurveGeom) {
+//
+//                BifurcationCurveGeomFactory factory = (BifurcationCurveGeomFactory) geometry.geomFactory();
+//                BifurcationCurve curve = (BifurcationCurve) factory.geomSource();
+//
+//                List segmentsList = curve.segments();
+//                boolean toRemove = false;
+//
+//                for (int i = 0; i < segmentsList.size(); i++) {
+//
+//                    RealSegment segment = (RealSegment) segmentsList.get(i);
+//
+//                    RealVector point1 = segment.p1();
+//                    RealVector point2 = segment.p2();
+//
+//                    Point dcPoint1 = toDCcoords(point1);
+//                    Point dcPoint2 = toDCcoords(point2);
+//
+//                    Line2D.Double bifurcationSegment = new Line2D.Double(dcPoint1, dcPoint2);
+//
+//                    if (rectangle.intersectsLine(bifurcationSegment)) {
+//                        segmentsList.remove(i);
+//                        toRemove = true;
+//                    }
+//
+//                }
+//
+//
+//                if (toRemove) {
+//                    RPnDataModule.PHASESPACE.delete(geometry);
+//                    RPnDataModule.PHASESPACE.update();
+//                    BifurcationSegGeom[] newBifurcationSegs = new BifurcationSegGeom[segmentsList.size()];
+//
+//                    for (int i = 0; i < segmentsList.size(); i++) {
+//
+//                        newBifurcationSegs[i] = new BifurcationSegGeom((RealSegment) segmentsList.get(i));
+//                    }
+//
+//
+//                    BifurcationCurveGeom bifurcationCurveGeom = new BifurcationCurveGeom(newBifurcationSegs, factory);
+//                    RPnDataModule.PHASESPACE.join(bifurcationCurveGeom);
+//                    RPnDataModule.PHASESPACE.update();
+//
+//                }
+//
+//
+//            }
+//
+//        }
+//
+//
+//
+//
+//
+//
+//    }
+//
+//    private Point toDCcoords(RealVector input) {
+//
+//        Coords2D wcCoords = new Coords2D(input.getElement(0), input.getElement(1));
+//
+//        Coords2D dcCoords = new Coords2D();
+//        ViewingTransform viewingTransf = UIController.instance().getFocusPanel().scene().getViewingTransform();
+//        viewingTransf.viewPlaneTransform(wcCoords, dcCoords);
+//
+//        Point point = new Point((int) dcCoords.getX(), (int) dcCoords.getY());
+//
+//        return point;
+//
+//
+//    }
 }
