@@ -16,9 +16,7 @@ import wave.util.RealVector;
 
 public class SCRATCH_CONFIG extends UI_ACTION_SELECTED {
     
-    private JPanel selectedPanel_;
-    
-    public SCRATCH_CONFIG() {
+      public SCRATCH_CONFIG() {
         
         super(ChangeDirectionAgent.instance());
         
@@ -47,8 +45,7 @@ public class SCRATCH_CONFIG extends UI_ACTION_SELECTED {
             
             ui.getFocusPanel().getCastedUI().pointMarkBuffer().add
                     (point); 
-            System.out.println("Ponto: " + point);
-            
+                        
         }
         ui.getFocusPanel().repaint();
     }

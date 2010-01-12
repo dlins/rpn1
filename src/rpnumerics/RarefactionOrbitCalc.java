@@ -60,7 +60,6 @@ public class RarefactionOrbitCalc implements RpCalculation {
     // Methods
     //
     public RpSolution recalc() throws RpException {
-//        solver_.getProfile().setFunction(new FlowVectorField(RPNUMERICS.createRarefactionFlow()));
         return calc();
 
     }

@@ -24,10 +24,10 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     //
     // Members
     //
+
     private JPanel contentPane;
-    private JPanel configPanel_ = new JPanel(new GridLayout(2,1));
+    private JPanel configPanel_ = new JPanel(new GridLayout(2, 1));
     private JComboBox stateComboBox = new JComboBox();
-    
     private JMenuBar jMenuBar1 = new JMenuBar();
     private JMenu editMenu = new JMenu();
     private JMenu fileMenu = new JMenu();
@@ -52,8 +52,11 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JCheckBoxMenuItem showCursorMenuItem_ = new JCheckBoxMenuItem("Show Cursor Lines");
     private JToolBar toolBar_ = new JToolBar();
     private static JLabel statusLabel_ = new JLabel();
-    
     private JMenu viewMenu_ = new JMenu("View");
+    private JCheckBoxMenuItem showCurvesPaneltem_= new JCheckBoxMenuItem("Show Curves Window",true);
+    private JFrame curvesFrame_;
+
+
 
     //Construct the frame
     public RPnUIFrame(RPnMenuCommand command) {
@@ -86,6 +89,13 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     //
     // Methods
     //
+
+     public void setCurvesFrame(JFrame curvesFrame) {
+        this.curvesFrame_ = curvesFrame;
+        UIController.instance().showCurvesPanel(showCurvesPaneltem_.isSelected());
+
+    }
+
     public void propertyChange(PropertyChangeEvent evt) {
 
         if (evt.getPropertyName().equals("aplication state")) {
@@ -93,7 +103,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             toolBar_.setLayout(new GridLayout(8, 2));
             toolBar_.setOrientation(SwingConstants.VERTICAL);
 
-            if (UIController.instance().getState() instanceof SHOCK_CONFIG || (evt.getNewValue() instanceof SIGMA_CONFIG)|| evt.getNewValue() instanceof SHOCK_CONFIG) {
+            if (UIController.instance().getState() instanceof SHOCK_CONFIG || (evt.getNewValue() instanceof SIGMA_CONFIG) || evt.getNewValue() instanceof SHOCK_CONFIG) {
 
                 shockConfigMenu();
                 toolBar_.removeAll();
@@ -156,6 +166,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
     }
     //File | Exit action performed
+
     public void jMenuFileExit_actionPerformed(ActionEvent e) {
         commandMenu_.finalizeApplication();
     }
@@ -238,6 +249,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         }
     }
     // from here on just for 2D for now...
+
     void createJPEGImage_actionPerformed(ActionEvent e) {
         JFileChooser chooser = new JFileChooser();
         try {
@@ -302,9 +314,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         stateComboBox.addItem("Wave Curves");
         stateComboBox.addItem("Bifurcation Curves");
         stateComboBox.addActionListener(new StateHandler());
-        
+
         configPanel_.add(stateComboBox);
-        
+
         contentPane = (JPanel) this.getContentPane();
         contentPane.setLayout(borderLayout1);
         this.setSize(new Dimension(400, 300));
@@ -321,13 +333,25 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         KeyStroke keyStroke = KeyStroke.getKeyStroke('l');
         showCursorMenuItem_.setAccelerator(keyStroke);
 
-       
+
 
         showCursorMenuItem_.addActionListener(
                 new java.awt.event.ActionListener() {
 
                     public void actionPerformed(ActionEvent e) {
                         UIController.instance().showCursorLines(showCursorMenuItem_.isSelected());
+
+
+                    }
+                });
+
+
+        showCurvesPaneltem_.addActionListener(
+                new java.awt.event.ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+
+                        UIController.instance().showCurvesPanel(showCurvesPaneltem_.isSelected());
 
 
                     }
@@ -435,6 +459,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         jMenuBar1.add(editMenu);
         jMenuBar1.add(viewMenu_);
         viewMenu_.add(showCursorMenuItem_);
+        viewMenu_.add(showCurvesPaneltem_);
         jMenuBar1.add(modelInteractionMenu);
 
         toolBar_.setFloatable(false);
@@ -556,37 +581,38 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     public RPnPhaseSpaceFrame[] getPhaseSpaceFrames() {
         return frames_;
     }
-    
-    
-    private class StateHandler implements ActionListener{
+
+    public void showCurvesPanel(boolean show) {
+            curvesFrame_.setVisible(show);
+
+    }
+
+    private class StateHandler implements ActionListener {
 
         public void actionPerformed(ActionEvent e) {
-            
-              UI_ACTION_SELECTED newState = null;
 
-        if (stateComboBox.getSelectedItem().equals("Phase Diagram")) {
+            UI_ACTION_SELECTED newState = null;
 
-            newState = new SHOCK_CONFIG();
-            RPNUMERICS.getShockProfile().setHugoniotMethodName(ShockProfile.HUGONIOT_METHOD_NAMES[1]);
+            if (stateComboBox.getSelectedItem().equals("Phase Diagram")) {
+
+                newState = new SHOCK_CONFIG();
+                RPNUMERICS.getShockProfile().setHugoniotMethodName(ShockProfile.HUGONIOT_METHOD_NAMES[1]);
+
+            }
+
+            if (stateComboBox.getSelectedItem().equals("Wave Curves")) {
+                newState = new RAREFACTION_CONFIG();
+                RPNUMERICS.getShockProfile().setHugoniotMethodName(ShockProfile.HUGONIOT_METHOD_NAMES[0]);
+
+            }
+            if (stateComboBox.getSelectedItem().equals("Bifurcation Curves")) {
+                newState = new BIFURCATION_CONFIG();
+                rpn.usecase.BifurcationPlotAgent.instance().setEnabled(true);
+
+            }
+
+            UIController.instance().setState(newState);
 
         }
-
-        if (stateComboBox.getSelectedItem().equals("Wave Curves")) {
-            newState = new RAREFACTION_CONFIG();
-            RPNUMERICS.getShockProfile().setHugoniotMethodName(ShockProfile.HUGONIOT_METHOD_NAMES[0]);
-
-        }
-        if (stateComboBox.getSelectedItem().equals("Bifurcation Curves")) {
-            newState = new BIFURCATION_CONFIG();
-            rpn.usecase.BifurcationPlotAgent.instance().setEnabled(true);
-
-        }
-
-        UIController.instance().setState(newState);
-            
-        }
-        
     }
-    
-    
 }

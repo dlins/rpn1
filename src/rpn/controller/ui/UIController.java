@@ -116,6 +116,10 @@ public class UIController extends ComponentUI {
         return instance_;
     }
 
+    public void showCurvesPanel(boolean selected) {
+        RPnDesktopPlotter.getUIFrame().showCurvesPanel(selected);
+    }
+
     //
     // Inner Classes
     //
@@ -148,7 +152,7 @@ public class UIController extends ComponentUI {
         public MouseController() {
         }
 
-            @Override
+        @Override
         public void mousePressed(MouseEvent event) {
 
             if (event.getComponent() instanceof RPnPhaseSpacePanel) {
@@ -280,7 +284,7 @@ public class UIController extends ComponentUI {
 
     /** Sets the state of the application. The application works as a state machine and this method changes the actual state.*/
     public void setState(rpn.controller.ui.UserInputHandler newAction) {
-        
+
         stateController_.propertyChange(new PropertyChangeEvent(this, "aplication state", handler_, newAction));
 
         if (handler_ instanceof UI_ACTION_SELECTED) {
@@ -363,5 +367,4 @@ public class UIController extends ComponentUI {
     public void setStateController(StateInputController stateController) {
         stateController_ = stateController;
     }
-
 }

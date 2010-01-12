@@ -15,7 +15,7 @@
  */
 #include "ODEStopGenerator.h"
 #include "LSODEProfile.h"
-#define SUCCESSFUL_PROCEDURE 2
+//#define SUCCESSFUL_PROCEDURE 2
 //#define ABORTED_PROCEDURE(-7)
 //#define COMPLEX_EIGENVALUE(-7)
 //#define LAMBDA_ERROR(-7)

@@ -26,7 +26,7 @@ RarefactionFlow::RarefactionFlow(const RarefactionFlow & copy ):WaveFlow(copy.fl
 }
 
 
-RarefactionFlow::RarefactionFlow(const RealVector referenceVector,const int familyIndex, const int timeDirection, const FluxFunction & flux):WaveFlow(flux){
+RarefactionFlow::RarefactionFlow(const RealVector  & referenceVector,const int familyIndex, const int timeDirection, const FluxFunction & flux):WaveFlow(flux){
     
     timeDirection_=timeDirection;
     familyIndex_= familyIndex;
@@ -35,15 +35,8 @@ RarefactionFlow::RarefactionFlow(const RealVector referenceVector,const int fami
 }
 
 
-RarefactionFlow::RarefactionFlow(const int familyIndex, const int timeDirection, const FluxFunction & flux):WaveFlow(flux){
-    
-    timeDirection_=timeDirection;
-    familyIndex_= familyIndex;
-    referenceVector_ = new RealVector(flux.fluxParams().params().size());
-    
-}
-
 RarefactionFlow::~RarefactionFlow() {
+
     delete referenceVector_;
 }
 

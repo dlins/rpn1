@@ -32,7 +32,8 @@ class RarefactionFlowPlugin : public RpnPlugin,public RarefactionFlow{
     
 public:
     
-    RarefactionFlowPlugin(const int ,const int ,const FluxFunction &);
+//    RarefactionFlowPlugin(const int ,const int ,const FluxFunction &);
+    RarefactionFlowPlugin(const RealVector & , const int, const int, const FluxFunction &);
     
     int flux(const RealVector &, RealVector &) ;
     int fluxDeriv(const RealVector &, JacobianMatrix &);

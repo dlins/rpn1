@@ -23,9 +23,9 @@ public:
         
         virtual ~Quad3FluxParams();
 
-	static const double DEFAULT_A[3];
-	static const double DEFAULT_B[3][3];
-	static const double DEFAULT_C[3][3][3];
+//	static const double DEFAULT_A[3];
+//	static const double DEFAULT_B[3][3];
+//	static const double DEFAULT_C[3][3][3];
 
 	Quad3FluxParams defaultParams(void);
 

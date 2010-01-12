@@ -42,16 +42,19 @@ private:
 
 public:
 
-
-    RarefactionFlow(const int, const int, const FluxFunction &);
-
-    RarefactionFlow(const RealVector, const int, const int, const FluxFunction &);
+    RarefactionFlow(const RealVector &, const int, const int, const FluxFunction &);
 
     RarefactionFlow(const RarefactionFlow &);
 
-    virtual const RealVector & getReferenceVector() const;
+    const RealVector & getReferenceVector() const;
 
-    virtual void setReferenceVector(const RealVector &);
+    void setReferenceVector(const RealVector &);
+
+
+        void setReferenceVectorComponent(const int, const double);
+    
+        double getReferenceVectorComponent(const int)const;
+
 
     int getFamilyIndex() const;
     void setFamilyIndex(int);
@@ -85,9 +88,20 @@ inline const RealVector & RarefactionFlow::getReferenceVector() const {
 }
 
 inline void RarefactionFlow::setReferenceVector(const RealVector & referenceVector) {
-    for (int i = 0; i < referenceVector_->size(); i++) {
+    for (int i = 0; i < referenceVector.size(); i++) {
         referenceVector_->operator()(i) = referenceVector(i);
     }
+}
+
+inline void RarefactionFlow::setReferenceVectorComponent(const int index, const double value) {
+    referenceVector_->component(index) = value;
+
+}
+
+inline double RarefactionFlow::getReferenceVectorComponent(const int index) const {
+
+    return referenceVector_->component(index);
+
 }
 
 #endif //! _RarefactionFlow_H

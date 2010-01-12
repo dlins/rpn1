@@ -17,17 +17,20 @@
  * Definitions:
  */
 
-ContinuationRarefactionFlow::ContinuationRarefactionFlow(const int familyIndex, const int direction, const FluxFunction & fluxFunction) : RarefactionFlow(familyIndex, direction, fluxFunction) {
-}
+//ContinuationRarefactionFlow::ContinuationRarefactionFlow(const int familyIndex, const int direction, const FluxFunction & fluxFunction) : RarefactionFlow(familyIndex, direction, fluxFunction) {
+//}
 
 ContinuationRarefactionFlow::~ContinuationRarefactionFlow() {
 }
 
-ContinuationRarefactionFlow::ContinuationRarefactionFlow(const RealVector referenceVector,const int familyIndex, const int direction, const FluxFunction & fluxFunction):RarefactionFlow(referenceVector,familyIndex, direction, fluxFunction){
-    
+ContinuationRarefactionFlow::ContinuationRarefactionFlow(const RealVector & referenceVector,const int familyIndex, const int direction, const FluxFunction & fluxFunction):RarefactionFlow(referenceVector,familyIndex, direction, fluxFunction) {
 }
 
 
+
+ContinuationRarefactionFlow::ContinuationRarefactionFlow(const ContinuationRarefactionFlow  &copy):RarefactionFlow(copy.getReferenceVector(),copy.getFamilyIndex(),copy.direction(),copy.fluxFunction()){
+
+}
 int ContinuationRarefactionFlow::flux(const RealVector & input, RealVector &output) {
 
     double in[input.size()];
@@ -40,14 +43,14 @@ int ContinuationRarefactionFlow::flux(const RealVector & input, RealVector &outp
         in[i] = input(i);
     }
 
-    double param [input.size() + 1];
+    double param [input.size()+1 ];
 
     param[0] = (int) getFamilyIndex();
 
-    for (int i = 1; i < input.size() + 1; i++) {
-        param[i] = getReferenceVectorComponent(i);
+    for (int i = 0; i < input.size() ; i++) {
+        param[i+1] = getReferenceVectorComponent(i);
     }
-    int nparam = 3;
+    int nparam = input.size()+1;
 
     double xi = 0;
 
@@ -72,14 +75,6 @@ WaveFlow * ContinuationRarefactionFlow::clone()const {
     return new ContinuationRarefactionFlow(*this);
 }
 
-void ContinuationRarefactionFlow::setReferenceVectorComponent(const int index, const double value) {
-
-    re[index] = value;
-}
-
-double ContinuationRarefactionFlow::getReferenceVectorComponent(const int index)const {
-    return re[index];
-}
 
 int ContinuationRarefactionFlow::flux(int n, int family, double *in, double *lambda, double *out) {
 
@@ -110,17 +105,16 @@ int ContinuationRarefactionFlow::flux(int n, int family, double *in, double *lam
 
 int ContinuationRarefactionFlow::rarefaction(int *neq, double *xi, double *in, double *out, int *nparam, double *param) {
     // The dimension of the problem:
+
     int n = *neq;
 
     // The family:
-    //    int family = (int)param[0];
 
     int family = getFamilyIndex();
 
     // The reference eigenvector:
     double rev[n];
     int ii;
-    //    for (ii = 0; ii < n; ii++) rev[ii] = param[1 + ii];
 
     for (ii = 0; ii < n; ii++) rev[ii] = getReferenceVectorComponent(ii); //param[ 1+ii];
 
@@ -176,11 +170,11 @@ int ContinuationRarefactionFlow::rarefaction(int *neq, double *xi, double *in, d
     // Theory and Applications to Multi-Phase Flow" must not change
     // sign (that is, the rarefaction is monotonous).
 
-    double res[EIG_MAX];
+    double res[n];
 
-    applyH(EIG_MAX, &(e[family].vrr[0]), &H[0][0][0], &(e[family].vrr[0]), &res[0]);
-    double dlambda_dtk = prodint(EIG_MAX, &res[0], &(e[family].vlr[0])) /
-            prodint(EIG_MAX, &(e[family].vlr[0]), &(e[family].vrr[0]));
+    applyH(n, &(e[family].vrr[0]), &H[0][0][0], &(e[family].vrr[0]), &res[0]);
+    double dlambda_dtk = prodint(n, &res[0], &(e[family].vlr[0])) /
+            prodint(n, &(e[family].vlr[0]), &(e[family].vrr[0]));
     if (dlambda_dtk * ref_speed < 0) {
         return ABORTED_PROCEDURE;
     }
@@ -190,7 +184,8 @@ int ContinuationRarefactionFlow::rarefaction(int *neq, double *xi, double *in, d
 
     // Update the value of the reference eigenvector:
     for (i = 0; i < n; i++) {
-        re[i] = out[i];
+//        re[i] = out[i]; <<-Teste
+        setReferenceVectorComponent(i, out[i]);
     }
     return SUCCESSFUL_PROCEDURE;
 }

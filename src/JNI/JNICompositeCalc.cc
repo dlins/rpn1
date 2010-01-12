@@ -88,7 +88,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_calc(JNIEnv * env, jobje
     //
 
 
-    int dimension = 2;
+    int dimension = realVectorInput.size();
     //
     int itol = 2;
     //
@@ -111,9 +111,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_calc(JNIEnv * env, jobje
     int maxStepsNumber = 10000;
     //
     //
+    RealVector referenceVector(dimension);
     ContinuationShockFlow shockFlow(realVectorInput, familyIndex, timeDirection, RpNumerics::getPhysics().fluxFunction());
 
-    ContinuationRarefactionFlow rarefactionFlow(familyIndex, timeDirection, RpNumerics::getPhysics().fluxFunction());
+    ContinuationRarefactionFlow rarefactionFlow(referenceVector,familyIndex, timeDirection, RpNumerics::getPhysics().fluxFunction());
 
 
     CompositeFlow flow(familyIndex, rarefactionFlow, shockFlow, RpNumerics::getPhysics().fluxFunction());

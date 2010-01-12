@@ -21,7 +21,7 @@ public class ShockCurveGeom extends MultiPolyLine implements RpGeometry {
     public static final int FORWARD_DIR = 1;
     public static final int BACKWARD_DIR = -1;
     public static final int BOTH_DIR =0;
-    public static ViewingAttr VIEWING_ATTR = new ViewingAttr(Color.yellow);
+    public static ViewingAttr VIEWING_ATTR = new ViewingAttr(Color.red);
     //
     // Members
     //
@@ -42,7 +42,7 @@ public class ShockCurveGeom extends MultiPolyLine implements RpGeometry {
     @Override
     public GeomObjView createView(ViewingTransform transf) throws DimMismatchEx {
 
-        return new ShockCurveGeomView(this, transf, VIEWING_ATTR);
+        return new ShockCurveGeomView(this, transf, viewingAttr());
 
     }
 

@@ -37,7 +37,7 @@
 // equal to zero in certain circumstances
 #define EPS 1e-30
 
-#define EIG_MAX 2 //used to be 3
+#define EIG_MAX 3 //used to be 3
 
 // Maximum number of points in the orbit
 #define PNT_MAX 10000  
@@ -79,13 +79,14 @@ private:
 
     // Reference vector whose inner product with the eigenvector
     // must be positive.
-    double re[EIG_MAX];
+//    double re[EIG_MAX];
 
     int rarefaction(int *neq, double *xi, double *in, double *out, int *nparam, double *param);
 
 public:
-    ContinuationRarefactionFlow(const int, const int, const FluxFunction &);
-    ContinuationRarefactionFlow(const RealVector, const int, const int, const FluxFunction &);
+//    ContinuationRarefactionFlow(const int, const int, const FluxFunction &);
+    ContinuationRarefactionFlow(const RealVector & , const int, const int, const FluxFunction &);
+    ContinuationRarefactionFlow(const ContinuationRarefactionFlow &);
 
     int flux(int n, int family, double *in, double *lambda, double *out);
     double prodint(int n, double *a, double *b)const;
@@ -95,11 +96,6 @@ public:
     int fluxDeriv2(const RealVector &, HessianMatrix &);
 
     WaveFlow * clone()const;
-
-
-    void setReferenceVectorComponent(const int, const double);
-
-    double getReferenceVectorComponent(const int)const;
 
     virtual ~ContinuationRarefactionFlow();
 

@@ -3,9 +3,7 @@
 FluxFunction::FluxFunction(const FluxParams & params):params_(new FluxParams(params)){}
 
 FluxFunction::~FluxFunction(void) {
-    
     delete params_;
-
 }
 
 

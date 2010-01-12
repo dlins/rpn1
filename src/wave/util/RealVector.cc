@@ -7,8 +7,8 @@ RealVector::RealVector(int size) :  Vector(size) {}
 RealVector::RealVector(const int size,  double * coords) :  Vector(size, coords) { }
 
 RealVector::RealVector(const RealVector & copy):Vector(copy.size()){
-    int i;
-    for (i=0;i < size(); i++){
+
+    for (int i=0;i < size(); i++){
         operator ()(i)=copy.operator ()(i);
     }
 }
@@ -27,18 +27,15 @@ RealVector & RealVector::operator=(const Vector & copy){
 bool RealVector::operator ==(const RealVector &test) {
     
     if (size()!=test.size()) return false;
-    int i ;
     
-    for (i=0;i < size();i++)
+    for (int i=0;i < size();i++)
         if (test.component(i)!=component(i)) return false;
     return true;
 }
 
 void RealVector::negate(){
     
-    int i;
-    
-    for (i=0;i < size();i++)
+    for (int i=0;i < size();i++)
         component(i)=component(i)*(-1);
     
 }
@@ -49,10 +46,9 @@ double RealVector::dot(const RealVector & v1){
     
     if (size()!=v1.size()) THROW  (RealVector::RangeViolation());
     
-    int i;
     double result=0;
     
-    for (i=0; i< v1.size();i++){
+    for (int i=0; i< v1.size();i++){
         
         result+=component(i)*v1.component(i);
     }

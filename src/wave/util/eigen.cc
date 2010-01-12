@@ -145,14 +145,14 @@ void Eigen::sort_eigen(int n, eigencouple *e){
 // normalized.
 //
 int Eigen::eig(int n, double *A, std::vector<eigencouple> &ve){
-    printf("Eigen: A = [\n");
-    for (int i = 0; i < n; i++){
-        for (int j = 0; j < n; j++){
-            printf(" %6.2f ", A[i*n + j]);
-        }
-        printf(";\n");
-    }
-    printf("]\n");
+//    printf("Eigen: A = [\n");
+//    for (int i = 0; i < n; i++){
+//        for (int j = 0; j < n; j++){
+//            printf(" %6.2f ", A[i*n + j]);
+//        }
+//        printf(";\n");
+//    }
+//    printf("]\n");
 
     int lda = n, lwork = 5*n, ldvr = n, ldvl = n;
     int i, j, info;

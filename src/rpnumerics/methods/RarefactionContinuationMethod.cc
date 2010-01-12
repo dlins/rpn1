@@ -119,6 +119,10 @@ void RarefactionContinuationMethod::curve(const RealVector & inputVector, int di
     if (info == SUCCESSFUL_PROCEDURE) {
         output.push_back(inputVector);
     }
+    else {
+        cout<<"Erro aqui "<<info<<endl;
+    }
+    
     double previouseigenvalue = lambda;
 
     int step = 0;

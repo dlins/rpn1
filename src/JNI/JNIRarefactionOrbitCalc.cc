@@ -86,7 +86,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
     //
 
 
-    int dimension = 2;
+    int dimension = realVectorInput.size();
     //
     int itol = 2;
     //
@@ -110,7 +110,14 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
     //
     //
 
-    ContinuationRarefactionFlow flow(familyIndex, timeDirection, RpNumerics::getPhysics().fluxFunction());
+
+    RealVector referenceVector(dimension);
+
+    for (int i=0;i < referenceVector.size();i++){//Initializing reference vector
+        referenceVector(i)=0;
+    }
+    
+    ContinuationRarefactionFlow flow(referenceVector,familyIndex, timeDirection, RpNumerics::getPhysics().fluxFunction());
 
     LSODEProfile lsodeProfile(flow, RpNumerics::getPhysics().boundary(), maxStepsNumber, dimension, itol, rtol, mf, deltaxi, nparam, param);
 

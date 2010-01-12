@@ -69,21 +69,21 @@ public class AREASELECTION_CONFIG extends UI_ACTION_SELECTED {
 
             reset();
 
-//            //TESTE
-//
-//
-//            ArrayList<rpnumerics.Area> testeArray =  BifurcationProfile.instance().getSelectedAreas();
-//
-//            int i=0;
-//            for (rpnumerics.Area areaSelecionada: testeArray){
-//
-//                System.out.println("Posicao "+ i + areaSelecionada.getxUpLeft()+" " + areaSelecionada.getyUpLeft()+" " + areaSelecionada.getxDownRight()+" " + areaSelecionada.getyDownRight()+" " + areaSelecionada.getxResolution()+" "+ areaSelecionada.getyResolution());
-//
-//                i++;
-//
-//            }
-//
-//            System.out.println("Tamanho do array: " + testeArray.size());
+            //TESTE
+
+
+            ArrayList<rpnumerics.Area> testeArray =  BifurcationProfile.instance().getSelectedAreas();
+
+            int i=0;
+            for (rpnumerics.Area areaSelecionada: testeArray){
+
+                System.out.println("Posicao "+ i + areaSelecionada.getxUpLeft()+" " + areaSelecionada.getyUpLeft()+" " + areaSelecionada.getxDownRight()+" " + areaSelecionada.getyDownRight()+" " + areaSelecionada.getxResolution()+" "+ areaSelecionada.getyResolution());
+
+                i++;
+
+            }
+
+            System.out.println("Tamanho do array: " + testeArray.size());
 
 
 

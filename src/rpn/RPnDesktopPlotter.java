@@ -122,6 +122,10 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
 
             rpnUIFrame.setVisible(true);
 
+            RPnCurvesListFrame curvesFrame = new RPnCurvesListFrame();
+            rpnUIFrame.setCurvesFrame(curvesFrame);
+
+
 
         } catch (FileNotFoundException ex) {
 
