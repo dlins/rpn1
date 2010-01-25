@@ -281,11 +281,11 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             FileWriter writer = new FileWriter(chooser.getSelectedFile().
                     getAbsolutePath());
             writer.write(RPnConfigReader.XML_HEADER);
-            writer.write("<rpnconfig>\n");
+            writer.write("<rpnconfiguration>\n");
             RPnNumericsModule.export(writer);
             RPnVisualizationModule.export(writer);
             RPnDataModule.export(writer);
-            writer.write("</rpnconfig>");
+            writer.write("</rpnconfiguration>");
             writer.close();
         } catch (java.io.IOException ioex) {
             ioex.printStackTrace();

@@ -20,9 +20,9 @@ public class RPNumericsProfile {
 
 
     // Constructors/Initializers
-    public void initPhysics(String physicsId,String libname) {
+    public void initPhysics(String physicsId) {
         physicsId_ = physicsId;
-        libName_=libname;
+
     }
 
     //Acessors

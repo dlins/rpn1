@@ -30,7 +30,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
     private PhaseSpaceState state_;
     private RpGeometry selectedGeom_;
     private ArrayList<ArrayList> groupArrayList_;
-    private final int ALFA_DOWN = 80;
+    private final int ALFA_DOWN = 50;
     private final int ALFA_UP = 255;
     //
     // Constructors

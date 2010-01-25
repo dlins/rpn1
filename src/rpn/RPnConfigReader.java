@@ -22,7 +22,7 @@ import rpn.plugininterface.PluginInfoParser;
 public abstract class RPnConfigReader{
 
     static  public Font MODELPLOT_BUTTON_FONT = new Font("Arial", 1, 8);
-    static  public String XML_HEADER = "<?xml version=\"1.0\"?>\n<!DOCTYPE RPnConfig SYSTEM \"rpnconfig.dtd\">\n";
+    static  public String XML_HEADER = "<?xml version=\"1.0\"?>\n<!DOCTYPE rpnconfiguration SYSTEM \"rpnDTD.dtd\">\n";
 
   
 

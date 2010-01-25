@@ -35,8 +35,8 @@ public class ShockCurveGeomFactory extends RpCalcBasedGeomFactory {
 
     public String toXML() {//TODO Implement
         StringBuffer str = new StringBuffer();
-        String timedir = "ShockCurve XML";
-        str.append(timedir);
+//        String timedir = "ShockCurve XML";
+//        str.append(timedir);
         return str.toString();
     }
 }

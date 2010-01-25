@@ -43,14 +43,14 @@ public class RarefactionOrbitGeomFactory extends RpCalcBasedGeomFactory {
     
     public String toXML() {
         StringBuffer str = new StringBuffer();
-        String tdir = "pos";
-        if (((OrbitCalc)rpCalc()).tDirection() == OrbitGeom.BACKWARD_DIR)
-            tdir = "neg";
-        str.append("<RAREFACIONORBITCALC tdirection=\"" + tdir + "\" calcready=\""+rpn.parser.RPnDataModule.RESULTS+"\">\n");
-        if (!rpn.parser.RPnDataModule.RESULTS)
-            str.append(((Orbit)geomSource()).getPoints() [0].toXML());
-        str.append(((Orbit)geomSource()).toXML(rpn.parser.RPnDataModule.RESULTS));
-        str.append("</RAREFACTIONORBITCALC>\n");
+//        String tdir = "pos";
+//        if (((OrbitCalc)rpCalc()).tDirection() == OrbitGeom.BACKWARD_DIR)
+//            tdir = "neg";
+//        str.append("<RAREFACIONORBITCALC tdirection=\"" + tdir + "\" calcready=\""+rpn.parser.RPnDataModule.RESULTS+"\">\n");
+//        if (!rpn.parser.RPnDataModule.RESULTS)
+//            str.append(((Orbit)geomSource()).getPoints() [0].toXML());
+//        str.append(((Orbit)geomSource()).toXML(rpn.parser.RPnDataModule.RESULTS));
+//        str.append("</RAREFACTIONORBITCALC>\n");
         return str.toString();
     }
 }

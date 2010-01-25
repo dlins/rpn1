@@ -7,8 +7,10 @@ package rpnumerics;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.Set;
 import rpn.RPnConfig;
-import rpn.parser.MethodProfile;
+import rpn.parser.ConfigurationProfile;
 import rpn.plugininterface.PluginProfile;
 import rpn.plugininterface.PluginTableModel;
 import rpnumerics.methods.HugoniotContinuationMethod;
@@ -24,12 +26,10 @@ public class RPNUMERICS {
     //
 
     static public int INCREASING_LAMBDA = 0;
-    static public RealVector AREA_TOP;
-    static public RealVector AREA_DOWN;
     //
     // Members
     //
-    private static HashMap<String, MethodConfiguration> methodsConfigMap_ = new HashMap<String, MethodConfiguration>();
+    private static HashMap<String, Configuration> configMap_ = new HashMap<String, Configuration>();
     static private RpErrorControl errorControl_ = null;
     static private ODESolver odeSolver_ = null;
     static private ShockProfile shockProfile_ = ShockProfile.instance();
@@ -38,7 +38,6 @@ public class RPNUMERICS {
     static private ShockRarefactionProfile shockRarefactionProfile_ = null;
     static private ContourConfiguration contourConfiguration_ = null;
     static private Integer direction_;
-    public static boolean SELCTIONACTIVE;
 
     //
     // Constructors/Initializers
@@ -72,49 +71,133 @@ public class RPNUMERICS {
 
     }
 
-    public static void resetMethodsParams() {
+    public static void resetParams() {
 
-        ArrayList<MethodProfile> methodsProfiles = RPnConfig.getAllMethodsProfiles();
+        ArrayList<ConfigurationProfile> configurationProfiles = RPnConfig.getAllConfigurationProfiles();
 
-        for (int i = 0; i < methodsProfiles.size(); i++) {
-            MethodProfile profile = methodsProfiles.get(i);
-            String methodName = profile.getName();
+        for (int i = 0; i < configurationProfiles.size(); i++) {
+            ConfigurationProfile profile = configurationProfiles.get(i);
+            String configName = profile.getName();
 
-            if (methodName.equals("Contour") || methodName.equals("contour")) {
+
+            if (configName.equals("Contour") || configName.equals("contour")) {
                 contourConfiguration_ = new ContourConfiguration(profile.getParams());
+                RPNUMERICS.setConfiguration(configName, contourConfiguration_);
             } else {
 
                 HashMap<String, String> profileParams = profile.getParams();
-                MethodConfiguration methodConfiguration = new MethodConfiguration(profileParams);
-                RPNUMERICS.setMethodParam(methodName, methodConfiguration);
+
+                Configuration configuration = null;
+
+                if (profile.getType().equalsIgnoreCase("physics")) {
+                    configuration = processPhysicsProfile(profile);
+                }
+
+                if (profile.getType().equalsIgnoreCase("method")) {
+
+                    configuration = new Configuration(profile.getName(), "method", profileParams);
+                }
+
+                if (profile.getType().equalsIgnoreCase("curve")) {
+                    configuration = new Configuration(profile.getName(), "curve", profileParams);
+                }
+
+                RPNUMERICS.setConfiguration(configName, configuration);
 
             }
 
         }
 
-    }
 
-    public static void setMethodParam(String methodName, MethodConfiguration methodConfiguration) {
-
-        methodsConfigMap_.put(methodName, methodConfiguration);
 
     }
 
-    public static void setMethodParam(String methodName, String paramName, String paramValue) {
+    public static void setConfiguration(String methodName, Configuration methodConfiguration) {
+
+        configMap_.put(methodName, methodConfiguration);
+
+    }
+
+    public static String getParamValue(String methodName, String paramValue) {
+
+        Configuration configuration = configMap_.get(methodName);
+
+        return configuration.getParamValue(paramValue);
+
+
+    }
+
+    public static Configuration getConfiguration(String configurationName) {
+        return configMap_.get(configurationName);
+    }
+
+    public static void setParamValue(String methodName, String paramName, String paramValue) {
 
         if (methodName.equals("Contour") || methodName.equals("contour")) {
             contourConfiguration_.setParamValue(paramName, paramValue);
         } else {
 
-            MethodConfiguration methodConfig = methodsConfigMap_.get(methodName);
+            Configuration methodConfig = configMap_.get(methodName);
             methodConfig.setParamValue(paramName, paramValue);
-            methodsConfigMap_.put(methodName, methodConfig);
+            configMap_.put(methodName, methodConfig);
         }
 
     }
 
-    public static int methodsConfigurationSize() {
-        return methodsConfigMap_.size();
+    public static int getConfigurationSize() {
+        return configMap_.size();
+    }
+
+    private static ArrayList<Configuration> sortConfigurations() {
+        ArrayList<Configuration> methodConfiguration = new ArrayList<Configuration>();
+        ArrayList<Configuration> curveConfiguration = new ArrayList<Configuration>();
+        ArrayList<Configuration> returnedConfigurationArray = new ArrayList<Configuration>();
+
+        Set<Entry<String, Configuration>> configurationSet = configMap_.entrySet();
+
+        for (Entry<String, Configuration> configurationEntry : configurationSet) {
+
+            if (configurationEntry.getValue().getType().equalsIgnoreCase("method")) {
+
+                methodConfiguration.add(configurationEntry.getValue());
+
+            }
+            if (configurationEntry.getValue().getType().equalsIgnoreCase("curve")) {
+                curveConfiguration.add(configurationEntry.getValue());
+            }
+            if (configurationEntry.getValue().getType().equalsIgnoreCase("physics")) {
+                returnedConfigurationArray.add(configurationEntry.getValue());
+            }
+
+
+        }
+        returnedConfigurationArray.addAll(methodConfiguration);
+        returnedConfigurationArray.addAll(curveConfiguration);
+        return returnedConfigurationArray;
+
+    }
+
+    public static String toXML() {
+
+        StringBuffer buffer = new StringBuffer();
+
+        ArrayList<Configuration> configurationArray = sortConfigurations();
+
+        for (Configuration configurationEntry : configurationArray) {
+
+            if (configurationEntry.getType().equalsIgnoreCase("physics") && configurationEntry.getName().equalsIgnoreCase(physicsID())) {
+
+                buffer.append(configurationEntry.toXML());
+
+            }
+            if (!configurationEntry.getType().equalsIgnoreCase("physics")) {
+                buffer.append(configurationEntry.toXML());
+            }
+
+        }
+
+        return buffer.toString();
+
     }
 
     /**
@@ -200,33 +283,7 @@ public class RPNUMERICS {
         BifurcationCurveCalc bifurcationCurveCalc = null;
         BifurcationParams params = null;
 
-//        if (SELCTIONACTIVE) {
-//
-//            RealVector min = new RealVector(2);
-//            RealVector max = new RealVector(2);
-//
-//            min.setElement(0, AREA_TOP.getElement(0));
-//            min.setElement(1, AREA_DOWN.getElement(1));
-//
-//            max.setElement(0, AREA_DOWN.getElement(0));
-//            max.setElement(1, AREA_TOP.getElement(1));
-//
-//            System.out.println(AREA_TOP);
-//            System.out.println(AREA_DOWN);
-//
-//
-//            Boundary boundary = new RectBoundary(min, max);
-//            bifurcationProfile_.setBoundary(boundary);
-//
-//            params = new BifurcationParams(boundary);
-//
-//
-//
-//        } else {
-
-            params = new BifurcationParams(boundary());
-
-//        }
+        params = new BifurcationParams(boundary());
 
         bifurcationCurveCalc = new BifurcationCurveCalc(params);
 
@@ -263,6 +320,25 @@ public class RPNUMERICS {
 
     public static void setDirection(Integer integer) {
         direction_ = integer;
+    }
+
+    private static Configuration processPhysicsProfile(ConfigurationProfile physicsProfile) {
+        Configuration physicsConfiguration = new Configuration(physicsProfile.getName(), "physics");
+
+        for (int i = 0; i < physicsProfile.getIndicesSize(); i++) {
+            HashMap<String, String> fluxParam = physicsProfile.getParam(i);
+            Set<Entry<String, String>> fluxParamSet = fluxParam.entrySet();
+            for (Entry<String, String> fluxEntry : fluxParamSet) {
+                physicsConfiguration.setParamValue(fluxEntry.getKey(), fluxEntry.getValue());
+                physicsConfiguration.setParamOrder(fluxEntry.getKey(), i);
+            }
+        }
+        ConfigurationProfile boundaryProfile = physicsProfile.getConfigurationProfile(0);
+        Configuration boundaryConfiguration = new Configuration(boundaryProfile.getName(), "boundary", boundaryProfile.getParams());
+
+        physicsConfiguration.addConfiguration(boundaryConfiguration);
+
+        return physicsConfiguration;
     }
 
     private static ODESolver createODESolver(WaveFlow flow) {

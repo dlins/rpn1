@@ -35,12 +35,12 @@
 // Epsilon value, minimum threshold. 
 // Any number x such that abs(x) < EPS will be considered 
 // equal to zero in certain circumstances
-#define EPS 1e-30
+//#define EPS 1e-30
 
-#define EIG_MAX 3 //used to be 3
+//#define EIG_MAX 3 //used to be 3
 
 // Maximum number of points in the orbit
-#define PNT_MAX 10000  
+//#define PNT_MAX 10000
 
 // Functions that successfully carry on their task will return SUCCESSFUL_PROCEDURE,
 // since most of the results are not floats or ints, but vectors and as such must

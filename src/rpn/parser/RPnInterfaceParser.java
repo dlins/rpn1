@@ -12,7 +12,6 @@ import org.xml.sax.Locator;
 import wave.util.RealVector;
 import org.xml.sax.SAXException;
 import java.util.ArrayList;
-import java.util.StringTokenizer;
 import org.xml.sax.ContentHandler;
 import rpn.RPnConfig;
 import rpnumerics.RPNUMERICS;
@@ -22,11 +21,11 @@ public class RPnInterfaceParser implements ContentHandler {
     //
     // Constants
     //
-    private static ArrayList<PhysicsProfile> physics_ = new ArrayList<PhysicsProfile>(2);
-    private static ArrayList<MethodProfile> methods_ = new ArrayList<MethodProfile>(2);
+
+    private static ArrayList<ConfigurationProfile> configurationProfile_ = new ArrayList<ConfigurationProfile>(2);
+    private static ArrayList<ConfigurationProfile> methods_ = new ArrayList<ConfigurationProfile>(2);
     private static ArrayList<VisualizationProfile> visualizationProfiles_ = new ArrayList<VisualizationProfile>(2);
-    private static PhysicsProfile currentPhysicsProfile_;
-    private static MethodProfile currentMethodProfile_;    //
+    private static ConfigurationProfile currentConfigurationProfile_;    //
     private static VisualizationProfile currentVisualizationProfile_;    // Members
     //
     private RealVector tempVector_;
@@ -38,16 +37,13 @@ public class RPnInterfaceParser implements ContentHandler {
         currentElement_ = name;
 
         if (name.equals("PHYSICS")) {
-
-            PhysicsProfile physicsProfile = new PhysicsProfile();
-            currentPhysicsProfile_ = physicsProfile;
-            currentPhysicsProfile_.setName(att.getValue("name"));
-
+            currentConfigurationProfile_ = new ConfigurationProfile(att.getValue(0), "physics");
         }
 
         if (name.equals("FLUXPARAMS")) {
             checkNumberFormat(att.getValue("value"));
-            currentPhysicsProfile_.addFluxParam(att.getValue("name"), att.getValue("value"), new Integer(att.getValue("position")));
+//            currentPhysicsProfile_.addFluxParam(att.getValue("name"), att.getValue("value"), new Integer(att.getValue("position")));
+            currentConfigurationProfile_.addParam(new Integer(att.getValue(1)), att.getValue(0), att.getValue(2));
         }
 
         if (name.equals("VIEWINGPARAMS")) {
@@ -66,14 +62,20 @@ public class RPnInterfaceParser implements ContentHandler {
 
 
         if (name.equals("METHOD")) {
-            MethodProfile methodProfile = new MethodProfile(att.getValue("name"));
-            currentMethodProfile_ = methodProfile;
+
+            currentConfigurationProfile_ = new ConfigurationProfile(att.getValue("name"), "method");
 
         }
 
         if (name.equals("METHODPARAM")) {
             checkNumberFormat(att.getValue("value"));
-            currentMethodProfile_.addParam(att.getValue("name"), att.getValue("value"));
+            currentConfigurationProfile_.addParam(att.getValue("name"), att.getValue("value"));
+        }
+
+        if (name.equals("NUMERICSPARAM")) {
+
+            currentConfigurationProfile_.addParam(att.getValue(0), att.getValue(1));
+
         }
 
 
@@ -81,23 +83,30 @@ public class RPnInterfaceParser implements ContentHandler {
             tempVector_ = new RealVector(att.getValue("dimension"));
         }
 
-        if (name.equals("BOUNDARY")) {
+        if (name.equals("BOUNDARYPARAM")) {
 
-            currentPhysicsProfile_.setBoundaryDimension(new Integer(att.getValue("dimension")));
+//            if (att.getValue(0).equals("dimension")) {
+//                currentPhysicsProfile_.setBoundaryDimension(new Integer(att.getValue("value")));
+//            }
 
-            if (att.getValue("boundary").equals("rect")) {
-
-                currentPhysicsProfile_.setIso2equiBoundary(false);
-            }
-
-            if (att.getValue("boundary").equals("triang")) {
-
-                currentPhysicsProfile_.setIso2equiBoundary(true);
-            }
-
+            currentConfigurationProfile_.getConfigurationProfile(0).addParam(att.getValue(0), att.getValue(1));
 
         }
+        if (name.equals("BOUNDARY")) {
 
+            ConfigurationProfile boundaryProfile = new ConfigurationProfile(att.getValue(0), "curve");
+//            if (att.getValue(0).equals("rect")) {
+//
+//                currentPhysicsProfile_.setIso2equiBoundary(false);
+//            }
+//
+//            if (att.getValue(0).equals("triang")) {
+//
+//                currentPhysicsProfile_.setIso2equiBoundary(true);
+//            }
+
+            currentConfigurationProfile_.addConfigurationProfile(boundaryProfile);
+        }
 
 
     }
@@ -106,7 +115,8 @@ public class RPnInterfaceParser implements ContentHandler {
             SAXException {
 
         String data = new String(buff, offset, len);
-        data = data.trim();
+        data =
+                data.trim();
 
         if (data.length() != 0) {
 
@@ -122,21 +132,19 @@ public class RPnInterfaceParser implements ContentHandler {
     public void endElement(String uri, String localName, String name) throws SAXException {
 
         if (name.equals("PHYSICS")) {
-            physics_.add(currentPhysicsProfile_);
+            RPnConfig.addConfiguration(currentConfigurationProfile_.getName(), currentConfigurationProfile_);
+            configurationProfile_.add(currentConfigurationProfile_);
         }
 
-
         if (name.equals("BOUNDARY")) {
-
-            StringTokenizer axisTokenizer = new StringTokenizer(tempVector_.toString());
-            String[] dataArray = new String[axisTokenizer.countTokens()];
-            int i = 0;
-            while (axisTokenizer.hasMoreTokens()) {
-                dataArray[i++] = axisTokenizer.nextToken();
-            }
-
-            currentPhysicsProfile_.setBoundary(dataArray);
-
+//            StringTokenizer axisTokenizer = new StringTokenizer(tempVector_.toString());
+//            String[] dataArray = new String[axisTokenizer.countTokens()];
+//            int i = 0;
+//            while (axisTokenizer.hasMoreTokens()) {
+//                dataArray[i++] = axisTokenizer.nextToken();
+//            }
+//
+//            currentPhysicsProfile_.setBoundary(dataArray);
         }
 
         if (name.equals("VIEWINGPARAMS")) {
@@ -145,11 +153,9 @@ public class RPnInterfaceParser implements ContentHandler {
 
         if (name.equals("METHOD")) {
 
-            RPnConfig.addMethod(currentMethodProfile_.getName(), currentMethodProfile_);
+            RPnConfig.addConfiguration(currentConfigurationProfile_.getName(), currentConfigurationProfile_);
 
         }
-
-
 
     }
 
@@ -161,7 +167,7 @@ public class RPnInterfaceParser implements ContentHandler {
 
     public void endDocument() throws SAXException {
 
-        RPNUMERICS.resetMethodsParams();
+        RPNUMERICS.resetParams();
 
     }
 
@@ -180,18 +186,34 @@ public class RPnInterfaceParser implements ContentHandler {
     public void skippedEntity(String name) throws SAXException {
     }
 
-    public static ArrayList<PhysicsProfile> getPhysicsProfiles() {
-        return physics_;
+    public static ArrayList<ConfigurationProfile> getPhysicsProfiles() {
+        ArrayList<ConfigurationProfile> returned = new ArrayList<ConfigurationProfile>();
+        for (ConfigurationProfile configurationProfile : configurationProfile_) {
+            if (configurationProfile.getType().equalsIgnoreCase("physics")) {
+                returned.add(configurationProfile);
+            }
+        }
+
+        return returned;
     }
 
     public static ArrayList<VisualizationProfile> getVisualizationProfiles() {
         return visualizationProfiles_;
     }
 
-    public static ArrayList<MethodProfile> getMethodProfiles() {
-        return methods_;
+    public static ArrayList<ConfigurationProfile> getMethodProfiles() {
+
+        ArrayList<ConfigurationProfile> returned = new ArrayList<ConfigurationProfile>();
+        for (ConfigurationProfile configurationProfile : configurationProfile_) {
+            if (configurationProfile.getType().equalsIgnoreCase("method")) {
+                returned.add(configurationProfile);
+            }
+        }
+
+        return returned;
+
     }
-    
+
     private void checkNumberFormat(String value) {
         try {
             Double teste = new Double(value);

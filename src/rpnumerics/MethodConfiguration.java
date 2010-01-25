@@ -1,4 +1,5 @@
 /*
+ *
  * Instituto de Matematica Pura e Aplicada - IMPA
  * Departamento de Dinamica dos Fluidos
  *
@@ -6,34 +7,33 @@
 package rpnumerics;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.Set;
 
-public class MethodConfiguration {
-
-    private HashMap<String, String> params_ = new HashMap<String, String>();
+public class MethodConfiguration extends Configuration {
 
     public MethodConfiguration(HashMap<String, String> paramsAndValues) {
-        params_ = paramsAndValues;
+        super("method","name",paramsAndValues);
     }
 
-    public MethodConfiguration() {
-        params_ = new HashMap<String, String>();
-    }
+    @Override
+    public String toXML() {
 
-    public void removeParam(String paramName) {
-        params_.remove(paramName);
-    }
+        StringBuffer buffer = new StringBuffer();
+        Set<Entry<String, String>> paramsSet = getParams().entrySet();
 
-    public HashMap<String, String> getParams() {
-        return params_;
-    }
+        for (Entry entry : paramsSet) {
 
-    public void setParamValue(String paramName, String paramValue) {
+            buffer.append("<METHODPARAM name=\"" + entry.getKey() + "\" " + "value= \"" + entry.getValue() + "\"/>");
+            buffer.append("\n");
 
-        params_.put(paramName, paramValue);
-    }
 
-    public String getParamValue(String paramName) {
+        }
 
-        return params_.get(paramName);
+        buffer.append("<METHOD/>"+"\n");
+
+
+        return buffer.toString();
+
     }
 }

@@ -18,43 +18,62 @@ import org.xml.sax.InputSource;
 import java.io.FileWriter;
 import java.io.InputStream;
 import java.util.ArrayList;
-import rpnumerics.FluxParams;
+import rpn.RPnConfig;
 import rpnumerics.RPNUMERICS;
-import wave.util.RectBoundary;
-import wave.util.IsoTriang2DBoundary;
 
 /** This class implements methods to configure the numeric layer. The values are taked from a XML file and this values are used to setup the physics and all others numerics parameters. */
 public class RPnNumericsModule {
     //
     // Constants
     //
+
+    /**@deprecated
+     * Will be replaced by physics profile reference
+     */
     private static RPNumericsProfile profile_ = new RPNumericsProfile();
 
     static class InputHandler extends HandlerBase {
         //
         // Members
         //
+
         private RealVector tempVector_;
         private String currentElement_;
-        private ArrayList boundsVectorArray_;
-        private String boundaryType_;
+        private ArrayList boundaryParamsArray_;
+        private static ConfigurationProfile currentConfigurationProfile_;
+        private static ConfigurationProfile physicsProfile_;
 
+        @Override
         public void startElement(String name, AttributeList att) throws
                 SAXException {
 
             currentElement_ = name;
 
-            if (name.equals("NUMERICS")) {
+            if (name.equals("FLUXPARAMS")) {
+                physicsProfile_.addParam(new Integer(att.getValue(1)), att.getValue(0), att.getValue(2));
+            }
 
+            if (name.equals("CURVE")) {
+                currentConfigurationProfile_ = new ConfigurationProfile(att.getValue(0), "curve");
+            }
+
+            if (name.equals("CURVEPARAM")) {
+                currentConfigurationProfile_.addParam(att.getValue(0), att.getValue(1));
             }
 
             if (name.equals("PHYSICS")) {
-                profile_.initPhysics(att.getValue(0), att.getValue(1));
+                physicsProfile_ = new ConfigurationProfile(att.getValue(0), "physics");
+                profile_.initPhysics(att.getValue(0));
             }
 
             if (name.equals("BOUNDARY")) {
-                boundaryType_= att.getValue(0);
-                boundsVectorArray_ = new ArrayList();
+                physicsProfile_.addConfigurationProfile(0, new ConfigurationProfile(att.getValue(0), "boundary"));
+            }
+
+            if (name.equals("BOUNDARYPARAM")) {
+
+                physicsProfile_.getConfigurationProfile(0).addParam(att.getValue(0), att.getValue(1));
+
             }
 
             if (name.equals("PHASEPOINT")) {
@@ -63,6 +82,7 @@ public class RPnNumericsModule {
 
         }
 
+        @Override
         public void characters(char[] buff, int offset, int len) throws
                 SAXException {
 
@@ -71,7 +91,7 @@ public class RPnNumericsModule {
             if (data.length() != 0) {
                 if (currentElement_.equals("REALVECTOR")) {
                     tempVector_ = new RealVector(data);
-                    boundsVectorArray_.add(tempVector_);
+                    boundaryParamsArray_.add(tempVector_);
 
                 }
 
@@ -81,24 +101,20 @@ public class RPnNumericsModule {
 
         public void endElement(String name) throws SAXException {
             if (name.equals("PHYSICS")) {
-                    RPNUMERICS.init(profile_);
+                RPNUMERICS.init(profile_);
+                RPnConfig.addConfiguration(physicsProfile_.getName(), physicsProfile_);
             }
 
-            if (name.equals("BOUNDARY")) {
+            if (name.equals("CURVE")) {
 
-                if (boundaryType_.equals("rect")) {
-                    profile_.setBoundary(new RectBoundary((RealVector) boundsVectorArray_.get(0), (RealVector) boundsVectorArray_.get(1)));
-                }
-
-                if (boundaryType_.equals("triang")) {
-
-                    profile_.setBoundary(new IsoTriang2DBoundary((RealVector) boundsVectorArray_.get(0), (RealVector) boundsVectorArray_.get(1), (RealVector) boundsVectorArray_.get(2)));
-                }
+                RPnConfig.addConfiguration(currentConfigurationProfile_.getName(), currentConfigurationProfile_);
             }
+        }
 
-            if (name.equals("FLUXPARAMS")) {
-                profile_.setFluxParams(new FluxParams(tempVector_));
-            }
+        @Override
+        public void endDocument() throws SAXException {
+
+            RPNUMERICS.resetParams();
 
         }
     }
@@ -116,6 +132,7 @@ public class RPnNumericsModule {
         } catch (Exception saxex) {
             saxex.printStackTrace();
         }
+
     }
 
     public static void init(Parser parser, InputStream configFileStream) {
@@ -141,6 +158,7 @@ public class RPnNumericsModule {
 
             saxex.printStackTrace();
         }
+
     }
 
     //
@@ -149,10 +167,7 @@ public class RPnNumericsModule {
     /** Writes the actual values of the numerics parameters into a XML file. */
     public static void export(FileWriter writer) throws java.io.IOException {
 
-        writer.write("<NUMERICS>\n");
-        writer.write("<PHYSICS physicsid=\"" + RPNUMERICS.physicsID() + "\"" + " libname=\"" +  "\"" + ">" + "</PHYSICS>\n");
-        writer.write("</NUMERICS>\n");
-
+        writer.write(RPNUMERICS.toXML());
 
     }
 }

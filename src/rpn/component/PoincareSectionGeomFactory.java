@@ -66,11 +66,11 @@ public class PoincareSectionGeomFactory implements RpGeomFactory {
 
     public String toXML() {
         StringBuffer str = new StringBuffer();
-        str.append("<POINCAREDATA>\n");
-        SimplexPoincareSection pSection = (SimplexPoincareSection)geomSource_;
-        for (int i = 0; i < pSection.getPoints().length; i++)
-            str.append(new PhasePoint(pSection.getPoints() [i]).toXML());
-        str.append("</POINCAREDATA>\n");
+//        str.append("<POINCAREDATA>\n");
+//        SimplexPoincareSection pSection = (SimplexPoincareSection)geomSource_;
+//        for (int i = 0; i < pSection.getPoints().length; i++)
+//            str.append(new PhasePoint(pSection.getPoints() [i]).toXML());
+//        str.append("</POINCAREDATA>\n");
         return str.toString();
     }
 }

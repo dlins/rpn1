@@ -13,8 +13,9 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Set;
 import javax.swing.*;
-import rpn.parser.PhysicsProfile;
+import rpn.parser.ConfigurationProfile;
 import rpn.parser.RPnInterfaceParser;
+import rpnumerics.Configuration;
 import rpnumerics.FluxParams;
 import rpnumerics.RPNUMERICS;
 import wave.util.RealVector;
@@ -23,7 +24,7 @@ public class RPnFluxParamsPanel extends JPanel {
 
     private GridBagLayout gridLayout = new GridBagLayout();
     private ArrayList<JTextField> valuesArray_ = new ArrayList<JTextField>();
-    private PhysicsProfile physicsProfile_;
+    private ConfigurationProfile physicsProfile_;
 
     public RPnFluxParamsPanel() {
 
@@ -41,14 +42,28 @@ public class RPnFluxParamsPanel extends JPanel {
 
         GridBagConstraints gridConstraints = new GridBagConstraints();
 
+
+        HashMap<String, String> fluxParamsArrayList =null;
+
         gridConstraints.ipadx = 40;
+        if (useDefaults){
+            ConfigurationProfile physicsConfiguration = RPnConfig.getConfigurationProfile("QuadraticR2");
+            fluxParamsArrayList = physicsConfiguration.getParams();
+        }
+        else {
+        Configuration physicsConfiguration = RPNUMERICS.getConfiguration(physicsProfile_.getName());
+        fluxParamsArrayList = physicsConfiguration.getParams();
+        }
 
-        ArrayList<HashMap<String, String>> fluxParamsArrayList = physicsProfile_.getFluxParamArrayList();
 
-        for (int i = 0; i < fluxParamsArrayList.size(); i++) {
-            HashMap<String, String> fluxParams = fluxParamsArrayList.get(i);
 
-            Set<Entry<String, String>> fluxParamsSet = fluxParams.entrySet();
+
+
+
+//        for (int i = 0; i < fluxParamsArrayList.size(); i++) {
+//            HashMap<String, String> fluxParams = fluxParamsArrayList.get(i);
+        int i = 0;
+            Set<Entry<String, String>> fluxParamsSet = fluxParamsArrayList.entrySet();
 
             Iterator<Entry<String, String>> paramsIterator = fluxParamsSet.iterator();
 
@@ -75,18 +90,19 @@ public class RPnFluxParamsPanel extends JPanel {
                 this.add(fluxParamName, gridConstraints);
                 gridConstraints.gridx = 1;
                 this.add(fluxValueField, gridConstraints);
+                i++;
             }
-        }
+//        }
     }
 
     private void searchPhysics(String physicsName) {
 
-        Iterator<PhysicsProfile> physics = RPnInterfaceParser.getPhysicsProfiles().iterator();
+        Iterator<ConfigurationProfile> physics = RPnInterfaceParser.getPhysicsProfiles().iterator();
 
         while (physics.hasNext()) {
-            PhysicsProfile physicsProfile = physics.next();
+            ConfigurationProfile physicsProfile = physics.next();
             if (physicsProfile.getName().equals(physicsName)) {
-                physicsProfile_ = physicsProfile;
+                physicsProfile_ =  physicsProfile;
             }
         }
 

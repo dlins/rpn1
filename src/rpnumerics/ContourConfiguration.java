@@ -10,10 +10,10 @@ package rpnumerics;
 
 import java.util.HashMap;
 
-public class ContourConfiguration extends MethodConfiguration{
+public class ContourConfiguration extends Configuration{
 
     public ContourConfiguration(HashMap<String, String> paramsAndValues) {
-        super(paramsAndValues);
+        super("Contour","method",paramsAndValues);
     }
 
 }

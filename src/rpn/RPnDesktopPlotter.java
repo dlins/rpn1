@@ -32,13 +32,13 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
     private static RPnConfigReader configReader_;
     private static InputStream configStream_;
     private static RPnUIFrame rpnUIFrame;
-  
+
     public RPnDesktopPlotter(String configFile) throws FileNotFoundException, VerifierConfigurationException, SAXException, IOException {
 
         // create a VerifierFactory with the default SAX parser
         VerifierFactory factory = new com.sun.msv.verifier.jarv.TheFactoryImpl();
         // compile a RELAX schema (or whatever schema you like)
-        org.iso_relax.verifier.Schema schema = factory.compileSchema(new File(DTDPATH + "rpnconfig.dtd"));
+        org.iso_relax.verifier.Schema schema = factory.compileSchema(new File(DTDPATH + "rpnDTD.dtd"));
 
         // obtain a verifier
         Verifier verifier = schema.newVerifier();
@@ -102,12 +102,14 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
             XMLReader xmlReader = XMLReaderFactory.createXMLReader();
             xmlReader.setContentHandler(new RPnInterfaceParser());
 
-            File interfaceConfigFile = new File(INTERFACE_CONFIG_PATH + "rpninterfaceconfig.xml");
+            File interfaceConfigFile = new File(INTERFACE_CONFIG_PATH + "defaults.xml");
             InputStream configStream = new FileInputStream(interfaceConfigFile);
             xmlReader.parse(new InputSource(configStream));
 
-            if (args.length==0) throw new FileNotFoundException();
-            
+            if (args.length == 0) {
+                throw new FileNotFoundException();
+            }
+
             plotter = new RPnDesktopPlotter(args[0]);
 
             configReader_ = RPnConfigReader.getReader(args[0], false, null);
@@ -127,6 +129,11 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
 
 
 
+
+
+
+
+
         } catch (FileNotFoundException ex) {
 
             RPnConfigDialog configDialog = new RPnConfigDialog();
@@ -140,8 +147,8 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
             System.out.println("Because:  " + e);
             System.out.println("Line: " + e.getLineNumber());
             System.out.println("Column: " + e.getColumnNumber());
-        // if the document is invalid, then the execution will reach here
-        // because we throw an exception for an error.
+            // if the document is invalid, then the execution will reach here
+            // because we throw an exception for an error.
 
 
         } catch (SAXException ex) {
@@ -156,7 +163,6 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
 
                 configStream_.close();
             } catch (NullPointerException ex) {
-
             } catch (IOException ex) {
                 System.out.println("IO Error");
             }

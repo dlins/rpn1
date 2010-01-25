@@ -13,18 +13,17 @@ import java.util.Map.Entry;
 import java.util.Set;
 import javax.swing.ImageIcon;
 import rpn.controller.phasespace.NumConfigImpl;
-import rpn.parser.MethodProfile;
+import rpn.parser.ConfigurationProfile;
 import rpn.parser.RPnDataModule;
 import rpn.plugininterface.PluginInfoController;
 import rpn.plugininterface.PluginInfoParser;
-import rpnumerics.ContourConfiguration;
 import rpnumerics.RPNUMERICS;
 
 public class RPnConfig {
 
     private static String IMAGEPATH = System.getProperty("rpnhome") + System.getProperty("file.separator") + "share" + System.getProperty("file.separator") + "rpn-images" + System.getProperty("file.separator");
-    public static ImageIcon HUGONIOT,  MANIFOLD_BWD,  MANIFOLD_FWD,  POINCARE,  ORBIT_FWD,  ORBIT_BWD,  STATPOINT;
-    private static HashMap<String, MethodProfile> methodsMap_ = new HashMap<String, MethodProfile>();
+    public static ImageIcon HUGONIOT, MANIFOLD_BWD, MANIFOLD_FWD, POINCARE, ORBIT_FWD, ORBIT_BWD, STATPOINT;
+    private static HashMap<String, ConfigurationProfile> methodsMap_ = new HashMap<String, ConfigurationProfile>();
 
     public static void configure(String physicsName) {
 
@@ -43,13 +42,13 @@ public class RPnConfig {
     private static void visualConfig() {
 
         remoteImage();
-      
+
 
         RPnDataModule.PHASESPACE = new RPnPhaseSpaceAbstraction("Phase Space",
                 RPNUMERICS.domain(), new NumConfigImpl());//  RpNumerics.domain(),
 
 
-       
+
 
     }
 
@@ -73,40 +72,53 @@ public class RPnConfig {
 
     }
 
-    public static void addMethod(String methodName, MethodProfile profile) {
+    public static void addConfiguration(String configurationName, ConfigurationProfile profile) {
 
-        methodsMap_.put(methodName, profile);
+        methodsMap_.put(configurationName, profile);
+
+//        System.out.println("Adicionando Configuration");
+        //        ---------------------------TESTE--------------------------------------------------------
+
+//        Set<Entry<String, ConfigurationProfile>> configSet = methodsMap_.entrySet();
+//
+//        for (Entry<String, ConfigurationProfile> element : configSet) {
+//
+//            System.out.println(element.getValue().toString());
+
+//        ------------------------------------------------------------------------------------------
+
+
+//        }
+
+
 
 
     }
 
+//        public static void addParam(String configurationName, String paramName, String paramValue) {
+//
+//        if (!methodsMap_.containsKey(configurationName)) {
+//            ConfigurationProfile newProfile = new ConfigurationProfile(configurationName);
+//            newProfile.addParam(paramName, paramValue);
+//
+//            methodsMap_.put(configurationName, newProfile);
+//        } else {
+//            ConfigurationProfile methodProfile = methodsMap_.get(configurationName);
+//            methodProfile.addParam(paramName, paramValue);
+//            methodsMap_.put(configurationName, methodProfile);
+//
+//        }
+//    }
+    public static ArrayList<ConfigurationProfile> getAllConfigurationProfiles() {
 
-        public static void addParam(String methodName, String paramName, String paramValue) {
+        ArrayList<ConfigurationProfile> returnedArrayList = new ArrayList<ConfigurationProfile>();
 
-        if (!methodsMap_.containsKey(methodName)) {
-            MethodProfile newProfile = new MethodProfile(methodName);
-            newProfile.addParam(paramName, paramValue);
+        Set<Entry<String, ConfigurationProfile>> methodSet = methodsMap_.entrySet();
 
-            methodsMap_.put(methodName, newProfile);
-        } else {
-            MethodProfile methodProfile = methodsMap_.get(methodName);
-            methodProfile.addParam(paramName, paramValue);
-            methodsMap_.put(methodName, methodProfile);
-
-        }
-
-    }
-
-  public static ArrayList<MethodProfile> getAllMethodsProfiles() {
-
-        ArrayList<MethodProfile> returnedArrayList = new ArrayList<MethodProfile>();
-
-        Set<Entry<String, MethodProfile>> methodSet = methodsMap_.entrySet();
-
-        Iterator<Entry<String, MethodProfile>> methodIterator = methodSet.iterator();
+        Iterator<Entry<String, ConfigurationProfile>> methodIterator = methodSet.iterator();
 
         while (methodIterator.hasNext()) {
-            Entry<String, MethodProfile> entry = methodIterator.next();
+            Entry<String, ConfigurationProfile> entry = methodIterator.next();
 
             returnedArrayList.add(entry.getValue());
 
@@ -116,18 +128,15 @@ public class RPnConfig {
 
     }
 
-  public static MethodProfile getMethodProfile(String methodName) {
+    public static ConfigurationProfile getConfigurationProfile(String configurationName) {
 
-        return methodsMap_.get(methodName);
-
-    }
-
-    public static void removeMethod(String methodName) {
-
-        methodsMap_.remove(methodName);
+        return methodsMap_.get(configurationName);
 
     }
 
+    public static void removeConfiguration(String configurationName) {
 
+        methodsMap_.remove(configurationName);
 
+    }
 }

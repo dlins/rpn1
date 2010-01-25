@@ -24,12 +24,11 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
-import rpn.parser.MethodProfile;
-import rpn.parser.PhysicsProfile;
+import rpn.parser.ConfigurationProfile;
 import rpn.parser.RPnInterfaceParser;
 import rpn.parser.RPnVisualizationModule;
 import rpn.parser.VisualizationProfile;
-import rpnumerics.MethodConfiguration;
+import rpnumerics.Configuration;
 import rpnumerics.RPNUMERICS;
 import wave.multid.Space;
 import wave.util.RealVector;
@@ -54,16 +53,16 @@ public class RPnConfigDialog extends RPnDialog {
     private ArrayList<JTextField> boundaryTextArray_;
     private JTextField[] panelsSizeTextField_ = new JTextField[2];
     private JTextField[] panelsLabelTextField_;
-    private ArrayList<PhysicsProfile> profilesArray_;
-    private PhysicsProfile physicsProfile_;
+    private ArrayList<ConfigurationProfile> profilesArray_;
+    private ConfigurationProfile physicsProfile_;
     private JComboBox physicsComboBox_;
     private JComboBox methodComboBox_;
     private boolean[] axisSelected_;
-    private HashMap<String, MethodConfiguration> methodConfigMap_;
+    private HashMap<String, Configuration> methodConfigMap_;
 
     public RPnConfigDialog() {
         profilesArray_ = RPnInterfaceParser.getPhysicsProfiles();
-        methodConfigMap_ = new HashMap<String, MethodConfiguration>();
+        methodConfigMap_ = new HashMap<String, Configuration>();
         initLocalParamsConfigMap();
         removeDefaultApplyBehavior();
         applyButton.addActionListener(new ApplyButtonController());
@@ -75,7 +74,7 @@ public class RPnConfigDialog extends RPnDialog {
 
     private void initLocalParamsConfigMap() {
 
-        ArrayList<MethodProfile> methodsProfiles = RPnConfig.getAllMethodsProfiles();
+        ArrayList<ConfigurationProfile> methodsProfiles = RPnConfig.getAllConfigurationProfiles();
 
         methodComboBox_ = new JComboBox();
 
@@ -85,13 +84,13 @@ public class RPnConfigDialog extends RPnDialog {
 
         for (int i = 0; i < methodsProfiles.size(); i++) {
 
-            MethodProfile profile = methodsProfiles.get(i);
+            ConfigurationProfile profile = methodsProfiles.get(i);
 
             String methodName = profile.getName();
 
             HashMap<String, String> profileParams = profile.getParams();
 
-            MethodConfiguration methodConfiguration = new MethodConfiguration(profileParams);
+            Configuration methodConfiguration = new Configuration(profile.getName(),profile.getType(),profileParams);
 
             methodConfigMap_.put(methodName, methodConfiguration);
 
@@ -103,7 +102,7 @@ public class RPnConfigDialog extends RPnDialog {
 
         physicsComboBox_ = new JComboBox();
         for (int i = 0; i < profilesArray_.size(); i++) {
-            PhysicsProfile profile = profilesArray_.get(i);
+            ConfigurationProfile profile = profilesArray_.get(i);
             physicsComboBox_.addItem(profile.getName());
         }
 
@@ -152,26 +151,29 @@ public class RPnConfigDialog extends RPnDialog {
             }
         }
 
-        String[] boundaryArray = physicsProfile_.getBoundary();
 
         boundaryTextArray_ = new ArrayList<JTextField>();
 
-        if (!physicsProfile_.isIso2equiBoundary()) {//RECT BOUNDARY
+        if (physicsProfile_.getConfigurationProfile(0).getName().equalsIgnoreCase("rect")) {//RECT BOUNDARY
 
             JLabel minLabel = new JLabel("Min", SwingConstants.CENTER);
             JLabel maxLabel = new JLabel("Max", SwingConstants.CENTER);
 
-            boundaryDataPanel.setLayout(new GridLayout(2, physicsProfile_.getBoundaryDimension() + 1));
+            int dimension = new Integer(physicsProfile_.getConfigurationProfile(0).getParam("dimension"));
+
+            boundaryDataPanel.setLayout(new GridLayout(2, dimension + 1));
             boundaryDataPanel.add(minLabel);
 
+            boundaryTextArray_.add(0, new JTextField(physicsProfile_.getConfigurationProfile(0).getParam("x-min")));
+            boundaryTextArray_.add(1, new JTextField(physicsProfile_.getConfigurationProfile(0).getParam("y-min")));
+            boundaryDataPanel.add(maxLabel);
 
-            for (int i = 0; i < boundaryArray.length; i++) {
 
-                boundaryTextArray_.add(i, new JTextField((boundaryArray[i])));
+            boundaryTextArray_.add(2, new JTextField(physicsProfile_.getConfigurationProfile(0).getParam("x-max")));
+            boundaryTextArray_.add(3, new JTextField(physicsProfile_.getConfigurationProfile(0).getParam("y-max")));
 
-                if (i == boundaryArray.length / 2) {
-                    boundaryDataPanel.add(maxLabel);
-                }
+
+            for (int i = 0; i < 4; i++) {
 
                 boundaryDataPanel.add(boundaryTextArray_.get(i));
 
@@ -210,15 +212,15 @@ public class RPnConfigDialog extends RPnDialog {
 
         methodsParamsPanel_.setLayout(methodParamPanelLayout);
 
-        Set<Entry<String, MethodConfiguration>> configurationSet = methodConfigMap_.entrySet();
+        Set<Entry<String, Configuration>> configurationSet = methodConfigMap_.entrySet();
 
-        Iterator<Entry<String, MethodConfiguration>> methodIterator = configurationSet.iterator();
+        Iterator<Entry<String, Configuration>> methodIterator = configurationSet.iterator();
 
         while (methodIterator.hasNext()) {
 
-            Entry<String, MethodConfiguration> entry = methodIterator.next();
+            Entry<String, Configuration> entry = methodIterator.next();
 
-            MethodConfiguration methodConfiguration = entry.getValue();
+            Configuration methodConfiguration = entry.getValue();
 
             HashMap<String, String> params = methodConfiguration.getParams();
 
@@ -290,8 +292,7 @@ public class RPnConfigDialog extends RPnDialog {
         physicsLabelPanel.add(physicsNameLabel_);
 
 
-        int dimension = physicsProfile_.getBoundaryDimension();
-
+        int dimension = new Integer(physicsProfile_.getConfigurationProfile(0).getParam("dimension"));
 
         ArrayList<String> combinations = new ArrayList<String>();
 
@@ -349,7 +350,9 @@ public class RPnConfigDialog extends RPnDialog {
         addPhysicsName();
         buildBoundaryPanel();
         physicsComboBox_.addActionListener(new ComponentController());
-        axisSelected_ = new boolean[physicsProfile_.getBoundaryDimension()];
+        int dimension = new Integer(physicsProfile_.getConfigurationProfile(0).getParam("dimension"));
+
+        axisSelected_ = new boolean[dimension];
 
         tabbedPanel_.addChangeListener(new TabbedPanelController());
         applyButton.setText("Ok");
@@ -386,15 +389,15 @@ public class RPnConfigDialog extends RPnDialog {
 
     private void setMethodConfiguration() {
 
-        Set<Entry<String, MethodConfiguration>> configurationSet = methodConfigMap_.entrySet();
+        Set<Entry<String, Configuration>> configurationSet = methodConfigMap_.entrySet();
 
-        Iterator<Entry<String, MethodConfiguration>> methodIterator = configurationSet.iterator();
+        Iterator<Entry<String, Configuration>> methodIterator = configurationSet.iterator();
 
         while (methodIterator.hasNext()) {
 
-            Entry<String, MethodConfiguration> entry = methodIterator.next();
+            Entry<String, Configuration> entry = methodIterator.next();
 
-            MethodConfiguration methodConfiguration = entry.getValue();
+            Configuration methodConfiguration = entry.getValue();
 
             HashMap<String, String> params = methodConfiguration.getParams();
 
@@ -406,7 +409,7 @@ public class RPnConfigDialog extends RPnDialog {
 
                 Entry<String, String> paramEntry = paramIterator.next();
 
-                RPNUMERICS.setMethodParam(entry.getKey(), paramEntry.getKey(), paramEntry.getValue());
+                RPNUMERICS.setParamValue(entry.getKey(), paramEntry.getKey(), paramEntry.getValue());
 
             }
         }
@@ -414,7 +417,8 @@ public class RPnConfigDialog extends RPnDialog {
 
     private void setVisualConfiguration() {
 
-        boolean iso2equi_ = physicsProfile_.isIso2equiBoundary();
+
+        boolean iso2equi = new Boolean(physicsProfile_.getConfigurationProfile(0).getParam("iso2equi"));
 
         for (int i = 0; i < axisCheckBoxArray_.length; i++) {
 
@@ -428,13 +432,14 @@ public class RPnConfigDialog extends RPnDialog {
                     projIndices[index++] = new Integer(tokens.nextToken());
 
                 }
-                int dimension = physicsProfile_.getBoundaryDimension();
+
+                int dimension = new Integer(physicsProfile_.getConfigurationProfile(0).getParam("dimension"));
 
                 Space space = new Space("", dimension);
 
                 RPnVisualizationModule.DESCRIPTORS.add(
                         new RPnProjDescriptor(space, panelsLabelTextField_[i].getText(), new Integer(panelsSizeTextField_[0].getText()),
-                        new Integer(panelsSizeTextField_[1].getText()), projIndices, iso2equi_));
+                        new Integer(panelsSizeTextField_[1].getText()), projIndices, iso2equi));
 
             }
 
@@ -460,19 +465,19 @@ public class RPnConfigDialog extends RPnDialog {
     }
 
     private void setBoundary() {
-
-        if (!physicsProfile_.isIso2equiBoundary()) {//RECT BOUNDARY
+        boolean iso2equi = new Boolean(physicsProfile_.getConfigurationProfile(0).getParam("iso2equi"));
+        if (!iso2equi) {//RECT BOUNDARY
             int i = 0;
             RealVector min = new RealVector(2);
             RealVector max = new RealVector(2);
-            while (i < physicsProfile_.getBoundary().length / 2) {
+            while (i < 2) {
                 min.setElement(i, new Double(boundaryTextArray_.get(i).getText()));
                 i++;
             }
 
-            i = physicsProfile_.getBoundary().length / 2;
+            i = 2;
             int index = 0;
-            while (i < physicsProfile_.getBoundary().length) {
+            while (i < 4) {
 
                 max.setElement(index, new Double(boundaryTextArray_.get(i).getText()));
                 i++;
@@ -481,10 +486,10 @@ public class RPnConfigDialog extends RPnDialog {
             RectBoundary newBoundary = new RectBoundary(min, max);
 
             RPNUMERICS.setBoundary(newBoundary);
-            
+
 
         }
-    //If is triangular boundary, nothing to do . Default iso triangle domain in triphase physics will be used.
+        //If is triangular boundary, nothing to do . Default iso triangle domain in triphase physics will be used.
     }
 
     private class ComponentController implements ActionListener {
@@ -573,7 +578,7 @@ public class RPnConfigDialog extends RPnDialog {
 
                 String methodName = (String) methodComboBox_.getSelectedItem();
 
-                MethodConfiguration methodConfig = methodConfigMap_.get(methodName);
+                Configuration methodConfig = methodConfigMap_.get(methodName);
 
                 methodConfig.setParamValue(currentParamEdit_, newValue);
 
@@ -595,6 +600,5 @@ public class RPnConfigDialog extends RPnDialog {
 
     @Override
     protected void begin() {
-
     }
 }
