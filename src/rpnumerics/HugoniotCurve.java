@@ -265,6 +265,7 @@ public class HugoniotCurve extends RPnCurve implements RpSolution {
         return segments;
     }
 
+    @Override
     public int findClosestSegment(RealVector targetPoint, double alpha) {
 
         RealVector target = new RealVector(targetPoint);

@@ -110,7 +110,7 @@
     </target>
 
 
-    <target name="run" depends="compile-java,compile-c++,compile-plugins" description="Runs the programm" >
+    <target name="run" depends="compile-java,compile-c++,compile-plugins" description="Runs the program" >
         <property name="run.class" value="rpn.RPnDesktopPlotter"/>
 
         <path id="run.classpath">
@@ -133,7 +133,7 @@
             <sysproperty key="rpnhome" path="${basedir}"/>
             <sysproperty key="RPHOSTTYPE" value="${hosttype}"/>
             <jvmarg value="-Xmx256m"/>
-            <arg value="${basedir}/in/quad2.xml"/>
+            <arg value="${basedir}/in/testeConfig2.xml"/>
 <!--           <arg value="/impa/home/f/edsonlan/Java/testaSaidaResultados.xml"/>-->
 
         </java>

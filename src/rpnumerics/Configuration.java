@@ -118,21 +118,23 @@ public class Configuration {
         if (getType().equalsIgnoreCase("physics")) {
             buffer.append("<PHYSICS name=\"" + getName() + "\">\n");
             buffer.append(getConfiguration(0).toXML());
+                buffer.append("<FLUXFUNCTION>\n");
             for (Entry<String, String> entry : paramsSet) {
-                buffer.append("<FLUXPARAM name=" + entry.getKey() + "\" " + "position= \""+  getParamOrder(entry.getKey())+"\" "+"value= \"" + entry.getValue() + "\"/>");
+                buffer.append("<FLUXPARAMS name=\"" + entry.getKey() + "\" " + "position= \""+  getParamOrder(entry.getKey())+"\" "+"value= \"" + entry.getValue() + "\"/>");
                 buffer.append("\n");
             }
-            buffer.append("<PHYSICS/>\n");
+            buffer.append("</FLUXFUNCTION>\n");
+            buffer.append("</PHYSICS>\n");
         }
 
 
         if (getType().equalsIgnoreCase("boundary")) {
             buffer.append("<BOUNDARY name=\"" + getName() + "\">\n");
             for (Entry<String, String> entry : paramsSet) {
-                buffer.append("<BOUNDARYPARAM name=" + entry.getKey() + "\" " + "value= \"" + entry.getValue() + "\"/>");
+                buffer.append("<BOUNDARYPARAM name=\"" + entry.getKey() + "\" " + "value= \"" + entry.getValue() + "\"/>");
                 buffer.append("\n");
             }
-            buffer.append("<BOUNDARY/>\n");
+            buffer.append("</BOUNDARY>\n");
         }
 
 
@@ -140,19 +142,19 @@ public class Configuration {
         if (getType().equalsIgnoreCase("curve")) {
             buffer.append("<CURVE name=\"" + getName() + "\">\n");
             for (Entry<String, String> entry : paramsSet) {
-                buffer.append("<CURVEPARAM name=" + entry.getKey() + "\" " + "value= \"" + entry.getValue() + "\"/>");
+                buffer.append("<CURVEPARAM name=\"" + entry.getKey() + "\" " + "value= \"" + entry.getValue() + "\"/>");
                 buffer.append("\n");
             }
-            buffer.append("<CURVE/>\n");
+            buffer.append("</CURVE>\n");
         }
 
         if (getType().equalsIgnoreCase("method")) {
             buffer.append("<METHOD name=\"" + getName() + "\">\n");
             for (Entry<String, String> entry : paramsSet) {
-                buffer.append("<METHODPARAM name=" + entry.getKey() + "\" " + "value= \"" + entry.getValue() + "\"/>");
+                buffer.append("<METHODPARAM name=\"" + entry.getKey() + "\" " + "value= \"" + entry.getValue() + "\"/>");
                 buffer.append("\n");
             }
-            buffer.append("<METHOD/>\n");
+            buffer.append("</METHOD>\n");
         }
 
 

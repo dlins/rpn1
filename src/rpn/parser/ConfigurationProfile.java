@@ -17,7 +17,7 @@ public class ConfigurationProfile {
     private String type_;
     private ArrayList<ConfigurationProfile> configurationProfileArray_;
     private HashMap<String, String> paramsMap_ = new HashMap<String, String>();
-    private ArrayList<HashMap<String, String>> paramsArray_ = new ArrayList<HashMap<String, String>>();
+    private HashMap < Integer,String> paramsIndexMap_ = new HashMap<Integer,String>();
 
     public ConfigurationProfile(String name, String type) {
         type_ = type;
@@ -26,16 +26,16 @@ public class ConfigurationProfile {
     }
 
     public int getIndicesSize() {
-        return paramsArray_.size();
+        return paramsIndexMap_.size();
     }
 
 
 
     public void addParam(int index, String paramName, String defaultValue) {
-        HashMap<String, String> paramMap = new HashMap<String, String>();
+
         paramsMap_.put(paramName, defaultValue);
-        paramMap.put(paramName, defaultValue);
-        paramsArray_.add(index, paramMap);
+
+        paramsIndexMap_.put(index,paramName);
     }
 
     public void addParam(String paramName, String defaulValue) {
@@ -43,7 +43,13 @@ public class ConfigurationProfile {
     }
 
     public HashMap<String, String> getParam(int index) {
-        return paramsArray_.get(index);
+
+        String paramName = paramsIndexMap_.get(index);
+        String paramValue = paramsMap_.get(paramName);
+        HashMap<String,String> paramValuePair = new HashMap<String, String>();
+        paramValuePair.put(paramName,paramValue);
+        return paramValuePair;
+
     }
 
     public String getParam(String paramName){

@@ -51,6 +51,7 @@ public class RPnNumericsModule {
 
             if (name.equals("FLUXPARAMS")) {
                 physicsProfile_.addParam(new Integer(att.getValue(1)), att.getValue(0), att.getValue(2));
+
             }
 
             if (name.equals("CURVE")) {
@@ -99,6 +100,7 @@ public class RPnNumericsModule {
 
         }
 
+        @Override
         public void endElement(String name) throws SAXException {
             if (name.equals("PHYSICS")) {
                 RPNUMERICS.init(profile_);

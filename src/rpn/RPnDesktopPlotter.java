@@ -105,6 +105,7 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
             File interfaceConfigFile = new File(INTERFACE_CONFIG_PATH + "defaults.xml");
             InputStream configStream = new FileInputStream(interfaceConfigFile);
             xmlReader.parse(new InputSource(configStream));
+            System.out.println("Arquivo de entrada:"+ args[0]);
 
             if (args.length == 0) {
                 throw new FileNotFoundException();
@@ -135,7 +136,7 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
 
 
         } catch (FileNotFoundException ex) {
-
+            ex.printStackTrace();
             RPnConfigDialog configDialog = new RPnConfigDialog();
             configDialog.setVisible(true);
 
