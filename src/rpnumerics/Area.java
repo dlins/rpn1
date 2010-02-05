@@ -4,68 +4,34 @@
  * Departamento de Dinamica dos Fluidos
  *
  */
-
-
 package rpnumerics;
 
+import wave.util.RealVector;
 
 public class Area {
 
-    private int xResolution_;
-    private int yResolution_;
+    private RealVector topRight_;
+    private RealVector downLeft_;
+    private RealVector resolution_;
 
-    private int xUpLeft_;
-    private int yUpLeft_;
+    public Area(RealVector resolution, RealVector topRight, RealVector downLeft) {
+        topRight_ = topRight;
+        downLeft_ = downLeft;
+        resolution_ = resolution;
 
-    private int xDownRight_;
-    private int yDownRight_;
-
-    public Area(int xResolution_, int yResolution_, int xUpLeft_, int yUpLeft_, int xDownRight_, int yDownRight_) {
-        this.xResolution_ = xResolution_;
-        this.yResolution_ = yResolution_;
-        this.xUpLeft_ = xUpLeft_;
-        this.yUpLeft_ = yUpLeft_;
-        this.xDownRight_ = xDownRight_;
-        this.yDownRight_ = yDownRight_;
     }
 
-    public int getxDownRight() {
-        return xDownRight_;
+    public RealVector getDownLeft() {
+        return downLeft_;
     }
 
-    public void setxResolution(int xResolution_) {
-        this.xResolution_ = xResolution_;
+    public RealVector getResolution() {
+        return resolution_;
     }
 
-    public void setyResolution(int yResolution_) {
-        this.yResolution_ = yResolution_;
+    public RealVector getTopRight() {
+        return topRight_;
     }
-
-    public int getxResolution() {
-        return xResolution_;
-    }
-
-    public int getxUpLeft() {
-        return xUpLeft_;
-    }
-
-    public int getyDownRight() {
-        return yDownRight_;
-    }
-
-    public int getyResolution() {
-        return yResolution_;
-    }
-
-    public int getyUpLeft() {
-        return yUpLeft_;
-    }
-
-
-
-
-
-
 
 
 }

@@ -7,18 +7,19 @@ package rpn;
 
 import javax.swing.*;
 import java.awt.*;
-import rpn.controller.ui.AREASELECTION_CONFIG;
-import rpn.controller.ui.UIController;
-import rpnumerics.BifurcationProfile;
+import rpn.usecase.AreaSelectionAgent;
+import rpnumerics.RPNUMERICS;
+import wave.util.RealVector;
 
 public class RPnSelectedAreaDialog extends RPnDialog {
 
     private JPanel paramsPanel_ = new JPanel();
-
     JLabel xResolutionLabel;
     JLabel yResolutionLabel;
+    JLabel resolutionLabel_;
     JTextField xResolutionTextField;
     JTextField yResolutionTextField;
+    JTextField[] resolutionValues_;
 
     public RPnSelectedAreaDialog() {
         super(false, true);
@@ -31,21 +32,22 @@ public class RPnSelectedAreaDialog extends RPnDialog {
     }
 
     private void jbInit() throws Exception {
+
         setTitle("Area Selection Resolution");
+        resolutionValues_ = new JTextField[RPNUMERICS.domainDim()];
+
+        paramsPanel_.setLayout(new GridLayout(resolutionValues_.length, 2));
+
+        for (int i = 0; i < resolutionValues_.length; i++) {
+
+            resolutionLabel_ = new JLabel("" + i);
+            resolutionValues_[i] = new JTextField();
+
+            paramsPanel_.add(resolutionLabel_);
+            paramsPanel_.add(resolutionValues_[i]);
 
 
-        xResolutionLabel = new JLabel("X Resolution");
-        yResolutionLabel = new JLabel("Y Resolution");
-
-        xResolutionTextField = new JTextField();
-        yResolutionTextField = new JTextField();
-
-        paramsPanel_.setLayout(new GridLayout(2, 2));
-        paramsPanel_.add(xResolutionLabel);
-        paramsPanel_.add(xResolutionTextField);
-        paramsPanel_.add(yResolutionLabel);
-        paramsPanel_.add(yResolutionTextField);
-
+        }
 
         setMinimumSize(new Dimension(getTitle().length() * 10, 40));
         this.getContentPane().add(paramsPanel_, BorderLayout.CENTER);
@@ -55,27 +57,36 @@ public class RPnSelectedAreaDialog extends RPnDialog {
 
     @Override
     protected void cancel() {
-
-        int lastAreaSelected = BifurcationProfile.instance().getSelectedAreas().size() - 1;
-        int lastAreaFromPanel =  UIController.instance().getFocusPanel().getCastedUI().getSelectionAreas().size()-1;
-        BifurcationProfile.instance().getSelectedAreas().remove(lastAreaSelected);
-        UIController.instance().getFocusPanel().getCastedUI().getSelectionAreas().remove(lastAreaFromPanel);
-        UIController.instance().getFocusPanel().repaint();
-
         dispose();
     }
 
     protected void apply() {
 
-        int xRes = new Integer(xResolutionTextField.getText());
-        int yRes = new Integer(yResolutionTextField.getText());
+        boolean okFlag = true;
 
-        int lastAreaSelected = BifurcationProfile.instance().getSelectedAreas().size() - 1;
+        RealVector resolutionVector = new RealVector(resolutionValues_.length);
 
-        BifurcationProfile.instance().getSelectedAreas().get(lastAreaSelected).setxResolution(xRes);
-        BifurcationProfile.instance().getSelectedAreas().get(lastAreaSelected).setyResolution(yRes);
+        for (int i = 0; i < resolutionValues_.length; i++) {
+            JTextField jTextField = resolutionValues_[i];
+            try {
+                resolutionVector.setElement(i, Double.parseDouble(jTextField.getText()));
+            } catch (NumberFormatException ex) {
+                okFlag = false;
+                JOptionPane.showMessageDialog(this, "Invalid resolution", "Error", JOptionPane.ERROR_MESSAGE);
+                AreaSelectionAgent.instance().setValidResolution(false);
+                break;
 
-        dispose();
+            }
+        }
+
+        if (okFlag) {
+            AreaSelectionAgent.instance().setValidResolution(true);
+            AreaSelectionAgent.instance().setResolution(resolutionVector);
+            dispose();
+
+        }
+
+
 
     }
 

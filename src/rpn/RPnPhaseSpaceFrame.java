@@ -59,9 +59,9 @@ public class RPnPhaseSpaceFrame extends JFrame {
         jPanel3.setBackground(Color.gray);
         jPanel4.setBackground(Color.gray);
         contentPane.setBackground(Color.gray);
-        setTitle(" RPn - " +
-                new Integer(((PhaseSpacePanelController) phaseSpacePanel.getCastedUI()).getAbsIndex()).intValue() + ',' +
-                new Integer(((PhaseSpacePanelController) phaseSpacePanel.getCastedUI()).getOrdIndex()).intValue());
+        setTitle(" RPn - "
+                + new Integer(((PhaseSpacePanelController) phaseSpacePanel.getCastedUI()).getAbsIndex()).intValue() + ','
+                + new Integer(((PhaseSpacePanelController) phaseSpacePanel.getCastedUI()).getOrdIndex()).intValue());
         phaseSpacePanel.addMouseMotionListener(coordsField.getMouseMotionController());
         statusPanel.setBackground(Color.gray);
         statusPanel.setBorder(BorderFactory.createEtchedBorder());
@@ -91,7 +91,7 @@ public class RPnPhaseSpaceFrame extends JFrame {
 
     }
 
-     private class FocusController implements WindowFocusListener {
+    private class FocusController implements WindowFocusListener {
 
         public void windowGainedFocus(WindowEvent e) {
 
@@ -103,7 +103,7 @@ public class RPnPhaseSpaceFrame extends JFrame {
         }
     }
 
-   private  class KeyController extends KeyAdapter {
+    private class KeyController extends KeyAdapter {
 
         @Override
         public void keyPressed(KeyEvent keyEvent) {
@@ -119,88 +119,88 @@ public class RPnPhaseSpaceFrame extends JFrame {
 
             }
         }
+    }
 
+    private class SliderState implements ChangeListener {
+
+        private HashMap heightTable_;
+        private HashMap widthTable_;
+
+        public SliderState() {
+            heightTable_ = new HashMap(20);
+            widthTable_ = new HashMap(20);
         }
 
-      private   class SliderState implements ChangeListener {
+        private void createSizeScale(int min, int max) {
 
-            private HashMap heightTable_;
-            private HashMap widthTable_;
-
-            public SliderState() {
-                heightTable_ = new HashMap(20);
-                widthTable_ = new HashMap(20);
-            }
-
-            private void createSizeScale(int min, int max) {
-
-                int h = RPnPhaseSpaceFrame.this.frameSize_.height;
-                int w = RPnPhaseSpaceFrame.this.frameSize_.width;
-                int i;
-                float delta = 0;
-                for (i = -5; i <= 5; i++) {
-                    delta = (w * i * 5) / 100;
-                    heightTable_.put(new Integer(i), new Integer((int) (h + delta)));
-                    widthTable_.put(new Integer(i), new Integer((int) (w + delta)));
-                }
-
-            }
-
-            public void stateChanged(ChangeEvent e) {
-
-                int value = 0;
-                Integer h = new Integer(value);
-                Integer w = new Integer(value);
-                if ((heightTable_.isEmpty())) {
-                    createSizeScale(-5, 5);
-                }
-                JSlider source = (JSlider) (e.getSource());
-                if (!source.getValueIsAdjusting()) {
-                    value = source.getValue();
-                    h = (Integer) heightTable_.get(new Integer(value));
-                    w = (Integer) widthTable_.get(new Integer(value));
-                    RPnPhaseSpaceFrame.this.setSize(w.intValue(), h.intValue());
-                    RPnPhaseSpaceFrame.this.validate();
-                }
-            }
-        }
-        //Overridden so we can exit when window is closed
-        @Override
-        protected void processWindowEvent(WindowEvent e) {
-            super.processWindowEvent(e);
-            if (e.getID() == WindowEvent.WINDOW_CLOSING) {
-                commandMenu_.finalizeApplication();
-            }
-        }
-
-        @Override
-        protected void processComponentEvent(ComponentEvent e) {
-
-            if (e.getID() == ComponentEvent.COMPONENT_SHOWN) {
-
-                if (frameSize_ == null) {
-                    frameSize_ = getSize();
-                }
-            }
-
-        }
-
-        private void createLabels(int min, int max) {
-
+            int h = RPnPhaseSpaceFrame.this.frameSize_.height;
+            int w = RPnPhaseSpaceFrame.this.frameSize_.width;
             int i;
-            for (i = min; i <= max; i++) {
-
-                if (i == min) {
-                    labels_.put(new Integer(i), new JLabel("Min"));
-                }
-                if (i == max) {
-                    labels_.put(new Integer(i), new JLabel("Max"));
-                }
+            float delta = 0;
+            for (i = -5; i <= 5; i++) {
+                delta = (w * i * 5) / 100;
+                heightTable_.put(new Integer(i), new Integer((int) (h + delta)));
+                widthTable_.put(new Integer(i), new Integer((int) (w + delta)));
             }
 
         }
 
-        public RPnPhaseSpacePanel phaseSpacePanel() {
-            return phaseSpacePanel;
+        public void stateChanged(ChangeEvent e) {
+
+            int value = 0;
+            Integer h = new Integer(value);
+            Integer w = new Integer(value);
+            if ((heightTable_.isEmpty())) {
+                createSizeScale(-5, 5);
+            }
+            JSlider source = (JSlider) (e.getSource());
+            if (!source.getValueIsAdjusting()) {
+                value = source.getValue();
+                h = (Integer) heightTable_.get(new Integer(value));
+                w = (Integer) widthTable_.get(new Integer(value));
+                RPnPhaseSpaceFrame.this.setSize(w.intValue(), h.intValue());
+                RPnPhaseSpaceFrame.this.validate();
+            }
         }
     }
+    //Overridden so we can exit when window is closed
+
+    @Override
+    protected void processWindowEvent(WindowEvent e) {
+        super.processWindowEvent(e);
+        if (e.getID() == WindowEvent.WINDOW_CLOSING) {
+            commandMenu_.finalizeApplication();
+        }
+    }
+
+    @Override
+    protected void processComponentEvent(ComponentEvent e) {
+
+        if (e.getID() == ComponentEvent.COMPONENT_SHOWN) {
+
+            if (frameSize_ == null) {
+                frameSize_ = getSize();
+            }
+        }
+
+    }
+
+    private void createLabels(int min, int max) {
+
+        int i;
+        for (i = min; i <= max; i++) {
+
+            if (i == min) {
+                labels_.put(new Integer(i), new JLabel("Min"));
+            }
+            if (i == max) {
+                labels_.put(new Integer(i), new JLabel("Max"));
+            }
+        }
+
+    }
+
+    public RPnPhaseSpacePanel phaseSpacePanel() {
+        return phaseSpacePanel;
+    }
+}

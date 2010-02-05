@@ -44,12 +44,9 @@ public class BifurcationRefineAgent extends RpModelPlotAgent {
         BifurcationCurveCalc curveCalc = RPNUMERICS.createBifurcationCalc();
         BifurcationCurveGeomFactory factory = new BifurcationCurveGeomFactory(curveCalc);
         AreaSelectionAgent.instance().getContainer().setSelected(false);
-        AreaSelectionAgent.instance().eraseArea();
-//        removeBifurcationError();
         getContainer().setEnabled(false);
-
         return factory.geom();
-//        return null;
+
     }
 
     static public BifurcationRefineAgent instance() {

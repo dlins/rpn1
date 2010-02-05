@@ -9,11 +9,10 @@ import java.awt.Point;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import rpn.RPnSelectedAreaDialog;
+import rpn.usecase.AreaSelectionAgent;
 import rpn.usecase.BifurcationRefineAgent;
-import rpn.usecase.ChangeDirectionAgent;
 import rpnumerics.Area;
 import rpnumerics.BifurcationProfile;
-import rpnumerics.RPNUMERICS;
 import wave.multid.Coords2D;
 import wave.multid.view.ViewingTransform;
 import wave.util.RealVector;
@@ -24,13 +23,12 @@ public class AREASELECTION_CONFIG extends UI_ACTION_SELECTED {
     private ViewingTransform viewingTransf_;
     private int xResolution_;
     private int yResolution_;
-
     private RealVector areaTop_;
     private RealVector areaDown_;
 
     public AREASELECTION_CONFIG() {
 
-        super(ChangeDirectionAgent.instance());
+        super(AreaSelectionAgent.instance());
         pointsSelected_ = 0;
 
     }
@@ -38,58 +36,59 @@ public class AREASELECTION_CONFIG extends UI_ACTION_SELECTED {
     public void userInputComplete(rpn.controller.ui.UIController ui,
             RealVector userInput) {
 
-
-        if (pointsSelected_ == 0) {
-            
-            ui.getFocusPanel().getCastedUI().getSelectionAreas().clear();
-            areaTop_ = new RealVector(userInput);
-            pointsSelected_++;
-
-        } else {
-            areaDown_ = new RealVector(userInput);
-
-            viewingTransf_ = ui.getFocusPanel().scene().getViewingTransform();
-
-            Point topLeft = toDCcoords(areaTop_);
-            Point downRight = toDCcoords(areaDown_);
-
-            double width = downRight.x - topLeft.x;
-            double heigh = downRight.y - topLeft.y;
-
-            Rectangle2D.Double rectangle = new Rectangle2D.Double(topLeft.x, topLeft.y, width, heigh);
-
-            BifurcationProfile.instance().addArea(new Area(xResolution_, yResolution_, topLeft.x, topLeft.y, downRight.x, downRight.y));
-            
-            
-            ui.getFocusPanel().getCastedUI().getSelectionAreas().add(rectangle);
-            ui.getFocusPanel().repaint();
-
-            RPnSelectedAreaDialog resolutionDialog = new RPnSelectedAreaDialog();
-            resolutionDialog.setVisible(true);
-
-            reset();
+//        super.userInputComplete(ui, userInput);
+        System.out.println(" Adicionando area");
+//        if (pointsSelected_ == 0) {
+//
+//            ui.getFocusPanel().getCastedUI().getSelectionAreas().clear();
+//            areaTop_ = new RealVector(userInput);
+//            pointsSelected_++;
+//
+//        } else {
+//            areaDown_ = new RealVector(userInput);
+//
+//            viewingTransf_ = ui.getFocusPanel().scene().getViewingTransform();
+//
+//            Point topLeft = toDCcoords(areaTop_);
+//            Point downRight = toDCcoords(areaDown_);
+//
+//            double width = downRight.x - topLeft.x;
+//            double heigh = downRight.y - topLeft.y;
+//
+//            Rectangle2D.Double rectangle = new Rectangle2D.Double(topLeft.x, topLeft.y, width, heigh);
+//
+//            BifurcationProfile.instance().addArea(new Area(xResolution_, yResolution_, topLeft.x, topLeft.y, downRight.x, downRight.y));
+//
+//
+//            ui.getFocusPanel().getCastedUI().getSelectionAreas().add(rectangle);
+//            ui.getFocusPanel().repaint();
+//
+//            RPnSelectedAreaDialog resolutionDialog = new RPnSelectedAreaDialog();
+//            resolutionDialog.setVisible(true);
+//
+//            reset();
 
             //TESTE
 
 
-            ArrayList<rpnumerics.Area> testeArray =  BifurcationProfile.instance().getSelectedAreas();
-
-            int i=0;
-            for (rpnumerics.Area areaSelecionada: testeArray){
-
-                System.out.println("Posicao "+ i + areaSelecionada.getxUpLeft()+" " + areaSelecionada.getyUpLeft()+" " + areaSelecionada.getxDownRight()+" " + areaSelecionada.getyDownRight()+" " + areaSelecionada.getxResolution()+" "+ areaSelecionada.getyResolution());
-
-                i++;
-
-            }
-
-            System.out.println("Tamanho do array: " + testeArray.size());
-
-
-
-            BifurcationRefineAgent.instance().getContainer().setEnabled(true);
-
-        }
+//            ArrayList<rpnumerics.Area> testeArray = BifurcationProfile.instance().getSelectedAreas();
+//
+//            int i = 0;
+//            for (rpnumerics.Area areaSelecionada : testeArray) {
+//
+//                System.out.println("Posicao " + i + areaSelecionada.getxUpLeft() + " " + areaSelecionada.getyUpLeft() + " " + areaSelecionada.getxDownRight() + " " + areaSelecionada.getyDownRight() + " " + areaSelecionada.getxResolution() + " " + areaSelecionada.getyResolution());
+//
+//                i++;
+//
+//            }
+//
+//            System.out.println("Tamanho do array: " + testeArray.size());
+//
+//
+//
+//            BifurcationRefineAgent.instance().getContainer().setEnabled(true);
+//
+//        }
 
     }
 

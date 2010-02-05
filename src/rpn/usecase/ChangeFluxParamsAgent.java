@@ -36,7 +36,7 @@ public class ChangeFluxParamsAgent extends RpModelConfigChangeAgent {
     }
 
     public void execute() {
-        
+
         RPnFluxParamsDialog dialog = new RPnFluxParamsDialog();
         dialog.setVisible(true);
 

@@ -53,10 +53,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JToolBar toolBar_ = new JToolBar();
     private static JLabel statusLabel_ = new JLabel();
     private JMenu viewMenu_ = new JMenu("View");
-    private JCheckBoxMenuItem showCurvesPaneltem_= new JCheckBoxMenuItem("Show Curves Window",true);
+    private JCheckBoxMenuItem showCurvesPaneltem_ = new JCheckBoxMenuItem("Show Curves Window", true);
     private JFrame curvesFrame_;
-
-
 
     //Construct the frame
     public RPnUIFrame(RPnMenuCommand command) {
@@ -68,7 +66,13 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             UIController.instance().setStateController(new StateInputController(this));
             propertyChange(new PropertyChangeEvent(command, "aplication state", null, null));
             jbInit();
-            phaseSpaceFramesInit(RPNUMERICS.boundary());
+            phaseSpaceFramesInit(RPNUMERICS.boundary());//Criando painel padrao
+
+//            for (int i = 0; i < RPNUMERICS.domainDim(); i++) {//Criando paineis auxiliares
+//                phaseSpaceFramesInit(RPNUMERICS.boundary());
+//            }
+
+
             addPropertyChangeListener(this);
             UndoActionController.createInstance();
 
@@ -90,7 +94,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     // Methods
     //
 
-     public void setCurvesFrame(JFrame curvesFrame) {
+    public void setCurvesFrame(JFrame curvesFrame) {
         this.curvesFrame_ = curvesFrame;
         UIController.instance().showCurvesPanel(showCurvesPaneltem_.isSelected());
 
@@ -583,7 +587,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     }
 
     public void showCurvesPanel(boolean show) {
-            curvesFrame_.setVisible(show);
+        curvesFrame_.setVisible(show);
 
     }
 

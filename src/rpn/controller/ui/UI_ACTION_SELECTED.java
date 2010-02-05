@@ -14,6 +14,7 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
     //
     // Members
     //
+
     private RpModelActionAgent actionSelected_;
     private List userInputList_;
 
@@ -29,17 +30,20 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
     public void userInputComplete(rpn.controller.ui.UIController ui,
             RealVector userInput) {
         userInputList_.add(new RealVector(userInput));
+        UIController.instance().addCommand(userInput);
 
-        if (! (actionSelected_ instanceof ChangeDirectionAgent)) {
 
 
-            if (actionSelected_ instanceof PoincareSectionPlotAgent) {
+
+        if (!(actionSelected_ instanceof ChangeDirectionAgent)) {
+
+
+            if (actionSelected_ instanceof PoincareSectionPlotAgent || actionSelected_ instanceof AreaSelectionAgent) {
                 if (isPoincareInputReady()) {
                     //		        rpn.RPnUIFrame.instance().setTitle(" completing ...  " +
                     //		actionSelected_.getValue(javax.swing.Action.SHORT_DESCRIPTION).toString());
                     UIController.instance().setWaitCursor();
                     actionSelected_.execute();
-
                     //rpn.RPnUIFrame.instance().setTitle("");
                     UIController.instance().resetCursor();
                     userInputList_.clear();

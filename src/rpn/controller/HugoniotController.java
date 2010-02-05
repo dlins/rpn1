@@ -60,7 +60,7 @@ public class HugoniotController extends RpCalcController {
         if (change.getPropertyName().compareTo("enabled") != 0) {
 //            if (change.getSource() instanceof ChangeOrbitDirectionAgent) {
                 // updates the HugoniotFunction xzero
-                ((HugoniotCurveCalc) geomFactory_.rpCalc()).uMinusChangeNotify((PhasePoint) change.getNewValue());
+//TESTE //                ((HugoniotCurveCalc) geomFactory_.rpCalc()).uMinusChangeNotify((PhasePoint) change.getNewValue());
 //            }
 
 //            if (change.getSource() instanceof ChangeHugoniotMethodAgent) {

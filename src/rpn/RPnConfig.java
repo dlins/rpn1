@@ -32,10 +32,6 @@ public class RPnConfig {
         numericsConfig();
         visualConfig();
 
-//        System.out.println("Dimensao: " + RPNUMERICS.domain());
-
-//        System.out.println("Selecionado: " + physicsName);
-
 
     }
 
@@ -76,39 +72,8 @@ public class RPnConfig {
 
         methodsMap_.put(configurationName, profile);
 
-//        System.out.println("Adicionando Configuration");
-        //        ---------------------------TESTE--------------------------------------------------------
-
-//        Set<Entry<String, ConfigurationProfile>> configSet = methodsMap_.entrySet();
-//
-//        for (Entry<String, ConfigurationProfile> element : configSet) {
-//
-//            System.out.println(element.getValue().toString());
-
-//        ------------------------------------------------------------------------------------------
-
-
-//        }
-
-
-
-
     }
 
-//        public static void addParam(String configurationName, String paramName, String paramValue) {
-//
-//        if (!methodsMap_.containsKey(configurationName)) {
-//            ConfigurationProfile newProfile = new ConfigurationProfile(configurationName);
-//            newProfile.addParam(paramName, paramValue);
-//
-//            methodsMap_.put(configurationName, newProfile);
-//        } else {
-//            ConfigurationProfile methodProfile = methodsMap_.get(configurationName);
-//            methodProfile.addParam(paramName, paramValue);
-//            methodsMap_.put(configurationName, methodProfile);
-//
-//        }
-//    }
     public static ArrayList<ConfigurationProfile> getAllConfigurationProfiles() {
 
         ArrayList<ConfigurationProfile> returnedArrayList = new ArrayList<ConfigurationProfile>();

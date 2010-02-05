@@ -48,6 +48,7 @@ public class UIController extends ComponentUI {
     private RPnPhaseSpacePanel focusPanel_;
     private StateInputController stateController_;
     public static UI_ACTION_SELECTED INITSTATE = null;
+    private ArrayList<String> commandArray_;
 
     //
     // Constructors
@@ -60,6 +61,9 @@ public class UIController extends ComponentUI {
         installedPanels_ = new ArrayList();
         mouseController_ = new MouseController();
         globalInputTable_ = new UserInputTable(rpnumerics.RPNUMERICS.domainDim());
+
+        commandArray_ = new ArrayList<String>();
+
 
         handler_ = new SHOCK_CONFIG();
 
@@ -155,7 +159,9 @@ public class UIController extends ComponentUI {
         @Override
         public void mousePressed(MouseEvent event) {
 
+
             if (event.getComponent() instanceof RPnPhaseSpacePanel) {
+
 
                 if (netStatus_.isMaster() || !(netStatus_.isOnline())) {
                     RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
@@ -170,6 +176,7 @@ public class UIController extends ComponentUI {
                     }
                 }
             }
+
         }
 
         @Override
@@ -274,6 +281,7 @@ public class UIController extends ComponentUI {
     /** Do a specific action when all user inputs has been made. */
     public void userInputComplete(RealVector userInput) {
         // state dependent
+
         handler_.userInputComplete(this, userInput);
 
         if (netStatus_.isOnline()) {
@@ -281,6 +289,19 @@ public class UIController extends ComponentUI {
         }
 
     }
+
+    public void addCommand(RealVector userInput) {
+
+        if (handler_ instanceof UI_ACTION_SELECTED) {
+            UI_ACTION_SELECTED currentSelection = (UI_ACTION_SELECTED) handler_;
+            String commandArrayElement = currentSelection.getAction().getClass().getSimpleName() + " " + userInput.toXML();
+//            System.out.println(commandArrayElement);
+            commandArray_.add(commandArrayElement);
+        }
+
+    }
+
+    
 
     /** Sets the state of the application. The application works as a state machine and this method changes the actual state.*/
     public void setState(rpn.controller.ui.UserInputHandler newAction) {

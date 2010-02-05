@@ -27,7 +27,6 @@ import com.sun.image.codec.jpeg.JPEGCodec;
 import javax.swing.JPanel;
 import java.io.FileOutputStream;
 import java.awt.Shape;
-import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import rpnumerics.BifurcationProfile;
 
