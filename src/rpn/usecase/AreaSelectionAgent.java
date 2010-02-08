@@ -63,8 +63,18 @@ public class AreaSelectionAgent extends RpModelActionAgent {
         RealVector testDown = new RealVector(diagonal[1]);
 
         testUp.sub(testDown);
+        boolean selectionDirectionOk=true;
 
-        if (testUp.getElement(0) > 0 && testUp.getElement(1) > 0) {
+        for (int i =0; i < testUp.getSize();i++){// All direction cosines must be positives
+            if (testUp.getElement(i) / testUp.norm() < 0){
+                selectionDirectionOk = false;
+                break;
+            }
+
+        }
+
+
+        if (selectionDirectionOk) {
 
             RPnSelectedAreaDialog dialog = new RPnSelectedAreaDialog();
             dialog.setVisible(true);
