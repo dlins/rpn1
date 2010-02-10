@@ -23,7 +23,6 @@ public class RPnInterfaceParser implements ContentHandler {
     //
 
     private static ArrayList<ConfigurationProfile> configurationProfile_ = new ArrayList<ConfigurationProfile>(2);
-    private static ArrayList<ConfigurationProfile> methods_ = new ArrayList<ConfigurationProfile>(2);
     private static ArrayList<VisualizationProfile> visualizationProfiles_ = new ArrayList<VisualizationProfile>(2);
     private static ConfigurationProfile currentConfigurationProfile_;    //
     private static VisualizationProfile currentVisualizationProfile_;    // Members

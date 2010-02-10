@@ -133,8 +133,8 @@
             <sysproperty key="rpnhome" path="${basedir}"/>
             <sysproperty key="RPHOSTTYPE" value="${hosttype}"/>
             <jvmarg value="-Xmx256m"/>
-            <arg value="${basedir}/in/testeConfig2.xml"/>
-<!--           <arg value="/impa/home/f/edsonlan/Java/testaSaidaResultados.xml"/>-->
+            <arg value="${basedir}/in/quad2.xml"/>
+
 
         </java>
     </target>

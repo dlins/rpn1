@@ -11,6 +11,7 @@ import rpn.controller.ui.UIController;
 import rpnumerics.Area;
 import rpnumerics.BifurcationProfile;
 import wave.util.RealVector;
+import wave.util.RealVector2;
 
 public class AreaSelectionAgent extends RpModelActionAgent {
 
@@ -20,8 +21,8 @@ public class AreaSelectionAgent extends RpModelActionAgent {
     private RealVector resolution_;
     private boolean validResolution_;
 
-    /** Creates a new instance of ScratchAgent */
-    public AreaSelectionAgent() {
+
+    private AreaSelectionAgent() {
         super(DESC_TEXT, null);
 
         button_ = new JToggleButton(this);
@@ -62,11 +63,11 @@ public class AreaSelectionAgent extends RpModelActionAgent {
         RealVector testUp = new RealVector(diagonal[0]);
         RealVector testDown = new RealVector(diagonal[1]);
 
-        testUp.sub(testDown);
+
         boolean selectionDirectionOk=true;
 
-        for (int i =0; i < testUp.getSize();i++){// All direction cosines must be positives
-            if (testUp.getElement(i) / testUp.norm() < 0){
+        for (int i =0; i < testUp.getSize();i++){
+            if (testUp.getElement(i) < testDown.getElement(i) ){
                 selectionDirectionOk = false;
                 break;
             }
