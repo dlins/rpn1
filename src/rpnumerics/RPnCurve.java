@@ -4,7 +4,6 @@
  * Departamento de Dinamica dos Fluidos
  *
  */
-
 package rpnumerics;
 
 import java.awt.Color;
@@ -28,34 +27,19 @@ import java.util.ArrayList;
 public class RPnCurve extends MultiPolyLine {
 
     private RelaxedChainedPolylineSet polyLinesSetList_ = null;
-
     private ViewingAttr viewAttr = null;
-
     private double ALFA;
-//    public RPnCurve(ContourCurve curve, ViewingAttr viewAttr) {
-//        super(fromContourCurveToSegment(curve), viewAttr);
-//
-//        try {
-//           polyLinesSetList_ = new RelaxedChainedPolylineSet(curve.getCurve());
-//        } catch (Exception e) {
-//
-//        }
-//
-//        this.viewAttr = viewAttr;
-//
-//    }
-    
-    
-    public RPnCurve(){//TODO REMOVE !!
-        super(new CoordsArray[3],new ViewingAttr(Color.WHITE));
-        
+
+    public RPnCurve() {//TODO REMOVE !!
+        super(new CoordsArray[3], new ViewingAttr(Color.WHITE));
+
     }
 
     public RPnCurve(PointNDimension[][] polyline, ViewingAttr viewAttr) {
         super(fromPointNDimensionCurveToSegment(polyline), viewAttr);
 
         try {
-           polyLinesSetList_ = new RelaxedChainedPolylineSet(polyline);
+            polyLinesSetList_ = new RelaxedChainedPolylineSet(polyline);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -72,9 +56,8 @@ public class RPnCurve extends MultiPolyLine {
         }
 
         try {
-           polyLinesSetList_ = new RelaxedChainedPolylineSet(polyline);
+            polyLinesSetList_ = new RelaxedChainedPolylineSet(polyline);
         } catch (Exception e) {
-
         }
 
         this.viewAttr = viewAttr;
@@ -85,13 +68,63 @@ public class RPnCurve extends MultiPolyLine {
         // converter para chained
     }
 
+    public RealVector projectionCurve(RPnCurve curve, RealVector targetPoint) {
+
+        int segmentIndex = curve.findClosestSegment(targetPoint, 0);
+
+        RealVector closestPoint = curve.findClosestPoint(targetPoint);
+
+
+
+
+        if (curve instanceof BifurcationCurve) {
+
+            BifurcationCurve bifurcationCurve = (BifurcationCurve) curve;
+
+            //2D Processing
+            RealSegment closest2DSegment = (RealSegment) bifurcationCurve.segments().get(segmentIndex);
+
+
+            RealVector PP1 = new RealVector(2);
+            RealVector PP2 = new RealVector(2);
+
+            PP1.sub(closestPoint, closest2DSegment.p1());
+            PP2.sub(closest2DSegment.p2(), closestPoint);
+
+            double K = PP1.norm() / PP2.norm();
+
+            //this curve processing
+            BifurcationCurve bifurcationNDCurve = (BifurcationCurve) this;
+
+            RealSegment closestSegment = (RealSegment) bifurcationNDCurve.segments().get(segmentIndex);
+
+            RealVector x1 = new RealVector(closestSegment.p1());
+            RealVector x2 = new RealVector(closestSegment.p2());
+
+            for (int i = 0; i < bifurcationNDCurve.getSpace().getDim(); i++) {
+
+                x2.scale(K);
+                x1.sub(x2);
+
+                x1.scale(1 - K);
+
+            }
+
+            return x1;
+
+        }
+
+
+        return null;
+    }
+
     private static AbstractSegment[] fromPointNDimensionCurveToSegment(
             PointNDimension[][] polyline) {
         int numberOfPolylines = polyline.length;
 
         int numberOfSegments = 0;
         for (int pont_polyline = 0; pont_polyline < numberOfPolylines;
-                                 pont_polyline++) {
+                pont_polyline++) {
             numberOfSegments++;
             numberOfSegments += (polyline[pont_polyline].length - 1);
         }
@@ -103,7 +136,7 @@ public class RPnCurve extends MultiPolyLine {
         try {
 
             for (int pont_polyline = 0; pont_polyline < numberOfPolylines;
-                                     pont_polyline++) {
+                    pont_polyline++) {
 
                 CoordsArray[] segmentPoints = new CoordsArray[2];
                 segmentPoints[0] = polyline[pont_polyline][0].toCoordsArray();
@@ -114,8 +147,7 @@ public class RPnCurve extends MultiPolyLine {
 
                 int size = polyline[pont_polyline].length;
                 for (int pont_point = 1; pont_point < size; pont_point++) {
-                    segmentPoints[1] = polyline[pont_polyline][pont_point].
-                                       toCoordsArray();
+                    segmentPoints[1] = polyline[pont_polyline][pont_point].toCoordsArray();
                     segments[segmentCount] = new AbstractSegment(segmentPoints,
                             new AbstractSegmentAtt(AbstractSegment.SEG_LINETO));
                     segmentCount++;
@@ -133,22 +165,19 @@ public class RPnCurve extends MultiPolyLine {
 
     public RPnCurve(ContourCurve curve, ViewingAttr viewingAttr) {
 
-        super(RPnCurve.fromPointNDimensionCurveToSegment(curve.getCurve()),viewingAttr);
+        super(RPnCurve.fromPointNDimensionCurveToSegment(curve.getCurve()), viewingAttr);
 
-        viewAttr=viewingAttr;
+        viewAttr = viewingAttr;
         try {
             polyLinesSetList_ = new RelaxedChainedPolylineSet(curve.getCurve());
             //TODO Construtor para usar com o contour
         } catch (Exception ex) {
-      
+
             ex.printStackTrace();
-            
+
         }
 
-        
-
     }
-
 
     public int findClosestSegment(RealVector targetPoint, double alpha) {
 
@@ -170,8 +199,8 @@ public class RPnCurve extends MultiPolyLine {
             closest = new RealVector(target);
 
             closest.sub(segment.p2());
-            alpha = closest.dot(segmentVector) /
-                    segmentVector.dot(segmentVector);
+            alpha = closest.dot(segmentVector)
+                    / segmentVector.dot(segmentVector);
 
             if (alpha < 0) {
                 alpha = 0;
@@ -192,7 +221,6 @@ public class RPnCurve extends MultiPolyLine {
         return closestSegment;
     }
 
-
     public RealVector findClosestPoint(RealVector targetPoint) {
 
 
@@ -209,12 +237,11 @@ public class RPnCurve extends MultiPolyLine {
         }
 
         RealVector projVec = calcVecProj(closestSegment.p2(), targetPoint,
-                                         closestSegment.p1());
+                closestSegment.p1());
 
         return projVec;
 
     }
-
 
     private RealVector calcVecProj(RealVector a, RealVector b, RealVector o) {
 
@@ -241,29 +268,25 @@ public class RPnCurve extends MultiPolyLine {
 
     }
 
-
     private void updateMultiPolyline() {
         (this.getPath()).reset();
 
-        PointNDimension[][] polyline =polyLinesSetList_.getPolylines();
+        PointNDimension[][] polyline = polyLinesSetList_.getPolylines();
         int numberOfPolylines = polyline.length;
 
         try {
             for (int pont_polyline = 0; pont_polyline < numberOfPolylines;
-                                     pont_polyline++) {
+                    pont_polyline++) {
 
                 CoordsArray[] segmentPoints = new CoordsArray[2];
                 segmentPoints[0] = polyline[pont_polyline][0].toCoordsArray();
                 segmentPoints[1] = new CoordsArray(segmentPoints[0].getSpace());
                 super.append(new AbstractSegment(segmentPoints,
-                                                 new
-                                                 AbstractSegmentAtt(AbstractSegment.
-                        SEG_MOVETO)), false);
+                        new AbstractSegmentAtt(AbstractSegment.SEG_MOVETO)), false);
 
                 int size = polyline[pont_polyline].length;
                 for (int pont_point = 1; pont_point < size; pont_point++) {
-                    segmentPoints[1] = polyline[pont_polyline][pont_point].
-                                       toCoordsArray();
+                    segmentPoints[1] = polyline[pont_polyline][pont_point].toCoordsArray();
                     super.append(new AbstractSegment(segmentPoints,
                             new AbstractSegmentAtt(AbstractSegment.SEG_LINETO)), false);
                     segmentPoints[0] = segmentPoints[1];
@@ -279,7 +302,7 @@ public class RPnCurve extends MultiPolyLine {
     }
 
     public PointNDimension[] getPolyLineAt(int index) {
-        PointNDimension[][] polyline =polyLinesSetList_.getPolylines();
+        PointNDimension[][] polyline = polyLinesSetList_.getPolylines();
         return polyline[index];
     }
 
@@ -291,28 +314,28 @@ public class RPnCurve extends MultiPolyLine {
         return polyLinesSetList_.size();
     }
 
-
     public MultiPolyLine getMultidPolylineAt(int index, ViewingAttr attributes) {
 
-        PointNDimension[][] polyline =polyLinesSetList_.getPolylines();
+        PointNDimension[][] polyline = polyLinesSetList_.getPolylines();
 
         int size = polyline[index].length;
 
         CoordsArray[] coordsPolyline = new CoordsArray[size];
 
         for (int pont_point = 0; pont_point < size; pont_point++) {
-            coordsPolyline[pont_point] = polyline[index][pont_point].
-                                         toCoordsArray();
+            coordsPolyline[pont_point] = polyline[index][pont_point].toCoordsArray();
         }
 
         return new MultiPolyLine(coordsPolyline, attributes);
     }
 
+    @Override
     public void append(AbstractPathIterator toAppend, boolean connect) throws
             DimMismatchEx {
         // nao sei como implementar
     }
 
+    @Override
     public void append(AbstractSegment toAppend, boolean connect) throws
             DimMismatchEx {
         CoordsArray[] definitionPoints = toAppend.getDefinitionPoints();
@@ -320,7 +343,7 @@ public class RPnCurve extends MultiPolyLine {
         PointNDimension point2 = new PointNDimension(definitionPoints[1]);
 
         try {
-           polyLinesSetList_.addSegment(point1, point2);
+            polyLinesSetList_.addSegment(point1, point2);
         } catch (Exception e) {
             return;
         }
@@ -328,10 +351,9 @@ public class RPnCurve extends MultiPolyLine {
         updateMultiPolyline();
     }
 
-
     public void append(PointNDimension point1, PointNDimension point2) {
         try {
-           polyLinesSetList_.addSegment(point1, point2);
+            polyLinesSetList_.addSegment(point1, point2);
         } catch (Exception e) {
             return;
         }
@@ -343,7 +365,7 @@ public class RPnCurve extends MultiPolyLine {
             SegmentDegradesPolyline,
             SegmentCiclesPolyline {
         try {
-           polyLinesSetList_.addPolyline(polyline);
+            polyLinesSetList_.addPolyline(polyline);
         } catch (SegmentAlreadyInList e) {
             throw e;
         } catch (SegmentDegradesPolyline e) {
@@ -356,9 +378,7 @@ public class RPnCurve extends MultiPolyLine {
     }
 
     // remover segmento e polylines
-
     public ViewingAttr getViewAttr() {
         return this.viewAttr;
     }
-
 }

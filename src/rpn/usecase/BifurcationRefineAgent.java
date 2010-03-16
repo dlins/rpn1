@@ -5,19 +5,15 @@
  */
 package rpn.usecase;
 
-import java.awt.Point;
-import java.awt.geom.Line2D;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
-import java.util.Iterator;
-import java.util.List;
+import java.awt.event.ActionEvent;
+import rpnumerics.Area;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+import rpn.RPnSelectedAreaDialog;
 import rpn.component.*;
+import rpn.controller.ui.BIFURCATIONREFINE_CONFIG;
 import rpn.controller.ui.UIController;
-import rpn.parser.RPnDataModule;
-import rpnumerics.*;
-import wave.multid.Coords2D;
-import wave.multid.model.MultiGeometry;
-import wave.multid.view.ViewingTransform;
+import rpnumerics.BifurcationProfile;
 import wave.util.*;
 
 public class BifurcationRefineAgent extends RpModelPlotAgent {
@@ -29,23 +25,29 @@ public class BifurcationRefineAgent extends RpModelPlotAgent {
     // Members
     //
     static private BifurcationRefineAgent instance_ = null;
+    private RealVector resolution_;
+    private boolean validResolution_;
 
     //
     // Constructors/Initializers
     //
     protected BifurcationRefineAgent() {
-        super(DESC_TEXT, rpn.RPnConfig.HUGONIOT);
+        super(DESC_TEXT, rpn.RPnConfig.HUGONIOT, new JButton());
         getContainer().setEnabled(false);
+        validResolution_ = false;
 
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent event) {
+        UIController.instance().setState(new BIFURCATIONREFINE_CONFIG());
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {
 
-        BifurcationCurveCalc curveCalc = RPNUMERICS.createBifurcationCalc();
-        BifurcationCurveGeomFactory factory = new BifurcationCurveGeomFactory(curveCalc);
-        AreaSelectionAgent.instance().getContainer().setSelected(false);
-        getContainer().setEnabled(false);
-        return factory.geom();
+        System.out.println("Chamando create geometry do refino " + input.length);
+
+        return null;
 
     }
 
@@ -56,91 +58,58 @@ public class BifurcationRefineAgent extends RpModelPlotAgent {
         return instance_;
     }
 
-//    private void removeBifurcationError() {
-//
-//        Point topLeft = toDCcoords(RPNUMERICS.AREA_TOP);
-//        Point downRight = toDCcoords(RPNUMERICS.AREA_DOWN);
-//
-//        double width = downRight.x - topLeft.x;
-//        double heigh = downRight.y - topLeft.y;
-//
-//        Rectangle2D.Double rectangle = new Rectangle2D.Double(topLeft.x, topLeft.y, width, heigh);
-//
-//        Iterator geometriesIterator = RPnDataModule.PHASESPACE.getGeomObjIterator();
-//
-//        while (geometriesIterator.hasNext()) {
-//
-//            RpGeometry geometry = (RpGeometry) geometriesIterator.next();
-//
-//            if (geometry instanceof BifurcationCurveGeom) {
-//
-//                BifurcationCurveGeomFactory factory = (BifurcationCurveGeomFactory) geometry.geomFactory();
-//                BifurcationCurve curve = (BifurcationCurve) factory.geomSource();
-//
-//                List segmentsList = curve.segments();
-//                boolean toRemove = false;
-//
-//                for (int i = 0; i < segmentsList.size(); i++) {
-//
-//                    RealSegment segment = (RealSegment) segmentsList.get(i);
-//
-//                    RealVector point1 = segment.p1();
-//                    RealVector point2 = segment.p2();
-//
-//                    Point dcPoint1 = toDCcoords(point1);
-//                    Point dcPoint2 = toDCcoords(point2);
-//
-//                    Line2D.Double bifurcationSegment = new Line2D.Double(dcPoint1, dcPoint2);
-//
-//                    if (rectangle.intersectsLine(bifurcationSegment)) {
-//                        segmentsList.remove(i);
-//                        toRemove = true;
-//                    }
-//
-//                }
-//
-//
-//                if (toRemove) {
-//                    RPnDataModule.PHASESPACE.delete(geometry);
-//                    RPnDataModule.PHASESPACE.update();
-//                    BifurcationSegGeom[] newBifurcationSegs = new BifurcationSegGeom[segmentsList.size()];
-//
-//                    for (int i = 0; i < segmentsList.size(); i++) {
-//
-//                        newBifurcationSegs[i] = new BifurcationSegGeom((RealSegment) segmentsList.get(i));
-//                    }
-//
-//
-//                    BifurcationCurveGeom bifurcationCurveGeom = new BifurcationCurveGeom(newBifurcationSegs, factory);
-//                    RPnDataModule.PHASESPACE.join(bifurcationCurveGeom);
-//                    RPnDataModule.PHASESPACE.update();
-//
-//                }
-//
-//
-//            }
-//
-//        }
-//
-//
-//
-//
-//
-//
-//    }
-//
-//    private Point toDCcoords(RealVector input) {
-//
-//        Coords2D wcCoords = new Coords2D(input.getElement(0), input.getElement(1));
-//
-//        Coords2D dcCoords = new Coords2D();
-//        ViewingTransform viewingTransf = UIController.instance().getFocusPanel().scene().getViewingTransform();
-//        viewingTransf.viewPlaneTransform(wcCoords, dcCoords);
-//
-//        Point point = new Point((int) dcCoords.getX(), (int) dcCoords.getY());
-//
-//        return point;
-//
-//
-//    }
+    private void showAreaSelectionDialog(RealVector up, RealVector down) {
+
+        while (!validResolution_) {
+            RPnSelectedAreaDialog dialog = new RPnSelectedAreaDialog();
+            dialog.setVisible(true);
+
+        }
+
+        Area selectedArea = new Area(resolution_, up, down);
+        BifurcationProfile.instance().addArea(selectedArea);
+
+    }
+
+    @Override
+    public void execute() {
+        //AREA SELECTION
+
+        System.out.println("Chamando execute do refino");
+
+        RealVector[] diagonal = UIController.instance().userInputList();
+
+        System.out.println(diagonal[0]);
+        System.out.println(diagonal[1]);
+
+        RealVector testUp = new RealVector(diagonal[0]);
+        RealVector testDown = new RealVector(diagonal[1]);
+
+        boolean selectionDirectionOk = true;
+
+        for (int i = 0; i < testUp.getSize(); i++) {
+            if (testUp.getElement(i) < testDown.getElement(i)) {
+                selectionDirectionOk = false;
+                break;
+            }
+        }
+
+        if (!selectionDirectionOk) {
+            UIController.instance().globalInputTable().reset();
+            JOptionPane.showMessageDialog(UIController.instance().getFocusPanel(), "Wrong area selection", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            showAreaSelectionDialog(testUp, testDown);
+            super.execute();
+        }
+
+
+    }
+
+    public void setValidResolution(boolean validResolution) {
+        this.validResolution_ = validResolution;
+    }
+
+    public void setResolution(RealVector resolutionVector) {
+        resolution_ = resolutionVector;
+    }
 }

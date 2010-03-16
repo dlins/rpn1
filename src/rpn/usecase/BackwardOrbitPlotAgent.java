@@ -6,6 +6,7 @@
 
 package rpn.usecase;
 
+import javax.swing.JToggleButton;
 import rpn.RPnConfig;
 import rpn.component.*;
 import rpnumerics.OrbitPoint;
@@ -29,7 +30,7 @@ public class BackwardOrbitPlotAgent extends RpModelPlotAgent {
     // Constructors/Initializers
     //
     protected BackwardOrbitPlotAgent() {
-        super(DESC_TEXT,RPnConfig.ORBIT_BWD);
+        super(DESC_TEXT,RPnConfig.ORBIT_BWD,new JToggleButton());
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {

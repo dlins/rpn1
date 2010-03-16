@@ -4,7 +4,6 @@
  * Departamento de Dinamica dos Fluidos
  *
  */
-
 package rpnumerics;
 
 import java.util.ArrayList;
@@ -17,13 +16,11 @@ import wave.util.RealVector;
 
 import java.awt.*;
 
-
-
 public class BifurcationCurve extends RPnCurve implements RpSolution {
     //
     // Members
     //
-   
+
     private int familyIndex_;
     private List segments;
 
@@ -35,51 +32,59 @@ public class BifurcationCurve extends RPnCurve implements RpSolution {
 
         familyIndex_ = familyIndex;
         segments = states;
-       
     }
 
-   
-
+    @Override
     public int findClosestSegment(RealVector targetPoint, double alpha) {
-    	 RealVector target = new RealVector(targetPoint);
-         RealVector closest = null;
-         RealVector segmentVector = null;
-         alpha = 0;
-         int closestSegment = 0;
-         double closestDistance = -1;
+        RealVector target = new RealVector(targetPoint);
+        RealVector closest = null;
+        RealVector segmentVector = null;
+        alpha = 0;
+        int closestSegment = 0;
+        double closestDistance = -1;
 
-         List bifurcationSegment = segments();
-         for (int i = 0; i < segments.size(); i++) {
+        List bifurcationSegment = segments();
+        for (int i = 0; i < segments.size(); i++) {
 
-             RealSegment segment = (RealSegment) bifurcationSegment.get(i);
-             segmentVector = new RealVector(segment.p1());
-             segmentVector.sub(segment.p1());
-             closest = new RealVector(target);
-             closest.sub(segment.p2());
-             alpha = closest.dot(segmentVector) /
-                     segmentVector.dot(segmentVector);
-             if (alpha < 0) {
-                 alpha = 0;
-             }
-             if (alpha > 1) {
-                 alpha = 1;
-             }
-             segmentVector.scale(alpha);
-             closest.sub(segmentVector);
-             if ((closestDistance < 0) || (closestDistance > closest.norm())) {
-                 closestSegment = i;
-                 closestDistance = closest.norm();
-             }
-         }
-         
+            RealSegment segment = (RealSegment) bifurcationSegment.get(i);
+            segmentVector = new RealVector(segment.p1());
+            segmentVector.sub(segment.p2());
 
-         return closestSegment;
+            closest = new RealVector(target);
+            closest.sub(segment.p2());
+
+
+
+            alpha = closest.dot(segmentVector) / segmentVector.dot(segmentVector);
+
+
+            System.out.println("Numerador: " + closest.dot(segmentVector));
+            System.out.println("Denominador: " + closest.dot(segmentVector));
+
+
+            System.out.println("Dentro de findClosestSegment:" + alpha);
+
+            if (alpha < 0) {
+                alpha = 0;
+            }
+            if (alpha > 1) {
+                alpha = 1;
+            }
+            segmentVector.scale(alpha);
+            closest.sub(segmentVector);
+            if ((closestDistance < 0) || (closestDistance > closest.norm())) {
+                closestSegment = i;
+                closestDistance = closest.norm();
+            }
+        }
+
+
+        return closestSegment;
     }
 
     //
     // Accessors/Mutators
     //
-  
     public int getFamilyIndex() {
         return familyIndex_;
     }
@@ -102,7 +107,7 @@ public class BifurcationCurve extends RPnCurve implements RpSolution {
         return coords;
 
     }
-    
+
     public String toXML(boolean calcReady) {
         StringBuffer buffer = new StringBuffer();
         if (calcReady) {
@@ -110,25 +115,18 @@ public class BifurcationCurve extends RPnCurve implements RpSolution {
             buffer.append("<BIFURCATIONCURVE>\n");
 
             for (int i = 0; i < segments.size(); i++) {
-
-                HugoniotSegment hSegment = ((HugoniotSegment) segments.get(
-                        i));
-                RealSegment rSegment = new RealSegment(hSegment.leftPoint(),
-                        hSegment.rightPoint());
+                RealSegment rSegment = (RealSegment) segments.get(i);
                 buffer.append(rSegment.toXML());
 
             }
             buffer.append("</BIFURCATIONCURVE>\n");
-
-
         }
 
         return buffer.toString();
 
     }
-    
+
     public List segments() {
         return segments;
     }
-
 }

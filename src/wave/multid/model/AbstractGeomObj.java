@@ -8,12 +8,8 @@ package wave.multid.model;
 
 import java.io.FileWriter;
 import java.io.FileReader;
-import wave.multid.CoordsArray;
-import wave.multid.view.GeomObjView;
 import wave.multid.Space;
 import wave.multid.map.Map;
-import java.awt.Color;
-import wave.multid.view.ViewingTransform;
 import wave.multid.DimMismatchEx;
  /** The main class of the model package . This interface declares the main methods used to create the mutidimensional objects. */
 public interface AbstractGeomObj {

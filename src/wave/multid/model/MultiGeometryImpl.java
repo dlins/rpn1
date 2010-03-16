@@ -6,7 +6,6 @@
 
 package wave.multid.model;
 
-import wave.multid.DimMismatchEx;
 import wave.multid.view.*;
 import wave.multid.*;
 import wave.multid.map.Map;
@@ -62,6 +61,7 @@ public abstract class MultiGeometryImpl implements MultiGeometry {
 
     public void closePath() { path_.closePath(); }
 
+    @Override
     public String toString() { return path_.toString(); }
 
     protected AbstractPath getPath() {

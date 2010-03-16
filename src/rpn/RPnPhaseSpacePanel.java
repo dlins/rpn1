@@ -27,6 +27,7 @@ import com.sun.image.codec.jpeg.JPEGCodec;
 import javax.swing.JPanel;
 import java.io.FileOutputStream;
 import java.awt.Shape;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import rpnumerics.BifurcationProfile;
 
@@ -47,6 +48,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     //
     private Scene scene_;
     private Point cursorPos_;
+    private Point trackedPoint_;
     private JPEGImageEncoder encoder_;
     private boolean printFlag_ = false;
     private PhaseSpacePanelController ui_;
@@ -58,8 +60,6 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     //
     public RPnPhaseSpacePanel(Scene scene) {
         scene_ = scene;
-
-
 
         if (scene_.getViewingTransform() instanceof Viewing3DTransform) {
             ui_ = new PhaseSpacePanel3DController(scene_.getViewingTransform().
@@ -118,6 +118,11 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         cursorLine_ = aSetCursorLine_;
     }
 
+    public void setTrackedPoint(Point trackedPoint) {
+
+        this.trackedPoint_ = trackedPoint;
+    }
+
     //
     // Methods
     //
@@ -165,11 +170,15 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
 
         g.setColor(DEFAULT_POINTMARK_COLOR);
 
-        for (rpnumerics.Area selectedArea : BifurcationProfile.instance().getSelectedAreas()){
-
+        for (rpnumerics.Area selectedArea : BifurcationProfile.instance().getSelectedAreas()) {
         }
 
-
+        /*
+         * Tracked Point
+         */
+        if (trackedPoint_ != null) {
+            g.fillRect(trackedPoint_.x, trackedPoint_.y, 5, 5);
+        }
 
 
         for (Rectangle2D.Double rectangle : getCastedUI().getSelectionAreas()) {
@@ -186,8 +195,8 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
          */
         if (showCursorLine_ && isCursorLine()) {
 
-            if ((!printFlag_) &&
-                    (scene().getViewingTransform() instanceof Viewing2DTransform)) {
+            if ((!printFlag_)
+                    && (scene().getViewingTransform() instanceof Viewing2DTransform)) {
                 g.setColor(Color.red);
                 int xCursor = new Double(cursorPos_.getX()).intValue();
                 int yCursor = new Double(cursorPos_.getY()).intValue();
@@ -248,11 +257,11 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         Graphics2D g2d = (Graphics2D) g;
         pf.setOrientation(PageFormat.LANDSCAPE);
         g2d.translate(pf.getImageableX(), pf.getImageableY());
-        g2d.scale(pf.getImageableWidth() /
-                scene().getViewingTransform().viewPlane().getViewport().
+        g2d.scale(pf.getImageableWidth()
+                / scene().getViewingTransform().viewPlane().getViewport().
                 getWidth(),
-                pf.getImageableHeight() /
-                scene().getViewingTransform().viewPlane().getViewport().
+                pf.getImageableHeight()
+                / scene().getViewingTransform().viewPlane().getViewport().
                 getHeight());
         // toggle double buffering
         boolean buffered = isDoubleBuffered();
@@ -278,13 +287,8 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         g.setColor(Color.BLACK);
 
         for (Rectangle2D.Double rectangle : getCastedUI().getSelectionAreas()) {
-        g.fill(rectangle);
+            g.fill(rectangle);
         }
 
     }
-
-
-
-
-
 }

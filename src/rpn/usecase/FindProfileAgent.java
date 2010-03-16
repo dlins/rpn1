@@ -11,6 +11,7 @@ import rpnumerics.*;
 import rpn.message.*;
 import rpn.component.*;
 import java.awt.event.ActionEvent;
+import javax.swing.JToggleButton;
 import rpn.controller.phasespace.*;
 import rpn.controller.ui.*;
 
@@ -28,7 +29,7 @@ public class FindProfileAgent extends RpModelPlotAgent {
     // Constructors
     //
     protected FindProfileAgent() {
-        super(DESC_TEXT, null);
+        super(DESC_TEXT, null,new JToggleButton());
     }
 
     public void actionPerformed(ActionEvent action) {

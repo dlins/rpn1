@@ -6,6 +6,7 @@
 
 package rpn.usecase;
 
+import javax.swing.JToggleButton;
 import rpn.RPnConfig;
 import rpn.component.*;
 import rpnumerics.PhasePoint;
@@ -29,7 +30,7 @@ public class StationaryPointPlotAgent extends RpModelPlotAgent {
     // Constructors/Initializers
     //
     protected StationaryPointPlotAgent() {
-        super(DESC_TEXT, RPnConfig.STATPOINT);
+        super(DESC_TEXT, RPnConfig.STATPOINT,new JToggleButton());
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {

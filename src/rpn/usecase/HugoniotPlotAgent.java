@@ -5,6 +5,7 @@
  */
 package rpn.usecase;
 
+import javax.swing.JToggleButton;
 import rpn.component.*;
 import rpnumerics.*;
 import wave.util.RealVector;
@@ -24,7 +25,7 @@ public class HugoniotPlotAgent extends RpModelPlotAgent {
     // Constructors/Initializers
     //
     protected HugoniotPlotAgent() {
-        super(DESC_TEXT, rpn.RPnConfig.HUGONIOT);
+        super(DESC_TEXT, rpn.RPnConfig.HUGONIOT,new JToggleButton());
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {
@@ -44,4 +45,6 @@ public class HugoniotPlotAgent extends RpModelPlotAgent {
         }
         return instance_;
     }
+
+   
 }

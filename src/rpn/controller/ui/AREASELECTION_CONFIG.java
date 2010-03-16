@@ -6,13 +6,8 @@
 package rpn.controller.ui;
 
 import java.awt.Point;
-import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
-import rpn.RPnSelectedAreaDialog;
 import rpn.usecase.AreaSelectionAgent;
 import rpn.usecase.BifurcationRefineAgent;
-import rpnumerics.Area;
-import rpnumerics.BifurcationProfile;
 import wave.multid.Coords2D;
 import wave.multid.view.ViewingTransform;
 import wave.util.RealVector;
@@ -30,6 +25,7 @@ public class AREASELECTION_CONFIG extends UI_ACTION_SELECTED {
 
         super(AreaSelectionAgent.instance());
         pointsSelected_ = 0;
+        System.out.println("Construtor de AREASELECTION_CONFIG");
 
     }
 
@@ -37,7 +33,7 @@ public class AREASELECTION_CONFIG extends UI_ACTION_SELECTED {
             RealVector userInput) {
 
 //        super.userInputComplete(ui, userInput);
-        System.out.println(" Adicionando area");
+        System.out.println(" Chamando userInputComplete de AREASELECTION_CONFIG");
 //        if (pointsSelected_ == 0) {
 //
 //            ui.getFocusPanel().getCastedUI().getSelectionAreas().clear();
@@ -116,4 +112,11 @@ public class AREASELECTION_CONFIG extends UI_ACTION_SELECTED {
     public void setyResolution_(int yResolution) {
         this.yResolution_ = yResolution;
     }
+
+
+
+
+
+
+
 }

@@ -5,6 +5,7 @@
  */
 package rpn.usecase;
 
+import javax.swing.JToggleButton;
 import rpn.component.*;
 import rpnumerics.OrbitPoint;
 import rpnumerics.RPNUMERICS;
@@ -23,7 +24,7 @@ public class CompositePlotAgent extends RpModelPlotAgent {
     // Constructors/Initializers
     //
     protected CompositePlotAgent() {
-        super(DESC_TEXT, rpn.RPnConfig.HUGONIOT);
+        super(DESC_TEXT, rpn.RPnConfig.HUGONIOT,new JToggleButton());
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {

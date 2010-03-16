@@ -7,8 +7,10 @@ package rpn;
 
 import javax.swing.*;
 import java.awt.*;
+import rpn.controller.ui.UIController;
+import rpn.controller.ui.UI_ACTION_SELECTED;
 import rpn.usecase.AreaSelectionAgent;
-import rpnumerics.RPNUMERICS;
+import rpn.usecase.BifurcationRefineAgent;
 import wave.util.RealVector;
 
 public class RPnSelectedAreaDialog extends RPnDialog {
@@ -34,7 +36,9 @@ public class RPnSelectedAreaDialog extends RPnDialog {
     private void jbInit() throws Exception {
 
         setTitle("Area Selection Resolution");
-        resolutionValues_ = new JTextField[RPNUMERICS.domainDim()];
+        UI_ACTION_SELECTED actionSelected = (UI_ACTION_SELECTED) UIController.instance().getState();
+
+        resolutionValues_ = new JTextField[actionSelected.actionDimension()];
 
         paramsPanel_.setLayout(new GridLayout(resolutionValues_.length, 2));
 
@@ -73,15 +77,15 @@ public class RPnSelectedAreaDialog extends RPnDialog {
             } catch (NumberFormatException ex) {
                 okFlag = false;
                 JOptionPane.showMessageDialog(this, "Invalid resolution", "Error", JOptionPane.ERROR_MESSAGE);
-                AreaSelectionAgent.instance().setValidResolution(false);
+                BifurcationRefineAgent.instance().setValidResolution(false);
                 break;
 
             }
         }
 
         if (okFlag) {
-            AreaSelectionAgent.instance().setValidResolution(true);
-            AreaSelectionAgent.instance().setResolution(resolutionVector);
+            BifurcationRefineAgent.instance().setValidResolution(true);
+            BifurcationRefineAgent.instance().setResolution(resolutionVector);
             dispose();
 
         }

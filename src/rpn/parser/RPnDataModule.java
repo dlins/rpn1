@@ -26,11 +26,13 @@ import rpnumerics.Orbit;
 import rpnumerics.OrbitPoint;
 import rpnumerics.RPNUMERICS;
 import rpnumerics.StationaryPoint;
+import wave.multid.Space;
 
 /** With this class the calculus made in a previous session can be reloaded. A previous state can be reloaded reading a XML file that is used by this class */
 public class RPnDataModule {
 
     static public RPnPhaseSpaceAbstraction PHASESPACE = null;
+    static public RPnPhaseSpaceAbstraction AUXPHASESPACE = null;
     public static Orbit ORBIT = null;
     public static boolean RESULTS = false;
     private static HugoniotCurve hugoniotCurve_;
@@ -42,17 +44,18 @@ public class RPnDataModule {
 
     static protected class InputHandler extends HandlerBase {
         // for PoincareData
-        protected static ArrayList pPointList_,  orbitPointsList_,  vectorList_;
+
+        protected static ArrayList pPointList_, orbitPointsList_, vectorList_;
         protected static List segmentList_;
         private String currentElement_;
         protected static RealMatrix2 tempMatrix_;
-        protected static RealVector tempVector_,  point1_,  point2_;
+        protected static RealVector tempVector_, point1_, point2_;
         protected static RealVector[] vectorArray_;
         protected static XZeroGeom xZeroGeom_;
         protected static CoordsArray[] tempCoords_;
         protected static OrbitGeom tempOrbit_;
-        protected static PhasePoint tempPoint_,  tempPhasePoint_;
-        protected static int phaseSize_,  ncol_,  nrow_;
+        protected static PhasePoint tempPoint_, tempPhasePoint_;
+        protected static int phaseSize_, ncol_, nrow_;
         private double tempPTime_;
         private HugoniotParser hugolistener_;
         private OrbitParser orbitListener_;
@@ -63,7 +66,7 @@ public class RPnDataModule {
         private OrbitCalcParser orbitCalcListener_;
         private ShockFlowParser shockFlowParser_;
         private ManifoldCalcParser manifoldCalcParser_;
-        protected static boolean pointOneOK_,  calcReady_,  plotProfile_;
+        protected static boolean pointOneOK_, calcReady_, plotProfile_;
 
         public InputHandler() {
             orbitListener_ = new OrbitParser();
@@ -89,18 +92,15 @@ public class RPnDataModule {
             // initialize phase space state
             PHASESPACE = new RPnPhaseSpaceAbstraction("Phase Space",
                     RPNUMERICS.domain(), new NumConfigImpl());//  RpNumerics.domain(),
-
-
+            // initialize auxiliary phase space state
+            AUXPHASESPACE = new RPnPhaseSpaceAbstraction("Auxiliary Phase Space",
+                    new Space("Auxiliary Space", RPNUMERICS.domainDim() * 2), new NumConfigImpl());
 
         }
 
         @Override
         public void endDocument() {
-
-
 //            System.out.println("Fim do documento");//TODO Set the initial state here
-
-
         }
 
         @Override
@@ -111,11 +111,8 @@ public class RPnDataModule {
 
 
             if (name.equals("STATPOINT")) {
-
 //                System.out.println("Abrindo statpoint");
-
 //                tempPoint_ = new PhasePoint(tempVector_);
-
             }
 
             if (name.equals("MANIFOLDCALC")) {
@@ -145,13 +142,11 @@ public class RPnDataModule {
                 OrbitParser.plotOrbit = true;
             }
             if (name.equals("STATPOINTCALC")) {
-
 //                calcReady_ = new Boolean(att.getValue(1)).booleanValue();
 //                tempPoint_=new PhasePoint(new RealVector(att.getValue(0)));
 //                RPNUMERICS.getShockProfile().setFlowName(att.getValue(2));
 //                
 //                System.out.println("Abrindo StatPoint com calcready:" + calcReady_);
-
             }
 
             if (name.equals("CONNECTIONORBITCALC")) {
@@ -414,7 +409,6 @@ public class RPnDataModule {
         }
     }
 
-
     //
     // Initializers
     //
@@ -441,10 +435,10 @@ public class RPnDataModule {
         } catch (Exception saxex) {
 
             if (saxex instanceof org.xml.sax.SAXParseException) {
-                System.out.println("Line: " +
-                        ((org.xml.sax.SAXParseException) saxex).getLineNumber());
-                System.out.println("Column: " +
-                        ((org.xml.sax.SAXParseException) saxex).getColumnNumber());
+                System.out.println("Line: "
+                        + ((org.xml.sax.SAXParseException) saxex).getLineNumber());
+                System.out.println("Column: "
+                        + ((org.xml.sax.SAXParseException) saxex).getColumnNumber());
             }
 
             saxex.printStackTrace();
@@ -464,6 +458,15 @@ public class RPnDataModule {
             writer.write(((RpGeometry) geomIterator.next()).geomFactory().toXML());
 
         }
+
+        Iterator auxGeomIterator = RPnDataModule.AUXPHASESPACE.getGeomObjIterator();
+
+        while (auxGeomIterator.hasNext()) {
+
+            writer.write(((RpGeometry) auxGeomIterator.next()).geomFactory().toXML());
+
+        }
+
 
     }
 }

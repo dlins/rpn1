@@ -5,6 +5,7 @@
  */
 package rpn.usecase;
 
+import javax.swing.JToggleButton;
 import rpn.RPnConfig;
 import rpn.component.*;
 import rpnumerics.StationaryPoint;
@@ -27,7 +28,7 @@ public class BackwardManifoldPlotAgent extends RpModelPlotAgent {
     // Constructors/Initializers
     //
     protected BackwardManifoldPlotAgent() {
-        super(DESC_TEXT, RPnConfig.MANIFOLD_BWD);
+        super(DESC_TEXT, RPnConfig.MANIFOLD_BWD,new JToggleButton());
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {

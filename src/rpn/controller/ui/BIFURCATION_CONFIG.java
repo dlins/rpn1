@@ -7,25 +7,28 @@
 package rpn.controller.ui;
 
 
+import rpn.usecase.BifurcationPlotAgent;
 import wave.util.RealVector;
 
 
-import rpn.usecase.ChangeDirectionAgent;
 
 
 public class BIFURCATION_CONFIG extends UI_ACTION_SELECTED {
 
     public BIFURCATION_CONFIG() {
 
-        super(ChangeDirectionAgent.instance());
+        super(BifurcationPlotAgent.instance());
 
     }
 
     @Override
     public void userInputComplete(rpn.controller.ui.UIController ui,
                                   RealVector userInput) {
-        //System.out.println("Calling Bifurcation Config");
-        ui.setState(new GEOM_SELECTION());
-
+        System.out.println("chamando userinput complete de bifurcation config");
     }
+
+    @Override
+     public int actionDimension(){
+         return rpnumerics.RPNUMERICS.domainDim() * 2;
+     }
 }

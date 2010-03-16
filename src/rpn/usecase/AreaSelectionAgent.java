@@ -21,7 +21,6 @@ public class AreaSelectionAgent extends RpModelActionAgent {
     private RealVector resolution_;
     private boolean validResolution_;
 
-
     private AreaSelectionAgent() {
         super(DESC_TEXT, null);
 
@@ -46,8 +45,8 @@ public class AreaSelectionAgent extends RpModelActionAgent {
         resolution_ = resolution;
     }
 
-    public void setValidResolution(boolean validResolution){
-        validResolution_=validResolution;
+    public void setValidResolution(boolean validResolution) {
+        validResolution_ = validResolution;
     }
 
     @Override
@@ -58,16 +57,19 @@ public class AreaSelectionAgent extends RpModelActionAgent {
     @Override
     public void execute() {
 
+
+        System.out.println("Area Selection Agent");
+
         RealVector[] diagonal = UIController.instance().userInputList();
 
         RealVector testUp = new RealVector(diagonal[0]);
         RealVector testDown = new RealVector(diagonal[1]);
 
 
-        boolean selectionDirectionOk=true;
+        boolean selectionDirectionOk = true;
 
-        for (int i =0; i < testUp.getSize();i++){
-            if (testUp.getElement(i) < testDown.getElement(i) ){
+        for (int i = 0; i < testUp.getSize(); i++) {
+            if (testUp.getElement(i) < testDown.getElement(i)) {
                 selectionDirectionOk = false;
                 break;
             }

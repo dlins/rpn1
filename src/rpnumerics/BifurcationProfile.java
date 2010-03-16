@@ -56,6 +56,11 @@ public class BifurcationProfile {
     }
 
     public void addArea(Area area) {
+
         selectedAreas_.add(area);
+        //DEBUG
+        for (Area element : selectedAreas_) {
+            System.out.println(element.toString());
+        }
     }
 }

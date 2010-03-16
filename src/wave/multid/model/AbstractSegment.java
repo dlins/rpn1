@@ -92,6 +92,7 @@ public class AbstractSegment implements AbstractGeomObj {
 
     public void applyMap(Map map) { }
 
+    @Override
     public String toString() {
         StringBuffer buf = new StringBuffer();
         buf.append("Segment Attributes : " + attributes_ + '\n');

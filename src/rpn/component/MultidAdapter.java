@@ -14,6 +14,7 @@ import wave.util.RealVector;
 import rpnumerics.RPnCurve;
 import wave.util.PointNDimension;
 import java.util.ArrayList;
+import wave.multid.Space;
 import wave.util.RealSegment;
 
 public class MultidAdapter {
@@ -104,6 +105,7 @@ public class MultidAdapter {
     }
 
     static public CoordsArray createCoords() {
-        return new CoordsArray(rpnumerics.RPNUMERICS.domain());
+        return new CoordsArray(new Space("Espaco de teste em MultidAdapter",rpnumerics.RPNUMERICS.domainDim()*2));
+//        return new CoordsArray(rpnumerics.RPNUMERICS.domain()*2);
     }
 }

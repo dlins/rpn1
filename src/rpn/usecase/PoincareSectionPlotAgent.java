@@ -6,6 +6,7 @@
 
 package rpn.usecase;
 
+import javax.swing.JToggleButton;
 import rpn.component.*;
 import wave.util.SimplexPoincareSection;
 import rpn.RPnConfig;
@@ -26,7 +27,7 @@ public class PoincareSectionPlotAgent extends RpModelPlotAgent {
     // Constructors/Initializers
     //
     protected PoincareSectionPlotAgent() {
-        super(DESC_TEXT, RPnConfig.POINCARE);
+        super(DESC_TEXT, RPnConfig.POINCARE,new JToggleButton());
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {

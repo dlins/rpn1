@@ -21,7 +21,7 @@ public class GEOM_SELECTION implements UserInputHandler {
     }
 
     public RealVector[] userInputList(UIController ui) {
-        return ui.inputConvertion(userInputList_);
+        return UIController.inputConvertion(userInputList_);
     }
 
     public void userInputComplete(UIController ui, RealVector userInput) {

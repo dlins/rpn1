@@ -23,6 +23,7 @@ import java.beans.PropertyChangeEvent;
 import rpn.controller.*;
 import java.net.*;
 import java.util.Iterator;
+import javax.swing.JOptionPane;
 import rpn.RPnDesktopPlotter;
 import rpn.message.*;
 
@@ -136,6 +137,15 @@ public class UIController extends ComponentUI {
 
                 if (netStatus_.isMaster() || !(netStatus_.isOnline())) {
                     RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
+
+//                    int sceneDim = panel.scene().getViewingTransform().projectionMap().getDomain().getDim();
+
+//
+//                    if (sceneDim >= globalInputTable_.flags().length) {
+
+//                        if (sceneDim > globalInputTable_.flags().length) {
+                    //TODO
+//                        } else {
                     // this will automatically work only for 2D(isComplete())
                     updateUserInputTable(panel, event.getPoint());
                     evaluatePanelsCursorCoords(panel, event.getPoint());
@@ -144,6 +154,15 @@ public class UIController extends ComponentUI {
                         globalInputTable().reset();
                         resetPanelsCursorCoords();
                     }
+//                        }
+//                    } else {
+//                        JOptionPane.showMessageDialog(panel, "Wrong space dimension", "Error", JOptionPane.ERROR_MESSAGE);
+//                    }
+
+
+
+
+
 
 
                 }
@@ -159,21 +178,35 @@ public class UIController extends ComponentUI {
         @Override
         public void mousePressed(MouseEvent event) {
 
-
-            if (event.getComponent() instanceof RPnPhaseSpacePanel) {
-
+            if (event.getComponent() instanceof RPnPhaseSpacePanel) {//TODO Modificar: A userInputTable tem que ter o tamanho setado quando o handler é escolhido !!! O tamanho setado no handler e
+//                de pontos completos na userInputTable tem que ser usados no teste abaixo
 
                 if (netStatus_.isMaster() || !(netStatus_.isOnline())) {
                     RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
-                    updateUserInputTable(panel, event.getPoint());
-                    evaluatePanelsCursorCoords(panel, event.getPoint());
-                    // execute
-                    if (globalInputTable().isComplete()) {
-                        userInputComplete(globalInputTable().values());
-                        globalInputTable().reset();
-                        resetPanelsCursorCoords();
+
+                    int sceneDim = panel.scene().getViewingTransform().projectionMap().getDomain().getDim();
+
+                    if (sceneDim == globalInputTable_.flags().length) {
+
+//                        if (sceneDim > globalInputTable_.flags().length) {
+                        //TODO
+//                        } else {
+
+                        updateUserInputTable(panel, event.getPoint());
+                        evaluatePanelsCursorCoords(panel, event.getPoint());
+                        // execute
+                        if (globalInputTable().isComplete()) {
+                            userInputComplete(globalInputTable().values());
+                            globalInputTable().reset();
+                            resetPanelsCursorCoords();
+
+                        }
+
+                    } else {
+                        JOptionPane.showMessageDialog(panel, "Wrong space dimension", "Error", JOptionPane.ERROR_MESSAGE);
 
                     }
+
                 }
             }
 
@@ -223,6 +256,25 @@ public class UIController extends ComponentUI {
         installedPanels_.remove(panel);
         panel.removeMouseListener(mouseController_);
         panel.removeMouseMotionListener(mouseMotionController_);
+
+    }
+
+    /** This method removes all listeners .*/
+    public void uninstallPanels() {
+        for (int i = 0; i < installedPanels_.size(); i++) {
+            RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) installedPanels_.get(i);
+            panel.removeMouseListener(mouseController_);
+            panel.removeMouseMotionListener(mouseMotionController_);
+        }
+
+    }
+
+    public void installPanels() {
+        for (int i = 0; i < installedPanels_.size(); i++) {
+            RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) installedPanels_.get(i);
+            panel.addMouseListener(mouseController_);
+            panel.addMouseMotionListener(mouseMotionController_);
+        }
 
     }
 
@@ -301,21 +353,25 @@ public class UIController extends ComponentUI {
 
     }
 
-    
-
     /** Sets the state of the application. The application works as a state machine and this method changes the actual state.*/
     public void setState(rpn.controller.ui.UserInputHandler newAction) {
 
         stateController_.propertyChange(new PropertyChangeEvent(this, "aplication state", handler_, newAction));
 
         if (handler_ instanceof UI_ACTION_SELECTED) {
+
             UI_ACTION_SELECTED currentSelection = (UI_ACTION_SELECTED) handler_;
+            System.out.println("Tamanho da user input table:" + currentSelection.actionDimension() + currentSelection.getClass().getName());
+
+            globalInputTable_ = new UserInputTable(currentSelection.actionDimension());
+
             if (newAction instanceof UI_ACTION_SELECTED) {
                 UI_ACTION_SELECTED selectedAction = (UI_ACTION_SELECTED) newAction;
                 // either unselect or new selection
                 if (currentSelection.getAction() instanceof RpModelPlotAgent) {
 
                     ((RpModelPlotAgent) currentSelection.getAction()).getContainer().setSelected(false);
+
                 }
                 // Singletons !
                 if (currentSelection.getAction() == selectedAction.getAction()) // unselect

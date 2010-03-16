@@ -19,6 +19,7 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
         BifurcationSegGeom[] bifurcationArray = new BifurcationSegGeom[resultSize];
         for (int i = 0; i < resultSize; i++) {
             bifurcationArray[i] = new BifurcationSegGeom((RealSegment) curve.segments().get(i));
+
         }
         
         return new BifurcationCurveGeom(bifurcationArray,this);
@@ -27,7 +28,7 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
     public String toXML() {
     	 StringBuffer buffer = new StringBuffer();
 
-         buffer.append("<BIFURCATIONCALC xzero=\"" + ((HugoniotCurve) geomSource()).getXZero() + "\"" + " methodname=\"" + ShockProfile.instance().getHugoniotMethodName() + "\"" + " flowname=\"" + RPNUMERICS.getShockProfile().getFlowName() + "\"" + ">\n");
+         buffer.append("<BIFURCATIONCALC >\n");
 
          buffer.append(((BifurcationCurve) geomSource()).toXML(rpn.parser.RPnDataModule.RESULTS));
          

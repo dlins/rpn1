@@ -6,12 +6,12 @@
 
 package rpn.usecase;
 
+import javax.swing.JToggleButton;
 import rpn.RPnConfig;
 import rpn.component.*;
 import rpnumerics.StationaryPointCalc;
 import rpnumerics.PhasePoint;
 import wave.util.RealVector;
-import rpn.RPnConfigReader;
 import rpnumerics.RPNUMERICS;
 import rpnumerics.ShockFlow;
 
@@ -30,7 +30,7 @@ public class XZeroPlotAgent extends RpModelPlotAgent {
     // Constructors/Initializers
     //
     protected XZeroPlotAgent() {
-        super(DESC_TEXT, RPnConfig.STATPOINT);
+        super(DESC_TEXT, RPnConfig.STATPOINT,new JToggleButton());
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {

@@ -13,70 +13,67 @@ import wave.multid.view.ViewingTransform;
 
 public class BifurcationCurveView implements GeomObjView {
 
-	private List viewList_;
+    private List viewList_;
     private ViewingTransform viewingTransf_;
-	private AbstractGeomObj abstractGeom_;
-	private ViewingAttr viewAttr_;
-	
-	public BifurcationCurveView(BifurcationCurveGeom abstractGeom,
-            					ViewingTransform transf,
-            					ViewingAttr viewAttr) throws DimMismatchEx{
-		super();
-		setAbstractGeom(abstractGeom);
-		setViewingTransform(transf);
-		setViewingAttr(viewAttr);
-		viewList_ = new ArrayList();
-		update();
-	}
+    private AbstractGeomObj abstractGeom_;
+    private ViewingAttr viewAttr_;
 
-	  public AbstractGeomObj getAbstractGeom() {
-		    return abstractGeom_;
-	  }
+    public BifurcationCurveView(BifurcationCurveGeom abstractGeom,
+            ViewingTransform transf,
+            ViewingAttr viewAttr) throws DimMismatchEx {
+        super();
+        setAbstractGeom(abstractGeom);
+        setViewingTransform(transf);
+        setViewingAttr(viewAttr);
+        viewList_ = new ArrayList();
+        update();
+    }
 
-	  public void setAbstractGeom(AbstractGeomObj abstractGeom) {
-	    abstractGeom_ = abstractGeom;
-	  }
+    public AbstractGeomObj getAbstractGeom() {
+        return abstractGeom_;
+    }
 
-	  public ViewingTransform getViewingTransform() {
-	    return viewingTransf_;
-	  }
+    public void setAbstractGeom(AbstractGeomObj abstractGeom) {
+        abstractGeom_ = abstractGeom;
+    }
 
-	  public void setViewingTransform(ViewingTransform transf) {
-	    viewingTransf_ = transf;
-	  }
+    public ViewingTransform getViewingTransform() {
+        return viewingTransf_;
+    }
 
-	  public ViewingAttr getViewingAttr() {
-	    return viewAttr_;
-	  }
+    public void setViewingTransform(ViewingTransform transf) {
+        viewingTransf_ = transf;
+    }
 
-	  public void setViewingAttr(ViewingAttr viewAttr) {
-	    viewAttr_ = viewAttr;
-	  }
+    public ViewingAttr getViewingAttr() {
+        return viewAttr_;
+    }
 
-	  //
-	  // Methods
-	  //
-	  public void draw(Graphics2D g) {
+    public void setViewingAttr(ViewingAttr viewAttr) {
+        viewAttr_ = viewAttr;
+    }
 
-	    for (int i = 0; i < viewList_.size(); i++) {
-	      ( (GeomObjView) viewList_.get(i)).draw(g);
-	    }
-	  }
+    //
+    // Methods
+    //
+    public void draw(Graphics2D g) {
 
-	  //Original update method
+        for (int i = 0; i < viewList_.size(); i++) {
+            ((GeomObjView) viewList_.get(i)).draw(g);
+        }
+    }
 
-	  public void update() {
-		viewList_.clear();
-	    Iterator geomListIterator = ( (BifurcationCurveGeom) abstractGeom_).getBifurcationSegmentsIterator();
-	    while (geomListIterator.hasNext()) {
-	      BifurcationSegGeom geomObj = (BifurcationSegGeom) geomListIterator.next();
-	      try {
-	        viewList_.add(geomObj.createView(getViewingTransform()));
-	      }
-	      catch (DimMismatchEx dex) {
-	        dex.printStackTrace();
-	      }
-	    }
-	  }
-
+    //Original update method
+    public void update() {
+        viewList_.clear();
+        Iterator geomListIterator = ((BifurcationCurveGeom) abstractGeom_).getBifurcationSegmentsIterator();
+        while (geomListIterator.hasNext()) {
+            BifurcationSegGeom geomObj = (BifurcationSegGeom) geomListIterator.next();
+            try {
+                viewList_.add(geomObj.createView(getViewingTransform()));
+            } catch (DimMismatchEx dex) {
+                dex.printStackTrace();
+            }
+        }
+    }
 }

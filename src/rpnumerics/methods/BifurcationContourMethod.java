@@ -1,10 +1,10 @@
 package rpnumerics.methods;
 
-import rpnumerics.methods.contour.exceptions.CanNotCalculateCurve;
 import java.util.ArrayList;
 
 import rpnumerics.*;
 import rpnumerics.methods.contour.*;
+import rpnumerics.methods.contour.exceptions.CanNotCalculateCurve;
 import rpnumerics.methods.contour.functionsobjects.*;
 import wave.multid.CoordsArray;
 import wave.util.*;
@@ -282,8 +282,7 @@ public class BifurcationContourMethod extends BifurcationMethod {
 	                p4 = new RealVector(plusSide(secondPoint));
 
                         if (!(isInRestrictions(p1, p2, p3, p4, subDomainsBoundaryArray))) {
-                            realSegments.add(new RealSegment(p1, p2));
-                            realSegments.add(new RealSegment(p3, p4));
+                            realSegments.add(new RealSegment(new RealVector(firstPoint), new RealVector(secondPoint)));
                         }
 	            } // for coordiantes
 
@@ -297,8 +296,7 @@ public class BifurcationContourMethod extends BifurcationMethod {
                     p4 = new RealVector(plusSide(secondPoint));
 
                     if (!(isInRestrictions(p1, p2, p3, p4, subDomainsBoundaryArray))) {
-                            realSegments.add(new RealSegment(p1, p2));
-                            realSegments.add(new RealSegment(p3, p4));
+                            realSegments.add(new RealSegment(new RealVector(firstPoint), new RealVector(secondPoint)));
                     }
                 }// for polilineIndex
 
@@ -337,29 +335,16 @@ public class BifurcationContourMethod extends BifurcationMethod {
 
                                     for (int i = 0; i < coords1.length - 2; i++) {
                                         double[] firstPoint = coords1[i].getCoords();
-                                        double[] secondPoint = coords1[i + 1].getCoords();
+                                        double[] secondPoint = coords1[i + 1].getCoords();                                        
 
-                                        p11 = new RealVector(minusSide(firstPoint));
-                                        p21 = new RealVector(minusSide(secondPoint));
-
-                                        p31 = new RealVector(plusSide(firstPoint));
-                                        p41 = new RealVector(plusSide(secondPoint));
-
-                                        realSegments.add(new RealSegment(p11, p21));
-                                        realSegments.add(new RealSegment(p31, p41));
+                                        realSegments.add(new RealSegment(new RealVector(firstPoint), new RealVector(secondPoint)));
                                     }
 
                                     double[] firstPoint = coords1[coords1.length - 2].getCoords();
                                     double[] secondPoint = coords1[coords1.length - 1].getCoords();
 
-                                    p11 = new RealVector(minusSide(firstPoint));
-                                    p21 = new RealVector(minusSide(secondPoint));
+                                    realSegments.add(new RealSegment(new RealVector(firstPoint), new RealVector(secondPoint)));
 
-                                    p31 = new RealVector(plusSide(firstPoint));
-                                    p41 = new RealVector(plusSide(secondPoint));
-
-                                    realSegments.add(new RealSegment(p11, p21));
-                                    realSegments.add(new RealSegment(p31, p41));
                             } //for polulineIndex
                         bifurcationCurve = new BifurcationCurve(familyIndex, realSegments);
                     }

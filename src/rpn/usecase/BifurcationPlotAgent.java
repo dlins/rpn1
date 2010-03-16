@@ -5,7 +5,13 @@
  */
 package rpn.usecase;
 
+import java.awt.event.ActionEvent;
+import javax.swing.JButton;
 import rpn.component.*;
+import rpn.controller.ui.BIFURCATIONREFINE_CONFIG;
+import rpn.controller.ui.BIFURCATION_CONFIG;
+import rpn.controller.ui.UIController;
+import rpn.controller.ui.UI_ACTION_SELECTED;
 import rpnumerics.*;
 import wave.util.*;
 
@@ -21,18 +27,30 @@ public class BifurcationPlotAgent extends RpModelPlotAgent {
     //
     // Constructors/Initializers
     //
+
     protected BifurcationPlotAgent() {
-        super(DESC_TEXT, rpn.RPnConfig.HUGONIOT);
+        super(DESC_TEXT, rpn.RPnConfig.HUGONIOT, new JButton());
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent event) {
+
+        UI_ACTION_SELECTED action = new UI_ACTION_SELECTED(this);
+        UIController.instance().setState(new BIFURCATION_CONFIG());
+        action.userInputComplete(UIController.instance(), new RealVector(rpnumerics.RPNUMERICS.domainDim() * 2));// No input needed
+
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {
 
-        // System.out.println("Calling createGeometry from BifurcationPlotAgent");
+        System.out.println("Calling createGeometry from BifurcationPlotAgent");
 
         BifurcationCurveCalc curveCalc = RPNUMERICS.createBifurcationCalc();
         BifurcationCurveGeomFactory factory = new BifurcationCurveGeomFactory(curveCalc);
-        BifurcationRefineAgent.instance().setEnabled(false);
-        return factory.geom();        
+        BifurcationRefineAgent.instance().setEnabled(true);
+
+
+        return factory.geom();
     }
 
     static public BifurcationPlotAgent instance() {
@@ -41,4 +59,6 @@ public class BifurcationPlotAgent extends RpModelPlotAgent {
         }
         return instance_;
     }
+
+
 }

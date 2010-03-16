@@ -1,5 +1,6 @@
 package rpn.usecase;
 
+import javax.swing.JToggleButton;
 import rpn.component.RarefactionOrbitGeomFactory;
 import rpn.component.RpGeometry;
 import rpnumerics.OrbitPoint;
@@ -13,7 +14,7 @@ public class RarefactionBackwardOrbitPlotAgent extends RpModelPlotAgent {
     
     public RarefactionBackwardOrbitPlotAgent() {
         
-        super(DESC_TEXT, rpn.RPnConfig.ORBIT_BWD);
+        super(DESC_TEXT, rpn.RPnConfig.ORBIT_BWD,new JToggleButton());
     }
     
     public RpGeometry createRpGeometry(RealVector[] input) {

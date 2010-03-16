@@ -29,7 +29,7 @@ public class BifurcationCurveGeom implements MultiGeometry, RpGeometry {
             segList_.add(segArray[i]);
         }
         factory_ = factory;
-        space_ = rpnumerics.RPNUMERICS.domain();
+        space_ = new Space("Auxiliar Space",rpnumerics.RPNUMERICS.domainDim()*2);
         try {
             boundary_ = new BoundingBox(new CoordsArray(space_), new CoordsArray(space_));
         } catch (DimMismatchEx dex) {

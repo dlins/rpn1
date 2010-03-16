@@ -5,6 +5,7 @@
  */
 package rpn.usecase;
 
+import javax.swing.JToggleButton;
 import rpn.component.*;
 import wave.util.RealVector;
 
@@ -23,7 +24,7 @@ public class BackwardShockCurvePlotAgent extends RpModelPlotAgent {
     // Constructors/Initializers
     //
     protected BackwardShockCurvePlotAgent() {
-        super(DESC_TEXT, rpn.RPnConfig.HUGONIOT);
+        super(DESC_TEXT, rpn.RPnConfig.HUGONIOT,new JToggleButton());
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {

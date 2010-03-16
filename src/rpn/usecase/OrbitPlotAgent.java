@@ -6,6 +6,7 @@
 
 package rpn.usecase;
 
+import javax.swing.JToggleButton;
 import rpn.component.*;
 import rpnumerics.OrbitPoint;
 import wave.util.RealVector;
@@ -26,7 +27,7 @@ public class OrbitPlotAgent extends RpModelPlotAgent {
     // Constructors/Initializers
     //
     protected OrbitPlotAgent() {
-        super(DESC_TEXT, rpn.RPnConfig.ORBIT_FWD);
+        super(DESC_TEXT, rpn.RPnConfig.ORBIT_FWD,new JToggleButton());
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {

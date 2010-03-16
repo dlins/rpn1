@@ -19,6 +19,8 @@ import java.io.FileWriter;
 import rpn.controller.ui.*;
 import rpn.message.*;
 import rpnumerics.ShockProfile;
+import wave.util.RealVector;
+import wave.util.RectBoundary;
 
 public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     //
@@ -46,7 +48,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JMenuItem createJPEGImageMenuItem = new JMenuItem();
     private JMenuItem printMenuItem = new JMenuItem();
     private JMenuItem pluginMenuItem = new JMenuItem();
-    private RPnPhaseSpaceFrame[] frames_ = null;
+    private static RPnPhaseSpaceFrame[] frames_, auxFrames_;
+
+
     private RPnMenuCommand commandMenu_ = null;
     private JMenuItem networkMenuItem = new JMenuItem();
     private JCheckBoxMenuItem showCursorMenuItem_ = new JCheckBoxMenuItem("Show Cursor Lines");
@@ -100,6 +104,10 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
     }
 
+    public static RPnPhaseSpaceFrame[] getAuxFrames() {
+        return auxFrames_;
+    }
+
     public void propertyChange(PropertyChangeEvent evt) {
 
         if (evt.getPropertyName().equals("aplication state")) {
@@ -118,10 +126,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 toolBar_.add(PoincareSectionPlotAgent.instance().getContainer());
                 toolBar_.add(HugoniotPlotAgent.instance().getContainer());
                 toolBar_.add(ScratchAgent.instance().getContainer());
-                toolBar_.add(AreaSelectionAgent.instance().getContainer());
                 ScratchAgent.instance().setEnabled(true);
-
-                pack();
 
             }
 
@@ -137,9 +142,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
                 toolBar_.add(CompositePlotAgent.instance().getContainer());
                 toolBar_.add(ScratchAgent.instance().getContainer());
-                toolBar_.add(AreaSelectionAgent.instance().getContainer());
+
                 ScratchAgent.instance().setEnabled(true);
-                pack();
+
             }
 
 
@@ -150,12 +155,14 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 toolBar_.removeAll();
                 toolBar_.add(BifurcationPlotAgent.instance().getContainer());
                 toolBar_.add(ScratchAgent.instance().getContainer());
-                toolBar_.add(AreaSelectionAgent.instance().getContainer());
                 toolBar_.add(BifurcationRefineAgent.instance().getContainer());
+                toolBar_.add(TrackPointAgent.instance().getContainer());
                 ScratchAgent.instance().setEnabled(true);
                 setStatusMessage("");
-                pack();
+
             }
+
+            pack();
         }
 
 
@@ -221,6 +228,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         wave.multid.graphs.ClippedShape clipping = new wave.multid.graphs.ClippedShape(boundary);
         int numOfPanels = RPnVisualizationModule.DESCRIPTORS.size();
         frames_ = new RPnPhaseSpaceFrame[numOfPanels];
+        auxFrames_ = new RPnPhaseSpaceFrame[numOfPanels * 2];
         for (int i = 0; i < numOfPanels; i++) {
             wave.multid.view.ViewingTransform viewingTransf =
                     ((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(
@@ -244,13 +252,70 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
                 setFramesPosition(frames_[i]);
                 frames_[i].pack();
-
                 frames_[i].setVisible(true);
+
+
             } catch (wave.multid.DimMismatchEx dex) {
                 dex.printStackTrace();
             }
 
         }
+        //Init Aux Frames
+
+        Boundary auxBoundary = null;
+
+        if (RPNUMERICS.boundary() instanceof RectBoundary) {
+
+            RealVector newMax = new RealVector(RPNUMERICS.boundary().getMaximums().getSize() * 2);
+
+            RealVector newMin = new RealVector(RPNUMERICS.boundary().getMinimums().getSize() * 2);
+
+            newMin.setElement(0, -0.5);
+            newMin.setElement(1, -0.5);
+            newMin.setElement(2, -0.5);
+            newMin.setElement(3, -0.5);
+
+            newMax.setElement(0, 0.5);
+            newMax.setElement(1, 0.5);
+            newMax.setElement(2, 0.5);
+            newMax.setElement(3, 0.5);
+
+            auxBoundary = new RectBoundary(newMin, newMax);
+        }
+
+        wave.multid.graphs.ClippedShape auxClipping = new wave.multid.graphs.ClippedShape(auxBoundary);
+
+
+        for (int i = 0; i < numOfPanels * 2; i++) {
+
+            wave.multid.view.ViewingTransform auxViewingTransf =
+                    ((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(
+                    i)).createTransform(auxClipping);
+
+
+            try {
+                wave.multid.view.Scene scene = RPnDataModule.AUXPHASESPACE.createScene(auxViewingTransf,
+                        new wave.multid.view.ViewingAttr(Color.black));
+                auxFrames_[i] = new RPnPhaseSpaceFrame(scene, commandMenu_);
+                auxFrames_[i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i)).label());
+
+                UIController.instance().install(auxFrames_[i].phaseSpacePanel());
+
+                setFramesPosition(auxFrames_[i]);
+                auxFrames_[i].pack();
+                auxFrames_[i].setVisible(true);
+
+
+            } catch (wave.multid.DimMismatchEx dex) {
+                dex.printStackTrace();
+            }
+
+        }
+
+
+
+
+
     }
     // from here on just for 2D for now...
 
@@ -307,6 +372,46 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 0, null));
 
         commandMenu_.networkCommand();
+
+    }
+
+    private RPnProjDescriptor[] generateAuxProjDescriptors() {
+
+
+        int dim = RPNUMERICS.domainDim();
+
+        int index = 0;
+
+
+
+
+        RPnProjDescriptor projDescriptors[] = new RPnProjDescriptor[RPNUMERICS.domainDim() * 2];
+
+        int[] projIndex = new int[projDescriptors.length];
+
+        for (int i = 0; i < projDescriptors.length; i++) {
+            projIndex[i] = i;
+        }
+
+
+        while (index < dim) {
+
+            int[] projI = new int[2];
+
+            projI[0] = projIndex[index];
+            projI[1] = projIndex[index + 1];
+
+            projDescriptors[index] = new RPnProjDescriptor(RPnDataModule.AUXPHASESPACE.getSpace(), "Aux " + "Axis " + projI[0] + " Axis " + projI[1], 200, 200, projI, false);
+            index++;
+
+
+        }
+
+
+
+
+
+        return projDescriptors;
 
     }
 
@@ -594,7 +699,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private class StateHandler implements ActionListener {
 
         public void actionPerformed(ActionEvent e) {
-
+            System.out.println("Trocando de estado");
             UI_ACTION_SELECTED newState = null;
 
             if (stateComboBox.getSelectedItem().equals("Phase Diagram")) {
@@ -612,6 +717,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             if (stateComboBox.getSelectedItem().equals("Bifurcation Curves")) {
                 newState = new BIFURCATION_CONFIG();
                 rpn.usecase.BifurcationPlotAgent.instance().setEnabled(true);
+
 
             }
 

@@ -6,6 +6,7 @@
 
 package rpn.usecase;
 
+import javax.swing.JToggleButton;
 import rpn.RPnConfig;
 import rpn.component.*;
 import rpnumerics.*;
@@ -26,7 +27,7 @@ public class ForwardManifoldPlotAgent extends RpModelPlotAgent {
     // Constructors/Initializers
     //
     protected ForwardManifoldPlotAgent() {
-        super(DESC_TEXT, RPnConfig.MANIFOLD_FWD);
+        super(DESC_TEXT, RPnConfig.MANIFOLD_FWD,new JToggleButton());
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {

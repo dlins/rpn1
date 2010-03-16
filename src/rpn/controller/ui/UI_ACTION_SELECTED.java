@@ -35,11 +35,9 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
 
         if (!(actionSelected_ instanceof ChangeDirectionAgent)) {
 
+            if (actionSelected_ instanceof PoincareSectionPlotAgent || actionSelected_ instanceof BifurcationRefineAgent) {
 
-
-            if (actionSelected_ instanceof PoincareSectionPlotAgent || actionSelected_ instanceof AreaSelectionAgent) {
-
-                if (actionSelected_ instanceof AreaSelectionAgent) {
+                if (actionSelected_ instanceof BifurcationRefineAgent) {
                     if (isDiagonalSelection()){
                           //		        rpn.RPnUIFrame.instance().setTitle(" completing ...  " +
                         //		actionSelected_.getValue(javax.swing.Action.SHORT_DESCRIPTION).toString());
@@ -107,4 +105,9 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
     public RpModelActionAgent getAction() {
         return actionSelected_;
     }
+    public int actionDimension(){
+
+        return rpnumerics.RPNUMERICS.domainDim();
+    }
+
 }

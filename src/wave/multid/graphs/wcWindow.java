@@ -12,7 +12,6 @@ import wave.multid.view.Viewing2DTransform;
 import wave.multid.view.ViewingTransform;
 import wave.util.RealVector2;
 import java.awt.geom.Point2D;
-import java.awt.geom.Line2D;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
