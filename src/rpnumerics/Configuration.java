@@ -137,6 +137,15 @@ public class Configuration {
             buffer.append("</BOUNDARY>\n");
         }
 
+        if (getType().equalsIgnoreCase("auxboundary")) {
+            buffer.append("<AUXBOUNDARY name=\"" + getName() + "\">\n");
+            for (Entry<String, String> entry : paramsSet) {
+                buffer.append("<BOUNDARYPARAM name=\"" + entry.getKey() + "\" " + "value= \"" + entry.getValue() + "\"/>");
+                buffer.append("\n");
+            }
+            buffer.append("</AUXBOUNDARY>\n");
+        }
+
 
 
         if (getType().equalsIgnoreCase("curve")) {

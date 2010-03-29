@@ -42,12 +42,14 @@ public class RPnNumericsModule {
         private ArrayList boundaryParamsArray_;
         private static ConfigurationProfile currentConfigurationProfile_;
         private static ConfigurationProfile physicsProfile_;
+        private boolean auxBoundary_ = false;
 
         @Override
         public void startElement(String name, AttributeList att) throws
                 SAXException {
 
             currentElement_ = name;
+
 
             if (name.equals("FLUXPARAMS")) {
                 physicsProfile_.addParam(new Integer(att.getValue(1)), att.getValue(0), att.getValue(2));
@@ -68,14 +70,34 @@ public class RPnNumericsModule {
             }
 
             if (name.equals("BOUNDARY")) {
-                physicsProfile_.addConfigurationProfile(0, new ConfigurationProfile(att.getValue(0), "boundary"));
+                physicsProfile_.addConfigurationProfile(new ConfigurationProfile(att.getValue(0), "boundary"));
             }
 
             if (name.equals("BOUNDARYPARAM")) {
 
-                physicsProfile_.getConfigurationProfile(0).addParam(att.getValue(0), att.getValue(1));
+                if (physicsProfile_.profileArraySize() == 1) {
+                    physicsProfile_.getConfigurationProfile(0).addParam(att.getValue(0), att.getValue(1));
+                } else {
+
+                    if (auxBoundary_) {
+                        physicsProfile_.getConfigurationProfile(1).addParam(att.getValue(0), att.getValue(1));
+                    } else {
+                        physicsProfile_.getConfigurationProfile(0).addParam(att.getValue(0), att.getValue(1));
+                    }
+
+                }
 
             }
+
+
+
+            if (name.equals("AUXBOUNDARY")) {
+                auxBoundary_ = true;
+                System.out.println("Aqui");
+                physicsProfile_.addConfigurationProfile(new ConfigurationProfile(att.getValue(0), "auxboundary"));
+
+            }
+
 
             if (name.equals("PHASEPOINT")) {
                 tempVector_ = new RealVector((new Integer(att.getValue(0))).intValue());
@@ -105,11 +127,17 @@ public class RPnNumericsModule {
             if (name.equals("PHYSICS")) {
                 RPNUMERICS.init(profile_);
                 RPnConfig.addConfiguration(physicsProfile_.getName(), physicsProfile_);
+                System.out.println("Tamanho do arraydeConfig: "+ physicsProfile_.profileArraySize());
+
             }
 
             if (name.equals("CURVE")) {
 
                 RPnConfig.addConfiguration(currentConfigurationProfile_.getName(), currentConfigurationProfile_);
+            }
+
+            if (name.equals("AUXBOUNDARY")) {
+                auxBoundary_ = false;
             }
         }
 
