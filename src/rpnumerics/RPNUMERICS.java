@@ -91,6 +91,7 @@ public class RPNUMERICS {
 
                 if (profile.getType().equalsIgnoreCase("physics")) {
                     configuration = processPhysicsProfile(profile);
+
                 }
 
                 if (profile.getType().equalsIgnoreCase("method")) {
@@ -158,7 +159,7 @@ public class RPNUMERICS {
             if (configurationEntry.getValue().getType().equalsIgnoreCase("method")) {
                 methodConfiguration.add(configurationEntry.getValue());
             }
-            
+
             if (configurationEntry.getValue().getType().equalsIgnoreCase("curve")) {
                 curveConfiguration.add(configurationEntry.getValue());
             }
@@ -331,6 +332,9 @@ public class RPNUMERICS {
             }
         }
 
+
+
+
         for (int i = 0; i < physicsProfile.profileArraySize(); i++) {
 
             ConfigurationProfile boundaryProfile = physicsProfile.getConfigurationProfile(i);
@@ -340,7 +344,7 @@ public class RPNUMERICS {
                 physicsConfiguration.addConfiguration(boundaryConfiguration);
             }
 
-            if (boundaryProfile.getType().equals("auxboundary")) {
+            if (boundaryProfile.getName().equals("auxrect")) {
 
                 Configuration boundaryConfiguration = new Configuration(boundaryProfile.getName(), "auxboundary", boundaryProfile.getParams());
                 physicsConfiguration.addConfiguration(boundaryConfiguration);

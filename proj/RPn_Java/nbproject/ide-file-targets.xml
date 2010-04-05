@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir=".." name="RPn_Java-IDE">
+    <property name="project.dir" value="../../src"/>
+    <property name="ant.script" value="${project.dir}/build.xml"/>
+    <!-- TODO: edit the following target according to your needs -->
+    <!-- (more info: http://www.netbeans.org/kb/articles/freeform-config.html#runsingle) -->
+    <target name="run-selected-file-in-src">
+        <fail unless="run.class">Must set property 'run.class'</fail>
+        <ant antfile="${ant.script}" inheritall="false">
+            <target name="compile-java"/>
+            <target name="compile-c++"/>
+            <target name="compile-plugins"/>
+        </ant>
+        <java classname="${run.class}" failonerror="true" fork="true">
+            <classpath>
+                <pathelement path="${project.dir}/../lib/iso-relax.jar:${project.dir}/../lib/jbossall-client.jar:${project.dir}/../lib/jlapack-0.6.jar:${project.dir}/../lib/log4j.jar:${project.dir}/../lib/msv.jar:${project.dir}/../lib/pdflib.jar:${project.dir}/../lib/relaxngDatatype.jar:${project.dir}/../lib/vecmath.jar:${project.dir}/../lib/xercesImpl.jar:${project.dir}/../lib/xml4j.jar:${project.dir}/../lib/xmlParserAPIs.jar:${project.dir}/../lib/xsdlib.jar"/>
+            </classpath>
+        </java>
+    </target>
+</project>

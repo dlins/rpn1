@@ -93,7 +93,6 @@ public class RPnNumericsModule {
 
             if (name.equals("AUXBOUNDARY")) {
                 auxBoundary_ = true;
-                System.out.println("Aqui");
                 physicsProfile_.addConfigurationProfile(new ConfigurationProfile(att.getValue(0), "auxboundary"));
 
             }
@@ -127,7 +126,6 @@ public class RPnNumericsModule {
             if (name.equals("PHYSICS")) {
                 RPNUMERICS.init(profile_);
                 RPnConfig.addConfiguration(physicsProfile_.getName(), physicsProfile_);
-                System.out.println("Tamanho do arraydeConfig: "+ physicsProfile_.profileArraySize());
 
             }
 

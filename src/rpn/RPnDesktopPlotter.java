@@ -60,8 +60,8 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
     public void finalizeApplication() {
         try {
 
-            if (UIController.instance().getNetStatusHandler().isServerOnline() &&
-                    UIController.instance().getNetStatusHandler().isOnline()) {
+            if (UIController.instance().getNetStatusHandler().isServerOnline()
+                    && UIController.instance().getNetStatusHandler().isOnline()) {
                 UIController.instance().getNetStatusHandler().online(false);
             }
 
@@ -105,7 +105,7 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
             File interfaceConfigFile = new File(INTERFACE_CONFIG_PATH + "defaults.xml");
             InputStream configStream = new FileInputStream(interfaceConfigFile);
             xmlReader.parse(new InputSource(configStream));
-  
+
             if (args.length == 0) {
                 throw new FileNotFoundException();
             }
@@ -126,12 +126,6 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
 
             RPnCurvesListFrame curvesFrame = new RPnCurvesListFrame();
             rpnUIFrame.setCurvesFrame(curvesFrame);
-
-
-
-
-
-
 
 
         } catch (FileNotFoundException ex) {

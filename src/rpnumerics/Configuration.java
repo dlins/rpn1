@@ -18,18 +18,17 @@ public class Configuration {
     private String name_;
     private String type_;
 
- 
     public Configuration(String name, String type, HashMap<String, String> paramsAndValues) {
 
         params_ = paramsAndValues;
-        paramOrder_= new ArrayList<String>();
+        paramOrder_ = new ArrayList<String>();
         name_ = name;
         type_ = type;
     }
 
     public Configuration(String name, String type) {
         params_ = new HashMap<String, String>();
-        paramOrder_=new ArrayList<String>();
+        paramOrder_ = new ArrayList<String>();
         name_ = name;
         type_ = type;
     }
@@ -38,12 +37,11 @@ public class Configuration {
         params_.remove(paramName);
     }
 
-
-    public void setParamOrder(String paramName, int order){
+    public void setParamOrder(String paramName, int order) {
         paramOrder_.add(order, paramName);
     }
 
-    public int getParamOrder(String paramName){
+    public int getParamOrder(String paramName) {
 
         return paramOrder_.indexOf(paramName);
     }
@@ -57,9 +55,9 @@ public class Configuration {
 
         params_.put(paramName, paramValue);
 
-       if (paramOrder_.indexOf(paramName)==-1){
-           paramOrder_.add(paramName);
-       }
+        if (paramOrder_.indexOf(paramName) == -1) {
+            paramOrder_.add(paramName);
+        }
 
 
 
@@ -117,13 +115,19 @@ public class Configuration {
 
         if (getType().equalsIgnoreCase("physics")) {
             buffer.append("<PHYSICS name=\"" + getName() + "\">\n");
-            buffer.append(getConfiguration(0).toXML());
-                buffer.append("<FLUXFUNCTION>\n");
+            buffer.append(getConfiguration(0).toXML());//Printing main boundary
+
+            if (configurationArraySize() == 2) {//Printing auxiliar boundary
+                buffer.append(getConfiguration(1).toXML());
+            }
+
+            buffer.append("<FLUXFUNCTION>\n");
             for (Entry<String, String> entry : paramsSet) {
-                buffer.append("<FLUXPARAMS name=\"" + entry.getKey() + "\" " + "position= \""+  getParamOrder(entry.getKey())+"\" "+"value= \"" + entry.getValue() + "\"/>");
+                buffer.append("<FLUXPARAMS name=\"" + entry.getKey() + "\" " + "position= \"" + getParamOrder(entry.getKey()) + "\" " + "value= \"" + entry.getValue() + "\"/>");
                 buffer.append("\n");
             }
             buffer.append("</FLUXFUNCTION>\n");
+
             buffer.append("</PHYSICS>\n");
         }
 
@@ -136,6 +140,8 @@ public class Configuration {
             }
             buffer.append("</BOUNDARY>\n");
         }
+
+
 
         if (getType().equalsIgnoreCase("auxboundary")) {
             buffer.append("<AUXBOUNDARY name=\"" + getName() + "\">\n");

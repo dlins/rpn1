@@ -19,6 +19,7 @@ import java.io.FileWriter;
 import rpn.controller.ui.*;
 import rpn.message.*;
 import rpnumerics.ShockProfile;
+import wave.util.IsoTriang2DBoundary;
 import wave.util.RealVector;
 import wave.util.RectBoundary;
 
@@ -71,11 +72,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             propertyChange(new PropertyChangeEvent(command, "aplication state", null, null));
             jbInit();
             phaseSpaceFramesInit(RPNUMERICS.boundary());//Criando painel padrao
-
-//            for (int i = 0; i < RPNUMERICS.domainDim(); i++) {//Criando paineis auxiliares
-//                phaseSpaceFramesInit(RPNUMERICS.boundary());
-//            }
-
 
             addPropertyChangeListener(this);
             UndoActionController.createInstance();
@@ -264,7 +260,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         Boundary auxBoundary = null;
 
-        if (RPNUMERICS.boundary() instanceof RectBoundary) {
+        if (RPNUMERICS.boundary() instanceof RectBoundary) {//TODO Get auxiliar boundary configuration from RPNUMERICS 
 
             RealVector newMax = new RealVector(RPNUMERICS.boundary().getMaximums().getSize() * 2);
 
@@ -281,6 +277,10 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             newMax.setElement(3, 0.5);
 
             auxBoundary = new RectBoundary(newMin, newMax);
+        }
+
+        if (RPNUMERICS.boundary() instanceof IsoTriang2DBoundary){
+            auxBoundary= (IsoTriang2DBoundary)RPNUMERICS.boundary();
         }
 
         wave.multid.graphs.ClippedShape auxClipping = new wave.multid.graphs.ClippedShape(auxBoundary);

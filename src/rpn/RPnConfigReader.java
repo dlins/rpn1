@@ -77,8 +77,7 @@ public abstract class RPnConfigReader{
 
 	    RPnDataModule.init(parser, configStream);
 
-//	    configStream.reset();
-//
+
 //            RPnGeometryModule.init(parser, configStream);
             
             PluginInfoParser pluginParser = new PluginInfoParser();
