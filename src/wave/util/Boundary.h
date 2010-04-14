@@ -14,6 +14,7 @@
  * Includes:
  */
 #include "RealVector.h"
+#include "mathutil.h"
 
 //!
 /*!
@@ -46,6 +47,15 @@ public:
     virtual RealVector intersect(RealVector &y1, RealVector &y2) const = 0;
     //! Returns the boundary type
     virtual const char * boundaryType()const =0;
+
+    virtual int intersection(const RealVector &p, const RealVector &q, RealVector &r);
+
+
+
+protected:
+
+    double distance(const RealVector &, const RealVector &);
+    double static epsilon;
 };
 
 
