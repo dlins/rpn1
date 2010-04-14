@@ -50,9 +50,8 @@ public class ContourND implements Serializable {
 	 * Segment to be sent
 	 */
 			
-	public ContourND(CubeFunction[] functionp, 
-					 int dimensionp, 
-					 HyperCubeErrorTreatmentBehavior hyperCubeErrorTreatment) throws IllegalArgumentException {
+	public ContourND(CubeFunction[] functionp, int dimensionp, 
+		HyperCubeErrorTreatmentBehavior hyperCubeErrorTreatment) throws IllegalArgumentException {
 
 		propertiesInitialization(functionp, dimensionp);
 		
@@ -63,9 +62,7 @@ public class ContourND implements Serializable {
 		}
 				
 		initMainObjects();
-		
 		this.hyperCubeErrorTreatment = hyperCubeErrorTreatment;
-		
 		setNameOfMethod("ContourND");	
 	}
 	
@@ -83,41 +80,31 @@ public class ContourND implements Serializable {
 		if ((rect.length == (dimension * 2)) && (res.length == dimension)) {
 			
 			try {
-					
-
-		    	double[][] foncub_ = new double[numberOfEquations][numberOfVertices];
+				double[][] foncub_ = new double[numberOfEquations][numberOfVertices];
 		    					
 				Constraint[] constraints = initializeConstraints(res, rect);
 								
 				GridGenerator solution = initializeSolutionConstraints(dimension, 
-																	   constraints, 
-																	   function, 
-																	   hyperCubeErrorTreatment);
-							
+					constraints, function, hyperCubeErrorTreatment);
 				MultipleLoop loop = initializeLoop(res);
-				
+
 				int size = loop.getLoopSize();
-				
+
 				for(int loopHash = 0; loopHash < size; loopHash++) {
 		    		
-		    		int[] position = loop.getIndex(loopHash);
-		    		
+					int[] position = loop.getIndex(loopHash);
 					FunctionParameters parameters = new FunctionParameters(dimension);
-					
+
 					for (int dimension_pont = 0; dimension_pont < dimension; dimension_pont++) {
 						parameters.setIndex(position[dimension_pont], dimension_pont + 1);
 					}
 					
 					try {
-						
 /*  TODO: re-introduce trianglar domain for ContourND
-
-     // this code was introduced by Carlos Bevilaq and makes de domain triangular.
+     // this code was introduced by Carlos Bevilaq and makes the domain triangular.
      // Daniel de Albuquerque removed it --daniel@impa.br
 
-
 	int myDimension = parameters.myDimensionIs();
-        
         int even = myDimension % 2;
         int dim_loop = myDimension / 2;
         
@@ -129,47 +116,40 @@ public class ContourND implements Serializable {
 			// System.out.println("Leaving..." + first + " " + second);
                     throw new CanNotPerformCalculations();
                 }
-                    
             }
         }						
-*/						foncub_ = evaluateFunctions(solution, parameters);
-						
+*/
+						foncub_ = evaluateFunctions(solution, parameters);
 						double [][] sol_;
-				    	int [][] edges_; 
-						
+						int [][] edges_; 
 						sol_ = solving(foncub_);
-						
 						edges_ = makeEdges(); 	
 						
 						try{
-				    		int nedges = cSolver_.getNumberOfEdges();
+							int nedges = cSolver_.getNumberOfEdges();
 					
 							if ( nedges > 0 ) {
-								
 								ContourPolyline[] polylines = copyEdges(solution, nedges,parameters, sol_, edges_);
-						    	
-								for (int pont_polyline = 0; pont_polyline < polylines.length; pont_polyline++) {
-					    			curve.addPolyline(polylines[pont_polyline]);
-					    		}
+								for (int pont_polyline = 0; pont_polyline < polylines.length; pont_polyline++) 	{
+									curve.addPolyline(polylines[pont_polyline]);
+					    			}
 							} else {
 								throw new SolutionNotFound();
 							}
 							
-					    } catch (DimensionOutOfBounds e) {
-					    	throw new CanNotPerformCalculations();
+						} catch (DimensionOutOfBounds e) {
+							throw new CanNotPerformCalculations();
 						} catch (ThereIsNoFeasibleSolution e) {
 							throw new CanNotPerformCalculations();
 						} catch (HyperCubeErrorFound e) {
 							this.hyperCubeErrorTreatment.markHyperCube(new MarkedCubeItem( solution, parameters, e));
-			    		} 
+			    			} 
 												
 					} catch (SolutionNotFound e) {
-						
 					} catch (CanNotPerformCalculations e) {
-						
-		    		}
-		    	}
-								    			
+		    			}
+				}
+
 			} catch (Exception e) {
 				e.printStackTrace();
 				throw new CanNotPerformCalculations();			
