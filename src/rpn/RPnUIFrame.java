@@ -223,39 +223,10 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     protected void phaseSpaceFramesInit(Boundary boundary) {
         wave.multid.graphs.ClippedShape clipping = new wave.multid.graphs.ClippedShape(boundary);
         int numOfPanels = RPnVisualizationModule.DESCRIPTORS.size();
-        frames_ = new RPnPhaseSpaceFrame[numOfPanels];
         auxFrames_ = new RPnPhaseSpaceFrame[numOfPanels * 2];
-        for (int i = 0; i < numOfPanels; i++) {
-            wave.multid.view.ViewingTransform viewingTransf =
-                    ((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(
-                    i)).createTransform(clipping);
-            try {
-                wave.multid.view.Scene scene = RPnDataModule.PHASESPACE.createScene(viewingTransf,
-                        new wave.multid.view.ViewingAttr(Color.black));
-                frames_[i] = new RPnPhaseSpaceFrame(scene, commandMenu_);
-                frames_[i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(i)).label());
-
-                /*
-                 * controllers installation
-                 *
-                 * Each controller will be installed in Panel
-                 * constructor and the central UIController
-                 * will be controlling all Panels.
-                 * All Panels listen to all Panels...
-                 */
-
-                UIController.instance().install(frames_[i].phaseSpacePanel());
-
-                setFramesPosition(frames_[i]);
-                frames_[i].pack();
-                frames_[i].setVisible(true);
+        frames_ = new RPnPhaseSpaceFrame[numOfPanels];
 
 
-            } catch (wave.multid.DimMismatchEx dex) {
-                dex.printStackTrace();
-            }
-
-        }
         //Init Aux Frames
 
         Boundary auxBoundary = null;
@@ -313,10 +284,43 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         }
 
 
+	// Init Main Frame
+        for (int i = 0; i < numOfPanels; i++) {
+            wave.multid.view.ViewingTransform viewingTransf =
+                    ((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(
+                    i)).createTransform(clipping);
+            try {
+                wave.multid.view.Scene scene = RPnDataModule.PHASESPACE.createScene(viewingTransf,
+                        new wave.multid.view.ViewingAttr(Color.black));
+                frames_[i] = new RPnPhaseSpaceFrame(scene, commandMenu_);
+                frames_[i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(i)).label());
+
+                /*
+                 * controllers installation
+                 *
+                 * Each controller will be installed in Panel
+                 * constructor and the central UIController
+                 * will be controlling all Panels.
+                 * All Panels listen to all Panels...
+                 */
+
+                UIController.instance().install(frames_[i].phaseSpacePanel());
+
+                setFramesPosition(frames_[i]);
+                frames_[i].pack();
+                frames_[i].setVisible(true);
+
+
+            } catch (wave.multid.DimMismatchEx dex) {
+                dex.printStackTrace();
+            }
+
+        }
 
 
 
     }
+
     // from here on just for 2D for now...
 
     void createJPEGImage_actionPerformed(ActionEvent e) {
