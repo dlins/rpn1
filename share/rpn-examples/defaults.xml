@@ -4,16 +4,29 @@
 <rpnconfiguration>
     <!--PHYSICS-->
     <PHYSICS name="QuadraticR2">
-  <BOUNDARY name="rect">
-         <BOUNDARYPARAM name="dimension" value="2" />
-         <BOUNDARYPARAM name="iso2equi" value="false" />
-         <BOUNDARYPARAM name="x-min" value="-0.5" />
-         <BOUNDARYPARAM name="x-max" value="0.5" />
-         <BOUNDARYPARAM name="y-min" value="-0.5" />
-         <BOUNDARYPARAM name="y-max" value="0.5" />
+        <BOUNDARY name="rect">
+            <BOUNDARYPARAM name="dimension" value="2" />
+            <BOUNDARYPARAM name="iso2equi" value="false" />
+            <BOUNDARYPARAM name="x-min" value="-0.5" />
+            <BOUNDARYPARAM name="x-max" value="0.5" />
+            <BOUNDARYPARAM name="y-min" value="-0.5" />
+            <BOUNDARYPARAM name="y-max" value="0.5" />
 
         </BOUNDARY>
-             <FLUXFUNCTION >
+
+        <AUXBOUNDARY name="auxrect">
+
+            <BOUNDARYPARAM name="dimension" value="2" />
+            <BOUNDARYPARAM name="iso2equi" value="false" />
+            <BOUNDARYPARAM name="x-min" value="-0.5" />
+            <BOUNDARYPARAM name="x-max" value="0.5" />
+            <BOUNDARYPARAM name="y-min" value="-0.5" />
+            <BOUNDARYPARAM name="y-max" value="0.5" />
+
+        </AUXBOUNDARY>
+
+
+        <FLUXFUNCTION >
             <FLUXPARAMS name="a1" position="0" value ="-1" />
             <FLUXPARAMS name="b1" position="1" value ="0" />
 
@@ -27,13 +40,20 @@
             <FLUXPARAMS name="e2" position="9" value ="0" />
 
         </FLUXFUNCTION>
-        
+
     </PHYSICS>
-    
+
     <PHYSICS name="TriPhase">
         <BOUNDARY name="triang">
-        <BOUNDARYPARAM name="dimension" value="2" />
+            <BOUNDARYPARAM name="dimension" value="2" />
         </BOUNDARY>
+
+        <AUXBOUNDARY name="auxrect">
+
+            <BOUNDARYPARAM name="dimension" value="2" />
+            <BOUNDARYPARAM name="iso2equi" value="true" />
+        </AUXBOUNDARY>
+
         <FLUXFUNCTION >
             <FLUXPARAMS name="vel" position="0" value ="1" />
             <FLUXPARAMS name="muw" position="1" value ="0.3333" />
@@ -44,33 +64,18 @@
             <FLUXPARAMS name="grg" position="6" value ="0" />
 
         </FLUXFUNCTION>
-        
-        
+
+
     </PHYSICS>
-    
-    
+
+
     <!--METHODS-->
-    
+
     <METHOD name="Continuation">
         <METHODPARAM  name="step" value="0.01" />
 
-<!--        <METHODPARAM  name="step1" value="0.01" />
-     <METHODPARAM  name="step2" value="0.01" />
-        <METHODPARAM  name="step3" value="0.01" />
-        <METHODPARAM  name="step4" value="0.01" />
-        <METHODPARAM  name="step5" value="0.01" />
-        <METHODPARAM  name="step6" value="0.01" />
-        <METHODPARAM  name="step7" value="0.01" />
-        <METHODPARAM  name="step8" value="0.01" />
-        <METHODPARAM  name="step9" value="0.01" />
-        <METHODPARAM  name="step10" value="0.01" />
-        <METHODPARAM  name="step11" value="0.01" />
-        <METHODPARAM  name="step12" value="0.01" />
-        <METHODPARAM  name="step13" value="0.01" /> -->
-
-
     </METHOD>
-    
+
     <METHOD name="Contour">
         <METHODPARAM  name="x-resolution" value="5" />
         <METHODPARAM  name="y-resolution" value="5" />
@@ -93,43 +98,43 @@
         <METHODPARAM  name="xFplus-boundary" value="2" />
         <METHODPARAM  name="yFplus-boundary" value="1" />
 
-	<METHODPARAM  name="subdomains" value="2" />
-	<METHODPARAM  name="operation-1" value="1" />
+        <METHODPARAM  name="subdomains" value="2" />
+        <METHODPARAM  name="operation-1" value="1" />
 
-	<METHODPARAM  name="xminus-resolution-1" value="5" />
-        <METHODPARAM  name="yminus-resolution-1" value="5" />
+        <METHODPARAM  name="xminus-resolution-1" value="10" />
+        <METHODPARAM  name="yminus-resolution-1" value="10" />
 
-        <METHODPARAM  name="xplus-resolution-1" value="5" />
-        <METHODPARAM  name="yplus-resolution-1" value="5" />
+        <METHODPARAM  name="xplus-resolution-1" value="10" />
+        <METHODPARAM  name="yplus-resolution-1" value="10" />
 
         <METHODPARAM  name="x0minus-boundary-1" value="-1" />
         <METHODPARAM  name="y0minus-boundary-1" value="-1" />
 
-	<METHODPARAM  name="xFminus-boundary-1" value="0" />
+        <METHODPARAM  name="xFminus-boundary-1" value="0" />
         <METHODPARAM  name="yFminus-boundary-1" value="0" />
 
         <METHODPARAM  name="x0plus-boundary-1" value="-1" />
-        <METHODPARAM  name="y0plus-boundary-1" value="-1" />      
+        <METHODPARAM  name="y0plus-boundary-1" value="-1" />
 
         <METHODPARAM  name="xFplus-boundary-1" value="0" />
         <METHODPARAM  name="yFplus-boundary-1" value="0" />
 
-	<METHODPARAM  name="operation-2" value="0" />
+        <METHODPARAM  name="operation-2" value="0" />
 
-	<METHODPARAM  name="xminus-resolution-2" value="5" />
-        <METHODPARAM  name="yminus-resolution-2" value="5" />
+        <METHODPARAM  name="xminus-resolution-2" value="10" />
+        <METHODPARAM  name="yminus-resolution-2" value="10" />
 
-        <METHODPARAM  name="xplus-resolution-2" value="5" />
-        <METHODPARAM  name="yplus-resolution-2" value="5" />
+        <METHODPARAM  name="xplus-resolution-2" value="10" />
+        <METHODPARAM  name="yplus-resolution-2" value="10" />
 
         <METHODPARAM  name="x0minus-boundary-2" value="1" />
         <METHODPARAM  name="y0minus-boundary-2" value="0" />
 
-	<METHODPARAM  name="xFminus-boundary-2" value="2" />
+        <METHODPARAM  name="xFminus-boundary-2" value="2" />
         <METHODPARAM  name="yFminus-boundary-2" value="1" />
 
         <METHODPARAM  name="x0plus-boundary-2" value="1" />
-        <METHODPARAM  name="y0plus-boundary-2" value="0" />      
+        <METHODPARAM  name="y0plus-boundary-2" value="0" />
 
         <METHODPARAM  name="xFplus-boundary-2" value="2" />
         <METHODPARAM  name="yFplus-boundary-2" value="1" />
@@ -137,11 +142,11 @@
 
 
     </METHOD>
-    
-    
-    
+
+
+
     <!--VIEW INFORMATIONS-->
-    
+
     <VIEWINGPARAMS>
         <VIEWPORT vpwidth="800" vpheight="800"/>
     </VIEWINGPARAMS>

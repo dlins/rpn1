@@ -1,10 +1,14 @@
 <?xml version="1.0"?>
-<!DOCTYPE rpnconfig >
-<rpnconfig>
+<!DOCTYPE rpnconfiguration >
+<rpnconfiguration>
     <NUMERICS >
-        <PHYSICS physicsid="QuadraticR2" libname="rpnumerics">
-            
-        </PHYSICS>
+  <PHYSICS physicsid="QuadraticR2" libname="rpnumerics">
+
+   <AUXBOUNDARY>            
+     <BOUDARYPARAM name="x-aux" value="0.6">
+     <BOUDARYPARAM name="y-aux" value="0.6">
+    </AUXBOUNDARY>            
+  </PHYSICS>
         
     </NUMERICS>
     <VIEWINGPARAMS modeldomain="2">
@@ -12,4 +16,4 @@
 
     </VIEWINGPARAMS>
     
-</rpnconfig>
+</rpnconfiguration>
