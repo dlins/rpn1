@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE rpninterfaceconfig  SYSTEM "../share/rpn-dtd/rpnDTD.dtd">
+<rpninterfaceconfig>
+    <!--PHYSICS-->
+    <PHYSICS name="QuadraticR2">
+        <BOUNDARY dimension="2" boundary="rect">
+            <REALVECTOR dimension="4">-0.5 -0.5 0.5 0.5
+            </REALVECTOR>
+        </BOUNDARY>
+        <FLUXFUNCTION >
+            <FLUXPARAMS name="a1" position="0" value ="-1" />
+            <FLUXPARAMS name="b1" position="1" value ="0" />
+
+            <FLUXPARAMS name="c1" position="2" value ="1" />
+            <FLUXPARAMS name="d1" position="3" value ="0" />
+            <FLUXPARAMS name="e1" position="4" value ="0.1" />
+            <FLUXPARAMS name="a2" position="5" value ="0" />
+            <FLUXPARAMS name="b2" position="6" value ="1" />
+            <FLUXPARAMS name="c2" position="7" value ="0" />
+            <FLUXPARAMS name="d2" position="8" value ="-0.1" />
+            <FLUXPARAMS name="e2" position="9" value ="0" />
+
+        </FLUXFUNCTION>
+        
+    </PHYSICS>
+    
+    <PHYSICS name="TriPhase">
+        <BOUNDARY dimension="2" boundary="triang">
+        </BOUNDARY>
+        <FLUXFUNCTION >
+            <FLUXPARAMS name="vel" position="0" value ="1" />
+            <FLUXPARAMS name="muw" position="1" value ="0.3333" />
+            <FLUXPARAMS name="muo" position="2" value ="0.3333" />
+            <FLUXPARAMS name="mug" position="3" value ="0.3333" />
+            <FLUXPARAMS name="grw" position="4" value ="0" />
+            <FLUXPARAMS name="gro" position="5" value ="0" />
+            <FLUXPARAMS name="grg" position="6" value ="0" />
+
+        </FLUXFUNCTION>
+        
+        
+    </PHYSICS>
+    
+    
+    <!--METHODS-->
+    
+    <METHOD name="Continuation">
+        <METHODPARAM  name="step" value="0.01" />
+
+<!--        <METHODPARAM  name="step1" value="0.01" />
+     <METHODPARAM  name="step2" value="0.01" />
+        <METHODPARAM  name="step3" value="0.01" />
+        <METHODPARAM  name="step4" value="0.01" />
+        <METHODPARAM  name="step5" value="0.01" />
+        <METHODPARAM  name="step6" value="0.01" />
+        <METHODPARAM  name="step7" value="0.01" />
+        <METHODPARAM  name="step8" value="0.01" />
+        <METHODPARAM  name="step9" value="0.01" />
+        <METHODPARAM  name="step10" value="0.01" />
+        <METHODPARAM  name="step11" value="0.01" />
+        <METHODPARAM  name="step12" value="0.01" />
+        <METHODPARAM  name="step13" value="0.01" /> -->
+
+
+    </METHOD>
+    <METHOD name="Contour">
+        <METHODPARAM  name="x-resolution" value="50" />
+        <METHODPARAM  name="y-resolution" value="50" />
+
+        <METHODPARAM  name="xminus-resolution" value="50" />
+        <METHODPARAM  name="yminus-resolution" value="50" />
+
+        <METHODPARAM  name="xplus-resolution" value="50" />
+        <METHODPARAM  name="yplus-resolution" value="50" />
+
+        <METHODPARAM  name="x0minus-boundary" value="-4" />
+        <METHODPARAM  name="y0minus-boundary" value="-5" />
+
+        <METHODPARAM  name="x0plus-boundary" value="-4" />
+        <METHODPARAM  name="y0plus-boundary" value="-5" />
+
+        <METHODPARAM  name="xFminus-boundary" value="2" />
+        <METHODPARAM  name="yFminus-boundary" value="1" />
+
+        <METHODPARAM  name="xFplus-boundary" value="2" />
+        <METHODPARAM  name="yFplus-boundary" value="1" />
+
+	<METHODPARAM  name="subdomains" value="2" />
+	<METHODPARAM  name="operation-1" value="1" />
+
+	<METHODPARAM  name="xminus-resolution-1" value="30" />
+        <METHODPARAM  name="yminus-resolution-1" value="30" />
+
+        <METHODPARAM  name="xplus-resolution-1" value="30" />
+        <METHODPARAM  name="yplus-resolution-1" value="30" />
+
+        <METHODPARAM  name="x0minus-boundary-1" value="-1" />
+        <METHODPARAM  name="y0minus-boundary-1" value="-1" />
+
+	<METHODPARAM  name="xFminus-boundary-1" value="0" />
+        <METHODPARAM  name="yFminus-boundary-1" value="0" />
+
+        <METHODPARAM  name="x0plus-boundary-1" value="-1" />
+        <METHODPARAM  name="y0plus-boundary-1" value="-1" />      
+
+        <METHODPARAM  name="xFplus-boundary-1" value="0" />
+        <METHODPARAM  name="yFplus-boundary-1" value="0" />
+
+	<METHODPARAM  name="operation-2" value="0" />
+
+	<METHODPARAM  name="xminus-resolution-2" value="30" />
+        <METHODPARAM  name="yminus-resolution-2" value="30" />
+
+        <METHODPARAM  name="xplus-resolution-2" value="30" />
+        <METHODPARAM  name="yplus-resolution-2" value="30" />
+
+        <METHODPARAM  name="x0minus-boundary-2" value="1" />
+        <METHODPARAM  name="y0minus-boundary-2" value="0" />
+
+	<METHODPARAM  name="xFminus-boundary-2" value="2" />
+        <METHODPARAM  name="yFminus-boundary-2" value="1" />
+
+        <METHODPARAM  name="x0plus-boundary-2" value="1" />
+        <METHODPARAM  name="y0plus-boundary-2" value="0" />      
+
+        <METHODPARAM  name="xFplus-boundary-2" value="2" />
+        <METHODPARAM  name="yFplus-boundary-2" value="1" />
+
+
+
+    </METHOD>
+    
+    
+    <!--VIEW INFORMATIONS-->
+    
+    <VIEWINGPARAMS>
+        <VIEWPORT vpwidth="800" vpheight="800"/>
+    </VIEWINGPARAMS>
+</rpninterfaceconfig>
