@@ -15,21 +15,16 @@
  */
 
 #include "RealVector.h"
+#include "eigen.h" 
 
 /*
  * ---------------------------------------------------------------
  * Definitions:
  */
-//#define RP_... 1
+
 
 extern"C" {
-    void dgeev_(char *, char *, int *, double *, int*, double *, double *,
-            double *, int *, double *, int *, double *, int *,
-            int *);
-
     void dgetrf_(int *, int *, double *, int *, int *, int *);
-
-
 }
 
 class RealMatrix2 {
