@@ -9,6 +9,7 @@
     <VIEWINGPARAMS modeldomain="3">
         <PROJDESC  projlabel="Axis0 X Axis1" projaxisid="0 1" vpwidth="650" vpheight="650"></PROJDESC>
         <PROJDESC  projlabel="Axis0 X Axis2" projaxisid="0 2" vpwidth="650" vpheight="650"></PROJDESC>
+        <PROJDESC  projlabel="Axis1 X Axis2" projaxisid="1 2" vpwidth="650" vpheight="650"></PROJDESC>
     </VIEWINGPARAMS>
     
 </rpnconfig>

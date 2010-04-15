@@ -1,23 +1,33 @@
 <?xml version="1.0"?>
 <!DOCTYPE rpnconfiguration >
 <rpnconfiguration>
-  <PHYSICS name="QuadraticR2">
+    <PHYSICS name="QuadraticR2">
 
         <BOUNDARY name="rect">
-         <BOUNDARYPARAM name="dimension" value="2" />
-         <BOUNDARYPARAM name="iso2equi" value="false" />
-         <BOUNDARYPARAM name="x-min" value="-0.5" />
-         <BOUNDARYPARAM name="x-max" value="0.5" />
-         <BOUNDARYPARAM name="y-min" value="-0.5" />
-         <BOUNDARYPARAM name="y-max" value="0.5" />
+
+            <BOUNDARYPARAM name="dimension" value="2" />
+            <BOUNDARYPARAM name="iso2equi" value="false" />
+            <BOUNDARYPARAM name="x-min" value="-1.5" />
+            <BOUNDARYPARAM name="x-max" value="1.5" />
+            <BOUNDARYPARAM name="y-min" value="-0.5" />
+            <BOUNDARYPARAM name="y-max" value="0.5" />
 
         </BOUNDARY>
 
+   <AUXBOUNDARY name="auxrect">            
 
-     <FLUXFUNCTION >
+     <BOUNDARYPARAM name="dimension" value="2" />
+     <BOUNDARYPARAM name="iso2equi" value="false" />
+     <BOUNDARYPARAM name="x-min" value="-0.4" />
+     <BOUNDARYPARAM name="x-max" value="0.4" />
+     <BOUNDARYPARAM name="y-min" value="-0.4" />
+     <BOUNDARYPARAM name="y-max" value="0.4" />
+
+    </AUXBOUNDARY>            
+
+        <FLUXFUNCTION >
             <FLUXPARAMS name="a1" position="0" value ="-1" />
             <FLUXPARAMS name="b1" position="1" value ="0" />
-
             <FLUXPARAMS name="c1" position="2" value ="1" />
             <FLUXPARAMS name="d1" position="3" value ="0" />
             <FLUXPARAMS name="e1" position="4" value ="0.1" />
@@ -29,20 +39,27 @@
 
         </FLUXFUNCTION>
 
+    </PHYSICS>
 
+    <CURVE name="shock">
+        <CURVEPARAM name="xzero" value="3.4 0.5"/>
+        <CURVEPARAM name="sigma" value="0.03"/>
+    </CURVE>
 
-
-  </PHYSICS>
-            
-<CURVE name="shock">
-<CURVEPARAM name="xzero" value="3.4 0.5"/>
-<CURVEPARAM name="sigma" value="0.03"/>
-</CURVE>
-
-
-            <VIEWINGPARAMS modeldomain="2">
-        <PROJDESC  projlabel="Axis0 X Axis1" projaxisid="0 1" vpwidth="650" vpheight="650"></PROJDESC>
-
-    </VIEWINGPARAMS>
     
+    <VIEWINGPARAMS modeldomain="2">
+        <PROJDESC  projlabel="Axis0 X Axis1" projaxisid="0 1" vpwidth="650" vpheight="650"></PROJDESC>
+        
+    </VIEWINGPARAMS>
+
+    <AUXVIEWINGPARAMS modeldomain="4">
+
+        <PROJDESC  projlabel="Aux Axis0 X Axis1" projaxisid="0 1" vpwidth="600" vpheight="600"></PROJDESC>
+        <PROJDESC  projlabel="Aux Axis2 X Axis3" projaxisid="2 3" vpwidth="600" vpheight="600"></PROJDESC>
+
+
+    </AUXVIEWINGPARAMS>
+
+
+
 </rpnconfiguration>
