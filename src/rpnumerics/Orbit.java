@@ -56,25 +56,7 @@ public class Orbit extends RPnCurve implements RpSolution {
     public int findClosestSegment(wave.util.RealVector coords, double alpha) {
         return 0;
     }
-    //
-    // Accessors/Mutators
-    //
-    public OrbitPoint[] getPoints() {
-        return points_;
-    }
-
-    public OrbitPoint lastPoint() {
-        return (OrbitPoint) points_[points_.length - 1];
-    }
-
-    public int getIntegrationFlag() {
-        return intFlag_;
-    }
-
-    public void setIntegrationFlag(int flag) {
-        intFlag_ = flag;
-    }
-
+  
     //
     // Methods
     //
@@ -172,4 +154,27 @@ public class Orbit extends RPnCurve implements RpSolution {
         }
         return buffer.toString();
     }
+
+
+      //
+    // Accessors/Mutators
+    //
+    public OrbitPoint[] getPoints() {
+        return points_;
+    }
+
+    public OrbitPoint lastPoint() {
+        return (OrbitPoint) points_[points_.length - 1];
+    }
+
+    public int getIntegrationFlag() {
+        return intFlag_;
+    }
+
+    public void setIntegrationFlag(int flag) {
+        intFlag_ = flag;
+    }
+
+
+
 }

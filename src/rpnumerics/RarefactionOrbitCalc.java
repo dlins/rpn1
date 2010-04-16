@@ -15,6 +15,7 @@ public class RarefactionOrbitCalc implements RpCalculation {
     //
     // Members
     //
+
     private PhasePoint start_;
     private int timeDirection_;
     private String methodName_;
@@ -65,7 +66,20 @@ public class RarefactionOrbitCalc implements RpCalculation {
     }
 
     public RpSolution calc() throws RpException {
-        RpSolution    result = calc(methodName_, flowName_, start_, familyIndex_, timeDirection_);
+
+
+        if (timeDirection_ == 0) {
+
+            RarefactionOrbit resultForward = (RarefactionOrbit) calc(methodName_, flowName_, start_, familyIndex_, 1);
+            RarefactionOrbit resultBackward = (RarefactionOrbit) calc(methodName_, flowName_, start_, familyIndex_, -1);
+            Orbit resultComplete = RarefactionOrbit.concat(resultBackward, resultForward);
+            RarefactionOrbit completeCurve = new RarefactionOrbit(resultComplete.getPoints(), resultComplete.getIntegrationFlag());
+
+            return completeCurve;
+
+
+        }
+        RpSolution result = calc(methodName_, flowName_, start_, familyIndex_, timeDirection_);
         return result;
     }
 
@@ -75,6 +89,4 @@ public class RarefactionOrbitCalc implements RpCalculation {
         return methodName_;
 
     }
-
-  
 }

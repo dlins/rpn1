@@ -62,7 +62,15 @@ public abstract class RpModelPlotAgent extends RpModelActionAgent {
         }
         // stores the scene
         Iterator oldValue = phaseSpace.getGeomObjIterator();
-        phaseSpace.plot(createRpGeometry(userInputList));
+
+        RpGeometry geometry = createRpGeometry(userInputList);
+        if (geometry.getPathIterator().isDone()){
+            System.out.println("Empty geometry");
+            return;
+        }
+
+//        phaseSpace.plot(createRpGeometry(userInputList));
+        phaseSpace.plot(geometry);
         Iterator newValue = phaseSpace.getGeomObjIterator();
         logAction(new PropertyChangeEvent(this, listString, oldValue, newValue));
 

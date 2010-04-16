@@ -14,14 +14,14 @@ import wave.multid.CoordsArray;
 
 
 
-public class ShockCurve implements RpSolution {
+public class ShockCurve extends Orbit implements RpSolution {
 
-    private OrbitPoint[] points_;
-    private int intFlag_;
+//    private OrbitPoint[] points_;
+//    private int intFlag_;
 
     public ShockCurve(OrbitPoint[] points, int flag) {
-        intFlag_ = flag;
-        points_ = points;
+        super(points, flag);
+
     }
 
     private static CoordsArray[] coordsArrayFromRealSegments(List segments) {
@@ -44,22 +44,9 @@ public class ShockCurve implements RpSolution {
 
     }
 
-    public OrbitPoint lastPoint() {
-        return (OrbitPoint) points_[points_.length - 1];
-    }
+    
 
-    public int getIntegrationFlag() {
-        return intFlag_;
-    }
-
-    public void setIntegrationFlag(int flag) {
-        intFlag_ = flag;
-    }
-
-    public OrbitPoint[] getPoints() {
-        return points_;
-    }
-
+   
     public int findClosestSegment(RealVector targetPoint, double alpha) {
         return 0;
     }

@@ -361,7 +361,6 @@ public class UIController extends ComponentUI {
         if (handler_ instanceof UI_ACTION_SELECTED) {
 
             UI_ACTION_SELECTED currentSelection = (UI_ACTION_SELECTED) handler_;
-            System.out.println("Tamanho da user input table:" + currentSelection.actionDimension() + currentSelection.getClass().getName());
 
             globalInputTable_ = new UserInputTable(currentSelection.actionDimension());
 

@@ -15,12 +15,12 @@ public class ShockCurveCalc implements RpCalculation {
     //
     // Members
     //
+
     private PhasePoint start_;
     private int timeDirection_;
     private String methodName_;
     private String flowName_;
     private int familyIndex_;
-    private ODESolver solver_;
 
     //
     // Constructors/Initializers
@@ -41,14 +41,6 @@ public class ShockCurveCalc implements RpCalculation {
 
     }
 
-    ShockCurveCalc(OrbitPoint orbitPoint, int timeDirection, ODESolver odeSolver, String methodName) {
-        start_ = orbitPoint;
-        timeDirection_ = timeDirection;
-        solver_ = odeSolver;
-        methodName_ = methodName;
-
-    }
-
     //
     // Accessors/Mutators
     //
@@ -66,7 +58,18 @@ public class ShockCurveCalc implements RpCalculation {
     }
 
     public RpSolution calc() throws RpException {
-        RpSolution    result = calc(methodName_, flowName_, start_, familyIndex_, timeDirection_);
+
+        if (timeDirection_ == 0) {
+
+            ShockCurve resultForward = (ShockCurve) calc(methodName_, flowName_, start_, familyIndex_, 1);
+            ShockCurve resultBackward = (ShockCurve) calc(methodName_, flowName_, start_, familyIndex_, -1);
+            Orbit resultComplete = ShockCurve.concat(resultBackward, resultForward);
+            ShockCurve completeCurve = new ShockCurve(resultComplete.getPoints(), resultComplete.getIntegrationFlag());
+
+            return completeCurve;
+        }
+
+        RpSolution result = calc(methodName_, flowName_, start_, familyIndex_, timeDirection_);
         return result;
     }
 
@@ -76,6 +79,4 @@ public class ShockCurveCalc implements RpCalculation {
         return methodName_;
 
     }
-
-  
 }

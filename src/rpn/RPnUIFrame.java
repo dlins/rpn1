@@ -703,7 +703,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private class StateHandler implements ActionListener {
 
         public void actionPerformed(ActionEvent e) {
-            System.out.println("Trocando de estado");
+
             UI_ACTION_SELECTED newState = null;
 
             if (stateComboBox.getSelectedItem().equals("Phase Diagram")) {
