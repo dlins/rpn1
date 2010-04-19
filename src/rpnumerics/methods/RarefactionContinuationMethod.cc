@@ -6,15 +6,11 @@
  * @(#) RarefactionContinuationMethod.cc
  **/
 
-#include <vector>
-
-
-#include "RPnCurve.h"
-
 /*
  * ---------------------------------------------------------------
  * Includes:
  */
+#include <vector>
 #include "RarefactionContinuationMethod.h"
 #include "LSODEProfile.h"
 #include "LSODE.h"

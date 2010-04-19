@@ -6,20 +6,14 @@
 #include <stdlib.h>
 #include <math.h>
 
-//#include "global_composite.h"
-
-
 
 #define SUCCESSFUL_PROCEDURE 2
-#define ABORTED_PROCEDURE (-7)
-#define COMPLEX_EIGENVALUE (-7)
-#define LAMBDA_ERROR (-7)
-#define LAMBDA_NOT_INCREASING (-7)
+#define ABORTED_PROCEDURE (-3)
+#define COMPLEX_EIGENVALUE (-4)
+#define LAMBDA_ERROR (-5)
+#define LAMBDA_NOT_INCREASING (-6)
 #define LAMBDA_NOT_DECREASING (-7)
 
-
-
-//using namespace std;
 
 extern "C" void dgeev_(char*, char*, int*, double*, int*, double*, double*, 
            double*, int*, double*, int*, double*, int*, 

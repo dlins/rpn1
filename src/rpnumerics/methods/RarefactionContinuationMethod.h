@@ -15,7 +15,6 @@
  */
 
 #include "RarefactionMethod.h"
-
 #include "ContinuationRarefactionFlow.h"
 #include "RPnCurve.h"
 
