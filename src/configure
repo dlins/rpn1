@@ -7,8 +7,8 @@
 declare -a jnidir
 
 i=1
-rpnhome=.
-rpnhome=`dirname $0`
+srcdir=$(dirname $(readlink -f $0))
+rpnhome=$(dirname $srcdir)
 jni=`locate jni.h`
 hosttype="linux_"`uname -m`
 
@@ -36,12 +36,12 @@ fi
 #
 # Create build.xml
 #
-sed -e "s,PRE_CONFIG_HOSTTYPE,$hosttype,g" $rpnhome/make/build.xml.in > $rpnhome/build.xml
+sed -e "s,PRE_CONFIG_HOSTTYPE,$hosttype,g" $srcdir/make/build.xml.in > $srcdir/build.xml
 
 #
 # Create make/env file
 #
-sed -e "s,PRE_CONFIG_HOSTTYPE,$hosttype,g" -e "s,PRE_CONFIG_JAVAHOME,$javahome,g" $rpnhome/make/env.in > $rpnhome/make/env
+sed -e "s,PRE_CONFIG_HOSTTYPE,$hosttype,g" -e "s,PRE_CONFIG_JAVAHOME,$javahome,g" $srcdir/make/env.in > $srcdir/make/env
 
 
 echo
