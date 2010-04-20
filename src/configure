@@ -12,7 +12,7 @@ rpnhome=$(dirname $srcdir)
 jni=`locate jni.h`
 hosttype="linux_"`uname -m`
 
-echo; echo "Choose the JAVA_HOME installation path elow: "; echo
+echo; echo "Choose the JAVA_HOME installation path below: "; echo
 
 for j in `echo $jni`; do
 	j=`dirname $j`
