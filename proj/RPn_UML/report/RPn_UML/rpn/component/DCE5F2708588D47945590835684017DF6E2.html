@@ -1,0 +1,376 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Class</TITLE>
+<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=UTF-8">
+<LINK REL ="stylesheet" TYPE="text/css" HREF="../../../stylesheet.css" TITLE="Style"></HEAD>
+<BODY BGCOLOR="white">
+<!-- ========= START OF NAVBAR ======= -->
+<A NAME="navbar_top"></A>
+<A HREF="#skip-navbar_top" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_top_firstrow"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1"> &nbsp;<A HREF="../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <FONT CLASS="NavBarFont1">Package</FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1Rev">    <FONT CLASS="NavBarFont1Rev"><B>Element</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <FONT CLASS="NavBarFont1">Diagram</FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../help.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>NetBeans UML Modeling</b>
+</TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_top"></A>
+<!-- ========= END OF NAVBAR ========= -->
+
+<HR>
+<H2>
+<FONT SIZE="-1">rpn::component</FONT>
+<BR>
+Class RpCalcBasedGeomFactory</H2>
+<PRE>
+<B>rpn::component::RpCalcBasedGeomFactory</B>
+</PRE>
+<DL>
+<DT><B>All Implemented Interfaces:</B> <DD><A HREF="../../../RPn_UML/rpn/component/DCEEAF4814184A61968C5D7BC90DC8665E4.html" title="interface in rpn::component">RpGeomFactory</A></DD>
+</DL>
+<DL>
+<DT><B>All Known Subclasses:</B> <DD><A HREF="../../../RPn_UML/rpn/component/DCE8191622CE35BA1C8A427E6C861F7D1A5.html" title="subclass in rpn::component">BifurcationCurveGeomFactory</A>, <A HREF="../../../RPn_UML/rpn/component/DCEECCEE15BCA05A12D18345C8DF42F9060.html" title="subclass in rpn::component">ProfileGeomFactory</A>, <A HREF="../../../RPn_UML/rpn/component/DCEE0D6C95A17133B0716EA5C986BC426A4.html" title="subclass in rpn::component">CompositeGeomFactory</A>, <A HREF="../../../RPn_UML/rpn/component/DCEDCA82F723442A41058D2AF60E60A541B.html" title="subclass in rpn::component">HugoniotCurveGeomFactory</A>, <A HREF="../../../RPn_UML/rpn/component/DCE1759EE93BE483787F6040169CB20AA2D.html" title="subclass in rpn::component">ShockCurveGeomFactory</A>, <A HREF="../../../RPn_UML/rpn/component/DCE56AAAA46AB9BB30E033E5957653E5A1F.html" title="subclass in rpn::component">OrbitGeomFactory</A>, <A HREF="../../../RPn_UML/rpn/component/DCEBE9584BF4930CA727C6D7C21C2B7571C.html" title="subclass in rpn::component">RarefactionOrbitGeomFactory</A>, <A HREF="../../../RPn_UML/rpn/component/DCE292C328A13DBEA3326C42995A1CB484E.html" title="subclass in rpn::component">ManifoldGeomFactory</A>, <A HREF="../../../RPn_UML/rpn/component/DCE34843CBBE7288C1AEA8F8147E6417211.html" title="subclass in rpn::component">StationaryPointGeomFactory</A></DD>
+</DL>
+<DL>
+<DT><B>All Dependency Suppliers:</B><DD><IMG SRC="../../../images/implementation.png" ALT="(Implementation) ">&nbsp;Implementation&nbsp;<A HREF="../../../RPn_UML/rpn/component/DCEEAF4814184A61968C5D7BC90DC8665E4.html" title="dependency in rpn::component">RpGeomFactory</A></DD>
+</DL>
+<DL>
+<DT><B>All Known Associations: </B><DD><IMG SRC="../../../images/navigable-aggregation.png" ALT="(Navigable_Aggregation) "> <A HREF="../../../RPn_UML/rpn/controller/DCEA79FB37544A0246511024E4D54AF99DA.html">Navigable_Aggregation</A>: <A HREF="../../../RPn_UML/rpn/controller/DCE6D587CF9F7791F48411EE76B73910A4D.html" title="association in rpn::controller">RpCalcController</A></DD>
+<DD><IMG SRC="../../../images/navigable-aggregation.png" ALT="(Navigable_Aggregation) "> <A HREF="../../../RPn_UML/rpn/component/DCE38C70E7605879FA91FFF27D8C671E760.html">Navigable_Aggregation</A>: <A HREF="../../../RPn_UML/rpnumerics/DCEEBB7B0C8BB37D05FD1C843D8B2D4AE83.html" title="association in rpnumerics">RpCalculation</A></DD>
+<DD><IMG SRC="../../../images/navigable-aggregation.png" ALT="(Navigable_Aggregation) "> <A HREF="../../../RPn_UML/rpn/component/DCE7C31CEB96B3C7C7C1D8411D4B4B5A26F.html">Navigable_Aggregation</A>: <A HREF="../../../RPn_UML/rpn/component/DCE40A5D6EF7B81624169066BB8880E9F61.html" title="association in rpn::component">RpGeometry</A></DD>
+<DD><IMG SRC="../../../images/navigable-aggregation.png" ALT="(Navigable_Aggregation) "> <A HREF="../../../RPn_UML/rpn/component/DCEE3877858F75D7B185CAD93CAE7D2BDD2.html">Navigable_Aggregation</A>: <A HREF="../../../RPn_UML/rpn/controller/DCE0DC9CEA9EA8D3DD0DEE7B6DDF47A4E75.html" title="association in rpn::controller">RpController</A></DD>
+</DL>
+<HR>
+<DL>
+<DT><PRE>public class <B>RpCalcBasedGeomFactory</B></DT><DT>implements <A HREF="../../../RPn_UML/rpn/component/DCEEAF4814184A61968C5D7BC90DC8665E4.html" title="interface in rpn::component">RpGeomFactory</A></DL>
+</PRE>
+
+<!-- =========== PROPERTY SUMMARY =========== -->
+<A NAME="property_summary"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Properties</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Alias</B></TD>
+<TD>RpCalcBasedGeomFactory</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Visibility</B></TD>
+<TD>public</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Final</B></TD>
+<TD><IMG src="../../../images/unchecked.png" border=n></TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Transient</B></TD>
+<TD><IMG src="../../../images/checked.png" border=n></TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Abstract</B></TD>
+<TD><IMG src="../../../images/checked.png" border=n></TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Leaf</B></TD>
+<TD><IMG src="../../../images/unchecked.png" border=n></TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- =========== ATTRIBUTE SUMMARY =========== -->
+<A NAME="attribute_summary"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Attribute Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../RPn_UML/DCE3A3286D50899B76164FE53808CE14BEE.html">Object</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#geomSource_">geomSource_</A></B></CODE>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../RPn_UML/DCEA61D7DEA5897BF690EBB83E7301555AE.html">boolean</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#isGeomOutOfDate_">isGeomOutOfDate_</A></B></CODE>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- =========== CONSTRUCTOR SUMMARY =========== -->
+
+<A NAME="constructor_summary"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Constructor Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><B><A HREF="#RpCalcBasedGeomFactory">RpCalcBasedGeomFactory</A></B>(<A HREF="../../../RPn_UML/rpnumerics/DCEEBB7B0C8BB37D05FD1C843D8B2D4AE83.html">RpCalculation</A>&nbsp;calc)</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Constructors/Initializers
+</TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- =========== OPERATION SUMMARY =========== -->
+<A NAME="operation_summary"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Operation Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../RPn_UML/rpn/controller/DCE0DC9CEA9EA8D3DD0DEE7B6DDF47A4E75.html">RpController</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#createUI">createUI</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../RPn_UML/DCE065324643F3067896121D454D1FB2F97.html">void</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#installController">installController</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../RPn_UML/rpn/component/DCE40A5D6EF7B81624169066BB8880E9F61.html">RpGeometry</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#geom">geom</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Accessors/Mutators
+</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../RPn_UML/DCE3A3286D50899B76164FE53808CE14BEE.html">Object</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#geomSource">geomSource</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../RPn_UML/DCE065324643F3067896121D454D1FB2F97.html">void</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#setUI">setUI</A></B>(<A HREF="../../../RPn_UML/rpn/controller/DCE0DC9CEA9EA8D3DD0DEE7B6DDF47A4E75.html">RpController</A>&nbsp;ui)</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../RPn_UML/rpn/controller/DCE0DC9CEA9EA8D3DD0DEE7B6DDF47A4E75.html">RpController</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#getUI">getUI</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../RPn_UML/rpnumerics/DCEEBB7B0C8BB37D05FD1C843D8B2D4AE83.html">RpCalculation</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#rpCalc">rpCalc</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../RPn_UML/DCEA61D7DEA5897BF690EBB83E7301555AE.html">boolean</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#isGeomOutOfDate">isGeomOutOfDate</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../RPn_UML/DCE065324643F3067896121D454D1FB2F97.html">void</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#setGeomOutOfDate">setGeomOutOfDate</A></B>(<A HREF="../../../RPn_UML/DCEA61D7DEA5897BF690EBB83E7301555AE.html">boolean</A>&nbsp;flag)</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../RPn_UML/rpn/component/DCE40A5D6EF7B81624169066BB8880E9F61.html">RpGeometry</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#createGeomFromSource">createGeomFromSource</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Methods
+</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../RPn_UML/DCE065324643F3067896121D454D1FB2F97.html">void</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#updateGeom">updateGeom</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- =========== ATTRIBUTE DETAIL =========== -->
+<A NAME="attribute_detail"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Attribute Detail</B></FONT></TH>
+</TR>
+</TABLE>
+<A NAME="geomSource_"></A><H3>geomSource_</H3>
+<PRE>private <A HREF="../../../RPn_UML/DCE3A3286D50899B76164FE53808CE14BEE.html">Object</A> <B>geomSource_</B></PRE><DL>
+<DD>
+<P>
+</DD>
+</DL>
+<HR>
+
+<A NAME="isGeomOutOfDate_"></A><H3>isGeomOutOfDate_</H3>
+<PRE>private <A HREF="../../../RPn_UML/DCEA61D7DEA5897BF690EBB83E7301555AE.html">boolean</A> <B>isGeomOutOfDate_</B></PRE><DL>
+<DD>
+<P>
+</DD>
+</DL>
+
+<!-- =========== CONSTRUCTOR DETAIL =========== -->
+
+<A NAME="constructor_detail"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Constructor Detail</B></FONT></TH>
+</TR>
+</TABLE>
+<A NAME="RpCalcBasedGeomFactory"></A><H3>RpCalcBasedGeomFactory</H3>
+<PRE>
+public <B>RpCalcBasedGeomFactory</B>(<A HREF="../../../RPn_UML/rpnumerics/DCEEBB7B0C8BB37D05FD1C843D8B2D4AE83.html">RpCalculation</A>&nbsp;calc)</PRE>
+<DL>
+<DD>Constructors/Initializers
+
+<P>
+</DD></DL>
+
+<!-- =========== OPERATION DETAIL =========== -->
+
+<A NAME="operationr_detail"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Operation Detail</B></FONT></TH>
+</TR>
+</TABLE>
+<A NAME="createUI"></A><H3>createUI</H3>
+<PRE>
+protected <A HREF="../../../RPn_UML/rpn/controller/DCE0DC9CEA9EA8D3DD0DEE7B6DDF47A4E75.html">RpController</A> <B>createUI</B>()</PRE>
+<DL>
+<DD>
+<P>
+</DD></DL>
+<HR>
+<A NAME="installController"></A><H3>installController</H3>
+<PRE>
+protected <A HREF="../../../RPn_UML/DCE065324643F3067896121D454D1FB2F97.html">void</A> <B>installController</B>()</PRE>
+<DL>
+<DD>
+<P>
+</DD></DL>
+<HR>
+<A NAME="geom"></A><H3>geom</H3>
+<PRE>
+public <A HREF="../../../RPn_UML/rpn/component/DCE40A5D6EF7B81624169066BB8880E9F61.html">RpGeometry</A> <B>geom</B>()</PRE>
+<DL>
+<DD>Accessors/Mutators
+
+<P>
+</DD></DL>
+<HR>
+<A NAME="geomSource"></A><H3>geomSource</H3>
+<PRE>
+public <A HREF="../../../RPn_UML/DCE3A3286D50899B76164FE53808CE14BEE.html">Object</A> <B>geomSource</B>()</PRE>
+<DL>
+<DD>
+<P>
+</DD></DL>
+<HR>
+<A NAME="setUI"></A><H3>setUI</H3>
+<PRE>
+public <A HREF="../../../RPn_UML/DCE065324643F3067896121D454D1FB2F97.html">void</A> <B>setUI</B>(<A HREF="../../../RPn_UML/rpn/controller/DCE0DC9CEA9EA8D3DD0DEE7B6DDF47A4E75.html">RpController</A>&nbsp;ui)</PRE>
+<DL>
+<DD>
+<P>
+</DD></DL>
+<HR>
+<A NAME="getUI"></A><H3>getUI</H3>
+<PRE>
+public <A HREF="../../../RPn_UML/rpn/controller/DCE0DC9CEA9EA8D3DD0DEE7B6DDF47A4E75.html">RpController</A> <B>getUI</B>()</PRE>
+<DL>
+<DD>
+<P>
+</DD></DL>
+<HR>
+<A NAME="rpCalc"></A><H3>rpCalc</H3>
+<PRE>
+public <A HREF="../../../RPn_UML/rpnumerics/DCEEBB7B0C8BB37D05FD1C843D8B2D4AE83.html">RpCalculation</A> <B>rpCalc</B>()</PRE>
+<DL>
+<DD>
+<P>
+</DD></DL>
+<HR>
+<A NAME="isGeomOutOfDate"></A><H3>isGeomOutOfDate</H3>
+<PRE>
+public <A HREF="../../../RPn_UML/DCEA61D7DEA5897BF690EBB83E7301555AE.html">boolean</A> <B>isGeomOutOfDate</B>()</PRE>
+<DL>
+<DD>
+<P>
+</DD></DL>
+<HR>
+<A NAME="setGeomOutOfDate"></A><H3>setGeomOutOfDate</H3>
+<PRE>
+public <A HREF="../../../RPn_UML/DCE065324643F3067896121D454D1FB2F97.html">void</A> <B>setGeomOutOfDate</B>(<A HREF="../../../RPn_UML/DCEA61D7DEA5897BF690EBB83E7301555AE.html">boolean</A>&nbsp;flag)</PRE>
+<DL>
+<DD>
+<P>
+</DD></DL>
+<HR>
+<A NAME="createGeomFromSource"></A><H3>createGeomFromSource</H3>
+<PRE>
+protected abstract <A HREF="../../../RPn_UML/rpn/component/DCE40A5D6EF7B81624169066BB8880E9F61.html">RpGeometry</A> <B>createGeomFromSource</B>()</PRE>
+<DL>
+<DD>Methods
+
+<P>
+</DD></DL>
+<HR>
+<A NAME="updateGeom"></A><H3>updateGeom</H3>
+<PRE>
+public <A HREF="../../../RPn_UML/DCE065324643F3067896121D454D1FB2F97.html">void</A> <B>updateGeom</B>()</PRE>
+<DL>
+<DD>
+<P>
+</DD></DL>
+
+<HR>
+<!-- ========= START OF NAVBAR ======= -->
+<A NAME="navbar_top"></A>
+<A HREF="#skip-navbar_top" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_top_firstrow"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1"> &nbsp;<A HREF="../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <FONT CLASS="NavBarFont1">Package</FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1Rev">    <FONT CLASS="NavBarFont1Rev"><B>Element</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <FONT CLASS="NavBarFont1">Diagram</FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../help.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>NetBeans UML Modeling</b>
+</TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_top"></A>
+<!-- ========= END OF NAVBAR ========= -->
+
+</BODY>
+</HTML>

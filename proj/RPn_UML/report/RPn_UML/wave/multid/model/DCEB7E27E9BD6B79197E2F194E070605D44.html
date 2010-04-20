@@ -1,0 +1,206 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Interface</TITLE>
+<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=UTF-8">
+<LINK REL ="stylesheet" TYPE="text/css" HREF="../../../../stylesheet.css" TITLE="Style"></HEAD>
+<BODY BGCOLOR="white">
+<!-- ========= START OF NAVBAR ======= -->
+<A NAME="navbar_top"></A>
+<A HREF="#skip-navbar_top" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_top_firstrow"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1"> &nbsp;<A HREF="../../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <FONT CLASS="NavBarFont1">Package</FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1Rev">    <FONT CLASS="NavBarFont1Rev"><B>Element</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <FONT CLASS="NavBarFont1">Diagram</FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../help.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>NetBeans UML Modeling</b>
+</TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_top"></A>
+<!-- ========= END OF NAVBAR ========= -->
+
+<HR>
+<H2>
+<FONT SIZE="-1">wave::multid::model</FONT>
+<BR>
+Interface MultiGeometry</H2>
+<PRE>
+<A HREF="../../../../RPn_UML/wave/multid/model/DCE18C1450FFF1D71B762073CD887DA81BB.html" title="Interface inwave::multid::model">AbstractGeomObj</A>
+  <IMG SRC="../../../../images/inherit.gif" ALT="extended by "><B>wave::multid::model::MultiGeometry</B>
+</PRE>
+<DL>
+<DT><B>All Known Subclasses:</B> <DD><A HREF="../../../../RPn_UML/rpn/component/DCE40A5D6EF7B81624169066BB8880E9F61.html" title="subclass in rpn::component">RpGeometry</A></DD>
+</DL>
+<DL>
+<DT><B>All Dependency Clients:</B><DD><IMG SRC="../../../../images/implementation.png" ALT="(Implementation) ">&nbsp;Implementation&nbsp;<A HREF="../../../../RPn_UML/rpn/component/DCEE81949F9CEFFCAAAA039E5CD42CF343F.html" title="dependency in rpn::component">HugoniotCurveGeom</A></DD>
+<DD><IMG SRC="../../../../images/implementation.png" ALT="(Implementation) ">&nbsp;Implementation&nbsp;<A HREF="../../../../RPn_UML/wave/multid/model/DCE0DC6DE3D95C969170E4EBA1E9DFF53F2.html" title="dependency in wave::multid::model">MultiGeometryImpl</A></DD>
+<DD><IMG SRC="../../../../images/implementation.png" ALT="(Implementation) ">&nbsp;Implementation&nbsp;<A HREF="../../../../RPn_UML/rpn/component/DCE81CF3C4AB2DB9D899E47E80F10F9AA25.html" title="dependency in rpn::component">BifurcationCurveGeom</A></DD>
+</DL>
+<HR>
+<DL>
+<DT><PRE>public interface <B>MultiGeometry</B></DT><DT>extends <A HREF="../../../../RPn_UML/wave/multid/model/DCE18C1450FFF1D71B762073CD887DA81BB.html" title="Interface inwave::multid::model">AbstractGeomObj</A></DL>
+</PRE>
+
+<P>
+An extension of AbstractGeometryObj interface. This interface declares others basic methods and is the interface that the main multidimensional objects implements</P><HR>
+<!-- =========== PROPERTY SUMMARY =========== -->
+<A NAME="property_summary"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Properties</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Alias</B></TD>
+<TD>MultiGeometry</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Visibility</B></TD>
+<TD>public</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Final</B></TD>
+<TD><IMG src="../../../../images/unchecked.png" border=n></TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Transient</B></TD>
+<TD><IMG src="../../../../images/checked.png" border=n></TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Abstract</B></TD>
+<TD><IMG src="../../../../images/checked.png" border=n></TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Leaf</B></TD>
+<TD><IMG src="../../../../images/unchecked.png" border=n></TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- =========== OPERATION SUMMARY =========== -->
+<A NAME="operation_summary"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Operation Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/wave/multid/model/DCE802C4AA3D24919DB2D9CEC7A399C4DFA.html">AbstractPathIterator</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#getPathIterator">getPathIterator</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns the path used to define the multidimensional object.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/wave/multid/model/DCE802C4AA3D24919DB2D9CEC7A399C4DFA.html">AbstractPathIterator</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#getPathIterator">getPathIterator</A></B>(<A HREF="../../../../RPn_UML/wave/multid/map/DCE6E4A3DA75C683FE93A786AC3EB74C1DF.html">Map</A>&nbsp;map)</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns the path that defines the multidimensional object after the map transformation is applied </TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/wave/multid/view/DCE2AA3119709B7568652855CA5E5AD584B.html">ViewingAttr</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#viewingAttr">viewingAttr</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns the visuals attributes of the multidimensional object.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/wave/multid/view/DCE8219B436FC7A10A094DA02C1FCD37A15.html">GeomObjView</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#createView">createView</A></B>(<A HREF="../../../../RPn_UML/wave/multid/view/DCE43251B4033E039A2C4D6B9D6C3B1BCF9.html">ViewingTransform</A>&nbsp;transf)</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Create a visual form of a multidimensional object.</TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- =========== STEREOTYPE SUMMARY =========== -->
+
+<A NAME="stereotype_summary"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Stereotype Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="left" VALIGN="top" WIDTH="15%">
+interface
+</TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- =========== OPERATION DETAIL =========== -->
+
+<A NAME="operationr_detail"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Operation Detail</B></FONT></TH>
+</TR>
+</TABLE>
+<A NAME="getPathIterator"></A><H3>getPathIterator</H3>
+<PRE>
+public abstract <A HREF="../../../../RPn_UML/wave/multid/model/DCE802C4AA3D24919DB2D9CEC7A399C4DFA.html">AbstractPathIterator</A> <B>getPathIterator</B>()</PRE>
+<DL>
+<DD>Returns the path used to define the multidimensional object. A multidimensional object can be understood as a sequence of segments in n dimensions . This segments  are stored in  AbstractPathIterator objects.
+<P>
+</DD></DL>
+<HR>
+<A NAME="getPathIterator"></A><H3>getPathIterator</H3>
+<PRE>
+public abstract <A HREF="../../../../RPn_UML/wave/multid/model/DCE802C4AA3D24919DB2D9CEC7A399C4DFA.html">AbstractPathIterator</A> <B>getPathIterator</B>(<A HREF="../../../../RPn_UML/wave/multid/map/DCE6E4A3DA75C683FE93A786AC3EB74C1DF.html">Map</A>&nbsp;map)</PRE>
+<DL>
+<DD>Returns the path that defines the multidimensional object after the map transformation is applied 
+<P>
+</DD></DL>
+<HR>
+<A NAME="viewingAttr"></A><H3>viewingAttr</H3>
+<PRE>
+public abstract <A HREF="../../../../RPn_UML/wave/multid/view/DCE2AA3119709B7568652855CA5E5AD584B.html">ViewingAttr</A> <B>viewingAttr</B>()</PRE>
+<DL>
+<DD>Returns the visuals attributes of the multidimensional object. 
+<P>
+</DD></DL>
+<HR>
+<A NAME="createView"></A><H3>createView</H3>
+<PRE>
+public abstract <A HREF="../../../../RPn_UML/wave/multid/view/DCE8219B436FC7A10A094DA02C1FCD37A15.html">GeomObjView</A> <B>createView</B>(<A HREF="../../../../RPn_UML/wave/multid/view/DCE43251B4033E039A2C4D6B9D6C3B1BCF9.html">ViewingTransform</A>&nbsp;transf)</PRE>
+<DL>
+<DD>Create a visual form of a multidimensional object. 
+<P>
+</DD></DL>
+
+<HR>
+<!-- ========= START OF NAVBAR ======= -->
+<A NAME="navbar_top"></A>
+<A HREF="#skip-navbar_top" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_top_firstrow"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1"> &nbsp;<A HREF="../../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <FONT CLASS="NavBarFont1">Package</FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1Rev">    <FONT CLASS="NavBarFont1Rev"><B>Element</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <FONT CLASS="NavBarFont1">Diagram</FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../help.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>NetBeans UML Modeling</b>
+</TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_top"></A>
+<!-- ========= END OF NAVBAR ========= -->
+
+</BODY>
+</HTML>

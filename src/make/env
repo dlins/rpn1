@@ -3,8 +3,5 @@
 #       If left empty, makefile will get shell settings
 
 RPGNU=yes
-#JAVA_HOME=/usr/lib/jvm/java-6-sun-1.6.0.16
-JAVA_HOME=/usr/jdk1.6.0_07/
-#JAVA_HOME=/usr/lib/jvm/java-6-sun-1.6.0.15
-RPHOSTTYPE=linux_i686
-#RPHOSTTYPE=linux_x86_64
+RPHOSTTYPE=linux_x86_64
+JAVA_HOME=/usr/lib/jvm/java-6-sun-1.6.0.15

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configurationDescriptor version="51">
+<configurationDescriptor version="62">
   <logicalFolder name="root" displayName="root" projectFiles="true">
     <logicalFolder name="src" displayName="src" projectFiles="true">
       <logicalFolder name="JNI" displayName="JNI" projectFiles="true">
         <logicalFolder name="include" displayName="include" projectFiles="true">
           <itemPath>../../src/JNI/include/JNIDefs.h</itemPath>
-          <itemPath>../../src/JNI/include/rpn_RPnDesktopPlotter.h</itemPath>
           <itemPath>../../src/JNI/include/RpNumerics.h</itemPath>
+          <itemPath>../../src/JNI/include/rpn_RPnDesktopPlotter.h</itemPath>
           <itemPath>../../src/JNI/include/rpnumerics_AccumulationFunction.h</itemPath>
           <itemPath>../../src/JNI/include/rpnumerics_CompositeCalc.h</itemPath>
           <itemPath>../../src/JNI/include/rpnumerics_ConnectionOrbitCalc.h</itemPath>
@@ -15,13 +15,13 @@
           <itemPath>../../src/JNI/include/rpnumerics_HugoniotCurveCalcND.h</itemPath>
           <itemPath>../../src/JNI/include/rpnumerics_ManifoldOrbitCalc.h</itemPath>
           <itemPath>../../src/JNI/include/rpnumerics_OrbitCalc.h</itemPath>
-          <itemPath>../../src/JNI/include/rpnumerics_plugin_RPnPluginManager.h</itemPath>
+          <itemPath>../../src/JNI/include/rpnumerics_RPNUMERICS.h</itemPath>
           <itemPath>../../src/JNI/include/rpnumerics_RarefactionOrbitCalc.h</itemPath>
           <itemPath>../../src/JNI/include/rpnumerics_RpNumerics.h</itemPath>
-          <itemPath>../../src/JNI/include/rpnumerics_RPNUMERICS.h</itemPath>
           <itemPath>../../src/JNI/include/rpnumerics_ShockCurveCalc.h</itemPath>
           <itemPath>../../src/JNI/include/rpnumerics_StationaryPointCalc.h</itemPath>
           <itemPath>../../src/JNI/include/rpnumerics_WaveFlow.h</itemPath>
+          <itemPath>../../src/JNI/include/rpnumerics_plugin_RPnPluginManager.h</itemPath>
         </logicalFolder>
         <itemPath>../../src/JNI/JNICompositeCalc.cc</itemPath>
         <itemPath>../../src/JNI/JNIConnectionOrbitCalc.cc</itemPath>
@@ -30,9 +30,9 @@
         <itemPath>../../src/JNI/JNINativeAccumulationFunction.cc</itemPath>
         <itemPath>../../src/JNI/JNINativeFluxFunction.cc</itemPath>
         <itemPath>../../src/JNI/JNIOrbitCalc.cc</itemPath>
-        <itemPath>../../src/JNI/JNIRarefactionOrbitCalc.cc</itemPath>
         <itemPath>../../src/JNI/JNIRPnDesktopPlotter.cc</itemPath>
         <itemPath>../../src/JNI/JNIRPnPluginManager.cc</itemPath>
+        <itemPath>../../src/JNI/JNIRarefactionOrbitCalc.cc</itemPath>
         <itemPath>../../src/JNI/JNIShockCurveCalc.cc</itemPath>
         <itemPath>../../src/JNI/JNIStationaryPointCalc.cc</itemPath>
         <itemPath>../../src/JNI/JNIWaveFlow.cc</itemPath>
@@ -92,7 +92,6 @@
               <itemPath>../../src/rpnumerics/methods/contour/EvaluationMatrix/FunctionsResultsDefinitions.h</itemPath>
               <itemPath>../../src/rpnumerics/methods/contour/EvaluationMatrix/JetFunctionGridEvaluation.cc</itemPath>
               <itemPath>../../src/rpnumerics/methods/contour/EvaluationMatrix/JetFunctionGridEvaluation.h</itemPath>
-              <itemPath>../../src/rpnumerics/methods/contour/EvaluationMatrix/main.cc</itemPath>
               <itemPath>../../src/rpnumerics/methods/contour/EvaluationMatrix/MultipleLoop.cc</itemPath>
               <itemPath>../../src/rpnumerics/methods/contour/EvaluationMatrix/MultipleLoop.h</itemPath>
               <itemPath>../../src/rpnumerics/methods/contour/EvaluationMatrix/MultipleMatrix.cc</itemPath>
@@ -101,6 +100,7 @@
               <itemPath>../../src/rpnumerics/methods/contour/EvaluationMatrix/TriangleDomainGrid.h</itemPath>
               <itemPath>../../src/rpnumerics/methods/contour/EvaluationMatrix/TriangleDomainMatrix.cc</itemPath>
               <itemPath>../../src/rpnumerics/methods/contour/EvaluationMatrix/TriangleDomainMatrix.h</itemPath>
+              <itemPath>../../src/rpnumerics/methods/contour/EvaluationMatrix/main.cc</itemPath>
             </logicalFolder>
           </logicalFolder>
           <itemPath>../../src/rpnumerics/methods/CompositeContinuationMethod.cc</itemPath>
@@ -114,10 +114,7 @@
         </logicalFolder>
         <logicalFolder name="ode" displayName="ode" projectFiles="true">
           <itemPath>../../src/rpnumerics/ode/LSODE.cc</itemPath>
-          <itemPath>../../src/rpnumerics/ode/lsode.F</itemPath>
           <itemPath>../../src/rpnumerics/ode/LSODE.h</itemPath>
-          <itemPath>../../src/rpnumerics/ode/lsode2.F</itemPath>
-          <itemPath>../../src/rpnumerics/ode/lsode3.F</itemPath>
           <itemPath>../../src/rpnumerics/ode/LSODEProfile.cc</itemPath>
           <itemPath>../../src/rpnumerics/ode/LSODEProfile.h</itemPath>
           <itemPath>../../src/rpnumerics/ode/LSODEStopGenerator.cc</itemPath>
@@ -130,6 +127,9 @@
           <itemPath>../../src/rpnumerics/ode/ODESolverProfile.h</itemPath>
           <itemPath>../../src/rpnumerics/ode/ODEStopGenerator.cc</itemPath>
           <itemPath>../../src/rpnumerics/ode/ODEStopGenerator.h</itemPath>
+          <itemPath>../../src/rpnumerics/ode/lsode.F</itemPath>
+          <itemPath>../../src/rpnumerics/ode/lsode2.F</itemPath>
+          <itemPath>../../src/rpnumerics/ode/lsode3.F</itemPath>
         </logicalFolder>
         <logicalFolder name="physics" displayName="physics" projectFiles="true">
           <logicalFolder name="quad" displayName="quad" projectFiles="true">
@@ -153,14 +153,14 @@
             <itemPath>../../src/rpnumerics/physics/quad/QuadWaveState.h</itemPath>
           </logicalFolder>
           <logicalFolder name="triphase" displayName="triphase" projectFiles="true">
-            <itemPath>../../src/rpnumerics/physics/triphase/Capillarity.cc</itemPath>
-            <itemPath>../../src/rpnumerics/physics/triphase/Capillarity.h</itemPath>
             <itemPath>../../src/rpnumerics/physics/triphase/CapilParams.cc</itemPath>
             <itemPath>../../src/rpnumerics/physics/triphase/CapilParams.h</itemPath>
-            <itemPath>../../src/rpnumerics/physics/triphase/Permeability.cc</itemPath>
-            <itemPath>../../src/rpnumerics/physics/triphase/Permeability.h</itemPath>
+            <itemPath>../../src/rpnumerics/physics/triphase/Capillarity.cc</itemPath>
+            <itemPath>../../src/rpnumerics/physics/triphase/Capillarity.h</itemPath>
             <itemPath>../../src/rpnumerics/physics/triphase/PermParams.cc</itemPath>
             <itemPath>../../src/rpnumerics/physics/triphase/PermParams.h</itemPath>
+            <itemPath>../../src/rpnumerics/physics/triphase/Permeability.cc</itemPath>
+            <itemPath>../../src/rpnumerics/physics/triphase/Permeability.h</itemPath>
             <itemPath>../../src/rpnumerics/physics/triphase/TriPhase.cc</itemPath>
             <itemPath>../../src/rpnumerics/physics/triphase/TriPhase.h</itemPath>
             <itemPath>../../src/rpnumerics/physics/triphase/TriPhaseAccumulationFunction.cc</itemPath>
@@ -176,9 +176,9 @@
         <logicalFolder name="plugin" displayName="plugin" projectFiles="true">
           <itemPath>../../src/rpnumerics/plugin/PluginService.cc</itemPath>
           <itemPath>../../src/rpnumerics/plugin/PluginService.h</itemPath>
-          <itemPath>../../src/rpnumerics/plugin/RpnPlugin.h</itemPath>
           <itemPath>../../src/rpnumerics/plugin/RPnPluginManager.cc</itemPath>
           <itemPath>../../src/rpnumerics/plugin/RPnPluginManager.h</itemPath>
+          <itemPath>../../src/rpnumerics/plugin/RpnPlugin.h</itemPath>
         </logicalFolder>
         <itemPath>../../src/rpnumerics/AccumulationFunction.cc</itemPath>
         <itemPath>../../src/rpnumerics/AccumulationFunction.h</itemPath>
@@ -204,6 +204,8 @@
         <itemPath>../../src/rpnumerics/PhaseSpace.h</itemPath>
         <itemPath>../../src/rpnumerics/Physics.cc</itemPath>
         <itemPath>../../src/rpnumerics/Physics.h</itemPath>
+        <itemPath>../../src/rpnumerics/RPnCurve.cc</itemPath>
+        <itemPath>../../src/rpnumerics/RPnCurve.h</itemPath>
         <itemPath>../../src/rpnumerics/RarefactionCalc.cc</itemPath>
         <itemPath>../../src/rpnumerics/RarefactionCalc.h</itemPath>
         <itemPath>../../src/rpnumerics/RarefactionCurve.cc</itemPath>
@@ -214,8 +216,6 @@
         <itemPath>../../src/rpnumerics/RpCalculation.h</itemPath>
         <itemPath>../../src/rpnumerics/RpFunction.cc</itemPath>
         <itemPath>../../src/rpnumerics/RpFunction.h</itemPath>
-        <itemPath>../../src/rpnumerics/RPnCurve.cc</itemPath>
-        <itemPath>../../src/rpnumerics/RPnCurve.h</itemPath>
         <itemPath>../../src/rpnumerics/RpSolution.cc</itemPath>
         <itemPath>../../src/rpnumerics/RpSolution.h</itemPath>
         <itemPath>../../src/rpnumerics/ShockFlow.cc</itemPath>
@@ -247,18 +247,8 @@
           <itemPath>../../src/wave/util/BlockTri3.h</itemPath>
           <itemPath>../../src/wave/util/BlockTriN.ccP</itemPath>
           <itemPath>../../src/wave/util/BlockTriN.hP</itemPath>
-          <itemPath>../../src/wave/util/bool.cc</itemPath>
-          <itemPath>../../src/wave/util/bool.h</itemPath>
           <itemPath>../../src/wave/util/Boundary.cc</itemPath>
           <itemPath>../../src/wave/util/Boundary.h</itemPath>
-          <itemPath>../../src/wave/util/eigen.cc</itemPath>
-          <itemPath>../../src/wave/util/eigen.h</itemPath>
-          <itemPath>../../src/wave/util/eigen2.cc</itemPath>
-          <itemPath>../../src/wave/util/eigen2.h</itemPath>
-          <itemPath>../../src/wave/util/errorhandler.cc</itemPath>
-          <itemPath>../../src/wave/util/errorhandler.h</itemPath>
-          <itemPath>../../src/wave/util/except.cc</itemPath>
-          <itemPath>../../src/wave/util/except.h</itemPath>
           <itemPath>../../src/wave/util/HessianMatrix.cc</itemPath>
           <itemPath>../../src/wave/util/HessianMatrix.h</itemPath>
           <itemPath>../../src/wave/util/IntArray.cc</itemPath>
@@ -269,12 +259,7 @@
           <itemPath>../../src/wave/util/JacobianMatrix.h</itemPath>
           <itemPath>../../src/wave/util/JetMatrix.cc</itemPath>
           <itemPath>../../src/wave/util/JetMatrix.h</itemPath>
-          <itemPath>../../src/wave/util/mathutil.cc</itemPath>
-          <itemPath>../../src/wave/util/mathutil.h</itemPath>
-          <itemPath>../../src/wave/util/new.cc</itemPath>
           <itemPath>../../src/wave/util/Pix.h</itemPath>
-          <itemPath>../../src/wave/util/polyroot.cc</itemPath>
-          <itemPath>../../src/wave/util/polyroot.h</itemPath>
           <itemPath>../../src/wave/util/RealMatrix2.cc</itemPath>
           <itemPath>../../src/wave/util/RealMatrix2.h</itemPath>
           <itemPath>../../src/wave/util/RealVector.cc</itemPath>
@@ -283,7 +268,6 @@
           <itemPath>../../src/wave/util/RectBoundary.h</itemPath>
           <itemPath>../../src/wave/util/ReturnCodes.h</itemPath>
           <itemPath>../../src/wave/util/ScalarArray.h</itemPath>
-          <itemPath>../../src/wave/util/trapfpe.h</itemPath>
           <itemPath>../../src/wave/util/Vector.cc</itemPath>
           <itemPath>../../src/wave/util/Vector.h</itemPath>
           <itemPath>../../src/wave/util/Vector1.cc</itemPath>
@@ -303,14 +287,30 @@
           <itemPath>../../src/wave/util/VectorNArray.ccP</itemPath>
           <itemPath>../../src/wave/util/VectorNArray.hP</itemPath>
           <itemPath>../../src/wave/util/WavePoint.h</itemPath>
+          <itemPath>../../src/wave/util/bool.cc</itemPath>
+          <itemPath>../../src/wave/util/bool.h</itemPath>
+          <itemPath>../../src/wave/util/eigen.cc</itemPath>
+          <itemPath>../../src/wave/util/eigen.h</itemPath>
+          <itemPath>../../src/wave/util/eigen2.cc</itemPath>
+          <itemPath>../../src/wave/util/eigen2.h</itemPath>
+          <itemPath>../../src/wave/util/errorhandler.cc</itemPath>
+          <itemPath>../../src/wave/util/errorhandler.h</itemPath>
+          <itemPath>../../src/wave/util/except.cc</itemPath>
+          <itemPath>../../src/wave/util/except.h</itemPath>
+          <itemPath>../../src/wave/util/mathutil.cc</itemPath>
+          <itemPath>../../src/wave/util/mathutil.h</itemPath>
+          <itemPath>../../src/wave/util/new.cc</itemPath>
+          <itemPath>../../src/wave/util/polyroot.cc</itemPath>
+          <itemPath>../../src/wave/util/polyroot.h</itemPath>
+          <itemPath>../../src/wave/util/trapfpe.h</itemPath>
         </logicalFolder>
       </logicalFolder>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
                    projectFiles="false">
-      <itemPath>../../src/make/makefile</itemPath>
       <itemPath>RPn_C++-Makefile.mk</itemPath>
+      <itemPath>../../src/make/makefile</itemPath>
     </logicalFolder>
   </logicalFolder>
   <sourceRootList>
@@ -330,93 +330,70 @@
           <buildCommand>make -f make/makefile</buildCommand>
           <cleanCommand>make -f make/makefile clean</cleanCommand>
           <executablePath></executablePath>
-          <cCompilerTool>
-            <includeDirectories>
-              <directoryPath>/usr/lib/jvm/java-6-sun-1.6.0.16/include</directoryPath>
-              <directoryPath>/usr/lib/jvm/java-6-sun-1.6.0.16/include/linux</directoryPath>
-            </includeDirectories>
-          </cCompilerTool>
-          <ccCompilerTool>
-            <includeDirectories>
-              <directoryPath>/usr/lib/jvm/java-6-sun-1.6.0.16/include</directoryPath>
-              <directoryPath>../../src/JNI</directoryPath>
-              <directoryPath>../../src/JNI/include</directoryPath>
-              <directoryPath>../../src/plugins</directoryPath>
-              <directoryPath>../../src/rpnumerics</directoryPath>
-              <directoryPath>../../src/rpnumerics/factories</directoryPath>
-              <directoryPath>../../src/rpnumerics/methods</directoryPath>
-              <directoryPath>../../src/rpnumerics/ode</directoryPath>
-              <directoryPath>../../src/rpnumerics/physics</directoryPath>
-              <directoryPath>../../src/rpnumerics/plugin</directoryPath>
-              <directoryPath>../../src/rpnumerics/methods/continuation</directoryPath>
-              <directoryPath>../../src/rpnumerics/methods/contour</directoryPath>
-              <directoryPath>../../src/rpnumerics/physics/quad</directoryPath>
-              <directoryPath>../../src/rpnumerics/physics/triphase</directoryPath>
-              <directoryPath>../../src/wave/multid</directoryPath>
-              <directoryPath>../../src/wave/ode</directoryPath>
-              <directoryPath>../../src/wave/util</directoryPath>
-              <directoryPath>/usr/lib/jvm/java-6-sun-1.6.0.16/include/linux</directoryPath>
-            </includeDirectories>
-          </ccCompilerTool>
+          <cTool>
+            <incDir>
+              <pElem>/usr/lib/jvm/java-6-sun-1.6.0.16/include</pElem>
+              <pElem>/usr/lib/jvm/java-6-sun-1.6.0.16/include/linux</pElem>
+            </incDir>
+          </cTool>
+          <ccTool>
+            <incDir>
+              <pElem>/usr/lib/jvm/java-6-sun-1.6.0.16/include</pElem>
+              <pElem>../../src/JNI</pElem>
+              <pElem>../../src/JNI/include</pElem>
+              <pElem>../../src/plugins</pElem>
+              <pElem>../../src/rpnumerics</pElem>
+              <pElem>../../src/rpnumerics/factories</pElem>
+              <pElem>../../src/rpnumerics/methods</pElem>
+              <pElem>../../src/rpnumerics/ode</pElem>
+              <pElem>../../src/rpnumerics/physics</pElem>
+              <pElem>../../src/rpnumerics/plugin</pElem>
+              <pElem>../../src/rpnumerics/methods/continuation</pElem>
+              <pElem>../../src/rpnumerics/methods/contour</pElem>
+              <pElem>../../src/rpnumerics/physics/quad</pElem>
+              <pElem>../../src/rpnumerics/physics/triphase</pElem>
+              <pElem>../../src/wave/multid</pElem>
+              <pElem>../../src/wave/ode</pElem>
+              <pElem>../../src/wave/util</pElem>
+              <pElem>/usr/lib/jvm/java-6-sun-1.6.0.16/include/linux</pElem>
+            </incDir>
+          </ccTool>
         </makeTool>
-        <requiredProjects>
-        </requiredProjects>
       </makefileType>
-      <item path="../../src/JNI/JNICompositeCalc.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/JNI/JNICompositeCalc.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/JNI/JNIConnectionOrbitCalc.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/JNI/JNIConnectionOrbitCalc.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/JNI/JNIHugoniotCurveCalc.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/JNI/JNIHugoniotCurveCalc.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/JNI/JNIManifoldOrbitCalc.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/JNI/JNIManifoldOrbitCalc.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/JNI/JNINativeAccumulationFunction.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/JNI/JNINativeAccumulationFunction.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/JNI/JNINativeFluxFunction.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/JNI/JNINativeFluxFunction.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/JNI/JNIOrbitCalc.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/JNI/JNIOrbitCalc.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/JNI/JNIRPnDesktopPlotter.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/JNI/JNIRPnDesktopPlotter.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/JNI/JNIRPnPluginManager.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/JNI/JNIRPnPluginManager.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/JNI/JNIRarefactionOrbitCalc.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/JNI/JNIRarefactionOrbitCalc.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/JNI/JNIShockCurveCalc.cc">
-        <itemTool>1</itemTool>
-        <ccCompilerTool>
-          <includeDirectories>
-            <directoryPath>../../src/wave/util</directoryPath>
-            <directoryPath>../../src/wave/multid</directoryPath>
-            <directoryPath>/usr/lib/jvm/java-6-sun-1.6.0.13/include/linux</directoryPath>
-            <directoryPath>../../src/JNI</directoryPath>
-            <directoryPath>../../src</directoryPath>
-            <directoryPath>/usr/lib/jvm/java-6-sun-1.6.0.13/include</directoryPath>
-            <directoryPath>../../src/JNI/include</directoryPath>
-            <directoryPath>../../src/rpnumerics</directoryPath>
-            <directoryPath>../../src/rpnumerics/ode</directoryPath>
-            <directoryPath>../../src/rpnumerics/methods</directoryPath>
-          </includeDirectories>
+      <item path="../../src/JNI/JNIShockCurveCalc.cc" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../../src/wave/util</pElem>
+            <pElem>../../src/wave/multid</pElem>
+            <pElem>/usr/lib/jvm/java-6-sun-1.6.0.13/include/linux</pElem>
+            <pElem>../../src/JNI</pElem>
+            <pElem>../../src</pElem>
+            <pElem>/usr/lib/jvm/java-6-sun-1.6.0.13/include</pElem>
+            <pElem>../../src/JNI/include</pElem>
+            <pElem>../../src/rpnumerics</pElem>
+            <pElem>../../src/rpnumerics/ode</pElem>
+            <pElem>../../src/rpnumerics/methods</pElem>
+          </incDir>
           <inheritIncValues>false</inheritIncValues>
           <preprocessorList>
             <Elem>__PIC__=2</Elem>
@@ -424,176 +401,110 @@
             <Elem>__SSP__=1</Elem>
           </preprocessorList>
           <inheritPreValues>false</inheritPreValues>
-        </ccCompilerTool>
+        </ccTool>
       </item>
-      <item path="../../src/JNI/JNIStationaryPointCalc.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/JNI/JNIStationaryPointCalc.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/JNI/JNIWaveFlow.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/JNI/JNIWaveFlow.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/JNI/RpNumerics.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/JNI/RpNumerics.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/JNI/include/JNIDefs.h">
-        <itemTool>3</itemTool>
+      <item path="../../src/JNI/include/rpn_RPnDesktopPlotter.h" ex="true" tool="3">
       </item>
-      <item path="../../src/JNI/include/RpNumerics.h">
-        <itemTool>3</itemTool>
+      <item path="../../src/JNI/include/rpnumerics_AccumulationFunction.h"
+            ex="true"
+            tool="3">
       </item>
-      <item path="../../src/JNI/include/rpn_RPnDesktopPlotter.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/JNI/include/rpnumerics_CompositeCalc.h"
+            ex="true"
+            tool="3">
       </item>
-      <item path="../../src/JNI/include/rpnumerics_AccumulationFunction.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/JNI/include/rpnumerics_ConnectionOrbitCalc.h"
+            ex="true"
+            tool="3">
       </item>
-      <item path="../../src/JNI/include/rpnumerics_CompositeCalc.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/JNI/include/rpnumerics_FluxFunction.h" ex="true" tool="3">
       </item>
-      <item path="../../src/JNI/include/rpnumerics_ConnectionOrbitCalc.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/JNI/include/rpnumerics_HugoniotCurve.h"
+            ex="true"
+            tool="3">
       </item>
-      <item path="../../src/JNI/include/rpnumerics_FluxFunction.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/JNI/include/rpnumerics_HugoniotCurveCalcND.h"
+            ex="true"
+            tool="3">
       </item>
-      <item path="../../src/JNI/include/rpnumerics_HugoniotCurve.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/JNI/include/rpnumerics_ManifoldOrbitCalc.h"
+            ex="true"
+            tool="3">
       </item>
-      <item path="../../src/JNI/include/rpnumerics_HugoniotCurveCalcND.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/JNI/include/rpnumerics_OrbitCalc.h" ex="true" tool="3">
       </item>
-      <item path="../../src/JNI/include/rpnumerics_ManifoldOrbitCalc.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/JNI/include/rpnumerics_RPNUMERICS.h" ex="true" tool="3">
       </item>
-      <item path="../../src/JNI/include/rpnumerics_OrbitCalc.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/JNI/include/rpnumerics_RarefactionOrbitCalc.h"
+            ex="true"
+            tool="3">
       </item>
-      <item path="../../src/JNI/include/rpnumerics_RPNUMERICS.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/JNI/include/rpnumerics_RpNumerics.h" ex="true" tool="3">
       </item>
-      <item path="../../src/JNI/include/rpnumerics_RarefactionOrbitCalc.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/JNI/include/rpnumerics_StationaryPointCalc.h"
+            ex="true"
+            tool="3">
       </item>
-      <item path="../../src/JNI/include/rpnumerics_RpNumerics.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/JNI/include/rpnumerics_WaveFlow.h" ex="true" tool="3">
       </item>
-      <item path="../../src/JNI/include/rpnumerics_ShockCurveCalc.h">
-        <itemTool>3</itemTool>
+      <item path="../../src/JNI/include/rpnumerics_plugin_RPnPluginManager.h"
+            ex="true"
+            tool="3">
       </item>
-      <item path="../../src/JNI/include/rpnumerics_StationaryPointCalc.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/lab/Lab.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/JNI/include/rpnumerics_WaveFlow.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/lab/Lab.h" ex="true" tool="3">
       </item>
-      <item path="../../src/JNI/include/rpnumerics_plugin_RPnPluginManager.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/lab/RealVectorUse.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/lab/Lab.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/lab/generic/GenericFluxCalc.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/lab/Lab.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/lab/generic/GenericFluxCalc.h" ex="true" tool="3">
       </item>
-      <item path="../../src/lab/RealVectorUse.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/lab/generic/GenericFluxFunction.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/lab/generic/GenericFluxCalc.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/lab/generic/GenericFluxFunction.h" ex="true" tool="3">
       </item>
-      <item path="../../src/lab/generic/GenericFluxCalc.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/lab/generic/GenericFluxParams.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/lab/generic/GenericFluxFunction.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/lab/generic/GenericFluxParams.h" ex="true" tool="3">
       </item>
-      <item path="../../src/lab/generic/GenericFluxFunction.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/lab/myfunction/My.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/lab/generic/GenericFluxParams.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/lab/myfunction/My.h" ex="true" tool="3">
       </item>
-      <item path="../../src/lab/generic/GenericFluxParams.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/lab/myfunction/MyFluxFunction.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/lab/myfunction/My.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/lab/myfunction/MyFluxFunction.h" ex="true" tool="3">
       </item>
-      <item path="../../src/lab/myfunction/My.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/lab/myfunction/MyFluxParams.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/lab/myfunction/MyFluxFunction.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/lab/myfunction/MyFluxParams.h" ex="true" tool="3">
       </item>
-      <item path="../../src/lab/myfunction/MyFluxFunction.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/lab/myfunction/MyWaveState.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/lab/myfunction/MyFluxParams.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/lab/myfunction/MyWaveState.h" ex="true" tool="3">
       </item>
-      <item path="../../src/lab/myfunction/MyFluxParams.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/make/Template.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/lab/myfunction/MyWaveState.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/make/Template.h" ex="true" tool="3">
       </item>
-      <item path="../../src/lab/myfunction/MyWaveState.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/make/Template.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
-      </item>
-      <item path="../../src/make/Template.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/plugins/RarefactionFlowPlugin.cc">
-        <itemTool>1</itemTool>
-        <ccCompilerTool>
-          <includeDirectories>
-            <directoryPath>../../src/wave/util</directoryPath>
-            <directoryPath>../../src</directoryPath>
-            <directoryPath>../../src/plugins</directoryPath>
-            <directoryPath>../../src/rpnumerics</directoryPath>
-            <directoryPath>../../src/rpnumerics/physics/quad</directoryPath>
-            <directoryPath>../../src/rpnumerics/plugin</directoryPath>
-          </includeDirectories>
+      <item path="../../src/plugins/RarefactionFlowPlugin.cc" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../../src/wave/util</pElem>
+            <pElem>../../src</pElem>
+            <pElem>../../src/plugins</pElem>
+            <pElem>../../src/rpnumerics</pElem>
+            <pElem>../../src/rpnumerics/physics/quad</pElem>
+            <pElem>../../src/rpnumerics/plugin</pElem>
+          </incDir>
           <inheritIncValues>false</inheritIncValues>
           <preprocessorList>
             <Elem>__PIC__=2</Elem>
@@ -601,22 +512,18 @@
             <Elem>__SSP__=1</Elem>
           </preprocessorList>
           <inheritPreValues>false</inheritPreValues>
-        </ccCompilerTool>
+        </ccTool>
       </item>
-      <item path="../../src/plugins/RarefactionFlowPlugin.h">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/plugins/ShockFlowPlugin.cc">
-        <itemTool>1</itemTool>
-        <ccCompilerTool>
-          <includeDirectories>
-            <directoryPath>../../src/wave/util</directoryPath>
-            <directoryPath>../../src</directoryPath>
-            <directoryPath>../../src/plugins</directoryPath>
-            <directoryPath>../../src/rpnumerics</directoryPath>
-            <directoryPath>../../src/rpnumerics/physics/quad</directoryPath>
-            <directoryPath>../../src/rpnumerics/plugin</directoryPath>
-          </includeDirectories>
+      <item path="../../src/plugins/ShockFlowPlugin.cc" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../../src/wave/util</pElem>
+            <pElem>../../src</pElem>
+            <pElem>../../src/plugins</pElem>
+            <pElem>../../src/rpnumerics</pElem>
+            <pElem>../../src/rpnumerics/physics/quad</pElem>
+            <pElem>../../src/rpnumerics/plugin</pElem>
+          </incDir>
           <inheritIncValues>false</inheritIncValues>
           <preprocessorList>
             <Elem>__PIC__=2</Elem>
@@ -624,41 +531,25 @@
             <Elem>__SSP__=1</Elem>
           </preprocessorList>
           <inheritPreValues>false</inheritPreValues>
-        </ccCompilerTool>
+        </ccTool>
       </item>
-      <item path="../../src/plugins/ShockFlowPlugin.h">
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/AccumulationFunction.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/rpnumerics/AccumulationFunction.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/rpnumerics/AccumulationParams.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/rpnumerics/AccumulationFunction.h">
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/CompositeFlow.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/rpnumerics/AccumulationParams.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/rpnumerics/CompositeFlow.h" ex="true" tool="3">
       </item>
-      <item path="../../src/rpnumerics/AccumulationParams.h">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/rpnumerics/CompositeFlow.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
-      </item>
-      <item path="../../src/rpnumerics/CompositeFlow.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/rpnumerics/ContinuationRarefactionFlow.cc">
-        <itemTool>1</itemTool>
-        <ccCompilerTool>
-          <includeDirectories>
-            <directoryPath>../../src/wave/util</directoryPath>
-            <directoryPath>../../src</directoryPath>
-            <directoryPath>../../src/rpnumerics</directoryPath>
-          </includeDirectories>
+      <item path="../../src/rpnumerics/ContinuationRarefactionFlow.cc"
+            ex="false"
+            tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../../src/wave/util</pElem>
+            <pElem>../../src</pElem>
+            <pElem>../../src/rpnumerics</pElem>
+          </incDir>
           <inheritIncValues>false</inheritIncValues>
           <preprocessorList>
             <Elem>__PIC__=2</Elem>
@@ -666,19 +557,15 @@
             <Elem>__SSP__=1</Elem>
           </preprocessorList>
           <inheritPreValues>false</inheritPreValues>
-        </ccCompilerTool>
+        </ccTool>
       </item>
-      <item path="../../src/rpnumerics/ContinuationRarefactionFlow.h">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/rpnumerics/ContinuationShockFlow.cc">
-        <itemTool>1</itemTool>
-        <ccCompilerTool>
-          <includeDirectories>
-            <directoryPath>../../src/wave/util</directoryPath>
-            <directoryPath>../../src</directoryPath>
-            <directoryPath>../../src/rpnumerics</directoryPath>
-          </includeDirectories>
+      <item path="../../src/rpnumerics/ContinuationShockFlow.cc" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../../src/wave/util</pElem>
+            <pElem>../../src</pElem>
+            <pElem>../../src/rpnumerics</pElem>
+          </incDir>
           <inheritIncValues>false</inheritIncValues>
           <preprocessorList>
             <Elem>__PIC__=2</Elem>
@@ -686,94 +573,53 @@
             <Elem>__SSP__=1</Elem>
           </preprocessorList>
           <inheritPreValues>false</inheritPreValues>
-        </ccCompilerTool>
+        </ccTool>
       </item>
-      <item path="../../src/rpnumerics/ContinuationShockFlow.h">
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/DefaultAccumulationFunction.cc"
+            ex="true"
+            tool="1">
       </item>
-      <item path="../../src/rpnumerics/DefaultAccumulationFunction.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/rpnumerics/DefaultAccumulationFunction.h"
+            ex="true"
+            tool="3">
       </item>
-      <item path="../../src/rpnumerics/DefaultAccumulationFunction.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/DefaultAccumulationParams.cc"
+            ex="true"
+            tool="1">
       </item>
-      <item path="../../src/rpnumerics/DefaultAccumulationParams.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/rpnumerics/DefaultAccumulationParams.h"
+            ex="true"
+            tool="3">
       </item>
-      <item path="../../src/rpnumerics/DefaultAccumulationParams.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/FluxFunction.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/rpnumerics/FluxFunction.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/rpnumerics/FluxParams.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/rpnumerics/FluxFunction.h">
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/HugoniotCurve.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/rpnumerics/FluxParams.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/rpnumerics/PhasePoint.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/rpnumerics/FluxParams.h">
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/PhaseSpace.h" ex="true" tool="3">
       </item>
-      <item path="../../src/rpnumerics/HugoniotCurve.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/rpnumerics/Physics.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/rpnumerics/PhasePoint.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/rpnumerics/RPnCurve.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/rpnumerics/PhasePoint.h">
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/RarefactionCalc.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/rpnumerics/PhaseSpace.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/RarefactionCalc.h" ex="true" tool="3">
       </item>
-      <item path="../../src/rpnumerics/Physics.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/rpnumerics/RarefactionCurve.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/rpnumerics/Physics.h">
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/RarefactionCurve.h" ex="true" tool="3">
       </item>
-      <item path="../../src/rpnumerics/RPnCurve.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
-      </item>
-      <item path="../../src/rpnumerics/RPnCurve.h">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/rpnumerics/RarefactionCalc.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
-      </item>
-      <item path="../../src/rpnumerics/RarefactionCalc.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/rpnumerics/RarefactionCurve.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
-      </item>
-      <item path="../../src/rpnumerics/RarefactionCurve.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/rpnumerics/RarefactionFlow.cc">
-        <itemTool>1</itemTool>
-        <ccCompilerTool>
-          <includeDirectories>
-            <directoryPath>../../src/wave/util</directoryPath>
-            <directoryPath>../../src</directoryPath>
-            <directoryPath>../../src/rpnumerics</directoryPath>
-          </includeDirectories>
+      <item path="../../src/rpnumerics/RarefactionFlow.cc" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../../src/wave/util</pElem>
+            <pElem>../../src</pElem>
+            <pElem>../../src/rpnumerics</pElem>
+          </incDir>
           <inheritIncValues>false</inheritIncValues>
           <preprocessorList>
             <Elem>__PIC__=2</Elem>
@@ -781,56 +627,29 @@
             <Elem>__SSP__=1</Elem>
           </preprocessorList>
           <inheritPreValues>false</inheritPreValues>
-        </ccCompilerTool>
+        </ccTool>
       </item>
-      <item path="../../src/rpnumerics/RarefactionFlow.h">
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/RpCalculation.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/rpnumerics/RpCalculation.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/rpnumerics/RpCalculation.h" ex="true" tool="3">
       </item>
-      <item path="../../src/rpnumerics/RpCalculation.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/RpFunction.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/rpnumerics/RpFunction.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/rpnumerics/RpSolution.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/rpnumerics/RpFunction.h">
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/RpSolution.h" ex="true" tool="3">
       </item>
-      <item path="../../src/rpnumerics/RpSolution.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/rpnumerics/ShockFlow.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/rpnumerics/RpSolution.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/ShockFlowParams.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/rpnumerics/ShockFlow.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
-      </item>
-      <item path="../../src/rpnumerics/ShockFlow.h">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/rpnumerics/ShockFlowParams.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
-      </item>
-      <item path="../../src/rpnumerics/ShockFlowParams.h">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/rpnumerics/WaveFlow.cc">
-        <itemTool>1</itemTool>
-        <ccCompilerTool>
-          <includeDirectories>
-            <directoryPath>../../src/wave/util</directoryPath>
-            <directoryPath>../../src</directoryPath>
-            <directoryPath>../../src/rpnumerics</directoryPath>
-          </includeDirectories>
+      <item path="../../src/rpnumerics/WaveFlow.cc" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../../src/wave/util</pElem>
+            <pElem>../../src</pElem>
+            <pElem>../../src/rpnumerics</pElem>
+          </incDir>
           <inheritIncValues>false</inheritIncValues>
           <preprocessorList>
             <Elem>__PIC__=2</Elem>
@@ -838,67 +657,55 @@
             <Elem>__SSP__=1</Elem>
           </preprocessorList>
           <inheritPreValues>false</inheritPreValues>
-        </ccCompilerTool>
+        </ccTool>
       </item>
-      <item path="../../src/rpnumerics/WaveFlow.h">
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/WavePoint.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/rpnumerics/WavePoint.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/rpnumerics/WaveState.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/rpnumerics/WavePoint.h">
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/factories/RarefactionFlowFactory.cc"
+            ex="true"
+            tool="1">
       </item>
-      <item path="../../src/rpnumerics/WaveState.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/rpnumerics/factories/RarefactionFlowFactory.h"
+            ex="true"
+            tool="3">
       </item>
-      <item path="../../src/rpnumerics/WaveState.h">
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/factories/RarefactionMethodFactory.cc"
+            ex="true"
+            tool="1">
       </item>
-      <item path="../../src/rpnumerics/factories/RarefactionFlowFactory.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/rpnumerics/factories/RarefactionMethodFactory.h"
+            ex="true"
+            tool="3">
       </item>
-      <item path="../../src/rpnumerics/factories/RarefactionFlowFactory.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/factories/WaveFlowFactory.cc"
+            ex="true"
+            tool="1">
       </item>
-      <item path="../../src/rpnumerics/factories/RarefactionMethodFactory.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/rpnumerics/factories/WaveFlowFactory.h"
+            ex="true"
+            tool="3">
       </item>
-      <item path="../../src/rpnumerics/factories/RarefactionMethodFactory.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/methods/CompositeContinuationMethod.cc"
+            ex="true"
+            tool="1">
       </item>
-      <item path="../../src/rpnumerics/factories/WaveFlowFactory.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/rpnumerics/methods/CompositeContinuationMethod.h"
+            ex="true"
+            tool="3">
       </item>
-      <item path="../../src/rpnumerics/factories/WaveFlowFactory.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/rpnumerics/methods/CompositeContinuationMethod.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
-      </item>
-      <item path="../../src/rpnumerics/methods/CompositeContinuationMethod.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/rpnumerics/methods/RarefactionContinuationMethod.cc">
-        <itemTool>1</itemTool>
-        <ccCompilerTool>
-          <includeDirectories>
-            <directoryPath>../../src/wave/util</directoryPath>
-            <directoryPath>../../src</directoryPath>
-            <directoryPath>../../src/rpnumerics</directoryPath>
-            <directoryPath>../../src/rpnumerics/ode</directoryPath>
-            <directoryPath>../../src/rpnumerics/methods</directoryPath>
-          </includeDirectories>
+      <item path="../../src/rpnumerics/methods/RarefactionContinuationMethod.cc"
+            ex="false"
+            tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../../src/wave/util</pElem>
+            <pElem>../../src</pElem>
+            <pElem>../../src/rpnumerics</pElem>
+            <pElem>../../src/rpnumerics/ode</pElem>
+            <pElem>../../src/rpnumerics/methods</pElem>
+          </incDir>
           <inheritIncValues>false</inheritIncValues>
           <preprocessorList>
             <Elem>__PIC__=2</Elem>
@@ -906,28 +713,23 @@
             <Elem>__SSP__=1</Elem>
           </preprocessorList>
           <inheritPreValues>false</inheritPreValues>
-        </ccCompilerTool>
+        </ccTool>
       </item>
-      <item path="../../src/rpnumerics/methods/RarefactionContinuationMethod.h">
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/methods/RarefactionMethod.cc"
+            ex="true"
+            tool="1">
       </item>
-      <item path="../../src/rpnumerics/methods/RarefactionMethod.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
-      </item>
-      <item path="../../src/rpnumerics/methods/RarefactionMethod.h">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/rpnumerics/methods/ShockContinuationMethod.cc">
-        <itemTool>1</itemTool>
-        <ccCompilerTool>
-          <includeDirectories>
-            <directoryPath>../../src/wave/util</directoryPath>
-            <directoryPath>../../src</directoryPath>
-            <directoryPath>../../src/rpnumerics</directoryPath>
-            <directoryPath>../../src/rpnumerics/ode</directoryPath>
-            <directoryPath>../../src/rpnumerics/methods</directoryPath>
-          </includeDirectories>
+      <item path="../../src/rpnumerics/methods/ShockContinuationMethod.cc"
+            ex="false"
+            tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../../src/wave/util</pElem>
+            <pElem>../../src</pElem>
+            <pElem>../../src/rpnumerics</pElem>
+            <pElem>../../src/rpnumerics/ode</pElem>
+            <pElem>../../src/rpnumerics/methods</pElem>
+          </incDir>
           <inheritIncValues>false</inheritIncValues>
           <preprocessorList>
             <Elem>__PIC__=2</Elem>
@@ -935,84 +737,80 @@
             <Elem>__SSP__=1</Elem>
           </preprocessorList>
           <inheritPreValues>false</inheritPreValues>
-        </ccCompilerTool>
+        </ccTool>
       </item>
-      <item path="../../src/rpnumerics/methods/ShockContinuationMethod.h">
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/methods/contour/EvaluationMatrix/EvaluationsGrid.cc"
+            ex="true"
+            tool="1">
       </item>
-      <item path="../../src/rpnumerics/methods/contour/EvaluationMatrix/EvaluationsGrid.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/rpnumerics/methods/contour/EvaluationMatrix/EvaluationsGrid.h"
+            ex="true"
+            tool="3">
       </item>
-      <item path="../../src/rpnumerics/methods/contour/EvaluationMatrix/EvaluationsGrid.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/methods/contour/EvaluationMatrix/FunctionGridEvaluation.cc"
+            ex="true"
+            tool="1">
       </item>
-      <item path="../../src/rpnumerics/methods/contour/EvaluationMatrix/FunctionGridEvaluation.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/rpnumerics/methods/contour/EvaluationMatrix/FunctionGridEvaluation.h"
+            ex="true"
+            tool="3">
       </item>
-      <item path="../../src/rpnumerics/methods/contour/EvaluationMatrix/FunctionGridEvaluation.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/methods/contour/EvaluationMatrix/FunctionsResultsDefinitions.h"
+            ex="true"
+            tool="3">
       </item>
-      <item path="../../src/rpnumerics/methods/contour/EvaluationMatrix/FunctionsResultsDefinitions.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/methods/contour/EvaluationMatrix/JetFunctionGridEvaluation.cc"
+            ex="true"
+            tool="1">
       </item>
-      <item path="../../src/rpnumerics/methods/contour/EvaluationMatrix/JetFunctionGridEvaluation.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/rpnumerics/methods/contour/EvaluationMatrix/JetFunctionGridEvaluation.h"
+            ex="true"
+            tool="3">
       </item>
-      <item path="../../src/rpnumerics/methods/contour/EvaluationMatrix/JetFunctionGridEvaluation.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/methods/contour/EvaluationMatrix/MultipleLoop.cc"
+            ex="true"
+            tool="1">
       </item>
-      <item path="../../src/rpnumerics/methods/contour/EvaluationMatrix/MultipleLoop.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/rpnumerics/methods/contour/EvaluationMatrix/MultipleLoop.h"
+            ex="true"
+            tool="3">
       </item>
-      <item path="../../src/rpnumerics/methods/contour/EvaluationMatrix/MultipleLoop.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/methods/contour/EvaluationMatrix/MultipleMatrix.cc"
+            ex="true"
+            tool="1">
       </item>
-      <item path="../../src/rpnumerics/methods/contour/EvaluationMatrix/MultipleMatrix.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/rpnumerics/methods/contour/EvaluationMatrix/MultipleMatrix.h"
+            ex="true"
+            tool="3">
       </item>
-      <item path="../../src/rpnumerics/methods/contour/EvaluationMatrix/MultipleMatrix.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/methods/contour/EvaluationMatrix/TriangleDomainGrid.cc"
+            ex="true"
+            tool="1">
       </item>
-      <item path="../../src/rpnumerics/methods/contour/EvaluationMatrix/TriangleDomainGrid.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/rpnumerics/methods/contour/EvaluationMatrix/TriangleDomainGrid.h"
+            ex="true"
+            tool="3">
       </item>
-      <item path="../../src/rpnumerics/methods/contour/EvaluationMatrix/TriangleDomainGrid.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/methods/contour/EvaluationMatrix/TriangleDomainMatrix.cc"
+            ex="true"
+            tool="1">
       </item>
-      <item path="../../src/rpnumerics/methods/contour/EvaluationMatrix/TriangleDomainMatrix.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/rpnumerics/methods/contour/EvaluationMatrix/TriangleDomainMatrix.h"
+            ex="true"
+            tool="3">
       </item>
-      <item path="../../src/rpnumerics/methods/contour/EvaluationMatrix/TriangleDomainMatrix.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/methods/contour/EvaluationMatrix/main.cc"
+            ex="true"
+            tool="1">
       </item>
-      <item path="../../src/rpnumerics/methods/contour/EvaluationMatrix/main.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
-      </item>
-      <item path="../../src/rpnumerics/ode/LSODE.cc">
-        <itemTool>1</itemTool>
-        <ccCompilerTool>
-          <includeDirectories>
-            <directoryPath>../../src/wave/util</directoryPath>
-            <directoryPath>../../src</directoryPath>
-            <directoryPath>../../src/rpnumerics</directoryPath>
-            <directoryPath>../../src/rpnumerics/ode</directoryPath>
-          </includeDirectories>
+      <item path="../../src/rpnumerics/ode/LSODE.cc" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../../src/wave/util</pElem>
+            <pElem>../../src</pElem>
+            <pElem>../../src/rpnumerics</pElem>
+            <pElem>../../src/rpnumerics/ode</pElem>
+          </incDir>
           <inheritIncValues>false</inheritIncValues>
           <preprocessorList>
             <Elem>__PIC__=2</Elem>
@@ -1020,20 +818,16 @@
             <Elem>__SSP__=1</Elem>
           </preprocessorList>
           <inheritPreValues>false</inheritPreValues>
-        </ccCompilerTool>
+        </ccTool>
       </item>
-      <item path="../../src/rpnumerics/ode/LSODE.h">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/rpnumerics/ode/LSODEProfile.cc">
-        <itemTool>1</itemTool>
-        <ccCompilerTool>
-          <includeDirectories>
-            <directoryPath>../../src/wave/util</directoryPath>
-            <directoryPath>../../src</directoryPath>
-            <directoryPath>../../src/rpnumerics</directoryPath>
-            <directoryPath>../../src/rpnumerics/ode</directoryPath>
-          </includeDirectories>
+      <item path="../../src/rpnumerics/ode/LSODEProfile.cc" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../../src/wave/util</pElem>
+            <pElem>../../src</pElem>
+            <pElem>../../src/rpnumerics</pElem>
+            <pElem>../../src/rpnumerics/ode</pElem>
+          </incDir>
           <inheritIncValues>false</inheritIncValues>
           <preprocessorList>
             <Elem>__PIC__=2</Elem>
@@ -1041,83 +835,46 @@
             <Elem>__SSP__=1</Elem>
           </preprocessorList>
           <inheritPreValues>false</inheritPreValues>
-        </ccCompilerTool>
+        </ccTool>
       </item>
-      <item path="../../src/rpnumerics/ode/LSODEProfile.h">
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/ode/LSODEStopGenerator.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/rpnumerics/ode/LSODEStopGenerator.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/rpnumerics/ode/ODESolution.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/rpnumerics/ode/LSODEStopGenerator.h">
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/ode/ODESolver.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/rpnumerics/ode/ODESolution.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/rpnumerics/ode/ODESolverProfile.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/rpnumerics/ode/ODESolution.h">
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/ode/ODEStopGenerator.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/rpnumerics/ode/ODESolver.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/rpnumerics/ode/lsode.F" ex="true" tool="2">
       </item>
-      <item path="../../src/rpnumerics/ode/ODESolver.h">
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/ode/lsode2.F" ex="true" tool="2">
       </item>
-      <item path="../../src/rpnumerics/ode/ODESolverProfile.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/rpnumerics/ode/lsode3.F" ex="true" tool="2">
       </item>
-      <item path="../../src/rpnumerics/ode/ODESolverProfile.h">
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/physics/quad/Quad2.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/rpnumerics/ode/ODEStopGenerator.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/rpnumerics/physics/quad/Quad2.h" ex="true" tool="3">
       </item>
-      <item path="../../src/rpnumerics/ode/ODEStopGenerator.h">
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/physics/quad/Quad2AccumulationFunction.cc"
+            ex="true"
+            tool="1">
       </item>
-      <item path="../../src/rpnumerics/ode/lsode.F">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>2</itemTool>
+      <item path="../../src/rpnumerics/physics/quad/Quad2AccumulationFunction.h"
+            ex="true"
+            tool="3">
       </item>
-      <item path="../../src/rpnumerics/ode/lsode2.F">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>2</itemTool>
-      </item>
-      <item path="../../src/rpnumerics/ode/lsode3.F">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>2</itemTool>
-      </item>
-      <item path="../../src/rpnumerics/physics/quad/Quad2.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
-      </item>
-      <item path="../../src/rpnumerics/physics/quad/Quad2.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/rpnumerics/physics/quad/Quad2AccumulationFunction.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
-      </item>
-      <item path="../../src/rpnumerics/physics/quad/Quad2AccumulationFunction.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/rpnumerics/physics/quad/Quad2FluxFunction.cc">
-        <itemTool>1</itemTool>
-        <ccCompilerTool>
-          <includeDirectories>
-            <directoryPath>../../src/wave/util</directoryPath>
-            <directoryPath>../../src</directoryPath>
-            <directoryPath>../../src/rpnumerics</directoryPath>
-            <directoryPath>../../src/rpnumerics/physics/quad</directoryPath>
-          </includeDirectories>
+      <item path="../../src/rpnumerics/physics/quad/Quad2FluxFunction.cc"
+            ex="false"
+            tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../../src/wave/util</pElem>
+            <pElem>../../src</pElem>
+            <pElem>../../src/rpnumerics</pElem>
+            <pElem>../../src/rpnumerics/physics/quad</pElem>
+          </incDir>
           <inheritIncValues>false</inheritIncValues>
           <preprocessorList>
             <Elem>__PIC__=2</Elem>
@@ -1125,43 +882,34 @@
             <Elem>__SSP__=1</Elem>
           </preprocessorList>
           <inheritPreValues>false</inheritPreValues>
-        </ccCompilerTool>
+        </ccTool>
       </item>
-      <item path="../../src/rpnumerics/physics/quad/Quad2FluxFunction.h">
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/physics/quad/Quad2FluxParams.cc"
+            ex="true"
+            tool="1">
       </item>
-      <item path="../../src/rpnumerics/physics/quad/Quad2FluxParams.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/rpnumerics/physics/quad/Quad4.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/rpnumerics/physics/quad/Quad2FluxParams.h">
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/physics/quad/Quad4.h" ex="true" tool="3">
       </item>
-      <item path="../../src/rpnumerics/physics/quad/Quad4.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/rpnumerics/physics/quad/Quad4AccumulationFunction.cc"
+            ex="true"
+            tool="1">
       </item>
-      <item path="../../src/rpnumerics/physics/quad/Quad4.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/physics/quad/Quad4AccumulationFunction.h"
+            ex="true"
+            tool="3">
       </item>
-      <item path="../../src/rpnumerics/physics/quad/Quad4AccumulationFunction.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
-      </item>
-      <item path="../../src/rpnumerics/physics/quad/Quad4AccumulationFunction.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/rpnumerics/physics/quad/Quad4FluxFunction.cc">
-        <itemTool>1</itemTool>
-        <ccCompilerTool>
-          <includeDirectories>
-            <directoryPath>../../src/wave/util</directoryPath>
-            <directoryPath>../../src</directoryPath>
-            <directoryPath>../../src/rpnumerics</directoryPath>
-            <directoryPath>../../src/rpnumerics/physics/quad</directoryPath>
-          </includeDirectories>
+      <item path="../../src/rpnumerics/physics/quad/Quad4FluxFunction.cc"
+            ex="false"
+            tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../../src/wave/util</pElem>
+            <pElem>../../src</pElem>
+            <pElem>../../src/rpnumerics</pElem>
+            <pElem>../../src/rpnumerics/physics/quad</pElem>
+          </incDir>
           <inheritIncValues>false</inheritIncValues>
           <preprocessorList>
             <Elem>__PIC__=2</Elem>
@@ -1169,139 +917,112 @@
             <Elem>__SSP__=1</Elem>
           </preprocessorList>
           <inheritPreValues>false</inheritPreValues>
-        </ccCompilerTool>
+        </ccTool>
       </item>
-      <item path="../../src/rpnumerics/physics/quad/Quad4FluxFunction.h">
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/physics/quad/Quad4FluxParams.cc"
+            ex="true"
+            tool="1">
       </item>
-      <item path="../../src/rpnumerics/physics/quad/Quad4FluxParams.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/rpnumerics/physics/quad/QuadWaveState.cc"
+            ex="true"
+            tool="1">
       </item>
-      <item path="../../src/rpnumerics/physics/quad/Quad4FluxParams.h">
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/physics/quad/QuadWaveState.h"
+            ex="true"
+            tool="3">
       </item>
-      <item path="../../src/rpnumerics/physics/quad/QuadWaveState.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/rpnumerics/physics/triphase/CapilParams.cc"
+            ex="true"
+            tool="1">
       </item>
-      <item path="../../src/rpnumerics/physics/quad/QuadWaveState.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/physics/triphase/CapilParams.h"
+            ex="true"
+            tool="3">
       </item>
-      <item path="../../src/rpnumerics/physics/triphase/CapilParams.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/rpnumerics/physics/triphase/Capillarity.cc"
+            ex="true"
+            tool="1">
       </item>
-      <item path="../../src/rpnumerics/physics/triphase/CapilParams.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/physics/triphase/Capillarity.h"
+            ex="true"
+            tool="3">
       </item>
-      <item path="../../src/rpnumerics/physics/triphase/Capillarity.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/rpnumerics/physics/triphase/PermParams.cc"
+            ex="true"
+            tool="1">
       </item>
-      <item path="../../src/rpnumerics/physics/triphase/Capillarity.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/physics/triphase/PermParams.h"
+            ex="true"
+            tool="3">
       </item>
-      <item path="../../src/rpnumerics/physics/triphase/PermParams.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/rpnumerics/physics/triphase/Permeability.cc"
+            ex="true"
+            tool="1">
       </item>
-      <item path="../../src/rpnumerics/physics/triphase/PermParams.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/physics/triphase/Permeability.h"
+            ex="true"
+            tool="3">
       </item>
-      <item path="../../src/rpnumerics/physics/triphase/Permeability.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/rpnumerics/physics/triphase/TriPhase.cc"
+            ex="true"
+            tool="1">
       </item>
-      <item path="../../src/rpnumerics/physics/triphase/Permeability.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/physics/triphase/TriPhase.h"
+            ex="true"
+            tool="3">
       </item>
-      <item path="../../src/rpnumerics/physics/triphase/TriPhase.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/rpnumerics/physics/triphase/TriPhaseAccumulationFunction.cc"
+            ex="true"
+            tool="1">
       </item>
-      <item path="../../src/rpnumerics/physics/triphase/TriPhase.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/physics/triphase/TriPhaseAccumulationFunction.h"
+            ex="true"
+            tool="3">
       </item>
-      <item path="../../src/rpnumerics/physics/triphase/TriPhaseAccumulationFunction.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/rpnumerics/physics/triphase/TriPhaseFluxFunction.cc"
+            ex="true"
+            tool="1">
       </item>
-      <item path="../../src/rpnumerics/physics/triphase/TriPhaseAccumulationFunction.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/physics/triphase/TriPhaseFluxFunction.h"
+            ex="true"
+            tool="3">
       </item>
-      <item path="../../src/rpnumerics/physics/triphase/TriPhaseFluxFunction.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/rpnumerics/physics/triphase/TriPhaseParams.cc"
+            ex="true"
+            tool="1">
       </item>
-      <item path="../../src/rpnumerics/physics/triphase/TriPhaseFluxFunction.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/physics/triphase/TriPhaseParams.h"
+            ex="true"
+            tool="3">
       </item>
-      <item path="../../src/rpnumerics/physics/triphase/TriPhaseParams.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/rpnumerics/physics/triphase/ViscosityParams.cc"
+            ex="true"
+            tool="1">
       </item>
-      <item path="../../src/rpnumerics/physics/triphase/TriPhaseParams.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/physics/triphase/ViscosityParams.h"
+            ex="true"
+            tool="3">
       </item>
-      <item path="../../src/rpnumerics/physics/triphase/ViscosityParams.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/rpnumerics/plugin/PluginService.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/rpnumerics/physics/triphase/ViscosityParams.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/plugin/PluginService.h" ex="true" tool="3">
       </item>
-      <item path="../../src/rpnumerics/plugin/PluginService.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/rpnumerics/plugin/RPnPluginManager.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/rpnumerics/plugin/PluginService.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/rpnumerics/plugin/RPnPluginManager.h" ex="true" tool="3">
       </item>
-      <item path="../../src/rpnumerics/plugin/RPnPluginManager.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
+      <item path="../../src/wave/multid/Multid.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/rpnumerics/plugin/RPnPluginManager.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/wave/multid/Multid.h" ex="true" tool="3">
       </item>
-      <item path="../../src/rpnumerics/plugin/RpnPlugin.h">
-        <itemTool>3</itemTool>
+      <item path="../../src/wave/multid/Space.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/wave/multid/Multid.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
-      </item>
-      <item path="../../src/wave/multid/Multid.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/wave/multid/Space.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
-      </item>
-      <item path="../../src/wave/multid/Space.h">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/wave/util/ADTADV.cc">
-        <itemTool>1</itemTool>
-        <ccCompilerTool>
-          <includeDirectories>
-            <directoryPath>../../src/wave/util</directoryPath>
-            <directoryPath>../../src</directoryPath>
-          </includeDirectories>
+      <item path="../../src/wave/util/ADTADV.cc" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../../src/wave/util</pElem>
+            <pElem>../../src</pElem>
+          </incDir>
           <inheritIncValues>false</inheritIncValues>
           <preprocessorList>
             <Elem>__PIC__=2</Elem>
@@ -1309,18 +1030,14 @@
             <Elem>__SSP__=1</Elem>
           </preprocessorList>
           <inheritPreValues>false</inheritPreValues>
-        </ccCompilerTool>
+        </ccTool>
       </item>
-      <item path="../../src/wave/util/ADTADV.h">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/wave/util/BlockTri1.cc">
-        <itemTool>1</itemTool>
-        <ccCompilerTool>
-          <includeDirectories>
-            <directoryPath>../../src/wave/util</directoryPath>
-            <directoryPath>../../src</directoryPath>
-          </includeDirectories>
+      <item path="../../src/wave/util/BlockTri1.cc" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../../src/wave/util</pElem>
+            <pElem>../../src</pElem>
+          </incDir>
           <inheritIncValues>false</inheritIncValues>
           <preprocessorList>
             <Elem>__PIC__=2</Elem>
@@ -1328,18 +1045,14 @@
             <Elem>__SSP__=1</Elem>
           </preprocessorList>
           <inheritPreValues>false</inheritPreValues>
-        </ccCompilerTool>
+        </ccTool>
       </item>
-      <item path="../../src/wave/util/BlockTri1.h">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/wave/util/BlockTri2.cc">
-        <itemTool>1</itemTool>
-        <ccCompilerTool>
-          <includeDirectories>
-            <directoryPath>../../src/wave/util</directoryPath>
-            <directoryPath>../../src</directoryPath>
-          </includeDirectories>
+      <item path="../../src/wave/util/BlockTri2.cc" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../../src/wave/util</pElem>
+            <pElem>../../src</pElem>
+          </incDir>
           <inheritIncValues>false</inheritIncValues>
           <preprocessorList>
             <Elem>__PIC__=2</Elem>
@@ -1347,18 +1060,14 @@
             <Elem>__SSP__=1</Elem>
           </preprocessorList>
           <inheritPreValues>false</inheritPreValues>
-        </ccCompilerTool>
+        </ccTool>
       </item>
-      <item path="../../src/wave/util/BlockTri2.h">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/wave/util/BlockTri3.cc">
-        <itemTool>1</itemTool>
-        <ccCompilerTool>
-          <includeDirectories>
-            <directoryPath>../../src/wave/util</directoryPath>
-            <directoryPath>../../src</directoryPath>
-          </includeDirectories>
+      <item path="../../src/wave/util/BlockTri3.cc" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../../src/wave/util</pElem>
+            <pElem>../../src</pElem>
+          </incDir>
           <inheritIncValues>false</inheritIncValues>
           <preprocessorList>
             <Elem>__PIC__=2</Elem>
@@ -1366,24 +1075,14 @@
             <Elem>__SSP__=1</Elem>
           </preprocessorList>
           <inheritPreValues>false</inheritPreValues>
-        </ccCompilerTool>
+        </ccTool>
       </item>
-      <item path="../../src/wave/util/BlockTri3.h">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/wave/util/BlockTriN.ccP">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/wave/util/BlockTriN.hP">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/wave/util/Boundary.cc">
-        <itemTool>1</itemTool>
-        <ccCompilerTool>
-          <includeDirectories>
-            <directoryPath>../../src/wave/util</directoryPath>
-            <directoryPath>../../src</directoryPath>
-          </includeDirectories>
+      <item path="../../src/wave/util/Boundary.cc" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../../src/wave/util</pElem>
+            <pElem>../../src</pElem>
+          </incDir>
           <inheritIncValues>false</inheritIncValues>
           <preprocessorList>
             <Elem>__PIC__=2</Elem>
@@ -1391,18 +1090,14 @@
             <Elem>__SSP__=1</Elem>
           </preprocessorList>
           <inheritPreValues>false</inheritPreValues>
-        </ccCompilerTool>
+        </ccTool>
       </item>
-      <item path="../../src/wave/util/Boundary.h">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/wave/util/HessianMatrix.cc">
-        <itemTool>1</itemTool>
-        <ccCompilerTool>
-          <includeDirectories>
-            <directoryPath>../../src/wave/util</directoryPath>
-            <directoryPath>../../src</directoryPath>
-          </includeDirectories>
+      <item path="../../src/wave/util/HessianMatrix.cc" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../../src/wave/util</pElem>
+            <pElem>../../src</pElem>
+          </incDir>
           <inheritIncValues>false</inheritIncValues>
           <preprocessorList>
             <Elem>__PIC__=2</Elem>
@@ -1410,18 +1105,14 @@
             <Elem>__SSP__=1</Elem>
           </preprocessorList>
           <inheritPreValues>false</inheritPreValues>
-        </ccCompilerTool>
+        </ccTool>
       </item>
-      <item path="../../src/wave/util/HessianMatrix.h">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/wave/util/IntArray.cc">
-        <itemTool>1</itemTool>
-        <ccCompilerTool>
-          <includeDirectories>
-            <directoryPath>../../src/wave/util</directoryPath>
-            <directoryPath>../../src</directoryPath>
-          </includeDirectories>
+      <item path="../../src/wave/util/IntArray.cc" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../../src/wave/util</pElem>
+            <pElem>../../src</pElem>
+          </incDir>
           <inheritIncValues>false</inheritIncValues>
           <preprocessorList>
             <Elem>__PIC__=2</Elem>
@@ -1429,18 +1120,14 @@
             <Elem>__SSP__=1</Elem>
           </preprocessorList>
           <inheritPreValues>false</inheritPreValues>
-        </ccCompilerTool>
+        </ccTool>
       </item>
-      <item path="../../src/wave/util/IntArray.h">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/wave/util/IsoTriang2DBoundary.cc">
-        <itemTool>1</itemTool>
-        <ccCompilerTool>
-          <includeDirectories>
-            <directoryPath>../../src/wave/util</directoryPath>
-            <directoryPath>../../src</directoryPath>
-          </includeDirectories>
+      <item path="../../src/wave/util/IsoTriang2DBoundary.cc" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../../src/wave/util</pElem>
+            <pElem>../../src</pElem>
+          </incDir>
           <inheritIncValues>false</inheritIncValues>
           <preprocessorList>
             <Elem>__PIC__=2</Elem>
@@ -1448,18 +1135,14 @@
             <Elem>__SSP__=1</Elem>
           </preprocessorList>
           <inheritPreValues>false</inheritPreValues>
-        </ccCompilerTool>
+        </ccTool>
       </item>
-      <item path="../../src/wave/util/IsoTriang2DBoundary.h">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/wave/util/JacobianMatrix.cc">
-        <itemTool>1</itemTool>
-        <ccCompilerTool>
-          <includeDirectories>
-            <directoryPath>../../src/wave/util</directoryPath>
-            <directoryPath>../../src</directoryPath>
-          </includeDirectories>
+      <item path="../../src/wave/util/JacobianMatrix.cc" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../../src/wave/util</pElem>
+            <pElem>../../src</pElem>
+          </incDir>
           <inheritIncValues>false</inheritIncValues>
           <preprocessorList>
             <Elem>__PIC__=2</Elem>
@@ -1467,18 +1150,14 @@
             <Elem>__SSP__=1</Elem>
           </preprocessorList>
           <inheritPreValues>false</inheritPreValues>
-        </ccCompilerTool>
+        </ccTool>
       </item>
-      <item path="../../src/wave/util/JacobianMatrix.h">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/wave/util/JetMatrix.cc">
-        <itemTool>1</itemTool>
-        <ccCompilerTool>
-          <includeDirectories>
-            <directoryPath>../../src/wave/util</directoryPath>
-            <directoryPath>../../src</directoryPath>
-          </includeDirectories>
+      <item path="../../src/wave/util/JetMatrix.cc" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../../src/wave/util</pElem>
+            <pElem>../../src</pElem>
+          </incDir>
           <inheritIncValues>false</inheritIncValues>
           <preprocessorList>
             <Elem>__PIC__=2</Elem>
@@ -1486,21 +1165,14 @@
             <Elem>__SSP__=1</Elem>
           </preprocessorList>
           <inheritPreValues>false</inheritPreValues>
-        </ccCompilerTool>
+        </ccTool>
       </item>
-      <item path="../../src/wave/util/JetMatrix.h">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/wave/util/Pix.h">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/wave/util/RealMatrix2.cc">
-        <itemTool>1</itemTool>
-        <ccCompilerTool>
-          <includeDirectories>
-            <directoryPath>../../src/wave/util</directoryPath>
-            <directoryPath>../../src</directoryPath>
-          </includeDirectories>
+      <item path="../../src/wave/util/RealMatrix2.cc" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../../src/wave/util</pElem>
+            <pElem>../../src</pElem>
+          </incDir>
           <inheritIncValues>false</inheritIncValues>
           <preprocessorList>
             <Elem>__PIC__=2</Elem>
@@ -1508,18 +1180,14 @@
             <Elem>__SSP__=1</Elem>
           </preprocessorList>
           <inheritPreValues>false</inheritPreValues>
-        </ccCompilerTool>
+        </ccTool>
       </item>
-      <item path="../../src/wave/util/RealMatrix2.h">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/wave/util/RealVector.cc">
-        <itemTool>1</itemTool>
-        <ccCompilerTool>
-          <includeDirectories>
-            <directoryPath>../../src/wave/util</directoryPath>
-            <directoryPath>../../src</directoryPath>
-          </includeDirectories>
+      <item path="../../src/wave/util/RealVector.cc" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../../src/wave/util</pElem>
+            <pElem>../../src</pElem>
+          </incDir>
           <inheritIncValues>false</inheritIncValues>
           <preprocessorList>
             <Elem>__PIC__=2</Elem>
@@ -1527,18 +1195,14 @@
             <Elem>__SSP__=1</Elem>
           </preprocessorList>
           <inheritPreValues>false</inheritPreValues>
-        </ccCompilerTool>
+        </ccTool>
       </item>
-      <item path="../../src/wave/util/RealVector.h">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/wave/util/RectBoundary.cc">
-        <itemTool>1</itemTool>
-        <ccCompilerTool>
-          <includeDirectories>
-            <directoryPath>../../src/wave/util</directoryPath>
-            <directoryPath>../../src</directoryPath>
-          </includeDirectories>
+      <item path="../../src/wave/util/RectBoundary.cc" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../../src/wave/util</pElem>
+            <pElem>../../src</pElem>
+          </incDir>
           <inheritIncValues>false</inheritIncValues>
           <preprocessorList>
             <Elem>__PIC__=2</Elem>
@@ -1546,24 +1210,14 @@
             <Elem>__SSP__=1</Elem>
           </preprocessorList>
           <inheritPreValues>false</inheritPreValues>
-        </ccCompilerTool>
+        </ccTool>
       </item>
-      <item path="../../src/wave/util/RectBoundary.h">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/wave/util/ReturnCodes.h">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/wave/util/ScalarArray.h">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/wave/util/Vector.cc">
-        <itemTool>1</itemTool>
-        <ccCompilerTool>
-          <includeDirectories>
-            <directoryPath>../../src/wave/util</directoryPath>
-            <directoryPath>../../src</directoryPath>
-          </includeDirectories>
+      <item path="../../src/wave/util/Vector.cc" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../../src/wave/util</pElem>
+            <pElem>../../src</pElem>
+          </incDir>
           <inheritIncValues>false</inheritIncValues>
           <preprocessorList>
             <Elem>__PIC__=2</Elem>
@@ -1571,18 +1225,14 @@
             <Elem>__SSP__=1</Elem>
           </preprocessorList>
           <inheritPreValues>false</inheritPreValues>
-        </ccCompilerTool>
+        </ccTool>
       </item>
-      <item path="../../src/wave/util/Vector.h">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/wave/util/Vector1.cc">
-        <itemTool>1</itemTool>
-        <ccCompilerTool>
-          <includeDirectories>
-            <directoryPath>../../src/wave/util</directoryPath>
-            <directoryPath>../../src</directoryPath>
-          </includeDirectories>
+      <item path="../../src/wave/util/Vector1.cc" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../../src/wave/util</pElem>
+            <pElem>../../src</pElem>
+          </incDir>
           <inheritIncValues>false</inheritIncValues>
           <preprocessorList>
             <Elem>__PIC__=2</Elem>
@@ -1590,18 +1240,14 @@
             <Elem>__SSP__=1</Elem>
           </preprocessorList>
           <inheritPreValues>false</inheritPreValues>
-        </ccCompilerTool>
+        </ccTool>
       </item>
-      <item path="../../src/wave/util/Vector1.h">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/wave/util/Vector1Array.cc">
-        <itemTool>1</itemTool>
-        <ccCompilerTool>
-          <includeDirectories>
-            <directoryPath>../../src/wave/util</directoryPath>
-            <directoryPath>../../src</directoryPath>
-          </includeDirectories>
+      <item path="../../src/wave/util/Vector1Array.cc" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../../src/wave/util</pElem>
+            <pElem>../../src</pElem>
+          </incDir>
           <inheritIncValues>false</inheritIncValues>
           <preprocessorList>
             <Elem>__PIC__=2</Elem>
@@ -1609,18 +1255,14 @@
             <Elem>__SSP__=1</Elem>
           </preprocessorList>
           <inheritPreValues>false</inheritPreValues>
-        </ccCompilerTool>
+        </ccTool>
       </item>
-      <item path="../../src/wave/util/Vector1Array.h">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/wave/util/Vector2.cc">
-        <itemTool>1</itemTool>
-        <ccCompilerTool>
-          <includeDirectories>
-            <directoryPath>../../src/wave/util</directoryPath>
-            <directoryPath>../../src</directoryPath>
-          </includeDirectories>
+      <item path="../../src/wave/util/Vector2.cc" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../../src/wave/util</pElem>
+            <pElem>../../src</pElem>
+          </incDir>
           <inheritIncValues>false</inheritIncValues>
           <preprocessorList>
             <Elem>__PIC__=2</Elem>
@@ -1628,18 +1270,14 @@
             <Elem>__SSP__=1</Elem>
           </preprocessorList>
           <inheritPreValues>false</inheritPreValues>
-        </ccCompilerTool>
+        </ccTool>
       </item>
-      <item path="../../src/wave/util/Vector2.h">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/wave/util/Vector2Array.cc">
-        <itemTool>1</itemTool>
-        <ccCompilerTool>
-          <includeDirectories>
-            <directoryPath>../../src/wave/util</directoryPath>
-            <directoryPath>../../src</directoryPath>
-          </includeDirectories>
+      <item path="../../src/wave/util/Vector2Array.cc" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../../src/wave/util</pElem>
+            <pElem>../../src</pElem>
+          </incDir>
           <inheritIncValues>false</inheritIncValues>
           <preprocessorList>
             <Elem>__PIC__=2</Elem>
@@ -1647,18 +1285,14 @@
             <Elem>__SSP__=1</Elem>
           </preprocessorList>
           <inheritPreValues>false</inheritPreValues>
-        </ccCompilerTool>
+        </ccTool>
       </item>
-      <item path="../../src/wave/util/Vector2Array.h">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/wave/util/Vector3.cc">
-        <itemTool>1</itemTool>
-        <ccCompilerTool>
-          <includeDirectories>
-            <directoryPath>../../src/wave/util</directoryPath>
-            <directoryPath>../../src</directoryPath>
-          </includeDirectories>
+      <item path="../../src/wave/util/Vector3.cc" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../../src/wave/util</pElem>
+            <pElem>../../src</pElem>
+          </incDir>
           <inheritIncValues>false</inheritIncValues>
           <preprocessorList>
             <Elem>__PIC__=2</Elem>
@@ -1666,18 +1300,14 @@
             <Elem>__SSP__=1</Elem>
           </preprocessorList>
           <inheritPreValues>false</inheritPreValues>
-        </ccCompilerTool>
+        </ccTool>
       </item>
-      <item path="../../src/wave/util/Vector3.h">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/wave/util/Vector3Array.cc">
-        <itemTool>1</itemTool>
-        <ccCompilerTool>
-          <includeDirectories>
-            <directoryPath>../../src/wave/util</directoryPath>
-            <directoryPath>../../src</directoryPath>
-          </includeDirectories>
+      <item path="../../src/wave/util/Vector3Array.cc" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../../src/wave/util</pElem>
+            <pElem>../../src</pElem>
+          </incDir>
           <inheritIncValues>false</inheritIncValues>
           <preprocessorList>
             <Elem>__PIC__=2</Elem>
@@ -1685,43 +1315,22 @@
             <Elem>__SSP__=1</Elem>
           </preprocessorList>
           <inheritPreValues>false</inheritPreValues>
-        </ccCompilerTool>
+        </ccTool>
       </item>
-      <item path="../../src/wave/util/Vector3Array.h">
-        <itemTool>3</itemTool>
+      <item path="../../src/wave/util/Vector4.h" ex="true" tool="3">
       </item>
-      <item path="../../src/wave/util/Vector4.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/wave/util/VectorField.h" ex="true" tool="3">
       </item>
-      <item path="../../src/wave/util/VectorField.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/wave/util/WavePoint.h" ex="true" tool="3">
       </item>
-      <item path="../../src/wave/util/VectorNArray.ccP">
-        <itemTool>3</itemTool>
+      <item path="../../src/wave/util/bool.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/wave/util/VectorNArray.hP">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/wave/util/WavePoint.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/wave/util/bool.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
-      </item>
-      <item path="../../src/wave/util/bool.h">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/wave/util/eigen.cc">
-        <itemTool>1</itemTool>
-        <ccCompilerTool>
-          <includeDirectories>
-            <directoryPath>../../src/wave/util</directoryPath>
-            <directoryPath>../../src</directoryPath>
-          </includeDirectories>
+      <item path="../../src/wave/util/eigen.cc" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../../src/wave/util</pElem>
+            <pElem>../../src</pElem>
+          </incDir>
           <inheritIncValues>false</inheritIncValues>
           <preprocessorList>
             <Elem>__PIC__=2</Elem>
@@ -1729,18 +1338,14 @@
             <Elem>__SSP__=1</Elem>
           </preprocessorList>
           <inheritPreValues>false</inheritPreValues>
-        </ccCompilerTool>
+        </ccTool>
       </item>
-      <item path="../../src/wave/util/eigen.h">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/wave/util/eigen2.cc">
-        <itemTool>1</itemTool>
-        <ccCompilerTool>
-          <includeDirectories>
-            <directoryPath>../../src/wave/util</directoryPath>
-            <directoryPath>../../src</directoryPath>
-          </includeDirectories>
+      <item path="../../src/wave/util/eigen2.cc" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../../src/wave/util</pElem>
+            <pElem>../../src</pElem>
+          </incDir>
           <inheritIncValues>false</inheritIncValues>
           <preprocessorList>
             <Elem>__PIC__=2</Elem>
@@ -1748,18 +1353,14 @@
             <Elem>__SSP__=1</Elem>
           </preprocessorList>
           <inheritPreValues>false</inheritPreValues>
-        </ccCompilerTool>
+        </ccTool>
       </item>
-      <item path="../../src/wave/util/eigen2.h">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/wave/util/errorhandler.cc">
-        <itemTool>1</itemTool>
-        <ccCompilerTool>
-          <includeDirectories>
-            <directoryPath>../../src/wave/util</directoryPath>
-            <directoryPath>../../src</directoryPath>
-          </includeDirectories>
+      <item path="../../src/wave/util/errorhandler.cc" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../../src/wave/util</pElem>
+            <pElem>../../src</pElem>
+          </incDir>
           <inheritIncValues>false</inheritIncValues>
           <preprocessorList>
             <Elem>__PIC__=2</Elem>
@@ -1767,18 +1368,14 @@
             <Elem>__SSP__=1</Elem>
           </preprocessorList>
           <inheritPreValues>false</inheritPreValues>
-        </ccCompilerTool>
+        </ccTool>
       </item>
-      <item path="../../src/wave/util/errorhandler.h">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/wave/util/except.cc">
-        <itemTool>1</itemTool>
-        <ccCompilerTool>
-          <includeDirectories>
-            <directoryPath>../../src/wave/util</directoryPath>
-            <directoryPath>../../src</directoryPath>
-          </includeDirectories>
+      <item path="../../src/wave/util/except.cc" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../../src/wave/util</pElem>
+            <pElem>../../src</pElem>
+          </incDir>
           <inheritIncValues>false</inheritIncValues>
           <preprocessorList>
             <Elem>__PIC__=2</Elem>
@@ -1786,18 +1383,14 @@
             <Elem>__SSP__=1</Elem>
           </preprocessorList>
           <inheritPreValues>false</inheritPreValues>
-        </ccCompilerTool>
+        </ccTool>
       </item>
-      <item path="../../src/wave/util/except.h">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/wave/util/mathutil.cc">
-        <itemTool>1</itemTool>
-        <ccCompilerTool>
-          <includeDirectories>
-            <directoryPath>../../src/wave/util</directoryPath>
-            <directoryPath>../../src</directoryPath>
-          </includeDirectories>
+      <item path="../../src/wave/util/mathutil.cc" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../../src/wave/util</pElem>
+            <pElem>../../src</pElem>
+          </incDir>
           <inheritIncValues>false</inheritIncValues>
           <preprocessorList>
             <Elem>__PIC__=2</Elem>
@@ -1805,22 +1398,16 @@
             <Elem>__SSP__=1</Elem>
           </preprocessorList>
           <inheritPreValues>false</inheritPreValues>
-        </ccCompilerTool>
+        </ccTool>
       </item>
-      <item path="../../src/wave/util/mathutil.h">
-        <itemTool>3</itemTool>
+      <item path="../../src/wave/util/new.cc" ex="true" tool="1">
       </item>
-      <item path="../../src/wave/util/new.cc">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>1</itemTool>
-      </item>
-      <item path="../../src/wave/util/polyroot.cc">
-        <itemTool>1</itemTool>
-        <ccCompilerTool>
-          <includeDirectories>
-            <directoryPath>../../src/wave/util</directoryPath>
-            <directoryPath>../../src</directoryPath>
-          </includeDirectories>
+      <item path="../../src/wave/util/polyroot.cc" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../../src/wave/util</pElem>
+            <pElem>../../src</pElem>
+          </incDir>
           <inheritIncValues>false</inheritIncValues>
           <preprocessorList>
             <Elem>__PIC__=2</Elem>
@@ -1828,14 +1415,9 @@
             <Elem>__SSP__=1</Elem>
           </preprocessorList>
           <inheritPreValues>false</inheritPreValues>
-        </ccCompilerTool>
+        </ccTool>
       </item>
-      <item path="../../src/wave/util/polyroot.h">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../src/wave/util/trapfpe.h">
-        <itemExcluded>true</itemExcluded>
-        <itemTool>3</itemTool>
+      <item path="../../src/wave/util/trapfpe.h" ex="true" tool="3">
       </item>
     </conf>
   </confs>

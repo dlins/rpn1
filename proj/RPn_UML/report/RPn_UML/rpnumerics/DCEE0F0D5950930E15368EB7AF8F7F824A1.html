@@ -1,0 +1,280 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Class</TITLE>
+<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=UTF-8">
+<LINK REL ="stylesheet" TYPE="text/css" HREF="../../stylesheet.css" TITLE="Style"></HEAD>
+<BODY BGCOLOR="white">
+<!-- ========= START OF NAVBAR ======= -->
+<A NAME="navbar_top"></A>
+<A HREF="#skip-navbar_top" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_top_firstrow"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1"> &nbsp;<A HREF="../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <FONT CLASS="NavBarFont1">Package</FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1Rev">    <FONT CLASS="NavBarFont1Rev"><B>Element</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <FONT CLASS="NavBarFont1">Diagram</FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../help.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>NetBeans UML Modeling</b>
+</TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_top"></A>
+<!-- ========= END OF NAVBAR ========= -->
+
+<HR>
+<H2>
+<FONT SIZE="-1">rpnumerics</FONT>
+<BR>
+Class ManifoldSensitivity</H2>
+<PRE>
+<B>rpnumerics::ManifoldSensitivity</B>
+</PRE>
+<DL>
+<DT><B>All Known Associations: </B><DD><IMG SRC="../../images/navigable-aggregation.png" ALT="(Navigable_Aggregation) "> <A HREF="../../RPn_UML/rpnumerics/DCEA19D4AAD952EDE30601DB91D21F95DD9.html">Navigable_Aggregation</A>: <A HREF="../../RPn_UML/wave/util/DCE33A196BDE13EE19ED1F73D7F91144BB8.html" title="association in wave::util">RealVector</A></DD>
+<DD><IMG SRC="../../images/navigable-aggregation.png" ALT="(Navigable_Aggregation) "> <A HREF="../../RPn_UML/rpnumerics/DCEE9A27A82356095A9F92E686C01A7782C.html">Navigable_Aggregation</A>: <A HREF="../../RPn_UML/wave/util/DCE33A196BDE13EE19ED1F73D7F91144BB8.html" title="association in wave::util">RealVector</A></DD>
+<DD><IMG SRC="../../images/navigable-aggregation.png" ALT="(Navigable_Aggregation) "> <A HREF="../../RPn_UML/rpnumerics/DCEB218B7145A675E49F38EFCD9B230A014.html">Navigable_Aggregation</A>: <A HREF="../../RPn_UML/wave/util/DCE33A196BDE13EE19ED1F73D7F91144BB8.html" title="association in wave::util">RealVector</A></DD>
+<DD><IMG SRC="../../images/navigable-aggregation.png" ALT="(Navigable_Aggregation) "> <A HREF="../../RPn_UML/rpnumerics/DCE41CCA7CA9292D178707512B9E2D83201.html">Navigable_Aggregation</A>: <A HREF="../../RPn_UML/wave/util/DCE9E4CB46FD5628414AD909931DA117AA8.html" title="association in wave::util">RealMatrix2</A></DD>
+<DD><IMG SRC="../../images/navigable-aggregation.png" ALT="(Navigable_Aggregation) "> <A HREF="../../RPn_UML/rpnumerics/DCE41B9542E3C7FE49E1E563E365713B372.html">Navigable_Aggregation</A>: <A HREF="../../RPn_UML/wave/util/DCE33A196BDE13EE19ED1F73D7F91144BB8.html" title="association in wave::util">RealVector</A></DD>
+<DD><IMG SRC="../../images/navigable-aggregation.png" ALT="(Navigable_Aggregation) "> <A HREF="../../RPn_UML/rpnumerics/DCE2D64A43418B4940C7A83E2D22A6A71ED.html">Navigable_Aggregation</A>: <A HREF="../../RPn_UML/wave/util/DCE9E4CB46FD5628414AD909931DA117AA8.html" title="association in wave::util">RealMatrix2</A></DD>
+<DD><IMG SRC="../../images/navigable-aggregation.png" ALT="(Navigable_Aggregation) "> <A HREF="../../RPn_UML/rpnumerics/DCE903AA80CAAA54499ADDC7A003EB7DE29.html">Navigable_Aggregation</A>: <A HREF="../../RPn_UML/wave/util/DCE33A196BDE13EE19ED1F73D7F91144BB8.html" title="association in wave::util">RealVector</A></DD>
+</DL>
+<HR>
+<DL>
+<DT><PRE>public class <B>ManifoldSensitivity</B></DT></DL>
+</PRE>
+
+<P>
+x_Stationary_		stationary point coordinates
+
+Xp_Stationary_	= - F0-1G0 (sensitivity of stationary point)
+
+x_t0_			first point of the orbit
+
+x_t1_			last point of the orbit
+
+Xp_t1_		value of solution of equations (3.10), (3.11) at the last point of the orbit
+
+X_t0_			value of the fundamental matrix Y(t) at the first point of the orbit
+
+X_t1_			value of the fundamental matrix Y(t) at the last point of the orbit</P><HR>
+<!-- =========== PROPERTY SUMMARY =========== -->
+<A NAME="property_summary"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Properties</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Alias</B></TD>
+<TD>ManifoldSensitivity</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Visibility</B></TD>
+<TD>public</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Final</B></TD>
+<TD><IMG src="../../images/unchecked.png" border=n></TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Transient</B></TD>
+<TD><IMG src="../../images/checked.png" border=n></TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Abstract</B></TD>
+<TD><IMG src="../../images/unchecked.png" border=n></TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Leaf</B></TD>
+<TD><IMG src="../../images/unchecked.png" border=n></TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- =========== CONSTRUCTOR SUMMARY =========== -->
+
+<A NAME="constructor_summary"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Constructor Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><B><A HREF="#ManifoldSensitivity">ManifoldSensitivity</A></B>(<A HREF="../../RPn_UML/wave/util/DCE33A196BDE13EE19ED1F73D7F91144BB8.html">RealVector</A>&nbsp;x_Stationary,&nbsp;<A HREF="../../RPn_UML/wave/util/DCE33A196BDE13EE19ED1F73D7F91144BB8.html">RealVector</A>&nbsp;Xp_Stationary,&nbsp;<A HREF="../../RPn_UML/wave/util/DCE33A196BDE13EE19ED1F73D7F91144BB8.html">RealVector</A>&nbsp;x_t0,&nbsp;<A HREF="../../RPn_UML/wave/util/DCE9E4CB46FD5628414AD909931DA117AA8.html">RealMatrix2</A>&nbsp;X_t0,&nbsp;<A HREF="../../RPn_UML/wave/util/DCE33A196BDE13EE19ED1F73D7F91144BB8.html">RealVector</A>&nbsp;x_t1,&nbsp;<A HREF="../../RPn_UML/wave/util/DCE9E4CB46FD5628414AD909931DA117AA8.html">RealMatrix2</A>&nbsp;X_t1,&nbsp;<A HREF="../../RPn_UML/wave/util/DCE33A196BDE13EE19ED1F73D7F91144BB8.html">RealVector</A>&nbsp;Xp_t1)</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Constructor
+</TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- =========== OPERATION SUMMARY =========== -->
+<A NAME="operation_summary"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Operation Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../RPn_UML/wave/util/DCE33A196BDE13EE19ED1F73D7F91144BB8.html">RealVector</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#getx_Stationary">getx_Stationary</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Accessors/Mutators
+</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../RPn_UML/wave/util/DCE33A196BDE13EE19ED1F73D7F91144BB8.html">RealVector</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#getXp_Stationary">getXp_Stationary</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../RPn_UML/wave/util/DCE33A196BDE13EE19ED1F73D7F91144BB8.html">RealVector</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#getx_t0">getx_t0</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../RPn_UML/wave/util/DCE9E4CB46FD5628414AD909931DA117AA8.html">RealMatrix2</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#getX_t0">getX_t0</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../RPn_UML/wave/util/DCE33A196BDE13EE19ED1F73D7F91144BB8.html">RealVector</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#getx_t1">getx_t1</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../RPn_UML/wave/util/DCE9E4CB46FD5628414AD909931DA117AA8.html">RealMatrix2</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#getX_t1">getX_t1</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../RPn_UML/wave/util/DCE33A196BDE13EE19ED1F73D7F91144BB8.html">RealVector</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#getXp_t1">getXp_t1</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- =========== CONSTRUCTOR DETAIL =========== -->
+
+<A NAME="constructor_detail"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Constructor Detail</B></FONT></TH>
+</TR>
+</TABLE>
+<A NAME="ManifoldSensitivity"></A><H3>ManifoldSensitivity</H3>
+<PRE>
+public <B>ManifoldSensitivity</B>(<A HREF="../../RPn_UML/wave/util/DCE33A196BDE13EE19ED1F73D7F91144BB8.html">RealVector</A>&nbsp;x_Stationary,&nbsp;<A HREF="../../RPn_UML/wave/util/DCE33A196BDE13EE19ED1F73D7F91144BB8.html">RealVector</A>&nbsp;Xp_Stationary,&nbsp;<A HREF="../../RPn_UML/wave/util/DCE33A196BDE13EE19ED1F73D7F91144BB8.html">RealVector</A>&nbsp;x_t0,&nbsp;<A HREF="../../RPn_UML/wave/util/DCE9E4CB46FD5628414AD909931DA117AA8.html">RealMatrix2</A>&nbsp;X_t0,&nbsp;<A HREF="../../RPn_UML/wave/util/DCE33A196BDE13EE19ED1F73D7F91144BB8.html">RealVector</A>&nbsp;x_t1,&nbsp;<A HREF="../../RPn_UML/wave/util/DCE9E4CB46FD5628414AD909931DA117AA8.html">RealMatrix2</A>&nbsp;X_t1,&nbsp;<A HREF="../../RPn_UML/wave/util/DCE33A196BDE13EE19ED1F73D7F91144BB8.html">RealVector</A>&nbsp;Xp_t1)</PRE>
+<DL>
+<DD>Constructor
+
+<P>
+</DD></DL>
+
+<!-- =========== OPERATION DETAIL =========== -->
+
+<A NAME="operationr_detail"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Operation Detail</B></FONT></TH>
+</TR>
+</TABLE>
+<A NAME="getx_Stationary"></A><H3>getx_Stationary</H3>
+<PRE>
+public <A HREF="../../RPn_UML/wave/util/DCE33A196BDE13EE19ED1F73D7F91144BB8.html">RealVector</A> <B>getx_Stationary</B>()</PRE>
+<DL>
+<DD>Accessors/Mutators
+
+<P>
+</DD></DL>
+<HR>
+<A NAME="getXp_Stationary"></A><H3>getXp_Stationary</H3>
+<PRE>
+public <A HREF="../../RPn_UML/wave/util/DCE33A196BDE13EE19ED1F73D7F91144BB8.html">RealVector</A> <B>getXp_Stationary</B>()</PRE>
+<DL>
+<DD>
+<P>
+</DD></DL>
+<HR>
+<A NAME="getx_t0"></A><H3>getx_t0</H3>
+<PRE>
+public <A HREF="../../RPn_UML/wave/util/DCE33A196BDE13EE19ED1F73D7F91144BB8.html">RealVector</A> <B>getx_t0</B>()</PRE>
+<DL>
+<DD>
+<P>
+</DD></DL>
+<HR>
+<A NAME="getX_t0"></A><H3>getX_t0</H3>
+<PRE>
+public <A HREF="../../RPn_UML/wave/util/DCE9E4CB46FD5628414AD909931DA117AA8.html">RealMatrix2</A> <B>getX_t0</B>()</PRE>
+<DL>
+<DD>
+<P>
+</DD></DL>
+<HR>
+<A NAME="getx_t1"></A><H3>getx_t1</H3>
+<PRE>
+public <A HREF="../../RPn_UML/wave/util/DCE33A196BDE13EE19ED1F73D7F91144BB8.html">RealVector</A> <B>getx_t1</B>()</PRE>
+<DL>
+<DD>
+<P>
+</DD></DL>
+<HR>
+<A NAME="getX_t1"></A><H3>getX_t1</H3>
+<PRE>
+public <A HREF="../../RPn_UML/wave/util/DCE9E4CB46FD5628414AD909931DA117AA8.html">RealMatrix2</A> <B>getX_t1</B>()</PRE>
+<DL>
+<DD>
+<P>
+</DD></DL>
+<HR>
+<A NAME="getXp_t1"></A><H3>getXp_t1</H3>
+<PRE>
+public <A HREF="../../RPn_UML/wave/util/DCE33A196BDE13EE19ED1F73D7F91144BB8.html">RealVector</A> <B>getXp_t1</B>()</PRE>
+<DL>
+<DD>
+<P>
+</DD></DL>
+
+<HR>
+<!-- ========= START OF NAVBAR ======= -->
+<A NAME="navbar_top"></A>
+<A HREF="#skip-navbar_top" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_top_firstrow"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1"> &nbsp;<A HREF="../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <FONT CLASS="NavBarFont1">Package</FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1Rev">    <FONT CLASS="NavBarFont1Rev"><B>Element</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <FONT CLASS="NavBarFont1">Diagram</FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../help.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>NetBeans UML Modeling</b>
+</TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_top"></A>
+<!-- ========= END OF NAVBAR ========= -->
+
+</BODY>
+</HTML>

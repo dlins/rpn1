@@ -1,0 +1,58 @@
+#!/bin/bash
+
+#
+# configure build.xml, environment variables and makefile
+#
+
+declare -a jnidir
+
+i=1
+rpnhome=.
+rpnhome=`dirname $0`
+jni=`locate jni.h`
+hosttype="linux_"`uname -m`
+
+echo; echo "Choose the JAVA_HOME installation path elow: "; echo
+
+for j in `echo $jni`; do
+	j=`dirname $j`
+	j=`dirname $j`
+	jnidir[$i]=$j
+
+	echo "      "$i") "${jnidir[$i]}
+	i=$(($i + 1))
+done
+
+echo "      "$i") None of the above. Entre JAVA_HOME manually."
+echo -n "      > "; read -n 1 ans; echo
+
+if [ $ans == $i ]; then
+	echo -n "Entre JAVA_HOME path: "
+	read javahome
+else 
+	javahome=${jnidir[$ans]}
+fi
+
+#
+# Create build.xml
+#
+sed -e "s,PRE_CONFIG_HOSTTYPE,$hosttype,g" $rpnhome/make/build.xml.in > $rpnhome/build.xml
+
+#
+# Create make/env file
+#
+sed -e "s,PRE_CONFIG_HOSTTYPE,$hosttype,g" -e "s,PRE_CONFIG_JAVAHOME,$javahome,g" $rpnhome/make/env.in > $rpnhome/make/env
+
+
+echo
+echo
+echo "Final Configuration:"
+echo
+echo -e "\tRPn_HOME:  \033[31m $rpnhome \033[0m"
+echo -e "\tMACHNINE:  \033[31m $hosttype \033[0m"
+echo -e "\tJAVA_HOME: \033[31m $javahome \033[0m"
+echo
+echo
+echo -e "Now, run\033[32m 'ant' \033[0mto build RPn."
+echo -e "Use\033[32m 'ant run' \033[0mto execute the program."
+echo

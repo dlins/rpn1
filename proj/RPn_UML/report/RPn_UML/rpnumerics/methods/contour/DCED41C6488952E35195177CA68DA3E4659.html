@@ -1,0 +1,987 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Class</TITLE>
+<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=UTF-8">
+<LINK REL ="stylesheet" TYPE="text/css" HREF="../../../../stylesheet.css" TITLE="Style"></HEAD>
+<BODY BGCOLOR="white">
+<!-- ========= START OF NAVBAR ======= -->
+<A NAME="navbar_top"></A>
+<A HREF="#skip-navbar_top" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_top_firstrow"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1"> &nbsp;<A HREF="../../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <FONT CLASS="NavBarFont1">Package</FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1Rev">    <FONT CLASS="NavBarFont1Rev"><B>Element</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <FONT CLASS="NavBarFont1">Diagram</FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../help.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>NetBeans UML Modeling</b>
+</TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_top"></A>
+<!-- ========= END OF NAVBAR ========= -->
+
+<HR>
+<H2>
+<FONT SIZE="-1">rpnumerics::methods::contour</FONT>
+<BR>
+Class CubeFace</H2>
+<PRE>
+<B>rpnumerics::methods::contour::CubeFace</B>
+</PRE>
+<DL>
+<DT><B>All Known Associations: </B><DD><IMG SRC="../../../../images/navigable-aggregation.png" ALT="(Navigable_Aggregation) "> <A HREF="../../../../RPn_UML/rpnumerics/methods/contour/DCE25A1114BDDD5426C2A0A13A6ED4E85CB.html">Navigable_Aggregation</A>: <A HREF="../../../../RPn_UML/rpnumerics/methods/contour/DCEE25BA3E38683B445B475EB4C5969EC05.html" title="association in rpnumerics::methods::contour">CubeSolver</A></DD>
+<DD><IMG SRC="../../../../images/navigable-aggregation.png" ALT="(Navigable_Aggregation) "> <A HREF="../../../../RPn_UML/rpnumerics/methods/contour/DCE5E014CAB62F9F91221AC24B426AA524B.html">Navigable_Aggregation</A>: <A HREF="../../../../RPn_UML/rpnumerics/methods/contour/DCEF395AB4B654DF27C59B09CAD945A8B5F.html" title="association in rpnumerics::methods::contour">ContourPolyline</A></DD>
+<DD><IMG SRC="../../../../images/navigable-aggregation.png" ALT="(Navigable_Aggregation) "> <A HREF="../../../../RPn_UML/rpnumerics/methods/contour/DCE3FE47760C060BA611A06B1F2A1A10E23.html">Navigable_Aggregation</A>: <A HREF="../../../../RPn_UML/rpnumerics/methods/contour/DCE8FF1CE34FA377F4AC4238E744B621D86.html" title="association in rpnumerics::methods::contour">ContourND</A></DD>
+</DL>
+<HR>
+<DL>
+<DT><PRE>public class <B>CubeFace</B></DT></DL>
+</PRE>
+
+<!-- =========== PROPERTY SUMMARY =========== -->
+<A NAME="property_summary"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Properties</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Alias</B></TD>
+<TD>CubeFace</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Visibility</B></TD>
+<TD>public</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Final</B></TD>
+<TD><IMG src="../../../../images/unchecked.png" border=n></TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Transient</B></TD>
+<TD><IMG src="../../../../images/checked.png" border=n></TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Abstract</B></TD>
+<TD><IMG src="../../../../images/unchecked.png" border=n></TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Leaf</B></TD>
+<TD><IMG src="../../../../images/unchecked.png" border=n></TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- =========== ATTRIBUTE SUMMARY =========== -->
+<A NAME="attribute_summary"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Attribute Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#n_">n_</A></B></CODE>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The dimension of the space </TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#m_">m_</A></B></CODE>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The dimension of the faces </TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#nsface_">nsface_</A></B></CODE>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The number of faces in the basic simplex (n_+1 choose m_+1) </TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#nface_">nface_</A></B></CODE>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The number of distinct faces (columns of  face_) </TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#ncvert_">ncvert_</A></B></CODE>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The number of vertices of the n_-cube (2n_) </TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#nsimp_">nsimp_</A></B></CODE>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The number of simplices in the n_-cube (n_!) </TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#fdim_">fdim_</A></B></CODE>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dimension of facatt_ </TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#faceptInd_">faceptInd_</A></B></CODE>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dimension of facept_ </TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#dimf_">dimf_</A></B></CODE>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The initial size of the face_ array (the default value is 10) </TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE1BF8DA2C3948887826F74A3BBF2C68E6.html">double</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#cvert_">cvert_</A></B>[0..*,0..*]</CODE>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     <p> A 2-dimensional array each line of which contains the coordinates of one vertex of the standard n_-cube.</p></TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#bsvert_">bsvert_</A></B>[0..*,0..*]</CODE>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     <p> A 2-dimensional array each line of which contains the coordinates of the basic n_-simplex.</p></TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#perm_">perm_</A></B>[0..*,0..*]</CODE>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     <p> A 2-dimensional array each column of which contains a pertmutaion of the numbers from  1  to  n_.</p></TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#face_">face_</A></B>[0..*,0..*]</CODE>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     A 2-dimensional array each column of which contains the coordinates
+     of one m_-dimensional face_ of one of the simplices.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#facptr_">facptr_</A></B>[0..*,0..*]</CODE>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     A 2-dimensional array containing pointers to the array face_ so that duplicated faces can be referenced.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#comb_">comb_</A></B>[0..*,0..*]</CODE>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     A 2-dimensional array each line of which contains a subset of size  m_+1  of the set  1, 2, .</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#fnbr_">fnbr_</A></B>[0..*,0..*]</CODE>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     A 2-dimensional array containing the adjacency information for the faces in the basic simplex.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#ptrf_">ptrf_</A></B>[0..*,0..*]</CODE>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     A pointer array to  facept_.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#facept_">facept_</A></B>[0..*,0..*]</CODE>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     The inverse of  facptr_.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#ptfatt_">ptfatt_</A></B>[0..*,0..*]</CODE>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     A pointer array to  facatt_.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#facatt_">facatt_</A></B>[0..*,0..*]</CODE>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     The array of attributes.</TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- =========== CONSTRUCTOR SUMMARY =========== -->
+
+<A NAME="constructor_summary"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Constructor Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><B><A HREF="#CubeFace">CubeFace</A></B>(<A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;dim,&nbsp;<A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;faceDim)</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     @param dim Dimension of the space
+     @param faceDim Dimension of the faces
+     @throws IllegalArgumentException
+     </TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- =========== OPERATION SUMMARY =========== -->
+<A NAME="operation_summary"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Operation Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#getSpaceDimension">getSpaceDimension</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@return Returns the space dimension </TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#getFaceDimension">getFaceDimension</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@return Returns the face_ dimension </TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#getNumberOfVertices">getNumberOfVertices</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@return Returns the number of vertices of the n_-cube (2n_) </TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#getNumberOfFaces">getNumberOfFaces</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@return Returns the number of distinct faces </TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#getNumberOfSimplexFaces">getNumberOfSimplexFaces</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@return Returns the number of faces in the basic simplex </TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#getNumberOfSimplices">getNumberOfSimplices</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@return Returns the number of simplices in the n_-cube </TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>[0..*,0..*]</CODE></FONT></TD>
+<TD><CODE><B><A HREF="#getAttributeArray">getAttributeArray</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@return Returns the attribute array </TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>[0..*,0..*]</CODE></FONT></TD>
+<TD><CODE><B><A HREF="#getAttributePointersArray">getAttributePointersArray</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@return Returns a 2-dimensional array containing pointers to the attribute array </TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>[0..*,0..*]</CODE></FONT></TD>
+<TD><CODE><B><A HREF="#getFaceArray">getFaceArray</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     @return Returns a 2-dimensional array containing pointers to the array face_ so that
+     duplicated faces can be referenced.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>[0..*,0..*]</CODE></FONT></TD>
+<TD><CODE><B><A HREF="#getFacePointersArray">getFacePointersArray</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@return Returns a 2-dimensional array containing pointers to the face_ array </TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE1BF8DA2C3948887826F74A3BBF2C68E6.html">double</A>[0..*,0..*]</CODE></FONT></TD>
+<TD><CODE><B><A HREF="#getVertexCoordinatesArray">getVertexCoordinatesArray</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@return Returns a 2-dimensional array with coordinates of the vertices of the standard n_-cube.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>[0..*,0..*]</CODE></FONT></TD>
+<TD><CODE><B><A HREF="#getAdjacencyInfoArray">getAdjacencyInfoArray</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@return Returns a 2-dimensional array containing the adjacency information for the faces in the basic simplex.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE065324643F3067896121D454D1FB2F97.html">void</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#setFaceArray">setFaceArray</A></B>(<A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;altFace[0..*,0..*])</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     @param altFace The new face array
+     @throws IllegalArgumentException If the array has an invalid size.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE065324643F3067896121D454D1FB2F97.html">void</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#setVertexCoordinatesArray">setVertexCoordinatesArray</A></B>(<A HREF="../../../../RPn_UML/DCE1BF8DA2C3948887826F74A3BBF2C68E6.html">double</A>&nbsp;altVert[0..*,0..*])</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     @param altVert The new vertex coordinates array
+     @throws IllegalArgumentException If the array has an invalid size.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#factorial">factorial</A></B>(<A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;num)</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      @param num integer greater than or equal to zero
+      @return Returns the factorial of num
+     </TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE065324643F3067896121D454D1FB2F97.html">void</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#mkcube">mkcube</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     This routine creates the standard hypercube vertices (in cvert_),
+     the basic simplex vertices (in bsvert_), and the permutations of 1, 2, .</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE065324643F3067896121D454D1FB2F97.html">void</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#mkperm">mkperm</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      This routine creates the array  perm_  containing the permutations
+     of the numbers from 1 to  n_.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE065324643F3067896121D454D1FB2F97.html">void</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#mkface">mkface</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     This routine creates the list  face_  of all m_-dimensional faces
+     of the  n_!  simplices obtained by permuting the coordinates of
+     the basic simplex.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE065324643F3067896121D454D1FB2F97.html">void</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#mkcomb">mkcomb</A></B>(<A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;n,&nbsp;<A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;m)</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      This routine makes a list of all  m_  element subsets of an n_  element set.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCEAF6B22CF3915DACC28EA5EDB18B5F249.html">long</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#combination">combination</A></B>(<A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;n,&nbsp;<A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;m)</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE065324643F3067896121D454D1FB2F97.html">void</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#mkfcfp">mkfcfp</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This routine makes the arrays  face_  and  facptr_.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#search">search</A></B>(<A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;a1[0..*],&nbsp;<A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;a2[0..*,0..*],&nbsp;<A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;n1,&nbsp;<A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;n2)</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     This routine searches the columns of a2  for the column array a1.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE065324643F3067896121D454D1FB2F97.html">void</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#mkfnbr">mkfnbr</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     This routine makes the adjacency array  fnbr_  for the faces in
+     the basic simplex.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE065324643F3067896121D454D1FB2F97.html">void</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#findInds">findInds</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Find facept_ and facatt_ sizes </TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE065324643F3067896121D454D1FB2F97.html">void</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#mkflst">mkflst</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     This routine has two purposes: <ul> <p> (1) Invert the array  facptr_  using two arrays: facept_, ptrf_.</ul></p></TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#mkoppf">mkoppf</A></B>(<A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;f,&nbsp;<A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;xind,&nbsp;<A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;value,&nbsp;<A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;oppvrt[0..*])</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     This function determines which face_ is opposite face_  f  in
+     a cube.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE065324643F3067896121D454D1FB2F97.html">void</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#printInt">printInt</A></B>(<A HREF="../../../../RPn_UML/DCE1DAE3130FDB46D61C5C4BEE71AB9345E.html">String</A>&nbsp;name,&nbsp;<A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;matrix[0..*,0..*],&nbsp;<A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;k1,&nbsp;<A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;k2)</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     Funcao para Debug!! Imprime array de inteiros trocando linhas com colunas.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE065324643F3067896121D454D1FB2F97.html">void</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#printDouble">printDouble</A></B>(<A HREF="../../../../RPn_UML/DCE1DAE3130FDB46D61C5C4BEE71AB9345E.html">String</A>&nbsp;name,&nbsp;<A HREF="../../../../RPn_UML/DCE1BF8DA2C3948887826F74A3BBF2C68E6.html">double</A>&nbsp;matrix[0..*,0..*],&nbsp;<A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;k1,&nbsp;<A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;k2)</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     Funcao para Debug!! Imprime array de doubles na ordem correta.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../RPn_UML/DCE3A3286D50899B76164FE53808CE14BEE.html">Object</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#doubleArray">doubleArray</A></B>(<A HREF="../../../../RPn_UML/DCE3A3286D50899B76164FE53808CE14BEE.html">Object</A>&nbsp;source)</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     Doubles the size of an array
+     @param source Array de origem
+     @return Returns an array containing the elements of source with twice its size
+     </TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- =========== ATTRIBUTE DETAIL =========== -->
+<A NAME="attribute_detail"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Attribute Detail</B></FONT></TH>
+</TR>
+</TABLE>
+<A NAME="n_"></A><H3>n_</H3>
+<PRE>private <A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A> <B>n_</B></PRE><DL>
+<DD>The dimension of the space 
+<P>
+</DD>
+</DL>
+<HR>
+
+<A NAME="m_"></A><H3>m_</H3>
+<PRE>private <A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A> <B>m_</B></PRE><DL>
+<DD>The dimension of the faces 
+<P>
+</DD>
+</DL>
+<HR>
+
+<A NAME="nsface_"></A><H3>nsface_</H3>
+<PRE>private <A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A> <B>nsface_</B></PRE><DL>
+<DD>The number of faces in the basic simplex (n_+1 choose m_+1) 
+<P>
+</DD>
+</DL>
+<HR>
+
+<A NAME="nface_"></A><H3>nface_</H3>
+<PRE>private <A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A> <B>nface_</B></PRE><DL>
+<DD>The number of distinct faces (columns of  face_) 
+<P>
+</DD>
+</DL>
+<HR>
+
+<A NAME="ncvert_"></A><H3>ncvert_</H3>
+<PRE>private <A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A> <B>ncvert_</B></PRE><DL>
+<DD>The number of vertices of the n_-cube (2n_) 
+<P>
+</DD>
+</DL>
+<HR>
+
+<A NAME="nsimp_"></A><H3>nsimp_</H3>
+<PRE>private <A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A> <B>nsimp_</B></PRE><DL>
+<DD>The number of simplices in the n_-cube (n_!) 
+<P>
+</DD>
+</DL>
+<HR>
+
+<A NAME="fdim_"></A><H3>fdim_</H3>
+<PRE>private <A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A> <B>fdim_</B></PRE><DL>
+<DD>Dimension of facatt_ 
+<P>
+</DD>
+</DL>
+<HR>
+
+<A NAME="faceptInd_"></A><H3>faceptInd_</H3>
+<PRE>private <A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A> <B>faceptInd_</B></PRE><DL>
+<DD>Dimension of facept_ 
+<P>
+</DD>
+</DL>
+<HR>
+
+<A NAME="dimf_"></A><H3>dimf_</H3>
+<PRE>private <A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A> <B>dimf_</B></PRE><DL>
+<DD>The initial size of the face_ array (the default value is 10) 
+<P>
+</DD>
+</DL>
+<HR>
+
+<A NAME="cvert_"></A><H3>cvert_</H3>
+<PRE>private <A HREF="../../../../RPn_UML/DCE1BF8DA2C3948887826F74A3BBF2C68E6.html">double</A> <B>cvert_</B>[0..*,0..*]</PRE><DL>
+<DD>     <p> A 2-dimensional array each line of which contains the coordinates of one vertex of the standard n_-cube. </p>
+     <p> These are the binary representations of the numbers from  0  to  2n_-1. </p> <p>For  n_=3:</p> <ul>
+     <p>    0 0 0 </p> <p>    0 0 1 </p> <p>    0 1 0 </p> <p>    0 1 1 </p> <p>    1 0 0 </p> <p>    1 0 1 </p>
+     <p>    1 1 0 </p> <p>    1 1 1 </p></ul>
+     
+<P>
+</DD>
+</DL>
+<HR>
+
+<A NAME="bsvert_"></A><H3>bsvert_</H3>
+<PRE>private <A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A> <B>bsvert_</B>[0..*,0..*]</PRE><DL>
+<DD>     <p> A 2-dimensional array each line of which contains the coordinates of the basic n_-simplex.</p> <p> For  n_=3:</p>
+     <ul> <p>      0 0 0 </p> <p>      0 0 1 </p> <p>      0 1 1 </p> <p>      1 1 1 </p></ul>
+     
+<P>
+</DD>
+</DL>
+<HR>
+
+<A NAME="perm_"></A><H3>perm_</H3>
+<PRE>private <A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A> <B>perm_</B>[0..*,0..*]</PRE><DL>
+<DD>     <p> A 2-dimensional array each column of which contains a pertmutaion of the numbers from  1  to  n_. </p>
+     <p> Each column corresponds to a distinct simplex in the standard
+     hypercube by permutation of the coordinates of the vertices of the basic simplex. </p> <p> For  n_=3: </p> <ul>
+     <p> 1 2 1 2 3 3 </p> <p> 1 2 1 2 3 3 </p> <p> 3 3 2 1 2 1 </p></ul>
+     <p> The position of the 3-s above gives away the law of formation. </p>
+     
+<P>
+</DD>
+</DL>
+<HR>
+
+<A NAME="face_"></A><H3>face_</H3>
+<PRE>private <A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A> <B>face_</B>[0..*,0..*]</PRE><DL>
+<DD>     A 2-dimensional array each column of which contains the coordinates
+     of one m_-dimensional face_ of one of the simplices. Only distinct faces are stored.
+     
+<P>
+</DD>
+</DL>
+<HR>
+
+<A NAME="facptr_"></A><H3>facptr_</H3>
+<PRE>private <A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A> <B>facptr_</B>[0..*,0..*]</PRE><DL>
+<DD>     A 2-dimensional array containing pointers to the array face_ so that duplicated faces can be referenced.
+     Each line points to the faces in a given simplex.
+     
+<P>
+</DD>
+</DL>
+<HR>
+
+<A NAME="comb_"></A><H3>comb_</H3>
+<PRE>private <A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A> <B>comb_</B>[0..*,0..*]</PRE><DL>
+<DD>     A 2-dimensional array each line of which contains a subset of size  m_+1  of the set  1, 2, ..., n_+1.
+     Each line corresponds to a face_ of the basic simplex.
+     
+<P>
+</DD>
+</DL>
+<HR>
+
+<A NAME="fnbr_"></A><H3>fnbr_</H3>
+<PRE>private <A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A> <B>fnbr_</B>[0..*,0..*]</PRE><DL>
+<DD>     A 2-dimensional array containing the adjacency information for the faces in the basic simplex.
+     i.e.,  fnbr_[i][j]  is 1 (resp. 0) if the i-th and j-th faces are (resp. are not) adjacent in the basic simplex.
+     Here,  i,j  refer to the order determined by the array  comb_.
+     
+<P>
+</DD>
+</DL>
+<HR>
+
+<A NAME="ptrf_"></A><H3>ptrf_</H3>
+<PRE>private <A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A> <B>ptrf_</B>[0..*,0..*]</PRE><DL>
+<DD>     A pointer array to  facept_.  for f = 1, ..., nface_, <p> ptrf_[f][0] = beginning line  in facept_ for face_ f. </p>
+     <p> ptrf_[f][1] = number of lines in facept_ for face_ f. </p>
+     
+<P>
+</DD>
+</DL>
+<HR>
+
+<A NAME="facept_"></A><H3>facept_</H3>
+<PRE>private <A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A> <B>facept_</B>[0..*,0..*]</PRE><DL>
+<DD>     The inverse of  facptr_. <p> facept_[.][0] = index of simplex face_ for face_ f. </p>
+     <p> facept_[.][1] = index of simplex for face_ f. </p>
+     
+<P>
+</DD>
+</DL>
+<HR>
+
+<A NAME="ptfatt_"></A><H3>ptfatt_</H3>
+<PRE>private <A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A> <B>ptfatt_</B>[0..*,0..*]</PRE><DL>
+<DD>     A pointer array to  facatt_. <p> ptfatt_[f][0] = beginning line  in facatt_ for face_ f. </p>
+     <p> ptfatt_[f][1] = number of lines in facatt_ for face_ f. </p>
+     
+<P>
+</DD>
+</DL>
+<HR>
+
+<A NAME="facatt_"></A><H3>facatt_</H3>
+<PRE>private <A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A> <B>facatt_</B>[0..*,0..*]</PRE><DL>
+<DD>     The array of attributes. <p> facatt_[.][0] = index of constant coordinate on a cube face_ (negative for x = 0). </p>
+     <p> facatt_[.][1] = index in  face_  of the opposite face_. </p>
+     
+<P>
+</DD>
+</DL>
+
+<!-- =========== CONSTRUCTOR DETAIL =========== -->
+
+<A NAME="constructor_detail"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Constructor Detail</B></FONT></TH>
+</TR>
+</TABLE>
+<A NAME="CubeFace"></A><H3>CubeFace</H3>
+<PRE>
+public <B>CubeFace</B>(<A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;dim,&nbsp;<A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;faceDim)</PRE>
+<DL>
+<DD>     @param dim Dimension of the space
+     @param faceDim Dimension of the faces
+     @throws IllegalArgumentException
+     
+<P>
+</DD></DL>
+
+<!-- =========== OPERATION DETAIL =========== -->
+
+<A NAME="operationr_detail"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Operation Detail</B></FONT></TH>
+</TR>
+</TABLE>
+<A NAME="getSpaceDimension"></A><H3>getSpaceDimension</H3>
+<PRE>
+public <A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A> <B>getSpaceDimension</B>()</PRE>
+<DL>
+<DD>@return Returns the space dimension 
+<P>
+</DD></DL>
+<HR>
+<A NAME="getFaceDimension"></A><H3>getFaceDimension</H3>
+<PRE>
+public <A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A> <B>getFaceDimension</B>()</PRE>
+<DL>
+<DD>@return Returns the face_ dimension 
+<P>
+</DD></DL>
+<HR>
+<A NAME="getNumberOfVertices"></A><H3>getNumberOfVertices</H3>
+<PRE>
+public <A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A> <B>getNumberOfVertices</B>()</PRE>
+<DL>
+<DD>@return Returns the number of vertices of the n_-cube (2n_) 
+<P>
+</DD></DL>
+<HR>
+<A NAME="getNumberOfFaces"></A><H3>getNumberOfFaces</H3>
+<PRE>
+public <A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A> <B>getNumberOfFaces</B>()</PRE>
+<DL>
+<DD>@return Returns the number of distinct faces 
+<P>
+</DD></DL>
+<HR>
+<A NAME="getNumberOfSimplexFaces"></A><H3>getNumberOfSimplexFaces</H3>
+<PRE>
+public <A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A> <B>getNumberOfSimplexFaces</B>()</PRE>
+<DL>
+<DD>@return Returns the number of faces in the basic simplex 
+<P>
+</DD></DL>
+<HR>
+<A NAME="getNumberOfSimplices"></A><H3>getNumberOfSimplices</H3>
+<PRE>
+public <A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A> <B>getNumberOfSimplices</B>()</PRE>
+<DL>
+<DD>@return Returns the number of simplices in the n_-cube 
+<P>
+</DD></DL>
+<HR>
+<A NAME="getAttributeArray"></A><H3>getAttributeArray</H3>
+<PRE>
+public <A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>[0..*,0..*] <B>getAttributeArray</B>()</PRE>
+<DL>
+<DD>@return Returns the attribute array 
+<P>
+</DD></DL>
+<HR>
+<A NAME="getAttributePointersArray"></A><H3>getAttributePointersArray</H3>
+<PRE>
+public <A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>[0..*,0..*] <B>getAttributePointersArray</B>()</PRE>
+<DL>
+<DD>@return Returns a 2-dimensional array containing pointers to the attribute array 
+<P>
+</DD></DL>
+<HR>
+<A NAME="getFaceArray"></A><H3>getFaceArray</H3>
+<PRE>
+public <A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>[0..*,0..*] <B>getFaceArray</B>()</PRE>
+<DL>
+<DD>     @return Returns a 2-dimensional array containing pointers to the array face_ so that
+     duplicated faces can be referenced.
+     
+<P>
+</DD></DL>
+<HR>
+<A NAME="getFacePointersArray"></A><H3>getFacePointersArray</H3>
+<PRE>
+public <A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>[0..*,0..*] <B>getFacePointersArray</B>()</PRE>
+<DL>
+<DD>@return Returns a 2-dimensional array containing pointers to the face_ array 
+<P>
+</DD></DL>
+<HR>
+<A NAME="getVertexCoordinatesArray"></A><H3>getVertexCoordinatesArray</H3>
+<PRE>
+public <A HREF="../../../../RPn_UML/DCE1BF8DA2C3948887826F74A3BBF2C68E6.html">double</A>[0..*,0..*] <B>getVertexCoordinatesArray</B>()</PRE>
+<DL>
+<DD>@return Returns a 2-dimensional array with coordinates of the vertices of the standard n_-cube. 
+<P>
+</DD></DL>
+<HR>
+<A NAME="getAdjacencyInfoArray"></A><H3>getAdjacencyInfoArray</H3>
+<PRE>
+public <A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>[0..*,0..*] <B>getAdjacencyInfoArray</B>()</PRE>
+<DL>
+<DD>@return Returns a 2-dimensional array containing the adjacency information for the faces in the basic simplex. 
+<P>
+</DD></DL>
+<HR>
+<A NAME="setFaceArray"></A><H3>setFaceArray</H3>
+<PRE>
+public <A HREF="../../../../RPn_UML/DCE065324643F3067896121D454D1FB2F97.html">void</A> <B>setFaceArray</B>(<A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;altFace[0..*,0..*])</PRE>
+<DL>
+<DD>     @param altFace The new face array
+     @throws IllegalArgumentException If the array has an invalid size.
+     
+<P>
+</DD></DL>
+<HR>
+<A NAME="setVertexCoordinatesArray"></A><H3>setVertexCoordinatesArray</H3>
+<PRE>
+public <A HREF="../../../../RPn_UML/DCE065324643F3067896121D454D1FB2F97.html">void</A> <B>setVertexCoordinatesArray</B>(<A HREF="../../../../RPn_UML/DCE1BF8DA2C3948887826F74A3BBF2C68E6.html">double</A>&nbsp;altVert[0..*,0..*])</PRE>
+<DL>
+<DD>     @param altVert The new vertex coordinates array
+     @throws IllegalArgumentException If the array has an invalid size.
+     
+<P>
+</DD></DL>
+<HR>
+<A NAME="factorial"></A><H3>factorial</H3>
+<PRE>
+private <A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A> <B>factorial</B>(<A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;num)</PRE>
+<DL>
+<DD>      @param num integer greater than or equal to zero
+      @return Returns the factorial of num
+     
+<P>
+</DD></DL>
+<HR>
+<A NAME="mkcube"></A><H3>mkcube</H3>
+<PRE>
+private <A HREF="../../../../RPn_UML/DCE065324643F3067896121D454D1FB2F97.html">void</A> <B>mkcube</B>()</PRE>
+<DL>
+<DD>     This routine creates the standard hypercube vertices (in cvert_),
+     the basic simplex vertices (in bsvert_), and the permutations of 1, 2, ..., n_  (in permutations).
+     
+<P>
+</DD></DL>
+<HR>
+<A NAME="mkperm"></A><H3>mkperm</H3>
+<PRE>
+private <A HREF="../../../../RPn_UML/DCE065324643F3067896121D454D1FB2F97.html">void</A> <B>mkperm</B>()</PRE>
+<DL>
+<DD>      This routine creates the array  perm_  containing the permutations
+     of the numbers from 1 to  n_.  It also sets  nsimp_  to be  n_  factorial.
+     
+<P>
+</DD></DL>
+<HR>
+<A NAME="mkface"></A><H3>mkface</H3>
+<PRE>
+private <A HREF="../../../../RPn_UML/DCE065324643F3067896121D454D1FB2F97.html">void</A> <B>mkface</B>()</PRE>
+<DL>
+<DD>     This routine creates the list  face_  of all m_-dimensional faces
+     of the  n_!  simplices obtained by permuting the coordinates of
+     the basic simplex.  to do this it needs the array  comb_  of all
+     subsets of size  m_+1  from a set of size  n_+1.  since  face_  contains
+     only distinct faces, a pointer array  facptr_  is needed to
+     determine which column of  face_  corresponds to each permutation and combination.
+     
+<P>
+</DD></DL>
+<HR>
+<A NAME="mkcomb"></A><H3>mkcomb</H3>
+<PRE>
+private <A HREF="../../../../RPn_UML/DCE065324643F3067896121D454D1FB2F97.html">void</A> <B>mkcomb</B>(<A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;n,&nbsp;<A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;m)</PRE>
+<DL>
+<DD>      This routine makes a list of all  m_  element subsets of an n_  element set.  It also sets  nsface_  to be the number
+     of subsets found. Each subset is stored in a column of  comb_.  the elements
+     in a column are in increasing order, and the columns are ordered lexicographically.
+      @param n_ Set size
+      @param m_ Subset size
+     
+<P>
+</DD></DL>
+<HR>
+<A NAME="combination"></A><H3>combination</H3>
+<PRE>
+private <A HREF="../../../../RPn_UML/DCEAF6B22CF3915DACC28EA5EDB18B5F249.html">long</A> <B>combination</B>(<A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;n,&nbsp;<A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;m)</PRE>
+<DL>
+<DD>
+<P>
+</DD></DL>
+<HR>
+<A NAME="mkfcfp"></A><H3>mkfcfp</H3>
+<PRE>
+private <A HREF="../../../../RPn_UML/DCE065324643F3067896121D454D1FB2F97.html">void</A> <B>mkfcfp</B>()</PRE>
+<DL>
+<DD>This routine makes the arrays  face_  and  facptr_. It also defines the variable  nface_. 
+<P>
+</DD></DL>
+<HR>
+<A NAME="search"></A><H3>search</H3>
+<PRE>
+private <A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A> <B>search</B>(<A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;a1[0..*],&nbsp;<A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;a2[0..*,0..*],&nbsp;<A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;n1,&nbsp;<A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;n2)</PRE>
+<DL>
+<DD>     This routine searches the columns of a2  for the column array a1.
+     @param a1 The column to be searched
+     @param a2 The array to be analized
+     @param n1 Number of columns of the array
+     @param n2 Number of lines of the array
+     @returns  <p> -1  ----------> a1  not found in  a2 </p> <p> column no.  --> a1  found in  a2 </p>
+     
+<P>
+</DD></DL>
+<HR>
+<A NAME="mkfnbr"></A><H3>mkfnbr</H3>
+<PRE>
+private <A HREF="../../../../RPn_UML/DCE065324643F3067896121D454D1FB2F97.html">void</A> <B>mkfnbr</B>()</PRE>
+<DL>
+<DD>     This routine makes the adjacency array  fnbr_  for the faces in
+     the basic simplex. Two faces in comb_ are adjacent if they differ in exactly one vertex.
+     
+<P>
+</DD></DL>
+<HR>
+<A NAME="findInds"></A><H3>findInds</H3>
+<PRE>
+private <A HREF="../../../../RPn_UML/DCE065324643F3067896121D454D1FB2F97.html">void</A> <B>findInds</B>()</PRE>
+<DL>
+<DD>Find facept_ and facatt_ sizes 
+<P>
+</DD></DL>
+<HR>
+<A NAME="mkflst"></A><H3>mkflst</H3>
+<PRE>
+private <A HREF="../../../../RPn_UML/DCE065324643F3067896121D454D1FB2F97.html">void</A> <B>mkflst</B>()</PRE>
+<DL>
+<DD>     This routine has two purposes: <ul> <p> (1) Invert the array  facptr_  using two arrays: facept_, ptrf_. </p>
+     <p> (2) Create the attribute arrays facatt_ and ptfatt_. These encode the information about which simplex faces
+     reside on cube faces. </p> </ul>
+     
+<P>
+</DD></DL>
+<HR>
+<A NAME="mkoppf"></A><H3>mkoppf</H3>
+<PRE>
+private <A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A> <B>mkoppf</B>(<A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;f,&nbsp;<A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;xind,&nbsp;<A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;value,&nbsp;<A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;oppvrt[0..*])</PRE>
+<DL>
+<DD>     This function determines which face_ is opposite face_  f  in
+     a cube.  It is assumed that face_  f  lies on a cube face_.
+     @param f Face number
+     @param xind Indicates which component is constant.
+     @param value Is that constant value.
+     @param oppvrt Auxiliar vector
+     @returns See the search method return values
+     
+<P>
+</DD></DL>
+<HR>
+<A NAME="printInt"></A><H3>printInt</H3>
+<PRE>
+private <A HREF="../../../../RPn_UML/DCE065324643F3067896121D454D1FB2F97.html">void</A> <B>printInt</B>(<A HREF="../../../../RPn_UML/DCE1DAE3130FDB46D61C5C4BEE71AB9345E.html">String</A>&nbsp;name,&nbsp;<A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;matrix[0..*,0..*],&nbsp;<A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;k1,&nbsp;<A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;k2)</PRE>
+<DL>
+<DD>     Funcao para Debug!! Imprime array de inteiros trocando linhas com colunas.
+     <p><h3> Deve ser eliminada apos testes da classe </h3></p>
+     @param name Variable name
+     @param matrix The bidimensional array to be printed
+     @param k1 Size of the array
+     @param k2 Size of the array
+     
+<P>
+</DD></DL>
+<HR>
+<A NAME="printDouble"></A><H3>printDouble</H3>
+<PRE>
+private <A HREF="../../../../RPn_UML/DCE065324643F3067896121D454D1FB2F97.html">void</A> <B>printDouble</B>(<A HREF="../../../../RPn_UML/DCE1DAE3130FDB46D61C5C4BEE71AB9345E.html">String</A>&nbsp;name,&nbsp;<A HREF="../../../../RPn_UML/DCE1BF8DA2C3948887826F74A3BBF2C68E6.html">double</A>&nbsp;matrix[0..*,0..*],&nbsp;<A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;k1,&nbsp;<A HREF="../../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;k2)</PRE>
+<DL>
+<DD>     Funcao para Debug!! Imprime array de doubles na ordem correta.
+     <p><h3> Deve ser eliminada apos testes da classe </h3></p>
+     @param name Variable name
+     @param matrix The bidimensional array to be printed
+     @param k1 Size of the array
+     @param k2 Size of the array
+     
+<P>
+</DD></DL>
+<HR>
+<A NAME="doubleArray"></A><H3>doubleArray</H3>
+<PRE>
+private <A HREF="../../../../RPn_UML/DCE3A3286D50899B76164FE53808CE14BEE.html">Object</A> <B>doubleArray</B>(<A HREF="../../../../RPn_UML/DCE3A3286D50899B76164FE53808CE14BEE.html">Object</A>&nbsp;source)</PRE>
+<DL>
+<DD>     Doubles the size of an array
+     @param source Array de origem
+     @return Returns an array containing the elements of source with twice its size
+     
+<P>
+</DD></DL>
+
+<HR>
+<!-- ========= START OF NAVBAR ======= -->
+<A NAME="navbar_top"></A>
+<A HREF="#skip-navbar_top" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_top_firstrow"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1"> &nbsp;<A HREF="../../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <FONT CLASS="NavBarFont1">Package</FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1Rev">    <FONT CLASS="NavBarFont1Rev"><B>Element</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <FONT CLASS="NavBarFont1">Diagram</FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../help.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>NetBeans UML Modeling</b>
+</TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_top"></A>
+<!-- ========= END OF NAVBAR ========= -->
+
+</BODY>
+</HTML>

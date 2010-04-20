@@ -16,15 +16,18 @@ CC=gcc
 CCC=g++
 CXX=g++
 FC=gfortran
+AS=
 
 # Macros
-PLATFORM=GNU-Linux-x86
+CND_PLATFORM=GNU-Linux-x86
+CND_CONF=Default
+CND_DISTDIR=dist
 
 # Include project Makefile
 include RPn_C++-Makefile.mk
 
 # Object Directory
-OBJECTDIR=build/Default/${PLATFORM}
+OBJECTDIR=build/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES=
@@ -38,6 +41,9 @@ CXXFLAGS=
 
 # Fortran Compiler Flags
 FFLAGS=
+
+# Assembler Flags
+ASFLAGS=
 
 # Link Libraries and Options
 LDLIBSOPTIONS=
