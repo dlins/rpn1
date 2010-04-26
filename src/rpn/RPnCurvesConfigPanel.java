@@ -9,6 +9,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import rpn.usecase.ChangeDirectionAgent;
 import rpnumerics.RPNUMERICS;
 
@@ -23,7 +25,6 @@ public class RPnCurvesConfigPanel extends JPanel {
     private JCheckBox backwardCheckBox_;
     private static Integer currentOrbitDirection_ = new Integer(1);
 
-
     public RPnCurvesConfigPanel() {
         buildPanel();
         ChangeDirectionAgent.instance().execute();
@@ -32,8 +33,9 @@ public class RPnCurvesConfigPanel extends JPanel {
     private void buildPanel() {
 
         familyLabel_ = new JLabel("Family", SwingConstants.CENTER);
-        
-        familySpinner_ = new JSpinner(new SpinnerNumberModel(1,1,RPNUMERICS.domainDim(),1));
+
+        familySpinner_ = new JSpinner(new SpinnerNumberModel(0, 0, RPNUMERICS.domainDim(), 1));
+        familySpinner_.addChangeListener(new FamilyListener());
 
         familyPanel_ = new JPanel(new GridLayout(2, 1));
         directionPanel_ = new JPanel(new GridLayout(2, 1));
@@ -72,11 +74,21 @@ public class RPnCurvesConfigPanel extends JPanel {
     public static Integer getOrbitDirection() {
         return currentOrbitDirection_;
     }
-    
-    public static Integer getFamilyIndex(){
+
+    public static Integer getFamilyIndex() {
         return (Integer) familySpinner_.getModel().getValue();
     }
-    
+
+    private class FamilyListener implements ChangeListener {
+
+        public void stateChanged(ChangeEvent e) {
+            JSpinner familySpinner = (JSpinner) e.getSource();
+            Integer value = (Integer)familySpinner.getValue();
+            RPNUMERICS.setFamily(value);
+
+
+        }
+    }
 
     private class OrbitDirectionListener implements ActionListener {
 

@@ -143,7 +143,6 @@ public class RPnNumericsModule {
         public void endDocument() throws SAXException {
 
             RPNUMERICS.resetParams();
-
         }
     }
 

@@ -23,7 +23,7 @@ public abstract class RpModelPlotAgent extends RpModelActionAgent {
 //    private JToggleButton button_;
     private AbstractButton button_;
 
-    public RpModelPlotAgent(String shortDesc, ImageIcon icon,AbstractButton button) {
+    public RpModelPlotAgent(String shortDesc, ImageIcon icon, AbstractButton button) {
         super(shortDesc, icon);
         button_ = button;
         button_.setAction(this);
@@ -64,10 +64,10 @@ public abstract class RpModelPlotAgent extends RpModelActionAgent {
         Iterator oldValue = phaseSpace.getGeomObjIterator();
 
         RpGeometry geometry = createRpGeometry(userInputList);
-        if (geometry.getPathIterator().isDone()){
-            System.out.println("Empty geometry");
-            return;
-        }
+//        if (geometry.getPathIterator().isDone()) {
+//            System.out.println("Empty geometry");
+//            return;
+//        }
 
 //        phaseSpace.plot(createRpGeometry(userInputList));
         phaseSpace.plot(geometry);

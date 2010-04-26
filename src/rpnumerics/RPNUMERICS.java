@@ -38,6 +38,7 @@ public class RPNUMERICS {
     static private ShockRarefactionProfile shockRarefactionProfile_ = null;
     static private ContourConfiguration contourConfiguration_ = null;
     static private Integer direction_;
+    static private int family_=0;
 
     //
     // Constructors/Initializers
@@ -109,6 +110,10 @@ public class RPNUMERICS {
 
         }
 
+    }
+
+    public static void setFamily(int family){
+        family_=family;
     }
 
     public static void setConfiguration(String methodName, Configuration methodConfiguration) {
@@ -236,7 +241,7 @@ public class RPNUMERICS {
 
     public static RarefactionOrbitCalc createRarefactionCalc(OrbitPoint orbitPoint) {
 
-        return new RarefactionOrbitCalc("methodName", "flowName", orbitPoint, rarefactionProfile_.getFamily(), direction_);//TODO Is method and flowName needed ? 
+        return new RarefactionOrbitCalc("methodName", "flowName", orbitPoint, rarefactionProfile_.getFamily(), direction_);//TODO Is method and flowName needed ?
 
     }
 
@@ -273,7 +278,7 @@ public class RPNUMERICS {
 
     public static ShockCurveCalc createShockCurveCalc(OrbitPoint orbitPoint) {
 //TODO Family hardcoded to zero
-        return new ShockCurveCalc("methodname", "flowName", orbitPoint, 0, direction_);
+        return new ShockCurveCalc("methodname", "flowName", orbitPoint, family_, direction_);
 
     }
 
