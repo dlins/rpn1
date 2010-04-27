@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!DOCTYPE rpnconfiguration  SYSTEM "../share/rpn-dtd/rpnDTD.dtd">
 <rpnconfiguration>
+
     <!--PHYSICS-->
+
     <PHYSICS name="QuadraticR2">
         <BOUNDARY name="rect">
             <BOUNDARYPARAM name="dimension" value="2" />
@@ -11,25 +12,20 @@
             <BOUNDARYPARAM name="x-max" value="0.5" />
             <BOUNDARYPARAM name="y-min" value="-0.5" />
             <BOUNDARYPARAM name="y-max" value="0.5" />
-
         </BOUNDARY>
 
         <AUXBOUNDARY name="auxrect">
-
             <BOUNDARYPARAM name="dimension" value="2" />
             <BOUNDARYPARAM name="iso2equi" value="false" />
             <BOUNDARYPARAM name="x-min" value="-0.5" />
             <BOUNDARYPARAM name="x-max" value="0.5" />
             <BOUNDARYPARAM name="y-min" value="-0.5" />
             <BOUNDARYPARAM name="y-max" value="0.5" />
-
         </AUXBOUNDARY>
-
 
         <FLUXFUNCTION >
             <FLUXPARAMS name="a1" position="0" value ="-1" />
             <FLUXPARAMS name="b1" position="1" value ="0" />
-
             <FLUXPARAMS name="c1" position="2" value ="1" />
             <FLUXPARAMS name="d1" position="3" value ="0" />
             <FLUXPARAMS name="e1" position="4" value ="0.1" />
@@ -38,10 +34,9 @@
             <FLUXPARAMS name="c2" position="7" value ="0" />
             <FLUXPARAMS name="d2" position="8" value ="-0.1" />
             <FLUXPARAMS name="e2" position="9" value ="0" />
-
         </FLUXFUNCTION>
-
     </PHYSICS>
+
 
     <PHYSICS name="TriPhase">
         <BOUNDARY name="triang">
@@ -49,7 +44,6 @@
         </BOUNDARY>
 
         <AUXBOUNDARY name="auxrect">
-
             <BOUNDARYPARAM name="dimension" value="2" />
             <BOUNDARYPARAM name="iso2equi" value="true" />
         </AUXBOUNDARY>
@@ -62,10 +56,29 @@
             <FLUXPARAMS name="grw" position="4" value ="0" />
             <FLUXPARAMS name="gro" position="5" value ="0" />
             <FLUXPARAMS name="grg" position="6" value ="0" />
-
         </FLUXFUNCTION>
+    </PHYSICS>
 
 
+    <PHYSICS name="Corey">
+        <BOUNDARY name="triang">
+            <BOUNDARYPARAM name="dimension" value="2" />
+        </BOUNDARY>
+
+        <AUXBOUNDARY name="auxrect">
+            <BOUNDARYPARAM name="dimension" value="2" />
+            <BOUNDARYPARAM name="iso2equi" value="true" />
+        </AUXBOUNDARY>
+
+        <FLUXFUNCTION >
+            <FLUXPARAMS name="vel" position="0" value ="1" />
+            <FLUXPARAMS name="muw" position="1" value ="0.3333" />
+            <FLUXPARAMS name="muo" position="2" value ="0.3333" />
+            <FLUXPARAMS name="mug" position="3" value ="0.3333" />
+            <FLUXPARAMS name="grw" position="4" value ="0" />
+            <FLUXPARAMS name="gro" position="5" value ="0" />
+            <FLUXPARAMS name="grg" position="6" value ="0" />
+        </FLUXFUNCTION>
     </PHYSICS>
 
 
@@ -73,8 +86,8 @@
 
     <METHOD name="Continuation">
         <METHODPARAM  name="step" value="0.01" />
-
     </METHOD>
+
 
     <METHOD name="Contour">
         <METHODPARAM  name="x-resolution" value="5" />
@@ -138,11 +151,7 @@
 
         <METHODPARAM  name="xFplus-boundary-2" value="2" />
         <METHODPARAM  name="yFplus-boundary-2" value="1" />
-
-
-
     </METHOD>
-
 
 
     <!--VIEW INFORMATIONS-->
@@ -150,4 +159,5 @@
     <VIEWINGPARAMS>
         <VIEWPORT vpwidth="800" vpheight="800"/>
     </VIEWINGPARAMS>
+
 </rpnconfiguration>

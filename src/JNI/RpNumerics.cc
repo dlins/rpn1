@@ -18,23 +18,34 @@
 
 //#include "rpnumerics_RpNumerics.h"
 #include <stdlib.h>
-
 #include "rpnumerics_RPNUMERICS.h"
-
 #include "RpNumerics.h"
+
+//-------------------------------------
+// PHYSICS
+//-------------------------------------
+
+// Quad2
 #include "Quad2.h"
 #include "Quad2FluxParams.h"
+// Quad3
 #include "Quad3.h"
 #include "Quad3FluxParams.h"
+// Quad4
 #include "Quad4.h"
 #include "Quad4FluxParams.h"
-#include "TriPhase.h"
-#include "TriPhaseParams.h"
-#include  "CapilParams.h"
+// Auxiliary use by TriPhase and Corey 
+#include "CapilParams.h"
 #include "PermParams.h"
 #include "ViscosityParams.h"
+// TriPhase
+#include "TriPhase.h"
+#include "TriPhaseParams.h"
+// Corey
+#include "Corey.h"
+#include "CoreyParams.h"
 
-//#include "ContinuationRarefactionMethod.h"
+//-------------------------------------
 
 
 #include "LSODEStopGenerator.h"
@@ -68,32 +79,25 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getFluxParams
 
 
     const FluxParams & nativeFluxParams = RpNumerics::getPhysics().fluxFunction().fluxParams();
-
     const RealVector & nativeRealVectorParams = nativeFluxParams.params();
 
-
     int paramsSize = nativeRealVectorParams.size();
-
     double nativeRealVectorArray[paramsSize];
 
     for (int i = 0; i < paramsSize; i++) {
-
         nativeRealVectorArray[i] = nativeRealVectorParams(i);
-
     }
 
     jdoubleArray realVectorArray = env->NewDoubleArray(paramsSize);
-
     env->SetDoubleArrayRegion(realVectorArray, 0, paramsSize, nativeRealVectorArray);
 
     jobject realVector = (env)->NewObject(realVectorClass, realVectorConstructorID, realVectorArray);
-
     jobject fluxParams = (env)->NewObject(fluxParamsClass, fluxParamsConstructorID, realVector);
 
     return fluxParams;
 
-
 }
+
 
 /*
  * Class:     rpnumerics_RPNUMERICS
@@ -104,30 +108,24 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setFluxParams(JNIEnv * env, jc
 
 
     jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
-
     jclass fluxParamsClass = env->FindClass(FLUXPARAMS_LOCATION);
 
     jmethodID getParamsMethodID = (env)->GetMethodID(fluxParamsClass, "getParams", "()Lwave/util/RealVector;");
-
     jmethodID toDoubleMethodID = (env)->GetMethodID(realVectorClass, "toDouble", "()[D");
 
     jobject fluxParamRealVector = env->CallObjectMethod(fluxParams, getParamsMethodID);
-
     jdoubleArray fluxParamRealVectorArray = (jdoubleArray) (env)->CallObjectMethod(fluxParamRealVector, toDoubleMethodID);
 
     int fluxParamSize = env->GetArrayLength(fluxParamRealVectorArray);
-
     double nativeFluxParamArray[fluxParamSize];
 
     env->GetDoubleArrayRegion(fluxParamRealVectorArray, 0, fluxParamSize, nativeFluxParamArray);
-
     RealVector nativeFluxParamRealVector(fluxParamSize, nativeFluxParamArray);
-
     FluxParams newFluxParams(nativeFluxParamRealVector);
-
     RpNumerics::getPhysics().fluxParams(newFluxParams);
 
 }
+
 
 /*
  * Class:     rpnumerics_RPNUMERICS
@@ -147,24 +145,17 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setBoundary
     jmethodID getMaximumsMethodID = env->GetMethodID(boundaryClass, "getMaximums", "()Lwave/util/RealVector;");
     jmethodID toDoubleMethodID = (env)->GetMethodID(realVectorClass, "toDouble", "()[D");
 
-
-
     jobject minRealVector = env->CallObjectMethod(newBoundary, getMinimumsMethodID);
     jobject maxRealVector = env->CallObjectMethod(newBoundary, getMaximumsMethodID);
 
-
-
     jdoubleArray minRealVectorArray = (jdoubleArray) (env)->CallObjectMethod(minRealVector, toDoubleMethodID);
     jdoubleArray maxRealVectorArray = (jdoubleArray) (env)->CallObjectMethod(maxRealVector, toDoubleMethodID);
-
 
     int minSize = env->GetArrayLength(minRealVectorArray);
     int maxSize = env->GetArrayLength(maxRealVectorArray);
 
     double minNativeArray [minSize];
     double maxNativeArray [maxSize];
-
-
 
     env->GetDoubleArrayRegion(minRealVectorArray, 0, minSize, minNativeArray);
     env->GetDoubleArrayRegion(maxRealVectorArray, 0, maxSize, maxNativeArray);
@@ -174,7 +165,6 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setBoundary
         RealVector minNativeRealVector(minSize, minNativeArray);
         RealVector maxNativeRealVector(maxSize, maxNativeArray);
         RectBoundary nativeBoundary(minNativeRealVector, maxNativeRealVector);
-
         RpNumerics::getPhysics().boundary(nativeBoundary);
 
     } 
@@ -239,15 +229,12 @@ JNIEXPORT jstring JNICALL Java_rpnumerics_RPNUMERICS_physicsID(JNIEnv * env, jcl
 JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_domain(JNIEnv * env, jclass cls) {
 
     jclass spaceClass = env->FindClass("wave/multid/Space");
-
     jmethodID spaceConstructor = (env)->GetMethodID(spaceClass, "<init>", "(Ljava/lang/String;I)V");
 
     jstring spaceName = env->NewStringUTF(RpNumerics::getPhysics().domain().name());
-
     jobject space = env->NewObject(spaceClass, spaceConstructor, spaceName, RpNumerics::getPhysics().domain().dim());
 
     return space;
-
 
 }
 
@@ -268,28 +255,23 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initNative(JNIEnv * env, jclas
     }
 
     if (!strcmp(physicsID, "QuadraticR2")) {
-
         RpNumerics::setPhysics(Quad2(Quad2FluxParams()));
-
     }
 
     if (!strcmp(physicsID, "QuadraticR3")) {
-
         RpNumerics::setPhysics(Quad3(Quad3FluxParams()));
-
     }
 
     if (!strcmp(physicsID, "QuadraticR4")) {
-
         RpNumerics::setPhysics(Quad4(Quad4FluxParams()));
-
     }
 
-
-
     if (!strcmp(physicsID, "TriPhase")) {
-
         RpNumerics::setPhysics(TriPhase(TriPhaseParams(), PermParams(), CapilParams(0.4, 3.0, 44.0, 8.0), ViscosityParams(0.5)));
+    }
+
+    if (!strcmp(physicsID, "Corey")) {
+        RpNumerics::setPhysics(Corey(CoreyParams(), PermParams(), CapilParams(0.4, 3.0, 44.0, 8.0), ViscosityParams(0.5)));
     }
 
 
@@ -313,29 +295,25 @@ JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_init(JNIEnv * env, jclass cls,
     //Physics instantiation
 
     if (!strcmp(physicsID, "QuadraticR2")) {
-
         RpNumerics::setPhysics(Quad2(Quad2FluxParams()));
-
     }
 
     if (!strcmp(physicsID, "QuadraticR3")) {
-
         RpNumerics::setPhysics(Quad3(Quad3FluxParams()));
-
     }
 
     if (!strcmp(physicsID, "QuadraticR4")) {
-
         RpNumerics::setPhysics(Quad4(Quad4FluxParams()));
-
     }
-
-
 
     if (!strcmp(physicsID, "TriPhase")) {
-
         RpNumerics::setPhysics(TriPhase(TriPhaseParams(), PermParams(), CapilParams(0.4, 3.0, 44.0, 8.0), ViscosityParams(0.5)));
     }
+
+    if (!strcmp(physicsID, "Corey")) {
+        RpNumerics::setPhysics(Corey(CoreyParams(), PermParams(), CapilParams(0.4, 3.0, 44.0, 8.0), ViscosityParams(0.5)));
+    }
+
 
     cout << "Physics: " << physicsID << endl;
 
@@ -353,19 +331,15 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RpNumerics_getXZero(JNIEnv * env, jcla
     int coordsSize = 2;
 
     jclass realVectorClass_ = env->FindClass("wave/util/RealVector");
-
     jclass phasePointClass_ = env->FindClass("rpnumerics/PhasePoint");
 
     jmethodID phasePointConstructor_ = (env)->GetMethodID(phasePointClass_, "<init>", "(Lwave/util/RealVector;)V");
-
     jmethodID realVectorConstructorDoubleArray_ = env->GetMethodID(realVectorClass_, "<init>", "([D)V");
 
     jdoubleArray tempArray = env->NewDoubleArray(coordsSize);
-
     env->SetDoubleArrayRegion(tempArray, 0, coordsSize, teste);
 
     jobject realVector = env->NewObject(realVectorClass_, realVectorConstructorDoubleArray_, tempArray);
-
     jobject phasePoint = env->NewObject(phasePointClass_, phasePointConstructor_, realVector);
 
     env->DeleteLocalRef(tempArray);
@@ -403,32 +377,30 @@ JNIEXPORT jint JNICALL Java_rpnumerics_RPNUMERICS_domainDim(JNIEnv * env, jclass
 JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_boundary(JNIEnv * env, jclass cls) {
 
     jclass realVectorClass = env->FindClass("wave/util/RealVector");
-
     jmethodID realVectorConstructor = (env)->GetMethodID(realVectorClass, "<init>", "([D)V");
 
     const Boundary & boundary = RpNumerics::getPhysics().boundary();
-
     const char * boundaryType = boundary.boundaryType();
 
     if (!strcmp(boundaryType, "rect")) {
 
         jclass boundaryClass = env->FindClass("wave/util/RectBoundary");
-
         jmethodID boundaryConstructor = (env)->GetMethodID(boundaryClass, "<init>", "(Lwave/util/RealVector;Lwave/util/RealVector;)V");
 
         const RectBoundary & rectBoundary = (RectBoundary &) boundary;
-
         int boundaryDimension = rectBoundary.minimums().size();
 
         double minimum [boundaryDimension];
         double maximum [boundaryDimension];
 
         for (int i = 0; i < boundaryDimension; i++) {
-
             minimum[i] = boundary.minimums().component(i);
             maximum[i] = boundary.maximums().component(i);
         }
-        //---------------------------------
+
+
+        //-----------------------------------------------------------------------
+
 
         jdoubleArray min = (env)->NewDoubleArray(boundaryDimension);
         jdoubleArray max = (env)->NewDoubleArray(boundaryDimension);
@@ -451,15 +423,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_boundary(JNIEnv * env, jcla
     }
 
     if (!strcmp(boundaryType, "triang")) {
+
         const IsoTriang2DBoundary & boundary = (const IsoTriang2DBoundary &) RpNumerics::getPhysics().boundary();
-
         jclass isoRect2DBboundaryClass = env->FindClass("wave/util/IsoTriang2DBoundary");
-
-        jmethodID isoTriang2DBoundaryConstructor = (env)->GetMethodID(isoRect2DBboundaryClass, "<init>", "(Lwave/util/RealVector;Lwave/util/RealVector;Lwave/util/RealVector;)V");
-
+        jmethodID isoTriang2DBoundaryConstructor = (env)->GetMethodID(isoRect2DBboundaryClass, "<init>", 
+					"(Lwave/util/RealVector;Lwave/util/RealVector;Lwave/util/RealVector;)V");
 
         int boundaryDimension = boundary.minimums().size();
-
 
         jdoubleArray A = (env)->NewDoubleArray(boundaryDimension);
         jdoubleArray B = (env)->NewDoubleArray(boundaryDimension);
@@ -477,8 +447,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_boundary(JNIEnv * env, jcla
         }
 
 
+        //-----------------------------------------------------------------------
 
-        //---------------------------
 
         (env)->SetDoubleArrayRegion(A, 0, boundaryDimension, Anative);
         (env)->SetDoubleArrayRegion(B, 0, boundaryDimension, Bnative);
@@ -505,13 +475,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_boundary(JNIEnv * env, jcla
     cout << "Boundary not defined" << endl;
     return NULL;
 
-
-
-
 }
-
-
-
 
 
 

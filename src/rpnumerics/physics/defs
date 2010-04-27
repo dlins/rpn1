@@ -1,10 +1,10 @@
 
-COREY = $(PHYSICSDIR)/corey
+COREYDIR = $(PHYSICSDIR)/corey
 QUADDIR = $(PHYSICSDIR)/quad
 TRIPHASEDIR = $(PHYSICSDIR)/triphase
 
 
-include $(COREY)/defs
+include $(COREYDIR)/defs
 include $(QUADDIR)/defs
 include $(TRIPHASEDIR)/defs
 
