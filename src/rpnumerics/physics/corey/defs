@@ -1,0 +1,17 @@
+vpath %.cc $(COREYDIR)
+
+
+RPNUMSRC += Capillarity.cc\
+          Permeability.cc \
+          Corey.cc   \
+          ViscosityParams.cc \
+          CapilParams.cc \
+          PermParams.cc \
+          CoreyParams.cc \
+          CoreyFluxFunction.cc \
+          CoreyAccumulationFunction.cc \
+          
+
+
+CPPFLAGS += -I $(COREYDIR)
+
