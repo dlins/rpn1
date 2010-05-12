@@ -14,15 +14,7 @@
             <BOUNDARYPARAM name="y-max" value="0.5" />
         </BOUNDARY>
 
-        <AUXBOUNDARY name="auxrect">
-            <BOUNDARYPARAM name="dimension" value="2" />
-            <BOUNDARYPARAM name="iso2equi" value="false" />
-            <BOUNDARYPARAM name="x-min" value="-0.5" />
-            <BOUNDARYPARAM name="x-max" value="0.5" />
-            <BOUNDARYPARAM name="y-min" value="-0.5" />
-            <BOUNDARYPARAM name="y-max" value="0.5" />
-        </AUXBOUNDARY>
-
+      
         <FLUXFUNCTION >
             <FLUXPARAMS name="a1" position="0" value ="-1" />
             <FLUXPARAMS name="b1" position="1" value ="0" />
@@ -43,11 +35,6 @@
             <BOUNDARYPARAM name="dimension" value="2" />
         </BOUNDARY>
 
-        <AUXBOUNDARY name="auxrect">
-            <BOUNDARYPARAM name="dimension" value="2" />
-            <BOUNDARYPARAM name="iso2equi" value="true" />
-        </AUXBOUNDARY>
-
         <FLUXFUNCTION >
             <FLUXPARAMS name="vel" position="0" value ="1" />
             <FLUXPARAMS name="muw" position="1" value ="0.3333" />
@@ -64,11 +51,6 @@
         <BOUNDARY name="triang">
             <BOUNDARYPARAM name="dimension" value="2" />
         </BOUNDARY>
-
-        <AUXBOUNDARY name="auxrect">
-            <BOUNDARYPARAM name="dimension" value="2" />
-            <BOUNDARYPARAM name="iso2equi" value="true" />
-        </AUXBOUNDARY>
 
         <FLUXFUNCTION >
             <FLUXPARAMS name="vel" position="0" value ="1" />
