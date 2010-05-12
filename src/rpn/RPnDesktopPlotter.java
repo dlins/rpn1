@@ -23,6 +23,7 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 import rpn.controller.ui.UIController;
 import rpn.parser.RPnInterfaceParser;
+import rpn.parser.RPnNumericsModule;
 import rpnumerics.RPNUMERICS;
 
 public class RPnDesktopPlotter implements RPnMenuCommand {
@@ -99,24 +100,22 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
         RPnDesktopPlotter plotter = null;
         try {
 
-            XMLReader xmlReader = XMLReaderFactory.createXMLReader();
-            xmlReader.setContentHandler(new RPnInterfaceParser());
-
             File interfaceConfigFile = new File(INTERFACE_CONFIG_PATH + "defaults.xml");
-            InputStream configStream = new FileInputStream(interfaceConfigFile);
-            xmlReader.parse(new InputSource(configStream));
+            InputStream defaultsConfigStream = new FileInputStream(interfaceConfigFile);
+
 
             if (args.length == 0) {
                 throw new FileNotFoundException();
             }
 
+            RPnConfigReader.readDefaults(defaultsConfigStream);//Reading defaults
+
+            System.out.println("Arquivo de entrada: " + args[0]);
             plotter = new RPnDesktopPlotter(args[0]);
 
             configReader_ = RPnConfigReader.getReader(args[0], false, null);
-
             configStream_ = configReader_.read();
-
-            RPnDesktopPlotter.configReader_.init(RPnDesktopPlotter.configStream_);
+            RPnDesktopPlotter.configReader_.init(configStream_); //Reading input file
 
             rpnUIFrame = new RPnUIFrame(plotter);
 
@@ -127,7 +126,7 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
             RPnCurvesListFrame curvesFrame = new RPnCurvesListFrame();
             rpnUIFrame.setCurvesFrame(curvesFrame);
 
-
+            System.out.println(RPNUMERICS.toXML());
 
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();

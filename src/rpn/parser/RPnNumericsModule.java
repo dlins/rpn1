@@ -18,7 +18,11 @@ import org.xml.sax.InputSource;
 import java.io.FileWriter;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.Set;
 import rpn.RPnConfig;
+import rpnumerics.Configuration;
 import rpnumerics.RPNUMERICS;
 
 /** This class implements methods to configure the numeric layer. The values are taked from a XML file and this values are used to setup the physics and all others numerics parameters. */
@@ -42,7 +46,6 @@ public class RPnNumericsModule {
         private ArrayList boundaryParamsArray_;
         private static ConfigurationProfile currentConfigurationProfile_;
         private static ConfigurationProfile physicsProfile_;
-        private boolean auxBoundary_ = false;
 
         @Override
         public void startElement(String name, AttributeList att) throws
@@ -77,26 +80,9 @@ public class RPnNumericsModule {
 
                 if (physicsProfile_.profileArraySize() == 1) {
                     physicsProfile_.getConfigurationProfile(0).addParam(att.getValue(0), att.getValue(1));
-                } else {
-
-                    if (auxBoundary_) {
-                        physicsProfile_.getConfigurationProfile(1).addParam(att.getValue(0), att.getValue(1));
-                    } else {
-                        physicsProfile_.getConfigurationProfile(0).addParam(att.getValue(0), att.getValue(1));
-                    }
-
                 }
 
             }
-
-
-
-            if (name.equals("AUXBOUNDARY")) {
-                auxBoundary_ = true;
-                physicsProfile_.addConfigurationProfile(new ConfigurationProfile(att.getValue(0), "auxboundary"));
-
-            }
-
 
             if (name.equals("PHASEPOINT")) {
                 tempVector_ = new RealVector((new Integer(att.getValue(0))).intValue());
@@ -125,7 +111,19 @@ public class RPnNumericsModule {
         public void endElement(String name) throws SAXException {
             if (name.equals("PHYSICS")) {
                 RPNUMERICS.init(profile_);
-                RPnConfig.addConfiguration(physicsProfile_.getName(), physicsProfile_);
+
+                if (physicsProfile_.profileArraySize() >= 1) {
+
+                    Configuration physConfiguration = RPNUMERICS.getConfiguration(profile_.getPhysicsID());
+                    ConfigurationProfile physProfile = physicsProfile_.getConfigurationProfile(0);
+                    Configuration boundaryConfigurantion = new Configuration(physProfile);
+                    physConfiguration.addConfiguration(0, boundaryConfigurantion);
+
+                }
+
+                Configuration physConfiguration = RPNUMERICS.getConfiguration(profile_.getPhysicsID());
+                physConfiguration.setParams(physicsProfile_);
+
 
             }
 
@@ -134,15 +132,10 @@ public class RPnNumericsModule {
                 RPnConfig.addConfiguration(currentConfigurationProfile_.getName(), currentConfigurationProfile_);
             }
 
-            if (name.equals("AUXBOUNDARY")) {
-                auxBoundary_ = false;
-            }
         }
 
         @Override
         public void endDocument() throws SAXException {
-
-            RPNUMERICS.resetParams();
         }
     }
 

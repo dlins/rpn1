@@ -38,16 +38,20 @@ public class RPNUMERICS {
     static private ShockRarefactionProfile shockRarefactionProfile_ = null;
     static private ContourConfiguration contourConfiguration_ = null;
     static private Integer direction_;
-    static private int family_=0;
+    static private int family_ = 0;
 
     //
     // Constructors/Initializers
     //
     static public void init(RPNumericsProfile profile) {
         try {
+
+            System.out.println("Inicializando a fisica");
             System.loadLibrary("wave"); //TODO libwave is always loaded ?
             System.loadLibrary("rpnumerics");
             initNative(profile.getPhysicsID());
+            setBoundaryDefaultConfiguration();
+            setFluxDefaultConfiguration();
             if (profile.hasBoundary()) {
                 setBoundary(profile.getBoundary());
             }
@@ -55,13 +59,37 @@ public class RPNUMERICS {
             if (profile.hasFluxParams()) {
                 setFluxParams(profile.getFluxParams());
             }
-
-
             errorControl_ = new RpErrorControl(boundary());
         } catch (Exception ex) {
             ex.printStackTrace();
 
         }
+    }
+
+    private static void setBoundaryDefaultConfiguration() {
+        Boundary boundary = boundary();
+
+        if (boundary instanceof RectBoundary) {
+
+            Configuration configuration = new Configuration(physicsID(), "physics");
+
+            RealVector min = boundary.getMinimums();
+            RealVector max = boundary.getMaximums();
+
+            HashMap<String, String> boundaryParams = new HashMap<String, String>();
+
+            boundaryParams.put("x-min", min.getElement(0) + "");
+            boundaryParams.put("y-min", min.getElement(1) + "");
+
+            boundaryParams.put("x-max", max.getElement(0) + "");
+            boundaryParams.put("y-max", max.getElement(1) + "");
+
+            configuration.addConfiguration(0, new Configuration("rect", "boundary", boundaryParams));
+            configMap_.put(configuration.getName(), configuration);
+
+        }
+
+
     }
 
     static public void init(String physicsID) {
@@ -73,6 +101,7 @@ public class RPNUMERICS {
     }
 
     public static void resetParams() {
+        System.out.println("Resetando params");
 
         ArrayList<ConfigurationProfile> configurationProfiles = RPnConfig.getAllConfigurationProfiles();
 
@@ -92,7 +121,6 @@ public class RPNUMERICS {
 
                 if (profile.getType().equalsIgnoreCase("physics")) {
                     configuration = processPhysicsProfile(profile);
-
                 }
 
                 if (profile.getType().equalsIgnoreCase("method")) {
@@ -112,8 +140,8 @@ public class RPNUMERICS {
 
     }
 
-    public static void setFamily(int family){
-        family_=family;
+    public static void setFamily(int family) {
+        family_ = family;
     }
 
     public static void setConfiguration(String methodName, Configuration methodConfiguration) {
@@ -189,7 +217,7 @@ public class RPNUMERICS {
         for (Configuration configurationEntry : configurationArray) {
 
             if (configurationEntry.getType().equalsIgnoreCase("physics") && configurationEntry.getName().equalsIgnoreCase(physicsID())) {
-
+                System.out.println("Quantidade de configurations : " + configurationEntry.configurationArraySize());
                 buffer.append(configurationEntry.toXML());
 
             }
@@ -328,17 +356,7 @@ public class RPNUMERICS {
     private static Configuration processPhysicsProfile(ConfigurationProfile physicsProfile) {
         Configuration physicsConfiguration = new Configuration(physicsProfile.getName(), "physics");
 
-        for (int i = 0; i < physicsProfile.getIndicesSize(); i++) {
-            HashMap<String, String> fluxParam = physicsProfile.getParam(i);
-            Set<Entry<String, String>> fluxParamSet = fluxParam.entrySet();
-            for (Entry<String, String> fluxEntry : fluxParamSet) {
-                physicsConfiguration.setParamValue(fluxEntry.getKey(), fluxEntry.getValue());
-                physicsConfiguration.setParamOrder(fluxEntry.getKey(), i);
-            }
-        }
-
-
-
+        physicsConfiguration.setParams(physicsProfile);
 
         for (int i = 0; i < physicsProfile.profileArraySize(); i++) {
 
@@ -349,17 +367,26 @@ public class RPNUMERICS {
                 physicsConfiguration.addConfiguration(boundaryConfiguration);
             }
 
-            if (boundaryProfile.getName().equals("auxrect")) {
+        }
 
-                Configuration boundaryConfiguration = new Configuration(boundaryProfile.getName(), "auxboundary", boundaryProfile.getParams());
-                physicsConfiguration.addConfiguration(boundaryConfiguration);
-            }
+        return physicsConfiguration;
+    }
+
+    private static void setFluxDefaultConfiguration() {
+
+        FluxParams fluxParams = getFluxParams();
+
+        Configuration physicsConfiguration = configMap_.get(physicsID());
+
+        for (int i = 0; i < fluxParams.getParams().getSize(); i++) {
+
+            physicsConfiguration.setParamOrder("param"+i, i);
+            physicsConfiguration.setParamValue("param"+i, fluxParams.getElement(i)+"");
+
 
         }
 
 
-
-        return physicsConfiguration;
     }
 
     private static ODESolver createODESolver(WaveFlow flow) {
