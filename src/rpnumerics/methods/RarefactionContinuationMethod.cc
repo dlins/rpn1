@@ -114,12 +114,11 @@ void RarefactionContinuationMethod::curve(const RealVector & inputVector, int di
 
     if (info == SUCCESSFUL_PROCEDURE) {
         output.push_back(inputVector);
+    } else {
+        cout << "Error: " << info << endl;
     }
-    else {
-        cout<<"Erro aqui "<<info<<endl;
-    }
-    
-    double previouseigenvalue = lambda;
+
+    double speed = lambda;
 
     int step = 0;
 
@@ -128,17 +127,28 @@ void RarefactionContinuationMethod::curve(const RealVector & inputVector, int di
 
     double testeDouble = 0; //TODO Dummy value !!
     double nowIn[dimension];
-    double oldRefVec[dimension];
-    double tempRefVector[dimension];
-    double noweigenvalue;
+    //double oldRefVec[dimension];
+    //double tempRefVector[dimension];
+    double speed_prev;
+
+    RealVector outputVector_prev;
+//    cout << testeFlow.getReferenceVector() << endl;
+//    cout << "Info = " << info << endl;
+
 
     while (step < solver_->getProfile().maxStepNumber() && info == SUCCESSFUL_PROCEDURE) {
 
-        for (int i = 0; i < dimension; i++) {
-            oldRefVec[i] = testeFlow.getReferenceVectorComponent(i);
-        }
+        outputVector_prev = localInputVector;
+        speed_prev = speed;
 
+        /*
+                for (int i = 0; i < dimension; i++) {
+                    oldRefVec[i] = testeFlow.getReferenceVectorComponent(i);
+                }
+         */
+//        cout << "before solver" << endl;
         info = solver_->solve(localInputVector, outputVector, testeDouble);
+//        cout << "info (solver) = " << info << endl;
 
         if (info == SUCCESSFUL_PROCEDURE) {
 
@@ -148,28 +158,78 @@ void RarefactionContinuationMethod::curve(const RealVector & inputVector, int di
 
             //-----------------------------------Stop Criterion---------------------------
 
-            info = testeFlow.flux(dimension, indx, &nowIn[0], &noweigenvalue, &tempRefVector[0]);
-
+            info = testeFlow.flux(dimension, indx, &nowIn[0], &speed, 0);
+//            cout << "info (flux) = " << info << endl;
+//            cout << "speed = " << speed << ", speed_prev = " << speed_prev << endl;
 
             if (info == ABORTED_PROCEDURE) return;
 
             // Eigenvalues should follow a monotonous trend. If they don't, abort.
 
-            if (noweigenvalue > previouseigenvalue && direction == -1) {
+
+            if (speed > speed_prev && direction == -1) {
                 info = ABORTED_PROCEDURE;
+                return;
             }
 
 
-            if (noweigenvalue < previouseigenvalue && direction == 1) {
+            if (speed < speed_prev && direction == 1) {
                 info = ABORTED_PROCEDURE;
+                return;
             }
+
+            // Mon 10 May 2010 05:07:33 PM BRT 
+            RealVector r;
+
+            int cllsn = (solver_->getProfile().boundary().intersection(outputVector, outputVector_prev, r));
+            //cout << "cllsn = " << cllsn << endl;
+            if (cllsn == -1) {
+                // Both outside
+                info = ABORTED_PROCEDURE;
+                return; // ABORTED_PROCEDURE;
+            } else if (cllsn == 1) {
+                // Both inside
+                //for (int i = 0; i < n; i++) Ustore[i] = U[i];
+                //Ustore[n] = speed;
+                output.push_back(outputVector);
+            } else if (cllsn == 0) {
+                // One inside, one outside: store and get out
+                //double ppnt[n + 1];
+                //for (int i = 0; i < n; i++) ppnt[i] = r[i];
+                //flux(n, indx, flux_object, ppnt, &(ppnt[n]), 0);
+
+                // Store, update the counter and the time
+                //add(out, ppnt);
+                //(*numtotal)++;
+                //tout = t + deltaxi;
+                LSODE::increaseTime();
+                output.push_back(r);
+
+                // Reference vector for the next curve (a composite):
+                //for (int i = 0; i < n; i++) ref_vec[i] = ppnt[i] - Uprev[i];
+                RealVector ref_vec(r);
+                for (int i = 0; i < dimension; i++) ref_vec(i) = r(i) - outputVector_prev(i);
+
+                testeFlow.setReferenceVector(ref_vec);
+                //normalize(n, ref_vec);
+
+                info = ABORTED_PROCEDURE;
+                return;
+            }
+
+
+            // Mon 10 May 2010 05:07:33 PM BRT 
 
             // Reference vector
 
-            if (testeFlow.prodint(dimension, oldRefVec, tempRefVector) > 0) for (int ii = 0; ii < dimension; ii++) testeFlow.setReferenceVectorComponent(ii, tempRefVector[ii]); //rev[ii] = tempRefVector[ii];
-            else for (int ii = 0; ii < dimension; ii++) testeFlow.setReferenceVectorComponent(ii, -tempRefVector[ii]); //rev[ii] = -tempRefVector[ii];
+            /*            if (testeFlow.prodint(dimension, oldRefVec, tempRefVector) > 0) for (int ii = 0; ii < dimension; ii++) testeFlow.setReferenceVectorComponent(ii, tempRefVector[ii]); //rev[ii] = tempRefVector[ii];
+                        else for (int ii = 0; ii < dimension; ii++) testeFlow.setReferenceVectorComponent(ii, -tempRefVector[ii]); //rev[ii] = -tempRefVector[ii];
+             */
+            for (int i = 0; i < dimension; i++) testeFlow.setReferenceVectorComponent(i, outputVector(i) - outputVector_prev(i));
+//            for (int i = 0; i < dimension; i++) cout << "refvec[" << i << "] = " << outputVector(i) - outputVector_prev(i) << endl;
 
-            previouseigenvalue = noweigenvalue;
+
+            //previouseigenvalue = noweigenvalue;
 
             output.push_back(outputVector);
 

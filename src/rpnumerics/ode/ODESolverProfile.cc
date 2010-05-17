@@ -39,6 +39,10 @@ void ODESolverProfile::setMaxStepNumber(const int maxStepNumber) {
     maxStepNumber_ = maxStepNumber;
 }
 
+const Boundary & ODESolverProfile::boundary()const {
+    
+
+}
 
 
 

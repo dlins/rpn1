@@ -23,14 +23,13 @@
 ContinuationRarefactionFlow::~ContinuationRarefactionFlow() {
 }
 
-ContinuationRarefactionFlow::ContinuationRarefactionFlow(const RealVector & referenceVector,const int familyIndex, const int direction, const FluxFunction & fluxFunction):RarefactionFlow(referenceVector,familyIndex, direction, fluxFunction) {
+ContinuationRarefactionFlow::ContinuationRarefactionFlow(const RealVector & referenceVector, const int familyIndex, const int direction, const FluxFunction & fluxFunction) : RarefactionFlow(referenceVector, familyIndex, direction, fluxFunction) {
 }
 
-
-
-ContinuationRarefactionFlow::ContinuationRarefactionFlow(const ContinuationRarefactionFlow  &copy):RarefactionFlow(copy.getReferenceVector(),copy.getFamilyIndex(),copy.direction(),copy.fluxFunction()){
+ContinuationRarefactionFlow::ContinuationRarefactionFlow(const ContinuationRarefactionFlow &copy) : RarefactionFlow(copy.getReferenceVector(), copy.getFamilyIndex(), copy.direction(), copy.fluxFunction()) {
 
 }
+
 int ContinuationRarefactionFlow::flux(const RealVector & input, RealVector &output) {
 
     double in[input.size()];
@@ -43,14 +42,14 @@ int ContinuationRarefactionFlow::flux(const RealVector & input, RealVector &outp
         in[i] = input(i);
     }
 
-    double param [input.size()+1 ];
+    double param [input.size() + 1 ];
 
     param[0] = (int) getFamilyIndex();
 
-    for (int i = 0; i < input.size() ; i++) {
-        param[i+1] = getReferenceVectorComponent(i);
+    for (int i = 0; i < input.size(); i++) {
+        param[i + 1] = getReferenceVectorComponent(i);
     }
-    int nparam = input.size()+1;
+    int nparam = input.size() + 1;
 
     double xi = 0;
 
@@ -75,31 +74,42 @@ WaveFlow * ContinuationRarefactionFlow::clone()const {
     return new ContinuationRarefactionFlow(*this);
 }
 
-
 int ContinuationRarefactionFlow::flux(int n, int family, double *in, double *lambda, double *out) {
+    if (out != 0) {
 
-    // Fill the Jacobianflux
-    double J[n][n];
 
-    const FluxFunction & flux = fluxFunction();
-    fill_with_jet(flux, n, in, 1, 0, &J[0][0], 0);
+        // Fill the Jacobianflux
+        double J[n][n];
 
-    // Find J's eigencouples and sort them.
+        const FluxFunction & flux = fluxFunction();
+        fill_with_jet(flux, n, in, 1, 0, &J[0][0], 0);
 
-    vector<eigencouple> e;
-    Eigen::eig(n, &J[0][0], e);
 
-    if (e[family].i != 0) {
 
-        return COMPLEX_EIGENVALUE;
-    } else {
+        // Find J's eigencouples and sort them.
 
-        *lambda = e[family].r;
+        vector<eigencouple> e;
+        Eigen::eig(n, &J[0][0], e);
 
-        int i;
-        for (i = 0; i < n; i++) out[i] = e[family].vrr[i];
-        return SUCCESSFUL_PROCEDURE;
+
+
+        if (e[family].i != 0) {
+
+            return COMPLEX_EIGENVALUE;
+        } else {
+
+            *lambda = e[family].r;
+
+
+            for (int i = 0; i < n; i++) {
+                out[i] = e[family].vrr[i];
+
+            }
+            return SUCCESSFUL_PROCEDURE;
+        }
+
     }
+    return SUCCESSFUL_PROCEDURE;
 
 }
 
@@ -184,12 +194,11 @@ int ContinuationRarefactionFlow::rarefaction(int *neq, double *xi, double *in, d
 
     // Update the value of the reference eigenvector:
     for (i = 0; i < n; i++) {
-//        re[i] = out[i]; <<-Teste
+        //        re[i] = out[i]; <<-Teste
         setReferenceVectorComponent(i, out[i]);
     }
     return SUCCESSFUL_PROCEDURE;
 }
-
 
 void ContinuationRarefactionFlow::fill_with_jet(const FluxFunction & flux_object, int n, double *in, int degree, double *F, double *J, double *H) {
     RealVector r(n);
