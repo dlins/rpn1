@@ -115,7 +115,7 @@ void RarefactionContinuationMethod::curve(const RealVector & inputVector, int di
     if (info == SUCCESSFUL_PROCEDURE) {
         output.push_back(inputVector);
     } else {
-        cout << "Erro aqui " << info << endl;
+        cout << "Error: " << info << endl;
     }
 
     double speed = lambda;
@@ -132,8 +132,8 @@ void RarefactionContinuationMethod::curve(const RealVector & inputVector, int di
     double speed_prev;
 
     RealVector outputVector_prev;
-    cout << testeFlow.getReferenceVector() << endl;
-    cout << "Info = " << info << endl;
+//    cout << testeFlow.getReferenceVector() << endl;
+//    cout << "Info = " << info << endl;
 
 
     while (step < solver_->getProfile().maxStepNumber() && info == SUCCESSFUL_PROCEDURE) {
@@ -146,9 +146,9 @@ void RarefactionContinuationMethod::curve(const RealVector & inputVector, int di
                     oldRefVec[i] = testeFlow.getReferenceVectorComponent(i);
                 }
          */
-        cout << "before solver" << endl;
+//        cout << "before solver" << endl;
         info = solver_->solve(localInputVector, outputVector, testeDouble);
-        cout << "info (solver) = " << info << endl;
+//        cout << "info (solver) = " << info << endl;
 
         if (info == SUCCESSFUL_PROCEDURE) {
 
@@ -159,8 +159,8 @@ void RarefactionContinuationMethod::curve(const RealVector & inputVector, int di
             //-----------------------------------Stop Criterion---------------------------
 
             info = testeFlow.flux(dimension, indx, &nowIn[0], &speed, 0);
-            cout << "info (flux) = " << info << endl;
-            cout << "speed = " << speed << ", speed_prev = " << speed_prev << endl;
+//            cout << "info (flux) = " << info << endl;
+//            cout << "speed = " << speed << ", speed_prev = " << speed_prev << endl;
 
             if (info == ABORTED_PROCEDURE) return;
 
@@ -202,6 +202,7 @@ void RarefactionContinuationMethod::curve(const RealVector & inputVector, int di
                 //add(out, ppnt);
                 //(*numtotal)++;
                 //tout = t + deltaxi;
+                LSODE::increaseTime();
                 output.push_back(r);
 
                 // Reference vector for the next curve (a composite):
@@ -225,7 +226,7 @@ void RarefactionContinuationMethod::curve(const RealVector & inputVector, int di
                         else for (int ii = 0; ii < dimension; ii++) testeFlow.setReferenceVectorComponent(ii, -tempRefVector[ii]); //rev[ii] = -tempRefVector[ii];
              */
             for (int i = 0; i < dimension; i++) testeFlow.setReferenceVectorComponent(i, outputVector(i) - outputVector_prev(i));
-            for (int i = 0; i < dimension; i++) cout << "refvec[" << i << "] = " << outputVector(i) - outputVector_prev(i) << endl;
+//            for (int i = 0; i < dimension; i++) cout << "refvec[" << i << "] = " << outputVector(i) - outputVector_prev(i) << endl;
 
 
             //previouseigenvalue = noweigenvalue;

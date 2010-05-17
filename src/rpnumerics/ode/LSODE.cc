@@ -106,11 +106,11 @@ int LSODE::solve(const RealVector & input, RealVector & output, double & time) c
 
     int info;
 
-    cout << "LSODE, before solve" << endl;
-    for (int i = 0; i < neq + 1; i++) cout << "Inside LSODE, refvec[" << i << "] = " << param[i] << endl;
+//    cout << "LSODE, before solve" << endl;
+//    for (int i = 0; i < neq + 1; i++) cout << "Inside LSODE, refvec[" << i << "] = " << param[i] << endl;
 
     info = solver(&LSODE::function, &neq, &U[0], &LSODE::t_, &LSODE::tout_, &itol, &rtol, &atol[0], &itask, &istate, &iopt, &rwork[0], &lrw, &iwork[0], &liw, &LSODE::jacrarefaction, &mf, &nparam, &param[0]);
-    cout << "LSODE, after solve" << endl;
+//    cout << "LSODE, after solve" << endl;
 
     for (i = 0; i < neq; i++) {
         output.component(i) = U[i];
