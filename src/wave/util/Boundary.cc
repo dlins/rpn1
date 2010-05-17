@@ -5,7 +5,7 @@ Boundary::~Boundary() {
 };
 double Boundary::epsilon = 1e-10;
 
-int Boundary::intersection(const RealVector &p, const RealVector &q, RealVector &r) {
+int Boundary::intersection(const RealVector &p, const RealVector &q, RealVector &r) const {
 
     if (inside(p) && inside(q)) return 1;
     else if (!inside(p) && !inside(q)) return -1;
@@ -68,7 +68,7 @@ int Boundary::intersection(const RealVector &p, const RealVector &q, RealVector 
     }
 }
 
-double Boundary::distance(const RealVector &p, const RealVector &q) {
+double Boundary::distance(const RealVector &p, const RealVector &q)const {
     double d = 0.0;
     for (int i = 0; i < p.size(); i++) d += (p(i) - q(i))*(p(i) - q(i));
 

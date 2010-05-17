@@ -46,7 +46,7 @@ public:
     const RealVector & maximums(void) const;
     RealVector intersect(RealVector & y1, RealVector & y2) const;
       bool inside(const RealVector & );
-    int intersection(const RealVector &, const RealVector & ,RealVector &);
+    int intersection(const RealVector &, const RealVector & ,RealVector &)const;
 
     const char * boundaryType()const;
 

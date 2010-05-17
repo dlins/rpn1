@@ -3,6 +3,7 @@
 
 #include "RpFunction.h"
 #include "WaveFlow.h"
+#include "Boundary.h"
 
 class ODESolverProfile {
 private:
@@ -24,6 +25,10 @@ public:
     void setMaxStepNumber(const int);
     WaveFlow & getFunction() const;
     void setFunction(const WaveFlow &);
+  
+
+   virtual const Boundary & boundary()const;
+
 
 
 };

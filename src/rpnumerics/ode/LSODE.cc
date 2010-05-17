@@ -26,6 +26,7 @@ double LSODE::t_ = 0;
 LSODEProfile * LSODE::profile_ = NULL;
 
 LSODE::LSODE(const LSODEProfile & profile) {
+    //setProfile(profile); 
     profile_ = new LSODEProfile(profile);
 }
 
@@ -105,8 +106,11 @@ int LSODE::solve(const RealVector & input, RealVector & output, double & time) c
 
     int info;
 
+    cout << "LSODE, before solve" << endl;
+    for (int i = 0; i < neq + 1; i++) cout << "Inside LSODE, refvec[" << i << "] = " << param[i] << endl;
 
     info = solver(&LSODE::function, &neq, &U[0], &LSODE::t_, &LSODE::tout_, &itol, &rtol, &atol[0], &itask, &istate, &iopt, &rwork[0], &lrw, &iwork[0], &liw, &LSODE::jacrarefaction, &mf, &nparam, &param[0]);
+    cout << "LSODE, after solve" << endl;
 
     for (i = 0; i < neq; i++) {
         output.component(i) = U[i];
@@ -148,6 +152,7 @@ void LSODE::setProfile(const LSODEProfile & profile) {
 
     delete profile_;
     profile_ = new LSODEProfile(profile);
+    //update_profile_data();
 }
 
 int LSODE::jacrarefaction(int *neq, double *t, double *y, int *ml, int *mu, double *pd, int *nrpd) {
@@ -166,6 +171,8 @@ int LSODE::solver(int (*f)(int *, double *, double *, double *), int *neq, doubl
     if (*istate == 2) {
         return SUCCESSFUL_PROCEDURE;
     } else {
+
+        cout<<"Valor de istate: "<<*istate<<endl;
         return *istate;
     }
 

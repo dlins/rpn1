@@ -48,13 +48,13 @@ public:
     //! Returns the boundary type
     virtual const char * boundaryType()const =0;
 
-    virtual int intersection(const RealVector &p, const RealVector &q, RealVector &r);
+    virtual int intersection(const RealVector &p, const RealVector &q, RealVector &r)const;
 
 
 
 protected:
 
-    double distance(const RealVector &, const RealVector &);
+    double distance(const RealVector &, const RealVector &)const;
     double static epsilon;
 };
 
