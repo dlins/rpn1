@@ -46,12 +46,14 @@ public class RPNUMERICS {
     static public void init(RPNumericsProfile profile) {
         try {
 
-            System.out.println("Inicializando a fisica");
+
             System.loadLibrary("wave"); //TODO libwave is always loaded ?
             System.loadLibrary("rpnumerics");
             initNative(profile.getPhysicsID());
             setBoundaryDefaultConfiguration();
             setFluxDefaultConfiguration();
+
+
             if (profile.hasBoundary()) {
                 setBoundary(profile.getBoundary());
             }
@@ -92,6 +94,27 @@ public class RPNUMERICS {
 
     }
 
+    public static void setParsedConfigurations() {
+
+        Configuration configTeste = configMap_.get(physicsID());
+
+
+        RealVector min = new RealVector(2);
+        RealVector max = new RealVector(2);
+
+        min.setElement(0, new Double(configTeste.getConfiguration(0).getParamValue("x-min")));
+        min.setElement(1, new Double(configTeste.getConfiguration(0).getParamValue("y-min")));
+
+        max.setElement(0, new Double(configTeste.getConfiguration(0).getParamValue("x-max")));
+        max.setElement(1, new Double(configTeste.getConfiguration(0).getParamValue("y-max")));
+
+
+        RectBoundary boundary = new RectBoundary(min, max);
+
+        setBoundary(boundary);
+
+    }
+
     static public void init(String physicsID) {
         System.loadLibrary("wave");//TODO libwave is always loaded ?
         System.loadLibrary("rpnumerics");
@@ -101,7 +124,7 @@ public class RPNUMERICS {
     }
 
     public static void resetParams() {
-        System.out.println("Resetando params");
+
 
         ArrayList<ConfigurationProfile> configurationProfiles = RPnConfig.getAllConfigurationProfiles();
 
@@ -137,6 +160,7 @@ public class RPNUMERICS {
             }
 
         }
+
 
     }
 
@@ -217,7 +241,7 @@ public class RPNUMERICS {
         for (Configuration configurationEntry : configurationArray) {
 
             if (configurationEntry.getType().equalsIgnoreCase("physics") && configurationEntry.getName().equalsIgnoreCase(physicsID())) {
-                System.out.println("Quantidade de configurations : " + configurationEntry.configurationArraySize());
+
                 buffer.append(configurationEntry.toXML());
 
             }
@@ -369,6 +393,8 @@ public class RPNUMERICS {
 
         }
 
+
+
         return physicsConfiguration;
     }
 
@@ -380,8 +406,8 @@ public class RPNUMERICS {
 
         for (int i = 0; i < fluxParams.getParams().getSize(); i++) {
 
-            physicsConfiguration.setParamOrder("param"+i, i);
-            physicsConfiguration.setParamValue("param"+i, fluxParams.getElement(i)+"");
+            physicsConfiguration.setParamOrder("param" + i, i);
+            physicsConfiguration.setParamValue("param" + i, fluxParams.getElement(i) + "");
 
 
         }

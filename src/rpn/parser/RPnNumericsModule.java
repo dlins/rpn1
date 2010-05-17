@@ -123,6 +123,7 @@ public class RPnNumericsModule {
 
                 Configuration physConfiguration = RPNUMERICS.getConfiguration(profile_.getPhysicsID());
                 physConfiguration.setParams(physicsProfile_);
+                RPNUMERICS.setParsedConfigurations();
 
 
             }

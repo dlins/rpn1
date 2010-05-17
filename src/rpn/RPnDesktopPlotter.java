@@ -110,7 +110,6 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
 
             RPnConfigReader.readDefaults(defaultsConfigStream);//Reading defaults
 
-            System.out.println("Arquivo de entrada: " + args[0]);
             plotter = new RPnDesktopPlotter(args[0]);
 
             configReader_ = RPnConfigReader.getReader(args[0], false, null);
@@ -126,7 +125,6 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
             RPnCurvesListFrame curvesFrame = new RPnCurvesListFrame();
             rpnUIFrame.setCurvesFrame(curvesFrame);
 
-            System.out.println(RPNUMERICS.toXML());
 
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();

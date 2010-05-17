@@ -143,6 +143,7 @@ public class RPnInterfaceParser implements ContentHandler {
 
         RPNUMERICS.resetParams();
 
+
     }
 
     public void startPrefixMapping(String prefix, String uri) throws SAXException {
