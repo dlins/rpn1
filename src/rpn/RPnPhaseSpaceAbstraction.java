@@ -70,6 +70,15 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         state_.delete(this, geom);
     }
 
+    public void removeLastGeometry() {
+        if (super.geomList_.size() >= 2) {
+            MultiGeometry toBeRemoved = (MultiGeometry) super.geomList_.get(geomList_.size() - 2);
+            remove(toBeRemoved);
+            update();
+        }
+
+    }
+
     @Override
     public void join(MultiGeometry geom) {
 
@@ -278,10 +287,10 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
                     double closestDeltaSum = 0d;
                     double evaluateDeltaSum = 0d;
                     for (int i = 0; i < coords.getSize(); i++) {
-                        double closestDelta = Math.pow(coords.getElement(i) -
-                                ((StationaryPoint) closest.geomFactory().geomSource()).getPoint().getCoords().getElement(i), 2);
-                        double evaluateDelta = Math.pow(coords.getElement(i) -
-                                ((StationaryPoint) evaluate.geomFactory().geomSource()).getPoint().getCoords().getElement(i), 2);
+                        double closestDelta = Math.pow(coords.getElement(i)
+                                - ((StationaryPoint) closest.geomFactory().geomSource()).getPoint().getCoords().getElement(i), 2);
+                        double evaluateDelta = Math.pow(coords.getElement(i)
+                                - ((StationaryPoint) evaluate.geomFactory().geomSource()).getPoint().getCoords().getElement(i), 2);
                         closestDeltaSum += closestDelta;
                         evaluateDeltaSum += evaluateDelta;
                     }

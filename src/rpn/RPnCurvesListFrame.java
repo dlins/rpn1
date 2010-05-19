@@ -64,16 +64,9 @@ public class RPnCurvesListFrame extends JFrame implements ListSelectionListener,
         toolBar_.add(resetSelectionButton_);
         toolBar_.setFloatable(false);
 
-//        curvesTable_.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-//        curvesTable_.setColumnSelectionAllowed(false);
         curvesTable_.getSelectionModel().addListSelectionListener(this);
         curvesTable_.getColumnModel().getColumn(0).setPreferredWidth(20);
         curvesTable_.getColumnModel().getColumn(1).setPreferredWidth(80);
-
-
-
-
-
 
 
         tablePanel_.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -82,7 +75,6 @@ public class RPnCurvesListFrame extends JFrame implements ListSelectionListener,
         this.getContentPane().add(tablePanel_, BorderLayout.CENTER);
         this.getContentPane().add(toolBar_, BorderLayout.NORTH);
 
-//        pack();
     }
 
     public static void addGeometry(String geometryIndex, String geometryName) {
@@ -92,16 +84,20 @@ public class RPnCurvesListFrame extends JFrame implements ListSelectionListener,
         data.add(geometryName);
         data.add(new Boolean(true));
 
-
-
         tableModel_.addRow(data);
 
+    }
 
+    public static void removeLastEntry() {
+
+        if (tableModel_.getRowCount() >= 2) {
+            tableModel_.removeRow(tableModel_.getRowCount() - 2);
+        }
 
     }
 
     public static void removeGeometry(String geometryName) {
-        throw new UnsupportedOperationException("Not yet implemented");
+//        System.out.println("Implementar remocao de curva da lista"+ geometryName);
     }
 
     public void valueChanged(ListSelectionEvent e) {
@@ -125,14 +121,14 @@ public class RPnCurvesListFrame extends JFrame implements ListSelectionListener,
     public void actionPerformed(ActionEvent e) {
         curvesTable_.clearSelection();
         RPnDataModule.PHASESPACE.clearGeometrySelection();
-        
+
     }
 
     public void tableChanged(TableModelEvent e) {
         curvesTable_.clearSelection();
 
         if (e.getType() == TableModelEvent.INSERT) {
-             RPnDataModule.PHASESPACE.clearGeometrySelection();
+            RPnDataModule.PHASESPACE.clearGeometrySelection();
         }
     }
 }

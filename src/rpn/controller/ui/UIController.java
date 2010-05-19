@@ -138,14 +138,6 @@ public class UIController extends ComponentUI {
                 if (netStatus_.isMaster() || !(netStatus_.isOnline())) {
                     RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
 
-//                    int sceneDim = panel.scene().getViewingTransform().projectionMap().getDomain().getDim();
-
-//
-//                    if (sceneDim >= globalInputTable_.flags().length) {
-
-//                        if (sceneDim > globalInputTable_.flags().length) {
-                    //TODO
-//                        } else {
                     // this will automatically work only for 2D(isComplete())
                     updateUserInputTable(panel, event.getPoint());
                     evaluatePanelsCursorCoords(panel, event.getPoint());
@@ -154,14 +146,6 @@ public class UIController extends ComponentUI {
                         globalInputTable().reset();
                         resetPanelsCursorCoords();
                     }
-//                        }
-//                    } else {
-//                        JOptionPane.showMessageDialog(panel, "Wrong space dimension", "Error", JOptionPane.ERROR_MESSAGE);
-//                    }
-
-
-
-
 
 
 

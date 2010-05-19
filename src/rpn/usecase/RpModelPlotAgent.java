@@ -13,6 +13,7 @@ import java.beans.PropertyChangeEvent;
 import javax.swing.ImageIcon;
 import java.util.Iterator;
 import javax.swing.AbstractButton;
+import rpn.RPnCurvesListFrame;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.controller.ui.*;
 
@@ -20,7 +21,7 @@ public abstract class RpModelPlotAgent extends RpModelActionAgent {
 
     static public final String PHASESPACE_LIST = "Phase Space list of elements";
     static public final String AUXPHASESPACE_LIST = "Auxiliary Phase Space list of elements";
-//    private JToggleButton button_;
+    private boolean addOnlyLastGeometry_;
     private AbstractButton button_;
 
     public RpModelPlotAgent(String shortDesc, ImageIcon icon, AbstractButton button) {
@@ -31,7 +32,9 @@ public abstract class RpModelPlotAgent extends RpModelActionAgent {
         button_.setFont(rpn.RPnConfigReader.MODELPLOT_BUTTON_FONT);
         putValue(Action.SHORT_DESCRIPTION, shortDesc);
         setEnabled(false);
+        addOnlyLastGeometry_ = false;
     }
+
 
     public void execute() {
         RealVector[] userInputList = UIController.instance().userInputList();
@@ -64,18 +67,22 @@ public abstract class RpModelPlotAgent extends RpModelActionAgent {
         Iterator oldValue = phaseSpace.getGeomObjIterator();
 
         RpGeometry geometry = createRpGeometry(userInputList);
-//        if (geometry.getPathIterator().isDone()) {
-//            System.out.println("Empty geometry");
-//            return;
-//        }
-
-//        phaseSpace.plot(createRpGeometry(userInputList));
         phaseSpace.plot(geometry);
+        if (addOnlyLastGeometry_) {
+            phaseSpace.removeLastGeometry();
+            RPnCurvesListFrame.removeLastEntry();
+
+        }
+
         Iterator newValue = phaseSpace.getGeomObjIterator();
         logAction(new PropertyChangeEvent(this, listString, oldValue, newValue));
 
 
 
+    }
+
+    public void setMultipleGeometry(boolean multiple) {
+        addOnlyLastGeometry_ = multiple;
     }
 
     public void unexecute() {
