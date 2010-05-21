@@ -24,12 +24,17 @@ PLUG_DEPENDOBJ = $(PLUG_SRC:%.cc=$(OBJDIR)/%.d)
 
 SHARELIBFLAG += -fPIC
 CPPFLAGS += $(SHARELIBFLAG) -I $(RPNUMERICSDIR) -I $(RPNUMERICSDIR)/plugin -I $(RPNUMERICSDIR)/physics/quad
-LIBRPN = -L $(LIBDIR) -lwave -lrpnumerics
+LIBRPN = -L$(LIBDIR) -lwave -lrpnumerics
+
+ifneq ($(RPHOSTTYPE),darwin_i386)
+PLUGLDFLAG = -Wl,-soname,$(PLUG_LIBNAME)
+endif
+
 
 all: $(PLUG_LIBARC)
 
 $(PLUG_LIBARC): $(PLUG_LIBOBJ)
-	$(CCC) -shared $(SHARELIBFLAG) -Wl,-soname,$(PLUG_LIBNAME) -o $(PLUG_LIBARC) $(PLUG_LIBOBJ) $(LIBRPN)
+	$(CCC) -shared $(SHARELIBFLAG) $(PLUGLDFLAG) -o $(PLUG_LIBARC) $(PLUG_LIBOBJ) $(LIBRPN)
 
 
 .PRECIOUS: $(LIBARC)

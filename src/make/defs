@@ -144,8 +144,13 @@ ifeq ($(RPHOSTTYPE),solaris_i86)
 FLIBS = -L/opt/SUNWspro/SC1.0 -lF77 -lM77
 endif
 else
+ifeq ($(RPHOSTTYPE),darwin_i386)
+FC = gfortran -arch x86_64
+FLIBS =
+else
 FC = gfortran
 FLIBS =
+endif
 endif
 FFLAGS = -u -C
 CPPFLAGS +=

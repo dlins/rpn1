@@ -16,7 +16,7 @@
 
 #include "ContinuationShockFlow.h"
 #include "LSODEProfile.h"
-#include "LSODE.h"
+#include "LSODESolver.h"
 #include <vector>
 
 /*

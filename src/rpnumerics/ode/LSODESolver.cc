@@ -10,7 +10,7 @@
  * ---------------------------------------------------------------
  * Includes:
  */
-#include "LSODE.h"
+#include "LSODESolver.h"
 #include "FluxParams.h"
 
 using std::vector;

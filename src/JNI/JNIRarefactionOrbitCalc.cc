@@ -12,7 +12,7 @@
  */
 #include "rpnumerics_RarefactionOrbitCalc.h"
 #include "RarefactionContinuationMethod.h"
-#include "LSODE.h"
+#include "LSODESolver.h"
 #include "LSODEProfile.h"
 
 #include "ContinuationRarefactionFlow.h"

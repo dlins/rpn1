@@ -12,7 +12,7 @@
  */
 #include "rpnumerics_ShockCurveCalc.h"
 #include "ShockContinuationMethod.h"
-#include "LSODE.h"
+#include "LSODESolver.h"
 #include "LSODEProfile.h"
 
 #include "ContinuationShockFlow.h"

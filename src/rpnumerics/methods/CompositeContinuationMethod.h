@@ -16,7 +16,7 @@
  * Includes:
  */
 
-#include "LSODE.h"
+#include "LSODESolver.h"
 #include "CompositeFlow.h"
 #include "ContinuationRarefactionFlow.h"
 

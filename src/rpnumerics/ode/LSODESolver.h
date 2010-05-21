@@ -3,7 +3,7 @@
  *
  * RPn Project
  *
- * @(#) LSODE.h
+ * @(#) LSODESolver.h
  */
 
 #ifndef _LSODE_H

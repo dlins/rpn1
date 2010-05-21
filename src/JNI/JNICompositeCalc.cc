@@ -12,7 +12,7 @@
  */
 #include "rpnumerics_CompositeCalc.h"
 #include "CompositeContinuationMethod.h"
-#include "LSODE.h"
+#include "LSODESolver.h"
 #include "LSODEProfile.h"
 #include "ContinuationShockFlow.h"
 #include "ContinuationRarefactionFlow.h"

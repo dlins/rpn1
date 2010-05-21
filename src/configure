@@ -10,7 +10,10 @@ i=1
 srcdir=$(dirname $(readlink -f $0))
 rpnhome=$(dirname $srcdir)
 jni=`locate jni.h`
-hosttype="linux_"`uname -m`
+hostsys=`uname -s | tr '[:upper:]' '[:lower:]'`
+hostmach=`uname -m`
+hosttype=$hostsys"_"$hostmach
+
 
 echo; echo "Choose the JAVA_HOME installation path below: "; echo
 
@@ -33,6 +36,14 @@ else
 	javahome=${jnidir[$ans]}
 fi
 
+javainc=$javahome/include
+
+if [ $hostsys == "darwin" ]; then
+	javainc=$javahome"/Headers"
+	javahome=$javahome"/Home"
+fi
+
+
 #
 # Create build.xml
 #
@@ -41,7 +52,10 @@ sed -e "s,PRE_CONFIG_HOSTTYPE,$hosttype,g" $srcdir/make/build.xml.in > $srcdir/b
 #
 # Create make/env file
 #
-sed -e "s,PRE_CONFIG_HOSTTYPE,$hosttype,g" -e "s,PRE_CONFIG_JAVAHOME,$javahome,g" $srcdir/make/env.in > $srcdir/make/env
+sed -e "s,PRE_CONFIG_HOSTTYPE,$hosttype,g" \
+	-e "s,PRE_CONFIG_JAVAHOME,$javahome,g" \
+	-e "s,PRE_CONFIG_JAVAINC,$javainc,g" \
+	$srcdir/make/env.in > $srcdir/make/env
 
 
 echo
