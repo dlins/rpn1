@@ -32,7 +32,7 @@ public abstract class RpModelPlotAgent extends RpModelActionAgent {
         button_.setFont(rpn.RPnConfigReader.MODELPLOT_BUTTON_FONT);
         putValue(Action.SHORT_DESCRIPTION, shortDesc);
         setEnabled(false);
-        addOnlyLastGeometry_ = false;
+        addOnlyLastGeometry_ = true;
     }
 
 

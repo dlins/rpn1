@@ -43,31 +43,17 @@ public class RPNUMERICS {
     //
     // Constructors/Initializers
     //
-    static public void init(RPNumericsProfile profile) {
-        try {
+   
+   static public void init(String physicsID) {
+        System.loadLibrary("wave");//TODO libwave is always loaded ?
+        System.loadLibrary("rpnumerics");
+        initNative(physicsID);
+        setBoundaryDefaultConfiguration();
+        setFluxDefaultConfiguration();
+        errorControl_ = new RpErrorControl(boundary());
 
-
-            System.loadLibrary("wave"); //TODO libwave is always loaded ?
-            System.loadLibrary("rpnumerics");
-            initNative(profile.getPhysicsID());
-            setBoundaryDefaultConfiguration();
-            setFluxDefaultConfiguration();
-
-
-            if (profile.hasBoundary()) {
-                setBoundary(profile.getBoundary());
-            }
-
-            if (profile.hasFluxParams()) {
-                setFluxParams(profile.getFluxParams());
-            }
-            errorControl_ = new RpErrorControl(boundary());
-        } catch (Exception ex) {
-            ex.printStackTrace();
-
-        }
     }
-
+   
     private static void setBoundaryDefaultConfiguration() {
         Boundary boundary = boundary();
 
@@ -115,13 +101,7 @@ public class RPNUMERICS {
 
     }
 
-    static public void init(String physicsID) {
-        System.loadLibrary("wave");//TODO libwave is always loaded ?
-        System.loadLibrary("rpnumerics");
-        initNative(physicsID);
-        errorControl_ = new RpErrorControl(boundary());
-
-    }
+ 
 
     public static void resetParams() {
 

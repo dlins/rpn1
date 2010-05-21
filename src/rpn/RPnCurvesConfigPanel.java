@@ -23,11 +23,12 @@ public class RPnCurvesConfigPanel extends JPanel {
     private JPanel familyPanel_;
     private JPanel directionPanel_;
     private JLabel familyLabel_;
-    private static JSpinner familySpinner_;
+    private JSpinner familySpinner_;
     private JCheckBox forwardCheckBox_;
     private JCheckBox backwardCheckBox_;
     private static Integer currentOrbitDirection_ = new Integer(1);
     private JToggleButton addLastGeometryButton_;
+
     public RPnCurvesConfigPanel() {
         buildPanel();
         ChangeDirectionAgent.instance().execute();
@@ -86,9 +87,9 @@ public class RPnCurvesConfigPanel extends JPanel {
         return currentOrbitDirection_;
     }
 
-    public static Integer getFamilyIndex() {
-        return (Integer) familySpinner_.getModel().getValue();
-    }
+//    public static Integer getFamilyIndex() {
+//        return (Integer) familySpinner_.getModel().getValue();
+//    }
 
     private class FamilyListener implements ChangeListener {
 
