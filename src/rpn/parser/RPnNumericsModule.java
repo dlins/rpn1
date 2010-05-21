@@ -27,7 +27,6 @@ public class RPnNumericsModule {
     // Constants
     //
 
-  
     private static String physicsID_;
 
     static class InputHandler extends HandlerBase {
@@ -55,6 +54,7 @@ public class RPnNumericsModule {
 
             if (name.equals("CURVE")) {
                 currentConfigurationProfile_ = new ConfigurationProfile(att.getValue(0), "curve");
+
             }
 
             if (name.equals("CURVEPARAM")) {
@@ -63,7 +63,7 @@ public class RPnNumericsModule {
 
             if (name.equals("PHYSICS")) {
                 physicsProfile_ = new ConfigurationProfile(att.getValue(0), "physics");
-                physicsID_=att.getValue(0);
+                physicsID_ = att.getValue(0);
             }
 
             if (name.equals("BOUNDARY")) {
@@ -125,12 +125,14 @@ public class RPnNumericsModule {
             if (name.equals("CURVE")) {
 
                 RPnConfig.addConfiguration(currentConfigurationProfile_.getName(), currentConfigurationProfile_);
+
             }
 
         }
 
         @Override
         public void endDocument() throws SAXException {
+//            RPNUMERICS.resetParams();
         }
     }
 

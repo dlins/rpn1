@@ -17,6 +17,7 @@ import rpn.parser.ConfigurationProfile;
 import rpn.parser.RPnDataModule;
 import rpn.plugininterface.PluginInfoController;
 import rpn.plugininterface.PluginInfoParser;
+import rpnumerics.Configuration;
 import rpnumerics.RPNUMERICS;
 
 public class RPnConfig {
@@ -36,16 +37,9 @@ public class RPnConfig {
     }
 
     private static void visualConfig() {
-
         remoteImage();
-
-
         RPnDataModule.PHASESPACE = new RPnPhaseSpaceAbstraction("Phase Space",
                 RPNUMERICS.domain(), new NumConfigImpl());//  RpNumerics.domain(),
-
-
-
-
     }
 
     private static void numericsConfig() {
@@ -71,6 +65,18 @@ public class RPnConfig {
     public static void addConfiguration(String configurationName, ConfigurationProfile profile) {
 
         methodsMap_.put(configurationName, profile);
+
+        /*TODO Verificar se as configuracoes de curva devem ser definidas no arquivo default.
+         *     Essa implementacao le as configuracoes de curva apenas do arquivo de entrada.
+         */
+
+
+        if (profile.getType().equalsIgnoreCase("curve")) {
+            Configuration configuration = new Configuration(profile);
+
+            RPNUMERICS.setConfiguration(configuration.getName(), configuration);
+
+        }
 
     }
 

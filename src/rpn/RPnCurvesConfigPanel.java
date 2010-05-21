@@ -87,10 +87,6 @@ public class RPnCurvesConfigPanel extends JPanel {
         return currentOrbitDirection_;
     }
 
-//    public static Integer getFamilyIndex() {
-//        return (Integer) familySpinner_.getModel().getValue();
-//    }
-
     private class FamilyListener implements ChangeListener {
 
         public void stateChanged(ChangeEvent e) {
