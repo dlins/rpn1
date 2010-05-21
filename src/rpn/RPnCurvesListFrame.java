@@ -49,7 +49,7 @@ public class RPnCurvesListFrame extends JFrame implements ListSelectionListener,
         DisplayMode displayMode = gs[0].getDisplayMode();
         int height = displayMode.getHeight();
         int width = displayMode.getWidth();
-        this.setLocation((int) (width - (width * .10)), (int) (height - (height * .8)));
+        this.setLocation((int) (width - (width * .55)), (int) (height - (height * .45)));
 
 
         toolBar_ = new JToolBar();

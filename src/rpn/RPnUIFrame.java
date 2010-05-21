@@ -673,7 +673,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         DisplayMode displayMode = gs[0].getDisplayMode();
         int height = displayMode.getHeight();
         int width = displayMode.getWidth();
-        this.setLocation((int) (width - (width * .2)), (int) (height - (height * .8)));
+        //this.setLocation((int) (width - (width * .55)), (int) (height - (height * .9)));
+        this.setLocation((int) (width - (width * .55)), 100);
 
     }
 
@@ -685,8 +686,10 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         int height = displayMode.getHeight();
         int width = displayMode.getWidth();
 
-        int newwidth = (int) (width - (width * .6));
-        int newheight = (int) (height - (height * .8));
+        //int newwidth = (int) (width - (width * .6));
+        //int newheight = (int) (height - (height * .8));
+        int newwidth = (int) 100;
+        int newheight = (int) 100;
         component.setLocation(newwidth, newheight);
 
     }
