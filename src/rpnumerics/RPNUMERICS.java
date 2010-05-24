@@ -80,22 +80,25 @@ public class RPNUMERICS {
 
     public static void setParsedConfigurations() {
 
-        Configuration configTeste = configMap_.get(physicsID());
+        Configuration physicsConfiguration = configMap_.get(physicsID());
+        Configuration boundaryConfiguration = physicsConfiguration.getConfiguration(0);//Getting boundary configuration
 
+        if(!boundaryConfiguration.getName().equals("triang")){
 
-        RealVector min = new RealVector(2);
-        RealVector max = new RealVector(2);
+            RealVector min = new RealVector(2);
+            RealVector max = new RealVector(2);
 
-        min.setElement(0, new Double(configTeste.getConfiguration(0).getParamValue("x-min")));
-        min.setElement(1, new Double(configTeste.getConfiguration(0).getParamValue("y-min")));
+            min.setElement(0, new Double(physicsConfiguration.getConfiguration(0).getParamValue("x-min")));
+            min.setElement(1, new Double(physicsConfiguration.getConfiguration(0).getParamValue("y-min")));
 
-        max.setElement(0, new Double(configTeste.getConfiguration(0).getParamValue("x-max")));
-        max.setElement(1, new Double(configTeste.getConfiguration(0).getParamValue("y-max")));
+            max.setElement(0, new Double(physicsConfiguration.getConfiguration(0).getParamValue("x-max")));
+            max.setElement(1, new Double(physicsConfiguration.getConfiguration(0).getParamValue("y-max")));
 
+            RectBoundary boundary = new RectBoundary(min, max);
 
-        RectBoundary boundary = new RectBoundary(min, max);
-
-        setBoundary(boundary);
+            setBoundary(boundary);
+            
+        }
 
     }
 
