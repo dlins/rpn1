@@ -38,36 +38,20 @@ public class RPNUMERICS {
     static private ShockRarefactionProfile shockRarefactionProfile_ = null;
     static private ContourConfiguration contourConfiguration_ = null;
     static private Integer direction_;
-    static private int family_ = 0;
-
     //
     // Constructors/Initializers
     //
-    static public void init(RPNumericsProfile profile) {
-        try {
+   
+   static public void init(String physicsID) {
+        System.loadLibrary("wave");//TODO libwave is always loaded ?
+        System.loadLibrary("rpnumerics");
+        initNative(physicsID);
+        setBoundaryDefaultConfiguration();
+        setFluxDefaultConfiguration();
+        errorControl_ = new RpErrorControl(boundary());
 
-
-            System.loadLibrary("wave"); //TODO libwave is always loaded ?
-            System.loadLibrary("rpnumerics");
-            initNative(profile.getPhysicsID());
-            setBoundaryDefaultConfiguration();
-            setFluxDefaultConfiguration();
-
-
-            if (profile.hasBoundary()) {
-                setBoundary(profile.getBoundary());
-            }
-
-            if (profile.hasFluxParams()) {
-                setFluxParams(profile.getFluxParams());
-            }
-            errorControl_ = new RpErrorControl(boundary());
-        } catch (Exception ex) {
-            ex.printStackTrace();
-
-        }
     }
-
+   
     private static void setBoundaryDefaultConfiguration() {
         Boundary boundary = boundary();
 
@@ -115,13 +99,7 @@ public class RPNUMERICS {
 
     }
 
-    static public void init(String physicsID) {
-        System.loadLibrary("wave");//TODO libwave is always loaded ?
-        System.loadLibrary("rpnumerics");
-        initNative(physicsID);
-        errorControl_ = new RpErrorControl(boundary());
-
-    }
+ 
 
     public static void resetParams() {
 
@@ -165,7 +143,7 @@ public class RPNUMERICS {
     }
 
     public static void setFamily(int family) {
-        family_ = family;
+        setParamValue("shock", "family", String.valueOf(family));
     }
 
     public static void setConfiguration(String methodName, Configuration methodConfiguration) {
@@ -293,7 +271,11 @@ public class RPNUMERICS {
 
     public static RarefactionOrbitCalc createRarefactionCalc(OrbitPoint orbitPoint) {
 
-        return new RarefactionOrbitCalc("methodName", "flowName", orbitPoint, rarefactionProfile_.getFamily(), direction_);//TODO Is method and flowName needed ?
+        /*
+         * TODO O Valor de family deve ser o mesmo para choque e rarefacao ????
+         */
+
+        return new RarefactionOrbitCalc("methodName", "flowName", orbitPoint, Integer.parseInt(getParamValue("shock", "family")), direction_);//TODO Is method and flowName needed ?
 
     }
 
@@ -329,9 +311,9 @@ public class RPNUMERICS {
     }
 
     public static ShockCurveCalc createShockCurveCalc(OrbitPoint orbitPoint) {
-//TODO Family hardcoded to zero
-        return new ShockCurveCalc("methodname", "flowName", orbitPoint, family_, direction_);
 
+        Integer family = new Integer (getParamValue("shock", "family"));
+        return new ShockCurveCalc("methodname", "flowName", orbitPoint, family, direction_);
     }
 
     public static BifurcationCurveCalc createBifurcationCalc() {

@@ -23,8 +23,8 @@
  * Definitions:
  */
 
-#define SUCCESSFUL_PROCEDURE 2                    
-#define ABORTED_PROCEDURE (-7)
+//#define SUCCESSFUL_PROCEDURE 2
+//#define ABORTED_PROCEDURE (-7)
 
 
 extern"C" {
