@@ -7,13 +7,12 @@
             <FLUXPARAMS name="parm0" position="0" value ="-1" />
             <FLUXPARAMS name="param1" position="1" value ="0" />
             <FLUXPARAMS name="param2" position="2" value ="1" />
-
-
         </FLUXFUNCTION>
 
     </PHYSICS>
 
     <CURVE name="shock">
+        <CURVEPARAM name="family" value="0"/>
         <CURVEPARAM name="xzero" value="3.4 0.5"/>
         <CURVEPARAM name="sigma" value="0.03"/>
     </CURVE>
