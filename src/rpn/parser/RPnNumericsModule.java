@@ -116,6 +116,7 @@ public class RPnNumericsModule {
                 }
 
                 Configuration physConfiguration = RPNUMERICS.getConfiguration(physicsID_);
+                System.out.println("Printando configuration: "+ physConfiguration.getName());
                 physConfiguration.setParams(physicsProfile_);
                 RPNUMERICS.setParsedConfigurations();
 

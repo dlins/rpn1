@@ -59,7 +59,8 @@ public class RPnConfigDialog extends RPnDialog {
     private JComboBox methodComboBox_;
     private boolean[] axisSelected_;
     private HashMap<String, Configuration> methodConfigMap_;
-
+    
+    //TODO Esse dialogo pode ser o arquivo de configuracao geral ??
     public RPnConfigDialog() {
         profilesArray_ = RPnInterfaceParser.getPhysicsProfiles();
         methodConfigMap_ = new HashMap<String, Configuration>();
@@ -201,6 +202,7 @@ public class RPnConfigDialog extends RPnDialog {
     private void buildMethodPanel() {
 
         thirdPanel_.removeAll();
+        JScrollPane scrollPane = new JScrollPane(methodsParamsPanel_);
 
         JPanel methodComboPanel = new JPanel(new BorderLayout());
 
@@ -263,11 +265,9 @@ public class RPnConfigDialog extends RPnDialog {
             }
         }
 
-
-
         thirdPanel_.add(methodComboPanel, BorderLayout.NORTH);
-
-        thirdPanel_.add(methodsParamsPanel_, BorderLayout.CENTER);
+//        thirdPanel_.add(methodsParamsPanel_, BorderLayout.CENTER);
+        thirdPanel_.add(scrollPane, BorderLayout.CENTER);
 
     }
 

@@ -35,15 +35,12 @@ public class RPnCurvesConfigPanel extends JPanel {
 
     }
 
-
-
-
     private void buildPanel() {
         addLastGeometryButton_ = new JToggleButton("Multiple plot");
         addLastGeometryButton_.addActionListener(new ToggleButtonListener());
 
         familyLabel_ = new JLabel("Family", SwingConstants.CENTER);
-
+        //TODO Qual eh o valor maximo que o JSpinner deve ter ?? Esse valor muda conforme o tipo de curva para a qual ele configura a familia ??
         familySpinner_ = new JSpinner(new SpinnerNumberModel(0, 0, RPNUMERICS.domainDim(), 1));
         familySpinner_.addChangeListener(new FamilyListener());
 
