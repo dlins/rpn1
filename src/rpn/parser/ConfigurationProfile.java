@@ -17,7 +17,7 @@ public class ConfigurationProfile {
     private String type_;
     private ArrayList<ConfigurationProfile> configurationProfileArray_;
     private HashMap<String, String> paramsMap_ = new HashMap<String, String>();
-    private HashMap < Integer,String> paramsIndexMap_ = new HashMap<Integer,String>();
+    private HashMap<Integer, String> paramsIndexMap_ = new HashMap<Integer, String>();
 
     public ConfigurationProfile(String name, String type) {
         type_ = type;
@@ -29,13 +29,11 @@ public class ConfigurationProfile {
         return paramsIndexMap_.size();
     }
 
-
-
     public void addParam(int index, String paramName, String defaultValue) {
 
         paramsMap_.put(paramName, defaultValue);
 
-        paramsIndexMap_.put(index,paramName);
+        paramsIndexMap_.put(index, paramName);
     }
 
     public void addParam(String paramName, String defaulValue) {
@@ -46,13 +44,13 @@ public class ConfigurationProfile {
 
         String paramName = paramsIndexMap_.get(index);
         String paramValue = paramsMap_.get(paramName);
-        HashMap<String,String> paramValuePair = new HashMap<String, String>();
-        paramValuePair.put(paramName,paramValue);
+        HashMap<String, String> paramValuePair = new HashMap<String, String>();
+        paramValuePair.put(paramName, paramValue);
         return paramValuePair;
 
     }
 
-    public String getParam(String paramName){
+    public String getParam(String paramName) {
         return paramsMap_.get(paramName);
     }
 
@@ -81,7 +79,7 @@ public class ConfigurationProfile {
         return configurationProfileArray_.get(index);
     }
 
-    public int profileArraySize(){
+    public int profileArraySize() {
         return configurationProfileArray_.size();
     }
 

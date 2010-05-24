@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
+import rpn.parser.ConfigurationProfile;
 
 public class Configuration {
 
@@ -26,6 +27,21 @@ public class Configuration {
         type_ = type;
     }
 
+    public Configuration(ConfigurationProfile profile) {
+        params_ = profile.getParams();
+        name_ = profile.getName();
+        type_ = profile.getType();
+        paramOrder_ = new ArrayList<String>();
+        for (int i = 0; i < profile.getIndicesSize(); i++) {
+            HashMap<String, String> fluxParam = profile.getParam(i);
+            Set<Entry<String, String>> fluxParamSet = fluxParam.entrySet();
+            for (Entry<String, String> fluxEntry : fluxParamSet) {
+                setParamValue(fluxEntry.getKey(), fluxEntry.getValue());
+                setParamOrder(fluxEntry.getKey(), i);
+            }
+        }
+    }
+
     public Configuration(String name, String type) {
         params_ = new HashMap<String, String>();
         paramOrder_ = new ArrayList<String>();
@@ -39,6 +55,27 @@ public class Configuration {
 
     public void setParamOrder(String paramName, int order) {
         paramOrder_.add(order, paramName);
+    }
+
+    public void setParams(ConfigurationProfile profile) {
+        if (!profile.getParams().isEmpty()) {
+
+            for (int i = 0; i < profile.getIndicesSize(); i++) {
+
+                HashMap<String, String> param = profile.getParam(i);
+
+                Set<Entry<String, String>> paramSet = param.entrySet();
+
+                for (Entry<String, String> paramEntry : paramSet) {
+
+                    setParamOrder(paramEntry.getKey(), i);
+                    setParamValue(paramEntry.getKey(), paramEntry.getValue());
+                }
+
+            }
+
+        }
+
     }
 
     public int getParamOrder(String paramName) {
@@ -116,10 +153,6 @@ public class Configuration {
         if (getType().equalsIgnoreCase("physics")) {
             buffer.append("<PHYSICS name=\"" + getName() + "\">\n");
             buffer.append(getConfiguration(0).toXML());//Printing main boundary
-
-            if (configurationArraySize() == 2) {//Printing auxiliar boundary
-                buffer.append(getConfiguration(1).toXML());
-            }
 
             buffer.append("<FLUXFUNCTION>\n");
             for (Entry<String, String> entry : paramsSet) {

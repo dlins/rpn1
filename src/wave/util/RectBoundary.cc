@@ -71,7 +71,7 @@ bool RectBoundary::inside(const RealVector &p) {
 // returns 0 this point's coordinates are meaningful).
 //
 
-int RectBoundary::intersection(const RealVector &p, const RealVector &q, RealVector &r) {
+int RectBoundary::intersection(const RealVector &p, const RealVector &q, RealVector &r)const {
     if (inside(p) && inside(q)) return 1;
     else if (!inside(p) && !inside(q)) return -1;
     else {

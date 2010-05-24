@@ -41,7 +41,6 @@ public class RPnInterfaceParser implements ContentHandler {
 
         if (name.equals("FLUXPARAMS")) {
             checkNumberFormat(att.getValue("value"));
-//            currentPhysicsProfile_.addFluxParam(att.getValue("name"), att.getValue("value"), new Integer(att.getValue("position")));
             currentConfigurationProfile_.addParam(new Integer(att.getValue(1)), att.getValue(0), att.getValue(2));
         }
 
@@ -84,27 +83,13 @@ public class RPnInterfaceParser implements ContentHandler {
 
         if (name.equals("BOUNDARYPARAM")) {
 
-//            if (att.getValue(0).equals("dimension")) {
-//                currentPhysicsProfile_.setBoundaryDimension(new Integer(att.getValue("value")));
-//            }
-
             currentConfigurationProfile_.getConfigurationProfile(0).addParam(att.getValue(0), att.getValue(1));
 
         }
         if (name.equals("BOUNDARY")) {
 
-            ConfigurationProfile boundaryProfile = new ConfigurationProfile(att.getValue(0), "curve");
-//            if (att.getValue(0).equals("rect")) {
-//
-//                currentPhysicsProfile_.setIso2equiBoundary(false);
-//            }
-//
-//            if (att.getValue(0).equals("triang")) {
-//
-//                currentPhysicsProfile_.setIso2equiBoundary(true);
-//            }
-
-            currentConfigurationProfile_.addConfigurationProfile(boundaryProfile);
+            ConfigurationProfile boundaryProfile = new ConfigurationProfile(att.getValue(0), "boundary");
+            currentConfigurationProfile_.addConfigurationProfile(0, boundaryProfile);
         }
 
 
@@ -135,16 +120,6 @@ public class RPnInterfaceParser implements ContentHandler {
             configurationProfile_.add(currentConfigurationProfile_);
         }
 
-        if (name.equals("BOUNDARY")) {
-//            StringTokenizer axisTokenizer = new StringTokenizer(tempVector_.toString());
-//            String[] dataArray = new String[axisTokenizer.countTokens()];
-//            int i = 0;
-//            while (axisTokenizer.hasMoreTokens()) {
-//                dataArray[i++] = axisTokenizer.nextToken();
-//            }
-//
-//            currentPhysicsProfile_.setBoundary(dataArray);
-        }
 
         if (name.equals("VIEWINGPARAMS")) {
             getVisualizationProfiles().add(currentVisualizationProfile_);
@@ -167,6 +142,7 @@ public class RPnInterfaceParser implements ContentHandler {
     public void endDocument() throws SAXException {
 
         RPNUMERICS.resetParams();
+
 
     }
 
