@@ -135,6 +135,12 @@
         <METHODPARAM  name="yFplus-boundary-2" value="1" />
     </METHOD>
 
+    <CURVE name="shock">
+        <CURVEPARAM name="family" value="0"/>
+        <CURVEPARAM name="xzero" value="3.4 0.5"/>
+        <CURVEPARAM name="sigma" value="0.03"/>
+    </CURVE>
+    
 
     <!--VIEW INFORMATIONS-->
 
