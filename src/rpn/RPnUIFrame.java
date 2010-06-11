@@ -25,14 +25,9 @@ import wave.util.RectBoundary;
 
 public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
-    public static void clearStatusMessage() {
-        statusLabel_.setForeground(Color.black);
-        setStatusMessage("", 0);
-    }
     //
     // Members
     //
-
     private JPanel contentPane;
     private JPanel configPanel_ = new JPanel(new GridLayout(2, 1));
     private JComboBox stateComboBox = new JComboBox();
@@ -365,6 +360,11 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             ioex.printStackTrace();
         } catch (java.lang.NullPointerException nullEx) {
         }
+    }
+
+    public static void clearStatusMessage() {
+        statusLabel_.setForeground(Color.black);
+        setStatusMessage("", 0);
     }
 
     public static void setStatusMessage(String message, int messageType) {

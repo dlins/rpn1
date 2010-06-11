@@ -24,6 +24,7 @@ import rpn.controller.*;
 import java.net.*;
 import java.util.Iterator;
 import javax.swing.JOptionPane;
+import rpn.RPnCurvesConfigPanel;
 import rpn.RPnDesktopPlotter;
 import rpn.RPnUIFrame;
 import rpn.message.*;
@@ -133,6 +134,7 @@ public class UIController extends ComponentUI {
 
         @Override
         public void mouseDragged(MouseEvent event) {
+               RPnUIFrame.clearStatusMessage();
 
             if (event.getComponent() instanceof RPnPhaseSpacePanel) {
 
@@ -336,6 +338,7 @@ public class UIController extends ComponentUI {
 
     /** Sets the state of the application. The application works as a state machine and this method changes the actual state.*/
     public void setState(rpn.controller.ui.UserInputHandler newAction) {
+        RPnCurvesConfigPanel.setMultipleButton(false);
 
         stateController_.propertyChange(new PropertyChangeEvent(this, "aplication state", handler_, newAction));
 

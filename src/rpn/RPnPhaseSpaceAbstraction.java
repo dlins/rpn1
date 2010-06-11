@@ -88,7 +88,9 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
             super.geomList_ = activeList;
 
         }
+        if(geom==null)return;
         super.join(geom);
+
         RPnCurvesListFrame.addGeometry((geomList_.size() - 1) + "", geom.getClass().getSimpleName());
     }
 

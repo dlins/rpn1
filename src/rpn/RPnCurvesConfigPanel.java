@@ -27,11 +27,20 @@ public class RPnCurvesConfigPanel extends JPanel {
     private JCheckBox forwardCheckBox_;
     private JCheckBox backwardCheckBox_;
     private static Integer currentOrbitDirection_ = new Integer(1);
-    private JToggleButton addLastGeometryButton_;
+    private static JToggleButton addLastGeometryButton_;
+    private static ToggleButtonListener buttonListener_;
 
     public RPnCurvesConfigPanel() {
         buildPanel();
         ChangeDirectionAgent.instance().execute();
+        buttonListener_ = new ToggleButtonListener();
+
+    }
+
+    public static void setMultipleButton(boolean state){
+        addLastGeometryButton_.setSelected(state);
+        buttonListener_.actionPerformed(new ActionEvent(addLastGeometryButton_,0,""));
+
 
     }
 
