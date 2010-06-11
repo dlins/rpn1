@@ -57,7 +57,6 @@ public class RPnShockConfigDialog extends RPnDialog {
     private void jbInit() throws Exception {
 
         this.setTitle("Shock Curve Configuration");
-        RPnUIFrame.setStatusMessage("Curve Configuration");
         addMethodName();
         addFlowName();
         flowPluginName_.addMouseListener(new MouseHandler());

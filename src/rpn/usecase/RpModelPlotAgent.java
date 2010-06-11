@@ -67,6 +67,9 @@ public abstract class RpModelPlotAgent extends RpModelActionAgent {
         Iterator oldValue = phaseSpace.getGeomObjIterator();
 
         RpGeometry geometry = createRpGeometry(userInputList);
+        if (geometry == null) {
+            return ;
+        }
         phaseSpace.plot(geometry);
         if (addOnlyLastGeometry_) {
             phaseSpace.removeLastGeometry();

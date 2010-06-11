@@ -34,7 +34,6 @@ public class RPnRarefactionConfigDialog extends RPnDialog {
 
     private void jbInit() throws Exception {
         setTitle("Rarefaction Curve Configuration");
-        RPnUIFrame.setStatusMessage("Curve Configuration");
         addFlowName();
 
         flowNamePanel.add(flowNameLabel);

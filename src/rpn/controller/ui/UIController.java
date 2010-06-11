@@ -25,6 +25,7 @@ import java.net.*;
 import java.util.Iterator;
 import javax.swing.JOptionPane;
 import rpn.RPnDesktopPlotter;
+import rpn.RPnUIFrame;
 import rpn.message.*;
 
 /** This class implements a general controller to the application. With the UIController class, the state of the application is changed, the controllers of each panel are installed or removed and the user inputs are stored in a global table. */
@@ -161,9 +162,9 @@ public class UIController extends ComponentUI {
 
         @Override
         public void mousePressed(MouseEvent event) {
+            RPnUIFrame.clearStatusMessage();
 
-            if (event.getComponent() instanceof RPnPhaseSpacePanel) {//TODO Modificar: A userInputTable tem que ter o tamanho setado quando o handler é escolhido !!! O tamanho setado no handler e
-//                de pontos completos na userInputTable tem que ser usados no teste abaixo
+            if (event.getComponent() instanceof RPnPhaseSpacePanel) {
 
                 if (netStatus_.isMaster() || !(netStatus_.isOnline())) {
                     RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
@@ -171,10 +172,6 @@ public class UIController extends ComponentUI {
                     int sceneDim = panel.scene().getViewingTransform().projectionMap().getDomain().getDim();
 
                     if (sceneDim == globalInputTable_.flags().length) {
-
-//                        if (sceneDim > globalInputTable_.flags().length) {
-                        //TODO
-//                        } else {
 
                         updateUserInputTable(panel, event.getPoint());
                         evaluatePanelsCursorCoords(panel, event.getPoint());

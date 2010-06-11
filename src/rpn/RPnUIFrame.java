@@ -24,6 +24,11 @@ import wave.util.RealVector;
 import wave.util.RectBoundary;
 
 public class RPnUIFrame extends JFrame implements PropertyChangeListener {
+
+    public static void clearStatusMessage() {
+        statusLabel_.setForeground(Color.black);
+        setStatusMessage("", 0);
+    }
     //
     // Members
     //
@@ -50,8 +55,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JMenuItem printMenuItem = new JMenuItem();
     private JMenuItem pluginMenuItem = new JMenuItem();
     private static RPnPhaseSpaceFrame[] frames_, auxFrames_;
-
-
     private RPnMenuCommand commandMenu_ = null;
     private JMenuItem networkMenuItem = new JMenuItem();
     private JCheckBoxMenuItem showCursorMenuItem_ = new JCheckBoxMenuItem("Show Cursor Lines");
@@ -75,6 +78,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
             addPropertyChangeListener(this);
             UndoActionController.createInstance();
+
 
             getContentPane().add(statusLabel_, BorderLayout.SOUTH);
             if (commandMenu_ instanceof RPnAppletPlotter) { // Selecting itens to disable in Applet
@@ -154,8 +158,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 toolBar_.add(BifurcationRefineAgent.instance().getContainer());
                 toolBar_.add(TrackPointAgent.instance().getContainer());
                 ScratchAgent.instance().setEnabled(true);
-                setStatusMessage("");
-
             }
 
             pack();
@@ -250,8 +252,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             auxBoundary = new RectBoundary(newMin, newMax);
         }
 
-        if (RPNUMERICS.boundary() instanceof IsoTriang2DBoundary){
-            auxBoundary= (IsoTriang2DBoundary)RPNUMERICS.boundary();
+        if (RPNUMERICS.boundary() instanceof IsoTriang2DBoundary) {
+            auxBoundary = (IsoTriang2DBoundary) RPNUMERICS.boundary();
         }
 
         wave.multid.graphs.ClippedShape auxClipping = new wave.multid.graphs.ClippedShape(auxBoundary);
@@ -284,7 +286,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         }
 
 
-	// Init Main Frame
+        // Init Main Frame
         for (int i = 0; i < numOfPanels; i++) {
             wave.multid.view.ViewingTransform viewingTransf =
                     ((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(
@@ -322,7 +324,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     }
 
     // from here on just for 2D for now...
-
     void createJPEGImage_actionPerformed(ActionEvent e) {
         JFileChooser chooser = new JFileChooser();
         try {
@@ -366,8 +367,16 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         }
     }
 
-    public static void setStatusMessage(String message) {
+    public static void setStatusMessage(String message, int messageType) {
+        switch (messageType) {
+            case 1://Error message;
+                statusLabel_.setForeground(Color.red);
+
+                break;
+        }
+
         statusLabel_.setText(message);
+
     }
 
     void networkMenuItem_actionPerformed(ActionEvent e) {

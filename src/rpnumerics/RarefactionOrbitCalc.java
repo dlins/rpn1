@@ -72,15 +72,31 @@ public class RarefactionOrbitCalc implements RpCalculation {
 
             RarefactionOrbit resultForward = (RarefactionOrbit) calc(methodName_, flowName_, start_, familyIndex_, 1);
             RarefactionOrbit resultBackward = (RarefactionOrbit) calc(methodName_, flowName_, start_, familyIndex_, -1);
+
+            if (resultBackward == null || resultForward == null) {
+                throw new RpException("Error in native layer");
+            }
+
+
             Orbit resultComplete = RarefactionOrbit.concat(resultBackward, resultForward);
             RarefactionOrbit completeCurve = new RarefactionOrbit(resultComplete.getPoints(), resultComplete.getIntegrationFlag());
+
 
             return completeCurve;
 
 
         }
-        RpSolution result = calc(methodName_, flowName_, start_, familyIndex_, timeDirection_);
+
+        RpSolution result = null;
+
+        result = calc(methodName_, flowName_, start_, familyIndex_, timeDirection_);
+        if (result == null) {
+            throw new RpException("Error in native layer");
+        }
+
         return result;
+
+
     }
 
     private native RpSolution calc(String methodName, String flowName, PhasePoint initialpoint, int familyIndex, int timeDirection) throws RpException;
