@@ -2,17 +2,4 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <data xmlns="http://www.netbeans.org/ns/profiler/1" profile-file-target="" profile-target="run" version="0.4"/>
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/1"/>
-    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/1">
-        <file>file:/impa/home/f/edsonlan/Java/rpnGit/src/rpn/RPnUIFrame.java</file>
-        <file>file:/impa/home/f/edsonlan/Java/rpnGit/src/rpn/RPnRarefactionConfigDialog.java</file>
-        <file>file:/impa/home/f/edsonlan/Java/rpnGit/src/rpn/RPnShockConfigDialog.java</file>
-        <file>file:/impa/home/f/edsonlan/Java/rpnGit/src/rpn/usecase/RpModelActionAgent.java</file>
-        <file>file:/impa/home/f/edsonlan/Java/rpnGit/src/rpn/usecase/RpModelPlotAgent.java</file>
-        <file>file:/impa/home/f/edsonlan/Java/rpnGit/src/rpnumerics/RpException.java</file>
-        <file>file:/impa/home/f/edsonlan/Java/rpnGit/src/rpn/RPnDesktopPlotter.java</file>
-        <file>file:/impa/home/f/edsonlan/Java/rpnGit/src/rpn/controller/ui/UserInputHandler.java</file>
-        <file>file:/impa/home/f/edsonlan/Java/rpnGit/src/rpn/controller/ui/UIController.java</file>
-        <file>file:/impa/home/f/edsonlan/Java/rpnGit/src/rpnumerics/ode/LSODESolver.cc</file>
-        <file>file:/impa/home/f/edsonlan/Java/rpnGit/src/build.xml</file>
-    </open-files>
 </project-private>

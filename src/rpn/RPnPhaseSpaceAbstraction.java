@@ -248,10 +248,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
             }
         }
         for (int i = 0; i < deleteList.size(); i++) {
-//            if ((RpGeometry) deleteList.get(i) instanceof RarefactionGeom)
-//                System.out.println("curva de rarefacao");
             delete((RpGeometry) deleteList.get(i));
-
         }
 
         if (RPNUMERICS.getCurrentProfile() instanceof ShockProfile) {

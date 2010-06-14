@@ -116,7 +116,6 @@ public class RPnNumericsModule {
                 }
 
                 Configuration physConfiguration = RPNUMERICS.getConfiguration(physicsID_);
-                System.out.println("Printando configuration: "+ physConfiguration.getName());
                 physConfiguration.setParams(physicsProfile_);
                 RPNUMERICS.setParsedConfigurations();
 
@@ -131,10 +130,6 @@ public class RPnNumericsModule {
 
         }
 
-        @Override
-        public void endDocument() throws SAXException {
-//            RPNUMERICS.resetParams();
-        }
     }
 
     //

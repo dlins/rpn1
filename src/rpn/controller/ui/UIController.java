@@ -338,8 +338,6 @@ public class UIController extends ComponentUI {
 
     /** Sets the state of the application. The application works as a state machine and this method changes the actual state.*/
     public void setState(rpn.controller.ui.UserInputHandler newAction) {
-        RPnCurvesConfigPanel.setMultipleButton(false);
-
         stateController_.propertyChange(new PropertyChangeEvent(this, "aplication state", handler_, newAction));
 
         if (handler_ instanceof UI_ACTION_SELECTED) {
