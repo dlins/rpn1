@@ -23,12 +23,6 @@ public class StateInputController implements PropertyChangeListener {
         if (evt.getPropertyName().equals("aplication state")) {
                 uiFrame_.propertyChange(evt);
                 RPnCurvesConfigPanel.setMultipleButton(false);
-       
-//            if (evt.getNewValue() instanceof BIFURCATION_CONFIG) {
-//                RPnBifurcationConfigDialog bifurcationConfigDialog = new RPnBifurcationConfigDialog(false, false);
-//                bifurcationConfigDialog.setVisible(true);
-//
-//            }
 
         }
 

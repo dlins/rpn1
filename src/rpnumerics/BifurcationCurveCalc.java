@@ -6,6 +6,8 @@
 package rpnumerics;
 
 import rpnumerics.methods.*;
+import wave.util.Boundary;
+import wave.util.RealVector;
 
 public class BifurcationCurveCalc implements RpCalculation {
 
@@ -18,11 +20,14 @@ public class BifurcationCurveCalc implements RpCalculation {
     public BifurcationCurveCalc() {
         params_ = new BifurcationParams();
         bifurcationMethod_ = new BifurcationContourMethod(params_);
+    
+
     }
 
     public BifurcationCurveCalc(BifurcationParams params) {
         params_ = params;
         bifurcationMethod_ = new BifurcationContourMethod(params_);
+
     }
 
     public BifurcationCurveCalc(BifurcationContourMethod bifurcationMethod) {
@@ -38,6 +43,8 @@ public class BifurcationCurveCalc implements RpCalculation {
     }
 
     public RpSolution calc() {
+
+
         return bifurcationMethod_.curve();
     }
 
@@ -48,4 +55,9 @@ public class BifurcationCurveCalc implements RpCalculation {
     public String getCalcMethodName() {
         throw new UnsupportedOperationException("Bifurcation");
     }
+
+
+  
+
+
 }

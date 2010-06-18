@@ -72,14 +72,14 @@
 
 
     <METHOD name="Contour">
-        <METHODPARAM  name="x-resolution" value="5" />
-        <METHODPARAM  name="y-resolution" value="5" />
+        <METHODPARAM  name="x-resolution" value="30" />
+        <METHODPARAM  name="y-resolution" value="30" />
 
-        <METHODPARAM  name="xminus-resolution" value="10" />
-        <METHODPARAM  name="yminus-resolution" value="10" />
+        <METHODPARAM  name="xminus-resolution" value="30" />
+        <METHODPARAM  name="yminus-resolution" value="30" />
 
-        <METHODPARAM  name="xplus-resolution" value="10" />
-        <METHODPARAM  name="yplus-resolution" value="10" />
+        <METHODPARAM  name="xplus-resolution" value="30" />
+        <METHODPARAM  name="yplus-resolution" value="30" />
 
         <METHODPARAM  name="x0minus-boundary" value="-4" />
         <METHODPARAM  name="y0minus-boundary" value="-5" />
@@ -96,11 +96,11 @@
         <METHODPARAM  name="subdomains" value="2" />
         <METHODPARAM  name="operation-1" value="1" />
 
-        <METHODPARAM  name="xminus-resolution-1" value="10" />
-        <METHODPARAM  name="yminus-resolution-1" value="10" />
+        <METHODPARAM  name="xminus-resolution-1" value="30" />
+        <METHODPARAM  name="yminus-resolution-1" value="30" />
 
-        <METHODPARAM  name="xplus-resolution-1" value="10" />
-        <METHODPARAM  name="yplus-resolution-1" value="10" />
+        <METHODPARAM  name="xplus-resolution-1" value="30" />
+        <METHODPARAM  name="yplus-resolution-1" value="30" />
 
         <METHODPARAM  name="x0minus-boundary-1" value="-1" />
         <METHODPARAM  name="y0minus-boundary-1" value="-1" />
@@ -116,11 +116,11 @@
 
         <METHODPARAM  name="operation-2" value="0" />
 
-        <METHODPARAM  name="xminus-resolution-2" value="10" />
-        <METHODPARAM  name="yminus-resolution-2" value="10" />
+        <METHODPARAM  name="xminus-resolution-2" value="30" />
+        <METHODPARAM  name="yminus-resolution-2" value="30" />
 
-        <METHODPARAM  name="xplus-resolution-2" value="10" />
-        <METHODPARAM  name="yplus-resolution-2" value="10" />
+        <METHODPARAM  name="xplus-resolution-2" value="30" />
+        <METHODPARAM  name="yplus-resolution-2" value="30" />
 
         <METHODPARAM  name="x0minus-boundary-2" value="1" />
         <METHODPARAM  name="y0minus-boundary-2" value="0" />

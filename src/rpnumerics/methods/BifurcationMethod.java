@@ -1,7 +1,6 @@
 package rpnumerics.methods;
 
 import rpnumerics.*;
-import wave.util.*;
 
 public abstract class BifurcationMethod implements RPMethod {
 
