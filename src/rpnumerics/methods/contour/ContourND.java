@@ -354,7 +354,7 @@ public class ContourND implements Serializable {
     	
     	double[][] foncub_ = new double[numberOfEquations][numberOfVertices];
     	
-		int numberOfVertices = solution.getNumberOfVertices();
+		int numberOfVertices = solution.getNumberOfVertices(); // tirar
 		
 		double[] feasibleSolution = new double[numberOfVertices];						
 			
