@@ -8,7 +8,6 @@ package rpn.parser;
 import org.xml.sax.SAXParseException;
 
 
-import rpnumerics.RPNumericsProfile;
 import wave.util.RealVector;
 import org.xml.sax.HandlerBase;
 import org.xml.sax.AttributeList;
@@ -18,9 +17,6 @@ import org.xml.sax.InputSource;
 import java.io.FileWriter;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map.Entry;
-import java.util.Set;
 import rpn.RPnConfig;
 import rpnumerics.Configuration;
 import rpnumerics.RPNUMERICS;
@@ -31,10 +27,7 @@ public class RPnNumericsModule {
     // Constants
     //
 
-    /**@deprecated
-     * Will be replaced by physics profile reference
-     */
-    private static RPNumericsProfile profile_ = new RPNumericsProfile();
+    private static String physicsID_;
 
     static class InputHandler extends HandlerBase {
         //
@@ -61,6 +54,7 @@ public class RPnNumericsModule {
 
             if (name.equals("CURVE")) {
                 currentConfigurationProfile_ = new ConfigurationProfile(att.getValue(0), "curve");
+
             }
 
             if (name.equals("CURVEPARAM")) {
@@ -69,7 +63,7 @@ public class RPnNumericsModule {
 
             if (name.equals("PHYSICS")) {
                 physicsProfile_ = new ConfigurationProfile(att.getValue(0), "physics");
-                profile_.initPhysics(att.getValue(0));
+                physicsID_ = att.getValue(0);
             }
 
             if (name.equals("BOUNDARY")) {
@@ -110,18 +104,19 @@ public class RPnNumericsModule {
         @Override
         public void endElement(String name) throws SAXException {
             if (name.equals("PHYSICS")) {
-                RPNUMERICS.init(profile_);
+                RPNUMERICS.init(physicsID_);
 
                 if (physicsProfile_.profileArraySize() >= 1) {
 
-                    Configuration physConfiguration = RPNUMERICS.getConfiguration(profile_.getPhysicsID());
+                    Configuration physConfiguration = RPNUMERICS.getConfiguration(physicsID_);
                     ConfigurationProfile physProfile = physicsProfile_.getConfigurationProfile(0);
                     Configuration boundaryConfigurantion = new Configuration(physProfile);
                     physConfiguration.addConfiguration(0, boundaryConfigurantion);
 
                 }
 
-                Configuration physConfiguration = RPNUMERICS.getConfiguration(profile_.getPhysicsID());
+                Configuration physConfiguration = RPNUMERICS.getConfiguration(physicsID_);
+                System.out.println("Printando configuration: "+ physConfiguration.getName());
                 physConfiguration.setParams(physicsProfile_);
                 RPNUMERICS.setParsedConfigurations();
 
@@ -131,12 +126,14 @@ public class RPnNumericsModule {
             if (name.equals("CURVE")) {
 
                 RPnConfig.addConfiguration(currentConfigurationProfile_.getName(), currentConfigurationProfile_);
+
             }
 
         }
 
         @Override
         public void endDocument() throws SAXException {
+//            RPNUMERICS.resetParams();
         }
     }
 

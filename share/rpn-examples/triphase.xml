@@ -2,29 +2,19 @@
 <!DOCTYPE rpnconfiguration >
 <rpnconfiguration>
     <PHYSICS name="TriPhase">
-
-         <FLUXFUNCTION >
-            <FLUXPARAMS name="parm0" position="0" value ="-1" />
-            <FLUXPARAMS name="param1" position="1" value ="0" />
-            <FLUXPARAMS name="param2" position="2" value ="1" />
-
-
-        </FLUXFUNCTION>
-
     </PHYSICS>
-
-    <CURVE name="shock">
+  
+     <CURVE name="shock">
+        <CURVEPARAM name="family" value="0"/>
         <CURVEPARAM name="xzero" value="3.4 0.5"/>
         <CURVEPARAM name="sigma" value="0.03"/>
     </CURVE>
-    
-    
+
     <VIEWINGPARAMS modeldomain="2">
         <PROJDESC  projlabel="Axis0 X Axis1" projaxisid="0 1" vpwidth="650" vpheight="650"><ISO2EQUI_TRANSFORM/></PROJDESC>
 
     </VIEWINGPARAMS>
    
-
 
     <AUXVIEWINGPARAMS modeldomain="2">
 
@@ -34,7 +24,6 @@
 
 
     </AUXVIEWINGPARAMS>
-
 
 
 </rpnconfiguration>

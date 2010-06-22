@@ -6,8 +6,6 @@
 package rpn;
 
 import java.io.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JApplet;
 import java.awt.Font;
 import org.xml.sax.InputSource;
@@ -55,7 +53,6 @@ public abstract class RPnConfigReader {
             xmlReader.parse(new InputSource(defaultsStream));
         } catch (SAXException ex) {
             ex.printStackTrace();
-//            Logger.getLogger(RPnConfigReader.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
