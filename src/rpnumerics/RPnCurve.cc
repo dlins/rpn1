@@ -18,7 +18,7 @@
  */
 
 
-RPnCurve::RPnCurve(vector <RealVector> coords){
+RPnCurve::RPnCurve(const vector <RealVector> coords){
     
     resultList_=coords;
     

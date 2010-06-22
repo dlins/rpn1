@@ -133,7 +133,7 @@
             <sysproperty key="rpnhome" path="${basedir}"/>
             <sysproperty key="RPHOSTTYPE" value="${hosttype}"/>
             <jvmarg value="-Xmx256m"/>
-            <arg value="${basedir}/in/quad2.xml"/>
+            <arg value="${basedir}/in/triphase.xml"/>
 
 
         </java>

@@ -25,12 +25,12 @@
 class RPnCurve {
 
 private:
- vector <RealVector> resultList_;
+ vector <RealVector>  resultList_;
     
 public:
     
     RPnCurve ();
-    RPnCurve (vector<RealVector>);
+    RPnCurve (const vector<RealVector> );
     RPnCurve & operator=(const RPnCurve &);
     void add(const RealVector &);
     vector<RealVector> getCoords() const;
@@ -38,5 +38,7 @@ public:
     
 
 };
+
+
 
 #endif //! _RPnCurve_H

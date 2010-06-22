@@ -55,6 +55,9 @@ public class HugoniotContourMethod extends HugoniotMethod {
             boundaryArray_[3] = maximumsArray[1];
         } else {
 
+
+
+
             System.out.println("Implementar para dominio triangular");
 
         }
