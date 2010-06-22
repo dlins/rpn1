@@ -86,9 +86,11 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
     }
 
     static public void showCalcExceptionDialog(RpException ex) {
-        JOptionPane.showMessageDialog(null, ex.toString(),
-                "Rp Calculation Exception",
-                JOptionPane.ERROR_MESSAGE);
+
+        RPnUIFrame.setStatusMessage(ex.getLocalizedMessage(), 1);
+//        JOptionPane.showMessageDialog(null, ex.toString(),
+//                "Rp Calculation Exception",
+//                JOptionPane.ERROR_MESSAGE);
     }
 
     public static RPnUIFrame getUIFrame() {
@@ -124,7 +126,7 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
 
             RPnCurvesListFrame curvesFrame = new RPnCurvesListFrame();
             rpnUIFrame.setCurvesFrame(curvesFrame);
-            System.out.println(RPNUMERICS.toXML());
+//            System.out.println(RPNUMERICS.toXML());
 
 
         } catch (FileNotFoundException ex) {

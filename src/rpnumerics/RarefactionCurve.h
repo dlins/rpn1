@@ -14,22 +14,31 @@
  * Includes:
  */
 
-#include <vector>
+#include "WaveCurve.h"
 #include "RealVector.h"
+
 /*
  * ---------------------------------------------------------------
  * Definitions:
  */
 
 
-struct RarefactionCurve {
-    
+class RarefactionCurve : public WaveCurve {
+private:
+  
 
-    
-    vector <RealVector> coords;
-    
+public:
+
+    RarefactionCurve();
+    RarefactionCurve(const vector<RealVector> &, const int);
+    ~RarefactionCurve();
+  
+    const string getType()const;
+
 };
 
-
+inline const string RarefactionCurve::getType() const {
+    return "rarefactioncurve";
+}
 
 #endif //! _RarefactionCurve_H

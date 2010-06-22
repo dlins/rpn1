@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package rpnumerics.methods.contour.support;
 
 import rpnumerics.methods.contour.*;
@@ -21,13 +20,11 @@ public class CurveDomainManager {
     private static CurveDomainManager instance_ = null;
     private ContourND contourMethod = null;
     private Area area = null;
-    
     private double[] boundaryArray;
     private int[] resolution;
     private int dimension;
 
     private CurveDomainManager() {
-
     }
 
     public static CurveDomainManager instance() {
@@ -50,6 +47,9 @@ public class CurveDomainManager {
         RealVector topright = area.getTopRight();
         RealVector resolutionArea = area.getResolution();
 
+
+
+
         dimension = (downleft.getSize() / 2);
 
         boundaryArray = new double[dimension * 2];
@@ -57,8 +57,8 @@ public class CurveDomainManager {
 
         for (int pont_dimension = 0; pont_dimension < dimension; pont_dimension++) {
             resolution[pont_dimension] = (int) resolutionArea.getElement(pont_dimension);
-            boundaryArray[2*pont_dimension] = downleft.getElement(pont_dimension);
-            boundaryArray[2*pont_dimension + 1] = topright.getElement(pont_dimension);
+            boundaryArray[2 * pont_dimension] = downleft.getElement(pont_dimension);
+            boundaryArray[2 * pont_dimension + 1] = topright.getElement(pont_dimension);
         }
 
     }
@@ -81,7 +81,7 @@ public class CurveDomainManager {
          * it returns a curve based on the area set on RPNProfile
          */
 
-        if ((contourMethod == null) || (area == null))  {
+        if ((contourMethod == null) || (area == null)) {
             throw new NoContourMethodDefined();
         }
 
@@ -94,7 +94,16 @@ public class CurveDomainManager {
 
         try {
 
+            System.out.println("Dimension: " + this.dimension);
+            System.out.println("Tamanho de Boundary Array: " + this.boundaryArray.length);
+  //          System.out.println("Resolucao: " + resolution[0] + " " + resolution[1]);
+//            System.out.println("Boundary Array: " + boundaryArray[0] + " " + boundaryArray[1]);
+
+
             curve = contourMethod.curvND(boundaryArray, resolution);
+
+
+
 
             PointNDimension[][] polyline = curve.getPolylines();
 
@@ -146,33 +155,33 @@ public class CurveDomainManager {
         RealVector topright = lastArea.getTopRight();
         RealVector resolutionArea = lastArea.getResolution();
 
-        int dimensionArea  = (downleft.getSize() / 2);
+        int dimensionArea = (downleft.getSize() / 2);
 
         if (dimensionArea == dimension) {
 
             double[] boundaryNewArea = new double[dimension * 2];
-            
+
             for (int pont_dimension = 0; pont_dimension < dimension; pont_dimension++) {
-                boundaryNewArea[pont_dimension] = calculateNextLowerPoint(boundaryArray[2*pont_dimension] , boundaryArray[2*pont_dimension + 1], resolution[pont_dimension], downleft.getElement(pont_dimension));
+                boundaryNewArea[pont_dimension] = calculateNextLowerPoint(boundaryArray[2 * pont_dimension], boundaryArray[2 * pont_dimension + 1], resolution[pont_dimension], downleft.getElement(pont_dimension));
             }
 
             for (int pont_dimension = 0; pont_dimension < dimension; pont_dimension++) {
-                boundaryNewArea[pont_dimension + dimension] = calculateNextUpperPoint(boundaryArray[2*pont_dimension] , boundaryArray[2*pont_dimension + 1], resolution[pont_dimension], topright.getElement(pont_dimension));
+                boundaryNewArea[pont_dimension + dimension] = calculateNextUpperPoint(boundaryArray[2 * pont_dimension], boundaryArray[2 * pont_dimension + 1], resolution[pont_dimension], topright.getElement(pont_dimension));
             }
 
             RealVector newDownLeft = new RealVector(dimension);
             RealVector newTopRight = new RealVector(dimension);
-            
+
             areasList.remove((areasList.size() - 1));
             areasList.add(new Area(resolutionArea, newTopRight, newDownLeft));
-            
+
         } else {
             throw new DimensionDoenstMatch();
         }
-        
+
     }
 
-    public RPnCurve fillSubDomain(RPnCurve curve, Area subdomain) throws NoContourMethodDefined{
+    public RPnCurve fillSubDomain(RPnCurve curve, Area subdomain) throws NoContourMethodDefined {
 
         RPnCurve newCurve = null;
 
@@ -181,10 +190,10 @@ public class CurveDomainManager {
 
         for (int pont_dimension = 0; pont_dimension < dimension; pont_dimension++) {
             resolutionTemp[pont_dimension] = resolution[pont_dimension];
-            boundaryArrayTemp[2*pont_dimension] = boundaryArray[2*pont_dimension];
-            boundaryArrayTemp[2*pont_dimension + 1] = boundaryArray[2*pont_dimension + 1];
+            boundaryArrayTemp[2 * pont_dimension] = boundaryArray[2 * pont_dimension];
+            boundaryArrayTemp[2 * pont_dimension + 1] = boundaryArray[2 * pont_dimension + 1];
         }
-        
+
         // pegar area e sudomain
 
         RealVector downleft = area.getDownLeft();
@@ -193,16 +202,15 @@ public class CurveDomainManager {
 
         try {
             for (int pont_dimension = 0; pont_dimension < dimension; pont_dimension++) {
-                    boundaryArray[2*pont_dimension] = calculateNextLowerPoint(boundaryArray[2*pont_dimension] , boundaryArray[2*pont_dimension + 1], resolution[pont_dimension], downleft.getElement(2*pont_dimension));
-                    this.resolution[2*pont_dimension] = (int) resolutionArea.getElement(2*pont_dimension);
+                boundaryArray[2 * pont_dimension] = calculateNextLowerPoint(boundaryArray[2 * pont_dimension], boundaryArray[2 * pont_dimension + 1], resolution[pont_dimension], downleft.getElement(2 * pont_dimension));
+                this.resolution[2 * pont_dimension] = (int) resolutionArea.getElement(2 * pont_dimension);
             }
 
             for (int pont_dimension = 0; pont_dimension < dimension; pont_dimension++) {
-                boundaryArray[2*pont_dimension + 1] = calculateNextUpperPoint(boundaryArray[2*pont_dimension] , boundaryArray[2*pont_dimension + 1], resolution[pont_dimension], topright.getElement(pont_dimension));
-                this.resolution[2*pont_dimension + 1] = (int) resolutionArea.getElement(2*pont_dimension + 1);
+                boundaryArray[2 * pont_dimension + 1] = calculateNextUpperPoint(boundaryArray[2 * pont_dimension], boundaryArray[2 * pont_dimension + 1], resolution[pont_dimension], topright.getElement(pont_dimension));
+                this.resolution[2 * pont_dimension + 1] = (int) resolutionArea.getElement(2 * pont_dimension + 1);
             }
         } catch (Exception e) {
-
         }
 
         // code goes here
@@ -223,11 +231,10 @@ public class CurveDomainManager {
 
                 for (int pont_dimension = 0; (pont_dimension < dimension) && InDomain; pont_dimension++) {
                     try {
-                        if ((boundaryArray[2*pont_dimension] < point.getCoordinate(pont_dimension + 1)) || (boundaryArray[2*pont_dimension + 1] > point.getCoordinate(pont_dimension + 1))) {
+                        if ((boundaryArray[2 * pont_dimension] < point.getCoordinate(pont_dimension + 1)) || (boundaryArray[2 * pont_dimension + 1] > point.getCoordinate(pont_dimension + 1))) {
                             InDomain = false;
                         }
                     } catch (Exception e) {
-
                     }
                 }
 
@@ -239,7 +246,7 @@ public class CurveDomainManager {
 
         for (int pont_polyline = 0; pont_polyline < polyline.length; pont_polyline++) {
             Object[] points = tempPolylines[pont_polyline].toArray();
-            cleanedPolyline[pont_polyline] = (PointNDimension []) points[pont_polyline];
+            cleanedPolyline[pont_polyline] = (PointNDimension[]) points[pont_polyline];
         }
 
         // limpar
@@ -253,14 +260,13 @@ public class CurveDomainManager {
             try {
                 newCurve.append(tempPolyline[pont_polyline]);
             } catch (Exception e) {
-
             }
         }
-        
+
         for (int pont_dimension = 0; pont_dimension < dimension; pont_dimension++) {
             resolution[pont_dimension] = resolutionTemp[pont_dimension];
-            boundaryArray[2*pont_dimension] = boundaryArrayTemp[2*pont_dimension];
-            boundaryArray[2*pont_dimension + 1] = boundaryArrayTemp[2*pont_dimension + 1];
+            boundaryArray[2 * pont_dimension] = boundaryArrayTemp[2 * pont_dimension];
+            boundaryArray[2 * pont_dimension + 1] = boundaryArrayTemp[2 * pont_dimension + 1];
         }
 
         return newCurve;
@@ -325,9 +331,9 @@ public class CurveDomainManager {
         return answer;
     }
 
-    private boolean isInRestrictions(RealVector p1, RealVector p2, RealVector p3, RealVector p4, double [][]boundaries) {
+    private boolean isInRestrictions(RealVector p1, RealVector p2, RealVector p3, RealVector p4, double[][] boundaries) {
 
-       /* double[] point1Minus = p1.toDouble();
+        /* double[] point1Minus = p1.toDouble();
         double xp1Minus = point1Minus[0];
         double yp1Minus = point1Minus[1];
 
@@ -344,42 +350,41 @@ public class CurveDomainManager {
         double xp2Plus = point2Plus[0];
         double yp2Plus = point2Plus[1];
 
-       for (int pont_subdomain = 0; pont_subdomain < numberOfSubDomains; pont_subdomain++) {
+        for (int pont_subdomain = 0; pont_subdomain < numberOfSubDomains; pont_subdomain++) {
 
         // Minus
 
-           double xl1Minus = boundaries[pont_subdomain][0];
-           double yl1Minus = boundaries[pont_subdomain][2];
+        double xl1Minus = boundaries[pont_subdomain][0];
+        double yl1Minus = boundaries[pont_subdomain][2];
 
-           double xl2Minus = boundaries[pont_subdomain][1];
-           double yl2Minus = boundaries[pont_subdomain][3];
+        double xl2Minus = boundaries[pont_subdomain][1];
+        double yl2Minus = boundaries[pont_subdomain][3];
 
-            if ((((yp1Minus >= yl1Minus) && (yp1Minus <= yl2Minus)) &&
-                 ((xp1Minus >= xl1Minus) && (xp1Minus <= xl2Minus))) ||
-                (((xp2Minus >= xl1Minus) && (xp2Minus <= xl2Minus)) &&
-                 ((yp2Minus >= yl1Minus) && (yp2Minus <= yl2Minus)))) {
-               return true;
-            }
+        if ((((yp1Minus >= yl1Minus) && (yp1Minus <= yl2Minus)) &&
+        ((xp1Minus >= xl1Minus) && (xp1Minus <= xl2Minus))) ||
+        (((xp2Minus >= xl1Minus) && (xp2Minus <= xl2Minus)) &&
+        ((yp2Minus >= yl1Minus) && (yp2Minus <= yl2Minus)))) {
+        return true;
+        }
 
         // Plus
 
-           double xl1Plus = boundaries[pont_subdomain][4];
-           double yl1Plus = boundaries[pont_subdomain][6];
+        double xl1Plus = boundaries[pont_subdomain][4];
+        double yl1Plus = boundaries[pont_subdomain][6];
 
-           double xl2Plus = boundaries[pont_subdomain][5];
-           double yl2Plus = boundaries[pont_subdomain][7];
+        double xl2Plus = boundaries[pont_subdomain][5];
+        double yl2Plus = boundaries[pont_subdomain][7];
 
-            if ((((yp1Plus >= yl1Plus) && (yp1Plus <= yl2Plus)) &&
-                 ((xp1Plus >= xl1Plus) && (xp1Plus <= xl2Plus))) ||
-                (((xp2Plus >= xl1Plus) && (xp2Plus <= xl2Plus)) &&
-                 ((yp2Plus >= yl1Plus) && (yp2Plus <= yl2Plus)))) {
+        if ((((yp1Plus >= yl1Plus) && (yp1Plus <= yl2Plus)) &&
+        ((xp1Plus >= xl1Plus) && (xp1Plus <= xl2Plus))) ||
+        (((xp2Plus >= xl1Plus) && (xp2Plus <= xl2Plus)) &&
+        ((yp2Plus >= yl1Plus) && (yp2Plus <= yl2Plus)))) {
 
 
-               return true;
-            }
-       } */
+        return true;
+        }
+        } */
 
         return false;
     }
-    
 }

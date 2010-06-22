@@ -172,7 +172,7 @@ int LSODE::solver(int (*f)(int *, double *, double *, double *), int *neq, doubl
         return SUCCESSFUL_PROCEDURE;
     } else {
 
-        cout<<"Valor de istate: "<<*istate<<endl;
+//        cout<<"istate: "<<*istate<<endl; //Thows a exception ??
         return *istate;
     }
 

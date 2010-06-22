@@ -123,6 +123,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
 
     method.curve(realVectorInput, timeDirection, coords);
 
+     if (coords.size() == 0) {
+        return NULL;
+
+    }
+
    //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
    //Orbit memebers creation
 

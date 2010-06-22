@@ -3,7 +3,8 @@ vpath %.cc $(METHODSDIR)
 RPNUMSRC += RarefactionMethod.cc \
 	RarefactionContinuationMethod.cc \
         ShockContinuationMethod.cc \
-        CompositeContinuationMethod.cc
+        CompositeContinuationMethod.cc\
+        jetcomposite.cc \
 
 
 

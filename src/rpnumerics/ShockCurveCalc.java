@@ -66,10 +66,22 @@ public class ShockCurveCalc implements RpCalculation {
             Orbit resultComplete = ShockCurve.concat(resultBackward, resultForward);
             ShockCurve completeCurve = new ShockCurve(resultComplete.getPoints(), resultComplete.getIntegrationFlag());
 
+
+              if (resultBackward == null || resultForward == null) {
+                throw new RpException("Error in native layer");
+            }
+
+
+
             return completeCurve;
         }
 
         RpSolution result = calc(methodName_, flowName_, start_, familyIndex_, timeDirection_);
+
+          if (result == null) {
+            throw new RpException("Error in native layer");
+        }
+
         return result;
     }
 

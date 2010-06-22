@@ -22,6 +22,7 @@ public abstract class RpModelPlotAgent extends RpModelActionAgent {
     static public final String PHASESPACE_LIST = "Phase Space list of elements";
     static public final String AUXPHASESPACE_LIST = "Auxiliary Phase Space list of elements";
     private boolean addOnlyLastGeometry_;
+    private static boolean keepLastGeometry_;
     private AbstractButton button_;
 
     public RpModelPlotAgent(String shortDesc, ImageIcon icon, AbstractButton button) {
@@ -33,8 +34,8 @@ public abstract class RpModelPlotAgent extends RpModelActionAgent {
         putValue(Action.SHORT_DESCRIPTION, shortDesc);
         setEnabled(false);
         addOnlyLastGeometry_ = true;
+        keepLastGeometry_ = true;
     }
-
 
     public void execute() {
         RealVector[] userInputList = UIController.instance().userInputList();
@@ -67,13 +68,17 @@ public abstract class RpModelPlotAgent extends RpModelActionAgent {
         Iterator oldValue = phaseSpace.getGeomObjIterator();
 
         RpGeometry geometry = createRpGeometry(userInputList);
+        if (geometry == null) {
+            return;
+        }
         phaseSpace.plot(geometry);
         if (addOnlyLastGeometry_) {
-            phaseSpace.removeLastGeometry();
-            RPnCurvesListFrame.removeLastEntry();
-
+            if (!keepLastGeometry_) {
+                phaseSpace.removeLastGeometry();
+                RPnCurvesListFrame.removeLastEntry();
+            }
         }
-
+        keepLastGeometry_ = false;
         Iterator newValue = phaseSpace.getGeomObjIterator();
         logAction(new PropertyChangeEvent(this, listString, oldValue, newValue));
 
@@ -100,5 +105,10 @@ public abstract class RpModelPlotAgent extends RpModelActionAgent {
     // the container for this Action
     public AbstractButton getContainer() {
         return button_;
+    }
+
+    static void keepLastGeometry() {
+        keepLastGeometry_ = true;
+
     }
 }

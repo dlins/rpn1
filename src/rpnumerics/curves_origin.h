@@ -1,0 +1,9 @@
+#ifndef _CURVES_ORIGIN_
+#define _CURVES_ORIGIN_
+
+#define INITIAL_CURVE           501
+#define PRECEDED_BY_RAREFACTION 502
+#define PRECEDED_BY_SHOCK       503
+#define PRECEDED_BY_COMPOSITE   504
+
+#endif // _CURVES_ORIGIN_
