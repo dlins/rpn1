@@ -166,7 +166,7 @@
             <jvmarg value="-Xdebug"/>
             <jvmarg value="-Xrunjdwp:transport=dt_socket,address=${jpda.address}"/>
 
-          <arg value="${basedir}/in/triphase.xml"/>
+          <arg value="${basedir}/in/quad2.xml"/>
         </java>
     </target>
 

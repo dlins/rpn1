@@ -29,7 +29,6 @@ RPNUMSRC += \
         RarefactionCurve.cc\
         CompositeCurve.cc\
         WaveCurve.cc \
-        fill_with_jet.cc
 
 
 CPPFLAGS += -I $(RPNUMERICSDIR) -g3

@@ -4,7 +4,6 @@ RPNUMSRC += RarefactionMethod.cc \
 	RarefactionContinuationMethod.cc \
         ShockContinuationMethod.cc \
         CompositeContinuationMethod.cc\
-        jetcomposite.cc \
 
 
 
