@@ -13,17 +13,11 @@ import org.xml.sax.SAXException;
 
 import rpn.message.*;
 import rpnumerics.RpException;
-import javax.swing.JOptionPane;
 import java.io.*;
 import org.iso_relax.verifier.Verifier;
 import org.iso_relax.verifier.VerifierFactory;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXParseException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
 import rpn.controller.ui.UIController;
-import rpn.parser.RPnInterfaceParser;
-import rpn.parser.RPnNumericsModule;
 import rpnumerics.RPNUMERICS;
 
 public class RPnDesktopPlotter implements RPnMenuCommand {

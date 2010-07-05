@@ -13,9 +13,13 @@ import wave.util.RealVector;
 
 public interface UserInputHandler {
 
-    /** When all user inputs required to do a action is done this method is invoked. */
+    /** When a user input is done this method is invoked. */
  
     void userInputComplete(rpn.controller.ui.UIController ui, RealVector userInput);
+
+    /** When no inputs are required to do a action this method is invoked. */
+
+    void userInputComplete(rpn.controller.ui.UIController ui);
 
     /** This method returns all user inputs .*/
     RealVector[] userInputList(rpn.controller.ui.UIController ui);

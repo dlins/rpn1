@@ -71,10 +71,13 @@ public class MultidAdapter {
                 tempCoords.add(polyline[polyLineIndex][polyPoint].toCoordsArray());
             }
         }
+        
         CoordsArray[] coords = new CoordsArray[tempCoords.size()];
+        
         for (int i = 0; i < tempCoords.size(); i++) {
             coords[i] = (CoordsArray) tempCoords.get(i);
         }
+        
         tempCoords.clear();
 
         return coords;
@@ -100,6 +103,45 @@ public class MultidAdapter {
         p2 = new RealVector(coords[coords.length - 1].getCoords());
         realSegments.add(new RealSegment(p1, p2));
 
+        return realSegments;
+
+    }
+    
+    static public ArrayList converseRPnCurveToRealSegments(RPnCurve rpncurve) {
+  	
+        PointNDimension[][] polyline = rpncurve.getPolylines();
+
+        ArrayList realSegments = new ArrayList();
+
+        for (int polyLineIndex = 0; polyLineIndex < polyline.length; polyLineIndex++) {
+
+            int size = polyline[polyLineIndex].length;
+            int numberOfSegments = size - 1;
+            
+            CoordsArray point1, point2;
+            RealVector p1, p2;
+
+            for (int polySegment = 1; polySegment < numberOfSegments; polySegment++) {
+            	
+            	point1 = polyline[polyLineIndex][polySegment - 1].toCoordsArray();
+            	point2 = polyline[polyLineIndex][polySegment].toCoordsArray();
+            	
+            	p1 = new RealVector(point1.getCoords());
+                p2 = new RealVector(point2.getCoords());
+                
+                realSegments.add(new RealSegment(p1, p2));
+                
+            }
+            
+            point1 = polyline[polyLineIndex][numberOfSegments - 1].toCoordsArray();
+        	point2 = polyline[polyLineIndex][numberOfSegments].toCoordsArray();
+        	
+        	p1 = new RealVector(point1.getCoords());
+            p2 = new RealVector(point2.getCoords());
+            
+            realSegments.add(new RealSegment(p1, p2));
+        }
+        
         return realSegments;
 
     }

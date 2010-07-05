@@ -20,6 +20,8 @@ import java.io.*;
 import java.awt.event.ActionEvent;
 import java.util.Iterator;
 import rpn.component.RpGeometry;
+import rpn.controller.ui.Command;
+import rpn.controller.ui.UIController;
 import rpnumerics.HugoniotCurve;
 import rpnumerics.PhasePoint;
 import rpnumerics.Orbit;
@@ -451,21 +453,25 @@ public class RPnDataModule {
     /** Writes the data of actual session into a XML file. */
     static public void export(FileWriter writer) throws java.io.IOException {
 
-        Iterator geomIterator = RPnDataModule.PHASESPACE.getGeomObjIterator();
+//        Iterator geomIterator = RPnDataModule.PHASESPACE.getGeomObjIterator();
 
-        while (geomIterator.hasNext()) {
 
-            writer.write(((RpGeometry) geomIterator.next()).geomFactory().toXML());
+        Iterator<Command> commandInterator = UIController.instance().getCommandIterator();
 
-        }
 
-        Iterator auxGeomIterator = RPnDataModule.AUXPHASESPACE.getGeomObjIterator();
+        while (commandInterator.hasNext()) {
 
-        while (auxGeomIterator.hasNext()) {
-
-            writer.write(((RpGeometry) auxGeomIterator.next()).geomFactory().toXML());
+           writer.write((commandInterator.next().toXML()));
 
         }
+
+//        Iterator auxGeomIterator = RPnDataModule.AUXPHASESPACE.getGeomObjIterator();
+//
+//        while (auxGeomIterator.hasNext()) {
+//
+//            writer.write(((RpGeometry) auxGeomIterator.next()).geomFactory().toXML());
+//
+//        }
 
 
     }

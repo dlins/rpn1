@@ -8,8 +8,8 @@ package rpn.usecase;
 import java.awt.event.ActionEvent;
 import javax.swing.JButton;
 import rpn.component.*;
-import rpn.controller.ui.BIFURCATIONREFINE_CONFIG;
 import rpn.controller.ui.BIFURCATION_CONFIG;
+import rpn.controller.ui.Command;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UI_ACTION_SELECTED;
 import rpnumerics.*;
@@ -37,7 +37,8 @@ public class BifurcationPlotAgent extends RpModelPlotAgent {
 
         UI_ACTION_SELECTED action = new UI_ACTION_SELECTED(this);
         UIController.instance().setState(new BIFURCATION_CONFIG());
-        action.userInputComplete(UIController.instance(), new RealVector(rpnumerics.RPNUMERICS.domainDim() * 2));// No input needed
+
+        action.userInputComplete(UIController.instance());// No input needed
 
     }
 

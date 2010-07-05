@@ -43,9 +43,8 @@ public class PhasePoint extends RealVector {
         
         for (int i=0;i < getCoords().getSize();i++){
             
-            
             str.append(getCoords().getElement(i));
-            str.append("\n");
+            str.append(" ");
             
         }
         return str.toString();

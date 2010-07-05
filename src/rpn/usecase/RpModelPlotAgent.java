@@ -35,6 +35,7 @@ public abstract class RpModelPlotAgent extends RpModelActionAgent {
         setEnabled(false);
         addOnlyLastGeometry_ = true;
         keepLastGeometry_ = true;
+
     }
 
     public void execute() {
@@ -76,6 +77,8 @@ public abstract class RpModelPlotAgent extends RpModelActionAgent {
             if (!keepLastGeometry_) {
                 phaseSpace.removeLastGeometry();
                 RPnCurvesListFrame.removeLastEntry();
+                UIController.instance().removeLastCommand();
+
             }
         }
         keepLastGeometry_ = false;

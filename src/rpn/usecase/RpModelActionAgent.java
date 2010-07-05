@@ -56,6 +56,7 @@ public abstract class RpModelActionAgent extends AbstractAction implements Undoa
 
         }
 
+
     }
 
     //
@@ -63,5 +64,10 @@ public abstract class RpModelActionAgent extends AbstractAction implements Undoa
     //
     public PropertyChangeEvent log() {
         return history_;
+    }
+
+    @Override
+    public String toString(){
+        return desc_;
     }
 }

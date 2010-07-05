@@ -16,6 +16,9 @@ import wave.util.RealVector;
 
 import java.awt.*;
 
+import rpn.component.MultidAdapter;
+import rpnumerics.methods.contour.ContourCurve;
+
 public class BifurcationCurve extends RPnCurve implements RpSolution {
     //
     // Members
@@ -32,6 +35,13 @@ public class BifurcationCurve extends RPnCurve implements RpSolution {
 
         familyIndex_ = familyIndex;
         segments = states;
+    }
+    
+    public BifurcationCurve(int familyIndex, ContourCurve curve, ViewingAttr viewingAttr) {
+        super(curve, new ViewingAttr(Color.white));
+        familyIndex_ = familyIndex;        
+       // segments = MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseRPnCurveToCoordsArray(this));
+        segments = MultidAdapter.converseRPnCurveToRealSegments(this);
     }
 
     @Override

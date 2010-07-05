@@ -37,13 +37,13 @@ public class OrbitGeomFactory extends RpCalcBasedGeomFactory {
 
     public String toXML() {
         StringBuffer str = new StringBuffer();
-//        String timedir = "pos";
-//        if (((OrbitCalc) rpCalc()).tDirection() == OrbitGeom.BACKWARD_DIR) {
-//            timedir = "neg";
-//        }
-//        str.append("<ORBITCALC timedirection=\"" + timedir + "\"" + " initialpoint=\"" + ((OrbitCalc) rpCalc()).getStart() + "\"" + " calcready=\"" + rpn.parser.RPnDataModule.RESULTS + "\"" + ">\n");
-//        str.append(((Orbit) geomSource()).toXML(rpn.parser.RPnDataModule.RESULTS));
-//        str.append("</ORBITCALC>\n");
+        String timedir = "pos";
+        if (((OrbitCalc) rpCalc()).tDirection() == OrbitGeom.BACKWARD_DIR) {
+            timedir = "neg";
+        }
+        str.append("<ORBITCALC timedirection=\"" + timedir + "\"" + " initialpoint=\"" + ((OrbitCalc) rpCalc()).getStart() + "\"" + " calcready=\"" + rpn.parser.RPnDataModule.RESULTS + "\"" + ">\n");
+        str.append(((Orbit) geomSource()).toXML(rpn.parser.RPnDataModule.RESULTS));
+        str.append("</ORBITCALC>\n");
         return str.toString();
     }
 }

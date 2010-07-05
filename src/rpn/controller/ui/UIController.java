@@ -24,7 +24,6 @@ import rpn.controller.*;
 import java.net.*;
 import java.util.Iterator;
 import javax.swing.JOptionPane;
-import rpn.RPnCurvesConfigPanel;
 import rpn.RPnDesktopPlotter;
 import rpn.RPnUIFrame;
 import rpn.message.*;
@@ -51,7 +50,7 @@ public class UIController extends ComponentUI {
     private RPnPhaseSpacePanel focusPanel_;
     private StateInputController stateController_;
     public static UI_ACTION_SELECTED INITSTATE = null;
-    private ArrayList<String> commandArray_;
+    private ArrayList<Command> commandArray_;
 
     //
     // Constructors
@@ -65,7 +64,7 @@ public class UIController extends ComponentUI {
         mouseController_ = new MouseController();
         globalInputTable_ = new UserInputTable(rpnumerics.RPNUMERICS.domainDim());
 
-        commandArray_ = new ArrayList<String>();
+        commandArray_ = new ArrayList<Command>();
 
 
         handler_ = new SHOCK_CONFIG();
@@ -127,14 +126,27 @@ public class UIController extends ComponentUI {
         RPnDesktopPlotter.getUIFrame().showCurvesPanel(selected);
     }
 
+    public void removeLastCommand() {
+        commandArray_.remove(commandArray_.size() - 1);
+        for (Command element : commandArray_) {
+            System.out.println("" + commandArray_.indexOf(element) + element.toXML());
+        }
+
+    }
+
+    public Iterator<Command> getCommandIterator() {
+        return commandArray_.iterator();
+
+    }
     //
     // Inner Classes
     //
+
     class MouseMotionController extends MouseMotionAdapter {
 
         @Override
         public void mouseDragged(MouseEvent event) {
-               RPnUIFrame.clearStatusMessage();
+            RPnUIFrame.clearStatusMessage();
 
             if (event.getComponent() instanceof RPnPhaseSpacePanel) {
 
@@ -325,14 +337,15 @@ public class UIController extends ComponentUI {
 
     }
 
-    public void addCommand(RealVector userInput) {
+    public void addCommand(Command command) {
+        commandArray_.add(command);
+        for (Command element : commandArray_) {
+            System.out.println("" + commandArray_.indexOf(element) + element.toXML());
 
-        if (handler_ instanceof UI_ACTION_SELECTED) {
-            UI_ACTION_SELECTED currentSelection = (UI_ACTION_SELECTED) handler_;
-            String commandArrayElement = currentSelection.getAction().getClass().getSimpleName() + " " + userInput.toXML();
-//            System.out.println(commandArrayElement);
-            commandArray_.add(commandArrayElement);
         }
+
+
+
 
     }
 

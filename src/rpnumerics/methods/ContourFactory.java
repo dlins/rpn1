@@ -102,7 +102,7 @@ public class ContourFactory {
 
         	  }
 
-        return new ContourBifurcation((MultiBifurcationFunction) functionsArray[0], null); //
+        return new ContourBifurcation((MultiBifurcationFunction) functionsArray[0], 1, null); //
 
     }
 }

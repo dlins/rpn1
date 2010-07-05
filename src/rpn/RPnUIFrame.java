@@ -5,6 +5,7 @@
  */
 package rpn;
 
+import java.io.File;
 import rpn.usecase.*;
 import rpn.parser.*;
 import rpnumerics.RPNUMERICS;
@@ -16,6 +17,8 @@ import java.awt.event.*;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 import java.io.FileWriter;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import rpn.controller.ui.*;
 import rpn.message.*;
 import rpnumerics.ShockProfile;
@@ -46,7 +49,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JMenuItem exportMenuItem = new JMenuItem();
     private JMenuItem layoutMenuItem = new JMenuItem();
     private JMenuItem errorControlMenuItem = new JMenuItem();
-    private JMenuItem createJPEGImageMenuItem = new JMenuItem();
+    private JMenuItem createSVGImageMenuItem = new JMenuItem();
     private JMenuItem printMenuItem = new JMenuItem();
     private JMenuItem pluginMenuItem = new JMenuItem();
     private static RPnPhaseSpaceFrame[] frames_, auxFrames_;
@@ -79,7 +82,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             if (commandMenu_ instanceof RPnAppletPlotter) { // Selecting itens to disable in Applet
 
                 networkMenuItem.setEnabled(false);
-                createJPEGImageMenuItem.setEnabled(false);
+                createSVGImageMenuItem.setEnabled(false);
                 printMenuItem.setEnabled(false);
                 exportMenuItem.setEnabled(false);
             }
@@ -318,12 +321,20 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
     }
 
-    // from here on just for 2D for now...
-    void createJPEGImage_actionPerformed(ActionEvent e) {
+//     from here on just for 2D for now...
+    void createSVGImage_actionPerformed(ActionEvent e) {
         JFileChooser chooser = new JFileChooser();
+        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        chooser.setFileFilter(new FileNameExtensionFilter("SVG File", "svg","SVG"));
+        int status = chooser.showSaveDialog(this);
+
+        if (status==JFileChooser.CANCEL_OPTION || status==JFileChooser.ERROR_OPTION)
+            return;
+
         try {
-            frames_[0].phaseSpacePanel().createJPEGImageFile(chooser.getSelectedFile().getAbsolutePath());
+            UIController.instance().getFocusPanel().createSVG(chooser.getSelectedFile());
         } catch (java.lang.NullPointerException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -540,12 +551,12 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                         errorControlMenuItem_actionPerformed(e);
                     }
                 });
-        createJPEGImageMenuItem.setText("Create JPEG Image...");
-        createJPEGImageMenuItem.addActionListener(
+        createSVGImageMenuItem.setText("Create SVG Image...");
+        createSVGImageMenuItem.addActionListener(
                 new java.awt.event.ActionListener() {
 
                     public void actionPerformed(ActionEvent e) {
-                        createJPEGImage_actionPerformed(e);
+                        createSVGImage_actionPerformed(e);
                     }
                 });
         printMenuItem.setText("Print...");
@@ -571,7 +582,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         fileMenu.add(networkMenuItem);
         fileMenu.add(pluginMenuItem);
         fileMenu.addSeparator();
-        fileMenu.add(createJPEGImageMenuItem);
+        fileMenu.add(createSVGImageMenuItem);
         fileMenu.addSeparator();
         fileMenu.add(printMenuItem);
         fileMenu.addSeparator();
@@ -741,4 +752,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         }
     }
+
+
 }

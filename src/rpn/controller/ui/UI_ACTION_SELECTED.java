@@ -28,9 +28,9 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
     }
 
     public void userInputComplete(rpn.controller.ui.UIController ui,
-            RealVector userInput) {
+            RealVector userInput) {//Limpar esse metodo . Utilizar a versao sem entrada do usuario quando necessario
         userInputList_.add(new RealVector(userInput));
-        UIController.instance().addCommand(userInput);
+
 
         if (!(actionSelected_ instanceof ChangeDirectionAgent)) {
 
@@ -38,53 +38,58 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
 
                 if (actionSelected_ instanceof BifurcationRefineAgent) {
                     if (isDiagonalSelection()) {
-                        //		        rpn.RPnUIFrame.instance().setTitle(" completing ...  " +
-                        //		actionSelected_.getValue(javax.swing.Action.SHORT_DESCRIPTION).toString());
                         UIController.instance().setWaitCursor();
                         actionSelected_.execute();
-                        //rpn.RPnUIFrame.instance().setTitle("");
                         UIController.instance().resetCursor();
                         userInputList_.clear();
                         ui.panelsBufferClear();
                         rpn.parser.RPnDataModule.PHASESPACE.unselectAll();
+                        return;
                     }
 
                 }
-
                 if (actionSelected_ instanceof PoincareSectionPlotAgent) {
-
                     if (isPoincareInputReady()) {
-                        //		        rpn.RPnUIFrame.instance().setTitle(" completing ...  " +
-                        //		actionSelected_.getValue(javax.swing.Action.SHORT_DESCRIPTION).toString());
-                        UIController.instance().setWaitCursor();
-                        actionSelected_.execute();
-                        //rpn.RPnUIFrame.instance().setTitle("");
-                        UIController.instance().resetCursor();
-                        userInputList_.clear();
-                        ui.panelsBufferClear();
-                        rpn.parser.RPnDataModule.PHASESPACE.unselectAll();
+                        ArrayList<RealVector> tempInputList = new ArrayList<RealVector>();
+                        for (RealVector inputElement : userInputList(ui)) {
+                            tempInputList.add(inputElement);
+                        }
+
+                        UIController.instance().addCommand(new Command(this, tempInputList));
                     }
-
-
-
                 }
 
+
+                UIController.instance().setWaitCursor();
+                actionSelected_.execute();
+                UIController.instance().resetCursor();
+                userInputList_.clear();
+                ui.panelsBufferClear();
+                rpn.parser.RPnDataModule.PHASESPACE.unselectAll();
 
 
             } else {
-
-                //rpn.RPnUIFrame.instance().setTitle(" completing ...  " +
-                //	    actionSelected_.getValue(javax.swing.Action.SHORT_DESCRIPTION).toString());
+                UIController.instance().addCommand(new Command(this, userInput));
                 UIController.instance().setWaitCursor();
                 actionSelected_.execute();
-
-                //      rpn.RPnUIFrame.instance().setTitle("");
                 UIController.instance().resetCursor();
                 userInputList_.clear();
                 ui.panelsBufferClear();
                 rpn.parser.RPnDataModule.PHASESPACE.unselectAll();
             }
         }
+    }
+
+    public void userInputComplete(UIController ui) {
+
+        UIController.instance().addCommand(new Command(this));
+        UIController.instance().setWaitCursor();
+        actionSelected_.execute();
+        UIController.instance().resetCursor();
+        userInputList_.clear();
+        ui.panelsBufferClear();
+        rpn.parser.RPnDataModule.PHASESPACE.unselectAll();
+
     }
 
     protected boolean isPoincareInputReady() {

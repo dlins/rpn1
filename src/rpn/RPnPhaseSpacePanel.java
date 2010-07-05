@@ -5,6 +5,8 @@
  */
 package rpn;
 
+import java.io.UnsupportedEncodingException;
+import org.apache.batik.svggen.SVGGraphics2DIOException;
 import wave.multid.view.*;
 import rpn.controller.PhaseSpacePanel2DController;
 import rpn.controller.PhaseSpacePanelController;
@@ -22,13 +24,16 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Color;
 
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
-import com.sun.image.codec.jpeg.JPEGCodec;
 import javax.swing.JPanel;
-import java.io.FileOutputStream;
 import java.awt.Shape;
-import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.io.File;
+import java.io.IOException;
+import java.util.Iterator;
+import org.apache.batik.dom.GenericDOMImplementation;
+import org.apache.batik.svggen.SVGGraphics2D;
+import org.w3c.dom.DOMImplementation;
+import org.w3c.dom.Document;
 import rpnumerics.BifurcationProfile;
 
 public class RPnPhaseSpacePanel extends JPanel implements Printable {
@@ -49,7 +54,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     private Scene scene_;
     private Point cursorPos_;
     private Point trackedPoint_;
-    private JPEGImageEncoder encoder_;
+//    private JPEGImageEncoder encoder_;
     private boolean printFlag_ = false;
     private PhaseSpacePanelController ui_;
     private static boolean showCursorLine_;
@@ -229,18 +234,17 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         return buffedImage;
     }
 
-    public void createJPEGImageFile(String targetAbsPath) {
-        try {
-            // First save it as JPEG
-            FileOutputStream out = new FileOutputStream(targetAbsPath);
-            JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
-            encoder.encode(createOffSetImageBuffer());
-            out.close();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
+//    public void createJPEGImageFile(String targetAbsPath) {
+//        try {
+//            // First save it as JPEG
+//            FileOutputStream out = new FileOutputStream(targetAbsPath);
+//            JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
+//            encoder.encode(createOffSetImageBuffer());
+//            out.close();
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
     public int print(Graphics g, PageFormat pf, int pageIndx) {
         /* TODO some operating systems (UNIX) offer the option
         of local postscript file printing. This should *not*
@@ -277,6 +281,44 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
 
     public static void setShowCursor(boolean showCursor) {
         showCursorLine_ = showCursor;
+
+    }
+
+    public void createSVG(File file) {
+        try {
+
+            // Get a DOMImplementation.
+            DOMImplementation domImpl = GenericDOMImplementation.getDOMImplementation();
+
+            // Create an instance of org.w3c.dom.Document.
+            String svgNS = "http://www.w3.org/2000/svg";
+            Document document = domImpl.createDocument(svgNS, "svg", null);
+            // Create an instance of the SVG Generator.
+            SVGGraphics2D svgGenerator = new SVGGraphics2D(document);
+            // Ask the test to render into the SVG Graphics2D implementation.
+            boolean useCSS = true; // we want to use CSS style attributes
+
+            Iterator it = scene_.geometries();
+            while (it.hasNext()) {
+                GeomObjView geometry = (GeomObjView) it.next();
+                geometry.draw(svgGenerator);
+
+
+            }
+            // Finally, stream out SVG to the standard output using
+            // UTF-8 encoding.
+            svgGenerator.stream(file.getCanonicalPath(), useCSS);
+
+        } catch (SVGGraphics2DIOException ex) {
+            ex.printStackTrace();
+
+        } catch (UnsupportedEncodingException ex) {
+            ex.printStackTrace();
+
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
 
     }
 

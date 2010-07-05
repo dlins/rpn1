@@ -47,10 +47,8 @@ public class CurveDomainManager {
         RealVector topright = area.getTopRight();
         RealVector resolutionArea = area.getResolution();
 
-
-
-
-        dimension = (downleft.getSize() / 2);
+        //dimension = (downleft.getSize() / 2);
+        dimension = downleft.getSize();
 
         boundaryArray = new double[dimension * 2];
         resolution = new int[dimension];
@@ -94,18 +92,12 @@ public class CurveDomainManager {
 
         try {
 
-            System.out.println("Dimension: " + this.dimension);
-            System.out.println("Tamanho de Boundary Array: " + this.boundaryArray.length);
-  //          System.out.println("Resolucao: " + resolution[0] + " " + resolution[1]);
-//            System.out.println("Boundary Array: " + boundaryArray[0] + " " + boundaryArray[1]);
-
-
             curve = contourMethod.curvND(boundaryArray, resolution);
 
 
 
 
-            PointNDimension[][] polyline = curve.getPolylines();
+       /*     PointNDimension[][] polyline = curve.getPolylines();
 
             for (int polyLineIndex = 0; polyLineIndex < polyline.length; polyLineIndex++) {
 
@@ -136,14 +128,16 @@ public class CurveDomainManager {
 
                 realSegments.add(new RealSegment(new RealVector(firstPoint), new RealVector(secondPoint)));
 
-            }// for polilineIndex
+            }// for polilineIndex */
 
         } catch (Exception e1) {
             e1.printStackTrace();
             return new CanNotCalculateCurve();
         } //try fo primeiro ContourND
 
-        return new RPnCurve(coordsArrayFromRealSegments(realSegments), new ViewingAttr(Color.white));
+//        return new RPnCurve(coordsArrayFromRealSegments(realSegments), new ViewingAttr(Color.white));
+        
+        return curve;
 
     }
 
