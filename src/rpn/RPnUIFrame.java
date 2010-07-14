@@ -5,7 +5,6 @@
  */
 package rpn;
 
-import java.io.File;
 import rpn.usecase.*;
 import rpn.parser.*;
 import rpnumerics.RPNUMERICS;
@@ -16,8 +15,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
+import java.io.File;
 import java.io.FileWriter;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import rpn.controller.ui.*;
 import rpn.message.*;
@@ -325,12 +324,13 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     void createSVGImage_actionPerformed(ActionEvent e) {
         JFileChooser chooser = new JFileChooser();
         chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        chooser.setFileFilter(new FileNameExtensionFilter("SVG File", "svg","SVG"));
+        chooser.setFileFilter(new FileNameExtensionFilter("SVG File", "svg", "SVG"));
+        chooser.setSelectedFile(new File("image.svg"));
         int status = chooser.showSaveDialog(this);
 
-        if (status==JFileChooser.CANCEL_OPTION || status==JFileChooser.ERROR_OPTION)
+        if (status == JFileChooser.CANCEL_OPTION || status == JFileChooser.ERROR_OPTION) {
             return;
-
+        }
         try {
             UIController.instance().getFocusPanel().createSVG(chooser.getSelectedFile());
         } catch (java.lang.NullPointerException ex) {
@@ -356,17 +356,21 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     void export_actionPerformed(ActionEvent e) {
         try {
             JFileChooser chooser = new JFileChooser();
-            chooser.setAccessory(resultsOption);
-            chooser.showSaveDialog(this);
-            FileWriter writer = new FileWriter(chooser.getSelectedFile().
-                    getAbsolutePath());
-            writer.write(RPnConfigReader.XML_HEADER);
-            writer.write("<rpnconfiguration>\n");
-            RPnNumericsModule.export(writer);
-            RPnVisualizationModule.export(writer);
-            RPnDataModule.export(writer);
-            writer.write("</rpnconfiguration>");
-            writer.close();
+//            chooser.setAccessory(resultsOption);
+            chooser.setSelectedFile(new File("output.xml"));
+            chooser.setFileFilter(new FileNameExtensionFilter("XML File", "xml","XML"));
+            if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+                FileWriter writer = new FileWriter(chooser.getSelectedFile().
+                        getAbsolutePath());
+                writer.write(RPnConfigReader.XML_HEADER);
+                writer.write("<rpnconfiguration>\n");
+                RPnNumericsModule.export(writer);
+                RPnVisualizationModule.export(writer);
+                RPnDataModule.export(writer);
+                writer.write("</rpnconfiguration>");
+                writer.close();
+            }
+
         } catch (java.io.IOException ioex) {
             ioex.printStackTrace();
         } catch (java.lang.NullPointerException nullEx) {
@@ -752,6 +756,4 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         }
     }
-
-
 }

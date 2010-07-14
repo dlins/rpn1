@@ -7,8 +7,8 @@
 
             <BOUNDARYPARAM name="dimension" value="2" />
             <BOUNDARYPARAM name="iso2equi" value="false" />
-            <BOUNDARYPARAM name="x-min" value="-1.5" />
-            <BOUNDARYPARAM name="x-max" value="1.5" />
+            <BOUNDARYPARAM name="x-min" value="-0.5" />
+            <BOUNDARYPARAM name="x-max" value="0.5" />
             <BOUNDARYPARAM name="y-min" value="-0.5" />
             <BOUNDARYPARAM name="y-max" value="0.5" />
 

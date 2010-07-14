@@ -453,26 +453,11 @@ public class RPnDataModule {
     /** Writes the data of actual session into a XML file. */
     static public void export(FileWriter writer) throws java.io.IOException {
 
-//        Iterator geomIterator = RPnDataModule.PHASESPACE.getGeomObjIterator();
-
-
         Iterator<Command> commandInterator = UIController.instance().getCommandIterator();
-
-
         while (commandInterator.hasNext()) {
-
            writer.write((commandInterator.next().toXML()));
 
         }
-
-//        Iterator auxGeomIterator = RPnDataModule.AUXPHASESPACE.getGeomObjIterator();
-//
-//        while (auxGeomIterator.hasNext()) {
-//
-//            writer.write(((RpGeometry) auxGeomIterator.next()).geomFactory().toXML());
-//
-//        }
-
 
     }
 }

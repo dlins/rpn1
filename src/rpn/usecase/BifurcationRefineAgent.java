@@ -6,6 +6,10 @@
 package rpn.usecase;
 
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import rpnumerics.Area;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -13,7 +17,13 @@ import rpn.RPnSelectedAreaDialog;
 import rpn.component.*;
 import rpn.controller.ui.BIFURCATIONREFINE_CONFIG;
 import rpn.controller.ui.UIController;
+import rpn.parser.RPnDataModule;
+import rpnumerics.BifurcationCurve;
 import rpnumerics.BifurcationProfile;
+import rpnumerics.RPnCurve;
+import rpnumerics.methods.contour.support.CurveDomainManager;
+import rpnumerics.methods.contour.support.DimensionDoenstMatch;
+import rpnumerics.methods.contour.support.NoContourMethodDefined;
 import wave.util.*;
 
 public class BifurcationRefineAgent extends RpModelPlotAgent {
@@ -45,10 +55,20 @@ public class BifurcationRefineAgent extends RpModelPlotAgent {
 
     public RpGeometry createRpGeometry(RealVector[] input) {
 
-        System.out.println("Chamando create geometry do refino " + input.length);
+         Iterator geomIterator = RPnDataModule.AUXPHASESPACE.getGeomObjIterator();
+
+          while (geomIterator.hasNext()) {
+                RpGeometry geom = (RpGeometry) geomIterator.next();
+
+                if (geom instanceof BifurcationCurveGeom) {
+                    BifurcationCurveGeomFactory factory = (BifurcationCurveGeomFactory) geom.geomFactory();
+                    return factory.refine();
+                }
+
+          }
+
 
         return null;
-
     }
 
     static public BifurcationRefineAgent instance() {

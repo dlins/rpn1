@@ -149,7 +149,7 @@ public class CurveDomainManager {
         RealVector topright = lastArea.getTopRight();
         RealVector resolutionArea = lastArea.getResolution();
 
-        int dimensionArea = (downleft.getSize() / 2);
+        int dimensionArea = (downleft.getSize());// / 2);
 
         if (dimensionArea == dimension) {
 
@@ -216,6 +216,8 @@ public class CurveDomainManager {
 
         for (int pont_polyline = 0; pont_polyline < polyline.length; pont_polyline++) {
 
+
+            tempPolylines[pont_polyline]=new Vector();
             int numberOfPoints = polyline[pont_polyline].length;
 
             for (int pont_point = 0; pont_point < numberOfPoints; pont_point++) {
@@ -238,10 +240,22 @@ public class CurveDomainManager {
             }
         }
 
+
+
         for (int pont_polyline = 0; pont_polyline < polyline.length; pont_polyline++) {
-            Object[] points = tempPolylines[pont_polyline].toArray();
-            cleanedPolyline[pont_polyline] = (PointNDimension[]) points[pont_polyline];
-        }
+           Object[] points = tempPolylines[pont_polyline].toArray();
+
+           for(int pont_point = 0; pont_point < polyline.length; pont_point++) {
+               cleanedPolyline[pont_polyline][pont_point] = (PointNDimension) points[pont_point];
+           }
+       }
+
+
+//
+//        for (int pont_polyline = 0; pont_polyline < polyline.length; pont_polyline++) {
+//            Object[] points = tempPolylines[pont_polyline].toArray();
+//            cleanedPolyline[pont_polyline] = (PointNDimension[]) points;
+//        }
 
         // limpar
         newCurve = new RPnCurve(cleanedPolyline, curve.viewingAttr());

@@ -128,10 +128,6 @@ public class UIController extends ComponentUI {
 
     public void removeLastCommand() {
         commandArray_.remove(commandArray_.size() - 1);
-        for (Command element : commandArray_) {
-            System.out.println("" + commandArray_.indexOf(element) + element.toXML());
-        }
-
     }
 
     public Iterator<Command> getCommandIterator() {
@@ -339,14 +335,6 @@ public class UIController extends ComponentUI {
 
     public void addCommand(Command command) {
         commandArray_.add(command);
-        for (Command element : commandArray_) {
-            System.out.println("" + commandArray_.indexOf(element) + element.toXML());
-
-        }
-
-
-
-
     }
 
     /** Sets the state of the application. The application works as a state machine and this method changes the actual state.*/

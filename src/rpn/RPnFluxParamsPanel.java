@@ -120,9 +120,10 @@ public class RPnFluxParamsPanel extends JPanel {
 
         RealVector paramsVector = new RealVector(paramsBuffer.toString());
         RPNUMERICS.setFluxParams(new FluxParams(paramsVector));
+        System.out.println(paramsVector);
         Integer teste = new Integer(0);
         Integer teste2 = new Integer(1);
-        rpn.usecase.ChangeFluxParamsAgent.instance().applyChange(new PropertyChangeEvent(this, "", teste, teste2));
+        rpn.usecase.ChangeFluxParamsAgent.instance().applyChange(new PropertyChangeEvent(rpn.usecase.ChangeFluxParamsAgent.instance(), "", teste, teste2));
 
     }
 }
