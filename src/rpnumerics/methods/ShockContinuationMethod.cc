@@ -17,7 +17,7 @@
  * Definitions:
  */
 
-ShockContinuationMethod::ShockContinuationMethod(const ODESolver & solver) : solver_(solver.clone()) {
+ShockContinuationMethod::ShockContinuationMethod(const ODESolver & solver,const Boundary  & boundary, int family ) : solver_(solver.clone()),boundary_(boundary.clone()),family_(family) {
 
 }
 

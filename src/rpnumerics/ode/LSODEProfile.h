@@ -100,13 +100,11 @@ private:
     int liw_;
     int mf_;
     int paramLength_;
-    Boundary * boundary_;
-
 
 
 public:
 
-    LSODEProfile(const WaveFlow &, const Boundary &, int NmaxSteps, int, int, double, int, double, int, const double *);
+    LSODEProfile(const WaveFlow &, int NmaxSteps, int, int, double, int, double, int, const double *);
 
     LSODEProfile(const LSODEProfile &);
 
@@ -136,16 +134,13 @@ public:
 
     void setParamComponent(int, const double);
 
-    const Boundary & boundary()const;
+
 
     double getTime() const;
     void setTime(const double );
 
 };
 
-inline const Boundary & LSODEProfile::boundary()const {
-    return *boundary_;
-}
 
 inline double LSODEProfile::relativeTolerance()const {
     return rtol_;

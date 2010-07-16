@@ -19,7 +19,7 @@
 
 
 
-CompositeContinuationMethod::CompositeContinuationMethod(const ODESolver & solver) : solver_(solver.clone()) {
+CompositeContinuationMethod::CompositeContinuationMethod(const ODESolver & solver,const Boundary & boundary,int family) : solver_(solver.clone()),boundary_(boundary.clone()),family_(family) {
 
 }
 

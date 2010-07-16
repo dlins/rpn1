@@ -62,6 +62,10 @@ public:
     int solve(const RealVector &, RealVector &, double &) const;
 
     static void increaseTime();
+
+    static void setTime(double);
+
+    static double getTime();
     
     const ODESolverProfile & getProfile() const ;
 

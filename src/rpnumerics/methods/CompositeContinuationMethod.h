@@ -29,10 +29,12 @@ class CompositeContinuationMethod {
 private:
 
     ODESolver * solver_;
+    Boundary *boundary_;
+    int family_;
 
 public:
 
-    CompositeContinuationMethod(const ODESolver &);
+    CompositeContinuationMethod(const ODESolver &,const Boundary &,int );
 
     void curve(const RealVector &, int, vector<RealVector> &);
 

@@ -119,13 +119,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_calc(JNIEnv * env, jobje
 
     CompositeFlow flow(familyIndex, rarefactionFlow, shockFlow, RpNumerics::getPhysics().fluxFunction());
 
-    LSODEProfile lsodeProfile(flow, RpNumerics::getPhysics().boundary(), maxStepsNumber, dimension, itol, rtol, mf, deltaxi, nparam, param);
+    LSODEProfile lsodeProfile(flow, maxStepsNumber, dimension, itol, rtol, mf, deltaxi, nparam, param);
 
     LSODE odeSolver(lsodeProfile);
 
     vector <RealVector> coords;
 
-    CompositeContinuationMethod method(odeSolver);
+    CompositeContinuationMethod method(odeSolver,RpNumerics::getPhysics().boundary(),familyIndex);
 
     method.curve(realVectorInput, timeDirection, coords);
     

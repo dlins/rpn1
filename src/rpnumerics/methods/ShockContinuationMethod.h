@@ -32,11 +32,13 @@ private:
     void fill_with_jet(const FluxFunction & flux_object, int n, double *in, int degree, double *F, double *J, double *H);
 
     ODESolver * solver_;
+    Boundary * boundary_;
+    int family_;
 
 
 public:
 
-    ShockContinuationMethod(const ODESolver &);
+    ShockContinuationMethod(const ODESolver &,const Boundary &,int );
 
     virtual ~ShockContinuationMethod();
 
