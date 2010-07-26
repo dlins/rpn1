@@ -8,8 +8,6 @@ package rpn.controller;
 import rpn.component.RpGeomFactory;
 import rpn.component.HugoniotCurveGeomFactory;
 import rpn.usecase.*;
-import rpnumerics.HugoniotCurveCalc;
-import rpnumerics.PhasePoint;
 import java.beans.PropertyChangeEvent;
 
 public class HugoniotController extends RpCalcController {
@@ -61,6 +59,9 @@ public class HugoniotController extends RpCalcController {
 //            if (change.getSource() instanceof ChangeOrbitDirectionAgent) {
             // updates the HugoniotFunction xzero
 //TESTE
+
+
+            System.out.println("Chamando propertyChange de Hugoniot Controller");
 //            ((HugoniotCurveCalc) geomFactory_.rpCalc()).uMinusChangeNotify((PhasePoint) change.getNewValue());
 //            }
 

@@ -44,7 +44,7 @@
                 <attribute name="Class-path" value="./vecmath.jar ./log4j.jar ./jbossall-client.jar \
 			./pdflib.jar ./xml4j.jar ./jlapack-0.6.jar ./msv.jar ./iso-relax.jar \
                         ./batik-awt-util.jar ./batik-util.jar ./batik-dom.jar ./batik-ext.jar \
-                        ./batik-svg-dom.jar ./batik-svggen.jar"/>
+                        ./batik-svg-dom.jar ./batik-svggen.jar ./batik-xml.jar"/>
             </manifest>
         </jar>
     </target>

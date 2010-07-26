@@ -222,65 +222,66 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     protected void phaseSpaceFramesInit(Boundary boundary) {
         wave.multid.graphs.ClippedShape clipping = new wave.multid.graphs.ClippedShape(boundary);
         int numOfPanels = RPnVisualizationModule.DESCRIPTORS.size();
+
         auxFrames_ = new RPnPhaseSpaceFrame[numOfPanels * 2];
         frames_ = new RPnPhaseSpaceFrame[numOfPanels];
 
 
-        //Init Aux Frames
-
-        Boundary auxBoundary = null;
-
-        if (RPNUMERICS.boundary() instanceof RectBoundary) {//TODO Get auxiliar boundary configuration from RPNUMERICS 
-
-            RealVector newMax = new RealVector(RPNUMERICS.boundary().getMaximums().getSize() * 2);
-
-            RealVector newMin = new RealVector(RPNUMERICS.boundary().getMinimums().getSize() * 2);
-
-            newMin.setElement(0, -0.5);
-            newMin.setElement(1, -0.5);
-            newMin.setElement(2, -0.5);
-            newMin.setElement(3, -0.5);
-
-            newMax.setElement(0, 0.5);
-            newMax.setElement(1, 0.5);
-            newMax.setElement(2, 0.5);
-            newMax.setElement(3, 0.5);
-
-            auxBoundary = new RectBoundary(newMin, newMax);
-        }
-
-        if (RPNUMERICS.boundary() instanceof IsoTriang2DBoundary) {
-            auxBoundary = (IsoTriang2DBoundary) RPNUMERICS.boundary();
-        }
-
-        wave.multid.graphs.ClippedShape auxClipping = new wave.multid.graphs.ClippedShape(auxBoundary);
-
-
-        for (int i = 0; i < numOfPanels * 2; i++) {
-
-            wave.multid.view.ViewingTransform auxViewingTransf =
-                    ((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(
-                    i)).createTransform(auxClipping);
-
-
-            try {
-                wave.multid.view.Scene scene = RPnDataModule.AUXPHASESPACE.createScene(auxViewingTransf,
-                        new wave.multid.view.ViewingAttr(Color.black));
-                auxFrames_[i] = new RPnPhaseSpaceFrame(scene, commandMenu_);
-                auxFrames_[i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i)).label());
-
-                UIController.instance().install(auxFrames_[i].phaseSpacePanel());
-
-                setFramesPosition(auxFrames_[i]);
-                auxFrames_[i].pack();
-                auxFrames_[i].setVisible(true);
-
-
-            } catch (wave.multid.DimMismatchEx dex) {
-                dex.printStackTrace();
-            }
-
-        }
+//        //Init Aux Frames
+//
+//        Boundary auxBoundary = null;
+//
+//        if (RPNUMERICS.boundary() instanceof RectBoundary) {//TODO Get auxiliar boundary configuration from RPNUMERICS
+//
+//            RealVector newMax = new RealVector(RPNUMERICS.boundary().getMaximums().getSize() * 2);
+//
+//            RealVector newMin = new RealVector(RPNUMERICS.boundary().getMinimums().getSize() * 2);
+//
+//            newMin.setElement(0, -0.5);
+//            newMin.setElement(1, -0.5);
+//            newMin.setElement(2, -0.5);
+//            newMin.setElement(3, -0.5);
+//
+//            newMax.setElement(0, 0.5);
+//            newMax.setElement(1, 0.5);
+//            newMax.setElement(2, 0.5);
+//            newMax.setElement(3, 0.5);
+//
+//            auxBoundary = new RectBoundary(newMin, newMax);
+//        }
+//
+//        if (RPNUMERICS.boundary() instanceof IsoTriang2DBoundary) {
+//            auxBoundary = (IsoTriang2DBoundary) RPNUMERICS.boundary();
+//        }
+//
+//        wave.multid.graphs.ClippedShape auxClipping = new wave.multid.graphs.ClippedShape(auxBoundary);
+//
+//
+//        for (int i = 0; i < numOfPanels * 2; i++) {
+//
+//            wave.multid.view.ViewingTransform auxViewingTransf =
+//                    ((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(
+//                    i)).createTransform(auxClipping);
+//
+//
+//            try {
+//                wave.multid.view.Scene scene = RPnDataModule.AUXPHASESPACE.createScene(auxViewingTransf,
+//                        new wave.multid.view.ViewingAttr(Color.black));
+//                auxFrames_[i] = new RPnPhaseSpaceFrame(scene, commandMenu_);
+//                auxFrames_[i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i)).label());
+//
+//                UIController.instance().install(auxFrames_[i].phaseSpacePanel());
+//
+//                setFramesPosition(auxFrames_[i]);
+//                auxFrames_[i].pack();
+//                auxFrames_[i].setVisible(true);
+//
+//
+//            } catch (wave.multid.DimMismatchEx dex) {
+//                dex.printStackTrace();
+//            }
+//
+//        }
 
 
         // Init Main Frame
@@ -358,7 +359,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             JFileChooser chooser = new JFileChooser();
 //            chooser.setAccessory(resultsOption);
             chooser.setSelectedFile(new File("output.xml"));
-            chooser.setFileFilter(new FileNameExtensionFilter("XML File", "xml","XML"));
+            chooser.setFileFilter(new FileNameExtensionFilter("XML File", "xml", "XML"));
             if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
                 FileWriter writer = new FileWriter(chooser.getSelectedFile().
                         getAbsolutePath());

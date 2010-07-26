@@ -38,8 +38,8 @@ public class RPnVisualizationModule {
         public void startElement(String name, AttributeList att) throws SAXException {
             if (name.equals("VIEWINGPARAMS")) {
 
-
                 domain_ = att.getValue(0);
+
 
             }
 
@@ -79,6 +79,7 @@ public class RPnVisualizationModule {
                     DESCRIPTORS.add(
                             new RPnProjDescriptor(new Space("", new Integer(domain_).intValue()), label_, new Integer(vpw_).intValue(),
                             new Integer(vph_).intValue(), projIndices, iso2equi_));
+
 
                 }
                 if (name.equals(

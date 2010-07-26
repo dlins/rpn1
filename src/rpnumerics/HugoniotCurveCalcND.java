@@ -104,6 +104,7 @@ public class HugoniotCurveCalcND
     }
 
     public RpSolution recalc() {
+        System.out.println("Chamando recalc");
         return calc();
     }
 

@@ -103,9 +103,11 @@ int Quad2FluxFunction::jet(const WaveState & x, JetMatrix & y, int degree = 2) c
 
     const FluxParams params = fluxParams();
 
-    //    RealVector parVector = params.params();
+//        RealVector parVector = params.params();
 
-    //    cout << parVector << "\n";
+//        cout << "Params em jet "<< parVector << "\n";
+
+//        cout << "Chamando fluxFunction "<< "\n";
 
     a1 = params.component(0);
     b1 = params.component(1);
@@ -172,7 +174,7 @@ int Quad2FluxFunction::jet(const WaveState & x, JetMatrix & y, int degree = 2) c
         // Calculate DF
         double out00, out01, out10, out11;
 
-        //        out00 = a1 * u + b1 * v + d1;
+//                out00 = a1 * u + b1 * v + d1;
         //        out01 = b1 * u + c1 * v + e1;
         //        out10 = a2 * u + b2 * v + d2;
         //        out11 = b2 * u + c2 * v + e2;

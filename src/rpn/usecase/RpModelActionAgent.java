@@ -67,7 +67,7 @@ public abstract class RpModelActionAgent extends AbstractAction implements Undoa
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return desc_;
     }
 }

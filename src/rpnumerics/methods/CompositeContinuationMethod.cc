@@ -19,7 +19,7 @@
 
 
 
-CompositeContinuationMethod::CompositeContinuationMethod(const ODESolver & solver,const Boundary & boundary,int family) : solver_(solver.clone()),boundary_(boundary.clone()),family_(family) {
+CompositeContinuationMethod::CompositeContinuationMethod(const ODESolver & solver, const Boundary & boundary, int family) : solver_(solver.clone()), boundary_(boundary.clone()), family_(family) {
 
 }
 
@@ -39,10 +39,7 @@ void CompositeContinuationMethod::curve(const RealVector & input, int direction,
 
     int previous = 0;
 
-
     for (int i = 0; i < n; i++) in[i] = input(i);
-    
-    
 
     if (previous == INITIAL_CURVE) {
         // TODO: Initialize the composite curve. In rare occasions the composite will be the
@@ -74,7 +71,6 @@ void CompositeContinuationMethod::curve(const RealVector & input, int direction,
     double param[nparam];
 
 
-    //TODO : Como pegar esses parametros ????
 
     //    param[0] = indx;                                                  // Family
     //    for (int i = 0; i < n; i++) param[1 + i]     = -input_ref_vec[i]; // Rar. ref. vector
@@ -82,8 +78,8 @@ void CompositeContinuationMethod::curve(const RealVector & input, int direction,
 
     // A vector only for LSODE to work with.
     double Ulsode[2 * n];
-//    for (int i = 0; i < 2 * n; i++) Ulsode[i] = in[i];
-//    for (int i = 0; i < 2 * n; i++) Ulsode[i] += deltaxi * param[1 + i];
+    //    for (int i = 0; i < 2 * n; i++) Ulsode[i] = in[i];
+    //    for (int i = 0; i < 2 * n; i++) Ulsode[i] += deltaxi * param[1 + i];
 
     // Compute the curve proper (BEGIN)
     RealVector outputVector(n);
@@ -134,26 +130,26 @@ void CompositeContinuationMethod::curve(const RealVector & input, int direction,
             RealVector outputPoint(2 * n);
             for (int i = 0; i < 2 * n; i++) outputPoint(i) = U[i];
             output.push_back(outputPoint);
-//            add(out, U);
+            //            add(out, U);
 
             // CHECK MONOTONICITY, DOMAIN
 
             // Update the counter and the time
-//            (*numtotal)++;
+            //            (*numtotal)++;
             step++;
-//            tout += deltaxi;
+            //            tout += deltaxi;
 
-            LSODE::increaseTime();
+            //            LSODE::increaseTime();
         } else {
-//            printf("Cmp aborted, numtotal = %d\n", (*numtotal));
+            //            printf("Cmp aborted, numtotal = %d\n", (*numtotal));
             printf("Cmp aborted, numtotal = %d\n", step);
-//            return ABORTED_PROCEDURE;
+            //            return ABORTED_PROCEDURE;
             return;
         }
     }
     // Compute the curve proper (END)
-//    return SUCCESSFUL_PROCEDURE;
-    return ;
+    //    return SUCCESSFUL_PROCEDURE;
+    return;
 
 
 }

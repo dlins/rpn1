@@ -34,6 +34,7 @@ private:
     ODESolver * solver_;
     Boundary * boundary_;
     int family_;
+    RealVector * referenceVector_;
 
 
 public:
@@ -43,6 +44,10 @@ public:
     virtual ~ShockContinuationMethod();
 
     void curve(const RealVector &, int direction, vector<RealVector> &);
+
+    const RealVector & getReferenceVector();
+
+    void setReferenceVector(const RealVector &);
 
 };
 

@@ -114,6 +114,8 @@ inline void Quad3::boundary(const Boundary & boundary) {
 
 inline Boundary * Quad3::defaultBoundary() {
 
+
+
     RealVector min(3);
 
     min.component(0) = -0.5;

@@ -169,8 +169,15 @@ int LSODE::solver(int (*f)(int *, double *, double *, double *), int *neq, doubl
         int *iwork, int *liw, int(*j)(int *, double *, double *, int *, int *, double *, int *),
         int *mf, int *nparam, double *param) const {
 
+    const LSODEProfile & profile = (const LSODEProfile &)getProfile();
+
+    tout_=t_+profile.deltaTime();
+
     lsode_(f, neq, y, t, tout, itol, rtol, atol, itask, istate,
             iopt, rwork, lrw, iwork, liw, j, mf, nparam, param);
+
+
+    t_=tout_;
 
 
     if (*istate == 2) {

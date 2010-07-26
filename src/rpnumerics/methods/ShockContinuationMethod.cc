@@ -318,7 +318,7 @@ void ShockContinuationMethod::curve(const RealVector & input, int direction, vec
         //        cout << "Input Vector: " << inputVector << endl;
         info = solver_->solve(inputVector, outputVector, testeDouble);
         //        cout << "Output: " << outputVector << endl;
-        LSODE::increaseTime();
+        //        LSODE::increaseTime();
         if (info == SUCCESSFUL_PROCEDURE) {
             //            cout << "SUCCE" << endl;
             //
@@ -328,7 +328,6 @@ void ShockContinuationMethod::curve(const RealVector & input, int direction, vec
             for (i = 0; i < n; i++) {
                 Pn[i] = outputVector(i);
             }
-
             //
             double nowspeed = flow.shockspeed(n, indx, 1, in, Pn);
             //            //
@@ -357,11 +356,11 @@ void ShockContinuationMethod::curve(const RealVector & input, int direction, vec
             for (i = 0; i < n; i++) {
                 newReferenceVector(i) = dHdu[i]; //param[n + i + 1];
                 outputPoint(i) = Pn[i];
-                //                outputPoint(i) = dHdu[i];
+                // outputPoint(i) = dHdu[i];
             }
             flow.setReferenceVector(newReferenceVector);
 
-            //            outputPoint(n) = sn;
+            // outputPoint(n) = sn;
 
             output.push_back(outputPoint);
 
@@ -370,7 +369,8 @@ void ShockContinuationMethod::curve(const RealVector & input, int direction, vec
 
         } else {
             cout << "ELSE" << endl;
-            //                        printf("Inside while, info = %d, numtotal = %d\n", info, *numtotal);
+
+            // printf("Inside while, info = %d, numtotal = %d\n", info, *numtotal);
             return; // ABORTED_PROCEDURE;
         }
     }
@@ -382,4 +382,13 @@ ShockContinuationMethod::~ShockContinuationMethod() {
 
 }
 
+const RealVector & ShockContinuationMethod::getReferenceVector() {
+    return *referenceVector_;
+}
 
+void ShockContinuationMethod::setReferenceVector(const RealVector &vector) {
+
+    delete referenceVector_;
+    referenceVector_ = new RealVector(vector);
+
+}

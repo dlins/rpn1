@@ -14,6 +14,7 @@
 #include "RarefactionContinuationMethod.h"
 #include "LSODEProfile.h"
 #include "LSODESolver.h"
+#include "ContinuationShockFlow.h"
 
 /*
  * ---------------------------------------------------------------
@@ -27,7 +28,7 @@ RarefactionContinuationMethod::RarefactionContinuationMethod(const RarefactionCo
 RarefactionContinuationMethod::RarefactionContinuationMethod(const ODESolver & solver) : solver_(solver.clone()) {
 }
 
-RarefactionContinuationMethod::RarefactionContinuationMethod(const ODESolver & solver,const Boundary & boundary,int family) : solver_(solver.clone()), boundary_(boundary.clone()),family_(family) {
+RarefactionContinuationMethod::RarefactionContinuationMethod(const ODESolver & solver, const Boundary & boundary, int family) : solver_(solver.clone()), boundary_(boundary.clone()), family_(family) {
 
 }
 
@@ -57,9 +58,6 @@ int RarefactionContinuationMethod::init(ContinuationRarefactionFlow * flow, int 
     }
     if (flow->flux(n, indx, inp, &lambdap, &rep[0]) == COMPLEX_EIGENVALUE) return COMPLEX_EIGENVALUE;
     if (flow->flux(n, indx, inm, &lambdam, &rem[0]) == COMPLEX_EIGENVALUE) return COMPLEX_EIGENVALUE;
-
-    //    printf("@ rarefactioncurve(), after init.\nl- = % f, l = % f, l+ = % f\n", lambdam, *lambda, lambdap);
-    //    printf("e = (% f, % f), ", rev[0], rev[1]);
 
     // 4. Find the reference eigenvector.
     if (increase == 1) { // Eigenvalues should increase as the orbit advances
@@ -134,13 +132,9 @@ void RarefactionContinuationMethod::curve(const RealVector & inputVector, int di
 
     double testeDouble = 0; //TODO Dummy value !!
     double nowIn[dimension];
-    //double oldRefVec[dimension];
-    //double tempRefVector[dimension];
     double speed_prev;
 
     RealVector outputVector_prev;
-    //    cout << testeFlow.getReferenceVector() << endl;
-    //    cout << "Info = " << info << endl;
 
 
     while (step < solver_->getProfile().maxStepNumber() && info == SUCCESSFUL_PROCEDURE) {
@@ -148,14 +142,7 @@ void RarefactionContinuationMethod::curve(const RealVector & inputVector, int di
         outputVector_prev = localInputVector;
         speed_prev = speed;
 
-        /*
-                for (int i = 0; i < dimension; i++) {
-                    oldRefVec[i] = testeFlow.getReferenceVectorComponent(i);
-                }
-         */
-        //        cout << "before solver" << endl;
         info = solver_->solve(localInputVector, outputVector, testeDouble);
-        //        cout << "info (solver) = " << info << endl;
 
         if (info == SUCCESSFUL_PROCEDURE) {
 
@@ -166,19 +153,15 @@ void RarefactionContinuationMethod::curve(const RealVector & inputVector, int di
             //-----------------------------------Stop Criterion---------------------------
 
             info = testeFlow.flux(dimension, indx, &nowIn[0], &speed, 0);
-            //            cout << "info (flux) = " << info << endl;
-            //            cout << "speed = " << speed << ", speed_prev = " << speed_prev << endl;
 
             if (info == ABORTED_PROCEDURE) return;
 
             // Eigenvalues should follow a monotonous trend. If they don't, abort.
 
-
             if (speed > speed_prev && direction == -1) {
                 info = ABORTED_PROCEDURE;
                 return;
             }
-
 
             if (speed < speed_prev && direction == 1) {
                 info = ABORTED_PROCEDURE;
@@ -188,36 +171,24 @@ void RarefactionContinuationMethod::curve(const RealVector & inputVector, int di
             // Mon 10 May 2010 05:07:33 PM BRT 
             RealVector r;
             int cllsn = (boundary_->intersection(outputVector, outputVector_prev, r));
-            //cout << "cllsn = " << cllsn << endl;
+
             if (cllsn == -1) {
                 // Both outside
+
                 info = ABORTED_PROCEDURE;
                 return; // ABORTED_PROCEDURE;
             } else if (cllsn == 1) {
                 // Both inside
-                //for (int i = 0; i < n; i++) Ustore[i] = U[i];
-                //Ustore[n] = speed;
+
                 output.push_back(outputVector);
             } else if (cllsn == 0) {
                 // One inside, one outside: store and get out
-                //double ppnt[n + 1];
-                //for (int i = 0; i < n; i++) ppnt[i] = r[i];
-                //flux(n, indx, flux_object, ppnt, &(ppnt[n]), 0);
-
-                // Store, update the counter and the time
-                //add(out, ppnt);
-                //(*numtotal)++;
-                //tout = t + deltaxi;
-                LSODE::increaseTime();
                 output.push_back(r);
-
                 // Reference vector for the next curve (a composite):
-                //for (int i = 0; i < n; i++) ref_vec[i] = ppnt[i] - Uprev[i];
                 RealVector ref_vec(r);
                 for (int i = 0; i < dimension; i++) ref_vec(i) = r(i) - outputVector_prev(i);
 
                 testeFlow.setReferenceVector(ref_vec);
-                //normalize(n, ref_vec);
 
                 info = ABORTED_PROCEDURE;
                 return;
@@ -228,26 +199,15 @@ void RarefactionContinuationMethod::curve(const RealVector & inputVector, int di
 
             // Reference vector
 
-            /*            if (testeFlow.prodint(dimension, oldRefVec, tempRefVector) > 0) for (int ii = 0; ii < dimension; ii++) testeFlow.setReferenceVectorComponent(ii, tempRefVector[ii]); //rev[ii] = tempRefVector[ii];
-                        else for (int ii = 0; ii < dimension; ii++) testeFlow.setReferenceVectorComponent(ii, -tempRefVector[ii]); //rev[ii] = -tempRefVector[ii];
-             */
             for (int i = 0; i < dimension; i++) testeFlow.setReferenceVectorComponent(i, outputVector(i) - outputVector_prev(i));
-            //            for (int i = 0; i < dimension; i++) cout << "refvec[" << i << "] = " << outputVector(i) - outputVector_prev(i) << endl;
-
-
-            //previouseigenvalue = noweigenvalue;
-
             output.push_back(outputVector);
-
             localInputVector = outputVector;
-
             step++;
-
-            LSODE::increaseTime();
-
 
         }
     }
+
+
 
 }
 
@@ -257,14 +217,8 @@ const RealVector & RarefactionContinuationMethod::getReferenceVector() {
 
 void RarefactionContinuationMethod::setReferenceVector(const RealVector &vector) {
 
-    if (referenceVector_ == NULL) {
-        referenceVector_ = new RealVector(vector);
-    } else {
-        for (int i = 0; i < vector.size(); i++) {
-            referenceVector_->operator ()(i) = vector.component(i);
-        }
-
-    }
+    delete referenceVector_;
+    referenceVector_ = new RealVector(vector);
 }
 
 RarefactionMethod * RarefactionContinuationMethod::clone() const {

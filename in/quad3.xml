@@ -1,16 +1,70 @@
 <?xml version="1.0"?>
-<!DOCTYPE rpnconfig >
-<rpnconfig>
-    <NUMERICS >
-        <PHYSICS physicsid="QuadraticR3" libname="rpnumerics">
-        </PHYSICS>
-    </NUMERICS>
+<!DOCTYPE rpnconfiguration >
+<rpnconfiguration>
+    <PHYSICS name="QuadraticR3">
+
+      <!-- <BOUNDARY name="rect">
+
+            <BOUNDARYPARAM name="dimension" value="3" />
+            <BOUNDARYPARAM name="iso2equi" value="false" />
+            <BOUNDARYPARAM name="x-min" value="-0.5" />
+            <BOUNDARYPARAM name="x-max" value="0.5" />
+            <BOUNDARYPARAM name="y-min" value="-0.5" />
+            <BOUNDARYPARAM name="y-max" value="0.5" />
+
+             <BOUNDARYPARAM name="z-min" value="-0.5" />
+             <BOUNDARYPARAM name="z-max" value="0.5" />
+
+
+
+        </BOUNDARY>-->
+
+<!--        <FLUXFUNCTION >
+            <FLUXPARAMS name="param0" position="0" value ="-1" />
+            <FLUXPARAMS name="param1" position="1" value ="0" />
+            <FLUXPARAMS name="param2" position="2" value ="1" />
+            <FLUXPARAMS name="param3" position="3" value ="0" />
+            <FLUXPARAMS name="param4" position="4" value ="0.1" />
+            <FLUXPARAMS name="param5" position="5" value ="0" />
+            <FLUXPARAMS name="param6" position="6" value ="1" />
+            <FLUXPARAMS name="param7" position="7" value ="0" />
+            <FLUXPARAMS name="param8" position="8" value ="-0.1" />
+            <FLUXPARAMS name="param9" position="9" value ="0" />
+
+        </FLUXFUNCTION>-->
+
+    </PHYSICS>
+
+    <CURVE name="shock">
+        <CURVEPARAM name="family" value="0"/>
+        <CURVEPARAM name="xzero" value="3.4 0.5"/>
+        <CURVEPARAM name="sigma" value="0.03"/>
+    </CURVE>
+
 
     <VIEWINGPARAMS modeldomain="3">
         <PROJDESC  projlabel="Axis0 X Axis1" projaxisid="0 1" vpwidth="650" vpheight="650"></PROJDESC>
-        <PROJDESC  projlabel="Axis0 X Axis2" projaxisid="0 2" vpwidth="650" vpheight="650"></PROJDESC>
-        <PROJDESC  projlabel="Axis1 X Axis2" projaxisid="1 2" vpwidth="650" vpheight="650"></PROJDESC>
-    </VIEWINGPARAMS>
-    
-</rpnconfig>
+        <PROJDESC  projlabel="Axis0 X Axis1" projaxisid="0 2" vpwidth="650" vpheight="650"></PROJDESC>
+        <PROJDESC  projlabel="Axis0 X Axis1" projaxisid="2 1" vpwidth="650" vpheight="650"></PROJDESC>
 
+    </VIEWINGPARAMS>
+
+    <AUXVIEWINGPARAMS modeldomain="3">
+
+        <PROJDESC  projlabel="Aux Axis0 X Axis1" projaxisid="0 1" vpwidth="600" vpheight="600"></PROJDESC>
+        <PROJDESC  projlabel="Aux Axis2 X Axis3" projaxisid="2 0" vpwidth="600" vpheight="600"></PROJDESC>
+
+        <PROJDESC  projlabel="Aux Axis0 X Axis1" projaxisid="0 1" vpwidth="600" vpheight="600"></PROJDESC>
+        <PROJDESC  projlabel="Aux Axis2 X Axis3" projaxisid="2 1" vpwidth="600" vpheight="600"></PROJDESC>
+
+        <PROJDESC  projlabel="Aux Axis0 X Axis1" projaxisid="0 1" vpwidth="600" vpheight="600"></PROJDESC>
+        <PROJDESC  projlabel="Aux Axis2 X Axis3" projaxisid="1 2" vpwidth="600" vpheight="600"></PROJDESC>
+
+
+
+
+    </AUXVIEWINGPARAMS>
+
+
+
+</rpnconfiguration>

@@ -61,7 +61,7 @@ public:
     
     int solve(const RealVector &, RealVector &, double &) const;
 
-    static void increaseTime();
+//    static void increaseTime();
 
     static void setTime(double);
 
@@ -73,9 +73,9 @@ public:
     
 };
 
-inline void LSODE::increaseTime() {
-    LSODE::tout_ += profile_->deltaTime();
-}
+//inline void LSODE::increaseTime() {
+//    LSODE::tout_ += profile_->deltaTime();
+//}
 
 inline ODESolver * LSODE::clone()const {
     return new LSODE(*this);
