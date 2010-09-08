@@ -11,22 +11,17 @@
         <CURVEPARAM name="sigma" value="0.03"/>
     </CURVE>
     
-    
-    <VIEWINGPARAMS modeldomain="2">
-        <PROJDESC  projlabel="Axis0 X Axis1" projaxisid="0 1" vpwidth="650" vpheight="650"><ISO2EQUI_TRANSFORM/></PROJDESC>
+       <VIEWCONFIGURATION modeldomain="2">
 
-    </VIEWINGPARAMS>
-   
+    <PROJDESC name="Axis0 Axis1">
+        <VIEWPARAM name="axis" value="0 1"/>
+        <VIEWPARAM name="vpwidth" value="650"/>
+        <VIEWPARAM name="vpheight" value="650"/>
+        <VIEWPARAM name="iso2equi" value="true"/>
+    </PROJDESC>
 
+</VIEWCONFIGURATION>
 
-    <AUXVIEWINGPARAMS modeldomain="2">
-
-        <PROJDESC  projlabel="AUX Axis0 X Axis1" projaxisid="0 1" vpwidth="650" vpheight="650"><ISO2EQUI_TRANSFORM/></PROJDESC>
-        <PROJDESC  projlabel="AUX Axis0 X Axis1" projaxisid="0 1" vpwidth="650" vpheight="650"><ISO2EQUI_TRANSFORM/></PROJDESC>
- 
-
-
-    </AUXVIEWINGPARAMS>
 
 
 

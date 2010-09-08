@@ -60,6 +60,4 @@ public class BifurcationPlotAgent extends RpModelPlotAgent {
         }
         return instance_;
     }
-
-
 }

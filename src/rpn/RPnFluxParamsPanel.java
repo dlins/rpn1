@@ -6,114 +6,93 @@
 package rpn;
 
 import java.awt.*;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
-import java.text.DecimalFormat;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Set;
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
 import rpn.parser.ConfigurationProfile;
-import rpn.parser.RPnInterfaceParser;
 import rpnumerics.Configuration;
 import rpnumerics.FluxParams;
 import rpnumerics.RPNUMERICS;
 import wave.util.RealVector;
 
-public class RPnFluxParamsPanel extends JPanel {
+public class RPnFluxParamsPanel extends JPanel implements PropertyChangeListener {
 
     private GridBagLayout gridLayout = new GridBagLayout();
-    private ArrayList<JTextField> valuesArray_ = new ArrayList<JTextField>();
-    private ArrayList<JSlider> sliderArray_ = new ArrayList<JSlider>();
+    private ArrayList<RPnInputComponent> valuesArray_;
     private ConfigurationProfile physicsProfile_;
-    private DecimalFormat formatter_ = new DecimalFormat("0.000");
-    private int index;
+    private boolean isDefault_;
 
     public RPnFluxParamsPanel() {
-
+        System.out.println("Consturindo com a fisica de rpnumerics" + RPNUMERICS.physicsID());
         searchPhysics(RPNUMERICS.physicsID());
         buildPanel(false);
     }
 
     public RPnFluxParamsPanel(String physicsName) {
+        System.out.println("consturindo default com a fisica:" + physicsName);
         searchPhysics(physicsName);
         buildPanel(true);
     }
 
     private void buildPanel(boolean useDefaults) {
         this.setLayout(gridLayout);
-
+        isDefault_ = useDefaults;
         GridBagConstraints gridConstraints = new GridBagConstraints();
+        gridConstraints.fill = GridBagConstraints.BOTH;
 
         gridConstraints.gridwidth = 3;
         gridConstraints.gridheight = 12;
-        HashMap<String, String> fluxParamsArrayList = null;
+        valuesArray_ = new ArrayList<RPnInputComponent>();
 
-        gridConstraints.ipadx = 40;
+        gridConstraints.ipadx = 80;
+
         if (useDefaults) {
-            ConfigurationProfile physicsConfiguration = RPnConfig.getConfigurationProfile("QuadraticR2");
-            fluxParamsArrayList = physicsConfiguration.getParams();
-        } else {
-            Configuration physicsConfiguration = RPNUMERICS.getConfiguration(physicsProfile_.getName());
-            fluxParamsArrayList = physicsConfiguration.getParams();
-        }
-        int i = 0;
-        Set<Entry<String, String>> fluxParamsSet = fluxParamsArrayList.entrySet();
+            for (int i = 0; i < physicsProfile_.getIndicesSize(); i++) {
 
-        Iterator<Entry<String, String>> paramsIterator = fluxParamsSet.iterator();
+                HashMap<String, String> param = physicsProfile_.getParam(i);
+                Set<Entry<String, String>> paramSet = param.entrySet();
 
-        while (paramsIterator.hasNext()) {
-            Entry<String, String> entry = paramsIterator.next();
-            JLabel fluxParamName = new JLabel(entry.getKey());
-            fluxParamName.setName(entry.getKey());
-            JFormattedTextField fluxValueField = new JFormattedTextField(formatter_);
-            JSlider slider = new JSlider(SwingConstants.HORIZONTAL, -100, +100, 0);
-            Double paramValue;
-            valuesArray_.add(i, fluxValueField);
-            sliderArray_.add(i, slider);
-            if (useDefaults) {
-                paramValue = new Double(entry.getValue());
-                fluxValueField.setText(formatter_.format(paramValue));
+                for (Entry<String, String> paramEntry : paramSet) {
 
-            } else {
-                FluxParams fluxParam = RPNUMERICS.getFluxParams();
-                paramValue = fluxParam.getElement(i);
-                valuesArray_.get(i).setText(formatter_.format(paramValue));
+                    RPnInputComponent inputComponent = new RPnInputComponent(new Double(paramEntry.getValue()));
+                    inputComponent.setLabel(paramEntry.getKey());
+                    inputComponent.addPropertyChangeListener(this);
+                    valuesArray_.add(i, inputComponent);
+//                    gridConstraints.gridx = 1;
+                    this.add(inputComponent.getContainer(), gridConstraints);
+                        gridConstraints.gridx=1;
+
+                }
 
             }
-
-            slider.setName(String.valueOf(i));
-            fluxValueField.setName(String.valueOf(i));
-
-            slider.addChangeListener(new SliderHandler(new Double(paramValue.toString())));
-            fluxValueField.getDocument().addDocumentListener(new TextValueHandler(new Double(paramValue.toString())));
-            fluxValueField.addFocusListener(new FocusHandler());
-
-            gridConstraints.gridx = 0;
-
-            this.add(fluxParamName, gridConstraints);
+        } else {
+//            gridConstraints.gridy = 0;
             gridConstraints.gridx = 1;
-            this.add(fluxValueField, gridConstraints);
-            this.add(slider, gridConstraints);
-            i++;
+            Configuration physicsConfiguration = RPNUMERICS.getConfiguration(physicsProfile_.getName());
+            for (int i = 0; i < physicsConfiguration.getParamsSize(); i++) {
+
+                RPnInputComponent inputComponent = new RPnInputComponent(new Double(physicsConfiguration.getParam(i)));
+                inputComponent.setLabel(physicsConfiguration.getParamName(i));
+                inputComponent.addPropertyChangeListener(this);
+                valuesArray_.add(i, inputComponent);
+                this.add(inputComponent.getContainer(), gridConstraints);
+
+                
+            }
         }
+
     }
 
     private void searchPhysics(String physicsName) {
+        Iterator<ConfigurationProfile> physicsIterator = RPnConfig.getAllPhysicsProfiles().iterator();
 
-        Iterator<ConfigurationProfile> physics = RPnInterfaceParser.getPhysicsProfiles().iterator();
-
-        while (physics.hasNext()) {
-            ConfigurationProfile physicsProfile = physics.next();
+        while (physicsIterator.hasNext()) {
+            ConfigurationProfile physicsProfile = physicsIterator.next();
             if (physicsProfile.getName().equals(physicsName)) {
                 physicsProfile_ = physicsProfile;
             }
@@ -122,100 +101,28 @@ public class RPnFluxParamsPanel extends JPanel {
     }
 
     public void applyParams() {
+        RealVector newParamsVector = new RealVector(valuesArray_.size());
 
-        StringBuffer paramsBuffer = new StringBuffer();
-
-        for (int i = 0; i < valuesArray_.size(); i++) {
-            JTextField jTextField = valuesArray_.get(i);
-            paramsBuffer.append(jTextField.getText());
-            paramsBuffer.append(" ");
-        }
         FluxParams oldParams = RPNUMERICS.getFluxParams();
-        RealVector paramsVector = new RealVector(paramsBuffer.toString());
-        FluxParams newParams = new FluxParams(paramsVector);
-        RPNUMERICS.setFluxParams(newParams);
+        for (int i = 0; i < valuesArray_.size(); i++) {
+            System.out.println((Double) valuesArray_.get(i).getValue(RPnInputComponent.NUMERIC_VALUE));
+            newParamsVector.setElement(i, (Double) valuesArray_.get(i).getValue(RPnInputComponent.NUMERIC_VALUE));
 
+        }
+        System.out.println("Old params: " + oldParams);
+        FluxParams newParams = new FluxParams(newParamsVector);
+        System.out.println("New params: " + newParams);
+        RPNUMERICS.setFluxParams(newParams);
         rpn.usecase.ChangeFluxParamsAgent.instance().applyChange(new PropertyChangeEvent(rpn.usecase.ChangeFluxParamsAgent.instance(), "", oldParams, newParams));
 
     }
 
-    private class SliderHandler implements ChangeListener {
+    public void propertyChange(PropertyChangeEvent evt) {
 
-        private Double referenceValue_;
-
-        public SliderHandler(Double referenceValue) {
-            referenceValue_ = referenceValue;
+        if (!isDefault_) {
+            applyParams();
         }
 
-        public void stateChanged(ChangeEvent e) {
-            if (e.getSource() instanceof JSlider) {
-                JSlider slider = (JSlider) e.getSource();
-                JTextField textField = valuesArray_.get(new Integer(slider.getName()));
-                Double paramValue = referenceValue_ + (new Double(slider.getValue()) / 100);
-                textField.setText(formatter_.format(paramValue));
-                applyParams();
 
-            }
-        }
-    }
-
-    private class FocusHandler implements FocusListener {
-
-        public void focusGained(FocusEvent e) {
-            JTextField text = (JTextField) e.getSource();
-            index = new Integer(text.getName());
-        }
-
-        public void focusLost(FocusEvent e) {
-        }
-    }
-
-    private class TextValueHandler implements DocumentListener {
-
-        private Double referenceValue_;
-
-        public TextValueHandler(Double referenceValue) {
-            referenceValue_ = referenceValue;
-        }
-
-        public void insertUpdate(DocumentEvent e) {
-
-            Document doc = (Document) e.getDocument();
-            System.out.println("atualizando");
-            JSlider slider = sliderArray_.get(index);
-            if (doc.getLength() != 0) {
-                try {
-
-                    Double paramValue = new Double(doc.getText(0, doc.getLength()));
-
-                    ChangeListener[] changeListener = slider.getChangeListeners();
-
-                    slider.removeChangeListener(changeListener[0]);
-
-                    slider.setValue(sliderPosition(paramValue));
-
-                    slider.addChangeListener(new SliderHandler(paramValue));
-
-
-                } catch (BadLocationException ex) {
-                    System.out.println("BadLocationException");
-                } catch (NumberFormatException ex) {
-                    System.out.println("NumberException");
-                }
-
-            }
-        }
-
-        public void removeUpdate(DocumentEvent e) {
-//            System.out.println("Removendo");
-        }
-
-        public void changedUpdate(DocumentEvent e) {
-            System.out.println("Trocando");
-        }
-
-        private int sliderPosition(Double paramValue) {
-            return (int) ((paramValue - referenceValue_) * 100);
-        }
     }
 }

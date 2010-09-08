@@ -5,148 +5,221 @@
  */
 package rpn.parser;
 
-import rpn.*;
-
-import wave.multid.Space;
-import org.xml.sax.HandlerBase;
-import org.xml.sax.Parser;
+//import wave.multid.Space;
+import java.util.HashMap;
+import org.xml.sax.Attributes;
+import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
-import org.xml.sax.AttributeList;
 import org.xml.sax.InputSource;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 import java.io.*;
+import java.util.Map.Entry;
+import java.util.Set;
+import rpn.RPnConfig;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.XMLReader;
+import rpn.RPnProjDescriptor;
 import rpnumerics.RPNUMERICS;
+import wave.multid.Space;
 
 /** This class configures the initial visualization properties. Reading a XML file that contains the necessary information, this class sets the axis, labels , domain, etc to represents correctly the physics. */
 public class RPnVisualizationModule {
 
-    static public List DESCRIPTORS = new ArrayList();
-    static public List AUXDESCRIPTORS = new ArrayList();
+    static public List<RPnProjDescriptor> DESCRIPTORS = new ArrayList<RPnProjDescriptor>();
+    static public List<RPnProjDescriptor> AUXDESCRIPTORS = new ArrayList<RPnProjDescriptor>();
+    private static ConfigurationProfile currentConfigurationProfile_;
+    private static ConfigurationProfile currentProjConfigurationProfile_;
 
-    static class InputHandler extends HandlerBase {
+    private static class InputHandler implements ContentHandler {
 
-        String domain_;
-        String label_;
-        String axis_;
-        String vpw_;
-        String vph_;
-        boolean iso2equi_ = false, inAuxViewParams_ = false;
+        public void startElement(String uri, String localName, String qName, Attributes att) throws SAXException {
 
-        @Override
-        public void startElement(String name, AttributeList att) throws SAXException {
-            if (name.equals("VIEWINGPARAMS")) {
+            if (localName.equals("VIEWCONFIGURATION")) {
 
-                domain_ = att.getValue(0);
-
+                currentConfigurationProfile_ = new ConfigurationProfile(att.getValue(0), ConfigurationProfile.VISUALIZATION_PROFILE);
 
             }
 
-            if (name.equals("AUXVIEWINGPARAMS")) {
-                domain_ = att.getValue(0);
-                inAuxViewParams_ = true;
+
+            if (localName.equals("PROJDESC")) {
+
+                currentProjConfigurationProfile_ = new ConfigurationProfile(att.getValue(0), ConfigurationProfile.VISUALIZATION_PROFILE);
+
             }
 
+            if (localName.equals("VIEWPARAM")) {
 
-            if (name.equals("ISO2EQUI_TRANSFORM")) {
-                iso2equi_ = true;
+                currentProjConfigurationProfile_.addParam(att.getValue(0), att.getValue(1));
+
             }
-            if (name.equals("PROJDESC")) {
-                iso2equi_ = false;
-                label_ = att.getValue(0);
-                axis_ = att.getValue(1);
-                vpw_ = att.getValue(2);
-                vph_ = att.getValue(3);
-            }
+
         }
 
-        @Override
-        public void endElement(String name) throws SAXException {
-            if (name.equals("PROJDESC")) {
-                StringTokenizer axisTokenizer = new StringTokenizer(axis_);
-                int[] projIndices = new int[axisTokenizer.countTokens()];
-                int i = 0;
-                while (axisTokenizer.hasMoreTokens()) {
-                    projIndices[i++] = new Integer(axisTokenizer.nextToken()).intValue();
-                }
-                if (inAuxViewParams_) {
-                    AUXDESCRIPTORS.add(
-                            new RPnProjDescriptor(new Space("", new Integer(domain_).intValue()), label_, new Integer(vpw_).intValue(),
-                            new Integer(vph_).intValue(), projIndices, iso2equi_));
-
-                } else {
-                    DESCRIPTORS.add(
-                            new RPnProjDescriptor(new Space("", new Integer(domain_).intValue()), label_, new Integer(vpw_).intValue(),
-                            new Integer(vph_).intValue(), projIndices, iso2equi_));
+        public void endElement(String uri, String localName, String qName) throws SAXException {
 
 
-                }
-                if (name.equals(
-                        "AUXVIEWINGPARAMS")) {
-                    inAuxViewParams_ = false;
-                }
+            if (localName.equals("PROJDESC")) {
+
+
+                currentConfigurationProfile_.addConfigurationProfile(currentProjConfigurationProfile_.getName(), currentProjConfigurationProfile_);
+
             }
+
+
+            if (localName.equals("VIEWCONFIGURATION")) {
+
+
+                RPnConfig.addProfile(currentConfigurationProfile_.getName(), currentConfigurationProfile_);
+                RPnConfig.setActiveVisualConfiguration(currentConfigurationProfile_.getName());
+            }
+
+        }
+
+        public void setDocumentLocator(Locator locator) {
+        }
+
+        public void startDocument() throws SAXException {
+        }
+
+        public void endDocument() throws SAXException {
+            processActiveVisualConfiguration();
+        }
+
+        public void startPrefixMapping(String prefix, String uri) throws SAXException {
+        }
+
+        public void endPrefixMapping(String prefix) throws SAXException {
+        }
+
+        public void characters(char[] ch, int start, int length) throws SAXException {
+        }
+
+        public void ignorableWhitespace(char[] ch, int start, int length) throws SAXException {
+        }
+
+        public void processingInstruction(String target, String data) throws SAXException {
+        }
+
+        public void skippedEntity(String name) throws SAXException {
         }
     }
-        //
+    //
 // Initializers
 //
 
-        /** Initializes the XML parser to configure the visualization properties. */
-        public static void init(Parser parser, String file) {
-            try {
+    /** Initializes the XML parser to configure the visualization properties. */
+    public static void init(XMLReader parser, String file) {
+        try {
 
-                DESCRIPTORS = new ArrayList();
-                AUXDESCRIPTORS = new ArrayList();
-                parser.setDocumentHandler(new InputHandler());
-                parser.parse(file);
-
-
-            } catch (Exception saxex) {
-                saxex.printStackTrace();
+            DESCRIPTORS = new ArrayList<RPnProjDescriptor>();
+            AUXDESCRIPTORS = new ArrayList<RPnProjDescriptor>();
+            parser.setContentHandler(new InputHandler());
+            parser.parse(file);
 
 
-            }
-        }
+        } catch (Exception saxex) {
+            saxex.printStackTrace();
 
-        /** Initializes the XML parser to configure the visualization properties. */
-        public static void init(Parser parser, InputStream configFileStream) {
-            try {
-                DESCRIPTORS = new ArrayList();
-                AUXDESCRIPTORS = new ArrayList();
-                parser.setDocumentHandler(new InputHandler());
-                System.out.println("Visualization Module");
-
-                System.out.println("Will parse !");
-                parser.parse(new InputSource(configFileStream));
-
-                System.out.println("parsed !");
-
-
-            } catch (Exception saxex) {
-                saxex.printStackTrace();
-
-
-            }
-        }
-
-        //
-        // Methods
-        //
-        /** Writes the actual visualization configuration into a XML file. */
-        static public void export(FileWriter writer) throws java.io.IOException {
-            writer.write("<VIEWINGPARAMS modeldomain=\"" + RPNUMERICS.domainDim() + "\">\n");
-
-
-            for (int i = 0; i
-                    < DESCRIPTORS.size(); i++) {
-                writer.write(((RPnProjDescriptor) DESCRIPTORS.get(i)).toXML() + "\n");
-
-
-            }
-            writer.write("</VIEWINGPARAMS>\n");
 
         }
-    
+    }
+
+    /** Initializes the XML parser to configure the visualization properties. */
+    public static void init(XMLReader parser, InputStream configFileStream) {
+        try {
+            DESCRIPTORS = new ArrayList<RPnProjDescriptor>();
+            AUXDESCRIPTORS = new ArrayList<RPnProjDescriptor>();
+            parser.setContentHandler(new InputHandler());
+            System.out.println("Visualization Module");
+
+            System.out.println("Will parse !");
+            parser.parse(new InputSource(configFileStream));
+
+            System.out.println("parsed !");
+
+
+        } catch (Exception saxex) {
+            saxex.printStackTrace();
+
+
+        }
+    }
+
+    private static void processActiveVisualConfiguration() {
+        ConfigurationProfile visualizationProfile = RPnConfig.getActiveVisualProfile();
+
+        Integer dimension = new Integer(visualizationProfile.getName());
+
+
+        Set<Entry<String, ConfigurationProfile>> configurationSet = visualizationProfile.getProfiles().entrySet();
+
+        Space space = new Space("Domain", dimension);
+
+        System.out.println("teste :" + RPnConfig.getActivePhysicsProfile().getName());
+        for (Entry<String, ConfigurationProfile> profileEntry : configurationSet) {
+
+            ConfigurationProfile profile = profileEntry.getValue();
+            String label = profile.getName();
+
+            String[] axisString = profile.getParam("axis").split(" ");
+            String vpwidth = profile.getParam("vpwidth");
+            String vpheight = profile.getParam("vpheight");
+            String iso2equi = profile.getParam("iso2equi");
+
+
+            int[] axisArray = new int[2];
+
+            axisArray[0] = new Integer(axisString[0]);
+
+            axisArray[1] = new Integer(axisString[1]);
+
+            Integer w = new Integer(vpwidth);
+            Integer h = new Integer(vpheight);
+
+            Boolean iso = new Boolean(iso2equi);
+
+            DESCRIPTORS.add(new RPnProjDescriptor(space, label, w, h, axisArray, iso));
+
+            Space auxSpace = new Space("AuxDomain", dimension * 2);
+
+            for (RPnProjDescriptor descriptor : DESCRIPTORS) {
+                createAuxDescriptor(descriptor, auxSpace, descriptor.isIso2equi());
+
+            }
+
+        }
+
+
+    }
+
+    public static void createAuxDescriptor(RPnProjDescriptor descriptor, Space space, boolean isIso2Equi) {
+
+        int[] projIndices = descriptor.projMap().getCompIndexes();
+
+        int w = descriptor.viewport().width;
+        int h = descriptor.viewport().height;
+
+        RPnProjDescriptor auxDescriptorLeft = new RPnProjDescriptor(space, "Aux " + projIndices[0] + " " + projIndices[1], w, h, projIndices, isIso2Equi);
+        AUXDESCRIPTORS.add(auxDescriptorLeft);
+
+        int[] auxProj = new int[2];
+        auxProj[0] = projIndices[0] + space.getDim() / 2;
+        auxProj[1] = projIndices[1] + space.getDim() / 2;
+
+        RPnProjDescriptor auxDescriptorRight = new RPnProjDescriptor(space, "Aux " + auxProj[0] + " " + auxProj[1], w, h, auxProj, isIso2Equi);
+        AUXDESCRIPTORS.add(auxDescriptorRight);
+
+
+    }
+
+    //
+    // Methods
+    //
+    /** Writes the actual visualization configuration into a XML file. */
+    static public void export(FileWriter writer) throws java.io.IOException {
+
+        writer.write(RPnConfig.getVisualConfiguration().toXML());
+
+    }
 }

@@ -1,55 +1,52 @@
 <?xml version="1.0"?>
 <!DOCTYPE rpnconfiguration >
 <rpnconfiguration>
-    <PHYSICS name="QuadraticR2">
+<PHYSICS name="QuadraticR2">
 
-        <BOUNDARY name="rect">
+<BOUNDARY name="rect">
 
-            <BOUNDARYPARAM name="dimension" value="2" />
-            <BOUNDARYPARAM name="iso2equi" value="false" />
-            <BOUNDARYPARAM name="x-min" value="-0.5" />
-            <BOUNDARYPARAM name="x-max" value="0.5" />
-            <BOUNDARYPARAM name="y-min" value="-0.5" />
-            <BOUNDARYPARAM name="y-max" value="0.5" />
+        <BOUNDARYPARAM name="dimension" value="2" />
+        <BOUNDARYPARAM name="iso2equi" value="false" />
+        <BOUNDARYPARAM name="x-min" value="-0.5" />
+        <BOUNDARYPARAM name="x-max" value="0.5" />
+        <BOUNDARYPARAM name="y-min" value="-0.5" />
+        <BOUNDARYPARAM name="y-max" value="0.5" />
 
-        </BOUNDARY>
+    </BOUNDARY>
 
-        <FLUXFUNCTION >
-            <FLUXPARAMS name="param0" position="0" value ="-1" />
-            <FLUXPARAMS name="param1" position="1" value ="0" />
-            <FLUXPARAMS name="param2" position="2" value ="1" />
-            <FLUXPARAMS name="param3" position="3" value ="0" />
-            <FLUXPARAMS name="param4" position="4" value ="0.1" />
-            <FLUXPARAMS name="param5" position="5" value ="0" />
-            <FLUXPARAMS name="param6" position="6" value ="1" />
-            <FLUXPARAMS name="param7" position="7" value ="0" />
-            <FLUXPARAMS name="param8" position="8" value ="-0.1" />
-            <FLUXPARAMS name="param9" position="9" value ="0" />
+<FLUXFUNCTION >
+        <FLUXPARAMS name="param0" position="0" value ="-1" />
+        <FLUXPARAMS name="param1" position="1" value ="0" />
+        <FLUXPARAMS name="param2" position="2" value ="1" />
+        <FLUXPARAMS name="param3" position="3" value ="0" />
+        <FLUXPARAMS name="param4" position="4" value ="0.1" />
+        <FLUXPARAMS name="param5" position="5" value ="0" />
+        <FLUXPARAMS name="param6" position="6" value ="1" />
+        <FLUXPARAMS name="param7" position="7" value ="0" />
+        <FLUXPARAMS name="param8" position="8" value ="-0.1" />
+        <FLUXPARAMS name="param9" position="9" value ="0" />
 
-        </FLUXFUNCTION>
+    </FLUXFUNCTION>
+</PHYSICS>
 
-    </PHYSICS>
-
-    <CURVE name="shock">
-        <CURVEPARAM name="family" value="0"/>
-        <CURVEPARAM name="xzero" value="3.4 0.5"/>
-        <CURVEPARAM name="sigma" value="0.03"/>
-    </CURVE>
-
-
-    <VIEWINGPARAMS modeldomain="2">
-        <PROJDESC  projlabel="Axis0 X Axis1" projaxisid="0 1" vpwidth="650" vpheight="650"></PROJDESC>
-
-    </VIEWINGPARAMS>
-
-    <AUXVIEWINGPARAMS modeldomain="4">
-
-        <PROJDESC  projlabel="Aux Axis0 X Axis1" projaxisid="0 1" vpwidth="600" vpheight="600"></PROJDESC>
-        <PROJDESC  projlabel="Aux Axis2 X Axis3" projaxisid="2 3" vpwidth="600" vpheight="600"></PROJDESC>
+<CURVE name="shock">
+    <CURVEPARAM name="family" value="0"/>
+    <CURVEPARAM name="xzero" value="3.4 0.5"/>
+    <CURVEPARAM name="sigma" value="0.03"/>
+</CURVE>
 
 
-    </AUXVIEWINGPARAMS>
+<VIEWCONFIGURATION modeldomain="2">
 
+    <PROJDESC name="Axis0 Axis1">
+        <VIEWPARAM name="axis" value="0 1"/>
+        <VIEWPARAM name="vpwidth" value="600"/>
+        <VIEWPARAM name="vpheight" value="650"/>
+        <VIEWPARAM name="iso2equi" value="false"/>
+
+    </PROJDESC>
+
+</VIEWCONFIGURATION>
 
 
 </rpnconfiguration>

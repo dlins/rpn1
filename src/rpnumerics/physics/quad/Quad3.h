@@ -118,15 +118,15 @@ inline Boundary * Quad3::defaultBoundary() {
 
     RealVector min(3);
 
-    min.component(0) = -0.5;
-    min.component(1) = -0.5;
-    min.component(2) = -0.5;
+    min.component(0) = -10.5;
+    min.component(1) = -10.5;
+    min.component(2) = -10.5;
 
     RealVector max(3);
 
-    max.component(0) = 0.5;
-    max.component(1) = 0.5;
-    max.component(2) = 0.5;
+    max.component(0) = 10.5;
+    max.component(1) = 10.5;
+    max.component(2) = 10.5;
 
     return new RectBoundary(min, max);
 

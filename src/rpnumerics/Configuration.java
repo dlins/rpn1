@@ -15,7 +15,7 @@ public class Configuration {
 
     private HashMap<String, String> params_;
     private ArrayList<String> paramOrder_;
-    private ArrayList<Configuration> configurationArrayList_ = new ArrayList<Configuration>();
+    private HashMap<String, Configuration> configurationMap_ = new HashMap<String, Configuration>();
     private String name_;
     private String type_;
 
@@ -28,7 +28,21 @@ public class Configuration {
     }
 
     public Configuration(ConfigurationProfile profile) {
-        params_ = profile.getParams();
+        System.out.println(profile);
+        if (profile.getParams() != null) {
+            params_ = profile.getParams();
+        }
+
+        if (!profile.getProfiles().isEmpty()) {
+
+            Set<Entry<String, ConfigurationProfile>> profilesSet = profile.getProfiles().entrySet();
+            for (Entry<String, ConfigurationProfile> profileEntry : profilesSet) {
+                configurationMap_.put(profileEntry.getKey(), new Configuration(profileEntry.getValue()));
+            }
+
+
+        }
+
         name_ = profile.getName();
         type_ = profile.getType();
         paramOrder_ = new ArrayList<String>();
@@ -83,6 +97,42 @@ public class Configuration {
         return paramOrder_.indexOf(paramName);
     }
 
+    public int getParamsSize() {
+        return params_.size();
+    }
+
+    public String getParam(int paramOrder) {
+
+
+
+        try {
+            String paramName = paramOrder_.get(paramOrder);
+
+            return params_.get(paramName);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+
+        return null;
+
+    }
+
+    public String getParamName(int paramOrder) {
+
+        try {
+            String paramName = paramOrder_.get(paramOrder);
+
+            return paramName;
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return null;
+    }
+
     public HashMap<String, String> getParams() {
         return params_;
     }
@@ -100,25 +150,25 @@ public class Configuration {
 
     }
 
-    public String getParamValue(String paramName) {
+    public String getParam(String paramName) {
 
         return params_.get(paramName);
     }
 
-    public void addConfiguration(Configuration configuration) {
-        configurationArrayList_.add(configuration);
+    public void addConfiguration(String name, Configuration configuration) {
+
+        configurationMap_.put(name, configuration);
     }
 
-    public void addConfiguration(int index, Configuration configuration) {
-        configurationArrayList_.add(index, configuration);
-    }
-
-    public int configurationArraySize() {
-        return configurationArrayList_.size();
-    }
-
-    public Configuration getConfiguration(int index) {
-        return configurationArrayList_.get(index);
+//    public void addConfiguration(int index, Configuration configuration) {
+//        configurationArrayList_.add(index, configuration);
+//    }
+//
+//    public int configurationArraySize() {
+//        return configurationArrayList_.size();
+//    }
+    public Configuration getConfiguration(String name) {
+        return configurationMap_.get(name);
     }
 
     public String getName() {
@@ -137,10 +187,14 @@ public class Configuration {
         for (Entry<String, String> paramsEntry : paramsSet) {
             stringBuffer.append(paramsEntry.getKey() + " " + paramsEntry.getValue() + "\n");
         }
-        for (Configuration config : configurationArrayList_) {
-            stringBuffer.append(config.toString() + "\n");
-        }
 
+
+        Set<Entry<String, Configuration>> configurationSet = configurationMap_.entrySet();
+
+        for (Entry<String, Configuration> entry : configurationSet) {
+            stringBuffer.append(entry.getValue().toString());//Printing main boundary
+
+        }
         return stringBuffer.toString();
 
     }
@@ -152,7 +206,13 @@ public class Configuration {
 
         if (getType().equalsIgnoreCase("physics")) {
             buffer.append("<PHYSICS name=\"" + getName() + "\">\n");
-            buffer.append(getConfiguration(0).toXML());//Printing main boundary
+
+            Set<Entry<String, Configuration>> configurationSet = configurationMap_.entrySet();
+
+            for (Entry<String, Configuration> entry : configurationSet) {
+                buffer.append(entry.getValue().toXML());//Printing main boundary
+
+            }
 
             buffer.append("<FLUXFUNCTION>\n");
             for (Entry<String, String> entry : paramsSet) {
@@ -203,6 +263,24 @@ public class Configuration {
                 buffer.append("\n");
             }
             buffer.append("</METHOD>\n");
+        }
+
+
+        if (getType().equalsIgnoreCase("visual")) {
+            buffer.append("<VIEWCONFIGURATION modeldomain=\"" + getName() + "\">\n");
+            Set<Entry<String, Configuration>> configurationEntry = configurationMap_.entrySet();
+            for (Entry<String, Configuration> configEntry : configurationEntry) {
+
+                buffer.append("<PROJDESC name=\"" + configEntry.getValue().getName() + "\">\n");
+                HashMap<String, String> configParams = configEntry.getValue().getParams();
+                Set<Entry<String, String>> configSet = configParams.entrySet();
+                for(Entry<String,String> internalConfigEntry: configSet){
+                    buffer.append("<VIEWPARAM name=\"" + internalConfigEntry.getKey() + "\" " + "value= \"" + internalConfigEntry.getValue() + "\"/>");
+                buffer.append("\n");
+                }
+                buffer.append("</PROJDESC>\n");
+            }
+            buffer.append("</VIEWCONFIGURATION>\n");
         }
 
 

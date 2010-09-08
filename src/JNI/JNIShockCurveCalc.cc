@@ -89,7 +89,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
     //    //
     //
     //
-    int dimension = 2;
+    int dimension = realVectorInput.size();
     //    //
     int itol = 2;
     //    //

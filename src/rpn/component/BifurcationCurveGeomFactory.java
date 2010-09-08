@@ -12,16 +12,15 @@ import rpnumerics.methods.contour.support.DimensionDoenstMatch;
 import rpnumerics.methods.contour.support.NoContourMethodDefined;
 import wave.util.*;
 
-
 public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
+
     public BifurcationCurveGeomFactory(BifurcationCurveCalc calc) {
         super(calc);
     }
 
-   
     protected RpGeometry createGeomFromSource() {
 
-        BifurcationCurve curve = (BifurcationCurve)geomSource();
+        BifurcationCurve curve = (BifurcationCurve) geomSource();
 
         int resultSize = curve.segments().size();
 
@@ -30,14 +29,12 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
             bifurcationArray[i] = new BifurcationSegGeom((RealSegment) curve.segments().get(i));
 
         }
-        
-        return new BifurcationCurveGeom(bifurcationArray,this);
+
+        return new BifurcationCurveGeom(bifurcationArray, this);
     }
 
-
-
-    public RpGeometry refine(){
-             try {
+    public RpGeometry refine() {
+        try {
 
             ArrayList<Area> areaArray = rpnumerics.RPNUMERICS.getBifurcationProfile().getSelectedAreas();
             System.out.println("Chamando refine do factory");
@@ -55,24 +52,18 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
                     BifurcationCurveGeomFactory factory = (BifurcationCurveGeomFactory) geom.geomFactory();
 
                     BifurcationCurve bifurcationCurve = (BifurcationCurve) factory.geomSource();
-
-
-                    if (areaArray.get(areaArray.size()-1)==null){
+                    if (areaArray.get(areaArray.size() - 1) == null) {
                         System.out.println("Area nula");
                     }
-
-                    RPnCurve result =  CurveDomainManager.instance().fillSubDomain(bifurcationCurve, areaArray.get(areaArray.size() - 1));
-
-
+                    RPnCurve result = CurveDomainManager.instance().fillSubDomain(bifurcationCurve, areaArray.get(areaArray.size() - 1));
 
                     ArrayList<RealSegment> tempSegmentArray = MultidAdapter.converseRPnCurveToRealSegments(result);
 
-
                     BifurcationSegGeom[] bifurcationSegGeoms = new BifurcationSegGeom[tempSegmentArray.size()];
 
-                    for (int i=0; i < tempSegmentArray.size();i++){
+                    for (int i = 0; i < tempSegmentArray.size(); i++) {
                         BifurcationSegGeom bifurcationSegment = new BifurcationSegGeom(tempSegmentArray.get(i));
-                        bifurcationSegGeoms[i]=bifurcationSegment;
+                        bifurcationSegGeoms[i] = bifurcationSegment;
                     }
                     BifurcationCurveGeom bifurcationGeom = new BifurcationCurveGeom(bifurcationSegGeoms, factory);
 
@@ -92,19 +83,15 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
         return null;
     }
 
-
-
-
-    
     public String toXML() {
-    	 StringBuffer buffer = new StringBuffer();
+        StringBuffer buffer = new StringBuffer();
 
-         buffer.append("<BIFURCATIONCALC >\n");
+        buffer.append("<BIFURCATIONCALC >\n");
 
-         buffer.append(((BifurcationCurve) geomSource()).toXML(rpn.parser.RPnDataModule.RESULTS));
-         
-         buffer.append("</BIFURCATIONCALC>\n");
+        buffer.append(((BifurcationCurve) geomSource()).toXML(rpn.parser.RPnDataModule.RESULTS));
 
-         return buffer.toString();
+        buffer.append("</BIFURCATIONCALC>\n");
+
+        return buffer.toString();
     }
 }

@@ -13,6 +13,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import javax.swing.ImageIcon;
 import rpn.controller.phasespace.NumConfigImpl;
+
 import rpn.parser.ConfigurationProfile;
 import rpn.parser.RPnDataModule;
 import rpn.plugininterface.PluginInfoController;
@@ -24,12 +25,14 @@ public class RPnConfig {
 
     private static String IMAGEPATH = System.getProperty("rpnhome") + System.getProperty("file.separator") + "share" + System.getProperty("file.separator") + "rpn-images" + System.getProperty("file.separator");
     public static ImageIcon HUGONIOT, MANIFOLD_BWD, MANIFOLD_FWD, POINCARE, ORBIT_FWD, ORBIT_BWD, STATPOINT;
-    private static HashMap<String, ConfigurationProfile> methodsMap_ = new HashMap<String, ConfigurationProfile>();
+    private static HashMap<String, ConfigurationProfile> configurationsProfileMap_ = new HashMap<String, ConfigurationProfile>();
+    private static String activePhysics_;
+    private static String activeVisualConfig_;
+    private static Configuration visualConfiguration_;
 
     public static void configure(String physicsName) {
-
+        activePhysics_ = physicsName;
         RPNUMERICS.init((String) physicsName);//PHYSICS is INITIALIZATED
-
         numericsConfig();
         visualConfig();
 
@@ -40,14 +43,22 @@ public class RPnConfig {
         remoteImage();
         RPnDataModule.PHASESPACE = new RPnPhaseSpaceAbstraction("Phase Space",
                 RPNUMERICS.domain(), new NumConfigImpl());//  RpNumerics.domain(),
+
+        RPnDataModule.AUXPHASESPACE = new RPnPhaseSpaceAbstraction("Phase Space",
+                RPNUMERICS.domain(), new NumConfigImpl());//  Rp
+
+
+        RPnDataModule.LEFTPHASESPACE = new RPnPhaseSpaceAbstraction("LeftPhase Space",
+                RPNUMERICS.domain(), new NumConfigImpl());//  RpNumerics.domain(),
+        RPnDataModule.RIGHTPHASESPACE = new RPnPhaseSpaceAbstraction("RightPhase Space",
+                RPNUMERICS.domain(), new NumConfigImpl());//  RpNumerics.domain(),
+
+
     }
 
     private static void numericsConfig() {
-
         PluginInfoParser pluginParser = new PluginInfoParser();
         PluginInfoController.updatePluginInfo(pluginParser);
-
-
     }
 
     static public void remoteImage() {
@@ -62,52 +73,115 @@ public class RPnConfig {
 
     }
 
-    public static void addConfiguration(String configurationName, ConfigurationProfile profile) {
+    public static void addProfile(String configurationName, ConfigurationProfile profile) {
 
-        methodsMap_.put(configurationName, profile);
+        configurationsProfileMap_.put(configurationName, profile);
 
-        /*TODO Verificar se as configuracoes de curva devem ser definidas no arquivo default.
-         *     Essa implementacao le as configuracoes de curva apenas do arquivo de entrada.
-         */
-
-
-        if (profile.getType().equalsIgnoreCase("curve")) {
+        if (!profile.getName().equalsIgnoreCase("Contour")) {
             Configuration configuration = new Configuration(profile);
-
             RPNUMERICS.setConfiguration(configuration.getName(), configuration);
 
         }
 
     }
 
+    public static ArrayList<ConfigurationProfile> getAllMethodsProfiles() {
+        return filterProfiles(ConfigurationProfile.METHOD_PROFILE);
+    }
+
+    public static ArrayList<ConfigurationProfile> getAllVisualizationProfiles() {
+
+        return filterProfiles(ConfigurationProfile.VISUALIZATION_PROFILE);
+
+    }
+
+    public static ArrayList<ConfigurationProfile> getAllPhysicsProfiles() {
+        return filterProfiles(ConfigurationProfile.PHISICS_PROFILE);
+
+    }
+
+    public static ConfigurationProfile getPhysicsProfile(String physicsName) {
+        ConfigurationProfile physicsProfile = configurationsProfileMap_.get(physicsName);
+        if (physicsProfile != null && physicsProfile.getType().equals(ConfigurationProfile.PHISICS_PROFILE)) {
+            return physicsProfile;
+        }
+        return null;
+
+    }
+
     public static ArrayList<ConfigurationProfile> getAllConfigurationProfiles() {
 
         ArrayList<ConfigurationProfile> returnedArrayList = new ArrayList<ConfigurationProfile>();
+        Set<Entry<String, ConfigurationProfile>> methodSet = configurationsProfileMap_.entrySet();
+        Iterator<Entry<String, ConfigurationProfile>> profilesIterator = methodSet.iterator();
 
-        Set<Entry<String, ConfigurationProfile>> methodSet = methodsMap_.entrySet();
-
-        Iterator<Entry<String, ConfigurationProfile>> methodIterator = methodSet.iterator();
-
-        while (methodIterator.hasNext()) {
-            Entry<String, ConfigurationProfile> entry = methodIterator.next();
-
+        while (profilesIterator.hasNext()) {
+            Entry<String, ConfigurationProfile> entry = profilesIterator.next();
             returnedArrayList.add(entry.getValue());
-
         }
-
         return returnedArrayList;
 
     }
 
     public static ConfigurationProfile getConfigurationProfile(String configurationName) {
 
-        return methodsMap_.get(configurationName);
+        return configurationsProfileMap_.get(configurationName);
 
     }
 
     public static void removeConfiguration(String configurationName) {
 
-        methodsMap_.remove(configurationName);
+        configurationsProfileMap_.remove(configurationName);
+
+    }
+
+    public static void setActivePhisics(String physicsName) {
+        activePhysics_ = physicsName;
+    }
+
+    public static void setActiveVisualConfiguration(String visualConfigName) {
+        activeVisualConfig_ = visualConfigName;
+
+        System.out.println("Active visual configuration: " + activeVisualConfig_);
+        visualConfiguration_ = new Configuration(configurationsProfileMap_.get(visualConfigName));
+    }
+
+    public static ConfigurationProfile getActivePhysicsProfile() {
+
+        return configurationsProfileMap_.get(activePhysics_);
+
+    }
+
+    public static ConfigurationProfile getActiveVisualProfile() {
+        return configurationsProfileMap_.get(activeVisualConfig_);
+    }
+
+    public static Configuration getVisualConfiguration() {
+        return visualConfiguration_;
+    }
+
+    @Override
+    public String toString() {
+        StringBuffer buffer = new StringBuffer();
+        Set<Entry<String, ConfigurationProfile>> configurationSet = configurationsProfileMap_.entrySet();
+        for (Entry<String, ConfigurationProfile> entry : configurationSet) {
+            buffer.append(entry.getValue().toString());
+        }
+        return buffer.toString();
+
+    }
+
+    private static ArrayList<ConfigurationProfile> filterProfiles(String profileType) {
+        ArrayList<ConfigurationProfile> filteredProfiles = new ArrayList<ConfigurationProfile>();
+        Set<Entry<String, ConfigurationProfile>> methodSet = configurationsProfileMap_.entrySet();
+
+        for (Entry<String, ConfigurationProfile> configEntry : methodSet) {
+
+            if (configEntry.getValue().getType().equals(profileType)) {
+                filteredProfiles.add(configEntry.getValue());
+            }
+        }
+        return filteredProfiles;
 
     }
 }

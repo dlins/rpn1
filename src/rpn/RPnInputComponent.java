@@ -1,6 +1,8 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ *
+ * Instituto de Matematica Pura e Aplicada - IMPA
+ * Departamento de Dinamica dos Fluidos
+ *
  */
 package rpn;
 
@@ -27,7 +29,9 @@ public class RPnInputComponent extends AbstractAction {
     private DecimalFormat formatter_ = new DecimalFormat("0.000");
     private double maxRange_;
     private double minRange_;
-    private double value_;    //CONSTS
+    private double value_;
+
+    //CONSTS
     public static final String NUMERIC_VALUE = "NUMBER_VALUE";
 
     public RPnInputComponent(double value) {
@@ -56,6 +60,14 @@ public class RPnInputComponent extends AbstractAction {
         slider_.setMinimum(min);
         slider_.setMaximum(max);
 
+    }
+
+    public void setDisplayColumns(int col){
+        textField_.setColumns(col);
+    }
+
+    public void setLabel(String caption) {
+        label_.setText(caption);
     }
 
     public JPanel getContainer() {
@@ -92,30 +104,28 @@ public class RPnInputComponent extends AbstractAction {
 
         public void insertUpdate(DocumentEvent arg0) {
             Document doc = (Document) arg0.getDocument();
-
-
             try {
                 Double value = new Double(doc.getText(0, doc.getLength()));
                 ChangeListener changeListener[] = slider_.getChangeListeners();
-
                 slider_.removeChangeListener(changeListener[0]);
-
                 slider_.setValue(setSliderPosition(value));
-
                 slider_.addChangeListener(changeListener[0]);
-                firePropertyChange(NUMERIC_VALUE, value_, value);
+                value_ = value;
+//                firePropertyChange(NUMERIC_VALUE, value_, value);
             } catch (BadLocationException ex) {
                 System.out.println("Excessao Bad" + ex.getMessage());
             } catch (NumberFormatException ex) {
-                System.out.println("Excessao Nuberformat "+ ex.getMessage());
+                System.out.println("Excessao Nuberformat " + ex.getMessage());
             }
 
         }
 
         public void removeUpdate(DocumentEvent arg0) {
+//            insertUpdate(arg0);
         }
 
         public void changedUpdate(DocumentEvent arg0) {
+//            insertUpdate(arg0);
         }
     }
 
@@ -124,20 +134,16 @@ public class RPnInputComponent extends AbstractAction {
         public void stateChanged(ChangeEvent arg0) {
 
             JSlider slider = (JSlider) arg0.getSource();
-
             Double newValue = setValue(slider.getValue());
-            
-
-
             textField_.setText(formatter_.format(new Double(newValue)));
-
             putValue(NUMERIC_VALUE, newValue);
         }
     }
 
+    @Override
     public Object getValue(String key) {
 
-        if (key.equalsIgnoreCase(NUMERIC_VALUE)) {
+        if (key.equals(NUMERIC_VALUE)) {
             return new Double(value_);
         }
 
@@ -147,7 +153,7 @@ public class RPnInputComponent extends AbstractAction {
     @Override
     public void putValue(String key, Object value) {
 
-        if (key.equalsIgnoreCase(NUMERIC_VALUE)) {
+        if (key.equals(NUMERIC_VALUE)) {
             firePropertyChange(NUMERIC_VALUE, value_, value);
         }
 

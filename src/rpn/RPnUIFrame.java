@@ -51,7 +51,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JMenuItem createSVGImageMenuItem = new JMenuItem();
     private JMenuItem printMenuItem = new JMenuItem();
     private JMenuItem pluginMenuItem = new JMenuItem();
-    private static RPnPhaseSpaceFrame[] frames_, auxFrames_;
+    private static RPnPhaseSpaceFrame[] frames_, auxFrames_, leftFrames_, rightFrames_;
     private RPnMenuCommand commandMenu_ = null;
     private JMenuItem networkMenuItem = new JMenuItem();
     private JCheckBoxMenuItem showCursorMenuItem_ = new JCheckBoxMenuItem("Show Cursor Lines");
@@ -71,7 +71,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             UIController.instance().setStateController(new StateInputController(this));
             propertyChange(new PropertyChangeEvent(command, "aplication state", null, null));
             jbInit();
-            phaseSpaceFramesInit(RPNUMERICS.boundary());//Criando painel padrao
+            phaseSpaceFramesInit(RPNUMERICS.boundary());//Buinding default panela
 
             addPropertyChangeListener(this);
             UndoActionController.createInstance();
@@ -223,66 +223,66 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         wave.multid.graphs.ClippedShape clipping = new wave.multid.graphs.ClippedShape(boundary);
         int numOfPanels = RPnVisualizationModule.DESCRIPTORS.size();
 
-        auxFrames_ = new RPnPhaseSpaceFrame[numOfPanels * 2];
+        auxFrames_ = new RPnPhaseSpaceFrame[2 * numOfPanels];
         frames_ = new RPnPhaseSpaceFrame[numOfPanels];
 
+        leftFrames_ = new RPnPhaseSpaceFrame[numOfPanels];
+        rightFrames_ = new RPnPhaseSpaceFrame[numOfPanels];
 
-//        //Init Aux Frames
-//
+
+
+
+////        //Init Aux Frames
+////
 //        Boundary auxBoundary = null;
 //
-//        if (RPNUMERICS.boundary() instanceof RectBoundary) {//TODO Get auxiliar boundary configuration from RPNUMERICS
+//        if (RPNUMERICS.boundary() instanceof RectBoundary) {//TODO Get auxiliar boundary configuration from RPNUMERICS. Implement auxiliar frame for triangular domain
+//
+//            RealVector originalMax = RPNUMERICS.boundary().getMaximums();
+//            RealVector originalMin = RPNUMERICS.boundary().getMinimums();
 //
 //            RealVector newMax = new RealVector(RPNUMERICS.boundary().getMaximums().getSize() * 2);
 //
 //            RealVector newMin = new RealVector(RPNUMERICS.boundary().getMinimums().getSize() * 2);
 //
-//            newMin.setElement(0, -0.5);
-//            newMin.setElement(1, -0.5);
-//            newMin.setElement(2, -0.5);
-//            newMin.setElement(3, -0.5);
+//            newMin.setElement(0, originalMin.getElement(0));
+//            newMin.setElement(1, originalMin.getElement(1));
+//            newMin.setElement(2, originalMin.getElement(0));
+//            newMin.setElement(3, originalMin.getElement(1));
 //
-//            newMax.setElement(0, 0.5);
-//            newMax.setElement(1, 0.5);
-//            newMax.setElement(2, 0.5);
-//            newMax.setElement(3, 0.5);
+//            newMax.setElement(0, originalMax.getElement(0));
+//            newMax.setElement(1, originalMax.getElement(1));
+//            newMax.setElement(2, originalMax.getElement(0));
+//            newMax.setElement(3, originalMax.getElement(1));
 //
 //            auxBoundary = new RectBoundary(newMin, newMax);
-//        }
 //
-//        if (RPNUMERICS.boundary() instanceof IsoTriang2DBoundary) {
-//            auxBoundary = (IsoTriang2DBoundary) RPNUMERICS.boundary();
-//        }
-//
-//        wave.multid.graphs.ClippedShape auxClipping = new wave.multid.graphs.ClippedShape(auxBoundary);
-//
-//
-//        for (int i = 0; i < numOfPanels * 2; i++) {
-//
-//            wave.multid.view.ViewingTransform auxViewingTransf =
-//                    ((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(
-//                    i)).createTransform(auxClipping);
+//            wave.multid.graphs.ClippedShape auxClipping = new wave.multid.graphs.ClippedShape(auxBoundary);
+//            for (int i = 0; i < numOfPanels * 2; i++) {
+//                wave.multid.view.ViewingTransform auxViewingTransf =
+//                        ((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(
+//                        i)).createTransform(auxClipping);
 //
 //
-//            try {
-//                wave.multid.view.Scene scene = RPnDataModule.AUXPHASESPACE.createScene(auxViewingTransf,
-//                        new wave.multid.view.ViewingAttr(Color.black));
-//                auxFrames_[i] = new RPnPhaseSpaceFrame(scene, commandMenu_);
-//                auxFrames_[i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i)).label());
+//                try {
+//                    wave.multid.view.Scene auxScene = RPnDataModule.AUXPHASESPACE.createScene(auxViewingTransf,
+//                            new wave.multid.view.ViewingAttr(Color.black));
+//                    auxFrames_[i] = new RPnPhaseSpaceFrame(auxScene, commandMenu_);
+//                    auxFrames_[i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i)).label());
 //
-//                UIController.instance().install(auxFrames_[i].phaseSpacePanel());
+//                    UIController.instance().install(auxFrames_[i].phaseSpacePanel());
 //
-//                setFramesPosition(auxFrames_[i]);
-//                auxFrames_[i].pack();
-//                auxFrames_[i].setVisible(true);
+//                    setFramesPosition(auxFrames_[i]);
+//                    auxFrames_[i].pack();
+//                    auxFrames_[i].setVisible(true);
 //
 //
-//            } catch (wave.multid.DimMismatchEx dex) {
-//                dex.printStackTrace();
+//                } catch (wave.multid.DimMismatchEx dex) {
+//                    dex.printStackTrace();
+//                }
+//
 //            }
-//
 //        }
-
 
         // Init Main Frame
         for (int i = 0; i < numOfPanels; i++) {
@@ -292,8 +292,25 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             try {
                 wave.multid.view.Scene scene = RPnDataModule.PHASESPACE.createScene(viewingTransf,
                         new wave.multid.view.ViewingAttr(Color.black));
+
+
+                wave.multid.view.Scene leftScene = RPnDataModule.LEFTPHASESPACE.createScene(viewingTransf,
+                        new wave.multid.view.ViewingAttr(Color.black));
+                wave.multid.view.Scene rightScene = RPnDataModule.RIGHTPHASESPACE.createScene(viewingTransf,
+                        new wave.multid.view.ViewingAttr(Color.black));
+
                 frames_[i] = new RPnPhaseSpaceFrame(scene, commandMenu_);
                 frames_[i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(i)).label());
+
+
+
+                leftFrames_[i] = new RPnPhaseSpaceFrame(leftScene, commandMenu_);
+                leftFrames_[i].setTitle("Left " + ((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(i)).label());
+
+
+                rightFrames_[i] = new RPnPhaseSpaceFrame(rightScene, commandMenu_);
+                rightFrames_[i].setTitle("Right " + ((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(i)).label());
+
 
                 /*
                  * controllers installation
@@ -304,11 +321,28 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                  * All Panels listen to all Panels...
                  */
 
+
+
+                UIController.instance().install(leftFrames_[i].phaseSpacePanel());
+
+                setFramesPosition(leftFrames_[i]);
+                leftFrames_[i].pack();
+                leftFrames_[i].setVisible(true);
+
+
+                UIController.instance().install(rightFrames_[i].phaseSpacePanel());
+
+                setFramesPosition(rightFrames_[i]);
+                rightFrames_[i].pack();
+                rightFrames_[i].setVisible(true);
+
+
                 UIController.instance().install(frames_[i].phaseSpacePanel());
 
                 setFramesPosition(frames_[i]);
                 frames_[i].pack();
                 frames_[i].setVisible(true);
+
 
 
             } catch (wave.multid.DimMismatchEx dex) {

@@ -99,12 +99,13 @@ public class HugoniotCurveCalcND
             initialPoint.setElement(i, initialPoint.getElement(i) + UMINUS_SHIFT);
 
         }
+
         return hugoniotMethod_.curve(initialPoint);
 
     }
 
     public RpSolution recalc() {
-        System.out.println("Chamando recalc");
+//        System.out.println("Chamando recalc");
         return calc();
     }
 

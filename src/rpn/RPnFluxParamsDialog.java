@@ -13,7 +13,7 @@ public class RPnFluxParamsDialog extends RPnDialog{
     RPnFluxParamsPanel paramsPanel_;
 
     public RPnFluxParamsDialog() {
-        super(true, true);
+        super(false, true);
         setTitle(RPNUMERICS.physicsID());
         paramsPanel_ = new RPnFluxParamsPanel();
         this.getContentPane().add(paramsPanel_, BorderLayout.CENTER);
@@ -32,7 +32,6 @@ public class RPnFluxParamsDialog extends RPnDialog{
     }
 
     protected void begin(){
-
         getContentPane().remove(paramsPanel_);
         paramsPanel_ = new RPnFluxParamsPanel(RPNUMERICS.physicsID());
         getContentPane().add(paramsPanel_, BorderLayout.CENTER);

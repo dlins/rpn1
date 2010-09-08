@@ -44,7 +44,6 @@ public abstract class RpModelPlotAgent extends RpModelActionAgent {
         String listString = "";
         // selecting phase space
         if (userInputList.length == 0) {//Bifurcation curve
-
             phaseSpace = RPnDataModule.AUXPHASESPACE;
             listString = AUXPHASESPACE_LIST;
 

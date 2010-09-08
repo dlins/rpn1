@@ -6,7 +6,6 @@
  */
 package rpn.parser;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -15,18 +14,30 @@ public class ConfigurationProfile {
 
     private String name_;
     private String type_;
-    private ArrayList<ConfigurationProfile> configurationProfileArray_;
+    private HashMap<String,ConfigurationProfile> configurationProfileMap_;
     private HashMap<String, String> paramsMap_ = new HashMap<String, String>();
     private HashMap<Integer, String> paramsIndexMap_ = new HashMap<Integer, String>();
+
+    public static final String PHISICS_PROFILE = "PHYSICS";
+    public static final String CURVE_PROFILE = "CURVE";
+    public static final String METHOD_PROFILE = "METHOD";
+    public static final String BOUNDARY_PROFILE = "BOUNDARY";
+    public static final String VISUALIZATION_PROFILE = "VISUAL";
+
 
     public ConfigurationProfile(String name, String type) {
         type_ = type;
         name_ = name;
-        configurationProfileArray_ = new ArrayList<ConfigurationProfile>();
+        configurationProfileMap_ = new HashMap<String, ConfigurationProfile>();
     }
 
     public int getIndicesSize() {
         return paramsIndexMap_.size();
+    }
+
+
+    public HashMap<String, ConfigurationProfile> getProfiles() {
+        return configurationProfileMap_;
     }
 
     public void addParam(int index, String paramName, String defaultValue) {
@@ -66,40 +77,46 @@ public class ConfigurationProfile {
         return type_;
     }
 
-    public void addConfigurationProfile(ConfigurationProfile configProfile) {
-        configurationProfileArray_.add(configProfile);
+    public void addConfigurationProfile(String configurationType, ConfigurationProfile configProfile) {
+        configurationProfileMap_.put(configurationType,configProfile);
     }
 
-    public void addConfigurationProfile(int index, ConfigurationProfile configProfile) {
-        configurationProfileArray_.add(index, configProfile);
-    }
 
-    public ConfigurationProfile getConfigurationProfile(int index) {
+    public ConfigurationProfile getConfigurationProfile(String configurationType) {
 
-        return configurationProfileArray_.get(index);
+        return configurationProfileMap_.get(configurationType);
     }
 
     public int profileArraySize() {
-        return configurationProfileArray_.size();
+        return configurationProfileMap_.size();
     }
 
     @Override
     public String toString() {
         StringBuffer stringBuffer = new StringBuffer();
-        stringBuffer.append(name_ + "\n");
+        stringBuffer.append("Name: " +name_ + "\n");
 
         Set<Entry<String, String>> paramsSet = paramsMap_.entrySet();
         for (Entry<String, String> paramsEntry : paramsSet) {
             stringBuffer.append(paramsEntry.getKey() + " " + paramsEntry.getValue() + "\n");
 
         }
-        for (ConfigurationProfile confProfile : configurationProfileArray_) {
 
-            stringBuffer.append(confProfile.toString() + "\n");
+        Set<Entry<String, ConfigurationProfile>> configurationSet = configurationProfileMap_.entrySet();
+        for (Entry<String, ConfigurationProfile> configurationEntry : configurationSet) {
+
+            stringBuffer.append(configurationEntry.getValue().toString() + "\n");
 
         }
 
         return stringBuffer.toString();
 
     }
+
+    public int getParamsSize() {
+
+        return paramsMap_.size();
+
+    }
+
 }

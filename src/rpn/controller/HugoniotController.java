@@ -61,7 +61,6 @@ public class HugoniotController extends RpCalcController {
 //TESTE
 
 
-            System.out.println("Chamando propertyChange de Hugoniot Controller");
 //            ((HugoniotCurveCalc) geomFactory_.rpCalc()).uMinusChangeNotify((PhasePoint) change.getNewValue());
 //            }
 

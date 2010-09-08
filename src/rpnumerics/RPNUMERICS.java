@@ -41,115 +41,151 @@ public class RPNUMERICS {
     //
     // Constructors/Initializers
     //
-   
-   static public void init(String physicsID) {
+
+    static public void init(String physicsID) {
         System.loadLibrary("wave");//TODO libwave is always loaded ?
         System.loadLibrary("rpnumerics");
+
+        System.out.println("Inicializando a fisica: " + physicsID);
         initNative(physicsID);
-        setBoundaryDefaultConfiguration();
-        setFluxDefaultConfiguration();
+
+        //Processing configuration data
+
+        ConfigurationProfile physicsProfile = RPnConfig.getActivePhysicsProfile();
+
+        System.out.println("Profile ativo: " + physicsProfile.getName());
+
+        Configuration physicsConfiguration = new Configuration(physicsProfile);
+        FluxParams fluxParams = getFluxParams();
+        if (physicsConfiguration.getParamsSize() != 0) {
+
+            for (int i = 0; i < physicsConfiguration.getParamsSize(); i++) {
+                //SET FLUX PARAMS !!!
+                fluxParams.setParam(i, new Double(physicsConfiguration.getParam(i)));
+                System.out.println("Param: " + " order:" + i + " " + physicsConfiguration.getParam(i));
+            }
+
+        } else {
+
+            RealVector paramsVector = fluxParams.getParams();
+
+            for (int i = 0; i < paramsVector.getSize(); i++) {
+                physicsProfile.addParam(i, "param " + i, String.valueOf(paramsVector.getElement(i)));
+                physicsConfiguration.setParamOrder("param " + i, i);
+                physicsConfiguration.setParamValue("param " + i, String.valueOf(paramsVector.getElement(i)));
+
+            }
+//            System.out.println("Usando fluxo default");
+
+            RPnConfig.addProfile(physicsID, physicsProfile);
+
+        }
+
+        ConfigurationProfile boundaryProfile = physicsProfile.getConfigurationProfile(ConfigurationProfile.BOUNDARY_PROFILE);
+
+        if (boundaryProfile != null) {
+
+            Configuration boundaryConfiguration = new Configuration(boundaryProfile);
+
+            if (boundaryConfiguration.getName().equalsIgnoreCase("rect")) {
+
+                RealVector min = new RealVector(new Integer(boundaryConfiguration.getParam("dimension")));
+                RealVector max = new RealVector(new Integer(boundaryConfiguration.getParam("dimension")));
+
+                min.setElement(0, new Double(boundaryConfiguration.getParam("x-min")));
+                max.setElement(0, new Double(boundaryConfiguration.getParam("x-max")));
+
+                min.setElement(1, new Double(boundaryConfiguration.getParam("y-min")));
+                max.setElement(1, new Double(boundaryConfiguration.getParam("y-max")));
+
+                RectBoundary boundary = new RectBoundary(min, max);
+
+                setBoundary(boundary);
+            }
+
+        } else {
+
+            Boundary boundary = boundary();
+
+            if (boundary instanceof RectBoundary) {
+
+                RealVector min = boundary.getMinimums();
+                RealVector max = boundary.getMaximums();
+
+                ConfigurationProfile defaultBoundaryProfile = new ConfigurationProfile("rect", ConfigurationProfile.BOUNDARY_PROFILE);
+
+                defaultBoundaryProfile.addParam("x-min", min.getElement(0) + "");
+                defaultBoundaryProfile.addParam("y-min", min.getElement(1) + "");
+                defaultBoundaryProfile.addParam("x-max", max.getElement(0) + "");
+                defaultBoundaryProfile.addParam("y-max", max.getElement(1) + "");
+
+                physicsProfile.addConfigurationProfile(ConfigurationProfile.BOUNDARY_PROFILE, boundaryProfile);
+
+                Configuration boundaryConfiguration = new Configuration(defaultBoundaryProfile);
+
+                physicsConfiguration.addConfiguration(boundaryConfiguration.getName(), boundaryConfiguration);
+
+
+            }
+//            System.out.println("Usando boundary default");
+        }
+
+        configMap_.put(physicsID, physicsConfiguration);
+
         errorControl_ = new RpErrorControl(boundary());
 
     }
-   
-    private static void setBoundaryDefaultConfiguration() {
-        Boundary boundary = boundary();
 
-        if (boundary instanceof RectBoundary) {
-
-            Configuration configuration = new Configuration(physicsID(), "physics");
-
-            RealVector min = boundary.getMinimums();
-            RealVector max = boundary.getMaximums();
-
-            HashMap<String, String> boundaryParams = new HashMap<String, String>();
-
-            boundaryParams.put("x-min", min.getElement(0) + "");
-            boundaryParams.put("y-min", min.getElement(1) + "");
-
-            boundaryParams.put("x-max", max.getElement(0) + "");
-            boundaryParams.put("y-max", max.getElement(1) + "");
-
-            configuration.addConfiguration(0, new Configuration("rect", "boundary", boundaryParams));
-            configMap_.put(configuration.getName(), configuration);
-
-        }
-
-
-    }
-
-    public static void setParsedConfigurations() {
-
-        Configuration physicsConfiguration = configMap_.get(physicsID());
-        Configuration boundaryConfiguration = physicsConfiguration.getConfiguration(0);//Getting boundary configuration
-
-        if(!boundaryConfiguration.getName().equals("triang")){
-
-            RealVector min = new RealVector(2);
-            RealVector max = new RealVector(2);
-
-            min.setElement(0, new Double(physicsConfiguration.getConfiguration(0).getParamValue("x-min")));
-            min.setElement(1, new Double(physicsConfiguration.getConfiguration(0).getParamValue("y-min")));
-
-            max.setElement(0, new Double(physicsConfiguration.getConfiguration(0).getParamValue("x-max")));
-            max.setElement(1, new Double(physicsConfiguration.getConfiguration(0).getParamValue("y-max")));
-
-            RectBoundary boundary = new RectBoundary(min, max);
-
-            setBoundary(boundary);
-            
-        }
-
-    }
-
- 
-
-    public static void resetParams() {
-
-
-        ArrayList<ConfigurationProfile> configurationProfiles = RPnConfig.getAllConfigurationProfiles();
-
-        for (int i = 0; i < configurationProfiles.size(); i++) {
-            ConfigurationProfile profile = configurationProfiles.get(i);
-            String configName = profile.getName();
-
-
-            if (configName.equals("Contour") || configName.equals("contour")) {
-                contourConfiguration_ = new ContourConfiguration(profile.getParams());
-                RPNUMERICS.setConfiguration(configName, contourConfiguration_);
-            } else {
-
-                HashMap<String, String> profileParams = profile.getParams();
-
-                Configuration configuration = null;
-
-                if (profile.getType().equalsIgnoreCase("physics")) {
-                    configuration = processPhysicsProfile(profile);
-                }
-
-                if (profile.getType().equalsIgnoreCase("method")) {
-
-                    configuration = new Configuration(profile.getName(), "method", profileParams);
-                }
-
-                if (profile.getType().equalsIgnoreCase("curve")) {
-                    configuration = new Configuration(profile.getName(), "curve", profileParams);
-                }
-
-                RPNUMERICS.setConfiguration(configName, configuration);
-
-            }
-
-        }
-
-
-    }
-
+    //
+//    }
+//    public static void resetParams() {
+//
+//
+//        ArrayList<ConfigurationProfile> configurationProfiles = RPnConfig.getAllConfigurationProfiles();
+//
+//        for (int i = 0; i < configurationProfiles.size(); i++) {
+//            ConfigurationProfile profile = configurationProfiles.get(i);
+//            String configName = profile.getName();
+//
+//
+//            if (configName.equals("Contour") || configName.equals("contour")) {
+//                contourConfiguration_ = new ContourConfiguration(profile.getParams());
+//                RPNUMERICS.setConfiguration(configName, contourConfiguration_);
+//            } else {
+//
+//                HashMap<String, String> profileParams = profile.getParams();
+//
+//                Configuration configuration = null;
+//
+//                if (profile.getType().equalsIgnoreCase("physics")) {
+//                    configuration = processPhysicsProfile(profile);
+//                }
+//
+//                if (profile.getType().equalsIgnoreCase("method")) {
+//
+//                    configuration = new Configuration(profile.getName(), "method", profileParams);
+//                }
+//
+//                if (profile.getType().equalsIgnoreCase("curve")) {
+//                    configuration = new Configuration(profile.getName(), "curve", profileParams);
+//                }
+//
+//                RPNUMERICS.setConfiguration(configName, configuration);
+//
+//            }
+//
+//        }
+//
+//
+//    }
     public static void setFamily(int family) {
         setParamValue("shock", "family", String.valueOf(family));
     }
 
     public static void setConfiguration(String methodName, Configuration methodConfiguration) {
+        if (methodName.equalsIgnoreCase("Contour")) {
+            contourConfiguration_ = new ContourConfiguration(methodConfiguration.getParams());
+        }
 
         configMap_.put(methodName, methodConfiguration);
 
@@ -159,7 +195,7 @@ public class RPNUMERICS {
 
         Configuration configuration = configMap_.get(methodName);
 
-        return configuration.getParamValue(paramValue);
+        return configuration.getParam(paramValue);
 
 
     }
@@ -315,7 +351,7 @@ public class RPNUMERICS {
 
     public static ShockCurveCalc createShockCurveCalc(OrbitPoint orbitPoint) {
 
-        Integer family = new Integer (getParamValue("shock", "family"));
+        Integer family = new Integer(getParamValue("shock", "family"));
         return new ShockCurveCalc("methodname", "flowName", orbitPoint, family, direction_);
     }
 
@@ -362,27 +398,26 @@ public class RPNUMERICS {
         direction_ = integer;
     }
 
-    private static Configuration processPhysicsProfile(ConfigurationProfile physicsProfile) {
-        Configuration physicsConfiguration = new Configuration(physicsProfile.getName(), "physics");
-
-        physicsConfiguration.setParams(physicsProfile);
-
-        for (int i = 0; i < physicsProfile.profileArraySize(); i++) {
-
-            ConfigurationProfile boundaryProfile = physicsProfile.getConfigurationProfile(i);
-
-            if (boundaryProfile.getType().equals("boundary")) {
-                Configuration boundaryConfiguration = new Configuration(boundaryProfile.getName(), "boundary", boundaryProfile.getParams());
-                physicsConfiguration.addConfiguration(boundaryConfiguration);
-            }
-
-        }
-
-
-
-        return physicsConfiguration;
-    }
-
+//    private static Configuration processPhysicsProfile(ConfigurationProfile physicsProfile) {
+//        Configuration physicsConfiguration = new Configuration(physicsProfile.getName(), "physics");
+//
+//        physicsConfiguration.setParams(physicsProfile);
+//
+//        for (int i = 0; i < physicsProfile.profileArraySize(); i++) {
+//
+//            ConfigurationProfile boundaryProfile = physicsProfile.getConfigurationProfile(i);
+//
+//            if (boundaryProfile.getType().equals("boundary")) {
+//                Configuration boundaryConfiguration = new Configuration(boundaryProfile.getName(), "boundary", boundaryProfile.getParams());
+//                physicsConfiguration.addConfiguration(boundaryConfiguration);
+//            }
+//
+//        }
+//
+//
+//
+//        return physicsConfiguration;
+//    }
     private static void setFluxDefaultConfiguration() {
 
         FluxParams fluxParams = getFluxParams();
@@ -465,7 +500,7 @@ public class RPNUMERICS {
     }
 
     public static ContourConfiguration getContourConfiguration() {
-        return contourConfiguration_;
+        return (ContourConfiguration) configMap_.get("Contour");
     }
 
     private native void setFamilyIndex(int familyIndex);
