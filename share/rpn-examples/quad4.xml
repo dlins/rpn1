@@ -1,17 +1,64 @@
 <?xml version="1.0"?>
-<!DOCTYPE rpnconfig >
-<rpnconfig>
-    <NUMERICS >
-        <PHYSICS physicsid="QuadraticR4" libname="rpnumerics">
-            
-        </PHYSICS>
-        
-    </NUMERICS>
-    <VIEWINGPARAMS modeldomain="4">
-        <PROJDESC  projlabel="Axis0 X Axis1" projaxisid="0 1" vpwidth="400" vpheight="400"></PROJDESC>
-        <PROJDESC  projlabel="Axis2 X Axis3" projaxisid="2 3" vpwidth="400" vpheight="400"></PROJDESC>
+<!DOCTYPE rpnconfiguration >
+<rpnconfiguration>
+<PHYSICS name="QuadraticR4">
 
-    </VIEWINGPARAMS>
-    
-</rpnconfig>
+<!--<BOUNDARY name="rect">
 
+        <BOUNDARYPARAM name="dimension" value="4" />
+        <BOUNDARYPARAM name="iso2equi" value="false" />
+        <BOUNDARYPARAM name="x-min" value="-0.5" />
+        <BOUNDARYPARAM name="x-max" value="0.5" />
+        <BOUNDARYPARAM name="y-min" value="-0.5" />
+        <BOUNDARYPARAM name="y-max" value="0.5" />
+
+    </BOUNDARY>-->
+
+<!--<FLUXFUNCTION >
+        <FLUXPARAMS name="param0" position="0" value ="-1" />
+        <FLUXPARAMS name="param1" position="1" value ="0" />
+        <FLUXPARAMS name="param2" position="2" value ="1" />
+        <FLUXPARAMS name="param3" position="3" value ="0" />
+        <FLUXPARAMS name="param4" position="4" value ="0.1" />
+        <FLUXPARAMS name="param5" position="5" value ="0" />
+        <FLUXPARAMS name="param6" position="6" value ="1" />
+        <FLUXPARAMS name="param7" position="7" value ="0" />
+        <FLUXPARAMS name="param8" position="8" value ="-0.1" />
+        <FLUXPARAMS name="param9" position="9" value ="0" />
+
+    </FLUXFUNCTION>-->
+
+</PHYSICS>
+
+<CURVE name="shock">
+    <CURVEPARAM name="family" value="0"/>
+    <CURVEPARAM name="xzero" value="3.4 0.5"/>
+    <CURVEPARAM name="sigma" value="0.03"/>
+</CURVE>
+
+
+<VIEWCONFIGURATION modeldomain="4">
+
+    <PROJDESC name="Axis0 Axis1">
+        <VIEWPARAM name="axis" value="0 1"/>
+        <VIEWPARAM name="vpwidth" value="600"/>
+        <VIEWPARAM name="vpheight" value="650"/>
+        <VIEWPARAM name="iso2equi" value="false"/>
+
+    </PROJDESC>
+
+
+     <PROJDESC name="Axis2 Axis3">
+        <VIEWPARAM name="axis" value="2 3"/>
+        <VIEWPARAM name="vpwidth" value="600"/>
+        <VIEWPARAM name="vpheight" value="650"/>
+        <VIEWPARAM name="iso2equi" value="false"/>
+
+    </PROJDESC>
+
+
+
+</VIEWCONFIGURATION>
+
+
+</rpnconfiguration>

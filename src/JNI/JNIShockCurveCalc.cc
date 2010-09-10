@@ -89,7 +89,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
     //    //
     //
     //
-    int dimension = 2;
+    int dimension = realVectorInput.size();
     //    //
     int itol = 2;
     //    //
@@ -113,13 +113,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
     //
     ContinuationShockFlow flow(realVectorInput, familyIndex, timeDirection, RpNumerics::getPhysics().fluxFunction());
 
-    LSODEProfile lsodeProfile(flow, RpNumerics::getPhysics().boundary(), maxStepsNumber, dimension, itol, rtol, mf, deltaxi, nparam, param);
+    LSODEProfile lsodeProfile(flow,maxStepsNumber, dimension, itol, rtol, mf, deltaxi, nparam, param);
 
     LSODE odeSolver(lsodeProfile);
 
     vector <RealVector> coords;
 
-    ShockContinuationMethod method(odeSolver);
+    ShockContinuationMethod method(odeSolver,RpNumerics::getPhysics().boundary(),familyIndex);
 
     method.curve(realVectorInput, timeDirection, coords);
 

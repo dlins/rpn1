@@ -29,4 +29,8 @@ public class GEOM_SELECTION implements UserInputHandler {
         rpn.parser.RPnDataModule.PHASESPACE.select(userInput);
         ui.panelsBufferClear();
     }
+
+    public void userInputComplete(UIController ui) {
+
+    }
 }

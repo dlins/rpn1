@@ -13,17 +13,11 @@ import org.xml.sax.SAXException;
 
 import rpn.message.*;
 import rpnumerics.RpException;
-import javax.swing.JOptionPane;
 import java.io.*;
 import org.iso_relax.verifier.Verifier;
 import org.iso_relax.verifier.VerifierFactory;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXParseException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
 import rpn.controller.ui.UIController;
-import rpn.parser.RPnInterfaceParser;
-import rpn.parser.RPnNumericsModule;
 import rpnumerics.RPNUMERICS;
 
 public class RPnDesktopPlotter implements RPnMenuCommand {
@@ -32,7 +26,7 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
     public static String INTERFACE_CONFIG_PATH = System.getProperty("rpnhome") + System.getProperty("file.separator") + "share" + System.getProperty("file.separator") + "rpn-examples" + System.getProperty("file.separator");
     private static RPnConfigReader configReader_;
     private static InputStream configStream_;
-    private static RPnUIFrame rpnUIFrame;
+    private static RPnUIFrame rpnUIFrame_;
 
     public RPnDesktopPlotter(String configFile) throws FileNotFoundException, VerifierConfigurationException, SAXException, IOException {
 
@@ -94,19 +88,28 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
     }
 
     public static RPnUIFrame getUIFrame() {
-        return rpnUIFrame;
+        return rpnUIFrame_;
     }
 
+    public static void setUIFrame(RPnUIFrame rpnUIFrame){
+        rpnUIFrame_=rpnUIFrame;
+    }
     public static void main(String[] args) {
 
         RPnDesktopPlotter plotter = null;
         try {
 
-            File interfaceConfigFile = new File(INTERFACE_CONFIG_PATH + "defaults.xml");
-            InputStream defaultsConfigStream = new FileInputStream(interfaceConfigFile);
+//            File interfaceConfigFile = new File(INTERFACE_CONFIG_PATH + "defaults.xml");
 
+
+            RPnDesktopConfigReader defaultsReader = new RPnDesktopConfigReader(INTERFACE_CONFIG_PATH + "defaults.xml");
+
+//            InputStream defaultsConfigStream = new FileInputStream(interfaceConfigFile);
+
+            InputStream defaultsConfigStream = defaultsReader.read();
 
             if (args.length == 0) {
+                RPnConfigReader.readDefaults(defaultsConfigStream);//Reading defaults
                 throw new FileNotFoundException();
             }
 
@@ -118,19 +121,19 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
             configStream_ = configReader_.read();
             RPnDesktopPlotter.configReader_.init(configStream_); //Reading input file
 
-            rpnUIFrame = new RPnUIFrame(plotter);
+            rpnUIFrame_ = new RPnUIFrame(plotter);
 
-            rpnUIFrame.pack();
+            rpnUIFrame_.pack();
 
-            rpnUIFrame.setVisible(true);
+            rpnUIFrame_.setVisible(true);
 
             RPnCurvesListFrame curvesFrame = new RPnCurvesListFrame();
-            rpnUIFrame.setCurvesFrame(curvesFrame);
+            rpnUIFrame_.setCurvesFrame(curvesFrame);
 //            System.out.println(RPNUMERICS.toXML());
 
 
         } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
+//            ex.printStackTrace();
             RPnConfigDialog configDialog = new RPnConfigDialog();
             configDialog.setVisible(true);
 

@@ -384,6 +384,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_boundary(JNIEnv * env, jcla
 
     if (!strcmp(boundaryType, "rect")) {
 
+
+
         jclass boundaryClass = env->FindClass("wave/util/RectBoundary");
         jmethodID boundaryConstructor = (env)->GetMethodID(boundaryClass, "<init>", "(Lwave/util/RealVector;Lwave/util/RealVector;)V");
 

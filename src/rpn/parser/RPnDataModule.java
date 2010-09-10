@@ -1,5 +1,7 @@
 package rpn.parser;
 
+import org.xml.sax.Attributes;
+import org.xml.sax.Locator;
 import rpn.*;
 import rpn.controller.phasespace.*;
 import wave.util.RealVector;
@@ -8,18 +10,18 @@ import wave.multid.CoordsArray;
 import wave.util.RealSegment;
 import rpn.component.OrbitGeom;
 import rpn.component.XZeroGeom;
-import org.xml.sax.HandlerBase;
-import org.xml.sax.AttributeList;
 import org.xml.sax.SAXException;
 import org.xml.sax.InputSource;
-import org.xml.sax.Parser;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 import java.io.*;
 import java.awt.event.ActionEvent;
 import java.util.Iterator;
-import rpn.component.RpGeometry;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.XMLReader;
+import rpn.controller.ui.Command;
+import rpn.controller.ui.UIController;
 import rpnumerics.HugoniotCurve;
 import rpnumerics.PhasePoint;
 import rpnumerics.Orbit;
@@ -33,6 +35,9 @@ public class RPnDataModule {
 
     static public RPnPhaseSpaceAbstraction PHASESPACE = null;
     static public RPnPhaseSpaceAbstraction AUXPHASESPACE = null;
+    static public RPnPhaseSpaceAbstraction LEFTPHASESPACE = null;
+    static public RPnPhaseSpaceAbstraction RIGHTPHASESPACE = null;
+
     public static Orbit ORBIT = null;
     public static boolean RESULTS = false;
     private static HugoniotCurve hugoniotCurve_;
@@ -42,7 +47,7 @@ public class RPnDataModule {
         return hugoniotCurve_;
     }
 
-    static protected class InputHandler extends HandlerBase {
+    static protected class InputHandler implements ContentHandler {
         // for PoincareData
 
         protected static ArrayList pPointList_, orbitPointsList_, vectorList_;
@@ -96,6 +101,27 @@ public class RPnDataModule {
             AUXPHASESPACE = new RPnPhaseSpaceAbstraction("Auxiliary Phase Space",
                     new Space("Auxiliary Space", RPNUMERICS.domainDim() * 2), new NumConfigImpl());
 
+
+
+
+            LEFTPHASESPACE = new RPnPhaseSpaceAbstraction("LeftPhase Space",
+                    RPNUMERICS.domain(), new NumConfigImpl());//  RpNumerics.domain(),
+            RIGHTPHASESPACE = new RPnPhaseSpaceAbstraction("RightPhase Space",
+                    RPNUMERICS.domain(), new NumConfigImpl());//  RpNumerics.domain(),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         }
 
         @Override
@@ -104,7 +130,7 @@ public class RPnDataModule {
         }
 
         @Override
-        public void startElement(String name, AttributeList att) throws
+        public void startElement(String uri, String name, String qName, Attributes att) throws
                 SAXException {
 
             currentElement_ = name;
@@ -293,7 +319,7 @@ public class RPnDataModule {
         }
 
         @Override
-        public void endElement(String name) throws SAXException {
+        public void endElement(String uri, String name, String qName)throws SAXException {
 
             if (name.equals("HUGONIOTCURVE")) {
                 try {
@@ -407,15 +433,45 @@ public class RPnDataModule {
             }
 
         }
+
+        public void setDocumentLocator(Locator locator) {
+
+        }
+
+        public void startDocument() throws SAXException {
+
+        }
+
+        public void startPrefixMapping(String prefix, String uri) throws SAXException {
+
+        }
+
+        public void endPrefixMapping(String prefix) throws SAXException {
+
+        }
+
+
+
+        public void ignorableWhitespace(char[] ch, int start, int length) throws SAXException {
+
+        }
+
+        public void processingInstruction(String target, String data) throws SAXException {
+
+        }
+
+        public void skippedEntity(String name) throws SAXException {
+
+        }
     }
 
     //
     // Initializers
     //
     /** Initializes the XML parser to reload a previous session. */
-    public static void init(Parser parser, String configFile) {
+    public static void init(XMLReader parser, String configFile) {
         try {
-            parser.setDocumentHandler(new InputHandler());
+            parser.setContentHandler(new InputHandler());
             parser.parse(configFile);
         } catch (Exception saxex) {
 
@@ -425,9 +481,9 @@ public class RPnDataModule {
     }
 
     /** Initializes the XML parser to reload a previous session. */
-    public static void init(Parser parser, InputStream configFileStream) {
+    public static void init(XMLReader parser, InputStream configFileStream) {
         try {
-            parser.setDocumentHandler(new InputHandler());
+            parser.setContentHandler(new InputHandler());
             System.out.println("Data Module");
             System.out.println("Will parse !");
             parser.parse(new InputSource((configFileStream)));
@@ -451,22 +507,11 @@ public class RPnDataModule {
     /** Writes the data of actual session into a XML file. */
     static public void export(FileWriter writer) throws java.io.IOException {
 
-        Iterator geomIterator = RPnDataModule.PHASESPACE.getGeomObjIterator();
-
-        while (geomIterator.hasNext()) {
-
-            writer.write(((RpGeometry) geomIterator.next()).geomFactory().toXML());
+        Iterator<Command> commandInterator = UIController.instance().getCommandIterator();
+        while (commandInterator.hasNext()) {
+//           writer.write((commandInterator.next().toXML()));//TODO Fix.
 
         }
-
-        Iterator auxGeomIterator = RPnDataModule.AUXPHASESPACE.getGeomObjIterator();
-
-        while (auxGeomIterator.hasNext()) {
-
-            writer.write(((RpGeometry) auxGeomIterator.next()).geomFactory().toXML());
-
-        }
-
 
     }
 }

@@ -157,14 +157,8 @@ public class ContourND implements Serializable {
 				throw new CanNotPerformCalculations();			
 			}
 		}
-		 		
-		RPnCurve rpncurve = null;
 		
-		if (curve.numberOfSegments() != 0 ) {
-			rpncurve = new RPnCurve(curve, new ViewingAttr(Color.yellow));
-		}		
-		
-		return rpncurve;
+		return setRPnCurve(curve);
 	}
 		
 	public HyperCubeErrorTreatmentBehavior getHyperCubeErrorTreatment() {
@@ -354,7 +348,7 @@ public class ContourND implements Serializable {
     	
     	double[][] foncub_ = new double[numberOfEquations][numberOfVertices];
     	
-		int numberOfVertices = solution.getNumberOfVertices(); // tirar
+		int numberOfVertices = solution.getNumberOfVertices();
 		
 		double[] feasibleSolution = new double[numberOfVertices];						
 			
@@ -421,6 +415,17 @@ public class ContourND implements Serializable {
     
     protected void setNameOfMethod(String method) {
     	this.nameOfMethod = method;
+    }
+    
+    protected RPnCurve setRPnCurve (ContourCurve curve) {
+    	
+    	RPnCurve rpncurve = null;
+		
+		if (curve.numberOfSegments() != 0 ) {
+			rpncurve = new RPnCurve(curve, new ViewingAttr(Color.yellow));
+		}		
+    	
+    	return rpncurve;
     }
     
     public String getNameOfMethod() {

@@ -6,7 +6,6 @@
 package rpn;
 
 import java.io.*;
-import javax.swing.ImageIcon;
 
 public class RPnDesktopConfigReader extends RPnConfigReader{
 

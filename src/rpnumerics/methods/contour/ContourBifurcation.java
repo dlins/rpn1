@@ -1,18 +1,26 @@
 package rpnumerics.methods.contour;
 
+import java.awt.Color;
+
+import rpnumerics.*;
 import rpnumerics.methods.contour.functionsobjects.*;
 import rpnumerics.methods.contour.markedhypercubes.HyperCubeErrorTreatmentBehavior;
 import rpnumerics.methods.contour.exceptions.*;
-import rpnumerics.methods.contour.nraphson.*;
+import wave.multid.view.ViewingAttr;
 import wave.util.exceptions.*;
 
 public class ContourBifurcation extends ContourNDVectorialFunctions {
 
-	public ContourBifurcation(MDVectorFunction functionp, HyperCubeErrorTreatmentBehavior hyperCubeErrorTreatment)
+	private int family;
+	
+	public ContourBifurcation(MDVectorFunction functionp, int family, HyperCubeErrorTreatmentBehavior hyperCubeErrorTreatment)
 			throws IllegalArgumentException {
 		super(functionp, functionp.getFunctionDimension(), hyperCubeErrorTreatment);
+		
+		this.family = family;
 	}
-	
+			
+    @Override
 	protected GridGenerator initializeSolutionConstraints(int dimension, 
                                                               Constraint[] constraints,
                                                               rpnumerics.methods.contour.functionsobjects.CubeFunction[] function,
@@ -30,6 +38,18 @@ public class ContourBifurcation extends ContourNDVectorialFunctions {
 			throw new CanNotInitializeGrid();
 		}
 	}	  
+	
+    @Override
+	protected RPnCurve setRPnCurve(ContourCurve curve) {
+    	
+		BifurcationCurve rpncurve = null;
+		
+		if (curve.numberOfSegments() != 0 ) {
+			rpncurve = new BifurcationCurve(family, curve, new ViewingAttr(Color.yellow));
+		}		
+    		
+    	return rpncurve;
+    }
 	
 	/*protected void initMainObjects() {   
     	this.setCFace(new CubeFace(dimension, numberOfEquations));

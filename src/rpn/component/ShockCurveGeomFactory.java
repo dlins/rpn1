@@ -35,8 +35,14 @@ public class ShockCurveGeomFactory extends RpCalcBasedGeomFactory {
 
     public String toXML() {//TODO Implement
         StringBuffer str = new StringBuffer();
-//        String timedir = "ShockCurve XML";
-//        str.append(timedir);
+         String tdir = "pos";
+        if (((ShockCurveCalc)rpCalc()).tDirection() == OrbitGeom.BACKWARD_DIR)
+            tdir = "neg";
+        str.append("<SHOCKCURVECALC tdirection=\"" + tdir + "\" calcready=\""+rpn.parser.RPnDataModule.RESULTS+"\">\n");
+        if (!rpn.parser.RPnDataModule.RESULTS)
+            str.append(((ShockCurve)geomSource()).getPoints() [0].toXML());
+        str.append(((ShockCurve)geomSource()).toXML(rpn.parser.RPnDataModule.RESULTS));
+        str.append("</SHOCKCURVECALC>\n");
         return str.toString();
     }
 }

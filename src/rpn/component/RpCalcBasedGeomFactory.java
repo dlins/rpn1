@@ -28,15 +28,21 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
     //
     public RpCalcBasedGeomFactory(RpCalculation calc) {
         calc_ = calc;
+
         // first calculation is different for some cases...
         try {
+
             geomSource_ = calc_.calc();
             geom_ = createGeomFromSource();
             isGeomOutOfDate_ = false;
+            installController();
+
         } catch (RpException rex) {
+
             RPnDesktopPlotter.showCalcExceptionDialog(rex);
         }
-        installController();
+       
+    
     }
 
     protected RpController createUI() {

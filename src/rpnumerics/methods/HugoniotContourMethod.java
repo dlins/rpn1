@@ -33,8 +33,8 @@ public class HugoniotContourMethod extends HugoniotMethod {
 
         contourMethod_ = ContourFactory.createContourHugoniot(hugoniotParams);
         resolution_ = new int[2];
-        resolution_[0] = new Integer(RPNUMERICS.getContourConfiguration().getParamValue("x-resolution"));
-        resolution_[1] = new Integer(RPNUMERICS.getContourConfiguration().getParamValue("y-resolution"));
+        resolution_[0] = new Integer(RPNUMERICS.getContourConfiguration().getParam("x-resolution"));
+        resolution_[1] = new Integer(RPNUMERICS.getContourConfiguration().getParam("y-resolution"));
 
 
         Boundary boundary = RPNUMERICS.boundary();
@@ -55,9 +55,6 @@ public class HugoniotContourMethod extends HugoniotMethod {
             boundaryArray_[3] = maximumsArray[1];
         } else {
 
-
-
-
             System.out.println("Implementar para dominio triangular");
 
         }
@@ -70,6 +67,7 @@ public class HugoniotContourMethod extends HugoniotMethod {
         HugoniotCurve hugoniotCurve = null;
         try {
             contourMethod_.setInitialPoint(new PointNDimension(RPNUMERICS.getShockProfile().getXZero()));
+
             RPnCurve curve = contourMethod_.curvND(boundaryArray_, resolution_);
 
             PointNDimension[][] polyline = curve.getPolylines();

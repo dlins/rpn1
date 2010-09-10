@@ -22,7 +22,7 @@
 
 
 
-LSODEProfile::LSODEProfile(const WaveFlow & function, const Boundary & boundary,int NmaxSteps, int neq , int itol , double rtol, int mf, double deltaxi, int paramLength, const double * param):ODESolverProfile(function),boundary_(boundary.clone()) {
+LSODEProfile::LSODEProfile(const WaveFlow & function,int NmaxSteps, int neq , int itol , double rtol, int mf, double deltaxi, int paramLength, const double * param):ODESolverProfile(function) {
     
 
     setMaxStepNumber(NmaxSteps);
@@ -112,7 +112,7 @@ LSODEProfile::LSODEProfile(const LSODEProfile & copy):ODESolverProfile(copy.getF
 
     int i;
 
-    boundary_ = copy.boundary().clone();
+
     setMaxStepNumber(copy.maxStepNumber());
 
     rwork_ = new double[copy.lengthRWork()];
@@ -158,7 +158,7 @@ LSODEProfile::~LSODEProfile() {
     delete iwork_;
     delete atol_;
     delete param_;
-    delete boundary_;
+
 }
 
 LSODEProfile & LSODEProfile::operator=(const LSODEProfile & source){

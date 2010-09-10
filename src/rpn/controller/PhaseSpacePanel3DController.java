@@ -6,9 +6,7 @@
 
 package rpn.controller;
 
-import rpn.RPnPhaseSpacePanel;
 import rpn.RPnUserDepthCoordInputDialog;
-import java.awt.Point;
 
 public class PhaseSpacePanel3DController extends PhaseSpacePanel2DController {
     //

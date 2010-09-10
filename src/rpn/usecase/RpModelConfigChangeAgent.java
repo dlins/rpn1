@@ -55,10 +55,11 @@ public abstract class RpModelConfigChangeAgent extends RpModelActionAgent {
     }
 
     public void firePropertyChange(PropertyChangeEvent event) {
+
         for (int i = 0; i < listenersList_.size(); i++) {
             ((PropertyChangeListener) listenersList_.get(i)).propertyChange(
                     event);
-//            System.out.println(event.getSource().toString()+ " "+ event.getOldValue() + " "+ event.getNewValue());
+
         }
     }
 }

@@ -132,7 +132,7 @@ void ContinuationShockFlow::normalize(int rows, int cols, double *v){
 int ContinuationShockFlow::shockfield(int n, double Um[], int m, double *Up, int family, double *dHdu) {
     // This will change in time.
 
-    if (n != 2) return ABORTED_PROCEDURE;
+//    if (n != 2) return ABORTED_PROCEDURE;
 
     const FluxFunction & shock_flux_object = fluxFunction();
     
@@ -159,18 +159,14 @@ int ContinuationShockFlow::shockfield(int n, double Um[], int m, double *Up, int
              int info = Eigen::eig(n, &J[0][0], e);
 
                 if (info == ABORTED_PROCEDURE) {
-#ifdef TEST_SHOCK
-                printf("Inside shockfield(): cdgeev() aborted!\n");
-#endif
-                return ABORTED_PROCEDURE;
+               printf("Inside shockfield(): cdgeev() aborted!\n");
+               return ABORTED_PROCEDURE;
             }
 
             // STOP CRITERION AT THIS POINT:
             // The i-th eigenvalue must be real.
             if (e[family].i != 0) {
-#ifdef TEST_SHOCK
-                printf("Inside shockfield(): Init step, eigenvalue %d is complex: % f %+f.\n", family, e[family].r, e[family].i);
-#endif
+               printf("Inside shockfield(): Init step, eigenvalue %d is complex: % f %+f.\n", family, e[family].r, e[family].i);
                 return ABORTED_PROCEDURE;
             }
 

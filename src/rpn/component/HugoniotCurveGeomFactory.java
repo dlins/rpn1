@@ -13,12 +13,15 @@ public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
 
     public HugoniotCurveGeomFactory(HugoniotCurveCalc calc) {
         super(calc);
+
     }
 
     @Override
     protected RpController createUI() {
         return new HugoniotController();
     }
+
+   
 
     //
     // Methods
@@ -42,11 +45,11 @@ public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
 
         StringBuffer buffer = new StringBuffer();
 
-//        buffer.append("<HUGONIOTCALC xzero=\"" + ((HugoniotCurve) geomSource()).getXZero() + "\"" + " methodname=\"" + ShockProfile.instance().getHugoniotMethodName() + "\"" + " flowname=\"" + RPNUMERICS.getShockProfile().getFlowName() + "\"" + ">\n");
-//
-//        buffer.append(((HugoniotCurve) geomSource()).toXML(rpn.parser.RPnDataModule.RESULTS));
-//
-//        buffer.append("</HUGONIOTCALC>\n");
+        buffer.append("<HUGONIOTCALC xzero=\"" + ((HugoniotCurve) geomSource()).getXZero() + "\"" + " methodname=\"" + ShockProfile.instance().getHugoniotMethodName() + "\"" + " flowname=\"" + RPNUMERICS.getShockProfile().getFlowName() + "\"" + ">\n");
+
+        buffer.append(((HugoniotCurve) geomSource()).toXML(rpn.parser.RPnDataModule.RESULTS));
+
+        buffer.append("</HUGONIOTCALC>\n");
 
         return buffer.toString();
 

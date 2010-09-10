@@ -144,8 +144,37 @@
 
     <!--VIEW INFORMATIONS-->
 
-    <VIEWINGPARAMS>
-        <VIEWPORT vpwidth="800" vpheight="800"/>
-    </VIEWINGPARAMS>
+
+    <VIEWCONFIGURATION modeldomain="2">
+
+    <PROJDESC name="Axis0 Axis1">
+        <VIEWPARAM name="axis" value="0 1"/>
+        <VIEWPARAM name="vpwidth" value="650"/>
+        <VIEWPARAM name="vpheight" value="650"/>
+    </PROJDESC>
+
+</VIEWCONFIGURATION>
+
+    <VIEWCONFIGURATION modeldomain="3">
+
+    <PROJDESC name="Axis0 Axis1">
+        <VIEWPARAM name="axis" value="0 1"/>
+        <VIEWPARAM name="vpwidth" value="650"/>
+        <VIEWPARAM name="vpheight" value="650"/>
+    </PROJDESC>
+
+
+    <PROJDESC name="Axis0 Axis2">
+        <VIEWPARAM name="axis" value="0 2"/>
+        <VIEWPARAM name="vpwidth" value="650"/>
+        <VIEWPARAM name="vpheight" value="650"/>
+    </PROJDESC>
+
+
+</VIEWCONFIGURATION>
+
+
+
+
 
 </rpnconfiguration>

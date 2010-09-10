@@ -37,6 +37,7 @@ public class RpCalcController implements RpController {
         ChangeDirectionAgent.instance().addPropertyChangeListener(this);
         ChangeSigmaAgent.instance().addPropertyChangeListener(this);
 
+
     }
 
 

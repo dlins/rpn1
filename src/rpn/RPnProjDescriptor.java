@@ -54,6 +54,10 @@ public class RPnProjDescriptor {
         return projMap_;
     }
 
+    public boolean isIso2equi() {
+        return iso2equi_;
+    }
+
     public String label() {
         return label_;
     }

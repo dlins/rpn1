@@ -27,12 +27,19 @@ class RarefactionContinuationMethod : public RarefactionMethod {
 private:
 
     ODESolver * solver_;
+    Boundary * boundary_;
+    RealVector * referenceVector_;
+    int family_;
+
 
     int init(ContinuationRarefactionFlow * flow, int n, double *in, int indx, int increase, double deltaxi, double *lambda, double *rev)const;
 
 public:
 
     RarefactionContinuationMethod(const ODESolver &);
+
+    RarefactionContinuationMethod(const ODESolver &,const Boundary &,int);
+
 
     RarefactionContinuationMethod(const RarefactionContinuationMethod &);
 
@@ -41,6 +48,10 @@ public:
     const ODESolver & getSolver()const;
 
     RarefactionMethod * clone() const;
+
+    const RealVector & getReferenceVector();
+
+    void setReferenceVector(const RealVector &);
 
     virtual ~RarefactionContinuationMethod();
 

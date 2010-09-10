@@ -109,23 +109,23 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
     int maxStepsNumber = 10000;
     //
     //
-
-
     RealVector referenceVector(dimension);
 
     for (int i = 0; i < referenceVector.size(); i++) {//Initializing reference vector
         referenceVector(i) = 0;
     }
 
+
+
     ContinuationRarefactionFlow flow(referenceVector, familyIndex, timeDirection, RpNumerics::getPhysics().fluxFunction());
 
-    LSODEProfile lsodeProfile(flow, RpNumerics::getPhysics().boundary(), maxStepsNumber, dimension, itol, rtol, mf, deltaxi, nparam, param);
+    LSODEProfile lsodeProfile(flow,maxStepsNumber, dimension, itol, rtol, mf, deltaxi, nparam, param);
 
     LSODE odeSolver(lsodeProfile);
 
     vector <RealVector> coords;
 
-    RarefactionContinuationMethod method(odeSolver);
+    RarefactionContinuationMethod method(odeSolver,RpNumerics::getPhysics().boundary(),familyIndex);
 
     method.curve(realVectorInput, timeDirection, coords);
 

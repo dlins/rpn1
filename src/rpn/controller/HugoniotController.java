@@ -8,24 +8,21 @@ package rpn.controller;
 import rpn.component.RpGeomFactory;
 import rpn.component.HugoniotCurveGeomFactory;
 import rpn.usecase.*;
-import rpnumerics.HugoniotCurveCalc;
-import rpnumerics.PhasePoint;
 import java.beans.PropertyChangeEvent;
 
 public class HugoniotController extends RpCalcController {
     //
     // Members
     //
+
     private HugoniotCurveGeomFactory geomFactory_;
 
     //
     // Constructors
     //
-
     //
     // Accessors/Mutators
     //
-
     //
     // Methods
     //
@@ -49,6 +46,7 @@ public class HugoniotController extends RpCalcController {
         geomFactory_ = (HugoniotCurveGeomFactory) geom;
     }
 
+    @Override
     public void uninstall(RpGeomFactory geom) {
         super.uninstall(geom);
         geomFactory_ = null;
@@ -59,8 +57,11 @@ public class HugoniotController extends RpCalcController {
         // this is to avoid void notifications of enabled/disbled
         if (change.getPropertyName().compareTo("enabled") != 0) {
 //            if (change.getSource() instanceof ChangeOrbitDirectionAgent) {
-                // updates the HugoniotFunction xzero
-//TESTE //                ((HugoniotCurveCalc) geomFactory_.rpCalc()).uMinusChangeNotify((PhasePoint) change.getNewValue());
+            // updates the HugoniotFunction xzero
+//TESTE
+
+
+//            ((HugoniotCurveCalc) geomFactory_.rpCalc()).uMinusChangeNotify((PhasePoint) change.getNewValue());
 //            }
 
 //            if (change.getSource() instanceof ChangeHugoniotMethodAgent) {

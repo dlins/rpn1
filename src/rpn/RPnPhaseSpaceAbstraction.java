@@ -82,13 +82,15 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
     @Override
     public void join(MultiGeometry geom) {
 
+        if (geom == null) {
+            return;
+        }
         if (geom instanceof HugoniotCurveGeom) {
             ArrayList activeList = new ArrayList();
             groupArrayList_.add(activeList);
             super.geomList_ = activeList;
 
         }
-        if(geom==null)return;
         super.join(geom);
 
         RPnCurvesListFrame.addGeometry((geomList_.size() - 1) + "", geom.getClass().getSimpleName());

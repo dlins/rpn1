@@ -19,24 +19,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.Point;
-import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.util.Iterator;
-import rpn.RPnUIFrame;
-import rpn.component.BifurcationCurveGeom;
-import rpn.component.BifurcationCurveView;
-import rpn.component.RpGeomFactory;
 import rpn.controller.ui.TRACKPOINT_CONFIG;
 import rpn.controller.ui.UIController;
-import rpn.controller.ui.UI_ACTION_SELECTED;
-import rpn.usecase.TrackPointAgent;
-import rpnumerics.BifurcationCurve;
-import rpnumerics.RPnCurve;
 import wave.multid.Coords2D;
-import wave.multid.CoordsArray;
-import wave.multid.Space;
-import wave.util.RealSegment;
-import wave.util.RealVector;
 
 public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpacePanelController {
     //
