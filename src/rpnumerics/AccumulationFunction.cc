@@ -4,7 +4,7 @@ AccumulationFunction::AccumulationFunction(void) : params_(new AccumulationParam
 
 
 
-RpFunction * AccumulationFunction::clone() const  { return new AccumulationFunction(*this);}
+//RpFunction * AccumulationFunction::clone() const  { return new AccumulationFunction(*this);}
 
 
 AccumulationFunction::AccumulationFunction(const AccumulationFunction & copy ){
@@ -12,10 +12,10 @@ AccumulationFunction::AccumulationFunction(const AccumulationFunction & copy ){
  }
 
 
-int AccumulationFunction::jet(const WaveState &u, JetMatrix &m, int degree) const{
-    
-    return 0;
-}
+//int AccumulationFunction::jet(const WaveState &u, JetMatrix &m, int degree) const{
+//
+//    return 0;
+//}
 
 
 AccumulationFunction::~AccumulationFunction(void){delete params_;}

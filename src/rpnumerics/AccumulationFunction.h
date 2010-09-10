@@ -36,9 +36,9 @@ public:
     
     virtual ~AccumulationFunction(void);
     
-    RpFunction * clone() const;
+//    RpFunction * clone() const;
     
-    int jet(const WaveState &u, JetMatrix &m, int degree) const;
+//    int jet(const WaveState &u, JetMatrix &m, int degree) const;
     
     void accumulationParams(const AccumulationParams & params);
     
