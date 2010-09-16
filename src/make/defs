@@ -235,7 +235,7 @@ endif
 #	Definitions for cleaning
 #
 CLEAN = rm -f
-CLEANSRC = $(OBJDIR)/*.[ado]
+CLEANSRC = $(OBJDIR)/*.[ado] $(LIBARC)
 
 #
 #	Definitions for printing

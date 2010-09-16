@@ -43,8 +43,9 @@ public class RPNUMERICS {
     //
 
     static public void init(String physicsID) {
-        System.loadLibrary("wave");//TODO libwave is always loaded ?
-        System.loadLibrary("rpnumerics");
+        //System.loadLibrary("wave");//TODO libwave is always loaded ?
+        //System.loadLibrary("rpnumerics");
+        System.loadLibrary("rpn");
 
         System.out.println("Inicializando a fisica: " + physicsID);
         initNative(physicsID);

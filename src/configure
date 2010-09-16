@@ -4,6 +4,34 @@
 # configure build.xml, environment variables and makefile
 #
 
+# Fisrt create INCLUDE and SRC macros for makefile
+incfile=make/inc
+echo "" > $incfile
+for dir in `find c++ plugins -type d`; do PTH="$PTH \\\\\n\\t$dir"; done
+echo -e VPATH = $PTH >> $incfile
+
+echo >> $incfile
+for dir in `find c++ plugins -type d`; do INC="$INC \\\\\n\\t-I $dir"; done
+echo -e INCLUDE = $INC >> $incfile
+
+echo >> $incfile
+for src in `find c++ -name \*.cc`; do CCSRC="$CCSRC \\\\\n\\t"$(basename $src); done
+echo -e CCSRC = $CCSRC >> $incfile
+
+echo >> $incfile
+for src in `find c++ -name \*.cpp`; do CPPSRC="$CPPSRC \\\\\n\\t"$(basename $src); done
+echo -e CPPSRC = $CPPSRC >> $incfile
+
+echo >> $incfile
+for src in `find c++ -name \*.F`; do FSRC="$FSRC \\\\\n\\t"$(basename $src); done
+echo -e FSRC = $FSRC >> $incfile
+echo >> $incfile
+
+echo "vpath %.F   \$(VPATH)" >> $incfile
+echo "vpath %.cc  \$(VPATH)" >> $incfile
+echo "vpath %.cpp \$(VPATH)" >> $incfile
+
+# Now set environment variables for build.xml (i.e. ant)
 declare -a jnidir
 
 i=1
@@ -52,11 +80,25 @@ sed -e "s,PRE_CONFIG_HOSTTYPE,$hosttype,g" $srcdir/make/build.xml.in > $srcdir/b
 #
 # Create make/env file
 #
-sed -e "s,PRE_CONFIG_HOSTTYPE,$hosttype,g" \
-	-e "s,PRE_CONFIG_JAVAHOME,$javahome,g" \
-	-e "s,PRE_CONFIG_JAVAINC,$javainc,g" \
-	$srcdir/make/env.in > $srcdir/make/env
+cat << EOF >> $srcdir/make/env
+#
+# env - RPn makefile environment variable settings
+#       If left empty, makefile will get shell settings
+RPGNU=yes
+RPHOSTTYPE=$hosttype
+JAVA_HOME=$javahome
+JAVA_INC=$javainc
+EOF
 
+cat << EOF >> $srcdir/make/env.csh
+#
+# env - RPn makefile environment variable settings
+#       If left empty, makefile will get shell settings
+setenv RPGNU yes
+setenv RPHOSTTYPE $hosttype
+setenv JAVA_HOME $javahome
+setenv JAVA_INC $javainc
+EOF
 
 echo
 echo

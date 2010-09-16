@@ -1,48 +1,47 @@
-include make/defs
 include make/env
-
+include make/defs
+include make/inc
 vpath %.cc ./plugins
 
 SRCDIR = .
 LIBDIR = $(SRCDIR)/../lib/$(RPHOSTTYPE)
-#OBJDIR = $(SRCDIR)/build/$(RPHOSTTYPE)
 OBJDIR = $(LIBDIR)
+LIBNAME = RPnDefaultPlugins
 
-RPNUMERICSDIR = $(SRCDIR)/rpnumerics
-WAVEDIR       = $(SRCDIR)/wave
-include $(RPNUMERICSDIR)/defs
-include $(WAVEDIR)/defs
+PLUGINSRC = ShockFlowPlugin.cc \
+	RarefactionFlowPlugin.cc
 
-PLUG_SRC = ShockFlowPlugin.cc RarefactionFlowPlugin.cc
+LIBARC = $(LIBDIR)/plugins/$(LIBNAME).$(LIBEXT)
+LIBOBJ = $(PLUGINSRC:%.cc=$(OBJDIR)/%.o)
 
+CPPFLAGS = $(INCLUDE)
+LDLIB    = -L$(LIBDIR) -lrpn
 
+ifeq ($(RPHOSTTYPE),darwin_i386)
+    LIBEXT = dylib
+    LDFLAG = -fPIC 
+    LDLIB += -L/Developer/SDKs/MacOSX10.5.sdk/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A -lBLAS -lLAPACK -L/usr/local/lib -lgfortran
 
-PLUG_LIBNAME = RPnDefaultPlugins.so
-PLUG_LIBARC = $(LIBDIR)/plugins/$(PLUG_LIBNAME)
-PLUG_LIBOBJ = $(PLUG_SRC:%.cc=$(OBJDIR)/%.o)
-PLUG_DEPENDOBJ = $(PLUG_SRC:%.cc=$(OBJDIR)/%.d)
-
-SHARELIBFLAG += -fPIC
-CPPFLAGS += $(SHARELIBFLAG) -I $(RPNUMERICSDIR) -I $(RPNUMERICSDIR)/plugin -I $(RPNUMERICSDIR)/physics/quad
-LIBRPN = -L$(LIBDIR) -lwave -lrpnumerics
-
-ifneq ($(RPHOSTTYPE),darwin_i386)
-PLUGLDFLAG = -Wl,-soname,$(PLUG_LIBNAME)
+else # ifeq ($(RPHOSTTYPE),linux_*)
+    LIBEXT = so
+    LDFLAG = -Wl,-soname,$(LIBNAME).$(LIBEXT) -fPIC
+    LDLIB += -L/usr/lib -lblas -ldl -llapack
 endif
 
 
-all: $(PLUG_LIBARC)
+all: $(LIBARC)
 
-$(PLUG_LIBARC): $(PLUG_LIBOBJ)
-	$(CCC) -shared $(SHARELIBFLAG) $(PLUGLDFLAG) -o $(PLUG_LIBARC) $(PLUG_LIBOBJ) $(LIBRPN)
+$(LIBARC): $(LIBOBJ)
+	$(CCC) -shared $(LDFLAG) -o $(LIBARC) $(LIBOBJ) $(LDLIB)
 
-
-.PRECIOUS: $(LIBARC)
 
 include make/rules
-ifneq ($(RPHOSTTYPE),mingw32)
--include $(DEPENDOBJ)
-endif
 
-CLEANSRC += $(LIBARC)
+# TODO: Dependencies is not working!!!
+#DEPENDOBJ = $(CPPSRC:%.cc=$(OBJDIR)/%.d)
+
+#ifneq ($(RPHOSTTYPE),mingw32)
+#-include $(DEPENDOBJ)
+#endif
+
 

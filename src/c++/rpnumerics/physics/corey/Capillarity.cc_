@@ -58,11 +58,10 @@ double Capillarity::dpcogdsw(double sg) const{
     return params_->acg() * (params_->lcg() + (1. - params_->lcg()) * 2. * (1. - sg));
 }
 
-double Capillarity::dpcogdso(double sg)const {
+double Capillarity::dpcogdso(double sg) const {
     // finds DPcog(1-sw-so)/Dso
     return params_->acg() * (params_->lcg() + (1. - params_->lcg()) * 2. * (1. - sg));
 }
 
 
-//! Code comes here! daniel@impa.br
 
