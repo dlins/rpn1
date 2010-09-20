@@ -80,7 +80,7 @@ sed -e "s,PRE_CONFIG_HOSTTYPE,$hosttype,g" $srcdir/make/build.xml.in > $srcdir/b
 #
 # Create make/env file
 #
-cat << EOF >> $srcdir/make/env
+cat << EOF > $srcdir/make/env
 #
 # env - RPn makefile environment variable settings
 #       If left empty, makefile will get shell settings
@@ -90,7 +90,7 @@ JAVA_HOME=$javahome
 JAVA_INC=$javainc
 EOF
 
-cat << EOF >> $srcdir/make/env.csh
+cat << EOF > $srcdir/make/env.csh
 #
 # env - RPn makefile environment variable settings
 #       If left empty, makefile will get shell settings

@@ -1,7 +1,0 @@
-vpath %.cc $(MULTIDDIR)
-
-WAVESRC += Multid.cc	\
-	Space.cc
-
-CPPFLAGS += -I $(MULTIDDIR)
-

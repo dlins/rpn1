@@ -1,8 +1,0 @@
-vpath %.cc $(PLUGINDIR)
-
-
-RPNUMSRC += PluginService.cc\
-            RPnPluginManager.cc\
-
-	
-
