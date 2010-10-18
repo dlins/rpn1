@@ -255,7 +255,13 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initNative(JNIEnv * env, jclas
     }
 
     if (!strcmp(physicsID, "QuadraticR2")) {
-        RpNumerics::setPhysics(Quad2(Quad2FluxParams()));
+//        RpNumerics::setPhysics(Quad2(Quad2FluxParams()));
+
+        vector <Quad2FluxFunction> testVector;
+
+        testVector.push_back(Quad2FluxFunction(Quad2FluxParams()));
+
+        RpNumerics::setPhysics(Quad2(testVector));
     }
 
     if (!strcmp(physicsID, "QuadraticR3")) {

@@ -43,6 +43,8 @@ public:
 
     Quad2(const Quad2&);
 
+    Quad2(vector<Quad2FluxFunction> );
+
     void fluxFunction(const FluxFunction &);
 
     virtual ~Quad2();

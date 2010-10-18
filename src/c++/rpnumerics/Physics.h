@@ -29,8 +29,14 @@
  */
 
 class Physics {
-    
+
+private:
+    FluxFunction * fluxVector_;
+
+
 public :
+
+
     virtual ~Physics();
     
     virtual Physics * clone()const =0;
@@ -41,7 +47,8 @@ public :
     
     virtual void boundary(const Boundary & boundary) = 0;
     
-    virtual  const FluxFunction & fluxFunction() const  = 0;
+    const FluxFunction & fluxFunction() const;
+
     
     virtual void fluxParams(const FluxParams &) =0;
 
@@ -50,7 +57,12 @@ public :
     virtual const Space & domain() const = 0;
     
     virtual const char * ID() const =0;
-    
+
+
+    Physics();
+    Physics(vector<FluxFunction>);
+    Physics(const Physics &);
+
 
     
 };
