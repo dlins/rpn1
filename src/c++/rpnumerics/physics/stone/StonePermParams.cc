@@ -3,14 +3,14 @@
  *
  * RPn Project
  *
- * @(#) PermParams.cc
+ * @(#) StonePermParams.cc
  */
 
 /*
  * ---------------------------------------------------------------
  * Includes:
  */
-#include "PermParams.h"
+#include "StonePermParams.h"
 
 /*
  * ---------------------------------------------------------------
@@ -20,13 +20,13 @@
 
 
 
-PermParams::PermParams(double lw, double low, double lg, double log, double cnw, double cno, double cng, double epsl) {
+StonePermParams::StonePermParams(double lw, double low, double lg, double log, double cnw, double cno, double cng, double epsl) {
 
 }
 
-PermParams::PermParams() { reset(); }
+StonePermParams::StonePermParams() { reset(); }
 
-void PermParams::reset() {
+void StonePermParams::reset() {
 
 }
 

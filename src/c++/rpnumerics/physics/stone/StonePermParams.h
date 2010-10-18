@@ -3,11 +3,11 @@
  *
  * RPn Project
  *
- * @(#) PermParams.h
+ * @(#) StonePermParams.h
  */
 
-#ifndef _PermParams_H
-#define _PermParams_H
+#ifndef _StonePermParams_H
+#define _StonePermParams_H
 
 /*
  * ---------------------------------------------------------------
@@ -24,23 +24,16 @@
 class StonePermParams {
     
 private:
-    
 
     
 public:
-
     
     StonePermParams(double lw, double low, double lg, double log, double cnw, double cno, double cng, double epsl);
-    
-    
     StonePermParams();
-    
-
-    
-    
+    void reset();
     
 };
 
 
 
-#endif //! _PermParams_H
+#endif //! _StonePermParams_H

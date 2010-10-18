@@ -11,6 +11,7 @@
  * Includes:
  */
 #include "Stone.h"
+#include "TriPhaseAccumulationFunction.h"
 
 /*
  * ---------------------------------------------------------------
@@ -79,3 +80,10 @@ Stone::~Stone() {
     delete accFunction_;
 
 }
+
+
+const AccumulationFunction & Stone::accumulation() const {
+    return TriPhaseAccumulationFunction(*this);
+}
+
+

@@ -24,11 +24,13 @@ using namespace std;
 StonePermeability::StonePermeability(const StonePermParams & params) : params_(new StonePermParams(params)) {
 
 
-
 }
 
 StonePermeability::StonePermeability(const StonePermeability & copy) {
-
     params_ = new StonePermParams(copy.params());
 
+}
+
+
+StonePermeability::~StonePermeability() {
 }

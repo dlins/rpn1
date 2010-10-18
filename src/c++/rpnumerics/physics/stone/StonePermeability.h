@@ -30,17 +30,12 @@ private:
     
 public:
     
-
-    
-StonePermeability(const StonePermParams & params);
-    
+    StonePermeability(const StonePermParams & params);
     StonePermeability(const StonePermeability & );
-    
     virtual ~StonePermeability();
     
     const StonePermParams & params() const ;
-    
-        
+
 };
 
 

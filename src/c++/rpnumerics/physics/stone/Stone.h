@@ -14,6 +14,10 @@
  * Includes:
  */
 #include "Physics.h"
+#include "IsoTriang2DBoundary.h"
+#include "StoneParams.h"
+#include "AccumulationFunction.h"
+
 /*
  * ---------------------------------------------------------------
  * Definitions:
@@ -35,6 +39,7 @@ public:
 
     Stone(const StoneParams &);
     Stone();
+    Stone(const Stone &);
 
     virtual ~Stone();
 

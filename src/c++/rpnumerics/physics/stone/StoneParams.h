@@ -6,8 +6,8 @@
  * @(#) TriphaseFluxParams.h
  */
 
-#ifndef _TriPhaseFluxParams_H
-#define _TriPhaseFluxParams_H
+#ifndef _StoneFluxParams_H
+#define _StoneFluxParams_H
 
 /*
  * ---------------------------------------------------------------
@@ -21,7 +21,7 @@
  * Definitions:
  */
 
-class TriPhaseParams:public FluxParams {
+class StoneParams:public FluxParams {
     
 private:
     
@@ -40,9 +40,9 @@ public:
     
 //    const static FluxParams & DEFAULT_FLUX_PARAMS;
     
-    TriPhaseParams();
+    StoneParams();
     
-    TriPhaseParams(const RealVector & params, int index);
+    StoneParams(const RealVector & params, int index);
     
     double vel()const ;
     
@@ -60,22 +60,22 @@ public:
     
 };
 
-inline double TriPhaseParams::vel()const { return params().component(0); }
+inline double StoneParams::vel()const { return params().component(0); }
 
-inline double TriPhaseParams::muw()const { return
+inline double StoneParams::muw()const { return
         params().component(1); }
 
-inline double TriPhaseParams::muo()const { return params().component(2); }
+inline double StoneParams::muo()const { return params().component(2); }
 
-inline double TriPhaseParams::mug()const { return params().component(3); }
+inline double StoneParams::mug()const { return params().component(3); }
 
-inline double TriPhaseParams::grw()const { return params().component(4); }
+inline double StoneParams::grw()const { return params().component(4); }
 
-inline double TriPhaseParams::gro()const { return params().component(5); }
+inline double StoneParams::gro()const { return params().component(5); }
 
-inline double TriPhaseParams::grg()const { return params().component(6); }
+inline double StoneParams::grg()const { return params().component(6); }
 
-inline const FluxParams & TriPhaseParams::defaultParams()  {
+inline const FluxParams & StoneParams::defaultParams()  {
 
 
     RealVector  paramsVector(7);
@@ -90,10 +90,10 @@ inline const FluxParams & TriPhaseParams::defaultParams()  {
     paramsVector.component(6)=0;
     
     
-    TriPhaseParams * fluxParams = new TriPhaseParams(paramsVector, 0); // TODO Index zero ???
+    StoneParams * fluxParams = new StoneParams(paramsVector, 0); // TODO Index zero ???
     
     return *fluxParams;
     
 }
 
-#endif //! _TriPhaseFluxParams_H
+#endif //! _StoneFluxParams_H

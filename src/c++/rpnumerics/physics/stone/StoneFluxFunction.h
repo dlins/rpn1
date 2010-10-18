@@ -17,12 +17,9 @@
 
 #include  "FluxFunction.h"
 #include  "RealMatrix2.h"
-#include "CapilParams.h"
-#include "PermParams.h"
+#include "StonePermParams.h"
 #include "StoneParams.h"
-#include "Capillarity.h"
-#include "Permeability.h"
-#include "ViscosityParams.h"
+#include "StonePermeability.h"
 #include <math.h>
 
 
