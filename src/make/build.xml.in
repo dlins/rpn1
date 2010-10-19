@@ -111,7 +111,10 @@
     </target>
 
 
+    <!--
     <target name="run" depends="compile-java,compile-c++,compile-plugins" description="Runs the program" >
+    -->
+    <target name="run" description="Runs the program" >
         <property name="run.class" value="rpn.RPnDesktopPlotter"/>
 
         <path id="run.classpath">

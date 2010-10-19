@@ -19,8 +19,6 @@
  */
 
 
-//! Code comes here! daniel@impa.br
-
 IsoTriang2DBoundary * Stone::defaultBoundary() {
 
     RealVector A(2);
@@ -60,7 +58,7 @@ Stone::Stone(const Stone & copy) {
 
     accFunction_ = (AccumulationFunction *) copy.accumulation().clone();
 
-    FLUX_ID = "Stone";
+    FLUX_ID = (char *)"Stone";
 
 
 }
@@ -79,11 +77,6 @@ Stone::~Stone() {
     delete boundary_;
     delete accFunction_;
 
-}
-
-
-const AccumulationFunction & Stone::accumulation() const {
-    return TriPhaseAccumulationFunction(*this);
 }
 
 
