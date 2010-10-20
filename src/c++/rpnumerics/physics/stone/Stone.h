@@ -18,6 +18,7 @@
 #include "StoneParams.h"
 #include "AccumulationFunction.h"
 #include  "Multid.h"
+#include "StoneFluxFunction.h"
 
 /*
  * ---------------------------------------------------------------
@@ -38,7 +39,7 @@ private:
 
 public:
 
-    Stone(const StoneParams &);
+    //Stone(const StoneParams &);
     Stone(const Stone &);
     Stone();
 
@@ -66,7 +67,7 @@ inline const FluxFunction & Stone::fluxFunction() const{
 }
 
 inline void Stone::fluxParams (const FluxParams & params){
-    StoneParams newParams(params.params(),0); 
+    StoneParams newParams(params.params()); 
     fluxFunction_->fluxParams(newParams);
 }
 
