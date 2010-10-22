@@ -21,14 +21,14 @@
 
 
 Corey::Corey(const CoreyParams & params, const PermParams & permParams,
-        const CapilParams & capilParams, const ViscosityParams & viscParams){
-    fluxFunction_ = new CoreyFluxFunction(params, permParams, capilParams, viscParams);
+        const CapilParams & capilParams, const ViscosityParams & viscParams):SubPhysics(CoreyFluxFunction(params, permParams, capilParams, viscParams), CoreyAccumulationFunction(), defaultBoundary()){
+    fluxFunction_ = new ;
     
     FLUX_ID="Corey";
 
-    accFunction_ = new CoreyAccumulationFunction(); //TODO Using default accumulationFunction
+    accFunction_ = new; //TODO Using default accumulationFunction
 
-    boundary_= defaultBoundary();
+    boundary_=;
     
 }
 

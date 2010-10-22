@@ -13,13 +13,10 @@
  * ---------------------------------------------------------------
  * Includes:
  */
-#include "AccumulationFunction.h"
-#include "Boundary.h"
-#include "FluxFunction.h"
-#include "Space.h"
-
+#include "SubPhysics.h"
 
 //!
+
 /*!
  *
  * TODO:
@@ -29,42 +26,47 @@
  */
 
 class Physics {
-
 private:
-    FluxFunction * fluxVector_;
+    vector<SubPhysics *> * physicsVector_;
+    Boundary * boundary_;
 
+public:
 
-public :
-
-
-    virtual ~Physics();
-    
-    virtual Physics * clone()const =0;
-    
-    virtual const AccumulationFunction & accumulation() const = 0;
-    
-    virtual const Boundary & boundary() const= 0;
-    
-    virtual void boundary(const Boundary & boundary) = 0;
-    
-    const FluxFunction & fluxFunction() const;
-
-    
-    virtual void fluxParams(const FluxParams &) =0;
-
-    virtual void accumulationParams(const AccumulationParams &) = 0;
-    
-    virtual const Space & domain() const = 0;
-    
-    virtual const char * ID() const =0;
-
-
-    Physics();
-    Physics(vector<FluxFunction>);
+    Physics(const vector<SubPhysics> &,const Boundary &,const char *);
     Physics(const Physics &);
 
+    virtual ~Physics();
 
-    
+    virtual Physics * clone()const = 0;
+
+    const Boundary & boundary() const;
+
+    void boundary(const Boundary & boundary);
+
+    const Space & domain() const;
+
+    virtual const char * ID() const = 0;
+
+    const SubPhysics & getSubPhysics(const int);
+
+    const vector<SubPhysics *> & getPhysicsVector()const;
+
+    //deprecated
+    const FluxFunction & fluxFunction() const;
+
+    //deprecated
+
+    const AccumulationFunction & accumulation() const;
+    //deprecated
+
+    void fluxParams(const FluxParams &);
+    //deprecated
+
+    void accumulationParams(const AccumulationParams &);
+    //deprecated
+    const AccumulationParams & accumulationParams()const;
+
+
 };
 
 
