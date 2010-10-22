@@ -88,6 +88,7 @@ RPGNU=yes
 RPHOSTTYPE=$hosttype
 JAVA_HOME=$javahome
 JAVA_INC=$javainc
+PATH=$PATH:$rpnhome/bin
 EOF
 
 cat << EOF > $srcdir/make/env.csh
@@ -98,6 +99,7 @@ setenv RPGNU yes
 setenv RPHOSTTYPE $hosttype
 setenv JAVA_HOME $javahome
 setenv JAVA_INC $javainc
+setenv PATH "$PATH":"$rpnhome/bin"
 EOF
 
 echo
@@ -112,3 +114,4 @@ echo
 echo -e "Now, run\033[32m 'ant' \033[0mto build RPn."
 echo -e "Use\033[32m 'ant run' \033[0mto execute the program."
 echo
+
