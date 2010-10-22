@@ -20,7 +20,7 @@ ifeq ($(RPHOSTTYPE),darwin_i386)
     LDLIB    = -L/Developer/SDKs/MacOSX10.5.sdk/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A -lBLAS -lLAPACK -L/usr/local/lib -lgfortran
 else # ifeq ($(RPHOSTTYPE),linux_*)
     LIBEXT   = so
-    CPPFLAGS = $(INCLUDE) -I $(JAVA_INC) -I $(JAVA_INC)/linux
+    CPPFLAGS = $(INCLUDE) -g -I $(JAVA_INC) -I $(JAVA_INC)/linux
     LDFLAG   = -Wl,-soname,$(LIBNAME).$(LIBEXT) -fPIC 
     LDLIB    = -L/usr/lib -lblas -ldl -llapack 
 endif

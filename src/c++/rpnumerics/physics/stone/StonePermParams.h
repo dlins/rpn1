@@ -3,16 +3,18 @@
  *
  * RPn Project
  *
- * @(#) PermParams.h
+ * @(#) StonePermParams.h
  */
 
-#ifndef _PermParams_H
-#define _PermParams_H
+#ifndef _StonePermParams_H
+#define _StonePermParams_H
 
 /*
  * ---------------------------------------------------------------
  * Includes:
  */
+
+#include "RealVector.h"
 
 
 /*
@@ -24,23 +26,29 @@
 class StonePermParams {
     
 private:
-    
-
+    RealVector * comp;	
     
 public:
-
     
-    StonePermParams(double lw, double low, double lg, double log, double cnw, double cno, double cng, double epsl);
-    
-    
+    StonePermParams(double expw, double expg, double expo,
+                    double expow, double expog,
+                    double cnw, double cng, double cno,
+                    double lw, double lg, 
+                    double low, double log, 
+                    double epsl);
     StonePermParams();
-    
+StonePermParams(const StonePermParams &	);
+    virtual ~StonePermParams();
 
+    void reset();
     
-    
-    
+    double component(int);
+
+const RealVector & params() const;
 };
+ 
+
+inline const RealVector & StonePermParams::params()const {return *comp;}
 
 
-
-#endif //! _PermParams_H
+#endif //! _StonePermParams_H

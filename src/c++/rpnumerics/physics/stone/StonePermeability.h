@@ -13,6 +13,7 @@
  * ---------------------------------------------------------------
  * Includes:
  */
+#include <math.h>
 #include "StonePermParams.h"
 
 /*
@@ -24,23 +25,29 @@
 class StonePermeability{
     
 private:
-  
     StonePermParams * params_;
+
+    double expw_, expg_, expo_;
+    double expow_, expog_;
+    double cnw_, cng_, cno_;
+    double lw_, lg_;
+    double low_, log_;
+    double epsl_;
+
     double denkw_, denkg_, denkow_, denkog_;
     
 public:
     
-
-    
-StonePermeability(const StonePermParams & params);
-    
+    StonePermeability(const StonePermParams & params);
     StonePermeability(const StonePermeability & );
-    
     virtual ~StonePermeability();
     
     const StonePermParams & params() const ;
-    
-        
+
+    void Diff_PermabilityWater(double, double, double, double&, double&, double&, double&, double&, double&);
+    void Diff_PermabilityOil(double, double, double, double&, double&, double&, double&, double&, double&);
+    void Diff_PermabilityGas(double, double, double, double&, double&, double&, double&, double&, double&);
+
 };
 
 

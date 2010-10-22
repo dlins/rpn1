@@ -17,12 +17,9 @@
 
 #include  "FluxFunction.h"
 #include  "RealMatrix2.h"
-#include "CapilParams.h"
-#include "PermParams.h"
+#include "StonePermParams.h"
 #include "StoneParams.h"
-#include "Capillarity.h"
-#include "Permeability.h"
-#include "ViscosityParams.h"
+#include "StonePermeability.h"
 #include <math.h>
 
 
@@ -35,13 +32,16 @@
 class StoneFluxFunction:public FluxFunction {
     
 private:
-    
     StonePermeability * perm_;
+
+    double grw, grg, gro;
+    double muw, mug, muo;
+    double vel;
     
 public:
     
     StoneFluxFunction(const StoneParams & params, const StonePermParams & permParams);
-    
+    //StoneFluxFunction();
     virtual ~StoneFluxFunction();
     
     StoneFluxFunction(const StoneFluxFunction & );

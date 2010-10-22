@@ -11,12 +11,12 @@
  * Includes:
  */
 #include "Stone.h"
+#include "TriPhaseAccumulationFunction.h"
 
 /*
  * ---------------------------------------------------------------
  * Definitions:
  */
-
 
 
 IsoTriang2DBoundary * Stone::defaultBoundary() {
@@ -50,6 +50,15 @@ void Stone::boundary(const Boundary & boundary) {
 
 }
 
+
+
+Stone::Stone():fluxFunction_(new StoneFluxFunction(StoneParams(),StonePermParams())){
+boundary_=defaultBoundary();	
+accFunction_=new TriPhaseAccumulationFunction();
+
+    FLUX_ID = (char *)"Stone";
+}
+
 Stone::Stone(const Stone & copy) {
 
     fluxFunction_ = (FluxFunction *) copy.fluxFunction().clone();
@@ -58,10 +67,15 @@ Stone::Stone(const Stone & copy) {
 
     accFunction_ = (AccumulationFunction *) copy.accumulation().clone();
 
-    FLUX_ID = "Stone";
+    FLUX_ID = (char *)"Stone";
 
 
 }
+
+
+ // Stone(const StoneParams & params):fluxFunction_(new StoneFluxFunction(params,StonePermParams())){
+//}
+
 
 const char * Stone::ID()const {
     return FLUX_ID;
@@ -78,3 +92,5 @@ Stone::~Stone() {
     delete accFunction_;
 
 }
+
+

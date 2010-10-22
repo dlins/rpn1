@@ -20,15 +20,25 @@ using namespace std;
  * Definitions:
  */
 
-//const double TriPhaseParams::DEFAULT_FLUX_PARAMS_ARRAY []= {1,1/3,1/3,1/3,0,0,0};
+//const double StoneParams::DEFAULT_FLUX_PARAMS_ARRAY []= {1,1/3,1/3,1/3,0,0,0};
 
 
 StoneParams::StoneParams():FluxParams(defaultParams()){}
 
-StoneParams::StoneParams(const RealVector & params, int index):FluxParams(params),index_(index){}
+StoneParams::StoneParams(const RealVector & params):FluxParams(params){
+    grw_ = component(0);
+    grg_ = component(1);
+    gro_ = component(2);
+
+    muw_ = component(3);
+    mug_ = component(4);
+    muo_ = component(5);
+
+    vel_ = component(6);
+}
 
 
-//const FluxParams & TriPhaseParams::DEFAULT_FLUX_PARAMS=defaultParams();
+//const FluxParams & StoneParams::DEFAULT_FLUX_PARAMS=defaultParams();
 
 
 
