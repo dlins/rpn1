@@ -50,7 +50,7 @@ public:
 
     virtual ~Corey();
 
-    Physics * clone()const;
+    SubPhysics * clone()const;
 
     const char * ID() const;
 
