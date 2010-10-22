@@ -107,7 +107,6 @@ int LSODE::solve(const RealVector & input, RealVector & output, double & time) c
 
     //    cout << "LSODE, before solve" << endl;
     //    for (int i = 0; i < neq + 1; i++) cout << "Inside LSODE, refvec[" << i << "] = " << param[i] << endl;
-
     info = solver(&LSODE::function, &neq, &U[0], &LSODE::t_, &LSODE::tout_, &itol, &rtol, &atol[0], &itask, &istate, &iopt, &rwork[0], &lrw, &iwork[0], &liw, &LSODE::jacrarefaction, &mf, &nparam, &param[0]);
     //    cout << "LSODE, after solve" << endl;
 
@@ -171,13 +170,13 @@ int LSODE::solver(int (*f)(int *, double *, double *, double *), int *neq, doubl
 
     const LSODEProfile & profile = (const LSODEProfile &)getProfile();
 
-    tout_=t_+profile.deltaTime();
+
 
     lsode_(f, neq, y, t, tout, itol, rtol, atol, itask, istate,
             iopt, rwork, lrw, iwork, liw, j, mf, nparam, param);
 
-
-    t_=tout_;
+    tout_ += profile.deltaTime();
+    //t_=tout_;
 
 
     if (*istate == 2) {

@@ -32,13 +32,16 @@
 class StoneFluxFunction:public FluxFunction {
     
 private:
-    
     StonePermeability * perm_;
+
+    double grw, grg, gro;
+    double muw, mug, muo;
+    double vel;
     
 public:
     
     StoneFluxFunction(const StoneParams & params, const StonePermParams & permParams);
-    
+    //StoneFluxFunction();
     virtual ~StoneFluxFunction();
     
     StoneFluxFunction(const StoneFluxFunction & );

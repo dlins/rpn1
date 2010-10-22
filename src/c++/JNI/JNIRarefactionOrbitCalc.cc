@@ -119,6 +119,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
 
     ContinuationRarefactionFlow flow(referenceVector, familyIndex, timeDirection, RpNumerics::getPhysics().fluxFunction());
 
+
+
     LSODEProfile lsodeProfile(flow,maxStepsNumber, dimension, itol, rtol, mf, deltaxi, nparam, param);
 
     LSODE odeSolver(lsodeProfile);
@@ -131,7 +133,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
 
     if (coords.size() == 0) {
         return NULL;
-
     }
 
 

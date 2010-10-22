@@ -44,6 +44,9 @@
 // Corey
 #include "Corey.h"
 #include "CoreyParams.h"
+//Stone
+#include "Stone.h" 
+#include "StoneParams.h" 
 
 //-------------------------------------
 
@@ -274,7 +277,9 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initNative(JNIEnv * env, jclas
         RpNumerics::setPhysics(Corey(CoreyParams(), PermParams(), CapilParams(0.4, 3.0, 44.0, 8.0), ViscosityParams(0.5)));
     }
 
-
+    if (!strcmp(physicsID, "Stone")) {
+        RpNumerics::setPhysics(Stone());
+    }
 
 }
 
@@ -314,7 +319,9 @@ JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_init(JNIEnv * env, jclass cls,
         RpNumerics::setPhysics(Corey(CoreyParams(), PermParams(), CapilParams(0.4, 3.0, 44.0, 8.0), ViscosityParams(0.5)));
     }
 
-
+  if (!strcmp(physicsID, "Stone")) {
+        RpNumerics::setPhysics(Stone());
+    }
     cout << "Physics: " << physicsID << endl;
 
     env->ReleaseStringUTFChars(ID, physicsID);
