@@ -18,7 +18,6 @@
  */
 
 
-//! Code comes here! daniel@impa.br
 
 IsoTriang2DBoundary * Stone::defaultBoundary() {
 

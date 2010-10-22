@@ -14,6 +14,8 @@
  * Includes:
  */
 #include "Physics.h"
+#include "IsoTriang2DBoundary.h"
+#include "StoneParams.h"
 /*
  * ---------------------------------------------------------------
  * Definitions:
