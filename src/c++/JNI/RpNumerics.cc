@@ -253,35 +253,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initNative(JNIEnv * env, jclas
     if (physicsID == NULL) {
         return; /* OutOfMemoryError already thrown */
     }
-
-    if (!strcmp(physicsID, "QuadraticR2")) {
-//        RpNumerics::setPhysics(Quad2(Quad2FluxParams()));
-
-        vector <Quad2FluxFunction> testVector;
-
-        testVector.push_back(Quad2FluxFunction(Quad2FluxParams()));
-
-        RpNumerics::setPhysics(Quad2(testVector));
-    }
-
-    if (!strcmp(physicsID, "QuadraticR3")) {
-        RpNumerics::setPhysics(Quad3(Quad3FluxParams()));
-    }
-
-    if (!strcmp(physicsID, "QuadraticR4")) {
-        RpNumerics::setPhysics(Quad4(Quad4FluxParams()));
-    }
-
-    if (!strcmp(physicsID, "TriPhase")) {
-        RpNumerics::setPhysics(TriPhase(TriPhaseParams(), PermParams(), CapilParams(0.4, 3.0, 44.0, 8.0), ViscosityParams(0.5)));
-    }
-
-    if (!strcmp(physicsID, "Corey")) {
-        RpNumerics::setPhysics(Corey(CoreyParams(), PermParams(), CapilParams(0.4, 3.0, 44.0, 8.0), ViscosityParams(0.5)));
-    }
-
-
-
+        RpNumerics::setPhysics(Physics(physicsID));
 }
 
 JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_init(JNIEnv * env, jclass cls, jobject numericsProfile) {
@@ -300,25 +272,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_init(JNIEnv * env, jclass cls,
 
     //Physics instantiation
 
-    if (!strcmp(physicsID, "QuadraticR2")) {
-        RpNumerics::setPhysics(Quad2(Quad2FluxParams()));
-    }
-
-    if (!strcmp(physicsID, "QuadraticR3")) {
-        RpNumerics::setPhysics(Quad3(Quad3FluxParams()));
-    }
-
-    if (!strcmp(physicsID, "QuadraticR4")) {
-        RpNumerics::setPhysics(Quad4(Quad4FluxParams()));
-    }
-
-    if (!strcmp(physicsID, "TriPhase")) {
-        RpNumerics::setPhysics(TriPhase(TriPhaseParams(), PermParams(), CapilParams(0.4, 3.0, 44.0, 8.0), ViscosityParams(0.5)));
-    }
-
-    if (!strcmp(physicsID, "Corey")) {
-        RpNumerics::setPhysics(Corey(CoreyParams(), PermParams(), CapilParams(0.4, 3.0, 44.0, 8.0), ViscosityParams(0.5)));
-    }
+    RpNumerics::setPhysics(Physics(physicsID));
 
 
     cout << "Physics: " << physicsID << endl;

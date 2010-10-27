@@ -14,6 +14,12 @@
  * Includes:
  */
 #include "SubPhysics.h"
+#include "Quad2.h"
+#include "Quad3.h"
+#include "Quad4.h"
+#include "TriPhase.h"
+#include "Corey.h"
+
 
 //!
 
@@ -29,15 +35,20 @@ class Physics {
 private:
     vector<SubPhysics *> * physicsVector_;
     Boundary * boundary_;
+    const char * ID_;
+    Space * space_;
 
 public:
 
+
+
+    Physics (const char *);
     Physics(const vector<SubPhysics> &,const Boundary &,const char *);
     Physics(const Physics &);
 
     virtual ~Physics();
 
-    virtual Physics * clone()const = 0;
+    Physics * clone()const;
 
     const Boundary & boundary() const;
 
@@ -45,7 +56,7 @@ public:
 
     const Space & domain() const;
 
-    virtual const char * ID() const = 0;
+    const char * ID() const;
 
     const SubPhysics & getSubPhysics(const int);
 
