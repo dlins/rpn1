@@ -19,6 +19,8 @@
 
 #include "ODESolver.h"
 
+#include "Stone.h"
+
 class RpNumerics {
     
     

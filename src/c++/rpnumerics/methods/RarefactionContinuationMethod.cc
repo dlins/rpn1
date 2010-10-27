@@ -109,11 +109,7 @@ void RarefactionContinuationMethod::curve(const RealVector & inputVector, int di
     double lambda;
 
     double rev[dimension];
-cout<<"before init"<<endl;
     info = init(&testeFlow, dimension, in, indx, direction, deltaxi, &lambda, &rev[0]);
-
-cout<<"after init"<<endl;
-
 
     for (int i = 0; i < dimension; i++) {
         testeFlow.setReferenceVectorComponent(i, rev[i]);
