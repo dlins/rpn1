@@ -35,15 +35,15 @@ class Physics {
 private:
     vector<SubPhysics *> * physicsVector_;
     Boundary * boundary_;
-    const char * ID_;
+    string * ID_;
     Space * space_;
 
 public:
 
 
 
-    Physics (const char *);
-    Physics(const vector<SubPhysics> &,const Boundary &,const char *);
+    Physics(const string &);
+    Physics(const vector<SubPhysics> &,const Boundary &,const string &);
     Physics(const Physics &);
 
     virtual ~Physics();
@@ -56,7 +56,7 @@ public:
 
     const Space & domain() const;
 
-    const char * ID() const;
+    const string & ID() const;
 
     const SubPhysics & getSubPhysics(const int);
 

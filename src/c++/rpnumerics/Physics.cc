@@ -3,26 +3,27 @@
 Physics::~Physics() {
 
     delete physicsVector_;
+    delete ID_;
 }
 
-Physics::Physics(const char * physicsID) : physicsVector_(new vector<SubPhysics *>()), ID_(physicsID) {
-    if (!strcmp(physicsID, "QuadraticR2")) {
+Physics::Physics(const string & physicsID) : physicsVector_(new vector<SubPhysics *>()), ID_(new string(physicsID)) {
+    if (physicsID.compare("QuadraticR2")==0) {
         physicsVector_->push_back(new Quad2(Quad2FluxParams()));
     }
 
-    if (!strcmp(physicsID, "QuadraticR3")) {
+    if (physicsID.compare("QuadraticR3")==0) {
         physicsVector_->push_back(new Quad3(Quad3FluxParams()));
     }
 
-    if (!strcmp(physicsID, "QuadraticR4")) {
+    if (physicsID.compare( "QuadraticR4")==0) {
         physicsVector_->push_back(new Quad4(Quad4FluxParams()));
     }
 
-    if (!strcmp(physicsID, "TriPhase")) {
+    if (physicsID.compare( "TriPhase")==0) {
         physicsVector_->push_back(new TriPhase(TriPhaseParams(), PermParams(), CapilParams(0.4, 3.0, 44.0, 8.0), ViscosityParams(0.5)));
     }
 
-    if (!strcmp(physicsID, "Corey")) {
+    if (physicsID.compare( "Corey")==0) {
         physicsVector_->push_back(new Corey(CoreyParams(), PermParams(), CapilParams(0.4, 3.0, 44.0, 8.0), ViscosityParams(0.5)));
     }
 
@@ -30,7 +31,7 @@ Physics::Physics(const char * physicsID) : physicsVector_(new vector<SubPhysics 
     space_=new Space(physicsVector_->at(0)->domain());
 }
 
-Physics::Physics(const vector<SubPhysics> & inputPhysicsVector, const Boundary & boundary, const char * id) : physicsVector_(new vector<SubPhysics*>()), boundary_(boundary.clone()), ID_(id) {
+Physics::Physics(const vector<SubPhysics> & inputPhysicsVector, const Boundary & boundary, const string & id) : physicsVector_(new vector<SubPhysics*>()), boundary_(boundary.clone()), ID_( new string(id)){
 
     for (unsigned int i = 0; i < inputPhysicsVector.size(); i++) {
 
@@ -43,7 +44,7 @@ Physics::Physics(const vector<SubPhysics> & inputPhysicsVector, const Boundary &
 
 }
 
-Physics::Physics(const Physics & physics) : physicsVector_(new vector<SubPhysics*>()), boundary_(physics.boundary().clone()), ID_(ID()),space_(new Space(physics.domain())) {
+Physics::Physics(const Physics & physics) : physicsVector_(new vector<SubPhysics*>()), boundary_(physics.boundary().clone()), ID_(new string(physics.ID())),space_(new Space(physics.domain())) {
 
     for (unsigned int i = 0; i < physics.getPhysicsVector().size(); i++) {
 
@@ -57,13 +58,13 @@ const Space & Physics::domain() const {
     return *space_;
 }
 
-const char * Physics::ID() const {
-    return ID_;
+const string & Physics::ID() const {
+    return *ID_;
 }
 
 const FluxFunction & Physics::fluxFunction() const {
 
-    SubPhysics * subPhysics = physicsVector_->at(0); //Receive index
+    SubPhysics * subPhysics = physicsVector_->at(0); //TODO Receive index
 
     return subPhysics->fluxFunction();
 }

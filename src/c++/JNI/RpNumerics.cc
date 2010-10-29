@@ -208,7 +208,6 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_clean(JNIEnv * env, jclass cls
 void RpNumerics::clean() {
 
     delete physics_;
-    //    delete odeSolver_;
 }
 
 /* Class:     rpnumerics_RPNUMERICS
@@ -218,7 +217,8 @@ void RpNumerics::clean() {
 
 
 JNIEXPORT jstring JNICALL Java_rpnumerics_RPNUMERICS_physicsID(JNIEnv * env, jclass cls) {
-    return env->NewStringUTF(RpNumerics::getPhysics().ID());
+
+    return env->NewStringUTF(RpNumerics::getPhysics().ID().c_str());
 }
 
 /*
@@ -253,6 +253,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initNative(JNIEnv * env, jclas
     if (physicsID == NULL) {
         return; /* OutOfMemoryError already thrown */
     }
+    cout <<"Construindo a fisica: "<<physicsID<<endl;
         RpNumerics::setPhysics(Physics(physicsID));
 }
 
