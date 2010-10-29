@@ -256,7 +256,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initNative(JNIEnv * env, jclas
     if (physicsID == NULL) {
         return; /* OutOfMemoryError already thrown */
     }
-    cout << "Construindo a fisica: " << physicsID << endl;
+//    cout << "Construindo a fisica: " << physicsID << endl;
     RpNumerics::setPhysics(Physics(physicsID));
 
 }

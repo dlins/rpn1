@@ -27,6 +27,11 @@ Physics::Physics(const string & physicsID) : physicsVector_(new vector<SubPhysic
         physicsVector_->push_back(new Corey(CoreyParams(), PermParams(), CapilParams(0.4, 3.0, 44.0, 8.0), ViscosityParams(0.5)));
     }
 
+    if (physicsID.compare("Stone") == 0) {
+        physicsVector_->push_back(new Stone());
+    }
+
+
     boundary_ = physicsVector_->at(0)->boundary().clone(); //TODO Using the default boundary.Replace
     space_=new Space(physicsVector_->at(0)->domain());
 }
