@@ -9,6 +9,7 @@
 #define	_Space_H
 
 //! Definition of class Space.
+
 /*!
     
 TODO:
@@ -18,39 +19,53 @@ NOTE :
  */
 
 class Space {
+private:
+    int dim_;
+    const char * name_;
 
-private :
-	const char * name_;
-	int dim_;
 
 public:
-	Space(void);
-	Space(const char * name, const int dim);
-	~Space(void);
-	
-	const char * name(void) const;
-	const int dim(void) const;
-	void name(const char * name);
-	void dim(const int dim);
+    Space(void);
+    Space(const char * name, const int dim);
+    Space(const Space &);
+    ~Space(void);
+
+    const char * name(void) const;
+    const int dim(void) const;
+    void name(const char * name);
+    void dim(const int dim);
+
 
 };
 
-inline Space::Space():name_("Space"),dim_(2) { }
-
-inline Space::Space(const char * name, const int dim)
-	: name_(name),
-	  dim_(dim)
-{
+inline Space::Space() : dim_(2),name_("Space") {
 }
 
-inline Space::~Space() { }
+inline Space::Space(const char * name, const int dim)
+:dim_(dim), name_(name)
+ {
+}
 
-inline const char * Space::name() const { return name_; }
+inline Space::Space(const Space &copy) : dim_(copy.dim()), name_(copy.name()) {
+}
 
-inline const int  Space::dim() const { return dim_; }
+inline Space::~Space() {
+}
 
-inline void Space::name(const char * name) { name_ = name; }
+inline const char * Space::name() const {
+    return name_;
+}
 
-inline void Space::dim(const int dim) { dim_ = dim; }
+inline const int Space::dim() const {
+    return dim_;
+}
+
+inline void Space::name(const char * name) {
+    name_ = name;
+}
+
+inline void Space::dim(const int dim) {
+    dim_ = dim;
+}
 
 #endif	/* _Space_H */
