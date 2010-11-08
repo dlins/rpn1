@@ -20,6 +20,7 @@
 #include "HessianMatrix.h"
 #include "RarefactionFlow.h"
 #include "eigen.h"
+#include "RpNumerics.h"
 
 
 /*
@@ -51,6 +52,11 @@
 // a function invoking another function MUST check wether the invoked function
 // could or could not successfully perform its task.
 //
+#define _SIMPLE_ACCUMULATION_  10  // Traditional rarefaction, using dgeev.
+#define _GENERAL_ACCUMULATION_ 11  // Rarefaction with generalized eigenpairs, using dggev.
+#define SUCCESSFUL_PROCEDURE 2
+#define ABORTED_PROCEDURE (-7)
+
 
 extern"C" {
 
@@ -60,7 +66,7 @@ extern"C" {
 class ContinuationRarefactionFlow : public RarefactionFlow {
 private:
 
-    void fill_with_jet(const FluxFunction & flux_object, int n, double *in, int degree, double *F, double *J, double *H);
+    void fill_with_jet(const RpFunction & flux_object, int n, double *in, int degree, double *F, double *J, double *H);
     void applyH(int n, double *xi, double *H, double *eta, double *out)const;
     void matrixmult(int m, int p, int n, double *A, double *B, double *C)const;
   
@@ -88,7 +94,9 @@ public:
     ContinuationRarefactionFlow(const RealVector & , const int, const int, const FluxFunction &);
     ContinuationRarefactionFlow(const ContinuationRarefactionFlow &);
 
-    int flux(int n, int family, double *in, double *lambda, double *out);
+//    int flux(int n, int family, double *in, double *lambda, double *out);
+
+    int flux(int n, int family, const FluxFunction & , const AccumulationFunction &, int type, double *in, double *lambda, double *out);
     double prodint(int n, double *a, double *b)const;
 
     int flux(const RealVector &, RealVector &);

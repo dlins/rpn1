@@ -24,6 +24,7 @@
 #include "RealVector.h"
 #include "JNIDefs.h"
 #include <vector>
+#include "TPCW.h"
 
 
 using std::vector;
@@ -87,6 +88,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
 
 
     int dimension = realVectorInput.size();
+    dimension+=1;
     //
     int itol = 2;
     //
@@ -129,7 +131,16 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
 
     RarefactionContinuationMethod method(odeSolver,RpNumerics::getPhysics().boundary(),familyIndex);
 
+    cout<<"Entrada do Java: "<<realVectorInput<<endl;
+
+//    double theta = ((const TPCW &) RpNumerics::getPhysics()).T2Theta(realVectorInput(1));
+
+//    realVectorInput.component(1)=theta;
+
+    cout<<realVectorInput<<endl;
     method.curve(realVectorInput, timeDirection, coords);
+
+
 
     if (coords.size() == 0) {
         return NULL;
@@ -142,11 +153,20 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
 
     //Orbit memebers creation
 
+    cout << "Tamanho da curva: "<<coords.size() << endl;
+
     jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(coords.size(), classOrbitPoint, NULL);
 
     for (i = 0; i < coords.size(); i++) {
 
-        RealVector tempVector = coords.at(i);
+        RealVector tempVectorT = coords.at(i);
+
+        RealVector tempVector (2);
+
+        tempVector.component(0)=tempVectorT(0);
+        tempVector.component(1) = tempVectorT(1);
+
+        cout<<tempVector<<endl;
 
         double * dataCoords = tempVector;
 

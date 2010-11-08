@@ -47,7 +47,7 @@ maximums_(new RealVector(maximums)),
 size_(minimums.size()), type_("rect") {
 }
 
-bool RectBoundary::inside(const RealVector &p) {
+bool RectBoundary::inside(const RealVector &p) const{
     bool in = true;
     int pos = 0;
 
@@ -55,7 +55,7 @@ bool RectBoundary::inside(const RealVector &p) {
         if (p(pos) < minimums()(pos) || p(pos) > maximums()(pos)) in = false;
         pos++;
     }
-
+    cout << "tamanho dentro de inside"<<in<<" "<<p.size() << endl;
     return in;
 }
 
@@ -72,9 +72,21 @@ bool RectBoundary::inside(const RealVector &p) {
 //
 
 int RectBoundary::intersection(const RealVector &p, const RealVector &q, RealVector &r)const {
-    if (inside(p) && inside(q)) return 1;
-    else if (!inside(p) && !inside(q)) return -1;
-    else {
+
+    cout << "min" << minimums() << endl;
+    cout << "max" << maximums() << endl;
+
+    if (inside(p) && inside(q)) {
+
+        cout << "tamanho de p " << p.size() << " q" << q.size() << " r" << r.size();
+        return 1;
+
+    } else if (!inside(p) && !inside(q)) {
+        cout << "tamanho de p " << p << " q" << q << " r --------------" << r.size();
+        return -1;
+
+    } else {
+        cout << "tamanho de p " << p.size() << " q" << q.size() << " r***************" << r.size();
         int n = p.size();
         double alpha, beta;
         int pos = 0;

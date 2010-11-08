@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!DOCTYPE rpnconfiguration >
+<rpnconfiguration>
+<PHYSICS name="TPCW">
+
+<BOUNDARY name="rect">
+
+        <BOUNDARYPARAM name="dimension" value="2" />
+        <BOUNDARYPARAM name="iso2equi" value="false" />
+        <BOUNDARYPARAM name="x-min" value="0" />
+        <BOUNDARYPARAM name="x-max" value="1" />
+        <BOUNDARYPARAM name="y-min" value="0.099309" />
+        <BOUNDARYPARAM name="y-max" value="0.576511" />
+
+    </BOUNDARY>
+
+</PHYSICS>
+
+<CURVE name="shock">
+    <CURVEPARAM name="family" value="0"/>
+    <CURVEPARAM name="xzero" value="3.4 0.5"/>
+    <CURVEPARAM name="sigma" value="0.03"/>
+</CURVE>
+
+
+<VIEWCONFIGURATION modeldomain="2">
+
+    <PROJDESC name="Axis0 Axis1">
+        <VIEWPARAM name="axis" value="1 0"/>
+        <VIEWPARAM name="vpwidth" value="600"/>
+        <VIEWPARAM name="vpheight" value="650"/>
+        <VIEWPARAM name="iso2equi" value="false"/>
+
+    </PROJDESC>
+
+  
+
+
+
+
+</VIEWCONFIGURATION>
+
+
+</rpnconfiguration>

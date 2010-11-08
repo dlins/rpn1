@@ -3,6 +3,12 @@
 // Initialize the value of the epsilon
 double Eigen::epsilon(1e-10);
 
+// Function to compare the ratio alphar/beta, to be passed to the std::algorithm::sort method.
+// TODO: Check this one.
+bool Eigen::eigen_compare(const eigenpair &n1, const eigenpair &n2){
+    return n1.r < n2.r;
+}
+
 // Transpose a square matrix, rewriting the original.
 //
 void Eigen::transpose(int n, double *A){
@@ -22,7 +28,7 @@ void Eigen::transpose(int n, double *A){
 // To fill an array of eigen structs. It is assumed that the matrix containing the
 // eigenvectors returned by Lapack was tranposed before being fed to
 // this function.
-void Eigen::fill_eigen(int n, struct eigencouple e[], double rp[], double ip[], double vl[], double vr[]){
+void Eigen::fill_eigen(int n, struct eigenpair e[], double rp[], double ip[], double vl[], double vr[]){
     int i, j;
      
     for (i = 0; i < n; i++){
@@ -118,8 +124,8 @@ void Eigen::fill_eigen(int n, struct eigencouple e[], double rp[], double ip[], 
 
 // Engine of sort_eigen (below)
 int Eigen::eigen_comp(const void *p1, const void *p2){
-   eigencouple *sp1 = (eigencouple*)p1;
-   eigencouple *sp2 = (eigencouple*)p2;
+   eigenpair *sp1 = (eigenpair*)p1;
+   eigenpair *sp2 = (eigenpair*)p2;
 
    double temp = sp1->r - sp2->r;
 
@@ -129,31 +135,22 @@ int Eigen::eigen_comp(const void *p1, const void *p2){
 }
 
 // Sort e[] according to the real part of the eigenvalues
-void Eigen::sort_eigen(int n, eigencouple *e){
+void Eigen::sort_eigen(int n, eigenpair *e){
     qsort(e, n, sizeof(e[0]), eigen_comp);
     return;
 }
 
-// Compute all the eigencouples of a matrix and fill a
+// Compute all the eigenpairs of a matrix and fill a
 // vector of said structs.
 //
 //      n: Dimension of the space
 //      A: Square matrix
-//     ve: Vector where the eigencouples will be stored.
+//     ve: Vector where the eigenpairs will be stored.
 //
 // This function uses LAPACK's dgeev. Eigenvectors will be
 // normalized.
 //
-int Eigen::eig(int n, double *A, std::vector<eigencouple> &ve){
-//    printf("Eigen: A = [\n");
-//    for (int i = 0; i < n; i++){
-//        for (int j = 0; j < n; j++){
-//            printf(" %6.2f ", A[i*n + j]);
-//        }
-//        printf(";\n");
-//    }
-//    printf("]\n");
-
+int Eigen::eig(int n, const double *A, vector<eigenpair> &ve){
     int lda = n, lwork = 5*n, ldvr = n, ldvl = n;
     int i, j, info;
     double vr[n][n], vl[n][n];
@@ -170,12 +167,13 @@ int Eigen::eig(int n, double *A, std::vector<eigencouple> &ve){
            &info);
 
     // Process the results
+
     if (info != 0) return info;
     else {
         transpose(n, &vl[0][0]); // ...or else...
         transpose(n, &vr[0][0]); // ...or else...
 
-        eigencouple e[n];
+        eigenpair e[n];
         for (int i = 0; i < n; i++){
             e[i].vlr.resize(n);
             e[i].vli.resize(n);
@@ -183,34 +181,199 @@ int Eigen::eig(int n, double *A, std::vector<eigencouple> &ve){
             e[i].vri.resize(n);
         }
 
-        fill_eigen(n, e, &wr[0], &wi[0], &vl[0][0], &vr[0][0]); 
-        sort_eigen(n, e); 
+        fill_eigen(n, e, &wr[0], &wi[0], &vl[0][0], &vr[0][0]);
+        sort_eigen(n, e);
 
         ve.clear();
         ve.resize(n);
-        for (int i = 0; i < n; i++) ve[i] = e[i]; 
-        return SUCCESSFUL_PROCEDURE;
+        for (int i = 0; i < n; i++) ve[i] = e[i];
+        return 0;// SUCCESSFUL_PROCEDURE;
 
     }
 
     return info;
 }
 
-void Eigen::print_eigen(const std::vector<eigencouple> &ve){
+// Generalized eigenproblem
+//
+int Eigen::eig(int n, const double *A, const double *B, vector<eigenpair> &vge){
+    // Dimension
+    int dim = n;
+
+    // Copy A and B (transposed)
+    double AA[dim*dim], BB[dim*dim];
+    for (int i = 0; i < dim; i++){
+        for (int j = 0; j < dim; j++){
+            AA[i*dim + j] = A[j*dim + i];
+            BB[i*dim + j] = B[j*dim + i];
+        }
+    }
+
+    // Some parameters
+    int lda = max(1, n);
+    int ldb = max(1, n);
+
+    // Eigenvalues of the form:
+    //
+    // (alphar[j] + i*alphai[j])/beta[j] for j = 0,..., (n - 1).
+    //
+    double alphar[dim], alphai[dim], beta[dim];
+
+    // The leading dimension of the matrix vl. 
+    // ldlvl >= 1, and if jovl = "V", ldvl >= n.
+    // 
+    int ldvl = n;
+
+    double vl[ldvl*dim]; 
+    
+    // The leading dimension of the matrix vr. 
+    // ldvr >= 1, and if jobvr = "V", ldvr >= n.
+    int ldvr = n;
+
+    double vr[ldvr*dim]; 
+
+    // Working array
+    int lwork = max(1, 8*dim);
+    double work[lwork];
+
+    // Info
+    int info = 0;
+
+    // Invoke LAPACK
+    dggev_("V", "V", &dim, 
+           AA, &lda, 
+           BB, &ldb, 
+           alphar, alphai, beta, 
+           vl, &ldvl, 
+           vr, &ldvr,
+           work, &lwork,
+           &info);
+
+    transpose(dim, vl);
+    transpose(dim, vr);
+
+    // Success!
+    if (info == 0) {
+//        for (int i = 0; i < dim; i++) printf("alphar[%d] = %g, alphai[%d] = %g, beta[%d] = %g\n", i, alphar[i], i, alphai[i], i, beta[i]);
+
+        // Abort if some beta is smaller than sum_i(abs(alphar(i)) + abs(alphai(i))).
+        double sum = 0;
+        for (int i = 0; i < dim; i++) sum += fabs(alphar[i]) + fabs(alphai[i]);
+        sum *= epsilon;
+
+        // Quick and dirty
+        int max = 0;
+        for (int i = 0; i < dim; i++){
+            if (fabs(beta[i]) > sum) max++; //return _EIGEN_BETA_NEAR_ZERO_;
+        }
+        if (max == 0) return _EIGEN_BETA_NEAR_ZERO_;
+
+        // Otherwise, carry on
+        vge.clear();
+        vge.resize(max);
+
+        for (int i = 0; i < max; i++){
+            vge[i].vlr.resize(dim);
+            vge[i].vli.resize(dim);
+            vge[i].vrr.resize(dim);
+            vge[i].vri.resize(dim);
+        }
+
+        int pos = 0;
+        for (int i = 0; i < dim; i++){
+            if (fabs(beta[i]) > sum){
+                if (fabs(alphai[i]) < epsilon){
+                    // Eigenvalue is real.
+
+                    vge[pos].r = alphar[i]/beta[i];
+                    vge[pos].i = alphai[i]/beta[i];
+
+                    // Normalize
+                    double norm_l(0), norm_r(0);
+                    for (int j = 0; j < dim; j++){
+                        norm_l += vl[i + j*dim]*vl[i + j*dim];
+                        norm_r += vr[i + j*dim]*vr[i + j*dim];
+                    }
+                    norm_l = sqrt(norm_l);
+                    norm_r = sqrt(norm_r);
+
+                    for (int j = 0; j < dim; j++){
+                        vge[pos].vlr[j] = vl[i + j*dim]/norm_l;
+                        vge[pos].vli[j] = 0;
+
+                        vge[pos].vrr[j] = vr[i + j*dim]/norm_r;
+                        vge[pos].vri[j] = 0;
+                    }
+                }
+                else {
+                    // Eigenvalue is complex.
+                    // In this case the i-th column of v contains the real part
+                    // of the eigenvector and the (i + 1)-th column contains the
+                    // imaginary part of the eigenvector. 
+                                   
+                    // If the eigenvalues are complex they are returned by Lapack in conjugated pairs,
+                    // the first of the pair having positive imaginary part.
+
+                    vge[pos].r = alphar[i]/beta[i];
+                    vge[pos].i = alphai[i]/beta[i];
+    
+                    vge[pos + 1].r = alphar[i]/beta[i];
+                    vge[pos + 1].i = -alphai[i]/beta[i];
+
+                    // Normalize
+                    double norm_l(0), norm_r(0);
+                    for (int j = 0; j < dim; j++){
+                        norm_l += vl[i + j*dim]*vl[i + j*dim] + vl[i + 1 + j*dim]*vl[i + 1 + j*dim];
+                        norm_r += vr[i + j*dim]*vr[i + j*dim] + vr[i + 1 + j*dim]*vr[i + 1 + j*dim];
+                    }
+                    norm_l = sqrt(norm_l);
+                    norm_r = sqrt(norm_r);
+
+                    for (int j = 0; j < dim; j++){
+                        vge[pos].vlr[j]     = vl[i + j*dim]/norm_l;
+                        vge[pos].vli[j]     = vl[i + 1 + j*dim]/norm_l;
+    
+                        vge[pos + 1].vlr[j] = vl[i + j*dim]/norm_l;
+                        vge[pos + 1].vli[j] = -vl[i + 1 + j*dim]/norm_l;
+
+                        vge[pos].vrr[j]     = vr[i + j*dim]/norm_r;
+                        vge[pos].vri[j]     = vr[i + 1 + j*dim]/norm_r;
+
+                        vge[pos + 1].vrr[j] = vr[i + j*dim]/norm_r;
+                        vge[pos + 1].vri[j] = -vr[i + 1 + j*dim]/norm_r;
+                    }
+
+                    // Skip one step!
+                    i++;
+                }
+                pos++;
+            }
+            else {
+                printf("Eigenvalue discarded: %d\n", pos);
+            }
+        }
+
+        sort(vge.begin(), vge.end(), eigen_compare);
+    }
+
+    return info;
+}
+
+void Eigen::print_eigen(const vector<eigenpair> &ve){
     for (int i = 0; i < ve.size(); i++){
-        printf("Eigencouple #%d\n", i);
-        printf("    Eigenvalue = % 6.2f + % 6.2fi\n", ve[i].r, ve[i].i);
+        printf("Eigenpair #%d\n", i);
+        printf("    Eigenvalue = % g + % gi\n", ve[i].r, ve[i].i);
         printf("\n");
 
         printf("    Left eigenvector =\n");
-        for (int j = 0; j < ve.size(); j++){
-            printf("    [% 6.2f + % 6.2fi]\n", ve[i].vlr[j], ve[i].vli[j]);
+        for (int j = 0; j < ve[0].vlr.size(); j++){
+            printf("    [% g + % gi]\n", ve[i].vlr[j], ve[i].vli[j]);
         }
         printf("\n");
 
         printf("    Right eigenvector =\n");
-        for (int j = 0; j < ve.size(); j++){
-            printf("    [% 6.2f + % 6.2fi]\n", ve[i].vrr[j], ve[i].vri[j]);
+        for (int j = 0; j < ve[0].vlr.size(); j++){
+            printf("    [% g + % gi]\n", ve[i].vrr[j], ve[i].vri[j]);
         }
         printf("\n");
     }
@@ -218,15 +381,12 @@ void Eigen::print_eigen(const std::vector<eigencouple> &ve){
     return;
 }
 
-// Set the threshold used by fill_eigen.
-//
 void Eigen::eps(double e){
-    Eigen::epsilon = e;
+    epsilon = e;
     return;
 }
 
-// Get the threshold used by fill_eigen.
-//
 double Eigen::eps(void){
-    return Eigen::epsilon;
+    return epsilon;
 }
+

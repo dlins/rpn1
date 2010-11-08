@@ -63,7 +63,7 @@ public class RPNUMERICS {
             for (int i = 0; i < physicsConfiguration.getParamsSize(); i++) {
                 //SET FLUX PARAMS !!!
                 fluxParams.setParam(i, new Double(physicsConfiguration.getParam(i)));
-                System.out.println("Param: " + " order:" + i + " " + physicsConfiguration.getParam(i));
+//                System.out.println("Param: " + " order:" + i + " " + physicsConfiguration.getParam(i));
             }
 
         } else {

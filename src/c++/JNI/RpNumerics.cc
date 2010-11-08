@@ -48,6 +48,9 @@
 #include "Stone.h" 
 #include "StoneParams.h" 
 
+//TPCW
+#include "TPCW.h"
+
 //-------------------------------------
 
 
@@ -279,6 +282,10 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initNative(JNIEnv * env, jclas
 
     if (!strcmp(physicsID, "Stone")) {
         RpNumerics::setPhysics(Stone());
+    }
+
+     if (!strcmp(physicsID, "TPCW")) {
+        RpNumerics::setPhysics(TPCW());
     }
 
 }

@@ -39,7 +39,7 @@ ShockContinuationMethod::ShockContinuationMethod(const ODESolver & solver,const 
 //     ABORTED_PROCEDURE: Something went wrong, Unext should not be used.
 
 int ShockContinuationMethod::shockinit(int n, double Um[], int family, int increase, double Unext[]) {
-    // Compute the eigencouple at Um:
+    // Compute the eigenpair at Um:
     // Find the Jacobian of the field at U-:
     double J[n][n];
 
@@ -53,7 +53,7 @@ int ShockContinuationMethod::shockinit(int n, double Um[], int family, int incre
     fill_with_jet(shock_flux_object, n, Um, 1, 0, &J[0][0], 0);
 
     // Find the eigenpairs of J:
-     vector<eigencouple> e;
+     vector<eigenpair> e;
     int info = Eigen::eig(n, &J[0][0], e);
         if (info == ABORTED_PROCEDURE) {
 #ifdef TEST_SHOCK
