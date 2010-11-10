@@ -84,7 +84,7 @@ public class RPNUMERICS {
 
         ConfigurationProfile boundaryProfile = physicsProfile.getConfigurationProfile(ConfigurationProfile.BOUNDARY_PROFILE);
 
-        if (boundaryProfile != null) {
+        if (boundaryProfile != null) { //Catching boundary from input file
 
             Configuration boundaryConfiguration = new Configuration(boundaryProfile);
 
@@ -93,18 +93,42 @@ public class RPNUMERICS {
                 RealVector min = new RealVector(new Integer(boundaryConfiguration.getParam("dimension")));
                 RealVector max = new RealVector(new Integer(boundaryConfiguration.getParam("dimension")));
 
-                min.setElement(0, new Double(boundaryConfiguration.getParam("x-min")));
-                max.setElement(0, new Double(boundaryConfiguration.getParam("x-max")));
+                String[] limitsNumbers = boundaryConfiguration.getParam("limits").split(" ");
 
-                min.setElement(1, new Double(boundaryConfiguration.getParam("y-min")));
-                max.setElement(1, new Double(boundaryConfiguration.getParam("y-max")));
+
+                int vectorIndex = 0;
+                for (int i = 0; i < min.getSize() ; i ++) {
+
+                    min.setElement(i, new Double(limitsNumbers[vectorIndex]));
+
+                    vectorIndex += 2;
+
+                }
+
+                vectorIndex = 1;
+
+                for (int i = 0; i < max.getSize(); i ++) {
+
+                    max.setElement(i, new Double(limitsNumbers[vectorIndex]));
+
+                    vectorIndex += 2;
+
+                }
+
 
                 RectBoundary boundary = new RectBoundary(min, max);
-
                 setBoundary(boundary);
+
+//                max.setElement(0, new Double(boundaryConfiguration.getParam("x-max")));
+//
+//                min.setElement(1, new Double(boundaryConfiguration.getParam("y-min")));
+//                max.setElement(1, new Double(boundaryConfiguration.getParam("y-max")));
+//
+
+
             }
 
-        } else {
+        } else {//Catching boundary from numerics layer
 
             Boundary boundary = boundary();
 
@@ -115,10 +139,23 @@ public class RPNUMERICS {
 
                 ConfigurationProfile defaultBoundaryProfile = new ConfigurationProfile("rect", ConfigurationProfile.BOUNDARY_PROFILE);
 
-                defaultBoundaryProfile.addParam("x-min", min.getElement(0) + "");
-                defaultBoundaryProfile.addParam("y-min", min.getElement(1) + "");
-                defaultBoundaryProfile.addParam("x-max", max.getElement(0) + "");
-                defaultBoundaryProfile.addParam("y-max", max.getElement(1) + "");
+                String limits = null;
+
+                for (int i = 0; i < min.getSize(); i++) {
+                    limits += min.getElement(i);
+                    limits += " ";
+                }
+
+                for (int i = 0; i < max.getSize(); i++) {
+                    limits = limits.replaceFirst(" ", max.getElement(i) + "");
+                }
+
+                defaultBoundaryProfile.addParam("limits", limits);
+
+//                defaultBoundaryProfile.addParam("x-min", min.getElement(0) + "");
+//                defaultBoundaryProfile.addParam("y-min", min.getElement(1) + "");
+//                defaultBoundaryProfile.addParam("x-max", max.getElement(0) + "");
+//                defaultBoundaryProfile.addParam("y-max", max.getElement(1) + "");
 
                 physicsProfile.addConfigurationProfile(ConfigurationProfile.BOUNDARY_PROFILE, boundaryProfile);
 

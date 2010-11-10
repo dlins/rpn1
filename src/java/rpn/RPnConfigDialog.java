@@ -165,27 +165,40 @@ public class RPnConfigDialog extends RPnDialog {
 
             int dimension = new Integer(boundaryProfile.getParam("dimension"));
 
+            int totalInputComponets = dimension * 2;
+
+            ArrayList<RPnInputComponent> inputComponentsArray = new ArrayList<RPnInputComponent>(totalInputComponets);
+
             boundaryDataPanel.setLayout(new GridLayout(2, dimension + 1));
 
-            RPnInputComponent xMin = new RPnInputComponent(new Double(boundaryProfile.getParam("x-min")));
-            xMin.setLabel("X Min");
-            RPnInputComponent xMax = new RPnInputComponent(new Double(boundaryProfile.getParam("x-max")));
-            xMax.setLabel("X Max");
-            RPnInputComponent yMin = new RPnInputComponent(new Double(boundaryProfile.getParam("y-min")));
-            yMin.setLabel("Y Min");
-            RPnInputComponent yMax = new RPnInputComponent(new Double(boundaryProfile.getParam("y-max")));
-            yMax.setLabel("Y Max");
+            String[] limitsNumbers = boundaryProfile.getParam("limits").split(" ");
 
-            boundaryTextArray_.add(0, xMin);
-            boundaryTextArray_.add(1, yMin);
-            boundaryTextArray_.add(2, xMax);
-            boundaryTextArray_.add(3, yMax);
+            int vectorIndex = 0;
+            for (int i = 0; i < dimension; i++) {
+                RPnInputComponent Min = new RPnInputComponent(new Double(limitsNumbers[vectorIndex]));
+                Min.setLabel("Axis " + i + " Min");
+                inputComponentsArray.add(Min);
 
-            for (int i = 0; i < 4; i++) {
-
-                boundaryDataPanel.add(boundaryTextArray_.get(i).getContainer());
+                vectorIndex += 2;
 
             }
+
+            vectorIndex = 1;
+
+            for (int i = 0; i < dimension; i++) {
+
+                RPnInputComponent Max = new RPnInputComponent(new Double(limitsNumbers[vectorIndex]));
+                Max.setLabel("Axis " + i + " Max");
+                inputComponentsArray.add(Max);
+
+                vectorIndex += 2;
+
+            }
+            for (int i = 0; i < totalInputComponets; i++) {
+                boundaryTextArray_.add(i, inputComponentsArray.get(i));
+                boundaryDataPanel.add(boundaryTextArray_.get(i).getContainer());
+            }
+
 
             boundaryPanel_.add(boundaryDataPanel, BorderLayout.CENTER);
 
@@ -325,6 +338,7 @@ public class RPnConfigDialog extends RPnDialog {
 
             ArrayList<String> combinations = new ArrayList<String>();
 
+
             for (int i = 0; i < dimension; i++) {
                 for (int j = 0; j < dimension; j++) {
                     if (i != j) {
@@ -334,11 +348,11 @@ public class RPnConfigDialog extends RPnDialog {
             }
             axisCheckBoxArray_ = new JCheckBox[combinations.size()];
             panelsLabelTextField_ = new JTextField[combinations.size()];
-
+            axisSelected_ = new boolean[combinations.size()];
 
             axisSelected_[0] = true;//The first axis is checked by default
 
-
+            System.out.println("Tamanho de combination size:" + combinations.size());
 
             for (int i = 0; i < combinations.size(); i++) {
 
@@ -468,7 +482,7 @@ public class RPnConfigDialog extends RPnDialog {
         ConfigurationProfile boundaryProfile = physicsProfile_.getConfigurationProfile(ConfigurationProfile.BOUNDARY_PROFILE);
         int dimension = new Integer(boundaryProfile.getParam("dimension"));
         Space space = new Space("", dimension);
-        Space auxSpace = new Space("", dimension*2);
+        Space auxSpace = new Space("", dimension * 2);
         int[] projIndices;
         if (!boundaryProfile.getName().equalsIgnoreCase("triang")) {//RECT BOUNDARY
             for (int i = 0; i < axisCheckBoxArray_.length; i++) {
@@ -509,6 +523,7 @@ public class RPnConfigDialog extends RPnDialog {
         RPnConfig.configure((String) physicsComboBox_.getSelectedItem());
         setVisualConfiguration();
         fluxParamPanel_.applyParams();
+
         setBoundary();
         setMethodConfiguration();
 
@@ -522,18 +537,23 @@ public class RPnConfigDialog extends RPnDialog {
 
     }
 
-    private void setBoundary() {
+    private void setBoundary() { //Creating a boundary using user's input values
         ConfigurationProfile boundaryProfile = physicsProfile_.getConfigurationProfile(ConfigurationProfile.BOUNDARY_PROFILE);
 //        boolean iso2equi = new Boolean(boundaryProfile.getParam("iso2equi"));
         if (!boundaryProfile.getName().equalsIgnoreCase("triang")) {//RECT BOUNDARY. TODO Use iso2equi value as flag
-            RealVector min = new RealVector(2);
-            RealVector max = new RealVector(2);
 
-            min.setElement(0, (Double) boundaryTextArray_.get(0).getValue(RPnInputComponent.NUMERIC_VALUE));
-            min.setElement(1, (Double) boundaryTextArray_.get(1).getValue(RPnInputComponent.NUMERIC_VALUE));
+            int dimension = new Integer(boundaryProfile.getParam("dimension"));
+            RealVector min = new RealVector(dimension);
+            RealVector max = new RealVector(dimension);
 
-            max.setElement(0, (Double) boundaryTextArray_.get(2).getValue(RPnInputComponent.NUMERIC_VALUE));
-            max.setElement(1, (Double) boundaryTextArray_.get(3).getValue(RPnInputComponent.NUMERIC_VALUE));
+
+            for (int i = 0; i < boundaryTextArray_.size()/2; i++) {//Filling min limits
+
+                min.setElement(i, (Double) boundaryTextArray_.get(i).getValue(RPnInputComponent.NUMERIC_VALUE));
+            }
+            for (int i = 0; i < boundaryTextArray_.size()/2; i++) {//Filling max limits
+                max.setElement(i, (Double) boundaryTextArray_.get(i+boundaryTextArray_.size()/2).getValue(RPnInputComponent.NUMERIC_VALUE));
+            }
 
             RectBoundary newBoundary = new RectBoundary(min, max);
 
