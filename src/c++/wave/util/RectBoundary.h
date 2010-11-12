@@ -45,8 +45,8 @@ public:
     const RealVector & minimums(void) const;
     const RealVector & maximums(void) const;
     RealVector intersect(RealVector & y1, RealVector & y2) const;
-      bool inside(const RealVector & );
-    int intersection(const RealVector &, const RealVector & ,RealVector &)const;
+//    bool inside(const RealVector &);
+    int intersection(const RealVector &, const RealVector &, RealVector &)const;
 
     const char * boundaryType()const;
 
@@ -64,15 +64,16 @@ inline double RectBoundary::coordinateSpan(int i) {
     return maximums_->component(i) - minimums_->component(i);
 }
 
-inline bool RectBoundary::inside(const RealVector & y) const {
-    // true if y inside rectangular boundary
-    bool result = true;
-    for (int i = 0; i < y.size(); i++)
-        if ((y.component(i) < minimums_->component(i)) || (y.component(i) > maximums_->component(i)))
-            result = false;
-
-    return result;
-}
+//inline bool RectBoundary::inside(const RealVector & y) const {
+//    // true if y inside rectangular boundary
+//        cout << "tamanho dentro de inside inline" << endl;
+//    bool result = true;
+//    for (int i = 0; i < y.size(); i++)
+//        if ((y.component(i) < minimums_->component(i)) || (y.component(i) > maximums_->component(i)))
+//            result = false;
+//
+//    return result;
+//}
 
 inline const RealVector &RectBoundary::minimums(void) const {
     return *minimums_;
@@ -91,7 +92,7 @@ inline RealVector RectBoundary::intersect(RealVector & y1, RealVector & y2) cons
 
     for (int i = 0; i < size_; i++)
         if (y1.component(i) != y2.component(i)) {
-            ratio = (minimums_->component(i) - y1.component(i)) /  \
+            ratio = (minimums_->component(i) - y1.component(i)) /   \
                 (y2.component(i) - y1.component(i));
 
             if ((ratio >= 0) && (ratio <= 1)) {
@@ -113,7 +114,7 @@ inline RealVector RectBoundary::intersect(RealVector & y1, RealVector & y2) cons
                     result = vec2;
             }
 
-            ratio = (maximums_->component(i) - y1.component(i)) /  \
+            ratio = (maximums_->component(i) - y1.component(i)) /   \
                 (y2.component(i) - y1.component(i));
 
             if ((ratio >= 0) && (ratio <= 1)) {

@@ -155,7 +155,7 @@ int ContinuationShockFlow::shockfield(int n, double Um[], int m, double *Up, int
             double J[n][n];
             fill_with_jet(shock_flux_object, n, Um, 1, 0, &J[0][0], 0); // DF(n, Um, &J[0][0]);
             // Find the eigenvector
-             vector<eigencouple> e;
+             vector<eigenpair> e;
              int info = Eigen::eig(n, &J[0][0], e);
 
                 if (info == ABORTED_PROCEDURE) {
@@ -355,7 +355,7 @@ double ContinuationShockFlow::shockspeed(int n, int family, int typeofspeed, dou
     const FluxFunction & shock_flux_object = fluxFunction();
     if (typeofspeed == 0) {
 //        struct eigen e[n];
-        vector<eigencouple> e;
+        vector<eigenpair> e;
         double J[n][n];
         fill_with_jet(shock_flux_object, n, Um, 1, 0, &J[0][0], 0);
         Eigen::eig(n, &J[0][0], e);

@@ -21,9 +21,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import rpn.controller.ui.*;
 import rpn.message.*;
 import rpnumerics.ShockProfile;
-import wave.util.IsoTriang2DBoundary;
-import wave.util.RealVector;
-import wave.util.RectBoundary;
 
 public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 

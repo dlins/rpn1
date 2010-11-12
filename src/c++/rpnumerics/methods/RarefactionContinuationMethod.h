@@ -17,6 +17,7 @@
 #include "RarefactionMethod.h"
 #include "ContinuationRarefactionFlow.h"
 #include "RPnCurve.h"
+#include "eigen.h"
 
 /*
  * ---------------------------------------------------------------
@@ -30,9 +31,9 @@ private:
     Boundary * boundary_;
     RealVector * referenceVector_;
     int family_;
+    int init(ContinuationRarefactionFlow *,int n, double *in, int indx,const  FluxFunction &, const AccumulationFunction &, int type, int increase, double deltaxi, double *lambda, double *rev);
 
-
-    int init(ContinuationRarefactionFlow * flow, int n, double *in, int indx, int increase, double deltaxi, double *lambda, double *rev)const;
+//    int init(ContinuationRarefactionFlow * flow, int n, double *in, int indx, int increase, double deltaxi, double *lambda, double *rev)const;
 
 public:
 

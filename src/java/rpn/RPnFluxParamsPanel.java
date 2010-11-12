@@ -28,13 +28,13 @@ public class RPnFluxParamsPanel extends JPanel implements PropertyChangeListener
     private boolean isDefault_;
 
     public RPnFluxParamsPanel() {
-        System.out.println("Consturindo com a fisica de rpnumerics" + RPNUMERICS.physicsID());
+//        System.out.println("Consturindo com a fisica de rpnumerics" + RPNUMERICS.physicsID());
         searchPhysics(RPNUMERICS.physicsID());
         buildPanel(false);
     }
 
     public RPnFluxParamsPanel(String physicsName) {
-        System.out.println("consturindo default com a fisica:" + physicsName);
+//        System.out.println("consturindo default com a fisica:" + physicsName);
         searchPhysics(physicsName);
         buildPanel(true);
     }
@@ -105,7 +105,7 @@ public class RPnFluxParamsPanel extends JPanel implements PropertyChangeListener
 
         FluxParams oldParams = RPNUMERICS.getFluxParams();
         for (int i = 0; i < valuesArray_.size(); i++) {
-            System.out.println((Double) valuesArray_.get(i).getValue(RPnInputComponent.NUMERIC_VALUE));
+//            System.out.println((Double) valuesArray_.get(i).getValue(RPnInputComponent.NUMERIC_VALUE));
             newParamsVector.setElement(i, (Double) valuesArray_.get(i).getValue(RPnInputComponent.NUMERIC_VALUE));
 
         }

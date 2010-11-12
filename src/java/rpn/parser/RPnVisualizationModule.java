@@ -156,7 +156,6 @@ public class RPnVisualizationModule {
 
         Space space = new Space("Domain", dimension);
 
-        System.out.println("teste :" + RPnConfig.getActivePhysicsProfile().getName());
         for (Entry<String, ConfigurationProfile> profileEntry : configurationSet) {
 
             ConfigurationProfile profile = profileEntry.getValue();

@@ -17,7 +17,7 @@
 #include "ContinuationShockFlow.h"
 #include "ContinuationRarefactionFlow.h"
 
-#include "CompositeFlow.h"
+//#include "CompositeFlow.h"
 
 #include "PluginService.h"
 #include "RPnPluginManager.h"

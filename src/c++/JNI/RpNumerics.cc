@@ -48,6 +48,9 @@
 #include "Stone.h" 
 #include "StoneParams.h" 
 
+//TPCW
+#include "TPCW.h"
+
 //-------------------------------------
 
 
@@ -211,7 +214,6 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_clean(JNIEnv * env, jclass cls
 void RpNumerics::clean() {
 
     delete physics_;
-    //    delete odeSolver_;
 }
 
 /* Class:     rpnumerics_RPNUMERICS
@@ -221,7 +223,8 @@ void RpNumerics::clean() {
 
 
 JNIEXPORT jstring JNICALL Java_rpnumerics_RPNUMERICS_physicsID(JNIEnv * env, jclass cls) {
-    return env->NewStringUTF(RpNumerics::getPhysics().ID());
+
+    return env->NewStringUTF(RpNumerics::getPhysics().ID().c_str());
 }
 
 /*
@@ -256,77 +259,16 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initNative(JNIEnv * env, jclas
     if (physicsID == NULL) {
         return; /* OutOfMemoryError already thrown */
     }
+//    cout << "Construindo a fisica: " << physicsID << endl;
+    RpNumerics::setPhysics(Physics(physicsID));
 
-    if (!strcmp(physicsID, "QuadraticR2")) {
-        RpNumerics::setPhysics(Quad2(Quad2FluxParams()));
-    }
-
-    if (!strcmp(physicsID, "QuadraticR3")) {
-        RpNumerics::setPhysics(Quad3(Quad3FluxParams()));
-    }
-
-    if (!strcmp(physicsID, "QuadraticR4")) {
-        RpNumerics::setPhysics(Quad4(Quad4FluxParams()));
-    }
-
-    if (!strcmp(physicsID, "TriPhase")) {
-        RpNumerics::setPhysics(TriPhase(TriPhaseParams(), PermParams(), CapilParams(0.4, 3.0, 44.0, 8.0), ViscosityParams(0.5)));
-    }
-
-    if (!strcmp(physicsID, "Corey")) {
-        RpNumerics::setPhysics(Corey(CoreyParams(), PermParams(), CapilParams(0.4, 3.0, 44.0, 8.0), ViscosityParams(0.5)));
-    }
-
-    if (!strcmp(physicsID, "Stone")) {
-        RpNumerics::setPhysics(Stone());
+     if (!strcmp(physicsID, "TPCW")) {
+        RpNumerics::setPhysics(TPCW());
     }
 
 }
 
-JNIEXPORT void JNICALL Java_rpnumerics_RpNumerics_init(JNIEnv * env, jclass cls, jobject numericsProfile) {
 
-    jclass numericsProfileClass = env->FindClass(NUMERICSPROFILE_LOCATION);
-    jmethodID getPhysIDMethod = env->GetMethodID(numericsProfileClass, "getPhysicsID", "()Ljava/lang/String;");
-    jstring ID = (jstring) env->CallObjectMethod(numericsProfile, getPhysIDMethod);
-
-    const char *physicsID;
-
-    physicsID = env->GetStringUTFChars(ID, NULL);
-
-    if (physicsID == NULL) {
-        return; /* OutOfMemoryError already thrown */
-    }
-
-    //Physics instantiation
-
-    if (!strcmp(physicsID, "QuadraticR2")) {
-        RpNumerics::setPhysics(Quad2(Quad2FluxParams()));
-    }
-
-    if (!strcmp(physicsID, "QuadraticR3")) {
-        RpNumerics::setPhysics(Quad3(Quad3FluxParams()));
-    }
-
-    if (!strcmp(physicsID, "QuadraticR4")) {
-        RpNumerics::setPhysics(Quad4(Quad4FluxParams()));
-    }
-
-    if (!strcmp(physicsID, "TriPhase")) {
-        RpNumerics::setPhysics(TriPhase(TriPhaseParams(), PermParams(), CapilParams(0.4, 3.0, 44.0, 8.0), ViscosityParams(0.5)));
-    }
-
-    if (!strcmp(physicsID, "Corey")) {
-        RpNumerics::setPhysics(Corey(CoreyParams(), PermParams(), CapilParams(0.4, 3.0, 44.0, 8.0), ViscosityParams(0.5)));
-    }
-
-  if (!strcmp(physicsID, "Stone")) {
-        RpNumerics::setPhysics(Stone());
-    }
-    cout << "Physics: " << physicsID << endl;
-
-    env->ReleaseStringUTFChars(ID, physicsID);
-
-}
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_RpNumerics_getXZero(JNIEnv * env, jclass cls) {
 

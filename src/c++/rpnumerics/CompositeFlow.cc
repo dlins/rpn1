@@ -85,7 +85,7 @@ int CompositeFlow::composite(int *neq, double *xi, double *in, double *out, int 
     double lambda;
     double rm[n];
 
-     vector<eigencouple> e;
+     vector<eigenpair> e;
      Eigen::eig(n, &Jm[0][0], e);
 
 

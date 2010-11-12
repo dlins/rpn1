@@ -16,16 +16,32 @@ TODO:
 NOTE : 
 
 @ingroup JNI
-*/
+ */
 
 
 
 
-#include "rpnumerics_HugoniotCurve.h"
+#include "HugoniotCurve.h"
 
-JNIEXPORT jdouble JNICALL Java_rpnumerics_HugoniotCurve_findSigma
-        (JNIEnv * env , jobject obj, jobject phasePoint){
-    
-    return 0.1 ; //Testing
-    
+HugoniotCurve::HugoniotCurve(const RealVector & xZero,const vector<HugoniotSegment> & segmentsList) : segmentsList_(new vector<HugoniotSegment>()),xZero_(new RealVector(xZero)) {
+
+    * segmentsList_ = segmentsList;
+
+}
+
+HugoniotCurve::~HugoniotCurve() {
+    delete segmentsList_;
+    delete xZero_;
+}
+
+HugoniotCurve::HugoniotCurve(const HugoniotCurve & copy) : segmentsList_(new vector<HugoniotSegment>()),xZero_(new RealVector(copy.getXZero())) {
+    *segmentsList_=copy.segments();
+}
+
+const vector<HugoniotSegment> & HugoniotCurve::segments() const {
+    return * segmentsList_;
+}
+
+const RealVector & HugoniotCurve::getXZero()const {
+    return *xZero_;
 }

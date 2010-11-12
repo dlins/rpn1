@@ -21,74 +21,48 @@
 
 
 TriPhase::TriPhase(const TriPhaseParams & params, const PermParams & permParams,
-        const CapilParams & capilParams, const ViscosityParams & viscParams){
-    fluxFunction_ = new TriPhaseFluxFunction(params, permParams, capilParams, viscParams);
-    
-    FLUX_ID="TriPhase";
+        const CapilParams & capilParams, const ViscosityParams & viscParams) :
+SubPhysics(TriPhaseFluxFunction(params, permParams, capilParams, viscParams), TriPhaseAccumulationFunction(), *defaultBoundary(),Multid::PLANE,"TriPhase") {
 
-    accFunction_ = new TriPhaseAccumulationFunction(); //TODO Using default accumulationFunction
 
-    boundary_= defaultBoundary();
-    
+
 }
 
+Boundary * TriPhase::defaultBoundary() const{
 
-IsoTriang2DBoundary * TriPhase::defaultBoundary(){
-    
     RealVector A(2);
-    
-    A.component(0)=0;
-    A.component(1)=0;
-    
+
+    A.component(0) = 0;
+    A.component(1) = 0;
+
     RealVector B(2);
-    
-    B.component(0)=0;
-    B.component(1)=1;
-    
+
+    B.component(0) = 0;
+    B.component(1) = 1;
+
     RealVector C(2);
-    
-    C.component(0)=1;
-    C.component(1)=0;
-    
-    
+
+    C.component(0) = 1;
+    C.component(1) = 0;
+
+
     return new IsoTriang2DBoundary(A, B, C);
-    
-    
+
+
 }
 
+TriPhase::TriPhase(const TriPhase & copy) : SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.boundary(),Multid::PLANE,"TriPhase") {
 
 
-void TriPhase::boundary(const Boundary & boundary){
-    
-    delete boundary_;
-    
-    boundary_=boundary.clone();
-    
+
 }
 
-TriPhase::TriPhase(const TriPhase & copy){
-
-    fluxFunction_ = (FluxFunction *) copy.fluxFunction().clone();
-
-    boundary_= copy.boundary().clone();
-
-    accFunction_ = (AccumulationFunction *)copy.accumulation().clone();
-
-    FLUX_ID="TriPhase";
-
-    
+SubPhysics * TriPhase::clone()const {
+    return new TriPhase(*this);
 }
 
-const char * TriPhase::ID()const {return FLUX_ID;}
+TriPhase::~TriPhase() {
 
-Physics * TriPhase::clone()const {return new TriPhase(*this);}
-
-TriPhase::~TriPhase(){
-    
-    delete fluxFunction_;
-    delete boundary_;
-    delete accFunction_;
-    
 }
 
 

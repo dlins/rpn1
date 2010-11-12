@@ -464,7 +464,6 @@ public class RPnConfigDialog extends RPnDialog {
     }
 
     private void setVisualConfiguration() {
-        System.out.println("Chamando setVisual");
         ConfigurationProfile boundaryProfile = physicsProfile_.getConfigurationProfile(ConfigurationProfile.BOUNDARY_PROFILE);
         int dimension = new Integer(boundaryProfile.getParam("dimension"));
         Space space = new Space("", dimension);
