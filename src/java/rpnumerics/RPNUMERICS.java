@@ -47,14 +47,11 @@ public class RPNUMERICS {
         //System.loadLibrary("rpnumerics");
         System.loadLibrary("rpn");
 
-        System.out.println("Inicializando a fisica: " + physicsID);
         initNative(physicsID);
 
         //Processing configuration data
 
         ConfigurationProfile physicsProfile = RPnConfig.getActivePhysicsProfile();
-
-        System.out.println("Profile ativo: " + physicsProfile.getName());
 
         Configuration physicsConfiguration = new Configuration(physicsProfile);
         FluxParams fluxParams = getFluxParams();
