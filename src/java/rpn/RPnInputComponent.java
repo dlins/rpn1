@@ -6,6 +6,7 @@
  */
 package rpn;
 
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.text.DecimalFormat;
 import javax.swing.AbstractAction;
@@ -36,7 +37,7 @@ public class RPnInputComponent extends AbstractAction {
 
     public RPnInputComponent(double value) {
         formatter_.setMaximumFractionDigits(3);
-        panel_ = new JPanel();
+        panel_ = new JPanel(new GridLayout(1,3));
         value_ = value;
         textField_ = new JFormattedTextField(formatter_);
         slider_ = new JSlider(-100, 100);
@@ -49,9 +50,9 @@ public class RPnInputComponent extends AbstractAction {
         label_ = new JLabel();
         label_.setText("Label");
 
-        panel_.add(label_);
-        panel_.add(textField_);
-        panel_.add(slider_);
+        panel_.add(label_,0,0);
+        panel_.add(textField_,0,1);
+        panel_.add(slider_,0,2);
         setValue(new Double(value));
     }
 

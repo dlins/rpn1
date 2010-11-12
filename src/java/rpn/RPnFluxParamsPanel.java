@@ -45,11 +45,12 @@ public class RPnFluxParamsPanel extends JPanel implements PropertyChangeListener
         GridBagConstraints gridConstraints = new GridBagConstraints();
         gridConstraints.fill = GridBagConstraints.BOTH;
 
-        gridConstraints.gridwidth = 3;
-        gridConstraints.gridheight = 12;
+        gridConstraints.gridwidth =1;
+        gridConstraints.gridheight = 1;
         valuesArray_ = new ArrayList<RPnInputComponent>();
 
-        gridConstraints.ipadx = 80;
+        gridConstraints.ipadx = 160;
+        gridConstraints.gridy=0;
 
         if (useDefaults) {
             for (int i = 0; i < physicsProfile_.getIndicesSize(); i++) {
@@ -65,9 +66,10 @@ public class RPnFluxParamsPanel extends JPanel implements PropertyChangeListener
                     valuesArray_.add(i, inputComponent);
 //                    gridConstraints.gridx = 1;
                     this.add(inputComponent.getContainer(), gridConstraints);
-                        gridConstraints.gridx=1;
+
 
                 }
+                gridConstraints.gridy++;//x = i;
 
             }
         } else {
