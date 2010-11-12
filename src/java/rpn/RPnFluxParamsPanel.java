@@ -109,9 +109,9 @@ public class RPnFluxParamsPanel extends JPanel implements PropertyChangeListener
             newParamsVector.setElement(i, (Double) valuesArray_.get(i).getValue(RPnInputComponent.NUMERIC_VALUE));
 
         }
-        System.out.println("Old params: " + oldParams);
+//        System.out.println("Old params: " + oldParams);
         FluxParams newParams = new FluxParams(newParamsVector);
-        System.out.println("New params: " + newParams);
+//        System.out.println("New params: " + newParams);
         RPNUMERICS.setFluxParams(newParams);
         rpn.usecase.ChangeFluxParamsAgent.instance().applyChange(new PropertyChangeEvent(rpn.usecase.ChangeFluxParamsAgent.instance(), "", oldParams, newParams));
 
