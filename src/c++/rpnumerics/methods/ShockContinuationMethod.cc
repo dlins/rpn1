@@ -95,21 +95,21 @@ int ShockContinuationMethod::shockinit(int n, double Um[], int family, int incre
 
     // Choose the point according to the increase/decrease of the speed:
 
-    printf("\n\n\n");
-    printf("Family: %d, increase = %d\n", family, increase);
-    printf("spr = %f, sm = %f, spl = %f\n", spr, sm, spl);
-    for (i = 0; i < n; i++) printf("Upr[%d] = %f     Upl[%d] = %f\n", i, Upr[i], i, Upl[i]);
+//    printf("\n\n\n");
+//    printf("Family: %d, increase = %d\n", family, increase);
+//    printf("spr = %f, sm = %f, spl = %f\n", spr, sm, spl);
+//    for (i = 0; i < n; i++) printf("Upr[%d] = %f     Upl[%d] = %f\n", i, Upr[i], i, Upl[i]);
 
     // Speed should increase
     if (increase == 1) {
         if (spl > sm && sm > spr) {
             for (i = 0; i < n; i++) Unext[i] = Upl[i];
-            printf("shock init: 1\n");
+//            printf("shock init: 1\n");
         } else if (spl < sm && sm < spr) {
             for (i = 0; i < n; i++) Unext[i] = Upr[i];
-            printf("shock init: 2\n");
+//            printf("shock init: 2\n");
         } else if ((spl < sm && sm > spr) || (spl > sm && sm < spr)) {
-            printf("3\n");
+//            printf("3\n");
             return ABORTED_PROCEDURE;
         }
     }// Speed should decrease
@@ -255,8 +255,8 @@ void ShockContinuationMethod::curve(const RealVector & input, int direction, vec
         return; //ABORTED_PROCEDURE;
     }
     //
-    printf("After shock init:\n");
-    for (int i = 0; i < n; i++) printf("P[%d] = %f\n", i, Pn[i]);
+//    printf("After shock init:\n");
+//    for (int i = 0; i < n; i++) printf("P[%d] = %f\n", i, Pn[i]);
     // Store the first point
     //    double res[n + 1];
 
@@ -271,7 +271,7 @@ void ShockContinuationMethod::curve(const RealVector & input, int direction, vec
     //    res[n] = sn;
     //    outputShockPoint(n) = sn;
     output.push_back(outputShockPoint);
-    printf("Speed at first point: %f\n", sn);
+//    printf("Speed at first point: %f\n", sn);
 
     //--------------------------------------FIM INICIALIZACAO--------------------------------------------------------
     //
@@ -335,8 +335,8 @@ void ShockContinuationMethod::curve(const RealVector & input, int direction, vec
             //            //            // Is the speed monotonic?
             if ((increase == 1 && nowspeed < oldspeed) ||
                     (increase == -1 && nowspeed > oldspeed)) {
-                printf("nowspeed = %f, oldspeed = %f\n", nowspeed, oldspeed);
-                printf("Non-monotonous!\n");
+//                printf("nowspeed = %f, oldspeed = %f\n", nowspeed, oldspeed);
+//                printf("Non-monotonous!\n");
                 return; // ABORTED_PROCEDURE;
             }
             sn = nowspeed;

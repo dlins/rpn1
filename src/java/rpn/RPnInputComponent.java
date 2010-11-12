@@ -8,6 +8,8 @@ package rpn;
 
 import java.awt.event.ActionEvent;
 import java.text.DecimalFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
@@ -30,7 +32,6 @@ public class RPnInputComponent extends AbstractAction {
     private double maxRange_;
     private double minRange_;
     private double value_;
-
     //CONSTS
     public static final String NUMERIC_VALUE = "NUMBER_VALUE";
 
@@ -62,7 +63,7 @@ public class RPnInputComponent extends AbstractAction {
 
     }
 
-    public void setDisplayColumns(int col){
+    public void setDisplayColumns(int col) {
         textField_.setColumns(col);
     }
 
@@ -111,6 +112,7 @@ public class RPnInputComponent extends AbstractAction {
                 slider_.setValue(setSliderPosition(value));
                 slider_.addChangeListener(changeListener[0]);
                 value_ = value;
+                putValue(NUMERIC_VALUE, value);
 //                firePropertyChange(NUMERIC_VALUE, value_, value);
             } catch (BadLocationException ex) {
                 System.out.println("Excessao Bad" + ex.getMessage());
@@ -121,7 +123,7 @@ public class RPnInputComponent extends AbstractAction {
         }
 
         public void removeUpdate(DocumentEvent arg0) {
-//            insertUpdate(arg0);
+            //            insertUpdate(arg0);
         }
 
         public void changedUpdate(DocumentEvent arg0) {
@@ -136,7 +138,13 @@ public class RPnInputComponent extends AbstractAction {
             JSlider slider = (JSlider) arg0.getSource();
             Double newValue = setValue(slider.getValue());
             textField_.setText(formatter_.format(new Double(newValue)));
-            putValue(NUMERIC_VALUE, newValue);
+
+            if (!slider.getValueIsAdjusting()) {
+                putValue(NUMERIC_VALUE, newValue);
+            }
+
+
+
         }
     }
 
@@ -145,9 +153,13 @@ public class RPnInputComponent extends AbstractAction {
 
         if (key.equals(NUMERIC_VALUE)) {
             return new Double(value_);
+
+
         }
 
         return null;
+
+
     }
 
     @Override
@@ -168,8 +180,6 @@ public class RPnInputComponent extends AbstractAction {
 
         }
         super.firePropertyChange(propName, oldValue, newValue);
-
-
     }
 
     @Override
@@ -180,14 +190,21 @@ public class RPnInputComponent extends AbstractAction {
             slider_.setEnabled(false);
             textField_.setEditable(false);
 
+
+
             return;
+
+
         }
 
         slider_.setEnabled(true);
         textField_.setEnabled(true);
+
+
     }
 
     public void actionPerformed(ActionEvent arg0) {
         throw new UnsupportedOperationException("Not supported yet.");
+
     }
 }

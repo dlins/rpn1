@@ -29,77 +29,21 @@
  */
 
 
-class Corey : public Physics {
+class Corey : public SubPhysics {
 private:
-
-    FluxFunction * fluxFunction_;
-    Boundary * boundary_;
-    AccumulationFunction * accFunction_;
-
-    IsoTriang2DBoundary * defaultBoundary();
-
-    char * FLUX_ID;
-
-
 
 public:
 
     Corey(const CoreyParams & params, const PermParams & permParams, const CapilParams & capilParams, const ViscosityParams & viscParams);
 
-
     Corey(const Corey &);
 
     virtual ~Corey();
 
-    Physics * clone()const;
+    SubPhysics * clone()const;
 
-    const char * ID() const;
-
-    const AccumulationFunction & accumulation() const;
-
-    void accumulationParams(const AccumulationParams &);
-
-    const Boundary & boundary() const;
-
-    void boundary(const Boundary & boundary);
-
-    const FluxFunction & fluxFunction() const;
-    
-    void fluxParams (const FluxParams &);
-
-    const Space & domain() const;
-
+   Boundary * defaultBoundary()const;
 
 };
-
-inline const FluxFunction & Corey::fluxFunction() const{
-    return *fluxFunction_;
-}
-
-inline  void Corey::fluxParams (const FluxParams & params){
-
-    CoreyParams newParams(params.params(),0); //TODO index ???
-    
-    fluxFunction_->fluxParams(newParams);
-}
-
-inline const Boundary & Corey::boundary() const {
-    return *boundary_;
-}
-
-inline const AccumulationFunction & Corey::accumulation() const {
-    return *accFunction_;
-}
-
-inline void Corey::accumulationParams(const AccumulationParams & params){
-    accFunction_->accumulationParams(params);
-    
-}
-    
-
-
-inline const Space & Corey::domain(void) const {
-    return Multid::PLANE;
-}
 
 #endif //! _Corey_H

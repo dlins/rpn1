@@ -19,7 +19,7 @@
  */
 
 
-IsoTriang2DBoundary * Stone::defaultBoundary() {
+Boundary * Stone::defaultBoundary() const{
 
     RealVector A(2);
 
@@ -42,55 +42,19 @@ IsoTriang2DBoundary * Stone::defaultBoundary() {
 
 }
 
-void Stone::boundary(const Boundary & boundary) {
-
-    delete boundary_;
-
-    boundary_ = boundary.clone();
+Stone::Stone():SubPhysics(StoneFluxFunction(StoneParams(),StonePermParams()),TriPhaseAccumulationFunction(),*defaultBoundary(),Multid::PLANE,"Stone"){
 
 }
 
-
-
-Stone::Stone():fluxFunction_(new StoneFluxFunction(StoneParams(),StonePermParams())){
-boundary_=defaultBoundary();	
-accFunction_=new TriPhaseAccumulationFunction();
-
-    FLUX_ID = (char *)"Stone";
-}
-
-Stone::Stone(const Stone & copy) {
-
-    fluxFunction_ = (FluxFunction *) copy.fluxFunction().clone();
-
-    boundary_ = copy.boundary().clone();
-
-    accFunction_ = (AccumulationFunction *) copy.accumulation().clone();
-
-    FLUX_ID = (char *)"Stone";
-
+Stone::Stone(const Stone & copy):SubPhysics(copy.fluxFunction(),copy.accumulation(),copy.boundary(),Multid::PLANE,"Stone") {
 
 }
 
-
- // Stone(const StoneParams & params):fluxFunction_(new StoneFluxFunction(params,StonePermParams())){
-//}
-
-
-const char * Stone::ID()const {
-    return FLUX_ID;
-}
-
-Physics * Stone::clone()const {
+SubPhysics * Stone::clone()const {
     return new Stone(*this);
 }
 
 Stone::~Stone() {
-
-    delete fluxFunction_;
-    delete boundary_;
-    delete accFunction_;
-
 }
 
 
