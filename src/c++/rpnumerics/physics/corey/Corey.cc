@@ -21,7 +21,7 @@
 
 
 Corey::Corey(const CoreyParams & params, const PermParams & permParams,
-        const CapilParams & capilParams, const ViscosityParams & viscParams) : SubPhysics(CoreyFluxFunction(params, permParams, capilParams, viscParams), CoreyAccumulationFunction(), *defaultBoundary(),Multid::PLANE,"Corey") {
+        const CapilParams & capilParams, const ViscosityParams & viscParams) : SubPhysics(CoreyFluxFunction(params, permParams, capilParams, viscParams), CoreyAccumulationFunction(), *defaultBoundary(),Multid::PLANE,"Corey",_SIMPLE_ACCUMULATION_) {
 
 
 
@@ -51,7 +51,7 @@ Boundary * Corey::defaultBoundary()const {
 
 }
 
-Corey::Corey(const Corey & copy):SubPhysics(copy.fluxFunction(),copy.accumulation(),copy.boundary(),copy.domain(),"Corey") {
+Corey::Corey(const Corey & copy):SubPhysics(copy.fluxFunction(),copy.accumulation(),copy.boundary(),copy.domain(),"Corey",_SIMPLE_ACCUMULATION_) {
 
 }
 

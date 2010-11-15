@@ -22,7 +22,7 @@
 
 TriPhase::TriPhase(const TriPhaseParams & params, const PermParams & permParams,
         const CapilParams & capilParams, const ViscosityParams & viscParams) :
-SubPhysics(TriPhaseFluxFunction(params, permParams, capilParams, viscParams), TriPhaseAccumulationFunction(), *defaultBoundary(),Multid::PLANE,"TriPhase") {
+SubPhysics(TriPhaseFluxFunction(params, permParams, capilParams, viscParams), TriPhaseAccumulationFunction(), *defaultBoundary(),Multid::PLANE,"TriPhase",_SIMPLE_ACCUMULATION_) {
 
 
 
@@ -51,7 +51,7 @@ Boundary * TriPhase::defaultBoundary() const{
 
 }
 
-TriPhase::TriPhase(const TriPhase & copy) : SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.boundary(),Multid::PLANE,"TriPhase") {
+TriPhase::TriPhase(const TriPhase & copy) : SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.boundary(),Multid::PLANE,"TriPhase",_SIMPLE_ACCUMULATION_) {
 
 
 

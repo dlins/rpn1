@@ -19,6 +19,7 @@
 #include "Boundary.h"
 #include "Space.h"
 #include  "Multid.h"
+#include "eigen.h"
 
 /*
  * ---------------------------------------------------------------
@@ -36,10 +37,11 @@ private:
     Boundary * boundary_;
     Space * space_;
     const char * ID_;
+    int type_;
 
 public:
 
-    SubPhysics(const FluxFunction &,const AccumulationFunction &,const Boundary &,const Space &,const char *);
+    SubPhysics(const FluxFunction &,const AccumulationFunction &,const Boundary &,const Space &,const char *,int );
 
     void fluxParams(const FluxParams &);
 
@@ -48,6 +50,10 @@ public:
     const AccumulationFunction & accumulation() const;
 
     const Boundary & boundary() const;
+
+
+    void boundary(const Boundary &);
+
 
     const FluxFunction & fluxFunction() const;
 
@@ -60,7 +66,7 @@ public:
     virtual Boundary * defaultBoundary()const = 0;
 
 
-
+    const int type() const;
 
 };
 

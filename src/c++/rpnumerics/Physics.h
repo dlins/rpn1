@@ -20,6 +20,7 @@
 #include "TriPhase.h"
 #include "Corey.h"
 #include "Stone.h"
+#include "TPCW.h"
 
 //!
 
@@ -37,13 +38,14 @@ private:
     Boundary * boundary_;
     string * ID_;
     Space * space_;
+    int type_;
 
 public:
 
 
 
-    Physics(const string &);
-    Physics(const vector<SubPhysics> &,const Boundary &,const string &);
+    Physics(const string & );
+    Physics(const vector<SubPhysics> &,const Boundary &,const string & );
     Physics(const Physics &);
 
     virtual ~Physics();
@@ -61,6 +63,8 @@ public:
     const SubPhysics & getSubPhysics(const int);
 
     const vector<SubPhysics *> & getPhysicsVector()const;
+
+
 
     //deprecated
     const FluxFunction & fluxFunction() const;

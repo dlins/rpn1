@@ -262,9 +262,12 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initNative(JNIEnv * env, jclas
 //    cout << "Construindo a fisica: " << physicsID << endl;
     RpNumerics::setPhysics(Physics(physicsID));
 
-     if (!strcmp(physicsID, "TPCW")) {
-        RpNumerics::setPhysics(TPCW());
-    }
+//     if (!strcmp(physicsID, "TPCW")) {
+//
+//
+//
+//        RpNumerics::setPhysics(TPCW());
+//    }
 
 }
 

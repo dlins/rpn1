@@ -1,4 +1,5 @@
 
+
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE rpnconfiguration  SYSTEM "./rpn-dtd/rpnDTD.dtd">
 <rpnconfiguration>
@@ -68,6 +69,30 @@
 
         </FLUXFUNCTION>
     </PHYSICS>
+
+
+
+
+    <PHYSICS name="TPCW">
+        <BOUNDARY name="rect">
+	  <BOUNDARYPARAM name="dimension" value="3" />
+          <BOUNDARYPARAM name="iso2equi" value="false" />
+          <BOUNDARYPARAM name="limits" value="-0.5 0.5 -0.5 0.5 -0.5 0.5" />
+
+        </BOUNDARY>
+
+        <FLUXFUNCTION >
+            <FLUXPARAMS name="vel" position="0" value ="1" />
+            <FLUXPARAMS name="muw" position="1" value ="0.3333" />
+            <FLUXPARAMS name="muo" position="2" value ="0.3333" />
+            <FLUXPARAMS name="mug" position="3" value ="0.3333" />
+            <FLUXPARAMS name="grw" position="4" value ="0" />
+            <FLUXPARAMS name="gro" position="5" value ="0" />
+            <FLUXPARAMS name="grg" position="6" value ="0" />
+        </FLUXFUNCTION>
+    </PHYSICS>
+
+
 
     <PHYSICS name="TriPhase">
         <BOUNDARY name="triang">

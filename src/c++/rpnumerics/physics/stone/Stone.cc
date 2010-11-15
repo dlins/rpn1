@@ -42,11 +42,11 @@ Boundary * Stone::defaultBoundary() const{
 
 }
 
-Stone::Stone():SubPhysics(StoneFluxFunction(StoneParams(),StonePermParams()),TriPhaseAccumulationFunction(),*defaultBoundary(),Multid::PLANE,"Stone"){
+Stone::Stone():SubPhysics(StoneFluxFunction(StoneParams(),StonePermParams()),TriPhaseAccumulationFunction(),*defaultBoundary(),Multid::PLANE,"Stone",_SIMPLE_ACCUMULATION_){
 
 }
 
-Stone::Stone(const Stone & copy):SubPhysics(copy.fluxFunction(),copy.accumulation(),copy.boundary(),Multid::PLANE,"Stone") {
+Stone::Stone(const Stone & copy):SubPhysics(copy.fluxFunction(),copy.accumulation(),copy.boundary(),Multid::PLANE,"Stone",_SIMPLE_ACCUMULATION_) {
 
 }
 

@@ -136,8 +136,10 @@ int ContinuationRarefactionFlow::rarefaction(int *neq, double *xi, double *in, d
     // Some parameters
     int i, j, info;
     vector<eigenpair> e;
-
-    //    param[0]=_SIMPLE_ACCUMULATION_;//TODO REMOVE !!
+    int type = RpNumerics::getPhysics().getPhysicsVector().at(0)->type();
+    cout <<"Valor de type: "<<type<<endl;
+    param[0] =type;// _SIMPLE_ACCUMULATION_; //TODO REMOVE !!
+//    param[0] = _GENERAL_ACCUMULATION_; //TODO REMOVE !!
 
     // Find the eigenpair
     if ((int) param[0] == _SIMPLE_ACCUMULATION_) {
@@ -294,7 +296,7 @@ void ContinuationRarefactionFlow::fill_with_jet(const RpFunction & flux_object, 
     WaveState state_c(r);
 
     JetMatrix c_jet(n);
-
+    cout <<"Depois da linha 296"<<c_jet.size()<<endl;
     flux_object.jet(state_c, c_jet, degree);
 
     // Fill F
@@ -319,7 +321,7 @@ void ContinuationRarefactionFlow::fill_with_jet(const RpFunction & flux_object, 
             }
         }
     }
-
+    cout <<"Dentro de fill with jet cont rare flow"<<endl;
     return;
 }
 

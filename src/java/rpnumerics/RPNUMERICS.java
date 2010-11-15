@@ -54,7 +54,7 @@ public class RPNUMERICS {
 
         ConfigurationProfile physicsProfile = RPnConfig.getActivePhysicsProfile();
 
-//        System.out.println("Profile ativo: " + physicsProfile.getName());
+        System.out.println("Profile ativo: " + physicsProfile.getName());
 
         Configuration physicsConfiguration = new Configuration(physicsProfile);
         FluxParams fluxParams = getFluxParams();
@@ -84,7 +84,12 @@ public class RPNUMERICS {
 
         ConfigurationProfile boundaryProfile = physicsProfile.getConfigurationProfile(ConfigurationProfile.BOUNDARY_PROFILE);
 
+//        if (boundaryProfile.getParam("limits") != null) { //Catching boundary from input file
+
         if (boundaryProfile != null) { //Catching boundary from input file
+
+
+            System.out.println("Profile do boundary: " + boundaryProfile);
 
             Configuration boundaryConfiguration = new Configuration(boundaryProfile);
 
@@ -93,11 +98,14 @@ public class RPNUMERICS {
                 RealVector min = new RealVector(new Integer(boundaryConfiguration.getParam("dimension")));
                 RealVector max = new RealVector(new Integer(boundaryConfiguration.getParam("dimension")));
 
+                System.out.println("Printando limites: " + boundaryConfiguration.getParam("limits"));
+
+
                 String[] limitsNumbers = boundaryConfiguration.getParam("limits").split(" ");
 
 
                 int vectorIndex = 0;
-                for (int i = 0; i < min.getSize() ; i ++) {
+                for (int i = 0; i < min.getSize(); i++) {
 
                     min.setElement(i, new Double(limitsNumbers[vectorIndex]));
 
@@ -107,25 +115,15 @@ public class RPNUMERICS {
 
                 vectorIndex = 1;
 
-                for (int i = 0; i < max.getSize(); i ++) {
+                for (int i = 0; i < max.getSize(); i++) {
 
                     max.setElement(i, new Double(limitsNumbers[vectorIndex]));
 
                     vectorIndex += 2;
 
                 }
-
-
                 RectBoundary boundary = new RectBoundary(min, max);
                 setBoundary(boundary);
-
-//                max.setElement(0, new Double(boundaryConfiguration.getParam("x-max")));
-//
-//                min.setElement(1, new Double(boundaryConfiguration.getParam("y-min")));
-//                max.setElement(1, new Double(boundaryConfiguration.getParam("y-max")));
-//
-
-
             }
 
         } else {//Catching boundary from numerics layer

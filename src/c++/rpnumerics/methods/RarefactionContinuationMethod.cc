@@ -46,6 +46,8 @@ RarefactionContinuationMethod::~RarefactionContinuationMethod() {
 
 int RarefactionContinuationMethod::init(ContinuationRarefactionFlow * flow,int n, double *in, int indx, const FluxFunction &ff, const AccumulationFunction &gg, int type, int increase, double deltaxi, double *lambda, double *rev){ /* NEW HERE */
 
+
+    cout<<"Dentro de init"<<endl;
     // 1. Find the eigenvalue and the eigenvector at in (the initial point):
 //    printf("&rev = %p; (rev == 0 = %d)\n", rev, rev == 0);
     /* NEW BELOW */
@@ -62,6 +64,7 @@ int RarefactionContinuationMethod::init(ContinuationRarefactionFlow * flow,int n
         inp[ii] = in[ii] + epsilon*rev[ii];
         inm[ii] = in[ii] - epsilon*rev[ii];
     }
+    cout<<"Dentro de init antes de flux"<<endl;
     if (flow->flux(n, indx, ff, gg, type, inp, &lambdap, &rep[0]) == COMPLEX_EIGENVALUE) return COMPLEX_EIGENVALUE;
     if (flow->flux(n, indx, ff, gg, type, inm, &lambdam, &rem[0]) == COMPLEX_EIGENVALUE) return COMPLEX_EIGENVALUE;
 
@@ -160,15 +163,15 @@ int RarefactionContinuationMethod::init(ContinuationRarefactionFlow * flow,int n
 //    return SUCCESSFUL_PROCEDURE;
 //}
 
-void RarefactionContinuationMethod::curve(const RealVector & input, int direction, vector<RealVector> & output) {
+void RarefactionContinuationMethod::curve(const RealVector & inputVector, int direction, vector<RealVector> & output) {
     cout <<"here curve"<<endl;
     output.clear();
-    RealVector inputVector(3);
+//    RealVector inputVector(3);
 
-    inputVector.component(0)=input.component(0);
-    inputVector.component(1) = input.component(1);
+//    inputVector.component(0)=input.component(0);
+//    inputVector.component(1) = input.component(1);
 
-    inputVector.component(2) = 1;//TODO Hardcoded !!
+//    inputVector.component(2) = 1;//TODO Hardcoded !!
 
     int info = SUCCESSFUL_PROCEDURE;
     int dimension = inputVector.size();
@@ -189,7 +192,10 @@ void RarefactionContinuationMethod::curve(const RealVector & input, int directio
     double lambda;
 
     double rev[dimension];
-    int type =_GENERAL_ACCUMULATION_;//TODO REMOVE
+//    int type =_GENERAL_ACCUMULATION_;//TODO REMOVE
+//    int type = _SIMPLE_ACCUMULATION_; //TODO REMOVE
+
+     int type = RpNumerics::getPhysics().getPhysicsVector().at(0)->type();
     const FluxFunction & fluxFunction = RpNumerics::getPhysics().fluxFunction();//TODO REMOVE !!
     const AccumulationFunction & accumulationFunction = RpNumerics::getPhysics().accumulation(); //TODO REMOVE !!
     info = init(&testeFlow, dimension, in, indx,fluxFunction,accumulationFunction, type, direction, deltaxi, &lambda, &rev[0]);

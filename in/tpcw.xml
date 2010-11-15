@@ -3,16 +3,14 @@
 <rpnconfiguration>
 <PHYSICS name="TPCW">
 
-<BOUNDARY name="rect">
+<!--<BOUNDARY name="rect">
 
-        <BOUNDARYPARAM name="dimension" value="2" />
+        <BOUNDARYPARAM name="dimension" value="3" />
         <BOUNDARYPARAM name="iso2equi" value="false" />
-        <BOUNDARYPARAM name="x-min" value="0" />
-        <BOUNDARYPARAM name="x-max" value="1" />
-        <BOUNDARYPARAM name="y-min" value="0.099309" />
-        <BOUNDARYPARAM name="y-max" value="0.576511" />
+        <BOUNDARYPARAM name="limits" value="-0.5 0.5 -0.5 0.5 -0.5 0.5" />
 
-    </BOUNDARY>
+
+    </BOUNDARY>-->
 
 </PHYSICS>
 
@@ -23,7 +21,7 @@
 </CURVE>
 
 
-<VIEWCONFIGURATION modeldomain="2">
+<VIEWCONFIGURATION modeldomain="3">
 
     <PROJDESC name="Axis0 Axis1">
         <VIEWPARAM name="axis" value="1 0"/>
@@ -33,6 +31,23 @@
 
     </PROJDESC>
 
+
+  <PROJDESC name="Axis0 Axis2">
+        <VIEWPARAM name="axis" value="0 2"/>
+        <VIEWPARAM name="vpwidth" value="600"/>
+        <VIEWPARAM name="vpheight" value="650"/>
+        <VIEWPARAM name="iso2equi" value="false"/>
+
+    </PROJDESC>
+  
+
+ <PROJDESC name="Axis1 Axis2">
+        <VIEWPARAM name="axis" value="1 2"/>
+        <VIEWPARAM name="vpwidth" value="600"/>
+        <VIEWPARAM name="vpheight" value="650"/>
+        <VIEWPARAM name="iso2equi" value="false"/>
+
+    </PROJDESC>
   
 
 

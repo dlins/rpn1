@@ -88,7 +88,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
 
 
     int dimension = realVectorInput.size();
-    dimension+=1;
+//    dimension;
     //
     int itol = 2;
     //
@@ -137,7 +137,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
 
 //    realVectorInput.component(1)=theta;
 
-    cout<<realVectorInput<<endl;
+//    cout<<realVectorInput<<endl;
     method.curve(realVectorInput, timeDirection, coords);
 
 
@@ -159,12 +159,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
 
     for (i = 0; i < coords.size(); i++) {
 
-        RealVector tempVectorT = coords.at(i);
+        RealVector tempVector = coords.at(i);
 
-        RealVector tempVector (2);
-
-        tempVector.component(0)=tempVectorT(0);
-        tempVector.component(1) = tempVectorT(1);
+//        RealVector tempVector (2);
+//
+//        tempVector.component(0)=tempVectorT(0);
+//        tempVector.component(1) = tempVectorT(1);
 
         cout<<tempVector<<endl;
 
