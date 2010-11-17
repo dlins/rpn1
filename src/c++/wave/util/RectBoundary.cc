@@ -25,6 +25,7 @@ RectBoundary::RectBoundary(const RectBoundary & copy) {
     minimums_ = new RealVector(copy.minimums());
     maximums_ = new RealVector(copy.maximums());
     type_ = "rect";
+    exception.push_back(2);
 }
 
 RectBoundary & RectBoundary::operator=(const RectBoundary & source) {
@@ -79,12 +80,25 @@ bool RectBoundary::inside(const double *p)const {
 }
 
 bool RectBoundary::inside(const RealVector &p) const {
+     bool in = true;
+    int pos = 0;
+
+    while (in && pos < minimums().size()) {
+        if (p(pos) < minimums()(pos) || p(pos) > maximums()(pos)) in = false;
+        pos++;
+    }
+    cout << "tamanho dentro de inside"<<in<<" "<<p.size() << endl;
+    return in;
 
 
-     double pp[p.size()];
-    for (int i = 0; i < p.size(); i++) pp[i] = p.component(i);
-
-    return inside(pp);
+//
+//
+//
+//
+//     double pp[p.size()];
+//    for (int i = 0; i < p.size(); i++) pp[i] = p.component(i);
+//
+//    return inside(pp);
 
 
 
