@@ -28,6 +28,9 @@ private:
     int size_;
     const char * type_;
 
+    std::vector<int> exception;
+
+
 public:
 
 
@@ -42,6 +45,9 @@ public:
 
     double coordinateSpan(int i);
     bool inside(const RealVector &y) const;
+    bool inside(const double*)const;
+
+
     const RealVector & minimums(void) const;
     const RealVector & maximums(void) const;
     RealVector intersect(RealVector & y1, RealVector & y2) const;

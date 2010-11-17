@@ -88,5 +88,17 @@ IsoTriang2DBoundary::IsoTriang2DBoundary(const RealVector & A, const RealVector 
     
 }
 
+
+bool IsoTriang2DBoundary::inside(const double*)const {
+    
+}
+
+
+
+
+
+
+
+
 RealVector IsoTriang2DBoundary::intersect(RealVector &y1, RealVector &y2)const{}     //TODO
 

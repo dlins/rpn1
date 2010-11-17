@@ -16,6 +16,7 @@
 #include "LSODEProfile.h"
 
 #include "ContinuationShockFlow.h"
+#include "ShockContinuationMethod3D2D.h"
 
 #include "RpNumerics.h"
 #include "RealVector.h"
@@ -113,15 +114,41 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
     //
     ContinuationShockFlow flow(realVectorInput, familyIndex, timeDirection, RpNumerics::getPhysics().fluxFunction());
 
-    LSODEProfile lsodeProfile(flow,maxStepsNumber, dimension, itol, rtol, mf, deltaxi, nparam, param);
+    //TODO Teste para o novo metodo de choque
 
-    LSODE odeSolver(lsodeProfile);
+//    LSODEProfile lsodeProfile(flow,maxStepsNumber, dimension, itol, rtol, mf, deltaxi, nparam, param);
+//
+//    LSODE odeSolver(lsodeProfile);
 
     vector <RealVector> coords;
 
-    ShockContinuationMethod method(odeSolver,RpNumerics::getPhysics().boundary(),familyIndex);
+//    ShockContinuationMethod method(odeSolver,RpNumerics::getPhysics().boundary(),familyIndex);
 
-    method.curve(realVectorInput, timeDirection, coords);
+    double Ur [dimension];
+    Ur[0]=0.47;
+    Ur[1] = 0.182590;
+    Ur[2] = 1.0;
+    double tol =10e-10;
+    double epsilon = 10e-3;
+    int t = 11;
+
+    FluxFunction * f = (FluxFunction *)RpNumerics::getPhysics().fluxFunction().clone();
+
+    AccumulationFunction * a = (AccumulationFunction *) RpNumerics::getPhysics().accumulation().clone();
+    Boundary * b = (Boundary *) RpNumerics::getPhysics().boundary().clone();
+
+    ShockContinuationMethod3D2D method(dimension, f, a, b,  Ur,  tol,  epsilon,  t);
+
+
+// ShockContinuationMethod3D2D method(dimension, RpNumerics::getPhysics().boundary(), familyIndex);
+
+    int edge;
+    method.curve(familyIndex,maxStepsNumber, timeDirection,coords,edge);
+
+    delete f;
+    delete a;
+    delete b;
+
 
      if (coords.size() == 0) {
         return NULL;

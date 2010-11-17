@@ -10,6 +10,8 @@
  * ---------------------------------------------------------------
  * Includes:
  */
+#include <vector>
+
 #include "RectBoundary.h"
 
 /*
@@ -45,18 +47,59 @@ RectBoundary::RectBoundary(const RealVector & minimums, const RealVector & maxim
 : minimums_(new RealVector(minimums)),
 maximums_(new RealVector(maximums)),
 size_(minimums.size()), type_("rect") {
+
+    exception.push_back(2); //TODO Colocar como membro da classe (???) Vetor de excessoes . Lista de limites que nao serao checados
 }
 
-bool RectBoundary::inside(const RealVector &p) const{
+bool RectBoundary::inside(const double *p)const {
+    cout <<"Inicio do inside double"<<endl;
+    cout << "(\n";
+    cout << p[0] << ", " << p[1] << ", " << p[2] << ")\n";
+
     bool in = true;
     int pos = 0;
 
-    while (in && pos < minimums().size()) {
-        if (p(pos) < minimums()(pos) || p(pos) > maximums()(pos)) in = false;
+    unsigned int exception_pos = 0;
+
+    while (in && pos < minimums_->size()) {
+        // Check if the current component should be skipped, as stated in the list of
+        // exceptions.
+        if (exception_pos < exception.size() - 1) { // TODO: Check this and see if it can be improved somehow.
+            if (exception[exception_pos] == pos) {
+                exception_pos++;
+                continue;
+            }
+        }
+
+        if (p[pos] < minimums_->component(pos) || p[pos] > maximums_->component(pos)) in = false;
         pos++;
     }
-    cout << "tamanho dentro de inside"<<in<<" "<<p.size() << endl;
+
     return in;
+}
+
+bool RectBoundary::inside(const RealVector &p) const {
+
+
+     double pp[p.size()];
+    for (int i = 0; i < p.size(); i++) pp[i] = p.component(i);
+
+    return inside(pp);
+
+
+
+//
+//
+//
+//    bool in = true;
+//    int pos = 0;
+//
+//    while (in && pos < minimums().size()) {
+//        if (p(pos) < minimums()(pos) || p(pos) > maximums()(pos)) in = false;
+//        pos++;
+//    }
+//    cout << "tamanho dentro de inside" << in << " " << p.size() << endl;
+//    return in;
 }
 
 // Check if a line segment intersects the box. If so, where.

@@ -43,6 +43,8 @@ public:
     IsoTriang2DBoundary(const IsoTriang2DBoundary &);
     
     bool inside(const RealVector &y) const;
+
+    bool inside(const double*)const;
     
     //! Virtual constructor
     Boundary * clone()const;

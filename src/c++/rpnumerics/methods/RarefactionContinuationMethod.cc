@@ -266,7 +266,8 @@ void RarefactionContinuationMethod::curve(const RealVector & inputVector, int di
 
             // Mon 10 May 2010 05:07:33 PM BRT 
             RealVector r(dimension);
-            int cllsn = (boundary_->intersection(outputVector, outputVector_prev, r));
+            int edge;
+            int cllsn = (boundary_->intersection(outputVector, outputVector_prev, r,edge));
             cout <<"depois de intersection"<<endl;
             if (cllsn == -1) {
                 // Both outside

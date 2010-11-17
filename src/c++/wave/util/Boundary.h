@@ -34,6 +34,8 @@ public:
     
     //! Check if the point is inside the boundary.
     virtual bool inside(const RealVector &y) const = 0;
+
+    virtual bool inside(const double*)const = 0;
     
     //! Virtual constructor
     virtual Boundary * clone()const =0;
@@ -48,13 +50,13 @@ public:
     //! Returns the boundary type
     virtual const char * boundaryType()const =0;
 
-    virtual int intersection(const RealVector &p, const RealVector &q, RealVector &r)const;
+    virtual int intersection(const RealVector &p, const RealVector &q, RealVector &r,int &)const;
 
 
 
 protected:
 
-    double distance(const RealVector &, const RealVector &)const;
+    double distance(int ,const double *, const double *)const;
     double static epsilon;
 };
 
