@@ -61,102 +61,85 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
 
 
     }
-    
+
 
 
     env->DeleteLocalRef(inputPhasePointArray);
 
-    //    /*
-    //     *
-    //     *1 - Pegar a instancia do rarefaction flow (plugin)
-    //     *2 - Passar a instancia do flow para o construtor do metodo de calculo
-    //     *3- O metodo cria o ODE solver , usando o flow . O profile do solver contem os parametros necessarios para o criterio de para especifico do metodo
-    //     *4 -  o metodo curve da classe do metodo de calculo calcula a curva
-    //     *
-    //         RarefactionFlow *rarefactionFlow = RarefactionFlowFactory::createRarefactionFlow(flow, familyIndex, timeDirection, RpNumerics::getFlux());
-    //
-    //         RarefactionMethod * rarefactionMethod=  RarefactionMethodFactory::createRarefactionMethod(method, *rarefactionFlow);
-    //
-    //         env->ReleaseStringUTFChars(methodName, method);
-    //
-    //         env->ReleaseStringUTFChars(flowName, flow);
-    //
-    //         //Calculations
-    //     *
-    //     *
-    //     */
-    //    //    Physics & physics = RpNumerics::getPhysics();
-    //    //
-    //    //
-    //
-    //
     int dimension = realVectorInput.size();
     //    //
-    int itol = 2;
+    //    int itol = 2;
+    //    //    //
+    //    double rtol = 1e-4;
+    //    //    //
+    //    int mf = 22;
+    //    //    //
+    //    double deltaxi = 0.001;
+    //    //    //
+    //    int nparam = 1 + dimension;
+    //    //    //
     //    //
-    double rtol = 1e-4;
+    //    double param[nparam];
     //    //
-    int mf = 22;
+    //    //    //
+    //    int ii;
     //    //
-    double deltaxi = 0.001;
-    //    //
-    int nparam = 1 + dimension;
-    //    //
-    //
-    double param[nparam];
-    //
-    //    //
-    int ii;
-    //
-    for (ii = 0; ii < dimension; ii++) param[1 + ii] = 0.1;
-    //    //
+    //    for (ii = 0; ii < dimension; ii++) param[1 + ii] = 0.1;
+    //    //    //
     int maxStepsNumber = 10000;
     //
-    ContinuationShockFlow flow(realVectorInput, familyIndex, timeDirection, RpNumerics::getPhysics().fluxFunction());
+    //    ContinuationShockFlow flow(realVectorInput, familyIndex, timeDirection, RpNumerics::getPhysics().fluxFunction());
 
     //TODO Teste para o novo metodo de choque
 
-//    LSODEProfile lsodeProfile(flow,maxStepsNumber, dimension, itol, rtol, mf, deltaxi, nparam, param);
-//
-//    LSODE odeSolver(lsodeProfile);
+    //    LSODEProfile lsodeProfile(flow,maxStepsNumber, dimension, itol, rtol, mf, deltaxi, nparam, param);
+    //
+    //    LSODE odeSolver(lsodeProfile);
 
     vector <RealVector> coords;
 
-//    ShockContinuationMethod method(odeSolver,RpNumerics::getPhysics().boundary(),familyIndex);
+    //    ShockContinuationMethod method(odeSolver,RpNumerics::getPhysics().boundary(),familyIndex);
 
-    double Ur [dimension];
-    Ur[0]=0.47;
-    Ur[1] = 0.182590;
-    Ur[2] = 1.0;
-    double tol =10e-10;
+    //    double Ur [dimension];
+    double * Ur;
+
+    Ur = realVectorInput;
+    // for (int i = 0; i < dimension; i++) Ur[i] = realVectorInput.component(i);
+
+    //    Ur[0]=0.47;
+    //    Ur[1] = 0.182590;
+    //    Ur[2] = 1.0;
+
+    double tol = 10e-10;
     double epsilon = 10e-3;
     int t = 11;
 
-    FluxFunction * f = (FluxFunction *)RpNumerics::getPhysics().fluxFunction().clone();
+    //    FluxFunction * f = (FluxFunction *)RpNumerics::getPhysics().fluxFunction().clone();
+    //
+    //    AccumulationFunction * a = (AccumulationFunction *) RpNumerics::getPhysics().accumulation().clone();
+    //    Boundary * b = (Boundary *) RpNumerics::getPhysics().boundary().clone();
 
-    AccumulationFunction * a = (AccumulationFunction *) RpNumerics::getPhysics().accumulation().clone();
-    Boundary * b = (Boundary *) RpNumerics::getPhysics().boundary().clone();
-
-    ShockContinuationMethod3D2D method(dimension, f, a, b,  Ur,  tol,  epsilon,  t);
+    ShockContinuationMethod3D2D method(dimension, familyIndex, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), RpNumerics::getPhysics().boundary(), Ur, tol, epsilon, t);
 
 
-// ShockContinuationMethod3D2D method(dimension, RpNumerics::getPhysics().boundary(), familyIndex);
+    // ShockContinuationMethod3D2D method(dimension, RpNumerics::getPhysics().boundary(), familyIndex);
 
     int edge;
-    method.curve(familyIndex,maxStepsNumber, timeDirection,coords,edge);
+    //    method.curve(familyIndex, maxStepsNumber, timeDirection, coords, edge);
+    method.curve(realVectorInput, timeDirection, coords);
 
-    delete f;
-    delete a;
-    delete b;
+    //    delete f;
+    //    delete a;
+    //    delete b;
 
 
-     if (coords.size() == 0) {
+    if (coords.size() == 0) {
         return NULL;
 
     }
 
-   //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-   //Orbit memebers creation
+    //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    //Orbit memebers creation
 
 
     jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(coords.size(), classOrbitPoint, NULL);

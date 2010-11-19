@@ -18,6 +18,7 @@
 #include "AccumulationFunction.h"
 #include "Boundary.h"
 #include "eigen.h"
+#include "ShockMethod.h"
 
 /*
  * ---------------------------------------------------------------
@@ -28,7 +29,6 @@
 
 #define _SHOCK_INIT_IS_REF_     20
 #define _SHOCK_INIT_IS_NOT_REF_ 21
-
 
 struct Plane {
 public:
@@ -50,24 +50,31 @@ extern "C" {
     void dgesv_(int*, int*, double*, int*, int*, double*, int*, int*);
 }
 
-class ShockContinuationMethod3D2D {
+class ShockContinuationMethod3D2D:public ShockMethod {
 private:
 
 
 private:
-    double delta; // Maximum distance
-    double eps; // Epsilon, typically = 1e-3
-    double tolerance;
-    int n; // Dimension
-    int type;
-    double *Uref; // Uref is the same as the initial point
-    double *p_outside; // Delete later
-    double *v1_outside, *v2_outside;
 
     FluxFunction *shock_flux_object;
     AccumulationFunction *shock_accumulation_object;
 
     Boundary *boundary;
+
+    int family_;
+    int n; // Dimension
+    double eps; // Epsilon, typically = 1e-3
+    int type;
+    double tolerance;
+    double delta; // Maximum distance
+
+    double *Uref; // Uref is the same as the initial point
+    double *p_outside; // Delete later
+    double *v1_outside, *v2_outside;
+
+    
+
+   
 
     void vectprod(double *a, double *b, double *c);
     double dotprod(int n, double x[], double y[]);
@@ -92,15 +99,23 @@ private:
 
     int init(int family, int increase, Plane &plane, RealVector &refvec, double &rebounds_first_step, double &epsilon_start);
     int init(const Plane &init_plane, const RealVector &init_refvec, Plane &plane, RealVector &refvec, double &rebounds_first_step, double &epsilon_start);
-
+    int curve(int family, double maxnum, int increase, std::vector<RealVector> &out, int &edge); // If _SHOCK_INIT_IS_REF_
 
 public:
 
 
-    ShockContinuationMethod3D2D(int dim, FluxFunction *f, AccumulationFunction *a, Boundary *b, double Ur[], double tol, double epsilon, int t);
-    ~ShockContinuationMethod3D2D();
+    ShockContinuationMethod3D2D(int dim,int family, const FluxFunction &, const AccumulationFunction &, const Boundary &, double Ur[], double tol, double epsilon, int t);
+    virtual ~ShockContinuationMethod3D2D();
 
-    int curve(int family, double maxnum, int increase, std::vector<RealVector> &out, int &edge); // If _SHOCK_INIT_IS_REF_
+    ShockContinuationMethod3D2D(const ShockContinuationMethod3D2D &);
+
+    ShockMethod * clone() const ;
+
+
+    void curve(const RealVector &, int direction, vector<RealVector> &);
+
+
+
     //int curve(int family, double maxnum, int increase, double U0[], double refplane[], std::vector<RealVector> &out); // If _SHOCK_INIT_IS_NOT_REF_
 
     int plane(double Uprevious[], double direction[], double vec_previous1[], double vec_previous2[], double plane_point[], double v1[], double v2[], double epsilon);

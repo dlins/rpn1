@@ -16,17 +16,15 @@
  * ---------------------------------------------------------------
  * Definitions:
  */
-#define RP_... 1
-
 
 #include "ShockContinuationMethod3D2D.h"
 
-void ShockContinuationMethod3D2D::print_matrix(const char *name, int m, int n, double *A){
+void ShockContinuationMethod3D2D::print_matrix(const char *name, int m, int n, double *A) {
     printf("%s = \n", name);
-    for (int i = 0; i < m; i++){
+    for (int i = 0; i < m; i++) {
         printf("[");
-        for (int j = 0; j < n; j++){
-            printf("%e ", A[i*n + j]);
+        for (int j = 0; j < n; j++) {
+            printf("%e ", A[i * n + j]);
         }
         printf("]\n");
     }
@@ -40,33 +38,55 @@ void ShockContinuationMethod3D2D::print_matrix(const char *name, int m, int n, d
 // where a, b and c are arrays of size = 3, which the user
 // must create.
 //
-void ShockContinuationMethod3D2D::vectprod(double *a, double *b, double *c){
-    c[0] = a[1]*b[2] - a[2]*b[1];
-    c[1] = a[2]*b[0] - a[0]*b[2];
-    c[2] = a[0]*b[1] - a[1]*b[0];
+
+void ShockContinuationMethod3D2D::vectprod(double *a, double *b, double *c) {
+    c[0] = a[1] * b[2] - a[2] * b[1];
+    c[1] = a[2] * b[0] - a[0] * b[2];
+    c[2] = a[0] * b[1] - a[1] * b[0];
 
     return;
 }
 
-double ShockContinuationMethod3D2D::dotprod(int n, double x[], double y[]){
+double ShockContinuationMethod3D2D::dotprod(int n, double x[], double y[]) {
     double p = 0;
-    for (int i = 0; i < n; i++) p += x[i]*y[i];
+    for (int i = 0; i < n; i++) p += x[i] * y[i];
     return p;
 }
 
-void ShockContinuationMethod3D2D::normalize(int n, double x[]){
+void ShockContinuationMethod3D2D::normalize(int n, double x[]) {
     double norm = 0;
-    norm = euclidean_norm(n,&x[0]);
+    norm = euclidean_norm(n, &x[0]);
     for (int i = 0; i < n; i++) x[i] /= norm;
     return;
 }
 
-double ShockContinuationMethod3D2D::euclidean_norm(int n, double x[]){
-    double norm=0;
-    for (int i = 0; i < n; i++) norm += x[i]*x[i];
+double ShockContinuationMethod3D2D::euclidean_norm(int n, double x[]) {
+    double norm = 0;
+    for (int i = 0; i < n; i++) norm += x[i] * x[i];
 
     return sqrt(norm);
 }
+
+void ShockContinuationMethod3D2D::curve(const RealVector & input, int direction, vector<RealVector> & output) {
+    int maxStepsNumber = 10000;
+
+    int edge;
+
+    curve(family_, maxStepsNumber, direction, output, edge);
+
+
+
+}
+
+ShockContinuationMethod3D2D::ShockContinuationMethod3D2D(const ShockContinuationMethod3D2D & copy) {
+
+}
+
+ShockMethod * ShockContinuationMethod3D2D::clone() const {
+    return new ShockContinuationMethod3D2D(*this);
+
+}
+
 
 // FUNCTION shockspeed
 //
@@ -85,50 +105,50 @@ double ShockContinuationMethod3D2D::euclidean_norm(int n, double x[]){
 // Returns:
 //     The speed as a double.
 //
-double ShockContinuationMethod3D2D::shockspeed(int n, int family, double Um[], double Up[]){
-        // Compute F(Up), F(Um):
-        double Fp[n], Fm[n];
-        fill_with_jet(*shock_flux_object, n, Up, 0, Fp, 0, 0);
-        fill_with_jet(*shock_flux_object, n, Um, 0, Fm, 0, 0);
 
-/*
-        printf("\nUp = (");
-        for (int i = 0; i < n; i++){
-            printf("%f", Up[i]);
-            if (i < n - 1) printf(", ");
-        }
-        printf(")\n");
+double ShockContinuationMethod3D2D::shockspeed(int n, int family, double Um[], double Up[]) {
+    // Compute F(Up), F(Um):
+    double Fp[n], Fm[n];
+    fill_with_jet(*shock_flux_object, n, Up, 0, Fp, 0, 0);
+    fill_with_jet(*shock_flux_object, n, Um, 0, Fm, 0, 0);
 
-        printf("Fp = (");
-        for (int i = 0; i < n; i++){
-            printf("%g", Fp[i]);
-            if (i < n - 1) printf(", ");
-        }
-        printf(")\n");
-*/
-        double Gp[n], Gm[n];
-        if (type == _SHOCK_SIMPLE_ACCUMULATION_){
+    /*
+            printf("\nUp = (");
             for (int i = 0; i < n; i++){
-                Gp[i] = Up[i];
-                Gm[i] = Um[i];
+                printf("%f", Up[i]);
+                if (i < n - 1) printf(", ");
             }
-        }
-        else {
-            fill_with_jet(*shock_accumulation_object, n, Up, 0, Gp, 0, 0);
-            fill_with_jet(*shock_accumulation_object, n, Um, 0, Gm, 0, 0);
-        }
+            printf(")\n");
 
-        // The speed
-        double s = 0, den = 0;
-        int i;
-
-        for (i = 0; i < n; i++){
-            s   += (Fp[i] - Fm[i])*(Gp[i] - Gm[i]);
-            den += (Gp[i] - Gm[i])*(Gp[i] - Gm[i]);
+            printf("Fp = (");
+            for (int i = 0; i < n; i++){
+                printf("%g", Fp[i]);
+                if (i < n - 1) printf(", ");
+            }
+            printf(")\n");
+     */
+    double Gp[n], Gm[n];
+    if (type == _SHOCK_SIMPLE_ACCUMULATION_) {
+        for (int i = 0; i < n; i++) {
+            Gp[i] = Up[i];
+            Gm[i] = Um[i];
         }
-        // Colocar aqui um error se den = 0
-//        printf("s = %g, den = %g\n", s, den);
-        return s/den;
+    } else {
+        fill_with_jet(*shock_accumulation_object, n, Up, 0, Gp, 0, 0);
+        fill_with_jet(*shock_accumulation_object, n, Um, 0, Gm, 0, 0);
+    }
+
+    // The speed
+    double s = 0, den = 0;
+    int i;
+
+    for (i = 0; i < n; i++) {
+        s += (Fp[i] - Fm[i])*(Gp[i] - Gm[i]);
+        den += (Gp[i] - Gm[i])*(Gp[i] - Gm[i]);
+    }
+    // Colocar aqui um error se den = 0
+    //        printf("s = %g, den = %g\n", s, den);
+    return s / den;
 }
 
 /* EVENTUALLY THIS IS GOING AWAY!
@@ -197,13 +217,13 @@ int Shockcurve_Adaptive_Hypersurface_Newton::shock_init(double Uref[], int famil
 
     return SUCCESSFUL_PROCEDURE;
 }
-*/
+ */
 
 
 void ShockContinuationMethod3D2D::fill_with_jet(const RpFunction & flux_object, int n, double *in, int degree, double *F, double *J, double *H) {
     RealVector r(n);
 
-    cout<<"Tamanho em fill: "<<n<<endl;
+    cout << "Tamanho em fill: " << n << endl;
     double *rp = r;
     for (int i = 0; i < n; i++) rp[i] = in[i];
     cout << "Entrada em fill: " << r << endl;
@@ -214,7 +234,7 @@ void ShockContinuationMethod3D2D::fill_with_jet(const RpFunction & flux_object, 
     WaveState state_c(r);
 
     JetMatrix c_jet(n);
-    cout <<"Depois da linha 296 "<<c_jet.size()<<endl;
+    cout << "Depois da linha 296 " << c_jet.size() << endl;
     flux_object.jet(state_c, c_jet, degree);
 
     // Fill F
@@ -239,7 +259,7 @@ void ShockContinuationMethod3D2D::fill_with_jet(const RpFunction & flux_object, 
             }
         }
     }
-    cout <<"Dentro de fill with jet shock"<<endl;
+    cout << "Dentro de fill with jet shock" << endl;
     return;
 }
 
@@ -256,31 +276,32 @@ void ShockContinuationMethod3D2D::fill_with_jet(const RpFunction & flux_object, 
 
 // Creamos um metodo que transforma as coordenadas no espaco (a1,a2) em um ponto em 3D contido no plano dado por plane_point, v1 e v2
 
-void ShockContinuationMethod3D2D::plane_mapping(double plane_point[], double a1, double a2, double v1[], double v2[], double p[]){
-     for (int i = 0; i < n; i++) p[i] = plane_point[i] + a1*v1[i] + a2*v2[i];
-     return;
+void ShockContinuationMethod3D2D::plane_mapping(double plane_point[], double a1, double a2, double v1[], double v2[], double p[]) {
+    for (int i = 0; i < n; i++) p[i] = plane_point[i] + a1 * v1[i] + a2 * v2[i];
+    return;
 }
 
 // COMENTAR
-int ShockContinuationMethod3D2D::plane_start(int family,  double Upr[], double Upl[], double v1[], double v2[], double epsilon){ // TO DO: CONVENCAO SAIDAS E ENTRADAS !!!!!!!!!
-//  EXPLICAR TUDO POR FAVOR PETICAO DO DAN
+
+int ShockContinuationMethod3D2D::plane_start(int family, double Upr[], double Upl[], double v1[], double v2[], double epsilon) { // TO DO: CONVENCAO SAIDAS E ENTRADAS !!!!!!!!!
+    //  EXPLICAR TUDO POR FAVOR PETICAO DO DAN
 
     double A[n][n], B[n][n];
 
 
-    fill_with_jet(*shock_flux_object,         n, Uref, 1, 0, &A[0][0], 0);
+    fill_with_jet(*shock_flux_object, n, Uref, 1, 0, &A[0][0], 0);
     fill_with_jet(*shock_accumulation_object, n, Uref, 1, 0, &B[0][0], 0); // TODO: Add "type", etc.
-    cout <<"depois de fill with jet plane start"<<endl;
+    cout << "depois de fill with jet plane start" << endl;
     // Find the eigenpairs:
     // TODO: Check LAPACK's docs for the case when the number of eigenpairs is insufficient (less than the dimension of space).
     vector<eigenpair> e;
     int info;
     if (type == _SHOCK_SIMPLE_ACCUMULATION_) info = Eigen::eig(n, &A[0][0], e);
-    else                                     info = Eigen::eig(n, &A[0][0], &B[0][0], e);
+    else info = Eigen::eig(n, &A[0][0], &B[0][0], e);
 
     // The i-th eigenvalue must be real. // The eigenvalues must be chosen carefully in the n-dimensional case.
     // ALL eigenvalues must be real. Extend this by using a for cycle.
-    if (e[family].i != 0){
+    if (e[family].i != 0) {
         printf("Inside shockinit(): Init step, eigenvalue %d is complex: % f %+f.\n", family, e[family].r, e[family].i);
         return ABORTED_PROCEDURE;
     }
@@ -294,14 +315,14 @@ int ShockContinuationMethod3D2D::plane_start(int family,  double Upr[], double U
     // Matrix whose rows are the valid eigenvectors (one less than the dimension of space).
     double M[n - 1][n];
 
-    for (int i = 0; i < n - 1; i++){
-        for (int j = 0; j < n; j++){
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n; j++) {
             M[i][j] = e[i].vrr[j];
         }
     }
 
     // TODO: Generalize using Gram-Schmidt
-    if (n == 3){
+    if (n == 3) {
         int opp_family;
         if (family == 0) opp_family = 1;
         else if (family == 1) opp_family = 0;
@@ -312,40 +333,39 @@ int ShockContinuationMethod3D2D::plane_start(int family,  double Upr[], double U
 
         for (int j = 0; j < n; j++) M[family][j] = vec[j];
         normalize(3, &M[family][0]);
-    }
+    } else return ABORTED_PROCEDURE;
 
-    else return ABORTED_PROCEDURE;
-
-    for (int j = 0; j < n; j++){
+    for (int j = 0; j < n; j++) {
         v1[j] = M[0][j];
         v2[j] = M[1][j];
     }
 
-//    for (int i=0; i < n; i++) printf("v1(%d)=%e\n", i, v1[i]);
-//    for (int i=0; i < n; i++) printf("v2(%d)=%e\n", i, v2[i]);
+    //    for (int i=0; i < n; i++) printf("v1(%d)=%e\n", i, v1[i]);
+    //    for (int i=0; i < n; i++) printf("v2(%d)=%e\n", i, v2[i]);
 
     // Find U+right and U+left.
-    for (i = 0; i < n; i++){
-        Upr[i] = Uref[i] + epsilon*r[i];
-        Upl[i] = Uref[i] - epsilon*r[i];
+    for (i = 0; i < n; i++) {
+        Upr[i] = Uref[i] + epsilon * r[i];
+        Upl[i] = Uref[i] - epsilon * r[i];
     }
 
     return SUCCESSFUL_PROCEDURE;
 }
 
 // TODO: mudar os nomes apropiadamente. plane(Uprevious, direction, vec_previous1, vec_previous2, plane_point, v1, v2, epsilon);
-int ShockContinuationMethod3D2D::plane(double Uprevious[], double direction[], double vec_previous1[], double vec_previous2[],  double plane_point[], double v1[], double v2[], double epsilon){
 
-    for (int i = 0; i < n; i++) plane_point[i] = Uprevious[i] + epsilon*direction[i];
+int ShockContinuationMethod3D2D::plane(double Uprevious[], double direction[], double vec_previous1[], double vec_previous2[], double plane_point[], double v1[], double v2[], double epsilon) {
+
+    for (int i = 0; i < n; i++) plane_point[i] = Uprevious[i] + epsilon * direction[i];
 
     vectprod(direction, vec_previous1, v1);
     double norm = 0;
-    for (int i = 0; i < n; i++) norm += v1[i]*v1[i];
+    for (int i = 0; i < n; i++) norm += v1[i] * v1[i];
     norm = sqrt(norm);
 
-    if (norm <= 1e-6){   // Verifying that we are are not calculating non-sense
-                         // TODO: Use a tolerance, not a fixed value
-       vectprod(direction, vec_previous2, v1); // TODO: verificar a importancia da orientacao.
+    if (norm <= 1e-6) { // Verifying that we are are not calculating non-sense
+        // TODO: Use a tolerance, not a fixed value
+        vectprod(direction, vec_previous2, v1); // TODO: verificar a importancia da orientacao.
     }
 
     vectprod(direction, v1, v2);
@@ -360,8 +380,8 @@ int ShockContinuationMethod3D2D::plane(double Uprevious[], double direction[], d
 // TODO: LEVAR OS JATOS PARA FORA, E MISTURAR AMBOS JATOS
 // Alternative for nabla_H1 calculated with equations 1 and 3
 
-void ShockContinuationMethod3D2D::jet_H1(double *p, double &H1, double *nabla_H1){
-    if (type == _SHOCK_SIMPLE_ACCUMULATION_){
+void ShockContinuationMethod3D2D::jet_H1(double *p, double &H1, double *nabla_H1) {
+    if (type == _SHOCK_SIMPLE_ACCUMULATION_) {
         double F0[3];
         fill_with_jet(*shock_flux_object, 3, Uref, 0, &F0[0], 0, 0);
 
@@ -372,11 +392,10 @@ void ShockContinuationMethod3D2D::jet_H1(double *p, double &H1, double *nabla_H1
 
         H1 = (F[0] - F0[0])*(p[2] - Uref[2]) - (F[2] - F0[2])*(p[0] - Uref[0]);
 
-        nabla_H1[0] = A[0][0]*(p[1] - Uref[1]) - ( A[1][0]*(p[0] - Uref[0]) + (F[1] - F0[1]) ); // estas ecuaciones deben ser cambiadas para coincidir con el estandar establecido.
+        nabla_H1[0] = A[0][0]*(p[1] - Uref[1]) - (A[1][0]*(p[0] - Uref[0]) + (F[1] - F0[1])); // estas ecuaciones deben ser cambiadas para coincidir con el estandar establecido.
         nabla_H1[1] = A[0][1]*(p[1] - Uref[1]) + (F[0] - F0[0]) - A[1][1]*(p[0] - Uref[0]);
         nabla_H1[2] = A[0][2]*(p[1] - Uref[1]) - A[1][2]*(p[0] - Uref[0]);
-    }
-    else {
+    } else {
         double F0[3];
         double G0[3];
 
@@ -385,28 +404,28 @@ void ShockContinuationMethod3D2D::jet_H1(double *p, double &H1, double *nabla_H1
         double A[3][3];
         double B[3][3];
 
-        double diff_F0, diff_F1, diff_F2 ;
-        double diff_G0, diff_G1, diff_G2 ;
+        double diff_F0, diff_F1, diff_F2;
+        double diff_G0, diff_G1, diff_G2;
 
-        fill_with_jet(*shock_flux_object,         3, Uref, 0, &F0[0], 0, 0);
+        fill_with_jet(*shock_flux_object, 3, Uref, 0, &F0[0], 0, 0);
         fill_with_jet(*shock_accumulation_object, 3, Uref, 0, &G0[0], 0, 0);
 
-        fill_with_jet(*shock_flux_object,         3, p, 1, &F[0], &A[0][0], 0);
+        fill_with_jet(*shock_flux_object, 3, p, 1, &F[0], &A[0][0], 0);
         fill_with_jet(*shock_accumulation_object, 3, p, 1, &G[0], &B[0][0], 0);
 
-        diff_F0=F[0] - F0[0]; // [F1]
-        diff_F1=F[1] - F0[1]; // [F2]
-        diff_F2=F[2] - F0[2]; // [F3]
+        diff_F0 = F[0] - F0[0]; // [F1]
+        diff_F1 = F[1] - F0[1]; // [F2]
+        diff_F2 = F[2] - F0[2]; // [F3]
 
-        diff_G0=G[0] - G0[0]; // [G1]
-        diff_G1=G[1] - G0[1]; // [G2]
-        diff_G2=G[2] - G0[2]; // [G3]
+        diff_G0 = G[0] - G0[0]; // [G1]
+        diff_G1 = G[1] - G0[1]; // [G2]
+        diff_G2 = G[2] - G0[2]; // [G3]
 
-        H1 = diff_F0*diff_G2 - diff_F2*diff_G0;
+        H1 = diff_F0 * diff_G2 - diff_F2*diff_G0;
 
-        nabla_H1[0] = A[0][0]*diff_G2 + diff_F0*B[2][0] - A[2][0]*diff_G0 - diff_F2*B[0][0];   // dF1_dW1 * [G3] + [F1]*dG3_dW1 - dF3_dW1*[G1] - [F3]*dG1_dW1
-        nabla_H1[1] = A[0][1]*diff_G2 + diff_F0*B[2][1] - A[2][1]*diff_G0 - diff_F2*B[0][1];   // dF1_dW2 * [G3] + [F1]*dG3_dW2 - dF3_dW2*[G1] - [F3]*dG1_dW2
-        nabla_H1[2] = A[0][2]*diff_G2 + diff_F0*B[2][2] - A[2][2]*diff_G0 - diff_F2*B[0][2];   // dF1_dW3 * [G3] + [F1]*dG3_dW3 - dF3_dW3*[G1] - [F3]*dG1_dW3
+        nabla_H1[0] = A[0][0] * diff_G2 + diff_F0 * B[2][0] - A[2][0] * diff_G0 - diff_F2 * B[0][0]; // dF1_dW1 * [G3] + [F1]*dG3_dW1 - dF3_dW1*[G1] - [F3]*dG1_dW1
+        nabla_H1[1] = A[0][1] * diff_G2 + diff_F0 * B[2][1] - A[2][1] * diff_G0 - diff_F2 * B[0][1]; // dF1_dW2 * [G3] + [F1]*dG3_dW2 - dF3_dW2*[G1] - [F3]*dG1_dW2
+        nabla_H1[2] = A[0][2] * diff_G2 + diff_F0 * B[2][2] - A[2][2] * diff_G0 - diff_F2 * B[0][2]; // dF1_dW3 * [G3] + [F1]*dG3_dW3 - dF3_dW3*[G1] - [F3]*dG1_dW3
     }
 
     return;
@@ -419,22 +438,22 @@ void ShockContinuationMethod3D2D::jet_H1(double *p, double &H1, double *nabla_H1
 //
 // type: _SHOCK_SIMPLE_ACCUMULATION_ or _SHOCK_GENERAL_ACCUMULATION_.
 //
-void ShockContinuationMethod3D2D::jet_H2(double *p, double &H2, double *nabla_H2){
-    if (type == _SHOCK_SIMPLE_ACCUMULATION_){
+
+void ShockContinuationMethod3D2D::jet_H2(double *p, double &H2, double *nabla_H2) {
+    if (type == _SHOCK_SIMPLE_ACCUMULATION_) {
         double F0[3];
         fill_with_jet(*shock_flux_object, 3, Uref, 0, &F0[0], 0, 0);
 
-    	double F[3];
-    	double A[3][3];
-    	fill_with_jet(*shock_flux_object, 3, p, 1, &F[0], &A[0][0], 0);
+        double F[3];
+        double A[3][3];
+        fill_with_jet(*shock_flux_object, 3, p, 1, &F[0], &A[0][0], 0);
 
         H2 = (F[1] - F0[1])*(p[2] - Uref[2]) - (F[2] - F0[2])*(p[1] - Uref[1]);
 
-    	nabla_H2[0] = A[1][0]*(p[2] - Uref[2]) - A[2][0]*(p[1] - Uref[1]);
-    	nabla_H2[1] = A[1][1]*(p[2] - Uref[2]) - (A[2][1]*(p[1] - Uref[1]) + (F[2] - F0[2]));
-    	nabla_H2[2] = A[1][2]*(p[2] - Uref[2]) + (F[1] - F0[1]) - A[2][2]*(p[1] - Uref[1]);
-    }
-    else {
+        nabla_H2[0] = A[1][0]*(p[2] - Uref[2]) - A[2][0]*(p[1] - Uref[1]);
+        nabla_H2[1] = A[1][1]*(p[2] - Uref[2]) - (A[2][1]*(p[1] - Uref[1]) + (F[2] - F0[2]));
+        nabla_H2[2] = A[1][2]*(p[2] - Uref[2]) + (F[1] - F0[1]) - A[2][2]*(p[1] - Uref[1]);
+    } else {
         double F0[3];
         double G0[3];
 
@@ -443,51 +462,50 @@ void ShockContinuationMethod3D2D::jet_H2(double *p, double &H2, double *nabla_H2
         double A[3][3];
         double B[3][3];
 
-        double diff_F0, diff_F1, diff_F2 ;
-	double diff_G0, diff_G1, diff_G2 ;
+        double diff_F0, diff_F1, diff_F2;
+        double diff_G0, diff_G1, diff_G2;
 
-        fill_with_jet(*shock_flux_object,         3, Uref, 0, &F0[0], 0, 0);
+        fill_with_jet(*shock_flux_object, 3, Uref, 0, &F0[0], 0, 0);
         fill_with_jet(*shock_accumulation_object, 3, Uref, 0, &G0[0], 0, 0);
 
-        fill_with_jet(*shock_flux_object,         3, p, 1, &F[0], &A[0][0], 0);
+        fill_with_jet(*shock_flux_object, 3, p, 1, &F[0], &A[0][0], 0);
         fill_with_jet(*shock_accumulation_object, 3, p, 1, &G[0], &B[0][0], 0);
 
-        diff_F0=F[0] - F0[0]; // [F1]
-        diff_F1=F[1] - F0[1]; // [F2]
-        diff_F2=F[2] - F0[2]; // [F3]
+        diff_F0 = F[0] - F0[0]; // [F1]
+        diff_F1 = F[1] - F0[1]; // [F2]
+        diff_F2 = F[2] - F0[2]; // [F3]
 
-        diff_G0=G[0] - G0[0]; // [G1]
-        diff_G1=G[1] - G0[1]; // [G2]
-        diff_G2=G[2] - G0[2]; // [G3]
+        diff_G0 = G[0] - G0[0]; // [G1]
+        diff_G1 = G[1] - G0[1]; // [G2]
+        diff_G2 = G[2] - G0[2]; // [G3]
 
-        H2 = diff_F1*diff_G2 - diff_F2*diff_G1;
+        H2 = diff_F1 * diff_G2 - diff_F2*diff_G1;
 
-        nabla_H2[0] = A[1][0]*diff_G2 + diff_F1*B[2][0] - A[2][0]*diff_G1 - diff_F2*B[1][0];  // dF2_dW1 * [G3] + [F2]*dG3_dW1 - dF3_dW1*[G2] - [F3]*dG2_dW1
-        nabla_H2[1] = A[1][1]*diff_G2 + diff_F1*B[2][1] - A[2][1]*diff_G1 - diff_F2*B[1][1];  // dF2_dW2 * [G3] + [F2]*dG3_dW2 - dF3_dW2*[G2] - [F3]*dG2_dW2
-        nabla_H2[2] = A[1][2]*diff_G2 + diff_F1*B[2][2] - A[2][2]*diff_G1 - diff_F2*B[1][2];  // dF2_dW3 * [G3] + [F2]*dG3_dW3 - dF3_dW3*[G2] - [F3]*dG2_dW3
+        nabla_H2[0] = A[1][0] * diff_G2 + diff_F1 * B[2][0] - A[2][0] * diff_G1 - diff_F2 * B[1][0]; // dF2_dW1 * [G3] + [F2]*dG3_dW1 - dF3_dW1*[G2] - [F3]*dG2_dW1
+        nabla_H2[1] = A[1][1] * diff_G2 + diff_F1 * B[2][1] - A[2][1] * diff_G1 - diff_F2 * B[1][1]; // dF2_dW2 * [G3] + [F2]*dG3_dW2 - dF3_dW2*[G2] - [F3]*dG2_dW2
+        nabla_H2[2] = A[1][2] * diff_G2 + diff_F1 * B[2][2] - A[2][2] * diff_G1 - diff_F2 * B[1][2]; // dF2_dW3 * [G3] + [F2]*dG3_dW3 - dF3_dW3*[G2] - [F3]*dG2_dW3
     }
 
     return;
 }
 
-
-void ShockContinuationMethod3D2D::jet_N(double plane_point[], double a1, double a2, double v1[], double v2[], double N[], double *DN){
+void ShockContinuationMethod3D2D::jet_N(double plane_point[], double a1, double a2, double v1[], double v2[], double N[], double *DN) {
     double H1, nablaH1[3], H2, nablaH2[3], p[3];
 
-    plane_mapping(plane_point, a1, a2, v1, v2,  p);
-//    printf("This is the initial plane_point = (%le, %le, %le)\n", plane_point[0], plane_point[1], plane_point[2]);
-//    printf("This is the point to be passed to the jets p = (%le, %le, %le)\n", p[0], p[1], p[2]);
+    plane_mapping(plane_point, a1, a2, v1, v2, p);
+    //    printf("This is the initial plane_point = (%le, %le, %le)\n", plane_point[0], plane_point[1], plane_point[2]);
+    //    printf("This is the point to be passed to the jets p = (%le, %le, %le)\n", p[0], p[1], p[2]);
 
     jet_H1(p, H1, nablaH1);
     jet_H2(p, H2, nablaH2);
 
-//    printf("This is the nablaH1 for calculating the jacobian = (%le, %le, %le)\n", nablaH1[0], nablaH1[1], nablaH1[2]);
-//    printf("This is the nablaH2 for calculating the jacobian = (%le, %le, %le)\n", nablaH2[0], nablaH2[1], nablaH2[2]);
+    //    printf("This is the nablaH1 for calculating the jacobian = (%le, %le, %le)\n", nablaH1[0], nablaH1[1], nablaH1[2]);
+    //    printf("This is the nablaH2 for calculating the jacobian = (%le, %le, %le)\n", nablaH2[0], nablaH2[1], nablaH2[2]);
 
     N[0] = H1;
     N[1] = H2;
 
-//    for (int i = 0; i < n - 1; i++) printf("Inside Newton_plane: N[%d] = %e\n", i, N[i]);
+    //    for (int i = 0; i < n - 1; i++) printf("Inside Newton_plane: N[%d] = %e\n", i, N[i]);
 
     DN[0] = dotprod(3, nablaH1, v1);
     DN[1] = dotprod(3, nablaH1, v2);
@@ -497,73 +515,72 @@ void ShockContinuationMethod3D2D::jet_N(double plane_point[], double a1, double 
     return;
 }
 
-
-int ShockContinuationMethod3D2D::solver(int nn, double *A, double *b, double *x){
+int ShockContinuationMethod3D2D::solver(int nn, double *A, double *b, double *x) {
     double eps = 1e-10;
     double det, anorm;
 
-/*    printf("Inside solver:\n");
-      printf("    A = ");
-      for (int i = 0; i < nn; i++){
-          if (i == 0) printf("[");
-          else printf("        [");
-          for (int j = 0; j < nn; j++){
-              printf("%e ", A[i*nn + j]);
-          }
-          printf("]\n");
-      }*/
+    /*    printf("Inside solver:\n");
+          printf("    A = ");
+          for (int i = 0; i < nn; i++){
+              if (i == 0) printf("[");
+              else printf("        [");
+              for (int j = 0; j < nn; j++){
+                  printf("%e ", A[i*nn + j]);
+              }
+              printf("]\n");
+          }*/
 
     switch (nn) {
         case 1:
             if (fabs(A[0]) <= eps) return ABORTED_PROCEDURE;
 
-            x[0] = b[0]/A[0];
+            x[0] = b[0] / A[0];
 
             return SUCCESSFUL_PROCEDURE;
-        break;
+            break;
 
         case 2:
-            det = A[0]*A[3] - A[1]*A[2];
+            det = A[0] * A[3] - A[1] * A[2];
             anorm = 0;
-            for (int i = 0; i < nn*nn; i++) anorm += A[i]*A[i];
+            for (int i = 0; i < nn * nn; i++) anorm += A[i] * A[i];
 
-  //          printf("det = %g, isnan = %d\n", det, isnan(det));
+            //          printf("det = %g, isnan = %d\n", det, isnan(det));
 
-            if (fabs(det) <= (eps*anorm)) return ABORTED_PROCEDURE;
+            if (fabs(det) <= (eps * anorm)) return ABORTED_PROCEDURE;
 
-            x[0] = ( b[0]*A[3] - b[1]*A[1] )/det;
-            x[1] = ( A[0]*b[1] - A[2]*b[0] )/det;
+            x[0] = (b[0] * A[3] - b[1] * A[1]) / det;
+            x[1] = (A[0] * b[1] - A[2] * b[0]) / det;
 
             return SUCCESSFUL_PROCEDURE;
-        break;
+            break;
 
         case 3:
-            det =   A[0]*( A[4]*A[8] - A[5]*A[7] )
-                         - A[3]*( A[1]*A[8] - A[7]*A[2] )
-                         + A[6]*( A[1]*A[5] - A[4]*A[2] );
+            det = A[0]*(A[4] * A[8] - A[5] * A[7])
+                    - A[3]*(A[1] * A[8] - A[7] * A[2])
+                    + A[6]*(A[1] * A[5] - A[4] * A[2]);
 
             anorm = 0;
-            for (int i = 0; i < nn*nn; i++) anorm += A[i]*A[i];
+            for (int i = 0; i < nn * nn; i++) anorm += A[i] * A[i];
 
-            if (fabs(det) <= (eps*anorm)) return ABORTED_PROCEDURE;
+            if (fabs(det) <= (eps * anorm)) return ABORTED_PROCEDURE;
 
-            x[0]  = (  b[0]*( A[4]*A[8] - A[7]*A[5] )
-                     - b[1]*( A[1]*A[8] - A[7]*A[2] )
-                     + b[2]*( A[1]*A[5] - A[4]*A[2] )
-                    )/det;
+            x[0] = (b[0]*(A[4] * A[8] - A[7] * A[5])
+                    - b[1]*(A[1] * A[8] - A[7] * A[2])
+                    + b[2]*(A[1] * A[5] - A[4] * A[2])
+                    ) / det;
 
-            x[1]  = (- b[0] * ( A[3]*A[8] - A[6]*A[5] )
-                     + b[1] * ( A[0]*A[8] - A[6]*A[2] )
-                     - b[2] * ( A[0]*A[5] - A[3]*A[2] )
-                    )/det;
+            x[1] = (-b[0] * (A[3] * A[8] - A[6] * A[5])
+                    + b[1] * (A[0] * A[8] - A[6] * A[2])
+                    - b[2] * (A[0] * A[5] - A[3] * A[2])
+                    ) / det;
 
-            x[2]  = (  b[0] * ( A[3]*A[7] - A[6]*A[4] )
-                     - b[1] * ( A[0]*A[7] - A[6]*A[1] )
-                     + b[2] * ( A[0]*A[4] - A[3]*A[1] )
-                    )/det;
+            x[2] = (b[0] * (A[3] * A[7] - A[6] * A[4])
+                    - b[1] * (A[0] * A[7] - A[6] * A[1])
+                    + b[2] * (A[0] * A[4] - A[3] * A[1])
+                    ) / det;
 
             return SUCCESSFUL_PROCEDURE;
-        break;
+            break;
 
         default: // 4 or greater
             int i, j;
@@ -576,8 +593,8 @@ int ShockContinuationMethod3D2D::solver(int nn, double *A, double *b, double *x)
 
             // Create a transposed copy of A to be used by LAPACK's dgesv:
             double B[nn][nn];
-            for (i = 0; i < nn; i++){
-                for (j = 0; j < nn; j++) B[j][i] = A[i*nn + j];
+            for (i = 0; i < nn; i++) {
+                for (j = 0; j < nn; j++) B[j][i] = A[i * nn + j];
             }
 
             // Create a copy of b to be used by LAPACK's dgesv:
@@ -586,34 +603,44 @@ int ShockContinuationMethod3D2D::solver(int nn, double *A, double *b, double *x)
 
             dgesv_(&dim, &nrhs, &B[0][0], &lda, &ipiv[0], &bb[0], &ldb, &info);
 
-            if (info == 0){
+            if (info == 0) {
                 for (i = 0; i < nn; i++) x[i] = bb[i];
                 return SUCCESSFUL_PROCEDURE;
-            }
-            else return ABORTED_PROCEDURE;
-        break;
+            } else return ABORTED_PROCEDURE;
+            break;
     }
 
 }
 
-
-ShockContinuationMethod3D2D::ShockContinuationMethod3D2D(int dim, FluxFunction *f, AccumulationFunction *a, Boundary *b, double Ur[], double tol, double epsilon, int t){
+ShockContinuationMethod3D2D::ShockContinuationMethod3D2D(int dim, int family,const  FluxFunction & f, const AccumulationFunction & a, const Boundary  & b, double Ur[], double tol, double epsilon, int t) :
+shock_flux_object((FluxFunction*) f.clone()),
+shock_accumulation_object((AccumulationFunction*) a.clone()),
+boundary(b.clone()),
+family_(family),
+n(dim),
+eps(epsilon),
+type(t),
+tolerance(tol){
+//    family_ = family;
     delta = 1e-10;
-    tolerance = tol;
-    eps = epsilon;
-    n = dim;
-    boundary = b;
+//    tolerance = tol;
+//    eps = epsilon;
+//    n = dim;
+//    boundary = b;
 
     Uref = new double[3];
 
     for (int i = 0; i < n; i++) Uref[i] = Ur[i];
 
-    shock_flux_object = f;
-    shock_accumulation_object = a;
-    type = t;
+//    shock_flux_object = f;
+//    shock_accumulation_object = a;
+//    type = t;
 }
 
-ShockContinuationMethod3D2D::~ShockContinuationMethod3D2D(){
+ShockContinuationMethod3D2D::~ShockContinuationMethod3D2D() {
+    delete shock_flux_object;
+    delete shock_accumulation_object;
+    delete boundary;
     delete [] Uref;
 }
 
@@ -622,14 +649,15 @@ ShockContinuationMethod3D2D::~ShockContinuationMethod3D2D(){
 //
 // Given the family and the increase condition, return a plane and a reference vector.
 //
-int ShockContinuationMethod3D2D::init(int family, int increase, Plane &plane, RealVector &refvec, double &rfs, double &es){
+
+int ShockContinuationMethod3D2D::init(int family, int increase, Plane &plane, RealVector &refvec, double &rfs, double &es) {
     /* In the first step we need to initialize the shock curve in the chosen direction */
 
     double Upr[n], Upl[n]; // These are two possible initial points for the shock curve
-    double v1[n], v2[n];   // These are the two vectors on the first plane.  (notice that we use the SAME plane for both Upr and Upl).
+    double v1[n], v2[n]; // These are the two vectors on the first plane.  (notice that we use the SAME plane for both Upr and Upl).
     double epsilon = eps;
     double epsilon_start = epsilon;
-    int    rebounds_first_step = 0;
+    int rebounds_first_step = 0;
 
     //  Now we make our first run of the Newton method.
     double pr[3], pl[3];
@@ -642,10 +670,10 @@ int ShockContinuationMethod3D2D::init(int family, int increase, Plane &plane, Re
 
     do {
         plane_start(family, Upr, Upl, v1, v2, epsilon); //printf("here 1\n");
-        Newton_plane(Upr, v1, v2, pr);                  //printf("here 2\n");
-        Newton_plane(Upl, v1, v2, pl);                  //printf("here 3\n");
+        Newton_plane(Upr, v1, v2, pr); //printf("here 2\n");
+        Newton_plane(Upl, v1, v2, pl); //printf("here 3\n");
 
-        for (int i = 0; i < n; i++){
+        for (int i = 0; i < n; i++) {
             Upr_pr[i] = Upr[i] - pr[i];
             Upl_pl[i] = Upl[i] - pl[i];
         }
@@ -658,7 +686,7 @@ int ShockContinuationMethod3D2D::init(int family, int increase, Plane &plane, Re
     } while (max(normr, norml) > delta);
 
 
-    double epsilon_fix = epsilon;
+//    double epsilon_fix = epsilon;
 
     // Check if the speed is monotonic
     vector<eigenpair> e;
@@ -684,21 +712,33 @@ int ShockContinuationMethod3D2D::init(int family, int increase, Plane &plane, Re
     double Uprevious[n];
 
     // Speed should increase
-    if (increase == 1){
-        if (sl > sm && sm > sr)      {for (int i = 0; i < n; i++) Uprevious[i] = pl[i]; /*printf("shock init: 1\n");*/}
-        else if (sl < sm && sm < sr) {for (int i = 0; i < n; i++) Uprevious[i] = pr[i]; /*printf("shock init: 2\n");*/}
-        else if ((sl < sm && sm > sr) || (sl > sm && sm < sr)) { printf("3\n"); return ABORTED_PROCEDURE;}
-    }
-    // Speed should decrease
-    else if (increase == -1){
-        if (sl < sm && sm < sr)      {for (int i = 0; i < n; i++) Uprevious[i] = pl[i]; /*printf("shock init: 4\n");*/}
-        else if (sl > sm && sm > sr) {for (int i = 0; i < n; i++) Uprevious[i] = pr[i]; /*printf("shock init: 5\n");*/}
-        else if ((sl < sm && sm > sr) || (sl > sm && sm < sr)) { printf("6\n"); return ABORTED_PROCEDURE;}
-    }
-    else return ABORTED_PROCEDURE;
+    if (increase == 1) {
+        if (sl > sm && sm > sr) {
+            for (int i = 0; i < n; i++) Uprevious[i] = pl[i];
+            /*printf("shock init: 1\n");*/
+        } else if (sl < sm && sm < sr) {
+            for (int i = 0; i < n; i++) Uprevious[i] = pr[i];
+            /*printf("shock init: 2\n");*/
+        } else if ((sl < sm && sm > sr) || (sl > sm && sm < sr)) {
+            printf("3\n");
+            return ABORTED_PROCEDURE;
+        }
+    }// Speed should decrease
+    else if (increase == -1) {
+        if (sl < sm && sm < sr) {
+            for (int i = 0; i < n; i++) Uprevious[i] = pl[i];
+            /*printf("shock init: 4\n");*/
+        } else if (sl > sm && sm > sr) {
+            for (int i = 0; i < n; i++) Uprevious[i] = pr[i];
+            /*printf("shock init: 5\n");*/
+        } else if ((sl < sm && sm > sr) || (sl > sm && sm < sr)) {
+            printf("6\n");
+            return ABORTED_PROCEDURE;
+        }
+    } else return ABORTED_PROCEDURE;
 
     // Output: plane
-    for (int i = 0; i < n; i++){
+    for (int i = 0; i < n; i++) {
         plane.vec[0].component(i) = v1[i];
         plane.vec[1].component(i) = v2[i];
 
@@ -718,9 +758,10 @@ int ShockContinuationMethod3D2D::init(int family, int increase, Plane &plane, Re
 //
 // No family and the increase condition are necessary. Returns a plane and a reference vector.
 //
-int ShockContinuationMethod3D2D::init(const Plane &init_plane, const RealVector &init_refvec, Plane &plane, RealVector &refvec, double &rebounds_first_step, double &epsilon_start){
+
+int ShockContinuationMethod3D2D::init(const Plane &init_plane, const RealVector &init_refvec, Plane &plane, RealVector &refvec, double &rebounds_first_step, double &epsilon_start) {
     // Output: plane
-    for (int i = 0; i < n; i++){
+    for (int i = 0; i < n; i++) {
         plane.vec[0].component(i) = init_plane.vec[0].component(i);
         plane.vec[1].component(i) = init_plane.vec[1].component(i);
 
@@ -735,7 +776,8 @@ int ShockContinuationMethod3D2D::init(const Plane &init_plane, const RealVector 
 
 // Compute the shockcurve using the Newton method.
 //
-int ShockContinuationMethod3D2D::curve(int family, double maxnum, int increase, std::vector<RealVector> &out, int &edge){
+
+int ShockContinuationMethod3D2D::curve(int family, double maxnum, int increase, std::vector<RealVector> &out, int &edge) {
     out.clear();
 
     // rv will be used to store temporarily the output.
@@ -755,7 +797,7 @@ int ShockContinuationMethod3D2D::curve(int family, double maxnum, int increase, 
 
     // TODO: Extract Uprevious = plane.point, v1 = plane.vec[0], plane.vec[1], etc.
     double Uprevious[n], v1[n], v2[n];
-    for (int i = 0; i < n; i++){
+    for (int i = 0; i < n; i++) {
         Uprevious[i] = init_plane.point.component(i);
         v1[i] = init_plane.vec[0].component(i);
         v2[i] = init_plane.vec[1].component(i);
@@ -764,16 +806,16 @@ int ShockContinuationMethod3D2D::curve(int family, double maxnum, int increase, 
 
     // The curve proper
     int num = 1;
-    int counter_rebounds=0; // This is an auxiliary variable used for counting the number of consecutive points that need only one iteration of the adaptative method.
+    int counter_rebounds = 0; // This is an auxiliary variable used for counting the number of consecutive points that need only one iteration of the adaptative method.
 
 
 
-    while (num < maxnum){
+    while (num < maxnum) {
 
         epsilon = epsilon_fix;
-        double    normprevious;
-        double    old_previous[n];
-        int       counter ;
+        double normprevious;
+        double old_previous[n];
+        int counter;
 
 
         do {
@@ -794,7 +836,7 @@ int ShockContinuationMethod3D2D::curve(int family, double maxnum, int increase, 
 
             double vec_previous1[n];
             double vec_previous2[n];
-            for (int i = 0; i < n; i++){
+            for (int i = 0; i < n; i++) {
                 vec_previous1[i] = v1[i];
                 vec_previous2[i] = v2[i];
             }
@@ -805,35 +847,34 @@ int ShockContinuationMethod3D2D::curve(int family, double maxnum, int increase, 
 
             // Update refvec and do Newton
             for (int i = 0; i < n; i++) old_previous[i] = Uprevious[i];
-            Newton_plane(plane_point, v1, v2, Uprevious);                  // printf("here 2\n");
+            Newton_plane(plane_point, v1, v2, Uprevious); // printf("here 2\n");
 
             double Uprevious_plane_point[n];
-            for (int i = 0; i < n; i++){
+            for (int i = 0; i < n; i++) {
                 Uprevious_plane_point[i] = Uprevious[i] - plane_point[i];
             }
-            normprevious=euclidean_norm(3,Uprevious_plane_point);
-            epsilon /=2;
+            normprevious = euclidean_norm(3, Uprevious_plane_point);
+            epsilon /= 2;
             counter++;
         } while (normprevious > delta);
 
         // BELOW THE ADAPTIVE METHOD FOR THE SIZE OF THE VECTOR
 
-        if (counter == 1){  // Whenever the last point needs none adaptations to converge, counter is 1.
-                            // Therefore we must re-adapt the epsilon_fix for the next calculation until
-                            // this happens again.
+        if (counter == 1) { // Whenever the last point needs none adaptations to converge, counter is 1.
+            // Therefore we must re-adapt the epsilon_fix for the next calculation until
+            // this happens again.
 
             counter_rebounds++; // This will count the number of points that passed easily through the convergence method.
             //printf("counter_rebounds   =%d\n", counter_rebounds  );
             //printf("rebounds_first_step=%d\n",rebounds_first_step);
 
-            if(counter_rebounds <= rebounds_first_step){ // Whenever the number of re-adjustments is not too big
-                                                         // we can keep using a bigger epsilon_fix for the nextrun.
+            if (counter_rebounds <= rebounds_first_step) { // Whenever the number of re-adjustments is not too big
+                // we can keep using a bigger epsilon_fix for the nextrun.
                 if (epsilon_fix < epsilon_start) epsilon_fix *= 2;
-            }
-            else{
+            } else {
                 counter_rebounds = 0; // When we have too many readjustments implying we arrived to the biggest
-                                      // epsilon accepted, we should keep the biggest possible epsilon
-                                      // bounded by epsilon_start.
+                // epsilon accepted, we should keep the biggest possible epsilon
+                // bounded by epsilon_start.
                 epsilon_fix /= 2;
             }
         }
@@ -841,28 +882,26 @@ int ShockContinuationMethod3D2D::curve(int family, double maxnum, int increase, 
 
         // Check for NAN's
         for (int i = 0; i < n; i++) {
-            if (isnan(rv.component(i))){
+            if (isnan(rv.component(i))) {
                 printf("Aborting... num = %d\n", num);
                 return ABORTED_PROCEDURE;
             }
         }
 
         // New: Check if the point is within the boundary
-        int out_edge;
+//        int out_edge;
         RealVector p(n), q(n), r(n);
         p = out[out.size() - 1]; // Previous point
         for (int i = 0; i < n; i++) q.component(i) = Uprevious[i];
 
         int info_intersect = boundary->intersection(p, q, r, edge);
-        if (info_intersect == 1){         // Both inside
+        if (info_intersect == 1) { // Both inside
             out.push_back(q);
-        }
-        else if (info_intersect == -1){   // Both outside
+        } else if (info_intersect == -1) { // Both outside
             return ABORTED_PROCEDURE;
-        }
-        else {                            // New point outside
+        } else { // New point outside
             out.push_back(r);
-            edge = out_edge;
+//            edge = out_edge;
             return ABORTED_PROCEDURE;
         }
 
@@ -874,67 +913,66 @@ int ShockContinuationMethod3D2D::curve(int family, double maxnum, int increase, 
     return SUCCESSFUL_PROCEDURE;
 }
 
+void ShockContinuationMethod3D2D::Newton_plane(double plane_point[], double v1[], double v2[], double *pnew) {
 
+    // The initial point to be used in the Newton method is (a1,a2)=0 that corresponds to the plane_point in the plane coordinates.
 
-void ShockContinuationMethod3D2D::Newton_plane(double plane_point[], double v1[], double v2[], double *pnew){
-
-// The initial point to be used in the Newton method is (a1,a2)=0 that corresponds to the plane_point in the plane coordinates.
-
-   double N[2];
-   double DN[2][2];
-   double aold[2]={0.,0.}; // We need to initialize a at 0.
-   double anew[2], err[2];
-   double norm_delta_a = 2.*tolerance; /* just to make its way through the while... this is the norm of the difference of the vectors.  Should we adimensionalize norm_delta_a, w.r. to
+    double N[2];
+    double DN[2][2];
+    double aold[2] = {0., 0.}; // We need to initialize a at 0.
+    double anew[2], err[2];
+    double norm_delta_a = 2. * tolerance; /* just to make its way through the while... this is the norm of the difference of the vectors.  Should we adimensionalize norm_delta_a, w.r. to
                                           the first error? */
-   int    iterations = 1;
-   // double norm_delta_a;
+    int iterations = 1;
+    // double norm_delta_a;
 
 
-//   printf("*********** Inside Newton_plane, before while.\n");
+    //   printf("*********** Inside Newton_plane, before while.\n");
 
-   while(iterations < 10 && norm_delta_a > tolerance && norm_delta_a < 10.0){
-
-
-//       printf("Inside Newton_plane: iterations = %d < 10 = %d\n", iterations, iterations < 10);
-
-//       printf("Inside Newton_plane: (norm_delta_a = %e > tolerance = %e) = %d\n", norm_delta_a, tolerance, norm_delta_a > tolerance);
-
-//       printf("Inside Newton_plane: norm_delta_a < 1.0 = %d\n", norm_delta_a < 1.0);
+    while (iterations < 10 && norm_delta_a > tolerance && norm_delta_a < 10.0) {
 
 
-       // Now we calculate the jet of N at p, and at xold
+        //       printf("Inside Newton_plane: iterations = %d < 10 = %d\n", iterations, iterations < 10);
 
-       jet_N(plane_point, aold[0], aold[1], v1, v2, &N[0], &DN[0][0]);  // We calculate the JET for the expression of the Rankine-Hugoniot Locus system at the plane.
+        //       printf("Inside Newton_plane: (norm_delta_a = %e > tolerance = %e) = %d\n", norm_delta_a, tolerance, norm_delta_a > tolerance);
 
-       int info = solver(n - 1, &DN[0][0], &N[0], &err[0]);
+        //       printf("Inside Newton_plane: norm_delta_a < 1.0 = %d\n", norm_delta_a < 1.0);
 
-//       printf("solver.info = %d\n", info);
+
+        // Now we calculate the jet of N at p, and at xold
+
+        jet_N(plane_point, aold[0], aold[1], v1, v2, &N[0], &DN[0][0]); // We calculate the JET for the expression of the Rankine-Hugoniot Locus system at the plane.
+
+//        int info =
+        solver(n - 1, &DN[0][0], &N[0], &err[0]);
+
+        //       printf("solver.info = %d\n", info);
 
 
         // Approximation given by the Newton Method over the plane
-       for(int i=0 ; i < n - 1; i++){
-           anew[i] = aold[i] - err[i] ;
-           aold[i] = anew[i] ;
-       }
-//       for(int i=0 ; i < n - 1; i++) printf("anew[%d] = %e\n", i, anew[i]);
+        for (int i = 0; i < n - 1; i++) {
+            anew[i] = aold[i] - err[i];
+            aold[i] = anew[i];
+        }
+        //       for(int i=0 ; i < n - 1; i++) printf("anew[%d] = %e\n", i, anew[i]);
 
-       // Print anew (delete later)
+        // Print anew (delete later)
 
-       //jet_N(plane_point, aold[0], aold[1], v1, v2, &N[0], &DN[0][0]);
-       //for (int i = 0; i < n - 1; i++) printf("After the solver: N[%d] = %e\n", i, N[i]);
+        //jet_N(plane_point, aold[0], aold[1], v1, v2, &N[0], &DN[0][0]);
+        //for (int i = 0; i < n - 1; i++) printf("After the solver: N[%d] = %e\n", i, N[i]);
 
-       // Norm of delta_x
-       norm_delta_a=0;
-       norm_delta_a=euclidean_norm(n-1, &err[0]) ;
+        // Norm of delta_x
+        norm_delta_a = 0;
+        norm_delta_a = euclidean_norm(n - 1, &err[0]);
 
-//       printf("norm_delta_a=%e\n", norm_delta_a);
+        //       printf("norm_delta_a=%e\n", norm_delta_a);
 
-       iterations++;
-   }
+        iterations++;
+    }
 
-// jet_N(plane_point, aold[0], aold[1], v1, v2, &N[0], &DN[0][0]);
-   plane_mapping(plane_point, anew[0], anew[1], v1, v2,  pnew);
-   return;
+    // jet_N(plane_point, aold[0], aold[1], v1, v2, &N[0], &DN[0][0]);
+    plane_mapping(plane_point, anew[0], anew[1], v1, v2, pnew);
+    return;
 }
 
 
