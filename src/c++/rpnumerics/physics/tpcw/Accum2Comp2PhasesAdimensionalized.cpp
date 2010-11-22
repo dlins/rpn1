@@ -11,12 +11,12 @@ Accum2Comp2PhasesAdimensionalized::Accum2Comp2PhasesAdimensionalized(const Accum
 }
 
 Accum2Comp2PhasesAdimensionalized * Accum2Comp2PhasesAdimensionalized::clone() const {
-    cout << "clone do accum do tpcw "<<this << endl;
+
     return new Accum2Comp2PhasesAdimensionalized(*this);
 }
 
 Accum2Comp2PhasesAdimensionalized::~Accum2Comp2PhasesAdimensionalized(){
-    cout<<"Destrutor de accum"<<this<<endl;
+
 }
 
 // Existe uma discrepancia entre o o significado de s quando este codigo foi

@@ -29,12 +29,12 @@ Flux2Comp2PhasesAdimensionalized::Flux2Comp2PhasesAdimensionalized(const Flux2Co
 }
 
 Flux2Comp2PhasesAdimensionalized * Flux2Comp2PhasesAdimensionalized::clone() const {
-    cout<<"clone do flux do tpcw"<<this<<endl;
+
     return new Flux2Comp2PhasesAdimensionalized(*this);
 }
 
 Flux2Comp2PhasesAdimensionalized::~Flux2Comp2PhasesAdimensionalized() {
-    cout << "Destrutor de flux tpcw" << this << endl;
+
 
 
 }
