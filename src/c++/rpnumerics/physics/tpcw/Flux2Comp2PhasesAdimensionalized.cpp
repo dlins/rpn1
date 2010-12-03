@@ -44,13 +44,15 @@ int Flux2Comp2PhasesAdimensionalized::jet(const WaveState &w, JetMatrix &m, int 
     double Theta = w(1);
     double U     = w(2);
 
-    cout <<"s: "<<s<<" Theta:"<<Theta<<" U:"<<U<<endl;
+//    cout <<"s: "<<s<<" Theta:"<<Theta<<" U:"<<U<<endl;
 
     // Recovering the U_typical_
-    double U_typical_=TD->U_typical() ;
+    double U_typical_=TD->U_typical();
+
 
     // Some auxiliary variables
     double Hr, d_Hr, d2_Hr;    TD->Diff_RockEnthalpyVol(Theta, Hr, d_Hr, d2_Hr);
+
     double Ha, d_Ha, d2_Ha;    TD->Diff_AqueousEnthalpyVol(Theta, Ha, d_Ha, d2_Ha);
     double Hsi, d_Hsi, d2_Hsi; TD->Diff_SuperCriticEnthalpyVol(Theta, Hsi, d_Hsi, d2_Hsi);
 
@@ -86,7 +88,9 @@ int Flux2Comp2PhasesAdimensionalized::jet(const WaveState &w, JetMatrix &m, int 
     double out220 = 0.0, out221 = 0.0, out222 = 0.0;
 
     // Begin of pure horizontal
+//    cout <<"aqui"<<endl;
     if (has_horizontal){
+
         double f, df_ds, df_dTheta, d2f_ds2, d2f_dsdTheta, d2f_dThetads, d2f_dTheta2; // f=f_{sigma}, s=s_{sigma}
         JetMatrix horizontal(2);
 

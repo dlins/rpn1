@@ -100,18 +100,24 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
 
     //    ShockContinuationMethod method(odeSolver,RpNumerics::getPhysics().boundary(),familyIndex);
 
-    //    double Ur [dimension];
-    double * Ur;
+      double Ur [dimension];
+//    double * Ur;
 
-    Ur = realVectorInput;
+//    Ur = realVectorInput;
     // for (int i = 0; i < dimension; i++) Ur[i] = realVectorInput.component(i);
 
     //    Ur[0]=0.47;
     //    Ur[1] = 0.182590;
     //    Ur[2] = 1.0;
 
+
+        Ur[0]=0.7;
+        Ur[1] = 0.116937;
+        Ur[2] = 1.0;
+
+
     double tol = 10e-10;
-    double epsilon = 10e-3;
+    double epsilon = 10e-4;
     int t = 11;
 
     //    FluxFunction * f = (FluxFunction *)RpNumerics::getPhysics().fluxFunction().clone();

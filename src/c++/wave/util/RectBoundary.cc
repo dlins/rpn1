@@ -53,8 +53,8 @@ size_(minimums.size()), type_("rect") {
 }
 
 bool RectBoundary::inside(const double *p)const {
-    cout <<"Inicio do inside double"<<endl;
-    cout << "(\n";
+//    cout <<"Inicio do inside double"<<endl;
+//    cout << "(\n";
     cout << p[0] << ", " << p[1] << ", " << p[2] << ")\n";
 
     bool in = true;
@@ -87,7 +87,7 @@ bool RectBoundary::inside(const RealVector &p) const {
         if (p(pos) < minimums()(pos) || p(pos) > maximums()(pos)) in = false;
         pos++;
     }
-    cout << "tamanho dentro de inside"<<in<<" "<<p.size() << endl;
+//    cout << "tamanho dentro de inside"<<in<<" "<<p.size() << endl;
     return in;
 
 

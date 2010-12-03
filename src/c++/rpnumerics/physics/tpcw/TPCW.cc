@@ -37,12 +37,12 @@ TPCW::TPCW(const FluxFunction & fluxFunction, const AccumulationFunction & accum
 //     = new Thermodynamics_SuperCO2_WaterAdimensionalized(thermo);
 
     TD = new Thermodynamics_SuperCO2_WaterAdimensionalized(Tref_rock, Tref_water, pressure,
-            "/impa/home/f/edsonlan/Java/rpnGit/src/c++/rpnumerics/physics/tpcw/rhosigmac_spline.txt",
-            "/impa/home/f/edsonlan/Java/rpnGit/src/c++/rpnumerics/physics/tpcw/rhosigmaw_spline.txt",
-            "/impa/home/f/edsonlan/Java/rpnGit/src/c++/rpnumerics/physics/tpcw/rhoac_spline.txt",
-            "/impa/home/f/edsonlan/Java/rpnGit/src/c++/rpnumerics/physics/tpcw/rhoaw_spline.txt",
-            "/impa/home/f/edsonlan/Java/rpnGit/src/c++/rpnumerics/physics/tpcw/rhoW_spline.txt",
-            "/impa/home/f/edsonlan/Java/rpnGit/src/c++/rpnumerics/physics/tpcw/hsigmaC_spline.txt",
+            "/impa/home/f/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhosigmac_spline.txt",
+            "/impa/home/f/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhosigmaw_spline.txt",
+            "/impa/home/f/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhoac_spline.txt",
+            "/impa/home/f/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhoaw_spline.txt",
+            "/impa/home/f/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhoW_spline.txt",
+            "/impa/home/f/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/hsigmaC_spline.txt",
             rhoW_init,
             Cr,
             Cw,
@@ -52,6 +52,11 @@ TPCW::TPCW(const FluxFunction & fluxFunction, const AccumulationFunction & accum
             U_typical);
 
 //    int info = TD->status_after_init();
+
+
+
+    cout <<"Calculo de U0[1] "<<TD->T2Theta(310.)<<endl;
+    cout << "Calculo de U0[2] " << TD->u2U(4.22e-6) << endl;
 
 //    printf("Thermodynamics  info = %d\n\n\n", info);
 
@@ -97,12 +102,12 @@ TPCW::TPCW(const TPCW & copy):SubPhysics(copy.fluxFunction(),copy.accumulation()
     double h_typical = Cw * (T_typical - Tref_water);
 
     TD = new Thermodynamics_SuperCO2_WaterAdimensionalized(Tref_rock, Tref_water, pressure,
-            "/impa/home/f/edsonlan/Java/rpnGit/src/c++/rpnumerics/physics/tpcw/rhosigmac_spline.txt",
-            "/impa/home/f/edsonlan/Java/rpnGit/src/c++/rpnumerics/physics/tpcw/rhosigmaw_spline.txt",
-            "/impa/home/f/edsonlan/Java/rpnGit/src/c++/rpnumerics/physics/tpcw/rhoac_spline.txt",
-            "/impa/home/f/edsonlan/Java/rpnGit/src/c++/rpnumerics/physics/tpcw/rhoaw_spline.txt",
-            "/impa/home/f/edsonlan/Java/rpnGit/src/c++/rpnumerics/physics/tpcw/rhoW_spline.txt",
-            "/impa/home/f/edsonlan/Java/rpnGit/src/c++/rpnumerics/physics/tpcw/hsigmaC_spline.txt",
+            "/impa/home/f/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhosigmac_spline.txt",
+            "/impa/home/f/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhosigmaw_spline.txt",
+            "/impa/home/f/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhoac_spline.txt",
+            "/impa/home/f/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhoaw_spline.txt",
+            "/impa/home/f/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhoW_spline.txt",
+            "/impa/home/f/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/hsigmaC_spline.txt",
             rhoW_init,
             Cr,
             Cw,
@@ -175,7 +180,7 @@ Boundary * TPCW::defaultBoundary()const {
 
     RealVector max(3);
 
-    max.component(0) = 1;
+    max.component(0) = 1.0;
     max.component(1) = T2Theta(450);
 
 //    max.component(1) = 1;

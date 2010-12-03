@@ -299,6 +299,7 @@ void ContinuationRarefactionFlow::fill_with_jet(const RpFunction & flux_object, 
     cout <<"Depois da linha 296"<<c_jet.size()<<endl;
     flux_object.jet(state_c, c_jet, degree);
 
+
     // Fill F
     if (F != 0) for (int i = 0; i < n; i++) F[i] = c_jet(i);
 
@@ -366,9 +367,10 @@ int ContinuationRarefactionFlow::flux(int n, int family, const FluxFunction &ff,
         fill_with_jet(ff, n, in, 1, 0, &J[0][0], 0);
         info = Eigen::eig(n, &J[0][0], e);
     } else {
+        cout<<"Rare nao e simple"<<endl;
         double A[n][n], B[n][n];
         for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) A[i][j] = B[i][j] = 0;
+            for (int j = 0; j < n; j++) A[i][j] = B[i][j] = 0.0;
         }
 
         fill_with_jet(ff, n, in, 1, 0, &A[0][0], 0);

@@ -68,7 +68,7 @@ double ShockContinuationMethod3D2D::euclidean_norm(int n, double x[]) {
 }
 
 void ShockContinuationMethod3D2D::curve(const RealVector & input, int direction, vector<RealVector> & output) {
-    int maxStepsNumber = 10000;
+    int maxStepsNumber = 100000;
 
     int edge;
 
@@ -223,10 +223,10 @@ int Shockcurve_Adaptive_Hypersurface_Newton::shock_init(double Uref[], int famil
 void ShockContinuationMethod3D2D::fill_with_jet(const RpFunction & flux_object, int n, double *in, int degree, double *F, double *J, double *H) {
     RealVector r(n);
 
-    cout << "Tamanho em fill: " << n << endl;
+//    cout << "Tamanho em fill: " << n << endl;
     double *rp = r;
     for (int i = 0; i < n; i++) rp[i] = in[i];
-    cout << "Entrada em fill: " << r << endl;
+//    cout << "Entrada em fill: " << r << endl;
     // Will this work? There is a const somewhere in fluxParams.
     //FluxParams fp(r);
     //flux_object->fluxParams(FluxParams(r)); // flux_object->fluxParams(fp);
@@ -234,8 +234,9 @@ void ShockContinuationMethod3D2D::fill_with_jet(const RpFunction & flux_object, 
     WaveState state_c(r);
 
     JetMatrix c_jet(n);
-    cout << "Depois da linha 296 " << c_jet.size() << endl;
+//    cout << "Depois da linha 296 " << c_jet.size() << endl;
     flux_object.jet(state_c, c_jet, degree);
+//    cout << "Depois de flux object: " << n << endl;
 
     // Fill F
     if (F != 0) for (int i = 0; i < n; i++) F[i] = c_jet(i);
@@ -259,7 +260,7 @@ void ShockContinuationMethod3D2D::fill_with_jet(const RpFunction & flux_object, 
             }
         }
     }
-    cout << "Dentro de fill with jet shock" << endl;
+//    cout << "Dentro de fill with jet shock" << endl;
     return;
 }
 
@@ -288,14 +289,16 @@ int ShockContinuationMethod3D2D::plane_start(int family, double Upr[], double Up
 
     double A[n][n], B[n][n];
 
-
+    cout << "Em  plane start"<< endl;
     fill_with_jet(*shock_flux_object, n, Uref, 1, 0, &A[0][0], 0);
+    cout << "Depois  plane start" << endl;
     fill_with_jet(*shock_accumulation_object, n, Uref, 1, 0, &B[0][0], 0); // TODO: Add "type", etc.
-    cout << "depois de fill with jet plane start" << endl;
+    cout << "Depois  accum start" << endl;
     // Find the eigenpairs:
     // TODO: Check LAPACK's docs for the case when the number of eigenpairs is insufficient (less than the dimension of space).
     vector<eigenpair> e;
     int info;
+    cout <<"Valor de type:"<<type<<endl;
     if (type == _SHOCK_SIMPLE_ACCUMULATION_) info = Eigen::eig(n, &A[0][0], e);
     else info = Eigen::eig(n, &A[0][0], &B[0][0], e);
 
@@ -652,7 +655,7 @@ ShockContinuationMethod3D2D::~ShockContinuationMethod3D2D() {
 
 int ShockContinuationMethod3D2D::init(int family, int increase, Plane &plane, RealVector &refvec, double &rfs, double &es) {
     /* In the first step we need to initialize the shock curve in the chosen direction */
-
+    cout<<"Inicializando com init inteiro"<<endl;
     double Upr[n], Upl[n]; // These are two possible initial points for the shock curve
     double v1[n], v2[n]; // These are the two vectors on the first plane.  (notice that we use the SAME plane for both Upr and Upl).
     double epsilon = eps;
