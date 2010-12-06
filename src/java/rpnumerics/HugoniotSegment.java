@@ -28,6 +28,7 @@ public class HugoniotSegment extends RealSegment {
     private RealVector rightPoint_;
     private double rightSigma_;
     private HugoniotPointType type_;
+    private int intType_;
 
     //
     // Constructors
@@ -102,7 +103,18 @@ public class HugoniotSegment extends RealSegment {
 
 
 
+public HugoniotSegment (RealVector leftPoint, double leftSigma, RealVector rightPoint, double rightSigma,
+                           int type) {
 
+     super(leftPoint,rightPoint);
+      leftPoint_ = leftPoint;
+      leftSigma_ = leftSigma;
+      rightPoint_ = rightPoint;
+      rightSigma_ = rightSigma;
+
+      intType_=type;
+
+}
 
 
 
@@ -115,7 +127,7 @@ public class HugoniotSegment extends RealSegment {
       buffer.append("rightpoint=\""+rightPoint().toString()+"\""+" ");
       buffer.append("leftsigma=\""+leftSigma()+"\""+" ");
       buffer.append("rightsigma=\""+rightSigma()+"\""+" ");
-      buffer.append("hugoniotpointtype=\""+type().toString()+"\"");
+//      buffer.append("hugoniotpointtype=\""+type().toString()+"\"");
       buffer.append(">");
       buffer.append("</HUGONIOTSEGMENT>\n");
 
@@ -139,7 +151,9 @@ public class HugoniotSegment extends RealSegment {
 
     public double rightSigma() { return rightSigma_; }
 
-    public HugoniotPointType type() { return type_; }
+//    public HugoniotPointType type() { return type_; }
+
+    public int getType(){return intType_;}
     //
     // Methods
     //

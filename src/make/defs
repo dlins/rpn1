@@ -62,7 +62,7 @@ else
 CCC = CC
 endif
 else
-CCC = c++ -Wall -Wno-deprecated
+CCC = g++ -Wall -Wno-deprecated
 endif
 ifeq ($(RPHOSTTYPE),solaris)
 # The -D_XOPEN_SOURCE flag is needed if __SUNPRO_CC == 0x540

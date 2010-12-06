@@ -32,7 +32,7 @@ public class ShockCurvePlotAgent extends RpModelPlotAgent {
 
     public RpGeometry createRpGeometry(RealVector[] input) {
         OrbitPoint oPoint = new OrbitPoint(input[input.length - 1]);
-        ShockCurveGeomFactory factory = new ShockCurveGeomFactory(RPNUMERICS.createShockCurveCalc(oPoint));
+        HugoniotCurveGeomFactory factory = new HugoniotCurveGeomFactory(RPNUMERICS.createShockCurveCalc(oPoint));
         return factory.geom();
     }
 

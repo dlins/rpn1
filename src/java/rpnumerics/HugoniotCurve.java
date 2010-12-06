@@ -18,16 +18,17 @@ public class HugoniotCurve extends RPnCurve implements RpSolution {
     //
     // Members
     //
+
     private PhasePoint xZero_;
     private List hugoniotSegments_;
 
     // the list is filled with RealSegments...
-    public HugoniotCurve(PhasePoint xZero, List realSegs) {
-        super(coordsArrayFromRealSegments(realSegs), new ViewingAttr(Color.red));
-        xZero_ = new PhasePoint(xZero);
-        hugoniotSegments_ = hugoniotSegsFromRealSegs(xZero_, realSegs);
-
-    }
+//    public HugoniotCurve(PhasePoint xZero, List realSegs) {
+//        super(coordsArrayFromRealSegments(realSegs), new ViewingAttr(Color.red));
+//        xZero_ = new PhasePoint(xZero);
+//        hugoniotSegments_ = hugoniotSegsFromRealSegs(xZero_, realSegs);
+//
+//    }
 
     public HugoniotCurve(PhasePoint xZero, WaveState[] states) {
         super(coordsArrayFromRealSegments(HugoniotCurve.hugoniotSegsFromWaveState(xZero,
@@ -39,26 +40,34 @@ public class HugoniotCurve extends RPnCurve implements RpSolution {
 
     }
 
-    public HugoniotCurve(PhasePoint xZero, ArrayList states) {
-        super(coordsArrayFromRealSegments(HugoniotCurve.hugoniotSegsFromWaveState(xZero,
-                states)), new ViewingAttr(Color.red));
+//    public HugoniotCurve(PhasePoint xZero, ArrayList states) {
+//        super(coordsArrayFromRealSegments(HugoniotCurve.hugoniotSegsFromWaveState(xZero,
+//                states)), new ViewingAttr(Color.red));
+//
+//        xZero_ = new PhasePoint(xZero);
+//        hugoniotSegments_ = HugoniotCurve.hugoniotSegsFromWaveState(xZero,
+//                states);
+//
+//    }
 
-        xZero_ = new PhasePoint(xZero);
-        hugoniotSegments_ = HugoniotCurve.hugoniotSegsFromWaveState(xZero,
-                states);
+    public HugoniotCurve(PhasePoint xZero, CoordsArray[] coords) {
 
-    }
-    
-    public HugoniotCurve(PhasePoint xZero,CoordsArray [] coords) {
-        
         super(coords, new ViewingAttr(Color.RED));
-        
+
         List realSegments = MultidAdapter.converseCoordsArrayToRealSegments(coords);
         hugoniotSegments_ = hugoniotSegsFromRealSegs(xZero, realSegments);
-        
-        xZero_=new PhasePoint(xZero);
-        
-        
+
+        xZero_ = new PhasePoint(xZero);
+
+
+    }
+
+    public HugoniotCurve(PhasePoint xZero, List<HugoniotSegment> hSegments) {
+        super(coordsArrayFromRealSegments(hSegments), new ViewingAttr(Color.RED));
+
+        xZero_ = new PhasePoint(xZero);
+        hugoniotSegments_ = hSegments;
+
     }
 
     public static List interpolate(HugoniotPoint v1,
@@ -80,26 +89,26 @@ public class HugoniotCurve extends RPnCurve implements RpSolution {
         int positiveRealPartNoLeft2 = v2.type().positiveRealPartNoLeft();
         // number and direction of changes in the left state
         int leftStateChangesNo = 0;
-        if ((positiveRealPartNoLeft2 - positiveRealPartNoLeft1 < 0) &&
-                ((positiveRealPartNoLeft2 - positiveRealPartNoLeft1) *
-                (positiveRealPartNoLeft2 - positiveRealPartNoLeft1 +
-                zeroRealPartNoLeft2) > 0) ||
-                (positiveRealPartNoLeft2 - positiveRealPartNoLeft1 > 0) &&
-                ((positiveRealPartNoLeft2 - positiveRealPartNoLeft1) *
-                (positiveRealPartNoLeft2 - positiveRealPartNoLeft1 -
-                zeroRealPartNoLeft1) > 0)) {
+        if ((positiveRealPartNoLeft2 - positiveRealPartNoLeft1 < 0)
+                && ((positiveRealPartNoLeft2 - positiveRealPartNoLeft1)
+                * (positiveRealPartNoLeft2 - positiveRealPartNoLeft1
+                + zeroRealPartNoLeft2) > 0)
+                || (positiveRealPartNoLeft2 - positiveRealPartNoLeft1 > 0)
+                && ((positiveRealPartNoLeft2 - positiveRealPartNoLeft1)
+                * (positiveRealPartNoLeft2 - positiveRealPartNoLeft1
+                - zeroRealPartNoLeft1) > 0)) {
             // there are changes of type
             // determine how many
             if (positiveRealPartNoLeft2 - positiveRealPartNoLeft1 > 0) {
-                leftStateChangesNo = positiveRealPartNoLeft2 -
-                        positiveRealPartNoLeft1 -
-                        zeroRealPartNoLeft1;
+                leftStateChangesNo = positiveRealPartNoLeft2
+                        - positiveRealPartNoLeft1
+                        - zeroRealPartNoLeft1;
                 positiveRealPartNoLeft1 += zeroRealPartNoLeft1;
                 zeroRealPartNoLeft1 = 0;
             } else {
-                leftStateChangesNo = positiveRealPartNoLeft2 +
-                        zeroRealPartNoLeft2 -
-                        positiveRealPartNoLeft1;
+                leftStateChangesNo = positiveRealPartNoLeft2
+                        + zeroRealPartNoLeft2
+                        - positiveRealPartNoLeft1;
                 negativeRealPartNoLeft1 += zeroRealPartNoLeft1;
                 zeroRealPartNoLeft1 = 0;
             }
@@ -110,31 +119,31 @@ public class HugoniotCurve extends RPnCurve implements RpSolution {
                     positiveRealPartNoLeft2);
             negativeRealPartNoLeft1 = Math.max(negativeRealPartNoLeft1,
                     negativeRealPartNoLeft2);
-            zeroRealPartNoLeft1 = m - positiveRealPartNoLeft1 -
-                    negativeRealPartNoLeft1;
+            zeroRealPartNoLeft1 = m - positiveRealPartNoLeft1
+                    - negativeRealPartNoLeft1;
         }
         // number and direction of changes in the right state
         int rightStateChangesNo = 0;
-        if ((positiveRealPartNoRight2 - positiveRealPartNoRight1 < 0) &&
-                ((positiveRealPartNoRight2 - positiveRealPartNoRight1) *
-                (positiveRealPartNoRight2 - positiveRealPartNoRight1 +
-                zeroRealPartNoRight2) > 0) ||
-                (positiveRealPartNoRight2 - positiveRealPartNoRight1 > 0) &&
-                ((positiveRealPartNoRight2 - positiveRealPartNoRight1) *
-                (positiveRealPartNoRight2 - positiveRealPartNoRight1 -
-                zeroRealPartNoRight1) > 0)) {
+        if ((positiveRealPartNoRight2 - positiveRealPartNoRight1 < 0)
+                && ((positiveRealPartNoRight2 - positiveRealPartNoRight1)
+                * (positiveRealPartNoRight2 - positiveRealPartNoRight1
+                + zeroRealPartNoRight2) > 0)
+                || (positiveRealPartNoRight2 - positiveRealPartNoRight1 > 0)
+                && ((positiveRealPartNoRight2 - positiveRealPartNoRight1)
+                * (positiveRealPartNoRight2 - positiveRealPartNoRight1
+                - zeroRealPartNoRight1) > 0)) {
             // there are changes of type
             // determine how many
             if (positiveRealPartNoRight2 - positiveRealPartNoRight1 > 0) {
-                rightStateChangesNo = positiveRealPartNoRight2 -
-                        positiveRealPartNoRight1 -
-                        zeroRealPartNoRight1;
+                rightStateChangesNo = positiveRealPartNoRight2
+                        - positiveRealPartNoRight1
+                        - zeroRealPartNoRight1;
                 positiveRealPartNoRight1 += zeroRealPartNoRight1;
                 zeroRealPartNoRight1 = 0;
             } else {
-                rightStateChangesNo = positiveRealPartNoRight2 +
-                        zeroRealPartNoRight2 -
-                        positiveRealPartNoRight1;
+                rightStateChangesNo = positiveRealPartNoRight2
+                        + zeroRealPartNoRight2
+                        - positiveRealPartNoRight1;
                 negativeRealPartNoRight1 += zeroRealPartNoRight1;
                 zeroRealPartNoRight1 = 0;
             }
@@ -145,8 +154,8 @@ public class HugoniotCurve extends RPnCurve implements RpSolution {
                     positiveRealPartNoRight2);
             negativeRealPartNoRight1 = Math.max(negativeRealPartNoRight1,
                     negativeRealPartNoRight2);
-            zeroRealPartNoRight1 = m - positiveRealPartNoRight1 -
-                    negativeRealPartNoRight1;
+            zeroRealPartNoRight1 = m - positiveRealPartNoRight1
+                    - negativeRealPartNoRight1;
         }
         // cutting and creating segments
         HugoniotPointType type;
@@ -168,24 +177,24 @@ public class HugoniotCurve extends RPnCurve implements RpSolution {
             if (leftStateChangesNo > 0) {
                 dLeft = 1;
                 alphaLeft = v1.eigenValRLeft().getElement(
-                        negativeRealPartNoLeft1 - 1) /
-                        (v1.eigenValRLeft().getElement(
-                        negativeRealPartNoLeft1 - 1) -
-                        v2.eigenValRLeft().getElement(
+                        negativeRealPartNoLeft1 - 1)
+                        / (v1.eigenValRLeft().getElement(
+                        negativeRealPartNoLeft1 - 1)
+                        - v2.eigenValRLeft().getElement(
                         negativeRealPartNoLeft1 - 1));
-                sigma2Left = (1 - alphaLeft) * v1.sigma() +
-                        alphaLeft * v2.sigma();
+                sigma2Left = (1 - alphaLeft) * v1.sigma()
+                        + alphaLeft * v2.sigma();
             }
             if (leftStateChangesNo < 0) {
                 dLeft = -1;
-                alphaLeft = v1.eigenValRLeft().getElement(m -
-                        positiveRealPartNoLeft1) /
-                        (v1.eigenValRLeft().getElement(m -
-                        positiveRealPartNoLeft1) -
-                        v2.eigenValRLeft().getElement(m -
-                        positiveRealPartNoLeft1));
-                sigma2Left = (1 - alphaLeft) * v1.sigma() +
-                        alphaLeft * v2.sigma();
+                alphaLeft = v1.eigenValRLeft().getElement(m
+                        - positiveRealPartNoLeft1)
+                        / (v1.eigenValRLeft().getElement(m
+                        - positiveRealPartNoLeft1)
+                        - v2.eigenValRLeft().getElement(m
+                        - positiveRealPartNoLeft1));
+                sigma2Left = (1 - alphaLeft) * v1.sigma()
+                        + alphaLeft * v2.sigma();
             }
             if (leftStateChangesNo == 0) {
                 dLeft = 0;
@@ -196,24 +205,24 @@ public class HugoniotCurve extends RPnCurve implements RpSolution {
             if (rightStateChangesNo > 0) {
                 dRight = 1;
                 alphaRight = v1.eigenValRRight().getElement(
-                        negativeRealPartNoRight1 - 1) /
-                        (v1.eigenValRRight().getElement(
-                        negativeRealPartNoRight1 - 1) -
-                        v2.eigenValRRight().getElement(
+                        negativeRealPartNoRight1 - 1)
+                        / (v1.eigenValRRight().getElement(
+                        negativeRealPartNoRight1 - 1)
+                        - v2.eigenValRRight().getElement(
                         negativeRealPartNoRight1 - 1));
-                sigma2Right = (1 - alphaRight) * v1.sigma() +
-                        alphaRight * v2.sigma();
+                sigma2Right = (1 - alphaRight) * v1.sigma()
+                        + alphaRight * v2.sigma();
             }
             if (rightStateChangesNo < 0) {
                 dRight = -1;
-                alphaRight = v1.eigenValRRight().getElement(m -
-                        positiveRealPartNoRight1) /
-                        (v1.eigenValRRight().getElement(m -
-                        positiveRealPartNoRight1) -
-                        v2.eigenValRRight().getElement(m -
-                        positiveRealPartNoRight1));
-                sigma2Right = (1 - alphaRight) * v1.sigma() +
-                        alphaRight * v2.sigma();
+                alphaRight = v1.eigenValRRight().getElement(m
+                        - positiveRealPartNoRight1)
+                        / (v1.eigenValRRight().getElement(m
+                        - positiveRealPartNoRight1)
+                        - v2.eigenValRRight().getElement(m
+                        - positiveRealPartNoRight1));
+                sigma2Right = (1 - alphaRight) * v1.sigma()
+                        + alphaRight * v2.sigma();
             }
             if (rightStateChangesNo == 0) {
                 dRight = 0;
@@ -283,8 +292,8 @@ public class HugoniotCurve extends RPnCurve implements RpSolution {
             segmentVector.sub(segment.leftPoint());
             closest = new RealVector(target);
             closest.sub(segment.rightPoint());
-            alpha = closest.dot(segmentVector) /
-                    segmentVector.dot(segmentVector);
+            alpha = closest.dot(segmentVector)
+                    / segmentVector.dot(segmentVector);
             if (alpha < 0) {
                 alpha = 0;
             }
@@ -298,7 +307,7 @@ public class HugoniotCurve extends RPnCurve implements RpSolution {
                 closestDistance = closest.norm();
             }
         }
-        
+
 
         return closestSegment;
     }
@@ -315,8 +324,8 @@ public class HugoniotCurve extends RPnCurve implements RpSolution {
                     getCoords(),
                     wStates[i].speed());
             HugoniotPoint v2 = new HugoniotPoint(xZero,
-                    wStates[i +
-                    1].finalState().getCoords(),
+                    wStates[i
+                    + 1].finalState().getCoords(),
                     wStates[i + 1].speed());
             if ((v1.type().equals(v2.type()))) {
                 result.add(new HugoniotSegment(v1, v1.sigma(), v2, v2.sigma(),
@@ -385,7 +394,7 @@ public class HugoniotCurve extends RPnCurve implements RpSolution {
         int inputSize = realSegs.size();
         for (int i = 0; i < inputSize; i++) {
             // type is set...
-            
+
             HugoniotPoint v1 = new HugoniotPoint(xZero_,
                     ((RealSegment) realSegs.get(i)).p1());
             HugoniotPoint v2 = new HugoniotPoint(xZero_,
@@ -401,7 +410,6 @@ public class HugoniotCurve extends RPnCurve implements RpSolution {
         return result;
     }
 
-
     //
     // Accessors/Mutators
     //
@@ -416,9 +424,9 @@ public class HugoniotCurve extends RPnCurve implements RpSolution {
 
         HugoniotSegment segment = (HugoniotSegment) segments().get(
                 hugoniotSegmentIndx);
-        
-        return (segment.leftSigma() * (1 - alpha) +
-                segment.rightSigma() * alpha);
+
+        return (segment.leftSigma() * (1 - alpha)
+                + segment.rightSigma() * alpha);
 
     }
 
@@ -431,10 +439,10 @@ public class HugoniotCurve extends RPnCurve implements RpSolution {
 
             HugoniotSegment segment = (HugoniotSegment) hugoniotSegments_.get(i);
 
-            if ((sigma - segment.leftSigma()) * (sigma - segment.rightSigma()) <=
-                    0) {
-                alpha = (segment.leftSigma() - sigma) /
-                        (segment.leftSigma() - segment.rightSigma());
+            if ((sigma - segment.leftSigma()) * (sigma - segment.rightSigma())
+                    <= 0) {
+                alpha = (segment.leftSigma() - sigma)
+                        / (segment.leftSigma() - segment.rightSigma());
                 point = new RealVector(segment.leftPoint());
                 point.interpolate(segment.rightPoint(), alpha);
                 points.add(point);

@@ -16,12 +16,15 @@ public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
 
     }
 
+    public HugoniotCurveGeomFactory(ShockCurveCalc calc) {
+        super(calc);
+
+    }
+
     @Override
     protected RpController createUI() {
         return new HugoniotController();
     }
-
-   
 
     //
     // Methods
