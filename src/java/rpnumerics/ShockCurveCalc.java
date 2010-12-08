@@ -6,6 +6,8 @@
  */
 package rpnumerics;
 
+import java.util.ArrayList;
+import java.util.List;
 import wave.ode.ODESolver;
 
 public class ShockCurveCalc implements RpCalculation {
@@ -57,14 +59,32 @@ public class ShockCurveCalc implements RpCalculation {
 
     }
 
+
+
+    private static HugoniotCurve concat(HugoniotCurve backward, HugoniotCurve forward) {
+        // opposite time directions assumed...
+        List<HugoniotSegment> result = new ArrayList<HugoniotSegment>();//OrbitPoint[backward.getPoints().length +
+//                forward.getPoints().length - 1];
+
+        for(int i= backward.segments().size()-1;i >0;i--){
+
+            result.add((HugoniotSegment)backward.segments().get(i));
+        }
+
+        result.addAll(forward.segments());
+        return new HugoniotCurve(forward.getXZero(), result);
+
+    }
+
+
     public RpSolution calc() throws RpException {
 
         if (timeDirection_ == 0) {
 
-            ShockCurve resultForward = (ShockCurve) calc(methodName_, flowName_, start_, familyIndex_, 1);
-            ShockCurve resultBackward = (ShockCurve) calc(methodName_, flowName_, start_, familyIndex_, -1);
-            Orbit resultComplete = ShockCurve.concat(resultBackward, resultForward);
-            ShockCurve completeCurve = new ShockCurve(resultComplete.getPoints(), resultComplete.getIntegrationFlag());
+            HugoniotCurve resultForward = (HugoniotCurve) calc(methodName_, flowName_, start_, familyIndex_, 1);
+            HugoniotCurve resultBackward = (HugoniotCurve) calc(methodName_, flowName_, start_, familyIndex_, -1);
+//            Orbit resultComplete = ShockCurve.concat(resultBackward, resultForward);
+            HugoniotCurve completeCurve = concat(resultBackward,resultForward);
 
 
               if (resultBackward == null || resultForward == null) {

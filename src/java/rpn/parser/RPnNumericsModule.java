@@ -70,7 +70,7 @@ public class RPnNumericsModule {
 
             if (localName.equals("BOUNDARYPARAM")) {
 
-                System.out.println("Parametro: " + att.getValue(0) + " " + att.getValue(1));
+//                System.out.println("Parametro: " + att.getValue(0) + " " + att.getValue(1));
 
                 if (physicsProfile_.profileArraySize() == 1) {
                     physicsProfile_.getConfigurationProfile(ConfigurationProfile.BOUNDARY_PROFILE).addParam(att.getValue(0), att.getValue(1));

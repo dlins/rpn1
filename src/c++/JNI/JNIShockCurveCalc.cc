@@ -20,6 +20,7 @@
 
 
 #include "ColorCurve.h"
+#include <stdio.h>
 
 
 #include "RpNumerics.h"
@@ -81,10 +82,16 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
     //    Ur[1] = 0.182590;
     //    Ur[2] = 1.0;
 
+
+
+cout<<input[0]<<endl;
+cout<<input[1]<<endl;
+cout<<input[2]<<endl;
+
     double tol = 10e-10;
     double epsilon = 10e-4;
     int t = 11;
-
+//    printf("Valor de fluxobject em JNI %p\n",&RpNumerics::getPhysics().fluxFunction());
     ShockContinuationMethod3D2D method(dimension, familyIndex, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), RpNumerics::getPhysics().boundary(), input, tol, epsilon, t);
 
 //    int edge;

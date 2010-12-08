@@ -89,7 +89,7 @@ public class RPNUMERICS {
         if (boundaryProfile != null) { //Catching boundary from input file
 
 
-            System.out.println("Profile do boundary: " + boundaryProfile);
+//            System.out.println("Profile do boundary: " + boundaryProfile);
 
             Configuration boundaryConfiguration = new Configuration(boundaryProfile);
 
@@ -98,7 +98,7 @@ public class RPNUMERICS {
                 RealVector min = new RealVector(new Integer(boundaryConfiguration.getParam("dimension")));
                 RealVector max = new RealVector(new Integer(boundaryConfiguration.getParam("dimension")));
 
-                System.out.println("Printando limites: " + boundaryConfiguration.getParam("limits"));
+//                System.out.println("Printando limites: " + boundaryConfiguration.getParam("limits"));
 
 
                 String[] limitsNumbers = boundaryConfiguration.getParam("limits").split(" ");

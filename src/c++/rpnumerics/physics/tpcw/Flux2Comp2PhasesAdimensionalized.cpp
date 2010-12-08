@@ -47,7 +47,7 @@ int Flux2Comp2PhasesAdimensionalized::jet(const WaveState &w, JetMatrix &m, int 
 //    cout <<"s: "<<s<<" Theta:"<<Theta<<" U:"<<U<<endl;
 
     // Recovering the U_typical_
-    double U_typical_=TD->U_typical();
+//    double U_typical_=TD->U_typical();
 
 
     // Some auxiliary variables

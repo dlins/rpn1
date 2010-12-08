@@ -91,8 +91,8 @@ Physics::Physics(const string & physicsID) : physicsVector_(new vector<SubPhysic
         delete flux;
         delete accum_params;
         delete accum;
-        delete fh;
-        delete fv;
+//        delete fh;
+//        delete fv;
 
 
     }

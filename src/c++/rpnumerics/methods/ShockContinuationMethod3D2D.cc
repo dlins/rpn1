@@ -223,6 +223,10 @@ int Shockcurve_Adaptive_Hypersurface_Newton::shock_init(double Uref[], int famil
 void ShockContinuationMethod3D2D::fill_with_jet(const RpFunction & flux_object, int n, double *in, int degree, double *F, double *J, double *H) {
     RealVector r(n);
 
+//   printf("Valor de fluxobject %p\n",&flux_object);
+
+
+
 //    cout << "Tamanho em fill: " << n << endl;
     double *rp = r;
     for (int i = 0; i < n; i++) rp[i] = in[i];
@@ -299,8 +303,32 @@ int ShockContinuationMethod3D2D::plane_start(int family, double Upr[], double Up
     vector<eigenpair> e;
     int info;
     cout <<"Valor de type:"<<type<<endl;
+    
+    cout<<"A: "<<endl;
+    for (int i = 0; i < n ; i++) {
+        for (int j = 0; j < n; j++) {
+            cout<<A[i][j]<<" ";
+        }
+                cout<<endl;
+    }
+
+
+        cout<<"B: "<<endl;
+    for (int i = 0; i < n ; i++) {
+        for (int j = 0; j < n; j++) {
+            cout<<B[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+
+ for (int i = 0; i < n ; i++) {
+     cout <<"Uref "<<Uref[i]<<endl;
+ }
+
+
     if (type == _SHOCK_SIMPLE_ACCUMULATION_) info = Eigen::eig(n, &A[0][0], e);
     else info = Eigen::eig(n, &A[0][0], &B[0][0], e);
+    cout <<"Tamanho de e"<<e.size()<<endl;
 
     // The i-th eigenvalue must be real. // The eigenvalues must be chosen carefully in the n-dimensional case.
     // ALL eigenvalues must be real. Extend this by using a for cycle.
@@ -892,7 +920,7 @@ int ShockContinuationMethod3D2D::curve(int family, double maxnum, int increase, 
         }
 
         // New: Check if the point is within the boundary
-//        int out_edge;
+        //        int out_edge;
         RealVector p(n), q(n), r(n);
         p = out[out.size() - 1]; // Previous point
         for (int i = 0; i < n; i++) q.component(i) = Uprevious[i];
@@ -904,7 +932,7 @@ int ShockContinuationMethod3D2D::curve(int family, double maxnum, int increase, 
             return ABORTED_PROCEDURE;
         } else { // New point outside
             out.push_back(r);
-//            edge = out_edge;
+            //            edge = out_edge;
             return ABORTED_PROCEDURE;
         }
 
@@ -946,7 +974,7 @@ void ShockContinuationMethod3D2D::Newton_plane(double plane_point[], double v1[]
 
         jet_N(plane_point, aold[0], aold[1], v1, v2, &N[0], &DN[0][0]); // We calculate the JET for the expression of the Rankine-Hugoniot Locus system at the plane.
 
-//        int info =
+        //        int info =
         solver(n - 1, &DN[0][0], &N[0], &err[0]);
 
         //       printf("solver.info = %d\n", info);
