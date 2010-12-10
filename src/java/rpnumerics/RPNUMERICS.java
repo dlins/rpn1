@@ -54,7 +54,7 @@ public class RPNUMERICS {
 
         ConfigurationProfile physicsProfile = RPnConfig.getActivePhysicsProfile();
 
-        System.out.println("Profile ativo: " + physicsProfile.getName());
+//        System.out.println("Profile ativo: " + physicsProfile.getName());
 
         Configuration physicsConfiguration = new Configuration(physicsProfile);
         FluxParams fluxParams = getFluxParams();
@@ -315,6 +315,10 @@ public class RPNUMERICS {
     public static native void initNative(String physicsName);
 
     public static HugoniotCurveCalc createHugoniotCalc() {
+
+
+
+
 
         HugoniotCurveCalc hugoniotCurveCalc = null;
         HugoniotParams hparams = new HugoniotParams(shockProfile_.getXZero(), new FluxFunction(getFluxParams()));

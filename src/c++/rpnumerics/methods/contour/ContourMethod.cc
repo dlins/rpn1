@@ -20,12 +20,119 @@
 
 
 
-double ContourMethod::f(double x, double y) {
-//    return 3.0*x-y-1.2;//pow(x - 0.3, 2.0) + pow(y - 0.7, 2.0) - 0.01;
 
-  return pow(x - 0.313, 2.0) + pow(y - 0.724, 2.0) - 0.017;
-    //    return 1 * (x - 0.1) + 2 * (y - 0.2);
+
+
+
+
+ContourMethod::ContourMethod(HugoniotFunctionClass *h){
+    hugoniot = h;
+
+//    int zero;
+//    int nedg;
+
+//    int tsimp, tface, ssimp, sface;
+
+//    int ncubes, first, last, k;
+//    double u, v;
+//    double p[2];
+//    int type;
+//    int half = 1;
+//    int whole = 2;
+
+//    int hn = 2;
+//    int hm = 1;
+//    int nsface_, nface_, nsoln_, nedges_;
+//    int dims_ = 50;
+//    int dime_ = 60;
+
+//    double refval;
+
+//    int ncvert_ = 4;
+//    int nsimp_ = 2;
+
+//    int numberOfCombinations = hc.combination(hn + 1, hm + 1);
+
+//    // Reserve arrays
+//    storn_  = new int[hn + 1];
+//    storm_  = new int[hm + 1];
+//    cvert_  = new double[ncvert_][hn];
+//    vert    = new double[ncvert_][hn];
+//    bsvert_ = new int[hn + 1][hn];
+//    perm_   = new int[hn][nsimp_];
+//    comb_   = new int[numberOfCombinations][hm + 1];
+
+//    // Initialize arrays dimensions
+//    nsface_ = hc.mkcomb(&comb_[0][0], hn + 1, hm + 1);
+
+//    fnbr_   = new int[nsface_][nsface_];
+
+//    int dimf_ = 5;
+
+//    nsoln_ = -1;
+
+//    sol_    = new double[hn][dims_];
+//    solptr_ = new int[nsimp_][nsface_];
+
+//    for (i = 0; i < nsimp_; i++) {
+//        for (j = 0; j < nsface_; j++) solptr_[i][j] = 0;
+//    } //TODO: Revisar como "solptr" eh modificada, os numero sao muito estranhos
+
+//    edges_ = new int[2][dime_];
+//    for (int i = 0; i < 2; i++) {
+//        for (int j = 0; j < dime_; j++) edges_[i][j] = -6;
+//    } //TODO: Ver o que acontece, pois se nao sao inicializadas coloca valores estranhos
+
+//    smpedg_   = new int[nsimp_][2];
+//    for (int i = 0; i < nsimp_; i++) {
+//        for (int j = 0; j < 2; j++) smpedg_[i][j] = 0;
+//    } //TODO: Ver o que acontece, pois se nao sao inicializadas coloca valores estranhos
+
+//    //inicializing another arrays, it were globally defined in java
+//    facptr_ = new int[nsimp_][nsface_];
+//    face_   = new int[hm + 1][dimf_];
+
+//    int dblev = 3;
+//    hc.mkcube(&cvert_[0][0], &bsvert_[0][0], &perm_[0][0], ncvert_, nsimp_, hn);
+//    nface_ = hc.mkface(&face_[0][0], &facptr_[0][0], &fnbr_[0][0], dimf_, nsimp_, hn, hm, nsface_,
+//                           &bsvert_[0][0], &comb_[0][0], &perm_[0][0], &storn_[0], &storm_[0]);
+
+//    exstfc = new int[nface_];
+//    for (i = 0; i < nface_; i++) exstfc[i] = 1;
+//    sptr_ = new int[nface_];
+
+//    tsimp = 1;
+//    tface = 3;
+
+    // End of initialization
 }
+
+ContourMethod::~ContourMethod(){
+//    delete [] sptr_;
+//    delete [] exstfc;
+//    delete [] face_;
+//    delete [] facptr_;
+//    delete [] smpedg_;
+//    delete [] edges_;
+//    delete [] solptr_;
+//    delete [] sol_;
+//    delete [] fnbr_;
+//    delete [] comb_;
+//    delete [] perm_;
+//    delete [] bsvert_;
+//    delete [] vert;
+//    delete [] cvert_;
+//    delete [] storm_;
+//    delete [] storn_;
+}
+
+//double ContourMethod::f(double x, double y) {
+////    return 3.0*x-y-1.2;//pow(x - 0.3, 2.0) + pow(y - 0.7, 2.0) - 0.01;
+
+//    // return pow(x - 0.313, 2.0) + pow(y - 0.724, 2.0) - 0.017;
+//    return pow(x*x + y*y, 2.0) - 2.0*(x*x - y*y);
+//    //    return 1 * (x - 0.1) + 2 * (y - 0.2);
+//}
 
 int ContourMethod::inpdom(double *u) { // double u[2]//Replace by Boundary::inside
     //    if (u[0] >= 0 && u[1] >= 0 && u[0] + u[1] <= 1) return 1;
@@ -34,11 +141,27 @@ int ContourMethod::inpdom(double *u) { // double u[2]//Replace by Boundary::insi
     return 1;
 }
 
-int ContourMethod::curv2d(/*double *segend,*/ int sn, int seglim, double fdummy, double *rect, int *res, int ifirst) {
+//int ContourMethod::curv2d(/*double *segend,*/ int sn, int seglim, double fdummy, double *rect, int *res, int ifirst) {
+int ContourMethod::curv2d(/*double *segend,*/ int sn, int seglim, double fdummy, double *rect, int *res, int ifirst,
+                          std::vector<RealVector> &vrs) {
+    vrs.clear();
+
     double segend[seglim][2][2]; //int sn, int seglim, double f, double rect[4], int res[2], int ifirst;
 
-    int n_ = 2;
-    int m_ = 1;
+    int zero;
+    int nedg;
+
+    int tsimp, tface, ssimp, sface;
+
+    int ncubes, first, last, k;
+    double u, v;
+    double p[2];
+    int type;
+    int half = 1;
+    int whole = 2;
+
+    int hn = 2;
+    int hm = 1;
     int nsface_, nface_, nsoln_, nedges_;
     int dims_ = 50;
     int dime_ = 60;
@@ -46,73 +169,29 @@ int ContourMethod::curv2d(/*double *segend,*/ int sn, int seglim, double fdummy,
     double refval;
     int i, j;
 
-
-    // initialize
-
-
-    //inicializing variables
-
     int ncvert_ = 4;
     int nsimp_ = 2;
 
-    //    int dimf_ = dimFACE(n_, m_); // dimFACE(n_); // TODO Falta configurar dimFACE
-    int numberOfCombinations = hc.combination(n_ + 1, m_ + 1);
+    int numberOfCombinations = hc.combination(hn + 1, hm + 1);
 
     //inicializing arrays
-    int storn_[n_ + 1];
-    int storm_[m_ + 1];
-    double cvert_[ncvert_][n_];
-    double vert[ncvert_][n_];
-    int bsvert_[n_ + 1][n_];
-    int perm_[n_][nsimp_];
-    int comb_[numberOfCombinations][m_ + 1];
+    int storn_[hn + 1];
+    int storm_[hm + 1];
+    double cvert_[ncvert_][hn];
+    double vert[ncvert_][hn];
+    int bsvert_[hn + 1][hn];
+    int perm_[hn][nsimp_];
+    int comb_[numberOfCombinations][hm + 1];
 
     //inicializing arrays dimensions
-    nsface_ = hc.mkcomb(&comb_[0][0], n_ + 1, m_ + 1);
-
+    nsface_ = hc.mkcomb(&comb_[0][0], hn + 1, hm + 1);
 
     int fnbr_[nsface_][nsface_];
 
     int dimf_ = 5;
 
-    //inicializing another arrays, it were globally defined in java
-    int facptr_[nsimp_][nsface_];
-    int face_[m_ + 1][dimf_];
-
-    hc.mkcube(&cvert_[0][0], &bsvert_[0][0], &perm_[0][0], ncvert_, nsimp_, n_);
-
-//    hc.putmf("CVERT", &cvert_[0][0], ncvert_, n_);
-//    hc.putmi("BSVERT", &bsvert_[0][0], n_ + 1, n_);
-//    hc.putmi("PERM", &perm_[0][0], n_, nsimp_);
-
-
-    nface_ = hc.mkface(&face_[0][0], &facptr_[0][0], &fnbr_[0][0], dimf_, nsimp_, n_, m_, nsface_,
-            &bsvert_[0][0], &comb_[0][0], &perm_[0][0], &storn_[0], &storm_[0]);
-
-//    cout << "Valor de nface " << nface_ << endl;
-
-
-
-//    hc.putmi("COMB", &comb_[0][0], numberOfCombinations, m_ + 1);
-//    hc.putmi("FACE", &face_[0][0], m_ + 1, dimf_);
-//    hc.putmi("FACPTR", &facptr_[0][0], nsimp_, nsface_);
-//    hc.putmi("FNBR", &fnbr_[0][0], nsface_, nsface_);
-
-    int ptrf_[nface_][2];
-    int ptfatt_[nface_][2];
-
-    int fdim_, faceptInd_;
-    hc.findInds(&faceptInd_, &fdim_, n_, m_, &cvert_[0][0], &face_[0][0], dimf_, nface_, nsimp_, nsface_, &facptr_[0][0]);
-    int facatt_[fdim_][2];
-    int facept_[faceptInd_][2];
-
-    hc.mkflst(&facept_[0][0], &ptrf_[0][0], &facatt_[0][0], &ptfatt_[0][0],
-            dimf_, fdim_, n_, m_, nface_, nsface_, nsimp_, ncvert_, faceptInd_,
-            &cvert_[0][0], &face_[0][0], &facptr_[0][0], &storm_[0]);
-
     nsoln_ = -1;
-    double sol_[n_][dims_];
-    int sptr_[nface_];
+    double sol_[hn][dims_];
     int solptr_[nsimp_][nsface_];
     for (i = 0; i < nsimp_; i++) {
         for (j = 0; j < nsface_; j++) solptr_[i][j] = 0;
@@ -128,77 +207,37 @@ int ContourMethod::curv2d(/*double *segend,*/ int sn, int seglim, double fdummy,
         for (j = 0; j < 2; j++) smpedg_[i][j] = 0;
     } //TODO: Ver o que acontece, pois se nao sao inicializadas coloca valores estranhos
 
-    //    double u[n_][m_ + 1];
-    double g[m_][m_ + 1];
-    double gx[m_];
-    double x[m_];
-    int wrki[m_];
-    int exstfc[nface_];
-    for (i = 0; i < nface_; i++) exstfc[i] = 1;
-    double foncub[ncvert_][m_];
+    //inicializing another arrays, it were globally defined in java
+    int facptr_[nsimp_][nsface_];
+    int face_[hm + 1][dimf_];
 
-
-
-
-//    printf("HERE\n");
-
-
-
-
-    int zero;
-    //double foncub[ncvert_][m_], int ncvert_, int exstfc[nface],
-    //bool zero; //TODO: Ver se o analogo do "logical" de Fortran eh este
-    int nedg;
-
-    // DEBUG
-
-
-
-    int tsimp, tface, ssimp, sface;
-
-    int ncubes, first, last, k;
-    double u, v;
-    double p[2];
-    int type;
-    int half = 1;
-    int whole = 2;
-    // TODO: ver half, whole linha 59 de fortran
-
-    // TODO: No fortran isto eh feito para debugar, depois vemos os valores certos
-    int hn = 2;
-    int hm = 1;
     int dblev = 3;
     if (ifirst != 0) {
         hc.mkcube(&cvert_[0][0], &bsvert_[0][0], &perm_[0][0], ncvert_, nsimp_, hn);
+        nface_ = hc.mkface(&face_[0][0], &facptr_[0][0], &fnbr_[0][0], dimf_, nsimp_, hn, hm, nsface_,
+                           &bsvert_[0][0], &comb_[0][0], &perm_[0][0], &storn_[0], &storm_[0]);
 
-//        if (dblev == 3) {
-//            hc.putmf("CVERT", &cvert_[0][0], hn, ncvert_);
-//            hc.putmi("BSVERT", &bsvert_[0][0], hn, hn + 1);
-//            hc.putmi("PERM", &perm_[0][0], hn, nsimp_);
-//        }
-
-        hc.mkface(&face_[0][0], &facptr_[0][0], &fnbr_[0][0], dimf_, nsimp_, hn, hm, nsface_,
-                &bsvert_[0][0], &comb_[0][0], &perm_[0][0], &storn_[0], &storm_[0]);
-//
-//        if (dblev == 3) {
-//            hc.putmi("COMB", &comb_[0][0], hm + 1, nsface_);
-//            hc.putmi("FACE", &face_[0][0], hm + 1, nface_);
-//            hc.putmi("FACPTR", &facptr_[0][0], nsface_, nsimp_);
-//            hc.putmi("FNBR", &fnbr_[0][0], nsface_, nsface_);
-//        }
     }
+
+    int exstfc[nface_];
+    for (i = 0; i < nface_; i++) exstfc[i] = 1;
+    int sptr_[nface_];
 
     tsimp = 1;
     tface = 3;
 
-    // initialize all faces so that they are considered by cubsol
+    // End of initialization
 
-    for (int l = 0; l < nface_; l++) {
-        exstfc[l] = 1;
-    }
+    // Curve2D proper
+    double foncub[hm][ncvert_];
+
+    // Work area
+    double g[hm][hm + 1];
+    double gx[hm];
+    double x[hm];
+    int wrki[hm];
 
     // set the rectangle sizes and resolutions
-
     double u0 = rect[0];
     double u1 = rect[1];
     double v0 = rect[2];
@@ -215,6 +254,8 @@ int ContourMethod::curv2d(/*double *segend,*/ int sn, int seglim, double fdummy,
 
     // initialize number of segments found
     sn = 0;
+
+    //int i, j, k;
 
     // loop over the rectangles
     for (k = first; k <= last; k++) {
@@ -245,11 +286,13 @@ int ContourMethod::curv2d(/*double *segend,*/ int sn, int seglim, double fdummy,
         p[1] = v;
 
         // a funcao inpdom foi criada a partir do arquivo bndry.F (localizada em phys/stone) do fortran!
-        if (inpdom(&p[0]) == 0) goto lab200;
+        //if (inpdom(&p[0]) == 0) goto lab200;
+        if (inpdom(&p[0]) != 0) {
         // upper left point
         p[0] = u;
         p[1] = v + dv;
-        if (inpdom(&p[0]) == 0) goto lab200;
+        //if (inpdom(&p[0]) == 0) goto lab200;
+        if (inpdom(&p[0]) != 0) {
 
         /* TODO: this works provided that the lower left corner is inside
            when both the upper left and lower right corners are inside.
@@ -277,19 +320,31 @@ int ContourMethod::curv2d(/*double *segend,*/ int sn, int seglim, double fdummy,
 
         //TODO: lembrar descometar
 
-        foncub[0][0] = f(vert[0][0], vert[0][1]);
+        //foncub[0][0] = f(vert[0][0], vert[0][1]);
+        RealVector u(2);
+        u(0) = vert[0][0];
+        u(1) = vert[0][1];
+
+        foncub[0][0] = hugoniot->HugoniotFunction(u);
+        //foncub[0][0] = f(vert[0][0], vert [0][1]);
+
         refval = foncub[0][0];
         for (int l = 1; l < 4; l++) {
             if (l == 2 && type == half) goto lab90;
-//            foncub[l][0] = f(vert[l][0], vert [l][1]);
-            foncub[0][l] = f(vert[l][0], vert [l][1]);
-            if (refval * foncub[l][0] < 0.0) zero = 1;
+              u(0) = vert[l][0];
+              u(1) = vert[l][1];
+
+              foncub[0][l] = hugoniot->HugoniotFunction(u); 
+              //foncub[0][l] = f(vert[l][0], vert [l][1]);
+              
+            if (refval * foncub[0][l] < 0.0) zero = 1;
 lab90:
             ;
         }
 
 //        hc.putmf("FONCUB", &foncub[0][0], 4, 1);
-        if (zero == 0) goto lab200;
+        //if (zero == 0) goto lab200;
+        if (zero != 0) {
 
         //  solve for the current cube
 
@@ -353,40 +408,32 @@ lab90:
 
         //STORE ALL PAIRS OF EDGES THAT WERE FOUND
         //        cout << "Aqui sn= "<<sn<<endl;
+
         if (nedges_ > 0) {
             for (nedg = 0; nedg < nedges_; nedg++) {
-                sn += 1;
-                // TODO: tal vez seja necesario trocar a ordem dos indices.
-//                segend[sn - 1][0][0] = sol_[0][edges_[nedg ][0]]; // falta passar para forma vetorial
-//                segend[sn - 1][0][1] = sol_[1][edges_[nedg ][0]]; // falta passar para forma vetorial
-//                segend[sn - 1][1][0] = sol_[0][edges_[nedg ][1]]; // falta passar para forma vetorial
-//                segend[sn - 1][1][1] = sol_[1][edges_[nedg ][1]]; // falta passar para forma vetorial
-//
-
-
+                sn++;
 
                 segend[sn - 1][0][0] = sol_[0][edges_[0][nedg ]]; // X1
                 segend[sn - 1][0][1] = sol_[1][edges_[0][nedg ]]; // Y1
                 segend[sn - 1][1][0] = sol_[0][edges_[1][nedg ]]; // X2
                 segend[sn - 1][1][1] = sol_[1][edges_[1][nedg ]]; // Y2
 
+//                cout << segend[sn - 1][0][0] << "    " << segend[sn - 1][0][1]<<";" << endl;
 
+//                cout << segend[sn - 1][1][0] << "     " << segend[sn - 1][1][1] <<";"<< endl;
 
+//                cout <<endl;
 
+                // Store the segments
+                RealVector p1(2), p2(2);
+                p1.component(0) = segend[sn - 1][0][0];//sol_[0][edges_[0][nedg ]];
+                p1.component(1) = segend[sn - 1][0][1];//sol_[1][edges_[0][nedg ]];
 
+                p2.component(0) = segend[sn - 1][1][0];//sol_[0][edges_[1][nedg ]];
+                p2.component(1) = segend[sn - 1][1][1];//sol_[1][edges_[1][nedg ]];
 
-
-
-
-
-
-
-//                printf("Agora aqui");
-                cout << segend[sn - 1][0][0] << "    " << segend[sn - 1][0][1]<<";" << endl;
-
-                cout << segend[sn - 1][1][0] << "     " << segend[sn - 1][1][1] <<";"<< endl;
-
-                cout <<endl;
+                vrs.push_back(p1);
+                vrs.push_back(p2);
 
                 if (sn >= seglim) {
                     return -1;
@@ -395,9 +442,13 @@ lab90:
 
 //            cout << "Valor de sn: " << sn << endl;
         }
-
-lab200:
-        ;
+  
+ 
+//lab200:;
+    }
+ }
+}
+        
 
     }
     return 0;

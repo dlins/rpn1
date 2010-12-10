@@ -15,7 +15,7 @@ TODO:
 NOTE : 
 
 @ingroup JNI
-*/
+ */
 
 
 #include "rpnumerics_HugoniotCurveCalcND.h"
@@ -23,133 +23,205 @@ NOTE :
 #include "RpNumerics.h"
 #include <vector>
 #include <iostream>
+#include "ContourMethod.h"
+#include "ReducedTPCWHugoniotFunctionClass.h"
+#include "TPCW.h"
 
 using std::vector;
 using namespace std;
 
 JNIEXPORT void JNICALL Java_rpnumerics_HugoniotCurveCalcND_setUMinus
-        (JNIEnv * env, jobject obj , jobject uMinus){
-    
+(JNIEnv * env, jobject obj, jobject uMinus) {
+
     printf("Seting UMinus\n");
-    
+
 }
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
-        (JNIEnv * env, jobject obj, jobject uMinus){
-    
-    jclass    classPhasePoint = (env)->FindClass(PHASEPOINT_LOCATION);
-    
+(JNIEnv * env, jobject obj, jobject uMinus) {
+
+    jclass classPhasePoint = (env)->FindClass(PHASEPOINT_LOCATION);
+
     jclass hugoniotSegmentClass = (env)->FindClass(HUGONIOTSEGMENTCLASS_LOCATION);
-    
-    jclass    realVectorClass_= env->FindClass(REALVECTOR_LOCATION);
-    
-    jclass   arrayListClass_=env->FindClass("java/util/ArrayList");
-    
-    jclass hugoniotPointTypeClass = (env)->FindClass(HUGONIOTPOINTTYPE_LOCATION);
-    
+
+    jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
+
+    jclass arrayListClass = env->FindClass("java/util/ArrayList");
+
+    //    jclass hugoniotPointTypeClass = (env)->FindClass(HUGONIOTPOINTTYPE_LOCATION);
+
     jclass hugoniotCurveClass = env->FindClass(HUGONIOTCURVE_LOCATION);
-    
+
     jmethodID toDoubleMethodID = (env)->GetMethodID(classPhasePoint, "toDouble", "()[D");
-    jmethodID    realVectorConstructorDoubleArray_= env->GetMethodID(realVectorClass_, "<init>", "([D)V");
+    jmethodID realVectorConstructorDoubleArray = env->GetMethodID(realVectorClass, "<init>", "([D)V");
     jmethodID hugoniotSegmentConstructor = (env)->GetMethodID(hugoniotSegmentClass, "<init>", "(Lwave/util/RealVector;DLwave/util/RealVector;DLrpnumerics/HugoniotPointType;)V");
-    jmethodID arrayListConstructor_= env->GetMethodID(arrayListClass_, "<init>", "()V");
-    jmethodID  arrayListAddMethod_=env->GetMethodID(arrayListClass_, "add", "(Ljava/lang/Object;)Z");
-    jmethodID hugoniotPointTypeConstructor = (env)->GetMethodID(hugoniotPointTypeClass, "<init>", "([D[D)V");
-    jmethodID hugoniotCurveConstructor = env->GetMethodID(hugoniotCurveClass, "<init>", "(Ljava/util/List;)V");
-    
-    int i;
-    
+    jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
+    jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
+    //    jmethodID hugoniotPointTypeConstructor = (env)->GetMethodID(hugoniotPointTypeClass, "<init>", "([D[D)V");
+    jmethodID hugoniotCurveConstructor = env->GetMethodID(hugoniotCurveClass, "<init>", "(Lrpnumerics/PhasePoint;Ljava/util/List;)V");
+
+//    int i;
+
     //Input processing
-    jdoubleArray phasePointArray =(jdoubleArray) (env)->CallObjectMethod(uMinus, toDoubleMethodID);
-    
+    jdoubleArray phasePointArray = (jdoubleArray) (env)->CallObjectMethod(uMinus, toDoubleMethodID);
+
     int dimension = env->GetArrayLength(phasePointArray);
-    
+
     double input [dimension];
-    
+
     env->GetDoubleArrayRegion(phasePointArray, 0, dimension, input);
-    
+
     env->DeleteLocalRef(phasePointArray);
-    
+
     //Calculations using the input
-    
-    jobject segmentsArray = env->NewObject(arrayListClass_, arrayListConstructor_, NULL);
-    
-    vector <double *> coords ;
-    double ix=-0.5;
-    
-    while (ix < 0.5){
-        double * coord = new double [dimension];
-        
-        coord[0]=input[0]+ix;
-        coord[1]=input[1]+ix;
-        
-        coords.push_back(coord);
-        ix+=0.005;
+
+    jobject segmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
+
+
+    //    Test testFunction;
+
+
+    //-------------------------------------------------------------------
+
+
+    RealVector Uref(dimension, input);
+
+
+    double const_gravity = 9.8;
+    double abs_perm = 3e-12;
+    double phi = 0.38;
+//    bool has_gravity = false;
+    double Tref_rock = 273.15;
+    double Tref_water = 274.3775;
+    double pressure = 100.9;
+    double Cr = 2.029e6;
+    double Cw = 4297.;
+    double rhoW_init = 998.2;
+    double T_typical = 304.63;
+    double Rho_typical = 998.2; // For the time being, this will be RhoWconst = 998 [kg/m^3]. In the future, this value should be the density of pure water at the temperature T_typical.
+    double U_typical = 4.22e-6;
+    double h_typical = Cw * (T_typical - Tref_water);
+
+    Thermodynamics_SuperCO2_WaterAdimensionalized TD(Tref_rock, Tref_water, pressure,
+            "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhosigmac_spline.txt",
+            "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhosigmaw_spline.txt",
+            "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhoac_spline.txt",
+            "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhoaw_spline.txt",
+            "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhoW_spline.txt",
+            "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/hsigmaC_spline.txt",
+            rhoW_init,
+            Cr,
+            Cw,
+            T_typical,
+            Rho_typical,
+            h_typical,
+            U_typical);
+
+
+
+    double cnw = 0., cng = 0., expw = 2., expg = 2.;
+    FracFlow2PhasesHorizontalAdimensionalized fh(cnw, cng, expw, expg, &TD);
+
+
+    ReducedTPCWHugoniotFunctionClass tpcwhc(Uref, abs_perm, phi, const_gravity, &TD, &fh);
+
+    // Contour proper
+
+
+
+    double rect[4];
+
+
+    rect[0] = 0.0; // xmin
+    rect[1] = 1.0; // xmax
+    rect[2] = TD.T2Theta(300.0); // ymin
+    rect[3] = TD.T2Theta(450.0); // ymax
+
+
+    int res[2];
+
+    res[0] = 150;
+    res[1] = 150;
+
+    ContourMethod method(&tpcwhc);
+
+    std::vector<RealVector> vrs;
+    method.curv2d(0, 2000, 0.0, &rect[0], &res[0], 1, vrs);
+
+    std::vector<RealVector> vrs3d;
+    vrs3d.resize(vrs.size());
+    for (unsigned int i = 0; i < vrs.size(); i++) {
+        double s;
+        double u;
+        tpcwhc.CompleteHugoniot(s, u, vrs[i]);
+        vrs3d[i].resize(3);
+        vrs3d[i].component(0) = vrs[i].component(0);
+//        vrs3d[i].component(1) = TD.Theta2T(vrs[i].component(1));
+        vrs3d[i].component(1) = vrs[i].component(1);
+        vrs3d[i].component(2) = TD.U2u(u);
     }
-    
-    double leftSigma =1;
-    double rightSigma =1;
-    
-// public HugoniotSegment (RealVector leftPoint, double leftSigma, RealVector rightPoint, double rightSigma, HugoniotPointType type);
-    
-    // Hugoniot Segments list creation
-    
-    //Segment type eigenValLeft and Right initialization
-    
-    jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
-    jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
-    
-    for (i=0;i < coords.size();i++){
-        
-        double * dataCoords = (double *)coords[i];
-        
-        env->SetDoubleArrayRegion(eigenValRLeft, 0, dimension, dataCoords);
-        env->SetDoubleArrayRegion(eigenValRRight, 0, dimension, dataCoords);
-        
-        delete [] dataCoords;
-        
-        //Construindo o point type
-        
-        jobject pointType = env->NewObject(hugoniotPointTypeClass, hugoniotPointTypeConstructor, eigenValRLeft, eigenValRRight);
-        
+
+    for (unsigned int i = 0; i < vrs3d.size() / 2; i++) {
+
+//        cout<<"Coordenada : "<<vrs3d.at(2*i)<<endl;
+//        cout << "Coordenada : " << vrs3d.at(2 * i+1) << endl;
+        jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
+        jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
+
+
+        double * leftCoords = (double *) vrs3d.at(2 * i);
+        double * rightCoords = (double *) vrs3d.at(2 * i + 1);
+
+
+        env->SetDoubleArrayRegion(eigenValRLeft, 0, dimension, leftCoords);
+        env->SetDoubleArrayRegion(eigenValRRight, 0, dimension, rightCoords);
+
+
         //Construindo left e right points
-        jobject realVectorLeftPoint = env->NewObject(realVectorClass_, realVectorConstructorDoubleArray_, eigenValRLeft);
-        
-        jobject realVectorRightPoint =env->NewObject(realVectorClass_, realVectorConstructorDoubleArray_, eigenValRRight);
-        
-        //Construindo o segmento
-        
-        jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorLeftPoint, rightSigma, pointType);
-        
-        // Adicionando o segmento a lista
-        
-        env->CallObjectMethod(segmentsArray, arrayListAddMethod_, hugoniotSegment);
-        
-        // Limpando
-        
-        env->DeleteLocalRef(pointType);
-        
-        env->DeleteLocalRef(realVectorLeftPoint);
-        
-        env->DeleteLocalRef(realVectorRightPoint);
-        
-        env->DeleteLocalRef(hugoniotSegment);
+        jobject realVectorLeftPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRLeft);
+        jobject realVectorRightPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRRight);
+
+        int pointType = 0;
+
+        double leftSigma = -1.0;
+        double rightSigma = -1.0;
+        //            cout << "type of " << j << " = " << classified[i].type << endl;
+        //            cout << "speed of " << j << " = " << classified[i].vec[j].component(dimension + m) << endl;
+        //            cout << "speed of " << j + 1 << " = " << classified[i].vec[j + 1].component(dimension + m) << endl;
+
+        jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, pointType);
+        env->CallObjectMethod(segmentsArray, arrayListAddMethod, hugoniotSegment);
+
     }
-    
-    
-    jobject result = env->NewObject(hugoniotCurveClass, hugoniotCurveConstructor, segmentsArray);
-    
-    env->DeleteLocalRef(eigenValRLeft);
-    env->DeleteLocalRef(eigenValRRight);
+
+
+
+
+    // Limpando
+
+    //        env->DeleteLocalRef(realVectorLeftPoint);
+
+    //        env->DeleteLocalRef(realVectorRightPoint);
+
+    //        env->DeleteLocalRef(hugoniotSegment);
+
+
+
+
+
+    jobject result = env->NewObject(hugoniotCurveClass, hugoniotCurveConstructor, uMinus, segmentsArray);
+
+    //    env->DeleteLocalRef(eigenValRLeft);
+    //    env->DeleteLocalRef(eigenValRRight);
     env->DeleteLocalRef(hugoniotSegmentClass);
-    env->DeleteLocalRef(realVectorClass_);
-    env->DeleteLocalRef(arrayListClass_);
-    
-    coords.clear();
-    
+    env->DeleteLocalRef(realVectorClass);
+    env->DeleteLocalRef(arrayListClass);
+
+
+
     return result;
-    
-    
+
+
 }
 
 

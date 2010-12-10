@@ -19,8 +19,6 @@ public class HugoniotSegGeom extends MultiPolyLine {
 
     public static ViewingAttr viewAttrSelection(HugoniotSegment segment) {
         ViewingAttr attr = new ViewingAttr(Color.white);
-//        System.out.println("Chamando att selection");
-//        System.out.println(segment.leftPoint() + "   " + segment.rightPoint());
 
         if (segment.getType() == 0) {
             attr = new ViewingAttr(new Color(255, 255, 255));
@@ -73,7 +71,6 @@ public class HugoniotSegGeom extends MultiPolyLine {
         if (segment.getType() == 15) {
             attr = new ViewingAttr(new Color(255, 255, 255));
         }
-
         return attr;
     }
 }
