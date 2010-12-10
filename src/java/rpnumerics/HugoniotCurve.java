@@ -12,7 +12,6 @@ import wave.multid.CoordsArray;
 import java.util.ArrayList;
 import wave.multid.view.ViewingAttr;
 import java.awt.Color;
-import rpn.component.MultidAdapter;
 
 public class HugoniotCurve extends RPnCurve implements RpSolution {
     //
@@ -22,44 +21,55 @@ public class HugoniotCurve extends RPnCurve implements RpSolution {
     private List hugoniotSegments_;
 
     // the list is filled with RealSegments...
-    public HugoniotCurve(PhasePoint xZero, List realSegs) {
-        super(coordsArrayFromRealSegments(realSegs), new ViewingAttr(Color.red));
-        xZero_ = new PhasePoint(xZero);
-        hugoniotSegments_ = hugoniotSegsFromRealSegs(xZero_, realSegs);
+//    public HugoniotCurve(PhasePoint xZero, List realSegs) {
+//        super(coordsArrayFromRealSegments(realSegs), new ViewingAttr(Color.red));
+//        xZero_ = new PhasePoint(xZero);
+//        hugoniotSegments_ = hugoniotSegsFromRealSegs(xZero_, realSegs);
+//
+//    }
+
+//    public HugoniotCurve(PhasePoint xZero, WaveState[] states) {
+//        super(coordsArrayFromRealSegments(HugoniotCurve.hugoniotSegsFromWaveState(xZero,
+//                states)), new ViewingAttr(Color.red));
+//
+//        xZero_ = new PhasePoint(xZero);
+//        hugoniotSegments_ = HugoniotCurve.hugoniotSegsFromWaveState(xZero,
+//                states);
+//
+//    }
+
+
+
+//    public HugoniotCurve(PhasePoint xZero, ArrayList states) {
+//        super(coordsArrayFromRealSegments(HugoniotCurve.hugoniotSegsFromWaveState(xZero,
+//                states)), new ViewingAttr(Color.red));
+//
+//        xZero_ = new PhasePoint(xZero);
+//        hugoniotSegments_ = HugoniotCurve.hugoniotSegsFromWaveState(xZero,
+//                states);
+//
+//    }
+//
+//    public HugoniotCurve(PhasePoint xZero,CoordsArray [] coords) {
+//
+//        super(coords, new ViewingAttr(Color.RED));
+//
+//        List realSegments = MultidAdapter.converseCoordsArrayToRealSegments(coords);
+//        hugoniotSegments_ = hugoniotSegsFromRealSegs(xZero, realSegments);
+//
+//        xZero_=new PhasePoint(xZero);
+//
+//
+//    }
+
+    public HugoniotCurve(PhasePoint xZero, List<HugoniotSegment> segments) {
+        super(coordsArrayFromRealSegments(segments), new ViewingAttr(Color.red));
+        hugoniotSegments_=segments;
+        xZero_=xZero;
 
     }
 
-    public HugoniotCurve(PhasePoint xZero, WaveState[] states) {
-        super(coordsArrayFromRealSegments(HugoniotCurve.hugoniotSegsFromWaveState(xZero,
-                states)), new ViewingAttr(Color.red));
 
-        xZero_ = new PhasePoint(xZero);
-        hugoniotSegments_ = HugoniotCurve.hugoniotSegsFromWaveState(xZero,
-                states);
-
-    }
-
-    public HugoniotCurve(PhasePoint xZero, ArrayList states) {
-        super(coordsArrayFromRealSegments(HugoniotCurve.hugoniotSegsFromWaveState(xZero,
-                states)), new ViewingAttr(Color.red));
-
-        xZero_ = new PhasePoint(xZero);
-        hugoniotSegments_ = HugoniotCurve.hugoniotSegsFromWaveState(xZero,
-                states);
-
-    }
-    
-    public HugoniotCurve(PhasePoint xZero,CoordsArray [] coords) {
-        
-        super(coords, new ViewingAttr(Color.RED));
-        
-        List realSegments = MultidAdapter.converseCoordsArrayToRealSegments(coords);
-        hugoniotSegments_ = hugoniotSegsFromRealSegs(xZero, realSegments);
-        
-        xZero_=new PhasePoint(xZero);
-        
-        
-    }
 
     public static List interpolate(HugoniotPoint v1,
             HugoniotPoint v2) {

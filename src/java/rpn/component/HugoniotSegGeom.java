@@ -20,18 +20,18 @@ public class HugoniotSegGeom extends MultiPolyLine {
     public static ViewingAttr viewAttrSelection(HugoniotSegment segment) {
         ViewingAttr attr = new ViewingAttr(Color.white);
 
-        if ((segment.type().negativeRealPartNoLeft() == 1) && (segment.type().negativeRealPartNoRight() == 0))
-            attr = new ViewingAttr(Color.cyan);
-        if ((segment.type().negativeRealPartNoLeft() == 0) && (segment.type().negativeRealPartNoRight() == 1))
-            attr = new ViewingAttr(Color.blue);
-        if ((segment.type().negativeRealPartNoLeft() == 1) && (segment.type().negativeRealPartNoRight() == 1))
-            attr = new ViewingAttr(Color.green);
-        if ((segment.type().negativeRealPartNoLeft() == 2) && (segment.type().negativeRealPartNoRight() == 1))
-            attr = new ViewingAttr(Color.pink);
-        if ((segment.type().negativeRealPartNoLeft() == 0) && (segment.type().negativeRealPartNoRight() == 2))
-            attr = new ViewingAttr(Color.yellow);
-        if ((segment.type().negativeRealPartNoLeft() == 1) && (segment.type().negativeRealPartNoRight() == 2))
-            attr = new ViewingAttr(Color.red);
+//        if ((segment.type().negativeRealPartNoLeft() == 1) && (segment.type().negativeRealPartNoRight() == 0))
+//            attr = new ViewingAttr(Color.cyan);
+//        if ((segment.type().negativeRealPartNoLeft() == 0) && (segment.type().negativeRealPartNoRight() == 1))
+//            attr = new ViewingAttr(Color.blue);
+//        if ((segment.type().negativeRealPartNoLeft() == 1) && (segment.type().negativeRealPartNoRight() == 1))
+//            attr = new ViewingAttr(Color.green);
+//        if ((segment.type().negativeRealPartNoLeft() == 2) && (segment.type().negativeRealPartNoRight() == 1))
+//            attr = new ViewingAttr(Color.pink);
+//        if ((segment.type().negativeRealPartNoLeft() == 0) && (segment.type().negativeRealPartNoRight() == 2))
+//            attr = new ViewingAttr(Color.yellow);
+//        if ((segment.type().negativeRealPartNoLeft() == 1) && (segment.type().negativeRealPartNoRight() == 2))
+//            attr = new ViewingAttr(Color.red);
         return attr;
     }
 }

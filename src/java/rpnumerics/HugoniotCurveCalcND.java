@@ -17,19 +17,23 @@ public class HugoniotCurveCalcND
     //
     // Constants
     //
+
     static public final double UMINUS_SHIFT = .01;
     //
     // Members
     //
     private VectorFunction f_;
     private HugoniotMethod hugoniotMethod_;
-//    private RealVector Uminus_;
+    private RealVector Uminus_;
     private HugoniotParams hugoniotParams_;
-
 
     //
     // Constructors
     //
+    public HugoniotCurveCalcND(RealVector uMinus) {
+        Uminus_=new PhasePoint(uMinus);
+    }
+
     public HugoniotCurveCalcND(HugoniotContinuationMethod hugoniotMethod) {
 
         hugoniotMethod_ = hugoniotMethod;
@@ -71,8 +75,8 @@ public class HugoniotCurveCalcND
 
     public PhasePoint getUMinus() {
 
-        return new PhasePoint(hugoniotParams_.getUMinus());
-//        return new PhasePoint(Uminus_);
+//        return new PhasePoint(hugoniotParams_.getUMinus());
+        return new PhasePoint(Uminus_);
     }
 
     public RealVector getFMinus() {
@@ -90,24 +94,24 @@ public class HugoniotCurveCalcND
 //        return Uminus_.toDouble();
     }
 
-    public RpSolution calc() {
+    public RpSolution calc() throws RpException {
         //		System.out.println("DEBUG - will do the approximation");
         // the XZero shift will be the reference point for now...
 
-        wave.util.RealVector initialPoint = getUMinus();//rpnumerics.RPNUMERICS.hugoniotCurveCalc().getUMinus().getCoords();
-        for (int i = 0; i < initialPoint.getSize(); i++) {
-            initialPoint.setElement(i, initialPoint.getElement(i) + UMINUS_SHIFT);
+//        wave.util.RealVector initialPoint = getUMinus();//rpnumerics.RPNUMERICS.hugoniotCurveCalc().getUMinus().getCoords();
+//        for (int i = 0; i < initialPoint.getSize(); i++) {
+//            initialPoint.setElement(i, initialPoint.getElement(i) + UMINUS_SHIFT);
+//
+//        }
 
-        }
-
-        return hugoniotMethod_.curve(initialPoint);
+        return calc(getUMinus());
 
     }
 
-    public RpSolution recalc() {
+    public RpSolution recalc() throws RpException {
 //        System.out.println("Chamando recalc");
         return calc();
     }
 
-    
+    private native RpSolution calc(PhasePoint initialpoint) throws RpException;
 }
