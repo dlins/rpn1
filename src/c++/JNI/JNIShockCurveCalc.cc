@@ -84,17 +84,17 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
 
 
 
-cout<<input[0]<<endl;
-cout<<input[1]<<endl;
-cout<<input[2]<<endl;
+    cout << input[0] << endl;
+    cout << input[1] << endl;
+    cout << input[2] << endl;
 
-    double tol = 10e-10;
-    double epsilon = 10e-4;
+    double tol = 10e-4;
+    double epsilon = 10e-2;
     int t = 11;
-//    printf("Valor de fluxobject em JNI %p\n",&RpNumerics::getPhysics().fluxFunction());
+    //    printf("Valor de fluxobject em JNI %p\n",&RpNumerics::getPhysics().fluxFunction());
     ShockContinuationMethod3D2D method(dimension, familyIndex, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), RpNumerics::getPhysics().boundary(), input, tol, epsilon, t);
 
-//    int edge;
+    //    int edge;
 
     method.curve(realVectorInput, timeDirection, coords);
 
@@ -126,6 +126,8 @@ cout<<input[2]<<endl;
 
 
         for (unsigned int j = 0; j < classified[i].vec.size() - 1; j++) {
+
+//        for (unsigned int j = 0; j < coords.size() - 1; j++) {
             int m = (classified[i].vec[0].size() - dimension - 1) / 2; // Number of valid eigenvalues
 
             jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
@@ -134,6 +136,13 @@ cout<<input[2]<<endl;
 
             double * leftCoords = (double *) classified[i].vec[j];
             double * rightCoords = (double *) classified[i].vec[j + 1];
+
+
+
+//            double * leftCoords = (double *) coords.at(j);
+//            double * rightCoords = (double *) coords.at(j + 1);
+
+
 
 
             env->SetDoubleArrayRegion(eigenValRLeft, 0, dimension, leftCoords);
@@ -148,6 +157,13 @@ cout<<input[2]<<endl;
 
             double leftSigma = classified[i].vec[j].component(dimension + m);
             double rightSigma = classified[i].vec[j + 1].component(dimension + m);
+
+
+//            double leftSigma = 0;
+//            double rightSigma = 0;
+
+
+
             //            cout << "type of " << j << " = " << classified[i].type << endl;
             //            cout << "speed of " << j << " = " << classified[i].vec[j].component(dimension + m) << endl;
             //            cout << "speed of " << j + 1 << " = " << classified[i].vec[j + 1].component(dimension + m) << endl;

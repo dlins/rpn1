@@ -27,10 +27,10 @@ struct HugoniotPolyLine {
 };
 
 // Color table. Could be anywhere.
-struct ColorTable{
-    public:
-        static int color[16][3];
-};
+//struct ColorTable{
+//    public:
+//        static int color[16][3];
+//};
 
 class ColorCurve {
     private:

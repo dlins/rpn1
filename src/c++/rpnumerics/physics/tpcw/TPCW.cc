@@ -184,7 +184,7 @@ Boundary * TPCW::defaultBoundary()const {
     max.component(1) = T2Theta(450);
 
 //    max.component(1) = 1;
-    max.component(2) = TD->u2U(2*4.22e-5);
+    max.component(2) = TD->u2U(100*4.22e-5);
 
 
 //    max.component(2) = 1;

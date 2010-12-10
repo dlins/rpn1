@@ -1,23 +1,23 @@
 #include "ColorCurve.h"
 
 // Initialize the color table:
-int ColorTable::color[16][3] = {255, 255, 255, //  0 = Left transport    COLOR=white     ---- ATTENTION IT IS ALSO USEFUL TO PUT THIS +'s AND -'s.
-    255, 255, 255, //  1
-    255, 0, 0, //  2 = Choque 2 LAX.     COLOR=red       -+--
-    247, 151, 55, //  3 = SUPERCOMPRESSIVE  COLOR=orange    ++--
-    255, 255, 255, //  4
-    255, 255, 255, //  5
-    255, 255, 255, //  6
-    255, 255, 255, //  7
-    255, 0, 255, //  8 = EXPANSIVE 2       COLOR=pink      ---+
-    255, 255, 255, //  9
-    18, 153, 1, // 10 = TRANSITIONAL      COLOR=green     -+-+
-    0, 0, 255, // 11 = Choque 1 LAX.     COLOR=dark blue ++-+
-    255, 255, 255, // 12 = Central transport COLOR=white     --++
-    255, 255, 255, // 13
-    0, 255, 255, // 14 = EXPANSIVE 1       COLOR=cyan      -+++
-    255, 255, 255 // 15 = Right transport   COLOR=white     ++++
-};
+//int ColorTable::color[16][3] = {255, 255, 255, //  0 = Left transport    COLOR=white     ---- ATTENTION IT IS ALSO USEFUL TO PUT THIS +'s AND -'s.
+//    255, 255, 255, //  1
+//    255, 0, 0, //  2 = Choque 2 LAX.     COLOR=red       -+--
+//    247, 151, 55, //  3 = SUPERCOMPRESSIVE  COLOR=orange    ++--
+//    255, 255, 255, //  4
+//    255, 255, 255, //  5
+//    255, 255, 255, //  6
+//    255, 255, 255, //  7
+//    255, 0, 255, //  8 = EXPANSIVE 2       COLOR=pink      ---+
+//    255, 255, 255, //  9
+//    18, 153, 1, // 10 = TRANSITIONAL      COLOR=green     -+-+
+//    0, 0, 255, // 11 = Choque 1 LAX.     COLOR=dark blue ++-+
+//    255, 255, 255, // 12 = Central transport COLOR=white     --++
+//    255, 255, 255, // 13
+//    0, 255, 255, // 14 = EXPANSIVE 1       COLOR=cyan      -+++
+//    255, 255, 255 // 15 = Right transport   COLOR=white     ++++
+//};
 
 // Sign function. Inlined, should be fast.
 

@@ -186,6 +186,8 @@ int ContourMethod::curv2d(/*double *segend,*/ int sn, int seglim, double fdummy,
     //inicializing arrays dimensions
     nsface_ = hc.mkcomb(&comb_[0][0], hn + 1, hm + 1);
 
+
+
     int fnbr_[nsface_][nsface_];
 
     int dimf_ = 5;
@@ -326,6 +328,8 @@ int ContourMethod::curv2d(/*double *segend,*/ int sn, int seglim, double fdummy,
         u(1) = vert[0][1];
 
         foncub[0][0] = hugoniot->HugoniotFunction(u);
+
+
         //foncub[0][0] = f(vert[0][0], vert [0][1]);
 
         refval = foncub[0][0];
@@ -371,6 +375,8 @@ lab90:
                 &g[0][0], &stormd[0], &storm_[0]);
 
 
+
+
         //        hc.putmi("SOLPTR", &solptr_[0][0], nsimp_, nsface_);
 
 
@@ -391,7 +397,7 @@ lab90:
 
         //MAKE THE LIST OF EDGE POINTERS
 
-//        cout << "Valor de inteiros " << dime_ << " " << nedges_ << " " << nsimp_ << "  " << nsface_ << endl;
+
 
 
 

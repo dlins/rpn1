@@ -349,7 +349,7 @@ int Eigen::eig(int n, const double *A, const double *B, vector<eigenpair> &vge){
                 pos++;
             }
             else {
-                printf("Eigenvalue discarded: %d\n", pos);
+//                printf("Eigenvalue discarded: %d\n", pos);
             }
         }
 

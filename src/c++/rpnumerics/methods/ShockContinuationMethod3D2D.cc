@@ -926,6 +926,7 @@ int ShockContinuationMethod3D2D::curve(int family, double maxnum, int increase, 
         for (int i = 0; i < n; i++) q.component(i) = Uprevious[i];
 
         int info_intersect = boundary->intersection(p, q, r, edge);
+
         if (info_intersect == 1) { // Both inside
             out.push_back(q);
         } else if (info_intersect == -1) { // Both outside

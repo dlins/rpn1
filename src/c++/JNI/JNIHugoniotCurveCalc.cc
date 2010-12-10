@@ -69,6 +69,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
 
     double input [dimension];
 
+
     env->GetDoubleArrayRegion(phasePointArray, 0, dimension, input);
 
     env->DeleteLocalRef(phasePointArray);
@@ -158,9 +159,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
         vrs3d[i].component(0) = vrs[i].component(0);
 //        vrs3d[i].component(1) = TD.Theta2T(vrs[i].component(1));
         vrs3d[i].component(1) = vrs[i].component(1);
-        vrs3d[i].component(2) = TD.U2u(u);
-    }
+        cout<<"Valor de u"<<u<<endl;
+        cout << "Valor de s" << s << endl;
 
+        vrs3d[i].component(2) = u;//TD.U2u(u);
+    }
+//    ColorCurve::preprocess com os pontos em 3d (completo)
+  //Chamar o classified para cada 2 de pontos retornado pelo preprocess . Esses dois pontos tem que estar dentro de um vector<RealVector>
     for (unsigned int i = 0; i < vrs3d.size() / 2; i++) {
 
 //        cout<<"Coordenada : "<<vrs3d.at(2*i)<<endl;

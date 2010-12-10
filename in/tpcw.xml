@@ -23,7 +23,7 @@
 
 <VIEWCONFIGURATION modeldomain="3">
 
-    <PROJDESC name="Axis0 Axis1">
+    <PROJDESC name="Axis1 Axis0">
         <VIEWPARAM name="axis" value="1 0"/>
         <VIEWPARAM name="vpwidth" value="600"/>
         <VIEWPARAM name="vpheight" value="650"/>
