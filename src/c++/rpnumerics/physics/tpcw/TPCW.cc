@@ -172,9 +172,9 @@ Boundary * TPCW::defaultBoundary()const {
 
 //    min.component(2) = 0;
 
-    cout <<min.component(0)<<"<--------MIN 0"<<endl;
-    cout << min.component(1) << "<--------MIN 1" << endl;
-    cout << min.component(2) << "<--------MIN 2" << endl;
+//    cout <<min.component(0)<<"<--------MIN 0"<<endl;
+//    cout << min.component(1) << "<--------MIN 1" << endl;
+//    cout << min.component(2) << "<--------MIN 2" << endl;
 
 
 
@@ -184,15 +184,15 @@ Boundary * TPCW::defaultBoundary()const {
     max.component(1) = T2Theta(450);
 
 //    max.component(1) = 1;
-    max.component(2) = TD->u2U(100*4.22e-5);
+    max.component(2) = TD->u2U(2*4.22e-5);
 
 
 //    max.component(2) = 1;
 //cout <<"res "<<TD->u2U(4.22e-6)<<endl;
 
-    cout <<max.component(0)<<"<----------MAX 0"<<endl;
-    cout << max.component(1) << "<-------MAX 1" << endl;
-    cout << max.component(2) << "<------MAX 2" << endl;
+//    cout <<max.component(0)<<"<----------MAX 0"<<endl;
+//    cout << max.component(1) << "<-------MAX 1" << endl;
+//    cout << max.component(2) << "<------MAX 2" << endl;
 
 
     return new RectBoundary(min, max);

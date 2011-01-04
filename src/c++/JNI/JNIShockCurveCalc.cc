@@ -83,13 +83,18 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
     //    Ur[2] = 1.0;
 
 
+    cout << "Ponto de entrada" << endl;
 
     cout << input[0] << endl;
     cout << input[1] << endl;
     cout << input[2] << endl;
 
-    double tol = 10e-4;
-    double epsilon = 10e-2;
+//    double tol = 10e-4;
+//    double epsilon = 10e-2;
+
+    double tol = 1e-10;
+    double epsilon = 1e-3;
+
     int t = 11;
     //    printf("Valor de fluxobject em JNI %p\n",&RpNumerics::getPhysics().fluxFunction());
     ShockContinuationMethod3D2D method(dimension, familyIndex, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), RpNumerics::getPhysics().boundary(), input, tol, epsilon, t);
@@ -100,34 +105,29 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
 
     //Classify
 
-    const vector < RealVector> tempCurve = coords;
+    //    const vector < RealVector> tempCurve = coords;
 
     std::vector<RealVector> out_color;
 
-    ColorCurve::preprocess_data(tempCurve, realVectorInput, 2, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), 11, out_color);
+    ColorCurve::preprocess_data(coords, realVectorInput, 2, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), 11, out_color);
 
 
     std::vector<HugoniotPolyLine> classified;
     ColorCurve::classify_segments(out_color, classified);
     jobject segmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
+    cout << "Numero de hugo poly: " << classified.size() << endl;
 
     for (i = 0; i < classified.size(); i++) {
 
-        HugoniotPolyLine tempPoly = classified.at(i);
+ //        HugoniotPolyLine tempPoly = classified.at(i);
 
-        vector <RealVector> tempVec = tempPoly.vec;
-
-        int pointType;
-
-
-        jobject realVectorLeftPoint;
-
-        jobject realVectorRightPoint;
+        //        vector <RealVector> tempVec = tempPoly.vec;
+        cout << "Numero de pontos na polyline: " <<i<<" "<< classified[i].vec.size() << endl;
 
 
         for (unsigned int j = 0; j < classified[i].vec.size() - 1; j++) {
 
-//        for (unsigned int j = 0; j < coords.size() - 1; j++) {
+            //        for (unsigned int j = 0; j < coords.size() - 1; j++) {
             int m = (classified[i].vec[0].size() - dimension - 1) / 2; // Number of valid eigenvalues
 
             jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
@@ -137,34 +137,26 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
             double * leftCoords = (double *) classified[i].vec[j];
             double * rightCoords = (double *) classified[i].vec[j + 1];
 
-
-
-//            double * leftCoords = (double *) coords.at(j);
-//            double * rightCoords = (double *) coords.at(j + 1);
-
-
-
-
             env->SetDoubleArrayRegion(eigenValRLeft, 0, dimension, leftCoords);
             env->SetDoubleArrayRegion(eigenValRRight, 0, dimension, rightCoords);
 
 
             //Construindo left e right points
-            realVectorLeftPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRLeft);
-            realVectorRightPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRRight);
+            jobject realVectorLeftPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRLeft);
+            jobject realVectorRightPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRRight);
 
-            pointType = classified[i].type;
+           int  pointType = classified[i].type;
 
             double leftSigma = classified[i].vec[j].component(dimension + m);
             double rightSigma = classified[i].vec[j + 1].component(dimension + m);
 
 
-//            double leftSigma = 0;
-//            double rightSigma = 0;
+            //            double leftSigma = 0;
+            //            double rightSigma = 0;
+            //
 
 
-
-            //            cout << "type of " << j << " = " << classified[i].type << endl;
+//                        cout << "type of " << j << " = " << classified[i].type << endl;
             //            cout << "speed of " << j << " = " << classified[i].vec[j].component(dimension + m) << endl;
             //            cout << "speed of " << j + 1 << " = " << classified[i].vec[j + 1].component(dimension + m) << endl;
 

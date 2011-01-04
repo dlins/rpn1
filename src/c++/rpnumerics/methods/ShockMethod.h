@@ -13,8 +13,13 @@
  * ---------------------------------------------------------------
  * Includes:
  */
+
 #include "RealVector.h"
 #include <vector>
+#include "ColorCurve.h"
+#include "FluxFunction.h"
+#include "AccumulationFunction.h"
+#include "Boundary.h"
 
 /*
  * ---------------------------------------------------------------
@@ -23,19 +28,39 @@
 
 
 class ShockMethod {
-
 private:
+
+    ColorCurve * sorter_;
+
+    FluxFunction * fluxFunction_;
+
+    AccumulationFunction * accFunction_;
+
+    Boundary * boundary_;
+
+    int dimension_;
 
 public:
 
+    ShockMethod(int, const FluxFunction &, const AccumulationFunction &,const Boundary &);
+
+    const FluxFunction & fluxFunction()const;
+
+    const AccumulationFunction & accumulationFunction()const;
+
+    const Boundary & boundary()const ;
+
+    int dimension()const;
+
     virtual void curve(const RealVector &, int direction, vector<RealVector> &) = 0;
 
-    virtual ShockMethod * clone() const = 0;
+//    virtual ShockMethod * clone() const = 0;
 
     virtual ~ShockMethod();
 
-
-
 };
+
+
+
 
 #endif //! _ShockMethod_H

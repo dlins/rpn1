@@ -72,7 +72,8 @@ void ShockContinuationMethod3D2D::curve(const RealVector & input, int direction,
 
     int edge;
 
-    curve(family_, maxStepsNumber, direction, output, edge);
+    int info = curve(family_, maxStepsNumber, direction, output, edge);
+    cout <<"Info retornado "<<info<<endl;
 
 
 
@@ -82,10 +83,10 @@ ShockContinuationMethod3D2D::ShockContinuationMethod3D2D(const ShockContinuation
 
 }
 
-ShockMethod * ShockContinuationMethod3D2D::clone() const {
-    return new ShockContinuationMethod3D2D(*this);
-
-}
+//ShockMethod * ShockContinuationMethod3D2D::clone() const {
+//    return new ShockContinuationMethod3D2D(*this);
+//
+//}
 
 
 // FUNCTION shockspeed
@@ -293,42 +294,42 @@ int ShockContinuationMethod3D2D::plane_start(int family, double Upr[], double Up
 
     double A[n][n], B[n][n];
 
-    cout << "Em  plane start"<< endl;
+//    cout << "Em  plane start"<< endl;
     fill_with_jet(*shock_flux_object, n, Uref, 1, 0, &A[0][0], 0);
-    cout << "Depois  plane start" << endl;
+//    cout << "Depois  plane start" << endl;
     fill_with_jet(*shock_accumulation_object, n, Uref, 1, 0, &B[0][0], 0); // TODO: Add "type", etc.
-    cout << "Depois  accum start" << endl;
+//    cout << "Depois  accum start" << endl;
     // Find the eigenpairs:
     // TODO: Check LAPACK's docs for the case when the number of eigenpairs is insufficient (less than the dimension of space).
     vector<eigenpair> e;
     int info;
-    cout <<"Valor de type:"<<type<<endl;
+//    cout <<"Valor de type:"<<type<<endl;
     
-    cout<<"A: "<<endl;
-    for (int i = 0; i < n ; i++) {
-        for (int j = 0; j < n; j++) {
-            cout<<A[i][j]<<" ";
-        }
-                cout<<endl;
-    }
+//    cout<<"A: "<<endl;
+//    for (int i = 0; i < n ; i++) {
+//        for (int j = 0; j < n; j++) {
+//            cout<<A[i][j]<<" ";
+//        }
+//                cout<<endl;
+//    }
 
 
-        cout<<"B: "<<endl;
-    for (int i = 0; i < n ; i++) {
-        for (int j = 0; j < n; j++) {
-            cout<<B[i][j]<<" ";
-        }
-        cout<<endl;
-    }
+//        cout<<"B: "<<endl;
+//    for (int i = 0; i < n ; i++) {
+//        for (int j = 0; j < n; j++) {
+//            cout<<B[i][j]<<" ";
+//        }
+//        cout<<endl;
+//    }
 
- for (int i = 0; i < n ; i++) {
-     cout <<"Uref "<<Uref[i]<<endl;
- }
+// for (int i = 0; i < n ; i++) {
+//     cout <<"Uref "<<Uref[i]<<endl;
+// }
 
 
     if (type == _SHOCK_SIMPLE_ACCUMULATION_) info = Eigen::eig(n, &A[0][0], e);
     else info = Eigen::eig(n, &A[0][0], &B[0][0], e);
-    cout <<"Tamanho de e"<<e.size()<<endl;
+//    cout <<"Tamanho de e"<<e.size()<<endl;
 
     // The i-th eigenvalue must be real. // The eigenvalues must be chosen carefully in the n-dimensional case.
     // ALL eigenvalues must be real. Extend this by using a for cycle.
@@ -683,7 +684,7 @@ ShockContinuationMethod3D2D::~ShockContinuationMethod3D2D() {
 
 int ShockContinuationMethod3D2D::init(int family, int increase, Plane &plane, RealVector &refvec, double &rfs, double &es) {
     /* In the first step we need to initialize the shock curve in the chosen direction */
-    cout<<"Inicializando com init inteiro"<<endl;
+//    cout<<"Inicializando com init inteiro"<<endl;
     double Upr[n], Upl[n]; // These are two possible initial points for the shock curve
     double v1[n], v2[n]; // These are the two vectors on the first plane.  (notice that we use the SAME plane for both Upr and Upl).
     double epsilon = eps;

@@ -50,7 +50,7 @@ extern "C" {
     void dgesv_(int*, int*, double*, int*, int*, double*, int*, int*);
 }
 
-class ShockContinuationMethod3D2D:public ShockMethod {
+class ShockContinuationMethod3D2D {
 private:
 
 
@@ -99,22 +99,22 @@ private:
 
     int init(int family, int increase, Plane &plane, RealVector &refvec, double &rebounds_first_step, double &epsilon_start);
     int init(const Plane &init_plane, const RealVector &init_refvec, Plane &plane, RealVector &refvec, double &rebounds_first_step, double &epsilon_start);
-    int curve(int family, double maxnum, int increase, std::vector<RealVector> &out, int &edge); // If _SHOCK_INIT_IS_REF_
+
 
 public:
 
+
+    int curve(int family, double maxnum, int increase, std::vector<RealVector> &out, int &edge); // If _SHOCK_INIT_IS_REF_
 
     ShockContinuationMethod3D2D(int dim,int family, const FluxFunction &, const AccumulationFunction &, const Boundary &, double Ur[], double tol, double epsilon, int t);
     virtual ~ShockContinuationMethod3D2D();
 
     ShockContinuationMethod3D2D(const ShockContinuationMethod3D2D &);
 
-    ShockMethod * clone() const ;
+//    ShockMethod * clone() const ;
 
 
     void curve(const RealVector &, int direction, vector<RealVector> &);
-
-
 
     //int curve(int family, double maxnum, int increase, double U0[], double refplane[], std::vector<RealVector> &out); // If _SHOCK_INIT_IS_NOT_REF_
 

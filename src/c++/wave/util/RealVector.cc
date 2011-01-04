@@ -1,6 +1,6 @@
 #include "RealVector.h"
 
-RealVector::RealVector(void) : Vector(2) {}
+RealVector::RealVector(void) : Vector(8) {}
 
 RealVector::RealVector(int size) :  Vector(size) {}
 

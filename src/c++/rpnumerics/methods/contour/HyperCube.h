@@ -507,7 +507,7 @@ public:
 
     int mkcomb(int *comb_, int np, int mp);
 
-    int mkedge(int *edges_, int dime_, int nedges_, int *smpedg_, int *solptr_, int *fnbr_, int nsimp_, int nsface_);
+    int mkedge(int *edges_, int dime_, int *smpedg_, int *solptr_, int *fnbr_, int nsimp_, int nsface_);
 
     void mkflst(int *facept_, int *ptrf_, // facept_[faceptInd_][2], ptrf_[nface_][2]
             int *facatt_, int *ptfatt_, // facatt_[fdim_][2], ptfatt_[nface_][2]

@@ -60,7 +60,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
     //    jmethodID hugoniotPointTypeConstructor = (env)->GetMethodID(hugoniotPointTypeClass, "<init>", "([D[D)V");
     jmethodID hugoniotCurveConstructor = env->GetMethodID(hugoniotCurveClass, "<init>", "(Lrpnumerics/PhasePoint;Ljava/util/List;)V");
 
-//    int i;
+    //    int i;
 
     //Input processing
     jdoubleArray phasePointArray = (jdoubleArray) (env)->CallObjectMethod(uMinus, toDoubleMethodID);
@@ -81,17 +81,22 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
 
     //    Test testFunction;
 
-
     //-------------------------------------------------------------------
 
 
     RealVector Uref(dimension, input);
 
 
+    for (unsigned int i = 0; i < dimension; i++) {
+
+        cout << "Valor de uref " << Uref.component(i) << endl;
+
+    }
+
     double const_gravity = 9.8;
     double abs_perm = 3e-12;
     double phi = 0.38;
-//    bool has_gravity = false;
+    //    bool has_gravity = false;
     double Tref_rock = 273.15;
     double Tref_water = 274.3775;
     double pressure = 100.9;
@@ -128,8 +133,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
 
     // Contour proper
 
-
-
     double rect[4];
 
 
@@ -149,7 +152,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
     std::vector<RealVector> vrs;
     method.curv2d(0, 2000, 0.0, &rect[0], &res[0], 1, vrs);
 
+
     std::vector<RealVector> vrs3d;
+
+
+
     vrs3d.resize(vrs.size());
     for (unsigned int i = 0; i < vrs.size(); i++) {
         double s;
@@ -157,19 +164,19 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
         tpcwhc.CompleteHugoniot(s, u, vrs[i]);
         vrs3d[i].resize(3);
         vrs3d[i].component(0) = vrs[i].component(0);
-//        vrs3d[i].component(1) = TD.Theta2T(vrs[i].component(1));
+        //        vrs3d[i].component(1) = TD.Theta2T(vrs[i].component(1));
         vrs3d[i].component(1) = vrs[i].component(1);
-        cout<<"Valor de u"<<u<<endl;
-        cout << "Valor de s" << s << endl;
+        //        cout<<"Valor de u"<<u<<endl;
+        //        cout << "Valor de s" << s << endl;
 
-        vrs3d[i].component(2) = u;//TD.U2u(u);
+        vrs3d[i].component(2) = u; //TD.U2u(u);
     }
-//    ColorCurve::preprocess com os pontos em 3d (completo)
-  //Chamar o classified para cada 2 de pontos retornado pelo preprocess . Esses dois pontos tem que estar dentro de um vector<RealVector>
+    //    ColorCurve::preprocess com os pontos em 3d (completo)
+    //Chamar o classified para cada 2 de pontos retornado pelo preprocess . Esses dois pontos tem que estar dentro de um vector<RealVector>
     for (unsigned int i = 0; i < vrs3d.size() / 2; i++) {
 
-//        cout<<"Coordenada : "<<vrs3d.at(2*i)<<endl;
-//        cout << "Coordenada : " << vrs3d.at(2 * i+1) << endl;
+        //        cout<<"Coordenada : "<<vrs3d.at(2*i)<<endl;
+        //        cout << "Coordenada : " << vrs3d.at(2 * i+1) << endl;
         jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
         jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
 

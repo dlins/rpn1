@@ -28,8 +28,8 @@ private:
     int size_;
     const char * type_;
 
-    std::vector<int> exception;
-
+//    std::vector<int> exception;
+    std::vector<bool> test_dimension;
 
 public:
 
@@ -51,8 +51,9 @@ public:
     const RealVector & minimums(void) const;
     const RealVector & maximums(void) const;
     RealVector intersect(RealVector & y1, RealVector & y2) const;
-//    bool inside(const RealVector &);
-    int intersection(const RealVector &, const RealVector &, RealVector &)const;
+    //    bool inside(const RealVector &);
+    //    int intersection(const RealVector &, const RealVector &, RealVector &)const;
+    int intersection(const RealVector &, const RealVector &, RealVector &, int &)const;
 
     const char * boundaryType()const;
 
@@ -98,7 +99,7 @@ inline RealVector RectBoundary::intersect(RealVector & y1, RealVector & y2) cons
 
     for (int i = 0; i < size_; i++)
         if (y1.component(i) != y2.component(i)) {
-            ratio = (minimums_->component(i) - y1.component(i)) /   \
+            ratio = (minimums_->component(i) - y1.component(i)) /    \
                 (y2.component(i) - y1.component(i));
 
             if ((ratio >= 0) && (ratio <= 1)) {
@@ -120,7 +121,7 @@ inline RealVector RectBoundary::intersect(RealVector & y1, RealVector & y2) cons
                     result = vec2;
             }
 
-            ratio = (maximums_->component(i) - y1.component(i)) /   \
+            ratio = (maximums_->component(i) - y1.component(i)) /    \
                 (y2.component(i) - y1.component(i));
 
             if ((ratio >= 0) && (ratio <= 1)) {

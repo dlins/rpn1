@@ -1,23 +1,23 @@
 #include "ColorCurve.h"
 
 // Initialize the color table:
-//int ColorTable::color[16][3] = {255, 255, 255, //  0 = Left transport    COLOR=white     ---- ATTENTION IT IS ALSO USEFUL TO PUT THIS +'s AND -'s.
-//    255, 255, 255, //  1
-//    255, 0, 0, //  2 = Choque 2 LAX.     COLOR=red       -+--
-//    247, 151, 55, //  3 = SUPERCOMPRESSIVE  COLOR=orange    ++--
-//    255, 255, 255, //  4
-//    255, 255, 255, //  5
-//    255, 255, 255, //  6
-//    255, 255, 255, //  7
-//    255, 0, 255, //  8 = EXPANSIVE 2       COLOR=pink      ---+
-//    255, 255, 255, //  9
-//    18, 153, 1, // 10 = TRANSITIONAL      COLOR=green     -+-+
-//    0, 0, 255, // 11 = Choque 1 LAX.     COLOR=dark blue ++-+
-//    255, 255, 255, // 12 = Central transport COLOR=white     --++
-//    255, 255, 255, // 13
-//    0, 255, 255, // 14 = EXPANSIVE 1       COLOR=cyan      -+++
-//    255, 255, 255 // 15 = Right transport   COLOR=white     ++++
-//};
+//int ColorTable::color[16][3] = { 255, 255, 255,   //  0 = Left transport    COLOR=white     ---- ATTENTION IT IS ALSO USEFUL TO PUT THIS +'s AND -'s.
+//                                 255, 255, 255,   //  1
+//                                 255,   0,   0,   //  2 = Choque 2 LAX.     COLOR=red       -+--
+//                                 247, 151,  55,   //  3 = SUPERCOMPRESSIVE  COLOR=orange    ++--
+//                                 255, 255, 255,   //  4
+//                                 255, 255, 255,   //  5
+//                                 255, 255, 255,   //  6
+//                                 255, 255, 255,   //  7
+//                                 255,   0, 255,   //  8 = EXPANSIVE 2       COLOR=pink      ---+
+//                                 255, 255, 255,   //  9
+//                                  18, 153,   1,   // 10 = TRANSITIONAL      COLOR=green     -+-+
+//                                   0,   0, 255,   // 11 = Choque 1 LAX.     COLOR=dark blue ++-+
+//                                 255, 255, 255,   // 12 = Central transport COLOR=white     --++
+//                                 255, 255, 255,   // 13
+//                                   0, 255, 255,   // 14 = EXPANSIVE 1       COLOR=cyan      -+++
+//                                 255, 255, 255    // 15 = Right transport   COLOR=white     ++++
+//                                };
 
 // Sign function. Inlined, should be fast.
 
@@ -30,6 +30,50 @@ int ColorCurve::sgn(double x) {
 //
 //    r = alpha*p + (1 - alpha)*q
 //
+
+void ColorCurve::fill_with_jet(const RpFunction & flux_object, int n, double *in, int degree, double *F, double *J, double *H) {
+    RealVector r(n);
+
+    //    cout << "Tamanho em fill: " << n << endl;
+    double *rp = r;
+    for (int i = 0; i < n; i++) rp[i] = in[i];
+    //    cout << "Entrada em fill: " << r << endl;
+    // Will this work? There is a const somewhere in fluxParams.
+    //FluxParams fp(r);
+    //flux_object->fluxParams(FluxParams(r)); // flux_object->fluxParams(fp);
+
+    WaveState state_c(r);
+
+    JetMatrix c_jet(n);
+    //    cout << "Depois da linha 296 " << c_jet.size() << endl;
+    flux_object.jet(state_c, c_jet, degree);
+    //    cout << "Depois de flux object: " << n << endl;
+
+    // Fill F
+    if (F != 0) for (int i = 0; i < n; i++) F[i] = c_jet(i);
+
+    // Fill J
+    if (J != 0) {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                J[i * n + j] = c_jet(i, j);
+            }
+        }
+    }
+
+    // Fill H
+    if (H != 0) {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                for (int k = 0; k < n; k++) {
+                    H[(i * n + j) * n + k] = c_jet(i, j, k); // Check this!!!!!!!!
+                }
+            }
+        }
+    }
+    //    cout << "Dentro de fill with jet shock" << endl;
+    return;
+}
 
 int ColorCurve::interpolate(const RealVector &p, const RealVector &q, std::vector<RealVector> &r) {
     r.clear();
@@ -110,11 +154,18 @@ int ColorCurve::interpolate(const RealVector &p, const RealVector &q, std::vecto
 }
 
 int ColorCurve::classify_point(const RealVector &p) {
+
     double l0_ref = p.component(3); // lambda_0(Uref)
     double l1_ref = p.component(4); // lambda_1(Uref)
     double s = p.component(5); // shock speed s(Uref,p)
     double l0_p = p.component(6); // lambda_0(p)
     double l1_p = p.component(7); // lambda_1(p)
+
+//    double l0_ref =0;
+//    double l1_ref =0;
+//    double s = 0;
+//    double l0_p =0;
+//    double l1_p = 0;
 
     int type = 0;
 
@@ -127,6 +178,10 @@ int ColorCurve::classify_point(const RealVector &p) {
 }
 
 void ColorCurve::classify_segments(const std::vector<RealVector> &input, std::vector<HugoniotPolyLine> &output) {
+
+    cout << "Tamanho do vetor para classificar: " << input.size() << endl;
+    if (input.size() < 2) return;
+
     // Create a vector of the positions where a change of type occurs.
     // These will be used later, when filling the output. 
     // The first and last points will be treated differently, and extra care should be taken then.
@@ -139,10 +194,15 @@ void ColorCurve::classify_segments(const std::vector<RealVector> &input, std::ve
     // Initialize t_current
     t_current = classify_point(input[1]);
 
+
     // The first point will not be classified
     int p = 1;
     while (p < input_size - 1) {
+
+
         t_next = classify_point(input[p + 1]);
+
+//        cout << "Depois de t_next" << endl;
 
         if (t_current != t_next) {
             pos.push_back(p + 1);
@@ -179,6 +239,8 @@ void ColorCurve::classify_segments(const std::vector<RealVector> &input, std::ve
         // Set the type of this segment
         output[seg_num].type = classify_point(input[init]);
 
+//        output[seg_num].type = 0; //TODO Test  Remove
+
         // Add the points
         for (int i = init; i < end; i++) {
             output[seg_num].vec.push_back(input[i]);
@@ -204,7 +266,7 @@ void ColorCurve::classify_segments(const std::vector<RealVector> &input, std::ve
                     printf("    Interpolation, added 1 point (a).\n");
                     output[seg_num + 1].vec.push_back(r[0]);
                     printf("    Interpolation, added 1 point (b).\n");
-                }                    // If two points are returned, the first one is added to the current segment,
+                }// If two points are returned, the first one is added to the current segment,
                     // while the second one is added to the next segment. There is a gap between the two segments.
                 else {
                     output[seg_num].vec.push_back(r[0]);
@@ -248,50 +310,6 @@ double ColorCurve::shockspeed(int n, double Um[], double Up[], const FluxFunctio
     return s / den;
 }
 
-void ColorCurve::fill_with_jet(const RpFunction & flux_object, int n, double *in, int degree, double *F, double *J, double *H) {
-    RealVector r(n);
-
-    //    cout << "Tamanho em fill: " << n << endl;
-    double *rp = r;
-    for (int i = 0; i < n; i++) rp[i] = in[i];
-    //    cout << "Entrada em fill: " << r << endl;
-    // Will this work? There is a const somewhere in fluxParams.
-    //FluxParams fp(r);
-    //flux_object->fluxParams(FluxParams(r)); // flux_object->fluxParams(fp);
-
-    WaveState state_c(r);
-
-    JetMatrix c_jet(n);
-    //    cout << "Depois da linha 296 " << c_jet.size() << endl;
-    flux_object.jet(state_c, c_jet, degree);
-    //    cout << "Depois de flux object: " << n << endl;
-
-    // Fill F
-    if (F != 0) for (int i = 0; i < n; i++) F[i] = c_jet(i);
-
-    // Fill J
-    if (J != 0) {
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                J[i * n + j] = c_jet(i, j);
-            }
-        }
-    }
-
-    // Fill H
-    if (H != 0) {
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                for (int k = 0; k < n; k++) {
-                    H[(i * n + j) * n + k] = c_jet(i, j, k); // Check this!!!!!!!!
-                }
-            }
-        }
-    }
-    //    cout << "Dentro de fill with jet shock" << endl;
-    return;
-}
-
 // Given an array of points that form a shockcurve it will return the same curve augmented with the valid eigenvalues at the
 // reference point, and the speed and valid eigenvalues at each point.
 //
@@ -315,7 +333,7 @@ void ColorCurve::fill_with_jet(const RpFunction & flux_object, int n, double *in
 //
 
 int ColorCurve::preprocess_data(const std::vector<RealVector> &curve, const RealVector &Uref, int noe,
-       const FluxFunction & ff, const AccumulationFunction & aa, int type,
+        const FluxFunction &ff, const AccumulationFunction &aa, int type,
         std::vector<RealVector> &out) {
     out.clear();
 
@@ -379,7 +397,12 @@ int ColorCurve::preprocess_data(const std::vector<RealVector> &curve, const Real
 
             for (int j = 0; j < noe; j++) temp.component(noe + m + 1 + j) = e[j].r;
 
-            out[i] = temp;
+            //            out[i] = temp;
+
+            out[i].resize(m + 2 * noe + 1);
+            for (int j = 0; j < m + 2 * noe + 1; j++) out[i].component(j) = temp.component(j);
+
+
         }
 
     }
