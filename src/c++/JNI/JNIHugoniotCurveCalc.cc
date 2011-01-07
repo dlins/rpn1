@@ -26,6 +26,7 @@ NOTE :
 #include "ContourMethod.h"
 #include "ReducedTPCWHugoniotFunctionClass.h"
 #include "TPCW.h"
+#include "StoneHugoniotFunctionClass.h"
 
 using std::vector;
 using namespace std;
@@ -54,7 +55,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
 
     jmethodID toDoubleMethodID = (env)->GetMethodID(classPhasePoint, "toDouble", "()[D");
     jmethodID realVectorConstructorDoubleArray = env->GetMethodID(realVectorClass, "<init>", "([D)V");
-    jmethodID hugoniotSegmentConstructor = (env)->GetMethodID(hugoniotSegmentClass, "<init>", "(Lwave/util/RealVector;DLwave/util/RealVector;DLrpnumerics/HugoniotPointType;)V");
+    jmethodID hugoniotSegmentConstructor = (env)->GetMethodID(hugoniotSegmentClass, "<init>", "(Lwave/util/RealVector;DLwave/util/RealVector;DI)V");
     jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
     jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
     //    jmethodID hugoniotPointTypeConstructor = (env)->GetMethodID(hugoniotPointTypeClass, "<init>", "([D[D)V");
@@ -131,6 +132,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
 
     ReducedTPCWHugoniotFunctionClass tpcwhc(Uref, abs_perm, phi, const_gravity, &TD, &fh);
 
+//    StoneHugoniotFunctionClass stoneHugoniotFunction(Uref,(const StoneFluxFunction &) RpNumerics::getPhysics().fluxFunction());
+
+//    CoincidenceTPCW coincidence()
+
+
     // Contour proper
 
     double rect[4];
@@ -144,67 +150,125 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
 
     int res[2];
 
-    res[0] = 150;
-    res[1] = 150;
+    res[0] =2;
+    res[1] = 2;
 
-    ContourMethod method(&tpcwhc);
+    ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), RpNumerics::getPhysics().boundary(), &tpcwhc);
+//       ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), RpNumerics::getPhysics().boundary(), &stoneHugoniotFunction);
 
-    std::vector<RealVector> vrs;
-    method.curv2d(0, 2000, 0.0, &rect[0], &res[0], 1, vrs);
+    //    std::vector<RealVector> vrs;
+    //    method.curv2d(0, 2000, 0.0, &rect[0], &res[0], 1, vrs);
+
+    vector<HugoniotPolyLine> hugoniotPolyLineVector;
+    method.curve(Uref, hugoniotPolyLineVector);
 
 
-    std::vector<RealVector> vrs3d;
+    //    tpcwhc.completCurve(vrs);
+//    for (int i = 0; i < hugoniotPolyLineVector.size(); i++) {
+//
+//        cout << "Numero de pontos na polyline: " << i << " " << hugoniotPolyLineVector[i].vec.size() << endl;
+//        cout << "coord 1: " << i << " " << hugoniotPolyLineVector[i].vec[0].size() << endl;
+//        cout << "coord 2: " << i << " " << hugoniotPolyLineVector[i].vec[1].size() << endl;
+//
+//    }
 
 
+    //    std::vector<RealVector> vrs3d;
+    //
+    //    vrs3d.resize(vrs.size());
+    //    for (unsigned int i = 0; i < vrs.size(); i++) {
+    //        double s;
+    //        double u;
+    //        tpcwhc.CompleteHugoniot(s, u, vrs[i]);
+    //        vrs3d[i].resize(3);
+    //        vrs3d[i].component(0) = vrs[i].component(0);
+    //        //        vrs3d[i].component(1) = TD.Theta2T(vrs[i].component(1));
+    //        vrs3d[i].component(1) = vrs[i].component(1);
+    //        //        cout<<"Valor de u"<<u<<endl;
+    //        //        cout << "Valor de s" << s << endl;
+    //
+    //        vrs3d[i].component(2) = u; //TD.U2u(u);
+    //    }
 
-    vrs3d.resize(vrs.size());
-    for (unsigned int i = 0; i < vrs.size(); i++) {
-        double s;
-        double u;
-        tpcwhc.CompleteHugoniot(s, u, vrs[i]);
-        vrs3d[i].resize(3);
-        vrs3d[i].component(0) = vrs[i].component(0);
-        //        vrs3d[i].component(1) = TD.Theta2T(vrs[i].component(1));
-        vrs3d[i].component(1) = vrs[i].component(1);
-        //        cout<<"Valor de u"<<u<<endl;
-        //        cout << "Valor de s" << s << endl;
+cout<<"Numero de polylines: " <<hugoniotPolyLineVector.size()<<endl;
 
-        vrs3d[i].component(2) = u; //TD.U2u(u);
+    for (int i = 0; i < hugoniotPolyLineVector.size(); i++) {
+
+        for (unsigned int j = 0; j < hugoniotPolyLineVector[i].vec.size() - 1; j++) {
+
+            int m = (hugoniotPolyLineVector[i].vec[0].size() - dimension - 1) / 2; // Number of valid eigenvalues
+
+            //
+            //            cout << "type of " << j << " = " << hugoniotPolyLineVector[i].type << endl;
+            //            cout << "coord 1 " << j << " = " << hugoniotPolyLineVector[i].vec[j] << endl;
+            //            cout << "coord 2 " << j + 1 << " = " << hugoniotPolyLineVector[i].vec[j + 1] << endl;
+
+            jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
+            jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
+
+            double * leftCoords = (double *) hugoniotPolyLineVector[i].vec[j];
+            double * rightCoords = (double *) hugoniotPolyLineVector[i].vec[j + 1];
+
+            env->SetDoubleArrayRegion(eigenValRLeft, 0, dimension, leftCoords);
+            env->SetDoubleArrayRegion(eigenValRRight, 0, dimension, rightCoords);
+
+
+            //Construindo left e right points
+            jobject realVectorLeftPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRLeft);
+            jobject realVectorRightPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRRight);
+
+            int pointType = hugoniotPolyLineVector[i].type;
+
+            double leftSigma = hugoniotPolyLineVector[i].vec[j].component(dimension + m);
+            double rightSigma = hugoniotPolyLineVector[i].vec[j + 1].component(dimension + m);
+
+            //            double leftSigma = 0;
+            //            double rightSigma = 0;
+            //
+
+//            cout<<"Antes de criar hugoniot segment"<<endl;
+            jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, pointType);
+            env->CallObjectMethod(segmentsArray, arrayListAddMethod, hugoniotSegment);
+
+        }
+
+
     }
-    //    ColorCurve::preprocess com os pontos em 3d (completo)
-    //Chamar o classified para cada 2 de pontos retornado pelo preprocess . Esses dois pontos tem que estar dentro de um vector<RealVector>
-    for (unsigned int i = 0; i < vrs3d.size() / 2; i++) {
 
-        //        cout<<"Coordenada : "<<vrs3d.at(2*i)<<endl;
-        //        cout << "Coordenada : " << vrs3d.at(2 * i+1) << endl;
-        jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
-        jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
-
-
-        double * leftCoords = (double *) vrs3d.at(2 * i);
-        double * rightCoords = (double *) vrs3d.at(2 * i + 1);
-
-
-        env->SetDoubleArrayRegion(eigenValRLeft, 0, dimension, leftCoords);
-        env->SetDoubleArrayRegion(eigenValRRight, 0, dimension, rightCoords);
-
-
-        //Construindo left e right points
-        jobject realVectorLeftPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRLeft);
-        jobject realVectorRightPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRRight);
-
-        int pointType = 0;
-
-        double leftSigma = -1.0;
-        double rightSigma = -1.0;
-        //            cout << "type of " << j << " = " << classified[i].type << endl;
-        //            cout << "speed of " << j << " = " << classified[i].vec[j].component(dimension + m) << endl;
-        //            cout << "speed of " << j + 1 << " = " << classified[i].vec[j + 1].component(dimension + m) << endl;
-
-        jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, pointType);
-        env->CallObjectMethod(segmentsArray, arrayListAddMethod, hugoniotSegment);
-
-    }
+    //    //    ColorCurve::preprocess com os pontos em 3d (completo)
+    //    //Chamar o classified para cada 2 de pontos retornado pelo preprocess . Esses dois pontos tem que estar dentro de um vector<RealVector>
+    //    for (unsigned int i = 0; i < vrs3d.size() / 2; i++) {
+    //
+    //        //        cout<<"Coordenada : "<<vrs3d.at(2*i)<<endl;
+    //        //        cout << "Coordenada : " << vrs3d.at(2 * i+1) << endl;
+    //        jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
+    //        jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
+    //
+    //
+    //        double * leftCoords = (double *) vrs3d.at(2 * i);
+    //        double * rightCoords = (double *) vrs3d.at(2 * i + 1);
+    //
+    //
+    //        env->SetDoubleArrayRegion(eigenValRLeft, 0, dimension, leftCoords);
+    //        env->SetDoubleArrayRegion(eigenValRRight, 0, dimension, rightCoords);
+    //
+    //
+    //        //Construindo left e right points
+    //        jobject realVectorLeftPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRLeft);
+    //        jobject realVectorRightPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRRight);
+    //
+    //        int pointType = 0;
+    //
+    //        double leftSigma = -1.0;
+    //        double rightSigma = -1.0;
+    //        //            cout << "type of " << j << " = " << classified[i].type << endl;
+    //        //            cout << "speed of " << j << " = " << classified[i].vec[j].component(dimension + m) << endl;
+    //        //            cout << "speed of " << j + 1 << " = " << classified[i].vec[j + 1].component(dimension + m) << endl;
+    //
+    //        jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, pointType);
+    //        env->CallObjectMethod(segmentsArray, arrayListAddMethod, hugoniotSegment);
+    //
+    //    }
 
 
 

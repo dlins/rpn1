@@ -105,7 +105,7 @@ private:
      * @returns  <p> -1  ----------> a1  not found in  a2 </p> <p> column no.  --> a1  found in  a2 </p>
      */
 
-    int search(int *a1, int *a2, int n1, int n2);
+    int search(int *a1, int *a2, int n1, int n2,int n3);
 
 
     /*

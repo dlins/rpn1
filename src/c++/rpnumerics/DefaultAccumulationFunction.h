@@ -52,7 +52,7 @@ inline DefaultAccumulationFunction::DefaultAccumulationFunction(void)
 inline int DefaultAccumulationFunction::f(const RealVector & u, RealVector & v)
 {
 	v = u;
-	return OK;
+	return 2;
 }
 
 inline int DefaultAccumulationFunction::df(const RealVector & u, JacobianMatrix & v)
@@ -62,13 +62,13 @@ inline int DefaultAccumulationFunction::df(const RealVector & u, JacobianMatrix 
 	// JAVA CODE: daniel@impa.br
 	//return new RealMatrix(U.size(),U.size());
 	//v.equals_multiple_of_identity(1.);
-	return OK;
+	return 2;
 }
 
 inline int DefaultAccumulationFunction::d2f(const RealVector & u, HessianMatrix & v)
 {
 	v = * new HessianMatrix(u.size());
-	return OK;
+	return 2;
 }
 
 inline const DefaultAccumulationParams & DefaultAccumulationFunction::accumulationParams(void)

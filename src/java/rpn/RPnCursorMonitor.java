@@ -30,7 +30,7 @@ public class RPnCursorMonitor extends JLabel {
         this.setForeground(Color.lightGray);
         mouseMotionController_ = new MouseMotionController();
         formatter_ = NumberFormat.getInstance();
-        formatter_.setMaximumFractionDigits(2);
+        formatter_.setMaximumFractionDigits(4);
     }
 
     class MouseMotionController extends MouseMotionAdapter {

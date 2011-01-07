@@ -532,7 +532,8 @@ int HyperCube::mkfcfp(int *face_, int *facptr_, // face_[m_ + 1][dimf_], facptr_
             //store the face_ if it is distinct
             if (nface_ > 0) {
                 //printf("Posit atnes %d.", posit);
-                posit = search(stor, face_, m_ + 1, dimf_);
+//                posit = search(stor, face_, m_ + 1, dimf_);
+                posit = search(stor, face_, m_ + 1, nface_,dimf_);
                 //printf("Pase por search, posit = %d, nface = %d\n", posit, nface_);
             } else {
                 //printf("Pasamos por posit con %d\n", nface_);
@@ -567,7 +568,7 @@ int HyperCube::mkfcfp(int *face_, int *facptr_, // face_[m_ + 1][dimf_], facptr_
  * @returns  <p> -1  ----------> a1  not found in  a2 </p> <p> column no.  --> a1  found in  a2 </p>
  */
 
-int HyperCube::search(int *a1, int *a2, int n1, int n2) {
+int HyperCube::search(int *a1, int *a2, int n1, int n2,int n3) {
     //local variables
     int i, j, search = -1;
     //check for empty  a2
@@ -576,7 +577,7 @@ int HyperCube::search(int *a1, int *a2, int n1, int n2) {
     for (j = 0; j < n2; j++) {
 
         for (i = 0; i < n1; i++) {
-            if (a1[i] != a2[i * n2 + j])
+            if (a1[i] != a2[i * n3 + j])
                 goto lab40;
         }
         search = j;
@@ -707,7 +708,7 @@ int HyperCube::mkoppf(int f, int xind, int value, int n_, int m_, int nface_, in
         oppvrt[v] = face_[v * dimf_ + f] + oppval;
     }
     //find the index of the opposite face_
-    return search(oppvrt, face_, m_ + 1, nface_);
+    return search(oppvrt, face_, m_ + 1, nface_,dimf_);
 }
 
 /**

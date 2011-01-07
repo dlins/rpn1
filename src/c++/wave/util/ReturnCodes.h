@@ -19,10 +19,10 @@
  * Definitions:
  */
 
-enum ReturnCodes
-{
-	OK,      	// Function concluded successfully
-	ERROR		// Function concluded with errors
-};
+//enum ReturnCodes
+//{
+//	OK,      	// Function concluded successfully
+//	ERROR		// Function concluded with errors
+//};
 
 #endif //! _ReturnCodes_H

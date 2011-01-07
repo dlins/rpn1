@@ -30,15 +30,15 @@
 class ShockMethod {
 private:
 
-    ColorCurve * sorter_;
-
+    int dimension_;
     FluxFunction * fluxFunction_;
-
     AccumulationFunction * accFunction_;
-
     Boundary * boundary_;
 
-    int dimension_;
+
+protected:
+
+    ColorCurve * sorter_;
 
 public:
 
@@ -52,7 +52,7 @@ public:
 
     int dimension()const;
 
-    virtual void curve(const RealVector &, int direction, vector<RealVector> &) = 0;
+//    virtual void curve(const RealVector &, int direction, vector<RealVector> &) = 0;
 
 //    virtual ShockMethod * clone() const = 0;
 

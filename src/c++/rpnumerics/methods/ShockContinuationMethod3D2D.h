@@ -50,19 +50,19 @@ extern "C" {
     void dgesv_(int*, int*, double*, int*, int*, double*, int*, int*);
 }
 
-class ShockContinuationMethod3D2D {
+class ShockContinuationMethod3D2D:public ShockMethod {
 private:
 
 
 private:
 
-    FluxFunction *shock_flux_object;
-    AccumulationFunction *shock_accumulation_object;
-
-    Boundary *boundary;
+//    FluxFunction *shock_flux_object;
+//    AccumulationFunction *shock_accumulation_object;
+//
+//    Boundary *boundary;
 
     int family_;
-    int n; // Dimension
+//    int n; // Dimension
     double eps; // Epsilon, typically = 1e-3
     int type;
     double tolerance;
@@ -109,12 +109,13 @@ public:
     ShockContinuationMethod3D2D(int dim,int family, const FluxFunction &, const AccumulationFunction &, const Boundary &, double Ur[], double tol, double epsilon, int t);
     virtual ~ShockContinuationMethod3D2D();
 
-    ShockContinuationMethod3D2D(const ShockContinuationMethod3D2D &);
+//    ShockContinuationMethod3D2D(const ShockContinuationMethod3D2D &);
 
 //    ShockMethod * clone() const ;
 
 
-    void curve(const RealVector &, int direction, vector<RealVector> &);
+//    void curve(const RealVector &, int direction, vector<RealVector> &);
+    void curve(const RealVector &, int direction, vector<HugoniotPolyLine> &);
 
     //int curve(int family, double maxnum, int increase, double U0[], double refplane[], std::vector<RealVector> &out); // If _SHOCK_INIT_IS_NOT_REF_
 

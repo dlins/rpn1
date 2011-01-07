@@ -20,125 +20,13 @@
 
 
 
-ContourMethod::ContourMethod(HugoniotFunctionClass *h) {
+ContourMethod::ContourMethod(int dimension, const FluxFunction & fluxFunction, const AccumulationFunction & accumFunction, const Boundary & boundary, HugoniotFunctionClass *h) : ShockMethod(dimension, fluxFunction, accumFunction, boundary) {
     hugoniot = h;
-    //    double const_gravity = 9.8;
-    //    double abs_perm = 3e-12;
-    //    double phi = 0.38;
-    //    bool has_gravity = false;
-    //    double Tref_rock = 273.15;
-    //    double Tref_water = 274.3775;
-    //    double pressure = 100.9;
-    //    double Cr = 2.029e6;
-    //    double Cw = 4297.;
-    //    double rhoW_init = 998.2;
-    //    double T_typical = 304.63;
-    //    double Rho_typical = 998.2; // For the time being, this will be RhoWconst = 998 [kg/m^3]. In the future, this value should be the density of pure water at the temperature T_typical.
-    //    double U_typical = 4.22e-6;
-    //    double h_typical = Cw * (T_typical - Tref_water);
-    //
-    //    Thermodynamics_SuperCO2_WaterAdimensionalized TD(Tref_rock, Tref_water, pressure,
-    //            "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhosigmac_spline.txt",
-    //            "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhosigmaw_spline.txt",
-    //            "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhoac_spline.txt",
-    //            "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhoaw_spline.txt",
-    //            "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhoW_spline.txt",
-    //            "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/hsigmaC_spline.txt",
-    //            rhoW_init,
-    //            Cr,
-    //            Cw,
-    //            T_typical,
-    //            Rho_typical,
-    //            h_typical,
-    //            U_typical);
-    //
-    //    double cnw = 0., cng = 0., expw = 2., expg = 2.;
-    //    FracFlow2PhasesHorizontalAdimensionalized fh(cnw, cng, expw, expg, &TD);
-    //
-    //    //    ReducedTPCWHugoniotFunctionClass tpcwhc(Uref, abs_perm, phi, const_gravity, &TD, &fh);
-    //
-    //    hugoniot = new ReducedTPCWHugoniotFunctionClass(Uref, abs_perm, phi, const_gravity, &TD, &fh);
-    //
-    //    int zero;
-    //    int nedg;
 
-    //    int tsimp, tface, ssimp, sface;
-
-    //    int ncubes, first, last, k;
-    //    double u, v;
-    //    double p[2];
-    //    int type;
-    //    int half = 1;
-    //    int whole = 2;
-
-    //    int hn = 2;
-    //    int hm = 1;
-    //    int nsface_, nface_, nsoln_, nedges_;
-    //    int dims_ = 50;
-    //    int dime_ = 60;
-
-    //    double refval;
-
-    //    int ncvert_ = 4;
-    //    int nsimp_ = 2;
-
-    //    int numberOfCombinations = hc.combination(hn + 1, hm + 1);
-
-    //    // Reserve arrays
-    //    storn_  = new int[hn + 1];
-    //    storm_  = new int[hm + 1];
-    //    cvert_  = new double[ncvert_][hn];
-    //    vert    = new double[ncvert_][hn];
-    //    bsvert_ = new int[hn + 1][hn];
-    //    perm_   = new int[hn][nsimp_];
-    //    comb_   = new int[numberOfCombinations][hm + 1];
-
-    //    // Initialize arrays dimensions
-    //    nsface_ = hc.mkcomb(&comb_[0][0], hn + 1, hm + 1);
-
-    //    fnbr_   = new int[nsface_][nsface_];
-
-    //    int dimf_ = 5;
-
-    //    nsoln_ = -1;
-
-    //    sol_    = new double[hn][dims_];
-    //    solptr_ = new int[nsimp_][nsface_];
-
-    //    for (i = 0; i < nsimp_; i++) {
-    //        for (j = 0; j < nsface_; j++) solptr_[i][j] = 0;
-    //    } //TODO: Revisar como "solptr" eh modificada, os numero sao muito estranhos
-
-    //    edges_ = new int[2][dime_];
-    //    for (int i = 0; i < 2; i++) {
-    //        for (int j = 0; j < dime_; j++) edges_[i][j] = -6;
-    //    } //TODO: Ver o que acontece, pois se nao sao inicializadas coloca valores estranhos
-
-    //    smpedg_   = new int[nsimp_][2];
-    //    for (int i = 0; i < nsimp_; i++) {
-    //        for (int j = 0; j < 2; j++) smpedg_[i][j] = 0;
-    //    } //TODO: Ver o que acontece, pois se nao sao inicializadas coloca valores estranhos
-
-    //    //inicializing another arrays, it were globally defined in java
-    //    facptr_ = new int[nsimp_][nsface_];
-    //    face_   = new int[hm + 1][dimf_];
-
-    //    int dblev = 3;
-    //    hc.mkcube(&cvert_[0][0], &bsvert_[0][0], &perm_[0][0], ncvert_, nsimp_, hn);
-    //    nface_ = hc.mkface(&face_[0][0], &facptr_[0][0], &fnbr_[0][0], dimf_, nsimp_, hn, hm, nsface_,
-    //                           &bsvert_[0][0], &comb_[0][0], &perm_[0][0], &storn_[0], &storm_[0]);
-
-    //    exstfc = new int[nface_];
-    //    for (i = 0; i < nface_; i++) exstfc[i] = 1;
-    //    sptr_ = new int[nface_];
-
-    //    tsimp = 1;
-    //    tface = 3;
-
-    // End of initialization
 }
 
 ContourMethod::~ContourMethod() {
+
     //    delete [] sptr_;
     //    delete [] exstfc;
     //    delete [] face_;
@@ -174,18 +62,18 @@ int ContourMethod::inpdom(double *u) { // double u[2]//Replace by Boundary::insi
 
 //int ContourMethod::curv2d(/*double *segend,*/ int sn, int seglim, double fdummy, double *rect, int *res, int ifirst) {
 
- int ContourMethod::curv2d(/*double *segend,*/ int sn, int seglim, double fdummy, double *rect, int *res, int ifirst,
+int ContourMethod::curv2d(/*double *segend,*/ int sn, int seglim, double fdummy, double *rect, int *res, int ifirst,
         std::vector<RealVector> &vrs) {
     vrs.clear();
-      for (unsigned int i = 0; i < 2; i++) {
+    for (unsigned int i = 0; i < 2; i++) {
         cout << "Valor de res:" << res[i] << endl;
-      }
+    }
 
-    cout<<"---------------"<<endl;
+    cout << "---------------" << endl;
 
 
     for (unsigned int i = 0; i < 4; i++) {
-        cout <<"Valor de rect:"<<rect[i]<<endl;
+        cout << "Valor de rect:" << rect[i] << endl;
     }
 
 
@@ -205,9 +93,9 @@ int ContourMethod::inpdom(double *u) { // double u[2]//Replace by Boundary::insi
 
     int hn = 2;
     int hm = 1;
-    int nsface_, nface_, nsoln_, nedges_=0;
+    int nsface_, nface_, nsoln_, nedges_ = 0;
     int dims_ = 50;
-    int dime_ = 600;
+    int dime_ = 60;
 
     double refval;
     int i, j;
@@ -449,8 +337,8 @@ lab90:
                     //        cout << "Aqui sn= "<<sn<<endl;
 
                     if (nedges_ > 0) {
-                        cout << "Depois  nedges_"<< nedges_ << endl;
-//                        if (nedges_ >2 ) return 0;
+                        cout << "Depois  nedges_" << nedges_ << endl;
+                        //                        if (nedges_ >2 ) return 0;
 
                         for (nedg = 0; nedg < nedges_; nedg++) {
                             sn++;
@@ -478,7 +366,6 @@ lab90:
                             vrs.push_back(p2);
 
 
-
                             if (sn >= seglim) {
                                 return -1;
                             }
@@ -495,7 +382,146 @@ lab90:
 
 
     }
+
+
     return 0;
 }
 
+void ContourMethod::curve(const RealVector & input, vector<HugoniotPolyLine> & hugoniotPolyLineVector) {
 
+    double rect[4];
+
+
+
+
+    rect[0] = 0.0; // xmin
+    rect[1] = 1.0; // xmax
+    rect[2] = 0.0841102; // ymin
+    rect[3] = 0.576511; // ymax
+
+
+
+//
+//    rect[0] = 0.65; // xmin
+//    rect[1] = 0.84; // xmax
+//    rect[2] = 0.27; // ymin
+//    rect[3] = 0.367; // ymax
+
+    //    rect[0] = 0.0; // xmin
+    //    rect[1] = 1.0; // xmax
+    //    rect[2] = 0.0; // ymin
+    //    rect[3] = 1.0; // ymax
+
+    int res[2];
+
+    res[0] = 75;
+    res[1] = 75;
+
+    std::vector<RealVector> vrs;
+
+    int info = curv2d(0, 9025, 0.0, &rect[0], &res[0], 1, vrs);
+
+    //    cout << "Unclissified curve: " << vrs.size() << endl;
+
+
+
+    //    cout << "antes de complete curve: " << info << endl;
+
+    hugoniot->completeCurve(vrs);
+
+
+    //    for (int i = 0; i < vrs.size(); i++) {
+    //        for (unsigned int j = 0; j < vrs[i].size(); j++) {
+    //            cout << "ponto: " << i << "coord: " << j << " = " << vrs[i][j] << endl;
+    //
+    //        }
+    //        cout << endl;
+    //    }
+
+    //    for (int i = 0; i < vrs.size() / 2; i++) {
+    //        HugoniotPolyLine temp;
+    //
+    //        temp.vec.push_back(vrs[2 * i]);
+    //
+    //        temp.vec.push_back(vrs[2 * i + 1]);
+    //        temp.type = 0;
+    //
+    //        hugoniotPolyLineVector.push_back(temp);
+    //
+    //    }
+
+
+    //    cout << "depois de complete curve: " << vrs.size() << endl;
+    vector<vector<RealVector> > unclassifiedCurve;
+
+    for (int i = 0; i < vrs.size() / 2; i++) {
+        vector< RealVector> temp;
+        temp.push_back(vrs[2 * i]);
+        temp.push_back(vrs[2 * i]);
+        temp.push_back(vrs[2 * i + 1]);
+        //        temp.push_back(vrs[2 * i + 1]);
+        unclassifiedCurve.push_back(temp);
+
+
+
+    }
+
+
+
+    //
+    //            cout << "type of " << j << " = " << hugoniotPolyLineVector[i].type << endl;
+    //            cout << "coord 1 " << j << " = " << hugoniotPolyLineVector[i].vec[j] << endl;
+    //            cout << "coord 2 " << j + 1 << " = " << hugoniotPolyLineVector[i].vec[j + 1] << endl;
+
+
+    cout << "antes de classificar: " << unclassifiedCurve.size()<<endl;
+
+    sorter_->classify_curve(unclassifiedCurve, input, 2, 11, hugoniotPolyLineVector);
+//    cout << "Size (1) of a vector within HugoniotPolyLine: " << hugoniotPolyLineVector[0].vec[0].size() << endl;
+
+
+    //Para testar o contour sem classificacao
+    //    hugoniotPolyLineVector.clear();
+    //    for (int i = 0; i < vrs.size() / 2; i++) {
+    //        HugoniotPolyLine temp;
+    //        temp.vec.resize(2);
+    //
+    //        for (int j = 0; j < 2; j++) {
+    //            temp.vec[j].resize(7);
+    //            for (int k = 0; k < 2; k++) temp.vec[j].component(k) = vrs[2 * i + j].component(k);
+    //        }
+    //
+    ////        temp.vec[0] = vrs[2 * i];
+    ////        temp.vec[1] = vrs[2 * i + 1];
+    //        temp.type = 0;
+    //        hugoniotPolyLineVector.push_back(temp);
+    //    }
+
+//    cout << "Size (2) of a vector within HugoniotPolyLine: " << hugoniotPolyLineVector[0].vec[0].size() << endl;
+    cout << "Depois do classify: " << hugoniotPolyLineVector.size() << endl;
+
+
+    //
+
+
+
+
+    //    for (int i = 0; i < hugoniotPolyLineVector.size(); i++) {
+    //
+    //        for (unsigned int j = 0; j < hugoniotPolyLineVector[i].vec.size() - 1; j++) {
+    //
+    //            cout << "Depois do classificador: " << hugoniotPolyLineVector.size() << endl;
+    //            cout << " depois type of " << j << " = " << hugoniotPolyLineVector[i].type << endl;
+    //            cout << "depois coord 1 " << j << " = " << hugoniotPolyLineVector[i].vec[j] << endl;
+    //            cout << "depois coord 2 " << j + 1 << " = " << hugoniotPolyLineVector[i].vec[j + 1] << endl;
+    //
+    //
+    //        }
+    //
+    //    }
+
+
+
+
+
+}

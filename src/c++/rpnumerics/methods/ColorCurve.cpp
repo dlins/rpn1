@@ -21,6 +21,14 @@
 
 // Sign function. Inlined, should be fast.
 
+ColorCurve::ColorCurve(const FluxFunction & fluxFunction, const AccumulationFunction & accumulationFunction):fluxFunction_((FluxFunction *)fluxFunction.clone()),accFunction_((AccumulationFunction *)accumulationFunction.clone()) {
+
+}
+ColorCurve::~ColorCurve(){
+    delete fluxFunction_;
+    delete accFunction_;
+}
+
 int ColorCurve::sgn(double x) {
     if (x < 0.) return -1;
     else if (x > 0.) return 1;
@@ -75,22 +83,23 @@ void ColorCurve::fill_with_jet(const RpFunction & flux_object, int n, double *in
     return;
 }
 
-int ColorCurve::interpolate(const RealVector &p, const RealVector &q, std::vector<RealVector> &r) {
+int ColorCurve::interpolate(int noe, const RealVector &p, const RealVector &q, std::vector<RealVector> &r) {
     r.clear();
-
+    int dim = p.size() - 2 * noe - 1;
+    cout <<"Em interpolate"<<endl;
     double fq[4], fp[4]; // f(p), f(q), the function whose zero is to be found
 
-    double l0_ref_p = p.component(3); // lambda_0(Uref)
-    double l1_ref_p = p.component(4); // lambda_1(Uref)
-    double s_p = p.component(5); // shock speed s(Uref,p)
-    double l0_p = p.component(6); // lambda_0(p)
-    double l1_p = p.component(7); // lambda_1(p)
+    double l0_ref_p = p.component(dim); // lambda_0(Uref)
+    double l1_ref_p = p.component(dim+1); // lambda_1(Uref)
+    double s_p = p.component(dim+2); // shock speed s(Uref,p)
+    double l0_p = p.component(dim+3); // lambda_0(p)
+    double l1_p = p.component(dim+4); // lambda_1(p)
 
-    double l0_ref_q = q.component(3); // lambda_0(Uref)
-    double l1_ref_q = q.component(4); // lambda_1(Uref)
-    double s_q = q.component(5); // shock speed s(Uref,q)
-    double l0_q = q.component(6); // lambda_0(q)
-    double l1_q = q.component(7); // lambda_1(q)
+    double l0_ref_q = q.component(dim); // lambda_0(Uref)
+    double l1_ref_q = q.component(dim+1); // lambda_1(Uref)
+    double s_q = q.component(dim+2); // shock speed s(Uref,q)
+    double l0_q = q.component(dim+3); // lambda_0(q)
+    double l1_q = q.component(dim+4); // lambda_1(q)
 
     // To detect if more than two inequality hold (an error situation)
     int noi = 0; // Number of inequalities
@@ -128,6 +137,7 @@ int ColorCurve::interpolate(const RealVector &p, const RealVector &q, std::vecto
     else {
         double alpha[noi];
         for (int i = 0; i < noi; i++) {
+        cout<<"Diferenca: " <<fq[i] - fp[i]<<endl;
             alpha[i] = fq[i] / (fq[i] - fp[i]);
 
         }
@@ -148,18 +158,21 @@ int ColorCurve::interpolate(const RealVector &p, const RealVector &q, std::vecto
             double beta = 1.0 - alpha[i];
             for (int j = 0; j < p.size(); j++) r[i].component(j) = alpha[i] * p.component(j) + beta * q.component(j);
         }
-
+        cout <<"Depois resize"<<endl;
         return INTERPOLATION_OK;
     }
 }
 
-int ColorCurve::classify_point(const RealVector &p) {
+int ColorCurve::classify_point(const RealVector &p,int noe) {
 
-    double l0_ref = p.component(3); // lambda_0(Uref)
-    double l1_ref = p.component(4); // lambda_1(Uref)
-    double s = p.component(5); // shock speed s(Uref,p)
-    double l0_p = p.component(6); // lambda_0(p)
-    double l1_p = p.component(7); // lambda_1(p)
+    cout<<"Tamanho de p: "<<p.size()<<endl;
+    int dim = p.size()-2*noe-1;
+
+    double l0_ref = p.component(dim); // lambda_0(Uref)
+    double l1_ref = p.component(dim+1); // lambda_1(Uref)
+    double s = p.component(dim+2); // shock speed s(Uref,p)
+    double l0_p = p.component(dim+3); // lambda_0(p)
+    double l1_p = p.component(dim+4); // lambda_1(p)
 
 //    double l0_ref =0;
 //    double l1_ref =0;
@@ -177,7 +190,7 @@ int ColorCurve::classify_point(const RealVector &p) {
     return type;
 }
 
-void ColorCurve::classify_segments(const std::vector<RealVector> &input, std::vector<HugoniotPolyLine> &output) {
+void ColorCurve::classify_segments(const std::vector<RealVector> &input, int noe, std::vector<HugoniotPolyLine> &output) {
 
     cout << "Tamanho do vetor para classificar: " << input.size() << endl;
     if (input.size() < 2) return;
@@ -192,7 +205,7 @@ void ColorCurve::classify_segments(const std::vector<RealVector> &input, std::ve
     int t_current, t_next; // Two consecutive types
 
     // Initialize t_current
-    t_current = classify_point(input[1]);
+    t_current = classify_point(input[1],noe);
 
 
     // The first point will not be classified
@@ -200,7 +213,7 @@ void ColorCurve::classify_segments(const std::vector<RealVector> &input, std::ve
     while (p < input_size - 1) {
 
 
-        t_next = classify_point(input[p + 1]);
+        t_next = classify_point(input[p + 1],noe);
 
 //        cout << "Depois de t_next" << endl;
 
@@ -214,30 +227,30 @@ void ColorCurve::classify_segments(const std::vector<RealVector> &input, std::ve
     }
 
     // The number of segments exceeds by one the number of points where a change of type was detected.
-    output.clear();
+//    output.clear();
     printf("pos.size() = %d\n", pos.size());
-    for (int i = 0; i < pos.size(); i++) printf("pos[%d] = %d\n", i, pos[i]);
+    for (unsigned int i = 0; i < pos.size(); i++) printf("pos[%d] = %d\n", i, pos[i]);
     output.resize(pos.size() + 1);
 
     // Add the points to the segment they belong, according to their type.
-    for (int seg_num = 0; seg_num < output.size(); seg_num++) {
+    for (unsigned int seg_num = 0; seg_num < output.size(); seg_num++) {
         int init, end;
         if (seg_num == 0) {
             init = 1;
             if (pos.size() != 0) end = pos[seg_num]; // pos can have size == 0, this is a must.
-            else end = input.size() - 1;
+            else end = input.size() ;
         } else if (seg_num == output.size() - 1) {
-            init = pos[seg_num - 1] + 1;
-            end = input.size() - 1;
+            init = pos[seg_num - 1] ;
+            end = input.size() ;
         } else {
-            init = pos[seg_num - 1] + 1;
+            init = pos[seg_num - 1] ;
             end = pos[seg_num];
         }
 
         printf("seg_num = %d, init = %d, end = %d\n", seg_num, init, end);
 
         // Set the type of this segment
-        output[seg_num].type = classify_point(input[init]);
+        output[seg_num].type = classify_point(input[init],noe);
 
 //        output[seg_num].type = 0; //TODO Test  Remove
 
@@ -252,9 +265,9 @@ void ColorCurve::classify_segments(const std::vector<RealVector> &input, std::ve
         // This only happens if the current segment is not the last one.
         if (seg_num < output.size() - 1) {
             std::vector<RealVector> r;
-            int info = interpolate(input[end - 1], input[end], r);
+            int info = interpolate(noe,input[end - 1], input[end], r);
 
-            printf("type(%d) = %d, type(%d) = %d\n", end - 1, classify_point(input[end - 1]), end, classify_point(input[end]));
+            printf("type(%d) = %d, type(%d) = %d\n", end - 1, classify_point(input[end - 1],noe), end, classify_point(input[end],noe));
 
             if (info == INTERPOLATION_OK) {
                 //printf("r.size() = %d\n", r.size());
@@ -310,6 +323,65 @@ double ColorCurve::shockspeed(int n, double Um[], double Up[], const FluxFunctio
     return s / den;
 }
 
+void ColorCurve::classify_curve(vector<vector<RealVector> > & input, const RealVector & Uref, int noe, int accumulationType,  vector<HugoniotPolyLine> & output) {
+//    output.clear();
+    //    int N = 3 + 2 * noe + 1;
+    vector<vector<RealVector> > complete_segments;
+    complete_segments.resize(input.size());
+    for (int i = 0; i < input.size(); i++) {
+        complete_segments[i].resize(input[i].size());
+        //        cout << "tamanho de input " << input[i].size() << endl;
+        //        cout << "tamanho de input " << Uref.size() << endl;
+
+        preprocess_data(input[i], Uref, noe, *fluxFunction_, *accFunction_, accumulationType, complete_segments[i]);
+
+        //cout << "After preprocessing: size of elements in complete_segments = " <<  complete_segments[i][0].size() << endl;
+    }
+
+
+
+
+
+    for (unsigned int i = 0; i < complete_segments.size(); i++) {
+
+        vector<HugoniotPolyLine> hugoniotPolyLineVector;
+        classify_segments(complete_segments[i],noe, hugoniotPolyLineVector);
+        //        cout << "hugoniot polyline: " << hugoniotPolyLineVector.size() << endl;
+
+
+
+        //    for (int i = 0; i < hugoniotPolyLineVector.size(); i++) {
+        //
+        //        for (unsigned int j = 0; j < hugoniotPolyLineVector[i].vec.size() - 1; j++) {
+        //
+        //
+        //
+        //
+        //            cout << "type of " << j << " = " << hugoniotPolyLineVector[i].type << endl;
+        //            cout << "coord 1 " << j << " = " << hugoniotPolyLineVector[i].vec[j] << endl;
+        //            cout << "coord 2 " << j + 1 << " = " << hugoniotPolyLineVector[i].vec[j + 1] << endl;
+        //
+        //
+        //        }
+        //    }
+
+
+
+
+        for (int j = 0; j < hugoniotPolyLineVector.size(); j++) output.push_back(hugoniotPolyLineVector[j]);
+
+    }
+
+
+    //
+
+        cout << "Tamanho de output" << output.size() << endl;
+    return;
+
+}
+
+
+
 // Given an array of points that form a shockcurve it will return the same curve augmented with the valid eigenvalues at the
 // reference point, and the speed and valid eigenvalues at each point.
 //
@@ -335,7 +407,9 @@ double ColorCurve::shockspeed(int n, double Um[], double Up[], const FluxFunctio
 int ColorCurve::preprocess_data(const std::vector<RealVector> &curve, const RealVector &Uref, int noe,
         const FluxFunction &ff, const AccumulationFunction &aa, int type,
         std::vector<RealVector> &out) {
-    out.clear();
+    //    out.clear();
+
+        cout <<"Dentro de preprocess data"<<endl;
 
     if (curve.size() != 0) {
         int m = Uref.size();
@@ -369,7 +443,7 @@ int ColorCurve::preprocess_data(const std::vector<RealVector> &curve, const Real
 
         // Onto the curve
         RealVector temp(m + 2 * noe + 1);
-        for (int i = 0; i < curve.size(); i++) {
+        for (unsigned int i = 0; i < curve.size(); i++) {
             for (int j = 0; j < m; j++) temp.component(j) = curve[i].component(j); // Point
             for (int j = 0; j < noe; j++) temp.component(j + m) = lr[j]; // Uref's eigenvalues
 

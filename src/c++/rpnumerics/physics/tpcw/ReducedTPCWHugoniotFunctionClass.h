@@ -45,11 +45,11 @@ class ReducedTPCWHugoniotFunctionClass : public HugoniotFunctionClass {
                                          FracFlow2PhasesHorizontalAdimensionalized     *fh); // U=dim 3  , u=dim 2.
         ~ReducedTPCWHugoniotFunctionClass();
 
-//        ReducedTPCWHugoniotFunctionClass(const ReducedTPCWHugoniotFunctionClass &);
-
         double HugoniotFunction(const RealVector &u);    // TODO: u tem que ter dimensao 2 e nao 3.
-//        HugoniotFunctionClass * clone ();
-        void CompleteHugoniot(double &shock_speed, double &vel_plus, const RealVector &uplus); // TODO: u tem que ter dimensao 2 e nao 3.
+
+        void CompleteHugoniot(double &darcy_speedplus, const RealVector &uplus); // TODO: u tem que ter dimensao 2 e nao 3.
+        void completeCurve(vector<RealVector> & curve);
+
 };
 
 #endif // _REDUCEDTPCWHUGONIOTFUNCTIONCLASS_
