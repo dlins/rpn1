@@ -165,7 +165,7 @@ int ColorCurve::interpolate(int noe, const RealVector &p, const RealVector &q, s
 
 int ColorCurve::classify_point(const RealVector &p,int noe) {
 
-    cout<<"Tamanho de p: "<<p.size()<<endl;
+
     int dim = p.size()-2*noe-1;
 
     double l0_ref = p.component(dim); // lambda_0(Uref)
@@ -192,7 +192,7 @@ int ColorCurve::classify_point(const RealVector &p,int noe) {
 
 void ColorCurve::classify_segments(const std::vector<RealVector> &input, int noe, std::vector<HugoniotPolyLine> &output) {
 
-    cout << "Tamanho do vetor para classificar: " << input.size() << endl;
+//    cout << "Tamanho do vetor para classificar: " << input.size() << endl;
     if (input.size() < 2) return;
 
     // Create a vector of the positions where a change of type occurs.
@@ -409,7 +409,7 @@ int ColorCurve::preprocess_data(const std::vector<RealVector> &curve, const Real
         std::vector<RealVector> &out) {
     //    out.clear();
 
-        cout <<"Dentro de preprocess data"<<endl;
+//        cout <<"Dentro de preprocess data"<<endl;
 
     if (curve.size() != 0) {
         int m = Uref.size();

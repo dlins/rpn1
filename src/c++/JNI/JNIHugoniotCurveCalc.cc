@@ -109,21 +109,24 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
     double U_typical = 4.22e-6;
     double h_typical = Cw * (T_typical - Tref_water);
 
-    Thermodynamics_SuperCO2_WaterAdimensionalized TD(Tref_rock, Tref_water, pressure,
-            "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhosigmac_spline.txt",
-            "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhosigmaw_spline.txt",
-            "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhoac_spline.txt",
-            "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhoaw_spline.txt",
-            "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhoW_spline.txt",
-            "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/hsigmaC_spline.txt",
-            rhoW_init,
-            Cr,
-            Cw,
-            T_typical,
-            Rho_typical,
-            h_typical,
-            U_typical);
+//    Thermodynamics_SuperCO2_WaterAdimensionalized TD(Tref_rock, Tref_water, pressure,
+//            "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhosigmac_spline.txt",
+//            "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhosigmaw_spline.txt",
+//            "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhoac_spline.txt",
+//            "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhoaw_spline.txt",
+//            "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhoW_spline.txt",
+//            "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/hsigmaC_spline.txt",
+//            rhoW_init,
+//            Cr,
+//            Cw,
+//            T_typical,
+//            Rho_typical,
+//            h_typical,
+//            U_typical);
 
+
+    string rpnHome("/home/edsonlan/Java/rpn");
+    Thermodynamics_SuperCO2_WaterAdimensionalized TD(rpnHome);
 
 
     double cnw = 0., cng = 0., expw = 2., expg = 2.;

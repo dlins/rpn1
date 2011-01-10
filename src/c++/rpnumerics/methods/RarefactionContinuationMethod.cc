@@ -47,13 +47,13 @@ RarefactionContinuationMethod::~RarefactionContinuationMethod() {
 int RarefactionContinuationMethod::init(ContinuationRarefactionFlow * flow,int n, double *in, int indx, const FluxFunction &ff, const AccumulationFunction &gg, int type, int increase, double deltaxi, double *lambda, double *rev){ /* NEW HERE */
 
 
-    cout<<"Dentro de init"<<endl;
+//    cout<<"Dentro de init"<<endl;
     // 1. Find the eigenvalue and the eigenvector at in (the initial point):
 //    printf("&rev = %p; (rev == 0 = %d)\n", rev, rev == 0);
     /* NEW BELOW */
     if (flow->flux(n, indx, ff, gg, type, in, lambda, rev) == COMPLEX_EIGENVALUE) return COMPLEX_EIGENVALUE;
     /* NEW ABOVE */
-    cout <<"after flow flux"<<endl;
+//    cout <<"after flow flux"<<endl;
     // 2. and 3. Find the eigenpairs at in_plus and in_minus.
     double epsilon = 10*deltaxi;
     double lambdap, lambdam; // Lambda_plus, lambda_minus

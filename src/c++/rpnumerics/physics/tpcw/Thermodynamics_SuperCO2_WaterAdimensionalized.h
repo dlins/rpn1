@@ -1,11 +1,14 @@
 #ifndef _THERMODYNAMICS_SUPERCO2_WATERADIMENSIONALIZED_
 #define _THERMODYNAMICS_SUPERCO2_WATERADIMENSIONALIZED_
 
-#include <stdio.h>
-#include <stdlib.h>
+//#include <stdio.h>
+//#include <stdlib.h>
+
 #include <string.h>
+//#include<string>
 #include "spline1d.h"
-//#include <string>
+#include <iostream>
+
 
 #define SPLINE_OK    0
 #define SPLINE_ERROR 1
@@ -20,6 +23,9 @@ private:
     double Rock_Cr; // [J/(m*m*m*K)] Care should be taken: Cr and Cw display different units.
     double Water_Cw_specific; // [J/(kg*K)]
 
+
+    std::string rpnHomePath_;
+
     // Splines
     spline1dinterpolant rhosigmac_, rhosigmaw_, rhoac_, rhoaw_, rhoW_, hsigmaC_;
 
@@ -27,7 +33,7 @@ private:
     int info_rhosigmac, info_rhosigmaw, info_rhoac, info_rhoaw, info_rhoW, info_hsigmaC;
 
     // Create a spline
-    int create_spline(const char*, const char*, double, spline1dinterpolant&);
+    int create_spline(const std::string &, const char*, double, spline1dinterpolant&);
 
     // Some constants for mug
     const double a0, a1, a2, a3;
@@ -54,11 +60,7 @@ public:
             double,
             double);
 
-    Thermodynamics_SuperCO2_WaterAdimensionalized(
-            const char *
-            );
-
-
+    Thermodynamics_SuperCO2_WaterAdimensionalized(const std::string & );
 
     ~Thermodynamics_SuperCO2_WaterAdimensionalized();
 

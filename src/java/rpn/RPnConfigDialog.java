@@ -352,7 +352,7 @@ public class RPnConfigDialog extends RPnDialog {
 
             axisSelected_[0] = true;//The first axis is checked by default
 
-            System.out.println("Tamanho de combination size:" + combinations.size());
+//            System.out.println("Tamanho de combination size:" + combinations.size());
 
             for (int i = 0; i < combinations.size(); i++) {
 

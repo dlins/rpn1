@@ -18,7 +18,7 @@
  */
 
 
-TPCW::TPCW(const FluxFunction & fluxFunction, const AccumulationFunction & accumulationFunction, Thermodynamics_SuperCO2_WaterAdimensionalized * thermo) : SubPhysics(fluxFunction, accumulationFunction, *new RectBoundary(RealVector(),RealVector()), *new Space("R3", 3), "TPCW",_GENERAL_ACCUMULATION_) {
+TPCW::TPCW(const FluxFunction & fluxFunction, const AccumulationFunction & accumulationFunction,const  Thermodynamics_SuperCO2_WaterAdimensionalized & thermo) : SubPhysics(fluxFunction, accumulationFunction, *new RectBoundary(RealVector(),RealVector()), *new Space("R3", 3), "TPCW",_GENERAL_ACCUMULATION_) {
 
     // Create Thermodynamics
     double Tref_rock = 273.15;
@@ -36,20 +36,25 @@ TPCW::TPCW(const FluxFunction & fluxFunction, const AccumulationFunction & accum
 //     TD =thermo;
 //     = new Thermodynamics_SuperCO2_WaterAdimensionalized(thermo);
 
-    TD = new Thermodynamics_SuperCO2_WaterAdimensionalized(Tref_rock, Tref_water, pressure,
-            "/impa/home/f/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhosigmac_spline.txt",
-            "/impa/home/f/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhosigmaw_spline.txt",
-            "/impa/home/f/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhoac_spline.txt",
-            "/impa/home/f/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhoaw_spline.txt",
-            "/impa/home/f/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhoW_spline.txt",
-            "/impa/home/f/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/hsigmaC_spline.txt",
-            rhoW_init,
-            Cr,
-            Cw,
-            T_typical,
-            Rho_typical,
-            h_typical,
-            U_typical);
+    string rpnHome("/home/edsonlan/Java/rpn");
+
+    TD = new Thermodynamics_SuperCO2_WaterAdimensionalized(rpnHome);
+//    TD = new Thermodynamics_SuperCO2_WaterAdimensionalized(Tref_rock, Tref_water, pressure,
+//            "/impa/home/f/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhosigmac_spline.txt",
+//            "/impa/home/f/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhosigmaw_spline.txt",
+//            "/impa/home/f/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhoac_spline.txt",
+//            "/impa/home/f/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhoaw_spline.txt",
+//            "/impa/home/f/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhoW_spline.txt",
+//            "/impa/home/f/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/hsigmaC_spline.txt",
+//            rhoW_init,
+//            Cr,
+//            Cw,
+//            T_typical,
+//            Rho_typical,
+//            h_typical,
+//            U_typical);
+
+
 
 //    int info = TD->status_after_init();
 

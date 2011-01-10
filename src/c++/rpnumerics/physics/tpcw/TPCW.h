@@ -51,7 +51,7 @@ private:
 
 public:
 
-    TPCW(const FluxFunction &, const AccumulationFunction &,  Thermodynamics_SuperCO2_WaterAdimensionalized *);
+    TPCW(const FluxFunction &, const AccumulationFunction &,  const Thermodynamics_SuperCO2_WaterAdimensionalized &);
 
     TPCW(const TPCW &);
 

@@ -44,31 +44,44 @@ Physics::Physics(const string & physicsID) : physicsVector_(new vector<SubPhysic
         double U_typical = 4.22e-6;
         double h_typical = Cw * (T_typical - Tref_water);
 
-        Thermodynamics_SuperCO2_WaterAdimensionalized * TD = new Thermodynamics_SuperCO2_WaterAdimensionalized(Tref_rock, Tref_water, pressure,
-                "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhosigmac_spline.txt",
-                "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhosigmaw_spline.txt",
-                "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhoac_spline.txt",
-                "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhoaw_spline.txt",
-                "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhoW_spline.txt",
-                "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/hsigmaC_spline.txt",
-                rhoW_init,
-                Cr,
-                Cw,
-                T_typical,
-                Rho_typical,
-                h_typical,
-                U_typical);
+       
+
+//                Thermodynamics_SuperCO2_WaterAdimensionalized * TD = new Thermodynamics_SuperCO2_WaterAdimensionalized(Tref_rock, Tref_water, pressure,
+//                        "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhosigmac_spline.txt",
+//                        "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhosigmaw_spline.txt",
+//                        "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhoac_spline.txt",
+//                        "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhoaw_spline.txt",
+//                        "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhoW_spline.txt",
+//                        "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/hsigmaC_spline.txt",
+//                        rhoW_init,
+//                        Cr,
+//                        Cw,
+//                        T_typical,
+//                        Rho_typical,
+//                        h_typical,
+//                        U_typical);
 
 
-//        const char * source = "/home/edsonalan/Java/";
-//        char * destString = new char[strlen(source) + 10];
-//        destString[0] = 'a';
-//        char * novaString = strcat(destString, source);
+        string dataPath("/src/c++/rpnumerics/physics/tpcw/");
+        Thermodynamics_SuperCO2_WaterAdimensionalized * TD = new Thermodynamics_SuperCO2_WaterAdimensionalized(dataPath);
+
+
+
 //
-//        cout << novaString << endl;
+//        rpnHome.append(dataPath);
+//
+//        string splineFile("rhosigmac_spline.txt");
 //
 //
-//        delete destString;
+//        rpnHome.append(splineFile);
+        //        char * destString = new char[strlen(source) + 10];
+        //        destString[0] = 'a';
+        //        char * novaString = strcat(destString, source);
+
+//        cout << rpnHome << endl;
+
+
+        //        delete destString;
 
 
         // Create the Flux and its params
@@ -94,7 +107,7 @@ Physics::Physics(const string & physicsID) : physicsVector_(new vector<SubPhysic
         Accum2Comp2PhasesAdimensionalized_Params * accum_params = new Accum2Comp2PhasesAdimensionalized_Params(TD, &phi);
         AccumulationFunction * accum = new Accum2Comp2PhasesAdimensionalized(*accum_params);
 
-        physicsVector_->push_back(new TPCW((FluxFunction&) * flux, (AccumulationFunction&) * accum, TD));
+        physicsVector_->push_back(new TPCW((FluxFunction&) * flux, (AccumulationFunction&) * accum, *TD));
 
         delete flux_params;
         delete flux;

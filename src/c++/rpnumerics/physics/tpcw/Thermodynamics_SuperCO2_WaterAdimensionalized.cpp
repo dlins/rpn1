@@ -2,10 +2,19 @@
 
 // Generate a spline
 
-int Thermodynamics_SuperCO2_WaterAdimensionalized::create_spline(const char *name, const char *verify, double P, spline1dinterpolant &spline) {
+//int Thermodynamics_SuperCO2_WaterAdimensionalized::create_spline(const char *name, const char *verify, double P, spline1dinterpolant &spline) {
+
+int Thermodynamics_SuperCO2_WaterAdimensionalized::create_spline(const std::string& name, const char *verify, double P, spline1dinterpolant &spline) {
+//    printf("Dentro de create spline\n");
+
+//    std::cout << "Aqui----------" << name << "\n";
+
+    std::string rpnHome("/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/");
+
+
     // Open the file that contains the data needed for the creation of the spline
     FILE *fid;
-    fid = fopen(name, "r");
+    fid = fopen(rpnHome.append(name).c_str(), "r");
     if (fid == NULL) return SPLINE_ERROR;
 
     // Read the name of the variable and the pressure and verify them.
@@ -87,7 +96,7 @@ double Thermodynamics_SuperCO2_WaterAdimensionalized::u2U(double u) {
     return u / U_typical_;
 }
 
-Thermodynamics_SuperCO2_WaterAdimensionalized::Thermodynamics_SuperCO2_WaterAdimensionalized(const char * spinedatapath) :
+Thermodynamics_SuperCO2_WaterAdimensionalized::Thermodynamics_SuperCO2_WaterAdimensionalized(const std::string & rpnHomePath) :
 a0(-1.94760101098783e-6),
 a1(0.013524080086578),
 a2(-9.043578102452411),
@@ -106,38 +115,22 @@ Rock_Cr(2.029e6),
 Water_Cw_specific(4297.),
 T_typical_(304.63),
 Rho_typical_(998.2),
-U_typical_(4.22e-6) {
+U_typical_(4.22e-6),
+rpnHomePath_(rpnHomePath){
 
     h_typical_ = Water_Cw_specific * (T_typical_ - Tref_water);
 
-    //    printf(strcat("rhosigmac_spline.txt", spinedatapath));
     // Generate the splines
+//    printf("Novo construtor %f\n", h_typical_);
 
+//    std::cout<<rpnHomePath_<<std::endl;
 
-    info_rhosigmac = create_spline("/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhosigmac_spline.txt", "rhosigmac", P, rhosigmac_);
-    info_rhosigmaw = create_spline("/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhosigmaw_spline.txt", "rhosigmaw", P, rhosigmaw_);
-    info_rhoac = create_spline("/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhoac_spline.txt", "rhoac", P, rhoac_);
-    info_rhoaw = create_spline("/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhoaw_spline.txt", "rhoaw", P, rhoaw_);
-    info_rhoW = create_spline("/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhoW_spline.txt", "rhoW", P, rhoW_);
-    info_hsigmaC = create_spline("/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/hsigmaC_spline.txt", "hsigmaC", P, hsigmaC_);
-
-    //
-    //    double Tref_rock = 273.15;
-    //    double Tref_water = 274.3775;
-    //    double pressure = 100.9;
-    //    double Cr = 2.029e6;
-    //    double Cw = 4297.;
-    //    double rhoW_init = 998.2;
-    //    double T_typical = 304.63;
-    //    double Rho_typical = 998.2; // For the time being, this will be RhoWconst = 998 [kg/m^3]. In the future, this value should be the density of pure water at the temperature T_typical.
-    //    double U_typical = 4.22e-6;
-    //    double h_typical = Cw * (T_typical - Tref_water);
-    //    double abs_perm_typ = 3e-12; // We adimensionalize the abs_perm by a typical value of 3e-12
-    //    double grav_typ = 9.8;
-    //    double viscosity_typical = Rho_typical * abs_perm_typ * grav_typ / U_typical;
-
-
-
+    info_rhosigmac = create_spline("rhosigmac_spline.txt", "rhosigmac", P, rhosigmac_);
+    info_rhosigmaw = create_spline("rhosigmaw_spline.txt", "rhosigmaw", P, rhosigmaw_);
+    info_rhoac = create_spline("rhoac_spline.txt", "rhoac", P, rhoac_);
+    info_rhoaw = create_spline("rhoaw_spline.txt", "rhoaw", P, rhoaw_);
+    info_rhoW = create_spline("rhoW_spline.txt", "rhoW", P, rhoW_);
+    info_hsigmaC = create_spline("hsigmaC_spline.txt", "hsigmaC", P, hsigmaC_);
 
 
 }
@@ -192,6 +185,8 @@ U_typical_(U_typ) {
     info_rhoaw = create_spline(rhoaw_name, "rhoaw", P, rhoaw_);
     info_rhoW = create_spline(rhoW_name, "rhoW", P, rhoW_);
     info_hsigmaC = create_spline(hsigmaC_name, "hsigmaC", P, hsigmaC_);
+
+
 }
 
 

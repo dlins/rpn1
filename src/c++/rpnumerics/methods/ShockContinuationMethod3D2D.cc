@@ -84,7 +84,7 @@ void ShockContinuationMethod3D2D::curve(const RealVector & input, int direction,
 
     sorter_->classify_curve(unclassifiedCurve,input,2,11,hugoniotPolyLineVector);
 
-    cout<<"Tamanho de hugoniot polyline vector: "<< hugoniotPolyLineVector.size()<<endl;
+//    cout<<"Tamanho de hugoniot polyline vector: "<< hugoniotPolyLineVector.size()<<endl;
 
     //
 //
@@ -959,11 +959,11 @@ int ShockContinuationMethod3D2D::curve(int family, double maxnum, int increase, 
         if (info_intersect == 1) { // Both inside
             out.push_back(q);
         } else if (info_intersect == -1) { // Both outside
-            cout << "No primeiro else" << endl;
+//            cout << "No primeiro else" << endl;
             return ABORTED_PROCEDURE;
         } else { // New point outside
             out.push_back(r);
-            cout << "No segundo else" << endl;
+//            cout << "No segundo else" << endl;
             //            edge = out_edge;
             return ABORTED_PROCEDURE;
         }

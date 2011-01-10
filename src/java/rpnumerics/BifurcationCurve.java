@@ -67,12 +67,12 @@ public class BifurcationCurve extends RPnCurve implements RpSolution {
 
             alpha = closest.dot(segmentVector) / segmentVector.dot(segmentVector);
 
-
-            System.out.println("Numerador: " + closest.dot(segmentVector));
-            System.out.println("Denominador: " + closest.dot(segmentVector));
-
-
-            System.out.println("Dentro de findClosestSegment:" + alpha);
+//
+//            System.out.println("Numerador: " + closest.dot(segmentVector));
+//            System.out.println("Denominador: " + closest.dot(segmentVector));
+//
+//
+//            System.out.println("Dentro de findClosestSegment:" + alpha);
 
             if (alpha < 0) {
                 alpha = 0;

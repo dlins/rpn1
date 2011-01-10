@@ -322,7 +322,7 @@ void ContinuationRarefactionFlow::fill_with_jet(const RpFunction & flux_object, 
             }
         }
     }
-    cout <<"Dentro de fill with jet cont rare flow"<<endl;
+//    cout <<"Dentro de fill with jet cont rare flow"<<endl;
     return;
 }
 
