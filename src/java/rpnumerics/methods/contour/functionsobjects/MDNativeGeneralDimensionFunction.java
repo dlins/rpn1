@@ -8,9 +8,9 @@ import wave.util.RealVector;
 
 public class MDNativeGeneralDimensionFunction extends MDVectorFunction {
 
-	static {
-		System.load("/impa/home/g/cbevilac/RP/Contour/Java/native/interfaceJNIContour/libContourFunctions.so");
-	}
+//	static {
+//		System.load("/impa/home/g/cbevilac/RP/Contour/Java/native/interfaceJNIContour/libContourFunctions.so");
+//	}
 	
 	private int dimension;
 	

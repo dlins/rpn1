@@ -1,7 +1,7 @@
 #include "Accum2Comp2PhasesAdimensionalized.h"
 
 Accum2Comp2PhasesAdimensionalized::Accum2Comp2PhasesAdimensionalized(const Accum2Comp2PhasesAdimensionalized &a){
-    TD = a.TD;
+    TD = new Thermodynamics_SuperCO2_WaterAdimensionalized(*a.TD);
     phi = a.phi;
 }
 
@@ -16,6 +16,7 @@ Accum2Comp2PhasesAdimensionalized * Accum2Comp2PhasesAdimensionalized::clone() c
 }
 
 Accum2Comp2PhasesAdimensionalized::~Accum2Comp2PhasesAdimensionalized(){
+    delete TD;
 
 }
 

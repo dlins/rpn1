@@ -12,6 +12,7 @@ ReducedFlux2Comp2PhasesAdimensionalized::ReducedFlux2Comp2PhasesAdimensionalized
 }
 
 ReducedFlux2Comp2PhasesAdimensionalized * ReducedFlux2Comp2PhasesAdimensionalized::clone() const {
+    cout<<"chamando clone de reduced"<<endl;
     return new ReducedFlux2Comp2PhasesAdimensionalized(*this);
 }
 

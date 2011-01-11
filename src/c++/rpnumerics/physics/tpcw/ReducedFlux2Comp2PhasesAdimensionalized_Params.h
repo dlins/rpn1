@@ -17,7 +17,7 @@ class ReducedFlux2Comp2PhasesAdimensionalized_Params : public FluxParams {
         ReducedFlux2Comp2PhasesAdimensionalized_Params(double abs_perm,
                                 Thermodynamics_SuperCO2_WaterAdimensionalized *TD,
                                 FracFlow2PhasesHorizontalAdimensionalized *FH);
-        ~ReducedFlux2Comp2PhasesAdimensionalized_Params();
+        virtual ~ReducedFlux2Comp2PhasesAdimensionalized_Params();
 
         Thermodynamics_SuperCO2_WaterAdimensionalized * get_thermodynamics(void) const;
         FracFlow2PhasesHorizontalAdimensionalized     * get_horizontal(void) const;

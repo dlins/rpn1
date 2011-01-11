@@ -48,7 +48,9 @@ public class RPNUMERICS {
         System.loadLibrary("rpn");
 
 //        System.out.println("Inicializando a fisica: " + physicsID);
+        setRPnHome(System.getProperty("rpnhome"));
         initNative(physicsID);
+
 
         //Processing configuration data
 
@@ -557,6 +559,8 @@ public class RPNUMERICS {
     public static native FluxParams getFluxParams();
 
     public static native String physicsID();
+
+    public static native void setRPnHome(String rpnHome);
 
     public static native Boundary boundary();
 

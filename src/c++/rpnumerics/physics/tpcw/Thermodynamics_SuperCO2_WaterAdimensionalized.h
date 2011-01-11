@@ -5,14 +5,14 @@
 //#include <stdlib.h>
 
 #include <string.h>
-//#include<string>
+#include<string>
 #include "spline1d.h"
 #include <iostream>
 
 
 #define SPLINE_OK    0
 #define SPLINE_ERROR 1
-
+using namespace std;
 // TODO: Check that T is within the interval
 
 class Thermodynamics_SuperCO2_WaterAdimensionalized {
@@ -23,8 +23,9 @@ private:
     double Rock_Cr; // [J/(m*m*m*K)] Care should be taken: Cr and Cw display different units.
     double Water_Cw_specific; // [J/(kg*K)]
 
+    string rpnHomePath_;
 
-    std::string rpnHomePath_;
+    static string dataPath_;
 
     // Splines
     spline1dinterpolant rhosigmac_, rhosigmaw_, rhoac_, rhoaw_, rhoW_, hsigmaC_;
@@ -33,7 +34,7 @@ private:
     int info_rhosigmac, info_rhosigmaw, info_rhoac, info_rhoaw, info_rhoW, info_hsigmaC;
 
     // Create a spline
-    int create_spline(const std::string &, const char*, double, spline1dinterpolant&);
+    int create_spline(const string &, const string &, double, spline1dinterpolant&);
 
     // Some constants for mug
     const double a0, a1, a2, a3;
@@ -51,18 +52,21 @@ private:
 protected:
 public:
     Thermodynamics_SuperCO2_WaterAdimensionalized(double, double, double,
-            const char*, const char*, const char*,
-            const char*, const char*, const char*,
             double,
             double, double,
             double,
             double,
             double,
-            double);
+            double,
+            const string &);
 
-    Thermodynamics_SuperCO2_WaterAdimensionalized(const std::string & );
+    Thermodynamics_SuperCO2_WaterAdimensionalized(const string &);
 
-    ~Thermodynamics_SuperCO2_WaterAdimensionalized();
+
+
+//    Thermodynamics_SuperCO2_WaterAdimensionalized(const Thermodynamics_SuperCO2_WaterAdimensionalized &);
+
+    virtual ~Thermodynamics_SuperCO2_WaterAdimensionalized();
 
     int status_after_init(void); //
 

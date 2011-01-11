@@ -7,16 +7,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-/* Inaccessible static: INCREASING_LAMBDA */
-/* Inaccessible static: methodsConfigMap_ */
-/* Inaccessible static: errorControl_ */
-/* Inaccessible static: odeSolver_ */
-/* Inaccessible static: shockProfile_ */
-/* Inaccessible static: rarefactionProfile_ */
-/* Inaccessible static: bifurcationProfile_ */
-/* Inaccessible static: shockRarefactionProfile_ */
-/* Inaccessible static: contourConfiguration_ */
-/* Inaccessible static: direction_ */
 /*
  * Class:     rpnumerics_RPNUMERICS
  * Method:    initNative
@@ -72,6 +62,14 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getFluxParams
  */
 JNIEXPORT jstring JNICALL Java_rpnumerics_RPNUMERICS_physicsID
   (JNIEnv *, jclass);
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    setRPnHome
+ * Signature: (Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setRPnHome
+  (JNIEnv *, jclass, jstring);
 
 /*
  * Class:     rpnumerics_RPNUMERICS

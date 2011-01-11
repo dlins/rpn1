@@ -192,7 +192,6 @@ int ColorCurve::classify_point(const RealVector &p,int noe) {
 
 void ColorCurve::classify_segments(const std::vector<RealVector> &input, int noe, std::vector<HugoniotPolyLine> &output) {
 
-//    cout << "Tamanho do vetor para classificar: " << input.size() << endl;
     if (input.size() < 2) return;
 
     // Create a vector of the positions where a change of type occurs.
