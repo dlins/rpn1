@@ -30,7 +30,7 @@ class ReducedFlux2Comp2PhasesAdimensionalized : public FluxFunction {
         ReducedFlux2Comp2PhasesAdimensionalized(const ReducedFlux2Comp2PhasesAdimensionalized_Params &);
         ReducedFlux2Comp2PhasesAdimensionalized * clone() const;
 
-       virtual ~ReducedFlux2Comp2PhasesAdimensionalized();
+        ~ReducedFlux2Comp2PhasesAdimensionalized();
 
         int jet(const WaveState &u, JetMatrix &m, int degree) const;
 };

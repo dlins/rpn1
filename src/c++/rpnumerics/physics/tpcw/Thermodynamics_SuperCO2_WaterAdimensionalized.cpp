@@ -1,12 +1,16 @@
 #include "Thermodynamics_SuperCO2_WaterAdimensionalized.h"
 
-string Thermodynamics_SuperCO2_WaterAdimensionalized::dataPath_("/src/c++/rpnumerics/physics/tpcw/");
 // Generate a spline
 
-int Thermodynamics_SuperCO2_WaterAdimensionalized::create_spline(const string& name, const string & verify, double P, spline1dinterpolant &spline) {
+//int Thermodynamics_SuperCO2_WaterAdimensionalized::create_spline(const char *name, const char *verify, double P, spline1dinterpolant &spline) {
 
-    string rpnHome(rpnHomePath_);
-    rpnHome.append(dataPath_);
+int Thermodynamics_SuperCO2_WaterAdimensionalized::create_spline(const std::string& name, const char *verify, double P, spline1dinterpolant &spline) {
+//    printf("Dentro de create spline\n");
+
+//    std::cout << "Aqui----------" << name << "\n";
+
+    std::string rpnHome("/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/");
+
 
     // Open the file that contains the data needed for the creation of the spline
     FILE *fid;
@@ -20,7 +24,7 @@ int Thermodynamics_SuperCO2_WaterAdimensionalized::create_spline(const string& n
     double Ptest;
     fscanf(fid, "%lf", &Ptest);
 
-    if (strcmp(name_variable, verify.c_str()) != 0 || Ptest != P) {
+    if (strcmp(name_variable, verify) != 0 || Ptest != P) {
         fclose(fid);
         return SPLINE_ERROR;
     }
@@ -61,11 +65,16 @@ int Thermodynamics_SuperCO2_WaterAdimensionalized::create_spline(const string& n
 }
 
 
+
+
 // Convert from Theta to T
 
 double Thermodynamics_SuperCO2_WaterAdimensionalized::Theta2T(double Theta) {
     return Theta * T_typical_ + Tref_water;
 }
+
+
+
 // Convert from T to Theta
 
 double Thermodynamics_SuperCO2_WaterAdimensionalized::T2Theta(double T) {
@@ -79,13 +88,15 @@ double Thermodynamics_SuperCO2_WaterAdimensionalized::U2u(double U) {
     return U*U_typical_;
 }
 
+
+
 // Convert from u to U
 
 double Thermodynamics_SuperCO2_WaterAdimensionalized::u2U(double u) {
     return u / U_typical_;
 }
 
-Thermodynamics_SuperCO2_WaterAdimensionalized::Thermodynamics_SuperCO2_WaterAdimensionalized(const string & rpnHomePath) :
+Thermodynamics_SuperCO2_WaterAdimensionalized::Thermodynamics_SuperCO2_WaterAdimensionalized(const std::string & rpnHomePath) :
 a0(-1.94760101098783e-6),
 a1(0.013524080086578),
 a2(-9.043578102452411),
@@ -105,11 +116,14 @@ Water_Cw_specific(4297.),
 T_typical_(304.63),
 Rho_typical_(998.2),
 U_typical_(4.22e-6),
-rpnHomePath_(rpnHomePath) {
+rpnHomePath_(rpnHomePath){
 
     h_typical_ = Water_Cw_specific * (T_typical_ - Tref_water);
 
     // Generate the splines
+//    printf("Novo construtor %f\n", h_typical_);
+
+//    std::cout<<rpnHomePath_<<std::endl;
 
     info_rhosigmac = create_spline("rhosigmac_spline.txt", "rhosigmac", P, rhosigmac_);
     info_rhosigmaw = create_spline("rhosigmaw_spline.txt", "rhosigmaw", P, rhosigmaw_);
@@ -118,7 +132,18 @@ rpnHomePath_(rpnHomePath) {
     info_rhoW = create_spline("rhoW_spline.txt", "rhoW", P, rhoW_);
     info_hsigmaC = create_spline("hsigmaC_spline.txt", "hsigmaC", P, hsigmaC_);
 
+
 }
+
+
+
+
+
+
+
+
+
+
 
 
 // CTOR (Constructor).
@@ -126,12 +151,14 @@ rpnHomePath_(rpnHomePath) {
 // can be used.
 
 Thermodynamics_SuperCO2_WaterAdimensionalized::Thermodynamics_SuperCO2_WaterAdimensionalized(double T1, double T2, double Press,
+        const char *rhosigmac_name, const char *rhosigmaw_name, const char *rhoac_name,
+        const char *rhoaw_name, const char *rhoW_name, const char *hsigmaC_name,
         double rhoW_init,
         double rhv, double whv,
         double T_typ,
         double Rho_typ,
         double h_typ,
-        double U_typ, const string & rpnHomePath) : a0(-1.94760101098783e-6),
+        double U_typ) : a0(-1.94760101098783e-6),
 a1(0.013524080086578),
 a2(-9.043578102452411),
 a3(1.612763701298628e3),
@@ -150,51 +177,17 @@ Water_Cw_specific(whv),
 T_typical_(T_typ),
 Rho_typical_(Rho_typ),
 h_typical_(h_typ),
-U_typical_(U_typ),
-rpnHomePath_(rpnHomePath) {
+U_typical_(U_typ) {
     // Generate the splines
+    info_rhosigmac = create_spline(rhosigmac_name, "rhosigmac", P, rhosigmac_);
+    info_rhosigmaw = create_spline(rhosigmaw_name, "rhosigmaw", P, rhosigmaw_);
+    info_rhoac = create_spline(rhoac_name, "rhoac", P, rhoac_);
+    info_rhoaw = create_spline(rhoaw_name, "rhoaw", P, rhoaw_);
+    info_rhoW = create_spline(rhoW_name, "rhoW", P, rhoW_);
+    info_hsigmaC = create_spline(hsigmaC_name, "hsigmaC", P, hsigmaC_);
 
-    info_rhosigmac = create_spline("rhosigmac_spline.txt", "rhosigmac", P, rhosigmac_);
-    info_rhosigmaw = create_spline("rhosigmaw_spline.txt", "rhosigmaw", P, rhosigmaw_);
-    info_rhoac = create_spline("rhoac_spline.txt", "rhoac", P, rhoac_);
-    info_rhoaw = create_spline("rhoaw_spline.txt", "rhoaw", P, rhoaw_);
-    info_rhoW = create_spline("rhoW_spline.txt", "rhoW", P, rhoW_);
-    info_hsigmaC = create_spline("hsigmaC_spline.txt", "hsigmaC", P, hsigmaC_);
 
 }
-
-//Thermodynamics_SuperCO2_WaterAdimensionalized::Thermodynamics_SuperCO2_WaterAdimensionalized(const Thermodynamics_SuperCO2_WaterAdimensionalized & copy) :
-//a0(copy.a0),
-//a1(copy.a1),
-//a2(copy.a2),
-//a3(copy.a3),
-//b0(copy.b0),
-//b1(copy.b1),
-//b2(copy.b2),
-//b3(copy.b3),
-//b4(copy.b4),
-//b5(copy.b5),
-//Tref_rock(copy.Tref_rock),
-//Tref_water(copy.Tref_water),
-//P(copy.P),
-//rhoW_const(copy.rhoW_const),
-//Rock_Cr(copy.Rock_Cr),
-//Water_Cw_specific(copy.Water_Cw_specific),
-//T_typical_(copy.T_typical_),
-//Rho_typical_(copy.Rho_typical_),
-//h_typical_(copy.h_typical_),
-//U_typical_(copy.U_typical_),
-//rpnHomePath_(copy.rpnHomePath_) {
-//
-//    info_rhosigmac = create_spline("rhosigmac_spline.txt", "rhosigmac", P, rhosigmac_);
-//    info_rhosigmaw = create_spline("rhosigmaw_spline.txt", "rhosigmaw", P, rhosigmaw_);
-//    info_rhoac = create_spline("rhoac_spline.txt", "rhoac", P, rhoac_);
-//    info_rhoaw = create_spline("rhoaw_spline.txt", "rhoaw", P, rhoaw_);
-//    info_rhoW = create_spline("rhoW_spline.txt", "rhoW", P, rhoW_);
-//    info_hsigmaC = create_spline("hsigmaC_spline.txt", "hsigmaC", P, hsigmaC_);
-//
-//}
-
 
 
 
@@ -202,7 +195,6 @@ rpnHomePath_(rpnHomePath) {
 // DTOR (Destructor)
 
 Thermodynamics_SuperCO2_WaterAdimensionalized::~Thermodynamics_SuperCO2_WaterAdimensionalized() {
-
 }
 
 

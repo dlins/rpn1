@@ -16,12 +16,10 @@
 
 #include "FluxFunction.h"
 #include "AccumulationFunction.h"
-#include "HugoniotFunctionClass.h"
 #include "Boundary.h"
 #include "Space.h"
 #include  "Multid.h"
 #include "eigen.h"
-
 
 /*
  * ---------------------------------------------------------------
@@ -36,7 +34,6 @@ private:
 
     FluxFunction * fluxFunction_;
     AccumulationFunction * accumulationFunction_;
-//    HugoniotFunctionClass * hugoniotFunction_;
     Boundary * boundary_;
     Space * space_;
     const char * ID_;

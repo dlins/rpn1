@@ -31,8 +31,6 @@ private:
     static const ShockFlow * shockFlow_;
         
     static double sigma;
-
- 
     
     
 public:
@@ -50,12 +48,7 @@ public:
     static void setPhysics(const Physics &);
     
     static void clean();
-
-
-
- 
-
-
+    
 };
 
 inline Physics & RpNumerics::getPhysics(){return *physics_;}
@@ -71,8 +64,7 @@ inline void RpNumerics::setPhysics(const Physics & physics){
 
 inline void RpNumerics::setSigma(double s){sigma=s;}
 
-inline double RpNumerics::getSigma(){return sigma;
-}
+inline double RpNumerics::getSigma(){return sigma;}
 
 
 #endif	/* _JNIDEFS_H */

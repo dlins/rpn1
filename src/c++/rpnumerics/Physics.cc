@@ -4,10 +4,7 @@ Physics::~Physics() {
 
     delete physicsVector_;
     delete ID_;
-    //    delete rpnHome_;
 }
-
-string * Physics::rpnHome_ = new string();
 
 Physics::Physics(const string & physicsID) : physicsVector_(new vector<SubPhysics *>()), ID_(new string(physicsID)) {
     if (physicsID.compare("QuadraticR2") == 0) {
@@ -34,14 +31,58 @@ Physics::Physics(const string & physicsID) : physicsVector_(new vector<SubPhysic
         physicsVector_->push_back(new Stone());
     }
 
-    if (physicsID.compare("Stone") == 0) {
-        physicsVector_->push_back(new Stone());
-    }
-
     if (physicsID.compare("TPCW") == 0) {
         // Create Thermodynamics
+        double Tref_rock = 273.15;
+        double Tref_water = 274.3775;
+        double pressure = 100.9;
+        double Cr = 2.029e6;
+        double Cw = 4297.;
+        double rhoW_init = 998.2;
+        double T_typical = 304.63;
+        double Rho_typical = 998.2; // For the time being, this will be RhoWconst = 998 [kg/m^3]. In the future, this value should be the density of pure water at the temperature T_typical.
+        double U_typical = 4.22e-6;
+        double h_typical = Cw * (T_typical - Tref_water);
 
-        Thermodynamics_SuperCO2_WaterAdimensionalized * TD = new Thermodynamics_SuperCO2_WaterAdimensionalized(Physics::getRPnHome());
+       
+
+//                Thermodynamics_SuperCO2_WaterAdimensionalized * TD = new Thermodynamics_SuperCO2_WaterAdimensionalized(Tref_rock, Tref_water, pressure,
+//                        "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhosigmac_spline.txt",
+//                        "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhosigmaw_spline.txt",
+//                        "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhoac_spline.txt",
+//                        "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhoaw_spline.txt",
+//                        "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhoW_spline.txt",
+//                        "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/hsigmaC_spline.txt",
+//                        rhoW_init,
+//                        Cr,
+//                        Cw,
+//                        T_typical,
+//                        Rho_typical,
+//                        h_typical,
+//                        U_typical);
+
+
+        string dataPath("/src/c++/rpnumerics/physics/tpcw/");
+        Thermodynamics_SuperCO2_WaterAdimensionalized * TD = new Thermodynamics_SuperCO2_WaterAdimensionalized(dataPath);
+
+
+
+//
+//        rpnHome.append(dataPath);
+//
+//        string splineFile("rhosigmac_spline.txt");
+//
+//
+//        rpnHome.append(splineFile);
+        //        char * destString = new char[strlen(source) + 10];
+        //        destString[0] = 'a';
+        //        char * novaString = strcat(destString, source);
+
+//        cout << rpnHome << endl;
+
+
+        //        delete destString;
+
 
         // Create the Flux and its params
         double abs_perm = 3e-12;
@@ -60,6 +101,7 @@ Physics::Physics(const string & physicsID) : physicsVector_(new vector<SubPhysic
 
         FluxFunction * flux = new Flux2Comp2PhasesAdimensionalized(*flux_params);
 
+
         // Create the Accum and its params
         double phi = 0.38;
         Accum2Comp2PhasesAdimensionalized_Params * accum_params = new Accum2Comp2PhasesAdimensionalized_Params(TD, &phi);
@@ -71,7 +113,13 @@ Physics::Physics(const string & physicsID) : physicsVector_(new vector<SubPhysic
         delete flux;
         delete accum_params;
         delete accum;
+        //        delete fh;
+        //        delete fv;
+
+
     }
+
+
 
 
     boundary_ = physicsVector_->at(0)->boundary().clone(); //TODO Using the default boundary.Replace
@@ -98,7 +146,6 @@ Physics::Physics(const Physics & physics) : physicsVector_(new vector<SubPhysics
         physicsVector_->push_back(physics.getPhysicsVector().at(i)->clone());
 
     }
-    rpnHome_ = new string(Physics::getRPnHome());
 
 }
 
