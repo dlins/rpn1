@@ -23,8 +23,8 @@ private:
     double Rock_Cr; // [J/(m*m*m*K)] Care should be taken: Cr and Cw display different units.
     double Water_Cw_specific; // [J/(kg*K)]
 
-
     std::string rpnHomePath_;
+    static std::string dataPath_;
 
     // Splines
     spline1dinterpolant rhosigmac_, rhosigmaw_, rhoac_, rhoaw_, rhoW_, hsigmaC_;
@@ -50,21 +50,23 @@ private:
 
 protected:
 public:
-    Thermodynamics_SuperCO2_WaterAdimensionalized(double, double, double,
-            const char*, const char*, const char*,
-            const char*, const char*, const char*,
-            double,
-            double, double,
-            double,
-            double,
-            double,
-            double);
+//    Thermodynamics_SuperCO2_WaterAdimensionalized(double, double, double,
+//            const char*, const char*, const char*,
+//            const char*, const char*, const char*,
+//            double,
+//            double, double,
+//            double,
+//            double,
+//            double,
+//            double);
 
+
+    Thermodynamics_SuperCO2_WaterAdimensionalized(const Thermodynamics_SuperCO2_WaterAdimensionalized &);
     Thermodynamics_SuperCO2_WaterAdimensionalized(const std::string & );
 
-    ~Thermodynamics_SuperCO2_WaterAdimensionalized();
+    virtual ~Thermodynamics_SuperCO2_WaterAdimensionalized();
 
-    int status_after_init(void); //
+    int status_after_init(void); 
 
     double RockEnthalpyVol(double);
     void Diff_RockEnthalpyVol(double, double&, double&, double&);

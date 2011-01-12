@@ -109,20 +109,20 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
     double U_typical = 4.22e-6;
     double h_typical = Cw * (T_typical - Tref_water);
 
-//    Thermodynamics_SuperCO2_WaterAdimensionalized TD(Tref_rock, Tref_water, pressure,
-//            "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhosigmac_spline.txt",
-//            "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhosigmaw_spline.txt",
-//            "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhoac_spline.txt",
-//            "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhoaw_spline.txt",
-//            "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhoW_spline.txt",
-//            "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/hsigmaC_spline.txt",
-//            rhoW_init,
-//            Cr,
-//            Cw,
-//            T_typical,
-//            Rho_typical,
-//            h_typical,
-//            U_typical);
+    //    Thermodynamics_SuperCO2_WaterAdimensionalized TD(Tref_rock, Tref_water, pressure,
+    //            "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhosigmac_spline.txt",
+    //            "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhosigmaw_spline.txt",
+    //            "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhoac_spline.txt",
+    //            "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhoaw_spline.txt",
+    //            "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhoW_spline.txt",
+    //            "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/hsigmaC_spline.txt",
+    //            rhoW_init,
+    //            Cr,
+    //            Cw,
+    //            T_typical,
+    //            Rho_typical,
+    //            h_typical,
+    //            U_typical);
 
 
     string rpnHome("/home/edsonlan/Java/rpn");
@@ -130,15 +130,14 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
 
 
     double cnw = 0., cng = 0., expw = 2., expg = 2.;
-    FracFlow2PhasesHorizontalAdimensionalized fh(cnw, cng, expw, expg, &TD);
+    FracFlow2PhasesHorizontalAdimensionalized fh(cnw, cng, expw, expg, TD);
 
 
     ReducedTPCWHugoniotFunctionClass tpcwhc(Uref, abs_perm, phi, const_gravity, &TD, &fh);
 
-//    StoneHugoniotFunctionClass stoneHugoniotFunction(Uref,(const StoneFluxFunction &) RpNumerics::getPhysics().fluxFunction());
+    //    StoneHugoniotFunctionClass stoneHugoniotFunction(Uref,(const StoneFluxFunction &) RpNumerics::getPhysics().fluxFunction());
 
-//    CoincidenceTPCW coincidence()
-
+    //    CoincidenceTPCW coincidence()
 
     // Contour proper
 
@@ -153,11 +152,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
 
     int res[2];
 
-    res[0] =2;
+    res[0] = 2;
     res[1] = 2;
 
     ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), RpNumerics::getPhysics().boundary(), &tpcwhc);
-//       ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), RpNumerics::getPhysics().boundary(), &stoneHugoniotFunction);
+    //       ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), RpNumerics::getPhysics().boundary(), &stoneHugoniotFunction);
 
     //    std::vector<RealVector> vrs;
     //    method.curv2d(0, 2000, 0.0, &rect[0], &res[0], 1, vrs);
@@ -167,13 +166,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
 
 
     //    tpcwhc.completCurve(vrs);
-//    for (int i = 0; i < hugoniotPolyLineVector.size(); i++) {
-//
-//        cout << "Numero de pontos na polyline: " << i << " " << hugoniotPolyLineVector[i].vec.size() << endl;
-//        cout << "coord 1: " << i << " " << hugoniotPolyLineVector[i].vec[0].size() << endl;
-//        cout << "coord 2: " << i << " " << hugoniotPolyLineVector[i].vec[1].size() << endl;
-//
-//    }
+    //    for (int i = 0; i < hugoniotPolyLineVector.size(); i++) {
+    //
+    //        cout << "Numero de pontos na polyline: " << i << " " << hugoniotPolyLineVector[i].vec.size() << endl;
+    //        cout << "coord 1: " << i << " " << hugoniotPolyLineVector[i].vec[0].size() << endl;
+    //        cout << "coord 2: " << i << " " << hugoniotPolyLineVector[i].vec[1].size() << endl;
+    //
+    //    }
 
 
     //    std::vector<RealVector> vrs3d;
@@ -193,7 +192,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
     //        vrs3d[i].component(2) = u; //TD.U2u(u);
     //    }
 
-cout<<"Numero de polylines: " <<hugoniotPolyLineVector.size()<<endl;
+    cout << "Numero de polylines: " << hugoniotPolyLineVector.size() << endl;
 
     for (int i = 0; i < hugoniotPolyLineVector.size(); i++) {
 
@@ -229,7 +228,7 @@ cout<<"Numero de polylines: " <<hugoniotPolyLineVector.size()<<endl;
             //            double rightSigma = 0;
             //
 
-//            cout<<"Antes de criar hugoniot segment"<<endl;
+            //            cout<<"Antes de criar hugoniot segment"<<endl;
             jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, pointType);
             env->CallObjectMethod(segmentsArray, arrayListAddMethod, hugoniotSegment);
 

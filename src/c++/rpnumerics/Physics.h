@@ -39,13 +39,14 @@ private:
     string * ID_;
     Space * space_;
     int type_;
-
+    static string rpnHome_;
+    
 public:
 
 
 
-    Physics(const string & );
-    Physics(const vector<SubPhysics> &,const Boundary &,const string & );
+    Physics(const string &);
+    Physics(const vector<SubPhysics> &, const Boundary &, const string &);
     Physics(const Physics &);
 
     virtual ~Physics();
@@ -64,6 +65,9 @@ public:
 
     const vector<SubPhysics *> & getPhysicsVector()const;
 
+    static const string & getRPnHome();
+    
+    static void setRPnHome(const string &);
 
 
     //deprecated

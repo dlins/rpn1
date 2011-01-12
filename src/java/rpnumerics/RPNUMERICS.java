@@ -46,6 +46,7 @@ public class RPNUMERICS {
         //System.loadLibrary("wave");//TODO libwave is always loaded ?
         //System.loadLibrary("rpnumerics");
         System.loadLibrary("rpn");
+        setRPnHome(System.getProperty("rpnhome")) ;
 
 //        System.out.println("Inicializando a fisica: " + physicsID);
         initNative(physicsID);
@@ -557,6 +558,8 @@ public class RPNUMERICS {
     public static native FluxParams getFluxParams();
 
     public static native String physicsID();
+
+    public static native void setRPnHome(String rpnHome);
 
     public static native Boundary boundary();
 

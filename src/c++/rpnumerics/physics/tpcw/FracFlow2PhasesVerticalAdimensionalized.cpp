@@ -1,17 +1,18 @@
 #include "FracFlow2PhasesVerticalAdimensionalized.h"
 
-FracFlow2PhasesVerticalAdimensionalized::FracFlow2PhasesVerticalAdimensionalized(double cnw_, double cng_, double expw_, double expg_, 
-                                                 Thermodynamics_SuperCO2_WaterAdimensionalized *TD_){
+FracFlow2PhasesVerticalAdimensionalized::FracFlow2PhasesVerticalAdimensionalized(double cnw_, double cng_, double expw_, double expg_,
+        const Thermodynamics_SuperCO2_WaterAdimensionalized &TD_) {
     cnw  = cnw_; // = 0
     cng  = cng_; // = 0
     expw = expw_; // = 2
     expg = expg_; // = 2
 
-    TD = TD_;
+    TD = new Thermodynamics_SuperCO2_WaterAdimensionalized(TD_);
     T_typical_ = TD->T_typical();
 }
 
 FracFlow2PhasesVerticalAdimensionalized::~FracFlow2PhasesVerticalAdimensionalized(){
+    delete TD;
 }
 
 int FracFlow2PhasesVerticalAdimensionalized::Diff_FracFlow2PhasesVerticalAdimensionalized(double sw, double Theta, int degree, JetMatrix &m){

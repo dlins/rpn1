@@ -25,7 +25,7 @@ ReducedTPCWHugoniotFunctionClass::ReducedTPCWHugoniotFunctionClass(const RealVec
                                                                                   td, fh, (FracFlow2PhasesVerticalAdimensionalized*)0);
     TPCWFluxAdimensionalized = new Flux2Comp2PhasesAdimensionalized(TPCWFluxAdimensionalized_Params);
 
-    Accum2Comp2PhasesAdimensionalized_Params TPCWAccumAdimensionalized_Params(td, &phi);
+    Accum2Comp2PhasesAdimensionalized_Params TPCWAccumAdimensionalized_Params(*td, &phi);
     TPCWAccumAdimensionalized = new Accum2Comp2PhasesAdimensionalized(TPCWAccumAdimensionalized_Params);
 
     n = U.size();

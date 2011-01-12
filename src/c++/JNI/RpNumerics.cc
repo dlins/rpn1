@@ -68,6 +68,28 @@ Physics * RpNumerics::physics_ = NULL;
 
 double RpNumerics::sigma = 0;
 
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    setRPnHome
+ * Signature: (Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setRPnHome
+  (JNIEnv * env, jclass cls, jstring rpnHome){
+
+    const char *rpnHomeC;
+
+    rpnHomeC = env->GetStringUTFChars(rpnHome, NULL);
+
+    string rpnHomeString (rpnHomeC);
+
+    Physics::setRPnHome(rpnHomeString);
+
+    cout<<"RPn home path em physics: "<<Physics::getRPnHome()<<endl;
+
+}
+
+
 /*
  * Class:     rpnumerics_RPNUMERICS
  * Method:    getFluxParams

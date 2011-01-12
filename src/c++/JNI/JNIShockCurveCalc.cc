@@ -96,6 +96,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
     double epsilon = 1e-3;
 
     int t = 11;
+
     vector<HugoniotPolyLine> hugoniotPolyLineVector;
     ShockContinuationMethod3D2D method(dimension, familyIndex, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), RpNumerics::getPhysics().boundary(), input, tol, epsilon, t);
 

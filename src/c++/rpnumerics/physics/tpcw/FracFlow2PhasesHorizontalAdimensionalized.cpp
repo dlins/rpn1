@@ -1,15 +1,16 @@
 #include "FracFlow2PhasesHorizontalAdimensionalized.h"
 
-FracFlow2PhasesHorizontalAdimensionalized::FracFlow2PhasesHorizontalAdimensionalized(double cnw_, double cng_, double expw_, double expg_, 
-                                                     Thermodynamics_SuperCO2_WaterAdimensionalized *TD_) : cnw(cnw_), 
+FracFlow2PhasesHorizontalAdimensionalized::FracFlow2PhasesHorizontalAdimensionalized(double cnw_, double cng_, double expw_, double expg_, const
+                                                     Thermodynamics_SuperCO2_WaterAdimensionalized  & TD_) : cnw(cnw_),
                                                                                            cng(cng_), 
                                                                                            expw(expw_), 
                                                                                            expg(expg_), 
-                                                                                           TD(TD_){
+                                                                                           TD(new Thermodynamics_SuperCO2_WaterAdimensionalized(TD_)){
     T_typical_ = TD->T_typical();
 }
 
 FracFlow2PhasesHorizontalAdimensionalized::~FracFlow2PhasesHorizontalAdimensionalized(){
+    delete TD;
 }
 
 int FracFlow2PhasesHorizontalAdimensionalized::Diff_FracFlow2PhasesHorizontalAdimensionalized(double sw, double Theta, int degree, JetMatrix &m){
