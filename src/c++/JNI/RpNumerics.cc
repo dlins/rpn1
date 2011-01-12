@@ -85,7 +85,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setRPnHome
 
     Physics::setRPnHome(rpnHomeString);
 
-    cout<<"RPn home path em physics: "<<Physics::getRPnHome()<<endl;
+//    cout<<"RPn home path em physics: "<<Physics::getRPnHome()<<endl;
 
 }
 

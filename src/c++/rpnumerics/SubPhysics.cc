@@ -17,7 +17,15 @@
  * Definitions:
  */
 
-SubPhysics::SubPhysics(const FluxFunction & fluxFunction, const AccumulationFunction & accumulationFunction, const Boundary & boundary, const Space & space, const char * id,int type) : fluxFunction_((FluxFunction *) fluxFunction.clone()), accumulationFunction_((AccumulationFunction*) accumulationFunction.clone()), boundary_(boundary.clone()), space_(new Space(space)), ID_(id),type_(type) {
+SubPhysics::SubPhysics(const FluxFunction & fluxFunction, const AccumulationFunction & accumulationFunction, const Boundary & boundary, const Space & space, const char * id, int type) : fluxFunction_((FluxFunction *) fluxFunction.clone()),
+accumulationFunction_((AccumulationFunction*) accumulationFunction.clone()),
+boundary_(boundary.clone()),
+space_(new Space(space)),
+ID_(id),
+type_(type) {
+
+
+
 
 
 
@@ -33,18 +41,16 @@ const char * SubPhysics::ID() const {
 
 const Boundary & SubPhysics::boundary() const {
     return *boundary_;
-
-
 }
+
 const int SubPhysics::type() const {
     return type_;
 }
 
-void SubPhysics::boundary(const Boundary & newBoundary){
+void SubPhysics::boundary(const Boundary & newBoundary) {
 
     delete boundary_;
     boundary_ = newBoundary.clone();
-
 
 }
 
@@ -60,7 +66,7 @@ void SubPhysics::fluxParams(const FluxParams & newFluxParams) {
     fluxFunction_->fluxParams(newFluxParams);
 }
 
-void SubPhysics::accumulationParams(const AccumulationParams & newAccumulationParams){
+void SubPhysics::accumulationParams(const AccumulationParams & newAccumulationParams) {
 
     accumulationFunction_->accumulationParams(newAccumulationParams);
 }

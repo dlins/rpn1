@@ -44,7 +44,7 @@ Physics::Physics(const string & physicsID) : physicsVector_(new vector<SubPhysic
 
     if (physicsID.compare("TPCW") == 0) {
 
-        Thermodynamics_SuperCO2_WaterAdimensionalized * TD = new Thermodynamics_SuperCO2_WaterAdimensionalized(rpnHome_);
+        Thermodynamics_SuperCO2_WaterAdimensionalized TD(rpnHome_);
 
         // Create the Flux and its params
         double abs_perm = 3e-12;
@@ -54,22 +54,22 @@ Physics::Physics(const string & physicsID) : physicsVector_(new vector<SubPhysic
 
 
         double cnw = 0., cng = 0., expw = 2., expg = 2.;
-        FracFlow2PhasesHorizontalAdimensionalized *fh = new FracFlow2PhasesHorizontalAdimensionalized(cnw, cng, expw, expg, *TD);
-        FracFlow2PhasesVerticalAdimensionalized * fv = new FracFlow2PhasesVerticalAdimensionalized(cnw, cng, expw, expg, * TD);
+        FracFlow2PhasesHorizontalAdimensionalized *fh = new FracFlow2PhasesHorizontalAdimensionalized(cnw, cng, expw, expg, TD);
+        FracFlow2PhasesVerticalAdimensionalized * fv = new FracFlow2PhasesVerticalAdimensionalized(cnw, cng, expw, expg,  TD);
 
 
         Flux2Comp2PhasesAdimensionalized_Params * flux_params = new Flux2Comp2PhasesAdimensionalized_Params(abs_perm, sin_beta, const_gravity,
-                has_gravity, has_horizontal, TD, fh, fv); // Check pointer fh and fv allocation
+                has_gravity, has_horizontal,TD, fh, fv); // Check pointer fh and fv allocation
 
         FluxFunction * flux = new Flux2Comp2PhasesAdimensionalized(*flux_params);
 
 
         // Create the Accum and its params
         double phi = 0.38;
-        Accum2Comp2PhasesAdimensionalized_Params * accum_params = new Accum2Comp2PhasesAdimensionalized_Params(*TD, &phi);
+        Accum2Comp2PhasesAdimensionalized_Params * accum_params = new Accum2Comp2PhasesAdimensionalized_Params(TD, &phi);
         AccumulationFunction * accum = new Accum2Comp2PhasesAdimensionalized(*accum_params);
 
-        physicsVector_->push_back(new TPCW((FluxFunction&) * flux, (AccumulationFunction&) * accum, *TD));
+        physicsVector_->push_back(new TPCW((FluxFunction&) * flux, (AccumulationFunction&) * accum, TD));
 
         delete flux_params;
         delete flux;

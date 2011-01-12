@@ -12,7 +12,7 @@ int Thermodynamics_SuperCO2_WaterAdimensionalized::create_spline(const std::stri
     //    printf("Dentro de create spline\n");
     std::string temp(rpnHomePath_);
     temp.append(dataPath_);
-    std::cout << "Valor de temp: " << temp << "\n";
+//    std::cout << "Valor de temp: " << temp << "\n";
 
     // Open the file that contains the data needed for the creation of the spline
     FILE *fid;
@@ -124,9 +124,6 @@ double Thermodynamics_SuperCO2_WaterAdimensionalized::T2Theta(double T) {
 double Thermodynamics_SuperCO2_WaterAdimensionalized::U2u(double U) {
     return U*U_typical_;
 }
-
-
-
 // Convert from u to U
 
 double Thermodynamics_SuperCO2_WaterAdimensionalized::u2U(double u) {
@@ -158,9 +155,6 @@ rpnHomePath_(rpnHomePath) {
     h_typical_ = Water_Cw_specific * (T_typical_ - Tref_water);
 
     // Generate the splines
-    //    printf("Novo construtor %f\n", h_typical_);
-
-    //    std::cout<<rpnHomePath_<<std::endl;
 
     info_rhosigmac = create_spline("rhosigmac_spline.txt", "rhosigmac", P, rhosigmac_);
     info_rhosigmaw = create_spline("rhosigmaw_spline.txt", "rhosigmaw", P, rhosigmaw_);
@@ -168,7 +162,6 @@ rpnHomePath_(rpnHomePath) {
     info_rhoaw = create_spline("rhoaw_spline.txt", "rhoaw", P, rhoaw_);
     info_rhoW = create_spline("rhoW_spline.txt", "rhoW", P, rhoW_);
     info_hsigmaC = create_spline("hsigmaC_spline.txt", "hsigmaC", P, hsigmaC_);
-
 
 }
 

@@ -3,7 +3,7 @@
 Flux2Comp2PhasesAdimensionalized_Params::Flux2Comp2PhasesAdimensionalized_Params(double abs_perm, double sin_beta, double const_gravity, 
                                                  bool has_gravity, 
                                                  bool has_horizontal,
-                                                 Thermodynamics_SuperCO2_WaterAdimensionalized *TD,
+                                                 const Thermodynamics_SuperCO2_WaterAdimensionalized & TD,
                                                  FracFlow2PhasesHorizontalAdimensionalized *FH,
                                                  FracFlow2PhasesVerticalAdimensionalized *FV) : FluxParams(3){
     component(0, abs_perm);
@@ -13,16 +13,17 @@ Flux2Comp2PhasesAdimensionalized_Params::Flux2Comp2PhasesAdimensionalized_Params
     has_gravity_    = has_gravity;
     has_horizontal_ = has_horizontal;
 
-    TD_ = TD;
+    TD_ = new Thermodynamics_SuperCO2_WaterAdimensionalized(TD);
     FH_ = FH;
     FV_ = FV;
 }
 
 Flux2Comp2PhasesAdimensionalized_Params::~Flux2Comp2PhasesAdimensionalized_Params(){
+    delete TD_;
 }
 
-Thermodynamics_SuperCO2_WaterAdimensionalized * Flux2Comp2PhasesAdimensionalized_Params::get_thermodynamics(void) const {
-    return TD_;
+const Thermodynamics_SuperCO2_WaterAdimensionalized & Flux2Comp2PhasesAdimensionalized_Params::get_thermodynamics(void) const {
+    return *TD_;
 }
 
 FracFlow2PhasesHorizontalAdimensionalized * Flux2Comp2PhasesAdimensionalized_Params::get_horizontal(void) const {

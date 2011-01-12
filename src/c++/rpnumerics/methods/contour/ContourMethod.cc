@@ -337,12 +337,12 @@ lab90:
                     //        cout << "Aqui sn= "<<sn<<endl;
 
                     if (nedges_ > 0) {
-                        cout << "Depois  nedges_" << nedges_ << endl;
+                        //                        cout << "Depois  nedges_" << nedges_ << endl;
                         //                        if (nedges_ >2 ) return 0;
 
                         for (nedg = 0; nedg < nedges_; nedg++) {
                             sn++;
-                            cout << "Depois  nedg" << nedg << endl;
+                            //                            cout << "Depois  nedg" << nedg << endl;
                             segend[sn - 1][0][0] = sol_[0][edges_[0][nedg ]]; // X1
                             segend[sn - 1][0][1] = sol_[1][edges_[0][nedg ]]; // Y1
                             segend[sn - 1][1][0] = sol_[0][edges_[1][nedg ]]; // X2
@@ -391,21 +391,15 @@ void ContourMethod::curve(const RealVector & input, vector<HugoniotPolyLine> & h
 
     double rect[4];
 
-
-
-
     rect[0] = 0.0; // xmin
     rect[1] = 1.0; // xmax
     rect[2] = 0.0841102; // ymin
     rect[3] = 0.576511; // ymax
-
-
-
-//
-//    rect[0] = 0.65; // xmin
-//    rect[1] = 0.84; // xmax
-//    rect[2] = 0.27; // ymin
-//    rect[3] = 0.367; // ymax
+    //
+    //    rect[0] = 0.65; // xmin
+    //    rect[1] = 0.84; // xmax
+    //    rect[2] = 0.27; // ymin
+    //    rect[3] = 0.367; // ymax
 
     //    rect[0] = 0.0; // xmin
     //    rect[1] = 1.0; // xmax
@@ -422,8 +416,6 @@ void ContourMethod::curve(const RealVector & input, vector<HugoniotPolyLine> & h
     int info = curv2d(0, 9025, 0.0, &rect[0], &res[0], 1, vrs);
 
     //    cout << "Unclissified curve: " << vrs.size() << endl;
-
-
 
     //    cout << "antes de complete curve: " << info << endl;
 
@@ -465,19 +457,16 @@ void ContourMethod::curve(const RealVector & input, vector<HugoniotPolyLine> & h
 
 
     }
-
-
-
     //
     //            cout << "type of " << j << " = " << hugoniotPolyLineVector[i].type << endl;
     //            cout << "coord 1 " << j << " = " << hugoniotPolyLineVector[i].vec[j] << endl;
     //            cout << "coord 2 " << j + 1 << " = " << hugoniotPolyLineVector[i].vec[j + 1] << endl;
 
 
-    cout << "antes de classificar: " << unclassifiedCurve.size()<<endl;
+//    cout << "antes de classificar: " << unclassifiedCurve.size() << endl;
 
     sorter_->classify_curve(unclassifiedCurve, input, 2, 11, hugoniotPolyLineVector);
-//    cout << "Size (1) of a vector within HugoniotPolyLine: " << hugoniotPolyLineVector[0].vec[0].size() << endl;
+    //    cout << "Size (1) of a vector within HugoniotPolyLine: " << hugoniotPolyLineVector[0].vec[0].size() << endl;
 
 
     //Para testar o contour sem classificacao
@@ -497,14 +486,10 @@ void ContourMethod::curve(const RealVector & input, vector<HugoniotPolyLine> & h
     //        hugoniotPolyLineVector.push_back(temp);
     //    }
 
-//    cout << "Size (2) of a vector within HugoniotPolyLine: " << hugoniotPolyLineVector[0].vec[0].size() << endl;
-    cout << "Depois do classify: " << hugoniotPolyLineVector.size() << endl;
-
+    //    cout << "Size (2) of a vector within HugoniotPolyLine: " << hugoniotPolyLineVector[0].vec[0].size() << endl;
+    //    cout << "Depois do classify: " << hugoniotPolyLineVector.size() << endl;
 
     //
-
-
-
 
     //    for (int i = 0; i < hugoniotPolyLineVector.size(); i++) {
     //

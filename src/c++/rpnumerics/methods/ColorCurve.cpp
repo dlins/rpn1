@@ -228,8 +228,8 @@ void ColorCurve::classify_segments(const std::vector<RealVector> &input, int noe
 
     // The number of segments exceeds by one the number of points where a change of type was detected.
 //    output.clear();
-    printf("pos.size() = %d\n", pos.size());
-    for (unsigned int i = 0; i < pos.size(); i++) printf("pos[%d] = %d\n", i, pos[i]);
+//    printf("pos.size() = %d\n", pos.size());
+//    for (unsigned int i = 0; i < pos.size(); i++) printf("pos[%d] = %d\n", i, pos[i]);
     output.resize(pos.size() + 1);
 
     // Add the points to the segment they belong, according to their type.
@@ -247,7 +247,7 @@ void ColorCurve::classify_segments(const std::vector<RealVector> &input, int noe
             end = pos[seg_num];
         }
 
-        printf("seg_num = %d, init = %d, end = %d\n", seg_num, init, end);
+//        printf("seg_num = %d, init = %d, end = %d\n", seg_num, init, end);
 
         // Set the type of this segment
         output[seg_num].type = classify_point(input[init],noe);
@@ -267,7 +267,7 @@ void ColorCurve::classify_segments(const std::vector<RealVector> &input, int noe
             std::vector<RealVector> r;
             int info = interpolate(noe,input[end - 1], input[end], r);
 
-            printf("type(%d) = %d, type(%d) = %d\n", end - 1, classify_point(input[end - 1],noe), end, classify_point(input[end],noe));
+//            printf("type(%d) = %d, type(%d) = %d\n", end - 1, classify_point(input[end - 1],noe), end, classify_point(input[end],noe));
 
             if (info == INTERPOLATION_OK) {
                 //printf("r.size() = %d\n", r.size());

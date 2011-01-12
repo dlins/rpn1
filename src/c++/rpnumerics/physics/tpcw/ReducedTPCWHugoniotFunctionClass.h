@@ -35,6 +35,8 @@ class ReducedTPCWHugoniotFunctionClass : public HugoniotFunctionClass {
 
         double det(int nn, double *A);
 
+    HugoniotFunctionClass * clone()const;
+
     protected:
     public:
         ReducedTPCWHugoniotFunctionClass(const RealVector &U, 
@@ -44,6 +46,8 @@ class ReducedTPCWHugoniotFunctionClass : public HugoniotFunctionClass {
                                          Thermodynamics_SuperCO2_WaterAdimensionalized *td,
                                          FracFlow2PhasesHorizontalAdimensionalized     *fh); // U=dim 3  , u=dim 2.
         ~ReducedTPCWHugoniotFunctionClass();
+
+    ReducedTPCWHugoniotFunctionClass(const ReducedTPCWHugoniotFunctionClass &);
 
         double HugoniotFunction(const RealVector &u);    // TODO: u tem que ter dimensao 2 e nao 3.
 
