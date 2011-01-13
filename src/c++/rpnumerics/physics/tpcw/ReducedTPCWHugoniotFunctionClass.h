@@ -10,49 +10,49 @@
 #include "eigen.h" // TODO: Find the place
 
 class ReducedTPCWHugoniotFunctionClass : public HugoniotFunctionClass {
-    private:
-//        ReducedFlux2Comp2PhasesAdimensionalized_Params  *ReducedTPCWFluxAdimensionalized_Params;
-        ReducedFlux2Comp2PhasesAdimensionalized         *ReducedTPCWFluxAdimensionalized;
+private:
+    //        ReducedFlux2Comp2PhasesAdimensionalized_Params  *ReducedTPCWFluxAdimensionalized_Params;
+    ReducedFlux2Comp2PhasesAdimensionalized *ReducedTPCWFluxAdimensionalized;
 
-//        ReducedAccum2Comp2PhasesAdimensionalized_Params *ReducedTPCWAccumAdimensionalized_Params;
-        ReducedAccum2Comp2PhasesAdimensionalized        *ReducedTPCWAccumAdimensionalized;
+    //        ReducedAccum2Comp2PhasesAdimensionalized_Params *ReducedTPCWAccumAdimensionalized_Params;
+    ReducedAccum2Comp2PhasesAdimensionalized *ReducedTPCWAccumAdimensionalized;
 
-//        Flux2Comp2PhasesAdimensionalized_Params         *TPCWFluxAdimensionalized_Params;
-        Flux2Comp2PhasesAdimensionalized                *TPCWFluxAdimensionalized;
+    //        Flux2Comp2PhasesAdimensionalized_Params         *TPCWFluxAdimensionalized_Params;
+    Flux2Comp2PhasesAdimensionalized *TPCWFluxAdimensionalized;
 
-//        Accum2Comp2PhasesAdimensionalized_Params        *TPCWAccumAdimensionalized_Params;
-        Accum2Comp2PhasesAdimensionalized               *TPCWAccumAdimensionalized;
+    //        Accum2Comp2PhasesAdimensionalized_Params        *TPCWAccumAdimensionalized_Params;
+    Accum2Comp2PhasesAdimensionalized *TPCWAccumAdimensionalized;
 
-        RealVector Uref;
-        double *aref_F;
-        double *bref_F;
+    RealVector Uref;
+    double *aref_F;
+    double *bref_F;
 
-        int n;
+    int n;
 
-        std::vector<eigenpair> ve_uref;
+    std::vector<eigenpair> ve_uref;
 
-        bool Uref_is_elliptic;
+    bool Uref_is_elliptic;
 
-        double det(int nn, double *A);
+    double det(int nn, double *A);
 
     HugoniotFunctionClass * clone()const;
 
-    protected:
-    public:
-        ReducedTPCWHugoniotFunctionClass(const RealVector &U, 
-                                         double abs_perm,
-                                         double phi,
-                                         double const_gravity,
-                                         Thermodynamics_SuperCO2_WaterAdimensionalized *td,
-                                         FracFlow2PhasesHorizontalAdimensionalized     *fh); // U=dim 3  , u=dim 2.
-        ~ReducedTPCWHugoniotFunctionClass();
+protected:
+public:
+    ReducedTPCWHugoniotFunctionClass(const RealVector &U,
+            double abs_perm,
+            double phi,
+            double const_gravity,
+            Thermodynamics_SuperCO2_WaterAdimensionalized *td,
+            FracFlow2PhasesHorizontalAdimensionalized *fh); // U=dim 3  , u=dim 2.
+    ~ReducedTPCWHugoniotFunctionClass();
 
     ReducedTPCWHugoniotFunctionClass(const ReducedTPCWHugoniotFunctionClass &);
 
-        double HugoniotFunction(const RealVector &u);    // TODO: u tem que ter dimensao 2 e nao 3.
+    double HugoniotFunction(const RealVector &u); // TODO: u tem que ter dimensao 2 e nao 3.
 
-        void CompleteHugoniot(double &darcy_speedplus, const RealVector &uplus); // TODO: u tem que ter dimensao 2 e nao 3.
-        void completeCurve(vector<RealVector> & curve);
+    void CompleteHugoniot(double &darcy_speedplus, const RealVector &uplus); // TODO: u tem que ter dimensao 2 e nao 3.
+    void completeCurve(vector<RealVector> & curve);
 
 };
 

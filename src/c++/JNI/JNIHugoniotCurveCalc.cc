@@ -125,8 +125,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
     //            U_typical);
 
 
-    string rpnHome("/home/edsonlan/Java/rpn");
-    Thermodynamics_SuperCO2_WaterAdimensionalized TD(rpnHome);
+    //    string rpnHome("/home/edsonlan/Java/rpn");
+    Thermodynamics_SuperCO2_WaterAdimensionalized TD(Physics::getRPnHome());
 
 
     double cnw = 0., cng = 0., expw = 2., expg = 2.;
