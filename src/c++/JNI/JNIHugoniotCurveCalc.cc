@@ -27,6 +27,8 @@ NOTE :
 #include "ReducedTPCWHugoniotFunctionClass.h"
 #include "TPCW.h"
 #include "StoneHugoniotFunctionClass.h"
+#include "CoincidenceTPCW.h"
+#include"SubinflectionTPCW.h"
 
 using std::vector;
 using namespace std;
@@ -133,11 +135,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
     FracFlow2PhasesHorizontalAdimensionalized fh(cnw, cng, expw, expg, TD);
 
 
-    ReducedTPCWHugoniotFunctionClass tpcwhc(Uref, abs_perm, phi, const_gravity, &TD, &fh);
+//    ReducedTPCWHugoniotFunctionClass tpcwhc(Uref, abs_perm, phi, const_gravity, &TD, &fh);
 
     //    StoneHugoniotFunctionClass stoneHugoniotFunction(Uref,(const StoneFluxFunction &) RpNumerics::getPhysics().fluxFunction());
 
-    //    CoincidenceTPCW coincidence()
+   CoincidenceTPCW coincidence(&TD,&fh,phi);
+
+    SubinflectionTPCW inflection(&TD, &fh, phi);
 
     // Contour proper
 
@@ -155,7 +159,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
     res[0] = 2;
     res[1] = 2;
 
-    ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), RpNumerics::getPhysics().boundary(), &tpcwhc);
+//    ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), RpNumerics::getPhysics().boundary(), &tpcwhc);
+//        ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), RpNumerics::getPhysics().boundary(), &coincidence);
+    ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), RpNumerics::getPhysics().boundary(), &inflection);
     //       ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), RpNumerics::getPhysics().boundary(), &stoneHugoniotFunction);
 
     //    std::vector<RealVector> vrs;

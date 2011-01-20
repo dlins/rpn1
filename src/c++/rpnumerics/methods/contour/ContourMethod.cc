@@ -465,45 +465,45 @@ void ContourMethod::curve(const RealVector & input, vector<HugoniotPolyLine> & h
 
 //    cout << "antes de classificar: " << unclassifiedCurve.size() << endl;
 
-    sorter_->classify_curve(unclassifiedCurve, input, 2, 11, hugoniotPolyLineVector);
+//    sorter_->classify_curve(unclassifiedCurve, input, 2, 11, hugoniotPolyLineVector);
     //    cout << "Size (1) of a vector within HugoniotPolyLine: " << hugoniotPolyLineVector[0].vec[0].size() << endl;
 
 
-    //Para testar o contour sem classificacao
-    //    hugoniotPolyLineVector.clear();
-    //    for (int i = 0; i < vrs.size() / 2; i++) {
-    //        HugoniotPolyLine temp;
-    //        temp.vec.resize(2);
-    //
-    //        for (int j = 0; j < 2; j++) {
-    //            temp.vec[j].resize(7);
-    //            for (int k = 0; k < 2; k++) temp.vec[j].component(k) = vrs[2 * i + j].component(k);
-    //        }
-    //
-    ////        temp.vec[0] = vrs[2 * i];
-    ////        temp.vec[1] = vrs[2 * i + 1];
-    //        temp.type = 0;
-    //        hugoniotPolyLineVector.push_back(temp);
-    //    }
+//    Para testar o contour sem classificacao
+        hugoniotPolyLineVector.clear();
+        for (int i = 0; i < vrs.size() / 2; i++) {
+            HugoniotPolyLine temp;
+            temp.vec.resize(2);
+    
+            for (int j = 0; j < 2; j++) {
+                temp.vec[j].resize(7);
+                for (int k = 0; k < 2; k++) temp.vec[j].component(k) = vrs[2 * i + j].component(k);
+            }
+    
+    //        temp.vec[0] = vrs[2 * i];
+    //        temp.vec[1] = vrs[2 * i + 1];
+            temp.type = 0;
+            hugoniotPolyLineVector.push_back(temp);
+        }
 
-    //    cout << "Size (2) of a vector within HugoniotPolyLine: " << hugoniotPolyLineVector[0].vec[0].size() << endl;
-    //    cout << "Depois do classify: " << hugoniotPolyLineVector.size() << endl;
+        cout << "Size (2) of a vector within HugoniotPolyLine: " << hugoniotPolyLineVector[0].vec[0].size() << endl;
+        cout << "Depois do classify: " << hugoniotPolyLineVector.size() << endl;
 
-    //
+    
 
-    //    for (int i = 0; i < hugoniotPolyLineVector.size(); i++) {
-    //
-    //        for (unsigned int j = 0; j < hugoniotPolyLineVector[i].vec.size() - 1; j++) {
-    //
-    //            cout << "Depois do classificador: " << hugoniotPolyLineVector.size() << endl;
-    //            cout << " depois type of " << j << " = " << hugoniotPolyLineVector[i].type << endl;
-    //            cout << "depois coord 1 " << j << " = " << hugoniotPolyLineVector[i].vec[j] << endl;
-    //            cout << "depois coord 2 " << j + 1 << " = " << hugoniotPolyLineVector[i].vec[j + 1] << endl;
-    //
-    //
-    //        }
-    //
-    //    }
+        for (int i = 0; i < hugoniotPolyLineVector.size(); i++) {
+    
+            for (unsigned int j = 0; j < hugoniotPolyLineVector[i].vec.size() - 1; j++) {
+    
+                cout << "Depois do classificador: " << hugoniotPolyLineVector.size() << endl;
+                cout << " depois type of " << j << " = " << hugoniotPolyLineVector[i].type << endl;
+                cout << "depois coord 1 " << j << " = " << hugoniotPolyLineVector[i].vec[j] << endl;
+                cout << "depois coord 2 " << j + 1 << " = " << hugoniotPolyLineVector[i].vec[j + 1] << endl;
+    
+    
+            }
+    
+        }
 
 
 
