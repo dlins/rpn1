@@ -64,6 +64,20 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
     public void plot(RpGeometry geom) {
 
         state_.plot(this, geom);
+
+        
+        
+        //TODO Teste
+//            RpGeomFactory factory = geom.geomFactory();
+//
+//            HugoniotCurveGeomFactory  hugoniotFactory= (HugoniotCurveGeomFactory) factory;
+//
+//
+//            System.out.println(hugoniotFactory.toMatlab());
+///
+
+
+
     }
 
     public void delete(RpGeometry geom) {

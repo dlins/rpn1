@@ -133,7 +133,7 @@ double SubinflectionTPCW::HugoniotFunction(const RealVector &u) {
 
     subinflection_function(reduc_lambdae, numchiu, denchiu, u);
 
-    return numchiu - reduc_lambdae*denchiu;
+    return 1e20*(numchiu - reduc_lambdae*denchiu);
 }
 
 

@@ -20,6 +20,9 @@ import java.awt.event.ActionEvent;
 import java.util.Iterator;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.XMLReader;
+import rpn.component.HugoniotCurveGeomFactory;
+import rpn.component.RpGeomFactory;
+import rpn.component.RpGeometry;
 import rpn.controller.ui.Command;
 import rpn.controller.ui.UIController;
 import rpnumerics.HugoniotCurve;
@@ -507,9 +510,20 @@ public class RPnDataModule {
     /** Writes the data of actual session into a XML file. */
     static public void export(FileWriter writer) throws java.io.IOException {
 
-        Iterator<Command> commandInterator = UIController.instance().getCommandIterator();
-        while (commandInterator.hasNext()) {
-//           writer.write((commandInterator.next().toXML()));//TODO Fix.
+//        Iterator<Command> commandInterator = UIController.instance().getCommandIterator();
+//        while (commandInterator.hasNext()) {
+////           writer.write((commandInterator.next().toXML()));//TODO Fix.
+//
+//        }
+
+
+
+        Iterator<RpGeometry> iterator = PHASESPACE.getGeomObjIterator();
+
+
+        while(iterator.hasNext()){
+
+           
 
         }
 

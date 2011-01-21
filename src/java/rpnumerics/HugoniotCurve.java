@@ -21,86 +21,6 @@ public class HugoniotCurve extends RPnCurve implements RpSolution {
     private PhasePoint xZero_;
     private List hugoniotSegments_;
 
-    // the list is filled with RealSegments...
-//    public HugoniotCurve(PhasePoint xZero, List realSegs) {
-//        super(coordsArrayFromRealSegments(realSegs), new ViewingAttr(Color.red));
-//        xZero_ = new PhasePoint(xZero);
-//        hugoniotSegments_ = hugoniotSegsFromRealSegs(xZero_, realSegs);
-//
-//    }
-
-//    public HugoniotCurve(PhasePoint xZero, WaveState[] states) {
-//        super(coordsArrayFromRealSegments(HugoniotCurve.hugoniotSegsFromWaveState(xZero,
-//                states)), new ViewingAttr(Color.red));
-//
-//        xZero_ = new PhasePoint(xZero);
-//        hugoniotSegments_ = HugoniotCurve.hugoniotSegsFromWaveState(xZero,
-//                states);
-//
-//    }
-
-
-
-//    public HugoniotCurve(PhasePoint xZero, ArrayList states) {
-//        super(coordsArrayFromRealSegments(HugoniotCurve.hugoniotSegsFromWaveState(xZero,
-//                states)), new ViewingAttr(Color.red));
-//
-//        xZero_ = new PhasePoint(xZero);
-//        hugoniotSegments_ = HugoniotCurve.hugoniotSegsFromWaveState(xZero,
-//                states);
-//
-//    }
-//
-//    public HugoniotCurve(PhasePoint xZero,CoordsArray [] coords) {
-//
-//        super(coords, new ViewingAttr(Color.RED));
-//
-//        List realSegments = MultidAdapter.converseCoordsArrayToRealSegments(coords);
-//        hugoniotSegments_ = hugoniotSegsFromRealSegs(xZero, realSegments);
-//
-//        xZero_=new PhasePoint(xZero);
-//
-//
-//    }
-
-//    public HugoniotCurve(PhasePoint xZero, List<HugoniotSegment> segments) {
-//        super(coordsArrayFromRealSegments(segments), new ViewingAttr(Color.red));
-//        hugoniotSegments_=segments;
-//        xZero_=xZero;
-//
-//    }
-//>>>>>>> contour
-//
-//
-//<<<<<<< HEAD
-//        xZero_ = new PhasePoint(xZero);
-//        hugoniotSegments_ = HugoniotCurve.hugoniotSegsFromWaveState(xZero,
-//                states);
-
-//    }
-
-//    public HugoniotCurve(PhasePoint xZero, ArrayList states) {
-//        super(coordsArrayFromRealSegments(HugoniotCurve.hugoniotSegsFromWaveState(xZero,
-//                states)), new ViewingAttr(Color.red));
-//
-//        xZero_ = new PhasePoint(xZero);
-//        hugoniotSegments_ = HugoniotCurve.hugoniotSegsFromWaveState(xZero,
-//                states);
-//
-//    }
-
-//    public HugoniotCurve(PhasePoint xZero, CoordsArray[] coords) {
-//
-//        super(coords, new ViewingAttr(Color.RED));
-//
-//        List realSegments = MultidAdapter.converseCoordsArrayToRealSegments(coords);
-//        hugoniotSegments_ = hugoniotSegsFromRealSegs(xZero, realSegments);
-//
-//        xZero_ = new PhasePoint(xZero);
-//
-//
-//    }
-
     public HugoniotCurve(PhasePoint xZero, List<HugoniotSegment> hSegments) {
         super(coordsArrayFromRealSegments(hSegments), new ViewingAttr(Color.RED));
 
@@ -108,8 +28,7 @@ public class HugoniotCurve extends RPnCurve implements RpSolution {
         hugoniotSegments_ = hSegments;
 
     }
-//=======
-//>>>>>>> contour
+
 
     public static List interpolate(HugoniotPoint v1,
             HugoniotPoint v2) {
@@ -490,6 +409,75 @@ public class HugoniotCurve extends RPnCurve implements RpSolution {
             }
         }
         return points;
+    }
+
+    public String toMatlabPlot(int x, int y) {
+
+        StringBuffer buffer = new StringBuffer();
+
+        for (int i = 0; i < hugoniotSegments_.size(); i++) {
+
+
+            HugoniotSegment hSegment = ((HugoniotSegment) hugoniotSegments_.get(
+                    i));
+
+            int type = hSegment.getType() + 1;
+            buffer.append("% type of segment: " + type + "\n");
+
+            buffer.append("plot([data");
+            buffer.append(i);
+            buffer.append("(" + (x + 1)+ ") ");
+            buffer.append("data");
+            buffer.append(i);
+            buffer.append("(" + (x + 4) + ")],");
+
+            buffer.append("[data");
+            buffer.append(i);
+            buffer.append("(" + (y + 1)+ ") ");
+            buffer.append("data");
+            buffer.append(i);
+            buffer.append("(" + (y + 4) + ")]");
+
+//            buffer.append("plot (data");
+//            buffer.append( i );
+//            buffer.append("(:,");
+//            buffer.append(x+1 );
+//            buffer.append("), data");
+//            buffer.append( i);
+//            buffer.append("(:, ");
+//            buffer.append( y+1 );
+            buffer.append(", \'Color\', [toc(");
+            buffer.append(type);
+            buffer.append(", 1) toc(");
+            buffer.append(type);
+            buffer.append(", 2) toc(");
+            buffer.append(type);
+            buffer.append(", 3)])\n");
+            if (i < hugoniotSegments_.size() - 1) {
+                buffer.append("hold on\n\n");
+            }
+        }
+
+
+        return buffer.toString();
+    }
+
+    public String toMatlabData() {
+
+        StringBuffer buffer = new StringBuffer();
+        for (int i = 0; i < hugoniotSegments_.size(); i++) {
+
+
+            HugoniotSegment hSegment = ((HugoniotSegment) hugoniotSegments_.get(
+                    i));
+            RealSegment rSegment = new RealSegment(hSegment.leftPoint(),
+                    hSegment.rightPoint());
+
+            buffer.append("% type of segment: " + hSegment.getType() + "\n");
+
+            buffer.append("data" + i + "= [" + rSegment.toString() + "];\n\n");
+        }
+        return buffer.toString();
     }
 
     public String toXML(boolean calcReady) {

@@ -78,7 +78,8 @@ public:
     //int curv2d(int sn, int seglim, double f, double *rect, int *res, int ifirst, std::vector<RealSegment> &vrs) ;
     int curv2d(int sn, int seglim, double f, double *rect, int *res, int ifirst, std::vector<RealVector> &vrs);
 
-    void curve(const RealVector &, vector<HugoniotPolyLine> &);
+    void classifiedCurve(const RealVector &, vector<HugoniotPolyLine> &);
+    void unclassifiedCurve(const RealVector &, vector<HugoniotPolyLine> &);
 
 
 };

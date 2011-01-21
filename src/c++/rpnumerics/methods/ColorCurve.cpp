@@ -86,7 +86,7 @@ void ColorCurve::fill_with_jet(const RpFunction & flux_object, int n, double *in
 int ColorCurve::interpolate(int noe, const RealVector &p, const RealVector &q, std::vector<RealVector> &r) {
     r.clear();
     int dim = p.size() - 2 * noe - 1;
-    cout <<"Em interpolate"<<endl;
+
     double fq[4], fp[4]; // f(p), f(q), the function whose zero is to be found
 
     double l0_ref_p = p.component(dim); // lambda_0(Uref)
@@ -130,14 +130,14 @@ int ColorCurve::interpolate(int noe, const RealVector &p, const RealVector &q, s
         noi++;
     }
 
-    printf("    During interpolation: number of inequalities (noi) = %d\n", noi);
+//    printf("    During interpolation: number of inequalities (noi) = %d\n", noi);
 
     if (noi <= 0 || noi > 2) return INTERPOLATION_ERROR; // If the sign changes more than twice, return an error.
         // Is it better to fill the vector of r's at all in this case?
     else {
         double alpha[noi];
         for (int i = 0; i < noi; i++) {
-        cout<<"Diferenca: " <<fq[i] - fp[i]<<endl;
+//        cout<<"Diferenca: " <<fq[i] - fp[i]<<endl;
             alpha[i] = fq[i] / (fq[i] - fp[i]);
 
         }
@@ -158,7 +158,7 @@ int ColorCurve::interpolate(int noe, const RealVector &p, const RealVector &q, s
             double beta = 1.0 - alpha[i];
             for (int j = 0; j < p.size(); j++) r[i].component(j) = alpha[i] * p.component(j) + beta * q.component(j);
         }
-        cout <<"Depois resize"<<endl;
+//        cout <<"Depois resize"<<endl;
         return INTERPOLATION_OK;
     }
 }
@@ -219,7 +219,7 @@ void ColorCurve::classify_segments(const std::vector<RealVector> &input, int noe
 
         if (t_current != t_next) {
             pos.push_back(p + 1);
-            printf("    Change of type: t_current(%d) = %d, t_next(%d) = %d\n", p, t_current, p + 1, t_next);
+//            printf("    Change of type: t_current(%d) = %d, t_next(%d) = %d\n", p, t_current, p + 1, t_next);
         }
 
         p++;
@@ -276,16 +276,16 @@ void ColorCurve::classify_segments(const std::vector<RealVector> &input, int noe
                 // No gap is present between the segments.
                 if (r.size() == 1) {
                     output[seg_num].vec.push_back(r[0]);
-                    printf("    Interpolation, added 1 point (a).\n");
+//                    printf("    Interpolation, added 1 point (a).\n");
                     output[seg_num + 1].vec.push_back(r[0]);
-                    printf("    Interpolation, added 1 point (b).\n");
+//                    printf("    Interpolation, added 1 point (b).\n");
                 }// If two points are returned, the first one is added to the current segment,
                     // while the second one is added to the next segment. There is a gap between the two segments.
                 else {
                     output[seg_num].vec.push_back(r[0]);
-                    printf("    Interpolation, added 2 points (a).\n");
+//                    printf("    Interpolation, added 2 points (a).\n");
                     output[seg_num + 1].vec.push_back(r[1]);
-                    printf("    Interpolation, added 2 points (b).\n");
+//                    printf("    Interpolation, added 2 points (b).\n");
                 }
             }
         }
@@ -338,18 +338,11 @@ void ColorCurve::classify_curve(vector<vector<RealVector> > & input, const RealV
         //cout << "After preprocessing: size of elements in complete_segments = " <<  complete_segments[i][0].size() << endl;
     }
 
-
-
-
-
     for (unsigned int i = 0; i < complete_segments.size(); i++) {
 
         vector<HugoniotPolyLine> hugoniotPolyLineVector;
         classify_segments(complete_segments[i],noe, hugoniotPolyLineVector);
         //        cout << "hugoniot polyline: " << hugoniotPolyLineVector.size() << endl;
-
-
-
         //    for (int i = 0; i < hugoniotPolyLineVector.size(); i++) {
         //
         //        for (unsigned int j = 0; j < hugoniotPolyLineVector[i].vec.size() - 1; j++) {
@@ -365,17 +358,11 @@ void ColorCurve::classify_curve(vector<vector<RealVector> > & input, const RealV
         //        }
         //    }
 
-
-
-
         for (int j = 0; j < hugoniotPolyLineVector.size(); j++) output.push_back(hugoniotPolyLineVector[j]);
 
     }
 
-
-    //
-
-        cout << "Tamanho de output" << output.size() << endl;
+//        cout << "Tamanho de output" << output.size() << endl;
     return;
 
 }

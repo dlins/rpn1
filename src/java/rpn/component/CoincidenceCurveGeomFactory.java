@@ -9,21 +9,11 @@ import rpnumerics.*;
 import rpn.controller.HugoniotController;
 import rpn.controller.RpController;
 
-public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
+public class CoincidenceCurveGeomFactory extends RpCalcBasedGeomFactory {
 
-    public HugoniotCurveGeomFactory(HugoniotCurveCalc calc) {
+    public CoincidenceCurveGeomFactory(CoincidenceCurveCalc calc) {
         super(calc);
 
-    }
-
-    public HugoniotCurveGeomFactory(ShockCurveCalc calc) {
-        super(calc);
-
-    }
-
-    @Override
-    protected RpController createUI() {
-        return new HugoniotController();
     }
 
     //
@@ -31,7 +21,7 @@ public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
     //
     protected RpGeometry createGeomFromSource() {
 
-        HugoniotCurve curve = (HugoniotCurve) geomSource();
+        CoincidenceCurve curve = (CoincidenceCurve) geomSource();
 
         // assuming a container with HugoniotSegment elements
         int resultSize = curve.segments().size();
@@ -40,7 +30,7 @@ public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
         for (int i = 0; i < resultSize; i++) {
             hugoniotArray[i] = new HugoniotSegGeom((HugoniotSegment) curve.segments().get(i));
         }
-        return new HugoniotCurveGeom(hugoniotArray, this);
+        return new CoincidenceCurveGeom(hugoniotArray, this);
 
     }
 
@@ -84,7 +74,7 @@ public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
     public String toMatlab() {
 
         StringBuffer buffer = new StringBuffer();
-        HugoniotCurve curve = (HugoniotCurve) geomSource();
+        CoincidenceCurve curve = (CoincidenceCurve) geomSource();
         buffer.append("%%\nclose all;clear all;\n");
         buffer.append(createColorTable());
         buffer.append(curve.toMatlabData());

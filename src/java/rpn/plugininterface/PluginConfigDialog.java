@@ -32,7 +32,6 @@ public class PluginConfigDialog extends RPnDialog {
 
         pluginType_ = pluginType;
 
-
         BorderLayout dialogLayout = (BorderLayout) this.getContentPane().getLayout();
 
         dialogLayout.setVgap(30);

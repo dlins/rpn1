@@ -18,9 +18,8 @@ public class CompositeCalc implements RpCalculation {
     private PhasePoint start_;
     private int timeDirection_;
     private String methodName_;
-    private String flowName_;
     private int familyIndex_;
-    private ODESolver solver_;
+    private String flowName_;
 
     //
     // Constructors/Initializers
@@ -44,33 +43,29 @@ public class CompositeCalc implements RpCalculation {
     CompositeCalc(OrbitPoint orbitPoint, int timeDirection, ODESolver odeSolver, String methodName) {
         start_ = orbitPoint;
         timeDirection_ = timeDirection;
-        solver_ = odeSolver;
+//        solver_ = odeSolver;
         methodName_ = methodName;
 
     }
 
-    //
-    // Accessors/Mutators
-    //
-    public int tDirection() {
-        return timeDirection_;
-    }
+   
 
     //
     // Methods
     //
     public RpSolution recalc() throws RpException {
-//        solver_.getProfile().setFunction(new FlowVectorField(RPNUMERICS.createRarefactionFlow()));
+
         return calc();
 
     }
 
     public RpSolution calc() throws RpException {
-        RpSolution    result = calc(methodName_, flowName_, start_, familyIndex_, timeDirection_);
+        RpSolution    result = calc(methodName_, start_);
+
         return result;
     }
 
-    private native RpSolution calc(String methodName, String flowName, PhasePoint initialpoint, int familyIndex, int timeDirection) throws RpException;
+    private native RpSolution calc(String methodName, PhasePoint initialpoint) throws RpException;
 
     public String getCalcMethodName() {
         return methodName_;

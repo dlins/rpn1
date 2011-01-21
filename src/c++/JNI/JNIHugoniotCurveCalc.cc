@@ -135,40 +135,44 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
     FracFlow2PhasesHorizontalAdimensionalized fh(cnw, cng, expw, expg, TD);
 
 
-//    ReducedTPCWHugoniotFunctionClass tpcwhc(Uref, abs_perm, phi, const_gravity, &TD, &fh);
+    ReducedTPCWHugoniotFunctionClass tpcwhc(Uref, abs_perm, phi, const_gravity, &TD, &fh);
 
     //    StoneHugoniotFunctionClass stoneHugoniotFunction(Uref,(const StoneFluxFunction &) RpNumerics::getPhysics().fluxFunction());
 
-   CoincidenceTPCW coincidence(&TD,&fh,phi);
+    CoincidenceTPCW coincidence(&TD, &fh, phi);
 
     SubinflectionTPCW inflection(&TD, &fh, phi);
 
     // Contour proper
 
-    double rect[4];
+    //    double rect[4];
 
 
-    rect[0] = 0.0; // xmin
-    rect[1] = 1.0; // xmax
-    rect[2] = TD.T2Theta(300.0); // ymin
-    rect[3] = TD.T2Theta(450.0); // ymax
+    //    rect[0] = 0.0; // xmin
+    //    rect[1] = 1.0; // xmax
+    //    rect[2] = TD.T2Theta(300.0); // ymin
+    //    rect[3] = TD.T2Theta(450.0); // ymax
+    //
+    //
+    //    int res[2];
+    //
+    //    res[0] = 2;
+    //    res[1] = 2;
 
+    ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), RpNumerics::getPhysics().boundary(), &tpcwhc);
 
-    int res[2];
-
-    res[0] = 2;
-    res[1] = 2;
-
-//    ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), RpNumerics::getPhysics().boundary(), &tpcwhc);
-//        ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), RpNumerics::getPhysics().boundary(), &coincidence);
-    ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), RpNumerics::getPhysics().boundary(), &inflection);
+    //        ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), RpNumerics::getPhysics().boundary(), &coincidence);
+    //    ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), RpNumerics::getPhysics().boundary(), &inflection);
     //       ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), RpNumerics::getPhysics().boundary(), &stoneHugoniotFunction);
 
     //    std::vector<RealVector> vrs;
     //    method.curv2d(0, 2000, 0.0, &rect[0], &res[0], 1, vrs);
 
     vector<HugoniotPolyLine> hugoniotPolyLineVector;
-    method.curve(Uref, hugoniotPolyLineVector);
+    //    method.curve(Uref, hugoniotPolyLineVector);
+
+//    method.unclassifiedCurve(Uref, hugoniotPolyLineVector);
+    method.classifiedCurve(Uref, hugoniotPolyLineVector);
 
 
     //    tpcwhc.completCurve(vrs);

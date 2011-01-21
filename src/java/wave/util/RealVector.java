@@ -26,6 +26,22 @@ public class RealVector extends GVector {
     // Methods
     //
 
+    @Override
+    public String toString() {
+
+
+        StringBuffer buffer = new StringBuffer();
+
+        for (int i=0; i < this.getSize();i++){
+
+            buffer.append(getElement(i)+" ");
+
+        }
+        return buffer.toString();
+
+
+    }
+
     public String toXML(){
 
       StringBuffer buffer = new StringBuffer();

@@ -78,7 +78,8 @@ Boundary * TPCW::defaultBoundary()const {
     RealVector max(3);
 
     max.component(0) = 1.0;
-    max.component(1) = T2Theta(450);
+//    max.component(1) = T2Theta(450);
+    max.component(1) = T2Theta(420);
 
     //    max.component(1) = 1;
     max.component(2) = TD->u2U(2 * 4.22e-5);

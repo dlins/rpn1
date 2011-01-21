@@ -3,13 +3,13 @@
  * Departamento de Dinamica dos Fluidos
  *
  */
-
 package wave.util;
 
 public class RealSegment {
     //
     // Members
     //
+
     private RealVector p1_;
     private RealVector p2_;
 
@@ -23,31 +23,39 @@ public class RealSegment {
 
 
 
-    public String toXML(){
+    public String toString() {
+
+        StringBuffer buffer = new StringBuffer();
+
+        buffer.append(p1_.toString() + " " + p2_.toString());
+        return buffer.toString();
 
 
-      StringBuffer buffer = new StringBuffer();
-
-      buffer.append("<REALSEGMENT>"+"\n");
-      buffer.append("<PHASEPOINT dimension=\"" + p1_.getSize() + "\">"+p1_.toString()+"</PHASEPOINT>\n");
-      buffer.append("<PHASEPOINT dimension=\"" + p2_.getSize() + "\">"+p2_.toString()+"</PHASEPOINT>\n");
-      buffer.append("</REALSEGMENT>"+"\n");
-
-      return buffer.toString();
 
     }
 
+    public String toXML() {
+
+
+        StringBuffer buffer = new StringBuffer();
+
+        buffer.append("<REALSEGMENT>" + "\n");
+        buffer.append("<PHASEPOINT dimension=\"" + p1_.getSize() + "\">" + p1_.toString() + "</PHASEPOINT>\n");
+        buffer.append("<PHASEPOINT dimension=\"" + p2_.getSize() + "\">" + p2_.toString() + "</PHASEPOINT>\n");
+        buffer.append("</REALSEGMENT>" + "\n");
+
+        return buffer.toString();
+
+    }
 
     //
     // Accessors/Mutators
     //
-    public RealVector p1() { return p1_; }
+    public RealVector p1() {
+        return p1_;
+    }
 
-    public RealVector p2() { return p2_; }
-
-
-
-
-
-
+    public RealVector p2() {
+        return p2_;
+    }
 }

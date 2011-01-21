@@ -80,6 +80,8 @@ public abstract class RpModelPlotAgent extends RpModelActionAgent {
 
             }
         }
+
+
         keepLastGeometry_ = false;
         Iterator newValue = phaseSpace.getGeomObjIterator();
         logAction(new PropertyChangeEvent(this, listString, oldValue, newValue));

@@ -5,6 +5,7 @@
  */
 package rpnumerics;
 
+import rpnumerics.HugoniotCurve;
 import rpnumerics.methods.HugoniotMethod;
 import rpnumerics.methods.HugoniotContinuationMethod;
 import rpnumerics.methods.HugoniotContourMethod;
@@ -104,7 +105,12 @@ public class HugoniotCurveCalcND
 //
 //        }
 
-        return calc(getUMinus());
+        HugoniotCurve result= (HugoniotCurve) calc(getUMinus());
+
+
+//        System.out.println(result.toMatlabData());
+
+        return result;
 
     }
 

@@ -8,7 +8,6 @@ package rpnumerics;
 
 import java.util.ArrayList;
 import java.util.List;
-import wave.ode.ODESolver;
 
 public class ShockCurveCalc implements RpCalculation {
     //

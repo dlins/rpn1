@@ -14,22 +14,28 @@
             </properties>
             <folders>
                 <source-folder>
-                    <label>Source Packages</label>
-                    <location>${project.dir}</location>
-                </source-folder>
-                <source-folder>
-                    <label>src</label>
-                    <location>${project.dir}</location>
-                </source-folder>
-                <source-folder>
                     <label>RPn_Java</label>
                     <location>.</location>
                     <encoding>UTF-8</encoding>
                 </source-folder>
                 <source-folder>
-                    <label>Source Packages</label>
+                    <label>java</label>
+                    <location>${project.dir}/java</location>
+                </source-folder>
+                <source-folder>
+                    <label>c++</label>
+                    <location>${project.dir}/c++</location>
+                </source-folder>
+                <source-folder>
+                    <label>java</label>
                     <type>java</type>
-                    <location>${project.dir}</location>
+                    <location>${project.dir}/java</location>
+                    <encoding>UTF-8</encoding>
+                </source-folder>
+                <source-folder>
+                    <label>c++</label>
+                    <type>java</type>
+                    <location>${project.dir}/c++</location>
                     <encoding>UTF-8</encoding>
                 </source-folder>
             </folders>
@@ -89,8 +95,12 @@
             <view>
                 <items>
                     <source-folder style="packages">
-                        <label>Source Packages</label>
-                        <location>${project.dir}</location>
+                        <label>java</label>
+                        <location>${project.dir}/java</location>
+                    </source-folder>
+                    <source-folder style="packages">
+                        <label>c++</label>
+                        <location>${project.dir}/c++</location>
                     </source-folder>
                     <source-file>
                         <location>${ant.script}</location>
@@ -109,8 +119,12 @@
         </general-data>
         <java-data xmlns="http://www.netbeans.org/ns/freeform-project-java/1">
             <compilation-unit>
-                <package-root>${project.dir}</package-root>
-                <classpath mode="compile">${project.dir}/../lib/batik-awt-util.jar:${project.dir}/../lib/batik-dom.jar:${project.dir}/../lib/batik-ext.jar:${project.dir}/../lib/batik-svg-dom.jar:${project.dir}/../lib/batik-svggen.jar:${project.dir}/../lib/batik-util.jar:${project.dir}/../lib/batik-xml.jar:${project.dir}/../lib/iso-relax.jar:${project.dir}/../lib/jbossall-client.jar:${project.dir}/../lib/jlapack-0.6.jar:${project.dir}/../lib/log4j.jar:${project.dir}/../lib/msv.jar:${project.dir}/../lib/pdflib.jar:${project.dir}/../lib/relaxngDatatype.jar:${project.dir}/../lib/vecmath.jar:${project.dir}/../lib/xercesImpl.jar:${project.dir}/../lib/xml4j.jar:${project.dir}/../lib/xmlParserAPIs.jar:${project.dir}/../lib/xsdlib.jar</classpath>
+                <package-root>${project.dir}/java</package-root>
+                <classpath mode="compile">/home/edsonlan/Java/rpn/lib/batik-awt-util.jar:/home/edsonlan/Java/rpn/lib/batik-dom.jar:/home/edsonlan/Java/rpn/lib/batik-ext.jar:/home/edsonlan/Java/rpn/lib/batik-svg-dom.jar:/home/edsonlan/Java/rpn/lib/batik-svggen.jar:/home/edsonlan/Java/rpn/lib/batik-util.jar:/home/edsonlan/Java/rpn/lib/batik-xml.jar:/home/edsonlan/Java/rpn/lib/iso-relax.jar:/home/edsonlan/Java/rpn/lib/jbossall-client.jar:/home/edsonlan/Java/rpn/lib/jlapack-0.6.jar:/home/edsonlan/Java/rpn/lib/log4j.jar:/home/edsonlan/Java/rpn/lib/msv.jar:/home/edsonlan/Java/rpn/lib/pdflib.jar:/home/edsonlan/Java/rpn/lib/relaxngDatatype.jar:/home/edsonlan/Java/rpn/lib/vecmath.jar:/home/edsonlan/Java/rpn/lib/xercesImpl.jar:/home/edsonlan/Java/rpn/lib/xml4j.jar:/home/edsonlan/Java/rpn/lib/xmlParserAPIs.jar:/home/edsonlan/Java/rpn/lib/xsdlib.jar</classpath>
+                <source-level>1.5</source-level>
+            </compilation-unit>
+            <compilation-unit>
+                <package-root>${project.dir}/c++</package-root>
                 <source-level>1.5</source-level>
             </compilation-unit>
         </java-data>
