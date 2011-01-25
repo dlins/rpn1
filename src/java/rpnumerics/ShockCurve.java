@@ -16,9 +16,6 @@ import wave.multid.CoordsArray;
 
 public class ShockCurve extends Orbit implements RpSolution {
 
-//    private OrbitPoint[] points_;
-//    private int intFlag_;
-
     public ShockCurve(OrbitPoint[] points, int flag) {
         super(points, flag);
 

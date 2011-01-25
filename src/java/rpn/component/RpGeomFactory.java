@@ -31,6 +31,10 @@ public interface RpGeomFactory {
     /** Returns a XML string that contains the data required to obtain the geometric model.*/
 
     String toXML();
+    
+    /** Returns a string in Matlab's format of the model.*/
+
+    String toMatlab();
 
     /** Verify if the geometric model is updated.*/
 

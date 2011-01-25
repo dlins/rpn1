@@ -81,7 +81,7 @@ public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
         return buffer.toString();
     }
 
-    public String toMatlab() {
+     public String toMatlab() {
 
         StringBuffer buffer = new StringBuffer();
         HugoniotCurve curve = (HugoniotCurve) geomSource();
@@ -102,9 +102,62 @@ public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
         buffer.append("figure; set(gca, 'Color',[0 0 0]); hold on\n");
         buffer.append(curve.toMatlabPlot(1, 2));
 
+        // Modified from here...
+        buffer.append("\n%%\n% begin plot3d\n");
+        buffer.append("figure; set(gca, 'Color',[0 0 0]); hold on\n");
+        buffer.append(curve.toMatlabData());
+        // ...to here.
+
         return buffer.toString();
 
     }
+
+
+
+
+
+
+
+
+//    public String toMatlab() {
+//
+//        StringBuffer buffer = new StringBuffer();
+//        HugoniotCurve curve = (HugoniotCurve) geomSource();
+//        buffer.append("%%\nclose all;clear all;\n");
+//        buffer.append(createColorTable());
+//        buffer.append(curve.toMatlabData());
+//
+//        buffer.append("%%\n% begin plot x y\n");
+//        buffer.append("figure; set(gca, 'Color',[0 0 0]); hold on\n");
+//        buffer.append(curve.toMatlabPlot(0, 1));
+//
+//
+//        buffer.append("\n%%\n% begin plot x z\n");
+//        buffer.append("figure; set(gca, 'Color',[0 0 0]); hold on\n");
+//        buffer.append(curve.toMatlabPlot(0, 2));
+//
+//        buffer.append("\n%%\n% begin plot y z\n");
+//        buffer.append("figure; set(gca, 'Color',[0 0 0]); hold on\n");
+//        buffer.append(curve.toMatlabPlot(1, 2));
+//
+//        return buffer.toString();
+//
+//    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public String toXML() {
 

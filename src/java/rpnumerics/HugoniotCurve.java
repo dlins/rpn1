@@ -29,7 +29,6 @@ public class HugoniotCurve extends RPnCurve implements RpSolution {
 
     }
 
-
     public static List interpolate(HugoniotPoint v1,
             HugoniotPoint v2) {
         List segments = new ArrayList();
@@ -426,26 +425,18 @@ public class HugoniotCurve extends RPnCurve implements RpSolution {
 
             buffer.append("plot([data");
             buffer.append(i);
-            buffer.append("(" + (x + 1)+ ") ");
+            buffer.append("(" + (x + 1) + ") ");
             buffer.append("data");
             buffer.append(i);
             buffer.append("(" + (x + 4) + ")],");
 
             buffer.append("[data");
             buffer.append(i);
-            buffer.append("(" + (y + 1)+ ") ");
+            buffer.append("(" + (y + 1) + ") ");
             buffer.append("data");
             buffer.append(i);
             buffer.append("(" + (y + 4) + ")]");
 
-//            buffer.append("plot (data");
-//            buffer.append( i );
-//            buffer.append("(:,");
-//            buffer.append(x+1 );
-//            buffer.append("), data");
-//            buffer.append( i);
-//            buffer.append("(:, ");
-//            buffer.append( y+1 );
             buffer.append(", \'Color\', [toc(");
             buffer.append(type);
             buffer.append(", 1) toc(");
@@ -465,21 +456,79 @@ public class HugoniotCurve extends RPnCurve implements RpSolution {
     public String toMatlabData() {
 
         StringBuffer buffer = new StringBuffer();
+
         for (int i = 0; i < hugoniotSegments_.size(); i++) {
 
 
             HugoniotSegment hSegment = ((HugoniotSegment) hugoniotSegments_.get(
                     i));
+
+
+            double leftSigma = hSegment.leftSigma();
+            double rightSigma = hSegment.rightSigma();
+
             RealSegment rSegment = new RealSegment(hSegment.leftPoint(),
                     hSegment.rightPoint());
 
-            buffer.append("% type of segment: " + hSegment.getType() + "\n");
+            buffer.append("data" + i + "= [" + rSegment.toString() +" "+ leftSigma+" "+rightSigma+ "];\n\n");
 
-            buffer.append("data" + i + "= [" + rSegment.toString() + "];\n\n");
+            int type = hSegment.getType() + 1;
+            buffer.append("% type of segment: " + type + "\n");
+
+            buffer.append("plot3([data");
+            buffer.append(i);
+            buffer.append("(" + (1) + ") ");
+            buffer.append("data");
+            buffer.append(i);
+            buffer.append("(" + (4) + ")], ");
+
+            buffer.append("[data");
+            buffer.append(i);
+            buffer.append("(" + (2) + ") ");
+            buffer.append("data");
+            buffer.append(i);
+            buffer.append("(" + (5) + ")], ");
+
+            buffer.append("[data");
+            buffer.append(i);
+            buffer.append("(" + (3) + ") ");
+            buffer.append("data");
+            buffer.append(i);
+            buffer.append("(" + (6) + ")]");
+
+            buffer.append(", \'Color\', [toc(");
+            buffer.append(type);
+            buffer.append(", 1) toc(");
+            buffer.append(type);
+            buffer.append(", 2) toc(");
+            buffer.append(type);
+            buffer.append(", 3)])\n");
+            if (i < hugoniotSegments_.size() - 1) {
+                buffer.append("hold on\n\n");
+            }
         }
+
+
         return buffer.toString();
     }
 
+//    public String toMatlabData() {
+//
+//        StringBuffer buffer = new StringBuffer();
+//        for (int i = 0; i < hugoniotSegments_.size(); i++) {
+//
+//
+//            HugoniotSegment hSegment = ((HugoniotSegment) hugoniotSegments_.get(
+//                    i));
+//            RealSegment rSegment = new RealSegment(hSegment.leftPoint(),
+//                    hSegment.rightPoint());
+//
+//            buffer.append("% type of segment: " + hSegment.getType() + "\n");
+//
+//            buffer.append("data" + i + "= [" + rSegment.toString() + "];\n\n");
+//        }
+//        return buffer.toString();
+//    }
     public String toXML(boolean calcReady) {
         StringBuffer buffer = new StringBuffer();
         if (calcReady) {

@@ -44,4 +44,8 @@ public class ManifoldGeomFactory extends RpCalcBasedGeomFactory {
 //        str.append("</MANIFOLDCALC>\n");
         return str.toString();
     }
+
+    public String toMatlab() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

@@ -47,7 +47,7 @@ int LSODE::solve(const RealVector & input, RealVector & output, double & time) c
 
     int neq = profile_->numberOfEquations();
 
-    cout<<"neq: "<<neq<<endl;
+//    cout<<"neq: "<<neq<<endl;
 
     int itol = profile_->absoluteToleranceType();
 

@@ -53,7 +53,6 @@ public class AbstractScene implements AbstractGeomObj {
     // Methods
     //
     public void join(MultiGeometry geom) {
-        
         try {
             geomList_.add(geom);
             boundary_.resize(geom.getPathIterator());
@@ -62,7 +61,6 @@ public class AbstractScene implements AbstractGeomObj {
         }
         for (int i = 0; i < viewList_.size(); i++)
             ((Scene)viewList_.get(i)).addViewFor(geom);
-        
       
     }
 

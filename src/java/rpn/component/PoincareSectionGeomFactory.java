@@ -73,4 +73,8 @@ public class PoincareSectionGeomFactory implements RpGeomFactory {
         str.append("</POINCAREDATA>\n");
         return str.toString();
     }
+
+    public String toMatlab() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

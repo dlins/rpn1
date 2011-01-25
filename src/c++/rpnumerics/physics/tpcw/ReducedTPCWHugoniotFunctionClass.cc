@@ -35,13 +35,13 @@ ReducedTPCWHugoniotFunctionClass::ReducedTPCWHugoniotFunctionClass(const RealVec
 
     // TODO: The flux object must be initialized somehow (be it created here or outside, etc.)
     RealVector uref(Uref.size() - 1);
-    printf("Uref.size() = %d\n", Uref.size());
+//    printf("Uref.size() = %d\n", Uref.size());
     for (int i = 0; i < Uref.size() - 1; i++) uref.component(i) = Uref.component(i);
 
     WaveState u(uref); // TODO: Check this.
-    for (int i = 0; i < uref.size(); i++) printf("u(%d) = %f\n", i, u(i));
+//    for (int i = 0; i < uref.size(); i++) printf("u(%d) = %f\n", i, u(i));
 
-    printf("here 1\n");
+//    printf("here 1\n");
 
     JetMatrix arefJetMatrix(n);
     JetMatrix brefJetMatrix(n);
@@ -57,7 +57,7 @@ ReducedTPCWHugoniotFunctionClass::ReducedTPCWHugoniotFunctionClass(const RealVec
         bref_F[i] = brefJetMatrix(i);
     }
 
-    printf("here 2\n");
+//    printf("here 2\n");
 
     WaveState Ur(Uref);
     JetMatrix ArefJetMatrix(n);
@@ -140,7 +140,7 @@ double ReducedTPCWHugoniotFunctionClass::HugoniotFunction(const RealVector &u) {
 }
 
 void ReducedTPCWHugoniotFunctionClass::completeCurve(vector<RealVector> & curve) {
-    cout << "Chamando complete curve nao default" << endl;
+//    cout << "Chamando complete curve nao default" << endl;
 
     for (unsigned int i = 0; i < curve.size(); i++) {
         double darcy_speed;
@@ -155,7 +155,7 @@ void ReducedTPCWHugoniotFunctionClass::completeCurve(vector<RealVector> & curve)
         for (int j = 0; j < n; j++) curve[i].component(j) = temp[j];
         curve[i].component(n) = darcy_speed;
     }
-    cout << "Saindo de complete curve" << endl;
+//    cout << "Saindo de complete curve" << endl;
     return;
 
 }

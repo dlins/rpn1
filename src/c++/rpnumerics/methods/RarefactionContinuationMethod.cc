@@ -64,14 +64,14 @@ int RarefactionContinuationMethod::init(ContinuationRarefactionFlow * flow,int n
         inp[ii] = in[ii] + epsilon*rev[ii];
         inm[ii] = in[ii] - epsilon*rev[ii];
     }
-    cout<<"Dentro de init antes de flux"<<endl;
+//    cout<<"Dentro de init antes de flux"<<endl;
     if (flow->flux(n, indx, ff, gg, type, inp, &lambdap, &rep[0]) == COMPLEX_EIGENVALUE) return COMPLEX_EIGENVALUE;
     if (flow->flux(n, indx, ff, gg, type, inm, &lambdam, &rem[0]) == COMPLEX_EIGENVALUE) return COMPLEX_EIGENVALUE;
 
-    printf("@ rarefactioncurve(), after init.\nl- = % f, l = % f, l+ = % f\n", lambdam, *lambda, lambdap);
-    printf("e = (");
-    for (int i = 0; i < n; i++) printf("%6.2f, ", rev[i]);
-    printf(")\n");
+//    printf("@ rarefactioncurve(), after init.\nl- = % f, l = % f, l+ = % f\n", lambdam, *lambda, lambdap);
+//    printf("e = (");
+//    for (int i = 0; i < n; i++) printf("%6.2f, ", rev[i]);
+//    printf(")\n");
 
     // 4. Find the reference eigenvector.
     if (increase == 1){ // Eigenvalues should increase as the orbit advances
@@ -164,7 +164,7 @@ int RarefactionContinuationMethod::init(ContinuationRarefactionFlow * flow,int n
 //}
 
 void RarefactionContinuationMethod::curve(const RealVector & inputVector, int direction, vector<RealVector> & output) {
-    cout <<"here curve"<<endl;
+//    cout <<"here curve"<<endl;
     output.clear();
 //    RealVector inputVector(3);
 
@@ -203,12 +203,12 @@ void RarefactionContinuationMethod::curve(const RealVector & inputVector, int di
 
 //    info = init(&testeFlow, dimension, in, indx, direction, deltaxi, &lambda, &rev[0]);
 
-    cout <<"Vetor de referencia: "<<testeFlow.getReferenceVector();
+//    cout <<"Vetor de referencia: "<<testeFlow.getReferenceVector();
 
     for (int i = 0; i < dimension; i++) {
         testeFlow.setReferenceVectorComponent(i, rev[i]);
     }
-    cout <<"after init"<<endl;
+//    cout <<"after init"<<endl;
     if (info == SUCCESSFUL_PROCEDURE) {
         output.push_back(inputVector);
     } else {
@@ -236,7 +236,7 @@ void RarefactionContinuationMethod::curve(const RealVector & inputVector, int di
 
         info = solver_->solve(localInputVector, outputVector, testeDouble);
 
-        cout <<"saida do solver "<<outputVector<<endl;
+//        cout <<"saida do solver "<<outputVector<<endl;
 
         if (info == SUCCESSFUL_PROCEDURE) {
 
@@ -268,7 +268,7 @@ void RarefactionContinuationMethod::curve(const RealVector & inputVector, int di
             RealVector r(dimension);
             int edge;
             int cllsn = (boundary_->intersection(outputVector, outputVector_prev, r,edge));
-            cout <<"depois de intersection"<<endl;
+//            cout <<"depois de intersection"<<endl;
             if (cllsn == -1) {
                 // Both outside
 

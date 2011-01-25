@@ -51,4 +51,8 @@ public class CompositeGeomFactory extends RpCalcBasedGeomFactory {
 //        str.append("</RAREFACTIONORBITCALC>\n");
         return str.toString();
     }
+
+    public String toMatlab() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

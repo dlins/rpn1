@@ -83,11 +83,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
     //    Ur[2] = 1.0;
 
 
-    cout << "Ponto de entrada" << endl;
-
-    cout << input[0] << endl;
-    cout << input[1] << endl;
-    cout << input[2] << endl;
+//    cout << "Ponto de entrada" << endl;
+//
+//    cout << input[0] << endl;
+//    cout << input[1] << endl;
+//    cout << input[2] << endl;
 
     //    double tol = 10e-4;
     //    double epsilon = 10e-2;

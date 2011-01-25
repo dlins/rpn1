@@ -21,8 +21,8 @@
 TPCW::TPCW(const FluxFunction & fluxFunction, const AccumulationFunction & accumulationFunction, const Thermodynamics_SuperCO2_WaterAdimensionalized & thermo) :
 SubPhysics(fluxFunction, accumulationFunction, *new RectBoundary(RealVector(), RealVector()), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATION_),
 TD(new Thermodynamics_SuperCO2_WaterAdimensionalized(thermo)) {
-    cout << "Calculo de U0[1] " << TD->T2Theta(310.) << endl;
-    cout << "Calculo de U0[2] " << TD->u2U(4.22e-6) << endl;
+//    cout << "Calculo de U0[1] " << TD->T2Theta(310.) << endl;
+//    cout << "Calculo de U0[2] " << TD->u2U(4.22e-6) << endl;
 
     // Create Horizontal & Vertical FracFlows
     double cnw = 0., cng = 0., expw = 2., expg = 2.;

@@ -36,4 +36,8 @@ public class StationaryPointGeomFactory extends RpCalcBasedGeomFactory {
         str.append("</STATPOINTCALC>\n");
         return str.toString();
     }
+
+    public String toMatlab() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

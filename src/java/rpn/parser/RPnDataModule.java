@@ -20,11 +20,7 @@ import java.awt.event.ActionEvent;
 import java.util.Iterator;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.XMLReader;
-import rpn.component.HugoniotCurveGeomFactory;
-import rpn.component.RpGeomFactory;
 import rpn.component.RpGeometry;
-import rpn.controller.ui.Command;
-import rpn.controller.ui.UIController;
 import rpnumerics.HugoniotCurve;
 import rpnumerics.PhasePoint;
 import rpnumerics.Orbit;
@@ -516,16 +512,38 @@ public class RPnDataModule {
 //
 //        }
 
+//        System.out.println("Chamando export do data module");
+//
+//        Iterator<RpGeometry> iterator = PHASESPACE.getGeomObjIterator();
+//
+//        int i = 0;
+//
+//        while(iterator.hasNext()){
+//
+//
+//
+//
+//            System.out.println(iterator.next().geomFactory().toMatlab());
+//
+//
+//        }
 
+    }
+
+
+      static public void matlabExport(FileWriter writer) throws java.io.IOException {
+
+        System.out.println("Chamando export matlab do data module");
 
         Iterator<RpGeometry> iterator = PHASESPACE.getGeomObjIterator();
 
-
         while(iterator.hasNext()){
-
-           
+            writer.write(iterator.next().geomFactory().toMatlab());
 
         }
 
     }
+
+
+
 }

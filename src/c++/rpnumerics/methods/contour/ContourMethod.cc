@@ -65,16 +65,16 @@ int ContourMethod::inpdom(double *u) { // double u[2]//Replace by Boundary::insi
 int ContourMethod::curv2d(/*double *segend,*/ int sn, int seglim, double fdummy, double *rect, int *res, int ifirst,
         std::vector<RealVector> &vrs) {
     vrs.clear();
-    for (unsigned int i = 0; i < 2; i++) {
-        cout << "Valor de res:" << res[i] << endl;
-    }
+//    for (unsigned int i = 0; i < 2; i++) {
+//        cout << "Valor de res:" << res[i] << endl;
+//    }
 
-    cout << "---------------" << endl;
+//    cout << "---------------" << endl;
 
 
-    for (unsigned int i = 0; i < 4; i++) {
-        cout << "Valor de rect:" << rect[i] << endl;
-    }
+//    for (unsigned int i = 0; i < 4; i++) {
+//        cout << "Valor de rect:" << rect[i] << endl;
+//    }
 
 
     double segend[seglim][2][2]; //int sn, int seglim, double f, double rect[4], int res[2], int ifirst;

@@ -100,7 +100,7 @@ void ShockContinuationMethod3D2D::curve(const RealVector & input, int direction,
 //    }
 //   for (int i = 0; i < hugoniotPolyLineVector.size(); i++) printf("classified[i].vec.size() = %d, type = %d\n", hugoniotPolyLineVector[i].vec.size(), hugoniotPolyLineVector[i].type);
 
-    cout <<"Info retornado "<<info<<endl;
+//    cout <<"Info retornado "<<info<<endl;
 
 
 

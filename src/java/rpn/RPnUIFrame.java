@@ -40,6 +40,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JMenuItem bifurcationMenuItem_ = new JMenuItem("Bifurcation Configuration ...");
     private JMenuItem rarefactionMenuItem_ = new JMenuItem("Rarefaction Config ...");
     private JMenuItem jMenuFileExit = new JMenuItem();
+    private JMenuItem matlabMenuFileExport_ = new JMenuItem("Export to Matlab ...");
     private JMenuItem jMenuHelpAbout = new JMenuItem();
     private BorderLayout borderLayout1 = new BorderLayout();
     private JMenuItem exportMenuItem = new JMenuItem();
@@ -388,6 +389,25 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         }
     }
 
+    void matlabExport_actionPerformed(ActionEvent e) {
+        try {
+            JFileChooser chooser = new JFileChooser();
+            chooser.setSelectedFile(new File("output.m"));
+            chooser.setFileFilter(new FileNameExtensionFilter("Matlab file","m"));
+            if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+                FileWriter writer = new FileWriter(chooser.getSelectedFile().
+                        getAbsolutePath());
+                RPnDataModule.matlabExport(writer);
+
+                writer.close();
+            }
+
+        } catch (java.io.IOException ioex) {
+            ioex.printStackTrace();
+        } catch (java.lang.NullPointerException nullEx) {
+        }
+    }
+
     void export_actionPerformed(ActionEvent e) {
         try {
             JFileChooser chooser = new JFileChooser();
@@ -555,6 +575,16 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                         jMenuFileExit_actionPerformed(e);
                     }
                 });
+
+        matlabMenuFileExport_.addActionListener(
+                new ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+                        matlabExport_actionPerformed(e);
+                    }
+                });
+
+
         helpMenu.setText("Help");
         jMenuHelpAbout.setText("About");
         jMenuHelpAbout.addActionListener(
@@ -617,6 +647,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         });
 
         fileMenu.add(exportMenuItem);
+        fileMenu.add(matlabMenuFileExport_);
         fileMenu.addSeparator();
         fileMenu.add(networkMenuItem);
         fileMenu.add(pluginMenuItem);

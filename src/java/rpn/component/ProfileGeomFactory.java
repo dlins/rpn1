@@ -42,4 +42,8 @@ public class ProfileGeomFactory extends RpCalcBasedGeomFactory {
         str.append("</CONNECTIONORBITCALC>\n");
         return str.toString();
     }
+
+    public String toMatlab() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

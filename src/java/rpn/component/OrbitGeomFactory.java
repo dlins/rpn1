@@ -46,4 +46,8 @@ public class OrbitGeomFactory extends RpCalcBasedGeomFactory {
         str.append("</ORBITCALC>\n");
         return str.toString();
     }
+
+    public String toMatlab() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

@@ -18,11 +18,13 @@ public class Orbit extends RPnCurve implements RpSolution {
     //
     // Members
     //
+
     private OrbitPoint[] points_;
     private int intFlag_;
     //
     // Constructor
     //
+
     public Orbit(RealVector[] coords, double[] times, int flag) {
         super(MultidAdapter.converseRealVectorsToCoordsArray(coords), new ViewingAttr(Color.white));
 
@@ -56,7 +58,7 @@ public class Orbit extends RPnCurve implements RpSolution {
     public int findClosestSegment(wave.util.RealVector coords, double alpha) {
         return 0;
     }
-  
+
     //
     // Methods
     //
@@ -70,8 +72,8 @@ public class Orbit extends RPnCurve implements RpSolution {
 
     public void cat(Orbit curve) {//TODO Reimplements . Bugged !
         // opposite time directions assumed...
-        OrbitPoint[] swap = new OrbitPoint[points_.length +
-                curve.getPoints().length - 1];
+        OrbitPoint[] swap = new OrbitPoint[points_.length
+                + curve.getPoints().length - 1];
         double deltat = lastPoint().getTime() - curve.lastPoint().getTime();
         for (int i = 0, j = curve.getPoints().length - 2; i < swap.length; i++) {
             if (i >= points_.length) {
@@ -86,11 +88,11 @@ public class Orbit extends RPnCurve implements RpSolution {
 
     public static Orbit concat(Orbit backward, Orbit forward) {
         // opposite time directions assumed...
-        OrbitPoint[] swap = new OrbitPoint[backward.getPoints().length +
-                forward.getPoints().length - 1];
+        OrbitPoint[] swap = new OrbitPoint[backward.getPoints().length
+                + forward.getPoints().length - 1];
 
         double timeAdjust = -backward.getPoints()[0].getTime();
-        
+
         for (int i = 0, j = backward.getPoints().length - 1; i < swap.length; i++) {
             if (i >= backward.getPoints().length) {
                 swap[i] = (OrbitPoint) forward.getPoints()[i - backward.getPoints().length + 1];
@@ -128,8 +130,8 @@ public class Orbit extends RPnCurve implements RpSolution {
 
         for (int i = 0; i < points_.length; i++) {
 
-            buffer.append("<ORBITPOINT time=\"" +
-                    ((OrbitPoint) points_[i]).getTime() + "\">");
+            buffer.append("<ORBITPOINT time=\""
+                    + ((OrbitPoint) points_[i]).getTime() + "\">");
             buffer.append(points_[i].toXML());
             buffer.append("</ORBITPOINT>\n");
         }
@@ -145,8 +147,8 @@ public class Orbit extends RPnCurve implements RpSolution {
             for (int i = 0; i < points_.length; i++) {
 
 
-                buffer.append("<ORBITPOINT time=\"" +
-                        ((OrbitPoint) points_[i]).getTime() + "\">");
+                buffer.append("<ORBITPOINT time=\""
+                        + ((OrbitPoint) points_[i]).getTime() + "\">");
                 buffer.append(points_[i].toXML());
                 buffer.append("</ORBITPOINT>\n");
             }
@@ -155,8 +157,31 @@ public class Orbit extends RPnCurve implements RpSolution {
         return buffer.toString();
     }
 
+    public String toMatlabData() {
 
-      //
+        StringBuffer buffer = new StringBuffer();
+
+        buffer.append("data=[");
+
+        for (int i = 0; i < points_.length; i++) {
+            OrbitPoint orbitPoint = points_[i];
+
+            buffer.append(orbitPoint.toString());
+            buffer.append(";\n");
+
+
+        }
+
+        buffer.append("];");
+
+        return buffer.toString();
+
+
+
+
+    }
+
+    //
     // Accessors/Mutators
     //
     public OrbitPoint[] getPoints() {
@@ -174,7 +199,4 @@ public class Orbit extends RPnCurve implements RpSolution {
     public void setIntegrationFlag(int flag) {
         intFlag_ = flag;
     }
-
-
-
 }

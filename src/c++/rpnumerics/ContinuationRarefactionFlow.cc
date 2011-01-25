@@ -25,7 +25,7 @@ ContinuationRarefactionFlow::~ContinuationRarefactionFlow() {
 
 ContinuationRarefactionFlow::ContinuationRarefactionFlow(const RealVector & referenceVector, const int familyIndex, const int direction, const FluxFunction & fluxFunction) : RarefactionFlow(referenceVector, familyIndex, direction, fluxFunction) {
 
-    cout << "here" << endl;
+//    cout << "here" << endl;
 
 }
 
@@ -137,7 +137,7 @@ int ContinuationRarefactionFlow::rarefaction(int *neq, double *xi, double *in, d
     int i, j, info;
     vector<eigenpair> e;
     int type = RpNumerics::getPhysics().getPhysicsVector().at(0)->type();
-    cout <<"Valor de type: "<<type<<endl;
+//    cout <<"Valor de type: "<<type<<endl;
     param[0] =type;// _SIMPLE_ACCUMULATION_; //TODO REMOVE !!
 //    param[0] = _GENERAL_ACCUMULATION_; //TODO REMOVE !!
 
@@ -285,10 +285,10 @@ int ContinuationRarefactionFlow::rarefaction(int *neq, double *xi, double *in, d
 void ContinuationRarefactionFlow::fill_with_jet(const RpFunction & flux_object, int n, double *in, int degree, double *F, double *J, double *H) {
     RealVector r(n);
 
-    cout<<"Tamanho em fill: "<<n<<endl;
+//    cout<<"Tamanho em fill: "<<n<<endl;
     double *rp = r;
     for (int i = 0; i < n; i++) rp[i] = in[i];
-    cout << "Entrada em fill: " << r << endl;
+//    cout << "Entrada em fill: " << r << endl;
     // Will this work? There is a const somewhere in fluxParams.
     //FluxParams fp(r);
     //flux_object->fluxParams(FluxParams(r)); // flux_object->fluxParams(fp);
@@ -296,7 +296,7 @@ void ContinuationRarefactionFlow::fill_with_jet(const RpFunction & flux_object, 
     WaveState state_c(r);
 
     JetMatrix c_jet(n);
-    cout <<"Depois da linha 296"<<c_jet.size()<<endl;
+//    cout <<"Depois da linha 296"<<c_jet.size()<<endl;
     flux_object.jet(state_c, c_jet, degree);
 
 
@@ -367,41 +367,41 @@ int ContinuationRarefactionFlow::flux(int n, int family, const FluxFunction &ff,
         fill_with_jet(ff, n, in, 1, 0, &J[0][0], 0);
         info = Eigen::eig(n, &J[0][0], e);
     } else {
-        cout<<"Rare nao e simple"<<endl;
+//        cout<<"Rare nao e simple"<<endl;
         double A[n][n], B[n][n];
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) A[i][j] = B[i][j] = 0.0;
         }
 
         fill_with_jet(ff, n, in, 1, 0, &A[0][0], 0);
-        printf("here1\n");
+//        printf("here1\n");
         fill_with_jet(gg, n, in, 1, 0, &B[0][0], 0);
-        printf("here2\n");
+//        printf("here2\n");
 
-        printf("in = \n");
-        printf("[");
-        for (int j = 0; j < n; j++) printf("%e ", in[j]);
-        printf("]\n");
-
-        printf("A = \n");
-        for (int i = 0; i < n; i++) {
-            printf("[");
-            for (int j = 0; j < n; j++) printf("%e ", A[i][j]);
-            printf("]\n");
-        }
-
-        printf("B = \n");
-        for (int i = 0; i < n; i++) {
-            printf("[");
-            for (int j = 0; j < n; j++) printf("%e ", B[i][j]);
-            printf("]\n");
-        }
+//        printf("in = \n");
+//        printf("[");
+//        for (int j = 0; j < n; j++) printf("%e ", in[j]);
+//        printf("]\n");
+//
+//        printf("A = \n");
+//        for (int i = 0; i < n; i++) {
+//            printf("[");
+//            for (int j = 0; j < n; j++) printf("%e ", A[i][j]);
+//            printf("]\n");
+//        }
+//
+//        printf("B = \n");
+//        for (int i = 0; i < n; i++) {
+//            printf("[");
+//            for (int j = 0; j < n; j++) printf("%e ", B[i][j]);
+//            printf("]\n");
+//        }
 
         info = Eigen::eig(n, &A[0][0], &B[0][0], e);
 
 
 
-        printf("after eig: info = %d, e.size() = %d\n", info, e.size());
+//        printf("after eig: info = %d, e.size() = %d\n", info, e.size());
     }
     /* NEW ABOVE */
 
@@ -416,8 +416,8 @@ int ContinuationRarefactionFlow::flux(int n, int family, const FluxFunction &ff,
         if (out != 0) for (int i = 0; i < n; i++) {
                 out[i] = e[family].vrr[i];
 
-                cout << "out referencia" << out[i] << endl;
-                printf("here5\n");
+//                cout << "out referencia" << out[i] << endl;
+//                printf("here5\n");
 
             }
         return SUCCESSFUL_PROCEDURE;

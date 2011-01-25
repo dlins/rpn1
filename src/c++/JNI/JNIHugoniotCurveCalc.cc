@@ -90,26 +90,24 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
     RealVector Uref(dimension, input);
 
 
-    for (unsigned int i = 0; i < dimension; i++) {
+    //    for (unsigned int i = 0; i < dimension; i++) {
+    //
+    //        cout << "Valor de uref " << Uref.component(i) << endl;
+    //
+    //    }
 
-        cout << "Valor de uref " << Uref.component(i) << endl;
 
-    }
-
-    double const_gravity = 9.8;
-    double abs_perm = 3e-12;
-    double phi = 0.38;
     //    bool has_gravity = false;
-    double Tref_rock = 273.15;
-    double Tref_water = 274.3775;
-    double pressure = 100.9;
-    double Cr = 2.029e6;
-    double Cw = 4297.;
-    double rhoW_init = 998.2;
-    double T_typical = 304.63;
-    double Rho_typical = 998.2; // For the time being, this will be RhoWconst = 998 [kg/m^3]. In the future, this value should be the density of pure water at the temperature T_typical.
-    double U_typical = 4.22e-6;
-    double h_typical = Cw * (T_typical - Tref_water);
+    //    double Tref_rock = 273.15;
+    //    double Tref_water = 274.3775;
+    //    double pressure = 100.9;
+    //    double Cr = 2.029e6;
+    //    double Cw = 4297.;
+    //    double rhoW_init = 998.2;
+    //    double T_typical = 304.63;
+    //    double Rho_typical = 998.2; // For the time being, this will be RhoWconst = 998 [kg/m^3]. In the future, this value should be the density of pure water at the temperature T_typical.
+    //    double U_typical = 4.22e-6;
+    //    double h_typical = Cw * (T_typical - Tref_water);
 
     //    Thermodynamics_SuperCO2_WaterAdimensionalized TD(Tref_rock, Tref_water, pressure,
     //            "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhosigmac_spline.txt",
@@ -127,7 +125,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
     //            U_typical);
 
 
-    //    string rpnHome("/home/edsonlan/Java/rpn");
+
+
+    double const_gravity = 9.8;
+    double abs_perm = 3e-12;
+    double phi = 0.38;
+    
     Thermodynamics_SuperCO2_WaterAdimensionalized TD(Physics::getRPnHome());
 
 
@@ -171,7 +174,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
     vector<HugoniotPolyLine> hugoniotPolyLineVector;
     //    method.curve(Uref, hugoniotPolyLineVector);
 
-//    method.unclassifiedCurve(Uref, hugoniotPolyLineVector);
+    //    method.unclassifiedCurve(Uref, hugoniotPolyLineVector);
     method.classifiedCurve(Uref, hugoniotPolyLineVector);
 
 
@@ -202,7 +205,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
     //        vrs3d[i].component(2) = u; //TD.U2u(u);
     //    }
 
-    cout << "Numero de polylines: " << hugoniotPolyLineVector.size() << endl;
+//    cout << "Numero de polylines: " << hugoniotPolyLineVector.size() << endl;
 
     for (int i = 0; i < hugoniotPolyLineVector.size(); i++) {
 
