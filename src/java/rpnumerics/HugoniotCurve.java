@@ -412,6 +412,14 @@ public class HugoniotCurve extends RPnCurve implements RpSolution {
 
     public String toMatlabPlot(int x, int y) {
 
+        RealVector xMin = RPNUMERICS.boundary().getMinimums();
+        RealVector xMax = RPNUMERICS.boundary().getMaximums();
+
+
+        System.out.println(xMin);
+
+        System.out.println(xMax);
+
         StringBuffer buffer = new StringBuffer();
 
         for (int i = 0; i < hugoniotSegments_.size(); i++) {
@@ -444,6 +452,9 @@ public class HugoniotCurve extends RPnCurve implements RpSolution {
             buffer.append(", 2) toc(");
             buffer.append(type);
             buffer.append(", 3)])\n");
+            if (i == 0) {
+                buffer.append("axis([" + xMin.getElement(x) + " " + xMax.getElement(x) + " " + xMin.getElement(y) + " " + xMax.getElement(y) + "]);\n");
+            }
             if (i < hugoniotSegments_.size() - 1) {
                 buffer.append("hold on\n\n");
             }
@@ -470,7 +481,7 @@ public class HugoniotCurve extends RPnCurve implements RpSolution {
             RealSegment rSegment = new RealSegment(hSegment.leftPoint(),
                     hSegment.rightPoint());
 
-            buffer.append("data" + i + "= [" + rSegment.toString() +"   "+ leftSigma+" "+rightSigma+ "];\n\n");
+            buffer.append("data" + i + "= [" + rSegment.toString() + "   " + leftSigma + " " + rightSigma + "];\n\n");
 
             int type = hSegment.getType() + 1;
             buffer.append("% type of segment: " + type + "\n");
@@ -503,6 +514,13 @@ public class HugoniotCurve extends RPnCurve implements RpSolution {
             buffer.append(", 2) toc(");
             buffer.append(type);
             buffer.append(", 3)])\n");
+            if (i == 0) {
+                RealVector xMin = RPNUMERICS.boundary().getMinimums();
+                RealVector xMax = RPNUMERICS.boundary().getMaximums();
+
+                buffer.append("axis([" + xMin.getElement(0) + " " + xMax.getElement(0) + " " + xMin.getElement(1) + " " + xMax.getElement(1) + " "+xMin.getElement(2)+ " " + xMax.getElement(2)+ " "+"]);\n");
+
+            }
             if (i < hugoniotSegments_.size() - 1) {
                 buffer.append("hold on\n\n");
             }

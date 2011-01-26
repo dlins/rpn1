@@ -8,6 +8,7 @@ package rpn.component;
 import rpnumerics.*;
 import rpn.controller.HugoniotController;
 import rpn.controller.RpController;
+import wave.util.RealVector;
 
 public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
 
@@ -81,7 +82,52 @@ public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
         return buffer.toString();
     }
 
-     public String toMatlab() {
+    private String createAxisLabel2D(int x,int y){
+
+        String axisName[] = new String[3];
+
+        axisName[0] = "s";
+        axisName[1] = "T";
+        axisName[2] = "u";
+
+
+        StringBuffer buffer=new StringBuffer();
+        buffer.append("xlabel('");
+        buffer.append(axisName[x]+"')\n");
+        buffer.append("ylabel('"+axisName[y]+"')\n");
+
+        return buffer.toString();
+
+
+
+    }
+
+
+
+      private String createAxisLabel3D(int x,int y,int z){
+
+        String axisName[] = new String[3];
+
+        axisName[0] = "s";
+        axisName[1] = "T";
+        axisName[2] = "u";
+
+
+        StringBuffer buffer=new StringBuffer();
+        buffer.append("xlabel('");
+        buffer.append(axisName[x]+"')\n");
+        buffer.append("ylabel('"+axisName[y]+"')\n");
+
+          buffer.append("zlabel('" + axisName[z] + "')\n");
+
+        return buffer.toString();
+
+
+
+    }
+
+    public String toMatlab() {
+
 
         StringBuffer buffer = new StringBuffer();
         HugoniotCurve curve = (HugoniotCurve) geomSource();
@@ -91,33 +137,38 @@ public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
 
         buffer.append("%%\n% begin plot x y\n");
         buffer.append("figure; set(gca, 'Color',[0 0 0]); hold on\n");
-        buffer.append(curve.toMatlabPlot(0, 1));
+//         buffer.append("set(figure,'Name','x y')");
+//        buffer.append("xlabel('s')\n");
+//        buffer.append("ylabel('T')");
 
+        buffer.append(createAxisLabel2D(1,0));
+        buffer.append(curve.toMatlabPlot(1, 0));
 
         buffer.append("\n%%\n% begin plot x z\n");
         buffer.append("figure; set(gca, 'Color',[0 0 0]); hold on\n");
+//         buffer.append("set(figure,'Name','x y')");
+        buffer.append(createAxisLabel2D(0, 2));
         buffer.append(curve.toMatlabPlot(0, 2));
 
         buffer.append("\n%%\n% begin plot y z\n");
         buffer.append("figure; set(gca, 'Color',[0 0 0]); hold on\n");
+//         buffer.append("set(figure,'Name','x y')");
+        buffer.append(createAxisLabel2D(1, 2));
         buffer.append(curve.toMatlabPlot(1, 2));
 
         // Modified from here...
         buffer.append("\n%%\n% begin plot3d\n");
-        buffer.append("figure; set(gca, 'Color',[0 0 0]); hold on\n");
+        buffer.append("figure; ");
+        //set(gca, 'Color',[0 0 0]); hold on\n");
+
         buffer.append(curve.toMatlabData());
+        buffer.append(createAxisLabel3D(0, 1, 2));
+      
         // ...to here.
 
         return buffer.toString();
 
     }
-
-
-
-
-
-
-
 
 //    public String toMatlab() {
 //
@@ -143,22 +194,6 @@ public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
 //        return buffer.toString();
 //
 //    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public String toXML() {
 
         StringBuffer buffer = new StringBuffer();
