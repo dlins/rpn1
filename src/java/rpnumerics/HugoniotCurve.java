@@ -470,7 +470,7 @@ public class HugoniotCurve extends RPnCurve implements RpSolution {
             RealSegment rSegment = new RealSegment(hSegment.leftPoint(),
                     hSegment.rightPoint());
 
-            buffer.append("data" + i + "= [" + rSegment.toString() +" "+ leftSigma+" "+rightSigma+ "];\n\n");
+            buffer.append("data" + i + "= [" + rSegment.toString() +"   "+ leftSigma+" "+rightSigma+ "];\n\n");
 
             int type = hSegment.getType() + 1;
             buffer.append("% type of segment: " + type + "\n");
