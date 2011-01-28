@@ -87,8 +87,8 @@ public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
         String axisName[] = new String[3];
 
         axisName[0] = "s";
-        axisName[1] = "T";
-        axisName[2] = "u";
+        axisName[2] = "T";
+        axisName[1] = "u";
 
 
         StringBuffer buffer=new StringBuffer();

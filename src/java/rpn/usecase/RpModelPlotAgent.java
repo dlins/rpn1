@@ -15,6 +15,8 @@ import java.util.Iterator;
 import javax.swing.AbstractButton;
 import rpn.RPnCurvesListFrame;
 import rpn.RPnPhaseSpaceAbstraction;
+import rpn.component.CoincidenceCurveGeom;
+import rpn.component.SubInflectionCurveGeom;
 import rpn.controller.ui.*;
 
 public abstract class RpModelPlotAgent extends RpModelActionAgent {
@@ -40,34 +42,19 @@ public abstract class RpModelPlotAgent extends RpModelActionAgent {
 
     public void execute() {
         RealVector[] userInputList = UIController.instance().userInputList();
-        RPnPhaseSpaceAbstraction phaseSpace = null;
+        RPnPhaseSpaceAbstraction phaseSpace = RPnDataModule.PHASESPACE;
         String listString = "";
         // selecting phase space
-        if (userInputList.length == 0) {//Bifurcation curve
-            phaseSpace = RPnDataModule.AUXPHASESPACE;
-            listString = AUXPHASESPACE_LIST;
 
-        } else {
-
-            RealVector testPoint = userInputList[0];
-
-            if (rpnumerics.RPNUMERICS.domainDim() == testPoint.getSize()) {
-                phaseSpace = RPnDataModule.PHASESPACE;
-                listString = PHASESPACE_LIST;
-            }
-
-            if (testPoint.getSize() == rpnumerics.RPNUMERICS.domainDim() * 2) {
-                phaseSpace = RPnDataModule.AUXPHASESPACE;
-                listString = AUXPHASESPACE_LIST;
-
-            }
-
-
-        }
         // stores the scene
         Iterator oldValue = phaseSpace.getGeomObjIterator();
 
         RpGeometry geometry = createRpGeometry(userInputList);
+
+//        if (geometry instanceof CoincidenceCurveGeom || geometry instanceof SubInflectionCurveGeom){
+//            keepLastGeometry_=true;
+//        }
+
         if (geometry == null) {
             return;
         }
@@ -80,13 +67,10 @@ public abstract class RpModelPlotAgent extends RpModelActionAgent {
 
             }
         }
-
-
-        keepLastGeometry_ = false;
+//        keepLastGeometry_ = false;
+        keepLastGeometry_ = true;
         Iterator newValue = phaseSpace.getGeomObjIterator();
         logAction(new PropertyChangeEvent(this, listString, oldValue, newValue));
-
-
 
     }
 

@@ -24,8 +24,6 @@ public class RAREFACTION_CONFIG extends UI_ACTION_SELECTED {
         RarefactionOrbitPlotAgent.instance().setEnabled(true);
         HugoniotPlotAgent.instance().setEnabled(true);
         ShockCurvePlotAgent.instance().setEnabled(true);
-        CoincidencePlotAgent.instance().setEnabled(true);
-        SubInflectionPlotAgent.instance().setEnabled(true);
         ChangeDirectionAgent.instance().setEnabled(true);
         ChangeFluxParamsAgent.instance().setEnabled(true);
         CompositePlotAgent.instance().setEnabled(true);

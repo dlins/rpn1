@@ -38,7 +38,7 @@ public class RarefactionOrbit extends Orbit implements RpSolution {
         for (int i = 0; i < getPoints().length; i++) {
 
             buffer.append("<ORBITPOINT time=\""
-                    + ((OrbitPoint) getPoints()[i]).getTime() + "\">");
+                    + ((OrbitPoint) getPoints()[i]).getLambda() + "\">");
             buffer.append(getPoints()[i].toXML());
             buffer.append("</ORBITPOINT>\n");
 
@@ -57,7 +57,7 @@ public class RarefactionOrbit extends Orbit implements RpSolution {
             for (int i = 0; i < getPoints().length; i++) {
 
                 buffer.append("<ORBITPOINT time=\""
-                        + ((OrbitPoint) getPoints()[i]).getTime() + "\">");
+                        + ((OrbitPoint) getPoints()[i]).getLambda() + "\">");
                 buffer.append(getPoints()[i].toXML());
                 buffer.append("</ORBITPOINT>\n");
 

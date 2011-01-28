@@ -132,7 +132,7 @@ public class ManifoldOrbit extends RPnCurve implements RpSolution {
         double h;
         for (int i = 0; i < pointsNumber - 1; i++) {
             x.set(getOrbit().getPoints()[i].getCoords());
-            h = getOrbit().getPoints()[i + 1].getTime() - getOrbit().getPoints()[i].getTime();
+            h = getOrbit().getPoints()[i + 1].getLambda() - getOrbit().getPoints()[i].getLambda();
             sens.set(rk4(x, sens, k, h));
         }
         // extracting the final information

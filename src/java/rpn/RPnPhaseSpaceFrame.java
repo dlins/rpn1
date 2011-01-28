@@ -160,6 +160,7 @@ public class RPnPhaseSpaceFrame extends JFrame {
                 w = (Integer) widthTable_.get(new Integer(value));
                 RPnPhaseSpaceFrame.this.setSize(w.intValue(), h.intValue());
                 RPnPhaseSpaceFrame.this.validate();
+
             }
         }
     }

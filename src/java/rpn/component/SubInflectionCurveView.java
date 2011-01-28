@@ -7,7 +7,6 @@
 package rpn.component;
 
 import wave.multid.model.*;
-import wave.multid.map.*;
 import wave.multid.view.*;
 import wave.multid.DimMismatchEx;
 import java.awt.Graphics2D;

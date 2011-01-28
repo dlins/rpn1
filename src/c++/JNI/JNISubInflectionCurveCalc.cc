@@ -30,10 +30,10 @@ NOTE :
 using std::vector;
 using namespace std;
 
-JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionCurveCalc_nativeCalc (JNIEnv * env, jobject obj) {
+JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionCurveCalc_nativeCalc(JNIEnv * env, jobject obj) {
 
-    cout<<"Em subinflection nativo: "<<endl;
-    
+    cout << "Em subinflection nativo: " << endl;
+
     jclass classPhasePoint = (env)->FindClass(PHASEPOINT_LOCATION);
 
     jclass hugoniotSegmentClass = (env)->FindClass(HUGONIOTSEGMENTCLASS_LOCATION);
@@ -54,17 +54,17 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionCurveCalc_nativeCalc (JNI
 
 
     //Input processing
-//    jdoubleArray phasePointArray = (jdoubleArray) (env)->CallObjectMethod(uMinus, toDoubleMethodID);
-//
-//    int dimension = env->GetArrayLength(phasePointArray);
-//
-//    double input [dimension];
-//
-//
-//    env->GetDoubleArrayRegion(phasePointArray, 0, dimension, input);
-//
-//    env->DeleteLocalRef(phasePointArray);
-//
+    //    jdoubleArray phasePointArray = (jdoubleArray) (env)->CallObjectMethod(uMinus, toDoubleMethodID);
+    //
+    //    int dimension = env->GetArrayLength(phasePointArray);
+    //
+    //    double input [dimension];
+    //
+    //
+    //    env->GetDoubleArrayRegion(phasePointArray, 0, dimension, input);
+    //
+    //    env->DeleteLocalRef(phasePointArray);
+    //
     //Calculations using the input
 
     jobject segmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
@@ -76,12 +76,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionCurveCalc_nativeCalc (JNI
     RealVector Uref(dimension);
 
     double phi = 0.38;
-  
+
     Thermodynamics_SuperCO2_WaterAdimensionalized TD(Physics::getRPnHome());
 
     double cnw = 0., cng = 0., expw = 2., expg = 2.;
     FracFlow2PhasesHorizontalAdimensionalized fh(cnw, cng, expw, expg, TD);
-    
+
     SubinflectionTPCW subinflection(&TD, &fh, phi);
 
     ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), RpNumerics::getPhysics().boundary(), &subinflection);
@@ -124,7 +124,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionCurveCalc_nativeCalc (JNI
             //
 
             //            cout<<"Antes de criar hugoniot segment"<<endl;
-            jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, pointType);
+            jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, 100);
             env->CallObjectMethod(segmentsArray, arrayListAddMethod, hugoniotSegment);
 
         }

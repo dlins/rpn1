@@ -74,11 +74,11 @@ public class Orbit extends RPnCurve implements RpSolution {
         // opposite time directions assumed...
         OrbitPoint[] swap = new OrbitPoint[points_.length
                 + curve.getPoints().length - 1];
-        double deltat = lastPoint().getTime() - curve.lastPoint().getTime();
+        double deltat = lastPoint().getLambda() - curve.lastPoint().getLambda();
         for (int i = 0, j = curve.getPoints().length - 2; i < swap.length; i++) {
             if (i >= points_.length) {
                 swap[i] = curve.getPoints()[j--];
-                swap[i].setTime(swap[i].getTime() + deltat);
+                swap[i].setLambda(swap[i].getLambda() + deltat);
             } else {
                 swap[i] = (OrbitPoint) points_[i];
             }
@@ -91,14 +91,14 @@ public class Orbit extends RPnCurve implements RpSolution {
         OrbitPoint[] swap = new OrbitPoint[backward.getPoints().length
                 + forward.getPoints().length - 1];
 
-        double timeAdjust = -backward.getPoints()[0].getTime();
+        double timeAdjust = -backward.getPoints()[0].getLambda();
 
         for (int i = 0, j = backward.getPoints().length - 1; i < swap.length; i++) {
             if (i >= backward.getPoints().length) {
                 swap[i] = (OrbitPoint) forward.getPoints()[i - backward.getPoints().length + 1];
             } else {
                 swap[i] = backward.getPoints()[j--];
-                swap[i].setTime(swap[i].getTime() + timeAdjust);
+                swap[i].setLambda(swap[i].getLambda() + timeAdjust);
 
             }
         }
@@ -131,7 +131,7 @@ public class Orbit extends RPnCurve implements RpSolution {
         for (int i = 0; i < points_.length; i++) {
 
             buffer.append("<ORBITPOINT time=\""
-                    + ((OrbitPoint) points_[i]).getTime() + "\">");
+                    + ((OrbitPoint) points_[i]).getLambda() + "\">");
             buffer.append(points_[i].toXML());
             buffer.append("</ORBITPOINT>\n");
         }
@@ -148,7 +148,7 @@ public class Orbit extends RPnCurve implements RpSolution {
 
 
                 buffer.append("<ORBITPOINT time=\""
-                        + ((OrbitPoint) points_[i]).getTime() + "\">");
+                        + ((OrbitPoint) points_[i]).getLambda() + "\">");
                 buffer.append(points_[i].toXML());
                 buffer.append("</ORBITPOINT>\n");
             }

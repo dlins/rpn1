@@ -21,7 +21,7 @@ public class CoincidenceCurveGeom implements MultiGeometry, RpGeometry {
     //
     // Constants
     //
-    public static ViewingAttr VIEWING_ATTR = new ViewingAttr(Color.white);
+    public static ViewingAttr VIEWING_ATTR = new ViewingAttr(Color.yellow);
     //
     // Members
     //

@@ -102,12 +102,12 @@ public class ConnectionOrbitCalc implements RpCalculation {
         int i;
         int nA = manifoldOrbitA_.getOrbit().getPoints().length;
         int nB = manifoldOrbitB_.getOrbit().getPoints().length;
-        double tA = manifoldOrbitA_.getOrbit().getPoints() [nA - 1].getTime();
-        double tB = manifoldOrbitB_.getOrbit().getPoints() [nB - 1].getTime();
+        double tA = manifoldOrbitA_.getOrbit().getPoints() [nA - 1].getLambda();
+        double tB = manifoldOrbitB_.getOrbit().getPoints() [nB - 1].getLambda();
         OrbitPoint[] result = new OrbitPoint[nA + nB - 1];
         for (i = 0; i < nA - 1; i++) {
             result[i] = new OrbitPoint(manifoldOrbitA_.getOrbit().getPoints() [i]);
-            result[i].setTime(result[i].getTime() - tA);
+            result[i].setLambda(result[i].getLambda() - tA);
         }
 
       /* calculates the middle point and replace both endpoints
@@ -119,7 +119,7 @@ public class ConnectionOrbitCalc implements RpCalculation {
         result[nA - 1] = new OrbitPoint(tmp, 0.0);
         for (i = nB - 2; i >= 0; i--) {
             result[nA + nB - 2 - i] = new OrbitPoint(manifoldOrbitB_.getOrbit().getPoints() [i]);
-            result[nA + nB - 2 - i].setTime(result[nA + nB - 2 - i].getTime() - tB);
+            result[nA + nB - 2 - i].setLambda(result[nA + nB - 2 - i].getLambda() - tB);
         }
         return new Orbit(result, flag_);
     }

@@ -5,10 +5,11 @@
  */
 package rpn.component;
 
-import java.util.ArrayList;
 import rpnumerics.Orbit;
+import rpnumerics.RPNUMERICS;
 import rpnumerics.RarefactionOrbit;
 import rpnumerics.RarefactionOrbitCalc;
+import wave.util.RealVector;
 
 public class RarefactionOrbitGeomFactory extends RpCalcBasedGeomFactory {
     //
@@ -60,7 +61,6 @@ public class RarefactionOrbitGeomFactory extends RpCalcBasedGeomFactory {
         RarefactionOrbit orbit = (RarefactionOrbit) geomSource();
 
 
-
         String plotString = "figure; set(gca, 'Color',[0 0 0]" + ");hold on\n";
         buffer.append("%%\nclose all;clear all;\n");
         buffer.append(orbit.toMatlabData());
@@ -69,20 +69,20 @@ public class RarefactionOrbitGeomFactory extends RpCalcBasedGeomFactory {
         buffer.append("%%\n% begin plot x y\n");
 //        buffer.append("figure; set(gca, 'Color',[0 0 0]); hold on\n");
         buffer.append(plotString);
-        buffer.append(toMatlabPlot(1, 2));
+        buffer.append(toMatlabPlot(2, 1));
 
 
         buffer.append("\n%%\n% begin plot x z\n");
 //        buffer.append("figure; set(gca, 'Color',[0 0 0]); hold on\n");
         buffer.append(plotString);
-        buffer.append(toMatlabPlot(1, 3));
+        buffer.append(toMatlabPlot(3, 1));
 
 
         buffer.append("\n%%\n% begin plot y z\n");
 
         buffer.append(plotString);
 //        buffer.append("figure; set(gca, 'Color',[0 0 0]); hold on\n");
-        buffer.append(toMatlabPlot(2, 3));
+        buffer.append(toMatlabPlot(3, 2));
 
 //        System.out.println(orbit.toMatlabData());
 //
@@ -119,9 +119,35 @@ public class RarefactionOrbitGeomFactory extends RpCalcBasedGeomFactory {
         buffer.append("data(:,");
         buffer.append(y);
 
-        buffer.append("),'Color'"+"," + color + ")");
+        buffer.append("),'Color'" + "," + color + ")\n");
+
+        RealVector xMin = RPNUMERICS.boundary().getMinimums();
+        RealVector xMax = RPNUMERICS.boundary().getMaximums();
+
+        buffer.append("axis([" + xMin.getElement(x-1) + " " + xMax.getElement(x-1) + " " + xMin.getElement(y-1) + " " + xMax.getElement(y-1) + "]);\n");
+
+        buffer.append(createAxisLabel2D(x-1, y-1));
+        return buffer.toString();
+
+    }
+
+    private String createAxisLabel2D(int x, int y) {
+
+        String axisName[] = new String[3];
+
+        axisName[0] = "s";
+        axisName[2] = "T";
+        axisName[1] = "u";
+
+
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("xlabel('");
+        buffer.append(axisName[x] + "')\n");
+        buffer.append("ylabel('" + axisName[y] + "')\n");
 
         return buffer.toString();
+
+
 
     }
 }

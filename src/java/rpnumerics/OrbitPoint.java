@@ -17,19 +17,19 @@ public final class OrbitPoint extends PhasePoint {
     //
     // Members
     //
-    private double pTime_;
+    private double lambda_;
 
     //
     // Constructor
     //
     public OrbitPoint(OrbitPoint copy) {
         super(copy.getCoords());
-        pTime_ = copy.getTime();
+        lambda_ = copy.getLambda();
     }
 
     public OrbitPoint(RealVector pCoords, double pTime) {
         super(pCoords);
-        pTime_ = pTime;
+        lambda_ = pTime;
     }
 
     public OrbitPoint(RealVector pCoords) {
@@ -38,30 +38,50 @@ public final class OrbitPoint extends PhasePoint {
     
     
     public OrbitPoint(double [] coords){
-        super (new RealVector(coords));
-        pTime_=0;
+//        super(new RealVector(coords));
+
+        super(setCoordsAndSpeed(coords));
+//        pTime_=0;
+
+        lambda_ = coords[coords.length - 1];
     }
 
     public OrbitPoint(PhasePoint pPoint) {
         this(pPoint.getCoords());
     }
 
+
+    private static RealVector setCoordsAndSpeed(double [] coordsAndSpeed){
+
+        RealVector coords = new RealVector(coordsAndSpeed.length - 1);
+
+        for (int i = 0; i < coords.getSize(); i++) {
+            coords.setElement(i, coordsAndSpeed[i]);
+
+        }
+
+        return coords;
+
+
+    }
+
+
     //
     // Accessors/Mutators
     //
-    public double getTime() { return pTime_; }
+    public double getLambda() { return lambda_; }
 
-    public void setTime(double t) {
-        pTime_ = t;
+    public void setLambda(double t) {
+        lambda_ = t;
     }
 
     //
     // Methods
     //
 
-//    public String toString() {
+    public String toString() {
 //        StringBuffer buf = new StringBuffer();
-//        buf.append("\n pTime = " + pTime_);
-//        return super.toString() + buf.toString();
-//    }
+        
+        return super.toString() + " " + lambda_;
+    }
 }

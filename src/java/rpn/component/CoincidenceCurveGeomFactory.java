@@ -6,8 +6,6 @@
 package rpn.component;
 
 import rpnumerics.*;
-import rpn.controller.HugoniotController;
-import rpn.controller.RpController;
 
 public class CoincidenceCurveGeomFactory extends RpCalcBasedGeomFactory {
 

@@ -16,6 +16,7 @@
 #include "LSODESolver.h"
 #include "ContinuationShockFlow.h"
 #include "RpNumerics.h"
+
 /*
  * ---------------------------------------------------------------
  * Definitions:
@@ -42,75 +43,66 @@ RarefactionContinuationMethod::~RarefactionContinuationMethod() {
 
 }
 
+int RarefactionContinuationMethod::init(ContinuationRarefactionFlow * flow, int n, double *in, int indx, const FluxFunction &ff, const AccumulationFunction &gg, int type, int increase, double deltaxi, double *lambda, double *rev) { /* NEW HERE */
 
 
-int RarefactionContinuationMethod::init(ContinuationRarefactionFlow * flow,int n, double *in, int indx, const FluxFunction &ff, const AccumulationFunction &gg, int type, int increase, double deltaxi, double *lambda, double *rev){ /* NEW HERE */
-
-
-//    cout<<"Dentro de init"<<endl;
+    //    cout<<"Dentro de init"<<endl;
     // 1. Find the eigenvalue and the eigenvector at in (the initial point):
-//    printf("&rev = %p; (rev == 0 = %d)\n", rev, rev == 0);
+    //    printf("&rev = %p; (rev == 0 = %d)\n", rev, rev == 0);
     /* NEW BELOW */
     if (flow->flux(n, indx, ff, gg, type, in, lambda, rev) == COMPLEX_EIGENVALUE) return COMPLEX_EIGENVALUE;
     /* NEW ABOVE */
-//    cout <<"after flow flux"<<endl;
+    //    cout <<"after flow flux"<<endl;
     // 2. and 3. Find the eigenpairs at in_plus and in_minus.
-    double epsilon = 10*deltaxi;
+    double epsilon = 10 * deltaxi;
     double lambdap, lambdam; // Lambda_plus, lambda_minus
-    double inp[n], inm[n];   // In_plus and in_minus
-    double rep[n], rem[n];   // Eigenvectors at in_plus and in_minus
+    double inp[n], inm[n]; // In_plus and in_minus
+    double rep[n], rem[n]; // Eigenvectors at in_plus and in_minus
     int ii;
-    for (ii = 0; ii < n; ii++){
-        inp[ii] = in[ii] + epsilon*rev[ii];
-        inm[ii] = in[ii] - epsilon*rev[ii];
+    for (ii = 0; ii < n; ii++) {
+        inp[ii] = in[ii] + epsilon * rev[ii];
+        inm[ii] = in[ii] - epsilon * rev[ii];
     }
-//    cout<<"Dentro de init antes de flux"<<endl;
+    //    cout<<"Dentro de init antes de flux"<<endl;
     if (flow->flux(n, indx, ff, gg, type, inp, &lambdap, &rep[0]) == COMPLEX_EIGENVALUE) return COMPLEX_EIGENVALUE;
     if (flow->flux(n, indx, ff, gg, type, inm, &lambdam, &rem[0]) == COMPLEX_EIGENVALUE) return COMPLEX_EIGENVALUE;
 
-//    printf("@ rarefactioncurve(), after init.\nl- = % f, l = % f, l+ = % f\n", lambdam, *lambda, lambdap);
-//    printf("e = (");
-//    for (int i = 0; i < n; i++) printf("%6.2f, ", rev[i]);
-//    printf(")\n");
+    //    printf("@ rarefactioncurve(), after init.\nl- = % f, l = % f, l+ = % f\n", lambdam, *lambda, lambdap);
+    //    printf("e = (");
+    //    for (int i = 0; i < n; i++) printf("%6.2f, ", rev[i]);
+    //    printf(")\n");
 
     // 4. Find the reference eigenvector.
-    if (increase == 1){ // Eigenvalues should increase as the orbit advances
-        if (*lambda <= lambdap && *lambda <= lambdam){
-            #ifdef TEST_RAREFACTION
+    if (increase == 1) { // Eigenvalues should increase as the orbit advances
+        if (*lambda <= lambdap && *lambda <= lambdam) {
+#ifdef TEST_RAREFACTION
             printf("Inside rarefactioncurve(): Cannot initialize, lambda doesn't increase!\n");
-            #endif
+#endif
             return LAMBDA_NOT_INCREASING;
-        }
-        else if (*lambda < lambdap && *lambda > lambdam){
+        } else if (*lambda < lambdap && *lambda > lambdam) {
             // Nothing to do, the eigenvector is rev.
-        }
-        else if (*lambda > lambdap && *lambda < lambdam){
+        } else if (*lambda > lambdap && *lambda < lambdam) {
             for (ii = 0; ii < n; ii++) rev[ii] = -rev[ii];
-        }
-        else {
-            #ifdef TEST_RAREFACTION
+        } else {
+#ifdef TEST_RAREFACTION
             printf("Inside rarefactioncurve(): Cannot initialize, unexpected!\n");
-            #endif
+#endif
             return LAMBDA_NOT_INCREASING;
         }
-    }
-    else {              // Eigenvalues should decrease as the orbit advances
-        if (*lambda >= lambdap && *lambda >= lambdam){
-            #ifdef TEST_RAREFACTION
+    } else { // Eigenvalues should decrease as the orbit advances
+        if (*lambda >= lambdap && *lambda >= lambdam) {
+#ifdef TEST_RAREFACTION
             printf("Inside rarefactioncurve(): Cannot initialize, lambda doesn't decrease!\n");
-            #endif
+#endif
             return LAMBDA_NOT_DECREASING;
-        }
-        else if (*lambda > lambdap && *lambda < lambdam){
+        } else if (*lambda > lambdap && *lambda < lambdam) {
             // Nothing to do, the eigenvector is rev.
-        }
-        else if (*lambda < lambdap && *lambda > lambdam){
+        } else if (*lambda < lambdap && *lambda > lambdam) {
             for (ii = 0; ii < n; ii++) rev[ii] = -rev[ii];
-        }
-        else {
-            #ifdef TEST_RAREFACTION
+        } else {
+#ifdef TEST_RAREFACTION
             printf("Inside rarefactioncurve(): Cannot initialize, unexpected!\n");
-            #endif
+#endif
             return LAMBDA_NOT_DECREASING;
         }
     }
@@ -164,14 +156,14 @@ int RarefactionContinuationMethod::init(ContinuationRarefactionFlow * flow,int n
 //}
 
 void RarefactionContinuationMethod::curve(const RealVector & inputVector, int direction, vector<RealVector> & output) {
-//    cout <<"here curve"<<endl;
+    //    cout <<"here curve"<<endl;
     output.clear();
-//    RealVector inputVector(3);
+    //    RealVector inputVector(3);
 
-//    inputVector.component(0)=input.component(0);
-//    inputVector.component(1) = input.component(1);
+    //    inputVector.component(0)=input.component(0);
+    //    inputVector.component(1) = input.component(1);
 
-//    inputVector.component(2) = 1;//TODO Hardcoded !!
+    //    inputVector.component(2) = 1;//TODO Hardcoded !!
 
     int info = SUCCESSFUL_PROCEDURE;
     int dimension = inputVector.size();
@@ -192,25 +184,34 @@ void RarefactionContinuationMethod::curve(const RealVector & inputVector, int di
     double lambda;
 
     double rev[dimension];
-//    int type =_GENERAL_ACCUMULATION_;//TODO REMOVE
-//    int type = _SIMPLE_ACCUMULATION_; //TODO REMOVE
+    //    int type =_GENERAL_ACCUMULATION_;//TODO REMOVE
+    //    int type = _SIMPLE_ACCUMULATION_; //TODO REMOVE
 
-     int type = RpNumerics::getPhysics().getPhysicsVector().at(0)->type();
-    const FluxFunction & fluxFunction = RpNumerics::getPhysics().fluxFunction();//TODO REMOVE !!
+    int type = RpNumerics::getPhysics().getPhysicsVector().at(0)->type();
+    const FluxFunction & fluxFunction = RpNumerics::getPhysics().fluxFunction(); //TODO REMOVE !!
     const AccumulationFunction & accumulationFunction = RpNumerics::getPhysics().accumulation(); //TODO REMOVE !!
-    info = init(&testeFlow, dimension, in, indx,fluxFunction,accumulationFunction, type, direction, deltaxi, &lambda, &rev[0]);
+    info = init(&testeFlow, dimension, in, indx, fluxFunction, accumulationFunction, type, direction, deltaxi, &lambda, &rev[0]);
 
 
-//    info = init(&testeFlow, dimension, in, indx, direction, deltaxi, &lambda, &rev[0]);
+    //    info = init(&testeFlow, dimension, in, indx, direction, deltaxi, &lambda, &rev[0]);
 
-//    cout <<"Vetor de referencia: "<<testeFlow.getReferenceVector();
+    //    cout <<"Vetor de referencia: "<<testeFlow.getReferenceVector();
 
     for (int i = 0; i < dimension; i++) {
         testeFlow.setReferenceVectorComponent(i, rev[i]);
     }
-//    cout <<"after init"<<endl;
+    //    cout <<"after init"<<endl;
     if (info == SUCCESSFUL_PROCEDURE) {
-        output.push_back(inputVector);
+//        output.push_back(inputVector);
+        RealVector firstPoint(dimension+1);
+
+        for (int i = 0; i < inputVector.size(); i++) {
+                    firstPoint.component(i) = inputVector.component(i);
+                }
+
+        firstPoint.component(dimension)=lambda;
+        output.push_back(firstPoint);
+
     } else {
         //        cout << "Error: " << info << endl;
     }
@@ -230,13 +231,14 @@ void RarefactionContinuationMethod::curve(const RealVector & inputVector, int di
 
 
     while (step < solver_->getProfile().maxStepNumber() && info == SUCCESSFUL_PROCEDURE) {
+        RealVector resultVector(dimension + 1);
 
         outputVector_prev = localInputVector;
         speed_prev = speed;
 
         info = solver_->solve(localInputVector, outputVector, testeDouble);
 
-//        cout <<"saida do solver "<<outputVector<<endl;
+        //        cout <<"saida do solver "<<outputVector<<endl;
 
         if (info == SUCCESSFUL_PROCEDURE) {
 
@@ -246,7 +248,7 @@ void RarefactionContinuationMethod::curve(const RealVector & inputVector, int di
 
             //-----------------------------------Stop Criterion---------------------------
 
-            info = testeFlow.flux(dimension,indx,fluxFunction,accumulationFunction,type, &nowIn[0], &speed, 0);
+            info = testeFlow.flux(dimension, indx, fluxFunction, accumulationFunction, type, &nowIn[0], &speed, 0);
 
 
 
@@ -267,8 +269,8 @@ void RarefactionContinuationMethod::curve(const RealVector & inputVector, int di
             // Mon 10 May 2010 05:07:33 PM BRT 
             RealVector r(dimension);
             int edge;
-            int cllsn = (boundary_->intersection(outputVector, outputVector_prev, r,edge));
-//            cout <<"depois de intersection"<<endl;
+            int cllsn = (boundary_->intersection(outputVector, outputVector_prev, r, edge));
+            //            cout <<"depois de intersection"<<endl;
             if (cllsn == -1) {
                 // Both outside
 
@@ -277,10 +279,24 @@ void RarefactionContinuationMethod::curve(const RealVector & inputVector, int di
             } else if (cllsn == 1) {
                 // Both inside
 
-                output.push_back(outputVector);
+
+                for (int i = 0; i < outputVector.size(); i++) {
+                    resultVector.component(i) = outputVector.component(i);
+
+
+                }
+                resultVector.component(dimension) = speed;
+                output.push_back(resultVector);
+
+                //                output.push_back(outputVector);
             } else if (cllsn == 0) {
                 // One inside, one outside: store and get out
-                output.push_back(r);
+                //                output.push_back(r);
+                for (int i = 0; i < outputVector.size(); i++) {
+                    resultVector.component(i) = outputVector.component(i);
+                }
+                resultVector.component(dimension) = speed;
+                output.push_back(resultVector);
                 // Reference vector for the next curve (a composite):
                 RealVector ref_vec(r);
                 for (int i = 0; i < dimension; i++) ref_vec(i) = r(i) - outputVector_prev(i);
@@ -297,7 +313,23 @@ void RarefactionContinuationMethod::curve(const RealVector & inputVector, int di
             // Reference vector
 
             for (int i = 0; i < dimension; i++) testeFlow.setReferenceVectorComponent(i, outputVector(i) - outputVector_prev(i));
-            output.push_back(outputVector);
+
+            //            Including the speed
+            RealVector resultVector(dimension + 1);
+            for (int i = 0; i < outputVector.size(); i++) {
+                resultVector.component(i) = outputVector.component(i);
+
+
+            }
+
+            resultVector(dimension) = speed;
+
+
+            //            output.push_back(outputVector);
+
+
+
+            output.push_back(resultVector);
             localInputVector = outputVector;
             step++;
 

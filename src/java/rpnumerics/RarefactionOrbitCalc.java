@@ -88,12 +88,12 @@ public class RarefactionOrbitCalc implements RpCalculation {
         }
 
         result = (RarefactionOrbit) calc(methodName_, flowName_, start_, familyIndex_, timeDirection_);
-        result.setFamilyIndex(familyIndex_);
+
 
         if (result == null) {
             throw new RpException("Error in native layer");
         }
-
+        result.setFamilyIndex(familyIndex_);
         return result;
 
 

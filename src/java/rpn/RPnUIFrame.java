@@ -132,8 +132,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 toolBar_.add(HugoniotPlotAgent.instance().getContainer());
 
                 toolBar_.add(ShockCurvePlotAgent.instance().getContainer());
-                toolBar_.add(CoincidencePlotAgent.instance().getContainer());
-                toolBar_.add(SubInflectionPlotAgent.instance().getContainer());
+
 
                 toolBar_.add(RarefactionOrbitPlotAgent.instance().getContainer());
                 toolBar_.add(CompositePlotAgent.instance().getContainer());
@@ -152,6 +151,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
                 toolBar_.removeAll();
                 toolBar_.add(BifurcationPlotAgent.instance().getContainer());
+                toolBar_.add(CoincidencePlotAgent.instance().getContainer());
+                toolBar_.add(SubInflectionPlotAgent.instance().getContainer());
                 toolBar_.add(ScratchAgent.instance().getContainer());
                 toolBar_.add(BifurcationRefineAgent.instance().getContainer());
                 toolBar_.add(TrackPointAgent.instance().getContainer());
@@ -294,23 +295,23 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 wave.multid.view.Scene scene = RPnDataModule.PHASESPACE.createScene(viewingTransf,
                         new wave.multid.view.ViewingAttr(Color.black));
 
-
-                wave.multid.view.Scene leftScene = RPnDataModule.LEFTPHASESPACE.createScene(viewingTransf,
-                        new wave.multid.view.ViewingAttr(Color.black));
-                wave.multid.view.Scene rightScene = RPnDataModule.RIGHTPHASESPACE.createScene(viewingTransf,
-                        new wave.multid.view.ViewingAttr(Color.black));
+//
+//                wave.multid.view.Scene leftScene = RPnDataModule.LEFTPHASESPACE.createScene(viewingTransf,
+//                        new wave.multid.view.ViewingAttr(Color.black));
+//                wave.multid.view.Scene rightScene = RPnDataModule.RIGHTPHASESPACE.createScene(viewingTransf,
+//                        new wave.multid.view.ViewingAttr(Color.black));
 
                 frames_[i] = new RPnPhaseSpaceFrame(scene, commandMenu_);
                 frames_[i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(i)).label());
 
 
 
-                leftFrames_[i] = new RPnPhaseSpaceFrame(leftScene, commandMenu_);
-                leftFrames_[i].setTitle("Left " + ((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(i)).label());
-
-
-                rightFrames_[i] = new RPnPhaseSpaceFrame(rightScene, commandMenu_);
-                rightFrames_[i].setTitle("Right " + ((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(i)).label());
+//                leftFrames_[i] = new RPnPhaseSpaceFrame(leftScene, commandMenu_);
+//                leftFrames_[i].setTitle("Left " + ((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(i)).label());
+//
+//
+//                rightFrames_[i] = new RPnPhaseSpaceFrame(rightScene, commandMenu_);
+//                rightFrames_[i].setTitle("Right " + ((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(i)).label());
 
 
                 /*
@@ -324,18 +325,18 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
 
 
-                UIController.instance().install(leftFrames_[i].phaseSpacePanel());
-
-                setFramesPosition(leftFrames_[i]);
-                leftFrames_[i].pack();
-                leftFrames_[i].setVisible(true);
-
-
-                UIController.instance().install(rightFrames_[i].phaseSpacePanel());
-
-                setFramesPosition(rightFrames_[i]);
-                rightFrames_[i].pack();
-                rightFrames_[i].setVisible(true);
+//                UIController.instance().install(leftFrames_[i].phaseSpacePanel());
+//
+//                setFramesPosition(leftFrames_[i]);
+//                leftFrames_[i].pack();
+//                leftFrames_[i].setVisible(true);
+//
+//
+//                UIController.instance().install(rightFrames_[i].phaseSpacePanel());
+//
+//                setFramesPosition(rightFrames_[i]);
+//                rightFrames_[i].pack();
+//                rightFrames_[i].setVisible(true);
 
 
                 UIController.instance().install(frames_[i].phaseSpacePanel());
@@ -393,7 +394,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         try {
             JFileChooser chooser = new JFileChooser();
             chooser.setSelectedFile(new File("output.m"));
-            chooser.setFileFilter(new FileNameExtensionFilter("Matlab file","m"));
+            chooser.setFileFilter(new FileNameExtensionFilter("Matlab file", "m"));
             if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
                 FileWriter writer = new FileWriter(chooser.getSelectedFile().
                         getAbsolutePath());

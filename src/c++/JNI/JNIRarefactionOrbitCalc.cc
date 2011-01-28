@@ -117,9 +117,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
         referenceVector(i) = 0;
     }
 
-
-
     ContinuationRarefactionFlow flow(referenceVector, familyIndex, timeDirection, RpNumerics::getPhysics().fluxFunction());
+
 
 
 
@@ -146,9 +145,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
         return NULL;
     }
 
-
-
-
     //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //Orbit memebers creation
@@ -167,6 +163,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
 //        tempVector.component(1) = tempVectorT(1);
 
 //        cout<<tempVector<<endl;
+
+//        cout << "Tamanho de tempVector: "<<tempVector.size()<<endl;
 
         double * dataCoords = tempVector;
 
