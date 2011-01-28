@@ -76,6 +76,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
 
             getContentPane().add(statusLabel_, BorderLayout.SOUTH);
+
+
             if (commandMenu_ instanceof RPnAppletPlotter) { // Selecting itens to disable in Applet
 
                 networkMenuItem.setEnabled(false);
@@ -785,8 +787,24 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
     }
 
-    public RPnPhaseSpaceFrame[] getPhaseSpaceFrames() {
+    public static RPnPhaseSpaceFrame[] getPhaseSpaceFrames() {
         return frames_;
+    }
+
+    public static void disableSliders() {
+        for (int i = 0; i < RPnUIFrame.getPhaseSpaceFrames().length; i++) {
+
+            RPnPhaseSpaceFrame frame = RPnUIFrame.getPhaseSpaceFrames()[i];
+            frame.getSlider().setEnabled(false);
+        }
+    }
+
+    public static void enableSliders() {
+        for (int i = 0; i < RPnUIFrame.getPhaseSpaceFrames().length; i++) {
+
+            RPnPhaseSpaceFrame frame = RPnUIFrame.getPhaseSpaceFrames()[i];
+            frame.getSlider().setEnabled(true);
+        }
     }
 
     public void showCurvesPanel(boolean show) {

@@ -173,6 +173,7 @@ public class UIController extends ComponentUI {
         @Override
         public void mousePressed(MouseEvent event) {
             RPnUIFrame.clearStatusMessage();
+            RPnUIFrame.disableSliders();
 
             if (event.getComponent() instanceof RPnPhaseSpacePanel) {
 
@@ -190,6 +191,7 @@ public class UIController extends ComponentUI {
                             userInputComplete(globalInputTable().values());
                             globalInputTable().reset();
                             resetPanelsCursorCoords();
+                            RPnUIFrame.enableSliders();
 
                         }
 

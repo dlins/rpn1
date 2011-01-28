@@ -40,6 +40,7 @@ public class RPnPhaseSpaceFrame extends JFrame {
         commandMenu_ = command;
         try {
             phaseSpacePanel = new RPnPhaseSpacePanel(scene);
+        
             jbInit();
         } catch (Exception e) {
             e.printStackTrace();
@@ -90,6 +91,8 @@ public class RPnPhaseSpaceFrame extends JFrame {
         addKeyListener(new KeyController());
 
     }
+
+    public JSlider getSlider(){return slider;}
 
     private class FocusController implements WindowFocusListener {
 
@@ -158,8 +161,29 @@ public class RPnPhaseSpaceFrame extends JFrame {
                 value = source.getValue();
                 h = (Integer) heightTable_.get(new Integer(value));
                 w = (Integer) widthTable_.get(new Integer(value));
-                RPnPhaseSpaceFrame.this.setSize(w.intValue(), h.intValue());
-                RPnPhaseSpaceFrame.this.validate();
+
+                for (int i = 0; i < RPnUIFrame.getPhaseSpaceFrames().length; i++) {
+
+                    RPnPhaseSpaceFrame frame = RPnUIFrame.getPhaseSpaceFrames()[i];
+
+                    frame.setSize(w.intValue(), h.intValue());
+                    frame.validate();
+
+                    ChangeListener changeListener = frame.getSlider().getChangeListeners()[0];
+
+                    frame.getSlider().removeChangeListener(changeListener);
+
+                    frame.getSlider().getModel().setValue(value);
+
+
+                    frame.getSlider().addChangeListener(changeListener);
+
+
+                }
+
+
+//                RPnPhaseSpaceFrame.this.setSize(w.intValue(), h.intValue());
+//                RPnPhaseSpaceFrame.this.validate();
 
             }
         }

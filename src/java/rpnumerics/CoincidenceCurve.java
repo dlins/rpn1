@@ -52,13 +52,10 @@ public class CoincidenceCurve extends RPnCurve implements RpSolution {
         return hugoniotSegments_;
     }
 
-    
     public String toMatlabPlot(int x, int y) {
-
         StringBuffer buffer = new StringBuffer();
 
         for (int i = 0; i < hugoniotSegments_.size(); i++) {
-
 
             HugoniotSegment hSegment = ((HugoniotSegment) hugoniotSegments_.get(
                     i));
@@ -68,14 +65,14 @@ public class CoincidenceCurve extends RPnCurve implements RpSolution {
 
             buffer.append("plot([data");
             buffer.append(i);
-            buffer.append("(" + (x + 1)+ ") ");
+            buffer.append("(" + (x + 1) + ") ");
             buffer.append("data");
             buffer.append(i);
             buffer.append("(" + (x + 4) + ")],");
 
             buffer.append("[data");
             buffer.append(i);
-            buffer.append("(" + (y + 1)+ ") ");
+            buffer.append("(" + (y + 1) + ") ");
             buffer.append("data");
             buffer.append(i);
             buffer.append("(" + (y + 4) + ")]");
@@ -99,8 +96,6 @@ public class CoincidenceCurve extends RPnCurve implements RpSolution {
                 buffer.append("hold on\n\n");
             }
         }
-
-
         return buffer.toString();
     }
 
@@ -112,12 +107,16 @@ public class CoincidenceCurve extends RPnCurve implements RpSolution {
 
             HugoniotSegment hSegment = ((HugoniotSegment) hugoniotSegments_.get(
                     i));
-            RealSegment rSegment = new RealSegment(hSegment.leftPoint(),
-                    hSegment.rightPoint());
+
+
+            RealVector leftPoint = hSegment.leftPoint();
+            RealVector rightPoint = hSegment.rightPoint();
+//            RealSegment rSegment = new RealSegment(hSegment.leftPoint(),
+//                    hSegment.rightPoint());
 
             buffer.append("% type of segment: " + hSegment.getType() + "\n");
 
-            buffer.append("data" + i + "= [" + rSegment.toString() + "];\n\n");
+            buffer.append("data" + i + "= [" + leftPoint + " " + rightPoint + "];\n\n");
         }
         return buffer.toString();
     }
@@ -145,5 +144,4 @@ public class CoincidenceCurve extends RPnCurve implements RpSolution {
         return buffer.toString();
 
     }
-
 }

@@ -89,6 +89,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
 
     RealVector Uref(dimension, input);
 
+    cout<<Uref<<endl;
+
 
     //    for (unsigned int i = 0; i < dimension; i++) {
     //

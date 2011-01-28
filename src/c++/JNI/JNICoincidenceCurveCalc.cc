@@ -124,7 +124,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceCurveCalc_nativeCalc (JNIEn
             //
 
             //            cout<<"Antes de criar hugoniot segment"<<endl;
-            jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, 101);
+            jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, 17);
             env->CallObjectMethod(segmentsArray, arrayListAddMethod, hugoniotSegment);
 
         }

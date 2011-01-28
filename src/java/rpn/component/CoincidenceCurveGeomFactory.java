@@ -54,10 +54,12 @@ public class CoincidenceCurveGeomFactory extends RpCalcBasedGeomFactory {
             {255, 255, 255},
             {255, 255, 255},
             {0, 255, 255},
-            {255, 255, 255}
+            {255, 255, 255},
+            {255, 255, 0},
+            {0, 204, 0}
         };
 
-        for (int i = 0; i < 16; i++) {
+        for (int i = 0; i < 18; i++) {
 
             for (int j = 0; j < 3; j++) {
                 buffer.append("  " + toc[i][j] / 255.0 + " ");
@@ -79,16 +81,16 @@ public class CoincidenceCurveGeomFactory extends RpCalcBasedGeomFactory {
 
         buffer.append("%%\n% begin plot x y\n");
         buffer.append("figure; set(gca, 'Color',[0 0 0]); hold on\n");
-        buffer.append(curve.toMatlabPlot(0, 1));
+        buffer.append(curve.toMatlabPlot(1, 0));
 
 
-        buffer.append("\n%%\n% begin plot x z\n");
-        buffer.append("figure; set(gca, 'Color',[0 0 0]); hold on\n");
-        buffer.append(curve.toMatlabPlot(0, 2));
-
-        buffer.append("\n%%\n% begin plot y z\n");
-        buffer.append("figure; set(gca, 'Color',[0 0 0]); hold on\n");
-        buffer.append(curve.toMatlabPlot(1, 2));
+//        buffer.append("\n%%\n% begin plot x z\n");
+//        buffer.append("figure; set(gca, 'Color',[0 0 0]); hold on\n");
+//        buffer.append(curve.toMatlabPlot(2, 0));
+//
+//        buffer.append("\n%%\n% begin plot y z\n");
+//        buffer.append("figure; set(gca, 'Color',[0 0 0]); hold on\n");
+//        buffer.append(curve.toMatlabPlot(2, 1));
 
         return buffer.toString();
 

@@ -44,6 +44,15 @@ public class RPnCursorMonitor extends JLabel {
         }
     }
 
+    //-----------------------------------------
+
+    //Mostrar todas as coordenadas em um label na janela principal
+    // A string mostrada por esse label seria a concatenacao das coordenadas de todos os paineis
+    //A base para esse label seria essa classe RPnCursorMonitor
+    // Ela seria um controlador instalado em todos os paineis abertos
+
+    //--------------------------------
+
     //
     // Accessors/Mutators
     //

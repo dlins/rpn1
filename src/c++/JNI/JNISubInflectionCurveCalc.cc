@@ -124,7 +124,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionCurveCalc_nativeCalc(JNIE
             //
 
             //            cout<<"Antes de criar hugoniot segment"<<endl;
-            jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, 100);
+            jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, 16);
             env->CallObjectMethod(segmentsArray, arrayListAddMethod, hugoniotSegment);
 
         }
