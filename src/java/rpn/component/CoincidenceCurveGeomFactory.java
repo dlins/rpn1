@@ -1,20 +1,25 @@
 /*
- * Instituto de Matematica Pura e Aplicada - IMPA
- * Departamento de Dinamica dos Fluidos
- *
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
  */
+
 package rpn.component;
 
-import rpnumerics.*;
+import rpnumerics.CoincidenceCurve;
+import rpnumerics.HugoniotCurve;
+import rpnumerics.HugoniotSegment;
+import rpnumerics.RPNUMERICS;
+import rpnumerics.RpCalculation;
+import rpnumerics.ShockProfile;
+import rpnumerics.SubInflectionCurve;
 
-public class CoincidenceCurveGeomFactory extends RpCalcBasedGeomFactory {
+public class CoincidenceCurveGeomFactory extends RpCalcBasedGeomFactory{
 
-    public CoincidenceCurveGeomFactory(CoincidenceCurveCalc calc) {
+    public CoincidenceCurveGeomFactory(RpCalculation calc) {
         super(calc);
-
     }
 
-    //
+  
     // Methods
     //
     protected RpGeometry createGeomFromSource() {
@@ -31,6 +36,7 @@ public class CoincidenceCurveGeomFactory extends RpCalcBasedGeomFactory {
         return new CoincidenceCurveGeom(hugoniotArray, this);
 
     }
+
 
     private String createColorTable() {
 
@@ -56,7 +62,7 @@ public class CoincidenceCurveGeomFactory extends RpCalcBasedGeomFactory {
             {0, 255, 255},
             {255, 255, 255},
             {255, 255, 0},
-            {0, 204, 0}
+             {0, 204, 0}
         };
 
         for (int i = 0; i < 18; i++) {
@@ -74,23 +80,23 @@ public class CoincidenceCurveGeomFactory extends RpCalcBasedGeomFactory {
     public String toMatlab() {
 
         StringBuffer buffer = new StringBuffer();
-        CoincidenceCurve curve = (CoincidenceCurve) geomSource();
+        SubInflectionCurve curve = (SubInflectionCurve) geomSource();
         buffer.append("%%\nclose all;clear all;\n");
         buffer.append(createColorTable());
         buffer.append(curve.toMatlabData());
 
         buffer.append("%%\n% begin plot x y\n");
         buffer.append("figure; set(gca, 'Color',[0 0 0]); hold on\n");
-        buffer.append(curve.toMatlabPlot(1, 0));
+        buffer.append(curve.toMatlabPlot(0, 1));
 
 
-//        buffer.append("\n%%\n% begin plot x z\n");
-//        buffer.append("figure; set(gca, 'Color',[0 0 0]); hold on\n");
-//        buffer.append(curve.toMatlabPlot(2, 0));
-//
-//        buffer.append("\n%%\n% begin plot y z\n");
-//        buffer.append("figure; set(gca, 'Color',[0 0 0]); hold on\n");
-//        buffer.append(curve.toMatlabPlot(2, 1));
+        buffer.append("\n%%\n% begin plot x z\n");
+        buffer.append("figure; set(gca, 'Color',[0 0 0]); hold on\n");
+        buffer.append(curve.toMatlabPlot(0, 2));
+
+        buffer.append("\n%%\n% begin plot y z\n");
+        buffer.append("figure; set(gca, 'Color',[0 0 0]); hold on\n");
+        buffer.append(curve.toMatlabPlot(1, 2));
 
         return buffer.toString();
 
@@ -109,4 +115,22 @@ public class CoincidenceCurveGeomFactory extends RpCalcBasedGeomFactory {
         return buffer.toString();
 
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

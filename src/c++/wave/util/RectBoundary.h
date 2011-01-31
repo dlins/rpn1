@@ -14,7 +14,7 @@
  * Includes:
  */
 #include "Boundary.h"
-#include "mathutil.h"
+#include "math.h"
 
 /*
  * ---------------------------------------------------------------
@@ -31,6 +31,7 @@ private:
 //    std::vector<int> exception;
     std::vector<bool> test_dimension;
 
+
 public:
 
 
@@ -40,6 +41,8 @@ public:
     Boundary * clone() const;
 
     RectBoundary(const RealVector & minimums, const RealVector & maximums);
+    RectBoundary(const RealVector & minimums, const RealVector & maximums, const std::vector<bool> &, const double = 0.0);
+
     RectBoundary & operator =(const RectBoundary &);
 
 

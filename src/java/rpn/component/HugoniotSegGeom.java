@@ -83,6 +83,12 @@ public class HugoniotSegGeom extends MultiPolyLine {
             attr = new ViewingAttr(new Color(0, 204, 0));
         }
 
+        //TODO  BuckleyLeverettinflection Curve segment type
+         if (segment.getType() == 18) {
+            attr = new ViewingAttr(new Color(135,27, 224));
+        }
+
+
         return attr;
     }
 }

@@ -3,7 +3,7 @@
 
 Boundary::~Boundary() {
 };
-double Boundary::epsilon = 1e-10;
+//double Boundary::epsilon = 1e-10;
 
 int Boundary::intersection(const RealVector &p, const RealVector &q, RealVector &r,int &w) const {
       w = -1;

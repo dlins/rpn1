@@ -27,7 +27,8 @@
 
 
 class Boundary {
-    
+
+
 public:
     
     virtual ~Boundary();
@@ -55,9 +56,11 @@ public:
 
 
 protected:
+    double  epsilon;
+
 
     double distance(int ,const double *, const double *)const;
-    double static epsilon;
+    
 };
 
 

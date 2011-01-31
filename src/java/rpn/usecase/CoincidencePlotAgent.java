@@ -5,9 +5,9 @@
  */
 package rpn.usecase;
 
+
 import java.awt.event.ActionEvent;
 import javax.swing.JToggleButton;
-import rpn.RPnCurvesConfigPanel;
 import rpn.component.*;
 import rpn.controller.ui.BIFURCATION_CONFIG;
 import rpn.controller.ui.UIController;
@@ -45,7 +45,7 @@ public class CoincidencePlotAgent extends RpModelPlotAgent {
     }
     public RpGeometry createRpGeometry(RealVector[] input) {
 
-        CoincidenceCurveGeomFactory factory = new CoincidenceCurveGeomFactory(new CoincidenceCurveCalc());
+        CoincidenceCurveGeomFactory factory = new   CoincidenceCurveGeomFactory(new CoincidenceCurveCalc());
         return factory.geom();
 
     }

@@ -52,7 +52,8 @@
 #define HUGONIOTSEGMENTCLASS_LOCATION         "rpnumerics/HugoniotSegment"
 #define HUGONIOTCURVE_LOCATION                "rpnumerics/HugoniotCurve"
 #define COINCIDENCECURVE_LOCATION             "rpnumerics/CoincidenceCurve"
-#define SUBINFLECTIONCURVE_LOCATION             "rpnumerics/SubInflectionCurve"
+#define SUBINFLECTIONCURVE_LOCATION           "rpnumerics/SubInflectionCurve"
+#define BLCURVE_LOCATION                      "rpnumerics/BuckleyLeverettInflectionCurve"
 
 
 #define NUMERICSPROFILE_LOCATION              "rpnumerics/RPNumericsProfile"

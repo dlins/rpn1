@@ -15,7 +15,7 @@ import java.util.Iterator;
 import javax.swing.AbstractButton;
 import rpn.RPnCurvesListFrame;
 import rpn.RPnPhaseSpaceAbstraction;
-import rpn.component.CoincidenceCurveGeom;
+import rpn.component.BuckleyLeverettinInflectionGeom;
 import rpn.component.SubInflectionCurveGeom;
 import rpn.controller.ui.*;
 

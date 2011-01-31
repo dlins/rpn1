@@ -40,6 +40,7 @@ RectBoundary & RectBoundary::operator=(const RectBoundary & source) {
     type_ = "rect";
     minimums_ = new RealVector(source.minimums());
     maximums_ = new RealVector(source.maximums());
+    test_dimension = source.test_dimension;
 
     return *this;
 
@@ -50,12 +51,37 @@ RectBoundary::RectBoundary(const RealVector & minimums, const RealVector & maxim
 : minimums_(new RealVector(minimums)),
 maximums_(new RealVector(maximums)),
 size_(minimums.size()), type_("rect") {
-
+    epsilon = 0.0;
     test_dimension.push_back(true);
     test_dimension.push_back(true);
     test_dimension.push_back(false); // u will not be tested for belonging to the HyperBox.
 
 }
+
+RectBoundary::RectBoundary(const RealVector & minimums, const RealVector & maximums, const std::vector<bool> & test, const double eps) {
+    minimums_->resize(minimums.size());
+    maximums_->resize(maximums.size());
+
+
+    for (int i = 0; i < minimums.size(); i++) {
+        if (minimums.component(i) < maximums.component(i)) {
+            minimums_->component(i) = minimums.component(i);
+            maximums_->component(i) = maximums.component(i);
+        } else {
+            minimums_->component(i) = maximums.component(i);
+            maximums_->component(i) = minimums.component(i);
+        }
+    }
+
+    test_dimension.resize(minimums.size());
+    for (int i = 0; i < minimums.size(); i++) test_dimension[i] = true;
+   
+    for (int i = 0; i < min((int)test.size(), minimums.size()); i++) test_dimension[i] = test[i]; //TODO ???
+
+    //    for (int i = 0; i < test.size(); i++) test_dimension[i] = test[i];
+    epsilon = eps;
+}
+
 
 //bool RectBoundary::inside(const double *p)const {
 ////    cout <<"Inicio do inside double"<<endl;
