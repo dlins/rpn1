@@ -51,7 +51,6 @@ public class SubInflectionCurve extends RPnCurve implements RpSolution {
         return hugoniotSegments_;
     }
 
-    
     public String toMatlabPlot(int x, int y) {
 
         StringBuffer buffer = new StringBuffer();
@@ -67,14 +66,14 @@ public class SubInflectionCurve extends RPnCurve implements RpSolution {
 
             buffer.append("plot([data");
             buffer.append(i);
-            buffer.append("(" + (x + 1)+ ") ");
+            buffer.append("(" + (x + 1) + ") ");
             buffer.append("data");
             buffer.append(i);
             buffer.append("(" + (x + 4) + ")],");
 
             buffer.append("[data");
             buffer.append(i);
-            buffer.append("(" + (y + 1)+ ") ");
+            buffer.append("(" + (y + 1) + ") ");
             buffer.append("data");
             buffer.append(i);
             buffer.append("(" + (y + 4) + ")]");
@@ -103,9 +102,11 @@ public class SubInflectionCurve extends RPnCurve implements RpSolution {
         return buffer.toString();
     }
 
-    public String toMatlabData() {
+    public String toMatlabData(int identifier) {
 
         StringBuffer buffer = new StringBuffer();
+
+        buffer.append("data" + identifier + "= [\n");// + rSegment.toString() + "];\n\n");
         for (int i = 0; i < hugoniotSegments_.size(); i++) {
 
 
@@ -114,10 +115,20 @@ public class SubInflectionCurve extends RPnCurve implements RpSolution {
             RealSegment rSegment = new RealSegment(hSegment.leftPoint(),
                     hSegment.rightPoint());
 
-            buffer.append("% type of segment: " + hSegment.getType() + "\n");
+            buffer.append(rSegment.toString() + ";\n");
 
-            buffer.append("data" + i + "= [" + rSegment.toString() + "];\n\n");
         }
+
+        buffer.append("];\n");
+
+        buffer.append("type" + identifier + "=[\n");
+
+        for (int i = 0; i < hugoniotSegments_.size(); i++) {
+            HugoniotSegment hSegment = ((HugoniotSegment) hugoniotSegments_.get(
+                    i));
+            buffer.append(hSegment.getType() + ";\n");
+        }
+        buffer.append("];\n");
         return buffer.toString();
     }
 
@@ -144,5 +155,4 @@ public class SubInflectionCurve extends RPnCurve implements RpSolution {
         return buffer.toString();
 
     }
-
 }

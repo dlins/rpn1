@@ -202,14 +202,14 @@ void RarefactionContinuationMethod::curve(const RealVector & inputVector, int di
     }
     //    cout <<"after init"<<endl;
     if (info == SUCCESSFUL_PROCEDURE) {
-//        output.push_back(inputVector);
-        RealVector firstPoint(dimension+1);
+        //        output.push_back(inputVector);
+        RealVector firstPoint(dimension + 1);
 
         for (int i = 0; i < inputVector.size(); i++) {
-                    firstPoint.component(i) = inputVector.component(i);
-                }
+            firstPoint.component(i) = inputVector.component(i);
+        }
 
-        firstPoint.component(dimension)=lambda;
+        firstPoint.component(dimension) = lambda;
         output.push_back(firstPoint);
 
     } else {

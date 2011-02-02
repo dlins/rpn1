@@ -169,7 +169,6 @@ public class Orbit extends RPnCurve implements RpSolution {
             buffer.append(orbitPoint.toString());
             buffer.append(";\n");
 
-
         }
 
         buffer.append("];");

@@ -36,7 +36,7 @@ public class RarefactionGeom extends MultiPolyLine implements RpGeometry {
         }
 
 
-        return new ViewingAttr(Color.yellow);
+        return new ViewingAttr(Color.white);
 
     }
 }

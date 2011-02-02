@@ -56,10 +56,11 @@ public class BuckleyLeverettinCurveGeomFactory extends RpCalcBasedGeomFactory {
             {0, 255, 255},
             {255, 255, 255},
             {255, 255, 0},
-            {0, 204, 0}
+            {0, 204, 0},
+            {135, 27, 224}
         };
 
-        for (int i = 0; i < 18; i++) {
+        for (int i = 0; i < 19; i++) {
 
             for (int j = 0; j < 3; j++) {
                 buffer.append("  " + toc[i][j] / 255.0 + " ");
@@ -74,7 +75,7 @@ public class BuckleyLeverettinCurveGeomFactory extends RpCalcBasedGeomFactory {
     public String toMatlab() {
 
         StringBuffer buffer = new StringBuffer();
-        CoincidenceCurve curve = (CoincidenceCurve) geomSource();
+        BuckleyLeverettInflectionCurve curve = (BuckleyLeverettInflectionCurve) geomSource();
         buffer.append("%%\nclose all;clear all;\n");
         buffer.append(createColorTable());
         buffer.append(curve.toMatlabData());

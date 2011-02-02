@@ -82,7 +82,7 @@ public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
         return buffer.toString();
     }
 
-    private String createAxisLabel2D(int x,int y){
+    private String createAxisLabel2D(int x, int y) {
 
         String axisName[] = new String[3];
 
@@ -91,10 +91,10 @@ public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
         axisName[1] = "u";
 
 
-        StringBuffer buffer=new StringBuffer();
+        StringBuffer buffer = new StringBuffer();
         buffer.append("xlabel('");
-        buffer.append(axisName[x]+"')\n");
-        buffer.append("ylabel('"+axisName[y]+"')\n");
+        buffer.append(axisName[x] + "')\n");
+        buffer.append("ylabel('" + axisName[y] + "')\n");
 
         return buffer.toString();
 
@@ -102,9 +102,39 @@ public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
 
     }
 
+    private String createMatlabFor(int x, int y, int identifier) {
+        int dimension = RPNUMERICS.domainDim();
+        StringBuffer buffer = new StringBuffer();
 
+        buffer.append("for i=1: length(data" + identifier + ")\n");
+        buffer.append("plot([ data" + identifier);
 
-      private String createAxisLabel3D(int x,int y,int z){
+        buffer.append("(i" + "," + x + ") ");
+        buffer.append("data" + identifier + "(i," + (x + dimension) + ")],");
+
+        buffer.append("[ data" + identifier);
+
+        buffer.append("(i" + "," + y + ") ");
+        buffer.append("data" + identifier + "(i," + (y + dimension) + ")],");
+        buffer.append("'Color',");
+        buffer.append("[toc(type" + identifier + "(i), 1) toc(type" + identifier + "(i), 2) toc(type" + identifier + "(i), 3)])\n");
+
+        buffer.append("hold on\n");
+
+        buffer.append("end\n");
+
+        return buffer.toString();
+
+//        figure(1) % Assume figure(1) corresponds to the x-y projection
+//xlabel('x')
+//ylabel('y')
+//for i = 1: length(data0)
+//    plot([data0(i, 1) data0(i, 4)], [data0(i, 2) data0(i, 5)])
+//    hold on
+//end
+    }
+
+    private String createAxisLabel3D(int x, int y, int z) {
 
         String axisName[] = new String[3];
 
@@ -113,12 +143,12 @@ public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
         axisName[2] = "u";
 
 
-        StringBuffer buffer=new StringBuffer();
+        StringBuffer buffer = new StringBuffer();
         buffer.append("xlabel('");
-        buffer.append(axisName[x]+"')\n");
-        buffer.append("ylabel('"+axisName[y]+"')\n");
+        buffer.append(axisName[x] + "')\n");
+        buffer.append("ylabel('" + axisName[y] + "')\n");
 
-          buffer.append("zlabel('" + axisName[z] + "')\n");
+        buffer.append("zlabel('" + axisName[z] + "')\n");
 
         return buffer.toString();
 
@@ -127,43 +157,60 @@ public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
     }
 
     public String toMatlab() {
+        RealVector xMin = RPNUMERICS.boundary().getMinimums();
+        RealVector xMax = RPNUMERICS.boundary().getMaximums();
 
 
         StringBuffer buffer = new StringBuffer();
         HugoniotCurve curve = (HugoniotCurve) geomSource();
         buffer.append("%%\nclose all;clear all;\n");
         buffer.append(createColorTable());
-        buffer.append(curve.toMatlabData());
+        buffer.append(curve.toMatlabData(0));
 
-        buffer.append("%%\n% begin plot x y\n");
         buffer.append("figure; set(gca, 'Color',[0 0 0]); hold on\n");
-//         buffer.append("set(figure,'Name','x y')");
-//        buffer.append("xlabel('s')\n");
-//        buffer.append("ylabel('T')");
+        buffer.append("axis([" + xMin.getElement(1) + " " + xMax.getElement(1) + " " + xMin.getElement(0) + " " + xMax.getElement(0) + "]);\n");
+        buffer.append(createMatlabFor(2, 1, 0));
+        buffer.append(createAxisLabel2D(1, 0));
 
-        buffer.append(createAxisLabel2D(1,0));
-        buffer.append(curve.toMatlabPlot(1, 0));
-
-        buffer.append("\n%%\n% begin plot x z\n");
+        
+        
+        
+        
+        
         buffer.append("figure; set(gca, 'Color',[0 0 0]); hold on\n");
-//         buffer.append("set(figure,'Name','x y')");
-        buffer.append(createAxisLabel2D(0, 2));
-        buffer.append(curve.toMatlabPlot(0, 2));
+        buffer.append("axis([" + xMin.getElement(2) + " " + xMax.getElement(2) + " " + xMin.getElement(0) + " " + xMax.getElement(0) + "]);\n");
+        buffer.append(createMatlabFor(3, 1, 0));
+        buffer.append(createAxisLabel2D(2, 0));
 
-        buffer.append("\n%%\n% begin plot y z\n");
-        buffer.append("figure; set(gca, 'Color',[0 0 0]); hold on\n");
-//         buffer.append("set(figure,'Name','x y')");
-        buffer.append(createAxisLabel2D(1, 2));
-        buffer.append(curve.toMatlabPlot(1, 2));
+//        buffer.append("%%\n% begin plot x y\n");
+//        buffer.append("figure; set(gca, 'Color',[0 0 0]); hold on\n");
+////         buffer.append("set(figure,'Name','x y')");
+////        buffer.append("xlabel('s')\n");
+////        buffer.append("ylabel('T')");
+//
+//        buffer.append(createAxisLabel2D(1, 0));
+//        buffer.append(curve.toMatlabPlot(1, 0));
+//
+//        buffer.append("\n%%\n% begin plot x z\n");
+//        buffer.append("figure; set(gca, 'Color',[0 0 0]); hold on\n");
+////         buffer.append("set(figure,'Name','x y')");
+//        buffer.append(createAxisLabel2D(0, 2));
+//        buffer.append(curve.toMatlabPlot(0, 2));
+//
+//        buffer.append("\n%%\n% begin plot y z\n");
+//        buffer.append("figure; set(gca, 'Color',[0 0 0]); hold on\n");
+////         buffer.append("set(figure,'Name','x y')");
+//        buffer.append(createAxisLabel2D(1, 2));
+//        buffer.append(curve.toMatlabPlot(1, 2));
 
-        // Modified from here...
-        buffer.append("\n%%\n% begin plot3d\n");
-        buffer.append("figure; ");
-        //set(gca, 'Color',[0 0 0]); hold on\n");
+//        // Modified from here...
+//        buffer.append("\n%%\n% begin plot3d\n");
+//        buffer.append("figure; ");
+//        //set(gca, 'Color',[0 0 0]); hold on\n");
+//
+//        buffer.append(curve.toMatlabData(0));
+//        buffer.append(createAxisLabel3D(0, 1, 2));
 
-        buffer.append(curve.toMatlabData());
-        buffer.append(createAxisLabel3D(0, 1, 2));
-      
         // ...to here.
 
         return buffer.toString();

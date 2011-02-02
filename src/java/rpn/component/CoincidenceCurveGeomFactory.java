@@ -80,7 +80,7 @@ public class CoincidenceCurveGeomFactory extends RpCalcBasedGeomFactory{
     public String toMatlab() {
 
         StringBuffer buffer = new StringBuffer();
-        SubInflectionCurve curve = (SubInflectionCurve) geomSource();
+        CoincidenceCurve curve = (CoincidenceCurve) geomSource();
         buffer.append("%%\nclose all;clear all;\n");
         buffer.append(createColorTable());
         buffer.append(curve.toMatlabData());

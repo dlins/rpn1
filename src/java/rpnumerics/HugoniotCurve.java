@@ -464,71 +464,107 @@ public class HugoniotCurve extends RPnCurve implements RpSolution {
         return buffer.toString();
     }
 
-    public String toMatlabData() {
+    public String toMatlabData(int identifier) {
 
         StringBuffer buffer = new StringBuffer();
 
+        buffer.append("data" + identifier + "= [\n");// + rSegment.toString() + "];\n\n");
         for (int i = 0; i < hugoniotSegments_.size(); i++) {
 
 
             HugoniotSegment hSegment = ((HugoniotSegment) hugoniotSegments_.get(
                     i));
-
-
-            double leftSigma = hSegment.leftSigma();
-            double rightSigma = hSegment.rightSigma();
-
             RealSegment rSegment = new RealSegment(hSegment.leftPoint(),
                     hSegment.rightPoint());
 
-            buffer.append("data" + i + "= [" + rSegment.toString() + "   " + leftSigma + " " + rightSigma + "];\n\n");
+            double leftSigma = hSegment.leftSigma();
+            double rightSigma = hSegment.rightSigma();
+            buffer.append(rSegment.toString() + "   " + leftSigma + " " + rightSigma + " " + hSegment.getLeftLambdaArray()[0] + " " + hSegment.getLeftLambdaArray()[1] + " " + hSegment.getRightLambdaArray()[0] + " " + hSegment.getRightLambdaArray()[1] +"\n");
 
-            int type = hSegment.getType() + 1;
-            buffer.append("% type of segment: " + type + "\n");
 
-            buffer.append("plot3([data");
-            buffer.append(i);
-            buffer.append("(" + (1) + ") ");
-            buffer.append("data");
-            buffer.append(i);
-            buffer.append("(" + (4) + ")], ");
-
-            buffer.append("[data");
-            buffer.append(i);
-            buffer.append("(" + (2) + ") ");
-            buffer.append("data");
-            buffer.append(i);
-            buffer.append("(" + (5) + ")], ");
-
-            buffer.append("[data");
-            buffer.append(i);
-            buffer.append("(" + (3) + ") ");
-            buffer.append("data");
-            buffer.append(i);
-            buffer.append("(" + (6) + ")]");
-
-            buffer.append(", \'Color\', [toc(");
-            buffer.append(type);
-            buffer.append(", 1) toc(");
-            buffer.append(type);
-            buffer.append(", 2) toc(");
-            buffer.append(type);
-            buffer.append(", 3)])\n");
-            if (i == 0) {
-                RealVector xMin = RPNUMERICS.boundary().getMinimums();
-                RealVector xMax = RPNUMERICS.boundary().getMaximums();
-
-                buffer.append("axis([" + xMin.getElement(0) + " " + xMax.getElement(0) + " " + xMin.getElement(1) + " " + xMax.getElement(1) + " "+xMin.getElement(2)+ " " + xMax.getElement(2)+ " "+"]);\n");
-
-            }
-            if (i < hugoniotSegments_.size() - 1) {
-                buffer.append("hold on\n\n");
-            }
         }
 
+        buffer.append("];\n");
 
+        buffer.append("type" + identifier + "=[\n");
+
+        for (int i = 0; i < hugoniotSegments_.size(); i++) {
+            HugoniotSegment hSegment = ((HugoniotSegment) hugoniotSegments_.get(
+                    i));
+            buffer.append((hSegment.getType() +1) + ";\n");
+        }
+        buffer.append("];\n");
         return buffer.toString();
     }
+
+//    public String toMatlabData() {
+//
+//        StringBuffer buffer = new StringBuffer();
+//
+//        for (int i = 0; i < hugoniotSegments_.size(); i++) {
+//
+//
+//            HugoniotSegment hSegment = ((HugoniotSegment) hugoniotSegments_.get(
+//                    i));
+//
+//
+//            double leftSigma = hSegment.leftSigma();
+//            double rightSigma = hSegment.rightSigma();
+//
+//            RealSegment rSegment = new RealSegment(hSegment.leftPoint(),
+//                    hSegment.rightPoint());
+//
+//
+//
+//
+//            buffer.append("data" + i + "= [" + rSegment.toString() + "   " + leftSigma + " " + rightSigma + " " + hSegment.getLeftLambdaArray()[0] + " " + hSegment.getLeftLambdaArray()[1] + " " + hSegment.getRightLambdaArray()[0] + " " + hSegment.getRightLambdaArray()[1] + "];\n\n");
+//
+//            int type = hSegment.getType() + 1;
+//            buffer.append("% type of segment: " + type + "\n");
+//
+//            buffer.append("plot3([data");
+//            buffer.append(i);
+//            buffer.append("(" + (1) + ") ");
+//            buffer.append("data");
+//            buffer.append(i);
+//            buffer.append("(" + (4) + ")], ");
+//
+//            buffer.append("[data");
+//            buffer.append(i);
+//            buffer.append("(" + (2) + ") ");
+//            buffer.append("data");
+//            buffer.append(i);
+//            buffer.append("(" + (5) + ")], ");
+//
+//            buffer.append("[data");
+//            buffer.append(i);
+//            buffer.append("(" + (3) + ") ");
+//            buffer.append("data");
+//            buffer.append(i);
+//            buffer.append("(" + (6) + ")]");
+//
+//            buffer.append(", \'Color\', [toc(");
+//            buffer.append(type);
+//            buffer.append(", 1) toc(");
+//            buffer.append(type);
+//            buffer.append(", 2) toc(");
+//            buffer.append(type);
+//            buffer.append(", 3)])\n");
+//            if (i == 0) {
+//                RealVector xMin = RPNUMERICS.boundary().getMinimums();
+//                RealVector xMax = RPNUMERICS.boundary().getMaximums();
+//
+//                buffer.append("axis([" + xMin.getElement(0) + " " + xMax.getElement(0) + " " + xMin.getElement(1) + " " + xMax.getElement(1) + " " + xMin.getElement(2) + " " + xMax.getElement(2) + " " + "]);\n");
+//
+//            }
+//            if (i < hugoniotSegments_.size() - 1) {
+//                buffer.append("hold on\n\n");
+//            }
+//        }
+//
+//
+//        return buffer.toString();
+//    }
 
 //    public String toMatlabData() {
 //

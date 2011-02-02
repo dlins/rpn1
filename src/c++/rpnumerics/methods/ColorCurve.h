@@ -19,14 +19,37 @@
 
 struct HugoniotPolyLine {
 public:
-    std::vector<RealVector> vec;
+    std::vector<RealVector> vec; // Consolidated
+
+    std::vector<RealVector> point;  // Each element has size = dimension.
+    std::vector<double>     speed;      // Speed at each point.
+    std::vector<RealVector> eigenvalue; // Each element has size = number of valid eigenvalues (noe).
     int type;
+    
+    int noe; // assert(eigenvalue.size() == noe);
 
     HugoniotPolyLine() {
         vec.clear();
         type = 0;
     };
 
+    void dismember(int noe,int dim){
+        for (int i = 0; i < vec.size(); i++){
+            point[i].resize(dim); // Dim must come from somewhere
+            for (int j = 0; j < dim; j++) point[i].component(j) = vec[i].component(j);
+
+            speed[i] = vec[i].component(dim + noe);
+
+            eigenvalue.resize(noe);
+            for (int j = 0; j < noe; j++) eigenvalue[i].component(j) = vec[i].component(j + dim + noe + 1);
+        }
+        return;
+
+    }
+    
+    
+    
+    
     ~HugoniotPolyLine() {
         vec.clear();
     };
