@@ -6,8 +6,6 @@
  */
 package rpn;
 
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
 public class RPnCurvesTableModel extends DefaultTableModel  {
@@ -15,6 +13,7 @@ public class RPnCurvesTableModel extends DefaultTableModel  {
     public RPnCurvesTableModel() {
         columnIdentifiers.add(new String("Index"));
         columnIdentifiers.add(new String("Geometry"));
+        columnIdentifiers.add(new String("User Input"));
         columnIdentifiers.add(new String("Visible"));
 
 
@@ -27,13 +26,13 @@ public class RPnCurvesTableModel extends DefaultTableModel  {
 
     @Override
     public int getColumnCount() {
-        return 3;
+        return 4;
     }
 
    
     @Override
     public boolean isCellEditable(int row, int col) {
-        if (col == 2) {
+        if (col == 3) {
             return true;
         }
         return false;

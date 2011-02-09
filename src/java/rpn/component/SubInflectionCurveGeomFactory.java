@@ -6,8 +6,6 @@
 package rpn.component;
 
 import rpnumerics.*;
-import rpn.controller.HugoniotController;
-import rpn.controller.RpController;
 
 public class SubInflectionCurveGeomFactory extends RpCalcBasedGeomFactory {
 
@@ -25,7 +23,6 @@ public class SubInflectionCurveGeomFactory extends RpCalcBasedGeomFactory {
 
         // assuming a container with HugoniotSegment elements
         int resultSize = curve.segments().size();
-
         HugoniotSegGeom[] hugoniotArray = new HugoniotSegGeom[resultSize];
         for (int i = 0; i < resultSize; i++) {
             hugoniotArray[i] = new HugoniotSegGeom((HugoniotSegment) curve.segments().get(i));
@@ -33,47 +30,6 @@ public class SubInflectionCurveGeomFactory extends RpCalcBasedGeomFactory {
         return new SubInflectionCurveGeom(hugoniotArray, this);
 
     }
-
-    private String createColorTable() {
-
-        StringBuffer buffer = new StringBuffer();
-
-        buffer.append("toc=[");
-
-
-        double toc[][] = {{255, 255, 255},
-            {255, 255, 255},
-            {255, 0, 0},
-            {247, 151, 55},
-            {255, 255, 255},
-            {255, 255, 255},
-            {255, 255, 255},
-            {255, 255, 255},
-            {255, 0, 255},
-            {255, 255, 255},
-            {18, 153, 1},
-            {0, 0, 255},
-            {255, 255, 255},
-            {255, 255, 255},
-            {0, 255, 255},
-            {255, 255, 255},
-            {255, 255, 0},
-             {0, 204, 0}
-        };
-
-        for (int i = 0; i < 18; i++) {
-
-            for (int j = 0; j < 3; j++) {
-                buffer.append("  " + toc[i][j] / 255.0 + " ");
-            }
-            buffer.append(";\n");
-        }
-        buffer.append("];\n\n");
-
-        return buffer.toString();
-    }
-
-
 
 //    private String createMatlabFor(int x, int y,int identifier){
 //        int dimension = RPNUMERICS.domainDim();
@@ -101,30 +57,48 @@ public class SubInflectionCurveGeomFactory extends RpCalcBasedGeomFactory {
 ////    hold on
 ////end
 //    }
-    public String toMatlab() {
-
-        StringBuffer buffer = new StringBuffer();
-        SubInflectionCurve curve = (SubInflectionCurve) geomSource();
-        buffer.append("%%\nclose all;clear all;\n");
-        buffer.append(createColorTable());
-        buffer.append(curve.toMatlabData(0));
-
-//        buffer.append("%%\n% begin plot x y\n");
-//        buffer.append("figure; set(gca, 'Color',[0 0 0]); hold on\n");
-//        buffer.append(curve.toMatlabPlot(0, 1));
+//    public String toMatlab(int curveIndex) {
 //
 //
-//        buffer.append("\n%%\n% begin plot x z\n");
-//        buffer.append("figure; set(gca, 'Color',[0 0 0]); hold on\n");
-//        buffer.append(curve.toMatlabPlot(0, 2));
+//        RealVector xMin = RPNUMERICS.boundary().getMinimums();
+//        RealVector xMax = RPNUMERICS.boundary().getMaximums();
 //
-//        buffer.append("\n%%\n% begin plot y z\n");
-//        buffer.append("figure; set(gca, 'Color',[0 0 0]); hold on\n");
-//        buffer.append(curve.toMatlabPlot(1, 2));
-
-        return buffer.toString();
-
-    }
+////
+////        StringBuffer buffer = new StringBuffer();
+////       SubInflectionCurve curve = (SubInflectionCurve) geomSource();
+////        buffer.append("%%\nclose all;clear all;\n");
+////        buffer.append(RpCalcBasedGeomFactory.createMatlabColorTable());
+////        buffer.append(curve.toMatlabData(0));
+////
+////        buffer.append("figure; set(gca, 'Color',[0 0 0]); hold on\n");
+////        buffer.append("axis([" + xMin.getElement(1) + " " + xMax.getElement(1) + " " + xMin.getElement(0) + " " + xMax.getElement(0) + "]);\n");
+////        buffer.append(curve.createMatlabPlotLoop(2, 1, 0));
+//////        buffer.append(createAxisLabel2D(1, 0));
+////
+////
+////
+////        buffer.append("figure; set(gca, 'Color',[0 0 0]); hold on\n");
+////        buffer.append("axis([" + xMin.getElement(2) + " " + xMax.getElement(2) + " " + xMin.getElement(0) + " " + xMax.getElement(0) + "]);\n");
+////        buffer.append(curve.createMatlabPlotLoop(3, 1, 0));
+//////        buffer.append(createAxisLabel2D(2, 0));
+//
+//
+//        StringBuffer buffer = new StringBuffer();
+//        System.out.println("Chamando geom factory de sub inflection");
+//        buffer.append("%%\nclose all;clear all;\n");
+//
+//        SubInflectionCurve curve = (SubInflectionCurve) geomSource();
+//
+//        buffer.append(RpCalcBasedGeomFactory.createMatlabColorTable());
+//        buffer.append(curve.toMatlabData(0));
+//
+//
+//        buffer.append(curve.createMatlabPlotLoop(0,1,0));
+//
+//
+//        return buffer.toString();
+//
+//    }
 
 
 //
@@ -141,5 +115,9 @@ public class SubInflectionCurveGeomFactory extends RpCalcBasedGeomFactory {
 
         return buffer.toString();
 
+    }
+
+    public String toMatlab(int curveIndex) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

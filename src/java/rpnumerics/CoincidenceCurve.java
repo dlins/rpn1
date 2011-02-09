@@ -13,16 +13,16 @@ import java.util.ArrayList;
 import wave.multid.view.ViewingAttr;
 import java.awt.Color;
 
-public class CoincidenceCurve extends RPnCurve implements RpSolution {
+public class CoincidenceCurve extends SegmentedCurve{// RPnCurve implements RpSolution {
     //
     // Members
     //
 
-    private List hugoniotSegments_;
+//    private List hugoniotSegments_;
 
     public CoincidenceCurve(List<HugoniotSegment> hSegments) {
-        super(coordsArrayFromRealSegments(hSegments), new ViewingAttr(Color.RED));
-        hugoniotSegments_ = hSegments;
+        super(hSegments);//, new ViewingAttr(Color.RED));
+//        hugoniotSegments_ = hSegments;
 
     }
 
@@ -47,101 +47,101 @@ public class CoincidenceCurve extends RPnCurve implements RpSolution {
 
     //
     // Accessors/Mutators
-    //
-    public List segments() {
-        return hugoniotSegments_;
-    }
+//    //
+//    public List segments() {
+//        return hugoniotSegments_;
+//    }
 
-    public String toMatlabPlot(int x, int y) {
-        StringBuffer buffer = new StringBuffer();
-
-        for (int i = 0; i < hugoniotSegments_.size(); i++) {
-
-            HugoniotSegment hSegment = ((HugoniotSegment) hugoniotSegments_.get(
-                    i));
-
-            int type = hSegment.getType() + 1;
-            buffer.append("% type of segment: " + type + "\n");
-
-            buffer.append("plot([data");
-            buffer.append(i);
-            buffer.append("(" + (x + 1) + ") ");
-            buffer.append("data");
-            buffer.append(i);
-            buffer.append("(" + (x + 4) + ")],");
-
-            buffer.append("[data");
-            buffer.append(i);
-            buffer.append("(" + (y + 1) + ") ");
-            buffer.append("data");
-            buffer.append(i);
-            buffer.append("(" + (y + 4) + ")]");
-
-//            buffer.append("plot (data");
-//            buffer.append( i );
-//            buffer.append("(:,");
-//            buffer.append(x+1 );
-//            buffer.append("), data");
-//            buffer.append( i);
-//            buffer.append("(:, ");
-//            buffer.append( y+1 );
-            buffer.append(", \'Color\', [toc(");
-            buffer.append(type);
-            buffer.append(", 1) toc(");
-            buffer.append(type);
-            buffer.append(", 2) toc(");
-            buffer.append(type);
-            buffer.append(", 3)])\n");
-            if (i < hugoniotSegments_.size() - 1) {
-                buffer.append("hold on\n\n");
-            }
-        }
-        return buffer.toString();
-    }
-
-    public String toMatlabData() {
-
-        StringBuffer buffer = new StringBuffer();
-        for (int i = 0; i < hugoniotSegments_.size(); i++) {
-
-
-            HugoniotSegment hSegment = ((HugoniotSegment) hugoniotSegments_.get(
-                    i));
-
-
-            RealVector leftPoint = hSegment.leftPoint();
-            RealVector rightPoint = hSegment.rightPoint();
-//            RealSegment rSegment = new RealSegment(hSegment.leftPoint(),
-//                    hSegment.rightPoint());
-
-            buffer.append("% type of segment: " + hSegment.getType() + "\n");
-
-            buffer.append("data" + i + "= [" + leftPoint + " " + rightPoint + "];\n\n");
-        }
-        return buffer.toString();
-    }
-
-    public String toXML(boolean calcReady) {
-        StringBuffer buffer = new StringBuffer();
-        if (calcReady) {
-
-            buffer.append("<HUGONIOTCURVE>\n");
-
-            for (int i = 0; i < hugoniotSegments_.size(); i++) {
-
-                HugoniotSegment hSegment = ((HugoniotSegment) hugoniotSegments_.get(
-                        i));
-                RealSegment rSegment = new RealSegment(hSegment.leftPoint(),
-                        hSegment.rightPoint());
-                buffer.append(rSegment.toXML());
-
-            }
-            buffer.append("</HUGONIOTCURVE>\n");
-
-
-        }
-
-        return buffer.toString();
-
-    }
+//    public String toMatlabPlot(int x, int y) {
+//        StringBuffer buffer = new StringBuffer();
+//
+//        for (int i = 0; i < hugoniotSegments_.size(); i++) {
+//
+//            HugoniotSegment hSegment = ((HugoniotSegment) hugoniotSegments_.get(
+//                    i));
+//
+//            int type = hSegment.getType() + 1;
+//            buffer.append("% type of segment: " + type + "\n");
+//
+//            buffer.append("plot([data");
+//            buffer.append(i);
+//            buffer.append("(" + (x + 1) + ") ");
+//            buffer.append("data");
+//            buffer.append(i);
+//            buffer.append("(" + (x + 4) + ")],");
+//
+//            buffer.append("[data");
+//            buffer.append(i);
+//            buffer.append("(" + (y + 1) + ") ");
+//            buffer.append("data");
+//            buffer.append(i);
+//            buffer.append("(" + (y + 4) + ")]");
+//
+////            buffer.append("plot (data");
+////            buffer.append( i );
+////            buffer.append("(:,");
+////            buffer.append(x+1 );
+////            buffer.append("), data");
+////            buffer.append( i);
+////            buffer.append("(:, ");
+////            buffer.append( y+1 );
+//            buffer.append(", \'Color\', [toc(");
+//            buffer.append(type);
+//            buffer.append(", 1) toc(");
+//            buffer.append(type);
+//            buffer.append(", 2) toc(");
+//            buffer.append(type);
+//            buffer.append(", 3)])\n");
+//            if (i < hugoniotSegments_.size() - 1) {
+//                buffer.append("hold on\n\n");
+//            }
+//        }
+//        return buffer.toString();
+//    }
+//
+//    public String toMatlabData() {
+//
+//        StringBuffer buffer = new StringBuffer();
+//        for (int i = 0; i < hugoniotSegments_.size(); i++) {
+//
+//
+//            HugoniotSegment hSegment = ((HugoniotSegment) hugoniotSegments_.get(
+//                    i));
+//
+//
+//            RealVector leftPoint = hSegment.leftPoint();
+//            RealVector rightPoint = hSegment.rightPoint();
+////            RealSegment rSegment = new RealSegment(hSegment.leftPoint(),
+////                    hSegment.rightPoint());
+//
+//            buffer.append("% type of segment: " + hSegment.getType() + "\n");
+//
+//            buffer.append("data" + i + "= [" + leftPoint + " " + rightPoint + "];\n\n");
+//        }
+//        return buffer.toString();
+//    }
+//
+//    public String toXML(boolean calcReady) {
+//        StringBuffer buffer = new StringBuffer();
+//        if (calcReady) {
+//
+//            buffer.append("<HUGONIOTCURVE>\n");
+//
+//            for (int i = 0; i < hugoniotSegments_.size(); i++) {
+//
+//                HugoniotSegment hSegment = ((HugoniotSegment) hugoniotSegments_.get(
+//                        i));
+//                RealSegment rSegment = new RealSegment(hSegment.leftPoint(),
+//                        hSegment.rightPoint());
+//                buffer.append(rSegment.toXML());
+//
+//            }
+//            buffer.append("</HUGONIOTCURVE>\n");
+//
+//
+//        }
+//
+//        return buffer.toString();
+//
+//    }
 }

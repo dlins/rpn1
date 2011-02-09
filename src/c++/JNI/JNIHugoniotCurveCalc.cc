@@ -262,7 +262,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
             double rightLambda2 = hugoniotPolyLineVector[i].vec[j+1].component(dimension + m + 2);
 
 
-            cout <<leftLambda1<<" "<<leftLambda2<<" "<<rightLambda1<<" "<<rightLambda2<<endl;
+//            cout <<leftLambda1<<" "<<leftLambda2<<" "<<rightLambda1<<" "<<rightLambda2<<endl;
 
             //
 

@@ -81,6 +81,8 @@ public:
     void classifiedCurve(const RealVector &, vector<HugoniotPolyLine> &);
     void unclassifiedCurve(const RealVector &, vector<HugoniotPolyLine> &);
 
+    void completedCurve(const RealVector &, vector<HugoniotPolyLine> &);
+
 
 };
 

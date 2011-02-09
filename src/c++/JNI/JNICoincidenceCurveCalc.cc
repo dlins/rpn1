@@ -89,12 +89,18 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceCurveCalc_nativeCalc (JNIEn
     vector<HugoniotPolyLine> hugoniotPolyLineVector;
     method.unclassifiedCurve(Uref, hugoniotPolyLineVector);
 
+     RealVector min(RpNumerics::getPhysics().boundary().minimums());
+    RealVector max(RpNumerics::getPhysics().boundary().maximums());
+
     for (int i = 0; i < hugoniotPolyLineVector.size(); i++) {
 
         for (unsigned int j = 0; j < hugoniotPolyLineVector[i].vec.size() - 1; j++) {
 
             int m = (hugoniotPolyLineVector[i].vec[0].size() - dimension - 1) / 2; // Number of valid eigenvalues
 
+
+                hugoniotPolyLineVector[i].vec[j].component(2) = max.component(2);
+            hugoniotPolyLineVector[i].vec[j+1].component(2) = max.component(2);
             //
             //            cout << "type of " << j << " = " << hugoniotPolyLineVector[i].type << endl;
             //            cout << "coord 1 " << j << " = " << hugoniotPolyLineVector[i].vec[j] << endl;

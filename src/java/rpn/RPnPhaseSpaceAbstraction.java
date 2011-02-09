@@ -5,7 +5,6 @@
  */
 package rpn;
 
-import java.awt.Color;
 import rpn.controller.phasespace.*;
 import wave.multid.model.AbstractScene;
 import wave.multid.Space;
@@ -16,7 +15,7 @@ import java.util.List;
 import java.util.Iterator;
 import rpn.controller.ui.UIController;
 import wave.multid.model.MultiGeometry;
-import wave.multid.view.ViewingAttr;
+import wave.multid.model.MultiPolyLine;
 import wave.util.RealVector;
 
 public class RPnPhaseSpaceAbstraction extends AbstractScene {
@@ -30,12 +29,10 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
     private PhaseSpaceState state_;
     private RpGeometry selectedGeom_;
     private ArrayList<ArrayList> groupArrayList_;
-    private final int ALFA_DOWN = 50;
-    private final int ALFA_UP = 255;
+
     //
     // Constructors
     //
-
     public RPnPhaseSpaceAbstraction(String id, Space domain, PhaseSpaceState state) {
         super(id, domain);
         changeState(state);
@@ -64,19 +61,6 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
     public void plot(RpGeometry geom) {
 
         state_.plot(this, geom);
-
-
-
-        //TODO Teste
-//            RpGeomFactory factory = geom.geomFactory();
-//
-//            HugoniotCurveGeomFactory  hugoniotFactory= (HugoniotCurveGeomFactory) factory;
-//
-//
-//            System.out.println(hugoniotFactory.toMatlab());
-///
-
-
 
     }
 
@@ -132,29 +116,59 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
     }
 
     public void highlightGeometry(int index) {
-
         for (int i = 0; i < geomList_.size(); i++) {
-            MultiGeometry geometry = (MultiGeometry) geomList_.get(i);
-            ViewingAttr viewingAttr = geometry.viewingAttr();
-
-            Color newColor;
 
             if (i == index) {
+                MultiGeometry geometry = (MultiGeometry) geomList_.get(i);
+                if (geometry instanceof SegmentedCurveGeom) {
 
-                if (geometry instanceof HugoniotCurveGeom) {
-                    HugoniotCurveGeom hugoniotCurveGeom = (HugoniotCurveGeom) geometry;
-                    hugonitoCurveGeomHighLight(hugoniotCurveGeom, true);
+                    SegmentedCurveGeom segGeom = (SegmentedCurveGeom) geometry;
+                    segGeom.highLight();
+
+
                 } else {
 
-                    newColor = new Color(viewingAttr.getColor().getRed(), viewingAttr.getColor().getGreen(), viewingAttr.getColor().getBlue(), ALFA_UP);
-                    viewingAttr.setColor(newColor);
-                }
+                    if (geometry instanceof MultiPolyLine) {
 
+                        MultiPolyLine poly = (MultiPolyLine) geometry;
+                        poly.highLight();
+
+                    }
+                }
+            }
+        }
+
+        UIController.instance().panelsUpdate();
+    }
+
+    public void hideGeometry(int index) {
+
+        for (int i = 0; i < geomList_.size(); i++) {
+
+            if (i == index) {
+                MultiGeometry geometry = (MultiGeometry) geomList_.get(i);
+                geometry.viewingAttr().setVisible(false);
+
+
+            }
+        }
+
+        UIController.instance().panelsUpdate();
+
+    }
+
+    public void displayGeometry(int index) {
+        for (int i = 0; i < geomList_.size(); i++) {
+
+            if (i == index) {
+                MultiGeometry geometry = (MultiGeometry) geomList_.get(i);
+                geometry.viewingAttr().setVisible(true);
             }
 
         }
 
         UIController.instance().panelsUpdate();
+
 
     }
 
@@ -162,29 +176,27 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
 
 
         for (int i = 0; i < geomList_.size(); i++) {
-            MultiGeometry geometry = (MultiGeometry) geomList_.get(i);
 
-            ViewingAttr viewingAttr = geometry.viewingAttr();
-
-            Color newColor;
             if (i == index) {
-                if (geometry instanceof HugoniotCurveGeom) {
-//
-                    HugoniotCurveGeom hugoniotCurveGeom = (HugoniotCurveGeom) geometry;
-//
-                    hugonitoCurveGeomHighLight(hugoniotCurveGeom, false);
+                MultiGeometry geometry = (MultiGeometry) geomList_.get(i);
+                if (geometry instanceof SegmentedCurveGeom) {
+
+                    SegmentedCurveGeom segGeom = (SegmentedCurveGeom) geometry;
+                    segGeom.lowLight();
+
 
                 } else {
 
-                    newColor = new Color(viewingAttr.getColor().getRed(), viewingAttr.getColor().getGreen(), viewingAttr.getColor().getBlue(), ALFA_DOWN);
-                    viewingAttr.setColor(newColor);
+                    if (geometry instanceof MultiPolyLine) {
 
+                        MultiPolyLine poly = (MultiPolyLine) geometry;
+                        poly.lowLight();
+
+                    }
                 }
             }
-
         }
         UIController.instance().panelsUpdate();
-
     }
 
     @Override
@@ -192,7 +204,8 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
 
         Iterator geomList = getGeomObjIterator();
 
-        List removeList = new ArrayList();
+        List removeList =
+                new ArrayList();
         List joinList = new ArrayList();
         while (geomList.hasNext()) {
             RpGeometry geom = (RpGeometry) geomList.next();
@@ -338,30 +351,5 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         if (selectedGeom_ != null) {
             selectedGeom_.viewingAttr().setSelected(false);
         }
-    }
-
-    private void hugonitoCurveGeomHighLight(HugoniotCurveGeom hugoniotCurveGeom, boolean brighter) {
-
-        Iterator hugoniotSegIterator = hugoniotCurveGeom.getHugoniotSegIterator();
-
-        while (hugoniotSegIterator.hasNext()) {
-
-            HugoniotSegGeom hugoniotSeg = (HugoniotSegGeom) hugoniotSegIterator.next();
-
-            ViewingAttr viewingAttr = hugoniotSeg.viewingAttr();
-
-            Color newColor;
-
-            if (brighter) {
-                newColor = new Color(viewingAttr.getColor().getRed(), viewingAttr.getColor().getGreen(), viewingAttr.getColor().getBlue(), ALFA_UP);
-            } else {
-                newColor = new Color(viewingAttr.getColor().getRed(), viewingAttr.getColor().getGreen(), viewingAttr.getColor().getBlue(), ALFA_DOWN);
-            }
-
-
-            viewingAttr.setColor(newColor);
-
-        }
-
     }
 }

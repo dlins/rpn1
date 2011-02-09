@@ -18,6 +18,8 @@ class CoincidenceTPCW : public HugoniotFunctionClass {
     public:
         CoincidenceTPCW(Thermodynamics_SuperCO2_WaterAdimensionalized *t, FracFlow2PhasesHorizontalAdimensionalized *f, double phi_);
         double HugoniotFunction(const RealVector &u);
+
+    void completeCurve(std::vector<RealVector> &);
 };
 
 #endif // _COINCIDENCETPCW_

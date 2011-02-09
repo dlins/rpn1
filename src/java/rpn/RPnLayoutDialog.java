@@ -65,11 +65,11 @@ public class RPnLayoutDialog extends JDialog {
                             break;
                             // poincare section
                         case 5:
-                            visibleBox.setSelected(PoincareSectionGeom.VIEWING_ATTR.isVisible());
+//                            visibleBox.setSelected(PoincareSectionGeom.VIEWING_ATTR.isVisible());
                             break;
                             // hugoniot
                         case 6:
-                            visibleBox.setSelected(HugoniotCurveGeom.VIEWING_ATTR.isVisible());
+//                            visibleBox.setSelected(HugoniotCurveGeom.VIEWING_ATTR.isVisible());
                             break;
                     }
                 }
@@ -172,8 +172,8 @@ public class RPnLayoutDialog extends JDialog {
                 break;
                 // hugoniot
             case 6:
-                HugoniotCurveGeom.VIEWING_ATTR.setColor(JColorChooser.showDialog(this, "Hugoniot Orbit Color",
-                    HugoniotCurveGeom.VIEWING_ATTR.getColor()));
+//                HugoniotCurveGeom.VIEWING_ATTR.setColor(JColorChooser.showDialog(this, "Hugoniot Orbit Color",
+//                    HugoniotCurveGeom.VIEWING_ATTR.getColor()));
                 break;
         }
     }
@@ -191,7 +191,7 @@ public class RPnLayoutDialog extends JDialog {
                 break;
                 // hugoniot
             case 6:
-                HugoniotCurveGeom.VIEWING_ATTR.setVisible(visibleBox.isSelected());
+//                HugoniotCurveGeom.VIEWING_ATTR.setVisible(visibleBox.isSelected());
                 if (visibleBox.isSelected())
                     ((NUMCONFIG_READY)rpn.parser.RPnDataModule.PHASESPACE.state()).hugoniotGeom().geomFactory().updateGeom();
                 break;

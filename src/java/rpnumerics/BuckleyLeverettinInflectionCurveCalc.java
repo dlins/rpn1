@@ -25,7 +25,7 @@ public class BuckleyLeverettinInflectionCurveCalc implements RpCalculation {
     public RpSolution calc() throws RpException {
 
 
-        RpSolution result = nativeCalc();
+        BuckleyLeverettInflectionCurve result = (BuckleyLeverettInflectionCurve)nativeCalc();
 
           if (result == null) {
             throw new RpException("Error in native layer");

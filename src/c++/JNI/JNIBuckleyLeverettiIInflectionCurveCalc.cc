@@ -31,10 +31,10 @@ NOTE :
 using std::vector;
 using namespace std;
 
-JNIEXPORT jobject JNICALL Java_rpnumerics_BuckleyLeverettinInflectionCurveCalc_nativeCalc (JNIEnv * env, jobject obj) {
+JNIEXPORT jobject JNICALL Java_rpnumerics_BuckleyLeverettinInflectionCurveCalc_nativeCalc(JNIEnv * env, jobject obj) {
 
-    cout<<"Em BL nativo: "<<endl;
-    
+    cout << "Em BL nativo: " << endl;
+
     jclass classPhasePoint = (env)->FindClass(PHASEPOINT_LOCATION);
 
     jclass hugoniotSegmentClass = (env)->FindClass(HUGONIOTSEGMENTCLASS_LOCATION);
@@ -55,17 +55,17 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BuckleyLeverettinInflectionCurveCalc_n
 
 
     //Input processing
-//    jdoubleArray phasePointArray = (jdoubleArray) (env)->CallObjectMethod(uMinus, toDoubleMethodID);
-//
-//    int dimension = env->GetArrayLength(phasePointArray);
-//
-//    double input [dimension];
-//
-//
-//    env->GetDoubleArrayRegion(phasePointArray, 0, dimension, input);
-//
-//    env->DeleteLocalRef(phasePointArray);
-//
+    //    jdoubleArray phasePointArray = (jdoubleArray) (env)->CallObjectMethod(uMinus, toDoubleMethodID);
+    //
+    //    int dimension = env->GetArrayLength(phasePointArray);
+    //
+    //    double input [dimension];
+    //
+    //
+    //    env->GetDoubleArrayRegion(phasePointArray, 0, dimension, input);
+    //
+    //    env->DeleteLocalRef(phasePointArray);
+    //
     //Calculations using the input
 
     jobject segmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
@@ -77,18 +77,26 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BuckleyLeverettinInflectionCurveCalc_n
     RealVector Uref(dimension);
 
     double phi = 0.38;
-  
+
     Thermodynamics_SuperCO2_WaterAdimensionalized TD(Physics::getRPnHome());
 
     double cnw = 0., cng = 0., expw = 2., expg = 2.;
     FracFlow2PhasesHorizontalAdimensionalized fh(cnw, cng, expw, expg, TD);
-    
+
     BuckleyLeverettinInflectionTPCW bl(&fh);
 
     ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), RpNumerics::getPhysics().boundary(), &bl);
 
     vector<HugoniotPolyLine> hugoniotPolyLineVector;
     method.unclassifiedCurve(Uref, hugoniotPolyLineVector);
+    cout << "Depois de chamar complete curve" << endl;
+
+
+
+    RealVector min(RpNumerics::getPhysics().boundary().minimums());
+    RealVector max(RpNumerics::getPhysics().boundary().maximums());
+
+
 
     for (int i = 0; i < hugoniotPolyLineVector.size(); i++) {
 
@@ -96,16 +104,22 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BuckleyLeverettinInflectionCurveCalc_n
 
             int m = (hugoniotPolyLineVector[i].vec[0].size() - dimension - 1) / 2; // Number of valid eigenvalues
 
-            //
-            //            cout << "type of " << j << " = " << hugoniotPolyLineVector[i].type << endl;
-            //            cout << "coord 1 " << j << " = " << hugoniotPolyLineVector[i].vec[j] << endl;
-            //            cout << "coord 2 " << j + 1 << " = " << hugoniotPolyLineVector[i].vec[j + 1] << endl;
+
+//            cout << "type of " << j << " = " << hugoniotPolyLineVector[i].type << endl;
+//            cout << "coord 1 " << j << " = " << hugoniotPolyLineVector[i].vec[j] << endl;
+
+            hugoniotPolyLineVector[i].vec[j].component(2) = max.component(2);
+            hugoniotPolyLineVector[i].vec[j+1].component(2) = max.component(2);
+
+
+//            cout << "coord 2 " << j + 1 << " = " << hugoniotPolyLineVector[i].vec[j + 1] << endl;
 
             jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
             jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
 
             double * leftCoords = (double *) hugoniotPolyLineVector[i].vec[j];
             double * rightCoords = (double *) hugoniotPolyLineVector[i].vec[j + 1];
+
 
             env->SetDoubleArrayRegion(eigenValRLeft, 0, dimension, leftCoords);
             env->SetDoubleArrayRegion(eigenValRRight, 0, dimension, rightCoords);
@@ -120,8 +134,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BuckleyLeverettinInflectionCurveCalc_n
             double leftSigma = hugoniotPolyLineVector[i].vec[j].component(dimension + m);
             double rightSigma = hugoniotPolyLineVector[i].vec[j + 1].component(dimension + m);
 
-            //            double leftSigma = 0;
-            //            double rightSigma = 0;
+            //                        double leftSigma = 0;
+            //                        double rightSigma = 0;
             //
 
             //            cout<<"Antes de criar hugoniot segment"<<endl;

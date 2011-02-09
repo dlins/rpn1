@@ -43,7 +43,7 @@ public class ProfileGeomFactory extends RpCalcBasedGeomFactory {
         return str.toString();
     }
 
-    public String toMatlab() {
+    public String toMatlab(int curveIndex) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }

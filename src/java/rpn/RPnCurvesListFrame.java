@@ -13,6 +13,7 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.NumberFormat;
 import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -26,7 +27,9 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
+import rpn.controller.ui.UIController;
 import rpn.parser.RPnDataModule;
+import wave.util.RealVector;
 
 public class RPnCurvesListFrame extends JFrame implements ListSelectionListener, ActionListener, TableModelListener {
 
@@ -54,6 +57,7 @@ public class RPnCurvesListFrame extends JFrame implements ListSelectionListener,
         tableModel_.addTableModelListener(this);
         curvesTable_ = new JTable(tableModel_);
 
+
         tablePanel_ = new JScrollPane(curvesTable_);
         resetSelectionButton_ = new JButton("Select None");
         resetSelectionButton_.addActionListener(this);
@@ -78,8 +82,23 @@ public class RPnCurvesListFrame extends JFrame implements ListSelectionListener,
     public static void addGeometry(String geometryIndex, String geometryName) {
 
         Vector<Object> data = new Vector<Object>();
+        RealVector userInput = UIController.instance().globalInputTable().values();
+
+        NumberFormat formatter = NumberFormat.getInstance();
+        formatter.setMaximumFractionDigits(4);
+
         data.add(geometryIndex);
         data.add(geometryName);
+        String userInputString = "";
+        for (int i = 0; i < userInput.getSize(); i++) {
+            userInputString=userInputString .concat(formatter.format(userInput.getElement(i))+" ");
+
+        }
+
+
+
+    
+        data.add(userInputString);
         data.add(new Boolean(true));
 
         tableModel_.addRow(data);
@@ -128,5 +147,23 @@ public class RPnCurvesListFrame extends JFrame implements ListSelectionListener,
         if (e.getType() == TableModelEvent.INSERT) {
             RPnDataModule.PHASESPACE.clearGeometrySelection();
         }
+
+        if (e.getType() == TableModelEvent.UPDATE) {
+
+            if (e.getColumn() == 3) {
+                Boolean visible = (Boolean) curvesTable_.getValueAt(e.getFirstRow(), 3);
+                if (visible) {
+                    RPnDataModule.PHASESPACE.displayGeometry(new Integer ((String)curvesTable_.getValueAt(e.getFirstRow(), 0)));
+                } else {
+                    RPnDataModule.PHASESPACE.hideGeometry(new Integer ((String)curvesTable_.getValueAt(e.getFirstRow(), 0)));
+                }
+//                System.out.println("Trocando valor" + curvesTable_.getValueAt(e.getFirstRow(), 3) + " " + curvesTable_.getValueAt(e.getFirstRow(), 0));
+            }
+        }
+
+
+    }
+
+    private void geometryVisibleSelection(int geomIndex) {
     }
 }

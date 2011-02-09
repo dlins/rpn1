@@ -138,3 +138,6 @@ double SubinflectionTPCW::HugoniotFunction(const RealVector &u) {
 
 
 
+ void SubinflectionTPCW::completeCurve(std::vector<RealVector> & curve){
+
+ }

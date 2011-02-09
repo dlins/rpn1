@@ -134,6 +134,19 @@ public class HugoniotSegment extends RealSegment {
         rightPoint_ = rightPoint;
         rightSigma_ = rightSigma;
 
+
+          leftLambdaArray_ = new double[2];//TODO Hardcoded para fisica do Helmut
+
+        leftLambdaArray_[0] = 0;
+        leftLambdaArray_[1] = 0;
+
+
+
+        rightLambdaArray_ = new double[2];//TODO Hardcoded para fisica do Helmut
+
+        rightLambdaArray_[0] = 0;
+        rightLambdaArray_[1] = 0;
+
         intType_ = type;
 
     }

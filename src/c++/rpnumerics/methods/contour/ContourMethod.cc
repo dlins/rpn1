@@ -65,16 +65,16 @@ int ContourMethod::inpdom(double *u) { // double u[2]//Replace by Boundary::insi
 int ContourMethod::curv2d(/*double *segend,*/ int sn, int seglim, double fdummy, double *rect, int *res, int ifirst,
         std::vector<RealVector> &vrs) {
     vrs.clear();
-//    for (unsigned int i = 0; i < 2; i++) {
-//        cout << "Valor de res:" << res[i] << endl;
-//    }
+    //    for (unsigned int i = 0; i < 2; i++) {
+    //        cout << "Valor de res:" << res[i] << endl;
+    //    }
 
-//    cout << "---------------" << endl;
+    //    cout << "---------------" << endl;
 
 
-//    for (unsigned int i = 0; i < 4; i++) {
-//        cout << "Valor de rect:" << rect[i] << endl;
-//    }
+    //    for (unsigned int i = 0; i < 4; i++) {
+    //        cout << "Valor de rect:" << rect[i] << endl;
+    //    }
 
 
     double segend[seglim][2][2]; //int sn, int seglim, double f, double rect[4], int res[2], int ifirst;
@@ -411,16 +411,16 @@ void ContourMethod::unclassifiedCurve(const RealVector & input, vector<HugoniotP
 
     //    cout << "antes de complete curve: " << info << endl;
 
-//    hugoniot->completeCurve(vrs);
+    //    hugoniot->completeCurve(vrs);
 
 
-//        for (int i = 0; i < vrs.size(); i++) {
-//            for (unsigned int j = 0; j < vrs[i].size(); j++) {
-//                cout << "ponto: " << i << "coord: " << j << " = " << vrs[i][j] << endl;
-//
-//            }
-//            cout << endl;
-//        }
+    //        for (int i = 0; i < vrs.size(); i++) {
+    //            for (unsigned int j = 0; j < vrs[i].size(); j++) {
+    //                cout << "ponto: " << i << "coord: " << j << " = " << vrs[i][j] << endl;
+    //
+    //            }
+    //            cout << endl;
+    //        }
 
     hugoniotPolyLineVector.clear();
     for (int i = 0; i < vrs.size() / 2; i++) {
@@ -458,6 +458,70 @@ void ContourMethod::unclassifiedCurve(const RealVector & input, vector<HugoniotP
     //        }
 
 
+
+}
+
+void ContourMethod::completedCurve(const RealVector & input, vector<HugoniotPolyLine> & hugoniotPolyLineVector) {
+
+
+    double rect[4];
+
+    rect[0] = 0.0; // xmin
+    rect[1] = 1.0; // xmax
+    //    rect[2] = 0.0841102; // ymin
+    rect[2] = 0.099308998; // ymin
+    //    rect[3] = 0.576510849; // ymax
+    rect[3] = 0.478030726; // ymax
+
+    //    rect[3] = 1.0; // ymax
+
+    //
+    //    rect[0] = 0.65; // xmin
+    //    rect[1] = 0.84; // xmax
+    //    rect[2] = 0.27; // ymin
+    //    rect[3] = 0.367; // ymax
+
+    //    rect[0] = 0.0; // xmin
+    //    rect[1] = 1.0; // xmax
+    //    rect[2] = 0.0; // ymin
+    //    rect[3] = 1.0; // ymax
+
+    int res[2];
+
+    res[0] = 151;
+    res[1] = 151;
+
+    std::vector<RealVector> vrs;
+
+    int info = curv2d(0, 9025, 0.0, &rect[0], &res[0], 1, vrs);
+
+    //    cout << "Unclissified curve: " << vrs.size() << endl;
+
+    //    cout << "antes de complete curve: " << info << endl;
+
+    hugoniot->completeCurve(vrs);
+    cout<<"vrs: "<<vrs.size()<<endl;
+    cout << "Tamanho do primeiro elemento de vrs: " <<vrs.at(0).size()<< endl;
+
+    //         Para testar o contour sem classificacao
+    hugoniotPolyLineVector.clear();
+    for (int i = 0; i < vrs.size() / 2; i++) {
+        cout<<"Valor de i: "<<i<<endl;
+        HugoniotPolyLine temp;
+        temp.vec.resize(2);
+
+        for (int j = 0; j < 2; j++) {
+            temp.vec[j].resize(3);
+            for (int k = 0; k < 3; k++) temp.vec[j].component(k) = vrs[2 * i + j].component(k);
+        }
+
+        //                    temp.vec[0] = vrs[2 * i];
+        //                    temp.vec[1] = vrs[2 * i + 1];
+        temp.type = 0;
+        hugoniotPolyLineVector.push_back(temp);
+    }
+
+    cout<<"Final do complete curve"<<endl;
 
 }
 
@@ -499,6 +563,20 @@ void ContourMethod::classifiedCurve(const RealVector & input, vector<HugoniotPol
     //    cout << "antes de complete curve: " << info << endl;
 
     hugoniot->completeCurve(vrs);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     //    for (int i = 0; i < vrs.size(); i++) {

@@ -99,3 +99,6 @@ double CoincidenceTPCW::HugoniotFunction(const RealVector &u){
     return lambdas - lambdae;
 }
 
+ void CoincidenceTPCW::completeCurve(std::vector<RealVector> & curve){
+
+}

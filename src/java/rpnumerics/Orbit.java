@@ -157,11 +157,10 @@ public class Orbit extends RPnCurve implements RpSolution {
         return buffer.toString();
     }
 
-    public String toMatlabData() {
+    public String toMatlabData(int curveIndex) {
 
         StringBuffer buffer = new StringBuffer();
-
-        buffer.append("data=[");
+        buffer.append("data" + curveIndex + "=[");
 
         for (int i = 0; i < points_.length; i++) {
             OrbitPoint orbitPoint = points_[i];
@@ -174,8 +173,6 @@ public class Orbit extends RPnCurve implements RpSolution {
         buffer.append("];");
 
         return buffer.toString();
-
-
 
 
     }
@@ -197,5 +194,91 @@ public class Orbit extends RPnCurve implements RpSolution {
 
     public void setIntegrationFlag(int flag) {
         intFlag_ = flag;
+    }
+
+    public String createPoint3DMatlabPlot(int identifier) {
+
+        StringBuffer buffer = new StringBuffer();
+
+        String color = null;
+        if (this instanceof RarefactionOrbit) {
+            RarefactionOrbit rarefactionOrbit = (RarefactionOrbit) this;
+            int family = rarefactionOrbit.getFamilyIndex();
+            if (family == 1) {
+                color = "[1 0 0]";
+            } else {
+                color = "[0 0 1]";
+            }
+
+        }
+
+        buffer.append("plot3(data" + identifier + "(:,1),data" + identifier + "(:,2),data" + identifier + "(:,3),'Color'," + color + ")\n");
+
+        RealVector xMin = RPNUMERICS.boundary().getMinimums();
+        RealVector xMax = RPNUMERICS.boundary().getMaximums();
+
+        buffer.append("axis([" + xMin.getElement(0) + " " + xMax.getElement(0) + " " + xMin.getElement(1) + " " + xMax.getElement(1) + " " + xMin.getElement(2) + " " + xMax.getElement(2) + "]);\n");
+
+        buffer.append("xlabel('s')\nylabel('T')\nzlabel('u')\n");
+
+        return buffer.toString();
+
+    }
+
+    public String create2DPointMatlabPlot(int x, int y, int identifier) {
+
+        StringBuffer buffer = new StringBuffer();
+
+        String color = null;
+
+        if (this instanceof RarefactionOrbit) {
+            RarefactionOrbit rOrbit = (RarefactionOrbit) this;
+
+            int family = rOrbit.getFamilyIndex();
+            if (family == 1) {
+                color = "[1 0 0]";
+            } else {
+                color = "[0 0 1]";
+            }
+        }
+
+
+        x++;
+        y++;
+
+        buffer.append("plot(data" + identifier + "(:,");
+        buffer.append(x);
+        buffer.append("),");
+        buffer.append("data" + identifier + "(:,");
+        buffer.append(y);
+
+        buffer.append("),'Color'" + "," + color + ")\n");
+
+        RealVector xMin = RPNUMERICS.boundary().getMinimums();
+        RealVector xMax = RPNUMERICS.boundary().getMaximums();
+
+        buffer.append("axis([" + xMin.getElement(x - 1) + " " + xMax.getElement(x - 1) + " " + xMin.getElement(y - 1) + " " + xMax.getElement(y - 1) + "]);\n");
+
+        buffer.append(createAxisLabel2D(x - 1, y - 1));
+        return buffer.toString();
+
+    }
+
+    private static String createAxisLabel2D(int x, int y) {
+
+        String axisName[] = new String[3];
+
+        axisName[0] = "s";
+        axisName[1] = "T";
+        axisName[2] = "u";
+
+
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("xlabel('");
+        buffer.append(axisName[x] + "')\n");
+        buffer.append("ylabel('" + axisName[y] + "')\n");
+
+        return buffer.toString();
+
     }
 }

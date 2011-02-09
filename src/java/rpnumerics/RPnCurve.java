@@ -23,6 +23,7 @@ import rpn.component.MultidAdapter;
 
 import wave.util.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class RPnCurve extends MultiPolyLine {
 
@@ -61,11 +62,17 @@ public class RPnCurve extends MultiPolyLine {
         }
 
         this.viewAttr = viewAttr;
+
+
     }
 
     public RPnCurve(AbstractSegment[] segments, ViewingAttr viewAttr) {
         super(segments, viewAttr);
         // converter para chained
+    }
+
+    public String toString() {
+        return getPath().toString();
     }
 
     public RealVector projectionCurve(RPnCurve curve, RealVector targetPoint) {
@@ -117,6 +124,8 @@ public class RPnCurve extends MultiPolyLine {
 
         return null;
     }
+
+   
 
     private static AbstractSegment[] fromPointNDimensionCurveToSegment(
             PointNDimension[][] polyline) {

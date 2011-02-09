@@ -1,7 +1,9 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+* Instituto de Matematica Pura e Aplicada - IMPA
+* Departamento de Dinamica dos Fluidos
+*
+*/
+
 
 package rpn.component;
 
@@ -15,10 +17,7 @@ import wave.multid.view.GeomObjView;
 import wave.multid.view.ViewingAttr;
 import wave.multid.view.ViewingTransform;
 
-/**
- *
- * @author edsonlan
- */
+
 class CoincidenceCurveView implements GeomObjView{
     //
   // Members

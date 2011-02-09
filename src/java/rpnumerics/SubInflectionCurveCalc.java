@@ -25,7 +25,7 @@ public class SubInflectionCurveCalc implements RpCalculation {
     public RpSolution calc() throws RpException {
 
 
-        RpSolution result = nativeCalc();
+        SubInflectionCurve result = (SubInflectionCurve) nativeCalc();
 
           if (result == null) {
             throw new RpException("Error in native layer");

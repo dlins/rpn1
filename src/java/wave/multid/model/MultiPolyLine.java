@@ -1,11 +1,11 @@
 /*
-* Instituto de Matematica Pura e Aplicada - IMPA
-* Departamento de Dinamica dos Fluidos
-*
-*/
-
+ * Instituto de Matematica Pura e Aplicada - IMPA
+ * Departamento de Dinamica dos Fluidos
+ *
+ */
 package wave.multid.model;
 
+import java.awt.Color;
 import wave.multid.view.*;
 import wave.multid.*;
 
@@ -13,9 +13,13 @@ public class MultiPolyLine extends MultiGeometryImpl {
     //
     // Members
     //
+
+    private final int ALFA_DOWN = 50;
+    private final int ALFA_UP = 255;
     //
     // Constructors
     //
+
     public MultiPolyLine(CoordsArray[] vertices, ViewingAttr viewAttr) {
         super(vertices[0].getSpace(), viewAttr);
         try {
@@ -26,14 +30,15 @@ public class MultiPolyLine extends MultiGeometryImpl {
             moveToVx[1] = new CoordsArray(vertices[0].getSpace());
             segList[0] = new AbstractSegment(moveToVx, new AbstractSegmentAtt(AbstractSegment.SEG_MOVETO));
             int i = 1;
-            for ( ; i < vertices.length; i++) {
+            for (; i < vertices.length; i++) {
                 // LINETO needs 2 coords only
                 lineToVx[0] = new CoordsArray(vertices[i - 1]);
                 lineToVx[1] = new CoordsArray(vertices[i]);
                 segList[i] = new AbstractSegment(lineToVx, new AbstractSegmentAtt(AbstractSegment.SEG_LINETO));
             }
-            for (int j = 0; j < segList.length; j++)
+            for (int j = 0; j < segList.length; j++) {
                 append(segList[j], false);
+            }
         } catch (DimMismatchEx dex) {
             dex.printStackTrace();
         } catch (WrongNumberOfDefPointsEx wex) {
@@ -61,5 +66,21 @@ public class MultiPolyLine extends MultiGeometryImpl {
     //
     public GeomObjView createView(ViewingTransform transf) throws DimMismatchEx {
         return new PolyLine(this, transf, viewingAttr());
+    }
+
+    public void lowLight() {
+        Color newColor = new Color(viewingAttr().getColor().getRed(), viewingAttr().getColor().getGreen(), viewingAttr().getColor().getBlue(), ALFA_DOWN);
+        viewingAttr().setColor(newColor);
+
+    }
+
+   
+
+    public void highLight() {
+
+        Color newColor = new Color(viewingAttr().getColor().getRed(), viewingAttr().getColor().getGreen(), viewingAttr().getColor().getBlue(), ALFA_UP);
+        viewingAttr().setColor(newColor);
+
+
     }
 }

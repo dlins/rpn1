@@ -34,7 +34,7 @@ public interface RpGeomFactory {
     
     /** Returns a string in Matlab's format of the model.*/
 
-    String toMatlab();
+    String toMatlab(int curveIndex);
 
     /** Verify if the geometric model is updated.*/
 

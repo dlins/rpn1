@@ -16,6 +16,8 @@ class SubinflectionTPCW : public HugoniotFunctionClass {
     public:
         SubinflectionTPCW(Thermodynamics_SuperCO2_WaterAdimensionalized *t, FracFlow2PhasesHorizontalAdimensionalized *f, double phi_);
         double HugoniotFunction(const RealVector &u);
+
+    void completeCurve(std::vector<RealVector> & );
 };
 
 #endif // _SUBINFLECTIONTPCW_

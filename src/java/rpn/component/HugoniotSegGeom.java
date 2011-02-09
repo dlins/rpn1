@@ -3,6 +3,8 @@
  * Departamento de Dinamica dos Fluidos
  *
  */
+
+
 package rpn.component;
 
 import rpnumerics.HugoniotSegment;
@@ -12,6 +14,8 @@ import wave.multid.*;
 import java.awt.Color;
 
 public class HugoniotSegGeom extends MultiPolyLine {
+
+   
 
     public HugoniotSegGeom(HugoniotSegment segment) {
         super(new CoordsArray[]{new CoordsArray(segment.leftPoint()), new CoordsArray(segment.rightPoint())}, viewAttrSelection(segment));
@@ -79,16 +83,16 @@ public class HugoniotSegGeom extends MultiPolyLine {
             attr = new ViewingAttr(new Color(255, 255, 0));
         }
         //TODO Coincidence Curve segment type
-         if (segment.getType() == 17) {
+        if (segment.getType() == 17) {
             attr = new ViewingAttr(new Color(0, 204, 0));
         }
 
         //TODO  BuckleyLeverettinflection Curve segment type
-         if (segment.getType() == 18) {
-            attr = new ViewingAttr(new Color(135,27, 224));
+        if (segment.getType() == 18) {
+            attr = new ViewingAttr(new Color(135, 27, 224));
         }
-
-
         return attr;
     }
+
+   
 }

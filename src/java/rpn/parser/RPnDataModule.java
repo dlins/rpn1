@@ -17,15 +17,21 @@ import java.util.ArrayList;
 import java.util.StringTokenizer;
 import java.io.*;
 import java.awt.event.ActionEvent;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map.Entry;
+import java.util.Set;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.XMLReader;
+import rpn.component.RpCalcBasedGeomFactory;
 import rpn.component.RpGeometry;
 import rpnumerics.HugoniotCurve;
 import rpnumerics.PhasePoint;
 import rpnumerics.Orbit;
 import rpnumerics.OrbitPoint;
 import rpnumerics.RPNUMERICS;
+import rpnumerics.RPnCurve;
+import rpnumerics.SegmentedCurve;
 import rpnumerics.StationaryPoint;
 import wave.multid.Space;
 
@@ -36,7 +42,6 @@ public class RPnDataModule {
     static public RPnPhaseSpaceAbstraction AUXPHASESPACE = null;
     static public RPnPhaseSpaceAbstraction LEFTPHASESPACE = null;
     static public RPnPhaseSpaceAbstraction RIGHTPHASESPACE = null;
-
     public static Orbit ORBIT = null;
     public static boolean RESULTS = false;
     private static HugoniotCurve hugoniotCurve_;
@@ -99,26 +104,10 @@ public class RPnDataModule {
             // initialize auxiliary phase space state
             AUXPHASESPACE = new RPnPhaseSpaceAbstraction("Auxiliary Phase Space",
                     new Space("Auxiliary Space", RPNUMERICS.domainDim() * 2), new NumConfigImpl());
-
-
-
-
             LEFTPHASESPACE = new RPnPhaseSpaceAbstraction("LeftPhase Space",
                     RPNUMERICS.domain(), new NumConfigImpl());//  RpNumerics.domain(),
             RIGHTPHASESPACE = new RPnPhaseSpaceAbstraction("RightPhase Space",
                     RPNUMERICS.domain(), new NumConfigImpl());//  RpNumerics.domain(),
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         }
@@ -318,7 +307,7 @@ public class RPnDataModule {
         }
 
         @Override
-        public void endElement(String uri, String name, String qName)throws SAXException {
+        public void endElement(String uri, String name, String qName) throws SAXException {
 
             if (name.equals("HUGONIOTCURVE")) {
                 try {
@@ -434,33 +423,24 @@ public class RPnDataModule {
         }
 
         public void setDocumentLocator(Locator locator) {
-
         }
 
         public void startDocument() throws SAXException {
-
         }
 
         public void startPrefixMapping(String prefix, String uri) throws SAXException {
-
         }
 
         public void endPrefixMapping(String prefix) throws SAXException {
-
         }
 
-
-
         public void ignorableWhitespace(char[] ch, int start, int length) throws SAXException {
-
         }
 
         public void processingInstruction(String target, String data) throws SAXException {
-
         }
 
         public void skippedEntity(String name) throws SAXException {
-
         }
     }
 
@@ -505,13 +485,11 @@ public class RPnDataModule {
     //
     /** Writes the data of actual session into a XML file. */
     static public void export(FileWriter writer) throws java.io.IOException {
-
 //        Iterator<Command> commandInterator = UIController.instance().getCommandIterator();
 //        while (commandInterator.hasNext()) {
 ////           writer.write((commandInterator.next().toXML()));//TODO Fix.
 //
 //        }
-
 //        System.out.println("Chamando export do data module");
 //
 //        Iterator<RpGeometry> iterator = PHASESPACE.getGeomObjIterator();
@@ -527,23 +505,101 @@ public class RPnDataModule {
 //
 //
 //        }
-
     }
 
-
-      static public void matlabExport(FileWriter writer) throws java.io.IOException {
+    static public void matlabExport(FileWriter writer) throws java.io.IOException {
 
         System.out.println("Chamando export matlab do data module");
 
         Iterator<RpGeometry> iterator = PHASESPACE.getGeomObjIterator();
+        writer.write("close all; clear all;\n");
+        writer.write(RpCalcBasedGeomFactory.createMatlabColorTable());
 
-        while(iterator.hasNext()){
-            writer.write(iterator.next().geomFactory().toMatlab());
+
+        //Inserting data
+
+        HashMap<Integer, RpGeometry> visibleGeometries = new HashMap<Integer, RpGeometry>();
+        int geometryCounter = 0;
+
+        while (iterator.hasNext()) {
+            RpGeometry geometry = iterator.next();
+            if (geometry.viewingAttr().isVisible()) {
+                visibleGeometries.put(geometryCounter, geometry);
+                geometryCounter++;
+            }
+
+        }
+
+        // Inserting data
+        Set<Entry<Integer, RpGeometry>> geometrySet = visibleGeometries.entrySet();
+
+        for (Entry<Integer, RpGeometry> entry : geometrySet) {
+
+            RPnCurve curve = (RPnCurve) entry.getValue().geomFactory().geomSource();
+
+            if (curve instanceof SegmentedCurve) {
+
+                SegmentedCurve sCurve = (SegmentedCurve) curve;
+                writer.write(sCurve.toMatlabData(entry.getKey()));
+
+            } else {
+                Orbit orbit = (Orbit) curve;
+                writer.write(orbit.toMatlabData(entry.getKey()));
+            }
+
+        }
+
+        //Plotting 3D view
+        writer.write("%% plotting 3D \n");
+        writer.write("figure(1)\n");
+
+
+        for (Entry<Integer, RpGeometry> entry : geometrySet) {
+
+            RPnCurve curve = (RPnCurve) entry.getValue().geomFactory().geomSource();
+
+            if (curve instanceof SegmentedCurve) {
+
+                SegmentedCurve sCurve = (SegmentedCurve) curve;
+
+                writer.write(sCurve.createSegment3DPlotMatlabPlot(entry.getKey()));
+
+            } else {
+                Orbit orbit = (Orbit) curve;
+                writer.write(orbit.createPoint3DMatlabPlot(entry.getKey()));
+            }
+        }
+
+        //Plotting 2D view
+        writer.write("%% plotting 2D\n");
+
+        for (Entry<Integer, RpGeometry> entry : geometrySet) {
+
+            RPnCurve curve = (RPnCurve) entry.getValue().geomFactory().geomSource();
+
+            if (curve instanceof SegmentedCurve) {
+
+                writer.write("figure(2)\n");
+                writer.write(SegmentedCurve.createSegmentedMatlabPlotLoop(0, 1, entry.getKey()));
+                writer.write("figure(3)\n");
+                writer.write(SegmentedCurve.createSegmentedMatlabPlotLoop(0, 2, entry.getKey()));
+                writer.write("figure(4)\n");
+                writer.write(SegmentedCurve.createSegmentedMatlabPlotLoop(1, 2, entry.getKey()));
+
+            } else {
+                Orbit orbit = (Orbit) curve;
+                writer.write("figure(2)\n");
+                writer.write(orbit.create2DPointMatlabPlot(0, 1, entry.getKey()));
+                writer.write("figure(3)\n");
+                writer.write(orbit.create2DPointMatlabPlot(0, 2, entry.getKey()));
+                writer.write("figure(4)\n");
+                writer.write(orbit.create2DPointMatlabPlot(1, 2, entry.getKey()));
+
+            }
 
         }
 
     }
-
-
-
 }
+
+  

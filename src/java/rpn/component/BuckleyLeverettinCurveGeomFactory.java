@@ -32,66 +32,23 @@ public class BuckleyLeverettinCurveGeomFactory extends RpCalcBasedGeomFactory {
 
     }
 
-    private String createColorTable() {
+    
 
-        StringBuffer buffer = new StringBuffer();
-
-        buffer.append("toc=[");
-
-
-        double toc[][] = {{255, 255, 255},
-            {255, 255, 255},
-            {255, 0, 0},
-            {247, 151, 55},
-            {255, 255, 255},
-            {255, 255, 255},
-            {255, 255, 255},
-            {255, 255, 255},
-            {255, 0, 255},
-            {255, 255, 255},
-            {18, 153, 1},
-            {0, 0, 255},
-            {255, 255, 255},
-            {255, 255, 255},
-            {0, 255, 255},
-            {255, 255, 255},
-            {255, 255, 0},
-            {0, 204, 0},
-            {135, 27, 224}
-        };
-
-        for (int i = 0; i < 19; i++) {
-
-            for (int j = 0; j < 3; j++) {
-                buffer.append("  " + toc[i][j] / 255.0 + " ");
-            }
-            buffer.append(";\n");
-        }
-        buffer.append("];\n\n");
-
-        return buffer.toString();
-    }
-
-    public String toMatlab() {
+    public String toMatlab(int curveIndex) {
 
         StringBuffer buffer = new StringBuffer();
         BuckleyLeverettInflectionCurve curve = (BuckleyLeverettInflectionCurve) geomSource();
         buffer.append("%%\nclose all;clear all;\n");
-        buffer.append(createColorTable());
-        buffer.append(curve.toMatlabData());
+        buffer.append(RpCalcBasedGeomFactory.createMatlabColorTable());
+        buffer.append((curve.toMatlabData(0)));
 
-        buffer.append("%%\n% begin plot x y\n");
-        buffer.append("figure; set(gca, 'Color',[0 0 0]); hold on\n");
-        buffer.append(curve.toMatlabPlot(1, 0));
+        buffer.append(curve.createMatlabPlotLoop(0, 1, 0));
 
-
-//        buffer.append("\n%%\n% begin plot x z\n");
+//        buffer.append("%%\n% begin plot x y\n");
 //        buffer.append("figure; set(gca, 'Color',[0 0 0]); hold on\n");
-//        buffer.append(curve.toMatlabPlot(2, 0));
-//
-//        buffer.append("\n%%\n% begin plot y z\n");
-//        buffer.append("figure; set(gca, 'Color',[0 0 0]); hold on\n");
-//        buffer.append(curve.toMatlabPlot(2, 1));
+//        buffer.append(curve.createMatlabPlotLoop(0, 2, 1));
+
+
 
         return buffer.toString();
 

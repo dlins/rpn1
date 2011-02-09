@@ -95,7 +95,7 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
         return buffer.toString();
     }
 
-    public String toMatlab() {
+    public String toMatlab(int curveIndex) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }

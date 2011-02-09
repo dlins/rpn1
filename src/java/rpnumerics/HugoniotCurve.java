@@ -1,31 +1,24 @@
-/*
- * Instituto de Matematica Pura e Aplicada - IMPA
- * Departamento de Dinamica dos Fluidos
- *
- */
+
 package rpnumerics;
 
 import wave.util.RealVector;
 import wave.util.RealSegment;
 import java.util.List;
-import wave.multid.CoordsArray;
 import java.util.ArrayList;
-import wave.multid.view.ViewingAttr;
-import java.awt.Color;
 
-public class HugoniotCurve extends RPnCurve implements RpSolution {
+public class HugoniotCurve extends SegmentedCurve {
     //
     // Members
     //
 
     private PhasePoint xZero_;
-    private List hugoniotSegments_;
+ 
 
     public HugoniotCurve(PhasePoint xZero, List<HugoniotSegment> hSegments) {
-        super(coordsArrayFromRealSegments(hSegments), new ViewingAttr(Color.RED));
+        super(hSegments);
 
         xZero_ = new PhasePoint(xZero);
-        hugoniotSegments_ = hSegments;
+    
 
     }
 
@@ -244,7 +237,7 @@ public class HugoniotCurve extends RPnCurve implements RpSolution {
         double closestDistance = -1;
 
         List hugoniotSegList = segments();
-        for (int i = 0; i < hugoniotSegments_.size(); i++) {
+        for (int i = 0; i < segments().size(); i++) {
 
             HugoniotSegment segment = (HugoniotSegment) hugoniotSegList.get(i);
             segmentVector = new RealVector(segment.rightPoint());
@@ -326,25 +319,7 @@ public class HugoniotCurve extends RPnCurve implements RpSolution {
 
     }
 
-    private static CoordsArray[] coordsArrayFromRealSegments(List segments) {
-
-        ArrayList tempCoords = new ArrayList(segments.size());
-        for (int i = 0; i < segments.size(); i++) {
-            RealSegment segment = (RealSegment) segments.get(i);
-            tempCoords.add(new CoordsArray(segment.p1()));
-            tempCoords.add(new CoordsArray(segment.p2()));
-
-        }
-
-        CoordsArray[] coords = new CoordsArray[tempCoords.size()];
-        for (int i = 0; i < tempCoords.size(); i++) {
-            coords[i] = (CoordsArray) tempCoords.get(i);
-        }
-        tempCoords = null;
-        return coords;
-
-    }
-
+    
     private static List hugoniotSegsFromRealSegs(PhasePoint xZero_,
             List realSegs) {
 
@@ -369,12 +344,7 @@ public class HugoniotCurve extends RPnCurve implements RpSolution {
         return result;
     }
 
-    //
-    // Accessors/Mutators
-    //
-    public List segments() {
-        return hugoniotSegments_;
-    }
+   
 
     public double findSigma(PhasePoint targetPoint) {
 
@@ -394,9 +364,9 @@ public class HugoniotCurve extends RPnCurve implements RpSolution {
         double alpha = 0;
         RealVector point = null;
 
-        for (int i = 0; i < hugoniotSegments_.size(); i++) {
+        for (int i = 0; i < segments().size(); i++) {
 
-            HugoniotSegment segment = (HugoniotSegment) hugoniotSegments_.get(i);
+            HugoniotSegment segment = (HugoniotSegment) segments().get(i);
 
             if ((sigma - segment.leftSigma()) * (sigma - segment.rightSigma())
                     <= 0) {
@@ -410,92 +380,34 @@ public class HugoniotCurve extends RPnCurve implements RpSolution {
         return points;
     }
 
-    public String toMatlabPlot(int x, int y) {
-
-        RealVector xMin = RPNUMERICS.boundary().getMinimums();
-        RealVector xMax = RPNUMERICS.boundary().getMaximums();
 
 
-        System.out.println(xMin);
+//    private String createMatlabFor(int x, int y,int identifier){
+//        int dimension = RPNUMERICS.domainDim();
+//        StringBuffer buffer = new StringBuffer();
+//        buffer.append("xlabel('"+x+"')");
+//        buffer.append("ylabel('" + x + "')");
+//        buffer.append("for i=1: length(data" + identifier + ")");
+//        buffer.append("plot([ data"+identifier);
+//
+//        buffer.append("(i"+","+x+") ");
+//        buffer.append("data" + identifier + "(i," + (x+dimension) + ")],");
+//
+//        buffer.append("[ data"+identifier);
+//
+//        buffer.append("(i"+","+y+") ");
+//        buffer.append("data" + identifier + "(i," + (y+dimension) + ")])");
+//
+//        buffer.append("hold on");
+//
+////        figure(1) % Assume figure(1) corresponds to the x-y projection
+////xlabel('x')
+////ylabel('y')
+////for i = 1: length(data0)
+////    plot([data0(i, 1) data0(i, 4)], [data0(i, 2) data
 
-        System.out.println(xMax);
-
-        StringBuffer buffer = new StringBuffer();
-
-        for (int i = 0; i < hugoniotSegments_.size(); i++) {
-
-
-            HugoniotSegment hSegment = ((HugoniotSegment) hugoniotSegments_.get(
-                    i));
-
-            int type = hSegment.getType() + 1;
-            buffer.append("% type of segment: " + type + "\n");
-
-            buffer.append("plot([data");
-            buffer.append(i);
-            buffer.append("(" + (x + 1) + ") ");
-            buffer.append("data");
-            buffer.append(i);
-            buffer.append("(" + (x + 4) + ")],");
-
-            buffer.append("[data");
-            buffer.append(i);
-            buffer.append("(" + (y + 1) + ") ");
-            buffer.append("data");
-            buffer.append(i);
-            buffer.append("(" + (y + 4) + ")]");
-
-            buffer.append(", \'Color\', [toc(");
-            buffer.append(type);
-            buffer.append(", 1) toc(");
-            buffer.append(type);
-            buffer.append(", 2) toc(");
-            buffer.append(type);
-            buffer.append(", 3)])\n");
-            if (i == 0) {
-                buffer.append("axis([" + xMin.getElement(x) + " " + xMax.getElement(x) + " " + xMin.getElement(y) + " " + xMax.getElement(y) + "]);\n");
-            }
-            if (i < hugoniotSegments_.size() - 1) {
-                buffer.append("hold on\n\n");
-            }
-        }
-
-
-        return buffer.toString();
-    }
-
-    public String toMatlabData(int identifier) {
-
-        StringBuffer buffer = new StringBuffer();
-
-        buffer.append("data" + identifier + "= [\n");// + rSegment.toString() + "];\n\n");
-        for (int i = 0; i < hugoniotSegments_.size(); i++) {
-
-
-            HugoniotSegment hSegment = ((HugoniotSegment) hugoniotSegments_.get(
-                    i));
-            RealSegment rSegment = new RealSegment(hSegment.leftPoint(),
-                    hSegment.rightPoint());
-
-            double leftSigma = hSegment.leftSigma();
-            double rightSigma = hSegment.rightSigma();
-            buffer.append(rSegment.toString() + "   " + leftSigma + " " + rightSigma + " " + hSegment.getLeftLambdaArray()[0] + " " + hSegment.getLeftLambdaArray()[1] + " " + hSegment.getRightLambdaArray()[0] + " " + hSegment.getRightLambdaArray()[1] +"\n");
-
-
-        }
-
-        buffer.append("];\n");
-
-        buffer.append("type" + identifier + "=[\n");
-
-        for (int i = 0; i < hugoniotSegments_.size(); i++) {
-            HugoniotSegment hSegment = ((HugoniotSegment) hugoniotSegments_.get(
-                    i));
-            buffer.append((hSegment.getType() +1) + ";\n");
-        }
-        buffer.append("];\n");
-        return buffer.toString();
-    }
+   
+    
 
 //    public String toMatlabData() {
 //
@@ -565,7 +477,6 @@ public class HugoniotCurve extends RPnCurve implements RpSolution {
 //
 //        return buffer.toString();
 //    }
-
 //    public String toMatlabData() {
 //
 //        StringBuffer buffer = new StringBuffer();
@@ -589,9 +500,9 @@ public class HugoniotCurve extends RPnCurve implements RpSolution {
 
             buffer.append("<HUGONIOTCURVE>\n");
 
-            for (int i = 0; i < hugoniotSegments_.size(); i++) {
+            for (int i = 0; i < segments().size(); i++) {
 
-                HugoniotSegment hSegment = ((HugoniotSegment) hugoniotSegments_.get(
+                HugoniotSegment hSegment = ((HugoniotSegment) segments().get(
                         i));
                 RealSegment rSegment = new RealSegment(hSegment.leftPoint(),
                         hSegment.rightPoint());

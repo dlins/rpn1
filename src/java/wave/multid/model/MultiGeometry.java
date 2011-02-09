@@ -33,4 +33,7 @@ public interface MultiGeometry extends AbstractGeomObj {
     /** Create a visual form of a multidimensional object. */
 
     GeomObjView createView(ViewingTransform transf) throws DimMismatchEx;
+
+
+
 }
