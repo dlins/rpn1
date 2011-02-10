@@ -45,6 +45,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private BorderLayout borderLayout1 = new BorderLayout();
     private JMenuItem exportMenuItem = new JMenuItem();
     private JMenuItem layoutMenuItem = new JMenuItem();
+    private JMenuItem inputCoordsMenuItem = new JMenuItem("Input Coords ...");
     private JMenuItem errorControlMenuItem = new JMenuItem();
     private JMenuItem createSVGImageMenuItem = new JMenuItem();
     private JMenuItem printMenuItem = new JMenuItem();
@@ -624,6 +625,22 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                         errorControlMenuItem_actionPerformed(e);
                     }
                 });
+
+
+        inputCoordsMenuItem.addActionListener(
+                new java.awt.event.ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+
+                        RPnCoordsInputDialog inputDialog = new RPnCoordsInputDialog(true, true);
+                        inputDialog.setVisible(true);
+
+
+                    }
+                });
+
+
+
         createSVGImageMenuItem.setText("Create SVG Image...");
         createSVGImageMenuItem.addActionListener(
                 new java.awt.event.ActionListener() {
@@ -669,6 +686,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         viewMenu_.add(showCurvesPaneltem_);
         jMenuBar1.add(modelInteractionMenu);
 
+
         toolBar_.setFloatable(false);
 
         jMenuBar1.add(helpMenu);
@@ -707,7 +725,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         modelInteractionMenu.add(FindProfileAgent.instance());
         modelInteractionMenu.addSeparator();
         modelInteractionMenu.add(ChangeFluxParamsAgent.instance());
-
+        modelInteractionMenu.add(inputCoordsMenuItem);
         modelInteractionMenu.add(shockMenuItem_);
         modelInteractionMenu.add(errorControlMenuItem);
 
@@ -732,6 +750,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         modelInteractionMenu.removeAll();
         modelInteractionMenu.add(ChangeFluxParamsAgent.instance());
+
+        modelInteractionMenu.add(inputCoordsMenuItem);
         modelInteractionMenu.addSeparator();
         modelInteractionMenu.add(rarefactionMenuItem_);
         modelInteractionMenu.addSeparator();
@@ -755,6 +775,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         modelInteractionMenu.removeAll();
         modelInteractionMenu.add(bifurcationMenuItem_);
+        modelInteractionMenu.add(inputCoordsMenuItem);
         modelInteractionMenu.addSeparator();
 
 

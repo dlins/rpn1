@@ -125,9 +125,11 @@ public class RPnCurvesListFrame extends JFrame implements ListSelectionListener,
             for (int i = 0; i < rowsNumber; i++) {
                 if (curvesTable_.isRowSelected(i)) {
                     RPnDataModule.PHASESPACE.highlightGeometry(i);
+                    System.out.println("Highlight: "+i);
 
                 } else {
                     RPnDataModule.PHASESPACE.lowlightGeometry(i);
+                    System.out.println("Lowlight: " + i);
                 }
 
             }

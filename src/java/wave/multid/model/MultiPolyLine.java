@@ -14,7 +14,7 @@ public class MultiPolyLine extends MultiGeometryImpl {
     // Members
     //
 
-    private final int ALFA_DOWN = 50;
+    private final int ALFA_DOWN = 20;
     private final int ALFA_UP = 255;
     //
     // Constructors
@@ -73,8 +73,6 @@ public class MultiPolyLine extends MultiGeometryImpl {
         viewingAttr().setColor(newColor);
 
     }
-
-   
 
     public void highLight() {
 

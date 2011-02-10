@@ -76,7 +76,7 @@ public class HugoniotSegGeom extends MultiPolyLine {
             attr = new ViewingAttr(new Color(255, 255, 255));
         }
 
-        //TODO The types 100 and 101 must to be removed . Only Hugoniot curves must to have types !!
+
         //TODO SubInflection Curve segment type .
 
         if (segment.getType() == 16) {

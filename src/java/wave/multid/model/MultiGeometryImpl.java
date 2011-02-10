@@ -5,7 +5,6 @@
  */
 package wave.multid.model;
 
-import java.awt.Color;
 import wave.multid.view.*;
 import wave.multid.*;
 import wave.multid.map.Map;
