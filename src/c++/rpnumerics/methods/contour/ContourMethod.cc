@@ -258,7 +258,7 @@ int ContourMethod::curv2d(/*double *segend,*/ int sn, int seglim, double fdummy,
 
                 foncub[0][0] = hugoniot->HugoniotFunction(u);
                 //foncub[0][0] = f(vert[0][0], vert [0][1]);
-
+                
                 refval = foncub[0][0];
                 for (int l = 1; l < 4; l++) {
                     if (l == 2 && type == half) goto lab90;
@@ -322,7 +322,7 @@ lab90:
 
                     //MAKE THE LIST OF EDGE POINTERS
 
-                    nedges_ = hc.mkedge(&edges_[0][0], dime_, &smpedg_[0][0], &solptr_[0][0], &fnbr_[0][0], nsimp_, nsface_);
+                    nedges_ = hc.mkedge(&edges_[0][0], dime_, nedges_, &smpedg_[0][0], &solptr_[0][0], &fnbr_[0][0], nsimp_, nsface_);
 
                     //        printf("Estamos aqui\n");
                     //        cout << "Valor de nedges " << nedges_ << endl;
@@ -532,9 +532,11 @@ void ContourMethod::classifiedCurve(const RealVector & input, vector<HugoniotPol
     rect[0] = 0.0; // xmin
     rect[1] = 1.0; // xmax
     //    rect[2] = 0.0841102; // ymin
-    rect[2] = 0.099308998; // ymin
+//    rect[2] = 0.099308998; // ymin
+
+    rect[2] = 0.0; // ymin
     //    rect[3] = 0.576510849; // ymax
-    rect[3] = 0.478030726; // ymax
+    rect[3] = 1.0; // ymax
 
     //    rect[3] = 1.0; // ymax
 
@@ -563,19 +565,6 @@ void ContourMethod::classifiedCurve(const RealVector & input, vector<HugoniotPol
     //    cout << "antes de complete curve: " << info << endl;
 
     hugoniot->completeCurve(vrs);
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -55,11 +55,11 @@ Physics::Physics(const string & physicsID) : physicsVector_(new vector<SubPhysic
 
         double cnw = 0., cng = 0., expw = 2., expg = 2.;
         FracFlow2PhasesHorizontalAdimensionalized *fh = new FracFlow2PhasesHorizontalAdimensionalized(cnw, cng, expw, expg, TD);
-        FracFlow2PhasesVerticalAdimensionalized * fv = new FracFlow2PhasesVerticalAdimensionalized(cnw, cng, expw, expg,  TD);
+        FracFlow2PhasesVerticalAdimensionalized * fv = new FracFlow2PhasesVerticalAdimensionalized(cnw, cng, expw, expg, TD);
 
 
         Flux2Comp2PhasesAdimensionalized_Params * flux_params = new Flux2Comp2PhasesAdimensionalized_Params(abs_perm, sin_beta, const_gravity,
-                has_gravity, has_horizontal,TD, fh, fv); // Check pointer fh and fv allocation
+                has_gravity, has_horizontal, TD, fh, fv); // Check pointer fh and fv allocation
 
         FluxFunction * flux = new Flux2Comp2PhasesAdimensionalized(*flux_params);
 
@@ -108,6 +108,16 @@ Physics::Physics(const Physics & physics) : physicsVector_(new vector<SubPhysics
     }
 
 }
+
+SubPhysics & Physics::getSubPhysics(const int index) {
+
+    return *physicsVector_->at(index);
+
+}
+
+
+
+
 
 const Space & Physics::domain() const {
     return *space_;

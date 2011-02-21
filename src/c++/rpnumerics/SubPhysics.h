@@ -53,11 +53,13 @@ public:
 
     const Boundary & boundary() const;
 
-
     void boundary(const Boundary &);
 
-
     const FluxFunction & fluxFunction() const;
+
+    HugoniotFunctionClass * getHugoniotFunction() const;
+
+    void setHugoniotFunction(HugoniotFunctionClass *);
 
     const Space & domain() const;
 
@@ -67,6 +69,7 @@ public:
 
     virtual Boundary * defaultBoundary()const = 0;
 
+    virtual ~SubPhysics();
 
     const int type() const;
 

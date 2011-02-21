@@ -30,18 +30,20 @@ ReducedTPCWHugoniotFunctionClass::ReducedTPCWHugoniotFunctionClass(const RealVec
 
     n = U.size();
 
+
+
     Uref.resize(n);
     for (int i = 0; i < n; i++) Uref.component(i) = U.component(i);
 
     // TODO: The flux object must be initialized somehow (be it created here or outside, etc.)
     RealVector uref(Uref.size() - 1);
-//    printf("Uref.size() = %d\n", Uref.size());
+    //    printf("Uref.size() = %d\n", Uref.size());
     for (int i = 0; i < Uref.size() - 1; i++) uref.component(i) = Uref.component(i);
 
     WaveState u(uref); // TODO: Check this.
-//    for (int i = 0; i < uref.size(); i++) printf("u(%d) = %f\n", i, u(i));
+    //    for (int i = 0; i < uref.size(); i++) printf("u(%d) = %f\n", i, u(i));
 
-//    printf("here 1\n");
+    //    printf("here 1\n");
 
     JetMatrix arefJetMatrix(n);
     JetMatrix brefJetMatrix(n);
@@ -57,7 +59,7 @@ ReducedTPCWHugoniotFunctionClass::ReducedTPCWHugoniotFunctionClass(const RealVec
         bref_F[i] = brefJetMatrix(i);
     }
 
-//    printf("here 2\n");
+    //    printf("here 2\n");
 
     WaveState Ur(Uref);
     JetMatrix ArefJetMatrix(n);
@@ -83,6 +85,86 @@ ReducedTPCWHugoniotFunctionClass::ReducedTPCWHugoniotFunctionClass(const RealVec
     else Uref_is_elliptic = true;
 }
 
+void ReducedTPCWHugoniotFunctionClass::setReferenceVector(const RealVector & refVec) {
+
+    n = refVec.size();
+
+    Uref.resize(n);
+    for (int i = 0; i < n; i++) Uref.component(i) = refVec.component(i);
+
+    // TODO: The flux object must be initialized somehow (be it created here or outside, etc.)
+    RealVector uref(Uref.size() - 1);
+    //    printf("Uref.size() = %d\n", Uref.size());
+    for (int i = 0; i < Uref.size() - 1; i++) uref.component(i) = Uref.component(i);
+
+    WaveState u(uref); // TODO: Check this.
+        for (int i = 0; i < uref.size(); i++) printf("u(%d) = %f\n", i, u(i));
+
+    //    printf("here 1\n");
+
+    JetMatrix arefJetMatrix(n);
+    JetMatrix brefJetMatrix(n);
+
+    aref_F = new double[n];
+    bref_F = new double[n];
+
+    ReducedTPCWFluxAdimensionalized->jet(u, arefJetMatrix, 0);
+    ReducedTPCWAccumAdimensionalized->jet(u, brefJetMatrix, 0);
+
+
+    for (int i = 0; i < n; i++) {
+        aref_F[i] = arefJetMatrix(i);
+        bref_F[i] = brefJetMatrix(i);
+    }
+
+    //    printf("here 2\n");
+
+    WaveState Ur(Uref);
+    JetMatrix ArefJetMatrix(n);
+    JetMatrix BrefJetMatrix(n);
+    TPCWFluxAdimensionalized->jet(Ur, ArefJetMatrix, 1);
+    cout << "Valor de Uref: " << Uref << endl;
+
+      for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+          cout<<ArefJetMatrix(i, j)<<" ";
+
+        }
+
+        cout<<endl;
+    }
+
+    cout<<"Valor de Ur"<<Ur(0)<<" "<<Ur(1)<<" "<<Ur(2)<<endl;
+
+    if (TPCWAccumAdimensionalized==NULL){
+        cout<<"Eh nulo"<<endl;
+    }
+    TPCWAccumAdimensionalized->jet(Ur, BrefJetMatrix, 1);
+
+
+//    // Find the generalized eigenpairs of the system at Uref
+//    double A[n][n];
+//    double B[n][n];
+//
+//    for (int i = 0; i < n; i++) {
+//        for (int j = 0; j < n; j++) {
+//            A[i][j] = ArefJetMatrix(i, j);
+//            B[i][j] = BrefJetMatrix(i, j);
+//        }
+//    }
+//    Eigen::eig(n, &A[0][0], &B[0][0], ve_uref);
+//
+//    double epsilon = 1.0e-6; // TODO: Tolerance must be created within a class which will be used by everyone. Say, "class Tolerance", or something like that.
+//
+//    if (fabs(ve_uref[0].i) < epsilon) Uref_is_elliptic = false;
+//    else Uref_is_elliptic = true;
+
+    cout << "Chamando setReference: " << refVec << endl;
+    HugoniotFunctionClass::setReferenceVector(refVec);
+
+
+}
+
 ReducedTPCWHugoniotFunctionClass::ReducedTPCWHugoniotFunctionClass(const ReducedTPCWHugoniotFunctionClass & copy) :
 ReducedTPCWFluxAdimensionalized(copy.ReducedTPCWFluxAdimensionalized),
 ReducedTPCWAccumAdimensionalized(copy.ReducedTPCWAccumAdimensionalized),
@@ -106,7 +188,6 @@ ve_uref(copy.ve_uref) {
 HugoniotFunctionClass * ReducedTPCWHugoniotFunctionClass::clone()const {
     return new ReducedTPCWHugoniotFunctionClass(*this);
 }
-
 
 ReducedTPCWHugoniotFunctionClass::~ReducedTPCWHugoniotFunctionClass() {
     delete [] bref_F;
@@ -135,12 +216,12 @@ double ReducedTPCWHugoniotFunctionClass::HugoniotFunction(const RealVector &u) {
         Hmatrix[i][2] = aref_F[i];
     }
 
-    return 1e20*(det(n, &Hmatrix[0][0]));
+    return 1e20 * (det(n, &Hmatrix[0][0]));
     //return u.component(0)*u.component(0) + u.component(1)*u.component(1) - .5;
 }
 
 void ReducedTPCWHugoniotFunctionClass::completeCurve(vector<RealVector> & curve) {
-//    cout << "Chamando complete curve nao default" << endl;
+    //    cout << "Chamando complete curve nao default" << endl;
 
     for (unsigned int i = 0; i < curve.size(); i++) {
         double darcy_speed;
@@ -155,7 +236,7 @@ void ReducedTPCWHugoniotFunctionClass::completeCurve(vector<RealVector> & curve)
         for (int j = 0; j < n; j++) curve[i].component(j) = temp[j];
         curve[i].component(n) = darcy_speed;
     }
-//    cout << "Saindo de complete curve" << endl;
+    //    cout << "Saindo de complete curve" << endl;
     return;
 
 }

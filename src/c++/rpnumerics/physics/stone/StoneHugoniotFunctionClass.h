@@ -19,6 +19,7 @@ class StoneHugoniotFunctionClass : public HugoniotFunctionClass {
     protected:
     public:
         StoneHugoniotFunctionClass(const RealVector &U, const StoneFluxFunction &);
+        void setReferenceVector(const RealVector & refVec);
         ~StoneHugoniotFunctionClass();
 
         double HugoniotFunction(const RealVector &u);

@@ -5,14 +5,13 @@
  */
 package rpn.controller.ui;
 
+import rpn.RPnCurvesConfigPanel;
 import rpn.usecase.ChangeFluxParamsAgent;
 import rpn.usecase.ChangeDirectionAgent;
 import rpn.usecase.CompositePlotAgent;
 import rpn.usecase.HugoniotPlotAgent;
 import rpn.usecase.RarefactionOrbitPlotAgent;
 import rpn.usecase.ShockCurvePlotAgent;
-import rpn.usecase.CoincidencePlotAgent;
-import rpn.usecase.SubInflectionPlotAgent;
 import wave.util.RealVector;
 
 public class RAREFACTION_CONFIG extends UI_ACTION_SELECTED {
@@ -27,6 +26,7 @@ public class RAREFACTION_CONFIG extends UI_ACTION_SELECTED {
         ChangeDirectionAgent.instance().setEnabled(true);
         ChangeFluxParamsAgent.instance().setEnabled(true);
         CompositePlotAgent.instance().setEnabled(true);
+
 
 
 

@@ -19,6 +19,7 @@
 #include "AccumulationFunction.h"
 #include "Multid.h"
 #include "StoneFluxFunction.h"
+#include "StoneHugoniotFunctionClass.h"
 
 /*
  * ---------------------------------------------------------------

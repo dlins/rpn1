@@ -16,6 +16,7 @@
 #include "SubPhysics.h"
 #include "Accum2Comp2PhasesAdimensionalized.h"
 #include "Flux2Comp2PhasesAdimensionalized.h"
+#include "ReducedTPCWHugoniotFunctionClass.h"
 #include "RectBoundary.h"
 #include "Multid.h"
 

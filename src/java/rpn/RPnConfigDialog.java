@@ -500,7 +500,7 @@ public class RPnConfigDialog extends RPnDialog {
                     RPnProjDescriptor projDesc = new RPnProjDescriptor(space, panelsLabelTextField_[i].getText(), new Integer(frameSize_[0].getText()), new Integer(frameSize_[1].getText()), projIndices, false);
                     RPnVisualizationModule.DESCRIPTORS.add(projDesc);
 
-                    RPnVisualizationModule.createAuxDescriptor(projDesc, auxSpace, projDesc.isIso2equi());
+//                    RPnVisualizationModule.createAuxDescriptor(projDesc, auxSpace, projDesc.isIso2equi());
 
                 }
             }

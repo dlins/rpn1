@@ -2,6 +2,7 @@ package rpn.component;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import rpn.parser.RPnDataModule;
@@ -21,16 +22,30 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
     protected RpGeometry createGeomFromSource() {
 
         BifurcationCurve curve = (BifurcationCurve) geomSource();
+        ArrayList<RpGeometry> geometryArray = new ArrayList<RpGeometry>();
 
-        int resultSize = curve.segments().size();
+        int resultSize = curve.leftSegments().size();
 
         BifurcationSegGeom[] bifurcationArray = new BifurcationSegGeom[resultSize];
         for (int i = 0; i < resultSize; i++) {
-            bifurcationArray[i] = new BifurcationSegGeom((RealSegment) curve.segments().get(i));
+            bifurcationArray[i] = new BifurcationSegGeom((RealSegment) curve.leftSegments().get(i));
 
         }
-
         return new BifurcationCurveGeom(bifurcationArray, this);
+
+
+//        int rightResultSize = curve.rightSegments().size();
+//
+//        BifurcationSegGeom[] bifurcationRightArray = new BifurcationSegGeom[rightResultSize];
+//        for (int i = 0; i < rightResultSize; i++) {
+//            bifurcationArray[i] = new BifurcationSegGeom((RealSegment) curve.rightSegments().get(i));
+//
+//        }
+//        geometryArray.add(new BifurcationCurveGeom(bifurcationRightArray, this));
+//
+//        return geometryArray;
+
+
     }
 
     public RpGeometry refine() {

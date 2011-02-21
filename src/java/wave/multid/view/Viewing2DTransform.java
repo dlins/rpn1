@@ -1,11 +1,9 @@
 /*
-* Instituto de Matematica Pura e Aplicada - IMPA
-* Departamento de Dinamica dos Fluidos
-*
-*/
-
+ * Instituto de Matematica Pura e Aplicada - IMPA
+ * Departamento de Dinamica dos Fluidos
+ *
+ */
 package wave.multid.view;
-
 
 import wave.multid.map.Map;
 import wave.multid.CoordsArray;
@@ -16,14 +14,11 @@ import wave.multid.map.IdentityMap;
 import wave.multid.map.NoInverseMapEx;
 import wave.multid.map.ProjectionMap;
 
-       
-
-
-
 public class Viewing2DTransform implements ViewingTransform {
     //
     // Constants
     //
+
     public static final int ABSISSA_INDEX = 0;
     public static final int ORDINATE_INDEX = 1;
     //
@@ -33,8 +28,6 @@ public class Viewing2DTransform implements ViewingTransform {
     private IdentityMap coordSysTransform_;
     private ViewPlane viewPlane_;
     private IdentityMap compositeTransform_;
-
-  
 
     //
     // Constructors
@@ -46,24 +39,30 @@ public class Viewing2DTransform implements ViewingTransform {
         makeCompositeTransform();
 
     }
-    
-    
+
     //
     // Accessors/Mutators
     //
-    public ProjectionMap projectionMap() { return projection_; }
+    public ProjectionMap projectionMap() {
+        return projection_;
+    }
 
-    public Map coordSysTransform() { return coordSysTransform_; }
+    public Map coordSysTransform() {
+        return coordSysTransform_;
+    }
 
-    public Map viewingMap() { return compositeTransform_; }
+    public Map viewingMap() {
+        return compositeTransform_;
+    }
 
-    public ViewPlane viewPlane() { return viewPlane_; }
+    public ViewPlane viewPlane() {
+        return viewPlane_;
+    }
 
-
-    public void setViewPlane(ViewPlane vPlane){
-      viewPlane_=vPlane;
-      makeCoordSysTransform();
-      makeCompositeTransform();
+    public void setViewPlane(ViewPlane vPlane) {
+        viewPlane_ = vPlane;
+        makeCoordSysTransform();
+        makeCompositeTransform();
 
     }
 
@@ -74,7 +73,6 @@ public class Viewing2DTransform implements ViewingTransform {
     /*
      * these linear transformations are post-multiplication (T=tXT)
      */
-
     public void shear(double xshear, double yshear) {
         IdentityMap shearTransform = new IdentityMap(Multid.PLANE, Multid.PLANE);
         shearTransform.getTransfMatrix().setElement(0, 1, yshear);
@@ -116,12 +114,12 @@ public class Viewing2DTransform implements ViewingTransform {
     }
 
     public void makeCoordSysTransform() {
- 		/*
-	     * COORDINATE SYSTEM TRANSFORMATION
+        /*
+         * COORDINATE SYSTEM TRANSFORMATION
          *
          * this is the translation + scaling + translation coordinate
-    	 * System transformation
-	     */
+         * System transformation
+         */
 
         coordSysTransform_ = new IdentityMap(Multid.PLANE, Multid.PLANE);
         double XScaleFactor = viewPlane_.getViewport().getWidth() / viewPlane_.getWindow().getWidth();
@@ -129,8 +127,8 @@ public class Viewing2DTransform implements ViewingTransform {
         double YScaleFactor = -viewPlane_.getViewport().getHeight() / viewPlane_.getWindow().getHeight();
         double XTranslateFactor = -viewPlane_.getWindow().getOriginPosition().x * XScaleFactor;
         // we are working with RASTER
-        double YTranslateFactor = -viewPlane_.getWindow().getOriginPosition().y * YScaleFactor +
-            viewPlane_.getViewport().getHeight();
+        double YTranslateFactor = -viewPlane_.getWindow().getOriginPosition().y * YScaleFactor
+                + viewPlane_.getViewport().getHeight();
         // the viewport translation
         XTranslateFactor += viewPlane_.getViewport().getOriginPosition().x;
         YTranslateFactor += viewPlane_.getViewport().getOriginPosition().y;
@@ -142,12 +140,12 @@ public class Viewing2DTransform implements ViewingTransform {
     }
 
     public void makeCompositeTransform() {
-		/*
-        * COMPOSITE TRANSFORMATION
-        *
-		* now we concatenate the projection map. It will carry the
-        * coordinate system transformation parameters along with it
-        */
+        /*
+         * COMPOSITE TRANSFORMATION
+         *
+         * now we concatenate the projection map. It will carry the
+         * coordinate system transformation parameters along with it
+         */
 
         compositeTransform_ = new IdentityMap(projection_.getDomain(), Multid.PLANE);
         compositeTransform_.setTransfMatrix(projection_.getTransfMatrix());
@@ -166,8 +164,8 @@ public class Viewing2DTransform implements ViewingTransform {
             coordSysTransform_.inverse(dcCoords, swapCoords);
             // all unknown values are set to zero...
             worldCoords.setZero();
-            worldCoords.setElement(projection_.getCompIndexes() [ABSISSA_INDEX], swapCoords.getCoords() [ABSISSA_INDEX]);
-            worldCoords.setElement(projection_.getCompIndexes() [ORDINATE_INDEX], swapCoords.getCoords() [ORDINATE_INDEX]);
+            worldCoords.setElement(projection_.getCompIndexes()[ABSISSA_INDEX], swapCoords.getCoords()[ABSISSA_INDEX]);
+            worldCoords.setElement(projection_.getCompIndexes()[ORDINATE_INDEX], swapCoords.getCoords()[ORDINATE_INDEX]);
         } catch (NoInverseMapEx noInvEx) {
             noInvEx.printStackTrace();
         }

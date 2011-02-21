@@ -5,13 +5,12 @@
  */
 package rpn.component;
 
+import java.util.List;
 import rpn.RPnDesktopPlotter;
 import rpn.controller.RpCalcController;
 import rpn.controller.RpController;
-import rpnumerics.RPNUMERICS;
 import rpnumerics.RpCalculation;
 import rpnumerics.RpException;
-import wave.util.RealVector;
 
 public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
     //
@@ -54,8 +53,6 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
         setUI(createUI());
         getUI().install(this);
     }
-
-    
 
     public static String createMatlabColorTable() {
 
@@ -142,11 +139,4 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
             RPnDesktopPlotter.showCalcExceptionDialog(rex);
         }
     }
-
-    
-
-    
-
-   
-    
 }

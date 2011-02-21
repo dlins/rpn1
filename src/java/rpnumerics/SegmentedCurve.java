@@ -22,24 +22,7 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
         hugoniotSegments_ = hugoniotSegments;
     }
 
-    private static CoordsArray[] coordsArrayFromRealSegments(List segments) {
-
-        ArrayList tempCoords = new ArrayList(segments.size());
-        for (int i = 0; i < segments.size(); i++) {
-            RealSegment segment = (RealSegment) segments.get(i);
-            tempCoords.add(new CoordsArray(segment.p1()));
-            tempCoords.add(new CoordsArray(segment.p2()));
-
-        }
-
-        CoordsArray[] coords = new CoordsArray[tempCoords.size()];
-        for (int i = 0; i < tempCoords.size(); i++) {
-            coords[i] = (CoordsArray) tempCoords.get(i);
-        }
-        tempCoords = null;
-        return coords;
-
-    }
+   
 
     public String toMatlabData(int identifier) {
 
@@ -61,8 +44,6 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
             buffer.append(rSegment.toString() + "   " + leftSigma + " " + rightSigma + " " + hSegment.getLeftLambdaArray()[0] + " " + hSegment.getLeftLambdaArray()[1] + " " + hSegment.getRightLambdaArray()[0] + " " + hSegment.getRightLambdaArray()[1] + "\n");
 
         }
-
-
 
         buffer.append("];\n");
 
@@ -140,24 +121,7 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
     }
 
 
-
-     public static String createAxisLabel2D(int x, int y) {
-
-        String axisName[] = new String[3];
-
-        axisName[0] = "s";
-        axisName[1] = "T";
-        axisName[2] = "u";
-
-
-        StringBuffer buffer = new StringBuffer();
-        buffer.append("xlabel('");
-        buffer.append(axisName[x] + "')\n");
-        buffer.append("ylabel('" + axisName[y] + "')\n");
-
-        return buffer.toString();
-
-    }
+    
 
     public String createSegment3DPlotMatlabPlot(int identifier) {
 
@@ -191,6 +155,48 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
 
         return buffer.toString();
     }
+
+
+     private static String createAxisLabel2D(int x, int y) {
+
+        String axisName[] = new String[3];
+
+        axisName[0] = "s";
+        axisName[1] = "T";
+        axisName[2] = "u";
+
+
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("xlabel('");
+        buffer.append(axisName[x] + "')\n");
+        buffer.append("ylabel('" + axisName[y] + "')\n");
+
+        return buffer.toString();
+
+    }
+
+
+
+     private static CoordsArray[] coordsArrayFromRealSegments(List segments) {
+
+        ArrayList tempCoords = new ArrayList(segments.size());
+        for (int i = 0; i < segments.size(); i++) {
+            RealSegment segment = (RealSegment) segments.get(i);
+            tempCoords.add(new CoordsArray(segment.p1()));
+            tempCoords.add(new CoordsArray(segment.p2()));
+
+        }
+
+        CoordsArray[] coords = new CoordsArray[tempCoords.size()];
+        for (int i = 0; i < tempCoords.size(); i++) {
+            coords[i] = (CoordsArray) tempCoords.get(i);
+        }
+        tempCoords = null;
+        return coords;
+
+    }
+
+
 
     //
     // Accessors/Mutators

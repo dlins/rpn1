@@ -9,6 +9,7 @@ import rpn.RPnCurvesConfigPanel;
 import rpn.usecase.BifurcationPlotAgent;
 import rpn.usecase.BuckleyLeverettiInflectionAgent;
 import rpn.usecase.CoincidencePlotAgent;
+import rpn.usecase.DoubleContactAgent;
 import rpn.usecase.SubInflectionPlotAgent;
 import wave.util.RealVector;
 
@@ -20,6 +21,9 @@ public class BIFURCATION_CONFIG extends UI_ACTION_SELECTED {
         CoincidencePlotAgent.instance().setEnabled(true);
         SubInflectionPlotAgent.instance().setEnabled(true);
         BuckleyLeverettiInflectionAgent.instance().setEnabled(true);
+        DoubleContactAgent.instance().setEnabled(true);
+
+
 
 
     }

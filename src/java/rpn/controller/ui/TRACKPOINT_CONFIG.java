@@ -91,13 +91,13 @@ public class TRACKPOINT_CONFIG extends UI_ACTION_SELECTED {
                 }
 
 
-                BifurcationCurve tempCurve = new BifurcationCurve(bifurcationCurve.getFamilyIndex(), tempVerticesArrayList);
-                RealVector worldPoint2D = new RealVector(2);
-                worldPoint2D.setElement(0, worldPoint.getElement(indices[0]));
-                worldPoint2D.setElement(1, worldPoint.getElement(indices[1]));
-                RealVector point = bifurcationCurve.projectionCurve(tempCurve, worldPoint2D);
+//                BifurcationCurve tempCurve = new BifurcationCurve(bifurcationCurve.getFamilyIndex(), tempVerticesArrayList);
+//                RealVector worldPoint2D = new RealVector(2);
+//                worldPoint2D.setElement(0, worldPoint.getElement(indices[0]));
+//                worldPoint2D.setElement(1, worldPoint.getElement(indices[1]));
+//                RealVector point = bifurcationCurve.projectionCurve(tempCurve, worldPoint2D);
 
-                trackedPoint(point);
+//                trackedPoint(point);
 
             }
         }

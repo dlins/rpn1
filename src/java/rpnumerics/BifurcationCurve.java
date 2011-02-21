@@ -8,64 +8,71 @@ package rpnumerics;
 
 import java.util.ArrayList;
 import java.util.List;
+import rpnumerics.methods.contour.ContourCurve;
 
 import wave.multid.CoordsArray;
-import wave.multid.view.*;
+import wave.multid.view.ViewingAttr;
 import wave.util.RealSegment;
 import wave.util.RealVector;
 
-import java.awt.*;
-
-import rpn.component.MultidAdapter;
-import rpnumerics.methods.contour.ContourCurve;
-
-public class BifurcationCurve extends RPnCurve implements RpSolution {
+public class BifurcationCurve extends SegmentedCurve {
     //
     // Members
     //
 
     private int familyIndex_;
-    private List segments;
+    private List leftSegments_;
+    private List rightSegments_;
+//    private List segments;
 
     //
     // Constructor
     //
-    public BifurcationCurve(int familyIndex, ArrayList states) {
-        super(coordsArrayFromRealSegments(states), new ViewingAttr(Color.white));
+//    public BifurcationCurve(int familyIndex, ArrayList states) {
+//        super(coordsArrayFromRealSegments(states), new ViewingAttr(Color.white));
+//
+//        familyIndex_ = familyIndex;
+//        segments = states;
+//    }
+    public BifurcationCurve(List<HugoniotSegment> leftList, List<HugoniotSegment> rightList) {
+
+        super(createSingleSegmentList(leftList, rightList));
+        leftSegments_ = leftList;
+        rightSegments_ = rightList;
+
+    }
+
+    public BifurcationCurve(int familyIndex, ContourCurve curve, ViewingAttr viewingAttr) {
+
+        super(new ArrayList());
 
         familyIndex_ = familyIndex;
-        segments = states;
-    }
-    
-    public BifurcationCurve(int familyIndex, ContourCurve curve, ViewingAttr viewingAttr) {
-        super(curve, new ViewingAttr(Color.white));
-        familyIndex_ = familyIndex;        
-       // segments = MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseRPnCurveToCoordsArray(this));
-        segments = MultidAdapter.converseRPnCurveToRealSegments(this);
+        // segments = MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseRPnCurveToCoordsArray(this));
+//        segments = MultidAdapter.converseRPnCurveToRealSegments(this);
     }
 
     @Override
     public int findClosestSegment(RealVector targetPoint, double alpha) {
-        RealVector target = new RealVector(targetPoint);
-        RealVector closest = null;
-        RealVector segmentVector = null;
-        alpha = 0;
-        int closestSegment = 0;
-        double closestDistance = -1;
-
-        List bifurcationSegment = segments();
-        for (int i = 0; i < segments.size(); i++) {
-
-            RealSegment segment = (RealSegment) bifurcationSegment.get(i);
-            segmentVector = new RealVector(segment.p1());
-            segmentVector.sub(segment.p2());
-
-            closest = new RealVector(target);
-            closest.sub(segment.p2());
-
-
-
-            alpha = closest.dot(segmentVector) / segmentVector.dot(segmentVector);
+//        RealVector target = new RealVector(targetPoint);
+//        RealVector closest = null;
+//        RealVector segmentVector = null;
+//        alpha = 0;
+//        int closestSegment = 0;
+//        double closestDistance = -1;
+//
+//        List bifurcationSegment = segments();
+//        for (int i = 0; i < segments.size(); i++) {
+//
+//            RealSegment segment = (RealSegment) bifurcationSegment.get(i);
+//            segmentVector = new RealVector(segment.p1());
+//            segmentVector.sub(segment.p2());
+//
+//            closest = new RealVector(target);
+//            closest.sub(segment.p2());
+//
+//
+//
+//            alpha = closest.dot(segmentVector) / segmentVector.dot(segmentVector);
 
 //
 //            System.out.println("Numerador: " + closest.dot(segmentVector));
@@ -74,22 +81,23 @@ public class BifurcationCurve extends RPnCurve implements RpSolution {
 //
 //            System.out.println("Dentro de findClosestSegment:" + alpha);
 
-            if (alpha < 0) {
-                alpha = 0;
-            }
-            if (alpha > 1) {
-                alpha = 1;
-            }
-            segmentVector.scale(alpha);
-            closest.sub(segmentVector);
-            if ((closestDistance < 0) || (closestDistance > closest.norm())) {
-                closestSegment = i;
-                closestDistance = closest.norm();
-            }
-        }
-
-
-        return closestSegment;
+//            if (alpha < 0) {
+//                alpha = 0;
+//            }
+//            if (alpha > 1) {
+//                alpha = 1;
+//            }
+//            segmentVector.scale(alpha);
+//            closest.sub(segmentVector);
+//            if ((closestDistance < 0) || (closestDistance > closest.norm())) {
+//                closestSegment = i;
+//                closestDistance = closest.norm();
+//            }
+//        }
+//
+//
+//        return closestSegment;
+        return 0;
     }
 
     //
@@ -99,7 +107,48 @@ public class BifurcationCurve extends RPnCurve implements RpSolution {
         return familyIndex_;
     }
 
-    private static CoordsArray[] coordsArrayFromRealSegments(List segments) {
+   
+
+    public String toXML(boolean calcReady) {
+        StringBuffer buffer = new StringBuffer();
+//        if (calcReady) {
+//
+//            buffer.append("<BIFURCATIONCURVE>\n");
+//
+//            for (int i = 0; i < segments.size(); i++) {
+//                RealSegment rSegment = (RealSegment) segments.get(i);
+//                buffer.append(rSegment.toXML());
+//
+//            }
+//            buffer.append("</BIFURCATIONCURVE>\n");
+//        }
+//
+        return buffer.toString();
+
+    }
+
+
+
+    public List<HugoniotSegment> leftSegments() {
+        return leftSegments_;
+    }
+
+    public List<HugoniotSegment> rightSegments() {
+        return rightSegments_;
+    }
+
+    private static List createSingleSegmentList(List<HugoniotSegment> leftSeg, List<HugoniotSegment> rightSeg) {
+
+        if (leftSeg.addAll(rightSeg)) {
+            return leftSeg;
+        } else {
+            return null;
+        }
+
+    }
+
+
+     private static CoordsArray[] coordsArrayFromRealSegments(List segments) {
 
         ArrayList tempCoords = new ArrayList(segments.size());
         for (int i = 0; i < segments.size(); i++) {
@@ -118,25 +167,6 @@ public class BifurcationCurve extends RPnCurve implements RpSolution {
 
     }
 
-    public String toXML(boolean calcReady) {
-        StringBuffer buffer = new StringBuffer();
-        if (calcReady) {
 
-            buffer.append("<BIFURCATIONCURVE>\n");
 
-            for (int i = 0; i < segments.size(); i++) {
-                RealSegment rSegment = (RealSegment) segments.get(i);
-                buffer.append(rSegment.toXML());
-
-            }
-            buffer.append("</BIFURCATIONCURVE>\n");
-        }
-
-        return buffer.toString();
-
-    }
-
-    public List segments() {
-        return segments;
-    }
 }

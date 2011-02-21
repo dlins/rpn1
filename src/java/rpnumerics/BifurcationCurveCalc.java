@@ -5,19 +5,7 @@
  */
 package rpnumerics;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import rpn.component.BifurcationCurveGeom;
-import rpn.component.BifurcationCurveGeomFactory;
-import rpn.component.RpGeometry;
-import rpn.parser.RPnDataModule;
-import rpn.usecase.BifurcationRefineAgent;
 import rpnumerics.methods.*;
-import rpnumerics.methods.contour.support.CurveDomainManager;
-import rpnumerics.methods.contour.support.DimensionDoenstMatch;
-import rpnumerics.methods.contour.support.NoContourMethodDefined;
 
 public class BifurcationCurveCalc implements RpCalculation {
 
@@ -28,9 +16,9 @@ public class BifurcationCurveCalc implements RpCalculation {
     // Constructors
     //
     public BifurcationCurveCalc() {
-        params_ = new BifurcationParams();
-        bifurcationMethod_ = new BifurcationContourMethod(params_);
-    
+//        params_ = new BifurcationParams();
+//        bifurcationMethod_ = new BifurcationContourMethod(params_);
+//    
 
     }
 

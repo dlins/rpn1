@@ -12,6 +12,7 @@
  */
 #include "SubPhysics.h"
 
+
 /*
  * ---------------------------------------------------------------
  * Definitions:
@@ -24,12 +25,7 @@ space_(new Space(space)),
 ID_(id),
 type_(type) {
 
-
-
-
-
-
-}
+ }
 
 const Space &SubPhysics::domain() const {
     return *space_;
@@ -54,6 +50,15 @@ void SubPhysics::boundary(const Boundary & newBoundary) {
 
 }
 
+HugoniotFunctionClass * SubPhysics::getHugoniotFunction()const {
+    return hugoniotFunction_;
+}
+
+void SubPhysics::setHugoniotFunction(HugoniotFunctionClass *hf){
+
+    hugoniotFunction_=hf;
+}
+
 const FluxFunction & SubPhysics::fluxFunction() const {
     return *fluxFunction_;
 }
@@ -70,3 +75,15 @@ void SubPhysics::accumulationParams(const AccumulationParams & newAccumulationPa
 
     accumulationFunction_->accumulationParams(newAccumulationParams);
 }
+
+ SubPhysics::~SubPhysics(){
+
+     delete fluxFunction_;
+     delete accumulationFunction_;
+     delete boundary_;
+
+    delete hugoniotFunction_;
+    delete space_;
+
+
+ }

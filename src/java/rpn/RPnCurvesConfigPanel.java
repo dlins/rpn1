@@ -31,18 +31,21 @@ public class RPnCurvesConfigPanel extends JPanel {
     private static ToggleButtonListener buttonListener_;
 
     public RPnCurvesConfigPanel() {
+
         buildPanel();
         ChangeDirectionAgent.instance().execute();
         buttonListener_ = new ToggleButtonListener();
 
     }
 
-    public static void setMultipleButton(boolean state){
+    public static void setMultipleButton(boolean state) {
         addLastGeometryButton_.setSelected(state);
-        buttonListener_.actionPerformed(new ActionEvent(addLastGeometryButton_,0,""));
+        buttonListener_.actionPerformed(new ActionEvent(addLastGeometryButton_, 0, ""));
 
 
     }
+
+   
 
     private void buildPanel() {
         addLastGeometryButton_ = new JToggleButton("Multiple plot");
@@ -87,6 +90,8 @@ public class RPnCurvesConfigPanel extends JPanel {
         this.add(directionPanel_, gridConstraints);
         gridConstraints.gridx = 1;
         this.add(familyPanel_, gridConstraints);
+
+
     }
 
     public static Integer getOrbitDirection() {
@@ -97,30 +102,28 @@ public class RPnCurvesConfigPanel extends JPanel {
 
         public void stateChanged(ChangeEvent e) {
             JSpinner familySpinner = (JSpinner) e.getSource();
-            Integer value = (Integer)familySpinner.getValue();
+            Integer value = (Integer) familySpinner.getValue();
             RPNUMERICS.setFamily(value);
 
 
         }
     }
 
-
-    private class ToggleButtonListener implements ActionListener{
+    private class ToggleButtonListener implements ActionListener {
 
         public void actionPerformed(ActionEvent e) {
             JToggleButton button = (JToggleButton) e.getSource();
-               if ( UIController.instance().getState() instanceof UI_ACTION_SELECTED){
-                   UI_ACTION_SELECTED actionSelected = (UI_ACTION_SELECTED)(UIController.instance().getState());
-                   if (actionSelected.getAction() instanceof RpModelPlotAgent){
-                       RpModelPlotAgent plotAgent = (RpModelPlotAgent)actionSelected.getAction();
-                       plotAgent.setMultipleGeometry(!button.isSelected());
+            if (UIController.instance().getState() instanceof UI_ACTION_SELECTED) {
+                UI_ACTION_SELECTED actionSelected = (UI_ACTION_SELECTED) (UIController.instance().getState());
+                if (actionSelected.getAction() instanceof RpModelPlotAgent) {
+                    RpModelPlotAgent plotAgent = (RpModelPlotAgent) actionSelected.getAction();
+                    plotAgent.setMultipleGeometry(!button.isSelected());
 
-                   }
-                       
-               }
+                }
+
+            }
 
         }
-
     }
 
     private class OrbitDirectionListener implements ActionListener {

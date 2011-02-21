@@ -77,6 +77,8 @@ public class AbstractPath implements AbstractGeomObj {
     public BoundingBox getBoundary() { return boundary_; }
 
     public AbstractPathIterator getPathIterator(Map map) throws DimMismatchEx {
+
+      
         if (!getSpace().equals(map.getDomain()))
             throw new DimMismatchEx("MAPPING EXCEPTION");
         // TODO : check this approach... it's not changing

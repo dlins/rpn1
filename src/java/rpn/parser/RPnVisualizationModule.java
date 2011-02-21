@@ -6,7 +6,6 @@
 package rpn.parser;
 
 //import wave.multid.Space;
-import java.util.HashMap;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
@@ -20,7 +19,6 @@ import rpn.RPnConfig;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.XMLReader;
 import rpn.RPnProjDescriptor;
-import rpnumerics.RPNUMERICS;
 import wave.multid.Space;
 
 /** This class configures the initial visualization properties. Reading a XML file that contains the necessary information, this class sets the axis, labels , domain, etc to represents correctly the physics. */
@@ -151,7 +149,6 @@ public class RPnVisualizationModule {
 
         Integer dimension = new Integer(visualizationProfile.getName());
 
-
         Set<Entry<String, ConfigurationProfile>> configurationSet = visualizationProfile.getProfiles().entrySet();
 
         Space space = new Space("Domain", dimension);
@@ -180,12 +177,11 @@ public class RPnVisualizationModule {
 
             DESCRIPTORS.add(new RPnProjDescriptor(space, label, w, h, axisArray, iso));
 
-            Space auxSpace = new Space("AuxDomain", dimension * 2);
+        }
+        Space auxSpace = new Space("AuxDomain", dimension);
 
-            for (RPnProjDescriptor descriptor : DESCRIPTORS) {
-                createAuxDescriptor(descriptor, auxSpace, descriptor.isIso2equi());
-
-            }
+        for (RPnProjDescriptor descriptor : DESCRIPTORS) {
+            createAuxDescriptor(descriptor, auxSpace, descriptor.isIso2equi());
 
         }
 
@@ -199,16 +195,18 @@ public class RPnVisualizationModule {
         int w = descriptor.viewport().width;
         int h = descriptor.viewport().height;
 
-        RPnProjDescriptor auxDescriptorLeft = new RPnProjDescriptor(space, "Aux " + projIndices[0] + " " + projIndices[1], w, h, projIndices, isIso2Equi);
+        RPnProjDescriptor auxDescriptorLeft = new RPnProjDescriptor(space, "Left " + projIndices[0] + " " + projIndices[1], w, h, projIndices, isIso2Equi);
         AUXDESCRIPTORS.add(auxDescriptorLeft);
 
+        System.out.println("auxDescriptorLeft: " + auxDescriptorLeft.label());
+//
         int[] auxProj = new int[2];
-        auxProj[0] = projIndices[0] + space.getDim() / 2;
-        auxProj[1] = projIndices[1] + space.getDim() / 2;
+        auxProj[0] = projIndices[0];// + space.getDim() ;
+        auxProj[1] = projIndices[1];// + space.getDim() ;
 
-        RPnProjDescriptor auxDescriptorRight = new RPnProjDescriptor(space, "Aux " + auxProj[0] + " " + auxProj[1], w, h, auxProj, isIso2Equi);
+        RPnProjDescriptor auxDescriptorRight = new RPnProjDescriptor(space, "Right " + auxProj[0] + " " + auxProj[1], w, h, auxProj, isIso2Equi);
         AUXDESCRIPTORS.add(auxDescriptorRight);
-
+        System.out.println("auxDescriptorRight: "+auxDescriptorRight.label());
 
     }
 

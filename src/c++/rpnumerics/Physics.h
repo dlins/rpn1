@@ -40,7 +40,7 @@ private:
     Space * space_;
     int type_;
     static string rpnHome_;
-    
+
 public:
 
 
@@ -61,12 +61,12 @@ public:
 
     const string & ID() const;
 
-    const SubPhysics & getSubPhysics(const int);
+    SubPhysics & getSubPhysics(const int);
 
     const vector<SubPhysics *> & getPhysicsVector()const;
 
     static const string & getRPnHome();
-    
+
     static void setRPnHome(const string &);
 
 

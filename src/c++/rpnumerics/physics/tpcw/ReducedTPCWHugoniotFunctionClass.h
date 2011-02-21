@@ -49,6 +49,8 @@ public:
 
     ReducedTPCWHugoniotFunctionClass(const ReducedTPCWHugoniotFunctionClass &);
 
+    void setReferenceVector(const RealVector & refVec) ;
+
     double HugoniotFunction(const RealVector &u); // TODO: u tem que ter dimensao 2 e nao 3.
 
     void CompleteHugoniot(double &darcy_speedplus, const RealVector &uplus); // TODO: u tem que ter dimensao 2 e nao 3.

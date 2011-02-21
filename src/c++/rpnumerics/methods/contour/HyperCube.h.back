@@ -20,7 +20,6 @@
 #include "eigen.h"
 #include <iostream>
 
-#include "Matrix.h"
 
 /*
  * ---------------------------------------------------------------
@@ -106,7 +105,7 @@ private:
      * @returns  <p> -1  ----------> a1  not found in  a2 </p> <p> column no.  --> a1  found in  a2 </p>
      */
 
-    int search(int *a1, int *a2, int n1, int n2, int n3);
+    int search(int *a1, int *a2, int n1, int n2,int n3);
 
 
     /*
@@ -416,17 +415,12 @@ private:
 
 
 public:
-    void cpp_mkcube(Matrix<double> &cpp_cvert_, // cvert_[ncvert_][n_]
-            Matrix<int> &cpp_bsvert_, // bsvert_[n_ + 1][n_]
-            Matrix<int> &cpp_perm_, // perm_[n_][nsimp_]
-            int ncvert_, int nsimp_, int n_);
+
 
     void mkcube(double *cvert_, // cvert_[ncvert_][n_]
             int *bsvert_, // bsvert_[n_ + 1][n_]
             int *perm_, // perm_[n_][nsimp_]
             int ncvert_, int nsimp_, int n_);
-
-
 
 
 
@@ -459,12 +453,6 @@ public:
      */
 
     // TODO: exstfc eh usado dentro de mksoln, porem ainda nao foi inicializado
-    int cpp_cubsol(int *solptr_, Matrix<double> &cpp_sol_, int dims_, int *sptr_, int nsoln_,
-            double *foncub, int *exstfc, int *face,
-            int *facptr_, int dimf_, double *cvert, int ncvert_, int n_, int m_,
-            int nsimp_, int nsface_, int nface, double *u, double *g,
-            double *x, int *wrki);
-
     int cubsol(int *solptr_, double *sol_, int dims_, int *sptr_, int nsoln_,
             double *foncub, int *exstfc, int *face,
             int *facptr_, int dimf_, double *cvert, int ncvert_, int n_, int m_,
@@ -519,9 +507,7 @@ public:
 
     int mkcomb(int *comb_, int np, int mp);
 
-    int cpp_mkedge(Matrix<int> &cpp_edges_, int dime_, int nedges_, int *smpedg_, int *solptr_, int *fnbr_, int nsimp_, int nsface_);
-
-    int mkedge(int *edges_, int dime_, int nedges_, int *smpedg_, int *solptr_, int *fnbr_, int nsimp_, int nsface_);
+    int mkedge(int *edges_, int dime_, int *smpedg_, int *solptr_, int *fnbr_, int nsimp_, int nsface_);
 
     void mkflst(int *facept_, int *ptrf_, // facept_[faceptInd_][2], ptrf_[nface_][2]
             int *facatt_, int *ptfatt_, // facatt_[fdim_][2], ptfatt_[nface_][2]
@@ -536,8 +522,7 @@ public:
     void putmi(const char *name, int *matrix_, int k1_, int k2_);
     void putmi2(const char *name, int *matrix_, int k1_, int k2_, int kmax);
 
-    HyperCube(){};
-    ~HyperCube(){};
+
 };
 
 #endif //! _HyperCube_H

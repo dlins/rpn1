@@ -21,6 +21,9 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import rpn.controller.ui.*;
 import rpn.message.*;
 import rpnumerics.ShockProfile;
+import wave.util.IsoTriang2DBoundary;
+import wave.util.RealVector;
+import wave.util.RectBoundary;
 
 public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
@@ -136,11 +139,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
                 toolBar_.add(ShockCurvePlotAgent.instance().getContainer());
 
-
                 toolBar_.add(RarefactionOrbitPlotAgent.instance().getContainer());
-                toolBar_.add(CompositePlotAgent.instance().getContainer());
 
-                toolBar_.add(CompositePlotAgent.instance().getContainer());
+//                toolBar_.add(CompositePlotAgent.instance().getContainer());
                 toolBar_.add(ScratchAgent.instance().getContainer());
 
                 ScratchAgent.instance().setEnabled(true);
@@ -153,13 +154,14 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 bifurcationConfigMenu();
 
                 toolBar_.removeAll();
-                toolBar_.add(BifurcationPlotAgent.instance().getContainer());
+//                toolBar_.add(BifurcationPlotAgent.instance().getContainer());
                 toolBar_.add(CoincidencePlotAgent.instance().getContainer());
                 toolBar_.add(SubInflectionPlotAgent.instance().getContainer());
                 toolBar_.add(BuckleyLeverettiInflectionAgent.instance().getContainer());
-                toolBar_.add(ScratchAgent.instance().getContainer());
-                toolBar_.add(BifurcationRefineAgent.instance().getContainer());
-                toolBar_.add(TrackPointAgent.instance().getContainer());
+                toolBar_.add(DoubleContactAgent.instance().getContainer());
+//                toolBar_.add(ScratchAgent.instance().getContainer());
+//                toolBar_.add(BifurcationRefineAgent.instance().getContainer());
+//                toolBar_.add(TrackPointAgent.instance().getContainer());
                 ScratchAgent.instance().setEnabled(true);
             }
 
@@ -229,66 +231,72 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         wave.multid.graphs.ClippedShape clipping = new wave.multid.graphs.ClippedShape(boundary);
         int numOfPanels = RPnVisualizationModule.DESCRIPTORS.size();
 
-        auxFrames_ = new RPnPhaseSpaceFrame[2 * numOfPanels];
+        auxFrames_ = new RPnPhaseSpaceFrame[numOfPanels * 2];
         frames_ = new RPnPhaseSpaceFrame[numOfPanels];
 
-        leftFrames_ = new RPnPhaseSpaceFrame[numOfPanels];
-        rightFrames_ = new RPnPhaseSpaceFrame[numOfPanels];
+//        leftFrames_ = new RPnPhaseSpaceFrame[numOfPanels];
+//        rightFrames_ = new RPnPhaseSpaceFrame[numOfPanels];
+
+        //Init Aux Frames
+
+        Boundary auxBoundary = null;
+
+        if (RPNUMERICS.boundary() instanceof RectBoundary) {
+            RealVector originalMax = RPNUMERICS.boundary().getMaximums();
+            RealVector originalMin = RPNUMERICS.boundary().getMinimums();
+
+            RealVector newMax = new RealVector(2 * RPNUMERICS.boundary().getMaximums().getSize());
+            RealVector newMin = new RealVector(2 * RPNUMERICS.boundary().getMinimums().getSize());
+
+            newMin.setElement(0, originalMin.getElement(0));
+            newMin.setElement(1, originalMin.getElement(1));
+            newMin.setElement(2, originalMin.getElement(0));
+            newMin.setElement(3, originalMin.getElement(1));
+
+            newMax.setElement(0, originalMax.getElement(0));
+            newMax.setElement(1, originalMax.getElement(1));
+            newMax.setElement(2, originalMax.getElement(0));
+            newMax.setElement(3, originalMax.getElement(1));
+
+            auxBoundary = new RectBoundary(newMin, newMax);
+
+        } else {
+
+            RealVector A = new RealVector("0 0");
+            RealVector B = new RealVector("0 1");
+            RealVector C = new RealVector("1 0");
 
 
+            auxBoundary = new IsoTriang2DBoundary(A, B, C);
+        }
+
+        int auxNumOfPanels = RPnVisualizationModule.AUXDESCRIPTORS.size();
+        System.out.println("Quantidade de projecoes auxiliares: " + RPnVisualizationModule.AUXDESCRIPTORS.size());
+        wave.multid.graphs.ClippedShape auxClipping = new wave.multid.graphs.ClippedShape(auxBoundary);
+        for (int i = 0; i < auxNumOfPanels; i++) {
+            wave.multid.view.ViewingTransform auxViewingTransf =
+                    ((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(
+                    i)).createTransform(auxClipping);
+            try {
+                wave.multid.view.Scene auxScene = RPnDataModule.AUXPHASESPACE.createScene(auxViewingTransf,
+                        new wave.multid.view.ViewingAttr(Color.black));
+                System.out.println("Dimensao do auxiliar: " + RPnDataModule.AUXPHASESPACE.getSpace().getDim());
+                auxFrames_[i] = new RPnPhaseSpaceFrame(auxScene, commandMenu_);
+                auxFrames_[i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i)).label());
+
+                UIController.instance().install(auxFrames_[i].phaseSpacePanel());
+
+                setFramesPosition(auxFrames_[i]);
+                auxFrames_[i].pack();
+                auxFrames_[i].setVisible(true);
 
 
-////        //Init Aux Frames
-////
-//        Boundary auxBoundary = null;
-//
-//        if (RPNUMERICS.boundary() instanceof RectBoundary) {//TODO Get auxiliar boundary configuration from RPNUMERICS. Implement auxiliar frame for triangular domain
-//
-//            RealVector originalMax = RPNUMERICS.boundary().getMaximums();
-//            RealVector originalMin = RPNUMERICS.boundary().getMinimums();
-//
-//            RealVector newMax = new RealVector(RPNUMERICS.boundary().getMaximums().getSize() * 2);
-//
-//            RealVector newMin = new RealVector(RPNUMERICS.boundary().getMinimums().getSize() * 2);
-//
-//            newMin.setElement(0, originalMin.getElement(0));
-//            newMin.setElement(1, originalMin.getElement(1));
-//            newMin.setElement(2, originalMin.getElement(0));
-//            newMin.setElement(3, originalMin.getElement(1));
-//
-//            newMax.setElement(0, originalMax.getElement(0));
-//            newMax.setElement(1, originalMax.getElement(1));
-//            newMax.setElement(2, originalMax.getElement(0));
-//            newMax.setElement(3, originalMax.getElement(1));
-//
-//            auxBoundary = new RectBoundary(newMin, newMax);
-//
-//            wave.multid.graphs.ClippedShape auxClipping = new wave.multid.graphs.ClippedShape(auxBoundary);
-//            for (int i = 0; i < numOfPanels * 2; i++) {
-//                wave.multid.view.ViewingTransform auxViewingTransf =
-//                        ((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(
-//                        i)).createTransform(auxClipping);
-//
-//
-//                try {
-//                    wave.multid.view.Scene auxScene = RPnDataModule.AUXPHASESPACE.createScene(auxViewingTransf,
-//                            new wave.multid.view.ViewingAttr(Color.black));
-//                    auxFrames_[i] = new RPnPhaseSpaceFrame(auxScene, commandMenu_);
-//                    auxFrames_[i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i)).label());
-//
-//                    UIController.instance().install(auxFrames_[i].phaseSpacePanel());
-//
-//                    setFramesPosition(auxFrames_[i]);
-//                    auxFrames_[i].pack();
-//                    auxFrames_[i].setVisible(true);
-//
-//
-//                } catch (wave.multid.DimMismatchEx dex) {
-//                    dex.printStackTrace();
-//                }
-//
-//            }
-//        }
+            } catch (wave.multid.DimMismatchEx dex) {
+                dex.printStackTrace();
+            }
+
+        }
+
 
         // Init Main Frame
         for (int i = 0; i < numOfPanels; i++) {
@@ -307,28 +315,28 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
                 frames_[i] = new RPnPhaseSpaceFrame(scene, commandMenu_);
                 frames_[i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(i)).label());
-
-
-
+//
+//
+//
 //                leftFrames_[i] = new RPnPhaseSpaceFrame(leftScene, commandMenu_);
 //                leftFrames_[i].setTitle("Left " + ((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(i)).label());
 //
 //
 //                rightFrames_[i] = new RPnPhaseSpaceFrame(rightScene, commandMenu_);
 //                rightFrames_[i].setTitle("Right " + ((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(i)).label());
-
-
-                /*
-                 * controllers installation
-                 *
-                 * Each controller will be installed in Panel
-                 * constructor and the central UIController
-                 * will be controlling all Panels.
-                 * All Panels listen to all Panels...
-                 */
-
-
-
+//
+//
+//                /*
+//                 * controllers installation
+//                 *
+//                 * Each controller will be installed in Panel
+//                 * constructor and the central UIController
+//                 * will be controlling all Panels.
+//                 * All Panels listen to all Panels...
+//                 */
+//
+//
+//
 //                UIController.instance().install(leftFrames_[i].phaseSpacePanel());
 //
 //                setFramesPosition(leftFrames_[i]);
@@ -705,6 +713,10 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         editMenu.add(ClearPhaseSpaceAgent.instance());
         editMenu.addSeparator();
         editMenu.add(FillPhaseSpaceAgent.instance());
+
+
+
+
 
     }
 

@@ -6,7 +6,7 @@ Accum2Comp2PhasesAdimensionalized::Accum2Comp2PhasesAdimensionalized(const Accum
 }
 
 Accum2Comp2PhasesAdimensionalized::Accum2Comp2PhasesAdimensionalized(const Accum2Comp2PhasesAdimensionalized_Params &param){
-    TD = param.get_thermodynamics();
+    TD = new Thermodynamics_SuperCO2_WaterAdimensionalized(*param.get_thermodynamics());
     phi = param.component(0);
 }
 
@@ -16,7 +16,7 @@ Accum2Comp2PhasesAdimensionalized * Accum2Comp2PhasesAdimensionalized::clone() c
 }
 
 Accum2Comp2PhasesAdimensionalized::~Accum2Comp2PhasesAdimensionalized(){
-
+    delete TD;
 }
 
 // Existe uma discrepancia entre o o significado de s quando este codigo foi
@@ -31,6 +31,7 @@ Accum2Comp2PhasesAdimensionalized::~Accum2Comp2PhasesAdimensionalized(){
 int Accum2Comp2PhasesAdimensionalized::jet(const WaveState &w, JetMatrix &m, int degree) const{
     double s     = w(0); // s_{sigma} = sg in FracFlow2PhasesHorizontal & FracFlow2PhasesVertical
     double Theta = w(1);
+
     double U     = w(2);
 
     // Some auxiliary variables

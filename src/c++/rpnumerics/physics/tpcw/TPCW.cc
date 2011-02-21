@@ -21,8 +21,8 @@
 TPCW::TPCW(const FluxFunction & fluxFunction, const AccumulationFunction & accumulationFunction, const Thermodynamics_SuperCO2_WaterAdimensionalized & thermo) :
 SubPhysics(fluxFunction, accumulationFunction, *new RectBoundary(RealVector(), RealVector()), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATION_),
 TD(new Thermodynamics_SuperCO2_WaterAdimensionalized(thermo)) {
-//    cout << "Calculo de U0[1] " << TD->T2Theta(310.) << endl;
-//    cout << "Calculo de U0[2] " << TD->u2U(4.22e-6) << endl;
+    //    cout << "Calculo de U0[1] " << TD->T2Theta(310.) << endl;
+    //    cout << "Calculo de U0[2] " << TD->u2U(4.22e-6) << endl;
 
     // Create Horizontal & Vertical FracFlows
     double cnw = 0., cng = 0., expw = 2., expg = 2.;
@@ -31,6 +31,22 @@ TD(new Thermodynamics_SuperCO2_WaterAdimensionalized(thermo)) {
 
     // Create the Flux and its params
     boundary(*defaultBoundary());
+
+
+
+    double const_gravity = 9.8;
+    double abs_perm = 3e-12;
+    double phi = 0.38;
+
+    RealVector Uref(3);
+    Uref.component(0)=0;
+    Uref.component(1) = 0;
+    Uref.component(2) = 0;
+
+    ReducedTPCWHugoniotFunctionClass * tpcwhc = new ReducedTPCWHugoniotFunctionClass(Uref, abs_perm, phi, const_gravity, TD, fh);
+
+    setHugoniotFunction(tpcwhc);
+
 
 }
 
@@ -42,6 +58,21 @@ TD(new Thermodynamics_SuperCO2_WaterAdimensionalized(*copy.TD)) {
     double cnw = 0., cng = 0., expw = 2., expg = 2.;
     fh = new FracFlow2PhasesHorizontalAdimensionalized(cnw, cng, expw, expg, *TD);
     fv = new FracFlow2PhasesVerticalAdimensionalized(cnw, cng, expw, expg, *TD);
+
+
+    double const_gravity = 9.8;
+    double abs_perm = 3e-12;
+    double phi = 0.38;
+    RealVector Uref(3);
+    Uref.component(0)=0;
+    Uref.component(1) = 0;
+    Uref.component(2) = 0;
+
+    ReducedTPCWHugoniotFunctionClass * tpcwhc = new ReducedTPCWHugoniotFunctionClass(Uref, abs_perm, phi, const_gravity, TD, fh);
+
+    setHugoniotFunction(tpcwhc);
+//
+
 
 }
 
@@ -78,7 +109,7 @@ Boundary * TPCW::defaultBoundary()const {
     RealVector max(3);
 
     max.component(0) = 1.0;
-//    max.component(1) = T2Theta(450);
+    //    max.component(1) = T2Theta(450);
     max.component(1) = T2Theta(420);
 
     //    max.component(1) = 1;

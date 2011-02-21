@@ -11,7 +11,6 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import wave.multid.CoordsArray;
 import wave.multid.DimMismatchEx;
 import wave.multid.Space;
@@ -23,8 +22,8 @@ import wave.multid.view.ViewingAttr;
 
 public abstract class SegmentedCurveGeom implements MultiGeometry, RpGeometry {
 
-    private Space space_;
-    private BoundingBox boundary_;
+    protected Space space_;
+    protected  BoundingBox boundary_;
     private List<HugoniotSegGeom> hugoniotSegList_;
     private RpGeomFactory factory_;
     public  ViewingAttr VIEWING_ATTR = new ViewingAttr(Color.white);

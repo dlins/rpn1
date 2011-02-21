@@ -118,7 +118,7 @@ public class RPnInputComponent extends AbstractAction {
             } catch (BadLocationException ex) {
                 System.out.println("Excessao Bad" + ex.getMessage());
             } catch (NumberFormatException ex) {
-                System.out.println("Excessao Nuberformat " + ex.getMessage());
+                System.out.println("Excessao NumberFormat " + ex.getMessage());
             }
 
         }

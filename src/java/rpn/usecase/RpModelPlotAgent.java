@@ -15,8 +15,6 @@ import java.util.Iterator;
 import javax.swing.AbstractButton;
 import rpn.RPnCurvesListFrame;
 import rpn.RPnPhaseSpaceAbstraction;
-import rpn.component.BuckleyLeverettinInflectionGeom;
-import rpn.component.SubInflectionCurveGeom;
 import rpn.controller.ui.*;
 
 public abstract class RpModelPlotAgent extends RpModelActionAgent {
@@ -43,6 +41,7 @@ public abstract class RpModelPlotAgent extends RpModelActionAgent {
     public void execute() {
         RealVector[] userInputList = UIController.instance().userInputList();
         RPnPhaseSpaceAbstraction phaseSpace = RPnDataModule.PHASESPACE;
+
         String listString = "";
         // selecting phase space
 
@@ -50,6 +49,11 @@ public abstract class RpModelPlotAgent extends RpModelActionAgent {
         Iterator oldValue = phaseSpace.getGeomObjIterator();
 
         RpGeometry geometry = createRpGeometry(userInputList);
+
+        if (this instanceof DoubleContactAgent){
+            System.out.println("Sou instancia");
+        }
+
 
 //        if (geometry instanceof CoincidenceCurveGeom || geometry instanceof SubInflectionCurveGeom){
 //            keepLastGeometry_=true;

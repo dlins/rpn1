@@ -6,6 +6,7 @@
 
 package rpn.controller.ui;
 
+import rpn.RPnCurvesConfigPanel;
 import rpn.usecase.HugoniotPlotAgent;
 import rpnumerics.PhasePoint;
 import rpnumerics.RPNUMERICS;
@@ -19,6 +20,7 @@ public class SHOCK_CONFIG extends UI_ACTION_SELECTED {
     //
     public SHOCK_CONFIG() {
         super(HugoniotPlotAgent.instance());
+
     }
 
     //

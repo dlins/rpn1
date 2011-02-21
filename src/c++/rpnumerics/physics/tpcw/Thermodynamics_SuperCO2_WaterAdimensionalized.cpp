@@ -12,11 +12,11 @@ int Thermodynamics_SuperCO2_WaterAdimensionalized::create_spline(const std::stri
     //    printf("Dentro de create spline\n");
     std::string temp(rpnHomePath_);
     temp.append(dataPath_);
-//    std::cout << "Valor de temp: " << temp << "\n";
+    //    std::cout << "Valor de temp: " << temp << "\n";
 
     // Open the file that contains the data needed for the creation of the spline
     FILE *fid;
-//    fid = fopen(rpnHome.append(name).c_str(), "r");
+    //    fid = fopen(rpnHome.append(name).c_str(), "r");
 
     fid = fopen(temp.append(name).c_str(), "r");
 
@@ -164,15 +164,6 @@ rpnHomePath_(rpnHomePath) {
     info_hsigmaC = create_spline("hsigmaC_spline.txt", "hsigmaC", P, hsigmaC_);
 
 }
-
-
-
-
-
-
-
-
-
 
 
 
