@@ -58,6 +58,10 @@ public class HugoniotSegment extends RealSegment {
         intType_ = type;
     }
 
+    public void setIntType(int type_) {
+        intType_=type_;
+    }
+
     public HugoniotSegment(RealVector leftPoint, double leftSigma, RealVector rightPoint, double rightSigma,
             HugoniotPointType type) {
         super(leftPoint, rightPoint);

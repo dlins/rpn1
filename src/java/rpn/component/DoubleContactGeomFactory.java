@@ -9,7 +9,7 @@ import rpnumerics.*;
 
 public class DoubleContactGeomFactory extends BifurcationCurveGeomFactory {
 
-    private int activeGeometry_;
+  
 
     public DoubleContactGeomFactory(DoubleContactCurveCalc calc) {
         super(calc);
@@ -23,29 +23,21 @@ public class DoubleContactGeomFactory extends BifurcationCurveGeomFactory {
 
         DoubleContactCurve curve = (DoubleContactCurve) geomSource();
 
-        BifurcationSegGeom[] hugoniotArray = null;
+        BifurcationSegGeom[] leftBifurcationSegArray = null;
 
-        int resultSize = curve.leftSegments().size();
+        int resultSize = curve.segments().size();
 
-        hugoniotArray = new BifurcationSegGeom[resultSize];
+        leftBifurcationSegArray = new BifurcationSegGeom[resultSize];
         for (int i = 0; i < resultSize; i++) {
-            hugoniotArray[i] = new BifurcationSegGeom((HugoniotSegment) curve.leftSegments().get(i));
-            
+            leftBifurcationSegArray[i] = new BifurcationSegGeom((HugoniotSegment) curve.segments().get(i));
+
         }
 
-        resultSize = curve.rightSegments().size();
-
-        hugoniotArray = new BifurcationSegGeom[resultSize];
-        for (int i = 0; i < resultSize; i++) {
-            hugoniotArray[i] = new BifurcationSegGeom((HugoniotSegment) curve.rightSegments().get(i));
-        }
-
-
-        System.out.println("Chamando geom from source");
-
-        return new DoubleContactCurveGeom(hugoniotArray, this);
+        return new DoubleContactCurveGeom(leftBifurcationSegArray, this);
 
     }
+
+   
 
 //    public List<RpGeometry> createGeometriesFromSource() {
 //
@@ -100,8 +92,6 @@ public class DoubleContactGeomFactory extends BifurcationCurveGeomFactory {
 //        buffer.append("axis([" + xMin.getElement(2) + " " + xMax.getElement(2) + " " + xMin.getElement(0) + " " + xMax.getElement(0) + "]);\n");
 //        buffer.append(curve.createMatlabPlotLoop(3, 1, 0));
 //        buffer.append(SegmentedCurve.createAxisLabel2D(2, 0));
-//
-//
 //
 //        return buffer.toString();
         return null;

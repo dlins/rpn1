@@ -59,7 +59,7 @@ public class DoubleContactAgent extends RpModelPlotAgent {
 
         DoubleContactGeomFactory factory = new DoubleContactGeomFactory(new DoubleContactCurveCalc());
 
-        RPnPhaseSpaceAbstraction auxPhaseSpace = RPnDataModule.AUXPHASESPACE;
+        RPnPhaseSpaceAbstraction auxPhaseSpace = RPnDataModule.PHASESPACE;//AUXPHASESPACE;
 
         RpGeometry geometry = factory.geom();
 

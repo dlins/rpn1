@@ -33,6 +33,7 @@ public abstract class RpModelConfigChangeAgent extends RpModelActionAgent {
         logAction(change);
         rpn.parser.RPnDataModule.PHASESPACE.update();
         UIController.instance().panelsUpdate();
+
     }
 
     @Override

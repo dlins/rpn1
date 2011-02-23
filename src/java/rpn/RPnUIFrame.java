@@ -269,33 +269,33 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
             auxBoundary = new IsoTriang2DBoundary(A, B, C);
         }
-
-        int auxNumOfPanels = RPnVisualizationModule.AUXDESCRIPTORS.size();
-        System.out.println("Quantidade de projecoes auxiliares: " + RPnVisualizationModule.AUXDESCRIPTORS.size());
-        wave.multid.graphs.ClippedShape auxClipping = new wave.multid.graphs.ClippedShape(auxBoundary);
-        for (int i = 0; i < auxNumOfPanels; i++) {
-            wave.multid.view.ViewingTransform auxViewingTransf =
-                    ((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(
-                    i)).createTransform(auxClipping);
-            try {
-                wave.multid.view.Scene auxScene = RPnDataModule.AUXPHASESPACE.createScene(auxViewingTransf,
-                        new wave.multid.view.ViewingAttr(Color.black));
-                System.out.println("Dimensao do auxiliar: " + RPnDataModule.AUXPHASESPACE.getSpace().getDim());
-                auxFrames_[i] = new RPnPhaseSpaceFrame(auxScene, commandMenu_);
-                auxFrames_[i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i)).label());
-
-                UIController.instance().install(auxFrames_[i].phaseSpacePanel());
-
-                setFramesPosition(auxFrames_[i]);
-                auxFrames_[i].pack();
-                auxFrames_[i].setVisible(true);
-
-
-            } catch (wave.multid.DimMismatchEx dex) {
-                dex.printStackTrace();
-            }
-
-        }
+//
+//        int auxNumOfPanels = RPnVisualizationModule.AUXDESCRIPTORS.size();
+//        System.out.println("Quantidade de projecoes auxiliares: " + RPnVisualizationModule.AUXDESCRIPTORS.size());
+//        wave.multid.graphs.ClippedShape auxClipping = new wave.multid.graphs.ClippedShape(auxBoundary);
+//        for (int i = 0; i < auxNumOfPanels; i++) {
+//            wave.multid.view.ViewingTransform auxViewingTransf =
+//                    ((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(
+//                    i)).createTransform(auxClipping);
+//            try {
+//                wave.multid.view.Scene auxScene = RPnDataModule.AUXPHASESPACE.createScene(auxViewingTransf,
+//                        new wave.multid.view.ViewingAttr(Color.black));
+//                System.out.println("Dimensao do auxiliar: " + RPnDataModule.AUXPHASESPACE.getSpace().getDim());
+//                auxFrames_[i] = new RPnPhaseSpaceFrame(auxScene, commandMenu_);
+//                auxFrames_[i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i)).label());
+//
+//                UIController.instance().install(auxFrames_[i].phaseSpacePanel());
+//
+//                setFramesPosition(auxFrames_[i]);
+//                auxFrames_[i].pack();
+//                auxFrames_[i].setVisible(true);
+//
+//
+//            } catch (wave.multid.DimMismatchEx dex) {
+//                dex.printStackTrace();
+//            }
+//
+//        }
 
 
         // Init Main Frame
@@ -307,7 +307,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 wave.multid.view.Scene scene = RPnDataModule.PHASESPACE.createScene(viewingTransf,
                         new wave.multid.view.ViewingAttr(Color.black));
 
-//
+////
 //                wave.multid.view.Scene leftScene = RPnDataModule.LEFTPHASESPACE.createScene(viewingTransf,
 //                        new wave.multid.view.ViewingAttr(Color.black));
 //                wave.multid.view.Scene rightScene = RPnDataModule.RIGHTPHASESPACE.createScene(viewingTransf,
@@ -315,16 +315,16 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
                 frames_[i] = new RPnPhaseSpaceFrame(scene, commandMenu_);
                 frames_[i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(i)).label());
+
 //
-//
-//
+
 //                leftFrames_[i] = new RPnPhaseSpaceFrame(leftScene, commandMenu_);
 //                leftFrames_[i].setTitle("Left " + ((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(i)).label());
-//
+////
 //
 //                rightFrames_[i] = new RPnPhaseSpaceFrame(rightScene, commandMenu_);
 //                rightFrames_[i].setTitle("Right " + ((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(i)).label());
-//
+////
 //
 //                /*
 //                 * controllers installation
@@ -336,7 +336,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 //                 */
 //
 //
-//
+////
 //                UIController.instance().install(leftFrames_[i].phaseSpacePanel());
 //
 //                setFramesPosition(leftFrames_[i]);

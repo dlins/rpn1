@@ -148,8 +148,6 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
             if (i == index) {
                 MultiGeometry geometry = (MultiGeometry) geomList_.get(i);
                 geometry.viewingAttr().setVisible(false);
-
-
             }
         }
 

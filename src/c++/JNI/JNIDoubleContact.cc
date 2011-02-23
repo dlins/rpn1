@@ -167,7 +167,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
         pmax.component(0) = 1.0;
         pmax.component(1) = td.T2Theta(450.0);
 
-        int number_of_grid_pnts[2] = {51, 51};
+        int number_of_grid_pnts[2] = {101, 101};
 
         int lfamily = 0;
         int rfamily = 0;
@@ -183,6 +183,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
 
 
         dc.compute_double_contactTPCW(left_vrs, right_vrs);
+
 
         delete fv;
         delete fh;
