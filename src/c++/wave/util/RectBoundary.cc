@@ -11,7 +11,7 @@
  * Includes:
  */
 #include <vector>
-
+#include <stdio.h>
 #include "RectBoundary.h"
 
 /*
@@ -75,8 +75,8 @@ RectBoundary::RectBoundary(const RealVector & minimums, const RealVector & maxim
 
     test_dimension.resize(minimums.size());
     for (int i = 0; i < minimums.size(); i++) test_dimension[i] = true;
-   
-    for (int i = 0; i < min((int)test.size(), minimums.size()); i++) test_dimension[i] = test[i]; //TODO ???
+
+    for (int i = 0; i < min((int) test.size(), minimums.size()); i++) test_dimension[i] = test[i]; //TODO ???
 
     //    for (int i = 0; i < test.size(); i++) test_dimension[i] = test[i];
     epsilon = eps;
@@ -134,7 +134,10 @@ bool RectBoundary::inside(const RealVector &p) const {
     int pos = 0;
 
     while (in && pos < minimums().size()) {
-        if (p(pos) < minimums()(pos) || p(pos) > maximums()(pos)) in = false;
+        if (test_dimension[pos]) {
+            if (p(pos) < minimums()(pos) || p(pos) > maximums()(pos)) in = false;
+        }
+
         pos++;
     }
     //    cout << "tamanho dentro de inside"<<in<<" "<<p.size() << endl;
@@ -248,9 +251,17 @@ bool RectBoundary::inside(const RealVector &p) const {
 //
 
 int RectBoundary::intersection(const RealVector &p, const RealVector &q, RealVector &r, int &w)const {
-    if (inside(p) && inside(q)) return 1;
-    else if (!inside(p) && !inside(q)) return -1;
-    else {
+    //    printf("Antes da linha 254\n");
+    if (inside(p) && inside(q)) {
+        //        printf("ponto dentro\n");
+        return 1;
+
+    } else if (!inside(p) && !inside(q)) {
+        //        printf("ponto fora\n");
+        return -1;
+
+    } else {
+        //        printf("intersecao\n");
         int n = p.size();
         double alpha, beta;
         int pos = 0;
@@ -266,30 +277,33 @@ int RectBoundary::intersection(const RealVector &p, const RealVector &q, RealVec
                 if (alpha >= 0.0 && alpha <= 1.0) {
                     for (int i = 0; i < n; i++) r.component(i) = alpha * p.component(i) + (1.0 - alpha) * q.component(i);
                     found = true;
-#ifdef _TEST_HYPERBOX_
+                    //#ifdef _TEST_HYPERBOX_
                     printf("ALPHA = %f, beta = %f, pos = %d\n", alpha, beta, pos);
-#endif
+                    //#endif
 
                     // Return the index
                     w = pos * n + 0;
-                }
-
-                if (beta >= 0.0 && beta <= 1.0) {
+                } else
+                    if (beta >= 0.0 && beta <= 1.0) {
                     for (int i = 0; i < n; i++) r.component(i) = beta * p.component(i) + (1.0 - beta) * q.component(i);
                     found = true;
-#ifdef _TEST_HYPERBOX_
+                    //#ifdef _TEST_HYPERBOX_
                     printf("alpha = %f, BETA = %f, pos = %d\n", alpha, beta, pos);
-#endif
+                    //#endif
 
                     // Return the index
                     w = pos * n + 1;
+                } else {
+                    printf("Other: alpha = %f, beta = %f\n", alpha, beta);
                 }
             }
+
             pos++;
         }
 
-        return 0;
+
     }
+    return 0;
 }
 
 RectBoundary::~RectBoundary() {

@@ -68,6 +68,18 @@ public class AbstractScene implements AbstractGeomObj {
 
     public void load(FileReader cin) { }
 
+
+     public void remove(int  geometryIndex) {
+         MultiGeometry geom = (MultiGeometry) geomList_.remove(geometryIndex);
+
+        try {
+            boundary_.resize(geom.getPathIterator());
+        } catch (DimMismatchEx dex) { dex.printStackTrace(); }
+        for (int i = 0; i < viewList_.size(); i++)
+            ((Scene)viewList_.get(i)).removeViewOf(geom);
+    }
+
+
     public void remove(MultiGeometry geom) {
         geomList_.remove(geom);
               

@@ -475,8 +475,44 @@ void Double_ContactTPCW::func(double *val, int ir, int jr, int kl, int kr,
                 Fr[k] = rightffv(ir, jr + 1).component(k); // fr  = fa(ir, jr + 1);
             }
         }
-      
         
+	double Hmatrix[3][3];
+        double Gq[3];
+
+	for(int i = 0; i < 3; i++){
+            Gq[i]         =  Gr[i] - Gl[i]  ;   
+    	    Hmatrix[i][0] =  Gq[i]          ;    // bJetMatrix(i) - bref_G[i]; // b=G   
+   	    Hmatrix[i][1] = -Fr[i]          ;    // a=F 
+            Hmatrix[i][2] =  Fl[i]          ;
+            }
+
+        val[0] = det(3, &Hmatrix[0][0]); // TODO: PRECISAMOS DO METODO DETERMINANTE.
+
+
+        double X12 = Fr[0]*Gq[1] - Fr[1]*Gq[0] ;
+        double X31 = Fr[2]*Gq[0] - Fr[0]*Gq[2] ;
+        double X23 = Fr[1]*Gq[2] - Fr[2]*Gq[1] ;
+
+        double X12_0 = Fl[0]*Gq[1] - Fl[1]*Gq[0] ;
+        double X31_0 = Fl[2]*Gq[0] - Fl[0]*Gq[2] ;
+        double X23_0 = Fl[1]*Gq[2] - Fl[2]*Gq[1] ;
+
+        double Y21 = Fr[1]*Fl[0] - Fr[0]*Fl[1] ; 
+        double Y13 = Fr[0]*Fl[2] - Fr[2]*Fl[0] ;
+        double Y32 = Fr[2]*Fl[1] - Fr[1]*Fl[2] ;
+
+        double den      = X12*X12 + X31*X31 + X23*X23 ; 
+
+        double scaling_factor =  (X12_0*X12 + X31_0*X31 + X23_0*X23)/den ;    
+        
+        double red_shock_speed = (Y21*X12 + Y13*X31 + Y32*X23)/den ;
+
+        double lambda_right = scaling_factor*lr ;
+
+        val[1] = (red_shock_speed - lambda_left_input[kl]); // SECOND EQUATION
+        val[2] = (red_shock_speed - lambda_right);          // THIRD  EQUATION
+      
+        /*
 	double Hmatrix[3][3];
         double Gq[3];
 
@@ -505,7 +541,7 @@ void Double_ContactTPCW::func(double *val, int ir, int jr, int kl, int kr,
 
         val[1] = red_shock_speed - lambda_left_input[kl]; // SECOND EQUATION
         val[2] = red_shock_speed - lr;                    // THIRD  EQUATION
-
+*/
 
    /*     
         val[1] = lambda_left_input[kl]*(accum_left_input(0, kl) - hur) - (flux_left_input(0, kl) - fr);

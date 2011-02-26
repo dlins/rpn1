@@ -14,6 +14,14 @@
 
 // TODO: number_of_cells should be number_of_grid_points throughout.
 
+//#ifndef CHARACTERISTIC_ON_CURVE
+//    #define CHARACTERISTIC_ON_CURVE  0
+//#endif
+//
+//#ifndef CHARACTERISTIC_ON_DOMAIN
+//    #define CHARACTERISTIC_ON_DOMAIN 1
+//#endif
+
 class Bifurcation_Curve {
     protected:
         double epsilon;
@@ -50,9 +58,23 @@ class Bifurcation_Curve {
 
         void prepare_cell(int i, int j, int family, Matrix< std::vector<double> > &eigen, Matrix<RealVector> &flux_values, Matrix<RealVector> &accum_values, double *lambda, Matrix<double> &flux, Matrix<double> &accum);
 
-        void fill_values_on_curve(const FluxFunction *ff, const AccumulationFunction *aa, const std::vector<RealVector> &input, 
-                                  std::vector<RealVector> &vff, std::vector<RealVector> &vaa, 
-                                  std::vector<std::vector<double> > &vee, std::vector< std::vector<bool> > &eig_is_real);
+        bool prepare_segment(int i, int family, int where_is_characteristic,
+                             const std::vector< std::vector<double> > &eigen, 
+                             const std::vector<RealVector> &flux_values, 
+                             const std::vector<RealVector> &accum_values, 
+                             const std::vector<std::vector<bool> > &eig_is_real,
+                             double *lambda, 
+                             Matrix<double> &flux, 
+                             Matrix<double> &accum);
+
+        void fill_values_on_segments(const FluxFunction *ff, const AccumulationFunction *aa, const std::vector<RealVector> &input, 
+                                     std::vector<RealVector> &vff, std::vector<RealVector> &vaa, 
+                                     std::vector<std::vector<double> > &vee, std::vector< std::vector<bool> > &eig_is_real);
+
+        template <typename T> void initialize_matrix(int n, int m, T *matrix, T value){
+            for (int i = 0; i < n*m; i++) matrix[i] = value;
+            return;
+        }
 
     public:
         Bifurcation_Curve();

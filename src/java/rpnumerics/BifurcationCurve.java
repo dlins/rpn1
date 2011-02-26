@@ -107,20 +107,14 @@ public class BifurcationCurve extends SegmentedCurve {
         return familyIndex_;
     }
 
-    public String toXML(boolean calcReady) {
+    public String toXML() {
         StringBuffer buffer = new StringBuffer();
-//        if (calcReady) {
-//
-//            buffer.append("<BIFURCATIONCURVE>\n");
-//
-//            for (int i = 0; i < segments.size(); i++) {
-//                RealSegment rSegment = (RealSegment) segments.get(i);
-//                buffer.append(rSegment.toXML());
-//
-//            }
-//            buffer.append("</BIFURCATIONCURVE>\n");
-//        }
-//
+
+        for (int i = 0; i < segments().size(); i++) {
+                RealSegment rSegment = (RealSegment) segments().get(i);
+                buffer.append(rSegment.toXML());
+            }
+
         return buffer.toString();
 
     }
@@ -150,8 +144,6 @@ public class BifurcationCurve extends SegmentedCurve {
         }
 
         if (leftSeg.addAll(rightSeg)) {
-
-
 
             return leftSeg;
         } else {

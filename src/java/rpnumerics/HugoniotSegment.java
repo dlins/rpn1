@@ -164,7 +164,7 @@ public class HugoniotSegment extends RealSegment {
         buffer.append("rightpoint=\"" + rightPoint().toString() + "\"" + " ");
         buffer.append("leftsigma=\"" + leftSigma() + "\"" + " ");
         buffer.append("rightsigma=\"" + rightSigma() + "\"" + " ");
-//      buffer.append("hugoniotpointtype=\""+type().toString()+"\"");
+        buffer.append("type=\"" + intType_ + "\"");
         buffer.append(">");
         buffer.append("</HUGONIOTSEGMENT>\n");
 

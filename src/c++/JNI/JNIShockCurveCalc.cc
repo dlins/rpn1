@@ -97,11 +97,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
 
     int t = 11;
 
+    cout << "Valor de family"<<familyIndex << endl;
+
     vector<HugoniotPolyLine> hugoniotPolyLineVector;
     ShockContinuationMethod3D2D method(dimension, familyIndex, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), RpNumerics::getPhysics().boundary(), input, tol, epsilon, t);
 
     method.curve(realVectorInput, timeDirection, hugoniotPolyLineVector);
-//    cout <<"depois de curve em jni"<<endl;
+
     //Classify
 
     jobject segmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);

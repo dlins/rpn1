@@ -55,6 +55,7 @@
 #define SUBINFLECTIONCURVE_LOCATION           "rpnumerics/SubInflectionCurve"
 #define BLCURVE_LOCATION                      "rpnumerics/BuckleyLeverettInflectionCurve"
 #define DOUBLECONTACT_LOCATION                "rpnumerics/DoubleContactCurve"
+#define EXTENSIONCURVE_LOCATION               "rpnumerics/ExtensionCurve"
 
 
 #define NUMERICSPROFILE_LOCATION              "rpnumerics/RPNumericsProfile"

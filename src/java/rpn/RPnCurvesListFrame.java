@@ -13,10 +13,16 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.text.NumberFormat;
 import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JToolBar;
@@ -31,13 +37,15 @@ import rpn.controller.ui.UIController;
 import rpn.parser.RPnDataModule;
 import wave.util.RealVector;
 
-public class RPnCurvesListFrame extends JFrame implements ListSelectionListener, ActionListener, TableModelListener {
+public class RPnCurvesListFrame extends JFrame implements ListSelectionListener, ActionListener, TableModelListener, MouseListener {
 
     private JScrollPane tablePanel_;
     private JToolBar toolBar_;
     private JTable curvesTable_;
     private JButton resetSelectionButton_;
     private static DefaultTableModel tableModel_ = new RPnCurvesTableModel();
+    private JPopupMenu popUpTableMenu_;
+    private JMenuItem removeMenuItem_;
 
     public RPnCurvesListFrame() {
         super("Curves");
@@ -56,6 +64,17 @@ public class RPnCurvesListFrame extends JFrame implements ListSelectionListener,
         toolBar_ = new JToolBar();
         tableModel_.addTableModelListener(this);
         curvesTable_ = new JTable(tableModel_);
+
+        curvesTable_.addMouseListener(this);
+
+        popUpTableMenu_ = new JPopupMenu("Curves Menu");
+
+
+
+        removeMenuItem_ = new JMenuItem("Remove selected curves");
+        removeMenuItem_.addMouseListener(this);
+        popUpTableMenu_.add(removeMenuItem_);
+
 
 
         tablePanel_ = new JScrollPane(curvesTable_);
@@ -87,17 +106,17 @@ public class RPnCurvesListFrame extends JFrame implements ListSelectionListener,
         NumberFormat formatter = NumberFormat.getInstance();
         formatter.setMaximumFractionDigits(4);
 
-        data.add(geometryIndex);
+//        data.add(geometryIndex);
         data.add(geometryName);
         String userInputString = "";
         for (int i = 0; i < userInput.getSize(); i++) {
-            userInputString=userInputString .concat(formatter.format(userInput.getElement(i))+" ");
+            userInputString = userInputString.concat(formatter.format(userInput.getElement(i)) + " ");
 
         }
 
 
 
-    
+
         data.add(userInputString);
         data.add(new Boolean(true));
 
@@ -113,10 +132,6 @@ public class RPnCurvesListFrame extends JFrame implements ListSelectionListener,
 
     }
 
-    public static void removeGeometry(String geometryName) {
-//        System.out.println("Implementar remocao de curva da lista"+ geometryName);
-    }
-
     public void valueChanged(ListSelectionEvent e) {
 
         if (!e.getValueIsAdjusting()) {
@@ -125,11 +140,8 @@ public class RPnCurvesListFrame extends JFrame implements ListSelectionListener,
             for (int i = 0; i < rowsNumber; i++) {
                 if (curvesTable_.isRowSelected(i)) {
                     RPnDataModule.PHASESPACE.highlightGeometry(i);
-                    System.out.println("Highlight: "+i);
-
                 } else {
                     RPnDataModule.PHASESPACE.lowlightGeometry(i);
-                    System.out.println("Lowlight: " + i);
                 }
 
             }
@@ -146,26 +158,67 @@ public class RPnCurvesListFrame extends JFrame implements ListSelectionListener,
     public void tableChanged(TableModelEvent e) {
         curvesTable_.clearSelection();
 
-        if (e.getType() == TableModelEvent.INSERT) {
-            RPnDataModule.PHASESPACE.clearGeometrySelection();
-        }
+//        if (e.getType() == TableModelEvent.INSERT) {
+//            RPnDataModule.PHASESPACE.clearGeometrySelection();
+//        }
 
         if (e.getType() == TableModelEvent.UPDATE) {
 
-            if (e.getColumn() == 3) {
-                Boolean visible = (Boolean) curvesTable_.getValueAt(e.getFirstRow(), 3);
+            if (e.getColumn() == 2) {
+                Boolean visible = (Boolean) curvesTable_.getValueAt(e.getFirstRow(), 2);
                 if (visible) {
-                    RPnDataModule.PHASESPACE.displayGeometry(new Integer ((String)curvesTable_.getValueAt(e.getFirstRow(), 0)));
+//                    RPnDataModule.PHASESPACE.displayGeometry(new Integer((String) curvesTable_.getValueAt(e.getFirstRow(), 0)));
+
+                    RPnDataModule.PHASESPACE.displayGeometry(e.getFirstRow());
+
                 } else {
-                    RPnDataModule.PHASESPACE.hideGeometry(new Integer ((String)curvesTable_.getValueAt(e.getFirstRow(), 0)));
+//                    RPnDataModule.PHASESPACE.hideGeometry(new Integer((String) curvesTable_.getValueAt(e.getFirstRow(),0)));                }
+                    RPnDataModule.PHASESPACE.hideGeometry(e.getFirstRow());
                 }
 //                System.out.println("Trocando valor" + curvesTable_.getValueAt(e.getFirstRow(), 3) + " " + curvesTable_.getValueAt(e.getFirstRow(), 0));
             }
+
         }
 
+        RPnDataModule.PHASESPACE.clearGeometrySelection();
 
     }
 
     private void geometryVisibleSelection(int geomIndex) {
+    }
+
+    public void mouseClicked(MouseEvent e) {
+    }
+
+    public void mousePressed(MouseEvent e) {
+
+        if (e.isPopupTrigger()) {
+            popUpTableMenu_.show(curvesTable_, e.getX(), e.getY());
+        }
+
+
+        if (e.getSource() instanceof JMenuItem) {
+            int[] selectedRows = curvesTable_.getSelectedRows();
+
+            for (int i = 0; i < selectedRows.length; i++) {
+                int j = selectedRows[i];
+                RPnDataModule.PHASESPACE.remove(j);
+
+                System.out.println("Geometria: " + j);
+                tableModel_.removeRow(j);
+
+            }
+
+        }
+
+    }
+
+    public void mouseReleased(MouseEvent e) {
+    }
+
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    public void mouseExited(MouseEvent e) {
     }
 }

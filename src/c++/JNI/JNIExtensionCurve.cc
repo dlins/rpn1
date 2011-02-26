@@ -18,23 +18,23 @@ NOTE :
  */
 
 
-#include "rpnumerics_DoubleContactCurveCalc.h"
-#include "Double_Contact.h"
+#include "rpnumerics_ExtensionCurveCalc.h"
+
 #include "JNIDefs.h"
 #include "RpNumerics.h"
 #include <vector>
 #include <iostream>
-#include "ContourMethod.h"
-#include "ReducedTPCWHugoniotFunctionClass.h"
 #include "TPCW.h"
-#include "StoneHugoniotFunctionClass.h"
-#include "Double_ContactTPCW.h"
+#include "Extension_CurveTPCW.h"
+#include "Extension_Curve.h"
+
+
 
 using std::vector;
 using namespace std;
 
-JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
-(JNIEnv * env, jobject obj,jint xResolution, jint yResolution, jint leftFamily, jint rightFamily) {
+JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
+(JNIEnv * env, jobject obj, jint xResolution, jint yResolution, jint leftFamily, jint rightFamily,jint caracteristicDomain) {
 
     jclass classPhasePoint = (env)->FindClass(PHASEPOINT_LOCATION);
 
@@ -46,7 +46,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
 
     //    jclass hugoniotPointTypeClass = (env)->FindClass(HUGONIOTPOINTTYPE_LOCATION);
 
-    jclass doubleContactCurveClass = env->FindClass(DOUBLECONTACT_LOCATION);
+    jclass doubleContactCurveClass = env->FindClass(EXTENSIONCURVE_LOCATION);
 
     jmethodID toDoubleMethodID = (env)->GetMethodID(classPhasePoint, "toDouble", "()[D");
     jmethodID realVectorConstructorDoubleArray = env->GetMethodID(realVectorClass, "<init>", "([D)V");
@@ -84,8 +84,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
     //    cout << Uref << endl;
 
     // Storage space for the segments:
-    std::vector<RealVector> left_vrs;
-    std::vector<RealVector> right_vrs;
+    std::vector<RealVector> curve_segments;
+    std::vector<RealVector> domain_segments;
 
     if (RpNumerics::getPhysics().ID().compare("Stone") == 0) {
 
@@ -94,6 +94,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
         dimension = 2;
         // Create the Double Contact
         // Grid (the same one for the left- and right-domains)
+
+        int number_of_domain_pnts[2] = {51, 51};
+
+        int family = 0; // Or else...
+
+
         RealVector pmin(2);
         pmin.component(0) = 0.0;
         pmin.component(1) = 0.0;
@@ -104,23 +110,52 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
 
 
 
-        int number_of_grid_pnts[2] = {51, 51};
+        // Over the x axis.
+        int curve_points = 51;
+        double delta = 1.0 / (double) curve_points;
 
-        int family = 0; // Or else...
+        RealVector p1(2), p2(2);
+        std::vector<RealVector> original_curve_segments;
+        for (int i = 0; i < curve_points - 1; i++) {
+            p1.component(0) = (double) i*delta;
+            p1.component(1) = 0.0;
 
-        Double_Contact dc(pmin, pmax, number_of_grid_pnts, (FluxFunction*) RpNumerics::getPhysics().fluxFunction().clone(), (AccumulationFunction*) RpNumerics::getPhysics().accumulation().clone(), family,
-                pmin, pmax, number_of_grid_pnts, (FluxFunction*) RpNumerics::getPhysics().fluxFunction().clone(), (AccumulationFunction*) RpNumerics::getPhysics().accumulation().clone(), family);
+            p2.component(0) = ((double) i + 1) * delta;
+            p2.component(1) = 0.0;
 
-        dc.compute_double_contact(left_vrs, right_vrs);
+            original_curve_segments.push_back(p1);
+            original_curve_segments.push_back(p2);
+        }
+
+        Extension_Curve ec(original_curve_segments, (FluxFunction *)RpNumerics::getPhysics().fluxFunction().clone(), (AccumulationFunction *)RpNumerics::getPhysics().accumulation().clone(),
+                pmin, pmax, number_of_domain_pnts, (FluxFunction *)RpNumerics::getPhysics().fluxFunction().clone(), (AccumulationFunction *)RpNumerics::getPhysics().accumulation().clone());
+
+
+        // Storage space for the segments:
+        //    int characteristic_where = CHARACTERISTIC_ON_CURVE;
+        int characteristic_where = CHARACTERISTIC_ON_DOMAIN;
+        int singular = 0;
+        int curve_family = leftFamily;
+        int domain_family = rightFamily;
+
+       
+
+        ec.compute_extension_curve(characteristic_where, singular,
+                original_curve_segments, curve_family,
+
+                (FluxFunction *) RpNumerics::getPhysics().fluxFunction().clone(), (AccumulationFunction *) RpNumerics::getPhysics().accumulation().clone(),
+                domain_family,
+                curve_segments,
+                domain_segments);
 
     }
 
 
     if (RpNumerics::getPhysics().ID().compare("TPCW") == 0) {
 
-        cout << "Chamando com tpcw" << endl;
+        cout << "Chamando extesion com tpcw" << endl;
         dimension = 3;
-        
+
         Thermodynamics_SuperCO2_WaterAdimensionalized td(Physics::getRPnHome());
 
         int info = td.status_after_init();
@@ -170,10 +205,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
         int * number_of_grid_pnts = new int[2];
 
 
-        number_of_grid_pnts[0]=xResolution;
-        number_of_grid_pnts[1]=yResolution;
+        number_of_grid_pnts[0] = xResolution;
+        number_of_grid_pnts[1] = yResolution;
 
-        cout <<"Resolucao x "<<number_of_grid_pnts[0];
+        cout << "Resolucao x " << number_of_grid_pnts[0];
         cout << "Resolucao y " << number_of_grid_pnts[1];
 
 
@@ -181,22 +216,51 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
         cout << "Familia direita" << rightFamily;
         cout << "Familia esquerda" << leftFamily;
 
-//        = {xResolution, yResolution};
 
-//        int lfamily = 0;
-//        int rfamily = 0;
 
-        Double_ContactTPCW dc(pmin, pmax, number_of_grid_pnts,
+        int number_of_domain_pnts[2] = {101, 101};
+
+        int characteristic_where = CHARACTERISTIC_ON_DOMAIN;
+        int singular = 1;
+        int cfamily = leftFamily;
+        int dfamily = rightFamily;
+
+        Extension_CurveTPCW ectpcw(pmin, pmax, number_of_grid_pnts,
+                &flux, &accum,
+                &reduced_flux, &reduced_accum);
+
+        // For s = 0.
+        int curve_points = 101;
+        double delta = (td.T2Theta(450.0) - td.T2Theta(304.63)) / (double) curve_points;
+
+        RealVector p1(2), p2(2);
+        std::vector<RealVector> original_curve_segments;
+        for (int i = 0; i < curve_points - 1; i++) {
+            p1.component(0) = 0.0;
+            p1.component(1) = td.T2Theta(304.63) + (double) i*delta;
+
+            p2.component(0) = 0.0;
+            p2.component(1) = td.T2Theta(304.63) + ((double) i + 1) * delta;
+
+            original_curve_segments.push_back(p1);
+            original_curve_segments.push_back(p2);
+        }
+
+    
+        ectpcw.compute_extension_curve(characteristic_where, singular,
+                original_curve_segments, cfamily,
                 &flux, &accum,
                 &reduced_flux, &reduced_accum,
-                leftFamily,
-                pmin, pmax, number_of_grid_pnts,
-                &flux, &accum,
-                &reduced_flux, &reduced_accum,
-                rightFamily);
+                dfamily,
+                curve_segments, domain_segments);
 
 
-        dc.compute_double_contactTPCW(left_vrs, right_vrs);
+        //        = {xResolution, yResolution};
+
+        //        int lfamily = 0;
+        //        int rfamily = 0;
+
+
 
 
         delete fv;
@@ -207,11 +271,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
     }
 
 
-    printf("left_vrs.size()  = %d\n", left_vrs.size());
-    printf("right_vrs.size() = %d\n", right_vrs.size());
+    printf("curve_segments.size()  = %d\n", curve_segments.size());
+    printf("domain_segments.size() = %d\n", domain_segments.size());
 
 
-    for (unsigned int i = 0; i < left_vrs.size() / 2; i++) {
+    for (unsigned int i = 0; i < curve_segments.size() / 2; i++) {
         //    for (unsigned int i = 0; i < right_vrs.size() / 2; i++) {
 
         //        cout << "Coordenada : " << left_vrs.at(2 * i) << endl;
@@ -222,8 +286,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
         jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
 
 
-        double * leftCoords = (double *) left_vrs.at(2 * i);
-        double * rightCoords = (double *) left_vrs.at(2 * i + 1);
+        double * leftCoords = (double *) curve_segments.at(2 * i);
+        double * rightCoords = (double *) curve_segments.at(2 * i + 1);
 
 
         //
@@ -256,7 +320,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
 
 
 
-    for (unsigned int i = 0; i < right_vrs.size() / 2; i++) {
+    for (unsigned int i = 0; i < domain_segments.size() / 2; i++) {
 
         //        cout << "Coordenada : " << left_vrs.at(2 * i) << endl;
         //        cout << "Coordenada : " << left_vrs.at(2 * i + 1) << endl;
@@ -266,8 +330,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
         jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
 
 
-        double * leftCoords = (double *) right_vrs.at(2 * i);
-        double * rightCoords = (double *) right_vrs.at(2 * i + 1);
+        double * leftCoords = (double *) domain_segments.at(2 * i);
+        double * rightCoords = (double *) domain_segments.at(2 * i + 1);
 
 
         env->SetDoubleArrayRegion(eigenValRLeft, 0, dimension, leftCoords);

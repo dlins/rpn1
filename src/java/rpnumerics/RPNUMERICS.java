@@ -46,7 +46,7 @@ public class RPNUMERICS {
         //System.loadLibrary("wave");//TODO libwave is always loaded ?
         //System.loadLibrary("rpnumerics");
         System.loadLibrary("rpn");
-        setRPnHome(System.getProperty("rpnhome")) ;
+        setRPnHome(System.getProperty("rpnhome"));
 
 //        System.out.println("Inicializando a fisica: " + physicsID);
         initNative(physicsID);
@@ -89,8 +89,7 @@ public class RPNUMERICS {
 
         if (boundaryProfile != null) { //Catching boundary from input file
 
-
-//            System.out.println("Profile do boundary: " + boundaryProfile);
+            System.out.println("Profile do boundary: " + boundaryProfile);
 
             Configuration boundaryConfiguration = new Configuration(boundaryProfile);
 
@@ -138,7 +137,7 @@ public class RPNUMERICS {
 
                 ConfigurationProfile defaultBoundaryProfile = new ConfigurationProfile("rect", ConfigurationProfile.BOUNDARY_PROFILE);
 
-                String limits = null;
+                String limits = "";
 
                 for (int i = 0; i < min.getSize(); i++) {
                     limits += min.getElement(i);
@@ -146,7 +145,11 @@ public class RPNUMERICS {
                 }
 
                 for (int i = 0; i < max.getSize(); i++) {
-                    limits = limits.replaceFirst(" ", max.getElement(i) + "");
+//                    limits = limits.replaceFirst(" ", max.getElement(i) + "");
+
+                    limits += max.getElement(i);
+                    limits += " ";
+
                 }
 
                 defaultBoundaryProfile.addParam("limits", limits);
@@ -165,6 +168,8 @@ public class RPNUMERICS {
 
             }
 //            System.out.println("Usando boundary default");
+
+            System.out.println("Profile do boundary: " + boundaryProfile);
         }
 
         configMap_.put(physicsID, physicsConfiguration);
@@ -215,8 +220,18 @@ public class RPNUMERICS {
 //
 //
 //    }
-    public static void setFamily(int family) {
+
+
+    public static void setExtensionCurveParams(int curveFamily, int domainFamily,int caracteristicDomain) {
+        setParamValue("extensioncurve", "curvefamily", String.valueOf(curveFamily));
+        setParamValue("extensioncurve", "domainfamily", String.valueOf(domainFamily));
+        setParamValue("extensioncurve", "caracteristicdomain", String.valueOf(caracteristicDomain));
+
+    }
+
+    public static void setFamily(int family, int leftFamily, int rightFamily) {
         setParamValue("shock", "family", String.valueOf(family));
+        
     }
 
     public static void setConfiguration(String methodName, Configuration methodConfiguration) {
@@ -297,10 +312,12 @@ public class RPNUMERICS {
             if (configurationEntry.getType().equalsIgnoreCase("physics") && configurationEntry.getName().equalsIgnoreCase(physicsID())) {
 
                 buffer.append(configurationEntry.toXML());
+                System.out.println(configurationEntry.toString());
 
             }
             if (!configurationEntry.getType().equalsIgnoreCase("physics")) {
                 buffer.append(configurationEntry.toXML());
+                System.out.println("Nao fisica: " + configurationEntry.toString());
             }
 
         }
@@ -316,10 +333,6 @@ public class RPNUMERICS {
     public static native void initNative(String physicsName);
 
     public static HugoniotCurveCalc createHugoniotCalc() {
-
-
-
-
 
         HugoniotCurveCalc hugoniotCurveCalc = null;
         HugoniotParams hparams = new HugoniotParams(shockProfile_.getXZero(), new FluxFunction(getFluxParams()));
@@ -389,6 +402,38 @@ public class RPNUMERICS {
         return new OrbitCalc(orbitPoint, direction_, createODESolver(flow));
 
     }
+
+    public static DoubleContactCurveCalc createDoubleContactCurveCalc() {
+
+
+        int xResolution = new Integer(getContourConfiguration().getParam("x-resolution"));
+        int yResolution = new Integer(getContourConfiguration().getParam("y-resolution"));
+
+
+        System.out.println("Resolucao em Java:" + xResolution+ " " + yResolution);
+
+
+        return new DoubleContactCurveCalc(xResolution, yResolution, new Integer(getParamValue("bifurcation", "leftfamily")), new Integer(getParamValue("bifurcation", "rightfamily")));
+
+    }
+
+
+    public static ExtensionCurveCalc createExtensionCurveCalc() {
+
+
+        int xResolution = new Integer(getContourConfiguration().getParam("x-resolution"));
+        int yResolution = new Integer(getContourConfiguration().getParam("y-resolution"));
+        int caracteristicDomain = new  Integer(getParamValue("bifurcation", "caracteristicdomain"));
+
+
+
+        System.out.println("Resolucao em Java:" + xResolution+ " " + yResolution);
+
+
+        return new ExtensionCurveCalc(xResolution, yResolution, new Integer(getParamValue("bifurcation", "leftfamily")), new Integer(getParamValue("bifurcation", "rightfamily")),caracteristicDomain);
+
+    }
+
 
     public static ShockCurveCalc createShockCurveCalc(OrbitPoint orbitPoint) {
 

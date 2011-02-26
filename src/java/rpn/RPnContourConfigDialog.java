@@ -32,6 +32,10 @@ public class RPnContourConfigDialog extends RPnDialog {
     private void jbInit() throws Exception {
         setTitle("Contour Method Configuration");
 
+        GridLayout gridLayout = new GridLayout(3,3,10,10);
+
+        paramsPanel_.setLayout(gridLayout);
+
         ContourConfiguration contourConfiguration= RPNUMERICS.getContourConfiguration();
 
         HashMap<String, String> paramsMap = contourConfiguration.getParams();

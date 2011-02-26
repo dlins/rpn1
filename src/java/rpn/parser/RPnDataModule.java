@@ -492,19 +492,15 @@ public class RPnDataModule {
 //        }
 //        System.out.println("Chamando export do data module");
 //
-//        Iterator<RpGeometry> iterator = PHASESPACE.getGeomObjIterator();
+        Iterator<RpGeometry> iterator = PHASESPACE.getGeomObjIterator();
 //
 //        int i = 0;
 //
-//        while(iterator.hasNext()){
-//
-//
-//
-//
-//            System.out.println(iterator.next().geomFactory().toMatlab());
-//
-//
-//        }
+        while(iterator.hasNext()){
+            writer.write(iterator.next().geomFactory().toXML());
+        }
+
+        
     }
 
     static public void matlabExport(FileWriter writer) throws java.io.IOException {

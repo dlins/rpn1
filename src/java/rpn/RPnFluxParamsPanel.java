@@ -36,6 +36,7 @@ public class RPnFluxParamsPanel extends JPanel implements PropertyChangeListener
     public RPnFluxParamsPanel(String physicsName) {
 //        System.out.println("consturindo default com a fisica:" + physicsName);
         searchPhysics(physicsName);
+
         buildPanel(true);
     }
 
@@ -45,12 +46,13 @@ public class RPnFluxParamsPanel extends JPanel implements PropertyChangeListener
         GridBagConstraints gridConstraints = new GridBagConstraints();
         gridConstraints.fill = GridBagConstraints.BOTH;
 
-        gridConstraints.gridwidth =1;
+        gridConstraints.gridwidth = 1;
         gridConstraints.gridheight = 1;
         valuesArray_ = new ArrayList<RPnInputComponent>();
 
-        gridConstraints.ipadx = 160;
-        gridConstraints.gridy=0;
+        gridConstraints.ipadx = 50;
+        gridConstraints.ipady = 5;
+        gridConstraints.gridy = 0;
 
         if (useDefaults) {
             for (int i = 0; i < physicsProfile_.getIndicesSize(); i++) {
@@ -84,7 +86,7 @@ public class RPnFluxParamsPanel extends JPanel implements PropertyChangeListener
                 valuesArray_.add(i, inputComponent);
                 this.add(inputComponent.getContainer(), gridConstraints);
 
-                
+
             }
         }
 
@@ -99,6 +101,8 @@ public class RPnFluxParamsPanel extends JPanel implements PropertyChangeListener
                 physicsProfile_ = physicsProfile;
             }
         }
+
+        System.out.println("Profile: "+physicsProfile_);
 
     }
 

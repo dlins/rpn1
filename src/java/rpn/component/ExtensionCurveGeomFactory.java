@@ -7,11 +7,9 @@ package rpn.component;
 
 import rpnumerics.*;
 
-public class DoubleContactGeomFactory extends BifurcationCurveGeomFactory {
+public class ExtensionCurveGeomFactory extends BifurcationCurveGeomFactory {
 
-  
-
-    public DoubleContactGeomFactory(DoubleContactCurveCalc calc) {
+    public ExtensionCurveGeomFactory(ExtensionCurveCalc calc) {
         super(calc);
     }
 
@@ -21,7 +19,7 @@ public class DoubleContactGeomFactory extends BifurcationCurveGeomFactory {
     @Override
     protected RpGeometry createGeomFromSource() {
 
-        DoubleContactCurve curve = (DoubleContactCurve) geomSource();
+        ExtensionCurve curve = (ExtensionCurve) geomSource();
 
         BifurcationSegGeom[] leftBifurcationSegArray = null;
 
@@ -33,11 +31,9 @@ public class DoubleContactGeomFactory extends BifurcationCurveGeomFactory {
 
         }
 
-        return new DoubleContactCurveGeom(leftBifurcationSegArray, this);
+        return new ExtensionCurveGeom(leftBifurcationSegArray, this);
 
     }
-
-   
 
 //    public List<RpGeometry> createGeometriesFromSource() {
 //

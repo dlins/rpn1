@@ -20,21 +20,21 @@ import rpn.parser.RPnDataModule;
 import rpnumerics.*;
 import wave.util.RealVector;
 
-public class DoubleContactAgent extends RpModelPlotAgent {
+public class ExtensionCurveAgent extends RpModelPlotAgent {
     //
     // Constants
     //
 
-    static public final String DESC_TEXT = "DoubleContact Curve";
+    static public final String DESC_TEXT = "Extension Curve";
     //
     // Members
     //
-    static private DoubleContactAgent instance_ = null;
+    static private ExtensionCurveAgent instance_ = null;
 
     //
     // Constructors/Initializers
     //
-    protected DoubleContactAgent() {
+    protected ExtensionCurveAgent() {
         super(DESC_TEXT, rpn.RPnConfig.HUGONIOT, new JToggleButton());
     }
 
@@ -50,14 +50,15 @@ public class DoubleContactAgent extends RpModelPlotAgent {
 
     public RpGeometry createRpGeometry(RealVector[] input) {
 
-        DoubleContactGeomFactory factory = new DoubleContactGeomFactory(RPNUMERICS.createDoubleContactCurveCalc());
+        ExtensionCurveGeomFactory factory = new ExtensionCurveGeomFactory(RPNUMERICS.createExtensionCurveCalc());
 
         return factory.geom();
 
     }
 
+    @Override
     public void execute() {
-        DoubleContactGeomFactory factory = new DoubleContactGeomFactory(RPNUMERICS.createDoubleContactCurveCalc());
+        ExtensionCurveGeomFactory factory = new ExtensionCurveGeomFactory(RPNUMERICS.createExtensionCurveCalc());
 
 
         RPnPhaseSpaceAbstraction auxPhaseSpace = RPnDataModule.PHASESPACE;//AUXPHASESPACE;
@@ -66,12 +67,12 @@ public class DoubleContactAgent extends RpModelPlotAgent {
 
         auxPhaseSpace.plot(geometry);
 
-        System.out.println("Chamando execute");
+        System.out.println("Chamando  extension curve execute");
     }
 
-    static public DoubleContactAgent instance() {
+    static public ExtensionCurveAgent instance() {
         if (instance_ == null) {
-            instance_ = new DoubleContactAgent();
+            instance_ = new ExtensionCurveAgent();
         }
         return instance_;
     }

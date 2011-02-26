@@ -98,7 +98,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
     public void remove(MultiGeometry geom) {
 
         super.remove(geom);
-        RPnCurvesListFrame.removeGeometry(geom.toString());
+
 //        for (int i = 0; i < groupArrayList_.size(); i++) {
 //
 //            ArrayList list = groupArrayList_.get(i);
@@ -108,6 +108,8 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
 //            }
 //        }
     }
+
+  
 
     public void clearGeometrySelection() {
         for (int i = 0; i < geomList_.size(); i++) {

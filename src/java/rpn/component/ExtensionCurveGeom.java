@@ -1,0 +1,31 @@
+/*
+ * Instituto de Matematica Pura e Aplicada - IMPA
+ * Departamento de Dinamica dos Fluidos
+ *
+ */
+package rpn.component;
+
+import wave.multid.view.*;
+import wave.multid.*;
+
+public class ExtensionCurveGeom extends BifurcationCurveGeom {//implements MultiGeometry, RpGeometry {
+   
+
+    //
+    // Constructors
+    //
+
+
+    public ExtensionCurveGeom(BifurcationSegGeom[] segArray, BifurcationCurveGeomFactory factory) {
+
+        super(segArray, factory);
+
+    }
+
+
+    public GeomObjView createView(ViewingTransform transf) throws DimMismatchEx {
+        return new ExtensionCurveView(this, transf, viewingAttr());
+    }
+
+
+}

@@ -9,7 +9,7 @@ void Bifurcation_Curve::create_grid(const RealVector &pmin, const RealVector &pm
 
     for (int i = 0; i < number_of_cells[0]; i++){
         for (int j = 0; j < number_of_cells[1]; j++){
-            printf("Here\n");
+//            printf("Here\n");
 
             p(i, j).resize(dim);
 
@@ -312,84 +312,36 @@ void Bifurcation_Curve::validate_cells(int family, bool type_of_cells, Matrix< s
 // TODO;: This function must also take into account the fact that cells can be triangles.
 void Bifurcation_Curve::prepare_cell(int i, int j, int family, Matrix< std::vector<double> > &eigen, Matrix<RealVector> &flux_values, Matrix<RealVector> &accum_values, double *lambda, Matrix<double> &flux, Matrix<double> &accum){
 
-//    lambda[0] = eigen(i, j)[family];
-//    flux(0, 0) = flux_values(i, j).component(0);
-//    flux(1, 0) = flux_values(i, j).component(1);
-//    accum(0, 0) = accum_values(i, j).component(0);
-//    accum(1, 0) = accum_values(i, j).component(1);
+    lambda[0] = eigen(i, j)[family];
+    flux(0, 0) = flux_values(i, j).component(0);
+    flux(1, 0) = flux_values(i, j).component(1);
+    accum(0, 0) = accum_values(i, j).component(0);
+    accum(1, 0) = accum_values(i, j).component(1);
 
-//    lambda[1] = eigen(i + 1, j)[family];
-//    flux(0, 1) = flux_values(i + 1, j).component(0);
-//    flux(1, 1) = flux_values(i + 1, j).component(1);
-//    accum(0, 1) = accum_values(i + 1, j).component(0);
-//    accum(1, 1) = accum_values(i + 1, j).component(1);
+    lambda[1] = eigen(i + 1, j)[family];
+    flux(0, 1) = flux_values(i + 1, j).component(0);
+    flux(1, 1) = flux_values(i + 1, j).component(1);
+    accum(0, 1) = accum_values(i + 1, j).component(0);
+    accum(1, 1) = accum_values(i + 1, j).component(1);
 
-//    lambda[2] = eigen(i + 1, j + 1)[family];
-//    flux(0, 2) = flux_values(i + 1, j + 1).component(0);
-//    flux(1, 2) = flux_values(i + 1, j + 1).component(1);
-//    accum(0, 2) = accum_values(i + 1, j + 1).component(0);
-//    accum(1, 2) = accum_values(i + 1, j + 1).component(1);
+    lambda[2] = eigen(i + 1, j + 1)[family];
+    flux(0, 2) = flux_values(i + 1, j + 1).component(0);
+    flux(1, 2) = flux_values(i + 1, j + 1).component(1);
+    accum(0, 2) = accum_values(i + 1, j + 1).component(0);
+    accum(1, 2) = accum_values(i + 1, j + 1).component(1);
 
-//    lambda[3] = eigen(i, j + 1)[family];
-//    flux(0, 3) = flux_values(i, j + 1).component(0);
-//    flux(1, 3) = flux_values(i, j + 1).component(1);
-//    accum(0, 3) = accum_values(i, j + 1).component(0);
-//    accum(1, 3) = accum_values(i, j + 1).component(1);
-
-    int domain_i, domain_j;
-
-    for (int kr = 0; kr < 4; kr++){
-        if      (kr == 0) {domain_i = i;     domain_j = j;}
-        else if (kr == 1) {domain_i = i + 1; domain_j = j;}
-        else if (kr == 2) {domain_i = i + 1; domain_j = j + 1;}
-        else if (kr == 3) {domain_i = i;     domain_j = j + 1;}
-
-        lambda[kr]   = eigen(domain_i, domain_j)[family];
-
-        flux(0, kr)  = flux_values(domain_i, domain_j).component(0);
-        flux(1, kr)  = flux_values(domain_i, domain_j).component(1);
-
-        accum(0, kr) = accum_values(domain_i, domain_j).component(0);
-        accum(1, kr) = accum_values(domain_i, domain_j).component(1);
-    }
+    lambda[3] = eigen(i, j + 1)[family];
+    flux(0, 3) = flux_values(i, j + 1).component(0);
+    flux(1, 3) = flux_values(i, j + 1).component(1);
+    accum(0, 3) = accum_values(i, j + 1).component(0);
+    accum(1, 3) = accum_values(i, j + 1).component(1);
 
     return;
 }
 
-//
-// where_is_characteristic = CHARACTERISTIC_ON_CURVE or CHARACTERISTIC_ON_DOMAIN.
-// 
-bool Bifurcation_Curve::prepare_segment(int i, int family, int where_is_characteristic,
-                                        const std::vector< std::vector<double> > &eigen, 
-                                        const std::vector<RealVector> &flux_values, 
-                                        const std::vector<RealVector> &accum_values, 
-                                        const std::vector<std::vector<bool> > &eig_is_real,
-                                        double *lambda, 
-                                        Matrix<double> &flux, 
-                                        Matrix<double> &accum){
-
-    if (where_is_characteristic == CHARACTERISTIC_ON_CURVE){
-        if (!eig_is_real[i][family] || !eig_is_real[i + 1][family]) return false;
-    }
-
-    lambda[0] = eigen[i][family];
-    flux(0, 0) = flux_values[i].component(0);
-    flux(1, 0) = flux_values[i].component(1);
-    accum(0, 0) = accum_values[i].component(0);
-    accum(1, 0) = accum_values[i].component(1);
-
-    lambda[1] = eigen[i + 1][family];
-    flux(0, 1) = flux_values[i + 1].component(0);
-    flux(1, 1) = flux_values[i + 1].component(1);
-    accum(0, 1) = accum_values[i + 1].component(0);
-    accum(1, 1) = accum_values[i + 1].component(1);
-
-    return true;
-}
-
-void Bifurcation_Curve::fill_values_on_segments(const FluxFunction *ff, const AccumulationFunction *aa, const std::vector<RealVector> &input, 
-                                                std::vector<RealVector> &vff, std::vector<RealVector> &vaa,
-                                                std::vector<std::vector<double> > &vee, std::vector< std::vector<bool> > &eig_is_real){
+void Bifurcation_Curve::fill_values_on_curve(const FluxFunction *ff, const AccumulationFunction *aa, const std::vector<RealVector> &input, 
+                                             std::vector<RealVector> &vff, std::vector<RealVector> &vaa,
+                                             std::vector<std::vector<double> > &vee, std::vector< std::vector<bool> > &eig_is_real){
     vff.clear();
     vaa.clear();
     vee.clear();

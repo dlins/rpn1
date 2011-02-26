@@ -204,6 +204,12 @@
         <CURVEPARAM name="xzero" value="3.4 0.5"/>
         <CURVEPARAM name="sigma" value="0.03"/>
     </CURVE>
+
+    <CURVE name="bifurcation">
+        <CURVEPARAM name="leftfamily" value="0"/>
+        <CURVEPARAM name="rightfamily" value="0"/>
+	<CURVEPARAM name="caracteristicdomain" value="0"/>
+    </CURVE>
     
 
     <!--VIEW INFORMATIONS-->

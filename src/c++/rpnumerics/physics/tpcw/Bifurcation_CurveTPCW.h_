@@ -7,14 +7,12 @@
 #include "FluxFunction.h"
 #include "AccumulationFunction.h"
 #include "Matrix.h"
+//#include "RealEigenvalueCell.h"
 
-#ifndef CHARACTERISTIC_ON_CURVE
-    #define CHARACTERISTIC_ON_CURVE  0
-#endif
+// TODO: A class Cell is needed, such that it has three or four vertices defined a Cell.
+//       Pointers to vertices? How to index them?
 
-#ifndef CHARACTERISTIC_ON_DOMAIN
-    #define CHARACTERISTIC_ON_DOMAIN 1
-#endif
+// TODO: number_of_cells should be number_of_grid_points throughout.
 
 class Bifurcation_CurveTPCW {
     protected:
@@ -57,31 +55,6 @@ class Bifurcation_CurveTPCW {
         void fill_values_on_curve(const FluxFunction *ff, const AccumulationFunction *aa, const std::vector<RealVector> &input, 
                                   std::vector<RealVector> &vff, std::vector<RealVector> &vaa, 
                                   std::vector<std::vector<double> > &vee, std::vector< std::vector<bool> > &eig_is_real);
-
-//        void fill_values_on_curve(const FluxFunction *ff, const AccumulationFunction *aa, const std::vector<RealVector> &input, 
-//                                                 const FluxFunction *Redff, const AccumulationFunction *Redaa,
-//                                                 std::vector<RealVector> &Redvff, std::vector<RealVector> &Redvaa,
-//                                                 std::vector<std::vector<double> > &Redvee, std::vector< std::vector<bool> > &Redeig_is_real);
-
-         bool prepare_segment(int i, int family, int where_is_characteristic,
-                                            const std::vector< std::vector<double> > &eigen, 
-                                            const std::vector<RealVector> &reduced_flux_values, 
-                                            const std::vector<RealVector> &reduced_accum_values, 
-                                            const std::vector<std::vector<bool> > &eig_is_real,
-                                            double *lambda, 
-                                            Matrix<double> &reduced_flux, 
-                                            Matrix<double> &reduced_accum);
-
-        void fill_values_on_segments(const FluxFunction *ff, const AccumulationFunction *aa, 
-                                     const FluxFunction *Redff, const AccumulationFunction *Redaa,
-                                     const std::vector<RealVector> &input, 
-                                     std::vector<RealVector> &vff, std::vector<RealVector> &vaa,
-                                     std::vector<std::vector<double> > &vee, std::vector< std::vector<bool> > &eig_is_real);
-
-        template <typename T> void initialize_matrix(int n, int m, T *matrix, T value){
-            for (int i = 0; i < n*m; i++) matrix[i] = value;
-            return;
-        }
 
     public:
         Bifurcation_CurveTPCW();

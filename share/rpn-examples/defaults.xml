@@ -128,7 +128,7 @@
     <METHOD name="Contour">
         <METHODPARAM  name="x-resolution" value="30" />
         <METHODPARAM  name="y-resolution" value="30" />
-
+<!--
         <METHODPARAM  name="xminus-resolution" value="30" />
         <METHODPARAM  name="yminus-resolution" value="30" />
 
@@ -186,7 +186,7 @@
         <METHODPARAM  name="y0plus-boundary-2" value="0" />
 
         <METHODPARAM  name="xFplus-boundary-2" value="2" />
-        <METHODPARAM  name="yFplus-boundary-2" value="1" />
+        <METHODPARAM  name="yFplus-boundary-2" value="1" />-->
     </METHOD>
 
     <CURVE name="shock">
@@ -194,7 +194,27 @@
         <CURVEPARAM name="xzero" value="3.4 0.5"/>
         <CURVEPARAM name="sigma" value="0.03"/>
     </CURVE>
-    
+
+
+
+    <CURVE name="bifurcation">
+      <CURVEPARAM name="leftfamily" value="0"/>
+      <CURVEPARAM name="rightfamily" value="0"/>
+      <CURVEPARAM name="caracteristicdomain" value="0"/>
+    </CURVE>
+
+     <CURVE name="extensioncurve">
+      <CURVEPARAM name="curvefamily" value="1"/>
+      <CURVEPARAM name="domainfamily" value="1"/>
+      <CURVEPARAM name="caracteristicdomain" value="1"/>
+
+
+
+
+
+    </CURVE>
+
+
 
     <!--VIEW INFORMATIONS-->
 

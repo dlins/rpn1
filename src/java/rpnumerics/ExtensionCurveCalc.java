@@ -9,7 +9,7 @@ package rpnumerics;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class DoubleContactCurveCalc extends BifurcationCurveCalc {
+public class ExtensionCurveCalc extends BifurcationCurveCalc {
 
     //
     // Constructors/Initializers
@@ -18,15 +18,17 @@ public class DoubleContactCurveCalc extends BifurcationCurveCalc {
     int yResolution_;
     int leftFamily_;
     int rightFamily_;
+    int caracteristicDomain_;
 
-    public DoubleContactCurveCalc(int xResolution, int yResolution, int leftFamily, int rightFamily) {
+    public ExtensionCurveCalc(int xResolution, int yResolution, int leftFamily, int rightFamily,int caracteristicDomain) {
         this.xResolution_ = xResolution;
         this.yResolution_ = yResolution;
         this.leftFamily_ = leftFamily;
         this.rightFamily_ = rightFamily;
+        caracteristicDomain_=caracteristicDomain;
     }
 
-    public DoubleContactCurveCalc() {
+    public ExtensionCurveCalc() {
     }
 
     @Override
@@ -34,17 +36,14 @@ public class DoubleContactCurveCalc extends BifurcationCurveCalc {
         RpSolution result = null;
 
         try {
-            result = (DoubleContactCurve) nativeCalc(xResolution_,yResolution_,leftFamily_,rightFamily_);
-            //          if (result == null) {
-            //            throw new RpException("Error in native layer");
-            //        }
+            result = (ExtensionCurve) nativeCalc(xResolution_,yResolution_,leftFamily_,rightFamily_,caracteristicDomain_);
             return result;
         } catch (RpException ex) {
-            Logger.getLogger(DoubleContactCurveCalc.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ExtensionCurveCalc.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return result;
     }
 
-    private native RpSolution nativeCalc(int xResolution, int yResolution, int leftFamily, int rightFamily) throws RpException;
+    private native RpSolution nativeCalc(int xResolution, int yResolution, int leftFamily, int rightFamily,int caracteristicDomain) throws RpException;
 }

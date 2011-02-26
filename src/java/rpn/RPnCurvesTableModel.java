@@ -11,7 +11,6 @@ import javax.swing.table.DefaultTableModel;
 public class RPnCurvesTableModel extends DefaultTableModel  {
 
     public RPnCurvesTableModel() {
-        columnIdentifiers.add(new String("Index"));
         columnIdentifiers.add(new String("Geometry"));
         columnIdentifiers.add(new String("User Input"));
         columnIdentifiers.add(new String("Visible"));
@@ -26,13 +25,13 @@ public class RPnCurvesTableModel extends DefaultTableModel  {
 
     @Override
     public int getColumnCount() {
-        return 4;
+        return 3;
     }
 
    
     @Override
     public boolean isCellEditable(int row, int col) {
-        if (col == 3) {
+        if (col == 2) {
             return true;
         }
         return false;

@@ -2,6 +2,7 @@
 #define _MATRIX_
 
 #include <stdlib.h>
+#include <math.h>
 
 /*    SIMPLE USE EXAMPLE:
 
@@ -38,6 +39,8 @@ class Matrix {
         T *vec;
         int rows_, cols_;
 
+        int min(int x, int y);
+
     public:
         Matrix(void);
         Matrix(int n, int m);
@@ -60,9 +63,12 @@ class Matrix {
         void size(int &r, int &c) const;
 };
 
+template <typename T> int Matrix<T>::min(int x, int y){
+    return (x < y) ? x : y;
+}
+
 template <typename T> Matrix<T>::Matrix(void){
     vec = 0;
-    //resize(1, 1);
 }
 
 template <typename T> Matrix<T>::Matrix(int n, int m){
@@ -84,8 +90,7 @@ template <typename T> Matrix<T>::Matrix(int n, int m, const T *original){
 }
 
 template <typename T> Matrix<T>::~Matrix(){
-    //if (vec != 0) free(vec);
-    delete [] vec;
+    if (vec != 0) delete [] vec;
 }
 
 template <typename T> T& Matrix<T>::operator()(int i, int j){
@@ -97,7 +102,7 @@ template <typename T> T& Matrix<T>::operator()(int i){
 }
 
 template <typename T> T* Matrix<T>::data(void){
-    return vec;
+    return &vec[0];
 }
 
 template <typename T> Matrix<T> Matrix<T>::operator=(const Matrix<T> &original){
@@ -108,20 +113,23 @@ template <typename T> Matrix<T> Matrix<T>::operator=(const Matrix<T> &original){
 }
 
 template <typename T> void Matrix<T>::resize(int newn, int newm){
-    rows_ = newn;
-    cols_ = newm;
-
-//    if (vec == 0) vec = (T*)malloc(rows_*cols_*sizeof(T));
-//    else          vec = (T*)realloc(vec, rows_*cols_*sizeof(T));
-    if (vec == 0) vec = new T[rows_*cols_];
+    if (vec == 0) vec = new T[newn*newm];
     else {
-        T *temp0 = new T[rows_*cols_];
-        for (int i = 0; i < rows_*cols_; i++) temp0[i] = vec[i];
+        T *temp0 = new T[newn*newm];
+        for (int i = 0; i < min(rows_, newn); i++){
+            for (int j = 0; j < min(cols_, newm); j++){
+                temp0[i*newm + j] = vec[i*cols_ + j];
+            }
+         }
+
         T *temp1 = vec;
         vec = temp0;
         temp0 = temp1;
         delete [] temp0;
     }
+
+    rows_ = newn;
+    cols_ = newm;
 
     return;
 }

@@ -103,7 +103,7 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
 
         buffer.append("<BIFURCATIONCALC >\n");
 
-        buffer.append(((BifurcationCurve) geomSource()).toXML(rpn.parser.RPnDataModule.RESULTS));
+//        buffer.append(((BifurcationCurve) geomSource()).toXML(rpn.parser.RPnDataModule.RESULTS));
 
         buffer.append("</BIFURCATIONCALC>\n");
 
