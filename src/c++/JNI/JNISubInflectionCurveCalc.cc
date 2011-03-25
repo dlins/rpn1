@@ -87,6 +87,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionCurveCalc_nativeCalc(JNIE
     ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), RpNumerics::getPhysics().boundary(), &subinflection);
 
     vector<HugoniotPolyLine> hugoniotPolyLineVector;
+    
     method.unclassifiedCurve(Uref, hugoniotPolyLineVector);
 
     RealVector min(RpNumerics::getPhysics().boundary().minimums());

@@ -34,9 +34,7 @@ using std::vector;
 using namespace std;
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
-(JNIEnv * env, jobject obj, jint xResolution, jint yResolution, jint leftFamily, jint rightFamily,jint caracteristicDomain) {
-
-    jclass classPhasePoint = (env)->FindClass(PHASEPOINT_LOCATION);
+(JNIEnv * env, jobject obj, jint xResolution, jint yResolution, jint curveFamily, jint domainFamily, jint characteristicWhere) {
 
     jclass hugoniotSegmentClass = (env)->FindClass(HUGONIOTSEGMENTCLASS_LOCATION);
 
@@ -44,34 +42,20 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
 
     jclass arrayListClass = env->FindClass("java/util/ArrayList");
 
-    //    jclass hugoniotPointTypeClass = (env)->FindClass(HUGONIOTPOINTTYPE_LOCATION);
+    jclass extensionCurveClass = env->FindClass(EXTENSIONCURVE_LOCATION);
 
-    jclass doubleContactCurveClass = env->FindClass(EXTENSIONCURVE_LOCATION);
-
-    jmethodID toDoubleMethodID = (env)->GetMethodID(classPhasePoint, "toDouble", "()[D");
     jmethodID realVectorConstructorDoubleArray = env->GetMethodID(realVectorClass, "<init>", "([D)V");
-    //    jmethodID hugoniotSegmentConstructor = (env)->GetMethodID(hugoniotSegmentClass, "<init>", "(Lwave/util/RealVector;DLwave/util/RealVector;DI)V");
 
     jmethodID hugoniotSegmentConstructor = (env)->GetMethodID(hugoniotSegmentClass, "<init>", "(Lwave/util/RealVector;DLwave/util/RealVector;DI)V");
 
     jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
     jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
-    //    jmethodID hugoniotPointTypeConstructor = (env)->GetMethodID(hugoniotPointTypeClass, "<init>", "([D[D)V");
-    jmethodID doubleContactCurveConstructor = env->GetMethodID(doubleContactCurveClass, "<init>", "(Ljava/util/List;Ljava/util/List;)V");
-
-    //    int i;
+    jmethodID extensionCurveConstructor = env->GetMethodID(extensionCurveClass, "<init>", "(Ljava/util/List;Ljava/util/List;)V");
 
     //Input processing
-    //    jdoubleArray phasePointArray = (jdoubleArray) (env)->CallObjectMethod(uMinus, toDoubleMethodID);
 
     int dimension;
 
-    //    double input [dimension];
-
-
-    //    env->GetDoubleArrayRegion(phasePointArray, 0, dimension, input);
-    //
-    //    env->DeleteLocalRef(phasePointArray);
 
     //Calculations using the input
 
@@ -79,11 +63,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
 
     jobject rightSegmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
 
-    //    RealVector Uref(dimension, input);
-    //
-    //    cout << Uref << endl;
-
     // Storage space for the segments:
+
     std::vector<RealVector> curve_segments;
     std::vector<RealVector> domain_segments;
 
@@ -95,9 +76,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
         // Create the Double Contact
         // Grid (the same one for the left- and right-domains)
 
-        int number_of_domain_pnts[2] = {51, 51};
+        int * number_of_domain_pnts = new int[2];
 
-        int family = 0; // Or else...
+
+        number_of_domain_pnts[0] = 51;
+        number_of_domain_pnts[1] = 51;
 
 
         RealVector pmin(2);
@@ -127,26 +110,24 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
             original_curve_segments.push_back(p2);
         }
 
-        Extension_Curve ec(original_curve_segments, (FluxFunction *)RpNumerics::getPhysics().fluxFunction().clone(), (AccumulationFunction *)RpNumerics::getPhysics().accumulation().clone(),
-                pmin, pmax, number_of_domain_pnts, (FluxFunction *)RpNumerics::getPhysics().fluxFunction().clone(), (AccumulationFunction *)RpNumerics::getPhysics().accumulation().clone());
+        Extension_Curve ec(pmin, pmax, number_of_domain_pnts, (FluxFunction *) RpNumerics::getPhysics().fluxFunction().clone(), (AccumulationFunction *) RpNumerics::getPhysics().accumulation().clone());
 
 
         // Storage space for the segments:
         //    int characteristic_where = CHARACTERISTIC_ON_CURVE;
-        int characteristic_where = CHARACTERISTIC_ON_DOMAIN;
+        //        int characteristic_where = CHARACTERISTIC_ON_DOMAIN;
         int singular = 0;
-        int curve_family = leftFamily;
-        int domain_family = rightFamily;
 
-       
-
-        ec.compute_extension_curve(characteristic_where, singular,
-                original_curve_segments, curve_family,
+        ec.compute_extension_curve(characteristicWhere, singular,
+                original_curve_segments, curveFamily,
 
                 (FluxFunction *) RpNumerics::getPhysics().fluxFunction().clone(), (AccumulationFunction *) RpNumerics::getPhysics().accumulation().clone(),
-                domain_family,
+                domainFamily,
                 curve_segments,
                 domain_segments);
+
+
+        delete number_of_domain_pnts;
 
     }
 
@@ -194,7 +175,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
         ReducedAccum2Comp2PhasesAdimensionalized reduced_accum(reduced_accum_params);
 
 
-        // Double Contact
         RealVector pmin(2);
         pmin.component(0) = 0.0;
         pmin.component(1) = td.T2Theta(304.63);
@@ -208,22 +188,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
         number_of_grid_pnts[0] = xResolution;
         number_of_grid_pnts[1] = yResolution;
 
-        cout << "Resolucao x " << number_of_grid_pnts[0];
-        cout << "Resolucao y " << number_of_grid_pnts[1];
 
+        //        int number_of_domain_pnts[2] = {101, 101};
 
-
-        cout << "Familia direita" << rightFamily;
-        cout << "Familia esquerda" << leftFamily;
-
-
-
-        int number_of_domain_pnts[2] = {101, 101};
-
-        int characteristic_where = CHARACTERISTIC_ON_DOMAIN;
+        //        int characteristic_where = CHARACTERISTIC_ON_DOMAIN;
         int singular = 1;
-        int cfamily = leftFamily;
-        int dfamily = rightFamily;
+
 
         Extension_CurveTPCW ectpcw(pmin, pmax, number_of_grid_pnts,
                 &flux, &accum,
@@ -246,21 +216,24 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
             original_curve_segments.push_back(p2);
         }
 
-    
-        ectpcw.compute_extension_curve(characteristic_where, singular,
-                original_curve_segments, cfamily,
+
+        cout << "Resolucao x " << number_of_grid_pnts[0] << endl;
+        ;
+        cout << "Resolucao y " << number_of_grid_pnts[1] << endl;
+
+
+
+        cout << "Familia da curva" << curveFamily << endl;
+        cout << "Familia do dominio" << domainFamily << endl;
+        cout << "characteristic " << characteristicWhere << endl;
+
+
+        ectpcw.compute_extension_curve(characteristicWhere, singular,
+                original_curve_segments, curveFamily,
                 &flux, &accum,
                 &reduced_flux, &reduced_accum,
-                dfamily,
+                domainFamily,
                 curve_segments, domain_segments);
-
-
-        //        = {xResolution, yResolution};
-
-        //        int lfamily = 0;
-        //        int rfamily = 0;
-
-
 
 
         delete fv;
@@ -271,8 +244,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
     }
 
 
-    printf("curve_segments.size()  = %d\n", curve_segments.size());
-    printf("domain_segments.size() = %d\n", domain_segments.size());
+    //    printf("curve_segments.size()  = %d\n", curve_segments.size());
+    //    printf("domain_segments.size() = %d\n", domain_segments.size());
 
 
     for (unsigned int i = 0; i < curve_segments.size() / 2; i++) {
@@ -359,7 +332,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
 
 
 
-    jobject result = env->NewObject(doubleContactCurveClass, doubleContactCurveConstructor, leftSegmentsArray, rightSegmentsArray);
+    jobject result = env->NewObject(extensionCurveClass, extensionCurveConstructor, leftSegmentsArray, rightSegmentsArray);
 
 
     //    env->DeleteLocalRef(eigenValRLeft);

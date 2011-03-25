@@ -19,7 +19,7 @@
  */
 
 
-Boundary * Stone::defaultBoundary() const {
+Boundary * Stone::defaultBoundary() const{
 
     RealVector A(2);
 
@@ -42,21 +42,12 @@ Boundary * Stone::defaultBoundary() const {
 
 }
 
-Stone::Stone() : SubPhysics(StoneFluxFunction(StoneParams(), StonePermParams()), TriPhaseAccumulationFunction(), *defaultBoundary(), Multid::PLANE, "Stone", _SIMPLE_ACCUMULATION_) {
-
-    
-    RealVector refVec(2);
-
-    StoneHugoniotFunctionClass * stoneHugoniotFunction = new StoneHugoniotFunctionClass(refVec, (StoneFluxFunction(StoneParams(), StonePermParams())));
-    setHugoniotFunction(stoneHugoniotFunction);
+Stone::Stone():SubPhysics(StoneFluxFunction(StoneParams(),StonePermParams()),TriPhaseAccumulationFunction(),*defaultBoundary(),Multid::PLANE,"Stone",_SIMPLE_ACCUMULATION_){
 
 }
 
-Stone::Stone(const Stone & copy) : SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.boundary(), Multid::PLANE, "Stone", _SIMPLE_ACCUMULATION_) {
-   RealVector refVec(2);
+Stone::Stone(const Stone & copy):SubPhysics(copy.fluxFunction(),copy.accumulation(),copy.boundary(),Multid::PLANE,"Stone",_SIMPLE_ACCUMULATION_) {
 
-    StoneHugoniotFunctionClass * stoneHugoniotFunction = new StoneHugoniotFunctionClass(refVec, (StoneFluxFunction(StoneParams(), StonePermParams())));
-    setHugoniotFunction(stoneHugoniotFunction);
 }
 
 SubPhysics * Stone::clone()const {

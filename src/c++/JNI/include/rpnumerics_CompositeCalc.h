@@ -9,11 +9,11 @@ extern "C" {
 #endif
 /*
  * Class:     rpnumerics_CompositeCalc
- * Method:    calc
- * Signature: (Ljava/lang/String;Ljava/lang/String;Lrpnumerics/PhasePoint;II)Lrpnumerics/RpSolution;
+ * Method:    nativeCalc
+ * Signature: (IILrpnumerics/PhasePoint;IIII)Lrpnumerics/RpSolution;
  */
-JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_calc
-  (JNIEnv *, jobject, jstring, jstring, jobject, jint, jint);
+JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc
+  (JNIEnv *, jobject, jint, jint, jobject, jint, jint, jint, jint);
 
 #ifdef __cplusplus
 }

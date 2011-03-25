@@ -211,6 +211,13 @@
 	<CURVEPARAM name="caracteristicdomain" value="0"/>
     </CURVE>
     
+ <CURVE name="extensioncurve">
+      <CURVEPARAM name="curvefamily" value="1"/>
+      <CURVEPARAM name="domainfamily" value="1"/>
+      <CURVEPARAM name="caracteristicdomain" value="1"/>
+ </CURVE>
+
+
 
     <!--VIEW INFORMATIONS-->
 

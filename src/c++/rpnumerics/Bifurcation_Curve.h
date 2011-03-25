@@ -14,13 +14,13 @@
 
 // TODO: number_of_cells should be number_of_grid_points throughout.
 
-//#ifndef CHARACTERISTIC_ON_CURVE
-//    #define CHARACTERISTIC_ON_CURVE  0
-//#endif
-//
-//#ifndef CHARACTERISTIC_ON_DOMAIN
-//    #define CHARACTERISTIC_ON_DOMAIN 1
-//#endif
+#ifndef CHARACTERISTIC_ON_CURVE
+    #define CHARACTERISTIC_ON_CURVE  0
+#endif
+
+#ifndef CHARACTERISTIC_ON_DOMAIN
+    #define CHARACTERISTIC_ON_DOMAIN 1
+#endif
 
 class Bifurcation_Curve {
     protected:

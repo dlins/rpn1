@@ -133,7 +133,7 @@ public class BifurcationCurve extends SegmentedCurve {
 
         for (HugoniotSegment hugoniotSegment : leftSeg) {
             hugoniotSegment.setIntType(16);
-            System.out.println("Segmento : " + i + " " + hugoniotSegment);
+//            System.out.println("Segmento : " + i + " " + hugoniotSegment);
 
             i++;
 

@@ -15,6 +15,8 @@
  */
 #include "Boundary.h"
 #include "math.h"
+#include "stdio.h"
+#include "vector"
 
 /*
  * ---------------------------------------------------------------
@@ -41,7 +43,7 @@ public:
     Boundary * clone() const;
 
     RectBoundary(const RealVector & minimums, const RealVector & maximums);
-    RectBoundary(const RealVector & minimums, const RealVector & maximums, const std::vector<bool> &, const double = 0.0);
+    RectBoundary(const RealVector & minimums, const RealVector & maximums, const std::vector<bool> &, const double = 1e-10);
 
     RectBoundary & operator =(const RectBoundary &);
 

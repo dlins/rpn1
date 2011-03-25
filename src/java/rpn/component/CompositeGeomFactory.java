@@ -6,9 +6,8 @@
 package rpn.component;
 
 import rpnumerics.CompositeCalc;
-import rpnumerics.Orbit;
-import rpnumerics.OrbitCalc;
-import rpnumerics.RarefactionOrbit;
+import rpnumerics.CompositeCurve;
+import rpnumerics.HugoniotSegment;
 
 public class CompositeGeomFactory extends RpCalcBasedGeomFactory {
     //
@@ -31,9 +30,19 @@ public class CompositeGeomFactory extends RpCalcBasedGeomFactory {
     //
     protected RpGeometry createGeomFromSource() {
 
-        RarefactionOrbit orbit = (RarefactionOrbit) geomSource();
+          CompositeCurve curve = (CompositeCurve) geomSource();
 
-        return new CompositeGeom(MultidAdapter.converseOrbitPointsToCoordsArray(orbit.getPoints()), this);
+        // assuming a container with HugoniotSegment elements
+        int resultSize = curve.segments().size();
+
+        HugoniotSegGeom[] hugoniotArray = new HugoniotSegGeom[resultSize];
+        for (int i = 0; i < resultSize; i++) {
+            hugoniotArray[i] = new HugoniotSegGeom((HugoniotSegment) curve.segments().get(i));
+
+
+        }
+
+        return new CompositeGeom(hugoniotArray, this);
 
     }
 

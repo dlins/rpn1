@@ -203,15 +203,12 @@
       <CURVEPARAM name="caracteristicdomain" value="0"/>
     </CURVE>
 
-     <CURVE name="extensioncurve">
+     <CURVE name="boundaryextensioncurve">
       <CURVEPARAM name="curvefamily" value="1"/>
       <CURVEPARAM name="domainfamily" value="1"/>
-      <CURVEPARAM name="caracteristicdomain" value="1"/>
-
-
-
-
-
+      <CURVEPARAM name="characteristicdomain" value="1"/>
+      <CURVEPARAM name="x-domainpoints" value="101"/>
+      <CURVEPARAM name="y-domainpoints" value="101"/>
     </CURVE>
 
 

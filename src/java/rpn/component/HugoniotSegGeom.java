@@ -15,10 +15,13 @@ import java.awt.Color;
 
 public class HugoniotSegGeom extends MultiPolyLine {
 
-   
 
     public HugoniotSegGeom(HugoniotSegment segment) {
         super(new CoordsArray[]{new CoordsArray(segment.leftPoint()), new CoordsArray(segment.rightPoint())}, viewAttrSelection(segment));
+
+
+
+
     }
 
     public static ViewingAttr viewAttrSelection(HugoniotSegment segment) {

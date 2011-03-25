@@ -22,7 +22,7 @@
 
 ContourMethod::ContourMethod(int dimension, const FluxFunction & fluxFunction, const AccumulationFunction & accumFunction, const Boundary & boundary, HugoniotFunctionClass *h) : ShockMethod(dimension, fluxFunction, accumFunction, boundary) {
     hugoniot = h;
-
+    cout << "Construtor do contour" << endl;
 }
 
 ContourMethod::~ContourMethod() {
@@ -76,7 +76,6 @@ int ContourMethod::curv2d(/*double *segend,*/ int sn, int seglim, double fdummy,
     //        cout << "Valor de rect:" << rect[i] << endl;
     //    }
 
-
     double segend[seglim][2][2]; //int sn, int seglim, double f, double rect[4], int res[2], int ifirst;
 
     int zero;
@@ -103,7 +102,12 @@ int ContourMethod::curv2d(/*double *segend,*/ int sn, int seglim, double fdummy,
     int ncvert_ = 4;
     int nsimp_ = 2;
 
+
+
     int numberOfCombinations = hc.combination(hn + 1, hm + 1);
+
+
+
 
     //inicializing arrays
     int storn_[hn + 1];
@@ -258,7 +262,7 @@ int ContourMethod::curv2d(/*double *segend,*/ int sn, int seglim, double fdummy,
 
                 foncub[0][0] = hugoniot->HugoniotFunction(u);
                 //foncub[0][0] = f(vert[0][0], vert [0][1]);
-                
+
                 refval = foncub[0][0];
                 for (int l = 1; l < 4; l++) {
                     if (l == 2 && type == half) goto lab90;
@@ -500,13 +504,13 @@ void ContourMethod::completedCurve(const RealVector & input, vector<HugoniotPoly
     //    cout << "antes de complete curve: " << info << endl;
 
     hugoniot->completeCurve(vrs);
-    cout<<"vrs: "<<vrs.size()<<endl;
-    cout << "Tamanho do primeiro elemento de vrs: " <<vrs.at(0).size()<< endl;
+    cout << "vrs: " << vrs.size() << endl;
+    cout << "Tamanho do primeiro elemento de vrs: " << vrs.at(0).size() << endl;
 
     //         Para testar o contour sem classificacao
     hugoniotPolyLineVector.clear();
     for (int i = 0; i < vrs.size() / 2; i++) {
-        cout<<"Valor de i: "<<i<<endl;
+
         HugoniotPolyLine temp;
         temp.vec.resize(2);
 
@@ -521,7 +525,7 @@ void ContourMethod::completedCurve(const RealVector & input, vector<HugoniotPoly
         hugoniotPolyLineVector.push_back(temp);
     }
 
-    cout<<"Final do complete curve"<<endl;
+    cout << "Final do complete curve" << endl;
 
 }
 
@@ -532,7 +536,7 @@ void ContourMethod::classifiedCurve(const RealVector & input, vector<HugoniotPol
     rect[0] = 0.0; // xmin
     rect[1] = 1.0; // xmax
     //    rect[2] = 0.0841102; // ymin
-//    rect[2] = 0.099308998; // ymin
+    //    rect[2] = 0.099308998; // ymin
 
     rect[2] = 0.0; // ymin
     //    rect[3] = 0.576510849; // ymax

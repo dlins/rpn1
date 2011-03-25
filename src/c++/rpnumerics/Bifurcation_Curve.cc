@@ -9,7 +9,7 @@ void Bifurcation_Curve::create_grid(const RealVector &pmin, const RealVector &pm
 
     for (int i = 0; i < number_of_cells[0]; i++){
         for (int j = 0; j < number_of_cells[1]; j++){
-            printf("Here\n");
+//            printf("Here\n");
 
             p(i, j).resize(dim);
 
@@ -18,7 +18,7 @@ void Bifurcation_Curve::create_grid(const RealVector &pmin, const RealVector &pm
         }
     }
 
-    printf("Inside create_grid()\n");
+//    printf("Inside create_grid()\n");
 
     return;
 }
@@ -372,11 +372,13 @@ bool Bifurcation_Curve::prepare_segment(int i, int family, int where_is_characte
         if (!eig_is_real[i][family] || !eig_is_real[i + 1][family]) return false;
     }
 
+
     lambda[0] = eigen[i][family];
     flux(0, 0) = flux_values[i].component(0);
     flux(1, 0) = flux_values[i].component(1);
     accum(0, 0) = accum_values[i].component(0);
     accum(1, 0) = accum_values[i].component(1);
+
 
     lambda[1] = eigen[i + 1][family];
     flux(0, 1) = flux_values[i + 1].component(0);

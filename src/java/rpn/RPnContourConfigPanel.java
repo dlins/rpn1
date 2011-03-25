@@ -14,14 +14,13 @@ import java.util.Set;
 import rpnumerics.ContourConfiguration;
 import rpnumerics.RPNUMERICS;
 
-public class RPnContourConfigDialog extends RPnDialog {
+public class RPnContourConfigPanel extends JPanel {
 
     private JPanel paramsPanel_ = new JPanel();
     private JTextField [] textFieldsArray_;
 
-    public RPnContourConfigDialog() {
-        super(false,true);
-
+    public RPnContourConfigPanel() {
+     
         try {
             jbInit();
         } catch (Exception e) {
@@ -30,7 +29,6 @@ public class RPnContourConfigDialog extends RPnDialog {
     }
 
     private void jbInit() throws Exception {
-        setTitle("Contour Method Configuration");
 
         GridLayout gridLayout = new GridLayout(3,3,10,10);
 
@@ -58,29 +56,18 @@ public class RPnContourConfigDialog extends RPnDialog {
             i++;
         }
 
-        setMinimumSize(new Dimension(getTitle().length()*10,40));
-        this.getContentPane().add(paramsPanel_, BorderLayout.CENTER);
+        this.add(paramsPanel_, BorderLayout.CENTER);
 
-        pack();
+
     }
 
-    @Override
-    protected void cancel() {
-        dispose();
-    }
 
-    protected void apply() {
+    public void apply() {
 
         for (int i = 0; i < textFieldsArray_.length; i++) {
             RPNUMERICS.getContourConfiguration().setParamValue(textFieldsArray_[i].getName(), textFieldsArray_[i].getText());
         }
 
 
-        dispose();
-
-    }
-
-    @Override
-    protected void begin() {
     }
 }

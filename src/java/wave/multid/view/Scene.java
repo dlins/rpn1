@@ -61,6 +61,7 @@ public class Scene implements GeomObjView {
     }
 
     public Iterator geometries() {
+
         return viewList_.iterator();
     }
 

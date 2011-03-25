@@ -28,13 +28,13 @@ public class RPnFluxParamsPanel extends JPanel implements PropertyChangeListener
     private boolean isDefault_;
 
     public RPnFluxParamsPanel() {
-//        System.out.println("Consturindo com a fisica de rpnumerics" + RPNUMERICS.physicsID());
+        System.out.println("Consturindo com a fisica de rpnumerics: " + RPNUMERICS.physicsID());
         searchPhysics(RPNUMERICS.physicsID());
         buildPanel(false);
     }
 
     public RPnFluxParamsPanel(String physicsName) {
-//        System.out.println("consturindo default com a fisica:" + physicsName);
+        System.out.println("consturindo default com a fisica:" + physicsName);
         searchPhysics(physicsName);
 
         buildPanel(true);
@@ -51,8 +51,6 @@ public class RPnFluxParamsPanel extends JPanel implements PropertyChangeListener
         valuesArray_ = new ArrayList<RPnInputComponent>();
 
         gridConstraints.ipadx = 50;
-        gridConstraints.ipady = 5;
-        gridConstraints.gridy = 0;
 
         if (useDefaults) {
             for (int i = 0; i < physicsProfile_.getIndicesSize(); i++) {
@@ -66,18 +64,17 @@ public class RPnFluxParamsPanel extends JPanel implements PropertyChangeListener
                     inputComponent.setLabel(paramEntry.getKey());
                     inputComponent.addPropertyChangeListener(this);
                     valuesArray_.add(i, inputComponent);
-//                    gridConstraints.gridx = 1;
+                    gridConstraints.gridx++;
                     this.add(inputComponent.getContainer(), gridConstraints);
 
 
                 }
-                gridConstraints.gridy++;//x = i;
-
             }
         } else {
-//            gridConstraints.gridy = 0;
+
             gridConstraints.gridx = 1;
             Configuration physicsConfiguration = RPNUMERICS.getConfiguration(physicsProfile_.getName());
+ 
             for (int i = 0; i < physicsConfiguration.getParamsSize(); i++) {
 
                 RPnInputComponent inputComponent = new RPnInputComponent(new Double(physicsConfiguration.getParam(i)));
@@ -102,23 +99,21 @@ public class RPnFluxParamsPanel extends JPanel implements PropertyChangeListener
             }
         }
 
-        System.out.println("Profile: "+physicsProfile_);
-
     }
 
     public void applyParams() {
         RealVector newParamsVector = new RealVector(valuesArray_.size());
+         Configuration physicsConfiguration = RPNUMERICS.getConfiguration(physicsProfile_.getName());
+
+         System.out.println ( physicsConfiguration.toString());
 
         FluxParams oldParams = RPNUMERICS.getFluxParams();
         for (int i = 0; i < valuesArray_.size(); i++) {
-//            System.out.println((Double) valuesArray_.get(i).getValue(RPnInputComponent.NUMERIC_VALUE));
             newParamsVector.setElement(i, (Double) valuesArray_.get(i).getValue(RPnInputComponent.NUMERIC_VALUE));
-
         }
-//        System.out.println("Old params: " + oldParams);
+
         FluxParams newParams = new FluxParams(newParamsVector);
-//        System.out.println("New params: " + newParams);
-        RPNUMERICS.setFluxParams(newParams);
+        RPNUMERICS.configFluxParams(newParams);
         rpn.usecase.ChangeFluxParamsAgent.instance().applyChange(new PropertyChangeEvent(rpn.usecase.ChangeFluxParamsAgent.instance(), "", oldParams, newParams));
 
     }
@@ -128,7 +123,6 @@ public class RPnFluxParamsPanel extends JPanel implements PropertyChangeListener
         if (!isDefault_) {
             applyParams();
         }
-
 
     }
 }

@@ -5,7 +5,6 @@
  */
 package rpn.controller.ui;
 
-import rpn.RPnCurvesConfigPanel;
 import rpn.usecase.ChangeFluxParamsAgent;
 import rpn.usecase.ChangeDirectionAgent;
 import rpn.usecase.CompositePlotAgent;

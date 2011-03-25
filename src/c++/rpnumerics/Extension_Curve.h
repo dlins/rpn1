@@ -117,8 +117,9 @@ class Extension_Curve : public Bifurcation_Curve {
     public:
         // TODO: Maybe this class could be formed by purely static. In that case the ctor() may be useless.
         // The convenience of this approach is to be discussed sometime.
-        Extension_Curve(const std::vector<RealVector> &original_curve_segments, 
-                        const FluxFunction *cff, const AccumulationFunction *caa,
+        Extension_Curve(
+//const std::vector<RealVector> &original_curve_segments, 
+//                        const FluxFunction *cff, const AccumulationFunction *caa,
                         const RealVector &dpmin, const RealVector &dpmax, const int *domain_number_of_grid_pnts_input,
                         const FluxFunction *dff, const AccumulationFunction *daa);
         ~Extension_Curve();

@@ -9,7 +9,7 @@ void Bifurcation_CurveTPCW::create_grid(const RealVector &pmin, const RealVector
 
     for (int i = 0; i < number_of_cells[0]; i++){
         for (int j = 0; j < number_of_cells[1]; j++){
-            printf("Here\n");
+//            printf("Here\n");
 
             p(i, j).resize(dim);
 
@@ -18,7 +18,7 @@ void Bifurcation_CurveTPCW::create_grid(const RealVector &pmin, const RealVector
         }
     }
 
-    printf("Inside create_grid()\n");
+//    printf("Inside create_grid()\n");
 
     return;
 }

@@ -14,16 +14,14 @@ public class ConfigurationProfile {
 
     private String name_;
     private String type_;
-    private HashMap<String,ConfigurationProfile> configurationProfileMap_;
+    private HashMap<String, ConfigurationProfile> configurationProfileMap_;
     private HashMap<String, String> paramsMap_ = new HashMap<String, String>();
     private HashMap<Integer, String> paramsIndexMap_ = new HashMap<Integer, String>();
-
     public static final String PHISICS_PROFILE = "PHYSICS";
     public static final String CURVE_PROFILE = "CURVE";
     public static final String METHOD_PROFILE = "METHOD";
     public static final String BOUNDARY_PROFILE = "BOUNDARY";
     public static final String VISUALIZATION_PROFILE = "VISUAL";
-
 
     public ConfigurationProfile(String name, String type) {
         type_ = type;
@@ -34,7 +32,6 @@ public class ConfigurationProfile {
     public int getIndicesSize() {
         return paramsIndexMap_.size();
     }
-
 
     public HashMap<String, ConfigurationProfile> getProfiles() {
         return configurationProfileMap_;
@@ -78,9 +75,8 @@ public class ConfigurationProfile {
     }
 
     public void addConfigurationProfile(String configurationType, ConfigurationProfile configProfile) {
-        configurationProfileMap_.put(configurationType,configProfile);
+        configurationProfileMap_.put(configurationType, configProfile);
     }
-
 
     public ConfigurationProfile getConfigurationProfile(String configurationType) {
 
@@ -94,7 +90,7 @@ public class ConfigurationProfile {
     @Override
     public String toString() {
         StringBuffer stringBuffer = new StringBuffer();
-        stringBuffer.append("Name: " +name_ + "\n");
+        stringBuffer.append("Name: " + name_ + "\n");
 
         Set<Entry<String, String>> paramsSet = paramsMap_.entrySet();
         for (Entry<String, String> paramsEntry : paramsSet) {
@@ -104,8 +100,12 @@ public class ConfigurationProfile {
 
         Set<Entry<String, ConfigurationProfile>> configurationSet = configurationProfileMap_.entrySet();
         for (Entry<String, ConfigurationProfile> configurationEntry : configurationSet) {
+            if (configurationEntry.getValue() == null) {
+                System.out.println("Valor nulo");
+            } else {
+                stringBuffer.append(configurationEntry.getValue().toString() + "\n");
+            }
 
-            stringBuffer.append(configurationEntry.getValue().toString() + "\n");
 
         }
 
@@ -118,5 +118,4 @@ public class ConfigurationProfile {
         return paramsMap_.size();
 
     }
-
 }

@@ -1,7 +1,8 @@
 #include "Extension_Curve.h"
 
-Extension_Curve::Extension_Curve(const std::vector<RealVector> &original_curve_segments, 
-                                 const FluxFunction *cff, const AccumulationFunction *caa,
+Extension_Curve::Extension_Curve(
+//const std::vector<RealVector> &original_curve_segments, 
+//                                 const FluxFunction *cff, const AccumulationFunction *caa,
                                  const RealVector &dpmin, const RealVector &dpmax, const int *domain_number_of_grid_pnts_input,
                                  const FluxFunction *dff, const AccumulationFunction *daa){
 

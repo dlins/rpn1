@@ -6,6 +6,8 @@
  */
 package rpnumerics;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import wave.ode.ODESolver;
 
 public class CompositeCalc implements RpCalculation {
@@ -15,11 +17,18 @@ public class CompositeCalc implements RpCalculation {
     //
     // Members
     //
+
     private PhasePoint start_;
     private int timeDirection_;
+    private int increase_;
     private String methodName_;
     private int familyIndex_;
     private String flowName_;
+    int xResolution_;
+    int yResolution_;
+    int curveFamily_;
+    int domainFamily_;
+    int characteristicDomain_;
 
     //
     // Constructors/Initializers
@@ -40,6 +49,17 @@ public class CompositeCalc implements RpCalculation {
 
     }
 
+    public CompositeCalc(int xResolution, int yResolution, PhasePoint startPoint, int increase, int leftFamily, int rightFamily, int characteristicDomain) {
+
+        this.xResolution_ = xResolution;
+        this.yResolution_ = yResolution;
+        this.curveFamily_ = leftFamily;
+        this.domainFamily_ = rightFamily;
+        characteristicDomain_ = characteristicDomain;
+        start_ = startPoint;
+        increase_ = increase;
+    }
+
     CompositeCalc(OrbitPoint orbitPoint, int timeDirection, ODESolver odeSolver, String methodName) {
         start_ = orbitPoint;
         timeDirection_ = timeDirection;
@@ -47,8 +67,6 @@ public class CompositeCalc implements RpCalculation {
         methodName_ = methodName;
 
     }
-
-   
 
     //
     // Methods
@@ -60,17 +78,19 @@ public class CompositeCalc implements RpCalculation {
     }
 
     public RpSolution calc() throws RpException {
-        RpSolution    result = calc(methodName_, start_);
+
+        RpSolution result = null;
+
+
+        result = (CompositeCurve) nativeCalc(xResolution_, yResolution_, start_, increase_, curveFamily_, domainFamily_, characteristicDomain_);
+        if (result == null) {
+            throw new RpException("Error in native layer");
+        }
+
+
 
         return result;
     }
 
-    private native RpSolution calc(String methodName, PhasePoint initialpoint) throws RpException;
-
-    public String getCalcMethodName() {
-        return methodName_;
-
-    }
-
-  
+    private native RpSolution nativeCalc(int xResolution, int yResolution, PhasePoint start, int increase, int leftFamily, int rightFamily, int characteristicDomain) throws RpException;
 }

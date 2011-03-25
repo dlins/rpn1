@@ -16,10 +16,9 @@
 #include "SubPhysics.h"
 #include "IsoTriang2DBoundary.h"
 #include "StoneParams.h"
-#include "AccumulationFunction.h"
-#include "Multid.h"
+#include "AccumulationFunction.h" // Isto não deveria ser necessário. Ver se pode ser eliminado.
+#include "Multid.h"               // Isto não deveria ser necessário. Ver se pode ser eliminado.
 #include "StoneFluxFunction.h"
-#include "StoneHugoniotFunctionClass.h"
 
 /*
  * ---------------------------------------------------------------

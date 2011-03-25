@@ -63,7 +63,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JCheckBoxMenuItem showCurvesPaneltem_ = new JCheckBoxMenuItem("Show Curves Window", true);
     private RPnCurvesConfigPanel curvesConfigPanel_ = new RPnCurvesConfigPanel();
     private JFrame curvesFrame_;
-    private JMenuItem extensioncurveMenuItem_=new JMenuItem("Extension Curve Configuration ...");
+    private JMenuItem boundaryextensioncurveMenuItem_ = new JMenuItem("Bifurcation Curve Configuration ...");
 
     //Construct the frame
     public RPnUIFrame(RPnMenuCommand command) {
@@ -118,7 +118,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             toolBar_.setLayout(new GridLayout(8, 2));
             toolBar_.setOrientation(SwingConstants.VERTICAL);
 
-            if (UIController.instance().getState() instanceof SHOCK_CONFIG || (evt.getNewValue() instanceof SIGMA_CONFIG) || evt.getNewValue() instanceof SHOCK_CONFIG) {
+            if (evt.getNewValue() instanceof SHOCK_CONFIG || evt.getNewValue() instanceof SIGMA_CONFIG) {
 
                 shockConfigMenu();
                 toolBar_.removeAll();
@@ -133,38 +133,33 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
             }
 
-            if (UIController.instance().getState() instanceof RAREFACTION_CONFIG || evt.getNewValue() instanceof RAREFACTION_CONFIG) {
+            if (evt.getNewValue() instanceof RAREFACTION_CONFIG) {
                 rarefactionConfigMenu();
 
                 toolBar_.removeAll();
                 toolBar_.add(HugoniotPlotAgent.instance().getContainer());
-
                 toolBar_.add(ShockCurvePlotAgent.instance().getContainer());
-
                 toolBar_.add(RarefactionOrbitPlotAgent.instance().getContainer());
-
-//                toolBar_.add(CompositePlotAgent.instance().getContainer());
+                toolBar_.add(CompositePlotAgent.instance().getContainer());
                 toolBar_.add(ScratchAgent.instance().getContainer());
 
                 ScratchAgent.instance().setEnabled(true);
 
             }
 
-
-            if (UIController.instance().getState() instanceof BIFURCATION_CONFIG || evt.getNewValue() instanceof BIFURCATION_CONFIG) {
+            if (evt.getNewValue() instanceof BIFURCATION_CONFIG) {
 
                 bifurcationConfigMenu();
 
                 toolBar_.removeAll();
-//                toolBar_.add(BifurcationPlotAgent.instance().getContainer());
+
                 toolBar_.add(CoincidencePlotAgent.instance().getContainer());
                 toolBar_.add(SubInflectionPlotAgent.instance().getContainer());
                 toolBar_.add(BuckleyLeverettiInflectionAgent.instance().getContainer());
                 toolBar_.add(DoubleContactAgent.instance().getContainer());
                 toolBar_.add(ExtensionCurveAgent.instance().getContainer());
-//                toolBar_.add(ScratchAgent.instance().getContainer());
-//                toolBar_.add(BifurcationRefineAgent.instance().getContainer());
-//                toolBar_.add(TrackPointAgent.instance().getContainer());
+                toolBar_.add(SubInflectionExtensionCurveAgent.instance().getContainer());
+                toolBar_.add(CoincidenceExtensionCurvePlotAgent.instance().getContainer());
                 ScratchAgent.instance().setEnabled(true);
 
             }
@@ -523,6 +518,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         stateComboBox.addItem("Wave Curves");
         stateComboBox.addItem("Bifurcation Curves");
         stateComboBox.addActionListener(new StateHandler());
+        UIController.instance().setState(new SHOCK_CONFIG());
 
         configPanel_.add(stateComboBox);
 
@@ -783,7 +779,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
                     public void actionPerformed(ActionEvent e) {
 
-                        RPnContourConfigDialog contourconfigDialog = new RPnContourConfigDialog();
+                        RPnContourConfigPanel contourconfigDialog = new RPnContourConfigPanel();
                         contourconfigDialog.setVisible(true);
 //                        RPnBifurcationConfigDialog bifurcationConfigDialog = new RPnBifurcationConfigDialog(false, false);
 //                        bifurcationConfigDialog.setVisible(true);
@@ -793,7 +789,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
 
 
-        extensioncurveMenuItem_.addActionListener(
+        boundaryextensioncurveMenuItem_.addActionListener(
                 new java.awt.event.ActionListener() {
 
                     public void actionPerformed(ActionEvent e) {
@@ -813,9 +809,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
 
         modelInteractionMenu.removeAll();
-        modelInteractionMenu.add(bifurcationMenuItem_);
-        modelInteractionMenu.add(extensioncurveMenuItem_);
-        modelInteractionMenu.add(inputCoordsMenuItem);
+        modelInteractionMenu.add(boundaryextensioncurveMenuItem_);
+
 
 
 

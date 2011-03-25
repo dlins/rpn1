@@ -9,8 +9,6 @@ package rpn;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.text.DecimalFormat;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
