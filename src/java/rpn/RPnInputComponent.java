@@ -27,19 +27,30 @@ public class RPnInputComponent extends AbstractAction {
     private JSlider slider_;
     private JFormattedTextField textField_;
     private JLabel label_;
-    private DecimalFormat formatter_ = new DecimalFormat("0.000");
+    private DecimalFormat formatter_;
+    private DecimalFormat doubleFormatter_ = new DecimalFormat("0.000");
+    private DecimalFormat integerFormatter_ = new DecimalFormat("0");
     private double maxRange_;
     private double minRange_;
-    private double value_;
+    private Object value_;
     //CONSTS
+
+
     public static final String NUMERIC_VALUE = "NUMBER_VALUE";
+    public static final String DOUBLE_FORMAT = "INTEGERTYPE";
+    public static final String INTEGER_FORMAT = "DOUBLETYPE";
+
+
+    private static final String FORMAT_TYPE = "FORMAT_TYPE";
 
     public RPnInputComponent(double value) {
-        formatter_.setMaximumFractionDigits(3);
-        panel_ = new JPanel(new GridLayout(1,3));
+
+        formatter_=doubleFormatter_;
+        panel_ = new JPanel(new GridLayout(1, 3));
         value_ = value;
         textField_ = new JFormattedTextField(formatter_);
         slider_ = new JSlider(-100, 100);
+
         textField_.getDocument().addDocumentListener(new TextValueHandler());
         slider_.addChangeListener(new SliderHandler());
 
@@ -49,16 +60,34 @@ public class RPnInputComponent extends AbstractAction {
         label_ = new JLabel();
         label_.setText("Label");
 
-        panel_.add(label_,0,0);
-        panel_.add(textField_,0,1);
-        panel_.add(slider_,0,2);
-        setValue(new Double(value));
+        panel_.add(label_, 0, 0);
+        panel_.add(textField_, 0, 1);
+        panel_.add(slider_, 0, 2);
+
+        putValue(NUMERIC_VALUE, value);
+    }
+
+    public RPnInputComponent(String label, double value) {
+        this(value);
+        setLabel(label);
+    }
+
+    public RPnInputComponent(String label) {
+        this(0);
+        setLabel(label);
     }
 
     public void setRelativeRange(int min, int max) {
 
         slider_.setMinimum(min);
         slider_.setMaximum(max);
+
+    }
+
+    public void setNumericFormat(String numericFormat){
+
+        firePropertyChange(FORMAT_TYPE,"", numericFormat);
+
 
     }
 
@@ -136,14 +165,15 @@ public class RPnInputComponent extends AbstractAction {
 
             JSlider slider = (JSlider) arg0.getSource();
             Double newValue = setValue(slider.getValue());
-            textField_.setText(formatter_.format(new Double(newValue)));
+
+
+//            textField_.setText(formatter_.format(new Double(newValue)));
+
+            textField_.setText(formatter_.format(slider.getValue()));
 
             if (!slider.getValueIsAdjusting()) {
                 putValue(NUMERIC_VALUE, newValue);
             }
-
-
-
         }
     }
 
@@ -151,9 +181,7 @@ public class RPnInputComponent extends AbstractAction {
     public Object getValue(String key) {
 
         if (key.equals(NUMERIC_VALUE)) {
-            return new Double(value_);
-
-
+            return formatter_.format(value_);
         }
 
         return null;
@@ -175,9 +203,28 @@ public class RPnInputComponent extends AbstractAction {
     protected void firePropertyChange(String propName, Object oldValue, Object newValue) {
 
         if (propName.equalsIgnoreCase(NUMERIC_VALUE)) {
-            value_ = (Double) newValue;
-
+                value_ =  newValue;
         }
+
+
+        if (propName.equalsIgnoreCase(FORMAT_TYPE)) {
+
+            if (newValue.equals(RPnInputComponent.INTEGER_FORMAT)){
+
+                integerFormatter_.setMaximumFractionDigits(0);
+                formatter_ = integerFormatter_;
+
+            }
+
+            if (newValue.equals(RPnInputComponent.DOUBLE_FORMAT)){
+                doubleFormatter_.setMaximumFractionDigits(3);
+                formatter_ = doubleFormatter_;
+            }
+
+            textField_.setText(formatter_.format(value_));
+        }
+
+
         super.firePropertyChange(propName, oldValue, newValue);
     }
 
@@ -189,8 +236,6 @@ public class RPnInputComponent extends AbstractAction {
             slider_.setEnabled(false);
             textField_.setEditable(false);
 
-
-
             return;
 
 
@@ -198,7 +243,6 @@ public class RPnInputComponent extends AbstractAction {
 
         slider_.setEnabled(true);
         textField_.setEnabled(true);
-
 
     }
 

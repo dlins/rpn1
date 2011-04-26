@@ -124,6 +124,10 @@
         <METHODPARAM  name="step" value="0.01" />
     </METHOD>
 
+    <METHOD name="Newton">
+        <METHODPARAM  name="tolerance" value="0.01" />
+    </METHOD>
+
 
     <METHOD name="Contour">
         <METHODPARAM  name="x-resolution" value="30" />
@@ -201,6 +205,9 @@
       <CURVEPARAM name="leftfamily" value="0"/>
       <CURVEPARAM name="rightfamily" value="0"/>
       <CURVEPARAM name="caracteristicdomain" value="0"/>
+      <CURVEPARAM name="singular" value="1"/>
+
+
     </CURVE>
 
      <CURVE name="boundaryextensioncurve">
@@ -209,7 +216,22 @@
       <CURVEPARAM name="characteristicdomain" value="1"/>
       <CURVEPARAM name="x-domainpoints" value="101"/>
       <CURVEPARAM name="y-domainpoints" value="101"/>
+      <CURVEPARAM name="edge" value="0"/>
+
     </CURVE>
+
+
+     <CURVE name="rarefactionextension">
+      <CURVEPARAM name="curvefamily" value="1"/>
+      <CURVEPARAM name="domainfamily" value="1"/>
+      <CURVEPARAM name="characteristicdomain" value="1"/>
+      <CURVEPARAM name="x-domainpoints" value="101"/>
+      <CURVEPARAM name="y-domainpoints" value="101"/>
+    </CURVE>
+
+
+
+
 
 
 

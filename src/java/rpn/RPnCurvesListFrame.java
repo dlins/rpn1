@@ -8,13 +8,9 @@ package rpn;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.DisplayMode;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.NumberFormat;
@@ -53,12 +49,12 @@ public class RPnCurvesListFrame extends JFrame implements ListSelectionListener,
         this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
         setSize(new Dimension(360, 200));
-        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        GraphicsDevice[] gs = ge.getScreenDevices();
-        DisplayMode displayMode = gs[0].getDisplayMode();
-        int height = displayMode.getHeight();
-        int width = displayMode.getWidth();
-        this.setLocation((int) (width - (width * .55)), (int) (height - (height * .45)));
+         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+
+        int height = dim.height;
+        int width = dim.width;
+
+        this.setLocation((int) (width - (width * .55)), (int) (height - (height * .35)));
 
 
         toolBar_ = new JToolBar();
@@ -122,6 +118,15 @@ public class RPnCurvesListFrame extends JFrame implements ListSelectionListener,
 
         tableModel_.addRow(data);
 
+    }
+
+
+    public static void clear(){
+
+        for (int i = 1; i < tableModel_.getRowCount(); i++) {
+        tableModel_.removeRow(i);
+
+        }
     }
 
     public static void removeLastEntry() {

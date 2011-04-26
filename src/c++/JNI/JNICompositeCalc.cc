@@ -72,13 +72,19 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
     std::vector<RealVector> curve_segments;
     std::vector<RealVector> domain_segments;
 
+
+    int number_of_grid_points[2];
+
+    number_of_grid_points[0] = xResolution;
+    number_of_grid_points[1] = yResolution;
+
+
     if (RpNumerics::getPhysics().ID().compare("Stone") == 0) {
 
         cout << "Chamando com stone" << endl;
 
         dimension = 2;
 
-        int number_of_grid_points[2] = {101, 101};
 
         double expw, expg, expo;
         expw = expg = expo = 2.0;
@@ -147,7 +153,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
         cout << "Domain Family: " << domainFamily << endl;
         cout << "Characteristic : " << characteristicWhere << endl;
         cout << "Increase: " << increase << endl;
-
+        cout << "x resolution: " << xResolution << endl;
+        cout << "y resolution: " << yResolution << endl;
 
 
         vector<bool> testBooleanVector;
@@ -178,12 +185,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
 
     }
 
-        if (curve_segments.size() == 0 || domain_segments.size() == 0) {
-            printf("curve.size()  = %d\n", curve_segments.size());
-            printf("domain.size() = %d\n", domain_segments.size());
-            return NULL;
-        }
-    
+    if (curve_segments.size() == 0 || domain_segments.size() == 0) {
+        printf("curve.size()  = %d\n", curve_segments.size());
+        printf("domain.size() = %d\n", domain_segments.size());
+        return NULL;
+    }
+
 
     for (unsigned int i = 0; i < curve_segments.size() / 2; i++) {
         //    for (unsigned int i = 0; i < right_vrs.size() / 2; i++) {
@@ -265,9 +272,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
         env->CallObjectMethod(rightSegmentsArray, arrayListAddMethod, hugoniotSegment);
 
     }
-
-
-
 
     jobject result = env->NewObject(compositeCurveClass, compositeCurveConstructor, leftSegmentsArray, rightSegmentsArray);
 

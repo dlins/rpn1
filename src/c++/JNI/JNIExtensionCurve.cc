@@ -34,7 +34,7 @@ using std::vector;
 using namespace std;
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
-(JNIEnv * env, jobject obj, jint xResolution, jint yResolution, jint curveFamily, jint domainFamily, jint characteristicWhere) {
+(JNIEnv * env, jobject obj, jint xResolution, jint yResolution, jint curveFamily, jint domainFamily, jint edge,jint characteristicWhere) {
 
     jclass hugoniotSegmentClass = (env)->FindClass(HUGONIOTSEGMENTCLASS_LOCATION);
 
@@ -56,7 +56,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
 
     int dimension;
 
-
     //Calculations using the input
 
     jobject leftSegmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
@@ -68,6 +67,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
     std::vector<RealVector> curve_segments;
     std::vector<RealVector> domain_segments;
 
+      int * number_of_domain_pnts = new int[2];
+
+
+        number_of_domain_pnts[0] = xResolution;
+        number_of_domain_pnts[1] = yResolution;
+
     if (RpNumerics::getPhysics().ID().compare("Stone") == 0) {
 
         cout << "Chamando com stone" << endl;
@@ -75,12 +80,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
         dimension = 2;
         // Create the Double Contact
         // Grid (the same one for the left- and right-domains)
-
-        int * number_of_domain_pnts = new int[2];
-
-
-        number_of_domain_pnts[0] = 51;
-        number_of_domain_pnts[1] = 51;
 
 
         RealVector pmin(2);
@@ -90,8 +89,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
         RealVector pmax(2);
         pmax.component(0) = 1.0;
         pmax.component(1) = 1.0;
-
-
 
         // Over the x axis.
         int curve_points = 51;
@@ -127,14 +124,14 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
                 domain_segments);
 
 
-        delete number_of_domain_pnts;
+       
 
     }
 
 
     if (RpNumerics::getPhysics().ID().compare("TPCW") == 0) {
 
-        cout << "Chamando extesion com tpcw" << endl;
+        cout << "Chamando extension com tpcw" << endl;
         dimension = 3;
 
         Thermodynamics_SuperCO2_WaterAdimensionalized td(Physics::getRPnHome());
@@ -206,10 +203,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
         RealVector p1(2), p2(2);
         std::vector<RealVector> original_curve_segments;
         for (int i = 0; i < curve_points - 1; i++) {
-            p1.component(0) = 0.0;
+            p1.component(0) = edge;
             p1.component(1) = td.T2Theta(304.63) + (double) i*delta;
 
-            p2.component(0) = 0.0;
+            p2.component(0) = edge;
             p2.component(1) = td.T2Theta(304.63) + ((double) i + 1) * delta;
 
             original_curve_segments.push_back(p1);
@@ -221,11 +218,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
         ;
         cout << "Resolucao y " << number_of_grid_pnts[1] << endl;
 
-
-
         cout << "Familia da curva" << curveFamily << endl;
         cout << "Familia do dominio" << domainFamily << endl;
         cout << "characteristic " << characteristicWhere << endl;
+        cout << "edge " << edge << endl;
 
 
         ectpcw.compute_extension_curve(characteristicWhere, singular,
@@ -238,11 +234,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
 
         delete fv;
         delete fh;
-        delete number_of_grid_pnts;
-
 
     }
 
+    delete number_of_domain_pnts;
 
     //    printf("curve_segments.size()  = %d\n", curve_segments.size());
     //    printf("domain_segments.size() = %d\n", domain_segments.size());

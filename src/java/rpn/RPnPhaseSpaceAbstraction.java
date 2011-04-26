@@ -285,6 +285,8 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
             changeState(new NumConfigReadyImpl(((NUMCONFIG_READY) state_).hugoniotGeom(), ((NUMCONFIG_READY) state_).xzeroGeom()));
         }
 
+        RPnCurvesListFrame.clear();
+
 //        deleteList.clear();
 //        deleteList.add(groupArrayList_.get(groupArrayList_.size() - 1));//using deleteList as temporary list
 //        groupArrayList_.clear();

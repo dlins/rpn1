@@ -34,7 +34,7 @@ using std::vector;
 using namespace std;
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
-(JNIEnv * env, jobject obj,jint xResolution, jint yResolution, jint leftFamily, jint rightFamily) {
+(JNIEnv * env, jobject obj, jint xResolution, jint yResolution, jint leftFamily, jint rightFamily) {
 
     jclass classPhasePoint = (env)->FindClass(PHASEPOINT_LOCATION);
 
@@ -87,6 +87,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
     std::vector<RealVector> left_vrs;
     std::vector<RealVector> right_vrs;
 
+    int * number_of_grid_pnts = new int[2];
+
+
+    number_of_grid_pnts[0] = xResolution;
+    number_of_grid_pnts[1] = yResolution;
+
     if (RpNumerics::getPhysics().ID().compare("Stone") == 0) {
 
         cout << "Chamando com stone" << endl;
@@ -104,7 +110,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
 
 
 
-        int number_of_grid_pnts[2] = {51, 51};
+        //        int number_of_grid_pnts[2] = {51, 51};
 
         int family = 0; // Or else...
 
@@ -120,7 +126,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
 
         cout << "Chamando com tpcw" << endl;
         dimension = 3;
-        
+
         Thermodynamics_SuperCO2_WaterAdimensionalized td(Physics::getRPnHome());
 
         int info = td.status_after_init();
@@ -167,13 +173,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
         pmax.component(0) = 1.0;
         pmax.component(1) = td.T2Theta(450.0);
 
-        int * number_of_grid_pnts = new int[2];
 
 
-        number_of_grid_pnts[0]=xResolution;
-        number_of_grid_pnts[1]=yResolution;
-
-        cout <<"Resolucao x "<<number_of_grid_pnts[0];
+        cout << "Resolucao x " << number_of_grid_pnts[0];
         cout << "Resolucao y " << number_of_grid_pnts[1];
 
 
@@ -181,10 +183,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
         cout << "Familia direita" << rightFamily;
         cout << "Familia esquerda" << leftFamily;
 
-//        = {xResolution, yResolution};
+        //        = {xResolution, yResolution};
 
-//        int lfamily = 0;
-//        int rfamily = 0;
+        //        int lfamily = 0;
+        //        int rfamily = 0;
 
         Double_ContactTPCW dc(pmin, pmax, number_of_grid_pnts,
                 &flux, &accum,
@@ -195,18 +197,15 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
                 &reduced_flux, &reduced_accum,
                 rightFamily);
 
-
         dc.compute_double_contactTPCW(left_vrs, right_vrs);
-
 
         delete fv;
         delete fh;
-        delete number_of_grid_pnts;
-
 
     }
 
-
+    delete number_of_grid_pnts;
+    
     printf("left_vrs.size()  = %d\n", left_vrs.size());
     printf("right_vrs.size() = %d\n", right_vrs.size());
 

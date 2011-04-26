@@ -19,6 +19,8 @@ public class RPnContourConfigPanel extends JPanel {
     private JPanel paramsPanel_ = new JPanel();
     private JTextField [] textFieldsArray_;
 
+    private HashMap<String, RPnInputComponent> inputHash_;
+
     public RPnContourConfigPanel() {
      
         try {
@@ -30,13 +32,15 @@ public class RPnContourConfigPanel extends JPanel {
 
     private void jbInit() throws Exception {
 
-        GridLayout gridLayout = new GridLayout(3,3,10,10);
-
-        paramsPanel_.setLayout(gridLayout);
+        inputHash_=new HashMap<String, RPnInputComponent>();
 
         ContourConfiguration contourConfiguration= RPNUMERICS.getContourConfiguration();
 
         HashMap<String, String> paramsMap = contourConfiguration.getParams();
+
+        GridLayout gridLayout = new GridLayout(paramsMap.size(), 1, 10, 10);
+
+        paramsPanel_.setLayout(gridLayout);
 
         textFieldsArray_ = new JTextField[paramsMap.size()];
 
@@ -57,8 +61,6 @@ public class RPnContourConfigPanel extends JPanel {
         }
 
         this.add(paramsPanel_, BorderLayout.CENTER);
-
-
     }
 
 

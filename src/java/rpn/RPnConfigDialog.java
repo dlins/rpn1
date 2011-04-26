@@ -546,12 +546,12 @@ public class RPnConfigDialog extends RPnDialog {
             RealVector max = new RealVector(dimension);
 
 
-            for (int i = 0; i < boundaryTextArray_.size()/2; i++) {//Filling min limits
+            for (int i = 0; i < boundaryTextArray_.size() / 2; i++) {//Filling min limits
 
                 min.setElement(i, (Double) boundaryTextArray_.get(i).getValue(RPnInputComponent.NUMERIC_VALUE));
             }
-            for (int i = 0; i < boundaryTextArray_.size()/2; i++) {//Filling max limits
-                max.setElement(i, (Double) boundaryTextArray_.get(i+boundaryTextArray_.size()/2).getValue(RPnInputComponent.NUMERIC_VALUE));
+            for (int i = 0; i < boundaryTextArray_.size() / 2; i++) {//Filling max limits
+                max.setElement(i, (Double) boundaryTextArray_.get(i + boundaryTextArray_.size() / 2).getValue(RPnInputComponent.NUMERIC_VALUE));
             }
 
             RectBoundary newBoundary = new RectBoundary(min, max);
@@ -575,9 +575,6 @@ public class RPnConfigDialog extends RPnDialog {
                 buildBoundaryPanel();
 
             }
-
-
-
         }
     }
 

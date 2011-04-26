@@ -19,12 +19,14 @@ public class ExtensionCurveCalc extends BifurcationCurveCalc {
     int curveFamily_;
     int domainFamily_;
     int characteristicDomain_;
+    int edge_;
 
-    public ExtensionCurveCalc(int xResolution, int yResolution, int leftFamily, int rightFamily,int characteristicDomain) {
+    public ExtensionCurveCalc(int xResolution, int yResolution, int leftFamily, int rightFamily,int edge, int characteristicDomain) {
         this.xResolution_ = xResolution;
         this.yResolution_ = yResolution;
         this.curveFamily_ = leftFamily;
         this.domainFamily_ = rightFamily;
+        edge_=edge;
         characteristicDomain_=characteristicDomain;
     }
 
@@ -36,7 +38,7 @@ public class ExtensionCurveCalc extends BifurcationCurveCalc {
         RpSolution result = null;
 
         try {
-            result = (ExtensionCurve) nativeCalc(xResolution_,yResolution_,curveFamily_,domainFamily_,characteristicDomain_);
+            result = (ExtensionCurve) nativeCalc(xResolution_,yResolution_,curveFamily_,domainFamily_,edge_,characteristicDomain_);
             return result;
         } catch (RpException ex) {
             Logger.getLogger(ExtensionCurveCalc.class.getName()).log(Level.SEVERE, null, ex);
@@ -45,5 +47,5 @@ public class ExtensionCurveCalc extends BifurcationCurveCalc {
         return result;
     }
 
-    private native RpSolution nativeCalc(int xResolution, int yResolution, int leftFamily, int rightFamily,int characteristicDomain) throws RpException;
+    private native RpSolution nativeCalc(int xResolution, int yResolution, int leftFamily, int rightFamily,int edge,int characteristicDomain) throws RpException;
 }

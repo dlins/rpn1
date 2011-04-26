@@ -6,11 +6,7 @@
 package rpn.usecase;
 
 import java.awt.event.ActionEvent;
-import java.beans.PropertyChangeEvent;
-import java.util.Iterator;
-import java.util.List;
 import javax.swing.JToggleButton;
-import rpn.RPnCurvesListFrame;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.component.*;
 import rpn.controller.ui.BIFURCATION_CONFIG;
@@ -25,7 +21,7 @@ public class ExtensionCurveAgent extends RpModelPlotAgent {
     // Constants
     //
 
-    static public final String DESC_TEXT = "Extension Curve";
+    static public final String DESC_TEXT = "Boundary Extension Curve";
     //
     // Members
     //

@@ -61,6 +61,7 @@ public class RPnFluxParamsPanel extends JPanel implements PropertyChangeListener
                 for (Entry<String, String> paramEntry : paramSet) {
 
                     RPnInputComponent inputComponent = new RPnInputComponent(new Double(paramEntry.getValue()));
+                    inputComponent.setNumericFormat(RPnInputComponent.DOUBLE_FORMAT);
                     inputComponent.setLabel(paramEntry.getKey());
                     inputComponent.addPropertyChangeListener(this);
                     valuesArray_.add(i, inputComponent);
@@ -78,6 +79,7 @@ public class RPnFluxParamsPanel extends JPanel implements PropertyChangeListener
             for (int i = 0; i < physicsConfiguration.getParamsSize(); i++) {
 
                 RPnInputComponent inputComponent = new RPnInputComponent(new Double(physicsConfiguration.getParam(i)));
+                inputComponent.setNumericFormat(RPnInputComponent.DOUBLE_FORMAT);
                 inputComponent.setLabel(physicsConfiguration.getParamName(i));
                 inputComponent.addPropertyChangeListener(this);
                 valuesArray_.add(i, inputComponent);
@@ -109,7 +111,7 @@ public class RPnFluxParamsPanel extends JPanel implements PropertyChangeListener
 
         FluxParams oldParams = RPNUMERICS.getFluxParams();
         for (int i = 0; i < valuesArray_.size(); i++) {
-            newParamsVector.setElement(i, (Double) valuesArray_.get(i).getValue(RPnInputComponent.NUMERIC_VALUE));
+            newParamsVector.setElement(i, new Double((String)valuesArray_.get(i).getValue(RPnInputComponent.NUMERIC_VALUE)));
         }
 
         FluxParams newParams = new FluxParams(newParamsVector);

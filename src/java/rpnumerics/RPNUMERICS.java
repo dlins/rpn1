@@ -384,13 +384,14 @@ public class RPNUMERICS {
         int xResolution = new Integer(getContourConfiguration().getParam("x-resolution"));
         int yResolution = new Integer(getContourConfiguration().getParam("y-resolution"));
         int characteristicDomain = new Integer(getParamValue("boundaryextensioncurve", "characteristicdomain"));
+        int edge = new Integer(getParamValue("boundaryextensioncurve", "edge"));
 
 
 
         System.out.println("Resolucao em Java:" + xResolution + " " + yResolution);
 
 
-        return new ExtensionCurveCalc(xResolution, yResolution, new Integer(getParamValue("boundaryextensioncurve", "curvefamily")), new Integer(getParamValue("boundaryextensioncurve", "domainfamily")), characteristicDomain);
+        return new ExtensionCurveCalc(xResolution, yResolution, new Integer(getParamValue("boundaryextensioncurve", "curvefamily")), new Integer(getParamValue("boundaryextensioncurve", "domainfamily")), edge,characteristicDomain);
 
     }
 
@@ -428,8 +429,19 @@ public class RPNUMERICS {
     }
 
     public static CompositeCalc createCompositeCalc(OrbitPoint orbitPoint) {
-        System.out.println("aqui no create");
-        return new CompositeCalc(101, 101, orbitPoint, 1, 0,0,0);
+        System.out.println("aqui no create "+ getContourConfiguration().getParam("x-resolution")+" "+getContourConfiguration().getParam("y-resolution"));
+
+
+
+        int xResolution = new Integer(getContourConfiguration().getParam("x-resolution"));
+        int yResolution = new Integer(getContourConfiguration().getParam("y-resolution"));
+
+        int domainFamily = new Integer(getParamValue("rarefactionextension", "curvefamily"));
+        int curveFamily = new Integer(getParamValue("rarefactionextension", "domainfamily"));
+
+        int characteristicDomain = new Integer(getParamValue("boundaryextensioncurve", "characteristicdomain"));
+
+        return new CompositeCalc(xResolution, yResolution, orbitPoint, direction_, curveFamily, domainFamily, characteristicDomain);
     }
 
     public static ShockFlow createShockFlow() {

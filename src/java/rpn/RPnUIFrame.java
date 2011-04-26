@@ -32,6 +32,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     //
     private JPanel contentPane;
     private JPanel configPanel_ = new JPanel(new GridLayout(2, 1));
+    private JPanel toolBarPanel_ = new JPanel();
     private JComboBox stateComboBox = new JComboBox();
     private JMenuBar jMenuBar1 = new JMenuBar();
     private JMenu editMenu = new JMenu();
@@ -40,8 +41,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JMenu helpMenu = new JMenu();
     private JCheckBox resultsOption = new JCheckBox("Save With Results");
     private JMenuItem shockMenuItem_ = new JMenuItem("Shock Configuration ...");
-    private JMenuItem bifurcationMenuItem_ = new JMenuItem("Bifurcation Configuration ...");
-    private JMenuItem rarefactionMenuItem_ = new JMenuItem("Rarefaction Config ...");
+//    private JMenuItem bifurcationMenuItem_ = new JMenuItem("Configuration ...");
+    private JMenuItem rarefactionMenuItem_ = new JMenuItem("Configuration ...");
     private JMenuItem jMenuFileExit = new JMenuItem();
     private JMenuItem matlabMenuFileExport_ = new JMenuItem("Export to Matlab ...");
     private JMenuItem jMenuHelpAbout = new JMenuItem();
@@ -63,7 +64,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JCheckBoxMenuItem showCurvesPaneltem_ = new JCheckBoxMenuItem("Show Curves Window", true);
     private RPnCurvesConfigPanel curvesConfigPanel_ = new RPnCurvesConfigPanel();
     private JFrame curvesFrame_;
-    private JMenuItem boundaryextensioncurveMenuItem_ = new JMenuItem("Bifurcation Curve Configuration ...");
+    private JMenuItem bifurcationConfigMenuItem_ = new JMenuItem("Bifurcation Curve Configuration ...");
 
     //Construct the frame
     public RPnUIFrame(RPnMenuCommand command) {
@@ -118,18 +119,21 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             toolBar_.setLayout(new GridLayout(8, 2));
             toolBar_.setOrientation(SwingConstants.VERTICAL);
 
+
             if (evt.getNewValue() instanceof SHOCK_CONFIG || evt.getNewValue() instanceof SIGMA_CONFIG) {
 
                 shockConfigMenu();
                 toolBar_.removeAll();
+
                 toolBar_.add(OrbitPlotAgent.instance().getContainer());
                 toolBar_.add(ForwardManifoldPlotAgent.instance().getContainer());
                 toolBar_.add(BackwardManifoldPlotAgent.instance().getContainer());
                 toolBar_.add(StationaryPointPlotAgent.instance().getContainer());
                 toolBar_.add(PoincareSectionPlotAgent.instance().getContainer());
                 toolBar_.add(HugoniotPlotAgent.instance().getContainer());
-                toolBar_.add(ScratchAgent.instance().getContainer());
-                ScratchAgent.instance().setEnabled(true);
+//                toolBar_.add(ScratchAgent.instance().getContainer());
+//                ScratchAgent.instance().setEnabled(true);
+                toolBar_.revalidate();
 
             }
 
@@ -137,13 +141,14 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 rarefactionConfigMenu();
 
                 toolBar_.removeAll();
+
                 toolBar_.add(HugoniotPlotAgent.instance().getContainer());
                 toolBar_.add(ShockCurvePlotAgent.instance().getContainer());
                 toolBar_.add(RarefactionOrbitPlotAgent.instance().getContainer());
                 toolBar_.add(CompositePlotAgent.instance().getContainer());
-                toolBar_.add(ScratchAgent.instance().getContainer());
-
-                ScratchAgent.instance().setEnabled(true);
+//                toolBar_.add(ScratchAgent.instance().getContainer());
+//                ScratchAgent.instance().setEnabled(true);
+                toolBar_.revalidate();
 
             }
 
@@ -160,11 +165,13 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 toolBar_.add(ExtensionCurveAgent.instance().getContainer());
                 toolBar_.add(SubInflectionExtensionCurveAgent.instance().getContainer());
                 toolBar_.add(CoincidenceExtensionCurvePlotAgent.instance().getContainer());
-                ScratchAgent.instance().setEnabled(true);
+//                ScratchAgent.instance().setEnabled(true);
+//                toolBar_.validate();
+                toolBar_.revalidate();
 
             }
 
-            pack();
+//            pack();
         }
 
 
@@ -477,9 +484,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         int index = 0;
 
-
-
-
         RPnProjDescriptor projDescriptors[] = new RPnProjDescriptor[RPNUMERICS.domainDim() * 2];
 
         int[] projIndex = new int[projDescriptors.length];
@@ -503,9 +507,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         }
 
 
-
-
-
         return projDescriptors;
 
     }
@@ -524,6 +525,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         contentPane = (JPanel) this.getContentPane();
         contentPane.setLayout(borderLayout1);
+        toolBar_.setOpaque(true);
+        toolBarPanel_.add(toolBar_);
         this.setSize(new Dimension(400, 300));
         this.setResizable(false);
         this.setTitle("");
@@ -537,9 +540,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         KeyStroke keyStroke = KeyStroke.getKeyStroke('l');
         showCursorMenuItem_.setAccelerator(keyStroke);
-
-
-
         showCursorMenuItem_.addActionListener(
                 new java.awt.event.ActionListener() {
 
@@ -699,7 +699,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         jMenuBar1.add(helpMenu);
         setJMenuBar(jMenuBar1);
-        contentPane.add(toolBar_, BorderLayout.CENTER);
+//        contentPane.add(toolBar_, BorderLayout.CENTER);
+
+        contentPane.add(toolBarPanel_, BorderLayout.CENTER);
 
         configPanel_.add(stateComboBox);
         configPanel_.add(curvesConfigPanel_);
@@ -713,9 +715,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         editMenu.add(ClearPhaseSpaceAgent.instance());
         editMenu.addSeparator();
         editMenu.add(FillPhaseSpaceAgent.instance());
-
-
-
 
 
     }
@@ -754,9 +753,11 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
                         //System.out.println("Calling action");
 
-                        RPnRarefactionConfigDialog rarefactionConfigDialog = new RPnRarefactionConfigDialog(false, false);
+                        RPnExtensionCurveConfigDialog extensionCurve = new RPnExtensionCurveConfigDialog();
+                        extensionCurve.setVisible(true);
+//                        RPnRarefactionConfigDialog rarefactionConfigDialog = new RPnRarefactionConfigDialog(false, false);
 
-                        rarefactionConfigDialog.setVisible(true);
+//                        rarefactionConfigDialog.setVisible(true);
                     }
                 });
 
@@ -774,22 +775,22 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
     private void bifurcationConfigMenu() {
 
-        bifurcationMenuItem_.addActionListener(
-                new java.awt.event.ActionListener() {
+//        bifurcationMenuItem_.addActionListener(
+//                new java.awt.event.ActionListener() {
+//
+//                    public void actionPerformed(ActionEvent e) {
+//
+//                        RPnContourConfigPanel contourconfigDialog = new RPnContourConfigPanel();
+//                        contourconfigDialog.setVisible(true);
+////                        RPnBifurcationConfigDialog bifurcationConfigDialog = new RPnBifurcationConfigDialog(false, false);
+////                        bifurcationConfigDialog.setVisible(true);
+//
+//                    }
+//                });
 
-                    public void actionPerformed(ActionEvent e) {
-
-                        RPnContourConfigPanel contourconfigDialog = new RPnContourConfigPanel();
-                        contourconfigDialog.setVisible(true);
-//                        RPnBifurcationConfigDialog bifurcationConfigDialog = new RPnBifurcationConfigDialog(false, false);
-//                        bifurcationConfigDialog.setVisible(true);
-
-                    }
-                });
 
 
-
-        boundaryextensioncurveMenuItem_.addActionListener(
+        bifurcationConfigMenuItem_.addActionListener(
                 new java.awt.event.ActionListener() {
 
                     public void actionPerformed(ActionEvent e) {
@@ -804,44 +805,25 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                     }
                 });
 
-
-
-
-
         modelInteractionMenu.removeAll();
-        modelInteractionMenu.add(boundaryextensioncurveMenuItem_);
-
-
-
+        modelInteractionMenu.add(bifurcationConfigMenuItem_);
 
     }
 
     private void setUIFramePosition() {
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 
-        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        GraphicsDevice[] gs = ge.getScreenDevices();
-        DisplayMode displayMode = gs[0].getDisplayMode();
-        int height = displayMode.getHeight();
-        int width = displayMode.getWidth();
-        //this.setLocation((int) (width - (width * .55)), (int) (height - (height * .9)));
+        int height = dim.height;
+        int width = dim.width;
+        this.setLocation((int) (width - (width * .55)), (int) (height - (height * .9)));
         this.setLocation((int) (width - (width * .55)), 100);
-
     }
 
     private void setFramesPosition(Component component) {
 
-        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        GraphicsDevice[] gs = ge.getScreenDevices();
-        DisplayMode displayMode = gs[0].getDisplayMode();
-        int height = displayMode.getHeight();
-        int width = displayMode.getWidth();
-
-        //int newwidth = (int) (width - (width * .6));
-        //int newheight = (int) (height - (height * .8));
         int newwidth = (int) 100;
         int newheight = (int) 100;
         component.setLocation(newwidth, newheight);
-
     }
 
     public static RPnPhaseSpaceFrame[] getPhaseSpaceFrames() {
@@ -894,8 +876,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 newState = new BIFURCATION_CONFIG();
                 curvesConfigPanel_.propertyChange(new PropertyChangeEvent(this, "family", "", "bifurcationcurve"));
                 curvesConfigPanel_.propertyChange(new PropertyChangeEvent(this, "direction", "", "bifurcationcurve"));
-
-
             }
 
             UIController.instance().setState(newState);
