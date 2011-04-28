@@ -36,4 +36,6 @@ public class RPnCurvesTableModel extends DefaultTableModel  {
         }
         return false;
     }
+
+
 }

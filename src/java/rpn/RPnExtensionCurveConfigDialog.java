@@ -7,6 +7,7 @@ package rpn;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -130,6 +131,13 @@ public class RPnExtensionCurveConfigDialog extends RPnDialog {
         setMinimumSize(new Dimension(getTitle().length() * 10, 40));
 
         getContentPane().add(extensionPanel_, BorderLayout.CENTER);
+
+        extensionPanel_.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "Apply");
+
+        extensionPanel_.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "Cancel");
+
+        extensionPanel_.getActionMap().put("Apply", applyButton.getAction());
+        extensionPanel_.getActionMap().put("Cancel", cancelButton.getAction());
 
 
         readValues();

@@ -6,6 +6,9 @@
 package rpn;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
 import rpnumerics.RPNUMERICS;
 
 public class RPnFluxParamsDialog extends RPnDialog{
@@ -16,6 +19,15 @@ public class RPnFluxParamsDialog extends RPnDialog{
         super(false, true);
         setTitle(RPNUMERICS.physicsID());
         paramsPanel_ = new RPnFluxParamsPanel();
+
+        paramsPanel_.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "Apply");
+
+        paramsPanel_.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "Cancel");
+
+        paramsPanel_.getActionMap().put("Apply", applyButton.getAction());
+        paramsPanel_.getActionMap().put("Cancel", cancelButton.getAction());
+
+
         this.getContentPane().add(paramsPanel_, BorderLayout.CENTER);
 
         pack();

@@ -10,7 +10,9 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeListener;
 import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -31,8 +33,8 @@ public abstract class RPnDialog extends JDialog {
         getContentPane().setLayout(new BorderLayout());
 
         buttonsPanel = new JPanel(new FlowLayout());
-        cancelButton = new JButton("Cancel");
-        applyButton = new JButton("Apply");
+        cancelButton = new JButton(new DefaultCancelAction());
+        applyButton = new JButton(new DefaultApplyAction());
 
         buttonsPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "Apply");
         buttonsPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "Cancel");
@@ -45,13 +47,13 @@ public abstract class RPnDialog extends JDialog {
         buttonsPanel.add(applyButton);
         buttonsPanel.add(cancelButton);
 
-        defaultCancelAction_=new DefaultCancelController();
+//        defaultCancelAction_=new DefaultCancelController();
 
-        cancelButton.addActionListener(defaultCancelAction_);
+//        cancelButton.addActionListener(defaultCancelAction_);
 
-        defaultApplyAction_ = new DefaultApplyController();
+//        defaultApplyAction_ = new DefaultApplyController();
 
-        applyButton.addActionListener(defaultApplyAction_);
+//        applyButton.addActionListener(defaultApplyAction_);
 
         addBackButton();
         cancelButton.setEnabled(false);
@@ -106,18 +108,16 @@ public abstract class RPnDialog extends JDialog {
 
     protected abstract void apply();
 
-    protected  abstract void begin();
+    protected abstract void begin();
 
-    
     protected void cancel() {
         dispose();
     }
 
-    protected void removeDefaultApplyBehavior(){
+    protected void removeDefaultApplyBehavior() {
         applyButton.removeActionListener(defaultApplyAction_);
 
     }
-
 
     protected void removeDefaultCancelBehavior() {
         cancelButton.removeActionListener(defaultCancelAction_);
@@ -137,6 +137,69 @@ public abstract class RPnDialog extends JDialog {
         }
     }
 
+    private class DefaultApplyAction implements Action {
+
+        public Object getValue(String key) {
+            if (key.equals(Action.NAME)) {
+                return "Apply";
+            }
+            return null;
+        }
+
+        public void putValue(String key, Object value) {
+        }
+
+        public void setEnabled(boolean b) {
+        }
+
+        public boolean isEnabled() {
+            return true;
+        }
+
+        public void addPropertyChangeListener(PropertyChangeListener listener) {
+        }
+
+        public void removePropertyChangeListener(PropertyChangeListener listener) {
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            apply();
+            dispose();
+        }
+    }
+
+    private class DefaultCancelAction implements Action {
+
+        public Object getValue(String key) {
+            if (key.equals(Action.NAME)) {
+                return "Cancel";
+            }
+            return null;
+          
+
+        }
+
+        public void putValue(String key, Object value) {
+        }
+
+        public void setEnabled(boolean b) {
+        }
+
+        public boolean isEnabled() {
+            return true;
+        }
+
+        public void addPropertyChangeListener(PropertyChangeListener listener) {
+        }
+
+        public void removePropertyChangeListener(PropertyChangeListener listener) {
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            cancel();
+        }
+    }
+
     private class DefaultApplyController implements ActionListener {
 
         public void actionPerformed(ActionEvent e) {
@@ -150,8 +213,5 @@ public abstract class RPnDialog extends JDialog {
         public void actionPerformed(ActionEvent e) {
             cancel();
         }
-
     }
-
-
 }

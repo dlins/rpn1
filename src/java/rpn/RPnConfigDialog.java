@@ -58,7 +58,7 @@ public class RPnConfigDialog extends RPnDialog {
     private HashMap<String, Configuration> methodConfigMap_;
 
     public RPnConfigDialog() {
-        profilesArray_ = RPnConfig.getAllPhysicsProfiles();//ConfigurationProfiles();//null;//RPnInterfaceParser.getPhysicsProfiles();
+        profilesArray_ = RPnConfig.getAllPhysicsProfiles();
 
 
         methodConfigMap_ = new HashMap<String, Configuration>();

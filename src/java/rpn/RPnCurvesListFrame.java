@@ -85,6 +85,8 @@ public class RPnCurvesListFrame extends JFrame implements ListSelectionListener,
         curvesTable_.getColumnModel().getColumn(0).setPreferredWidth(20);
         curvesTable_.getColumnModel().getColumn(1).setPreferredWidth(80);
 
+        curvesTable_.getTableHeader().setReorderingAllowed(false);
+
 
         tablePanel_.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
@@ -150,7 +152,8 @@ public class RPnCurvesListFrame extends JFrame implements ListSelectionListener,
 
             }
         }
-
+        curvesTable_.clearSelection();
+        
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -173,11 +176,14 @@ public class RPnCurvesListFrame extends JFrame implements ListSelectionListener,
                 } else {
 
                     RPnDataModule.PHASESPACE.hideGeometry(e.getFirstRow());
+
                 }
             }
 
         }
-        RPnDataModule.PHASESPACE.clearGeometrySelection();
+//        RPnDataModule.PHASESPACE.clearGeometrySelection();
+
+//        resetSelectionButton_.doClick();
 
     }
 
