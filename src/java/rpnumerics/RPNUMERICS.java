@@ -175,10 +175,17 @@ public class RPNUMERICS {
 
     }
 
-    public static void setFamily(int family, int leftFamily, int rightFamily) {
+//    public static void setFamily(int family, int leftFamily, int rightFamily) {
+//        setParamValue("shock", "family", String.valueOf(family));
+//
+//    }
+
+
+    public static void setFamily(int family) {
         setParamValue("shock", "family", String.valueOf(family));
 
     }
+
 
     public static void setConfiguration(String methodName, Configuration methodConfiguration) {
         if (methodName.equalsIgnoreCase("Contour")) {
@@ -359,7 +366,7 @@ public class RPNUMERICS {
         System.out.println("Resolucao em Java:" + xResolution + " " + yResolution);
 
 
-        return new DoubleContactCurveCalc(xResolution, yResolution, new Integer(getParamValue("bifurcation", "leftfamily")), new Integer(getParamValue("bifurcation", "rightfamily")));
+        return new DoubleContactCurveCalc(xResolution, yResolution, new Integer(getParamValue("boundaryextensioncurve", "curvefamily")), new Integer(getParamValue("boundaryextensioncurve", "domainfamily")));
 
     }
 

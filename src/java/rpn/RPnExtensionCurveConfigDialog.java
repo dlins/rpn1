@@ -154,13 +154,16 @@ public class RPnExtensionCurveConfigDialog extends RPnDialog {
         RPNUMERICS.setParamValue("boundaryextensioncurve", "edge", String.valueOf(inputHash_.get("edge").getValue(RPnInputComponent.NUMERIC_VALUE)));
 
         contourConfigPanel_.apply();
-
-        dispose();
+//
+//        setVisible(false);
+//        dispose();
 
     }
 
     @Override
     protected void begin() {
+        System.out.println("Chamando begin do extension config");
+        dispose();
     }
 
     private class TabListener implements ChangeListener {

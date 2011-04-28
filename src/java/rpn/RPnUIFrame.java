@@ -42,7 +42,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JCheckBox resultsOption = new JCheckBox("Save With Results");
     private JMenuItem shockMenuItem_ = new JMenuItem("Shock Configuration ...");
 //    private JMenuItem bifurcationMenuItem_ = new JMenuItem("Configuration ...");
-    private JMenuItem rarefactionMenuItem_ = new JMenuItem("Configuration ...");
+    private JMenuItem configurationMenuItem_ = new JMenuItem(new ConfigAction());//"Configuration ...");
     private JMenuItem jMenuFileExit = new JMenuItem();
     private JMenuItem matlabMenuFileExport_ = new JMenuItem("Export to Matlab ...");
     private JMenuItem jMenuHelpAbout = new JMenuItem();
@@ -64,7 +64,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JCheckBoxMenuItem showCurvesPaneltem_ = new JCheckBoxMenuItem("Show Curves Window", true);
     private RPnCurvesConfigPanel curvesConfigPanel_ = new RPnCurvesConfigPanel();
     private JFrame curvesFrame_;
-    private JMenuItem bifurcationConfigMenuItem_ = new JMenuItem("Bifurcation Curve Configuration ...");
+    private JMenuItem bifurcationConfigMenuItem_ = new JMenuItem("Configuration ...");
+    private RPnExtensionCurveConfigDialog configurationDialog_ = new RPnExtensionCurveConfigDialog();
 
     //Construct the frame
     public RPnUIFrame(RPnMenuCommand command) {
@@ -520,6 +521,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         stateComboBox.addItem("Bifurcation Curves");
         stateComboBox.addActionListener(new StateHandler());
         UIController.instance().setState(new SHOCK_CONFIG());
+//        configurationMenuItem_.setText(configurationMenuItem_.getText());
 
         configPanel_.add(stateComboBox);
 
@@ -675,6 +677,48 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             }
         });
 
+
+
+
+//        rarefactionMenuItem_.addActionListener(
+//                new java.awt.event.ActionListener() {
+//
+//                    public void actionPerformed(ActionEvent e) {
+//
+////                        configurationDialog_.setVisible(true);
+//                        System.out.println("em rarefacao");
+//
+//                        RPnExtensionCurveConfigDialog extensionCurve = new RPnExtensionCurveConfigDialog();
+//                        extensionCurve.setVisible(true);
+//
+//                    }
+//                });
+
+
+
+        shockMenuItem_.addActionListener(
+                new java.awt.event.ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+                        RPnShockConfigDialog shockConfigDialog = new RPnShockConfigDialog(false, false);
+                        shockConfigDialog.setVisible(true);
+
+                    }
+                });
+
+
+//        rarefactionMenuItem_.addActionListener(
+//                new java.awt.event.ActionListener() {
+//
+//                    public void actionPerformed(ActionEvent e) {
+//
+////                        configurationDialog_.setVisible(true);
+//                        RPnExtensionCurveConfigDialog extensionCurve = new RPnExtensionCurveConfigDialog();
+//                        extensionCurve.setVisible(true);
+//                    }
+//                });
+
+
         fileMenu.add(exportMenuItem);
         fileMenu.add(matlabMenuFileExport_);
         fileMenu.addSeparator();
@@ -707,10 +751,11 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         configPanel_.add(curvesConfigPanel_);
         contentPane.add(configPanel_, BorderLayout.NORTH);
 
-        editMenu.add(UndoActionController.instance());
-        editMenu.addSeparator();
+//        editMenu.add(UndoActionController.instance());
+//        editMenu.addSeparator();
         editMenu.add(layoutMenuItem);
         editMenu.addSeparator();
+
 
         editMenu.add(ClearPhaseSpaceAgent.instance());
         editMenu.addSeparator();
@@ -720,15 +765,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     }
 
     private void shockConfigMenu() {
-        shockMenuItem_.addActionListener(
-                new java.awt.event.ActionListener() {
-
-                    public void actionPerformed(ActionEvent e) {
-                        RPnShockConfigDialog shockConfigDialog = new RPnShockConfigDialog(false, false);
-                        shockConfigDialog.setVisible(true);
-
-                    }
-                });
 
         modelInteractionMenu.removeAll();
         modelInteractionMenu.add(ChangeSigmaAgent.instance());
@@ -746,67 +782,26 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
     private void rarefactionConfigMenu() {
 
-        rarefactionMenuItem_.addActionListener(
-                new java.awt.event.ActionListener() {
 
-                    public void actionPerformed(ActionEvent e) {
-
-                        //System.out.println("Calling action");
-
-                        RPnExtensionCurveConfigDialog extensionCurve = new RPnExtensionCurveConfigDialog();
-                        extensionCurve.setVisible(true);
-//                        RPnRarefactionConfigDialog rarefactionConfigDialog = new RPnRarefactionConfigDialog(false, false);
-
-//                        rarefactionConfigDialog.setVisible(true);
-                    }
-                });
 
         modelInteractionMenu.removeAll();
         modelInteractionMenu.add(ChangeFluxParamsAgent.instance());
 
         modelInteractionMenu.add(inputCoordsMenuItem);
         modelInteractionMenu.addSeparator();
-        modelInteractionMenu.add(rarefactionMenuItem_);
+        modelInteractionMenu.add(configurationMenuItem_);
         modelInteractionMenu.addSeparator();
         modelInteractionMenu.add(errorControlMenuItem);
-        modelInteractionMenu.addSeparator();
 
     }
 
     private void bifurcationConfigMenu() {
 
-//        bifurcationMenuItem_.addActionListener(
-//                new java.awt.event.ActionListener() {
-//
-//                    public void actionPerformed(ActionEvent e) {
-//
-//                        RPnContourConfigPanel contourconfigDialog = new RPnContourConfigPanel();
-//                        contourconfigDialog.setVisible(true);
-////                        RPnBifurcationConfigDialog bifurcationConfigDialog = new RPnBifurcationConfigDialog(false, false);
-////                        bifurcationConfigDialog.setVisible(true);
-//
-//                    }
-//                });
 
-
-
-        bifurcationConfigMenuItem_.addActionListener(
-                new java.awt.event.ActionListener() {
-
-                    public void actionPerformed(ActionEvent e) {
-
-                        RPnExtensionCurveConfigDialog extensionCurve = new RPnExtensionCurveConfigDialog();
-                        extensionCurve.setVisible(true);
-
-//                        contourconfigDialog.setVisible(true);
-//                        RPnBifurcationConfigDialog bifurcationConfigDialog = new RPnBifurcationConfigDialog(false, false);
-//                        bifurcationConfigDialog.setVisible(true);
-
-                    }
-                });
 
         modelInteractionMenu.removeAll();
-        modelInteractionMenu.add(bifurcationConfigMenuItem_);
+        modelInteractionMenu.add(ChangeFluxParamsAgent.instance());
+        modelInteractionMenu.add(configurationMenuItem_);
 
     }
 
@@ -849,6 +844,39 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     public void showCurvesPanel(boolean show) {
         curvesFrame_.setVisible(show);
 
+    }
+
+    private class ConfigAction implements Action {
+
+        public Object getValue(String key) {
+            if (key.equals(Action.NAME)) {
+                return "Configuration ...";
+            }
+            return null;
+        }
+
+        public void putValue(String key, Object value) {
+        }
+
+        public void setEnabled(boolean b) {
+        }
+
+        public boolean isEnabled() {
+            return true;
+
+        }
+
+        public void addPropertyChangeListener(PropertyChangeListener listener) {
+        }
+
+        public void removePropertyChangeListener(PropertyChangeListener listener) {
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            RPnExtensionCurveConfigDialog extensionCurve = new RPnExtensionCurveConfigDialog();
+            extensionCurve.setVisible(true);
+
+        }
     }
 
     private class StateHandler implements ActionListener {

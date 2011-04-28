@@ -509,8 +509,8 @@ void Double_ContactTPCW::func(double *val, int ir, int jr, int kl, int kr,
 
         double lambda_right = scaling_factor*lr ;
 
-        val[1] = (red_shock_speed - lambda_left_input[kl]); // SECOND EQUATION
-        val[2] = (red_shock_speed - lambda_right);          // THIRD  EQUATION
+        val[1] = 1e10*(red_shock_speed - lambda_left_input[kl]); // SECOND EQUATION
+        val[2] = 1e10*(red_shock_speed - lambda_right);          // THIRD  EQUATION
       
         /*
 	double Hmatrix[3][3];

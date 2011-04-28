@@ -92,6 +92,7 @@ public class RPnCurvesListFrame extends JFrame implements ListSelectionListener,
         this.getContentPane().add(tablePanel_, BorderLayout.CENTER);
         this.getContentPane().add(toolBar_, BorderLayout.NORTH);
 
+
     }
 
     public static void addGeometry(String geometryIndex, String geometryName) {
@@ -101,17 +102,12 @@ public class RPnCurvesListFrame extends JFrame implements ListSelectionListener,
 
         NumberFormat formatter = NumberFormat.getInstance();
         formatter.setMaximumFractionDigits(4);
-
-//        data.add(geometryIndex);
         data.add(geometryName);
         String userInputString = "";
         for (int i = 0; i < userInput.getSize(); i++) {
             userInputString = userInputString.concat(formatter.format(userInput.getElement(i)) + " ");
 
         }
-
-
-
 
         data.add(userInputString);
         data.add(new Boolean(true));
@@ -122,11 +118,14 @@ public class RPnCurvesListFrame extends JFrame implements ListSelectionListener,
 
 
     public static void clear(){
+        int rowNumber = tableModel_.getRowCount();
+        int i = 0;
 
-        for (int i = 1; i < tableModel_.getRowCount(); i++) {
-        tableModel_.removeRow(i);
-
+        while (i<rowNumber){
+            tableModel_.removeRow(0);
+            i++;
         }
+        
     }
 
     public static void removeLastEntry() {
@@ -163,28 +162,21 @@ public class RPnCurvesListFrame extends JFrame implements ListSelectionListener,
     public void tableChanged(TableModelEvent e) {
         curvesTable_.clearSelection();
 
-//        if (e.getType() == TableModelEvent.INSERT) {
-//            RPnDataModule.PHASESPACE.clearGeometrySelection();
-//        }
 
         if (e.getType() == TableModelEvent.UPDATE) {
 
             if (e.getColumn() == 2) {
                 Boolean visible = (Boolean) curvesTable_.getValueAt(e.getFirstRow(), 2);
                 if (visible) {
-//                    RPnDataModule.PHASESPACE.displayGeometry(new Integer((String) curvesTable_.getValueAt(e.getFirstRow(), 0)));
-
                     RPnDataModule.PHASESPACE.displayGeometry(e.getFirstRow());
 
                 } else {
-//                    RPnDataModule.PHASESPACE.hideGeometry(new Integer((String) curvesTable_.getValueAt(e.getFirstRow(),0)));                }
+
                     RPnDataModule.PHASESPACE.hideGeometry(e.getFirstRow());
                 }
-//                System.out.println("Trocando valor" + curvesTable_.getValueAt(e.getFirstRow(), 3) + " " + curvesTable_.getValueAt(e.getFirstRow(), 0));
             }
 
         }
-
         RPnDataModule.PHASESPACE.clearGeometrySelection();
 
     }

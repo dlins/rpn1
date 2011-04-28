@@ -57,22 +57,22 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
 
         familyLabel_ = new JLabel("Family", SwingConstants.CENTER);
 
-        leftFamilyLabel_ = new JLabel("Right Family", SwingConstants.CENTER);
-
-        rightFamilyLabel_ = new JLabel("Left Family", SwingConstants.CENTER);
+//        leftFamilyLabel_ = new JLabel("Right Family", SwingConstants.CENTER);
+//
+//        rightFamilyLabel_ = new JLabel("Left Family", SwingConstants.CENTER);
 
         //TODO Qual eh o valor maximo que o JSpinner deve ter ?? Esse valor muda conforme o tipo de curva para a qual ele configura a familia ??
         familySpinner_ = new JSpinner(new SpinnerNumberModel(0, 0, RPNUMERICS.domainDim(), 1));
 
         familySpinner_.addChangeListener(familyListener);
 
-        leftFamilySpinner_ = new JSpinner(new SpinnerNumberModel(0, 0, RPNUMERICS.domainDim(), 1));
-        rightFamilySpinner_ = new JSpinner(new SpinnerNumberModel(0, 0, RPNUMERICS.domainDim(), 1));
-
-
-        leftFamilySpinner_.addChangeListener(familyListener);
-
-        rightFamilySpinner_.addChangeListener(familyListener);
+//        leftFamilySpinner_ = new JSpinner(new SpinnerNumberModel(0, 0, RPNUMERICS.domainDim(), 1));
+//        rightFamilySpinner_ = new JSpinner(new SpinnerNumberModel(0, 0, RPNUMERICS.domainDim(), 1));
+//
+//
+//        leftFamilySpinner_.addChangeListener(familyListener);
+//
+//        rightFamilySpinner_.addChangeListener(familyListener);
 
 
         GridLayout familyPanelGridLayout = new GridLayout(4, 2, 10, 10);
@@ -101,15 +101,15 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
 
 
         familyPanel_.add(familyLabel_);
-
+//
         familyPanel_.add(familySpinner_);
-
-        familyPanel_.add(leftFamilyLabel_);
-
-        familyPanel_.add(leftFamilySpinner_);
-
-        familyPanel_.add(rightFamilyLabel_);
-        familyPanel_.add(rightFamilySpinner_);
+//
+//        familyPanel_.add(leftFamilyLabel_);
+//
+//        familyPanel_.add(leftFamilySpinner_);
+//
+//        familyPanel_.add(rightFamilyLabel_);
+//        familyPanel_.add(rightFamilySpinner_);
 
         
 
@@ -139,11 +139,11 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
 
                 familySpinner_.setEnabled(false);
                 familyLabel_.setEnabled(false);
-                leftFamilyLabel_.setEnabled(true);
-
-                rightFamilyLabel_.setEnabled(true);
-                leftFamilySpinner_.setEnabled(true);
-                rightFamilySpinner_.setEnabled(true);
+//                leftFamilyLabel_.setEnabled(true);
+//
+//                rightFamilyLabel_.setEnabled(true);
+//                leftFamilySpinner_.setEnabled(true);
+//                rightFamilySpinner_.setEnabled(true);
          
 
             }
@@ -160,10 +160,10 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
 
                 familySpinner_.setEnabled(true);
                 familyLabel_.setEnabled(true);
-                leftFamilyLabel_.setEnabled(false);
-                leftFamilySpinner_.setEnabled(false);
-                rightFamilySpinner_.setEnabled(false);
-                rightFamilyLabel_.setEnabled(false);
+//                leftFamilyLabel_.setEnabled(false);
+//                leftFamilySpinner_.setEnabled(false);
+//                rightFamilySpinner_.setEnabled(false);
+//                rightFamilyLabel_.setEnabled(false);
 
        
 
@@ -184,10 +184,10 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
 
                 familySpinner_.setEnabled(true);
                 familyLabel_.setEnabled(true);
-                leftFamilyLabel_.setEnabled(false);
-                leftFamilySpinner_.setEnabled(false);
-                rightFamilySpinner_.setEnabled(false);
-                rightFamilyLabel_.setEnabled(false);
+//                leftFamilyLabel_.setEnabled(false);
+//                leftFamilySpinner_.setEnabled(false);
+//                rightFamilySpinner_.setEnabled(false);
+//                rightFamilyLabel_.setEnabled(false);
                 
             }
 
@@ -213,11 +213,13 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
         public void stateChanged(ChangeEvent e) {
 
             Integer value = (Integer) familySpinner_.getValue();
-            Integer rightFamily = (Integer) rightFamilySpinner_.getValue();
+//            Integer rightFamily = (Integer) rightFamilySpinner_.getValue();
+//
+//            Integer leftFamily = (Integer) leftFamilySpinner_.getValue();
 
-            Integer leftFamily = (Integer) leftFamilySpinner_.getValue();
+//            RPNUMERICS.setFamily(value, leftFamily, rightFamily);
 
-            RPNUMERICS.setFamily(value, leftFamily, rightFamily);
+            RPNUMERICS.setFamily(value);
 
 
         }
