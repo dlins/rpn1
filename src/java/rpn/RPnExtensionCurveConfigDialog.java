@@ -16,10 +16,12 @@ import rpnumerics.RPNUMERICS;
 public class RPnExtensionCurveConfigDialog extends RPnDialog {
 
     private JPanel paramsPanel_ = new JPanel();
+    private JPanel newtonTolerancePanel_ = new JPanel();
     private JTabbedPane extensionPanel_;
     private HashMap<String, RPnInputComponent> inputHash_;
     private RPnContourConfigPanel contourConfigPanel_;
     private String[] cDomain_;
+    private JTextField toleranceTextField_;
 
     public RPnExtensionCurveConfigDialog() {
         super(false, true);
@@ -40,12 +42,17 @@ public class RPnExtensionCurveConfigDialog extends RPnDialog {
         inputHash_.get("edge").setValue(new Double(RPNUMERICS.getParamValue("boundaryextensioncurve", "edge")));
 
 
+        toleranceTextField_.setText(RPNUMERICS.getParamValue("Newton", "tolerance"));
+
     }
 
     private void jbInit() throws Exception {
         inputHash_ = new HashMap<String, RPnInputComponent>();
         setTitle("Configuration");
         extensionPanel_ = new JTabbedPane();
+
+        toleranceTextField_ = new JTextField();
+        toleranceTextField_.setColumns(5);
         //Resolution Tab
         contourConfigPanel_ = new RPnContourConfigPanel();
         extensionPanel_.addTab("Resolution", contourConfigPanel_);
@@ -57,7 +64,6 @@ public class RPnExtensionCurveConfigDialog extends RPnDialog {
         GridLayout gridLayout = new GridLayout(5, 1, 10, 10);
 
         paramsPanel_.setLayout(gridLayout);
-
 
         extensionPanel_.addTab("Family & Characteristic", paramsPanel_);
 
@@ -128,6 +134,12 @@ public class RPnExtensionCurveConfigDialog extends RPnDialog {
         paramsPanel_.add(edgeInput.getContainer());
 
 
+        //Newton tolerance
+
+        extensionPanel_.addTab("Newton Method Tolerance", newtonTolerancePanel_);
+        newtonTolerancePanel_.add(toleranceTextField_);
+
+
         setMinimumSize(new Dimension(getTitle().length() * 10, 40));
 
         getContentPane().add(extensionPanel_, BorderLayout.CENTER);
@@ -160,6 +172,11 @@ public class RPnExtensionCurveConfigDialog extends RPnDialog {
 
         RPNUMERICS.setParamValue("bifurcation", "singular", String.valueOf(inputHash_.get("singular").getValue(RPnInputComponent.NUMERIC_VALUE)));
         RPNUMERICS.setParamValue("boundaryextensioncurve", "edge", String.valueOf(inputHash_.get("edge").getValue(RPnInputComponent.NUMERIC_VALUE)));
+
+
+        RPNUMERICS.setParamValue("Newton", "tolerance", toleranceTextField_.getText());
+
+
 
         contourConfigPanel_.apply();
 //

@@ -529,7 +529,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         contentPane.setLayout(borderLayout1);
         toolBar_.setOpaque(true);
         toolBarPanel_.add(toolBar_);
-        this.setSize(new Dimension(400, 300));
+//        this.setSize(new Dimension(200, 200));
+        this.setPreferredSize(new Dimension(400, 400));
+
         this.setResizable(false);
         this.setTitle("");
         fileMenu.setText("File");
@@ -747,9 +749,11 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         contentPane.add(toolBarPanel_, BorderLayout.CENTER);
 
-        configPanel_.add(stateComboBox);
+//        configPanel_.add(stateComboBox);
         configPanel_.add(curvesConfigPanel_);
         contentPane.add(configPanel_, BorderLayout.NORTH);
+
+
 
 //        editMenu.add(UndoActionController.instance());
 //        editMenu.addSeparator();
@@ -760,6 +764,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         editMenu.add(ClearPhaseSpaceAgent.instance());
         editMenu.addSeparator();
         editMenu.add(FillPhaseSpaceAgent.instance());
+
 
 
     }

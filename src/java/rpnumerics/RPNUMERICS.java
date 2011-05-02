@@ -421,6 +421,9 @@ public class RPNUMERICS {
     public static ShockCurveCalc createShockCurveCalc(OrbitPoint orbitPoint) {
 
         Integer family = new Integer(getParamValue("shock", "family"));
+        Double tolerance = new Double(getParamValue("Newton", "tolerance"));
+
+        System.out.println("Tolerancia: " + tolerance);
         return new ShockCurveCalc("methodname", "flowName", orbitPoint, family, direction_);
     }
 

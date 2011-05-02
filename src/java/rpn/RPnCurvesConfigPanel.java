@@ -28,7 +28,6 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
     private JSpinner familySpinner_, leftFamilySpinner_, rightFamilySpinner_;
     private JCheckBox forwardCheckBox_;
     private JCheckBox backwardCheckBox_;
-
     private static Integer currentOrbitDirection_ = new Integer(1);
     private static JToggleButton addLastGeometryButton_;
     private static ToggleButtonListener buttonListener_;
@@ -75,12 +74,12 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
 //        rightFamilySpinner_.addChangeListener(familyListener);
 
 
-        GridLayout familyPanelGridLayout = new GridLayout(4, 2, 10, 10);
+        GridLayout familyPanelGridLayout = new GridLayout(1, 2, 10, 10);
 
         familyPanel_ = new JPanel(familyPanelGridLayout);
 
 
-        directionPanel_ = new JPanel(new GridLayout(2, 1));
+        directionPanel_ = new JPanel(new GridLayout(1, 2));
 
         forwardCheckBox_ = new JCheckBox();
         forwardCheckBox_.setSelected(true);//Default 
@@ -97,7 +96,7 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
         directionPanel_.add(forwardCheckBox_);
         directionPanel_.add(backwardCheckBox_);
 
-        directionPanel_.add(addLastGeometryButton_);
+//        directionPanel_.add(addLastGeometryButton_);
 
 
         familyPanel_.add(familyLabel_);
@@ -111,7 +110,7 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
 //        familyPanel_.add(rightFamilyLabel_);
 //        familyPanel_.add(rightFamilySpinner_);
 
-        
+
 
         this.setLayout(gridLayout);
 
@@ -144,7 +143,7 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
 //                rightFamilyLabel_.setEnabled(true);
 //                leftFamilySpinner_.setEnabled(true);
 //                rightFamilySpinner_.setEnabled(true);
-         
+
 
             }
 
@@ -165,7 +164,7 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
 //                rightFamilySpinner_.setEnabled(false);
 //                rightFamilyLabel_.setEnabled(false);
 
-       
+
 
 
             }
@@ -188,7 +187,7 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
 //                leftFamilySpinner_.setEnabled(false);
 //                rightFamilySpinner_.setEnabled(false);
 //                rightFamilyLabel_.setEnabled(false);
-                
+
             }
 
             if (evt.getPropertyName().equals("direction")) {
@@ -204,7 +203,7 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
 
 
 
-   
+
 
     }
 
