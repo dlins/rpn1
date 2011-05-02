@@ -22,6 +22,7 @@ public class ShockCurveCalc implements RpCalculation {
     private String methodName_;
     private String flowName_;
     private int familyIndex_;
+    private double newtonTolerance_;
 
     //
     // Constructors/Initializers
@@ -31,10 +32,10 @@ public class ShockCurveCalc implements RpCalculation {
         timeDirection_ = timeDirection;
     }
 
-    public ShockCurveCalc(String methodName, String flowName, PhasePoint point, int familyIndex, int timeDirection) {
+    public ShockCurveCalc(String methodName, double newtonTolerance, PhasePoint point, int familyIndex, int timeDirection) {
 
         methodName_ = methodName;
-
+        newtonTolerance_ = newtonTolerance;
         start_ = point;
         timeDirection_ = timeDirection;
         familyIndex_ = familyIndex;
@@ -80,8 +81,8 @@ public class ShockCurveCalc implements RpCalculation {
 
         if (timeDirection_ == 0) {
 
-            HugoniotCurve resultForward = (HugoniotCurve) calc(methodName_, flowName_, start_, familyIndex_, 1);
-            HugoniotCurve resultBackward = (HugoniotCurve) calc(methodName_, flowName_, start_, familyIndex_, -1);
+            HugoniotCurve resultForward = (HugoniotCurve) calc(methodName_, newtonTolerance_, start_, familyIndex_, 1);
+            HugoniotCurve resultBackward = (HugoniotCurve) calc(methodName_, newtonTolerance_, start_, familyIndex_, -1);
 //            Orbit resultComplete = ShockCurve.concat(resultBackward, resultForward);
             HugoniotCurve completeCurve = concat(resultBackward,resultForward);
 
@@ -95,7 +96,7 @@ public class ShockCurveCalc implements RpCalculation {
             return completeCurve;
         }
 
-        RpSolution result = calc(methodName_, flowName_, start_, familyIndex_, timeDirection_);
+        RpSolution result = calc(methodName_, newtonTolerance_, start_, familyIndex_, timeDirection_);
 
           if (result == null) {
             throw new RpException("Error in native layer");
@@ -104,7 +105,7 @@ public class ShockCurveCalc implements RpCalculation {
         return result;
     }
 
-    private native RpSolution calc(String methodName, String flowName, PhasePoint initialpoint, int familyIndex, int timeDirection) throws RpException;
+    private native RpSolution calc(String methodName, double newtonTolerance, PhasePoint initialpoint, int familyIndex, int timeDirection) throws RpException;
 
     public String getCalcMethodName() {
         return methodName_;

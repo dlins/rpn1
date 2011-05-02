@@ -37,7 +37,7 @@ using std::vector;
  */
 
 
-JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobject obj, jstring methodName, jstring flowName, jobject initialPoint, jint familyIndex, jint timeDirection) {
+JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobject obj, jstring methodName, jdouble newtonTolerance, jobject initialPoint, jint familyIndex, jint timeDirection) {
 
     unsigned int i;
 
@@ -93,14 +93,16 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
     //    double epsilon = 10e-2;
 
     double tol = 1e-10;
-    double epsilon = 1e-3;
+//    double epsilon = 1e-3;
 
     int t = 11;
+
+
 
     cout << "Valor de family"<<familyIndex << endl;
 
     vector<HugoniotPolyLine> hugoniotPolyLineVector;
-    ShockContinuationMethod3D2D method(dimension, familyIndex, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), RpNumerics::getPhysics().boundary(), input, tol, epsilon, t);
+    ShockContinuationMethod3D2D method(dimension, familyIndex, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), RpNumerics::getPhysics().boundary(), input, tol,newtonTolerance, t);
 
     method.curve(realVectorInput, timeDirection, hugoniotPolyLineVector);
 

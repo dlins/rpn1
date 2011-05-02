@@ -423,8 +423,7 @@ public class RPNUMERICS {
         Integer family = new Integer(getParamValue("shock", "family"));
         Double tolerance = new Double(getParamValue("Newton", "tolerance"));
 
-        System.out.println("Tolerancia: " + tolerance);
-        return new ShockCurveCalc("methodname", "flowName", orbitPoint, family, direction_);
+        return new ShockCurveCalc("methodname", tolerance, orbitPoint, family, direction_);
     }
 
     public static BifurcationCurveCalc createBifurcationCalc() {

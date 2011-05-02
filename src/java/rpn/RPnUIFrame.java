@@ -50,10 +50,10 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JMenuItem exportMenuItem = new JMenuItem();
     private JMenuItem layoutMenuItem = new JMenuItem();
     private JMenuItem inputCoordsMenuItem = new JMenuItem("Input Coords ...");
-    private JMenuItem errorControlMenuItem = new JMenuItem();
+//    private JMenuItem errorControlMenuItem = new JMenuItem();
     private JMenuItem createSVGImageMenuItem = new JMenuItem();
     private JMenuItem printMenuItem = new JMenuItem();
-    private JMenuItem pluginMenuItem = new JMenuItem();
+//    private JMenuItem pluginMenuItem = new JMenuItem();
     private static RPnPhaseSpaceFrame[] frames_, auxFrames_, leftFrames_, rightFrames_;
     private RPnMenuCommand commandMenu_ = null;
     private JMenuItem networkMenuItem = new JMenuItem();
@@ -220,19 +220,19 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         UIController.instance().panelsUpdate();
     }
 
-    void errorControlMenuItem_actionPerformed(ActionEvent e) {
-        RPnErrorControlDialog dialog = new RPnErrorControlDialog();
-        Dimension dlgSize = dialog.getPreferredSize();
-        Dimension frmSize = new Dimension(1280, 1024);
-        Point loc = new Point(0, 0);
-        dialog.setLocation((frmSize.width - dlgSize.width) / 2 + loc.x,
-                (frmSize.height - dlgSize.height) / 2 + loc.y);
-        dialog.setModal(true);
-        dialog.pack();
-        dialog.setVisible(true);
-        rpnumerics.RPNUMERICS.errorControl().reset(dialog.getEps(),
-                rpnumerics.RPNUMERICS.boundary());
-    }
+//    void errorControlMenuItem_actionPerformed(ActionEvent e) {
+//        RPnErrorControlDialog dialog = new RPnErrorControlDialog();
+//        Dimension dlgSize = dialog.getPreferredSize();
+//        Dimension frmSize = new Dimension(1280, 1024);
+//        Point loc = new Point(0, 0);
+//        dialog.setLocation((frmSize.width - dlgSize.width) / 2 + loc.x,
+//                (frmSize.height - dlgSize.height) / 2 + loc.y);
+//        dialog.setModal(true);
+//        dialog.pack();
+//        dialog.setVisible(true);
+//        rpnumerics.RPNUMERICS.errorControl().reset(dialog.getEps(),
+//                rpnumerics.RPNUMERICS.boundary());
+//    }
 
     protected void phaseSpaceFramesInit(Boundary boundary) {
         wave.multid.graphs.ClippedShape clipping = new wave.multid.graphs.ClippedShape(boundary);
@@ -535,7 +535,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         this.setResizable(false);
         this.setTitle("");
         fileMenu.setText("File");
-        pluginMenuItem.setText("Plugins ...");
+//        pluginMenuItem.setText("Plugins ...");
         jMenuFileExit.setText("Exit");
 
         showCursorMenuItem_.setSelected(true);
@@ -567,14 +567,14 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 });
 
 
-        pluginMenuItem.addActionListener(
-                new ActionListener() {
-
-                    public void actionPerformed(ActionEvent e) {
-                        RPnPluginDialog pluginDialog = new RPnPluginDialog();
-                        pluginDialog.setVisible(true);
-                    }
-                });
+//        pluginMenuItem.addActionListener(
+//                new ActionListener() {
+//
+//                    public void actionPerformed(ActionEvent e) {
+//                        RPnPluginDialog pluginDialog = new RPnPluginDialog();
+//                        pluginDialog.setVisible(true);
+//                    }
+//                });
 
         resultsOption.addActionListener(
                 new ActionListener() {
@@ -620,7 +620,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                     }
                 });
         editMenu.setText("Edit");
-        errorControlMenuItem.setText("Error Control...");
+//        errorControlMenuItem.setText("Error Control...");
         layoutMenuItem.setText("Scene Layout...");
         layoutMenuItem.addActionListener(
                 new java.awt.event.ActionListener() {
@@ -630,13 +630,13 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                     }
                 });
 
-        errorControlMenuItem.addActionListener(
-                new java.awt.event.ActionListener() {
-
-                    public void actionPerformed(ActionEvent e) {
-                        errorControlMenuItem_actionPerformed(e);
-                    }
-                });
+//        errorControlMenuItem.addActionListener(
+//                new java.awt.event.ActionListener() {
+//
+//                    public void actionPerformed(ActionEvent e) {
+//                        errorControlMenuItem_actionPerformed(e);
+//                    }
+//                });
 
 
         inputCoordsMenuItem.addActionListener(
@@ -725,7 +725,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         fileMenu.add(matlabMenuFileExport_);
         fileMenu.addSeparator();
         fileMenu.add(networkMenuItem);
-        fileMenu.add(pluginMenuItem);
+//        fileMenu.add(pluginMenuItem);
         fileMenu.addSeparator();
         fileMenu.add(createSVGImageMenuItem);
         fileMenu.addSeparator();
@@ -779,7 +779,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         modelInteractionMenu.add(ChangeFluxParamsAgent.instance());
         modelInteractionMenu.add(inputCoordsMenuItem);
         modelInteractionMenu.add(shockMenuItem_);
-        modelInteractionMenu.add(errorControlMenuItem);
+//        modelInteractionMenu.add(errorControlMenuItem);
 
 
 
@@ -795,8 +795,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         modelInteractionMenu.add(inputCoordsMenuItem);
         modelInteractionMenu.addSeparator();
         modelInteractionMenu.add(configurationMenuItem_);
-        modelInteractionMenu.addSeparator();
-        modelInteractionMenu.add(errorControlMenuItem);
+
+//        modelInteractionMenu.add(errorControlMenuItem);
 
     }
 

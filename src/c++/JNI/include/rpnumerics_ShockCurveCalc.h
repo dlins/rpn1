@@ -10,10 +10,10 @@ extern "C" {
 /*
  * Class:     rpnumerics_ShockCurveCalc
  * Method:    calc
- * Signature: (Ljava/lang/String;Ljava/lang/String;Lrpnumerics/PhasePoint;II)Lrpnumerics/RpSolution;
+ * Signature: (Ljava/lang/String;DLrpnumerics/PhasePoint;II)Lrpnumerics/RpSolution;
  */
 JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc
-  (JNIEnv *, jobject, jstring, jstring, jobject, jint, jint);
+  (JNIEnv *, jobject, jstring, jdouble, jobject, jint, jint);
 
 #ifdef __cplusplus
 }

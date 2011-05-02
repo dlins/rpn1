@@ -11,37 +11,27 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.text.NumberFormat;
 import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JToolBar;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.WindowConstants;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import rpn.controller.ui.UIController;
 import rpn.parser.RPnDataModule;
 import wave.util.RealVector;
 
-public class RPnCurvesListFrame extends JFrame implements ListSelectionListener, ActionListener, TableModelListener, MouseListener {
+public class RPnCurvesListFrame extends JFrame implements ActionListener {
 
     private JScrollPane tablePanel_;
     private JToolBar toolBar_;
     private JTable curvesTable_;
-    private JButton resetSelectionButton_;
+    private JButton selectNoneButton_, selectAllButton_, invisibleButton_, visibleButton_, removeButton_;
     private static DefaultTableModel tableModel_ = new RPnCurvesTableModel();
-    private JPopupMenu popUpTableMenu_;
-    private JMenuItem removeMenuItem_;
 
     public RPnCurvesListFrame() {
         super("Curves");
@@ -49,7 +39,7 @@ public class RPnCurvesListFrame extends JFrame implements ListSelectionListener,
         this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
         setSize(new Dimension(360, 200));
-         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 
         int height = dim.height;
         int width = dim.width;
@@ -58,30 +48,43 @@ public class RPnCurvesListFrame extends JFrame implements ListSelectionListener,
 
 
         toolBar_ = new JToolBar();
-        tableModel_.addTableModelListener(this);
+
         curvesTable_ = new JTable(tableModel_);
-
-        curvesTable_.addMouseListener(this);
-
-        popUpTableMenu_ = new JPopupMenu("Curves Menu");
-
-
-
-        removeMenuItem_ = new JMenuItem("Remove selected curves");
-        removeMenuItem_.addMouseListener(this);
-        popUpTableMenu_.add(removeMenuItem_);
-
-
+        curvesTable_.setRowSelectionAllowed(false);
 
         tablePanel_ = new JScrollPane(curvesTable_);
-        resetSelectionButton_ = new JButton("Select None");
-        resetSelectionButton_.addActionListener(this);
+
+        selectNoneButton_ = new JButton("Select None");
+        selectNoneButton_.setName("SelectNone");
+
+        selectAllButton_ = new JButton("Select All");
+        selectAllButton_.setName("SelectAll");
+
+        invisibleButton_ = new JButton("Invisible");
+        invisibleButton_.setName("Invisible");
+
+        visibleButton_ = new JButton("Visible");
+        visibleButton_.setName("Visible");
+
+        removeButton_ = new JButton("Remove");
+        removeButton_.setName("Remove");
+
+        selectNoneButton_.addActionListener(this);
+        selectAllButton_.addActionListener(this);
+        invisibleButton_.addActionListener(this);
+        visibleButton_.addActionListener(this);
+        removeButton_.addActionListener(this);
+
+        toolBar_.add(selectNoneButton_);
+        toolBar_.add(selectAllButton_);
+        toolBar_.add(invisibleButton_);
+        toolBar_.add(visibleButton_);
+        toolBar_.add(removeButton_);
 
 
-        toolBar_.add(resetSelectionButton_);
         toolBar_.setFloatable(false);
 
-        curvesTable_.getSelectionModel().addListSelectionListener(this);
+
         curvesTable_.getColumnModel().getColumn(0).setPreferredWidth(20);
         curvesTable_.getColumnModel().getColumn(1).setPreferredWidth(80);
 
@@ -104,6 +107,7 @@ public class RPnCurvesListFrame extends JFrame implements ListSelectionListener,
 
         NumberFormat formatter = NumberFormat.getInstance();
         formatter.setMaximumFractionDigits(4);
+        data.add(true);
         data.add(geometryName);
         String userInputString = "";
         for (int i = 0; i < userInput.getSize(); i++) {
@@ -118,16 +122,15 @@ public class RPnCurvesListFrame extends JFrame implements ListSelectionListener,
 
     }
 
-
-    public static void clear(){
+    public static void clear() {
         int rowNumber = tableModel_.getRowCount();
         int i = 0;
 
-        while (i<rowNumber){
+        while (i < rowNumber) {
             tableModel_.removeRow(0);
             i++;
         }
-        
+
     }
 
     public static void removeLastEntry() {
@@ -138,90 +141,98 @@ public class RPnCurvesListFrame extends JFrame implements ListSelectionListener,
 
     }
 
-    public void valueChanged(ListSelectionEvent e) {
-
-        if (!e.getValueIsAdjusting()) {
-
-            int rowsNumber = curvesTable_.getRowCount();
-            for (int i = 0; i < rowsNumber; i++) {
-                if (curvesTable_.isRowSelected(i)) {
-                    RPnDataModule.PHASESPACE.highlightGeometry(i);
-                } else {
-                    RPnDataModule.PHASESPACE.lowlightGeometry(i);
-                }
-
-            }
-        }
-        curvesTable_.clearSelection();
-        
-    }
+   
 
     public void actionPerformed(ActionEvent e) {
-        curvesTable_.clearSelection();
-        RPnDataModule.PHASESPACE.clearGeometrySelection();
 
-    }
+        JButton button = (JButton) e.getSource();
 
-    public void tableChanged(TableModelEvent e) {
-        curvesTable_.clearSelection();
+        if (button.getName().equals("SelectAll")) {
 
 
-        if (e.getType() == TableModelEvent.UPDATE) {
+            for (int i = 0; i < curvesTable_.getModel().getRowCount(); i++) {
 
-            if (e.getColumn() == 2) {
-                Boolean visible = (Boolean) curvesTable_.getValueAt(e.getFirstRow(), 2);
-                if (visible) {
-                    RPnDataModule.PHASESPACE.displayGeometry(e.getFirstRow());
+                curvesTable_.setValueAt(new Boolean(true), i, 0);
 
-                } else {
+            }
 
-                    RPnDataModule.PHASESPACE.hideGeometry(e.getFirstRow());
+
+        }
+
+        if (button.getName().equals("SelectNone")) {
+
+            for (int i = 0; i < curvesTable_.getModel().getRowCount(); i++) {
+
+                curvesTable_.setValueAt(new Boolean(false), i, 0);
+
+            }
+        }
+
+
+
+        if (button.getName().equals("Invisible")) {
+
+            for (int i = 0; i < curvesTable_.getModel().getRowCount(); i++) {
+
+                Boolean selected = (Boolean) curvesTable_.getValueAt(i, 0);
+
+                if (selected) {
+                    RPnDataModule.PHASESPACE.hideGeometry(i);
+                    curvesTable_.setValueAt(false, i, 3);
+                }
+
+
+            }
+
+        }
+
+        if (button.getName().equals("Visible")) {
+
+
+            for (int i = 0; i < curvesTable_.getModel().getRowCount(); i++) {
+
+                Boolean selected = (Boolean) curvesTable_.getValueAt(i, 0);
+
+                if (selected) {
+                    RPnDataModule.PHASESPACE.displayGeometry(i);
+                    curvesTable_.setValueAt(true, i, 3);
+                }
+
+
+            }
+
+        }
+
+
+        if (button.getName().equals("Remove")) {
+
+            Vector<Boolean> selectedVector = new Vector<Boolean>();
+
+            for (int i = 0; i < curvesTable_.getModel().getRowCount(); i++) {
+
+                Boolean selected = (Boolean) curvesTable_.getValueAt(i, 0);
+
+                selectedVector.add(selected);
+
+            }
+
+            for (int j = 0; j < selectedVector.size(); j++) {
+                Boolean boolean1 = selectedVector.get(j);
+
+                if (boolean1) {
+
+                    RPnDataModule.PHASESPACE.remove(j);
+                    tableModel_.removeRow(j);
 
                 }
+
             }
 
         }
+//        curvesTable_.clearSelection();
 //        RPnDataModule.PHASESPACE.clearGeometrySelection();
 
-//        resetSelectionButton_.doClick();
-
     }
 
-    private void geometryVisibleSelection(int geomIndex) {
-    }
-
-    public void mouseClicked(MouseEvent e) {
-    }
-
-    public void mousePressed(MouseEvent e) {
-
-        if (e.isPopupTrigger()) {
-            popUpTableMenu_.show(curvesTable_, e.getX(), e.getY());
-        }
-
-
-        if (e.getSource() instanceof JMenuItem) {
-            int[] selectedRows = curvesTable_.getSelectedRows();
-
-            for (int i = 0; i < selectedRows.length; i++) {
-                int j = selectedRows[i];
-                RPnDataModule.PHASESPACE.remove(j);
-
-                System.out.println("Geometria: " + j);
-                tableModel_.removeRow(j);
-
-            }
-
-        }
-
-    }
-
-    public void mouseReleased(MouseEvent e) {
-    }
-
-    public void mouseEntered(MouseEvent e) {
-    }
-
-    public void mouseExited(MouseEvent e) {
-    }
+  
 }
