@@ -31,6 +31,8 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
             RealVector userInput) {//Limpar esse metodo . Utilizar a versao sem entrada do usuario quando necessario
         userInputList_.add(new RealVector(userInput));
 
+      
+
         if (!(actionSelected_ instanceof ChangeDirectionAgent)) {
 
             if (actionSelected_ instanceof PoincareSectionPlotAgent || actionSelected_ instanceof BifurcationRefineAgent) {
@@ -80,6 +82,11 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
                 rpn.parser.RPnDataModule.PHASESPACE.unselectAll();
             }
         }
+
+
+
+
+
     }
 
     public void userInputComplete(UIController ui) {

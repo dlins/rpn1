@@ -50,10 +50,7 @@ public abstract class RpModelPlotAgent extends RpModelActionAgent {
 
         RpGeometry geometry = createRpGeometry(userInputList);
 
-        if (this instanceof DoubleContactAgent){
-            System.out.println("Sou instancia");
-        }
-
+      
 
 //        if (geometry instanceof CoincidenceCurveGeom || geometry instanceof SubInflectionCurveGeom){
 //            keepLastGeometry_=true;

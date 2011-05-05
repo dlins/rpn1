@@ -5,26 +5,10 @@
  */
 package rpn.controller.ui;
 
-import java.awt.Point;
-import java.util.ArrayList;
-import java.util.Iterator;
 import rpn.RPnPhaseSpacePanel;
-import rpn.RPnUIFrame;
-import rpn.component.BifurcationCurveGeom;
-import rpn.component.BifurcationCurveView;
-import rpn.component.RpGeomFactory;
-import rpn.component.RpGeometry;
 import rpn.controller.PhaseSpacePanel2DController;
 import rpn.usecase.TrackPointAgent;
-import rpnumerics.BifurcationCurve;
-import rpnumerics.RPnCurve;
-import rpnumerics.SegmentedCurve;
 import wave.multid.Coords2D;
-import wave.multid.CoordsArray;
-import wave.multid.Space;
-import wave.multid.model.AbstractGeomObj;
-import wave.multid.view.GeomObjView;
-import wave.util.RealSegment;
 import wave.util.RealVector;
 
 public class TRACKPOINT_CONFIG extends UI_ACTION_SELECTED {

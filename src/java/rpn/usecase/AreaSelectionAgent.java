@@ -11,7 +11,6 @@ import rpn.controller.ui.UIController;
 import rpnumerics.Area;
 import rpnumerics.BifurcationProfile;
 import wave.util.RealVector;
-import wave.util.RealVector2;
 
 public class AreaSelectionAgent extends RpModelActionAgent {
 

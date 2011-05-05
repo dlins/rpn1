@@ -5,6 +5,7 @@
  */
 package rpn.controller.ui;
 
+import rpn.usecase.AreaSelectionAgent;
 import rpn.usecase.ChangeFluxParamsAgent;
 import rpn.usecase.ChangeDirectionAgent;
 import rpn.usecase.CompositePlotAgent;
@@ -25,8 +26,7 @@ public class RAREFACTION_CONFIG extends UI_ACTION_SELECTED {
         ChangeDirectionAgent.instance().setEnabled(true);
         ChangeFluxParamsAgent.instance().setEnabled(true);
         CompositePlotAgent.instance().setEnabled(true);
-
-
+        AreaSelectionAgent.instance().setEnabled(true);
 
 
     }

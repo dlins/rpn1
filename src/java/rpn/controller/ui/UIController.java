@@ -65,8 +65,6 @@ public class UIController extends ComponentUI {
         globalInputTable_ = new UserInputTable(rpnumerics.RPNUMERICS.domainDim());
 
         commandArray_ = new ArrayList<Command>();
-
-
         handler_ = new SHOCK_CONFIG();
 
         initNetStatus();
@@ -177,11 +175,11 @@ public class UIController extends ComponentUI {
 
             if (event.getComponent() instanceof RPnPhaseSpacePanel) {
 
+                RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
+
                 if (netStatus_.isMaster() || !(netStatus_.isOnline())) {
-                    RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
 
                     int sceneDim = panel.scene().getViewingTransform().projectionMap().getDomain().getDim();
-
                     if (sceneDim == globalInputTable_.flags().length) {
 
                         updateUserInputTable(panel, event.getPoint());
