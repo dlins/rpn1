@@ -42,6 +42,14 @@ Physics::Physics(const string & physicsID) : physicsVector_(new vector<SubPhysic
         physicsVector_->push_back(new Stone());
     }
 
+
+    if (physicsID.compare("Polydispersive") == 0) {
+
+        physicsVector_->push_back(new PolydispersivePhysics());
+    }
+
+
+
     if (physicsID.compare("TPCW") == 0) {
 
         Thermodynamics_SuperCO2_WaterAdimensionalized TD(rpnHome_);

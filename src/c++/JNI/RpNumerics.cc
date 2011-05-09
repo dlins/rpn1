@@ -107,12 +107,16 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getFluxParams
 
 
     const FluxParams & nativeFluxParams = RpNumerics::getPhysics().fluxFunction().fluxParams();
+
     const RealVector & nativeRealVectorParams = nativeFluxParams.params();
 
     int paramsSize = nativeRealVectorParams.size();
+
+
     double nativeRealVectorArray[paramsSize];
 
     for (int i = 0; i < paramsSize; i++) {
+
         nativeRealVectorArray[i] = nativeRealVectorParams(i);
     }
 
