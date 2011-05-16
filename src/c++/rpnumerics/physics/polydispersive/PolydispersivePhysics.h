@@ -16,6 +16,10 @@
 #include "Polydispersive.h"
 #include "SubPhysics.h"
 #include "RectBoundary.h"
+#include "StoneAccumulation.h"
+#include "PolydispersiveHugoniotFunction.h"
+#include "Quad2AccumulationFunction.h"
+
 
 /*
  * ---------------------------------------------------------------
@@ -33,7 +37,7 @@ private:
 
 public:
 
-    PolydispersivePhysics(const Polydispersive &, const Boundary &, const Space &);
+//    PolydispersivePhysics(const Polydispersive &, const Boundary &, const Space &);
 
       PolydispersivePhysics();
 
@@ -50,13 +54,13 @@ inline Boundary * PolydispersivePhysics::defaultBoundary() const{
 
     RealVector min(2);
 
-    min.component(0) = -10.0;
-    min.component(1) = -10.0;
+    min.component(0) = 0.0;
+    min.component(1) = 0.0;
 
     RealVector max(2);
 
-    max.component(0) = 10.0;
-    max.component(1) = 10.0;
+    max.component(0) = 1.0;
+    max.component(1) = 1.0;
 
     return new RectBoundary(min, max);
 }

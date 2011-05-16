@@ -3,13 +3,13 @@
 <rpnconfiguration>
 <PHYSICS name="Polydispersive">
 
-<BOUNDARY name="rect">
+<!--<BOUNDARY name="rect">
 
         <BOUNDARYPARAM name="dimension" value="2" />
         <BOUNDARYPARAM name="iso2equi" value="false" />
-        <BOUNDARYPARAM name="limits" value="-10.5 10.5 -10.5 10.5" />
+        <BOUNDARYPARAM name="limits" value="0 0 1 1" />
 
-    </BOUNDARY>
+    </BOUNDARY>-->
 
 <!--<FLUXFUNCTION >
         <FLUXPARAMS name="param0" position="0" value ="-1" />

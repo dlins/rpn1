@@ -18,7 +18,25 @@ Polydispersive * Polydispersive::clone() const {
 }
 
 Polydispersive::Polydispersive(const Polydispersive & copy): FluxFunction(copy.fluxParams()){
-    
+    for (int i = 0; i < copy.fluxParams().params().size(); i++) {
+        cout<<copy.fluxParams().params().component(i)<<endl;
+
+
+    }
+      // Maximum packing concentration
+    phimax = copy.fluxParams().params().component(0);
+
+    // Terminal (settling) velocities
+    V1inf = copy.fluxParams().params().component(1);
+    V2inf = copy.fluxParams().params().component(2);
+
+    // Power velocities
+    n1 = copy.fluxParams().params().component(3);
+    n2 = copy.fluxParams().params().component(4);
+
+
+
+
 }
 
 
@@ -122,13 +140,14 @@ int Polydispersive::jet(const WaveState &Phi, JetMatrix &flux, int degree) const
     double phi2 = Phi(1);
     double phi = phi1 + phi2;      // Total concentration
 
+
+
     JetMatrix settlingj(2);
     Settling_jet(phi1, phi2, settlingj, degree);
 
     if (degree >= 0){
         double v1 = settlingj(0);
         double v2 = settlingj(1);
-
         double f1 = phi1*v1;
         double f2 = phi2*v2;
 

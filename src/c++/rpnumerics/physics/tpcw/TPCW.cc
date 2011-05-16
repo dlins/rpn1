@@ -32,14 +32,12 @@ TD(new Thermodynamics_SuperCO2_WaterAdimensionalized(thermo)) {
     // Create the Flux and its params
     boundary(*defaultBoundary());
 
-
-
     double const_gravity = 9.8;
     double abs_perm = 3e-12;
     double phi = 0.38;
 
     RealVector Uref(3);
-    Uref.component(0)=0;
+    Uref.component(0) = 0;
     Uref.component(1) = 0;
     Uref.component(2) = 0;
 

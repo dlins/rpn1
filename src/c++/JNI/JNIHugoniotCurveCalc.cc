@@ -168,10 +168,32 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
     //    RpNumerics::getPhysics().getSubPhysics(0).setHugoniotFunction(stoneHugoniotFunction);
 
     HugoniotFunctionClass *hf = RpNumerics::getPhysics().getSubPhysics(0).getHugoniotFunction();
+    hf->setFluxFunction((FluxFunction *)RpNumerics::getPhysics().fluxFunction().clone());
 
     hf->setReferenceVector(Uref);
 
     ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), RpNumerics::getPhysics().boundary(), hf); //stoneHugoniotFunction);
+
+
+    const FluxFunction  &flux = RpNumerics::getPhysics().fluxFunction();
+
+    for (int i = 0; i < flux.fluxParams().params().size(); i++) {
+
+
+        cout<<"parametro de fluxo: "<<i<<" "<<flux.fluxParams().params().component(i)<<endl;
+
+
+    }
+
+
+
+
+
+
+
+
+
+
 
     vector<HugoniotPolyLine> hugoniotPolyLineVector;
 
