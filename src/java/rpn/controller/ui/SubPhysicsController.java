@@ -1,6 +1,7 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Instituto de Matematica Pura e Aplicada - IMPA
+ * Departamento de Dinamica dos Fluidos
+ *
  */
 package rpn.controller.ui;
 
@@ -9,10 +10,7 @@ import java.awt.event.MouseEvent;
 import rpn.RPnPhaseSpaceFrame;
 import rpnumerics.RPNUMERICS;
 
-/**
- *
- * @author edsonlan
- */
+
 public class SubPhysicsController  {
 
     private RPnPhaseSpaceFrame framesMatrix_[][];
