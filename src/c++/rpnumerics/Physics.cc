@@ -115,10 +115,6 @@ SubPhysics & Physics::getSubPhysics(const int index) {
 
 }
 
-
-
-
-
 const Space & Physics::domain() const {
     return *space_;
 }

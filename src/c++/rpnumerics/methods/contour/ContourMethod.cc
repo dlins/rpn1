@@ -393,18 +393,18 @@ lab90:
 
 void ContourMethod::unclassifiedCurve(const RealVector & input, vector<HugoniotPolyLine> & hugoniotPolyLineVector) {
     double rect[4];
-//
-//    rect[0] = 0.0; // xmin
-//    rect[1] = 1.0; // xmax
-//    //    rect[2] = 0.0841102; // ymin
-//    rect[2] = 0.099308998; // ymin
-//    //    rect[3] = 0.576510849; // ymax
-//    rect[3] = 0.478030726; // ymax
+    //
+    //    rect[0] = 0.0; // xmin
+    //    rect[1] = 1.0; // xmax
+    //    //    rect[2] = 0.0841102; // ymin
+    //    rect[2] = 0.099308998; // ymin
+    //    //    rect[3] = 0.576510849; // ymax
+    //    rect[3] = 0.478030726; // ymax
 
 
 
 
-     rect[0] = boundary().minimums()(0); // xmin
+    rect[0] = boundary().minimums()(0); // xmin
     rect[1] = boundary(). maximums()(0); // xmax
     //    rect[2] = 0.0841102; // ymin
     //    rect[2] = 0.099308998; // ymin
@@ -497,12 +497,12 @@ void ContourMethod::completedCurve(const RealVector & input, vector<HugoniotPoly
     rect [3] = boundary(). maximums()(1); // ymax
 
 
-//    rect[0] = 0.0; // xmin
-//    rect[1] = 1.0; // xmax
-//    //    rect[2] = 0.0841102; // ymin
-//    rect[2] = 0.099308998; // ymin
-//    //    rect[3] = 0.576510849; // ymax
-//    rect[3] = 0.478030726; // ymax
+    //    rect[0] = 0.0; // xmin
+    //    rect[1] = 1.0; // xmax
+    //    //    rect[2] = 0.0841102; // ymin
+    //    rect[2] = 0.099308998; // ymin
+    //    //    rect[3] = 0.576510849; // ymax
+    //    rect[3] = 0.478030726; // ymax
 
     //    rect[3] = 1.0; // ymax
 
