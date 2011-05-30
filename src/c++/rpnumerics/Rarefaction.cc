@@ -338,7 +338,7 @@ int Rarefaction::init(const RealVector &initial_point, int increase, double delt
 // i-th "matrix" of the Hessian.  (Where there are n Hessians.)
 //
 
-double Rarefaction::dirdrv(int n, const RealVector &p, double *outr){
+double Rarefaction::dirdrv(int n, const RealVector &p){
     double point[n];
     for (int i = 0; i < n; i++) point[i] = p.component(i);
     double A[n][n];
@@ -361,7 +361,6 @@ double Rarefaction::dirdrv(int n, const RealVector &p, double *outr){
     for (int i = 0; i < n; i++){
         l[i] = e[family].vlr[i];
         r[i] = e[family].vrr[i];
-        outr[i] = r[i];
     }
 
     // Extract lambda.
@@ -395,8 +394,8 @@ double Rarefaction::dirdrv(int n, const RealVector &p, double *outr){
        double rowh[n];
        double rowm[n];
 
-       matrixmult(1, n, n, &r[0], &SubH[0][0], rowh);
-       matrixmult(1, n, n, &r[0], &SubM[0][0], rowm);
+       matrixmult(1, n, n, &r[0], &SubH[0][0], &rowh[n]);
+       matrixmult(1, n, n, &r[0], &SubM[0][0], &rowm[n]);
 
 /*     matrixmult(n, n, 1, &SubH[0][0], &r[0], &rowh[n]);
        matrixmult(n, n, 1, &SubK[0][0], &r[0], &rowk[n]); */
@@ -444,18 +443,12 @@ double Rarefaction::dirdrv(int n, const RealVector &p, double *outr){
 //      0: Successfuly found the point, out is usable.
 //
 int Rarefaction::rar_last_point(int n, const RealVector &p0, const RealVector &p1, RealVector &out){
-    double r0[n], r1[n];
-
-    double d0 = dirdrv(n, p0, r0);
-    double d1 = dirdrv(n, p1, r1);
-
-    if (ddot(n, r0, r1) >= 0.0) d1 *= -1.0;
-
-    printf("Inside dirdrv: d0 = %g, d1 = %g\n", d0, d1);
+    double d0 = dirdrv(n, p0);
+    double d1 = dirdrv(n, p1);
 
     if (d1*d0 >= 0.0) return ABORTED_PROCEDURE;
 
-    double alpha = d1/(d1 - d0);
+    double alpha = d1/(d1 - d0); printf("Inside rar_last_point(): alpha = %g\n", alpha);
 
     out.resize(n + 1);
 
@@ -469,6 +462,8 @@ int Rarefaction::rar_last_point(int n, const RealVector &p0, const RealVector &p
 }
 
 int Rarefaction::curve(const RealVector &initial_point, 
+                       int initialize,
+                       const RealVector *initial_direction,
                        int curve_family, 
                        int increase,
                        double deltaxi,
@@ -498,13 +493,43 @@ int Rarefaction::curve(const RealVector &initial_point,
     rarcurve.clear();
 
     // ...and store the initial point
-    for (int i = 0; i < n; i++) new_point.component(i) = initial_point.component(i);
+    for (int i = 0; i < n; i++) new_point.component(i) = initial_point.component(i); 
     new_point.component(n) = compute_lambda(n, initial_point);
     rarcurve.push_back(new_point);
 
     // Initialize the rarefaction and store the second point (lambda is added by init()).
-    int init_info = init(initial_point, increase, deltaxi, new_point);
-    if (init_info != RAREFACTION_INIT_OK) return init_info;
+    if (initialize == RAREFACTION_INITIALIZE_YES){
+        int init_info = init(initial_point, increase, deltaxi, new_point);
+        if (init_info != RAREFACTION_INIT_OK) return init_info;
+    }
+    else {
+        RealVector tempev(n);
+        double templambda;
+        compute_eigenpair(n, new_point, templambda, tempev);
+
+        double d = 0;
+        for (int i = 0; i < n; i++) d += tempev.component(i)*initial_direction->component(i);
+
+        printf("d = %f\n", d);
+        printf("Eigenvector = (");
+        for (int i = 0; i < n; i++){
+            printf("%g", tempev.component(i));
+            if (i < n - 1) printf(", ");
+        }
+        printf(")\n");
+
+        if (d >= 0.0) for (int i = 0; i < n; i++) new_point.component(i) += deltaxi*tempev.component(i);
+        else          for (int i = 0; i < n; i++) new_point.component(i) -= deltaxi*tempev.component(i);
+
+        new_point.component(n) = compute_lambda(n, new_point);
+
+        printf("New point   = (");
+        for (int i = 0; i < n; i++){
+            printf("%g", new_point.component(i));
+            if (i < n - 1) printf(", ");
+        }
+        printf(")\n");
+    }
 
     rarcurve.push_back(new_point);
     new_lambda = new_point.component(n);
@@ -587,6 +612,19 @@ int Rarefaction::curve(const RealVector &initial_point,
         RealVector r;
         int intersection_info = boundary->intersection(previous_point, new_point, r, where_out);
 
+//        printf("Inside while. previous_point = (");
+//        for (int i = 0; i < n; i++){
+//            printf("%g", previous_point.component(i));
+//            if (i < n - 1) printf(", ");
+//        }
+//        printf(")\n");
+//        printf("Inside while.      new_point = (");
+//        for (int i = 0; i < n; i++){
+//            printf("%g", new_point.component(i));
+//            if (i < n - 1) printf(", ");
+//        }
+//        printf(")\n");
+
         if      (intersection_info == 1){
             // Both points inside. Carry on with the rest of the tests, etc.
         }
@@ -623,23 +661,25 @@ int Rarefaction::curve(const RealVector &initial_point,
         // END   Check Boundary //
 
         // BEGIN Check for monotonicity //
-        if ((new_lambda > previous_lambda && increase == -1) || 
-            (new_lambda < previous_lambda && increase ==  1)){
+        if (increase != RAREFACTION_SPEED_NEUTRAL){
+            if ((new_lambda > previous_lambda && increase == RAREFACTION_SPEED_DECREASE) || 
+                (new_lambda < previous_lambda && increase == RAREFACTION_SPEED_INCREASE)){
 
-            // Find the point where lambda reaches a minimum, store it and get out.
-            RealVector last_point;
-            int info_compute_last_point = compute_last_point(previous_point, new_point, last_point);
-            if (info_compute_last_point == SUCCESSFUL_PROCEDURE) rarcurve.push_back(last_point);
-            else printf("Last point discarded.\n");
+                // Find the point where lambda reaches a minimum, store it and get out.
+                RealVector last_point;
+                int info_compute_last_point = compute_last_point(previous_point, new_point, last_point);
+                if (info_compute_last_point == SUCCESSFUL_PROCEDURE) rarcurve.push_back(last_point);
+                else printf("Last point discarded.\n");
 
-            printf("RAREFACTION_NOT_MONOTONOUS\n");
-            return RAREFACTION_NOT_MONOTONOUS;
+                printf("RAREFACTION_NOT_MONOTONOUS\n");
+                return RAREFACTION_NOT_MONOTONOUS;
+            }
+            else {
+                // Store the point and the eigenvalue and continue.
+                rarcurve.push_back(new_point);
+            }
         }
-        else {
-            // Store the point and the eigenvalue and continue.
-            rarcurve.push_back(new_point);
-        }
-
+        else rarcurve.push_back(new_point);
         // END   Check for monotonicity //
 
         // Update the independent parameters.

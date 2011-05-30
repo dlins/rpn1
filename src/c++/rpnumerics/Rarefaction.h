@@ -8,6 +8,13 @@
 #define RAREFACTION_SIMPLE_ACCUMULATION  10
 #define RAREFACTION_GENERAL_ACCUMULATION 11
 
+#define RAREFACTION_SPEED_INCREASE 20
+#define RAREFACTION_SPEED_NEUTRAL  21
+#define RAREFACTION_SPEED_DECREASE 22
+
+#define RAREFACTION_INITIALIZE_YES 30
+#define RAREFACTION_INITIALIZE_NO  31
+
 #include "FluxFunction.h"
 #include "AccumulationFunction.h"
 #include "eigen.h"
@@ -42,12 +49,14 @@ class Rarefaction {
 
         static int init(const RealVector &initial_point, int increase, double deltaxi, RealVector &second_point);
 
-        static double dirdrv(int n, const RealVector &p, double *outr);
+        static double dirdrv(int n, const RealVector &p);
 
         static int rar_last_point(int n, const RealVector &p0, const RealVector &p1, RealVector &out);
     protected:
     public:
         static int curve(const RealVector &initial_point, 
+                         int initialize,
+                         const RealVector *initial_direction,
                          int curve_family, 
                          int increase,
                          double deltaxi,
