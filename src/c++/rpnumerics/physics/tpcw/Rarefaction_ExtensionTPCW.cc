@@ -19,14 +19,29 @@ void Rarefaction_ExtensionTPCW::extension_curve(const FluxFunction *curve_flux, 
 
     std::vector<RealVector> rarefaction_curve;
 
-    int info = Rarefaction::curve(initial_point, 
-                                  curve_family, 
-                                  increase, 
-                                  deltaxi, 
-                                  curve_flux, curve_accum, 
-                                  RAREFACTION_GENERAL_ACCUMULATION,
-                                  (Boundary*)boundary,
-                                  rarefaction_curve);
+//    int info = Rarefaction::curve(initial_point,
+//                                  curve_family,
+//                                  increase,
+//                                  deltaxi,
+//                                  curve_flux, curve_accum,
+//                                  RAREFACTION_GENERAL_ACCUMULATION,
+//                                  (Boundary*)boundary,
+//                                  rarefaction_curve);
+//
+
+
+  int info = Rarefaction::curve(initial_point,
+            RAREFACTION_INITIALIZE_YES,
+            (const RealVector *) 0,
+            curve_family,
+            increase,
+            deltaxi,
+            curve_flux, curve_accum,
+            RAREFACTION_GENERAL_ACCUMULATION,
+            (Boundary*) boundary,
+            rarefaction_curve);
+
+    
 
     if (rarefaction_curve.size() < 2) return;
 

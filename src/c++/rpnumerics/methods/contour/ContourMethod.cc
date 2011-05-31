@@ -393,13 +393,31 @@ lab90:
 
 void ContourMethod::unclassifiedCurve(const RealVector & input, vector<HugoniotPolyLine> & hugoniotPolyLineVector) {
     double rect[4];
+    //
+    //    rect[0] = 0.0; // xmin
+    //    rect[1] = 1.0; // xmax
+    //    //    rect[2] = 0.0841102; // ymin
+    //    rect[2] = 0.099308998; // ymin
+    //    //    rect[3] = 0.576510849; // ymax
+    //    rect[3] = 0.478030726; // ymax
 
-    rect[0] = 0.0; // xmin
-    rect[1] = 1.0; // xmax
+
+
+
+    rect[0] = boundary().minimums()(0); // xmin
+    rect[1] = boundary(). maximums()(0); // xmax
     //    rect[2] = 0.0841102; // ymin
-    rect[2] = 0.099308998; // ymin
+    //    rect[2] = 0.099308998; // ymin
+
+    rect[2] = boundary().minimums()(1); // ymin
     //    rect[3] = 0.576510849; // ymax
-    rect[3] = 0.478030726; // ymax
+    rect [3] = boundary(). maximums()(1); // ymax
+
+
+
+
+
+
 
 
     int res[2];
@@ -467,15 +485,24 @@ void ContourMethod::unclassifiedCurve(const RealVector & input, vector<HugoniotP
 
 void ContourMethod::completedCurve(const RealVector & input, vector<HugoniotPolyLine> & hugoniotPolyLineVector) {
 
-
     double rect[4];
 
-    rect[0] = 0.0; // xmin
-    rect[1] = 1.0; // xmax
+    rect[0] = boundary().minimums()(0); // xmin
+    rect[1] = boundary(). maximums()(0); // xmax
     //    rect[2] = 0.0841102; // ymin
-    rect[2] = 0.099308998; // ymin
+    //    rect[2] = 0.099308998; // ymin
+
+    rect[2] = boundary().minimums()(1); // ymin
     //    rect[3] = 0.576510849; // ymax
-    rect[3] = 0.478030726; // ymax
+    rect [3] = boundary(). maximums()(1); // ymax
+
+
+    //    rect[0] = 0.0; // xmin
+    //    rect[1] = 1.0; // xmax
+    //    //    rect[2] = 0.0841102; // ymin
+    //    rect[2] = 0.099308998; // ymin
+    //    //    rect[3] = 0.576510849; // ymax
+    //    rect[3] = 0.478030726; // ymax
 
     //    rect[3] = 1.0; // ymax
 
@@ -533,14 +560,31 @@ void ContourMethod::classifiedCurve(const RealVector & input, vector<HugoniotPol
 
     double rect[4];
 
-    rect[0] = 0.0; // xmin
-    rect[1] = 1.0; // xmax
+    rect[0] = boundary().minimums()(0); // xmin
+    rect[1] = boundary(). maximums()(0); // xmax
     //    rect[2] = 0.0841102; // ymin
     //    rect[2] = 0.099308998; // ymin
 
-    rect[2] = 0.0; // ymin
+    rect[2] = boundary().minimums()(1); // ymin
     //    rect[3] = 0.576510849; // ymax
-    rect[3] = 1.0; // ymax
+    rect [3] = boundary(). maximums()(1); // ymax
+
+
+
+    cout << " xmin" << rect[0] << endl;
+    cout << "xmax" << rect[1] << endl;
+    cout << "ymin" << rect[2] << endl;
+    cout << "ymax" << rect[3] << endl;
+
+
+
+
+
+
+
+
+
+
 
     //    rect[3] = 1.0; // ymax
 

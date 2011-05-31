@@ -86,36 +86,6 @@ RectBoundary::RectBoundary(const RealVector & minimums, const RealVector & maxim
 }
 
 
-//bool RectBoundary::inside(const double *p)const {
-////    cout <<"Inicio do inside double"<<endl;
-////    cout << "(\n";
-//    cout << p[0] << ", " << p[1] << ", " << p[2] << ")\n";
-//
-//    bool in = true;
-//    int pos = 0;
-//
-//    unsigned int exception_pos = 0;
-//
-//    while (in && pos < minimums_->size()) {
-//        // Check if the current component should be skipped, as stated in the list of
-//        // exceptions.
-//        if (exception_pos < exception.size() - 1) { // TODO: Check this and see if it can be improved somehow.
-//            if (exception[exception_pos] == pos) {
-//                exception_pos++;
-//                continue;
-//            }
-//        }
-//
-//        if (p[pos] < minimums_->component(pos) || p[pos] > maximums_->component(pos)) in = false;
-//        pos++;
-//    }
-//
-//    return in;
-//}
-
-// Check if a point is inside the box
-//
-
 bool RectBoundary::inside(const double *p)const {
     bool in = true;
     int pos = 0;
