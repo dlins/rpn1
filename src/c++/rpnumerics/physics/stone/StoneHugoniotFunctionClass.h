@@ -8,7 +8,7 @@
 
 class StoneHugoniotFunctionClass : public HugoniotFunctionClass {
     private:
-        StoneFluxFunction *stone;
+//        StoneFluxFunction *stone;
 
         RealVector Uref;
         JetMatrix  UrefJetMatrix;
