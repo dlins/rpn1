@@ -48,14 +48,14 @@ public class RPNUMERICS {
         System.loadLibrary("rpn");
         setRPnHome(System.getProperty("rpnhome"));
 
-        System.out.println("Inicializando a fisica: " + physicsID);
+//        System.out.println("Inicializando a fisica: " + physicsID);
         initNative(physicsID);
 
         //Processing configuration data
 
         ConfigurationProfile physicsProfile = RPnConfig.getActivePhysicsProfile();
 
-        System.out.println("Profile ativo: " + physicsProfile.getName());
+//        System.out.println("Profile ativo: " + physicsProfile.getName());
 
         Configuration physicsConfiguration = new Configuration(physicsProfile);
         FluxParams fluxParams = getFluxParams();
@@ -64,7 +64,7 @@ public class RPNUMERICS {
             for (int i = 0; i < physicsConfiguration.getParamsSize(); i++) {
                 //SET FLUX PARAMS !!!
                 fluxParams.setParam(i, new Double(physicsConfiguration.getParam(i)));
-                System.out.println("Param: " + " order:" + i + " " + physicsConfiguration.getParam(i));
+//                System.out.println("Param: " + " order:" + i + " " + physicsConfiguration.getParam(i));
             }
 
         } else {
@@ -263,7 +263,7 @@ public class RPNUMERICS {
             if (configurationEntry.getType().equalsIgnoreCase("physics") && configurationEntry.getName().equalsIgnoreCase(physicsID())) {
 
                 buffer.append(configurationEntry.toXML());
-                System.out.println(configurationEntry.toString());
+//                System.out.println(configurationEntry.toString());
 
             }
             if (!configurationEntry.getType().equalsIgnoreCase("physics")) {

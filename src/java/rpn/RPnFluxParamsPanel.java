@@ -28,13 +28,13 @@ public class RPnFluxParamsPanel extends JPanel implements PropertyChangeListener
     private boolean isDefault_;
 
     public RPnFluxParamsPanel() {
-        System.out.println("Consturindo com a fisica de rpnumerics: " + RPNUMERICS.physicsID());
+//        System.out.println("Consturindo com a fisica de rpnumerics: " + RPNUMERICS.physicsID());
         searchPhysics(RPNUMERICS.physicsID());
         buildPanel(false);
     }
 
     public RPnFluxParamsPanel(String physicsName) {
-        System.out.println("consturindo default com a fisica:" + physicsName);
+//        System.out.println("consturindo default com a fisica:" + physicsName);
         searchPhysics(physicsName);
 
         buildPanel(true);
