@@ -4,6 +4,12 @@ HugoniotFunctionClass::HugoniotFunctionClass(const FluxFunction &fluxFunction) :
 
 }
 
+
+
+//HugoniotFunctionClass::HugoniotFunctionClass(FluxFunction * flux):fluxFunction_(flux){
+//
+//}
+
 HugoniotFunctionClass::HugoniotFunctionClass() {
 
 }
@@ -14,8 +20,12 @@ void HugoniotFunctionClass::setFluxFunction(FluxFunction * flux){
 }
 
 HugoniotFunctionClass::~HugoniotFunctionClass() {
-    delete fluxFunction_;
-    delete uRef_;
+
+//    if (fluxFunction_!=NULL)
+//    delete fluxFunction_;
+//
+//    if(uRef_!=NULL)
+//        delete uRef_;
 }
 const FluxFunction & HugoniotFunctionClass::getFluxFunction()const {
     return *fluxFunction_;
@@ -41,8 +51,4 @@ void HugoniotFunctionClass::setReferenceVector(const RealVector & refVec) {
 
 
     }
-
-
-
-
 }

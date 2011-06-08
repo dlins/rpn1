@@ -19,7 +19,7 @@
 
 
 
-PolydispersiveHugoniotFunction::PolydispersiveHugoniotFunction(const RealVector& U, const Polydispersive & stoneFluxFunction):HugoniotFunctionClass(stoneFluxFunction){
+PolydispersiveHugoniotFunction::PolydispersiveHugoniotFunction(const RealVector& U, const Polydispersive & stoneFluxFunction) : HugoniotFunctionClass(stoneFluxFunction) {
 
     int n = U.size();
 
@@ -32,7 +32,7 @@ PolydispersiveHugoniotFunction::PolydispersiveHugoniotFunction(const RealVector&
     // TODO: The flux object must be initialized somehow (be it created here or outside, etc.)
     UrefJetMatrix.resize(n);
     WaveState u(Uref); // TODO: Check this.
-//    stone->jet(u, UrefJetMatrix, 1);
+    //    stone->jet(u, UrefJetMatrix, 1);
 
     fluxFunction.jet(u, UrefJetMatrix, 1);
 
@@ -51,18 +51,17 @@ PolydispersiveHugoniotFunction::PolydispersiveHugoniotFunction(const RealVector&
     else Uref_is_elliptic = true;
 }
 
-PolydispersiveHugoniotFunction::~PolydispersiveHugoniotFunction(){
+PolydispersiveHugoniotFunction::~PolydispersiveHugoniotFunction() {
 }
 
-
 void PolydispersiveHugoniotFunction::setReferenceVector(const RealVector & refVec) {
-    Uref=refVec;
+    Uref = refVec;
     const FluxFunction & fluxFunction = getFluxFunction();
     // TODO: The flux object must be initialized somehow (be it created here or outside, etc.)
     UrefJetMatrix.resize(refVec.size());
     int n = refVec.size();
     WaveState u(refVec); // TODO: Check this.
-//    stone->jet(u, UrefJetMatrix, 1);
+    //    stone->jet(u, UrefJetMatrix, 1);
 
     fluxFunction.jet(u, UrefJetMatrix, 1);
 
@@ -85,51 +84,48 @@ void PolydispersiveHugoniotFunction::setReferenceVector(const RealVector & refVe
     HugoniotFunctionClass::setReferenceVector(refVec);
 }
 
-
-
-
 double PolydispersiveHugoniotFunction::HugoniotFunction(const RealVector & u) {
-//        Uref = getReferenceVector();
+    //        Uref = getReferenceVector();
     const FluxFunction & fluxFunction = getFluxFunction();
-        double sw = u(0);
-        double swz = Uref(0);
+    double sw = u(0);
+    double swz = Uref(0);
 
-        double so = u(1);
-        double soz = Uref(1);
+    double so = u(1);
+    double soz = Uref(1);
 
-        double dsw = sw - swz;
-        double dso = so - soz;
+    double dsw = sw - swz;
+    double dso = so - soz;
 
-        double epsilon = 1.0e-6; // TODO: Tolerance must be created within a class which will be used by everyone. Say, "class Tolerance", or something like that.
+    double epsilon = 1.0e-6; // TODO: Tolerance must be created within a class which will be used by everyone. Say, "class Tolerance", or something like that.
 
-        // Find F at the point
-        double dhw, dho;
-        double dfw, dfo;
+    // Find F at the point
+    double dhw, dho;
+    double dfw, dfo;
 
-        WaveState wu(u); // TODO: Is this correct?
-        JetMatrix UJetMatrix(u.size());
+    WaveState wu(u); // TODO: Is this correct?
+    JetMatrix UJetMatrix(u.size());
 
-        if (fabs(dsw) + fabs(dso) >= epsilon) {
-            dhw = sw - swz;
-            dho = so - soz;
+    if (fabs(dsw) + fabs(dso) >= epsilon) {
+        dhw = sw - swz;
+        dho = so - soz;
 
-//        stone->jet(wu, UJetMatrix, 0);
+        //        stone->jet(wu, UJetMatrix, 0);
         fluxFunction.jet(wu, UJetMatrix, 0);
 
-            dfw = UJetMatrix(0) - UrefJetMatrix(0);
-            dfo = UJetMatrix(1) - UrefJetMatrix(1);
-        } else {
-//            stone->jet(wu, UJetMatrix, 1);
+        dfw = UJetMatrix(0) - UrefJetMatrix(0);
+        dfo = UJetMatrix(1) - UrefJetMatrix(1);
+    } else {
+        //            stone->jet(wu, UJetMatrix, 1);
         fluxFunction.jet(wu, UJetMatrix, 0);
-            dhw = dsw;
-            dho = dso;
-            dfw = UrefJetMatrix(0, 0) * dsw + UrefJetMatrix(0, 1) * dso;
-            dfo = UrefJetMatrix(1, 0) * dsw + UrefJetMatrix(1, 1) * dso;
-        }
-
-        double hugont = dho * dfw - dhw*dfo;
-
-        if (fabs(hugont) <= epsilon * (fabs(dho * dfw) + fabs(dhw * dfo))) hugont = 0.0;
-
-        return hugont;
+        dhw = dsw;
+        dho = dso;
+        dfw = UrefJetMatrix(0, 0) * dsw + UrefJetMatrix(0, 1) * dso;
+        dfo = UrefJetMatrix(1, 0) * dsw + UrefJetMatrix(1, 1) * dso;
     }
+
+    double hugont = dho * dfw - dhw*dfo;
+
+    if (fabs(hugont) <= epsilon * (fabs(dho * dfw) + fabs(dhw * dfo))) hugont = 0.0;
+
+    return hugont;
+}

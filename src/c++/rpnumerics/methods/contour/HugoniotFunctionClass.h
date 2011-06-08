@@ -14,6 +14,7 @@ public:
 
     HugoniotFunctionClass();
     HugoniotFunctionClass(const FluxFunction &);
+//    HugoniotFunctionClass(FluxFunction *);
     virtual double HugoniotFunction(const RealVector &u) = 0;
     virtual void completeCurve(std::vector<RealVector> &);
     RealVector & getReferenceVector();
@@ -22,7 +23,7 @@ public:
     void setFluxFunction(FluxFunction *);
 
     virtual ~HugoniotFunctionClass();
-//    virtual HugoniotFunctionClass * clone()const = 0;
+
 };
 
 #endif // _HUGONIOTFUNCTIONCLASS_
