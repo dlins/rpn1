@@ -19,7 +19,7 @@
  * ---------------------------------------------------------------
  * Definitions:
  */
-
+using namespace std;
 
 class HugoniotCurve {
 

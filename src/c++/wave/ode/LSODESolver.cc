@@ -128,14 +128,25 @@ int LSODE::function(int * neq, double * xi, double* U, double * out) {
 
     int i, status;
 
-    RealVector input(*neq, U);
+//    RealVector input(*neq, U);
+
+    RealVector input(*neq);
+
+    for (int i = 0; i < *neq; i++) {
+        input.component(i)=U[i];
+
+    }
+
+
+
+
     RealVector output(*neq);
 
     status = profile_->getFunction().flux(input, output); //This function must return the same codes of LSODE s functions
 
     for (i = 0; i< *neq; i++) {
 
-        out[i] = output(i);
+        out[i] = output.component(i);
 
     }
     return status;

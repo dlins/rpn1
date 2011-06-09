@@ -18,11 +18,7 @@ Polydispersive * Polydispersive::clone() const {
 }
 
 Polydispersive::Polydispersive(const Polydispersive & copy): FluxFunction(copy.fluxParams()){
-    for (int i = 0; i < copy.fluxParams().params().size(); i++) {
-        cout<<copy.fluxParams().params().component(i)<<endl;
-
-
-    }
+   
       // Maximum packing concentration
     phimax = copy.fluxParams().params().component(0);
 

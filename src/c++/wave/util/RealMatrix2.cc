@@ -21,10 +21,10 @@
 
 
 
-RealMatrix2::RealMatrix2(int row, int col) : data_(new Vector(row*col)), row_(row), col_(col) {
+RealMatrix2::RealMatrix2(int row, int col) : data_(new RealVector(row*col)), row_(row), col_(col) {
 }
 
-RealMatrix2::RealMatrix2(int rowcol) : data_(new Vector(rowcol*rowcol)), row_(rowcol), col_(rowcol) {
+RealMatrix2::RealMatrix2(int rowcol) : data_(new RealVector(rowcol*rowcol)), row_(rowcol), col_(rowcol) {
 
     for (int i = 0; i < rowcol; i++) {
         for (int j = 0; j < rowcol; j++) {
@@ -39,7 +39,7 @@ RealMatrix2::RealMatrix2(int rowcol) : data_(new Vector(rowcol*rowcol)), row_(ro
 
 }
 
-RealMatrix2::RealMatrix2() : data_(new Vector(4)), row_(2), col_(2) {
+RealMatrix2::RealMatrix2() : data_(new RealVector(4)), row_(2), col_(2) {
 }
 
 RealMatrix2::RealMatrix2(const RealMatrix2 & copy) : data_(copy.data_) {
@@ -140,9 +140,9 @@ void RealMatrix2::mul(const RealMatrix2 & m1) const {
 
     if (col_ != m1.row() || col_ != m1.col())
 
-        THROW(RealMatrix2::RangeViolation());
+        throw(RealMatrix2::RangeViolation());
 
-    Vector temp(row_ * col_);
+    RealVector temp(row_ * col_);
 
     for (i = 0; i < row_; i++) {
         for (j = 0; j < col_; j++) {
@@ -162,7 +162,7 @@ void RealMatrix2::mul(const RealMatrix2 & m1) const {
 
 void RealMatrix2::getColumn(int colIndex, double * outputArray) {
     if (colIndex < 0 || colIndex >= col_)
-        THROW(RealMatrix2::RangeViolation());
+        throw(RealMatrix2::RangeViolation());
 
     for (int i = 0; i < row_; i++) {
         outputArray[i] = operator()(i, colIndex);
@@ -172,7 +172,7 @@ void RealMatrix2::getColumn(int colIndex, double * outputArray) {
 
 void RealMatrix2::setColumn(int colIndex, double * inputArray) {
     if (colIndex < 0 || colIndex >= col_)
-        THROW(RealMatrix2::RangeViolation());
+        throw(RealMatrix2::RangeViolation());
 
     for (int i = 0; i < row_; i++) {
         operator()(i, colIndex, inputArray[i]);

@@ -84,7 +84,7 @@ public:
     
     void component(int index, double value);
     
-    bool operator==(const FluxParams & fluxParams);
+    bool operator==(const FluxParams & fluxParams)const;
     bool operator!=(const FluxParams & fluxParams);
 
     FluxParams & operator=(const FluxParams &);
@@ -126,7 +126,7 @@ inline bool FluxParams::operator!=(const FluxParams & fluxParams){
     return (!(*this==fluxParams));
 }
 
-inline bool FluxParams::operator==(const FluxParams & fluxParams) {
+inline bool FluxParams::operator==(const FluxParams & fluxParams) const{
     
     if (params_->size()!=fluxParams.params().size())
         return false;

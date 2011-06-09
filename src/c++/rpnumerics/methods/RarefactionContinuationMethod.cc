@@ -303,7 +303,7 @@ void RarefactionContinuationMethod::curve(const RealVector & inputVector, int di
                 output.push_back(resultVector);
                 // Reference vector for the next curve (a composite):
                 RealVector ref_vec(r);
-                for (int i = 0; i < dimension; i++) ref_vec(i) = r(i) - outputVector_prev(i);
+                for (int i = 0; i < dimension; i++) ref_vec.component(i) = r(i) - outputVector_prev(i);
 
                 testeFlow.setReferenceVector(ref_vec);
 
@@ -326,7 +326,7 @@ void RarefactionContinuationMethod::curve(const RealVector & inputVector, int di
 
             }
 
-            resultVector(dimension) = speed;
+            resultVector.component(dimension) = speed;
 
 
             //            output.push_back(outputVector);

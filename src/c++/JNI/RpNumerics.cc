@@ -117,7 +117,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getFluxParams
 
     for (int i = 0; i < paramsSize; i++) {
 
-        nativeRealVectorArray[i] = nativeRealVectorParams(i);
+        nativeRealVectorArray[i] = nativeRealVectorParams.component(i);
     }
 
     jdoubleArray realVectorArray = env->NewDoubleArray(paramsSize);
@@ -152,6 +152,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setFluxParams(JNIEnv * env, jc
     double nativeFluxParamArray[fluxParamSize];
 
     env->GetDoubleArrayRegion(fluxParamRealVectorArray, 0, fluxParamSize, nativeFluxParamArray);
+
     RealVector nativeFluxParamRealVector(fluxParamSize, nativeFluxParamArray);
     FluxParams newFluxParams(nativeFluxParamRealVector);
     RpNumerics::getPhysics().fluxParams(newFluxParams);
