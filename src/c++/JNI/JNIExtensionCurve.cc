@@ -90,6 +90,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
         pmax.component(0) = 1.0;
         pmax.component(1) = 1.0;
 
+        cout <<"Resolucao do x: "<<xResolution<<endl;
+        cout << "Resolucao do y: " << yResolution << endl;
+
         // Over the x axis.
         int curve_points = 51;
         double delta = 1.0 / (double) curve_points;

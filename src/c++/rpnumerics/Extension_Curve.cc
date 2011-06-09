@@ -282,8 +282,6 @@ void Extension_Curve::compute_extension_curve(int characteristic_where, int sing
     Matrix<double> segment_flux(2, 2);
     Matrix<double> segment_accum(2, 2);
 
-    cout<<"Tamanho de original segments:"<<original_segments.size()<<endl;
-
     for (int i = 0; i < original_segments.size()/2; i++){
         // prepare_segment is defined in Bifurcation_Curve.
         //
