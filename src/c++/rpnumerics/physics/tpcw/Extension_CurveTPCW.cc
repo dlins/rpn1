@@ -71,7 +71,7 @@ Extension_CurveTPCW::Extension_CurveTPCW(const RealVector &dpmin, const RealVect
 
     dimf  = 18; // dimf SEEMS to be DNFACE, as can be inferred from: hccube.inc:7.
 
-    ncvert_ = 16; // N^2 ncvert_ SEEMS to be DNCV, as can be inferred from: hcsoln.inc:3.
+    ncvert_ = 8; //16; // N^2 ncvert_ SEEMS to be DNCV, as can be inferred from: hcsoln.inc:3.
     nsimp_  =  6; // N!  nsimp_ SEEMS to be DNSIMP, as can be inferred from: hccube.inc:5.
 
 //    dnsimp = 6;
@@ -596,7 +596,8 @@ int Extension_CurveTPCW::filhcub3(int ir, int jr, int *index, double *foncub, in
             extension_curve_func(val, ir, jr, kl, kr, characteristic_where, segment_lambda, segment_flux, segment_accum);
             
             for (int comp = 0; comp < 2; comp++){
-                foncub[comp*ncvert_ + 2*index[kl] + index[kr]] = val[comp]; // ??? O q e esse index?????
+                //foncub[comp*ncvert_ + 2*index[kl] + index[kr]] = val[comp]; // ??? O q e esse index?????
+                foncub[comp*ncvert_ + kl + 2*index[kr]] = val[comp]; // Changed on 2011/06/06 by R. Morante, following Pablo's advice.
 //                foncub[comp*ncvert_ + 4*(index[kl] - 1) + index[kr]] = val[comp]; // ??? O q e esse index?????
                 // foncub(comp,4*(index(kl)-1)+index(kr)) = val // ??? O q e esse index?????
                 if (refval[comp]*val[comp] < 0.0) zero[comp] = true;
@@ -604,7 +605,9 @@ int Extension_CurveTPCW::filhcub3(int ir, int jr, int *index, double *foncub, in
         }
     }
           
-    if (!zero[0] && !zero[1]) return 0;
+    // if (!zero[0] && !zero[1]) return 0;
+    if (!zero[0]) return 0;
+    if (!zero[1]) return 0;
     
     return 1;
 
