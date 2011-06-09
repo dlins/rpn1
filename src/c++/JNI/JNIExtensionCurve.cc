@@ -34,7 +34,7 @@ using std::vector;
 using namespace std;
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
-(JNIEnv * env, jobject obj, jint xResolution, jint yResolution, jint curveFamily, jint domainFamily, jint edge,jint characteristicWhere) {
+(JNIEnv * env, jobject obj, jint xResolution, jint yResolution, jint curveFamily, jint domainFamily, jint edge, jint characteristicWhere) {
 
     jclass hugoniotSegmentClass = (env)->FindClass(HUGONIOTSEGMENTCLASS_LOCATION);
 
@@ -67,11 +67,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
     std::vector<RealVector> curve_segments;
     std::vector<RealVector> domain_segments;
 
-      int * number_of_domain_pnts = new int[2];
+    int * number_of_domain_pnts = new int[2];
 
 
-        number_of_domain_pnts[0] = xResolution;
-        number_of_domain_pnts[1] = yResolution;
+    number_of_domain_pnts[0] = xResolution;
+    number_of_domain_pnts[1] = yResolution;
 
     if (RpNumerics::getPhysics().ID().compare("Stone") == 0) {
 
@@ -115,6 +115,16 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
         //        int characteristic_where = CHARACTERISTIC_ON_DOMAIN;
         int singular = 0;
 
+
+
+        
+
+        cout << "Familia da curva" << curveFamily << endl;
+        cout << "Familia do dominio" << domainFamily << endl;
+        cout << "characteristic " << characteristicWhere << endl;
+        cout << "edge " << edge << endl;
+
+
         ec.compute_extension_curve(characteristicWhere, singular,
                 original_curve_segments, curveFamily,
 
@@ -124,7 +134,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
                 domain_segments);
 
 
-       
+
 
     }
 

@@ -102,15 +102,32 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
 
         StonePermeability stonepermeability(stonepermparams);
 
+//        double grw = 1.0;
+//        double grg = 0.5;
+//        double gro = 0.7;
+//
+//        double muw = 1.0;
+//        double mug = 1.0;
+//        double muo = 1.0;
+//
+//        double vel = 0.0;
+
+
         double grw = 1.0;
-        double grg = 0.5;
-        double gro = 0.7;
+        double grg = 1.0;
+        double gro = 1.0;
 
         double muw = 1.0;
         double mug = 1.0;
         double muo = 1.0;
 
-        double vel = 0.0;
+        double vel = 1.0;
+
+
+
+
+
+
 
         RealVector p(7);
         p.component(0) = grw;

@@ -199,13 +199,16 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
 
         dc.compute_double_contactTPCW(left_vrs, right_vrs);
 
+        printf("left_vrs.size()  = %d\n", left_vrs.size());
+        printf("right_vrs.size() = %d\n", right_vrs.size());
+
         delete fv;
         delete fh;
 
     }
 
     delete number_of_grid_pnts;
-    
+
     printf("left_vrs.size()  = %d\n", left_vrs.size());
     printf("right_vrs.size() = %d\n", right_vrs.size());
 

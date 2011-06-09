@@ -1,24 +1,24 @@
 #include "Bifurcation_Curve.h"
 
-void Bifurcation_Curve::create_grid(const RealVector &pmin, const RealVector &pmax, const int *number_of_cells, Matrix<RealVector> &p){
+void Bifurcation_Curve::create_grid(const RealVector &pmin, const RealVector &pmax, const int *number_of_cells, Matrix<RealVector> &p) {
     int dim = pmin.size();
 
     double delta[pmin.size()];
 
-    for (int i = 0; i < pmin.size(); i++) delta[i] = (fabs(pmax.component(i) - pmin.component(i)))/(double)(number_of_cells[i] - 1);
+    for (int i = 0; i < pmin.size(); i++) delta[i] = (fabs(pmax.component(i) - pmin.component(i))) / (double) (number_of_cells[i] - 1);
 
-    for (int i = 0; i < number_of_cells[0]; i++){
-        for (int j = 0; j < number_of_cells[1]; j++){
-//            printf("Here\n");
+    for (int i = 0; i < number_of_cells[0]; i++) {
+        for (int j = 0; j < number_of_cells[1]; j++) {
+            printf("Here\n");
 
             p(i, j).resize(dim);
 
-            p(i, j).component(0) = pmin.component(0) + (double)i*delta[0];
-            p(i, j).component(1) = pmin.component(1) + (double)j*delta[1];
+            p(i, j).component(0) = pmin.component(0) + (double) i * delta[0];
+            p(i, j).component(1) = pmin.component(1) + (double) j * delta[1];
         }
     }
 
-//    printf("Inside create_grid()\n");
+    printf("Inside create_grid()\n");
 
     return;
 }
@@ -69,13 +69,14 @@ void Bifurcation_Curve::create_grid(const RealVector &pmin, const RealVector &pm
 //
 
 // TODO: Change indices i, j to k, l. i & j are reserved for grid- or cell-like uses.
-void Bifurcation_Curve::fill_values_on_grid(const RealVector &pmin, const RealVector &pmax, 
-                                            const FluxFunction *ff, const AccumulationFunction *aa, 
-                                            const int *number_of_grid_pnts,
-                                            Matrix<RealVector> &grid,
-                                            Matrix<RealVector> &ffv, Matrix<RealVector> &aav, 
-                                            Matrix< vector<eigenpair> > &e, Matrix< vector<bool> > &eig_is_real){
-    
+
+void Bifurcation_Curve::fill_values_on_grid(const RealVector &pmin, const RealVector &pmax,
+        const FluxFunction *ff, const AccumulationFunction *aa,
+        const int *number_of_grid_pnts,
+        Matrix<RealVector> &grid,
+        Matrix<RealVector> &ffv, Matrix<RealVector> &aav,
+        Matrix< vector<eigenpair> > &e, Matrix< vector<bool> > &eig_is_real) {
+
     // Dimension of space
     int dim = pmin.size();
 
@@ -88,16 +89,16 @@ void Bifurcation_Curve::fill_values_on_grid(const RealVector &pmin, const RealVe
 
     // Fill the arrays with the value of the flux and accumulation functions at every point in the grid.
     // The eigenpairs must also be stored.
-    for (int i = 0; i < n; i++){
+    for (int i = 0; i < n; i++) {
         double point[dim];
         for (int j = 0; j < dim; j++) point[j] = grid(i).component(j);
 
         double F[dim], G[dim], JF[dim][dim], JG[dim][dim];
-        fill_with_jet((RpFunction*)ff, dim, point, 1, F, &JF[0][0], 0);
-        fill_with_jet((RpFunction*)aa, dim, point, 1, G, &JG[0][0], 0);
+        fill_with_jet((RpFunction*) ff, dim, point, 1, F, &JF[0][0], 0);
+        fill_with_jet((RpFunction*) aa, dim, point, 1, G, &JG[0][0], 0);
 
         // Fill the values of the functions
-        for (int j = 0; j < dim; j++){
+        for (int j = 0; j < dim; j++) {
             ffv(i).component(j) = F[j];
             aav(i).component(j) = G[j];
         }
@@ -113,27 +114,27 @@ void Bifurcation_Curve::fill_values_on_grid(const RealVector &pmin, const RealVe
         // Decide if the eigenvalues are real or complex
         eig_is_real(i).clear();
         eig_is_real(i).resize(etemp.size());
-        for (int j = 0; j < etemp.size(); j++){
+        for (int j = 0; j < etemp.size(); j++) {
             if (fabs(etemp[j].i) < epsilon) eig_is_real(i)[j] = true;
-            else                            eig_is_real(i)[j] = false;
+            else eig_is_real(i)[j] = false;
         }
     }
 
     return;
 }
 
-void Bifurcation_Curve::fill_values_on_grid(const RealVector &pmin, const RealVector &pmax, 
-                                            const FluxFunction *ff, const AccumulationFunction *aa, 
-                                            const int *number_of_grid_pnts,
-                                            Matrix<RealVector> &grid,
-                                            Matrix<RealVector> &ffv, Matrix<RealVector> &aav, 
-                                            Matrix< std::vector<double> > &e, Matrix< vector<bool> > &eig_is_real){
+void Bifurcation_Curve::fill_values_on_grid(const RealVector &pmin, const RealVector &pmax,
+        const FluxFunction *ff, const AccumulationFunction *aa,
+        const int *number_of_grid_pnts,
+        Matrix<RealVector> &grid,
+        Matrix<RealVector> &ffv, Matrix<RealVector> &aav,
+        Matrix< std::vector<double> > &e, Matrix< vector<bool> > &eig_is_real) {
 
     Matrix< std::vector<eigenpair> > temp(grid.rows(), grid.cols());
     fill_values_on_grid(pmin, pmax, ff, aa, number_of_grid_pnts, grid, ffv, aav, temp, eig_is_real);
-    
-    for (int i = 0; i < grid.rows(); i++){
-        for (int j = 0; j < grid.cols(); j++){
+
+    for (int i = 0; i < grid.rows(); i++) {
+        for (int j = 0; j < grid.cols(); j++) {
             e(i, j).resize(pmin.size());
 
             for (int k = 0; k < pmin.size(); k++) e(i, j)[k] = temp(i, j)[k].r;
@@ -143,11 +144,11 @@ void Bifurcation_Curve::fill_values_on_grid(const RealVector &pmin, const RealVe
     return;
 }
 
-Bifurcation_Curve::Bifurcation_Curve(){
+Bifurcation_Curve::Bifurcation_Curve() {
     epsilon = 1e-6;
 }
 
-Bifurcation_Curve::~Bifurcation_Curve(){
+Bifurcation_Curve::~Bifurcation_Curve() {
 }
 
 // This function that fills F, J and H using jets.
@@ -172,41 +173,42 @@ Bifurcation_Curve::~Bifurcation_Curve(){
 // should be set to zero. For example, the rarefaction only uses J. Therefore, the
 // user should reserve an array of n*n doubles for J, and invoke this function passing 0 for F and H.
 //
-void Bifurcation_Curve::fill_with_jet(RpFunction *flux_object, int n, double *in, int degree, double *F, double *J, double *H){
+
+void Bifurcation_Curve::fill_with_jet(RpFunction *flux_object, int n, double *in, int degree, double *F, double *J, double *H) {
     RealVector r(n);
     double *rp = r;
-    for (int i = 0; i < n; i++) rp[i] = in[i]; 
+    for (int i = 0; i < n; i++) rp[i] = in[i];
 
     // Will this work? There is a const somewhere in fluxParams.
     //FluxParams fp(r);
     //flux_object->fluxParams(FluxParams(r)); // flux_object->fluxParams(fp);
-    
-    WaveState state_c(r); 
+
+    WaveState state_c(r);
     JetMatrix c_jet(n);
-    
+
     flux_object->jet(state_c, c_jet, degree);
 
     // Fill F
     if (F != 0) for (int i = 0; i < n; i++) F[i] = c_jet(i);
 
     // Fill J
-    if (J != 0){
-        for (int i = 0; i < n; i++){
-            for (int j = 0; j < n; j++){
-                J[i*n + j] = c_jet(i, j);
+    if (J != 0) {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                J[i * n + j] = c_jet(i, j);
             }
         }
     }
-    
+
     // Fill H
-    if (H != 0){
-        for (int i = 0; i < n; i++){
-            for (int j = 0; j < n; j++){
-                for (int k = 0; k < n; k++){
-                    H[(i*n + j)*n + k] = c_jet(i, j, k); // Check this!!!!!!!!
+    if (H != 0) {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                for (int k = 0; k < n; k++) {
+                    H[(i * n + j) * n + k] = c_jet(i, j, k); // Check this!!!!!!!!
                 }
             }
-        }    
+        }
     }
 
     return;
@@ -253,36 +255,37 @@ void Bifurcation_Curve::fill_with_jet(RpFunction *flux_object, int n, double *in
 //
 
 // TODO: A grid may contain both square and triangular cells. Therefore, type_of_cells will become a Matrix<bool>.
-void Bifurcation_Curve::validate_cells(int family, bool type_of_cells, Matrix< std::vector<bool> > &original, Matrix<bool> &mb_is_complex){
-    int rows = original.rows() - 1; 
+
+void Bifurcation_Curve::validate_cells(int family, bool type_of_cells, Matrix< std::vector<bool> > &original, Matrix<bool> &mb_is_complex) {
+    int rows = original.rows() - 1;
     int cols = original.cols() - 1;
 
     mb_is_complex.resize(rows, cols);
 
-    for (int i = 0; i < rows; i++){
-        for (int j = 0; j < cols; j++){
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
             mb_is_complex(i, j) = false;
 
             // Vertex 0
-            if (!(original(i, j)[family])){
+            if (!(original(i, j)[family])) {
                 mb_is_complex(i, j) = true;
                 return;
             }
             // Vertex 1
-            if (!(original(i + 1, j)[family])){
+            if (!(original(i + 1, j)[family])) {
                 mb_is_complex(i, j) = true;
                 return;
             }
             // Vertex 3
-            if (!(original(i, j + 1)[family])){
+            if (!(original(i, j + 1)[family])) {
                 mb_is_complex(i, j) = true;
                 return;
             }
 
             // Vertex 2
             // Squares only
-            if (type_of_cells){
-                if (!(original(i + 1, j + 1)[family])){
+            if (type_of_cells) {
+                if (!(original(i + 1, j + 1)[family])) {
                     mb_is_complex(i, j) = true;
                     return;
                 }
@@ -310,44 +313,54 @@ void Bifurcation_Curve::validate_cells(int family, bool type_of_cells, Matrix< s
 //     3 = (i, j + 1).
 //
 // TODO;: This function must also take into account the fact that cells can be triangles.
-void Bifurcation_Curve::prepare_cell(int i, int j, int family, Matrix< std::vector<double> > &eigen, Matrix<RealVector> &flux_values, Matrix<RealVector> &accum_values, double *lambda, Matrix<double> &flux, Matrix<double> &accum){
 
-//    lambda[0] = eigen(i, j)[family];
-//    flux(0, 0) = flux_values(i, j).component(0);
-//    flux(1, 0) = flux_values(i, j).component(1);
-//    accum(0, 0) = accum_values(i, j).component(0);
-//    accum(1, 0) = accum_values(i, j).component(1);
+void Bifurcation_Curve::prepare_cell(int i, int j, int family, Matrix< std::vector<double> > &eigen, Matrix<RealVector> &flux_values, Matrix<RealVector> &accum_values, double *lambda, Matrix<double> &flux, Matrix<double> &accum) {
 
-//    lambda[1] = eigen(i + 1, j)[family];
-//    flux(0, 1) = flux_values(i + 1, j).component(0);
-//    flux(1, 1) = flux_values(i + 1, j).component(1);
-//    accum(0, 1) = accum_values(i + 1, j).component(0);
-//    accum(1, 1) = accum_values(i + 1, j).component(1);
+    //    lambda[0] = eigen(i, j)[family];
+    //    flux(0, 0) = flux_values(i, j).component(0);
+    //    flux(1, 0) = flux_values(i, j).component(1);
+    //    accum(0, 0) = accum_values(i, j).component(0);
+    //    accum(1, 0) = accum_values(i, j).component(1);
 
-//    lambda[2] = eigen(i + 1, j + 1)[family];
-//    flux(0, 2) = flux_values(i + 1, j + 1).component(0);
-//    flux(1, 2) = flux_values(i + 1, j + 1).component(1);
-//    accum(0, 2) = accum_values(i + 1, j + 1).component(0);
-//    accum(1, 2) = accum_values(i + 1, j + 1).component(1);
+    //    lambda[1] = eigen(i + 1, j)[family];
+    //    flux(0, 1) = flux_values(i + 1, j).component(0);
+    //    flux(1, 1) = flux_values(i + 1, j).component(1);
+    //    accum(0, 1) = accum_values(i + 1, j).component(0);
+    //    accum(1, 1) = accum_values(i + 1, j).component(1);
 
-//    lambda[3] = eigen(i, j + 1)[family];
-//    flux(0, 3) = flux_values(i, j + 1).component(0);
-//    flux(1, 3) = flux_values(i, j + 1).component(1);
-//    accum(0, 3) = accum_values(i, j + 1).component(0);
-//    accum(1, 3) = accum_values(i, j + 1).component(1);
+    //    lambda[2] = eigen(i + 1, j + 1)[family];
+    //    flux(0, 2) = flux_values(i + 1, j + 1).component(0);
+    //    flux(1, 2) = flux_values(i + 1, j + 1).component(1);
+    //    accum(0, 2) = accum_values(i + 1, j + 1).component(0);
+    //    accum(1, 2) = accum_values(i + 1, j + 1).component(1);
+
+    //    lambda[3] = eigen(i, j + 1)[family];
+    //    flux(0, 3) = flux_values(i, j + 1).component(0);
+    //    flux(1, 3) = flux_values(i, j + 1).component(1);
+    //    accum(0, 3) = accum_values(i, j + 1).component(0);
+    //    accum(1, 3) = accum_values(i, j + 1).component(1);
 
     int domain_i, domain_j;
 
-    for (int kr = 0; kr < 4; kr++){
-        if      (kr == 0) {domain_i = i;     domain_j = j;}
-        else if (kr == 1) {domain_i = i + 1; domain_j = j;}
-        else if (kr == 2) {domain_i = i + 1; domain_j = j + 1;}
-        else if (kr == 3) {domain_i = i;     domain_j = j + 1;}
+    for (int kr = 0; kr < 4; kr++) {
+        if (kr == 0) {
+            domain_i = i;
+            domain_j = j;
+        } else if (kr == 1) {
+            domain_i = i + 1;
+            domain_j = j;
+        } else if (kr == 2) {
+            domain_i = i + 1;
+            domain_j = j + 1;
+        } else if (kr == 3) {
+            domain_i = i;
+            domain_j = j + 1;
+        }
 
-        lambda[kr]   = eigen(domain_i, domain_j)[family];
+        lambda[kr] = eigen(domain_i, domain_j)[family];
 
-        flux(0, kr)  = flux_values(domain_i, domain_j).component(0);
-        flux(1, kr)  = flux_values(domain_i, domain_j).component(1);
+        flux(0, kr) = flux_values(domain_i, domain_j).component(0);
+        flux(1, kr) = flux_values(domain_i, domain_j).component(1);
 
         accum(0, kr) = accum_values(domain_i, domain_j).component(0);
         accum(1, kr) = accum_values(domain_i, domain_j).component(1);
@@ -358,29 +371,38 @@ void Bifurcation_Curve::prepare_cell(int i, int j, int family, Matrix< std::vect
 
 //
 // where_is_characteristic = CHARACTERISTIC_ON_CURVE or CHARACTERISTIC_ON_DOMAIN.
-// 
-bool Bifurcation_Curve::prepare_segment(int i, int family, int where_is_characteristic,
-                                        const std::vector< std::vector<double> > &eigen, 
-                                        const std::vector<RealVector> &flux_values, 
-                                        const std::vector<RealVector> &accum_values, 
-                                        const std::vector<std::vector<bool> > &eig_is_real,
-                                        double *lambda, 
-                                        Matrix<double> &flux, 
-                                        Matrix<double> &accum){
+//
 
-    if (where_is_characteristic == CHARACTERISTIC_ON_CURVE){
-        if (!eig_is_real[i][family] || !eig_is_real[i + 1][family]) return false;
+bool Bifurcation_Curve::prepare_segment(int i, int family, int where_is_characteristic,
+        const std::vector< std::vector<double> > &eigen,
+        const std::vector<RealVector> &flux_values,
+        const std::vector<RealVector> &accum_values,
+        const std::vector<std::vector<bool> > &eig_is_real,
+        double *lambda,
+        Matrix<double> &flux,
+        Matrix<double> &accum) {
+
+    if (where_is_characteristic == CHARACTERISTIC_ON_CURVE) {
+        if (!eig_is_real[i][family] || !eig_is_real[i + 1][family]) {
+            return false;
+        }
     }
 
+    cout << "Valor de family:" << family << endl;
+    cout << "Valor de i:" << i << endl;
+    cout<<"Tamanho de eigen: "<<eigen.size()<<endl;
+
+    cout << "Tamanho de eigen i: "<<" "<<i<<" " << eigen[i].size() << endl;
 
     lambda[0] = eigen[i][family];
+
     flux(0, 0) = flux_values[i].component(0);
     flux(1, 0) = flux_values[i].component(1);
     accum(0, 0) = accum_values[i].component(0);
     accum(1, 0) = accum_values[i].component(1);
 
-
     lambda[1] = eigen[i + 1][family];
+
     flux(0, 1) = flux_values[i + 1].component(0);
     flux(1, 1) = flux_values[i + 1].component(1);
     accum(0, 1) = accum_values[i + 1].component(0);
@@ -389,16 +411,16 @@ bool Bifurcation_Curve::prepare_segment(int i, int family, int where_is_characte
     return true;
 }
 
-void Bifurcation_Curve::fill_values_on_segments(const FluxFunction *ff, const AccumulationFunction *aa, const std::vector<RealVector> &input, 
-                                                std::vector<RealVector> &vff, std::vector<RealVector> &vaa,
-                                                std::vector<std::vector<double> > &vee, std::vector< std::vector<bool> > &eig_is_real){
+void Bifurcation_Curve::fill_values_on_segments(const FluxFunction *ff, const AccumulationFunction *aa, const std::vector<RealVector> &input,
+        std::vector<RealVector> &vff, std::vector<RealVector> &vaa,
+        std::vector<std::vector<double> > &vee, std::vector< std::vector<bool> > &eig_is_real) {
     vff.clear();
     vaa.clear();
     vee.clear();
-    
+
     int n = input.size();
 
-    if (n > 1){
+    if (n > 1) {
         int dim = input[0].size();
 
         vff.resize(n);
@@ -406,20 +428,20 @@ void Bifurcation_Curve::fill_values_on_segments(const FluxFunction *ff, const Ac
         vee.resize(n);
         eig_is_real.resize(n);
 
-        for (int i = 0; i < n; i++){
+        for (int i = 0; i < n; i++) {
             double point[dim];
             for (int j = 0; j < dim; j++) point[j] = input[i].component(j);
 
             // Fill the values of the functions
 
             double F[dim], G[dim], JF[dim][dim], JG[dim][dim];
-            fill_with_jet((RpFunction*)ff, dim, point, 1, F, &JF[0][0], 0);
-            fill_with_jet((RpFunction*)aa, dim, point, 1, G, &JG[0][0], 0);
+            fill_with_jet((RpFunction*) ff, dim, point, 1, F, &JF[0][0], 0);
+            fill_with_jet((RpFunction*) aa, dim, point, 1, G, &JG[0][0], 0);
 
             vff[i].resize(dim);
             vaa[i].resize(dim);
 
-            for (int j = 0; j < dim; j++){
+            for (int j = 0; j < dim; j++) {
                 vff[i].component(j) = F[j];
                 vaa[i].component(j) = G[j];
             }
@@ -432,13 +454,13 @@ void Bifurcation_Curve::fill_values_on_segments(const FluxFunction *ff, const Ac
             vee[i].resize(etemp.size());
 
             for (int j = 0; j < etemp.size(); j++) vee[i][j] = etemp[j].r;
-            
+
             // Decide if the eigenvalues are real or complex
             eig_is_real[i].clear();
             eig_is_real[i].resize(etemp.size());
-            for (int j = 0; j < etemp.size(); j++){
+            for (int j = 0; j < etemp.size(); j++) {
                 if (fabs(etemp[j].i) < epsilon) eig_is_real[i][j] = true;
-                else                            eig_is_real[i][j] = false;
+                else eig_is_real[i][j] = false;
             }
         }
     }
