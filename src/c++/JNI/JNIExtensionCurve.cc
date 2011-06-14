@@ -27,6 +27,8 @@ NOTE :
 #include "TPCW.h"
 #include "Extension_CurveTPCW.h"
 #include "Extension_Curve.h"
+#include "Boundary_ExtensionTPCW.h"
+
 
 
 
@@ -34,7 +36,7 @@ using std::vector;
 using namespace std;
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
-(JNIEnv * env, jobject obj, jint xResolution, jint yResolution, jint curveFamily, jint domainFamily, jint edge,jint characteristicWhere) {
+(JNIEnv * env, jobject obj, jint xResolution, jint yResolution, jint curveFamily, jint domainFamily, jint edge, jint characteristicWhere) {
 
     jclass hugoniotSegmentClass = (env)->FindClass(HUGONIOTSEGMENTCLASS_LOCATION);
 
@@ -67,11 +69,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
     std::vector<RealVector> curve_segments;
     std::vector<RealVector> domain_segments;
 
-      int * number_of_domain_pnts = new int[2];
+    int * number_of_domain_pnts = new int[2];
 
 
-        number_of_domain_pnts[0] = xResolution;
-        number_of_domain_pnts[1] = yResolution;
+    number_of_domain_pnts[0] = xResolution;
+    number_of_domain_pnts[1] = yResolution;
 
     if (RpNumerics::getPhysics().ID().compare("Stone") == 0) {
 
@@ -124,7 +126,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
                 domain_segments);
 
 
-       
+
 
     }
 
@@ -224,12 +226,33 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
         cout << "edge " << edge << endl;
 
 
-        ectpcw.compute_extension_curve(characteristicWhere, singular,
-                original_curve_segments, curveFamily,
-                &flux, &accum,
-                &reduced_flux, &reduced_accum,
+        const FluxFunction * curve_flux = &flux;
+        const AccumulationFunction *curve_accum = &accum;
+
+        const FluxFunction * curve_reduced_flux = &reduced_flux;
+        const AccumulationFunction *curve_reduced_accum = &reduced_accum;
+
+
+
+        Boundary_ExtensionTPCW::extension_curve(curve_flux, curve_accum,
+                curve_reduced_flux, curve_reduced_accum,
+                1, 10,
+                curveFamily,
+                &pmin, &pmax, number_of_grid_pnts, // For the domain.
                 domainFamily,
-                curve_segments, domain_segments);
+                curve_flux, curve_accum,
+                curve_reduced_flux, curve_reduced_accum,
+                characteristicWhere, singular,
+                curve_segments,
+                domain_segments);
+
+
+//        ectpcw.compute_extension_curve(characteristicWhere, singular,
+//                original_curve_segments, curveFamily,
+//                &flux, &accum,
+//                &reduced_flux, &reduced_accum,
+//                domainFamily,
+//                curve_segments, domain_segments);
 
 
         delete fv;
