@@ -25,7 +25,6 @@ NOTE :
 #include <vector>
 #include <iostream>
 #include "TPCW.h"
-#include "Extension_CurveTPCW.h"
 #include "Extension_Curve.h"
 #include "Boundary_ExtensionTPCW.h"
 
@@ -66,8 +65,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
 
     // Storage space for the segments:
 
-    std::vector<RealVector> curve_segments;
-    std::vector<RealVector> domain_segments;
+    vector<RealVector> curve_segments;
+    vector<RealVector> domain_segments;
 
     int * number_of_domain_pnts = new int[2];
 
@@ -194,26 +193,26 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
         int singular = 1;
 
 
-        Extension_CurveTPCW ectpcw(pmin, pmax, number_of_grid_pnts,
-                &flux, &accum,
-                &reduced_flux, &reduced_accum);
+        //        Extension_CurveTPCW ectpcw(pmin, pmax, number_of_grid_pnts,
+        //                &flux, &accum,
+        //                &reduced_flux, &reduced_accum);
 
         // For s = 0.
-        int curve_points = 101;
-        double delta = (td.T2Theta(450.0) - td.T2Theta(304.63)) / (double) curve_points;
-
-        RealVector p1(2), p2(2);
-        std::vector<RealVector> original_curve_segments;
-        for (int i = 0; i < curve_points - 1; i++) {
-            p1.component(0) = edge;
-            p1.component(1) = td.T2Theta(304.63) + (double) i*delta;
-
-            p2.component(0) = edge;
-            p2.component(1) = td.T2Theta(304.63) + ((double) i + 1) * delta;
-
-            original_curve_segments.push_back(p1);
-            original_curve_segments.push_back(p2);
-        }
+//        int curve_points = 101;
+//        double delta = (td.T2Theta(450.0) - td.T2Theta(304.63)) / (double) curve_points;
+//
+//        RealVector p1(2), p2(2);
+//        std::vector<RealVector> original_curve_segments;
+//        for (int i = 0; i < curve_points - 1; i++) {
+//            p1.component(0) = edge;
+//            p1.component(1) = td.T2Theta(304.63) + (double) i*delta;
+//
+//            p2.component(0) = edge;
+//            p2.component(1) = td.T2Theta(304.63) + ((double) i + 1) * delta;
+//
+//            original_curve_segments.push_back(p1);
+//            original_curve_segments.push_back(p2);
+//        }
 
 
         cout << "Resolucao x " << number_of_grid_pnts[0] << endl;
@@ -238,7 +237,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
                 curve_reduced_flux, curve_reduced_accum,
                 edge, 101,
                 curveFamily,
-                &pmin, &pmax, number_of_grid_pnts, // For the domain.
+                pmin,pmax, number_of_grid_pnts, // For the domain.
                 domainFamily,
                 curve_flux, curve_accum,
                 curve_reduced_flux, curve_reduced_accum,
@@ -247,12 +246,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
                 domain_segments);
 
 
-//        ectpcw.compute_extension_curve(characteristicWhere, singular,
-//                original_curve_segments, curveFamily,
-//                &flux, &accum,
-//                &reduced_flux, &reduced_accum,
-//                domainFamily,
-//                curve_segments, domain_segments);
+        //        ectpcw.compute_extension_curve(characteristicWhere, singular,
+        //                original_curve_segments, curveFamily,
+        //                &flux, &accum,
+        //                &reduced_flux, &reduced_accum,
+        //                domainFamily,
+        //                curve_segments, domain_segments);
 
 
         delete fv;

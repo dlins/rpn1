@@ -89,84 +89,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
 
     cout << Uref << endl;
 
-
-    //    for (unsigned int i = 0; i < dimension; i++) {
-    //
-    //        cout << "Valor de uref " << Uref.component(i) << endl;
-    //
-    //    }
-
-
-    //    bool has_gravity = false;
-    //    double Tref_rock = 273.15;
-    //    double Tref_water = 274.3775;
-    //    double pressure = 100.9;
-    //    double Cr = 2.029e6;
-    //    double Cw = 4297.;
-    //    double rhoW_init = 998.2;
-    //    double T_typical = 304.63;
-    //    double Rho_typical = 998.2; // For the time being, this will be RhoWconst = 998 [kg/m^3]. In the future, this value should be the density of pure water at the temperature T_typical.
-    //    double U_typical = 4.22e-6;
-    //    double h_typical = Cw * (T_typical - Tref_water);
-
-    //    Thermodynamics_SuperCO2_WaterAdimensionalized TD(Tref_rock, Tref_water, pressure,
-    //            "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhosigmac_spline.txt",
-    //            "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhosigmaw_spline.txt",
-    //            "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhoac_spline.txt",
-    //            "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhoaw_spline.txt",
-    //            "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/rhoW_spline.txt",
-    //            "/home/edsonlan/Java/rpn/src/c++/rpnumerics/physics/tpcw/hsigmaC_spline.txt",
-    //            rhoW_init,
-    //            Cr,
-    //            Cw,
-    //            T_typical,
-    //            Rho_typical,
-    //            h_typical,
-    //            U_typical);
-
-
-
-
-    //    double const_gravity = 9.8;
-    //    double abs_perm = 3e-12;
-    //    double phi = 0.38;
-    //
-    //    Thermodynamics_SuperCO2_WaterAdimensionalized TD(Physics::getRPnHome());
-    //
-    //
-    //    double cnw = 0., cng = 0., expw = 2., expg = 2.;
-    //    FracFlow2PhasesHorizontalAdimensionalized fh(cnw, cng, expw, expg, TD);
-    //
-    //
-    //    ReducedTPCWHugoniotFunctionClass tpcwhc(Uref, abs_perm, phi, const_gravity, &TD, &fh);
-
-    //    StoneHugoniotFunctionClass * hf = new StoneHugoniotFunctionClass(Uref, (const StoneFluxFunction &) RpNumerics::getPhysics().fluxFunction());
-    //
-
-
-    // Contour proper
-
-    //    double rect[4];
-
-
-    //    rect[0] = 0.0; // xmin
-    //    rect[1] = 1.0; // xmax
-    //    rect[2] = TD.T2Theta(300.0); // ymin
-    //    rect[3] = TD.T2Theta(450.0); // ymax
-    //
-    //
-    //    int res[2];
-    //
-    //    res[0] = 2;
-    //    res[1] = 2;
-
-    //    ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), RpNumerics::getPhysics().boundary(), &tpcwhc);
-
-    //        ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), RpNumerics::getPhysics().boundary(), &coincidence);
-    //    ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), RpNumerics::getPhysics().boundary(), &inflection);
-
-    //    RpNumerics::getPhysics().getSubPhysics(0).setHugoniotFunction(stoneHugoniotFunction);
-
     HugoniotFunctionClass *hf = RpNumerics::getPhysics().getSubPhysics(0).getHugoniotFunction();
 
     hf->setReferenceVector(Uref);
@@ -183,13 +105,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
         for (unsigned int j = 0; j < hugoniotPolyLineVector[i].vec.size() - 1; j++) {
 
             int m = (hugoniotPolyLineVector[i].vec[0].size() - dimension - 1) / 2; // Number of valid eigenvalues
-
-            //
-            //            cout << "type of " << j << " = " << hugoniotPolyLineVector[i].type << endl;
-            //            cout << "coord 1 " << j << " = " << hugoniotPolyLineVector[i].vec[j] << endl;
-            //            cout << "coord 2 " << j + 1 << " = " << hugoniotPolyLineVector[i].vec[j + 1] << endl;
-
-
 
             jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
             jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
