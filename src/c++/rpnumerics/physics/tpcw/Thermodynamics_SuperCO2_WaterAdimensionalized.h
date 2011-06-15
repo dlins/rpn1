@@ -50,18 +50,8 @@ private:
 
 protected:
 public:
-//    Thermodynamics_SuperCO2_WaterAdimensionalized(double, double, double,
-//            const char*, const char*, const char*,
-//            const char*, const char*, const char*,
-//            double,
-//            double, double,
-//            double,
-//            double,
-//            double,
-//            double);
-
-
     Thermodynamics_SuperCO2_WaterAdimensionalized(const Thermodynamics_SuperCO2_WaterAdimensionalized &);
+
     Thermodynamics_SuperCO2_WaterAdimensionalized(const std::string & );
 
     virtual ~Thermodynamics_SuperCO2_WaterAdimensionalized();
