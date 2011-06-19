@@ -1,4 +1,4 @@
- /**
+/**
  * IMPA - Fluid Dynamics Laboratory
  *
  * RPn Project
@@ -112,24 +112,27 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceExtensionCurveCalc_nativeCa
         ReducedAccum2Comp2PhasesAdimensionalized_Params reduced_accum_params(&td, &phi);
         ReducedAccum2Comp2PhasesAdimensionalized reduced_accum(reduced_accum_params);
 
+        //        RealVector pmin(2);
+        //        pmin.component(0) = 0.0;
+        //        pmin.component(1) = td.T2Theta(304.63);
+        //        RealVector pmax(2);
+        //        pmax.component(0) = 1.0;
+        //        pmax.component(1) = td.T2Theta(450.0);
 
         RealVector pmin(2);
-        pmin.component(0) = 0.0;
-        pmin.component(1) = td.T2Theta(304.63);
+        pmin.component(0) = RpNumerics::getPhysics().boundary().minimums().component(0);
+        pmin.component(1) = RpNumerics::getPhysics().boundary().minimums().component(1);
         RealVector pmax(2);
-        pmax.component(0) = 1.0;
-        pmax.component(1) = td.T2Theta(450.0);
+        pmax.component(0) = RpNumerics::getPhysics().boundary().maximums().component(0);
+        pmax.component(1) = RpNumerics::getPhysics().boundary().maximums().component(1);
 
         int * number_of_grid_points = new int[2];
 
+        //        number_of_grid_points[0] = 101;
+        //        number_of_grid_points[1] = 101;
 
-        number_of_grid_points[0] = 101;
-        number_of_grid_points[1] = 101;
-
-
-        //        int number_of_domain_pnts[2] = {101, 101};
-
-        //        int characteristic_where = CHARACTERISTIC_ON_DOMAIN;
+        number_of_grid_points[0] = xResolution;
+        number_of_grid_points[1] = yResolution;
 
         int characteristic_where = CHARACTERISTIC_ON_DOMAIN;
         int singular = 1;
@@ -150,125 +153,134 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceExtensionCurveCalc_nativeCa
                 curve_segments,
                 domain_segments);
 
-    
+        //        CoincidenceTPCW_Extension::extension_curve(&coincidencetpcw,
+        //                min, max, number_of_grid_points,
+        //                &flux, &accum,
+        //                &reduced_flux, &reduced_accum,
+        //                dfamily,
+        //                &flux, &accum,
+        //                &reduced_flux, &reduced_accum,
+        //                cfamily,
+        //                characteristic_where, singular,
+        //                curve_segments,
+        //                domain_segments);
+
+        cout << "Resolucao x " << xResolution << endl;
+
+        cout << "Resolucao y " << yResolution << endl;
+
+        cout << "Familia da curva" << curveFamily << endl;
+        cout << "Familia do dominio" << domainFamily << endl;
+        cout << "characteristic " << characteristicWhere << endl;
+
+        delete fv;
+        delete fh;
+        delete number_of_grid_points;
 
 
-    cout << "Resolucao x " << number_of_grid_points[0] << endl;
-
-    cout << "Resolucao y " << number_of_grid_points[1] << endl;
-
-    cout << "Familia da curva" << curveFamily << endl;
-    cout << "Familia do dominio" << domainFamily << endl;
-    cout << "characteristic " << characteristicWhere << endl;
-
-    delete fv;
-    delete fh;
-    delete number_of_grid_points;
+    }
 
 
-}
+    //    printf("curve_segments.size()  = %d\n", curve_segments.size());
+    //    printf("domain_segments.size() = %d\n", domain_segments.size());
 
 
-//    printf("curve_segments.size()  = %d\n", curve_segments.size());
-//    printf("domain_segments.size() = %d\n", domain_segments.size());
+    for (unsigned int i = 0; i < curve_segments.size() / 2; i++) {
+        //    for (unsigned int i = 0; i < right_vrs.size() / 2; i++) {
+
+        //        cout << "Coordenada : " << left_vrs.at(2 * i) << endl;
+        //        cout << "Coordenada : " << left_vrs.at(2 * i + 1) << endl;
 
 
-for (unsigned int i = 0; i < curve_segments.size() / 2; i++) {
-    //    for (unsigned int i = 0; i < right_vrs.size() / 2; i++) {
-
-    //        cout << "Coordenada : " << left_vrs.at(2 * i) << endl;
-    //        cout << "Coordenada : " << left_vrs.at(2 * i + 1) << endl;
+        jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
+        jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
 
 
-    jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
-    jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
+        double * leftCoords = (double *) curve_segments.at(2 * i);
+        double * rightCoords = (double *) curve_segments.at(2 * i + 1);
 
 
-    double * leftCoords = (double *) curve_segments.at(2 * i);
-    double * rightCoords = (double *) curve_segments.at(2 * i + 1);
+        //
+        //        double * leftCoords = (double *) right_vrs.at(2 * i);
+        //        double * rightCoords = (double *) right_vrs.at(2 * i + 1 );
 
 
-    //
-    //        double * leftCoords = (double *) right_vrs.at(2 * i);
-    //        double * rightCoords = (double *) right_vrs.at(2 * i + 1 );
+        env->SetDoubleArrayRegion(eigenValRLeft, 0, dimension, leftCoords);
+        env->SetDoubleArrayRegion(eigenValRRight, 0, dimension, rightCoords);
 
 
-    env->SetDoubleArrayRegion(eigenValRLeft, 0, dimension, leftCoords);
-    env->SetDoubleArrayRegion(eigenValRRight, 0, dimension, rightCoords);
+        //Construindo left e right points
+        jobject realVectorLeftPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRLeft);
 
+        jobject realVectorRightPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRRight);
 
-    //Construindo left e right points
-    jobject realVectorLeftPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRLeft);
+        int pointType = 0;
 
-    jobject realVectorRightPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRRight);
+        double leftSigma = 0;
+        double rightSigma = 0;
+        //            cout << "type of " << j << " = " << classified[i].type << endl;
+        //            cout << "speed of " << j << " = " << classified[i].vec[j].component(dimension + m) << endl;
+        //            cout << "speed of " << j + 1 << " = " << classified[i].vec[j + 1].component(dimension + m) << endl;
 
-    int pointType = 0;
+        jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, pointType);
+        env->CallObjectMethod(leftSegmentsArray, arrayListAddMethod, hugoniotSegment);
 
-    double leftSigma = 0;
-    double rightSigma = 0;
-    //            cout << "type of " << j << " = " << classified[i].type << endl;
-    //            cout << "speed of " << j << " = " << classified[i].vec[j].component(dimension + m) << endl;
-    //            cout << "speed of " << j + 1 << " = " << classified[i].vec[j + 1].component(dimension + m) << endl;
-
-    jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, pointType);
-    env->CallObjectMethod(leftSegmentsArray, arrayListAddMethod, hugoniotSegment);
-
-}
-
-
-
-
-for (unsigned int i = 0; i < domain_segments.size() / 2; i++) {
-
-    //        cout << "Coordenada : " << left_vrs.at(2 * i) << endl;
-    //        cout << "Coordenada : " << left_vrs.at(2 * i + 1) << endl;
-
-
-    jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
-    jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
-
-
-    double * leftCoords = (double *) domain_segments.at(2 * i);
-    double * rightCoords = (double *) domain_segments.at(2 * i + 1);
-
-
-    env->SetDoubleArrayRegion(eigenValRLeft, 0, dimension, leftCoords);
-    env->SetDoubleArrayRegion(eigenValRRight, 0, dimension, rightCoords);
-
-
-    //Construindo left e right points
-    jobject realVectorLeftPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRLeft);
-
-    jobject realVectorRightPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRRight);
-
-    int pointType = 0;
-
-    double leftSigma = 0;
-    double rightSigma = 0;
-    //            cout << "type of " << j << " = " << classified[i].type << endl;
-    //            cout << "speed of " << j << " = " << classified[i].vec[j].component(dimension + m) << endl;
-    //            cout << "speed of " << j + 1 << " = " << classified[i].vec[j + 1].component(dimension + m) << endl;
-
-    jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, pointType);
-    env->CallObjectMethod(rightSegmentsArray, arrayListAddMethod, hugoniotSegment);
-
-}
+    }
 
 
 
 
-jobject result = env->NewObject(coincidenceExtensionCurveClass, coincidenceExtensionCurveConstructor, leftSegmentsArray, rightSegmentsArray);
+    for (unsigned int i = 0; i < domain_segments.size() / 2; i++) {
+
+        //        cout << "Coordenada : " << left_vrs.at(2 * i) << endl;
+        //        cout << "Coordenada : " << left_vrs.at(2 * i + 1) << endl;
 
 
-//    env->DeleteLocalRef(eigenValRLeft);
-//    env->DeleteLocalRef(eigenValRRight);
-//    env->DeleteLocalRef(hugoniotSegmentClass);
-//    env->DeleteLocalRef(realVectorClass);
-//    env->DeleteLocalRef(arrayListClass);
+        jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
+        jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
+
+
+        double * leftCoords = (double *) domain_segments.at(2 * i);
+        double * rightCoords = (double *) domain_segments.at(2 * i + 1);
+
+
+        env->SetDoubleArrayRegion(eigenValRLeft, 0, dimension, leftCoords);
+        env->SetDoubleArrayRegion(eigenValRRight, 0, dimension, rightCoords);
+
+
+        //Construindo left e right points
+        jobject realVectorLeftPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRLeft);
+
+        jobject realVectorRightPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRRight);
+
+        int pointType = 0;
+
+        double leftSigma = 0;
+        double rightSigma = 0;
+        //            cout << "type of " << j << " = " << classified[i].type << endl;
+        //            cout << "speed of " << j << " = " << classified[i].vec[j].component(dimension + m) << endl;
+        //            cout << "speed of " << j + 1 << " = " << classified[i].vec[j + 1].component(dimension + m) << endl;
+
+        jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, pointType);
+        env->CallObjectMethod(rightSegmentsArray, arrayListAddMethod, hugoniotSegment);
+
+    }
 
 
 
-return result;
+
+    jobject result = env->NewObject(coincidenceExtensionCurveClass, coincidenceExtensionCurveConstructor, leftSegmentsArray, rightSegmentsArray);
+
+
+    //    env->DeleteLocalRef(eigenValRLeft);
+    //    env->DeleteLocalRef(eigenValRRight);
+    //    env->DeleteLocalRef(hugoniotSegmentClass);
+    //    env->DeleteLocalRef(realVectorClass);
+    //    env->DeleteLocalRef(arrayListClass);
+
+
+
+    return result;
 
 
 }

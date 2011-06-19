@@ -166,12 +166,21 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
 
 
         // Double Contact
+        //        RealVector pmin(2);
+        //        pmin.component(0) = 0.0;
+        //        pmin.component(1) = td.T2Theta(304.63);
+        //        RealVector pmax(2);
+        //        pmax.component(0) = 1.0;
+        //        pmax.component(1) = td.T2Theta(450.0);
+
+
+
         RealVector pmin(2);
-        pmin.component(0) = 0.0;
-        pmin.component(1) = td.T2Theta(304.63);
+        pmin.component(0) = RpNumerics::getPhysics().boundary().minimums().component(0);
+        pmin.component(1) = RpNumerics::getPhysics().boundary().minimums().component(1);
         RealVector pmax(2);
-        pmax.component(0) = 1.0;
-        pmax.component(1) = td.T2Theta(450.0);
+        pmax.component(0) = RpNumerics::getPhysics().boundary().maximums().component(0);
+        pmax.component(1) = RpNumerics::getPhysics().boundary().maximums().component(1);
 
 
 
@@ -205,7 +214,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
     }
 
     delete number_of_grid_pnts;
-    
+
     printf("left_vrs.size()  = %d\n", left_vrs.size());
     printf("right_vrs.size() = %d\n", right_vrs.size());
 
