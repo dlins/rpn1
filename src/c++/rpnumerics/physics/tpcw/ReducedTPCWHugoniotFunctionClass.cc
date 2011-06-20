@@ -6,7 +6,9 @@ ReducedTPCWHugoniotFunctionClass::ReducedTPCWHugoniotFunctionClass(const RealVec
         double const_gravity,
         Thermodynamics_SuperCO2_WaterAdimensionalized * td,
         FracFlow2PhasesHorizontalAdimensionalized *fh
-        ) {
+        ):HugoniotFunctionClass(Flux2Comp2PhasesAdimensionalized( Flux2Comp2PhasesAdimensionalized_Params(abs_perm, 0.0, const_gravity,
+            false, true,
+            *td, fh, (FracFlow2PhasesVerticalAdimensionalized*) 0))) {
 
     // Create the auxiliary objects
     ReducedFlux2Comp2PhasesAdimensionalized_Params ReducedTPCWFluxAdimensionalized_Params(abs_perm, td, fh);
@@ -24,7 +26,6 @@ ReducedTPCWHugoniotFunctionClass::ReducedTPCWHugoniotFunctionClass(const RealVec
             has_gravity, has_horizontal,
             *td, fh, (FracFlow2PhasesVerticalAdimensionalized*) 0);
     TPCWFluxAdimensionalized = new Flux2Comp2PhasesAdimensionalized(TPCWFluxAdimensionalized_Params);
-
     Accum2Comp2PhasesAdimensionalized_Params TPCWAccumAdimensionalized_Params(*td, &phi);
     TPCWAccumAdimensionalized = new Accum2Comp2PhasesAdimensionalized(TPCWAccumAdimensionalized_Params);
 
@@ -165,7 +166,7 @@ void ReducedTPCWHugoniotFunctionClass::setReferenceVector(const RealVector & ref
 
 }
 
-ReducedTPCWHugoniotFunctionClass::ReducedTPCWHugoniotFunctionClass(const ReducedTPCWHugoniotFunctionClass & copy) :
+ReducedTPCWHugoniotFunctionClass::ReducedTPCWHugoniotFunctionClass(const ReducedTPCWHugoniotFunctionClass & copy) :HugoniotFunctionClass(copy.getFluxFunction()),
 ReducedTPCWFluxAdimensionalized(copy.ReducedTPCWFluxAdimensionalized),
 ReducedTPCWAccumAdimensionalized(copy.ReducedTPCWAccumAdimensionalized),
 TPCWAccumAdimensionalized(copy.TPCWAccumAdimensionalized),

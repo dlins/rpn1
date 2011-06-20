@@ -5,7 +5,7 @@
 #include "FracFlow2PhasesHorizontalAdimensionalized.h"
 #include "HugoniotFunctionClass.h"
 
-class SubinflectionTPCW : public HugoniotFunctionClass {
+class SubinflectionTPCW :public HugoniotFunctionClass {
     private:
         Thermodynamics_SuperCO2_WaterAdimensionalized *td;
         FracFlow2PhasesHorizontalAdimensionalized     *fh;

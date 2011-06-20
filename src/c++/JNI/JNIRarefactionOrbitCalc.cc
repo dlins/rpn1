@@ -119,9 +119,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
 
     ContinuationRarefactionFlow flow(referenceVector, familyIndex, timeDirection, RpNumerics::getPhysics().fluxFunction());
 
-
-
-
     LSODEProfile lsodeProfile(flow,maxStepsNumber, dimension, itol, rtol, mf, deltaxi, nparam, param);
 
     LSODE odeSolver(lsodeProfile);
@@ -130,7 +127,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
 
     RarefactionContinuationMethod method(odeSolver,RpNumerics::getPhysics().boundary(),familyIndex);
 
-//    cout<<"Entrada do Java: "<<realVectorInput<<endl;
+
+
+    cout<<"Entrada do Java: "<<realVectorInput<<endl;
 
 //    double theta = ((const TPCW &) RpNumerics::getPhysics()).T2Theta(realVectorInput(1));
 
@@ -139,7 +138,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
 //    cout<<realVectorInput<<endl;
     method.curve(realVectorInput, timeDirection, coords);
 
-
+    cout << "Tamanho da curva: "<<coords.size() << endl;
 
     if (coords.size() == 0) {
         return NULL;
@@ -149,7 +148,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
 
     //Orbit memebers creation
 
-//    cout << "Tamanho da curva: "<<coords.size() << endl;
+    cout << "Tamanho da curva: "<<coords.size() << endl;
 
     jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(coords.size(), classOrbitPoint, NULL);
 

@@ -48,6 +48,8 @@ Stone::Stone() : SubPhysics(StoneFluxFunction(StoneParams(), StonePermParams()),
     RealVector refVec(2);
 
     StoneHugoniotFunctionClass * stoneHugoniotFunction = new StoneHugoniotFunctionClass(refVec, (StoneFluxFunction(StoneParams(), StonePermParams())));
+    
+    
     setHugoniotFunction(stoneHugoniotFunction);
 
 }

@@ -67,6 +67,10 @@ int RarefactionContinuationMethod::init(ContinuationRarefactionFlow * flow, int 
     if (flow->flux(n, indx, ff, gg, type, inp, &lambdap, &rep[0]) == COMPLEX_EIGENVALUE) return COMPLEX_EIGENVALUE;
     if (flow->flux(n, indx, ff, gg, type, inm, &lambdam, &rem[0]) == COMPLEX_EIGENVALUE) return COMPLEX_EIGENVALUE;
 
+
+
+    cout<<"Lambdap"<<lambdap<<endl;
+    cout << "Lambdam" << lambdam << endl;
     //    printf("@ rarefactioncurve(), after init.\nl- = % f, l = % f, l+ = % f\n", lambdam, *lambda, lambdap);
     //    printf("e = (");
     //    for (int i = 0; i < n; i++) printf("%6.2f, ", rev[i]);
@@ -221,7 +225,7 @@ void RarefactionContinuationMethod::curve(const RealVector & inputVector, int di
     int step = 0;
 
     RealVector outputVector(dimension);
-    // -------------------------Invoke th solver     ----------------------------------
+    // -------------------------Invoke the solver     ----------------------------------
 
     double testeDouble = 0; //TODO Dummy value !!
     double nowIn[dimension];

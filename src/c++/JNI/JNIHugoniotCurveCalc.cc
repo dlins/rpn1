@@ -91,6 +91,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
 
     HugoniotFunctionClass *hf = RpNumerics::getPhysics().getSubPhysics(0).getHugoniotFunction();
 
+    FluxFunction * tempFluxFunction = (FluxFunction *) RpNumerics::getPhysics().fluxFunction().clone();
+    hf->setFluxFunction(tempFluxFunction);
+
     hf->setReferenceVector(Uref);
 
     ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), RpNumerics::getPhysics().boundary(), hf); //stoneHugoniotFunction);
@@ -99,6 +102,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
 
     method.classifiedCurve(Uref, hugoniotPolyLineVector);
 
+    delete tempFluxFunction;
 
     for (int i = 0; i < hugoniotPolyLineVector.size(); i++) {
 

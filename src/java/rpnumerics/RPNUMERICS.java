@@ -89,8 +89,6 @@ public class RPNUMERICS {
 
         if (boundaryProfile != null) { //Catching boundary from input file
 
-            System.out.println("Profile do boundary: " + boundaryProfile);
-
             Configuration boundaryConfiguration = new Configuration(boundaryProfile);
 
             if (boundaryConfiguration.getName().equalsIgnoreCase("rect")) {
@@ -265,7 +263,7 @@ public class RPNUMERICS {
             if (configurationEntry.getType().equalsIgnoreCase("physics") && configurationEntry.getName().equalsIgnoreCase(physicsID())) {
 
                 buffer.append(configurationEntry.toXML());
-                System.out.println(configurationEntry.toString());
+//                System.out.println(configurationEntry.toString());
 
             }
             if (!configurationEntry.getType().equalsIgnoreCase("physics")) {

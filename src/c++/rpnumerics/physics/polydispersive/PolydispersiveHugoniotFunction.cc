@@ -1,12 +1,30 @@
-#include "StoneHugoniotFunctionClass.h"
+/*
+ * IMPA - Fluid Dynamics Laboratory
+ *
+ * RPn Project
+ *
+ * @(#) PolydispersiveHugoniotFunction.cc
+ */
 
-StoneHugoniotFunctionClass::StoneHugoniotFunctionClass(const RealVector &U, const StoneFluxFunction & stoneFluxFunction) : HugoniotFunctionClass(stoneFluxFunction){//, stone(new StoneFluxFunction(stoneFluxFunction)) {
+/*
+ * ---------------------------------------------------------------
+ * Includes:
+ */
+#include "PolydispersiveHugoniotFunction.h"
 
-    StoneFluxFunction & stone = (StoneFluxFunction &)getFluxFunction();
+/*
+ * ---------------------------------------------------------------
+ * Definitions:
+ */
 
+
+
+PolydispersiveHugoniotFunction::PolydispersiveHugoniotFunction(const RealVector& U, const Polydispersive & stoneFluxFunction) : HugoniotFunctionClass(stoneFluxFunction) {
 
     int n = U.size();
 
+
+    const FluxFunction &fluxFunction = getFluxFunction();
     Uref.resize(n);
     for (int i = 0; i < n; i++) Uref.component(i) = U.component(i);
 
@@ -14,7 +32,9 @@ StoneHugoniotFunctionClass::StoneHugoniotFunctionClass(const RealVector &U, cons
     // TODO: The flux object must be initialized somehow (be it created here or outside, etc.)
     UrefJetMatrix.resize(n);
     WaveState u(Uref); // TODO: Check this.
-    stone.jet(u, UrefJetMatrix, 1);
+    //    stone->jet(u, UrefJetMatrix, 1);
+
+    fluxFunction.jet(u, UrefJetMatrix, 1);
 
     // Find the eigenpairs of the Jacobian of the jet at Uref
     double A[n][n];
@@ -31,18 +51,19 @@ StoneHugoniotFunctionClass::StoneHugoniotFunctionClass(const RealVector &U, cons
     else Uref_is_elliptic = true;
 }
 
-StoneHugoniotFunctionClass::~StoneHugoniotFunctionClass() {
-//    delete stone;
+PolydispersiveHugoniotFunction::~PolydispersiveHugoniotFunction() {
 }
 
-void StoneHugoniotFunctionClass::setReferenceVector(const RealVector & refVec) {
-    StoneFluxFunction & stone = (StoneFluxFunction &)getFluxFunction();
+void PolydispersiveHugoniotFunction::setReferenceVector(const RealVector & refVec) {
     Uref = refVec;
+    const FluxFunction & fluxFunction = getFluxFunction();
     // TODO: The flux object must be initialized somehow (be it created here or outside, etc.)
     UrefJetMatrix.resize(refVec.size());
     int n = refVec.size();
     WaveState u(refVec); // TODO: Check this.
-    stone.jet(u, UrefJetMatrix, 1);
+    //    stone->jet(u, UrefJetMatrix, 1);
+
+    fluxFunction.jet(u, UrefJetMatrix, 1);
 
     // Find the eigenpairs of the Jacobian of the jet at Uref
     double A[n][n];
@@ -51,6 +72,8 @@ void StoneHugoniotFunctionClass::setReferenceVector(const RealVector & refVec) {
             A[i][j] = UrefJetMatrix(i, j);
         }
     }
+
+
     Eigen::eig(n, &A[0][0], ve_uref);
 
     double epsilon = 1.0e-6; // TODO: Tolerance must be created within a class which will be used by everyone. Say, "class Tolerance", or something like that.
@@ -59,14 +82,11 @@ void StoneHugoniotFunctionClass::setReferenceVector(const RealVector & refVec) {
     else Uref_is_elliptic = true;
 
     HugoniotFunctionClass::setReferenceVector(refVec);
-
-
 }
 
-double StoneHugoniotFunctionClass::HugoniotFunction(const RealVector & u) {
+double PolydispersiveHugoniotFunction::HugoniotFunction(const RealVector & u) {
     //        Uref = getReferenceVector();
-
-    StoneFluxFunction & stone = (StoneFluxFunction &)getFluxFunction();
+    const FluxFunction & fluxFunction = getFluxFunction();
     double sw = u(0);
     double swz = Uref(0);
 
@@ -89,13 +109,14 @@ double StoneHugoniotFunctionClass::HugoniotFunction(const RealVector & u) {
         dhw = sw - swz;
         dho = so - soz;
 
-        stone.jet(wu, UJetMatrix, 0);
+        //        stone->jet(wu, UJetMatrix, 0);
+        fluxFunction.jet(wu, UJetMatrix, 0);
 
         dfw = UJetMatrix(0) - UrefJetMatrix(0);
         dfo = UJetMatrix(1) - UrefJetMatrix(1);
     } else {
-        stone.jet(wu, UJetMatrix, 1);
-
+        //            stone->jet(wu, UJetMatrix, 1);
+        fluxFunction.jet(wu, UJetMatrix, 0);
         dhw = dsw;
         dho = dso;
         dfw = UrefJetMatrix(0, 0) * dsw + UrefJetMatrix(0, 1) * dso;
@@ -108,4 +129,3 @@ double StoneHugoniotFunctionClass::HugoniotFunction(const RealVector & u) {
 
     return hugont;
 }
-

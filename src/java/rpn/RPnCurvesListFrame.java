@@ -141,8 +141,6 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
 
     }
 
-   
-
     public void actionPerformed(ActionEvent e) {
 
         JButton button = (JButton) e.getSource();
@@ -207,23 +205,24 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
         if (button.getName().equals("Remove")) {
 
             Vector<Boolean> selectedVector = new Vector<Boolean>();
-
-            for (int i = 0; i < curvesTable_.getModel().getRowCount(); i++) {
-
+            int rowNumber = curvesTable_.getModel().getRowCount();
+            for (int i = 0; i < rowNumber; i++) {
                 Boolean selected = (Boolean) curvesTable_.getValueAt(i, 0);
 
-                selectedVector.add(selected);
+                if (selected){
+                    selectedVector.add(selected);
+                }
 
             }
 
-            for (int j = 0; j < selectedVector.size(); j++) {
-                Boolean boolean1 = selectedVector.get(j);
 
-                if (boolean1) {
+            for (int i = 0; i < selectedVector.size(); i++) {
 
-                    RPnDataModule.PHASESPACE.remove(j);
-                    tableModel_.removeRow(j);
+                Boolean selected = (Boolean) selectedVector.remove(i);
 
+                if (selected) {
+                    RPnDataModule.PHASESPACE.remove(i);
+                    tableModel_.removeRow(i);
                 }
 
             }
@@ -233,6 +232,4 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
 //        RPnDataModule.PHASESPACE.clearGeometrySelection();
 
     }
-
-  
 }
