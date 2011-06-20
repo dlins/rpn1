@@ -118,10 +118,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
         //        int characteristic_where = CHARACTERISTIC_ON_DOMAIN;
         int singular = 0;
 
-
-
-        
-
         cout << "Familia da curva" << curveFamily << endl;
         cout << "Familia do dominio" << domainFamily << endl;
         cout << "characteristic " << characteristicWhere << endl;

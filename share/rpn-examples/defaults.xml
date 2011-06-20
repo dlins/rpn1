@@ -241,7 +241,7 @@
 
 
      <CURVE name="rarefactionextension">
-      <CURVEPARAM name="curvefamily" value="1"/>
+      <CURVEPARAM name="curvefamily" value="0"/>
       <CURVEPARAM name="domainfamily" value="1"/>
       <CURVEPARAM name="characteristicdomain" value="1"/>
       <CURVEPARAM name="x-domainpoints" value="101"/>

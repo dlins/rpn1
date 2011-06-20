@@ -34,7 +34,7 @@ void Rarefaction_Extension::extension_curve(const FluxFunction *curve_ff, const 
             increase,
             deltaxi,
             curve_ff, curve_aa,
-            RAREFACTION_SIMPLE_ACCUMULATION,
+            RAREFACTION_GENERAL_ACCUMULATION,
             (Boundary*) boundary,
             rarefaction_curve);
 
@@ -42,6 +42,8 @@ void Rarefaction_Extension::extension_curve(const FluxFunction *curve_ff, const 
     if (rarefaction_curve.size() < 2) return;
 
     int n = initial_point.size();
+
+    cout <<"valor de n: "<<n<<endl;
 
     // Turn the curve of points into a curve of segments.
     vector <RealVector> rarefaction_segments;

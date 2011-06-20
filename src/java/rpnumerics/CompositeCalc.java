@@ -55,6 +55,11 @@ public class CompositeCalc implements RpCalculation {
         this.yResolution_ = yResolution;
         this.curveFamily_ = leftFamily;
         this.domainFamily_ = rightFamily;
+
+        System.out.println("Curve Family:"+curveFamily_);
+        System.out.println("Domain Family:" + domainFamily_);
+
+
         characteristicDomain_ = characteristicDomain;
         start_ = startPoint;
         increase_ = increase;

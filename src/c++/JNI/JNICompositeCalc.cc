@@ -124,11 +124,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
         double vel = 1.0;
 
 
-
-
-
-
-
         RealVector p(7);
         p.component(0) = grw;
         p.component(1) = grg;
@@ -154,12 +149,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
         RealVector pmax(2);
 
 
-        pmin.component(0) = 0.0;
-        pmin.component(1) = 0.0;
+        pmin.component(0) = 0.001;
+        pmin.component(1) = 0.001;
 
 
-        pmax.component(0) = 1.0;
-        pmax.component(1) = 1.0;
+        pmax.component(0) = 1.0-0.001;
+        pmax.component(1) = 1.0-0.001;
 
 
 

@@ -664,7 +664,7 @@ int Rarefaction::curve(const RealVector &initial_point,
         if (increase != RAREFACTION_SPEED_NEUTRAL){
             if ((new_lambda > previous_lambda && increase == RAREFACTION_SPEED_DECREASE) || 
                 (new_lambda < previous_lambda && increase == RAREFACTION_SPEED_INCREASE)){
-
+                cout<<"Valor de increase: "<<increase<<endl;
                 // Find the point where lambda reaches a minimum, store it and get out.
                 RealVector last_point;
                 int info_compute_last_point = compute_last_point(previous_point, new_point, last_point);

@@ -368,20 +368,22 @@ bool Bifurcation_Curve::prepare_segment(int i, int family, int where_is_characte
                                         Matrix<double> &flux, 
                                         Matrix<double> &accum){
 
-    //printf("Bifurcation_Curve::prepare_segment. eigen.size() = %d\n", eigen.size());
-    //printf("    Family = %d, eigen[%d].size() = %d, eigen[%d].size() = %d\n", family, i, eigen[i].size(), i + 1, eigen[i + 1].size());
+//    printf("Bifurcation_Curve::prepare_segment. eigen.size() = %d\n", eigen.size());
+//    printf("    Family = %d, eigen[%d].size() = %d, eigen[%d].size() = %d\n", family, i, eigen[i].size(), i + 1, eigen[i + 1].size());
 
     if (where_is_characteristic == CHARACTERISTIC_ON_CURVE){
         if (!eig_is_real[i][family] || !eig_is_real[i + 1][family]) return false;
     }
 
-    lambda[0] = eigen[i][family];                //printf("Bifurcation_Curve::prepare_segment. lambda[0] = %g\n", lambda[0]);
+    lambda[0] = eigen[i][family];
+//    printf("Bifurcation_Curve::prepare_segment. lambda[0] = %g\n", lambda[0]);
     flux(0, 0) = flux_values[i].component(0);
     flux(1, 0) = flux_values[i].component(1);
     accum(0, 0) = accum_values[i].component(0);
     accum(1, 0) = accum_values[i].component(1);
 
-    lambda[1] = eigen[i + 1][family];            //printf("Bifurcation_Curve::prepare_segment. lambda[1] = %g\n", lambda[1]);
+    lambda[1] = eigen[i + 1][family];
+//    printf("Bifurcation_Curve::prepare_segment. lambda[1] = %g\n", lambda[1]);
     flux(0, 1) = flux_values[i + 1].component(0);
     flux(1, 1) = flux_values[i + 1].component(1);
     accum(0, 1) = accum_values[i + 1].component(0);
