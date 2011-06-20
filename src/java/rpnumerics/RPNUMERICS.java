@@ -445,8 +445,8 @@ public class RPNUMERICS {
         int xResolution = new Integer(getContourConfiguration().getParam("x-resolution"));
         int yResolution = new Integer(getContourConfiguration().getParam("y-resolution"));
 
-        int domainFamily = new Integer(getParamValue("rarefactionextension", "curvefamily"));
-        int curveFamily = new Integer(getParamValue("rarefactionextension", "domainfamily"));
+        int domainFamily = new Integer(getParamValue("boundaryextensioncurve","curvefamily"));
+        int curveFamily = new Integer(getParamValue("boundaryextensioncurve", "domainfamily"));
 
         int characteristicDomain = new Integer(getParamValue("boundaryextensioncurve", "characteristicdomain"));
 
