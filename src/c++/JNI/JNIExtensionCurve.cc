@@ -25,8 +25,9 @@ NOTE :
 #include <vector>
 #include <iostream>
 #include "TPCW.h"
-#include "Extension_CurveTPCW.h"
 #include "Extension_Curve.h"
+#include "Boundary_ExtensionTPCW.h"
+
 
 
 
@@ -34,7 +35,7 @@ using std::vector;
 using namespace std;
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
-(JNIEnv * env, jobject obj, jint xResolution, jint yResolution, jint curveFamily, jint domainFamily, jint edge,jint characteristicWhere) {
+(JNIEnv * env, jobject obj, jint xResolution, jint yResolution, jint curveFamily, jint domainFamily, jint edge, jint characteristicWhere) {
 
     jclass hugoniotSegmentClass = (env)->FindClass(HUGONIOTSEGMENTCLASS_LOCATION);
 
@@ -64,14 +65,14 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
 
     // Storage space for the segments:
 
-    std::vector<RealVector> curve_segments;
-    std::vector<RealVector> domain_segments;
+    vector<RealVector> curve_segments;
+    vector<RealVector> domain_segments;
 
-      int * number_of_domain_pnts = new int[2];
+    int * number_of_domain_pnts = new int[2];
 
 
-        number_of_domain_pnts[0] = xResolution;
-        number_of_domain_pnts[1] = yResolution;
+    number_of_domain_pnts[0] = xResolution;
+    number_of_domain_pnts[1] = yResolution;
 
     if (RpNumerics::getPhysics().ID().compare("Stone") == 0) {
 
@@ -123,9 +124,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
                 curve_segments,
                 domain_segments);
 
-
-       
-
     }
 
 
@@ -171,13 +169,23 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
         ReducedAccum2Comp2PhasesAdimensionalized_Params reduced_accum_params(&td, &phi);
         ReducedAccum2Comp2PhasesAdimensionalized reduced_accum(reduced_accum_params);
 
+        
+//                RealVector pmin(2);
+//                pmin.component(0) = 0.0;
+//                pmin.component(1) = td.T2Theta(304.63);
+//                RealVector pmax(2);
+//                pmax.component(0) = 1.0;
+//                pmax.component(1) = td.T2Theta(450.0);
+//
+//
+
 
         RealVector pmin(2);
-        pmin.component(0) = 0.0;
-        pmin.component(1) = td.T2Theta(304.63);
+        pmin.component(0) = RpNumerics::getPhysics().boundary().minimums().component(0);
+        pmin.component(1) = RpNumerics::getPhysics().boundary().minimums().component(1);
         RealVector pmax(2);
-        pmax.component(0) = 1.0;
-        pmax.component(1) = td.T2Theta(450.0);
+        pmax.component(0) = RpNumerics::getPhysics().boundary().maximums().component(0);
+        pmax.component(1) = RpNumerics::getPhysics().boundary().maximums().component(1);
 
         int * number_of_grid_pnts = new int[2];
 
@@ -185,34 +193,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
         number_of_grid_pnts[0] = xResolution;
         number_of_grid_pnts[1] = yResolution;
 
-
-        //        int number_of_domain_pnts[2] = {101, 101};
-
-        //        int characteristic_where = CHARACTERISTIC_ON_DOMAIN;
         int singular = 1;
-
-
-        Extension_CurveTPCW ectpcw(pmin, pmax, number_of_grid_pnts,
-                &flux, &accum,
-                &reduced_flux, &reduced_accum);
-
-        // For s = 0.
-        int curve_points = 101;
-        double delta = (td.T2Theta(450.0) - td.T2Theta(304.63)) / (double) curve_points;
-
-        RealVector p1(2), p2(2);
-        std::vector<RealVector> original_curve_segments;
-        for (int i = 0; i < curve_points - 1; i++) {
-            p1.component(0) = edge;
-            p1.component(1) = td.T2Theta(304.63) + (double) i*delta;
-
-            p2.component(0) = edge;
-            p2.component(1) = td.T2Theta(304.63) + ((double) i + 1) * delta;
-
-            original_curve_segments.push_back(p1);
-            original_curve_segments.push_back(p2);
-        }
-
 
         cout << "Resolucao x " << number_of_grid_pnts[0] << endl;
         ;
@@ -224,12 +205,26 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
         cout << "edge " << edge << endl;
 
 
-        ectpcw.compute_extension_curve(characteristicWhere, singular,
-                original_curve_segments, curveFamily,
-                &flux, &accum,
-                &reduced_flux, &reduced_accum,
+        const FluxFunction * curve_flux = &flux;
+        const AccumulationFunction *curve_accum = &accum;
+
+        const FluxFunction * curve_reduced_flux = &reduced_flux;
+        const AccumulationFunction *curve_reduced_accum = &reduced_accum;
+
+
+//TODO Pegar o parametro hardcoded 101 (number_of_temperature_steps) da interface
+        
+        Boundary_ExtensionTPCW::extension_curve(curve_flux, curve_accum,
+                curve_reduced_flux, curve_reduced_accum,
+                edge, 501,
+                curveFamily,
+                pmin, pmax, number_of_grid_pnts, // For the domain.
                 domainFamily,
-                curve_segments, domain_segments);
+                curve_flux, curve_accum,
+                curve_reduced_flux, curve_reduced_accum,
+                characteristicWhere, singular,
+                curve_segments,
+                domain_segments);
 
 
         delete fv;

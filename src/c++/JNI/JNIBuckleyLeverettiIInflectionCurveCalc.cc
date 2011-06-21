@@ -55,17 +55,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BuckleyLeverettinInflectionCurveCalc_n
 
 
     //Input processing
-    //    jdoubleArray phasePointArray = (jdoubleArray) (env)->CallObjectMethod(uMinus, toDoubleMethodID);
-    //
-    //    int dimension = env->GetArrayLength(phasePointArray);
-    //
-    //    double input [dimension];
-    //
-    //
-    //    env->GetDoubleArrayRegion(phasePointArray, 0, dimension, input);
-    //
-    //    env->DeleteLocalRef(phasePointArray);
-    //
+
     //Calculations using the input
 
     jobject segmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
@@ -105,14 +95,14 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BuckleyLeverettinInflectionCurveCalc_n
             int m = (hugoniotPolyLineVector[i].vec[0].size() - dimension - 1) / 2; // Number of valid eigenvalues
 
 
-//            cout << "type of " << j << " = " << hugoniotPolyLineVector[i].type << endl;
-//            cout << "coord 1 " << j << " = " << hugoniotPolyLineVector[i].vec[j] << endl;
+            //            cout << "type of " << j << " = " << hugoniotPolyLineVector[i].type << endl;
+            //            cout << "coord 1 " << j << " = " << hugoniotPolyLineVector[i].vec[j] << endl;
 
             hugoniotPolyLineVector[i].vec[j].component(2) = max.component(2);
-            hugoniotPolyLineVector[i].vec[j+1].component(2) = max.component(2);
+            hugoniotPolyLineVector[i].vec[j + 1].component(2) = max.component(2);
 
 
-//            cout << "coord 2 " << j + 1 << " = " << hugoniotPolyLineVector[i].vec[j + 1] << endl;
+            //            cout << "coord 2 " << j + 1 << " = " << hugoniotPolyLineVector[i].vec[j + 1] << endl;
 
             jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
             jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);

@@ -149,7 +149,7 @@ Rock_Cr(2.029e6),
 Water_Cw_specific(4297.),
 T_typical_(304.63),
 Rho_typical_(998.2),
-U_typical_(4.22e-6),
+U_typical_(4.42e-7),
 rpnHomePath_(rpnHomePath) {
 
     h_typical_ = Water_Cw_specific * (T_typical_ - Tref_water);
@@ -164,60 +164,10 @@ rpnHomePath_(rpnHomePath) {
     info_hsigmaC = create_spline("hsigmaC_spline.txt", "hsigmaC", P, hsigmaC_);
 
 }
-
-
-
-// CTOR (Constructor).
-// Immediatly after the constructor, use status_after_init() to verify that the object
-// can be used.
-
-//Thermodynamics_SuperCO2_WaterAdimensionalized::Thermodynamics_SuperCO2_WaterAdimensionalized(double T1, double T2, double Press,
-//        const char *rhosigmac_name, const char *rhosigmaw_name, const char *rhoac_name,
-//        const char *rhoaw_name, const char *rhoW_name, const char *hsigmaC_name,
-//        double rhoW_init,
-//        double rhv, double whv,
-//        double T_typ,
-//        double Rho_typ,
-//        double h_typ,
-//        double U_typ) : a0(-1.94760101098783e-6),
-//a1(0.013524080086578),
-//a2(-9.043578102452411),
-//a3(1.612763701298628e3),
-//b0(-0.0123274),
-//b1(27.1038),
-//b2(-23527.5),
-//b3(1.01425e7),
-//b4(-2.17342e9),
-//b5(1.86935e11),
-//Tref_rock(T1),
-//Tref_water(T2),
-//P(Press),
-//rhoW_const(rhoW_init),
-//Rock_Cr(rhv),
-//Water_Cw_specific(whv),
-//T_typical_(T_typ),
-//Rho_typical_(Rho_typ),
-//h_typical_(h_typ),
-//U_typical_(U_typ) {
-//    // Generate the splines
-//    info_rhosigmac = create_spline(rhosigmac_name, "rhosigmac", P, rhosigmac_);
-//    info_rhosigmaw = create_spline(rhosigmaw_name, "rhosigmaw", P, rhosigmaw_);
-//    info_rhoac = create_spline(rhoac_name, "rhoac", P, rhoac_);
-//    info_rhoaw = create_spline(rhoaw_name, "rhoaw", P, rhoaw_);
-//    info_rhoW = create_spline(rhoW_name, "rhoW", P, rhoW_);
-//    info_hsigmaC = create_spline(hsigmaC_name, "hsigmaC", P, hsigmaC_);
-//
-//
-//}
-
-
 // DTOR (Destructor)
 
 Thermodynamics_SuperCO2_WaterAdimensionalized::~Thermodynamics_SuperCO2_WaterAdimensionalized() {
 }
-
-
-
 
 // Verify if the splines were created correctly. This function
 // should be called immediatly after the constructor.
@@ -248,10 +198,6 @@ void Thermodynamics_SuperCO2_WaterAdimensionalized::Diff_RockEnthalpyVol(double 
     d2_Hr = 0; // d2_Hr_D = (d2_Hr/(Rho_typical_*h_typical_) )* T_ref^2
     return;
 }
-
-
-
-
 // AqueousEnthalpyVol & Diff_AqueousEnthalpyVol Adimensionalized
 
 double Thermodynamics_SuperCO2_WaterAdimensionalized::AqueousEnthalpyVol(double Theta) {
@@ -271,8 +217,6 @@ void Thermodynamics_SuperCO2_WaterAdimensionalized::Diff_AqueousEnthalpyVol(doub
     d2_Ha = d2_rho * Water_Cw_specific * (T - Tref_water) / h_typical_ + 2 * d_rho * Water_Cw_specific * T_typical_ / h_typical_; // d2_rhoaw_D*h_W_D +2*d_rhoaw_D*d_h_W_D + ( rhoaw_D*d2h_W_D...=0 )
     return;
 }
-
-
 
 
 // SuperCriticEnthalpyVol & Diff_SuperCriticEnthalpyVol Adimensionalized
@@ -296,9 +240,6 @@ void Thermodynamics_SuperCO2_WaterAdimensionalized::Diff_SuperCriticEnthalpyVol(
     return;
 }
 
-
-
-
 // Rhosic & Diff_Rhosic Adimensionalized
 
 double Thermodynamics_SuperCO2_WaterAdimensionalized::Rhosic(double Theta) {
@@ -316,8 +257,6 @@ void Thermodynamics_SuperCO2_WaterAdimensionalized::Diff_Rhosic(double Theta, do
     return;
 }
 
-
-
 // Rhosiw & Diff_Rhosiw Adimensionalized
 
 double Thermodynamics_SuperCO2_WaterAdimensionalized::Rhosiw(double Theta) {
@@ -334,9 +273,6 @@ void Thermodynamics_SuperCO2_WaterAdimensionalized::Diff_Rhosiw(double Theta, do
 
     return;
 }
-
-
-
 
 // Rhoac & Diff_Rhoac Adimensionalized
 
@@ -356,9 +292,6 @@ void Thermodynamics_SuperCO2_WaterAdimensionalized::Diff_Rhoac(double Theta, dou
     return;
 }
 
-
-
-
 // Rhoaw & Diff_Rhoaw Adimensionalized
 
 double Thermodynamics_SuperCO2_WaterAdimensionalized::Rhoaw(double Theta) {
@@ -375,7 +308,6 @@ void Thermodynamics_SuperCO2_WaterAdimensionalized::Diff_Rhoaw(double Theta, dou
     return;
 }
 
-
 // RhoW
 
 double Thermodynamics_SuperCO2_WaterAdimensionalized::RhoW(double Theta) {
@@ -387,8 +319,6 @@ void Thermodynamics_SuperCO2_WaterAdimensionalized::Diff_RhoW(double Theta, doub
     d_rho = d2_rho = 0; // remember to change this for the gravity model together with its adimensionalization!!!!
     return;
 }
-
-
 
 // hsigmaC & Diff_hsigmaC Adimensionalized
 
@@ -406,9 +336,6 @@ void Thermodynamics_SuperCO2_WaterAdimensionalized::Diff_hsigmaC(double Theta, d
     return;
 }
 
-
-
-
 // Return the value of the constants
 
 double Thermodynamics_SuperCO2_WaterAdimensionalized::Cr(void) {
@@ -418,8 +345,6 @@ double Thermodynamics_SuperCO2_WaterAdimensionalized::Cr(void) {
 double Thermodynamics_SuperCO2_WaterAdimensionalized::Cw_specific(void) {
     return Water_Cw_specific;
 }
-
-
 // We do not need to make the dimesion-less analysis for the viscosities.
 
 void Thermodynamics_SuperCO2_WaterAdimensionalized::inv_muw(double T, double &nuw, double &dnuw_dT, double &d2nuw_dT2) {

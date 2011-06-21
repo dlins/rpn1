@@ -28,8 +28,7 @@ public class CoincidenceExtensionCurveCalc extends BifurcationCurveCalc {
         characteristicDomain_=characteristicDomain;
     }
 
-    public CoincidenceExtensionCurveCalc() {
-    }
+  
 
     @Override
     public RpSolution calc() {
