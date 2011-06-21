@@ -13,7 +13,8 @@
  * ---------------------------------------------------------------
  * Includes:
  */
-#include "Vector.h"
+//#include "Vector.h"
+#include "RealVector.h"
 #include "except.h"
 #include "JacobianMatrix.h"
 #include "HessianMatrix.h"
@@ -36,7 +37,7 @@
 class JetMatrix {
 private:
     int n_comps_, size_;
-    Vector v_;
+    RealVector v_;
     bool c0_, c1_, c2_;
     
     class RangeViolation : public exception { };
@@ -185,12 +186,17 @@ public:
 
 inline void JetMatrix::range_check(int comp) const {
     if (comp < 0 || comp >= n_comps())
-        THROW(JetMatrix::RangeViolation());
+        throw(JetMatrix::RangeViolation());
 }
 
 
 inline JetMatrix & JetMatrix::zero(void) {
-    v_.zero();
+//    v_.zero();
+
+    for(int i=0; i< v_.size();i++){
+        v_(i)=0;
+    }
+
     return *this;
 }
 
@@ -201,7 +207,7 @@ inline double * JetMatrix::operator()(void) {
 inline double JetMatrix::operator()(int i) {
     range_check(i);
     if (!c0_)
-        THROW(JetMatrix::RangeViolation());
+        throw(JetMatrix::RangeViolation());
     return v_.component(i);
 }
 
@@ -209,7 +215,7 @@ inline double JetMatrix::operator()(int i, int j) {
     range_check(i);
     range_check(j);
     if (!c1_)
-        THROW(JetMatrix::RangeViolation());
+        throw(JetMatrix::RangeViolation());
     return v_.component((n_comps_) + (i*n_comps_ + j));
 }
 
@@ -219,7 +225,7 @@ inline double JetMatrix::operator()(int i, int j, int k) {
     range_check(j);
     range_check(k);
     if (!c2_)
-        THROW(JetMatrix::RangeViolation());
+        throw(JetMatrix::RangeViolation());
     return v_.component((n_comps_ * (1 + n_comps_)) + (i*n_comps_*n_comps_ + j*n_comps_ + k));
 }
 
@@ -265,7 +271,7 @@ inline void JetMatrix::setHessian(const HessianMatrix & input){
 
 inline void JetMatrix::hessian(HessianMatrix & hMatrix){
     if (!c2_)
-        THROW(JetMatrix::RangeViolation());
+        throw(JetMatrix::RangeViolation());
      
          int i, j, k;
     for (i=0;i < n_comps() ; i++){
@@ -288,7 +294,7 @@ inline void JetMatrix::setF(const RealVector &input){
 
 inline void JetMatrix::f(RealVector & vector){
     if (!c0_)
-        THROW(JetMatrix::RangeViolation());
+        throw(JetMatrix::RangeViolation());
     int i;
     
     for (i=0; i < n_comps();i++){
@@ -310,7 +316,7 @@ inline void JetMatrix::jacobian(JacobianMatrix &jMatrix){
     int i, j;
     
     if (!c1_)
-        THROW(JetMatrix::RangeViolation());
+        throw(JetMatrix::RangeViolation());
     for (i=0;i < n_comps(); i++){
         for (j=0; j < n_comps();j++ ){
             double value = operator()(i, j);
