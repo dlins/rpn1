@@ -268,7 +268,7 @@ int Rarefaction::init(const RealVector &initial_point, int increase, double delt
     // Fill the second point of the curve and the eigenvalue thereat.
     second_point.resize(n + 1);
 
-    if (increase == 1) {
+    if (increase ==  RAREFACTION_SPEED_INCREASE ) {
         if      (mlambda < lambda && lambda < plambda){
             for (int i = 0; i < n; i++) second_point.component(i) = p.component(i);
             second_point.component(n) = plambda;
@@ -279,7 +279,7 @@ int Rarefaction::init(const RealVector &initial_point, int increase, double delt
         }
         else return RAREFACTION_INIT_FAILURE;
     }
-    else if (increase == -1){
+    else if (increase ==  RAREFACTION_SPEED_DECREASE ){
         if      (mlambda < lambda && lambda < plambda){
             for (int i = 0; i < n; i++) second_point.component(i) = m.component(i);
             second_point.component(n) = mlambda;
