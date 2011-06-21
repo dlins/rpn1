@@ -216,7 +216,7 @@ double ReducedTPCWHugoniotFunctionClass::HugoniotFunction(const RealVector &u) {
         Hmatrix[i][2] = aref_F[i];
     }
 
-    return 1e20 * (det(n, &Hmatrix[0][0]));
+    return 1e20*det(n, &Hmatrix[0][0]);
     //return u.component(0)*u.component(0) + u.component(1)*u.component(1) - .5;
 }
 

@@ -143,11 +143,11 @@ void Double_ContactTPCW::filedg4(Matrix<double> &sol_, int dims, Matrix<int> &ed
         left_vrs.push_back(p1);
         left_vrs.push_back(p2);
 
-        p3.component(0) = ur0 + dur * (ir-1 + sol_(0, edges_(0, nedg) ) ); // RX1 Was:  = segend[sn - 1][0][0];//sol_[0][edges_[0][nedg ]];
-        p3.component(1) = vr0 + dvr * (jr-1 + sol_(1, edges_(0, nedg) ) ); // RY1 Was:  = segend[sn - 1][0][1];//sol_[1][edges_[0][nedg ]];
+        p3.component(0) = ur0 + dur * (ir-1 + sol_(2, edges_(0, nedg) ) ); // RX1 Was:  = segend[sn - 1][0][0];//sol_[0][edges_[0][nedg ]];
+        p3.component(1) = vr0 + dvr * (jr-1 + sol_(3, edges_(0, nedg) ) ); // RY1 Was:  = segend[sn - 1][0][1];//sol_[1][edges_[0][nedg ]];
 
-        p4.component(0) = ur0 + dur * (ir-1 + sol_(0, edges_(1, nedg) ) ); // RX2 Was:  = segend[sn - 1][1][0];//sol_[0][edges_[1][nedg ]];
-        p4.component(1) = vr0 + dvr * (jr-1 + sol_(1, edges_(1, nedg) ) ); // RY2 Was:  = segend[sn - 1][1][1];//sol_[1][edges_[1][nedg ]];
+        p4.component(0) = ur0 + dur * (ir-1 + sol_(2, edges_(1, nedg) ) ); // RX2 Was:  = segend[sn - 1][1][0];//sol_[0][edges_[1][nedg ]];
+        p4.component(1) = vr0 + dvr * (jr-1 + sol_(3, edges_(1, nedg) ) ); // RY2 Was:  = segend[sn - 1][1][1];//sol_[1][edges_[1][nedg ]];
 
         right_vrs.push_back(p3);
         right_vrs.push_back(p4);
@@ -509,8 +509,8 @@ void Double_ContactTPCW::func(double *val, int ir, int jr, int kl, int kr,
 
         double lambda_right = scaling_factor*lr ;
 
-        val[1] = 1e10*(red_shock_speed - lambda_left_input[kl]); // SECOND EQUATION
-        val[2] = 1e10*(red_shock_speed - lambda_right);          // THIRD  EQUATION
+        val[1] = (red_shock_speed - lambda_left_input[kl]); // SECOND EQUATION
+        val[2] = (red_shock_speed - lambda_right);          // THIRD  EQUATION
       
         /*
 	double Hmatrix[3][3];
@@ -606,12 +606,12 @@ int Double_ContactTPCW::filhcub4 (int ir, int jr, int *index, double *foncub, in
                 foncub[comp*ncvert_ + 4*(index[kl] - 0) + index[kr]] = val[comp]; // ??? O q e esse index?????     // TODO: Dan esto tiene que ver con la dimesion del espacio???
 //                foncub[comp*ncvert_ + 4*(index[kl] - 1) + index[kr]] = val[comp]; // ??? O q e esse index?????
                 // foncub(comp,4*(index(kl)-1)+index(kr)) = val // ??? O q e esse index?????
-                if (refval[comp]*val[comp] < 0.0) zero[comp] = true;
+                if (refval[comp]*val[comp] <= 0.0) zero[comp] = true;
             }
         }
     }
           
-    if (!zero[0] && !zero[1] && !zero[2]) return 0;
+//    if (!zero[0] || !zero[1] && !zero[2]) return 0;
     
     return 1;
 
