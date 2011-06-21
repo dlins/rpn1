@@ -24,7 +24,9 @@
 #include "RealVector.h"
 #include "JNIDefs.h"
 #include <vector>
+#include <time.h>
 #include "TPCW.h"
+#include "Rarefaction.h"
 
 
 using std::vector;
@@ -88,7 +90,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
 
 
     int dimension = realVectorInput.size();
-//    dimension;
+    //    dimension;
     //
     int itol = 2;
     //
@@ -96,7 +98,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
     //
     int mf = 22;
     //
-    double deltaxi = 0.001;
+    double deltaxi = 0.01;
     //
     int nparam = 1 + dimension;
     //
@@ -117,28 +119,52 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
         referenceVector(i) = 0;
     }
 
-    ContinuationRarefactionFlow flow(referenceVector, familyIndex, timeDirection, RpNumerics::getPhysics().fluxFunction());
+    //    ContinuationRarefactionFlow flow(referenceVector, familyIndex, timeDirection, RpNumerics::getPhysics().fluxFunction());
 
-    LSODEProfile lsodeProfile(flow,maxStepsNumber, dimension, itol, rtol, mf, deltaxi, nparam, param);
 
-    LSODE odeSolver(lsodeProfile);
 
+
+
+    //
+    //    LSODEProfile lsodeProfile(flow,maxStepsNumber, dimension, itol, rtol, mf, deltaxi, nparam, param);
+    //
+    //    LSODE odeSolver(lsodeProfile);
+    //
     vector <RealVector> coords;
+    //
+    //    RarefactionContinuationMethod method(odeSolver,RpNumerics::getPhysics().boundary(),familyIndex);
 
-    RarefactionContinuationMethod method(odeSolver,RpNumerics::getPhysics().boundary(),familyIndex);
+    //    cout<<"Entrada do Java: "<<realVectorInput<<endl;
+
+    //    double theta = ((const TPCW &) RpNumerics::getPhysics()).T2Theta(realVectorInput(1));
+
+    //    realVectorInput.component(1)=theta;
+
+    //    cout<<realVectorInput<<endl;
+
+
+    clock_t begin = clock();
 
 
 
-    cout<<"Entrada do Java: "<<realVectorInput<<endl;
+    cout <<"Time direction :"<<timeDirection<<endl;
+    int info = Rarefaction::curve(realVectorInput,
+            RAREFACTION_INITIALIZE_YES,
+            (const RealVector *) 0,
+            familyIndex,
+            timeDirection,
+            deltaxi,
+            (FluxFunction *) RpNumerics::getPhysics().fluxFunction().clone(),
+            (AccumulationFunction*) RpNumerics::getPhysics().accumulation().clone(),
+            RAREFACTION_GENERAL_ACCUMULATION,
+            RpNumerics::getPhysics().boundary().clone(),
+            coords);
 
-//    double theta = ((const TPCW &) RpNumerics::getPhysics()).T2Theta(realVectorInput(1));
 
-//    realVectorInput.component(1)=theta;
+    cout << "Resultado da rarefacao " << info << endl;
+    //    method.curve(realVectorInput, timeDirection, coords);
 
-//    cout<<realVectorInput<<endl;
-    method.curve(realVectorInput, timeDirection, coords);
-
-    cout << "Tamanho da curva: "<<coords.size() << endl;
+    cout << "Depois de chamar curve: " << (double) (clock() - begin) / (double) CLOCKS_PER_SEC << endl;
 
     if (coords.size() == 0) {
         return NULL;
@@ -148,7 +174,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
 
     //Orbit memebers creation
 
-    cout << "Tamanho da curva: "<<coords.size() << endl;
+    cout << "Tamanho da curva: " << coords.size() << endl;
 
     jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(coords.size(), classOrbitPoint, NULL);
 
@@ -156,14 +182,14 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
 
         RealVector tempVector = coords.at(i);
 
-//        RealVector tempVector (2);
-//
-//        tempVector.component(0)=tempVectorT(0);
-//        tempVector.component(1) = tempVectorT(1);
+        //        RealVector tempVector (2);
+        //
+        //        tempVector.component(0)=tempVectorT(0);
+        //        tempVector.component(1) = tempVectorT(1);
 
-//        cout<<tempVector<<endl;
+        //        cout<<tempVector<<endl;
 
-//        cout << "Tamanho de tempVector: "<<tempVector.size()<<endl;
+        //        cout << "Tamanho de tempVector: "<<tempVector.size()<<endl;
 
         double * dataCoords = tempVector;
 

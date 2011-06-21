@@ -687,7 +687,7 @@ int Rarefaction::curve(const RealVector &initial_point,
         new_xi += deltaxi;
 
         // Update the reference vector.
-        for (int i = 0; i < n; i++) param[1 + i] = new_point.component(i) - previous_point.component(i);
+        for (int i = 0; i < n; i++) param[1 + i] = new_point.component(i) - previous_point.component(i); 
     }
 
     return SUCCESSFUL_PROCEDURE;

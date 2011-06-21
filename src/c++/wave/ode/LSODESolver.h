@@ -22,12 +22,12 @@
  */
 
 
-extern "C"{
-    
-    void  lsode_(int (*)(int *, double *, double *, double *), int *, double *, double *, double *,
-            int *, double *, double *, int *, int *, int *, double *, int *,
-            int *, int *, int(*)(int *, double *, double *, int *, int *, double *, int *), int *, int*, double*);
-}
+//extern "C"{
+//
+//    void  lsode_(int (*)(int *, double *, double *, double *), int *, double *, double *, double *,
+//            int *, double *, double *, int *, int *, int *, double *, int *,
+//            int *, int *, int(*)(int *, double *, double *, int *, int *, double *, int *), int *, int*, double*);
+//}
 
 class LSODE:public ODESolver {
     
