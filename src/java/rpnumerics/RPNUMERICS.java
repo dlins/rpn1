@@ -445,6 +445,7 @@ public class RPNUMERICS {
 
         int characteristicDomain = new Integer(getParamValue("boundaryextensioncurve", "characteristicdomain"));
 
+      
         return new CompositeCalc(xResolution, yResolution, orbitPoint, direction_, curveFamily, domainFamily, characteristicDomain);
     }
 

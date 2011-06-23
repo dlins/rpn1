@@ -28,7 +28,7 @@ Boundary * IsoTriang2DBoundary::clone() const {
 }
 
 IsoTriang2DBoundary::IsoTriang2DBoundary(const IsoTriang2DBoundary & copy) {
-
+    epsilon=1e-3;
     minimums_ = new RealVector(copy.minimums());
     maximums_ = new RealVector(copy.maximums());
 
@@ -40,7 +40,7 @@ IsoTriang2DBoundary::IsoTriang2DBoundary(const IsoTriang2DBoundary & copy) {
 }
 
 IsoTriang2DBoundary::IsoTriang2DBoundary(const RealVector & A, const RealVector & B, const RealVector & C) {
-
+    epsilon=1e-3;
     A_ = new RealVector(A);
     B_ = new RealVector(B);
     C_ = new RealVector(C);
@@ -84,7 +84,6 @@ IsoTriang2DBoundary::IsoTriang2DBoundary(const RealVector & A, const RealVector 
     maxArray[0] = maxAbs;
     maxArray[1] = maxOrd;
 
-    //    minimums_ = new RealVector(2, minArray);//TODO Esse construtor pode ter um problema !
 
     minimums_ = new RealVector(2);
 
@@ -99,7 +98,32 @@ IsoTriang2DBoundary::IsoTriang2DBoundary(const RealVector & A, const RealVector 
 
 }
 
-bool IsoTriang2DBoundary::inside(const double*)const {
+bool IsoTriang2DBoundary::inside(const double *U)const {
+    double x = U[0];
+    double y = U[1];
+
+    if ((x >= 0.) && (y >= 0.) && (x + y <= 1.)) {
+//        cout << "(" << x << ", " << y << ") is INSIDE" << endl;
+        return true;
+    } else {
+//        cout << "(" << x << ", " << y << ") is OUTSIDE" << endl;
+        return false;
+    }
+}
+
+bool IsoTriang2DBoundary::inside(const RealVector & U)const {
+    double x = U.component(0);
+    double y = U.component(1);
+
+    if ((x >= 0.) && (y >= 0.) && (x + y <= 1.)) {
+//        cout << "(" << x << ", " << y << ") is INSIDE" << endl;
+        return true;
+    } else {
+//        cout << "(" << x << ", " << y << ") is OUTSIDE" << endl;
+        return false;
+    }
+
+    //return false;
 
 }
 

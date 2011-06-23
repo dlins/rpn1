@@ -8,11 +8,15 @@ Boundary::~Boundary() {
 int Boundary::intersection(const RealVector &p, const RealVector &q, RealVector &r,int &w) const {
       w = -1;
 
+
     if (inside(p) && inside(q)) return 1;
-    else if (!inside(p) && !inside(q)) return -1;
+    else if (!inside(p) && !inside(q)){
+        cout << "Both outside, should abort" << endl;
+        return -1;
+    }
     else {
         int n = p.size();
-
+      
         // Initialize the temporal points
         double *pp, *qq;
         pp = new double[n];
