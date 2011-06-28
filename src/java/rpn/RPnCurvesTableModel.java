@@ -6,9 +6,12 @@
  */
 package rpn;
 
+import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 
-public class RPnCurvesTableModel extends DefaultTableModel  {
+public class RPnCurvesTableModel extends DefaultTableModel {
+
+    Vector<Integer> selectedRowVector_;
 
     public RPnCurvesTableModel() {
 
@@ -16,7 +19,6 @@ public class RPnCurvesTableModel extends DefaultTableModel  {
         columnIdentifiers.add(new String("Curve"));
         columnIdentifiers.add(new String("User Input"));
         columnIdentifiers.add(new String("Visible"));
-
 
     }
 
@@ -30,14 +32,13 @@ public class RPnCurvesTableModel extends DefaultTableModel  {
         return 4;
     }
 
-   
     @Override
     public boolean isCellEditable(int row, int col) {
-        if (col==0) {
+        if (col == 0) {
             return true;
         }
         return false;
     }
 
-
+   
 }

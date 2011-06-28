@@ -82,8 +82,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             addPropertyChangeListener(this);
             UndoActionController.createInstance();
 
-
-            getContentPane().add(statusLabel_, BorderLayout.SOUTH);
+             getContentPane().add(statusLabel_, BorderLayout.SOUTH);
 
 
             if (commandMenu_ instanceof RPnAppletPlotter) { // Selecting itens to disable in Applet

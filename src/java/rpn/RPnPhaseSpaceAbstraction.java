@@ -99,6 +99,8 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
 
         super.remove(geom);
 
+
+
 //        for (int i = 0; i < groupArrayList_.size(); i++) {
 //
 //            ArrayList list = groupArrayList_.get(i);
