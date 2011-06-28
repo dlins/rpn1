@@ -100,6 +100,10 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
 
     }
 
+    public static void removeGeometry(Integer geometryIndex) {
+        tableModel_.removeRow(geometryIndex);
+    }
+
     public static void addGeometry(String geometryIndex, String geometryName) {
 
         Vector<Object> data = new Vector<Object>();
@@ -203,33 +207,24 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
 
 
         if (button.getName().equals("Remove")) {
+            int count = tableModel_.getRowCount();
+            int index = 0;
+            while (index<count){
 
-            Vector<Boolean> selectedVector = new Vector<Boolean>();
-            int rowNumber = curvesTable_.getModel().getRowCount();
-            for (int i = 0; i < rowNumber; i++) {
-                Boolean selected = (Boolean) curvesTable_.getValueAt(i, 0);
-
+                boolean selected = (Boolean)tableModel_.getValueAt(index, 0);
                 if (selected){
-                    selectedVector.add(selected);
+                    tableModel_.removeRow(index);
+                    RPnDataModule.PHASESPACE.remove(index);
+
+                    index=0;
+                    count=tableModel_.getRowCount();
+                }
+                else{
+                    index++;
                 }
 
             }
-
-
-            for (int i = 0; i < selectedVector.size(); i++) {
-
-                Boolean selected = (Boolean) selectedVector.remove(i);
-
-                if (selected) {
-                    RPnDataModule.PHASESPACE.remove(i);
-                    tableModel_.removeRow(i);
-                }
-
-            }
-
         }
-//        curvesTable_.clearSelection();
-//        RPnDataModule.PHASESPACE.clearGeometrySelection();
 
     }
 }

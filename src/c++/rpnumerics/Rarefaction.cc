@@ -268,7 +268,7 @@ int Rarefaction::init(const RealVector &initial_point, int increase, double delt
     // Fill the second point of the curve and the eigenvalue thereat.
     second_point.resize(n + 1);
 
-    if (increase == 1) {
+    if (increase ==  RAREFACTION_SPEED_INCREASE ) {
         if      (mlambda < lambda && lambda < plambda){
             for (int i = 0; i < n; i++) second_point.component(i) = p.component(i);
             second_point.component(n) = plambda;
@@ -279,7 +279,7 @@ int Rarefaction::init(const RealVector &initial_point, int increase, double delt
         }
         else return RAREFACTION_INIT_FAILURE;
     }
-    else if (increase == -1){
+    else if (increase ==  RAREFACTION_SPEED_DECREASE ){
         if      (mlambda < lambda && lambda < plambda){
             for (int i = 0; i < n; i++) second_point.component(i) = m.component(i);
             second_point.component(n) = mlambda;
@@ -594,6 +594,8 @@ int Rarefaction::curve(const RealVector &initial_point,
 
     // Compute the curve.
     while (true){
+
+//        cout<<"Dentro do while"<<endl;
         // Update the previous point & lambda
         for (int i = 0; i < n; i++) previous_point.component(i) = new_point.component(i);
         previous_point.component(n) = previous_lambda = new_point.component(n);
@@ -624,6 +626,8 @@ int Rarefaction::curve(const RealVector &initial_point,
 //            if (i < n - 1) printf(", ");
 //        }
 //        printf(")\n");
+
+//        cout << "intersection_info = " << intersection_info << endl;
 
         if      (intersection_info == 1){
             // Both points inside. Carry on with the rest of the tests, etc.
@@ -662,9 +666,9 @@ int Rarefaction::curve(const RealVector &initial_point,
 
         // BEGIN Check for monotonicity //
         if (increase != RAREFACTION_SPEED_NEUTRAL){
-            if ((new_lambda > previous_lambda && increase == RAREFACTION_SPEED_DECREASE) || 
-                (new_lambda < previous_lambda && increase == RAREFACTION_SPEED_INCREASE)){
-
+            if ((new_lambda >= previous_lambda && increase == RAREFACTION_SPEED_DECREASE) ||
+                (new_lambda <= previous_lambda && increase == RAREFACTION_SPEED_INCREASE)){
+                cout<<"Valor de increase: "<<increase<<endl;
                 // Find the point where lambda reaches a minimum, store it and get out.
                 RealVector last_point;
                 int info_compute_last_point = compute_last_point(previous_point, new_point, last_point);
@@ -687,7 +691,7 @@ int Rarefaction::curve(const RealVector &initial_point,
         new_xi += deltaxi;
 
         // Update the reference vector.
-        for (int i = 0; i < n; i++) param[1 + i] = new_point.component(i) - previous_point.component(i);
+        for (int i = 0; i < n; i++) param[1 + i] = new_point.component(i) - previous_point.component(i); 
     }
 
     return SUCCESSFUL_PROCEDURE;

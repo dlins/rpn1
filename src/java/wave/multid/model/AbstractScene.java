@@ -1,15 +1,15 @@
 /*
-* Instituto de Matematica Pura e Aplicada - IMPA
-* Departamento de Dinamica dos Fluidos
-*
-*/
-
+ * Instituto de Matematica Pura e Aplicada - IMPA
+ * Departamento de Dinamica dos Fluidos
+ *
+ */
 package wave.multid.model;
 
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.io.FileReader;
 import java.util.Iterator;
+import rpn.RPnCurvesListFrame;
 import wave.multid.view.*;
 import wave.multid.*;
 import wave.multid.map.Map;
@@ -18,6 +18,7 @@ public class AbstractScene implements AbstractGeomObj {
     //
     // Members
     //
+
     protected ArrayList geomList_;
     private String name_;
     private ArrayList viewList_;
@@ -32,22 +33,32 @@ public class AbstractScene implements AbstractGeomObj {
         space_ = space;
         try {
             boundary_ = new BoundingBox(new CoordsArray(space_), new CoordsArray(space_));
-        } catch (DimMismatchEx dex) { dex.printStackTrace(); }
+        } catch (DimMismatchEx dex) {
+            dex.printStackTrace();
+        }
         geomList_ = new ArrayList();
         viewList_ = new ArrayList();
-        
+
     }
 
     //
     // Accessors/Mutators
     //
-    public String getName() { return name_.toString(); }
+    public String getName() {
+        return name_.toString();
+    }
 
-    public Iterator getGeomObjIterator() { return geomList_.iterator(); }
+    public Iterator getGeomObjIterator() {
+        return geomList_.iterator();
+    }
 
-    public BoundingBox getBoundary() { return boundary_; }
+    public BoundingBox getBoundary() {
+        return boundary_;
+    }
 
-    public Space getSpace() { return space_; }
+    public Space getSpace() {
+        return space_;
+    }
 
     //
     // Methods
@@ -59,44 +70,53 @@ public class AbstractScene implements AbstractGeomObj {
         } catch (DimMismatchEx ex) {
             ex.printStackTrace();
         }
-        for (int i = 0; i < viewList_.size(); i++)
-            ((Scene)viewList_.get(i)).addViewFor(geom);
-      
+        for (int i = 0; i < viewList_.size(); i++) {
+            ((Scene) viewList_.get(i)).addViewFor(geom);
+        }
+
     }
 
-    public void print(FileWriter cout) { }
+    public void print(FileWriter cout) {
+    }
 
-    public void load(FileReader cin) { }
+    public void load(FileReader cin) {
+    }
 
-
-     public void remove(int  geometryIndex) {
-         MultiGeometry geom = (MultiGeometry) geomList_.remove(geometryIndex);
-
+    public void remove(int geometryIndex) {
+        MultiGeometry geom = (MultiGeometry) geomList_.remove(geometryIndex);
+//        RPnCurvesListFrame.removeGeometry(geometryIndex);
         try {
             boundary_.resize(geom.getPathIterator());
-        } catch (DimMismatchEx dex) { dex.printStackTrace(); }
-        for (int i = 0; i < viewList_.size(); i++)
-            ((Scene)viewList_.get(i)).removeViewOf(geom);
+        } catch (DimMismatchEx dex) {
+            dex.printStackTrace();
+        }
+        for (int i = 0; i < viewList_.size(); i++) {
+            ((Scene) viewList_.get(i)).removeViewOf(geom);
+        }
     }
-
 
     public void remove(MultiGeometry geom) {
         geomList_.remove(geom);
-              
+
         try {
             boundary_.resize(geom.getPathIterator());
-        } catch (DimMismatchEx dex) { dex.printStackTrace(); }
-        for (int i = 0; i < viewList_.size(); i++)
-            ((Scene)viewList_.get(i)).removeViewOf(geom);
+        } catch (DimMismatchEx dex) {
+            dex.printStackTrace();
+        }
+        for (int i = 0; i < viewList_.size(); i++) {
+            ((Scene) viewList_.get(i)).removeViewOf(geom);
+        }
     }
 
     public void applyMap(Map map) {
         Iterator geomIterator = getGeomObjIterator();
         while (geomIterator.hasNext()) {
-            MultiGeometry geom = (MultiGeometry)geomIterator.next();
+            MultiGeometry geom = (MultiGeometry) geomIterator.next();
             try {
                 geom.applyMap(map);
-            } catch (DimMismatchEx dex) { dex.printStackTrace(); }
+            } catch (DimMismatchEx dex) {
+                dex.printStackTrace();
+            }
         }
         update();
     }
@@ -107,8 +127,9 @@ public class AbstractScene implements AbstractGeomObj {
     }
 
     public void update() {
-        for (int i = 0; i < viewList_.size(); i++)
-            ((Scene)viewList_.get(i)).update();
+        for (int i = 0; i < viewList_.size(); i++) {
+            ((Scene) viewList_.get(i)).update();
+        }
     }
 
     public Scene createScene(ViewingTransform transf, ViewingAttr viewAttr) throws DimMismatchEx {

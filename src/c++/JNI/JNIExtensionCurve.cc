@@ -91,6 +91,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
         pmax.component(0) = 1.0;
         pmax.component(1) = 1.0;
 
+        cout <<"Resolucao do x: "<<xResolution<<endl;
+        cout << "Resolucao do y: " << yResolution << endl;
+
         // Over the x axis.
         int curve_points = 51;
         double delta = 1.0 / (double) curve_points;
@@ -115,6 +118,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
         //    int characteristic_where = CHARACTERISTIC_ON_CURVE;
         //        int characteristic_where = CHARACTERISTIC_ON_DOMAIN;
         int singular = 0;
+
+        cout << "Familia da curva" << curveFamily << endl;
+        cout << "Familia do dominio" << domainFamily << endl;
+        cout << "characteristic " << characteristicWhere << endl;
+        cout << "edge " << edge << endl;
+
 
         ec.compute_extension_curve(characteristicWhere, singular,
                 original_curve_segments, curveFamily,

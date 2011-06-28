@@ -64,15 +64,6 @@ public:
 };
 
 
-inline bool IsoTriang2DBoundary::inside(const RealVector & U)const {
-    double x = U.component(0);
-    double y= U.component(1);
-    
-    if ((x > 0.) && (y > 0.) && (x + y <= 1.))
-        return true;
-    return false;
-    
-}
 
 inline const char * IsoTriang2DBoundary::boundaryType()const {return type_;}
 inline const RealVector  &  IsoTriang2DBoundary::getA()const {return *A_;}

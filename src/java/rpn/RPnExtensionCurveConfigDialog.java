@@ -75,7 +75,7 @@ public class RPnExtensionCurveConfigDialog extends RPnDialog {
         cDomain_[0] = "CHARACTERISTIC ON CURVE";
         cDomain_[1] = "CHARACTERISTIC ON DOMAIN";
 
-        RPnInputComponent characteristicInput = new RPnInputComponent("Characteristic Domain");
+        RPnInputComponent characteristicInput = new RPnInputComponent("Characteristic Where");
 
         characteristicInput.setMinRange(0);
         characteristicInput.setMaxRange(1);

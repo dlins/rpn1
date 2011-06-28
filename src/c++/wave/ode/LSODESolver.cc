@@ -174,8 +174,8 @@ int LSODE::solver(int (*f)(int *, double *, double *, double *), int *neq, doubl
 
 
 
-    lsode_(f, neq, y, t, tout, itol, rtol, atol, itask, istate,
-            iopt, rwork, lrw, iwork, liw, j, mf, nparam, param);
+//    lsode_(f, neq, y, t, tout, itol, rtol, atol, itask, istate,
+//            iopt, rwork, lrw, iwork, liw, j, mf, nparam, param);
 
     tout_ += profile.deltaTime();
     //t_=tout_;

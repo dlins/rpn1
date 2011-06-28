@@ -71,6 +71,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
 
     std::vector<RealVector> curve_segments;
     std::vector<RealVector> domain_segments;
+    std::vector<RealVector> rarefaction_segments;
 
 
     int number_of_grid_points[2];
@@ -102,15 +103,27 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
 
         StonePermeability stonepermeability(stonepermparams);
 
+//        double grw = 1.0;
+//        double grg = 0.5;
+//        double gro = 0.7;
+//
+//        double muw = 1.0;
+//        double mug = 1.0;
+//        double muo = 1.0;
+//
+//        double vel = 0.0;
+
+
         double grw = 1.0;
         double grg = 0.5;
-        double gro = 0.7;
+        double gro = 1.0;
 
         double muw = 1.0;
         double mug = 1.0;
         double muo = 1.0;
 
         double vel = 0.0;
+
 
         RealVector p(7);
         p.component(0) = grw;
@@ -173,7 +186,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
                 pmin, pmax, number_of_grid_points, // For the domain.
                 domainFamily,
                 &stoneflux, &stoneaccum,
-                characteristicWhere, singular,
+                characteristicWhere, singular,rarefaction_segments,
                 curve_segments,
                 domain_segments);
 
@@ -181,6 +194,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
 
         printf("curve.size()  = %d\n", curve_segments.size());
         printf("domain.size() = %d\n", domain_segments.size());
+        printf("rarefaction.size() = %d\n", rarefaction_segments.size());
+
 
 
     }

@@ -10,6 +10,7 @@ void Rarefaction_Extension::extension_curve(const FluxFunction *curve_ff, const 
         int domain_family,
         const FluxFunction *domain_ff, const AccumulationFunction *domain_aa,
         int characteristic_where, int singular,
+        std::vector<RealVector> &rarefaction_segments,
         std::vector<RealVector> &curve_segments,
         std::vector<RealVector> &domain_segments) {
     curve_segments.clear();
@@ -34,7 +35,7 @@ void Rarefaction_Extension::extension_curve(const FluxFunction *curve_ff, const 
             increase,
             deltaxi,
             curve_ff, curve_aa,
-            RAREFACTION_SIMPLE_ACCUMULATION,
+            RAREFACTION_GENERAL_ACCUMULATION,
             (Boundary*) boundary,
             rarefaction_curve);
 
@@ -43,8 +44,11 @@ void Rarefaction_Extension::extension_curve(const FluxFunction *curve_ff, const 
 
     int n = initial_point.size();
 
+    cout <<"valor de n: "<<n<<endl;
+
     // Turn the curve of points into a curve of segments.
-    vector <RealVector> rarefaction_segments;
+    //vector <RealVector> rarefaction_segments;
+    rarefaction_segments.clear();
     rarefaction_segments.resize(2 * rarefaction_curve.size() - 2);
     for (int i = 0; i < rarefaction_curve.size() - 1; i++) {
         for (int j = 0; j < n; j++) {
@@ -64,6 +68,17 @@ void Rarefaction_Extension::extension_curve(const FluxFunction *curve_ff, const 
             domain_family,
             curve_segments,
             domain_segments);
+
+
+    cout<<"Tamanho de rarefaction segments: "<<rarefaction_segments.size()<<endl;
+    cout << "Tamanho de curve segments: " << curve_segments.size()<<endl;
+
+
+
+
+
+
+
 
     return;
 }

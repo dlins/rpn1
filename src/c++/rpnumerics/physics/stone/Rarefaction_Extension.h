@@ -19,6 +19,7 @@ class Rarefaction_Extension {
                                     int domain_family,
                                     const FluxFunction *domain_ff, const AccumulationFunction *domain_aa,
                                     int characteristic_where, int singular,
+                                    std::vector<RealVector> &rarefaction_segments,
                                     std::vector<RealVector> &curve_segments,
                                     std::vector<RealVector> &domain_segments);
 };

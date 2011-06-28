@@ -177,13 +177,10 @@ public class RPNUMERICS {
 //        setParamValue("shock", "family", String.valueOf(family));
 //
 //    }
-
-
     public static void setFamily(int family) {
         setParamValue("shock", "family", String.valueOf(family));
 
     }
-
 
     public static void setConfiguration(String methodName, Configuration methodConfiguration) {
         if (methodName.equalsIgnoreCase("Contour")) {
@@ -396,7 +393,7 @@ public class RPNUMERICS {
         System.out.println("Resolucao em Java:" + xResolution + " " + yResolution);
 
 
-        return new ExtensionCurveCalc(xResolution, yResolution, new Integer(getParamValue("boundaryextensioncurve", "curvefamily")), new Integer(getParamValue("boundaryextensioncurve", "domainfamily")), edge,characteristicDomain);
+        return new ExtensionCurveCalc(xResolution, yResolution, new Integer(getParamValue("boundaryextensioncurve", "curvefamily")), new Integer(getParamValue("boundaryextensioncurve", "domainfamily")), edge, characteristicDomain);
 
     }
 
@@ -436,18 +433,21 @@ public class RPNUMERICS {
     }
 
     public static CompositeCalc createCompositeCalc(OrbitPoint orbitPoint) {
-        System.out.println("aqui no create "+ getContourConfiguration().getParam("x-resolution")+" "+getContourConfiguration().getParam("y-resolution"));
+        System.out.println("aqui no create " + getContourConfiguration().getParam("x-resolution") + " " + getContourConfiguration().getParam("y-resolution"));
 
 
 
         int xResolution = new Integer(getContourConfiguration().getParam("x-resolution"));
         int yResolution = new Integer(getContourConfiguration().getParam("y-resolution"));
 
-        int domainFamily = new Integer(getParamValue("boundaryextensioncurve","curvefamily"));
-        int curveFamily = new Integer(getParamValue("boundaryextensioncurve", "domainfamily"));
+
+        int curveFamily = new Integer(getParamValue("boundaryextensioncurve", "curvefamily"));
+        int domainFamily = new Integer(getParamValue("boundaryextensioncurve", "domainfamily"));
+
 
         int characteristicDomain = new Integer(getParamValue("boundaryextensioncurve", "characteristicdomain"));
 
+      
         return new CompositeCalc(xResolution, yResolution, orbitPoint, direction_, curveFamily, domainFamily, characteristicDomain);
     }
 
@@ -477,6 +477,17 @@ public class RPNUMERICS {
 
     public static void setDirection(Integer integer) {
         direction_ = integer;
+
+        //TODO Remove
+
+        if (integer == 1) {
+            direction_ = 20;
+        }
+        if (integer == -1) {
+            direction_ = 22;
+        }
+
+
     }
 
 //    private static Configuration processPhysicsProfile(ConfigurationProfile physicsProfile) {
