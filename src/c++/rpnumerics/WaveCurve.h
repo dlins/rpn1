@@ -16,6 +16,8 @@
 #include <vector>
 #include "RPnCurve.h"
 
+using namespace std;
+
 /*
  * ---------------------------------------------------------------
  * Definitions:
@@ -25,7 +27,7 @@
 class WaveCurve : public RPnCurve {
 private:
     vector <RPnCurve> curvesVector_;
-    vector <double> speedArray_;
+   vector <double> speedArray_;
     int familyIndex_;
     RealVector & referenceVector_;
 

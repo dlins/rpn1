@@ -52,7 +52,7 @@ inline void WaveState::setCoords(const RealVector &coords){
     
     for (int i=0;i < coords_->size();i++){
         
-        coords_->operator()(i)=coords(i);
+        coords_->component(i)=coords.component(i);
     }
     
 }

@@ -15,7 +15,9 @@
  */
 
 #include "RealVector.h"
-#include "eigen.h" 
+#include "eigen.h"
+
+//#include "Vector.h"
 
 /*
  * ---------------------------------------------------------------
@@ -30,7 +32,7 @@ extern"C" {
 class RealMatrix2 {
 private:
 
-    Vector * data_;
+    RealVector * data_;
     int row_, col_;
 
       class RangeViolation : public exception {
@@ -95,7 +97,7 @@ inline void RealMatrix2::resize(int row, int col) {
 
 inline void RealMatrix2::range_check(int i, int j) const {
     if (((i < 0) && (i >= row_)) || ((j < 0) && (j >= col_)))
-        THROW(RealMatrix2::RangeViolation());
+        throw(RealMatrix2::RangeViolation());
 }
 
 inline double RealMatrix2::operator()(int i, int j) const {
@@ -107,7 +109,7 @@ inline double RealMatrix2::operator()(int i, int j) const {
 inline RealMatrix2 & RealMatrix2::operator=(const RealMatrix2 & source) {
     
     if ((source.row_!=row_) || (source.col_!=col_))
-         THROW(RealMatrix2::RangeViolation());
+         throw(RealMatrix2::RangeViolation());
     
     for (int i=0;i < row_;i++){
         for (int j=0;j< col_;j++){
@@ -181,7 +183,9 @@ inline RealMatrix2 & RealMatrix2::operator+(const RealMatrix2 & b) {
 }
 
 inline RealMatrix2 & RealMatrix2::zero(void) {
-    data_->zero();
+    for (int i = 0; i < data_->size(); i++) {
+        data_->component(i)=0;
+    }
     return *this;
 }
 

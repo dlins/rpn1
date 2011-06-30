@@ -116,7 +116,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
     RealVector referenceVector(dimension);
 
     for (int i = 0; i < referenceVector.size(); i++) {//Initializing reference vector
-        referenceVector(i) = 0;
+        referenceVector.component(i) = 0;
     }
 
     //    ContinuationRarefactionFlow flow(referenceVector, familyIndex, timeDirection, RpNumerics::getPhysics().fluxFunction());

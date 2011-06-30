@@ -89,7 +89,7 @@ inline const RealVector & RarefactionFlow::getReferenceVector() const {
 
 inline void RarefactionFlow::setReferenceVector(const RealVector & referenceVector) {
     for (int i = 0; i < referenceVector.size(); i++) {
-        referenceVector_->operator()(i) = referenceVector(i);
+        referenceVector_->component(i) = referenceVector.component(i);
     }
 }
 

@@ -242,8 +242,8 @@ void ShockContinuationMethod::curve(const RealVector & input, int direction, vec
     double in[n];
     double Um[n];
     for (i = 0; i < n; i++) {
-        Um[i] = startPoint(i);
-        in[i] = localInputVector(i);
+        Um[i] = startPoint.component(i);
+        in[i] = localInputVector.component(i);
     }
 
 
@@ -263,7 +263,7 @@ void ShockContinuationMethod::curve(const RealVector & input, int direction, vec
     RealVector outputShockPoint(n);
     for (i = 0; i < n; i++) {
         //        res[i] = Pn[i];
-        outputShockPoint(i) = Pn[i];
+        outputShockPoint.component(i) = Pn[i];
     }
     //
     //    // nowspeed = s(Pn), the speed at Pn.
@@ -292,7 +292,7 @@ void ShockContinuationMethod::curve(const RealVector & input, int direction, vec
     //
     RealVector newReferenceVector(n);
     //
-    for (i = 0; i < n; i++) newReferenceVector(i) = dHdu[i];
+    for (i = 0; i < n; i++) newReferenceVector.component(i) = dHdu[i];
     //
     flow.setReferenceVector(newReferenceVector);
     //---------------------------------------FIM DO CALCULO DO NOVO VETOR DE REFERENCIA-------------------------------
@@ -313,7 +313,7 @@ void ShockContinuationMethod::curve(const RealVector & input, int direction, vec
         oldspeed = sn;
         for (i = 0; i < n; i++) {
             oldrefvec[i] = flow.getReferenceVector()(i); //param[1 + n + i];
-            inputVector(i) = Pn[i];
+            inputVector.component(i) = Pn[i];
         }
         //        cout << "Input Vector: " << inputVector << endl;
         info = solver_->solve(inputVector, outputVector, testeDouble);
@@ -354,8 +354,8 @@ void ShockContinuationMethod::curve(const RealVector & input, int direction, vec
             RealVector outputPoint(n);
 
             for (i = 0; i < n; i++) {
-                newReferenceVector(i) = dHdu[i]; //param[n + i + 1];
-                outputPoint(i) = Pn[i];
+                newReferenceVector.component(i) = dHdu[i]; //param[n + i + 1];
+                outputPoint.component(i) = Pn[i];
                 // outputPoint(i) = dHdu[i];
             }
             flow.setReferenceVector(newReferenceVector);
