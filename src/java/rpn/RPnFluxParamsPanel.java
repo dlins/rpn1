@@ -61,6 +61,7 @@ public class RPnFluxParamsPanel extends JPanel implements PropertyChangeListener
                 for (Entry<String, String> paramEntry : paramSet) {
 
                     RPnInputComponent inputComponent = new RPnInputComponent(new Double(paramEntry.getValue()));
+                    inputComponent.removeSlider();
                     inputComponent.setNumericFormat(RPnInputComponent.DOUBLE_FORMAT);
                     inputComponent.setLabel(paramEntry.getKey());
                     inputComponent.addPropertyChangeListener(this);
@@ -79,6 +80,7 @@ public class RPnFluxParamsPanel extends JPanel implements PropertyChangeListener
             for (int i = 0; i < physicsConfiguration.getParamsSize(); i++) {
 
                 RPnInputComponent inputComponent = new RPnInputComponent(new Double(physicsConfiguration.getParam(i)));
+                inputComponent.removeSlider();
                 inputComponent.setNumericFormat(RPnInputComponent.DOUBLE_FORMAT);
                 inputComponent.setLabel(physicsConfiguration.getParamName(i));
                 inputComponent.addPropertyChangeListener(this);

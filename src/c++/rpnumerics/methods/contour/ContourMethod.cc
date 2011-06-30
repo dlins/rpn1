@@ -578,14 +578,6 @@ void ContourMethod::classifiedCurve(const RealVector & input, vector<HugoniotPol
 
 
 
-
-
-
-
-
-
-
-
     //    rect[3] = 1.0; // ymax
 
     //

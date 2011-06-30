@@ -49,7 +49,7 @@ public class RPnInputComponent extends AbstractAction {
         panel_ = new JPanel(new GridLayout(1, 3));
         value_ = value;
         textField_ = new JFormattedTextField(formatter_);
-        slider_ = new JSlider(-100, 100);
+        slider_ = new JSlider(-1, 1);
 
         textField_.getDocument().addDocumentListener(new TextValueHandler());
         slider_.addChangeListener(new SliderHandler());
@@ -235,15 +235,17 @@ public class RPnInputComponent extends AbstractAction {
 
             slider_.setEnabled(false);
             textField_.setEditable(false);
-
             return;
-
 
         }
 
         slider_.setEnabled(true);
         textField_.setEnabled(true);
 
+    }
+
+    public void removeSlider(){
+        panel_.remove(slider_);
     }
 
     public void actionPerformed(ActionEvent arg0) {
