@@ -17,15 +17,19 @@ ReducedTPCWHugoniotFunctionClass::ReducedTPCWHugoniotFunctionClass(const RealVec
     ReducedAccum2Comp2PhasesAdimensionalized_Params ReducedTPCWAccumAdimensionalized_Params(td, &phi);
     ReducedTPCWAccumAdimensionalized = new ReducedAccum2Comp2PhasesAdimensionalized(ReducedTPCWAccumAdimensionalized_Params);
 
-    double sin_beta = 0.0; // No gravity, purely horizontal
-    bool has_gravity = false;
-    bool has_horizontal = true;
+//    double sin_beta = 0.0; // No gravity, purely horizontal
+//    bool has_gravity = false;
+//    bool has_horizontal = true;
     //    const_gravity is not used.
 
-    Flux2Comp2PhasesAdimensionalized_Params TPCWFluxAdimensionalized_Params(abs_perm, sin_beta, const_gravity,
-            has_gravity, has_horizontal,
-            *td, fh, (FracFlow2PhasesVerticalAdimensionalized*) 0);
-    TPCWFluxAdimensionalized = new Flux2Comp2PhasesAdimensionalized(TPCWFluxAdimensionalized_Params);
+//    Flux2Comp2PhasesAdimensionalized_Params TPCWFluxAdimensionalized_Params(abs_perm, sin_beta, const_gravity,
+//            has_gravity, has_horizontal,
+//            *td, fh, (FracFlow2PhasesVerticalAdimensionalized*) 0);
+//    TPCWFluxAdimensionalized = new Flux2Comp2PhasesAdimensionalized(TPCWFluxAdimensionalized_Params);
+
+
+
+
     Accum2Comp2PhasesAdimensionalized_Params TPCWAccumAdimensionalized_Params(*td, &phi);
     TPCWAccumAdimensionalized = new Accum2Comp2PhasesAdimensionalized(TPCWAccumAdimensionalized_Params);
 
@@ -65,7 +69,10 @@ ReducedTPCWHugoniotFunctionClass::ReducedTPCWHugoniotFunctionClass(const RealVec
     WaveState Ur(Uref);
     JetMatrix ArefJetMatrix(n);
     JetMatrix BrefJetMatrix(n);
-    TPCWFluxAdimensionalized->jet(Ur, ArefJetMatrix, 1);
+
+//    TPCWFluxAdimensionalized->jet(Ur, ArefJetMatrix, 1);
+
+    getFluxFunction().jet(Ur, ArefJetMatrix, 1);
     TPCWAccumAdimensionalized->jet(Ur, BrefJetMatrix, 1);
 
     // Find the generalized eigenpairs of the system at Uref
@@ -123,7 +130,9 @@ void ReducedTPCWHugoniotFunctionClass::setReferenceVector(const RealVector & ref
     WaveState Ur(Uref);
     JetMatrix ArefJetMatrix(n);
     JetMatrix BrefJetMatrix(n);
-    TPCWFluxAdimensionalized->jet(Ur, ArefJetMatrix, 1);
+//    TPCWFluxAdimensionalized->jet(Ur, ArefJetMatrix, 1);
+
+    getFluxFunction().jet(Ur, ArefJetMatrix, 1);
     cout << "Valor de Uref: " << Uref << endl;
 
       for (int i = 0; i < n; i++) {
@@ -170,7 +179,7 @@ ReducedTPCWHugoniotFunctionClass::ReducedTPCWHugoniotFunctionClass(const Reduced
 ReducedTPCWFluxAdimensionalized(copy.ReducedTPCWFluxAdimensionalized),
 ReducedTPCWAccumAdimensionalized(copy.ReducedTPCWAccumAdimensionalized),
 TPCWAccumAdimensionalized(copy.TPCWAccumAdimensionalized),
-TPCWFluxAdimensionalized(copy.TPCWFluxAdimensionalized),
+//TPCWFluxAdimensionalized(copy.TPCWFluxAdimensionalized),
 Uref(copy.Uref),
 n(copy.n),
 Uref_is_elliptic(copy.Uref_is_elliptic),
@@ -196,7 +205,7 @@ ReducedTPCWHugoniotFunctionClass::~ReducedTPCWHugoniotFunctionClass() {
     delete [] aref_F;
 
     delete TPCWAccumAdimensionalized;
-    delete TPCWFluxAdimensionalized;
+//    delete TPCWFluxAdimensionalized;
     delete ReducedTPCWAccumAdimensionalized;
     delete ReducedTPCWFluxAdimensionalized;
 }
@@ -289,9 +298,9 @@ void ReducedTPCWHugoniotFunctionClass::CompleteHugoniot(double &darcy_speedplus,
     double X13plus = F3plus * G1quad - F1plus*G3quad;
     double X23plus = F2plus * G3quad - F3plus*G2quad;
 
-    double Y12 = F1minus * F2plus - F1plus*F2minus;
-    double Y13 = F1plus * F3minus - F1minus*F3plus;
-    double Y23 = F2minus * F3plus - F2plus*F3minus;
+//    double Y12 = F1minus * F2plus - F1plus*F2minus;
+//    double Y13 = F1plus * F3minus - F1minus*F3plus;
+//    double Y23 = F2minus * F3plus - F2plus*F3minus;
 
     double den = X12plus * X12plus + X13plus * X13plus + X23plus*X23plus;
 

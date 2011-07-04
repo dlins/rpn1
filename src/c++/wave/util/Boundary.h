@@ -15,6 +15,7 @@
  */
 #include "RealVector.h"
 #include "mathutil.h"
+#include <iostream>
 
 //!
 /*!
