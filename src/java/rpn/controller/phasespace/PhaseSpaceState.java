@@ -11,7 +11,7 @@ import rpn.RPnPhaseSpaceAbstraction;
 import wave.util.RealVector;
 
 /** This interface is the main class of rpn.controller.phasespace package. This package contains classes that controls the state of the application. These classes enables and disables the menu options to keep the application syncronized with the user inputs.
-*<p> This three methods declared by this interface manipulates the geometric models of the curves shown by the application. </p>
+*<p> These three methods declared by this interface manipulates the geometric models of the curves shown by the application. </p>
 */
 
 public interface PhaseSpaceState {

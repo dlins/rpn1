@@ -167,10 +167,10 @@ int ContourMethod::curv2d(/*double *segend,*/ int sn, int seglim, double fdummy,
     double foncub[hm][ncvert_];
 
     // Work area
-    double g[hm][hm + 1];
-    double gx[hm];
-    double x[hm];
-    int wrki[hm];
+//    double g[hm][hm + 1];
+//    double gx[hm];
+//    double x[hm];
+//    int wrki[hm];
 
     // set the rectangle sizes and resolutions
     double u0 = rect[0];
@@ -415,11 +415,6 @@ void ContourMethod::unclassifiedCurve(const RealVector & input, vector<HugoniotP
 
 
 
-
-
-
-
-
     int res[2];
 
     res[0] = 151;
@@ -427,7 +422,8 @@ void ContourMethod::unclassifiedCurve(const RealVector & input, vector<HugoniotP
 
     std::vector<RealVector> vrs;
 
-    int info = curv2d(0, 9025, 0.0, &rect[0], &res[0], 1, vrs);
+//    int info =
+    curv2d(0, 9025, 0.0, &rect[0], &res[0], 1, vrs);
 
     //    cout << "Unclissified curve: " << vrs.size() << endl;
 

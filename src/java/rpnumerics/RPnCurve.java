@@ -23,7 +23,6 @@ import rpn.component.MultidAdapter;
 
 import wave.util.*;
 import java.util.ArrayList;
-import java.util.List;
 
 public class RPnCurve extends MultiPolyLine {
 

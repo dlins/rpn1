@@ -1,7 +1,6 @@
 package rpn.component;
 
 import java.awt.Color;
-import javax.vecmath.Color3b;
 import rpnumerics.HugoniotSegment;
 
 import wave.util.*;
@@ -14,8 +13,6 @@ public class BifurcationSegGeom extends MultiPolyLine {
 
 	public BifurcationSegGeom(RealSegment segment) {
 		super(new CoordsArray[] { new CoordsArray(segment.p1()), new CoordsArray(segment.p2())}, new ViewingAttr(Color.white));
-
-
 	}
 
         public BifurcationSegGeom (HugoniotSegment hsegment){
