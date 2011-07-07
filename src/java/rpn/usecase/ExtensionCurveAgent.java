@@ -56,7 +56,6 @@ public class ExtensionCurveAgent extends RpModelPlotAgent {
     public void execute() {
         ExtensionCurveGeomFactory factory = new ExtensionCurveGeomFactory(RPNUMERICS.createExtensionCurveCalc());
 
-
         RPnPhaseSpaceAbstraction auxPhaseSpace = RPnDataModule.AUXPHASESPACE;
 
         RpGeometry geometry = factory.geom();

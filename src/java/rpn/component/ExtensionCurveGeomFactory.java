@@ -21,14 +21,13 @@ public class ExtensionCurveGeomFactory extends BifurcationCurveGeomFactory {
 
         ExtensionCurve curve = (ExtensionCurve) geomSource();
 
-        BifurcationSegGeom[] leftBifurcationSegArray = null;
-
         int resultSize = curve.segments().size();
+//        System.out.println("Tamanho da extensao da fronteira: "+resultSize);
 
-        leftBifurcationSegArray = new BifurcationSegGeom[resultSize];
+        BifurcationSegGeom[] leftBifurcationSegArray = new BifurcationSegGeom[resultSize];
         for (int i = 0; i < resultSize; i++) {
             leftBifurcationSegArray[i] = new BifurcationSegGeom((HugoniotSegment) curve.segments().get(i));
-
+            System.out.println((HugoniotSegment) curve.segments().get(i));
         }
 
         return new ExtensionCurveGeom(leftBifurcationSegArray, this);

@@ -389,7 +389,6 @@ public class RPNUMERICS {
         int edge = new Integer(getParamValue("boundaryextensioncurve", "edge"));
 
 
-
         System.out.println("Resolucao em Java:" + xResolution + " " + yResolution);
 
 
