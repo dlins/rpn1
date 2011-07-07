@@ -35,7 +35,7 @@ public class ExtensionCurveGeomFactory extends BifurcationCurveGeomFactory {
 
     }
 
-/
+
     public String toMatlab(int curveIndex) {
 //        RealVector xMin = RPNUMERICS.boundary().getMinimums();
 //        RealVector xMax = RPNUMERICS.boundary().getMaximums();
