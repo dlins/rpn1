@@ -258,13 +258,27 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             newMin.setElement(1, originalMin.getElement(1));
             newMin.setElement(2, originalMin.getElement(0));
             newMin.setElement(3, originalMin.getElement(1));
+            newMin.setElement(4, originalMin.getElement(0));
+            newMin.setElement(5, originalMin.getElement(1));
+
+
+
+
 
             newMax.setElement(0, originalMax.getElement(0));
             newMax.setElement(1, originalMax.getElement(1));
             newMax.setElement(2, originalMax.getElement(0));
             newMax.setElement(3, originalMax.getElement(1));
+            newMax.setElement(4, originalMax.getElement(1));
+            newMax.setElement(5, originalMax.getElement(1));
+
+
+
+
 
             auxBoundary = new RectBoundary(newMin, newMax);
+
+
 
         } else {
 
@@ -276,32 +290,36 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             auxBoundary = new IsoTriang2DBoundary(A, B, C);
         }
 //
-//        int auxNumOfPanels = RPnVisualizationModule.AUXDESCRIPTORS.size();
-//        System.out.println("Quantidade de projecoes auxiliares: " + RPnVisualizationModule.AUXDESCRIPTORS.size());
-//        wave.multid.graphs.ClippedShape auxClipping = new wave.multid.graphs.ClippedShape(auxBoundary);
-//        for (int i = 0; i < auxNumOfPanels; i++) {
-//            wave.multid.view.ViewingTransform auxViewingTransf =
-//                    ((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(
-//                    i)).createTransform(auxClipping);
-//            try {
-//                wave.multid.view.Scene auxScene = RPnDataModule.AUXPHASESPACE.createScene(auxViewingTransf,
-//                        new wave.multid.view.ViewingAttr(Color.black));
-//                System.out.println("Dimensao do auxiliar: " + RPnDataModule.AUXPHASESPACE.getSpace().getDim());
-//                auxFrames_[i] = new RPnPhaseSpaceFrame(auxScene, commandMenu_);
-//                auxFrames_[i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i)).label());
-//
-//                UIController.instance().install(auxFrames_[i].phaseSpacePanel());
-//
-//                setFramesPosition(auxFrames_[i]);
-//                auxFrames_[i].pack();
-//                auxFrames_[i].setVisible(true);
-//
-//
-//            } catch (wave.multid.DimMismatchEx dex) {
-//                dex.printStackTrace();
-//            }
-//
-//        }
+        int auxNumOfPanels = RPnVisualizationModule.AUXDESCRIPTORS.size();
+        System.out.println("Quantidade de projecoes auxiliares: " + RPnVisualizationModule.AUXDESCRIPTORS.size());
+        wave.multid.graphs.ClippedShape auxClipping = new wave.multid.graphs.ClippedShape(auxBoundary);
+        for (int i = 0; i < auxNumOfPanels; i++) {
+            wave.multid.view.ViewingTransform auxViewingTransf =
+                    ((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(
+                    i)).createTransform(auxClipping);
+
+            System.out.println("Dimensao da transf auxiliar :"+ auxViewingTransf.viewingMap().getDomain().getDim());
+
+            
+            try {
+                wave.multid.view.Scene auxScene = RPnDataModule.AUXPHASESPACE.createScene(auxViewingTransf,
+                        new wave.multid.view.ViewingAttr(Color.black));
+                System.out.println("Dimensao do auxiliar: " + RPnDataModule.AUXPHASESPACE.getSpace().getDim());
+                auxFrames_[i] = new RPnPhaseSpaceFrame(auxScene, commandMenu_);
+                auxFrames_[i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i)).label());
+
+                UIController.instance().install(auxFrames_[i].phaseSpacePanel());
+
+                setFramesPosition(auxFrames_[i]);
+                auxFrames_[i].pack();
+                auxFrames_[i].setVisible(true);
+
+
+            } catch (wave.multid.DimMismatchEx dex) {
+                dex.printStackTrace();
+            }
+
+        }
 
 
         // Init Main Frame

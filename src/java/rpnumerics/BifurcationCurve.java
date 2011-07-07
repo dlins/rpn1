@@ -128,27 +128,49 @@ public class BifurcationCurve extends SegmentedCurve {
     }
 
     private static List createSingleSegmentList(List<HugoniotSegment> leftSeg, List<HugoniotSegment> rightSeg) {
-        int i = 0;
+//        int i = 0;
 
 
-        for (HugoniotSegment hugoniotSegment : leftSeg) {
-            hugoniotSegment.setIntType(16);
-//            System.out.println("Segmento : " + i + " " + hugoniotSegment);
+//
+//        for (HugoniotSegment hugoniotSegment : leftSeg) {
+//            hugoniotSegment.setIntType(16);
+////            System.out.println("Segmento : " + i + " " + hugoniotSegment);
+//
+////            i++;
+//
+//
+//        }
+//        for (HugoniotSegment hugoniotSegment : rightSeg) {
+//            hugoniotSegment.setIntType(15);
+//        }
+//
+//        if (leftSeg.addAll(rightSeg)) {
+//
+//            return leftSeg;
+//        } else {
+//            return null;
+//        }
 
-            i++;
+        List<HugoniotSegment> mergedList = new ArrayList<HugoniotSegment>();
 
+        for (int i = 0; i < rightSeg.size(); i++) {
+            HugoniotSegment hSegmentRight = rightSeg.get(i);
+            HugoniotSegment hSegmentLeft = leftSeg.get(i);
 
+            RealVector leftPoint = new RealVector(hSegmentLeft.p1().toString()+hSegmentRight.p1().toString());
+
+            System.out.println(hSegmentLeft.p1().toString() + hSegmentRight.p1().toString());
+            RealVector rightPoint = new RealVector(hSegmentLeft.p2().toString() + hSegmentRight.p2().toString());
+            System.out.println(hSegmentLeft.p2().toString() + hSegmentRight.p2().toString());
+
+            HugoniotSegment mergedSegment = new HugoniotSegment(leftPoint, 0.0, rightPoint, 0.0, 16); // TODO TESTE !!!
+
+            mergedList.add(mergedSegment);
         }
-        for (HugoniotSegment hugoniotSegment : rightSeg) {
-            hugoniotSegment.setIntType(15);
-        }
 
-        if (leftSeg.addAll(rightSeg)) {
 
-            return leftSeg;
-        } else {
-            return null;
-        }
+        return mergedList;
+
 
     }
 

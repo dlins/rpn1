@@ -151,7 +151,7 @@ public class RPnVisualizationModule {
 
         Set<Entry<String, ConfigurationProfile>> configurationSet = visualizationProfile.getProfiles().entrySet();
 
-        Space space = new Space("Domain", dimension);
+        Space space = new Space("Domain",dimension);
 
         for (Entry<String, ConfigurationProfile> profileEntry : configurationSet) {
 
@@ -178,7 +178,7 @@ public class RPnVisualizationModule {
             DESCRIPTORS.add(new RPnProjDescriptor(space, label, w, h, axisArray, iso));
 
         }
-        Space auxSpace = new Space("AuxDomain", dimension);
+        Space auxSpace = new Space("AuxDomain", 2 * dimension);
 
         for (RPnProjDescriptor descriptor : DESCRIPTORS) {
             createAuxDescriptor(descriptor, auxSpace, descriptor.isIso2equi());

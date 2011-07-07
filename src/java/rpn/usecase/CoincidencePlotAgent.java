@@ -8,10 +8,12 @@ package rpn.usecase;
 
 import java.awt.event.ActionEvent;
 import javax.swing.JToggleButton;
+import rpn.RPnPhaseSpaceAbstraction;
 import rpn.component.*;
 import rpn.controller.ui.BIFURCATION_CONFIG;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UI_ACTION_SELECTED;
+import rpn.parser.RPnDataModule;
 import rpnumerics.*;
 import wave.util.RealVector;
 
@@ -49,6 +51,8 @@ public class CoincidencePlotAgent extends RpModelPlotAgent {
         return factory.geom();
 
     }
+
+    
 
     static public CoincidencePlotAgent instance() {
         if (instance_ == null) {

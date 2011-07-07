@@ -6,19 +6,11 @@
 
 package wave.multid.graphs;
 
-import java.awt.geom.Line2D;
-import java.awt.geom.GeneralPath;
 import wave.util.RectBoundary;
-import wave.util.IsoTriang2DBoundary;
 import wave.util.RealVector2;
 import wave.util.RealVector;
 import wave.util.Boundary;
-import wave.multid.view.ViewingTransform;
 import wave.multid.map.ProjectionMap;
-import wave.multid.Coords2D;
-import wave.multid.CoordsArray;
-import java.awt.Dimension;
-import java.awt.Polygon;
 import java.awt.geom.Point2D;
 
 // TODO make this an interface and

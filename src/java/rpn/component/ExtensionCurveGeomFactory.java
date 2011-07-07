@@ -35,37 +35,7 @@ public class ExtensionCurveGeomFactory extends BifurcationCurveGeomFactory {
 
     }
 
-//    public List<RpGeometry> createGeometriesFromSource() {
-//
-//        DoubleContactCurve curve = (DoubleContactCurve) geomSource();
-//        List<RpGeometry> result = new ArrayList<RpGeometry>();
-//        // assuming a container with HugoniotSegment elements
-//        int leftResultSize = curve.leftSegments().size();
-//
-//        int rightResultSize = curve.rightSegments().size();
-//
-//        HugoniotSegGeom[] leftHugoniotArray = new HugoniotSegGeom[leftResultSize];
-//        for (int i = 0; i < leftResultSize; i++) {
-//            leftHugoniotArray[i] = new HugoniotSegGeom((HugoniotSegment) curve.leftSegments().get(i));
-//        }
-//
-//        DoubleContactCurveGeom leftGeom = new DoubleContactCurveGeom(leftHugoniotArray, this);
-//
-//        result.add(leftGeom);
-//
-//        HugoniotSegGeom[] rightHugoniotArray = new HugoniotSegGeom[leftResultSize];
-//        for (int i = 0; i < rightResultSize; i++) {
-//            rightHugoniotArray[i] = new HugoniotSegGeom((HugoniotSegment) curve.rightSegments().get(i));
-//        }
-//
-//        DoubleContactCurveGeom rightGeom = new DoubleContactCurveGeom(rightHugoniotArray, this);
-//
-//        result.add(rightGeom);
-//
-//        return result;
-//
-//
-//    }
+/
     public String toMatlab(int curveIndex) {
 //        RealVector xMin = RPNUMERICS.boundary().getMinimums();
 //        RealVector xMax = RPNUMERICS.boundary().getMaximums();
