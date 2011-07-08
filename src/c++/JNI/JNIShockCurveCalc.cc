@@ -102,6 +102,19 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
     cout << "Valor de family"<<familyIndex << endl;
 
     vector<HugoniotPolyLine> hugoniotPolyLineVector;
+
+    cout << "Valor de timeDirection" << timeDirection << endl;
+
+
+    if (timeDirection==20) //TODO REMOVE !!!!
+
+        timeDirection = 1;
+
+    else
+
+        timeDirection = -1;
+
+
     ShockContinuationMethod3D2D method(dimension, familyIndex, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), RpNumerics::getPhysics().boundary(), input, tol,newtonTolerance, t);
 
     method.curve(realVectorInput, timeDirection, hugoniotPolyLineVector);
