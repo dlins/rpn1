@@ -256,21 +256,22 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
             newMin.setElement(0, originalMin.getElement(0));
             newMin.setElement(1, originalMin.getElement(1));
-            newMin.setElement(2, originalMin.getElement(0));
-            newMin.setElement(3, originalMin.getElement(1));
-            newMin.setElement(4, originalMin.getElement(0));
-            newMin.setElement(5, originalMin.getElement(1));
+            newMin.setElement(2, originalMin.getElement(2));
 
 
-
+            newMin.setElement(3, originalMin.getElement(0));
+            newMin.setElement(4, originalMin.getElement(1));
+            newMin.setElement(5, originalMin.getElement(2));
 
 
             newMax.setElement(0, originalMax.getElement(0));
             newMax.setElement(1, originalMax.getElement(1));
-            newMax.setElement(2, originalMax.getElement(0));
-            newMax.setElement(3, originalMax.getElement(1));
+            newMax.setElement(2, originalMax.getElement(2));
+            
+            
+            newMax.setElement(3, originalMax.getElement(0));
             newMax.setElement(4, originalMax.getElement(1));
-            newMax.setElement(5, originalMax.getElement(1));
+            newMax.setElement(5, originalMax.getElement(2));
 
 
 

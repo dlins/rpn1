@@ -157,11 +157,10 @@ public class BifurcationCurve extends SegmentedCurve {
             HugoniotSegment hSegmentLeft = leftSeg.get(i);
 
             RealVector leftPoint = new RealVector(hSegmentLeft.p1().toString()+hSegmentRight.p1().toString());
-
-//            System.out.println(hSegmentLeft.p1().toString() + hSegmentRight.p1().toString());
+            System.out.println(leftPoint);
             RealVector rightPoint = new RealVector(hSegmentLeft.p2().toString() + hSegmentRight.p2().toString());
 //            System.out.println(hSegmentLeft.p2().toString() + hSegmentRight.p2().toString());
-
+            System.out.println(rightPoint);
             HugoniotSegment mergedSegment = new HugoniotSegment(leftPoint, 0.0, rightPoint, 0.0, 16); // TODO TESTE !!!
 
             mergedList.add(mergedSegment);
