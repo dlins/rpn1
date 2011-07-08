@@ -1,6 +1,7 @@
 #include <math.h>
 
 #include "Thermodynamics_SuperCO2_WaterAdimensionalized.h"
+using namespace std;
 
 // Generate a spline
 
@@ -92,6 +93,7 @@ U_typical_(copy.U_typical_),
 h_typical_(copy.h_typical_),
 rpnHomePath_(copy.rpnHomePath_) {
 
+    cout<<"construtor de copia da termodinamica"<<endl;
     // Generate the splines
 
     info_rhosigmac = create_spline("rhosigmac_spline.txt", "rhosigmac", P, rhosigmac_);

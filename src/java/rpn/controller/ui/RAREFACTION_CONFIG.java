@@ -5,12 +5,14 @@
  */
 package rpn.controller.ui;
 
+import java.util.ArrayList;
 import rpn.usecase.AreaSelectionAgent;
 import rpn.usecase.ChangeFluxParamsAgent;
 import rpn.usecase.ChangeDirectionAgent;
 import rpn.usecase.CompositePlotAgent;
 import rpn.usecase.HugoniotPlotAgent;
 import rpn.usecase.RarefactionOrbitPlotAgent;
+import rpn.usecase.RpModelActionAgent;
 import rpn.usecase.ShockCurvePlotAgent;
 import wave.util.RealVector;
 
@@ -30,6 +32,22 @@ public class RAREFACTION_CONFIG extends UI_ACTION_SELECTED {
 
 
     }
+
+     @Override
+    public ArrayList<RpModelActionAgent> getAgents() {
+
+         ArrayList<RpModelActionAgent> returnedArray = new ArrayList<RpModelActionAgent>();
+
+         returnedArray.add(HugoniotPlotAgent.instance());
+
+         returnedArray.add(ShockCurvePlotAgent.instance());
+
+         returnedArray.add(CompositePlotAgent.instance());
+
+        return returnedArray;
+    }
+
+
 
     @Override
     public void userInputComplete(rpn.controller.ui.UIController ui,

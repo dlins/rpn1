@@ -14,11 +14,58 @@
 
 </PHYSICS>
 
-<CURVE name="shock">
-    <CURVEPARAM name="family" value="0"/>
-    <CURVEPARAM name="xzero" value="3.4 0.5"/>
-    <CURVEPARAM name="sigma" value="0.03"/>
-</CURVE>
+
+
+     <METHOD name="Contour">
+        <METHODPARAM  name="x-resolution" value="30" />
+        <METHODPARAM  name="y-resolution" value="30" />
+
+    </METHOD>
+
+
+    <METHOD name="Newton">
+        <METHODPARAM  name="tolerance" value="0.001" />
+    </METHOD>
+
+
+
+    <CURVE name="bifurcation">
+        <CURVEPARAM name="leftfamily" value="0"/>
+        <CURVEPARAM name="rightfamily" value="0"/>
+        <CURVEPARAM name="caracteristicdomain" value="0"/>
+        <CURVEPARAM name="singular" value="1"/>
+
+
+    </CURVE>
+
+    <CURVE name="boundaryextensioncurve">
+        <CURVEPARAM name="curvefamily" value="1"/>
+        <CURVEPARAM name="domainfamily" value="1"/>
+        <CURVEPARAM name="characteristicdomain" value="1"/>
+        <CURVEPARAM name="x-domainpoints" value="101"/>
+        <CURVEPARAM name="y-domainpoints" value="101"/>
+        <CURVEPARAM name="edge" value="0"/>
+
+    </CURVE>
+
+
+    <CURVE name="rarefactionextension">
+        <CURVEPARAM name="curvefamily" value="0"/>
+        <CURVEPARAM name="domainfamily" value="1"/>
+        <CURVEPARAM name="characteristicdomain" value="1"/>
+        <CURVEPARAM name="x-domainpoints" value="101"/>
+        <CURVEPARAM name="y-domainpoints" value="101"/>
+    </CURVE>
+
+
+    <CURVE name="shock">
+        <CURVEPARAM name="family" value="0"/>
+        <CURVEPARAM name="xzero" value="3.4 0.5"/>
+        <CURVEPARAM name="sigma" value="0.03"/>
+    </CURVE>
+
+ 
+
 
 
 <VIEWCONFIGURATION modeldomain="3">

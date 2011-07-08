@@ -177,6 +177,16 @@ public class RPNUMERICS {
 //        setParamValue("shock", "family", String.valueOf(family));
 //
 //    }
+
+
+    public static Set<String> getConfigurationNames(){
+
+        return configMap_.keySet();
+
+
+    }
+
+
     public static void setFamily(int family) {
         setParamValue("shock", "family", String.valueOf(family));
 

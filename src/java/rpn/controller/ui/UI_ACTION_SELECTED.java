@@ -31,7 +31,7 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
             RealVector userInput) {//Limpar esse metodo . Utilizar a versao sem entrada do usuario quando necessario
         userInputList_.add(new RealVector(userInput));
 
-      
+
 
         if (!(actionSelected_ instanceof ChangeDirectionAgent)) {
 
@@ -117,6 +117,13 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
 
     public RpModelActionAgent getAction() {
         return actionSelected_;
+    }
+
+    public ArrayList<RpModelActionAgent> getAgents() {
+
+        ArrayList<RpModelActionAgent> returnedArray = new ArrayList<RpModelActionAgent>();
+        returnedArray.add(actionSelected_);
+        return returnedArray;
     }
 
     public int actionDimension() {

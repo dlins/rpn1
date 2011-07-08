@@ -5,13 +5,14 @@
  */
 package rpn.controller.ui;
 
-import rpn.RPnCurvesConfigPanel;
+import java.util.ArrayList;
 import rpn.usecase.BifurcationPlotAgent;
 import rpn.usecase.BuckleyLeverettiInflectionAgent;
 import rpn.usecase.CoincidenceExtensionCurvePlotAgent;
 import rpn.usecase.CoincidencePlotAgent;
 import rpn.usecase.DoubleContactAgent;
 import rpn.usecase.ExtensionCurveAgent;
+import rpn.usecase.RpModelActionAgent;
 import rpn.usecase.SubInflectionExtensionCurveAgent;
 import rpn.usecase.SubInflectionPlotAgent;
 import wave.util.RealVector;
@@ -32,6 +33,28 @@ public class BIFURCATION_CONFIG extends UI_ACTION_SELECTED {
 
 
 
+    }
+
+    @Override
+    public ArrayList<RpModelActionAgent> getAgents() {
+
+       ArrayList<RpModelActionAgent> returnedArray = new ArrayList<RpModelActionAgent>();
+
+        returnedArray.add(CoincidencePlotAgent.instance());
+
+        returnedArray.add(SubInflectionPlotAgent.instance());
+
+        returnedArray.add(BuckleyLeverettiInflectionAgent.instance());
+
+        returnedArray.add(DoubleContactAgent.instance());
+
+        returnedArray.add(ExtensionCurveAgent.instance());
+
+        returnedArray.add(SubInflectionExtensionCurveAgent.instance());
+
+        returnedArray.add( CoincidenceExtensionCurvePlotAgent.instance());
+
+        return returnedArray;
     }
 
     @Override
