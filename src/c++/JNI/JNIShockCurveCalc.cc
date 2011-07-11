@@ -83,33 +83,36 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
     //    Ur[2] = 1.0;
 
 
-//    cout << "Ponto de entrada" << endl;
-//
-//    cout << input[0] << endl;
-//    cout << input[1] << endl;
-//    cout << input[2] << endl;
+    //    cout << "Ponto de entrada" << endl;
+    //
+    //    cout << input[0] << endl;
+    //    cout << input[1] << endl;
+    //    cout << input[2] << endl;
 
     //    double tol = 10e-4;
     //    double epsilon = 10e-2;
 
     double tol = 1e-10;
-//    double epsilon = 1e-3;
+    //    double epsilon = 1e-3;
 
     int t = 11;
 
+    if (timeDirection == 20)
+        timeDirection = 1;
+    else
+        timeDirection = -1;
 
-
-    cout << "Valor de family"<<familyIndex << endl;
+    cout << "Valor de family" << familyIndex << endl;
 
     vector<HugoniotPolyLine> hugoniotPolyLineVector;
-    ShockContinuationMethod3D2D method(dimension, familyIndex, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), RpNumerics::getPhysics().boundary(), input, tol,newtonTolerance, t);
+    ShockContinuationMethod3D2D method(dimension, familyIndex, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), RpNumerics::getPhysics().boundary(), input, tol, newtonTolerance, t);
 
     method.curve(realVectorInput, timeDirection, hugoniotPolyLineVector);
 
     //Classify
 
     jobject segmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
-//    cout << "Numero de hugo poly: " << hugoniotPolyLineVector.size() << endl;
+    //    cout << "Numero de hugo poly: " << hugoniotPolyLineVector.size() << endl;
 
     for (i = 0; i < hugoniotPolyLineVector.size(); i++) {
 

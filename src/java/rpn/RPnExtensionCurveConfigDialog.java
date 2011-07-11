@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
+import java.util.Set;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import rpnumerics.RPNUMERICS;
@@ -35,9 +36,12 @@ public class RPnExtensionCurveConfigDialog extends RPnDialog {
 
     private void readValues() {
 
+      
         inputHash_.get("characteristicdomain").setValue(new Double(RPNUMERICS.getParamValue("boundaryextensioncurve", "characteristicdomain")));
+
         inputHash_.get("curvefamily").setValue(new Double(RPNUMERICS.getParamValue("boundaryextensioncurve", "curvefamily")));
         inputHash_.get("domainfamily").setValue(new Double(RPNUMERICS.getParamValue("boundaryextensioncurve", "domainfamily")));
+
         inputHash_.get("singular").setValue(new Double(RPNUMERICS.getParamValue("bifurcation", "singular")));
         inputHash_.get("edge").setValue(new Double(RPNUMERICS.getParamValue("boundaryextensioncurve", "edge")));
 
@@ -185,11 +189,17 @@ public class RPnExtensionCurveConfigDialog extends RPnDialog {
 
     }
 
+
+
+
     @Override
     protected void begin() {
         System.out.println("Chamando begin do extension config");
         dispose();
     }
+
+
+   
 
     private class TabListener implements ChangeListener {
 

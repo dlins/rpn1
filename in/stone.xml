@@ -29,7 +29,7 @@
 
     </CURVE>
 
-<!--    <CURVE name="boundaryextensioncurve">
+    <CURVE name="boundaryextensioncurve">
         <CURVEPARAM name="curvefamily" value="1"/>
         <CURVEPARAM name="domainfamily" value="1"/>
         <CURVEPARAM name="characteristicdomain" value="1"/>
@@ -37,7 +37,7 @@
         <CURVEPARAM name="y-domainpoints" value="101"/>
         <CURVEPARAM name="edge" value="0"/>
 
-    </CURVE>-->
+    </CURVE>
 
 
     <CURVE name="rarefactionextension">

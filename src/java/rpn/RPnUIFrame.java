@@ -111,29 +111,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private void checkMethods(int state) {
 
         Set<String> stringSet = RPNUMERICS.getConfigurationNames();
-        switch (state) {
-
-            case 0:
-
-                break;
-
-            case 1:
-
-                break;
-
-
-            case 2:
-
-                break;
-
-
-
-
-
-
-
-
-        }
+      
         if (stringSet.contains("boundaryextensioncurve")) {
             toolBar_.add(CoincidencePlotAgent.instance().getContainer());
             toolBar_.add(SubInflectionPlotAgent.instance().getContainer());
@@ -285,25 +263,42 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             RealVector newMax = new RealVector(2 * RPNUMERICS.boundary().getMaximums().getSize());
             RealVector newMin = new RealVector(2 * RPNUMERICS.boundary().getMinimums().getSize());
 
-            newMin.setElement(0, originalMin.getElement(0));
-            newMin.setElement(1, originalMin.getElement(1));
-            newMin.setElement(2, originalMin.getElement(2));
+            int minDimension = RPNUMERICS.boundary().getMinimums().getSize();
+            for (int i = 0; i < minDimension; i++) {
+                newMin.setElement(i, originalMin.getElement(i));
+                newMin.setElement(i + minDimension, originalMin.getElement(i));
+            }
 
 
-            newMin.setElement(3, originalMin.getElement(0));
-            newMin.setElement(4, originalMin.getElement(1));
-            newMin.setElement(5, originalMin.getElement(2));
+//            newMin.setElement(1, originalMin.getElement(1));
+//            newMin.setElement(2, originalMin.getElement(2));
+//
+//
+//            newMin.setElement(3, originalMin.getElement(0));
+//            newMin.setElement(4, originalMin.getElement(1));
+//            newMin.setElement(5, originalMin.getElement(2));
 
 
-            newMax.setElement(0, originalMax.getElement(0));
-            newMax.setElement(1, originalMax.getElement(1));
-            newMax.setElement(2, originalMax.getElement(2));
+            int maxDimension = RPNUMERICS.boundary().getMaximums().getSize();
+            for (int i = 0; i < maxDimension; i++) {
+                newMax.setElement(i, originalMax.getElement(i));
+                newMax.setElement(i + maxDimension, originalMax.getElement(i));
+            }
 
 
-            newMax.setElement(3, originalMax.getElement(0));
-            newMax.setElement(4, originalMax.getElement(1));
-            newMax.setElement(5, originalMax.getElement(2));
 
+
+
+//
+//            newMax.setElement(0, originalMax.getElement(0));
+//            newMax.setElement(1, originalMax.getElement(1));
+//            newMax.setElement(2, originalMax.getElement(2));
+//
+//
+//            newMax.setElement(3, originalMax.getElement(0));
+//            newMax.setElement(4, originalMax.getElement(1));
+//            newMax.setElement(5, originalMax.getElement(2));
+//
 
 
 

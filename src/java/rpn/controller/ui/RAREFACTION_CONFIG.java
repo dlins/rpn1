@@ -33,21 +33,21 @@ public class RAREFACTION_CONFIG extends UI_ACTION_SELECTED {
 
     }
 
-     @Override
+    @Override
     public ArrayList<RpModelActionAgent> getAgents() {
 
-         ArrayList<RpModelActionAgent> returnedArray = new ArrayList<RpModelActionAgent>();
+        ArrayList<RpModelActionAgent> returnedArray = new ArrayList<RpModelActionAgent>();
 
-         returnedArray.add(HugoniotPlotAgent.instance());
+        returnedArray.add(HugoniotPlotAgent.instance());
 
-         returnedArray.add(ShockCurvePlotAgent.instance());
+        returnedArray.add(ShockCurvePlotAgent.instance());
 
-         returnedArray.add(CompositePlotAgent.instance());
+        returnedArray.add(RarefactionOrbitPlotAgent.instance());
+
+        returnedArray.add(CompositePlotAgent.instance());
 
         return returnedArray;
     }
-
-
 
     @Override
     public void userInputComplete(rpn.controller.ui.UIController ui,
