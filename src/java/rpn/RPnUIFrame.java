@@ -16,6 +16,7 @@ import java.awt.event.*;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.Set;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -62,6 +63,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JCheckBoxMenuItem showCurvesPaneltem_ = new JCheckBoxMenuItem("Show Curves Window", true);
     private RPnCurvesConfigPanel curvesConfigPanel_ = new RPnCurvesConfigPanel();
     private JFrame curvesFrame_;
+    private JMenuItem readMatlabFile_ = new JMenuItem("Read Matlab File ...");
 
     //Construct the frame
     public RPnUIFrame(RPnMenuCommand command) {
@@ -111,7 +113,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private void checkMethods(int state) {
 
         Set<String> stringSet = RPNUMERICS.getConfigurationNames();
-      
+
         if (stringSet.contains("boundaryextensioncurve")) {
             toolBar_.add(CoincidencePlotAgent.instance().getContainer());
             toolBar_.add(SubInflectionPlotAgent.instance().getContainer());
@@ -453,6 +455,27 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         }
     }
 
+    void matlabRead_actionPerformed(ActionEvent e) {
+        try {
+            JFileChooser chooser = new JFileChooser();
+            chooser.setSelectedFile(new File("output.m"));
+            chooser.setFileFilter(new FileNameExtensionFilter("Matlab file", "m"));
+            if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+
+                FileReader reader = new FileReader(chooser.getSelectedFile().getAbsolutePath());
+
+
+                RPnDataModule.matlabReader(reader);
+
+                reader.close();
+            }
+
+        } catch (java.io.IOException ioex) {
+            ioex.printStackTrace();
+        } catch (java.lang.NullPointerException nullEx) {
+        }
+    }
+
     void matlabExport_actionPerformed(ActionEvent e) {
         try {
             JFileChooser chooser = new JFileChooser();
@@ -637,6 +660,16 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                     }
                 });
 
+
+
+        readMatlabFile_.addActionListener(
+                new ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+                        matlabRead_actionPerformed(e);
+                    }
+                });
+
         matlabMenuFileExport_.addActionListener(
                 new ActionListener() {
 
@@ -767,6 +800,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         fileMenu.add(exportMenuItem);
         fileMenu.add(matlabMenuFileExport_);
+        fileMenu.add(readMatlabFile_);
         fileMenu.addSeparator();
         fileMenu.add(networkMenuItem);
 //        fileMenu.add(pluginMenuItem);
@@ -922,7 +956,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         }
 
         public void actionPerformed(ActionEvent e) {
-            RPnExtensionCurveConfigDialog extensionCurve = new RPnExtensionCurveConfigDialog();
+            RPnConfigurationDialog extensionCurve = new RPnConfigurationDialog();
             extensionCurve.setVisible(true);
 
         }

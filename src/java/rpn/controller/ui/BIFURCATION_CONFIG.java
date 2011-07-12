@@ -45,7 +45,7 @@ public class BIFURCATION_CONFIG extends UI_ACTION_SELECTED {
         Set<String> stringSet = RPNUMERICS.getConfigurationNames();
 
 
-        if (stringSet.contains("boundaryextensioncurve")) {
+        if (stringSet.contains("extensioncurve")) {
 
             returnedArray.add(CoincidenceExtensionCurvePlotAgent.instance());
             returnedArray.add(SubInflectionExtensionCurveAgent.instance());
