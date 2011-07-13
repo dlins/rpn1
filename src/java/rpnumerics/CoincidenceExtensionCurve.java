@@ -14,6 +14,8 @@ public class CoincidenceExtensionCurve extends BifurcationCurve{
 
     public CoincidenceExtensionCurve(List<HugoniotSegment> leftSegments,List<HugoniotSegment> rightSegments) {
         super(leftSegments,rightSegments);
+//        super(rightSegments);
+//        super(leftSegments);
 
     }
   
