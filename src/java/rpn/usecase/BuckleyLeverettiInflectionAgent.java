@@ -6,7 +6,7 @@
 package rpn.usecase;
 
 import java.awt.event.ActionEvent;
-import javax.swing.JToggleButton;
+import javax.swing.JButton;
 import rpn.component.*;
 import rpn.controller.ui.BIFURCATION_CONFIG;
 import rpn.controller.ui.UIController;
@@ -29,7 +29,7 @@ public class BuckleyLeverettiInflectionAgent extends RpModelPlotAgent {
     // Constructors/Initializers
     //
     protected BuckleyLeverettiInflectionAgent() {
-        super(DESC_TEXT, rpn.RPnConfig.HUGONIOT,new JToggleButton());
+        super(DESC_TEXT, rpn.RPnConfig.HUGONIOT,new JButton(DESC_TEXT));
     }
 
 

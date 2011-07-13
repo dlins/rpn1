@@ -19,7 +19,7 @@ public class RPnConfigurationDialog extends RPnDialog {
     private JTabbedPane extensionPanel_;
 
     public RPnConfigurationDialog() {
-        super(false, true);
+        super(false, false);
 
         try {
             jbInit();
@@ -31,15 +31,13 @@ public class RPnConfigurationDialog extends RPnDialog {
     private void jbInit() throws Exception {
         setTitle("Configuration");
         extensionPanel_ = new JTabbedPane();
+        applyButton.setText("OK");
         extensionPanel_.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
         HashMap<String, Configuration> configMap = RPNUMERICS.getConfigurations();
 
         Set<Entry<String, Configuration>> configSet = configMap.entrySet();
 
         for (Entry<String, Configuration> entry : configSet) {
-
-            System.out.println(entry.getValue().getName());
-
 
             String configurationType = entry.getValue().getType();
 
@@ -58,11 +56,8 @@ public class RPnConfigurationDialog extends RPnDialog {
         getContentPane().add(extensionPanel_, BorderLayout.CENTER);
 
         extensionPanel_.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "Apply");
-
-        extensionPanel_.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "Cancel");
-
         extensionPanel_.getActionMap().put("Apply", applyButton.getAction());
-        extensionPanel_.getActionMap().put("Cancel", cancelButton.getAction());
+
 
 
         pack();

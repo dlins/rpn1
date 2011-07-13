@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Set;
 import rpn.usecase.BifurcationPlotAgent;
 import rpn.usecase.BuckleyLeverettiInflectionAgent;
+import rpn.usecase.ChangeFluxParamsAgent;
 import rpn.usecase.CoincidenceExtensionCurvePlotAgent;
 import rpn.usecase.CoincidencePlotAgent;
 import rpn.usecase.DoubleContactAgent;
@@ -31,6 +32,7 @@ public class BIFURCATION_CONFIG extends UI_ACTION_SELECTED {
         ExtensionCurveAgent.instance().setEnabled(true);
         SubInflectionExtensionCurveAgent.instance().setEnabled(true);
         CoincidenceExtensionCurvePlotAgent.instance().setEnabled(true);
+        ChangeFluxParamsAgent.instance().setEnabled(true);
 
 
 

@@ -36,24 +36,9 @@ public abstract class RPnDialog extends JDialog {
         cancelButton = new JButton(new DefaultCancelAction());
         applyButton = new JButton(new DefaultApplyAction());
 
-        buttonsPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "Apply");
-        buttonsPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "Cancel");
-
-
-//        buttonsPanel.getActionMap().put("Apply", new ActionApply());//TODO Enable key events
-//        buttonsPanel.getActionMap().put("Cancel", new ActionCancel());
-
-
         buttonsPanel.add(applyButton);
         buttonsPanel.add(cancelButton);
 
-//        defaultCancelAction_=new DefaultCancelController();
-
-//        cancelButton.addActionListener(defaultCancelAction_);
-
-//        defaultApplyAction_ = new DefaultApplyController();
-
-//        applyButton.addActionListener(defaultApplyAction_);
 
         addBackButton();
         cancelButton.setEnabled(false);
@@ -164,7 +149,6 @@ public abstract class RPnDialog extends JDialog {
 
         public void actionPerformed(ActionEvent e) {
             apply();
-            dispose();
         }
     }
 
@@ -175,7 +159,7 @@ public abstract class RPnDialog extends JDialog {
                 return "Cancel";
             }
             return null;
-          
+
 
         }
 
@@ -204,7 +188,7 @@ public abstract class RPnDialog extends JDialog {
 
         public void actionPerformed(ActionEvent e) {
             apply();
-            dispose();
+
         }
     }
 

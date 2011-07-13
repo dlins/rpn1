@@ -6,7 +6,7 @@
 package rpn.usecase;
 
 import java.awt.event.ActionEvent;
-import javax.swing.JToggleButton;
+import javax.swing.JButton;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.component.*;
 import rpn.controller.ui.BIFURCATION_CONFIG;
@@ -31,7 +31,7 @@ public class ExtensionCurveAgent extends RpModelPlotAgent {
     // Constructors/Initializers
     //
     protected ExtensionCurveAgent() {
-        super(DESC_TEXT, rpn.RPnConfig.HUGONIOT, new JToggleButton());
+        super(DESC_TEXT, rpn.RPnConfig.HUGONIOT, new JButton(DESC_TEXT));
     }
 
     @Override

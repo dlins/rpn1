@@ -22,10 +22,12 @@ public class RPnFluxParamsDialog extends RPnDialog {
     JPanel paramsPanel_;
 
     public RPnFluxParamsDialog() {
-        super(false, true);
+        super(true, false);
         setTitle(RPNUMERICS.physicsID());
-
+        beginButton.setText("OK");
         paramsPanel_ = new JPanel();
+
+        removeDefaultApplyBehavior();
 
         HashMap<String, Configuration> configMap = RPNUMERICS.getConfigurations();
 
@@ -50,7 +52,7 @@ public class RPnFluxParamsDialog extends RPnDialog {
 
         paramsPanel_.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "Cancel");
 
-        paramsPanel_.getActionMap().put("Apply", applyButton.getAction());
+        paramsPanel_.getActionMap().put("Apply", beginButton.getAction());
         paramsPanel_.getActionMap().put("Cancel", cancelButton.getAction());
 
         this.getContentPane().add(paramsPanel_, BorderLayout.CENTER);
@@ -64,11 +66,12 @@ public class RPnFluxParamsDialog extends RPnDialog {
     protected void apply() {
         RPNUMERICS.applyFluxParams();
         rpn.usecase.ChangeFluxParamsAgent.instance().applyChange(new PropertyChangeEvent(rpn.usecase.ChangeFluxParamsAgent.instance(), "", null, RPNUMERICS.getFluxParams()));
-        dispose();
-
+        System.out.println("Chamando apply do flux dialog");
     }
 
     @Override
     protected void begin() {
+
+        dispose();
     }
 }

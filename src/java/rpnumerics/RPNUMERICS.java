@@ -629,6 +629,7 @@ public class RPNUMERICS {
             int paramOrder = physicsConfiguration.getParamOrder(entry.getKey());
             Double paramValue = new Double(entry.getValue());
             paramsVector.setElement(paramOrder, paramValue);
+            System.out.println(paramOrder + " " + paramValue);
         }
 
         FluxParams newFluxParams = new FluxParams(paramsVector);
