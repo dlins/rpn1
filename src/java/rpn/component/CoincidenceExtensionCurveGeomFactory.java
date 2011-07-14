@@ -5,6 +5,7 @@
 
 package rpn.component;
 
+import java.awt.Color;
 import rpnumerics.CoincidenceCurve;
 import rpnumerics.CoincidenceExtensionCurve;
 import rpnumerics.HugoniotCurve;
@@ -12,6 +13,7 @@ import rpnumerics.HugoniotSegment;
 import rpnumerics.RPNUMERICS;
 import rpnumerics.RpCalculation;
 import rpnumerics.ShockProfile;
+import wave.multid.view.ViewingAttr;
 
 public class CoincidenceExtensionCurveGeomFactory extends RpCalcBasedGeomFactory{
 
@@ -28,10 +30,11 @@ public class CoincidenceExtensionCurveGeomFactory extends RpCalcBasedGeomFactory
 
         // assuming a container with HugoniotSegment elements
         int resultSize = curve.segments().size();
-
+        ViewingAttr viewingAttr = new ViewingAttr(Color.MAGENTA);
         HugoniotSegGeom[] hugoniotArray = new HugoniotSegGeom[resultSize];
         for (int i = 0; i < resultSize; i++) {
-            hugoniotArray[i] = new HugoniotSegGeom((HugoniotSegment) curve.segments().get(i));
+            hugoniotArray[i] = new HugoniotSegGeom((HugoniotSegment) curve.segments().get(i),viewingAttr);
+
         }
         return new CoincidenceExtensionCurveGeom(hugoniotArray, this);
 

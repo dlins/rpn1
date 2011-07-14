@@ -7,25 +7,14 @@ package rpnumerics;
 
 import java.util.List;
 
-public class SubInflectionExtensionCurve extends BifurcationCurve{// RPnCurve implements RpSolution {
+public class SubInflectionExtensionCurve extends BifurcationCurve {// RPnCurve implements RpSolution {
     //
     // Members
     //
-
-//    private List hugoniotSegments_;
-
-//    public DoubleContactCurve(List<HugoniotSegment> hSegments) {
-//        super(hSegments);//, new ViewingAttr(Color.RED));
-////        hugoniotSegments_ = hSegments;
-//
-//    }
-
-
-     public SubInflectionExtensionCurve(List<HugoniotSegment> hSegments,List<HugoniotSegment> rightSegments) {
-        super(hSegments,rightSegments);//, new ViewingAttr(Color.RED));
+    public SubInflectionExtensionCurve(List<HugoniotSegment> hSegments, List<HugoniotSegment> rightSegments) {
+//        super(hSegments,rightSegments);//, new ViewingAttr(Color.RED));
+        super(rightSegments);//, new ViewingAttr(Color.RED));
 //        hugoniotSegments_ = hSegments;
 
     }
-
-
 }

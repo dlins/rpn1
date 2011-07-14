@@ -55,7 +55,7 @@ Physics::Physics(const string & physicsID) : physicsVector_(new vector<SubPhysic
         Thermodynamics_SuperCO2_WaterAdimensionalized TD(rpnHome_);
 
         // Create the Flux and its params
-        double abs_perm = 3e-12;
+        double abs_perm = 20e-12;
         double sin_beta = 0.0;
         double const_gravity = 9.8;
         bool has_gravity = false, has_horizontal = true;
@@ -73,7 +73,7 @@ Physics::Physics(const string & physicsID) : physicsVector_(new vector<SubPhysic
 
 
         // Create the Accum and its params
-        double phi = 0.38;
+        double phi = 0.15;
         Accum2Comp2PhasesAdimensionalized_Params * accum_params = new Accum2Comp2PhasesAdimensionalized_Params(TD, &phi);
         AccumulationFunction * accum = new Accum2Comp2PhasesAdimensionalized(*accum_params);
 

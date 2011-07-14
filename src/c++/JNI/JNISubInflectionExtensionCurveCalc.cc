@@ -83,7 +83,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionExtensionCurveCalc_native
         FracFlow2PhasesVerticalAdimensionalized * fv = new FracFlow2PhasesVerticalAdimensionalized(cnw, cng, expw, expg, td);
 
         // Create the Flux and its params
-        double abs_perm = 3e-12;
+        double abs_perm = 20e-12;
         double sin_beta = 0.0;
         double const_gravity = 9.8;
         bool has_gravity = false, has_horizontal = true;
@@ -96,7 +96,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionExtensionCurveCalc_native
         Flux2Comp2PhasesAdimensionalized flux(flux_params);
 
         // Create the Accum and its params
-        double phi = 0.38;
+        double phi = 0.15;
         Accum2Comp2PhasesAdimensionalized_Params accum_params(td, &phi);
         Accum2Comp2PhasesAdimensionalized accum(accum_params);
 

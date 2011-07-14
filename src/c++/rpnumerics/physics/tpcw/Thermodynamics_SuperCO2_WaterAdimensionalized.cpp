@@ -151,7 +151,7 @@ Rock_Cr(2.029e6),
 Water_Cw_specific(4297.),
 T_typical_(304.63),
 Rho_typical_(998.2),
-U_typical_(4.42e-7),
+U_typical_(4.42e-3),
 rpnHomePath_(rpnHomePath) {
 
     h_typical_ = Water_Cw_specific * (T_typical_ - Tref_water);

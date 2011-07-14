@@ -18,8 +18,10 @@ public class ExtensionCurve extends BifurcationCurve {// RPnCurve implements RpS
 ////        hugoniotSegments_ = hSegments;
 //
 //    }
-    public ExtensionCurve(List<HugoniotSegment> hSegments, List<HugoniotSegment> rightSegments) {
-        super(hSegments, rightSegments);//, new ViewingAttr(Color.RED));
+    public ExtensionCurve(List<HugoniotSegment> leftSegments, List<HugoniotSegment> rightSegments) {
+//        super(hSegments, rightSegments);//, new ViewingAttr(Color.RED));
+
+        super(rightSegments);//, new ViewingAttr(Color.RED));
 
 
     }

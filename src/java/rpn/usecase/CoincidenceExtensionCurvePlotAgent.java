@@ -56,7 +56,9 @@ public class CoincidenceExtensionCurvePlotAgent extends RpModelPlotAgent {
 
         CoincidenceExtensionCurveGeomFactory factory = new CoincidenceExtensionCurveGeomFactory(RPNUMERICS.createCoincidenceExtensionCurveCalc());
 
-        RPnPhaseSpaceAbstraction auxPhaseSpace = RPnDataModule.AUXPHASESPACE;
+//        RPnPhaseSpaceAbstraction auxPhaseSpace = RPnDataModule.AUXPHASESPACE;
+
+        RPnPhaseSpaceAbstraction auxPhaseSpace = RPnDataModule.PHASESPACE;
 
         RpGeometry geometry = factory.geom();
 

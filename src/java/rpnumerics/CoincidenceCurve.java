@@ -10,7 +10,7 @@ import java.util.List;
 import wave.multid.CoordsArray;
 import java.util.ArrayList;
 
-public class CoincidenceCurve extends SegmentedCurve{// RPnCurve implements RpSolution {
+public class CoincidenceCurve extends BifurcationCurve{// RPnCurve implements RpSolution {
     //
     // Members
     //

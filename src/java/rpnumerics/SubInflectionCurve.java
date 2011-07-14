@@ -8,7 +8,7 @@ package rpnumerics;
 import wave.util.RealSegment;
 import java.util.List;
 
-public class SubInflectionCurve extends SegmentedCurve {
+public class SubInflectionCurve extends BifurcationCurve {
     //
     // Members
     //

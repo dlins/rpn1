@@ -75,7 +75,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceCurveCalc_nativeCalc(JNIEnv
     //-------------------------------------------------------------------
     RealVector Uref(dimension);
 
-    double phi = 0.38;
+    double phi = 0.15;
 
     Thermodynamics_SuperCO2_WaterAdimensionalized TD(Physics::getRPnHome());
 
