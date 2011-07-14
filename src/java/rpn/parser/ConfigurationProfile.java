@@ -17,7 +17,8 @@ public class ConfigurationProfile {
     private HashMap<String, ConfigurationProfile> configurationProfileMap_;
     private HashMap<String, String> paramsMap_ = new HashMap<String, String>();
     private HashMap<Integer, String> paramsIndexMap_ = new HashMap<Integer, String>();
-    public static final String PHISICS_PROFILE = "PHYSICS";
+    public static final String PHYSICS_PROFILE = "PHYSICS";
+    public static final String PHYSICS_CONFIG_PROFILE = "PHYSICS CONFIGURATION";
     public static final String CURVE_PROFILE = "CURVE";
     public static final String METHOD_PROFILE = "METHOD";
     public static final String BOUNDARY_PROFILE = "BOUNDARY";

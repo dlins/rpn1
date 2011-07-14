@@ -96,13 +96,13 @@ public class RPnConfig {
     }
 
     public static ArrayList<ConfigurationProfile> getAllPhysicsProfiles() {
-        return filterProfiles(ConfigurationProfile.PHISICS_PROFILE);
+        return filterProfiles(ConfigurationProfile.PHYSICS_PROFILE);
 
     }
 
     public static ConfigurationProfile getPhysicsProfile(String physicsName) {
         ConfigurationProfile physicsProfile = configurationsProfileMap_.get(physicsName);
-        if (physicsProfile != null && physicsProfile.getType().equals(ConfigurationProfile.PHISICS_PROFILE)) {
+        if (physicsProfile != null && physicsProfile.getType().equals(ConfigurationProfile.PHYSICS_PROFILE)) {
             return physicsProfile;
         }
         return null;

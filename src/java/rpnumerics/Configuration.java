@@ -28,7 +28,8 @@ public class Configuration {
     }
 
     public Configuration(ConfigurationProfile profile) {
-//        System.out.println(profile);
+        System.out.println(profile);
+
         if (profile.getParams() != null) {
             params_ = profile.getParams();
         }

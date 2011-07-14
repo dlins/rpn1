@@ -39,6 +39,7 @@ public class RPnNumericsModule {
         private ArrayList<RealVector> boundaryParamsArray_;
         private static ConfigurationProfile currentConfigurationProfile_;
         private static ConfigurationProfile physicsProfile_;
+        private static ConfigurationProfile currentPhysicsConfigurationProfile_;
 
         public void startElement(String uri, String localName, String qName, Attributes att) throws SAXException {
             currentElement_ = localName;
@@ -58,7 +59,7 @@ public class RPnNumericsModule {
             }
 
             if (localName.equals("PHYSICS")) {
-                physicsProfile_ = new ConfigurationProfile(att.getValue(0), ConfigurationProfile.PHISICS_PROFILE);
+                physicsProfile_ = new ConfigurationProfile(att.getValue(0), ConfigurationProfile.PHYSICS_PROFILE);
 //                physicsID_ = att.getValue(0);
             }
 
@@ -67,6 +68,19 @@ public class RPnNumericsModule {
 
 
             }
+
+            if (localName.equals("PHYSICSCONFIG")) {
+
+                currentPhysicsConfigurationProfile_ = new ConfigurationProfile(att.getValue(0), ConfigurationProfile.PHYSICS_CONFIG_PROFILE);
+
+            }
+            if (localName.equals("PHYSICSPARAM")) {
+
+                currentPhysicsConfigurationProfile_.addParam(att.getValue(0), att.getValue(1));
+
+            }
+
+
 
             if (localName.equals("BOUNDARYPARAM")) {
 
@@ -109,6 +123,12 @@ public class RPnNumericsModule {
 
             }
 
+
+            if (localName.equals("PHYSICSCONFIG")) {
+
+                physicsProfile_.addConfigurationProfile(ConfigurationProfile.PHYSICS_CONFIG_PROFILE, currentPhysicsConfigurationProfile_);
+            }
+
             if (localName.equals("CURVE")) {
 
 //                System.out.println("Adicionando profile: " + currentConfigurationProfile_.getName());
@@ -119,7 +139,7 @@ public class RPnNumericsModule {
             if (localName.equals("METHOD")) {
 
 //                System.out.println("Adicionando profile: " + currentConfigurationProfile_.getName());
-                if (currentConfigurationProfile_.getName().equalsIgnoreCase("Contour")){
+                if (currentConfigurationProfile_.getName().equalsIgnoreCase("Contour")) {
 
                     ContourConfiguration contourConfiguration = new ContourConfiguration(currentConfigurationProfile_);
                     RPNUMERICS.setConfiguration(contourConfiguration.getName(), contourConfiguration);

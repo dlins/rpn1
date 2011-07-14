@@ -14,6 +14,7 @@ import java.util.Set;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
+import rpn.parser.ConfigurationProfile;
 import rpnumerics.Configuration;
 import rpnumerics.RPNUMERICS;
 
@@ -40,7 +41,7 @@ public class RPnFluxParamsDialog extends RPnDialog {
 
             String configurationType = entry.getValue().getType();
 
-            if (configurationType.equalsIgnoreCase("PHYSICS")) {
+            if (configurationType.equalsIgnoreCase(ConfigurationProfile.PHYSICS_PROFILE) ||configurationType.equalsIgnoreCase(ConfigurationProfile.PHYSICS_CONFIG_PROFILE)) {
                 RPnInputComponent inputComponent = new RPnInputComponent(entry.getValue());
                 paramsPanel_.add(inputComponent.getContainer());
             }

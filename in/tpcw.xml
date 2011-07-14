@@ -3,6 +3,12 @@
 <rpnconfiguration>
 <PHYSICS name="TPCW">
 
+   <PHYSICSCONFIG name="thermodynamics">
+        <PHYSICSPARAM name="porosity" value="0.15"/>
+        <PHYSICSPARAM name="absolut permeability" value="1.15"/>
+        <PHYSICSPARAM name="viscosity" value="2.15"/>
+    </PHYSICSCONFIG>
+
 <!--<BOUNDARY name="rect">
 
         <BOUNDARYPARAM name="dimension" value="3" />
