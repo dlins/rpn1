@@ -22,7 +22,10 @@ public class DoubleContactCurve extends BifurcationCurve{// RPnCurve implements 
 
 
      public DoubleContactCurve(List<HugoniotSegment> hSegments,List<HugoniotSegment> rightSegments) {
-        super(hSegments,rightSegments);//, new ViewingAttr(Color.RED));
+//        super(hSegments,rightSegments);//, new ViewingAttr(Color.RED));
+         super(hSegments, rightSegments);//, new ViewingAttr(Color.RED));
+
+
 //        hugoniotSegments_ = hSegments;
 
     }

@@ -73,7 +73,7 @@ Physics::Physics(const string & physicsID) : physicsVector_(new vector<SubPhysic
 
 
         // Create the Accum and its params
-        double phi = 0.15;
+        double phi = 1.0;
         Accum2Comp2PhasesAdimensionalized_Params * accum_params = new Accum2Comp2PhasesAdimensionalized_Params(TD, &phi);
         AccumulationFunction * accum = new Accum2Comp2PhasesAdimensionalized(*accum_params);
 

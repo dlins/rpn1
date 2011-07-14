@@ -66,7 +66,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BuckleyLeverettinInflectionCurveCalc_n
     //-------------------------------------------------------------------
     RealVector Uref(dimension);
 
-    double phi = 0.15;
+    double phi = 1.0;
 
     Thermodynamics_SuperCO2_WaterAdimensionalized TD(Physics::getRPnHome());
 

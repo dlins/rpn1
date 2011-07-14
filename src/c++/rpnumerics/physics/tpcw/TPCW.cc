@@ -35,7 +35,7 @@ TD(new Thermodynamics_SuperCO2_WaterAdimensionalized(thermo)) {
     double const_gravity = 9.8;
     double abs_perm = 20e-12;
 //    double phi = 0.38;
-    double phi = 0.15;
+    double phi = 1.0;
 
     RealVector Uref(3);
     Uref.component(0) = 0;
@@ -61,7 +61,7 @@ TD(new Thermodynamics_SuperCO2_WaterAdimensionalized(*copy.TD)) {
 
     double const_gravity = 9.8;
     double abs_perm = 20e-12;
-    double phi = 0.15;
+    double phi = 1.0;
     RealVector Uref(3);
     Uref.component(0) = 0;
     Uref.component(1) = 0;
@@ -94,8 +94,8 @@ Boundary * TPCW::defaultBoundary()const {
     RealVector min(3);
 
     min.component(0) = 0;
-    //    min.component(1) = T2Theta(278.22);
-    min.component(1) = T2Theta(304.63);
+   min.component(1) = T2Theta(278.22);
+//    min.component(1) = T2Theta(304.63);
     min.component(2) = TD->u2U(0);
 
     //    cout <<min.component(0)<<"<--------MIN 0"<<endl;
@@ -107,7 +107,7 @@ Boundary * TPCW::defaultBoundary()const {
     max.component(0) = 1.0;
     //    max.component(1) = T2Theta(375.10);
     max.component(1) = T2Theta(450);
-    max.component(2) = TD->u2U(2 * 4.22e-5);
+    max.component(2) = TD->u2U(2 * 4.22e-2);  // The domain is 20 times as much as U_typical
 
     //    cout <<max.component(0)<<"<----------MAX 0"<<endl;
     //    cout << max.component(1) << "<-------MAX 1" << endl;
