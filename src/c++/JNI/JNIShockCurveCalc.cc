@@ -92,7 +92,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
     //    double tol = 10e-4;
     //    double epsilon = 10e-2;
 
-    double tol = 1e-10;
+    double tol = 1e-6;  // Toleranca antiga 15/07 1e-10;
     //    double epsilon = 1e-3;
 
     int t = 11;

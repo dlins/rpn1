@@ -28,17 +28,10 @@
     </METHOD>
 
 
-  
-
-
-
-
-
-
 
     <CURVE name="bifurcationcurve">
-        <CURVEPARAM name="curvefamily" value="0"/>
-        <CURVEPARAM name="domainfamily" value="0"/>
+        <CURVEPARAM name="curvefamily" value="1"/>
+        <CURVEPARAM name="domainfamily" value="1"/>
         <CURVEPARAM name="characteristicwhere" value="0"/>
         <CURVEPARAM name="singular" value="1"/>
 
