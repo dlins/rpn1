@@ -6,7 +6,7 @@
 package rpn.usecase;
 
 import java.awt.event.ActionEvent;
-import javax.swing.JToggleButton;
+import javax.swing.JButton;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.component.*;
 import rpn.controller.ui.BIFURCATION_CONFIG;
@@ -31,7 +31,7 @@ public class SubInflectionExtensionCurveAgent extends RpModelPlotAgent {
     // Constructors/Initializers
     //
     protected SubInflectionExtensionCurveAgent() {
-        super(DESC_TEXT, rpn.RPnConfig.HUGONIOT, new JToggleButton());
+        super(DESC_TEXT, rpn.RPnConfig.HUGONIOT, new JButton(DESC_TEXT));
     }
 
     @Override
@@ -58,7 +58,9 @@ public class SubInflectionExtensionCurveAgent extends RpModelPlotAgent {
         SubInflectionExtensionCurveGeomFactory factory = new SubInflectionExtensionCurveGeomFactory(RPNUMERICS.createSubInflectionExtensionCurveCalc());
 
 
-        RPnPhaseSpaceAbstraction auxPhaseSpace = RPnDataModule.PHASESPACE;//AUXPHASESPACE;
+//        RPnPhaseSpaceAbstraction auxPhaseSpace = RPnDataModule.AUXPHASESPACE;
+
+        RPnPhaseSpaceAbstraction auxPhaseSpace = RPnDataModule.PHASESPACE;
 
         RpGeometry geometry = factory.geom();
 

@@ -1,112 +1,185 @@
 #include "RealVector.h"
 
-RealVector::RealVector(void) : Vector(8) {}
+inline int RealVector::min(int x, int y) {
+    return (x < y) ? x : y;
+}
 
-RealVector::RealVector(int size) :  Vector(size) {}
+RealVector::RealVector(void) {
+    data = NULL;
+    size_ = 0;
+}
 
-RealVector::RealVector(const int size,  double * coords) :  Vector(size, coords) { }
+RealVector::RealVector(int n) : size_(n) {
+    data = new double[n];
+}
 
-RealVector::RealVector(const RealVector & copy):Vector(copy.size()){
-
-    for (int i=0;i < size(); i++){
-        operator ()(i)=copy.operator ()(i);
+RealVector::RealVector(int n, double * values) : size_(n) {
+    data = new double[n];
+    for (int i = 0; i < n; i++) {
+        data[i] = values[i];
     }
+
+
+}
+
+RealVector::RealVector(const RealVector &orig) : size_(orig.size_) {
+    data = new double[orig.size_];
+    for (int i = 0; i < orig.size_; i++) data[i] = orig.data[i];
+}
+
+RealVector::RealVector(const RealVector *orig) : size_(orig->size_) {
+    data = new double[orig->size_];
+    for (int i = 0; i < orig->size_; i++) data[i] = orig->data[i];
+}
+
+RealVector::~RealVector(void) {
+    if (data != NULL) delete [] data;
+}
+
+int RealVector::size(void)const {
+    return size_;
+}
+
+void RealVector::resize(int n) {
+    if (size_ == 0) {
+        data = new double[n];
+        for (int i = 0; i < n; i++) data[i] = 0.0;
+    } else {
+        double *temp0 = new double[n];
+
+        for (int i = 0; i < min(size_, n); i++) temp0[i] = data[i];
+
+        delete [] data;
+        data = temp0;
+    }
+
+    size_ = n;
+
+    return;
+}
+
+// Access to individual elements
+
+double & RealVector::component(int n) {
+    if (n < size_) return data[n];
 }
 
 
-RealVector & RealVector::operator=(const Vector & copy){
+// Access to individual elements
 
-    for (int i=0;i < size(); i++){
-        operator ()(i)=copy.operator ()(i);
+const double & RealVector::component(int n)const {
+    if (n < size_) return data[n];
+}
+
+// Access to data pointer
+
+double * RealVector::components(void) {
+    return data;
+}
+
+// Assignment
+
+RealVector RealVector::operator=(const RealVector &orig) {
+    // Avoid self-assignment
+    if (this != &orig) {
+        int n = orig.size_;
+        resize(n);
+        for (int i = 0; i < n; i++) data[i] = orig.data[i];
     }
-    
+
     return *this;
-    
 }
 
-bool RealVector::operator ==(const RealVector &test) {
-    
-    if (size()!=test.size()) return false;
-    
-    for (int i=0;i < size();i++)
-        if (test.component(i)!=component(i)) return false;
-    return true;
+RealVector::operator double *(void) {
+    return data;
 }
 
-void RealVector::negate(){
-    
-    for (int i=0;i < size();i++)
-        component(i)=component(i)*(-1);
-    
+double RealVector::operator()(int comp) const {
+    return data[comp];
 }
 
 
-double RealVector::dot(const RealVector & v1){
-    
-    
-    if (size()!=v1.size()) THROW  (RealVector::RangeViolation());
-    
-    double result=0;
-    
-    for (int i=0; i< v1.size();i++){
-        
-        result+=component(i)*v1.component(i);
+double & RealVector::operator()(int comp) {
+    return data[comp];
+}
+
+
+// Output to stream
+
+std::ostream & operator<<(std::ostream &out, const RealVector &r) {
+    out << "(";
+    for (int i = 0; i < r.size_; i++) {
+        out << r.data[i];
+        if (i != r.size_ - 1) out << ", ";
     }
-    
-    return result;
-    
+    out << ")";
+
+    return out;
 }
 
-RealVector::~RealVector(){}
+// Multiplication by a scalar
 
-void RealVector::sortEigenData(int n, double * eigenValR, double * eigenValI, RealVector * eigenVec) {
-    int i = 0;
-    int d1, d2, j;
-    bool flag = true;
-    RealVector * sortVec = new RealVector[4];
-    for (i = 0; i < 4; i++){
-        sortVec[i] =  RealVector(n);
-        
-    }
-    
-    double sortSpaceR [4] = {0, 0, 0, 0};
-    double sortSpaceI [4] = {0, 0, 0, 0};
-    while (flag) {
-        flag = false;
-        i = 0;
-        if (eigenValI[i] != 0)
-            d1 = 2;
-        else
-            d1 = 1;
-        while (i + d1 < n) {
-            if (eigenValI[i + d1] != 0)
-                d2 = 2;
-            else
-                d2 = 1;
-            if (eigenValR[i] > eigenValR[i + d1]) {
-                flag = true;
-                for (j = 0; j < d2; j++) {
-                    sortSpaceR[j] = eigenValR[i + d1 + j];
-                    sortSpaceI[j] = eigenValI[i + d1 + j];
-                    sortVec[j] = eigenVec[i + d1 + j];
-                }
-                for (j = 0; j < d1; j++) {
-                    sortSpaceR[d2 + j] = eigenValR[i + j];
-                    sortSpaceI[d2 + j] = eigenValI[i + j];
-                    sortVec[d2 + j] = eigenVec[i + j];
-                }
-                for (j = 0; j < d1 + d2; j++) {
-                    eigenValR[i + j] = sortSpaceR[j];
-                    eigenValI[i + j] = sortSpaceI[j];
-                    eigenVec[i + j] = sortVec[j];
-                }
-                i = i + d2;
-            }
-            else {
-                i = i + d1;
-                d1 = d2;
-            }
-        }
-    }
+RealVector operator*(const RealVector &r, double alpha) {
+    RealVector temp(r);
+    for (int i = 0; i < r.size_; i++) temp.data[i] *= alpha;
+
+    return temp;
+}
+
+RealVector operator*(double alpha, const RealVector &r) {
+    return r*alpha;
+}
+
+// Sum with a scalar
+
+RealVector operator+(const RealVector &r, double alpha) {
+    RealVector temp(r);
+    for (int i = 0; i < r.size_; i++) temp.data[i] += alpha;
+
+    return temp;
+}
+
+RealVector operator+(double alpha, const RealVector &r) {
+    return r + alpha;
+}
+
+// Subtraction of/from a scalar
+
+RealVector operator-(const RealVector &r, double alpha) {
+    RealVector temp(r);
+    for (int i = 0; i < r.size_; i++) temp.data[i] -= alpha;
+
+    return temp;
+}
+
+RealVector operator-(double alpha, const RealVector &r) {
+    return r - alpha;
+}
+
+// Negation
+
+RealVector operator-(const RealVector &r) {
+    RealVector temp(r);
+    for (int i = 0; i < r.size_; i++) temp.data[i] *= -1.0;
+
+    return temp;
+}
+
+// Sum of two RealVectors
+
+RealVector operator+(const RealVector &x, const RealVector &y) {
+    RealVector temp(x);
+    for (int i = 0; i < x.size_; i++) temp.data[i] += y.data[i];
+
+    return temp;
+}
+
+// Subtraction of two RealVectors
+
+RealVector operator-(const RealVector &x, const RealVector &y) {
+    RealVector temp(x);
+    for (int i = 0; i < x.size_; i++) temp.data[i] -= y.data[i];
+
+    return temp;
 }
 

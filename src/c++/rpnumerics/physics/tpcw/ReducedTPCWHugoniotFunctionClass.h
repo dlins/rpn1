@@ -18,7 +18,7 @@ private:
     ReducedAccum2Comp2PhasesAdimensionalized *ReducedTPCWAccumAdimensionalized;
 
     //        Flux2Comp2PhasesAdimensionalized_Params         *TPCWFluxAdimensionalized_Params;
-    Flux2Comp2PhasesAdimensionalized *TPCWFluxAdimensionalized;
+//    Flux2Comp2PhasesAdimensionalized *TPCWFluxAdimensionalized;
 
     //        Accum2Comp2PhasesAdimensionalized_Params        *TPCWAccumAdimensionalized_Params;
     Accum2Comp2PhasesAdimensionalized *TPCWAccumAdimensionalized;

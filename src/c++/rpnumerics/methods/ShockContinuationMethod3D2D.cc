@@ -72,7 +72,7 @@ double ShockContinuationMethod3D2D::euclidean_norm(int n, double x[]) {
 //}
 
 void ShockContinuationMethod3D2D::curve(const RealVector & input, int direction, vector<HugoniotPolyLine> & hugoniotPolyLineVector) {
-    int maxStepsNumber = 10000;
+    int maxStepsNumber = 20000;
     
     cout<<"Entrando em curve"<<endl;
 

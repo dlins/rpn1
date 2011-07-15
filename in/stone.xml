@@ -5,22 +5,69 @@
 
     </PHYSICS>
 
+
+
+    <METHOD name="Contour">
+        <METHODPARAM  name="x-resolution" value="30" />
+        <METHODPARAM  name="y-resolution" value="30" />
+
+    </METHOD>
+
+
+    <METHOD name="Newton">
+        <METHODPARAM  name="tolerance" value="0.001" />
+    </METHOD>
+
+
+
+    <CURVE name="bifurcationcurve">
+        <CURVEPARAM name="curvefamily" value="0"/>
+        <CURVEPARAM name="domainfamily" value="0"/>
+        <CURVEPARAM name="caracteristicwhere" value="0"/>
+        <CURVEPARAM name="singular" value="1"/>
+
+
+    </CURVE>
+
+   <!-- <CURVE name="extensioncurve">
+        <CURVEPARAM name="curvefamily" value="1"/>
+        <CURVEPARAM name="domainfamily" value="1"/>
+        <CURVEPARAM name="characteristicwhere" value="1"/>
+        <CURVEPARAM name="edge" value="0"/>
+
+    </CURVE>-->
+
+    <CURVE name="rarefactionextension">
+        <CURVEPARAM name="curvefamily" value="0"/>
+        <CURVEPARAM name="domainfamily" value="1"/>
+        <CURVEPARAM name="characteristicdomain" value="1"/>
+        <CURVEPARAM name="x-domainpoints" value="101"/>
+        <CURVEPARAM name="y-domainpoints" value="101"/>
+    </CURVE>
+
+    <CURVE name="wavecurve">
+        <CURVEPARAM name="curvefamily" value="0"/>
+        <CURVEPARAM name="domainfamily" value="1"/>
+        <CURVEPARAM name="characteristicwhere" value="1"/>
+
+    </CURVE>
+
     <CURVE name="shock">
         <CURVEPARAM name="family" value="0"/>
         <CURVEPARAM name="xzero" value="3.4 0.5"/>
         <CURVEPARAM name="sigma" value="0.03"/>
     </CURVE>
-    
-       <VIEWCONFIGURATION modeldomain="2">
 
-    <PROJDESC name="Axis0 Axis1">
-        <VIEWPARAM name="axis" value="0 1"/>
-        <VIEWPARAM name="vpwidth" value="650"/>
-        <VIEWPARAM name="vpheight" value="650"/>
-        <VIEWPARAM name="iso2equi" value="true"/>
-    </PROJDESC>
+    <VIEWCONFIGURATION modeldomain="2">
 
-</VIEWCONFIGURATION>
+        <PROJDESC name="Axis0 Axis1">
+            <VIEWPARAM name="axis" value="0 1"/>
+            <VIEWPARAM name="vpwidth" value="650"/>
+            <VIEWPARAM name="vpheight" value="650"/>
+            <VIEWPARAM name="iso2equi" value="true"/>
+        </PROJDESC>
+
+    </VIEWCONFIGURATION>
 
 
 

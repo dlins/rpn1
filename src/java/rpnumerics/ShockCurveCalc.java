@@ -78,11 +78,11 @@ public class ShockCurveCalc implements RpCalculation {
 
 
     public RpSolution calc() throws RpException {
-
+        System.out.println("Direcao do shock da interface grafica "+timeDirection_);
         if (timeDirection_ == 0) {
 
-            HugoniotCurve resultForward = (HugoniotCurve) calc(methodName_, newtonTolerance_, start_, familyIndex_, 1);
-            HugoniotCurve resultBackward = (HugoniotCurve) calc(methodName_, newtonTolerance_, start_, familyIndex_, -1);
+            HugoniotCurve resultForward = (HugoniotCurve) calc(methodName_, newtonTolerance_, start_, familyIndex_, 20);
+            HugoniotCurve resultBackward = (HugoniotCurve) calc(methodName_, newtonTolerance_, start_, familyIndex_, 22);
 //            Orbit resultComplete = ShockCurve.concat(resultBackward, resultForward);
             HugoniotCurve completeCurve = concat(resultBackward,resultForward);
 

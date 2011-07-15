@@ -32,6 +32,11 @@ import wave.multid.Space;
 import wave.util.RealVector;
 import wave.util.RectBoundary;
 
+/**
+ *
+ * @deprecated To be replaced by RPnConfigurationDialog
+ */
+
 public class RPnConfigDialog extends RPnDialog {
 
 //    private Dimension dialogDimension_ = new Dimension(480, 380);
@@ -44,7 +49,7 @@ public class RPnConfigDialog extends RPnDialog {
     private JPanel methodsParamsPanel_ = new JPanel();
     private JTabbedPane tabbedPanel_ = new JTabbedPane();
     private JLabel physicsNameLabel_ = new JLabel();
-    private RPnFluxParamsPanel fluxParamPanel_;
+//    private RPnFluxParamsPanel fluxParamPanel_;
     private JPanel visualizationPanel_ = new JPanel();
     private JCheckBox[] axisCheckBoxArray_;
     private ArrayList<RPnInputComponent> boundaryTextArray_;
@@ -111,10 +116,10 @@ public class RPnConfigDialog extends RPnDialog {
         constrains.gridx = 0;
         constrains.gridy = 0;
         firstPanel_.add(physicsPanel_, constrains);
-        fluxParamPanel_ = new RPnFluxParamsPanel((String) physicsComboBox_.getSelectedItem());
+//        fluxParamPanel_ = new RPnFluxParamsPanel((String) physicsComboBox_.getSelectedItem());
         constrains.gridx = 0;
         constrains.gridy = 1;
-        firstPanel_.add(fluxParamPanel_, constrains);
+//        firstPanel_.add(fluxParamPanel_, constrains);
 
     }
 
@@ -127,13 +132,13 @@ public class RPnConfigDialog extends RPnDialog {
         }
         RPNUMERICS.init(physicsProfile_.getName());
 
-        firstPanel_.remove(fluxParamPanel_);
-        fluxParamPanel_ = new RPnFluxParamsPanel((String) physicsComboBox_.getSelectedItem());
+//        firstPanel_.remove(fluxParamPanel_);
+//        fluxParamPanel_ = new RPnFluxParamsPanel((String) physicsComboBox_.getSelectedItem());
         physicsNameLabel_.setText((String) physicsComboBox_.getSelectedItem());
         GridBagConstraints constrains = new GridBagConstraints();
         constrains.gridx = 0;
         constrains.gridy = 1;
-        firstPanel_.add(fluxParamPanel_, constrains);
+//        firstPanel_.add(fluxParamPanel_, constrains);
         getContentPane().validate();
     }
 
@@ -175,11 +180,11 @@ public class RPnConfigDialog extends RPnDialog {
 
             int vectorIndex = 0;
             for (int i = 0; i < dimension; i++) {
-                RPnInputComponent Min = new RPnInputComponent(new Double(limitsNumbers[vectorIndex]));
-                Min.setLabel("Axis " + i + " Min");
-                inputComponentsArray.add(Min);
-
-                vectorIndex += 2;
+//                RPnInputComponent Min = new RPnInputComponent(new Double(limitsNumbers[vectorIndex]));
+//                Min.setLabel("Axis " + i + " Min");
+//                inputComponentsArray.add(Min);
+//
+//                vectorIndex += 2;
 
             }
 
@@ -187,11 +192,11 @@ public class RPnConfigDialog extends RPnDialog {
 
             for (int i = 0; i < dimension; i++) {
 
-                RPnInputComponent Max = new RPnInputComponent(new Double(limitsNumbers[vectorIndex]));
-                Max.setLabel("Axis " + i + " Max");
-                inputComponentsArray.add(Max);
-
-                vectorIndex += 2;
+//                RPnInputComponent Max = new RPnInputComponent(new Double(limitsNumbers[vectorIndex]));
+//                Max.setLabel("Axis " + i + " Max");
+//                inputComponentsArray.add(Max);
+//
+//                vectorIndex += 2;
 
             }
             for (int i = 0; i < totalInputComponets; i++) {
@@ -521,7 +526,7 @@ public class RPnConfigDialog extends RPnDialog {
 
         RPnConfig.configure((String) physicsComboBox_.getSelectedItem());
         setVisualConfiguration();
-        fluxParamPanel_.applyParams();
+//        fluxParamPanel_.applyParams();
 
         setBoundary();
         setMethodConfiguration();
@@ -548,10 +553,10 @@ public class RPnConfigDialog extends RPnDialog {
 
             for (int i = 0; i < boundaryTextArray_.size() / 2; i++) {//Filling min limits
 
-                min.setElement(i, (Double) boundaryTextArray_.get(i).getValue(RPnInputComponent.NUMERIC_VALUE));
+//                min.setElement(i, (Double) boundaryTextArray_.get(i).getValue(RPnInputComponent.NUMERIC_VALUE));
             }
             for (int i = 0; i < boundaryTextArray_.size() / 2; i++) {//Filling max limits
-                max.setElement(i, (Double) boundaryTextArray_.get(i + boundaryTextArray_.size() / 2).getValue(RPnInputComponent.NUMERIC_VALUE));
+//                max.setElement(i, (Double) boundaryTextArray_.get(i + boundaryTextArray_.size() / 2).getValue(RPnInputComponent.NUMERIC_VALUE));
             }
 
             RectBoundary newBoundary = new RectBoundary(min, max);

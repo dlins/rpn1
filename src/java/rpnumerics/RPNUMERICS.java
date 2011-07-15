@@ -177,6 +177,17 @@ public class RPNUMERICS {
 //        setParamValue("shock", "family", String.valueOf(family));
 //
 //    }
+    public static Set<String> getConfigurationNames() {
+
+        return configMap_.keySet();
+
+
+    }
+
+    public static HashMap<String, Configuration> getConfigurations() {
+        return configMap_;
+    }
+
     public static void setFamily(int family) {
         setParamValue("shock", "family", String.valueOf(family));
 
@@ -361,7 +372,7 @@ public class RPNUMERICS {
         System.out.println("Resolucao em Java:" + xResolution + " " + yResolution);
 
 
-        return new DoubleContactCurveCalc(xResolution, yResolution, new Integer(getParamValue("boundaryextensioncurve", "curvefamily")), new Integer(getParamValue("boundaryextensioncurve", "domainfamily")));
+        return new DoubleContactCurveCalc(xResolution, yResolution, new Integer(getParamValue("bifurcationcurve", "curvefamily")), new Integer(getParamValue("bifurcationcurve", "domainfamily")));
 
     }
 
@@ -370,14 +381,14 @@ public class RPNUMERICS {
 
         int xResolution = new Integer(getContourConfiguration().getParam("x-resolution"));
         int yResolution = new Integer(getContourConfiguration().getParam("y-resolution"));
-        int characteristicDomain = new Integer(getParamValue("boundaryextensioncurve", "characteristicdomain"));
 
+        int characteristicWhere = new Integer(getParamValue("extensioncurve", "characteristicwhere"));
 
 
         System.out.println("Coincidence Extension Resolution Java:" + xResolution + " " + yResolution);
 
 
-        return new CoincidenceExtensionCurveCalc(xResolution, yResolution, new Integer(getParamValue("boundaryextensioncurve", "curvefamily")), new Integer(getParamValue("boundaryextensioncurve", "domainfamily")), characteristicDomain);
+        return new CoincidenceExtensionCurveCalc(xResolution, yResolution, new Integer(getParamValue("extensioncurve", "curvefamily")), new Integer(getParamValue("extensioncurve", "domainfamily")), characteristicWhere);
     }
 
     public static ExtensionCurveCalc createExtensionCurveCalc() {
@@ -385,15 +396,15 @@ public class RPNUMERICS {
 
         int xResolution = new Integer(getContourConfiguration().getParam("x-resolution"));
         int yResolution = new Integer(getContourConfiguration().getParam("y-resolution"));
-        int characteristicDomain = new Integer(getParamValue("boundaryextensioncurve", "characteristicdomain"));
-        int edge = new Integer(getParamValue("boundaryextensioncurve", "edge"));
 
+        int characteristicWhere = new Integer(getParamValue("extensioncurve", "characteristicwhere"));
+        int edge = new Integer(getParamValue("extensioncurve", "edge"));
 
 
         System.out.println("Resolucao em Java:" + xResolution + " " + yResolution);
 
 
-        return new ExtensionCurveCalc(xResolution, yResolution, new Integer(getParamValue("boundaryextensioncurve", "curvefamily")), new Integer(getParamValue("boundaryextensioncurve", "domainfamily")), edge, characteristicDomain);
+        return new ExtensionCurveCalc(xResolution, yResolution, new Integer(getParamValue("extensioncurve", "curvefamily")), new Integer(getParamValue("extensioncurve", "domainfamily")), edge, characteristicWhere);
 
     }
 
@@ -402,14 +413,14 @@ public class RPNUMERICS {
 
         int xResolution = new Integer(getContourConfiguration().getParam("x-resolution"));
         int yResolution = new Integer(getContourConfiguration().getParam("y-resolution"));
-        int characteristicDomain = new Integer(getParamValue("boundaryextensioncurve", "characteristicdomain"));
 
+        int characteristicWhere = new Integer(getParamValue("extensioncurve", "characteristicwhere"));
 
 
         System.out.println("Resolucao em Java:" + xResolution + " " + yResolution);
 
 
-        return new SubInflectionExtensionCurveCalc(xResolution, yResolution, new Integer(getParamValue("boundaryextensioncurve", "curvefamily")), new Integer(getParamValue("boundaryextensioncurve", "domainfamily")), characteristicDomain);
+        return new SubInflectionExtensionCurveCalc(xResolution, yResolution, new Integer(getParamValue("extensioncurve", "curvefamily")), new Integer(getParamValue("extensioncurve", "domainfamily")), characteristicWhere);
 
     }
 
@@ -441,13 +452,13 @@ public class RPNUMERICS {
         int yResolution = new Integer(getContourConfiguration().getParam("y-resolution"));
 
 
-        int curveFamily = new Integer(getParamValue("boundaryextensioncurve", "curvefamily"));
-        int domainFamily = new Integer(getParamValue("boundaryextensioncurve", "domainfamily"));
+        int curveFamily = new Integer(getParamValue("wavecurve", "curvefamily"));
+        int domainFamily = new Integer(getParamValue("wavecurve", "domainfamily"));
 
 
-        int characteristicDomain = new Integer(getParamValue("boundaryextensioncurve", "characteristicdomain"));
+        int characteristicDomain = new Integer(getParamValue("wavecurve", "characteristicwhere"));
 
-      
+
         return new CompositeCalc(xResolution, yResolution, orbitPoint, direction_, curveFamily, domainFamily, characteristicDomain);
     }
 
@@ -601,16 +612,28 @@ public class RPNUMERICS {
 
     private native void setTimeDirection(int timeDirection);
 
-    public static void configFluxParams(FluxParams fluxParams) {
+    public static void applyFluxParams() {
 
-        for (int i = 0; i < fluxParams.getParams().getSize(); i++) {
+        Configuration physicsConfiguration = configMap_.get(physicsID());
 
-            configMap_.get(physicsID()).setParamValue("param " + i, fluxParams.getElement(i) + "");
+        int paramSize = physicsConfiguration.getParamsSize();
 
+        RealVector paramsVector = new RealVector(paramSize);
+
+        HashMap<String, String> configurationParameters = physicsConfiguration.getParams();
+
+        Set<Entry<String, String>> paramsSet = configurationParameters.entrySet();
+
+        for (Entry<String, String> entry : paramsSet) {
+
+            int paramOrder = physicsConfiguration.getParamOrder(entry.getKey());
+            Double paramValue = new Double(entry.getValue());
+            paramsVector.setElement(paramOrder, paramValue);
+            System.out.println(paramOrder + " " + paramValue);
         }
 
-        setFluxParams(fluxParams);
-
+        FluxParams newFluxParams = new FluxParams(paramsVector);
+        setFluxParams(newFluxParams);
 
     }
 

@@ -14,6 +14,7 @@ import org.xml.sax.SAXException;
 import rpn.message.*;
 import rpnumerics.RpException;
 import java.io.*;
+import javax.swing.JOptionPane;
 import org.iso_relax.verifier.Verifier;
 import org.iso_relax.verifier.VerifierFactory;
 import org.xml.sax.SAXParseException;
@@ -100,20 +101,20 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
         try {
 
 //            File interfaceConfigFile = new File(INTERFACE_CONFIG_PATH + "defaults.xml");
-
-
-            RPnDesktopConfigReader defaultsReader = new RPnDesktopConfigReader(INTERFACE_CONFIG_PATH + "defaults.xml");
-
-//            InputStream defaultsConfigStream = new FileInputStream(interfaceConfigFile);
-
-            InputStream defaultsConfigStream = defaultsReader.read();
-
-            if (args.length == 0) {
-                RPnConfigReader.readDefaults(defaultsConfigStream);//Reading defaults
-                throw new FileNotFoundException();
-            }
-
-            RPnConfigReader.readDefaults(defaultsConfigStream);//Reading defaults
+//
+//
+//            RPnDesktopConfigReader defaultsReader = new RPnDesktopConfigReader(INTERFACE_CONFIG_PATH + "defaults.xml");
+//
+////            InputStream defaultsConfigStream = new FileInputStream(interfaceConfigFile);
+//
+//            InputStream defaultsConfigStream = defaultsReader.read();
+//
+//            if (args.length == 0) {
+//                RPnConfigReader.readDefaults(defaultsConfigStream);//Reading defaults
+//                throw new FileNotFoundException();
+//            }
+//
+//            RPnConfigReader.readDefaults(defaultsConfigStream);//Reading defaults
 
             plotter = new RPnDesktopPlotter(args[0]);
 
@@ -133,9 +134,9 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
 
 
         } catch (FileNotFoundException ex) {
-//            ex.printStackTrace();
-            RPnConfigDialog configDialog = new RPnConfigDialog();
-            configDialog.setVisible(true);
+            JOptionPane.showMessageDialog(rpnUIFrame_, "No input file !", "RPn", JOptionPane.ERROR_MESSAGE);
+//            RPnConfigDialog configDialog = new RPnConfigDialog();
+//            configDialog.setVisible(true);
 
 
         } catch (VerifierConfigurationException ex) {

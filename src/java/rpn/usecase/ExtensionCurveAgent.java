@@ -6,7 +6,7 @@
 package rpn.usecase;
 
 import java.awt.event.ActionEvent;
-import javax.swing.JToggleButton;
+import javax.swing.JButton;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.component.*;
 import rpn.controller.ui.BIFURCATION_CONFIG;
@@ -31,7 +31,7 @@ public class ExtensionCurveAgent extends RpModelPlotAgent {
     // Constructors/Initializers
     //
     protected ExtensionCurveAgent() {
-        super(DESC_TEXT, rpn.RPnConfig.HUGONIOT, new JToggleButton());
+        super(DESC_TEXT, rpn.RPnConfig.HUGONIOT, new JButton(DESC_TEXT));
     }
 
     @Override
@@ -56,14 +56,15 @@ public class ExtensionCurveAgent extends RpModelPlotAgent {
     public void execute() {
         ExtensionCurveGeomFactory factory = new ExtensionCurveGeomFactory(RPNUMERICS.createExtensionCurveCalc());
 
+//        RPnPhaseSpaceAbstraction auxPhaseSpace = RPnDataModule.AUXPHASESPACE;
 
-        RPnPhaseSpaceAbstraction auxPhaseSpace = RPnDataModule.PHASESPACE;//AUXPHASESPACE;
+        RPnPhaseSpaceAbstraction auxPhaseSpace = RPnDataModule.PHASESPACE;
 
         RpGeometry geometry = factory.geom();
 
         auxPhaseSpace.plot(geometry);
 
-        System.out.println("Chamando  extension curve execute");
+        System.out.println("Chamando  extension curve execute boundary");
     }
 
     static public ExtensionCurveAgent instance() {

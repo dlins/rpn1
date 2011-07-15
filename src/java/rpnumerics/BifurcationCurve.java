@@ -21,8 +21,8 @@ public class BifurcationCurve extends SegmentedCurve {
     //
 
     private int familyIndex_;
-    private List leftSegments_;
-    private List rightSegments_;
+    private List leftSegments_;// TODO It is necessary ?
+    private List rightSegments_;//TODO It is necessary ?
 //    private List segments;
 
     //
@@ -39,8 +39,19 @@ public class BifurcationCurve extends SegmentedCurve {
         super(createSingleSegmentList(leftList, rightList));
         leftSegments_ = leftList;
         rightSegments_ = rightList;
-
     }
+
+
+     public BifurcationCurve(List<HugoniotSegment> singleList) {
+
+        super(singleList);
+        leftSegments_ = singleList;
+        rightSegments_ =singleList;
+    }
+
+
+
+
 
     public BifurcationCurve(int familyIndex, ContourCurve curve, ViewingAttr viewingAttr) {
 
@@ -131,6 +142,7 @@ public class BifurcationCurve extends SegmentedCurve {
         int i = 0;
 
 
+
         for (HugoniotSegment hugoniotSegment : leftSeg) {
             hugoniotSegment.setIntType(16);
 //            System.out.println("Segmento : " + i + " " + hugoniotSegment);
@@ -149,6 +161,56 @@ public class BifurcationCurve extends SegmentedCurve {
         } else {
             return null;
         }
+
+//        List<HugoniotSegment> mergedList = new ArrayList<HugoniotSegment>();
+//
+//        for (int i = 0; i < rightSeg.size(); i++) {
+//            HugoniotSegment hSegmentRight = rightSeg.get(i);
+//            HugoniotSegment hSegmentLeft = leftSeg.get(i);
+//
+//            RealVector leftPoint = new RealVector(hSegmentLeft.p1().getSize()*2);
+//
+//            for (int j = 0; j < hSegmentLeft.p1().getSize(); j++) {
+//                leftPoint.setElement(j, hSegmentLeft.p1().getElement(j));
+//
+//            }
+//
+//            for (int j = 0; j < hSegmentRight.p1().getSize();j++){
+//                leftPoint.setElement(j+hSegmentRight.p1().getSize(), hSegmentRight.p1().getElement(j));
+//            }
+//
+//
+//            RealVector rightPoint = new RealVector(hSegmentRight.p2().getSize() * 2);
+//
+//             for (int j = 0; j < hSegmentRight.p2().getSize(); j++) {
+//                rightPoint.setElement(j, hSegmentLeft.p2().getElement(j));
+//
+//            }
+//
+//            for (int j = 0; j < hSegmentRight.p2().getSize();j++){
+//                rightPoint.setElement(j+hSegmentRight.p2().getSize(), hSegmentRight.p2().getElement(j));
+//            }
+
+
+//
+//
+//
+//
+//
+//
+//            RealVector leftPoint = new RealVector(hSegmentLeft.p1().toString()+hSegmentRight.p1().toString());
+//            System.out.println(leftPoint);
+//            RealVector rightPoint = new RealVector(hSegmentLeft.p2().toString() + hSegmentRight.p2().toString());
+//            System.out.println(hSegmentLeft.p2().toString() + hSegmentRight.p2().toString());
+//            System.out.println(rightPoint);
+//            HugoniotSegment mergedSegment = new HugoniotSegment(leftPoint, 0.0, rightPoint, 0.0, 16); // TODO TESTE !!!
+//
+//            mergedList.add(mergedSegment);
+//        }
+//
+//
+//        return mergedList;
+
 
     }
 

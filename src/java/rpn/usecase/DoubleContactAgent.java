@@ -6,11 +6,7 @@
 package rpn.usecase;
 
 import java.awt.event.ActionEvent;
-import java.beans.PropertyChangeEvent;
-import java.util.Iterator;
-import java.util.List;
-import javax.swing.JToggleButton;
-import rpn.RPnCurvesListFrame;
+import javax.swing.JButton;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.component.*;
 import rpn.controller.ui.BIFURCATION_CONFIG;
@@ -35,7 +31,7 @@ public class DoubleContactAgent extends RpModelPlotAgent {
     // Constructors/Initializers
     //
     protected DoubleContactAgent() {
-        super(DESC_TEXT, rpn.RPnConfig.HUGONIOT, new JToggleButton());
+        super(DESC_TEXT, rpn.RPnConfig.HUGONIOT, new JButton(DESC_TEXT));
     }
 
     @Override
@@ -60,7 +56,9 @@ public class DoubleContactAgent extends RpModelPlotAgent {
         DoubleContactGeomFactory factory = new DoubleContactGeomFactory(RPNUMERICS.createDoubleContactCurveCalc());
 
 
-        RPnPhaseSpaceAbstraction auxPhaseSpace = RPnDataModule.PHASESPACE;//AUXPHASESPACE;
+//        RPnPhaseSpaceAbstraction auxPhaseSpace = RPnDataModule.PHASESPACE;//AUXPHASESPACE;
+
+        RPnPhaseSpaceAbstraction auxPhaseSpace = RPnDataModule.PHASESPACE;
 
         RpGeometry geometry = factory.geom();
 

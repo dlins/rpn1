@@ -6,75 +6,119 @@
  */
 package rpn;
 
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.beans.PropertyChangeEvent;
 import java.text.DecimalFormat;
-import javax.swing.AbstractAction;
+import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.Set;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
+import org.apache.batik.ext.swing.GridBagConstants;
+import rpnumerics.Configuration;
 
-public class RPnInputComponent extends AbstractAction {
+public class RPnInputComponent {
 
-    private JPanel panel_;
+    private JPanel panel_ = new JPanel();
     private JSlider slider_;
-    private JFormattedTextField textField_;
-    private JLabel label_;
+    private JFormattedTextField[] textField_;
+    private JLabel[] label_;
     private DecimalFormat formatter_;
     private DecimalFormat doubleFormatter_ = new DecimalFormat("0.000");
     private DecimalFormat integerFormatter_ = new DecimalFormat("0");
     private double maxRange_;
     private double minRange_;
-    private Object value_;
+    private RPnInputController controller_;
+    private String parameterName_;
     //CONSTS
-
-
     public static final String NUMERIC_VALUE = "NUMBER_VALUE";
     public static final String DOUBLE_FORMAT = "INTEGERTYPE";
     public static final String INTEGER_FORMAT = "DOUBLETYPE";
-
-
     private static final String FORMAT_TYPE = "FORMAT_TYPE";
 
-    public RPnInputComponent(double value) {
+    public RPnInputComponent(Configuration configuration) {
 
-        formatter_=doubleFormatter_;
-        panel_ = new JPanel(new GridLayout(1, 3));
-        value_ = value;
-        textField_ = new JFormattedTextField(formatter_);
-        slider_ = new JSlider(-100, 100);
+        textField_ = new JFormattedTextField[configuration.getParamsSize()];
 
-        textField_.getDocument().addDocumentListener(new TextValueHandler());
-        slider_.addChangeListener(new SliderHandler());
+        label_ = new JLabel[configuration.getParamsSize()];
 
-        maxRange_ = 1;
-        minRange_ = -1;
+        GridBagConstraints gridConstraints = new GridBagConstraints();
 
-        label_ = new JLabel();
-        label_.setText("Label");
+        gridConstraints.fill = GridBagConstraints.BOTH;
 
-        panel_.add(label_, 0, 0);
-        panel_.add(textField_, 0, 1);
-        panel_.add(slider_, 0, 2);
+        gridConstraints.gridwidth = 1;
+        gridConstraints.gridheight = 1;
+        gridConstraints.ipadx = 50;
+        gridConstraints.gridy = 0;
 
-        putValue(NUMERIC_VALUE, value);
-    }
+        gridConstraints.gridx = 0;
 
-    public RPnInputComponent(String label, double value) {
-        this(value);
-        setLabel(label);
-    }
+        GridBagLayout gridBayLayout = new GridBagLayout();
 
-    public RPnInputComponent(String label) {
-        this(0);
-        setLabel(label);
+
+
+        
+        panel_.setLayout(gridBayLayout);
+
+        HashMap<String, String> params = configuration.getParams();
+
+        Set<Entry<String, String>> paramsSet = params.entrySet();
+        int i = 0;
+
+        for (Entry<String, String> entry : paramsSet) {
+
+
+            String value = entry.getValue();
+            if (value.contains(".")) {
+
+                formatter_ = doubleFormatter_;
+            } else {
+                formatter_ = integerFormatter_;
+            }
+
+
+            JFormattedTextField textField = new JFormattedTextField(formatter_);
+
+            textField.setText(entry.getValue());
+            textField.setColumns(4);
+
+            textField_[i] = textField;
+            textField.setName(entry.getKey());
+            textField.addFocusListener(new FocusHandler());
+            textField.getDocument().addDocumentListener(new TextValueHandler());
+
+
+            JLabel label = new JLabel(entry.getKey());
+
+            label_[i] = label;
+
+            gridConstraints.gridx = 0;
+            panel_.add(label, gridConstraints);
+            gridConstraints.gridx = 1;
+            panel_.add(textField,gridConstraints);
+
+
+            gridConstraints.gridy++;
+
+            i++;
+
+        }
+
+        controller_ = new RPnInputController(this, configuration);
+
     }
 
     public void setRelativeRange(int min, int max) {
@@ -82,21 +126,6 @@ public class RPnInputComponent extends AbstractAction {
         slider_.setMinimum(min);
         slider_.setMaximum(max);
 
-    }
-
-    public void setNumericFormat(String numericFormat){
-
-        firePropertyChange(FORMAT_TYPE,"", numericFormat);
-
-
-    }
-
-    public void setDisplayColumns(int col) {
-        textField_.setColumns(col);
-    }
-
-    public void setLabel(String caption) {
-        label_.setText(caption);
     }
 
     public JPanel getContainer() {
@@ -111,9 +140,8 @@ public class RPnInputComponent extends AbstractAction {
         this.minRange_ = minRange;
     }
 
-    public void setValue(Double value) {
-        textField_.setText(formatter_.format(value));
-
+    public void removeSlider() {
+        panel_.remove(slider_);
     }
 
     private Double setValue(int sliderPosition) {
@@ -134,14 +162,9 @@ public class RPnInputComponent extends AbstractAction {
         public void insertUpdate(DocumentEvent arg0) {
             Document doc = (Document) arg0.getDocument();
             try {
-                Double value = new Double(doc.getText(0, doc.getLength()));
-                ChangeListener changeListener[] = slider_.getChangeListeners();
-                slider_.removeChangeListener(changeListener[0]);
-                slider_.setValue(setSliderPosition(value));
-                slider_.addChangeListener(changeListener[0]);
-                value_ = value;
-                putValue(NUMERIC_VALUE, value);
-//                firePropertyChange(NUMERIC_VALUE, value_, value);
+
+                String newValue = doc.getText(0, doc.getLength());
+                controller_.propertyChange(new PropertyChangeEvent(this, parameterName_, newValue, newValue));
             } catch (BadLocationException ex) {
                 System.out.println("Excessao Bad" + ex.getMessage());
             } catch (NumberFormatException ex) {
@@ -151,11 +174,9 @@ public class RPnInputComponent extends AbstractAction {
         }
 
         public void removeUpdate(DocumentEvent arg0) {
-            //            insertUpdate(arg0);
         }
 
         public void changedUpdate(DocumentEvent arg0) {
-//            insertUpdate(arg0);
         }
     }
 
@@ -169,85 +190,23 @@ public class RPnInputComponent extends AbstractAction {
 
 //            textField_.setText(formatter_.format(new Double(newValue)));
 
-            textField_.setText(formatter_.format(slider.getValue()));
+//            textField_.setText(formatter_.format(slider.getValue()));
 
             if (!slider.getValueIsAdjusting()) {
-                putValue(NUMERIC_VALUE, newValue);
+//                putValue(NUMERIC_VALUE, newValue);
             }
         }
     }
 
-    @Override
-    public Object getValue(String key) {
+    private class FocusHandler implements FocusListener {
 
-        if (key.equals(NUMERIC_VALUE)) {
-            return formatter_.format(value_);
+        public void focusGained(FocusEvent e) {
+
+            JTextField textField = (JTextField) e.getSource();
+            parameterName_ = textField.getName();
         }
 
-        return null;
-
-
-    }
-
-    @Override
-    public void putValue(String key, Object value) {
-
-        if (key.equals(NUMERIC_VALUE)) {
-            firePropertyChange(NUMERIC_VALUE, value_, value);
+        public void focusLost(FocusEvent e) {
         }
-
-
-    }
-
-    @Override
-    protected void firePropertyChange(String propName, Object oldValue, Object newValue) {
-
-        if (propName.equalsIgnoreCase(NUMERIC_VALUE)) {
-                value_ =  newValue;
-        }
-
-
-        if (propName.equalsIgnoreCase(FORMAT_TYPE)) {
-
-            if (newValue.equals(RPnInputComponent.INTEGER_FORMAT)){
-
-                integerFormatter_.setMaximumFractionDigits(0);
-                formatter_ = integerFormatter_;
-
-            }
-
-            if (newValue.equals(RPnInputComponent.DOUBLE_FORMAT)){
-                doubleFormatter_.setMaximumFractionDigits(3);
-                formatter_ = doubleFormatter_;
-            }
-
-            textField_.setText(formatter_.format(value_));
-        }
-
-
-        super.firePropertyChange(propName, oldValue, newValue);
-    }
-
-    @Override
-    public void setEnabled(boolean en) {
-
-        if (!en) {
-
-            slider_.setEnabled(false);
-            textField_.setEditable(false);
-
-            return;
-
-
-        }
-
-        slider_.setEnabled(true);
-        textField_.setEnabled(true);
-
-    }
-
-    public void actionPerformed(ActionEvent arg0) {
-        throw new UnsupportedOperationException("Not supported yet.");
-
     }
 }

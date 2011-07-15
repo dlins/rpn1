@@ -21,51 +21,20 @@ public class ExtensionCurveGeomFactory extends BifurcationCurveGeomFactory {
 
         ExtensionCurve curve = (ExtensionCurve) geomSource();
 
-        BifurcationSegGeom[] leftBifurcationSegArray = null;
-
         int resultSize = curve.segments().size();
+//        System.out.println("Tamanho da extensao da fronteira: "+resultSize);
 
-        leftBifurcationSegArray = new BifurcationSegGeom[resultSize];
+        BifurcationSegGeom[] leftBifurcationSegArray = new BifurcationSegGeom[resultSize];
         for (int i = 0; i < resultSize; i++) {
             leftBifurcationSegArray[i] = new BifurcationSegGeom((HugoniotSegment) curve.segments().get(i));
-
+            System.out.println((HugoniotSegment) curve.segments().get(i));
         }
 
         return new ExtensionCurveGeom(leftBifurcationSegArray, this);
 
     }
 
-//    public List<RpGeometry> createGeometriesFromSource() {
-//
-//        DoubleContactCurve curve = (DoubleContactCurve) geomSource();
-//        List<RpGeometry> result = new ArrayList<RpGeometry>();
-//        // assuming a container with HugoniotSegment elements
-//        int leftResultSize = curve.leftSegments().size();
-//
-//        int rightResultSize = curve.rightSegments().size();
-//
-//        HugoniotSegGeom[] leftHugoniotArray = new HugoniotSegGeom[leftResultSize];
-//        for (int i = 0; i < leftResultSize; i++) {
-//            leftHugoniotArray[i] = new HugoniotSegGeom((HugoniotSegment) curve.leftSegments().get(i));
-//        }
-//
-//        DoubleContactCurveGeom leftGeom = new DoubleContactCurveGeom(leftHugoniotArray, this);
-//
-//        result.add(leftGeom);
-//
-//        HugoniotSegGeom[] rightHugoniotArray = new HugoniotSegGeom[leftResultSize];
-//        for (int i = 0; i < rightResultSize; i++) {
-//            rightHugoniotArray[i] = new HugoniotSegGeom((HugoniotSegment) curve.rightSegments().get(i));
-//        }
-//
-//        DoubleContactCurveGeom rightGeom = new DoubleContactCurveGeom(rightHugoniotArray, this);
-//
-//        result.add(rightGeom);
-//
-//        return result;
-//
-//
-//    }
+
     public String toMatlab(int curveIndex) {
 //        RealVector xMin = RPNUMERICS.boundary().getMinimums();
 //        RealVector xMax = RPNUMERICS.boundary().getMaximums();

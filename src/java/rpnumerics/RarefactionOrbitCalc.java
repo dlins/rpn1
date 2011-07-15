@@ -70,8 +70,8 @@ public class RarefactionOrbitCalc implements RpCalculation {
         RarefactionOrbit result;
         if (timeDirection_ == 0) {
 
-            RarefactionOrbit resultForward = (RarefactionOrbit) calc(methodName_, flowName_, start_, familyIndex_, 1);
-            RarefactionOrbit resultBackward = (RarefactionOrbit) calc(methodName_, flowName_, start_, familyIndex_, -1);
+            RarefactionOrbit resultForward = (RarefactionOrbit) calc(methodName_, flowName_, start_, familyIndex_, 20);
+            RarefactionOrbit resultBackward = (RarefactionOrbit) calc(methodName_, flowName_, start_, familyIndex_, 22);
 
             if (resultBackward == null || resultForward == null) {
                 throw new RpException("Error in native layer");

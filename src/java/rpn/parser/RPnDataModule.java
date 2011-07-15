@@ -1,5 +1,7 @@
 package rpn.parser;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
 import rpn.*;
@@ -49,6 +51,27 @@ public class RPnDataModule {
 
     public static HugoniotCurve getHugoniotCurve() {
         return hugoniotCurve_;
+    }
+
+    public static void matlabReader(FileReader reader) {
+
+        BufferedReader buffer = new BufferedReader(reader);
+
+        String line = null;
+        try {
+            while ((line = buffer.readLine()) != null) {
+                System.out.print(line);
+
+            }
+
+            buffer.close();
+        } catch (IOException ex) {
+            Logger.getLogger(RPnDataModule.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+
+
+
     }
 
     static protected class InputHandler implements ContentHandler {
@@ -496,11 +519,11 @@ public class RPnDataModule {
 //
 //        int i = 0;
 //
-        while(iterator.hasNext()){
+        while (iterator.hasNext()) {
             writer.write(iterator.next().geomFactory().toXML());
         }
 
-        
+
     }
 
     static public void matlabExport(FileWriter writer) throws java.io.IOException {

@@ -97,7 +97,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveFlow_flux(JNIEnv * env, jobject ob
 
     for (int i = 0; i < dimension; i++) {
 
-        env->CallVoidMethod(returnedRealVector, setElementMethodID, i, realVectorOutput(i));
+        env->CallVoidMethod(returnedRealVector, setElementMethodID, i, realVectorOutput.component(i));
 
     }
 

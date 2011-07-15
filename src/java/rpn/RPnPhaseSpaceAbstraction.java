@@ -228,37 +228,37 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         }
     }
 
-    public void selectVisibleDirection(int direction) {
-        Iterator geomList = super.getGeomObjIterator();
-
-        while (geomList.hasNext()) {
-            RpGeometry geom = (RpGeometry) geomList.next();
-
-            if (geom instanceof RarefactionGeom) {//Rarefaction Orbit
-
-                RarefactionOrbitGeomFactory rarefactionFactory = (RarefactionOrbitGeomFactory) geom.geomFactory();
-                RarefactionOrbit rarefactionOrbit = (RarefactionOrbit) rarefactionFactory.geomSource();
-
-                if (rarefactionOrbit.getIntegrationFlag() == direction || direction == 0) {
-                    geom.viewingAttr().setVisible(true);
-
-                } else {
-                    geom.viewingAttr().setVisible(false);
-                }
-            }
-
-            if (geom instanceof OrbitGeom) {//Orbit
-                OrbitGeomFactory orbitFactory = (OrbitGeomFactory) geom.geomFactory();
-                Orbit orbit = (Orbit) orbitFactory.geomSource();
-                if (orbit.getIntegrationFlag() == direction || direction == 0) {
-                    geom.viewingAttr().setVisible(true);
-                } else {
-                    geom.viewingAttr().setVisible(false);
-                }
-
-            }
-        }
-    }
+//    public void selectVisibleDirection(int direction) {
+//        Iterator geomList = super.getGeomObjIterator();
+//
+//        while (geomList.hasNext()) {
+//            RpGeometry geom = (RpGeometry) geomList.next();
+//
+//            if (geom instanceof RarefactionGeom) {//Rarefaction Orbit
+//
+//                RarefactionOrbitGeomFactory rarefactionFactory = (RarefactionOrbitGeomFactory) geom.geomFactory();
+//                RarefactionOrbit rarefactionOrbit = (RarefactionOrbit) rarefactionFactory.geomSource();
+//
+//                if (rarefactionOrbit.getIntegrationFlag() == direction || direction == 0) {
+//                    geom.viewingAttr().setVisible(true);
+//
+//                } else {
+//                    geom.viewingAttr().setVisible(false);
+//                }
+//            }
+//
+//            if (geom instanceof OrbitGeom) {//Orbit
+//                OrbitGeomFactory orbitFactory = (OrbitGeomFactory) geom.geomFactory();
+//                Orbit orbit = (Orbit) orbitFactory.geomSource();
+//                if (orbit.getIntegrationFlag() == direction || direction == 0) {
+//                    geom.viewingAttr().setVisible(true);
+//                } else {
+//                    geom.viewingAttr().setVisible(false);
+//                }
+//
+//            }
+//        }
+//    }
     // overwriting so we don't remove the last Hugoniot
 
     @Override

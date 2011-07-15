@@ -5,6 +5,8 @@
  */
 package rpn.usecase;
 
+import java.awt.Font;
+import java.awt.geom.AffineTransform;
 import wave.util.RealVector;
 import rpn.parser.RPnDataModule;
 import rpn.component.RpGeometry;
@@ -29,8 +31,15 @@ public abstract class RpModelPlotAgent extends RpModelActionAgent {
         super(shortDesc, icon);
         button_ = button;
         button_.setAction(this);
-        button_.setToolTipText(shortDesc);
         button_.setFont(rpn.RPnConfigReader.MODELPLOT_BUTTON_FONT);
+        AffineTransform fontTransform = new AffineTransform();
+
+        fontTransform.scale(1.2, 1.2);
+        Font newFont = button_.getFont().deriveFont(fontTransform);
+        button_.setFont(newFont);
+
+        button_.setToolTipText(shortDesc);
+
         putValue(Action.SHORT_DESCRIPTION, shortDesc);
         setEnabled(false);
         addOnlyLastGeometry_ = true;

@@ -15,7 +15,7 @@
  */
 #include "RealVector.h"
 #include <vector>
-
+using namespace std;
 /*
  * ---------------------------------------------------------------
  * Definitions:

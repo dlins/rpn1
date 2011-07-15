@@ -8,6 +8,7 @@ package rpn.controller.ui;
 import java.awt.Point;
 import rpn.usecase.AreaSelectionAgent;
 import rpn.usecase.BifurcationRefineAgent;
+import rpn.usecase.RpModelPlotAgent;
 import wave.multid.Coords2D;
 import wave.multid.view.ViewingTransform;
 import wave.util.RealVector;
@@ -28,6 +29,8 @@ public class AREASELECTION_CONFIG extends UI_ACTION_SELECTED {
         System.out.println("Construtor de AREASELECTION_CONFIG");
 
     }
+
+
 
     @Override
     public void userInputComplete(rpn.controller.ui.UIController ui,

@@ -1,6 +1,7 @@
 #include <math.h>
 
 #include "Thermodynamics_SuperCO2_WaterAdimensionalized.h"
+using namespace std;
 
 // Generate a spline
 
@@ -92,6 +93,7 @@ U_typical_(copy.U_typical_),
 h_typical_(copy.h_typical_),
 rpnHomePath_(copy.rpnHomePath_) {
 
+    cout<<"construtor de copia da termodinamica"<<endl;
     // Generate the splines
 
     info_rhosigmac = create_spline("rhosigmac_spline.txt", "rhosigmac", P, rhosigmac_);
@@ -149,7 +151,7 @@ Rock_Cr(2.029e6),
 Water_Cw_specific(4297.),
 T_typical_(304.63),
 Rho_typical_(998.2),
-U_typical_(4.42e-7),
+U_typical_(4.42e-3),
 rpnHomePath_(rpnHomePath) {
 
     h_typical_ = Water_Cw_specific * (T_typical_ - Tref_water);

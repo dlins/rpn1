@@ -5,15 +5,12 @@
  */
 package rpnumerics;
 
-import wave.util.RealVector;
 import wave.util.RealSegment;
 import java.util.List;
 import wave.multid.CoordsArray;
 import java.util.ArrayList;
-import wave.multid.view.ViewingAttr;
-import java.awt.Color;
 
-public class CoincidenceCurve extends SegmentedCurve{// RPnCurve implements RpSolution {
+public class CoincidenceCurve extends BifurcationCurve{// RPnCurve implements RpSolution {
     //
     // Members
     //
