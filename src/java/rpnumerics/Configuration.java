@@ -27,6 +27,8 @@ public class Configuration {
         type_ = type;
     }
 
+
+
     public Configuration(ConfigurationProfile profile) {
         System.out.println(profile);
 
@@ -102,10 +104,11 @@ public class Configuration {
         return params_.size();
     }
 
+    public HashMap<String,Configuration> getConfiguration(){
+        return configurationMap_;
+    }
+
     public String getParam(int paramOrder) {
-
-
-
         try {
             String paramName = paramOrder_.get(paramOrder);
 

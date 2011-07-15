@@ -37,13 +37,23 @@ public class RPnFluxParamsDialog extends RPnDialog {
         for (Entry<String, Configuration> entry : configSet) {
 
             System.out.println(entry.getValue().getName());
-
-
             String configurationType = entry.getValue().getType();
 
-            if (configurationType.equalsIgnoreCase(ConfigurationProfile.PHYSICS_PROFILE) ||configurationType.equalsIgnoreCase(ConfigurationProfile.PHYSICS_CONFIG_PROFILE)) {
+            if (configurationType.equalsIgnoreCase(ConfigurationProfile.PHYSICS_PROFILE)) {
                 RPnInputComponent inputComponent = new RPnInputComponent(entry.getValue());
                 paramsPanel_.add(inputComponent.getContainer());
+
+                HashMap<String, Configuration> configurationMap = entry.getValue().getConfiguration();
+                Set<Entry<String, Configuration>> configurationSet = configurationMap.entrySet();
+                for (Entry<String, Configuration> physicsConfiguration : configurationSet) {
+                    if (physicsConfiguration.getValue().getType().equals(ConfigurationProfile.PHYSICS_CONFIG_PROFILE)) {
+                        RPnInputComponent physicsParamsInput = new RPnInputComponent(physicsConfiguration.getValue());
+                        paramsPanel_.add(physicsParamsInput.getContainer());
+
+                    }
+
+                }
+
             }
 
 
