@@ -34,7 +34,7 @@ public abstract class RpModelPlotAgent extends RpModelActionAgent {
         button_.setFont(rpn.RPnConfigReader.MODELPLOT_BUTTON_FONT);
         AffineTransform fontTransform = new AffineTransform();
 
-        fontTransform.scale(1.5, 1.5);
+        fontTransform.scale(1.2, 1.2);
         Font newFont = button_.getFont().deriveFont(fontTransform);
         button_.setFont(newFont);
 
