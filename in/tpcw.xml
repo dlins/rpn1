@@ -7,6 +7,7 @@
         <PHYSICSPARAM name="porosity" value="0.15"/>
         <PHYSICSPARAM name="absolut permeability" value="1.15"/>
         <PHYSICSPARAM name="viscosity" value="2.15"/>
+        <PHYSICSPARAM name="spline path" value="/home/edsonlan/Java/rpn"/>
     </PHYSICSCONFIG>
 
 <!--<BOUNDARY name="rect">

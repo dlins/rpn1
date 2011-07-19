@@ -110,42 +110,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         return auxFrames_;
     }
 
-    private void checkMethods(int state) {
-
-        Set<String> stringSet = RPNUMERICS.getConfigurationNames();
-
-        if (stringSet.contains("boundaryextensioncurve")) {
-            toolBar_.add(CoincidencePlotAgent.instance().getContainer());
-            toolBar_.add(SubInflectionPlotAgent.instance().getContainer());
-            toolBar_.add(BuckleyLeverettiInflectionAgent.instance().getContainer());
-            toolBar_.add(DoubleContactAgent.instance().getContainer());
-        }
-
-
-        if (stringSet.contains("rarefactionextensioncurve") && UIController.instance().getState() instanceof BIFURCATION_CONFIG) {
-            toolBar_.add(ExtensionCurveAgent.instance().getContainer());
-            toolBar_.add(SubInflectionExtensionCurveAgent.instance().getContainer());
-            toolBar_.add(CoincidenceExtensionCurvePlotAgent.instance().getContainer());
-
-        }
-
-//        if (stringSet.contains("shock")) {
-//
-//            toolBar_.add(HugoniotPlotAgent.instance().getContainer());
-//            toolBar_.add(ShockCurvePlotAgent.instance().getContainer());
-//            toolBar_.add(RarefactionOrbitPlotAgent.instance().getContainer());
-//            toolBar_.add(CompositePlotAgent.instance().getContainer());
-//        }
-
-
-
-        for (String string : stringSet) {
-
-            System.out.println(string);
-
-        }
-
-    }
+  
 
     public void propertyChange(PropertyChangeEvent evt) {
 

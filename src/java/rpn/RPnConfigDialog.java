@@ -575,7 +575,7 @@ public class RPnConfigDialog extends RPnDialog {
             if (e.getSource() instanceof JComboBox) {
 
                 JComboBox combo = (JComboBox) e.getSource();
-                RPnConfig.setActivePhisics((String) combo.getSelectedItem());
+                RPnConfig.setActivePhysics((String) combo.getSelectedItem());
                 buildFluxParamsPanel();
                 buildBoundaryPanel();
 

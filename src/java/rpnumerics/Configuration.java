@@ -30,7 +30,7 @@ public class Configuration {
 
 
     public Configuration(ConfigurationProfile profile) {
-        System.out.println(profile);
+//        System.out.println(profile);
 
         if (profile.getParams() != null) {
             params_ = profile.getParams();
@@ -164,13 +164,7 @@ public class Configuration {
         configurationMap_.put(name, configuration);
     }
 
-//    public void addConfiguration(int index, Configuration configuration) {
-//        configurationArrayList_.add(index, configuration);
-//    }
-//
-//    public int configurationArraySize() {
-//        return configurationArrayList_.size();
-//    }
+
     public Configuration getConfiguration(String name) {
         return configurationMap_.get(name);
     }

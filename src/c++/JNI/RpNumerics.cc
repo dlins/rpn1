@@ -68,27 +68,25 @@ Physics * RpNumerics::physics_ = NULL;
 
 double RpNumerics::sigma = 0;
 
-
 /*
  * Class:     rpnumerics_RPNUMERICS
  * Method:    setRPnHome
  * Signature: (Ljava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setRPnHome
-  (JNIEnv * env, jclass cls, jstring rpnHome){
+(JNIEnv * env, jclass cls, jstring rpnHome) {
 
     const char *rpnHomeC;
 
     rpnHomeC = env->GetStringUTFChars(rpnHome, NULL);
 
-    string rpnHomeString (rpnHomeC);
+    string rpnHomeString(rpnHomeC);
 
     Physics::setRPnHome(rpnHomeString);
 
-//    cout<<"RPn home path em physics: "<<Physics::getRPnHome()<<endl;
+    //    cout<<"RPn home path em physics: "<<Physics::getRPnHome()<<endl;
 
 }
-
 
 /*
  * Class:     rpnumerics_RPNUMERICS
@@ -130,7 +128,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getFluxParams
 
 }
 
-
 /*
  * Class:     rpnumerics_RPNUMERICS
  * Method:    setFluxParams
@@ -158,7 +155,6 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setFluxParams(JNIEnv * env, jc
     RpNumerics::getPhysics().fluxParams(newFluxParams);
 
 }
-
 
 /*
  * Class:     rpnumerics_RPNUMERICS
@@ -200,7 +196,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setBoundary
         RectBoundary nativeBoundary(minNativeRealVector, maxNativeRealVector);
         RpNumerics::getPhysics().boundary(nativeBoundary);
 
-    } 
+    }
 
 
 }
@@ -286,19 +282,14 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initNative(JNIEnv * env, jclas
     if (physicsID == NULL) {
         return; /* OutOfMemoryError already thrown */
     }
-//    cout << "Construindo a fisica: " << physicsID << endl;
+    //    cout << "Construindo a fisica: " << physicsID << endl;
     RpNumerics::setPhysics(Physics(physicsID));
 
-//     if (!strcmp(physicsID, "TPCW")) {
-//
-//
-//
-//        RpNumerics::setPhysics(TPCW());
-//    }
+
+
+
 
 }
-
-
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_RpNumerics_getXZero(JNIEnv * env, jclass cls) {
 
@@ -399,6 +390,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_boundary(JNIEnv * env, jcla
         (env)->DeleteLocalRef(minRealVector);
         (env)->DeleteLocalRef(maxRealVector);
 
+
         return boundary;
 
     }
@@ -407,8 +399,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_boundary(JNIEnv * env, jcla
 
         const IsoTriang2DBoundary & boundary = (const IsoTriang2DBoundary &) RpNumerics::getPhysics().boundary();
         jclass isoRect2DBboundaryClass = env->FindClass("wave/util/IsoTriang2DBoundary");
-        jmethodID isoTriang2DBoundaryConstructor = (env)->GetMethodID(isoRect2DBboundaryClass, "<init>", 
-					"(Lwave/util/RealVector;Lwave/util/RealVector;Lwave/util/RealVector;)V");
+        jmethodID isoTriang2DBoundaryConstructor = (env)->GetMethodID(isoRect2DBboundaryClass, "<init>",
+                "(Lwave/util/RealVector;Lwave/util/RealVector;Lwave/util/RealVector;)V");
 
         int boundaryDimension = boundary.minimums().size();
 
@@ -454,6 +446,17 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_boundary(JNIEnv * env, jcla
 
     }
     cout << "Boundary not defined" << endl;
+
+
+
+
+
+
+
+
+
+
+
     return NULL;
 
 }

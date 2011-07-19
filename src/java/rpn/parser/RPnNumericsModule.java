@@ -115,7 +115,7 @@ public class RPnNumericsModule {
 
         public void endElement(String uri, String localName, String qName) throws SAXException {
             if (localName.equals("PHYSICS")) {
-                RPnConfig.setActivePhisics(physicsProfile_.getName());
+                RPnConfig.setActivePhysics(physicsProfile_.getName());
                 RPnConfig.addProfile(physicsProfile_.getName(), physicsProfile_);
                 rpnumerics.RPNUMERICS.init(physicsProfile_.getName());
 
@@ -126,7 +126,7 @@ public class RPnNumericsModule {
 
             if (localName.equals("PHYSICSCONFIG")) {
 
-                physicsProfile_.addConfigurationProfile(ConfigurationProfile.PHYSICS_CONFIG_PROFILE, currentPhysicsConfigurationProfile_);
+                physicsProfile_.addConfigurationProfile(currentPhysicsConfigurationProfile_.getName(), currentPhysicsConfigurationProfile_);
             }
 
             if (localName.equals("CURVE")) {

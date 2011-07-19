@@ -41,6 +41,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
 
     unsigned int i;
 
+    jclass rpnumericsClass = (env)->FindClass(RPNUMERICS_LOCATION);
+
     jclass classOrbitPoint = (env)->FindClass(ORBITPOINT_LOCATION);
     jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
     jclass hugoniotSegmentClass = (env)->FindClass(HUGONIOTSEGMENTCLASS_LOCATION);
@@ -55,6 +57,45 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
     jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
     jmethodID hugoniotCurveConstructor = env->GetMethodID(hugoniotCurveClass, "<init>", "(Lrpnumerics/PhasePoint;Ljava/util/List;)V");
     jmethodID phasePointConstructor = (env)->GetMethodID(phasePointClass, "<init>", "(Lwave/util/RealVector;)V");
+
+    //---------------------------------------------------------------------------------------
+
+    //  jmethodID getParamValueID = env->GetStaticMethodID(rpnumericsClass, "getParamValue", "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;");
+    //    jmethodID getParamPhysicsValueID = env->GetStaticMethodID(rpnumericsClass, "getPhysicsParamValue", "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;");
+    //    const char * paramName = "tolerance";
+    //    const char * curveName = "Newton";
+    //    jstring cName = env->NewStringUTF(curveName);
+    //    jstring pName = env->NewStringUTF(paramName);
+    //    jstring paramValue = (jstring) env->CallStaticObjectMethod(rpnumericsClass, getParamValueID, cName, pName);
+    //    const char * nativeParamValue = env->GetStringUTFChars(paramValue, NULL);
+    //    cout << "Valor do parametro em Java:" << nativeParamValue << endl;
+
+    //    const char * curve2Name = "thermodynamics";
+    //    const char * param2Name = "porosity";
+
+    //    jstring c2Name = env->NewStringUTF(curve2Name);
+    //    jstring p2Name = env->NewStringUTF(param2Name);
+    //    jstring physicsParamValue = (jstring) env->CallStaticObjectMethod(rpnumericsClass, getParamPhysicsValueID, c2Name, p2Name);
+
+    //    nativeParamValue = env->GetStringUTFChars(physicsParamValue, NULL);
+    //    cout << "Valor do parametro em Java(Set RpnHome):" << nativeParamValue << endl;
+
+    //---------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     //Input processing
     jdoubleArray inputPhasePointArray = (jdoubleArray) (env)->CallObjectMethod(initialPoint, toDoubleMethodID);
@@ -73,7 +114,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
     env->DeleteLocalRef(inputPhasePointArray);
 
     int dimension = realVectorInput.size();
-
 
     vector <RealVector> coords;
 
@@ -101,6 +141,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
         timeDirection = 1;
     else
         timeDirection = -1;
+
+
+
+    cout << "Valor timDirection" << timeDirection << endl;
 
     cout << "Valor de family" << familyIndex << endl;
 

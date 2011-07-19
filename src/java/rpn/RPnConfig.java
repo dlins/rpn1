@@ -135,7 +135,7 @@ public class RPnConfig {
 
     }
 
-    public static void setActivePhisics(String physicsName) {
+    public static void setActivePhysics(String physicsName) {
         activePhysics_ = physicsName;
     }
 
