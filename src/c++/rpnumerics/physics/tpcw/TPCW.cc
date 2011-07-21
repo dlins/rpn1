@@ -51,7 +51,6 @@ TD(new Thermodynamics_SuperCO2_WaterAdimensionalized(thermo)) {
 TPCW::TPCW(const TPCW & copy) :
 SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.boundary(), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATION_),
 TD(new Thermodynamics_SuperCO2_WaterAdimensionalized(*copy.TD)) {
-    cout << "Construtor de copia da tcpw" << endl;
     // Create Horizontal & Vertical FracFlows
     double cnw = 0., cng = 0., expw = 2., expg = 2.;
     fh = new FracFlow2PhasesHorizontalAdimensionalized(cnw, cng, expw, expg, *TD);
@@ -96,7 +95,7 @@ Boundary * TPCW::defaultBoundary()const {
     //    min.component(1) = T2Theta(304.63);
     min.component(1) = 304.63;
     //    min.component(2) = TD->u2U(0);
-    min.component(2) = 1*4.22e-3;
+    min.component(2) = 1 * 4.22e-3;
 
     //    cout <<min.component(0)<<"<--------MIN 0"<<endl;
     //    cout << min.component(1) << "<--------MIN 1" << endl;
@@ -127,24 +126,45 @@ void TPCW::preProcess(RealVector & input) {
 
     }
 
-
-
-
-
-
 }
 
 void TPCW::postProcess(vector<RealVector> & input) {
 
+    int inputSize = input[0].size();
+
     for (int i = 0; i < input.size(); i++) {
-//        cout << "Postprocess. Was: " << input[i];
-        input[i].component(1) = TD->Theta2T(input[i].component(1));
-        if (input[i].size() >= 3) input[i].component(2) = TD->U2u(input[i].component(2));
-//        cout << " Now is: " << input[i] << endl;
+
+
+        switch (inputSize) {
+            case 4://Rarefaction
+                input[i].component(1) = TD->Theta2T(input[i].component(1));
+                input[i].component(2) = TD->U2u(input[i].component(2));
+                input[i].component(3) = TD->U2u(input[i].component(3));
+                break;
+
+            case 8://Shock
+                input[i].component(1) = TD->Theta2T(input[i].component(1));
+                input[i].component(2) = TD->U2u(input[i].component(2));
+                input[i].component(5) = TD->U2u(input[i].component(5));
+                break;
+
+            case 7: //Coincidence,BL,etc 
+                input[i].component(2) = TD->U2u(input[i].component(2));
+                input[i].component(1) = TD->Theta2T(input[i].component(1));
+
+                break;
+
+            case 2://Double contact , etc
+
+                input[i].component(1) = TD->Theta2T(input[i].component(1));
+
+                break;
+
+
+        }
+
+
     }
-
-
-
 
 }
 

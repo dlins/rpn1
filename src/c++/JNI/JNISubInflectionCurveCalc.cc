@@ -75,7 +75,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionCurveCalc_nativeCalc(JNIE
     //-------------------------------------------------------------------
     RealVector Uref(dimension);
 
-    double phi = 1.0;
+    double phi = 0.38;
 
     Thermodynamics_SuperCO2_WaterAdimensionalized TD(Physics::getRPnHome());
 

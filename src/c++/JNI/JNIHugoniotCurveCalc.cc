@@ -115,7 +115,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
     RectBoundary tempBoundary(min, max);
 
 
-    ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), tempBoundary, hf); //stoneHugoniotFunction);
+    ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), tempBoundary, hf);
 
     vector<HugoniotPolyLine> hugoniotPolyLineVector;
 
@@ -146,6 +146,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
             jobject realVectorRightPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRRight);
 
             int pointType = hugoniotPolyLineVector[i].type;
+
+            cout<<"Tamanho de vec: "<<hugoniotPolyLineVector[i].vec[j].size()<<endl;
 
             double leftSigma = hugoniotPolyLineVector[i].vec[j].component(dimension + m);
             double rightSigma = hugoniotPolyLineVector[i].vec[j + 1].component(dimension + m);
