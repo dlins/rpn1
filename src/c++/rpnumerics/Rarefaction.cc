@@ -666,6 +666,7 @@ int Rarefaction::curve(const RealVector &initial_point,
 
         // BEGIN Check for monotonicity //
         if (increase != RAREFACTION_SPEED_NEUTRAL){
+           // cout << "new_lambda = " << new_lambda << ", previous_lambda = " << previous_lambda << endl;
             if ((new_lambda >= previous_lambda && increase == RAREFACTION_SPEED_DECREASE) ||
                 (new_lambda <= previous_lambda && increase == RAREFACTION_SPEED_INCREASE)){
                 cout<<"Valor de increase: "<<increase<<endl;

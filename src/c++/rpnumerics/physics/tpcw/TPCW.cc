@@ -96,7 +96,7 @@ Boundary * TPCW::defaultBoundary()const {
     //    min.component(1) = T2Theta(304.63);
     min.component(1) = 304.63;
     //    min.component(2) = TD->u2U(0);
-    min.component(2) = 0;
+    min.component(2) = 1*4.22e-3;
 
     //    cout <<min.component(0)<<"<--------MIN 0"<<endl;
     //    cout << min.component(1) << "<--------MIN 1" << endl;
@@ -108,7 +108,7 @@ Boundary * TPCW::defaultBoundary()const {
     //    max.component(1) = T2Theta(450);
     max.component(1) = 450;
     //    max.component(2) = TD->u2U(2 * 4.22e-5);
-    max.component(2) = 2 * 4.22e-2;
+    max.component(2) = 2 * 4.22e-3;
 
     //    cout <<max.component(0)<<"<----------MAX 0"<<endl;
     //    cout << max.component(1) << "<-------MAX 1" << endl;
@@ -137,9 +137,10 @@ void TPCW::preProcess(RealVector & input) {
 void TPCW::postProcess(vector<RealVector> & input) {
 
     for (int i = 0; i < input.size(); i++) {
+        cout << "Postprocess. Was: " << input[i];
         input[i].component(1) = TD->Theta2T(input[i].component(1));
         if (input[i].size() >= 3) input[i].component(2) = TD->U2u(input[i].component(2));
-
+        cout << " Now is: " << input[i] << endl;
     }
 
 
