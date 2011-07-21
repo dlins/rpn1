@@ -51,7 +51,7 @@ TD(new Thermodynamics_SuperCO2_WaterAdimensionalized(thermo)) {
 TPCW::TPCW(const TPCW & copy) :
 SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.boundary(), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATION_),
 TD(new Thermodynamics_SuperCO2_WaterAdimensionalized(*copy.TD)) {
-    cout <<"Construtor de copia da tcpw"<<endl;
+    cout << "Construtor de copia da tcpw" << endl;
     // Create Horizontal & Vertical FracFlows
     double cnw = 0., cng = 0., expw = 2., expg = 2.;
     fh = new FracFlow2PhasesHorizontalAdimensionalized(cnw, cng, expw, expg, *TD);
@@ -93,8 +93,10 @@ Boundary * TPCW::defaultBoundary()const {
     RealVector min(3);
 
     min.component(0) = 0;
-    min.component(1) = T2Theta(278.22);
-    min.component(2) = TD->u2U(0);
+    //    min.component(1) = T2Theta(304.63);
+    min.component(1) = 304.63;
+    //    min.component(2) = TD->u2U(0);
+    min.component(2) = 0;
 
     //    cout <<min.component(0)<<"<--------MIN 0"<<endl;
     //    cout << min.component(1) << "<--------MIN 1" << endl;
@@ -103,14 +105,45 @@ Boundary * TPCW::defaultBoundary()const {
     RealVector max(3);
 
     max.component(0) = 1.0;
-    max.component(1) = T2Theta(375.10);
-    max.component(2) = TD->u2U(2 * 4.22e-5);
+    //    max.component(1) = T2Theta(450);
+    max.component(1) = 450;
+    //    max.component(2) = TD->u2U(2 * 4.22e-5);
+    max.component(2) = 2 * 4.22e-2;
 
     //    cout <<max.component(0)<<"<----------MAX 0"<<endl;
     //    cout << max.component(1) << "<-------MAX 1" << endl;
     //    cout << max.component(2) << "<------MAX 2" << endl;
 
+
     return new RectBoundary(min, max);
+
+}
+
+void TPCW::preProcess(RealVector & input) {
+    input.component(1) = TD->T2Theta(input.component(1));
+    if (input.size() == 3) {
+
+        input.component(2) = TD->u2U(input.component(2));
+
+    }
+
+
+
+
+
+
+}
+
+void TPCW::postProcess(vector<RealVector> & input) {
+
+    for (int i = 0; i < input.size(); i++) {
+        input[i].component(1) = TD->Theta2T(input[i].component(1));
+        if (input[i].size() >= 3) input[i].component(2) = TD->U2u(input[i].component(2));
+
+    }
+
+
+
 
 }
 

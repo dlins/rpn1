@@ -12,7 +12,6 @@
  */
 #include "SubPhysics.h"
 
-
 /*
  * ---------------------------------------------------------------
  * Definitions:
@@ -25,7 +24,7 @@ space_(new Space(space)),
 ID_(id),
 type_(type) {
 
- }
+}
 
 const Space &SubPhysics::domain() const {
     return *space_;
@@ -54,9 +53,9 @@ HugoniotFunctionClass * SubPhysics::getHugoniotFunction()const {
     return hugoniotFunction_;
 }
 
-void SubPhysics::setHugoniotFunction(HugoniotFunctionClass *hf){
+void SubPhysics::setHugoniotFunction(HugoniotFunctionClass *hf) {
 
-    hugoniotFunction_=hf;
+    hugoniotFunction_ = hf;
 }
 
 const FluxFunction & SubPhysics::fluxFunction() const {
@@ -76,14 +75,20 @@ void SubPhysics::accumulationParams(const AccumulationParams & newAccumulationPa
     accumulationFunction_->accumulationParams(newAccumulationParams);
 }
 
- SubPhysics::~SubPhysics(){
+SubPhysics::~SubPhysics() {
 
-     delete fluxFunction_;
-     delete accumulationFunction_;
-     delete boundary_;
+    delete fluxFunction_;
+    delete accumulationFunction_;
+    delete boundary_;
 
     delete hugoniotFunction_;
     delete space_;
 
 
- }
+}
+
+void SubPhysics::preProcess(RealVector &) {
+}
+
+void SubPhysics::postProcess(vector<RealVector> &) {
+}
