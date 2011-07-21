@@ -83,9 +83,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
     //    Test testFunction;
 
     //-------------------------------------------------------------------
-
+    SubPhysics & physics = RpNumerics::getPhysics().getSubPhysics(0);
 
     RealVector Uref(dimension, input);
+
+    physics.preProcess(Uref);
 
     cout << Uref << endl;
 
@@ -96,7 +98,24 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
 
     hf->setReferenceVector(Uref);
 
-    ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), RpNumerics::getPhysics().boundary(), hf); //stoneHugoniotFunction);
+
+
+    const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
+
+    RealVector min(physicsBoundary. minimums());
+    RealVector max(physicsBoundary. maximums());
+
+
+    physics.preProcess(min);
+    physics.preProcess(max);
+
+    cout << "Valor de min:" << min << endl;
+    cout << "Valor de max:" << max << endl;
+
+    RectBoundary tempBoundary(min, max);
+
+
+    ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), tempBoundary, hf); //stoneHugoniotFunction);
 
     vector<HugoniotPolyLine> hugoniotPolyLineVector;
 
@@ -105,6 +124,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
     delete tempFluxFunction;
 
     for (int i = 0; i < hugoniotPolyLineVector.size(); i++) {
+
+        physics.postProcess(hugoniotPolyLineVector[i].vec);
 
         for (unsigned int j = 0; j < hugoniotPolyLineVector[i].vec.size() - 1; j++) {
 

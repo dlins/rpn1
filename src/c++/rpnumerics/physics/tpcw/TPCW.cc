@@ -137,10 +137,10 @@ void TPCW::preProcess(RealVector & input) {
 void TPCW::postProcess(vector<RealVector> & input) {
 
     for (int i = 0; i < input.size(); i++) {
-        cout << "Postprocess. Was: " << input[i];
+//        cout << "Postprocess. Was: " << input[i];
         input[i].component(1) = TD->Theta2T(input[i].component(1));
         if (input[i].size() >= 3) input[i].component(2) = TD->U2u(input[i].component(2));
-        cout << " Now is: " << input[i] << endl;
+//        cout << " Now is: " << input[i] << endl;
     }
 
 
