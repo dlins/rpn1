@@ -251,7 +251,8 @@ public class GeometryGraph3D {
                             g.setFont(font);
                             FontMetrics metrics = new FontMetrics(font) {
                             };
-                            Rectangle2D bounds = metrics.getStringBounds(String.valueOf(v1), null);
+                            String exp = String.format("%.4e",v1);
+                            Rectangle2D bounds = metrics.getStringBounds(exp, null);
                             int tamPix = (int) bounds.getWidth();
 
                             //***** Ficou melhor !!!!!!!!!!!!
@@ -264,19 +265,19 @@ public class GeometryGraph3D {
                             double dy = (raio * Dy) / dist;
 
                             if (setaDC.getX() < newDC.getX() && setaDC.getY() < newDC.getY()) {
-                                g.drawString(String.valueOf(v1), (int) (newDC.getX() + 5), (int) (newDC.getY() + 5));
+                                g.drawString(exp, (int) (newDC.getX() + 5), (int) (newDC.getY() + 5));
                                 Line2D line_ = new Line2D.Double(setaDC.getX() + dx, setaDC.getY() + dy, newDC.getX(), newDC.getY());
                                 graph.draw(line_);
                             } else if (setaDC.getX() > newDC.getX() && setaDC.getY() < newDC.getY()) {
-                                g.drawString(String.valueOf(v1), (int) (newDC.getX() - (tamPix + 2)), (int) (newDC.getY() + 5));
+                                g.drawString(exp, (int) (newDC.getX() - (tamPix + 2)), (int) (newDC.getY() + 5));
                                 Line2D line_ = new Line2D.Double(setaDC.getX() - dx, setaDC.getY() + dy, newDC.getX(), newDC.getY());
                                 graph.draw(line_);
                             } else if (setaDC.getX() > newDC.getX() && setaDC.getY() > newDC.getY()) {
-                                g.drawString(String.valueOf(v1), (int) (newDC.getX() - (tamPix + 2)), (int) (newDC.getY() + 5));
+                                g.drawString(exp, (int) (newDC.getX() - (tamPix + 2)), (int) (newDC.getY() + 5));
                                 Line2D line_ = new Line2D.Double(setaDC.getX() - dx, setaDC.getY() - dy, newDC.getX(), newDC.getY());
                                 graph.draw(line_);
                             } else if (setaDC.getX() < newDC.getX() && setaDC.getY() > newDC.getY()) {
-                                g.drawString(String.valueOf(v1), (int) (newDC.getX() + 5), (int) (newDC.getY() + 5));
+                                g.drawString(exp, (int) (newDC.getX() + 5), (int) (newDC.getY() + 5));
                                 Line2D line_ = new Line2D.Double(setaDC.getX() + dx, setaDC.getY() - dy, newDC.getX(), newDC.getY());
                                 graph.draw(line_);
                             }

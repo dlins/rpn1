@@ -136,13 +136,13 @@ public class GeometryUtil {
         //****************
         if (UIController.instance().getState() instanceof VELOCITYAGENT_CONFIG  &&  curvelist_.get(closestCurve) instanceof Orbit) {
             OrbitPoint pontoOrbit = (OrbitPoint) segOrbit[closestCurve];
-            vel.add(Math.floor(pontoOrbit.getLambda() * 1000)/1000);
+            vel.add(pontoOrbit.getLambda());
         }
         //***************
 
         if (UIController.instance().getState() instanceof VELOCITYAGENT_CONFIG  &&  curvelist_.get(closestCurve) instanceof HugoniotCurve) {
             HugoniotSegment segment = (HugoniotSegment) segmento[closestCurve];
-            vel.add(Math.floor(segment.leftSigma() * 1000)/1000);
+            vel.add(segment.leftSigma());
         }
         //***************
 
