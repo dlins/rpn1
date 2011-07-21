@@ -138,7 +138,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
         FracFlow2PhasesVerticalAdimensionalized * fv = new FracFlow2PhasesVerticalAdimensionalized(cnw, cng, expw, expg, td);
 
         // Create the Flux and its params
-        double abs_perm = 3e-12;
+        double abs_perm = 20e-12;
         double sin_beta = 0.0;
         double const_gravity = 9.8;
         bool has_gravity = false, has_horizontal = true;
@@ -151,7 +151,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
         Flux2Comp2PhasesAdimensionalized flux(flux_params);
 
         // Create the Accum and its params
-        double phi = 0.38;
+        double phi = 0.15;
         Accum2Comp2PhasesAdimensionalized_Params accum_params(td, &phi);
         Accum2Comp2PhasesAdimensionalized accum(accum_params);
 
@@ -173,16 +173,23 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
         //        pmax.component(0) = 1.0;
         //        pmax.component(1) = td.T2Theta(450.0);
 
+          SubPhysics & physics = RpNumerics::getPhysics().getSubPhysics(0);
+        const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
+
+        RealVector min(2);
+
+        RealVector max(2);
 
 
-        RealVector pmin(2);
-        pmin.component(0) = RpNumerics::getPhysics().boundary().minimums().component(0);
-        pmin.component(1) = RpNumerics::getPhysics().boundary().minimums().component(1);
-        RealVector pmax(2);
-        pmax.component(0) = RpNumerics::getPhysics().boundary().maximums().component(0);
-        pmax.component(1) = RpNumerics::getPhysics().boundary().maximums().component(1);
+        min.component(0) = physicsBoundary.minimums().component(0);
+        min.component(1) = physicsBoundary.minimums().component(1);
+
+        max.component(0) = physicsBoundary.maximums().component(0);
+        max.component(1) = physicsBoundary.maximums().component(1);
 
 
+        physics.preProcess(min);
+        physics.preProcess(max);
 
         cout << "Resolucao x " << number_of_grid_pnts[0];
         cout << "Resolucao y " << number_of_grid_pnts[1];
@@ -197,16 +204,20 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
         //        int lfamily = 0;
         //        int rfamily = 0;
 
-        Double_ContactTPCW dc(pmin, pmax, number_of_grid_pnts,
+        Double_ContactTPCW dc(min, max, number_of_grid_pnts,
                 &flux, &accum,
                 &reduced_flux, &reduced_accum,
                 leftFamily,
-                pmin, pmax, number_of_grid_pnts,
+               min, max, number_of_grid_pnts,
                 &flux, &accum,
                 &reduced_flux, &reduced_accum,
                 rightFamily);
 
         dc.compute_double_contactTPCW(left_vrs, right_vrs);
+
+
+        physics.postProcess(left_vrs);
+        physics.postProcess(right_vrs);
 
         printf("left_vrs.size()  = %d\n", left_vrs.size());
         printf("right_vrs.size() = %d\n", right_vrs.size());
