@@ -67,6 +67,27 @@ public class ControlClick {
     //static public List indCurva = new ArrayList();
 
 
+    public static void clearMarks() {
+        //*************************************// (Leandro)
+        RPnCurve.lista.clear();
+
+        GeometryUtil.vel.clear();
+        GeometryUtil.tipo.clear();
+
+        xDevSeta.clear();           xDevStr.clear();
+        xSeta.clear();              xStr.clear();
+        yDevSeta.clear();           yDevStr.clear();
+        ySeta.clear();              yStr.clear();
+
+        xDevSetaVel.clear();        xDevVel.clear();
+        xSetaVel.clear();           xVel.clear();
+        yDevSetaVel.clear();        yDevVel.clear();
+        ySetaVel.clear();           yVel.clear();
+
+        //***************************************
+    }
+
+
     public static void mousePressed(MouseEvent event, Scene scene) {
 
         //**************************************************************   (Leandro)
@@ -80,9 +101,9 @@ public class ControlClick {
         //***
 
         //**************************************************************    Edson
-        if (((UIController.instance().getState() instanceof AREASELECTION_CONFIG)  ||
-             (UIController.instance().getState() instanceof CLASSIFIERAGENT_CONFIG) ||
-             (UIController.instance().getState() instanceof VELOCITYAGENT_CONFIG)) && (ind % 2) == 0) {
+        if (((UIController.instance_.getState() instanceof AREASELECTION_CONFIG)  ||
+             (UIController.instance_.getState() instanceof CLASSIFIERAGENT_CONFIG) ||
+             (UIController.instance_.getState() instanceof VELOCITYAGENT_CONFIG)) && (ind % 2) == 0) {
 
             for (int i = 0; i < GeometryUtil.targetPoint.getSize(); i++) {
                 GeometryUtil.targetPoint.setElement(i, wcCoords.getElement(i));
@@ -99,9 +120,9 @@ public class ControlClick {
             return;
 
         } //** Teste para segundo click. Segunda-feira, 09/05  (Leandro)
-        else if (((UIController.instance().getState() instanceof AREASELECTION_CONFIG)  ||
-                  (UIController.instance().getState() instanceof CLASSIFIERAGENT_CONFIG)  ||
-                  (UIController.instance().getState() instanceof VELOCITYAGENT_CONFIG)) && (ind % 2) == 1) {
+        else if (((UIController.instance_.getState() instanceof AREASELECTION_CONFIG)  ||
+                  (UIController.instance_.getState() instanceof CLASSIFIERAGENT_CONFIG)  ||
+                  (UIController.instance_.getState() instanceof VELOCITYAGENT_CONFIG)) && (ind % 2) == 1) {
 
             for (int i = 0; i < GeometryUtil.targetPoint.getSize(); i++) {
                 GeometryUtil.cornerRet.setElement(i, wcCoords.getElement(i));
@@ -109,7 +130,7 @@ public class ControlClick {
 
             System.out.println("Corner do retangulo: " + GeometryUtil.cornerRet);
 
-            if (UIController.instance().getState() instanceof CLASSIFIERAGENT_CONFIG  &&  RPnCurve.lista.get(GeometryUtil.closestCurve) instanceof HugoniotCurve) {
+            if (UIController.instance_.getState() instanceof CLASSIFIERAGENT_CONFIG  &&  RPnCurve.lista.get(GeometryUtil.closestCurve) instanceof HugoniotCurve) {
 
                 xStr.add(GeometryUtil.cornerRet.getElement(1));
                 yStr.add(GeometryUtil.cornerRet.getElement(0));
@@ -139,7 +160,7 @@ public class ControlClick {
 
             }
 
-            else if (UIController.instance().getState() instanceof VELOCITYAGENT_CONFIG  &&  RPnCurve.lista.get(GeometryUtil.closestCurve) instanceof Orbit) {
+            else if (UIController.instance_.getState() instanceof VELOCITYAGENT_CONFIG  &&  RPnCurve.lista.get(GeometryUtil.closestCurve) instanceof Orbit) {
 
                 xVel.add(GeometryUtil.cornerRet.getElement(1));
                 yVel.add(GeometryUtil.cornerRet.getElement(0));
@@ -169,7 +190,7 @@ public class ControlClick {
 
             }
 
-            else if (UIController.instance().getState() instanceof VELOCITYAGENT_CONFIG  &&  RPnCurve.lista.get(GeometryUtil.closestCurve) instanceof HugoniotCurve) {
+            else if (UIController.instance_.getState() instanceof VELOCITYAGENT_CONFIG  &&  RPnCurve.lista.get(GeometryUtil.closestCurve) instanceof HugoniotCurve) {
 
                 xVel.add(GeometryUtil.cornerRet.getElement(1));
                 yVel.add(GeometryUtil.cornerRet.getElement(0));

@@ -228,7 +228,9 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         }
 
         if (RPNUMERICS.domainDim() == 3) {
-            try {
+
+            if (scene().geometries().hasNext()){
+                try {
                 GeometryGraph3D.class.newInstance().markPoints(GeometryUtil.targetPoint, GeometryUtil.pMarca, scene());
                 GeometryGraph3D.class.newInstance().paintComponent(g, scene());
             } catch (InstantiationException ex) {
@@ -236,6 +238,9 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
             } catch (IllegalAccessException ex) {
                 //Logger.getLogger(RPnPhaseSpacePanel.class.getName()).log(Level.SEVERE, null, ex);
             }
+            }
+
+            
         }
 
 //        if (RPNUMERICS.domainDim() == 4) {

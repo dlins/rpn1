@@ -6,6 +6,7 @@
 package rpn.usecase;
 
 import java.awt.event.ActionEvent;
+import rpn.component.util.ControlClick;
 import rpn.controller.ui.*;
 import rpn.message.RPnActionMediator;
 
@@ -34,6 +35,7 @@ public class ClearPhaseSpaceAgent extends javax.swing.AbstractAction {
         BifurcationPlotAgent.instance().getContainer().setEnabled(true);
         // ClearScene is not undoable
         UndoActionController.instance().setEnabled(false);
+        ControlClick.clearMarks();
         System.gc();
         //rpn.RPnUIFrame.instance().setTitle("");
         UIController.instance().resetCursor();
