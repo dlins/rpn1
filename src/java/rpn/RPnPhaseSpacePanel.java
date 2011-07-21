@@ -26,15 +26,26 @@ import java.awt.Color;
 
 import javax.swing.JPanel;
 import java.awt.Shape;
+import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import org.apache.batik.dom.GenericDOMImplementation;
 import org.apache.batik.svggen.SVGGraphics2D;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
+import rpn.component.util.CLASSIFIERAGENT_CONFIG;
+import rpn.component.util.GeometryGraph;
+import rpn.component.util.GeometryGraph3D;
+import rpn.component.util.GeometryUtil;
+import rpn.component.util.VELOCITYAGENT_CONFIG;
+import rpn.controller.ui.AREASELECTION_CONFIG;
+import rpn.controller.ui.UIController;
 import rpnumerics.BifurcationProfile;
+import rpnumerics.RPNUMERICS;
 
 public class RPnPhaseSpacePanel extends JPanel implements Printable {
     //
@@ -44,6 +55,10 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     static final public Color DEFAULT_BACKGROUND_COLOR = Color.gray;
     static final public Color DEFAULT_BOUNDARY_COLOR = Color.black;
     static final public Color DEFAULT_POINTMARK_COLOR = Color.white;
+
+    public static List <Area> listaArea = new ArrayList<Area>();     //** declarei isso    (Leandro) - ainda nao esta sendo usado
+    public static int myH_;                                          //** declarei isso    (Leandro)
+    public static int myW_;                                          //** declarei isso    (Leandro)
 
     public static boolean isCursorLine() {
         return cursorLine_;
@@ -90,6 +105,10 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
                 getViewport().getWidth()).intValue();
         int myH = new Double(scene().getViewingTransform().viewPlane().
                 getViewport().getHeight()).intValue();
+
+        //myW = myW/2;             // Basta isso para redefinir os tamanho dos painéis
+        //myH = myH/2;
+
         cursorPos_ = new Point(0, 0);
         setBackground(DEFAULT_BACKGROUND_COLOR);
         setPreferredSize(new java.awt.Dimension(myW, myH));
@@ -192,6 +211,84 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
 
         }
 
+        //** Leandro: início.
+        
+        myH_ = getHeight();
+        myW_ = getWidth();
+
+        if (RPNUMERICS.domainDim() == 2) {
+            try {
+                GeometryGraph.class.newInstance().markPoints(GeometryUtil.targetPoint, GeometryUtil.pMarca, scene());
+                GeometryGraph.class.newInstance().paintComponent(g, scene());
+            } catch (InstantiationException ex) {
+                //Logger.getLogger(RPnPhaseSpacePanel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalAccessException ex) {
+                //Logger.getLogger(RPnPhaseSpacePanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        if (RPNUMERICS.domainDim() == 3) {
+            try {
+                GeometryGraph3D.class.newInstance().markPoints(GeometryUtil.targetPoint, GeometryUtil.pMarca, scene());
+                GeometryGraph3D.class.newInstance().paintComponent(g, scene());
+            } catch (InstantiationException ex) {
+                //Logger.getLogger(RPnPhaseSpacePanel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalAccessException ex) {
+                //Logger.getLogger(RPnPhaseSpacePanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+//        if (RPNUMERICS.domainDim() == 4) {
+//            GeometryGraph4D.markPoints(GeometryUtil.targetPoint, GeometryUtil.pMarca, scene());
+//            GeometryGraph4D.paintComponent(g, scene());
+//        }
+//
+//        if ((UIController.instance().getState() instanceof AREASELECTION_CONFIG)  ||
+//            (UIController.instance().getState() instanceof CLASSIFIERAGENT_CONFIG)) {      // acrescentei isso
+//            getCastedUI().pointMarkBuffer().clear();      // melhorar isso !!!
+//            showCursorLine_ = false;
+//            repaint();
+//            getCastedUI().resetCursorCoords();        // analisar se isso dá alguma consequencia (use o export p/ Matlab para isso)
+//        }
+
+
+
+
+        if (UIController.instance_.getState() instanceof AREASELECTION_CONFIG) {      // acrescentei isso (Leandro)
+            getCastedUI().pointMarkBuffer().clear();
+            showCursorLine_ = false;
+            repaint();
+            getCastedUI().resetCursorCoords();
+        }
+
+        if (UIController.instance_.getState() instanceof CLASSIFIERAGENT_CONFIG) {      // acrescentei isso (Leandro)
+            getCastedUI().pointMarkBuffer().clear();
+            showCursorLine_ = false;
+            repaint();
+            getCastedUI().resetCursorCoords();
+        }
+
+        if (UIController.instance_.getState() instanceof VELOCITYAGENT_CONFIG) {      // acrescentei isso (Leandro)
+            getCastedUI().pointMarkBuffer().clear();
+            showCursorLine_ = false;
+            repaint();
+            getCastedUI().resetCursorCoords();
+        }
+
+
+
+
+
+
+
+
+
+
+
+        
+        //** Leandro: fim.
+        //*****************************************
+
         /*
          * USER CURSOR ORIENTATION
          *
@@ -211,9 +308,6 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
             g.setColor(prev);
             ((Graphics2D) g).setStroke(stroke);
         }
-
-
-
 
 
     }

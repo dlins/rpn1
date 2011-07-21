@@ -81,8 +81,8 @@ public class ShockCurveCalc implements RpCalculation {
 
         if (timeDirection_ == 0) {
 
-            HugoniotCurve resultForward = (HugoniotCurve) calc(methodName_, newtonTolerance_, start_, familyIndex_, 20);
-            HugoniotCurve resultBackward = (HugoniotCurve) calc(methodName_, newtonTolerance_, start_, familyIndex_, 22);
+            HugoniotCurve resultForward = (HugoniotCurve) calc(methodName_, newtonTolerance_, start_, familyIndex_, 1);
+            HugoniotCurve resultBackward = (HugoniotCurve) calc(methodName_, newtonTolerance_, start_, familyIndex_, -1);
 //            Orbit resultComplete = ShockCurve.concat(resultBackward, resultForward);
             HugoniotCurve completeCurve = concat(resultBackward,resultForward);
 
@@ -101,6 +101,11 @@ public class ShockCurveCalc implements RpCalculation {
           if (result == null) {
             throw new RpException("Error in native layer");
         }
+
+        //** acrescentei isso (Leandro)
+        RPnCurve.lista.add((RPnCurve) result);
+        System.out.println("Tamanho da lista: " + RPnCurve.lista.size());
+        //***
 
         return result;
     }

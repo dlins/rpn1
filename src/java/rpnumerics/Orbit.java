@@ -11,8 +11,10 @@ import wave.util.RealVector;
 
 import wave.multid.view.ViewingAttr;
 import java.awt.Color;
+import java.util.ArrayList;
 import rpn.component.MultidAdapter;
 import rpn.component.OrbitGeom;
+import wave.util.RealSegment;
 
 public class Orbit extends RPnCurve implements RpSolution {
     //
@@ -21,6 +23,9 @@ public class Orbit extends RPnCurve implements RpSolution {
 
     private OrbitPoint[] points_;
     private int intFlag_;
+
+    public double distancia = 0;      //** declarei isso (Leandro)
+    
     //
     // Constructor
     //
@@ -53,10 +58,6 @@ public class Orbit extends RPnCurve implements RpSolution {
             result[i] = new OrbitPoint(coords[i], times[i]);
         }
         return result;
-    }
-
-    public int findClosestSegment(wave.util.RealVector coords, double alpha) {
-        return 0;
     }
 
     //
@@ -106,6 +107,77 @@ public class Orbit extends RPnCurve implements RpSolution {
         return new Orbit(swap, OrbitGeom.BOTH_DIR);
 
     }
+
+
+    //** inseri este método (Leandro)
+    @Override
+    public int findClosestSegment(RealVector targetPoint, double alpha) {
+
+        ArrayList segments = MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseRPnCurveToCoordsArray(this));
+
+        RealVector target = new RealVector(targetPoint);
+        RealVector closest = null;
+        RealVector segmentVector = null;
+        alpha = 0;
+        int closestSegment = 0;
+        double closestDistance = -1;
+
+        double[] dist = new double[segments.size()];
+        double distmin = 0, distprox;
+
+        for (int i = 0; i < segments.size(); i++) {
+
+            RealSegment segment = (RealSegment) segments.get(i);
+            segmentVector = new RealVector(segment.p1());
+            segmentVector.sub(segment.p2());
+
+            for (int k = 0; k < target.getSize(); k++) {
+                if (target.getElement(k) == 0.) {
+                    segmentVector.setElement(k, 0.);
+                }
+            }
+
+            closest = new RealVector(target);
+
+            closest.sub(segment.p2());
+
+            alpha = closest.dot(segmentVector)
+                    / segmentVector.dot(segmentVector);
+
+            if (alpha < 0) {
+                alpha = 0;
+            }
+            if (alpha > 1) {
+                alpha = 1;
+            }
+            segmentVector.scale(alpha);
+
+            closest.sub(segmentVector);
+
+            for (int k = 0; k < target.getSize(); k++) {
+                if (target.getElement(k) == 0.) {
+                    closest.setElement(k, 0.);
+                }
+            }
+
+            dist[i] = closest.norm();
+        }
+
+        distmin = dist[0];
+
+        for (int i = 1; i < dist.length; i++) {
+            distprox = dist[i];
+            if (distprox <= distmin) {
+                distmin = distprox;
+                closestSegment = i;
+            }
+        }
+
+        distancia = distmin;
+
+        return closestSegment;
+    }
+    //**************************************************************************
 
     @Override
     public String toString() {

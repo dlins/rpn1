@@ -226,43 +226,43 @@ public class HugoniotCurve extends SegmentedCurve {
         return segments;
     }
 
-    @Override
-    public int findClosestSegment(RealVector targetPoint, double alpha) {
-
-        RealVector target = new RealVector(targetPoint);
-        RealVector closest = null;
-        RealVector segmentVector = null;
-        alpha = 0;
-        int closestSegment = 0;
-        double closestDistance = -1;
-
-        List hugoniotSegList = segments();
-        for (int i = 0; i < segments().size(); i++) {
-
-            HugoniotSegment segment = (HugoniotSegment) hugoniotSegList.get(i);
-            segmentVector = new RealVector(segment.rightPoint());
-            segmentVector.sub(segment.leftPoint());
-            closest = new RealVector(target);
-            closest.sub(segment.rightPoint());
-            alpha = closest.dot(segmentVector)
-                    / segmentVector.dot(segmentVector);
-            if (alpha < 0) {
-                alpha = 0;
-            }
-            if (alpha > 1) {
-                alpha = 1;
-            }
-            segmentVector.scale(alpha);
-            closest.sub(segmentVector);
-            if ((closestDistance < 0) || (closestDistance > closest.norm())) {
-                closestSegment = i;
-                closestDistance = closest.norm();
-            }
-        }
-
-
-        return closestSegment;
-    }
+//    @Override
+//    public int findClosestSegment(RealVector targetPoint, double alpha) {
+//
+//        RealVector target = new RealVector(targetPoint);
+//        RealVector closest = null;
+//        RealVector segmentVector = null;
+//        alpha = 0;
+//        int closestSegment = 0;
+//        double closestDistance = -1;
+//
+//        List hugoniotSegList = segments();
+//        for (int i = 0; i < segments().size(); i++) {
+//
+//            HugoniotSegment segment = (HugoniotSegment) hugoniotSegList.get(i);
+//            segmentVector = new RealVector(segment.rightPoint());
+//            segmentVector.sub(segment.leftPoint());
+//            closest = new RealVector(target);
+//            closest.sub(segment.rightPoint());
+//            alpha = closest.dot(segmentVector)
+//                    / segmentVector.dot(segmentVector);
+//            if (alpha < 0) {
+//                alpha = 0;
+//            }
+//            if (alpha > 1) {
+//                alpha = 1;
+//            }
+//            segmentVector.scale(alpha);
+//            closest.sub(segmentVector);
+//            if ((closestDistance < 0) || (closestDistance > closest.norm())) {
+//                closestSegment = i;
+//                closestDistance = closest.norm();
+//            }
+//        }
+//
+//
+//        return closestSegment;
+//    }
 
     private static List hugoniotSegsFromWaveState(PhasePoint xZero, WaveState[] wStates) {
 

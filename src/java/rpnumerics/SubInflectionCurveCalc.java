@@ -8,6 +8,7 @@ package rpnumerics;
 
 public class SubInflectionCurveCalc implements RpCalculation {
 
+    static private int contSI = 0;      //** declarei isso (Leandro)
 
     //
     // Constructors/Initializers
@@ -30,6 +31,17 @@ public class SubInflectionCurveCalc implements RpCalculation {
           if (result == null) {
             throw new RpException("Error in native layer");
         }
+
+        //** acrescentei isso (Leandro)
+        if (contSI == 0) {
+            System.out.println("Entrando em SubInflectionCurveCalc...");
+
+            RPnCurve.lista.add(result);
+            System.out.println("Tamanho da lista: " + RPnCurve.lista.size());
+
+            contSI += 1;
+        }
+        //*********************************************
 
         return result;
     }

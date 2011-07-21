@@ -16,10 +16,10 @@ import java.awt.event.*;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
-import java.util.Set;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import rpn.component.util.ClassifierAgent;
+import rpn.component.util.VelocityAgent;
 import rpn.controller.ui.*;
 import rpn.message.*;
 import rpnumerics.ShockProfile;
@@ -43,6 +43,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JMenu helpMenu = new JMenu();
     private JCheckBox resultsOption = new JCheckBox("Save With Results");
     private JMenuItem shockMenuItem_ = new JMenuItem("Shock Configuration ...");
+//    private JMenuItem bifurcationMenuItem_ = new JMenuItem("Configuration ...");
     private JMenuItem configurationMenuItem_ = new JMenuItem(new ConfigAction());//"Configuration ...");
     private JMenuItem jMenuFileExit = new JMenuItem();
     private JMenuItem matlabMenuFileExport_ = new JMenuItem("Export to Matlab ...");
@@ -51,8 +52,10 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JMenuItem exportMenuItem = new JMenuItem();
     private JMenuItem layoutMenuItem = new JMenuItem();
     private JMenuItem inputCoordsMenuItem = new JMenuItem("Input Coords ...");
+//    private JMenuItem errorControlMenuItem = new JMenuItem();
     private JMenuItem createSVGImageMenuItem = new JMenuItem();
     private JMenuItem printMenuItem = new JMenuItem();
+//    private JMenuItem pluginMenuItem = new JMenuItem();
     private static RPnPhaseSpaceFrame[] frames_, auxFrames_, leftFrames_, rightFrames_;
     private RPnMenuCommand commandMenu_ = null;
     private JMenuItem networkMenuItem = new JMenuItem();
@@ -63,7 +66,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JCheckBoxMenuItem showCurvesPaneltem_ = new JCheckBoxMenuItem("Show Curves Window", true);
     private RPnCurvesConfigPanel curvesConfigPanel_ = new RPnCurvesConfigPanel();
     private JFrame curvesFrame_;
-    private JMenuItem readMatlabFile_ = new JMenuItem("Read Matlab File ...");
+    private JMenuItem bifurcationConfigMenuItem_ = new JMenuItem("Configuration ...");
+    private RPnConfigurationDialog configurationDialog_ = new RPnConfigurationDialog();
 
     //Construct the frame
     public RPnUIFrame(RPnMenuCommand command) {
@@ -79,6 +83,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
             addPropertyChangeListener(this);
             UndoActionController.createInstance();
+
 
             getContentPane().add(statusLabel_, BorderLayout.SOUTH);
 
@@ -100,18 +105,22 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     // Methods
     //
 
+
+    //** constroi a tabela de curvas
     public void setCurvesFrame(JFrame curvesFrame) {
         this.curvesFrame_ = curvesFrame;
         UIController.instance().showCurvesPanel(showCurvesPaneltem_.isSelected());
 
     }
 
+
+    //** parece que nao esta sendo usado
     public static RPnPhaseSpaceFrame[] getAuxFrames() {
         return auxFrames_;
     }
 
-  
 
+    //** para os botoes do menu de tipos de curvas
     public void propertyChange(PropertyChangeEvent evt) {
 
         if (evt.getPropertyName().equals("aplication state")) {
@@ -120,38 +129,63 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             toolBar_.setOrientation(SwingConstants.VERTICAL);
 
 
-
-            if (evt.getNewValue() instanceof UI_ACTION_SELECTED && (evt.getNewValue() instanceof SHOCK_CONFIG || evt.getNewValue() instanceof RAREFACTION_CONFIG || evt.getNewValue() instanceof BIFURCATION_CONFIG)) {
-                toolBar_.removeAll();
-                UI_ACTION_SELECTED actionSelected = (UI_ACTION_SELECTED) evt.getNewValue();
-
-                for (RpModelActionAgent agent : actionSelected.getAgents()) {
-
-                    RpModelPlotAgent plotAgent = (RpModelPlotAgent) agent;
-
-                    toolBar_.add(plotAgent.getContainer());
-
-                }
-                toolBar_.revalidate();
-            }
-
-
             if (evt.getNewValue() instanceof SHOCK_CONFIG || evt.getNewValue() instanceof SIGMA_CONFIG) {
 
                 shockConfigMenu();
+                toolBar_.removeAll();
+
+                toolBar_.add(OrbitPlotAgent.instance().getContainer());
+                toolBar_.add(ForwardManifoldPlotAgent.instance().getContainer());
+                toolBar_.add(BackwardManifoldPlotAgent.instance().getContainer());
+                toolBar_.add(StationaryPointPlotAgent.instance().getContainer());
+                toolBar_.add(PoincareSectionPlotAgent.instance().getContainer());
+                toolBar_.add(HugoniotPlotAgent.instance().getContainer());
+//                toolBar_.add(ScratchAgent.instance().getContainer());
+//                ScratchAgent.instance().setEnabled(true);
+                toolBar_.revalidate();
+
             }
 
             if (evt.getNewValue() instanceof RAREFACTION_CONFIG) {
                 rarefactionConfigMenu();
 
+                toolBar_.removeAll();
+
+                toolBar_.add(HugoniotPlotAgent.instance().getContainer());
+                toolBar_.add(ShockCurvePlotAgent.instance().getContainer());
+                toolBar_.add(RarefactionOrbitPlotAgent.instance().getContainer());
+                toolBar_.add(CompositePlotAgent.instance().getContainer());
+                toolBar_.add(AreaSelectionAgent.instance().getContainer());    //** Edson/Leandro
+                toolBar_.add(ClassifierAgent.instance().getContainer());    //** Leandro
+                toolBar_.add(VelocityAgent.instance().getContainer());
+//                ScratchAgent.instance().setEnabled(true);
+                toolBar_.revalidate();
+
             }
 
             if (evt.getNewValue() instanceof BIFURCATION_CONFIG) {
+
                 bifurcationConfigMenu();
+
+                toolBar_.removeAll();
+
+                toolBar_.add(CoincidencePlotAgent.instance().getContainer());
+                toolBar_.add(SubInflectionPlotAgent.instance().getContainer());
+                toolBar_.add(BuckleyLeverettiInflectionAgent.instance().getContainer());
+                toolBar_.add(DoubleContactAgent.instance().getContainer());
+                toolBar_.add(ExtensionCurveAgent.instance().getContainer());
+                toolBar_.add(SubInflectionExtensionCurveAgent.instance().getContainer());
+                toolBar_.add(CoincidenceExtensionCurvePlotAgent.instance().getContainer());
+//                ScratchAgent.instance().setEnabled(true);
+//                toolBar_.validate();
+                toolBar_.revalidate();
 
             }
 
+//            pack();
         }
+
+
 
         if (evt.getPropertyName().equals("Network MenuItem Clicked")) {
             networkMenuItem.setEnabled(false);
@@ -164,16 +198,22 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     }
     //File | Exit action performed
 
+
+    //** para fechar a aplicacao pelo menu de tipos de curvas
     public void jMenuFileExit_actionPerformed(ActionEvent e) {
         commandMenu_.finalizeApplication();
     }
 
+
+    //** ainda nao implementado
     //Help | About action performed
     public void jMenuHelpAbout_actionPerformed(ActionEvent e) {
     }
 
+
     //Overridden so we can exit when window is closed
     @Override
+    // para fechar a aplicacao a partir de qualquer janela
     protected void processWindowEvent(WindowEvent e) {
         super.processWindowEvent(e);
         if (e.getID() == WindowEvent.WINDOW_CLOSING) {
@@ -181,6 +221,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         }
     }
 
+
+    //** nao vi alteracao
     void layoutMenuItem_actionPerformed(ActionEvent e) {
         RPnLayoutDialog dialog = new RPnLayoutDialog();
         Dimension dlgSize = dialog.getPreferredSize();
@@ -209,9 +251,14 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 //        rpnumerics.RPNUMERICS.errorControl().reset(dialog.getEps(),
 //                rpnumerics.RPNUMERICS.boundary());
 //    }
+
+
+    //** para criar os frames (paineis) - incluindo os auxiliares
     protected void phaseSpaceFramesInit(Boundary boundary) {
         wave.multid.graphs.ClippedShape clipping = new wave.multid.graphs.ClippedShape(boundary);
         int numOfPanels = RPnVisualizationModule.DESCRIPTORS.size();
+
+        //RPnVisualizationModule.DESCRIPTORS
 
         auxFrames_ = new RPnPhaseSpaceFrame[numOfPanels * 2];
         frames_ = new RPnPhaseSpaceFrame[numOfPanels];
@@ -230,49 +277,17 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             RealVector newMax = new RealVector(2 * RPNUMERICS.boundary().getMaximums().getSize());
             RealVector newMin = new RealVector(2 * RPNUMERICS.boundary().getMinimums().getSize());
 
-            int minDimension = RPNUMERICS.boundary().getMinimums().getSize();
-            for (int i = 0; i < minDimension; i++) {
-                newMin.setElement(i, originalMin.getElement(i));
-                newMin.setElement(i + minDimension, originalMin.getElement(i));
-            }
+            newMin.setElement(0, originalMin.getElement(0));
+            newMin.setElement(1, originalMin.getElement(1));
+            newMin.setElement(2, originalMin.getElement(0));
+            newMin.setElement(3, originalMin.getElement(1));
 
-
-//            newMin.setElement(1, originalMin.getElement(1));
-//            newMin.setElement(2, originalMin.getElement(2));
-//
-//
-//            newMin.setElement(3, originalMin.getElement(0));
-//            newMin.setElement(4, originalMin.getElement(1));
-//            newMin.setElement(5, originalMin.getElement(2));
-
-
-            int maxDimension = RPNUMERICS.boundary().getMaximums().getSize();
-            for (int i = 0; i < maxDimension; i++) {
-                newMax.setElement(i, originalMax.getElement(i));
-                newMax.setElement(i + maxDimension, originalMax.getElement(i));
-            }
-
-
-
-
-
-//
-//            newMax.setElement(0, originalMax.getElement(0));
-//            newMax.setElement(1, originalMax.getElement(1));
-//            newMax.setElement(2, originalMax.getElement(2));
-//
-//
-//            newMax.setElement(3, originalMax.getElement(0));
-//            newMax.setElement(4, originalMax.getElement(1));
-//            newMax.setElement(5, originalMax.getElement(2));
-//
-
-
-
+            newMax.setElement(0, originalMax.getElement(0));
+            newMax.setElement(1, originalMax.getElement(1));
+            newMax.setElement(2, originalMax.getElement(0));
+            newMax.setElement(3, originalMax.getElement(1));
 
             auxBoundary = new RectBoundary(newMin, newMax);
-
-
 
         } else {
 
@@ -280,40 +295,37 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             RealVector B = new RealVector("0 1");
             RealVector C = new RealVector("1 0");
 
-
             auxBoundary = new IsoTriang2DBoundary(A, B, C);
         }
+
+//*** CRIA OS PAINEIS AUXILIARES MAS NAO DESENHA NADA NELES
+//        int auxNumOfPanels = RPnVisualizationModule.AUXDESCRIPTORS.size();
+//        System.out.println("Quantidade de projecoes auxiliares: " + RPnVisualizationModule.AUXDESCRIPTORS.size());
+//        wave.multid.graphs.ClippedShape auxClipping = new wave.multid.graphs.ClippedShape(auxBoundary);
 //
-        int auxNumOfPanels = RPnVisualizationModule.AUXDESCRIPTORS.size();
-        System.out.println("Quantidade de projecoes auxiliares: " + RPnVisualizationModule.AUXDESCRIPTORS.size());
-        wave.multid.graphs.ClippedShape auxClipping = new wave.multid.graphs.ClippedShape(auxBoundary);
-        for (int i = 0; i < auxNumOfPanels; i++) {
-            wave.multid.view.ViewingTransform auxViewingTransf =
-                    ((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(
-                    i)).createTransform(auxClipping);
-
-            System.out.println("Dimensao da transf auxiliar :" + auxViewingTransf.viewingMap().getDomain().getDim());
-
-
-            try {
-                wave.multid.view.Scene auxScene = RPnDataModule.AUXPHASESPACE.createScene(auxViewingTransf,
-                        new wave.multid.view.ViewingAttr(Color.black));
-                System.out.println("Dimensao do auxiliar: " + RPnDataModule.AUXPHASESPACE.getSpace().getDim());
-                auxFrames_[i] = new RPnPhaseSpaceFrame(auxScene, commandMenu_);
-                auxFrames_[i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i)).label());
-
-                UIController.instance().install(auxFrames_[i].phaseSpacePanel());
-
-                setFramesPosition(auxFrames_[i]);
-                auxFrames_[i].pack();
-                auxFrames_[i].setVisible(true);
-
-
-            } catch (wave.multid.DimMismatchEx dex) {
-                dex.printStackTrace();
-            }
-
-        }
+//        for (int i = 0; i < auxNumOfPanels; i++) {
+//            wave.multid.view.ViewingTransform auxViewingTransf =
+//                    ((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(
+//                    i)).createTransform(auxClipping);
+//            try {
+//                wave.multid.view.Scene auxScene = RPnDataModule.AUXPHASESPACE.createScene(auxViewingTransf,
+//                        new wave.multid.view.ViewingAttr(Color.black));
+//                System.out.println("Dimensao do auxiliar: " + RPnDataModule.AUXPHASESPACE.getSpace().getDim());   // Esta dando 6, o q significa?   (Leandro)
+//                auxFrames_[i] = new RPnPhaseSpaceFrame(auxScene, commandMenu_);
+//                auxFrames_[i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i)).label());
+//
+//                UIController.instance().install(auxFrames_[i].phaseSpacePanel());   // Se comentado, parece nao fazer diferenca
+//
+//                setFramesPosition(auxFrames_[i]);
+//                auxFrames_[i].pack();
+//                auxFrames_[i].setVisible(true);
+//
+//            } catch (wave.multid.DimMismatchEx dex) {
+//                dex.printStackTrace();
+//            }
+//
+//        }
+//***
 
 
         // Init Main Frame
@@ -383,9 +395,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         }
 
-
-
     }
+
+
 
 //     from here on just for 2D for now...
     void createSVGImage_actionPerformed(ActionEvent e) {
@@ -405,6 +417,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         }
     }
 
+
+    //** nao vi alteracao
     void printMenuItem_actionPerformed(ActionEvent e) {
 
         PrinterJob pj = PrinterJob.getPrinterJob();
@@ -420,27 +434,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         }
     }
 
-    void matlabRead_actionPerformed(ActionEvent e) {
-        try {
-            JFileChooser chooser = new JFileChooser();
-            chooser.setSelectedFile(new File("output.m"));
-            chooser.setFileFilter(new FileNameExtensionFilter("Matlab file", "m"));
-            if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
 
-                FileReader reader = new FileReader(chooser.getSelectedFile().getAbsolutePath());
-
-
-                RPnDataModule.matlabReader(reader);
-
-                reader.close();
-            }
-
-        } catch (java.io.IOException ioex) {
-            ioex.printStackTrace();
-        } catch (java.lang.NullPointerException nullEx) {
-        }
-    }
-
+    //** ???
     void matlabExport_actionPerformed(ActionEvent e) {
         try {
             JFileChooser chooser = new JFileChooser();
@@ -460,6 +455,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         }
     }
 
+
+    //**  ???
     void export_actionPerformed(ActionEvent e) {
         try {
             JFileChooser chooser = new JFileChooser();
@@ -484,11 +481,15 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         }
     }
 
+
+    //** nao vi alteracao
     public static void clearStatusMessage() {
         statusLabel_.setForeground(Color.black);
         setStatusMessage("", 0);
     }
 
+
+    //** nao vi alteracao
     public static void setStatusMessage(String message, int messageType) {
         switch (messageType) {
             case 1://Error message;
@@ -501,15 +502,18 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
     }
 
+
+    //** nao vi alteracao
     void networkMenuItem_actionPerformed(ActionEvent e) {
 
         RPnNetworkStatusController.instance().actionPerformed(new ActionEvent(this,
                 0, null));
 
         commandMenu_.networkCommand();
-
     }
 
+
+    //** parece que nao esta sendo usado
     private RPnProjDescriptor[] generateAuxProjDescriptors() {
 
 
@@ -544,6 +548,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
     }
 
+
+    //** para o menu de tipos de curvas
     private void jbInit() throws Exception {
         //setIconImage(Toolkit.getDefaultToolkit().createImage(ShockFlowControlFrame.class.getResource("[Your Icon]")));
         setUIFramePosition();
@@ -622,16 +628,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
                     public void actionPerformed(ActionEvent e) {
                         jMenuFileExit_actionPerformed(e);
-                    }
-                });
-
-
-
-        readMatlabFile_.addActionListener(
-                new ActionListener() {
-
-                    public void actionPerformed(ActionEvent e) {
-                        matlabRead_actionPerformed(e);
                     }
                 });
 
@@ -765,7 +761,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         fileMenu.add(exportMenuItem);
         fileMenu.add(matlabMenuFileExport_);
-        fileMenu.add(readMatlabFile_);
         fileMenu.addSeparator();
         fileMenu.add(networkMenuItem);
 //        fileMenu.add(pluginMenuItem);
@@ -812,6 +807,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
     }
 
+
     private void shockConfigMenu() {
 
         modelInteractionMenu.removeAll();
@@ -828,6 +824,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
     }
 
+
     private void rarefactionConfigMenu() {
 
 
@@ -843,6 +840,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
     }
 
+
     private void bifurcationConfigMenu() {
 
 
@@ -853,6 +851,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
     }
 
+
+    //** define a posicao inicial do menu de tipos de curvas
     private void setUIFramePosition() {
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -862,6 +862,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         this.setLocation((int) (width - (width * .55)), 100);
     }
 
+
+    //** define a posicao inicial dos frames
     private void setFramesPosition(Component component) {
 
         int newwidth = (int) 100;
@@ -869,10 +871,14 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         component.setLocation(newwidth, newheight);
     }
 
+
+    //** retorna os frames para representar o phaseSpace e desenhar as curvas
     public static RPnPhaseSpaceFrame[] getPhaseSpaceFrames() {
         return frames_;
     }
 
+
+    //** nao vi alteracao
     public static void disableSliders() {
         for (int i = 0; i < RPnUIFrame.getPhaseSpaceFrames().length; i++) {
 
@@ -881,6 +887,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         }
     }
 
+
+    //** nao vi alteracao
     public static void enableSliders() {
         for (int i = 0; i < RPnUIFrame.getPhaseSpaceFrames().length; i++) {
 
@@ -889,11 +897,15 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         }
     }
 
+
+    //** para mostrar a tabela de curvas
     public void showCurvesPanel(boolean show) {
         curvesFrame_.setVisible(show);
 
     }
 
+
+    //** nao vi alteracao
     private class ConfigAction implements Action {
 
         public Object getValue(String key) {
@@ -927,6 +939,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         }
     }
 
+
+    //** desativa os botoes do menu de tipos de curvas
     private class StateHandler implements ActionListener {
 
         public void actionPerformed(ActionEvent e) {

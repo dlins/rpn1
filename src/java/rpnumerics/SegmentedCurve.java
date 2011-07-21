@@ -8,6 +8,9 @@ package rpnumerics;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
+import rpn.component.HugoniotSegGeom;
+import rpn.component.util.ControlClick;
+import rpn.component.util.GeometryUtil;
 import wave.multid.CoordsArray;
 import wave.multid.view.ViewingAttr;
 import wave.util.RealSegment;
@@ -16,19 +19,131 @@ import wave.util.RealVector;
 public class SegmentedCurve extends RPnCurve implements RpSolution {
 
     private List<HugoniotSegment> hugoniotSegments_;
-
+    public double distancia = 0;                            //** declarei isso (Leandro)
+    
     public SegmentedCurve(List<HugoniotSegment> hugoniotSegments) {
         super(coordsArrayFromRealSegments(hugoniotSegments), new ViewingAttr(Color.red));
         hugoniotSegments_ = hugoniotSegments;
     }
 
+
+    //** inseri este método (Leandro)
+    @Override
+    public int findClosestSegment(RealVector targetPoint, double alpha) {
+
+        System.out.println("Entrou em findClosestSegment.");
+
+        RealVector target = new RealVector(targetPoint);
+        RealVector closest = null;
+        RealVector segmentVector = null;
+        alpha = 0;
+        int closestSegment = 0;
+        double closestDistance = -1;
+
+        List hugoniotSegList = segments();
+
+        double[] dist = new double[segments().size()];  //guarda todas as distancias entre o targetPoint e os segmentos da curva
+        double distmin = 0, distprox;
+
+        for (int i = 0; i < segments().size(); i++) {
+
+            HugoniotSegment segment = (HugoniotSegment) hugoniotSegList.get(i);
+            segmentVector = new RealVector(segment.rightPoint());
+            segmentVector.sub(segment.leftPoint());  // origem do vetor na origem do sistema, vetor continua no espaco
+
+            for (int k = 0; k < target.getSize(); k++) {                       /// Teste para calcular na projecao
+                if (target.getElement(k) == 0.) {
+                    segmentVector.setElement(k, 0.);
+                }
+            }
+
+            closest = new RealVector(target);
+
+            closest.sub(segment.leftPoint());   //*** ATENCAO: deve ser mudado para leftPoint()
+
+            alpha = closest.dot(segmentVector)
+                    / segmentVector.dot(segmentVector);
+
+
+            if (alpha < 0) {
+                alpha = 0;
+            }
+            if (alpha > 1) {
+                alpha = 1;
+            }
+            segmentVector.scale(alpha);
+
+            closest.sub(segmentVector);
+
+            for (int k = 0; k < target.getSize(); k++) {                       /// Teste para calcular na projecao
+                if (target.getElement(k) == 0.) {
+                    closest.setElement(k, 0.);
+                }
+            }
+
+            dist[i] = closest.norm();   //*****!!!!!!!!!
+
+        }
+
+        distmin = dist[0];
+
+        for (int i = 1; i < dist.length; i++) {
+            distprox = dist[i];
+            if (distprox <= distmin) {
+                distmin = distprox;
+                closestSegment = i;
+            }
+        }
+
+        distancia = distmin;
+        //System.out.println("Distancia:" +distancia);
+
+        return closestSegment;   // da ultima curva testada
+
+    }
+    //*************************************************************************
    
 
-    public String toMatlabData(int identifier) {
+    public String toMatlabData(int identifier) {              //** Imprime no output.m os dados das curvas e a classificacao dos segmentos (preenche os campos data e type)
 
         StringBuffer buffer = new StringBuffer();
         System.out.println(hugoniotSegments_.size());
 
+        //********************************************************************** (Leandro)
+        if (identifier == 0) {
+            buffer.append("%% Dados para marcadores\n");
+
+            buffer.append("dataString=[\n");
+
+            for (int k = 0; k < ControlClick.xStr.size(); k++) {
+                buffer.append(ControlClick.xStr.get(k) + "   " + ControlClick.yStr.get(k) + ";\n");
+            }
+
+            buffer.append("];\n");
+
+
+            buffer.append("dataSeta=[\n");
+
+            for (int k = 0; k < ControlClick.xSeta.size(); k++) {
+                buffer.append(ControlClick.xSeta.get(k) + "   " + ControlClick.ySeta.get(k) + ";\n");
+            }
+
+            buffer.append("];\n");
+
+
+            buffer.append("typeString=[\n");
+
+            for (int k = 0; k < ControlClick.xStr.size(); k++) {
+                int s1 = (Integer) (GeometryUtil.tipo.get(k));
+                buffer.append("'");
+                buffer.append(HugoniotSegGeom.s[s1]);
+                buffer.append("'" + ";\n");
+                //buffer.append(s1 + ";\n");
+            }
+
+            buffer.append("];\n");
+        }
+        //**********************************************************************
 
         buffer.append("%% xcoord ycoord zcoord firstPointShockSpeed secondPointShockSpeed leftEigenValue0 leftEigenValue1 rightEigenValue0 rightEigenValue1\n");
 
@@ -87,7 +202,7 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
 
     }
 
-     public static String createSegmentedMatlabPlotLoop(int x, int y, int identifier) {
+     public static String createSegmentedMatlabPlotLoop(int x, int y, int identifier) {               // metodo original
         x++;
         y++;//Adjusting to Matlab's indices
 
@@ -111,6 +226,27 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
         buffer.append("[toc(type" + identifier + "(i), 1) toc(type" + identifier + "(i), 2) toc(type" + identifier + "(i), 3)])\n");
         buffer.append("hold on\n");
         buffer.append("end\n");
+
+        //********************************************************************** (Leandro)
+        if ((identifier == 0)  &&  (x == 2)  &&  (y == 1)) {
+        buffer.append("for k=1: length(dataString)\n");
+
+        buffer.append("text(dataString(k,1), " +
+                       "dataString(k,2), " +
+                       "horzcat(typeString(k,1)," +
+                       "typeString(k,2)," +
+                       "typeString(k,3)," +
+                       "typeString(k,4)), " +
+                       "'Color', [1 1 1], 'FontSize', 16)\n");
+
+        buffer.append("line([dataString(k,1) " +"dataSeta(k,1)], " +
+                           "[dataString(k,2) " +"dataSeta(k,2)], "  +
+                           "'Color', [1 1 1])\n");
+
+        buffer.append("end\n");
+        }
+        //**********************************************************************
+
         buffer.append("set(gca, 'Color',[0 0 0]);\n");
         x--;
         y--;
@@ -120,8 +256,6 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
 
     }
 
-
-    
 
     public String createSegment3DPlotMatlabPlot(int identifier) {
 
@@ -157,7 +291,7 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
     }
 
 
-     private static String createAxisLabel2D(int x, int y) {
+     private static String createAxisLabel2D(int x, int y) {         //** Define os eixos para o output.m
 
         String axisName[] = new String[3];
 

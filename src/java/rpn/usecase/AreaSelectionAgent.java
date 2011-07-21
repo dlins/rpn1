@@ -5,8 +5,10 @@
  */
 package rpn.usecase;
 
+import java.awt.event.ActionEvent;
 import javax.swing.JToggleButton;
 import rpn.RPnSelectedAreaDialog;
+import rpn.controller.ui.AREASELECTION_CONFIG;
 import rpn.controller.ui.UIController;
 import rpnumerics.Area;
 import rpnumerics.BifurcationProfile;
@@ -28,6 +30,15 @@ public class AreaSelectionAgent extends RpModelActionAgent {
         button_.setFont(rpn.RPnConfigReader.MODELPLOT_BUTTON_FONT);
         setEnabled(true);
     }
+
+    //** Edson / Leandro
+    @Override
+    public void actionPerformed(ActionEvent event) {
+
+       UIController.instance().setState(new AREASELECTION_CONFIG());
+
+    }
+    //***
 
     public static AreaSelectionAgent instance() {
         if (instance_ == null) {

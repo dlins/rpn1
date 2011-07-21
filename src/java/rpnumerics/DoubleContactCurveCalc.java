@@ -11,6 +11,8 @@ import java.util.logging.Logger;
 
 public class DoubleContactCurveCalc extends BifurcationCurveCalc {
 
+    static private int contDC = 0;      //** declarei isso (Leandro)
+
     //
     // Constructors/Initializers
     //
@@ -38,6 +40,18 @@ public class DoubleContactCurveCalc extends BifurcationCurveCalc {
             //          if (result == null) {
             //            throw new RpException("Error in native layer");
             //        }
+
+            //** acrescentei isso (Leandro)
+            if (contDC == 0) {
+                System.out.println("Entrando em DoubleContactCurveCalc...");
+
+                RPnCurve.lista.add((RPnCurve) result);
+                System.out.println("Tamanho da lista: " + RPnCurve.lista.size());
+
+                contDC += 1;
+            }
+            //*********************************************
+
             return result;
         } catch (RpException ex) {
             Logger.getLogger(DoubleContactCurveCalc.class.getName()).log(Level.SEVERE, null, ex);
