@@ -74,8 +74,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionExtensionCurveCalc_native
 
         Thermodynamics_SuperCO2_WaterAdimensionalized td(Physics::getRPnHome());
 
-//        int info = td.status_after_init();
-//        printf("Thermodynamics = %p,  info = %d\n\n\n", &td, info);
+        //        int info = td.status_after_init();
+        //        printf("Thermodynamics = %p,  info = %d\n\n\n", &td, info);
 
         // Create Horizontal & Vertical FracFlows
         double cnw = 0., cng = 0., expw = 2., expg = 2.;
@@ -83,7 +83,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionExtensionCurveCalc_native
         FracFlow2PhasesVerticalAdimensionalized * fv = new FracFlow2PhasesVerticalAdimensionalized(cnw, cng, expw, expg, td);
 
         // Create the Flux and its params
-        double abs_perm = 3e-12;
+        double abs_perm = 20e-12;
         double sin_beta = 0.0;
         double const_gravity = 9.8;
         bool has_gravity = false, has_horizontal = true;
@@ -96,7 +96,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionExtensionCurveCalc_native
         Flux2Comp2PhasesAdimensionalized flux(flux_params);
 
         // Create the Accum and its params
-        double phi = 0.38;
+        double phi = 0.15;
+
         Accum2Comp2PhasesAdimensionalized_Params accum_params(td, &phi);
         Accum2Comp2PhasesAdimensionalized accum(accum_params);
 
@@ -110,18 +111,38 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionExtensionCurveCalc_native
         ReducedAccum2Comp2PhasesAdimensionalized reduced_accum(reduced_accum_params);
 
 
-        RealVector pmin(2);
-        pmin.component(0) = 0.0;
-        pmin.component(1) = td.T2Theta(304.63);
-        RealVector pmax(2);
-        pmax.component(0) = 1.0;
-        pmax.component(1) = td.T2Theta(450.0);
 
-        int  number_of_grid_points[2] ={101,101};
+        SubPhysics & physics = RpNumerics::getPhysics().getSubPhysics(0);
+        const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
+
+        RealVector min(2);
+
+        RealVector max(2);
 
 
-//        number_of_grid_points[0] = 101;
-//        number_of_grid_points[1] = 101;
+        min.component(0) = physicsBoundary.minimums().component(0);
+        min.component(1) = physicsBoundary.minimums().component(1);
+
+        max.component(0) = physicsBoundary.maximums().component(0);
+        max.component(1) = physicsBoundary.maximums().component(1);
+
+
+        physics.preProcess(min);
+        physics.preProcess(max);
+
+        //        RectBoundary tempBoundary(min, max);
+        //        RealVector pmin(2);
+        //        pmin.component(0) = 0.0;
+        //        pmin.component(1) = td.T2Theta(304.63);
+        //        RealVector pmax(2);
+        //        pmax.component(0) = 1.0;
+        //        pmax.component(1) = td.T2Theta(450.0);
+
+        int number_of_grid_points[2];
+
+
+        number_of_grid_points[0] = xResolution;
+        number_of_grid_points[1] = yResolution;
 
 
         //        int number_of_domain_pnts[2] = {101, 101};
@@ -129,16 +150,22 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionExtensionCurveCalc_native
         //        int characteristic_where = CHARACTERISTIC_ON_DOMAIN;
         int singular = 1;
 
-        curveFamily=0;
-        domainFamily=1;
-        characteristicWhere=1;
+        curveFamily = 0;
+        domainFamily = 1;
+        characteristicWhere = 1;
 
-        SubinflectionTPCW  subinflectiontpcw(&td, fh, phi);
+        SubinflectionTPCW subinflectiontpcw(&td, fh, phi);
 
-        cout<<"Aqui"<<endl;
+        cout << "Aqui" << endl;
+
+
+        cout << "Resolucao x " << number_of_grid_points[0] << endl;
+
+        cout << "Resolucao y " << number_of_grid_points[1] << endl;
+
 
         SubinflectionTPCW_Extension::extension_curve(&subinflectiontpcw,
-                pmin, pmax, number_of_grid_points,
+                min, max, number_of_grid_points,
                 &flux, &accum,
                 &reduced_flux, &reduced_accum,
                 domainFamily,
@@ -150,13 +177,14 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionExtensionCurveCalc_native
                 domain_segments);
 
 
-        cout<<"Curve: "<<curve_segments.size()<<endl;
+        cout << "Curve: " << curve_segments.size() << endl;
 
-        cout <<"Domain: "<< domain_segments.size()<<endl;
+        cout << "Domain: " << domain_segments.size() << endl;
 
-        cout << "Resolucao x " << number_of_grid_points[0] << endl;
 
-        cout << "Resolucao y " << number_of_grid_points[1] << endl;
+        physics.postProcess(curve_segments);
+        physics.postProcess(domain_segments);
+
 
 
 
@@ -168,21 +196,21 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionExtensionCurveCalc_native
 
         delete fv;
         delete fh;
-//        delete number_of_grid_points;
+        //        delete number_of_grid_points;
 
 
     }
 
 
-        printf("curve_segments.size()  = %d\n", curve_segments.size());
-        printf("domain_segments.size() = %d\n", domain_segments.size());
+    printf("curve_segments.size()  = %d\n", curve_segments.size());
+    printf("domain_segments.size() = %d\n", domain_segments.size());
 
 
     for (unsigned int i = 0; i < curve_segments.size() / 2; i++) {
         //    for (unsigned int i = 0; i < right_vrs.size() / 2; i++) {
 
-        //        cout << "Coordenada : " << left_vrs.at(2 * i) << endl;
-        //        cout << "Coordenada : " << left_vrs.at(2 * i + 1) << endl;
+        cout << "Coordenada : " << curve_segments.at(2 * i) << endl;
+        cout << "Coordenada : " << curve_segments.at(2 * i + 1) << endl;
 
 
         jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
@@ -225,8 +253,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionExtensionCurveCalc_native
 
     for (unsigned int i = 0; i < domain_segments.size() / 2; i++) {
 
-        //        cout << "Coordenada : " << left_vrs.at(2 * i) << endl;
-        //        cout << "Coordenada : " << left_vrs.at(2 * i + 1) << endl;
+        cout << "Coordenada : " << domain_segments.at(2 * i) << endl;
+        cout << "Coordenada : " << domain_segments.at(2 * i + 1) << endl;
 
 
         jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);

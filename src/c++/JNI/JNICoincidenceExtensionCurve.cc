@@ -86,7 +86,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceExtensionCurveCalc_nativeCa
         FracFlow2PhasesVerticalAdimensionalized * fv = new FracFlow2PhasesVerticalAdimensionalized(cnw, cng, expw, expg, td);
 
         // Create the Flux and its params
-        double abs_perm = 3e-12;
+        double abs_perm = 20e-12;
         double sin_beta = 0.0;
         double const_gravity = 9.8;
         bool has_gravity = false, has_horizontal = true;
@@ -119,12 +119,34 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceExtensionCurveCalc_nativeCa
         //        pmax.component(0) = 1.0;
         //        pmax.component(1) = td.T2Theta(450.0);
 
-        RealVector pmin(2);
-        pmin.component(0) = RpNumerics::getPhysics().boundary().minimums().component(0);
-        pmin.component(1) = RpNumerics::getPhysics().boundary().minimums().component(1);
-        RealVector pmax(2);
-        pmax.component(0) = RpNumerics::getPhysics().boundary().maximums().component(0);
-        pmax.component(1) = RpNumerics::getPhysics().boundary().maximums().component(1);
+        SubPhysics & physics = RpNumerics::getPhysics().getSubPhysics(0);
+        const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
+
+        RealVector min(2);
+
+        RealVector max(2);
+
+
+        min.component(0) = physicsBoundary.minimums().component(0);
+        min.component(1) = physicsBoundary.minimums().component(1);
+
+        max.component(0) = physicsBoundary.maximums().component(0);
+        max.component(1) = physicsBoundary.maximums().component(1);
+
+
+        physics.preProcess(min);
+        physics.preProcess(max);
+
+
+
+
+        //
+        //        RealVector pmin(2);
+        //        pmin.component(0) = RpNumerics::getPhysics().boundary().minimums().component(0);
+        //        pmin.component(1) = RpNumerics::getPhysics().boundary().minimums().component(1);
+        //        RealVector pmax(2);
+        //        pmax.component(0) = RpNumerics::getPhysics().boundary().maximums().component(0);
+        //        pmax.component(1) = RpNumerics::getPhysics().boundary().maximums().component(1);
 
         int * number_of_grid_points = new int[2];
 
@@ -142,7 +164,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceExtensionCurveCalc_nativeCa
         CoincidenceTPCW coincidencetpcw(&td, fh, phi);
 
         CoincidenceTPCW_Extension::extension_curve(&coincidencetpcw,
-                pmin, pmax, number_of_grid_points,
+                min, max, number_of_grid_points,
                 &flux, &accum,
                 &reduced_flux, &reduced_accum,
                 dfamily,
@@ -152,6 +174,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceExtensionCurveCalc_nativeCa
                 characteristic_where, singular,
                 curve_segments,
                 domain_segments);
+
+
+        physics.postProcess(curve_segments);
+        physics.postProcess(domain_segments);
 
         //        CoincidenceTPCW_Extension::extension_curve(&coincidencetpcw,
         //                min, max, number_of_grid_points,

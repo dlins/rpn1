@@ -66,7 +66,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BuckleyLeverettinInflectionCurveCalc_n
     //-------------------------------------------------------------------
     RealVector Uref(dimension);
 
-    double phi = 0.38;
+    double phi = 0.15;
 
     Thermodynamics_SuperCO2_WaterAdimensionalized TD(Physics::getRPnHome());
 
@@ -75,7 +75,20 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BuckleyLeverettinInflectionCurveCalc_n
 
     BuckleyLeverettinInflectionTPCW bl(&fh);
 
-    ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), RpNumerics::getPhysics().boundary(), &bl);
+    SubPhysics & physics = RpNumerics::getPhysics().getSubPhysics(0);
+    const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
+
+    RealVector min(physicsBoundary. minimums());
+    RealVector max(physicsBoundary. maximums());
+
+
+    physics.preProcess(min);
+    physics.preProcess(max);
+
+    RectBoundary tempBoundary(min, max);
+
+
+    ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(),tempBoundary, &bl);
 
     vector<HugoniotPolyLine> hugoniotPolyLineVector;
     method.unclassifiedCurve(Uref, hugoniotPolyLineVector);
@@ -83,8 +96,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BuckleyLeverettinInflectionCurveCalc_n
 
 
 
-    RealVector min(RpNumerics::getPhysics().boundary().minimums());
-    RealVector max(RpNumerics::getPhysics().boundary().maximums());
+    RealVector minDimension(RpNumerics::getPhysics().boundary().minimums());
+    RealVector maxDimension(RpNumerics::getPhysics().boundary().maximums());
 
 
 
@@ -98,8 +111,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BuckleyLeverettinInflectionCurveCalc_n
             //            cout << "type of " << j << " = " << hugoniotPolyLineVector[i].type << endl;
             //            cout << "coord 1 " << j << " = " << hugoniotPolyLineVector[i].vec[j] << endl;
 
-            hugoniotPolyLineVector[i].vec[j].component(2) = max.component(2);
-            hugoniotPolyLineVector[i].vec[j + 1].component(2) = max.component(2);
+            hugoniotPolyLineVector[i].vec[j].component(2) = maxDimension.component(2);
+            hugoniotPolyLineVector[i].vec[j + 1].component(2) = maxDimension.component(2);
+
+            physics.postProcess(hugoniotPolyLineVector[i].vec);
 
 
             //            cout << "coord 2 " << j + 1 << " = " << hugoniotPolyLineVector[i].vec[j + 1] << endl;

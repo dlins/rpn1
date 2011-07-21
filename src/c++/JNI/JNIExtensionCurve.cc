@@ -91,7 +91,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
         pmax.component(0) = 1.0;
         pmax.component(1) = 1.0;
 
-        cout <<"Resolucao do x: "<<xResolution<<endl;
+
+        cout << "Resolucao do x: " << xResolution << endl;
         cout << "Resolucao do y: " << yResolution << endl;
 
         // Over the x axis.
@@ -152,7 +153,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
         FracFlow2PhasesVerticalAdimensionalized * fv = new FracFlow2PhasesVerticalAdimensionalized(cnw, cng, expw, expg, td);
 
         // Create the Flux and its params
-        double abs_perm = 3e-12;
+        double abs_perm = 20e-12;
         double sin_beta = 0.0;
         double const_gravity = 9.8;
         bool has_gravity = false, has_horizontal = true;
@@ -165,7 +166,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
         Flux2Comp2PhasesAdimensionalized flux(flux_params);
 
         // Create the Accum and its params
-        double phi = 0.38;
+        double phi = 0.15;
         Accum2Comp2PhasesAdimensionalized_Params accum_params(td, &phi);
         Accum2Comp2PhasesAdimensionalized accum(accum_params);
 
@@ -178,23 +179,46 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
         ReducedAccum2Comp2PhasesAdimensionalized_Params reduced_accum_params(&td, &phi);
         ReducedAccum2Comp2PhasesAdimensionalized reduced_accum(reduced_accum_params);
 
-        
-//                RealVector pmin(2);
-//                pmin.component(0) = 0.0;
-//                pmin.component(1) = td.T2Theta(304.63);
-//                RealVector pmax(2);
-//                pmax.component(0) = 1.0;
-//                pmax.component(1) = td.T2Theta(450.0);
-//
-//
+
+        //                RealVector pmin(2);
+        //                pmin.component(0) = 0.0;
+        //                pmin.component(1) = td.T2Theta(304.63);
+        //                RealVector pmax(2);
+        //                pmax.component(0) = 1.0;
+        //                pmax.component(1) = td.T2Theta(450.0);
+        //
+        //
 
 
-        RealVector pmin(2);
-        pmin.component(0) = RpNumerics::getPhysics().boundary().minimums().component(0);
-        pmin.component(1) = RpNumerics::getPhysics().boundary().minimums().component(1);
-        RealVector pmax(2);
-        pmax.component(0) = RpNumerics::getPhysics().boundary().maximums().component(0);
-        pmax.component(1) = RpNumerics::getPhysics().boundary().maximums().component(1);
+
+
+        SubPhysics & physics = RpNumerics::getPhysics().getSubPhysics(0);
+        const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
+
+        RealVector min(2);
+
+        RealVector max(2);
+
+
+        min.component(0) = physicsBoundary.minimums().component(0);
+        min.component(1) = physicsBoundary.minimums().component(1);
+
+        max.component(0) = physicsBoundary.maximums().component(0);
+        max.component(1) = physicsBoundary.maximums().component(1);
+
+
+        physics.preProcess(min);
+        physics.preProcess(max);
+
+        cout << "Min: " << min << endl;
+        cout << "Max: " << max << endl;
+
+        //        RealVector pmin(2);
+        //        pmin.component(0) = RpNumerics::getPhysics().boundary().minimums().component(0);
+        //        pmin.component(1) = RpNumerics::getPhysics().boundary().minimums().component(1);
+        //        RealVector pmax(2);
+        //        pmax.component(0) = RpNumerics::getPhysics().boundary().maximums().component(0);
+        //        pmax.component(1) = RpNumerics::getPhysics().boundary().maximums().component(1);
 
         int * number_of_grid_pnts = new int[2];
 
@@ -221,19 +245,23 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
         const AccumulationFunction *curve_reduced_accum = &reduced_accum;
 
 
-//TODO Pegar o parametro hardcoded 101 (number_of_temperature_steps) da interface
-        
+        //TODO Pegar o parametro hardcoded 101 (number_of_temperature_steps) da interface
+
         Boundary_ExtensionTPCW::extension_curve(curve_flux, curve_accum,
                 curve_reduced_flux, curve_reduced_accum,
                 edge, 501,
                 curveFamily,
-                pmin, pmax, number_of_grid_pnts, // For the domain.
+                min, max, number_of_grid_pnts, // For the domain.
                 domainFamily,
                 curve_flux, curve_accum,
                 curve_reduced_flux, curve_reduced_accum,
                 characteristicWhere, singular,
                 curve_segments,
                 domain_segments);
+
+
+        physics.postProcess(curve_segments);
+        physics.postProcess(domain_segments);
 
 
         delete fv;
