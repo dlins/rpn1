@@ -36,6 +36,13 @@ TD(new Thermodynamics_SuperCO2_WaterAdimensionalized(thermo)) {
     double abs_perm = 3e-12;
     double phi = 0.38;
 
+
+    double Tnovo = TD->Theta2T(0.395);
+    cout <<"T redimensionalizada: "<<Tnovo<<endl;
+    double Unovo = TD->U2u(11.9821);
+
+    cout <<"U redimension: "<<Unovo<<endl;
+
     RealVector Uref(3);
     Uref.component(0) = 0;
     Uref.component(1) = 0;
@@ -155,8 +162,12 @@ void TPCW::postProcess(vector<RealVector> & input) {
                 break;
 
             case 2://Double contact , etc
+                RealVector temp(input[i]);
 
-                input[i].component(1) = TD->Theta2T(input[i].component(1));
+                input[i].resize(3);
+                input[i].component(0)=temp.component(0);
+                input[i].component(1) = TD->Theta2T(temp.component(1));
+                input[i].component(2)=boundary().maximums().component(2);
 
                 break;
 

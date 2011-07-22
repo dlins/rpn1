@@ -31,6 +31,7 @@ import rpnumerics.RPnCurve;
 import rpnumerics.SegmentedCurve;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
+import wave.multid.model.MultiGeometry;
 import wave.multid.view.Scene;
 import wave.multid.view.ViewingTransform;
 import wave.util.RealVector;
@@ -92,7 +93,7 @@ public class GeometryGraph3D {
 
             if (zerado == 2) {
 
-                if (UIController.instance().getState() instanceof AREASELECTION_CONFIG) {
+                if (UIController.instance_.getState() instanceof AREASELECTION_CONFIG) {
                     g.setColor(Color.red);
                     graph.draw(line1);
                     graph.draw(line2);
@@ -105,7 +106,7 @@ public class GeometryGraph3D {
                 
                 if ((ControlClick.ind % 2) == 0) {
 
-                    if (UIController.instance().getState() instanceof AREASELECTION_CONFIG) {
+                    if (UIController.instance_.getState() instanceof AREASELECTION_CONFIG) {
                         g.setColor(Color.red);
                         graph.draw(line5);
                         graph.draw(line6);
@@ -128,9 +129,9 @@ public class GeometryGraph3D {
 
 
                     //*** Para o botao Classify
-                    if ((UIController.instance().getState() instanceof VELOCITYAGENT_CONFIG)  ||
-                        (UIController.instance().getState() instanceof CLASSIFIERAGENT_CONFIG  &&
-                        RPnCurve.lista.get(GeometryUtil.closestCurve) instanceof HugoniotCurve)) {
+                    if ((UIController.instance_.getState() instanceof VELOCITYAGENT_CONFIG)  ||
+                        (UIController.instance_.getState() instanceof CLASSIFIERAGENT_CONFIG  &&
+                        RPnCurve.lista.get(GeometryUtil.closestCurve) instanceof HugoniotCurve)) {   //**  p/ tirar bug
 
                         int cont = ControlClick.xDevStr.size();
 
@@ -209,8 +210,8 @@ public class GeometryGraph3D {
 
 
                     //*** Para o botao Velocity
-                    if ((UIController.instance().getState() instanceof CLASSIFIERAGENT_CONFIG)  ||
-                        (UIController.instance().getState() instanceof VELOCITYAGENT_CONFIG  &&
+                    if ((UIController.instance_.getState() instanceof CLASSIFIERAGENT_CONFIG)  ||
+                        (UIController.instance_.getState() instanceof VELOCITYAGENT_CONFIG  &&
                         ((RPnCurve.lista.get(GeometryUtil.closestCurve) instanceof Orbit)  ||
                         (RPnCurve.lista.get(GeometryUtil.closestCurve) instanceof HugoniotCurve)))) {
 
@@ -251,7 +252,7 @@ public class GeometryGraph3D {
                             g.setFont(font);
                             FontMetrics metrics = new FontMetrics(font) {
                             };
-                            String exp = String.format("%.4e",v1);
+                            String exp = String.format("%.4e", v1);
                             Rectangle2D bounds = metrics.getStringBounds(exp, null);
                             int tamPix = (int) bounds.getWidth();
 
@@ -282,6 +283,7 @@ public class GeometryGraph3D {
                                 graph.draw(line_);
                             }
                             //**************************************************
+
                         }
                     }
                     //*** Fim botao Velocity
@@ -293,7 +295,7 @@ public class GeometryGraph3D {
                 graph.draw(line7);
                 graph.draw(line8);
 
-                if (((ControlClick.ind % 2) == 0)  &&  (UIController.instance().getState() instanceof AREASELECTION_CONFIG)) {
+                if (((ControlClick.ind % 2) == 0)  &&  (UIController.instance_.getState() instanceof AREASELECTION_CONFIG)) {
                     g.setColor(Color.red);
                     graph.draw(square2);
                 }
@@ -313,7 +315,7 @@ public class GeometryGraph3D {
                 graph.draw(line8);
                 
                 if (GeometryUtil.zContido.size() != 0) {
-                    if (UIController.instance().getState() instanceof AREASELECTION_CONFIG) {
+                    if (UIController.instance_.getState() instanceof AREASELECTION_CONFIG) {
                         g.setColor(Color.red);
                         graph.draw(square2);
                     }
@@ -321,7 +323,7 @@ public class GeometryGraph3D {
 
             } else {
 
-                if (UIController.instance().getState() instanceof AREASELECTION_CONFIG) {
+                if (UIController.instance_.getState() instanceof AREASELECTION_CONFIG) {
                     g.setColor(Color.red);
                     graph.draw(line1);
                     graph.draw(line2);
@@ -345,7 +347,7 @@ public class GeometryGraph3D {
                     double xMP = dcCoordsMP.getElement(1);
                     double yMP = dcCoordsMP.getElement(0);
 
-                    if (((ControlClick.ind % 2) == 0)  &&  (UIController.instance().getState() instanceof CLASSIFIERAGENT_CONFIG)) {
+                    if (((ControlClick.ind % 2) == 0)  &&  (UIController.instance_.getState() instanceof CLASSIFIERAGENT_CONFIG)) {
                         g.setColor(Color.white);
 
                         //*** Analisar o que fazer caso o click seja no painel 2.
@@ -360,7 +362,7 @@ public class GeometryGraph3D {
                 //****************************
 
 
-                if (((ControlClick.ind % 2) == 0)  &&  (UIController.instance().getState() instanceof AREASELECTION_CONFIG)) {
+                if (((ControlClick.ind % 2) == 0)  &&  (UIController.instance_.getState() instanceof AREASELECTION_CONFIG)) {
                     g.setColor(Color.red);
                     graph.draw(line5);
                     graph.draw(line6);
@@ -371,6 +373,7 @@ public class GeometryGraph3D {
 
         }
         //***
+
 
     }
 
@@ -437,12 +440,12 @@ public class GeometryGraph3D {
 
         if ((ControlClick.ind % 2) == 0) {
 
-            vs = Math.min(yTP, yCR);
+            vs = Math.min(yTP, yCR);               // Ja estao em coordenadas do dispositivo, mas sem ajuste no grid.
             us = Math.min(xTP, xCR);
             vi = Math.max(yTP, yCR);
             ui = Math.max(xTP, xCR);
 
-            v_s = (int) (vs / dv) * dv;
+            v_s = (int) (vs / dv) * dv;               //  Ajuste feito diretamente em pixel.
             u_s = (int) (us / du) * du;
             v_i = (int) (vi / dv + 1) * dv;
             u_i = (int) (ui / du + 1) * du;
@@ -461,7 +464,7 @@ public class GeometryGraph3D {
         //***
 
         //** Testa inclusão na área de selecão.
-        if ((ControlClick.ind % 2) == 0) {
+        if ((ControlClick.ind % 2) == 0  &&  (UIController.instance_.getState() instanceof AREASELECTION_CONFIG)) {
 
             square1 = new Rectangle2D.Double(v_s, u_s, Math.abs(v_i - v_s), Math.abs(u_i - u_s));
 
@@ -584,7 +587,7 @@ public class GeometryGraph3D {
                 z_i = (RPnPhaseSpacePanel.myW_ / (bdryMax.getElement(1) - bdryMin.getElement(1))) * (z_i - bdryMin.getElement(1));
             }
 
-            if ((ControlClick.ind % 2) == 0) {
+            if ((ControlClick.ind % 2) == 0  &&  (UIController.instance_.getState() instanceof AREASELECTION_CONFIG)) {
                 square2 = new Rectangle2D.Double(z_s, u_s, Math.abs(z_i - z_s), Math.abs(u_i - u_s));
             }
 

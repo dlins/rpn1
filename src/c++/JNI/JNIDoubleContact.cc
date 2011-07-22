@@ -173,7 +173,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
         //        pmax.component(0) = 1.0;
         //        pmax.component(1) = td.T2Theta(450.0);
 
-          SubPhysics & physics = RpNumerics::getPhysics().getSubPhysics(0);
+        SubPhysics & physics = RpNumerics::getPhysics().getSubPhysics(0);
         const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
 
         RealVector min(2);
@@ -208,7 +208,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
                 &flux, &accum,
                 &reduced_flux, &reduced_accum,
                 leftFamily,
-               min, max, number_of_grid_pnts,
+                min, max, number_of_grid_pnts,
                 &flux, &accum,
                 &reduced_flux, &reduced_accum,
                 rightFamily);
@@ -231,22 +231,20 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
 
     printf("left_vrs.size()  = %d\n", left_vrs.size());
     printf("right_vrs.size() = %d\n", right_vrs.size());
-
+    const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
 
     for (unsigned int i = 0; i < left_vrs.size() / 2; i++) {
         //    for (unsigned int i = 0; i < right_vrs.size() / 2; i++) {
 
-        //        cout << "Coordenada : " << left_vrs.at(2 * i) << endl;
-        //        cout << "Coordenada : " << left_vrs.at(2 * i + 1) << endl;
+       
 
 
         jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
         jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
 
-
+       
         double * leftCoords = (double *) left_vrs.at(2 * i);
         double * rightCoords = (double *) left_vrs.at(2 * i + 1);
-
 
         //
         //        double * leftCoords = (double *) right_vrs.at(2 * i);
@@ -280,16 +278,20 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
 
     for (unsigned int i = 0; i < right_vrs.size() / 2; i++) {
 
-        //        cout << "Coordenada : " << left_vrs.at(2 * i) << endl;
-        //        cout << "Coordenada : " << left_vrs.at(2 * i + 1) << endl;
+        cout << "Coordenada : " << left_vrs.at(2 * i) << endl;
+        cout << "Coordenada : " << left_vrs.at(2 * i + 1) << endl;
 
 
         jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
         jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
 
 
+
         double * leftCoords = (double *) right_vrs.at(2 * i);
         double * rightCoords = (double *) right_vrs.at(2 * i + 1);
+
+
+
 
 
         env->SetDoubleArrayRegion(eigenValRLeft, 0, dimension, leftCoords);

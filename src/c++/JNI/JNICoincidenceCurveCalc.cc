@@ -75,7 +75,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceCurveCalc_nativeCalc(JNIEnv
     //-------------------------------------------------------------------
     RealVector Uref(dimension);
 
-    double phi =0.38;
+    double phi = 0.38;
 
     Thermodynamics_SuperCO2_WaterAdimensionalized TD(Physics::getRPnHome());
 
@@ -94,7 +94,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceCurveCalc_nativeCalc(JNIEnv
     physics.preProcess(min);
     physics.preProcess(max);
 
-    cout<<"Valor de min:"<<min<<endl;
+    cout << "Valor de min:" << min << endl;
     cout << "Valor de max:" << max << endl;
 
     RectBoundary tempBoundary(min, max);

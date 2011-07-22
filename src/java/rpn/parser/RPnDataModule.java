@@ -1,7 +1,5 @@
 package rpn.parser;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
 import rpn.*;
@@ -51,27 +49,6 @@ public class RPnDataModule {
 
     public static HugoniotCurve getHugoniotCurve() {
         return hugoniotCurve_;
-    }
-
-    public static void matlabReader(FileReader reader) {
-
-        BufferedReader buffer = new BufferedReader(reader);
-
-        String line = null;
-        try {
-            while ((line = buffer.readLine()) != null) {
-                System.out.print(line);
-
-            }
-
-            buffer.close();
-        } catch (IOException ex) {
-            Logger.getLogger(RPnDataModule.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-
-
-
     }
 
     static protected class InputHandler implements ContentHandler {
@@ -519,11 +496,11 @@ public class RPnDataModule {
 //
 //        int i = 0;
 //
-        while (iterator.hasNext()) {
+        while(iterator.hasNext()){
             writer.write(iterator.next().geomFactory().toXML());
         }
 
-
+        
     }
 
     static public void matlabExport(FileWriter writer) throws java.io.IOException {
@@ -592,25 +569,47 @@ public class RPnDataModule {
         //Plotting 2D view
         writer.write("%% plotting 2D\n");
 
+        //****  (Leandro)
+        writer.write("disp('Digite 1 para imprimir as strings de classificacao; 0 caso contrario.')\n");
+        writer.write("bool = input('Voce quer imprimir as strings? : ');\n");
+
+        writer.write("disp('Digite 1 para imprimir as velocidades; 0 caso contrario.')\n");
+        writer.write("bool2 = input('Voce quer imprimir as velocidades? : ');\n");
+        //*****************
+
         for (Entry<Integer, RpGeometry> entry : geometrySet) {
 
             RPnCurve curve = (RPnCurve) entry.getValue().geomFactory().geomSource();
 
-            if (curve instanceof SegmentedCurve) {
+            if (curve instanceof SegmentedCurve) {                              //** Alterei os eixos (Leandro)
+
+//                writer.write("figure(2)\n");
+//                writer.write(SegmentedCurve.createSegmentedMatlabPlotLoop(0, 1, entry.getKey()));
+//                writer.write("figure(3)\n");
+//                writer.write(SegmentedCurve.createSegmentedMatlabPlotLoop(0, 2, entry.getKey()));
+//                writer.write("figure(4)\n");
+//                writer.write(SegmentedCurve.createSegmentedMatlabPlotLoop(1, 2, entry.getKey()));
 
                 writer.write("figure(2)\n");
-                writer.write(SegmentedCurve.createSegmentedMatlabPlotLoop(0, 1, entry.getKey()));
+                writer.write(SegmentedCurve.createSegmentedMatlabPlotLoop(1, 0, entry.getKey()));
                 writer.write("figure(3)\n");
-                writer.write(SegmentedCurve.createSegmentedMatlabPlotLoop(0, 2, entry.getKey()));
+                writer.write(SegmentedCurve.createSegmentedMatlabPlotLoop(2, 0, entry.getKey()));
                 writer.write("figure(4)\n");
                 writer.write(SegmentedCurve.createSegmentedMatlabPlotLoop(1, 2, entry.getKey()));
 
             } else {
                 Orbit orbit = (Orbit) curve;
+//                writer.write("figure(2)\n");
+//                writer.write(orbit.create2DPointMatlabPlot(0, 1, entry.getKey()));
+//                writer.write("figure(4)\n");
+//                writer.write("figure(3)\n");
+//                writer.write(orbit.create2DPointMatlabPlot(0, 2, entry.getKey()));
+//                writer.write(orbit.create2DPointMatlabPlot(1, 2, entry.getKey()));
+
                 writer.write("figure(2)\n");
-                writer.write(orbit.create2DPointMatlabPlot(0, 1, entry.getKey()));
+                writer.write(orbit.create2DPointMatlabPlot(1, 0, entry.getKey()));
                 writer.write("figure(3)\n");
-                writer.write(orbit.create2DPointMatlabPlot(0, 2, entry.getKey()));
+                writer.write(orbit.create2DPointMatlabPlot(2, 0, entry.getKey()));
                 writer.write("figure(4)\n");
                 writer.write(orbit.create2DPointMatlabPlot(1, 2, entry.getKey()));
 

@@ -6,6 +6,7 @@
 package rpnumerics;
 
 import java.awt.Color;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
 import rpn.component.HugoniotSegGeom;
@@ -30,8 +31,6 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
     //** inseri este método (Leandro)
     @Override
     public int findClosestSegment(RealVector targetPoint, double alpha) {
-
-        System.out.println("Entrou em findClosestSegment.");
 
         RealVector target = new RealVector(targetPoint);
         RealVector closest = null;
@@ -109,10 +108,11 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
         StringBuffer buffer = new StringBuffer();
         System.out.println(hugoniotSegments_.size());
 
-        //********************************************************************** (Leandro)
+        //********************************************************************** (inicia Leandro)
         if (identifier == 0) {
             buffer.append("%% Dados para marcadores\n");
 
+            // coordenadas das strings de classificacao ------------------------
             buffer.append("dataString=[\n");
 
             for (int k = 0; k < ControlClick.xStr.size(); k++) {
@@ -120,8 +120,10 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
             }
 
             buffer.append("];\n");
+            //------------------------------------------------------------------
 
 
+            // coordenadas das setas das strings de classificacao --------------
             buffer.append("dataSeta=[\n");
 
             for (int k = 0; k < ControlClick.xSeta.size(); k++) {
@@ -129,8 +131,10 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
             }
 
             buffer.append("];\n");
+            //------------------------------------------------------------------
 
 
+            // strings de classificacao ----------------------------------------
             buffer.append("typeString=[\n");
 
             for (int k = 0; k < ControlClick.xStr.size(); k++) {
@@ -142,16 +146,51 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
             }
 
             buffer.append("];\n");
+            //------------------------------------------------------------------
+
+
+            // coordenadas das strings de velocidade ---------------------------
+            buffer.append("dataVel=[\n");
+
+            for (int k = 0; k < ControlClick.xVel.size(); k++) {
+                buffer.append(ControlClick.xVel.get(k) + "   " + ControlClick.yVel.get(k) + ";\n");
+            }
+
+            buffer.append("];\n");
+            //------------------------------------------------------------------
+
+
+            // coordenadas das setas das strings de velocidade -----------------
+            buffer.append("dataSetaVel=[\n");
+
+            for (int k = 0; k < ControlClick.xSetaVel.size(); k++) {
+                buffer.append(ControlClick.xSetaVel.get(k) + "   " + ControlClick.ySetaVel.get(k) + ";\n");
+            }
+
+            buffer.append("];\n");
+            //------------------------------------------------------------------
+
+
+            // strings de velocidade -------------------------------------------
+            buffer.append("velString=[\n");
+
+            for (int k = 0; k < ControlClick.xVel.size(); k++) {
+                buffer.append(GeometryUtil.vel.get(k) + ";\n");
+            }
+
+            buffer.append("];\n");
+            //------------------------------------------------------------------
+
+
         }
-        //**********************************************************************
+        //********************************************************************** (finaliza Leandro)
 
         buffer.append("%% xcoord ycoord zcoord firstPointShockSpeed secondPointShockSpeed leftEigenValue0 leftEigenValue1 rightEigenValue0 rightEigenValue1\n");
 
         buffer.append("data" + identifier + "= [\n");
         for (int i = 0; i < hugoniotSegments_.size(); i++) {
 
-            HugoniotSegment hSegment = ((HugoniotSegment) hugoniotSegments_.get(
-                    i));
+            HugoniotSegment hSegment = ((HugoniotSegment) hugoniotSegments_.get(i));
             RealSegment rSegment = new RealSegment(hSegment.leftPoint(),
                     hSegment.rightPoint());
             double leftSigma = hSegment.leftSigma();
@@ -165,8 +204,7 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
         buffer.append("type" + identifier + "=[\n");
 
         for (int i = 0; i < hugoniotSegments_.size(); i++) {
-            HugoniotSegment hSegment = ((HugoniotSegment) hugoniotSegments_.get(
-                    i));
+            HugoniotSegment hSegment = ((HugoniotSegment) hugoniotSegments_.get(i));
             buffer.append((hSegment.getType() + 1) + ";\n");
         }
         buffer.append("];\n");
@@ -227,27 +265,60 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
         buffer.append("hold on\n");
         buffer.append("end\n");
 
-        //********************************************************************** (Leandro)
-        if ((identifier == 0)  &&  (x == 2)  &&  (y == 1)) {
-        buffer.append("for k=1: length(dataString)\n");
+        //********************************************************************** (inicia Leandro)
 
-        buffer.append("text(dataString(k,1), " +
-                       "dataString(k,2), " +
-                       "horzcat(typeString(k,1)," +
-                       "typeString(k,2)," +
-                       "typeString(k,3)," +
-                       "typeString(k,4)), " +
-                       "'Color', [1 1 1], 'FontSize', 16)\n");
+        if ((identifier == 0) && (x == 2) && (y == 1)) {
 
-        buffer.append("line([dataString(k,1) " +"dataSeta(k,1)], " +
-                           "[dataString(k,2) " +"dataSeta(k,2)], "  +
-                           "'Color', [1 1 1])\n");
+             // plot das strings de classificacao e suas setas -----------------
+             buffer.append("if (bool == 1)\n");
+             buffer.append("[rowS, colS] = size(dataString)\n");
+             buffer.append("for k=1: rowS\n");
 
-        buffer.append("end\n");
-        }
-        //**********************************************************************
+             buffer.append("text(dataString(k,1), "
+                     + "dataString(k,2), "
+                     + "horzcat(typeString(k,1),"
+                     + "typeString(k,2),"
+                     + "typeString(k,3),"
+                     + "typeString(k,4)), "
+                     //+ "'Color', [1 1 1], 'FontSize', 16)\n");
+                     + "'Color', [0 0 0], 'FontSize', 16)\n");
 
-        buffer.append("set(gca, 'Color',[0 0 0]);\n");
+             buffer.append("line([dataString(k,1) " + "dataSeta(k,1)], "
+                     + "[dataString(k,2) " + "dataSeta(k,2)], "
+                     //+ "'Color', [1 1 1])\n");
+                     + "'Color', [0 0 0])\n");
+
+             buffer.append("end\n");
+             buffer.append("end\n");
+             //-----------------------------------------------------------------
+
+
+             // plot das strings de velocidade e suas setas -----------------
+
+             buffer.append("if (bool2 == 1)\n");
+             buffer.append("[rowV, colV] = size(dataVel)\n");
+             buffer.append("for k=1: rowV\n");
+
+             buffer.append("text(dataVel(k,1), "
+                     + "dataVel(k,2), "
+                     + "num2str(velString(k), '%.4e'), "
+                     //+ "'Color', [1 1 1], 'FontSize', 12)\n");
+                     + "'Color', [0 0 0], 'FontSize', 12)\n");
+
+             buffer.append("line([dataVel(k,1) " + "dataSetaVel(k,1)], "
+                     + "[dataVel(k,2) " + "dataSetaVel(k,2)], "
+                     //+ "'Color', [1 1 1])\n");
+                     + "'Color', [0 0 0])\n");
+
+             buffer.append("end\n");
+             buffer.append("end\n");
+
+             //-----------------------------------------------------------------
+         }
+        //********************************************************************** (finaliza Leandro)
+
+        //buffer.append("set(gca, 'Color',[0 0 0]);\n");
+        buffer.append("set(gca, 'Color',[1 1 1]);\n");
         x--;
         y--;
         buffer.append("axis([" + xMin.getElement(x) + " " + xMax.getElement(x) + " " + xMin.getElement(y) + " " + xMax.getElement(y) + "]);\n");
@@ -284,7 +355,8 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
 
         buffer.append("axis([" + xMin.getElement(0) + " " + xMax.getElement(0) + " " + xMin.getElement(1) + " " + xMax.getElement(1) + " " + xMin.getElement(2) + " " + xMax.getElement(2) + "]);\n");
         buffer.append("view([20 30])\n");
-        buffer.append("set(gca, 'Color',[0 0 0])\n");
+        //buffer.append("set(gca, 'Color',[0 0 0])\n");
+        buffer.append("set(gca, 'Color',[1 1 1])\n");
         buffer.append("xlabel('s')\nylabel('T')\nzlabel('u')\n");
 
         return buffer.toString();
