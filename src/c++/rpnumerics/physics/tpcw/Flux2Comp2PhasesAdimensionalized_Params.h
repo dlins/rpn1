@@ -27,7 +27,7 @@ public:
             FracFlow2PhasesVerticalAdimensionalized *FV);
     virtual ~Flux2Comp2PhasesAdimensionalized_Params();
 
-    const Thermodynamics_SuperCO2_WaterAdimensionalized & get_thermodynamics(void) const;
+    Thermodynamics_SuperCO2_WaterAdimensionalized * get_thermodynamics(void) const;
     FracFlow2PhasesHorizontalAdimensionalized * get_horizontal(void) const;
     FracFlow2PhasesVerticalAdimensionalized * get_vertical(void) const;
 

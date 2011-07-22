@@ -24,10 +24,16 @@ TD(new Thermodynamics_SuperCO2_WaterAdimensionalized(thermo)) {
     //    cout << "Calculo de U0[1] " << TD->T2Theta(310.) << endl;
     //    cout << "Calculo de U0[2] " << TD->u2U(4.22e-6) << endl;
 
+
+
+    const Flux2Comp2PhasesAdimensionalized_Params & fluxParams = (const Flux2Comp2PhasesAdimensionalized_Params &) fluxFunction.fluxParams();
+
+    TD = fluxParams.get_thermodynamics();
+
     // Create Horizontal & Vertical FracFlows
     double cnw = 0., cng = 0., expw = 2., expg = 2.;
-    fh = new FracFlow2PhasesHorizontalAdimensionalized(cnw, cng, expw, expg, *TD);
-    fv = new FracFlow2PhasesVerticalAdimensionalized(cnw, cng, expw, expg, *TD);
+    fh = fluxParams.get_horizontal();//new FracFlow2PhasesHorizontalAdimensionalized(cnw, cng, expw, expg, *TD);
+    fv = fluxParams.get_vertical();//new FracFlow2PhasesVerticalAdimensionalized(cnw, cng, expw, expg, *TD);
 
     // Create the Flux and its params
     boundary(*defaultBoundary());

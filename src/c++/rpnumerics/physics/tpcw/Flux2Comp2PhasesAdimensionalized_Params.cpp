@@ -22,8 +22,8 @@ Flux2Comp2PhasesAdimensionalized_Params::~Flux2Comp2PhasesAdimensionalized_Param
     delete TD_;
 }
 
-const Thermodynamics_SuperCO2_WaterAdimensionalized & Flux2Comp2PhasesAdimensionalized_Params::get_thermodynamics(void) const {
-    return *TD_;
+ Thermodynamics_SuperCO2_WaterAdimensionalized * Flux2Comp2PhasesAdimensionalized_Params::get_thermodynamics(void) const {
+    return TD_;
 }
 
 FracFlow2PhasesHorizontalAdimensionalized * Flux2Comp2PhasesAdimensionalized_Params::get_horizontal(void) const {

@@ -18,7 +18,7 @@ Flux2Comp2PhasesAdimensionalized::Flux2Comp2PhasesAdimensionalized(const Flux2Co
     sin_beta       = param.component(1);
     const_gravity  = param.component(2);
 
-    TD = new Thermodynamics_SuperCO2_WaterAdimensionalized(param.get_thermodynamics());
+    TD = param.get_thermodynamics();//new Thermodynamics_SuperCO2_WaterAdimensionalized(param.get_thermodynamics());
     FH = param.get_horizontal();
     FV = param.get_vertical();
 
