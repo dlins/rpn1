@@ -119,7 +119,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
     int dimension = realVectorInput.size();
 
     for (int i = 0; i < realVectorInput.size(); i++) {
-        cout<<"input "<<i <<input[i]<<endl;
+        cout << "input " << i << input[i] << endl;
 
 
     }

@@ -48,7 +48,7 @@ public class RPnCoordsInputDialog extends RPnDialog {
             NumberFormat numberFormatter = NumberFormat.getInstance();
             numberFormatter.setMaximumFractionDigits(4);
             JTextField textInputField = new JFormattedTextField(numberFormatter);
-            JLabel axisNumberLabel = new JLabel(""+i);
+            JLabel axisNumberLabel = new JLabel("" + i);
             axisNumberLabel.setHorizontalAlignment(SwingConstants.CENTER);
             inputArrayList_.add(textInputField);
 
@@ -69,10 +69,7 @@ public class RPnCoordsInputDialog extends RPnDialog {
 
             inputCoordsPanel_.add(axisNumberLabel, constraints);
 
-
-
-
-
+            beginButton.setText("Clear");
 
 
         }
@@ -85,7 +82,6 @@ public class RPnCoordsInputDialog extends RPnDialog {
 
     @Override
     protected void apply() {
-        System.out.println("Clicando em apply");
         try {
             RealVector userInput = new RealVector(RPNUMERICS.domainDim());
             for (int i = 0; i < inputArrayList_.size(); i++) {
@@ -106,9 +102,6 @@ public class RPnCoordsInputDialog extends RPnDialog {
 
     @Override
     protected void begin() {
-
-        System.out.println("Clicando em begin");
-
         for (JTextField jTextField : inputArrayList_) {
 
             jTextField.setText("");
