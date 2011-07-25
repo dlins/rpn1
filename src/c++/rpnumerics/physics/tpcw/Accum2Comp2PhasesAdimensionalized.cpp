@@ -16,7 +16,7 @@ Accum2Comp2PhasesAdimensionalized * Accum2Comp2PhasesAdimensionalized::clone() c
 }
 
 Accum2Comp2PhasesAdimensionalized::~Accum2Comp2PhasesAdimensionalized(){
-    delete TD;
+//    delete TD;
 }
 
 // Existe uma discrepancia entre o o significado de s quando este codigo foi

@@ -42,13 +42,6 @@ TD(new Thermodynamics_SuperCO2_WaterAdimensionalized(thermo)) {
     double abs_perm = 3e-12;
     double phi = 0.38;
 
-
-    double Tnovo = TD->Theta2T(0.395);
-    cout <<"T redimensionalizada: "<<Tnovo<<endl;
-    double Unovo = TD->U2u(11.9821);
-
-    cout <<"U redimension: "<<Unovo<<endl;
-
     RealVector Uref(3);
     Uref.component(0) = 0;
     Uref.component(1) = 0;

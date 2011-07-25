@@ -35,7 +35,7 @@ Flux2Comp2PhasesAdimensionalized * Flux2Comp2PhasesAdimensionalized::clone() con
 
 Flux2Comp2PhasesAdimensionalized::~Flux2Comp2PhasesAdimensionalized() {
 
-    delete TD;
+//    delete TD;
 
 }
 

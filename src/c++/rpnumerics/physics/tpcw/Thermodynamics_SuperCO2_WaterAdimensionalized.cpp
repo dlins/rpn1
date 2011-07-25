@@ -149,9 +149,9 @@ P(100.9),
 rhoW_const(998.2),
 Rock_Cr(2.029e6),
 Water_Cw_specific(4297.),
-T_typical_(304.63),
-Rho_typical_(998.2),
-U_typical_(4.22e-3),
+T_typical_(304.63),   //=============> parametro
+Rho_typical_(998.2),  //=============> parametro
+U_typical_(4.22e-3),  //=============> parametro
 rpnHomePath_(rpnHomePath) {
 
     h_typical_ = Water_Cw_specific * (T_typical_ - Tref_water);

@@ -30,7 +30,7 @@ ReducedTPCWHugoniotFunctionClass::ReducedTPCWHugoniotFunctionClass(const RealVec
 
 
 
-    Accum2Comp2PhasesAdimensionalized_Params TPCWAccumAdimensionalized_Params(*td, &phi);
+    Accum2Comp2PhasesAdimensionalized_Params TPCWAccumAdimensionalized_Params(*td, phi);
     TPCWAccumAdimensionalized = new Accum2Comp2PhasesAdimensionalized(TPCWAccumAdimensionalized_Params);
 
     n = U.size();

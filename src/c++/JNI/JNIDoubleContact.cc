@@ -152,7 +152,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
 
         // Create the Accum and its params
         double phi = 0.38;
-        Accum2Comp2PhasesAdimensionalized_Params accum_params(td, &phi);
+        Accum2Comp2PhasesAdimensionalized_Params accum_params(td, phi);
         Accum2Comp2PhasesAdimensionalized accum(accum_params);
 
 
