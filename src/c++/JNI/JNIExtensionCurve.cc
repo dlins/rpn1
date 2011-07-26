@@ -249,7 +249,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
 
         Boundary_ExtensionTPCW::extension_curve(curve_flux, curve_accum,
                 curve_reduced_flux, curve_reduced_accum,
-                edge, 501,
+                edge,200,
                 curveFamily,
                 min, max, number_of_grid_pnts, // For the domain.
                 domainFamily,
