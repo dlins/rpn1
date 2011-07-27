@@ -204,10 +204,10 @@ ReducedTPCWHugoniotFunctionClass::~ReducedTPCWHugoniotFunctionClass() {
 
     delete [] aref_F;
 
-    delete TPCWAccumAdimensionalized;
+//    delete TPCWAccumAdimensionalized;
 //    delete TPCWFluxAdimensionalized;
-    delete ReducedTPCWAccumAdimensionalized;
-    delete ReducedTPCWFluxAdimensionalized;
+//    delete ReducedTPCWAccumAdimensionalized;
+//    delete ReducedTPCWFluxAdimensionalized;
 }
 
 double ReducedTPCWHugoniotFunctionClass::HugoniotFunction(const RealVector &u) {

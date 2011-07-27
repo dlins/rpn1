@@ -101,10 +101,10 @@ rpnHomePath_(copy.rpnHomePath_) {
     info_rhosigmaw = create_spline("rhosigmaw_spline.txt", "rhosigmaw", P, rhosigmaw_);
     info_rhoac = create_spline("rhoac_spline.txt", "rhoac", P, rhoac_);
     info_rhoaw = create_spline("rhoaw_spline.txt", "rhoaw", P, rhoaw_);
-     info_rhoW = create_spline("rhoW_spline.txt", "rhoW", P, rhoW_);
+    info_rhoW = create_spline("rhoW_spline.txt", "rhoW", P, rhoW_);
     info_hsigmaC = create_spline("hsigmaC_spline.txt", "hsigmaC", P, hsigmaC_);
 
-      cout << info_hsigmaC << info_rhoW<< info_rhoaw <<info_rhoac << info_rhosigmaw<< info_rhosigmac<<endl;
+    cout << info_hsigmaC << info_rhoW << info_rhoaw << info_rhoac << info_rhosigmaw << info_rhosigmac << endl;
 
 }
 
@@ -112,6 +112,11 @@ rpnHomePath_(copy.rpnHomePath_) {
 // Convert from Theta to T
 
 double Thermodynamics_SuperCO2_WaterAdimensionalized::Theta2T(double Theta) {
+
+    Tref_water=274.3775;10;
+    T_typical_ = 304.63;
+
+    cout << Theta << "||||||||||||" << T_typical_ << "||||||||||||" << Tref_water << endl;
     return Theta * T_typical_ + Tref_water;
 }
 
@@ -135,7 +140,7 @@ double Thermodynamics_SuperCO2_WaterAdimensionalized::u2U(double u) {
     return u / U_typical_;
 }
 
-Thermodynamics_SuperCO2_WaterAdimensionalized::Thermodynamics_SuperCO2_WaterAdimensionalized(const std::string & rpnHomePath,double T_Typical,double Rho_Typical,double U_Typical) :
+Thermodynamics_SuperCO2_WaterAdimensionalized::Thermodynamics_SuperCO2_WaterAdimensionalized(const std::string & rpnHomePath, double T_Typical, double Rho_Typical, double U_Typical) :
 a0(-1.94760101098783e-6),
 a1(0.013524080086578),
 a2(-9.043578102452411),
@@ -156,7 +161,7 @@ T_typical_(T_Typical),
 Rho_typical_(Rho_Typical),
 U_typical_(U_Typical),
 rpnHomePath_(rpnHomePath) {
-    cout<<"Aqui termo"<<endl;
+    cout << "Aqui termo" << endl;
     h_typical_ = Water_Cw_specific * (T_typical_ - Tref_water);
 
     // Generate the splines
@@ -168,7 +173,7 @@ rpnHomePath_(rpnHomePath) {
     info_rhoW = create_spline("rhoW_spline.txt", "rhoW", P, rhoW_);
     info_hsigmaC = create_spline("hsigmaC_spline.txt", "hsigmaC", P, hsigmaC_);
 
-    cout << info_hsigmaC << info_rhoW<< info_rhoaw <<info_rhoac << info_rhosigmaw<< info_rhosigmac<<endl;
+    cout << info_hsigmaC << info_rhoW << info_rhoaw << info_rhoac << info_rhosigmaw << info_rhosigmac << endl;
 
 
 }

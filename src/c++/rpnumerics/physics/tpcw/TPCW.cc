@@ -22,11 +22,11 @@ TPCW::TPCW(const TPCW& copy) : SubPhysics(copy.fluxFunction(), copy.accumulation
     Flux2Comp2PhasesAdimensionalized_Params & params = (Flux2Comp2PhasesAdimensionalized_Params &) copy.fluxFunction().fluxParams();
     cout << "Tamanho de params" << params.params().size() << endl;
 
-    Accum2Comp2PhasesAdimensionalized_Params & accParams = (Accum2Comp2PhasesAdimensionalized_Params &)copy.accumulation().accumulationParams();
+    Accum2Comp2PhasesAdimensionalized_Params & accParams = (Accum2Comp2PhasesAdimensionalized_Params &) copy.accumulation().accumulationParams();
 
     double T_Typical = 304.63;
     double Rho_Typical = 998.2;
-    double U_Typical = 4.22e-3;
+    double U_Typical = 4.42e-3;
 
 
     const string testString("/home/edsonlan/Java/rpn");
@@ -35,12 +35,12 @@ TPCW::TPCW(const TPCW& copy) : SubPhysics(copy.fluxFunction(), copy.accumulation
 
     RealVector refVec(3);
 
-    refVec.component(0)=0.0;
+    refVec.component(0) = 0.0;
     refVec.component(1) = 0.0;
     refVec.component(2) = 0.0;
 
 
-    HugoniotFunctionClass * tpcwHugoniot = new ReducedTPCWHugoniotFunctionClass(refVec,accParams.getPhi(), params.component(0), 9.8, TD,params.get_horizontal());
+    HugoniotFunctionClass * tpcwHugoniot = new ReducedTPCWHugoniotFunctionClass(refVec, accParams.getPhi(), params.component(0), 9.8, TD, params.get_horizontal());
 
     setHugoniotFunction(tpcwHugoniot);
 
@@ -96,30 +96,33 @@ TPCW::TPCW(const RealVector & params) : SubPhysics(*defaultBoundary(), *new Spac
 
     TD = new Thermodynamics_SuperCO2_WaterAdimensionalized(testString, T_Typical, Rho_Typical, U_Typical);
 
-    fh = new FracFlow2PhasesHorizontalAdimensionalized(cnw, cng, expw, expg, TD);
-    fv = new FracFlow2PhasesVerticalAdimensionalized(cnw, cng, expw, expg, TD);
+    cout << "Depois de termo" << endl;
 
+    fh = new FracFlow2PhasesHorizontalAdimensionalized(cnw, cng, expw, expg, TD);
+    cout << "Depois de fh" << endl;
+    fv = new FracFlow2PhasesVerticalAdimensionalized(cnw, cng, expw, expg, TD);
+    cout << "Depois de fv" << endl;
 
     Flux2Comp2PhasesAdimensionalized_Params flux_params(abs_perm, sin_beta, const_gravity,
             has_gravity, has_horizontal, TD, fh, fv); // Check pointer fh and fv allocation
-
+    cout << "Depois de fluxParams" << endl;
 
     Accum2Comp2PhasesAdimensionalized_Params accum_params(TD, phi);
-
+    cout << "Depois de accumParams" << endl;
 
     accumulationFunction_ = new Accum2Comp2PhasesAdimensionalized(accum_params);
 
     fluxFunction_ = new Flux2Comp2PhasesAdimensionalized(flux_params);
 
 
-    RealVector refVec(2);
+    RealVector refVec(3);
 
-    refVec.component(0)=0.0;
+    refVec.component(0) = 0.0;
     refVec.component(1) = 0.0;
-//    refVec.component(2) = 0.0;
+    refVec.component(2) = 0.0;
 
 
-    HugoniotFunctionClass * tpcwHugoniot = new ReducedTPCWHugoniotFunctionClass(refVec,phi, abs_perm, 9.8, TD,fh);
+    HugoniotFunctionClass * tpcwHugoniot = new ReducedTPCWHugoniotFunctionClass(refVec, phi, abs_perm, 9.8, TD, fh);
 
     setHugoniotFunction(tpcwHugoniot);
 

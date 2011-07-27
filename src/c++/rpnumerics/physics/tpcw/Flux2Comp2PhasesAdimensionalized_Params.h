@@ -25,6 +25,12 @@ public:
             Thermodynamics_SuperCO2_WaterAdimensionalized  * TD,
             FracFlow2PhasesHorizontalAdimensionalized *FH,
             FracFlow2PhasesVerticalAdimensionalized *FV);
+
+
+Flux2Comp2PhasesAdimensionalized_Params(const Flux2Comp2PhasesAdimensionalized_Params &);
+
+
+
     virtual ~Flux2Comp2PhasesAdimensionalized_Params();
 
     Thermodynamics_SuperCO2_WaterAdimensionalized * get_thermodynamics(void) const;

@@ -18,6 +18,8 @@ class FracFlow2PhasesHorizontalAdimensionalized {
     protected:
     public:
         FracFlow2PhasesHorizontalAdimensionalized(double cnw_, double cng_, double expw_, double expg_, Thermodynamics_SuperCO2_WaterAdimensionalized  *TD_);
+        FracFlow2PhasesHorizontalAdimensionalized(const FracFlow2PhasesHorizontalAdimensionalized &);
+
         virtual ~FracFlow2PhasesHorizontalAdimensionalized();
 
         int Diff_FracFlow2PhasesHorizontalAdimensionalized(double sw, double Theta, int degree, JetMatrix &m);

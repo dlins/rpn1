@@ -13,12 +13,27 @@ FracFlow2PhasesHorizontalAdimensionalized::~FracFlow2PhasesHorizontalAdimensiona
 
 }
 
+FracFlow2PhasesHorizontalAdimensionalized::FracFlow2PhasesHorizontalAdimensionalized(const FracFlow2PhasesHorizontalAdimensionalized & copy){
+
+
+    cnw=copy.cnw;
+    cng=copy.cng;
+
+    TD = copy.TD;
+    T_typical_=copy.T_typical_;
+
+
+
+}
+
 int FracFlow2PhasesHorizontalAdimensionalized::Diff_FracFlow2PhasesHorizontalAdimensionalized(double sw, double Theta, int degree, JetMatrix &m) {
     // Esta funcao retorna a funcao de fluxo da agua e seu jato; 
     // esta correta para uso do Helmut apenas
     // ja tiramos grw, grg de todos os lugares e as variaveis que as usavam    
 
     double T = TD->Theta2T(Theta);
+
+    cout<<"Depois de TD"<<endl;
 
     // Auxiliary variables
     double sg, law, lag;
