@@ -22,7 +22,7 @@ public:
     Flux2Comp2PhasesAdimensionalized_Params(double abs_perm, double sin_beta, double const_gravity,
             bool has_gravity,
             bool has_horizontal,
-            const Thermodynamics_SuperCO2_WaterAdimensionalized &,
+            Thermodynamics_SuperCO2_WaterAdimensionalized  * TD,
             FracFlow2PhasesHorizontalAdimensionalized *FH,
             FracFlow2PhasesVerticalAdimensionalized *FV);
     virtual ~Flux2Comp2PhasesAdimensionalized_Params();

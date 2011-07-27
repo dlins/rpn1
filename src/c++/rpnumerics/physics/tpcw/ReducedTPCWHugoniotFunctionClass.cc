@@ -8,13 +8,13 @@ ReducedTPCWHugoniotFunctionClass::ReducedTPCWHugoniotFunctionClass(const RealVec
         FracFlow2PhasesHorizontalAdimensionalized *fh
         ):HugoniotFunctionClass(Flux2Comp2PhasesAdimensionalized( Flux2Comp2PhasesAdimensionalized_Params(abs_perm, 0.0, const_gravity,
             false, true,
-            *td, fh, (FracFlow2PhasesVerticalAdimensionalized*) 0))) {
+           td, fh, (FracFlow2PhasesVerticalAdimensionalized*) 0))) {
 
     // Create the auxiliary objects
     ReducedFlux2Comp2PhasesAdimensionalized_Params ReducedTPCWFluxAdimensionalized_Params(abs_perm, td, fh);
     ReducedTPCWFluxAdimensionalized = new ReducedFlux2Comp2PhasesAdimensionalized(ReducedTPCWFluxAdimensionalized_Params);
 
-    ReducedAccum2Comp2PhasesAdimensionalized_Params ReducedTPCWAccumAdimensionalized_Params(td, &phi);
+    ReducedAccum2Comp2PhasesAdimensionalized_Params ReducedTPCWAccumAdimensionalized_Params(td, phi);
     ReducedTPCWAccumAdimensionalized = new ReducedAccum2Comp2PhasesAdimensionalized(ReducedTPCWAccumAdimensionalized_Params);
 
 //    double sin_beta = 0.0; // No gravity, purely horizontal
@@ -30,7 +30,7 @@ ReducedTPCWHugoniotFunctionClass::ReducedTPCWHugoniotFunctionClass(const RealVec
 
 
 
-    Accum2Comp2PhasesAdimensionalized_Params TPCWAccumAdimensionalized_Params(*td, phi);
+    Accum2Comp2PhasesAdimensionalized_Params TPCWAccumAdimensionalized_Params(td, phi);
     TPCWAccumAdimensionalized = new Accum2Comp2PhasesAdimensionalized(TPCWAccumAdimensionalized_Params);
 
     n = U.size();

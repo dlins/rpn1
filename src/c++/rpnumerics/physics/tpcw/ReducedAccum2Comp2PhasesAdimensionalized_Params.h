@@ -8,11 +8,11 @@
 
 class ReducedAccum2Comp2PhasesAdimensionalized_Params : public AccumulationParams {
     private:
-        double *vec;
+
         Thermodynamics_SuperCO2_WaterAdimensionalized *TD_;
     protected:
     public:
-        ReducedAccum2Comp2PhasesAdimensionalized_Params(Thermodynamics_SuperCO2_WaterAdimensionalized*, double*);
+        ReducedAccum2Comp2PhasesAdimensionalized_Params(Thermodynamics_SuperCO2_WaterAdimensionalized*, double);
         ~ReducedAccum2Comp2PhasesAdimensionalized_Params();
 
         Thermodynamics_SuperCO2_WaterAdimensionalized * get_thermodynamics(void) const;

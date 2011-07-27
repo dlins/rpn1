@@ -1,7 +1,10 @@
 #include "Flux2Comp2PhasesAdimensionalized.h"
 
 Flux2Comp2PhasesAdimensionalized::Flux2Comp2PhasesAdimensionalized(const Flux2Comp2PhasesAdimensionalized &a):FluxFunction(a.fluxParams()){
-    TD             = new Thermodynamics_SuperCO2_WaterAdimensionalized(*a.TD);
+
+const Flux2Comp2PhasesAdimensionalized_Params & fluxParams = (const Flux2Comp2PhasesAdimensionalized_Params &)a.fluxParams();
+    
+    TD             = fluxParams.get_thermodynamics();
     FH             = a.FH;
     FV             = a.FV;
 
@@ -18,7 +21,7 @@ Flux2Comp2PhasesAdimensionalized::Flux2Comp2PhasesAdimensionalized(const Flux2Co
     sin_beta       = param.component(1);
     const_gravity  = param.component(2);
 
-    TD = param.get_thermodynamics();//new Thermodynamics_SuperCO2_WaterAdimensionalized(param.get_thermodynamics());
+    TD =param.get_thermodynamics();
     FH = param.get_horizontal();
     FV = param.get_vertical();
 
@@ -35,7 +38,7 @@ Flux2Comp2PhasesAdimensionalized * Flux2Comp2PhasesAdimensionalized::clone() con
 
 Flux2Comp2PhasesAdimensionalized::~Flux2Comp2PhasesAdimensionalized() {
 
-//    delete TD;
+    delete TD;
 
 }
 

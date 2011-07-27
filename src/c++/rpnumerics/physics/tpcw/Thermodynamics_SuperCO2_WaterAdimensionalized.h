@@ -52,7 +52,7 @@ protected:
 public:
     Thermodynamics_SuperCO2_WaterAdimensionalized(const Thermodynamics_SuperCO2_WaterAdimensionalized &);
 
-    Thermodynamics_SuperCO2_WaterAdimensionalized(const std::string & );
+    Thermodynamics_SuperCO2_WaterAdimensionalized(const std::string &,double,double,double );
 
     virtual ~Thermodynamics_SuperCO2_WaterAdimensionalized();
 
@@ -88,6 +88,10 @@ public:
     double Cr(void);
 
     double Cw_specific(void);
+
+    void setTtypical(double);
+    void setRhoTypical(double);
+    void UTypical (double);
 
     void inv_muw(double T, double &nuw, double &dnuw_dT, double &d2nuw_dT2); // Water viscosity
     void muw(double T, double &muw, double &dmuw_dT, double &d2muw_dT2); // Water viscosity

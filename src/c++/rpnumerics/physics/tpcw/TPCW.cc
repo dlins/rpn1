@@ -17,70 +17,117 @@
  * Definitions:
  */
 
+TPCW::TPCW(const TPCW& copy) : SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.boundary(), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATION_) {
 
-TPCW::TPCW(const FluxFunction & fluxFunction, const AccumulationFunction & accumulationFunction, const Thermodynamics_SuperCO2_WaterAdimensionalized & thermo) :
-SubPhysics(fluxFunction, accumulationFunction, *new RectBoundary(RealVector(), RealVector()), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATION_),
-TD(new Thermodynamics_SuperCO2_WaterAdimensionalized(thermo)) {
-    //    cout << "Calculo de U0[1] " << TD->T2Theta(310.) << endl;
-    //    cout << "Calculo de U0[2] " << TD->u2U(4.22e-6) << endl;
+    Flux2Comp2PhasesAdimensionalized_Params & params = (Flux2Comp2PhasesAdimensionalized_Params &) copy.fluxFunction().fluxParams();
+    cout << "Tamanho de params" << params.params().size() << endl;
+
+    Accum2Comp2PhasesAdimensionalized_Params & accParams = (Accum2Comp2PhasesAdimensionalized_Params &)copy.accumulation().accumulationParams();
+
+    double T_Typical = 304.63;
+    double Rho_Typical = 998.2;
+    double U_Typical = 4.22e-3;
 
 
+    const string testString("/home/edsonlan/Java/rpn");
 
-    const Flux2Comp2PhasesAdimensionalized_Params & fluxParams = (const Flux2Comp2PhasesAdimensionalized_Params &) fluxFunction.fluxParams();
+    TD = new Thermodynamics_SuperCO2_WaterAdimensionalized(testString, T_Typical, Rho_Typical, U_Typical);
 
-    TD = fluxParams.get_thermodynamics();
+    RealVector refVec(3);
 
-    // Create Horizontal & Vertical FracFlows
-    double cnw = 0., cng = 0., expw = 2., expg = 2.;
-    fh = fluxParams.get_horizontal();//new FracFlow2PhasesHorizontalAdimensionalized(cnw, cng, expw, expg, *TD);
-    fv = fluxParams.get_vertical();//new FracFlow2PhasesVerticalAdimensionalized(cnw, cng, expw, expg, *TD);
+    refVec.component(0)=0.0;
+    refVec.component(1) = 0.0;
+    refVec.component(2) = 0.0;
 
-    // Create the Flux and its params
-    boundary(*defaultBoundary());
 
-    double const_gravity = 9.8;
-    double abs_perm = 3e-12;
-    double phi = 0.38;
+    HugoniotFunctionClass * tpcwHugoniot = new ReducedTPCWHugoniotFunctionClass(refVec,accParams.getPhi(), params.component(0), 9.8, TD,params.get_horizontal());
 
-    RealVector Uref(3);
-    Uref.component(0) = 0;
-    Uref.component(1) = 0;
-    Uref.component(2) = 0;
+    setHugoniotFunction(tpcwHugoniot);
 
-    ReducedTPCWHugoniotFunctionClass * tpcwhc = new ReducedTPCWHugoniotFunctionClass(Uref, abs_perm, phi, const_gravity, TD, fh);
-
-    setHugoniotFunction(tpcwhc);
 
 
 }
 
-TPCW::TPCW(const TPCW & copy) :
-SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.boundary(), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATION_),
-TD(new Thermodynamics_SuperCO2_WaterAdimensionalized(*copy.TD)) {
-    // Create Horizontal & Vertical FracFlows
-    double cnw = 0., cng = 0., expw = 2., expg = 2.;
-    fh = new FracFlow2PhasesHorizontalAdimensionalized(cnw, cng, expw, expg, *TD);
-    fv = new FracFlow2PhasesVerticalAdimensionalized(cnw, cng, expw, expg, *TD);
+TPCW::TPCW(const RealVector & params) : SubPhysics(*defaultBoundary(), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATION_) {
 
+    //Flux parameters
 
+    cout << "Aqui" << endl;
+    double abs_perm = params.component(0);
+    double sin_beta = params.component(1);
     double const_gravity = 9.8;
-    double abs_perm = 3e-12;
-    double phi = 0.38;
-    RealVector Uref(3);
-    Uref.component(0) = 0;
-    Uref.component(1) = 0;
-    Uref.component(2) = 0;
 
-    ReducedTPCWHugoniotFunctionClass * tpcwhc = new ReducedTPCWHugoniotFunctionClass(Uref, abs_perm, phi, const_gravity, TD, fh);
+    //Horizontal and vertical flux parameters
 
-    setHugoniotFunction(tpcwhc);
-    //
+    bool has_gravity;
+
+    if (params.component(2) == 0.0)
+        has_gravity = false;
+    else
+        has_gravity = true;
+
+
+
+    bool has_horizontal;
+    if (params.component(3) == 0.0)
+        has_horizontal = false;
+    else
+        has_horizontal = true;
+
+
+    double cnw = params.component(4);
+    double cng = params.component(5);
+    double expw = params.component(6);
+    double expg = params.component(7);
+
+    //Thermodynamics parameters
+
+
+    double T_Typical = params.component(9);
+    double Rho_Typical = params.component(10);
+    double U_Typical = params.component(11);
+
+
+    //Accumulation parameters
+
+    double phi = params.component(8);
+
+    const string testString("/home/edsonlan/Java/rpn");
+
+    TD = new Thermodynamics_SuperCO2_WaterAdimensionalized(testString, T_Typical, Rho_Typical, U_Typical);
+
+    fh = new FracFlow2PhasesHorizontalAdimensionalized(cnw, cng, expw, expg, TD);
+    fv = new FracFlow2PhasesVerticalAdimensionalized(cnw, cng, expw, expg, TD);
+
+
+    Flux2Comp2PhasesAdimensionalized_Params flux_params(abs_perm, sin_beta, const_gravity,
+            has_gravity, has_horizontal, TD, fh, fv); // Check pointer fh and fv allocation
+
+
+    Accum2Comp2PhasesAdimensionalized_Params accum_params(TD, phi);
+
+
+    accumulationFunction_ = new Accum2Comp2PhasesAdimensionalized(accum_params);
+
+    fluxFunction_ = new Flux2Comp2PhasesAdimensionalized(flux_params);
+
+
+    RealVector refVec(2);
+
+    refVec.component(0)=0.0;
+    refVec.component(1) = 0.0;
+//    refVec.component(2) = 0.0;
+
+
+    HugoniotFunctionClass * tpcwHugoniot = new ReducedTPCWHugoniotFunctionClass(refVec,phi, abs_perm, 9.8, TD,fh);
+
+    setHugoniotFunction(tpcwHugoniot);
 
 
 }
 
 SubPhysics * TPCW::clone() const {
-
+    cout << "Chamando clone" << endl;
     return new TPCW(*this);
 }
 
@@ -164,9 +211,9 @@ void TPCW::postProcess(vector<RealVector> & input) {
                 RealVector temp(input[i]);
 
                 input[i].resize(3);
-                input[i].component(0)=temp.component(0);
+                input[i].component(0) = temp.component(0);
                 input[i].component(1) = TD->Theta2T(temp.component(1));
-                input[i].component(2)=boundary().maximums().component(2);
+                input[i].component(2) = boundary().maximums().component(2);
 
                 break;
 
@@ -179,9 +226,10 @@ void TPCW::postProcess(vector<RealVector> & input) {
 }
 
 TPCW::~TPCW() {
-    delete TD;
+
     delete fv;
     delete fh;
+    delete TD;
 }
 
 

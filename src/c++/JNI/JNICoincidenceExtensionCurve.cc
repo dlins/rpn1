@@ -75,15 +75,23 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceExtensionCurveCalc_nativeCa
         cout << "Chamando extension com tpcw" << endl;
         dimension = 3;
 
-        Thermodynamics_SuperCO2_WaterAdimensionalized td(Physics::getRPnHome());
+        double T_Typical = 304.63;
+        double Rho_typical = 998.2;
+        double U_typical = 4.22e-3;
+
+
+
+        Thermodynamics_SuperCO2_WaterAdimensionalized td(Physics::getRPnHome(), T_Typical, Rho_typical, U_typical);
+
+//        Thermodynamics_SuperCO2_WaterAdimensionalized td(Physics::getRPnHome());
 
         int info = td.status_after_init();
         printf("Thermodynamics = %p,  info = %d\n\n\n", &td, info);
 
         // Create Horizontal & Vertical FracFlows
         double cnw = 0., cng = 0., expw = 2., expg = 2.;
-        FracFlow2PhasesHorizontalAdimensionalized * fh = new FracFlow2PhasesHorizontalAdimensionalized(cnw, cng, expw, expg, td);
-        FracFlow2PhasesVerticalAdimensionalized * fv = new FracFlow2PhasesVerticalAdimensionalized(cnw, cng, expw, expg, td);
+        FracFlow2PhasesHorizontalAdimensionalized * fh = new FracFlow2PhasesHorizontalAdimensionalized(cnw, cng, expw, expg, &td);
+        FracFlow2PhasesVerticalAdimensionalized * fv = new FracFlow2PhasesVerticalAdimensionalized(cnw, cng, expw, expg, &td);
 
         // Create the Flux and its params
         double abs_perm = 20e-12;
@@ -93,14 +101,14 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceExtensionCurveCalc_nativeCa
 
         Flux2Comp2PhasesAdimensionalized_Params flux_params(abs_perm, sin_beta, const_gravity,
                 has_gravity, has_horizontal,
-                td,
+                &td,
                 fh, fv);
 
         Flux2Comp2PhasesAdimensionalized flux(flux_params);
 
         // Create the Accum and its params
         double phi = 0.38;
-        Accum2Comp2PhasesAdimensionalized_Params accum_params(td, phi);
+        Accum2Comp2PhasesAdimensionalized_Params accum_params(&td, phi);
         Accum2Comp2PhasesAdimensionalized accum(accum_params);
 
 
@@ -109,7 +117,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceExtensionCurveCalc_nativeCa
         ReducedFlux2Comp2PhasesAdimensionalized reduced_flux(reduced_flux_params);
 
 
-        ReducedAccum2Comp2PhasesAdimensionalized_Params reduced_accum_params(&td, &phi);
+        ReducedAccum2Comp2PhasesAdimensionalized_Params reduced_accum_params(&td, phi);
         ReducedAccum2Comp2PhasesAdimensionalized reduced_accum(reduced_accum_params);
 
         //        RealVector pmin(2);

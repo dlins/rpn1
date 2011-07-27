@@ -1,12 +1,16 @@
 #include "Accum2Comp2PhasesAdimensionalized.h"
 
-Accum2Comp2PhasesAdimensionalized::Accum2Comp2PhasesAdimensionalized(const Accum2Comp2PhasesAdimensionalized &a){
-    TD = new Thermodynamics_SuperCO2_WaterAdimensionalized (*a.TD);
+Accum2Comp2PhasesAdimensionalized::Accum2Comp2PhasesAdimensionalized(const Accum2Comp2PhasesAdimensionalized &a) {
+
+    const Accum2Comp2PhasesAdimensionalized_Params & accumParams = (const Accum2Comp2PhasesAdimensionalized_Params &) a.accumulationParams();
+
+    TD =  accumParams.get_thermodynamics();
+
     phi = a.phi;
 }
 
-Accum2Comp2PhasesAdimensionalized::Accum2Comp2PhasesAdimensionalized(const Accum2Comp2PhasesAdimensionalized_Params &param){
-    TD = new Thermodynamics_SuperCO2_WaterAdimensionalized(*param.get_thermodynamics());
+Accum2Comp2PhasesAdimensionalized::Accum2Comp2PhasesAdimensionalized(const Accum2Comp2PhasesAdimensionalized_Params &param) {
+    TD = param.get_thermodynamics();
     phi = param.component(0);
 }
 
@@ -15,8 +19,8 @@ Accum2Comp2PhasesAdimensionalized * Accum2Comp2PhasesAdimensionalized::clone() c
     return new Accum2Comp2PhasesAdimensionalized(*this);
 }
 
-Accum2Comp2PhasesAdimensionalized::~Accum2Comp2PhasesAdimensionalized(){
-//    delete TD;
+Accum2Comp2PhasesAdimensionalized::~Accum2Comp2PhasesAdimensionalized() {
+
 }
 
 // Existe uma discrepancia entre o o significado de s quando este codigo foi
@@ -28,16 +32,19 @@ Accum2Comp2PhasesAdimensionalized::~Accum2Comp2PhasesAdimensionalized(){
 //
 // Dan
 
-int Accum2Comp2PhasesAdimensionalized::jet(const WaveState &w, JetMatrix &m, int degree) const{
-    double s     = w(0); // s_{sigma} = sg in FracFlow2PhasesHorizontal & FracFlow2PhasesVertical
+int Accum2Comp2PhasesAdimensionalized::jet(const WaveState &w, JetMatrix &m, int degree) const {
+    double s = w(0); // s_{sigma} = sg in FracFlow2PhasesHorizontal & FracFlow2PhasesVertical
     double Theta = w(1);
 
-    double U     = w(2);
+    double U = w(2);
 
     // Some auxiliary variables
-    double Hr, d_Hr, d2_Hr;    TD->Diff_RockEnthalpyVol(Theta, Hr, d_Hr, d2_Hr);
-    double Ha, d_Ha, d2_Ha;    TD->Diff_AqueousEnthalpyVol(Theta, Ha, d_Ha, d2_Ha);
-    double Hsi, d_Hsi, d2_Hsi; TD->Diff_SuperCriticEnthalpyVol(Theta, Hsi, d_Hsi, d2_Hsi);
+    double Hr, d_Hr, d2_Hr;
+    TD->Diff_RockEnthalpyVol(Theta, Hr, d_Hr, d2_Hr);
+    double Ha, d_Ha, d2_Ha;
+    TD->Diff_AqueousEnthalpyVol(Theta, Ha, d_Ha, d2_Ha);
+    double Hsi, d_Hsi, d2_Hsi;
+    TD->Diff_SuperCriticEnthalpyVol(Theta, Hsi, d_Hsi, d2_Hsi);
 
 
     double rhosic, d_rhosic, d2_rhosic;
@@ -51,7 +58,7 @@ int Accum2Comp2PhasesAdimensionalized::jet(const WaveState &w, JetMatrix &m, int
 
     double rhoaw, d_rhoaw, d2_rhoaw;
     TD->Diff_Rhoaw(Theta, rhoaw, d_rhoaw, d2_rhoaw);
-   
+
 
 
     // Output
@@ -74,31 +81,31 @@ int Accum2Comp2PhasesAdimensionalized::jet(const WaveState &w, JetMatrix &m, int
     double out220, out221, out222;
 
     // Function
-    if (degree >= 0){
-        out0 = phi*(rhosic*s + rhoac*(1.0 - s)); // G1
-        out1 = phi*(rhosiw*s + rhoaw*(1.0 - s)); // G2 
-        out2 = Hr + phi*(Hsi*s + Ha*(1.0 - s) ); // G3
+    if (degree >= 0) {
+        out0 = phi * (rhosic * s + rhoac * (1.0 - s)); // G1
+        out1 = phi * (rhosiw * s + rhoaw * (1.0 - s)); // G2
+        out2 = Hr + phi * (Hsi * s + Ha * (1.0 - s)); // G3
 
         m(0, out0);
         m(1, out1);
         m(2, out2);
 
         // Jacobian
-        if (degree >= 1){
-            out00 = phi*(rhosic - rhoac); // dG1_ds
-            out01 = phi*(d_rhosic*s + d_rhoac*(1.0 - s)); // dG1_dTheta
+        if (degree >= 1) {
+            out00 = phi * (rhosic - rhoac); // dG1_ds
+            out01 = phi * (d_rhosic * s + d_rhoac * (1.0 - s)); // dG1_dTheta
             out02 = 0.; // dG1_dU
 
-//            printf("out00 = %g\n", out00);
-//            printf("out01 = %g\n", out01);
-//            printf("out02 = %g\n", out02);
+            //            printf("out00 = %g\n", out00);
+            //            printf("out01 = %g\n", out01);
+            //            printf("out02 = %g\n", out02);
 
-            out10 = phi*(rhosiw - rhoaw); // dG2_ds
-            out11 = phi*(d_rhosiw*s + d_rhoaw*(1.0 - s)); // dG2_dTheta
+            out10 = phi * (rhosiw - rhoaw); // dG2_ds
+            out11 = phi * (d_rhosiw * s + d_rhoaw * (1.0 - s)); // dG2_dTheta
             out12 = 0.; // dG1_dU
 
-            out20 = phi*(Hsi-Ha); // dG3_ds 
-            out21 = d_Hr + phi*( d_Hsi*s + d_Ha*(1.0 - s) ); // dG3_dTheta
+            out20 = phi * (Hsi - Ha); // dG3_ds
+            out21 = d_Hr + phi * (d_Hsi * s + d_Ha * (1.0 - s)); // dG3_dTheta
             out22 = 0.; // dG3_dU
 
             m(0, 0, out00);
@@ -113,39 +120,39 @@ int Accum2Comp2PhasesAdimensionalized::jet(const WaveState &w, JetMatrix &m, int
             m(2, 1, out21);
             m(2, 2, out22);
 
-//            for (int i = 0; i < 3; i++){
-//                for (int j = 0; j < 3; j++){
-//                    printf("aa(%d, %d) = %g\n", i, j, m(i, j));
-//                }
-//            }
+            //            for (int i = 0; i < 3; i++){
+            //                for (int j = 0; j < 3; j++){
+            //                    printf("aa(%d, %d) = %g\n", i, j, m(i, j));
+            //                }
+            //            }
 
             // Hessian
-            if (degree == 2){
+            if (degree == 2) {
                 out000 = 0.; // d2G1_ds2
-                out001 = phi*(d_rhosic - d_rhoac); // d2G1_dsdTheta
+                out001 = phi * (d_rhosic - d_rhoac); // d2G1_dsdTheta
                 out002 = 0.; // d2G1_dsdU
                 out010 = out001; // d2G1_dThetads
-                out011 = phi*(d2_rhosic*s + d2_rhoac*(1.0 - s)); // d2G1_dTheta2
+                out011 = phi * (d2_rhosic * s + d2_rhoac * (1.0 - s)); // d2G1_dTheta2
                 out012 = 0.; // d2G1_dThetadU
                 out020 = 0.; // d2G1_dUds
                 out021 = 0.; // d2G1_dUdTheta
                 out022 = 0.; // d2G1_dU2
 
                 out100 = 0.; // d2G2_ds2
-                out101 = phi*(d_rhosiw - d_rhoaw); // d2G2_dsdTheta
+                out101 = phi * (d_rhosiw - d_rhoaw); // d2G2_dsdTheta
                 out102 = 0.; // d2G2_dsdU
-                out110 = phi*(d_rhosiw - d_rhoaw); // d2G2_dThetads
-                out111 = phi*(d2_rhosiw*s + d2_rhoaw*(1.0 - s)); // d2G2_dTheta2
+                out110 = phi * (d_rhosiw - d_rhoaw); // d2G2_dThetads
+                out111 = phi * (d2_rhosiw * s + d2_rhoaw * (1.0 - s)); // d2G2_dTheta2
                 out112 = 0.; // d2G2_dThetadU
                 out120 = 0.; // d2G2_dUds
                 out121 = 0.; // d2G2_dUdTheta
                 out122 = 0.; // d2G2_dU2
 
                 out200 = 0.; // d2G3_ds2
-                out201 = phi*(d_Hsi-d_Ha); // d2G3_dsdTheta 
+                out201 = phi * (d_Hsi - d_Ha); // d2G3_dsdTheta
                 out202 = 0.; // d2G3_dsdU
                 out210 = out201; // d2G3_dThetads
-                out211 = d2_Hr + phi*(d2_Hsi*s + d2_Ha*(1.0 - s) ); // d2G3_dTheta2
+                out211 = d2_Hr + phi * (d2_Hsi * s + d2_Ha * (1.0 - s)); // d2G3_dTheta2
                 out212 = 0.; // d2G3_dThetadU
                 out220 = 0.; // d2G3_dUds
                 out221 = 0.; // d2G3_dUdTheta
@@ -186,5 +193,5 @@ int Accum2Comp2PhasesAdimensionalized::jet(const WaveState &w, JetMatrix &m, int
         }
     }
 
-    return  2; //SUCCESSFUL_PROCEDURE;
+    return 2; //SUCCESSFUL_PROCEDURE;
 }

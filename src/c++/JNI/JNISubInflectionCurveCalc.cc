@@ -77,10 +77,16 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionCurveCalc_nativeCalc(JNIE
 
     double phi = 0.38;
 
-    Thermodynamics_SuperCO2_WaterAdimensionalized TD(Physics::getRPnHome());
+    double T_Typical = 304.63;
+    double Rho_typical = 998.2;
+    double U_typical = 4.22e-3;
+
+
+
+    Thermodynamics_SuperCO2_WaterAdimensionalized TD(Physics::getRPnHome(), T_Typical, Rho_typical, U_typical);
 
     double cnw = 0., cng = 0., expw = 2., expg = 2.;
-    FracFlow2PhasesHorizontalAdimensionalized fh(cnw, cng, expw, expg, TD);
+    FracFlow2PhasesHorizontalAdimensionalized fh(cnw, cng, expw, expg, &TD);
 
     SubinflectionTPCW subinflection(&TD, &fh, phi);
 

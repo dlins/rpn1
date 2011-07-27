@@ -1,4 +1,5 @@
 #include <math.h>
+#include <vector>
 
 #include "Thermodynamics_SuperCO2_WaterAdimensionalized.h"
 using namespace std;
@@ -93,15 +94,17 @@ U_typical_(copy.U_typical_),
 h_typical_(copy.h_typical_),
 rpnHomePath_(copy.rpnHomePath_) {
 
-    cout<<"construtor de copia da termodinamica"<<endl;
+    cout << "construtor de copia da termodinamica" << endl;
     // Generate the splines
 
     info_rhosigmac = create_spline("rhosigmac_spline.txt", "rhosigmac", P, rhosigmac_);
     info_rhosigmaw = create_spline("rhosigmaw_spline.txt", "rhosigmaw", P, rhosigmaw_);
     info_rhoac = create_spline("rhoac_spline.txt", "rhoac", P, rhoac_);
     info_rhoaw = create_spline("rhoaw_spline.txt", "rhoaw", P, rhoaw_);
-    // info_rhoW = create_spline("rhoW_spline.txt", "rhoW", P, rhoW_);
+     info_rhoW = create_spline("rhoW_spline.txt", "rhoW", P, rhoW_);
     info_hsigmaC = create_spline("hsigmaC_spline.txt", "hsigmaC", P, hsigmaC_);
+
+      cout << info_hsigmaC << info_rhoW<< info_rhoaw <<info_rhoac << info_rhosigmaw<< info_rhosigmac<<endl;
 
 }
 
@@ -132,7 +135,7 @@ double Thermodynamics_SuperCO2_WaterAdimensionalized::u2U(double u) {
     return u / U_typical_;
 }
 
-Thermodynamics_SuperCO2_WaterAdimensionalized::Thermodynamics_SuperCO2_WaterAdimensionalized(const std::string & rpnHomePath) :
+Thermodynamics_SuperCO2_WaterAdimensionalized::Thermodynamics_SuperCO2_WaterAdimensionalized(const std::string & rpnHomePath,double T_Typical,double Rho_Typical,double U_Typical) :
 a0(-1.94760101098783e-6),
 a1(0.013524080086578),
 a2(-9.043578102452411),
@@ -149,11 +152,11 @@ P(100.9),
 rhoW_const(998.2),
 Rock_Cr(2.029e6),
 Water_Cw_specific(4297.),
-T_typical_(304.63),   //=============> parametro
-Rho_typical_(998.2),  //=============> parametro
-U_typical_(4.22e-3),  //=============> parametro
+T_typical_(T_Typical),
+Rho_typical_(Rho_Typical),
+U_typical_(U_Typical),
 rpnHomePath_(rpnHomePath) {
-
+    cout<<"Aqui termo"<<endl;
     h_typical_ = Water_Cw_specific * (T_typical_ - Tref_water);
 
     // Generate the splines
@@ -164,6 +167,9 @@ rpnHomePath_(rpnHomePath) {
     info_rhoaw = create_spline("rhoaw_spline.txt", "rhoaw", P, rhoaw_);
     info_rhoW = create_spline("rhoW_spline.txt", "rhoW", P, rhoW_);
     info_hsigmaC = create_spline("hsigmaC_spline.txt", "hsigmaC", P, hsigmaC_);
+
+    cout << info_hsigmaC << info_rhoW<< info_rhoaw <<info_rhoac << info_rhosigmaw<< info_rhosigmac<<endl;
+
 
 }
 // DTOR (Destructor)
@@ -420,4 +426,21 @@ double Thermodynamics_SuperCO2_WaterAdimensionalized::T_typical(void) {
 
 double Thermodynamics_SuperCO2_WaterAdimensionalized::U_typical(void) {
     return U_typical_;
+}
+
+void Thermodynamics_SuperCO2_WaterAdimensionalized::setTtypical(double newValue) {
+
+    T_typical_ = newValue;
+
+}
+
+void Thermodynamics_SuperCO2_WaterAdimensionalized::setRhoTypical(double newValue) {
+
+    Rho_typical_ = newValue;
+
+}
+
+void Thermodynamics_SuperCO2_WaterAdimensionalized::UTypical(double newValue) {
+
+    U_typical_ = newValue;
 }

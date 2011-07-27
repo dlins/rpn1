@@ -85,7 +85,7 @@ void SubPhysics::accumulationParams(const AccumulationParams & newAccumulationPa
 
 SubPhysics::~SubPhysics() {
 
-//    delete hugoniotFunction_;
+    delete hugoniotFunction_;
     delete space_;
     
     delete fluxFunction_;

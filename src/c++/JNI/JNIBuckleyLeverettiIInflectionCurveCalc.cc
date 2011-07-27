@@ -68,10 +68,23 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BuckleyLeverettinInflectionCurveCalc_n
 
     double phi = 0.38;
 
-    Thermodynamics_SuperCO2_WaterAdimensionalized TD(Physics::getRPnHome());
+    double T_Typical = 304.63;
+    double Rho_typical = 998.2;
+    double U_typical = 4.22e-3;
+
+
+
+    Thermodynamics_SuperCO2_WaterAdimensionalized TD(Physics::getRPnHome(), T_Typical, Rho_typical, U_typical);
+
+
+
+
+
+
+//    Thermodynamics_SuperCO2_WaterAdimensionalized TD(Physics::getRPnHome());
 
     double cnw = 0., cng = 0., expw = 2., expg = 2.;
-    FracFlow2PhasesHorizontalAdimensionalized fh(cnw, cng, expw, expg, TD);
+    FracFlow2PhasesHorizontalAdimensionalized fh(cnw, cng, expw, expg, &TD);
 
     BuckleyLeverettinInflectionTPCW bl(&fh);
 
@@ -88,7 +101,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BuckleyLeverettinInflectionCurveCalc_n
     RectBoundary tempBoundary(min, max);
 
 
-    ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(),tempBoundary, &bl);
+    ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), tempBoundary, &bl);
 
     vector<HugoniotPolyLine> hugoniotPolyLineVector;
     method.unclassifiedCurve(Uref, hugoniotPolyLineVector);
