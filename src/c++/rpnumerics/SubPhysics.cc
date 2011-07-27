@@ -26,6 +26,14 @@ type_(type) {
 
 }
 
+
+ SubPhysics::SubPhysics(const Boundary & boundary, const Space & space, const char * name, int type):boundary_(boundary.clone()),
+space_(new Space(space)),
+ID_(name),
+type_(type) {
+
+ }
+
 const Space &SubPhysics::domain() const {
     return *space_;
 }
@@ -77,12 +85,13 @@ void SubPhysics::accumulationParams(const AccumulationParams & newAccumulationPa
 
 SubPhysics::~SubPhysics() {
 
+//    delete hugoniotFunction_;
+    delete space_;
+    
     delete fluxFunction_;
     delete accumulationFunction_;
     delete boundary_;
 
-    delete hugoniotFunction_;
-    delete space_;
 
 
 }

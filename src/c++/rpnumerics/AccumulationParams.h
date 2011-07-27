@@ -13,7 +13,7 @@
 class AccumulationParams {
 private:
 
-    RealVector *params_;
+    RealVector * params_;
 
 
 public:
