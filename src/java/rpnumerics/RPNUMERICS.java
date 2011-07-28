@@ -429,14 +429,15 @@ public class RPNUMERICS {
         int xResolution = new Integer(getContourConfiguration().getParam("x-resolution"));
         int yResolution = new Integer(getContourConfiguration().getParam("y-resolution"));
 
+
         int characteristicWhere = new Integer(getParamValue("extensioncurve", "characteristicwhere"));
         int edge = new Integer(getParamValue("extensioncurve", "edge"));
-
+        int edgeResolution = new Integer(getParamValue("extensioncurve", "edgeresolution"));
 
         System.out.println("Resolucao em Java:" + xResolution + " " + yResolution);
 
 
-        return new ExtensionCurveCalc(xResolution, yResolution, new Integer(getParamValue("extensioncurve", "curvefamily")), new Integer(getParamValue("extensioncurve", "domainfamily")), edge, characteristicWhere);
+        return new ExtensionCurveCalc(xResolution, yResolution, edgeResolution,new Integer(getParamValue("extensioncurve", "curvefamily")), new Integer(getParamValue("extensioncurve", "domainfamily")), edge, characteristicWhere);
 
     }
 

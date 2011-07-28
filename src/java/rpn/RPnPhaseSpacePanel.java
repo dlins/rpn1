@@ -6,6 +6,8 @@
 package rpn;
 
 import java.io.UnsupportedEncodingException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.batik.svggen.SVGGraphics2DIOException;
 import wave.multid.view.*;
 import rpn.controller.PhaseSpacePanel2DController;
@@ -40,6 +42,7 @@ import org.w3c.dom.Document;
 import rpn.component.util.CLASSIFIERAGENT_CONFIG;
 import rpn.component.util.GeometryGraph;
 import rpn.component.util.GeometryGraph3D;
+import rpn.component.util.GeometryGraph4D;
 import rpn.component.util.GeometryUtil;
 import rpn.component.util.VELOCITYAGENT_CONFIG;
 import rpn.controller.ui.AREASELECTION_CONFIG;
@@ -52,14 +55,31 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     // Constants
     //
 
-    static final public Color DEFAULT_BACKGROUND_COLOR = Color.gray;
-    static final public Color DEFAULT_BOUNDARY_COLOR = Color.black;
-    static final public Color DEFAULT_POINTMARK_COLOR = Color.white;
+    //*** alterei aqui  (Leandro)
+    static public Color DEFAULT_BOUNDARY_COLOR = Color.gray;
+    static public Color DEFAULT_BACKGROUND_COLOR = Color.black;
+    static public Color DEFAULT_POINTMARK_COLOR = Color.white;
+    //***
+
 
     public static List <Area> listaArea = new ArrayList<Area>();     //** declarei isso    (Leandro) - ainda nao esta sendo usado
     public static int myH_;                                          //** declarei isso    (Leandro)
     public static int myW_;                                          //** declarei isso    (Leandro)
 
+
+    //*** declarei esses métodos (Leandro)
+    public static void blackBackground() {
+        DEFAULT_BACKGROUND_COLOR = Color.black;
+        DEFAULT_POINTMARK_COLOR = Color.white;
+    }
+
+    public static void whiteBackground() {
+        DEFAULT_BACKGROUND_COLOR = Color.white;
+        DEFAULT_POINTMARK_COLOR = Color.black;
+    }
+    //***
+
+    
     public static boolean isCursorLine() {
         return cursorLine_;
     }
@@ -110,7 +130,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         //myH = myH/2;
 
         cursorPos_ = new Point(0, 0);
-        setBackground(DEFAULT_BACKGROUND_COLOR);
+        setBackground(DEFAULT_BOUNDARY_COLOR);
         setPreferredSize(new java.awt.Dimension(myW, myH));
     }
 
@@ -165,7 +185,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
          * BOUNDARY WINDOW
          */
 
-        g.setColor(DEFAULT_BOUNDARY_COLOR);
+        g.setColor(DEFAULT_BACKGROUND_COLOR);
         Shape s = scene_.getViewingTransform().viewPlane().getWindow().dcView(scene_.getViewingTransform());
         ((Graphics2D) g).fill(s);
 
@@ -228,38 +248,26 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         }
 
         if (RPNUMERICS.domainDim() == 3) {
-
-            if (scene().geometries().hasNext()){
                 try {
-                GeometryGraph3D.class.newInstance().markPoints(GeometryUtil.targetPoint, GeometryUtil.pMarca, scene());
-                GeometryGraph3D.class.newInstance().paintComponent(g, scene());
-            } catch (InstantiationException ex) {
-                //Logger.getLogger(RPnPhaseSpacePanel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalAccessException ex) {
-                //Logger.getLogger(RPnPhaseSpacePanel.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            }
-
-            
+                    if (scene().geometries().hasNext()) {
+                        GeometryGraph3D.class.newInstance().markPoints(GeometryUtil.targetPoint, GeometryUtil.pMarca, scene());
+                        GeometryGraph3D.class.newInstance().paintComponent(g, scene());
+                    }
+                    
+                } catch (InstantiationException ex) {
+                    System.out.println("Clear Space ativo.");
+                    //Logger.getLogger(RPnPhaseSpacePanel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalAccessException ex) {
+                    //Logger.getLogger(RPnPhaseSpacePanel.class.getName()).log(Level.SEVERE, null, ex);
+                }
         }
 
 //        if (RPNUMERICS.domainDim() == 4) {
 //            GeometryGraph4D.markPoints(GeometryUtil.targetPoint, GeometryUtil.pMarca, scene());
 //            GeometryGraph4D.paintComponent(g, scene());
 //        }
-//
-//        if ((UIController.instance().getState() instanceof AREASELECTION_CONFIG)  ||
-//            (UIController.instance().getState() instanceof CLASSIFIERAGENT_CONFIG)) {      // acrescentei isso
-//            getCastedUI().pointMarkBuffer().clear();      // melhorar isso !!!
-//            showCursorLine_ = false;
-//            repaint();
-//            getCastedUI().resetCursorCoords();        // analisar se isso dá alguma consequencia (use o export p/ Matlab para isso)
-//        }
 
-
-
-
-        if (UIController.instance_.getState() instanceof AREASELECTION_CONFIG) {      // acrescentei isso (Leandro)
+        if (UIController.instance_.getState() instanceof AREASELECTION_CONFIG) {        // acrescentei isso (Leandro)
             getCastedUI().pointMarkBuffer().clear();
             showCursorLine_ = false;
             repaint();
@@ -273,23 +281,13 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
             getCastedUI().resetCursorCoords();
         }
 
-        if (UIController.instance_.getState() instanceof VELOCITYAGENT_CONFIG) {      // acrescentei isso (Leandro)
+        if (UIController.instance_.getState() instanceof VELOCITYAGENT_CONFIG) {        // acrescentei isso (Leandro)
             getCastedUI().pointMarkBuffer().clear();
             showCursorLine_ = false;
             repaint();
             getCastedUI().resetCursorCoords();
         }
-
-
-
-
-
-
-
-
-
-
-
+        
         
         //** Leandro: fim.
         //*****************************************

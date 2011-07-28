@@ -10,6 +10,7 @@ import rpn.component.util.ControlClick;
 import rpn.controller.ui.*;
 import rpn.message.RPnActionMediator;
 
+
 public class ClearPhaseSpaceAgent extends javax.swing.AbstractAction {
     //
     // Constants
@@ -28,18 +29,20 @@ public class ClearPhaseSpaceAgent extends javax.swing.AbstractAction {
     }
 
     public void clear() {
+
         // rpn.RPnUIFrame.instance().setTitle(" completing ...  " + DESC_TEXT);
         UIController.instance().setWaitCursor();
         UIController.instance().panelsBufferClear();
         rpn.parser.RPnDataModule.PHASESPACE.clear();
+
+        ControlClick.clearAll();         //*** Leandro
+        
         BifurcationPlotAgent.instance().getContainer().setEnabled(true);
         // ClearScene is not undoable
         UndoActionController.instance().setEnabled(false);
-        ControlClick.clearMarks();
         System.gc();
         //rpn.RPnUIFrame.instance().setTitle("");
         UIController.instance().resetCursor();
-
 
     }
    

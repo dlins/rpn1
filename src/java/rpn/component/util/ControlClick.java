@@ -67,25 +67,62 @@ public class ControlClick {
     //static public List indCurva = new ArrayList();
 
 
-    public static void clearMarks() {
-        //*************************************// (Leandro)
-        RPnCurve.lista.clear();
+    //*************************************// (Leandro)
 
+    public static void clearVelocities() {
         GeometryUtil.vel.clear();
+        
+        xDevSetaVel.clear();        xDevVel.clear();
+        xSetaVel.clear();           xVel.clear();
+        yDevSetaVel.clear();        yDevVel.clear();
+        ySetaVel.clear();           yVel.clear();
+    }
+    
+    
+    public static void clearClassifiers() {
         GeometryUtil.tipo.clear();
 
         xDevSeta.clear();           xDevStr.clear();
         xSeta.clear();              xStr.clear();
         yDevSeta.clear();           yDevStr.clear();
         ySeta.clear();              yStr.clear();
-
-        xDevSetaVel.clear();        xDevVel.clear();
-        xSetaVel.clear();           xVel.clear();
-        yDevSetaVel.clear();        yDevVel.clear();
-        ySetaVel.clear();           yVel.clear();
-
-        //***************************************
     }
+
+
+    public static void clearLastString() {
+
+        if (UIController.instance_.getState() instanceof CLASSIFIERAGENT_CONFIG) {
+            int lastIndex = GeometryUtil.tipo.size() - 1;
+            GeometryUtil.tipo.remove(lastIndex);
+            xDevSeta.remove(lastIndex);           xDevStr.remove(lastIndex);
+            xSeta.remove(lastIndex);              xStr.remove(lastIndex);
+            yDevSeta.remove(lastIndex);           yDevStr.remove(lastIndex);
+            ySeta.remove(lastIndex);              yStr.remove(lastIndex);
+        }
+
+        if (UIController.instance_.getState() instanceof VELOCITYAGENT_CONFIG) {
+            int lastIndex = GeometryUtil.vel.size() - 1;
+            GeometryUtil.vel.remove(lastIndex);
+            xDevSetaVel.remove(lastIndex);        xDevVel.remove(lastIndex);
+            xSetaVel.remove(lastIndex);           xVel.remove(lastIndex);
+            yDevSetaVel.remove(lastIndex);        yDevVel.remove(lastIndex);
+            ySetaVel.remove(lastIndex);           yVel.remove(lastIndex);
+        }
+    }
+
+
+    public static void clearAllStrings() {
+        clearVelocities();
+        clearClassifiers();
+    }
+
+
+    public static void clearAll() {
+        RPnCurve.lista.clear();
+        clearAllStrings();
+    }
+
+    //***************************************
 
 
     public static void mousePressed(MouseEvent event, Scene scene) {

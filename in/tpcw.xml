@@ -50,6 +50,8 @@
         <CURVEPARAM name="domainfamily" value="1"/>
         <CURVEPARAM name="characteristicwhere" value="1"/>
         <CURVEPARAM name="edge" value="0"/>
+        <CURVEPARAM name="edgeresolution" value="200"/>
+
 
     </CURVE>
 

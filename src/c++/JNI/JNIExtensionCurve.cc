@@ -35,7 +35,7 @@ using std::vector;
 using namespace std;
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
-(JNIEnv * env, jobject obj, jint xResolution, jint yResolution, jint curveFamily, jint domainFamily, jint edge, jint characteristicWhere) {
+(JNIEnv * env, jobject obj, jint xResolution, jint yResolution, jint edgeResolution,jint curveFamily, jint domainFamily, jint edge, jint characteristicWhere) {
 
     jclass hugoniotSegmentClass = (env)->FindClass(HUGONIOTSEGMENTCLASS_LOCATION);
 
@@ -236,7 +236,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
         cout << "Familia do dominio" << domainFamily << endl;
         cout << "characteristic " << characteristicWhere << endl;
         cout << "edge " << edge << endl;
-
+        cout<<"edgeResolution: "<<edgeResolution<<endl;
 
         const FluxFunction * curve_flux = &flux;
         const AccumulationFunction *curve_accum = &accum;
@@ -249,7 +249,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
 
         Boundary_ExtensionTPCW::extension_curve(curve_flux, curve_accum,
                 curve_reduced_flux, curve_reduced_accum,
-                edge,200,
+                edge,edgeResolution,
                 curveFamily,
                 min, max, number_of_grid_pnts, // For the domain.
                 domainFamily,

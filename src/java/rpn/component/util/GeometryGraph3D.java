@@ -31,7 +31,6 @@ import rpnumerics.RPnCurve;
 import rpnumerics.SegmentedCurve;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
-import wave.multid.model.MultiGeometry;
 import wave.multid.view.Scene;
 import wave.multid.view.ViewingTransform;
 import wave.util.RealVector;
@@ -86,6 +85,35 @@ public class GeometryGraph3D {
 
     public void paintComponent(Graphics g, Scene scene_) {               // era static
 
+        /*
+         * line1 e line2 = marcador da posição do primeiro click; plot apenas se acionada a seleção de área.
+         * line3 e line4 = marcador sobre o ponto/segmento mais próximo de uma curva (encontrado no painel onde foi dado o click).
+         * line5 e line6 = marcador da posição do segundo click; plot apenas se acionada a seleção de área.
+         * line7 e line8 = marcador sobre o ponto/segmento mais próximo de uma curva (encontrado no painel onde não foi dado o click).
+         * square1 e square2 = retângulos usados para área de seleção.
+         */
+
+        Color cor12 = null, cor34 = null, cor56 = null, cor78 = null, corSquare = null, corString = null;
+
+        if (RPnPhaseSpacePanel.DEFAULT_BACKGROUND_COLOR == Color.white) {
+            cor12 = Color.red;
+            cor34 = Color.red;         //*** red se background = white ; yellow se background = black
+            cor56 = Color.red;
+            cor78 = Color.red;         //*** red se background = white ; yellow se background = black
+            corSquare = Color.red;
+            corString = Color.black;   //*** black se background = white ; white se background = black
+        }
+
+        if (RPnPhaseSpacePanel.DEFAULT_BACKGROUND_COLOR == Color.black) {
+            cor12 = Color.red;
+            cor34 = Color.yellow;         //*** red se background = white ; yellow se background = black
+            cor56 = Color.red;
+            cor78 = Color.yellow;         //*** red se background = white ; yellow se background = black
+            corSquare = Color.red;
+            corString = Color.white;      //*** black se background = white ; white se background = black
+        }
+
+        
         Graphics2D graph = (Graphics2D) g;
 
         //** Desenha no primeiro painel
@@ -94,12 +122,12 @@ public class GeometryGraph3D {
             if (zerado == 2) {
 
                 if (UIController.instance_.getState() instanceof AREASELECTION_CONFIG) {
-                    g.setColor(Color.red);
+                    g.setColor(cor12);
                     graph.draw(line1);
                     graph.draw(line2);
                 }
                 
-                g.setColor(Color.yellow);
+                g.setColor(cor34);
                 graph.draw(line3);
                 graph.draw(line4);
 
@@ -107,9 +135,10 @@ public class GeometryGraph3D {
                 if ((ControlClick.ind % 2) == 0) {
 
                     if (UIController.instance_.getState() instanceof AREASELECTION_CONFIG) {
-                        g.setColor(Color.red);
+                        g.setColor(cor56);
                         graph.draw(line5);
                         graph.draw(line6);
+                        g.setColor(corSquare);
                         graph.draw(square1);
                     }
                     
@@ -131,11 +160,11 @@ public class GeometryGraph3D {
                     //*** Para o botao Classify
                     if ((UIController.instance_.getState() instanceof VELOCITYAGENT_CONFIG)  ||
                         (UIController.instance_.getState() instanceof CLASSIFIERAGENT_CONFIG  &&
-                        RPnCurve.lista.get(GeometryUtil.closestCurve) instanceof HugoniotCurve)) {   //**  p/ tirar bug
+                        RPnCurve.lista.get(GeometryUtil.closestCurve) instanceof HugoniotCurve)) {
 
                         int cont = ControlClick.xDevStr.size();
 
-                        g.setColor(Color.white);
+                        g.setColor(corString);
                         
                         for (int i = 0; i < cont; i++) {
 
@@ -217,7 +246,7 @@ public class GeometryGraph3D {
 
                         int cont = ControlClick.xDevVel.size();
 
-                        g.setColor(Color.white);
+                        g.setColor(corString);
 
                         for (int i = 0; i < cont; i++) {
 
@@ -291,12 +320,12 @@ public class GeometryGraph3D {
                 }
 
             } else {
-                g.setColor(Color.yellow);
+                g.setColor(cor78);
                 graph.draw(line7);
                 graph.draw(line8);
 
                 if (((ControlClick.ind % 2) == 0)  &&  (UIController.instance_.getState() instanceof AREASELECTION_CONFIG)) {
-                    g.setColor(Color.red);
+                    g.setColor(corSquare);
                     graph.draw(square2);
                 }
 
@@ -310,13 +339,13 @@ public class GeometryGraph3D {
 
             if (zerado == 2) {
 
-                g.setColor(Color.yellow);
+                g.setColor(cor78);
                 graph.draw(line7);
                 graph.draw(line8);
                 
                 if (GeometryUtil.zContido.size() != 0) {
                     if (UIController.instance_.getState() instanceof AREASELECTION_CONFIG) {
-                        g.setColor(Color.red);
+                        g.setColor(corSquare);
                         graph.draw(square2);
                     }
                 }
@@ -324,12 +353,12 @@ public class GeometryGraph3D {
             } else {
 
                 if (UIController.instance_.getState() instanceof AREASELECTION_CONFIG) {
-                    g.setColor(Color.red);
+                    g.setColor(cor12);
                     graph.draw(line1);
                     graph.draw(line2);
                 }
 
-                g.setColor(Color.yellow);
+                g.setColor(cor34);
                 graph.draw(line3);
                 graph.draw(line4);
 
@@ -348,7 +377,7 @@ public class GeometryGraph3D {
                     double yMP = dcCoordsMP.getElement(0);
 
                     if (((ControlClick.ind % 2) == 0)  &&  (UIController.instance_.getState() instanceof CLASSIFIERAGENT_CONFIG)) {
-                        g.setColor(Color.white);
+                        //g.setColor(corString);
 
                         //*** Analisar o que fazer caso o click seja no painel 2.
                         //*** Precisa imprimir as strings lá?
@@ -363,9 +392,10 @@ public class GeometryGraph3D {
 
 
                 if (((ControlClick.ind % 2) == 0)  &&  (UIController.instance_.getState() instanceof AREASELECTION_CONFIG)) {
-                    g.setColor(Color.red);
+                    g.setColor(cor56);
                     graph.draw(line5);
                     graph.draw(line6);
+                    g.setColor(corSquare);
                     graph.draw(square1);
                 }
 
