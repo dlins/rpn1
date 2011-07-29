@@ -35,7 +35,7 @@ using std::vector;
 using namespace std;
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
-(JNIEnv * env, jobject obj, jint xResolution, jint yResolution, jint curveFamily, jint domainFamily, jint edge, jint characteristicWhere) {
+(JNIEnv * env, jobject obj, jint xResolution, jint yResolution, jint edgeResolution,jint curveFamily, jint domainFamily, jint edge, jint characteristicWhere) {
 
     jclass hugoniotSegmentClass = (env)->FindClass(HUGONIOTSEGMENTCLASS_LOCATION);
 
@@ -91,7 +91,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
         pmax.component(0) = 1.0;
         pmax.component(1) = 1.0;
 
-        cout <<"Resolucao do x: "<<xResolution<<endl;
+
+        cout << "Resolucao do x: " << xResolution << endl;
         cout << "Resolucao do y: " << yResolution << endl;
 
         // Over the x axis.
@@ -178,23 +179,46 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
         ReducedAccum2Comp2PhasesAdimensionalized_Params reduced_accum_params(&td, &phi);
         ReducedAccum2Comp2PhasesAdimensionalized reduced_accum(reduced_accum_params);
 
-        
-//                RealVector pmin(2);
-//                pmin.component(0) = 0.0;
-//                pmin.component(1) = td.T2Theta(304.63);
-//                RealVector pmax(2);
-//                pmax.component(0) = 1.0;
-//                pmax.component(1) = td.T2Theta(450.0);
-//
-//
+
+        //                RealVector pmin(2);
+        //                pmin.component(0) = 0.0;
+        //                pmin.component(1) = td.T2Theta(304.63);
+        //                RealVector pmax(2);
+        //                pmax.component(0) = 1.0;
+        //                pmax.component(1) = td.T2Theta(450.0);
+        //
+        //
 
 
-        RealVector pmin(2);
-        pmin.component(0) = RpNumerics::getPhysics().boundary().minimums().component(0);
-        pmin.component(1) = RpNumerics::getPhysics().boundary().minimums().component(1);
-        RealVector pmax(2);
-        pmax.component(0) = RpNumerics::getPhysics().boundary().maximums().component(0);
-        pmax.component(1) = RpNumerics::getPhysics().boundary().maximums().component(1);
+
+
+        SubPhysics & physics = RpNumerics::getPhysics().getSubPhysics(0);
+        const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
+
+        RealVector min(2);
+
+        RealVector max(2);
+
+
+        min.component(0) = physicsBoundary.minimums().component(0);
+        min.component(1) = physicsBoundary.minimums().component(1);
+
+        max.component(0) = physicsBoundary.maximums().component(0);
+        max.component(1) = physicsBoundary.maximums().component(1);
+
+
+        physics.preProcess(min);
+        physics.preProcess(max);
+
+        cout << "Min: " << min << endl;
+        cout << "Max: " << max << endl;
+
+        //        RealVector pmin(2);
+        //        pmin.component(0) = RpNumerics::getPhysics().boundary().minimums().component(0);
+        //        pmin.component(1) = RpNumerics::getPhysics().boundary().minimums().component(1);
+        //        RealVector pmax(2);
+        //        pmax.component(0) = RpNumerics::getPhysics().boundary().maximums().component(0);
+        //        pmax.component(1) = RpNumerics::getPhysics().boundary().maximums().component(1);
 
         int * number_of_grid_pnts = new int[2];
 
@@ -212,7 +236,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
         cout << "Familia do dominio" << domainFamily << endl;
         cout << "characteristic " << characteristicWhere << endl;
         cout << "edge " << edge << endl;
-
+        cout<<"edgeResolution: "<<edgeResolution<<endl;
 
         const FluxFunction * curve_flux = &flux;
         const AccumulationFunction *curve_accum = &accum;
@@ -221,19 +245,23 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
         const AccumulationFunction *curve_reduced_accum = &reduced_accum;
 
 
-//TODO Pegar o parametro hardcoded 101 (number_of_temperature_steps) da interface
-        
+        //TODO Pegar o parametro hardcoded 101 (number_of_temperature_steps) da interface
+
         Boundary_ExtensionTPCW::extension_curve(curve_flux, curve_accum,
                 curve_reduced_flux, curve_reduced_accum,
-                edge, 501,
+                edge,edgeResolution,
                 curveFamily,
-                pmin, pmax, number_of_grid_pnts, // For the domain.
+                min, max, number_of_grid_pnts, // For the domain.
                 domainFamily,
                 curve_flux, curve_accum,
                 curve_reduced_flux, curve_reduced_accum,
                 characteristicWhere, singular,
                 curve_segments,
                 domain_segments);
+
+
+        physics.postProcess(curve_segments);
+        physics.postProcess(domain_segments);
 
 
         delete fv;

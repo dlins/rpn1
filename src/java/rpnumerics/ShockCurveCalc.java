@@ -59,16 +59,14 @@ public class ShockCurveCalc implements RpCalculation {
 
     }
 
-
-
     private static HugoniotCurve concat(HugoniotCurve backward, HugoniotCurve forward) {
         // opposite time directions assumed...
         List<HugoniotSegment> result = new ArrayList<HugoniotSegment>();//OrbitPoint[backward.getPoints().length +
 //                forward.getPoints().length - 1];
 
-        for(int i= backward.segments().size()-1;i >0;i--){
+        for (int i = backward.segments().size() - 1; i > 0; i--) {
 
-            result.add((HugoniotSegment)backward.segments().get(i));
+            result.add((HugoniotSegment) backward.segments().get(i));
         }
 
         result.addAll(forward.segments());
@@ -76,31 +74,37 @@ public class ShockCurveCalc implements RpCalculation {
 
     }
 
-
     public RpSolution calc() throws RpException {
-        System.out.println("Direcao do shock da interface grafica "+timeDirection_);
         if (timeDirection_ == 0) {
 
             HugoniotCurve resultForward = (HugoniotCurve) calc(methodName_, newtonTolerance_, start_, familyIndex_, 20);
             HugoniotCurve resultBackward = (HugoniotCurve) calc(methodName_, newtonTolerance_, start_, familyIndex_, 22);
 //            Orbit resultComplete = ShockCurve.concat(resultBackward, resultForward);
-            HugoniotCurve completeCurve = concat(resultBackward,resultForward);
+            HugoniotCurve completeCurve = concat(resultBackward, resultForward);
 
 
-              if (resultBackward == null || resultForward == null) {
+            if (resultBackward == null || resultForward == null) {
                 throw new RpException("Error in native layer");
             }
 
-
+            //** acrescentei isso (Leandro)
+            RPnCurve.lista.add((RPnCurve) completeCurve);
+            System.out.println("Tamanho da lista: " + RPnCurve.lista.size());
+            //***
 
             return completeCurve;
         }
 
         RpSolution result = calc(methodName_, newtonTolerance_, start_, familyIndex_, timeDirection_);
 
-          if (result == null) {
+        if (result == null) {
             throw new RpException("Error in native layer");
         }
+
+        //** acrescentei isso (Leandro)
+        RPnCurve.lista.add((RPnCurve) result);
+        System.out.println("Tamanho da lista: " + RPnCurve.lista.size());
+        //***
 
         return result;
     }

@@ -58,6 +58,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
 
     RealVector realVectorInput(env->GetArrayLength(inputPhasePointArray));
 
+
     for (i = 0; i < (unsigned int) realVectorInput.size(); i++) {
 
         realVectorInput.component(i) = input[i];
@@ -65,89 +66,48 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
     }
 
     env->DeleteLocalRef(inputPhasePointArray);
-    /*
-     *
-     *1 - Pegar a instancia do rarefaction flow (plugin) 
-     *2 - Passar a instancia do flow para o construtor do metodo de calculo
-     *3- O metodo cria o ODE solver , usando o flow . O profile do solver contem os parametros necessarios para o criterio de para especifico do metodo
-     *4 -  o metodo curve da classe do metodo de calculo calcula a curva 
-     *
-         RarefactionFlow *rarefactionFlow = RarefactionFlowFactory::createRarefactionFlow(flow, familyIndex, timeDirection, RpNumerics::getFlux());
-    
-         RarefactionMethod * rarefactionMethod=  RarefactionMethodFactory::createRarefactionMethod(method, *rarefactionFlow);
-    
-         env->ReleaseStringUTFChars(methodName, method);
-    
-         env->ReleaseStringUTFChars(flowName, flow);
-    
-         //Calculations
-     *
-     *
-     */
-    //    Physics & physics = RpNumerics::getPhysics();
-    //
-    //
 
 
-    int dimension = realVectorInput.size();
+
     //    dimension;
     //
-    int itol = 2;
-    //
-    double rtol = 1e-4;
-    //
-    int mf = 22;
-    //
-    double deltaxi = 0.01;
-    //
-    int nparam = 1 + dimension;
-    //
 
-    double param[nparam];
-
-    //
-    int ii;
-
-    for (ii = 0; ii < dimension; ii++) param[1 + ii] = 0.1;
-    //
-    int maxStepsNumber = 10000;
-    //
-    //
-    RealVector referenceVector(dimension);
-
-    for (int i = 0; i < referenceVector.size(); i++) {//Initializing reference vector
-        referenceVector.component(i) = 0;
-    }
-
-    //    ContinuationRarefactionFlow flow(referenceVector, familyIndex, timeDirection, RpNumerics::getPhysics().fluxFunction());
-
-
-
-
-
-    //
-    //    LSODEProfile lsodeProfile(flow,maxStepsNumber, dimension, itol, rtol, mf, deltaxi, nparam, param);
-    //
-    //    LSODE odeSolver(lsodeProfile);
-    //
     vector <RealVector> coords;
-    //
-    //    RarefactionContinuationMethod method(odeSolver,RpNumerics::getPhysics().boundary(),familyIndex);
 
-    //    cout<<"Entrada do Java: "<<realVectorInput<<endl;
-
-    //    double theta = ((const TPCW &) RpNumerics::getPhysics()).T2Theta(realVectorInput(1));
-
-    //    realVectorInput.component(1)=theta;
-
-    //    cout<<realVectorInput<<endl;
-
-
-    clock_t begin = clock();
+    //    clock_t begin = clock();
 
 
 
-    cout <<"Time direction :"<<timeDirection<<endl;
+    const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
+
+    RealVector min(physicsBoundary.minimums());
+    RealVector max(physicsBoundary.maximums());
+
+
+
+    SubPhysics & physics = RpNumerics::getPhysics().getSubPhysics(0);
+
+
+    physics.preProcess(min);
+    physics.preProcess(max);
+
+
+    vector<bool> testBoundary;
+
+    testBoundary.push_back(true);
+    testBoundary.push_back(true);
+    testBoundary.push_back(false);
+
+
+
+    RectBoundary tempBoundary(min, max, testBoundary);
+
+    double deltaxi = 1e-4;
+
+    physics.preProcess(realVectorInput);
+
+
+    cout << "Time direction :" << timeDirection << endl;
     int info = Rarefaction::curve(realVectorInput,
             RAREFACTION_INITIALIZE_YES,
             (const RealVector *) 0,
@@ -157,14 +117,17 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
             (FluxFunction *) RpNumerics::getPhysics().fluxFunction().clone(),
             (AccumulationFunction*) RpNumerics::getPhysics().accumulation().clone(),
             RAREFACTION_GENERAL_ACCUMULATION,
-            RpNumerics::getPhysics().boundary().clone(),
+            &tempBoundary,
             coords);
 
 
-    cout << "Resultado da rarefacao " << info << endl;
+    physics.postProcess(coords);
+    for (int i = 0; i < coords.size(); i++) cout << "coords(" << i << ") = " << coords[i] << endl;
+
+    cout << "Resultado da rarefacao: " << info << ", size = " << coords.size() << endl;
     //    method.curve(realVectorInput, timeDirection, coords);
 
-    cout << "Depois de chamar curve: " << (double) (clock() - begin) / (double) CLOCKS_PER_SEC << endl;
+    //cout << "Depois de chamar curve: " << (double) (clock() - begin) / (double) CLOCKS_PER_SEC << endl;
 
     if (coords.size() == 0) {
         return NULL;
@@ -187,7 +150,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
         //        tempVector.component(0)=tempVectorT(0);
         //        tempVector.component(1) = tempVectorT(1);
 
-        //        cout<<tempVector<<endl;
+                cout<<tempVector<<endl;
 
         //        cout << "Tamanho de tempVector: "<<tempVector.size()<<endl;
 

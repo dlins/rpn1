@@ -44,9 +44,9 @@ public class ShockCurve extends Orbit implements RpSolution {
     
 
    
-    public int findClosestSegment(RealVector targetPoint, double alpha) {
-        return 0;
-    }
+//    public int findClosestSegment(RealVector targetPoint, double alpha) {
+//        return 0;
+//    }
 
     public RPnCurve cut() {
         return null;

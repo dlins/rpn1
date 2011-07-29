@@ -41,6 +41,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
 
     unsigned int i;
 
+    jclass rpnumericsClass = (env)->FindClass(RPNUMERICS_LOCATION);
+
     jclass classOrbitPoint = (env)->FindClass(ORBITPOINT_LOCATION);
     jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
     jclass hugoniotSegmentClass = (env)->FindClass(HUGONIOTSEGMENTCLASS_LOCATION);
@@ -65,39 +67,36 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
 
     RealVector realVectorInput(env->GetArrayLength(inputPhasePointArray));
 
+
+    SubPhysics & physics = RpNumerics::getPhysics().getSubPhysics(0);
+
+
     for (i = 0; i < (unsigned int) realVectorInput.size(); i++) {
         realVectorInput.component(i) = input[i];
+    }
+
+
+    physics.preProcess(realVectorInput);
+
+    cout << "Ponto de entrada: " << realVectorInput << endl;
+
+
+    for (i = 0; i < (unsigned int) realVectorInput.size(); i++) {
+
+        input[i] = realVectorInput.component(i);
 
     }
+
 
     env->DeleteLocalRef(inputPhasePointArray);
 
     int dimension = realVectorInput.size();
 
-
-    vector <RealVector> coords;
-
-    //    double Ur [dimension];
-    //    Ur[0]=0.47;
-    //    Ur[1] = 0.182590;
-    //    Ur[2] = 1.0;
+    for (int i = 0; i < realVectorInput.size(); i++) {
+        cout << "input " << i << input[i] << endl;
 
 
-    //    cout << "Ponto de entrada" << endl;
-    //
-    //    cout << input[0] << endl;
-    //    cout << input[1] << endl;
-    //    cout << input[2] << endl;
-
-    //    double tol = 10e-4;
-    //    double epsilon = 10e-2;
-
-    double tol = 1e-6;  // Toleranca antiga 15/07 1e-10;
-    //    double epsilon = 1e-3;
-
-    int t = 11;
-
-   
+    }
 
     cout << "Valor de family" << familyIndex << endl;
 
@@ -105,8 +104,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
 
     cout << "Valor de timeDirection" << timeDirection << endl;
 
+    double tol = 1e-10;
 
-    if (timeDirection==20) //TODO REMOVE !!!!
+    int t = 11;
+
+    if (timeDirection == 20)
 
         timeDirection = 1;
 
@@ -114,11 +116,34 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
 
         timeDirection = -1;
 
+    const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
 
-    ShockContinuationMethod3D2D method(dimension, familyIndex, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), RpNumerics::getPhysics().boundary(), input, tol,newtonTolerance, t);
+    RealVector min(physicsBoundary. minimums());
+    RealVector max(physicsBoundary. maximums());
 
+    physics.preProcess(min);
+    physics.preProcess(max);
+
+    cout << "min: " << min << endl;
+    cout << "max: " << max << endl;
+
+    vector<bool> testBoundary;
+
+    testBoundary.push_back(true);
+    testBoundary.push_back(true);
+    testBoundary.push_back(false);
+
+    RectBoundary tempBoundary(min, max, testBoundary);
+
+    cout << "Valor timDirection" << timeDirection << endl;
+
+    cout << "Valor de family" << familyIndex << endl;
+
+    ShockContinuationMethod3D2D method(dimension, familyIndex, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), tempBoundary, input, tol, newtonTolerance, t);
 
     method.curve(realVectorInput, timeDirection, hugoniotPolyLineVector);
+
+    cout << "Tamanho da curva" << hugoniotPolyLineVector.size() << endl;
 
     //Classify
 
@@ -126,6 +151,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
     //    cout << "Numero de hugo poly: " << hugoniotPolyLineVector.size() << endl;
 
     for (i = 0; i < hugoniotPolyLineVector.size(); i++) {
+
+        physics.postProcess(hugoniotPolyLineVector[i].vec);
 
         for (unsigned int j = 0; j < hugoniotPolyLineVector[i].vec.size() - 1; j++) {
 
@@ -186,7 +213,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
     //Cleaning up
 
 
-    coords.clear();
+    //    coords.clear();
     hugoniotPolyLineVector.clear();
     //    env->DeleteLocalRef(orbitPointArray);
     //    env->DeleteLocalRef(classOrbitPoint);

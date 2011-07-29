@@ -26,6 +26,8 @@ import java.util.Iterator;
 import javax.swing.JOptionPane;
 import rpn.RPnDesktopPlotter;
 import rpn.RPnUIFrame;
+import rpn.component.util.ClassifierAgent;
+import rpn.component.util.ControlClick;
 import rpn.message.*;
 
 /** This class implements a general controller to the application. With the UIController class, the state of the application is changed, the controllers of each panel are installed or removed and the user inputs are stored in a global table. */
@@ -44,7 +46,7 @@ public class UIController extends ComponentUI {
     private MouseController mouseController_;
     private MouseMotionController mouseMotionController_;
     private rpn.controller.ui.UserInputTable globalInputTable_;
-    private static UIController instance_ = null;
+    public static UIController instance_ = null;   //** era private (Leandro)
     private RPnNetworkStatus netStatus_ = null;
     private String clientID_;
     private RPnPhaseSpacePanel focusPanel_;
@@ -55,7 +57,7 @@ public class UIController extends ComponentUI {
     //
     // Constructors
     //
-    protected UIController() {
+    public UIController() {   //** era protected (Leandro)
 
         mouseMotionController_ = new MouseMotionController();
         stateController_ = new StateInputController(RPnDesktopPlotter.getUIFrame());
@@ -176,6 +178,7 @@ public class UIController extends ComponentUI {
             if (event.getComponent() instanceof RPnPhaseSpacePanel) {
 
                 RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
+                ControlClick.mousePressed(event, panel.scene());   //** acrescentei isso (Leandro)
 
                 if (netStatus_.isMaster() || !(netStatus_.isOnline())) {
 

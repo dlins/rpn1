@@ -5,6 +5,8 @@
  */
 package rpnumerics;
 
+import java.util.Iterator;
+import rpn.parser.RPnDataModule;
 import rpnumerics.HugoniotCurve;
 import rpnumerics.methods.HugoniotMethod;
 import rpnumerics.methods.HugoniotContinuationMethod;
@@ -106,6 +108,14 @@ public class HugoniotCurveCalcND
 //        }
 
         HugoniotCurve result= (HugoniotCurve) calc(getUMinus());
+
+        //** acrescentei isso (Leandro)
+        System.out.println("Entrando em HugoniotCurveCalcND.");
+        RPnCurve.lista.add(result);
+        System.out.println("Tamanho da lista: " + RPnCurve.lista.size());
+        //***
+
+        System.out.println("Tamanho de result: " + result.segments().size());
 
 
 //        System.out.println(result.toMatlabData());

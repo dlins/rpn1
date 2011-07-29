@@ -173,15 +173,8 @@ public class RPNUMERICS {
 
     }
 
-//    public static void setFamily(int family, int leftFamily, int rightFamily) {
-//        setParamValue("shock", "family", String.valueOf(family));
-//
-//    }
     public static Set<String> getConfigurationNames() {
-
         return configMap_.keySet();
-
-
     }
 
     public static HashMap<String, Configuration> getConfigurations() {
@@ -202,11 +195,50 @@ public class RPNUMERICS {
 
     }
 
-    public static String getParamValue(String methodName, String paramValue) {
+    public static String getPhysicsParamValue(String configurationName, String paramName) {
+
+        System.out.println(configurationName + " " + paramName);
+
+        Configuration physicsConfig = configMap_.get(physicsID());
+
+        return physicsConfig.getConfiguration(configurationName).getParam(paramName);
+//
+//        HashMap<String, Configuration> physicsParamConfiguration = physicsConfig.getConfiguration();
+//
+//        Set<Entry<String, Configuration>> configSet = physicsParamConfiguration.entrySet();
+//        System.out.println("---------------------Configuration dentro da fisica -----------");
+//        for (Entry<String, Configuration> entry : configSet) {
+//            System.out.println("Nome do configuration : " + entry.getValue().getName());
+//            System.out.println("Chave do configuration : " + entry.getKey());
+//            System.out.println(entry.getValue());
+//
+//        }
+//
+//
+//        System.out.println("---------------------Configuration dentro da fisica FIM-----------");
+//
+//        System.out.println("---------------------Testando chamada-----------");
+
+
+//        System.out.println(physicsParamConfiguration.get(configurationName));
+
+
+        //
+//        HashMap<String, Configuration> configHash = physicsParamConfiguration.getConfiguration();
+//
+
+//
+//        if (physicsParamConfiguration == null) {
+//            System.out.println("Eh nulo o configuartion dentro da fisica");
+//        }
+
+    }
+
+    public static String getParamValue(String methodName, String paramName) {
 
         Configuration configuration = configMap_.get(methodName);
 
-        return configuration.getParam(paramValue);
+        return configuration.getParam(paramName);
 
 
     }
@@ -397,14 +429,15 @@ public class RPNUMERICS {
         int xResolution = new Integer(getContourConfiguration().getParam("x-resolution"));
         int yResolution = new Integer(getContourConfiguration().getParam("y-resolution"));
 
+
         int characteristicWhere = new Integer(getParamValue("extensioncurve", "characteristicwhere"));
         int edge = new Integer(getParamValue("extensioncurve", "edge"));
-
+        int edgeResolution = new Integer(getParamValue("extensioncurve", "edgeresolution"));
 
         System.out.println("Resolucao em Java:" + xResolution + " " + yResolution);
 
 
-        return new ExtensionCurveCalc(xResolution, yResolution, new Integer(getParamValue("extensioncurve", "curvefamily")), new Integer(getParamValue("extensioncurve", "domainfamily")), edge, characteristicWhere);
+        return new ExtensionCurveCalc(xResolution, yResolution, edgeResolution,new Integer(getParamValue("extensioncurve", "curvefamily")), new Integer(getParamValue("extensioncurve", "domainfamily")), edge, characteristicWhere);
 
     }
 

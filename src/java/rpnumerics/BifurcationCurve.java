@@ -13,7 +13,6 @@ import rpnumerics.methods.contour.ContourCurve;
 import wave.multid.CoordsArray;
 import wave.multid.view.ViewingAttr;
 import wave.util.RealSegment;
-import wave.util.RealVector;
 
 public class BifurcationCurve extends SegmentedCurve {
     //
@@ -27,13 +26,7 @@ public class BifurcationCurve extends SegmentedCurve {
 
     //
     // Constructor
-    //
-//    public BifurcationCurve(int familyIndex, ArrayList states) {
-//        super(coordsArrayFromRealSegments(states), new ViewingAttr(Color.white));
-//
-//        familyIndex_ = familyIndex;
-//        segments = states;
-//    }
+
     public BifurcationCurve(List<HugoniotSegment> leftList, List<HugoniotSegment> rightList) {
 
         super(createSingleSegmentList(leftList, rightList));
@@ -62,54 +55,7 @@ public class BifurcationCurve extends SegmentedCurve {
 //        segments = MultidAdapter.converseRPnCurveToRealSegments(this);
     }
 
-    @Override
-    public int findClosestSegment(RealVector targetPoint, double alpha) {
-//        RealVector target = new RealVector(targetPoint);
-//        RealVector closest = null;
-//        RealVector segmentVector = null;
-//        alpha = 0;
-//        int closestSegment = 0;
-//        double closestDistance = -1;
-//
-//        List bifurcationSegment = segments();
-//        for (int i = 0; i < segments.size(); i++) {
-//
-//            RealSegment segment = (RealSegment) bifurcationSegment.get(i);
-//            segmentVector = new RealVector(segment.p1());
-//            segmentVector.sub(segment.p2());
-//
-//            closest = new RealVector(target);
-//            closest.sub(segment.p2());
-//
-//
-//
-//            alpha = closest.dot(segmentVector) / segmentVector.dot(segmentVector);
-
-//
-//            System.out.println("Numerador: " + closest.dot(segmentVector));
-//            System.out.println("Denominador: " + closest.dot(segmentVector));
-//
-//
-//            System.out.println("Dentro de findClosestSegment:" + alpha);
-
-//            if (alpha < 0) {
-//                alpha = 0;
-//            }
-//            if (alpha > 1) {
-//                alpha = 1;
-//            }
-//            segmentVector.scale(alpha);
-//            closest.sub(segmentVector);
-//            if ((closestDistance < 0) || (closestDistance > closest.norm())) {
-//                closestSegment = i;
-//                closestDistance = closest.norm();
-//            }
-//        }
-//
-//
-//        return closestSegment;
-        return 0;
-    }
+   
 
     //
     // Accessors/Mutators
@@ -140,16 +86,9 @@ public class BifurcationCurve extends SegmentedCurve {
 
     private static List createSingleSegmentList(List<HugoniotSegment> leftSeg, List<HugoniotSegment> rightSeg) {
         int i = 0;
-
-
-
         for (HugoniotSegment hugoniotSegment : leftSeg) {
             hugoniotSegment.setIntType(16);
-//            System.out.println("Segmento : " + i + " " + hugoniotSegment);
-
             i++;
-
-
         }
         for (HugoniotSegment hugoniotSegment : rightSeg) {
             hugoniotSegment.setIntType(15);

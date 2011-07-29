@@ -3,6 +3,13 @@
 <rpnconfiguration>
 <PHYSICS name="TPCW">
 
+   <PHYSICSCONFIG name="thermodynamics">
+        <PHYSICSPARAM name="porosity" value="0.15"/>
+        <PHYSICSPARAM name="absolut permeability" value="1.15"/>
+        <PHYSICSPARAM name="viscosity" value="2.15"/>
+        <PHYSICSPARAM name="spline path" value="/home/edsonlan/Java/rpn"/>
+    </PHYSICSCONFIG>
+
 <!--<BOUNDARY name="rect">
 
         <BOUNDARYPARAM name="dimension" value="3" />
@@ -43,6 +50,8 @@
         <CURVEPARAM name="domainfamily" value="1"/>
         <CURVEPARAM name="characteristicwhere" value="1"/>
         <CURVEPARAM name="edge" value="0"/>
+        <CURVEPARAM name="edgeresolution" value="200"/>
+
 
     </CURVE>
 
@@ -67,7 +76,7 @@
 
 <VIEWCONFIGURATION modeldomain="3">
 
-    <PROJDESC name="Axis0 Axis1">
+    <PROJDESC name="Axis1 Axis0">
         <VIEWPARAM name="axis" value="1 0"/>
         <VIEWPARAM name="vpwidth" value="800"/>
         <VIEWPARAM name="vpheight" value="800"/>
@@ -76,10 +85,10 @@
     </PROJDESC>
 
 
-  <PROJDESC name="Axis0 Axis2">
+  <PROJDESC name="Axis2 Axis0">
         <VIEWPARAM name="axis" value="2 0"/>
-        <VIEWPARAM name="vpwidth" value="400"/>
-        <VIEWPARAM name="vpheight" value="400"/>
+        <VIEWPARAM name="vpwidth" value="800"/>
+        <VIEWPARAM name="vpheight" value="800"/>
         <VIEWPARAM name="iso2equi" value="false"/>
 
     </PROJDESC>

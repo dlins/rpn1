@@ -12,4 +12,5 @@ public interface RpCalculation {
 
     RpSolution recalc() throws RpException;
 
+
 }

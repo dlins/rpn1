@@ -6,6 +6,7 @@
  */
 package rpnumerics;
 
+
 import wave.ode.ODESolver;
 
 public class RarefactionOrbitCalc implements RpCalculation {
@@ -94,6 +95,12 @@ public class RarefactionOrbitCalc implements RpCalculation {
             throw new RpException("Error in native layer");
         }
         result.setFamilyIndex(familyIndex_);
+
+        //** acrescentei isso (Leandro)
+            RPnCurve.lista.add(result);
+            System.out.println("Tamanho da lista: " + RPnCurve.lista.size());
+        //***
+
         return result;
 
 

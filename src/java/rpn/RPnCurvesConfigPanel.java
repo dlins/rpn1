@@ -55,24 +55,13 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
         FamilyListener familyListener = new FamilyListener();
 
         familyLabel_ = new JLabel("Family", SwingConstants.CENTER);
+        familyLabel_.setEnabled(false);
 
-//        leftFamilyLabel_ = new JLabel("Right Family", SwingConstants.CENTER);
-//
-//        rightFamilyLabel_ = new JLabel("Left Family", SwingConstants.CENTER);
 
         //TODO Qual eh o valor maximo que o JSpinner deve ter ?? Esse valor muda conforme o tipo de curva para a qual ele configura a familia ??
         familySpinner_ = new JSpinner(new SpinnerNumberModel(0, 0, RPNUMERICS.domainDim(), 1));
-
+        familySpinner_.setEnabled(false);
         familySpinner_.addChangeListener(familyListener);
-
-//        leftFamilySpinner_ = new JSpinner(new SpinnerNumberModel(0, 0, RPNUMERICS.domainDim(), 1));
-//        rightFamilySpinner_ = new JSpinner(new SpinnerNumberModel(0, 0, RPNUMERICS.domainDim(), 1));
-//
-//
-//        leftFamilySpinner_.addChangeListener(familyListener);
-//
-//        rightFamilySpinner_.addChangeListener(familyListener);
-
 
         GridLayout familyPanelGridLayout = new GridLayout(1, 2, 10, 10);
 
@@ -84,11 +73,16 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
         forwardCheckBox_ = new JCheckBox();
         forwardCheckBox_.setSelected(true);//Default 
 
+        forwardCheckBox_.setEnabled(false);
+
+
         forwardCheckBox_.addActionListener(new OrbitDirectionListener(1));
         forwardCheckBox_.setText("Forward");
 
         backwardCheckBox_ = new JCheckBox("Backward");
 
+
+        backwardCheckBox_.setEnabled(false);
         backwardCheckBox_.addActionListener(new OrbitDirectionListener(-1));
 
         backwardCheckBox_.setText("Backward");
@@ -96,21 +90,9 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
         directionPanel_.add(forwardCheckBox_);
         directionPanel_.add(backwardCheckBox_);
 
-//        directionPanel_.add(addLastGeometryButton_);
-
-
         familyPanel_.add(familyLabel_);
-//
+
         familyPanel_.add(familySpinner_);
-//
-//        familyPanel_.add(leftFamilyLabel_);
-//
-//        familyPanel_.add(leftFamilySpinner_);
-//
-//        familyPanel_.add(rightFamilyLabel_);
-//        familyPanel_.add(rightFamilySpinner_);
-
-
 
         this.setLayout(gridLayout);
 
@@ -157,8 +139,8 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
         if (evt.getNewValue().equals("phasediagram")) {//Phase Diagram Curves selected
             if (evt.getPropertyName().equals("family")) {
 
-                familySpinner_.setEnabled(true);
-                familyLabel_.setEnabled(true);
+                familySpinner_.setEnabled(false);
+                familyLabel_.setEnabled(false);
 //                leftFamilyLabel_.setEnabled(false);
 //                leftFamilySpinner_.setEnabled(false);
 //                rightFamilySpinner_.setEnabled(false);
@@ -170,8 +152,8 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
             }
 
             if (evt.getPropertyName().equals("direction")) {
-                forwardCheckBox_.setEnabled(true);
-                backwardCheckBox_.setEnabled(true);
+                forwardCheckBox_.setEnabled(false);
+                backwardCheckBox_.setEnabled(false);
 
             }
 

@@ -100,7 +100,7 @@ rpnHomePath_(copy.rpnHomePath_) {
     info_rhosigmaw = create_spline("rhosigmaw_spline.txt", "rhosigmaw", P, rhosigmaw_);
     info_rhoac = create_spline("rhoac_spline.txt", "rhoac", P, rhoac_);
     info_rhoaw = create_spline("rhoaw_spline.txt", "rhoaw", P, rhoaw_);
-    info_rhoW = create_spline("rhoW_spline.txt", "rhoW", P, rhoW_);
+    // info_rhoW = create_spline("rhoW_spline.txt", "rhoW", P, rhoW_);
     info_hsigmaC = create_spline("hsigmaC_spline.txt", "hsigmaC", P, hsigmaC_);
 
 }
@@ -151,7 +151,7 @@ Rock_Cr(2.029e6),
 Water_Cw_specific(4297.),
 T_typical_(304.63),
 Rho_typical_(998.2),
-U_typical_(4.42e-3),
+U_typical_(4.22e-3),
 rpnHomePath_(rpnHomePath) {
 
     h_typical_ = Water_Cw_specific * (T_typical_ - Tref_water);

@@ -23,12 +23,15 @@ import rpn.component.MultidAdapter;
 
 import wave.util.*;
 import java.util.ArrayList;
+import java.util.List;
+import rpn.component.util.GeometryUtil;
 
 public class RPnCurve extends MultiPolyLine {
 
     private RelaxedChainedPolylineSet polyLinesSetList_ = null;
     private ViewingAttr viewAttr = null;
     private double ALFA;
+    static public List<RPnCurve> lista = new ArrayList<RPnCurve>();  // declarei isso (Leandro)
 
     public RPnCurve() {//TODO REMOVE !!
         super(new CoordsArray[3], new ViewingAttr(Color.WHITE));
@@ -70,9 +73,11 @@ public class RPnCurve extends MultiPolyLine {
         // converter para chained
     }
 
+    @Override
     public String toString() {
         return getPath().toString();
     }
+
 
     public RealVector projectionCurve(RPnCurve curve, RealVector targetPoint) {
 

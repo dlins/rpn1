@@ -27,8 +27,11 @@ public class Configuration {
         type_ = type;
     }
 
+
+
     public Configuration(ConfigurationProfile profile) {
 //        System.out.println(profile);
+
         if (profile.getParams() != null) {
             params_ = profile.getParams();
         }
@@ -101,10 +104,11 @@ public class Configuration {
         return params_.size();
     }
 
+    public HashMap<String,Configuration> getConfiguration(){
+        return configurationMap_;
+    }
+
     public String getParam(int paramOrder) {
-
-
-
         try {
             String paramName = paramOrder_.get(paramOrder);
 
@@ -160,13 +164,7 @@ public class Configuration {
         configurationMap_.put(name, configuration);
     }
 
-//    public void addConfiguration(int index, Configuration configuration) {
-//        configurationArrayList_.add(index, configuration);
-//    }
-//
-//    public int configurationArraySize() {
-//        return configurationArrayList_.size();
-//    }
+
     public Configuration getConfiguration(String name) {
         return configurationMap_.get(name);
     }

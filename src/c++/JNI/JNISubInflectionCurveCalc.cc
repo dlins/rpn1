@@ -84,14 +84,30 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionCurveCalc_nativeCalc(JNIE
 
     SubinflectionTPCW subinflection(&TD, &fh, phi);
 
-    ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), RpNumerics::getPhysics().boundary(), &subinflection);
+
+    SubPhysics & physics = RpNumerics::getPhysics().getSubPhysics(0);
+    const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
+
+    RealVector min(physicsBoundary. minimums());
+    RealVector max(physicsBoundary. maximums());
+
+
+    physics.preProcess(min);
+    physics.preProcess(max);
+
+    cout << "Valor de min:" << min << endl;
+    cout << "Valor de max:" << max << endl;
+
+    RectBoundary tempBoundary(min, max);
+
+    ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), tempBoundary, &subinflection);
 
     vector<HugoniotPolyLine> hugoniotPolyLineVector;
-    
+
     method.unclassifiedCurve(Uref, hugoniotPolyLineVector);
 
-    RealVector min(RpNumerics::getPhysics().boundary().minimums());
-    RealVector max(RpNumerics::getPhysics().boundary().maximums());
+    RealVector minDimension(RpNumerics::getPhysics().boundary().minimums());
+    RealVector maxDimension(RpNumerics::getPhysics().boundary().maximums());
 
     for (int i = 0; i < hugoniotPolyLineVector.size(); i++) {
 
@@ -100,12 +116,14 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionCurveCalc_nativeCalc(JNIE
             int m = (hugoniotPolyLineVector[i].vec[0].size() - dimension - 1) / 2; // Number of valid eigenvalues
 
 
-            hugoniotPolyLineVector[i].vec[j].component(2) = max.component(2);
-            hugoniotPolyLineVector[i].vec[j + 1].component(2) = max.component(2);
-//            //
-//                        cout << "type of " << j << " = " << hugoniotPolyLineVector[i].type << endl;
-//                        cout << "coord 1 " << j << " = " << hugoniotPolyLineVector[i].vec[j] << endl;
-//                        cout << "coord 2 " << j + 1 << " = " << hugoniotPolyLineVector[i].vec[j + 1] << endl;
+            hugoniotPolyLineVector[i].vec[j].component(2) = maxDimension.component(2);
+            hugoniotPolyLineVector[i].vec[j + 1].component(2) = maxDimension.component(2);
+
+            physics.postProcess(hugoniotPolyLineVector[i].vec);
+            //            //
+            //                        cout << "type of " << j << " = " << hugoniotPolyLineVector[i].type << endl;
+            //                        cout << "coord 1 " << j << " = " << hugoniotPolyLineVector[i].vec[j] << endl;
+            //                        cout << "coord 2 " << j + 1 << " = " << hugoniotPolyLineVector[i].vec[j + 1] << endl;
 
             jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
             jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);

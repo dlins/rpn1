@@ -73,6 +73,10 @@ public:
 
     const int type() const;
 
+    virtual void preProcess(RealVector &);
+    virtual void postProcess(vector<RealVector> &);
+
+
 };
 
 
