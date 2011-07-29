@@ -241,7 +241,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceExtensionCurveCalc_nativeCa
 
         jobject realVectorRightPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRRight);
 
-        int pointType = 0;
+        int pointType = 20;
 
         double leftSigma = 0;
         double rightSigma = 0;
@@ -280,7 +280,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceExtensionCurveCalc_nativeCa
 
         jobject realVectorRightPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRRight);
 
-        int pointType = 0;
+        int pointType = 20;
 
         double leftSigma = 0;
         double rightSigma = 0;

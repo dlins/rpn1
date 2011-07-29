@@ -80,9 +80,9 @@ public class SubInflectionExtensionCurveView
 
 
     viewList_.clear();
-    Iterator geomListIterator = ( (SubInflectionExtensionCurveGeom) abstractGeom_).getHugoniotSegIterator();
+    Iterator geomListIterator = ( (SubInflectionExtensionCurveGeom) abstractGeom_).getBifurcationSegmentsIterator();
     while (geomListIterator.hasNext()) {
-      HugoniotSegGeom geomObj = (HugoniotSegGeom) geomListIterator.next();
+      BifurcationSegGeom geomObj = (BifurcationSegGeom) geomListIterator.next();
       try {
         viewList_.add(geomObj.createView(getViewingTransform()));
       }

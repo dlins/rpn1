@@ -8,7 +8,7 @@ package rpn.component;
 import wave.multid.view.*;
 import wave.multid.*;
 
-public class SubInflectionExtensionCurveGeom extends SegmentedCurveGeom {//implements MultiGeometry, RpGeometry {
+public class SubInflectionExtensionCurveGeom extends BifurcationCurveGeom {//implements MultiGeometry, RpGeometry {
    
 
     //
@@ -16,7 +16,7 @@ public class SubInflectionExtensionCurveGeom extends SegmentedCurveGeom {//imple
     //
 
 
-    public SubInflectionExtensionCurveGeom(HugoniotSegGeom[] segArray, SubInflectionExtensionCurveGeomFactory factory) {
+    public SubInflectionExtensionCurveGeom(BifurcationSegGeom[] segArray, SubInflectionExtensionCurveGeomFactory factory) {
 
         super(segArray, factory);
 

@@ -27,7 +27,6 @@ public class ExtensionCurveGeomFactory extends BifurcationCurveGeomFactory {
         BifurcationSegGeom[] leftBifurcationSegArray = new BifurcationSegGeom[resultSize];
         for (int i = 0; i < resultSize; i++) {
             leftBifurcationSegArray[i] = new BifurcationSegGeom((HugoniotSegment) curve.segments().get(i));
-            System.out.println((HugoniotSegment) curve.segments().get(i));
         }
 
         return new ExtensionCurveGeom(leftBifurcationSegArray, this);

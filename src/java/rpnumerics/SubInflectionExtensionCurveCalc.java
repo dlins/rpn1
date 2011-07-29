@@ -20,6 +20,8 @@ public class SubInflectionExtensionCurveCalc extends BifurcationCurveCalc {
     int domainFamily_;
     int characteristicDomain_;
 
+    static public int contSCE = 0;
+
     public SubInflectionExtensionCurveCalc(int xResolution, int yResolution, int leftFamily, int rightFamily,int characteristicDomain) {
         this.xResolution_ = xResolution;
         this.yResolution_ = yResolution;
@@ -36,7 +38,21 @@ public class SubInflectionExtensionCurveCalc extends BifurcationCurveCalc {
         RpSolution result = null;
 
         try {
-            result = (SubInflectionExtensionCurve) nativeCalc(xResolution_,yResolution_,curveFamily_,domainFamily_,characteristicDomain_);
+            result = (SubInflectionExtensionCurve) nativeCalc(xResolution_, yResolution_, curveFamily_, domainFamily_, characteristicDomain_);
+
+            //** acrescentei isso (Leandro)
+
+            if (contSCE == 0) {
+                System.out.println("Entrando em SubInflectionExtCurveCalc...");
+
+                RPnCurve.lista.add((RPnCurve) result);
+                System.out.println("Tamanho da lista: " + RPnCurve.lista.size());
+
+                contSCE += 1;
+            }
+
+            //*********************************************
+
             return result;
         } catch (RpException ex) {
             Logger.getLogger(SubInflectionExtensionCurveCalc.class.getName()).log(Level.SEVERE, null, ex);

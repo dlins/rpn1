@@ -80,9 +80,9 @@ class CoincidenceExtensionCurveGeomView implements GeomObjView{
 
 
     viewList_.clear();
-    Iterator geomListIterator = ( (CoincidenceExtensionCurveGeom) abstractGeom_).getHugoniotSegIterator();
+    Iterator geomListIterator = ( (CoincidenceExtensionCurveGeom) abstractGeom_).getBifurcationSegmentsIterator();
     while (geomListIterator.hasNext()) {
-      HugoniotSegGeom geomObj = (HugoniotSegGeom) geomListIterator.next();
+      BifurcationSegGeom geomObj = (BifurcationSegGeom) geomListIterator.next();
       try {
         viewList_.add(geomObj.createView(getViewingTransform()));
       }

@@ -26,25 +26,21 @@ public class BifurcationCurve extends SegmentedCurve {
 
     //
     // Constructor
-
     public BifurcationCurve(List<HugoniotSegment> leftList, List<HugoniotSegment> rightList) {
 
         super(createSingleSegmentList(leftList, rightList));
+       
         leftSegments_ = leftList;
         rightSegments_ = rightList;
     }
 
-
-     public BifurcationCurve(List<HugoniotSegment> singleList) {
+    public BifurcationCurve(List<HugoniotSegment> singleList) {
 
         super(singleList);
+        
         leftSegments_ = singleList;
-        rightSegments_ =singleList;
+        rightSegments_ = singleList;
     }
-
-
-
-
 
     public BifurcationCurve(int familyIndex, ContourCurve curve, ViewingAttr viewingAttr) {
 
@@ -54,8 +50,6 @@ public class BifurcationCurve extends SegmentedCurve {
         // segments = MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseRPnCurveToCoordsArray(this));
 //        segments = MultidAdapter.converseRPnCurveToRealSegments(this);
     }
-
-   
 
     //
     // Accessors/Mutators
@@ -68,9 +62,9 @@ public class BifurcationCurve extends SegmentedCurve {
         StringBuffer buffer = new StringBuffer();
 
         for (int i = 0; i < segments().size(); i++) {
-                RealSegment rSegment = (RealSegment) segments().get(i);
-                buffer.append(rSegment.toXML());
-            }
+            RealSegment rSegment = (RealSegment) segments().get(i);
+            buffer.append(rSegment.toXML());
+        }
 
         return buffer.toString();
 
@@ -87,11 +81,11 @@ public class BifurcationCurve extends SegmentedCurve {
     private static List createSingleSegmentList(List<HugoniotSegment> leftSeg, List<HugoniotSegment> rightSeg) {
         int i = 0;
         for (HugoniotSegment hugoniotSegment : leftSeg) {
-            hugoniotSegment.setIntType(16);
+            hugoniotSegment.setIntType(19);
             i++;
         }
         for (HugoniotSegment hugoniotSegment : rightSeg) {
-            hugoniotSegment.setIntType(15);
+            hugoniotSegment.setIntType(18);
         }
 
         if (leftSeg.addAll(rightSeg)) {

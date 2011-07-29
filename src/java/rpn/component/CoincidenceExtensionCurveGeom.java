@@ -11,13 +11,13 @@ import wave.multid.DimMismatchEx;
 import wave.multid.view.GeomObjView;
 import wave.multid.view.ViewingTransform;
 
-class CoincidenceExtensionCurveGeom extends SegmentedCurveGeom{//implements MultiGeometry, RpGeometry {
+class CoincidenceExtensionCurveGeom extends BifurcationCurveGeom{//implements MultiGeometry, RpGeometry {
   
     //
     // Constructors
 
     //
-    public CoincidenceExtensionCurveGeom(HugoniotSegGeom[] segArray, CoincidenceExtensionCurveGeomFactory factory) {
+    public CoincidenceExtensionCurveGeom(BifurcationSegGeom[] segArray, CoincidenceExtensionCurveGeomFactory factory) {
 
         super(segArray,factory);
     }

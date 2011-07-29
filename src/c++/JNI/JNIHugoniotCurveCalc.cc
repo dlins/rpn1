@@ -147,8 +147,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
 
             int pointType = hugoniotPolyLineVector[i].type;
 
-            cout<<"Tamanho de vec: "<<hugoniotPolyLineVector[i].vec[j].size()<<endl;
-
             double leftSigma = hugoniotPolyLineVector[i].vec[j].component(dimension + m);
             double rightSigma = hugoniotPolyLineVector[i].vec[j + 1].component(dimension + m);
 

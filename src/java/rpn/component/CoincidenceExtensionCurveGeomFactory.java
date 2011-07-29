@@ -6,6 +6,7 @@
 package rpn.component;
 
 import java.awt.Color;
+import rpnumerics.BifurcationCurveCalc;
 import rpnumerics.CoincidenceCurve;
 import rpnumerics.CoincidenceExtensionCurve;
 import rpnumerics.HugoniotCurve;
@@ -15,9 +16,9 @@ import rpnumerics.RpCalculation;
 import rpnumerics.ShockProfile;
 import wave.multid.view.ViewingAttr;
 
-public class CoincidenceExtensionCurveGeomFactory extends RpCalcBasedGeomFactory{
+public class CoincidenceExtensionCurveGeomFactory extends BifurcationCurveGeomFactory{
 
-    public CoincidenceExtensionCurveGeomFactory(RpCalculation calc) {
+    public CoincidenceExtensionCurveGeomFactory(BifurcationCurveCalc calc) {
         super(calc);
     }
 
@@ -30,10 +31,10 @@ public class CoincidenceExtensionCurveGeomFactory extends RpCalcBasedGeomFactory
 
         // assuming a container with HugoniotSegment elements
         int resultSize = curve.segments().size();
-        ViewingAttr viewingAttr = new ViewingAttr(Color.MAGENTA);
-        HugoniotSegGeom[] hugoniotArray = new HugoniotSegGeom[resultSize];
+        //ViewingAttr viewingAttr = new ViewingAttr(Color.MAGENTA);
+        BifurcationSegGeom[] hugoniotArray = new BifurcationSegGeom[resultSize];
         for (int i = 0; i < resultSize; i++) {
-            hugoniotArray[i] = new HugoniotSegGeom((HugoniotSegment) curve.segments().get(i),viewingAttr);
+            hugoniotArray[i] = new BifurcationSegGeom((HugoniotSegment) curve.segments().get(i));
 
         }
         return new CoincidenceExtensionCurveGeom(hugoniotArray, this);

@@ -21,13 +21,13 @@ public class SubInflectionExtensionCurveGeomFactory extends BifurcationCurveGeom
 
        SubInflectionExtensionCurve curve = (SubInflectionExtensionCurve) geomSource();
 
-        HugoniotSegGeom[] bifurcationSegArray = null;
+        BifurcationSegGeom[] bifurcationSegArray = null;
 
         int resultSize = curve.segments().size();
 
-        bifurcationSegArray = new HugoniotSegGeom[resultSize];
+        bifurcationSegArray = new BifurcationSegGeom[resultSize];
         for (int i = 0; i < resultSize; i++) {
-            bifurcationSegArray[i] = new HugoniotSegGeom((HugoniotSegment) curve.segments().get(i));
+            bifurcationSegArray[i] = new BifurcationSegGeom((HugoniotSegment) curve.segments().get(i));
 
         }
 
