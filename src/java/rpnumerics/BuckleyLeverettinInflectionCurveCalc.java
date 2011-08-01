@@ -6,7 +6,7 @@
  */
 package rpnumerics;
 
-public class BuckleyLeverettinInflectionCurveCalc implements RpCalculation {
+public class BuckleyLeverettinInflectionCurveCalc extends BifurcationCurveCalc {
 
 
     //
@@ -14,6 +14,7 @@ public class BuckleyLeverettinInflectionCurveCalc implements RpCalculation {
     //
     public BuckleyLeverettinInflectionCurveCalc(){
     }
+
 
     public RpSolution recalc() throws RpException {
 

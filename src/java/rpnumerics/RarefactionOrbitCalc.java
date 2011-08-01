@@ -6,9 +6,6 @@
  */
 package rpnumerics;
 
-
-import wave.ode.ODESolver;
-
 public class RarefactionOrbitCalc implements RpCalculation {
     //
     // Constants
@@ -22,7 +19,7 @@ public class RarefactionOrbitCalc implements RpCalculation {
     private String methodName_;
     private String flowName_;
     private int familyIndex_;
-    private ODESolver solver_;
+  
 
     //
     // Constructors/Initializers
@@ -43,13 +40,7 @@ public class RarefactionOrbitCalc implements RpCalculation {
 
     }
 
-    RarefactionOrbitCalc(OrbitPoint orbitPoint, int timeDirection, ODESolver odeSolver, String methodName) {
-        start_ = orbitPoint;
-        timeDirection_ = timeDirection;
-        solver_ = odeSolver;
-        methodName_ = methodName;
-
-    }
+   
 
     //
     // Accessors/Mutators

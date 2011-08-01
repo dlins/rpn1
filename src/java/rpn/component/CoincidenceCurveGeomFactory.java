@@ -5,13 +5,10 @@
 
 package rpn.component;
 
+import rpnumerics.BifurcationCurve;
 import rpnumerics.CoincidenceCurve;
-import rpnumerics.HugoniotCurve;
 import rpnumerics.HugoniotSegment;
-import rpnumerics.RPNUMERICS;
 import rpnumerics.RpCalculation;
-import rpnumerics.ShockProfile;
-import rpnumerics.SubInflectionCurve;
 
 public class CoincidenceCurveGeomFactory extends RpCalcBasedGeomFactory{
 
@@ -52,15 +49,6 @@ public class CoincidenceCurveGeomFactory extends RpCalcBasedGeomFactory{
         buffer.append("figure; set(gca, 'Color',[0 0 0]); hold on\n");
         buffer.append(curve.createMatlabPlotLoop(0,1,0));
 
-
-//        buffer.append("\n%%\n% begin plot x z\n");
-//        buffer.append("figure; set(gca, 'Color',[0 0 0]); hold on\n");
-//        buffer.append(curve.toMatlabPlot(0, 2));
-//
-//        buffer.append("\n%%\n% begin plot y z\n");
-//        buffer.append("figure; set(gca, 'Color',[0 0 0]); hold on\n");
-//        buffer.append(curve.toMatlabPlot(1, 2));
-
         return buffer.toString();
 
     }
@@ -69,11 +57,11 @@ public class CoincidenceCurveGeomFactory extends RpCalcBasedGeomFactory{
 
         StringBuffer buffer = new StringBuffer();
 
-        buffer.append("<HUGONIOTCALC xzero=\"" + ((HugoniotCurve) geomSource()).getXZero() + "\"" + " methodname=\"" + ShockProfile.instance().getHugoniotMethodName() + "\"" + " flowname=\"" + RPNUMERICS.getShockProfile().getFlowName() + "\"" + ">\n");
+        buffer.append("<COMMAND name=\"coincidence\"/>\n");
 
-        buffer.append(((HugoniotCurve) geomSource()).toXML(rpn.parser.RPnDataModule.RESULTS));
+        buffer.append(((BifurcationCurve)geomSource()).toXML());
 
-        buffer.append("</HUGONIOTCALC>\n");
+        buffer.append("</COMMAND>\n");
 
         return buffer.toString();
 

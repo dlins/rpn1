@@ -7,7 +7,7 @@ package rpn.component;
 
 import rpnumerics.*;
 
-public class BuckleyLeverettinCurveGeomFactory extends RpCalcBasedGeomFactory {
+public class BuckleyLeverettinCurveGeomFactory extends BifurcationCurveGeomFactory {
 
     public BuckleyLeverettinCurveGeomFactory(BuckleyLeverettinInflectionCurveCalc calc) {
         super(calc);
@@ -24,15 +24,13 @@ public class BuckleyLeverettinCurveGeomFactory extends RpCalcBasedGeomFactory {
         // assuming a container with HugoniotSegment elements
         int resultSize = curve.segments().size();
 
-        HugoniotSegGeom[] hugoniotArray = new HugoniotSegGeom[resultSize];
+        BifurcationSegGeom[] hugoniotArray = new BifurcationSegGeom[resultSize];
         for (int i = 0; i < resultSize; i++) {
-            hugoniotArray[i] = new HugoniotSegGeom((HugoniotSegment) curve.segments().get(i));
+            hugoniotArray[i] = new BifurcationSegGeom((HugoniotSegment) curve.segments().get(i));
         }
         return new BuckleyLeverettinInflectionGeom(hugoniotArray, this);
 
     }
-
-    
 
     public String toMatlab(int curveIndex) {
 
@@ -56,15 +54,19 @@ public class BuckleyLeverettinCurveGeomFactory extends RpCalcBasedGeomFactory {
 
     public String toXML() {
 
+
         StringBuffer buffer = new StringBuffer();
 
-        buffer.append("<HUGONIOTCALC xzero=\"" + ((HugoniotCurve) geomSource()).getXZero() + "\"" + " methodname=\"" + ShockProfile.instance().getHugoniotMethodName() + "\"" + " flowname=\"" + RPNUMERICS.getShockProfile().getFlowName() + "\"" + ">\n");
+        BifurcationCurve curve = (BifurcationCurve) geomSource();
 
-        buffer.append(((HugoniotCurve) geomSource()).toXML(rpn.parser.RPnDataModule.RESULTS));
+        buffer.append("<COMMAND name=\"buckleylevertti\"/>\n");
 
-        buffer.append("</HUGONIOTCALC>\n");
+        buffer.append(curve.toXML());
+
+        buffer.append("</COMMAND>\n");
 
         return buffer.toString();
+
 
     }
 }

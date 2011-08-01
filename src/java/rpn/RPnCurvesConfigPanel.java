@@ -13,6 +13,7 @@ import java.beans.PropertyChangeListener;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import rpn.component.OrbitGeom;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UI_ACTION_SELECTED;
 import rpn.usecase.ChangeDirectionAgent;
@@ -28,7 +29,7 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
     private JSpinner familySpinner_, leftFamilySpinner_, rightFamilySpinner_;
     private JCheckBox forwardCheckBox_;
     private JCheckBox backwardCheckBox_;
-    private static Integer currentOrbitDirection_ = new Integer(1);
+    private static Integer currentOrbitDirection_=OrbitGeom.FORWARD_DIR;
     private static JToggleButton addLastGeometryButton_;
     private static ToggleButtonListener buttonListener_;
 
@@ -76,14 +77,14 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
         forwardCheckBox_.setEnabled(false);
 
 
-        forwardCheckBox_.addActionListener(new OrbitDirectionListener(1));
+        forwardCheckBox_.addActionListener(new OrbitDirectionListener());
         forwardCheckBox_.setText("Forward");
 
         backwardCheckBox_ = new JCheckBox("Backward");
 
 
         backwardCheckBox_.setEnabled(false);
-        backwardCheckBox_.addActionListener(new OrbitDirectionListener(-1));
+        backwardCheckBox_.addActionListener(new OrbitDirectionListener());
 
         backwardCheckBox_.setText("Backward");
 
@@ -141,10 +142,6 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
 
                 familySpinner_.setEnabled(false);
                 familyLabel_.setEnabled(false);
-//                leftFamilyLabel_.setEnabled(false);
-//                leftFamilySpinner_.setEnabled(false);
-//                rightFamilySpinner_.setEnabled(false);
-//                rightFamilyLabel_.setEnabled(false);
 
 
 
@@ -165,10 +162,6 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
 
                 familySpinner_.setEnabled(true);
                 familyLabel_.setEnabled(true);
-//                leftFamilyLabel_.setEnabled(false);
-//                leftFamilySpinner_.setEnabled(false);
-//                rightFamilySpinner_.setEnabled(false);
-//                rightFamilyLabel_.setEnabled(false);
 
             }
 
@@ -179,14 +172,6 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
             }
 
         }
-
-
-
-
-
-
-
-
     }
 
     private class FamilyListener implements ChangeListener {
@@ -194,12 +179,6 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
         public void stateChanged(ChangeEvent e) {
 
             Integer value = (Integer) familySpinner_.getValue();
-//            Integer rightFamily = (Integer) rightFamilySpinner_.getValue();
-//
-//            Integer leftFamily = (Integer) leftFamilySpinner_.getValue();
-
-//            RPNUMERICS.setFamily(value, leftFamily, rightFamily);
-
             RPNUMERICS.setFamily(value);
 
 
@@ -225,12 +204,7 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
 
     private class OrbitDirectionListener implements ActionListener {
 
-        private Integer direction_;
-
-        public OrbitDirectionListener(int direction) {
-
-            direction_ = new Integer(direction);
-        }
+       
 
         public void actionPerformed(ActionEvent e) {
 
@@ -244,13 +218,13 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
 
 
             if (forwardCheckBox_.isSelected() == true && backwardCheckBox_.isSelected() == true) {
-                currentOrbitDirection_ = 0;
+                currentOrbitDirection_ = OrbitGeom.BOTH_DIR;
 
             } else {
-                if (checkBox.isSelected()) {
-                    currentOrbitDirection_ = direction_;
+                if (forwardCheckBox_.isSelected()) {
+                    currentOrbitDirection_ = OrbitGeom.FORWARD_DIR;
                 } else {
-                    currentOrbitDirection_ = -direction_;
+                    currentOrbitDirection_ = OrbitGeom.BACKWARD_DIR;
                 }
 
             }

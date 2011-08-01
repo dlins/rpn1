@@ -40,22 +40,15 @@ public class BifurcationCurveCalc implements RpCalculation {
         return params_.getFamilyIndex();
     }
 
-    public RpSolution calc() {
+    public RpSolution calc() throws RpException{
 
 
         return bifurcationMethod_.curve();
     }
 
-    public RpSolution recalc() {
+    public RpSolution recalc() throws  RpException{
         return calc();
     }
-
-    public String getCalcMethodName() {
-        throw new UnsupportedOperationException("Bifurcation");
-    }
-
-
-  
 
 
 }

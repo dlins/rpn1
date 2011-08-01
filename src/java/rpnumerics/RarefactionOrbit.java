@@ -52,8 +52,6 @@ public class RarefactionOrbit extends Orbit implements RpSolution {
     public String toXML(boolean calcReady) {
         StringBuffer buffer = new StringBuffer();
         if (calcReady) {
-
-            buffer.append("<ORBIT flag=\"" + getIntegrationFlag() + "\">\n");
             for (int i = 0; i < getPoints().length; i++) {
 
                 buffer.append("<ORBITPOINT time=\""

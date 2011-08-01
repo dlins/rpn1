@@ -155,6 +155,7 @@ public class HugoniotSegment extends RealSegment {
 
     }
 
+    @Override
     public String toXML() {
 
         StringBuffer buffer = new StringBuffer();

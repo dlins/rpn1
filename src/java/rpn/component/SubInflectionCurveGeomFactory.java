@@ -99,19 +99,18 @@ public class SubInflectionCurveGeomFactory extends RpCalcBasedGeomFactory {
 //        return buffer.toString();
 //
 //    }
-
-
 //
-
     public String toXML() {
 
         StringBuffer buffer = new StringBuffer();
+        BifurcationCurve curve = (BifurcationCurve) geomSource();
 
-        buffer.append("<HUGONIOTCALC xzero=\"" + ((HugoniotCurve) geomSource()).getXZero() + "\"" + " methodname=\"" + ShockProfile.instance().getHugoniotMethodName() + "\"" + " flowname=\"" + RPNUMERICS.getShockProfile().getFlowName() + "\"" + ">\n");
+        buffer.append("<COMMAND name=\"subinflection\"/>\n");
 
-        buffer.append(((HugoniotCurve) geomSource()).toXML(rpn.parser.RPnDataModule.RESULTS));
+        buffer.append(curve.toXML());
 
-        buffer.append("</HUGONIOTCALC>\n");
+        buffer.append("</COMMAND>\n");
+
 
         return buffer.toString();
 

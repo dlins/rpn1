@@ -6,7 +6,6 @@
 package rpnumerics;
 
 import java.awt.Color;
-import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
 import rpn.component.HugoniotSegGeom;
@@ -21,12 +20,11 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
 
     private List<HugoniotSegment> hugoniotSegments_;
     public double distancia = 0;                            //** declarei isso (Leandro)
-    
+
     public SegmentedCurve(List<HugoniotSegment> hugoniotSegments) {
         super(coordsArrayFromRealSegments(hugoniotSegments), new ViewingAttr(Color.red));
         hugoniotSegments_ = hugoniotSegments;
     }
-
 
     //** inseri este método (Leandro)
     @Override
@@ -101,7 +99,6 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
 
     }
     //*************************************************************************
-   
 
     public String toMatlabData(int identifier) {              //** Imprime no output.m os dados das curvas e a classificacao dos segmentos (preenche os campos data e type)
 
@@ -240,7 +237,7 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
 
     }
 
-     public static String createSegmentedMatlabPlotLoop(int x, int y, int identifier) {               // metodo original
+    public static String createSegmentedMatlabPlotLoop(int x, int y, int identifier) {               // metodo original
         x++;
         y++;//Adjusting to Matlab's indices
 
@@ -269,52 +266,52 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
 
         if ((identifier == 0) && (x == 2) && (y == 1)) {
 
-             // plot das strings de classificacao e suas setas -----------------
-             buffer.append("if (bool == 1)\n");
-             buffer.append("[rowS, colS] = size(dataString)\n");
-             buffer.append("for k=1: rowS\n");
+            // plot das strings de classificacao e suas setas -----------------
+            buffer.append("if (bool == 1)\n");
+            buffer.append("[rowS, colS] = size(dataString)\n");
+            buffer.append("for k=1: rowS\n");
 
-             buffer.append("text(dataString(k,1), "
-                     + "dataString(k,2), "
-                     + "horzcat(typeString(k,1),"
-                     + "typeString(k,2),"
-                     + "typeString(k,3),"
-                     + "typeString(k,4)), "
-                     //+ "'Color', [1 1 1], 'FontSize', 16)\n");
-                     + "'Color', [0 0 0], 'FontSize', 16)\n");
+            buffer.append("text(dataString(k,1), "
+                    + "dataString(k,2), "
+                    + "horzcat(typeString(k,1),"
+                    + "typeString(k,2),"
+                    + "typeString(k,3),"
+                    + "typeString(k,4)), "
+                    //+ "'Color', [1 1 1], 'FontSize', 16)\n");
+                    + "'Color', [0 0 0], 'FontSize', 16)\n");
 
-             buffer.append("line([dataString(k,1) " + "dataSeta(k,1)], "
-                     + "[dataString(k,2) " + "dataSeta(k,2)], "
-                     //+ "'Color', [1 1 1])\n");
-                     + "'Color', [0 0 0])\n");
+            buffer.append("line([dataString(k,1) " + "dataSeta(k,1)], "
+                    + "[dataString(k,2) " + "dataSeta(k,2)], "
+                    //+ "'Color', [1 1 1])\n");
+                    + "'Color', [0 0 0])\n");
 
-             buffer.append("end\n");
-             buffer.append("end\n");
-             //-----------------------------------------------------------------
+            buffer.append("end\n");
+            buffer.append("end\n");
+            //-----------------------------------------------------------------
 
 
-             // plot das strings de velocidade e suas setas -----------------
+            // plot das strings de velocidade e suas setas -----------------
 
-             buffer.append("if (bool2 == 1)\n");
-             buffer.append("[rowV, colV] = size(dataVel)\n");
-             buffer.append("for k=1: rowV\n");
+            buffer.append("if (bool2 == 1)\n");
+            buffer.append("[rowV, colV] = size(dataVel)\n");
+            buffer.append("for k=1: rowV\n");
 
-             buffer.append("text(dataVel(k,1), "
-                     + "dataVel(k,2), "
-                     + "num2str(velString(k), '%.4e'), "
-                     //+ "'Color', [1 1 1], 'FontSize', 12)\n");
-                     + "'Color', [0 0 0], 'FontSize', 12)\n");
+            buffer.append("text(dataVel(k,1), "
+                    + "dataVel(k,2), "
+                    + "num2str(velString(k), '%.4e'), "
+                    //+ "'Color', [1 1 1], 'FontSize', 12)\n");
+                    + "'Color', [0 0 0], 'FontSize', 12)\n");
 
-             buffer.append("line([dataVel(k,1) " + "dataSetaVel(k,1)], "
-                     + "[dataVel(k,2) " + "dataSetaVel(k,2)], "
-                     //+ "'Color', [1 1 1])\n");
-                     + "'Color', [0 0 0])\n");
+            buffer.append("line([dataVel(k,1) " + "dataSetaVel(k,1)], "
+                    + "[dataVel(k,2) " + "dataSetaVel(k,2)], "
+                    //+ "'Color', [1 1 1])\n");
+                    + "'Color', [0 0 0])\n");
 
-             buffer.append("end\n");
-             buffer.append("end\n");
+            buffer.append("end\n");
+            buffer.append("end\n");
 
-             //-----------------------------------------------------------------
-         }
+            //-----------------------------------------------------------------
+        }
         //********************************************************************** (finaliza Leandro)
 
         //buffer.append("set(gca, 'Color',[0 0 0]);\n");
@@ -326,7 +323,6 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
         return buffer.toString();
 
     }
-
 
     public String createSegment3DPlotMatlabPlot(int identifier) {
 
@@ -362,8 +358,7 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
         return buffer.toString();
     }
 
-
-     private static String createAxisLabel2D(int x, int y) {         //** Define os eixos para o output.m
+    private static String createAxisLabel2D(int x, int y) {         //** Define os eixos para o output.m
 
         String axisName[] = new String[3];
 
@@ -381,9 +376,7 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
 
     }
 
-
-
-     private static CoordsArray[] coordsArrayFromRealSegments(List segments) {
+    private static CoordsArray[] coordsArrayFromRealSegments(List segments) {
 
         ArrayList tempCoords = new ArrayList(segments.size());
         for (int i = 0; i < segments.size(); i++) {
@@ -401,8 +394,6 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
         return coords;
 
     }
-
-
 
     //
     // Accessors/Mutators

@@ -9,12 +9,12 @@ package rpn.component;
 import wave.multid.view.*;
 import wave.multid.*;
 
-public class BuckleyLeverettinInflectionGeom extends SegmentedCurveGeom{//implements MultiGeometry, RpGeometry {
+public class BuckleyLeverettinInflectionGeom extends BifurcationCurveGeom{//implements MultiGeometry, RpGeometry {
     
     //
     // Constructors
     //
-    public BuckleyLeverettinInflectionGeom(HugoniotSegGeom[] segArray, BuckleyLeverettinCurveGeomFactory factory) {
+    public BuckleyLeverettinInflectionGeom(BifurcationSegGeom[] segArray, BuckleyLeverettinCurveGeomFactory factory) {
         super (segArray,factory);
 
    }

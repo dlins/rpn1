@@ -23,10 +23,10 @@ public class RealSegment {
 
 
 
+    @Override
     public String toString() {
 
         StringBuffer buffer = new StringBuffer();
-
         buffer.append(p1_.toString() + " " + p2_.toString());
         return buffer.toString();
 
@@ -38,7 +38,6 @@ public class RealSegment {
 
 
         StringBuffer buffer = new StringBuffer();
-
         buffer.append("<REALSEGMENT>" + "\n");
         buffer.append("<PHASEPOINT dimension=\"" + p1_.getSize() + "\">" + p1_.toString() + "</PHASEPOINT>\n");
         buffer.append("<PHASEPOINT dimension=\"" + p2_.getSize() + "\">" + p2_.toString() + "</PHASEPOINT>\n");

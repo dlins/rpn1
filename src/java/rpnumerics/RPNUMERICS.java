@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
 import rpn.RPnConfig;
+import rpn.component.OrbitGeom;
 import rpn.parser.ConfigurationProfile;
 import rpn.plugininterface.PluginProfile;
 import rpn.plugininterface.PluginTableModel;
@@ -37,7 +38,7 @@ public class RPNUMERICS {
     static private BifurcationProfile bifurcationProfile_ = BifurcationProfile.instance();
     static private ShockRarefactionProfile shockRarefactionProfile_ = null;
     static private ContourConfiguration contourConfiguration_ = null;
-    static private Integer direction_;
+    static private Integer direction_=OrbitGeom.FORWARD_DIR;
     //
     // Constructors/Initializers
     //
@@ -308,7 +309,6 @@ public class RPNUMERICS {
             }
             if (!configurationEntry.getType().equalsIgnoreCase("physics")) {
                 buffer.append(configurationEntry.toXML());
-                System.out.println("Nao fisica: " + configurationEntry.toString());
             }
 
         }
@@ -462,6 +462,8 @@ public class RPNUMERICS {
         Integer family = new Integer(getParamValue("shock", "family"));
         Double tolerance = new Double(getParamValue("Newton", "tolerance"));
 
+        System.out.println(direction_);
+
         return new ShockCurveCalc("methodname", tolerance, orbitPoint, family, direction_);
     }
 
@@ -522,38 +524,8 @@ public class RPNUMERICS {
     public static void setDirection(Integer integer) {
         direction_ = integer;
 
-        //TODO Remove
-
-        if (integer == 1) {
-            direction_ = 20;
-        }
-        if (integer == -1) {
-            direction_ = 22;
-        }
-
-
     }
 
-//    private static Configuration processPhysicsProfile(ConfigurationProfile physicsProfile) {
-//        Configuration physicsConfiguration = new Configuration(physicsProfile.getName(), "physics");
-//
-//        physicsConfiguration.setParams(physicsProfile);
-//
-//        for (int i = 0; i < physicsProfile.profileArraySize(); i++) {
-//
-//            ConfigurationProfile boundaryProfile = physicsProfile.getConfigurationProfile(i);
-//
-//            if (boundaryProfile.getType().equals("boundary")) {
-//                Configuration boundaryConfiguration = new Configuration(boundaryProfile.getName(), "boundary", boundaryProfile.getParams());
-//                physicsConfiguration.addConfiguration(boundaryConfiguration);
-//            }
-//
-//        }
-//
-//
-//
-//        return physicsConfiguration;
-//    }
     private static void setFluxDefaultConfiguration() {
 
         System.out.println("Chamando setFluxDefaultConfiguration");

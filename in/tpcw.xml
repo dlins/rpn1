@@ -10,15 +10,6 @@
         <PHYSICSPARAM name="spline path" value="/home/edsonlan/Java/rpn"/>
     </PHYSICSCONFIG>
 
-<!--<BOUNDARY name="rect">
-
-        <BOUNDARYPARAM name="dimension" value="3" />
-        <BOUNDARYPARAM name="iso2equi" value="false" />
-        <BOUNDARYPARAM name="limits" value="-0.5 0.5 -0.5 0.5 -0.5 0.5" />
-
-
-    </BOUNDARY>-->
-
 </PHYSICS>
 
 
@@ -50,7 +41,7 @@
         <CURVEPARAM name="domainfamily" value="1"/>
         <CURVEPARAM name="characteristicwhere" value="1"/>
         <CURVEPARAM name="edge" value="0"/>
-        <CURVEPARAM name="edgeresolution" value="200"/>
+        <CURVEPARAM name="edgeresolution" value="30"/>
 
 
     </CURVE>

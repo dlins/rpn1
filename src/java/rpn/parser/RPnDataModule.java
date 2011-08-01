@@ -505,8 +505,7 @@ public class RPnDataModule {
 
     static public void matlabExport(FileWriter writer) throws java.io.IOException {
 
-        System.out.println("Chamando export matlab do data module");
-
+       
         Iterator<RpGeometry> iterator = PHASESPACE.getGeomObjIterator();
         writer.write("close all; clear all;\n");
         writer.write(RpCalcBasedGeomFactory.createMatlabColorTable());

@@ -1,4 +1,3 @@
-
 package rpnumerics;
 
 import wave.util.RealVector;
@@ -12,13 +11,12 @@ public class HugoniotCurve extends SegmentedCurve {
     //
 
     private PhasePoint xZero_;
- 
 
     public HugoniotCurve(PhasePoint xZero, List<HugoniotSegment> hSegments) {
         super(hSegments);
 
         xZero_ = new PhasePoint(xZero);
-    
+
 
     }
 
@@ -226,44 +224,6 @@ public class HugoniotCurve extends SegmentedCurve {
         return segments;
     }
 
-//    @Override
-//    public int findClosestSegment(RealVector targetPoint, double alpha) {
-//
-//        RealVector target = new RealVector(targetPoint);
-//        RealVector closest = null;
-//        RealVector segmentVector = null;
-//        alpha = 0;
-//        int closestSegment = 0;
-//        double closestDistance = -1;
-//
-//        List hugoniotSegList = segments();
-//        for (int i = 0; i < segments().size(); i++) {
-//
-//            HugoniotSegment segment = (HugoniotSegment) hugoniotSegList.get(i);
-//            segmentVector = new RealVector(segment.rightPoint());
-//            segmentVector.sub(segment.leftPoint());
-//            closest = new RealVector(target);
-//            closest.sub(segment.rightPoint());
-//            alpha = closest.dot(segmentVector)
-//                    / segmentVector.dot(segmentVector);
-//            if (alpha < 0) {
-//                alpha = 0;
-//            }
-//            if (alpha > 1) {
-//                alpha = 1;
-//            }
-//            segmentVector.scale(alpha);
-//            closest.sub(segmentVector);
-//            if ((closestDistance < 0) || (closestDistance > closest.norm())) {
-//                closestSegment = i;
-//                closestDistance = closest.norm();
-//            }
-//        }
-//
-//
-//        return closestSegment;
-//    }
-
     private static List hugoniotSegsFromWaveState(PhasePoint xZero, WaveState[] wStates) {
 
         ArrayList result = new ArrayList();
@@ -319,7 +279,6 @@ public class HugoniotCurve extends SegmentedCurve {
 
     }
 
-    
     private static List hugoniotSegsFromRealSegs(PhasePoint xZero_,
             List realSegs) {
 
@@ -343,8 +302,6 @@ public class HugoniotCurve extends SegmentedCurve {
         }
         return result;
     }
-
-   
 
     public double findSigma(PhasePoint targetPoint) {
 
@@ -381,139 +338,16 @@ public class HugoniotCurve extends SegmentedCurve {
     }
 
 
-
-//    private String createMatlabFor(int x, int y,int identifier){
-//        int dimension = RPNUMERICS.domainDim();
-//        StringBuffer buffer = new StringBuffer();
-//        buffer.append("xlabel('"+x+"')");
-//        buffer.append("ylabel('" + x + "')");
-//        buffer.append("for i=1: length(data" + identifier + ")");
-//        buffer.append("plot([ data"+identifier);
-//
-//        buffer.append("(i"+","+x+") ");
-//        buffer.append("data" + identifier + "(i," + (x+dimension) + ")],");
-//
-//        buffer.append("[ data"+identifier);
-//
-//        buffer.append("(i"+","+y+") ");
-//        buffer.append("data" + identifier + "(i," + (y+dimension) + ")])");
-//
-//        buffer.append("hold on");
-//
-////        figure(1) % Assume figure(1) corresponds to the x-y projection
-////xlabel('x')
-////ylabel('y')
-////for i = 1: length(data0)
-////    plot([data0(i, 1) data0(i, 4)], [data0(i, 2) data
-
-   
-    
-
-//    public String toMatlabData() {
-//
-//        StringBuffer buffer = new StringBuffer();
-//
-//        for (int i = 0; i < hugoniotSegments_.size(); i++) {
-//
-//
-//            HugoniotSegment hSegment = ((HugoniotSegment) hugoniotSegments_.get(
-//                    i));
-//
-//
-//            double leftSigma = hSegment.leftSigma();
-//            double rightSigma = hSegment.rightSigma();
-//
-//            RealSegment rSegment = new RealSegment(hSegment.leftPoint(),
-//                    hSegment.rightPoint());
-//
-//
-//
-//
-//            buffer.append("data" + i + "= [" + rSegment.toString() + "   " + leftSigma + " " + rightSigma + " " + hSegment.getLeftLambdaArray()[0] + " " + hSegment.getLeftLambdaArray()[1] + " " + hSegment.getRightLambdaArray()[0] + " " + hSegment.getRightLambdaArray()[1] + "];\n\n");
-//
-//            int type = hSegment.getType() + 1;
-//            buffer.append("% type of segment: " + type + "\n");
-//
-//            buffer.append("plot3([data");
-//            buffer.append(i);
-//            buffer.append("(" + (1) + ") ");
-//            buffer.append("data");
-//            buffer.append(i);
-//            buffer.append("(" + (4) + ")], ");
-//
-//            buffer.append("[data");
-//            buffer.append(i);
-//            buffer.append("(" + (2) + ") ");
-//            buffer.append("data");
-//            buffer.append(i);
-//            buffer.append("(" + (5) + ")], ");
-//
-//            buffer.append("[data");
-//            buffer.append(i);
-//            buffer.append("(" + (3) + ") ");
-//            buffer.append("data");
-//            buffer.append(i);
-//            buffer.append("(" + (6) + ")]");
-//
-//            buffer.append(", \'Color\', [toc(");
-//            buffer.append(type);
-//            buffer.append(", 1) toc(");
-//            buffer.append(type);
-//            buffer.append(", 2) toc(");
-//            buffer.append(type);
-//            buffer.append(", 3)])\n");
-//            if (i == 0) {
-//                RealVector xMin = RPNUMERICS.boundary().getMinimums();
-//                RealVector xMax = RPNUMERICS.boundary().getMaximums();
-//
-//                buffer.append("axis([" + xMin.getElement(0) + " " + xMax.getElement(0) + " " + xMin.getElement(1) + " " + xMax.getElement(1) + " " + xMin.getElement(2) + " " + xMax.getElement(2) + " " + "]);\n");
-//
-//            }
-//            if (i < hugoniotSegments_.size() - 1) {
-//                buffer.append("hold on\n\n");
-//            }
-//        }
-//
-//
-//        return buffer.toString();
-//    }
-//    public String toMatlabData() {
-//
-//        StringBuffer buffer = new StringBuffer();
-//        for (int i = 0; i < hugoniotSegments_.size(); i++) {
-//
-//
-//            HugoniotSegment hSegment = ((HugoniotSegment) hugoniotSegments_.get(
-//                    i));
-//            RealSegment rSegment = new RealSegment(hSegment.leftPoint(),
-//                    hSegment.rightPoint());
-//
-//            buffer.append("% type of segment: " + hSegment.getType() + "\n");
-//
-//            buffer.append("data" + i + "= [" + rSegment.toString() + "];\n\n");
-//        }
-//        return buffer.toString();
-//    }
-    public String toXML(boolean calcReady) {
+    public String toXML() {
         StringBuffer buffer = new StringBuffer();
-        if (calcReady) {
-
-            buffer.append("<HUGONIOTCURVE>\n");
-
-            for (int i = 0; i < segments().size(); i++) {
-
-                HugoniotSegment hSegment = ((HugoniotSegment) segments().get(
-                        i));
-                RealSegment rSegment = new RealSegment(hSegment.leftPoint(),
-                        hSegment.rightPoint());
-                buffer.append(rSegment.toXML());
-
-            }
-            buffer.append("</HUGONIOTCURVE>\n");
-
+        buffer.append("<HUGONIOTCURVE>\n");
+        for (int i = 0; i < segments().size(); i++) {
+            HugoniotSegment hSegment = ((HugoniotSegment) segments().get(
+                    i));
+            buffer.append(hSegment.toXML());
 
         }
-
+        buffer.append("</HUGONIOTCURVE>\n");
         return buffer.toString();
 
     }

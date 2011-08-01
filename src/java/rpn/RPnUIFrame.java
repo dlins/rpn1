@@ -615,16 +615,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                     }
                 });
 
-
-//        pluginMenuItem.addActionListener(
-//                new ActionListener() {
-//
-//                    public void actionPerformed(ActionEvent e) {
-//                        RPnPluginDialog pluginDialog = new RPnPluginDialog();
-//                        pluginDialog.setVisible(true);
-//                    }
-//                });
-
         resultsOption.addActionListener(
                 new ActionListener() {
 
@@ -730,16 +720,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 });
         //******************************************************
 
-
-//        errorControlMenuItem.addActionListener(
-//                new java.awt.event.ActionListener() {
-//
-//                    public void actionPerformed(ActionEvent e) {
-//                        errorControlMenuItem_actionPerformed(e);
-//                    }
-//                });
-
-
         inputCoordsMenuItem.addActionListener(
                 new java.awt.event.ActionListener() {
 
@@ -782,23 +762,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
 
 
-
-//        rarefactionMenuItem_.addActionListener(
-//                new java.awt.event.ActionListener() {
-//
-//                    public void actionPerformed(ActionEvent e) {
-//
-////                        configurationDialog_.setVisible(true);
-//                        System.out.println("em rarefacao");
-//
-//                        RPnExtensionCurveConfigDialog extensionCurve = new RPnExtensionCurveConfigDialog();
-//                        extensionCurve.setVisible(true);
-//
-//                    }
-//                });
-
-
-
         shockMenuItem_.addActionListener(
                 new java.awt.event.ActionListener() {
 
@@ -808,18 +771,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
                     }
                 });
-
-
-//        rarefactionMenuItem_.addActionListener(
-//                new java.awt.event.ActionListener() {
-//
-//                    public void actionPerformed(ActionEvent e) {
-//
-////                        configurationDialog_.setVisible(true);
-//                        RPnExtensionCurveConfigDialog extensionCurve = new RPnExtensionCurveConfigDialog();
-//                        extensionCurve.setVisible(true);
-//                    }
-//                });
 
 
         fileMenu.add(exportMenuItem);

@@ -2,29 +2,23 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package rpn.component;
 
-import java.awt.Color;
+import rpnumerics.BifurcationCurve;
 import rpnumerics.BifurcationCurveCalc;
 import rpnumerics.CoincidenceCurve;
 import rpnumerics.CoincidenceExtensionCurve;
-import rpnumerics.HugoniotCurve;
 import rpnumerics.HugoniotSegment;
-import rpnumerics.RPNUMERICS;
-import rpnumerics.RpCalculation;
-import rpnumerics.ShockProfile;
-import wave.multid.view.ViewingAttr;
 
-public class CoincidenceExtensionCurveGeomFactory extends BifurcationCurveGeomFactory{
+public class CoincidenceExtensionCurveGeomFactory extends BifurcationCurveGeomFactory {
 
     public CoincidenceExtensionCurveGeomFactory(BifurcationCurveCalc calc) {
         super(calc);
     }
 
-  
     // Methods
     //
+    @Override
     protected RpGeometry createGeomFromSource() {
 
         CoincidenceExtensionCurve curve = (CoincidenceExtensionCurve) geomSource();
@@ -41,9 +35,6 @@ public class CoincidenceExtensionCurveGeomFactory extends BifurcationCurveGeomFa
 
     }
 
-
-  
-
     public String toMatlab(int curveIndex) {
 
         StringBuffer buffer = new StringBuffer();
@@ -54,50 +45,24 @@ public class CoincidenceExtensionCurveGeomFactory extends BifurcationCurveGeomFa
 
         buffer.append("%%\n% begin plot x y\n");
         buffer.append("figure; set(gca, 'Color',[0 0 0]); hold on\n");
-        buffer.append(curve.createMatlabPlotLoop(0,1,0));
-
-
-//        buffer.append("\n%%\n% begin plot x z\n");
-//        buffer.append("figure; set(gca, 'Color',[0 0 0]); hold on\n");
-//        buffer.append(curve.toMatlabPlot(0, 2));
-//
-//        buffer.append("\n%%\n% begin plot y z\n");
-//        buffer.append("figure; set(gca, 'Color',[0 0 0]); hold on\n");
-//        buffer.append(curve.toMatlabPlot(1, 2));
+        buffer.append(curve.createMatlabPlotLoop(0, 1, 0));
 
         return buffer.toString();
 
     }
 
     public String toXML() {
-
         StringBuffer buffer = new StringBuffer();
 
-        buffer.append("<HUGONIOTCALC xzero=\"" + ((HugoniotCurve) geomSource()).getXZero() + "\"" + " methodname=\"" + ShockProfile.instance().getHugoniotMethodName() + "\"" + " flowname=\"" + RPNUMERICS.getShockProfile().getFlowName() + "\"" + ">\n");
+        BifurcationCurve curve = (BifurcationCurve) geomSource();
 
-        buffer.append(((HugoniotCurve) geomSource()).toXML(rpn.parser.RPnDataModule.RESULTS));
+        buffer.append("<COMMAND name=\"coincidenceextension\"/>\n");
 
-        buffer.append("</HUGONIOTCALC>\n");
+        buffer.append(curve.toXML());
+
+        buffer.append("</COMMAND>\n");
 
         return buffer.toString();
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
