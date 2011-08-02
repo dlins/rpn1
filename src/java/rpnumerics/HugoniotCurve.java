@@ -340,14 +340,14 @@ public class HugoniotCurve extends SegmentedCurve {
 
     public String toXML() {
         StringBuffer buffer = new StringBuffer();
-        buffer.append("<HUGONIOTCURVE>\n");
+
         for (int i = 0; i < segments().size(); i++) {
             HugoniotSegment hSegment = ((HugoniotSegment) segments().get(
                     i));
             buffer.append(hSegment.toXML());
 
         }
-        buffer.append("</HUGONIOTCURVE>\n");
+
         return buffer.toString();
 
     }

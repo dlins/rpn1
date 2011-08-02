@@ -38,7 +38,7 @@ public class RPNUMERICS {
     static private BifurcationProfile bifurcationProfile_ = BifurcationProfile.instance();
     static private ShockRarefactionProfile shockRarefactionProfile_ = null;
     static private ContourConfiguration contourConfiguration_ = null;
-    static private Integer direction_=OrbitGeom.FORWARD_DIR;
+    static private Integer direction_ = OrbitGeom.FORWARD_DIR;
     //
     // Constructors/Initializers
     //
@@ -86,9 +86,13 @@ public class RPNUMERICS {
 
         ConfigurationProfile boundaryProfile = physicsProfile.getConfigurationProfile(ConfigurationProfile.BOUNDARY_PROFILE);
 
+        System.out.println("Printando boundaryProfile: "+ boundaryProfile);
+
 //        if (boundaryProfile.getParam("limits") != null) { //Catching boundary from input file
 
         if (boundaryProfile != null) { //Catching boundary from input file
+
+            System.out.println("Pegando do arquivo de entrada");
 
             Configuration boundaryConfiguration = new Configuration(boundaryProfile);
 
@@ -97,7 +101,7 @@ public class RPNUMERICS {
                 RealVector min = new RealVector(new Integer(boundaryConfiguration.getParam("dimension")));
                 RealVector max = new RealVector(new Integer(boundaryConfiguration.getParam("dimension")));
 
-//                System.out.println("Printando limites: " + boundaryConfiguration.getParam("limits"));
+                System.out.println("Printando limites: " + boundaryConfiguration.getParam("limits"));
 
 
                 String[] limitsNumbers = boundaryConfiguration.getParam("limits").split(" ");
@@ -152,11 +156,12 @@ public class RPNUMERICS {
                 }
 
                 defaultBoundaryProfile.addParam("limits", limits);
+//                defaultBoundaryProfile.addParam("dimension", String.valueOf(min.getSize()));
 
-//                defaultBoundaryProfile.addParam("x-min", min.getElement(0) + "");
-//                defaultBoundaryProfile.addParam("y-min", min.getElement(1) + "");
-//                defaultBoundaryProfile.addParam("x-max", max.getElement(0) + "");
-//                defaultBoundaryProfile.addParam("y-max", max.getElement(1) + "");
+                defaultBoundaryProfile.addParam("x-min", min.getElement(0) + "");
+                defaultBoundaryProfile.addParam("y-min", min.getElement(1) + "");
+                defaultBoundaryProfile.addParam("x-max", max.getElement(0) + "");
+                defaultBoundaryProfile.addParam("y-max", max.getElement(1) + "");
 
                 physicsProfile.addConfigurationProfile(ConfigurationProfile.BOUNDARY_PROFILE, boundaryProfile);
 
@@ -437,7 +442,7 @@ public class RPNUMERICS {
         System.out.println("Resolucao em Java:" + xResolution + " " + yResolution);
 
 
-        return new ExtensionCurveCalc(xResolution, yResolution, edgeResolution,new Integer(getParamValue("extensioncurve", "curvefamily")), new Integer(getParamValue("extensioncurve", "domainfamily")), edge, characteristicWhere);
+        return new ExtensionCurveCalc(xResolution, yResolution, edgeResolution, new Integer(getParamValue("extensioncurve", "curvefamily")), new Integer(getParamValue("extensioncurve", "domainfamily")), edge, characteristicWhere);
 
     }
 
