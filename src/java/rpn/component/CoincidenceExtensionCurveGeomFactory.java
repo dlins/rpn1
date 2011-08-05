@@ -56,7 +56,7 @@ public class CoincidenceExtensionCurveGeomFactory extends BifurcationCurveGeomFa
 
         BifurcationCurve curve = (BifurcationCurve) geomSource();
 
-        buffer.append("<COMMAND name=\"coincidenceextension\"/>\n");
+        buffer.append("<COMMAND name=\"coincidenceextension\">\n");
 
         buffer.append(curve.toXML());
 

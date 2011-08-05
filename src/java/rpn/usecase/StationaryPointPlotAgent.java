@@ -37,9 +37,10 @@ public class StationaryPointPlotAgent extends RpModelPlotAgent {
 
         
         
-        StationaryPointCalc sPointCalc = RPNUMERICS.createStationaryPointCalc(new PhasePoint(input[input.length-1]));
+//        StationaryPointCalc sPointCalc = RPNUMERICS.createStationaryPointCalc(new PhasePoint(input[input.length-1]));
         
-        return new StationaryPointGeomFactory(sPointCalc).geom();
+//        return new StationaryPointGeomFactory(sPointCalc).geom();
+        return null;
 //
 //        return new StationaryPointGeomFactory(
 //            new rpnumerics.StationaryPointCalc(new PhasePoint(input[input.length - 1]))).geom();

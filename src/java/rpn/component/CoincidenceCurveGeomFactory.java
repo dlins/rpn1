@@ -57,7 +57,7 @@ public class CoincidenceCurveGeomFactory extends RpCalcBasedGeomFactory{
 
         StringBuffer buffer = new StringBuffer();
 
-        buffer.append("<COMMAND name=\"coincidence\"/>\n");
+        buffer.append("<COMMAND name=\"coincidence\">\n");
 
         buffer.append(((BifurcationCurve)geomSource()).toXML());
 

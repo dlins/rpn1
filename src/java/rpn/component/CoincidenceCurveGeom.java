@@ -11,7 +11,7 @@ import wave.multid.DimMismatchEx;
 import wave.multid.view.GeomObjView;
 import wave.multid.view.ViewingTransform;
 
-class CoincidenceCurveGeom extends SegmentedCurveGeom{//implements MultiGeometry, RpGeometry {
+public class CoincidenceCurveGeom extends SegmentedCurveGeom{//implements MultiGeometry, RpGeometry {
   
     //
     // Constructors

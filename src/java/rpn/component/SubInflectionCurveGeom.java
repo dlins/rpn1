@@ -8,7 +8,7 @@ package rpn.component;
 import wave.multid.view.*;
 import wave.multid.*;
 
-public class SubInflectionCurveGeom extends SegmentedCurveGeom{//implements MultiGeometry, RpGeometry {
+public class SubInflectionCurveGeom extends SegmentedCurveGeom{
    
   
     //

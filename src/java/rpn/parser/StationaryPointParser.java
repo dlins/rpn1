@@ -40,40 +40,40 @@ public class StationaryPointParser implements ActionListener {
 
 
         if (e.getActionCommand().equals("endStatPoint")) {
-            try {
-
-                PhasePoint initialPoint = new PhasePoint(RPnDataModule.InputHandler.tempPoint_);
-
-
-                System.out.println("Valor de temp Point " + RPnDataModule.InputHandler.tempPoint_);
-                System.out.println("Valor de temp Vector " + RPnDataModule.InputHandler.tempVector_);
-
-
-                StationaryPointParser.statPoint = new StationaryPoint(
-                        initialPoint, StationaryPointParser.eigenvalr,
-                        StationaryPointParser.eigenvali,
-                        RPnDataModule.InputHandler.vectorArray_,
-                        OrbitParser.dimP,
-                        StationaryPointParser.schurFormP,
-                        StationaryPointParser.schurVecP,
-                        OrbitParser.dimN,
-                        StationaryPointParser.schurFormN,
-                        StationaryPointParser.schurVecN,
-                        OrbitParser.integrationFlag);
-                StationaryPointCalc stationaryPointCalc = RPNUMERICS.createStationaryPointCalc(initialPoint);
-                
-                StationaryPointGeomFactory factory = new StationaryPointGeomFactory(stationaryPointCalc);
-                plotStatPoint = true;
-                if (StationaryPointParser.plotStatPoint) {
-                    RPnDataModule.PHASESPACE.join(new StationaryPointGeom(new CoordsArray(
-                            StationaryPointParser.statPoint.getCoords()),
-                            factory));
-                }
-//                UIController.instance().setUserDialogInput(false);
-//                UIController.instance().setState(new GEOM_SELECTION());
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
+//            try {
+//
+//                PhasePoint initialPoint = new PhasePoint(RPnDataModule.InputHandler.tempPoint_);
+//
+//
+//                System.out.println("Valor de temp Point " + RPnDataModule.InputHandler.tempPoint_);
+//                System.out.println("Valor de temp Vector " + RPnDataModule.InputHandler.tempVector_);
+//
+//
+//                StationaryPointParser.statPoint = new StationaryPoint(
+//                        initialPoint, StationaryPointParser.eigenvalr,
+//                        StationaryPointParser.eigenvali,
+//                        RPnDataModule.InputHandler.vectorArray_,
+//                        OrbitParser.dimP,
+//                        StationaryPointParser.schurFormP,
+//                        StationaryPointParser.schurVecP,
+//                        OrbitParser.dimN,
+//                        StationaryPointParser.schurFormN,
+//                        StationaryPointParser.schurVecN,
+//                        OrbitParser.integrationFlag);
+//                StationaryPointCalc stationaryPointCalc = RPNUMERICS.createStationaryPointCalc(initialPoint);
+//
+//                StationaryPointGeomFactory factory = new StationaryPointGeomFactory(stationaryPointCalc);
+//                plotStatPoint = true;
+//                if (StationaryPointParser.plotStatPoint) {
+//                    RPnDataModule.PHASESPACE.join(new StationaryPointGeom(new CoordsArray(
+//                            StationaryPointParser.statPoint.getCoords()),
+//                            factory));
+//                }
+////                UIController.instance().setUserDialogInput(false);
+////                UIController.instance().setState(new GEOM_SELECTION());
+//            } catch (Exception ex) {
+//                ex.printStackTrace();
+//            }
         }
     }
 }

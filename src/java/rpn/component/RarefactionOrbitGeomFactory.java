@@ -5,9 +5,9 @@
  */
 package rpn.component;
 
-import rpnumerics.Orbit;
 import rpnumerics.RarefactionOrbit;
 import rpnumerics.RarefactionOrbitCalc;
+import wave.util.RealVector;
 
 public class RarefactionOrbitGeomFactory extends RpCalcBasedGeomFactory {
     //
@@ -40,16 +40,30 @@ public class RarefactionOrbitGeomFactory extends RpCalcBasedGeomFactory {
 
     public String toXML() {
         StringBuffer str = new StringBuffer();
-        String direction = "forward\"/>\n";
+        RarefactionOrbit orbit = (RarefactionOrbit) geomSource();
+        RealVector firstPoint = (RealVector)orbit.firstPoint().getCoords();
+        RealVector coords = new RealVector(firstPoint.getSize());
+        for (int i = 0; i < coords.getSize(); i++) {
+            coords.setElement(i, firstPoint.getElement(i));
+        }
+
+
+        String direction = "forward\"";
         str.append("<COMMAND name=\"rarefaction");
         System.out.println("Direcao: "+((RarefactionOrbitCalc) rpCalc()).tDirection());
 
         if (((RarefactionOrbitCalc) rpCalc()).tDirection() == OrbitGeom.BACKWARD_DIR) {
-            direction = "backward\"/>\n";
+            direction = "backward\"";
 
         }
+
+        if (((RarefactionOrbitCalc) rpCalc()).tDirection() == OrbitGeom.BOTH_DIR) {
+            direction = "both\"";
+        }
+
         str.append(direction);
-        str.append(((RarefactionOrbit) geomSource()).toXML(true));
+        str.append(" inputpoint=\""+coords.toString()+"\">\n");
+        str.append(((RarefactionOrbit) geomSource()).toXML(false));//TODO Save with calculations
         str.append("</COMMAND>\n");
         return str.toString();
     }

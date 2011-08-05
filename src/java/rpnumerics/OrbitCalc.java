@@ -56,7 +56,7 @@ public class OrbitCalc implements RpCalculation {
     public RpSolution calc() throws RpException {
 
         FlowVectorField flowVectorField = (FlowVectorField) odeSolver_.getProfile().getFunction();
-        flowVectorField.setWaveFlow(RPNUMERICS.createShockFlow()); //Updating flow parameters
+//        flowVectorField.setWaveFlow(RPNUMERICS.createShockFlow()); //Updating flow parameters
         if (timeDirection_==0){
             
             ODESolution odeSolForward = odeSolver_.solve(getStart(), 1);

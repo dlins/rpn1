@@ -64,15 +64,16 @@ public class ManifoldOrbitCalc implements RpCalculation {
     //
     public RpSolution recalc() throws RpException {
         // stores the delta from the previous stationary point
-        PhasePoint firstDelta = new PhasePoint(firstPoint_);
-        firstDelta.getCoords().sub(firstPoint_.getCoords(), stationaryPoint_.getPoint().getCoords());
-        // recalculation of stationary point
-//        StationaryPointCalc pointRecalc = new StationaryPointCalc(stationaryPoint_.getPoint());
-        StationaryPointCalc pointRecalc = RPNUMERICS.createStationaryPointCalc(stationaryPoint_.getPoint());
-        stationaryPoint_ = (StationaryPoint) pointRecalc.calc();
-        // adds the delta to the new stationary point
-        firstPoint_.getCoords().add(stationaryPoint_.getPoint().getCoords(), firstDelta.getCoords());
-        return calc();
+//        PhasePoint firstDelta = new PhasePoint(firstPoint_);
+//        firstDelta.getCoords().sub(firstPoint_.getCoords(), stationaryPoint_.getPoint().getCoords());
+//        // recalculation of stationary point
+////        StationaryPointCalc pointRecalc = new StationaryPointCalc(stationaryPoint_.getPoint());
+//        StationaryPointCalc pointRecalc = RPNUMERICS.createStationaryPointCalc(stationaryPoint_.getPoint());
+//        stationaryPoint_ = (StationaryPoint) pointRecalc.calc();
+//        // adds the delta to the new stationary point
+//        firstPoint_.getCoords().add(stationaryPoint_.getPoint().getCoords(), firstDelta.getCoords());
+//        return calc();
+        return null;
     }
 
     public RpSolution calc() throws RpException {

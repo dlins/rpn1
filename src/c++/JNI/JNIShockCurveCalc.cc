@@ -75,7 +75,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
         realVectorInput.component(i) = input[i];
     }
 
-
+    RealVector noPreProcessVector(realVectorInput);
     physics.preProcess(realVectorInput);
 
     cout << "Ponto de entrada: " << realVectorInput << endl;
@@ -121,9 +121,15 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
     RealVector min(physicsBoundary. minimums());
     RealVector max(physicsBoundary. maximums());
 
+
+    // Preprocessing input data
+
     physics.preProcess(min);
     physics.preProcess(max);
 
+
+
+    
     cout << "min: " << min << endl;
     cout << "max: " << max << endl;
 
@@ -144,6 +150,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
     method.curve(realVectorInput, timeDirection, hugoniotPolyLineVector);
 
     cout << "Tamanho da curva" << hugoniotPolyLineVector.size() << endl;
+
+     for (i = 0; i < (unsigned int) noPreProcessVector.size(); i++) {// Storing the xzero
+
+        input[i] = noPreProcessVector.component(i);
+
+    }
 
     //Classify
 
@@ -199,6 +211,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
     //Orbit memebers creation
 
     //    //Building the orbit
+
+
 
 
 

@@ -8,7 +8,6 @@ package rpnumerics;
 
 import java.util.List;
 import java.util.ArrayList;
-import wave.util.RealVector;
 import wave.util.RealSegment;
 import wave.multid.CoordsArray;
 

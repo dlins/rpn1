@@ -41,7 +41,7 @@ public class SubInflectionExtensionCurveGeomFactory extends BifurcationCurveGeom
 
         BifurcationCurve curve = (BifurcationCurve) geomSource();
 
-        buffer.append("<COMMAND name=\"subinflectionextension\"/>\n");
+        buffer.append("<COMMAND name=\"subinflectionextension\">\n");
 
         buffer.append(curve.toXML());
 

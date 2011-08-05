@@ -5,7 +5,6 @@
  */
 package rpn.component;
 
-import java.util.List;
 import rpn.RPnDesktopPlotter;
 import rpn.controller.RpCalcController;
 import rpn.controller.RpController;

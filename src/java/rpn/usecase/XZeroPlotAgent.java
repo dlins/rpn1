@@ -34,7 +34,8 @@ public class XZeroPlotAgent extends RpModelPlotAgent {
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {
-        return  new XZeroGeomFactory(new StationaryPointCalc(new PhasePoint(input[input.length - 1]),(ShockFlow)RPNUMERICS.createShockFlow())).geom();
+//        return  new XZeroGeomFactory(new StationaryPointCalc(new PhasePoint(input[input.length - 1]),(ShockFlow)RPNUMERICS.createShockFlow())).geom();
+        return null;
     }
 
     static public XZeroPlotAgent instance() {

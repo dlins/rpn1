@@ -341,6 +341,10 @@ public class HugoniotCurve extends SegmentedCurve {
     public String toXML() {
         StringBuffer buffer = new StringBuffer();
 
+        RealVector xZero = new RealVector(getXZero().getCoords());
+
+        buffer.append(xZero.toXML());
+
         for (int i = 0; i < segments().size(); i++) {
             HugoniotSegment hSegment = ((HugoniotSegment) segments().get(
                     i));

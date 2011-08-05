@@ -77,32 +77,32 @@ public class ManifoldOrbit extends RPnCurve implements RpSolution {
     //
     public ManifoldSensitivity sensitivity() {
 
-        ShockFlow flow = RPNUMERICS.createShockFlow();
-
-        // getting local information at the stationary point
-        StationaryPoint stationaryPoint = getStationaryPoint();
-        int timeDirection = getTimeDirection();
-        int m = stationaryPoint.getSchurFormP().getNumRow();
-        RealMatrix2 schurVec = new RealMatrix2(m, m);
-        int k;
-        if (timeDirection < 0) {
-            schurVec.set(stationaryPoint.getSchurVecN());
-            k = stationaryPoint.getDimN();
-        } else {
-            schurVec.set(stationaryPoint.getSchurVecP());
-            k = stationaryPoint.getDimP();
-        }
-        RealMatrix2 Uu = new RealMatrix2(m, k);
-        schurVec.copySubMatrix(0, 0, m, k, 0, 0, Uu);
-        int pointsNumber = getOrbit().getPoints().length;
-        // stationary point
-        RealVector x_Stationary = new RealVector(stationaryPoint.getPoint().getCoords());
-        RealVector Xp_Stationary = new RealVector(m);
+//        ShockFlow flow = RPNUMERICS.createShockFlow();
+//
+//        // getting local information at the stationary point
+//        StationaryPoint stationaryPoint = getStationaryPoint();
+//        int timeDirection = getTimeDirection();
+//        int m = stationaryPoint.getSchurFormP().getNumRow();
+//        RealMatrix2 schurVec = new RealMatrix2(m, m);
+//        int k;
+//        if (timeDirection < 0) {
+//            schurVec.set(stationaryPoint.getSchurVecN());
+//            k = stationaryPoint.getDimN();
+//        } else {
+//            schurVec.set(stationaryPoint.getSchurVecP());
+//            k = stationaryPoint.getDimP();
+//        }
+//        RealMatrix2 Uu = new RealMatrix2(m, k);
+//        schurVec.copySubMatrix(0, 0, m, k, 0, 0, Uu);
+//        int pointsNumber = getOrbit().getPoints().length;
+//        // stationary point
+//        RealVector x_Stationary = new RealVector(stationaryPoint.getPoint().getCoords());
+//        RealVector Xp_Stationary = new RealVector(m);
 
 
 //            RealMatrix2 F = flow.fluxDeriv(x_Stationary);//new RealMatrix2(RPNUMERICS.flow().fluxDeriv(x_Stationary));
-        JetMatrix output = new JetMatrix(flow.getXZero().getSize());
-        RealMatrix2 F = new RealMatrix2(output.n_comps(), output.n_comps());
+//        JetMatrix output = new JetMatrix(flow.getXZero().getSize());
+//        RealMatrix2 F = new RealMatrix2(output.n_comps(), output.n_comps());
 
 //        flow.jet(x_Stationary, output, 1);
 //        for (int i = 0; i < output.n_comps(); i++) {
@@ -111,34 +111,36 @@ public class ManifoldOrbit extends RPnCurve implements RpSolution {
 //            }
 //        }
 
-        F = flow.fluxDeriv(x_Stationary);
+//        F = flow.fluxDeriv(x_Stationary);
+//
+//        F.invert();
+//        F.negate();
+//        RealVector G = flow.fluxDerivSigma(x_Stationary);//new RealVector(((ConservationShockFlow)RPNUMERICS.flow()).fluxDerivSigma(x_Stationary));
+//        Xp_Stationary.mul(F, G);
+//        // first point
+//        RealVector x0 = new RealVector(getOrbit().getPoints()[0].getCoords());
+//        RealMatrix2 XZero = new RealMatrix2(Uu);
+//        // last point
+//        RealVector x1 = new RealVector(getOrbit().lastPoint().getCoords());
+//        RealMatrix2 X1 = new RealMatrix2(m, k);
+//        RealVector Xp1 = new RealVector(m);
+//        // setting initial conditions
+//        RealMatrix2 Qx = new RealMatrix2(Uu);
+//        RealMatrix2 Rx = new RealMatrix2(k, k);
+//        RealVector sens = new RealVector(RealMatrix2.Matrices2Vector(Qx, Rx, Xp_Stationary));
+//        RealVector x = new RealVector(m);
+//        double h;
+//        for (int i = 0; i < pointsNumber - 1; i++) {
+//            x.set(getOrbit().getPoints()[i].getCoords());
+//            h = getOrbit().getPoints()[i + 1].getLambda() - getOrbit().getPoints()[i].getLambda();
+//            sens.set(rk4(x, sens, k, h));
+//        }
+//        // extracting the final information
+//        RealMatrix2.Vector2Matrices(sens, Qx, Rx, Xp1);
+//        X1.mul(Qx, Rx);
+//        return new ManifoldSensitivity(x_Stationary, Xp_Stationary, x0, XZero, x1, X1, Xp1);
 
-        F.invert();
-        F.negate();
-        RealVector G = flow.fluxDerivSigma(x_Stationary);//new RealVector(((ConservationShockFlow)RPNUMERICS.flow()).fluxDerivSigma(x_Stationary));
-        Xp_Stationary.mul(F, G);
-        // first point
-        RealVector x0 = new RealVector(getOrbit().getPoints()[0].getCoords());
-        RealMatrix2 XZero = new RealMatrix2(Uu);
-        // last point
-        RealVector x1 = new RealVector(getOrbit().lastPoint().getCoords());
-        RealMatrix2 X1 = new RealMatrix2(m, k);
-        RealVector Xp1 = new RealVector(m);
-        // setting initial conditions
-        RealMatrix2 Qx = new RealMatrix2(Uu);
-        RealMatrix2 Rx = new RealMatrix2(k, k);
-        RealVector sens = new RealVector(RealMatrix2.Matrices2Vector(Qx, Rx, Xp_Stationary));
-        RealVector x = new RealVector(m);
-        double h;
-        for (int i = 0; i < pointsNumber - 1; i++) {
-            x.set(getOrbit().getPoints()[i].getCoords());
-            h = getOrbit().getPoints()[i + 1].getLambda() - getOrbit().getPoints()[i].getLambda();
-            sens.set(rk4(x, sens, k, h));
-        }
-        // extracting the final information
-        RealMatrix2.Vector2Matrices(sens, Qx, Rx, Xp1);
-        X1.mul(Qx, Rx);
-        return new ManifoldSensitivity(x_Stationary, Xp_Stationary, x0, XZero, x1, X1, Xp1);
+        return null;
     }
 
     // returns the vector consisting of
@@ -203,39 +205,40 @@ public class ManifoldOrbit extends RPnCurve implements RpSolution {
     // as returned by Matrices2Vector function
     protected RealVector sensitivityFunction(RealVector x, RealVector sens, int k) {
 
-        ShockFlow flow = RPNUMERICS.createShockFlow();
-
-        int m = x.getSize();
-        RealMatrix2 Qx = new RealMatrix2(m, k);
-        RealMatrix2 Rx = new RealMatrix2(k, k);
-        RealVector Xp = new RealVector(m);
-        RealMatrix2 dQx = new RealMatrix2(m, k);
-        RealMatrix2 dRx = new RealMatrix2(k, k);
-        RealVector dXp = new RealVector(m);
-        RealMatrix2.Vector2Matrices(sens, Qx, Rx, Xp);
-//        RealMatrix2 F = new RealMatrix2(RPNUMERICS.flow().fluxDeriv(x));
-//        RealMatrix2 F = flow.fluxDeriv(x);//new RealMatrix2(RPNUMERICS.flow().fluxDeriv(x));
-
-
-        JetMatrix output = new JetMatrix(flow.getXZero().getSize());
-        RealMatrix2 F = new RealMatrix2(output.n_comps(), output.n_comps());
-
-//        flow.jet(x, output, 1);
-//        for (int i = 0; i < output.n_comps(); i++) {
-//            for (int j = 0; j < output.n_comps(); j++) {
-//                F.setElement(i, j, output.getElement(i, j));
-//            }
-//        }
-        F = flow.fluxDeriv(x);
-
-
-
-        RealVector G = flow.fluxDerivSigma(x);//new RealVector(((ConservationShockFlow)RPNUMERICS.flow()).fluxDerivSigma(x));
-        RealMatrix2.QRFunction(Qx, Rx, F, dQx, dRx);
-        dXp.mul(F, Xp);
-        dXp.add(G);
-        RealVector result = new RealVector(RealMatrix2.Matrices2Vector(dQx, dRx, dXp));
-        return result;
+//        ShockFlow flow = RPNUMERICS.createShockFlow();
+//
+//        int m = x.getSize();
+//        RealMatrix2 Qx = new RealMatrix2(m, k);
+//        RealMatrix2 Rx = new RealMatrix2(k, k);
+//        RealVector Xp = new RealVector(m);
+//        RealMatrix2 dQx = new RealMatrix2(m, k);
+//        RealMatrix2 dRx = new RealMatrix2(k, k);
+//        RealVector dXp = new RealVector(m);
+//        RealMatrix2.Vector2Matrices(sens, Qx, Rx, Xp);
+////        RealMatrix2 F = new RealMatrix2(RPNUMERICS.flow().fluxDeriv(x));
+////        RealMatrix2 F = flow.fluxDeriv(x);//new RealMatrix2(RPNUMERICS.flow().fluxDeriv(x));
+//
+//
+//        JetMatrix output = new JetMatrix(flow.getXZero().getSize());
+//        RealMatrix2 F = new RealMatrix2(output.n_comps(), output.n_comps());
+//
+////        flow.jet(x, output, 1);
+////        for (int i = 0; i < output.n_comps(); i++) {
+////            for (int j = 0; j < output.n_comps(); j++) {
+////                F.setElement(i, j, output.getElement(i, j));
+////            }
+////        }
+//        F = flow.fluxDeriv(x);
+//
+//
+//
+//        RealVector G = flow.fluxDerivSigma(x);//new RealVector(((ConservationShockFlow)RPNUMERICS.flow()).fluxDerivSigma(x));
+//        RealMatrix2.QRFunction(Qx, Rx, F, dQx, dRx);
+//        dXp.mul(F, Xp);
+//        dXp.add(G);
+//        RealVector result = new RealVector(RealMatrix2.Matrices2Vector(dQx, dRx, dXp));
+//        return result;
+        return null;
     }
 
     // provides the vector form z' = result
@@ -294,7 +297,7 @@ public class ManifoldOrbit extends RPnCurve implements RpSolution {
 //    }
     protected RealVector rk4(RealVector x0, RealVector sens0, int k, double h) {
         // Runge-Kutta step 4 th order
-        ShockFlow flow = (ShockFlow) RPNUMERICS.createShockFlow();
+//        ShockFlow flow = (ShockFlow) RPNUMERICS.createShockFlow();
 
 
 //        RealVector x = new RealVector(x0);
@@ -305,87 +308,89 @@ public class ManifoldOrbit extends RPnCurve implements RpSolution {
 //        JetMatrix output = new JetMatrix(x0.getSize());
 
 
+//
+//        RealVector sens = new RealVector(sens0);
+//        double halfH = 0.5 * h;
+////        RealVector halfK1x = flow.flux(x);//new RealVector(RPNUMERICS.flow().flux(x));
+//
+////        flow.jet(input, output, 0);
+//
+//
+//
+//        RealVector halfK1x = flow.flux(x0);
+//
+////        RealVector halfK1sens = new RealVector(sensitivityFunction(x, sens, k));
+//        RealVector halfK1sens = new RealVector(sensitivityFunction(x0, sens, k));
+//        halfK1x.scale(halfH);
+//        halfK1sens.scale(halfH);
+//
+////        x.add(x0, halfK1x);
+//
+//        x0.add(x0, halfK1x);
+//
+//
+//        sens.add(sens0, halfK1sens);
+//
+////        flow.jet(input, output, 0);
+//
+//
+////        RealVector halfK2x = flow.flux(x);//new RealVector(RPNUMERICS.flow().flux(x));
+//
+//        RealVector halfK2x = flow.flux(x0);
+//
+//
+////        RealVector halfK2sens = new RealVector(sensitivityFunction(x, sens, k));
+//
+//        RealVector halfK2sens = new RealVector(sensitivityFunction(x0, sens, k));
+//        halfK2x.scale(halfH);
+//        halfK2sens.scale(halfH);
+//
+////        x.add(x0, halfK2x);
+//        x0.add(x0, halfK2x);
+//
+//
+//
+//
+//        sens.add(sens0, halfK2sens);
+////        flow.jet(input, output, 0);
+//
+//
+//
+//
+//        RealVector k3x = flow.flux(x0);
+//
+////        RealVector k3x = flow.flux(x);//new RealVector(RPNUMERICS.flow().flux(x));
+//
+////        RealVector k3sens = new RealVector(sensitivityFunction(x, sens, k));
+//        RealVector k3sens = new RealVector(sensitivityFunction(x0, sens, k));
+//        k3x.scale(h);
+//        k3sens.scale(h);
+//
+//
+//        x0.add(x0, k3x);
+////        x.add(x0, k3x);
+//        sens.add(sens0, k3sens);
+////        flow.jet(input, output, 0);
+//
+////        RealVector k4x = flow.flux(x);//new RealVector(RPNUMERICS.flow().flux(x));
+//        RealVector k4x = flow.flux(x0);
+////        RealVector k4sens = new RealVector(sensitivityFunction(x, sens, k));
+//
+//        RealVector k4sens = new RealVector(sensitivityFunction(x0, sens, k));
+//        k4x.scale(h);
+//        k4sens.scale(h);
+//        RealVector result = new RealVector(sens0);
+//        halfK1sens.scale(1.0 / 3.0);
+//        result.add(halfK1sens);
+//        halfK2sens.scale(2.0 / 3.0);
+//        result.add(halfK2sens);
+//        k3sens.scale(1.0 / 3.0);
+//        result.add(k3sens);
+//        k4sens.scale(1.0 / 6.0);
+//        result.add(k4sens);
 
-        RealVector sens = new RealVector(sens0);
-        double halfH = 0.5 * h;
-//        RealVector halfK1x = flow.flux(x);//new RealVector(RPNUMERICS.flow().flux(x));
-
-//        flow.jet(input, output, 0);
-
-
-
-        RealVector halfK1x = flow.flux(x0);
-
-//        RealVector halfK1sens = new RealVector(sensitivityFunction(x, sens, k));
-        RealVector halfK1sens = new RealVector(sensitivityFunction(x0, sens, k));
-        halfK1x.scale(halfH);
-        halfK1sens.scale(halfH);
-
-//        x.add(x0, halfK1x);
-
-        x0.add(x0, halfK1x);
-
-
-        sens.add(sens0, halfK1sens);
-
-//        flow.jet(input, output, 0);
-
-
-//        RealVector halfK2x = flow.flux(x);//new RealVector(RPNUMERICS.flow().flux(x));
-
-        RealVector halfK2x = flow.flux(x0);
-
-
-//        RealVector halfK2sens = new RealVector(sensitivityFunction(x, sens, k));
-
-        RealVector halfK2sens = new RealVector(sensitivityFunction(x0, sens, k));
-        halfK2x.scale(halfH);
-        halfK2sens.scale(halfH);
-
-//        x.add(x0, halfK2x);
-        x0.add(x0, halfK2x);
-        
-        
-
-
-        sens.add(sens0, halfK2sens);
-//        flow.jet(input, output, 0);
-        
-        
-        
-
-        RealVector k3x = flow.flux(x0);
-
-//        RealVector k3x = flow.flux(x);//new RealVector(RPNUMERICS.flow().flux(x));
-
-//        RealVector k3sens = new RealVector(sensitivityFunction(x, sens, k));
-        RealVector k3sens = new RealVector(sensitivityFunction(x0, sens, k));
-        k3x.scale(h);
-        k3sens.scale(h);
-
-
-        x0.add(x0, k3x);
-//        x.add(x0, k3x);
-        sens.add(sens0, k3sens);
-//        flow.jet(input, output, 0);
-        
-//        RealVector k4x = flow.flux(x);//new RealVector(RPNUMERICS.flow().flux(x));
-        RealVector k4x = flow.flux(x0);
-//        RealVector k4sens = new RealVector(sensitivityFunction(x, sens, k));
-
-        RealVector k4sens = new RealVector(sensitivityFunction(x0, sens, k));
-        k4x.scale(h);
-        k4sens.scale(h);
-        RealVector result = new RealVector(sens0);
-        halfK1sens.scale(1.0 / 3.0);
-        result.add(halfK1sens);
-        halfK2sens.scale(2.0 / 3.0);
-        result.add(halfK2sens);
-        k3sens.scale(1.0 / 3.0);
-        result.add(k3sens);
-        k4sens.scale(1.0 / 6.0);
-        result.add(k4sens);
-        return result;
+        return null;
+//        return result;
     }
 
     public int findClosestSegment(RealVector point, double alfa) {

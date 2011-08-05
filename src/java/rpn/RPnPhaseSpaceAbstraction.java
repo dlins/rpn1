@@ -283,9 +283,9 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
             delete((RpGeometry) deleteList.get(i));
         }
 
-        if (RPNUMERICS.getCurrentProfile() instanceof ShockProfile) {
-            changeState(new NumConfigReadyImpl(((NUMCONFIG_READY) state_).hugoniotGeom(), ((NUMCONFIG_READY) state_).xzeroGeom()));
-        }
+//        if (RPNUMERICS.getCurrentProfile() instanceof ShockProfile) {
+//            changeState(new NumConfigReadyImpl(((NUMCONFIG_READY) state_).hugoniotGeom(), ((NUMCONFIG_READY) state_).xzeroGeom()));
+//        }
 
         RPnCurvesListFrame.clear();
 

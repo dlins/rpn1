@@ -35,7 +35,8 @@ public final class OrbitPoint extends PhasePoint {
     public OrbitPoint(RealVector pCoords) {
         this(pCoords, DEFAULT_TIME);
     }
-    
+
+
     
     public OrbitPoint(double [] coords){
 //        super(new RealVector(coords));
@@ -79,6 +80,7 @@ public final class OrbitPoint extends PhasePoint {
     // Methods
     //
 
+    @Override
     public String toString() {
 //        StringBuffer buf = new StringBuffer();
         

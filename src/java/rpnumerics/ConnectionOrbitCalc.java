@@ -75,27 +75,28 @@ public class ConnectionOrbitCalc implements RpCalculation {
     // Methods
     //
     public RpSolution recalc() throws RpException {
-        // recalculation for each Manifold
-        // Manifold A
-        RealVector firstPointDeltaA = new RealVector(manifoldOrbitA_.getFirstPoint().getCoords());
-        firstPointDeltaA.sub(manifoldOrbitA_.getStationaryPoint().getPoint().getCoords());
-        StationaryPointCalc statPointCalcA = new StationaryPointCalc(manifoldOrbitA_.getStationaryPoint().getPoint(),flow_);
-        StationaryPoint statPointA = (StationaryPoint)statPointCalcA.calc();
-        PhasePoint firstPointA = new PhasePoint(statPointA.getPoint());
-        firstPointA.getCoords().add(firstPointDeltaA);
-        ManifoldOrbitCalc manifoldCalcA = RPNUMERICS.createManifoldCalc(statPointA, firstPointA, manifoldOrbitA_.getTimeDirection());//()flag_)new ManifoldOrbitCalc(statPointA, firstPointA, manifoldOrbitA_.getTimeDirection());
-        manifoldOrbitA_ = (ManifoldOrbit)manifoldCalcA.calc();
-        // Manifold B
-        RealVector firstPointDeltaB = new RealVector(manifoldOrbitB_.getFirstPoint().getCoords());
-        firstPointDeltaB.sub(manifoldOrbitB_.getStationaryPoint().getPoint().getCoords());
-        StationaryPointCalc statPointCalcB = new StationaryPointCalc(manifoldOrbitB_.getStationaryPoint().getPoint(),flow_);
-        StationaryPoint statPointB = (StationaryPoint)statPointCalcB.calc();
-        PhasePoint firstPointB = new PhasePoint(statPointB.getPoint());
-        firstPointB.getCoords().add(firstPointDeltaB);
-        ManifoldOrbitCalc manifoldCalcB = RPNUMERICS.createManifoldCalc(statPointB, firstPointB, manifoldOrbitB_.getTimeDirection());//flag_)new ManifoldOrbitCalc(statPointB, firstPointB, manifoldOrbitB_.getTimeDirection());
-        manifoldOrbitB_ = (ManifoldOrbit)manifoldCalcB.calc();
-        ConnectionOrbitCalc newCalc = RPNUMERICS.createConnectionOrbitCalc(manifoldOrbitA_, manifoldOrbitB_);//new ConnectionOrbitCalc(manifoldOrbitA_, manifoldOrbitB_);
-        return newCalc.calc();
+//        // recalculation for each Manifold
+//        // Manifold A
+//        RealVector firstPointDeltaA = new RealVector(manifoldOrbitA_.getFirstPoint().getCoords());
+//        firstPointDeltaA.sub(manifoldOrbitA_.getStationaryPoint().getPoint().getCoords());
+//        StationaryPointCalc statPointCalcA = new StationaryPointCalc(manifoldOrbitA_.getStationaryPoint().getPoint(),flow_);
+//        StationaryPoint statPointA = (StationaryPoint)statPointCalcA.calc();
+//        PhasePoint firstPointA = new PhasePoint(statPointA.getPoint());
+//        firstPointA.getCoords().add(firstPointDeltaA);
+////        ManifoldOrbitCalc manifoldCalcA = RPNUMERICS.createManifoldCalc(statPointA, firstPointA, manifoldOrbitA_.getTimeDirection());//()flag_)new ManifoldOrbitCalc(statPointA, firstPointA, manifoldOrbitA_.getTimeDirection());
+//        manifoldOrbitA_ = (ManifoldOrbit)manifoldCalcA.calc();
+//        // Manifold B
+//        RealVector firstPointDeltaB = new RealVector(manifoldOrbitB_.getFirstPoint().getCoords());
+//        firstPointDeltaB.sub(manifoldOrbitB_.getStationaryPoint().getPoint().getCoords());
+//        StationaryPointCalc statPointCalcB = new StationaryPointCalc(manifoldOrbitB_.getStationaryPoint().getPoint(),flow_);
+//        StationaryPoint statPointB = (StationaryPoint)statPointCalcB.calc();
+//        PhasePoint firstPointB = new PhasePoint(statPointB.getPoint());
+//        firstPointB.getCoords().add(firstPointDeltaB);
+////        ManifoldOrbitCalc manifoldCalcB = RPNUMERICS.createManifoldCalc(statPointB, firstPointB, manifoldOrbitB_.getTimeDirection());//flag_)new ManifoldOrbitCalc(statPointB, firstPointB, manifoldOrbitB_.getTimeDirection());
+//        manifoldOrbitB_ = (ManifoldOrbit)manifoldCalcB.calc();
+////        ConnectionOrbitCalc newCalc = RPNUMERICS.createConnectionOrbitCalc(manifoldOrbitA_, manifoldOrbitB_);//new ConnectionOrbitCalc(manifoldOrbitA_, manifoldOrbitB_);
+//        return newCalc.calc();
+        return null;
     }
 
     protected Orbit createConnectingOrbit() {
@@ -239,39 +240,39 @@ public class ConnectionOrbitCalc implements RpCalculation {
         firstPointA.add(new RealVector(stationaryPointA.getPoint().getCoords()), dFirstPointA);
         firstPointB.add(new RealVector(stationaryPointB.getPoint().getCoords()), dFirstPointB);
         // calculation of new manifold orbits
-        try {
-            ManifoldOrbitCalc calcManA = RPNUMERICS.createManifoldCalc(stationaryPointA, stationaryPointA, manifoldOrbitA_.getTimeDirection());//( i)new ManifoldOrbitCalc(stationaryPointA,
-               // new PhasePoint(firstPointA), manifoldOrbitA_.getTimeDirection());
-            manifoldOrbitA_ = (ManifoldOrbit)calcManA.calc();
-            ManifoldOrbitCalc calcManB = RPNUMERICS.createManifoldCalc(stationaryPointB, stationaryPointB, manifoldOrbitB_.getTimeDirection());// i)new ManifoldOrbitCalc(stationaryPointB,
-//                new PhasePoint(firstPointB), manifoldOrbitB_.getTimeDirection());
-//            
-//            ManifoldOrbitCalc calcManB = new ManifoldOrbitCalc(stationaryPointB,
-//                new PhasePoint(firstPointB), manifoldOrbitB_.getTimeDirection());
-            manifoldOrbitB_ = (ManifoldOrbit)calcManB.calc();
-        } catch (RpException ex) { ex.printStackTrace(); }
+//        try {
+//            ManifoldOrbitCalc calcManA = RPNUMERICS.createManifoldCalc(stationaryPointA, stationaryPointA, manifoldOrbitA_.getTimeDirection());//( i)new ManifoldOrbitCalc(stationaryPointA,
+//               // new PhasePoint(firstPointA), manifoldOrbitA_.getTimeDirection());
+//            manifoldOrbitA_ = (ManifoldOrbit)calcManA.calc();
+//            ManifoldOrbitCalc calcManB = RPNUMERICS.createManifoldCalc(stationaryPointB, stationaryPointB, manifoldOrbitB_.getTimeDirection());// i)new ManifoldOrbitCalc(stationaryPointB,
+////                new PhasePoint(firstPointB), manifoldOrbitB_.getTimeDirection());
+////
+////            ManifoldOrbitCalc calcManB = new ManifoldOrbitCalc(stationaryPointB,
+////                new PhasePoint(firstPointB), manifoldOrbitB_.getTimeDirection());
+//            manifoldOrbitB_ = (ManifoldOrbit)calcManB.calc();
+//        } catch (RpException ex) { ex.printStackTrace(); }
         // final check
-        if ((manifoldOrbitA_.getFinishType() != ODESolution.STOP_ON_POINCARE_SECTION) ||
-            (manifoldOrbitB_.getFinishType() != ODESolution.STOP_ON_POINCARE_SECTION))
-                flag_ = RpSolution.NO_POINCARE_SECTION;
-        else {
-            RealVector lastPointA = new RealVector(manifoldOrbitA_.getOrbit().getPoints()
-                [manifoldOrbitA_.getOrbit().getPoints().length - 1].getCoords());
-            RealVector lastPointB = new RealVector(manifoldOrbitB_.getOrbit().getPoints()
-                [manifoldOrbitB_.getOrbit().getPoints().length - 1].getCoords());
-            RealVector dLastPointNew = new RealVector(m);
-            dLastPointNew.sub(lastPointB, lastPointA);
-            if (RPNUMERICS.errorControl().ode().stateVectorNorm(dLastPointNew) >
-                RPNUMERICS.errorControl().ode().stateVectorNorm(dLastPoint))
-                    flag_ = RpSolution.DEVIATION_INCREASED;
-            else
-                flag_ = RpSolution.CONNECTION_NOT_FINISHED;
-            if (RPNUMERICS.errorControl().ode().stateVectorNorm(dLastPointNew) < RPNUMERICS.errorControl().eps()) {
-                flag_ = RpSolution.CONNECTED;
-                // SET ACCURACY !!!
-                sigmaAccuracy_ = 0;
-            }
-        }
+//        if ((manifoldOrbitA_.getFinishType() != ODESolution.STOP_ON_POINCARE_SECTION) ||
+//            (manifoldOrbitB_.getFinishType() != ODESolution.STOP_ON_POINCARE_SECTION))
+//                flag_ = RpSolution.NO_POINCARE_SECTION;
+//        else {
+//            RealVector lastPointA = new RealVector(manifoldOrbitA_.getOrbit().getPoints()
+//                [manifoldOrbitA_.getOrbit().getPoints().length - 1].getCoords());
+//            RealVector lastPointB = new RealVector(manifoldOrbitB_.getOrbit().getPoints()
+//                [manifoldOrbitB_.getOrbit().getPoints().length - 1].getCoords());
+//            RealVector dLastPointNew = new RealVector(m);
+//            dLastPointNew.sub(lastPointB, lastPointA);
+//            if (RPNUMERICS.errorControl().ode().stateVectorNorm(dLastPointNew) >
+//                RPNUMERICS.errorControl().ode().stateVectorNorm(dLastPoint))
+//                    flag_ = RpSolution.DEVIATION_INCREASED;
+//            else
+//                flag_ = RpSolution.CONNECTION_NOT_FINISHED;
+//            if (RPNUMERICS.errorControl().ode().stateVectorNorm(dLastPointNew) < RPNUMERICS.errorControl().eps()) {
+//                flag_ = RpSolution.CONNECTED;
+//                // SET ACCURACY !!!
+//                sigmaAccuracy_ = 0;
+//            }
+//        }
     }
 
     // updating initial point for the manifold orbit

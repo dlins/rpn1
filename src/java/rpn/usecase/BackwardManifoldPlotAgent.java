@@ -9,9 +9,7 @@ import javax.swing.JToggleButton;
 import rpn.RPnConfig;
 import rpn.component.*;
 import rpnumerics.StationaryPoint;
-import rpnumerics.PhasePoint;
 import wave.util.RealVector;
-import rpnumerics.RPNUMERICS;
 
 public class BackwardManifoldPlotAgent extends RpModelPlotAgent {
     //
@@ -34,9 +32,10 @@ public class BackwardManifoldPlotAgent extends RpModelPlotAgent {
     public RpGeometry createRpGeometry(RealVector[] input) {
         RealVector lastPointAdded = input[input.length - 1];
         StationaryPoint statPoint = (StationaryPoint) rpn.parser.RPnDataModule.PHASESPACE.find(lastPointAdded).geomFactory().geomSource();
-        ManifoldGeomFactory factory = new ManifoldGeomFactory(RPNUMERICS.createManifoldCalc(statPoint, new PhasePoint(lastPointAdded), OrbitGeom.BACKWARD_DIR));
+//        ManifoldGeomFactory factory = new ManifoldGeomFactory(RPNUMERICS.createManifoldCalc(statPoint, new PhasePoint(lastPointAdded), OrbitGeom.BACKWARD_DIR));
 //            new ManifoldOrbitCalc(statPoint, new PhasePoint(lastPointAdded), OrbitGeom.BACKWARD_DIR));
-        return factory.geom();
+//        return factory.geom();
+        return null;
     }
 
     //

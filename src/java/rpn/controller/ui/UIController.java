@@ -46,7 +46,7 @@ public class UIController extends ComponentUI {
     private MouseController mouseController_;
     private MouseMotionController mouseMotionController_;
     private rpn.controller.ui.UserInputTable globalInputTable_;
-    public static UIController instance_ = null;   //** era private (Leandro)
+    private static UIController instance_ = null;   //** era private (Leandro)
     private RPnNetworkStatus netStatus_ = null;
     private String clientID_;
     private RPnPhaseSpacePanel focusPanel_;
@@ -57,7 +57,7 @@ public class UIController extends ComponentUI {
     //
     // Constructors
     //
-    public UIController() {   //** era protected (Leandro)
+    protected UIController() {   //** era protected (Leandro)
 
         mouseMotionController_ = new MouseMotionController();
         stateController_ = new StateInputController(RPnDesktopPlotter.getUIFrame());
