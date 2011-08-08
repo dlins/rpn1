@@ -14,7 +14,7 @@ import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExtensionCurveView
+public class BoundaryExtensionCurveView
         implements GeomObjView {
     //
     // Members
@@ -28,7 +28,7 @@ public class ExtensionCurveView
     //
     // Constructor
     //
-    public ExtensionCurveView(ExtensionCurveGeom abstractGeom,
+    public BoundaryExtensionCurveView(BoundaryExtensionCurveGeom abstractGeom,
             ViewingTransform transf,
             ViewingAttr viewAttr) throws DimMismatchEx {
         setAbstractGeom(abstractGeom);
@@ -79,13 +79,13 @@ public class ExtensionCurveView
     public void update() {
         viewList_.clear();
 
-        ExtensionCurveGeom extensionCurveGeom = (ExtensionCurveGeom) abstractGeom_;
+        BoundaryExtensionCurveGeom extensionCurveGeom = (BoundaryExtensionCurveGeom) abstractGeom_;
        
         Iterator geomListIterator = extensionCurveGeom.getBifurcationSegmentsIterator();
 
         while (geomListIterator.hasNext()) {
             BifurcationSegGeom geomObj = (BifurcationSegGeom) geomListIterator.next();
-            geomObj.viewingAttr().setColor(ExtensionCurveGeom.COLOR);
+            geomObj.viewingAttr().setColor(BoundaryExtensionCurveGeom.COLOR);
             try {
                 viewList_.add(geomObj.createView(getViewingTransform()));
             } catch (DimMismatchEx dex) {

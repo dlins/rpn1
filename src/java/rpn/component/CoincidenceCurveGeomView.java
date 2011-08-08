@@ -81,9 +81,9 @@ class CoincidenceCurveView implements GeomObjView{
 
 
     viewList_.clear();
-    Iterator geomListIterator = ( (CoincidenceCurveGeom) abstractGeom_).getHugoniotSegIterator();
+    Iterator geomListIterator = ( (CoincidenceCurveGeom) abstractGeom_).getBifurcationSegmentsIterator();
     while (geomListIterator.hasNext()) {
-      HugoniotSegGeom geomObj = (HugoniotSegGeom) geomListIterator.next();
+      BifurcationSegGeom geomObj = (BifurcationSegGeom) geomListIterator.next();
       geomObj.viewingAttr().setColor(CoincidenceCurveGeom.COLOR);
       try {
         viewList_.add(geomObj.createView(getViewingTransform()));

@@ -465,7 +465,7 @@ public class RPNUMERICS {
         return new CoincidenceExtensionCurveCalc(xResolution, yResolution, new Integer(getParamValue("extensioncurve", "curvefamily")), new Integer(getParamValue("extensioncurve", "domainfamily")), characteristicWhere);
     }
 
-    public static ExtensionCurveCalc createExtensionCurveCalc() {
+    public static BoundaryExtensionCurveCalc createExtensionCurveCalc() {
 
 
         int xResolution = new Integer(getContourConfiguration().getParam("x-resolution"));
@@ -479,7 +479,7 @@ public class RPNUMERICS {
         System.out.println("Resolucao em Java:" + xResolution + " " + yResolution);
 
 
-        return new ExtensionCurveCalc(xResolution, yResolution, edgeResolution, new Integer(getParamValue("extensioncurve", "curvefamily")), new Integer(getParamValue("extensioncurve", "domainfamily")), edge, characteristicWhere);
+        return new BoundaryExtensionCurveCalc(xResolution, yResolution, edgeResolution, new Integer(getParamValue("extensioncurve", "curvefamily")), new Integer(getParamValue("extensioncurve", "domainfamily")), edge, characteristicWhere);
 
     }
 

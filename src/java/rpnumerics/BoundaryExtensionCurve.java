@@ -7,7 +7,7 @@ package rpnumerics;
 
 import java.util.List;
 
-public class ExtensionCurve extends BifurcationCurve {// RPnCurve implements RpSolution {
+public class BoundaryExtensionCurve extends BifurcationCurve {// RPnCurve implements RpSolution {
     //
     // Members
     //
@@ -18,7 +18,7 @@ public class ExtensionCurve extends BifurcationCurve {// RPnCurve implements RpS
 ////        hugoniotSegments_ = hSegments;
 //
 //    }
-    public ExtensionCurve(List<HugoniotSegment> leftSegments, List<HugoniotSegment> rightSegments) {
+    public BoundaryExtensionCurve(List<HugoniotSegment> leftSegments, List<HugoniotSegment> rightSegments) {
 //        super(hSegments, rightSegments);//, new ViewingAttr(Color.RED));
 
         super(rightSegments);//, new ViewingAttr(Color.RED));

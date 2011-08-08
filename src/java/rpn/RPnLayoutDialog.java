@@ -114,7 +114,7 @@ public class RPnLayoutDialog extends RPnDialog {
                     SubInflectionExtensionCurveGeom.COLOR = JColorChooser.showDialog(jPanel3, null, SubInflectionExtensionCurveGeom.COLOR);
                     break;
                 case 9:
-                    ExtensionCurveGeom.COLOR = JColorChooser.showDialog(jPanel3, null, ExtensionCurveGeom.COLOR);
+                    BoundaryExtensionCurveGeom.COLOR = JColorChooser.showDialog(jPanel3, null, BoundaryExtensionCurveGeom.COLOR);
                     break;
 
                 case 10:

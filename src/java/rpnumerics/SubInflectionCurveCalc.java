@@ -6,7 +6,7 @@
  */
 package rpnumerics;
 
-public class SubInflectionCurveCalc implements RpCalculation {
+public class SubInflectionCurveCalc extends BifurcationCurveCalc {
 
     static private int contSI = 0;      //** declarei isso (Leandro)
 

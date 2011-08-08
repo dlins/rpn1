@@ -9,7 +9,7 @@ package rpnumerics;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class ExtensionCurveCalc extends BifurcationCurveCalc {
+public class BoundaryExtensionCurveCalc extends BifurcationCurveCalc {
 
     //
     // Constructors/Initializers
@@ -24,7 +24,7 @@ public class ExtensionCurveCalc extends BifurcationCurveCalc {
 
     static private int contEC = 0;      //** declarei isso (Leandro)
 
-    public ExtensionCurveCalc(int xResolution, int yResolution, int edgeResolution,int leftFamily, int rightFamily,int edge, int characteristicDomain) {
+    public BoundaryExtensionCurveCalc(int xResolution, int yResolution, int edgeResolution,int leftFamily, int rightFamily,int edge, int characteristicDomain) {
         this.xResolution_ = xResolution;
         this.yResolution_ = yResolution;
         this.curveFamily_ = leftFamily;
@@ -34,7 +34,7 @@ public class ExtensionCurveCalc extends BifurcationCurveCalc {
         characteristicDomain_=characteristicDomain;
     }
 
-    public ExtensionCurveCalc() {
+    public BoundaryExtensionCurveCalc() {
     }
 
     @Override
@@ -42,7 +42,7 @@ public class ExtensionCurveCalc extends BifurcationCurveCalc {
         RpSolution result = null;
 
         try {
-            result = (ExtensionCurve) nativeCalc(xResolution_,yResolution_,edgeResolution_,curveFamily_,domainFamily_,edge_,characteristicDomain_);
+            result = (BoundaryExtensionCurve) nativeCalc(xResolution_,yResolution_,edgeResolution_,curveFamily_,domainFamily_,edge_,characteristicDomain_);
 
             //** acrescentei isso (Leandro)
             if (contEC == 0) {
@@ -57,7 +57,7 @@ public class ExtensionCurveCalc extends BifurcationCurveCalc {
 
             return result;
         } catch (RpException ex) {
-            Logger.getLogger(ExtensionCurveCalc.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(BoundaryExtensionCurveCalc.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return result;

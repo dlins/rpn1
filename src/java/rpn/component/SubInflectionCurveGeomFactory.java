@@ -7,7 +7,7 @@ package rpn.component;
 
 import rpnumerics.*;
 
-public class SubInflectionCurveGeomFactory extends RpCalcBasedGeomFactory {
+public class SubInflectionCurveGeomFactory extends BifurcationCurveGeomFactory {
 
     public SubInflectionCurveGeomFactory(SubInflectionCurveCalc calc) {
         super(calc);
@@ -23,9 +23,9 @@ public class SubInflectionCurveGeomFactory extends RpCalcBasedGeomFactory {
 
         // assuming a container with HugoniotSegment elements
         int resultSize = curve.segments().size();
-        HugoniotSegGeom[] hugoniotArray = new HugoniotSegGeom[resultSize];
+        BifurcationSegGeom[] hugoniotArray = new BifurcationSegGeom[resultSize];
         for (int i = 0; i < resultSize; i++) {
-            hugoniotArray[i] = new HugoniotSegGeom((HugoniotSegment) curve.segments().get(i));
+            hugoniotArray[i] = new BifurcationSegGeom((HugoniotSegment) curve.segments().get(i));
         }
         return new SubInflectionCurveGeom(hugoniotArray, this);
 

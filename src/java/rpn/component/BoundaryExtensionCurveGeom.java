@@ -9,7 +9,7 @@ import java.awt.Color;
 import wave.multid.view.*;
 import wave.multid.*;
 
-public class ExtensionCurveGeom extends BifurcationCurveGeom {//implements MultiGeometry, RpGeometry {
+public class BoundaryExtensionCurveGeom extends BifurcationCurveGeom {//implements MultiGeometry, RpGeometry {
    
 
     //
@@ -18,7 +18,7 @@ public class ExtensionCurveGeom extends BifurcationCurveGeom {//implements Multi
 
   public static Color COLOR = new Color(0, 153, 153);
 
-    public ExtensionCurveGeom(BifurcationSegGeom[] segArray, BifurcationCurveGeomFactory factory) {
+    public BoundaryExtensionCurveGeom(BifurcationSegGeom[] segArray, BifurcationCurveGeomFactory factory) {
         super(segArray, factory);
     }
 
@@ -26,7 +26,7 @@ public class ExtensionCurveGeom extends BifurcationCurveGeom {//implements Multi
     @Override
     public GeomObjView createView(ViewingTransform transf) throws DimMismatchEx {
         viewingAttr().setColor(COLOR);
-        return new ExtensionCurveView(this, transf, viewingAttr());
+        return new BoundaryExtensionCurveView(this, transf, viewingAttr());
     }
 
 

@@ -16,7 +16,7 @@ import rpn.parser.RPnDataModule;
 import rpnumerics.*;
 import wave.util.RealVector;
 
-public class ExtensionCurveAgent extends RpModelPlotAgent {
+public class BoundaryExtensionCurveAgent extends RpModelPlotAgent {
     //
     // Constants
     //
@@ -25,12 +25,12 @@ public class ExtensionCurveAgent extends RpModelPlotAgent {
     //
     // Members
     //
-    static private ExtensionCurveAgent instance_ = null;
+    static private BoundaryExtensionCurveAgent instance_ = null;
 
     //
     // Constructors/Initializers
     //
-    protected ExtensionCurveAgent() {
+    protected BoundaryExtensionCurveAgent() {
         super(DESC_TEXT, rpn.RPnConfig.HUGONIOT, new JButton(DESC_TEXT));
     }
 
@@ -46,7 +46,7 @@ public class ExtensionCurveAgent extends RpModelPlotAgent {
 
     public RpGeometry createRpGeometry(RealVector[] input) {
 
-        ExtensionCurveGeomFactory factory = new ExtensionCurveGeomFactory(RPNUMERICS.createExtensionCurveCalc());
+        BoundaryExtensionCurveGeomFactory factory = new BoundaryExtensionCurveGeomFactory(RPNUMERICS.createExtensionCurveCalc());
 
         return factory.geom();
 
@@ -54,7 +54,7 @@ public class ExtensionCurveAgent extends RpModelPlotAgent {
 
     @Override
     public void execute() {
-        ExtensionCurveGeomFactory factory = new ExtensionCurveGeomFactory(RPNUMERICS.createExtensionCurveCalc());
+        BoundaryExtensionCurveGeomFactory factory = new BoundaryExtensionCurveGeomFactory(RPNUMERICS.createExtensionCurveCalc());
 
         RPnPhaseSpaceAbstraction auxPhaseSpace = RPnDataModule.PHASESPACE;
 
@@ -65,9 +65,9 @@ public class ExtensionCurveAgent extends RpModelPlotAgent {
         System.out.println("Chamando  extension curve execute boundary");
     }
 
-    static public ExtensionCurveAgent instance() {
+    static public BoundaryExtensionCurveAgent instance() {
         if (instance_ == null) {
-            instance_ = new ExtensionCurveAgent();
+            instance_ = new BoundaryExtensionCurveAgent();
         }
         return instance_;
     }

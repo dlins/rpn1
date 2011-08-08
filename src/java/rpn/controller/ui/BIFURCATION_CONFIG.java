@@ -13,7 +13,7 @@ import rpn.usecase.ChangeFluxParamsAgent;
 import rpn.usecase.CoincidenceExtensionCurvePlotAgent;
 import rpn.usecase.CoincidencePlotAgent;
 import rpn.usecase.DoubleContactAgent;
-import rpn.usecase.ExtensionCurveAgent;
+import rpn.usecase.BoundaryExtensionCurveAgent;
 import rpn.usecase.RpModelActionAgent;
 import rpn.usecase.SubInflectionExtensionCurveAgent;
 import rpn.usecase.SubInflectionPlotAgent;
@@ -29,7 +29,7 @@ public class BIFURCATION_CONFIG extends UI_ACTION_SELECTED {
         SubInflectionPlotAgent.instance().setEnabled(true);
         BuckleyLeverettiInflectionAgent.instance().setEnabled(true);
         DoubleContactAgent.instance().setEnabled(true);
-        ExtensionCurveAgent.instance().setEnabled(true);
+        BoundaryExtensionCurveAgent.instance().setEnabled(true);
         SubInflectionExtensionCurveAgent.instance().setEnabled(true);
         CoincidenceExtensionCurvePlotAgent.instance().setEnabled(true);
         ChangeFluxParamsAgent.instance().setEnabled(true);
@@ -51,7 +51,7 @@ public class BIFURCATION_CONFIG extends UI_ACTION_SELECTED {
 
             returnedArray.add(CoincidenceExtensionCurvePlotAgent.instance());
             returnedArray.add(SubInflectionExtensionCurveAgent.instance());
-            returnedArray.add(ExtensionCurveAgent.instance());
+            returnedArray.add(BoundaryExtensionCurveAgent.instance());
         }
 
 

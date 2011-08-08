@@ -20,19 +20,19 @@ public class BifurcationSegGeom extends MultiPolyLine {
 
     }
 
-    private static Color selectColor(HugoniotSegment hsegment) {
-        if (hsegment.getType() == 18) {
-            return Color.GREEN;
-        }
-
-        if (hsegment.getType() == 19) {
-            return new Color(248, 17, 47);
-        }
-
-        if (hsegment.getType() == 20) {
-            return new Color(0, 153, 153);
-        }
-
-        return  Color.white;
-    }
+//    private static Color selectColor(HugoniotSegment hsegment) {
+//        if (hsegment.getType() == 18) {
+//            return Color.GREEN;
+//        }
+//
+//        if (hsegment.getType() == 19) {
+//            return new Color(248, 17, 47);
+//        }
+//
+//        if (hsegment.getType() == 20) {
+//            return new Color(0, 153, 153);
+//        }
+//
+//        return  Color.white;
+//    }
 }

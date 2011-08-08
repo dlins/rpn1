@@ -29,7 +29,7 @@ import rpn.usecase.BuckleyLeverettiInflectionAgent;
 import rpn.usecase.CoincidenceExtensionCurvePlotAgent;
 import rpn.usecase.CoincidencePlotAgent;
 import rpn.usecase.DoubleContactAgent;
-import rpn.usecase.ExtensionCurveAgent;
+import rpn.usecase.BoundaryExtensionCurveAgent;
 import rpn.usecase.HugoniotPlotAgent;
 import rpn.usecase.RarefactionOrbitPlotAgent;
 import rpn.usecase.ShockCurvePlotAgent;
@@ -506,7 +506,7 @@ public class RPnDataModule {
                 }
 
                 if (currentCommand_.equalsIgnoreCase("boundaryextension")) {//BoundaryExtension command
-                    ExtensionCurveAgent.instance().actionPerformed(new ActionEvent(this, 0, "plot"));
+                    BoundaryExtensionCurveAgent.instance().actionPerformed(new ActionEvent(this, 0, "plot"));
                 }
 
 

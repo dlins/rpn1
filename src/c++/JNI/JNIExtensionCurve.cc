@@ -18,7 +18,7 @@ NOTE :
  */
 
 
-#include "rpnumerics_ExtensionCurveCalc.h"
+#include "rpnumerics_BoundaryExtensionCurveCalc.h"
 
 #include "JNIDefs.h"
 #include "RpNumerics.h"
@@ -34,7 +34,7 @@ NOTE :
 using std::vector;
 using namespace std;
 
-JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
+JNIEXPORT jobject JNICALL Java_rpnumerics_BoundaryExtensionCurveCalc_nativeCalc
 (JNIEnv * env, jobject obj, jint xResolution, jint yResolution, jint edgeResolution,jint curveFamily, jint domainFamily, jint edge, jint characteristicWhere) {
 
     jclass hugoniotSegmentClass = (env)->FindClass(HUGONIOTSEGMENTCLASS_LOCATION);
@@ -43,7 +43,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
 
     jclass arrayListClass = env->FindClass("java/util/ArrayList");
 
-    jclass extensionCurveClass = env->FindClass(EXTENSIONCURVE_LOCATION);
+    jclass extensionCurveClass = env->FindClass(BOUNDARYEXTENSIONCURVE_LOCATION);
 
     jmethodID realVectorConstructorDoubleArray = env->GetMethodID(realVectorClass, "<init>", "([D)V");
 

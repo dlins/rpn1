@@ -9,13 +9,13 @@ import java.awt.Color;
 import wave.multid.view.*;
 import wave.multid.*;
 
-public class SubInflectionCurveGeom extends SegmentedCurveGeom{
+public class SubInflectionCurveGeom extends BifurcationCurveGeom{
    
     public static Color COLOR  = new Color(243, 123, 46);
     //
     // Constructors
     //
-    public SubInflectionCurveGeom(HugoniotSegGeom[] segArray, SubInflectionCurveGeomFactory factory) {
+    public SubInflectionCurveGeom(BifurcationSegGeom[] segArray, SubInflectionCurveGeomFactory factory) {
 
         super(segArray,factory);
     }

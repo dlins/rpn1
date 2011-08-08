@@ -10,13 +10,13 @@ import wave.multid.DimMismatchEx;
 import wave.multid.view.GeomObjView;
 import wave.multid.view.ViewingTransform;
 
-public class CoincidenceCurveGeom extends SegmentedCurveGeom {//implements MultiGeometry, RpGeometry {
+public class CoincidenceCurveGeom extends BifurcationCurveGeom {
 
     //
     // Constructors
     public static Color COLOR = new Color(20, 43, 140);
 
-    public CoincidenceCurveGeom(HugoniotSegGeom[] segArray, CoincidenceCurveGeomFactory factory) {
+    public CoincidenceCurveGeom(BifurcationSegGeom[] segArray, CoincidenceCurveGeomFactory factory) {
 
         super(segArray, factory);
 
@@ -25,6 +25,7 @@ public class CoincidenceCurveGeom extends SegmentedCurveGeom {//implements Multi
     //
     // Methods
     //
+    @Override
     public GeomObjView createView(ViewingTransform transf) throws DimMismatchEx {
 
         viewingAttr().setColor(COLOR);

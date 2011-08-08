@@ -7,9 +7,9 @@ package rpn.component;
 
 import rpnumerics.*;
 
-public class ExtensionCurveGeomFactory extends BifurcationCurveGeomFactory {
+public class BoundaryExtensionCurveGeomFactory extends BifurcationCurveGeomFactory {
 
-    public ExtensionCurveGeomFactory(ExtensionCurveCalc calc) {
+    public BoundaryExtensionCurveGeomFactory(BoundaryExtensionCurveCalc calc) {
         super(calc);
     }
 
@@ -19,7 +19,7 @@ public class ExtensionCurveGeomFactory extends BifurcationCurveGeomFactory {
     @Override
     protected RpGeometry createGeomFromSource() {
 
-        ExtensionCurve curve = (ExtensionCurve) geomSource();
+        BoundaryExtensionCurve curve = (BoundaryExtensionCurve) geomSource();
 
         int resultSize = curve.segments().size();
 //        System.out.println("Tamanho da extensao da fronteira: "+resultSize);
@@ -29,7 +29,7 @@ public class ExtensionCurveGeomFactory extends BifurcationCurveGeomFactory {
             leftBifurcationSegArray[i] = new BifurcationSegGeom((HugoniotSegment) curve.segments().get(i));
         }
 
-        return new ExtensionCurveGeom(leftBifurcationSegArray, this);
+        return new BoundaryExtensionCurveGeom(leftBifurcationSegArray, this);
 
     }
  

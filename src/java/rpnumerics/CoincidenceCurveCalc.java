@@ -6,7 +6,7 @@
  */
 package rpnumerics;
 
-public class CoincidenceCurveCalc implements RpCalculation {
+public class CoincidenceCurveCalc extends BifurcationCurveCalc {
 
     static private int contCC = 0;      //** declarei isso (Leandro)
 
@@ -16,6 +16,7 @@ public class CoincidenceCurveCalc implements RpCalculation {
     public CoincidenceCurveCalc(){
     }
 
+    @Override
     public RpSolution recalc() throws RpException {
 
         return calc();
@@ -23,6 +24,7 @@ public class CoincidenceCurveCalc implements RpCalculation {
     }
 
 
+    @Override
     public RpSolution calc() throws RpException {
 
 
