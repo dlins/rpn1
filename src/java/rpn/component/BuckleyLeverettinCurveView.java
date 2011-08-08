@@ -5,6 +5,7 @@
  */
 package rpn.component;
 
+import java.awt.Color;
 import wave.multid.model.*;
 import wave.multid.view.*;
 import wave.multid.DimMismatchEx;
@@ -12,6 +13,7 @@ import java.awt.Graphics2D;
 import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.text.Position.Bias;
 
 public class BuckleyLeverettinCurveView
         implements GeomObjView {
@@ -82,6 +84,7 @@ public class BuckleyLeverettinCurveView
         Iterator geomListIterator = ((BuckleyLeverettinInflectionGeom) abstractGeom_).getBifurcationSegmentsIterator();
         while (geomListIterator.hasNext()) {
             BifurcationSegGeom geomObj = (BifurcationSegGeom) geomListIterator.next();
+            geomObj.viewingAttr().setColor(BuckleyLeverettinInflectionGeom.COLOR);
             try {
                 viewList_.add(geomObj.createView(getViewingTransform()));
             } catch (DimMismatchEx dex) {

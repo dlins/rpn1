@@ -7,6 +7,7 @@
 
 package rpn.component;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -83,6 +84,7 @@ class CoincidenceCurveView implements GeomObjView{
     Iterator geomListIterator = ( (CoincidenceCurveGeom) abstractGeom_).getHugoniotSegIterator();
     while (geomListIterator.hasNext()) {
       HugoniotSegGeom geomObj = (HugoniotSegGeom) geomListIterator.next();
+      geomObj.viewingAttr().setColor(CoincidenceCurveGeom.COLOR);
       try {
         viewList_.add(geomObj.createView(getViewingTransform()));
       }

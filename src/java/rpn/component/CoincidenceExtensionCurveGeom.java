@@ -7,16 +7,18 @@
 package rpn.component;
 
 
+import java.awt.Color;
 import wave.multid.DimMismatchEx;
 import wave.multid.view.GeomObjView;
 import wave.multid.view.ViewingTransform;
 
-class CoincidenceExtensionCurveGeom extends BifurcationCurveGeom{//implements MultiGeometry, RpGeometry {
+public class CoincidenceExtensionCurveGeom extends BifurcationCurveGeom{//implements MultiGeometry, RpGeometry {
   
     //
     // Constructors
 
-    //
+    public static Color COLOR = new Color(0, 153, 153);
+
     public CoincidenceExtensionCurveGeom(BifurcationSegGeom[] segArray, CoincidenceExtensionCurveGeomFactory factory) {
 
         super(segArray,factory);
@@ -26,8 +28,10 @@ class CoincidenceExtensionCurveGeom extends BifurcationCurveGeom{//implements Mu
     // Methods
     //
 
+    @Override
     public GeomObjView createView(ViewingTransform transf) throws DimMismatchEx {
-        return new CoincidenceExtensionCurveGeomView(this, transf, VIEWING_ATTR);
+        viewingAttr().setColor(COLOR);
+        return new CoincidenceExtensionCurveGeomView(this, transf, viewingAttr());
     }
   
 }

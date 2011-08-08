@@ -38,7 +38,7 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
 
         this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
-        setSize(new Dimension(360, 200));
+        setSize(new Dimension(600, 250));
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 
         int height = dim.height;
@@ -50,6 +50,7 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
         toolBar_ = new JToolBar();
 
         curvesTable_ = new JTable(tableModel_);
+
         curvesTable_.setRowSelectionAllowed(false);
 
         tablePanel_ = new JScrollPane(curvesTable_);

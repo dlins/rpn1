@@ -79,17 +79,7 @@ public class DoubleContactCurveView
         viewList_.clear();
 
         DoubleContactCurveGeom doubleContactGeom = (DoubleContactCurveGeom) abstractGeom_;
-        if (doubleContactGeom == null) {
-            System.out.println("Eh nula a geometria");
-        }
-
-
-        if (viewList_ == null) {
-            System.out.println("Eh nula a lista");
-        }
-
         Iterator geomListIterator = doubleContactGeom.getBifurcationSegmentsIterator();
-
 
 
         while (geomListIterator.hasNext()) {

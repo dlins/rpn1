@@ -119,6 +119,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         }
     }
 
+
     public void highlightGeometry(int index) {
         for (int i = 0; i < geomList_.size(); i++) {
 

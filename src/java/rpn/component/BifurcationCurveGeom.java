@@ -17,7 +17,7 @@ import wave.multid.view.*;
 public class BifurcationCurveGeom implements MultiGeometry, RpGeometry {
 
     private RpGeomFactory factory_;
-    public static ViewingAttr VIEWING_ATTR = new ViewingAttr(Color.white);
+    private ViewingAttr viewingAttr_ = new ViewingAttr(Color.white);
     private ArrayList segList_;
     private Space space_;
     private BoundingBox boundary_;
@@ -57,8 +57,10 @@ public class BifurcationCurveGeom implements MultiGeometry, RpGeometry {
     }
 
     public ViewingAttr viewingAttr() {
-        return VIEWING_ATTR;
+        return viewingAttr_;
     }
+
+
 
     public Iterator getBifurcationSegmentsIterator() {
         return segList_.iterator();

@@ -5,16 +5,16 @@
  */
 package rpn.component;
 
+import java.awt.Color;
 import wave.multid.view.*;
 import wave.multid.*;
 
 public class SubInflectionExtensionCurveGeom extends BifurcationCurveGeom {//implements MultiGeometry, RpGeometry {
-   
 
     //
     // Constructors
     //
-
+    public static Color COLOR =new Color(0, 153, 153);
 
     public SubInflectionExtensionCurveGeom(BifurcationSegGeom[] segArray, SubInflectionExtensionCurveGeomFactory factory) {
 
@@ -22,10 +22,9 @@ public class SubInflectionExtensionCurveGeom extends BifurcationCurveGeom {//imp
 
     }
 
-
+    @Override
     public GeomObjView createView(ViewingTransform transf) throws DimMismatchEx {
+        viewingAttr().setColor(COLOR);
         return new SubInflectionExtensionCurveView(this, transf, viewingAttr());
     }
-
-
 }

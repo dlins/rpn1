@@ -5,10 +5,12 @@
 
 package rpn.component;
 
+import java.awt.Color;
 import rpnumerics.BifurcationCurve;
 import rpnumerics.CoincidenceCurve;
 import rpnumerics.HugoniotSegment;
 import rpnumerics.RpCalculation;
+import wave.multid.view.ViewingAttr;
 
 public class CoincidenceCurveGeomFactory extends RpCalcBasedGeomFactory{
 
@@ -25,10 +27,11 @@ public class CoincidenceCurveGeomFactory extends RpCalcBasedGeomFactory{
 
         // assuming a container with HugoniotSegment elements
         int resultSize = curve.segments().size();
-
+        ViewingAttr viewAtt = new ViewingAttr(CoincidenceCurveGeom.COLOR);
         HugoniotSegGeom[] hugoniotArray = new HugoniotSegGeom[resultSize];
         for (int i = 0; i < resultSize; i++) {
-            hugoniotArray[i] = new HugoniotSegGeom((HugoniotSegment) curve.segments().get(i));
+            hugoniotArray[i] = new HugoniotSegGeom((HugoniotSegment) curve.segments().get(i),viewAtt);
+
         }
         return new CoincidenceCurveGeom(hugoniotArray, this);
 

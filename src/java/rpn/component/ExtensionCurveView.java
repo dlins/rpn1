@@ -5,6 +5,7 @@
  */
 package rpn.component;
 
+import java.awt.Color;
 import wave.multid.model.*;
 import wave.multid.view.*;
 import wave.multid.DimMismatchEx;
@@ -79,26 +80,13 @@ public class ExtensionCurveView
         viewList_.clear();
 
         ExtensionCurveGeom extensionCurveGeom = (ExtensionCurveGeom) abstractGeom_;
-        if (extensionCurveGeom == null) {
-            System.out.println("Eh nula a geometria");
-        }
-
-
-        if (viewList_ == null) {
-            System.out.println("Eh nula a lista");
-        }
-
+       
         Iterator geomListIterator = extensionCurveGeom.getBifurcationSegmentsIterator();
-
-
 
         while (geomListIterator.hasNext()) {
             BifurcationSegGeom geomObj = (BifurcationSegGeom) geomListIterator.next();
+            geomObj.viewingAttr().setColor(ExtensionCurveGeom.COLOR);
             try {
-                if (geomObj == null) {
-                    System.out.println("Eh nulo segmento");
-                }
-
                 viewList_.add(geomObj.createView(getViewingTransform()));
             } catch (DimMismatchEx dex) {
                 dex.printStackTrace();

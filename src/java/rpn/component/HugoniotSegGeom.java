@@ -130,7 +130,7 @@ public class HugoniotSegGeom extends MultiPolyLine {
 
 
         //TODO  BuckleyLeverettinflection Curve segment type
-        if (segment.getType() == 18) {                                          // está verde     //ok para BL
+        if (segment.getType() == 18) {                                        
             attr = new ViewingAttr(new Color(0, 255, 0));
 
         }

@@ -27,6 +27,7 @@ public class DoubleContactCurveGeom extends BifurcationCurveGeom {//implements M
 
 
     public GeomObjView createView(ViewingTransform transf) throws DimMismatchEx {
+
         return new DoubleContactCurveView (this, transf, viewingAttr());
     }
 
