@@ -37,25 +37,25 @@ public class SIGMA_CONFIG extends UI_ACTION_SELECTED {
         // XZERO
 //        XZeroGeomFactory xzeroFactory = new XZeroGeomFactory(new rpnumerics.StationaryPointCalc(RPNUMERICS.getShockProfile().getXZero()));
 
-        XZeroGeomFactory xzeroFactory = new XZeroGeomFactory(RPNUMERICS.createStationaryPointCalc(RPNUMERICS.getShockProfile().getXZero()));
+//        XZeroGeomFactory xzeroFactory = new XZeroGeomFactory(RPNUMERICS.createStationaryPointCalc(RPNUMERICS.getShockProfile().getXZero()));
 
 //        ((ShockFlow)RPNUMERICS.flow()).getXZero()));
-        RPnDataModule.PHASESPACE.plot(xzeroFactory.geom());
-        // plots all other singularities
-
-        HugoniotCurve hCurve = (HugoniotCurve) ((NUMCONFIG_READY) RPnDataModule.PHASESPACE.state()).hugoniotGeom().geomFactory().geomSource();
-
-//            List pList = hCurve.findPoints(((ShockFlow) RPNUMERICS.flow()).getSigma());
-
-        List pList = hCurve.findPoints(RPNUMERICS.getShockProfile().getSigma());
-        for (int i = 0; i < pList.size(); i++) {
-            RealVector sigmaPoint = (RealVector) pList.get(i);
-//                StationaryPointGeomFactory factory = new StationaryPointGeomFactory(new rpnumerics.StationaryPointCalc(new PhasePoint(sigmaPoint)));
-            StationaryPointGeomFactory factory = new StationaryPointGeomFactory(RPNUMERICS.createStationaryPointCalc(new PhasePoint(sigmaPoint)));
-
-            RPnDataModule.PHASESPACE.plot(factory.geom());
-
-        }
+//        RPnDataModule.PHASESPACE.plot(xzeroFactory.geom());
+//        // plots all other singularities
+//
+//        HugoniotCurve hCurve = (HugoniotCurve) ((NUMCONFIG_READY) RPnDataModule.PHASESPACE.state()).hugoniotGeom().geomFactory().geomSource();
+//
+////            List pList = hCurve.findPoints(((ShockFlow) RPNUMERICS.flow()).getSigma());
+//
+//        List pList = hCurve.findPoints(RPNUMERICS.getShockProfile().getSigma());
+//        for (int i = 0; i < pList.size(); i++) {
+//            RealVector sigmaPoint = (RealVector) pList.get(i);
+////                StationaryPointGeomFactory factory = new StationaryPointGeomFactory(new rpnumerics.StationaryPointCalc(new PhasePoint(sigmaPoint)));
+//            StationaryPointGeomFactory factory = new StationaryPointGeomFactory(RPNUMERICS.createStationaryPointCalc(new PhasePoint(sigmaPoint)));
+//
+//            RPnDataModule.PHASESPACE.plot(factory.geom());
+//
+//        }
 
 
         ui.setState(new GEOM_SELECTION());

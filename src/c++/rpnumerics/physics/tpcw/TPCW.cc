@@ -145,7 +145,6 @@ void TPCW::postProcess(vector<RealVector> & input) {
 
     for (int i = 0; i < input.size(); i++) {
 
-
         switch (inputSize) {
             case 4://Rarefaction
                 input[i].component(1) = TD->Theta2T(input[i].component(1));
@@ -172,9 +171,7 @@ void TPCW::postProcess(vector<RealVector> & input) {
                 input[i].component(0) = temp.component(0);
                 input[i].component(1) = TD->Theta2T(temp.component(1));
                 input[i].component(2) = boundary().maximums().component(2);
-
                 break;
-
 
         }
 

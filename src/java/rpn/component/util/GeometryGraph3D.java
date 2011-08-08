@@ -121,7 +121,7 @@ public class GeometryGraph3D {
 
             if (zerado == 2) {
 
-                if (UIController.instance_.getState() instanceof AREASELECTION_CONFIG) {
+                if (UIController.instance().getState() instanceof AREASELECTION_CONFIG) {
                     g.setColor(cor12);
                     graph.draw(line1);
                     graph.draw(line2);
@@ -134,7 +134,7 @@ public class GeometryGraph3D {
                 
                 if ((ControlClick.ind % 2) == 0) {
 
-                    if (UIController.instance_.getState() instanceof AREASELECTION_CONFIG) {
+                    if (UIController.instance().getState() instanceof AREASELECTION_CONFIG) {
                         g.setColor(cor56);
                         graph.draw(line5);
                         graph.draw(line6);
@@ -158,8 +158,8 @@ public class GeometryGraph3D {
 
 
                     //*** Para o botao Classify
-                    if ((UIController.instance_.getState() instanceof VELOCITYAGENT_CONFIG)  ||
-                        (UIController.instance_.getState() instanceof CLASSIFIERAGENT_CONFIG  &&
+                    if ((UIController.instance().getState() instanceof VELOCITYAGENT_CONFIG)  ||
+                        (UIController.instance().getState() instanceof CLASSIFIERAGENT_CONFIG  &&
                         RPnCurve.lista.get(GeometryUtil.closestCurve) instanceof HugoniotCurve)) {
 
                         int cont = ControlClick.xDevStr.size();
@@ -239,8 +239,8 @@ public class GeometryGraph3D {
 
 
                     //*** Para o botao Velocity
-                    if ((UIController.instance_.getState() instanceof CLASSIFIERAGENT_CONFIG)  ||
-                        (UIController.instance_.getState() instanceof VELOCITYAGENT_CONFIG  &&
+                    if ((UIController.instance().getState() instanceof CLASSIFIERAGENT_CONFIG)  ||
+                        (UIController.instance().getState() instanceof VELOCITYAGENT_CONFIG  &&
                         ((RPnCurve.lista.get(GeometryUtil.closestCurve) instanceof Orbit)  ||
                         (RPnCurve.lista.get(GeometryUtil.closestCurve) instanceof HugoniotCurve)))) {
 
@@ -324,7 +324,7 @@ public class GeometryGraph3D {
                 graph.draw(line7);
                 graph.draw(line8);
 
-                if (((ControlClick.ind % 2) == 0)  &&  (UIController.instance_.getState() instanceof AREASELECTION_CONFIG)) {
+                if (((ControlClick.ind % 2) == 0)  &&  (UIController.instance().getState() instanceof AREASELECTION_CONFIG)) {
                     g.setColor(corSquare);
                     graph.draw(square2);
                 }
@@ -344,7 +344,7 @@ public class GeometryGraph3D {
                 graph.draw(line8);
                 
                 if (GeometryUtil.zContido.size() != 0) {
-                    if (UIController.instance_.getState() instanceof AREASELECTION_CONFIG) {
+                    if (UIController.instance().getState() instanceof AREASELECTION_CONFIG) {
                         g.setColor(corSquare);
                         graph.draw(square2);
                     }
@@ -352,7 +352,7 @@ public class GeometryGraph3D {
 
             } else {
 
-                if (UIController.instance_.getState() instanceof AREASELECTION_CONFIG) {
+                if (UIController.instance().getState() instanceof AREASELECTION_CONFIG) {
                     g.setColor(cor12);
                     graph.draw(line1);
                     graph.draw(line2);
@@ -376,7 +376,7 @@ public class GeometryGraph3D {
                     double xMP = dcCoordsMP.getElement(1);
                     double yMP = dcCoordsMP.getElement(0);
 
-                    if (((ControlClick.ind % 2) == 0)  &&  (UIController.instance_.getState() instanceof CLASSIFIERAGENT_CONFIG)) {
+                    if (((ControlClick.ind % 2) == 0)  &&  (UIController.instance().getState() instanceof CLASSIFIERAGENT_CONFIG)) {
                         //g.setColor(corString);
 
                         //*** Analisar o que fazer caso o click seja no painel 2.
@@ -391,7 +391,7 @@ public class GeometryGraph3D {
                 //****************************
 
 
-                if (((ControlClick.ind % 2) == 0)  &&  (UIController.instance_.getState() instanceof AREASELECTION_CONFIG)) {
+                if (((ControlClick.ind % 2) == 0)  &&  (UIController.instance().getState() instanceof AREASELECTION_CONFIG)) {
                     g.setColor(cor56);
                     graph.draw(line5);
                     graph.draw(line6);
@@ -494,7 +494,7 @@ public class GeometryGraph3D {
         //***
 
         //** Testa inclusão na área de selecão.
-        if ((ControlClick.ind % 2) == 0  &&  (UIController.instance_.getState() instanceof AREASELECTION_CONFIG)) {
+        if ((ControlClick.ind % 2) == 0  &&  (UIController.instance().getState() instanceof AREASELECTION_CONFIG)) {
 
             square1 = new Rectangle2D.Double(v_s, u_s, Math.abs(v_i - v_s), Math.abs(u_i - u_s));
 
@@ -617,7 +617,7 @@ public class GeometryGraph3D {
                 z_i = (RPnPhaseSpacePanel.myW_ / (bdryMax.getElement(1) - bdryMin.getElement(1))) * (z_i - bdryMin.getElement(1));
             }
 
-            if ((ControlClick.ind % 2) == 0  &&  (UIController.instance_.getState() instanceof AREASELECTION_CONFIG)) {
+            if ((ControlClick.ind % 2) == 0  &&  (UIController.instance().getState() instanceof AREASELECTION_CONFIG)) {
                 square2 = new Rectangle2D.Double(z_s, u_s, Math.abs(z_i - z_s), Math.abs(u_i - u_s));
             }
 

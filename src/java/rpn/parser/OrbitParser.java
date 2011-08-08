@@ -21,46 +21,46 @@ public class OrbitParser implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         if (e.getActionCommand().equals("endOrbit")) {
-
-            try {
-
-                OrbitPoint[] orbitPoints = new OrbitPoint[RPnDataModule.InputHandler.orbitPointsList_.size()];
-                RPnDataModule.InputHandler.tempCoords_ = new CoordsArray[RPnDataModule.InputHandler.orbitPointsList_.size()];
-                for (int i = 0;
-                        i < RPnDataModule.InputHandler.tempCoords_.length; i++) {
-
-                    OrbitPoint point = (OrbitPoint) RPnDataModule.InputHandler.orbitPointsList_.get(i);
-                    orbitPoints[i] = point;
-
-                    RPnDataModule.InputHandler.tempCoords_[i] = new CoordsArray(point.getCoords());
-                }
-
-                RealVector coordsVector = new RealVector(RPnDataModule.InputHandler.tempCoords_[0].getCoords());
-
-                OrbitPoint oPoint = new OrbitPoint(coordsVector);
-                int direction;
-                if (OrbitParser.flag == 1) {
-                    direction = OrbitGeom.FORWARD_DIR;
-                } else {
-                    direction = OrbitGeom.BACKWARD_DIR;
-                }
-
-                OrbitGeomFactory factory = new OrbitGeomFactory(RPNUMERICS.createOrbitCalc(oPoint));
-                RPnDataModule.InputHandler.tempOrbit_ = new OrbitGeom(
-                        RPnDataModule.InputHandler.tempCoords_, factory);
-                RPnDataModule.ORBIT = new Orbit(orbitPoints,
-                        OrbitParser.flag);
-                RPnDataModule.InputHandler.orbitPointsList_.clear();
-
-                if (OrbitParser.plotOrbit) {
-                    RPnDataModule.PHASESPACE.join(RPnDataModule.InputHandler.tempOrbit_);
-                }
-                UIController.instance().setState(new GEOM_SELECTION());
-
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-
+//
+//            try {
+//
+//                OrbitPoint[] orbitPoints = new OrbitPoint[RPnDataModule.InputHandler.orbitPointsList_.size()];
+//                RPnDataModule.InputHandler.tempCoords_ = new CoordsArray[RPnDataModule.InputHandler.orbitPointsList_.size()];
+//                for (int i = 0;
+//                        i < RPnDataModule.InputHandler.tempCoords_.length; i++) {
+//
+//                    OrbitPoint point = (OrbitPoint) RPnDataModule.InputHandler.orbitPointsList_.get(i);
+//                    orbitPoints[i] = point;
+//
+//                    RPnDataModule.InputHandler.tempCoords_[i] = new CoordsArray(point.getCoords());
+//                }
+//
+//                RealVector coordsVector = new RealVector(RPnDataModule.InputHandler.tempCoords_[0].getCoords());
+//
+//                OrbitPoint oPoint = new OrbitPoint(coordsVector);
+//                int direction;
+//                if (OrbitParser.flag == 1) {
+//                    direction = OrbitGeom.FORWARD_DIR;
+//                } else {
+//                    direction = OrbitGeom.BACKWARD_DIR;
+//                }
+//
+//                OrbitGeomFactory factory = new OrbitGeomFactory(RPNUMERICS.createOrbitCalc(oPoint));
+//                RPnDataModule.InputHandler.tempOrbit_ = new OrbitGeom(
+//                        RPnDataModule.InputHandler.tempCoords_, factory);
+//                RPnDataModule.ORBIT = new Orbit(orbitPoints,
+//                        OrbitParser.flag);
+//                RPnDataModule.InputHandler.orbitPointsList_.clear();
+//
+//                if (OrbitParser.plotOrbit) {
+//                    RPnDataModule.PHASESPACE.join(RPnDataModule.InputHandler.tempOrbit_);
+//                }
+//                UIController.instance().setState(new GEOM_SELECTION());
+//
+//            } catch (Exception ex) {
+//                ex.printStackTrace();
+//            }
+//
         }
 
     }

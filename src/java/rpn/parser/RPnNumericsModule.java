@@ -143,9 +143,6 @@ public class RPnNumericsModule {
 
                     ContourConfiguration contourConfiguration = new ContourConfiguration(currentConfigurationProfile_);
                     RPNUMERICS.setConfiguration(contourConfiguration.getName(), contourConfiguration);
-
-
-
                 }
                 RPnConfig.addProfile(currentConfigurationProfile_.getName(), currentConfigurationProfile_);
 
@@ -162,8 +159,6 @@ public class RPnNumericsModule {
             if (data.length() != 0) {
                 if (currentElement_.equals("REALVECTOR")) {
                     tempVector_ = new RealVector(data);
-                    boundaryParamsArray_.add(tempVector_);
-
                 }
 
             }
@@ -174,15 +169,9 @@ public class RPnNumericsModule {
         }
 
         public void startDocument() throws SAXException {
-
-            System.out.println("Start Document  de Numerics");
-
         }
 
         public void endDocument() throws SAXException {
-            System.out.println("End Document  de Numerics");
-
-
         }
 
         public void startPrefixMapping(String prefix, String uri) throws SAXException {

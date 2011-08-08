@@ -34,11 +34,11 @@ public class RPNUMERICS {
     static private RpErrorControl errorControl_ = null;
     static private ODESolver odeSolver_ = null;
     static private ShockProfile shockProfile_ = ShockProfile.instance();
-    static private RarefactionProfile rarefactionProfile_ = RarefactionProfile.instance();
+//    static private RarefactionProfile rarefactionProfile_ = RarefactionProfile.instance();
     static private BifurcationProfile bifurcationProfile_ = BifurcationProfile.instance();
-    static private ShockRarefactionProfile shockRarefactionProfile_ = null;
+//    static private ShockRarefactionProfile shockRarefactionProfile_ = null;
     static private ContourConfiguration contourConfiguration_ = null;
-    static private Integer direction_=OrbitGeom.FORWARD_DIR;
+    static private Integer direction_ = OrbitGeom.FORWARD_DIR;
     //
     // Constructors/Initializers
     //
@@ -86,9 +86,13 @@ public class RPNUMERICS {
 
         ConfigurationProfile boundaryProfile = physicsProfile.getConfigurationProfile(ConfigurationProfile.BOUNDARY_PROFILE);
 
+//        System.out.println("Printando boundaryProfile: " + boundaryProfile);
+
 //        if (boundaryProfile.getParam("limits") != null) { //Catching boundary from input file
 
         if (boundaryProfile != null) { //Catching boundary from input file
+
+//            System.out.println("Pegando do arquivo de entrada");
 
             Configuration boundaryConfiguration = new Configuration(boundaryProfile);
 
@@ -97,30 +101,54 @@ public class RPNUMERICS {
                 RealVector min = new RealVector(new Integer(boundaryConfiguration.getParam("dimension")));
                 RealVector max = new RealVector(new Integer(boundaryConfiguration.getParam("dimension")));
 
-//                System.out.println("Printando limites: " + boundaryConfiguration.getParam("limits"));
+                System.out.println("Printando limites: " + boundaryConfiguration.getParam("limits"));
 
 
                 String[] limitsNumbers = boundaryConfiguration.getParam("limits").split(" ");
 
 
                 int vectorIndex = 0;
-                for (int i = 0; i < min.getSize(); i++) {
+                for (int i = 0; i < limitsNumbers.length / 2; i++) {
 
-                    min.setElement(i, new Double(limitsNumbers[vectorIndex]));
+                    min.setElement(vectorIndex, new Double(limitsNumbers[i]));
+                    vectorIndex++;
+                }
 
-                    vectorIndex += 2;
+                vectorIndex = 0;
+
+                for (int i = limitsNumbers.length / 2; i < limitsNumbers.length; i++) {
+
+                    max.setElement(vectorIndex, new Double(limitsNumbers[i]));
+
+                    vectorIndex++;
 
                 }
 
-                vectorIndex = 1;
 
-                for (int i = 0; i < max.getSize(); i++) {
 
-                    max.setElement(i, new Double(limitsNumbers[vectorIndex]));
 
-                    vectorIndex += 2;
 
-                }
+//                int vectorIndex = 0;
+//                for (int i = 0; i < min.getSize(); i++) {
+//
+//                    min.setElement(i, new Double(limitsNumbers[vectorIndex]));
+//
+//                    vectorIndex += 2;
+//
+//                }
+//
+//                vectorIndex = 1;
+//
+//                for (int i = 0; i < max.getSize(); i++) {
+//
+//                    max.setElement(i, new Double(limitsNumbers[vectorIndex]));
+//
+//                    vectorIndex += 2;
+//
+//                }
+
+                System.out.println("Valor de min: " + min);
+                System.out.println("Valor de max: " + max);
                 RectBoundary boundary = new RectBoundary(min, max);
                 setBoundary(boundary);
             }
@@ -152,11 +180,12 @@ public class RPNUMERICS {
                 }
 
                 defaultBoundaryProfile.addParam("limits", limits);
+                defaultBoundaryProfile.addParam("dimension", String.valueOf(min.getSize()));
 
-//                defaultBoundaryProfile.addParam("x-min", min.getElement(0) + "");
-//                defaultBoundaryProfile.addParam("y-min", min.getElement(1) + "");
-//                defaultBoundaryProfile.addParam("x-max", max.getElement(0) + "");
-//                defaultBoundaryProfile.addParam("y-max", max.getElement(1) + "");
+                defaultBoundaryProfile.addParam("x-min", min.getElement(0) + "");
+                defaultBoundaryProfile.addParam("y-min", min.getElement(1) + "");
+                defaultBoundaryProfile.addParam("x-max", max.getElement(0) + "");
+                defaultBoundaryProfile.addParam("y-max", max.getElement(1) + "");
 
                 physicsProfile.addConfigurationProfile(ConfigurationProfile.BOUNDARY_PROFILE, boundaryProfile);
 
@@ -326,31 +355,44 @@ public class RPNUMERICS {
     public static HugoniotCurveCalc createHugoniotCalc() {
 
         HugoniotCurveCalc hugoniotCurveCalc = null;
-        HugoniotParams hparams = new HugoniotParams(shockProfile_.getXZero(), new FluxFunction(getFluxParams()));
+        
+        RealVector teste = new RealVector(3);
+        
+        teste.setElement(0, 0.0);
+        teste.setElement(1, 0.0);
+        teste.setElement(2, 0.0);
 
-        ShockFlow shockFlow = (ShockFlow) createShockFlow();
+
+        return new HugoniotCurveCalcND(teste);
+
+        
+//        HugoniotParams hparams = new HugoniotParams(new PhasePoint(teste), new FluxFunction(getFluxParams()));
+
+
+
+//        ShockFlow shockFlow = (ShockFlow) createShockFlow();
         //Not specific
 
-        if (shockProfile_.getHugoniotMethodName().equals("Continuation")) {
+//        if (shockProfile_.getHugoniotMethodName().equals("Continuation")) {
+//
+//            GenericHugoniotFunction hugoniotFunction = new GenericHugoniotFunction(hparams);
+//
+//            HugoniotContinuationMethod method = new HugoniotContinuationMethod(hugoniotFunction, hparams, createODESolver(shockFlow));
+//
+//            hugoniotCurveCalc = new HugoniotCurveCalcND((HugoniotContinuationMethod) method);
+//
+//        }
+//
+//        if (shockProfile_.getHugoniotMethodName().equals("Contour")) {
+//
+//            HugoniotContourMethod contourMethod = new HugoniotContourMethod(hparams);
+//
+//            hugoniotCurveCalc = new HugoniotCurveCalcND(contourMethod);
+//
+//        }
+//        hugoniotCurveCalc.uMinusChangeNotify(shockProfile_.getUminus());
 
-            GenericHugoniotFunction hugoniotFunction = new GenericHugoniotFunction(hparams);
-
-            HugoniotContinuationMethod method = new HugoniotContinuationMethod(hugoniotFunction, hparams, createODESolver(shockFlow));
-
-            hugoniotCurveCalc = new HugoniotCurveCalcND((HugoniotContinuationMethod) method);
-
-        }
-
-        if (shockProfile_.getHugoniotMethodName().equals("Contour")) {
-
-            HugoniotContourMethod contourMethod = new HugoniotContourMethod(hparams);
-
-            hugoniotCurveCalc = new HugoniotCurveCalcND(contourMethod);
-
-        }
-        hugoniotCurveCalc.uMinusChangeNotify(shockProfile_.getUminus());
-
-        return hugoniotCurveCalc;
+//        return hugoniotCurveCalc;
     }
 
     public static RarefactionOrbitCalc createRarefactionCalc(OrbitPoint orbitPoint) {
@@ -363,36 +405,36 @@ public class RPNUMERICS {
 
     }
 
-    public static StationaryPointCalc createStationaryPointCalc(PhasePoint initial) {
+//    public static StationaryPointCalc createStationaryPointCalc(PhasePoint initial) {
+//
+//        ShockFlow shockFlow = createShockFlow();
+//        createODESolver((WaveFlow) shockFlow);
+//
+//        return new StationaryPointCalc(initial, shockFlow);
+//
+//    }
 
-        ShockFlow shockFlow = createShockFlow();
-        createODESolver((WaveFlow) shockFlow);
+//    public static ManifoldOrbitCalc createManifoldCalc(StationaryPoint statPoint, PhasePoint initialPoint, int timeDirection) {
+//        ShockFlow shockFlow = (ShockFlow) createShockFlow();
+//        return new ManifoldOrbitCalc(statPoint, initialPoint, shockFlow, timeDirection);
+//
+//    }
 
-        return new StationaryPointCalc(initial, shockFlow);
+//    public static ConnectionOrbitCalc createConnectionOrbitCalc(ManifoldOrbit manifoldA, ManifoldOrbit manifoldB) {
+//
+//        ShockFlow shockFlow = (ShockFlow) createShockFlow();
+//
+//        return new ConnectionOrbitCalc(manifoldA, manifoldB, shockFlow);
+//
+//
+//    }
 
-    }
-
-    public static ManifoldOrbitCalc createManifoldCalc(StationaryPoint statPoint, PhasePoint initialPoint, int timeDirection) {
-        ShockFlow shockFlow = (ShockFlow) createShockFlow();
-        return new ManifoldOrbitCalc(statPoint, initialPoint, shockFlow, timeDirection);
-
-    }
-
-    public static ConnectionOrbitCalc createConnectionOrbitCalc(ManifoldOrbit manifoldA, ManifoldOrbit manifoldB) {
-
-        ShockFlow shockFlow = (ShockFlow) createShockFlow();
-
-        return new ConnectionOrbitCalc(manifoldA, manifoldB, shockFlow);
-
-
-    }
-
-    public static OrbitCalc createOrbitCalc(OrbitPoint orbitPoint) {
-
-        ShockFlow flow = (ShockFlow) createShockFlow();
-        return new OrbitCalc(orbitPoint, direction_, createODESolver(flow));
-
-    }
+//    public static OrbitCalc createOrbitCalc(OrbitPoint orbitPoint) {
+//
+//        ShockFlow flow = (ShockFlow) createShockFlow();
+//        return new OrbitCalc(orbitPoint, direction_, createODESolver(flow));
+//
+//    }
 
     public static DoubleContactCurveCalc createDoubleContactCurveCalc() {
 
@@ -437,7 +479,7 @@ public class RPNUMERICS {
         System.out.println("Resolucao em Java:" + xResolution + " " + yResolution);
 
 
-        return new ExtensionCurveCalc(xResolution, yResolution, edgeResolution,new Integer(getParamValue("extensioncurve", "curvefamily")), new Integer(getParamValue("extensioncurve", "domainfamily")), edge, characteristicWhere);
+        return new ExtensionCurveCalc(xResolution, yResolution, edgeResolution, new Integer(getParamValue("extensioncurve", "curvefamily")), new Integer(getParamValue("extensioncurve", "domainfamily")), edge, characteristicWhere);
 
     }
 
@@ -497,24 +539,24 @@ public class RPNUMERICS {
         return new CompositeCalc(xResolution, yResolution, orbitPoint, direction_, curveFamily, domainFamily, characteristicDomain);
     }
 
-    public static ShockFlow createShockFlow() {
-
-        RPNUMERICS.getShockProfile().setFlowName((String) PluginTableModel.instance().getValueAt(0, 2));
-
-        RPNUMERICS.setCurrentProfile(RPNUMERICS.getShockProfile());
-
-        FluxFunction flux = new FluxFunction(getFluxParams());
-
-        PluginProfile profile = PluginTableModel.getPluginConfig(ShockProfile.SHOCKFLOW_NAME);
-
-        Double sigmaValue = new Double(profile.getParamValue("sigma"));
-
-        ShockFlowParams shockParams = new ShockFlowParams(shockProfile_.getXZero(), sigmaValue.doubleValue());
-
-        ShockFlow flow = new ShockFlow(shockParams, flux);
-        return flow;
-
-    }
+//    public static ShockFlow createShockFlow() {
+//
+//        RPNUMERICS.getShockProfile().setFlowName((String) PluginTableModel.instance().getValueAt(0, 2));
+//
+//        RPNUMERICS.setCurrentProfile(RPNUMERICS.getShockProfile());
+//
+//        FluxFunction flux = new FluxFunction(getFluxParams());
+//
+//        PluginProfile profile = PluginTableModel.getPluginConfig(ShockProfile.SHOCKFLOW_NAME);
+//
+//        Double sigmaValue = new Double(profile.getParamValue("sigma"));
+//
+//        ShockFlowParams shockParams = new ShockFlowParams(shockProfile_.getXZero(), sigmaValue.doubleValue());
+//
+//        ShockFlow flow = new ShockFlow(shockParams, flux);
+//        return flow;
+//
+//    }
 
     public static ShockFlow createShockFlow(ShockFlowParams shockFlowParams) {
         ShockFlow flow = new ShockFlow(shockFlowParams, new FluxFunction(getFluxParams()));
@@ -559,23 +601,23 @@ public class RPNUMERICS {
     // Accessors
     //
 
-    public static void setCurrentProfile(ShockRarefactionProfile aShockRarefactionProfile_) {
-        shockRarefactionProfile_ = aShockRarefactionProfile_;
-    }
+//    public static void setCurrentProfile(ShockRarefactionProfile aShockRarefactionProfile_) {
+//        shockRarefactionProfile_ = aShockRarefactionProfile_;
+//    }
 
-    public static ShockRarefactionProfile getCurrentProfile() {
-
-
-        return shockRarefactionProfile_;
-    }
+//    public static ShockRarefactionProfile getCurrentProfile() {
+//
+//
+//        return shockRarefactionProfile_;
+//    }
 
     public static ShockProfile getShockProfile() {
         return shockProfile_;
     }
 
-    public static RarefactionProfile getRarefactionProfile() {
-        return rarefactionProfile_;
-    }
+//    public static RarefactionProfile getRarefactionProfile() {
+//        return rarefactionProfile_;
+//    }
 
     public static BifurcationProfile getBifurcationProfile() {
         return bifurcationProfile_;

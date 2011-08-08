@@ -16,7 +16,7 @@ public class BifurcationSegGeom extends MultiPolyLine {
 
     public BifurcationSegGeom(HugoniotSegment hsegment) {
 
-        super(new CoordsArray[]{new CoordsArray(hsegment.p1()), new CoordsArray(hsegment.p2())}, new ViewingAttr(selectColor(hsegment)));
+        super(new CoordsArray[]{new CoordsArray(hsegment.p1()), new CoordsArray(hsegment.p2())}, new ViewingAttr(Color.white));
 
     }
 

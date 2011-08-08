@@ -124,6 +124,8 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
 
             rpnUIFrame_ = new RPnUIFrame(plotter);
 
+
+
             rpnUIFrame_.pack();
 
             rpnUIFrame_.setVisible(true);

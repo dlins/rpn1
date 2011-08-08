@@ -7,6 +7,7 @@
 
 package rpn.component;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -77,12 +78,13 @@ class CoincidenceExtensionCurveGeomView implements GeomObjView{
   //Original update method
 
   public void update() {
-
+      System.out.println("Chamando update de extension coincidence");
 
     viewList_.clear();
     Iterator geomListIterator = ( (CoincidenceExtensionCurveGeom) abstractGeom_).getBifurcationSegmentsIterator();
     while (geomListIterator.hasNext()) {
       BifurcationSegGeom geomObj = (BifurcationSegGeom) geomListIterator.next();
+      geomObj.viewingAttr().setColor(CoincidenceExtensionCurveGeom.COLOR);
       try {
         viewList_.add(geomObj.createView(getViewingTransform()));
       }

@@ -5,7 +5,6 @@
  */
 package rpn.component;
 
-import java.util.List;
 import rpn.RPnDesktopPlotter;
 import rpn.controller.RpCalcController;
 import rpn.controller.RpController;
@@ -58,6 +57,14 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
 
         StringBuffer buffer = new StringBuffer();
 
+
+
+
+        int red = CoincidenceExtensionCurveGeom.COLOR.getRed();
+        int blue = CoincidenceExtensionCurveGeom.COLOR.getBlue();
+        int green = CoincidenceExtensionCurveGeom.COLOR.getGreen();
+
+
         buffer.append("toc=[");
 
         double toc[][] = {{128, 128, 128}, //*** tipo 0 ao tipo 15 = para segmentos de Hugoniot
@@ -80,7 +87,7 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
             {20, 43, 140}, // tipo 17 = Coincidence
             {0, 255, 0}, // tipo 18 = {uma parte de Double Contact, BuckleyLeverettin}
             {248, 17, 47}, // tipo 19 = a outra parte de Double Contact
-            {0, 153, 153} // tipo 20 = {Coincidence Extension, SubInflection Extension, Boundary Extension}
+            {red, green, blue} // tipo 20 = {Coincidence Extension, SubInflection Extension, Boundary Extension}
         };
 
 

@@ -6,6 +6,7 @@
 
 package rpn.component;
 
+import java.awt.Color;
 import wave.multid.model.*;
 import wave.multid.view.*;
 import wave.multid.DimMismatchEx;
@@ -83,6 +84,7 @@ public class SubInflectionExtensionCurveView
     Iterator geomListIterator = ( (SubInflectionExtensionCurveGeom) abstractGeom_).getBifurcationSegmentsIterator();
     while (geomListIterator.hasNext()) {
       BifurcationSegGeom geomObj = (BifurcationSegGeom) geomListIterator.next();
+      geomObj.viewingAttr().setColor(SubInflectionExtensionCurveGeom.COLOR);
       try {
         viewList_.add(geomObj.createView(getViewingTransform()));
       }

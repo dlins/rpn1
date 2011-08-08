@@ -17,8 +17,8 @@ public class SubInflectionCurveCalc implements RpCalculation {
     }
 
     public RpSolution recalc() throws RpException {
-
-        return calc();
+return null;
+//        return calc();
 
     }
 

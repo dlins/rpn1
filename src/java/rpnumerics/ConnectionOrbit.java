@@ -36,14 +36,14 @@ public class ConnectionOrbit extends RPnCurve implements RpSolution {
 
         OrbitPoint centerOPoint = orbit_.getPoints()[0];
         RealVector center = new RealVector(centerOPoint.getCoords());
-        ShockFlow flow = (ShockFlow) RPNUMERICS.createShockFlow();
+//        ShockFlow flow = (ShockFlow) RPNUMERICS.createShockFlow();
 
 //        WaveState input = new WaveState(new PhasePoint(center));
 //        JetMatrix output = new JetMatrix(center.getSize());
 //
 //        flow.jet(input, output, 0);
 
-        RealVector fCenter = flow.flux(center);
+//        RealVector fCenter = flow.flux(center);
         
         
 
@@ -57,15 +57,16 @@ public class ConnectionOrbit extends RPnCurve implements RpSolution {
 //            
 //            flow.jet(in, output, 0);
 //            RealVector nextFCenter = flow.flux(nextCenter);
-            RealVector nextFCenter = flow.flux(nextCenter);
+//            RealVector nextFCenter = flow.flux(nextCenter);
 //            RealVector nextFCenter = RPNUMERICS.flow().flux(nextCenter);
-            if (fCenter.norm() < nextFCenter.norm()) {
-                fCenter.set(nextFCenter);
-                center.set(nextCenter);
-            }
-        }
+//            if (fCenter.norm() < nextFCenter.norm()) {
+//                fCenter.set(nextFCenter);
+//                center.set(nextCenter);
+//            }
+       }
         return center;
     }
+
 
     public int findClosestSegment(RealVector point, double alpha) {
         return 0;

@@ -39,7 +39,7 @@ public class ExtensionCurveGeomFactory extends BifurcationCurveGeomFactory {
 
         StringBuffer buffer = new StringBuffer();
 
-        buffer.append("<COMMAND name=\"boundaryextension\"/>\n");
+        buffer.append("<COMMAND name=\"boundaryextension\">\n");
 
         buffer.append(((BifurcationCurve)geomSource()).toXML());
 

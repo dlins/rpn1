@@ -26,7 +26,7 @@ public abstract class SegmentedCurveGeom implements MultiGeometry, RpGeometry {
     protected  BoundingBox boundary_;
     private List<HugoniotSegGeom> hugoniotSegList_;
     private RpGeomFactory factory_;
-    public  ViewingAttr VIEWING_ATTR = new ViewingAttr(Color.white);
+    protected  ViewingAttr VIEWING_ATTR = new ViewingAttr(Color.white);
 
     public SegmentedCurveGeom(HugoniotSegGeom[] segArray, RpGeomFactory factory) {
 

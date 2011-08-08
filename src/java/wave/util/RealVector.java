@@ -3,70 +3,75 @@
  * Departamento de Dinamica dos Fluidos
  *
  */
-
 package wave.util;
 
+import java.math.RoundingMode;
+import java.text.NumberFormat;
 import javax.vecmath.GVector;
 import java.util.StringTokenizer;
 
-
 public class RealVector extends GVector {
-    public RealVector(int size) { super(size); }
 
-    public RealVector(RealVector copy) { super(copy); }
+    public RealVector(int size) {
+        super(size);
+    }
 
-    public RealVector(double[] v) { super(v); }
+    public RealVector(RealVector copy) {
+        super(copy);
+    }
 
+    public RealVector(double[] v) {
+        super(v);
+    }
 
-     public RealVector (String data) {
-         super (fromString(data));
-     }
+    public RealVector(String data) {
+        super(fromString(data));
+    }
 
     //
     // Methods
     //
-
     @Override
     public String toString() {
+        StringBuffer buffer = new StringBuffer();
+        NumberFormat numberFormatter = NumberFormat.getInstance();
+        numberFormatter.setMaximumFractionDigits(4);
 
+        for (int i = 0; i < this.getSize(); i++) {
+            Double element = new Double(numberFormatter.format(getElement(i)));
+            buffer.append(element+" ");
+        }
+        return buffer.toString().trim();
+
+
+    }
+
+    public String toXML() {
 
         StringBuffer buffer = new StringBuffer();
-
-        for (int i=0; i < this.getSize();i++){
-
-            buffer.append(getElement(i)+" ");
-
-        }
+        buffer.append("<REALVECTOR dimension=\"" + getSize() + "\">");
+        buffer.append(toString());
+        buffer.append("</REALVECTOR>\n");
         return buffer.toString();
-
-
     }
 
-    public String toXML(){
-
-      StringBuffer buffer = new StringBuffer();
-      buffer.append("<REALVECTOR dimension=\"" + getSize()+"\">");
-      buffer.append(toString());
-      buffer.append("</REALVECTOR>\n");
-      return buffer.toString();
-    }
-
-    private static double [] fromString(String data) {
+    private static double[] fromString(String data) {
 
         StringTokenizer tokenizer = new StringTokenizer(data);
         double doubleList[] = new double[tokenizer.countTokens()];
         int i = 0;
         while (tokenizer.hasMoreTokens()) {
+
+
             doubleList[i++] = (new Double(tokenizer.nextToken())).doubleValue();
         }
 
-        return  (doubleList);
+        return (doubleList);
 
     }
 
-
     public void sort() {
-        for (int i = getSize(); --i >= 0; ) {
+        for (int i = getSize(); --i >= 0;) {
             for (int j = 0; j < i; j++) {
                 if (getElement(j) > getElement(j + 1)) {
                     double swap = getElement(j);
@@ -77,50 +82,49 @@ public class RealVector extends GVector {
         }
     }
 
+    public boolean equals(RealVector test) {
 
-    public boolean equals (RealVector test ){
-
-      if (test.getSize()!=this.getSize()){
-        return false;
-      }
-
-      for (int i=0;i < test.getSize();i++){
-
-        if (this.getElement(i)!=test.getElement(i)){
-
-          return false;
+        if (test.getSize() != this.getSize()) {
+            return false;
         }
-      }
 
-      return true;
+        for (int i = 0; i < test.getSize(); i++) {
+
+            if (this.getElement(i) != test.getElement(i)) {
+
+                return false;
+            }
+        }
+
+        return true;
 
 
     }
 
-
-
-
-static public void sortEigenData(int n, double[] eigenValR, double[] eigenValI, RealVector[] eigenVec) {
+    static public void sortEigenData(int n, double[] eigenValR, double[] eigenValI, RealVector[] eigenVec) {
         int i = 0;
         int d1, d2, j;
         boolean bool = true;
         RealVector[] sortVec = new RealVector[4];
-        for (i = 0; i < 4; i++)
+        for (i = 0; i < 4; i++) {
             sortVec[i] = new RealVector(n);
-        double[] sortSpaceR = {0,0,0,0};
-        double[] sortSpaceI = {0,0,0,0};
+        }
+        double[] sortSpaceR = {0, 0, 0, 0};
+        double[] sortSpaceI = {0, 0, 0, 0};
         while (bool) {
             bool = false;
             i = 0;
-            if (eigenValI[i] != 0)
+            if (eigenValI[i] != 0) {
                 d1 = 2;
-            else
+            } else {
                 d1 = 1;
+            }
             while (i + d1 < n) {
-                if (eigenValI[i + d1] != 0)
+                if (eigenValI[i + d1] != 0) {
                     d2 = 2;
-                else
+                } else {
                     d2 = 1;
+                }
                 if (eigenValR[i] > eigenValR[i + d1]) {
                     bool = true;
                     for (j = 0; j < d2; j++) {
@@ -139,8 +143,7 @@ static public void sortEigenData(int n, double[] eigenValR, double[] eigenValI, 
                         eigenVec[i + j] = sortVec[j];
                     }
                     i = i + d2;
-                }
-                else {
+                } else {
                     i = i + d1;
                     d1 = d2;
                 }
@@ -148,53 +151,49 @@ static public void sortEigenData(int n, double[] eigenValR, double[] eigenValI, 
         }
     }
 
+    public double[] toDouble() {
 
+        int i, lenData;
 
-    public  double[] toDouble(){
+        double data[];
 
-	int i,lenData;
+        lenData = getSize();
 
-	double data [];
+        data = new double[lenData];
 
-	lenData=getSize();
+        for (i = 0; i < lenData; i++) {
 
-	data = new double[lenData];
+            data[i] = getElement(i);
+        }
 
-	for ( i=0; i< lenData; i++){
-
-	    data[i]=getElement(i);
-	}
-
-	return data;
+        return data;
 
     }
 
+    public float[] toFloat() {
 
-    public float[] toFloat(){
+        int i, lenData;
 
-	int i,lenData;
+        float[] data;
+        double[] doubleData;
 
-	float [] data;
-	double [] doubleData;
+        Double tempData;
 
-	Double tempData;
+        doubleData = toDouble();
 
-	doubleData=toDouble();
+        lenData = getSize();
 
-	lenData=getSize();
+        data = new float[lenData];
 
-	data= new float[lenData];
+        for (i = 0; i < lenData; i++) {
 
-	for (i=0;i < lenData;i++){
+            tempData = new Double(doubleData[i]);
+            data[i] = tempData.floatValue();
 
-	    tempData = new Double(doubleData[i]);
-	    data[i]=tempData.floatValue();
-
-	}
+        }
 
 
-	return data;
+        return data;
 
     }
-
 }

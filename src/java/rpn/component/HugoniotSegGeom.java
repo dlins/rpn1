@@ -10,7 +10,6 @@ import wave.multid.model.*;
 import wave.multid.view.*;
 import wave.multid.*;
 import java.awt.Color;
-import rpn.RPnPhaseSpacePanel;
 
 public class HugoniotSegGeom extends MultiPolyLine {
 
@@ -117,7 +116,7 @@ public class HugoniotSegGeom extends MultiPolyLine {
 
 
         //TODO SubInflection Curve segment type .
-        if (segment.getType() == 16) {                                          
+        if (segment.getType() == 16) {
             attr = new ViewingAttr(new Color(243, 123, 46));
 
         }
@@ -125,13 +124,13 @@ public class HugoniotSegGeom extends MultiPolyLine {
 
         //TODO Coincidence Curve segment type
         if (segment.getType() == 17) {
-            attr = new ViewingAttr(new Color(20, 43, 140));                 
+            attr = new ViewingAttr(new Color(20, 43, 140));
 
         }
 
 
         //TODO  BuckleyLeverettinflection Curve segment type
-        if (segment.getType() == 18) {                                          // está verde     //ok para BL
+        if (segment.getType() == 18) {                                        
             attr = new ViewingAttr(new Color(0, 255, 0));
 
         }

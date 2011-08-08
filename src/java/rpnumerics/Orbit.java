@@ -260,6 +260,10 @@ public class Orbit extends RPnCurve implements RpSolution {
         return (OrbitPoint) points_[points_.length - 1];
     }
 
+    public OrbitPoint firstPoint(){
+        return (OrbitPoint) points_[0];
+    }
+
     public int getIntegrationFlag() {
         return intFlag_;
     }

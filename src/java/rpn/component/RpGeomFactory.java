@@ -6,7 +6,6 @@
 
 package rpn.component;
 
-import java.util.List;
 import rpn.controller.RpController;
 
 /** This interface declares aditional methods to manipulate the geometric models. Each geometric model has a geometric visual form associated , this class declares methods to handle the model part of the pair model/visual form. */

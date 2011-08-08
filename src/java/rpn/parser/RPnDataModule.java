@@ -25,7 +25,18 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.XMLReader;
 import rpn.component.RpCalcBasedGeomFactory;
 import rpn.component.RpGeometry;
+import rpn.usecase.BuckleyLeverettiInflectionAgent;
+import rpn.usecase.CoincidenceExtensionCurvePlotAgent;
+import rpn.usecase.CoincidencePlotAgent;
+import rpn.usecase.DoubleContactAgent;
+import rpn.usecase.ExtensionCurveAgent;
+import rpn.usecase.HugoniotPlotAgent;
+import rpn.usecase.RarefactionOrbitPlotAgent;
+import rpn.usecase.ShockCurvePlotAgent;
+import rpn.usecase.SubInflectionExtensionCurveAgent;
+import rpn.usecase.SubInflectionPlotAgent;
 import rpnumerics.HugoniotCurve;
+import rpnumerics.HugoniotSegment;
 import rpnumerics.PhasePoint;
 import rpnumerics.Orbit;
 import rpnumerics.OrbitPoint;
@@ -55,7 +66,8 @@ public class RPnDataModule {
         // for PoincareData
 
         protected static ArrayList pPointList_, orbitPointsList_, vectorList_;
-        protected static List segmentList_;
+        protected static List<HugoniotSegment> hugoniotSegmentsList_;
+        protected static List<RealSegment> realSegmentsList_;
         private String currentElement_;
         protected static RealMatrix2 tempMatrix_;
         protected static RealVector tempVector_, point1_, point2_;
@@ -76,6 +88,7 @@ public class RPnDataModule {
         private ShockFlowParser shockFlowParser_;
         private ManifoldCalcParser manifoldCalcParser_;
         protected static boolean pointOneOK_, calcReady_, plotProfile_;
+        private String currentCommand_;
 
         public InputHandler() {
             orbitListener_ = new OrbitParser();
@@ -91,7 +104,8 @@ public class RPnDataModule {
 
 
             pPointList_ = new ArrayList();
-            segmentList_ = new ArrayList();
+            hugoniotSegmentsList_ = new ArrayList();
+            realSegmentsList_ = new ArrayList();
             vectorList_ = new ArrayList();
             orbitPointsList_ = new ArrayList();
             ManifoldParser.manifoldNumber = 0;
@@ -120,8 +134,30 @@ public class RPnDataModule {
         @Override
         public void startElement(String uri, String name, String qName, Attributes att) throws
                 SAXException {
-
             currentElement_ = name;
+
+
+            if (name.equalsIgnoreCase("COMMAND")) {
+                currentCommand_ = att.getValue(0);
+
+                if (currentCommand_.equalsIgnoreCase("hugoniot")
+                        || currentCommand_.equalsIgnoreCase("rarefactionforward")
+                        || currentCommand_.equalsIgnoreCase("rarefactionbackward")
+                        || currentCommand_.equalsIgnoreCase("rarefactionboth")
+                        || currentCommand_.equalsIgnoreCase("shockboth")
+                        || currentCommand_.equalsIgnoreCase("shockforward")
+                        || currentCommand_.equalsIgnoreCase("shockbackward")) {//Rarefaction Forward command)
+
+
+                    tempPoint_ = new PhasePoint(new RealVector(att.getValue(1)));
+                    hugoniotSegmentsList_.clear();
+
+                }
+
+
+                System.out.println("Current command" + currentCommand_);
+
+            }
 
 
             if (name.equals("STATPOINT")) {
@@ -198,15 +234,32 @@ public class RPnDataModule {
 
             }
 
+
+            if (name.equals("HUGONIOTSEGMENT")) {
+
+                RealVector leftPoint = new RealVector(att.getValue(0));
+                RealVector rightPoint = new RealVector(att.getValue(1));
+
+                double leftSigma = new Double(att.getValue(2));
+                double rightSigma = new Double(att.getValue(3));
+
+                int type = new Integer(4);
+
+
+                HugoniotSegment segment = new HugoniotSegment(leftPoint, leftSigma, rightPoint, rightSigma, type);
+
+                hugoniotSegmentsList_.add(segment);
+
+            }
+
             if (name.equals("HUGONIOTCURVE")) {
 
-                segmentList_.clear();
+                hugoniotSegmentsList_.clear();
             }
 
             if (name.equals("PHASEPOINT")) {
                 phaseSize_ = (new Integer(att.getValue(0))).intValue();
                 tempVector_ = new RealVector(phaseSize_);
-
             }
             if (name.equals("REALSEGMENT")) {
                 pointOneOK_ = false;
@@ -242,11 +295,7 @@ public class RPnDataModule {
 
             try {
                 String data = new String(buff, offset, len);
-
-//        System.out.println("String pega no parser: "+ data);
-
                 data = data.trim();
-
                 if (data.length() != 0) {
 
                     if (currentElement_.equals("PHASEPOINT")) {
@@ -301,7 +350,9 @@ public class RPnDataModule {
 
                 }
             } catch (NumberFormatException ex) {
-                System.out.println("Erro de formato!");
+                System.out.println("Erro de formato! " + ex.getMessage());
+                ex.printStackTrace();
+
             }
 
         }
@@ -309,9 +360,173 @@ public class RPnDataModule {
         @Override
         public void endElement(String uri, String name, String qName) throws SAXException {
 
+
+            if (name.equalsIgnoreCase("COMMAND")) {
+
+
+                if (currentCommand_.equalsIgnoreCase("hugoniot")) {//Hugoniot command
+
+                    System.out.println("Valor de tempPoint: " + tempPoint_);
+
+                    RealVector[] inputArray = new RealVector[1];
+
+                    inputArray[0] = new RealVector(tempPoint_.getCoords());
+
+                    RpGeometry geometry = HugoniotPlotAgent.instance().createRpGeometry(inputArray);
+
+                    PHASESPACE.join(geometry);
+
+                }
+
+
+                if (currentCommand_.equalsIgnoreCase("rarefactionforward")) {//Rarefaction Forward command
+
+                    System.out.println("Valor de tempPoint: " + tempPoint_);
+
+                    RealVector[] inputArray = new RealVector[1];
+
+                    inputArray[0] = new RealVector(tempPoint_.getCoords());
+
+                    RPNUMERICS.setDirection(OrbitGeom.FORWARD_DIR);
+
+                    RpGeometry geometry = RarefactionOrbitPlotAgent.instance().createRpGeometry(inputArray);
+
+                    PHASESPACE.join(geometry);
+
+                }
+
+
+
+
+                if (currentCommand_.equalsIgnoreCase("rarefactionbackward")) {//Rarefaction Backward command
+
+                    System.out.println("Valor de tempPoint: " + tempPoint_);
+
+                    RealVector[] inputArray = new RealVector[1];
+
+                    inputArray[0] = new RealVector(tempPoint_.getCoords());
+
+                    RPNUMERICS.setDirection(OrbitGeom.BACKWARD_DIR);
+
+                    RpGeometry geometry = RarefactionOrbitPlotAgent.instance().createRpGeometry(inputArray);
+
+                    PHASESPACE.join(geometry);
+
+                }
+
+
+                if (currentCommand_.equalsIgnoreCase("rarefactionboth")) {//Rarefaction Forward Backward command
+
+                    System.out.println("Valor de tempPoint: " + tempPoint_);
+
+                    RealVector[] inputArray = new RealVector[1];
+
+                    inputArray[0] = new RealVector(tempPoint_.getCoords());
+
+                    RPNUMERICS.setDirection(OrbitGeom.BOTH_DIR);
+
+                    RpGeometry geometry = RarefactionOrbitPlotAgent.instance().createRpGeometry(inputArray);
+
+                    PHASESPACE.join(geometry);
+
+                }
+
+
+
+                if (currentCommand_.equalsIgnoreCase("shockboth")) {//Shock Forward Backward command
+
+                    System.out.println("Valor de tempPoint: " + tempPoint_);
+
+                    RealVector[] inputArray = new RealVector[1];
+
+                    inputArray[0] = new RealVector(tempPoint_.getCoords());
+
+                    RPNUMERICS.setDirection(OrbitGeom.BOTH_DIR);
+
+                    RpGeometry geometry = ShockCurvePlotAgent.instance().createRpGeometry(inputArray);
+
+                    PHASESPACE.join(geometry);
+
+                }
+
+                if (currentCommand_.equalsIgnoreCase("shockforward")) {//Shock Forward  command
+
+                    System.out.println("Valor de tempPoint: " + tempPoint_);
+
+                    RealVector[] inputArray = new RealVector[1];
+
+                    inputArray[0] = new RealVector(tempPoint_.getCoords());
+
+                    RPNUMERICS.setDirection(OrbitGeom.FORWARD_DIR);
+
+                    RpGeometry geometry = ShockCurvePlotAgent.instance().createRpGeometry(inputArray);
+
+                    PHASESPACE.join(geometry);
+
+                }
+
+                if (currentCommand_.equalsIgnoreCase("shockbackward")) {//Shock Backward command
+
+                    System.out.println("Valor de tempPoint: " + tempPoint_);
+
+                    RealVector[] inputArray = new RealVector[1];
+
+                    inputArray[0] = new RealVector(tempPoint_.getCoords());
+
+                    RPNUMERICS.setDirection(OrbitGeom.BACKWARD_DIR);
+
+                    RpGeometry geometry = ShockCurvePlotAgent.instance().createRpGeometry(inputArray);
+
+                    PHASESPACE.join(geometry);
+
+                }
+
+
+
+                if (currentCommand_.equalsIgnoreCase("coincidence")) {//Coincidence command
+
+
+                    CoincidencePlotAgent.instance().actionPerformed(new ActionEvent(this, 0, "plot"));
+                }
+
+                if (currentCommand_.equalsIgnoreCase("subinflection")) {//Subinflection command
+
+                    SubInflectionPlotAgent.instance().actionPerformed(new ActionEvent(this, 0, "plot"));
+
+                }
+
+                if (currentCommand_.equalsIgnoreCase("buckleylevertti")) {//BuckleyLevertti command
+
+                    BuckleyLeverettiInflectionAgent.instance().actionPerformed(new ActionEvent(this, 0, "plot"));
+                }
+
+                if (currentCommand_.equalsIgnoreCase("doublecontact")) {//DoubleContact command
+                    DoubleContactAgent.instance().actionPerformed(new ActionEvent(this, 0, "plot"));
+
+                }
+
+                if (currentCommand_.equalsIgnoreCase("boundaryextension")) {//BoundaryExtension command
+                    ExtensionCurveAgent.instance().actionPerformed(new ActionEvent(this, 0, "plot"));
+                }
+
+
+                if (currentCommand_.equalsIgnoreCase("subinflectionextension")) {//Subinflection command
+
+                    SubInflectionExtensionCurveAgent.instance().actionPerformed(new ActionEvent(this, 0, "plot"));
+
+                }
+
+
+                if (currentCommand_.equalsIgnoreCase("coincidenceextension")) {//Subinflection command
+
+                    CoincidenceExtensionCurvePlotAgent.instance().actionPerformed(new ActionEvent(this, 0, "plot"));
+
+                }
+            }
+
             if (name.equals("HUGONIOTCURVE")) {
                 try {
-                    hugoniotCurve_ = new HugoniotCurve(XZERO, segmentList_);
+                    hugoniotCurve_ = new HugoniotCurve(XZERO, hugoniotSegmentsList_);
 
                     hugolistener_.actionPerformed(new ActionEvent(this, 0,
                             "endHugoniotCurve"));
@@ -360,7 +575,7 @@ public class RPnDataModule {
             }
             if (name.equals("REALSEGMENT")) {
 
-                segmentList_.add(new RealSegment(point1_, point2_));
+                hugoniotSegmentsList_.add(new HugoniotSegment(point1_, 0, point2_, 0, 17));//TODO Use RealSegment or another typeless segment
             }
 
             if (name.equals("ORBITPOINT")) {
@@ -496,16 +711,16 @@ public class RPnDataModule {
 //
 //        int i = 0;
 //
-        while(iterator.hasNext()){
+        while (iterator.hasNext()) {
             writer.write(iterator.next().geomFactory().toXML());
         }
 
-        
+
     }
 
     static public void matlabExport(FileWriter writer) throws java.io.IOException {
 
-       
+
         Iterator<RpGeometry> iterator = PHASESPACE.getGeomObjIterator();
         writer.write("close all; clear all;\n");
         writer.write(RpCalcBasedGeomFactory.createMatlabColorTable());

@@ -38,7 +38,7 @@ public class ExtensionCurveAgent extends RpModelPlotAgent {
     public void actionPerformed(ActionEvent event) {
 
         UI_ACTION_SELECTED action = new UI_ACTION_SELECTED(this);
-        UIController.instance().setState(new BIFURCATION_CONFIG());
+//        UIController.instance().setState(new BIFURCATION_CONFIG());
 
         action.userInputComplete(UIController.instance());// No input needed
 

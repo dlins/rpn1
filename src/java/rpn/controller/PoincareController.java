@@ -31,12 +31,12 @@ public class PoincareController implements RpController {
             ConnectionOrbit connOrbit = (ConnectionOrbit) profileHolder.connectionGeom().geomFactory().geomSource();
             RealVector center = connOrbit.orbitCenter();
 //            RealVector normal = rpnumerics.RPNUMERICS.flow().flux(center);
-            ShockFlow flow = (ShockFlow) RPNUMERICS.createShockFlow();
+//            ShockFlow flow = (ShockFlow) RPNUMERICS.createShockFlow();
             
-            RealVector normal = flow.flux(center);
+//            RealVector normal = flow.flux(center);
 //            RealVector normal = flow.flux(center);//rpnumerics.RPNUMERICS.flow().flux(center);
 
-            ((SimplexPoincareSection) geomFactory_.geomSource()).shift(center, normal);
+//            ((SimplexPoincareSection) geomFactory_.geomSource()).shift(center, normal);
 
             geomFactory_.updateGeom();
 

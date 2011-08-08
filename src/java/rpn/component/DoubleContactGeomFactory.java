@@ -104,7 +104,7 @@ public class DoubleContactGeomFactory extends BifurcationCurveGeomFactory {
 
         BifurcationCurve curve = (BifurcationCurve) geomSource();
 
-        buffer.append("<COMMAND name=\"doublecontact\"/>\n");
+        buffer.append("<COMMAND name=\"doublecontact\">\n");
 
         buffer.append(curve.toXML());
 

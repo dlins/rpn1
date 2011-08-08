@@ -6,6 +6,7 @@
 
 package rpn.component;
 
+import java.awt.Color;
 import wave.multid.model.*;
 import wave.multid.view.*;
 import wave.multid.DimMismatchEx;
@@ -83,6 +84,7 @@ public class SubInflectionCurveView
     Iterator geomListIterator = ( (SubInflectionCurveGeom) abstractGeom_).getHugoniotSegIterator();
     while (geomListIterator.hasNext()) {
       HugoniotSegGeom geomObj = (HugoniotSegGeom) geomListIterator.next();
+            geomObj.viewingAttr().setColor(SubInflectionCurveGeom.COLOR);
       try {
         viewList_.add(geomObj.createView(getViewingTransform()));
       }
