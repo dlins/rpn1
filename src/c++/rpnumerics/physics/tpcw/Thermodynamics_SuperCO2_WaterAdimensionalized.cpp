@@ -112,11 +112,6 @@ rpnHomePath_(copy.rpnHomePath_) {
 // Convert from Theta to T
 
 double Thermodynamics_SuperCO2_WaterAdimensionalized::Theta2T(double Theta) {
-
-    Tref_water=274.3775;10;
-    T_typical_ = 304.63;
-
-    cout << Theta << "||||||||||||" << T_typical_ << "||||||||||||" << Tref_water << endl;
     return Theta * T_typical_ + Tref_water;
 }
 

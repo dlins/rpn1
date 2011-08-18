@@ -13,6 +13,6 @@ Thermodynamics_SuperCO2_WaterAdimensionalized * Accum2Comp2PhasesAdimensionalize
     return TD_;
 }
 
-double Accum2Comp2PhasesAdimensionalized_Params::getPhi() {
+double Accum2Comp2PhasesAdimensionalized_Params::getPhi() const{
     return params().component(0);
 }

@@ -27,6 +27,7 @@ NOTE :
 #include "ContourMethod.h"
 #include "ReducedTPCWHugoniotFunctionClass.h"
 #include "TPCW.h"
+#include "Flux2Comp2PhasesAdimensionalized.h"
 #include "StoneHugoniotFunctionClass.h"
 #include "Double_ContactTPCW.h"
 

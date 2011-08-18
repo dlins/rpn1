@@ -2,10 +2,14 @@
 #define _FLUX2COMP2PHASESADIMENSIONALIZED_PARAMS_
 
 #include "FluxParams.h"
+#include <iostream>
 
 #include "Thermodynamics_SuperCO2_WaterAdimensionalized.h"
-#include "FracFlow2PhasesHorizontalAdimensionalized.h"
-#include "FracFlow2PhasesVerticalAdimensionalized.h"
+//#include "FracFlow2PhasesHorizontalAdimensionalized.h"
+//#include "FracFlow2PhasesVerticalAdimensionalized.h"
+
+
+using namespace std;
 
 class Flux2Comp2PhasesAdimensionalized_Params : public FluxParams {
 private:
@@ -15,27 +19,26 @@ private:
     bool has_gravity_, has_horizontal_;
 
     Thermodynamics_SuperCO2_WaterAdimensionalized *TD_;
-    FracFlow2PhasesHorizontalAdimensionalized *FH_;
-    FracFlow2PhasesVerticalAdimensionalized *FV_;
+
 protected:
 public:
+
+
+    Flux2Comp2PhasesAdimensionalized_Params(const RealVector &,Thermodynamics_SuperCO2_WaterAdimensionalized *);
+
     Flux2Comp2PhasesAdimensionalized_Params(double abs_perm, double sin_beta, double const_gravity,
             bool has_gravity,
             bool has_horizontal,
-            Thermodynamics_SuperCO2_WaterAdimensionalized  * TD,
-            FracFlow2PhasesHorizontalAdimensionalized *FH,
-            FracFlow2PhasesVerticalAdimensionalized *FV);
+            Thermodynamics_SuperCO2_WaterAdimensionalized * TD);
 
 
-Flux2Comp2PhasesAdimensionalized_Params(const Flux2Comp2PhasesAdimensionalized_Params &);
+    Flux2Comp2PhasesAdimensionalized_Params(const Flux2Comp2PhasesAdimensionalized_Params &);
 
 
 
     virtual ~Flux2Comp2PhasesAdimensionalized_Params();
 
     Thermodynamics_SuperCO2_WaterAdimensionalized * get_thermodynamics(void) const;
-    FracFlow2PhasesHorizontalAdimensionalized * get_horizontal(void) const;
-    FracFlow2PhasesVerticalAdimensionalized * get_vertical(void) const;
 
     bool has_gravity(void) const;
     bool has_horizontal(void) const;

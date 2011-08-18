@@ -31,8 +31,8 @@ class TPCW : public SubPhysics {
 private:
 
     Thermodynamics_SuperCO2_WaterAdimensionalized * TD;
-    FracFlow2PhasesVerticalAdimensionalized *fv;
-    FracFlow2PhasesHorizontalAdimensionalized * fh;
+    Flux2Comp2PhasesAdimensionalized fluxFunction_;
+    Accum2Comp2PhasesAdimensionalized accumFunction_;
 
 
 public:
