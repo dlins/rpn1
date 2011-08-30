@@ -1,10 +1,7 @@
 #include "Accum2Comp2PhasesAdimensionalized.h"
 
 Accum2Comp2PhasesAdimensionalized::Accum2Comp2PhasesAdimensionalized(const Accum2Comp2PhasesAdimensionalized &a) {
-
-    const Accum2Comp2PhasesAdimensionalized_Params & accumParams = (const Accum2Comp2PhasesAdimensionalized_Params &) a.accumulationParams();
-
-    TD =  accumParams.get_thermodynamics();
+    TD =  a.TD;
 
     phi = a.phi;
 }
@@ -15,13 +12,13 @@ Accum2Comp2PhasesAdimensionalized::Accum2Comp2PhasesAdimensionalized(const Accum
     reducedAccum_= new ReducedAccum2Comp2PhasesAdimensionalized(this);
 }
 
-Accum2Comp2PhasesAdimensionalized * Accum2Comp2PhasesAdimensionalized::clone() const {
+ RpFunction * Accum2Comp2PhasesAdimensionalized::clone() const {
 
     return new Accum2Comp2PhasesAdimensionalized(*this);
 }
 
 Accum2Comp2PhasesAdimensionalized::~Accum2Comp2PhasesAdimensionalized() {
-    delete reducedAccum_;
+//    delete reducedAccum_;
 }
 
 // Existe uma discrepancia entre o o significado de s quando este codigo foi
@@ -198,7 +195,7 @@ int Accum2Comp2PhasesAdimensionalized::jet(const WaveState &w, JetMatrix &m, int
 }
 
 
-Accum2Comp2PhasesAdimensionalized::ReducedAccum2Comp2PhasesAdimensionalized::ReducedAccum2Comp2PhasesAdimensionalized(Accum2Comp2PhasesAdimensionalized * outer){
+Accum2Comp2PhasesAdimensionalized::ReducedAccum2Comp2PhasesAdimensionalized::ReducedAccum2Comp2PhasesAdimensionalized(Accum2Comp2PhasesAdimensionalized * outer):AccumulationFunction(outer->accumulationParams()){
     totalAccum_=outer;
 
  }
@@ -207,10 +204,15 @@ Accum2Comp2PhasesAdimensionalized::ReducedAccum2Comp2PhasesAdimensionalized::~Re
 
 }
 
- Accum2Comp2PhasesAdimensionalized::ReducedAccum2Comp2PhasesAdimensionalized * Accum2Comp2PhasesAdimensionalized::getReducedAccumulation(){
+ Accum2Comp2PhasesAdimensionalized::ReducedAccum2Comp2PhasesAdimensionalized * Accum2Comp2PhasesAdimensionalized::getReducedAccumulation()const{
      return reducedAccum_;
 
  }
+
+RpFunction * Accum2Comp2PhasesAdimensionalized::ReducedAccum2Comp2PhasesAdimensionalized::clone() const{
+
+}
+
 int Accum2Comp2PhasesAdimensionalized::ReducedAccum2Comp2PhasesAdimensionalized::jet(const WaveState &w, JetMatrix &m, int degree) const{
     double s     = w(0); // s_{sigma} = sg in FracFlow2PhasesHorizontal & FracFlow2PhasesVertical
     double Theta = w(1);

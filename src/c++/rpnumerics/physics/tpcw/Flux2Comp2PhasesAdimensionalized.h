@@ -12,6 +12,9 @@
 #define FLUX2COMP2PHASESADIMENSIONALIZED_HORIZONTAL   2
 
 class Flux2Comp2PhasesAdimensionalized : public FluxFunction {
+protected:
+
+public:
 
     class FracFlow2PhasesVerticalAdimensionalized {
     private:
@@ -20,6 +23,7 @@ class Flux2Comp2PhasesAdimensionalized : public FluxFunction {
         FracFlow2PhasesVerticalAdimensionalized(Flux2Comp2PhasesAdimensionalized *);
 
         int Diff_FracFlow2PhasesVerticalAdimensionalized(double sw, double Theta, int degree, JetMatrix &m);
+  
     };
 
     class FracFlow2PhasesHorizontalAdimensionalized {
@@ -30,10 +34,11 @@ class Flux2Comp2PhasesAdimensionalized : public FluxFunction {
         FracFlow2PhasesHorizontalAdimensionalized(Flux2Comp2PhasesAdimensionalized *);
 
         int Diff_FracFlow2PhasesHorizontalAdimensionalized(double sw, double Theta, int degree, JetMatrix &m);
+       
 
     };
 
-    class ReducedFlux2Comp2PhasesAdimensionalized {
+    class ReducedFlux2Comp2PhasesAdimensionalized: public FluxFunction {
     private:
         Flux2Comp2PhasesAdimensionalized * fluxComplete_;
     public:
@@ -41,7 +46,31 @@ class Flux2Comp2PhasesAdimensionalized : public FluxFunction {
         ReducedFlux2Comp2PhasesAdimensionalized(Flux2Comp2PhasesAdimensionalized *);
 
         int jet(const WaveState &u, JetMatrix &m, int degree) const;
+
+       RpFunction * clone() const;
     };
+
+
+    Thermodynamics_SuperCO2_WaterAdimensionalized * getThermo()const ;
+
+    FracFlow2PhasesHorizontalAdimensionalized * getHorizontalFlux()const ;
+    FracFlow2PhasesVerticalAdimensionalized * getVerticalFlux()const;
+    ReducedFlux2Comp2PhasesAdimensionalized * getReducedFlux()const;
+
+
+
+
+
+    Flux2Comp2PhasesAdimensionalized(const Flux2Comp2PhasesAdimensionalized &);
+    Flux2Comp2PhasesAdimensionalized(const Flux2Comp2PhasesAdimensionalized_Params &);
+
+
+    virtual ~Flux2Comp2PhasesAdimensionalized();
+
+    int jet(const WaveState &u, JetMatrix &m, int degree) const;
+    RpFunction * clone() const;
+    void type(int t);
+
 
 private:
 
@@ -77,24 +106,9 @@ private:
 
 
 
-protected:
 
-public:
 
-    Flux2Comp2PhasesAdimensionalized(const Flux2Comp2PhasesAdimensionalized &);
-    Flux2Comp2PhasesAdimensionalized(const Flux2Comp2PhasesAdimensionalized_Params &);
-    Flux2Comp2PhasesAdimensionalized * clone() const;
 
-    virtual ~Flux2Comp2PhasesAdimensionalized();
-
-    int jet(const WaveState &u, JetMatrix &m, int degree) const;
-    void type(int t);
-
-    Thermodynamics_SuperCO2_WaterAdimensionalized * getThermo();
-
-    FracFlow2PhasesHorizontalAdimensionalized * getHorizontalFlux();
-    FracFlow2PhasesVerticalAdimensionalized * getVerticalFlux();
-    ReducedFlux2Comp2PhasesAdimensionalized * getReducedFlux();
 
 
 

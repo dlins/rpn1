@@ -111,7 +111,7 @@ rpnHomePath_(copy.rpnHomePath_) {
 
 // Convert from Theta to T
 
-double Thermodynamics_SuperCO2_WaterAdimensionalized::Theta2T(double Theta) {
+double Thermodynamics_SuperCO2_WaterAdimensionalized::Theta2T(double Theta) const{
     return Theta * T_typical_ + Tref_water;
 }
 
@@ -119,19 +119,19 @@ double Thermodynamics_SuperCO2_WaterAdimensionalized::Theta2T(double Theta) {
 
 // Convert from T to Theta
 
-double Thermodynamics_SuperCO2_WaterAdimensionalized::T2Theta(double T) {
+double Thermodynamics_SuperCO2_WaterAdimensionalized::T2Theta(double T)const {
     return (T - Tref_water) / T_typical_;
 }
 
 
 // Convert from U to u
 
-double Thermodynamics_SuperCO2_WaterAdimensionalized::U2u(double U) {
+double Thermodynamics_SuperCO2_WaterAdimensionalized::U2u(double U) const{
     return U*U_typical_;
 }
 // Convert from u to U
 
-double Thermodynamics_SuperCO2_WaterAdimensionalized::u2U(double u) {
+double Thermodynamics_SuperCO2_WaterAdimensionalized::u2U(double u) const{
     return u / U_typical_;
 }
 
@@ -192,13 +192,13 @@ int Thermodynamics_SuperCO2_WaterAdimensionalized::status_after_init(void) {
 
 // RockEnthalpyVol & Diff_RockEnthalpyVol
 
-double Thermodynamics_SuperCO2_WaterAdimensionalized::RockEnthalpyVol(double Theta) {
+double Thermodynamics_SuperCO2_WaterAdimensionalized::RockEnthalpyVol(double Theta) const{
     double T = Theta2T(Theta); // T = Theta*T_typical_ + Tref_water
 
     return Rock_Cr * (T - Tref_rock) / (Rho_typical_ * h_typical_); // Hr_D = Hr/(Rho_typical_*h_typical_).
 }
 
-void Thermodynamics_SuperCO2_WaterAdimensionalized::Diff_RockEnthalpyVol(double Theta, double &Hr, double &d_Hr, double &d2_Hr) {
+void Thermodynamics_SuperCO2_WaterAdimensionalized::Diff_RockEnthalpyVol(double Theta, double &Hr, double &d_Hr, double &d2_Hr) const{
     double T = Theta2T(Theta); // T = Theta*T_typical_ + Tref_water
 
     Hr = Rock_Cr * (T - Tref_rock) / (Rho_typical_ * h_typical_); // Hr_D = Hr/(Rho_typical_*h_typical_).
@@ -214,7 +214,7 @@ double Thermodynamics_SuperCO2_WaterAdimensionalized::AqueousEnthalpyVol(double 
     return (Water_Cw_specific * (T - Tref_water) / h_typical_)*Rhoaw(Theta); // Ha_D(Theta) = rhoaw_D(Theta) * h_W_D(Theta)
 }
 
-void Thermodynamics_SuperCO2_WaterAdimensionalized::Diff_AqueousEnthalpyVol(double Theta, double &Ha, double &d_Ha, double &d2_Ha) {
+void Thermodynamics_SuperCO2_WaterAdimensionalized::Diff_AqueousEnthalpyVol(double Theta, double &Ha, double &d_Ha, double &d2_Ha)const {
     double rho, d_rho, d2_rho;
     Diff_Rhoaw(Theta, rho, d_rho, d2_rho);
 
@@ -229,12 +229,12 @@ void Thermodynamics_SuperCO2_WaterAdimensionalized::Diff_AqueousEnthalpyVol(doub
 
 // SuperCriticEnthalpyVol & Diff_SuperCriticEnthalpyVol Adimensionalized
 
-double Thermodynamics_SuperCO2_WaterAdimensionalized::SuperCriticEnthalpyVol(double Theta) {
+double Thermodynamics_SuperCO2_WaterAdimensionalized::SuperCriticEnthalpyVol(double Theta)const {
 
     return Rhosic(Theta) * hsigmaC(Theta); // Hsi_D = Hsigma_D
 }
 
-void Thermodynamics_SuperCO2_WaterAdimensionalized::Diff_SuperCriticEnthalpyVol(double Theta, double &Hsi, double &d_Hsi, double &d2_Hsi) {
+void Thermodynamics_SuperCO2_WaterAdimensionalized::Diff_SuperCriticEnthalpyVol(double Theta, double &Hsi, double &d_Hsi, double &d2_Hsi) const{
     double rho, d_rho, d2_rho;
     Diff_Rhosic(Theta, rho, d_rho, d2_rho);
 
@@ -250,12 +250,12 @@ void Thermodynamics_SuperCO2_WaterAdimensionalized::Diff_SuperCriticEnthalpyVol(
 
 // Rhosic & Diff_Rhosic Adimensionalized
 
-double Thermodynamics_SuperCO2_WaterAdimensionalized::Rhosic(double Theta) {
+double Thermodynamics_SuperCO2_WaterAdimensionalized::Rhosic(double Theta) const{
     double T = Theta2T(Theta); // T = Theta*T_typical_ + Tref_water
     return spline1dcalc(rhosigmac_, T) / Rho_typical_;
 }
 
-void Thermodynamics_SuperCO2_WaterAdimensionalized::Diff_Rhosic(double Theta, double &rho, double &d_rho, double &d2_rho) {
+void Thermodynamics_SuperCO2_WaterAdimensionalized::Diff_Rhosic(double Theta, double &rho, double &d_rho, double &d2_rho)const {
     double T = Theta2T(Theta); // T = Theta*T_typical_ + Tref_water
     spline1ddiff(rhosigmac_, T, rho, d_rho, d2_rho);
     rho *= (1. / Rho_typical_); // Rho_D(Theta)   = Rho(T(Theta))/Rho_typical_ .
@@ -267,12 +267,12 @@ void Thermodynamics_SuperCO2_WaterAdimensionalized::Diff_Rhosic(double Theta, do
 
 // Rhosiw & Diff_Rhosiw Adimensionalized
 
-double Thermodynamics_SuperCO2_WaterAdimensionalized::Rhosiw(double Theta) {
+double Thermodynamics_SuperCO2_WaterAdimensionalized::Rhosiw(double Theta)const {
     double T = Theta2T(Theta); // T = Theta*T_typical_ + Tref_water
     return spline1dcalc(rhosigmaw_, T) / Rho_typical_;
 }
 
-void Thermodynamics_SuperCO2_WaterAdimensionalized::Diff_Rhosiw(double Theta, double &rho, double &d_rho, double &d2_rho) {
+void Thermodynamics_SuperCO2_WaterAdimensionalized::Diff_Rhosiw(double Theta, double &rho, double &d_rho, double &d2_rho)const {
     double T = Theta2T(Theta); // T = Theta*T_typical_ + Tref_water
     spline1ddiff(rhosigmaw_, T, rho, d_rho, d2_rho);
     rho *= (1. / Rho_typical_);
@@ -284,13 +284,13 @@ void Thermodynamics_SuperCO2_WaterAdimensionalized::Diff_Rhosiw(double Theta, do
 
 // Rhoac & Diff_Rhoac Adimensionalized
 
-double Thermodynamics_SuperCO2_WaterAdimensionalized::Rhoac(double Theta) {
+double Thermodynamics_SuperCO2_WaterAdimensionalized::Rhoac(double Theta) const{
     double T = Theta2T(Theta); // T = Theta*T_typical_ + Tref_water
 
     return spline1dcalc(rhoac_, T) / Rho_typical_;
 }
 
-void Thermodynamics_SuperCO2_WaterAdimensionalized::Diff_Rhoac(double Theta, double &rho, double &d_rho, double &d2_rho) {
+void Thermodynamics_SuperCO2_WaterAdimensionalized::Diff_Rhoac(double Theta, double &rho, double &d_rho, double &d2_rho)const {
     double T = Theta2T(Theta); // T = Theta*T_typical_ + Tref_water
     spline1ddiff(rhoac_, T, rho, d_rho, d2_rho);
     rho *= (1. / Rho_typical_);
@@ -302,12 +302,12 @@ void Thermodynamics_SuperCO2_WaterAdimensionalized::Diff_Rhoac(double Theta, dou
 
 // Rhoaw & Diff_Rhoaw Adimensionalized
 
-double Thermodynamics_SuperCO2_WaterAdimensionalized::Rhoaw(double Theta) {
+double Thermodynamics_SuperCO2_WaterAdimensionalized::Rhoaw(double Theta) const{
     double T = Theta2T(Theta); // T = Theta*T_typical_ + Tref_water
     return spline1dcalc(rhoaw_, T) / Rho_typical_;
 }
 
-void Thermodynamics_SuperCO2_WaterAdimensionalized::Diff_Rhoaw(double Theta, double &rho, double &d_rho, double &d2_rho) {
+void Thermodynamics_SuperCO2_WaterAdimensionalized::Diff_Rhoaw(double Theta, double &rho, double &d_rho, double &d2_rho)const {
     double T = Theta2T(Theta); // T = Theta*T_typical_ + Tref_water
     spline1ddiff(rhoaw_, T, rho, d_rho, d2_rho);
     rho *= (1. / Rho_typical_);
@@ -318,11 +318,11 @@ void Thermodynamics_SuperCO2_WaterAdimensionalized::Diff_Rhoaw(double Theta, dou
 
 // RhoW
 
-double Thermodynamics_SuperCO2_WaterAdimensionalized::RhoW(double Theta) {
+double Thermodynamics_SuperCO2_WaterAdimensionalized::RhoW()const {
     return rhoW_const;
 }
 
-void Thermodynamics_SuperCO2_WaterAdimensionalized::Diff_RhoW(double Theta, double &rho, double &d_rho, double &d2_rho) {
+void Thermodynamics_SuperCO2_WaterAdimensionalized::Diff_RhoW(double Theta, double &rho, double &d_rho, double &d2_rho)const {
     rho = rhoW_const;
     d_rho = d2_rho = 0; // remember to change this for the gravity model together with its adimensionalization!!!!
     return;
@@ -330,12 +330,12 @@ void Thermodynamics_SuperCO2_WaterAdimensionalized::Diff_RhoW(double Theta, doub
 
 // hsigmaC & Diff_hsigmaC Adimensionalized
 
-double Thermodynamics_SuperCO2_WaterAdimensionalized::hsigmaC(double Theta) {
+double Thermodynamics_SuperCO2_WaterAdimensionalized::hsigmaC(double Theta) const{
     double T = Theta2T(Theta); // T = Theta*T_typical_ + Tref_water
     return spline1dcalc(hsigmaC_, T) / h_typical_;
 }
 
-void Thermodynamics_SuperCO2_WaterAdimensionalized::Diff_hsigmaC(double Theta, double &h, double &d_h, double &d2_h) {
+void Thermodynamics_SuperCO2_WaterAdimensionalized::Diff_hsigmaC(double Theta, double &h, double &d_h, double &d2_h) const{
     double T = Theta2T(Theta); // T = Theta*T_typical_ + Tref_water
     spline1ddiff(hsigmaC_, T, h, d_h, d2_h);
     h *= (1. / h_typical_); // CAREFUL THIS ADIMENSIONALIZATION IS WITH RESPECT TO ENTHALPY
@@ -346,16 +346,16 @@ void Thermodynamics_SuperCO2_WaterAdimensionalized::Diff_hsigmaC(double Theta, d
 
 // Return the value of the constants
 
-double Thermodynamics_SuperCO2_WaterAdimensionalized::Cr(void) {
+double Thermodynamics_SuperCO2_WaterAdimensionalized::Cr(void) const{
     return Rock_Cr;
 }
 
-double Thermodynamics_SuperCO2_WaterAdimensionalized::Cw_specific(void) {
+double Thermodynamics_SuperCO2_WaterAdimensionalized::Cw_specific(void) const{
     return Water_Cw_specific;
 }
 // We do not need to make the dimesion-less analysis for the viscosities.
 
-void Thermodynamics_SuperCO2_WaterAdimensionalized::inv_muw(double T, double &nuw, double &dnuw_dT, double &d2nuw_dT2) {
+void Thermodynamics_SuperCO2_WaterAdimensionalized::inv_muw(double T, double &nuw, double &dnuw_dT, double &d2nuw_dT2)const {
 
     double inv_T = 1. / T;
     double inv_T2 = inv_T*inv_T;
@@ -396,7 +396,7 @@ void Thermodynamics_SuperCO2_WaterAdimensionalized::muw(double T, double &muw, d
     return;
 }
 
-void Thermodynamics_SuperCO2_WaterAdimensionalized::inv_mug(double T, double &nug, double &dnug_dT, double &d2nug_dT2) {
+void Thermodynamics_SuperCO2_WaterAdimensionalized::inv_mug(double T, double &nug, double &dnug_dT, double &d2nug_dT2)const {
 
     double nug_den = 1. / (a0 * T * T * T + a1 * T * T + a2 * T + a3);
     nug = 1. / (1e-6 * (a0 * T * T * T + a1 * T * T + a2 * T + a3));
@@ -411,7 +411,7 @@ void Thermodynamics_SuperCO2_WaterAdimensionalized::inv_mug(double T, double &nu
     return;
 }
 
-void Thermodynamics_SuperCO2_WaterAdimensionalized::mug(double T, double &mug, double &dmug_dT, double &d2mug_dT2) {
+void Thermodynamics_SuperCO2_WaterAdimensionalized::mug(double T, double &mug, double &dmug_dT, double &d2mug_dT2)const {
 
     mug = 1e-6 * (a0 * T * T * T + a1 * T * T + a2 * T + a3);
     dmug_dT = 1e-6 * (3. * a0 * T * T + 2. * a1 * T + a2);
@@ -420,11 +420,11 @@ void Thermodynamics_SuperCO2_WaterAdimensionalized::mug(double T, double &mug, d
     return;
 }
 
-double Thermodynamics_SuperCO2_WaterAdimensionalized::T_typical(void) {
+double Thermodynamics_SuperCO2_WaterAdimensionalized::T_typical(void)const {
     return T_typical_;
 }
 
-double Thermodynamics_SuperCO2_WaterAdimensionalized::U_typical(void) {
+double Thermodynamics_SuperCO2_WaterAdimensionalized::U_typical(void)const {
     return U_typical_;
 }
 

@@ -4,6 +4,8 @@
 #include "math.h"
 #include "Bifurcation_CurveTPCW.h"
 #include "HyperCube.h"
+#include "Flux2Comp2PhasesAdimensionalized.h"
+#include "Accum2Comp2PhasesAdimensionalized.h"
 
 // Some matrices, etc., can be static. A static_init() method must take care of
 // this. A static flag must be set. The ctor will query the flag's status and
@@ -17,8 +19,10 @@ class Double_ContactTPCW : public Bifurcation_CurveTPCW {
         // ======================== Left  domain ======================== //
         RealVector leftpmin, leftpmax;                 // Input
         int *left_number_of_grid_pnts;
-        FluxFunction *leftff, *reducedleftff;
-        AccumulationFunction *leftaa, *reducedleftaa;
+        Flux2Comp2PhasesAdimensionalized *leftff;
+//                , *reducedleftff;
+        Accum2Comp2PhasesAdimensionalized *leftaa;
+//                , *reducedleftaa;
 
         Matrix<RealVector> leftgrid;                   // Left grid.
         Matrix<RealVector> leftffv, leftaav;           // Values of the left flux function and 
@@ -52,8 +56,10 @@ class Double_ContactTPCW : public Bifurcation_CurveTPCW {
         RealVector rightpmin, rightpmax;               // Input
         int *right_number_of_grid_pnts;
 
-        FluxFunction *rightff, *reducedrightff;
-        AccumulationFunction *rightaa, *reducedrightaa;
+        Flux2Comp2PhasesAdimensionalized *rightff;
+//        , *reducedrightff;
+        Accum2Comp2PhasesAdimensionalized *rightaa;
+//        , *reducedrightaa;
 
         Matrix<RealVector> rightgrid;                   // Right grid.
         Matrix<RealVector> rightffv, rightaav;          // Values of the right flux function and 
@@ -110,11 +116,11 @@ class Double_ContactTPCW : public Bifurcation_CurveTPCW {
     public:
         Double_ContactTPCW(const RealVector &lpmin, const RealVector &lpmax, const int *l_number_of_grid_pnts,
                        const FluxFunction *lff, const AccumulationFunction *laa, 
-                       const FluxFunction *Redlff, const AccumulationFunction *Redlaa, 
+//                       const FluxFunction *Redlff, const AccumulationFunction *Redlaa,
                        int lf,
                        const RealVector &rpmin, const RealVector &rpmax, const int *r_number_of_grid_pnts,
                        const FluxFunction *rff, const AccumulationFunction *raa, 
-                       const FluxFunction *Redrff, const AccumulationFunction *Redraa, 
+//                       const FluxFunction *Redrff, const AccumulationFunction *Redraa,
                        int rf);
         ~Double_ContactTPCW();
 

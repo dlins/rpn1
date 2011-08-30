@@ -4,10 +4,13 @@ Flux2Comp2PhasesAdimensionalized::Flux2Comp2PhasesAdimensionalized(const Flux2Co
 
     //    const Flux2Comp2PhasesAdimensionalized_Params & fluxParams = (const Flux2Comp2PhasesAdimensionalized_Params &) a.fluxParams();
     cout << "Construtor de copia de Flux2CompPhasesAdimensionalized" << endl;
-    TD = a.TD;
-    FH = a.FH;
-    FV = a.FV;
 
+
+    TD = a.TD;
+    FH = new FracFlow2PhasesHorizontalAdimensionalized(this);
+    FV = new FracFlow2PhasesVerticalAdimensionalized(this);
+
+    reducedFlux = new ReducedFlux2Comp2PhasesAdimensionalized(this);
     abs_perm = a.abs_perm;
     sin_beta = a.sin_beta;
     const_gravity = a.const_gravity;
@@ -23,7 +26,10 @@ Flux2Comp2PhasesAdimensionalized::Flux2Comp2PhasesAdimensionalized(const Flux2Co
 
     abs_perm = param.component(0);
     sin_beta = param.component(1);
-    const_gravity = param.component(2);
+    //    const_gravity = param.component(2);
+
+
+    const_gravity = 9.8;
 
     cnw = param.component(4);
     cng = param.component(5);
@@ -44,7 +50,7 @@ Flux2Comp2PhasesAdimensionalized::Flux2Comp2PhasesAdimensionalized(const Flux2Co
     grav = abs_perm * sin_beta*const_gravity;
 }
 
-Flux2Comp2PhasesAdimensionalized * Flux2Comp2PhasesAdimensionalized::clone() const {
+RpFunction * Flux2Comp2PhasesAdimensionalized::clone() const {
 
     return new Flux2Comp2PhasesAdimensionalized(*this);
 }
@@ -195,7 +201,7 @@ int Flux2Comp2PhasesAdimensionalized::ReducedFlux2Comp2PhasesAdimensionalized::j
     return 2; //SUCCESSFUL_PROCEDURE;
 }
 
-Flux2Comp2PhasesAdimensionalized::ReducedFlux2Comp2PhasesAdimensionalized::ReducedFlux2Comp2PhasesAdimensionalized(Flux2Comp2PhasesAdimensionalized * outer) {
+Flux2Comp2PhasesAdimensionalized::ReducedFlux2Comp2PhasesAdimensionalized::ReducedFlux2Comp2PhasesAdimensionalized(Flux2Comp2PhasesAdimensionalized * outer) : FluxFunction(outer->fluxParams()) {
 
     fluxComplete_ = outer;
 
@@ -208,6 +214,10 @@ Flux2Comp2PhasesAdimensionalized::FracFlow2PhasesHorizontalAdimensionalized::Fra
 Flux2Comp2PhasesAdimensionalized::FracFlow2PhasesVerticalAdimensionalized::FracFlow2PhasesVerticalAdimensionalized(Flux2Comp2PhasesAdimensionalized * outer) {
 
     fluxComplete_ = outer;
+
+}
+
+RpFunction * Flux2Comp2PhasesAdimensionalized::ReducedFlux2Comp2PhasesAdimensionalized::clone() const {
 
 }
 
@@ -533,22 +543,19 @@ int Flux2Comp2PhasesAdimensionalized::jet(const WaveState &w, JetMatrix &m, int 
     return 2; //SUCCESSFUL_PROCEDURE;
 }
 
-
-
-
-Thermodynamics_SuperCO2_WaterAdimensionalized * Flux2Comp2PhasesAdimensionalized::getThermo() {
+Thermodynamics_SuperCO2_WaterAdimensionalized * Flux2Comp2PhasesAdimensionalized::getThermo() const{
     return TD;
 }
 
-Flux2Comp2PhasesAdimensionalized::FracFlow2PhasesHorizontalAdimensionalized * Flux2Comp2PhasesAdimensionalized::getHorizontalFlux() {
+Flux2Comp2PhasesAdimensionalized::FracFlow2PhasesHorizontalAdimensionalized * Flux2Comp2PhasesAdimensionalized::getHorizontalFlux()const {
     return FH;
 }
 
-Flux2Comp2PhasesAdimensionalized::FracFlow2PhasesVerticalAdimensionalized * Flux2Comp2PhasesAdimensionalized::getVerticalFlux() {
+Flux2Comp2PhasesAdimensionalized::FracFlow2PhasesVerticalAdimensionalized * Flux2Comp2PhasesAdimensionalized::getVerticalFlux()const {
     return FV;
 }
 
-Flux2Comp2PhasesAdimensionalized::ReducedFlux2Comp2PhasesAdimensionalized * Flux2Comp2PhasesAdimensionalized::getReducedFlux() {
+Flux2Comp2PhasesAdimensionalized::ReducedFlux2Comp2PhasesAdimensionalized * Flux2Comp2PhasesAdimensionalized::getReducedFlux()const  {
     return reducedFlux;
 }
 
@@ -561,8 +568,6 @@ int Flux2Comp2PhasesAdimensionalized::FracFlow2PhasesHorizontalAdimensionalized:
     double T = fluxComplete_->TD->Theta2T(Theta);
 
     //    double T = Flux2Comp2PhasesAdimensionalized::getThermo()->Theta2T(Theta);
-
-    cout << "Depois de TD" << endl;
 
     // Auxiliary variables
     double sg, law, lag;

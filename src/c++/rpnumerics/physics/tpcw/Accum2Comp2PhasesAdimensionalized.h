@@ -9,19 +9,31 @@
 #include "Thermodynamics_SuperCO2_WaterAdimensionalized.h"
 
 class Accum2Comp2PhasesAdimensionalized : public AccumulationFunction {
+public:
 
-    class ReducedAccum2Comp2PhasesAdimensionalized {
+
+    class ReducedAccum2Comp2PhasesAdimensionalized:public AccumulationFunction {
     private:
         Accum2Comp2PhasesAdimensionalized * totalAccum_;
     public:
 
         ReducedAccum2Comp2PhasesAdimensionalized(Accum2Comp2PhasesAdimensionalized *);
-        ReducedAccum2Comp2PhasesAdimensionalized * clone() const;
+        RpFunction * clone() const;
 
         virtual ~ReducedAccum2Comp2PhasesAdimensionalized();
 
         int jet(const WaveState &u, JetMatrix &m, int degree) const; // ONLY DEGREE 0
     };
+
+
+    Accum2Comp2PhasesAdimensionalized(const Accum2Comp2PhasesAdimensionalized &);
+    Accum2Comp2PhasesAdimensionalized(const Accum2Comp2PhasesAdimensionalized_Params &);
+    RpFunction * clone() const;
+
+    virtual~Accum2Comp2PhasesAdimensionalized();
+
+    int jet(const WaveState &u, JetMatrix &m, int degree) const;
+    ReducedAccum2Comp2PhasesAdimensionalized * getReducedAccumulation()const;
 
 
 private:
@@ -32,15 +44,7 @@ private:
     Thermodynamics_SuperCO2_WaterAdimensionalized *TD;
     ReducedAccum2Comp2PhasesAdimensionalized * reducedAccum_;
 protected:
-public:
-    Accum2Comp2PhasesAdimensionalized(const Accum2Comp2PhasesAdimensionalized &);
-    Accum2Comp2PhasesAdimensionalized(const Accum2Comp2PhasesAdimensionalized_Params &);
-    Accum2Comp2PhasesAdimensionalized * clone() const;
 
-    virtual~Accum2Comp2PhasesAdimensionalized();
-
-    int jet(const WaveState &u, JetMatrix &m, int degree) const;
-    ReducedAccum2Comp2PhasesAdimensionalized * getReducedAccumulation();
 };
 
 #endif // _ACCUM2COMP2PHASESADIMENSIONALIZED_

@@ -4,20 +4,21 @@
 #include <stdio.h>
 #include "HugoniotFunctionClass.h"
 #include "Thermodynamics_SuperCO2_WaterAdimensionalized.h"
-#include "FracFlow2PhasesHorizontalAdimensionalized.h"
+#include "Flux2Comp2PhasesAdimensionalized.h"
+#include "Accum2Comp2PhasesAdimensionalized.h"
 
 class CoincidenceTPCW : public HugoniotFunctionClass {
-    private:
-        Thermodynamics_SuperCO2_WaterAdimensionalized *td;
-        FracFlow2PhasesHorizontalAdimensionalized     *fh;
-        double                                        phi;
+private:
+   const Thermodynamics_SuperCO2_WaterAdimensionalized *td;
+    const Flux2Comp2PhasesAdimensionalized *fluxFunction_;
+    double phi;
 
-        double lambdas_function(const RealVector &u);
-        double lambdae_function(const RealVector &u);
-    protected:
-    public:
-        CoincidenceTPCW(Thermodynamics_SuperCO2_WaterAdimensionalized *t, FracFlow2PhasesHorizontalAdimensionalized *f, double phi_);
-        double HugoniotFunction(const RealVector &u);
+    double lambdas_function(const RealVector &u);
+    double lambdae_function(const RealVector &u);
+protected:
+public:
+    CoincidenceTPCW(const Flux2Comp2PhasesAdimensionalized *,const Accum2Comp2PhasesAdimensionalized *);
+    double HugoniotFunction(const RealVector &u);
 
     void completeCurve(std::vector<RealVector> &);
 };

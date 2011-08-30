@@ -9,8 +9,7 @@ class Rarefaction_ExtensionTPCW {
     private:
     protected:
     public:
-        static void extension_curve(const FluxFunction *curve_flux, const AccumulationFunction *curve_accum,
-                                    const FluxFunction *curve_reduced_flux, const AccumulationFunction *curve_reduced_accum,
+        static void extension_curve(const Flux2Comp2PhasesAdimensionalized *curve_flux, const Accum2Comp2PhasesAdimensionalized *curve_accum,
                                     const RealVector &initial_point,
                                     double deltaxi,
                                     int curve_family,
@@ -18,8 +17,7 @@ class Rarefaction_ExtensionTPCW {
                                     const Boundary *boundary,
                                     const RealVector &pmin, const RealVector &pmax, int *number_of_grid_points,         // For the domain.
                                     int domain_family,
-                                    const FluxFunction *domain_ff, const AccumulationFunction *domain_aa,
-                                    const FluxFunction *domain_reduced_ff, const AccumulationFunction *domain_reduced_aa,
+                                    const Flux2Comp2PhasesAdimensionalized *domain_ff, const Accum2Comp2PhasesAdimensionalized *domain_aa,
                                     int characteristic_where, int singular,
                                     std::vector<RealVector> &curve_segments,
                                     std::vector<RealVector> &domain_segments);

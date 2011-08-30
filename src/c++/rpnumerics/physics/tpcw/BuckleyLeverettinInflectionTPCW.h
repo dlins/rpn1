@@ -1,16 +1,18 @@
 #ifndef _BUCKLEYLEVERETTINFLECTIONTPCW_
 #define _BUCKLEYLEVERETTINFLECTIONTPCW_
 
-#include "FracFlow2PhasesHorizontalAdimensionalized.h"
+
 #include "HugoniotFunctionClass.h"
-#include "RpNumerics.h"
+#include "RectBoundary.h"
+#include "Flux2Comp2PhasesAdimensionalized.h"
 
 class BuckleyLeverettinInflectionTPCW : public HugoniotFunctionClass {
 private:
-    FracFlow2PhasesHorizontalAdimensionalized *fh;
+    Flux2Comp2PhasesAdimensionalized::FracFlow2PhasesHorizontalAdimensionalized *fh;
+    RectBoundary * boundary_;
 protected:
 public:
-    BuckleyLeverettinInflectionTPCW(FracFlow2PhasesHorizontalAdimensionalized *f);
+    BuckleyLeverettinInflectionTPCW(Flux2Comp2PhasesAdimensionalized *f,RectBoundary *);
     double HugoniotFunction(const RealVector &u);
     void completeCurve(std::vector<RealVector> &);
 };

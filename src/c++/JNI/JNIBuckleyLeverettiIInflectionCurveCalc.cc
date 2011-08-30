@@ -74,34 +74,46 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BuckleyLeverettinInflectionCurveCalc_n
 
 
 
-    Thermodynamics_SuperCO2_WaterAdimensionalized TD(Physics::getRPnHome(), T_Typical, Rho_typical, U_typical);
+    //    Thermodynamics_SuperCO2_WaterAdimensionalized TD(Physics::getRPnHome(), T_Typical, Rho_typical, U_typical);
 
 
 
 
 
 
-//    Thermodynamics_SuperCO2_WaterAdimensionalized TD(Physics::getRPnHome());
+    //    Thermodynamics_SuperCO2_WaterAdimensionalized TD(Physics::getRPnHome());
 
     double cnw = 0., cng = 0., expw = 2., expg = 2.;
-    FracFlow2PhasesHorizontalAdimensionalized fh(cnw, cng, expw, expg, &TD);
+    //    FracFlow2PhasesHorizontalAdimensionalized fh(cnw, cng, expw, expg, &TD);
 
-    BuckleyLeverettinInflectionTPCW bl(&fh);
+    //    BuckleyLeverettinInflectionTPCW bl(&fh);
 
-    SubPhysics & physics = RpNumerics::getPhysics().getSubPhysics(0);
+    TPCW & tpcw = (TPCW &) RpNumerics::getPhysics().getSubPhysics(0);
     const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
+
+
+
+
+
+    //
+    //    SubPhysics & physics = RpNumerics::getPhysics().getSubPhysics(0);
+    //    const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
 
     RealVector min(physicsBoundary. minimums());
     RealVector max(physicsBoundary. maximums());
 
 
-    physics.preProcess(min);
-    physics.preProcess(max);
+    tpcw.preProcess(min);
+    tpcw.preProcess(max);
 
     RectBoundary tempBoundary(min, max);
 
 
-    ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), tempBoundary, &bl);
+    BuckleyLeverettinInflectionTPCW bl((Flux2Comp2PhasesAdimensionalized*) & tpcw.fluxFunction(), &tempBoundary);
+    ContourMethod method(3, tpcw.fluxFunction(), tpcw.accumulation(), physicsBoundary, &bl);
+
+
+    //    ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), tempBoundary, &bl);
 
     vector<HugoniotPolyLine> hugoniotPolyLineVector;
     method.unclassifiedCurve(Uref, hugoniotPolyLineVector);
@@ -127,7 +139,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BuckleyLeverettinInflectionCurveCalc_n
             hugoniotPolyLineVector[i].vec[j].component(2) = maxDimension.component(2);
             hugoniotPolyLineVector[i].vec[j + 1].component(2) = maxDimension.component(2);
 
-            physics.postProcess(hugoniotPolyLineVector[i].vec);
+            tpcw.postProcess(hugoniotPolyLineVector[i].vec);
 
 
             //            cout << "coord 2 " << j + 1 << " = " << hugoniotPolyLineVector[i].vec[j + 1] << endl;

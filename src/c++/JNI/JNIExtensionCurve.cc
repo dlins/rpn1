@@ -148,17 +148,17 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
 
 
 
-        Thermodynamics_SuperCO2_WaterAdimensionalized td(Physics::getRPnHome(), T_Typical, Rho_typical, U_typical);
+        //        Thermodynamics_SuperCO2_WaterAdimensionalized td(Physics::getRPnHome(), T_Typical, Rho_typical, U_typical);
 
-//        Thermodynamics_SuperCO2_WaterAdimensionalized td(Physics::getRPnHome());
+        //        Thermodynamics_SuperCO2_WaterAdimensionalized td(Physics::getRPnHome());
 
-        int info = td.status_after_init();
-        printf("Thermodynamics = %p,  info = %d\n\n\n", &td, info);
+        //        int info = td.status_after_init();
+        //        printf("Thermodynamics = %p,  info = %d\n\n\n", &td, info);
 
         // Create Horizontal & Vertical FracFlows
         double cnw = 0., cng = 0., expw = 2., expg = 2.;
-        FracFlow2PhasesHorizontalAdimensionalized * fh = new FracFlow2PhasesHorizontalAdimensionalized(cnw, cng, expw, expg, &td);
-        FracFlow2PhasesVerticalAdimensionalized * fv = new FracFlow2PhasesVerticalAdimensionalized(cnw, cng, expw, expg, &td);
+        //        FracFlow2PhasesHorizontalAdimensionalized * fh = new FracFlow2PhasesHorizontalAdimensionalized(cnw, cng, expw, expg, &td);
+        //        FracFlow2PhasesVerticalAdimensionalized * fv = new FracFlow2PhasesVerticalAdimensionalized(cnw, cng, expw, expg, &td);
 
         // Create the Flux and its params
         double abs_perm = 20e-12;
@@ -166,26 +166,26 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
         double const_gravity = 9.8;
         bool has_gravity = false, has_horizontal = true;
 
-        Flux2Comp2PhasesAdimensionalized_Params flux_params(abs_perm, sin_beta, const_gravity,
-                has_gravity, has_horizontal,
-                &td,
-                fh, fv);
-
-        Flux2Comp2PhasesAdimensionalized flux(flux_params);
+        //        Flux2Comp2PhasesAdimensionalized_Params flux_params(abs_perm, sin_beta, const_gravity,
+        //                has_gravity, has_horizontal,
+        //                &td,
+        //                fh, fv);
+        //
+        //        Flux2Comp2PhasesAdimensionalized flux(flux_params);
 
         // Create the Accum and its params
         double phi = 0.38;
-        Accum2Comp2PhasesAdimensionalized_Params accum_params(&td, phi);
-        Accum2Comp2PhasesAdimensionalized accum(accum_params);
-
-
-        // Reduced stuff
-        ReducedFlux2Comp2PhasesAdimensionalized_Params reduced_flux_params(abs_perm, &td, fh);
-        ReducedFlux2Comp2PhasesAdimensionalized reduced_flux(reduced_flux_params);
-
-
-        ReducedAccum2Comp2PhasesAdimensionalized_Params reduced_accum_params(&td, phi);
-        ReducedAccum2Comp2PhasesAdimensionalized reduced_accum(reduced_accum_params);
+        //        Accum2Comp2PhasesAdimensionalized_Params accum_params(&td, phi);
+        //        Accum2Comp2PhasesAdimensionalized accum(accum_params);
+        //
+        //
+        //        // Reduced stuff
+        //        ReducedFlux2Comp2PhasesAdimensionalized_Params reduced_flux_params(abs_perm, &td, fh);
+        //        ReducedFlux2Comp2PhasesAdimensionalized reduced_flux(reduced_flux_params);
+        //
+        //
+        //        ReducedAccum2Comp2PhasesAdimensionalized_Params reduced_accum_params(&td, phi);
+        //        ReducedAccum2Comp2PhasesAdimensionalized reduced_accum(reduced_accum_params);
 
 
         //                RealVector pmin(2);
@@ -197,11 +197,18 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
         //
         //
 
-
-
-
-        SubPhysics & physics = RpNumerics::getPhysics().getSubPhysics(0);
+        TPCW & tpcw = (TPCW &) RpNumerics::getPhysics().getSubPhysics(0);
         const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
+
+        Flux2Comp2PhasesAdimensionalized * fluxFunction = (Flux2Comp2PhasesAdimensionalized *) & tpcw.fluxFunction();
+
+        Accum2Comp2PhasesAdimensionalized * accumulationFunction = (Accum2Comp2PhasesAdimensionalized *) & tpcw.accumulation();
+
+
+
+        //
+        //        SubPhysics & physics = RpNumerics::getPhysics().getSubPhysics(0);
+        //        const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
 
         RealVector min(2);
 
@@ -215,8 +222,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
         max.component(1) = physicsBoundary.maximums().component(1);
 
 
-        physics.preProcess(min);
-        physics.preProcess(max);
+        tpcw.preProcess(min);
+        tpcw.preProcess(max);
 
         cout << "Min: " << min << endl;
         cout << "Max: " << max << endl;
@@ -246,34 +253,51 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
         cout << "edge " << edge << endl;
 
 
-        const FluxFunction * curve_flux = &flux;
-        const AccumulationFunction *curve_accum = &accum;
-
-        const FluxFunction * curve_reduced_flux = &reduced_flux;
-        const AccumulationFunction *curve_reduced_accum = &reduced_accum;
+        //        const FluxFunction * curve_flux = &flux;
+        //        const AccumulationFunction *curve_accum = &accum;
+        //
+        //        const FluxFunction * curve_reduced_flux = &reduced_flux;
+        //        const AccumulationFunction *curve_reduced_accum = &reduced_accum;
 
 
         //TODO Pegar o parametro hardcoded 101 (number_of_temperature_steps) da interface
 
-        Boundary_ExtensionTPCW::extension_curve(curve_flux, curve_accum,
-                curve_reduced_flux, curve_reduced_accum,
+        //        Boundary_ExtensionTPCW::extension_curve(curve_flux, curve_accum,
+        //                curve_reduced_flux, curve_reduced_accum,
+        //                edge, 501,
+        //                curveFamily,
+        //                min, max, number_of_grid_pnts, // For the domain.
+        //                domainFamily,
+        //                curve_flux, curve_accum,
+        //                curve_reduced_flux, curve_reduced_accum,
+        //                characteristicWhere, singular,
+        //                curve_segments,
+        //                domain_segments);
+
+
+
+        Boundary_ExtensionTPCW::extension_curve((Flux2Comp2PhasesAdimensionalized*) & tpcw.fluxFunction(), (Accum2Comp2PhasesAdimensionalized*) & tpcw.accumulation(),
+
                 edge, 501,
                 curveFamily,
                 min, max, number_of_grid_pnts, // For the domain.
                 domainFamily,
-                curve_flux, curve_accum,
-                curve_reduced_flux, curve_reduced_accum,
+
+                (Flux2Comp2PhasesAdimensionalized*) & tpcw.fluxFunction(), (Accum2Comp2PhasesAdimensionalized*) & tpcw.accumulation(),
+
                 characteristicWhere, singular,
                 curve_segments,
                 domain_segments);
 
 
-        physics.postProcess(curve_segments);
-        physics.postProcess(domain_segments);
 
 
-        delete fv;
-        delete fh;
+
+
+
+        tpcw.postProcess(curve_segments);
+        tpcw.postProcess(domain_segments);
+
 
     }
 

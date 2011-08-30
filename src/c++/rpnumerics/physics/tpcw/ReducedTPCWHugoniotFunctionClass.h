@@ -11,8 +11,8 @@
 class ReducedTPCWHugoniotFunctionClass : public HugoniotFunctionClass {
 private:
  
-    Accum2Comp2PhasesAdimensionalized *TPCWAccumAdimensionalized;
-    Flux2Comp2PhasesAdimensionalized * TPCWFluxAdimensionalized;
+    const Accum2Comp2PhasesAdimensionalized *TPCWAccumAdimensionalized;
+    const Flux2Comp2PhasesAdimensionalized * TPCWFluxAdimensionalized;
 
     RealVector Uref;
     double *aref_F;
@@ -38,7 +38,7 @@ public:
 //            FracFlow2PhasesHorizontalAdimensionalized *fh); // U=dim 3  , u=dim 2.
     virtual ~ReducedTPCWHugoniotFunctionClass();
 
-    ReducedTPCWHugoniotFunctionClass(const RealVector &, Flux2Comp2PhasesAdimensionalized *, Accum2Comp2PhasesAdimensionalized *);
+    ReducedTPCWHugoniotFunctionClass(const RealVector &, const Flux2Comp2PhasesAdimensionalized *, const Accum2Comp2PhasesAdimensionalized *);
 
     ReducedTPCWHugoniotFunctionClass(const ReducedTPCWHugoniotFunctionClass &);
 

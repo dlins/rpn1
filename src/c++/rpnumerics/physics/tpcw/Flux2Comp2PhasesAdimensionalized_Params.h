@@ -15,7 +15,7 @@ class Flux2Comp2PhasesAdimensionalized_Params : public FluxParams {
 private:
     double abs_perm; // = 3e-12
     double sin_beta; // = 0.0
-    double const_gravity; // = 9.8
+    const double const_gravity; //= 9.8;
     bool has_gravity_, has_horizontal_;
 
     Thermodynamics_SuperCO2_WaterAdimensionalized *TD_;

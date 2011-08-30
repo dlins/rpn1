@@ -73,7 +73,7 @@ void Bifurcation_CurveTPCW::create_grid(const RealVector &pmin, const RealVector
 
 void Bifurcation_CurveTPCW::fill_values_on_grid(const RealVector &pmin, const RealVector &pmax, 
                                                 const FluxFunction *ff, const AccumulationFunction *aa, 
-                                                const FluxFunction *Redff, const AccumulationFunction *Redaa, 
+//                                                const FluxFunction *Redff, const AccumulationFunction *Redaa,
                                                 const int *number_of_grid_pnts,
                                                 Matrix<RealVector> &grid,
                                                 Matrix<RealVector> &Redffv, Matrix<RealVector> &Redaav,
@@ -96,6 +96,10 @@ void Bifurcation_CurveTPCW::fill_values_on_grid(const RealVector &pmin, const Re
     // The eigenvalues must also be stored:  In the TPCW case we must find them using a trick.  We find the 
     // generalized eigenvalues using u=1 for the third component of the variables.
 
+
+    Flux2Comp2PhasesAdimensionalized * fluxFunction = (Flux2Comp2PhasesAdimensionalized*)ff;
+    Accum2Comp2PhasesAdimensionalized * accumulationFunction = (Accum2Comp2PhasesAdimensionalized *)aa;
+
     for (int i = 0; i < n; i++){
         double point[dim];
         double pointP[dimP] ;
@@ -109,13 +113,18 @@ void Bifurcation_CurveTPCW::fill_values_on_grid(const RealVector &pmin, const Re
         double RedF[dimP], RedG[dimP];        
 
         // Here we are filling the big jets.
-        fill_with_jet((RpFunction*)ff, dimP, pointP, 1, F, &JF[0][0], 0); // TODO: PRECISA COLOCAR O F NO FILL WITH JET O NO?????
+        fill_with_jet((RpFunction*)fluxFunction, dimP, pointP, 1, F, &JF[0][0], 0); // TODO: PRECISA COLOCAR O F NO FILL WITH JET O NO?????
 
-        fill_with_jet((RpFunction*)aa, dimP, pointP, 1, G, &JG[0][0], 0);
+        fill_with_jet((RpFunction*)accumulationFunction, dimP, pointP, 1, G, &JG[0][0], 0);
+
+
+//        Flux2Comp2PhasesAdimensionalized::ReducedFlux2Comp2PhasesAdimensionalized *reducedrightff = rightff->getReducedFlux();
+//        Accum2Comp2PhasesAdimensionalized::ReducedAccum2Comp2PhasesAdimensionalized *reducedrightaa = rightaa->getReducedAccumulation();
+
 
         // Here we are filling the reduced jets.  
-        fill_with_jet((RpFunction*)Redff, dimP, pointP, 0, RedF, 0, 0);
-        fill_with_jet((RpFunction*)Redaa, dimP, pointP, 0, RedG, 0, 0);
+        fill_with_jet((RpFunction*)fluxFunction->getReducedFlux(), dimP, pointP, 0, RedF, 0, 0);
+        fill_with_jet((RpFunction*)accumulationFunction->getReducedAccumulation(), dimP, pointP, 0, RedG, 0, 0);
 
 
         // Fill the values of the functions
@@ -148,14 +157,14 @@ void Bifurcation_CurveTPCW::fill_values_on_grid(const RealVector &pmin, const Re
 
 void Bifurcation_CurveTPCW::fill_values_on_grid(const RealVector &pmin, const RealVector &pmax, 
                                             const FluxFunction *ff, const AccumulationFunction *aa, 
-                                            const FluxFunction *Redff, const AccumulationFunction *Redaa, 
+//                                            const FluxFunction *Redff, const AccumulationFunction *Redaa,
                                             const int *number_of_grid_pnts,
                                             Matrix<RealVector> &grid,
                                             Matrix<RealVector> &ffv, Matrix<RealVector> &aav, 
                                             Matrix< std::vector<double> > &e, Matrix< vector<bool> > &eig_is_real){
 
     Matrix< std::vector<eigenpair> > temp(grid.rows(), grid.cols());
-    fill_values_on_grid(pmin, pmax, ff, aa, Redff, Redaa, number_of_grid_pnts, grid, ffv, aav, temp, eig_is_real);
+    fill_values_on_grid(pmin, pmax, ff, aa, number_of_grid_pnts, grid, ffv, aav, temp, eig_is_real);
     
     for (int i = 0; i < grid.rows(); i++){
         for (int j = 0; j < grid.cols(); j++){
@@ -213,6 +222,9 @@ void Bifurcation_CurveTPCW::fill_with_jet(RpFunction *flux_object, int n, double
 
     // Fill F
     if (F != 0) for (int i = 0; i < n; i++) F[i] = c_jet(i);
+
+
+
 
     // Fill J
     if (J != 0){
@@ -487,8 +499,8 @@ bool Bifurcation_CurveTPCW::prepare_segment(int i, int family, int where_is_char
 
 
 
-void Bifurcation_CurveTPCW::fill_values_on_segments(const FluxFunction *ff, const AccumulationFunction *aa, 
-                                                    const FluxFunction *Redff, const AccumulationFunction *Redaa,
+void Bifurcation_CurveTPCW::fill_values_on_segments(const Flux2Comp2PhasesAdimensionalized *ff, const Accum2Comp2PhasesAdimensionalized *aa,
+//                                                    const FluxFunction *Redff, const AccumulationFunction *Redaa,
                                                     const std::vector<RealVector> &input, 
                                                     std::vector<RealVector> &Redvff, std::vector<RealVector> &Redvaa,
                                                     std::vector<std::vector<double> > &Redvee, std::vector< std::vector<bool> > &Redeig_is_real){
@@ -523,12 +535,16 @@ void Bifurcation_CurveTPCW::fill_values_on_segments(const FluxFunction *ff, cons
         }
         pointP[dimP - 1] = 1.0;
 
+
+    Flux2Comp2PhasesAdimensionalized * fluxFunction = (Flux2Comp2PhasesAdimensionalized*)ff;
+    Accum2Comp2PhasesAdimensionalized * accumulationFunction = (Accum2Comp2PhasesAdimensionalized *)aa;
+
         // Fill the values of the functions
         fill_with_jet((RpFunction*)ff, dimP, pointP, 1, 0, &JF[0][0], 0);
         fill_with_jet((RpFunction*)aa, dimP, pointP, 1, 0, &JG[0][0], 0);
         
-        fill_with_jet((RpFunction*)Redff, dimP, pointP, 0, RedF, 0, 0);
-        fill_with_jet((RpFunction*)Redaa, dimP, pointP, 0, RedG, 0, 0);
+        fill_with_jet((RpFunction*)fluxFunction->getReducedFlux(), dimP, pointP, 0, RedF, 0, 0);
+        fill_with_jet((RpFunction*)accumulationFunction->getReducedAccumulation(), dimP, pointP, 0, RedG, 0, 0);
         
         Redvff[i].resize(dimP);
         Redvaa[i].resize(dimP);

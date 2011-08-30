@@ -1,12 +1,9 @@
 #include "ReducedTPCWHugoniotFunctionClass.h"
 
-ReducedTPCWHugoniotFunctionClass::ReducedTPCWHugoniotFunctionClass(const RealVector & U, Flux2Comp2PhasesAdimensionalized *fluxFunction, Accum2Comp2PhasesAdimensionalized * accumFunction) :
-HugoniotFunctionClass(*fluxFunction) {
-
-    double abs_perm = fluxFunction->fluxParams().component(0);
-   
-    TPCWAccumAdimensionalized = accumFunction;
-    TPCWFluxAdimensionalized = fluxFunction;
+ReducedTPCWHugoniotFunctionClass::ReducedTPCWHugoniotFunctionClass(const RealVector & U, const Flux2Comp2PhasesAdimensionalized *fluxFunction, const Accum2Comp2PhasesAdimensionalized * accumFunction) :
+HugoniotFunctionClass(*fluxFunction),
+TPCWFluxAdimensionalized(fluxFunction),
+TPCWAccumAdimensionalized(accumFunction){
 
     n = U.size();
 
@@ -47,7 +44,7 @@ HugoniotFunctionClass(*fluxFunction) {
     JetMatrix BrefJetMatrix(n);
 
 
-    getFluxFunction().jet(Ur, ArefJetMatrix, 1);
+    TPCWFluxAdimensionalized->jet(Ur, ArefJetMatrix, 1);
     TPCWAccumAdimensionalized->jet(Ur, BrefJetMatrix, 1);
 
     double A[n][n];

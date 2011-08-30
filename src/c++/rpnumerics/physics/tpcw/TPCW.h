@@ -19,20 +19,19 @@
 #include "ReducedTPCWHugoniotFunctionClass.h"
 #include "RectBoundary.h"
 #include "Multid.h"
-#include <string>
+
 
 /*
  * ---------------------------------------------------------------
  * Definitions:
  */
-using namespace std;
+
 
 class TPCW : public SubPhysics {
 private:
 
     Thermodynamics_SuperCO2_WaterAdimensionalized * TD;
-    Flux2Comp2PhasesAdimensionalized fluxFunction_;
-    Accum2Comp2PhasesAdimensionalized accumFunction_;
+
 
 
 public:
@@ -40,7 +39,7 @@ public:
 //    TPCW(const FluxFunction &, const AccumulationFunction &,  const Thermodynamics_SuperCO2_WaterAdimensionalized &);
 
 
-    TPCW(const RealVector &);
+    TPCW(const RealVector &,const string &);
 
 
     TPCW(const TPCW &);

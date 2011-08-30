@@ -58,62 +58,62 @@ public:
 
     int status_after_init(void); 
 
-    double RockEnthalpyVol(double);
-    void Diff_RockEnthalpyVol(double, double&, double&, double&);
+    double RockEnthalpyVol(double)const;
+    void Diff_RockEnthalpyVol(double, double&, double&, double&)const;
 
     double AqueousEnthalpyVol(double);
-    void Diff_AqueousEnthalpyVol(double, double&, double&, double&);
+    void Diff_AqueousEnthalpyVol(double, double&, double&, double&)const;
 
-    double SuperCriticEnthalpyVol(double);
-    void Diff_SuperCriticEnthalpyVol(double, double&, double&, double&);
+    double SuperCriticEnthalpyVol(double)const;
+    void Diff_SuperCriticEnthalpyVol(double, double&, double&, double&)const;
 
-    double Rhosic(double);
-    void Diff_Rhosic(double, double&, double&, double&);
+    double Rhosic(double)const;
+    void Diff_Rhosic(double, double&, double&, double&)const;
 
-    double Rhosiw(double);
-    void Diff_Rhosiw(double, double&, double&, double&);
+    double Rhosiw(double)const;
+    void Diff_Rhosiw(double, double&, double&, double&)const;
 
-    double Rhoac(double);
-    void Diff_Rhoac(double, double&, double&, double&);
+    double Rhoac(double)const;
+    void Diff_Rhoac(double, double&, double&, double&)const;
 
-    double Rhoaw(double);
-    void Diff_Rhoaw(double, double&, double&, double&);
+    double Rhoaw(double)const;
+    void Diff_Rhoaw(double, double&, double&, double&)const;
 
-    double RhoW(double);
-    void Diff_RhoW(double, double&, double&, double&);
+    double RhoW()const;
+    void Diff_RhoW(double, double&, double&, double&)const;
 
-    double hsigmaC(double);
-    void Diff_hsigmaC(double, double&, double&, double&);
+    double hsigmaC(double)const;
+    void Diff_hsigmaC(double, double&, double&, double&)const;
 
-    double Cr(void);
+    double Cr(void)const;
 
-    double Cw_specific(void);
+    double Cw_specific(void)const;
 
     void setTtypical(double);
     void setRhoTypical(double);
     void UTypical (double);
 
-    void inv_muw(double T, double &nuw, double &dnuw_dT, double &d2nuw_dT2); // Water viscosity
+    void inv_muw(double T, double &nuw, double &dnuw_dT, double &d2nuw_dT2)const; // Water viscosity
     void muw(double T, double &muw, double &dmuw_dT, double &d2muw_dT2); // Water viscosity
 
-    void inv_mug(double T, double &nug, double &dnug_dT, double &d2nug_dT2); // Gas   viscosity
-    void mug(double T, double &mug, double &dmug_dT, double &d2mug_dT2); // Gas   viscosity
+    void inv_mug(double T, double &nug, double &dnug_dT, double &d2nug_dT2)const; // Gas   viscosity
+    void mug(double T, double &mug, double &dmug_dT, double &d2mug_dT2)const; // Gas   viscosity
 
     // Convert from Theta to T (dimensionless -> dimensioned)
-    double Theta2T(double);
+    double Theta2T(double)const;
 
     // Convert from T to Theta (dimensioned -> dimensionless)
-    double T2Theta(double);
+    double T2Theta(double)const;
 
     // Convert from U to u (dimensionless -> dimensioned)
-    double U2u(double);
+    double U2u(double)const;
 
     // Convert from u to U (dimensioned -> dimensionless)
-    double u2U(double);
+    double u2U(double)const;
 
-    double T_typical(void);
+    double T_typical(void)const;
 
-    double U_typical(void);
+    double U_typical(void)const;
 };
 
 #endif // _THERMODYNAMICS_SUPERCO2_WATERADIMENSIONALIZED_

@@ -1,9 +1,9 @@
 #include "SubinflectionTPCW.h"
 
-SubinflectionTPCW::SubinflectionTPCW(Thermodynamics_SuperCO2_WaterAdimensionalized *t, FracFlow2PhasesHorizontalAdimensionalized *f, double phi_) {
-    td = t;
-    fh = f;
-    phi = phi_;
+SubinflectionTPCW::SubinflectionTPCW(const Flux2Comp2PhasesAdimensionalized * fluxFunction,const Accum2Comp2PhasesAdimensionalized * accumFunction):
+fluxFunction_(fluxFunction),
+td(fluxFunction->getThermo()),
+phi(accumFunction->accumulationParams().component(0)){
 }
 
 void SubinflectionTPCW::subinflection_function(double & reduced_lambdae, double & numeratorchiu, double & denominatorchiu, const RealVector &u) {
@@ -14,7 +14,7 @@ void SubinflectionTPCW::subinflection_function(double & reduced_lambdae, double 
     double Theta = u.component(1);
     JetMatrix m(1);
 
-    fh->Diff_FracFlow2PhasesHorizontalAdimensionalized(sw, Theta, 0, m);
+    fluxFunction_->getHorizontalFlux()->Diff_FracFlow2PhasesHorizontalAdimensionalized(sw, Theta, 0, m);
     double f = m(0);
     double s = u.component(0);
 

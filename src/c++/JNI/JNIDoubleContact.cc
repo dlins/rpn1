@@ -133,47 +133,42 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
         double Rho_typical = 998.2;
         double U_typical = 4.22e-3;
 
+        //        Thermodynamics_SuperCO2_WaterAdimensionalized td(Physics::getRPnHome(), T_Typical, Rho_typical, U_typical);
 
-
-
-
-
-        Thermodynamics_SuperCO2_WaterAdimensionalized td(Physics::getRPnHome(), T_Typical, Rho_typical, U_typical);
-
-        int info = td.status_after_init();
-        printf("Thermodynamics = %p,  info = %d\n\n\n", &td, info);
+        //        int info = td.status_after_init();
+        //        printf("Thermodynamics = %p,  info = %d\n\n\n", &td, info);
 
         // Create Horizontal & Vertical FracFlows
         double cnw = 0., cng = 0., expw = 2., expg = 2.;
-        FracFlow2PhasesHorizontalAdimensionalized * fh = new FracFlow2PhasesHorizontalAdimensionalized(cnw, cng, expw, expg, &td);
-        FracFlow2PhasesVerticalAdimensionalized * fv = new FracFlow2PhasesVerticalAdimensionalized(cnw, cng, expw, expg, &td);
+        //        FracFlow2PhasesHorizontalAdimensionalized * fh = new FracFlow2PhasesHorizontalAdimensionalized(cnw, cng, expw, expg, &td);
+        //        FracFlow2PhasesVerticalAdimensionalized * fv = new FracFlow2PhasesVerticalAdimensionalized(cnw, cng, expw, expg, &td);
 
         // Create the Flux and its params
         double abs_perm = 20e-12;
         double sin_beta = 0.0;
         double const_gravity = 9.8;
         bool has_gravity = false, has_horizontal = true;
-
-        Flux2Comp2PhasesAdimensionalized_Params flux_params(abs_perm, sin_beta, const_gravity,
-                has_gravity, has_horizontal,
-                &td,
-                fh, fv);
-
-        Flux2Comp2PhasesAdimensionalized flux(flux_params);
+        //
+        //        Flux2Comp2PhasesAdimensionalized_Params flux_params(abs_perm, sin_beta, const_gravity,
+        //                has_gravity, has_horizontal,
+        //                &td,
+        //                fh, fv);
+        //
+        //        Flux2Comp2PhasesAdimensionalized flux(flux_params);
 
         // Create the Accum and its params
         double phi = 0.38;
-        Accum2Comp2PhasesAdimensionalized_Params accum_params(&td, phi);
-        Accum2Comp2PhasesAdimensionalized accum(accum_params);
+        //        Accum2Comp2PhasesAdimensionalized_Params accum_params(&td, phi);
+        //        Accum2Comp2PhasesAdimensionalized accum(accum_params);
 
 
         // Reduced stuff
-        ReducedFlux2Comp2PhasesAdimensionalized_Params reduced_flux_params(abs_perm, &td, fh);
-        ReducedFlux2Comp2PhasesAdimensionalized reduced_flux(reduced_flux_params);
+        //        ReducedFlux2Comp2PhasesAdimensionalized_Params reduced_flux_params(abs_perm, &td, fh);
+        //        ReducedFlux2Comp2PhasesAdimensionalized reduced_flux(reduced_flux_params);
 
 
-        ReducedAccum2Comp2PhasesAdimensionalized_Params reduced_accum_params(&td, phi);
-        ReducedAccum2Comp2PhasesAdimensionalized reduced_accum(reduced_accum_params);
+        //        ReducedAccum2Comp2PhasesAdimensionalized_Params reduced_accum_params(&td, phi);
+        //        ReducedAccum2Comp2PhasesAdimensionalized reduced_accum(reduced_accum_params);
 
 
         // Double Contact
@@ -184,7 +179,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
         //        pmax.component(0) = 1.0;
         //        pmax.component(1) = td.T2Theta(450.0);
 
-        SubPhysics & physics = RpNumerics::getPhysics().getSubPhysics(0);
+        TPCW & tpcw = (TPCW &) RpNumerics::getPhysics().getSubPhysics(0);
         const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
 
         RealVector min(2);
@@ -199,8 +194,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
         max.component(1) = physicsBoundary.maximums().component(1);
 
 
-        physics.preProcess(min);
-        physics.preProcess(max);
+        tpcw.preProcess(min);
+        tpcw.preProcess(max);
 
         cout << "Resolucao x " << number_of_grid_pnts[0];
         cout << "Resolucao y " << number_of_grid_pnts[1];
@@ -215,26 +210,29 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
         //        int lfamily = 0;
         //        int rfamily = 0;
 
+
+        Flux2Comp2PhasesAdimensionalized * fluxFunction = (Flux2Comp2PhasesAdimensionalized *) & tpcw.fluxFunction();
+
+        Accum2Comp2PhasesAdimensionalized * accumulationFunction = (Accum2Comp2PhasesAdimensionalized *) & tpcw.accumulation();
+
         Double_ContactTPCW dc(min, max, number_of_grid_pnts,
-                &flux, &accum,
-                &reduced_flux, &reduced_accum,
+                fluxFunction, accumulationFunction,
                 leftFamily,
                 min, max, number_of_grid_pnts,
-                &flux, &accum,
-                &reduced_flux, &reduced_accum,
+                fluxFunction, accumulationFunction,
                 rightFamily);
 
         dc.compute_double_contactTPCW(left_vrs, right_vrs);
 
 
-        physics.postProcess(left_vrs);
-        physics.postProcess(right_vrs);
+        tpcw.postProcess(left_vrs);
+        tpcw.postProcess(right_vrs);
 
         printf("left_vrs.size()  = %d\n", left_vrs.size());
         printf("right_vrs.size() = %d\n", right_vrs.size());
 
-        delete fv;
-        delete fh;
+        //        delete fv;
+        //        delete fh;
 
     }
 
