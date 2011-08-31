@@ -543,7 +543,7 @@ int Flux2Comp2PhasesAdimensionalized::jet(const WaveState &w, JetMatrix &m, int 
     return 2; //SUCCESSFUL_PROCEDURE;
 }
 
-Thermodynamics_SuperCO2_WaterAdimensionalized * Flux2Comp2PhasesAdimensionalized::getThermo() const{
+Thermodynamics_SuperCO2_WaterAdimensionalized * Flux2Comp2PhasesAdimensionalized::getThermo() const {
     return TD;
 }
 
@@ -555,7 +555,7 @@ Flux2Comp2PhasesAdimensionalized::FracFlow2PhasesVerticalAdimensionalized * Flux
     return FV;
 }
 
-Flux2Comp2PhasesAdimensionalized::ReducedFlux2Comp2PhasesAdimensionalized * Flux2Comp2PhasesAdimensionalized::getReducedFlux()const  {
+Flux2Comp2PhasesAdimensionalized::ReducedFlux2Comp2PhasesAdimensionalized * Flux2Comp2PhasesAdimensionalized::getReducedFlux()const {
     return reducedFlux;
 }
 
@@ -566,6 +566,8 @@ int Flux2Comp2PhasesAdimensionalized::FracFlow2PhasesHorizontalAdimensionalized:
 
 
     double T = fluxComplete_->TD->Theta2T(Theta);
+
+    cout << "T em flux H: " << T << endl;
 
     //    double T = Flux2Comp2PhasesAdimensionalized::getThermo()->Theta2T(Theta);
 
@@ -615,6 +617,32 @@ int Flux2Comp2PhasesAdimensionalized::FracFlow2PhasesHorizontalAdimensionalized:
 
     fluxComplete_->TD->muw(T, muw, dmuw_dT, d2muw_dT2);
     fluxComplete_->TD->mug(T, mug, dmug_dT, d2mug_dT2);
+
+    //--------------------------------------------------------------------
+
+
+    cout << T << " " << nuw << " " << dnuw_dT << " " << d2nuw_dT2 << endl;
+    cout << nug << " " << dnug_dT << " " << d2nug_dT2 << " " << endl;
+
+    cout << muw << " " << dmuw_dT << " " << d2muw_dT2 << " " << endl;
+    cout << mug << " " << dmug_dT << " " << d2mug_dT2 << " " << endl;
+
+
+
+
+
+
+
+
+    //--------------------------------------------------------------------
+
+
+
+
+
+
+
+
 
 
     // Before evaluating proper

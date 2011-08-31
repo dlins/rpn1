@@ -23,13 +23,10 @@ double CoincidenceTPCW::lambdae_function(const RealVector &u) {
     double Theta = u.component(1);
     JetMatrix m(2);
 
-    cout << "sw: " << sw<<endl;
-    cout << "Theta: " << Theta<<endl;
-
-
-
     fluxFunction_->getHorizontalFlux()-> Diff_FracFlow2PhasesHorizontalAdimensionalized(sw, Theta, 0, m);
-  
+
+
+
     double f = m(0);
     double s = u.component(0);
 
@@ -65,13 +62,7 @@ double CoincidenceTPCW::lambdae_function(const RealVector &u) {
     td->Diff_Rhosic(Theta, rhosigmac, drhosigmac_dT, d2rhosigmac_dT2);
     td->Diff_Rhosiw(Theta, rhosigmaw, drhosigmaw_dT, d2rhosigmaw_dT2);
 
-
-
-
     td->Diff_Rhoac(Theta, rhoac, drhoac_dT, d2rhoac_dT2);
-
-
-
 
     td->Diff_Rhoaw(Theta, rhoaw, drhoaw_dT, d2rhoaw_dT2);
 
@@ -108,11 +99,11 @@ double CoincidenceTPCW::lambdae_function(const RealVector &u) {
 
 double CoincidenceTPCW::HugoniotFunction(const RealVector &u) {
     //    printf("CoincidenceTPCW::HugoniotFunction()\n");
-    cout <<"Valor entrado na HF de Coincidence: "<<u<<endl;
+
     double lambdas = lambdas_function(u);
     double lambdae = lambdae_function(u);
-    cout << "Lambdas: " << lambdas << endl;
-    cout << "Lambdae: " << lambdae << endl;
+//    cout << "Lambdas: " << lambdas << endl;
+//    cout << "Lambdae: " << lambdae << endl;
     return lambdas - lambdae;
 }
 

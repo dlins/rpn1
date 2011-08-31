@@ -54,14 +54,6 @@ SubPhysics(*defaultBoundary(), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATIO
 
 
 
-    cout << "min T: " << TD->T2Theta(304.63) << endl;
-
-    cout << "max T: " << TD->T2Theta(450) << endl;
-
-
-
-    cout << "min U: " << TD->U2u(2 * 4.22e-5) << endl;
-    cout << "max U: " << TD->U2u(2 * 4.22e-5) << endl;
 
 }
 
