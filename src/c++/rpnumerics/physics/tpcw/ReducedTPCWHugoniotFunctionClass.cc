@@ -94,7 +94,7 @@ void ReducedTPCWHugoniotFunctionClass::setReferenceVector(const RealVector & ref
     aref_F = new double[n];
     bref_F = new double[n];
 
-   TPCWFluxAdimensionalized->jet(u, arefJetMatrix, 0);
+   TPCWFluxAdimensionalized->getReducedFlux()->jet(u, arefJetMatrix, 0);
    TPCWAccumAdimensionalized->getReducedAccumulation()->jet(u, brefJetMatrix, 0);
 
 
