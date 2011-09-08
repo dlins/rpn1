@@ -1,24 +1,24 @@
 #include "Bifurcation_CurveTPCW.h"
 
-void Bifurcation_CurveTPCW::create_grid(const RealVector &pmin, const RealVector &pmax, const int *number_of_cells, Matrix<RealVector> &p){
+void Bifurcation_CurveTPCW::create_grid(const RealVector &pmin, const RealVector &pmax, const int *number_of_cells, Matrix<RealVector> &p) {
     int dim = pmin.size();
 
     double delta[pmin.size()];
 
-    for (int i = 0; i < pmin.size(); i++) delta[i] = (fabs(pmax.component(i) - pmin.component(i)))/(double)(number_of_cells[i] - 1);
+    for (int i = 0; i < pmin.size(); i++) delta[i] = (fabs(pmax.component(i) - pmin.component(i))) / (double) (number_of_cells[i] - 1);
 
-    for (int i = 0; i < number_of_cells[0]; i++){
-        for (int j = 0; j < number_of_cells[1]; j++){
-//            printf("Here\n");
+    for (int i = 0; i < number_of_cells[0]; i++) {
+        for (int j = 0; j < number_of_cells[1]; j++) {
+            //            printf("Here\n");
 
             p(i, j).resize(dim);
 
-            p(i, j).component(0) = pmin.component(0) + (double)i*delta[0];
-            p(i, j).component(1) = pmin.component(1) + (double)j*delta[1];
+            p(i, j).component(0) = pmin.component(0) + (double) i * delta[0];
+            p(i, j).component(1) = pmin.component(1) + (double) j * delta[1];
         }
     }
 
-//    printf("Inside create_grid()\n");
+    //    printf("Inside create_grid()\n");
 
     return;
 }
@@ -71,14 +71,13 @@ void Bifurcation_CurveTPCW::create_grid(const RealVector &pmin, const RealVector
 
 // TODO: Modify this method so it looks more like fill_values_on_curve() (qv below).
 
-void Bifurcation_CurveTPCW::fill_values_on_grid(const RealVector &pmin, const RealVector &pmax, 
-                                                const FluxFunction *ff, const AccumulationFunction *aa, 
-//                                                const FluxFunction *Redff, const AccumulationFunction *Redaa,
-                                                const int *number_of_grid_pnts,
-                                                Matrix<RealVector> &grid,
-                                                Matrix<RealVector> &Redffv, Matrix<RealVector> &Redaav,
-                                                Matrix< vector<eigenpair> > &Rede, Matrix< vector<bool> > &Redeig_is_real){
-    
+void Bifurcation_CurveTPCW::fill_values_on_grid(const RealVector &pmin, const RealVector &pmax,
+        const FluxFunction *ff, const AccumulationFunction *aa,
+        const int *number_of_grid_pnts,
+        Matrix<RealVector> &grid,
+        Matrix<RealVector> &Redffv, Matrix<RealVector> &Redaav,
+        Matrix< vector<eigenpair> > &Rede, Matrix< vector<bool> > &Redeig_is_real) {
+
     // Dimension of space
     int dim = pmin.size();
 
@@ -97,40 +96,36 @@ void Bifurcation_CurveTPCW::fill_values_on_grid(const RealVector &pmin, const Re
     // generalized eigenvalues using u=1 for the third component of the variables.
 
 
-    Flux2Comp2PhasesAdimensionalized * fluxFunction = (Flux2Comp2PhasesAdimensionalized*)ff;
-    Accum2Comp2PhasesAdimensionalized * accumulationFunction = (Accum2Comp2PhasesAdimensionalized *)aa;
+    Flux2Comp2PhasesAdimensionalized * fluxFunction = (Flux2Comp2PhasesAdimensionalized*) ff;
+    Accum2Comp2PhasesAdimensionalized * accumulationFunction = (Accum2Comp2PhasesAdimensionalized *) aa;
 
-    for (int i = 0; i < n; i++){
+    for (int i = 0; i < n; i++) {
         double point[dim];
-        double pointP[dimP] ;
+        double pointP[dimP];
 
         for (int j = 0; j < dim; j++) point[j] = grid(i).component(j);
         for (int j = 0; j < dim; j++) pointP[j] = point[j];
-        pointP[2] = 1.0 ; // THIS IS THE TRICK!
-        
+        pointP[2] = 1.0; // THIS IS THE TRICK!
+
         double JF[dimP][dimP], JG[dimP][dimP];
-        double F[dimP], G[dimP];     
-        double RedF[dimP], RedG[dimP];        
+        double F[dimP], G[dimP];
+        double RedF[dimP], RedG[dimP];
 
         // Here we are filling the big jets.
-        fill_with_jet((RpFunction*)fluxFunction, dimP, pointP, 1, F, &JF[0][0], 0); // TODO: PRECISA COLOCAR O F NO FILL WITH JET O NO?????
+        fill_with_jet((RpFunction*) fluxFunction, dimP, pointP, 1, F, &JF[0][0], 0); // TODO: PRECISA COLOCAR O F NO FILL WITH JET O NO?????
 
-        fill_with_jet((RpFunction*)accumulationFunction, dimP, pointP, 1, G, &JG[0][0], 0);
+        fill_with_jet((RpFunction*) accumulationFunction, dimP, pointP, 1, G, &JG[0][0], 0);
 
+        // Here we are filling the reduced jets.
 
-//        Flux2Comp2PhasesAdimensionalized::ReducedFlux2Comp2PhasesAdimensionalized *reducedrightff = rightff->getReducedFlux();
-//        Accum2Comp2PhasesAdimensionalized::ReducedAccum2Comp2PhasesAdimensionalized *reducedrightaa = rightaa->getReducedAccumulation();
-
-
-        // Here we are filling the reduced jets.  
-        fill_with_jet((RpFunction*)fluxFunction->getReducedFlux(), dimP, pointP, 0, RedF, 0, 0);
-        fill_with_jet((RpFunction*)accumulationFunction->getReducedAccumulation(), dimP, pointP, 0, RedG, 0, 0);
+        fill_with_jet((RpFunction*) fluxFunction->getReducedFlux(), dimP, pointP, 0, RedF, 0, 0);
+        fill_with_jet((RpFunction*) accumulationFunction->getReducedAccumulation(), dimP, pointP, 0, RedG, 0, 0);
 
 
         // Fill the values of the functions
         Redffv(i).resize(dimP);
         Redaav(i).resize(dimP);
-        for (int j = 0; j < dimP; j++){ 
+        for (int j = 0; j < dimP; j++) {
             Redffv(i).component(j) = RedF[j];
             Redaav(i).component(j) = RedG[j];
         }
@@ -146,28 +141,27 @@ void Bifurcation_CurveTPCW::fill_values_on_grid(const RealVector &pmin, const Re
         // Decide if the eigenvalues are real or complex
         Redeig_is_real(i).clear();
         Redeig_is_real(i).resize(Redetemp.size());
-        for (int j = 0; j < Redetemp.size(); j++){
+        for (int j = 0; j < Redetemp.size(); j++) {
             if (fabs(Redetemp[j].i) < epsilon) Redeig_is_real(i)[j] = true;
-            else                               Redeig_is_real(i)[j] = false;
+            else Redeig_is_real(i)[j] = false;
         }
     }
 
     return;
 }
 
-void Bifurcation_CurveTPCW::fill_values_on_grid(const RealVector &pmin, const RealVector &pmax, 
-                                            const FluxFunction *ff, const AccumulationFunction *aa, 
-//                                            const FluxFunction *Redff, const AccumulationFunction *Redaa,
-                                            const int *number_of_grid_pnts,
-                                            Matrix<RealVector> &grid,
-                                            Matrix<RealVector> &ffv, Matrix<RealVector> &aav, 
-                                            Matrix< std::vector<double> > &e, Matrix< vector<bool> > &eig_is_real){
+void Bifurcation_CurveTPCW::fill_values_on_grid(const RealVector &pmin, const RealVector &pmax,
+        const FluxFunction *ff, const AccumulationFunction *aa,
+        const int *number_of_grid_pnts,
+        Matrix<RealVector> &grid,
+        Matrix<RealVector> &ffv, Matrix<RealVector> &aav,
+        Matrix< std::vector<double> > &e, Matrix< vector<bool> > &eig_is_real) {
 
     Matrix< std::vector<eigenpair> > temp(grid.rows(), grid.cols());
     fill_values_on_grid(pmin, pmax, ff, aa, number_of_grid_pnts, grid, ffv, aav, temp, eig_is_real);
-    
-    for (int i = 0; i < grid.rows(); i++){
-        for (int j = 0; j < grid.cols(); j++){
+
+    for (int i = 0; i < grid.rows(); i++) {
+        for (int j = 0; j < grid.cols(); j++) {
             e(i, j).resize(pmin.size());
 
             for (int k = 0; k < pmin.size(); k++) e(i, j)[k] = temp(i, j)[k].r;
@@ -177,11 +171,11 @@ void Bifurcation_CurveTPCW::fill_values_on_grid(const RealVector &pmin, const Re
     return;
 }
 
-Bifurcation_CurveTPCW::Bifurcation_CurveTPCW(){
+Bifurcation_CurveTPCW::Bifurcation_CurveTPCW() {
     epsilon = 1e-6;
 }
 
-Bifurcation_CurveTPCW::~Bifurcation_CurveTPCW(){
+Bifurcation_CurveTPCW::~Bifurcation_CurveTPCW() {
 }
 
 // This function that fills F, J and H using jets.
@@ -206,73 +200,51 @@ Bifurcation_CurveTPCW::~Bifurcation_CurveTPCW(){
 // should be set to zero. For example, the rarefaction only uses J. Therefore, the
 // user should reserve an array of n*n doubles for J, and invoke this function passing 0 for F and H.
 //
-void Bifurcation_CurveTPCW::fill_with_jet(RpFunction *flux_object, int n, double *in, int degree, double *F, double *J, double *H){
+
+void Bifurcation_CurveTPCW::fill_with_jet(RpFunction *flux_object, int n, double *in, int degree, double *F, double *J, double *H) {
     RealVector r(n);
     double *rp = r;
-    for (int i = 0; i < n; i++) rp[i] = in[i]; 
+    for (int i = 0; i < n; i++) rp[i] = in[i];
+
 
     // Will this work? There is a const somewhere in fluxParams.
     //FluxParams fp(r);
     //flux_object->fluxParams(FluxParams(r)); // flux_object->fluxParams(fp);
-    
-    WaveState state_c(r); 
+
+    WaveState state_c(r);
     JetMatrix c_jet(n);
-    
+
+    //    if (flux_object==NULL)cout<<"Nulo !"<<endl;
+
     flux_object->jet(state_c, c_jet, degree);
 
     // Fill F
     if (F != 0) for (int i = 0; i < n; i++) F[i] = c_jet(i);
 
-
-
-
     // Fill J
-    if (J != 0){
-        for (int i = 0; i < n; i++){
-            for (int j = 0; j < n; j++){
-                J[i*n + j] = c_jet(i, j);
+    if (J != 0) {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                J[i * n + j] = c_jet(i, j);
             }
         }
     }
-    
+
     // Fill H
-    if (H != 0){
-        for (int i = 0; i < n; i++){
-            for (int j = 0; j < n; j++){
-                for (int k = 0; k < n; k++){
-                    H[(i*n + j)*n + k] = c_jet(i, j, k); // Check this!!!!!!!!
+    if (H != 0) {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                for (int k = 0; k < n; k++) {
+                    H[(i * n + j) * n + k] = c_jet(i, j, k); // Check this!!!!!!!!
                 }
             }
-        }    
+        }
     }
 
     return;
 }
 
-//void Bifurcation_CurveTPCW::create_cells(int *number_of_grid_pnts, int family, Matrix<RealEigenvalueCell> &mc, Matrix< std::vector<bool> > *eigenvalues_on_the_grid){
-//    int n = number_of_grid_pnts[0] - 1;
-//    int m = number_of_grid_pnts[1] - 1;
 
-//    mc.resize(n, m);
-
-//    for (int i = 0; i < n; i++){
-//        for (int j = 0; j < m; j++) mc(i, j) = RealEigenvalueCell(i, j, true, family, eigenvalues_on_the_grid); // Only squares for the moment being.
-//    }
-//    
-//    return;
-//}
-
-//void Bifurcation_CurveTPCW::validate_cells(int family, int *number_of_cells, Matrix<RealEigenvalueCell> &mc, Matrix<bool> &mb){
-//    mb.resize(number_of_cells[0], number_of_cells[1]);
-
-//    for (int i = 0; i < number_of_cells[0]; i++){
-//        for (int j = 0; j < number_of_cells[1]; j++){
-//            bool temp = mc(i, j).is_complex(family); 
-//            mb(i, j) = temp;
-//        }
-//    }
-//    return;
-//}
 
 // Each cell's indices are those of their lower-left vertex, which lies on a grid:
 //
@@ -290,36 +262,37 @@ void Bifurcation_CurveTPCW::fill_with_jet(RpFunction *flux_object, int n, double
 //
 
 // TODO: A grid may contain both square and triangular cells. Therefore, type_of_cells will become a Matrix<bool>.
-void Bifurcation_CurveTPCW::validate_cells(int family, bool type_of_cells, Matrix< std::vector<bool> > &original, Matrix<bool> &mb_is_complex){
-    int rows = original.rows() - 1; 
+
+void Bifurcation_CurveTPCW::validate_cells(int family, bool type_of_cells, Matrix< std::vector<bool> > &original, Matrix<bool> &mb_is_complex) {
+    int rows = original.rows() - 1;
     int cols = original.cols() - 1;
 
     mb_is_complex.resize(rows, cols);
 
-    for (int i = 0; i < rows; i++){
-        for (int j = 0; j < cols; j++){
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
             mb_is_complex(i, j) = false;
 
             // Vertex 0
-            if (!(original(i, j)[family])){
+            if (!(original(i, j)[family])) {
                 mb_is_complex(i, j) = true;
                 return;
             }
             // Vertex 1
-            if (!(original(i + 1, j)[family])){
+            if (!(original(i + 1, j)[family])) {
                 mb_is_complex(i, j) = true;
                 return;
             }
             // Vertex 3
-            if (!(original(i, j + 1)[family])){
+            if (!(original(i, j + 1)[family])) {
                 mb_is_complex(i, j) = true;
                 return;
             }
 
             // Vertex 2
             // Squares only
-            if (type_of_cells){
-                if (!(original(i + 1, j + 1)[family])){
+            if (type_of_cells) {
+                if (!(original(i + 1, j + 1)[family])) {
                     mb_is_complex(i, j) = true;
                     return;
                 }
@@ -347,53 +320,63 @@ void Bifurcation_CurveTPCW::validate_cells(int family, bool type_of_cells, Matri
 //     3 = (i, j + 1).
 //
 // TODO;: This function must also take into account the fact that cells can be triangles.
-void Bifurcation_CurveTPCW::prepare_cell(int i, int j, int family, Matrix< std::vector<double> > &eigen, Matrix<RealVector> &flux_values, Matrix<RealVector> &accum_values, double *lambda, Matrix<double> &flux, Matrix<double> &accum){
 
-//    lambda[0]   = eigen(i, j)[family];
-//    flux(0, 0)  = flux_values(i, j).component(0);
-//    flux(1, 0)  = flux_values(i, j).component(1);
-//    flux(2, 0)  = flux_values(i, j).component(2);
-//    accum(0, 0) = accum_values(i, j).component(0);
-//    accum(1, 0) = accum_values(i, j).component(1);
-//    accum(2, 0) = accum_values(i, j).component(2);
+void Bifurcation_CurveTPCW::prepare_cell(int i, int j, int family, Matrix< std::vector<double> > &eigen, Matrix<RealVector> &flux_values, Matrix<RealVector> &accum_values, double *lambda, Matrix<double> &flux, Matrix<double> &accum) {
 
-//    lambda[1] = eigen(i + 1, j)[family];
-//    flux(0, 1) = flux_values(i + 1, j).component(0);
-//    flux(1, 1) = flux_values(i + 1, j).component(1);
-//    flux(2, 1) = flux_values(i + 1, j).component(2);
-//    accum(0, 1) = accum_values(i + 1, j).component(0);
-//    accum(1, 1) = accum_values(i + 1, j).component(1);
-//    accum(2, 1) = accum_values(i + 1, j).component(2);
+    //    lambda[0]   = eigen(i, j)[family];
+    //    flux(0, 0)  = flux_values(i, j).component(0);
+    //    flux(1, 0)  = flux_values(i, j).component(1);
+    //    flux(2, 0)  = flux_values(i, j).component(2);
+    //    accum(0, 0) = accum_values(i, j).component(0);
+    //    accum(1, 0) = accum_values(i, j).component(1);
+    //    accum(2, 0) = accum_values(i, j).component(2);
 
-//    lambda[2] = eigen(i + 1, j + 1)[family];
-//    flux(0, 2) = flux_values(i + 1, j + 1).component(0);
-//    flux(1, 2) = flux_values(i + 1, j + 1).component(1);
-//    flux(2, 2) = flux_values(i + 1, j + 1).component(2);
-//    accum(0, 2) = accum_values(i + 1, j + 1).component(0);
-//    accum(1, 2) = accum_values(i + 1, j + 1).component(1);
-//    accum(2, 2) = accum_values(i + 1, j + 1).component(2);
+    //    lambda[1] = eigen(i + 1, j)[family];
+    //    flux(0, 1) = flux_values(i + 1, j).component(0);
+    //    flux(1, 1) = flux_values(i + 1, j).component(1);
+    //    flux(2, 1) = flux_values(i + 1, j).component(2);
+    //    accum(0, 1) = accum_values(i + 1, j).component(0);
+    //    accum(1, 1) = accum_values(i + 1, j).component(1);
+    //    accum(2, 1) = accum_values(i + 1, j).component(2);
 
-//    lambda[3] = eigen(i, j + 1)[family];
-//    flux(0, 3) = flux_values(i, j + 1).component(0);
-//    flux(1, 3) = flux_values(i, j + 1).component(1);
-//    flux(2, 3) = flux_values(i, j + 1).component(2);
-//    accum(0, 3) = accum_values(i, j + 1).component(0);
-//    accum(1, 3) = accum_values(i, j + 1).component(1);
-//    accum(2, 3) = accum_values(i, j + 1).component(2);
+    //    lambda[2] = eigen(i + 1, j + 1)[family];
+    //    flux(0, 2) = flux_values(i + 1, j + 1).component(0);
+    //    flux(1, 2) = flux_values(i + 1, j + 1).component(1);
+    //    flux(2, 2) = flux_values(i + 1, j + 1).component(2);
+    //    accum(0, 2) = accum_values(i + 1, j + 1).component(0);
+    //    accum(1, 2) = accum_values(i + 1, j + 1).component(1);
+    //    accum(2, 2) = accum_values(i + 1, j + 1).component(2);
+
+    //    lambda[3] = eigen(i, j + 1)[family];
+    //    flux(0, 3) = flux_values(i, j + 1).component(0);
+    //    flux(1, 3) = flux_values(i, j + 1).component(1);
+    //    flux(2, 3) = flux_values(i, j + 1).component(2);
+    //    accum(0, 3) = accum_values(i, j + 1).component(0);
+    //    accum(1, 3) = accum_values(i, j + 1).component(1);
+    //    accum(2, 3) = accum_values(i, j + 1).component(2);
 
     int domain_i, domain_j;
 
-    for (int kr = 0; kr < 4; kr++){
-        if      (kr == 0) {domain_i = i;     domain_j = j;}
-        else if (kr == 1) {domain_i = i + 1; domain_j = j;}
-        else if (kr == 2) {domain_i = i + 1; domain_j = j + 1;}
-        else if (kr == 3) {domain_i = i;     domain_j = j + 1;}
+    for (int kr = 0; kr < 4; kr++) {
+        if (kr == 0) {
+            domain_i = i;
+            domain_j = j;
+        } else if (kr == 1) {
+            domain_i = i + 1;
+            domain_j = j;
+        } else if (kr == 2) {
+            domain_i = i + 1;
+            domain_j = j + 1;
+        } else if (kr == 3) {
+            domain_i = i;
+            domain_j = j + 1;
+        }
 
-        lambda[kr]   = eigen(domain_i, domain_j)[family];
+        lambda[kr] = eigen(domain_i, domain_j)[family];
 
-        flux(0, kr)  = flux_values(domain_i, domain_j).component(0);
-        flux(1, kr)  = flux_values(domain_i, domain_j).component(1);
-        flux(2, kr)  = flux_values(domain_i, domain_j).component(2);
+        flux(0, kr) = flux_values(domain_i, domain_j).component(0);
+        flux(1, kr) = flux_values(domain_i, domain_j).component(1);
+        flux(2, kr) = flux_values(domain_i, domain_j).component(2);
 
         accum(0, kr) = accum_values(domain_i, domain_j).component(0);
         accum(1, kr) = accum_values(domain_i, domain_j).component(1);
@@ -405,17 +388,18 @@ void Bifurcation_CurveTPCW::prepare_cell(int i, int j, int family, Matrix< std::
 
 //
 // where_is_characteristic = CHARACTERISTIC_ON_CURVE or CHARACTERISTIC_ON_DOMAIN.
-// 
-bool Bifurcation_CurveTPCW::prepare_segment(int i, int family, int where_is_characteristic,
-                                            const std::vector< std::vector<double> > &eigen, 
-                                            const std::vector<RealVector> &reduced_flux_values, 
-                                            const std::vector<RealVector> &reduced_accum_values, 
-                                            const std::vector<std::vector<bool> > &eig_is_real,
-                                            double *lambda, 
-                                            Matrix<double> &reduced_flux, 
-                                            Matrix<double> &reduced_accum){
+//
 
-    if (where_is_characteristic == CHARACTERISTIC_ON_CURVE){
+bool Bifurcation_CurveTPCW::prepare_segment(int i, int family, int where_is_characteristic,
+        const std::vector< std::vector<double> > &eigen,
+        const std::vector<RealVector> &reduced_flux_values,
+        const std::vector<RealVector> &reduced_accum_values,
+        const std::vector<std::vector<bool> > &eig_is_real,
+        double *lambda,
+        Matrix<double> &reduced_flux,
+        Matrix<double> &reduced_accum) {
+
+    if (where_is_characteristic == CHARACTERISTIC_ON_CURVE) {
         if (!eig_is_real[i][family] || !eig_is_real[i + 1][family]) return false;
     }
 
@@ -440,81 +424,21 @@ bool Bifurcation_CurveTPCW::prepare_segment(int i, int family, int where_is_char
     return true;
 }
 
-//void Bifurcation_CurveTPCW::fill_values_on_segments(const FluxFunction *ff, const AccumulationFunction *aa, const std::vector<RealVector> &input, 
-//                                                std::vector<RealVector> &vff, std::vector<RealVector> &vaa,
-//                                                std::vector<std::vector<double> > &vee, std::vector< std::vector<bool> > &eig_is_real){
-//    vff.clear();
-//    vaa.clear();
-//    vee.clear();
-//    
-//    int n = input.size();
-
-//    if (n > 1){
-//        int dim = input[0].size();
-
-//        vff.resize(n);
-//        vaa.resize(n);
-//        vee.resize(n);
-//        eig_is_real.resize(n);
-
-//        for (int i = 0; i < n; i++){
-//            double point[dim];
-//            for (int j = 0; j < dim; j++) point[j] = input[i].component(j);
-
-//            // Fill the values of the functions
-
-//            double F[dim], G[dim], JF[dim][dim], JG[dim][dim];
-//            fill_with_jet((RpFunction*)ff, dim, point, 1, F, &JF[0][0], 0);
-//            fill_with_jet((RpFunction*)aa, dim, point, 1, G, &JG[0][0], 0);
-
-//            vff[i].resize(dim);
-//            vaa[i].resize(dim);
-
-//            for (int j = 0; j < dim; j++){
-//                vff[i].component(j) = F[j];
-//                vaa[i].component(j) = G[j];
-//            }
-
-//            // Find the eigenpairs
-//            vector<eigenpair> etemp;
-//            Eigen::eig(dim, &JF[0][0], &JG[0][0], etemp);
-
-//            vee[i].clear();
-//            vee[i].resize(etemp.size());
-
-//            for (int j = 0; j < etemp.size(); j++) vee[i][j] = etemp[j].r;
-//            
-//            // Decide if the eigenvalues are real or complex
-//            eig_is_real[i].clear();
-//            eig_is_real[i].resize(etemp.size());
-//            for (int j = 0; j < etemp.size(); j++){
-//                if (fabs(etemp[j].i) < epsilon) eig_is_real[i][j] = true;
-//                else                            eig_is_real[i][j] = false;
-//            }
-//        }
-//    }
-
-//    return;
-//}
-
-
-
 void Bifurcation_CurveTPCW::fill_values_on_segments(const Flux2Comp2PhasesAdimensionalized *ff, const Accum2Comp2PhasesAdimensionalized *aa,
-//                                                    const FluxFunction *Redff, const AccumulationFunction *Redaa,
-                                                    const std::vector<RealVector> &input, 
-                                                    std::vector<RealVector> &Redvff, std::vector<RealVector> &Redvaa,
-                                                    std::vector<std::vector<double> > &Redvee, std::vector< std::vector<bool> > &Redeig_is_real){
+        const std::vector<RealVector> &input,
+        std::vector<RealVector> &Redvff, std::vector<RealVector> &Redvaa,
+        std::vector<std::vector<double> > &Redvee, std::vector< std::vector<bool> > &Redeig_is_real) {
     Redvff.clear();
     Redvaa.clear();
     Redvee.clear();
-    
+
     int n = input.size();
 
     // Exit if the curve is formed by a point only (no segments are detected).
     if (n <= 1) return;
 
     // Proceed otherwise
-    int dim  = input[0].size();
+    int dim = input[0].size();
     int dimP = dim + 1;
 
     Redvff.resize(n);
@@ -528,28 +452,28 @@ void Bifurcation_CurveTPCW::fill_values_on_segments(const Flux2Comp2PhasesAdimen
     double JF[dimP][dimP], JG[dimP][dimP];
     double RedF[dimP], RedG[dimP];
 
-    for (int i = 0; i < n; i++){
-        for (int j = 0; j < dim; j++){
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < dim; j++) {
             point[j] = input[i].component(j);
             pointP[j] = input[i].component(j);
         }
         pointP[dimP - 1] = 1.0;
 
 
-    Flux2Comp2PhasesAdimensionalized * fluxFunction = (Flux2Comp2PhasesAdimensionalized*)ff;
-    Accum2Comp2PhasesAdimensionalized * accumulationFunction = (Accum2Comp2PhasesAdimensionalized *)aa;
+        Flux2Comp2PhasesAdimensionalized * fluxFunction = (Flux2Comp2PhasesAdimensionalized*) ff;
+        Accum2Comp2PhasesAdimensionalized * accumulationFunction = (Accum2Comp2PhasesAdimensionalized *) aa;
 
         // Fill the values of the functions
-        fill_with_jet((RpFunction*)ff, dimP, pointP, 1, 0, &JF[0][0], 0);
-        fill_with_jet((RpFunction*)aa, dimP, pointP, 1, 0, &JG[0][0], 0);
-        
-        fill_with_jet((RpFunction*)fluxFunction->getReducedFlux(), dimP, pointP, 0, RedF, 0, 0);
-        fill_with_jet((RpFunction*)accumulationFunction->getReducedAccumulation(), dimP, pointP, 0, RedG, 0, 0);
-        
+        fill_with_jet((RpFunction*) ff, dimP, pointP, 1, 0, &JF[0][0], 0);
+        fill_with_jet((RpFunction*) aa, dimP, pointP, 1, 0, &JG[0][0], 0);
+
+        fill_with_jet((RpFunction*) fluxFunction->getReducedFlux(), dimP, pointP, 0, RedF, 0, 0);
+        fill_with_jet((RpFunction*) accumulationFunction->getReducedAccumulation(), dimP, pointP, 0, RedG, 0, 0);
+
         Redvff[i].resize(dimP);
         Redvaa[i].resize(dimP);
 
-        for (int j = 0; j < dimP; j++){
+        for (int j = 0; j < dimP; j++) {
             Redvff[i].component(j) = RedF[j];
             Redvaa[i].component(j) = RedG[j];
         }
@@ -562,13 +486,13 @@ void Bifurcation_CurveTPCW::fill_values_on_segments(const Flux2Comp2PhasesAdimen
         Redvee[i].resize(Redetemp.size());
 
         for (int j = 0; j < Redetemp.size(); j++) Redvee[i][j] = Redetemp[j].r;
-           
+
         // Decide if the eigenvalues are real or complex
         Redeig_is_real[i].clear();
         Redeig_is_real[i].resize(Redetemp.size());
-        for (int j = 0; j < Redetemp.size(); j++){
+        for (int j = 0; j < Redetemp.size(); j++) {
             if (fabs(Redetemp[j].i) < epsilon) Redeig_is_real[i][j] = true;
-            else                               Redeig_is_real[i][j] = false;
+            else Redeig_is_real[i][j] = false;
         }
     }
 

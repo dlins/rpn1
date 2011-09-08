@@ -10,7 +10,7 @@
 class CoincidenceTPCW : public HugoniotFunctionClass {
 private:
    const Thermodynamics_SuperCO2_WaterAdimensionalized *td;
-    const Flux2Comp2PhasesAdimensionalized *fluxFunction_;
+//    const Flux2Comp2PhasesAdimensionalized *fluxFunction_;
     double phi;
 
     double lambdas_function(const RealVector &u);

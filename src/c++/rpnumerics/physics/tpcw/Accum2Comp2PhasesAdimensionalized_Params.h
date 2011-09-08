@@ -13,6 +13,8 @@ private:
 protected:
 public:
     Accum2Comp2PhasesAdimensionalized_Params( Thermodynamics_SuperCO2_WaterAdimensionalized *, double);
+    Accum2Comp2PhasesAdimensionalized_Params(const Accum2Comp2PhasesAdimensionalized_Params &);
+
     virtual ~Accum2Comp2PhasesAdimensionalized_Params();
     double getPhi() const;
 

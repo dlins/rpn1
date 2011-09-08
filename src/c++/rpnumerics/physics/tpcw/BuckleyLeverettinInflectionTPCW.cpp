@@ -13,7 +13,7 @@ double BuckleyLeverettinInflectionTPCW::HugoniotFunction(const RealVector &u){
 
     fh->Diff_FracFlow2PhasesHorizontalAdimensionalized(sw, Theta, 2, m);
     double d2f_ds2 = m(0,0,0);
-   
+
     return d2f_ds2 ;
 }
 

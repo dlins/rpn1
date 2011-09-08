@@ -1,7 +1,6 @@
 #include "CoincidenceTPCW.h"
 
-CoincidenceTPCW::CoincidenceTPCW(const Flux2Comp2PhasesAdimensionalized *f, const Accum2Comp2PhasesAdimensionalized * a) : td(f->getThermo()),
-fluxFunction_(f),
+CoincidenceTPCW::CoincidenceTPCW(const Flux2Comp2PhasesAdimensionalized *f, const Accum2Comp2PhasesAdimensionalized * a) : HugoniotFunctionClass(*f), td(f->getThermo()),
 phi(a->accumulationParams().component(0)) {
     phi = 1.0;
 }
@@ -10,7 +9,8 @@ double CoincidenceTPCW::lambdas_function(const RealVector &u) {
     double sw = 1.0 - u.component(0);
     double Theta = u.component(1);
     JetMatrix m(2);
-    fluxFunction_->getHorizontalFlux()->Diff_FracFlow2PhasesHorizontalAdimensionalized(sw, Theta, 1, m);
+    const Flux2Comp2PhasesAdimensionalized & fluxFunction = (const Flux2Comp2PhasesAdimensionalized &) getFluxFunction();
+    fluxFunction.getHorizontalFlux()->Diff_FracFlow2PhasesHorizontalAdimensionalized(sw, Theta, 1, m);
 
     return m(0, 0);
 }
@@ -22,9 +22,8 @@ double CoincidenceTPCW::lambdae_function(const RealVector &u) {
     double sw = 1.0 - u.component(0);
     double Theta = u.component(1);
     JetMatrix m(2);
-
-    fluxFunction_->getHorizontalFlux()-> Diff_FracFlow2PhasesHorizontalAdimensionalized(sw, Theta, 0, m);
-
+    const Flux2Comp2PhasesAdimensionalized & fluxFunction = (const Flux2Comp2PhasesAdimensionalized &) getFluxFunction();
+    fluxFunction.getHorizontalFlux()-> Diff_FracFlow2PhasesHorizontalAdimensionalized(sw, Theta, 0, m);
 
 
     double f = m(0);
@@ -66,7 +65,7 @@ double CoincidenceTPCW::lambdae_function(const RealVector &u) {
 
     td->Diff_Rhoaw(Theta, rhoaw, drhoaw_dT, d2rhoaw_dT2);
 
-    cout << rhoaw << drhoaw_dT << d2rhoaw_dT2 << endl;
+    //    cout << rhoaw << drhoaw_dT << d2rhoaw_dT2 << endl;
 
     td->Diff_AqueousEnthalpyVol(Theta, Ha, dHa_dT, d2Ha_dT2);
     td->Diff_SuperCriticEnthalpyVol(Theta, Hsi, dHsi_dT, d2Hsi_dT2);
@@ -98,12 +97,9 @@ double CoincidenceTPCW::lambdae_function(const RealVector &u) {
 }
 
 double CoincidenceTPCW::HugoniotFunction(const RealVector &u) {
-    //    printf("CoincidenceTPCW::HugoniotFunction()\n");
 
     double lambdas = lambdas_function(u);
     double lambdae = lambdae_function(u);
-//    cout << "Lambdas: " << lambdas << endl;
-//    cout << "Lambdae: " << lambdae << endl;
     return lambdas - lambdae;
 }
 

@@ -240,9 +240,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionExtensionCurveCalc_native
     for (unsigned int i = 0; i < curve_segments.size() / 2; i++) {
         //    for (unsigned int i = 0; i < right_vrs.size() / 2; i++) {
 
-        cout << "Coordenada : " << curve_segments.at(2 * i) << endl;
-        cout << "Coordenada : " << curve_segments.at(2 * i + 1) << endl;
-
 
         jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
         jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);

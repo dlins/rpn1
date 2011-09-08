@@ -15,6 +15,10 @@ Flux2Comp2PhasesAdimensionalized::Flux2Comp2PhasesAdimensionalized(const Flux2Co
     sin_beta = a.sin_beta;
     const_gravity = a.const_gravity;
     grav = a.grav;
+    cnw=a.cnw;
+    cng=a.cng;
+    expw=a.expw;
+    expg=a.expg;
     has_gravity = a.has_gravity;
     has_horizontal = a.has_horizontal;
 }
@@ -567,7 +571,10 @@ int Flux2Comp2PhasesAdimensionalized::FracFlow2PhasesHorizontalAdimensionalized:
 
     double T = fluxComplete_->TD->Theta2T(Theta);
 
-    cout << "T em flux H: " << T << endl;
+//    cout << "T em flux H: " << T << endl;
+//    cout << "Theta em flux H: " << Theta << endl;
+//
+//    cout <<"Valor de sw: "<<sw<<endl;
 
     //    double T = Flux2Comp2PhasesAdimensionalized::getThermo()->Theta2T(Theta);
 
@@ -620,12 +627,12 @@ int Flux2Comp2PhasesAdimensionalized::FracFlow2PhasesHorizontalAdimensionalized:
 
     //--------------------------------------------------------------------
 
-
-    cout << T << " " << nuw << " " << dnuw_dT << " " << d2nuw_dT2 << endl;
-    cout << nug << " " << dnug_dT << " " << d2nug_dT2 << " " << endl;
-
-    cout << muw << " " << dmuw_dT << " " << d2muw_dT2 << " " << endl;
-    cout << mug << " " << dmug_dT << " " << d2mug_dT2 << " " << endl;
+//
+//    cout << T << " " << nuw << " " << dnuw_dT << " " << d2nuw_dT2 << endl;
+//    cout << nug << " " << dnug_dT << " " << d2nug_dT2 << " " << endl;
+//
+//    cout << muw << " " << dmuw_dT << " " << d2muw_dT2 << " " << endl;
+//    cout << mug << " " << dmug_dT << " " << d2mug_dT2 << " " << endl;
 
 
 

@@ -2,11 +2,9 @@
 
 Double_ContactTPCW::Double_ContactTPCW(const RealVector &lpmin, const RealVector &lpmax, const int *l_number_of_grid_pnts,
         const FluxFunction *lff, const AccumulationFunction *laa,
-        //                               const FluxFunction *Redlff, const AccumulationFunction *Redlaa,
         int lf,
         const RealVector &rpmin, const RealVector &rpmax, const int *r_number_of_grid_pnts,
         const FluxFunction *rff, const AccumulationFunction *raa,
-        //                               const FluxFunction *Redrff, const AccumulationFunction *Redraa,
         int rf) {
 
     // ======================== Left  domain ======================== //
@@ -16,6 +14,9 @@ Double_ContactTPCW::Double_ContactTPCW(const RealVector &lpmin, const RealVector
     // Left flux and accumulation functions.
     leftff = (Flux2Comp2PhasesAdimensionalized*) lff;
     leftaa = (Accum2Comp2PhasesAdimensionalized*) laa;
+
+    cout << "Left ff " << leftff << endl;
+    cout << "Left aa " << leftaa << endl;
 
     // Reserve space and/or copy the input parameters to their inner counterparts.
     left_number_of_grid_pnts = new int[lpmin.size()];
@@ -40,7 +41,7 @@ Double_ContactTPCW::Double_ContactTPCW(const RealVector &lpmin, const RealVector
     printf("After create_grid()\n");
 
     fill_values_on_grid(leftpmin, leftpmax,
-            leftff, leftaa, //reducedleftff, reducedleftaa,
+            leftff, leftaa, 
             left_number_of_grid_pnts,
             leftgrid,
             leftffv, leftaav,
@@ -66,7 +67,10 @@ Double_ContactTPCW::Double_ContactTPCW(const RealVector &lpmin, const RealVector
     // Right flux and accumulation functions.
     rightff = (Flux2Comp2PhasesAdimensionalized*) rff;
     rightaa = (Accum2Comp2PhasesAdimensionalized*) raa;
-   
+
+    cout << "Right ff " << rightff << endl;
+    cout << "Right aa " << rightaa << endl;
+
     // Reserve space and/or copy the input parameters to their inner counterparts.
     right_number_of_grid_pnts = new int[rpmin.size()];
     rightpmin.resize(rpmin.size());

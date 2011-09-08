@@ -197,13 +197,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
         tpcw.preProcess(min);
         tpcw.preProcess(max);
 
-        cout << "Resolucao x " << number_of_grid_pnts[0];
-        cout << "Resolucao y " << number_of_grid_pnts[1];
+        cout << "Resolucao x " << number_of_grid_pnts[0]<<endl;
+        cout << "Resolucao y " << number_of_grid_pnts[1]<<endl;
 
 
 
-        cout << "Familia direita" << rightFamily;
-        cout << "Familia esquerda" << leftFamily;
+        cout << "Familia direita" << rightFamily<<endl;
+        cout << "Familia esquerda" << leftFamily<<endl;
 
         //        = {xResolution, yResolution};
 
@@ -238,7 +238,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
 
     delete number_of_grid_pnts;
 
-    printf("left_vrs.size()  = %d\n", left_vrs.size());
+
+
+
     printf("right_vrs.size() = %d\n", right_vrs.size());
     const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
 
@@ -282,25 +284,15 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
 
     }
 
-
-
-
     for (unsigned int i = 0; i < right_vrs.size() / 2; i++) {
 
-        cout << "Coordenada : " << left_vrs.at(2 * i) << endl;
-        cout << "Coordenada : " << left_vrs.at(2 * i + 1) << endl;
-
-
+     
         jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
         jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
 
 
-
         double * leftCoords = (double *) right_vrs.at(2 * i);
         double * rightCoords = (double *) right_vrs.at(2 * i + 1);
-
-
-
 
 
         env->SetDoubleArrayRegion(eigenValRLeft, 0, dimension, leftCoords);

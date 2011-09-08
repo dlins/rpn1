@@ -28,7 +28,6 @@ class Bifurcation_CurveTPCW {
         // TODO: Domains could be triangles. In that case it is necessary to understand what to do with pmin & pmax
         void fill_values_on_grid(const RealVector &pmin, const RealVector &pmax, 
                                  const FluxFunction *ff, const AccumulationFunction *aa, 
-//                                 const FluxFunction *Redff, const AccumulationFunction *Redaa,
                                  const int *number_of_cells,
                                  Matrix<RealVector> &grid,
                                  Matrix<RealVector> &ffv, Matrix<RealVector> &aav, 
@@ -39,7 +38,6 @@ class Bifurcation_CurveTPCW {
         // This function is a mere wrapper for the function above. Perhaps that one should be eliminated.
         void fill_values_on_grid(const RealVector &pmin, const RealVector &pmax, 
                                  const FluxFunction *ff, const AccumulationFunction *aa, 
-//                                 const FluxFunction *Redff, const AccumulationFunction *Redaa,
                                  const int *number_of_grid_pnts,
                                  Matrix<RealVector> &grid,
                                  Matrix<RealVector> &ffv, Matrix<RealVector> &aav, 
@@ -60,10 +58,6 @@ class Bifurcation_CurveTPCW {
                                   std::vector<RealVector> &vff, std::vector<RealVector> &vaa, 
                                   std::vector<std::vector<double> > &vee, std::vector< std::vector<bool> > &eig_is_real);
 
-//        void fill_values_on_curve(const FluxFunction *ff, const AccumulationFunction *aa, const std::vector<RealVector> &input, 
-//                                                 const FluxFunction *Redff, const AccumulationFunction *Redaa,
-//                                                 std::vector<RealVector> &Redvff, std::vector<RealVector> &Redvaa,
-//                                                 std::vector<std::vector<double> > &Redvee, std::vector< std::vector<bool> > &Redeig_is_real);
 
          bool prepare_segment(int i, int family, int where_is_characteristic,
                                             const std::vector< std::vector<double> > &eigen, 

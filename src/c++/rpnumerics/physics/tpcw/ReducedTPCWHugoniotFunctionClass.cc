@@ -4,7 +4,7 @@ ReducedTPCWHugoniotFunctionClass::ReducedTPCWHugoniotFunctionClass(const RealVec
 HugoniotFunctionClass(*fluxFunction),
 TPCWFluxAdimensionalized(fluxFunction),
 TPCWAccumAdimensionalized(accumFunction){
-
+    cout <<"Construindo hugoniot"<<endl;
     n = U.size();
 
     Uref.resize(n);

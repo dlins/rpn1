@@ -1,14 +1,19 @@
 #include "Accum2Comp2PhasesAdimensionalized.h"
 
-Accum2Comp2PhasesAdimensionalized::Accum2Comp2PhasesAdimensionalized(const Accum2Comp2PhasesAdimensionalized &a) {
+Accum2Comp2PhasesAdimensionalized::Accum2Comp2PhasesAdimensionalized(const Accum2Comp2PhasesAdimensionalized &a):AccumulationFunction(a.accumulationParams()){
     TD =  a.TD;
 
-    phi = a.phi;
+    phi = a.accumulationParams().params().component(0);
+
+    reducedAccum_=new ReducedAccum2Comp2PhasesAdimensionalized(this);
+
+    cout <<"Phi na copia da acumulacao: "<<phi<<endl;
 }
 
-Accum2Comp2PhasesAdimensionalized::Accum2Comp2PhasesAdimensionalized(const Accum2Comp2PhasesAdimensionalized_Params &param) {
+Accum2Comp2PhasesAdimensionalized::Accum2Comp2PhasesAdimensionalized(const Accum2Comp2PhasesAdimensionalized_Params &param):AccumulationFunction(param) {
     TD = param.get_thermodynamics();
     phi = param.component(0);
+    cout <<"Valor de phi no accum2 comp: "<<phi<<endl;
     reducedAccum_= new ReducedAccum2Comp2PhasesAdimensionalized(this);
 }
 
@@ -18,7 +23,7 @@ Accum2Comp2PhasesAdimensionalized::Accum2Comp2PhasesAdimensionalized(const Accum
 }
 
 Accum2Comp2PhasesAdimensionalized::~Accum2Comp2PhasesAdimensionalized() {
-//    delete reducedAccum_;
+    delete reducedAccum_;
 }
 
 // Existe uma discrepancia entre o o significado de s quando este codigo foi
