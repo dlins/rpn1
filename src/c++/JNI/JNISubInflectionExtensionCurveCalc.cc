@@ -70,13 +70,15 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionExtensionCurveCalc_native
     if (RpNumerics::getPhysics().ID().compare("TPCW") == 0) {
 
 
-
         TPCW & tpcw = (TPCW &) RpNumerics::getPhysics().getSubPhysics(0);
         const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
 
         Flux2Comp2PhasesAdimensionalized * fluxFunction = (Flux2Comp2PhasesAdimensionalized *) & tpcw.fluxFunction();
 
         Accum2Comp2PhasesAdimensionalized * accumulationFunction = (Accum2Comp2PhasesAdimensionalized *) & tpcw.accumulation();
+
+
+        dimension=tpcw.domain().dim();
 
 
         RealVector min(2);

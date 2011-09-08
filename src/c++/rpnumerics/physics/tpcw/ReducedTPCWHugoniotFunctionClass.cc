@@ -71,13 +71,20 @@ void ReducedTPCWHugoniotFunctionClass::setReferenceVector(const RealVector & ref
     Uref.resize(n);
     for (int i = 0; i < n; i++) Uref.component(i) = refVec.component(i);
 
-    // TODO: The flux object must be initialized somehow (be it created here or outside, etc.)
+
     RealVector uref(Uref.size() - 1);
-    //    printf("Uref.size() = %d\n", Uref.size());
+    printf("Uref.size() = %d\n", Uref.size());
+    
+    
     for (int i = 0; i < Uref.size() - 1; i++) uref.component(i) = Uref.component(i);
+
+
+    cout<<"Vetor de referencia em setRefVector: "<<uref<<endl;
+
 
     WaveState u(uref); // TODO: Check this.
     for (int i = 0; i < uref.size(); i++) printf("u(%d) = %f\n", i, u(i));
+    cout<<"Valor de wave state"<<u(0)<<" "<<u(1)<<endl;
 
     //    printf("here 1\n");
 
@@ -99,6 +106,7 @@ void ReducedTPCWHugoniotFunctionClass::setReferenceVector(const RealVector & ref
     //    printf("here 2\n");
 
     WaveState Ur(Uref);
+  cout << "Valor de Ur antes: " << Ur(0)<<" "<<Ur(1) << endl;
     JetMatrix ArefJetMatrix(n);
     JetMatrix BrefJetMatrix(n);
     //    TPCWFluxAdimensionalized->jet(Ur, ArefJetMatrix, 1);
