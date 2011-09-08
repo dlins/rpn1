@@ -121,7 +121,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
 
     method.classifiedCurve(Uref, hugoniotPolyLineVector);
 
-    delete tempFluxFunction;
+//    delete tempFluxFunction;
 
     for (int i = 0; i < hugoniotPolyLineVector.size(); i++) {
 

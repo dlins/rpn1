@@ -1,37 +1,39 @@
 #include "Flux2Comp2PhasesAdimensionalized_Params.h"
 
-Flux2Comp2PhasesAdimensionalized_Params::Flux2Comp2PhasesAdimensionalized_Params(double abs_perm, double sin_beta, double const_gravity, 
-                                                 bool has_gravity, 
-                                                 bool has_horizontal,
-                                                 const Thermodynamics_SuperCO2_WaterAdimensionalized & TD,
-                                                 FracFlow2PhasesHorizontalAdimensionalized *FH,
-                                                 FracFlow2PhasesVerticalAdimensionalized *FV) : FluxParams(3){
-    component(0, abs_perm);
-    component(1, sin_beta);
-    component(2, const_gravity);
+Flux2Comp2PhasesAdimensionalized_Params::Flux2Comp2PhasesAdimensionalized_Params(const RealVector & paramsVector, Thermodynamics_SuperCO2_WaterAdimensionalized * TD) : FluxParams(paramsVector),const_gravity(9.8) {
+    TD_ = TD;
+    if (paramsVector.component(2) == 1.0) {
+        has_gravity_ = true;
+    }
+    else {
+        has_gravity_ = false;
+    }
 
-    has_gravity_    = has_gravity;
-    has_horizontal_ = has_horizontal;
+    if (paramsVector.component(3) == 1.0) {
+        has_horizontal_ = true;
+    }
+    else {
+        has_horizontal_ = false;
+    }
 
-    TD_ = new Thermodynamics_SuperCO2_WaterAdimensionalized(TD);
-    FH_ = FH;
-    FV_ = FV;
+
 }
 
-Flux2Comp2PhasesAdimensionalized_Params::~Flux2Comp2PhasesAdimensionalized_Params(){
-    delete TD_;
+Flux2Comp2PhasesAdimensionalized_Params::~Flux2Comp2PhasesAdimensionalized_Params() {
+
 }
 
-const Thermodynamics_SuperCO2_WaterAdimensionalized & Flux2Comp2PhasesAdimensionalized_Params::get_thermodynamics(void) const {
-    return *TD_;
+Flux2Comp2PhasesAdimensionalized_Params::Flux2Comp2PhasesAdimensionalized_Params(const Flux2Comp2PhasesAdimensionalized_Params & copy) : FluxParams(copy.params()),const_gravity(9.8) {
+    component(0, copy.abs_perm);
+    component(1, copy.sin_beta);
+    TD_ = copy.TD_;
+    cout << "copy" << endl;
+    has_gravity_ = copy.has_gravity_;
+    has_horizontal_ = copy.has_horizontal_;
 }
 
-FracFlow2PhasesHorizontalAdimensionalized * Flux2Comp2PhasesAdimensionalized_Params::get_horizontal(void) const {
-    return FH_;
-}
-
-FracFlow2PhasesVerticalAdimensionalized * Flux2Comp2PhasesAdimensionalized_Params::get_vertical(void) const {
-    return FV_;
+Thermodynamics_SuperCO2_WaterAdimensionalized * Flux2Comp2PhasesAdimensionalized_Params::get_thermodynamics(void) const {
+    return TD_;
 }
 
 bool Flux2Comp2PhasesAdimensionalized_Params::has_gravity(void) const {

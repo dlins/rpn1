@@ -75,31 +75,32 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceCurveCalc_nativeCalc(JNIEnv
     //-------------------------------------------------------------------
     RealVector Uref(dimension);
 
-    double phi = 1.0;
 
-    Thermodynamics_SuperCO2_WaterAdimensionalized TD(Physics::getRPnHome());
-
-    double cnw = 0., cng = 0., expw = 2., expg = 2.;
-    FracFlow2PhasesHorizontalAdimensionalized fh(cnw, cng, expw, expg, TD);
-
-    CoincidenceTPCW coincidence(&TD, &fh, phi);
-
-    SubPhysics & physics = RpNumerics::getPhysics().getSubPhysics(0);
+    TPCW & tpcw = (TPCW &) RpNumerics::getPhysics().getSubPhysics(0);
     const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
+
+     Flux2Comp2PhasesAdimensionalized * fluxFunction = (Flux2Comp2PhasesAdimensionalized *) & tpcw.fluxFunction();
+
+    Accum2Comp2PhasesAdimensionalized * accumulationFunction = (Accum2Comp2PhasesAdimensionalized *) & tpcw.accumulation();
+
+    CoincidenceTPCW coincidenceFunction((Flux2Comp2PhasesAdimensionalized*) & tpcw.fluxFunction(), (Accum2Comp2PhasesAdimensionalized*) & tpcw.accumulation());
+
 
     RealVector min(physicsBoundary. minimums());
     RealVector max(physicsBoundary. maximums());
 
+    cout << "Valor de min antes:" << min << endl;
+    cout << "Valor de max antes:" << max << endl;
 
-    physics.preProcess(min);
-    physics.preProcess(max);
+    tpcw.preProcess(min);
+    tpcw.preProcess(max);
 
-    cout << "Valor de min:" << min << endl;
-    cout << "Valor de max:" << max << endl;
+    cout << "Valor de min depois:" << min << endl;
+    cout << "Valor de max depois:" << max << endl;
 
     RectBoundary tempBoundary(min, max);
 
-    ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), tempBoundary, &coincidence);
+    ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), tempBoundary, &coincidenceFunction);
 
     vector<HugoniotPolyLine> hugoniotPolyLineVector;
     method.unclassifiedCurve(Uref, hugoniotPolyLineVector);
@@ -117,7 +118,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceCurveCalc_nativeCalc(JNIEnv
             hugoniotPolyLineVector[i].vec[j].component(2) = maxDimension.component(2);
             hugoniotPolyLineVector[i].vec[j + 1].component(2) = maxDimension.component(2);
 
-            physics.postProcess(hugoniotPolyLineVector[i].vec);
+           tpcw.postProcess(hugoniotPolyLineVector[i].vec);
 
             //
             //            cout << "type of " << j << " = " << hugoniotPolyLineVector[i].type << endl;
@@ -157,23 +158,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceCurveCalc_nativeCalc(JNIEnv
     }
 
 
-
-    // Limpando
-
-    //        env->DeleteLocalRef(realVectorLeftPoint);
-
-    //        env->DeleteLocalRef(realVectorRightPoint);
-
-    //        env->DeleteLocalRef(hugoniotSegment);
-
-
-
-
-
     jobject result = env->NewObject(coincidenceCurveClass, coincidenceCurveConstructor, segmentsArray);
 
-    //    env->DeleteLocalRef(eigenValRLeft);
-    //    env->DeleteLocalRef(eigenValRRight);
     env->DeleteLocalRef(hugoniotSegmentClass);
     env->DeleteLocalRef(realVectorClass);
     env->DeleteLocalRef(arrayListClass);

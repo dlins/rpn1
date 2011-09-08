@@ -1,7 +1,8 @@
 #include "BuckleyLeverettinInflectionTPCW.h"
 
-BuckleyLeverettinInflectionTPCW::BuckleyLeverettinInflectionTPCW(FracFlow2PhasesHorizontalAdimensionalized *f){
-    fh = f;
+BuckleyLeverettinInflectionTPCW::BuckleyLeverettinInflectionTPCW(Flux2Comp2PhasesAdimensionalized *f,RectBoundary * boundary):HugoniotFunctionClass(){
+    fh = f->getHorizontalFlux();
+    boundary_=boundary;
 }
 
 double BuckleyLeverettinInflectionTPCW::HugoniotFunction(const RealVector &u){
@@ -12,7 +13,7 @@ double BuckleyLeverettinInflectionTPCW::HugoniotFunction(const RealVector &u){
 
     fh->Diff_FracFlow2PhasesHorizontalAdimensionalized(sw, Theta, 2, m);
     double d2f_ds2 = m(0,0,0);
-   
+
     return d2f_ds2 ;
 }
 
@@ -22,8 +23,8 @@ void BuckleyLeverettinInflectionTPCW::completeCurve(std::vector<RealVector> & cu
     temp.resize(2*curve.size());
     cout<<"Tamanho de curve em complete curve: "<<curve.size()<<endl;
 
-    RealVector min(RpNumerics::getPhysics().boundary().minimums());
-    RealVector max(RpNumerics::getPhysics().boundary().maximums());
+    RealVector min(boundary_->minimums());
+    RealVector max(boundary_->maximums());
 
     cout<<"Min: "<<min<<endl;
     cout << "Max: " << max << endl;

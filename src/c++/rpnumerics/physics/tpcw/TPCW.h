@@ -31,13 +31,16 @@ class TPCW : public SubPhysics {
 private:
 
     Thermodynamics_SuperCO2_WaterAdimensionalized * TD;
-    FracFlow2PhasesVerticalAdimensionalized *fv;
-    FracFlow2PhasesHorizontalAdimensionalized * fh;
+
 
 
 public:
 
-    TPCW(const FluxFunction &, const AccumulationFunction &,  const Thermodynamics_SuperCO2_WaterAdimensionalized &);
+//    TPCW(const FluxFunction &, const AccumulationFunction &,  const Thermodynamics_SuperCO2_WaterAdimensionalized &);
+
+
+    TPCW(const RealVector &,const string &);
+
 
     TPCW(const TPCW &);
 

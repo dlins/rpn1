@@ -1,18 +1,18 @@
 #include "Extension_CurveTPCW.h"
 
 Extension_CurveTPCW::Extension_CurveTPCW(const RealVector &dpmin, const RealVector &dpmax, const int *domain_number_of_grid_pnts_input,
-                                 const FluxFunction *dff, const AccumulationFunction *daa,
-                                 const FluxFunction *drff, const AccumulationFunction *draa){
+                                 const Flux2Comp2PhasesAdimensionalized *dff, const Accum2Comp2PhasesAdimensionalized *daa){
+//                                 const FluxFunction *drff, const AccumulationFunction *draa){
 
     // ======================== Right domain ======================== //
     int domain_rows = domain_number_of_grid_pnts_input[0];
     int domain_cols = domain_number_of_grid_pnts_input[1];
 
     // Right flux and accumulation functions.
-    domain_ff = (FluxFunction*)dff;
-    domain_aa = (AccumulationFunction*)daa;
-    domain_reduced_ff = (FluxFunction*)drff;
-    domain_reduced_aa = (AccumulationFunction*)draa;
+    domain_ff = dff;
+    domain_aa = daa;
+    domain_reduced_ff = dff->getReducedFlux();
+    domain_reduced_aa = daa->getReducedAccumulation();
 
     // Reserve space and/or copy the input parameters to their inner counterparts.
     domain_number_of_grid_pnts = new int[dpmin.size()];
@@ -36,7 +36,7 @@ Extension_CurveTPCW::Extension_CurveTPCW(const RealVector &dpmin, const RealVect
 
     fill_values_on_grid(domain_pmin, domain_pmax,
                         domain_ff, domain_aa,
-                        domain_reduced_ff, domain_reduced_aa, 
+//                        domain_reduced_ff, domain_reduced_aa,
                         domain_number_of_grid_pnts,
                         domain_grid,
                         domain_reduced_ffv, domain_reduced_aav,
@@ -231,8 +231,8 @@ void Extension_CurveTPCW::filedg3(Matrix<double> &sol_, int dims, Matrix<int> &e
 //
 void Extension_CurveTPCW::compute_extension_curve(int characteristic_where, int singular,
                                                   const std::vector<RealVector> &original_segments, int curve_family,
-                                                  FluxFunction *curve_ff, AccumulationFunction *curve_aa, // For the curve.
-                                                  FluxFunction *curve_reduced_ff, AccumulationFunction *curve_reduced_aa, // For the curve.
+                                                  const Flux2Comp2PhasesAdimensionalized *curve_ff, const Accum2Comp2PhasesAdimensionalized *curve_aa, // For the curve.
+//                                                  FluxFunction *curve_reduced_ff, AccumulationFunction *curve_reduced_aa, // For the curve.
                                                   int domain_family, 
                                                   std::vector<RealVector> &curve_segments,
                                                   std::vector<RealVector> &domain_segments){
@@ -251,7 +251,7 @@ void Extension_CurveTPCW::compute_extension_curve(int characteristic_where, int 
 
     // Prepare the curve-related information. This was in the ctor(), but has been moved here.
     // BEGIN
-    int dim = original_segments[0].size();
+//    int dim = original_segments[0].size();
     
 //    curve_number_of_segments = original_segments.size()/2;
 //    curve_segments.resize(2*curve_number_of_segments);
@@ -267,7 +267,7 @@ void Extension_CurveTPCW::compute_extension_curve(int characteristic_where, int 
 
     // Fill the left stuff
     fill_values_on_segments(curve_ff, curve_aa, 
-                            curve_reduced_ff, curve_reduced_aa, 
+//                            curve_reduced_ff, curve_reduced_aa,
                             original_segments,
                             curve_reduced_ffv, curve_reduced_aav, 
                             curve_reduced_e, curve_reduced_eig_is_real);

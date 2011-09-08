@@ -30,20 +30,26 @@
 
 
 class SubPhysics {
-
 private:
 
-    FluxFunction * fluxFunction_;
-    AccumulationFunction * accumulationFunction_;
+
     HugoniotFunctionClass * hugoniotFunction_;
     Boundary * boundary_;
     Space * space_;
     const char * ID_;
     int type_;
 
+protected:
+
+    FluxFunction * fluxFunction_;
+    AccumulationFunction * accumulationFunction_;
+
 public:
 
-    SubPhysics(const FluxFunction &,const AccumulationFunction &,const Boundary &,const Space &,const char *,int );
+
+     SubPhysics(const Boundary &, const Space &, const char *, int);
+
+    SubPhysics(const FluxFunction &, const AccumulationFunction &, const Boundary &, const Space &, const char *, int);
 
     void fluxParams(const FluxParams &);
 
@@ -65,7 +71,7 @@ public:
 
     const char * ID() const;
 
-    virtual SubPhysics * clone()const=0;
+    virtual SubPhysics * clone()const = 0;
 
     virtual Boundary * defaultBoundary()const = 0;
 

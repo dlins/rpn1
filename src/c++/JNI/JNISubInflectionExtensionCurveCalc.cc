@@ -69,53 +69,15 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionExtensionCurveCalc_native
 
     if (RpNumerics::getPhysics().ID().compare("TPCW") == 0) {
 
-        cout << "Chamando Sub Inflection Extension com tpcw" << endl;
-        dimension = 3;
-
-        Thermodynamics_SuperCO2_WaterAdimensionalized td(Physics::getRPnHome());
-
-        //        int info = td.status_after_init();
-        //        printf("Thermodynamics = %p,  info = %d\n\n\n", &td, info);
-
-        // Create Horizontal & Vertical FracFlows
-        double cnw = 0., cng = 0., expw = 2., expg = 2.;
-        FracFlow2PhasesHorizontalAdimensionalized * fh = new FracFlow2PhasesHorizontalAdimensionalized(cnw, cng, expw, expg, td);
-        FracFlow2PhasesVerticalAdimensionalized * fv = new FracFlow2PhasesVerticalAdimensionalized(cnw, cng, expw, expg, td);
-
-        // Create the Flux and its params
-        double abs_perm = 20e-12;
-        double sin_beta = 0.0;
-        double const_gravity = 9.8;
-        bool has_gravity = false, has_horizontal = true;
-
-        Flux2Comp2PhasesAdimensionalized_Params flux_params(abs_perm, sin_beta, const_gravity,
-                has_gravity, has_horizontal,
-                td,
-                fh, fv);
-
-        Flux2Comp2PhasesAdimensionalized flux(flux_params);
-
-        // Create the Accum and its params
-
-        double phi = 0.38;
 
 
-        Accum2Comp2PhasesAdimensionalized_Params accum_params(td, &phi);
-        Accum2Comp2PhasesAdimensionalized accum(accum_params);
-
-
-        // Reduced stuff
-        ReducedFlux2Comp2PhasesAdimensionalized_Params reduced_flux_params(abs_perm, &td, fh);
-        ReducedFlux2Comp2PhasesAdimensionalized reduced_flux(reduced_flux_params);
-
-
-        ReducedAccum2Comp2PhasesAdimensionalized_Params reduced_accum_params(&td, &phi);
-        ReducedAccum2Comp2PhasesAdimensionalized reduced_accum(reduced_accum_params);
-
-
-
-        SubPhysics & physics = RpNumerics::getPhysics().getSubPhysics(0);
+        TPCW & tpcw = (TPCW &) RpNumerics::getPhysics().getSubPhysics(0);
         const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
+
+        Flux2Comp2PhasesAdimensionalized * fluxFunction = (Flux2Comp2PhasesAdimensionalized *) & tpcw.fluxFunction();
+
+        Accum2Comp2PhasesAdimensionalized * accumulationFunction = (Accum2Comp2PhasesAdimensionalized *) & tpcw.accumulation();
+
 
         RealVector min(2);
 
@@ -129,16 +91,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionExtensionCurveCalc_native
         max.component(1) = physicsBoundary.maximums().component(1);
 
 
-        physics.preProcess(min);
-        physics.preProcess(max);
-
-        //        RectBoundary tempBoundary(min, max);
-        //        RealVector pmin(2);
-        //        pmin.component(0) = 0.0;
-        //        pmin.component(1) = td.T2Theta(304.63);
-        //        RealVector pmax(2);
-        //        pmax.component(0) = 1.0;
-        //        pmax.component(1) = td.T2Theta(450.0);
+        tpcw.preProcess(min);
+        tpcw.preProcess(max);
 
         int number_of_grid_points[2];
 
@@ -146,19 +100,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionExtensionCurveCalc_native
         number_of_grid_points[0] = xResolution;
         number_of_grid_points[1] = yResolution;
 
-
-        //        int number_of_domain_pnts[2] = {101, 101};
-
-        //        int characteristic_where = CHARACTERISTIC_ON_DOMAIN;
         int singular = 1;
 
         curveFamily = 0;
         domainFamily = 1;
         characteristicWhere = 1;
-
-        SubinflectionTPCW subinflectiontpcw(&td, fh, phi);
-
-        cout << "Aqui" << endl;
 
 
         cout << "Resolucao x " << number_of_grid_points[0] << endl;
@@ -166,17 +112,17 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionExtensionCurveCalc_native
         cout << "Resolucao y " << number_of_grid_points[1] << endl;
 
 
-        SubinflectionTPCW_Extension::extension_curve(&subinflectiontpcw,
-                min, max, number_of_grid_points,
-                &flux, &accum,
-                &reduced_flux, &reduced_accum,
-                domainFamily,
-                &flux, &accum,
-                &reduced_flux, &reduced_accum,
-                curveFamily,
-                characteristicWhere, singular,
-                curve_segments,
-                domain_segments);
+ SubinflectionTPCW  subInflectionFunction((Flux2Comp2PhasesAdimensionalized*) & tpcw.fluxFunction(), (Accum2Comp2PhasesAdimensionalized*) & tpcw.accumulation());
+
+    SubinflectionTPCW_Extension::extension_curve(&subInflectionFunction,
+            min, max, number_of_grid_points, // For the domain.
+            (Flux2Comp2PhasesAdimensionalized*) & tpcw.fluxFunction(), (Accum2Comp2PhasesAdimensionalized*) & tpcw.accumulation(),
+            domainFamily,
+            (Flux2Comp2PhasesAdimensionalized*) & tpcw.fluxFunction(), (Accum2Comp2PhasesAdimensionalized*) & tpcw.accumulation(),
+            curveFamily,
+            characteristicWhere, singular,
+            curve_segments,
+            domain_segments);
 
 
         cout << "Curve: " << curve_segments.size() << endl;
@@ -184,21 +130,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionExtensionCurveCalc_native
         cout << "Domain: " << domain_segments.size() << endl;
 
 
-        physics.postProcess(curve_segments);
-        physics.postProcess(domain_segments);
-
-
-
+        tpcw.postProcess(curve_segments);
+        tpcw.postProcess(domain_segments);
 
         cout << "Familia da curva" << curveFamily << endl;
         cout << "Familia do dominio" << domainFamily << endl;
         cout << "characteristic " << characteristicWhere << endl;
-
-
-
-        delete fv;
-        delete fh;
-        //        delete number_of_grid_points;
 
 
     }
@@ -209,21 +146,14 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionExtensionCurveCalc_native
 
 
     for (unsigned int i = 0; i < curve_segments.size() / 2; i++) {
-        //    for (unsigned int i = 0; i < right_vrs.size() / 2; i++) {
 
-       
+
         jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
         jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
 
 
         double * leftCoords = (double *) curve_segments.at(2 * i);
         double * rightCoords = (double *) curve_segments.at(2 * i + 1);
-
-
-        //
-        //        double * leftCoords = (double *) right_vrs.at(2 * i);
-        //        double * rightCoords = (double *) right_vrs.at(2 * i + 1 );
-
 
         env->SetDoubleArrayRegion(eigenValRLeft, 0, dimension, leftCoords);
         env->SetDoubleArrayRegion(eigenValRRight, 0, dimension, rightCoords);
@@ -238,10 +168,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionExtensionCurveCalc_native
 
         double leftSigma = 0;
         double rightSigma = 0;
-        //            cout << "type of " << j << " = " << classified[i].type << endl;
-        //            cout << "speed of " << j << " = " << classified[i].vec[j].component(dimension + m) << endl;
-        //            cout << "speed of " << j + 1 << " = " << classified[i].vec[j + 1].component(dimension + m) << endl;
 
+        
         jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, pointType);
         env->CallObjectMethod(leftSegmentsArray, arrayListAddMethod, hugoniotSegment);
 
@@ -273,31 +201,16 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionExtensionCurveCalc_native
 
         double leftSigma = 0;
         double rightSigma = 0;
-        //            cout << "type of " << j << " = " << classified[i].type << endl;
-        //            cout << "speed of " << j << " = " << classified[i].vec[j].component(dimension + m) << endl;
-        //            cout << "speed of " << j + 1 << " = " << classified[i].vec[j + 1].component(dimension + m) << endl;
-
+        
         jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, pointType);
         env->CallObjectMethod(rightSegmentsArray, arrayListAddMethod, hugoniotSegment);
 
     }
 
 
-
-
     jobject result = env->NewObject(subInflectionExtensionCurveClass, subInflectionExtensionCurveConstructor, leftSegmentsArray, rightSegmentsArray);
 
-
-    //    env->DeleteLocalRef(eigenValRLeft);
-    //    env->DeleteLocalRef(eigenValRRight);
-    //    env->DeleteLocalRef(hugoniotSegmentClass);
-    //    env->DeleteLocalRef(realVectorClass);
-    //    env->DeleteLocalRef(arrayListClass);
-
-
-
     return result;
-
 
 }
 

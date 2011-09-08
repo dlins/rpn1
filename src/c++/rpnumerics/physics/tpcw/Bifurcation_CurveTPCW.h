@@ -6,6 +6,8 @@
 #include "RealVector.h"
 #include "FluxFunction.h"
 #include "AccumulationFunction.h"
+#include "Flux2Comp2PhasesAdimensionalized.h"
+#include "Accum2Comp2PhasesAdimensionalized.h"
 #include "Matrix.h"
 
 #ifndef CHARACTERISTIC_ON_CURVE
@@ -26,7 +28,6 @@ class Bifurcation_CurveTPCW {
         // TODO: Domains could be triangles. In that case it is necessary to understand what to do with pmin & pmax
         void fill_values_on_grid(const RealVector &pmin, const RealVector &pmax, 
                                  const FluxFunction *ff, const AccumulationFunction *aa, 
-                                 const FluxFunction *Redff, const AccumulationFunction *Redaa, 
                                  const int *number_of_cells,
                                  Matrix<RealVector> &grid,
                                  Matrix<RealVector> &ffv, Matrix<RealVector> &aav, 
@@ -37,7 +38,6 @@ class Bifurcation_CurveTPCW {
         // This function is a mere wrapper for the function above. Perhaps that one should be eliminated.
         void fill_values_on_grid(const RealVector &pmin, const RealVector &pmax, 
                                  const FluxFunction *ff, const AccumulationFunction *aa, 
-                                 const FluxFunction *Redff, const AccumulationFunction *Redaa, 
                                  const int *number_of_grid_pnts,
                                  Matrix<RealVector> &grid,
                                  Matrix<RealVector> &ffv, Matrix<RealVector> &aav, 
@@ -58,10 +58,6 @@ class Bifurcation_CurveTPCW {
                                   std::vector<RealVector> &vff, std::vector<RealVector> &vaa, 
                                   std::vector<std::vector<double> > &vee, std::vector< std::vector<bool> > &eig_is_real);
 
-//        void fill_values_on_curve(const FluxFunction *ff, const AccumulationFunction *aa, const std::vector<RealVector> &input, 
-//                                                 const FluxFunction *Redff, const AccumulationFunction *Redaa,
-//                                                 std::vector<RealVector> &Redvff, std::vector<RealVector> &Redvaa,
-//                                                 std::vector<std::vector<double> > &Redvee, std::vector< std::vector<bool> > &Redeig_is_real);
 
          bool prepare_segment(int i, int family, int where_is_characteristic,
                                             const std::vector< std::vector<double> > &eigen, 
@@ -72,8 +68,8 @@ class Bifurcation_CurveTPCW {
                                             Matrix<double> &reduced_flux, 
                                             Matrix<double> &reduced_accum);
 
-        void fill_values_on_segments(const FluxFunction *ff, const AccumulationFunction *aa, 
-                                     const FluxFunction *Redff, const AccumulationFunction *Redaa,
+        void fill_values_on_segments(const Flux2Comp2PhasesAdimensionalized *ff, const Accum2Comp2PhasesAdimensionalized *aa,
+//                                     const FluxFunction *Redff, const AccumulationFunction *Redaa,
                                      const std::vector<RealVector> &input, 
                                      std::vector<RealVector> &vff, std::vector<RealVector> &vaa,
                                      std::vector<std::vector<double> > &vee, std::vector< std::vector<bool> > &eig_is_real);
@@ -85,7 +81,7 @@ class Bifurcation_CurveTPCW {
 
     public:
         Bifurcation_CurveTPCW();
-        ~Bifurcation_CurveTPCW();
+    virtual ~Bifurcation_CurveTPCW();
 };
 
 #endif // _BIFURCATION_CURVETPCW_

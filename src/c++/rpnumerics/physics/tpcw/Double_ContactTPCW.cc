@@ -2,11 +2,9 @@
 
 Double_ContactTPCW::Double_ContactTPCW(const RealVector &lpmin, const RealVector &lpmax, const int *l_number_of_grid_pnts,
         const FluxFunction *lff, const AccumulationFunction *laa,
-        const FluxFunction *Redlff, const AccumulationFunction *Redlaa,
         int lf,
         const RealVector &rpmin, const RealVector &rpmax, const int *r_number_of_grid_pnts,
         const FluxFunction *rff, const AccumulationFunction *raa,
-        const FluxFunction *Redrff, const AccumulationFunction *Redraa,
         int rf) {
 
     // ======================== Left  domain ======================== //
@@ -14,10 +12,13 @@ Double_ContactTPCW::Double_ContactTPCW(const RealVector &lpmin, const RealVector
     int lcols = l_number_of_grid_pnts[1];
 
     // Left flux and accumulation functions.
-    leftff = (FluxFunction*) lff;
-    leftaa = (AccumulationFunction*) laa;
-    reducedleftff = (FluxFunction*) Redlff;
-    reducedleftaa = (AccumulationFunction*) Redlaa;
+
+    leftff = (Flux2Comp2PhasesAdimensionalized*) lff;
+    leftaa = (Accum2Comp2PhasesAdimensionalized*) laa;
+
+    cout << "Left ff " << leftff << endl;
+    cout << "Left aa " << leftaa << endl;
+
 
     // Reserve space and/or copy the input parameters to their inner counterparts.
     left_number_of_grid_pnts = new int[lpmin.size()];
@@ -42,7 +43,7 @@ Double_ContactTPCW::Double_ContactTPCW(const RealVector &lpmin, const RealVector
     printf("After create_grid()\n");
 
     fill_values_on_grid(leftpmin, leftpmax,
-            leftff, leftaa, reducedleftff, reducedleftaa,
+            leftff, leftaa, 
             left_number_of_grid_pnts,
             leftgrid,
             leftffv, leftaav,
@@ -66,11 +67,11 @@ Double_ContactTPCW::Double_ContactTPCW(const RealVector &lpmin, const RealVector
     int rcols = r_number_of_grid_pnts[1];
 
     // Right flux and accumulation functions.
-    rightff = (FluxFunction*) lff;
-    rightaa = (AccumulationFunction*) laa;
-    reducedrightff = (FluxFunction*) Redrff;
-    reducedrightaa = (AccumulationFunction*) Redraa;
 
+    rightff = (Flux2Comp2PhasesAdimensionalized*) rff;
+    rightaa = (Accum2Comp2PhasesAdimensionalized*) raa;
+
+   
     // Reserve space and/or copy the input parameters to their inner counterparts.
     right_number_of_grid_pnts = new int[rpmin.size()];
     rightpmin.resize(rpmin.size());
@@ -91,7 +92,8 @@ Double_ContactTPCW::Double_ContactTPCW(const RealVector &lpmin, const RealVector
 
     create_grid(rightpmin, rightpmax, right_number_of_grid_pnts, rightgrid);
 
-    fill_values_on_grid(rightpmin, rightpmax, rightff, rightaa, reducedrightff, reducedrightaa,
+
+    fill_values_on_grid(rightpmin, rightpmax, rightff, rightaa,
             right_number_of_grid_pnts,
             rightgrid,
             rightffv, rightaav,
@@ -125,6 +127,7 @@ void Double_ContactTPCW::filedg4(Matrix<double> &sol_, int dims, Matrix<int> &ed
         int dime, int nedges_,
         int il, int jl, int ir, int jr,
         std::vector<RealVector> &left_vrs, std::vector<RealVector> &right_vrs) {
+
     // TODO: Verify if il, jl, ir & jr are the same as are computed by the Fortran code. (There they are used as indices and pass as references and are modified by some function.) Panters.
 
     // The variables below are defined in COMMON blocks (lrectdat and rrectdat).
@@ -134,6 +137,7 @@ void Double_ContactTPCW::filedg4(Matrix<double> &sol_, int dims, Matrix<int> &ed
 
     // Store all pairs of edges that were found
     RealVector p1(2), p2(2), p3(2), p4(2);
+
     for (int nedg = 0; nedg < nedges_; nedg++) {
         p1.component(0) = ul0 + dul * (il - 1 + sol_(0, edges_(0, nedg))); // LX1 Was  = segend[sn - 1][0][0];//sol_[0][edges_[0][nedg ]];
         p1.component(1) = vl0 + dvl * (jl - 1 + sol_(1, edges_(0, nedg))); // LY1 Was  = segend[sn - 1][0][1];//sol_[1][edges_[0][nedg ]];
@@ -535,6 +539,40 @@ void Double_ContactTPCW::func(double *val, int ir, int jr, int kl, int kr,
     double Y13     = Fr[0]*Fl[2] - Fl[0]*Fr[2] ;
     double Y23     = Fl[1]*Fr[2] - Fr[1]*Fl[2] ;
 
+=======
+
+    double scaling_factor = (X12_0 * X12 + X31_0 * X31 + X23_0 * X23) / den;
+
+    double red_shock_speed = (Y21 * X12 + Y13 * X31 + Y32 * X23) / den;
+
+    double lambda_right = scaling_factor*lr;
+
+    val[1] = (red_shock_speed - lambda_left_input[kl]); // SECOND EQUATION
+    val[2] = (red_shock_speed - lambda_right); // THIRD  EQUATION
+
+    /*
+    double Hmatrix[3][3];
+    double Gq[3];
+
+    for(int i = 0; i < 3; i++){
+        Gq[i]         =  Gr[i] - Gl[i]  ;
+        Hmatrix[i][0] =  Gq[i]          ;    // bJetMatrix(i) - bref_G[i]; // b=G
+        Hmatrix[i][1] = -Fr[i]          ;    // a=F
+        Hmatrix[i][2] =  Fl[i]          ;
+        }
+
+    val[0] = det(3, &Hmatrix[0][0]); // TODO: PRECISAMOS DO METODO DETERMINANTE.
+
+
+    double X12 = Fr[0]*Gq[1] - Fr[1]*Gq[0] ;
+    double X13 = Fr[2]*Gq[0] - Fr[0]*Gq[2] ;
+    double X23 = Fr[1]*Gq[2] - Fr[2]*Gq[1] ;
+
+    double Y12     = Fl[0]*Fr[1] - Fr[0]*Fl[1] ;
+    double Y13     = Fr[0]*Fl[2] - Fl[0]*Fr[2] ;
+    double Y23     = Fl[1]*Fr[2] - Fr[1]*Fl[2] ;
+
+>>>>>>> refatorandoTPCW2
     double den      = X12*X12 + X13*X13 + X23*X23 ;
      
         
@@ -665,16 +703,11 @@ double Double_ContactTPCW::det(int nn, double *A) {
             return determinant;
             break;
 
-            //        case 3:
 
         case 3:
             determinant = A[0]*(A[4] * A[8] - A[5] * A[7])
-                    - A[1]*(A[3] * A[8] - A[5] * A[6])
-                    + A[2]*(A[3] * A[7] - A[4] * A[6]);
-
-            //            determinant = A[0]*( A[4]*A[8] - A[5]*A[7] )
-            //                          - A[3]*( A[1]*A[8] - A[7]*A[2] )
-            //                          + A[6]*( A[1]*A[5] - A[4]*A[2] );
+                    - A[3]*(A[1] * A[8] - A[7] * A[2])
+                    + A[6]*(A[1] * A[5] - A[4] * A[2]);
 
             return determinant;
             break;

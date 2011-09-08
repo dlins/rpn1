@@ -1,9 +1,14 @@
 #include "SubinflectionTPCW.h"
 
-SubinflectionTPCW::SubinflectionTPCW(Thermodynamics_SuperCO2_WaterAdimensionalized *t, FracFlow2PhasesHorizontalAdimensionalized *f, double phi_) {
-    td = t;
-    fh = f;
-    phi = phi_;
+SubinflectionTPCW::SubinflectionTPCW(const Flux2Comp2PhasesAdimensionalized * fluxFunction, const Accum2Comp2PhasesAdimensionalized * accumFunction) :
+HugoniotFunctionClass(*fluxFunction),
+td(fluxFunction->getThermo()){
+
+
+   const Accum2Comp2PhasesAdimensionalized_Params & params = (Accum2Comp2PhasesAdimensionalized_Params &) accumFunction->accumulationParams();
+
+    phi=params.getPhi();
+
 }
 
 void SubinflectionTPCW::subinflection_function(double & reduced_lambdae, double & numeratorchiu, double & denominatorchiu, const RealVector &u) {
@@ -14,7 +19,9 @@ void SubinflectionTPCW::subinflection_function(double & reduced_lambdae, double 
     double Theta = u.component(1);
     JetMatrix m(1);
 
-    fh->Diff_FracFlow2PhasesHorizontalAdimensionalized(sw, Theta, 0, m);
+    const Flux2Comp2PhasesAdimensionalized & fluxFunction = (const Flux2Comp2PhasesAdimensionalized &) getFluxFunction();
+    fluxFunction.getHorizontalFlux()-> Diff_FracFlow2PhasesHorizontalAdimensionalized(sw, Theta, 0, m);
+
     double f = m(0);
     double s = u.component(0);
 
@@ -49,14 +56,13 @@ void SubinflectionTPCW::subinflection_function(double & reduced_lambdae, double 
 
 
     td->Diff_Rhosic(Theta, rhosigmac, drhosigmac_dT, d2rhosigmac_dT2);
+
+
     td->Diff_Rhosiw(Theta, rhosigmaw, drhosigmaw_dT, d2rhosigmaw_dT2);
     td->Diff_Rhoac(Theta, rhoac, drhoac_dT, d2rhoac_dT2);
     td->Diff_Rhoaw(Theta, rhoaw, drhoaw_dT, d2rhoaw_dT2);
     td->Diff_AqueousEnthalpyVol(Theta, Ha, dHa_dT, d2Ha_dT2);
     td->Diff_SuperCriticEnthalpyVol(Theta, Hsi, dHsi_dT, d2Hsi_dT2);
-
-
-
 
     //    fh->Diff_Rhosic(double Theta, double &rhosigmac, double &drhosigmac_dT, double &d2rhosigmac_dT2);
     //    fh->Diff_Rhosiw(double Theta, double &rhosigmaw, double &drhosigmaw_dT, double &d2rhosigmaw_dT2);
@@ -131,13 +137,12 @@ double SubinflectionTPCW::HugoniotFunction(const RealVector &u) {
     double numchiu;
     double denchiu;
 
+
     subinflection_function(reduc_lambdae, numchiu, denchiu, u);
 
-    return 1e20*(numchiu - reduc_lambdae*denchiu);
+    return 1e20 * (numchiu - reduc_lambdae * denchiu);
 }
 
+void SubinflectionTPCW::completeCurve(std::vector<RealVector> & curve) {
 
-
- void SubinflectionTPCW::completeCurve(std::vector<RealVector> & curve){
-
- }
+}

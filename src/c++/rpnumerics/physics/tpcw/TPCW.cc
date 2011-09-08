@@ -18,67 +18,54 @@
  */
 
 
-TPCW::TPCW(const FluxFunction & fluxFunction, const AccumulationFunction & accumulationFunction, const Thermodynamics_SuperCO2_WaterAdimensionalized & thermo) :
-SubPhysics(fluxFunction, accumulationFunction, *new RectBoundary(RealVector(), RealVector()), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATION_),
-TD(new Thermodynamics_SuperCO2_WaterAdimensionalized(thermo)) {
-    //    cout << "Calculo de U0[1] " << TD->T2Theta(310.) << endl;
-    //    cout << "Calculo de U0[2] " << TD->u2U(4.22e-6) << endl;
-
-    // Create Horizontal & Vertical FracFlows
-    double cnw = 0., cng = 0., expw = 2., expg = 2.;
-    fh = new FracFlow2PhasesHorizontalAdimensionalized(cnw, cng, expw, expg, *TD);
-    fv = new FracFlow2PhasesVerticalAdimensionalized(cnw, cng, expw, expg, *TD);
-
-    // Create the Flux and its params
-    boundary(*defaultBoundary());
-
-    double const_gravity = 9.8;
-    double abs_perm = 20e-12;
-    //    double phi = 0.38;
-    double phi = 1.0;
+TPCW::TPCW(const RealVector & paramsVector, const string & rpnHomePath) :
+SubPhysics(*defaultBoundary(), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATION_) {
 
 
-    double Tnovo = TD->Theta2T(0.395);
-    cout << "T redimensionalizada: " << Tnovo << endl;
-    double Unovo = TD->U2u(11.9821);
+    RealVector fluxVector(8);
 
-    cout << "U redimension: " << Unovo << endl;
+
+    fluxVector.component(0) = paramsVector.component(0);
+    fluxVector.component(1) = paramsVector.component(1);
+    fluxVector.component(2) = paramsVector.component(2);
+    fluxVector.component(3) = paramsVector.component(3);
+    fluxVector.component(4) = paramsVector.component(4);
+    fluxVector.component(5) = paramsVector.component(5);
+    fluxVector.component(6) = paramsVector.component(6);
+    fluxVector.component(7) = paramsVector.component(7);
+
+
+    // T_Typical,Rho_Typical,U_Typical
+
+    TD = new Thermodynamics_SuperCO2_WaterAdimensionalized(rpnHomePath, paramsVector.component(9), paramsVector.component(10), paramsVector.component(11));
+
+
+    fluxFunction_ = new Flux2Comp2PhasesAdimensionalized(Flux2Comp2PhasesAdimensionalized_Params(fluxVector, TD));
+    accumulationFunction_ = new Accum2Comp2PhasesAdimensionalized(Accum2Comp2PhasesAdimensionalized_Params(TD, paramsVector.component(8)));
+
 
     RealVector Uref(3);
     Uref.component(0) = 0;
     Uref.component(1) = 0;
     Uref.component(2) = 0;
 
-    ReducedTPCWHugoniotFunctionClass * tpcwhc = new ReducedTPCWHugoniotFunctionClass(Uref, abs_perm, phi, const_gravity, TD, fh);
-
+    ReducedTPCWHugoniotFunctionClass * tpcwhc = new ReducedTPCWHugoniotFunctionClass(Uref, (Flux2Comp2PhasesAdimensionalized*) fluxFunction_, (Accum2Comp2PhasesAdimensionalized *) accumulationFunction_);
+    //
     setHugoniotFunction(tpcwhc);
 
 
+
+
+
 }
+
 
 TPCW::TPCW(const TPCW & copy) :
 SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.boundary(), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATION_),
 TD(new Thermodynamics_SuperCO2_WaterAdimensionalized(*copy.TD)) {
 
-    // Create Horizontal & Vertical FracFlows
-    double cnw = 0., cng = 0., expw = 2., expg = 2.;
-    fh = new FracFlow2PhasesHorizontalAdimensionalized(cnw, cng, expw, expg, *TD);
-    fv = new FracFlow2PhasesVerticalAdimensionalized(cnw, cng, expw, expg, *TD);
-
-
-    double const_gravity = 9.8;
-    double abs_perm = 20e-12;
-    double phi = 1.0;
-    RealVector Uref(3);
-    Uref.component(0) = 0;
-    Uref.component(1) = 0;
-    Uref.component(2) = 0;
-
-    ReducedTPCWHugoniotFunctionClass * tpcwhc = new ReducedTPCWHugoniotFunctionClass(Uref, abs_perm, phi, const_gravity, TD, fh);
-
+    ReducedTPCWHugoniotFunctionClass * tpcwhc = new ReducedTPCWHugoniotFunctionClass((ReducedTPCWHugoniotFunctionClass &) * copy.getHugoniotFunction());
     setHugoniotFunction(tpcwhc);
-    //
-
 
 }
 
@@ -182,8 +169,7 @@ void TPCW::postProcess(vector<RealVector> & input) {
 
 TPCW::~TPCW() {
     delete TD;
-    delete fv;
-    delete fh;
+
 }
 
 

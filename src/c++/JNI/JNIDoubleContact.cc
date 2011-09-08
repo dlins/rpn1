@@ -27,6 +27,7 @@ NOTE :
 #include "ContourMethod.h"
 #include "ReducedTPCWHugoniotFunctionClass.h"
 #include "TPCW.h"
+#include "Flux2Comp2PhasesAdimensionalized.h"
 #include "StoneHugoniotFunctionClass.h"
 #include "Double_ContactTPCW.h"
 
@@ -126,56 +127,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
 
         cout << "Chamando com tpcw" << endl;
         dimension = 3;
+   
 
-        Thermodynamics_SuperCO2_WaterAdimensionalized td(Physics::getRPnHome());
-
-        int info = td.status_after_init();
-        printf("Thermodynamics = %p,  info = %d\n\n\n", &td, info);
-
-        // Create Horizontal & Vertical FracFlows
-        double cnw = 0., cng = 0., expw = 2., expg = 2.;
-        FracFlow2PhasesHorizontalAdimensionalized * fh = new FracFlow2PhasesHorizontalAdimensionalized(cnw, cng, expw, expg, td);
-        FracFlow2PhasesVerticalAdimensionalized * fv = new FracFlow2PhasesVerticalAdimensionalized(cnw, cng, expw, expg, td);
-
-        // Create the Flux and its params
-        double abs_perm = 20e-12;
-        double sin_beta = 0.0;
-        double const_gravity = 9.8;
-        bool has_gravity = false, has_horizontal = true;
-
-        Flux2Comp2PhasesAdimensionalized_Params flux_params(abs_perm, sin_beta, const_gravity,
-                has_gravity, has_horizontal,
-                td,
-                fh, fv);
-
-        Flux2Comp2PhasesAdimensionalized flux(flux_params);
-
-        // Create the Accum and its params
-//        double phi = 0.38;
-
-        double phi = 1.0;
-        Accum2Comp2PhasesAdimensionalized_Params accum_params(td, &phi);
-        Accum2Comp2PhasesAdimensionalized accum(accum_params);
-
-
-        // Reduced stuff
-        ReducedFlux2Comp2PhasesAdimensionalized_Params reduced_flux_params(abs_perm, &td, fh);
-        ReducedFlux2Comp2PhasesAdimensionalized reduced_flux(reduced_flux_params);
-
-
-        ReducedAccum2Comp2PhasesAdimensionalized_Params reduced_accum_params(&td, &phi);
-        ReducedAccum2Comp2PhasesAdimensionalized reduced_accum(reduced_accum_params);
-
-
-        // Double Contact
-        //        RealVector pmin(2);
-        //        pmin.component(0) = 0.0;
-        //        pmin.component(1) = td.T2Theta(304.63);
-        //        RealVector pmax(2);
-        //        pmax.component(0) = 1.0;
-        //        pmax.component(1) = td.T2Theta(450.0);
-
-        SubPhysics & physics = RpNumerics::getPhysics().getSubPhysics(0);
+        TPCW & tpcw = (TPCW &) RpNumerics::getPhysics().getSubPhysics(0);
         const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
 
         RealVector min(2);
@@ -190,68 +144,65 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
         max.component(1) = physicsBoundary.maximums().component(1);
 
 
-        physics.preProcess(min);
-        physics.preProcess(max);
+        tpcw.preProcess(min);
+        tpcw.preProcess(max);
 
-        cout << "Resolucao x " << number_of_grid_pnts[0];
-        cout << "Resolucao y " << number_of_grid_pnts[1];
+        cout << "Resolucao x " << number_of_grid_pnts[0]<<endl;
+        cout << "Resolucao y " << number_of_grid_pnts[1]<<endl;
 
 
 
-        cout << "Familia direita" << rightFamily;
-        cout << "Familia esquerda" << leftFamily;
+        cout << "Familia direita" << rightFamily<<endl;
+        cout << "Familia esquerda" << leftFamily<<endl;
 
-        //        = {xResolution, yResolution};
+  
 
-        //        int lfamily = 0;
-        //        int rfamily = 0;
+
+        Flux2Comp2PhasesAdimensionalized * fluxFunction = (Flux2Comp2PhasesAdimensionalized *) & tpcw.fluxFunction();
+
+        Accum2Comp2PhasesAdimensionalized * accumulationFunction = (Accum2Comp2PhasesAdimensionalized *) & tpcw.accumulation();
 
         Double_ContactTPCW dc(min, max, number_of_grid_pnts,
-                &flux, &accum,
-                &reduced_flux, &reduced_accum,
+                fluxFunction, accumulationFunction,
                 leftFamily,
                 min, max, number_of_grid_pnts,
-                &flux, &accum,
-                &reduced_flux, &reduced_accum,
+                fluxFunction, accumulationFunction,
                 rightFamily);
 
         dc.compute_double_contactTPCW(left_vrs, right_vrs);
 
 
-        physics.postProcess(left_vrs);
-        physics.postProcess(right_vrs);
+        tpcw.postProcess(left_vrs);
+        tpcw.postProcess(right_vrs);
 
         printf("left_vrs.size()  = %d\n", left_vrs.size());
         printf("right_vrs.size() = %d\n", right_vrs.size());
 
-        delete fv;
-        delete fh;
 
     }
 
     delete number_of_grid_pnts;
 
-    printf("left_vrs.size()  = %d\n", left_vrs.size());
+
+
+
     printf("right_vrs.size() = %d\n", right_vrs.size());
     const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
 
     for (unsigned int i = 0; i < left_vrs.size() / 2; i++) {
-        //    for (unsigned int i = 0; i < right_vrs.size() / 2; i++) {
+     
 
-       
+
 
 
         jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
         jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
 
-       
+
         double * leftCoords = (double *) left_vrs.at(2 * i);
         double * rightCoords = (double *) left_vrs.at(2 * i + 1);
 
-        //
-        //        double * leftCoords = (double *) right_vrs.at(2 * i);
-        //        double * rightCoords = (double *) right_vrs.at(2 * i + 1 );
-
+      
 
         env->SetDoubleArrayRegion(eigenValRLeft, 0, dimension, leftCoords);
         env->SetDoubleArrayRegion(eigenValRRight, 0, dimension, rightCoords);
@@ -266,34 +217,22 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
 
         double leftSigma = 0;
         double rightSigma = 0;
-        //            cout << "type of " << j << " = " << classified[i].type << endl;
-        //            cout << "speed of " << j << " = " << classified[i].vec[j].component(dimension + m) << endl;
-        //            cout << "speed of " << j + 1 << " = " << classified[i].vec[j + 1].component(dimension + m) << endl;
+    
 
         jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, pointType);
         env->CallObjectMethod(leftSegmentsArray, arrayListAddMethod, hugoniotSegment);
 
     }
 
-
-
-
     for (unsigned int i = 0; i < right_vrs.size() / 2; i++) {
 
-        cout << "Coordenada : " << left_vrs.at(2 * i) << endl;
-        cout << "Coordenada : " << left_vrs.at(2 * i + 1) << endl;
-
-
+     
         jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
         jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
 
 
-
         double * leftCoords = (double *) right_vrs.at(2 * i);
         double * rightCoords = (double *) right_vrs.at(2 * i + 1);
-
-
-
 
 
         env->SetDoubleArrayRegion(eigenValRLeft, 0, dimension, leftCoords);
@@ -309,9 +248,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
 
         double leftSigma = 0;
         double rightSigma = 0;
-        //            cout << "type of " << j << " = " << classified[i].type << endl;
-        //            cout << "speed of " << j << " = " << classified[i].vec[j].component(dimension + m) << endl;
-        //            cout << "speed of " << j + 1 << " = " << classified[i].vec[j + 1].component(dimension + m) << endl;
+  
 
         jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, pointType);
 
@@ -325,12 +262,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
 
     jobject result = env->NewObject(doubleContactCurveClass, doubleContactCurveConstructor, leftSegmentsArray, rightSegmentsArray);
 
-
-    //    env->DeleteLocalRef(eigenValRLeft);
-    //    env->DeleteLocalRef(eigenValRRight);
-    //    env->DeleteLocalRef(hugoniotSegmentClass);
-    //    env->DeleteLocalRef(realVectorClass);
-    //    env->DeleteLocalRef(arrayListClass);
 
 
 

@@ -1,6 +1,8 @@
 #include "HugoniotFunctionClass.h"
 
-HugoniotFunctionClass::HugoniotFunctionClass(const FluxFunction &fluxFunction) : fluxFunction_((FluxFunction *)fluxFunction.clone()) {
+//HugoniotFunctionClass::HugoniotFunctionClass(const FluxFunction &fluxFunction) : fluxFunction_((FluxFunction *)fluxFunction.clone()) {
+
+HugoniotFunctionClass::HugoniotFunctionClass(const FluxFunction &fluxFunction) : fluxFunction_(&fluxFunction) {
 
 }
 

@@ -77,30 +77,47 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionCurveCalc_nativeCalc(JNIE
 
     double phi = 1.0;
 
-    Thermodynamics_SuperCO2_WaterAdimensionalized TD(Physics::getRPnHome());
+    double T_Typical = 304.63;
+    double Rho_typical = 998.2;
+    double U_typical = 4.22e-3;
+
+
+
+//    Thermodynamics_SuperCO2_WaterAdimensionalized TD(Physics::getRPnHome(), T_Typical, Rho_typical, U_typical);
 
     double cnw = 0., cng = 0., expw = 2., expg = 2.;
-    FracFlow2PhasesHorizontalAdimensionalized fh(cnw, cng, expw, expg, TD);
+//    FracFlow2PhasesHorizontalAdimensionalized fh(cnw, cng, expw, expg, &TD);
 
-    SubinflectionTPCW subinflection(&TD, &fh, phi);
+//    SubinflectionTPCW subinflection(&TD, &fh, phi);
 
 
-    SubPhysics & physics = RpNumerics::getPhysics().getSubPhysics(0);
+    TPCW & tpcw = (TPCW &) RpNumerics::getPhysics().getSubPhysics(0);
     const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
+
+
+    SubinflectionTPCW * subInflectionFunction = new SubinflectionTPCW((Flux2Comp2PhasesAdimensionalized*)  &tpcw.fluxFunction(), (Accum2Comp2PhasesAdimensionalized*)  &tpcw.accumulation());
+
+    //    SubPhysics & physics = RpNumerics::getPhysics().getSubPhysics(0);
+    //    const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
+
+    Flux2Comp2PhasesAdimensionalized * fluxFunction = (Flux2Comp2PhasesAdimensionalized *) & tpcw.fluxFunction();
+
+    Accum2Comp2PhasesAdimensionalized * accumulationFunction = (Accum2Comp2PhasesAdimensionalized *) & tpcw.accumulation();
+
 
     RealVector min(physicsBoundary. minimums());
     RealVector max(physicsBoundary. maximums());
 
 
-    physics.preProcess(min);
-    physics.preProcess(max);
+    tpcw.preProcess(min);
+    tpcw.preProcess(max);
 
     cout << "Valor de min:" << min << endl;
     cout << "Valor de max:" << max << endl;
 
     RectBoundary tempBoundary(min, max);
 
-    ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), tempBoundary, &subinflection);
+    ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), tempBoundary, subInflectionFunction);
 
     vector<HugoniotPolyLine> hugoniotPolyLineVector;
 
@@ -119,7 +136,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionCurveCalc_nativeCalc(JNIE
             hugoniotPolyLineVector[i].vec[j].component(2) = maxDimension.component(2);
             hugoniotPolyLineVector[i].vec[j + 1].component(2) = maxDimension.component(2);
 
-            physics.postProcess(hugoniotPolyLineVector[i].vec);
+            tpcw.postProcess(hugoniotPolyLineVector[i].vec);
             //            //
             //                        cout << "type of " << j << " = " << hugoniotPolyLineVector[i].type << endl;
             //                        cout << "coord 1 " << j << " = " << hugoniotPolyLineVector[i].vec[j] << endl;

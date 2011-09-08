@@ -1,13 +1,13 @@
 #include "Boundary_ExtensionTPCW.h"
 
-void Boundary_ExtensionTPCW::extension_curve(const FluxFunction *curve_flux, const AccumulationFunction *curve_accum,
-                                             const FluxFunction *curve_reduced_flux, const AccumulationFunction *curve_reduced_accum,
+void Boundary_ExtensionTPCW::extension_curve(const Flux2Comp2PhasesAdimensionalized *curve_flux, const Accum2Comp2PhasesAdimensionalized *curve_accum,
+//                                             const FluxFunction *curve_reduced_flux, const AccumulationFunction *curve_reduced_accum,
                                              int fixed_s, int number_of_temperature_steps,
                                              int curve_family,
                                              const RealVector &pmin, const RealVector &pmax, int *number_of_grid_points,         // For the domain.
                                              int domain_family,
-                                             const FluxFunction *domain_ff, const AccumulationFunction *domain_aa,
-                                             const FluxFunction *domain_reduced_ff, const AccumulationFunction *domain_reduced_aa,
+                                             const Flux2Comp2PhasesAdimensionalized *domain_ff, const Accum2Comp2PhasesAdimensionalized *domain_aa,
+//                                             const FluxFunction *domain_reduced_ff, const AccumulationFunction *domain_reduced_aa,
                                              int characteristic_where, int singular,
                                              std::vector<RealVector> &curve_segments,
                                              std::vector<RealVector> &domain_segments){
@@ -47,13 +47,13 @@ void Boundary_ExtensionTPCW::extension_curve(const FluxFunction *curve_flux, con
 
     // Compute the extension curve for the rarefaction
     Extension_CurveTPCW extension_curvetpcw(pmin, pmax, number_of_grid_points,
-                                            domain_ff, domain_aa, 
-                                            domain_reduced_ff, domain_reduced_aa);
+                                            domain_ff, domain_aa);
+//                                            domain_reduced_ff, domain_reduced_aa);
 
     extension_curvetpcw.compute_extension_curve(characteristic_where, singular,
                                                 be_segments, curve_family,
-                                                (FluxFunction*)curve_flux,         (AccumulationFunction*)curve_accum,
-                                                (FluxFunction*)curve_reduced_flux, (AccumulationFunction*)curve_reduced_accum,
+                                                curve_flux,curve_accum,
+//                                                (FluxFunction*)curve_reduced_flux, (AccumulationFunction*)curve_reduced_accum,
                                                 domain_family, 
                                                 curve_segments,
                                                 domain_segments);
