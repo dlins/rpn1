@@ -127,8 +127,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
     physics.preProcess(min);
     physics.preProcess(max);
 
-
-
     
     cout << "min: " << min << endl;
     cout << "max: " << max << endl;

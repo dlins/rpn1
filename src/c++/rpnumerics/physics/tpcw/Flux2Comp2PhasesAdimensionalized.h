@@ -57,10 +57,6 @@ public:
     FracFlow2PhasesVerticalAdimensionalized * getVerticalFlux()const;
     ReducedFlux2Comp2PhasesAdimensionalized * getReducedFlux()const;
 
-
-
-
-
     Flux2Comp2PhasesAdimensionalized(const Flux2Comp2PhasesAdimensionalized &);
     Flux2Comp2PhasesAdimensionalized(const Flux2Comp2PhasesAdimensionalized_Params &);
 
@@ -70,6 +66,8 @@ public:
     int jet(const WaveState &u, JetMatrix &m, int degree) const;
     RpFunction * clone() const;
     void type(int t);
+
+    void fluxParams(const FluxParams &);
 
 
 private:

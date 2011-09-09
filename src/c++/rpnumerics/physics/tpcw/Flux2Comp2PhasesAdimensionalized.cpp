@@ -1,6 +1,6 @@
 #include "Flux2Comp2PhasesAdimensionalized.h"
 
-Flux2Comp2PhasesAdimensionalized::Flux2Comp2PhasesAdimensionalized(const Flux2Comp2PhasesAdimensionalized &a) : FluxFunction(a.fluxParams()) {
+Flux2Comp2PhasesAdimensionalized::Flux2Comp2PhasesAdimensionalized(const Flux2Comp2PhasesAdimensionalized &a) : FluxFunction(a.FluxFunction::fluxParams()) {
 
     //    const Flux2Comp2PhasesAdimensionalized_Params & fluxParams = (const Flux2Comp2PhasesAdimensionalized_Params &) a.fluxParams();
     cout << "Construtor de copia de Flux2CompPhasesAdimensionalized" << endl;
@@ -15,10 +15,10 @@ Flux2Comp2PhasesAdimensionalized::Flux2Comp2PhasesAdimensionalized(const Flux2Co
     sin_beta = a.sin_beta;
     const_gravity = a.const_gravity;
     grav = a.grav;
-    cnw=a.cnw;
-    cng=a.cng;
-    expw=a.expw;
-    expg=a.expg;
+    cnw = a.cnw;
+    cng = a.cng;
+    expw = a.expw;
+    expg = a.expg;
     has_gravity = a.has_gravity;
     has_horizontal = a.has_horizontal;
 }
@@ -64,6 +64,39 @@ Flux2Comp2PhasesAdimensionalized::~Flux2Comp2PhasesAdimensionalized() {
     delete FH;
     delete FV;
     delete reducedFlux;
+}
+
+void Flux2Comp2PhasesAdimensionalized::fluxParams(const FluxParams & param) {
+
+
+    if (param.component(2) == 1.0) {
+        has_gravity = true;
+    } else {
+        has_gravity = false;
+    }
+
+    if (param.component(3) == 1.0) {
+        has_horizontal = true;
+    } else {
+        has_horizontal = false;
+    }
+
+    abs_perm = param.component(0);
+    sin_beta = param.component(1);
+
+
+    const_gravity = 9.8;
+
+    cnw = param.component(4);
+    cng = param.component(5);
+    expw = param.component(6);
+    expg = param.component(7);
+
+    grav = abs_perm * sin_beta*const_gravity;
+
+    cout <<abs_perm<<" "<< sin_beta<<" "<<has_gravity<<" "<<has_horizontal<<" "<< cnw<<" "<<cng<<" "<<expw<<" "<<expg<<endl;
+
+
 }
 
 int Flux2Comp2PhasesAdimensionalized::ReducedFlux2Comp2PhasesAdimensionalized::jet(const WaveState &w, JetMatrix &m, int degree) const {
@@ -205,7 +238,7 @@ int Flux2Comp2PhasesAdimensionalized::ReducedFlux2Comp2PhasesAdimensionalized::j
     return 2; //SUCCESSFUL_PROCEDURE;
 }
 
-Flux2Comp2PhasesAdimensionalized::ReducedFlux2Comp2PhasesAdimensionalized::ReducedFlux2Comp2PhasesAdimensionalized(Flux2Comp2PhasesAdimensionalized * outer) : FluxFunction(outer->fluxParams()) {
+Flux2Comp2PhasesAdimensionalized::ReducedFlux2Comp2PhasesAdimensionalized::ReducedFlux2Comp2PhasesAdimensionalized(Flux2Comp2PhasesAdimensionalized * outer) : FluxFunction(outer->FluxFunction::fluxParams()) {
 
     fluxComplete_ = outer;
 
@@ -571,10 +604,10 @@ int Flux2Comp2PhasesAdimensionalized::FracFlow2PhasesHorizontalAdimensionalized:
 
     double T = fluxComplete_->TD->Theta2T(Theta);
 
-//    cout << "T em flux H: " << T << endl;
-//    cout << "Theta em flux H: " << Theta << endl;
-//
-//    cout <<"Valor de sw: "<<sw<<endl;
+    //    cout << "T em flux H: " << T << endl;
+    //    cout << "Theta em flux H: " << Theta << endl;
+    //
+    //    cout <<"Valor de sw: "<<sw<<endl;
 
     //    double T = Flux2Comp2PhasesAdimensionalized::getThermo()->Theta2T(Theta);
 
@@ -627,12 +660,12 @@ int Flux2Comp2PhasesAdimensionalized::FracFlow2PhasesHorizontalAdimensionalized:
 
     //--------------------------------------------------------------------
 
-//
-//    cout << T << " " << nuw << " " << dnuw_dT << " " << d2nuw_dT2 << endl;
-//    cout << nug << " " << dnug_dT << " " << d2nug_dT2 << " " << endl;
-//
-//    cout << muw << " " << dmuw_dT << " " << d2muw_dT2 << " " << endl;
-//    cout << mug << " " << dmug_dT << " " << d2mug_dT2 << " " << endl;
+    //
+    //    cout << T << " " << nuw << " " << dnuw_dT << " " << d2nuw_dT2 << endl;
+    //    cout << nug << " " << dnug_dT << " " << d2nug_dT2 << " " << endl;
+    //
+    //    cout << muw << " " << dmuw_dT << " " << d2muw_dT2 << " " << endl;
+    //    cout << mug << " " << dmug_dT << " " << d2mug_dT2 << " " << endl;
 
 
 

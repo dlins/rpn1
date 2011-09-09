@@ -45,7 +45,7 @@ public:
      * @param params  New flux parameters
      */
     
-    void fluxParams(const FluxParams & params);
+    virtual void fluxParams(const FluxParams & params);
     
 };
 

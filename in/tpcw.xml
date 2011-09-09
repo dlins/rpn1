@@ -4,9 +4,20 @@
     <PHYSICS name="TPCW">
 
 
-        <ACCUMFUNCTION>
+        <FLUXFUNCTION>
+            <FLUXPARAMS name="abs perm" position="0" value="2e-12"/>
+            <FLUXPARAMS name="sin beta" position="1" value="0.0"/>
+            <FLUXPARAMS name="has gravity" position="2" value="0.0"/>
+            <FLUXPARAMS name="has horizontal" position="3" value="1.0"/>
+            <FLUXPARAMS name="cnw" position="4" value="0.0"/>
+            <FLUXPARAMS name="cng" position="5" value="0.0"/>
+            <FLUXPARAMS name="expw" position="6" value="2.0"/>
+            <FLUXPARAMS name="expg" position="7" value="2.0"/>
+        </FLUXFUNCTION>
+
+      <!--  <ACCUMFUNCTION>
             <ACCUMPARAMS name="porosity" position="0" value="0.15"/>
-        </ACCUMFUNCTION>
+        </ACCUMFUNCTION>-->
 
         <PHYSICSCONFIG name="thermodynamics">
             <PHYSICSPARAM name="absolut permeability" value="1.15"/>
