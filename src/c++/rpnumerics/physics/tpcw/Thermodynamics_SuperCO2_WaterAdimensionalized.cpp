@@ -104,8 +104,6 @@ rpnHomePath_(copy.rpnHomePath_) {
     info_rhoW = create_spline("rhoW_spline.txt", "rhoW", P, rhoW_);
     info_hsigmaC = create_spline("hsigmaC_spline.txt", "hsigmaC", P, hsigmaC_);
 
-    cout << info_hsigmaC << info_rhoW << info_rhoaw << info_rhoac << info_rhosigmaw << info_rhosigmac << endl;
-
 }
 
 
@@ -156,7 +154,7 @@ T_typical_(T_Typical),
 Rho_typical_(Rho_Typical),
 U_typical_(U_Typical),
 rpnHomePath_(rpnHomePath) {
-    cout << "Aqui termo" << endl;
+
     h_typical_ = Water_Cw_specific * (T_typical_ - Tref_water);
 
     // Generate the splines
@@ -168,7 +166,7 @@ rpnHomePath_(rpnHomePath) {
     info_rhoW = create_spline("rhoW_spline.txt", "rhoW", P, rhoW_);
     info_hsigmaC = create_spline("hsigmaC_spline.txt", "hsigmaC", P, hsigmaC_);
 
-    cout << info_hsigmaC << info_rhoW << info_rhoaw << info_rhoac << info_rhosigmaw << info_rhosigmac << endl;
+
 
 
 }

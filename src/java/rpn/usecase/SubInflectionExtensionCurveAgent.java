@@ -56,14 +56,10 @@ public class SubInflectionExtensionCurveAgent extends RpModelPlotAgent {
     public void execute() {
 
         SubInflectionExtensionCurveGeomFactory factory = new SubInflectionExtensionCurveGeomFactory(RPNUMERICS.createSubInflectionExtensionCurveCalc());
-
         RPnPhaseSpaceAbstraction auxPhaseSpace = RPnDataModule.PHASESPACE;
-
         RpGeometry geometry = factory.geom();
-
         auxPhaseSpace.plot(geometry);
 
-        System.out.println("Chamando  extension curve execute");
     }
 
     static public SubInflectionExtensionCurveAgent instance() {

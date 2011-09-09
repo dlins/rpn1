@@ -66,7 +66,6 @@ Physics::Physics(const string & physicsID) : physicsVector_(new vector<SubPhysic
 
         //Accumulation parameters
 
-
         params.component(8) = 0.38;
 
         //Thermodynamics parameters
@@ -74,9 +73,8 @@ Physics::Physics(const string & physicsID) : physicsVector_(new vector<SubPhysic
         params.component(10) = 998.2;
         params.component(11) = 4.22e-3;
 
-        std::string testeRPnHome("/home/edsonlan/Java/rpn");
 
-        physicsVector_->push_back(new TPCW(params, testeRPnHome));
+        physicsVector_->push_back(new TPCW(params, getRPnHome()));
 
 
 

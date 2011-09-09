@@ -3,8 +3,7 @@
 ReducedTPCWHugoniotFunctionClass::ReducedTPCWHugoniotFunctionClass(const RealVector & U, const Flux2Comp2PhasesAdimensionalized *fluxFunction, const Accum2Comp2PhasesAdimensionalized * accumFunction) :
 HugoniotFunctionClass(*fluxFunction),
 TPCWFluxAdimensionalized(fluxFunction),
-TPCWAccumAdimensionalized(accumFunction){
-    cout <<"Construindo hugoniot"<<endl;
+TPCWAccumAdimensionalized(accumFunction) {
     n = U.size();
 
     Uref.resize(n);
@@ -27,10 +26,8 @@ TPCWAccumAdimensionalized(accumFunction){
     bref_F = new double[n];
 
     fluxFunction->getReducedFlux()->jet(u, arefJetMatrix, 0);
-    cout << "Ponto 1" << endl;
+
     accumFunction->getReducedAccumulation()->jet(u, brefJetMatrix, 0);
-
-
 
     for (int i = 0; i < n; i++) {
         aref_F[i] = arefJetMatrix(i);
@@ -74,17 +71,13 @@ void ReducedTPCWHugoniotFunctionClass::setReferenceVector(const RealVector & ref
 
     RealVector uref(Uref.size() - 1);
     printf("Uref.size() = %d\n", Uref.size());
-    
-    
+
+
     for (int i = 0; i < Uref.size() - 1; i++) uref.component(i) = Uref.component(i);
-
-
-    cout<<"Vetor de referencia em setRefVector: "<<uref<<endl;
 
 
     WaveState u(uref); // TODO: Check this.
     for (int i = 0; i < uref.size(); i++) printf("u(%d) = %f\n", i, u(i));
-    cout<<"Valor de wave state"<<u(0)<<" "<<u(1)<<endl;
 
     //    printf("here 1\n");
 
@@ -94,8 +87,8 @@ void ReducedTPCWHugoniotFunctionClass::setReferenceVector(const RealVector & ref
     aref_F = new double[n];
     bref_F = new double[n];
 
-   TPCWFluxAdimensionalized->getReducedFlux()->jet(u, arefJetMatrix, 0);
-   TPCWAccumAdimensionalized->getReducedAccumulation()->jet(u, brefJetMatrix, 0);
+    TPCWFluxAdimensionalized->getReducedFlux()->jet(u, arefJetMatrix, 0);
+    TPCWAccumAdimensionalized->getReducedAccumulation()->jet(u, brefJetMatrix, 0);
 
 
     for (int i = 0; i < n; i++) {
@@ -106,39 +99,25 @@ void ReducedTPCWHugoniotFunctionClass::setReferenceVector(const RealVector & ref
     //    printf("here 2\n");
 
     WaveState Ur(Uref);
-  cout << "Valor de Ur antes: " << Ur(0)<<" "<<Ur(1) << endl;
+
     JetMatrix ArefJetMatrix(n);
     JetMatrix BrefJetMatrix(n);
     //    TPCWFluxAdimensionalized->jet(Ur, ArefJetMatrix, 1);
-
     getFluxFunction().jet(Ur, ArefJetMatrix, 1);
-    cout << "Valor de Uref: " << Uref << endl;
 
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            cout << ArefJetMatrix(i, j) << " ";
+//    for (int i = 0; i < n; i++) {
+//        for (int j = 0; j < n; j++) {
+//            cout << ArefJetMatrix(i, j) << " ";
+//
+//        }
+//
+//        cout << endl;
+//    }
 
-        }
-
-        cout << endl;
-    }
-
-    cout << "Valor de Ur" << Ur(0) << " " << Ur(1) << " " << Ur(2) << endl;
-
-    if (TPCWAccumAdimensionalized == NULL) {
-        cout << "Eh nulo" << endl;
-    }
     TPCWAccumAdimensionalized->jet(Ur, BrefJetMatrix, 1);
-
-
-    cout << "Chamando setReference: " << refVec << endl;
     HugoniotFunctionClass::setReferenceVector(refVec);
 
-
-
-
 }
-
 
 ReducedTPCWHugoniotFunctionClass::ReducedTPCWHugoniotFunctionClass(const ReducedTPCWHugoniotFunctionClass & copy) : HugoniotFunctionClass(copy.getFluxFunction()),
 TPCWFluxAdimensionalized(copy.TPCWFluxAdimensionalized),
@@ -148,8 +127,6 @@ n(copy.n),
 Uref_is_elliptic(copy.Uref_is_elliptic),
 ve_uref(copy.ve_uref) {
 
-
-    cout << "Construtor de copia da funcao de hugoniot" << endl;
     aref_F = new double[n];
     bref_F = new double[n];
 
@@ -169,7 +146,7 @@ ReducedTPCWHugoniotFunctionClass::~ReducedTPCWHugoniotFunctionClass() {
 
     delete [] aref_F;
 
- 
+
 }
 
 double ReducedTPCWHugoniotFunctionClass::HugoniotFunction(const RealVector &u) {
@@ -177,8 +154,8 @@ double ReducedTPCWHugoniotFunctionClass::HugoniotFunction(const RealVector &u) {
     JetMatrix aJetMatrix(n); // TODO revisar isto com Rodrigo.
     JetMatrix bJetMatrix(n);
 
-    TPCWFluxAdimensionalized->jet(u, aJetMatrix, 0);
-   TPCWAccumAdimensionalized->jet(u, bJetMatrix, 0);
+    TPCWFluxAdimensionalized->getReducedFlux()->jet(u, aJetMatrix, 0);
+    TPCWAccumAdimensionalized->getReducedAccumulation()->jet(u, bJetMatrix, 0);
 
     double Hmatrix[n][n];
 
@@ -228,8 +205,8 @@ void ReducedTPCWHugoniotFunctionClass::CompleteHugoniot(double &darcy_speedplus,
     //  create wave state for using uplus in the jets
     WaveState up(uplus); // TODO: Check this.    
 
-    TPCWFluxAdimensionalized->jet(up, aJetMatrix, 0);
-    TPCWAccumAdimensionalized->jet(up, bJetMatrix, 0);
+    TPCWFluxAdimensionalized->getReducedFlux()->jet(up, aJetMatrix, 0);
+    TPCWAccumAdimensionalized->getReducedAccumulation()->jet(up, bJetMatrix, 0);
 
     double G1plus = bJetMatrix(0);
     double G2plus = bJetMatrix(1);

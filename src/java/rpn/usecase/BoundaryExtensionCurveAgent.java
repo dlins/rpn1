@@ -55,14 +55,10 @@ public class BoundaryExtensionCurveAgent extends RpModelPlotAgent {
     @Override
     public void execute() {
         BoundaryExtensionCurveGeomFactory factory = new BoundaryExtensionCurveGeomFactory(RPNUMERICS.createExtensionCurveCalc());
-
         RPnPhaseSpaceAbstraction auxPhaseSpace = RPnDataModule.PHASESPACE;
-
         RpGeometry geometry = factory.geom();
-
         auxPhaseSpace.plot(geometry);
 
-        System.out.println("Chamando  extension curve execute boundary");
     }
 
     static public BoundaryExtensionCurveAgent instance() {

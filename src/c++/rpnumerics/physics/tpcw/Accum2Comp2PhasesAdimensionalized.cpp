@@ -7,7 +7,7 @@ Accum2Comp2PhasesAdimensionalized::Accum2Comp2PhasesAdimensionalized(const Accum
 
     reducedAccum_=new ReducedAccum2Comp2PhasesAdimensionalized(this);
 
-    cout <<"Phi na copia da acumulacao: "<<phi<<endl;
+
 }
 
 Accum2Comp2PhasesAdimensionalized::Accum2Comp2PhasesAdimensionalized(const Accum2Comp2PhasesAdimensionalized_Params &param):AccumulationFunction(param) {

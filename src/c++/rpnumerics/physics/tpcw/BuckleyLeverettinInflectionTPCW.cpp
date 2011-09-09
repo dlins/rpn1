@@ -21,13 +21,9 @@ double BuckleyLeverettinInflectionTPCW::HugoniotFunction(const RealVector &u){
 void BuckleyLeverettinInflectionTPCW::completeCurve(std::vector<RealVector> & curve){
     std::vector<RealVector> temp;
     temp.resize(2*curve.size());
-    cout<<"Tamanho de curve em complete curve: "<<curve.size()<<endl;
 
     RealVector min(boundary_->minimums());
     RealVector max(boundary_->maximums());
-
-    cout<<"Min: "<<min<<endl;
-    cout << "Max: " << max << endl;
 
     double umin = min.component(2), umax = max.component(2);
 

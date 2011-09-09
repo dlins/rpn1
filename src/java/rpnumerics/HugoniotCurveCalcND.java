@@ -5,9 +5,6 @@
  */
 package rpnumerics;
 
-import java.util.Iterator;
-import rpn.parser.RPnDataModule;
-import rpnumerics.HugoniotCurve;
 import rpnumerics.methods.HugoniotMethod;
 import rpnumerics.methods.HugoniotContinuationMethod;
 import rpnumerics.methods.HugoniotContourMethod;
@@ -77,24 +74,22 @@ public class HugoniotCurveCalcND
     }
 
     public PhasePoint getUMinus() {
-
-//        return new PhasePoint(hugoniotParams_.getUMinus());
         return new PhasePoint(Uminus_);
     }
 
     public RealVector getFMinus() {
         return new PhasePoint(hugoniotParams_.getFMinus());
-//        return Fminus_;
+
     }
 
     public RealMatrix2 getDFMinus() {
         return hugoniotParams_.getDFMinus();
-//        return DFminus_;
+
     }
 
     public double[] getPrimitiveUMinus() {
         return hugoniotParams_.getUMinus().toDouble();
-//        return Uminus_.toDouble();
+
     }
 
     public RpSolution calc() throws RpException {
@@ -116,16 +111,12 @@ public class HugoniotCurveCalcND
         //***
 
         System.out.println("Tamanho de result: " + result.segments().size());
-
-
-//        System.out.println(result.toMatlabData());
-
         return result;
 
     }
 
     public RpSolution recalc() throws RpException {
-//        System.out.println("Chamando recalc");
+
         return calc();
     }
 

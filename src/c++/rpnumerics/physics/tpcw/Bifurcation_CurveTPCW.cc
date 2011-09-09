@@ -83,8 +83,6 @@ void Bifurcation_CurveTPCW::fill_values_on_grid(const RealVector &pmin, const Re
     // Dimension of space
     int dim = pmin.size();
 
-    cout <<"Dimensao em fill "<<dim<<endl;
-
     int dimP = dim + 1; // TODO: ISTO É NOVO.  E A DIMENSAO PARA CALCULAR AUTOVALORES.
 
     // Create the grid proper

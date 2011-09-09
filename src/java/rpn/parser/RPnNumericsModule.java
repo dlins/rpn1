@@ -49,6 +49,12 @@ public class RPnNumericsModule {
 
             }
 
+             if (localName.equals("ACCUMPARAMS")) {
+                physicsProfile_.addParam(new Integer(att.getValue(1)), att.getValue(0), att.getValue(2));
+
+            }
+            
+
             if (localName.equals("CURVE")) {
                 currentConfigurationProfile_ = new ConfigurationProfile(att.getValue(0), ConfigurationProfile.CURVE_PROFILE);
 

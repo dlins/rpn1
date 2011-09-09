@@ -109,8 +109,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
     physics.preProcess(min);
     physics.preProcess(max);
 
-    cout << "Valor de min:" << min << endl;
-    cout << "Valor de max:" << max << endl;
 
     RectBoundary tempBoundary(min, max);
 

@@ -30,11 +30,6 @@ public class HugoniotPlotAgent extends RpModelPlotAgent {
 
     public RpGeometry createRpGeometry(RealVector[] input) {
 
-
-//        RPNUMERICS.getShockProfile().setXZero(new PhasePoint(input[0]));
-        System.out.println("Dentro de createGeometyr:" + input[0]);
-
-
         HugoniotCurveGeomFactory factory = new HugoniotCurveGeomFactory(new HugoniotCurveCalcND(input[0]));
         return factory.geom();
 

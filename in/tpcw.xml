@@ -1,20 +1,25 @@
 <?xml version="1.0"?>
 <!DOCTYPE rpnconfiguration >
 <rpnconfiguration>
-<PHYSICS name="TPCW">
-
-   <PHYSICSCONFIG name="thermodynamics">
-        <PHYSICSPARAM name="porosity" value="0.15"/>
-        <PHYSICSPARAM name="absolut permeability" value="1.15"/>
-        <PHYSICSPARAM name="viscosity" value="2.15"/>
-        <PHYSICSPARAM name="spline path" value="/home/edsonlan/Java/rpn"/>
-    </PHYSICSCONFIG>
-
-</PHYSICS>
+    <PHYSICS name="TPCW">
 
 
+        <ACCUMFUNCTION>
+            <ACCUMPARAMS name="porosity" position="0" value="0.15"/>
+        </ACCUMFUNCTION>
 
-     <METHOD name="Contour">
+        <PHYSICSCONFIG name="thermodynamics">
+            <PHYSICSPARAM name="absolut permeability" value="1.15"/>
+            <PHYSICSPARAM name="viscosity" value="2.15"/>
+            <PHYSICSPARAM name="spline path" value="/home/edsonlan/Java/rpn"/>
+        </PHYSICSCONFIG>
+
+
+    </PHYSICS>
+
+
+
+    <METHOD name="Contour">
         <METHODPARAM  name="x-resolution" value="30" />
         <METHODPARAM  name="y-resolution" value="30" />
 
@@ -61,30 +66,30 @@
         <CURVEPARAM name="sigma" value="0.03"/>
     </CURVE>
 
- 
 
 
 
-<VIEWCONFIGURATION modeldomain="3">
 
-    <PROJDESC name="Axis1 Axis0">
-        <VIEWPARAM name="axis" value="1 0"/>
-        <VIEWPARAM name="vpwidth" value="800"/>
-        <VIEWPARAM name="vpheight" value="800"/>
-        <VIEWPARAM name="iso2equi" value="false"/>
+    <VIEWCONFIGURATION modeldomain="3">
 
-    </PROJDESC>
+        <PROJDESC name="Axis1 Axis0">
+            <VIEWPARAM name="axis" value="1 0"/>
+            <VIEWPARAM name="vpwidth" value="800"/>
+            <VIEWPARAM name="vpheight" value="800"/>
+            <VIEWPARAM name="iso2equi" value="false"/>
+
+        </PROJDESC>
 
 
-  <PROJDESC name="Axis2 Axis0">
-        <VIEWPARAM name="axis" value="2 0"/>
-        <VIEWPARAM name="vpwidth" value="800"/>
-        <VIEWPARAM name="vpheight" value="800"/>
-        <VIEWPARAM name="iso2equi" value="false"/>
+        <PROJDESC name="Axis2 Axis0">
+            <VIEWPARAM name="axis" value="2 0"/>
+            <VIEWPARAM name="vpwidth" value="800"/>
+            <VIEWPARAM name="vpheight" value="800"/>
+            <VIEWPARAM name="iso2equi" value="false"/>
 
-    </PROJDESC>
-  
-<!--
+        </PROJDESC>
+
+        <!--
  <PROJDESC name="Axis1 Axis2">
         <VIEWPARAM name="axis" value="1 2"/>
         <VIEWPARAM name="vpwidth" value="600"/>
@@ -97,7 +102,7 @@
 
 
 
-</VIEWCONFIGURATION>
+    </VIEWCONFIGURATION>
 
 
 </rpnconfiguration>

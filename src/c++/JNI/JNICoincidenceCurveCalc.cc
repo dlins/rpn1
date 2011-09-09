@@ -89,14 +89,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceCurveCalc_nativeCalc(JNIEnv
     RealVector min(physicsBoundary. minimums());
     RealVector max(physicsBoundary. maximums());
 
-    cout << "Valor de min antes:" << min << endl;
-    cout << "Valor de max antes:" << max << endl;
-
     tpcw.preProcess(min);
     tpcw.preProcess(max);
 
-    cout << "Valor de min depois:" << min << endl;
-    cout << "Valor de max depois:" << max << endl;
 
     RectBoundary tempBoundary(min, max);
 

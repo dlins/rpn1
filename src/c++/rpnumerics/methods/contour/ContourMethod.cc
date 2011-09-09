@@ -594,14 +594,12 @@ void ContourMethod::classifiedCurve(const RealVector & input, vector<HugoniotPol
 
     std::vector<RealVector> vrs;
 
-    int info = curv2d(0, 9025, 0.0, &rect[0], &res[0], 1, vrs);
-
-    cout << "Unclissified curve: " << vrs[0].size() << endl;
+    curv2d(0, 9025, 0.0, &rect[0], &res[0], 1, vrs);
 
     //    cout << "antes de complete curve: " << info << endl;
 
     hugoniot->completeCurve(vrs);
-    cout << "Unclissified curve depois: " << vrs[0].size() << endl;
+
 
 
     //    for (int i = 0; i < vrs.size(); i++) {

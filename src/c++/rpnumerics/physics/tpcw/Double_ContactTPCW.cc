@@ -16,9 +16,6 @@ Double_ContactTPCW::Double_ContactTPCW(const RealVector &lpmin, const RealVector
     leftff = (Flux2Comp2PhasesAdimensionalized*) lff;
     leftaa = (Accum2Comp2PhasesAdimensionalized*) laa;
 
-    cout << "Left ff " << leftff << endl;
-    cout << "Left aa " << leftaa << endl;
-
 
     // Reserve space and/or copy the input parameters to their inner counterparts.
     left_number_of_grid_pnts = new int[lpmin.size()];

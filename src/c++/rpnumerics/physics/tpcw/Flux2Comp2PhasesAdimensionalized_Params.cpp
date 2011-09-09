@@ -27,7 +27,6 @@ Flux2Comp2PhasesAdimensionalized_Params::Flux2Comp2PhasesAdimensionalized_Params
     component(0, copy.abs_perm);
     component(1, copy.sin_beta);
     TD_ = copy.TD_;
-    cout << "copy" << endl;
     has_gravity_ = copy.has_gravity_;
     has_horizontal_ = copy.has_horizontal_;
 }
