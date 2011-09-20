@@ -11,13 +11,10 @@ TPCWAccumAdimensionalized(accumFunction) {
 
     // TODO: The flux object must be initialized somehow (be it created here or outside, etc.)
     RealVector uref(Uref.size() - 1);
-    //    printf("Uref.size() = %d\n", Uref.size());
+
     for (int i = 0; i < Uref.size() - 1; i++) uref.component(i) = Uref.component(i);
 
     WaveState u(uref); // TODO: Check this.
-    //    for (int i = 0; i < uref.size(); i++) printf("u(%d) = %f\n", i, u(i));
-
-    //    printf("here 1\n");
 
     JetMatrix arefJetMatrix(n);
     JetMatrix brefJetMatrix(n);
@@ -34,12 +31,9 @@ TPCWAccumAdimensionalized(accumFunction) {
         bref_F[i] = brefJetMatrix(i);
     }
 
-    //    printf("here 2\n");
-
     WaveState Ur(Uref);
     JetMatrix ArefJetMatrix(n);
     JetMatrix BrefJetMatrix(n);
-
 
     TPCWFluxAdimensionalized->jet(Ur, ArefJetMatrix, 1);
     TPCWAccumAdimensionalized->jet(Ur, BrefJetMatrix, 1);
@@ -61,6 +55,18 @@ TPCWAccumAdimensionalized(accumFunction) {
     else Uref_is_elliptic = true;
 }
 
+void ReducedTPCWHugoniotFunctionClass::setAccumulationFunction(const AccumulationFunction * accumulationFunction) {
+    TPCWAccumAdimensionalized = (Accum2Comp2PhasesAdimensionalized *) accumulationFunction;
+}
+
+void ReducedTPCWHugoniotFunctionClass::setFluxFunction(const FluxFunction * fluxFunction) {
+
+    HugoniotFunctionClass::setFluxFunction(fluxFunction);
+    TPCWFluxAdimensionalized = (Flux2Comp2PhasesAdimensionalized*) & getFluxFunction();
+
+
+}
+
 void ReducedTPCWHugoniotFunctionClass::setReferenceVector(const RealVector & refVec) {
 
     n = refVec.size();
@@ -68,18 +74,11 @@ void ReducedTPCWHugoniotFunctionClass::setReferenceVector(const RealVector & ref
     Uref.resize(n);
     for (int i = 0; i < n; i++) Uref.component(i) = refVec.component(i);
 
-
     RealVector uref(Uref.size() - 1);
-    printf("Uref.size() = %d\n", Uref.size());
-
 
     for (int i = 0; i < Uref.size() - 1; i++) uref.component(i) = Uref.component(i);
 
-
     WaveState u(uref); // TODO: Check this.
-    for (int i = 0; i < uref.size(); i++) printf("u(%d) = %f\n", i, u(i));
-
-    //    printf("here 1\n");
 
     JetMatrix arefJetMatrix(n);
     JetMatrix brefJetMatrix(n);
@@ -96,23 +95,20 @@ void ReducedTPCWHugoniotFunctionClass::setReferenceVector(const RealVector & ref
         bref_F[i] = brefJetMatrix(i);
     }
 
-    //    printf("here 2\n");
-
-    WaveState Ur(Uref);
+        WaveState Ur(Uref);
 
     JetMatrix ArefJetMatrix(n);
     JetMatrix BrefJetMatrix(n);
-    //    TPCWFluxAdimensionalized->jet(Ur, ArefJetMatrix, 1);
     getFluxFunction().jet(Ur, ArefJetMatrix, 1);
 
-//    for (int i = 0; i < n; i++) {
-//        for (int j = 0; j < n; j++) {
-//            cout << ArefJetMatrix(i, j) << " ";
-//
-//        }
-//
-//        cout << endl;
-//    }
+    //    for (int i = 0; i < n; i++) {
+    //        for (int j = 0; j < n; j++) {
+    //            cout << ArefJetMatrix(i, j) << " ";
+    //
+    //        }
+    //
+    //        cout << endl;
+    //    }
 
     TPCWAccumAdimensionalized->jet(Ur, BrefJetMatrix, 1);
     HugoniotFunctionClass::setReferenceVector(refVec);
@@ -151,12 +147,12 @@ ReducedTPCWHugoniotFunctionClass::~ReducedTPCWHugoniotFunctionClass() {
 
 double ReducedTPCWHugoniotFunctionClass::HugoniotFunction(const RealVector &u) {
 
-    JetMatrix aJetMatrix(n); // TODO revisar isto com Rodrigo.
+    JetMatrix aJetMatrix(n);
     JetMatrix bJetMatrix(n);
 
     TPCWFluxAdimensionalized->getReducedFlux()->jet(u, aJetMatrix, 0);
     TPCWAccumAdimensionalized->getReducedAccumulation()->jet(u, bJetMatrix, 0);
-
+   
     double Hmatrix[n][n];
 
     for (int i = 0; i < n; i++) {
@@ -170,7 +166,6 @@ double ReducedTPCWHugoniotFunctionClass::HugoniotFunction(const RealVector &u) {
 }
 
 void ReducedTPCWHugoniotFunctionClass::completeCurve(vector<RealVector> & curve) {
-    //    cout << "Chamando complete curve nao default" << endl;
 
     for (unsigned int i = 0; i < curve.size(); i++) {
         double darcy_speed;
@@ -185,7 +180,7 @@ void ReducedTPCWHugoniotFunctionClass::completeCurve(vector<RealVector> & curve)
         for (int j = 0; j < n; j++) curve[i].component(j) = temp[j];
         curve[i].component(n) = darcy_speed;
     }
-    //    cout << "Saindo de complete curve" << endl;
+
     return;
 
 }

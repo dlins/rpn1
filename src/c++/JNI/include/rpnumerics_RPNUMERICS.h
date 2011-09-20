@@ -57,6 +57,22 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getFluxParams
 
 /*
  * Class:     rpnumerics_RPNUMERICS
+ * Method:    setAccumulationParams
+ * Signature: (Lwave/util/RealVector;)V
+ */
+JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setAccumulationParams
+  (JNIEnv *, jclass, jobject);
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    getAccumulationParams
+ * Signature: ()Lwave/util/RealVector;
+ */
+JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getAccumulationParams
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
  * Method:    physicsID
  * Signature: ()Ljava/lang/String;
  */

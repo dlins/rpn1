@@ -16,11 +16,7 @@ public class SubInflectionCurveCalc extends BifurcationCurveCalc {
     public SubInflectionCurveCalc(){
     }
 
-    public RpSolution recalc() throws RpException {
-return null;
-//        return calc();
-
-    }
+  
 
 
     public RpSolution calc() throws RpException {

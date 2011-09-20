@@ -42,7 +42,10 @@ public:
 
     ReducedTPCWHugoniotFunctionClass(const ReducedTPCWHugoniotFunctionClass &);
 
-    void setReferenceVector(const RealVector & refVec) ;
+    void setReferenceVector(const RealVector & refVec);
+
+    void setFluxFunction(const FluxFunction *);
+    void setAccumulationFunction(const AccumulationFunction *);
 
     double HugoniotFunction(const RealVector &u); // TODO: u tem que ter dimensao 2 e nao 3.
 

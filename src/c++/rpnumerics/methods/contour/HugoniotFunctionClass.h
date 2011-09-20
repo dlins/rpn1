@@ -4,12 +4,13 @@
 #include "RealVector.h"
 #include <vector>
 #include "FluxFunction.h"
+#include "AccumulationFunction.h"
 
 class HugoniotFunctionClass {
 private:
     RealVector * uRef_;
-    const FluxFunction *fluxFunction_; //TODO Colocar a referencia a funcao de fluxo para que o calculo da curva mude
-    // quando os parametros de fluxo mudarem
+    const FluxFunction *fluxFunction_;
+
 protected:
 public:
 
@@ -21,7 +22,8 @@ public:
     RealVector & getReferenceVector();
     virtual void setReferenceVector(const RealVector &);
     const FluxFunction & getFluxFunction()const;
-    void setFluxFunction(FluxFunction *);
+    virtual void setFluxFunction(const FluxFunction *);
+    virtual void setAccumulationFunction(const AccumulationFunction *);
 
     virtual ~HugoniotFunctionClass();
 

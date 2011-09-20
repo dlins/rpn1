@@ -16,13 +16,7 @@ public class CoincidenceCurveCalc extends BifurcationCurveCalc {
     public CoincidenceCurveCalc(){
     }
 
-    @Override
-    public RpSolution recalc() throws RpException {
-
-        return calc();
-
-    }
-
+   
 
     @Override
     public RpSolution calc() throws RpException {

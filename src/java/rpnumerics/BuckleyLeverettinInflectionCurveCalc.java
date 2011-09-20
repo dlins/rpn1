@@ -16,12 +16,7 @@ public class BuckleyLeverettinInflectionCurveCalc extends BifurcationCurveCalc {
     }
 
 
-    public RpSolution recalc() throws RpException {
-
-        return calc();
-
-    }
-
+  
 
     public RpSolution calc() throws RpException {
 

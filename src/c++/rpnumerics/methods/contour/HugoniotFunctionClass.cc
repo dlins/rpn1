@@ -16,8 +16,12 @@ HugoniotFunctionClass::HugoniotFunctionClass() {
 
 }
 
+ void HugoniotFunctionClass::setAccumulationFunction(const AccumulationFunction *accFunction){
 
-void HugoniotFunctionClass::setFluxFunction(FluxFunction * flux){
+}
+
+
+void HugoniotFunctionClass::setFluxFunction(const FluxFunction * flux){
     fluxFunction_=flux;
 }
 

@@ -84,7 +84,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setRPnHome
 
     Physics::setRPnHome(rpnHomeString);
 
-//    cout << "RPn home path in physics: " << Physics::getRPnHome() << endl;
+    //    cout << "RPn home path in physics: " << Physics::getRPnHome() << endl;
 
 }
 
@@ -125,6 +125,74 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getFluxParams
     jobject fluxParams = (env)->NewObject(fluxParamsClass, fluxParamsConstructorID, realVector);
 
     return fluxParams;
+
+}
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    setAccumulationParams
+ * Signature: (Lwave/util/RealVector;)V
+ */
+JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setAccumulationParams
+(JNIEnv * env, jclass cls, jobject newParamsVector) {
+
+
+
+    jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
+
+    jmethodID toDoubleMethodID = (env)->GetMethodID(realVectorClass, "toDouble", "()[D");
+
+
+
+    //Input processing
+    jdoubleArray newVectorArray = (jdoubleArray) (env)->CallObjectMethod(newParamsVector, toDoubleMethodID);
+
+    int dimension = env->GetArrayLength(newVectorArray);
+
+    double input [dimension];
+
+    env->GetDoubleArrayRegion(newVectorArray, 0, dimension, input);
+
+    RealVector newAccumulationParamsVector(dimension, input);
+
+    AccumulationParams newAccumulationParams(newAccumulationParamsVector);
+    RpNumerics::getPhysics().accumulationParams(newAccumulationParams);
+
+}
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    getAccumulationParams
+ * Signature: ()Lwave/util/RealVector;
+ */
+JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getAccumulationParams
+(JNIEnv * env, jclass cls) {
+
+    jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
+
+    jmethodID realVectorConstructorID = env->GetMethodID(realVectorClass, "<init>", "([D)V");
+
+    const AccumulationParams & nativeAccumulationParams = RpNumerics::getPhysics().accumulation().accumulationParams();
+
+    const RealVector & nativeRealVectorParams = nativeAccumulationParams.params();
+
+    int paramsSize = nativeRealVectorParams.size();
+
+
+    double nativeRealVectorArray[paramsSize];
+
+    for (int i = 0; i < paramsSize; i++) {
+
+        nativeRealVectorArray[i] = nativeRealVectorParams.component(i);
+    }
+
+    jdoubleArray realVectorArray = env->NewDoubleArray(paramsSize);
+    env->SetDoubleArrayRegion(realVectorArray, 0, paramsSize, nativeRealVectorArray);
+
+    jobject realVector = (env)->NewObject(realVectorClass, realVectorConstructorID, realVectorArray);
+
+
+    return realVector;
 
 }
 

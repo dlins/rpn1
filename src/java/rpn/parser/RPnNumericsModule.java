@@ -40,6 +40,7 @@ public class RPnNumericsModule {
         private static ConfigurationProfile currentConfigurationProfile_;
         private static ConfigurationProfile physicsProfile_;
         private static ConfigurationProfile currentPhysicsConfigurationProfile_;
+        private static ConfigurationProfile currentInnerPhysicsConfigurationProfile_;
 
         public void startElement(String uri, String localName, String qName, Attributes att) throws SAXException {
             currentElement_ = localName;
@@ -77,12 +78,14 @@ public class RPnNumericsModule {
 
             if (localName.equals("PHYSICSCONFIG")) {
 
-                currentPhysicsConfigurationProfile_ = new ConfigurationProfile(att.getValue(0), ConfigurationProfile.PHYSICS_CONFIG_PROFILE);
+                currentInnerPhysicsConfigurationProfile_=new ConfigurationProfile(att.getValue(0), ConfigurationProfile.PHYSICS_CONFIG_PROFILE);
+
+
 
             }
             if (localName.equals("PHYSICSPARAM")) {
 
-                currentPhysicsConfigurationProfile_.addParam(att.getValue(0), att.getValue(1));
+                currentInnerPhysicsConfigurationProfile_.addParam(new Integer(att.getValue(1)),att.getValue(0), att.getValue(2));
 
             }
 
@@ -132,7 +135,7 @@ public class RPnNumericsModule {
 
             if (localName.equals("PHYSICSCONFIG")) {
 
-                physicsProfile_.addConfigurationProfile(currentPhysicsConfigurationProfile_.getName(), currentPhysicsConfigurationProfile_);
+                physicsProfile_.addConfigurationProfile(currentInnerPhysicsConfigurationProfile_.getName(), currentInnerPhysicsConfigurationProfile_);
             }
 
             if (localName.equals("CURVE")) {

@@ -12,10 +12,6 @@ import java.util.Set;
 import rpn.RPnConfig;
 import rpn.component.OrbitGeom;
 import rpn.parser.ConfigurationProfile;
-import rpn.plugininterface.PluginProfile;
-import rpn.plugininterface.PluginTableModel;
-import rpnumerics.methods.HugoniotContinuationMethod;
-import rpnumerics.methods.HugoniotContourMethod;
 import wave.util.*;
 import wave.ode.*;
 import wave.multid.Space;
@@ -59,25 +55,71 @@ public class RPNUMERICS {
 //        System.out.println("Profile ativo: " + physicsProfile.getName());
 
         Configuration physicsConfiguration = new Configuration(physicsProfile);
-        FluxParams fluxParams = getFluxParams();
-        if (physicsConfiguration.getParamsSize() != 0) {
 
-            for (int i = 0; i < physicsConfiguration.getParamsSize(); i++) {
-                //SET FLUX PARAMS !!!
-                fluxParams.setParam(i, new Double(physicsConfiguration.getParam(i)));
-                System.out.println("Param: " + " order:" + i + " " + physicsConfiguration.getParam(i));
+
+        //Accumulation function
+
+        Configuration accumulationFunctionConfig = physicsConfiguration.getConfiguration("accumulationfunction");
+
+        if (accumulationFunctionConfig != null) {
+            System.out.println("Printando configuration para acumulacao: " + accumulationFunctionConfig.getParamsSize());
+            System.out.println(accumulationFunctionConfig);
+
+            RealVector newAccParams = new RealVector(accumulationFunctionConfig.getParamsSize());
+            for (int i = 0; i < newAccParams.getSize(); i++) {
+                //SET ACCUM PARAMS !!!
+                newAccParams.setElement(i, new Double(accumulationFunctionConfig.getParam(i)));
+
             }
+            setAccumulationParams(newAccParams);
+        } else {
+
+            RealVector paramsVector = getAccumulationParams();
+
+            Configuration accumlationFunctionConfiguration = new Configuration("accumulationfunction", ConfigurationProfile.PHYSICS_CONFIG_PROFILE);
+
+            for (int i = 0; i < paramsVector.getSize(); i++) {
+                accumlationFunctionConfiguration.setParamValue("param " + i, String.valueOf(paramsVector.getElement(i)));
+                accumlationFunctionConfiguration.setParamOrder("param " + i, i);
+
+
+            }
+
+            physicsConfiguration.addConfiguration("accumulationfunction", accumlationFunctionConfiguration);
+        }
+
+        //Flux function
+
+        Configuration fluxFunctionConfig = physicsConfiguration.getConfiguration("fluxfunction");
+        FluxParams fluxParams = getFluxParams();
+        if (fluxFunctionConfig != null) {
+
+            System.out.println("Printando configuration para fluxo: ");
+            System.out.println(fluxFunctionConfig);
+
+            for (int i = 0; i < fluxFunctionConfig.getParamsSize(); i++) {
+                //SET FLUX PARAMS !!!
+                fluxParams.setParam(i, new Double(fluxFunctionConfig.getParam(i)));
+                System.out.println("Do arquivo Param : " + " order:" + i + " " + fluxFunctionConfig.getParam(i));
+            }
+            setFluxParams(fluxParams);
+
 
         } else {
 
             RealVector paramsVector = fluxParams.getParams();
 
+            Configuration fluxFunctionConfiguration = new Configuration("fluxfunction", ConfigurationProfile.PHYSICS_CONFIG_PROFILE);
+
             for (int i = 0; i < paramsVector.getSize(); i++) {
-                physicsProfile.addParam(i, "param " + i, String.valueOf(paramsVector.getElement(i)));
-                physicsConfiguration.setParamOrder("param " + i, i);
-                physicsConfiguration.setParamValue("param " + i, String.valueOf(paramsVector.getElement(i)));
+                fluxFunctionConfiguration.setParamValue("param " + i, String.valueOf(paramsVector.getElement(i)));
+                fluxFunctionConfiguration.setParamOrder("param " + i, i);
 
             }
+
+            physicsConfiguration.addConfiguration("fluxfunction", fluxFunctionConfiguration);
+
+
 //            System.out.println("Usando fluxo default");
 
             RPnConfig.addProfile(physicsID, physicsProfile);
@@ -123,29 +165,6 @@ public class RPNUMERICS {
                     vectorIndex++;
 
                 }
-
-
-
-
-
-//                int vectorIndex = 0;
-//                for (int i = 0; i < min.getSize(); i++) {
-//
-//                    min.setElement(i, new Double(limitsNumbers[vectorIndex]));
-//
-//                    vectorIndex += 2;
-//
-//                }
-//
-//                vectorIndex = 1;
-//
-//                for (int i = 0; i < max.getSize(); i++) {
-//
-//                    max.setElement(i, new Double(limitsNumbers[vectorIndex]));
-//
-//                    vectorIndex += 2;
-//
-//                }
 
                 System.out.println("Valor de min: " + min);
                 System.out.println("Valor de max: " + max);
@@ -232,35 +251,7 @@ public class RPNUMERICS {
         Configuration physicsConfig = configMap_.get(physicsID());
 
         return physicsConfig.getConfiguration(configurationName).getParam(paramName);
-//
-//        HashMap<String, Configuration> physicsParamConfiguration = physicsConfig.getConfiguration();
-//
-//        Set<Entry<String, Configuration>> configSet = physicsParamConfiguration.entrySet();
-//        System.out.println("---------------------Configuration dentro da fisica -----------");
-//        for (Entry<String, Configuration> entry : configSet) {
-//            System.out.println("Nome do configuration : " + entry.getValue().getName());
-//            System.out.println("Chave do configuration : " + entry.getKey());
-//            System.out.println(entry.getValue());
-//
-//        }
-//
-//
-//        System.out.println("---------------------Configuration dentro da fisica FIM-----------");
-//
-//        System.out.println("---------------------Testando chamada-----------");
 
-
-//        System.out.println(physicsParamConfiguration.get(configurationName));
-
-
-        //
-//        HashMap<String, Configuration> configHash = physicsParamConfiguration.getConfiguration();
-//
-
-//
-//        if (physicsParamConfiguration == null) {
-//            System.out.println("Eh nulo o configuartion dentro da fisica");
-//        }
 
     }
 
@@ -355,9 +346,9 @@ public class RPNUMERICS {
     public static HugoniotCurveCalc createHugoniotCalc() {
 
         HugoniotCurveCalc hugoniotCurveCalc = null;
-        
+
         RealVector teste = new RealVector(3);
-        
+
         teste.setElement(0, 0.0);
         teste.setElement(1, 0.0);
         teste.setElement(2, 0.0);
@@ -365,7 +356,7 @@ public class RPNUMERICS {
 
         return new HugoniotCurveCalcND(teste);
 
-        
+
 //        HugoniotParams hparams = new HugoniotParams(new PhasePoint(teste), new FluxFunction(getFluxParams()));
 
 
@@ -413,13 +404,11 @@ public class RPNUMERICS {
 //        return new StationaryPointCalc(initial, shockFlow);
 //
 //    }
-
 //    public static ManifoldOrbitCalc createManifoldCalc(StationaryPoint statPoint, PhasePoint initialPoint, int timeDirection) {
 //        ShockFlow shockFlow = (ShockFlow) createShockFlow();
 //        return new ManifoldOrbitCalc(statPoint, initialPoint, shockFlow, timeDirection);
 //
 //    }
-
 //    public static ConnectionOrbitCalc createConnectionOrbitCalc(ManifoldOrbit manifoldA, ManifoldOrbit manifoldB) {
 //
 //        ShockFlow shockFlow = (ShockFlow) createShockFlow();
@@ -428,14 +417,12 @@ public class RPNUMERICS {
 //
 //
 //    }
-
 //    public static OrbitCalc createOrbitCalc(OrbitPoint orbitPoint) {
 //
 //        ShockFlow flow = (ShockFlow) createShockFlow();
 //        return new OrbitCalc(orbitPoint, direction_, createODESolver(flow));
 //
 //    }
-
     public static DoubleContactCurveCalc createDoubleContactCurveCalc() {
 
 
@@ -557,7 +544,6 @@ public class RPNUMERICS {
 //        return flow;
 //
 //    }
-
     public static ShockFlow createShockFlow(ShockFlowParams shockFlowParams) {
         ShockFlow flow = new ShockFlow(shockFlowParams, new FluxFunction(getFluxParams()));
         return flow;
@@ -604,13 +590,11 @@ public class RPNUMERICS {
 //    public static void setCurrentProfile(ShockRarefactionProfile aShockRarefactionProfile_) {
 //        shockRarefactionProfile_ = aShockRarefactionProfile_;
 //    }
-
 //    public static ShockRarefactionProfile getCurrentProfile() {
 //
 //
 //        return shockRarefactionProfile_;
 //    }
-
     public static ShockProfile getShockProfile() {
         return shockProfile_;
     }
@@ -618,7 +602,6 @@ public class RPNUMERICS {
 //    public static RarefactionProfile getRarefactionProfile() {
 //        return rarefactionProfile_;
 //    }
-
     public static BifurcationProfile getBifurcationProfile() {
         return bifurcationProfile_;
     }
@@ -663,24 +646,31 @@ public class RPNUMERICS {
 
         Configuration physicsConfiguration = configMap_.get(physicsID());
 
-        int paramSize = physicsConfiguration.getParamsSize();
+        Configuration fluxConfiguration = physicsConfiguration.getConfiguration("fluxfunction");
+        Configuration accumulationConfiguration = physicsConfiguration.getConfiguration("accumulationfunction");
+//
+//
+//        int paramSize = physicsConfiguration.getParamsSize();
+//
+//        RealVector paramsVector = new RealVector(paramSize);
+//
+//        HashMap<String, String> configurationParameters = physicsConfiguration.getParams();
+//
+//        Set<Entry<String, String>> paramsSet = configurationParameters.entrySet();
+//
+//        for (Entry<String, String> entry : paramsSet) {
+//
+//            int paramOrder = physicsConfiguration.getParamOrder(entry.getKey());
+//            Double paramValue = new Double(entry.getValue());
+//            paramsVector.setElement(paramOrder, paramValue);
+//            System.out.println(paramOrder + " " + paramValue);
+//        }
 
-        RealVector paramsVector = new RealVector(paramSize);
-
-        HashMap<String, String> configurationParameters = physicsConfiguration.getParams();
-
-        Set<Entry<String, String>> paramsSet = configurationParameters.entrySet();
-
-        for (Entry<String, String> entry : paramsSet) {
-
-            int paramOrder = physicsConfiguration.getParamOrder(entry.getKey());
-            Double paramValue = new Double(entry.getValue());
-            paramsVector.setElement(paramOrder, paramValue);
-            System.out.println(paramOrder + " " + paramValue);
-        }
-
-        FluxParams newFluxParams = new FluxParams(paramsVector);
+        FluxParams newFluxParams = new FluxParams(fluxConfiguration.getParamVector());
         setFluxParams(newFluxParams);
+
+
+        setAccumulationParams(accumulationConfiguration.getParamVector());
 
     }
 
@@ -692,6 +682,10 @@ public class RPNUMERICS {
     private static native void setFluxParams(FluxParams fluxParams);
 
     public static native FluxParams getFluxParams();
+
+    private static native void setAccumulationParams(RealVector accumulationParams);
+
+    public static native RealVector getAccumulationParams();
 
     public static native String physicsID();
 

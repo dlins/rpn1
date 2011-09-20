@@ -3,7 +3,7 @@
 Flux2Comp2PhasesAdimensionalized::Flux2Comp2PhasesAdimensionalized(const Flux2Comp2PhasesAdimensionalized &a) : FluxFunction(a.FluxFunction::fluxParams()) {
 
     //    const Flux2Comp2PhasesAdimensionalized_Params & fluxParams = (const Flux2Comp2PhasesAdimensionalized_Params &) a.fluxParams();
-    cout << "Construtor de copia de Flux2CompPhasesAdimensionalized" << endl;
+    cout << "Construtor de copia de Flux2CompPhasesAdimensionalized "<<a.FluxFunction::fluxParams().params() << endl;
 
 
     TD = a.TD;
@@ -25,13 +25,11 @@ Flux2Comp2PhasesAdimensionalized::Flux2Comp2PhasesAdimensionalized(const Flux2Co
 
 Flux2Comp2PhasesAdimensionalized::Flux2Comp2PhasesAdimensionalized(const Flux2Comp2PhasesAdimensionalized_Params &param) : FluxFunction(param) {
 
-    cout << "Tamanho dos parametros: " << param.params().size() << endl;
-
+    cout << "Parametros de fluxo: " << param.params()<< endl;
 
     abs_perm = param.component(0);
     sin_beta = param.component(1);
     //    const_gravity = param.component(2);
-
 
     const_gravity = 9.8;
 
@@ -67,6 +65,10 @@ Flux2Comp2PhasesAdimensionalized::~Flux2Comp2PhasesAdimensionalized() {
 }
 
 void Flux2Comp2PhasesAdimensionalized::fluxParams(const FluxParams & param) {
+
+    FluxFunction::fluxParams(param);
+
+    cout <<"Setando parametros de fluxo: "<<endl;
 
 
     if (param.component(2) == 1.0) {

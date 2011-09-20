@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
 import rpn.parser.ConfigurationProfile;
+import wave.util.RealVector;
 
 public class Configuration {
 
@@ -95,6 +96,17 @@ public class Configuration {
 
     }
 
+    public RealVector getParamVector(){
+        RealVector paramVector = new RealVector(params_.size());
+        for (int i = 0; i < params_.size(); i++) {
+            Double value = new Double(getParam(i));
+            paramVector.setElement(i, value);
+        }
+        return paramVector;
+    }
+
+
+    
     public int getParamOrder(String paramName) {
 
         return paramOrder_.indexOf(paramName);
