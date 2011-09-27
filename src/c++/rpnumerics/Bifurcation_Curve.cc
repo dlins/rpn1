@@ -79,6 +79,21 @@ void Bifurcation_Curve::fill_values_on_grid(const RealVector &pmin, const RealVe
     // Dimension of space
     int dim = pmin.size();
 
+    cout<<"Dimensao em fill values"<<dim<<endl;
+
+
+    cout << "ff: "<<ff << endl;
+
+    cout << "aa: "<<aa << endl;
+
+    cout <<"grid: "<<&grid<<endl;
+    cout << "ffv: " << ffv(0)<<endl;
+    cout<<" aav: "<<&aav<<endl;
+    cout << "e: " << &e << endl;
+    cout << "eig_is_real: " << &eig_is_real << endl;
+
+
+
     // Create the grid proper
     create_grid(pmin, pmax, number_of_grid_pnts, grid);
 
@@ -86,21 +101,37 @@ void Bifurcation_Curve::fill_values_on_grid(const RealVector &pmin, const RealVe
     int n = 1;
     for (int i = 0; i < dim; i++) n *= number_of_grid_pnts[i];
 
+    cout <<"valor de n: "<<n<<endl;
+
     // Fill the arrays with the value of the flux and accumulation functions at every point in the grid.
     // The eigenpairs must also be stored.
     for (int i = 0; i < n; i++){
         double point[dim];
-        for (int j = 0; j < dim; j++) point[j] = grid(i).component(j);
+        for (int j = 0; j < dim; j++) {
+
+            point[j] = grid(i).component(j);
+        }
+
 
         double F[dim], G[dim], JF[dim][dim], JG[dim][dim];
         fill_with_jet((RpFunction*)ff, dim, point, 1, F, &JF[0][0], 0);
         fill_with_jet((RpFunction*)aa, dim, point, 1, G, &JG[0][0], 0);
 
+
+        ffv(i).resize(dim);
+        aav(i).resize(dim);
         // Fill the values of the functions
-        for (int j = 0; j < dim; j++){
+        for (int j = 0; j < dim; j++) {
+
+            cout<<"Tamanho de ffv "<< ffv(0)<<endl;
+
             ffv(i).component(j) = F[j];
+            cout << "Valor de ffv: "<<i<<" "<<F[j]<< endl;
             aav(i).component(j) = G[j];
+            cout << "valor aav: " << j<<" "<<G[j]<< endl;
         }
+
+  cout << "Depois do ciclo j"<<endl;
 
         // Find the eigenpairs
         vector<eigenpair> etemp;
@@ -130,6 +161,7 @@ void Bifurcation_Curve::fill_values_on_grid(const RealVector &pmin, const RealVe
                                             Matrix< std::vector<double> > &e, Matrix< vector<bool> > &eig_is_real){
 
     Matrix< std::vector<eigenpair> > temp(grid.rows(), grid.cols());
+    cout<<"ffv de fora: "<<&ffv<<endl;
     fill_values_on_grid(pmin, pmax, ff, aa, number_of_grid_pnts, grid, ffv, aav, temp, eig_is_real);
     
     for (int i = 0; i < grid.rows(); i++){

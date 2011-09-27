@@ -110,13 +110,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
         pmax.component(1) = 1.0;
 
 
+        int family =1; // Or else...
 
-        //        int number_of_grid_pnts[2] = {51, 51};
-
-        int family =0; // Or else...
-
-        Double_Contact dc(pmin, pmax, number_of_grid_pnts, (FluxFunction*) RpNumerics::getPhysics().fluxFunction().clone(), (AccumulationFunction*) RpNumerics::getPhysics().accumulation().clone(), family,
-                pmin, pmax, number_of_grid_pnts, (FluxFunction*) RpNumerics::getPhysics().fluxFunction().clone(), (AccumulationFunction*) RpNumerics::getPhysics().accumulation().clone(), family);
+        Double_Contact dc(pmin, pmax, number_of_grid_pnts, (FluxFunction*) RpNumerics::getPhysics().fluxFunction().clone(), (AccumulationFunction*) RpNumerics::getPhysics().accumulation().clone(), leftFamily,
+                pmin, pmax, number_of_grid_pnts, (FluxFunction*) RpNumerics::getPhysics().fluxFunction().clone(), (AccumulationFunction*) RpNumerics::getPhysics().accumulation().clone(), rightFamily);
 
         dc.compute_double_contact(left_vrs, right_vrs);
 

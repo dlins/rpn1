@@ -27,6 +27,7 @@ NOTE :
 #include "TPCW.h"
 #include "Extension_Curve.h"
 #include "Boundary_ExtensionTPCW.h"
+#include "Boundary_ExtensionStone.h"
 
 
 
@@ -35,7 +36,7 @@ using std::vector;
 using namespace std;
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_BoundaryExtensionCurveCalc_nativeCalc
-(JNIEnv * env, jobject obj, jint xResolution, jint yResolution, jint edgeResolution,jint curveFamily, jint domainFamily, jint edge, jint characteristicWhere) {
+(JNIEnv * env, jobject obj, jint xResolution, jint yResolution, jint edgeResolution, jint curveFamily, jint domainFamily, jint edge, jint characteristicWhere) {
 
     jclass hugoniotSegmentClass = (env)->FindClass(HUGONIOTSEGMENTCLASS_LOCATION);
 
@@ -95,39 +96,25 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BoundaryExtensionCurveCalc_nativeCalc
         cout << "Resolucao do x: " << xResolution << endl;
         cout << "Resolucao do y: " << yResolution << endl;
 
-        // Over the x axis.
-        int curve_points = 51;
-        double delta = 1.0 / (double) curve_points;
-
-        RealVector p1(2), p2(2);
-        std::vector<RealVector> original_curve_segments;
-        for (int i = 0; i < curve_points - 1; i++) {
-            p1.component(0) = (double) i*delta;
-            p1.component(1) = 0.0;
-
-            p2.component(0) = ((double) i + 1) * delta;
-            p2.component(1) = 0.0;
-
-            original_curve_segments.push_back(p1);
-            original_curve_segments.push_back(p2);
-        }
-
-        Extension_Curve ec(pmin, pmax, number_of_domain_pnts, (FluxFunction *) RpNumerics::getPhysics().fluxFunction().clone(), (AccumulationFunction *) RpNumerics::getPhysics().accumulation().clone());
-
-        int singular = 0;
 
         cout << "Familia da curva" << curveFamily << endl;
         cout << "Familia do dominio" << domainFamily << endl;
         cout << "characteristic " << characteristicWhere << endl;
         cout << "edge " << edge << endl;
 
-        ec.compute_extension_curve(characteristicWhere, singular,
-                original_curve_segments, curveFamily,
 
-                (FluxFunction *) RpNumerics::getPhysics().fluxFunction().clone(), (AccumulationFunction *) RpNumerics::getPhysics().accumulation().clone(),
+        int singular = 0;
+
+        Boundary_ExtensionStone::extension_curve((FluxFunction *) & RpNumerics::getPhysics().fluxFunction(), (AccumulationFunction *) & RpNumerics::getPhysics().accumulation(),
+                edge, edgeResolution,
+                curveFamily,
+                pmin, pmax, number_of_domain_pnts, // For the domain.
                 domainFamily,
+                (FluxFunction *) & RpNumerics::getPhysics().fluxFunction(), (AccumulationFunction *) & RpNumerics::getPhysics().accumulation(),
+                characteristicWhere, singular,
                 curve_segments,
                 domain_segments);
+
 
     }
 
@@ -179,7 +166,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BoundaryExtensionCurveCalc_nativeCalc
         cout << "Familia do dominio" << domainFamily << endl;
         cout << "characteristic " << characteristicWhere << endl;
         cout << "edge " << edge << endl;
-        cout<<"edgeResolution: "<<edgeResolution<<endl;
+        cout << "edgeResolution: " << edgeResolution << endl;
 
 
         //TODO Pegar o parametro hardcoded 101 (number_of_temperature_steps) da interface
@@ -187,7 +174,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BoundaryExtensionCurveCalc_nativeCalc
 
         Boundary_ExtensionTPCW::extension_curve((Flux2Comp2PhasesAdimensionalized*) & tpcw.fluxFunction(), (Accum2Comp2PhasesAdimensionalized*) & tpcw.accumulation(),
 
-                edge,edgeResolution,
+                edge, edgeResolution,
                 curveFamily,
                 min, max, number_of_grid_pnts, // For the domain.
                 domainFamily,
@@ -207,7 +194,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BoundaryExtensionCurveCalc_nativeCalc
 
 
     for (unsigned int i = 0; i < curve_segments.size() / 2; i++) {
-       
+
 
 
         jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
@@ -230,7 +217,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BoundaryExtensionCurveCalc_nativeCalc
 
         double leftSigma = 0;
         double rightSigma = 0;
-     
+
 
         jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, pointType);
         env->CallObjectMethod(leftSegmentsArray, arrayListAddMethod, hugoniotSegment);

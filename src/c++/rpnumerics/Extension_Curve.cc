@@ -26,6 +26,8 @@ Extension_Curve::Extension_Curve(
 
     // Allocate space for the grid, etc., and fill those values.
     // TODO: The case where the domain is a triangle is to be treated differently.
+
+    cout << "No construtor de Extension Curve " << domain_rows<<" "<<domain_cols<<endl;
     domain_grid.resize(domain_rows, domain_cols);
     domain_ffv.resize(domain_rows, domain_cols);
     domain_aav.resize(domain_rows, domain_cols);

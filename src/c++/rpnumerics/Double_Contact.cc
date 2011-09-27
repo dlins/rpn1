@@ -139,11 +139,11 @@ void Double_Contact::filedg4(Matrix<double> &sol_, int dims, Matrix<int> &edges_
         left_vrs.push_back(p1);
         left_vrs.push_back(p2);
 
-        p3.component(0) = ur0 + dur * (ir-1 + sol_(0, edges_(0, nedg) ) ); // RX1 Was:  = segend[sn - 1][0][0];//sol_[0][edges_[0][nedg ]];
-        p3.component(1) = vr0 + dvr * (jr-1 + sol_(1, edges_(0, nedg) ) ); // RY1 Was:  = segend[sn - 1][0][1];//sol_[1][edges_[0][nedg ]];
+        p3.component(0) = ur0 + dur * (ir-1 + sol_(2, edges_(0, nedg) ) ); // RX1 Was:  = segend[sn - 1][0][0];//sol_[0][edges_[0][nedg ]];
+        p3.component(1) = vr0 + dvr * (jr-1 + sol_(3, edges_(0, nedg) ) ); // RY1 Was:  = segend[sn - 1][0][1];//sol_[1][edges_[0][nedg ]];
 
-        p4.component(0) = ur0 + dur * (ir-1 + sol_(0, edges_(1, nedg) ) ); // RX2 Was:  = segend[sn - 1][1][0];//sol_[0][edges_[1][nedg ]];
-        p4.component(1) = vr0 + dvr * (jr-1 + sol_(1, edges_(1, nedg) ) ); // RY2 Was:  = segend[sn - 1][1][1];//sol_[1][edges_[1][nedg ]];
+        p4.component(0) = ur0 + dur * (ir-1 + sol_(2, edges_(1, nedg) ) ); // RX2 Was:  = segend[sn - 1][1][0];//sol_[0][edges_[1][nedg ]];
+        p4.component(1) = vr0 + dvr * (jr-1 + sol_(3, edges_(1, nedg) ) ); // RY2 Was:  = segend[sn - 1][1][1];//sol_[1][edges_[1][nedg ]];
 
         right_vrs.push_back(p3);
         right_vrs.push_back(p4);

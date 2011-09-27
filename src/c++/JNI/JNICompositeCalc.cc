@@ -14,11 +14,12 @@
 #include "RpNumerics.h"
 #include "RealVector.h"
 #include "JNIDefs.h"
-#include "Rarefaction_Extension.h"
 #include "Stone.h"
 #include "StoneAccumulation.h"
 #include "RectBoundary.h"
 #include <vector>
+
+#include "Rarefaction_Extension.h"
 
 
 using std::vector;
@@ -103,26 +104,26 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
 
         StonePermeability stonepermeability(stonepermparams);
 
-//        double grw = 1.0;
-//        double grg = 0.5;
-//        double gro = 0.7;
-//
-//        double muw = 1.0;
-//        double mug = 1.0;
-//        double muo = 1.0;
-//
-//        double vel = 0.0;
+        //        double grw = 1.0;
+        //        double grg = 0.5;
+        //        double gro = 0.7;
+        //
+        //        double muw = 1.0;
+        //        double mug = 1.0;
+        //        double muo = 1.0;
+        //
+        //        double vel = 0.0;
 
 
-        double grw = 1.0;
-        double grg = 0.5;
-        double gro = 1.0;
+        double grw = 0.0;
+        double grg = 0.0;
+        double gro = 0.0;
 
         double muw = 1.0;
         double mug = 1.0;
         double muo = 1.0;
 
-        double vel = 0.0;
+        double vel = 1.0;
 
 
         RealVector p(7);
@@ -135,18 +136,22 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
         p.component(6) = vel;
 
         StoneParams stoneparams(p);
-        StoneFluxFunction stoneflux(stoneparams, stonepermparams);
+         StoneFluxFunction stoneflux(stoneparams, stonepermparams);
+
+        //        const StoneFluxFunction * stoneflux = (const StoneFluxFunction *) &RpNumerics::getPhysics().fluxFunction();
 
         // Create the (trivial) accumulation function
-        StoneAccumulation stoneaccum;
+         StoneAccumulation stoneaccum;
+
+        //        const StoneAccumulation * stoneaccum = (const StoneAccumulation *) & RpNumerics::getPhysics().accumulation();
 
 
-        int singular = 1;
+        int singular = 0;
 
         //        const RealVector & pmin = RpNumerics::getPhysics().boundary().minimums();
         //        const RealVector & pmax = RpNumerics::getPhysics().boundary().maximums();
 
-        RealVector pmin(2);
+       RealVector pmin(2);
         RealVector pmax(2);
 
 
@@ -174,7 +179,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
 
         testBooleanVector.push_back(true);
         testBooleanVector.push_back(true);
-        RectBoundary * testBoundary = new RectBoundary(pmin, pmax, testBooleanVector);
+        const RectBoundary testBoundary (pmin, pmax, testBooleanVector);
+
+
 
         Rarefaction_Extension::extension_curve(&stoneflux,
                 &stoneaccum,
@@ -182,15 +189,15 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
                 .001,
                 curveFamily,
                 increase,
-                testBoundary,
+                &testBoundary,
                 pmin, pmax, number_of_grid_points, // For the domain.
                 domainFamily,
                 &stoneflux, &stoneaccum,
-                characteristicWhere, singular,rarefaction_segments,
+                characteristicWhere, singular,
                 curve_segments,
                 domain_segments);
 
-        delete testBoundary;
+//        delete testBoundary;
 
         printf("curve.size()  = %d\n", curve_segments.size());
         printf("domain.size() = %d\n", domain_segments.size());
