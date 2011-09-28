@@ -99,7 +99,7 @@ class Double_Contact : public Bifurcation_Curve {
         int filhcub4(int ir, int jr, int *index, double *foncub, int hm, int ncvert_,
                      double *lambda_left_input, Matrix<double> &flux_left_input, Matrix<double> &accum_left_input);
                      
-        inline bool left_right_adjacency(int il, int jl, int ir, int jr);
+        inline bool left_right_ordering(int il, int jl, int ir, int jr);
     protected:
     public:
         Double_Contact(const RealVector &lpmin, const RealVector &lpmax, const int *l_number_of_grid_pnts,
