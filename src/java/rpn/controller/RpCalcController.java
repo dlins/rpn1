@@ -57,7 +57,7 @@ public class RpCalcController implements RpController {
         // this is to avoid void notifications of enabled/disbled
         if (change.getPropertyName().compareTo("enabled") != 0){
             // updates only if visible
-	        if (geomFactory_.geom().viewingAttr().isVisible())
+//	        if (geomFactory_.geom().viewingAttr().isVisible())
             	geomFactory_.updateGeom();
         }
             

@@ -96,15 +96,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
 //    FluxFunction * tempFluxFunction = (FluxFunction *) RpNumerics::getPhysics().fluxFunction().clone();
 //    AccumulationFunction * tempAccumlationFunction=(AccumulationFunction *)RpNumerics::getPhysics().accumulation().clone();
 
-//    cout<<"Parametros de fluxo na chamada: "<<tempFluxFunction->fluxParams().params()<<endl;
+    cout<<"Parametros de fluxo na chamada: "<<RpNumerics::getPhysics().fluxFunction().fluxParams().params()<<endl;
 
     hf->setFluxFunction((const FluxFunction *) &RpNumerics::getPhysics().fluxFunction());
 
     hf->setAccumulationFunction((const AccumulationFunction *) &RpNumerics::getPhysics().accumulation());
 
     hf->setReferenceVector(Uref);
-
-
 
     const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
 
@@ -117,6 +115,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
 
 
     RectBoundary tempBoundary(min, max);
+
+    cout <<"Ponto clicado: "<<Uref<<endl;
 
 
     ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), tempBoundary, hf);

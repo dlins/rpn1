@@ -2,19 +2,15 @@
 
 StoneHugoniotFunctionClass::StoneHugoniotFunctionClass(const RealVector &U, const StoneFluxFunction & stoneFluxFunction) : HugoniotFunctionClass(stoneFluxFunction){//, stone(new StoneFluxFunction(stoneFluxFunction)) {
 
-    StoneFluxFunction & stone = (StoneFluxFunction &)getFluxFunction();
-
-
     int n = U.size();
 
     Uref.resize(n);
     for (int i = 0; i < n; i++) Uref.component(i) = U.component(i);
 
-
     // TODO: The flux object must be initialized somehow (be it created here or outside, etc.)
     UrefJetMatrix.resize(n);
     WaveState u(Uref); // TODO: Check this.
-    stone.jet(u, UrefJetMatrix, 1);
+    stoneFluxFunction.jet(u, UrefJetMatrix, 1);
 
     // Find the eigenpairs of the Jacobian of the jet at Uref
     double A[n][n];
@@ -67,6 +63,7 @@ double StoneHugoniotFunctionClass::HugoniotFunction(const RealVector & u) {
     //        Uref = getReferenceVector();
 
     StoneFluxFunction & stone = (StoneFluxFunction &)getFluxFunction();
+//    cout <<"Parametros de fluxo em hgf: "<<stone.fluxParams().params()<<endl;
     double sw = u(0);
     double swz = Uref(0);
 

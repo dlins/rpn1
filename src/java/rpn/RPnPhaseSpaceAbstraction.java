@@ -111,14 +111,11 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
 //        }
     }
 
-  
-
     public void clearGeometrySelection() {
         for (int i = 0; i < geomList_.size(); i++) {
             highlightGeometry(i);
         }
     }
-
 
     public void highlightGeometry(int index) {
         for (int i = 0; i < geomList_.size(); i++) {
@@ -261,7 +258,6 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
 //        }
 //    }
     // overwriting so we don't remove the last Hugoniot
-
     @Override
     public void clear() {
 

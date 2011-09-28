@@ -20,6 +20,8 @@ class Quad2FluxParams : public FluxParams {
 public:
 	Quad2FluxParams(void);
 	Quad2FluxParams(const RealVector &);
+
+    Quad2FluxParams(double, double);
         
         virtual ~Quad2FluxParams();
 

@@ -73,7 +73,7 @@ public class AbstractScene implements AbstractGeomObj {
         for (int i = 0; i < viewList_.size(); i++) {
             ((Scene) viewList_.get(i)).addViewFor(geom);
         }
-
+        System.out.println("List de geometrias: " + geomList_.size());
     }
 
     public void print(FileWriter cout) {
@@ -93,6 +93,8 @@ public class AbstractScene implements AbstractGeomObj {
         for (int i = 0; i < viewList_.size(); i++) {
             ((Scene) viewList_.get(i)).removeViewOf(geom);
         }
+
+        System.out.println("List de geometrias: " + geomList_.size());
     }
 
     public void remove(MultiGeometry geom) {
@@ -106,6 +108,7 @@ public class AbstractScene implements AbstractGeomObj {
         for (int i = 0; i < viewList_.size(); i++) {
             ((Scene) viewList_.get(i)).removeViewOf(geom);
         }
+        System.out.println("List de geometrias: " + geomList_.size());
     }
 
     public void applyMap(Map map) {

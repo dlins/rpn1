@@ -88,7 +88,7 @@ IsoTriang2DBoundary::IsoTriang2DBoundary(const RealVector & A, const RealVector 
     minimums_ = new RealVector(2);
 
     minimums_->component(0) = minArray[0];
-    minimums_->component(0) = minArray[1];
+    minimums_->component(1) = minArray[1];
 
     maximums_ = new RealVector(2);
     maximums_->component(0) = maxArray[0];

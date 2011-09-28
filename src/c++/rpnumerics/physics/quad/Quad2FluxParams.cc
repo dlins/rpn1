@@ -6,6 +6,13 @@ const double Quad2FluxParams::DEFAULT_B[2][2] = { { 0., .1 }, { -.1, 0. } };
 const double Quad2FluxParams::DEFAULT_C[2][2][2] = { { { -1., 0. }, { 0., 1. } }, { { 0., 1. }, { 1., 0. } } };
 //
 
+
+Quad2FluxParams::Quad2FluxParams(double a , double b):FluxParams(RealVector(10)) {
+
+    //TODO Fazer com o Vitor
+
+}
+
 Quad2FluxParams::Quad2FluxParams(void) :FluxParams(RealVector(10))
 {
 //    component(0, 2); //A1
@@ -48,15 +55,6 @@ Quad2FluxParams::Quad2FluxParams(void) :FluxParams(RealVector(10))
     component(8, 0);//D2
 
     component(9, 0); //E2
-
-
-
-
-
-
-
-    
-
 
 
     

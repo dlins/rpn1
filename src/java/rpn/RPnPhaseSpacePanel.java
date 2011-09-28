@@ -6,8 +6,6 @@
 package rpn;
 
 import java.io.UnsupportedEncodingException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.batik.svggen.SVGGraphics2DIOException;
 import wave.multid.view.*;
 import rpn.controller.PhaseSpacePanel2DController;
@@ -42,7 +40,6 @@ import org.w3c.dom.Document;
 import rpn.component.util.CLASSIFIERAGENT_CONFIG;
 import rpn.component.util.GeometryGraph;
 import rpn.component.util.GeometryGraph3D;
-import rpn.component.util.GeometryGraph4D;
 import rpn.component.util.GeometryUtil;
 import rpn.component.util.VELOCITYAGENT_CONFIG;
 import rpn.controller.ui.AREASELECTION_CONFIG;

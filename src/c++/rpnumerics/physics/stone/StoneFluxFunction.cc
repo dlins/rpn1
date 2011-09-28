@@ -55,6 +55,7 @@ StoneFluxFunction::~StoneFluxFunction() {
 
 int StoneFluxFunction::jet(const WaveState &w, JetMatrix &m, int degree) const {
 
+
     double sw = w(0);
     double so = w(1);
     double sg = 1.0 - sw - so;
