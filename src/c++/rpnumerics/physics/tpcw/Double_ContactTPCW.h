@@ -103,7 +103,7 @@ private:
     int filhcub4(int ir, int jr, int *index, double *foncub, int hm, int ncvert_,
             double *lambda_left_input, Matrix<double> &flux_left_input, Matrix<double> &accum_left_input);
 
-    inline bool left_right_adjacency(int il, int jl, int ir, int jr);
+    inline bool left_right_ordering(int il, int jl, int ir, int jr);
 
     // Extra methods
     double det(int nn, double *A);

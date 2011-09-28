@@ -136,20 +136,22 @@ void Double_ContactTPCW::filedg4(Matrix<double> &sol_, int dims, Matrix<int> &ed
     RealVector p1(2), p2(2), p3(2), p4(2);
 
     for (int nedg = 0; nedg < nedges_; nedg++) {
-        p1.component(0) = ul0 + dul * (il - 1 + sol_(0, edges_(0, nedg))); // LX1 Was  = segend[sn - 1][0][0];//sol_[0][edges_[0][nedg ]];
-        p1.component(1) = vl0 + dvl * (jl - 1 + sol_(1, edges_(0, nedg))); // LY1 Was  = segend[sn - 1][0][1];//sol_[1][edges_[0][nedg ]];
+        // 2011-09-28: Eliminated "-1" from il, jl, ir and jr below. Marchesin, Morante.
 
-        p2.component(0) = ul0 + dul * (il - 1 + sol_(0, edges_(1, nedg))); // LX2 Was  = segend[sn - 1][1][0];//sol_[0][edges_[1][nedg ]];
-        p2.component(1) = vl0 + dvl * (jl - 1 + sol_(1, edges_(1, nedg))); // LY2 Was  = segend[sn - 1][1][1];//sol_[1][edges_[1][nedg ]];
+        p1.component(0) = ul0 + dul * (il + sol_(0, edges_(0, nedg))); // LX1 Was  = segend[sn - 1][0][0];//sol_[0][edges_[0][nedg ]];
+        p1.component(1) = vl0 + dvl * (jl + sol_(1, edges_(0, nedg))); // LY1 Was  = segend[sn - 1][0][1];//sol_[1][edges_[0][nedg ]];
+
+        p2.component(0) = ul0 + dul * (il + sol_(0, edges_(1, nedg))); // LX2 Was  = segend[sn - 1][1][0];//sol_[0][edges_[1][nedg ]];
+        p2.component(1) = vl0 + dvl * (jl + sol_(1, edges_(1, nedg))); // LY2 Was  = segend[sn - 1][1][1];//sol_[1][edges_[1][nedg ]];
 
         left_vrs.push_back(p1);
         left_vrs.push_back(p2);
 
-        p3.component(0) = ur0 + dur * (ir - 1 + sol_(2, edges_(0, nedg))); // RX1 Was:  = segend[sn - 1][0][0];//sol_[0][edges_[0][nedg ]];
-        p3.component(1) = vr0 + dvr * (jr - 1 + sol_(3, edges_(0, nedg))); // RY1 Was:  = segend[sn - 1][0][1];//sol_[1][edges_[0][nedg ]];
+        p3.component(0) = ur0 + dur * (ir + sol_(2, edges_(0, nedg))); // RX1 Was:  = segend[sn - 1][0][0];//sol_[0][edges_[0][nedg ]];
+        p3.component(1) = vr0 + dvr * (jr + sol_(3, edges_(0, nedg))); // RY1 Was:  = segend[sn - 1][0][1];//sol_[1][edges_[0][nedg ]];
 
-        p4.component(0) = ur0 + dur * (ir - 1 + sol_(2, edges_(1, nedg))); // RX2 Was:  = segend[sn - 1][1][0];//sol_[0][edges_[1][nedg ]];
-        p4.component(1) = vr0 + dvr * (jr - 1 + sol_(3, edges_(1, nedg))); // RY2 Was:  = segend[sn - 1][1][1];//sol_[1][edges_[1][nedg ]];
+        p4.component(0) = ur0 + dur * (ir + sol_(2, edges_(1, nedg))); // RX2 Was:  = segend[sn - 1][1][0];//sol_[0][edges_[1][nedg ]];
+        p4.component(1) = vr0 + dvr * (jr + sol_(3, edges_(1, nedg))); // RY2 Was:  = segend[sn - 1][1][1];//sol_[1][edges_[1][nedg ]];
 
         right_vrs.push_back(p3);
         right_vrs.push_back(p4);
@@ -274,7 +276,7 @@ void Double_ContactTPCW::compute_double_contactTPCW(std::vector<RealVector> &lef
             for (int ir = 0; ir < nur; ir++) {
                 for (int jr = 0; jr < nvr; jr++) {
                     // if (insided("right", ir, jr) == 0) continue;
-                    if (singular && left_right_adjacency(il, jl, ir, jr)) continue;
+                    if (singular && left_right_ordering(il, jl, ir, jr)) continue;
                     // TODO: See how much time these if's take up and think if they can or should be
                     //       made in C instead of C++.
                     if (right_is_complex(ir, jr)) continue;
@@ -660,7 +662,7 @@ int Double_ContactTPCW::filhcub4(int ir, int jr, int *index, double *foncub, int
 // and false otherwise.
 //
 
-bool Double_ContactTPCW::left_right_adjacency(int il, int jl, int ir, int jr) {
+bool Double_ContactTPCW::left_right_ordering(int il, int jl, int ir, int jr) {
     //c     input:
     //      real     ul0, vl0, ul1, vl1, dul, dvl, dvmax
     //      common  /  lrectdat / ul0, vl0, ul1, vl1, dul, dvl, dvmax
@@ -675,9 +677,21 @@ bool Double_ContactTPCW::left_right_adjacency(int il, int jl, int ir, int jr) {
     //     3     (abs( (vr0+(jr+.5)*dvr) - (vl0+(jl+.5)*dvl) ) .le. dvmax)
     //     4   ) adjrect = 0
 
-    return ( (fabs((ur0 + (ir + .5) * dur) - (ul0 + (il + .5) * dul)) <= dumax) &&
-            (fabs((vr0 + (jr + .5) * dvr) - (vl0 + (jl + .5) * dvl)) <= dvmax)
-            );
+//    return ( (fabs((ur0 + (ir + .5) * dur) - (ul0 + (il + .5) * dul)) <= dumax) &&
+//            (fabs((vr0 + (jr + .5) * dvr) - (vl0 + (jl + .5) * dvl)) <= dvmax)
+//            );
+
+//      return ( (fabs( (ur0+(ir-.5)*dur) - (ul0+(il-.5)*dul) ) <= 2.0*dumax) &&
+//               (fabs( (vr0+(jr-.5)*dvr) - (vl0+(jl-.5)*dvl) ) <= 2.0*dvmax)
+//             );
+
+
+      // Modified: 2011-09-28. Marchesin, Morante. Twice-computing suppressed.
+      return ( (( (ur0+(ir-.5)*dur) - (ul0+(il-.5)*dul) ) <= 2.0*dumax) &&
+               (( (vr0+(jr-.5)*dvr) - (vl0+(jl-.5)*dvl) ) <= 2.0*dvmax)
+             );
+
+
 }
 
 
