@@ -88,7 +88,6 @@ public class Scene implements GeomObjView {
     public void removeViewOf(MultiGeometry geomObj) {
         Iterator viewListIterator = viewList_.iterator();
         while (viewListIterator.hasNext()) {
-
             GeomObjView oldGeomView = (GeomObjView) viewListIterator.next();
             if (oldGeomView.getAbstractGeom().equals(geomObj)) {
                 viewListIterator.remove();

@@ -216,7 +216,6 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
                 if (selected){
                     tableModel_.removeRow(index);
                     RPnDataModule.PHASESPACE.remove(index);
-
                     index=0;
                     count=tableModel_.getRowCount();
                 }

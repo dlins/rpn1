@@ -55,7 +55,6 @@ StoneFluxFunction::~StoneFluxFunction() {
 
 int StoneFluxFunction::jet(const WaveState &w, JetMatrix &m, int degree) const {
 
-
     double sw = w(0);
     double so = w(1);
     double sg = 1.0 - sw - so;
@@ -96,7 +95,7 @@ int StoneFluxFunction::jet(const WaveState &w, JetMatrix &m, int degree) const {
 
            double ld2ko_dsw2= d2ko_dsw2/ muo;
            double ld2ko_dswso= d2ko_dswso/ muo;
-           double ld2ko_dso2= d2kw_dso2/ muo;
+           double ld2ko_dso2= d2ko_dso2/ muo; // Was:           double ld2ko_dso2= d2kw_dso2/ muo;
 
            double ld2kg_dsw2= d2kg_dsw2/ mug;
            double ld2kg_dswso= d2kg_dswso/ mug;

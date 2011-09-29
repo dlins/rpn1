@@ -73,7 +73,7 @@ public class AbstractScene implements AbstractGeomObj {
         for (int i = 0; i < viewList_.size(); i++) {
             ((Scene) viewList_.get(i)).addViewFor(geom);
         }
-        System.out.println("List de geometrias: " + geomList_.size());
+
     }
 
     public void print(FileWriter cout) {
@@ -83,18 +83,23 @@ public class AbstractScene implements AbstractGeomObj {
     }
 
     public void remove(int geometryIndex) {
-        MultiGeometry geom = (MultiGeometry) geomList_.remove(geometryIndex);
-//        RPnCurvesListFrame.removeGeometry(geometryIndex);
-        try {
-            boundary_.resize(geom.getPathIterator());
-        } catch (DimMismatchEx dex) {
-            dex.printStackTrace();
-        }
-        for (int i = 0; i < viewList_.size(); i++) {
-            ((Scene) viewList_.get(i)).removeViewOf(geom);
-        }
 
-        System.out.println("List de geometrias: " + geomList_.size());
+        MultiGeometry geom = (MultiGeometry) geomList_.get(geometryIndex);
+
+        remove(geom);
+//
+//        try {
+//            boundary_.resize(geom.getPathIterator());
+//        } catch (DimMismatchEx dex) {
+//            dex.printStackTrace();
+//        }
+//        for (int i = 0; i < viewList_.size(); i++) {
+//            ((Scene) viewList_.get(i)).removeViewOf(geom);
+//        }
+//
+//        geomList_.remove(geometryIndex);
+
+
     }
 
     public void remove(MultiGeometry geom) {
@@ -107,8 +112,10 @@ public class AbstractScene implements AbstractGeomObj {
         }
         for (int i = 0; i < viewList_.size(); i++) {
             ((Scene) viewList_.get(i)).removeViewOf(geom);
+            ((Scene) viewList_.get(i)).update();
         }
-        System.out.println("List de geometrias: " + geomList_.size());
+
+
     }
 
     public void applyMap(Map map) {

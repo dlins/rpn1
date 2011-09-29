@@ -63,7 +63,6 @@ double StoneHugoniotFunctionClass::HugoniotFunction(const RealVector & u) {
     //        Uref = getReferenceVector();
 
     StoneFluxFunction & stone = (StoneFluxFunction &)getFluxFunction();
-//    cout <<"Parametros de fluxo em hgf: "<<stone.fluxParams().params()<<endl;
     double sw = u(0);
     double swz = Uref(0);
 
