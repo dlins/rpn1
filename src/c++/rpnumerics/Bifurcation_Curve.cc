@@ -79,29 +79,12 @@ void Bifurcation_Curve::fill_values_on_grid(const RealVector &pmin, const RealVe
     // Dimension of space
     int dim = pmin.size();
 
-    cout<<"Dimensao em fill values"<<dim<<endl;
-
-
-    cout << "ff: "<<ff << endl;
-
-    cout << "aa: "<<aa << endl;
-
-    cout <<"grid: "<<&grid<<endl;
-    cout << "ffv: " << ffv(0)<<endl;
-    cout<<" aav: "<<&aav<<endl;
-    cout << "e: " << &e << endl;
-    cout << "eig_is_real: " << &eig_is_real << endl;
-
-
-
     // Create the grid proper
     create_grid(pmin, pmax, number_of_grid_pnts, grid);
 
     // Number of elements in the grid.
     int n = 1;
     for (int i = 0; i < dim; i++) n *= number_of_grid_pnts[i];
-
-    cout <<"valor de n: "<<n<<endl;
 
     // Fill the arrays with the value of the flux and accumulation functions at every point in the grid.
     // The eigenpairs must also be stored.
@@ -122,17 +105,9 @@ void Bifurcation_Curve::fill_values_on_grid(const RealVector &pmin, const RealVe
         aav(i).resize(dim);
         // Fill the values of the functions
         for (int j = 0; j < dim; j++) {
-
-            cout<<"Tamanho de ffv "<< ffv(0)<<endl;
-
             ffv(i).component(j) = F[j];
-            cout << "Valor de ffv: "<<i<<" "<<F[j]<< endl;
             aav(i).component(j) = G[j];
-            cout << "valor aav: " << j<<" "<<G[j]<< endl;
         }
-
-  cout << "Depois do ciclo j"<<endl;
-
         // Find the eigenpairs
         vector<eigenpair> etemp;
         Eigen::eig(dim, &JF[0][0], &JG[0][0], etemp);
@@ -161,7 +136,6 @@ void Bifurcation_Curve::fill_values_on_grid(const RealVector &pmin, const RealVe
                                             Matrix< std::vector<double> > &e, Matrix< vector<bool> > &eig_is_real){
 
     Matrix< std::vector<eigenpair> > temp(grid.rows(), grid.cols());
-    cout<<"ffv de fora: "<<&ffv<<endl;
     fill_values_on_grid(pmin, pmax, ff, aa, number_of_grid_pnts, grid, ffv, aav, temp, eig_is_real);
     
     for (int i = 0; i < grid.rows(); i++){
