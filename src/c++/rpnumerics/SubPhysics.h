@@ -47,7 +47,7 @@ protected:
 public:
 
 
-     SubPhysics(const Boundary &, const Space &, const char *, int);
+    SubPhysics(const Boundary &, const Space &, const char *, int);
 
     SubPhysics(const FluxFunction &, const AccumulationFunction &, const Boundary &, const Space &, const char *, int);
 

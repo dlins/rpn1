@@ -16,26 +16,24 @@
 #include "FluxParams.h"
 
 class Quad2FluxParams : public FluxParams {
-
 public:
-	Quad2FluxParams(void);
-	Quad2FluxParams(const RealVector &);
+    Quad2FluxParams(void);
+    Quad2FluxParams(const RealVector &);
 
     Quad2FluxParams(double, double);
-        
-        virtual ~Quad2FluxParams();
 
-	static const double DEFAULT_A[2];
-	static const double DEFAULT_B[2][2];
-	static const double DEFAULT_C[2][2][2];
+    virtual ~Quad2FluxParams();
 
-	Quad2FluxParams defaultParams(void);
+    static const double DEFAULT_A[2];
+    static const double DEFAULT_B[2][2];
+    static const double DEFAULT_C[2][2][2];
+
+    Quad2FluxParams defaultParams(void);
 
 };
 
-inline Quad2FluxParams Quad2FluxParams::defaultParams(void)
-{
-	return Quad2FluxParams();
+inline Quad2FluxParams Quad2FluxParams::defaultParams(void) {
+    return Quad2FluxParams();
 }
 
 

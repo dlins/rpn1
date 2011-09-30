@@ -93,9 +93,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
 
     HugoniotFunctionClass *hf = RpNumerics::getPhysics().getSubPhysics(0).getHugoniotFunction();
 
-//    FluxFunction * tempFluxFunction = (FluxFunction *) RpNumerics::getPhysics().fluxFunction().clone();
-//    AccumulationFunction * tempAccumlationFunction=(AccumulationFunction *)RpNumerics::getPhysics().accumulation().clone();
-
+    
     cout<<"Parametros de fluxo na chamada: "<<RpNumerics::getPhysics().fluxFunction().fluxParams().params()<<endl;
 
     hf->setFluxFunction((const FluxFunction *) &RpNumerics::getPhysics().fluxFunction());

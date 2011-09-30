@@ -102,7 +102,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
 
     RectBoundary tempBoundary(min, max, testBoundary);
 
-    double deltaxi = 1e-4;
+    double deltaxi = 1e-3;
 
     physics.preProcess(realVectorInput);
 
