@@ -11,7 +11,7 @@
 
     </BOUNDARY>-->
 
-<PHYSICSCONFIG name="fluxfunction">
+<!--<PHYSICSCONFIG name="fluxfunction">
         <PHYSICSPARAM name="param0" position="0" value ="-1" />
         <PHYSICSPARAM name="param1" position="1" value ="0" />
         <PHYSICSPARAM name="param2" position="2" value ="1" />
@@ -23,7 +23,7 @@
         <PHYSICSPARAM name="param8" position="8" value ="-0.1" />
         <PHYSICSPARAM name="param9" position="9" value ="0" />
 
-    </PHYSICSCONFIG>
+    </PHYSICSCONFIG>-->
 </PHYSICS>
 
 

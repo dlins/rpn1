@@ -111,12 +111,12 @@ int Quad2FluxFunction::jet(const WaveState & x, JetMatrix & y, int degree = 2) c
     c1 = params.component(2);
     d1 = params.component(3);
     e1 = params.component(4);
-    
-//            cout << "a1 0: " << a1 << "\n";
-//            cout << "b1 1: " << b1 << "\n";
-//            cout << "c1 2: " << c1 << "\n";
-//            cout << "d1 3: " << d1 << "\n";
-//            cout << "e1 4: " << e1 << "\n";
+
+    //            cout << "a1 0: " << a1 << "\n";
+    //            cout << "b1 1: " << b1 << "\n";
+    //            cout << "c1 2: " << c1 << "\n";
+    //            cout << "d1 3: " << d1 << "\n";
+    //            cout << "e1 4: " << e1 << "\n";
 
     a2 = params.component(5);
     b2 = params.component(6);
@@ -125,12 +125,12 @@ int Quad2FluxFunction::jet(const WaveState & x, JetMatrix & y, int degree = 2) c
     e2 = params.component(9);
 
 
-//            cout << "a2 5: " << a2 << "\n";
-//            cout << "b2 6: " << b2 << "\n";
-//            cout << "c2 7: " << c2 << "\n";
-//            cout << "d2 8: " << d2 << "\n";
-//            cout << "e2 9: " << e2 << "\n";
-//
+    //            cout << "a2 5: " << a2 << "\n";
+    //            cout << "b2 6: " << b2 << "\n";
+    //            cout << "c2 7: " << c2 << "\n";
+    //            cout << "d2 8: " << d2 << "\n";
+    //            cout << "e2 9: " << e2 << "\n";
+    //
 
     double u = x(0);
     double v = x(1);
@@ -192,26 +192,15 @@ int Quad2FluxFunction::jet(const WaveState & x, JetMatrix & y, int degree = 2) c
 
         if (degree > 1) {
             // Calculate D2F
+
             y(0, 0, 0, a1);
-            y(1, 0, 0, b1);
             y(0, 1, 0, b1);
-            y(1, 1, 0, c1);
-            y(0, 0, 1, a2);
+            y(0, 0, 1, b1);
+            y(0, 1, 1, c1);
+            y(1, 0, 0, a2);
+            y(1, 1, 0, b2);
             y(1, 0, 1, b2);
-            y(0, 1, 1, b2);
             y(1, 1, 1, c2);
-
-            //            y(0, 0, 0, 3.0);
-            //            y(1, 0, 0, 0.0);
-            //            y(0, 1, 0, 0.0);
-            //            y(1, 1, 0, 1.0);
-            //            y(0, 0, 1, 0.0);
-            //            y(1, 0, 1, 1.0);
-            //            y(0, 1, 1, 1.0);
-            //            y(1, 1, 1, 0.0);
-            //
-
-
 
             if (degree > 2) {
                 return 0; //UNSUCCESSFUL_PROCEDURE;
