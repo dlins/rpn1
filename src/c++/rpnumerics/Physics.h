@@ -22,6 +22,7 @@
 #include "Stone.h"
 #include "TPCW.h"
 #include "PolydispersivePhysics.h"
+#include "Cub2.h"
 
 //!
 

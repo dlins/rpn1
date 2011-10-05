@@ -49,6 +49,10 @@ Physics::Physics(const string & physicsID) : physicsVector_(new vector<SubPhysic
     }
 
 
+      if (physicsID.compare("Cub2") == 0) {
+        physicsVector_->push_back(new Cub2(Cub2FluxParams()));
+    }
+
 
     if (physicsID.compare("TPCW") == 0) {
 
