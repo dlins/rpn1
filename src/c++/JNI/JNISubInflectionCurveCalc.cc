@@ -126,6 +126,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionCurveCalc_nativeCalc(JNIE
     RealVector minDimension(RpNumerics::getPhysics().boundary().minimums());
     RealVector maxDimension(RpNumerics::getPhysics().boundary().maximums());
 
+    delete subInflectionFunction;
+
     for (int i = 0; i < hugoniotPolyLineVector.size(); i++) {
 
         for (unsigned int j = 0; j < hugoniotPolyLineVector[i].vec.size() - 1; j++) {

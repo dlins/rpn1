@@ -23,6 +23,7 @@ HugoniotFunctionClass::HugoniotFunctionClass() {
 
 void HugoniotFunctionClass::setFluxFunction(const FluxFunction * flux){
     fluxFunction_=flux;
+
 }
 
 HugoniotFunctionClass::~HugoniotFunctionClass() {

@@ -1,6 +1,6 @@
 #include "StoneHugoniotFunctionClass.h"
 
-StoneHugoniotFunctionClass::StoneHugoniotFunctionClass(const RealVector &U, const StoneFluxFunction & stoneFluxFunction) : HugoniotFunctionClass(stoneFluxFunction){//, stone(new StoneFluxFunction(stoneFluxFunction)) {
+StoneHugoniotFunctionClass::StoneHugoniotFunctionClass(const RealVector &U, const StoneFluxFunction & stoneFluxFunction) : HugoniotFunctionClass(stoneFluxFunction) {
 
     int n = U.size();
 
@@ -28,11 +28,13 @@ StoneHugoniotFunctionClass::StoneHugoniotFunctionClass(const RealVector &U, cons
 }
 
 StoneHugoniotFunctionClass::~StoneHugoniotFunctionClass() {
-//    delete stone;
+    //    delete stone;
 }
 
 void StoneHugoniotFunctionClass::setReferenceVector(const RealVector & refVec) {
-    StoneFluxFunction & stone = (StoneFluxFunction &)getFluxFunction();
+
+    StoneFluxFunction & stone = (StoneFluxFunction &) getFluxFunction();
+
     Uref = refVec;
     // TODO: The flux object must be initialized somehow (be it created here or outside, etc.)
     UrefJetMatrix.resize(refVec.size());
@@ -62,7 +64,9 @@ void StoneHugoniotFunctionClass::setReferenceVector(const RealVector & refVec) {
 double StoneHugoniotFunctionClass::HugoniotFunction(const RealVector & u) {
     //        Uref = getReferenceVector();
 
-    StoneFluxFunction & stone = (StoneFluxFunction &)getFluxFunction();
+    StoneFluxFunction & stone = (StoneFluxFunction &) getFluxFunction();
+
+
     double sw = u(0);
     double swz = Uref(0);
 

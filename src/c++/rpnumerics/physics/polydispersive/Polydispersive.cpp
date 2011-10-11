@@ -1,16 +1,16 @@
 #include "Polydispersive.h"
 
 Polydispersive::Polydispersive(const Polydispersive_Params &param) : FluxFunction(param){
-    // Maximum packing concentration
-    phimax = param.component(0);
-
-    // Terminal (settling) velocities
-    V1inf = param.component(1);
-    V2inf = param.component(2);
-
-    // Power velocities
-    n1 = param.component(3);
-    n2 = param.component(4);
+//    // Maximum packing concentration
+//    phimax = param.component(0);
+//
+//    // Terminal (settling) velocities
+//    V1inf = param.component(1);
+//    V2inf = param.component(2);
+//
+//    // Power velocities
+//    n1 = param.component(3);
+//    n2 = param.component(4);
 }
 
 Polydispersive * Polydispersive::clone() const {
@@ -19,16 +19,16 @@ Polydispersive * Polydispersive::clone() const {
 
 Polydispersive::Polydispersive(const Polydispersive & copy): FluxFunction(copy.fluxParams()){
    
-      // Maximum packing concentration
-    phimax = copy.fluxParams().params().component(0);
-
-    // Terminal (settling) velocities
-    V1inf = copy.fluxParams().params().component(1);
-    V2inf = copy.fluxParams().params().component(2);
-
-    // Power velocities
-    n1 = copy.fluxParams().params().component(3);
-    n2 = copy.fluxParams().params().component(4);
+//      // Maximum packing concentration
+//    phimax = copy.fluxParams().params().component(0);
+//
+//    // Terminal (settling) velocities
+//    V1inf = copy.fluxParams().params().component(1);
+//    V2inf = copy.fluxParams().params().component(2);
+//
+//    // Power velocities
+//    n1 = copy.fluxParams().params().component(3);
+//    n2 = copy.fluxParams().params().component(4);
 
 
 
@@ -41,6 +41,14 @@ Polydispersive::~Polydispersive(){
 
 int Polydispersive::Slip_jet(double phi1, double phi2, JetMatrix &uj, int degree) const{
     double phi = phi1 + phi2;      // Total concentration
+
+
+    double phimax = fluxParams().component(0);
+    double V1inf = fluxParams().component(1);
+    double V2inf = fluxParams().component(2);
+    double n1 = fluxParams().component(3);
+    double n2 = fluxParams().component(4);
+
 
     if (degree >= 0){
         double u1 = ( (phi < phimax) ? V1inf * pow(1.0 - phi, n1 - 1.0) : 0.0 );

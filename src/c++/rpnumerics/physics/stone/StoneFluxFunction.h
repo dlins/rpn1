@@ -34,14 +34,11 @@ class StoneFluxFunction:public FluxFunction {
 private:
     StonePermeability * perm_;
 
-    double grw, grg, gro;
-    double muw, mug, muo;
-    double vel;
     
 public:
     
     StoneFluxFunction(const StoneParams & params, const StonePermParams & permParams);
-    //StoneFluxFunction();
+
     virtual ~StoneFluxFunction();
     
     StoneFluxFunction(const StoneFluxFunction & );
@@ -51,10 +48,6 @@ public:
     RpFunction * clone() const;
     
     int jet(const WaveState &u, JetMatrix &m, int degree) const;
-    
-//
-// Methods
-//
     
     
     

@@ -9,9 +9,9 @@
 
 class Polydispersive : public FluxFunction {
     private:
-        double phimax;
-        double V1inf, V2inf;
-        double n1, n2;
+//        double phimax;
+//        double V1inf, V2inf;
+//        double n1, n2;
 
         // Slip velocities
 //        int Slip_jet(double phi1, double phi2, JetMatrix &uj, int degree) const;

@@ -93,6 +93,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
 
     HugoniotFunctionClass *hf = RpNumerics::getPhysics().getSubPhysics(0).getHugoniotFunction();
 
+
     
     cout<<"Parametros de fluxo na chamada: "<<RpNumerics::getPhysics().fluxFunction().fluxParams().params()<<endl;
 
@@ -101,6 +102,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
     hf->setAccumulationFunction((const AccumulationFunction *) &RpNumerics::getPhysics().accumulation());
 
     hf->setReferenceVector(Uref);
+
 
     const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
 
@@ -138,6 +140,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
 
             double * leftCoords = (double *) hugoniotPolyLineVector[i].vec[j];
             double * rightCoords = (double *) hugoniotPolyLineVector[i].vec[j + 1];
+
+
+//            cout << hugoniotPolyLineVector[i].vec[j] << " " << hugoniotPolyLineVector[i].vec[j + 1]<<endl;
+
 
             env->SetDoubleArrayRegion(eigenValRLeft, 0, dimension, leftCoords);
             env->SetDoubleArrayRegion(eigenValRRight, 0, dimension, rightCoords);
