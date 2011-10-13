@@ -43,10 +43,9 @@ private:
 
     int dimension;
 
-    HyperCube hc;
-
     //Mkcube pointers
-    int * cvert_;
+    //int * cvert_;
+    double *cvert_, *vert;
     int *ncvert;
     int *bsvert_;
     int *perm_;
@@ -55,8 +54,6 @@ private:
     int *face_;
     int *facptr_;
     int *fnbr_; // face_[m_ + 1][dimf_], facptr_[nsimp_][nsface_]
-    int dimf_;
-    int nsimp_;
     int *comb_; // bsvert_[n_ + 1][n_], comb_[numberOfCombinations][m_ + 1]
     int *storn_;
     int *storm_;
@@ -67,7 +64,31 @@ private:
 
     HugoniotFunctionClass *hugoniot;
 
+    // Combinatorics.
+    HyperCube hc;
+
+    int hn;
+    int hm;
+
+    int nsface_, nface_, nsoln_, nedges_;
+    int dims_;
+    int dime_;
+    int ncvert_;
+    int nsimp_;
+
+    int numberOfCombinations;
+
+    int dimf_;
+
+    double *sol_;
+    int *solptr_;
+    int *edges_;
+    int *smpedg_;
+
+    int *exstfc, *sptr_;
+
 protected:
+
 public:
 
     ContourMethod(int dimension,const FluxFunction &, const AccumulationFunction &, const Boundary &, HugoniotFunctionClass *);

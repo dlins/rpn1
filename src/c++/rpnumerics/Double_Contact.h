@@ -5,6 +5,8 @@
 #include "Bifurcation_Curve.h"
 #include "HyperCube.h"
 
+#include <time.h>
+
 // Some matrices, etc., can be static. A static_init() method must take care of
 // this. A static flag must be set. The ctor will query the flag's status and
 // invoke static_init() if necessary. Garbage collector (when no instance of Double_Contact is using it, destroy the space.)
@@ -14,6 +16,15 @@
 
 class Double_Contact : public Bifurcation_Curve {
     private:
+        void initialize_projection(const FluxFunction *ff, const AccumulationFunction *aa,
+                                           const RealVector &pmin, const RealVector &pmax, const int *number_of_grid_pnts, 
+                                           Matrix<RealVector> &grid,
+                                           Matrix<RealVector> &ffv, Matrix<RealVector> &aav,
+                                           Matrix< std::vector<double> > &e, Matrix< std::vector<bool> > &eig_is_real,
+                                           int family, int &inner_family,
+                                           int &nu, int &nv, double &u0, double &u1, double &v0, double &v1, double &du, double &dv);
+
+
         // ======================== Left  domain ======================== //
         RealVector leftpmin, leftpmax;                 // Input
         int *left_number_of_grid_pnts;
@@ -100,6 +111,47 @@ class Double_Contact : public Bifurcation_Curve {
                      double *lambda_left_input, Matrix<double> &flux_left_input, Matrix<double> &accum_left_input);
                      
         inline bool left_right_ordering(int il, int jl, int ir, int jr);
+
+        // Combinatorial
+        int hn;
+        int hm;
+        int DNCV;
+        int DNSIMP;
+        int DNSF;
+        int DNFACE;
+        int nsface_, nface_, nsoln_, nedges_;
+        int dims_;
+        int dime_;
+
+        int ncvert_, nsimp_, numberOfCombinations;
+        int *storn_, *storm_;
+        double *cvert_;//, *vert;
+        int *bsvert_, *perm_, *comb_;
+        double *foncub;
+        int *fnbr_;
+        int dimf_;
+
+        Matrix<double> cpp_sol;
+
+        int *solptr_;
+
+        Matrix<int> cpp_edges_;
+
+        int *smpedg_, *facptr_, *face_, *exstfc, *sptr_;
+
+        // Reserve some space for prepare_cell().
+        //
+        double *lambda_left;
+        Matrix<double> flux_left;
+        Matrix<double> accum_left;
+
+        int *index;
+        double *u, *g, *stormd;
+
+        void compute_double_contact_engine(int il_min, int il_max, 
+                                                   std::vector<RealVector> &left_vrs, 
+                                                   std::vector<RealVector> &right_vrs);
+
     protected:
     public:
         Double_Contact(const RealVector &lpmin, const RealVector &lpmax, const int *l_number_of_grid_pnts,
