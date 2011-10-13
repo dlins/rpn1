@@ -204,6 +204,8 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
 
         Iterator geomList = getGeomObjIterator();
 
+        System.out.println("Tamanho da lista em update: "+ geomList_.size());
+
         List removeList =
                 new ArrayList();
         List joinList = new ArrayList();

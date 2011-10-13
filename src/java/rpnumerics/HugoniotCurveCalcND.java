@@ -105,7 +105,7 @@ public class HugoniotCurveCalcND
         HugoniotCurve result= (HugoniotCurve) calc(getUMinus());
 
         //** acrescentei isso (Leandro)
-        System.out.println("Entrando em HugoniotCurveCalcND.");
+
         RPnCurve.lista.add(result);
         System.out.println("Tamanho da lista: " + RPnCurve.lista.size());
         //***
