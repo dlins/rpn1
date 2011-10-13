@@ -75,7 +75,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceExtensionCurveCalc_nativeCa
         cout << "Chamando extension com tpcw" << endl;
         dimension = 3;
 
-     
+
         // Create the Accum and its params
 
         TPCW & tpcw = (TPCW &) RpNumerics::getPhysics().getSubPhysics(0);
@@ -126,11 +126,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceExtensionCurveCalc_nativeCa
                 characteristic_where, singular,
                 curve_segments,
                 domain_segments);
-      
+
+        cout << "Tamanho da coincidence curve extension: " << curve_segments.size() << endl;
+        cout << "Tamanho da coincidence domain extension: " << domain_segments.size() << endl;
 
         tpcw.postProcess(curve_segments);
         tpcw.postProcess(domain_segments);
-     
+
 
         cout << "Resolucao x " << xResolution << endl;
 
@@ -140,7 +142,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceExtensionCurveCalc_nativeCa
         cout << "Familia do dominio" << domainFamily << endl;
         cout << "characteristic " << characteristicWhere << endl;
 
-       
+
         delete number_of_grid_points;
 
 
@@ -149,7 +151,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceExtensionCurveCalc_nativeCa
 
 
     for (unsigned int i = 0; i < curve_segments.size() / 2; i++) {
-      
+
 
 
         jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
@@ -174,7 +176,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceExtensionCurveCalc_nativeCa
 
         double leftSigma = 0;
         double rightSigma = 0;
-     
+
 
         jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, pointType);
         env->CallObjectMethod(leftSegmentsArray, arrayListAddMethod, hugoniotSegment);
@@ -186,7 +188,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceExtensionCurveCalc_nativeCa
 
     for (unsigned int i = 0; i < domain_segments.size() / 2; i++) {
 
-     
+
 
         jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
         jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
@@ -209,7 +211,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceExtensionCurveCalc_nativeCa
 
         double leftSigma = 0;
         double rightSigma = 0;
-    
+
 
         jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, pointType);
         env->CallObjectMethod(rightSegmentsArray, arrayListAddMethod, hugoniotSegment);

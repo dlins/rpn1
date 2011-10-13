@@ -168,12 +168,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
 
         dc.compute_double_contactTPCW(left_vrs, right_vrs);
 
+        printf("left_vrs.size()  = %d\n", left_vrs.size());
+        printf("right_vrs.size() = %d\n", right_vrs.size());
 
         tpcw.postProcess(left_vrs);
         tpcw.postProcess(right_vrs);
 
-        printf("left_vrs.size()  = %d\n", left_vrs.size());
-        printf("right_vrs.size() = %d\n", right_vrs.size());
+     
 
 
     }
