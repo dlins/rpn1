@@ -26,15 +26,7 @@ using namespace std;
 StoneParams::StoneParams():FluxParams(defaultParams()){}
 
 StoneParams::StoneParams(const RealVector & params):FluxParams(params){
-    grw_ = component(0);
-    grg_ = component(1);
-    gro_ = component(2);
-
-    muw_ = component(3);
-    mug_ = component(4);
-    muo_ = component(5);
-
-    vel_ = component(6);
+ 
 }
 
 
