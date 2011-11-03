@@ -183,6 +183,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BoundaryExtensionCurveCalc_nativeCalc
                 curve_segments,
                 domain_segments);
 
+
+        cout <<"Tamanho da boundary curve extension: "<<curve_segments.size()<<endl;
+        cout << "Tamanho da boundary domain extension: " << domain_segments.size() << endl;
         tpcw.postProcess(curve_segments);
         tpcw.postProcess(domain_segments);
 

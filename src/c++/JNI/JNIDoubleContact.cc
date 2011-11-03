@@ -110,6 +110,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
         pmax.component(1) = 1.0;
 
 
+        cout<<" Parametros "<< RpNumerics::getPhysics().fluxFunction().fluxParams().params()<<endl;
+
+
         int family =1; // Or else...
 
         Double_Contact dc(pmin, pmax, number_of_grid_pnts, (FluxFunction*) RpNumerics::getPhysics().fluxFunction().clone(), (AccumulationFunction*) RpNumerics::getPhysics().accumulation().clone(), leftFamily,
@@ -168,12 +171,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
 
         dc.compute_double_contactTPCW(left_vrs, right_vrs);
 
+        printf("left_vrs.size()  = %d\n", left_vrs.size());
+        printf("right_vrs.size() = %d\n", right_vrs.size());
 
         tpcw.postProcess(left_vrs);
         tpcw.postProcess(right_vrs);
 
-        printf("left_vrs.size()  = %d\n", left_vrs.size());
-        printf("right_vrs.size() = %d\n", right_vrs.size());
+     
 
 
     }

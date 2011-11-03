@@ -509,7 +509,7 @@ c           upper right point
            //                     fnbr, nsimp, nsface )
 
             // Make the list of edge pointers.
-                nedges_ = hc.cpp_mkedge(cpp_edges_, dime_, nedges_, smpedg_.data(),
+                hc.cpp_mkedge(cpp_edges_, dime_, nedges_, smpedg_.data(),
                                         solptr_.data(), fnbr_.data(), nsimp_, nsface_);
 
 

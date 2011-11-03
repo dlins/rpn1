@@ -5,114 +5,188 @@ template <typename T> void Double_Contact::initialize_matrix(int n, int m, T *ma
     return;
 }
 
+// TODO: Move this method upwards to Bifurcation_Curve.
+//
+void Double_Contact::initialize_projection(const FluxFunction *ff, const AccumulationFunction *aa,
+                                           const RealVector &pmin, const RealVector &pmax, const int *number_of_grid_pnts, 
+                                           Matrix<RealVector> &grid,
+                                           Matrix<RealVector> &ffv, Matrix<RealVector> &aav,
+                                           Matrix< std::vector<double> > &e, Matrix< std::vector<bool> > &eig_is_real,
+                                           int family, int &inner_family,
+                                           int &nu, int &nv, double &u0, double &u1, double &v0, double &v1, double &du, double &dv){
+    
+    int rows = number_of_grid_pnts[0];
+    int cols = number_of_grid_pnts[1];
+
+    // Reserve space and/or copy the input parameters to their inner counterparts.
+//    left_number_of_grid_pnts = new int[lpmin.size()];
+//    leftpmin.resize(lpmin.size());
+//    leftpmax.resize(lpmin.size());
+//    for (int i = 0; i < lpmin.size(); i++){
+//        left_number_of_grid_pnts[i] = l_number_of_grid_pnts[i];
+//        leftpmin.component(i) = lpmin.component(i);
+//        leftpmax.component(i) = lpmax.component(i);
+//    }
+
+    // Allocate space for the grid, etc., and fill those values.
+    // TODO: The case where the domain is a triangle is to be treated differently.
+    grid.resize(rows, cols);
+    ffv.resize(rows, cols);
+    aav.resize(rows, cols);
+    e.resize(rows, cols);
+    eig_is_real.resize(rows, cols);
+
+    create_grid(pmin, pmax, number_of_grid_pnts, grid);
+
+    fill_values_on_grid(pmin, pmax, (FluxFunction*)ff, (AccumulationFunction*)aa, 
+                        number_of_grid_pnts,
+                        grid,
+                        ffv, aav, 
+                        e, eig_is_real);
+
+    inner_family = family;
+
+    nu = number_of_grid_pnts[0] - 1; // Number of cells, not number of points in the grid
+    nv = number_of_grid_pnts[1] - 1; // Number of cells, not number of points in the grid
+    u0 = pmin.component(0);
+    u1 = pmax.component(0);
+    v0 = pmin.component(1);
+    v1 = pmax.component(1);
+
+    du = ( u1 - u0 ) / nu;
+    dv = ( v1 - v0 ) / nv;
+
+    return;
+}
+
 Double_Contact::Double_Contact(const RealVector &lpmin, const RealVector &lpmax, const int *l_number_of_grid_pnts,
                                const FluxFunction *lff, const AccumulationFunction *laa, int lf,
                                const RealVector &rpmin, const RealVector &rpmax, const int *r_number_of_grid_pnts,
                                const FluxFunction *rff, const AccumulationFunction *raa, int rf){
 
-    // ======================== Left  domain ======================== //
-    int lrows = l_number_of_grid_pnts[0];
-    int lcols = l_number_of_grid_pnts[1];
+    // Domain-related.
+    //
+    // TODO: Try to consolidate set_left_family & set_right_family
+    clock_t begin;
 
-    // Left flux and accumulation functions.
-    leftff = (FluxFunction*)lff;
-    leftaa = (AccumulationFunction*)laa;
-
-    // Reserve space and/or copy the input parameters to their inner counterparts.
-    left_number_of_grid_pnts = new int[lpmin.size()];
-    leftpmin.resize(lpmin.size());
-    leftpmax.resize(lpmin.size());
-    for (int i = 0; i < lpmin.size(); i++){
-        left_number_of_grid_pnts[i] = l_number_of_grid_pnts[i];
-        leftpmin.component(i) = lpmin.component(i);
-        leftpmax.component(i) = lpmax.component(i);
-    }
-
-    // Allocate space for the grid, etc., and fill those values.
-    // TODO: The case where the domain is a triangle is to be treated differently.
-    leftgrid.resize(lrows, lcols);
-    leftffv.resize(lrows, lcols);
-    leftaav.resize(lrows, lcols);
-    lefte.resize(lrows, lcols);
-    left_eig_is_real.resize(lrows, lcols);
-
-    create_grid(leftpmin, leftpmax, left_number_of_grid_pnts, leftgrid);
-
-    printf("After create_grid()\n");
-
-    fill_values_on_grid(leftpmin, leftpmax, leftff, leftaa, 
-                        left_number_of_grid_pnts,
-                        leftgrid,
-                        leftffv, leftaav, 
-                        lefte, left_eig_is_real);
-
+    begin = clock();
+    initialize_projection(lff, laa,
+                          lpmin, lpmax, l_number_of_grid_pnts, 
+                          leftgrid, 
+                          leftffv, leftaav,
+                          lefte, left_eig_is_real,
+                          lf, left_family,
+                          nul, nvl, ul0, ul1, vl0, vl1, dul, dvl);
     set_left_family(lf);
-    //create_cells(left_number_of_grid_pnts, left_family, left_cells, &left_eig_is_real);
 
-    nul = left_number_of_grid_pnts[0] - 1; // Number of cells, not number of points in the grid
-    nvl = left_number_of_grid_pnts[1] - 1; // Number of cells, not number of points in the grid
-    ul0 = leftpmin.component(0);
-    ul1 = leftpmax.component(0);
-    vl0 = leftpmin.component(1);
-    vl1 = leftpmax.component(1);
-    dul = ( ul1 - ul0 ) / nul;
-    dvl = ( vl1 - vl0 ) / nvl;
-    // ======================== Left  domain ======================== //
-
-    // ======================== Right domain ======================== //
-    int rrows = r_number_of_grid_pnts[0];
-    int rcols = r_number_of_grid_pnts[1];
-
-    // Right flux and accumulation functions.
-    rightff = (FluxFunction*)lff;
-    rightaa = (AccumulationFunction*)laa;
-
-    // Reserve space and/or copy the input parameters to their inner counterparts.
-    right_number_of_grid_pnts = new int[rpmin.size()];
-    rightpmin.resize(rpmin.size());
-    rightpmax.resize(rpmin.size());
-    for (int i = 0; i < rpmin.size(); i++){
-        right_number_of_grid_pnts[i] = r_number_of_grid_pnts[i];
-        rightpmin.component(i) = rpmin.component(i);
-        rightpmax.component(i) = rpmax.component(i);
-    }
-
-    // Allocate space for the grid, etc., and fill those values.
-    // TODO: The case where the domain is a triangle is to be treated differently.
-    rightgrid.resize(rrows, rcols);
-    rightffv.resize(rrows, rcols);
-    rightaav.resize(rrows, rcols);
-    righte.resize(rrows, rcols);
-    right_eig_is_real.resize(rrows, rcols);
-
-    create_grid(rightpmin, rightpmax, right_number_of_grid_pnts, rightgrid);
-
-    fill_values_on_grid(rightpmin, rightpmax, rightff, rightaa, 
-                        right_number_of_grid_pnts,
-                        rightgrid,
-                        rightffv, rightaav, 
-                        righte, right_eig_is_real);
-
+    initialize_projection(rff, raa,
+                          rpmin, rpmax, r_number_of_grid_pnts, 
+                          rightgrid, 
+                          rightffv, rightaav,
+                          righte, right_eig_is_real,
+                          rf, right_family,
+                          nur, nvr, ur0, ur1, vr0, vr1, dur, dvr);
     set_right_family(rf);
-//    create_cells(right_number_of_cells, right_cells, &right_eig_is_real);
 
-    nur = right_number_of_grid_pnts[0] - 1; // Number of cells, not number of points in the grid
-    nvr = right_number_of_grid_pnts[1] - 1; // Number of cells, not number of points in the grid
-    ur0 = rightpmin.component(0);
-    ur1 = rightpmax.component(0);
-    vr0 = rightpmin.component(1);
-    vr1 = rightpmax.component(1);
-    dur = ( ur1 - ur0 ) / nur;
-    dvr = ( vr1 - vr0 ) / nvr;
-    // ======================== Right domain ======================== //
+    printf("Double_Contact. Filling the grid took %f seconds. ***\n", (double)(clock() - begin)/(double)CLOCKS_PER_SEC);
 
     dumax = 2.0 * max ( dur, dul );
     dvmax = 2.0 * max ( dvr, dvl );
+
+    // Combinatorial. TODO: Convert all this stuff in a function initialize_combinatorics_double_contact().
+    //
+    hn = 4; //N
+    hm = 3; //M
+    DNCV = 16;
+    DNSIMP = 24;
+    DNSF = 5;
+    DNFACE = 125;
+    dims_ = 125;
+    dime_ = 200;
+
+    ncvert_ = 16; //N^2
+    nsimp_ = 24; //N!
+
+    numberOfCombinations = 5; // = hc.combination(hn + 1, hm + 1) = hc.combination(4 + 1, 3 + 1);
+
+    //storn_ = new int[hn + 1];
+    //storm_ = new int[hm + 1]; // Careful here
+    cvert_ = new double[ncvert_*hn];
+//    vert = new double[ncvert_*hn]; // TODO This line can be removed at the end.
+    bsvert_ = new int[(hn + 1)*hn];
+    perm_ = new int[hn*nsimp_];
+    comb_ = new int[numberOfCombinations*(hm + 1)];
+
+    foncub = new double[hm*ncvert_];
+
+    nsface_ = hc.mkcomb(comb_, hn + 1, hm + 1);
+
+    fnbr_ = new int[nsface_*nsface_];
+
+    dimf_ = 84;
+
+    cpp_sol.resize(hn, dims_);
+
+    solptr_ = new int [nsimp_*nsface_];
+
+    cpp_edges_.resize(2, dime_);
+
+    smpedg_ = new int[nsimp_*2];
+    facptr_ = new int[nsimp_*nsface_];
+    face_ = new int[(hm + 1)*dimf_];
+
+    hc.mkcube(cvert_, bsvert_, perm_, ncvert_, nsimp_, hn);
+
+    nface_ = hc.mkface(face_, facptr_, fnbr_, dimf_, nsimp_, hn, hm, nsface_,
+                       bsvert_, comb_, perm_, storn_, storm_);
+
+    exstfc = new int[nface_];
+    sptr_ = new int[nface_];
+
+    // Reserve some space for prepare_cell().
+    //
+    lambda_left = new double[4];
+    flux_left.resize(2, 4);
+    accum_left.resize(2, 4);
+
+    // In Fortran: index = {1, 3, 4, 2}. From the common block "hcindex". TODO: To be checked.
+    index = new int[4];
+    index[0] = 0;
+    index[1] = 2;
+    index[2] = 3;
+    index[3] = 1;
+
+    // Some workspace variables for HyperCube::cubsol(). Originally documented in: hcube.F.
+//    u = new double[hn*(hm + 1)];
+//    g = new double[hm*(hm + 1)];
+//    stormd = new double[hm];
+
 }
 
 Double_Contact::~Double_Contact(){
-    delete [] right_number_of_grid_pnts;
-    delete [] left_number_of_grid_pnts;
+//    delete [] stormd;
+//    delete [] g;
+//    delete [] u;
+    delete [] index;
+    delete [] lambda_left;
+    delete [] sptr_;
+    delete [] exstfc;
+    delete [] face_;
+    delete [] facptr_;
+    delete [] smpedg_;
+    delete [] solptr_;
+    delete [] fnbr_;
+    delete [] foncub;
+    delete [] comb_;
+    delete [] perm_;
+    delete [] bsvert_;
+//    delete [] vert;
+    delete [] cvert_;
+    //delete [] storm_;
+    //delete [] storn_;
+
+//    delete [] right_number_of_grid_pnts;
+//    delete [] left_number_of_grid_pnts;
 }
 
 // TODO: Dan believes this function can return void, since memory will not be overused.
@@ -168,111 +242,24 @@ void Double_Contact::filedg4(Matrix<double> &sol_, int dims, Matrix<int> &edges_
     return;
 }
 
-void Double_Contact::compute_double_contact(std::vector<RealVector> &left_vrs, 
-                                            std::vector<RealVector> &right_vrs) {
-    //int sn, int seglim, double f, double rect[4], int res[2], int ifirst;
+void Double_Contact::compute_double_contact_engine(int il_min, int il_max, 
+                                                   std::vector<RealVector> &left_vrs, 
+                                                   std::vector<RealVector> &right_vrs){
 
     bool singular = (left_family == right_family);
 
     int status;
-//    int nul, nvl, nur, nvr;
-
-    //  int ncubes, first, last, k;
-   
-    int hn = 4; //N
-    int hm = 3; //M
-    int DNCV = 16;
-    int DNSIMP = 24;
-    int DNSF = 5;
-    int DNFACE = 125;
-    int nsface_, nface_, nsoln_, nedges_;
-    int dims_ = 125;
-    int dime_ = 200;
 
     double refval;
     int i, j;
 
-    int ncvert_ = 16; //N^2
-    int nsimp_ = 24; //N!
-
-    int numberOfCombinations = 5; // = hc.combination(hn + 1, hm + 1) = hc.combination(4 + 1, 3 + 1);
-
-    // Allocating arrays
-    int storn_[hn + 1];
-    int storm_[hm + 1];
-    double cvert_[ncvert_][hn];
-    double vert[ncvert_][hn];
-    int bsvert_[hn + 1][hn];
-    int perm_[hn][nsimp_];
-    int comb_[numberOfCombinations][hm + 1];
-    double foncub[hm][ncvert_]; // First defined here.
-
-    //inicializing arrays dimensions
-    nsface_ = hc.mkcomb(&comb_[0][0], hn + 1, hm + 1);
-
-    int fnbr_[nsface_][nsface_];
-
-    int dimf_ = 84;
-
     nsoln_ = -1;
-    //double sol_[hn][dims_]; 
-    Matrix<double> cpp_sol(hn, dims_);
-    int solptr_[nsimp_][nsface_];
-//    initialize_matrix(nsimp_, nsface_, &solptr_[0][0], 0);//TODO: Revisar como "solptr" eh modificada, os numero sao muito estranhos
 
-    // int edges_[2][dime_]; 
-    Matrix<int> cpp_edges_(2, dime_);
-//    initialize_matrix(2, dime_, &edges_[0][0], -6);//TODO: Ver o que acontece, pois se nao sao inicializadas coloca valores estranhos
-
-    int smpedg_[nsimp_][2];
-//    initialize_matrix(nsimp_, 2, &smpedg_[0][0], 0);//TODO: Ver o que acontece, pois se nao sao inicializadas coloca valores estranhos
-
-    //inicializing another arrays, it were globally defined in java
-    int facptr_[nsimp_][nsface_];
-    int face_[hm + 1][dimf_];
-
-    hc.mkcube(&cvert_[0][0], &bsvert_[0][0], &perm_[0][0], ncvert_, nsimp_, hn);
-
-//    Matrix<double> cpp_cvert;
-//    Matrix<int>    cpp_bsvert;
-//    Matrix<int>    cpp_perm;
-
-//    hc.cpp_mkcube(cpp_cvert, cpp_bsvert, cpp_perm, ncvert_, nsimp_, hn);
-
-//    nface_ = hc.mkface(&face_[0][0], &facptr_[0][0], &fnbr_[0][0], dimf_, nsimp_, hn, hm, nsface_,
-//                       &bsvert_[0][0], &comb_[0][0], &perm_[0][0], &storn_[0], &storm_[0]);
-
-    nface_ = hc.mkface(&face_[0][0], &facptr_[0][0], &fnbr_[0][0], dimf_, nsimp_, hn, hm, nsface_,
-                       &bsvert_[0][0], &comb_[0][0], &perm_[0][0], &storn_[0], &storm_[0]);
-
-    int exstfc[nface_];
     for (i = 0; i < nface_; i++) exstfc[i] = 1; // This is a MUST!!!
     initialize_matrix(1, nface_, exstfc, 1);
-//    initialize_matrix(1, nface_, exstfc, 1);
-    int sptr_[nface_];
-    
-    //setrect(nul, nvl, nur, nvr); 
-    // TODO: We arrived here and went no further.
-    // Marchesi & Morante, Thu Jan 20 18:47:51 BRST 2011 
-    
-//    sn = 0;
-    left_vrs.clear();
-    right_vrs.clear();
-    
-    // Reserve some space for prepare_cell().
-    //
-    double lambda_left[4];
-    Matrix<double> flux_left(2, 4);
-    Matrix<double> accum_left(2, 4);
 
-    int index[4] = {0, 2, 3, 1};  // In Fortran: index = {1, 3, 4, 2}. From the common block "hcindex". TODO: To be checked.
-
-    // Some workspace variables for HyperCube::cubsol(). Originally documented in: hcube.F.
-    double u[hn][hm + 1];
-    double g[hm][hm + 1];
-    double stormd[hm];
-
-    for (int il = 0; il < nul; il++){
+    //for (int il = 0; il < nul; il++){
+    for (int il = il_min; il < il_max; il++){
     for (int jl = 0; jl < nvl; jl++){
         // if (insided("left", il, jl) == 0) continue;
         // This is valid only when the domain is a rectangle.
@@ -287,36 +274,43 @@ void Double_Contact::compute_double_contact(std::vector<RealVector> &left_vrs,
                 // TODO: See how much time these if's take up and think if they can or should be
                 //       made in C instead of C++.         
                 if (  right_is_complex(ir, jr)  ) continue;
-                if (filhcub4(ir, jr, index, &foncub[0][0], hm, ncvert_, lambda_left, flux_left, accum_left) != 0){
-                
-//              if (filhcub4(ir, jr, &index[0], &foncub[0][0], hm, fun1, 0) != 0){
-//              if (filhcub4(ir, jr, &index[0], &foncub[0][0], hm, fun2, 1) != 0){
-//              if (filhcub4(ir, jr, &index[0], &foncub[0][0], hm, fun3, 2) != 0){
-//                  nsoln_ = hc.cubsol(&solptr_[0][0], &sol_[0][0], dims_, 
-//                                     &sptr_[0], nsoln_, &foncub[0][0], &exstfc[0], 
-//                                     &face_[0][0], &facptr_[0][0], dimf_, &cvert_[0][0], 
-//                                     ncvert_, hn, hm, nsimp_, nsface_, nface_, &u[0][0], 
-//                                     &g[0][0], &stormd[0], &storm_[0]);
-
-                      nsoln_ = hc.cpp_cubsol(&solptr_[0][0], cpp_sol, dims_, 
-                                             &sptr_[0], nsoln_, &foncub[0][0], &exstfc[0], 
-                                            &face_[0][0], &facptr_[0][0], dimf_, &cvert_[0][0], 
-                                             ncvert_, hn, hm, nsimp_, nsface_, nface_, &u[0][0], 
-                                             &g[0][0], &stormd[0], &storm_[0]);
+                if (filhcub4(ir, jr, index, foncub, hm, ncvert_, lambda_left, flux_left, accum_left) != 0){
+                    nsoln_ = hc.cpp_cubsol(solptr_, cpp_sol, dims_, 
+                                           sptr_, nsoln_, foncub, exstfc, 
+                                           face_, facptr_, dimf_, cvert_, 
+                                           ncvert_, hn, hm, nsimp_, nsface_, nface_, u, 
+                                           g, stormd, storm_);
                         
-//                  nedges_ = hc.mkedge(&edges_[0][0], dime_, nedges_, &smpedg_[0][0], 
-//                                      &solptr_[0][0], &fnbr_[0][0], nsimp_, nsface_);
+                    // TODO: Add an error message as needed.
+                    //
+                    status = hc.cpp_mkedge(cpp_edges_, dime_, nedges_, smpedg_, 
+                                           solptr_, fnbr_, nsimp_, nsface_);
 
-                      nedges_ = hc.cpp_mkedge(cpp_edges_, dime_, nedges_, &smpedg_[0][0], 
-                                              &solptr_[0][0], &fnbr_[0][0], nsimp_, nsface_);
-                           
-                      filedg4 (cpp_sol, dims_, cpp_edges_, dime_, nedges_, 
-                               il, jl, ir, jr, left_vrs, right_vrs);
+                    filedg4 (cpp_sol, dims_, cpp_edges_, dime_, nedges_, 
+                             il, jl, ir, jr, left_vrs, right_vrs);
                 }
         }
         }
     }
     }
+
+}
+
+void Double_Contact::compute_double_contact(std::vector<RealVector> &left_vrs, 
+                                            std::vector<RealVector> &right_vrs) {
+   
+    left_vrs.clear();
+    right_vrs.clear();
+    
+    int nop = 8; // Number of processors, will be obtained via OpenMP's functions.
+    int range = nul/nop; // Verify this ratio is integer.
+
+    for (int l = 0; l < nop; l++){
+        clock_t begin = clock();
+        compute_double_contact_engine(l*range, (l + 1)*range, left_vrs, right_vrs);
+        printf("Double_Contact. Cycle %d took %f seconds. ***\n", l, (double)(clock() - begin)/(double)CLOCKS_PER_SEC);
+    }
+
     return;    
 }
 

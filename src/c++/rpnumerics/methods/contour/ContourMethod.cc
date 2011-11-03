@@ -22,25 +22,71 @@
 
 ContourMethod::ContourMethod(int dimension, const FluxFunction & fluxFunction, const AccumulationFunction & accumFunction, const Boundary & boundary, HugoniotFunctionClass *h) : ShockMethod(dimension, fluxFunction, accumFunction, boundary) {
     hugoniot = h;
-    cout << "Construtor do contour" << endl;
+
+    // Combinatorics.
+    //
+    hn = 2;
+    hm = 1;
+
+    nedges_ = 0;
+    dims_ = 50;
+    dime_ = 60;
+
+    ncvert_ = 4;
+    nsimp_ = 2;
+
+    numberOfCombinations = hc.combination(hn + 1, hm + 1);
+
+
+    cvert_  = new double[ncvert_*hn];
+    vert    = new double[ncvert_*hn];
+    bsvert_ = new int[(hn + 1)*hn];
+    perm_   = new int[hn*nsimp_];
+    comb_   = new int[numberOfCombinations*(hm + 1)];
+
+    nsface_ = hc.mkcomb(comb_, hn + 1, hm + 1);
+
+    fnbr_ = new int[nsface_*nsface_];
+
+    dimf_ = 5;
+
+    sol_ = new double[hn*dims_];
+    solptr_ = new int[nsimp_*nsface_];
+
+    edges_ = new int[2*dime_];
+
+    smpedg_ = new int[nsimp_*2];
+
+    facptr_ = new int[nsimp_*nsface_];
+
+    face_ = new int[(hm + 1)*dimf_];
+
+    hc.mkcube(cvert_, bsvert_, perm_, ncvert_, nsimp_, hn);
+
+    nface_ = hc.mkface(face_, facptr_, fnbr_, dimf_, nsimp_, hn, hm, nsface_,
+                       bsvert_, comb_, 
+                       perm_, storn_, storm_);
+
+    exstfc = new int[nface_];
+    sptr_ = new int[nface_];
 }
 
 ContourMethod::~ContourMethod() {
 
-    //    delete [] sptr_;
-    //    delete [] exstfc;
-    //    delete [] face_;
-    //    delete [] facptr_;
-    //    delete [] smpedg_;
-    //    delete [] edges_;
-    //    delete [] solptr_;
-    //    delete [] sol_;
-    //    delete [] fnbr_;
-    //    delete [] comb_;
-    //    delete [] perm_;
-    //    delete [] bsvert_;
-    //    delete [] vert;
-    //    delete [] cvert_;
+    delete [] sptr_;
+    delete [] exstfc;
+    delete [] face_;
+    delete [] facptr_;
+    delete [] smpedg_;
+    delete [] edges_;
+    delete [] solptr_;
+    delete [] sol_;
+    delete [] fnbr_;
+    delete [] comb_;
+    delete [] perm_;
+    delete [] bsvert_;
+    delete [] vert;
+    delete [] cvert_;
     //    delete [] storm_;
     //    delete [] storn_;
 }
@@ -60,22 +106,12 @@ int ContourMethod::inpdom(double *u) { // double u[2]//Replace by Boundary::insi
     return 1;
 }
 
-//int ContourMethod::curv2d(/*double *segend,*/ int sn, int seglim, double fdummy, double *rect, int *res, int ifirst) {
+//int ContourMethod::curv2d(int sn, int seglim, double fdummy, double *rect, int *res, int ifirst) {
 
-int ContourMethod::curv2d(/*double *segend,*/ int sn, int seglim, double fdummy, double *rect, int *res, int ifirst,
-        std::vector<RealVector> &vrs) {
+int ContourMethod::curv2d(int sn, int seglim, double fdummy, double *rect, int *res, int ifirst,
+                          std::vector<RealVector> &vrs) {
+
     vrs.clear();
-    //    for (unsigned int i = 0; i < 2; i++) {
-    //        cout << "Valor de res:" << res[i] << endl;
-    //    }
-
-    //    cout << "---------------" << endl;
-
-
-    //    for (unsigned int i = 0; i < 4; i++) {
-    //        cout << "Valor de rect:" << rect[i] << endl;
-    //    }
-
     double segend[seglim][2][2]; //int sn, int seglim, double f, double rect[4], int res[2], int ifirst;
 
     int zero;
@@ -90,73 +126,73 @@ int ContourMethod::curv2d(/*double *segend,*/ int sn, int seglim, double fdummy,
     int half = 1;
     int whole = 2;
 
-    int hn = 2;
-    int hm = 1;
-    int nsface_, nface_, nsoln_, nedges_ = 0;
-    int dims_ = 50;
-    int dime_ = 60;
+//    int hn = 2;
+//    int hm = 1;
+//    hn = 2;
+//    hm = 1;
+//    int nsface_, nface_, nsoln_, nedges_ = 0;
+//    int dims_ = 50;
+//    int dime_ = 60;
 
     double refval;
     int i, j;
 
-    int ncvert_ = 4;
-    int nsimp_ = 2;
+//    int ncvert_ = 4;
+//    int nsimp_ = 2;
 
-
-
-    int numberOfCombinations = hc.combination(hn + 1, hm + 1);
-
-
-
+//    int numberOfCombinations = hc.combination(hn + 1, hm + 1);
 
     //inicializing arrays
-    int storn_[hn + 1];
-    int storm_[hm + 1];
-    double cvert_[ncvert_][hn];
-    double vert[ncvert_][hn];
-    int bsvert_[hn + 1][hn];
-    int perm_[hn][nsimp_];
-    int comb_[numberOfCombinations][hm + 1];
+//    int storn_[hn + 1];
+//    int storm_[hm + 1];
+//    double cvert_[ncvert_][hn];
+//    double vert[ncvert_][hn];
+//    int bsvert_[hn + 1][hn];
+//    int perm_[hn][nsimp_];
+//    int comb_[numberOfCombinations][hm + 1];
 
     //inicializing arrays dimensions
-    nsface_ = hc.mkcomb(&comb_[0][0], hn + 1, hm + 1);
+//    nsface_ = hc.mkcomb(comb_, hn + 1, hm + 1);
 
-    int fnbr_[nsface_][nsface_];
+//    int fnbr_[nsface_][nsface_];
 
-    int dimf_ = 5;
+//    int dimf_ = 5;
 
     nsoln_ = -1;
-    double sol_[hn][dims_];
-    int solptr_[nsimp_][nsface_];
+//    double sol_[hn][dims_];
+//    int solptr_[nsimp_][nsface_];
     //    for (i = 0; i < nsimp_; i++) {
     //        for (j = 0; j < nsface_; j++) solptr_[i][j] = 0;
     //    } //TODO: Revisar como "solptr" eh modificada, os numero sao muito estranhos
 
-    int edges_[2][dime_];
+//    int edges_[2][dime_];
     //    for (i = 0; i < 2; i++) {
     //        for (j = 0; j < dime_; j++) edges_[i][j] = -6;
     //    } //TODO: Ver o que acontece, pois se nao sao inicializadas coloca valores estranhos
 
-    int smpedg_[nsimp_][2];
+//    int smpedg_[nsimp_][2];
     //    for (i = 0; i < nsimp_; i++) {
     //        for (j = 0; j < 2; j++) smpedg_[i][j] = 0;
     //    } //TODO: Ver o que acontece, pois se nao sao inicializadas coloca valores estranhos
 
     //inicializing another arrays, it were globally defined in java
-    int facptr_[nsimp_][nsface_];
-    int face_[hm + 1][dimf_];
+//    int facptr_[nsimp_][nsface_];
+//    int face_[hm + 1][dimf_];
 
     int dblev = 3;
     if (ifirst != 0) {
-        hc.mkcube(&cvert_[0][0], &bsvert_[0][0], &perm_[0][0], ncvert_, nsimp_, hn);
-        nface_ = hc.mkface(&face_[0][0], &facptr_[0][0], &fnbr_[0][0], dimf_, nsimp_, hn, hm, nsface_,
-                &bsvert_[0][0], &comb_[0][0], &perm_[0][0], &storn_[0], &storm_[0]);
+//        hc.mkcube(&cvert_[0][0], &bsvert_[0][0], &perm_[0][0], ncvert_, nsimp_, hn);
+//        hc.mkcube(cvert_, bsvert_, perm_, ncvert_, nsimp_, hn);
+
+//        nface_ = hc.mkface(face_, facptr_, fnbr_, dimf_, nsimp_, hn, hm, nsface_,
+//                           bsvert_, comb_, 
+//                           perm_, storn_, storm_);
 
     }
 
-    int exstfc[nface_];
+//    int exstfc[nface_];
     for (i = 0; i < nface_; i++) exstfc[i] = 1;
-    int sptr_[nface_];
+//    int sptr_[nface_];
 
     tsimp = 1;
     tface = 3;
@@ -164,13 +200,16 @@ int ContourMethod::curv2d(/*double *segend,*/ int sn, int seglim, double fdummy,
     // End of initialization
 
     // Curve2D proper
+    // This was added because all the curves that use HyperCube must do so 
+    // consistently.
+    int status;
     double foncub[hm][ncvert_];
 
     // Work area
-    //    double g[hm][hm + 1];
-    //    double gx[hm];
-    //    double x[hm];
-    //    int wrki[hm];
+//    double g[hm][hm + 1];
+//    double gx[hm];
+//    double x[hm];
+//    int wrki[hm];
 
     // set the rectangle sizes and resolutions
     double u0 = rect[0];
@@ -188,7 +227,7 @@ int ContourMethod::curv2d(/*double *segend,*/ int sn, int seglim, double fdummy,
     last = ncubes;
 
     // initialize number of segments found
-    sn = 0;
+//    sn = 0;
 
     //int i, j, k;
 
@@ -202,23 +241,26 @@ int ContourMethod::curv2d(/*double *segend,*/ int sn, int seglim, double fdummy,
             i = (k / nv) + 1;
         }
         u = u0 + (i - 1) * du;
-        vert[0][0] = u + du;
-        vert[1][0] = u;
-        vert[2][0] = u + du;
-        vert[3][0] = u;
+        vert[0*hn + 0] = u + du;
+        vert[1*hn + 0] = u;
+        vert[2*hn + 0] = u + du;
+        vert[3*hn + 0] = u;
 
         v = v0 + (j - 1) * dv;
 
-        vert[0][1] = v;
-        vert[1][1] = v;
-        vert[2][1] = v + dv;
-        vert[3][1] = v + dv;
+        vert[0*hn + 1] = v;
+        vert[1*hn + 1] = v;
+        vert[2*hn + 1] = v + dv;
+        vert[3*hn + 1] = v + dv;
 
         // check whether all, half, or none of the square is inside
 
         //lower right point
         p[0] = u + du;
         p[1] = v;
+
+
+//      printf("ContourMethod::curv2d()\n");
 
         // a funcao inpdom foi criada a partir do arquivo bndry.F (localizada em phys/stone) do fortran!
         //if (inpdom(&p[0]) == 0) goto lab200;
@@ -228,7 +270,6 @@ int ContourMethod::curv2d(/*double *segend,*/ int sn, int seglim, double fdummy,
             p[1] = v + dv;
             //if (inpdom(&p[0]) == 0) goto lab200;
             if (inpdom(&p[0]) != 0) {
-
                 /* TODO: this works provided that the lower left corner is inside
                    when both the upper left and lower right corners are inside.
                    (e.g., rectangles oriented with the axes.)
@@ -238,7 +279,6 @@ int ContourMethod::curv2d(/*double *segend,*/ int sn, int seglim, double fdummy,
 
                 if (inpdom(&p[0]) == 1) {
                     type = whole;
-
 
                     ssimp = nsimp_;
                     sface = nface_;
@@ -257,21 +297,22 @@ int ContourMethod::curv2d(/*double *segend,*/ int sn, int seglim, double fdummy,
 
                 //foncub[0][0] = f(vert[0][0], vert[0][1]);
                 RealVector u(2);
-                u(0) = vert[0][0];
-                u(1) = vert[0][1];
+                u(0) = vert[0*hn + 0];
+                u(1) = vert[0*hn + 1];
+
 
                 foncub[0][0] = hugoniot->HugoniotFunction(u);
                 //foncub[0][0] = f(vert[0][0], vert [0][1]);
 
                 refval = foncub[0][0];
+
                 for (int l = 1; l < 4; l++) {
                     if (l == 2 && type == half) goto lab90;
-                    u(0) = vert[l][0];
-                    u(1) = vert[l][1];
+                    u(0) = vert[l*hn + 0];
+                    u(1) = vert[l*hn + 1];
 
                     foncub[0][l] = hugoniot->HugoniotFunction(u);
                     //foncub[0][l] = f(vert[l][0], vert [l][1]);
-
 
                     if (refval * foncub[0][l] < 0.0) zero = 1;
 lab90:
@@ -296,15 +337,18 @@ lab90:
                     //                &storm_[0], &storm_[0]);
                     //
 
-                    double u[hn][hm + 1]; //TODO Remove
-                    double g[hm][hm + 1];
-                    double stormd[hm];
+
+//                    double u[hn][hm + 1]; //TODO Remove
+//                    double g[hm][hm + 1];
+//                    double stormd[hm];
+                    double *u, *g, *stormd;
                     //        cout << "Valor de exstfc" << endl;
                     //        for (i = 0; i < nface_; i++) cout << exstfc[i] << " " << endl;
 
-                    nsoln_ = hc.cubsol(&solptr_[0][0], &sol_[0][0], dims_, &sptr_[0], nsoln_, &foncub[0][0], &exstfc[0],
-                            &face_[0][0], &facptr_[0][0], dimf_, &vert[0][0], ncvert_, hn, hm, ssimp, nsface_, sface, &u[0][0],
-                            &g[0][0], &stormd[0], &storm_[0]);
+
+                    nsoln_ = hc.cubsol(solptr_, sol_, dims_, sptr_, nsoln_, &foncub[0][0], exstfc,
+                            face_, facptr_, dimf_, vert, ncvert_, hn, hm, ssimp, nsface_, sface, u,
+                            g, stormd, storm_);
 
                     //        hc.putmi("SOLPTR", &solptr_[0][0], nsimp_, nsface_);
 
@@ -326,7 +370,8 @@ lab90:
 
                     //MAKE THE LIST OF EDGE POINTERS
 
-                    nedges_ = hc.mkedge(&edges_[0][0], dime_, nedges_, &smpedg_[0][0], &solptr_[0][0], &fnbr_[0][0], nsimp_, nsface_);
+//                    nedges_ = hc.mkedge(&edges_[0][0], dime_, nedges_, &smpedg_[0][0], &solptr_[0][0], &fnbr_[0][0], nsimp_, nsface_);
+                    status = hc.mkedge(edges_, dime_, nedges_, smpedg_, solptr_, fnbr_, nsimp_, nsface_);
 
                     //        printf("Estamos aqui\n");
                     //        cout << "Valor de nedges " << nedges_ << endl;
@@ -345,12 +390,12 @@ lab90:
                         //                        if (nedges_ >2 ) return 0;
 
                         for (nedg = 0; nedg < nedges_; nedg++) {
-                            sn++;
-                            //                            cout << "Depois  nedg" << nedg << endl;
-                            segend[sn - 1][0][0] = sol_[0][edges_[0][nedg ]]; // X1
-                            segend[sn - 1][0][1] = sol_[1][edges_[0][nedg ]]; // Y1
-                            segend[sn - 1][1][0] = sol_[0][edges_[1][nedg ]]; // X2
-                            segend[sn - 1][1][1] = sol_[1][edges_[1][nedg ]]; // Y2
+//                            sn++;
+//                            //                            cout << "Depois  nedg" << nedg << endl;
+//                            segend[sn - 1][0][0] = sol_[0][edges_[0][nedg ]]; // X1
+//                            segend[sn - 1][0][1] = sol_[1][edges_[0][nedg ]]; // Y1
+//                            segend[sn - 1][1][0] = sol_[0][edges_[1][nedg ]]; // X2
+//                            segend[sn - 1][1][1] = sol_[1][edges_[1][nedg ]]; // Y2
 
                             //                cout << segend[sn - 1][0][0] << "    " << segend[sn - 1][0][1]<<";" << endl;
 
@@ -360,19 +405,19 @@ lab90:
 
                             // Store the segments
                             RealVector p1(2), p2(2);
-                            p1.component(0) = segend[sn - 1][0][0]; //sol_[0][edges_[0][nedg ]];
-                            p1.component(1) = segend[sn - 1][0][1]; //sol_[1][edges_[0][nedg ]];
+                            p1.component(0) = sol_[0*dims_ + edges_[0*dime_ + nedg] ]; //segend[sn - 1][0][0]; //;
+                            p1.component(1) = sol_[1*dims_ + edges_[0*dime_ + nedg] ]; //segend[sn - 1][0][1]; //;
 
-                            p2.component(0) = segend[sn - 1][1][0]; //sol_[0][edges_[1][nedg ]];
-                            p2.component(1) = segend[sn - 1][1][1]; //sol_[1][edges_[1][nedg ]];
+                            p2.component(0) = sol_[0*dims_ + edges_[1*dime_ + nedg] ]; //segend[sn - 1][1][0]; //;
+                            p2.component(1) = sol_[1*dims_ + edges_[1*dime_ + nedg] ]; //segend[sn - 1][1][1]; //;
 
                             vrs.push_back(p1);
                             vrs.push_back(p2);
 
 
-                            if (sn >= seglim) {
-                                return -1;
-                            }
+//                            if (sn >= seglim) {
+//                                return -1;
+//                            }
                         }
 
                         //            cout << "Valor de sn: " << sn << endl;
@@ -422,7 +467,7 @@ void ContourMethod::unclassifiedCurve(const RealVector & input, vector<HugoniotP
 
     std::vector<RealVector> vrs;
 
-    //    int info =
+//    int info =
     curv2d(0, 9025, 0.0, &rect[0], &res[0], 1, vrs);
 
     //    cout << "Unclissified curve: " << vrs.size() << endl;
@@ -531,30 +576,28 @@ void ContourMethod::completedCurve(const RealVector & input, vector<HugoniotPoly
     cout << "Tamanho do primeiro elemento de vrs: " << vrs.at(0).size() << endl;
 
     //         Para testar o contour sem classificacao
-//    hugoniotPolyLineVector.clear();
-//    for (int i = 0; i < vrs.size() / 2; i++) {
-//
-//        HugoniotPolyLine temp;
-//        temp.vec.resize(2);
-//
-//        for (int j = 0; j < 2; j++) {
-//            temp.vec[j].resize(3);
-//            for (int k = 0; k < 3; k++) temp.vec[j].component(k) = vrs[2 * i + j].component(k);
-//        }
-//
-//        //                    temp.vec[0] = vrs[2 * i];
-//        //                    temp.vec[1] = vrs[2 * i + 1];
-//        temp.type = 0;
-//        hugoniotPolyLineVector.push_back(temp);
-//    }
+    hugoniotPolyLineVector.clear();
+    for (int i = 0; i < vrs.size() / 2; i++) {
+
+        HugoniotPolyLine temp;
+        temp.vec.resize(2);
+
+        for (int j = 0; j < 2; j++) {
+            temp.vec[j].resize(3);
+            for (int k = 0; k < 3; k++) temp.vec[j].component(k) = vrs[2 * i + j].component(k);
+        }
+
+        //                    temp.vec[0] = vrs[2 * i];
+        //                    temp.vec[1] = vrs[2 * i + 1];
+        temp.type = 0;
+        hugoniotPolyLineVector.push_back(temp);
+    }
 
     cout << "Final do complete curve" << endl;
 
 }
 
 void ContourMethod::classifiedCurve(const RealVector & input, vector<HugoniotPolyLine> & hugoniotPolyLineVector) {
-
-
 
     double rect[4];
 
@@ -598,15 +641,6 @@ void ContourMethod::classifiedCurve(const RealVector & input, vector<HugoniotPol
 
     curv2d(0, 9025, 0.0, &rect[0], &res[0], 1, vrs);
 
-
-//         for (int i = 0; i < vrs.size(); i++) {
-//            for (unsigned int j = 0; j < vrs[i].size(); j++) {
-//                cout << "ponto: " << i << " coord: " << j << " = " << vrs[i][j] << endl;
-//
-//            }
-//            cout << endl;
-//        }
-
     //    cout << "antes de complete curve: " << info << endl;
 
     hugoniot->completeCurve(vrs);
@@ -646,10 +680,10 @@ void ContourMethod::classifiedCurve(const RealVector & input, vector<HugoniotPol
         unclassifiedCurve.push_back(temp);
     }
 
-
-    //                cout << "type of " << j << " = " << hugoniotPolyLineVector[i].type << endl;
-    //                cout << "coord 1 " << j << " = " << hugoniotPolyLineVector[i].vec[j] << endl;
-    //                cout << "coord 2 " << j + 1 << " = " << hugoniotPolyLineVector[i].vec[j + 1] << endl;
+    //
+    //            cout << "type of " << j << " = " << hugoniotPolyLineVector[i].type << endl;
+    //            cout << "coord 1 " << j << " = " << hugoniotPolyLineVector[i].vec[j] << endl;
+    //            cout << "coord 2 " << j + 1 << " = " << hugoniotPolyLineVector[i].vec[j + 1] << endl;
 
 
     //    cout << "antes de classificar: " << unclassifiedCurve.size() << endl;
@@ -660,42 +694,40 @@ void ContourMethod::classifiedCurve(const RealVector & input, vector<HugoniotPol
 
     //    Para testar o contour sem classificacao
     //                hugoniotPolyLineVector.clear();
+    //                for (int i = 0; i < vrs.size() / 2; i++) {
+    //                    HugoniotPolyLine temp;
+    //                    temp.vec.resize(2);
+    //
+    //                    for (int j = 0; j < 2; j++) {
+    //                        temp.vec[j].resize(7);
+    //                        for (int k = 0; k < 2; k++) temp.vec[j].component(k) = vrs[2 * i + j].component(k);
+    //                    }
+    //
+    ////                    temp.vec[0] = vrs[2 * i];
+    ////                    temp.vec[1] = vrs[2 * i + 1];
+    //                    temp.type = 0;
+    //                    hugoniotPolyLineVector.push_back(temp);
+    //                }
+    //
+    //                cout << "Size (2) of a vector within HugoniotPolyLine: " << hugoniotPolyLineVector[0].vec[0].size() << endl;
+    //                cout << "Depois do classify: " << hugoniotPolyLineVector.size() << endl;
+    //
+    //
 
-
-//    for (int i = 0; i < vrs.size() / 2; i++) {
-//        HugoniotPolyLine temp;
-//        temp.vec.resize(2);
-//
-//        for (int j = 0; j < 2; j++) {
-//            temp.vec[j].resize(7);
-//            for (int k = 0; k < 2; k++) temp.vec[j].component(k) = vrs[2 * i + j].component(k);
-//        }
-//
-//        //                    temp.vec[0] = vrs[2 * i];
-//        //                    temp.vec[1] = vrs[2 * i + 1];
-//        temp.type = 0;
-//        hugoniotPolyLineVector.push_back(temp);
-//    }
-//
-//    cout << "Size (2) of a vector within HugoniotPolyLine: " << hugoniotPolyLineVector[0].vec[0].size() << endl;
-//    cout << "Depois do classify: " << hugoniotPolyLineVector.size() << endl;
-//
-
-
-//    for (int i = 0; i < hugoniotPolyLineVector.size(); i++) {
-//
-//        for (unsigned int j = 0; j < hugoniotPolyLineVector[i].vec.size() - 1; j++) {
-//
-//            cout << "Depois do classificador: " << hugoniotPolyLineVector.size() << endl;
-//            cout << " depois type of " << j << " = " << hugoniotPolyLineVector[i].type << endl;
-//            cout << "depois coord 1 " << j << " = " << hugoniotPolyLineVector[i].vec[j] << endl;
-//            cout << "depois coord 2 " << j + 1 << " = " << hugoniotPolyLineVector[i].vec[j + 1] << endl;
-//
-//
-//        }
-
-//    }
-
+    //                for (int i = 0; i < hugoniotPolyLineVector.size(); i++) {
+    //
+    //                    for (unsigned int j = 0; j < hugoniotPolyLineVector[i].vec.size() - 1; j++) {
+    //
+    //                        cout << "Depois do classificador: " << hugoniotPolyLineVector.size() << endl;
+    //                        cout << " depois type of " << j << " = " << hugoniotPolyLineVector[i].type << endl;
+    //                        cout << "depois coord 1 " << j << " = " << hugoniotPolyLineVector[i].vec[j] << endl;
+    //                        cout << "depois coord 2 " << j + 1 << " = " << hugoniotPolyLineVector[i].vec[j + 1] << endl;
+    //
+    //
+    //                    }
+    //
+    //                }
+    //
 
 
 

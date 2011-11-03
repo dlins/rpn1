@@ -300,7 +300,7 @@ void Double_ContactTPCW::compute_double_contactTPCW(std::vector<RealVector> &lef
                         //                  nedges_ = hc.mkedge(&edges_[0][0], dime_, nedges_, &smpedg_[0][0],
                         //                                      &solptr_[0][0], &fnbr_[0][0], nsimp_, nsface_);
 
-                        nedges_ = hc.cpp_mkedge(cpp_edges_, dime_, nedges_, &smpedg_[0][0],
+                        hc.cpp_mkedge(cpp_edges_, dime_, nedges_, &smpedg_[0][0],
                                 &solptr_[0][0], &fnbr_[0][0], nsimp_, nsface_);
 
                         filedg4(cpp_sol, dims_, cpp_edges_, dime_, nedges_,
