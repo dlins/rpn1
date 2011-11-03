@@ -23,11 +23,11 @@ void Boundary_ExtensionStone::extension_curve(const FluxFunction *curve_flux, co
 
     double delta = 1.0/(double)number_of_steps;
 
-    if (fixed_s == BOUNDARY_EXTENSIONSTONE_SW_CONST){
+    if (fixed_s == BOUNDARY_EXTENSIONSTONE_SO_CONST){
         p_alpha[0] = 0.0; p_alpha[1] = 0.0;
         p_beta[0]  = 1.0; p_beta[1]  = 0.0;
     }
-    else if (fixed_s == BOUNDARY_EXTENSIONSTONE_SO_CONST){
+    else if (fixed_s == BOUNDARY_EXTENSIONSTONE_SW_CONST){
         p_alpha[0] = 0.0; p_alpha[1] = 0.0;
         p_beta[0]  = 0.0; p_beta[1]  = 1.0;
     }

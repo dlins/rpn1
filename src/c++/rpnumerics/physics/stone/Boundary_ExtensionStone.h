@@ -10,12 +10,12 @@
 //          |\
 //          | \
 //          |  \ 
-//  so = 0  |   \ sg = 0
+//  sw = 0  |   \ sg = 0
 //          |    \
 //          |     \
 //          |      \
 //           -------
-//           sw = 0
+//           so = 0
 //
 
 class Boundary_ExtensionStone{

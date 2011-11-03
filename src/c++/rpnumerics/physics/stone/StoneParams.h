@@ -24,9 +24,9 @@
 class StoneParams:public FluxParams {
     
 private:
-    double grw_, grg_, gro_;
-    double muw_, mug_, muo_;
-    double vel_;
+//    double grw_, grg_, gro_;
+//    double muw_, mug_, muo_;
+//    double vel_;
     
        
     const static FluxParams & defaultParams();
@@ -54,7 +54,7 @@ public:
     
 };
 
-/*
+
 inline double StoneParams::grw()const { return params().component(0); }
 
 inline double StoneParams::grg()const { return params().component(1); }
@@ -68,21 +68,21 @@ inline double StoneParams::mug()const { return params().component(4); }
 inline double StoneParams::muo()const { return params().component(5); }
 
 inline double StoneParams::vel()const { return params().component(6); }
-*/
 
-inline double StoneParams::grw()const { return grw_; }
-
-inline double StoneParams::grg()const { return grg_; }
-
-inline double StoneParams::gro()const { return gro_; }
-
-inline double StoneParams::muw()const { return muw_; }
-
-inline double StoneParams::mug()const { return mug_; }
-
-inline double StoneParams::muo()const { return muo_; }
-
-inline double StoneParams::vel()const { return vel_; }
+//
+//inline double StoneParams::grw()const { return grw_; }
+//
+//inline double StoneParams::grg()const { return grg_; }
+//
+//inline double StoneParams::gro()const { return gro_; }
+//
+//inline double StoneParams::muw()const { return muw_; }
+//
+//inline double StoneParams::mug()const { return mug_; }
+//
+//inline double StoneParams::muo()const { return muo_; }
+//
+//inline double StoneParams::vel()const { return vel_; }
 
 inline const FluxParams & StoneParams::defaultParams()  {
 
@@ -102,7 +102,7 @@ inline const FluxParams & StoneParams::defaultParams()  {
 
     paramsVector.component(0) = 1.5;
 
-    paramsVector.component(1)=1.5;
+    paramsVector.component(1)=1.0;
     paramsVector.component(2)=1.0;
     paramsVector.component(3)=1.0;
     paramsVector.component(4)=1.0;
