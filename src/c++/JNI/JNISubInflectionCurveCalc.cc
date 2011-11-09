@@ -25,6 +25,7 @@ NOTE :
 #include <iostream>
 #include "ContourMethod.h"
 #include "SubinflectionTPCW.h"
+#include "ColorCurve.h"
 
 
 using std::vector;
@@ -117,11 +118,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionCurveCalc_nativeCalc(JNIE
 
     RectBoundary tempBoundary(min, max);
 
-    ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), tempBoundary, subInflectionFunction);
+     ContourMethod method(subInflectionFunction);
+//    ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), tempBoundary, subInflectionFunction);
 
     vector<HugoniotPolyLine> hugoniotPolyLineVector;
 
-    method.unclassifiedCurve(Uref, hugoniotPolyLineVector);
+//    method.unclassifiedCurve(Uref, hugoniotPolyLineVector);
 
     RealVector minDimension(RpNumerics::getPhysics().boundary().minimums());
     RealVector maxDimension(RpNumerics::getPhysics().boundary().maximums());

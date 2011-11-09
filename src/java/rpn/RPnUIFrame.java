@@ -187,6 +187,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 toolBar_.add(BoundaryExtensionCurveAgent.instance().getContainer());
                 toolBar_.add(SubInflectionExtensionCurveAgent.instance().getContainer());
                 toolBar_.add(CoincidenceExtensionCurvePlotAgent.instance().getContainer());
+                toolBar_.add(InflectionPlotAgent.instance().getContainer());
 //                ScratchAgent.instance().setEnabled(true);
 //                toolBar_.validate();
                 toolBar_.revalidate();
@@ -579,7 +580,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         toolBar_.setOpaque(true);
         toolBarPanel_.add(toolBar_);
 //        this.setSize(new Dimension(200, 200));
-        this.setPreferredSize(new Dimension(400, 400));
+        this.setPreferredSize(new Dimension(450, 450));
 
         this.setResizable(false);
         this.setTitle("");

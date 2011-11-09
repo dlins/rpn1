@@ -192,8 +192,7 @@ private:
      * @param exstfc Bit array indicating which faces in array "face" are really to be considered by cubsol.
      * Dimension of exstfc should be nface
      */
-    int mksoln(double *sol_, int dims_, int *sptr_, int nsoln_, double *foncub, int *exstfc, int *face, int dimf_, double *cvert, int ncvert_, int n_, int m_, int nface, double *u, 
-               double *g, double *x, int *wrki);
+    int mksoln(double *sol_, int dims_, int *sptr_, int nsoln_, double *foncub, int *exstfc, int *face, int dimf_, double *cvert, int ncvert_, int n_, int m_, int nface, double *u, double *g, double *x, int *wrki);
 
 
     //    double auxsol[n_]; NAO PARECE SER USADA!!
@@ -463,15 +462,13 @@ public:
     int cpp_cubsol(int *solptr_, Matrix<double> &cpp_sol_, int dims_, int *sptr_, int nsoln_,
             double *foncub, int *exstfc, int *face,
             int *facptr_, int dimf_, double *cvert, int ncvert_, int n_, int m_,
-            int nsimp_, int nsface_, int nface, double *u, 
-            double *g,
+            int nsimp_, int nsface_, int nface, double *u, double *g,
             double *x, int *wrki);
 
     int cubsol(int *solptr_, double *sol_, int dims_, int *sptr_, int nsoln_,
             double *foncub, int *exstfc, int *face,
             int *facptr_, int dimf_, double *cvert, int ncvert_, int n_, int m_,
-            int nsimp_, int nsface_, int nface,  double *u, 
-            double *g,
+            int nsimp_, int nsface_, int nface, double *u, double *g,
             double *x, int *wrki);
 
 
@@ -522,9 +519,9 @@ public:
 
     int mkcomb(int *comb_, int np, int mp);
 
-    int cpp_mkedge(Matrix<int> &cpp_edges_, int dime_, int &nedges_, int *smpedg_, int *solptr_, int *fnbr_, int nsimp_, int nsface_);
+    int cpp_mkedge(Matrix<int> &cpp_edges_, int dime_, int nedges_, int *smpedg_, int *solptr_, int *fnbr_, int nsimp_, int nsface_);
 
-    int mkedge(int *edges_, int dime_, int &nedges_, int *smpedg_, int *solptr_, int *fnbr_, int nsimp_, int nsface_);
+    int mkedge(int *edges_, int dime_, int nedges_, int *smpedg_, int *solptr_, int *fnbr_, int nsimp_, int nsface_);
 
     void mkflst(int *facept_, int *ptrf_, // facept_[faceptInd_][2], ptrf_[nface_][2]
             int *facatt_, int *ptfatt_, // facatt_[fdim_][2], ptfatt_[nface_][2]

@@ -507,6 +507,12 @@ public class RPNUMERICS {
         return bifurcationCurveCalc;
     }
 
+
+     public static InflectionCurveCalc createInflectionCurveCalc() {
+
+         return new InflectionCurveCalc(new Integer(getParamValue("shock", "family")));
+     }
+
     public static CompositeCalc createCompositeCalc(OrbitPoint orbitPoint) {
         System.out.println("aqui no create " + getContourConfiguration().getParam("x-resolution") + " " + getContourConfiguration().getParam("y-resolution"));
 

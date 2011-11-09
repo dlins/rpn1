@@ -25,6 +25,8 @@ NOTE :
 #include <iostream>
 #include "ContourMethod.h"
 #include "CoincidenceTPCW.h"
+#include "ColorCurve.h"
+
 
 
 using std::vector;
@@ -95,10 +97,14 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceCurveCalc_nativeCalc(JNIEnv
 
     RectBoundary tempBoundary(min, max);
 
-    ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), tempBoundary, &coincidenceFunction);
+
+    ContourMethod method(&coincidenceFunction);
+
+//    ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), tempBoundary, &coincidenceFunction);
+
 
     vector<HugoniotPolyLine> hugoniotPolyLineVector;
-    method.unclassifiedCurve(Uref, hugoniotPolyLineVector);
+//    method.unclassifiedCurve(Uref, hugoniotPolyLineVector);
 
     RealVector minDimension(RpNumerics::getPhysics().boundary().minimums());
     RealVector maxDimension(RpNumerics::getPhysics().boundary().maximums());

@@ -59,6 +59,7 @@
 #define SUBINFLECTIONEXTENSIONCURVE_LOCATION  "rpnumerics/SubInflectionExtensionCurve"
 #define COINCIDENCEEXTENSIONCURVE_LOCATION    "rpnumerics/CoincidenceExtensionCurve"
 #define COMPOSITECURVE_LOCATION               "rpnumerics/CompositeCurve"
+#define INFLECTIONCURVE_LOCATION              "rpnumerics/InflectionCurve"
 
 #define NUMERICSPROFILE_LOCATION              "rpnumerics/RPNumericsProfile"
 #define RPNUMERICS_LOCATION                   "rpnumerics/RPNUMERICS"

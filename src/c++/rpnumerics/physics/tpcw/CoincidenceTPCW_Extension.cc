@@ -15,8 +15,8 @@ void CoincidenceTPCW_Extension::extension_curve(CoincidenceTPCW *coincidencetpcw
     // Compute the contour
 
     RectBoundary rectBoundary(pmin, pmax);
-    ContourMethod contourmethod(3, *dff, *daa, rectBoundary, coincidencetpcw);
-    //    ContourMethod contourmethod(coincidencetpcw);
+//    ContourMethod contourmethod(3, *dff, *daa, rectBoundary, coincidencetpcw);
+        ContourMethod contourmethod(coincidencetpcw);
 
     int isfirst = 1; // So that the contour computes some combinatorial stuff.
 

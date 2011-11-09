@@ -17,94 +17,82 @@
 #include "RealSegment.h"
 #include "HugoniotFunctionClass.h"
 
-#include "ShockMethod.h"
-
-
 #include <iostream>
 #include <vector>
 
+#include "ImplicitFunction.h"
 /*
  * ---------------------------------------------------------------
  * Definitions:
  */
 
-class Test : public HugoniotFunctionClass {
-public:
+// Forward declaration:
 
-    double HugoniotFunction(const RealVector &p) {
-        return p.component(0) * p.component(0) + p.component(1) * p.component(1) - 0.2;
-    }
-};
+//class Inflection_Curve;
 
-class ContourMethod : public ShockMethod {
-private:
-    int * res;
-    double * rect;
+class ContourMethod {
+    private:
+        int dimension;
 
-    int dimension;
+        static int inpdom(double *u);
 
-    //Mkcube pointers
-    //int * cvert_;
-    double *cvert_, *vert;
-    int *ncvert;
-    int *bsvert_;
-    int *perm_;
+        HugoniotFunctionClass *hugoniot;
 
-    //Mkcube pointers
-    int *face_;
-    int *facptr_;
-    int *fnbr_; // face_[m_ + 1][dimf_], facptr_[nsimp_][nsface_]
-    int *comb_; // bsvert_[n_ + 1][n_], comb_[numberOfCombinations][m_ + 1]
-    int *storn_;
-    int *storm_;
+        //
+        static bool is_first;
 
-    int inpdom(double *u);
+        static HyperCube hc;
+        static int hn;
+        static int hm;
+        static int nsface_, nface_, nsoln_, nedges_;
+        static int dims_;
+        static int dime_;
+        static int dimf_;
+        static int ncvert_;
+        static int nsimp_;
 
-    //double f(double x, double y );
+        static int numberOfCombinations;
 
-    HugoniotFunctionClass *hugoniot;
+        static int *storn_;
+        static int *storm_;
 
-    // Combinatorics.
-    HyperCube hc;
+        static double *cvert_;
+        static double *vert;
+        static int *bsvert_;
+        static int *perm_;
+        static int *comb_; 
+        static int *fnbr_;
 
-    int hn;
-    int hm;
+        static int *facptr_;
+        static int *face_;
 
-    int nsface_, nface_, nsoln_, nedges_;
-    int dims_;
-    int dime_;
-    int ncvert_;
-    int nsimp_;
+        static double *sol_;
+        static int *solptr_;
+        static int *edges_;
+        static int *smpedg_;
 
-    int numberOfCombinations;
+        static int *exstfc;
+        static int *sptr_;
 
-    int dimf_;
+        static int tsimp;
+        static int tface;
 
-    double *sol_;
-    int *solptr_;
-    int *edges_;
-    int *smpedg_;
+        static void allocate_arrays(void);
 
-    int *exstfc, *sptr_;
+    public:
+        static void deallocate_arrays(void);
 
-protected:
+    protected:
+    public:
+        ContourMethod(HugoniotFunctionClass *h);
+        ~ContourMethod();
+    
+        //int curv2d(int sn, int seglim, double f, double *rect, int *res, int ifirst) ;
+        //int curv2d(int sn, int seglim, double f, double *rect, int *res, int ifirst, std::vector<RealSegment> &vrs) ;
+        int curv2d(int sn, int seglim, double f, double *rect, int *res, int ifirst, std::vector<RealVector> &vrs);
 
-public:
-
-    ContourMethod(int dimension,const FluxFunction &, const AccumulationFunction &, const Boundary &, HugoniotFunctionClass *);
-
-    ~ContourMethod();
-
-    //int curv2d(int sn, int seglim, double f, double *rect, int *res, int ifirst) ;
-    //int curv2d(int sn, int seglim, double f, double *rect, int *res, int ifirst, std::vector<RealSegment> &vrs) ;
-    int curv2d(int sn, int seglim, double f, double *rect, int *res, int ifirst, std::vector<RealVector> &vrs);
-
-    void classifiedCurve(const RealVector &, vector<HugoniotPolyLine> &);
-    void unclassifiedCurve(const RealVector &, vector<HugoniotPolyLine> &);
-
-    void completedCurve(const RealVector &, vector<HugoniotPolyLine> &);
-
-
+//        static int vect2d(Inflection_Curve *functioninsquare, int &sn, int &seglim, double f, double *rect, int *res, int ifirst, std::vector<RealVector> &vrs);
+        static int contour2d(ImplicitFunction *impf, double *rect, int *res, std::vector<RealVector> &vrs);
 };
 
 #endif //! _HugoniotContourMethod_H

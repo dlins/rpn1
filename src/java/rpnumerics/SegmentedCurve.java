@@ -26,6 +26,8 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
         hugoniotSegments_ = hugoniotSegments;
     }
 
+
+
     //** inseri este método (Leandro)
     @Override
     public int findClosestSegment(RealVector targetPoint, double alpha) {

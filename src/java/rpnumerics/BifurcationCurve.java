@@ -11,7 +11,7 @@ import java.util.List;
 import rpnumerics.methods.contour.ContourCurve;
 
 import wave.multid.view.ViewingAttr;
-import wave.util.RealVector;
+import wave.util.RealSegment;
 
 public class BifurcationCurve extends SegmentedCurve {
     //
@@ -32,6 +32,7 @@ public class BifurcationCurve extends SegmentedCurve {
         leftSegments_ = leftList;
         rightSegments_ = rightList;
     }
+
 
     public BifurcationCurve(List<HugoniotSegment> singleList) {
 

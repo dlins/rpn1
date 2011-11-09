@@ -7,31 +7,33 @@
 package rpn.component;
 
 import rpnumerics.BifurcationCurve;
-import rpnumerics.BifurcationCurveCalc;
 import rpnumerics.CoincidenceCurve;
 import rpnumerics.HugoniotSegment;
+import rpnumerics.InflectionCurve;
+import rpnumerics.InflectionCurveCalc;
 
-public class CoincidenceCurveGeomFactory extends BifurcationCurveGeomFactory{
+public class InflectionCurveGeomFactory extends BifurcationCurveGeomFactory{
 
-    public CoincidenceCurveGeomFactory(BifurcationCurveCalc calc) {
+    public InflectionCurveGeomFactory(InflectionCurveCalc calc) {
         super(calc);
     }
 
   
     // Methods
     //
+    @Override
     protected RpGeometry createGeomFromSource() {
 
-        CoincidenceCurve curve = (CoincidenceCurve) geomSource();
+        InflectionCurve curve = (InflectionCurve) geomSource();
 
         // assuming a container with HugoniotSegment elements
         int resultSize = curve.segments().size();
-        BifurcationSegGeom[] hugoniotArray = new BifurcationSegGeom[resultSize];
+        BifurcationSegGeom[] bifurcationSegArray = new BifurcationSegGeom[resultSize];
         for (int i = 0; i < resultSize; i++) {
-            hugoniotArray[i] = new BifurcationSegGeom((HugoniotSegment) curve.segments().get(i));
+            bifurcationSegArray[i] = new BifurcationSegGeom((HugoniotSegment) curve.segments().get(i));
 
         }
-        return new CoincidenceCurveGeom(hugoniotArray, this);
+        return new InflectionCurveGeom(bifurcationSegArray, this);
 
     }
 
