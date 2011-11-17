@@ -16,10 +16,10 @@
 #include "SubPhysics.h"
 #include "IsoTriang2DBoundary.h"
 #include "StoneParams.h"
-#include "AccumulationFunction.h"
 #include "Multid.h"
 #include "StoneFluxFunction.h"
 #include "StoneHugoniotFunctionClass.h"
+#include "StoneAccumulation.h"
 
 /*
  * ---------------------------------------------------------------

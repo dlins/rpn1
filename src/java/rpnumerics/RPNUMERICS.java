@@ -343,6 +343,13 @@ public class RPNUMERICS {
      */
     public static native void initNative(String physicsName);
 
+    public static HugoniotCurveCalc createHugoniotCalc(RealVector xZero) {
+
+
+
+        return new HugoniotCurveCalcND(xZero);
+    }
+
     public static HugoniotCurveCalc createHugoniotCalc() {
 
         HugoniotCurveCalc hugoniotCurveCalc = null;
@@ -507,11 +514,10 @@ public class RPNUMERICS {
         return bifurcationCurveCalc;
     }
 
+    public static InflectionCurveCalc createInflectionCurveCalc() {
 
-     public static InflectionCurveCalc createInflectionCurveCalc() {
-
-         return new InflectionCurveCalc(new Integer(getParamValue("shock", "family")));
-     }
+        return new InflectionCurveCalc(new Integer(getParamValue("shock", "family")));
+    }
 
     public static CompositeCalc createCompositeCalc(OrbitPoint orbitPoint) {
         System.out.println("aqui no create " + getContourConfiguration().getParam("x-resolution") + " " + getContourConfiguration().getParam("y-resolution"));

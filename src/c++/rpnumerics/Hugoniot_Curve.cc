@@ -74,8 +74,8 @@ Hugoniot_Curve::Hugoniot_Curve(const FluxFunction *f, const AccumulationFunction
     number_of_cells = new int[2];
     for (int i = 0; i < 2; i++){
         number_of_cells[i] = cells[i];
-        pmin.component(i) = min.component(i);
-        pmax.component(i) = max.component(i);
+//        pmin.component(i) = min.component(i);
+//        pmax.component(i) = max.component(i);
     }
 
     int dim = 2;

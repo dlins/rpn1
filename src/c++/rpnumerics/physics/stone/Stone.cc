@@ -11,7 +11,7 @@
  * Includes:
  */
 #include "Stone.h"
-#include "TriPhaseAccumulationFunction.h"
+
 
 /*
  * ---------------------------------------------------------------
@@ -42,7 +42,7 @@ Boundary * Stone::defaultBoundary() const {
 
 }
 
-Stone::Stone() : SubPhysics(StoneFluxFunction(StoneParams(), StonePermParams()), TriPhaseAccumulationFunction(), *defaultBoundary(), Multid::PLANE, "Stone", _SIMPLE_ACCUMULATION_) {
+Stone::Stone() : SubPhysics(StoneFluxFunction(StoneParams(), StonePermParams()), StoneAccumulation(), *defaultBoundary(), Multid::PLANE, "Stone", _SIMPLE_ACCUMULATION_) {
 
     
     RealVector refVec(2);
