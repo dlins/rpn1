@@ -21,6 +21,7 @@
 #include <vector>
 
 #include "ImplicitFunction.h"
+#include "Newton_Improvement.h"
 /*
  * ---------------------------------------------------------------
  * Definitions:
@@ -36,7 +37,7 @@ class ContourMethod {
 
         static int inpdom(double *u);
 
-        HugoniotFunctionClass *hugoniot;
+//        HugoniotFunctionClass *hugoniot;
 
         //
         static bool is_first;
@@ -84,8 +85,8 @@ class ContourMethod {
 
     protected:
     public:
-        ContourMethod(HugoniotFunctionClass *h);
-        ~ContourMethod();
+//        ContourMethod(HugoniotFunctionClass *h);
+//        ~ContourMethod();
     
         //int curv2d(int sn, int seglim, double f, double *rect, int *res, int ifirst) ;
         //int curv2d(int sn, int seglim, double f, double *rect, int *res, int ifirst, std::vector<RealSegment> &vrs) ;

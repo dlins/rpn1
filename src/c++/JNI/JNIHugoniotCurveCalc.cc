@@ -23,13 +23,13 @@ NOTE :
 #include "RpNumerics.h"
 #include <vector>
 #include <iostream>
-#include "ContourMethod.h"
-#include "ReducedTPCWHugoniotFunctionClass.h"
+//#include "ContourMethod.h"
+//#include "ReducedTPCWHugoniotFunctionClass.h"
 #include "TPCW.h"
-#include "StoneHugoniotFunctionClass.h"
-#include "CoincidenceTPCW.h"
-#include"SubinflectionTPCW.h"
-#include "ColorCurve.h"
+//#include "StoneHugoniotFunctionClass.h"
+//#include "CoincidenceTPCW.h"
+//#include"SubinflectionTPCW.h"
+//#include "ColorCurve.h"
 #include "Hugoniot_Curve.h"
 
 using std::vector;
@@ -115,14 +115,15 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
     cout<< min<<endl;
     cout << max << endl;
 
+    cout << RpNumerics::getPhysics().fluxFunction().fluxParams().params() << endl;
+    cout<<RpNumerics::getPhysics().accumulation().accumulationParams().params()<<endl;
+
     Hugoniot_Curve hugoniotCurve( &RpNumerics::getPhysics().fluxFunction(),  &RpNumerics::getPhysics().accumulation(),
             min, max, cells, Uref);
 
     std::vector<RealVector> left_vrs;
 
     hugoniotCurve.curve(left_vrs);
-
-
 
     cout << "Tamanho da curva de hugoniot: " << left_vrs.size()<<endl;
 

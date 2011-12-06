@@ -7,7 +7,10 @@ AccumulationParams AccumulationParams::defaultParams(void) {
 
 AccumulationParams::~AccumulationParams(){ delete params_;}
 
-AccumulationParams::AccumulationParams() :params_(new RealVector(2)){}
+AccumulationParams::AccumulationParams() :params_(new RealVector(2)){
+    params_->component(0)=0.0;
+    params_->component(1)= 0.0;
+}
 
 AccumulationParams::AccumulationParams(const RealVector & params) :params_(new RealVector(params)){}
 

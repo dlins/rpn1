@@ -26,7 +26,7 @@ void SubinflectionTPCW_Extension::extension_curve(SubinflectionTPCW *subinflecti
 
     RectBoundary rectBoundary(pmin, pmax);
 //    ContourMethod contourmethod(3, *domainFluxFunction, *domainAccumulationFunction, rectBoundary, subinflectiontpcw);a
-    ContourMethod contourmethod(subinflectiontpcw);
+//    ContourMethod contourmethod(subinflectiontpcw);
 
     int isfirst = 1; // So that the contour computes some combinatorial stuff.
 
@@ -44,7 +44,7 @@ void SubinflectionTPCW_Extension::extension_curve(SubinflectionTPCW *subinflecti
 
     std::vector<RealVector> contour_segments;
 
-    contourmethod.curv2d(sn, maxnum, fdummy, rect, number_of_grid_points, isfirst, contour_segments);
+//    contourmethod.curv2d(sn, maxnum, fdummy, rect, number_of_grid_points, isfirst, contour_segments);
 
     // Compute the extension curve for the contour
     Extension_CurveTPCW extension_curvetpcw(pmin, pmax, number_of_grid_points,

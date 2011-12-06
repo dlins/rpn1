@@ -112,7 +112,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BuckleyLeverettinInflectionCurveCalc_n
 //    ContourMethod method(3, tpcw.fluxFunction(), tpcw.accumulation(), tempBoundary, &bl);
 
 
-    ContourMethod method(&bl);
+//    ContourMethod method(&bl);
 
     vector<HugoniotPolyLine> hugoniotPolyLineVector;
 

@@ -11,7 +11,8 @@
  * Includes:
  */
 #include "StonePermParams.h"
-
+#include <iostream>
+using namespace std;
 /*
  * ---------------------------------------------------------------
  * Definitions:
@@ -50,6 +51,7 @@ StonePermParams::StonePermParams(double expw, double expg, double expo,
 
 StonePermParams::StonePermParams() : comp(new RealVector(13)) {
     reset();
+    cout <<"Parametros de perm: "<<*comp<<endl;
 }
 
 StonePermParams::StonePermParams(const StonePermParams & copy) : comp(new RealVector(copy.params())) {

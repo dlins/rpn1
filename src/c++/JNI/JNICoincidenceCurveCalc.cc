@@ -98,7 +98,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceCurveCalc_nativeCalc(JNIEnv
     RectBoundary tempBoundary(min, max);
 
 
-    ContourMethod method(&coincidenceFunction);
+//    ContourMethod method(&coincidenceFunction);
 
 //    ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), tempBoundary, &coincidenceFunction);
 

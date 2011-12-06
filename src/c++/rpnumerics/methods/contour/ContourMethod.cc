@@ -128,12 +128,12 @@ void ContourMethod::deallocate_arrays(void){
     return;
 }
 
-ContourMethod::ContourMethod(HugoniotFunctionClass *h){
-    hugoniot = h;
-}
+//ContourMethod::ContourMethod(HugoniotFunctionClass *h){
+//    hugoniot = h;
+//}
 
-ContourMethod::~ContourMethod(){
-}
+//ContourMethod::~ContourMethod(){
+//}
 
 //double ContourMethod::f(double x, double y) {
 ////    return 3.0*x-y-1.2;//pow(x - 0.3, 2.0) + pow(y - 0.7, 2.0) - 0.01;
@@ -495,6 +495,7 @@ int ContourMethod::contour2d(ImplicitFunction *impf, double *rect, int *res, std
 // TODO: Get rid of seglim & fdummy, ifirst (use ctor instead), and rect will become Domain*.
     printf("BEGINS: vect2d()\n");
 //    HyperCube hc;
+//    deallocate_arrays();
     allocate_arrays();
 
     vrs.clear();
@@ -720,6 +721,39 @@ int ContourMethod::contour2d(ImplicitFunction *impf, double *rect, int *res, std
                         // IMPROVE THE SOLUTION USING A ZERO-FINDER.
                         //        imprv(f, &sol_[0][0], dims_, sface, &sptr_[0], &face_[0][0], &vert[0][0]);
                         // (TODO: VER AS ENTRADAS CERTAS)
+
+                        // DESTROY BELOW //
+                        if (impf->improvable()) {
+                            for (int ii = 0; ii < nface_; ii++){
+
+                                if (sptr_[ii] == -1) continue;
+                                int sp = sptr_[ii];
+
+                                RealVector p0newton(2), p1newton(2), p_init_newton(2), p_improved_newton(2);
+
+                                p0newton.component(0) = vert[face_[0*dimf_ + ii]*hn + 0]; // p1(1) = vert(1,face(1,i)+1)
+                                p0newton.component(1) = vert[face_[0*dimf_ + ii]*hn + 1]; // p1(2) = vert(2,face(1,i)+1)
+
+                                p1newton.component(0) = vert[face_[1*dimf_ + ii]*hn + 0]; // p2(1) = vert(1,face(2,i)+1)
+                                p1newton.component(1) = vert[face_[1*dimf_ + ii]*hn + 1]; // p2(2) = vert(2,face(2,i)+1)
+        
+                                // To initialize:
+                                //
+                                for (int jj = 0; jj < 2; jj++) p_init_newton.component(jj) = sol_[jj*dims_ + sp];
+
+                                Newton_Improvement *newton_improver = new Newton_Improvement(impf);
+                                int newton_info = newton_improver->newton(p0newton, p1newton, p_init_newton, p_improved_newton);
+//                                if (newton_info == NEWTON_IMPROVEMENT_ERROR){
+//                                    printf("        dimf_ = %d, face_[%d] = %d\n", dimf_, 0*dimf_ + ii, face_[0*dimf_ + ii]);
+//                                }
+                            
+                                sol_[0*dims_ + sp] = p_improved_newton.component(0); // sol(1,sp) = v(1)
+                                sol_[1*dims_ + sp] = p_improved_newton.component(1); // sol(2,sp) = v(2)
+
+                            }
+                        }
+                        // DESTROY ABOVE //
+
 
                         //MAKE THE LIST OF EDGE POINTERS
                         nedges_ = hc.mkedge(edges_, dime_, nedges_, smpedg_, solptr_,

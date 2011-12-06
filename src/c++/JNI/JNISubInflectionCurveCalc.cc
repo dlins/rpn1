@@ -118,7 +118,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionCurveCalc_nativeCalc(JNIE
 
     RectBoundary tempBoundary(min, max);
 
-     ContourMethod method(subInflectionFunction);
+//     ContourMethod method(subInflectionFunction);
 //    ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), tempBoundary, subInflectionFunction);
 
     vector<HugoniotPolyLine> hugoniotPolyLineVector;

@@ -42,6 +42,10 @@ class Hugoniot_Curve : public ImplicitFunction {
         int function_on_square(double *foncub, int i, int j, int is_square);
 
         int curve(std::vector<RealVector> &hugoniot_curve);
+
+        void map(const RealVector &p, double &f, RealVector &map_Jacobian);
+
+        bool improvable(void);
 };
 
 #endif // _HUGONIOT_CURVE_
