@@ -33,8 +33,8 @@ public class HugoniotContourMethod extends HugoniotMethod {
 
         contourMethod_ = ContourFactory.createContourHugoniot(hugoniotParams);
         resolution_ = new int[2];
-        resolution_[0] = new Integer(RPNUMERICS.getContourConfiguration().getParam("x-resolution"));
-        resolution_[1] = new Integer(RPNUMERICS.getContourConfiguration().getParam("y-resolution"));
+        resolution_[0] = new Integer(RPNUMERICS.getConfiguration("Contour").getParam("x-resolution"));
+        resolution_[1] = new Integer(RPNUMERICS.getConfiguration("Contour").getParam("y-resolution"));
 
 
         Boundary boundary = RPNUMERICS.boundary();

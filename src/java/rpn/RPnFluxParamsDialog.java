@@ -30,34 +30,14 @@ public class RPnFluxParamsDialog extends RPnDialog {
 
         removeDefaultApplyBehavior();
 
-        HashMap<String, Configuration> configMap = RPNUMERICS.getConfigurations();
+        Configuration physicsConfiguration = RPNUMERICS.getConfiguration(RPNUMERICS.physicsID());
 
-        Set<Entry<String, Configuration>> configSet = configMap.entrySet();
-
-        for (Entry<String, Configuration> entry : configSet) {
-
-            System.out.println(entry.getValue().getName());
-            String configurationType = entry.getValue().getType();
-
-            if (configurationType.equalsIgnoreCase(ConfigurationProfile.PHYSICS_PROFILE)) {
-                RPnInputComponent inputComponent = new RPnInputComponent(entry.getValue());
-                paramsPanel_.add(inputComponent.getContainer());
-
-                HashMap<String, Configuration> configurationMap = entry.getValue().getConfiguration();
-                Set<Entry<String, Configuration>> configurationSet = configurationMap.entrySet();
-                for (Entry<String, Configuration> physicsConfiguration : configurationSet) {
-                    if (physicsConfiguration.getValue().getType().equals(ConfigurationProfile.PHYSICS_CONFIG_PROFILE)) {
-                        RPnInputComponent physicsParamsInput = new RPnInputComponent(physicsConfiguration.getValue());
-                        paramsPanel_.add(physicsParamsInput.getContainer());
-
-                    }
-
-                }
-
-            }
+        Configuration fluxFunctionConfig = physicsConfiguration.getConfiguration("fluxfunction");
 
 
-        }
+        RPnInputComponent inputComponent = new RPnInputComponent(fluxFunctionConfig);
+
+        paramsPanel_.add(inputComponent.getContainer());
 
         paramsPanel_.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "Apply");
 
@@ -77,7 +57,7 @@ public class RPnFluxParamsDialog extends RPnDialog {
     protected void apply() {
         RPNUMERICS.applyFluxParams();
         rpn.usecase.ChangeFluxParamsAgent.instance().applyChange(new PropertyChangeEvent(rpn.usecase.ChangeFluxParamsAgent.instance(), "", null, RPNUMERICS.getFluxParams()));
-        System.out.println("Chamando apply do flux dialog");
+//        System.out.println("Chamando apply do flux dialog");
     }
 
     @Override

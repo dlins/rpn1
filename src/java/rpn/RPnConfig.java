@@ -76,12 +76,8 @@ public class RPnConfig {
     public static void addProfile(String configurationName, ConfigurationProfile profile) {
 
         configurationsProfileMap_.put(configurationName, profile);
-
-        if (!profile.getName().equalsIgnoreCase("Contour")) {
-            Configuration configuration = new Configuration(profile);
-            RPNUMERICS.setConfiguration(configuration.getName(), configuration);
-
-        }
+        Configuration configuration = new Configuration(profile);
+        RPNUMERICS.setConfiguration(configuration.getName(), configuration);
 
     }
 

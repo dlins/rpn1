@@ -16,11 +16,9 @@ import org.xml.sax.SAXException;
 import org.xml.sax.InputSource;
 import java.io.FileWriter;
 import java.io.InputStream;
-import java.util.ArrayList;
 import rpn.RPnConfig;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.XMLReader;
-import rpnumerics.ContourConfiguration;
 import rpnumerics.RPNUMERICS;
 
 /** This class implements methods to configure the numeric layer. The values are taked from a XML file and this values are used to setup the physics and all others numerics parameters. */
@@ -36,10 +34,8 @@ public class RPnNumericsModule {
 
         private RealVector tempVector_;
         private String currentElement_;
-        private ArrayList<RealVector> boundaryParamsArray_;
         private static ConfigurationProfile currentConfigurationProfile_;
         private static ConfigurationProfile physicsProfile_;
-        private static ConfigurationProfile currentPhysicsConfigurationProfile_;
         private static ConfigurationProfile currentInnerPhysicsConfigurationProfile_;
 
         public void startElement(String uri, String localName, String qName, Attributes att) throws SAXException {
@@ -57,7 +53,7 @@ public class RPnNumericsModule {
             
 
             if (localName.equals("CURVE")) {
-                currentConfigurationProfile_ = new ConfigurationProfile(att.getValue(0), ConfigurationProfile.CURVE_PROFILE);
+                currentConfigurationProfile_ = new ConfigurationProfile(att.getValue("name"), ConfigurationProfile.CURVE_PROFILE);
 
             }
 
@@ -77,10 +73,7 @@ public class RPnNumericsModule {
             }
 
             if (localName.equals("PHYSICSCONFIG")) {
-
                 currentInnerPhysicsConfigurationProfile_=new ConfigurationProfile(att.getValue(0), ConfigurationProfile.PHYSICS_CONFIG_PROFILE);
-
-
 
             }
             if (localName.equals("PHYSICSPARAM")) {
@@ -88,8 +81,6 @@ public class RPnNumericsModule {
                 currentInnerPhysicsConfigurationProfile_.addParam(new Integer(att.getValue(1)),att.getValue(0), att.getValue(2));
 
             }
-
-
 
             if (localName.equals("BOUNDARYPARAM")) {
 
@@ -140,19 +131,21 @@ public class RPnNumericsModule {
 
             if (localName.equals("CURVE")) {
 
-//                System.out.println("Adicionando profile: " + currentConfigurationProfile_.getName());
+//                System.out.println("Adicionando profile de curva: " + currentConfigurationProfile_.getName());
                 RPnConfig.addProfile(currentConfigurationProfile_.getName(), currentConfigurationProfile_);
 
             }
 
             if (localName.equals("METHOD")) {
 
-//                System.out.println("Adicionando profile: " + currentConfigurationProfile_.getName());
-                if (currentConfigurationProfile_.getName().equalsIgnoreCase("Contour")) {
-
-                    ContourConfiguration contourConfiguration = new ContourConfiguration(currentConfigurationProfile_);
-                    RPNUMERICS.setConfiguration(contourConfiguration.getName(), contourConfiguration);
-                }
+//                System.out.println("Adicionando profile de metodo: " + currentConfigurationProfile_.getName());
+//                if (currentConfigurationProfile_.getName().equalsIgnoreCase("Contour")) {
+//
+////                    System.out.println("Adicionando o profile do contour: "+ currentConfigurationProfile_);
+//
+//                    ContourConfiguration contourConfiguration = new ContourConfiguration(currentConfigurationProfile_);
+//                    RPNUMERICS.setConfiguration(contourConfiguration.getName(), contourConfiguration);
+//                }
                 RPnConfig.addProfile(currentConfigurationProfile_.getName(), currentConfigurationProfile_);
 
             }

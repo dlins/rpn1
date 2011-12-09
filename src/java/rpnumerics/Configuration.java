@@ -16,25 +16,25 @@ public class Configuration {
 
     private HashMap<String, String> params_;
     private ArrayList<String> paramOrder_;
-    private HashMap<String, Configuration> configurationMap_ = new HashMap<String, Configuration>();
+    private HashMap<String, Configuration> configurationMap_;//= new HashMap<String, Configuration>();
     private String name_;
     private String type_;
 
-    public Configuration(String name, String type, HashMap<String, String> paramsAndValues) {
-
-        params_ = paramsAndValues;
-        paramOrder_ = new ArrayList<String>();
-        name_ = name;
-        type_ = type;
-    }
-
-
-
     public Configuration(ConfigurationProfile profile) {
-//        System.out.println(profile);
 
-        if (profile.getParams() != null) {
-            params_ = profile.getParams();
+//        System.out.println(profile.getName() + "   *********Tamanho dos indices do profile****************: " + profile.getIndicesSize());
+
+        configurationMap_ = new HashMap<String, Configuration>();
+        params_ = profile.getParams();
+        paramOrder_ = new ArrayList<String>();
+
+        int index = 0;
+
+        while (index < profile.getIndicesSize()) {
+            Entry<String, String> param = profile.getParam(index);
+            setParamOrder(param.getKey(), index);
+            index++;
+
         }
 
         if (!profile.getProfiles().isEmpty()) {
@@ -43,21 +43,14 @@ public class Configuration {
             for (Entry<String, ConfigurationProfile> profileEntry : profilesSet) {
                 configurationMap_.put(profileEntry.getKey(), new Configuration(profileEntry.getValue()));
             }
-
-
         }
 
         name_ = profile.getName();
         type_ = profile.getType();
-        paramOrder_ = new ArrayList<String>();
-        for (int i = 0; i < profile.getIndicesSize(); i++) {
-            HashMap<String, String> fluxParam = profile.getParam(i);
-            Set<Entry<String, String>> fluxParamSet = fluxParam.entrySet();
-            for (Entry<String, String> fluxEntry : fluxParamSet) {
-                setParamValue(fluxEntry.getKey(), fluxEntry.getValue());
-                setParamOrder(fluxEntry.getKey(), i);
-            }
-        }
+
+
+
+
     }
 
     public Configuration(String name, String type) {
@@ -80,15 +73,11 @@ public class Configuration {
 
             for (int i = 0; i < profile.getIndicesSize(); i++) {
 
-                HashMap<String, String> param = profile.getParam(i);
+                Entry<String, String> param = profile.getParam(i);
 
-                Set<Entry<String, String>> paramSet = param.entrySet();
+                setParamOrder(param.getKey(), i);
+                setParamValue(param.getKey(), param.getValue());
 
-                for (Entry<String, String> paramEntry : paramSet) {
-
-                    setParamOrder(paramEntry.getKey(), i);
-                    setParamValue(paramEntry.getKey(), paramEntry.getValue());
-                }
 
             }
 
@@ -96,17 +85,6 @@ public class Configuration {
 
     }
 
-    public RealVector getParamVector(){
-        RealVector paramVector = new RealVector(params_.size());
-        for (int i = 0; i < params_.size(); i++) {
-            Double value = new Double(getParam(i));
-            paramVector.setElement(i, value);
-        }
-        return paramVector;
-    }
-
-
-    
     public int getParamOrder(String paramName) {
 
         return paramOrder_.indexOf(paramName);
@@ -116,23 +94,19 @@ public class Configuration {
         return params_.size();
     }
 
-    public HashMap<String,Configuration> getConfiguration(){
+    public HashMap<String, Configuration> getConfiguration() {
         return configurationMap_;
     }
 
     public String getParam(int paramOrder) {
         try {
             String paramName = paramOrder_.get(paramOrder);
-
             return params_.get(paramName);
 
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
-
         return null;
-
     }
 
     public String getParamName(int paramOrder) {
@@ -149,20 +123,28 @@ public class Configuration {
         return null;
     }
 
+    public String[] getParamNames() {
+        String[] paramNames = new String[params_.keySet().size()];
+
+        int i = 0;
+        for (String string : params_.keySet()) {
+            paramNames[i] = string;
+            i++;
+        }
+
+        return paramNames;
+    }
+
     public HashMap<String, String> getParams() {
         return params_;
     }
 
     public void setParamValue(String paramName, String paramValue) {
-
-
         params_.put(paramName, paramValue);
 
         if (paramOrder_.indexOf(paramName) == -1) {
             paramOrder_.add(paramName);
         }
-
-
 
     }
 
@@ -175,7 +157,6 @@ public class Configuration {
 
         configurationMap_.put(name, configuration);
     }
-
 
     public Configuration getConfiguration(String name) {
         return configurationMap_.get(name);
@@ -191,13 +172,13 @@ public class Configuration {
 
     @Override
     public String toString() {
-        StringBuffer stringBuffer = new StringBuffer();
 
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append("Configuration name: " + name_+ "\n");
         Set<Entry<String, String>> paramsSet = params_.entrySet();
         for (Entry<String, String> paramsEntry : paramsSet) {
             stringBuffer.append(paramsEntry.getKey() + " " + paramsEntry.getValue() + "\n");
         }
-
 
         Set<Entry<String, Configuration>> configurationSet = configurationMap_.entrySet();
 
@@ -284,9 +265,9 @@ public class Configuration {
                 buffer.append("<PROJDESC name=\"" + configEntry.getValue().getName() + "\">\n");
                 HashMap<String, String> configParams = configEntry.getValue().getParams();
                 Set<Entry<String, String>> configSet = configParams.entrySet();
-                for(Entry<String,String> internalConfigEntry: configSet){
+                for (Entry<String, String> internalConfigEntry : configSet) {
                     buffer.append("<VIEWPARAM name=\"" + internalConfigEntry.getKey() + "\" " + "value= \"" + internalConfigEntry.getValue() + "\"/>");
-                buffer.append("\n");
+                    buffer.append("\n");
                 }
                 buffer.append("</PROJDESC>\n");
             }

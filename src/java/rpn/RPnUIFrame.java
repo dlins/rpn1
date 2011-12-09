@@ -67,8 +67,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JCheckBoxMenuItem showCurvesPaneltem_ = new JCheckBoxMenuItem("Show Curves Window", true);
     private RPnCurvesConfigPanel curvesConfigPanel_ = new RPnCurvesConfigPanel();
     private JFrame curvesFrame_;
-    private JMenuItem bifurcationConfigMenuItem_ = new JMenuItem("Configuration ...");
-    private RPnConfigurationDialog configurationDialog_ = new RPnConfigurationDialog();
 
     //*** declarei isso  -- Leandro
     private JMenuItem editMenuItem1 = new JMenuItem("Clears All Strings");

@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Set;
-import rpnumerics.ContourConfiguration;
+import rpnumerics.Configuration;
 import rpnumerics.RPNUMERICS;
 
 public class RPnContourConfigPanel extends JPanel {
@@ -34,7 +34,7 @@ public class RPnContourConfigPanel extends JPanel {
 
         inputHash_=new HashMap<String, RPnInputComponent>();
 
-        ContourConfiguration contourConfiguration= RPNUMERICS.getContourConfiguration();
+        Configuration contourConfiguration= RPNUMERICS.getConfiguration("Contour");
 
         HashMap<String, String> paramsMap = contourConfiguration.getParams();
 
@@ -67,7 +67,7 @@ public class RPnContourConfigPanel extends JPanel {
     public void apply() {
 
         for (int i = 0; i < textFieldsArray_.length; i++) {
-            RPNUMERICS.getContourConfiguration().setParamValue(textFieldsArray_[i].getName(), textFieldsArray_[i].getText());
+            RPNUMERICS.getConfiguration("Contour").setParamValue(textFieldsArray_[i].getName(), textFieldsArray_[i].getText());
         }
 
 

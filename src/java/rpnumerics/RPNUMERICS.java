@@ -6,6 +6,7 @@
 package rpnumerics;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -33,7 +34,7 @@ public class RPNUMERICS {
 //    static private RarefactionProfile rarefactionProfile_ = RarefactionProfile.instance();
     static private BifurcationProfile bifurcationProfile_ = BifurcationProfile.instance();
 //    static private ShockRarefactionProfile shockRarefactionProfile_ = null;
-    static private ContourConfiguration contourConfiguration_ = null;
+//    static private ContourConfiguration contourConfiguration_ = null;
     static private Integer direction_ = OrbitGeom.FORWARD_DIR;
     //
     // Constructors/Initializers
@@ -62,8 +63,8 @@ public class RPNUMERICS {
         Configuration accumulationFunctionConfig = physicsConfiguration.getConfiguration("accumulationfunction");
 
         if (accumulationFunctionConfig != null) {
-            System.out.println("Printando configuration para acumulacao: " + accumulationFunctionConfig.getParamsSize());
-            System.out.println(accumulationFunctionConfig);
+//            System.out.println("Printando configuration para acumulacao: " + accumulationFunctionConfig.getParamsSize());
+//            System.out.println(accumulationFunctionConfig);
 
             RealVector newAccParams = new RealVector(accumulationFunctionConfig.getParamsSize());
             for (int i = 0; i < newAccParams.getSize(); i++) {
@@ -94,13 +95,11 @@ public class RPNUMERICS {
         FluxParams fluxParams = getFluxParams();
         if (fluxFunctionConfig != null) {
 
-            System.out.println("Printando configuration para fluxo: ");
-            System.out.println(fluxFunctionConfig);
 
             for (int i = 0; i < fluxFunctionConfig.getParamsSize(); i++) {
                 //SET FLUX PARAMS !!!
                 fluxParams.setParam(i, new Double(fluxFunctionConfig.getParam(i)));
-                System.out.println("Do arquivo Param : " + " order:" + i + " " + fluxFunctionConfig.getParam(i));
+//                System.out.println("Do arquivo Param : " + " order:" + i + " " + fluxFunctionConfig.getParam(i));
             }
             setFluxParams(fluxParams);
 
@@ -236,9 +235,9 @@ public class RPNUMERICS {
     }
 
     public static void setConfiguration(String methodName, Configuration methodConfiguration) {
-        if (methodName.equalsIgnoreCase("Contour")) {
-            contourConfiguration_ = new ContourConfiguration(methodConfiguration.getParams());
-        }
+//        if (methodName.equalsIgnoreCase("Contour")) {
+//            contourConfiguration_ = new ContourConfiguration(methodConfiguration.getParams());
+//        }
 
         configMap_.put(methodName, methodConfiguration);
 
@@ -246,7 +245,7 @@ public class RPNUMERICS {
 
     public static String getPhysicsParamValue(String configurationName, String paramName) {
 
-        System.out.println(configurationName + " " + paramName);
+//        System.out.println(configurationName + " " + paramName);
 
         Configuration physicsConfig = configMap_.get(physicsID());
 
@@ -270,14 +269,10 @@ public class RPNUMERICS {
 
     public static void setParamValue(String methodName, String paramName, String paramValue) {
 
-        if (methodName.equals("Contour") || methodName.equals("contour")) {
-            contourConfiguration_.setParamValue(paramName, paramValue);
-        } else {
+        Configuration methodConfig = configMap_.get(methodName);
+        methodConfig.setParamValue(paramName, paramValue);
+        configMap_.put(methodName, methodConfig);
 
-            Configuration methodConfig = configMap_.get(methodName);
-            methodConfig.setParamValue(paramName, paramValue);
-            configMap_.put(methodName, methodConfig);
-        }
 
     }
 
@@ -426,8 +421,8 @@ public class RPNUMERICS {
     public static DoubleContactCurveCalc createDoubleContactCurveCalc() {
 
 
-        int xResolution = new Integer(getContourConfiguration().getParam("x-resolution"));
-        int yResolution = new Integer(getContourConfiguration().getParam("y-resolution"));
+        int xResolution = new Integer(getConfiguration("Contour").getParam("x-resolution"));
+        int yResolution = new Integer(getConfiguration("Contour").getParam("y-resolution"));
 
 
         System.out.println("Resolucao em Java:" + xResolution + " " + yResolution);
@@ -440,8 +435,8 @@ public class RPNUMERICS {
     public static CoincidenceExtensionCurveCalc createCoincidenceExtensionCurveCalc() {
 
 
-        int xResolution = new Integer(getContourConfiguration().getParam("x-resolution"));
-        int yResolution = new Integer(getContourConfiguration().getParam("y-resolution"));
+        int xResolution = new Integer(getConfiguration("Contour").getParam("x-resolution"));
+        int yResolution = new Integer(getConfiguration("Contour").getParam("y-resolution"));
 
         int characteristicWhere = new Integer(getParamValue("extensioncurve", "characteristicwhere"));
 
@@ -455,8 +450,8 @@ public class RPNUMERICS {
     public static BoundaryExtensionCurveCalc createExtensionCurveCalc() {
 
 
-        int xResolution = new Integer(getContourConfiguration().getParam("x-resolution"));
-        int yResolution = new Integer(getContourConfiguration().getParam("y-resolution"));
+        int xResolution = new Integer(getConfiguration("Contour").getParam("x-resolution"));
+        int yResolution = new Integer(getConfiguration("Contour").getParam("y-resolution"));
 
 
         int characteristicWhere = new Integer(getParamValue("extensioncurve", "characteristicwhere"));
@@ -473,8 +468,8 @@ public class RPNUMERICS {
     public static SubInflectionExtensionCurveCalc createSubInflectionExtensionCurveCalc() {
 
 
-        int xResolution = new Integer(getContourConfiguration().getParam("x-resolution"));
-        int yResolution = new Integer(getContourConfiguration().getParam("y-resolution"));
+        int xResolution = new Integer(getConfiguration("Contour").getParam("x-resolution"));
+        int yResolution = new Integer(getConfiguration("Contour").getParam("y-resolution"));
 
         int characteristicWhere = new Integer(getParamValue("extensioncurve", "characteristicwhere"));
 
@@ -508,12 +503,12 @@ public class RPNUMERICS {
     }
 
     public static CompositeCalc createCompositeCalc(OrbitPoint orbitPoint) {
-        System.out.println("aqui no create " + getContourConfiguration().getParam("x-resolution") + " " + getContourConfiguration().getParam("y-resolution"));
+        System.out.println("aqui no create " + getConfiguration("Contour").getParam("x-resolution") + " " + getConfiguration("Contour").getParam("y-resolution"));
 
 
 
-        int xResolution = new Integer(getContourConfiguration().getParam("x-resolution"));
-        int yResolution = new Integer(getContourConfiguration().getParam("y-resolution"));
+        int xResolution = new Integer(getConfiguration("Contour").getParam("x-resolution"));
+        int yResolution = new Integer(getConfiguration("Contour").getParam("y-resolution"));
 
 
         int curveFamily = new Integer(getParamValue("wavecurve", "curvefamily"));
@@ -634,10 +629,9 @@ public class RPNUMERICS {
         return odeSolver_;
     }
 
-    public static ContourConfiguration getContourConfiguration() {
-        return (ContourConfiguration) configMap_.get("Contour");
-    }
-
+//    public static ContourConfiguration getContourConfiguration() {
+//        return (ContourConfiguration) configMap_.get("Contour");
+//    }
     private native void setFamilyIndex(int familyIndex);
 
     private native void setTimeDirection(int timeDirection);
@@ -648,29 +642,24 @@ public class RPNUMERICS {
 
         Configuration fluxConfiguration = physicsConfiguration.getConfiguration("fluxfunction");
         Configuration accumulationConfiguration = physicsConfiguration.getConfiguration("accumulationfunction");
-//
-//
-//        int paramSize = physicsConfiguration.getParamsSize();
-//
-//        RealVector paramsVector = new RealVector(paramSize);
-//
-//        HashMap<String, String> configurationParameters = physicsConfiguration.getParams();
-//
-//        Set<Entry<String, String>> paramsSet = configurationParameters.entrySet();
-//
-//        for (Entry<String, String> entry : paramsSet) {
-//
-//            int paramOrder = physicsConfiguration.getParamOrder(entry.getKey());
-//            Double paramValue = new Double(entry.getValue());
-//            paramsVector.setElement(paramOrder, paramValue);
-//            System.out.println(paramOrder + " " + paramValue);
-//        }
 
-        FluxParams newFluxParams = new FluxParams(fluxConfiguration.getParamVector());
+        
+        RealVector fluxParamsVector = new RealVector(fluxConfiguration.getParamsSize());
+        for (int i = 0; i < fluxParamsVector.getSize(); i++) {
+            fluxParamsVector.setElement(i, new Double(fluxConfiguration.getParam(i)));
+
+        }
+
+        FluxParams newFluxParams = new FluxParams(fluxParamsVector);
         setFluxParams(newFluxParams);
 
+        RealVector accumulationParamsVector = new RealVector(accumulationConfiguration.getParamsSize());
 
-        setAccumulationParams(accumulationConfiguration.getParamVector());
+        for (int i = 0; i < accumulationParamsVector.getSize(); i++) {
+            accumulationParamsVector.setElement(i, new Double(accumulationConfiguration.getParam(i)));
+
+        }
+        setAccumulationParams(accumulationParamsVector);
 
     }
 

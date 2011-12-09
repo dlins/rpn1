@@ -15,8 +15,8 @@ public class ConfigurationProfile {
     private String name_;
     private String type_;
     private HashMap<String, ConfigurationProfile> configurationProfileMap_;
-    private HashMap<String, String> paramsMap_ = new HashMap<String, String>();
-    private HashMap<Integer, String> paramsIndexMap_ = new HashMap<Integer, String>();
+    private HashMap<String, String> paramsMap_;
+    private HashMap<Integer, String> paramsIndexMap_;
     public static final String PHYSICS_PROFILE = "PHYSICS";
     public static final String PHYSICS_CONFIG_PROFILE = "PHYSICS CONFIGURATION";
     public static final String CURVE_PROFILE = "CURVE";
@@ -28,6 +28,8 @@ public class ConfigurationProfile {
         type_ = type;
         name_ = name;
         configurationProfileMap_ = new HashMap<String, ConfigurationProfile>();
+        paramsMap_ = new HashMap<String, String>();
+        paramsIndexMap_ = new HashMap<Integer, String>();
     }
 
     public int getIndicesSize() {
@@ -38,25 +40,38 @@ public class ConfigurationProfile {
         return configurationProfileMap_;
     }
 
-    public void addParam(int index, String paramName, String defaultValue) {
+    public void addParam(int index, String paramName, String value) {
 
-        paramsMap_.put(paramName, defaultValue);
+        paramsMap_.put(paramName, value);
 
         paramsIndexMap_.put(index, paramName);
     }
 
-    public void addParam(String paramName, String defaulValue) {
-        paramsMap_.put(paramName, defaulValue);
+    public void addParam(String paramName, String value) {
+
+      
+
+        if (!paramsMap_.containsKey(paramName)) {
+
+            int index = paramsIndexMap_.size() ;
+            paramsIndexMap_.put(index, paramName);
+        }
+
+        paramsMap_.put(paramName, value);
+
     }
 
-    public HashMap<String, String> getParam(int index) {
+    public Entry<String, String> getParam(int index) {
 
         String paramName = paramsIndexMap_.get(index);
-        String paramValue = paramsMap_.get(paramName);
-        HashMap<String, String> paramValuePair = new HashMap<String, String>();
-        paramValuePair.put(paramName, paramValue);
-        return paramValuePair;
-
+        Set<Entry<String, String>> paramValueSet = paramsMap_.entrySet();
+        for (Entry<String, String> entry : paramValueSet) {
+            if (entry.getKey().equals(paramName)) {
+                return entry;
+            }
+        }
+        System.out.println("Parametro: "+ paramName+ "indice "+ index +"nao encontrado no profile "+ name_);
+        return null;
     }
 
     public String getParam(String paramName) {
@@ -92,6 +107,8 @@ public class ConfigurationProfile {
     public String toString() {
         StringBuffer stringBuffer = new StringBuffer();
         stringBuffer.append("Name: " + name_ + "\n");
+        if (paramsMap_.size() == 0) {
+        }
 
         Set<Entry<String, String>> paramsSet = paramsMap_.entrySet();
         for (Entry<String, String> paramsEntry : paramsSet) {
@@ -101,13 +118,7 @@ public class ConfigurationProfile {
 
         Set<Entry<String, ConfigurationProfile>> configurationSet = configurationProfileMap_.entrySet();
         for (Entry<String, ConfigurationProfile> configurationEntry : configurationSet) {
-            if (configurationEntry.getValue() == null) {
-                System.out.println("Valor nulo");
-            } else {
                 stringBuffer.append(configurationEntry.getValue().toString() + "\n");
-            }
-
-
         }
 
         return stringBuffer.toString();

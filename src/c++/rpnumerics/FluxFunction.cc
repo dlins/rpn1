@@ -12,7 +12,6 @@ const FluxParams & FluxFunction::fluxParams(void) const {
 }
 
 void FluxFunction::fluxParams(const FluxParams & params) {
-    cout<<"Chamando setFluxParams "<<params.params()<<endl;
     delete params_;
     params_=new FluxParams(params.params());
     

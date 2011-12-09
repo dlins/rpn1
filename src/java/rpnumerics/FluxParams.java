@@ -25,15 +25,11 @@ public  class FluxParams {
     //
     public FluxParams(FluxParams params) {
         this(params.getParams());
-        System.out.println("Tamanho do flux params: " + params_.getSize());
-    }
+          }
 
     public FluxParams(RealVector params) {
         params_ = new RealVector(params);
-        System.out.println("Tamanho do flux params: " + params_.getSize());
-//        physicsID_ = physID.toString();
-//        initParams_ = new RealVector(params);
-//        index_=index;
+ 
     }
 
     //

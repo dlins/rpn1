@@ -92,9 +92,11 @@ public class RPnConfigDialog extends RPnDialog {
 
             String methodName = profile.getName();
 
-            HashMap<String, String> profileParams = profile.getParams();
+//            HashMap<String, String> profileParams = profile.getParams();
 
-            Configuration methodConfiguration = new Configuration(profile.getName(), profile.getType(), profileParams);
+//            Configuration methodConfiguration = new Configuration(profile.getName(), profile.getType(), profileParams);
+
+            Configuration methodConfiguration = new Configuration(profile);
 
             methodConfigMap_.put(methodName, methodConfiguration);
 
