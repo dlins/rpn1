@@ -217,7 +217,7 @@ public class RPnInputComponent {
         }
 
         controller_ = new RPnInputController(this, configuration);
-        
+
     }
 
     
