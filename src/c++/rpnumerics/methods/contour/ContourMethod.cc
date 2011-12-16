@@ -144,10 +144,10 @@ void ContourMethod::deallocate_arrays(void){
 //}
 
 int ContourMethod::inpdom(double *u) { // double u[2]//Replace by Boundary::inside
-    //    if (u[0] >= 0 && u[1] >= 0 && u[0] + u[1] <= 1) return 1;
-    //    else return 0;
+        if (u[0] >= 0 && u[1] >= 0 && u[0] + u[1] <= 1) return 1;
+        else return 0;
 
-    return 1;
+//    return 1;
 }
 
 //int ContourMethod::curv2d(/*double *segend,*/ int sn, int seglim, double fdummy, double *rect, int *res, int ifirst) {
@@ -621,6 +621,9 @@ int ContourMethod::contour2d(ImplicitFunction *impf, double *rect, int *res, std
         vert[2*hn + 0] = u + du;
         vert[3*hn + 0] = u;
 
+
+//        cout << "X: "<<  vert[0*hn + 0]<< " "<<vert[1*hn + 0]<< "  "<<vert[2*hn + 0]  <<"  "<< vert[3*hn + 0] <<endl;
+
         for (j = 0; j < nv; j++) {
             v = v0 + j * dv;
 
@@ -628,6 +631,10 @@ int ContourMethod::contour2d(ImplicitFunction *impf, double *rect, int *res, std
             vert[1*hn + 1] = v;
             vert[2*hn + 1] = v + dv;
             vert[3*hn + 1] = v + dv;
+
+//            cout << "Y: "<< vert[0 * hn + 1] << " " << vert[1 * hn + 1] << "  " << vert[2 * hn + 1] << "  " << vert[3 * hn + 1] << endl;
+
+
 
             // check whether all, half, or none of the square is inside
 

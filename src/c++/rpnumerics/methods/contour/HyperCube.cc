@@ -836,6 +836,8 @@ int HyperCube::cubsol(int *solptr_, double *sol_, int dims_, int *sptr_, int nso
         int *facptr_, int dimf_, double *cvert, int ncvert_, int n_, int m_,
         int nsimp_, int nsface_, int nface, double *u, double *g,
         double *x, int *wrki) {
+
+    cout <<"Variaveis inicializadas no contour: "<< dims_ <<" "<< nsoln_<< " "<<dimf_<< " "<< ncvert_<< " "<< n_<< " "<<m_<< " " << nsimp_ <<" "<<nsface_<< " " << nface<<endl;
     // I/O: (int solptr[nsimp_][nsface_], double sol_[n_][dims], int dims_, int sptr[nface_], int nsoln_,
     //       double foncub[m_][ncvert_], int ncvert_, int exstfc[nface], int face[m_ + 1][dimf_],
     //       int facptr_[nsimp_][nsface_], int dimf_, double cvert[ncvert_][n_], int n_, int m_,

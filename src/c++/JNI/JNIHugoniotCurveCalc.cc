@@ -103,8 +103,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
 
     int cells [2];
 
-    cells[0] = 200;
-    cells[1] =200;
+    cells[0] = 100;
+    cells[1] = 100;
 
     const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
 
