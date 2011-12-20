@@ -43,7 +43,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_HugoniotCurveCalcND_setUMinus
 }
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
-(JNIEnv * env, jobject obj, jobject uMinus,jintArray resolution) {
+(JNIEnv * env, jobject obj, jobject uMinus, jintArray resolution) {
 
     jclass classPhasePoint = (env)->FindClass(PHASEPOINT_LOCATION);
 
@@ -74,10 +74,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
 
     //Resolution
 
-//    jint res[dimension];
-//
-//
-//    env->GetIntArrayRegion(resolution, 0, dimension, res);
+    //    jint res[dimension];
+    //
+    //
+    //    env->GetIntArrayRegion(resolution, 0, dimension, res);
 
     //Input point
 
@@ -103,8 +103,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
 
     int cells [2];
 
-    cells[0] = 100;
-    cells[1] = 100;
+    cells[0] = 10;
+    cells[1] = 10;
 
     const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
 
@@ -112,44 +112,33 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
     RealVector max(physicsBoundary. maximums());
 
 
-    cout<< min<<endl;
+    cout << min << endl;
     cout << max << endl;
 
     cout << RpNumerics::getPhysics().fluxFunction().fluxParams().params() << endl;
-    cout<<RpNumerics::getPhysics().accumulation().accumulationParams().params()<<endl;
+    cout << RpNumerics::getPhysics().accumulation().accumulationParams().params() << endl;
 
-    Hugoniot_Curve hugoniotCurve( &RpNumerics::getPhysics().fluxFunction(),  &RpNumerics::getPhysics().accumulation(),
+    Hugoniot_Curve hugoniotCurve(&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(),
             min, max, cells, Uref);
 
     std::vector<RealVector> left_vrs;
 
     hugoniotCurve.curve(left_vrs);
 
-    cout << "Tamanho da curva de hugoniot: " << left_vrs.size()<<endl;
+    cout << "Tamanho da curva de hugoniot: " << left_vrs.size() << endl;
 
     for (int i = 0; i < left_vrs.size() / 2; i++) {
-
-        //        physics.postProcess(hugoniotPolyLineVector[i].vec);
-
-        //        for (unsigned int j = 0; j < hugoniotPolyLineVector[i].vec.size() - 1; j++) {
-
-        //            int m = (hugoniotPolyLineVector[i].vec[0].size() - dimension - 1) / 2; // Number of valid eigenvalues
-
-
-
 
         jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
         jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
 
 
         cout << left_vrs[2 * i] << endl;
-        cout  << left_vrs[2 * i +1] << endl;
-
-
+        cout << left_vrs[2 * i + 1] << endl;
 
         double * leftCoords = (double *) left_vrs[2 * i];
         double * rightCoords = (double *) left_vrs[2 * i + 1];
-        //            cout << hugoniotPolyLineVector[i].vec[j] << " " << hugoniotPolyLineVector[i].vec[j + 1]<<endl;
+
 
         env->SetDoubleArrayRegion(eigenValRLeft, 0, dimension, leftCoords);
         env->SetDoubleArrayRegion(eigenValRRight, 0, dimension, rightCoords);

@@ -144,10 +144,10 @@ void ContourMethod::deallocate_arrays(void){
 //}
 
 int ContourMethod::inpdom(double *u) { // double u[2]//Replace by Boundary::inside
-        if (u[0] >= 0 && u[1] >= 0 && u[0] + u[1] <= 1) return 1;
-        else return 0;
+//        if (u[0] >= 0 && u[1] >= 0 && u[0] + u[1] <= 1) return 1;
+//        else return 0;
 
-//    return 1;
+     return 1;
 }
 
 //int ContourMethod::curv2d(/*double *segend,*/ int sn, int seglim, double fdummy, double *rect, int *res, int ifirst) {
@@ -601,6 +601,8 @@ int ContourMethod::contour2d(ImplicitFunction *impf, double *rect, int *res, std
 
     printf("nu = %d, nv = %d\n", nu, nv);
     printf("du = %f, dv = %f\n", du, dv);
+
+    for (i = 0; i < nface_; i++) exstfc[i] = 1;
 
     // initialize number of segments found
 //    sn = 0;

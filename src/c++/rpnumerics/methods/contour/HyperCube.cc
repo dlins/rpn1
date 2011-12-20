@@ -837,7 +837,7 @@ int HyperCube::cubsol(int *solptr_, double *sol_, int dims_, int *sptr_, int nso
         int nsimp_, int nsface_, int nface, double *u, double *g,
         double *x, int *wrki) {
 
-    cout <<"Variaveis inicializadas no contour: "<< dims_ <<" "<< nsoln_<< " "<<dimf_<< " "<< ncvert_<< " "<< n_<< " "<<m_<< " " << nsimp_ <<" "<<nsface_<< " " << nface<<endl;
+    
     // I/O: (int solptr[nsimp_][nsface_], double sol_[n_][dims], int dims_, int sptr[nface_], int nsoln_,
     //       double foncub[m_][ncvert_], int ncvert_, int exstfc[nface], int face[m_ + 1][dimf_],
     //       int facptr_[nsimp_][nsface_], int dimf_, double cvert[ncvert_][n_], int n_, int m_,
@@ -863,6 +863,10 @@ int HyperCube::cubsol(int *solptr_, double *sol_, int dims_, int *sptr_, int nso
     //solptr[nsimp_,nsface_]
     // facptr_[nsimp_][nsface_];
     // sptr_[nface_]????;
+
+
+//    cout << "Variaveis inicializadas no contour: " << dims_ << " " << nsoln_ << " " << dimf_ << " " << ncvert_ << " " << n_ << " " << m_ << " " << nsimp_ << " " << nsface_ << " " << nface << endl;
+    cout << "Valor de nsoln_ : " << nsoln_ <<endl;
 
     return nsoln_;
 }
@@ -896,7 +900,7 @@ int HyperCube::mksoln(double *sol_, int dims_, int *sptr_, int nsoln_, double *f
         //if the indf-face is not to be considered by mksoln, skip it
 
 //        cout <<"Exstfc antes do if "<<exstfc[indf]<<" "<<nsoln_<<endl;
-        // printf("Inside mksoln(): exstfc[%d] = %d\n", indf, exstfc[indf]); // ************************ I commented out this line (Morante, Wed 09 Feb 2011 11:17:13 PM BRST).
+         printf("Inside mksoln(): exstfc[%d] = %d\n", indf, exstfc[indf]); // ************************ I commented out this line (Morante, Wed 09 Feb 2011 11:17:13 PM BRST).
         if (exstfc[indf] != 0) {
 
             //set the function values  at the face vertices
@@ -919,7 +923,7 @@ int HyperCube::mksoln(double *sol_, int dims_, int *sptr_, int nsoln_, double *f
             flag = affslv(x, g, m_, wrki);
             // printf("After affslv(): flag = %d\n", flag); // I commented out this line (Morante: Wed 09 Feb 2011 11:17:50 PM BRST )
             //skip the rest if no solution ( note -- pointer initialized to 0 )
-//            cout <<"Valor de flag: "<<flag<<endl;
+            cout <<"Valor de flag: "<<flag<<endl;
             if (flag == 0) {
                 //set the pointer to the solution
                 nsoln_ = nsoln_ + 1;

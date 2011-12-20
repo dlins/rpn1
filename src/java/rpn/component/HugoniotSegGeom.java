@@ -26,10 +26,15 @@ public class HugoniotSegGeom extends MultiPolyLine {
     }
 
     public static ViewingAttr viewAttrSelection(HugoniotSegment segment) {
+
+        
         ViewingAttr attr = new ViewingAttr(Color.white);
 
         if (segment.getType() == 0) {
-            attr = new ViewingAttr(new Color(128, 128, 128));
+//            attr = new ViewingAttr(new Color(128, 128, 128));
+            
+            attr = new ViewingAttr(Color.green);
+
 
         }
 
