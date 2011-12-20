@@ -45,7 +45,9 @@ public class CoincidencePlotAgent extends RpModelPlotAgent {
     }
     public RpGeometry createRpGeometry(RealVector[] input) {
 
-        InflectionCurveGeomFactory factory = new   InflectionCurveGeomFactory(RPNUMERICS.createInflectionCurveCalc());
+//        InflectionCurveGeomFactory factory = new   InflectionCurveGeomFactory(RPNUMERICS.createInflectionCurveCalc());
+
+        CoincidenceCurveGeomFactory factory = new CoincidenceCurveGeomFactory(RPNUMERICS.createCoincidenceCurveCalc());
         return factory.geom();
 
     }
