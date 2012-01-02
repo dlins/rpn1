@@ -347,7 +347,15 @@ public class RPNUMERICS {
 
 
 
-        return new HugoniotCurveCalcND(xZero);
+        int [] resolution  = new int[2];
+
+
+        resolution[0]= new Integer(getContourConfiguration().getParam("x-resolution"));
+        resolution[1] = new Integer(getContourConfiguration().getParam("y-resolution"));
+
+
+
+        return new HugoniotCurveCalcND(xZero,resolution);
     }
 
     public static HugoniotCurveCalc createHugoniotCalc() {
@@ -459,6 +467,23 @@ public class RPNUMERICS {
         return new CoincidenceExtensionCurveCalc(xResolution, yResolution, new Integer(getParamValue("extensioncurve", "curvefamily")), new Integer(getParamValue("extensioncurve", "domainfamily")), characteristicWhere);
     }
 
+    public static HysteresisCurveCalc createHysteresisCurveCalc() {
+
+        int xResolution = new Integer(getContourConfiguration().getParam("x-resolution"));
+        int yResolution = new Integer(getContourConfiguration().getParam("y-resolution"));
+
+        int characteristicWhere = new Integer(getParamValue("extensioncurve", "characteristicwhere"));
+
+
+        int curveFamily = new Integer(getParamValue("wavecurve", "curvefamily"));
+        int domainFamily = new Integer(getParamValue("wavecurve", "domainfamily"));
+
+        int singular = 0;//TODO Pegar do arquivo de entrada
+
+        return new HysteresisCurveCalc(domainFamily, curveFamily, xResolution, yResolution, characteristicWhere,singular);
+
+    }
+
     public static BoundaryExtensionCurveCalc createExtensionCurveCalc() {
 
 
@@ -519,8 +544,7 @@ public class RPNUMERICS {
         return new InflectionCurveCalc(new Integer(getParamValue("shock", "family")));
     }
 
-
-    public static CoincidenceCurveCalc createCoincidenceCurveCalc(){
+    public static CoincidenceCurveCalc createCoincidenceCurveCalc() {
 
         return null;
 

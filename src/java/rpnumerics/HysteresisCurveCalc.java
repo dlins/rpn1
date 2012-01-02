@@ -9,14 +9,25 @@ package rpnumerics;
 public class HysteresisCurveCalc extends BifurcationCurveCalc {
 
     static private int contCC = 0;      //** declarei isso (Leandro)
-    private int family_;
+    private int domainFamily_;
+    private int xResolution_;
+    private int yResolution_;
+    private int characteristic_where_;
+    private int singular_;
 
     //
     // Constructors/Initializers
     //
 
-    public HysteresisCurveCalc(int family){
-        family_=family;
+    public HysteresisCurveCalc(int domainFamily,int curveFamily,
+            int xResolution, int yResolution,
+            int characteristic_where, int singular){
+
+        domainFamily_=domainFamily;
+        xResolution_=xResolution;
+        yResolution_=yResolution;
+        characteristic_where_=characteristic_where;
+        singular_=singular;
     }
 
    
@@ -25,7 +36,7 @@ public class HysteresisCurveCalc extends BifurcationCurveCalc {
     public RpSolution calc() throws RpException {
 
 
-    HysteresisCurve result = (HysteresisCurve) nativeCalc(family_);
+        HysteresisCurve result = (HysteresisCurve) nativeCalc(domainFamily_, domainFamily_, xResolution_, yResolution_, singular_, characteristic_where_);
 
           if (result == null) {
             throw new RpException("Error in native layer");
@@ -48,10 +59,10 @@ public class HysteresisCurveCalc extends BifurcationCurveCalc {
         return result;
     }
 
-    private native RpSolution nativeCalc(int family) throws RpException;
 
-
-
+    private native RpSolution nativeCalc(int domainFamily, int curveFamily,
+            int xResolution, int yResolution,
+            int singular,int characteristicDomain) throws RpException;
 
 
 }

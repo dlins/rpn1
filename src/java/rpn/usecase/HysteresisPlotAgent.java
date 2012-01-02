@@ -15,21 +15,21 @@ import rpn.controller.ui.UI_ACTION_SELECTED;
 import rpnumerics.*;
 import wave.util.RealVector;
 
-public class CoincidencePlotAgent extends RpModelPlotAgent {
+public class HysteresisPlotAgent extends RpModelPlotAgent {
     //
     // Constants
     //
-    static public final String DESC_TEXT = "Coincidence Curve";
+    static public final String DESC_TEXT = "Hysteresis Curve";
 
     //
     // Members
     //
-    static private CoincidencePlotAgent instance_ = null;
+    static private HysteresisPlotAgent instance_ = null;
 
     //
     // Constructors/Initializers
     //
-    protected CoincidencePlotAgent() {
+    protected HysteresisPlotAgent() {
         super(DESC_TEXT, rpn.RPnConfig.HUGONIOT,new JButton(DESC_TEXT));
     }
 
@@ -38,23 +38,22 @@ public class CoincidencePlotAgent extends RpModelPlotAgent {
     public void actionPerformed(ActionEvent event) {
 
         UI_ACTION_SELECTED action = new UI_ACTION_SELECTED(this);
-//        UIController.instance().setState(new BIFURCATION_CONFIG());
          
         action.userInputComplete(UIController.instance());// No input needed
 
     }
     public RpGeometry createRpGeometry(RealVector[] input) {
 
-        CoincidenceCurveGeomFactory factory = new CoincidenceCurveGeomFactory(new CoincidenceCurveCalc());
+       HysteresisCurveGeomFactory factory = new   HysteresisCurveGeomFactory(RPNUMERICS.createHysteresisCurveCalc());
         return factory.geom();
 
     }
 
     
 
-    static public CoincidencePlotAgent instance() {
+    static public HysteresisPlotAgent instance() {
         if (instance_ == null) {
-            instance_ = new CoincidencePlotAgent();
+            instance_ = new HysteresisPlotAgent();
         }
         return instance_;
     }

@@ -9,6 +9,7 @@ package rpn.component;
 import rpnumerics.BifurcationCurve;
 import rpnumerics.CoincidenceCurve;
 import rpnumerics.HugoniotSegment;
+import rpnumerics.HysteresisCurve;
 import rpnumerics.HysteresisCurveCalc;
 import rpnumerics.InflectionCurve;
 
@@ -24,7 +25,7 @@ public class HysteresisCurveGeomFactory extends BifurcationCurveGeomFactory{
     @Override
     protected RpGeometry createGeomFromSource() {
 
-        InflectionCurve curve = (InflectionCurve) geomSource();
+        HysteresisCurve curve = (HysteresisCurve) geomSource();
 
         // assuming a container with HugoniotSegment elements
         int resultSize = curve.segments().size();

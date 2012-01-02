@@ -60,6 +60,8 @@
 #define COINCIDENCEEXTENSIONCURVE_LOCATION    "rpnumerics/CoincidenceExtensionCurve"
 #define COMPOSITECURVE_LOCATION               "rpnumerics/CompositeCurve"
 #define INFLECTIONCURVE_LOCATION              "rpnumerics/InflectionCurve"
+#define HYSTERESISCURVE_LOCATION              "rpnumerics/HysteresisCurve"
+
 
 #define NUMERICSPROFILE_LOCATION              "rpnumerics/RPNumericsProfile"
 #define RPNUMERICS_LOCATION                   "rpnumerics/RPNUMERICS"

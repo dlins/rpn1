@@ -74,10 +74,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
 
     //Resolution
 
-    //    jint res[dimension];
+    jint cells[dimension];
     //
     //
-    //    env->GetIntArrayRegion(resolution, 0, dimension, res);
+    env->GetIntArrayRegion(resolution, 0, dimension, cells);
 
     //Input point
 
@@ -101,10 +101,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
     cout << Uref << endl;
 
 
-    int cells [2];
-
-    cells[0] = 10;
-    cells[1] = 10;
+    //    int cells [2];
+    //
+    //    cells[0] = 10;
+    //    cells[1] = 10;
 
     const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
 
@@ -125,7 +125,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
 
     hugoniotCurve.curve(left_vrs);
 
-    cout << "Tamanho da curva de hugoniot: " << left_vrs.size() << endl;
+//    cout << "Tamanho da curva de hugoniot: " << left_vrs.size() << endl;
 
     for (int i = 0; i < left_vrs.size() / 2; i++) {
 
@@ -133,8 +133,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
         jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
 
 
-        cout << left_vrs[2 * i] << endl;
-        cout << left_vrs[2 * i + 1] << endl;
+//        cout << left_vrs[2 * i] << endl;
+//        cout << left_vrs[2 * i + 1] << endl;
 
         double * leftCoords = (double *) left_vrs[2 * i];
         double * rightCoords = (double *) left_vrs[2 * i + 1];
