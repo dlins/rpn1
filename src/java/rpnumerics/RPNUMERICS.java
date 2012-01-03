@@ -289,6 +289,8 @@ public class RPNUMERICS {
 
         for (Entry<String, Configuration> configurationEntry : configurationSet) {
 
+            System.out.print(configurationEntry.toString());
+
             if (configurationEntry.getValue().getType().equalsIgnoreCase("method")) {
                 methodConfiguration.add(configurationEntry.getValue());
             }
@@ -310,16 +312,22 @@ public class RPNUMERICS {
 
     public static String toXML() {
 
+        System.out.println("chamando to xml" + configMap_.size());
+
+
+
         StringBuffer buffer = new StringBuffer();
 
         ArrayList<Configuration> configurationArray = sortConfigurations();
 
         for (Configuration configurationEntry : configurationArray) {
 
+
+
             if (configurationEntry.getType().equalsIgnoreCase("physics") && configurationEntry.getName().equalsIgnoreCase(physicsID())) {
 
                 buffer.append(configurationEntry.toXML());
-//                System.out.println(configurationEntry.toString());
+                System.out.println(configurationEntry.toString());
 
             }
             if (!configurationEntry.getType().equalsIgnoreCase("physics")) {
@@ -643,7 +651,7 @@ public class RPNUMERICS {
         Configuration fluxConfiguration = physicsConfiguration.getConfiguration("fluxfunction");
         Configuration accumulationConfiguration = physicsConfiguration.getConfiguration("accumulationfunction");
 
-        
+
         RealVector fluxParamsVector = new RealVector(fluxConfiguration.getParamsSize());
         for (int i = 0; i < fluxParamsVector.getSize(); i++) {
             fluxParamsVector.setElement(i, new Double(fluxConfiguration.getParam(i)));

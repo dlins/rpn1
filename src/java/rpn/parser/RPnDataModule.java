@@ -705,7 +705,7 @@ public class RPnDataModule {
 ////           writer.write((commandInterator.next().toXML()));//TODO Fix.
 //
 //        }
-//        System.out.println("Chamando export do data module");
+        System.out.println("Chamando export do data module");
 //
         Iterator<RpGeometry> iterator = PHASESPACE.getGeomObjIterator();
 //

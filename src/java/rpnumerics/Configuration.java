@@ -56,6 +56,7 @@ public class Configuration {
     public Configuration(String name, String type) {
         params_ = new HashMap<String, String>();
         paramOrder_ = new ArrayList<String>();
+        configurationMap_=new HashMap<String, Configuration>();
         name_ = name;
         type_ = type;
     }
@@ -174,7 +175,7 @@ public class Configuration {
     public String toString() {
 
         StringBuffer stringBuffer = new StringBuffer();
-        stringBuffer.append("Configuration name: " + name_+ "\n");
+        stringBuffer.append("Configuration name: " + name_ + "\n");
         Set<Entry<String, String>> paramsSet = params_.entrySet();
         for (Entry<String, String> paramsEntry : paramsSet) {
             stringBuffer.append(paramsEntry.getKey() + " " + paramsEntry.getValue() + "\n");
@@ -192,6 +193,8 @@ public class Configuration {
 
     public String toXML() {
 
+        System.out.println(toString());
+
         StringBuffer buffer = new StringBuffer();
         Set<Entry<String, String>> paramsSet = params_.entrySet();
 
@@ -204,6 +207,7 @@ public class Configuration {
                 buffer.append(entry.getValue().toXML());//Printing main boundary
 
             }
+
 
             buffer.append("<FLUXFUNCTION>\n");
             for (Entry<String, String> entry : paramsSet) {
