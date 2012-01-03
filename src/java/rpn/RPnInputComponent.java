@@ -15,29 +15,21 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
 import java.text.DecimalFormat;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.ButtonGroup;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JSlider;
-import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 import rpnumerics.Configuration;
 import wave.util.RealVector;
-import rpnumerics.RPNUMERICS;
 
 
 //**** tirar os listeners, que serao enviados para classes especializadas
@@ -193,7 +185,9 @@ public class RPnInputComponent {
 
         for (Entry<String,String> value : paramsSet) {
 
-            JFormattedTextField textField = new JFormattedTextField(formatter_);
+//            JFormattedTextField textField = new JFormattedTextField(formatter_);
+
+            JFormattedTextField textField = new JFormattedTextField();
 
             textField.setText(configuration.getParam(j));
             textField.setColumns(4);
@@ -267,20 +261,25 @@ public class RPnInputComponent {
 
             Document doc = (Document) arg0.getDocument();
 
-            RealVector newValues = new RealVector(textField_.length);
-            double doubleNewValue;
+//            RealVector newValues = new RealVector(textField_.length);
+            String [] newValues = new String[textField_.length];
+//            double doubleNewValue;
+
             try {
                 for (int j = 0; j < textField_.length; j++) {
 
                     if (textField_[j].getDocument() == doc) {
                         parameterName_ = textField_[j].getName();
                         String newValue = doc.getText(0, doc.getLength());
-                        doubleNewValue = new Double(newValue);
-                        newValues.setElement(j, doubleNewValue);
+//                        doubleNewValue = new Double(newValue);
+//                        newValues.setElement(j, doubleNewValue);
+                        newValues[j] =newValue;
 
                     } else {
-                        doubleNewValue = new Double(textField_[j].getText());
-                        newValues.setElement(j, doubleNewValue);
+//                        doubleNewValue = new Double(textField_[j].getText());
+//                        newValues.setElement(j, doubleNewValue);
+
+                        newValues[j]=textField_[j].getText();
 
                     }
 
@@ -290,7 +289,7 @@ public class RPnInputComponent {
             } catch (BadLocationException ex) {
                 //System.out.println("Excessao Bad" + ex.getMessage());
             } catch (NumberFormatException ex) {
-                //System.out.println("Excessao NumberFormat " + ex.getMessage());
+                System.out.println("Excessao NumberFormat " + ex.getMessage());
             }
 
         }
