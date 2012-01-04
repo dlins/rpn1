@@ -157,7 +157,7 @@ public class RPnInputComponent {
 //
 //    }
 
-    public RPnInputComponent(Configuration configuration) {
+     public RPnInputComponent(Configuration configuration) {
 
         textField_ = new JFormattedTextField[configuration.getParamsSize()];
 
