@@ -109,8 +109,8 @@ Double_Contact::Double_Contact(const RealVector &lpmin, const RealVector &lpmax,
 
     numberOfCombinations = 5; // = hc.combination(hn + 1, hm + 1) = hc.combination(4 + 1, 3 + 1);
 
-    //storn_ = new int[hn + 1];
-    //storm_ = new int[hm + 1]; // Careful here
+    storn_ = new int[hn + 1];
+    storm_ = new int[hm + 1]; // Careful here
     cvert_ = new double[ncvert_*hn];
 //    vert = new double[ncvert_*hn]; // TODO This line can be removed at the end.
     bsvert_ = new int[(hn + 1)*hn];
@@ -140,6 +140,8 @@ Double_Contact::Double_Contact(const RealVector &lpmin, const RealVector &lpmax,
     nface_ = hc.mkface(face_, facptr_, fnbr_, dimf_, nsimp_, hn, hm, nsface_,
                        bsvert_, comb_, perm_, storn_, storm_);
 
+
+
     exstfc = new int[nface_];
     sptr_ = new int[nface_];
 
@@ -157,16 +159,16 @@ Double_Contact::Double_Contact(const RealVector &lpmin, const RealVector &lpmax,
     index[3] = 1;
 
     // Some workspace variables for HyperCube::cubsol(). Originally documented in: hcube.F.
-//    u = new double[hn*(hm + 1)];
-//    g = new double[hm*(hm + 1)];
-//    stormd = new double[hm];
+    u = new double[hn*(hm + 1)];
+    g = new double[hm*(hm + 1)];
+    stormd = new double[hm];
 
 }
 
 Double_Contact::~Double_Contact(){
-//    delete [] stormd;
-//    delete [] g;
-//    delete [] u;
+    delete [] stormd;
+    delete [] g;
+    delete [] u;
     delete [] index;
     delete [] lambda_left;
     delete [] sptr_;
@@ -182,16 +184,16 @@ Double_Contact::~Double_Contact(){
     delete [] bsvert_;
 //    delete [] vert;
     delete [] cvert_;
-    //delete [] storm_;
-    //delete [] storn_;
+    delete [] storm_;
+    delete [] storn_;
 
 //    delete [] right_number_of_grid_pnts;
 //    delete [] left_number_of_grid_pnts;
 }
 
 // TODO: Dan believes this function can return void, since memory will not be overused.
-void Double_Contact::filedg4(Matrix<double> &sol_, int dims, Matrix<int> &edges_, 
-                            int dime, int nedges_, 
+  void Double_Contact::filedg4(Matrix<double> &sol_, int dims, Matrix<int> &edges_,
+                            int dime, int nedges_,
                             int il, int jl, int ir, int jr, 
                             std::vector<RealVector> &left_vrs, std::vector<RealVector> &right_vrs){
 // TODO: Verify if il, jl, ir & jr are the same as are computed by the Fortran code. (There they are used as indices and pass as references and are modified by some function.) Panters.
@@ -202,6 +204,10 @@ void Double_Contact::filedg4(Matrix<double> &sol_, int dims, Matrix<int> &edges_
     // double ur0, vr0, ur1, vr1, dur, dvr.
 
     // Store all pairs of edges that were found
+
+      cout <<"Valor de nedges_: "<<nedges_<<endl;
+
+
     RealVector p1(2), p2(2), p3(2), p4(2);
     for (int nedg = 0; nedg < nedges_; nedg++) {
 //        p1.component(0) = ul0 + dul * (il-1 + sol_(0, edges_(0, nedg) ) ); // LX1 Was  = segend[sn - 1][0][0];//sol_[0][edges_[0][nedg ]];
