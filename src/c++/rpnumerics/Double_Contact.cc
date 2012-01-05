@@ -205,9 +205,6 @@ Double_Contact::~Double_Contact(){
 
     // Store all pairs of edges that were found
 
-      cout <<"Valor de nedges_: "<<nedges_<<endl;
-
-
     RealVector p1(2), p2(2), p3(2), p4(2);
     for (int nedg = 0; nedg < nedges_; nedg++) {
 //        p1.component(0) = ul0 + dul * (il-1 + sol_(0, edges_(0, nedg) ) ); // LX1 Was  = segend[sn - 1][0][0];//sol_[0][edges_[0][nedg ]];
@@ -293,7 +290,6 @@ void Double_Contact::compute_double_contact_engine(int il_min, int il_max,
                                            solptr_, fnbr_, nsimp_, nsface_);
                     nedges_=status;// TODO ???
 
-                    cout<<"Valor de status: "<<nedges_<<endl;
                     filedg4 (cpp_sol, dims_, cpp_edges_, dime_, nedges_, 
                              il, jl, ir, jr, left_vrs, right_vrs);
                 }

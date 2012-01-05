@@ -503,7 +503,9 @@ int ContourMethod::contour2d(ImplicitFunction *impf, double *rect, int *res, std
     int zero;
     int nedg;
 
-    int tsimp, tface, ssimp, sface;
+//    int tsimp, tface, ssimp, sface;
+
+    int ssimp, sface;
 
     double u, v;
     double p[2];

@@ -855,7 +855,7 @@ int HyperCube::cubsol(int *solptr_, double *sol_, int dims_, int *sptr_, int nso
     //local variables
     //double sol_[n_][dims_];
     //find the solution on each face (define  nsoln_)
-    printf("Entering: mksoln(), nface = %d\n", nface); // I commented out this line (Morante: Wed 09 Feb 2011 11:17:50 PM BRST )
+//    printf("Entering: mksoln(), nface = %d\n", nface); // I commented out this line (Morante: Wed 09 Feb 2011 11:17:50 PM BRST )
     nsoln_ = mksoln(sol_, dims_, sptr_, nsoln_, foncub,
             exstfc, face, dimf_, cvert, ncvert_, n_, m_, nface,
             u, g, x, wrki);
@@ -1318,7 +1318,7 @@ int HyperCube::cpp_mkedge(Matrix<int> &cpp_edges_, int dime_, int nedges_, int *
     int edges_[2][dime_];
 
     int res = mkedge(&edges_[0][0], dime_, nedges_, smpedg_, solptr_, fnbr_, nsimp_, nsface_);
-    cout<<"Valor de res: "<<res<<endl;
+
     cpp_edges_ = Matrix<int>(2, dime_, &edges_[0][0]);
 
     return res;
