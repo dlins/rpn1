@@ -460,7 +460,7 @@ void HyperCube::mkperm(int *perm_, // perm_[n_][nsimp_]
         }
     }
 
-    putmi("PERM", perm_, n_, nsimp_);
+//    putmi("PERM", perm_, n_, nsimp_);
 
     return;
 }
@@ -917,9 +917,9 @@ int HyperCube::mksoln(double *sol_, int dims_, int *sptr_, int nsoln_, double *f
                 }
             }
 
-            putmf("gtemp", &gtemp[0][0], m_, m_ + 1);
+//            putmf("gtemp", &gtemp[0][0], m_, m_ + 1);
 
-            putmf("gaqui", g, m_, m_ + 1);
+//            putmf("gaqui", g, m_, m_ + 1);
             //call the affine solver to solve in the standard simplex
 
             flag = affslv(x, g, m_, wrki);
@@ -1318,7 +1318,7 @@ int HyperCube::cpp_mkedge(Matrix<int> &cpp_edges_, int dime_, int nedges_, int *
     int edges_[2][dime_];
 
     int res = mkedge(&edges_[0][0], dime_, nedges_, smpedg_, solptr_, fnbr_, nsimp_, nsface_);
-
+    cout<<"Valor de res: "<<res<<endl;
     cpp_edges_ = Matrix<int>(2, dime_, &edges_[0][0]);
 
     return res;

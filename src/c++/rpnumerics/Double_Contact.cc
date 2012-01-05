@@ -291,7 +291,9 @@ void Double_Contact::compute_double_contact_engine(int il_min, int il_max,
                     //
                     status = hc.cpp_mkedge(cpp_edges_, dime_, nedges_, smpedg_, 
                                            solptr_, fnbr_, nsimp_, nsface_);
+                    nedges_=status;// TODO ???
 
+                    cout<<"Valor de status: "<<nedges_<<endl;
                     filedg4 (cpp_sol, dims_, cpp_edges_, dime_, nedges_, 
                              il, jl, ir, jr, left_vrs, right_vrs);
                 }
