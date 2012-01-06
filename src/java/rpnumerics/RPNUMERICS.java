@@ -77,7 +77,7 @@ public class RPNUMERICS {
 
             RealVector paramsVector = getAccumulationParams();
 
-            Configuration accumlationFunctionConfiguration = new Configuration("accumulationfunction", ConfigurationProfile.PHYSICS_CONFIG_PROFILE);
+            Configuration accumlationFunctionConfiguration = new Configuration("accumulationfunction", ConfigurationProfile.PHYSICS_CONFIG);
 
             for (int i = 0; i < paramsVector.getSize(); i++) {
                 accumlationFunctionConfiguration.setParamValue("param " + i, String.valueOf(paramsVector.getElement(i)));
@@ -108,7 +108,7 @@ public class RPNUMERICS {
 
             RealVector paramsVector = fluxParams.getParams();
 
-            Configuration fluxFunctionConfiguration = new Configuration("fluxfunction", ConfigurationProfile.PHYSICS_CONFIG_PROFILE);
+            Configuration fluxFunctionConfiguration = new Configuration("fluxfunction", ConfigurationProfile.PHYSICS_CONFIG);
 
             for (int i = 0; i < paramsVector.getSize(); i++) {
                 fluxFunctionConfiguration.setParamValue("param " + i, String.valueOf(paramsVector.getElement(i)));
@@ -125,7 +125,7 @@ public class RPNUMERICS {
 
         }
 
-        ConfigurationProfile boundaryProfile = physicsProfile.getConfigurationProfile(ConfigurationProfile.BOUNDARY_PROFILE);
+        ConfigurationProfile boundaryProfile = physicsProfile.getConfigurationProfile(ConfigurationProfile.BOUNDARY);
 
 //        System.out.println("Printando boundaryProfile: " + boundaryProfile);
 
@@ -180,7 +180,7 @@ public class RPNUMERICS {
                 RealVector min = boundary.getMinimums();
                 RealVector max = boundary.getMaximums();
 
-                ConfigurationProfile defaultBoundaryProfile = new ConfigurationProfile("rect", ConfigurationProfile.BOUNDARY_PROFILE);
+                ConfigurationProfile defaultBoundaryProfile = new ConfigurationProfile("rect", ConfigurationProfile.BOUNDARY);
 
                 String limits = "";
 
@@ -205,7 +205,7 @@ public class RPNUMERICS {
                 defaultBoundaryProfile.addParam("x-max", max.getElement(0) + "");
                 defaultBoundaryProfile.addParam("y-max", max.getElement(1) + "");
 
-                physicsProfile.addConfigurationProfile(ConfigurationProfile.BOUNDARY_PROFILE, boundaryProfile);
+                physicsProfile.addConfigurationProfile(ConfigurationProfile.BOUNDARY, boundaryProfile);
 
                 Configuration boundaryConfiguration = new Configuration(defaultBoundaryProfile);
 
@@ -312,17 +312,12 @@ public class RPNUMERICS {
 
     public static String toXML() {
 
-        System.out.println("chamando to xml" + configMap_.size());
-
-
 
         StringBuffer buffer = new StringBuffer();
 
         ArrayList<Configuration> configurationArray = sortConfigurations();
 
         for (Configuration configurationEntry : configurationArray) {
-
-
 
             if (configurationEntry.getType().equalsIgnoreCase("physics") && configurationEntry.getName().equalsIgnoreCase(physicsID())) {
 

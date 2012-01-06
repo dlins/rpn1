@@ -85,6 +85,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
 
 
 
+    cout << "Min: " << min << endl;
+    cout << "Max: " << max << endl;
+
+
+
+
     SubPhysics & physics = RpNumerics::getPhysics().getSubPhysics(0);
 
 
@@ -96,11 +102,14 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
 
     testBoundary.push_back(true);
     testBoundary.push_back(true);
-    testBoundary.push_back(false);
+    testBoundary.push_back(true);
+    testBoundary.push_back(true);
 
 
 
     RectBoundary tempBoundary(min, max, testBoundary);
+    //    RectBoundary tempBoundary(min, max);
+
 
     double deltaxi = 1e-3;
 
@@ -124,9 +133,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
 
 
     physics.postProcess(coords);
-//    for (int i = 0; i < coords.size(); i++) cout << "coords(" << i << ") = " << coords[i] << endl;
+    //    for (int i = 0; i < coords.size(); i++) cout << "coords(" << i << ") = " << coords[i] << endl;
 
-//    cout << "Resultado da rarefacao: " << info << ", size = " << coords.size() << endl;
+    //    cout << "Resultado da rarefacao: " << info << ", size = " << coords.size() << endl;
     //    method.curve(realVectorInput, timeDirection, coords);
 
     //cout << "Depois de chamar curve: " << (double) (clock() - begin) / (double) CLOCKS_PER_SEC << endl;

@@ -166,7 +166,7 @@ public class RPnConfigDialog extends RPnDialog {
 
         boundaryTextArray_ = new ArrayList<RPnInputComponent>();
 
-        ConfigurationProfile boundaryProfile = physicsProfile_.getConfigurationProfile(ConfigurationProfile.BOUNDARY_PROFILE);
+        ConfigurationProfile boundaryProfile = physicsProfile_.getConfigurationProfile(ConfigurationProfile.BOUNDARY);
 
         if (boundaryProfile.getName().equalsIgnoreCase("rect")) {//RECT BOUNDARY
 
@@ -338,7 +338,7 @@ public class RPnConfigDialog extends RPnDialog {
 
         ConfigurationProfile selectedPhysicsProifle = RPnConfig.getPhysicsProfile((String) physicsComboBox_.getSelectedItem());
 
-        ConfigurationProfile boundaryProfile = selectedPhysicsProifle.getConfigurationProfile(ConfigurationProfile.BOUNDARY_PROFILE);
+        ConfigurationProfile boundaryProfile = selectedPhysicsProifle.getConfigurationProfile(ConfigurationProfile.BOUNDARY);
 
         if (!boundaryProfile.getName().equals("triang")) {
             int dimension = new Integer(boundaryProfile.getParam("dimension"));
@@ -409,7 +409,7 @@ public class RPnConfigDialog extends RPnDialog {
         addPhysicsName();
         buildBoundaryPanel();
         physicsComboBox_.addActionListener(new ComponentController());
-        ConfigurationProfile boundaryProfile = physicsProfile_.getConfigurationProfile(ConfigurationProfile.BOUNDARY_PROFILE);
+        ConfigurationProfile boundaryProfile = physicsProfile_.getConfigurationProfile(ConfigurationProfile.BOUNDARY);
         int dimension = new Integer(boundaryProfile.getParam("dimension"));
 
         axisSelected_ = new boolean[dimension];
@@ -485,7 +485,7 @@ public class RPnConfigDialog extends RPnDialog {
     }
 
     private void setVisualConfiguration() {
-        ConfigurationProfile boundaryProfile = physicsProfile_.getConfigurationProfile(ConfigurationProfile.BOUNDARY_PROFILE);
+        ConfigurationProfile boundaryProfile = physicsProfile_.getConfigurationProfile(ConfigurationProfile.BOUNDARY);
         int dimension = new Integer(boundaryProfile.getParam("dimension"));
         Space space = new Space("", dimension);
         Space auxSpace = new Space("", dimension * 2);
@@ -544,7 +544,7 @@ public class RPnConfigDialog extends RPnDialog {
     }
 
     private void setBoundary() { //Creating a boundary using user's input values
-        ConfigurationProfile boundaryProfile = physicsProfile_.getConfigurationProfile(ConfigurationProfile.BOUNDARY_PROFILE);
+        ConfigurationProfile boundaryProfile = physicsProfile_.getConfigurationProfile(ConfigurationProfile.BOUNDARY);
 //        boolean iso2equi = new Boolean(boundaryProfile.getParam("iso2equi"));
         if (!boundaryProfile.getName().equalsIgnoreCase("triang")) {//RECT BOUNDARY. TODO Use iso2equi value as flag
 
@@ -615,7 +615,7 @@ public class RPnConfigDialog extends RPnDialog {
             boolean oneAxisSelected = false;
 
 
-            if (physicsProfile_.getConfigurationProfile(ConfigurationProfile.BOUNDARY_PROFILE).getName().equals("triang")) {
+            if (physicsProfile_.getConfigurationProfile(ConfigurationProfile.BOUNDARY).getName().equals("triang")) {
                 apply();
                 return;
             }

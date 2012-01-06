@@ -224,6 +224,8 @@ bool RectBoundary::inside(const RealVector &p) const {
 //
 
 int RectBoundary::intersection(const RealVector &p, const RealVector &q, RealVector &r, int &w)const {
+
+
     if (inside(p) && inside(q)) return 1;
     else if (!inside(p) && !inside(q)) return -1;
     else {

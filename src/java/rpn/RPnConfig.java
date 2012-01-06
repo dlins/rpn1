@@ -82,12 +82,12 @@ public class RPnConfig {
     }
 
     public static ArrayList<ConfigurationProfile> getAllMethodsProfiles() {
-        return filterProfiles(ConfigurationProfile.METHOD_PROFILE);
+        return filterProfiles(ConfigurationProfile.METHOD);
     }
 
     public static ArrayList<ConfigurationProfile> getAllVisualizationProfiles() {
 
-        return filterProfiles(ConfigurationProfile.VISUALIZATION_PROFILE);
+        return filterProfiles(ConfigurationProfile.VISUALIZATION);
 
     }
 

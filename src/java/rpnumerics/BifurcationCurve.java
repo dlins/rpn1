@@ -11,7 +11,7 @@ import java.util.List;
 import rpnumerics.methods.contour.ContourCurve;
 
 import wave.multid.view.ViewingAttr;
-import wave.util.RealVector;
+import wave.util.RealSegment;
 
 public class BifurcationCurve extends SegmentedCurve {
     //
@@ -59,15 +59,15 @@ public class BifurcationCurve extends SegmentedCurve {
 
     public String toXML() {
 
-        return "";
-//        StringBuffer buffer = new StringBuffer();
-//
-//        for (int i = 0; i < segments().size(); i++) {
-//            HugoniotSegment hugoniotSegment = (HugoniotSegment) segments().get(i);
-//            RealSegment realSegment = new RealSegment(hugoniotSegment.p1(), hugoniotSegment.p2());
-//            buffer.append(realSegment.toXML());
-//        }
-//        return buffer.toString();
+
+        StringBuffer buffer = new StringBuffer();
+
+        for (int i = 0; i < segments().size(); i++) {
+            HugoniotSegment hugoniotSegment = (HugoniotSegment) segments().get(i);
+            RealSegment realSegment = new RealSegment(hugoniotSegment.p1(), hugoniotSegment.p2());
+            buffer.append(realSegment.toXML());
+        }
+        return buffer.toString();
     }
 
     public List<HugoniotSegment> leftSegments() {

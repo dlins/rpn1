@@ -272,10 +272,12 @@ int Rarefaction::init(const RealVector &initial_point, int increase, double delt
         if      (mlambda < lambda && lambda < plambda){
             for (int i = 0; i < n; i++) second_point.component(i) = p.component(i);
             second_point.component(n) = plambda;
+            cout<<"Second point: "<<second_point<<endl;
         }
         else if (mlambda > lambda && lambda > plambda){
             for (int i = 0; i < n; i++) second_point.component(i) = m.component(i);
             second_point.component(n) = mlambda;
+            cout << "Second point: " << second_point << endl;
         }
         else return RAREFACTION_INIT_FAILURE;
     }
@@ -633,7 +635,7 @@ int Rarefaction::curve(const RealVector &initial_point,
             // Both points inside. Carry on with the rest of the tests, etc.
         }
         else if (intersection_info == 0){
-            // One point is inside, the other is outside. 
+            // One point is inside, the other is outside.
             // Store the point lying in the domain's border and get out.
             r.component(n) = compute_lambda(n, r);
             rarcurve.push_back(r);
@@ -662,7 +664,7 @@ int Rarefaction::curve(const RealVector &initial_point,
             return ABORTED_PROCEDURE;
         }
 
-        // END   Check Boundary //
+//        // END   Check Boundary //
 
         // BEGIN Check for monotonicity //
         if (increase != RAREFACTION_SPEED_NEUTRAL){

@@ -35,6 +35,22 @@ Boundary * Stone::defaultBoundary() const {
 
     C.component(0) = 1;
     C.component(1) = 0;
+//
+
+//Saturacoes negativas 
+
+//     A.component(0) = -1;
+//    A.component(1) = 2;
+//
+//    RealVector B(2);
+//
+//    B.component(0) = -1;
+//    B.component(1) = 2;
+//
+//    RealVector C(2);
+//
+//    C.component(0) = 2;
+//    C.component(1) = -1;
 
 
     return new IsoTriang2DBoundary(A, B, C);

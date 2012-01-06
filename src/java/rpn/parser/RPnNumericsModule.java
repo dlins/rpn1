@@ -53,7 +53,7 @@ public class RPnNumericsModule {
             
 
             if (localName.equals("CURVE")) {
-                currentConfigurationProfile_ = new ConfigurationProfile(att.getValue("name"), ConfigurationProfile.CURVE_PROFILE);
+                currentConfigurationProfile_ = new ConfigurationProfile(att.getValue("name"), ConfigurationProfile.CURVE);
 
             }
 
@@ -67,13 +67,13 @@ public class RPnNumericsModule {
             }
 
             if (localName.equals("BOUNDARY")) {
-                physicsProfile_.addConfigurationProfile(ConfigurationProfile.BOUNDARY_PROFILE, new ConfigurationProfile(att.getValue(0), ConfigurationProfile.BOUNDARY_PROFILE));
+                physicsProfile_.addConfigurationProfile(ConfigurationProfile.BOUNDARY, new ConfigurationProfile(att.getValue(0), ConfigurationProfile.BOUNDARY));
 
 
             }
 
             if (localName.equals("PHYSICSCONFIG")) {
-                currentInnerPhysicsConfigurationProfile_=new ConfigurationProfile(att.getValue(0), ConfigurationProfile.PHYSICS_CONFIG_PROFILE);
+                currentInnerPhysicsConfigurationProfile_=new ConfigurationProfile(att.getValue(0), ConfigurationProfile.PHYSICS_CONFIG);
 
             }
             if (localName.equals("PHYSICSPARAM")) {
@@ -87,7 +87,7 @@ public class RPnNumericsModule {
 //                System.out.println("Parametro: " + att.getValue(0) + " " + att.getValue(1));
 
                 if (physicsProfile_.profileArraySize() == 1) {
-                    physicsProfile_.getConfigurationProfile(ConfigurationProfile.BOUNDARY_PROFILE).addParam(att.getValue(0), att.getValue(1));
+                    physicsProfile_.getConfigurationProfile(ConfigurationProfile.BOUNDARY).addParam(att.getValue(0), att.getValue(1));
                 }
 
             }
@@ -95,7 +95,7 @@ public class RPnNumericsModule {
 
             if (localName.equals("METHOD")) {
 
-                currentConfigurationProfile_ = new ConfigurationProfile(att.getValue("name"), ConfigurationProfile.METHOD_PROFILE);
+                currentConfigurationProfile_ = new ConfigurationProfile(att.getValue("name"), ConfigurationProfile.METHOD);
 
             }
 

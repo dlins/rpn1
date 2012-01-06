@@ -56,7 +56,7 @@ public class Configuration {
     public Configuration(String name, String type) {
         params_ = new HashMap<String, String>();
         paramOrder_ = new ArrayList<String>();
-        configurationMap_=new HashMap<String, Configuration>();
+        configurationMap_ = new HashMap<String, Configuration>();
         name_ = name;
         type_ = type;
     }
@@ -175,7 +175,7 @@ public class Configuration {
     public String toString() {
 
         StringBuffer stringBuffer = new StringBuffer();
-        stringBuffer.append("Configuration name: " + name_ + "\n");
+        stringBuffer.append("Configuration name: " + name_ + " Configuration type: " + type_ + "\n");
         Set<Entry<String, String>> paramsSet = params_.entrySet();
         for (Entry<String, String> paramsEntry : paramsSet) {
             stringBuffer.append(paramsEntry.getKey() + " " + paramsEntry.getValue() + "\n");
@@ -198,51 +198,21 @@ public class Configuration {
         StringBuffer buffer = new StringBuffer();
         Set<Entry<String, String>> paramsSet = params_.entrySet();
 
-        if (getType().equalsIgnoreCase("physics")) {
+        if (getType().equalsIgnoreCase(ConfigurationProfile.PHYSICS_PROFILE)) {
             buffer.append("<PHYSICS name=\"" + getName() + "\">\n");
 
             Set<Entry<String, Configuration>> configurationSet = configurationMap_.entrySet();
 
             for (Entry<String, Configuration> entry : configurationSet) {
-                buffer.append(entry.getValue().toXML());//Printing main boundary
+                buffer.append(entry.getValue().toXML());
 
             }
 
-
-            buffer.append("<FLUXFUNCTION>\n");
-            for (Entry<String, String> entry : paramsSet) {
-                buffer.append("<FLUXPARAMS name=\"" + entry.getKey() + "\" " + "position= \"" + getParamOrder(entry.getKey()) + "\" " + "value= \"" + entry.getValue() + "\"/>");
-                buffer.append("\n");
-            }
-            buffer.append("</FLUXFUNCTION>\n");
 
             buffer.append("</PHYSICS>\n");
         }
 
-
-        if (getType().equalsIgnoreCase("boundary")) {
-            buffer.append("<BOUNDARY name=\"" + getName() + "\">\n");
-            for (Entry<String, String> entry : paramsSet) {
-                buffer.append("<BOUNDARYPARAM name=\"" + entry.getKey() + "\" " + "value= \"" + entry.getValue() + "\"/>");
-                buffer.append("\n");
-            }
-            buffer.append("</BOUNDARY>\n");
-        }
-
-
-
-        if (getType().equalsIgnoreCase("auxboundary")) {
-            buffer.append("<AUXBOUNDARY name=\"" + getName() + "\">\n");
-            for (Entry<String, String> entry : paramsSet) {
-                buffer.append("<BOUNDARYPARAM name=\"" + entry.getKey() + "\" " + "value= \"" + entry.getValue() + "\"/>");
-                buffer.append("\n");
-            }
-            buffer.append("</AUXBOUNDARY>\n");
-        }
-
-
-
-        if (getType().equalsIgnoreCase("curve")) {
+        if (getType().equalsIgnoreCase(ConfigurationProfile.CURVE)) {
             buffer.append("<CURVE name=\"" + getName() + "\">\n");
             for (Entry<String, String> entry : paramsSet) {
                 buffer.append("<CURVEPARAM name=\"" + entry.getKey() + "\" " + "value= \"" + entry.getValue() + "\"/>");
@@ -251,7 +221,7 @@ public class Configuration {
             buffer.append("</CURVE>\n");
         }
 
-        if (getType().equalsIgnoreCase("method")) {
+        if (getType().equalsIgnoreCase(ConfigurationProfile.METHOD)) {
             buffer.append("<METHOD name=\"" + getName() + "\">\n");
             for (Entry<String, String> entry : paramsSet) {
                 buffer.append("<METHODPARAM name=\"" + entry.getKey() + "\" " + "value= \"" + entry.getValue() + "\"/>");
@@ -261,7 +231,7 @@ public class Configuration {
         }
 
 
-        if (getType().equalsIgnoreCase("visual")) {
+        if (getType().equalsIgnoreCase(ConfigurationProfile.VISUALIZATION)) {
             buffer.append("<VIEWCONFIGURATION modeldomain=\"" + getName() + "\">\n");
             Set<Entry<String, Configuration>> configurationEntry = configurationMap_.entrySet();
             for (Entry<String, Configuration> configEntry : configurationEntry) {

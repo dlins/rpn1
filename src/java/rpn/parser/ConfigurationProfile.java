@@ -18,11 +18,11 @@ public class ConfigurationProfile {
     private HashMap<String, String> paramsMap_;
     private HashMap<Integer, String> paramsIndexMap_;
     public static final String PHYSICS_PROFILE = "PHYSICS";
-    public static final String PHYSICS_CONFIG_PROFILE = "PHYSICS CONFIGURATION";
-    public static final String CURVE_PROFILE = "CURVE";
-    public static final String METHOD_PROFILE = "METHOD";
-    public static final String BOUNDARY_PROFILE = "BOUNDARY";
-    public static final String VISUALIZATION_PROFILE = "VISUAL";
+    public static final String PHYSICS_CONFIG = "PHYSICS CONFIGURATION";
+    public static final String CURVE = "CURVE";
+    public static final String METHOD = "METHOD";
+    public static final String BOUNDARY = "BOUNDARY";
+    public static final String VISUALIZATION = "VISUAL";
 
     public ConfigurationProfile(String name, String type) {
         type_ = type;

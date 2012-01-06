@@ -35,14 +35,14 @@ public class RPnVisualizationModule {
 
             if (localName.equals("VIEWCONFIGURATION")) {
 
-                currentConfigurationProfile_ = new ConfigurationProfile(att.getValue(0), ConfigurationProfile.VISUALIZATION_PROFILE);
+                currentConfigurationProfile_ = new ConfigurationProfile(att.getValue(0), ConfigurationProfile.VISUALIZATION);
 
             }
 
 
             if (localName.equals("PROJDESC")) {
 
-                currentProjConfigurationProfile_ = new ConfigurationProfile(att.getValue(0), ConfigurationProfile.VISUALIZATION_PROFILE);
+                currentProjConfigurationProfile_ = new ConfigurationProfile(att.getValue(0), ConfigurationProfile.VISUALIZATION);
 
             }
 

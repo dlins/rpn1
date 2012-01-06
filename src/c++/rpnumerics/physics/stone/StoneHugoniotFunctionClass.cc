@@ -104,7 +104,7 @@ double StoneHugoniotFunctionClass::HugoniotFunction(const RealVector & u) {
 
     double hugont = dho * dfw - dhw*dfo;
 
-    if (fabs(hugont) <= epsilon * (fabs(dho * dfw) + fabs(dhw * dfo))) hugont = 0.0;
+//    if (fabs(hugont) <= epsilon * (fabs(dho * dfw) + fabs(dhw * dfo))) hugont = 0.0;
 
     return hugont;
 }

@@ -11,6 +11,7 @@
  * Includes:
  */
 #include "IsoTriang2DBoundary.h"
+using namespace std;
 
 /*
  * ---------------------------------------------------------------
@@ -102,26 +103,52 @@ bool IsoTriang2DBoundary::inside(const double *U)const {
     double x = U[0];
     double y = U[1];
 
-    if ((x >= 0.) && (y >= 0.) && (x + y <= 1.)) {
-//        cout << "(" << x << ", " << y << ") is INSIDE" << endl;
+
+     if ((x >= minimums().component(0)) && (y >= minimums().component(1)) && (x + y <=  maximums().component(0)+minimums().component(1))) {
+        cout << "(" << x << ", " << y << ") is INSIDE" << endl;
         return true;
     } else {
-//        cout << "(" << x << ", " << y << ") is OUTSIDE" << endl;
+       cout << "(" << x << ", " << y << ") is OUTSIDE" << endl;
         return false;
     }
+
 }
+
+//
+//
+//    if ((x >= 0.) && (y >= 0.) && (x + y <= 1.)) {
+////        cout << "(" << x << ", " << y << ") is INSIDE" << endl;
+//        return true;
+//    } else {
+////        cout << "(" << x << ", " << y << ") is OUTSIDE" << endl;
+//        return false;
+ 
 
 bool IsoTriang2DBoundary::inside(const RealVector & U)const {
     double x = U.component(0);
     double y = U.component(1);
 
-    if ((x >= 0.) && (y >= 0.) && (x + y <= 1.)) {
-//        cout << "(" << x << ", " << y << ") is INSIDE" << endl;
+
+
+     if ((x >= minimums().component(0)) && (y >= minimums().component(1)) && (x + y <=  maximums().component(0)+minimums().component(1))) {
+        cout << "(" << x << ", " << y << ") is INSIDE" << endl;
         return true;
     } else {
-//        cout << "(" << x << ", " << y << ") is OUTSIDE" << endl;
+       cout << "(" << x << ", " << y << ") is OUTSIDE" << endl;
         return false;
     }
+
+
+
+
+//
+//    if ((x >= 0.) && (y >= 0.) && (x + y <= 1.)) {
+////        cout << "(" << x << ", " << y << ") is INSIDE" << endl;
+//        return true;
+//    } else {
+////        cout << "(" << x << ", " << y << ") is OUTSIDE" << endl;
+//        return false;
+//    }
 
     //return false;
 
