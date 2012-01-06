@@ -46,9 +46,6 @@ int StoneFluxFunction::jet(const WaveState &w, JetMatrix &m, int degree) const {
 
     double vel = fluxParams().component(6);
 
-
-    cout<<"Valor de w:"<<w(0)<<" |||||||| "<<w(1)<<endl;
-
     double sw = w(0);
     double so = w(1);
     double sg = 1.0 - sw - so;

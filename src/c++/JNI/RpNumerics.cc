@@ -236,11 +236,22 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setBoundary
     jclass boundaryClass = env->FindClass(BOUNDARY_LOCATION);
 
     jclass rectBoundaryClass = env->FindClass(RECTBOUNDARY_LOCATION);
-    jboolean testeBoundaryType = env->IsInstanceOf(newBoundary, rectBoundaryClass);
+
+    jclass isoTriangBoundaryClass = env->FindClass(ISOTRIANG2DBOUNDARY_LOCATION);
+
+    jboolean testRectBoundary = env->IsInstanceOf(newBoundary, rectBoundaryClass);
+
+    jboolean testIsoTriangBoundary = env->IsInstanceOf(newBoundary, isoTriangBoundaryClass);
 
     jmethodID getMinimumsMethodID = env->GetMethodID(boundaryClass, "getMinimums", "()Lwave/util/RealVector;");
     jmethodID getMaximumsMethodID = env->GetMethodID(boundaryClass, "getMaximums", "()Lwave/util/RealVector;");
     jmethodID toDoubleMethodID = (env)->GetMethodID(realVectorClass, "toDouble", "()[D");
+
+
+    jmethodID getAMethodID = (env)->GetMethodID(isoTriangBoundaryClass, "getA", "()Lwave/util/RealVector;");
+    jmethodID getBMethodID = (env)->GetMethodID(isoTriangBoundaryClass, "getB", "()Lwave/util/RealVector;");
+    jmethodID getCMethodID = (env)->GetMethodID(isoTriangBoundaryClass, "getC", "()Lwave/util/RealVector;");
+
 
     jobject minRealVector = env->CallObjectMethod(newBoundary, getMinimumsMethodID);
     jobject maxRealVector = env->CallObjectMethod(newBoundary, getMaximumsMethodID);
@@ -257,7 +268,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setBoundary
     env->GetDoubleArrayRegion(minRealVectorArray, 0, minSize, minNativeArray);
     env->GetDoubleArrayRegion(maxRealVectorArray, 0, maxSize, maxNativeArray);
 
-    if (testeBoundaryType) { //         RectBoundary 
+    if (testRectBoundary) { //  RectBoundary
 
         RealVector minNativeRealVector(minSize, minNativeArray);
         RealVector maxNativeRealVector(maxSize, maxNativeArray);
@@ -265,6 +276,52 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setBoundary
         RpNumerics::getPhysics().boundary(nativeBoundary);
 
     }
+
+    if (testIsoTriangBoundary) { //   IsoTriang2DBoundary
+
+        jobject aRealVector = (env)->CallObjectMethod(newBoundary, getAMethodID);
+        jobject bRealVector = (env)->CallObjectMethod(newBoundary, getBMethodID);
+        jobject cRealVector = (env)->CallObjectMethod(newBoundary, getCMethodID);
+
+        jdoubleArray aRealVectorArray = (jdoubleArray) (env)->CallObjectMethod(aRealVector, toDoubleMethodID);
+        jdoubleArray bRealVectorArray = (jdoubleArray) (env)->CallObjectMethod(bRealVector, toDoubleMethodID);
+        jdoubleArray cRealVectorArray = (jdoubleArray) (env)->CallObjectMethod(cRealVector, toDoubleMethodID);
+
+        int aRealVectorSize = env->GetArrayLength(cRealVectorArray);
+        int bRealVectorSize = env->GetArrayLength(bRealVectorArray);
+        int cRealVectorSize = env->GetArrayLength(aRealVectorArray);
+
+        double aNativeArray [aRealVectorSize];
+        double bNativeArray [bRealVectorSize];
+        double cNativeArray [cRealVectorSize];
+
+
+        env->GetDoubleArrayRegion(aRealVectorArray, 0, aRealVectorSize, aNativeArray);
+        env->GetDoubleArrayRegion(bRealVectorArray, 0, bRealVectorSize, bNativeArray);
+        env->GetDoubleArrayRegion(cRealVectorArray, 0, cRealVectorSize, cNativeArray);
+
+
+        RealVector A(aRealVectorSize, aNativeArray);
+        RealVector B(bRealVectorSize, bNativeArray);
+        RealVector C(aRealVectorSize, cNativeArray);
+
+
+        cout << "O tipo eh isotriang boundary"<< A <<"|||| "<<B <<" |||| "<<C<< endl;
+
+
+        IsoTriang2DBoundary triangBoundary(A, B, C);
+
+
+        RpNumerics::getPhysics().boundary(triangBoundary);
+
+
+
+
+
+
+
+    }
+
 
 
 }

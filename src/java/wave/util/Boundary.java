@@ -20,4 +20,6 @@ public interface Boundary {
     RealVector getMaximums();
 
     RealVector intersect(RealVector y1, RealVector y2);
+
+    String limits();
 }

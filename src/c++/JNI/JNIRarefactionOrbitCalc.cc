@@ -97,18 +97,18 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
     physics.preProcess(min);
     physics.preProcess(max);
 
+//
+//    vector<bool> testBoundary;
+//
+//    testBoundary.push_back(true);
+//    testBoundary.push_back(true);
+//    testBoundary.push_back(true);
+//    testBoundary.push_back(true);
 
-    vector<bool> testBoundary;
-
-    testBoundary.push_back(true);
-    testBoundary.push_back(true);
-    testBoundary.push_back(true);
-    testBoundary.push_back(true);
 
 
-
-    RectBoundary tempBoundary(min, max, testBoundary);
-    //    RectBoundary tempBoundary(min, max);
+//    RectBoundary tempBoundary(min, max, testBoundary);
+        RectBoundary tempBoundary(min, max);
 
 
     double deltaxi = 1e-3;

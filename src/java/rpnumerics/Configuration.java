@@ -95,7 +95,7 @@ public class Configuration {
         return params_.size();
     }
 
-    public HashMap<String, Configuration> getConfiguration() {
+    public HashMap<String, Configuration> getConfigurationMap() {
         return configurationMap_;
     }
 
@@ -203,14 +203,52 @@ public class Configuration {
 
             Set<Entry<String, Configuration>> configurationSet = configurationMap_.entrySet();
 
-            for (Entry<String, Configuration> entry : configurationSet) {
+            for (Entry<String, Configuration> entry : configurationSet) {//Printing boundary first
+
+                if(entry.getValue().getType().equals(ConfigurationProfile.BOUNDARY))
+
                 buffer.append(entry.getValue().toXML());
 
             }
 
+            for (Entry<String, Configuration> entry : configurationSet) {//Printing the rest
+
+                if (!entry.getValue().getType().equals(ConfigurationProfile.BOUNDARY))
+
+                    buffer.append(entry.getValue().toXML());
+
+            }
 
             buffer.append("</PHYSICS>\n");
         }
+
+
+        if (getType().equalsIgnoreCase(ConfigurationProfile.PHYSICS_CONFIG)) {
+            buffer.append("<PHYSICSCONFIG name=\"" + getName() + "\">\n");
+            for (Entry<String, String> entry : paramsSet) {
+
+                buffer.append("<PHYSICSPARAM name=\"" + entry.getKey() + "\" " + "position=\"" + getParamOrder(entry.getKey()) + "\"" + " value= \"" + entry.getValue() + "\"/>");
+                buffer.append("\n");
+            }
+
+            buffer.append("</PHYSICSCONFIG>\n");
+
+        }
+
+
+
+        if (getType().equalsIgnoreCase(ConfigurationProfile.BOUNDARY)) {
+            buffer.append("<BOUNDARY name=\"" + getName() + "\">\n");
+            for (Entry<String, String> entry : paramsSet) {
+
+                buffer.append("<BOUNDARYPARAM name=\"" + entry.getKey() + "\" " + " value= \"" + entry.getValue() + "\"/>");
+                buffer.append("\n");
+            }
+
+            buffer.append("</BOUNDARY>\n");
+
+        }
+
 
         if (getType().equalsIgnoreCase(ConfigurationProfile.CURVE)) {
             buffer.append("<CURVE name=\"" + getName() + "\">\n");
