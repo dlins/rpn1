@@ -6,14 +6,9 @@
 package rpnumerics;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.text.StyledEditorKit.ItalicAction;
 import rpn.RPnConfig;
 import rpn.component.OrbitGeom;
 import rpn.parser.ConfigurationProfile;
@@ -389,11 +384,13 @@ public class RPNUMERICS {
     public static DoubleContactCurveCalc createDoubleContactCurveCalc() {
 
 
-        int xResolution = new Integer(getConfiguration("Contour").getParam("x-resolution"));
-        int yResolution = new Integer(getConfiguration("Contour").getParam("y-resolution"));
-        System.out.println("Resolucao em Java:" + xResolution + " " + yResolution);
 
-        return new DoubleContactCurveCalc(xResolution, yResolution, new Integer(getParamValue("bifurcationcurve", "curvefamily")), new Integer(getParamValue("bifurcationcurve", "domainfamily")));
+        Double xResolution = new Double (getConfiguration("Contour").getParam("x-resolution"));
+        Double yResolution = new Double(getConfiguration("Contour").getParam("y-resolution"));
+
+        System.out.println("Resolucao em Java:" + xResolution + " " + yResolution);
+        return new DoubleContactCurveCalc(xResolution.intValue(), yResolution.intValue(), new Integer(getParamValue("bifurcationcurve", "curvefamily")), new Integer(getParamValue("bifurcationcurve", "domainfamily")));
+
 
 
     }
@@ -407,14 +404,10 @@ public class RPNUMERICS {
         int yResolution = new Integer(getConfiguration("Contour").getParam("y-resolution"));
 
 
-
         int characteristicWhere = new Integer(getParamValue("extensioncurve", "characteristicwhere"));
 
 
         System.out.println("Coincidence Extension Resolution Java:" + xResolution + " " + yResolution);
-
-
-
 
         return new CoincidenceExtensionCurveCalc(xResolution, yResolution, new Integer(getParamValue("extensioncurve", "curvefamily")), new Integer(getParamValue("extensioncurve", "domainfamily")), characteristicWhere);
 

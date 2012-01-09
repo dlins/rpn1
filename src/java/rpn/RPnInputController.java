@@ -7,7 +7,6 @@ package rpn;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import rpnumerics.Configuration;
-import wave.util.RealVector;
 
 /**
  *
@@ -33,11 +32,13 @@ public class RPnInputController implements PropertyChangeListener {
 //
 
         String[] parameterNames = configuration_.getParamNames();
-        RealVector newValue = (RealVector) evt.getNewValue();
+//        RealVector newValue = (RealVector) evt.getNewValue();
+
+        String [] newValues = (String []) evt.getNewValue();
 
         for (int i = 0; i < parameterNames.length; i++) {
             String paramName = configuration_.getParamName(i);
-            configuration_.setParamValue(paramName, String.valueOf(newValue.getElement(i)));
+            configuration_.setParamValue(paramName, newValues[i]);
 
         }
 
