@@ -52,6 +52,7 @@ public class DoubleContactAgent extends RpModelPlotAgent {
 
     }
 
+    @Override
     public void execute() {
         DoubleContactGeomFactory factory = new DoubleContactGeomFactory(RPNUMERICS.createDoubleContactCurveCalc());
 

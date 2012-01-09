@@ -129,23 +129,8 @@ public class RPnNumericsModule {
                 physicsProfile_.addConfigurationProfile(currentInnerPhysicsConfigurationProfile_.getName(), currentInnerPhysicsConfigurationProfile_);
             }
 
-            if (localName.equals("CURVE")) {
+            if (localName.equals("CURVE") ||localName.equals("METHOD") ) {
 
-//                System.out.println("Adicionando profile de curva: " + currentConfigurationProfile_.getName());
-                RPnConfig.addProfile(currentConfigurationProfile_.getName(), currentConfigurationProfile_);
-
-            }
-
-            if (localName.equals("METHOD")) {
-
-//                System.out.println("Adicionando profile de metodo: " + currentConfigurationProfile_.getName());
-//                if (currentConfigurationProfile_.getName().equalsIgnoreCase("Contour")) {
-//
-////                    System.out.println("Adicionando o profile do contour: "+ currentConfigurationProfile_);
-//
-//                    ContourConfiguration contourConfiguration = new ContourConfiguration(currentConfigurationProfile_);
-//                    RPNUMERICS.setConfiguration(contourConfiguration.getName(), contourConfiguration);
-//                }
                 RPnConfig.addProfile(currentConfigurationProfile_.getName(), currentConfigurationProfile_);
 
             }

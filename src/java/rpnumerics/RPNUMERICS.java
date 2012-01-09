@@ -185,48 +185,26 @@ public class RPNUMERICS {
 
     public static HashMap<String, Configuration> getConfigurations() {
         return configMap_;
-
-
     }
 
     public static void setFamily(int family) {
         setParamValue("shock", "family", String.valueOf(family));
-
-
-
     }
 
     public static void setConfiguration(String methodName, Configuration methodConfiguration) {
         configMap_.put(methodName, methodConfiguration);
-
-
-
     }
 
     public static String getPhysicsParamValue(String configurationName, String paramName) {
 
         Configuration physicsConfig = configMap_.get(physicsID());
-
-
-
         return physicsConfig.getConfiguration(configurationName).getParam(paramName);
-
-
-
-
     }
 
     public static String getParamValue(String methodName, String paramName) {
 
         Configuration configuration = configMap_.get(methodName);
-
-
-
         return configuration.getParam(paramName);
-
-
-
-
     }
 
     public static Configuration getConfiguration(String configurationName) {
@@ -240,10 +218,6 @@ public class RPNUMERICS {
         Configuration methodConfig = configMap_.get(methodName);
         methodConfig.setParamValue(paramName, paramValue);
         configMap_.put(methodName, methodConfig);
-
-
-
-
     }
 
     public static int getConfigurationSize() {
@@ -306,8 +280,6 @@ public class RPNUMERICS {
 
         ArrayList<Configuration> configurationArray = sortConfigurations();
 
-
-
         for (Configuration configurationEntry : configurationArray) {
 
             if (configurationEntry.getType().equalsIgnoreCase(ConfigurationProfile.PHYSICS_PROFILE) && configurationEntry.getName().equalsIgnoreCase(physicsID())) {
@@ -330,8 +302,6 @@ public class RPNUMERICS {
 
         return buffer.toString();
 
-
-
     }
 
     /**
@@ -350,15 +320,8 @@ public class RPNUMERICS {
         teste.setElement(1, 0.0);
         teste.setElement(2, 0.0);
 
-
-
-
         return new HugoniotCurveCalcND(teste);
-
-
 //        HugoniotParams hparams = new HugoniotParams(new PhasePoint(teste), new FluxFunction(getFluxParams()));
-
-
 
 //        ShockFlow shockFlow = (ShockFlow) createShockFlow();
         //Not specific
@@ -389,10 +352,7 @@ public class RPNUMERICS {
 
     public static RarefactionOrbitCalc createRarefactionCalc(OrbitPoint orbitPoint) {
 
-        /*
-         * TODO O Valor de family deve ser o mesmo para choque e rarefacao ????
-         */
-
+       
         return new RarefactionOrbitCalc("methodName", "flowName", orbitPoint, Integer.parseInt(getParamValue("shock", "family")), direction_);//TODO Is method and flowName needed ?
 
 
@@ -430,18 +390,10 @@ public class RPNUMERICS {
 
 
         int xResolution = new Integer(getConfiguration("Contour").getParam("x-resolution"));
-
-
         int yResolution = new Integer(getConfiguration("Contour").getParam("y-resolution"));
-
-
         System.out.println("Resolucao em Java:" + xResolution + " " + yResolution);
 
-
-
-
         return new DoubleContactCurveCalc(xResolution, yResolution, new Integer(getParamValue("bifurcationcurve", "curvefamily")), new Integer(getParamValue("bifurcationcurve", "domainfamily")));
-
 
 
     }

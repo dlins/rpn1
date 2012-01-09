@@ -95,9 +95,6 @@ public class IsoTriang2DBoundary implements Boundary {
         B_ = B;
         C_ = C;
 
-        System.out.println("Printando limits do triang: " + A+" ||||"  + B+ "||||" + " ||||" + C);
-
-
         double minAbs = A.getElement(0);
         double minOrd = A.getElement(1);
         double maxAbs = minAbs;
@@ -214,7 +211,6 @@ public class IsoTriang2DBoundary implements Boundary {
     public String limits() {
         String limits = "";
 
-
         for (int i = 0; i < A_.getSize(); i++) {
             limits += A_.getElement(i);
             limits += " ";
@@ -225,8 +221,6 @@ public class IsoTriang2DBoundary implements Boundary {
             limits += " ";
 
         }
-
-
 
         for (int i = 0; i < C_.getSize(); i++) {
             limits += C_.getElement(i);

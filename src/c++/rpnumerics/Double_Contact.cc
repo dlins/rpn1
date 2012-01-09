@@ -317,7 +317,11 @@ void Double_Contact::compute_double_contact(std::vector<RealVector> &left_vrs,
 // This method sets the family and validates the cells for the left domain.
 //
 void Double_Contact::set_left_family(int nlf){
-    left_family = nlf; 
+    left_family = nlf;
+
+    cout <<"left family: "<<left_family<<endl;
+
+    cout << "left cell type: " << left_cell_type << endl;
 
     validate_cells(left_family, left_cell_type, left_eig_is_real, left_is_complex);
 

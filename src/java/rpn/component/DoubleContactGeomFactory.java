@@ -11,6 +11,11 @@ public class DoubleContactGeomFactory extends BifurcationCurveGeomFactory {
 
   
 
+
+    public DoubleContactGeomFactory(DoubleContactCurveCalc calc, DoubleContactCurve curve) {
+        super(calc,curve);
+    }
+
     public DoubleContactGeomFactory(DoubleContactCurveCalc calc) {
         super(calc);
     }
@@ -104,7 +109,12 @@ public class DoubleContactGeomFactory extends BifurcationCurveGeomFactory {
 
         BifurcationCurve curve = (BifurcationCurve) geomSource();
 
-        buffer.append("<COMMAND name=\"doublecontact\">\n");
+        DoubleContactCurveCalc doubleContactCalc = (DoubleContactCurveCalc)rpCalc();
+
+
+        buffer.append("<COMMAND name=\"doublecontact\" curvefamily=\""+doubleContactCalc.getCurveFamily()+"\""+" domainfamily=\""+doubleContactCalc.getDomainFamily()+"\""+">\n");
+
+
 
         buffer.append(curve.toXML());
 

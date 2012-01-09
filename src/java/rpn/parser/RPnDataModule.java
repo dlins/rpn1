@@ -23,6 +23,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.XMLReader;
+import rpn.component.DoubleContactGeomFactory;
 import rpn.component.RpCalcBasedGeomFactory;
 import rpn.component.RpGeometry;
 import rpn.usecase.BuckleyLeverettiInflectionAgent;
@@ -35,6 +36,8 @@ import rpn.usecase.RarefactionOrbitPlotAgent;
 import rpn.usecase.ShockCurvePlotAgent;
 import rpn.usecase.SubInflectionExtensionCurveAgent;
 import rpn.usecase.SubInflectionPlotAgent;
+import rpnumerics.DoubleContactCurve;
+import rpnumerics.DoubleContactCurveCalc;
 import rpnumerics.HugoniotCurve;
 import rpnumerics.HugoniotSegment;
 import rpnumerics.PhasePoint;
@@ -42,6 +45,7 @@ import rpnumerics.Orbit;
 import rpnumerics.OrbitPoint;
 import rpnumerics.RPNUMERICS;
 import rpnumerics.RPnCurve;
+import rpnumerics.RpCalculation;
 import rpnumerics.SegmentedCurve;
 import rpnumerics.StationaryPoint;
 import wave.multid.Space;
@@ -89,6 +93,7 @@ public class RPnDataModule {
         private ManifoldCalcParser manifoldCalcParser_;
         protected static boolean pointOneOK_, calcReady_, plotProfile_;
         private String currentCommand_;
+        private RpCalculation calc_;
 
         public InputHandler() {
             orbitListener_ = new OrbitParser();
@@ -101,6 +106,7 @@ public class RPnDataModule {
             connectionCalcListener_ = new ConnectionOrbitCalcParser();
             orbitCalcListener_ = new OrbitCalcParser();
             manifoldCalcParser_ = new ManifoldCalcParser();
+
 
 
             pPointList_ = new ArrayList();
@@ -136,7 +142,6 @@ public class RPnDataModule {
                 SAXException {
             currentElement_ = name;
 
-
             if (name.equalsIgnoreCase("COMMAND")) {
                 currentCommand_ = att.getValue(0);
 
@@ -146,7 +151,7 @@ public class RPnDataModule {
                         || currentCommand_.equalsIgnoreCase("rarefactionboth")
                         || currentCommand_.equalsIgnoreCase("shockboth")
                         || currentCommand_.equalsIgnoreCase("shockforward")
-                        || currentCommand_.equalsIgnoreCase("shockbackward")) {//Rarefaction Forward command)
+                        || currentCommand_.equalsIgnoreCase("shockbackward")) {
 
 
                     tempPoint_ = new PhasePoint(new RealVector(att.getValue(1)));
@@ -155,9 +160,24 @@ public class RPnDataModule {
                 }
 
 
+                if (currentCommand_.equalsIgnoreCase("doublecontact")) {
+                    int xResolution = new Integer(RPNUMERICS.getParamValue("Contour", "x-resolution"));
+                    int yResolution = new Integer(RPNUMERICS.getParamValue("Contour", "y-resolution"));
+
+                    int curveFamily = att.getIndex("curvefamily");
+                    int domainFamily = att.getIndex("domainfamily");
+                    calc_ = new DoubleContactCurveCalc(xResolution, yResolution, curveFamily, domainFamily);
+
+
+                }
+
+
                 System.out.println("Current command" + currentCommand_);
 
             }
+
+
+
 
 
             if (name.equals("STATPOINT")) {
@@ -263,6 +283,7 @@ public class RPnDataModule {
             }
             if (name.equals("REALSEGMENT")) {
                 pointOneOK_ = false;
+
             }
 
             if (name.equals("EIGENVEC")) {
@@ -501,7 +522,24 @@ public class RPnDataModule {
                 }
 
                 if (currentCommand_.equalsIgnoreCase("doublecontact")) {//DoubleContact command
-                    DoubleContactAgent.instance().actionPerformed(new ActionEvent(this, 0, "plot"));
+
+
+
+                    if (hugoniotSegmentsList_.size() != 0) {
+
+                        DoubleContactCurve curve = new DoubleContactCurve(hugoniotSegmentsList_);
+
+                        DoubleContactGeomFactory factory = new DoubleContactGeomFactory((DoubleContactCurveCalc) calc_, curve);
+
+                          RpGeometry  geometry =  factory.geom();
+
+                          PHASESPACE.join(geometry);
+                    }
+//                    else{
+//                        DoubleContactAgent.instance().actionPerformed(new ActionEvent(this, 0, "plot"));
+//                    }
+
+                   
 
                 }
 
@@ -576,6 +614,7 @@ public class RPnDataModule {
             if (name.equals("REALSEGMENT")) {
 
                 hugoniotSegmentsList_.add(new HugoniotSegment(point1_, 0, point2_, 0, 17));//TODO Use RealSegment or another typeless segment
+                realSegmentsList_.add(new RealSegment(point1_, point2_));
             }
 
             if (name.equals("ORBITPOINT")) {

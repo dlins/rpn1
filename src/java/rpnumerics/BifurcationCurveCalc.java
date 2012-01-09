@@ -41,8 +41,6 @@ public class BifurcationCurveCalc implements RpCalculation {
     }
 
     public RpSolution calc() throws RpException{
-
-
         return bifurcationMethod_.curve();
     }
 

@@ -8,8 +8,10 @@ package rpn.component;
 import rpn.RPnDesktopPlotter;
 import rpn.controller.RpCalcController;
 import rpn.controller.RpController;
+import rpnumerics.RPnCurve;
 import rpnumerics.RpCalculation;
 import rpnumerics.RpException;
+import rpnumerics.RpSolution;
 
 public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
     //
@@ -41,6 +43,15 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
             RPnDesktopPlotter.showCalcExceptionDialog(rex);
         }
 
+
+    }
+
+    public RpCalcBasedGeomFactory(RpCalculation calc, RpSolution solution) {
+        calc_ = calc;
+        geomSource_ = solution;
+        geom_ = createGeomFromSource();
+        isGeomOutOfDate_ = false;
+        installController();
 
     }
 

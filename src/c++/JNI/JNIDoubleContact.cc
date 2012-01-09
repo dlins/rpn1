@@ -110,15 +110,19 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
         pmax.component(1) = 1.0;
 
 
-        cout<<" Parametros "<< RpNumerics::getPhysics().fluxFunction().fluxParams().params()<<endl;
+        cout << " Parametros " << RpNumerics::getPhysics().fluxFunction().fluxParams().params() << endl;
 
 
-        int family =1; // Or else...
+        int family = 1; // Or else...
 
         Double_Contact dc(pmin, pmax, number_of_grid_pnts, (FluxFunction*) RpNumerics::getPhysics().fluxFunction().clone(), (AccumulationFunction*) RpNumerics::getPhysics().accumulation().clone(), leftFamily,
                 pmin, pmax, number_of_grid_pnts, (FluxFunction*) RpNumerics::getPhysics().fluxFunction().clone(), (AccumulationFunction*) RpNumerics::getPhysics().accumulation().clone(), rightFamily);
 
         dc.compute_double_contact(left_vrs, right_vrs);
+
+        printf("left_vrs.size()  = %d\n", left_vrs.size());
+
+        printf("right_vrs.size() = %d\n", right_vrs.size());
 
     }
 
@@ -127,7 +131,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
 
         cout << "Chamando com tpcw" << endl;
         dimension = 3;
-   
+
 
         TPCW & tpcw = (TPCW &) RpNumerics::getPhysics().getSubPhysics(0);
         const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
@@ -147,15 +151,15 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
         tpcw.preProcess(min);
         tpcw.preProcess(max);
 
-        cout << "Resolucao x " << number_of_grid_pnts[0]<<endl;
-        cout << "Resolucao y " << number_of_grid_pnts[1]<<endl;
+        cout << "Resolucao x " << number_of_grid_pnts[0] << endl;
+        cout << "Resolucao y " << number_of_grid_pnts[1] << endl;
 
 
 
-        cout << "Familia direita" << rightFamily<<endl;
-        cout << "Familia esquerda" << leftFamily<<endl;
+        cout << "Familia direita" << rightFamily << endl;
+        cout << "Familia esquerda" << leftFamily << endl;
 
-  
+
 
 
         Flux2Comp2PhasesAdimensionalized * fluxFunction = (Flux2Comp2PhasesAdimensionalized *) & tpcw.fluxFunction();
@@ -177,7 +181,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
         tpcw.postProcess(left_vrs);
         tpcw.postProcess(right_vrs);
 
-     
+
 
 
     }
@@ -187,11 +191,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
 
 
 
-    printf("right_vrs.size() = %d\n", right_vrs.size());
     const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
 
     for (unsigned int i = 0; i < left_vrs.size() / 2; i++) {
-     
+
 
 
 
@@ -203,7 +206,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
         double * leftCoords = (double *) left_vrs.at(2 * i);
         double * rightCoords = (double *) left_vrs.at(2 * i + 1);
 
-      
+
 
         env->SetDoubleArrayRegion(eigenValRLeft, 0, dimension, leftCoords);
         env->SetDoubleArrayRegion(eigenValRRight, 0, dimension, rightCoords);
@@ -218,7 +221,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
 
         double leftSigma = 0;
         double rightSigma = 0;
-    
+
 
         jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, pointType);
         env->CallObjectMethod(leftSegmentsArray, arrayListAddMethod, hugoniotSegment);
@@ -227,7 +230,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
 
     for (unsigned int i = 0; i < right_vrs.size() / 2; i++) {
 
-     
+
         jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
         jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
 
@@ -249,7 +252,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
 
         double leftSigma = 0;
         double rightSigma = 0;
-  
+
 
         jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, pointType);
 

@@ -18,17 +18,25 @@ public class DoubleContactCurveCalc extends BifurcationCurveCalc {
     //
     int xResolution_;
     int yResolution_;
-    int leftFamily_;
-    int rightFamily_;
+    int curveFamily_;
+    int domainFamily_;
 
     public DoubleContactCurveCalc(int xResolution, int yResolution, int leftFamily, int rightFamily) {
         this.xResolution_ = xResolution;
         this.yResolution_ = yResolution;
-        this.leftFamily_ = leftFamily;
-        this.rightFamily_ = rightFamily;
+        this.curveFamily_ = leftFamily;
+        this.domainFamily_ = rightFamily;
     }
 
     public DoubleContactCurveCalc() {
+    }
+
+    public int getCurveFamily() {
+        return curveFamily_;
+    }
+
+    public int getDomainFamily() {
+        return domainFamily_;
     }
 
     @Override
@@ -36,10 +44,8 @@ public class DoubleContactCurveCalc extends BifurcationCurveCalc {
         RpSolution result = null;
 
         try {
-            result = (DoubleContactCurve) nativeCalc(xResolution_,yResolution_,leftFamily_,rightFamily_);
-            //          if (result == null) {
-            //            throw new RpException("Error in native layer");
-            //        }
+            result = (DoubleContactCurve) nativeCalc(xResolution_,yResolution_,curveFamily_,domainFamily_);
+           
 
             //** acrescentei isso (Leandro)
             if (contDC == 0) {
@@ -60,5 +66,5 @@ public class DoubleContactCurveCalc extends BifurcationCurveCalc {
         return result;
     }
 
-    private native RpSolution nativeCalc(int xResolution, int yResolution, int leftFamily, int rightFamily) throws RpException;
+    private native RpSolution nativeCalc(int xResolution, int yResolution, int curveFamily, int domainFamily) throws RpException;
 }

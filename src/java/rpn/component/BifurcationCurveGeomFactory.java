@@ -18,6 +18,11 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
         super(calc);
     }
 
+
+     public BifurcationCurveGeomFactory(BifurcationCurveCalc calc,RpSolution curve) {
+        super(calc,curve);
+    }
+
     protected RpGeometry createGeomFromSource() {
 
         BifurcationCurve curve = (BifurcationCurve) geomSource();
