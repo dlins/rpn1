@@ -68,9 +68,6 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
 
         StringBuffer buffer = new StringBuffer();
 
-
-
-
         int red = CoincidenceExtensionCurveGeom.COLOR.getRed();
         int blue = CoincidenceExtensionCurveGeom.COLOR.getBlue();
         int green = CoincidenceExtensionCurveGeom.COLOR.getGreen();
