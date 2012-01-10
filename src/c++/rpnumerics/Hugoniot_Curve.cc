@@ -1,4 +1,4 @@
-#include "Hugoniot_Curve.h"
+ #include "Hugoniot_Curve.h"
 
 // TODO: Move or blend fill_with_jet as a method or methods of JetMatrix.
 //
@@ -40,6 +40,23 @@ void Hugoniot_Curve::fill_with_jet(const RpFunction *flux_object, int n, double 
     }
 
     return;
+}
+
+
+int Hugoniot_Curve::classified_curve(std::vector<HugoniotPolyLine> &hugoniot_curve){
+
+    ColorCurve colorCurve(*ff,*aa);
+
+    vector<RealVector> vrs;
+
+    curve(vrs);
+
+    
+
+
+
+
+
 }
 
 void Hugoniot_Curve::set_reference_point(const RealVector &ref){
