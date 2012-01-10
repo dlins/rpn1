@@ -45,17 +45,27 @@ void Hugoniot_Curve::fill_with_jet(const RpFunction *flux_object, int n, double 
 
 int Hugoniot_Curve::classified_curve(std::vector<HugoniotPolyLine> &hugoniot_curve){
 
-    ColorCurve colorCurve(*ff,*aa);
-
+   // Compute the Hugoniot curve as usual
+    //
     vector<RealVector> vrs;
+    int info = curve(vrs);
 
-    curve(vrs);
+    // Prepare the Hugoniot curve to classify it
+     vector<vector<RealVector> > unclassifiedCurve;
 
-    
+    for (int i = 0; i < vrs.size() / 2; i++) {
+        vector< RealVector> temp;
+        temp.push_back(vrs[2 * i]);
+        temp.push_back(vrs[2 * i]);
+        temp.push_back(vrs[2 * i + 1]);
+        //temp.push_back(vrs[2 * i + 1]);
+        unclassifiedCurve.push_back(temp);
+    }
 
+    ColorCurve colorCurve(*ff, *aa);
+    colorCurve.classify_curve(unclassifiedCurve, Uref, 2, 11, hugoniot_curve);
 
-
-
+    return info;
 
 }
 
