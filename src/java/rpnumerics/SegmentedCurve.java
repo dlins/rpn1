@@ -23,7 +23,16 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
 
     public SegmentedCurve(List<HugoniotSegment> hugoniotSegments) {
         super(coordsArrayFromRealSegments(hugoniotSegments), new ViewingAttr(Color.red));
+
+
         hugoniotSegments_ = hugoniotSegments;
+
+        System.out.println("Printando segmentos da curva: ");
+//        for (HugoniotSegment hugoniotSegment : hugoniotSegments) {
+//
+//            System.out.println(hugoniotSegment);
+//
+//        }
     }
 
     //** inseri este método (Leandro)

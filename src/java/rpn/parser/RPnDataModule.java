@@ -168,6 +168,8 @@ public class RPnDataModule {
                     int domainFamily = att.getIndex("domainfamily");
                     calc_ = new DoubleContactCurveCalc(xResolution, yResolution, curveFamily, domainFamily);
 
+                    hugoniotSegmentsList_.clear();
+
 
                 }
 
@@ -278,8 +280,9 @@ public class RPnDataModule {
             }
 
             if (name.equals("PHASEPOINT")) {
+
                 phaseSize_ = (new Integer(att.getValue(0))).intValue();
-                tempVector_ = new RealVector(phaseSize_);
+//                tempVector_ = new RealVector(phaseSize_);
             }
             if (name.equals("REALSEGMENT")) {
                 pointOneOK_ = false;
@@ -316,14 +319,17 @@ public class RPnDataModule {
 
             try {
                 String data = new String(buff, offset, len);
-                data = data.trim();
+//                data = data.trim();
                 if (data.length() != 0) {
 
                     if (currentElement_.equals("PHASEPOINT")) {
-                        StringTokenizer tokenizer = new StringTokenizer(data);
+                        StringTokenizer tokenizer = new StringTokenizer(data," ");
+                            System.out.println("Valor de phaseSize: " +phaseSize_);                        
                         if (tokenizer.countTokens() == phaseSize_) {
                             tempVector_ = new RealVector(data);
-                            pPointList_.add(new PhasePoint(tempVector_));
+
+
+//                            pPointList_.add(new PhasePoint(tempVector_));
                         }
 
                     }
@@ -613,8 +619,11 @@ public class RPnDataModule {
             }
             if (name.equals("REALSEGMENT")) {
 
+                System.out.println("Valor de point1: "+point1_);
+                System.out.println("Valor de point2: " + point2_);
+
                 hugoniotSegmentsList_.add(new HugoniotSegment(point1_, 0, point2_, 0, 17));//TODO Use RealSegment or another typeless segment
-                realSegmentsList_.add(new RealSegment(point1_, point2_));
+//                realSegmentsList_.add(new RealSegment(point1_, point2_));
             }
 
             if (name.equals("ORBITPOINT")) {

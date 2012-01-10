@@ -35,10 +35,11 @@ public class RealVector extends GVector {
     public String toString() {
         StringBuffer buffer = new StringBuffer();
         NumberFormat numberFormatter = NumberFormat.getInstance();
-        numberFormatter.setMaximumFractionDigits(4);
+        numberFormatter.setMaximumFractionDigits(6);
 
         for (int i = 0; i < this.getSize(); i++) {
-            Double element = new Double(numberFormatter.format(getElement(i)));
+            Double element = getElement(i);
+//            Double element = new Double(numberFormatter.format(getElement(i)));
             buffer.append(element+" ");
         }
         return buffer.toString().trim();
