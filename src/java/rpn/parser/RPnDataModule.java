@@ -29,7 +29,6 @@ import rpn.component.RpGeometry;
 import rpn.usecase.BuckleyLeverettiInflectionAgent;
 import rpn.usecase.CoincidenceExtensionCurvePlotAgent;
 import rpn.usecase.CoincidencePlotAgent;
-import rpn.usecase.DoubleContactAgent;
 import rpn.usecase.BoundaryExtensionCurveAgent;
 import rpn.usecase.HugoniotPlotAgent;
 import rpn.usecase.RarefactionOrbitPlotAgent;
@@ -319,18 +318,17 @@ public class RPnDataModule {
 
             try {
                 String data = new String(buff, offset, len);
-//                data = data.trim();
+                data = data.trim();
                 if (data.length() != 0) {
 
                     if (currentElement_.equals("PHASEPOINT")) {
-                        StringTokenizer tokenizer = new StringTokenizer(data," ");
-                            System.out.println("Valor de phaseSize: " +phaseSize_);                        
-                        if (tokenizer.countTokens() == phaseSize_) {
+                        StringTokenizer tokenizer = new StringTokenizer(data, " ");
+
+//                        if (tokenizer.countTokens() == phaseSize_) {
                             tempVector_ = new RealVector(data);
-
-
+                            System.out.println("Valor de phaseSize: " + phaseSize_ + " valor de data: " + data);
 //                            pPointList_.add(new PhasePoint(tempVector_));
-                        }
+//                        }
 
                     }
                     if (currentElement_.equals("REALVECTOR")) {
@@ -529,23 +527,21 @@ public class RPnDataModule {
 
                 if (currentCommand_.equalsIgnoreCase("doublecontact")) {//DoubleContact command
 
-
-
                     if (hugoniotSegmentsList_.size() != 0) {
 
                         DoubleContactCurve curve = new DoubleContactCurve(hugoniotSegmentsList_);
 
                         DoubleContactGeomFactory factory = new DoubleContactGeomFactory((DoubleContactCurveCalc) calc_, curve);
 
-                          RpGeometry  geometry =  factory.geom();
+                        RpGeometry geometry = factory.geom();
 
-                          PHASESPACE.join(geometry);
+                        PHASESPACE.join(geometry);
                     }
 //                    else{
 //                        DoubleContactAgent.instance().actionPerformed(new ActionEvent(this, 0, "plot"));
 //                    }
 
-                   
+
 
                 }
 
@@ -619,7 +615,7 @@ public class RPnDataModule {
             }
             if (name.equals("REALSEGMENT")) {
 
-                System.out.println("Valor de point1: "+point1_);
+                System.out.println("Valor de point1: " + point1_);
                 System.out.println("Valor de point2: " + point2_);
 
                 hugoniotSegmentsList_.add(new HugoniotSegment(point1_, 0, point2_, 0, 17));//TODO Use RealSegment or another typeless segment
