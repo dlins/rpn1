@@ -466,6 +466,7 @@ int Rarefaction::curve(const RealVector &initial_point,
                        const RealVector *initial_direction,
                        int curve_family, 
                        int increase,
+        int check_monotony,
                        double deltaxi,
                        const FluxFunction *ff, const AccumulationFunction *aa,
                        int type_of_accumulation,
@@ -665,7 +666,7 @@ int Rarefaction::curve(const RealVector &initial_point,
         // END   Check Boundary //
 
         // BEGIN Check for monotonicity //
-        if (increase != RAREFACTION_SPEED_NEUTRAL){
+        if (check_monotony == CHECK_RAREFACTION_MONOTONY_TRUE){
            // cout << "new_lambda = " << new_lambda << ", previous_lambda = " << previous_lambda << endl;
             if ((new_lambda >= previous_lambda && increase == RAREFACTION_SPEED_DECREASE) ||
                 (new_lambda <= previous_lambda && increase == RAREFACTION_SPEED_INCREASE)){

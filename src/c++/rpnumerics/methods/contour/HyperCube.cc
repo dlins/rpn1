@@ -1186,7 +1186,7 @@ int HyperCube::solver(int n, double *A, double *b, double *x) {
      * Seems that ipiv[n] is missing, but with the new solver it is not necessary to keep the
      * line permutation (index pivoting).
      **/
-    double eps = 1e-5;
+    double eps = 1e-10;
     double det, anorm;
     int i, j;
 

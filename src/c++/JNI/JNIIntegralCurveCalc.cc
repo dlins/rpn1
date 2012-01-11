@@ -10,16 +10,7 @@
  * ---------------------------------------------------------------
  * Includes:
  */
-#include "rpnumerics_RarefactionOrbitCalc.h"
-#include "RarefactionContinuationMethod.h"
-#include "LSODESolver.h"
-#include "LSODEProfile.h"
-
-#include "ContinuationRarefactionFlow.h"
-
-#include "PluginService.h"
-#include "RPnPluginManager.h"
-#include "RarefactionFlowPlugin.h"
+#include "rpnumerics_IntegralCurveCalc.h"
 #include "RpNumerics.h"
 #include "RealVector.h"
 #include "JNIDefs.h"
@@ -37,7 +28,7 @@ using std::vector;
  */
 
 
-JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env, jobject obj, jstring methodName, jstring flowName, jobject initialPoint, jint familyIndex, jint timeDirection) {
+JNIEXPORT jobject JNICALL Java_rpnumerics_IntegralCurveCalc_calc(JNIEnv * env, jobject obj, jobject initialPoint,jint familyIndex, jint timeDirection) {
 
 
     unsigned int i;
@@ -68,13 +59,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
     env->DeleteLocalRef(inputPhasePointArray);
 
 
-
-    //    dimension;
-    //
-
     vector <RealVector> coords;
-
-    //    clock_t begin = clock();
 
 
     SubPhysics & physics = RpNumerics::getPhysics().getSubPhysics(0);
@@ -95,64 +80,22 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
         physics.preProcess(min);
         physics.preProcess(max);
 
+
         vector<bool> testBoundary;
 
         testBoundary.push_back(true);
         testBoundary.push_back(true);
         testBoundary.push_back(false);
 
-        tempBoundary = new RectBoundary(min, max,testBoundary);
+
+        tempBoundary = new RectBoundary(min, max);
 
 
     }
     else
-
         tempBoundary = physics.boundary().clone();
 
-
-
-
-
-
-
-
-  
-    //    //
-    //    //
-    //
-    //
-    //
-    //    RealVector A(2);
-    //
-    //
-    //
-    //    A.component(0) = 0;
-    //    A.component(1) = 0;
-    //
-    //    RealVector B(2);
-    //
-    //    B.component(0) = 0;
-    //    B.component(1) = 1;
-    //
-    //    RealVector C(2);
-    //
-    //    C.component(0) = 1;
-    //    C.component(1) = 0;
-    //
-    //
-    //
-    //    IsoTriang2DBoundary tempBoundary(A, B, C);
-
-
     double deltaxi = 1e-3;
-
-
-
-
-    cout << "Time direction :" << timeDirection << endl;
-
-
-
 
     cout << " Parametros " << RpNumerics::getPhysics().fluxFunction().fluxParams().params() << endl;
 
@@ -161,7 +104,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
             (const RealVector *) 0,
             familyIndex,
             timeDirection,
-            CHECK_RAREFACTION_MONOTONY_TRUE,
+            CHECK_RAREFACTION_MONOTONY_FALSE,
             deltaxi,
             (FluxFunction *) RpNumerics::getPhysics().fluxFunction().clone(),
             (AccumulationFunction*) RpNumerics::getPhysics().accumulation().clone(),
@@ -169,17 +112,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
             tempBoundary,
             coords);
 
-
-
-
-    physics.postProcess(coords);
-
     delete tempBoundary;
-
-
-
-
-
+    
+    physics.postProcess(coords);
     //    for (int i = 0; i < coords.size(); i++) cout << "coords(" << i << ") = " << coords[i] << endl;
 
     //    cout << "Resultado da rarefacao: " << info << ", size = " << coords.size() << endl;

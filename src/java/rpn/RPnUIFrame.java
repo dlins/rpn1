@@ -165,10 +165,13 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 toolBar_.add(HugoniotPlotAgent.instance().getContainer());
                 toolBar_.add(ShockCurvePlotAgent.instance().getContainer());
                 toolBar_.add(RarefactionOrbitPlotAgent.instance().getContainer());
+                toolBar_.add(IntegralCurvePlotAgent.instance().getContainer());
                 toolBar_.add(CompositePlotAgent.instance().getContainer());
                 toolBar_.add(AreaSelectionAgent.instance().getContainer());     //** Edson/Leandro
                 toolBar_.add(ClassifierAgent.instance().getContainer());        //** Leandro
                 toolBar_.add(VelocityAgent.instance().getContainer());        //** Leandro
+
+
 //                ScratchAgent.instance().setEnabled(true);
                 toolBar_.revalidate();
 

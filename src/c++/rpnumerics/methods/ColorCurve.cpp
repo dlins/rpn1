@@ -330,8 +330,9 @@ void ColorCurve::classify_curve(vector<vector<RealVector> > & input, const RealV
     complete_segments.resize(input.size());
     for (int i = 0; i < input.size(); i++) {
         complete_segments[i].resize(input[i].size());
-        //        cout << "tamanho de input " << input[i].size() << endl;
-        //        cout << "tamanho de input " << Uref.size() << endl;
+//                cout << "tamanho de input " << input[i].size() << endl;
+//                cout << "tamanho de input " << Uref.size() << endl;
+//                cout<< "Noe: "<<noe<<endl;
 
         preprocess_data(input[i], Uref, noe, *fluxFunction_, *accFunction_, accumulationType, complete_segments[i]);
 

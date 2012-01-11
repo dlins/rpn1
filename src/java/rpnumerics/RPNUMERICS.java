@@ -411,6 +411,18 @@ public class RPNUMERICS {
 
     }
 
+
+
+      public static IntegralCurveCalc createIntegralCurveCalc(OrbitPoint orbitPoint) {
+
+        /*
+         * TODO O Valor de family deve ser o mesmo para choque e rarefacao ????
+         */
+
+        return new IntegralCurveCalc(orbitPoint, Integer.parseInt(getParamValue("shock", "family")));
+
+    }
+
 //    public static StationaryPointCalc createStationaryPointCalc(PhasePoint initial) {
 //
 //        ShockFlow shockFlow = createShockFlow();
