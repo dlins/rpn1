@@ -73,6 +73,7 @@ int Newton_Improvement::newton(const RealVector &p0, const RealVector &p1, const
     do {
         double f, df;
         function_and_derivative(alpha, p0, p1, f, df);
+        // TODO: The tolerance must be relative, not absolute as it is now.
         if (fabs(df) < 1.0e-10 ) delta_alpha = 0.0;
         else delta_alpha = -f/df;
         alpha += delta_alpha;

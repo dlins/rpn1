@@ -1,6 +1,7 @@
 #include "Hysteresis.h"
 
-int Hysteresis::curve(const FluxFunction *curve_flux, const AccumulationFunction *curve_accum,
+int Hysteresis::curve(Boundary *boundary, 
+                      const FluxFunction *curve_flux, const AccumulationFunction *curve_accum,
                       int curve_family,
                       const RealVector &pmin, const RealVector &pmax, int *number_of_cells,         // For the domain.
                       int domain_family,
@@ -10,7 +11,7 @@ int Hysteresis::curve(const FluxFunction *curve_flux, const AccumulationFunction
                       std::vector<RealVector> &domain_segments){
 
     // Inflection curve
-    Inflection_Curve ic((FluxFunction*)curve_flux, (AccumulationFunction*)curve_accum, 
+    Inflection_Curve ic((FluxFunction*)curve_flux, (AccumulationFunction*)curve_accum, boundary, 
                          pmin, pmax, number_of_cells);
     std::vector<RealVector> vic;
     int info = ic.curve(curve_family, vic);

@@ -44,20 +44,25 @@ void Inflection_Curve::fill_with_jet(const RpFunction *flux_object, int n, doubl
 }
 
 Inflection_Curve::Inflection_Curve(const FluxFunction *f, const AccumulationFunction *a, 
+                                   Boundary *b, 
                                    const RealVector &min, const RealVector &max, 
                                    const int *cells){
 
     ff = f; aa = a;
 
+    boundary = b;
+
     // Create the grid...
     //
+    pmin.resize(min.size());
+    pmax.resize(max.size());
     number_of_cells = new int[2];
     for (int i = 0; i < 2; i++){
         number_of_cells[i] = cells[i];
-//        pmin.component(i) = min.component(i);
-//        pmax.component(i) = max.component(i);
+        pmin.component(i) = min.component(i);
+        pmax.component(i) = max.component(i);
     }
-    pmin = min; pmax = max;
+//    pmin = min; pmax = max;
 
     int dim = 2;
 
@@ -617,7 +622,7 @@ int Inflection_Curve::curve(int fam, std::vector<RealVector> &inflection_curve){
     rect[2] = pmin.component(1);
     rect[3] = pmax.component(1);
 
-    int info = ContourMethod::contour2d(this, rect, number_of_cells, inflection_curve);
+    int info = ContourMethod::contour2d(this, boundary, rect, number_of_cells, inflection_curve);
     
     return info;
 }

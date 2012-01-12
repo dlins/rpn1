@@ -73,8 +73,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HysteresisCurveCalc_nativeCalc
 
     const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
 
-    RealVector min(physicsBoundary. minimums());
-    RealVector max(physicsBoundary. maximums());
+    Boundary * tempBoundary = physicsBoundary.clone();
+
+
+
+    RealVector min(tempBoundary-> minimums());
+    RealVector max(tempBoundary-> maximums());
 
 
     RpNumerics::getPhysics().getSubPhysics(0).preProcess(min);
@@ -88,7 +92,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HysteresisCurveCalc_nativeCalc
     number_of_grid_points[1] = yResolution;
 
 
-    Hysteresis::curve(fluxFunction, accumulationFunction,
+    Hysteresis::curve(tempBoundary,fluxFunction, accumulationFunction,
             curveFamily,
             min, max, number_of_grid_points,
             domainFamily,
@@ -96,6 +100,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HysteresisCurveCalc_nativeCalc
             characteristicWhere, singular,
             curve_segments,
             domain_segments);
+
+    delete tempBoundary;
 
     cout << "Tamanho da coincidence curve extension: " << curve_segments.size() << endl;
     cout << "Tamanho da coincidence domain extension: " << domain_segments.size() << endl;
