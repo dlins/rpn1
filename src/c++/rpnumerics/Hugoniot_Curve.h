@@ -8,47 +8,50 @@
 
 #include "ImplicitFunction.h"
 #include "ContourMethod.h"
+#include "ColorCurve.h"
 
 class Hugoniot_Curve : public ImplicitFunction {
-    private:
-        const FluxFunction         *ff;
-        const AccumulationFunction *aa;
+private:
+    const FluxFunction *ff;
+    const AccumulationFunction *aa;
 
-        // For the grid proper.
-        RealVector pmin, pmax, Uref;
-        double *Fref, *Gref;
-        double *JFref, *JGref;
+    Boundary * boundary;
 
-        int *number_of_cells;
-        
-        // Values on the grid.
-        Matrix<RealVector> grid;
-        Matrix<RealVector> F_on_grid;
-        Matrix<RealVector> G_on_grid;
+    // For the grid proper.
+    RealVector pmin, pmax, Uref;
+    double *Fref, *Gref;
+    double *JFref, *JGref;
 
-        void hc_fill_values_on_grid(void);
+    int *number_of_cells;
 
-        void fill_with_jet(const RpFunction *flux_object, int n, double *in, int degree, double *F, double *J, double *H);
+    // Values on the grid.
+    Matrix<RealVector> grid;
+    Matrix<RealVector> F_on_grid;
+    Matrix<RealVector> G_on_grid;
 
-        Boundary *boundary;
-    protected:
-    public:
-        Hugoniot_Curve(const FluxFunction *f, const AccumulationFunction *a, 
-                       Boundary *b, 
-                       const RealVector &min, const RealVector &max, 
-                       const int *cells,
-                       const RealVector &ref);
-        ~Hugoniot_Curve();
+    void hc_fill_values_on_grid(void);
 
-        void set_reference_point(const RealVector &ref);
+    void fill_with_jet(const RpFunction *flux_object, int n, double *in, int degree, double *F, double *J, double *H);
+protected:
+public:
+    Hugoniot_Curve(const FluxFunction *f, const AccumulationFunction *a,Boundary * b,
+            const RealVector &min, const RealVector &max,
+            const int *cells,
+            const RealVector &ref);
+    ~Hugoniot_Curve();
 
-        int function_on_square(double *foncub, int i, int j, int is_square);
+    void set_reference_point(const RealVector &ref);
 
-        int curve(std::vector<RealVector> &hugoniot_curve);
+    int function_on_square(double *foncub, int i, int j, int is_square);
 
-        void map(const RealVector &p, double &f, RealVector &map_Jacobian);
+    int curve(std::vector<RealVector> &hugoniot_curve);
 
-        bool improvable(void);
+    int classified_curve(std::vector<HugoniotPolyLine> &hugoniot_curve);
+
+
+    void map(const RealVector &p, double &f, RealVector &map_Jacobian);
+
+    bool improvable(void);
 };
 
 #endif // _HUGONIOT_CURVE_

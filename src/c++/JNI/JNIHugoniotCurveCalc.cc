@@ -144,7 +144,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
 //        hugoniotCurve.classified_curve(hugoniotPolyLineVector);
 //
 //    } else {
-        Hugoniot_Curve hugoniotCurve(RpNumerics::getPhysics().boundary().clone(),&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(),
+        Hugoniot_Curve hugoniotCurve(&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(),RpNumerics::getPhysics().boundary().clone(),
                 min, max, cells, Uref);
         hugoniotCurve.classified_curve(hugoniotPolyLineVector);
 //    }
