@@ -284,8 +284,7 @@ public class RPnDataModule {
 //                tempVector_ = new RealVector(phaseSize_);
             }
             if (name.equals("REALSEGMENT")) {
-                pointOneOK_ = false;
-
+//                pointOneOK_ = false;
             }
 
             if (name.equals("EIGENVEC")) {
@@ -318,17 +317,20 @@ public class RPnDataModule {
 
             try {
                 String data = new String(buff, offset, len);
+//                System.out.println("Data : " + data);
                 data = data.trim();
                 if (data.length() != 0) {
-
+                    System.out.println("Data : " + data);
                     if (currentElement_.equals("PHASEPOINT")) {
-                        StringTokenizer tokenizer = new StringTokenizer(data, " ");
+                        StringTokenizer tokenizer = new StringTokenizer(data);
 
-//                        if (tokenizer.countTokens() == phaseSize_) {
+//                        System.out.println("Tamanho dos tokens: " + tokenizer.countTokens());
+
+                        if (tokenizer.countTokens() == phaseSize_) {
                             tempVector_ = new RealVector(data);
-                            System.out.println("Valor de phaseSize: " + phaseSize_ + " valor de data: " + data);
+//                            System.out.println("Valor de phaseSize: " + phaseSize_ + " valor de data: " + data);
 //                            pPointList_.add(new PhasePoint(tempVector_));
-//                        }
+                        }
 
                     }
                     if (currentElement_.equals("REALVECTOR")) {
@@ -615,8 +617,10 @@ public class RPnDataModule {
             }
             if (name.equals("REALSEGMENT")) {
 
-                System.out.println("Valor de point1: " + point1_);
-                System.out.println("Valor de point2: " + point2_);
+//                System.out.println("Valor de point1: " + point1_);
+//                System.out.println("Valor de point2: " + point2_);
+//                pointOneOK_=false;
+
 
                 hugoniotSegmentsList_.add(new HugoniotSegment(point1_, 0, point2_, 0, 17));//TODO Use RealSegment or another typeless segment
 //                realSegmentsList_.add(new RealSegment(point1_, point2_));
