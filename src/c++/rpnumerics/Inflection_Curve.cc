@@ -52,6 +52,9 @@ Inflection_Curve::Inflection_Curve(const FluxFunction *f, const AccumulationFunc
 
     boundary = b;
 
+    cout<<"Max em inflection: "<<boundary->maximums()<<endl;
+    cout << "Min em inflection: " << boundary->minimums() << endl;
+
     // Create the grid...
     //
     pmin.resize(min.size());
@@ -219,90 +222,92 @@ void Inflection_Curve::fill_values_on_grid(void){
     for (int i = 0; i < n; i++){
 
         double point[dim];
+        // We only compute the value of the function on points that are inside the physical domain
+        // given by "boundary".
         for (int j = 0; j < dim; j++) point[j] = grid(i).component(j);
+        if (boundary->inside(point)) {
+            double JF[dim][dim], JG[dim][dim];
+            double HF[dim][dim][dim], HG[dim][dim][dim];
+            fill_with_jet((RpFunction*)ff, dim, point, 2, 0, &JF[0][0], &HF[0][0][0]);
+            fill_with_jet((RpFunction*)aa, dim, point, 2, 0, &JG[0][0], &HG[0][0][0]);
 
-        double JF[dim][dim], JG[dim][dim];
-        double HF[dim][dim][dim], HG[dim][dim][dim];
-        fill_with_jet((RpFunction*)ff, dim, point, 2, 0, &JF[0][0], &HF[0][0][0]);
-        fill_with_jet((RpFunction*)aa, dim, point, 2, 0, &JG[0][0], &HG[0][0][0]);
+            // TODO: Isso aqui eh para o caso de acumulacao trivial!
 
-        // TODO: Isso aqui eh para o caso de acumulacao trivial!
+//            // Fill the values of the functions
+//            for (int j = 0; j < dim; j++){
+//                ffv(i).component(j) = F[j];
+//                aav(i).component(j) = G[j];
+//            }
 
-//        // Fill the values of the functions
-//        for (int j = 0; j < dim; j++){
-//            ffv(i).component(j) = F[j];
-//            aav(i).component(j) = G[j];
-//        }
+            // Find the eigenpairs
+            std::vector<eigenpair> etemp;
+            Eigen::eig(dim, &JF[0][0], &JG[0][0], etemp);
 
-        // Find the eigenpairs
-        std::vector<eigenpair> etemp;
-        Eigen::eig(dim, &JF[0][0], &JG[0][0], etemp);
+            e(i).clear();
+            e(i).resize(etemp.size());
+            for (int j = 0; j < etemp.size(); j++) e(i)[j] = etemp[j];
 
-        e(i).clear();
-        e(i).resize(etemp.size());
-        for (int j = 0; j < etemp.size(); j++) e(i)[j] = etemp[j];
+            // Decide if the eigenvalues are real or complex
+            eig_is_real(i).clear();
+            eig_is_real(i).resize(etemp.size());
+            for (int j = 0; j < etemp.size(); j++){
+                if (fabs(etemp[j].i) < epsilon) eig_is_real(i)[j] = true; // TODO: Comparacoes devem ser feitas com valores relativos, nao absolutos
+                else                            eig_is_real(i)[j] = false;
+            }
 
-        // Decide if the eigenvalues are real or complex
-        eig_is_real(i).clear();
-        eig_is_real(i).resize(etemp.size());
-        for (int j = 0; j < etemp.size(); j++){
-            if (fabs(etemp[j].i) < epsilon) eig_is_real(i)[j] = true; // TODO: Comparacoes devem ser feitas com valores relativos, nao absolutos
-            else                            eig_is_real(i)[j] = false;
-        }
+            // Find the directional derivatives
+            dd(i).resize(dim);
 
-        // Find the directional derivatives
-        dd(i).resize(dim);
+//                if (eig_is_real(i)[0] == true) {
+//                    for (int fam = 0; fam < dim; fam++){
+//                        norm   = 0.0;
+//                        dirdrv = 0.0;
 
-//            if (eig_is_real(i)[0] == true) {
-//                for (int fam = 0; fam < dim; fam++){
-//                    norm   = 0.0;
-//                    dirdrv = 0.0;
-
-//                    for (int entry = 0; entry < dim; entry++){
-//                        l[entry] = e(i)[fam].vlr[entry];
-//                        r[entry] = e(i)[fam].vrr[entry];
-//                    }
-
-//                    // Reset
-//                    for (int k = 0; k < dim; k++) {
-//                        for (int m = 0; m < dim; m++) {
-//                            SubHF[m][k] = 0.0;
+//                        for (int entry = 0; entry < dim; entry++){
+//                            l[entry] = e(i)[fam].vlr[entry];
+//                            r[entry] = e(i)[fam].vrr[entry];
 //                        }
-//                    }
 
-//                    for (int k = 0; k < dim; k++) {
-//                        for (int m = 0; m < dim; m++) {
-//                            for (int n = 0; n < dim; n++) {
-//                                SubHF[k][m] += HF[k][m][n]*r[n];
-////                                printf("r[%d][%d] = %f\n", fam, n, r[n]);
+//                        // Reset
+//                        for (int k = 0; k < dim; k++) {
+//                            for (int m = 0; m < dim; m++) {
+//                                SubHF[m][k] = 0.0;    
 //                            }
 //                        }
-//                    }
 
-//                    for (int n = 0; n < dim; n++) {
-//                        norm += l[n]*r[n];
-////                        if (norm != 1.0) printf("FAILED!\n");
-//                    } 
-
-//                    for (int k = 0; k < dim; k++) {
-//                        for (int m = 0; m < dim; m++) {
-//                            dirdrv += l[k]*SubHF[k][m]*r[m]; // TODO: Substituir para o caso de acumulacao nao trivial
+//                        for (int k = 0; k < dim; k++) {
+//                            for (int m = 0; m < dim; m++) {
+//                                for (int n = 0; n < dim; n++) {
+//                                    SubHF[k][m] += HF[k][m][n]*r[n];
+////                                    printf("r[%d][%d] = %f\n", fam, n, r[n]);
+//                                }
+//                            }
 //                        }
+
+//                        for (int n = 0; n < dim; n++) {
+//                            norm += l[n]*r[n];
+////                            if (norm != 1.0) printf("FAILED!\n");
+//                        } 
+
+//                        for (int k = 0; k < dim; k++) {
+//                            for (int m = 0; m < dim; m++) {
+//                                dirdrv += l[k]*SubHF[k][m]*r[m]; // TODO: Substituir para o caso de acumulacao nao trivial
+//                            }
+//                        }
+
+//                        // The directional derivative is
+
+//                        dd(i)[fam] = dirdrv / norm;
+
+////                        printf("dd(%d)[%d] = %f\n", i, fam, dd(i)[fam]);
 //                    }
-
-//                    // The directional derivative is
-
-//                    dd(i)[fam] = dirdrv / norm;
-
-////                    printf("dd(%d)[%d] = %f\n", i, fam, dd(i)[fam]);
-//                }
 //                
-//            }
+//                }
 
             for (int fam = 0; fam < dim; fam++){
                 dd(i)[fam] = this->dirdrv(2, &point[0], fam);
             }
-
+        }
     }
 
     return;

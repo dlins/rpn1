@@ -60,20 +60,31 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_InflectionCurveCalc_nativeCalc(JNIEnv 
     //    Test testFunction;
 
     //-------------------------------------------------------------------
-    SubPhysics & subPhysics = RpNumerics::getPhysics().getSubPhysics(0);
+//    SubPhysics & subPhysics = RpNumerics::getPhysics().getSubPhysics(0);
 
-    int dimension = subPhysics.domain().dim();
+//    int dimension = subPhysics.domain().dim();
 
-    const Boundary & boundary = subPhysics.boundary();
+    int dimension = RpNumerics::getPhysics().domain().dim();
+
+//    const Boundary & boundary = subPhysics.boundary();
+//
+    Boundary * tempBoundary = RpNumerics::getPhysics().boundary().clone();
 
     int cells [2];
 
-    cells[0] = 128;
-    cells[1] = 128;
+    cells[0] = 30;
+    cells[1] = 30;
 
-    Inflection_Curve inflectionCurve((FluxFunction*) RpNumerics::getPhysics().fluxFunction().clone(), (AccumulationFunction*) RpNumerics::getPhysics().accumulation().clone(),
-            boundary.minimums(), boundary.maximums(), cells);
 
+    cout<<"min:"<<tempBoundary->minimums();
+
+    cout << "max:" << tempBoundary->maximums();
+
+    Inflection_Curve inflectionCurve((FluxFunction*) RpNumerics::getPhysics().fluxFunction().clone(), (AccumulationFunction*) RpNumerics::getPhysics().accumulation().clone(),tempBoundary,
+            tempBoundary->minimums(), tempBoundary->maximums(), cells);
+
+
+    delete tempBoundary;
     std::vector<RealVector> left_vrs;
 
     inflectionCurve.curve(family, left_vrs);

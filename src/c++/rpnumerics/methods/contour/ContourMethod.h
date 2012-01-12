@@ -35,11 +35,11 @@
 
 class ContourMethod {
     private:
-        int dimension;
+//        int dimension;
 
 //        static int inpdom(double *u);
 
-        HugoniotFunctionClass *hugoniot;	 // TODO: Edson, voce deve comentar essa linha (e no .cc)
+//        HugoniotFunctionClass *hugoniot;	 // TODO: Edson, voce deve comentar essa linha (e no .cc)
 
         //
         static bool is_first;
@@ -87,8 +87,8 @@ class ContourMethod {
 
     protected:
     public:
-        ContourMethod(HugoniotFunctionClass *h); // TODO: Edson, voce deve comentar essa linha (e no .cc)
-        ~ContourMethod();			 // TODO: Edson, voce deve comentar essa linha (e no .cc)
+//        ContourMethod(HugoniotFunctionClass *h); // TODO: Edson, voce deve comentar essa linha (e no .cc)
+//        ~ContourMethod();			 // TODO: Edson, voce deve comentar essa linha (e no .cc)
     
         //int curv2d(int sn, int seglim, double f, double *rect, int *res, int ifirst) ;
         //int curv2d(int sn, int seglim, double f, double *rect, int *res, int ifirst, std::vector<RealSegment> &vrs) ;

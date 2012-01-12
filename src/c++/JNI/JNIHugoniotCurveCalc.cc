@@ -125,27 +125,29 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
     vector<HugoniotPolyLine> hugoniotPolyLineVector;
 
 
-    if (RpNumerics::getPhysics().ID().compare("TPCW") == 0) {
-
-        TPCW & physics = (TPCW &) RpNumerics::getPhysics().getSubPhysics(0);
-
-        Flux2Comp2PhasesAdimensionalized & fluxFunction = (Flux2Comp2PhasesAdimensionalized &) physics.fluxFunction();
-
-        Flux2Comp2PhasesAdimensionalized::ReducedFlux2Comp2PhasesAdimensionalized *reducedFlux = fluxFunction.getReducedFlux();
-
-        Accum2Comp2PhasesAdimensionalized & accumFunction = (Accum2Comp2PhasesAdimensionalized &) physics.accumulation();
-
-        Accum2Comp2PhasesAdimensionalized::ReducedAccum2Comp2PhasesAdimensionalized * reducedAccum = accumFunction.getReducedAccumulation();
-
-        Hugoniot_Curve hugoniotCurve(reducedFlux, reducedAccum, min, max, cells, Uref);
-
-        hugoniotCurve.classified_curve(hugoniotPolyLineVector);
-
-    } else {
-        Hugoniot_Curve hugoniotCurve(&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(),
+//    if (RpNumerics::getPhysics().ID().compare("TPCW") == 0) {
+//
+//        TPCW & physics = (TPCW &) RpNumerics::getPhysics().getSubPhysics(0);
+//
+//        RectBoundary * tempBoundary = new RectBoundary(min, max);
+//
+//        Flux2Comp2PhasesAdimensionalized & fluxFunction = (Flux2Comp2PhasesAdimensionalized &) physics.fluxFunction();
+//
+//        Flux2Comp2PhasesAdimensionalized::ReducedFlux2Comp2PhasesAdimensionalized *reducedFlux = fluxFunction.getReducedFlux();
+//
+//        Accum2Comp2PhasesAdimensionalized & accumFunction = (Accum2Comp2PhasesAdimensionalized &) physics.accumulation();
+//
+//        Accum2Comp2PhasesAdimensionalized::ReducedAccum2Comp2PhasesAdimensionalized * reducedAccum = accumFunction.getReducedAccumulation();
+//
+//        Hugoniot_Curve hugoniotCurve(tempBoundary,reducedFlux, reducedAccum, min, max, cells, Uref);
+//
+//        hugoniotCurve.classified_curve(hugoniotPolyLineVector);
+//
+//    } else {
+        Hugoniot_Curve hugoniotCurve(RpNumerics::getPhysics().boundary().clone(),&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(),
                 min, max, cells, Uref);
         hugoniotCurve.classified_curve(hugoniotPolyLineVector);
-    }
+//    }
 
 
 

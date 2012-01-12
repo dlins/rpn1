@@ -16,6 +16,7 @@
  * ---------------------------------------------------------------
  * Definitions:
  */
+using namespace std;
 IsoTriang2DBoundary::~IsoTriang2DBoundary() {
 
     delete minimums_;
@@ -101,6 +102,8 @@ IsoTriang2DBoundary::IsoTriang2DBoundary(const RealVector & A, const RealVector 
 bool IsoTriang2DBoundary::inside(const double *U)const {
     double x = U[0];
     double y = U[1];
+
+    cout <<"Dentro do inside triangulo"<<endl;
 
     if ((x >= 0.) && (y >= 0.) && (x + y <= 1.)) {
 //        cout << "(" << x << ", " << y << ") is INSIDE" << endl;
