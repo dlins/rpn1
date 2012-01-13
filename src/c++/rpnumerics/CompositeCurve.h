@@ -1,54 +1,55 @@
-/*
- * IMPA - Fluid Dynamics Laboratory
- *
- * RPn Project
- *
- * @(#) CompositeCurve.h
- */
+#ifndef _COMPOSITECURVE_
+#define _COMPOSITECURVE_
 
-#ifndef _CompositeCurve_H
-#define _CompositeCurve_H
+#include <vector>
+#include <stdio.h>
 
-/*
- * ---------------------------------------------------------------
- * Includes:
- */
-#include "RarefactionCurve.h"
-#include "ShockCurve.h"
-#include "WaveCurve.h"
-
-/*
- * ---------------------------------------------------------------
- * Definitions:
- */
+//#include "RealVector.h"
+#include "FluxFunction.h"
+#include "AccumulationFunction.h"
+#include "Shock.h"
+#include "Boundary.h"
+//#include "eigen.h"
+//#include "ShockMethod.h"
 
 
-class CompositeCurve:public WaveCurve {
-    
-private:
-    ShockCurve & shockCurve_;
-    RarefactionCurve & rarefactionCurve_;
+//extern "C" void dgesv_(int*, int*, double*, int*, int*, double*, int*, int*);
 
-public:
+#ifndef COMPOSITE_OK
+#define COMPOSITE_OK 0
+#endif
 
-    CompositeCurve(const RarefactionCurve &, const ShockCurve &,const int);
-    ~CompositeCurve();
-    const RarefactionCurve & getRarefactionCurve();
-    const ShockCurve & getShockCurve();
-    const string getType()const;
+#ifndef COMPOSITE_ERROR
+#define COMPOSITE_ERROR 1
+#endif
 
+#ifndef COMPOSITE_FROM_NORMAL_RAREFACTION
+#define COMPOSITE_FROM_NORMAL_RAREFACTION 2
+#endif
+
+#ifndef COMPOSITE_FROM_STACK_RAREFACTION
+#define COMPOSITE_FROM_STACK_RAREFACTION 3
+#endif
+
+#ifndef COMPOSITE_FROM_NORMAL_RAREFACTION_START
+#define COMPOSITE_FROM_NORMAL_RAREFACTION_START 3
+#endif
+
+class CompositeCurve {
+    private:
+//        FluxFunction         *F;
+//        AccumulationFunction *G;
+//        Boundary *boundary;
+
+//        double zero_level_function(const RealVector &rarpoint, RealVector &Un, int &info);
+//        int cdgesv(int n, double *A, double *b, double *x);
+//        
+    protected:
+    public:
+        static void curve(const std::vector<RealVector> &rarcurve, int origin, int family, int increase, 
+                          FluxFunction *ff, AccumulationFunction *aa, 
+                          Boundary *boundary, std::vector<RealVector> &compcurve);
 };
 
-inline const RarefactionCurve & CompositeCurve::getRarefactionCurve() {
-    return rarefactionCurve_;
-}
+#endif // _COMPOSITECURVE_
 
-inline const ShockCurve & CompositeCurve::getShockCurve(){
-    return shockCurve_;
-}
-
-inline const string CompositeCurve::getType() const {
-    return "compositecurve";
-}
-
-#endif //! _CompositeCurve_H

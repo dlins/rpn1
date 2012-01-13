@@ -7,13 +7,13 @@ package rpnumerics;
 
 import java.util.List;
 
-public class CompositeCurve extends SegmentedCurve {
+public class RarefactionExtensionCurve extends SegmentedCurve {
     //
     // Members
     //
 
-    public CompositeCurve(List<HugoniotSegment> hSegments) {
-        super(hSegments);
+    public RarefactionExtensionCurve(List<HugoniotSegment> hSegments, List<HugoniotSegment> rightSegments) {
+        super(createSingleSegmentList(hSegments, rightSegments));
 
 
     }

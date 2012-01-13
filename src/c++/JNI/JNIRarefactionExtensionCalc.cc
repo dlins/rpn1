@@ -10,7 +10,7 @@
  * ---------------------------------------------------------------
  * Includes:
  */
-#include "rpnumerics_CompositeCalc.h"
+#include "rpnumerics_RarefactionExtensionCalc.h"
 #include "RpNumerics.h"
 #include "RealVector.h"
 #include "JNIDefs.h"
@@ -18,7 +18,8 @@
 #include "StoneAccumulation.h"
 #include "RectBoundary.h"
 #include <vector>
-#include "Rarefaction.h"
+
+#include "Rarefaction_Extension.h"
 
 
 using std::vector;
@@ -29,7 +30,7 @@ using std::vector;
  */
 
 
-JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env, jobject obj, jobject initialPoint, jint increase, jint familyIndex) {
+JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionExtensionCalc_nativeCalc(JNIEnv * env, jobject obj, jint xResolution, jint yResolution, jobject initialPoint, jint increase, jint curveFamily, jint domainFamily, jint characteristicWhere) {
 
     cout << "chamando JNI composite calc" << endl;
 
@@ -37,7 +38,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
     jclass hugoniotSegmentClass = (env)->FindClass(HUGONIOTSEGMENTCLASS_LOCATION);
     jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
     jclass arrayListClass = env->FindClass("java/util/ArrayList");
-    jclass compositeCurveClass = env->FindClass(COMPOSITECURVE_LOCATION);
+    jclass compositeCurveClass = env->FindClass(RAREFACTIONEXTENSIONCURVE_LOCATION);
 
     jmethodID toDoubleMethodID = (env)->GetMethodID(classPhasePoint, "toDouble", "()[D");
     jmethodID realVectorConstructorDoubleArray = env->GetMethodID(realVectorClass, "<init>", "([D)V");
@@ -69,7 +70,15 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
     // Storage space for the segments:
 
 
+    std::vector<RealVector> curve_segments;
+    std::vector<RealVector> domain_segments;
+    std::vector<RealVector> rarefaction_segments;
+
+
     int number_of_grid_points[2];
+
+    number_of_grid_points[0] = xResolution;
+    number_of_grid_points[1] = yResolution;
 
 
     if (RpNumerics::getPhysics().ID().compare("Stone") == 0) {
@@ -78,62 +87,131 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
 
         dimension = 2;
 
-        const FluxFunction * stoneflux = &RpNumerics::getPhysics().fluxFunction();
 
-        const AccumulationFunction * stoneaccum = &RpNumerics::getPhysics().accumulation();
+        double expw, expg, expo;
+        expw = expg = expo = 2.0;
+        double expow, expog;
+        expow = expog = 2.0;
+        double cnw, cng, cno;
+        cnw = cng = cno = 0.0;
+        double lw, lg;
+        lw = lg = 0.0;
+        double low, log;
+        low = log = 0.0;
+        double epsl = 0.0;
 
-        Boundary * tempBoundary = RpNumerics::getPhysics().boundary().clone();
+        StonePermParams stonepermparams(expw, expg, expo, expow, expog, cnw, cng, cno, lw, lg, low, log, epsl);
 
+        StonePermeability stonepermeability(stonepermparams);
+
+        //        double grw = 1.0;
+        //        double grg = 0.5;
+        //        double gro = 0.7;
+        //
+        //        double muw = 1.0;
+        //        double mug = 1.0;
+        //        double muo = 1.0;
+        //
+        //        double vel = 0.0;
+
+
+        double grw = 0.0;
+        double grg = 0.0;
+        double gro = 0.0;
+
+        double muw = 1.0;
+        double mug = 1.0;
+        double muo = 1.0;
+
+        double vel = 1.0;
+
+
+        RealVector p(7);
+        p.component(0) = grw;
+        p.component(1) = grg;
+        p.component(2) = gro;
+        p.component(3) = muw;
+        p.component(4) = mug;
+        p.component(5) = muo;
+        p.component(6) = vel;
+
+        StoneParams stoneparams(p);
+        StoneFluxFunction stoneflux(stoneparams, stonepermparams);
+
+        //        const StoneFluxFunction * stoneflux = (const StoneFluxFunction *) &RpNumerics::getPhysics().fluxFunction();
+
+        // Create the (trivial) accumulation function
+        StoneAccumulation stoneaccum;
+
+        //        const StoneAccumulation * stoneaccum = (const StoneAccumulation *) & RpNumerics::getPhysics().accumulation();
+
+
+        int singular = 0;
 
         //        const RealVector & pmin = RpNumerics::getPhysics().boundary().minimums();
         //        const RealVector & pmax = RpNumerics::getPhysics().boundary().maximums();
 
-        //        RealVector pmin(2);
-        //        RealVector pmax(2);
-        //
-        //
-        //        pmin.component(0) = 0.0;
-        //        pmin.component(1) = 0.0;
-        //
-        //
-        //        pmax.component(0) = 1.0;
-        //        pmax.component(1) = 1.0;
-        //
-        //
-        //
-        //        cout << pmin << endl;
-        //        cout << pmax << endl;
-        //
-        //
+        RealVector pmin(2);
+        RealVector pmax(2);
+
+
+        pmin.component(0) = 0.0;
+        pmin.component(1) = 0.0;
+
+
+        pmax.component(0) = 1.0;
+        pmax.component(1) = 1.0;
+
+
+
+        cout << pmin << endl;
+        cout << pmax << endl;
+
+        cout << "Curve Family: " << curveFamily << endl;
+        cout << "Domain Family: " << domainFamily << endl;
+        cout << "Characteristic : " << characteristicWhere << endl;
         cout << "Increase: " << increase << endl;
-
-        double deltaxi = 1e-3;
-
-        //Compute rarefaction
+        cout << "x resolution: " << xResolution << endl;
+        cout << "y resolution: " << yResolution << endl;
 
 
-        std::vector<RealVector> rarefactionCurve;
+        vector<bool> testBooleanVector;
 
-        Rarefaction::curve(inputPoint,
-                RAREFACTION_INITIALIZE_YES,
-                0,
-                familyIndex,
+        testBooleanVector.push_back(true);
+        testBooleanVector.push_back(true);
+        const RectBoundary testBoundary(pmin, pmax, testBooleanVector);
+
+
+
+        Rarefaction_Extension::extension_curve(&stoneflux,
+                &stoneaccum,
+                inputPoint,
+                .001,
+                curveFamily,
                 increase,
-                CHECK_RAREFACTION_MONOTONY_TRUE,
-                deltaxi,
-                stoneflux, stoneaccum,
-                RAREFACTION_GENERAL_ACCUMULATION,
-                tempBoundary,
-                rarefactionCurve);
+                &testBoundary,
+                pmin, pmax, number_of_grid_points, // For the domain.
+                domainFamily,
+                &stoneflux, &stoneaccum,
+                characteristicWhere, singular,
+                curve_segments,
+                domain_segments);
 
+        //        delete testBoundary;
 
-
+        printf("curve.size()  = %d\n", curve_segments.size());
+        printf("domain.size() = %d\n", domain_segments.size());
+        printf("rarefaction.size() = %d\n", rarefaction_segments.size());
 
 
 
     }
 
-  
+    if (curve_segments.size() == 0 || domain_segments.size() == 0) {
+        printf("curve.size()  = %d\n", curve_segments.size());
+        printf("domain.size() = %d\n", domain_segments.size());
+        return NULL;
+    }
 
 
     for (unsigned int i = 0; i < curve_segments.size() / 2; i++) {

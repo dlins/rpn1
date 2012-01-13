@@ -61,6 +61,7 @@
 #define COMPOSITECURVE_LOCATION               "rpnumerics/CompositeCurve"
 #define INFLECTIONCURVE_LOCATION              "rpnumerics/InflectionCurve"
 #define HYSTERESISCURVE_LOCATION              "rpnumerics/HysteresisCurve"
+#define RAREFACTIONEXTENSIONCURVE_LOCATION    "rpnumerics/RarefactionExtensionCurve"
 
 
 #define NUMERICSPROFILE_LOCATION              "rpnumerics/RPNumericsProfile"

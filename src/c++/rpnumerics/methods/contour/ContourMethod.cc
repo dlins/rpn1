@@ -650,8 +650,13 @@ int ContourMethod::contour2d(ImplicitFunction *impf, Boundary *boundary, double 
             //lower right point
             p[0] = u + du;
             p[1] = v;
-            cout << "Antes do if : " << endl;
             
+            cout << "Antes do if : " << endl;
+
+
+            cout << "Valor de p[0]" << p[0] << endl;
+            cout << "Valor de p[1]" << p[1] << endl;
+
             // a funcao inpdom foi criada a partir do arquivo bndry.F (localizada em phys/stone) do fortran!
             //if (inpdom(&p[0]) == 0) goto lab200;
             //            if (inpdom(&p[0]) != 0) {

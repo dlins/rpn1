@@ -103,8 +103,6 @@ bool IsoTriang2DBoundary::inside(const double *U)const {
     double x = U[0];
     double y = U[1];
 
-    cout <<"Dentro do inside triangulo"<<endl;
-
     if ((x >= 0.) && (y >= 0.) && (x + y <= 1.)) {
 //        cout << "(" << x << ", " << y << ") is INSIDE" << endl;
         return true;

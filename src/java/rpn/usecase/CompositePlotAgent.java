@@ -28,9 +28,10 @@ public class CompositePlotAgent extends RpModelPlotAgent {
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {
-        OrbitPoint oPoint = new OrbitPoint(input[input.length - 1]);
-        CompositeGeomFactory factory = new CompositeGeomFactory(RPNUMERICS.createCompositeCalc(oPoint));
-        return factory.geom();
+//        OrbitPoint oPoint = new OrbitPoint(input[input.length - 1]);
+//        CompositeGeomFactory factory = new CompositeGeomFactory(RPNUMERICS.createRarefactionExtensionCalc(oPoint));
+//        return factory.geom();
+        return null;
     }
 
     static public CompositePlotAgent instance() {

@@ -563,7 +563,7 @@ public class RPNUMERICS {
 
     }
 
-    public static CompositeCalc createCompositeCalc(OrbitPoint orbitPoint) {
+    public static RarefactionExtensionCalc createRarefactionExtensionCalc(OrbitPoint orbitPoint) {
         System.out.println("aqui no create " + getContourConfiguration().getParam("x-resolution") + " " + getContourConfiguration().getParam("y-resolution"));
 
 
@@ -579,7 +579,7 @@ public class RPNUMERICS {
         int characteristicDomain = new Integer(getParamValue("wavecurve", "characteristicwhere"));
 
 
-        return new CompositeCalc(xResolution, yResolution, orbitPoint, direction_, curveFamily, domainFamily, characteristicDomain);
+        return new RarefactionExtensionCalc(xResolution, yResolution, orbitPoint, direction_, curveFamily, domainFamily, characteristicDomain);
     }
 
 //    public static ShockFlow createShockFlow() {
