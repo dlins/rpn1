@@ -7,6 +7,8 @@
 #include "FluxFunction.h"
 #include "AccumulationFunction.h"
 #include "Matrix.h"
+#include "Boundary.h"
+
 //#include "RealEigenvalueCell.h"
 
 // TODO: A class Cell is needed, such that it has three or four vertices defined a Cell.
@@ -47,6 +49,28 @@ class Bifurcation_Curve {
                                  Matrix<RealVector> &ffv, Matrix<RealVector> &aav, 
                                  Matrix< vector<double> > &e, Matrix< vector<bool> > &eig_is_real);
 
+        // TODO: Domains could be triangles. In that case it is necessary to understand what to do with pmin & pmax
+        // 
+        // This function is a mere wrapper for the function above. Perhaps that one should be eliminated.
+        void fill_values_on_grid(const RealVector &pmin, const RealVector &pmax, 
+                                 const FluxFunction *ff, const AccumulationFunction *aa, 
+                                 const int *number_of_grid_pnts,
+                                 Matrix<RealVector> &grid,
+                                 Matrix<RealVector> &ffv, Matrix<RealVector> &aav, 
+                                 Matrix< vector<eigenpair> > &e, Matrix< vector<bool> > &eig_is_real,
+                                 Boundary *b, Matrix<bool> &is_inside);
+
+        // TODO: Domains could be triangles. In that case it is necessary to understand what to do with pmin & pmax
+        // 
+        // This function is a mere wrapper for the function above. Perhaps that one should be eliminated.
+        void fill_values_on_grid(const RealVector &pmin, const RealVector &pmax, 
+                                 const FluxFunction *ff, const AccumulationFunction *aa, 
+                                 const int *number_of_grid_pnts,
+                                 Matrix<RealVector> &grid,
+                                 Matrix<RealVector> &ffv, Matrix<RealVector> &aav, 
+                                 Matrix< vector<double> > &e, Matrix< vector<bool> > &eig_is_real,
+                                 Boundary *b, Matrix<bool> &is_inside);
+
         void fill_with_jet(RpFunction *flux_object, int n, double *in, int degree, double *F, double *J, double *H);
 
         // TODO: The grid is not always rectangular. Cells outside a triangular grid
@@ -54,6 +78,9 @@ class Bifurcation_Curve {
 //        void create_cells(int *number_of_cells, Matrix<RealEigenvalueCell> &mc, Matrix< std::vector<bool> > *eigenvalues_on_the_grid);
 
 //        void validate_cells(int family, int *number_of_cells, Matrix<RealEigenvalueCell> &mc, Matrix<bool> &mb);
+        void validate_cells(int family, bool type_of_cells, Matrix< std::vector<bool> > &original, Matrix<bool> &mb_is_complex, Matrix<bool> &mb_is_inside);
+
+//TODO: Esta era a original, esta faltando modificar Extension_Curve. Despois este metodo deve sair (Pablo 13/Jan/12)
         void validate_cells(int family, bool type_of_cells, Matrix< std::vector<bool> > &original, Matrix<bool> &mb_is_complex);
 
         void prepare_cell(int i, int j, int family, Matrix< std::vector<double> > &eigen, Matrix<RealVector> &flux_values, Matrix<RealVector> &accum_values, double *lambda, Matrix<double> &flux, Matrix<double> &accum);

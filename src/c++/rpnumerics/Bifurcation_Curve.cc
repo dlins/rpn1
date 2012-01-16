@@ -6,10 +6,11 @@ void Bifurcation_Curve::create_grid(const RealVector &pmin, const RealVector &pm
     double delta[pmin.size()];
 
     for (int i = 0; i < pmin.size(); i++) delta[i] = (fabs(pmax.component(i) - pmin.component(i)))/(double)(number_of_cells[i] - 1);
+    
 
     for (int i = 0; i < number_of_cells[0]; i++){
         for (int j = 0; j < number_of_cells[1]; j++){
-//            printf("Here\n");
+            //printf("Here\n");
 
             p(i, j).resize(dim);
 
@@ -76,55 +77,60 @@ void Bifurcation_Curve::fill_values_on_grid(const RealVector &pmin, const RealVe
                                             Matrix<RealVector> &ffv, Matrix<RealVector> &aav, 
                                             Matrix< vector<eigenpair> > &e, Matrix< vector<bool> > &eig_is_real){
     
-    // Dimension of space
-    int dim = pmin.size();
+//    // Dimension of space
+//    int dim = pmin.size();
 
-    // Create the grid proper
-    create_grid(pmin, pmax, number_of_grid_pnts, grid);
+//    // Create the grid proper
+//    create_grid(pmin, pmax, number_of_grid_pnts, grid);
 
-    // Number of elements in the grid.
-    int n = 1;
-    for (int i = 0; i < dim; i++) n *= number_of_grid_pnts[i];
+//    // Number of elements in the grid.
+//    int n = 1;
+//    for (int i = 0; i < dim; i++) n *= number_of_grid_pnts[i];
 
-    // Fill the arrays with the value of the flux and accumulation functions at every point in the grid.
-    // The eigenpairs must also be stored.
-    for (int i = 0; i < n; i++){
-        double point[dim];
-        for (int j = 0; j < dim; j++) {
+//    // Fill the arrays with the value of the flux and accumulation functions at every point in the grid.
+//    // The eigenpairs must also be stored.
+//    for (int i = 0; i < n; i++){
+//        double point[dim];
+//        for (int j = 0; j < dim; j++) point[j] = grid(i).component(j);
 
-            point[j] = grid(i).component(j);
-        }
+//        double F[dim], G[dim], JF[dim][dim], JG[dim][dim];
+//        fill_with_jet((RpFunction*)ff, dim, point, 1, F, &JF[0][0], 0);
+//        fill_with_jet((RpFunction*)aa, dim, point, 1, G, &JG[0][0], 0);
 
+//        // Fill the values of the functions
+//        ffv(i).resize(dim);
+//        aav(i).resize(dim);
+//        for (int j = 0; j < dim; j++){
+//            ffv(i).component(j) = F[j];	
+//            aav(i).component(j) = G[j];
+//        }
 
-        double F[dim], G[dim], JF[dim][dim], JG[dim][dim];
-        fill_with_jet((RpFunction*)ff, dim, point, 1, F, &JF[0][0], 0);
-        fill_with_jet((RpFunction*)aa, dim, point, 1, G, &JG[0][0], 0);
+//        // Find the eigenpairs
+//        vector<eigenpair> etemp;
+//        Eigen::eig(dim, &JF[0][0], &JG[0][0], etemp);
 
+//        e(i).clear();
+//        e(i).resize(etemp.size());
+//        for (int j = 0; j < etemp.size(); j++) e(i)[j] = etemp[j];
 
-        ffv(i).resize(dim);
-        aav(i).resize(dim);
-        // Fill the values of the functions
-        for (int j = 0; j < dim; j++) {
-            ffv(i).component(j) = F[j];
-            aav(i).component(j) = G[j];
-        }
-        // Find the eigenpairs
-        vector<eigenpair> etemp;
-        Eigen::eig(dim, &JF[0][0], &JG[0][0], etemp);
+//        // Decide if the eigenvalues are real or complex
+//        eig_is_real(i).clear();
+//        eig_is_real(i).resize(etemp.size());
+//        for (int j = 0; j < etemp.size(); j++){
+//            if (fabs(etemp[j].i) < epsilon) eig_is_real(i)[j] = true;
+//            else                            eig_is_real(i)[j] = false;
+//        }
+//    }
 
-        e(i).clear();
-        e(i).resize(etemp.size());
-        for (int j = 0; j < etemp.size(); j++) e(i)[j] = etemp[j];
+    Matrix<bool> is_inside;
 
-        // Decide if the eigenvalues are real or complex
-        eig_is_real(i).clear();
-        eig_is_real(i).resize(etemp.size());
-        for (int j = 0; j < etemp.size(); j++){
-            if (fabs(etemp[j].i) < epsilon) eig_is_real(i)[j] = true;
-            else                            eig_is_real(i)[j] = false;
-        }
-    }
-
+    fill_values_on_grid(pmin, pmax, 
+                        ff, aa, 
+                        number_of_grid_pnts,
+                        grid,
+                        ffv, aav, 
+                        e, eig_is_real,
+                        0, is_inside);
     return;
 }
 
@@ -137,11 +143,11 @@ void Bifurcation_Curve::fill_values_on_grid(const RealVector &pmin, const RealVe
 
     Matrix< std::vector<eigenpair> > temp(grid.rows(), grid.cols());
     fill_values_on_grid(pmin, pmax, ff, aa, number_of_grid_pnts, grid, ffv, aav, temp, eig_is_real);
-    
+
     for (int i = 0; i < grid.rows(); i++){
         for (int j = 0; j < grid.cols(); j++){
             e(i, j).resize(pmin.size());
-
+//            printf("temp(%d, %d).size() = %d\n", i, j, temp(i, j).size());
             for (int k = 0; k < pmin.size(); k++) e(i, j)[k] = temp(i, j)[k].r;
         }
     }
@@ -258,8 +264,23 @@ void Bifurcation_Curve::fill_with_jet(RpFunction *flux_object, int n, double *in
 //     3 = (i, j + 1).
 //
 
-// TODO: A grid may contain both square and triangular cells. Therefore, type_of_cells will become a Matrix<bool>.
+//TODO: Esta era a original, esta faltando modificar Extension_Curve
 void Bifurcation_Curve::validate_cells(int family, bool type_of_cells, Matrix< std::vector<bool> > &original, Matrix<bool> &mb_is_complex){
+    Matrix<bool> temp_is_inside(original.rows(), original.cols());
+
+    for (int i = 0; i < original.rows(); i++){
+        for (int j = 0; j < original.cols(); j++){
+            temp_is_inside(i, j) = true;
+        }
+    }
+
+    validate_cells(family, type_of_cells, original, mb_is_complex, temp_is_inside);
+
+    return;
+}
+
+// TODO: A grid may contain both square and triangular cells. Therefore, type_of_cells will become a Matrix<bool>.
+void Bifurcation_Curve::validate_cells(int family, bool type_of_cells, Matrix< std::vector<bool> > &original, Matrix<bool> &mb_is_complex, Matrix<bool> &mb_is_inside){
     int rows = original.rows() - 1; 
     int cols = original.cols() - 1;
 
@@ -267,6 +288,7 @@ void Bifurcation_Curve::validate_cells(int family, bool type_of_cells, Matrix< s
 
     for (int i = 0; i < rows; i++){
         for (int j = 0; j < cols; j++){
+            if(mb_is_inside(i+1,j+1)){ // TODO: Only if the whole cell is in domain, it would be validated
             mb_is_complex(i, j) = false;
 
             // Vertex 0
@@ -292,6 +314,7 @@ void Bifurcation_Curve::validate_cells(int family, bool type_of_cells, Matrix< s
                     mb_is_complex(i, j) = true;
                     return;
                 }
+            }
             }
         }
     }
@@ -374,22 +397,20 @@ bool Bifurcation_Curve::prepare_segment(int i, int family, int where_is_characte
                                         Matrix<double> &flux, 
                                         Matrix<double> &accum){
 
-//    printf("Bifurcation_Curve::prepare_segment. eigen.size() = %d\n", eigen.size());
-//    printf("    Family = %d, eigen[%d].size() = %d, eigen[%d].size() = %d\n", family, i, eigen[i].size(), i + 1, eigen[i + 1].size());
+    //printf("Bifurcation_Curve::prepare_segment. eigen.size() = %d\n", eigen.size());
+    //printf("    Family = %d, eigen[%d].size() = %d, eigen[%d].size() = %d\n", family, i, eigen[i].size(), i + 1, eigen[i + 1].size());
 
     if (where_is_characteristic == CHARACTERISTIC_ON_CURVE){
         if (!eig_is_real[i][family] || !eig_is_real[i + 1][family]) return false;
     }
 
-    lambda[0] = eigen[i][family];
-    printf("Bifurcation_Curve::prepare_segment. lambda[0] = %g\n", lambda[0]);
+    lambda[0] = eigen[i][family];                //printf("Bifurcation_Curve::prepare_segment. lambda[0] = %g\n", lambda[0]);
     flux(0, 0) = flux_values[i].component(0);
     flux(1, 0) = flux_values[i].component(1);
     accum(0, 0) = accum_values[i].component(0);
     accum(1, 0) = accum_values[i].component(1);
 
-    lambda[1] = eigen[i + 1][family];
-    printf("Bifurcation_Curve::prepare_segment. lambda[1] = %g\n", lambda[1]);
+    lambda[1] = eigen[i + 1][family];            //printf("Bifurcation_Curve::prepare_segment. lambda[1] = %g\n", lambda[1]);
     flux(0, 1) = flux_values[i + 1].component(0);
     flux(1, 1) = flux_values[i + 1].component(1);
     accum(0, 1) = accum_values[i + 1].component(0);
@@ -453,6 +474,95 @@ void Bifurcation_Curve::fill_values_on_segments(const FluxFunction *ff, const Ac
             }
         }
     }
+
+    return;
+}
+
+void Bifurcation_Curve::fill_values_on_grid(const RealVector &pmin, const RealVector &pmax, 
+                                 const FluxFunction *ff, const AccumulationFunction *aa, 
+                                 const int *number_of_grid_pnts,
+                                 Matrix<RealVector> &grid,
+                                 Matrix<RealVector> &ffv, Matrix<RealVector> &aav, 
+                                 Matrix< vector<eigenpair> > &e, Matrix< vector<bool> > &eig_is_real,
+                                 Boundary *b, Matrix<bool> &is_inside){
+
+    // Dimension of space
+    int dim = pmin.size();
+
+    // Create the grid proper
+    create_grid(pmin, pmax, number_of_grid_pnts, grid);
+
+    // Number of elements in the grid.
+    int n = 1;
+    for (int i = 0; i < dim; i++) n *= number_of_grid_pnts[i];
+
+    is_inside.resize(number_of_grid_pnts[0], number_of_grid_pnts[1]);
+
+    // Fill the arrays with the value of the flux and accumulation functions at every point in the grid.
+    // The eigenpairs must also be stored.
+    for (int i = 0; i < n; i++){
+        double point[dim];
+        for (int j = 0; j < dim; j++) point[j] = grid(i).component(j);
+
+        bool inside;
+        if (b != NULL) inside = b->inside(grid(i));
+        else inside = true;
+
+        is_inside(i) = inside;
+            
+        if (inside){
+            double F[dim], G[dim], JF[dim][dim], JG[dim][dim];
+            fill_with_jet((RpFunction*)ff, dim, point, 1, F, &JF[0][0], 0);
+            fill_with_jet((RpFunction*)aa, dim, point, 1, G, &JG[0][0], 0);
+
+            // Fill the values of the functions
+            ffv(i).resize(dim);
+            aav(i).resize(dim);
+            for (int j = 0; j < dim; j++){
+                ffv(i).component(j) = F[j];	
+                aav(i).component(j) = G[j];
+            }
+
+            // Find the eigenpairs
+            vector<eigenpair> etemp;
+            Eigen::eig(dim, &JF[0][0], &JG[0][0], etemp);
+
+            e(i).clear();
+            e(i).resize(etemp.size());
+            for (int j = 0; j < etemp.size(); j++) e(i)[j] = etemp[j];
+            // Decide if the eigenvalues are real or complex
+            eig_is_real(i).clear();
+            eig_is_real(i).resize(etemp.size());
+            for (int j = 0; j < etemp.size(); j++){
+                if (fabs(etemp[j].i) < epsilon) eig_is_real(i)[j] = true;
+                else                            eig_is_real(i)[j] = false;
+            }
+        }
+    }
+
+    return;
+}
+
+void Bifurcation_Curve::fill_values_on_grid(const RealVector &pmin, const RealVector &pmax, 
+                                 const FluxFunction *ff, const AccumulationFunction *aa, 
+                                 const int *number_of_grid_pnts,
+                                 Matrix<RealVector> &grid,
+                                 Matrix<RealVector> &ffv, Matrix<RealVector> &aav, 
+                                 Matrix< vector<double> > &e, Matrix< vector<bool> > &eig_is_real,
+                                 Boundary *b, Matrix<bool> &is_inside){
+
+    Matrix< std::vector<eigenpair> > temp(grid.rows(), grid.cols());
+    fill_values_on_grid(pmin, pmax, ff, aa, number_of_grid_pnts, grid, ffv, aav, temp, eig_is_real, b, is_inside);
+//    printf("temp = %d x %d\n", temp.rows(), temp.cols());
+
+    for (int i = 0; i < grid.rows(); i++){
+        for (int j = 0; j < grid.cols(); j++){
+            e(i, j).resize(pmin.size());
+            //printf("is_inside(%d, %d).size() = %d\n", i, j, is_inside(i, j));
+            if (is_inside(i, j)) for (int k = 0; k < pmin.size(); k++) e(i, j)[k] = temp(i, j)[k].r;
+        }
+    }
+//    printf("Fill_values_on_grid. Line = %u\n", __LINE__);
 
     return;
 }
