@@ -141,9 +141,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
 
         dc.compute_double_contact(left_vrs, right_vrs);
 
-
-
-
     }
 
 
