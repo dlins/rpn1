@@ -496,6 +496,15 @@ public class RPNUMERICS {
 
     }
 
+
+    public static CompositeCalc createCompositeCalc(OrbitPoint initialPoint){
+
+
+        return  new CompositeCalc(initialPoint,Integer.parseInt(getParamValue("shock", "family")), direction_);
+
+
+    }
+
     public static BoundaryExtensionCurveCalc createExtensionCurveCalc() {
 
 

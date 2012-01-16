@@ -89,6 +89,9 @@ public class RarefactionOrbitView extends PolyLine {
                         points_[i].getCoords()), start_dc);
 
                 direction_dc.setElement(0, direction_dc.getX() - start_dc.getX());
+
+
+
                 direction_dc.setElement(1, direction_dc.getY() - start_dc.getY());
 
                 Arrow arrow = new Arrow(new RealVector(start_dc.getCoords()),

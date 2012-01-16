@@ -144,6 +144,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
     //    IsoTriang2DBoundary tempBoundary(A, B, C);
 
 
+//    double deltaxi = 1e-3; // This is the original value (Rodrigo/ Panters)
+
     double deltaxi = 1e-3;
 
 
@@ -197,11 +199,18 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
 
     cout << "Tamanho da curva: " << coords.size() << endl;
 
+    cout<<"Pontos da rarefacao "<<endl;
+
     jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(coords.size(), classOrbitPoint, NULL);
 
     for (i = 0; i < coords.size(); i++) {
 
         RealVector tempVector = coords.at(i);
+
+
+      
+
+        cout<<tempVector<<endl;
 
         double * dataCoords = tempVector;
 

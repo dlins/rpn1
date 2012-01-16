@@ -16,6 +16,14 @@ public class RarefactionOrbit extends Orbit implements RpSolution {
     public RarefactionOrbit(OrbitPoint[] points, int flag) {
         super(points, flag);
 
+
+        System.out.println("Pontos da rarefacao em Java:");
+        for (OrbitPoint orbitPoint : points) {
+
+            System.out.println(orbitPoint);
+
+        }
+
     }
 
     // Methods

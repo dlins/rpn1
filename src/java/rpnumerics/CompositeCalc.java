@@ -8,7 +8,7 @@ package rpnumerics;
 
 import wave.ode.ODESolver;
 
-public class CompositeCalc implements RpCalculation {
+public class CompositeCalc extends OrbitCalc  {
     //
     // Constants
     //
@@ -25,7 +25,9 @@ public class CompositeCalc implements RpCalculation {
     //
   
 
-    public CompositeCalc(PhasePoint point, int familyIndex, int increase) {
+    public CompositeCalc(OrbitPoint point, int familyIndex, int increase) {
+
+        super(point, increase);
         start_ = point;
         increase_= increase;
         familyIndex_ = familyIndex;
@@ -34,23 +36,23 @@ public class CompositeCalc implements RpCalculation {
     //
     // Methods
     //
+    @Override
     public RpSolution recalc() throws RpException {
 
         return calc();
 
     }
 
+    @Override
     public RpSolution calc() throws RpException {
 
-        RpSolution result = null;
+        CompositeCurve result = null;
 
 
         result = (CompositeCurve) nativeCalc(start_, increase_, familyIndex_);
         if (result == null) {
             throw new RpException("Error in native layer");
         }
-
-
 
         return result;
     }

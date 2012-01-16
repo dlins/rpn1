@@ -20,6 +20,8 @@
 #include <vector>
 #include "Rarefaction.h"
 
+#include "CompositeCurve.h"
+#include "Shock.h"
 
 using std::vector;
 
@@ -33,54 +35,52 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
 
     cout << "chamando JNI composite calc" << endl;
 
-    jclass classPhasePoint = (env)->FindClass(PHASEPOINT_LOCATION);
-    jclass hugoniotSegmentClass = (env)->FindClass(HUGONIOTSEGMENTCLASS_LOCATION);
-    jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
-    jclass arrayListClass = env->FindClass("java/util/ArrayList");
-    jclass compositeCurveClass = env->FindClass(COMPOSITECURVE_LOCATION);
+    unsigned int i;
 
-    jmethodID toDoubleMethodID = (env)->GetMethodID(classPhasePoint, "toDouble", "()[D");
-    jmethodID realVectorConstructorDoubleArray = env->GetMethodID(realVectorClass, "<init>", "([D)V");
-    jmethodID hugoniotSegmentConstructor = (env)->GetMethodID(hugoniotSegmentClass, "<init>", "(Lwave/util/RealVector;DLwave/util/RealVector;DI)V");
-    jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
-    jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
-    jmethodID compositeCurveConstructor = env->GetMethodID(compositeCurveClass, "<init>", "(Ljava/util/List;Ljava/util/List;)V");
+    jclass classOrbitPoint = (env)->FindClass(ORBITPOINT_LOCATION);
+    jclass classRarefactionOrbit = (env)->FindClass(COMPOSITECURVE_LOCATION);
 
+    jmethodID rarefactionOrbitConstructor = (env)->GetMethodID(classRarefactionOrbit, "<init>", "([Lrpnumerics/OrbitPoint;II)V");
+    jmethodID orbitPointConstructor = (env)->GetMethodID(classOrbitPoint, "<init>", "([D)V");
+    jmethodID toDoubleMethodID = (env)->GetMethodID(classOrbitPoint, "toDouble", "()[D");
 
     //Input processing
-    jdoubleArray phasePointArray = (jdoubleArray) (env)->CallObjectMethod(initialPoint, toDoubleMethodID);
+    jdoubleArray inputPhasePointArray = (jdoubleArray) (env)->CallObjectMethod(initialPoint, toDoubleMethodID);
 
-    int dimension = env->GetArrayLength(phasePointArray);
+    double input [env->GetArrayLength(inputPhasePointArray)];
 
-    double input [dimension];
+    env->GetDoubleArrayRegion(inputPhasePointArray, 0, env->GetArrayLength(inputPhasePointArray), input);
 
-    env->GetDoubleArrayRegion(phasePointArray, 0, dimension, input);
+    RealVector realVectorInput(env->GetArrayLength(inputPhasePointArray));
 
-    env->DeleteLocalRef(phasePointArray);
 
-    RealVector inputPoint(dimension, input);
-    cout << inputPoint << endl;
+    for (i = 0; i < (unsigned int) realVectorInput.size(); i++) {
 
-    jobject leftSegmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
+        realVectorInput.component(i) = input[i];
 
-    jobject rightSegmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
+    }
+
+    env->DeleteLocalRef(inputPhasePointArray);
 
 
     // Storage space for the segments:
 
 
-    int number_of_grid_points[2];
+
+
+    std::vector<RealVector> rarefactionCurve;
+    std::vector<RealVector> compositeCurve;
 
 
     if (RpNumerics::getPhysics().ID().compare("Stone") == 0) {
 
         cout << "Chamando com stone" << endl;
 
-        dimension = 2;
+        int dimension = 2;
 
-        const FluxFunction * stoneflux = &RpNumerics::getPhysics().fluxFunction();
+        FluxFunction * stoneflux = (FluxFunction *) RpNumerics::getPhysics().fluxFunction().clone();
 
-        const AccumulationFunction * stoneaccum = &RpNumerics::getPhysics().accumulation();
+        AccumulationFunction * stoneaccum = (AccumulationFunction *) RpNumerics::getPhysics().accumulation().clone();
 
         Boundary * tempBoundary = RpNumerics::getPhysics().boundary().clone();
 
@@ -105,16 +105,21 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
         //        cout << pmax << endl;
         //
         //
+
+
         cout << "Increase: " << increase << endl;
 
-        double deltaxi = 1e-3;
+//        double deltaxi = 1e-3;
+        double deltaxi = 1e-2;
 
         //Compute rarefaction
 
 
-        std::vector<RealVector> rarefactionCurve;
 
-        Rarefaction::curve(inputPoint,
+        cout << "Increase da rarefacao: " << increase << endl;
+
+
+        Rarefaction::curve(realVectorInput,
                 RAREFACTION_INITIALIZE_YES,
                 0,
                 familyIndex,
@@ -127,107 +132,70 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
                 rarefactionCurve);
 
 
+        increase = WAVE_FORWARD;
 
+        cout << "Rarefaction curve" << rarefactionCurve.size() << endl;
 
+        CompositeCurve::curve(rarefactionCurve, COMPOSITE_FROM_NORMAL_RAREFACTION, familyIndex, increase, stoneflux, stoneaccum, tempBoundary, compositeCurve);
 
 
     }
 
-  
+    //Orbit members creation
+
+    cout << "Tamanho da curva: " << compositeCurve.size() << endl;
+
+    jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(compositeCurve.size(), classOrbitPoint, NULL);
+
+    for (i = 0; i < compositeCurve.size(); i++) {
+
+        RealVector tempVector = compositeCurve.at(i);
 
 
-    for (unsigned int i = 0; i < curve_segments.size() / 2; i++) {
-        //    for (unsigned int i = 0; i < right_vrs.size() / 2; i++) {
-
-        //        cout << "Coordenada : " << left_vrs.at(2 * i) << endl;
-        //        cout << "Coordenada : " << left_vrs.at(2 * i + 1) << endl;
+        //        cout << "Ponto " << i << " " << tempVector<<" dimensao:"<<tempVector.size() << endl;
 
 
-        jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
-        jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
+
+        RealVector newVector(3);
+
+        newVector.component(0) = tempVector(0);
+        newVector.component(1) = tempVector(1);
+        newVector.component(2) = 0;
 
 
-        double * leftCoords = (double *) curve_segments.at(2 * i);
-        double * rightCoords = (double *) curve_segments.at(2 * i + 1);
+        double * dataCoords = newVector;
 
 
-        //
-        //        double * leftCoords = (double *) right_vrs.at(2 * i);
-        //        double * rightCoords = (double *) right_vrs.at(2 * i + 1 );
 
+        jdoubleArray jTempArray = (env)->NewDoubleArray(newVector.size());
 
-        env->SetDoubleArrayRegion(eigenValRLeft, 0, dimension, leftCoords);
-        env->SetDoubleArrayRegion(eigenValRRight, 0, dimension, rightCoords);
+        (env)->SetDoubleArrayRegion(jTempArray, 0, newVector.size(), dataCoords);
 
+        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray);
 
-        //Construindo left e right points
-        jobject realVectorLeftPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRLeft);
+        (env)->SetObjectArrayElement(orbitPointArray, i, orbitPoint);
 
-        jobject realVectorRightPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRRight);
+        env->DeleteLocalRef(jTempArray);
 
-        int pointType = 0;
-
-        double leftSigma = 0;
-        double rightSigma = 0;
-        //            cout << "type of " << j << " = " << classified[i].type << endl;
-        //            cout << "speed of " << j << " = " << classified[i].vec[j].component(dimension + m) << endl;
-        //            cout << "speed of " << j + 1 << " = " << classified[i].vec[j + 1].component(dimension + m) << endl;
-
-        jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, pointType);
-        env->CallObjectMethod(leftSegmentsArray, arrayListAddMethod, hugoniotSegment);
+        env->DeleteLocalRef(orbitPoint);
 
     }
 
+    //Building the orbit
+
+    jobject rarefactionOrbit = (env)->NewObject(classRarefactionOrbit, rarefactionOrbitConstructor, orbitPointArray, increase, familyIndex);
 
 
+    //Cleaning up
 
-    for (unsigned int i = 0; i < domain_segments.size() / 2; i++) {
+    compositeCurve.clear();
 
-        //        cout << "Coordenada : " << left_vrs.at(2 * i) << endl;
-        //        cout << "Coordenada : " << left_vrs.at(2 * i + 1) << endl;
+    env->DeleteLocalRef(orbitPointArray);
+    env->DeleteLocalRef(classOrbitPoint);
+    env->DeleteLocalRef(classRarefactionOrbit);
 
-
-        jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
-        jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
-
-
-        double * leftCoords = (double *) domain_segments.at(2 * i);
-        double * rightCoords = (double *) domain_segments.at(2 * i + 1);
+    return rarefactionOrbit;
 
 
-        env->SetDoubleArrayRegion(eigenValRLeft, 0, dimension, leftCoords);
-        env->SetDoubleArrayRegion(eigenValRRight, 0, dimension, rightCoords);
-
-
-        //Construindo left e right points
-        jobject realVectorLeftPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRLeft);
-
-        jobject realVectorRightPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRRight);
-
-        int pointType = 0;
-
-        double leftSigma = 0;
-        double rightSigma = 0;
-        //            cout << "type of " << j << " = " << classified[i].type << endl;
-        //            cout << "speed of " << j << " = " << classified[i].vec[j].component(dimension + m) << endl;
-        //            cout << "speed of " << j + 1 << " = " << classified[i].vec[j + 1].component(dimension + m) << endl;
-
-        jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, pointType);
-        env->CallObjectMethod(rightSegmentsArray, arrayListAddMethod, hugoniotSegment);
-
-    }
-
-    jobject result = env->NewObject(compositeCurveClass, compositeCurveConstructor, leftSegmentsArray, rightSegmentsArray);
-
-
-    //    env->DeleteLocalRef(eigenValRLeft);
-    //    env->DeleteLocalRef(eigenValRRight);
-    //    env->DeleteLocalRef(hugoniotSegmentClass);
-    //    env->DeleteLocalRef(realVectorClass);
-    //    env->DeleteLocalRef(arrayListClass);
-
-
-
-    return result;
 
 }
