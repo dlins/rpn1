@@ -31,8 +31,6 @@ public class CompositeGeomFactory extends OrbitGeomFactory {
 
     protected RpGeometry createGeomFromSource() {
 
-
-
         CompositeCurve compositeCurve = (CompositeCurve) geomSource();
 
         return new CompositeGeom(MultidAdapter.converseOrbitPointsToCoordsArray(compositeCurve.getPoints()), this);

@@ -1048,6 +1048,13 @@ int Shock::curve(const RealVector &ref, bool local_shock, const RealVector &in, 
                 sigma_left, sign_composite_left, sign_shock_left,
                 shockcurve_alt);
 
+        for (int i = 0; i < shockcurve_alt.size(); i++) {
+            cout << "Shock curve dentro de curve: " << shockcurve_alt[i] << endl;
+
+
+        }
+
+
         return (info_curve_constructor_right && info_curve_constructor_left);
     }
 
@@ -1173,7 +1180,8 @@ int Shock::curve(const RealVector &ref, bool local_shock, const RealVector &in, 
 
 
 
-// For the moment being, ONLY FOR 2D.
+// For the moment being, ONLY FOR 2D. Actually this part of code is not in use, maybe it is not necessary (Panters)
+
 //
 
 double Shock::find_initial_epsilon(std::vector<RealVector> &right_eigenvector, std::vector<RealVector> &r_dot, double cos_alpha) {

@@ -28,7 +28,7 @@ using std::vector;
  */
 
 
-JNIEXPORT jobject JNICALL Java_rpnumerics_IntegralCurveCalc_calc(JNIEnv * env, jobject obj, jobject initialPoint,jint familyIndex, jint timeDirection) {
+JNIEXPORT jobject JNICALL Java_rpnumerics_IntegralCurveCalc_calc(JNIEnv * env, jobject obj, jobject initialPoint, jint familyIndex, jint timeDirection) {
 
 
     unsigned int i;
@@ -36,7 +36,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_IntegralCurveCalc_calc(JNIEnv * env, j
     jclass classOrbitPoint = (env)->FindClass(ORBITPOINT_LOCATION);
     jclass classRarefactionOrbit = (env)->FindClass(RAREFACTIONORBIT_LOCATION);
 
-    jmethodID rarefactionOrbitConstructor = (env)->GetMethodID(classRarefactionOrbit, "<init>", "([Lrpnumerics/OrbitPoint;I)V");
+    jmethodID rarefactionOrbitConstructor = (env)->GetMethodID(classRarefactionOrbit, "<init>", "([Lrpnumerics/OrbitPoint;II)V");
     jmethodID orbitPointConstructor = (env)->GetMethodID(classOrbitPoint, "<init>", "([D)V");
     jmethodID toDoubleMethodID = (env)->GetMethodID(classOrbitPoint, "toDouble", "()[D");
 
@@ -61,43 +61,14 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_IntegralCurveCalc_calc(JNIEnv * env, j
 
     vector <RealVector> coords;
 
-
-    SubPhysics & physics = RpNumerics::getPhysics().getSubPhysics(0);
-
-    const Boundary & physicsBoundary = physics.boundary();
-
-    Boundary * tempBoundary;
-
-
-    if (RpNumerics::getPhysics().ID().compare("TPCW") == 0) {
-
-        physics.preProcess(realVectorInput);
-
-        RealVector min(physicsBoundary.minimums());
-        RealVector max(physicsBoundary.maximums());
-
-
-        physics.preProcess(min);
-        physics.preProcess(max);
-
-
-        vector<bool> testBoundary;
-
-        testBoundary.push_back(true);
-        testBoundary.push_back(true);
-        testBoundary.push_back(false);
-
-
-        tempBoundary = new RectBoundary(min, max);
-
-
-    }
-    else
-        tempBoundary = physics.boundary().clone();
+    Boundary * tempBoundary = RpNumerics::getPhysics().boundary().clone();
 
     double deltaxi = 1e-3;
 
     cout << " Parametros " << RpNumerics::getPhysics().fluxFunction().fluxParams().params() << endl;
+
+    const FluxFunction * fluxFunction = &RpNumerics::getPhysics().fluxFunction();
+    const AccumulationFunction * accumulationFunction = &RpNumerics::getPhysics().accumulation();
 
     int info = Rarefaction::curve(realVectorInput,
             RAREFACTION_INITIALIZE_YES,
@@ -106,15 +77,16 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_IntegralCurveCalc_calc(JNIEnv * env, j
             timeDirection,
             CHECK_RAREFACTION_MONOTONY_FALSE,
             deltaxi,
-            (FluxFunction *) RpNumerics::getPhysics().fluxFunction().clone(),
-            (AccumulationFunction*) RpNumerics::getPhysics().accumulation().clone(),
+            fluxFunction,
+            accumulationFunction,
             RAREFACTION_GENERAL_ACCUMULATION,
             tempBoundary,
             coords);
 
     delete tempBoundary;
-    
-    physics.postProcess(coords);
+
+
+
     //    for (int i = 0; i < coords.size(); i++) cout << "coords(" << i << ") = " << coords[i] << endl;
 
     //    cout << "Resultado da rarefacao: " << info << ", size = " << coords.size() << endl;

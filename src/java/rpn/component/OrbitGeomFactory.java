@@ -5,7 +5,9 @@
  */
 package rpn.component;
 
+import java.awt.Color;
 import rpnumerics.*;
+import wave.multid.view.ViewingAttr;
 
 public class OrbitGeomFactory extends RpCalcBasedGeomFactory {
     //
@@ -17,6 +19,7 @@ public class OrbitGeomFactory extends RpCalcBasedGeomFactory {
     //
     // Constructors/Initializers
     //
+
     public OrbitGeomFactory(OrbitCalc calc) {
         super(calc);
     }
@@ -27,7 +30,20 @@ public class OrbitGeomFactory extends RpCalcBasedGeomFactory {
     //
     // Methods
     //
-   
+    protected ViewingAttr selectViewingAttr() {
+
+        int family = (((Orbit) this.geomSource()).getFamilyIndex());
+
+        System.out.println("Family Index: " + family);
+        if (family == 1) {
+            return new ViewingAttr(Color.red);
+        }
+        if (family == 0) {
+            return new ViewingAttr(Color.blue);
+        }
+
+        return new ViewingAttr(Color.white);
+    }
 
     protected RpGeometry createGeomFromSource() {
         Orbit orbit = (Orbit) geomSource();
@@ -38,7 +54,7 @@ public class OrbitGeomFactory extends RpCalcBasedGeomFactory {
     public String toXML() {
         StringBuffer str = new StringBuffer();
         String timedir = "pos";
-        if (((OrbitCalc) rpCalc()).tDirection() == OrbitGeom.BACKWARD_DIR) {
+        if (((OrbitCalc) rpCalc()).getDirection() == OrbitGeom.BACKWARD_DIR) {
             timedir = "neg";
         }
         str.append("<ORBITCALC timedirection=\"" + timedir + "\"" + " initialpoint=\"" + ((OrbitCalc) rpCalc()).getStart() + "\"" + " calcready=\"" + rpn.parser.RPnDataModule.RESULTS + "\"" + ">\n");

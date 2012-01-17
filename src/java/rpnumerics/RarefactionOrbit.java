@@ -7,22 +7,11 @@
 package rpnumerics;
 
 public class RarefactionOrbit extends Orbit implements RpSolution {
-
-    int familyIndex_;
-
     //
     // Constructor
     //
-    public RarefactionOrbit(OrbitPoint[] points, int flag) {
-        super(points, flag);
-
-
-        System.out.println("Pontos da rarefacao em Java:");
-        for (OrbitPoint orbitPoint : points) {
-
-            System.out.println(orbitPoint);
-
-        }
+    public RarefactionOrbit(OrbitPoint[] points, int familyIndex,int flag) {
+        super(points, familyIndex,flag);
 
     }
 
@@ -42,7 +31,7 @@ public class RarefactionOrbit extends Orbit implements RpSolution {
     public String toXML() {
 
         StringBuffer buffer = new StringBuffer();
-        buffer.append("<ORBIT flag=\"" + getIntegrationFlag() + "\">\n");
+        buffer.append("<ORBIT flag=\"" + getDirection() + "\">\n");
         for (int i = 0; i < getPoints().length; i++) {
 
             buffer.append("<ORBITPOINT time=\""
@@ -74,18 +63,5 @@ public class RarefactionOrbit extends Orbit implements RpSolution {
         return buffer.toString();
 
     }
-
-    public int getFamilyIndex() {
-        return familyIndex_;
-    }
-
-    /**@deprecated
-     *
-     * Set in constructor !!
-     *
-     * @param familyIndex_
-     */
-    public void setFamilyIndex(int familyIndex_) {
-        this.familyIndex_ = familyIndex_;
-    }
+   
 }

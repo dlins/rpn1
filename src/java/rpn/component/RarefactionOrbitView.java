@@ -1,5 +1,6 @@
 package rpn.component;
 
+import java.awt.BasicStroke;
 import java.awt.Graphics2D;
 import rpnumerics.RarefactionOrbit;
 import wave.multid.view.PolyLine;
@@ -9,6 +10,7 @@ import wave.multid.DimMismatchEx;
 import wave.multid.view.ViewingAttr;
 import java.util.ArrayList;
 import java.awt.Shape;
+import java.awt.Stroke;
 import java.awt.geom.GeneralPath;
 import rpnumerics.OrbitPoint;
 import wave.multid.Coords2D;
@@ -49,20 +51,9 @@ public class RarefactionOrbitView extends PolyLine {
         return composite;
     }
 
-    
-     public void draw(Graphics2D g) {
+   
+   
 
-        g.setColor(getViewingAttr().getColor());
-
-        super.draw(g);
-
-        for (int i = 0; i < arrowList_.size(); i++) {
-
-            ((Arrow) (arrowList_.get(i))).paintComponent(g);
-        }
-    }
-    
-    
     private void arrowsCalculations() {
 
         arrowList_ = new ArrayList();
@@ -72,12 +63,12 @@ public class RarefactionOrbitView extends PolyLine {
             Coords2D endPoint = new Coords2D();
             getViewingTransform().viewPlaneTransform(new CoordsArray(points_[i]),
                     startPoint);
-            getViewingTransform().viewPlaneTransform(new CoordsArray(points_[i +
-                    1]), endPoint);
+            getViewingTransform().viewPlaneTransform(new CoordsArray(points_[i
+                    + 1]), endPoint);
             endPoint.sub(startPoint);
-            if (endPoint.norm() >
-                    (getViewingTransform().viewPlane().getViewport().getWidth() /
-                    SCALE)) {
+            if (endPoint.norm()
+                    > (getViewingTransform().viewPlane().getViewport().getWidth()
+                    / SCALE)) {
 
                 Coords2D direction_dc = new Coords2D();
                 Coords2D start_dc = new Coords2D();

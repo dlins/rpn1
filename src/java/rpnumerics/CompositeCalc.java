@@ -6,8 +6,6 @@
  */
 package rpnumerics;
 
-import wave.ode.ODESolver;
-
 public class CompositeCalc extends OrbitCalc  {
     //
     // Constants
@@ -16,22 +14,14 @@ public class CompositeCalc extends OrbitCalc  {
     // Members
     //
 
-    private PhasePoint start_;
-    private int increase_;
-    private int familyIndex_;
-
+ 
     //
     // Constructors/Initializers
     //
   
 
     public CompositeCalc(OrbitPoint point, int familyIndex, int increase) {
-
-        super(point, increase);
-        start_ = point;
-        increase_= increase;
-        familyIndex_ = familyIndex;
-
+        super(point, familyIndex,increase);
     }
     //
     // Methods
@@ -48,8 +38,7 @@ public class CompositeCalc extends OrbitCalc  {
 
         CompositeCurve result = null;
 
-
-        result = (CompositeCurve) nativeCalc(start_, increase_, familyIndex_);
+        result = (CompositeCurve) nativeCalc(getStart(), getDirection(), getFamilyIndex());
         if (result == null) {
             throw new RpException("Error in native layer");
         }

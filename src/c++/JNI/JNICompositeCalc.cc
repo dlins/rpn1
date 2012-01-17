@@ -62,88 +62,65 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
 
     env->DeleteLocalRef(inputPhasePointArray);
 
-
     // Storage space for the segments:
-
-
-
 
     std::vector<RealVector> rarefactionCurve;
     std::vector<RealVector> compositeCurve;
 
+    cout << "Chamando com stone" << endl;
 
-    if (RpNumerics::getPhysics().ID().compare("Stone") == 0) {
+    FluxFunction * stoneflux = (FluxFunction *) RpNumerics::getPhysics().fluxFunction().clone();
 
-        cout << "Chamando com stone" << endl;
+    AccumulationFunction * stoneaccum = (AccumulationFunction *) RpNumerics::getPhysics().accumulation().clone();
 
-        int dimension = 2;
+    Boundary * tempBoundary = RpNumerics::getPhysics().boundary().clone();
 
-        FluxFunction * stoneflux = (FluxFunction *) RpNumerics::getPhysics().fluxFunction().clone();
+    cout << "Increase: " << increase << endl;
 
-        AccumulationFunction * stoneaccum = (AccumulationFunction *) RpNumerics::getPhysics().accumulation().clone();
+    //        double deltaxi = 1e-3;
+    double deltaxi = 1e-2;
 
-        Boundary * tempBoundary = RpNumerics::getPhysics().boundary().clone();
+    //Compute rarefaction
 
+    cout << "Increase da rarefacao: " << increase << endl;
 
-        //        const RealVector & pmin = RpNumerics::getPhysics().boundary().minimums();
-        //        const RealVector & pmax = RpNumerics::getPhysics().boundary().maximums();
-
-        //        RealVector pmin(2);
-        //        RealVector pmax(2);
-        //
-        //
-        //        pmin.component(0) = 0.0;
-        //        pmin.component(1) = 0.0;
-        //
-        //
-        //        pmax.component(0) = 1.0;
-        //        pmax.component(1) = 1.0;
-        //
-        //
-        //
-        //        cout << pmin << endl;
-        //        cout << pmax << endl;
-        //
-        //
+    Rarefaction::curve(realVectorInput,
+            RAREFACTION_INITIALIZE_YES,
+            0,
+            familyIndex,
+            increase,
+            CHECK_RAREFACTION_MONOTONY_TRUE,
+            deltaxi,
+            stoneflux, stoneaccum,
+            RAREFACTION_GENERAL_ACCUMULATION,
+            tempBoundary,
+            rarefactionCurve);
 
 
-        cout << "Increase: " << increase << endl;
-
-//        double deltaxi = 1e-3;
-        double deltaxi = 1e-2;
-
-        //Compute rarefaction
-
-
-
-        cout << "Increase da rarefacao: " << increase << endl;
-
-
-        Rarefaction::curve(realVectorInput,
-                RAREFACTION_INITIALIZE_YES,
-                0,
-                familyIndex,
-                increase,
-                CHECK_RAREFACTION_MONOTONY_TRUE,
-                deltaxi,
-                stoneflux, stoneaccum,
-                RAREFACTION_GENERAL_ACCUMULATION,
-                tempBoundary,
-                rarefactionCurve);
-
+    if (increase == RAREFACTION_SPEED_INCREASE)
 
         increase = WAVE_FORWARD;
 
-        cout << "Rarefaction curve" << rarefactionCurve.size() << endl;
+    if (increase == RAREFACTION_SPEED_DECREASE)
 
-        CompositeCurve::curve(rarefactionCurve, COMPOSITE_FROM_NORMAL_RAREFACTION, familyIndex, increase, stoneflux, stoneaccum, tempBoundary, compositeCurve);
+        increase = WAVE_BACKWARD;
 
+    cout << "Rarefaction curve" << rarefactionCurve.size() << endl;
 
-    }
+    CompositeCurve::curve(rarefactionCurve, COMPOSITE_FROM_NORMAL_RAREFACTION, familyIndex, increase, stoneflux, stoneaccum, tempBoundary, compositeCurve);
 
-    //Orbit members creation
+    delete stoneflux;
+    delete stoneaccum;
+    delete tempBoundary;
+
+    if (compositeCurve.size() == 0)
+        return NULL;
+
 
     cout << "Tamanho da curva: " << compositeCurve.size() << endl;
+
+
+    //Orbit members creation
 
     jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(compositeCurve.size(), classOrbitPoint, NULL);
 
@@ -151,21 +128,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
 
         RealVector tempVector = compositeCurve.at(i);
 
-
-        //        cout << "Ponto " << i << " " << tempVector<<" dimensao:"<<tempVector.size() << endl;
-
-
-
         RealVector newVector(3);
 
         newVector.component(0) = tempVector(0);
         newVector.component(1) = tempVector(1);
-        newVector.component(2) = 0;
-
+        newVector.component(2) = 0; //TODO Substituir pelo indice do ponto correspondente na rarefacao ??
 
         double * dataCoords = newVector;
-
-
 
         jdoubleArray jTempArray = (env)->NewDoubleArray(newVector.size());
 

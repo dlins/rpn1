@@ -347,15 +347,15 @@ public class RPNUMERICS {
 
 
 
-        int [] resolution  = new int[2];
+        int[] resolution = new int[2];
 
 
-        resolution[0]= new Integer(getContourConfiguration().getParam("x-resolution"));
+        resolution[0] = new Integer(getContourConfiguration().getParam("x-resolution"));
         resolution[1] = new Integer(getContourConfiguration().getParam("y-resolution"));
 
 
 
-        return new HugoniotCurveCalcND(xZero,resolution);
+        return new HugoniotCurveCalcND(xZero, resolution);
     }
 
     public static HugoniotCurveCalc createHugoniotCalc() {
@@ -407,13 +407,11 @@ public class RPNUMERICS {
          * TODO O Valor de family deve ser o mesmo para choque e rarefacao ????
          */
 
-        return new RarefactionOrbitCalc("methodName", "flowName", orbitPoint, Integer.parseInt(getParamValue("shock", "family")), direction_);//TODO Is method and flowName needed ?
+        return new RarefactionOrbitCalc(orbitPoint, Integer.parseInt(getParamValue("shock", "family")), direction_);//TODO Is method and flowName needed ?
 
     }
 
-
-
-      public static IntegralCurveCalc createIntegralCurveCalc(OrbitPoint orbitPoint) {
+    public static IntegralCurveCalc createIntegralCurveCalc(OrbitPoint orbitPoint) {
 
         /*
          * TODO O Valor de family deve ser o mesmo para choque e rarefacao ????
@@ -492,15 +490,14 @@ public class RPNUMERICS {
 
         int singular = 0;//TODO Pegar do arquivo de entrada
 
-        return new HysteresisCurveCalc(domainFamily, curveFamily, xResolution, yResolution, characteristicWhere,singular);
+        return new HysteresisCurveCalc(domainFamily, curveFamily, xResolution, yResolution, characteristicWhere, singular);
 
     }
 
+    public static CompositeCalc createCompositeCalc(OrbitPoint initialPoint) {
 
-    public static CompositeCalc createCompositeCalc(OrbitPoint initialPoint){
 
-
-        return  new CompositeCalc(initialPoint,Integer.parseInt(getParamValue("shock", "family")), direction_);
+        return new CompositeCalc(initialPoint, Integer.parseInt(getParamValue("shock", "family")), direction_);
 
 
     }
@@ -546,7 +543,7 @@ public class RPNUMERICS {
 
         System.out.println(direction_);
 
-        return new ShockCurveCalc("methodname", tolerance, orbitPoint, family, direction_);
+        return new ShockCurveCalc(orbitPoint, family, direction_);
     }
 
     public static BifurcationCurveCalc createBifurcationCalc() {
