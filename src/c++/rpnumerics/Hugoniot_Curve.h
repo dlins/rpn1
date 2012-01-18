@@ -15,10 +15,13 @@ class Hugoniot_Curve : public ImplicitFunction {
         const FluxFunction         *ff;
         const AccumulationFunction *aa;
 
-        // For the grid proper.
-        RealVector pmin, pmax, Uref;
-        double *Fref, *Gref;
-        double *JFref, *JGref;
+
+    Boundary * boundary;
+
+    // For the grid proper.
+    RealVector pmin, pmax, Uref;
+    double *Fref, *Gref;
+    double *JFref, *JGref;
 
         int *number_of_cells;
         
@@ -31,15 +34,15 @@ class Hugoniot_Curve : public ImplicitFunction {
 
         void fill_with_jet(const RpFunction *flux_object, int n, double *in, int degree, double *F, double *J, double *H);
 
-        Boundary *boundary;
-    protected:
-    public:
-        Hugoniot_Curve(const FluxFunction *f, const AccumulationFunction *a, 
-                       Boundary *b, 
-                       const RealVector &min, const RealVector &max, 
-                       const int *cells,
-                       const RealVector &ref);
-        ~Hugoniot_Curve();
+
+  
+protected:
+public:
+    Hugoniot_Curve(const FluxFunction *f, const AccumulationFunction *a,Boundary * b,
+            const RealVector &min, const RealVector &max,
+            const int *cells,
+            const RealVector &ref);
+    ~Hugoniot_Curve();
 
         void set_reference_point(const RealVector &ref);
 

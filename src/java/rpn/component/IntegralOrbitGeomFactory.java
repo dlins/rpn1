@@ -7,7 +7,7 @@ package rpn.component;
 
 import rpnumerics.*;
 
-public class IntegralOrbitGeomFactory extends RpCalcBasedGeomFactory {
+public class IntegralOrbitGeomFactory extends OrbitGeomFactory {
     //
     // Constants
     //
@@ -38,7 +38,7 @@ public class IntegralOrbitGeomFactory extends RpCalcBasedGeomFactory {
     public String toXML() {
         StringBuffer str = new StringBuffer();
         String timedir = "pos";
-        if (((OrbitCalc) rpCalc()).tDirection() == OrbitGeom.BACKWARD_DIR) {
+        if (((OrbitCalc) rpCalc()).getDirection() == OrbitGeom.BACKWARD_DIR) {
             timedir = "neg";
         }
         str.append("<ORBITCALC timedirection=\"" + timedir + "\"" + " initialpoint=\"" + ((OrbitCalc) rpCalc()).getStart() + "\"" + " calcready=\"" + rpn.parser.RPnDataModule.RESULTS + "\"" + ">\n");

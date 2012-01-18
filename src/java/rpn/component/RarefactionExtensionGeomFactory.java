@@ -5,10 +5,12 @@
  */
 package rpn.component;
 
-import rpnumerics.CompositeCalc;
 import rpnumerics.CompositeCurve;
+import rpnumerics.HugoniotSegment;
+import rpnumerics.RarefactionExtensionCalc;
+import rpnumerics.RarefactionExtensionCurve;
 
-public class CompositeGeomFactory extends OrbitGeomFactory {
+public class RarefactionExtensionGeomFactory extends RpCalcBasedGeomFactory {
     //
     // Constants
     //
@@ -18,8 +20,7 @@ public class CompositeGeomFactory extends OrbitGeomFactory {
     //
     // Constructors/Initializers
     //
-
-    public CompositeGeomFactory(CompositeCalc calc) {
+    public RarefactionExtensionGeomFactory(RarefactionExtensionCalc calc) {
         super(calc);
     }
     //
@@ -28,15 +29,21 @@ public class CompositeGeomFactory extends OrbitGeomFactory {
     //
     // Methods
     //
-
     protected RpGeometry createGeomFromSource() {
 
-        CompositeCurve compositeCurve = (CompositeCurve) geomSource();
+          RarefactionExtensionCurve curve = (RarefactionExtensionCurve) geomSource();
 
-        return new CompositeGeom(MultidAdapter.converseOrbitPointsToCoordsArray(compositeCurve.getPoints()), this);
+        // assuming a container with HugoniotSegment elements
+        int resultSize = curve.segments().size();
+
+        HugoniotSegGeom[] hugoniotArray = new HugoniotSegGeom[resultSize];
+        for (int i = 0; i < resultSize; i++) {
+            hugoniotArray[i] = new HugoniotSegGeom((HugoniotSegment) curve.segments().get(i));
 
 
+        }
 
+        return new RarefactionExtensionGeom(hugoniotArray, this);
 
     }
 

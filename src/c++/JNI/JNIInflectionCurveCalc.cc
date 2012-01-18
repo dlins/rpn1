@@ -60,24 +60,35 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_InflectionCurveCalc_nativeCalc(JNIEnv 
     //    Test testFunction;
 
     //-------------------------------------------------------------------
-    SubPhysics & subPhysics = RpNumerics::getPhysics().getSubPhysics(0);
+    //    SubPhysics & subPhysics = RpNumerics::getPhysics().getSubPhysics(0);
 
-    int dimension = subPhysics.domain().dim();
+    //    int dimension = subPhysics.domain().dim();
 
- Boundary * boundary = subPhysics.boundary().clone();
+
+    int dimension = RpNumerics::getPhysics().domain().dim();
+
+    //    const Boundary & boundary = subPhysics.boundary();
+    //
+    Boundary * tempBoundary = RpNumerics::getPhysics().boundary().clone();
 
     int cells [2];
 
     cells[0] = 128;
     cells[1] = 128;
 
-    Inflection_Curve inflectionCurve((FluxFunction*) RpNumerics::getPhysics().fluxFunction().clone(), (AccumulationFunction*) RpNumerics::getPhysics().accumulation().clone(),  boundary,
-            boundary->minimums(), boundary->maximums(), cells);
+    cout << "min:" << tempBoundary->minimums();
 
+    cout << "max:" << tempBoundary->maximums();
+
+    Inflection_Curve inflectionCurve((FluxFunction*) RpNumerics::getPhysics().fluxFunction().clone(), (AccumulationFunction*) RpNumerics::getPhysics().accumulation().clone(), tempBoundary,
+            tempBoundary->minimums(), tempBoundary->maximums(), cells);
+
+    
     std::vector<RealVector> left_vrs;
 
     inflectionCurve.curve(family, left_vrs);
- 
+
+    delete tempBoundary;
 
     int tamanho = left_vrs.size();
 
@@ -92,8 +103,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_InflectionCurveCalc_nativeCalc(JNIEnv 
         jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
 
 
-//        cout << "Ponto: " << 2*i << left_vrs[2 * i] << endl;
-//        cout << "Ponto: " << 2*i+1 << left_vrs[2 * i +1] << endl;
+        //        cout << "Ponto: " << 2*i << left_vrs[2 * i] << endl;
+        //        cout << "Ponto: " << 2*i+1 << left_vrs[2 * i +1] << endl;
 
         double * leftCoords = (double *) left_vrs[2 * i];
         double * rightCoords = (double *) left_vrs[2 * i + 1];

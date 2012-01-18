@@ -16,6 +16,7 @@
  * ---------------------------------------------------------------
  * Definitions:
  */
+using namespace std;
 IsoTriang2DBoundary::~IsoTriang2DBoundary() {
 
     delete minimums_;

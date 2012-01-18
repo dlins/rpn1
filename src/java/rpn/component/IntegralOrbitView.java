@@ -29,41 +29,38 @@ public class IntegralOrbitView extends PolyLine {
         super(geom, transf, attr);
     }
 
-    public Shape createShape() {
+//    public Shape createShape() {
+//
+//
+//        GeneralPath composite = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
+//        IntegralCurve source = (IntegralCurve) (((RpGeometry) getAbstractGeom()).geomFactory().
+//                geomSource());
+//        points_ = source.getPoints();
+//
+//        try {
+//            composite.append(super.createShape(), false);
+//
+//        } catch (DimMismatchEx ex) {
+//
+//            ex.printStackTrace();
+//
+//        }
+//
+//        return composite;
+//    }
 
+//    public void draw(Graphics2D g) {
+//
+//        g.setColor(getViewingAttr().getColor());
+//
+//        super.draw(g);
+//
+//        for (int i = 0; i < arrowList_.size(); i++) {
+//
+//            ((Arrow) (arrowList_.get(i))).paintComponent(g);
+//        }
+//    }
 
-        GeneralPath composite = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
-        IntegralCurve source = (IntegralCurve) (((RpGeometry) getAbstractGeom()).geomFactory().
-                geomSource());
-        points_ = source.getPoints();
-        arrowsCalculations();
-
-        try {
-            composite.append(super.createShape(), false);
-
-        } catch (DimMismatchEx ex) {
-
-            ex.printStackTrace();
-
-        }
-
-        return composite;
-    }
-
-    
-     public void draw(Graphics2D g) {
-
-        g.setColor(getViewingAttr().getColor());
-
-        super.draw(g);
-
-        for (int i = 0; i < arrowList_.size(); i++) {
-
-            ((Arrow) (arrowList_.get(i))).paintComponent(g);
-        }
-    }
-    
-    
     private void arrowsCalculations() {
 
         arrowList_ = new ArrayList();
@@ -73,12 +70,12 @@ public class IntegralOrbitView extends PolyLine {
             Coords2D endPoint = new Coords2D();
             getViewingTransform().viewPlaneTransform(new CoordsArray(points_[i]),
                     startPoint);
-            getViewingTransform().viewPlaneTransform(new CoordsArray(points_[i +
-                    1]), endPoint);
+            getViewingTransform().viewPlaneTransform(new CoordsArray(points_[i
+                    + 1]), endPoint);
             endPoint.sub(startPoint);
-            if (endPoint.norm() >
-                    (getViewingTransform().viewPlane().getViewport().getWidth() /
-                    SCALE)) {
+            if (endPoint.norm()
+                    > (getViewingTransform().viewPlane().getViewport().getWidth()
+                    / SCALE)) {
 
                 Coords2D direction_dc = new Coords2D();
                 Coords2D start_dc = new Coords2D();

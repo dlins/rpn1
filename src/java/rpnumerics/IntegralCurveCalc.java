@@ -6,7 +6,7 @@
  */
 package rpnumerics;
 
-public class IntegralCurveCalc implements RpCalculation {
+public class IntegralCurveCalc extends OrbitCalc implements RpCalculation {
     //
     // Constants
     //
@@ -14,15 +14,14 @@ public class IntegralCurveCalc implements RpCalculation {
     // Members
     //
 
-    private PhasePoint start_;
-      private int familyIndex_;
+    
 
     //
     // Constructors/Initializers
     //
     public IntegralCurveCalc(PhasePoint point,int familyIndex) {
-        start_ = point;
-        familyIndex_=familyIndex;
+        super(new OrbitPoint(point), familyIndex, 0);
+       
     }
     //
     // Methods
@@ -37,25 +36,25 @@ public class IntegralCurveCalc implements RpCalculation {
 
         IntegralCurve result;
 
-        RarefactionOrbit resultForward = (RarefactionOrbit) calc(start_, familyIndex_,20);
-        RarefactionOrbit resultBackward = (RarefactionOrbit) calc(start_, familyIndex_,22);
+        RarefactionOrbit resultForward = (RarefactionOrbit) calc(getStart(), getFamilyIndex(),20);
+        RarefactionOrbit resultBackward = (RarefactionOrbit) calc(getStart(), getFamilyIndex(),22);
 
         if (resultBackward == null || resultForward == null) {
             throw new RpException("Error in native layer");
         }
 
 
-        Orbit resultComplete = Orbit.concat(resultBackward, resultForward);
+        Orbit resultComplete = Orbit.concat(resultBackward, resultForward,getFamilyIndex());
 
 
-        result = new IntegralCurve(resultComplete.getPoints(), familyIndex_);
+        result = new IntegralCurve(resultComplete.getPoints(), resultComplete.getFamilyIndex(),0);
 
 
 
         if (result == null) {
             throw new RpException("Error in native layer");
         }
-        result.setFamilyIndex(familyIndex_);
+       
 
         //** acrescentei isso (Leandro)
         RPnCurve.lista.add(result);

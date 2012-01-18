@@ -11,32 +11,31 @@ import rpnumerics.OrbitPoint;
 import rpnumerics.RPNUMERICS;
 import wave.util.RealVector;
 
-public class CompositePlotAgent extends RpModelPlotAgent {
+public class RarefactionExtensionCurvePlotAgent extends RpModelPlotAgent {
     //
     // Constants
     //
-    static public final String DESC_TEXT = "Composite Curve";   
+    static public final String DESC_TEXT = "Rarefaction Extension";    //
     // Members
     //
-    static private CompositePlotAgent instance_ = null;
+    static private RarefactionExtensionCurvePlotAgent instance_ = null;
 
     //
     // Constructors/Initializers
     //
-    protected CompositePlotAgent() {
+    protected RarefactionExtensionCurvePlotAgent() {
         super(DESC_TEXT, rpn.RPnConfig.HUGONIOT,new JToggleButton());
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {
         OrbitPoint oPoint = new OrbitPoint(input[input.length - 1]);
-        CompositeGeomFactory factory = new CompositeGeomFactory(RPNUMERICS.createCompositeCalc(oPoint));
+        RarefactionExtensionGeomFactory factory = new RarefactionExtensionGeomFactory(RPNUMERICS.createRarefactionExtensionCalc(oPoint));
         return factory.geom();
-
     }
 
-    static public CompositePlotAgent instance() {
+    static public RarefactionExtensionCurvePlotAgent instance() {
         if (instance_ == null) {
-            instance_ = new CompositePlotAgent();
+            instance_ = new RarefactionExtensionCurvePlotAgent();
         }
         return instance_;
     }

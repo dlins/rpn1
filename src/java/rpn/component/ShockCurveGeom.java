@@ -31,7 +31,7 @@ public class ShockCurveGeom extends MultiPolyLine implements RpGeometry {
     // Constructors
     //
     public ShockCurveGeom(CoordsArray[] source, ShockCurveGeomFactory factory) {
-        super(source, VIEWING_ATTR);
+        super(source, factory.selectViewingAttr());
         factory_ = factory;
     }
 

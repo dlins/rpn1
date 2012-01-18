@@ -38,7 +38,7 @@ public class ManifoldOrbit extends RPnCurve implements RpSolution {
         orbit_ = orbit;
         firstPoint_ = firstPoint;
         timeDirection_ = timeDirection;
-        finishType_ = orbit_.getIntegrationFlag();
+        finishType_ = orbit_.getDirection();
     }
 
     //

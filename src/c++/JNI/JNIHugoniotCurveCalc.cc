@@ -102,12 +102,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
 
     Boundary * physicsBoundary = RpNumerics::getPhysics().boundary().clone();
 
-
-
-
-
-
-
     RealVector min(physicsBoundary-> minimums());
     RealVector max(physicsBoundary-> maximums());
 
@@ -122,19 +116,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
 
     vector<HugoniotPolyLine> hugoniotPolyLineVector;
 
-
-
     Hugoniot_Curve hugoniotCurve(&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(), physicsBoundary,
             min, max, cells, Uref);
     hugoniotCurve.classified_curve(hugoniotPolyLineVector);
 
     delete physicsBoundary;
 
-
-
-
     for (int i = 0; i < hugoniotPolyLineVector.size(); i++) {
-
 
 
         for (unsigned int j = 0; j < hugoniotPolyLineVector[i].vec.size() - 1; j++) {

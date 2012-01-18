@@ -8,13 +8,16 @@
 #include <vector>
 #include "eigen.h"
 #include "ImplicitFunction.h"
+#include "ContourMethod.h"
 
 class Inflection_Curve : public ImplicitFunction {
     private:
         const FluxFunction         *ff;
         const AccumulationFunction *aa;
 
+
         Boundary * boundary;
+
 
         // For the grid proper.
         RealVector pmin, pmax;
@@ -33,6 +36,7 @@ class Inflection_Curve : public ImplicitFunction {
         void fill_with_jet(const RpFunction *flux_object, int n, double *in, int degree, double *F, double *J, double *H);
     protected:
     public:
+
         Inflection_Curve(const FluxFunction *f, const AccumulationFunction *a, Boundary *,
                          const RealVector &min, const RealVector &max, 
                          const int *cells);
