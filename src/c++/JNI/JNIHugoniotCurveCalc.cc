@@ -29,7 +29,7 @@ NOTE :
 //#include "StoneHugoniotFunctionClass.h"
 //#include "CoincidenceTPCW.h"
 //#include"SubinflectionTPCW.h"
-//#include "ColorCurve.h"
+#include "ColorCurve.h"
 #include "Hugoniot_Curve.h"
 
 using std::vector;
@@ -100,19 +100,17 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
 
     cout << Uref << endl;
 
-    const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
-
-    SubPhysics & physics = RpNumerics::getPhysics().getSubPhysics(0);
+    Boundary * physicsBoundary = RpNumerics::getPhysics().boundary().clone();
 
 
 
 
 
-    RealVector min(physicsBoundary. minimums());
-    RealVector max(physicsBoundary. maximums());
 
-    physics.preProcess(min);
-    physics.preProcess(max);
+
+    RealVector min(physicsBoundary-> minimums());
+    RealVector max(physicsBoundary-> maximums());
+
 
 
     cout << min << endl;
@@ -125,33 +123,19 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc
     vector<HugoniotPolyLine> hugoniotPolyLineVector;
 
 
-    if (RpNumerics::getPhysics().ID().compare("TPCW") == 0) {
 
-        TPCW & physics = (TPCW &) RpNumerics::getPhysics().getSubPhysics(0);
+    Hugoniot_Curve hugoniotCurve(&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(), physicsBoundary,
+            min, max, cells, Uref);
+    hugoniotCurve.classified_curve(hugoniotPolyLineVector);
 
-        Flux2Comp2PhasesAdimensionalized & fluxFunction = (Flux2Comp2PhasesAdimensionalized &) physics.fluxFunction();
+    delete physicsBoundary;
 
-        Flux2Comp2PhasesAdimensionalized::ReducedFlux2Comp2PhasesAdimensionalized *reducedFlux = fluxFunction.getReducedFlux();
-
-        Accum2Comp2PhasesAdimensionalized & accumFunction = (Accum2Comp2PhasesAdimensionalized &) physics.accumulation();
-
-        Accum2Comp2PhasesAdimensionalized::ReducedAccum2Comp2PhasesAdimensionalized * reducedAccum = accumFunction.getReducedAccumulation();
-
-        Hugoniot_Curve hugoniotCurve(reducedFlux, reducedAccum, min, max, cells, Uref);
-
-        hugoniotCurve.classified_curve(hugoniotPolyLineVector);
-
-    } else {
-        Hugoniot_Curve hugoniotCurve(&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(),
-                min, max, cells, Uref);
-        hugoniotCurve.classified_curve(hugoniotPolyLineVector);
-    }
 
 
 
     for (int i = 0; i < hugoniotPolyLineVector.size(); i++) {
 
-        physics.postProcess(hugoniotPolyLineVector[i].vec);
+
 
         for (unsigned int j = 0; j < hugoniotPolyLineVector[i].vec.size() - 1; j++) {
 

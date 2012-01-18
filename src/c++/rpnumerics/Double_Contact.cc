@@ -1,10 +1,5 @@
 #include "Double_Contact.h"
 
-//template <typename T> void Double_Contact::initialize_matrix(int n, int m, T *matrix, T value){
-//    for (int i = 0; i < n*m; i++) matrix[i] = value;
-//    return;
-//}
-
 Double_Contact::Double_Contact(const RealVector &lpmin, const RealVector &lpmax, const int *l_number_of_grid_pnts,
                                const FluxFunction *lff, const AccumulationFunction *laa, int lf,
                                const Boundary *lboundary,

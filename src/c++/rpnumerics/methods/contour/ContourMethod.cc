@@ -31,8 +31,8 @@ int ContourMethod::nface_ = 5;
 int ContourMethod::nsoln_ = -1;
 int ContourMethod::nedges_;
 
-int ContourMethod::dims_ = 50;
-int ContourMethod::dime_ = 60;
+int ContourMethod::dims_ = 6; // Estava 50, Fortran diz 6 (inicialmente 4)
+int ContourMethod::dime_ = 6; // Estava 60, Fortran diz 6 (inicialmente 2)
 int ContourMethod::dimf_ = 5;
 int ContourMethod::ncvert_ = 4;
 int ContourMethod::nsimp_ = 2;
@@ -128,12 +128,12 @@ void ContourMethod::deallocate_arrays(void){
     return;
 }
 
-//ContourMethod::ContourMethod(HugoniotFunctionClass *h){
-//    hugoniot = h;
-//}
+ContourMethod::ContourMethod(HugoniotFunctionClass *h){
+    hugoniot = h;
+}
 
-//ContourMethod::~ContourMethod(){
-//}
+ContourMethod::~ContourMethod(){
+}
 
 //double ContourMethod::f(double x, double y) {
 ////    return 3.0*x-y-1.2;//pow(x - 0.3, 2.0) + pow(y - 0.7, 2.0) - 0.01;
@@ -143,12 +143,12 @@ void ContourMethod::deallocate_arrays(void){
 //    //    return 1 * (x - 0.1) + 2 * (y - 0.2);
 //}
 
-int ContourMethod::inpdom(double *u) { // double u[2]//Replace by Boundary::inside
-//        if (u[0] >= 0 && u[1] >= 0 && u[0] + u[1] <= 1) return 1;
-//        else return 0;
+//int ContourMethod::inpdom(double *u) { // double u[2]//Replace by Boundary::inside
+////        if (u[0] >= 0 && u[1] >= 0 && u[0] + u[1] <= 1) return 1;
+////        else return 0;
 
-     return 1;
-}
+//     return 1;
+//}
 
 //int ContourMethod::curv2d(/*double *segend,*/ int sn, int seglim, double fdummy, double *rect, int *res, int ifirst) {
 int ContourMethod::curv2d(/*double *segend,*/ int sn, int seglim, double fdummy, double *rect, int *res, int ifirst,
@@ -489,7 +489,7 @@ int ContourMethod::curv2d(/*double *segend,*/ int sn, int seglim, double fdummy,
 
 
 
-int ContourMethod::contour2d(ImplicitFunction *impf, double *rect, int *res, std::vector<RealVector> &vrs) {
+int ContourMethod::contour2d(ImplicitFunction *impf, Boundary *boundary, double *rect, int *res, std::vector<RealVector> &vrs) {
 
 //TODO: int sn must be eliminated (because it is == vrs.size()).
 // TODO: Get rid of seglim & fdummy, ifirst (use ctor instead), and rect will become Domain*.
@@ -648,12 +648,14 @@ int ContourMethod::contour2d(ImplicitFunction *impf, double *rect, int *res, std
 
             // a funcao inpdom foi criada a partir do arquivo bndry.F (localizada em phys/stone) do fortran!
             //if (inpdom(&p[0]) == 0) goto lab200;
-            if (inpdom(&p[0]) != 0) {
+//            if (inpdom(&p[0]) != 0) {
+            if (boundary->inside(&p[0])) {
                 // upper left point
                 p[0] = u;
                 p[1] = v + dv;
                 //if (inpdom(&p[0]) == 0) goto lab200;
-                if (inpdom(&p[0]) != 0) {
+//                if (inpdom(&p[0]) != 0) {
+                if (boundary->inside(&p[0])) {
 
                     /* TODO: this works provided that the lower left corner is inside
                        when both the upper left and lower right corners are inside.
@@ -662,7 +664,8 @@ int ContourMethod::contour2d(ImplicitFunction *impf, double *rect, int *res, std
                     p[0] = u + du;
                     p[1] = v + dv;
 
-                    if (inpdom(&p[0]) == 1) {
+//                    if (inpdom(&p[0]) == 1) {
+                    if (boundary->inside(&p[0])) {
                         type = whole;
                         ssimp = nsimp_;
                         sface = nface_;
@@ -735,7 +738,7 @@ int ContourMethod::contour2d(ImplicitFunction *impf, double *rect, int *res, std
 
                         // DESTROY BELOW //
                         if (impf->improvable()) {
-                            for (int ii = 0; ii < nface_; ii++){
+                            for (int ii = 0; ii < sface; ii++){
 
                                 if (sptr_[ii] == -1) continue;
                                 int sp = sptr_[ii];
@@ -757,6 +760,10 @@ int ContourMethod::contour2d(ImplicitFunction *impf, double *rect, int *res, std
 //                                if (newton_info == NEWTON_IMPROVEMENT_ERROR){
 //                                    printf("        dimf_ = %d, face_[%d] = %d\n", dimf_, 0*dimf_ + ii, face_[0*dimf_ + ii]);
 //                                }
+
+//printf("p0 = (%lf,%lf), p1 = (%lf,%lf), p_init = (%lf,%lf)\n",
+// p0newton.component(0), p0newton.component(1), p1newton.component(0),
+// p1newton.component(1), p_init_newton.component(0), p_init_newton.component(1));
                             
                                 sol_[0*dims_ + sp] = p_improved_newton.component(0); // sol(1,sp) = v(1)
                                 sol_[1*dims_ + sp] = p_improved_newton.component(1); // sol(2,sp) = v(2)
@@ -767,8 +774,10 @@ int ContourMethod::contour2d(ImplicitFunction *impf, double *rect, int *res, std
 
 
                         //MAKE THE LIST OF EDGE POINTERS
-                        nedges_ = hc.mkedge(edges_, dime_, nedges_, smpedg_, solptr_,
-                                            fnbr_, nsimp_, nsface_);
+                        int N_EDGES = hc.mkedge(edges_, dime_, nedges_, smpedg_, solptr_,
+                                            fnbr_, ssimp, nsface_); // TODO: Em Fortran esta nsimp_
+
+                        nedges_ = N_EDGES;
 //                        printf("nedges_ = %d\n", nedges_);
 
                         // debug
@@ -794,7 +803,8 @@ int ContourMethod::contour2d(ImplicitFunction *impf, double *rect, int *res, std
                                p1.component(0) = sol_[0*dims_ + edges_[0*dime_ + nedg ]]; //printf("1\n");
                                p1.component(1) = sol_[1*dims_ + edges_[0*dime_ + nedg ]]; //printf("2\n");
 
-                               if (edges_[1*dime_ + nedg ] < 0) return 0;
+// TODO: Pablo comentou a seguinte linha em 11 Janeiro 2012
+//                               if (edges_[1*dime_ + nedg ] < 0) return 0;
                                p2.component(0) = sol_[0*dims_ + edges_[1*dime_ + nedg ]]; //printf("3\n");
                                p2.component(1) = sol_[1*dims_ + edges_[1*dime_ + nedg ]]; //printf("4\n");
 

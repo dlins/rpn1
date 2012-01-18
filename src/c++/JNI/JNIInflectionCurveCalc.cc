@@ -64,15 +64,15 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_InflectionCurveCalc_nativeCalc(JNIEnv 
 
     int dimension = subPhysics.domain().dim();
 
-    const Boundary & boundary = subPhysics.boundary();
+ Boundary * boundary = subPhysics.boundary().clone();
 
     int cells [2];
 
     cells[0] = 128;
     cells[1] = 128;
 
-    Inflection_Curve inflectionCurve((FluxFunction*) RpNumerics::getPhysics().fluxFunction().clone(), (AccumulationFunction*) RpNumerics::getPhysics().accumulation().clone(),
-            boundary.minimums(), boundary.maximums(), cells);
+    Inflection_Curve inflectionCurve((FluxFunction*) RpNumerics::getPhysics().fluxFunction().clone(), (AccumulationFunction*) RpNumerics::getPhysics().accumulation().clone(),  boundary,
+            boundary->minimums(), boundary->maximums(), cells);
 
     std::vector<RealVector> left_vrs;
 

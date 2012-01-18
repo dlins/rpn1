@@ -14,6 +14,8 @@ class Inflection_Curve : public ImplicitFunction {
         const FluxFunction         *ff;
         const AccumulationFunction *aa;
 
+        Boundary * boundary;
+
         // For the grid proper.
         RealVector pmin, pmax;
         int *number_of_cells;
@@ -31,7 +33,7 @@ class Inflection_Curve : public ImplicitFunction {
         void fill_with_jet(const RpFunction *flux_object, int n, double *in, int degree, double *F, double *J, double *H);
     protected:
     public:
-        Inflection_Curve(const FluxFunction *f, const AccumulationFunction *a, 
+        Inflection_Curve(const FluxFunction *f, const AccumulationFunction *a, Boundary *,
                          const RealVector &min, const RealVector &max, 
                          const int *cells);
         ~Inflection_Curve();

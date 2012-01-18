@@ -52,7 +52,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HysteresisCurveCalc_nativeCalc
 
     //Input processing
 
-    int dimension=2;
+    int dimension = 2;
 
 
     //Calculations using the input
@@ -66,19 +66,15 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HysteresisCurveCalc_nativeCalc
     std::vector<RealVector> curve_segments;
     std::vector<RealVector> domain_segments;
 
-
-
     const FluxFunction * fluxFunction = &RpNumerics::getPhysics().fluxFunction();
     const AccumulationFunction * accumulationFunction = &RpNumerics::getPhysics().accumulation();
 
-    const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
+    Boundary * physicsBoundary = RpNumerics::getPhysics().boundary().clone();
 
-    RealVector min(physicsBoundary. minimums());
-    RealVector max(physicsBoundary. maximums());
+    RealVector min(physicsBoundary-> minimums());
+    RealVector max(physicsBoundary-> maximums());
 
 
-    RpNumerics::getPhysics().getSubPhysics(0).preProcess(min);
-    RpNumerics::getPhysics().getSubPhysics(0).preProcess(max);
 
 
     int * number_of_grid_points = new int[2];
@@ -88,7 +84,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HysteresisCurveCalc_nativeCalc
     number_of_grid_points[1] = yResolution;
 
 
-    Hysteresis::curve(fluxFunction, accumulationFunction,
+    Hysteresis::curve(physicsBoundary, fluxFunction, accumulationFunction,
             curveFamily,
             min, max, number_of_grid_points,
             domainFamily,
@@ -97,13 +93,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HysteresisCurveCalc_nativeCalc
             curve_segments,
             domain_segments);
 
+
+    delete physicsBoundary;
     cout << "Tamanho da coincidence curve extension: " << curve_segments.size() << endl;
     cout << "Tamanho da coincidence domain extension: " << domain_segments.size() << endl;
-
-
-    RpNumerics::getPhysics().getSubPhysics(0).postProcess(curve_segments);
-    RpNumerics::getPhysics().getSubPhysics(0).postProcess(domain_segments);
-
+   
     cout << "Resolucao x " << xResolution << endl;
 
     cout << "Resolucao y " << yResolution << endl;
@@ -187,7 +181,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HysteresisCurveCalc_nativeCalc
 
 
 
-    jobject result = env->NewObject(hysteresisCurveClass, hysteresisCurveConstructor,curveFamily,domainFamily, leftSegmentsArray, rightSegmentsArray);
+    jobject result = env->NewObject(hysteresisCurveClass, hysteresisCurveConstructor, curveFamily, domainFamily, leftSegmentsArray, rightSegmentsArray);
 
 
 
