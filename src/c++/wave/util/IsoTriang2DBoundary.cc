@@ -16,6 +16,7 @@
  * ---------------------------------------------------------------
  * Definitions:
  */
+using namespace std;
 IsoTriang2DBoundary::~IsoTriang2DBoundary() {
 
     delete minimums_;
@@ -128,4 +129,5 @@ bool IsoTriang2DBoundary::inside(const RealVector & U)const {
 }
 
 RealVector IsoTriang2DBoundary::intersect(RealVector &y1, RealVector &y2)const {
+    return RealVector(2);
 } //TODO

@@ -100,29 +100,30 @@ public class ConnectionOrbitCalc implements RpCalculation {
     }
 
     protected Orbit createConnectingOrbit() {
-        int i;
-        int nA = manifoldOrbitA_.getOrbit().getPoints().length;
-        int nB = manifoldOrbitB_.getOrbit().getPoints().length;
-        double tA = manifoldOrbitA_.getOrbit().getPoints() [nA - 1].getLambda();
-        double tB = manifoldOrbitB_.getOrbit().getPoints() [nB - 1].getLambda();
-        OrbitPoint[] result = new OrbitPoint[nA + nB - 1];
-        for (i = 0; i < nA - 1; i++) {
-            result[i] = new OrbitPoint(manifoldOrbitA_.getOrbit().getPoints() [i]);
-            result[i].setLambda(result[i].getLambda() - tA);
-        }
-
-      /* calculates the middle point and replace both endpoints
-        TODO this should become a Multid Map*/
-
-        RealVector tmp = new RealVector(manifoldOrbitA_.getOrbit().getPoints() [nA - 1].getCoords());
-        tmp.add(new RealVector(manifoldOrbitB_.getOrbit().getPoints() [nB - 1].getCoords()));
-        tmp.scale(0.5);
-        result[nA - 1] = new OrbitPoint(tmp, 0.0);
-        for (i = nB - 2; i >= 0; i--) {
-            result[nA + nB - 2 - i] = new OrbitPoint(manifoldOrbitB_.getOrbit().getPoints() [i]);
-            result[nA + nB - 2 - i].setLambda(result[nA + nB - 2 - i].getLambda() - tB);
-        }
-        return new Orbit(result, flag_);
+        return null;
+//        int i;
+//        int nA = manifoldOrbitA_.getOrbit().getPoints().length;
+//        int nB = manifoldOrbitB_.getOrbit().getPoints().length;
+//        double tA = manifoldOrbitA_.getOrbit().getPoints() [nA - 1].getLambda();
+//        double tB = manifoldOrbitB_.getOrbit().getPoints() [nB - 1].getLambda();
+//        OrbitPoint[] result = new OrbitPoint[nA + nB - 1];
+//        for (i = 0; i < nA - 1; i++) {
+//            result[i] = new OrbitPoint(manifoldOrbitA_.getOrbit().getPoints() [i]);
+//            result[i].setLambda(result[i].getLambda() - tA);
+//        }
+//
+//      /* calculates the middle point and replace both endpoints
+//        TODO this should become a Multid Map*/
+//
+//        RealVector tmp = new RealVector(manifoldOrbitA_.getOrbit().getPoints() [nA - 1].getCoords());
+//        tmp.add(new RealVector(manifoldOrbitB_.getOrbit().getPoints() [nB - 1].getCoords()));
+//        tmp.scale(0.5);
+//        result[nA - 1] = new OrbitPoint(tmp, 0.0);
+//        for (i = nB - 2; i >= 0; i--) {
+//            result[nA + nB - 2 - i] = new OrbitPoint(manifoldOrbitB_.getOrbit().getPoints() [i]);
+//            result[nA + nB - 2 - i].setLambda(result[nA + nB - 2 - i].getLambda() - tB);
+//        }
+//        return new Orbit(result, flag_);
     }
 
     public RpSolution calc() throws RpException {

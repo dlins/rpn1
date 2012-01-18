@@ -22,7 +22,8 @@ public class Orbit extends RPnCurve implements RpSolution {
     //
 
     private OrbitPoint[] points_;
-    private int intFlag_;
+    private int increase_;
+    private int familyIndex_;
 
     public double distancia = 0;      //** declarei isso (Leandro)
     
@@ -30,24 +31,25 @@ public class Orbit extends RPnCurve implements RpSolution {
     // Constructor
     //
 
-    public Orbit(RealVector[] coords, double[] times, int flag) {
+    public Orbit(RealVector[] coords, double[] times, int increase) {
         super(MultidAdapter.converseRealVectorsToCoordsArray(coords), new ViewingAttr(Color.white));
 
-        intFlag_ = flag;
+        increase_ = increase;
         points_ = orbitPointsFromRealVectors(coords, times);
     }
 
-    public Orbit(OrbitPoint[] points, int flag) {
+    public Orbit(OrbitPoint[] points, int familyIndex,int increase) {
         super(MultidAdapter.converseOrbitPointsToCoordsArray(points), new ViewingAttr(Color.white));
-        intFlag_ = flag;
+        increase_ = increase;
         points_ = points;
+        familyIndex_=familyIndex;
     }
 
     public Orbit(Orbit orbit) {
 
         super(MultidAdapter.converseOrbitPointsToCoordsArray(orbit.getPoints()), new ViewingAttr(Color.white));
 
-        intFlag_ = orbit.getIntegrationFlag();
+        increase_ = orbit.getDirection();
         points_ = orbit.getPoints();
     }
 
@@ -65,11 +67,11 @@ public class Orbit extends RPnCurve implements RpSolution {
     //
     // there is a possibility that the concatenation of
     // Orbits not exist...
-    static public Orbit cat(Orbit curve1, Orbit curve2) {//TODO Reimplements . Bugged !
-        Orbit swap = new Orbit(curve1.getPoints(), RpSolution.DEFAULT_NULL_FLAG);
-        swap.cat(curve2);
-        return swap;
-    }
+//    static public Orbit cat(Orbit curve1, Orbit curve2) {//TODO Reimplements . Bugged !
+//        Orbit swap = new Orbit(curve1.getPoints(), RpSolution.DEFAULT_NULL_FLAG);
+//        swap.cat(curve2);
+//        return swap;
+//    }
 
     public void cat(Orbit curve) {//TODO Reimplements . Bugged !
         // opposite time directions assumed...
@@ -87,7 +89,7 @@ public class Orbit extends RPnCurve implements RpSolution {
         System.arraycopy(swap, 0, points_, 0, swap.length);
     }
 
-    public static Orbit concat(Orbit backward, Orbit forward) {
+    public static Orbit concat(Orbit backward, Orbit forward,int familyIndex) {
         // opposite time directions assumed...
         OrbitPoint[] swap = new OrbitPoint[backward.getPoints().length
                 + forward.getPoints().length - 1];
@@ -104,9 +106,12 @@ public class Orbit extends RPnCurve implements RpSolution {
             }
         }
 
-        return new Orbit(swap, OrbitGeom.BOTH_DIR);
+        return new Orbit(swap,familyIndex,OrbitGeom.BOTH_DIR);
 
     }
+
+
+
 
 
     //** inseri este método (Leandro)
@@ -194,7 +199,7 @@ public class Orbit extends RPnCurve implements RpSolution {
         StringBuffer buffer = new StringBuffer();
 
         String timedir = "pos";
-        if (getIntegrationFlag() == OrbitGeom.BACKWARD_DIR) {
+        if (getDirection() == OrbitGeom.BACKWARD_DIR) {
             timedir = "neg";
         }
 
@@ -215,7 +220,7 @@ public class Orbit extends RPnCurve implements RpSolution {
     public String toXML(boolean calcReady) {
         StringBuffer buffer = new StringBuffer();
         if (calcReady) {
-            buffer.append("<ORBIT timedirection=\"" + intFlag_ + "\"" + ">\n");
+            buffer.append("<ORBIT timedirection=\"" + increase_ + "\"" + ">\n");
             for (int i = 0; i < points_.length; i++) {
 
 
@@ -264,12 +269,12 @@ public class Orbit extends RPnCurve implements RpSolution {
         return (OrbitPoint) points_[0];
     }
 
-    public int getIntegrationFlag() {
-        return intFlag_;
+    public int getDirection() {
+        return increase_;
     }
 
     public void setIntegrationFlag(int flag) {
-        intFlag_ = flag;
+        increase_ = flag;
     }
 
     public String createPoint3DMatlabPlot(int identifier) {
@@ -356,5 +361,10 @@ public class Orbit extends RPnCurve implements RpSolution {
 
         return buffer.toString();
 
+    }
+
+
+      public int getFamilyIndex() {
+        return familyIndex_;
     }
 }

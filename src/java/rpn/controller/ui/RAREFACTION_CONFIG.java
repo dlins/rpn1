@@ -11,6 +11,8 @@ import rpn.usecase.ChangeFluxParamsAgent;
 import rpn.usecase.ChangeDirectionAgent;
 import rpn.usecase.CompositePlotAgent;
 import rpn.usecase.HugoniotPlotAgent;
+import rpn.usecase.IntegralCurvePlotAgent;
+import rpn.usecase.RarefactionExtensionCurvePlotAgent;
 import rpn.usecase.RarefactionOrbitPlotAgent;
 import rpn.usecase.RpModelActionAgent;
 import rpn.usecase.ShockCurvePlotAgent;
@@ -27,8 +29,11 @@ public class RAREFACTION_CONFIG extends UI_ACTION_SELECTED {
         ShockCurvePlotAgent.instance().setEnabled(true);
         ChangeDirectionAgent.instance().setEnabled(true);
         ChangeFluxParamsAgent.instance().setEnabled(true);
-        CompositePlotAgent.instance().setEnabled(true);
+        RarefactionExtensionCurvePlotAgent.instance().setEnabled(true);
+        IntegralCurvePlotAgent.instance().setEnabled(true);
         AreaSelectionAgent.instance().setEnabled(true);
+        CompositePlotAgent.instance().setEnabled(true);
+
 
 
     }

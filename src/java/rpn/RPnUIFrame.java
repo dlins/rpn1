@@ -163,10 +163,14 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 toolBar_.add(HugoniotPlotAgent.instance().getContainer());
                 toolBar_.add(ShockCurvePlotAgent.instance().getContainer());
                 toolBar_.add(RarefactionOrbitPlotAgent.instance().getContainer());
+                toolBar_.add(IntegralCurvePlotAgent.instance().getContainer());
                 toolBar_.add(CompositePlotAgent.instance().getContainer());
+                toolBar_.add(RarefactionExtensionCurvePlotAgent.instance().getContainer());
                 toolBar_.add(AreaSelectionAgent.instance().getContainer());     //** Edson/Leandro
                 toolBar_.add(ClassifierAgent.instance().getContainer());        //** Leandro
                 toolBar_.add(VelocityAgent.instance().getContainer());        //** Leandro
+
+
 //                ScratchAgent.instance().setEnabled(true);
                 toolBar_.revalidate();
 
@@ -185,6 +189,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 toolBar_.add(BoundaryExtensionCurveAgent.instance().getContainer());
                 toolBar_.add(SubInflectionExtensionCurveAgent.instance().getContainer());
                 toolBar_.add(CoincidenceExtensionCurvePlotAgent.instance().getContainer());
+                toolBar_.add(InflectionPlotAgent.instance().getContainer());
+                toolBar_.add(HysteresisPlotAgent.instance().getContainer());
 //                ScratchAgent.instance().setEnabled(true);
 //                toolBar_.validate();
                 toolBar_.revalidate();
@@ -577,7 +583,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         toolBar_.setOpaque(true);
         toolBarPanel_.add(toolBar_);
 //        this.setSize(new Dimension(200, 200));
-        this.setPreferredSize(new Dimension(400, 400));
+        this.setPreferredSize(new Dimension(450, 450));
 
         this.setResizable(false);
         this.setTitle("");

@@ -23,14 +23,18 @@ public class RPnFluxParamsDialog extends RPnDialog {
     JPanel paramsPanel_;
 
     public RPnFluxParamsDialog() {
-        super(true, false);
+        super(false, true);
         setTitle(RPNUMERICS.physicsID());
-        beginButton.setText("OK");
+        cancelButton.setText("Close");
         paramsPanel_ = new JPanel();
 
-        removeDefaultApplyBehavior();
+//<<<<<<< HEAD
+//        removeDefaultApplyBehavior();
 
         Configuration physicsConfiguration = RPNUMERICS.getConfiguration(RPNUMERICS.physicsID());
+//=======
+//        HashMap<String, Configuration> configMap = RPNUMERICS.getConfigurations();
+//>>>>>>> inflexao
 
         Configuration fluxFunctionConfig = physicsConfiguration.getConfiguration("fluxfunction");
 

@@ -15,6 +15,9 @@
 #define RAREFACTION_INITIALIZE_YES 30
 #define RAREFACTION_INITIALIZE_NO  31
 
+#define CHECK_RAREFACTION_MONOTONY_TRUE 40
+#define CHECK_RAREFACTION_MONOTONY_FALSE 41
+
 #include "FluxFunction.h"
 #include "AccumulationFunction.h"
 #include "eigen.h"
@@ -59,6 +62,7 @@ public:
             const RealVector *initial_direction,
             int curve_family,
             int increase,
+            int check_monotony,
             double deltaxi,
             const FluxFunction *ff, const AccumulationFunction *aa,
             int type_of_accumulation,

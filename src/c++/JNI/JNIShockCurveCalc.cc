@@ -27,6 +27,8 @@
 #include "RealVector.h"
 #include "JNIDefs.h"
 #include <vector>
+#include "Shock.h"
+#include "Rarefaction.h"
 
 
 using std::vector;
@@ -37,26 +39,17 @@ using std::vector;
  */
 
 
-JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobject obj, jstring methodName, jdouble newtonTolerance, jobject initialPoint, jint familyIndex, jint timeDirection) {
+JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobject obj, jstring methodName, jdouble newtonTolerance, jobject initialPoint, jint familyIndex, jint increase) {
+
 
     unsigned int i;
 
-    jclass rpnumericsClass = (env)->FindClass(RPNUMERICS_LOCATION);
-
     jclass classOrbitPoint = (env)->FindClass(ORBITPOINT_LOCATION);
-    jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
-    jclass hugoniotSegmentClass = (env)->FindClass(HUGONIOTSEGMENTCLASS_LOCATION);
-    jclass arrayListClass = env->FindClass("java/util/ArrayList");
-    jclass hugoniotCurveClass = env->FindClass(HUGONIOTCURVE_LOCATION);
-    jclass phasePointClass = (env)->FindClass(PHASEPOINT_LOCATION);
+    jclass shockCurveClass = (env)->FindClass(SHOCKCURVE_LOCATION);
 
-    jmethodID realVectorConstructorDoubleArray = env->GetMethodID(realVectorClass, "<init>", "([D)V");
+    jmethodID shockCurveConstructor = (env)->GetMethodID(shockCurveClass, "<init>", "([Lrpnumerics/OrbitPoint;II)V");
+    jmethodID orbitPointConstructor = (env)->GetMethodID(classOrbitPoint, "<init>", "([D)V");
     jmethodID toDoubleMethodID = (env)->GetMethodID(classOrbitPoint, "toDouble", "()[D");
-    jmethodID hugoniotSegmentConstructor = (env)->GetMethodID(hugoniotSegmentClass, "<init>", "(Lwave/util/RealVector;DLwave/util/RealVector;DI)V");
-    jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
-    jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
-    jmethodID hugoniotCurveConstructor = env->GetMethodID(hugoniotCurveClass, "<init>", "(Lrpnumerics/PhasePoint;Ljava/util/List;)V");
-    jmethodID phasePointConstructor = (env)->GetMethodID(phasePointClass, "<init>", "(Lwave/util/RealVector;)V");
 
     //Input processing
     jdoubleArray inputPhasePointArray = (jdoubleArray) (env)->CallObjectMethod(initialPoint, toDoubleMethodID);
@@ -68,172 +61,121 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
     RealVector realVectorInput(env->GetArrayLength(inputPhasePointArray));
 
 
-    SubPhysics & physics = RpNumerics::getPhysics().getSubPhysics(0);
-
-
     for (i = 0; i < (unsigned int) realVectorInput.size(); i++) {
+
         realVectorInput.component(i) = input[i];
-    }
-
-    RealVector noPreProcessVector(realVectorInput);
-    physics.preProcess(realVectorInput);
-
-    cout << "Ponto de entrada: " << realVectorInput << endl;
-
-
-    for (i = 0; i < (unsigned int) realVectorInput.size(); i++) {
-
-        input[i] = realVectorInput.component(i);
 
     }
-
 
     env->DeleteLocalRef(inputPhasePointArray);
 
-    int dimension = realVectorInput.size();
+    //    dimension;
+    //
 
-    for (int i = 0; i < realVectorInput.size(); i++) {
-        cout << "input " << i << input[i] << endl;
+    vector <RealVector> coords, shock_alt;
 
-
-    }
-
-    cout << "Valor de family" << familyIndex << endl;
-
-    vector<HugoniotPolyLine> hugoniotPolyLineVector;
-
-    cout << "Valor de timeDirection" << timeDirection << endl;
-
-    double tol = 1e-10;
-
-    int t = 11;
-
-    if (timeDirection == 20)
-
-        timeDirection = 1;
-
-    else
-
-        timeDirection = -1;
+    cout << "Valor de increase" << increase << endl;
 
     const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
 
     RealVector min(physicsBoundary. minimums());
     RealVector max(physicsBoundary. maximums());
 
-
-    // Preprocessing input data
-
-    physics.preProcess(min);
-    physics.preProcess(max);
-
-    
-    cout << "min: " << min << endl;
-    cout << "max: " << max << endl;
-
-    vector<bool> testBoundary;
-
-    testBoundary.push_back(true);
-    testBoundary.push_back(true);
-    testBoundary.push_back(false);
-
-    RectBoundary tempBoundary(min, max, testBoundary);
-
-    cout << "Valor timDirection" << timeDirection << endl;
-
     cout << "Valor de family" << familyIndex << endl;
 
-    ShockContinuationMethod3D2D method(dimension, familyIndex, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), tempBoundary, input, tol, newtonTolerance, t);
 
-    method.curve(realVectorInput, timeDirection, hugoniotPolyLineVector);
+    RealVector * originalDirection = new RealVector(realVectorInput.size());
 
-    cout << "Tamanho da curva" << hugoniotPolyLineVector.size() << endl;
+    originalDirection->component(0) = 0;
+    originalDirection->component(1) = 0;
 
-     for (i = 0; i < (unsigned int) noPreProcessVector.size(); i++) {// Storing the xzero
 
-        input[i] = noPreProcessVector.component(i);
+    if (increase == RAREFACTION_SPEED_INCREASE)
+        increase = WAVE_FORWARD;
+
+    if (increase == RAREFACTION_SPEED_DECREASE)
+        increase = WAVE_BACKWARD;
+
+    RealVector initPoint = realVectorInput;
+
+    //    initPoint.component(0) = 0.5678;
+    //    initPoint.component(1) = 0.4121;
+
+
+    FluxFunction * fluxFunction = (FluxFunction *) RpNumerics::getPhysics().fluxFunction().clone();
+    AccumulationFunction * accumulationFunction = (AccumulationFunction *) RpNumerics::getPhysics().accumulation().clone();
+
+    Boundary * tempBoundary = RpNumerics::getPhysics().boundary().clone();
+
+    Shock::curve(realVectorInput, true, initPoint, increase, familyIndex, SHOCK_FOR_ITSELF, originalDirection,
+
+            fluxFunction, accumulationFunction,
+            tempBoundary, coords, shock_alt);
+
+    //    for (int i = 0; i < shock_alt.size(); i++) {
+    //
+    //        cout<<"shock alt"<<shock_alt[i]<<endl;
+    //        coords.push_back(shock_alt[i]);
+    //
+    //
+    //    }
+
+
+    delete tempBoundary;
+    delete fluxFunction;
+    delete accumulationFunction;
+
+
+    //Orbit members creation
+
+    cout << "Tamanho do shock: " << coords.size() << endl;
+
+    jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(coords.size(), classOrbitPoint, NULL);
+
+    for (i = 0; i < coords.size(); i++) {
+
+        RealVector tempVector = coords.at(i);
+
+        RealVector newVector(tempVector.size() + 1);
+
+        newVector(0) = tempVector(0);
+        newVector(1) = tempVector(1);
+        newVector(2) = 0;
+
+        double * dataCoords = newVector;
+
+
+
+
+        jdoubleArray jTempArray = (env)->NewDoubleArray(newVector.size());
+
+        (env)->SetDoubleArrayRegion(jTempArray, 0, newVector.size(), dataCoords);
+
+        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray);
+
+        (env)->SetObjectArrayElement(orbitPointArray, i, orbitPoint);
+
+        env->DeleteLocalRef(jTempArray);
+
+        env->DeleteLocalRef(orbitPoint);
 
     }
 
-    //Classify
+    //Building the orbit
 
-    jobject segmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
-    //    cout << "Numero de hugo poly: " << hugoniotPolyLineVector.size() << endl;
+    jobject rarefactionOrbit = (env)->NewObject(shockCurveClass, shockCurveConstructor, orbitPointArray, familyIndex, increase);
 
-    for (i = 0; i < hugoniotPolyLineVector.size(); i++) {
-
-        physics.postProcess(hugoniotPolyLineVector[i].vec);
-
-        for (unsigned int j = 0; j < hugoniotPolyLineVector[i].vec.size() - 1; j++) {
-
-            int m = (hugoniotPolyLineVector[i].vec[0].size() - dimension - 1) / 2; // Number of valid eigenvalues
-
-            jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
-            jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
-
-            double * leftCoords = (double *) hugoniotPolyLineVector[i].vec[j];
-            double * rightCoords = (double *) hugoniotPolyLineVector[i].vec[j + 1];
-
-            env->SetDoubleArrayRegion(eigenValRLeft, 0, dimension, leftCoords);
-            env->SetDoubleArrayRegion(eigenValRRight, 0, dimension, rightCoords);
-
-
-            //Construindo left e right points
-            jobject realVectorLeftPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRLeft);
-            jobject realVectorRightPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRRight);
-
-            int pointType = hugoniotPolyLineVector[i].type;
-
-            double leftSigma = hugoniotPolyLineVector[i].vec[j].component(dimension + m);
-            double rightSigma = hugoniotPolyLineVector[i].vec[j + 1].component(dimension + m);
-
-            //            double leftSigma = 0;
-            //            double rightSigma = 0;
-            //
-
-
-            jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, pointType);
-            env->CallObjectMethod(segmentsArray, arrayListAddMethod, hugoniotSegment);
-
-        }
-
-
-    }
-
-    if (hugoniotPolyLineVector.size() == 0) {
-        return NULL;
-
-    }
-
-    //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    //Orbit memebers creation
-
-    //    //Building the orbit
-
-
-
-
-
-    jdoubleArray xzeroArray = env->NewDoubleArray(dimension);
-    env->SetDoubleArrayRegion(xzeroArray, 0, dimension, input);
-    jobject realVectorxzero = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, xzeroArray);
-
-    jobject phasePointxzero = env->NewObject(phasePointClass, phasePointConstructor, realVectorxzero);
-
-    jobject result = env->NewObject(hugoniotCurveClass, hugoniotCurveConstructor, phasePointxzero, segmentsArray);
 
     //Cleaning up
 
+    coords.clear();
 
-    //    coords.clear();
-    hugoniotPolyLineVector.clear();
-    //    env->DeleteLocalRef(orbitPointArray);
-    //    env->DeleteLocalRef(classOrbitPoint);
-    //    env->DeleteLocalRef(classShockCurve);
+    env->DeleteLocalRef(orbitPointArray);
+    env->DeleteLocalRef(classOrbitPoint);
+    env->DeleteLocalRef(shockCurveClass);
 
-    //    return shockCurve;
+    return rarefactionOrbit;
 
-    return result;
 
 
 }

@@ -11,7 +11,7 @@
  * Includes:
  */
 #include "Stone.h"
-#include "TriPhaseAccumulationFunction.h"
+
 
 /*
  * ---------------------------------------------------------------
@@ -37,12 +37,29 @@ Boundary * Stone::defaultBoundary() const {
     C.component(1) = 0;
 
 
+
+//
+//      A.component(0) = -1;
+//    A.component(1) = -1;
+//
+//    RealVector B(2);
+//
+//    B.component(0) = -1;
+//    B.component(1) = 2;
+//
+//    RealVector C(2);
+//
+//    C.component(0) = 2;
+//    C.component(1) = -1;
+
+
+
     return new IsoTriang2DBoundary(A, B, C);
 
 
 }
 
-Stone::Stone() : SubPhysics(StoneFluxFunction(StoneParams(), StonePermParams()), TriPhaseAccumulationFunction(), *defaultBoundary(), Multid::PLANE, "Stone", _SIMPLE_ACCUMULATION_) {
+Stone::Stone() : SubPhysics(StoneFluxFunction(StoneParams(), StonePermParams()), StoneAccumulation(), *defaultBoundary(), Multid::PLANE, "Stone", _SIMPLE_ACCUMULATION_) {
 
     
     RealVector refVec(2);

@@ -27,12 +27,25 @@ public class HugoniotCurveCalcND
     private RealVector Uminus_;
     private HugoniotParams hugoniotParams_;
 
+    private  int resolution_ [];
+
     //
     // Constructors
     //
     public HugoniotCurveCalcND(RealVector uMinus) {
         Uminus_=new PhasePoint(uMinus);
+        resolution_=new int[2];
+        resolution_[0]=128;
+        resolution_[1] = 128;
     }
+
+
+    public HugoniotCurveCalcND(RealVector uMinus, int resolution[]) {
+        Uminus_=new PhasePoint(uMinus);
+        resolution_=resolution;
+    }
+
+
 
     public HugoniotCurveCalcND(HugoniotContinuationMethod hugoniotMethod) {
 
@@ -102,7 +115,7 @@ public class HugoniotCurveCalcND
 //
 //        }
 
-        HugoniotCurve result= (HugoniotCurve) calc(getUMinus());
+        HugoniotCurve result= (HugoniotCurve) calc(getUMinus(),resolution_);
 
         //** acrescentei isso (Leandro)
 
@@ -120,5 +133,5 @@ public class HugoniotCurveCalcND
         return calc();
     }
 
-    private native RpSolution calc(PhasePoint initialpoint) throws RpException;
+    private native RpSolution calc(PhasePoint initialpoint,int resolution[]) throws RpException;
 }

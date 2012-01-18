@@ -371,19 +371,19 @@ void setFaceArray(int[] [] altFace) {
  */
 
 void HyperCube::cpp_mkcube(Matrix<double> &cpp_cvert_, // cvert_[ncvert_][n_]
-            Matrix<int> &cpp_bsvert_, // bsvert_[n_ + 1][n_]
-            Matrix<int> &cpp_perm_, // perm_[n_][nsimp_]
-            int ncvert_, int nsimp_, int n_){
+        Matrix<int> &cpp_bsvert_, // bsvert_[n_ + 1][n_]
+        Matrix<int> &cpp_perm_, // perm_[n_][nsimp_]
+        int ncvert_, int nsimp_, int n_) {
 
     double cvert_[ncvert_][n_];
-    int    bsvert_[n_ + 1][n_];
-    int    perm_[n_][nsimp_];
+    int bsvert_[n_ + 1][n_];
+    int perm_[n_][nsimp_];
 
     mkcube(&cvert_[0][0], &bsvert_[0][0], &perm_[0][0], ncvert_, nsimp_, n_);
 
-    cpp_cvert_  = Matrix<double>(ncvert_, n_, &cvert_[0][0]);
+    cpp_cvert_ = Matrix<double>(ncvert_, n_, &cvert_[0][0]);
     cpp_bsvert_ = Matrix<int>(n_ + 1, n_, &bsvert_[0][0]);
-    cpp_perm_   = Matrix<int>(n_, nsimp_, &perm_[0][0]);
+    cpp_perm_ = Matrix<int>(n_, nsimp_, &perm_[0][0]);
 
     return;
 }
@@ -425,6 +425,7 @@ void HyperCube::mkcube(double *cvert_, // cvert_[ncvert_][n_]
  */
 void HyperCube::mkperm(int *perm_, // perm_[n_][nsimp_]
         int n_, int nsimp_) {
+    //printf("Inside mkperm. n = %d, nsimp = %d\n", n_, nsimp_);
     int i, j, k, kmfact, nfact, l, shift;
     // initialize
     //    nfact = 0;
@@ -458,6 +459,9 @@ void HyperCube::mkperm(int *perm_, // perm_[n_][nsimp_]
             nfact = nfact + kmfact;
         }
     }
+
+//    putmi("PERM", perm_, n_, nsimp_);
+
     return;
 }
 
@@ -475,7 +479,7 @@ int HyperCube::mkface(int *face_, int *facptr_, int *fnbr_, // face_[m_ + 1][dim
         int *bsvert_, int *comb_, // bsvert_[n_ + 1][n_], comb_[numberOfCombinations][m_ + 1]
         int *perm_, int *storn_, int *storm_) {// perm[], storn[n_ + 1], storm[m_ + 1]
     int i, j;
-    // printf("Entering: mkfcfp()\n");   // I commented out this line (Morante: Wed 09 Feb 2011 11:17:50 PM BRST )
+    //printf("Entering: mkfcfp()\n");   // I commented out this line (Morante: Wed 09 Feb 2011 11:17:50 PM BRST )
     int nface_ = mkfcfp(face_, facptr_, nsface_, dimf_, nsimp_, m_, n_, bsvert_, comb_, perm_, storm_);
     //printf("Aqui nface vale: %d\n", nface_);
 
@@ -498,8 +502,6 @@ int HyperCube::mkface(int *face_, int *facptr_, int *fnbr_, // face_[m_ + 1][dim
 
     return nface_;
 }
-
-
 
 /* Combinatorial     ( n )
                      ( m ),    which means n > m.
@@ -532,36 +534,37 @@ int HyperCube::combination(int n, int m) {
 int HyperCube::mkfcfp(int *face_, int *facptr_, // face_[m_ + 1][dimf_], facptr_[nsimp_][nsface_]
         int nsface_, int dimf_, int nsimp_, int m_, int n_,
         int *bsvert_, int *comb_, // bsvert_[n_ + 1][n_], comb_[numberOfCombinations][m_ + 1]
-        int *perm_, int *stor_old) { // perm_[n_][nsimp_], storm[m_ + 1]
+        int *perm_, int *stor) { // perm_[n_][nsimp_], storm[m_ + 1]
 
 
     //local variables
     int c, i, j, index, p, posit, v;
 
-    int hm = m_;
-    int stor[hm + 1];
-
     //loop over all faces to create  face_  and  facptr_
     int nface_ = 0;
-    printf("nsimp_ = %d, nsface_ = %d, m_ = %d, n_ = %d\n", nsimp_, nsface_, m_, n_);
+    //printf("nsimp_ = %d, nsface_ = %d, m_ = %d, n_ = %d\n", nsimp_, nsface_, m_, n_);
     for (p = 0; p < nsimp_; p++) {
         for (c = 0; c < nsface_; c++) {
             //set indices for each vertex
             for (v = 0; v < m_ + 1; v++) {
                 index = 0;
                 for (i = 0; i < n_; i++) {
+                    //printf("c = %d, m_ = %d, v = %d. c * (m_ + 1) + v = %d.\n\n", c, m_, v, c * (m_ + 1) + v);
+                    //printf("n_ = %d, comb_[%d] = %d, n_*comb[%d] = %d.\n\n", n_, c * (m_ + 1) + v, comb_[c * (m_ + 1) + v], c * (m_ + 1) + v, comb_[c * (m_ + 1) + v] * n_);
+                    //printf("i = %d, nsimp_ = %d, p = %d, i * nsimp_ + p = %d, perm_[%d] = %d\n\n", i, nsimp_, p, i*nsimp_ + p, i*nsimp_ + p, perm_[i * nsimp_ + p]);
+                    //printf("bsvert_[%d] = %d\n\n", comb_[c * (m_ + 1) + v] * n_ + perm_[i * nsimp_ + p], bsvert_[comb_[c * (m_ + 1) + v] * n_ + perm_[i * nsimp_ + p]]);
                     index = 2 * index + bsvert_[comb_[c * (m_ + 1) + v] * n_ + perm_[i * nsimp_ + p]];
                 }
                 stor[v] = index;
             }
             //store the face_ if it is distinct
             if (nface_ > 0) {
-                printf("Posit atnes %d.", posit);
+                //printf("Posit antes %d.", posit);
                 //posit = search(stor, face_, m_ + 1, dimf_);
                 posit = search(stor, face_, m_ + 1, nface_, dimf_);
-                printf("Pase por search, posit = %d, nface = %d\n", posit, nface_);
+                //printf("Pase por search, posit = %d, nface = %d\n", posit, nface_);
             } else {
-                printf("Pasamos por posit con %d\n", nface_);
+                //printf("Pasamos por posit con %d\n", nface_);
                 posit = -1;
             }
             if (posit == -1) {
@@ -570,16 +573,24 @@ int HyperCube::mkfcfp(int *face_, int *facptr_, // face_[m_ + 1][dimf_], facptr_
                     printf("Error the dimension for matrix face is small. [posit = -1].\n");
                     return ERROR;
                 }
+
+                //printf("    posit = %d. dimf_ = %d. nface_ = %d\n", posit, dimf_, nface_);
+
                 for (i = 0; i < m_ + 1; i++) {
                     face_[i * dimf_ + (nface_ - 1)] = stor[i];
                 }
+
                 posit = nface_ - 1;
+
+                //printf("    After for cycle: posit = %d.\n", posit);
             }
             //set the pointer to the current face_
+            //printf("p = %d, nsface_ = %d, c = %d, p * nsface_ + c = %d\n", p, nsface_, c, p * nsface_ + c);
             facptr_[p * nsface_ + c] = posit;
+            //printf("After facptr = ...\n");
         }
     }
-    printf("Inside mkfcfp(): nface is %d\n", nface_);
+    //printf("Inside mkfcfp(): nface is %d\n", nface_);
     //printf("dimf_ is %d\n", dimf_);
     return nface_;
 }
@@ -620,12 +631,12 @@ lab40:
  */
 void HyperCube::mkfnbr(int *fnbr_, int *comb_, //fnbr_[nsface_][nsface_], comb_[numberOfCombinations][m_ + 1]
         int n_, int m_, int nsface_,
-        int *stor_old) { //storn[n_+1]
-
+        int *stor) { //storn[n_+1]
     //local variables
     int i, j, ndif, nf;
 
-    int stor[n_ + 1];
+
+
 
     //loop over the faces
     for (nf = 0; nf < nsface_ - 1; nf++) {
@@ -633,6 +644,8 @@ void HyperCube::mkfnbr(int *fnbr_, int *comb_, //fnbr_[nsface_][nsface_], comb_[
         for (i = 0; i < n_ + 1; i++) {
             stor[i] = 0;
         }
+        cout << "Valor de n_: " << n_ << " Valor de m_: " << m_ << " Valor de nsface_: " << nsface_ << endl;
+
         for (i = 0; i < m_ + 1; i++) {
             stor[comb_[nf * (m_ + 1) + i]] = 1;
         }
@@ -652,7 +665,6 @@ void HyperCube::mkfnbr(int *fnbr_, int *comb_, //fnbr_[nsface_][nsface_], comb_[
     }
     return;
 }
-
 
 /**
  * This routine has two purposes: <ul> <p> (1) Invert the array  facptr_  using two arrays: facept_, ptrf_. </p>
@@ -807,15 +819,14 @@ int HyperCube::mkoppf(int f, int xind, int value, int n_, int m_, int nface_, in
 int HyperCube::cpp_cubsol(int *solptr_, Matrix<double> &cpp_sol_, int dims_, int *sptr_, int nsoln_,
         double *foncub, int *exstfc, int *face,
         int *facptr_, int dimf_, double *cvert, int ncvert_, int n_, int m_,
-        int nsimp_, int nsface_, int nface, double *u, 
-        double *g,
-        double *x, int *wrki){
+        int nsimp_, int nsface_, int nface, double *u, double *g,
+        double *x, int *wrki) {
 
     double sol_[n_][dims_];
 
-    int res = cubsol(solptr_, &sol_[0][0], dims_, sptr_, nsoln_, foncub, exstfc, 
-           face, facptr_, dimf_, cvert, ncvert_, n_, m_, nsimp_, nsface_, nface, u, 
-           g, x, wrki);
+    int res = cubsol(solptr_, &sol_[0][0], dims_, sptr_, nsoln_, foncub, exstfc,
+            face, facptr_, dimf_, cvert, ncvert_, n_, m_, nsimp_, nsface_, nface, u,
+            g, x, wrki);
 
     cpp_sol_ = Matrix<double>(n_, dims_, &sol_[0][0]);
 
@@ -825,29 +836,39 @@ int HyperCube::cpp_cubsol(int *solptr_, Matrix<double> &cpp_sol_, int dims_, int
 int HyperCube::cubsol(int *solptr_, double *sol_, int dims_, int *sptr_, int nsoln_,
         double *foncub, int *exstfc, int *face,
         int *facptr_, int dimf_, double *cvert, int ncvert_, int n_, int m_,
-        int nsimp_, int nsface_, int nface, double *u, 
-        double *g,
+        int nsimp_, int nsface_, int nface, double *u, double *g,
         double *x, int *wrki) {
+
+
     // I/O: (int solptr[nsimp_][nsface_], double sol_[n_][dims], int dims_, int sptr[nface_], int nsoln_,
     //       double foncub[m_][ncvert_], int ncvert_, int exstfc[nface], int face[m_ + 1][dimf_],
     //       int facptr_[nsimp_][nsface_], int dimf_, double cvert[ncvert_][n_], int n_, int m_,
     //       int nsimp_, int nsface_, int nface, double u[n_][m_ + 1], double g[m_][m_], double gx[m_],
     //       double x[m_], int wrki[m_])
 
+    // u[n_][m_ + 1] SEEMS to be wrkf1(N,M+1), NOT transposed, as seen in hccube.inc:12.
+    // g[m_][m_] could not be mapped to an equivalent in Fortran.
+    // x[m_] SEEMS to be wrkf2(M), as seen in hccube.inc:12.
+    // wrki[m_] SEEMS to be wrki1(N+1), as seen in hccube.inc:12. Notice that the sizes of the arrays don't match.
+    // gx is no longer used. Marchesin & Morante (24-fev-2011).
+
     //local variables
     //double sol_[n_][dims_];
     //find the solution on each face (define  nsoln_)
-    // printf("Entering: mksoln(), nface = %d\n", nface);   // I commented out this line (Morante: Wed 09 Feb 2011 11:17:50 PM BRST )
+//    printf("Entering: mksoln(), nface = %d\n", nface); // I commented out this line (Morante: Wed 09 Feb 2011 11:17:50 PM BRST )
     nsoln_ = mksoln(sol_, dims_, sptr_, nsoln_, foncub,
             exstfc, face, dimf_, cvert, ncvert_, n_, m_, nface,
-            u, 
-            g, x, wrki);
+            u, g, x, wrki);
     //create the list of solutions for the simplices
     // printf("Entering: smpptr()\n");   // I commented out this line (Morante: Wed 09 Feb 2011 11:17:50 PM BRST )
     smpptr(solptr_, sptr_, facptr_, nsimp_, nsface_);
     //solptr[nsimp_,nsface_]
     // facptr_[nsimp_][nsface_];
     // sptr_[nface_]????;
+
+
+    //    cout << "Variaveis inicializadas no contour: " << dims_ << " " << nsoln_ << " " << dimf_ << " " << ncvert_ << " " << n_ << " " << m_ << " " << nsimp_ << " " << nsface_ << " " << nface << endl;
+    //    cout << "Valor de nsoln_ : " << nsoln_ <<endl;
 
     return nsoln_;
 }
@@ -858,16 +879,7 @@ int HyperCube::cubsol(int *solptr_, double *sol_, int dims_, int *sptr_, int nso
  * @param exstfc Bit array indicating which faces in array "face" are really to be considered by cubsol.
  * Dimension of exstfc should be nface
  */
-int HyperCube::mksoln(double *sol_, int dims_, int *sptr_, int nsoln_, double *foncub, int *exstfc, int *face, int dimf_, double *cvert, int ncvert_, int n_, int m_, int nface, double *u_old, 
-                      double *g_old, double *x_old, int *wrki_old) {
-
-    int hn = n_, hm = m_;
-    double u[hn*(hm + 1)];
-
-    double g[hm*(hm + 1)];
-    double x[hm];
-    int wrki[hm + 1];
-
+int HyperCube::mksoln(double *sol_, int dims_, int *sptr_, int nsoln_, double *foncub, int *exstfc, int *face, int dimf_, double *cvert, int ncvert_, int n_, int m_, int nface, double *u, double *g, double *x, int *wrki) {
     //TODO: Ver incongruencia entre sol_[n_][dims] e solution[n_][m_], aqui o java usaba solution, mas embaixo era preenchido sol_, e parece que deveria ser sol_[n_][dims], foi o que eu fiz.
     // I/O: (double sol_[n_][dims], int dims_, int sptr[nface_], int nsoln_, double foncub[m_][ncvert_], int ncvert_,
     //       int exstfc[nface], int face[m_ + 1][dimf_], int dimf_, double cvert[ncvert_][n_], int n_, int m_,
@@ -889,8 +901,8 @@ int HyperCube::mksoln(double *sol_, int dims_, int *sptr_, int nsoln_, double *f
         sptr_[indf] = -1;
         //if the indf-face is not to be considered by mksoln, skip it
 
-//        cout <<"Exstfc antes do if "<<exstfc[indf]<<" "<<nsoln_<<endl;
-        // printf("Inside mksoln(): exstfc[%d] = %d\n", indf, exstfc[indf]); // ************************ I commented out this line (Morante, Wed 09 Feb 2011 11:17:13 PM BRST).
+        //        cout <<"Exstfc antes do if "<<exstfc[indf]<<" "<<nsoln_<<endl;
+        //         printf("Inside mksoln(): exstfc[%d] = %d\n", indf, exstfc[indf]); // ************************ I commented out this line (Morante, Wed 09 Feb 2011 11:17:13 PM BRST).
         if (exstfc[indf] != 0) {
 
             //set the function values  at the face vertices
@@ -905,15 +917,15 @@ int HyperCube::mksoln(double *sol_, int dims_, int *sptr_, int nsoln_, double *f
                 }
             }
 
-            // putmf("gtemp", &gtemp[0][0], m_, m_+1);
+//            putmf("gtemp", &gtemp[0][0], m_, m_ + 1);
 
-            //putmf("gaqui", g, m_, m_+1);
+//            putmf("gaqui", g, m_, m_ + 1);
             //call the affine solver to solve in the standard simplex
 
             flag = affslv(x, g, m_, wrki);
             // printf("After affslv(): flag = %d\n", flag); // I commented out this line (Morante: Wed 09 Feb 2011 11:17:50 PM BRST )
             //skip the rest if no solution ( note -- pointer initialized to 0 )
-//            cout <<"Valor de flag: "<<flag<<endl;
+            //            cout <<"Valor de flag: "<<flag<<endl;
             if (flag == 0) {
                 //set the pointer to the solution
                 nsoln_ = nsoln_ + 1;
@@ -929,9 +941,9 @@ int HyperCube::mksoln(double *sol_, int dims_, int *sptr_, int nsoln_, double *f
                 }
                 // printf("Inside mksol(): indf = %d, nsoln_ = %d\n", indf, nsoln_); // I commented out this line (Morante: Wed 09 Feb 2011 11:17:50 PM BRST )
                 sptr_[indf] = nsoln_;
-//                printf("sptr= %d\n", sptr_[indf]);
-//                printf("indf= %d\n", indf);
-//                printf("nsoln= %d\n", nsoln_);
+                //                printf("sptr= %d\n", sptr_[indf]);
+                //                printf("indf= %d\n", indf);
+                //                printf("nsoln= %d\n", nsoln_);
 
                 //set the face vertices
                 for (k = 0; k < m_ + 1; k++) {
@@ -939,7 +951,7 @@ int HyperCube::mksoln(double *sol_, int dims_, int *sptr_, int nsoln_, double *f
                     for (i = 0; i < n_; i++) {
                         //TODO: Prestar atencao com a ordem a direita, no cvert!!
                         u[i * (m_ + 1) + k] = cvert[(v) * n_ + i];
-//                        printf("v: %d, indf: %d, k: %d, u(i,k): %f\n", v, indf, k, u[i * (m_ + 1) + k]);
+                        //                        printf("v: %d, indf: %d, k: %d, u(i,k): %f\n", v, indf, k, u[i * (m_ + 1) + k]);
                     }
                 }
 
@@ -1152,10 +1164,10 @@ int HyperCube::affslv(double *x, double *g, int m_, int *wrki) {
 void HyperCube::afftrn(double *solution, double *u, double *x, int n_, int m_) {
     // solution[n_], u[n_][m_ + 1], x[m_], n_, m_
     int i, k;
-//    printf("Entrando en afftrn\n");
+    //    printf("Entrando en afftrn\n");
     for (i = 0; i < n_; i++) {
-//        printf("solution[%d] = %f\n", i, solution[i]);
-//        printf("u[%d*(m_ + 1) + 0] = %f\n", i, u[i * (m_ + 1) + 0]);
+        //        printf("solution[%d] = %f\n", i, solution[i]);
+        //        printf("u[%d*(m_ + 1) + 0] = %f\n", i, u[i * (m_ + 1) + 0]);
         solution[i] = u[i * (m_ + 1) + 0];
         for (k = 0; k < m_; k++) {
             solution[i] += (u[i * (m_ + 1) + (k + 1)] - u[i * (m_ + 1) + 0]) * x[k];
@@ -1174,7 +1186,7 @@ int HyperCube::solver(int n, double *A, double *b, double *x) {
      * Seems that ipiv[n] is missing, but with the new solver it is not necessary to keep the
      * line permutation (index pivoting).
      **/
-    double eps = 1e-5;
+    double eps = 1e-10;
     double det, anorm;
     int i, j;
 
@@ -1302,7 +1314,7 @@ void HyperCube::smpptr(int *solptr_, int *sptr_, int *facptr, int nsimp_, int ns
                         smpedg(1,ns) .gt. smpedg(2,ns).
 c*/
 
-int HyperCube::cpp_mkedge(Matrix<int> &cpp_edges_, int dime_, int &nedges_, int *smpedg_, int *solptr_, int *fnbr_, int nsimp_, int nsface_){
+int HyperCube::cpp_mkedge(Matrix<int> &cpp_edges_, int dime_, int nedges_, int *smpedg_, int *solptr_, int *fnbr_, int nsimp_, int nsface_) {
     int edges_[2][dime_];
 
     int res = mkedge(&edges_[0][0], dime_, nedges_, smpedg_, solptr_, fnbr_, nsimp_, nsface_);
@@ -1312,7 +1324,7 @@ int HyperCube::cpp_mkedge(Matrix<int> &cpp_edges_, int dime_, int &nedges_, int 
     return res;
 }
 
-int HyperCube::mkedge(int *edges_, int dime_, int &nedges_, int *smpedg_, int *solptr_, int *fnbr_, int nsimp_, int nsface_) {
+int HyperCube::mkedge(int *edges_, int dime_, int nedges_, int *smpedg_, int *solptr_, int *fnbr_, int nsimp_, int nsface_) {
 
     //solptr[nsimp_,nsface_]
     //fnbr_[nsface_][nsface_]
@@ -1345,7 +1357,7 @@ int HyperCube::mkedge(int *edges_, int dime_, int &nedges_, int *smpedg_, int *s
                             }
                             nedges_ = nedges_ + 1;
                             edges_[0 * dime_ + nedges_] = spi;
-                            edges_[1 * dime_ + nedges_] = spj; 
+                            edges_[1 * dime_ + nedges_] = spj;
                         }
                     }
                 }
@@ -1353,10 +1365,7 @@ int HyperCube::mkedge(int *edges_, int dime_, int &nedges_, int *smpedg_, int *s
         }
         smpedg_[ns * 2 + 1] = nedges_;
     }
-
-    //return nedges_ + 1;
-    nedges_++;
-    return 0;
+    return nedges_ + 1;
 }
 
 /**
@@ -1372,9 +1381,9 @@ int HyperCube::mkcomb(int *comb_, // comb_[numberOfCombinations][m_ + 1]
     int i, j, pos, count;
     //    int aux = m;
 
-    int ncomb = 1;
+    int nsface_ = 1;
     for (i = 0; i < mp; i++) {
-        comb_[(ncomb - 1) * mp + i] = i;
+        comb_[(nsface_ - 1) * mp + i] = i;
     }
     //the main loop
     while (1) {
@@ -1382,21 +1391,21 @@ int HyperCube::mkcomb(int *comb_, // comb_[numberOfCombinations][m_ + 1]
         //search for the last position to change
         for (i = 0; i < mp; i++) {
             pos = mp - 1 - i;
-            if (comb_[(ncomb - 1) * mp + pos] == np - i - 1) {
+            if (comb_[(nsface_ - 1) * mp + pos] == np - i - 1) {
                 count++;
                 //return;
             } else {
                 //position found.  store new combination.
-                ncomb++;
+                nsface_++;
                 //increment the value at the position
-                comb_[(ncomb - 1) * mp + pos] = comb_[(ncomb - 2) * mp + pos] + 1;
+                comb_[(nsface_ - 1) * mp + pos] = comb_[(nsface_ - 2) * mp + pos] + 1;
                 //copy the preceding values
                 for (j = 0; j < pos; j++) {
-                    comb_[(ncomb - 1) * mp + j] = comb_[(ncomb - 2) * mp + j];
+                    comb_[(nsface_ - 1) * mp + j] = comb_[(nsface_ - 2) * mp + j];
                 }
                 //modify the succeeding values
                 for (j = pos + 1; j < mp; j++) {
-                    comb_[(ncomb - 1) * mp + j] = comb_[(ncomb - 1) * mp + (j - 1)] + 1;
+                    comb_[(nsface_ - 1) * mp + j] = comb_[(nsface_ - 1) * mp + (j - 1)] + 1;
                 }
                 //break
                 i = mp;
@@ -1404,19 +1413,19 @@ int HyperCube::mkcomb(int *comb_, // comb_[numberOfCombinations][m_ + 1]
         }
         if (count == mp) {
             //fell through.  done.
-            return ncomb;
+            return nsface_;
         }
     }
-    return ncomb;
+    return nsface_;
 }
 
 /*
  * Find facept_ and facatt_ sizes
  */
-void HyperCube::findInds(int *faceptInd_, int *fdim_,	//pointers to initializate these values
-	      int n_, int m_,
-              double *cvert_, int *face_,	// cvert_[ncvert_][n_], face_[m_ + 1][dimf_]
-	      int dimf_, int nface_, int nsimp_, int nsface_, int *facptr_) {
+void HyperCube::findInds(int *faceptInd_, int *fdim_, //pointers to initializate these values
+        int n_, int m_,
+        double *cvert_, int *face_, // cvert_[ncvert_][n_], face_[m_ + 1][dimf_]
+        int dimf_, int nface_, int nsimp_, int nsface_, int *facptr_) {
     //local variables
     int f, i, pos, s, v;
     double sum;
@@ -1424,7 +1433,7 @@ void HyperCube::findInds(int *faceptInd_, int *fdim_,	//pointers to initializate
     for (f = 0; f < nface_; f++) {
         for (s = 0; s < nsimp_; s++) {
             for (i = 0; i < nsface_; i++) {
-                if (facptr_[s*nsface_ + i] == f) {
+                if (facptr_[s * nsface_ + i] == f) {
                     pos = pos + 1;
                 }
             }
@@ -1437,12 +1446,11 @@ void HyperCube::findInds(int *faceptInd_, int *fdim_,	//pointers to initializate
         for (i = 0; i < n_; i++) {
             sum = 0.0;
             for (v = 0; v < m_ + 1; v++) {
-                sum = sum + cvert_[(face_[v*dimf_ + f])*n_ + i];
+                sum = sum + cvert_[(face_[v * dimf_ + f]) * n_ + i];
             }
             if (sum == 0.0) {
                 pos = pos + 1;
-            }
-            else if (sum == (double)(m_ + 1)) {
+            } else if (sum == (double) (m_ + 1)) {
                 pos = pos + 1;
             }
         }
@@ -1450,13 +1458,6 @@ void HyperCube::findInds(int *faceptInd_, int *fdim_,	//pointers to initializate
     *fdim_ = pos;
     return;
 }
-
-
-
-
-
-
-
 
 /**
      the following routine builds the array of pointers to the edges in
@@ -1545,7 +1546,7 @@ label40:
                                 return 1;
                             }
                             nedges_ = nedges_ + 1;
-                            printf("PASAMOS POR AQUI CON spi, spj = %d, %d", spi, spj);
+                            //printf("PASAMOS POR AQUI CON spi, spj = %d, %d", spi, spj);
                             edges_[0 * dime_ + nedges_] = spi;
                             edges_[1 * dime_ + nedges_] = spj;
                         }

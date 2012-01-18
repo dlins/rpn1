@@ -85,8 +85,6 @@ public class RPnCurve extends MultiPolyLine {
         RealVector closestPoint = curve.findClosestPoint(targetPoint);
 
 
-
-
         if (curve instanceof BifurcationCurve) {
 
             BifurcationCurve bifurcationCurve = (BifurcationCurve) curve;

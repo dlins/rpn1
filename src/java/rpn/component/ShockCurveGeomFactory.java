@@ -7,7 +7,7 @@ package rpn.component;
 
 import rpnumerics.*;
 
-public class ShockCurveGeomFactory extends RpCalcBasedGeomFactory {
+public class ShockCurveGeomFactory extends OrbitGeomFactory {
     //
     // Constants
     //
@@ -36,7 +36,7 @@ public class ShockCurveGeomFactory extends RpCalcBasedGeomFactory {
     public String toXML() {//TODO Implement
         StringBuffer str = new StringBuffer();
          String tdir = "pos";
-        if (((ShockCurveCalc)rpCalc()).tDirection() == OrbitGeom.BACKWARD_DIR)
+        if (((ShockCurveCalc)rpCalc()).getDirection() == OrbitGeom.BACKWARD_DIR)
             tdir = "neg";
         str.append("<SHOCKCURVECALC tdirection=\"" + tdir + "\" calcready=\""+rpn.parser.RPnDataModule.RESULTS+"\">\n");
         if (!rpn.parser.RPnDataModule.RESULTS)

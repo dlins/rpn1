@@ -127,11 +127,10 @@ void TPCW::preProcess(RealVector & input) {
 }
 
 void TPCW::postProcess(vector<RealVector> & input) {
-    cout << "Antes tamanho do vetor de saida do double contact: "<< endl;
+
+    cout<<"Em post process"<<endl;
 
     int inputSize = input[0].size();
-    cout << "Depois tamanho do vetor de saida do double contact: "<<input[0].size()<< endl;
-
 
     for (int i = 0; i < input.size(); i++) {
 

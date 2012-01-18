@@ -30,7 +30,7 @@ public class HugoniotPlotAgent extends RpModelPlotAgent {
 
     public RpGeometry createRpGeometry(RealVector[] input) {
 
-        HugoniotCurveGeomFactory factory = new HugoniotCurveGeomFactory(new HugoniotCurveCalcND(input[0]));
+        HugoniotCurveGeomFactory factory = new HugoniotCurveGeomFactory(RPNUMERICS.createHugoniotCalc(input[0]));
         return factory.geom();
 
     }

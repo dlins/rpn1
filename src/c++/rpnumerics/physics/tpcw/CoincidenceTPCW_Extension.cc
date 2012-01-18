@@ -15,8 +15,8 @@ void CoincidenceTPCW_Extension::extension_curve(CoincidenceTPCW *coincidencetpcw
     // Compute the contour
 
     RectBoundary rectBoundary(pmin, pmax);
-    ContourMethod contourmethod(3, *dff, *daa, rectBoundary, coincidencetpcw);
-    //    ContourMethod contourmethod(coincidencetpcw);
+//    ContourMethod contourmethod(3, *dff, *daa, rectBoundary, coincidencetpcw);
+//        ContourMethod contourmethod(coincidencetpcw);
 
     int isfirst = 1; // So that the contour computes some combinatorial stuff.
 
@@ -33,7 +33,7 @@ void CoincidenceTPCW_Extension::extension_curve(CoincidenceTPCW *coincidencetpcw
 
     std::vector<RealVector> contour_segments;
 
-    contourmethod.curv2d(sn, maxnum, fdummy, rect, number_of_grid_points, isfirst, contour_segments);
+//    contourmethod.curv2d(sn, maxnum, fdummy, rect, number_of_grid_points, isfirst, contour_segments);
 
     // Compute the extension curve for the contour
     Extension_CurveTPCW extension_curvetpcw(pmin, pmax, number_of_grid_points,

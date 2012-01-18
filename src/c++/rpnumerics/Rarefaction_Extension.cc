@@ -33,6 +33,7 @@ void Rarefaction_Extension::extension_curve(FluxFunction *curve_flux,  Accumulat
             (const RealVector *) 0,
             curve_family,
             increase,
+            CHECK_RAREFACTION_MONOTONY_TRUE,
             deltaxi,
             curve_flux, curve_accum,
             RAREFACTION_GENERAL_ACCUMULATION,
