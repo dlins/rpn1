@@ -45,7 +45,7 @@ public class CoincidencePlotAgent extends RpModelPlotAgent {
     }
     public RpGeometry createRpGeometry(RealVector[] input) {
 
-        CoincidenceCurveGeomFactory factory = new   CoincidenceCurveGeomFactory(new CoincidenceCurveCalc());
+        CoincidenceCurveGeomFactory factory = new CoincidenceCurveGeomFactory(new CoincidenceCurveCalc());
         return factory.geom();
 
     }

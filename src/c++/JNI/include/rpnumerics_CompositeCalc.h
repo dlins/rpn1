@@ -10,10 +10,10 @@ extern "C" {
 /*
  * Class:     rpnumerics_CompositeCalc
  * Method:    nativeCalc
- * Signature: (IILrpnumerics/PhasePoint;IIII)Lrpnumerics/RpSolution;
+ * Signature: (Lrpnumerics/PhasePoint;II)Lrpnumerics/RpSolution;
  */
 JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc
-  (JNIEnv *, jobject, jint, jint, jobject, jint, jint, jint, jint);
+  (JNIEnv *, jobject, jobject, jint, jint);
 
 #ifdef __cplusplus
 }

@@ -305,6 +305,24 @@ public class RPNUMERICS {
      */
     public static native void initNative(String physicsName);
 
+    public static HugoniotCurveCalc createHugoniotCalc(RealVector xZero) {
+
+
+        int xResolution = new Integer(getConfiguration("Contour").getParam("x-resolution"));
+        int yResolution = new Integer(getConfiguration("Contour").getParam("y-resolution"));
+
+
+        int[] resolution = new int[2];
+
+
+        resolution[0] = xResolution;
+        resolution[1] = yResolution;
+
+
+
+        return new HugoniotCurveCalcND(xZero, resolution);
+    }
+
     public static HugoniotCurveCalc createHugoniotCalc() {
 
         HugoniotCurveCalc hugoniotCurveCalc = null;
@@ -347,8 +365,22 @@ public class RPNUMERICS {
 
     public static RarefactionOrbitCalc createRarefactionCalc(OrbitPoint orbitPoint) {
 
-       
-        return new RarefactionOrbitCalc("methodName", "flowName", orbitPoint, Integer.parseInt(getParamValue("shock", "family")), direction_);//TODO Is method and flowName needed ?
+
+        /*
+         * TODO O Valor de family deve ser o mesmo para choque e rarefacao ????
+         */
+
+        return new RarefactionOrbitCalc(orbitPoint, Integer.parseInt(getParamValue("shock", "family")), direction_);//TODO Is method and flowName needed ?
+
+    }
+
+    public static IntegralCurveCalc createIntegralCurveCalc(OrbitPoint orbitPoint) {
+
+        /*
+         * TODO O Valor de family deve ser o mesmo para choque e rarefacao ????
+         */
+
+        return new IntegralCurveCalc(orbitPoint, Integer.parseInt(getParamValue("shock", "family")));
 
 
 
@@ -410,6 +442,35 @@ public class RPNUMERICS {
         System.out.println("Coincidence Extension Resolution Java:" + xResolution + " " + yResolution);
 
         return new CoincidenceExtensionCurveCalc(xResolution, yResolution, new Integer(getParamValue("extensioncurve", "curvefamily")), new Integer(getParamValue("extensioncurve", "domainfamily")), characteristicWhere);
+
+
+    }
+
+    public static HysteresisCurveCalc createHysteresisCurveCalc() {
+
+        
+          int xResolution = new Integer(getConfiguration("Contour").getParam("x-resolution"));
+        int yResolution = new Integer(getConfiguration("Contour").getParam("y-resolution"));
+
+//        int xResolution = new Integer(getContourConfiguration().getParam("x-resolution"));
+//        int yResolution = new Integer(getContourConfiguration().getParam("y-resolution"));
+
+        int characteristicWhere = new Integer(getParamValue("extensioncurve", "characteristicwhere"));
+
+
+        int curveFamily = new Integer(getParamValue("wavecurve", "curvefamily"));
+        int domainFamily = new Integer(getParamValue("wavecurve", "domainfamily"));
+
+        int singular = 0;//TODO Pegar do arquivo de entrada
+
+        return new HysteresisCurveCalc(domainFamily, curveFamily, xResolution, yResolution, characteristicWhere, singular);
+
+    }
+
+    public static CompositeCalc createCompositeCalc(OrbitPoint initialPoint) {
+
+
+        return new CompositeCalc(initialPoint, Integer.parseInt(getParamValue("shock", "family")), direction_);
 
 
     }
@@ -476,9 +537,7 @@ public class RPNUMERICS {
         System.out.println(direction_);
 
 
-
-        return new ShockCurveCalc("methodname", tolerance, orbitPoint, family, direction_);
-
+        return new ShockCurveCalc(orbitPoint, family, direction_);
 
     }
 
@@ -497,8 +556,25 @@ public class RPNUMERICS {
 
     }
 
-    public static CompositeCalc createCompositeCalc(OrbitPoint orbitPoint) {
-        System.out.println("aqui no create " + getConfiguration("Contour").getParam("x-resolution") + " " + getConfiguration("Contour").getParam("y-resolution"));
+//<<<<<<< HEAD
+//    public static CompositeCalc createCompositeCalc(OrbitPoint orbitPoint) {
+//        System.out.println("aqui no create " + getConfiguration("Contour").getParam("x-resolution") + " " + getConfiguration("Contour").getParam("y-resolution"));
+//=======
+    public static InflectionCurveCalc createInflectionCurveCalc() {
+
+        return new InflectionCurveCalc(new Integer(getParamValue("shock", "family")));
+    }
+
+    public static CoincidenceCurveCalc createCoincidenceCurveCalc() {
+
+        return null;
+
+
+    }
+
+    public static RarefactionExtensionCalc createRarefactionExtensionCalc(OrbitPoint orbitPoint) {
+//        System.out.println("aqui no create " + getContourConfiguration().getParam("x-resolution") + " " + getContourConfiguration().getParam("y-resolution"));
+//>>>>>>> inflexao
 
 
 
@@ -524,9 +600,7 @@ public class RPNUMERICS {
 
 
 
-
-        return new CompositeCalc(xResolution, yResolution, orbitPoint, direction_, curveFamily, domainFamily, characteristicDomain);
-
+        return new RarefactionExtensionCalc(xResolution, yResolution, orbitPoint, direction_, curveFamily, domainFamily, characteristicDomain);
 
     }
 

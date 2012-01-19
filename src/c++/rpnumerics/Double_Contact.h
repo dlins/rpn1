@@ -4,8 +4,7 @@
 #include "math.h"
 #include "Bifurcation_Curve.h"
 #include "HyperCube.h"
-
-#include <time.h>
+#include "Boundary.h"
 
 // Some matrices, etc., can be static. A static_init() method must take care of
 // this. A static flag must be set. The ctor will query the flag's status and
@@ -16,15 +15,6 @@
 
 class Double_Contact : public Bifurcation_Curve {
     private:
-        void initialize_projection(const FluxFunction *ff, const AccumulationFunction *aa,
-                                           const RealVector &pmin, const RealVector &pmax, const int *number_of_grid_pnts, 
-                                           Matrix<RealVector> &grid,
-                                           Matrix<RealVector> &ffv, Matrix<RealVector> &aav,
-                                           Matrix< std::vector<double> > &e, Matrix< std::vector<bool> > &eig_is_real,
-                                           int family, int &inner_family,
-                                           int &nu, int &nv, double &u0, double &u1, double &v0, double &v1, double &du, double &dv);
-
-
         // ======================== Left  domain ======================== //
         RealVector leftpmin, leftpmax;                 // Input
         int *left_number_of_grid_pnts;
@@ -39,6 +29,8 @@ class Double_Contact : public Bifurcation_Curve {
         Matrix< std::vector<bool> >   left_eig_is_real;     // If abovementioned eigenvalues are real.
 
         Matrix<bool> left_is_complex;
+
+        Matrix<bool> left_is_inside;
 
 //        Matrix<RealEigenvalueCell> left_cells;
 
@@ -57,6 +49,8 @@ class Double_Contact : public Bifurcation_Curve {
                              // A matrix or matrices to that effect will be created at some point of the future.
 
                              // TODO: Indices for the grid and the cells MAY start at a value different from zero.
+
+        Boundary *leftb;
         // ======================== Left  domain ======================== //
 
         // ======================== Right domain ======================== //
@@ -74,6 +68,9 @@ class Double_Contact : public Bifurcation_Curve {
         Matrix< std::vector<bool> >   right_eig_is_real;     // If abovementioned eigenvalues are real.
 
         Matrix<bool> right_is_complex;
+
+        Matrix<bool> right_is_inside;
+
 //        Matrix<RealEigenvalueCell> right_cells;
 
         int nur;
@@ -91,6 +88,8 @@ class Double_Contact : public Bifurcation_Curve {
                               // A matrix or matrices to that effect will be created at some point of the future.
 
                               // TODO: Indices for the grid and the cells MAY start at a value different from zero.
+
+        Boundary *rightb;
         // ======================== Right domain ======================== //
 
         double dumax, dvmax;
@@ -100,8 +99,6 @@ class Double_Contact : public Bifurcation_Curve {
                     int il, int jl, int ir, int jr, 
                     std::vector<RealVector> &left_vrs, std::vector<RealVector> &right_vrs);
 
-        template <typename T> void initialize_matrix(int n, int m, T *matrix, T value);
-
         HyperCube hc;
 
         void func(double *val, int ir, int jr, int kl, int kr, 
@@ -110,54 +107,16 @@ class Double_Contact : public Bifurcation_Curve {
         int filhcub4(int ir, int jr, int *index, double *foncub, int hm, int ncvert_,
                      double *lambda_left_input, Matrix<double> &flux_left_input, Matrix<double> &accum_left_input);
                      
-        inline bool left_right_ordering(int il, int jl, int ir, int jr);
-
-        // Combinatorial
-        int hn;
-        int hm;
-        int DNCV;
-        int DNSIMP;
-        int DNSF;
-        int DNFACE;
-        int nsface_, nface_, nsoln_, nedges_;
-        int dims_;
-        int dime_;
-
-        int ncvert_, nsimp_, numberOfCombinations;
-        int *storn_, *storm_;
-        double *cvert_;//, *vert;
-        int *bsvert_, *perm_, *comb_;
-        double *foncub;
-        int *fnbr_;
-        int dimf_;
-
-        Matrix<double> cpp_sol;
-
-        int *solptr_;
-
-        Matrix<int> cpp_edges_;
-
-        int *smpedg_, *facptr_, *face_, *exstfc, *sptr_;
-
-        // Reserve some space for prepare_cell().
-        //
-        double *lambda_left;
-        Matrix<double> flux_left;
-        Matrix<double> accum_left;
-
-        int *index;
-        double *u, *g, *stormd;
-
-        void compute_double_contact_engine(int il_min, int il_max, 
-                                                   std::vector<RealVector> &left_vrs, 
-                                                   std::vector<RealVector> &right_vrs);
+        inline bool left_right_adjacency(int il, int jl, int ir, int jr);
 
     protected:
     public:
         Double_Contact(const RealVector &lpmin, const RealVector &lpmax, const int *l_number_of_grid_pnts,
                        const FluxFunction *lff, const AccumulationFunction *laa, int lf,
+                       const Boundary *lboundary,
                        const RealVector &rpmin, const RealVector &rpmax, const int *r_number_of_grid_pnts,
-                       const FluxFunction *rff, const AccumulationFunction *raa, int rf);
+                       const FluxFunction *rff, const AccumulationFunction *raa, int rf,
+                       const Boundary *rboundary);
         ~Double_Contact();
 
         void compute_double_contact(std::vector<RealVector> &left_vrs, 

@@ -35,6 +35,8 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
 //        }
     }
 
+
+
     //** inseri este método (Leandro)
     @Override
     public int findClosestSegment(RealVector targetPoint, double alpha) {

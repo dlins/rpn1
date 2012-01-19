@@ -7,6 +7,7 @@ package rpnumerics;
 
 import java.util.List;
 
+
 public class DoubleContactCurve extends BifurcationCurve {
     //
     // Members
@@ -17,10 +18,7 @@ public class DoubleContactCurve extends BifurcationCurve {
     }
 
     public DoubleContactCurve(List<HugoniotSegment> hSegments, List<HugoniotSegment> rightSegments) {
-
         super(hSegments, rightSegments);//, new ViewingAttr(Color.RED));
-
-       
 
     }
 }

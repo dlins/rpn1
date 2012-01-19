@@ -93,6 +93,7 @@ public class RPnDataModule {
         protected static boolean pointOneOK_, calcReady_, plotProfile_;
         private String currentCommand_;
         private RpCalculation calc_;
+        private StringBuffer stringBuffer_;
 
         public InputHandler() {
             orbitListener_ = new OrbitParser();
@@ -105,8 +106,7 @@ public class RPnDataModule {
             connectionCalcListener_ = new ConnectionOrbitCalcParser();
             orbitCalcListener_ = new OrbitCalcParser();
             manifoldCalcParser_ = new ManifoldCalcParser();
-
-
+            stringBuffer_ = new StringBuffer();
 
             pPointList_ = new ArrayList();
             hugoniotSegmentsList_ = new ArrayList();
@@ -280,6 +280,10 @@ public class RPnDataModule {
 
             if (name.equals("PHASEPOINT")) {
 
+//                pointOneOK_=false;
+
+                stringBuffer_ = new StringBuffer();
+
                 phaseSize_ = (new Integer(att.getValue(0))).intValue();
 //                tempVector_ = new RealVector(phaseSize_);
             }
@@ -317,21 +321,15 @@ public class RPnDataModule {
 
             try {
                 String data = new String(buff, offset, len);
+
 //                System.out.println("Data : " + data);
                 data = data.trim();
                 if (data.length() != 0) {
-                    System.out.println("Data : " + data);
+//                    System.out.println("Data : " + data);
                     if (currentElement_.equals("PHASEPOINT")) {
-                        StringTokenizer tokenizer = new StringTokenizer(data);
 
-//                        System.out.println("Tamanho dos tokens: " + tokenizer.countTokens());
-
-                        if (tokenizer.countTokens() == phaseSize_) {
-                            tempVector_ = new RealVector(data);
-//                            System.out.println("Valor de phaseSize: " + phaseSize_ + " valor de data: " + data);
-//                            pPointList_.add(new PhasePoint(tempVector_));
-                        }
-
+                        stringBuffer_.append(data);
+//                  
                     }
                     if (currentElement_.equals("REALVECTOR")) {
                         tempVector_ = new RealVector(data);
@@ -606,20 +604,37 @@ public class RPnDataModule {
             }
             if (name.equals("PHASEPOINT")) {
 
+                try {
+                System.out.println(stringBuffer_.toString());
+                RealVector coordsVector = new RealVector(stringBuffer_.toString());
+
+                   System.out.println("Fim de PhasePoint");
+
                 if (pointOneOK_ == false) {
-                    point1_ = new RealVector(tempVector_);
+                    point1_ = new RealVector(coordsVector);
                     pointOneOK_ = true;
                 } else {
-                    point2_ = new RealVector(tempVector_);
+                    point2_ = new RealVector(coordsVector);
                     pointOneOK_ = false;
                 }
 
+
+                }
+                catch (Exception ex){
+                    ex.getMessage();
+                }
+
+
+
+        
+
+             
             }
             if (name.equals("REALSEGMENT")) {
 
-//                System.out.println("Valor de point1: " + point1_);
-//                System.out.println("Valor de point2: " + point2_);
-//                pointOneOK_=false;
+                System.out.println("Valor de point1: " + point1_);
+                System.out.println("Valor de point2: " + point2_);
+                pointOneOK_=false;
 
 
                 hugoniotSegmentsList_.add(new HugoniotSegment(point1_, 0, point2_, 0, 17));//TODO Use RealSegment or another typeless segment

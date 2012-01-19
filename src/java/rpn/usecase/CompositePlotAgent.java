@@ -15,7 +15,7 @@ public class CompositePlotAgent extends RpModelPlotAgent {
     //
     // Constants
     //
-    static public final String DESC_TEXT = "Composite Curve";    //
+    static public final String DESC_TEXT = "Composite Curve";   
     // Members
     //
     static private CompositePlotAgent instance_ = null;
@@ -31,6 +31,7 @@ public class CompositePlotAgent extends RpModelPlotAgent {
         OrbitPoint oPoint = new OrbitPoint(input[input.length - 1]);
         CompositeGeomFactory factory = new CompositeGeomFactory(RPNUMERICS.createCompositeCalc(oPoint));
         return factory.geom();
+
     }
 
     static public CompositePlotAgent instance() {

@@ -5,37 +5,21 @@
  */
 package rpnumerics;
 
-import java.util.List;
-
-public class CompositeCurve extends SegmentedCurve {
+public class CompositeCurve extends Orbit implements RpSolution {
+  
     //
     // Members
     //
 
-    public CompositeCurve(List<HugoniotSegment> hSegments, List<HugoniotSegment> rightSegments) {
-        super(createSingleSegmentList(hSegments, rightSegments));
+    public CompositeCurve(OrbitPoint [] rarefaction,int increase,int familyIndex) {
+        super(rarefaction,familyIndex,increase);
 
-
-    }
-
-    private static List createSingleSegmentList(List<HugoniotSegment> leftSeg, List<HugoniotSegment> rightSeg) {
-
-        System.out.println("Tamanho left: "+leftSeg.size());
-        System.out.println("Tamanho right: "+rightSeg.size());
-
-        for (HugoniotSegment hugoniotSegment : leftSeg) {
-            hugoniotSegment.setIntType(16);
-        }
-        for (HugoniotSegment hugoniotSegment : rightSeg) {
-            hugoniotSegment.setIntType(15);
-        }
-
-        if (leftSeg.addAll(rightSeg)) {
-
-            return leftSeg;
-        } else {
-            return null;
-        }
+   
 
     }
+
+
+   
+
+
 }

@@ -6,7 +6,7 @@
  */
 package rpnumerics;
 
-public class RarefactionOrbitCalc implements RpCalculation {
+public class RarefactionOrbitCalc extends OrbitCalc implements RpCalculation {
     //
     // Constants
     //
@@ -14,41 +14,26 @@ public class RarefactionOrbitCalc implements RpCalculation {
     // Members
     //
 
-    private PhasePoint start_;
-    private int timeDirection_;
-    private String methodName_;
-    private String flowName_;
-    private int familyIndex_;
-  
+//    private PhasePoint start_;
+//    private int timeDirection_;
+//    private String methodName_;
+//    private String flowName_;
+//    private int familyIndex_;
+//
 
     //
     // Constructors/Initializers
     //
-    public RarefactionOrbitCalc(PhasePoint point, int timeDirection) {
-        start_ = point;
-        timeDirection_ = timeDirection;
+    public RarefactionOrbitCalc(PhasePoint point, int familyIndex,int timeDirection) {
+
+        super(new OrbitPoint(point), familyIndex, timeDirection);
+       
     }
-
-    public RarefactionOrbitCalc(String methodName, String flowName, PhasePoint point, int familyIndex, int timeDirection) {
-
-        methodName_ = methodName;
-
-        start_ = point;
-        timeDirection_ = timeDirection;
-        familyIndex_ = familyIndex;
-        methodName_ = "ContinuationRarefactionMethod";//TODO Put the correct method name
-
-    }
-
-   
 
     //
     // Accessors/Mutators
     //
-    public int tDirection() {
-        return timeDirection_;
-    }
-
+   
     //
     // Methods
     //
@@ -60,32 +45,32 @@ public class RarefactionOrbitCalc implements RpCalculation {
     public RpSolution calc() throws RpException {
 
         RarefactionOrbit result;
-        if (timeDirection_ == 0) {
+        if (getDirection()== 0) {
 
-            RarefactionOrbit resultForward = (RarefactionOrbit) calc(methodName_, flowName_, start_, familyIndex_, 20);
-            RarefactionOrbit resultBackward = (RarefactionOrbit) calc(methodName_, flowName_, start_, familyIndex_, 22);
+            RarefactionOrbit resultForward = (RarefactionOrbit) calc("methodName_", "flowName_", getStart(), getFamilyIndex(), 20);
+
+            RarefactionOrbit resultBackward = (RarefactionOrbit) calc("methodName_", "flowName_", getStart(), getFamilyIndex(), 22);
 
             if (resultBackward == null || resultForward == null) {
                 throw new RpException("Error in native layer");
             }
 
 
-            Orbit resultComplete = RarefactionOrbit.concat(resultBackward, resultForward);
-            result = new RarefactionOrbit(resultComplete.getPoints(), resultComplete.getIntegrationFlag());
+            Orbit resultComplete = RarefactionOrbit.concat(resultBackward, resultForward,getFamilyIndex());
+            result = new RarefactionOrbit(resultComplete.getPoints(), resultComplete.getFamilyIndex(),resultComplete.getDirection());
 
-            result.setFamilyIndex(familyIndex_);
             return result;
 
 
         }
 
-        result = (RarefactionOrbit) calc(methodName_, flowName_, start_, familyIndex_, timeDirection_);
+        result = (RarefactionOrbit) calc("methodName_", "flowName_", getStart(), getFamilyIndex(), getDirection());
 
 
         if (result == null) {
             throw new RpException("Error in native layer");
         }
-        result.setFamilyIndex(familyIndex_);
+      
 
         //** acrescentei isso (Leandro)
             RPnCurve.lista.add(result);
@@ -99,8 +84,5 @@ public class RarefactionOrbitCalc implements RpCalculation {
 
     private native RpSolution calc(String methodName, String flowName, PhasePoint initialpoint, int familyIndex, int timeDirection) throws RpException;
 
-    public String getCalcMethodName() {
-        return methodName_;
-
-    }
+   
 }

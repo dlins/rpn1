@@ -45,6 +45,8 @@ public class BifurcationCurveCalc implements RpCalculation {
     }
 
     public RpSolution recalc() throws  RpException{
+
+        System.out.println("Chamando recalc da bifurcacao");
         return calc();
     }
 

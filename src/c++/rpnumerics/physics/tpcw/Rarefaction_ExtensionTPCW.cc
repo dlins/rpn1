@@ -32,7 +32,7 @@ void Rarefaction_ExtensionTPCW::extension_curve(const Flux2Comp2PhasesAdimension
             RAREFACTION_INITIALIZE_YES,
             (const RealVector *) 0,
             curve_family,
-            increase,
+            increase,CHECK_RAREFACTION_MONOTONY_TRUE,
             deltaxi,
             curve_flux, curve_accum,
             RAREFACTION_GENERAL_ACCUMULATION,

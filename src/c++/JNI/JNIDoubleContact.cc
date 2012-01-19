@@ -94,113 +94,52 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
     number_of_grid_pnts[0] = xResolution;
     number_of_grid_pnts[1] = yResolution;
 
-    if (RpNumerics::getPhysics().ID().compare("Stone") == 0) {
-
-        cout << "Chamando com stone" << endl;
-
-        dimension = 2;
-        // Create the Double Contact
-        // Grid (the same one for the left- and right-domains)
-        RealVector pmin(2);
-        pmin.component(0) = 0.0;
-        pmin.component(1) = 0.0;
-
-        RealVector pmax(2);
-        pmax.component(0) = 1.0;
-        pmax.component(1) = 1.0;
 
 
-        cout << " Parametros " << RpNumerics::getPhysics().fluxFunction().fluxParams().params() << endl;
+    cout << "Chamando com stone" << endl;
+
+    dimension = 2;
+
+    cout << " Parametros " << RpNumerics::getPhysics().fluxFunction().fluxParams().params() << endl;
+
+    int family = 1; // Or else...
+
+    const FluxFunction * leftFlux = &RpNumerics::getPhysics().fluxFunction();
+    const AccumulationFunction * leftAccum = &RpNumerics::getPhysics().accumulation();
+
+    const FluxFunction * rightFlux = leftFlux;
+    const AccumulationFunction * rightAccum = rightAccum;
+
+    const Boundary * leftBoundary = &RpNumerics::getPhysics().boundary();
+    const Boundary * rightBoundary = leftBoundary;
 
 
-        int family = 1; // Or else...
-
-      
-    
-
-        Double_Contact dc(pmin, pmax, number_of_grid_pnts, (FluxFunction*) RpNumerics::getPhysics().fluxFunction().clone(), (AccumulationFunction*) RpNumerics::getPhysics().accumulation().clone(), leftFamily,
-                pmin, pmax, number_of_grid_pnts, (FluxFunction*) RpNumerics::getPhysics().fluxFunction().clone(), (AccumulationFunction*) RpNumerics::getPhysics().accumulation().clone(), rightFamily);
-
-        dc.compute_double_contact(left_vrs, right_vrs);
-
-        printf("left_vrs.size()  = %d\n", left_vrs.size());
-
-        printf("right_vrs.size() = %d\n", right_vrs.size());
-
-    }
+    RealVector pmin(leftBoundary->minimums());
+    RealVector pmax(leftBoundary->maximums());
 
 
-    if (RpNumerics::getPhysics().ID().compare("TPCW") == 0) {
+    Double_Contact dc(pmin, pmax, number_of_grid_pnts, leftFlux,
+            leftAccum,
+            leftFamily, leftBoundary,
+            pmin, pmax, number_of_grid_pnts,
+            rightFlux,
+            rightAccum,
+            rightFamily, rightBoundary);
 
-        cout << "Chamando com tpcw" << endl;
-        dimension = 3;
+    dc.compute_double_contact(left_vrs, right_vrs);
 
+    printf("left_vrs.size()  = %d\n", left_vrs.size());
 
-        TPCW & tpcw = (TPCW &) RpNumerics::getPhysics().getSubPhysics(0);
-        const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
-
-        RealVector min(2);
-
-        RealVector max(2);
-
-
-        min.component(0) = physicsBoundary.minimums().component(0);
-        min.component(1) = physicsBoundary.minimums().component(1);
-
-        max.component(0) = physicsBoundary.maximums().component(0);
-        max.component(1) = physicsBoundary.maximums().component(1);
+    printf("right_vrs.size() = %d\n", right_vrs.size());
 
 
-        tpcw.preProcess(min);
-        tpcw.preProcess(max);
-
-        cout << "Resolucao x " << number_of_grid_pnts[0] << endl;
-        cout << "Resolucao y " << number_of_grid_pnts[1] << endl;
-
-
-
-        cout << "Familia direita" << rightFamily << endl;
-        cout << "Familia esquerda" << leftFamily << endl;
-
-
-
-
-        Flux2Comp2PhasesAdimensionalized * fluxFunction = (Flux2Comp2PhasesAdimensionalized *) & tpcw.fluxFunction();
-
-        Accum2Comp2PhasesAdimensionalized * accumulationFunction = (Accum2Comp2PhasesAdimensionalized *) & tpcw.accumulation();
-
-        Double_ContactTPCW dc(min, max, number_of_grid_pnts,
-                fluxFunction, accumulationFunction,
-                leftFamily,
-                min, max, number_of_grid_pnts,
-                fluxFunction, accumulationFunction,
-                rightFamily);
-
-        dc.compute_double_contactTPCW(left_vrs, right_vrs);
-
-        printf("left_vrs.size()  = %d\n", left_vrs.size());
-        printf("right_vrs.size() = %d\n", right_vrs.size());
-
-        tpcw.postProcess(left_vrs);
-        tpcw.postProcess(right_vrs);
-
-
-
-
-    }
 
     delete number_of_grid_pnts;
-
-
 
 
     const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
 
     for (unsigned int i = 0; i < left_vrs.size() / 2; i++) {
-
-
-
-
 
         jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
         jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);

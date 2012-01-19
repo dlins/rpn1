@@ -26,6 +26,7 @@ NOTE :
 #include "ContourMethod.h"
 #include  "BuckleyLeverettinInflectionTPCW.h"
 #include "rpnumerics_BuckleyLeverettinInflectionCurveCalc.h"
+#include "ColorCurve.h"
 
 
 using std::vector;
@@ -108,14 +109,14 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BuckleyLeverettinInflectionCurveCalc_n
 
 
     BuckleyLeverettinInflectionTPCW bl((Flux2Comp2PhasesAdimensionalized*) & tpcw.fluxFunction(), &tempBoundary);
-    ContourMethod method(3, tpcw.fluxFunction(), tpcw.accumulation(), tempBoundary, &bl);
+//    ContourMethod method(3, tpcw.fluxFunction(), tpcw.accumulation(), tempBoundary, &bl);
 
 
-    //    ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), tempBoundary, &bl);
+//    ContourMethod method(&bl);
 
     vector<HugoniotPolyLine> hugoniotPolyLineVector;
 
-    method.unclassifiedCurve(Uref, hugoniotPolyLineVector);
+//    method.unclassifiedCurve(Uref, hugoniotPolyLineVector);
 
     RealVector minDimension(RpNumerics::getPhysics().boundary().minimums());
     RealVector maxDimension(RpNumerics::getPhysics().boundary().maximums());

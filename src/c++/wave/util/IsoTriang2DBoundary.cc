@@ -17,6 +17,7 @@ using namespace std;
  * ---------------------------------------------------------------
  * Definitions:
  */
+using namespace std;
 IsoTriang2DBoundary::~IsoTriang2DBoundary() {
 
     delete minimums_;
@@ -104,7 +105,7 @@ bool IsoTriang2DBoundary::inside(const double *U)const {
     double y = U[1];
 
 
-     if ((x >= minimums().component(0)) && (y >= minimums().component(1)) && (x + y <=  maximums().component(0)+minimums().component(1))) {
+     if ((x >= minimums().component(0)) && (y >= minimums().component(1)) && (x + y <=  maximums().component(0)+minimums().component(1)+0.00000001)) {
         cout << "(" << x << ", " << y << ") is INSIDE" << endl;
         return true;
     } else {
@@ -130,7 +131,7 @@ bool IsoTriang2DBoundary::inside(const RealVector & U)const {
 
 
 
-     if ((x >= minimums().component(0)) && (y >= minimums().component(1)) && (x + y <=  maximums().component(0)+minimums().component(1))) {
+     if ((x >= minimums().component(0)) && (y >= minimums().component(1)) && (x + y <=  maximums().component(0)+minimums().component(1)+0.00000001)) {
         cout << "(" << x << ", " << y << ") is INSIDE" << endl;
         return true;
     } else {
@@ -155,4 +156,5 @@ bool IsoTriang2DBoundary::inside(const RealVector & U)const {
 }
 
 RealVector IsoTriang2DBoundary::intersect(RealVector &y1, RealVector &y2)const {
+    return RealVector(2);
 } //TODO

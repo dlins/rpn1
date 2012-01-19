@@ -9,7 +9,7 @@ import rpnumerics.RarefactionOrbit;
 import rpnumerics.RarefactionOrbitCalc;
 import wave.util.RealVector;
 
-public class RarefactionOrbitGeomFactory extends RpCalcBasedGeomFactory {
+public class RarefactionOrbitGeomFactory extends OrbitGeomFactory {
     //
     // Constants
     //
@@ -50,14 +50,14 @@ public class RarefactionOrbitGeomFactory extends RpCalcBasedGeomFactory {
 
         String direction = "forward\"";
         str.append("<COMMAND name=\"rarefaction");
-        System.out.println("Direcao: "+((RarefactionOrbitCalc) rpCalc()).tDirection());
+        System.out.println("Direcao: "+((RarefactionOrbitCalc) rpCalc()).getDirection());
 
-        if (((RarefactionOrbitCalc) rpCalc()).tDirection() == OrbitGeom.BACKWARD_DIR) {
+        if (((RarefactionOrbitCalc) rpCalc()).getDirection() == OrbitGeom.BACKWARD_DIR) {
             direction = "backward\"";
 
         }
 
-        if (((RarefactionOrbitCalc) rpCalc()).tDirection() == OrbitGeom.BOTH_DIR) {
+        if (((RarefactionOrbitCalc) rpCalc()).getDirection()== OrbitGeom.BOTH_DIR) {
             direction = "both\"";
         }
 

@@ -92,6 +92,7 @@ public abstract class RPnConfigReader {
 
             configStream.reset();
 
+
             RPnDataModule.init(xmlReader, configStream);
 
 

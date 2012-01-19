@@ -33,6 +33,7 @@ public class BifurcationCurve extends SegmentedCurve {
         rightSegments_ = rightList;
     }
 
+
     public BifurcationCurve(List<HugoniotSegment> singleList) {
 
         super(singleList);

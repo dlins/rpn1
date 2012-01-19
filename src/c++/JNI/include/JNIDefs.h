@@ -12,9 +12,8 @@
 // CLASSPATH
 
 
-
 #define BOUNDARY_LOCATION                     "wave/util/Boundary"
-#define ISOTRIANG2DBOUNDARY_LOCATION           "wave/util/IsoTriang2DBoundary"
+#define ISOTRIANG2DBOUNDARY_LOCATION          "wave/util/IsoTriang2DBoundary"
 #define RECTBOUNDARY_LOCATION                 "wave/util/RectBoundary"
 #define REALVECTOR_LOCATION                   "wave/util/RealVector"
 #define REALMATRIX2_LOCATION                  "wave/util/RealMatrix2"
@@ -47,7 +46,7 @@
 #define CONNECTIONORBIT_LOCATION               "rpnumerics/ConnectionOrbit"
 
 
-
+#define SHOCKCURVE_LOCATION                   "rpnumerics/ShockCurve"
 #define HUGONIOTPOINTTYPE_LOCATION            "rpnumerics/HugoniotPointType"
 #define HUGONIOTSEGMENTCLASS_LOCATION         "rpnumerics/HugoniotSegment"
 #define HUGONIOTCURVE_LOCATION                "rpnumerics/HugoniotCurve"
@@ -59,6 +58,10 @@
 #define SUBINFLECTIONEXTENSIONCURVE_LOCATION  "rpnumerics/SubInflectionExtensionCurve"
 #define COINCIDENCEEXTENSIONCURVE_LOCATION    "rpnumerics/CoincidenceExtensionCurve"
 #define COMPOSITECURVE_LOCATION               "rpnumerics/CompositeCurve"
+#define INFLECTIONCURVE_LOCATION              "rpnumerics/InflectionCurve"
+#define HYSTERESISCURVE_LOCATION              "rpnumerics/HysteresisCurve"
+#define RAREFACTIONEXTENSIONCURVE_LOCATION    "rpnumerics/RarefactionExtensionCurve"
+
 
 #define NUMERICSPROFILE_LOCATION              "rpnumerics/RPNumericsProfile"
 #define RPNUMERICS_LOCATION                   "rpnumerics/RPNUMERICS"

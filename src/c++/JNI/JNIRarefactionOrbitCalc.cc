@@ -45,7 +45,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
     jclass classOrbitPoint = (env)->FindClass(ORBITPOINT_LOCATION);
     jclass classRarefactionOrbit = (env)->FindClass(RAREFACTIONORBIT_LOCATION);
 
-    jmethodID rarefactionOrbitConstructor = (env)->GetMethodID(classRarefactionOrbit, "<init>", "([Lrpnumerics/OrbitPoint;I)V");
+    jmethodID rarefactionOrbitConstructor = (env)->GetMethodID(classRarefactionOrbit, "<init>", "([Lrpnumerics/OrbitPoint;II)V");
     jmethodID orbitPointConstructor = (env)->GetMethodID(classOrbitPoint, "<init>", "([D)V");
     jmethodID toDoubleMethodID = (env)->GetMethodID(classOrbitPoint, "toDouble", "()[D");
 
@@ -66,79 +66,34 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
     }
 
     env->DeleteLocalRef(inputPhasePointArray);
-
-
-
-    //    dimension;
     //
 
     vector <RealVector> coords;
 
-    //    clock_t begin = clock();
 
+    Boundary * tempBoundary = RpNumerics::getPhysics().boundary().clone();
 
-
-    const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
-
-    RealVector min(physicsBoundary.minimums());
-    RealVector max(physicsBoundary.maximums());
-
-
-
-    cout << "Min: " << min << endl;
-    cout << "Max: " << max << endl;
-
-
-
-
-    SubPhysics & physics = RpNumerics::getPhysics().getSubPhysics(0);
-
-
-    physics.preProcess(min);
-    physics.preProcess(max);
-
-//
-//    vector<bool> testBoundary;
-//
-//    testBoundary.push_back(true);
-//    testBoundary.push_back(true);
-//    testBoundary.push_back(true);
-//    testBoundary.push_back(true);
-
-
-
-//    RectBoundary tempBoundary(min, max, testBoundary);
-        RectBoundary tempBoundary(min, max);
+    //    double deltaxi = 1e-3; // This is the original value (Rodrigo/ Panters)
 
 
     double deltaxi = 1e-3;
 
-    physics.preProcess(realVectorInput);
-
-
-    cout << "Time direction :" << timeDirection << endl;
-
+    const FluxFunction * fluxFunction = &RpNumerics::getPhysics().fluxFunction();
+    const AccumulationFunction * accumulationFunction = &RpNumerics::getPhysics().accumulation();
 
     int info = Rarefaction::curve(realVectorInput,
             RAREFACTION_INITIALIZE_YES,
             (const RealVector *) 0,
             familyIndex,
             timeDirection,
+            CHECK_RAREFACTION_MONOTONY_TRUE,
             deltaxi,
-            (FluxFunction *) RpNumerics::getPhysics().fluxFunction().clone(),
-            (AccumulationFunction*) RpNumerics::getPhysics().accumulation().clone(),
+            fluxFunction,
+            accumulationFunction,
             RAREFACTION_GENERAL_ACCUMULATION,
-            &tempBoundary,
+            tempBoundary,
             coords);
-
-
-    physics.postProcess(coords);
-    //    for (int i = 0; i < coords.size(); i++) cout << "coords(" << i << ") = " << coords[i] << endl;
-
-    //    cout << "Resultado da rarefacao: " << info << ", size = " << coords.size() << endl;
-    //    method.curve(realVectorInput, timeDirection, coords);
-
-    //cout << "Depois de chamar curve: " << (double) (clock() - begin) / (double) CLOCKS_PER_SEC << endl;
+    delete tempBoundary;
 
     if (coords.size() == 0) {
         return NULL;
@@ -147,8 +102,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
     //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //Orbit members creation
-
-    cout << "Tamanho da curva: " << coords.size() << endl;
 
     jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(coords.size(), classOrbitPoint, NULL);
 
@@ -174,7 +127,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
 
     //Building the orbit
 
-    jobject rarefactionOrbit = (env)->NewObject(classRarefactionOrbit, rarefactionOrbitConstructor, orbitPointArray, timeDirection);
+    jobject rarefactionOrbit = (env)->NewObject(classRarefactionOrbit, rarefactionOrbitConstructor, orbitPointArray, familyIndex, timeDirection);
 
 
     //Cleaning up

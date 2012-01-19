@@ -1,6 +1,7 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Instituto de Matematica Pura e Aplicada - IMPA
+ * Departamento de Dinamica dos Fluidos
+ *
  */
 
 package rpn.component;
@@ -9,7 +10,6 @@ import rpnumerics.BifurcationCurve;
 import rpnumerics.BifurcationCurveCalc;
 import rpnumerics.CoincidenceCurve;
 import rpnumerics.HugoniotSegment;
-import wave.multid.view.ViewingAttr;
 
 public class CoincidenceCurveGeomFactory extends BifurcationCurveGeomFactory{
 
