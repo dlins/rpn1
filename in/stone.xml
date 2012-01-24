@@ -34,9 +34,9 @@
 
 
     <CURVE name="bifurcationcurve">
-        <CURVEPARAM name="curvefamily" value="0"/>
-        <CURVEPARAM name="domainfamily" value="0"/>
-        <CURVEPARAM name="caracteristicwhere" value="0"/>
+        <CURVEPARAM name="curvefamily" value="1"/>
+        <CURVEPARAM name="domainfamily" value="1"/>
+        <CURVEPARAM name="caracteristicwhere" value="1"/>
         <CURVEPARAM name="singular" value="1"/>
 
 

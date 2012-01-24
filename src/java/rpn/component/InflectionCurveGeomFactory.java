@@ -31,7 +31,6 @@ public class InflectionCurveGeomFactory extends BifurcationCurveGeomFactory{
         BifurcationSegGeom[] bifurcationSegArray = new BifurcationSegGeom[resultSize];
         for (int i = 0; i < resultSize; i++) {
             bifurcationSegArray[i] = new BifurcationSegGeom((HugoniotSegment) curve.segments().get(i));
-
         }
         return new InflectionCurveGeom(bifurcationSegArray, this);
 

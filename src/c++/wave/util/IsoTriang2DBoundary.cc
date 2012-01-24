@@ -100,16 +100,18 @@ IsoTriang2DBoundary::IsoTriang2DBoundary(const RealVector & A, const RealVector 
 
 }
 
+// 1.0000000001 is a kludge, in an ideal world it should be 1.0.
+
 bool IsoTriang2DBoundary::inside(const double *U)const {
     double x = U[0];
     double y = U[1];
 
 
      if ((x >= minimums().component(0)) && (y >= minimums().component(1)) && (x + y <=  maximums().component(0)+minimums().component(1)+0.00000001)) {
-        cout << "(" << x << ", " << y << ") is INSIDE" << endl;
+//        cout << "(" << x << ", " << y << ") is INSIDE" << endl;
         return true;
     } else {
-       cout << "(" << x << ", " << y << ") is OUTSIDE" << endl;
+//       cout << "(" << x << ", " << y << ") is OUTSIDE" << endl;
         return false;
     }
 
@@ -124,7 +126,7 @@ bool IsoTriang2DBoundary::inside(const double *U)const {
 ////        cout << "(" << x << ", " << y << ") is OUTSIDE" << endl;
 //        return false;
  
-
+// 1.0000000001 is a kludge, in an ideal world it should be 1.0.
 bool IsoTriang2DBoundary::inside(const RealVector & U)const {
     double x = U.component(0);
     double y = U.component(1);
@@ -132,10 +134,10 @@ bool IsoTriang2DBoundary::inside(const RealVector & U)const {
 
 
      if ((x >= minimums().component(0)) && (y >= minimums().component(1)) && (x + y <=  maximums().component(0)+minimums().component(1)+0.00000001)) {
-        cout << "(" << x << ", " << y << ") is INSIDE" << endl;
+//        cout << "(" << x << ", " << y << ") is INSIDE" << endl;
         return true;
     } else {
-       cout << "(" << x << ", " << y << ") is OUTSIDE" << endl;
+//       cout << "(" << x << ", " << y << ") is OUTSIDE" << endl;
         return false;
     }
 

@@ -123,20 +123,61 @@ int Hugoniot_Curve::classified_curve(std::vector<HugoniotPolyLine> &hugoniot_cur
     vector<RealVector> vrs;
     int info = curve(vrs);
 
-    // Prepare the Hugoniot curve to classify it
-    vector<vector<RealVector> > unclassifiedCurve;
+//
+//
+//
+//    //         Para testar o contour sem classificacao
+//    hugoniot_curve.clear();
+//    for (int i = 0; i < vrs.size() / 2; i++) {
+//        HugoniotPolyLine temp;
+//        temp.vec.resize(2);
+//
+//        for (int j = 0; j < 2; j++) {
+//            temp.vec[j].resize(7);
+//            for (int k = 0; k < 2; k++) temp.vec[j].component(k) = vrs[2 * i + j].component(k);
+//        }
+//
+//        //                    temp.vec[0] = vrs[2 * i];
+//        //                    temp.vec[1] = vrs[2 * i + 1];
+//        temp.type = 0;
+//        hugoniot_curve.push_back(temp);
+//    }
+//
+//    cout << "Size (2) of a vector within HugoniotPolyLine: " << hugoniot_curve[0].vec[0].size() << endl;
+//    cout << "Depois do classify: " << hugoniot_curve.size() << endl;
+//
+//
+//
+//    for (int i = 0; i < hugoniot_curve.size(); i++) {
+//
+//        for (unsigned int j = 0; j < hugoniot_curve[i].vec.size() - 1; j++) {
+//
+//            cout << "Depois do classificador: " << hugoniot_curve.size() << endl;
+//            cout << " depois type of " << j << " = " << hugoniot_curve[i].type << endl;
+//            cout << "depois coord 1 " << j << " = " << hugoniot_curve[i].vec[j] << endl;
+//            cout << "depois coord 2 " << j + 1 << " = " << hugoniot_curve[i].vec[j + 1] << endl;
+//
+//
+//        }
+//
+//    }
 
-    for (int i = 0; i < vrs.size() / 2; i++) {
-        vector< RealVector> temp;
-        temp.push_back(vrs[2 * i]);
-        temp.push_back(vrs[2 * i]);
-        temp.push_back(vrs[2 * i + 1]);
-        //temp.push_back(vrs[2 * i + 1]);
-        unclassifiedCurve.push_back(temp);
-    }
 
-    ColorCurve colorCurve(*ff, *aa);
-    colorCurve.classify_curve(unclassifiedCurve, Uref, 2, 11, hugoniot_curve);
+
+        // Prepare the Hugoniot curve to classify it
+        vector<vector<RealVector> > unclassifiedCurve;
+    
+        for (int i = 0; i < vrs.size() / 2; i++) {
+            vector< RealVector> temp;
+            temp.push_back(vrs[2 * i]);
+            temp.push_back(vrs[2 * i]);
+            temp.push_back(vrs[2 * i + 1]);
+            //temp.push_back(vrs[2 * i + 1]);
+            unclassifiedCurve.push_back(temp);
+        }
+    
+        ColorCurve colorCurve(*ff, *aa);
+        colorCurve.classify_curve(unclassifiedCurve, Uref, 2, 11, hugoniot_curve);
 
     return info;
 

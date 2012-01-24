@@ -5,10 +5,8 @@
  */
 package wave.util;
 
-import java.math.RoundingMode;
 import java.text.NumberFormat;
 import javax.vecmath.GVector;
-import java.util.StringTokenizer;
 
 public class RealVector extends GVector {
 
@@ -35,12 +33,11 @@ public class RealVector extends GVector {
     public String toString() {
         StringBuffer buffer = new StringBuffer();
         NumberFormat numberFormatter = NumberFormat.getInstance();
-        numberFormatter.setMaximumFractionDigits(6);
+        numberFormatter.setMaximumFractionDigits(12);
 
         for (int i = 0; i < this.getSize(); i++) {
-            Double element = getElement(i);
-//            Double element = new Double(numberFormatter.format(getElement(i)));
-            buffer.append(element+" ");
+            Double element = new Double(numberFormatter.format(getElement(i)));
+            buffer.append(element + " ");
         }
         return buffer.toString().trim();
 
@@ -58,17 +55,15 @@ public class RealVector extends GVector {
 
     private static double[] fromString(String data) {
 
-        StringTokenizer tokenizer = new StringTokenizer(data);
-        double doubleList[] = new double[tokenizer.countTokens()];
-        int i = 0;
-        while (tokenizer.hasMoreTokens()) {
+        String[] components = data.split(" ");
+        double[] doubleList = new double[components.length];
 
-
-            doubleList[i++] = (new Double(tokenizer.nextToken())).doubleValue();
+        for (int j = 0; j < components.length; j++) {
+            Double element = new Double(components[j]);
+            doubleList[j] = element;
         }
 
-        return (doubleList);
-
+        return doubleList;
     }
 
     public void sort() {

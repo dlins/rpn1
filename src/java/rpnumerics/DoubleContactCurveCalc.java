@@ -43,6 +43,8 @@ public class DoubleContactCurveCalc extends BifurcationCurveCalc {
     public RpSolution calc() {
         RpSolution result = null;
 
+        System.out.println("Entrando em DoubleContactCurveCalc... "+curveFamily_+" "+domainFamily_);
+
         try {
             result = (DoubleContactCurve) nativeCalc(xResolution_,yResolution_,curveFamily_,domainFamily_);
            

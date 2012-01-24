@@ -420,7 +420,21 @@ public class RPNUMERICS {
         Double xResolution = new Double (getConfiguration("Contour").getParam("x-resolution"));
         Double yResolution = new Double(getConfiguration("Contour").getParam("y-resolution"));
 
+
+        int curveFamily = new Integer(getParamValue("bifurcationcurve", "curvefamily"));
+
+        int domainFamily = new Integer(getParamValue("bifurcationcurve", "domainfamily"));
+
+
+
         System.out.println("Resolucao em Java:" + xResolution + " " + yResolution);
+
+        System.out.println("Curve family: " + curveFamily);
+        System.out.println("Domain family: " + domainFamily);
+
+
+
+
         return new DoubleContactCurveCalc(xResolution.intValue(), yResolution.intValue(), new Integer(getParamValue("bifurcationcurve", "curvefamily")), new Integer(getParamValue("bifurcationcurve", "domainfamily")));
 
 

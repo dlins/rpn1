@@ -283,9 +283,9 @@ void ColorCurve::classify_segments(const std::vector<RealVector> &input, int noe
                     // while the second one is added to the next segment. There is a gap between the two segments.
                 else {
                     output[seg_num].vec.push_back(r[0]);
-//                    printf("    Interpolation, added 2 points (a).\n");
+                    //                    printf("    Interpolation, added 2 points (a).\n");
                     output[seg_num + 1].vec.push_back(r[1]);
-//                    printf("    Interpolation, added 2 points (b).\n");
+                    //                    printf("    Interpolation, added 2 points (b).\n");
                 }
             }
         }
@@ -323,16 +323,16 @@ double ColorCurve::shockspeed(int n, double Um[], double Up[], const FluxFunctio
     return s / den;
 }
 
-void ColorCurve::classify_curve(vector<vector<RealVector> > & input, const RealVector & Uref, int noe, int accumulationType,  vector<HugoniotPolyLine> & output) {
-//    output.clear();
+void ColorCurve::classify_curve(vector<vector<RealVector> > & input, const RealVector & Uref, int noe, int accumulationType, vector<HugoniotPolyLine> & output) {
+    //    output.clear();
     //    int N = 3 + 2 * noe + 1;
     vector<vector<RealVector> > complete_segments;
     complete_segments.resize(input.size());
     for (int i = 0; i < input.size(); i++) {
         complete_segments[i].resize(input[i].size());
-//                cout << "tamanho de input " << input[i].size() << endl;
-//                cout << "tamanho de input " << Uref.size() << endl;
-//                cout<< "Noe: "<<noe<<endl;
+        //                cout << "tamanho de input " << input[i].size() << endl;
+        //                cout << "tamanho de input " << Uref.size() << endl;
+        //                cout<< "Noe: "<<noe<<endl;
 
         preprocess_data(input[i], Uref, noe, *fluxFunction_, *accFunction_, accumulationType, complete_segments[i]);
 
@@ -342,7 +342,7 @@ void ColorCurve::classify_curve(vector<vector<RealVector> > & input, const RealV
     for (unsigned int i = 0; i < complete_segments.size(); i++) {
 
         vector<HugoniotPolyLine> hugoniotPolyLineVector;
-        classify_segments(complete_segments[i],noe, hugoniotPolyLineVector);
+        classify_segments(complete_segments[i], noe, hugoniotPolyLineVector);
         //        cout << "hugoniot polyline: " << hugoniotPolyLineVector.size() << endl;
         //    for (int i = 0; i < hugoniotPolyLineVector.size(); i++) {
         //
@@ -363,7 +363,7 @@ void ColorCurve::classify_curve(vector<vector<RealVector> > & input, const RealV
 
     }
 
-//        cout << "Tamanho de output" << output.size() << endl;
+    //        cout << "Tamanho de output" << output.size() << endl;
     return;
 
 }
@@ -397,7 +397,7 @@ int ColorCurve::preprocess_data(const std::vector<RealVector> &curve, const Real
         std::vector<RealVector> &out) {
     //    out.clear();
 
-//        cout <<"Dentro de preprocess data"<<endl;
+    //        cout <<"Dentro de preprocess data"<<endl;
 
     if (curve.size() != 0) {
         int m = Uref.size();
