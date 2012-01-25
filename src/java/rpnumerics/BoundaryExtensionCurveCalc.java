@@ -21,17 +21,16 @@ public class BoundaryExtensionCurveCalc extends BifurcationCurveCalc {
     int characteristicDomain_;
     int edge_;
     int edgeResolution_;
-
     static private int contEC = 0;      //** declarei isso (Leandro)
 
-    public BoundaryExtensionCurveCalc(int xResolution, int yResolution, int edgeResolution,int leftFamily, int rightFamily,int edge, int characteristicDomain) {
+    public BoundaryExtensionCurveCalc(int xResolution, int yResolution, int edgeResolution, int curveFamily, int domainFamily, int edge, int characteristicDomain) {
         this.xResolution_ = xResolution;
         this.yResolution_ = yResolution;
-        this.curveFamily_ = leftFamily;
-        this.domainFamily_ = rightFamily;
-        edge_=edge;
-        edgeResolution_=edgeResolution;
-        characteristicDomain_=characteristicDomain;
+        this.curveFamily_ = curveFamily;
+        this.domainFamily_ = domainFamily;
+        edge_ = edge;
+        edgeResolution_ = edgeResolution;
+        characteristicDomain_ = characteristicDomain;
     }
 
     public BoundaryExtensionCurveCalc() {
@@ -42,7 +41,7 @@ public class BoundaryExtensionCurveCalc extends BifurcationCurveCalc {
         RpSolution result = null;
 
         try {
-            result = (BoundaryExtensionCurve) nativeCalc(xResolution_,yResolution_,edgeResolution_,curveFamily_,domainFamily_,edge_,characteristicDomain_);
+            result = (BoundaryExtensionCurve) nativeCalc(xResolution_, yResolution_, edgeResolution_, curveFamily_, domainFamily_, edge_, characteristicDomain_);
 
             //** acrescentei isso (Leandro)
             if (contEC == 0) {
@@ -63,5 +62,33 @@ public class BoundaryExtensionCurveCalc extends BifurcationCurveCalc {
         return result;
     }
 
-    private native RpSolution nativeCalc(int xResolution, int yResolution,int edgeResolution, int leftFamily, int rightFamily,int edge,int characteristicDomain) throws RpException;
+    public int getCharacteristicWhere() {
+        return characteristicDomain_;
+    }
+
+    public int getCurveFamily() {
+        return curveFamily_;
+    }
+
+    public int getDomainFamily() {
+        return domainFamily_;
+    }
+
+    public int getEdgeResolution() {
+        return edgeResolution_;
+    }
+
+    public int getEdge() {
+        return edge_;
+    }
+
+    public int getxResolution() {
+        return xResolution_;
+    }
+
+    public int getyResolution() {
+        return yResolution_;
+    }
+
+    private native RpSolution nativeCalc(int xResolution, int yResolution, int edgeResolution, int leftFamily, int rightFamily, int edge, int characteristicDomain) throws RpException;
 }

@@ -18,6 +18,12 @@ public class InflectionCurveGeomFactory extends BifurcationCurveGeomFactory{
         super(calc);
     }
 
+
+      public InflectionCurveGeomFactory(InflectionCurveCalc calc,InflectionCurve curve) {
+        super(calc,curve);
+    }
+
+
   
     // Methods
     //
@@ -55,11 +61,14 @@ public class InflectionCurveGeomFactory extends BifurcationCurveGeomFactory{
 
     }
 
+    @Override
     public String toXML() {
 
         StringBuffer buffer = new StringBuffer();
 
-        buffer.append("<COMMAND name=\"coincidence\">\n");
+        int familyIndex = ((InflectionCurveCalc) rpCalc()).getFamilyIndex();
+
+        buffer.append("<COMMAND name=\"inflection\" family=\""+familyIndex+"\">\n");
 
         buffer.append(((BifurcationCurve)geomSource()).toXML());
 

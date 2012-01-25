@@ -13,6 +13,10 @@ public class BoundaryExtensionCurveGeomFactory extends BifurcationCurveGeomFacto
         super(calc);
     }
 
+    public BoundaryExtensionCurveGeomFactory(BoundaryExtensionCurveCalc calc, BoundaryExtensionCurve curve) {
+        super(calc, curve);
+    }
+
     //
     // Methods
     //
@@ -32,16 +36,23 @@ public class BoundaryExtensionCurveGeomFactory extends BifurcationCurveGeomFacto
         return new BoundaryExtensionCurveGeom(leftBifurcationSegArray, this);
 
     }
- 
 
+    @Override
     public String toXML() {
 
 
         StringBuffer buffer = new StringBuffer();
 
-        buffer.append("<COMMAND name=\"boundaryextension\">\n");
+        BoundaryExtensionCurveCalc boundaryExtensionCurveCalc = (BoundaryExtensionCurveCalc) rpCalc();
 
-        buffer.append(((BifurcationCurve)geomSource()).toXML());
+        buffer.append("<COMMAND name=\"boundary extension\" curvefamily=\"" + boundaryExtensionCurveCalc.getCurveFamily()
+                + "\"" + " domainfamily=\"" + boundaryExtensionCurveCalc.getDomainFamily()
+                + "\"" + " characteristic=\"" + boundaryExtensionCurveCalc.getCharacteristicWhere()
+                + "\"" + " edge=\"" + boundaryExtensionCurveCalc.getEdge()
+                + "\"" + " edgeresolution=\"" + boundaryExtensionCurveCalc.getEdgeResolution() + "\""
+                + ">\n");
+
+        buffer.append(((BifurcationCurve) geomSource()).toXML());
 
         buffer.append("</COMMAND>\n");
 

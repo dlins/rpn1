@@ -12,17 +12,15 @@ public class InflectionCurve extends BifurcationCurve {
     // Members
     //
 
-    int family_;
+  
 
 
-    public InflectionCurve(int family,List<HugoniotSegment> hSegments) {
+    public InflectionCurve(List<HugoniotSegment> hSegments) {
         super(hSegments);
-        family_=family;
+        
       }
 
-    public int getFamily() {
-        return family_;
-    }
+   
 
 
 

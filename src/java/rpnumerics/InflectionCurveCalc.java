@@ -48,6 +48,11 @@ public class InflectionCurveCalc extends BifurcationCurveCalc {
         return result;
     }
 
+  
+     public int getFamilyIndex() {
+        return family_;
+    }
+
     private native RpSolution nativeCalc(int family) throws RpException;
 
 

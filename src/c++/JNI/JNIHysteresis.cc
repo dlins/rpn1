@@ -48,7 +48,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HysteresisCurveCalc_nativeCalc
     jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
     jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
 
-    jmethodID hysteresisCurveConstructor = env->GetMethodID(hysteresisCurveClass, "<init>", "(IILjava/util/List;Ljava/util/List;)V");
+    jmethodID hysteresisCurveConstructor = env->GetMethodID(hysteresisCurveClass, "<init>", "(Ljava/util/List;Ljava/util/List;)V");
 
     //Input processing
 
@@ -180,7 +180,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HysteresisCurveCalc_nativeCalc
 
 
 
-    jobject result = env->NewObject(hysteresisCurveClass, hysteresisCurveConstructor, curveFamily, domainFamily, leftSegmentsArray, rightSegmentsArray);
+    jobject result = env->NewObject(hysteresisCurveClass, hysteresisCurveConstructor,leftSegmentsArray, rightSegmentsArray);
 
 
 

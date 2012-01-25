@@ -13,14 +13,11 @@ public class HysteresisCurve extends BifurcationCurve {
     //
 
 
-    private  int domainFamily_;
-    private  int curveFamily_;
 
 
-    public HysteresisCurve(int domainFamily,int curveFamily,List<HugoniotSegment> curveSegments,List<HugoniotSegment> domainSegments) {
+    public HysteresisCurve(List<HugoniotSegment> curveSegments,List<HugoniotSegment> domainSegments) {
         super(curveSegments, domainSegments);
-        domainFamily_=domainFamily;
-        curveFamily_=curveFamily;
+        
 
       }
 

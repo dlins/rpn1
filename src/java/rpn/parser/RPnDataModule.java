@@ -23,8 +23,12 @@ import java.util.Map.Entry;
 import java.util.Set;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.XMLReader;
+import rpn.component.BoundaryExtensionCurveGeomFactory;
 import rpn.component.DoubleContactGeomFactory;
+import rpn.component.HysteresisCurveGeomFactory;
+import rpn.component.InflectionCurveGeomFactory;
 import rpn.component.RpCalcBasedGeomFactory;
+import rpn.component.RpGeomFactory;
 import rpn.component.RpGeometry;
 import rpn.usecase.BuckleyLeverettiInflectionAgent;
 import rpn.usecase.CoincidenceExtensionCurvePlotAgent;
@@ -35,10 +39,16 @@ import rpn.usecase.RarefactionOrbitPlotAgent;
 import rpn.usecase.ShockCurvePlotAgent;
 import rpn.usecase.SubInflectionExtensionCurveAgent;
 import rpn.usecase.SubInflectionPlotAgent;
+import rpnumerics.BoundaryExtensionCurve;
+import rpnumerics.BoundaryExtensionCurveCalc;
 import rpnumerics.DoubleContactCurve;
 import rpnumerics.DoubleContactCurveCalc;
 import rpnumerics.HugoniotCurve;
 import rpnumerics.HugoniotSegment;
+import rpnumerics.HysteresisCurve;
+import rpnumerics.HysteresisCurveCalc;
+import rpnumerics.InflectionCurve;
+import rpnumerics.InflectionCurveCalc;
 import rpnumerics.PhasePoint;
 import rpnumerics.Orbit;
 import rpnumerics.OrbitPoint;
@@ -90,9 +100,10 @@ public class RPnDataModule {
         private OrbitCalcParser orbitCalcListener_;
         private ShockFlowParser shockFlowParser_;
         private ManifoldCalcParser manifoldCalcParser_;
-        protected static boolean pointOneOK_=false, calcReady_, plotProfile_;
+        protected static boolean pointOneOK_ = false, calcReady_, plotProfile_;
         private String currentCommand_;
         private RpCalculation calc_;
+        private RpGeomFactory factory_;
         private StringBuilder stringBuffer_ = new StringBuilder();
 
         public InputHandler() {
@@ -143,6 +154,8 @@ public class RPnDataModule {
 
             if (name.equalsIgnoreCase("COMMAND")) {
                 currentCommand_ = att.getValue(0);
+                hugoniotSegmentsList_.clear();
+
 
                 if (currentCommand_.equalsIgnoreCase("hugoniot")
                         || currentCommand_.equalsIgnoreCase("rarefactionforward")
@@ -154,7 +167,7 @@ public class RPnDataModule {
 
 
                     tempPoint_ = new PhasePoint(new RealVector(att.getValue(1)));
-                    hugoniotSegmentsList_.clear();
+
 
                 }
 
@@ -167,10 +180,57 @@ public class RPnDataModule {
                     int domainFamily = new Integer(att.getValue("domainfamily"));
                     calc_ = new DoubleContactCurveCalc(xResolution, yResolution, curveFamily, domainFamily);
 
-                    hugoniotSegmentsList_.clear();
+
 
 
                 }
+
+
+
+                if (currentCommand_.equalsIgnoreCase("inflection")) {
+
+                    int curveFamily = new Integer(att.getValue("family"));
+
+                    calc_ = new InflectionCurveCalc(curveFamily);
+
+
+
+                }
+
+                if (currentCommand_.equalsIgnoreCase("hysteresis")) {
+                    int xResolution = new Integer(RPNUMERICS.getParamValue("Contour", "x-resolution"));
+                    int yResolution = new Integer(RPNUMERICS.getParamValue("Contour", "y-resolution"));
+
+                    int curveFamily = new Integer(att.getValue("curvefamily"));
+                    int domainFamily = new Integer(att.getValue("domainfamily"));
+                    int characteristic = new Integer(att.getValue("characteristic"));
+                    int singular = new Integer(att.getValue("singular"));
+
+                    calc_ = new HysteresisCurveCalc(domainFamily, curveFamily, xResolution, yResolution, characteristic, singular);
+
+
+
+                }
+
+
+
+                if (currentCommand_.equalsIgnoreCase("boundary extension")) {
+                    int xResolution = new Integer(RPNUMERICS.getParamValue("Contour", "x-resolution"));
+                    int yResolution = new Integer(RPNUMERICS.getParamValue("Contour", "y-resolution"));
+
+                    int curveFamily = new Integer(att.getValue("curvefamily"));
+                    int domainFamily = new Integer(att.getValue("domainfamily"));
+                    int characteristic = new Integer(att.getValue("characteristic"));
+                    int edge = new Integer(att.getValue("edge"));
+                    int edgeResolution = new Integer(att.getValue("edgeresolution"));
+
+                    calc_ = new BoundaryExtensionCurveCalc(xResolution, yResolution, edgeResolution, curveFamily,
+                            domainFamily, edge, characteristic);
+
+
+
+                }
+
 
             }
 
@@ -489,57 +549,83 @@ public class RPnDataModule {
                 }
 
 
-
-                if (currentCommand_.equalsIgnoreCase("coincidence")) {//Coincidence command
-
-
-                    CoincidencePlotAgent.instance().actionPerformed(new ActionEvent(this, 0, "plot"));
-                }
-
-                if (currentCommand_.equalsIgnoreCase("subinflection")) {//Subinflection command
-
-                    SubInflectionPlotAgent.instance().actionPerformed(new ActionEvent(this, 0, "plot"));
-
-                }
-
-                if (currentCommand_.equalsIgnoreCase("buckleylevertti")) {//BuckleyLevertti command
-
-                    BuckleyLeverettiInflectionAgent.instance().actionPerformed(new ActionEvent(this, 0, "plot"));
-                }
-
                 if (currentCommand_.equalsIgnoreCase("doublecontact")) {//DoubleContact command
 
-                    if (hugoniotSegmentsList_.size() != 0) {
+                    DoubleContactCurve curve = new DoubleContactCurve(hugoniotSegmentsList_);
 
-                        DoubleContactCurve curve = new DoubleContactCurve(hugoniotSegmentsList_);
-
-                        DoubleContactGeomFactory factory = new DoubleContactGeomFactory((DoubleContactCurveCalc) calc_, curve);
-
-                        RpGeometry geometry = factory.geom();
-
-                        PHASESPACE.join(geometry);
-                    }
+                    factory_ = new DoubleContactGeomFactory((DoubleContactCurveCalc) calc_, curve);
 
 
                 }
 
-                if (currentCommand_.equalsIgnoreCase("boundaryextension")) {//BoundaryExtension command
-                    BoundaryExtensionCurveAgent.instance().actionPerformed(new ActionEvent(this, 0, "plot"));
-                }
+                if (currentCommand_.equalsIgnoreCase("inflection")) {//Inflection command
 
+                    InflectionCurve curve = new InflectionCurve(hugoniotSegmentsList_);
 
-                if (currentCommand_.equalsIgnoreCase("subinflectionextension")) {//Subinflection command
-
-                    SubInflectionExtensionCurveAgent.instance().actionPerformed(new ActionEvent(this, 0, "plot"));
+                    factory_ = new InflectionCurveGeomFactory((InflectionCurveCalc) calc_, curve);
 
                 }
 
 
-                if (currentCommand_.equalsIgnoreCase("coincidenceextension")) {//Subinflection command
-
-                    CoincidenceExtensionCurvePlotAgent.instance().actionPerformed(new ActionEvent(this, 0, "plot"));
+                if (currentCommand_.equalsIgnoreCase("hysteresis")) {//Hysteresis command
+                    HysteresisCurve curve = new HysteresisCurve(hugoniotSegmentsList_, hugoniotSegmentsList_);
+                    factory_ = new HysteresisCurveGeomFactory((HysteresisCurveCalc) calc_, curve);
 
                 }
+
+                if (currentCommand_.equalsIgnoreCase("boundary extension")) {//Boundary extension command
+
+                    BoundaryExtensionCurve curve = new BoundaryExtensionCurve(hugoniotSegmentsList_, hugoniotSegmentsList_);
+                    factory_ = new BoundaryExtensionCurveGeomFactory((BoundaryExtensionCurveCalc) calc_, curve);
+
+                }
+
+                if (hugoniotSegmentsList_.size() != 0) {
+
+                    PHASESPACE.join(factory_.geom());
+
+                }
+
+
+//                if (currentCommand_.equalsIgnoreCase("boundaryextension")) {//BoundaryExtension command
+//                    BoundaryExtensionCurveAgent.instance().actionPerformed(new ActionEvent(this, 0, "plot"));
+//                }
+//
+//
+//                if (currentCommand_.equalsIgnoreCase("subinflectionextension")) {//Subinflection command
+//
+//                    SubInflectionExtensionCurveAgent.instance().actionPerformed(new ActionEvent(this, 0, "plot"));
+//
+//                }
+//
+//
+//                if (currentCommand_.equalsIgnoreCase("coincidenceextension")) {//Subinflection command
+//
+//                    CoincidenceExtensionCurvePlotAgent.instance().actionPerformed(new ActionEvent(this, 0, "plot"));
+//
+//                }
+//
+//
+//                if (currentCommand_.equalsIgnoreCase("coincidence")) {//Coincidence command
+//
+//
+//                    CoincidencePlotAgent.instance().actionPerformed(new ActionEvent(this, 0, "plot"));
+//                }
+//
+//                if (currentCommand_.equalsIgnoreCase("subinflection")) {//Subinflection command
+//
+//                    SubInflectionPlotAgent.instance().actionPerformed(new ActionEvent(this, 0, "plot"));
+//
+//                }
+//
+//                if (currentCommand_.equalsIgnoreCase("buckleylevertti")) {//BuckleyLevertti command
+//
+//                    BuckleyLeverettiInflectionAgent.instance().actionPerformed(new ActionEvent(this, 0, "plot"));
+//                }
+
+
+
+
             }
 
             if (name.equals("HUGONIOTCURVE")) {

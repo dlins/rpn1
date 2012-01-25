@@ -36,9 +36,7 @@ public class BifurcationCurveCalc implements RpCalculation {
     //
     // Accessors/Mutators
     //
-    public int getFamilyIndex() {
-        return params_.getFamilyIndex();
-    }
+    
 
     public RpSolution calc() throws RpException{
         return bifurcationMethod_.curve();

@@ -51,7 +51,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_InflectionCurveCalc_nativeCalc(JNIEnv 
     jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
     jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
 
-    jmethodID inflectionCurveConstructor = env->GetMethodID(inflectionCurveClass, "<init>", "(ILjava/util/List;)V");
+    jmethodID inflectionCurveConstructor = env->GetMethodID(inflectionCurveClass, "<init>", "(Ljava/util/List;)V");
 
 
     jobject segmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
@@ -135,7 +135,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_InflectionCurveCalc_nativeCalc(JNIEnv 
 
 
 
-    jobject result = env->NewObject(inflectionCurveClass, inflectionCurveConstructor, family, segmentsArray);
+    jobject result = env->NewObject(inflectionCurveClass, inflectionCurveConstructor, segmentsArray);
 
     // Limpando
 

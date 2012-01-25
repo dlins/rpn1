@@ -472,8 +472,8 @@ public class RPNUMERICS {
         int characteristicWhere = new Integer(getParamValue("extensioncurve", "characteristicwhere"));
 
 
-        int curveFamily = new Integer(getParamValue("wavecurve", "curvefamily"));
-        int domainFamily = new Integer(getParamValue("wavecurve", "domainfamily"));
+        int curveFamily = new Integer(getParamValue("bifurcationcurve", "curvefamily"));
+        int domainFamily = new Integer(getParamValue("bifurcationcurve", "domainfamily"));
 
         int singular = 0;//TODO Pegar do arquivo de entrada
 

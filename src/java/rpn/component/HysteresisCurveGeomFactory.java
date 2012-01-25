@@ -3,7 +3,6 @@
  * Departamento de Dinamica dos Fluidos
  *
  */
-
 package rpn.component;
 
 import rpnumerics.BifurcationCurve;
@@ -11,15 +10,17 @@ import rpnumerics.CoincidenceCurve;
 import rpnumerics.HugoniotSegment;
 import rpnumerics.HysteresisCurve;
 import rpnumerics.HysteresisCurveCalc;
-import rpnumerics.InflectionCurve;
 
-public class HysteresisCurveGeomFactory extends BifurcationCurveGeomFactory{
+public class HysteresisCurveGeomFactory extends BifurcationCurveGeomFactory {
 
     public HysteresisCurveGeomFactory(HysteresisCurveCalc calc) {
         super(calc);
     }
 
-  
+     public HysteresisCurveGeomFactory(HysteresisCurveCalc calc,HysteresisCurve curve) {
+        super(calc,curve);
+    }
+
     // Methods
     //
     @Override
@@ -38,9 +39,6 @@ public class HysteresisCurveGeomFactory extends BifurcationCurveGeomFactory{
 
     }
 
-
-  
-
     public String toMatlab(int curveIndex) {
 
         StringBuffer buffer = new StringBuffer();
@@ -51,41 +49,29 @@ public class HysteresisCurveGeomFactory extends BifurcationCurveGeomFactory{
 
         buffer.append("%%\n% begin plot x y\n");
         buffer.append("figure; set(gca, 'Color',[0 0 0]); hold on\n");
-        buffer.append(curve.createMatlabPlotLoop(0,1,0));
+        buffer.append(curve.createMatlabPlotLoop(0, 1, 0));
 
         return buffer.toString();
 
     }
 
+    @Override
     public String toXML() {
 
         StringBuffer buffer = new StringBuffer();
 
-        buffer.append("<COMMAND name=\"coincidence\">\n");
+        HysteresisCurveCalc hysteresisCurveCalc = (HysteresisCurveCalc) rpCalc();
 
-        buffer.append(((BifurcationCurve)geomSource()).toXML());
+        buffer.append("<COMMAND name=\"hysteresis\" curvefamily=\"" + hysteresisCurveCalc.getCurveFamily() +
+                "\"" + " domainfamily=\"" + hysteresisCurveCalc.getDomainFamily() +
+                "\"" +" characteristic=\""+hysteresisCurveCalc.getCharacteristicWhere()+
+                "\""+" singular=\""+hysteresisCurveCalc.getSingular()+"\""+ ">\n");
+
+        buffer.append(((BifurcationCurve) geomSource()).toXML());
 
         buffer.append("</COMMAND>\n");
 
         return buffer.toString();
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
