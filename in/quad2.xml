@@ -20,7 +20,7 @@
         <PHYSICSPARAM name="param5" position="5" value ="0" />
         <PHYSICSPARAM name="param6" position="6" value ="1" />
         <PHYSICSPARAM name="param7" position="7" value ="0" />
-        <PHYSICSPARAM name="param8" position="8" value ="-1000.1" />
+        <PHYSICSPARAM name="param8" position="8" value ="-1" />
         <PHYSICSPARAM name="param9" position="9" value ="0" />
 
     </PHYSICSCONFIG>

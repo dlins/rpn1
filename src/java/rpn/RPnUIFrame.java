@@ -182,13 +182,13 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
                 toolBar_.removeAll();
 
-                toolBar_.add(CoincidencePlotAgent.instance().getContainer());
-                toolBar_.add(SubInflectionPlotAgent.instance().getContainer());
-                toolBar_.add(BuckleyLeverettiInflectionAgent.instance().getContainer());
+//                toolBar_.add(CoincidencePlotAgent.instance().getContainer());
+//                toolBar_.add(SubInflectionPlotAgent.instance().getContainer());
+//                toolBar_.add(BuckleyLeverettiInflectionAgent.instance().getContainer());
                 toolBar_.add(DoubleContactAgent.instance().getContainer());
                 toolBar_.add(BoundaryExtensionCurveAgent.instance().getContainer());
-                toolBar_.add(SubInflectionExtensionCurveAgent.instance().getContainer());
-                toolBar_.add(CoincidenceExtensionCurvePlotAgent.instance().getContainer());
+//                toolBar_.add(SubInflectionExtensionCurveAgent.instance().getContainer());
+//                toolBar_.add(CoincidenceExtensionCurvePlotAgent.instance().getContainer());
                 toolBar_.add(InflectionPlotAgent.instance().getContainer());
                 toolBar_.add(HysteresisPlotAgent.instance().getContainer());
 //                ScratchAgent.instance().setEnabled(true);

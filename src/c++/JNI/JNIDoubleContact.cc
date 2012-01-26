@@ -39,50 +39,29 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
 
     jclass classPhasePoint = (env)->FindClass(PHASEPOINT_LOCATION);
 
-    jclass hugoniotSegmentClass = (env)->FindClass(HUGONIOTSEGMENTCLASS_LOCATION);
-
     jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
+
+    jclass realSegmentClass = env->FindClass(REALSEGMENT_LOCATION);
 
     jclass arrayListClass = env->FindClass("java/util/ArrayList");
 
-    //    jclass hugoniotPointTypeClass = (env)->FindClass(HUGONIOTPOINTTYPE_LOCATION);
-
     jclass doubleContactCurveClass = env->FindClass(DOUBLECONTACT_LOCATION);
+
+
+    
 
     jmethodID toDoubleMethodID = (env)->GetMethodID(classPhasePoint, "toDouble", "()[D");
     jmethodID realVectorConstructorDoubleArray = env->GetMethodID(realVectorClass, "<init>", "([D)V");
-    //    jmethodID hugoniotSegmentConstructor = (env)->GetMethodID(hugoniotSegmentClass, "<init>", "(Lwave/util/RealVector;DLwave/util/RealVector;DI)V");
-
-    jmethodID hugoniotSegmentConstructor = (env)->GetMethodID(hugoniotSegmentClass, "<init>", "(Lwave/util/RealVector;DLwave/util/RealVector;DI)V");
+    jmethodID realSegmentConstructor = (env)->GetMethodID(realSegmentClass, "<init>", "(Lwave/util/RealVector;Lwave/util/RealVector;)V");
 
     jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
     jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
-    //    jmethodID hugoniotPointTypeConstructor = (env)->GetMethodID(hugoniotPointTypeClass, "<init>", "([D[D)V");
     jmethodID doubleContactCurveConstructor = env->GetMethodID(doubleContactCurveClass, "<init>", "(Ljava/util/List;Ljava/util/List;)V");
-
-    //    int i;
-
-    //Input processing
-    //    jdoubleArray phasePointArray = (jdoubleArray) (env)->CallObjectMethod(uMinus, toDoubleMethodID);
 
     int dimension;
 
-    //    double input [dimension];
-
-
-    //    env->GetDoubleArrayRegion(phasePointArray, 0, dimension, input);
-    //
-    //    env->DeleteLocalRef(phasePointArray);
-
-    //Calculations using the input
-
     jobject leftSegmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
-
     jobject rightSegmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
-
-    //    RealVector Uref(dimension, input);
-    //
-    //    cout << Uref << endl;
 
     // Storage space for the segments:
     std::vector<RealVector> left_vrs;
@@ -132,17 +111,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
             rightFamily, rightBoundary);
 
 
-
-
     dc.compute_double_contact(left_vrs, right_vrs);
 
     cout << "left_vrs.size()  = " << left_vrs.size() << endl;
 
     cout << "right_vrs.size()  = " << right_vrs.size() << endl;
-
-    //    printf("right_vrs.size() = %d\n", right_vrs.size());
-
-
 
     delete number_of_grid_pnts;
 
@@ -169,14 +142,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
 
         jobject realVectorRightPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRRight);
 
-        int pointType = 0;
-
-        double leftSigma = 0;
-        double rightSigma = 0;
-
-
-        jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, pointType);
-        env->CallObjectMethod(leftSegmentsArray, arrayListAddMethod, hugoniotSegment);
+       
+        jobject realSegment = env->NewObject(realSegmentClass, realSegmentConstructor, realVectorLeftPoint, realVectorRightPoint);
+        env->CallObjectMethod(leftSegmentsArray, arrayListAddMethod, realSegment);
 
     }
 
@@ -199,27 +167,14 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
         jobject realVectorLeftPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRLeft);
 
         jobject realVectorRightPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRRight);
+        jobject realSegment = env->NewObject(realSegmentClass, realSegmentConstructor, realVectorLeftPoint, realVectorRightPoint);
 
-        int pointType = 0;
-
-        double leftSigma = 0;
-        double rightSigma = 0;
-
-
-        jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, pointType);
-
-
-        env->CallObjectMethod(rightSegmentsArray, arrayListAddMethod, hugoniotSegment);
+        env->CallObjectMethod(rightSegmentsArray, arrayListAddMethod, realSegment);
 
     }
 
 
-
-
     jobject result = env->NewObject(doubleContactCurveClass, doubleContactCurveConstructor, leftSegmentsArray, rightSegmentsArray);
-
-
-
 
     return result;
 

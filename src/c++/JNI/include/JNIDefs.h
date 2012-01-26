@@ -21,7 +21,7 @@
 #define JETMATRIX_LOCATION                    "wave/util/JetMatrix"
 #define JACOBIANMATRIX_LOCATION               "wave/util/JacobianMatrix"
 #define HESSIANMATRIX_LOCATION                "wave/util/HessianMatrix"
-
+#define REALSEGMENT_LOCATION                  "wave/util/RealSegment"
 
 
 

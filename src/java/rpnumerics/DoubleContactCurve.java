@@ -6,6 +6,7 @@
 package rpnumerics;
 
 import java.util.List;
+import wave.util.RealSegment;
 
 
 public class DoubleContactCurve extends BifurcationCurve {
@@ -13,11 +14,13 @@ public class DoubleContactCurve extends BifurcationCurve {
     // Members
     //
 
-    public DoubleContactCurve(List<HugoniotSegment> hSegments) {
+
+    public DoubleContactCurve(List<RealSegment> hSegments) {
         super(hSegments);
     }
 
-    public DoubleContactCurve(List<HugoniotSegment> hSegments, List<HugoniotSegment> rightSegments) {
+
+    public DoubleContactCurve(List<RealSegment> hSegments, List<RealSegment> rightSegments) {
         super(hSegments, rightSegments);//, new ViewingAttr(Color.RED));
 
     }

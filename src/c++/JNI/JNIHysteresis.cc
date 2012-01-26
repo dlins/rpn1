@@ -37,14 +37,17 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HysteresisCurveCalc_nativeCalc
 
     jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
 
+    jclass realSegmentClass = env->FindClass(REALSEGMENT_LOCATION);
+
     jclass arrayListClass = env->FindClass("java/util/ArrayList");
 
     jclass hysteresisCurveClass = env->FindClass(HYSTERESISCURVE_LOCATION);
 
     jmethodID realVectorConstructorDoubleArray = env->GetMethodID(realVectorClass, "<init>", "([D)V");
 
-    jmethodID hugoniotSegmentConstructor = (env)->GetMethodID(hugoniotSegmentClass, "<init>", "(Lwave/util/RealVector;DLwave/util/RealVector;DI)V");
+    jmethodID realSegmentConstructor = (env)->GetMethodID(realSegmentClass, "<init>", "(Lwave/util/RealVector;Lwave/util/RealVector;)V");
 
+ 
     jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
     jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
 
@@ -96,7 +99,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HysteresisCurveCalc_nativeCalc
 
     cout << "Tamanho da coincidence curve extension: " << curve_segments.size() << endl;
     cout << "Tamanho da coincidence domain extension: " << domain_segments.size() << endl;
-   
+
     cout << "Resolucao x " << xResolution << endl;
 
     cout << "Resolucao y " << yResolution << endl;
@@ -137,8 +140,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HysteresisCurveCalc_nativeCalc
         double rightSigma = 0;
 
 
-        jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, pointType);
-        env->CallObjectMethod(leftSegmentsArray, arrayListAddMethod, hugoniotSegment);
+        jobject realSegment = env->NewObject(realSegmentClass, realSegmentConstructor, realVectorLeftPoint, realVectorRightPoint);
+        env->CallObjectMethod(leftSegmentsArray, arrayListAddMethod, realSegment);
 
     }
 
@@ -166,21 +169,18 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HysteresisCurveCalc_nativeCalc
 
         jobject realVectorRightPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRRight);
 
-        int pointType = 20;
-
-        double leftSigma = 0;
-        double rightSigma = 0;
+      
 
 
-        jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, pointType);
-        env->CallObjectMethod(rightSegmentsArray, arrayListAddMethod, hugoniotSegment);
+        jobject realSegment = env->NewObject(realSegmentClass, realSegmentConstructor, realVectorLeftPoint, realVectorRightPoint);
+        env->CallObjectMethod(rightSegmentsArray, arrayListAddMethod, realSegment);
 
     }
 
 
 
 
-    jobject result = env->NewObject(hysteresisCurveClass, hysteresisCurveConstructor,leftSegmentsArray, rightSegmentsArray);
+    jobject result = env->NewObject(hysteresisCurveClass, hysteresisCurveConstructor, leftSegmentsArray, rightSegmentsArray);
 
 
 

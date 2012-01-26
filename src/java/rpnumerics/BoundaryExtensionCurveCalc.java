@@ -37,27 +37,27 @@ public class BoundaryExtensionCurveCalc extends BifurcationCurveCalc {
     }
 
     @Override
-    public RpSolution calc() {
+    public RpSolution calc() throws RpException {
         RpSolution result = null;
 
-        try {
-            result = (BoundaryExtensionCurve) nativeCalc(xResolution_, yResolution_, edgeResolution_, curveFamily_, domainFamily_, edge_, characteristicDomain_);
 
-            //** acrescentei isso (Leandro)
-            if (contEC == 0) {
-                System.out.println("Entrando em ExtensionCurveCalc...");
+        result = (BoundaryExtensionCurve) nativeCalc(xResolution_, yResolution_, edgeResolution_, curveFamily_, domainFamily_, edge_, characteristicDomain_);
 
-                RPnCurve.lista.add((RPnCurve) result);
-                System.out.println("Tamanho da lista: " + RPnCurve.lista.size());
+        //** acrescentei isso (Leandro)
+        if (contEC == 0) {
+            System.out.println("Entrando em ExtensionCurveCalc...");
 
-                contEC += 1;
-            }
-            //*********************************************
+            RPnCurve.lista.add((RPnCurve) result);
+            System.out.println("Tamanho da lista: " + RPnCurve.lista.size());
 
-            return result;
-        } catch (RpException ex) {
-            Logger.getLogger(BoundaryExtensionCurveCalc.class.getName()).log(Level.SEVERE, null, ex);
+            contEC += 1;
         }
+
+        //*********************************************
+        if (result == null) {
+            throw new RpException("Error in native layer");
+        }
+
 
         return result;
     }

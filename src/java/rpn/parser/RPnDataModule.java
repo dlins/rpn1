@@ -155,6 +155,7 @@ public class RPnDataModule {
             if (name.equalsIgnoreCase("COMMAND")) {
                 currentCommand_ = att.getValue(0);
                 hugoniotSegmentsList_.clear();
+                realSegmentsList_.clear();
 
 
                 if (currentCommand_.equalsIgnoreCase("hugoniot")
@@ -339,7 +340,6 @@ public class RPnDataModule {
 //                tempVector_ = new RealVector(phaseSize_);
             }
             if (name.equals("REALSEGMENT")) {
-//                pointOneOK_ = false;
             }
 
             if (name.equals("EIGENVEC")) {
@@ -551,7 +551,7 @@ public class RPnDataModule {
 
                 if (currentCommand_.equalsIgnoreCase("doublecontact")) {//DoubleContact command
 
-                    DoubleContactCurve curve = new DoubleContactCurve(hugoniotSegmentsList_);
+                    DoubleContactCurve curve = new DoubleContactCurve(realSegmentsList_);
 
                     factory_ = new DoubleContactGeomFactory((DoubleContactCurveCalc) calc_, curve);
 
@@ -560,7 +560,7 @@ public class RPnDataModule {
 
                 if (currentCommand_.equalsIgnoreCase("inflection")) {//Inflection command
 
-                    InflectionCurve curve = new InflectionCurve(hugoniotSegmentsList_);
+                    InflectionCurve curve = new InflectionCurve(realSegmentsList_);
 
                     factory_ = new InflectionCurveGeomFactory((InflectionCurveCalc) calc_, curve);
 
@@ -568,19 +568,19 @@ public class RPnDataModule {
 
 
                 if (currentCommand_.equalsIgnoreCase("hysteresis")) {//Hysteresis command
-                    HysteresisCurve curve = new HysteresisCurve(hugoniotSegmentsList_, hugoniotSegmentsList_);
+                    HysteresisCurve curve = new HysteresisCurve(realSegmentsList_,realSegmentsList_);
                     factory_ = new HysteresisCurveGeomFactory((HysteresisCurveCalc) calc_, curve);
 
                 }
 
                 if (currentCommand_.equalsIgnoreCase("boundary extension")) {//Boundary extension command
 
-                    BoundaryExtensionCurve curve = new BoundaryExtensionCurve(hugoniotSegmentsList_, hugoniotSegmentsList_);
+                    BoundaryExtensionCurve curve = new BoundaryExtensionCurve(realSegmentsList_, realSegmentsList_);
                     factory_ = new BoundaryExtensionCurveGeomFactory((BoundaryExtensionCurveCalc) calc_, curve);
 
                 }
 
-                if (hugoniotSegmentsList_.size() != 0) {
+                if (realSegmentsList_.size() != 0) {
 
                     PHASESPACE.join(factory_.geom());
 
@@ -693,9 +693,9 @@ public class RPnDataModule {
 //                System.out.println("Valor de point1: " + point1_);
 //                System.out.println("Valor de point2: " + point2_);
 
-                hugoniotSegmentsList_.add(new HugoniotSegment(point1_, 0, point2_, 0, 17));//TODO Use RealSegment or another typeless segment
+                realSegmentsList_.add(new RealSegment(point1_, point2_));
                 pointOneOK_ = false;
-//                realSegmentsList_.add(new RealSegment(point1_, point2_));
+
             }
 
             if (name.equals("ORBITPOINT")) {

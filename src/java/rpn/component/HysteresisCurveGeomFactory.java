@@ -5,13 +5,18 @@
  */
 package rpn.component;
 
+import java.awt.Color;
 import rpnumerics.BifurcationCurve;
 import rpnumerics.CoincidenceCurve;
-import rpnumerics.HugoniotSegment;
 import rpnumerics.HysteresisCurve;
 import rpnumerics.HysteresisCurveCalc;
+import wave.multid.view.ViewingAttr;
+import wave.util.RealSegment;
 
 public class HysteresisCurveGeomFactory extends BifurcationCurveGeomFactory {
+
+
+    private static ViewingAttr viewAtt_ = new ViewingAttr(Color.yellow);
 
     public HysteresisCurveGeomFactory(HysteresisCurveCalc calc) {
         super(calc);
@@ -32,7 +37,7 @@ public class HysteresisCurveGeomFactory extends BifurcationCurveGeomFactory {
         int resultSize = curve.segments().size();
         BifurcationSegGeom[] bifurcationSegArray = new BifurcationSegGeom[resultSize];
         for (int i = 0; i < resultSize; i++) {
-            bifurcationSegArray[i] = new BifurcationSegGeom((HugoniotSegment) curve.segments().get(i));
+            bifurcationSegArray[i] = new BifurcationSegGeom((RealSegment) curve.segments().get(i),viewAtt_);
 
         }
         return new HysteresisCurveGeom(bifurcationSegArray, this);

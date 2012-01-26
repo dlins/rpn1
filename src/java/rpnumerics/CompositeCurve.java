@@ -14,8 +14,6 @@ public class CompositeCurve extends Orbit implements RpSolution {
     public CompositeCurve(OrbitPoint [] rarefaction,int increase,int familyIndex) {
         super(rarefaction,familyIndex,increase);
 
-   
-
     }
 
 

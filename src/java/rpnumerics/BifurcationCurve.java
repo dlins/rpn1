@@ -25,16 +25,29 @@ public class BifurcationCurve extends SegmentedCurve {
 
     //
     // Constructor
-    public BifurcationCurve(List<HugoniotSegment> leftList, List<HugoniotSegment> rightList) {
+
+
+
+     public BifurcationCurve(List<RealSegment> leftList, List<RealSegment> rightList) {
 
         super(createSingleSegmentList(leftList, rightList));
 
         leftSegments_ = leftList;
         rightSegments_ = rightList;
     }
+//    public BifurcationCurve(List<HugoniotSegment> leftList, List<HugoniotSegment> rightList) {
+//
+//        super(createSingleSegmentList(leftList, rightList));
+//
+//        leftSegments_ = leftList;
+//        rightSegments_ = rightList;
+//    }
 
 
-    public BifurcationCurve(List<HugoniotSegment> singleList) {
+
+
+
+    public BifurcationCurve(List<? extends RealSegment> singleList) {
 
         super(singleList);
 
@@ -64,8 +77,8 @@ public class BifurcationCurve extends SegmentedCurve {
         StringBuffer buffer = new StringBuffer();
 
         for (int i = 0; i < segments().size(); i++) {
-            HugoniotSegment hugoniotSegment = (HugoniotSegment) segments().get(i);
-            RealSegment realSegment = new RealSegment(hugoniotSegment.p1(), hugoniotSegment.p2());
+
+            RealSegment realSegment =(RealSegment) segments().get(i);
             buffer.append(realSegment.toXML());
         }
         return buffer.toString();
@@ -79,18 +92,18 @@ public class BifurcationCurve extends SegmentedCurve {
         return rightSegments_;
     }
 
-    private static List createSingleSegmentList(List<HugoniotSegment> leftSeg, List<HugoniotSegment> rightSeg) {
+    private static List createSingleSegmentList(List<RealSegment> leftSeg, List<RealSegment> rightSeg) {
 //        int i = 0;
 
          System.out.println("Listas do d contact: " + leftSeg.size() + " " + rightSeg.size());
 
-        for (HugoniotSegment hugoniotSegment : leftSeg) {
-            hugoniotSegment.setIntType(19);
-//            i++;
-        }
-        for (HugoniotSegment hugoniotSegment : rightSeg) {
-            hugoniotSegment.setIntType(18);
-        }
+//        for (HugoniotSegment hugoniotSegment : leftSeg) {
+//            hugoniotSegment.setIntType(19);
+////            i++;
+//        }
+//        for (HugoniotSegment hugoniotSegment : rightSeg) {
+//            hugoniotSegment.setIntType(18);
+//        }
 
 //
 ////        List<HugoniotSegment> mergedList = new ArrayList<HugoniotSegment>();

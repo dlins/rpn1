@@ -6,6 +6,7 @@
 package rpnumerics;
 
 import java.util.List;
+import wave.util.RealSegment;
 
 public class BoundaryExtensionCurve extends BifurcationCurve {// RPnCurve implements RpSolution {
     //
@@ -18,7 +19,7 @@ public class BoundaryExtensionCurve extends BifurcationCurve {// RPnCurve implem
 ////        hugoniotSegments_ = hSegments;
 //
 //    }
-    public BoundaryExtensionCurve(List<HugoniotSegment> leftSegments, List<HugoniotSegment> rightSegments) {
+    public BoundaryExtensionCurve(List<RealSegment> leftSegments, List<RealSegment> rightSegments) {
 //        super(hSegments, rightSegments);//, new ViewingAttr(Color.RED));
 
         super(rightSegments);//, new ViewingAttr(Color.RED));

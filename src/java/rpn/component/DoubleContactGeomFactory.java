@@ -5,11 +5,14 @@
  */
 package rpn.component;
 
+import java.awt.Color;
 import rpnumerics.*;
+import wave.multid.view.ViewingAttr;
+import wave.util.RealSegment;
 
 public class DoubleContactGeomFactory extends BifurcationCurveGeomFactory {
 
-  
+    private static ViewingAttr viewAtt_ = new ViewingAttr(Color.white);
 
 
     public DoubleContactGeomFactory(DoubleContactCurveCalc calc, DoubleContactCurve curve) {
@@ -34,7 +37,7 @@ public class DoubleContactGeomFactory extends BifurcationCurveGeomFactory {
 
         leftBifurcationSegArray = new BifurcationSegGeom[resultSize];
         for (int i = 0; i < resultSize; i++) {
-            leftBifurcationSegArray[i] = new BifurcationSegGeom((HugoniotSegment) curve.segments().get(i));
+            leftBifurcationSegArray[i] = new BifurcationSegGeom((RealSegment) curve.segments().get(i),viewAtt_);
 
         }
 

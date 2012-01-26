@@ -36,17 +36,20 @@ using namespace std;
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_InflectionCurveCalc_nativeCalc(JNIEnv * env, jobject obj, jint family) {
 
-    jclass hugoniotSegmentClass = (env)->FindClass(HUGONIOTSEGMENTCLASS_LOCATION);
 
     jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
+
+    jclass realSegmentClass = env->FindClass(REALSEGMENT_LOCATION);
 
     jclass arrayListClass = env->FindClass("java/util/ArrayList");
 
     jclass inflectionCurveClass = env->FindClass(INFLECTIONCURVE_LOCATION);
 
+
+
     jmethodID realVectorConstructorDoubleArray = env->GetMethodID(realVectorClass, "<init>", "([D)V");
 
-    jmethodID hugoniotSegmentConstructor = (env)->GetMethodID(hugoniotSegmentClass, "<init>", "(Lwave/util/RealVector;DLwave/util/RealVector;DDDDDI)V");
+    jmethodID realSegmentConstructor = (env)->GetMethodID(realSegmentClass, "<init>", "(Lwave/util/RealVector;Lwave/util/RealVector;)V");
 
     jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
     jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
@@ -118,18 +121,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_InflectionCurveCalc_nativeCalc(JNIEnv 
         jobject realVectorLeftPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRLeft);
         jobject realVectorRightPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRRight);
 
-        int pointType = 10;
-
-        double leftSigma = 0;
-        double rightSigma = 0;
-
-        double leftLambda1 = 0;
-        double leftLambda2 = 0;
-
-        double rightLambda1 = 0;
-        double rightLambda2 = 0;
-        jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, leftLambda1, leftLambda2, rightLambda1, rightLambda2, pointType);
-        env->CallObjectMethod(segmentsArray, arrayListAddMethod, hugoniotSegment);
+      
+        jobject realSegment = env->NewObject(realSegmentClass, realSegmentConstructor, realVectorLeftPoint, realVectorRightPoint);
+        env->CallObjectMethod(segmentsArray, arrayListAddMethod, realSegment);
     }
 
 
@@ -139,7 +133,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_InflectionCurveCalc_nativeCalc(JNIEnv 
 
     // Limpando
 
-    env->DeleteLocalRef(hugoniotSegmentClass);
+    env->DeleteLocalRef(realSegmentClass);
     env->DeleteLocalRef(realVectorClass);
     env->DeleteLocalRef(arrayListClass);
 

@@ -18,24 +18,14 @@ import wave.util.RealVector;
 
 public class SegmentedCurve extends RPnCurve implements RpSolution {
 
-    private List<HugoniotSegment> hugoniotSegments_;
+    private List<? extends RealSegment> segments_;
     public double distancia = 0;                            //** declarei isso (Leandro)
 
-    public SegmentedCurve(List<HugoniotSegment> hugoniotSegments) {
-        super(coordsArrayFromRealSegments(hugoniotSegments), new ViewingAttr(Color.red));
+    public SegmentedCurve(List<? extends RealSegment> segmentsList) {
+        super(coordsArrayFromRealSegments(segmentsList), new ViewingAttr(Color.red));
+        segments_ = segmentsList;
 
-
-        hugoniotSegments_ = hugoniotSegments;
-
-        System.out.println("Printando segmentos da curva: ");
-//        for (HugoniotSegment hugoniotSegment : hugoniotSegments) {
-//
-//            System.out.println(hugoniotSegment);
-//
-//        }
     }
-
-
 
     //** inseri este método (Leandro)
     @Override
@@ -114,7 +104,7 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
     public String toMatlabData(int identifier) {              //** Imprime no output.m os dados das curvas e a classificacao dos segmentos (preenche os campos data e type)
 
         StringBuffer buffer = new StringBuffer();
-        System.out.println(hugoniotSegments_.size());
+        System.out.println(segments_.size());
 
         //********************************************************************** (inicia Leandro)
         if (identifier == 0) {
@@ -196,9 +186,9 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
         buffer.append("%% xcoord ycoord zcoord firstPointShockSpeed secondPointShockSpeed leftEigenValue0 leftEigenValue1 rightEigenValue0 rightEigenValue1\n");
 
         buffer.append("data" + identifier + "= [\n");
-        for (int i = 0; i < hugoniotSegments_.size(); i++) {
+        for (int i = 0; i < segments_.size(); i++) {
 
-            HugoniotSegment hSegment = ((HugoniotSegment) hugoniotSegments_.get(i));
+            HugoniotSegment hSegment = ((HugoniotSegment) segments_.get(i));
             RealSegment rSegment = new RealSegment(hSegment.leftPoint(),
                     hSegment.rightPoint());
             double leftSigma = hSegment.leftSigma();
@@ -211,8 +201,8 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
 
         buffer.append("type" + identifier + "=[\n");
 
-        for (int i = 0; i < hugoniotSegments_.size(); i++) {
-            HugoniotSegment hSegment = ((HugoniotSegment) hugoniotSegments_.get(i));
+        for (int i = 0; i < segments_.size(); i++) {
+            HugoniotSegment hSegment = ((HugoniotSegment) segments_.get(i));
             buffer.append((hSegment.getType() + 1) + ";\n");
         }
         buffer.append("];\n");
@@ -410,6 +400,6 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
     // Accessors/Mutators
     //
     public List segments() {
-        return hugoniotSegments_;
+        return segments_;
     }
 }

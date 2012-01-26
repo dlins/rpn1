@@ -17,12 +17,14 @@ import wave.multid.view.*;
 public class BifurcationCurveGeom implements MultiGeometry, RpGeometry {
 
     private RpGeomFactory factory_;
-    private ViewingAttr viewingAttr_ = new ViewingAttr(Color.white);
+    private ViewingAttr viewingAttr_;
     private ArrayList segList_;
     private Space space_;
     private BoundingBox boundary_;
 
     public BifurcationCurveGeom(BifurcationSegGeom[] segArray, BifurcationCurveGeomFactory factory) {
+
+        viewingAttr_=segArray[0].viewingAttr();
 
         segList_ = new ArrayList();
         for (int i = 0; i < segArray.length; i++) {

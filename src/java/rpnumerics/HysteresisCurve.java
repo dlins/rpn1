@@ -6,6 +6,7 @@
 package rpnumerics;
 
 import java.util.List;
+import wave.util.RealSegment;
 
 public class HysteresisCurve extends BifurcationCurve {
     //
@@ -15,7 +16,7 @@ public class HysteresisCurve extends BifurcationCurve {
 
 
 
-    public HysteresisCurve(List<HugoniotSegment> curveSegments,List<HugoniotSegment> domainSegments) {
+    public HysteresisCurve(List<RealSegment> curveSegments,List<RealSegment> domainSegments) {
         super(curveSegments, domainSegments);
         
 
