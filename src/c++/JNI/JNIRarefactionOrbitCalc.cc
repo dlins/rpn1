@@ -46,7 +46,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
     jclass classRarefactionOrbit = (env)->FindClass(RAREFACTIONORBIT_LOCATION);
 
     jmethodID rarefactionOrbitConstructor = (env)->GetMethodID(classRarefactionOrbit, "<init>", "([Lrpnumerics/OrbitPoint;II)V");
-    jmethodID orbitPointConstructor = (env)->GetMethodID(classOrbitPoint, "<init>", "([D)V");
+    jmethodID orbitPointConstructor = (env)->GetMethodID(classOrbitPoint, "<init>", "([DD)V");
     jmethodID toDoubleMethodID = (env)->GetMethodID(classOrbitPoint, "toDouble", "()[D");
 
     //Input processing
@@ -111,11 +111,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
 
         double * dataCoords = tempVector;
 
-        jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size());
+        //Reading only coodinates
+        jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size()-1);
 
-        (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size(), dataCoords);
+        (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size()-1, dataCoords);
 
-        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray);
+        //Lambda is the last component.
+        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray,tempVector.component(tempVector.size()-1));
 
         (env)->SetObjectArrayElement(orbitPointArray, i, orbitPoint);
 

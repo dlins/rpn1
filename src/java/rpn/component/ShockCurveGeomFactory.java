@@ -6,6 +6,7 @@
 package rpn.component;
 
 import rpnumerics.*;
+import wave.util.RealVector;
 
 public class ShockCurveGeomFactory extends OrbitGeomFactory {
     //
@@ -33,18 +34,33 @@ public class ShockCurveGeomFactory extends OrbitGeomFactory {
         return new ShockCurveGeom(MultidAdapter.converseOrbitPointsToCoordsArray(shockCurve.getPoints()), this);
     }
 
-    public String toXML() {//TODO Implement
-        StringBuffer str = new StringBuffer();
-         String tdir = "pos";
-        if (((ShockCurveCalc)rpCalc()).getDirection() == OrbitGeom.BACKWARD_DIR)
-            tdir = "neg";
-        str.append("<SHOCKCURVECALC tdirection=\"" + tdir + "\" calcready=\""+rpn.parser.RPnDataModule.RESULTS+"\">\n");
-        if (!rpn.parser.RPnDataModule.RESULTS)
-            str.append(((ShockCurve)geomSource()).getPoints() [0].toXML());
-        str.append(((ShockCurve)geomSource()).toXML(rpn.parser.RPnDataModule.RESULTS));
-        str.append("</SHOCKCURVECALC>\n");
-        return str.toString();
-    }
+//    public String toXML() {//TODO Implement
+//         StringBuffer str = new StringBuffer();
+//        RealVector firstPoint = ((OrbitCalc) rpCalc()).getStart();
+//
+//        String direction = "forward\"";
+//        str.append("<COMMAND name=\"shock");
+//        System.out.println("Direcao: "+((OrbitCalc) rpCalc()).getDirection());
+//
+//        if (((OrbitCalc) rpCalc()).getDirection() == OrbitGeom.BACKWARD_DIR) {
+//            direction = "backward\"";
+//
+//        }
+//
+////        if (((RarefactionOrbitCalc) rpCalc()).getDirection()== OrbitGeom.BOTH_DIR) {
+////            direction = "both\"";
+////        }
+//
+//        str.append(direction);
+//        str.append(" inputpoint=\""+firstPoint.toString()+"\" family=\""+ ((Orbit)geomSource()).getFamilyIndex()+"\" "+">\n");
+//        str.append(((Orbit) geomSource()).toXML());
+//        str.append("</COMMAND>\n");
+//        return str.toString();
+//
+//
+//
+
+//    }
 
     public String toMatlab(int curveIndex) {
         throw new UnsupportedOperationException("Not supported yet.");

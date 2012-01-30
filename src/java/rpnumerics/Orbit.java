@@ -195,43 +195,19 @@ public class Orbit extends RPnCurve implements RpSolution {
         return buf.toString();
     }
 
+
     public String toXML() {
+
+        System.out.println(getClass().getCanonicalName());
+
         StringBuffer buffer = new StringBuffer();
+        for (int i = 0; i < getPoints().length; i++) {
 
-        String timedir = "pos";
-        if (getDirection() == OrbitGeom.BACKWARD_DIR) {
-            timedir = "neg";
-        }
+            buffer.append(getPoints()[i].toXML());
 
-        buffer.append("<ORBIT timedirection=\"" + timedir + "\">\n");
-
-        for (int i = 0; i < points_.length; i++) {
-
-            buffer.append("<ORBITPOINT time=\""
-                    + ((OrbitPoint) points_[i]).getLambda() + "\">");
-            buffer.append(points_[i].toXML());
-            buffer.append("</ORBITPOINT>\n");
-        }
-        buffer.append("</ORBIT>\n");
-
-        return buffer.toString();
-    }
-
-    public String toXML(boolean calcReady) {
-        StringBuffer buffer = new StringBuffer();
-        if (calcReady) {
-            buffer.append("<ORBIT timedirection=\"" + increase_ + "\"" + ">\n");
-            for (int i = 0; i < points_.length; i++) {
-
-
-                buffer.append("<ORBITPOINT time=\""
-                        + ((OrbitPoint) points_[i]).getLambda() + "\">");
-                buffer.append(points_[i].toXML());
-                buffer.append("</ORBITPOINT>\n");
-            }
-            buffer.append("</ORBIT>\n");
         }
         return buffer.toString();
+
     }
 
     public String toMatlabData(int curveIndex) {

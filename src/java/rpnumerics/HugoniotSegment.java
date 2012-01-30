@@ -59,7 +59,7 @@ public class HugoniotSegment extends RealSegment {
     }
 
     public void setIntType(int type_) {
-        intType_=type_;
+        intType_ = type_;
     }
 
     public HugoniotSegment(RealVector leftPoint, double leftSigma, RealVector rightPoint, double rightSigma,
@@ -139,7 +139,7 @@ public class HugoniotSegment extends RealSegment {
         rightSigma_ = rightSigma;
 
 
-          leftLambdaArray_ = new double[2];//TODO Hardcoded para fisica do Helmut
+        leftLambdaArray_ = new double[2];//TODO Hardcoded para fisica do Helmut
 
         leftLambdaArray_[0] = 0;
         leftLambdaArray_[1] = 0;
@@ -160,13 +160,40 @@ public class HugoniotSegment extends RealSegment {
 
         StringBuffer buffer = new StringBuffer();
 
-        buffer.append("<HUGONIOTSEGMENT leftpoint=\"" + leftPoint().toString() + "\"" + " ");
+        PhasePoint leftPoint = new PhasePoint(leftPoint_);
+        PhasePoint rightPoint = new PhasePoint(rightPoint_);
 
-        buffer.append("rightpoint=\"" + rightPoint().toString() + "\"" + " ");
+        StringBuilder leftLambda = new StringBuilder();
+
+        for (int i = 0; i < leftLambdaArray_.length; i++) {
+            double d = leftLambdaArray_[i];
+
+            leftLambda.append(d);
+            leftLambda.append(" ");
+
+        }
+
+        StringBuilder rightLambda = new StringBuilder();
+
+        for (int i = 0; i < rightLambdaArray_.length; i++) {
+            double d = rightLambdaArray_[i];
+            rightLambda.append(d);
+            rightLambda.append(" ");
+        }
+
+        buffer.append("<HUGONIOTSEGMENT ");
+
         buffer.append("leftsigma=\"" + leftSigma() + "\"" + " ");
         buffer.append("rightsigma=\"" + rightSigma() + "\"" + " ");
+        buffer.append("leftlambda=\"" + leftLambda.toString().trim() + "\"" + " ");
+        buffer.append("rightlambda=\"" + rightLambda.toString().trim() + "\"" + " ");
         buffer.append("type=\"" + intType_ + "\"");
-        buffer.append(">");
+
+        buffer.append(">\n");
+
+        buffer.append(leftPoint.toXML());
+        buffer.append(rightPoint.toXML());
+
         buffer.append("</HUGONIOTSEGMENT>\n");
 
         return buffer.toString();

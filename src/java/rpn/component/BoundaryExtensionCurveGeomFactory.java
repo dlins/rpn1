@@ -31,7 +31,6 @@ public class BoundaryExtensionCurveGeomFactory extends BifurcationCurveGeomFacto
         BoundaryExtensionCurve curve = (BoundaryExtensionCurve) geomSource();
 
         int resultSize = curve.segments().size();
-//        System.out.println("Tamanho da extensao da fronteira: "+resultSize);
 
         BifurcationSegGeom[] leftBifurcationSegArray = new BifurcationSegGeom[resultSize];
         for (int i = 0; i < resultSize; i++) {

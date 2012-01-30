@@ -106,6 +106,7 @@ public class DoubleContactGeomFactory extends BifurcationCurveGeomFactory {
 //
     }
 
+    @Override
     public String toXML() {
 
         StringBuffer buffer = new StringBuffer();

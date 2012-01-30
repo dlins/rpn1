@@ -7,13 +7,8 @@
 package wave.multid.model;
 
 import wave.util.RealMatrix2;
-import wave.multid.DimMismatchEx;
 import wave.multid.view.*;
 import wave.multid.*;
-import wave.multid.map.Map;
-import java.io.FileWriter;
-import java.io.FileReader;
-import java.awt.Color;
 import wave.util.RealVector;
 
 public class MultiPolygon extends MultiGeometryImpl {

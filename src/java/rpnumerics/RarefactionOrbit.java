@@ -13,6 +13,7 @@ public class RarefactionOrbit extends Orbit implements RpSolution {
     public RarefactionOrbit(OrbitPoint[] points, int familyIndex,int flag) {
         super(points, familyIndex,flag);
 
+      
     }
 
     // Methods
@@ -27,41 +28,5 @@ public class RarefactionOrbit extends Orbit implements RpSolution {
         return buf.toString();
     }
 
-    @Override
-    public String toXML() {
-
-        StringBuffer buffer = new StringBuffer();
-        buffer.append("<ORBIT flag=\"" + getDirection() + "\">\n");
-        for (int i = 0; i < getPoints().length; i++) {
-
-            buffer.append("<ORBITPOINT time=\""
-                    + ((OrbitPoint) getPoints()[i]).getLambda() + "\">");
-            buffer.append(getPoints()[i].toXML());
-            buffer.append("</ORBITPOINT>\n");
-
-        }
-        buffer.append("</ORBIT>\n");
-        return buffer.toString();
-
-    }
-
-    @Override
-    public String toXML(boolean calcReady) {
-        StringBuffer buffer = new StringBuffer();
-        if (calcReady) {
-            for (int i = 0; i < getPoints().length; i++) {
-
-                buffer.append("<ORBITPOINT time=\""
-                        + ((OrbitPoint) getPoints()[i]).getLambda() + "\">");
-                buffer.append(getPoints()[i].toXML());
-                buffer.append("</ORBITPOINT>\n");
-
-            }
-            buffer.append("</ORBIT>\n");
-        } else {
-        }
-        return buffer.toString();
-
-    }
    
 }

@@ -57,12 +57,9 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     static public Color DEFAULT_BACKGROUND_COLOR = Color.black;
     static public Color DEFAULT_POINTMARK_COLOR = Color.white;
     //***
-
-
-    public static List <Area> listaArea = new ArrayList<Area>();     //** declarei isso    (Leandro) - ainda nao esta sendo usado
+    public static List<Area> listaArea = new ArrayList<Area>();     //** declarei isso    (Leandro) - ainda nao esta sendo usado
     public static int myH_;                                          //** declarei isso    (Leandro)
     public static int myW_;                                          //** declarei isso    (Leandro)
-
 
     //*** declarei esses métodos (Leandro)
     public static void blackBackground() {
@@ -76,7 +73,6 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     }
     //***
 
-    
     public static boolean isCursorLine() {
         return cursorLine_;
     }
@@ -229,7 +225,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         }
 
         //** Leandro: início.
-        
+
         myH_ = getHeight();
         myW_ = getWidth();
 
@@ -245,18 +241,18 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         }
 
         if (RPNUMERICS.domainDim() == 3) {
-                try {
-                    if (scene().geometries().hasNext()) {
-                        GeometryGraph3D.class.newInstance().markPoints(GeometryUtil.targetPoint, GeometryUtil.pMarca, scene());
-                        GeometryGraph3D.class.newInstance().paintComponent(g, scene());
-                    }
-                    
-                } catch (InstantiationException ex) {
-                    System.out.println("Clear Space ativo.");
-                    //Logger.getLogger(RPnPhaseSpacePanel.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IllegalAccessException ex) {
-                    //Logger.getLogger(RPnPhaseSpacePanel.class.getName()).log(Level.SEVERE, null, ex);
+            try {
+                if (scene().geometries().hasNext()) {
+                    GeometryGraph3D.class.newInstance().markPoints(GeometryUtil.targetPoint, GeometryUtil.pMarca, scene());
+                    GeometryGraph3D.class.newInstance().paintComponent(g, scene());
                 }
+
+            } catch (InstantiationException ex) {
+                System.out.println("Clear Space ativo.");
+                //Logger.getLogger(RPnPhaseSpacePanel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalAccessException ex) {
+                //Logger.getLogger(RPnPhaseSpacePanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
 //        if (RPNUMERICS.domainDim() == 4) {
@@ -284,8 +280,8 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
             repaint();
             getCastedUI().resetCursorCoords();
         }
-        
-        
+
+
         //** Leandro: fim.
         //*****************************************
 
@@ -392,6 +388,12 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
             // Ask the test to render into the SVG Graphics2D implementation.
             boolean useCSS = true; // we want to use CSS style attributes
 
+
+            //Draw boundary
+            Shape s = scene_.getViewingTransform().viewPlane().getWindow().dcView(scene_.getViewingTransform());
+            svgGenerator.fill(s);
+
+            //Draw geometries
             Iterator it = scene_.geometries();
             while (it.hasNext()) {
                 GeomObjView geometry = (GeomObjView) it.next();

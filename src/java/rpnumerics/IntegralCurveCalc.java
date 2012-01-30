@@ -27,11 +27,9 @@ public class IntegralCurveCalc extends OrbitCalc implements RpCalculation {
     // Methods
     //
 
-    public RpSolution recalc() throws RpException {
-        return calc();
+   
 
-    }
-
+    @Override
     public RpSolution calc() throws RpException {
 
         IntegralCurve result;

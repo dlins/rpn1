@@ -91,7 +91,10 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
 //        }
         super.join(geom);
 
-        RPnCurvesListFrame.addGeometry((geomList_.size() - 1) + "", geom.getClass().getSimpleName());
+
+        RpGeometry geometry= (RpGeometry)geom;
+
+        RPnCurvesListFrame.addGeometry(geometry);
     }
 
     @Override
@@ -143,26 +146,14 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         UIController.instance().panelsUpdate();
     }
 
-    public void hideGeometry(int index) {
+    public void displayGeometry(int index,boolean visible) {
 
         for (int i = 0; i < geomList_.size(); i++) {
 
             if (i == index) {
                 MultiGeometry geometry = (MultiGeometry) geomList_.get(i);
-                geometry.viewingAttr().setVisible(false);
-            }
-        }
 
-        UIController.instance().panelsUpdate();
-
-    }
-
-    public void displayGeometry(int index) {
-        for (int i = 0; i < geomList_.size(); i++) {
-
-            if (i == index) {
-                MultiGeometry geometry = (MultiGeometry) geomList_.get(i);
-                geometry.viewingAttr().setVisible(true);
+                geometry.viewingAttr().setVisible(visible);
             }
 
         }

@@ -117,7 +117,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
         return NULL;
 
 
-    cout << "Tamanho da curva: " << compositeCurve.size() << endl;
+//    cout << "Tamanho da curva: " << compositeCurve.size() << endl;
 
 
     //Orbit members creation

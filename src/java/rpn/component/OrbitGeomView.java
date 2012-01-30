@@ -25,6 +25,7 @@ public class OrbitGeomView extends PolyLine {
             ViewingAttr attr) throws DimMismatchEx {
 
         super(geom, transf, attr);
+ 
 
     }
 

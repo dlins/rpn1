@@ -30,15 +30,11 @@ import rpn.component.InflectionCurveGeomFactory;
 import rpn.component.RpCalcBasedGeomFactory;
 import rpn.component.RpGeomFactory;
 import rpn.component.RpGeometry;
-import rpn.usecase.BuckleyLeverettiInflectionAgent;
-import rpn.usecase.CoincidenceExtensionCurvePlotAgent;
-import rpn.usecase.CoincidencePlotAgent;
-import rpn.usecase.BoundaryExtensionCurveAgent;
+import rpn.usecase.CompositePlotAgent;
 import rpn.usecase.HugoniotPlotAgent;
+import rpn.usecase.IntegralCurvePlotAgent;
 import rpn.usecase.RarefactionOrbitPlotAgent;
 import rpn.usecase.ShockCurvePlotAgent;
-import rpn.usecase.SubInflectionExtensionCurveAgent;
-import rpn.usecase.SubInflectionPlotAgent;
 import rpnumerics.BoundaryExtensionCurve;
 import rpnumerics.BoundaryExtensionCurveCalc;
 import rpnumerics.DoubleContactCurve;
@@ -89,8 +85,8 @@ public class RPnDataModule {
         protected static CoordsArray[] tempCoords_;
         protected static OrbitGeom tempOrbit_;
         protected static PhasePoint tempPoint_, tempPhasePoint_;
-        protected static int phaseSize_, ncol_, nrow_;
-        private double tempPTime_;
+        protected static int phaseSize_, direction_, family_, ncol_, nrow_;
+        private double lambda_;
         private HugoniotParser hugolistener_;
         private OrbitParser orbitListener_;
         private StationaryPointParser statPointListener_;
@@ -156,18 +152,17 @@ public class RPnDataModule {
                 currentCommand_ = att.getValue(0);
                 hugoniotSegmentsList_.clear();
                 realSegmentsList_.clear();
+                orbitPointsList_.clear();
 
 
                 if (currentCommand_.equalsIgnoreCase("hugoniot")
-                        || currentCommand_.equalsIgnoreCase("rarefactionforward")
-                        || currentCommand_.equalsIgnoreCase("rarefactionbackward")
-                        || currentCommand_.equalsIgnoreCase("rarefactionboth")
-                        || currentCommand_.equalsIgnoreCase("shockboth")
-                        || currentCommand_.equalsIgnoreCase("shockforward")
-                        || currentCommand_.equalsIgnoreCase("shockbackward")) {
+                        || currentCommand_.equalsIgnoreCase("rarefactionorbit")
+                        || currentCommand_.equalsIgnoreCase("integralcurve")
+                        || currentCommand_.equalsIgnoreCase("shockcurve")) {
 
-
-                    tempPoint_ = new PhasePoint(new RealVector(att.getValue(1)));
+                    tempPoint_ = new PhasePoint(new RealVector(att.getValue("inputpoint")));
+                    direction_ = chooseDirection(att.getValue("direction"));
+                    family_ = chooseFamily(att.getValue("family"));
 
 
                 }
@@ -254,19 +249,7 @@ public class RPnDataModule {
 
             }
 
-            if ((name.equals("ORBITCALC"))) {
-                orbitPointsList_.clear();
-
-
-                calcReady_ = new Boolean(att.getValue(1)).booleanValue();
-
-                if (att.getValue(0).equals("neg")) {
-                    OrbitParser.dir = -1;
-                } else {
-                    OrbitParser.dir = 1;
-                }
-                OrbitParser.plotOrbit = true;
-            }
+         
             if (name.equals("STATPOINTCALC")) {
 //                calcReady_ = new Boolean(att.getValue(1)).booleanValue();
 //                tempPoint_=new PhasePoint(new RealVector(att.getValue(0)));
@@ -284,7 +267,8 @@ public class RPnDataModule {
                 plotProfile_ = true;
             }
             if (name.equals("ORBITPOINT")) {
-                tempPTime_ = (new Double(att.getValue(0))).doubleValue();
+                stringBuffer_ = new StringBuilder();
+                lambda_ = (new Double(att.getValue("lambda"))).doubleValue();
             }
 
             if (name.equals("ORBIT")) {
@@ -316,12 +300,12 @@ public class RPnDataModule {
                 RealVector leftPoint = new RealVector(att.getValue(0));
                 RealVector rightPoint = new RealVector(att.getValue(1));
 
-                double leftSigma = new Double(att.getValue(2));
-                double rightSigma = new Double(att.getValue(3));
+                double leftSigma = new Double(att.getValue("leftsigma"));
+                double rightSigma = new Double(att.getValue("rightsigma"));
 
-                int type = new Integer(4);
+                //TODO Read right and left lambda in array form
 
-
+                int type = new Integer(att.getValue("type"));
                 HugoniotSegment segment = new HugoniotSegment(leftPoint, leftSigma, rightPoint, rightSigma, type);
 
                 hugoniotSegmentsList_.add(segment);
@@ -334,10 +318,9 @@ public class RPnDataModule {
             }
 
             if (name.equals("PHASEPOINT")) {
-//                pointOneOK_=false;
+
                 stringBuffer_ = new StringBuilder();
-                phaseSize_ = (new Integer(att.getValue(0))).intValue();
-//                tempVector_ = new RealVector(phaseSize_);
+
             }
             if (name.equals("REALSEGMENT")) {
             }
@@ -372,49 +355,48 @@ public class RPnDataModule {
 
             try {
                 String data = new String(buff, offset, len);
-                data = data.trim();
                 if (data.length() != 0) {
-                    if (currentElement_.equals("PHASEPOINT")) {
-//                        System.out.println(data);
+                    if (currentElement_.equals("PHASEPOINT") || currentElement_.equals("ORBITPOINT")) {
                         stringBuffer_.append(data);
                     }
-                    if (currentElement_.equals("REALVECTOR")) {
-                        tempVector_ = new RealVector(data);
-                        vectorList_.add(tempVector_);
-                    }
-                    if (currentElement_.equals("REALMATRIX")) {
-                        tempMatrix_ = new RealMatrix2(nrow_, ncol_, data);
-                    }
-                    if (currentElement_.equals("EIGENVALR")) {
-                        StationaryPointParser.eigenvalr = StationaryPointParser.parserEingenVal(data);
-                    }
 
-                    if (currentElement_.equals("EIGENVALI")) {
-                        StationaryPointParser.eigenvali = StationaryPointParser.parserEingenVal(data);
-                    }
-                    if (currentElement_.equals("DIMP")) {
-
-                        OrbitParser.dimP = (new Integer(data)).intValue();
-                    }
-
-                    if (currentElement_.equals("DIMN")) {
-
-                        OrbitParser.dimN = (new Integer(data)).intValue();
-                    }
-
-                    if (currentElement_.equals("INTEGRATIONFLAG")) {
-
-                        OrbitParser.integrationFlag = (new Integer(data)).intValue();
-                    }
-
-                    if (currentElement_.equals("UMINUS")) {
-                        StationaryPointParser.plotStatPoint = false;
-                    }
-
-                    if (currentElement_.equals("UPLUS")) {
-                        StationaryPointParser.plotStatPoint = false;
-                    }
-
+//                    if (currentElement_.equals("REALVECTOR")) {
+//                        tempVector_ = new RealVector(data);
+//                        vectorList_.add(tempVector_);
+//                    }
+//                    if (currentElement_.equals("REALMATRIX")) {
+//                        tempMatrix_ = new RealMatrix2(nrow_, ncol_, data);
+//                    }
+//                    if (currentElement_.equals("EIGENVALR")) {
+//                        StationaryPointParser.eigenvalr = StationaryPointParser.parserEingenVal(data);
+//                    }
+//
+//                    if (currentElement_.equals("EIGENVALI")) {
+//                        StationaryPointParser.eigenvali = StationaryPointParser.parserEingenVal(data);
+//                    }
+//                    if (currentElement_.equals("DIMP")) {
+//
+//                        OrbitParser.dimP = (new Integer(data)).intValue();
+//                    }
+//
+//                    if (currentElement_.equals("DIMN")) {
+//
+//                        OrbitParser.dimN = (new Integer(data)).intValue();
+//                    }
+//
+//                    if (currentElement_.equals("INTEGRATIONFLAG")) {
+//
+//                        OrbitParser.integrationFlag = (new Integer(data)).intValue();
+//                    }
+//
+//                    if (currentElement_.equals("UMINUS")) {
+//                        StationaryPointParser.plotStatPoint = false;
+//                    }
+//
+//                    if (currentElement_.equals("UPLUS")) {
+//                        StationaryPointParser.plotStatPoint = false;
+//                    }
+//
                 }
             } catch (NumberFormatException ex) {
                 System.out.println("Erro de formato! " + ex.getMessage());
@@ -430,126 +412,38 @@ public class RPnDataModule {
 
             if (name.equalsIgnoreCase("COMMAND")) {
 
+                RealVector[] inputArray = new RealVector[1];
+                inputArray[0] = new RealVector(tempPoint_.getCoords());
+                RPNUMERICS.setDirection(direction_);
+                String actualFamily = RPNUMERICS.getParamValue("shock", "family");
+                RPNUMERICS.setParamValue("shock", "family", String.valueOf(family_));
 
-                if (currentCommand_.equalsIgnoreCase("hugoniot")) {//Hugoniot command
+                RpGeometry geometry = null;
 
-                    System.out.println("Valor de tempPoint: " + tempPoint_);
-
-                    RealVector[] inputArray = new RealVector[1];
-
-                    inputArray[0] = new RealVector(tempPoint_.getCoords());
-
-                    RpGeometry geometry = HugoniotPlotAgent.instance().createRpGeometry(inputArray);
-
-                    PHASESPACE.join(geometry);
-
+                if (currentCommand_.equalsIgnoreCase("hugoniot")) {//Hugoniot 
+                    geometry = HugoniotPlotAgent.instance().createRpGeometry(inputArray);
                 }
 
 
-                if (currentCommand_.equalsIgnoreCase("rarefactionforward")) {//Rarefaction Forward command
+                if (currentCommand_.equalsIgnoreCase("integralcurve")) {//Integral curve
+                    geometry = IntegralCurvePlotAgent.instance().createRpGeometry(inputArray);
+                }
 
-                    System.out.println("Valor de tempPoint: " + tempPoint_);
-
-                    RealVector[] inputArray = new RealVector[1];
-
-                    inputArray[0] = new RealVector(tempPoint_.getCoords());
-
-                    RPNUMERICS.setDirection(OrbitGeom.FORWARD_DIR);
-
-                    RpGeometry geometry = RarefactionOrbitPlotAgent.instance().createRpGeometry(inputArray);
-
-                    PHASESPACE.join(geometry);
-
+                if (currentCommand_.equalsIgnoreCase("compositecurve")) {//Composite
+                    geometry = CompositePlotAgent.instance().createRpGeometry(inputArray);
                 }
 
 
+                if (currentCommand_.equalsIgnoreCase("rarefactionorbit")) {//Rarefaction 
+                    geometry = RarefactionOrbitPlotAgent.instance().createRpGeometry(inputArray);
 
-
-                if (currentCommand_.equalsIgnoreCase("rarefactionbackward")) {//Rarefaction Backward command
-
-                    System.out.println("Valor de tempPoint: " + tempPoint_);
-
-                    RealVector[] inputArray = new RealVector[1];
-
-                    inputArray[0] = new RealVector(tempPoint_.getCoords());
-
-                    RPNUMERICS.setDirection(OrbitGeom.BACKWARD_DIR);
-
-                    RpGeometry geometry = RarefactionOrbitPlotAgent.instance().createRpGeometry(inputArray);
-
-                    PHASESPACE.join(geometry);
-
+                }
+                if (currentCommand_.equalsIgnoreCase("shockcurve")) {//Shock 
+                    geometry = ShockCurvePlotAgent.instance().createRpGeometry(inputArray);
                 }
 
 
-                if (currentCommand_.equalsIgnoreCase("rarefactionboth")) {//Rarefaction Forward Backward command
-
-                    System.out.println("Valor de tempPoint: " + tempPoint_);
-
-                    RealVector[] inputArray = new RealVector[1];
-
-                    inputArray[0] = new RealVector(tempPoint_.getCoords());
-
-                    RPNUMERICS.setDirection(OrbitGeom.BOTH_DIR);
-
-                    RpGeometry geometry = RarefactionOrbitPlotAgent.instance().createRpGeometry(inputArray);
-
-                    PHASESPACE.join(geometry);
-
-                }
-
-
-
-                if (currentCommand_.equalsIgnoreCase("shockboth")) {//Shock Forward Backward command
-
-                    System.out.println("Valor de tempPoint: " + tempPoint_);
-
-                    RealVector[] inputArray = new RealVector[1];
-
-                    inputArray[0] = new RealVector(tempPoint_.getCoords());
-
-                    RPNUMERICS.setDirection(OrbitGeom.BOTH_DIR);
-
-                    RpGeometry geometry = ShockCurvePlotAgent.instance().createRpGeometry(inputArray);
-
-                    PHASESPACE.join(geometry);
-
-                }
-
-                if (currentCommand_.equalsIgnoreCase("shockforward")) {//Shock Forward  command
-
-                    System.out.println("Valor de tempPoint: " + tempPoint_);
-
-                    RealVector[] inputArray = new RealVector[1];
-
-                    inputArray[0] = new RealVector(tempPoint_.getCoords());
-
-                    RPNUMERICS.setDirection(OrbitGeom.FORWARD_DIR);
-
-                    RpGeometry geometry = ShockCurvePlotAgent.instance().createRpGeometry(inputArray);
-
-                    PHASESPACE.join(geometry);
-
-                }
-
-                if (currentCommand_.equalsIgnoreCase("shockbackward")) {//Shock Backward command
-
-                    System.out.println("Valor de tempPoint: " + tempPoint_);
-
-                    RealVector[] inputArray = new RealVector[1];
-
-                    inputArray[0] = new RealVector(tempPoint_.getCoords());
-
-                    RPNUMERICS.setDirection(OrbitGeom.BACKWARD_DIR);
-
-                    RpGeometry geometry = ShockCurvePlotAgent.instance().createRpGeometry(inputArray);
-
-                    PHASESPACE.join(geometry);
-
-                }
-
-
-                if (currentCommand_.equalsIgnoreCase("doublecontact")) {//DoubleContact command
+                if (currentCommand_.equalsIgnoreCase("doublecontact")) {//DoubleContact 
 
                     DoubleContactCurve curve = new DoubleContactCurve(realSegmentsList_);
 
@@ -558,7 +452,7 @@ public class RPnDataModule {
 
                 }
 
-                if (currentCommand_.equalsIgnoreCase("inflection")) {//Inflection command
+                if (currentCommand_.equalsIgnoreCase("inflection")) {//Inflection 
 
                     InflectionCurve curve = new InflectionCurve(realSegmentsList_);
 
@@ -567,23 +461,26 @@ public class RPnDataModule {
                 }
 
 
-                if (currentCommand_.equalsIgnoreCase("hysteresis")) {//Hysteresis command
-                    HysteresisCurve curve = new HysteresisCurve(realSegmentsList_,realSegmentsList_);
+                if (currentCommand_.equalsIgnoreCase("hysteresis")) {//Hysteresis 
+                    HysteresisCurve curve = new HysteresisCurve(realSegmentsList_, realSegmentsList_);
                     factory_ = new HysteresisCurveGeomFactory((HysteresisCurveCalc) calc_, curve);
 
                 }
 
-                if (currentCommand_.equalsIgnoreCase("boundary extension")) {//Boundary extension command
+                if (currentCommand_.equalsIgnoreCase("boundary extension")) {//Boundary extension 
 
                     BoundaryExtensionCurve curve = new BoundaryExtensionCurve(realSegmentsList_, realSegmentsList_);
                     factory_ = new BoundaryExtensionCurveGeomFactory((BoundaryExtensionCurveCalc) calc_, curve);
 
                 }
 
-                if (realSegmentsList_.size() != 0) {
+                if (realSegmentsList_.size() != 0) { // Ploting using file data
 
                     PHASESPACE.join(factory_.geom());
 
+                } else {//Recalculating curves
+                    PHASESPACE.join(geometry);
+                    RPNUMERICS.setParamValue("shock", "family", actualFamily);
                 }
 
 
@@ -669,17 +566,14 @@ public class RPnDataModule {
             if (name.equals("PHASEPOINT")) {
 
                 try {
-//                    System.out.println(stringBuffer_.toString());
+
                     RealVector coordsVector = new RealVector(stringBuffer_.toString());
-
-//                   System.out.println("Fim de PhasePoint");
-
                     if (pointOneOK_ == false) {
                         point1_ = new RealVector(coordsVector);
                         pointOneOK_ = true;
                     } else {
                         point2_ = new RealVector(coordsVector);
-//                    pointOneOK_ = false;
+
                     }
 
 
@@ -689,17 +583,13 @@ public class RPnDataModule {
 
             }
             if (name.equals("REALSEGMENT")) {
-
-//                System.out.println("Valor de point1: " + point1_);
-//                System.out.println("Valor de point2: " + point2_);
-
                 realSegmentsList_.add(new RealSegment(point1_, point2_));
                 pointOneOK_ = false;
-
             }
 
             if (name.equals("ORBITPOINT")) {
-                orbitPointsList_.add(new OrbitPoint(tempVector_, tempPTime_));
+                RealVector coordsVector = new RealVector(stringBuffer_.toString());
+                orbitPointsList_.add(new OrbitPoint(coordsVector, lambda_));
             }
 
             if (name.equals("MANIFOLD")) {
@@ -777,6 +667,29 @@ public class RPnDataModule {
 
         public void skippedEntity(String name) throws SAXException {
         }
+
+        private int chooseDirection(String stringDirection) {
+            if (stringDirection == null) {
+                return OrbitGeom.BOTH_DIR;
+            }
+            if (stringDirection.equalsIgnoreCase("forward")) {
+                return OrbitGeom.FORWARD_DIR;
+            }
+            if (stringDirection.equalsIgnoreCase("backward")) {
+                return OrbitGeom.BACKWARD_DIR;
+            }
+
+            return OrbitGeom.BOTH_DIR;
+
+        }
+
+        private int chooseFamily(String stringFamily) {
+            try {
+                return new Integer(stringFamily);
+            } catch (Exception ex) {
+                return 0;
+            }
+        }
     }
 
     //
@@ -820,17 +733,11 @@ public class RPnDataModule {
     //
     /** Writes the data of actual session into a XML file. */
     static public void export(FileWriter writer) throws java.io.IOException {
-//        Iterator<Command> commandInterator = UIController.instance().getCommandIterator();
-//        while (commandInterator.hasNext()) {
-////           writer.write((commandInterator.next().toXML()));//TODO Fix.
-//
-//        }
+
         System.out.println("Chamando export do data module");
-//
+
         Iterator<RpGeometry> iterator = PHASESPACE.getGeomObjIterator();
-//
-//        int i = 0;
-//
+
         while (iterator.hasNext()) {
             writer.write(iterator.next().geomFactory().toXML());
         }

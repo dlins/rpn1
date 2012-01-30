@@ -36,22 +36,7 @@ public class PhasePoint extends RealVector {
     //
     // Methods
     //
-    @Override
-    public String toString() {
 
-        StringBuffer str = new StringBuffer();
-        
-        for (int i=0;i < getCoords().getSize();i++){
-            
-            str.append(getCoords().getElement(i));
-            str.append(" ");
-            
-        }
-        return str.toString();
-
-
-
-    }
 
     @Override
     public String toXML() {

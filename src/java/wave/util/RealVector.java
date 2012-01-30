@@ -5,7 +5,6 @@
  */
 package wave.util;
 
-import java.text.NumberFormat;
 import javax.vecmath.GVector;
 
 public class RealVector extends GVector {
@@ -31,17 +30,13 @@ public class RealVector extends GVector {
     //
     @Override
     public String toString() {
-        StringBuffer buffer = new StringBuffer();
-        NumberFormat numberFormatter = NumberFormat.getInstance();
-        numberFormatter.setMaximumFractionDigits(12);
+        StringBuilder buffer = new StringBuilder();
 
         for (int i = 0; i < this.getSize(); i++) {
-            Double element = new Double(numberFormatter.format(getElement(i)));
-            buffer.append(element + " ");
+            buffer.append(getElement(i));
+            buffer.append(" ");
         }
         return buffer.toString().trim();
-
-
     }
 
     public String toXML() {

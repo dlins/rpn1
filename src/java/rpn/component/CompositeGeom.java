@@ -1,28 +1,18 @@
 package rpn.component;
 
-import java.awt.Color;
-import rpnumerics.CompositeCurve;
 import wave.multid.*;
-import wave.multid.model.MultiPolyLine;
 import wave.multid.view.*;
 
-public class CompositeGeom extends MultiPolyLine implements RpGeometry {
-
-    public static ViewingAttr VIEWING_ATTR = new ViewingAttr(Color.green);
-    private RpGeomFactory factory_;
+public class CompositeGeom extends OrbitGeom implements RpGeometry {
 
     public CompositeGeom(CoordsArray[] coordsArray, CompositeGeomFactory factory) {
-        super(coordsArray, factory.selectViewingAttr());
-        factory_ = factory;
-    }
-
-    public RpGeomFactory geomFactory() {
-        return factory_;
+        super(coordsArray, factory);
+       
     }
 
     @Override
     public GeomObjView createView(ViewingTransform transf) throws DimMismatchEx {
-        return new CompositeOrbitView(this, transf, viewingAttr());
+        return new CompositeOrbitView(this, transf,  viewingAttr());
 
     }
 }

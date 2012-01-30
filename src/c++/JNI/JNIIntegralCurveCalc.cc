@@ -102,7 +102,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_IntegralCurveCalc_calc(JNIEnv * env, j
 
     //Orbit members creation
 
-    cout << "Tamanho da curva: " << coords.size() << endl;
+//    cout << "Tamanho da curva: " << coords.size() << endl;
 
     jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(coords.size(), classOrbitPoint, NULL);
 

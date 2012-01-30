@@ -8,6 +8,7 @@ package rpn.component;
 import java.awt.Color;
 import rpnumerics.*;
 import wave.multid.view.ViewingAttr;
+import wave.util.RealVector;
 
 public class OrbitGeomFactory extends RpCalcBasedGeomFactory {
     //
@@ -34,7 +35,7 @@ public class OrbitGeomFactory extends RpCalcBasedGeomFactory {
 
         int family = (((Orbit) this.geomSource()).getFamilyIndex());
 
-        System.out.println("Family Index: " + family);
+  
         if (family == 1) {
             return new ViewingAttr(Color.red);
         }
@@ -52,15 +53,38 @@ public class OrbitGeomFactory extends RpCalcBasedGeomFactory {
     }
 
     public String toXML() {
+
+
+
         StringBuffer str = new StringBuffer();
-        String timedir = "pos";
-        if (((OrbitCalc) rpCalc()).getDirection() == OrbitGeom.BACKWARD_DIR) {
-            timedir = "neg";
+        RealVector firstPoint = new RealVector(((OrbitCalc) rpCalc()).getStart());
+
+        String commandName = geomSource().getClass().getName();
+
+        commandName = commandName.toLowerCase();
+
+        commandName = commandName.replaceAll(".+\\.", "");
+        
+         str.append("<COMMAND name=\"" + commandName + "\"");
+
+        if (((OrbitCalc) rpCalc()).getDirection() != OrbitGeom.BOTH_DIR) {
+            String direction = "forward\"";
+
+            if (((OrbitCalc) rpCalc()).getDirection() == OrbitGeom.BACKWARD_DIR) {
+                direction = "backward\"";
+
+            }
+            str.append(" direction=\"");
+            str.append(direction);
         }
-        str.append("<ORBITCALC timedirection=\"" + timedir + "\"" + " initialpoint=\"" + ((OrbitCalc) rpCalc()).getStart() + "\"" + " calcready=\"" + rpn.parser.RPnDataModule.RESULTS + "\"" + ">\n");
-        str.append(((Orbit) geomSource()).toXML(rpn.parser.RPnDataModule.RESULTS));
-        str.append("</ORBITCALC>\n");
+       
+        str.append(" inputpoint=\"" + firstPoint.toString() + "\" family=\"" + ((Orbit) geomSource()).getFamilyIndex() + "\" " + ">\n");
+        str.append(((Orbit) geomSource()).toXML());
+        str.append("</COMMAND>\n");
         return str.toString();
+
+
+
     }
 
     public String toMatlab(int curveIndex) {

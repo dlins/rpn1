@@ -1,24 +1,17 @@
 package rpn.component;
 
-import java.awt.BasicStroke;
-import java.awt.Graphics2D;
-import rpnumerics.RarefactionOrbit;
-import wave.multid.view.PolyLine;
 import wave.multid.model.MultiGeometryImpl;
 import wave.multid.view.ViewingTransform;
 import wave.multid.DimMismatchEx;
 import wave.multid.view.ViewingAttr;
 import java.util.ArrayList;
-import java.awt.Shape;
-import java.awt.Stroke;
-import java.awt.geom.GeneralPath;
 import rpnumerics.OrbitPoint;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
 import wave.util.Arrow;
 import wave.util.RealVector;
 
-public class RarefactionOrbitView extends PolyLine {
+public class RarefactionOrbitView extends OrbitGeomView{
 
     private ArrayList arrowList_;
     private final static int ARROWS_STEP = 10;
@@ -30,26 +23,26 @@ public class RarefactionOrbitView extends PolyLine {
         super(geom, transf, attr);
     }
 
-    public Shape createShape() {
-
-
-        GeneralPath composite = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
-        RarefactionOrbit source = (RarefactionOrbit) (((RpGeometry) getAbstractGeom()).geomFactory().
-                geomSource());
-        points_ = source.getPoints();
-        arrowsCalculations();
-
-        try {
-            composite.append(super.createShape(), false);
-
-        } catch (DimMismatchEx ex) {
-
-            ex.printStackTrace();
-
-        }
-
-        return composite;
-    }
+//    public Shape createShape() {
+//
+//
+//        GeneralPath composite = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
+//        RarefactionOrbit source = (RarefactionOrbit) (((RpGeometry) getAbstractGeom()).geomFactory().
+//                geomSource());
+//        points_ = source.getPoints();
+//        arrowsCalculations();
+//
+//        try {
+//            composite.append(super.createShape(), false);
+//
+//        } catch (DimMismatchEx ex) {
+//
+//            ex.printStackTrace();
+//
+//        }
+//
+//        return composite;
+//    }
 
    
    

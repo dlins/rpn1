@@ -10,7 +10,7 @@ import wave.multid.*;
 import wave.multid.model.*;
 import wave.multid.view.*;
 
-public class ShockCurveGeomView extends PolyLine {
+public class ShockCurveGeomView extends OrbitGeomView {
 
     public ShockCurveGeomView(MultiGeometryImpl geom, ViewingTransform transf,
             ViewingAttr attr) throws DimMismatchEx {
@@ -42,6 +42,7 @@ public class ShockCurveGeomView extends PolyLine {
 //        return composite;
 //
 //    }
+    @Override
     public void draw(Graphics2D g) {
 
         g.setColor(getViewingAttr().getColor());

@@ -473,14 +473,11 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
     //**  ???
     void export_actionPerformed(ActionEvent e) {
-        System.out.println("chamando ok do dialogo");
         try {
             JFileChooser chooser = new JFileChooser();
-//            chooser.setAccessory(resultsOption);
             chooser.setSelectedFile(new File("output.xml"));
             chooser.setFileFilter(new FileNameExtensionFilter("XML File", "xml", "XML"));
             if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
-                System.out.println("chamando ok dentro do if");
                 FileWriter writer = new FileWriter(chooser.getSelectedFile().
                         getAbsolutePath());
                 writer.write(RPnConfigReader.XML_HEADER);

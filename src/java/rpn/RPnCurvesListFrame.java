@@ -21,8 +21,18 @@ import javax.swing.JToolBar;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableModel;
+import rpn.component.BifurcationCurveGeom;
+import rpn.component.BifurcationCurveGeomFactory;
+import rpn.component.HugoniotCurveGeom;
+import rpn.component.HugoniotCurveGeomFactory;
+import rpn.component.OrbitGeom;
+import rpn.component.OrbitGeomFactory;
+import rpn.component.RpGeometry;
 import rpn.controller.ui.UIController;
 import rpn.parser.RPnDataModule;
+import rpnumerics.HugoniotCurveCalc;
+import rpnumerics.HugoniotCurveCalcND;
+import rpnumerics.OrbitCalc;
 import wave.util.RealVector;
 
 public class RPnCurvesListFrame extends JFrame implements ActionListener {
@@ -105,10 +115,29 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
         tableModel_.removeRow(geometryIndex);
     }
 
-    public static void addGeometry(String geometryIndex, String geometryName) {
+    public static void addGeometry(RpGeometry geometry) {
+
+        String geometryName = geometry.getClass().getSimpleName();
+
+        RealVector userInput =new RealVector(geometry.getBoundary().getSpace().getDim());
+
+        if (geometry instanceof OrbitGeom){
+            OrbitGeomFactory factory = (OrbitGeomFactory)geometry.geomFactory();
+            OrbitCalc calc = (OrbitCalc)factory.rpCalc();
+            userInput= calc.getStart();
+
+        }
+
+        if(geometry instanceof HugoniotCurveGeom){
+            HugoniotCurveGeomFactory factory = (HugoniotCurveGeomFactory)geometry.geomFactory();
+            HugoniotCurveCalcND calc = (HugoniotCurveCalcND) factory.rpCalc();
+
+            userInput= calc.getUMinus();
+        }
+
 
         Vector<Object> data = new Vector<Object>();
-        RealVector userInput = UIController.instance().globalInputTable().values();
+
 
         NumberFormat formatter = NumberFormat.getInstance();
         formatter.setMaximumFractionDigits(4);
@@ -121,7 +150,7 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
         }
 
         data.add(userInputString);
-        data.add(new Boolean(true));
+        data.add(geometry.viewingAttr().isVisible());
 
         tableModel_.addRow(data);
 
@@ -180,7 +209,7 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
                 Boolean selected = (Boolean) curvesTable_.getValueAt(i, 0);
 
                 if (selected) {
-                    RPnDataModule.PHASESPACE.hideGeometry(i);
+                    RPnDataModule.PHASESPACE.displayGeometry(i,false);
                     curvesTable_.setValueAt(false, i, 3);
                 }
 
@@ -197,7 +226,7 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
                 Boolean selected = (Boolean) curvesTable_.getValueAt(i, 0);
 
                 if (selected) {
-                    RPnDataModule.PHASESPACE.displayGeometry(i);
+                    RPnDataModule.PHASESPACE.displayGeometry(i,true);
                     curvesTable_.setValueAt(true, i, 3);
                 }
 

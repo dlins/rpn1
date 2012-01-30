@@ -1,10 +1,9 @@
 /*
-*
-* Instituto de Matematica Pura e Aplicada - IMPA
-* Departamento de Dinamica dos Fluidos
-*
-*/
-
+ *
+ * Instituto de Matematica Pura e Aplicada - IMPA
+ * Departamento de Dinamica dos Fluidos
+ *
+ */
 package rpnumerics;
 
 import wave.util.RealVector;
@@ -13,6 +12,7 @@ public final class OrbitPoint extends PhasePoint {
     //
     // Constants
     //
+
     static public final double DEFAULT_TIME = 0d;
     //
     // Members
@@ -36,9 +36,13 @@ public final class OrbitPoint extends PhasePoint {
         this(pCoords, DEFAULT_TIME);
     }
 
+    public OrbitPoint(double[] coords, double lambda) {
 
-    
-    public OrbitPoint(double [] coords){
+        super(new RealVector(coords));
+        lambda_ = lambda;
+    }
+
+    public OrbitPoint(double[] coords) {
 //        super(new RealVector(coords));
 
         super(setCoordsAndSpeed(coords));
@@ -51,8 +55,7 @@ public final class OrbitPoint extends PhasePoint {
         this(pPoint.getCoords());
     }
 
-
-    private static RealVector setCoordsAndSpeed(double [] coordsAndSpeed){
+    private static RealVector setCoordsAndSpeed(double[] coordsAndSpeed) {
 
         RealVector coords = new RealVector(coordsAndSpeed.length - 1);
 
@@ -66,11 +69,12 @@ public final class OrbitPoint extends PhasePoint {
 
     }
 
-
     //
     // Accessors/Mutators
     //
-    public double getLambda() { return lambda_; }
+    public double getLambda() {
+        return lambda_;
+    }
 
     public void setLambda(double t) {
         lambda_ = t;
@@ -79,11 +83,18 @@ public final class OrbitPoint extends PhasePoint {
     //
     // Methods
     //
+   
 
     @Override
-    public String toString() {
-//        StringBuffer buf = new StringBuffer();
-        
-        return super.toString() + " " + lambda_;
+    public String toXML() {
+
+        StringBuilder buffer = new StringBuilder();
+        buffer.append("<ORBITPOINT lambda=\""
+                + getLambda() + "\">");
+        buffer.append(getCoords().toString());
+        buffer.append("</ORBITPOINT>\n");
+
+
+        return buffer.toString();
     }
 }

@@ -8,10 +8,9 @@ import wave.multid.view.ViewingTransform;
 import wave.multid.DimMismatchEx;
 import wave.multid.view.ViewingAttr;
 import wave.multid.model.MultiGeometryImpl;
-import wave.multid.view.PolyLine;
 import wave.util.RealVector;
 
-public class CompositeOrbitView extends PolyLine {
+public class CompositeOrbitView extends OrbitGeomView {
 
     public CompositeOrbitView(MultiGeometryImpl abstractGeom,
             ViewingTransform transf,
@@ -20,6 +19,7 @@ public class CompositeOrbitView extends PolyLine {
         super(abstractGeom, transf, viewAttr);
     }
 
+    @Override
     public void draw(Graphics2D g) {
 
         g.setColor(getViewingAttr().getColor());

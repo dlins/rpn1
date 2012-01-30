@@ -76,40 +76,19 @@ public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
 
     public String toXML() {
 
-//        HugoniotCurve hugoniotCurve = (HugoniotCurve) geomSource();
-//
-//
-//        StringBuffer buffer = new StringBuffer();
-//
-//
-//        if (continuationMethod_ == false) {
-//            buffer.append("<COMMAND name=\"hugoniot\" inputpoint=\"" + hugoniotCurve.getXZero().toString() + "\"" + ">\n");
-//        } else {
-//            ShockCurveCalc shockCalc = (ShockCurveCalc) rpCalc();
-//            int direction = shockCalc.tDirection();
-//
-//            if (direction == OrbitGeom.FORWARD_DIR) {
-//                buffer.append("<COMMAND name=\"shockforward\" inputpoint=\"" + hugoniotCurve.getXZero().toString() + "\"" + ">\n");
-//            }
-//
-//
-//            if (direction == OrbitGeom.BACKWARD_DIR) {
-//                buffer.append("<COMMAND name=\"shockbackward\" inputpoint=\"" + hugoniotCurve.getXZero().toString() + "\"" + ">\n");
-//            }
-//
-//            if (direction == OrbitGeom.BOTH_DIR) {
-//                buffer.append("<COMMAND name=\"shockboth\" inputpoint=\"" + hugoniotCurve.getXZero().toString() + "\"" + ">\n");
-//            }
-//
-//        }
-//
-//
-////        buffer.append(((HugoniotCurve) geomSource()).toXML());//TODO Save with calculations
-//
-//        buffer.append("</COMMAND>\n");
-//
-//        return buffer.toString();
-        return null;
+        HugoniotCurve hugoniotCurve = (HugoniotCurve) geomSource();
+
+
+        StringBuffer buffer = new StringBuffer();
+
+        buffer.append("<COMMAND name=\"hugoniot\" inputpoint=\"" + hugoniotCurve.getXZero().toString() + "\"" + ">\n");
+
+        buffer.append(((HugoniotCurve) geomSource()).toXML());//TODO Save with calculations
+
+        buffer.append("</COMMAND>\n");
+
+        return buffer.toString();
+   
 
     }
 }
