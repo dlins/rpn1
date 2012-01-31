@@ -19,25 +19,25 @@ public class CompositeOrbitView extends OrbitGeomView {
         super(abstractGeom, transf, viewAttr);
     }
 
-    @Override
-    public void draw(Graphics2D g) {
-
-        g.setColor(getViewingAttr().getColor());
-
-        CompositeCurve source = (CompositeCurve) (((RpGeometry) getAbstractGeom()).geomFactory().
-                geomSource());
-
-        for (int i = 0; i < source.getPoints().length; i++) {
-
-            Coords2D direction_dc = new Coords2D();
-            RealVector tempVector = new RealVector(source.getPoints()[i]);
-            getViewingTransform().viewPlaneTransform(new CoordsArray(
-                    tempVector),
-                    direction_dc);
-
-            g.drawString("+", (float) direction_dc.getX(), (float) direction_dc.getY());
-
-        }
-
-    }
+//    @Override
+//    public void draw(Graphics2D g) {
+//
+//        g.setColor(getViewingAttr().getColor());
+//
+//        CompositeCurve source = (CompositeCurve) (((RpGeometry) getAbstractGeom()).geomFactory().
+//                geomSource());
+//
+//        for (int i = 0; i < source.getPoints().length; i++) {
+//
+//            Coords2D direction_dc = new Coords2D();
+//            RealVector tempVector = new RealVector(source.getPoints()[i]);
+//            getViewingTransform().viewPlaneTransform(new CoordsArray(
+//                    tempVector),
+//                    direction_dc);
+//
+//            g.drawString("+", (float) direction_dc.getX(), (float) direction_dc.getY());
+//
+//        }
+//
+//    }
 }

@@ -249,7 +249,7 @@ public class RPnDataModule {
 
             }
 
-         
+
             if (name.equals("STATPOINTCALC")) {
 //                calcReady_ = new Boolean(att.getValue(1)).booleanValue();
 //                tempPoint_=new PhasePoint(new RealVector(att.getValue(0)));
@@ -413,32 +413,37 @@ public class RPnDataModule {
             if (name.equalsIgnoreCase("COMMAND")) {
 
                 RealVector[] inputArray = new RealVector[1];
-                inputArray[0] = new RealVector(tempPoint_.getCoords());
+
                 RPNUMERICS.setDirection(direction_);
                 String actualFamily = RPNUMERICS.getParamValue("shock", "family");
                 RPNUMERICS.setParamValue("shock", "family", String.valueOf(family_));
 
                 RpGeometry geometry = null;
 
-                if (currentCommand_.equalsIgnoreCase("hugoniot")) {//Hugoniot 
+                if (currentCommand_.equalsIgnoreCase("hugoniot")) {//Hugoniot
+                    inputArray[0] = new RealVector(tempPoint_.getCoords());
                     geometry = HugoniotPlotAgent.instance().createRpGeometry(inputArray);
                 }
 
 
                 if (currentCommand_.equalsIgnoreCase("integralcurve")) {//Integral curve
+                    inputArray[0] = new RealVector(tempPoint_.getCoords());
                     geometry = IntegralCurvePlotAgent.instance().createRpGeometry(inputArray);
                 }
 
                 if (currentCommand_.equalsIgnoreCase("compositecurve")) {//Composite
+                    inputArray[0] = new RealVector(tempPoint_.getCoords());
                     geometry = CompositePlotAgent.instance().createRpGeometry(inputArray);
                 }
 
 
-                if (currentCommand_.equalsIgnoreCase("rarefactionorbit")) {//Rarefaction 
+                if (currentCommand_.equalsIgnoreCase("rarefactionorbit")) {//Rarefaction
+                    inputArray[0] = new RealVector(tempPoint_.getCoords());
                     geometry = RarefactionOrbitPlotAgent.instance().createRpGeometry(inputArray);
 
                 }
-                if (currentCommand_.equalsIgnoreCase("shockcurve")) {//Shock 
+                if (currentCommand_.equalsIgnoreCase("shockcurve")) {//Shock
+                    inputArray[0] = new RealVector(tempPoint_.getCoords());
                     geometry = ShockCurvePlotAgent.instance().createRpGeometry(inputArray);
                 }
 
@@ -482,47 +487,6 @@ public class RPnDataModule {
                     PHASESPACE.join(geometry);
                     RPNUMERICS.setParamValue("shock", "family", actualFamily);
                 }
-
-
-//                if (currentCommand_.equalsIgnoreCase("boundaryextension")) {//BoundaryExtension command
-//                    BoundaryExtensionCurveAgent.instance().actionPerformed(new ActionEvent(this, 0, "plot"));
-//                }
-//
-//
-//                if (currentCommand_.equalsIgnoreCase("subinflectionextension")) {//Subinflection command
-//
-//                    SubInflectionExtensionCurveAgent.instance().actionPerformed(new ActionEvent(this, 0, "plot"));
-//
-//                }
-//
-//
-//                if (currentCommand_.equalsIgnoreCase("coincidenceextension")) {//Subinflection command
-//
-//                    CoincidenceExtensionCurvePlotAgent.instance().actionPerformed(new ActionEvent(this, 0, "plot"));
-//
-//                }
-//
-//
-//                if (currentCommand_.equalsIgnoreCase("coincidence")) {//Coincidence command
-//
-//
-//                    CoincidencePlotAgent.instance().actionPerformed(new ActionEvent(this, 0, "plot"));
-//                }
-//
-//                if (currentCommand_.equalsIgnoreCase("subinflection")) {//Subinflection command
-//
-//                    SubInflectionPlotAgent.instance().actionPerformed(new ActionEvent(this, 0, "plot"));
-//
-//                }
-//
-//                if (currentCommand_.equalsIgnoreCase("buckleylevertti")) {//BuckleyLevertti command
-//
-//                    BuckleyLeverettiInflectionAgent.instance().actionPerformed(new ActionEvent(this, 0, "plot"));
-//                }
-
-
-
-
             }
 
             if (name.equals("HUGONIOTCURVE")) {
