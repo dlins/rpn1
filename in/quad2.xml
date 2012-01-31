@@ -3,24 +3,23 @@
 <rpnconfiguration>
 <PHYSICS name="QuadraticR2">
 
-<!--<BOUNDARY name="rect">
+<BOUNDARY name="rect">
 
         <BOUNDARYPARAM name="dimension" value="2" />
-        <BOUNDARYPARAM name="iso2equi" value="false" />
-        <BOUNDARYPARAM name="limits" value="-0.5 0.5 -0.5 0.5" />
+        <BOUNDARYPARAM name="limits" value="-0.5 -0.5 0.5 0.5" />
 
-    </BOUNDARY>-->
+    </BOUNDARY>
 
 <PHYSICSCONFIG name="fluxfunction">
         <PHYSICSPARAM name="param0" position="0" value ="-1" />
         <PHYSICSPARAM name="param1" position="1" value ="0" />
         <PHYSICSPARAM name="param2" position="2" value ="1" />
         <PHYSICSPARAM name="param3" position="3" value ="0" />
-        <PHYSICSPARAM name="param4" position="4" value ="0.1" />
+        <PHYSICSPARAM name="param4" position="4" value ="0.05" />
         <PHYSICSPARAM name="param5" position="5" value ="0" />
         <PHYSICSPARAM name="param6" position="6" value ="1" />
         <PHYSICSPARAM name="param7" position="7" value ="0" />
-        <PHYSICSPARAM name="param8" position="8" value ="-1" />
+        <PHYSICSPARAM name="param8" position="8" value ="-0.05" />
         <PHYSICSPARAM name="param9" position="9" value ="0" />
 
     </PHYSICSCONFIG>

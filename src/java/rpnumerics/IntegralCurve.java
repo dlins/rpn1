@@ -14,13 +14,6 @@ public class IntegralCurve extends Orbit implements RpSolution {
     public IntegralCurve(OrbitPoint[] points, int familyIndex,int flag) {
         super(points,familyIndex, flag);
 
-        for (int i = 0; i < points.length; i++) {
-            OrbitPoint orbitPoint = points[i];
-
-            System.out.println(orbitPoint);
-
-        }
-
     }
 
     // Methods

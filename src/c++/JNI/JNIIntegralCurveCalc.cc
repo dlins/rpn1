@@ -63,7 +63,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_IntegralCurveCalc_calc(JNIEnv * env, j
 
     Boundary * tempBoundary = RpNumerics::getPhysics().boundary().clone();
 
-    double deltaxi = 1e-3;
+    double deltaxi = 1e-2;
 
     cout << " Parametros " << RpNumerics::getPhysics().fluxFunction().fluxParams().params() << endl;
 

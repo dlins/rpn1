@@ -19,6 +19,7 @@
  * Definitions:
  */
 
+using namespace std;
 
 RectBoundary::RectBoundary(const RectBoundary & copy) {
 
@@ -28,6 +29,8 @@ RectBoundary::RectBoundary(const RectBoundary & copy) {
     test_dimension.push_back(true);
     test_dimension.push_back(true);
     test_dimension.push_back(false); // u will not be tested for belonging to the HyperBox.
+
+    epsilon = 0.0;
 }
 
 RectBoundary & RectBoundary::operator=(const RectBoundary & source) {
@@ -78,13 +81,12 @@ RectBoundary::RectBoundary(const RealVector & minimums, const RealVector & maxim
 
     test_dimension.resize(minimums.size());
     for (int i = 0; i < minimums.size(); i++) test_dimension[i] = true;
-   
-    for (int i = 0; i < min((int)test.size(), minimums.size()); i++) test_dimension[i] = test[i]; //TODO ???
+
+    for (int i = 0; i < min((int) test.size(), minimums.size()); i++) test_dimension[i] = test[i]; //TODO ???
 
     //    for (int i = 0; i < test.size(); i++) test_dimension[i] = test[i];
     epsilon = eps;
 }
-
 
 bool RectBoundary::inside(const double *p)const {
     bool in = true;
@@ -110,7 +112,7 @@ bool RectBoundary::inside(const RealVector &p) const {
         if (test_dimension[pos]) {
             if (p.component(pos) < minimums().component(pos) || p.component(pos) > maximums().component(pos)) in = false;
         }
-//        if (p(pos) < minimums()(pos) || p(pos) > maximums()(pos)) in = false;
+        //        if (p(pos) < minimums()(pos) || p(pos) > maximums()(pos)) in = false;
         pos++;
     }
     //    cout << "tamanho dentro de inside"<<in<<" "<<p.size() << endl;
@@ -265,7 +267,7 @@ int RectBoundary::intersection(const RealVector &p, const RealVector &q, RealVec
             }
             pos++;
         }
-
+       
         return 0;
     }
 }

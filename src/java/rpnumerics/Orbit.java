@@ -94,14 +94,14 @@ public class Orbit extends RPnCurve implements RpSolution {
         OrbitPoint[] swap = new OrbitPoint[backward.getPoints().length
                 + forward.getPoints().length - 1];
 
-        double timeAdjust = -backward.getPoints()[0].getLambda();
+//        double timeAdjust = -backward.getPoints()[0].getLambda();
 
         for (int i = 0, j = backward.getPoints().length - 1; i < swap.length; i++) {
             if (i >= backward.getPoints().length) {
                 swap[i] = (OrbitPoint) forward.getPoints()[i - backward.getPoints().length + 1];
             } else {
                 swap[i] = backward.getPoints()[j--];
-                swap[i].setLambda(swap[i].getLambda() + timeAdjust);
+//                swap[i].setLambda(swap[i].getLambda() + timeAdjust);
 
             }
         }
