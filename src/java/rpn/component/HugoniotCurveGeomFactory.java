@@ -11,19 +11,14 @@ import rpn.controller.RpController;
 
 public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
 
-    private boolean continuationMethod_;
+
 
     public HugoniotCurveGeomFactory(HugoniotCurveCalc calc) {
         super(calc);
-        continuationMethod_ = false;
+      
 
     }
-
-    public HugoniotCurveGeomFactory(ShockCurveCalc calc) {
-        super(calc);
-        continuationMethod_ = true;
-
-    }
+   
 
     @Override
     protected RpController createUI() {
@@ -37,7 +32,7 @@ public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
 
         HugoniotCurve curve = (HugoniotCurve) geomSource();
 
-        // assuming a container with HugoniotSegment elements
+       
         int resultSize = curve.segments().size();
 
         HugoniotSegGeom[] hugoniotArray = new HugoniotSegGeom[resultSize];
@@ -78,12 +73,15 @@ public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
 
         HugoniotCurve hugoniotCurve = (HugoniotCurve) geomSource();
 
+        StringBuilder buffer = new StringBuilder();
 
-        StringBuffer buffer = new StringBuffer();
+        String commandName = geomSource().getClass().getName();
+        commandName = commandName.toLowerCase();
+        commandName = commandName.replaceAll(".+\\.", "");
 
-        buffer.append("<COMMAND name=\"hugoniot\" inputpoint=\"" + hugoniotCurve.getXZero().toString() + "\"" + ">\n");
+        buffer.append("<COMMAND name=\""+commandName+"\""+ " inputpoint=\"" + hugoniotCurve.getXZero().toString() + "\"" + ">\n");
 
-        buffer.append(((HugoniotCurve) geomSource()).toXML());//TODO Save with calculations
+        buffer.append(((HugoniotCurve) geomSource()).toXML());
 
         buffer.append("</COMMAND>\n");
 

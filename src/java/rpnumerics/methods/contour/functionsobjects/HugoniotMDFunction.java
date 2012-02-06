@@ -14,6 +14,7 @@ import rpnumerics.PhasePoint;
 import rpnumerics.RPNUMERICS;
 
 public class HugoniotMDFunction extends MDVectorFunction {
+
     private FluxFunction flux_;
 
     public HugoniotMDFunction(FluxFunction fluxFunction,
@@ -22,8 +23,8 @@ public class HugoniotMDFunction extends MDVectorFunction {
         super(rpnumerics.RPNUMERICS.domainDim(),
                 rpnumerics.RPNUMERICS.domainDim() - 1, fluxFunction, params);
 
-        flux_=fluxFunction;
-        
+        flux_ = fluxFunction;
+
     }
 
     public RealVector value(PointNDimension point) {
@@ -34,34 +35,34 @@ public class HugoniotMDFunction extends MDVectorFunction {
         RealVector result = new RealVector(RPNUMERICS.domainDim() - 1);
 
         try {
-
+//      deltaU.sub(RPNUMERICS.hugoniotCurveCalc().getUMinus().getCoords());// edsonlan
             x = point.getCoordinate(1);
             y = point.getCoordinate(2);
             RealVector U = new RealVector(2);
             U.setElement(0, x);
             U.setElement(1, y);
 
-            HugoniotCurveCalc hugoniotCurveCalc = RPNUMERICS.createHugoniotCalc();//edsonlan
-            PhasePoint uMinus = hugoniotCurveCalc.getUMinus();//edsonlan
 
-            RealVector fMinus = hugoniotCurveCalc.getFMinus();//edsonlan
+            PhasePoint uMinus = null;//edsonlan
+
+            RealVector fMinus = null;//edsonlan
 
             RealVector deltaF = flux_.F(U);
 
-//      deltaF.sub(RPNUMERICS.hugoniotCurveCalc().getFMinus());
+
 
             deltaF.sub(fMinus);
 
             RealVector deltaU = new RealVector(U);
-//      deltaU.sub(RPNUMERICS.hugoniotCurveCalc().getUMinus().getCoords());
+
             deltaU.sub(uMinus);//edsonlan
 
 
             for (int i = 0; i < RPNUMERICS.domainDim() - 1; i++) {
                 result.setElement(i,
-                        deltaF.getElement(i) * deltaU.getElement(RPNUMERICS.domainDim() - 1) -
-                        deltaF.getElement(RPNUMERICS.domainDim() - 1) *
-                        deltaU.getElement(i));
+                        deltaF.getElement(i) * deltaU.getElement(RPNUMERICS.domainDim() - 1)
+                        - deltaF.getElement(RPNUMERICS.domainDim() - 1)
+                        * deltaU.getElement(i));
             }
 
         } catch (Exception e) {
@@ -89,13 +90,15 @@ public class HugoniotMDFunction extends MDVectorFunction {
 
             RealVector deltaU = new RealVector(U);
 
-//      deltaU.sub(RPNUMERICS.hugoniotCurveCalc().getUMinus().getCoords());
-            deltaU.sub(RPNUMERICS.createHugoniotCalc().getUMinus().getCoords());//edsonlan
+            PhasePoint UMinus = null;
+
+
+            deltaU.sub(UMinus);//edsonlan
 
             RealVector deltaF = flux_.F(U);
 
-//      deltaF.sub(RPNUMERICS.hugoniotCurveCalc().getFMinus());
-            deltaF.sub(RPNUMERICS.createHugoniotCalc().getFMinus());//edsonlan
+            PhasePoint FMinus = null;
+            deltaF.sub(FMinus);//edsonlan
 
 
             RealMatrix2 DF = flux_.DF(U);
@@ -104,12 +107,12 @@ public class HugoniotMDFunction extends MDVectorFunction {
             for (int i = 0; i < RPNUMERICS.domainDim() - 1; i++) {
                 for (int j = 0; j < RPNUMERICS.domainDim(); j++) {
                     result.setElement(i, j,
-                            DF.getElement(i, j) * deltaU.getElement(RPNUMERICS.domainDim() - 1) +
-                            deltaF.getElement(i) *
-                            DU.getElement(RPNUMERICS.domainDim() - 1, j) -
-                            DF.getElement(RPNUMERICS.domainDim() - 1, j) * deltaU.getElement(i) -
-                            deltaF.getElement(RPNUMERICS.domainDim() - 1) *
-                            DU.getElement(i, j));
+                            DF.getElement(i, j) * deltaU.getElement(RPNUMERICS.domainDim() - 1)
+                            + deltaF.getElement(i)
+                            * DU.getElement(RPNUMERICS.domainDim() - 1, j)
+                            - DF.getElement(RPNUMERICS.domainDim() - 1, j) * deltaU.getElement(i)
+                            - deltaF.getElement(RPNUMERICS.domainDim() - 1)
+                            * DU.getElement(i, j));
                 }
             }
 

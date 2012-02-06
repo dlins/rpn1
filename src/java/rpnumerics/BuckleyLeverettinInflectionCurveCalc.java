@@ -13,6 +13,7 @@ public class BuckleyLeverettinInflectionCurveCalc extends BifurcationCurveCalc {
     // Constructors/Initializers
     //
     public BuckleyLeverettinInflectionCurveCalc(){
+        super(new BifurcationParams());
     }
 
 

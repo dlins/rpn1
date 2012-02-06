@@ -6,9 +6,6 @@
  */
 package rpnumerics;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 public class BoundaryExtensionCurveCalc extends BifurcationCurveCalc {
 
     //
@@ -23,25 +20,22 @@ public class BoundaryExtensionCurveCalc extends BifurcationCurveCalc {
     int edgeResolution_;
     static private int contEC = 0;      //** declarei isso (Leandro)
 
-    public BoundaryExtensionCurveCalc(int xResolution, int yResolution, int edgeResolution, int curveFamily, int domainFamily, int edge, int characteristicDomain) {
-        this.xResolution_ = xResolution;
-        this.yResolution_ = yResolution;
-        this.curveFamily_ = curveFamily;
-        this.domainFamily_ = domainFamily;
+    public BoundaryExtensionCurveCalc(BifurcationParams params, int edgeResolution, int curveFamily, int domainFamily, int edge, int characteristicDomain) {
+        super(params);
+        curveFamily_ = curveFamily;
+        domainFamily_ = domainFamily;
         edge_ = edge;
         edgeResolution_ = edgeResolution;
         characteristicDomain_ = characteristicDomain;
     }
 
-    public BoundaryExtensionCurveCalc() {
-    }
 
     @Override
     public RpSolution calc() throws RpException {
         RpSolution result = null;
 
-
-        result = (BoundaryExtensionCurve) nativeCalc(xResolution_, yResolution_, edgeResolution_, curveFamily_, domainFamily_, edge_, characteristicDomain_);
+        int resolution[] = getParams().getResolution();
+        result = (BoundaryExtensionCurve) nativeCalc(resolution, edgeResolution_, curveFamily_, domainFamily_, edge_, characteristicDomain_);
 
         //** acrescentei isso (Leandro)
         if (contEC == 0) {
@@ -90,5 +84,5 @@ public class BoundaryExtensionCurveCalc extends BifurcationCurveCalc {
         return yResolution_;
     }
 
-    private native RpSolution nativeCalc(int xResolution, int yResolution, int edgeResolution, int leftFamily, int rightFamily, int edge, int characteristicDomain) throws RpException;
+    private native RpSolution nativeCalc(int [] resolution, int edgeResolution, int leftFamily, int rightFamily, int edge, int characteristicDomain) throws RpException;
 }

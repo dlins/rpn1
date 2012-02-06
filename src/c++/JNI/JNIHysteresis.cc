@@ -31,7 +31,7 @@ using std::vector;
 using namespace std;
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_HysteresisCurveCalc_nativeCalc
-(JNIEnv * env, jobject obj, jint domainFamily, jint curveFamily, jint xResolution, jint yResolution, jint singular, jint characteristicWhere) {
+(JNIEnv * env, jobject obj, jint domainFamily, jint curveFamily, jintArray resolution, jint singular, jint characteristicWhere) {
 
     jclass hugoniotSegmentClass = (env)->FindClass(HUGONIOTSEGMENTCLASS_LOCATION);
 
@@ -53,13 +53,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HysteresisCurveCalc_nativeCalc
 
     jmethodID hysteresisCurveConstructor = env->GetMethodID(hysteresisCurveClass, "<init>", "(Ljava/util/List;Ljava/util/List;)V");
 
-    //Input processing
-
-    int dimension = 2;
-
-
-    //Calculations using the input
-
     jobject leftSegmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
 
     jobject rightSegmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
@@ -77,13 +70,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HysteresisCurveCalc_nativeCalc
     RealVector min(tempBoundary-> minimums());
     RealVector max(tempBoundary-> maximums());
 
-    int * number_of_grid_points = new int[2];
+    int dimension = RpNumerics::getPhysics().domain().dim();
 
+    jint number_of_grid_points [dimension];
 
-    number_of_grid_points[0] = xResolution;
-    number_of_grid_points[1] = yResolution;
-
-
+    env->GetIntArrayRegion(resolution, 0, dimension, number_of_grid_points);
 
     Hysteresis::curve(tempBoundary, fluxFunction, accumulationFunction,
             curveFamily,
@@ -97,19 +88,18 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HysteresisCurveCalc_nativeCalc
 
     delete tempBoundary;
 
+    if(curve_segments.size() ==0 || domain_segments.size()==0)return NULL;
+
     cout << "Tamanho da coincidence curve extension: " << curve_segments.size() << endl;
     cout << "Tamanho da coincidence domain extension: " << domain_segments.size() << endl;
 
-    cout << "Resolucao x " << xResolution << endl;
-
-    cout << "Resolucao y " << yResolution << endl;
+//    cout << "Resolucao x " << xResolution << endl;
+//
+//    cout << "Resolucao y " << yResolution << endl;
 
     cout << "Familia da curva" << curveFamily << endl;
     cout << "Familia do dominio" << domainFamily << endl;
     cout << "characteristic " << characteristicWhere << endl;
-
-
-    delete number_of_grid_points;
 
 
     for (unsigned int i = 0; i < curve_segments.size() / 2; i++) {
@@ -145,12 +135,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HysteresisCurveCalc_nativeCalc
 
     }
 
-
-
-
     for (unsigned int i = 0; i < domain_segments.size() / 2; i++) {
-
-
 
         jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
         jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);

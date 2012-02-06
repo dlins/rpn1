@@ -19,14 +19,11 @@ public class HysteresisCurveCalc extends BifurcationCurveCalc {
     //
     // Constructors/Initializers
     //
-    public HysteresisCurveCalc(int domainFamily, int curveFamily,
-            int xResolution, int yResolution,
+    public HysteresisCurveCalc(BifurcationParams params, int domainFamily, int curveFamily,
             int characteristic_where, int singular) {
-
+        super(params);
         domainFamily_ = domainFamily;
         curveFamily_ = curveFamily;
-        xResolution_ = xResolution;
-        yResolution_ = yResolution;
         characteristic_where_ = characteristic_where;
         singular_ = singular;
     }
@@ -34,8 +31,8 @@ public class HysteresisCurveCalc extends BifurcationCurveCalc {
     @Override
     public RpSolution calc() throws RpException {
 
-
-        HysteresisCurve result = (HysteresisCurve) nativeCalc(domainFamily_, curveFamily_, xResolution_, yResolution_, singular_, characteristic_where_);
+        int resolution[] = getParams().getResolution();
+        HysteresisCurve result = (HysteresisCurve) nativeCalc(domainFamily_, curveFamily_, resolution, singular_, characteristic_where_);
 
         if (result == null) {
             throw new RpException("Error in native layer");
@@ -83,6 +80,6 @@ public class HysteresisCurveCalc extends BifurcationCurveCalc {
     }
 
     private native RpSolution nativeCalc(int domainFamily, int curveFamily,
-            int xResolution, int yResolution,
+            int [] resolution,
             int singular, int characteristicDomain) throws RpException;
 }

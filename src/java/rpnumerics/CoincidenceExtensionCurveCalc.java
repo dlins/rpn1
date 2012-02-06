@@ -22,9 +22,8 @@ public class CoincidenceExtensionCurveCalc extends BifurcationCurveCalc {
 
     static private int contCCE = 0;      //** declarei isso (Leandro)
 
-    public CoincidenceExtensionCurveCalc(int xResolution, int yResolution, int leftFamily, int rightFamily,int characteristicDomain) {
-        this.xResolution_ = xResolution;
-        this.yResolution_ = yResolution;
+    public CoincidenceExtensionCurveCalc(BifurcationParams params, int leftFamily, int rightFamily,int characteristicDomain) {
+        super(params);
         this.curveFamily_ = leftFamily;
         this.domainFamily_ = rightFamily;
         characteristicDomain_=characteristicDomain;
@@ -37,7 +36,9 @@ public class CoincidenceExtensionCurveCalc extends BifurcationCurveCalc {
         RpSolution result = null;
 
         try {
-            result = (CoincidenceExtensionCurve) nativeCalc(xResolution_, yResolution_, curveFamily_, domainFamily_, characteristicDomain_);
+
+            int resolution[] = getParams().getResolution();
+            result = (CoincidenceExtensionCurve) nativeCalc(resolution[0],resolution[1], curveFamily_, domainFamily_, characteristicDomain_);
 
             //** acrescentei isso (Leandro)
 

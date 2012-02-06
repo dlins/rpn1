@@ -694,7 +694,7 @@ int Inflection_Curve::curve(int fam, std::vector<RealVector> &inflection_curve) 
 // i-th "matrix" of the Hessian.  (Where there are n Hessians.)
 //
 
-double Inflection_Curve::dirdrv(int n, const RealVector &p, int fam) {
+  double Inflection_Curve::dirdrv(int n, const RealVector &p, int fam) {
     //    RealVector pp(n);
     //    for (int i = 0; i < n; i++) pp.component(i) = p[i];
     double point[n];

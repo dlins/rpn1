@@ -14,6 +14,7 @@ public class SubInflectionCurveCalc extends BifurcationCurveCalc {
     // Constructors/Initializers
     //
     public SubInflectionCurveCalc(){
+        super(new BifurcationParams());
     }
 
   

@@ -234,7 +234,7 @@ void Extension_Curve::filedg3(Matrix<double> &sol_, int dims, Matrix<int> &edges
 //
 void Extension_Curve::compute_extension_curve(int characteristic_where, int singular,
                                               const std::vector<RealVector> &original_segments, int curve_family,
-                                              FluxFunction *curve_ff, AccumulationFunction *curve_aa, // For the curve.
+                                              const FluxFunction *curve_ff, const AccumulationFunction *curve_aa, // For the curve.
                                               int domain_family, 
                                               std::vector<RealVector> &curve_segments,
                                               std::vector<RealVector> &domain_segments){

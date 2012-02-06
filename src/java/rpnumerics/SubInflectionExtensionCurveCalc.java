@@ -22,23 +22,22 @@ public class SubInflectionExtensionCurveCalc extends BifurcationCurveCalc {
 
     static public int contSCE = 0;
 
-    public SubInflectionExtensionCurveCalc(int xResolution, int yResolution, int leftFamily, int rightFamily,int characteristicDomain) {
-        this.xResolution_ = xResolution;
-        this.yResolution_ = yResolution;
+    public SubInflectionExtensionCurveCalc(BifurcationParams params, int leftFamily, int rightFamily,int characteristicDomain) {
+        super(params);
         this.curveFamily_ = leftFamily;
         this.domainFamily_ = rightFamily;
         characteristicDomain_=characteristicDomain;
     }
 
-    public SubInflectionExtensionCurveCalc() {
-    }
 
     @Override
     public RpSolution calc() {
         RpSolution result = null;
 
         try {
-            result = (SubInflectionExtensionCurve) nativeCalc(xResolution_, yResolution_, curveFamily_, domainFamily_, characteristicDomain_);
+
+            int resolution[] = getParams().getResolution();
+            result = (SubInflectionExtensionCurve) nativeCalc(resolution[0],resolution[1], curveFamily_, domainFamily_, characteristicDomain_);
 
             //** acrescentei isso (Leandro)
 

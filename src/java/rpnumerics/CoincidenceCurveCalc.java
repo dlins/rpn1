@@ -14,6 +14,7 @@ public class CoincidenceCurveCalc extends BifurcationCurveCalc {
     // Constructors/Initializers
     //
     public CoincidenceCurveCalc(){
+        super(new BifurcationParams());
     }
 
    

@@ -4,33 +4,58 @@
     <PHYSICS name="Stone">
 
 
-       <PHYSICSCONFIG name="fluxfunction">
-        <PHYSICSPARAM name="grw" position="0" value ="1.0" />
-        <PHYSICSPARAM name="grg" position="1" value ="1.0" />
-        <PHYSICSPARAM name="gro" position="2" value ="1.0" />
-        <PHYSICSPARAM name="muw" position="3" value ="1.0" />
-        <PHYSICSPARAM name="mug" position="4" value ="1.0" />
-        <PHYSICSPARAM name="muo" position="5" value ="1.0" />
-        <PHYSICSPARAM name="vel" position="6" value ="1.0" />
+        <PHYSICSCONFIG name="fluxfunction">
+            <PHYSICSPARAM name="grw" position="0" value ="1.0" />
+            <PHYSICSPARAM name="grg" position="1" value ="1.0" />
+            <PHYSICSPARAM name="gro" position="2" value ="1.0" />
+            <PHYSICSPARAM name="muw" position="3" value ="1.0" />
+            <PHYSICSPARAM name="mug" position="4" value ="1.0" />
+            <PHYSICSPARAM name="muo" position="5" value ="1.0" />
+            <PHYSICSPARAM name="vel" position="6" value ="1.0" />
 
 
-    </PHYSICSCONFIG>
+        </PHYSICSCONFIG>
 
     </PHYSICS>
 
 
 
-    <METHOD name="Contour">
+    <!-- <METHOD name="Contour">
         <METHODPARAM  name="x-resolution" value="30" />
         <METHODPARAM  name="y-resolution" value="30" />
 
-    </METHOD>
+    </METHOD> -->
 
 
     <METHOD name="Newton">
         <METHODPARAM  name="tolerance" value="0.001" />
     </METHOD>
 
+
+    <CURVE name="hugoniotcurve">
+        <CURVEPARAM name="resolution" value="128 128"/>
+    </CURVE>
+
+
+    <CURVE name="inflectioncurve">
+        <CURVEPARAM name="family" value="0"/>
+        <CURVEPARAM name="resolution" value="128 128"/>
+    </CURVE>
+
+
+    <CURVE name="doublecontactcurve">
+         <CURVEPARAM name="curvefamily" value="1"/>
+        <CURVEPARAM name="domainfamily" value="1"/>
+        <CURVEPARAM name="resolution" value="30 30"/>
+    </CURVE>
+
+
+    <CURVE name="hysteresiscurve">
+        <CURVEPARAM name="curvefamily" value="1"/>
+        <CURVEPARAM name="domainfamily" value="1"/>
+        <CURVEPARAM name="characteristicwhere" value="1"/>
+        <CURVEPARAM name="resolution" value="30 30"/>
+    </CURVE>
 
 
     <CURVE name="bifurcationcurve">
@@ -42,34 +67,27 @@
 
     </CURVE>
 
-    <CURVE name="extensioncurve">
+    <CURVE name="boundaryextensioncurve">
         <CURVEPARAM name="curvefamily" value="1"/>
         <CURVEPARAM name="domainfamily" value="1"/>
         <CURVEPARAM name="characteristicwhere" value="1"/>
         <CURVEPARAM name="edge" value="0"/>
         <CURVEPARAM name="edgeresolution" value="30"/>
+        <CURVEPARAM name="resolution" value="60 60"/>
+
 
     </CURVE>
 
     <CURVE name="rarefactionextension">
         <CURVEPARAM name="curvefamily" value="0"/>
         <CURVEPARAM name="domainfamily" value="1"/>
-        <CURVEPARAM name="characteristicdomain" value="1"/>
-        <CURVEPARAM name="x-domainpoints" value="101"/>
-        <CURVEPARAM name="y-domainpoints" value="101"/>
+        <CURVEPARAM name="characteristic" value="1"/>
+        <CURVEPARAM name="resolution" value="60 60"/>
     </CURVE>
 
-    <CURVE name="wavecurve">
-        <CURVEPARAM name="curvefamily" value="0"/>
-        <CURVEPARAM name="domainfamily" value="1"/>
-        <CURVEPARAM name="characteristicwhere" value="1"/>
-
-    </CURVE>
-
-    <CURVE name="shock">
+    <CURVE name="orbit">
         <CURVEPARAM name="family" value="0"/>
-        <CURVEPARAM name="xzero" value="3.4 0.5"/>
-        <CURVEPARAM name="sigma" value="0.03"/>
+
     </CURVE>
 
     <VIEWCONFIGURATION modeldomain="2">

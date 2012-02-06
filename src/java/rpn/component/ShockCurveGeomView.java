@@ -19,29 +19,6 @@ public class ShockCurveGeomView extends OrbitGeomView {
 
     }
 
-//    @Override
-//    public Shape createShape() {
-//
-//        GeneralPath composite = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
-//
-//        ShockCurve source = (ShockCurve) (((RpGeometry) getAbstractGeom()).geomFactory().
-//                geomSource());
-//
-//        points_ = source.getPoints();
-//
-//        arrowsCalculations();
-//
-//        try {
-//            composite.append(super.createShape(), false);
-//        } catch (DimMismatchEx ex) {
-//
-//            ex.printStackTrace();
-//
-//        }
-//
-//        return composite;
-//
-//    }
     @Override
     public void draw(Graphics2D g) {
 

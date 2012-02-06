@@ -28,7 +28,7 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
     }
 
     public void userInputComplete(rpn.controller.ui.UIController ui,
-            RealVector userInput) {//Limpar esse metodo . Utilizar a versao sem entrada do usuario quando necessario
+            RealVector userInput) {
         userInputList_.add(new RealVector(userInput));
 
 

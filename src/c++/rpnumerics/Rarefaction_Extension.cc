@@ -1,14 +1,14 @@
 #include "Rarefaction_Extension.h"
 
-void Rarefaction_Extension::extension_curve(FluxFunction *curve_flux,  AccumulationFunction *curve_accum,
-         RealVector &initial_point,
+void Rarefaction_Extension::extension_curve(const FluxFunction *curve_flux, const AccumulationFunction *curve_accum,
+        RealVector &initial_point,
         double deltaxi,
         int curve_family,
         int increase,
         const Boundary *boundary,
         const RealVector &pmin, const RealVector &pmax, int *number_of_grid_points, // For the domain.
         int domain_family,
-          FluxFunction *domain_flux,  AccumulationFunction *domain_accum,
+        const FluxFunction *domain_flux, const AccumulationFunction *domain_accum,
         int characteristic_where, int singular,
         std::vector<RealVector> &curve_segments,
         std::vector<RealVector> &domain_segments) {
@@ -16,16 +16,6 @@ void Rarefaction_Extension::extension_curve(FluxFunction *curve_flux,  Accumulat
     domain_segments.clear();
 
     std::vector<RealVector> rarefaction_curve;
-
-    //    int info = Rarefaction::curve(initial_point,
-    //                                  curve_family,
-    //                                  increase,
-    //                                  deltaxi,
-    //                                  curve_flux, curve_accum,
-    //                                  RAREFACTION_GENERAL_ACCUMULATION,
-    //                                  (Boundary*)boundary,
-    //                                  rarefaction_curve);
-    //
 
 
     int info = Rarefaction::curve(initial_point,

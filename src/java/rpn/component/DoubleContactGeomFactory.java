@@ -111,14 +111,13 @@ public class DoubleContactGeomFactory extends BifurcationCurveGeomFactory {
 
         StringBuffer buffer = new StringBuffer();
 
+        buffer.append(super.toXML());
+
         BifurcationCurve curve = (BifurcationCurve) geomSource();
 
         DoubleContactCurveCalc doubleContactCalc = (DoubleContactCurveCalc)rpCalc();
 
-
-        buffer.append("<COMMAND name=\"doublecontact\" curvefamily=\""+doubleContactCalc.getCurveFamily()+"\""+" domainfamily=\""+doubleContactCalc.getDomainFamily()+"\""+">\n");
-
-
+        buffer.append(" curvefamily=\""+doubleContactCalc.getCurveFamily()+"\""+" domainfamily=\""+doubleContactCalc.getDomainFamily()+"\""+">\n");
 
         buffer.append(curve.toXML());
 

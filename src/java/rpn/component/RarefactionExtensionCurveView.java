@@ -121,27 +121,13 @@ public class RarefactionExtensionCurveView implements GeomObjView {
     public void update() {
         viewList_.clear();
 
-        RarefactionExtensionGeom doubleContactGeom = (RarefactionExtensionGeom) abstractGeom_;
-        if (doubleContactGeom == null) {
-            System.out.println("Eh nula a geometria");
-        }
-
-
-        if (viewList_ == null) {
-            System.out.println("Eh nula a lista");
-        }
-
-        Iterator geomListIterator = doubleContactGeom.getHugoniotSegIterator();
-
-
+        RarefactionExtensionGeom rarefactionExtensionGeom = (RarefactionExtensionGeom) abstractGeom_;
+      
+        Iterator geomListIterator = rarefactionExtensionGeom.getBifurcationSegmentsIterator();
 
         while (geomListIterator.hasNext()) {
-            HugoniotSegGeom geomObj = (HugoniotSegGeom) geomListIterator.next();
+            BifurcationSegGeom geomObj = (BifurcationSegGeom) geomListIterator.next();
             try {
-                if (geomObj == null) {
-                    System.out.println("Eh nulo segmento");
-                }
-
                 viewList_.add(geomObj.createView(getViewingTransform()));
             } catch (DimMismatchEx dex) {
                 dex.printStackTrace();

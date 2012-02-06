@@ -59,7 +59,11 @@ public class BuckleyLeverettinCurveGeomFactory extends BifurcationCurveGeomFacto
 
         BifurcationCurve curve = (BifurcationCurve) geomSource();
 
-        buffer.append("<COMMAND name=\"buckleylevertti\">\n");
+
+        buffer.append(super.toXML());
+
+
+        buffer.append(">\n");
 
         buffer.append(curve.toXML());
 

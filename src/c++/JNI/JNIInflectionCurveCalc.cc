@@ -34,7 +34,7 @@ NOTE :
 using std::vector;
 using namespace std;
 
-JNIEXPORT jobject JNICALL Java_rpnumerics_InflectionCurveCalc_nativeCalc(JNIEnv * env, jobject obj, jint family) {
+JNIEXPORT jobject JNICALL Java_rpnumerics_InflectionCurveCalc_nativeCalc(JNIEnv * env, jobject obj, jint family,jintArray resolution) {
 
 
     jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
@@ -70,33 +70,35 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_InflectionCurveCalc_nativeCalc(JNIEnv 
 
     int dimension = RpNumerics::getPhysics().domain().dim();
 
-    //    const Boundary & boundary = subPhysics.boundary();
-    //
     Boundary * tempBoundary = RpNumerics::getPhysics().boundary().clone();
 
-    int cells [2];
+    int cells [dimension];
 
-    cells[0] = 128;
-    cells[1] = 128;
+    env->GetIntArrayRegion(resolution, 0, dimension, cells);
 
     cout << "min:" << tempBoundary->minimums();
 
     cout << "max:" << tempBoundary->maximums();
 
-    Inflection_Curve inflectionCurve((FluxFunction*) RpNumerics::getPhysics().fluxFunction().clone(), (AccumulationFunction*) RpNumerics::getPhysics().accumulation().clone(), tempBoundary,
+    Inflection_Curve inflectionCurve((FluxFunction *) & RpNumerics::getPhysics().fluxFunction(), (AccumulationFunction *) & RpNumerics::getPhysics().accumulation(), tempBoundary,
             tempBoundary->minimums(), tempBoundary->maximums(), cells);
 
     
     std::vector<RealVector> left_vrs;
 
     inflectionCurve.curve(family, left_vrs);
+    int tamanho = left_vrs.size();
+    cout << "Tamanho do vetor de pontos: " << tamanho << endl;
+
+    if (left_vrs.size()==0)
+        return NULL;
 
     delete tempBoundary;
 
-    int tamanho = left_vrs.size();
+   
 
 
-    cout << "Tamanho do vetor de pontos: " << tamanho << endl;
+   
     cout << "Familia da inflexao: " << family << endl;
 
 

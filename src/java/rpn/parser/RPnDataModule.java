@@ -27,14 +27,17 @@ import rpn.component.BoundaryExtensionCurveGeomFactory;
 import rpn.component.DoubleContactGeomFactory;
 import rpn.component.HysteresisCurveGeomFactory;
 import rpn.component.InflectionCurveGeomFactory;
+import rpn.component.RarefactionExtensionGeomFactory;
 import rpn.component.RpCalcBasedGeomFactory;
 import rpn.component.RpGeomFactory;
 import rpn.component.RpGeometry;
 import rpn.usecase.CompositePlotAgent;
 import rpn.usecase.HugoniotPlotAgent;
 import rpn.usecase.IntegralCurvePlotAgent;
+import rpn.usecase.RarefactionExtensionCurvePlotAgent;
 import rpn.usecase.RarefactionOrbitPlotAgent;
 import rpn.usecase.ShockCurvePlotAgent;
+import rpnumerics.BifurcationParams;
 import rpnumerics.BoundaryExtensionCurve;
 import rpnumerics.BoundaryExtensionCurveCalc;
 import rpnumerics.DoubleContactCurve;
@@ -69,6 +72,27 @@ public class RPnDataModule {
 
     public static HugoniotCurve getHugoniotCurve() {
         return hugoniotCurve_;
+    }
+
+    public static int[] processResolution(String resolution) {
+
+        String[] splitedResolution = resolution.split(" ");
+        int[] result = new int[splitedResolution.length];
+
+        try {
+            for (int i = 0; i < splitedResolution.length; i++) {
+                String string = splitedResolution[i];
+
+                result[i] = new Integer(string);
+
+
+            }
+        } catch (NumberFormatException ex) {
+            System.out.println("Error in resolution format !");
+            ex.printStackTrace();
+        }
+        return result;
+
     }
 
     static protected class InputHandler implements ContentHandler {
@@ -155,10 +179,12 @@ public class RPnDataModule {
                 orbitPointsList_.clear();
 
 
-                if (currentCommand_.equalsIgnoreCase("hugoniot")
+                if (currentCommand_.equalsIgnoreCase("hugoniotcurve")
                         || currentCommand_.equalsIgnoreCase("rarefactionorbit")
+                        || currentCommand_.equalsIgnoreCase("rarefactionextensioncurve")
                         || currentCommand_.equalsIgnoreCase("integralcurve")
-                        || currentCommand_.equalsIgnoreCase("shockcurve")) {
+                        || currentCommand_.equalsIgnoreCase("shockcurve")
+                        || currentCommand_.equalsIgnoreCase("compositecurve")) {
 
                     tempPoint_ = new PhasePoint(new RealVector(att.getValue("inputpoint")));
                     direction_ = chooseDirection(att.getValue("direction"));
@@ -168,41 +194,41 @@ public class RPnDataModule {
                 }
 
 
-                if (currentCommand_.equalsIgnoreCase("doublecontact")) {
-                    int xResolution = new Integer(RPNUMERICS.getParamValue("Contour", "x-resolution"));
-                    int yResolution = new Integer(RPNUMERICS.getParamValue("Contour", "y-resolution"));
+                if (currentCommand_.equalsIgnoreCase("doublecontactcurve")) {
+
+
+                    BifurcationParams params = new BifurcationParams(processResolution(att.getValue("resolution")));
 
                     int curveFamily = new Integer(att.getValue("curvefamily"));
                     int domainFamily = new Integer(att.getValue("domainfamily"));
-                    calc_ = new DoubleContactCurveCalc(xResolution, yResolution, curveFamily, domainFamily);
-
-
+                    calc_ = new DoubleContactCurveCalc(params, curveFamily, domainFamily);
 
 
                 }
 
 
 
-                if (currentCommand_.equalsIgnoreCase("inflection")) {
+                if (currentCommand_.equalsIgnoreCase("inflectioncurve")) {
 
                     int curveFamily = new Integer(att.getValue("family"));
 
-                    calc_ = new InflectionCurveCalc(curveFamily);
+                    BifurcationParams params = new BifurcationParams(processResolution(att.getValue("resolution")));
 
-
+                    calc_ = new InflectionCurveCalc(params, curveFamily);
 
                 }
 
-                if (currentCommand_.equalsIgnoreCase("hysteresis")) {
-                    int xResolution = new Integer(RPNUMERICS.getParamValue("Contour", "x-resolution"));
-                    int yResolution = new Integer(RPNUMERICS.getParamValue("Contour", "y-resolution"));
+                if (currentCommand_.equalsIgnoreCase("hysteresiscurve")) {
+
+
+                    BifurcationParams params = new BifurcationParams(processResolution(att.getValue("resolution")));
 
                     int curveFamily = new Integer(att.getValue("curvefamily"));
                     int domainFamily = new Integer(att.getValue("domainfamily"));
                     int characteristic = new Integer(att.getValue("characteristic"));
                     int singular = new Integer(att.getValue("singular"));
 
-                    calc_ = new HysteresisCurveCalc(domainFamily, curveFamily, xResolution, yResolution, characteristic, singular);
+                    calc_ = new HysteresisCurveCalc(params, domainFamily, curveFamily, characteristic, singular);
 
 
 
@@ -210,9 +236,9 @@ public class RPnDataModule {
 
 
 
-                if (currentCommand_.equalsIgnoreCase("boundary extension")) {
-                    int xResolution = new Integer(RPNUMERICS.getParamValue("Contour", "x-resolution"));
-                    int yResolution = new Integer(RPNUMERICS.getParamValue("Contour", "y-resolution"));
+                if (currentCommand_.equalsIgnoreCase("boundaryextensioncurve")) {
+
+                    BifurcationParams params = new BifurcationParams(processResolution(att.getValue("resolution")));
 
                     int curveFamily = new Integer(att.getValue("curvefamily"));
                     int domainFamily = new Integer(att.getValue("domainfamily"));
@@ -220,7 +246,7 @@ public class RPnDataModule {
                     int edge = new Integer(att.getValue("edge"));
                     int edgeResolution = new Integer(att.getValue("edgeresolution"));
 
-                    calc_ = new BoundaryExtensionCurveCalc(xResolution, yResolution, edgeResolution, curveFamily,
+                    calc_ = new BoundaryExtensionCurveCalc(params, edgeResolution, curveFamily,
                             domainFamily, edge, characteristic);
 
 
@@ -310,11 +336,6 @@ public class RPnDataModule {
 
                 hugoniotSegmentsList_.add(segment);
 
-            }
-
-            if (name.equals("HUGONIOTCURVE")) {
-
-                hugoniotSegmentsList_.clear();
             }
 
             if (name.equals("PHASEPOINT")) {
@@ -415,12 +436,12 @@ public class RPnDataModule {
                 RealVector[] inputArray = new RealVector[1];
 
                 RPNUMERICS.setDirection(direction_);
-                String actualFamily = RPNUMERICS.getParamValue("shock", "family");
-                RPNUMERICS.setParamValue("shock", "family", String.valueOf(family_));
+                String actualFamily = RPNUMERICS.getParamValue("orbit", "family");
+                RPNUMERICS.setParamValue("orbit", "family", String.valueOf(family_));
 
                 RpGeometry geometry = null;
 
-                if (currentCommand_.equalsIgnoreCase("hugoniot")) {//Hugoniot
+                if (currentCommand_.equalsIgnoreCase("hugoniotcurve")) {//Hugoniot
                     inputArray[0] = new RealVector(tempPoint_.getCoords());
                     geometry = HugoniotPlotAgent.instance().createRpGeometry(inputArray);
                 }
@@ -442,13 +463,24 @@ public class RPnDataModule {
                     geometry = RarefactionOrbitPlotAgent.instance().createRpGeometry(inputArray);
 
                 }
+
+
+                if (currentCommand_.equalsIgnoreCase("rarefactionextensioncurve")) {//RarefactionExtension
+
+                    inputArray[0] = new RealVector(tempPoint_.getCoords());
+                    geometry = RarefactionExtensionCurvePlotAgent.instance().createRpGeometry(inputArray);
+                    PHASESPACE.join(geometry);
+                    RPNUMERICS.setParamValue("orbit", "family", actualFamily);
+                    return;
+
+                }
                 if (currentCommand_.equalsIgnoreCase("shockcurve")) {//Shock
                     inputArray[0] = new RealVector(tempPoint_.getCoords());
                     geometry = ShockCurvePlotAgent.instance().createRpGeometry(inputArray);
                 }
 
 
-                if (currentCommand_.equalsIgnoreCase("doublecontact")) {//DoubleContact 
+                if (currentCommand_.equalsIgnoreCase("doublecontactcurve")) {//DoubleContact
 
                     DoubleContactCurve curve = new DoubleContactCurve(realSegmentsList_);
 
@@ -457,7 +489,7 @@ public class RPnDataModule {
 
                 }
 
-                if (currentCommand_.equalsIgnoreCase("inflection")) {//Inflection 
+                if (currentCommand_.equalsIgnoreCase("inflectioncurve")) {//Inflection
 
                     InflectionCurve curve = new InflectionCurve(realSegmentsList_);
 
@@ -466,18 +498,21 @@ public class RPnDataModule {
                 }
 
 
-                if (currentCommand_.equalsIgnoreCase("hysteresis")) {//Hysteresis 
+                if (currentCommand_.equalsIgnoreCase("hysteresiscurve")) {//Hysteresis
                     HysteresisCurve curve = new HysteresisCurve(realSegmentsList_, realSegmentsList_);
                     factory_ = new HysteresisCurveGeomFactory((HysteresisCurveCalc) calc_, curve);
 
                 }
 
-                if (currentCommand_.equalsIgnoreCase("boundary extension")) {//Boundary extension 
+                if (currentCommand_.equalsIgnoreCase("boundaryextensioncurve")) {//Boundary extension
 
                     BoundaryExtensionCurve curve = new BoundaryExtensionCurve(realSegmentsList_, realSegmentsList_);
                     factory_ = new BoundaryExtensionCurveGeomFactory((BoundaryExtensionCurveCalc) calc_, curve);
 
                 }
+
+
+
 
                 if (realSegmentsList_.size() != 0) { // Ploting using file data
 
@@ -485,7 +520,7 @@ public class RPnDataModule {
 
                 } else {//Recalculating curves
                     PHASESPACE.join(geometry);
-                    RPNUMERICS.setParamValue("shock", "family", actualFamily);
+                    RPNUMERICS.setParamValue("orbit", "family", actualFamily);
                 }
             }
 

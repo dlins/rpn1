@@ -47,9 +47,11 @@ public class BoundaryExtensionCurveGeomFactory extends BifurcationCurveGeomFacto
 
         StringBuffer buffer = new StringBuffer();
 
+        buffer.append(super.toXML());
+
         BoundaryExtensionCurveCalc boundaryExtensionCurveCalc = (BoundaryExtensionCurveCalc) rpCalc();
 
-        buffer.append("<COMMAND name=\"boundary extension\" curvefamily=\"" + boundaryExtensionCurveCalc.getCurveFamily()
+        buffer.append("curvefamily=\"" + boundaryExtensionCurveCalc.getCurveFamily()
                 + "\"" + " domainfamily=\"" + boundaryExtensionCurveCalc.getDomainFamily()
                 + "\"" + " characteristic=\"" + boundaryExtensionCurveCalc.getCharacteristicWhere()
                 + "\"" + " edge=\"" + boundaryExtensionCurveCalc.getEdge()

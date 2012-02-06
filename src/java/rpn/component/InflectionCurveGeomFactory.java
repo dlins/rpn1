@@ -36,7 +36,7 @@ public class InflectionCurveGeomFactory extends BifurcationCurveGeomFactory {
         int resultSize = curve.segments().size();
         BifurcationSegGeom[] bifurcationSegArray = new BifurcationSegGeom[resultSize];
         for (int i = 0; i < resultSize; i++) {
-            bifurcationSegArray[i] = new BifurcationSegGeom((RealSegment) curve.segments().get(i),viewAtt_);
+            bifurcationSegArray[i] = new BifurcationSegGeom((RealSegment) curve.segments().get(i), viewAtt_);
         }
         return new InflectionCurveGeom(bifurcationSegArray, this);
 
@@ -63,9 +63,13 @@ public class InflectionCurveGeomFactory extends BifurcationCurveGeomFactory {
 
         StringBuffer buffer = new StringBuffer();
 
-        int familyIndex = ((InflectionCurveCalc) rpCalc()).getFamilyIndex();
+        buffer.append(super.toXML());
 
-        buffer.append("<COMMAND name=\"inflection\" family=\"" + familyIndex + "\">\n");
+        InflectionCurveCalc calc = ((InflectionCurveCalc) rpCalc());
+
+        int familyIndex = calc.getFamilyIndex();
+
+        buffer.append("family=\"" + familyIndex + "\">\n");
 
         buffer.append(((BifurcationCurve) geomSource()).toXML());
 

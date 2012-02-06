@@ -156,6 +156,7 @@ public class RPnConfig {
         return visualConfiguration_;
     }
 
+
     @Override
     public String toString() {
         StringBuffer buffer = new StringBuffer();

@@ -58,7 +58,9 @@ public class CoincidenceCurveGeomFactory extends BifurcationCurveGeomFactory{
 
         StringBuffer buffer = new StringBuffer();
 
-        buffer.append("<COMMAND name=\"coincidence\">\n");
+        buffer.append(super.toXML());
+
+        buffer.append("\n");
 
         buffer.append(((BifurcationCurve)geomSource()).toXML());
 

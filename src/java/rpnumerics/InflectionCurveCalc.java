@@ -14,20 +14,20 @@ public class InflectionCurveCalc extends BifurcationCurveCalc {
     //
     // Constructors/Initializers
     //
+    public InflectionCurveCalc(BifurcationParams params, int family) {
+        super(params);
+        family_ = family;
 
-    public InflectionCurveCalc(int family){
-        family_=family;
     }
-
-   
 
     @Override
     public RpSolution calc() throws RpException {
 
+        int[] resolution = getParams().getResolution();
 
-    InflectionCurve result = (InflectionCurve) nativeCalc(family_);
+        InflectionCurve result = (InflectionCurve) nativeCalc(family_, resolution);
 
-          if (result == null) {
+        if (result == null) {
             throw new RpException("Error in native layer");
         }
 
@@ -48,12 +48,9 @@ public class InflectionCurveCalc extends BifurcationCurveCalc {
         return result;
     }
 
-  
-     public int getFamilyIndex() {
+    public int getFamilyIndex() {
         return family_;
     }
 
-    private native RpSolution nativeCalc(int family) throws RpException;
-
-
+    private native RpSolution nativeCalc(int family, int[] resolution) throws RpException;
 }

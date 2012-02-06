@@ -112,14 +112,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
             fluxFunction, accumulationFunction,
             tempBoundary, coords, shock_alt);
 
-    //    for (int i = 0; i < shock_alt.size(); i++) {
-    //
-    //        cout<<"shock alt"<<shock_alt[i]<<endl;
-    //        coords.push_back(shock_alt[i]);
-    //
-    //
-    //    }
-
 
     delete tempBoundary;
     delete fluxFunction;
@@ -127,6 +119,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
 
 
     //Orbit members creation
+
+    if(coords.size()==0) return NULL;
 
     cout << "Tamanho do shock: " << coords.size() << endl;
 

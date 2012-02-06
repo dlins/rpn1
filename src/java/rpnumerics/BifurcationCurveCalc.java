@@ -5,48 +5,29 @@
  */
 package rpnumerics;
 
-import rpnumerics.methods.*;
+public abstract class BifurcationCurveCalc implements RpCalculation {
 
-public class BifurcationCurveCalc implements RpCalculation {
-
-    private BifurcationMethod bifurcationMethod_;
     private BifurcationParams params_;
 
     //
     // Constructors
     //
-    public BifurcationCurveCalc() {
-//        params_ = new BifurcationParams();
-//        bifurcationMethod_ = new BifurcationContourMethod(params_);
-//    
-
-    }
-
     public BifurcationCurveCalc(BifurcationParams params) {
         params_ = params;
-        bifurcationMethod_ = new BifurcationContourMethod(params_);
 
     }
 
-    public BifurcationCurveCalc(BifurcationContourMethod bifurcationMethod) {
-        bifurcationMethod_ = bifurcationMethod;
-        params_ = bifurcationMethod.getParams();
-    }
-
-    //
-    // Accessors/Mutators
-    //
-    
-
-    public RpSolution calc() throws RpException{
-        return bifurcationMethod_.curve();
-    }
-
-    public RpSolution recalc() throws  RpException{
+    public RpSolution recalc() throws RpException {
 
         System.out.println("Chamando recalc da bifurcacao");
         return calc();
     }
 
+      //
+    // Accessors/Mutators
+    //
 
+    public BifurcationParams getParams() {
+        return params_;
+    }
 }

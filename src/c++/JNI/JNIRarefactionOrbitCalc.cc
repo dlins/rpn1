@@ -109,8 +109,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
 
         RealVector tempVector = coords.at(i);
 
-        cout << "Ponto da rarefacao: "<<tempVector<<endl;
-
         double * dataCoords = tempVector;
 
         //Reading only coodinates

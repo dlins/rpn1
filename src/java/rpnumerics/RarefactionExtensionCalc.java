@@ -8,7 +8,7 @@ package rpnumerics;
 
 import wave.ode.ODESolver;
 
-public class RarefactionExtensionCalc implements RpCalculation {
+public class RarefactionExtensionCalc extends BifurcationCurveCalc {
     //
     // Constants
     //
@@ -22,7 +22,7 @@ public class RarefactionExtensionCalc implements RpCalculation {
     private String methodName_;
     private int familyIndex_;
     private String flowName_;
-    int xResolution_;
+    int [] resolution_;
     int yResolution_;
     int curveFamily_;
     int domainFamily_;
@@ -31,26 +31,12 @@ public class RarefactionExtensionCalc implements RpCalculation {
     //
     // Constructors/Initializers
     //
-    public RarefactionExtensionCalc(PhasePoint point, int timeDirection) {
-        start_ = point;
-        timeDirection_ = timeDirection;
-    }
+   
+    
 
-    public RarefactionExtensionCalc(String methodName, String flowName, PhasePoint point, int familyIndex, int timeDirection) {
-
-        methodName_ = methodName;
-
-        start_ = point;
-        timeDirection_ = timeDirection;
-        familyIndex_ = familyIndex;
-        methodName_ = "ContinuationRarefactionMethod";//TODO Put the correct method name
-
-    }
-
-    public RarefactionExtensionCalc(int xResolution, int yResolution, PhasePoint startPoint, int increase, int leftFamily, int rightFamily, int characteristicDomain) {
-
-        this.xResolution_ = xResolution;
-        this.yResolution_ = yResolution;
+    public RarefactionExtensionCalc(int [] resolution, PhasePoint startPoint, int increase, int leftFamily, int rightFamily, int characteristicDomain) {
+        super(new BifurcationParams(resolution));
+        resolution_ = resolution;
         this.curveFamily_ = leftFamily;
         this.domainFamily_ = rightFamily;
 
@@ -63,13 +49,7 @@ public class RarefactionExtensionCalc implements RpCalculation {
         increase_ = increase;
     }
 
-    RarefactionExtensionCalc(OrbitPoint orbitPoint, int timeDirection, ODESolver odeSolver, String methodName) {
-        start_ = orbitPoint;
-        timeDirection_ = timeDirection;
-//        solver_ = odeSolver;
-        methodName_ = methodName;
-
-    }
+   
 
     //
     // Methods
@@ -85,7 +65,7 @@ public class RarefactionExtensionCalc implements RpCalculation {
         RpSolution result = null;
 
 
-        result = (RarefactionExtensionCurve) nativeCalc(xResolution_, yResolution_, start_, increase_, curveFamily_, domainFamily_, characteristicDomain_);
+        result = (RarefactionExtensionCurve) nativeCalc(resolution_, start_, increase_, curveFamily_, domainFamily_, characteristicDomain_);
         if (result == null) {
             throw new RpException("Error in native layer");
         }
@@ -95,5 +75,31 @@ public class RarefactionExtensionCalc implements RpCalculation {
         return result;
     }
 
-    private native RpSolution nativeCalc(int xResolution, int yResolution, PhasePoint start, int increase, int leftFamily, int rightFamily, int characteristicDomain) throws RpException;
+    public int getCharacteristic() {
+        return characteristicDomain_;
+    }
+
+    public int getCurveFamily() {
+        return curveFamily_;
+    }
+
+    public int getDomainFamily() {
+        return domainFamily_;
+    }
+
+    public int getIncrease() {
+        return increase_;
+    }
+
+    public int[] getResolution() {
+        return resolution_;
+    }
+
+    public PhasePoint getStart() {
+        return start_;
+    }
+
+
+
+    private native RpSolution nativeCalc(int [] resolution, PhasePoint start, int increase, int leftFamily, int rightFamily, int characteristicDomain) throws RpException;
 }

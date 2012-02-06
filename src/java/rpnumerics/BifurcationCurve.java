@@ -18,10 +18,9 @@ public class BifurcationCurve extends SegmentedCurve {
     // Members
     //
 
-    private int familyIndex_;
-    private List leftSegments_;// TODO It is necessary ?
-    private List rightSegments_;//TODO It is necessary ?
-//    private List segments;
+
+    private List leftSegments_;
+    private List rightSegments_;
 
     //
     // Constructor
@@ -35,15 +34,6 @@ public class BifurcationCurve extends SegmentedCurve {
         leftSegments_ = leftList;
         rightSegments_ = rightList;
     }
-//    public BifurcationCurve(List<HugoniotSegment> leftList, List<HugoniotSegment> rightList) {
-//
-//        super(createSingleSegmentList(leftList, rightList));
-//
-//        leftSegments_ = leftList;
-//        rightSegments_ = rightList;
-//    }
-
-
 
 
 
@@ -59,7 +49,7 @@ public class BifurcationCurve extends SegmentedCurve {
 
         super(new ArrayList());
 
-        familyIndex_ = familyIndex;
+     
         // segments = MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseRPnCurveToCoordsArray(this));
 //        segments = MultidAdapter.converseRPnCurveToRealSegments(this);
     }
@@ -67,14 +57,12 @@ public class BifurcationCurve extends SegmentedCurve {
     //
     // Accessors/Mutators
     //
-    public int getFamilyIndex() {
-        return familyIndex_;
-    }
+   
 
     public String toXML() {
 
 
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
 
         for (int i = 0; i < segments().size(); i++) {
 
@@ -84,11 +72,11 @@ public class BifurcationCurve extends SegmentedCurve {
         return buffer.toString();
     }
 
-    public List<HugoniotSegment> leftSegments() {
+    public List<RealSegment> leftSegments() {
         return leftSegments_;
     }
 
-    public List<HugoniotSegment> rightSegments() {
+    public List<RealSegment> rightSegments() {
         return rightSegments_;
     }
 

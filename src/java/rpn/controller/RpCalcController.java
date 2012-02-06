@@ -55,7 +55,6 @@ public class RpCalcController implements RpController {
 
     public void propertyChange(PropertyChangeEvent change) {
 
-        System.out.println("Chamando propertychange");
         // this is to avoid void notifications of enabled/disbled
         if (change.getPropertyName().compareTo("enabled") != 0){
             // updates only if visible

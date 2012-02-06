@@ -4,12 +4,12 @@ import java.awt.Color;
 import wave.multid.*;
 import wave.multid.view.*;
 
-public class RarefactionExtensionGeom  extends SegmentedCurveGeom {
+public class RarefactionExtensionGeom  extends BifurcationCurveGeom {
     
 
     public static ViewingAttr VIEWING_ATTR = new ViewingAttr(Color.green);
     
-    public RarefactionExtensionGeom(HugoniotSegGeom[] segArray, RarefactionExtensionGeomFactory factory) {
+    public RarefactionExtensionGeom(BifurcationSegGeom[] segArray, RarefactionExtensionGeomFactory factory) {
 
         super(segArray,factory);
 

@@ -26,7 +26,7 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
     protected RpGeometry createGeomFromSource() {
 
         BifurcationCurve curve = (BifurcationCurve) geomSource();
-        ArrayList<RpGeometry> geometryArray = new ArrayList<RpGeometry>();
+       
 
         int resultSize = curve.leftSegments().size();
 
@@ -37,19 +37,6 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
         }
         return new BifurcationCurveGeom(bifurcationArray, this);
 
-
-//        int rightResultSize = curve.rightSegments().size();
-//
-//        BifurcationSegGeom[] bifurcationRightArray = new BifurcationSegGeom[rightResultSize];
-//        for (int i = 0; i < rightResultSize; i++) {
-//            bifurcationArray[i] = new BifurcationSegGeom((RealSegment) curve.rightSegments().get(i));
-//
-//        }
-//        geometryArray.add(new BifurcationCurveGeom(bifurcationRightArray, this));
-//
-//        return geometryArray;
-
-
     }
 
     public RpGeometry refine() {
@@ -59,10 +46,7 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
             System.out.println("Chamando refine do factory");
             CurveDomainManager.instance().repositionAreas(areaArray);
 
-
             Iterator geomIterator = RPnDataModule.AUXPHASESPACE.getGeomObjIterator();
-
-
 
             while (geomIterator.hasNext()) {
                 RpGeometry geom = (RpGeometry) geomIterator.next();
@@ -105,11 +89,18 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
     public String toXML() {
         StringBuffer buffer = new StringBuffer();
 
-        buffer.append("<BIFURCATIONCALC >\n");
+        String commandName = geomSource().getClass().getName();
+        commandName = commandName.toLowerCase();
+        commandName = commandName.replaceAll(".+\\.", "");
 
-//        buffer.append(((BifurcationCurve) geomSource()).toXML(rpn.parser.RPnDataModule.RESULTS));
+        BifurcationCurveCalc calc = ((BifurcationCurveCalc) rpCalc());
 
-        buffer.append("</BIFURCATIONCALC>\n");
+        BifurcationParams params = calc.getParams();
+        
+        buffer.append("<COMMAND name=\""+commandName+"\" ");
+
+        buffer.append(params.toString());
+
 
         return buffer.toString();
     }

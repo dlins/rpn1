@@ -60,7 +60,7 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
 
 
         //TODO Qual eh o valor maximo que o JSpinner deve ter ?? Esse valor muda conforme o tipo de curva para a qual ele configura a familia ??
-        int family = new Integer(RPNUMERICS.getParamValue("shock", "family"));
+        int family = new Integer(RPNUMERICS.getParamValue("orbit", "family"));
         familySpinner_ = new JSpinner(new SpinnerNumberModel(family, 0, RPNUMERICS.domainDim(), 1));
         familySpinner_.setEnabled(false);
         familySpinner_.addChangeListener(familyListener);
@@ -68,8 +68,6 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
         GridLayout familyPanelGridLayout = new GridLayout(1, 2, 10, 10);
 
         familyPanel_ = new JPanel(familyPanelGridLayout);
-
-
         directionPanel_ = new JPanel(new GridLayout(1, 2));
 
         forwardCheckBox_ = new JCheckBox();

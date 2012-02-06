@@ -2,14 +2,8 @@ package rpn.parser;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 import rpn.component.HugoniotCurveGeom;
-import rpn.component.HugoniotCurveGeomFactory;
-import rpn.component.HugoniotSegGeom;
 import rpnumerics.HugoniotCurve;
-import rpnumerics.HugoniotCurveCalc;
-import rpnumerics.HugoniotSegment;
-import rpnumerics.RPNUMERICS;
 
 public class HugoniotParser implements ActionListener {
 
@@ -25,7 +19,7 @@ public class HugoniotParser implements ActionListener {
         if (e.getActionCommand().equals("endHugoniotCurve")) {
 
 
-            HugoniotCurveCalc curveCalc = RPNUMERICS.createHugoniotCalc();
+
 
 //            StationaryPointCalc stationaryPointCalc = RPNUMERICS.createStationaryPointCalc(RPnDataModule.XZERO);
 //

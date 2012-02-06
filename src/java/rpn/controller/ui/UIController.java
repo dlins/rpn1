@@ -337,6 +337,7 @@ public class UIController extends ComponentUI {
     }
 
     public void addCommand(Command command) {
+        RPnUIFrame.clearStatusMessage();
         commandArray_.add(command);
     }
 

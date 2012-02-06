@@ -83,9 +83,7 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
     static public void showCalcExceptionDialog(RpException ex) {
 
         RPnUIFrame.setStatusMessage(ex.getLocalizedMessage(), 1);
-//        JOptionPane.showMessageDialog(null, ex.toString(),
-//                "Rp Calculation Exception",
-//                JOptionPane.ERROR_MESSAGE);
+
     }
 
     public static RPnUIFrame getUIFrame() {

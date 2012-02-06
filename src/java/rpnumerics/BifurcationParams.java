@@ -1,36 +1,41 @@
 package rpnumerics;
 
-import wave.util.Boundary;
-
 public class BifurcationParams {
 
-    private int familyIndex_;
-    private static int DEFAULT_FAMILY_INDEX = 0;
-    private Boundary boundary_;
+    private int[] resolution_;
 
-    
-
-    public BifurcationParams(Boundary boundary) {
-        this.boundary_ = boundary;
+    public BifurcationParams(int[] resolution) {
+        resolution_ = resolution;
     }
 
-    public BifurcationParams(int familyIndex) {
-        this.familyIndex_ = familyIndex;
+    public BifurcationParams(){
+
     }
 
-    public BifurcationParams() {
-        this.familyIndex_ = DEFAULT_FAMILY_INDEX;
+    public int[] getResolution() {
+        return resolution_;
     }
 
-    public int getFamilyIndex() {
-        return familyIndex_;
-    }
 
-    public void setFamilyIndex(int familyIndex) {
-        this.familyIndex_ = familyIndex;
-    }
+    @Override
+    public String toString() {
 
-    public Boundary getBoundary() {
-        return boundary_;
-    }
+        StringBuilder resolution = new StringBuilder();
+        StringBuilder result = new StringBuilder();
+        
+        //Adding resolution
+        resolution.append("resolution=\"");
+        for (int i = 0; i < resolution_.length; i++) {
+            resolution.append(resolution_[i]+" ");
+        }
+
+        result.append(resolution.toString().trim());
+        result.append("\" ");
+        //
+
+        return result.toString();
+
+}
+
+
 }

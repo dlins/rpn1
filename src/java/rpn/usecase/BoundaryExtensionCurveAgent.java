@@ -46,7 +46,7 @@ public class BoundaryExtensionCurveAgent extends RpModelPlotAgent {
 
     public RpGeometry createRpGeometry(RealVector[] input) {
 
-        BoundaryExtensionCurveGeomFactory factory = new BoundaryExtensionCurveGeomFactory(RPNUMERICS.createExtensionCurveCalc());
+        BoundaryExtensionCurveGeomFactory factory = new BoundaryExtensionCurveGeomFactory(RPNUMERICS.createBoundaryExtensionCurveCalc());
 
         return factory.geom();
 
@@ -54,7 +54,7 @@ public class BoundaryExtensionCurveAgent extends RpModelPlotAgent {
 
     @Override
     public void execute() {
-        BoundaryExtensionCurveGeomFactory factory = new BoundaryExtensionCurveGeomFactory(RPNUMERICS.createExtensionCurveCalc());
+        BoundaryExtensionCurveGeomFactory factory = new BoundaryExtensionCurveGeomFactory(RPNUMERICS.createBoundaryExtensionCurveCalc());
         RPnPhaseSpaceAbstraction auxPhaseSpace = RPnDataModule.PHASESPACE;
         RpGeometry geometry = factory.geom();
         auxPhaseSpace.plot(geometry);

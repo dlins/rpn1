@@ -31,10 +31,7 @@ public class HugoniotSegGeom extends MultiPolyLine {
         ViewingAttr attr = new ViewingAttr(Color.white);
 
         if (segment.getType() == 0) {
-//            attr = new ViewingAttr(new Color(128, 128, 128));
-            
-            attr = new ViewingAttr(Color.green);
-
+            attr = new ViewingAttr(new Color(128, 128, 128));
 
         }
 

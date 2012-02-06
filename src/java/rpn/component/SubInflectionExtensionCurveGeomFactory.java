@@ -38,10 +38,11 @@ public class SubInflectionExtensionCurveGeomFactory extends BifurcationCurveGeom
     public String toXML() {
 
         StringBuffer buffer = new StringBuffer();
+        buffer.append(super.toXML());
 
         BifurcationCurve curve = (BifurcationCurve) geomSource();
 
-        buffer.append("<COMMAND name=\"subinflectionextension\">\n");
+        buffer.append(">\n");
 
         buffer.append(curve.toXML());
 
