@@ -42,6 +42,8 @@ public class HugoniotMDFunction extends MDVectorFunction {
             U.setElement(0, x);
             U.setElement(1, y);
 
+            HugoniotCurveCalc hugoniotCurveCalc = RPNUMERICS.createHugoniotCalc(U);//edsonlan
+            PhasePoint uMinus = hugoniotCurveCalc.getUMinus();//edsonlan
 
             PhasePoint uMinus = null;//edsonlan
 
@@ -90,15 +92,24 @@ public class HugoniotMDFunction extends MDVectorFunction {
 
             RealVector deltaU = new RealVector(U);
 
-            PhasePoint UMinus = null;
 
+//            PhasePoint UMinus = null;
+//
+//
+//            deltaU.sub(UMinus);//edsonlan
+//
+//            RealVector deltaF = flux_.F(U);
+//
+//            PhasePoint FMinus = null;
+//            deltaF.sub(FMinus);//edsonlan
 
-            deltaU.sub(UMinus);//edsonlan
+//      deltaU.sub(RPNUMERICS.hugoniotCurveCalc().getUMinus().getCoords());
+            deltaU.sub(RPNUMERICS.createHugoniotCalc(deltaU).getUMinus().getCoords());//edsonlan
 
             RealVector deltaF = flux_.F(U);
 
-            PhasePoint FMinus = null;
-            deltaF.sub(FMinus);//edsonlan
+//      deltaF.sub(RPNUMERICS.hugoniotCurveCalc().getFMinus());
+            deltaF.sub(RPNUMERICS.createHugoniotCalc(deltaF).getFMinus());//edsonlan
 
 
             RealMatrix2 DF = flux_.DF(U);

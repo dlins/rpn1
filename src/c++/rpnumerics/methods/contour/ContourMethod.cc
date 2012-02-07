@@ -69,7 +69,7 @@ void ContourMethod::allocate_arrays(void){
         vert = new double[ncvert_*hn];
         bsvert_ = new int[(hn + 1)*hn];
         perm_ = new int[hn*nsimp_];
-        comb_ = new int[numberOfCombinations*(hm + 1)]; 
+        comb_ = new int[numberOfCombinations*(hm + 1)];
 
         nsface_ = hc.mkcomb(comb_, hn + 1, hm + 1);
         fnbr_ = new int[nsface_*nsface_];
@@ -94,7 +94,7 @@ void ContourMethod::allocate_arrays(void){
 
         printf("++++++++++++++++ REMEMBER TO INVOKE deallocate_arrays() AT QUIT-TIME!!!\n++++++++++++++++ DON\'T SAY I DIDN\'T WARN YOU!!!\n");
     }
-    
+
     return;
 }
 
@@ -121,7 +121,7 @@ void ContourMethod::deallocate_arrays(void){
 
         delete storm_;
         delete storn_;
-    
+
         is_first = true;
     }
 
@@ -354,9 +354,9 @@ int ContourMethod::curv2d(/*double *segend,*/ int sn, int seglim, double fdummy,
 //              u(0) = vert[l][0];
 //              u(1) = vert[l][1];
 
-//              foncub[0][l] = hugoniot->HugoniotFunction(u); 
+//              foncub[0][l] = hugoniot->HugoniotFunction(u);
 //              //foncub[0][l] = f(vert[l][0], vert [l][1]);
-//              
+//
 //            if (refval * foncub[0][l] < 0.0) zero = 1;
 //lab90:
 //            ;
@@ -470,13 +470,13 @@ int ContourMethod::curv2d(/*double *segend,*/ int sn, int seglim, double fdummy,
 
 ////            cout << "Valor de sn: " << sn << endl;
 //        }
-//  
-// 
+//
+//
 ////lab200:;
 //    }
 // }
 //}
-//        
+//
 
 //    }
 
@@ -616,7 +616,7 @@ int ContourMethod::contour2d(ImplicitFunction *impf, Boundary *boundary, double 
                                 |\  |
                                 | \ |
                                 |  \|
-                       1-vertex +---+ 0-vertex 
+                       1-vertex +---+ 0-vertex
     */
     for (i = 0; i < nu; i++) {
         u = u0 + i * du;
@@ -750,7 +750,7 @@ int ContourMethod::contour2d(ImplicitFunction *impf, Boundary *boundary, double 
 
                                 p1newton.component(0) = vert[face_[1*dimf_ + ii]*hn + 0]; // p2(1) = vert(1,face(2,i)+1)
                                 p1newton.component(1) = vert[face_[1*dimf_ + ii]*hn + 1]; // p2(2) = vert(2,face(2,i)+1)
-        
+
                                 // To initialize:
                                 //
                                 for (int jj = 0; jj < 2; jj++) p_init_newton.component(jj) = sol_[jj*dims_ + sp];
@@ -764,7 +764,7 @@ int ContourMethod::contour2d(ImplicitFunction *impf, Boundary *boundary, double 
 //printf("p0 = (%lf,%lf), p1 = (%lf,%lf), p_init = (%lf,%lf)\n",
 // p0newton.component(0), p0newton.component(1), p1newton.component(0),
 // p1newton.component(1), p_init_newton.component(0), p_init_newton.component(1));
-                            
+
                                 sol_[0*dims_ + sp] = p_improved_newton.component(0); // sol(1,sp) = v(1)
                                 sol_[1*dims_ + sp] = p_improved_newton.component(1); // sol(2,sp) = v(2)
 
@@ -824,5 +824,4 @@ int ContourMethod::contour2d(ImplicitFunction *impf, Boundary *boundary, double 
     printf("ENDS:   vect2d()\n\n");
     return 0;
 }
-
 

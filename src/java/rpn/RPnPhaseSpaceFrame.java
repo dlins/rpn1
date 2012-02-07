@@ -13,6 +13,8 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import java.util.*;
+import rpn.component.util.ControlClick;
+import rpn.component.util.GeometryGraphND;
 import rpn.controller.ui.UIController;
 
 public class RPnPhaseSpaceFrame extends JFrame {
@@ -108,10 +110,16 @@ public class RPnPhaseSpaceFrame extends JFrame {
 
     private class KeyController extends KeyAdapter {
 
+        int a = 0;
+
         @Override
         public void keyPressed(KeyEvent keyEvent) {
+            //double h = RPnPhaseSpaceFrame.this.frameSize_.height;  //*** Leandro
+            //double w = RPnPhaseSpaceFrame.this.frameSize_.width;   //*** Leandro
 
-
+            int h = RPnPhaseSpaceFrame.this.frameSize_.height;  //*** Leandro
+            int w = h - 91;   //*** Leandro
+            
             if (keyEvent.getKeyChar() == 'l') {
 
                 if (RPnPhaseSpacePanel.isCursorLine()) {
@@ -121,7 +129,68 @@ public class RPnPhaseSpaceFrame extends JFrame {
                 }
 
             }
+
+            if (keyEvent.getKeyChar() == 'q') {
+                GeometryGraphND.refina = 1;
+            }
+            else GeometryGraphND.refina = 0;
+
+
+            //*** solucao provisoria para mostrar/nao mostrar o grid --- Leandro
+            if (keyEvent.getKeyChar() == 'g'  ||  keyEvent.getKeyChar() == 'G') {
+                GeometryGraphND.mostraGrid = 1;
+            }
+            if (keyEvent.getKeyChar() == 'h'  ||  keyEvent.getKeyChar() == 'H') {
+                GeometryGraphND.mostraGrid = 0;
+            }
+            //------------------------------------------------------------------
+            
+
+            //*** solucao provisoria para movimento sobre a curva --- Leandro
+            if (keyEvent.getKeyChar() == 'm'  ||  keyEvent.getKeyChar() == 'M') {
+                ControlClick.ind = 0;
+            }
+            //*** --------------------------------------------------------------
+
+            //*** solucao provisoria para resize dos paineis em tempo de execucao --- Leandro
+            if (keyEvent.getKeyChar() == '+') {   //*** aumenta tamanho dos painéis
+                a += 20;
+                for (int i = 0; i < RPnUIFrame.getPhaseSpaceFrames().length; i++) {
+
+                    RPnPhaseSpaceFrame frame = RPnUIFrame.getPhaseSpaceFrames()[i];
+                    //frame.setSize(RPnPhaseSpaceFrame.this.frameSize_.width  * (int)(a/b), RPnPhaseSpaceFrame.this.frameSize_.height * (int)(a/b));
+                    frame.setSize(w+a, h+a);
+                    frame.validate();
+
+                }
+            }
+            if (keyEvent.getKeyChar() == '-') {   //*** reduz tamanho dos painéis
+                a -= 20;
+                for (int i = 0; i < RPnUIFrame.getPhaseSpaceFrames().length; i++) {
+
+                    RPnPhaseSpaceFrame frame = RPnUIFrame.getPhaseSpaceFrames()[i];
+                    //frame.setSize(RPnPhaseSpaceFrame.this.frameSize_.width  * (int)(a/b), RPnPhaseSpaceFrame.this.frameSize_.height * (int)(a/b));
+                    frame.setSize(w+a, h+a);
+                    frame.validate();
+
+                }
+            }
+            if (keyEvent.getKeyChar() == 'r') {   //*** reset para o tamanho original dos painéis
+                for (int i = 0; i < RPnUIFrame.getPhaseSpaceFrames().length; i++) {
+
+                    RPnPhaseSpaceFrame frame = RPnUIFrame.getPhaseSpaceFrames()[i];
+                    frame.setSize(w, h);
+                    frame.validate();
+
+                }
+            }
+
+            //*** ---------------------------------------------------------------------------
+
+            
         }
+
+        
     }
 
     private class SliderState implements ChangeListener {

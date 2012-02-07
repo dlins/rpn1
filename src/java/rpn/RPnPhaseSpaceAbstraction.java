@@ -13,6 +13,9 @@ import rpn.component.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
+import rpn.component.util.ClassifierAgent;
+import rpn.component.util.ControlClick;
+import rpn.component.util.VelocityAgent;
 import rpn.controller.ui.UIController;
 import wave.multid.model.MultiGeometry;
 import wave.multid.model.MultiPolyLine;
@@ -130,6 +133,10 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
                     SegmentedCurveGeom segGeom = (SegmentedCurveGeom) geometry;
                     segGeom.highLight();
 
+                    //****  OLHAR ISSO
+                    //((HugoniotCurve) (segGeom.geomFactory().geomSource())).segments().get(index);
+                    //((HugoniotCurve) (segGeom.geomFactory().geomSource())).viewingAttr().getColor();
+                    //****************
 
                 } else {
 
@@ -146,14 +153,113 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         UIController.instance().panelsUpdate();
     }
 
-    public void displayGeometry(int index,boolean visible) {
+
+    //******************************************************* Leandro, em 28/Set
+    
+    //*** ClassifierAgent.hideClassifiers - chamado aqui dentro - deverá ser revisto para permitir a simples ocultação dos classificadores
+    //*** Por enquanto, é feita a remoção, através de ClassifierAgent.clearClassifiers
+    public void ocultaStringsCla(int geometryIndex) {
+
+        for (int i = 0; i < ClassifierAgent.indCurvaCla.size(); i++) {
+            if ((Integer)ClassifierAgent.indCurvaCla.get(i) == geometryIndex) {
+                ClassifierAgent.paraOcultarIndCla.add(i);
+            }
+        }
+
+        if (ClassifierAgent.paraOcultarIndCla.size() > 0) {
+            //ClassifierAgent.hideClassifiers(ClassifierAgent.paraOcultarIndCla);
+            ClassifierAgent.clearClassifiers(ClassifierAgent.paraOcultarIndCla);
+        }
+
+        ClassifierAgent.paraOcultarIndCla.clear();
+
+    }
+
+    //*** Este método será usado para recuperar a visao das strings de classificacao
+    //*** NÃO USE AINDA !!!
+    public void mostraStringsCla(int geometryIndex) {
+
+        for (int i = 0; i < ClassifierAgent.indCurvaCla.size(); i++) {
+            if ((Integer)ClassifierAgent.indCurvaCla.get(i) == geometryIndex) {
+                ClassifierAgent.paraOcultarIndCla.add(i);
+            }
+        }
+
+        if (ClassifierAgent.paraOcultarIndCla.size() > 0) {
+            ClassifierAgent.viewClassifiers(ClassifierAgent.paraOcultarIndCla);
+        }
+
+        ClassifierAgent.paraOcultarIndCla.clear();
+
+    }
+
+
+    //*** ClassifierAgent.hideVelocities - chamado aqui dentro - deverá ser revisto para permitir a simples ocultação das strings de velocidade
+    //*** Por enquanto, é feita a remoção, através de ClassifierAgent.clearVelocities
+    public void ocultaStringsVel(int geometryIndex) {
+
+        for (int i = 0; i < VelocityAgent.indCurvaVel.size(); i++) {
+            if ((Integer)VelocityAgent.indCurvaVel.get(i) == geometryIndex) {
+                VelocityAgent.paraOcultarIndVel.add(i);
+            }
+        }
+
+        if (VelocityAgent.paraOcultarIndVel.size() > 0) {
+            //VelocityAgent.hideVelocities(VelocityAgent.paraOcultarIndVel);
+            VelocityAgent.clearVelocities(VelocityAgent.paraOcultarIndVel);
+        }
+
+        VelocityAgent.paraOcultarIndVel.clear();
+
+    }
+
+
+    //*** Este método será usado para recuperar a visao das strings de velocidade
+    //*** NÃO USE AINDA !!!
+    public void mostraStringsVel(int geometryIndex) {
+
+        for (int i = 0; i < VelocityAgent.indCurvaVel.size(); i++) {
+            if ((Integer)VelocityAgent.indCurvaVel.get(i) == geometryIndex) {
+                VelocityAgent.paraOcultarIndVel.add(i);
+            }
+        }
+
+        if (VelocityAgent.paraOcultarIndVel.size() > 0) {
+            VelocityAgent.viewVelocities(VelocityAgent.paraOcultarIndVel);
+        }
+
+        VelocityAgent.paraOcultarIndVel.clear();
+
+    }
+    //**************************************************************************
+
+    
+    public void hideGeometry(int index) {
 
         for (int i = 0; i < geomList_.size(); i++) {
 
             if (i == index) {
                 MultiGeometry geometry = (MultiGeometry) geomList_.get(i);
 
-                geometry.viewingAttr().setVisible(visible);
+                geometry.viewingAttr().setVisible(false);
+                ocultaStringsCla(index);    // ******
+                ocultaStringsVel(index);    // ******
+            }
+        }
+
+        UIController.instance().panelsUpdate();
+
+    }
+
+    public void displayGeometry(int index) {
+        for (int i = 0; i < geomList_.size(); i++) {
+
+            if (i == index) {
+                MultiGeometry geometry = (MultiGeometry) geomList_.get(i);
+                geometry.viewingAttr().setVisible(true);
+                //mostraStringsCla(index);    // ******
+                //mostraStringsVel(index);    // ******
+
             }
 
         }

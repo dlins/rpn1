@@ -6,6 +6,9 @@ package rpn;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JFormattedTextField;
 import rpnumerics.Configuration;
 
 /**
@@ -25,6 +28,7 @@ public class RPnInputController implements PropertyChangeListener {
 
     public void propertyChange(PropertyChangeEvent evt) {
 
+
 //
 //        System.out.println(evt.getPropertyName());
 //        System.out.println(evt.getOldValue());
@@ -38,12 +42,19 @@ public class RPnInputController implements PropertyChangeListener {
 
         for (int i = 0; i < parameterNames.length; i++) {
             String paramName = configuration_.getParamName(i);
+
+            //configuration_.setParamValue(paramName, String.valueOf(newValue.getElement(i)));
+
             configuration_.setParamValue(paramName, newValues[i]);
 
         }
 
 
+        }
+
+
     }
-}
+
+
 
 

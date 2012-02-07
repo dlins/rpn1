@@ -4,22 +4,28 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import rpn.component.HugoniotCurveGeom;
 import rpnumerics.HugoniotCurve;
+import rpnumerics.HugoniotCurveCalc;
+import rpnumerics.HugoniotSegment;
+import rpnumerics.PhasePoint;
+import rpnumerics.RPNUMERICS;
 
 public class HugoniotParser implements ActionListener {
 
     protected static HugoniotCurveGeom tempHugoniot;
     private HugoniotCurve hugoniotCurve_;
     private RPnDataModule dataModule_;
+    private PhasePoint UMinus_;
 
-    public HugoniotParser(RPnDataModule dataModule) {
+    public HugoniotParser(RPnDataModule dataModule, PhasePoint UMinus) {
         dataModule_ = dataModule;
+        UMinus_ = UMinus;
     }
 
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("endHugoniotCurve")) {
 
 
-
+            HugoniotCurveCalc curveCalc = RPNUMERICS.createHugoniotCalc(UMinus_);
 
 //            StationaryPointCalc stationaryPointCalc = RPNUMERICS.createStationaryPointCalc(RPnDataModule.XZERO);
 //

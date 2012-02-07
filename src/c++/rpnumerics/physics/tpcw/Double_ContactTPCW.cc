@@ -491,7 +491,7 @@ void Double_ContactTPCW::func(double *val, int ir, int jr, int kl, int kr,
     }
 
     val[0] = det(3, &Hmatrix[0][0]); // TODO: PRECISAMOS DO METODO DETERMINANTE.
-
+    
 
     double X12 = Fr[0] * Gq[1] - Fr[1] * Gq[0];
     double X31 = Fr[2] * Gq[0] - Fr[0] * Gq[2];

@@ -30,7 +30,7 @@ public class BifurcationCurve extends SegmentedCurve {
      public BifurcationCurve(List<RealSegment> leftList, List<RealSegment> rightList) {
 
         super(createSingleSegmentList(leftList, rightList));
-
+        
         leftSegments_ = leftList;
         rightSegments_ = rightList;
     }
@@ -40,7 +40,6 @@ public class BifurcationCurve extends SegmentedCurve {
     public BifurcationCurve(List<? extends RealSegment> singleList) {
 
         super(singleList);
-
         leftSegments_ = singleList;
         rightSegments_ = singleList;
     }
@@ -61,6 +60,14 @@ public class BifurcationCurve extends SegmentedCurve {
 
     public String toXML() {
 
+//        StringBuffer buffer = new StringBuffer();
+//
+//        for (int i = 0; i < segments().size(); i++) {
+//            HugoniotSegment hugoniotSegment = (HugoniotSegment) segments().get(i);
+//            RealSegment realSegment = new RealSegment(hugoniotSegment.p1(), hugoniotSegment.p2());
+//            buffer.append(realSegment.toXML());
+//        }
+//        return buffer.toString();
 
         StringBuilder buffer = new StringBuilder();
 
@@ -70,6 +77,7 @@ public class BifurcationCurve extends SegmentedCurve {
             buffer.append(realSegment.toXML());
         }
         return buffer.toString();
+
     }
 
     public List<RealSegment> leftSegments() {
@@ -92,6 +100,7 @@ public class BifurcationCurve extends SegmentedCurve {
 //        for (HugoniotSegment hugoniotSegment : rightSeg) {
 //            hugoniotSegment.setIntType(18);
 //        }
+
 
 //
 ////        List<HugoniotSegment> mergedList = new ArrayList<HugoniotSegment>();
@@ -138,9 +147,11 @@ public class BifurcationCurve extends SegmentedCurve {
         if (leftSeg.addAll(rightSeg)) {
 
             return leftSeg;
+
         } else {
             return null;
         }
+        
 
     }
 }

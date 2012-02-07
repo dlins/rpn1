@@ -8,7 +8,6 @@ package rpnumerics;
 
 public class DoubleContactCurveCalc extends BifurcationCurveCalc {
 
-    static private int contDC = 0;      //** declarei isso (Leandro)
     //
     // Constructors/Initializers
     //
@@ -35,26 +34,26 @@ public class DoubleContactCurveCalc extends BifurcationCurveCalc {
 
         System.out.println("Entrando em DoubleContactCurveCalc... " + curveFamily_ + " " + domainFamily_);
 
+        //result = (DoubleContactCurve) nativeCalc(getParams().getResolution(), curveFamily_, domainFamily_);
 
-        result = (DoubleContactCurve) nativeCalc(getParams().getResolution(), curveFamily_, domainFamily_);
+        //if (result == null) {
+        //    throw new RpException("Error in native layer");
+        //}
+        
+        try {
 
-        if (result == null) {
-            throw new RpException("Error in native layer");
+            result = (DoubleContactCurve) nativeCalc(xResolution_,yResolution_,curveFamily_,domainFamily_);
+	   
+	    return result;
+        } catch (RpException ex) {
+            Logger.getLogger(DoubleContactCurveCalc.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        //** acrescentei isso (Leandro)
-        if (contDC == 0) {
-            System.out.println("Entrando em DoubleContactCurveCalc...");
-
-            RPnCurve.lista.add((RPnCurve) result);
-            System.out.println("Tamanho da lista: " + RPnCurve.lista.size());
-
-            contDC += 1;
-        }
-        //*********************************************
+        
 
         return result;
     }
 
-    private native RpSolution nativeCalc(int [] resolution, int curveFamily, int domainFamily) throws RpException;
+    //private native RpSolution nativeCalc(int [] resolution, int curveFamily, int domainFamily) throws RpException;
+
+    private native RpSolution nativeCalc(int xResolution, int yResolution, int curveFamily, int domainFamily) throws RpException;
 }

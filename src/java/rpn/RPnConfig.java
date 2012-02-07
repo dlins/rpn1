@@ -29,14 +29,72 @@ public class RPnConfig {
     private static String activePhysics_;
     private static String activeVisualConfig_;
     private static Configuration visualConfiguration_;
+    private static RPnFluxParamsSubject[] teste;
+    private static RPnFluxParamsObserver paramObserver;
 
     public static void configure(String physicsName) {
+
         activePhysics_ = physicsName;
         RPNUMERICS.init((String) physicsName);//PHYSICS is INITIALIZATED
         numericsConfig();
         visualConfig();
+        
+    }
+
+    public static void createParamsFluxSubject(String physicsName) {
+
+        if (physicsName.equals("QuadraticR2")) {
+            teste = new RPnFluxParamsSubject[3];
+
+            Configuration physicsConfiguration = RPNUMERICS.getConfiguration(physicsName);
+
+            System.out.println("Configuration physicsConfiguration : " +physicsConfiguration.toString());
+            System.out.println("RPNUMERICS.getFluxParams() : " +RPNUMERICS.getFluxParams());
+
+            Configuration fluxConfiguration = physicsConfiguration.getConfiguration("fluxfunction");
+
+            paramObserver = new RPnFluxParamsObserver(fluxConfiguration);
+
+            teste[0] = new RPnSchearerSchaeffer(new String[3], new String[]{"A", "B", "C"});
+            teste[1] = new RPnPalmeira(new String[3], new String[]{"B1", "B2", "C"});
+            teste[2] = new RPnCorey(new String[2], new String[]{"A", "B"});
+
+            teste[0].attach(paramObserver);
+            teste[1].attach(paramObserver);
+            teste[2].attach(paramObserver);
+
+            
+        }
+        if (physicsName.equals("Stone")) {
+            teste = new RPnFluxParamsSubject[4];
+
+            Configuration physicsConfiguration = RPNUMERICS.getConfiguration(physicsName);
+
+            Configuration fluxConfiguration = physicsConfiguration.getConfiguration("fluxfunction");
+
+            paramObserver = new RPnFluxParamsObserver(fluxConfiguration);
+
+            teste[0] = new RPnCoreyToStone(new String[9], new String[]{"muw", "mug", "muo", "expw", "expg", "expo", "cnw", "cng", "cno"});
+            teste[1] = new RPnStoneToStone(new String[10], new String[]{"muw", "mug", "muo", "expw", "expg", "expow", "expog", "cnw", "cng", "cno"});
+            teste[2] = new RPnCoreyBrooks(new String[8], new String[]{"muw", "mug", "muo", "epsl", "cnw", "cng", "cno", "lambda"});
+            teste[3] = new RPnRadioButtonToStone(new String[3], new String[]{"", "", ""});       // aqui virao os nomes dos botoes
+
+            teste[0].attach(paramObserver);
+            teste[1].attach(paramObserver);
+            teste[2].attach(paramObserver);
+            teste[3].attach(paramObserver);
+
+        }
 
 
+    }
+
+    public static RPnFluxParamsSubject[] getFluxParamsSubject() {
+        return teste;
+    }
+
+    public static RPnFluxParamsObserver getFluxParamsObserver() {
+        return paramObserver;
     }
 
     private static void visualConfig() {
@@ -78,6 +136,7 @@ public class RPnConfig {
         configurationsProfileMap_.put(configurationName, profile);
         Configuration configuration = new Configuration(profile);
         RPNUMERICS.setConfiguration(configuration.getName(), configuration);
+
 
     }
 
@@ -133,6 +192,7 @@ public class RPnConfig {
 
     public static void setActivePhysics(String physicsName) {
         activePhysics_ = physicsName;
+       
     }
 
     public static void setActiveVisualConfiguration(String visualConfigName) {

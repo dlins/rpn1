@@ -64,7 +64,20 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
     std::vector<RealVector> left_vrs;
     std::vector<RealVector> right_vrs;
 
+<<<<<<< HEAD
     jint  number_of_grid_pnts [dimension];
+=======
+    int * number_of_grid_pnts = new int[2];
+
+
+    number_of_grid_pnts[0] = xResolution;
+    number_of_grid_pnts[1] = yResolution;
+    
+
+
+
+    cout << "Chamando com stone" << endl;
+>>>>>>> master-original/master
 
     env->GetIntArrayRegion(resolution, 0, dimension, number_of_grid_pnts );
 
@@ -95,11 +108,16 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
             rightFamily, rightBoundary);
 
 
+
     dc.compute_double_contact(left_vrs, right_vrs);
 
+<<<<<<< HEAD
     if (left_vrs.size()==0||right_vrs.size()==0)return NULL;
+=======
+>>>>>>> master-original/master
 
     cout << "left_vrs.size()  = " << left_vrs.size() << endl;
+
 
     cout << "right_vrs.size()  = " << right_vrs.size() << endl;
 
@@ -108,18 +126,18 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
 
     for (unsigned int i = 0; i < left_vrs.size() / 2; i++) {
 
+
         jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
         jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
-
 
         double * leftCoords = (double *) left_vrs.at(2 * i);
         double * rightCoords = (double *) left_vrs.at(2 * i + 1);
 
 
 
+
         env->SetDoubleArrayRegion(eigenValRLeft, 0, dimension, leftCoords);
         env->SetDoubleArrayRegion(eigenValRRight, 0, dimension, rightCoords);
-
 
         //Construindo left e right points
         jobject realVectorLeftPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRLeft);
@@ -135,9 +153,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
     for (unsigned int i = 0; i < right_vrs.size() / 2; i++) {
 
 
+
         jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
         jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
-
 
         double * leftCoords = (double *) right_vrs.at(2 * i);
         double * rightCoords = (double *) right_vrs.at(2 * i + 1);
@@ -146,12 +164,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
         env->SetDoubleArrayRegion(eigenValRLeft, 0, dimension, leftCoords);
         env->SetDoubleArrayRegion(eigenValRRight, 0, dimension, rightCoords);
 
-
         //Construindo left e right points
         jobject realVectorLeftPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRLeft);
 
         jobject realVectorRightPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRRight);
         jobject realSegment = env->NewObject(realSegmentClass, realSegmentConstructor, realVectorLeftPoint, realVectorRightPoint);
+
 
         env->CallObjectMethod(rightSegmentsArray, arrayListAddMethod, realSegment);
 
@@ -160,8 +178,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
 
     jobject result = env->NewObject(doubleContactCurveClass, doubleContactCurveConstructor, leftSegmentsArray, rightSegmentsArray);
 
-    return result;
 
+    return result;
 
 }
 

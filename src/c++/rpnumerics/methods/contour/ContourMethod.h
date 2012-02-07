@@ -80,7 +80,12 @@ class ContourMethod {
         static int tsimp;
         static int tface;
 
+//<<<<<<< HEAD
+    //void classifiedCurve(const RealVector &, int, int, vector<HugoniotPolyLine> &);
+    //void unclassifiedCurve(const RealVector &, vector<HugoniotPolyLine> &);
+//=======
         static void allocate_arrays(void);
+
 
     public:
         static void deallocate_arrays(void);

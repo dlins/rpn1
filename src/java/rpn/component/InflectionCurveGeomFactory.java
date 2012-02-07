@@ -47,7 +47,7 @@ public class InflectionCurveGeomFactory extends BifurcationCurveGeomFactory {
         StringBuffer buffer = new StringBuffer();
         CoincidenceCurve curve = (CoincidenceCurve) geomSource();
         buffer.append("%%\nclose all;clear all;\n");
-        buffer.append(RpCalcBasedGeomFactory.createMatlabColorTable());
+        //buffer.append(RpCalcBasedGeomFactory.createMatlabColorTable());
         buffer.append(curve.toMatlabData(0));
 
         buffer.append("%%\n% begin plot x y\n");

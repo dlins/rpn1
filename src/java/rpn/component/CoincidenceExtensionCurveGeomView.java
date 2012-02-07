@@ -82,7 +82,9 @@ class CoincidenceExtensionCurveGeomView implements GeomObjView{
     Iterator geomListIterator = ( (CoincidenceExtensionCurveGeom) abstractGeom_).getBifurcationSegmentsIterator();
     while (geomListIterator.hasNext()) {
       BifurcationSegGeom geomObj = (BifurcationSegGeom) geomListIterator.next();
+
       geomObj.viewingAttr().setColor(CoincidenceExtensionCurveGeom.COLOR);
+
       try {
         viewList_.add(geomObj.createView(getViewingTransform()));
       }

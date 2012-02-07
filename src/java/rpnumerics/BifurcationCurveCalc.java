@@ -26,6 +26,10 @@ public abstract class BifurcationCurveCalc implements RpCalculation {
       //
     // Accessors/Mutators
     //
+    public RpSolution recalc(Area area) throws RpException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 
     public BifurcationParams getParams() {
         return params_;

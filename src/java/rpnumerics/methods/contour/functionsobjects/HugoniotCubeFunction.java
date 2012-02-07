@@ -33,7 +33,10 @@ public class HugoniotCubeFunction extends CubeFunction  {
 
   public RealVector value(RealVector U) {
 
-      PhasePoint uMinus = null;//edsonlan
+//      PhasePoint uMinus = null;//edsonlan
+
+      PhasePoint uMinus = new PhasePoint(RPNUMERICS.createHugoniotCalc(U).getUMinus().getCoords());//edsonlan
+
       RealVector differenceF, differenceH;
 
       differenceF = flux_.F(U);

@@ -11,17 +11,16 @@
         </BOUNDARY>
 
         <PHYSICSCONFIG name="fluxfunction">
-            <PHYSICSPARAM name="param0" position="0" value ="-1" />
-            <PHYSICSPARAM name="param1" position="1" value ="0" />
-            <PHYSICSPARAM name="param2" position="2" value ="1" />
-            <PHYSICSPARAM name="param3" position="3" value ="0" />
-            <PHYSICSPARAM name="param4" position="4" value ="0.05" />
-            <PHYSICSPARAM name="param5" position="5" value ="0" />
-            <PHYSICSPARAM name="param6" position="6" value ="1" />
-            <PHYSICSPARAM name="param7" position="7" value ="0" />
-            <PHYSICSPARAM name="param8" position="8" value ="-0.05" />
-            <PHYSICSPARAM name="param9" position="9" value ="0" />
-
+            <PHYSICSPARAM name="a1" position="0" value ="1" />
+            <PHYSICSPARAM name="b1" position="1" value ="-1" />
+            <PHYSICSPARAM name="c1" position="2" value ="0" />
+            <PHYSICSPARAM name="d1" position="3" value ="0" />
+            <PHYSICSPARAM name="e1" position="4" value ="0" />
+            <PHYSICSPARAM name="a2" position="5" value ="0" />
+            <PHYSICSPARAM name="b2" position="6" value ="-1" />
+            <PHYSICSPARAM name="c2" position="7" value ="1" />
+            <PHYSICSPARAM name="d2" position="8" value ="0" />
+            <PHYSICSPARAM name="e2" position="9" value ="0" />
         </PHYSICSCONFIG>
     </PHYSICS>
 

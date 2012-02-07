@@ -61,7 +61,6 @@ public class RarefactionOrbitCalc extends OrbitCalc implements RpCalculation {
 
             return result;
 
-
         }
 
         result = (RarefactionOrbit) calc("methodName_", "flowName_", getStart(), getFamilyIndex(), getDirection());
@@ -72,17 +71,11 @@ public class RarefactionOrbitCalc extends OrbitCalc implements RpCalculation {
         }
       
 
-        //** acrescentei isso (Leandro)
-            RPnCurve.lista.add(result);
-            System.out.println("Tamanho da lista: " + RPnCurve.lista.size());
-        //***
-
         return result;
-
 
     }
 
     private native RpSolution calc(String methodName, String flowName, PhasePoint initialpoint, int familyIndex, int timeDirection) throws RpException;
 
-   
+
 }

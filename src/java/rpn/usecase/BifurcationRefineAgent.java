@@ -6,6 +6,7 @@
 package rpn.usecase;
 
 import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.logging.Level;
@@ -15,6 +16,8 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import rpn.RPnSelectedAreaDialog;
 import rpn.component.*;
+import rpn.component.util.GeometryUtil;
+import rpn.controller.ui.AREASELECTION_CONFIG;
 import rpn.controller.ui.BIFURCATIONREFINE_CONFIG;
 import rpn.controller.ui.UIController;
 import rpn.parser.RPnDataModule;
@@ -26,7 +29,7 @@ import rpnumerics.methods.contour.support.DimensionDoenstMatch;
 import rpnumerics.methods.contour.support.NoContourMethodDefined;
 import wave.util.*;
 
-public class BifurcationRefineAgent extends RpModelPlotAgent {
+public class BifurcationRefineAgent extends RpModelConfigChangeAgent {
     //
     // Constants
     //
@@ -35,41 +38,33 @@ public class BifurcationRefineAgent extends RpModelPlotAgent {
     // Members
     //
     static private BifurcationRefineAgent instance_ = null;
-    private RealVector resolution_;
-    private boolean validResolution_;
-
+    
     //
     // Constructors/Initializers
     //
     protected BifurcationRefineAgent() {
-        super(DESC_TEXT, rpn.RPnConfig.HUGONIOT, new JButton());
-        getContainer().setEnabled(false);
-        validResolution_ = false;
-
+        super(DESC_TEXT);
+        
     }
 
     @Override
     public void actionPerformed(ActionEvent event) {
-        UIController.instance().setState(new BIFURCATIONREFINE_CONFIG());
+        System.out.println("actionPerformed do BifurcationRefineAgent");
+        UIController.instance().setState(new BIFURCATIONREFINE_CONFIG());    //*** chamada original
+
+        PropertyChangeEvent propertyEvent = new PropertyChangeEvent(this, "refine", "", AreaSelectionAgent.instance().getListArea().get(0));
+
+        applyChange(propertyEvent);
+
+        AreaSelectionAgent.instance().getListArea().clear();
+
+//        for (int i = 0; i < GeometryUtil.targetPoint.getSize(); i++) {        // Pode ser útil na hora de fazer inclusao dos novos segmentos (para nao serem eliminados)
+//            GeometryUtil.cornerRet.setElement(i, 0);
+//            GeometryUtil.targetPoint.setElement(i, 0.);
+//        }
+
     }
 
-    public RpGeometry createRpGeometry(RealVector[] input) {
-
-         Iterator geomIterator = RPnDataModule.AUXPHASESPACE.getGeomObjIterator();
-
-          while (geomIterator.hasNext()) {
-                RpGeometry geom = (RpGeometry) geomIterator.next();
-
-                if (geom instanceof BifurcationCurveGeom) {
-                    BifurcationCurveGeomFactory factory = (BifurcationCurveGeomFactory) geom.geomFactory();
-                    return factory.refine();
-                }
-
-          }
-
-
-        return null;
-    }
 
     static public BifurcationRefineAgent instance() {
         if (instance_ == null) {
@@ -78,58 +73,15 @@ public class BifurcationRefineAgent extends RpModelPlotAgent {
         return instance_;
     }
 
-    private void showAreaSelectionDialog(RealVector up, RealVector down) {
 
-        while (!validResolution_) {
-            RPnSelectedAreaDialog dialog = new RPnSelectedAreaDialog();
-            dialog.setVisible(true);
 
-        }
-
-        Area selectedArea = new Area(resolution_, up, down);
-        BifurcationProfile.instance().addArea(selectedArea);
-
+    @Override
+    public void unexecute() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public void execute() {
-        //AREA SELECTION
-
-        System.out.println("Chamando execute do refino");
-
-        RealVector[] diagonal = UIController.instance().userInputList();
-
-        System.out.println(diagonal[0]);
-        System.out.println(diagonal[1]);
-
-        RealVector testUp = new RealVector(diagonal[0]);
-        RealVector testDown = new RealVector(diagonal[1]);
-
-        boolean selectionDirectionOk = true;
-
-        for (int i = 0; i < testUp.getSize(); i++) {
-            if (testUp.getElement(i) < testDown.getElement(i)) {
-                selectionDirectionOk = false;
-                break;
-            }
-        }
-
-        if (!selectionDirectionOk) {
-            UIController.instance().globalInputTable().reset();
-            JOptionPane.showMessageDialog(UIController.instance().getFocusPanel(), "Wrong area selection", "Error", JOptionPane.ERROR_MESSAGE);
-        } else {
-            showAreaSelectionDialog(testUp, testDown);
-            super.execute();
-        }
-
-
-    }
-
-    public void setValidResolution(boolean validResolution) {
-        this.validResolution_ = validResolution;
-    }
-
-    public void setResolution(RealVector resolutionVector) {
-        resolution_ = resolutionVector;
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

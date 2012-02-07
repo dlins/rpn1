@@ -8,9 +8,9 @@ package rpn.component;
 import rpnumerics.*;
 import rpn.controller.HugoniotController;
 import rpn.controller.RpController;
+import wave.util.RealVector;
 
 public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
-
 
 
     public HugoniotCurveGeomFactory(HugoniotCurveCalc calc) {
@@ -31,8 +31,9 @@ public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
     protected RpGeometry createGeomFromSource() {
 
         HugoniotCurve curve = (HugoniotCurve) geomSource();
-
-       
+        System.out.println("curve.getXZero() : " +curve.getXZero());
+        
+        // assuming a container with HugoniotSegment elements
         int resultSize = curve.segments().size();
 
         HugoniotSegGeom[] hugoniotArray = new HugoniotSegGeom[resultSize];

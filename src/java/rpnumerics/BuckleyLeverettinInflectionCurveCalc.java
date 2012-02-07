@@ -8,7 +8,6 @@ package rpnumerics;
 
 public class BuckleyLeverettinInflectionCurveCalc extends BifurcationCurveCalc {
 
-
     //
     // Constructors/Initializers
     //
@@ -16,8 +15,6 @@ public class BuckleyLeverettinInflectionCurveCalc extends BifurcationCurveCalc {
         super(new BifurcationParams());
     }
 
-
-  
 
     public RpSolution calc() throws RpException {
 

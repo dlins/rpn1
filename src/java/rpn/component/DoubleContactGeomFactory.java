@@ -21,6 +21,7 @@ public class DoubleContactGeomFactory extends BifurcationCurveGeomFactory {
 
     public DoubleContactGeomFactory(DoubleContactCurveCalc calc) {
         super(calc);
+        //System.out.println("Tamanho de calc em DoubleContactGeomFactory : " +((SegmentedCurve)calc.calc()).segments().size());
     }
 
     //
@@ -34,15 +35,16 @@ public class DoubleContactGeomFactory extends BifurcationCurveGeomFactory {
         BifurcationSegGeom[] leftBifurcationSegArray = null;
 
         int resultSize = curve.segments().size();
+        System.out.println("Tamanho da curve em DoubleContactGeomFactory , metodo createGeomFromSource() : " +resultSize);        //*******************************8
 
         leftBifurcationSegArray = new BifurcationSegGeom[resultSize];
         for (int i = 0; i < resultSize; i++) {
             leftBifurcationSegArray[i] = new BifurcationSegGeom((RealSegment) curve.segments().get(i),viewAtt_);
 
         }
-
+        
         return new DoubleContactCurveGeom(leftBifurcationSegArray, this);
-
+        
     }
 
    

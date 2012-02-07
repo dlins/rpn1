@@ -5,14 +5,33 @@
  */
 package rpn.usecase;
 
+import java.util.List;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.JToggleButton;
 import rpn.RPnSelectedAreaDialog;
+import rpn.component.HugoniotCurveGeomFactory;
+import rpn.component.util.ControlClick;
+import rpn.component.util.GeometryGraph;
+import rpn.component.util.GeometryGraph3D;
+import rpn.component.util.GeometryGraphND;
+import rpn.component.util.GeometryUtil;
 import rpn.controller.ui.AREASELECTION_CONFIG;
+import rpn.controller.ui.BIFURCATIONREFINE_CONFIG;
 import rpn.controller.ui.UIController;
+import rpn.parser.RPnDataModule;
 import rpnumerics.Area;
 import rpnumerics.BifurcationProfile;
+import rpnumerics.HugoniotCurve;
+import rpnumerics.HugoniotCurveCalcND;
+import rpnumerics.RPNUMERICS;
+import rpnumerics.RPnCurve;
+import rpnumerics.RpException;
 import wave.util.RealVector;
+
 
 public class AreaSelectionAgent extends RpModelActionAgent {
 
@@ -21,6 +40,7 @@ public class AreaSelectionAgent extends RpModelActionAgent {
     private JToggleButton button_;
     private RealVector resolution_;
     private boolean validResolution_;
+    private List<Area> listArea_;
 
     private AreaSelectionAgent() {
         super(DESC_TEXT, null);
@@ -28,6 +48,7 @@ public class AreaSelectionAgent extends RpModelActionAgent {
         button_ = new JToggleButton(this);
         button_.setToolTipText(DESC_TEXT);
         button_.setFont(rpn.RPnConfigReader.MODELPLOT_BUTTON_FONT);
+        listArea_ = new ArrayList<Area>();
         setEnabled(true);
     }
 
@@ -36,7 +57,7 @@ public class AreaSelectionAgent extends RpModelActionAgent {
     public void actionPerformed(ActionEvent event) {
 
        UIController.instance().setState(new AREASELECTION_CONFIG());
-
+       
     }
     //***
 
@@ -45,6 +66,64 @@ public class AreaSelectionAgent extends RpModelActionAgent {
             instance_ = new AreaSelectionAgent();
         }
         return instance_;
+    }
+
+    
+    @Override
+    public void unexecute() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void execute() {
+
+        System.out.println("Area Selection Agent");
+
+        //**********************************************************************
+
+        if (ControlClick.ind % 2 == 0) {
+            //****************************
+            Area area = null;
+            String Re1 = JOptionPane.showInputDialog(null, "Resolucao horizontal", "Resolucao", JOptionPane.QUESTION_MESSAGE);
+            String Re2 = JOptionPane.showInputDialog(null, "Resolucao vertical", "Resolucao", JOptionPane.QUESTION_MESSAGE);
+
+            try {
+                RealVector resolution = new RealVector(RPNUMERICS.domainDim());
+                resolution.setElement(0, Integer.parseInt(Re1));
+                resolution.setElement(1, Integer.parseInt(Re2));
+
+                if (RPNUMERICS.domainDim() == 2) {
+                    area = new Area(resolution, GeometryGraph.topRight, GeometryGraph.downLeft);
+                    System.out.println(area);
+                    listArea_.add(area);
+                    System.out.println("listArea.size() : " +listArea_.size());
+                } else if (RPNUMERICS.domainDim() == 3) {
+                    area = new Area(resolution, GeometryGraph3D.topRight, GeometryGraph3D.downLeft);
+                    System.out.println(area);
+                    listArea_.add(area);
+                }
+//                else {
+//                    area = new Area(resolution, GeometryGraphND.targetPoint, GeometryGraphND.cornerRet);
+//                    System.out.println(area);
+//                    listArea_.add(area);
+//                }
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Resolucao nao foi informada", "ATENCAO", JOptionPane.INFORMATION_MESSAGE);
+            }
+            //****************************
+
+
+//            for (int i = 0; i < GeometryUtil.targetPoint.getSize(); i++) {        // Pode ser útil na hora de fazer inclusao dos novos segmentos (para nao serem eliminados)
+//                GeometryUtil.cornerRet.setElement(i, 0);
+//                GeometryUtil.targetPoint.setElement(i, 0.);
+//            }
+        }
+
+
+        //**********************************************************************
+        
+
     }
 
     public JToggleButton getContainer() {
@@ -59,47 +138,8 @@ public class AreaSelectionAgent extends RpModelActionAgent {
         validResolution_ = validResolution;
     }
 
-    @Override
-    public void unexecute() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void execute() {
-
-
-        System.out.println("Area Selection Agent");
-
-        RealVector[] diagonal = UIController.instance().userInputList();
-
-        RealVector testUp = new RealVector(diagonal[0]);
-        RealVector testDown = new RealVector(diagonal[1]);
-
-
-        boolean selectionDirectionOk = true;
-
-        for (int i = 0; i < testUp.getSize(); i++) {
-            if (testUp.getElement(i) < testDown.getElement(i)) {
-                selectionDirectionOk = false;
-                break;
-            }
-
-        }
-
-
-        if (selectionDirectionOk) {
-
-            RPnSelectedAreaDialog dialog = new RPnSelectedAreaDialog();
-            dialog.setVisible(true);
-
-            if (validResolution_) {
-                Area selectedArea = new Area(resolution_, diagonal[0], diagonal[1]);
-                BifurcationProfile.instance().addArea(selectedArea);
-
-            }
-
-        }
-
+    public List<Area> getListArea() {
+        return listArea_;
     }
 }
 

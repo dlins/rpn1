@@ -306,4 +306,8 @@ public class ConnectionOrbitCalc implements RpCalculation {
         return methodCalcName_;
 
     }
+
+    public RpSolution recalc(Area area) throws RpException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

@@ -88,6 +88,8 @@ public class RPNUMERICS {
 
         Configuration fluxFunctionConfig = physicsConfiguration.getConfiguration("fluxfunction");
         FluxParams fluxParams = getFluxParams();
+        System.out.println("FluxParams fluxParams = getFluxParams() : " + fluxParams);
+
         if (fluxFunctionConfig != null) {
 
 
@@ -139,6 +141,11 @@ public class RPNUMERICS {
                 setBoundary(new IsoTriang2DBoundary(boundaryConfiguration.getParam("limits")));
             }
 
+
+//                System.out.println("boundary.getMinimums() : " + boundary.getMinimums());
+//                System.out.println("boundary.getMaximums() : " + boundary.getMaximums());
+//
+//                ConfigurationProfile defaultBoundaryProfile = new ConfigurationProfile("rect", ConfigurationProfile.BOUNDARY_PROFILE);
 
         } else {//Catching boundary from numerics layer
 
@@ -306,12 +313,83 @@ public class RPNUMERICS {
      */
     public static native void initNative(String physicsName);
 
-    public static HugoniotCurveCalc createHugoniotCalc(RealVector xZero) {
+//    public static HugoniotCurveCalc createHugoniotCalc(RealVector xZero) {
 
-        int[] resolution = RPnDataModule.processResolution(getParamValue("hugoniotcurve", "resolution"));
+//        int[] resolution = RPnDataModule.processResolution(getParamValue("hugoniotcurve", "resolution"));
 
-        return new HugoniotCurveCalcND(xZero, resolution);
+//        return new HugoniotCurveCalcND(xZero, resolution);
+//    }
+
+
+    public static HugoniotCurveCalc createHugoniotCalc(RealVector input) {
+
+        double xResolution = new Double(getConfiguration("Contour").getParam("x-resolution"));
+        double yResolution = new Double(getConfiguration("Contour").getParam("y-resolution"));
+
+        return new HugoniotCurveCalcND(new PhasePoint(input), (int)xResolution, (int)yResolution);
     }
+
+
+
+//    public static HugoniotCurveCalc createHugoniotCalc(RealVector xZero) {
+//
+//
+//        int xResolution = new Integer(getConfiguration("Contour").getParam("x-resolution"));
+//        int yResolution = new Integer(getConfiguration("Contour").getParam("y-resolution"));
+//
+//
+//        int[] resolution = new int[2];
+//
+//
+//        resolution[0] = xResolution;
+//        resolution[1] = yResolution;
+//
+//
+//
+//        return new HugoniotCurveCalcND(xZero, resolution);
+//    }
+
+//    public static HugoniotCurveCalc createHugoniotCalc() {
+//
+//        HugoniotCurveCalc hugoniotCurveCalc = null;
+//
+//        RealVector teste = new RealVector(3);
+//
+//        teste.setElement(0, 0.0);
+//        teste.setElement(1, 0.0);
+//        teste.setElement(2, 0.0);
+//
+//        return new HugoniotCurveCalcND(teste);
+////        HugoniotParams hparams = new HugoniotParams(new PhasePoint(teste), new FluxFunction(getFluxParams()));
+//
+////        ShockFlow shockFlow = (ShockFlow) createShockFlow();
+//        //Not specific
+//
+////        if (shockProfile_.getHugoniotMethodName().equals("Continuation")) {
+////
+////            GenericHugoniotFunction hugoniotFunction = new GenericHugoniotFunction(hparams);
+////
+////            HugoniotContinuationMethod method = new HugoniotContinuationMethod(hugoniotFunction, hparams, createODESolver(shockFlow));
+////
+////            hugoniotCurveCalc = new HugoniotCurveCalcND((HugoniotContinuationMethod) method);
+////
+////        }
+////
+////        if (shockProfile_.getHugoniotMethodName().equals("Contour")) {
+////
+////            HugoniotContourMethod contourMethod = new HugoniotContourMethod(hparams);
+////
+////            hugoniotCurveCalc = new HugoniotCurveCalcND(contourMethod);
+////
+////        }
+////        hugoniotCurveCalc.uMinusChangeNotify(shockProfile_.getUminus());
+//
+////        return hugoniotCurveCalc;
+//
+//
+//
+//    }
+
 
     public static RarefactionOrbitCalc createRarefactionCalc(OrbitPoint orbitPoint) {
 
@@ -565,7 +643,7 @@ public class RPNUMERICS {
         for (int i = 0; i
                 < fluxParams.getParams().getSize(); i++) {
 
-            physicsConfiguration.setParamOrder("param" + i, i);
+            physicsConfiguration.setParamOrder("param" + "i", i);
             physicsConfiguration.setParamValue("param" + i, fluxParams.getElement(i) + "");
 
 

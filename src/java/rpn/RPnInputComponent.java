@@ -18,9 +18,11 @@ import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
+import javax.swing.ButtonGroup;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -29,12 +31,11 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import rpnumerics.Configuration;
+import rpnumerics.RPNUMERICS;
 import wave.util.RealVector;
-
 
 //**** tirar os listeners, que serao enviados para classes especializadas
 //**** basicamente, cada tipo de campo deverá ser tratado por uma classe especialista, munida de um listener
-
 public class RPnInputComponent {
 
     private JPanel panel_ = new JPanel();
@@ -47,6 +48,7 @@ public class RPnInputComponent {
     private double maxRange_;
     private double minRange_;
     private RPnInputController controller_;
+    private RPnObserverController observerController_;
 //    private RPnObserverController observerController_;
     private String parameterName_;
     //CONSTS
@@ -57,107 +59,110 @@ public class RPnInputComponent {
     //RADIO BUTTON INDEX
     public static int rb = -1;
 
-//    public RPnInputComponent(RPnSubject subject) {
+    public RPnInputComponent(RPnSubject subject) {
+
+        // desfazer a associacao com grupo
+        JRadioButton[] option = new JRadioButton[3];
+        ButtonGroup group = new ButtonGroup();
+        option[0] = new JRadioButton("Horizontal");
+        option[1] = new JRadioButton("Vertical");
+        option[2] = new JRadioButton("Mixed");
+
+        textField_ = new JFormattedTextField[subject.getParamsNames().length];
+
+        label_ = new JLabel[subject.getParamsNames().length];
+
+        observerController_ = new RPnObserverController(this, subject);
+        GridBagConstraints gridConstraints = new GridBagConstraints();
+
+        gridConstraints.fill = GridBagConstraints.BOTH;
+
+        gridConstraints.gridwidth = 1;
+        gridConstraints.gridheight = 1;
+        gridConstraints.ipadx = 50;
+        gridConstraints.gridy = 0;
+        gridConstraints.gridx = 0;
+
+        GridBagLayout gridBayLayout = new GridBagLayout();
+
+        panel_.setLayout(gridBayLayout);
+        panel_.setName(subject.getName());
+
+
+        if (subject.getName() == null ? "Radio" != null : !subject.getName().equals("Radio")) {   //*** Leandro teste (introduzi o if)
+
+            for (int i = 0; i < subject.getParamsNames().length; i++) {         //********* Fazer tratamento se o campo for vazio, para preservar os formatos
+
+                String value = subject.getParamsValues()[i];        //*** Leandro teste
+
+//                if (value.contains(".")) {
 //
-//        // desfazer a associacao com grupo
-//        JRadioButton[] option = new JRadioButton[3];
-//        ButtonGroup group = new ButtonGroup();
-//        option[0] = new JRadioButton("Horizontal");
-//        option[1] = new JRadioButton("Vertical");
-//        option[2] = new JRadioButton("Mixed");
-//
-//        textField_ = new JFormattedTextField[subject.getParamsNames().length];
-//
-//        label_ = new JLabel[subject.getParamsNames().length];
-//
-//        observerController_ = new RPnObserverController(this, subject);
-//        GridBagConstraints gridConstraints = new GridBagConstraints();
-//
-//        gridConstraints.fill = GridBagConstraints.BOTH;
-//
-//        gridConstraints.gridwidth = 1;
-//        gridConstraints.gridheight = 1;
-//        gridConstraints.ipadx = 50;
-//        gridConstraints.gridy = 0;
-//        gridConstraints.gridx = 0;
-//
-//        GridBagLayout gridBayLayout = new GridBagLayout();
-//
-//        panel_.setLayout(gridBayLayout);
-//        panel_.setName(subject.getName());
-//
-//
-//        if (subject.getName() == null ? "Radio" != null : !subject.getName().equals("Radio")) {   //*** Leandro teste (introduzi o if)
-//
-//            for (int i = 0; i < subject.getParamsNames().length; i++) {         //********* Fazer tratamento se o campo for vazio, para preservar os formatos
-//
-//                String value = subject.getParamsValues()[i];        //*** Leandro teste
-//
-////                if (value.contains(".")) {
-////
-////                    formatter_ = doubleFormatter_;
-////                } else {
-////                    formatter_ = integerFormatter_;
-////                }
-//
-//                JFormattedTextField textField = new JFormattedTextField(formatter_);
-//
-//                //textField.setText(value);
-//                textField.setColumns(4);
-//                textField_[i] = textField;
-//
-//                textField.addFocusListener(new TextFocusListener());
-//
-//                textField.setName(subject.getParamsNames()[i]);
-//                textField.getDocument().addDocumentListener(new TextObserverValueHandler());
-//
-//
-//                JLabel labelName = new JLabel(subject.getParamsNames()[i]);
-//
-//                if (subject.getParamsNames()[i].equals("lambda")) {
-//                    labelName = new JLabel("  \u03BB");
+//                    formatter_ = doubleFormatter_;
+//                } else {
+//                    formatter_ = integerFormatter_;
 //                }
-//
-//                label_[i] = labelName;
-//
-//                gridConstraints.gridx = 0;
-//                panel_.add(label_[i], gridConstraints);
-//                panel_.add(textField_[i], gridConstraints);
-//                gridConstraints.gridx = 1;
-//                panel_.add(textField_[i], gridConstraints);
-//
-//                gridConstraints.gridy++;
-//
-//
-//            }
-//
-//        }
-//
-//
-//        if (subject.getName().equals("Radio")) {
-//            if (RPNUMERICS.physicsID().equals("Stone")) {
-//                for (int i = 0; i < option.length; i++) {
-//                    option[i].addActionListener(new ListenerRadioButton());
-//                    group.add(option[i]);
-//                    panel_.add(option[i]);
-//                }
-//
-//            }
-//
-//        }
-//
-//
-//
-//        //*** deverá ser retirado. Tratamentos assim serao feitos a partir do throws (RPnSubject)
-//        if (subject.getName().equals("Corey")  &&  RPNUMERICS.physicsID().equals("QuadraticR2")) {
-//            panel_.add(new JLabel("A > 0 , B > 0 , A + B < 1"));
-//        }
-//        //***
-//
-//
-//    }
+
+                JFormattedTextField textField = new JFormattedTextField(formatter_);
+
+                //textField.setText(value);
+                textField.setColumns(4);
+                textField_[i] = textField;
+
+                textField.addFocusListener(new TextFocusListener());
+
+//<<<<<<< HEAD
+                textField.setName(subject.getParamsNames()[i]);
+                textField.getDocument().addDocumentListener(new TextObserverValueHandler());
+
+
+                JLabel labelName = new JLabel(subject.getParamsNames()[i]);
+
+                if (subject.getParamsNames()[i].equals("lambda")) {
+                    labelName = new JLabel("  \u03BB");
+                }
+
+                label_[i] = labelName;
+
+                gridConstraints.gridx = 0;
+                panel_.add(label_[i], gridConstraints);
+                panel_.add(textField_[i], gridConstraints);
+                gridConstraints.gridx = 1;
+                panel_.add(textField_[i], gridConstraints);
+
+                gridConstraints.gridy++;
+
+
+            }
+
+        }
+
+
+        if (subject.getName().equals("Radio")) {
+            if (RPNUMERICS.physicsID().equals("Stone")) {
+                for (int i = 0; i < option.length; i++) {
+                    option[i].addActionListener(new ListenerRadioButton());
+                    group.add(option[i]);
+                    panel_.add(option[i]);
+                }
+
+            }
+
+        }
+
+
+
+        //*** deverá ser retirado. Tratamentos assim serao feitos a partir do throws (RPnSubject)
+        if (subject.getName().equals("Corey") && RPNUMERICS.physicsID().equals("QuadraticR2")) {
+            panel_.add(new JLabel("A > 0 , B > 0 , A + B < 1"));
+        }
+        //***
+
+
+    }
 
      public RPnInputComponent(Configuration configuration) {
+
+        //System.out.println("Entrou no construtor RPnInputComponent(Configuration configuration)");
 
         textField_ = new JFormattedTextField[configuration.getParamsSize()];
 
@@ -174,22 +179,28 @@ public class RPnInputComponent {
         gridConstraints.gridx = 0;
 
         GridBagLayout gridBayLayout = new GridBagLayout();
-        
+
         panel_.setLayout(gridBayLayout);
+
+        //System.out.println("Pronto pra montar RealVector paramsVector");
+        //System.out.println("O configuration é : " + configuration.toString());
+
 
         int j = 0;
 
         HashMap<String, String> paramsValues = configuration.getParams();
 
-        Set<Entry<String,String>> paramsSet= paramsValues.entrySet();
+        Set<Entry<String, String>> paramsSet = paramsValues.entrySet();
 
-        for (Entry<String,String> value : paramsSet) {
+        for (Entry<String, String> value : paramsSet) {
 
-//            JFormattedTextField textField = new JFormattedTextField(formatter_);
+
+            //JFormattedTextField textField = new JFormattedTextField(formatter_);
 
             JFormattedTextField textField = new JFormattedTextField();
 
             textField.setText(configuration.getParam(j));
+
             textField.setColumns(4);
 
             textField_[j] = textField;
@@ -206,15 +217,17 @@ public class RPnInputComponent {
             panel_.add(textField, gridConstraints);
 
             gridConstraints.gridy++;
+
             j++;
+
 
         }
 
         controller_ = new RPnInputController(this, configuration);
 
+
     }
 
-    
     public JFormattedTextField[] getTextField() {
         return textField_;
     }
@@ -259,11 +272,13 @@ public class RPnInputComponent {
 
         public void insertUpdate(DocumentEvent arg0) {
 
-            Document doc = (Document) arg0.getDocument();
 
-//            RealVector newValues = new RealVector(textField_.length);
+            Document
+             doc = (Document) arg0.getDocument();
+
+            //RealVector newValues = new RealVector(textField_.length);
             String [] newValues = new String[textField_.length];
-//            double doubleNewValue;
+            //double doubleNewValue;
 
             try {
                 for (int j = 0; j < textField_.length; j++) {
@@ -271,13 +286,14 @@ public class RPnInputComponent {
                     if (textField_[j].getDocument() == doc) {
                         parameterName_ = textField_[j].getName();
                         String newValue = doc.getText(0, doc.getLength());
-//                        doubleNewValue = new Double(newValue);
-//                        newValues.setElement(j, doubleNewValue);
+
+                        //doubleNewValue = new Double(newValue);
+                        //newValues.setElement(j, doubleNewValue);
                         newValues[j] =newValue;
 
                     } else {
-//                        doubleNewValue = new Double(textField_[j].getText());
-//                        newValues.setElement(j, doubleNewValue);
+                        //doubleNewValue = new Double(textField_[j].getText());
+                        //newValues.setElement(j, doubleNewValue);
 
                         newValues[j]=textField_[j].getText();
 
@@ -306,30 +322,32 @@ public class RPnInputComponent {
         public void insertUpdate(DocumentEvent arg0) {
             Document doc = (Document) arg0.getDocument();
 
+
+            RealVector newValues = new RealVector(textField_.length);
+            double doubleNewValue;
+
             try {
+                
+                    for (int j = 0; j < textField_.length; j++) {
 
-                RealVector newValues = new RealVector(textField_.length);
-                double doubleNewValue;
+                        if (textField_[j].getDocument() == doc) {
+                            String newValue = doc.getText(0, doc.getLength());
+                            doubleNewValue = new Double(newValue);
+                            newValues.setElement(j, doubleNewValue);
+                        } else {
+                            doubleNewValue = new Double(textField_[j].getText());
+                            newValues.setElement(j, doubleNewValue);
+                        }
 
-                for (int j = 0; j < textField_.length; j++) {
 
-                    if (textField_[j].getDocument() == doc) {
-                        String newValue = doc.getText(0, doc.getLength());
-                        doubleNewValue = new Double(newValue);
-                        newValues.setElement(j, doubleNewValue);
-                    } else {
-                        doubleNewValue = new Double(textField_[j].getText());
-                        newValues.setElement(j, doubleNewValue);
                     }
 
-                    
-                }
-                
-                // chamado qdo subject fica completo (comecando com textFields vazios...)
-//                observerController_.propertyChange(new PropertyChangeEvent(this, "fazendo teste", null, RPnFluxParamsSubject.realVectorToStringArray(newValues)));
+                    // chamado qdo subject fica completo (comecando com textFields vazios...)
+                    observerController_.propertyChange(new PropertyChangeEvent(this, "fazendo teste", null, RPnFluxParamsSubject.realVectorToStringArray(newValues)));
 
 
-            } catch (BadLocationException ex) {
+
+                } catch  (BadLocationException ex) {
                 //System.out.println("Excessao Bad" + ex.getMessage());
             } catch (NumberFormatException ex) {
                 //System.out.println("Excessao NumberFormat " + ex.getMessage());
@@ -345,66 +363,78 @@ public class RPnInputComponent {
         }
     }
 
-    private class SliderHandler implements ChangeListener {
 
-        public void stateChanged(ChangeEvent arg0) {
+private class SliderHandler implements ChangeListener {
 
-            JSlider slider = (JSlider) arg0.getSource();
-            Double newValue = setValue(slider.getValue());
+    public void stateChanged(ChangeEvent arg0) {
+
+        JSlider slider = (JSlider) arg0.getSource();
+        Double newValue = setValue(slider.getValue());
 
 
 //            textField_.setText(formatter_.format(new Double(newValue)));
 
 //            textField_.setText(formatter_.format(slider.getValue()));
 
-            if (!slider.getValueIsAdjusting()) {
+        if (!slider.getValueIsAdjusting()) {
 //                putValue(NUMERIC_VALUE, newValue);
-            }
         }
     }
+}
 
 
-    private class TextFocusListener implements FocusListener {
+private class TextFocusListener implements FocusListener {
 
-        public void focusGained(FocusEvent e) {
-            System.out.println("Ganhou foco : " +e.getComponent().getName());
+    public void focusGained(FocusEvent e) {
+        System.out.println("Ganhou foco : " + e.getComponent().getName());
 
-            for (int i = 0; i < textField_.length; i++) {
-                textField_[i].setForeground(Color.black);
-            }
-
-        }
-
-        public void focusLost(FocusEvent e) {
-            
-            for (int i = 0; i < textField_.length; i++) {
-                textField_[i].setForeground(Color.lightGray);
-                
-            }
-
+        for (int i = 0; i < textField_.length; i++) {
+            textField_[i].setForeground(Color.black);
         }
 
     }
 
+    public void focusLost(FocusEvent e) {
 
-    private class ListenerRadioButton implements ActionListener {
-
-        public void actionPerformed(ActionEvent e) {
-
-            System.out.println("Clicou num RadioButton : " +e.getActionCommand());
-
-            if (e.getActionCommand().equals("Horizontal")) rb = 0;
-            if (e.getActionCommand().equals("Vertical")) rb = 1;
-            if (e.getActionCommand().equals("Mixed")) rb = 2;
-
-            //System.out.println("Valor de rb : " +rb);
-
-            RealVector newValues = new RealVector(3);      //*** ESTE SERÄ O BOOLEANO
-
-//            observerController_.propertyChange(new PropertyChangeEvent(this, "fazendo teste", null, RPnFluxParamsSubject.realVectorToStringArray(newValues)));
+        for (int i = 0; i < textField_.length; i++) {
+            textField_[i].setForeground(Color.lightGray);
 
         }
 
+
     }
+}
+
+private class ListenerRadioButton implements ActionListener {
+
+    public void actionPerformed(ActionEvent e) {
+
+        System.out.println("Clicou num RadioButton : " + e.getActionCommand());
+
+        if (e.getActionCommand().equals("Horizontal")) {
+            rb = 0;
+        }
+        if (e.getActionCommand().equals("Vertical")) {
+            rb = 1;
+        }
+        if (e.getActionCommand().equals("Mixed")) {
+            rb = 2;
+        }
+
+        //System.out.println("Valor de rb : " +rb);
+
+        RealVector newValues = new RealVector(3);      //*** ESTE SERÄ O BOOLEANO
+
+        observerController_.propertyChange(new PropertyChangeEvent(this, "fazendo teste", null, RPnFluxParamsSubject.realVectorToStringArray(newValues)));
+
+    }
+}
 
 }
+
+
+
+
+    
+
+

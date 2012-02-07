@@ -175,6 +175,7 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
 
     }
 
+
     public void actionPerformed(ActionEvent e) {
 
         JButton button = (JButton) e.getSource();
@@ -209,7 +210,8 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
                 Boolean selected = (Boolean) curvesTable_.getValueAt(i, 0);
 
                 if (selected) {
-                    RPnDataModule.PHASESPACE.displayGeometry(i,false);
+                    //RPnDataModule.PHASESPACE.displayGeometry(i,false);
+                    RPnDataModule.PHASESPACE.hideGeometry(i);
                     curvesTable_.setValueAt(false, i, 3);
                 }
 
@@ -226,7 +228,8 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
                 Boolean selected = (Boolean) curvesTable_.getValueAt(i, 0);
 
                 if (selected) {
-                    RPnDataModule.PHASESPACE.displayGeometry(i,true);
+                    //RPnDataModule.PHASESPACE.displayGeometry(i,true);
+                    RPnDataModule.PHASESPACE.displayGeometry(i);
                     curvesTable_.setValueAt(true, i, 3);
                 }
 
@@ -239,8 +242,8 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
         if (button.getName().equals("Remove")) {
             int count = tableModel_.getRowCount();
             int index = 0;
-            while (index<count){
 
+            while (index<count){
                 boolean selected = (Boolean)tableModel_.getValueAt(index, 0);
                 if (selected){
                     tableModel_.removeRow(index);
@@ -253,6 +256,7 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
                 }
 
             }
+
         }
 
     }

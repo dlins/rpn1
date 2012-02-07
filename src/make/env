@@ -1,0 +1,8 @@
+#
+# env - RPn makefile environment variable settings
+#       If left empty, makefile will get shell settings
+RPGNU=yes
+RPHOSTTYPE=linux_i686
+JAVA_HOME=/usr/lib/jvm/java-6-sun-1.6.0.26
+JAVA_INC=/usr/lib/jvm/java-6-sun-1.6.0.26/include
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/home/moreira/RPN/moreira-rpn/bin

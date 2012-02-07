@@ -8,8 +8,6 @@ package rpnumerics;
 
 public class CoincidenceCurveCalc extends BifurcationCurveCalc {
 
-    static private int contCC = 0;      //** declarei isso (Leandro)
-
     //
     // Constructors/Initializers
     //
@@ -28,21 +26,7 @@ public class CoincidenceCurveCalc extends BifurcationCurveCalc {
           if (result == null) {
             throw new RpException("Error in native layer");
         }
-
-
-        //** acrescentei isso (Leandro)
-
-        if (contCC == 0) {
-            System.out.println("Entrando em CoincidenceCurveCalc...");
-
-            RPnCurve.lista.add(result);
-            System.out.println("Tamanho da lista: " + RPnCurve.lista.size());
-
-            contCC += 1;
-        }
-
-        //*********************************************
-
+    
         return result;
     }
 

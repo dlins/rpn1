@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import rpn.component.util.ControlClick;
 import rpn.controller.ui.*;
 import rpn.message.RPnActionMediator;
+import rpnumerics.RPnCurve;
 
 
 public class ClearPhaseSpaceAgent extends javax.swing.AbstractAction {
@@ -29,7 +30,7 @@ public class ClearPhaseSpaceAgent extends javax.swing.AbstractAction {
     }
 
     public void clear() {
-
+        
         // rpn.RPnUIFrame.instance().setTitle(" completing ...  " + DESC_TEXT);
         UIController.instance().setWaitCursor();
         UIController.instance().panelsBufferClear();

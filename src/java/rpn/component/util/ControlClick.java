@@ -1,27 +1,29 @@
+// VERSAO DE 03/08 - Funcionando melhor!!!
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package rpn.component.util;
 
 import java.awt.event.MouseEvent;
-//import java.util.logging.Level;
-//import java.util.logging.Logger;
-import java.util.ArrayList;
-import java.util.List;
 import rpn.RPnPhaseSpacePanel;
-//import rpn.RPnUIFrame;
 import rpn.controller.ui.AREASELECTION_CONFIG;
 import rpn.controller.ui.UIController;
-//import rpnumerics.RPNUMERICS;
+import rpnumerics.DoubleContactCurve;
 import rpnumerics.HugoniotCurve;
+import rpnumerics.HugoniotSegment;
 import rpnumerics.Orbit;
+import rpnumerics.OrbitPoint;
+import rpnumerics.RPNUMERICS;
 import rpnumerics.RPnCurve;
+import rpnumerics.SegmentedCurve;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
 import wave.multid.view.Scene;
 import wave.multid.view.ViewingTransform;
+import wave.util.RealSegment;
+import wave.util.RealVector;
 
 /**
  *
@@ -31,105 +33,81 @@ public class ControlClick {
 
     public static int ind = 0;
 
-    //** Para a posição da string em coordenadas físicas
-    static public List xStr = new ArrayList();
-    static public List yStr = new ArrayList();
-
-    //** Para a posição da string em coordenadas do dispositivo
-    static public List xDevStr = new ArrayList();
-    static public List yDevStr = new ArrayList();
-
-    //** Para ponta da seta da string na curva em coordenadas físicas
-    static public List xSeta = new ArrayList();
-    static public List ySeta = new ArrayList();
-
-    //** Para ponta da seta da string em coordenadas do dispositivo
-    static public List xDevSeta = new ArrayList();
-    static public List yDevSeta = new ArrayList();
-
-    //** Para a posição da velocidade em coordenadas físicas
-    static public List xVel = new ArrayList();
-    static public List yVel = new ArrayList();
-
-    //** Para a posição da velocidade em coordenadas do dispositivo
-    static public List xDevVel = new ArrayList();
-    static public List yDevVel = new ArrayList();
-
-    //** Para ponta da seta da velocidade na curva em coordenadas físicas
-    static public List xSetaVel = new ArrayList();
-    static public List ySetaVel = new ArrayList();
-
-    //** Para ponta da seta da velocidade na curva em coordenadas físicas
-    static public List xDevSetaVel = new ArrayList();
-    static public List yDevSetaVel = new ArrayList();
-
-    //** Para indicar as curvas
-    //static public List indCurva = new ArrayList();
-
-
-    //*************************************// (Leandro)
-
-    public static void clearVelocities() {
-        GeometryUtil.vel.clear();
-        
-        xDevSetaVel.clear();        xDevVel.clear();
-        xSetaVel.clear();           xVel.clear();
-        yDevSetaVel.clear();        yDevVel.clear();
-        ySetaVel.clear();           yVel.clear();
+    //*************************************
+    public static void clearpMarca() {
+        for (int i=0; i<GeometryGraphND.pMarca.getSize(); i++) {
+            GeometryGraphND.pMarca.setElement(i, 100.);
+        }
     }
-    
-    
-    public static void clearClassifiers() {
-        GeometryUtil.tipo.clear();
-
-        xDevSeta.clear();           xDevStr.clear();
-        xSeta.clear();              xStr.clear();
-        yDevSeta.clear();           yDevStr.clear();
-        ySeta.clear();              yStr.clear();
-    }
-
 
     public static void clearLastString() {
+        clearpMarca();
 
         if (UIController.instance().getState() instanceof CLASSIFIERAGENT_CONFIG) {
-            int lastIndex = GeometryUtil.tipo.size() - 1;
-            GeometryUtil.tipo.remove(lastIndex);
-            xDevSeta.remove(lastIndex);           xDevStr.remove(lastIndex);
-            xSeta.remove(lastIndex);              xStr.remove(lastIndex);
-            yDevSeta.remove(lastIndex);           yDevStr.remove(lastIndex);
-            ySeta.remove(lastIndex);              yStr.remove(lastIndex);
+            int lastIndex = ClassifierAgent.tipo.size() - 1;
+            ClassifierAgent.indCurvaCla.remove(lastIndex);
+            ClassifierAgent.tipo.remove(lastIndex);
+            ClassifierAgent.xDevSeta.remove(lastIndex);
+            ClassifierAgent.xDevStr.remove(lastIndex);
+            ClassifierAgent.xSeta.remove(lastIndex);
+            ClassifierAgent.xStr.remove(lastIndex);
+            ClassifierAgent.yDevSeta.remove(lastIndex);
+            ClassifierAgent.yDevStr.remove(lastIndex);
+            ClassifierAgent.ySeta.remove(lastIndex);
+            ClassifierAgent.yStr.remove(lastIndex);
         }
 
         if (UIController.instance().getState() instanceof VELOCITYAGENT_CONFIG) {
-            int lastIndex = GeometryUtil.vel.size() - 1;
-            GeometryUtil.vel.remove(lastIndex);
-            xDevSetaVel.remove(lastIndex);        xDevVel.remove(lastIndex);
-            xSetaVel.remove(lastIndex);           xVel.remove(lastIndex);
-            yDevSetaVel.remove(lastIndex);        yDevVel.remove(lastIndex);
-            ySetaVel.remove(lastIndex);           yVel.remove(lastIndex);
+            int lastIndex = VelocityAgent.vel.size() - 1;
+            VelocityAgent.indCurvaVel.remove(lastIndex);
+            VelocityAgent.vel.remove(lastIndex);
+            VelocityAgent.xDevSetaVel.remove(lastIndex);
+            VelocityAgent.xDevVel.remove(lastIndex);
+            VelocityAgent.xSetaVel.remove(lastIndex);
+            VelocityAgent.xVel.remove(lastIndex);
+            VelocityAgent.yDevSetaVel.remove(lastIndex);
+            VelocityAgent.yDevVel.remove(lastIndex);
+            VelocityAgent.ySetaVel.remove(lastIndex);
+            VelocityAgent.yVel.remove(lastIndex);
         }
     }
 
-
     public static void clearAllStrings() {
-        clearVelocities();
-        clearClassifiers();
+        VelocityAgent.clearVelocities();
+        ClassifierAgent.clearClassifiers();
     }
-
 
     public static void clearAll() {
-        RPnCurve.lista.clear();
+        ClassifierAgent.indCurvaCla.clear();
+        VelocityAgent.indCurvaVel.clear();
         clearAllStrings();
     }
-
     //***************************************
 
+    //---------------------------------------
+
+    public static RealVector secondPointDC(RPnCurve curve_) {
+
+        int jDC = 0;
+        SegmentedCurve curve = (SegmentedCurve)curve_;
+
+        if (GeometryUtil.closestSeg > curve.segments().size() / 2) {
+            jDC = GeometryUtil.closestSeg - curve.segments().size() / 2;
+        } else {
+            jDC = GeometryUtil.closestSeg + curve.segments().size() / 2;
+        }
+
+        RealVector pDC = new RealVector(((RealSegment) ((curve).segments()).get(jDC)).p1());
+
+        return pDC;
+    }
+
+    //---------------------------------------
 
     public static void mousePressed(MouseEvent event, Scene scene) {
 
-        //**************************************************************   (Leandro)
-        RPnPhaseSpacePanel panel_ = (RPnPhaseSpacePanel) event.getComponent();      // para usar transfs originais
-        ViewingTransform transf = panel_.scene().getViewingTransform();             // para usar transfs originais
+        RPnPhaseSpacePanel panel_ = (RPnPhaseSpacePanel) event.getComponent();
+        ViewingTransform transf = panel_.scene().getViewingTransform();
 
         //** Para usar transfs originais.   FUNCIONANDO!!!
         Coords2D dcCoords = new Coords2D(event.getX(), event.getY());
@@ -137,129 +115,156 @@ public class ControlClick {
         transf.dcInverseTransform(dcCoords, wcCoords);
         //***
 
-        //**************************************************************    Edson
-        if (((UIController.instance().getState() instanceof AREASELECTION_CONFIG)  ||
-             (UIController.instance().getState() instanceof CLASSIFIERAGENT_CONFIG) ||
-             (UIController.instance().getState() instanceof VELOCITYAGENT_CONFIG)) && (ind % 2) == 0) {
+        //****** Para primeiro click
+        if (((UIController.instance().getState() instanceof AREASELECTION_CONFIG)
+                || (UIController.instance().getState() instanceof AREASELECTION_CONFIG2)
+                || (UIController.instance().getState() instanceof CLASSIFIERAGENT_CONFIG)
+                || (UIController.instance().getState() instanceof VELOCITYAGENT_CONFIG)) && (ind % 2) == 0) {
 
-            for (int i = 0; i < GeometryUtil.targetPoint.getSize(); i++) {
-                GeometryUtil.targetPoint.setElement(i, wcCoords.getElement(i));
+            for (int i = 0; i < GeometryGraphND.targetPoint.getSize(); i++) {
+                GeometryGraphND.targetPoint.setElement(i, wcCoords.getElement(i));
             }
+            //System.out.println("Target point: " + GeometryUtil.targetPoint);
 
-            GeometryUtil.findClosestCurve(GeometryUtil.targetPoint, RPnCurve.lista, 0);
-
-            System.out.println("Target point: " + GeometryUtil.targetPoint);
-            GeometryUtil.zContido.clear();
-            GeometryUtil.wContido.clear();
+            RPnCurve curve = GeometryUtil.findClosestCurve(GeometryGraphND.targetPoint);
+            
+            if (curve instanceof SegmentedCurve)     GeometryGraphND.pMarca = ((RealSegment) (((SegmentedCurve) curve).segments()).get(GeometryUtil.closestSeg)).p1();
+            if (curve instanceof Orbit)              GeometryGraphND.pMarca = ((Orbit) curve).getPoints()[GeometryUtil.closestSeg];
+            
+            if (curve instanceof DoubleContactCurve) {
+                GeometryGraphND.pMarcaDC = secondPointDC(curve);
+            }
+            else GeometryGraphND.pMarcaDC = GeometryGraphND.pMarca;
+            
+            GeometryGraphND.zContido.clear();
+            GeometryGraphND.wContido.clear();
 
             ind += 1;
 
             return;
 
-        } //** Teste para segundo click. Segunda-feira, 09/05  (Leandro)
-        else if (((UIController.instance().getState() instanceof AREASELECTION_CONFIG)  ||
-                  (UIController.instance().getState() instanceof CLASSIFIERAGENT_CONFIG)  ||
-                  (UIController.instance().getState() instanceof VELOCITYAGENT_CONFIG)) && (ind % 2) == 1) {
+        }
+        //******
 
-            for (int i = 0; i < GeometryUtil.targetPoint.getSize(); i++) {
-                GeometryUtil.cornerRet.setElement(i, wcCoords.getElement(i));
+
+        //****** Para segundo click, com  AREASELECTION_CONFIG  ativo
+        if ((UIController.instance().getState() instanceof AREASELECTION_CONFIG  ||
+                (UIController.instance().getState() instanceof AREASELECTION_CONFIG2)) && (ind % 2) == 1) {
+
+            for (int i = 0; i < GeometryGraphND.targetPoint.getSize(); i++) {
+                GeometryGraphND.cornerRet.setElement(i, wcCoords.getElement(i));
             }
+            //System.out.println("Corner do retangulo: " + GeometryGraphND.cornerRet);
 
-            System.out.println("Corner do retangulo: " + GeometryUtil.cornerRet);
+            GeometryGraphND.zContido.clear();
+            GeometryGraphND.wContido.clear();
 
-            if (UIController.instance().getState() instanceof CLASSIFIERAGENT_CONFIG  &&  RPnCurve.lista.get(GeometryUtil.closestCurve) instanceof HugoniotCurve) {
+            ind += 1;
 
-                xStr.add(GeometryUtil.cornerRet.getElement(1));
-                yStr.add(GeometryUtil.cornerRet.getElement(0));
+            return;
 
-                CoordsArray wcCoordsCR = new CoordsArray(GeometryUtil.cornerRet);
+        }
+        //******
+
+        
+        //****** Para segundo click, com  CLASSIFIERAGENT_CONFIG  ou  VELOCITYAGENT_CONFIG  ativo
+        if (((UIController.instance().getState() instanceof CLASSIFIERAGENT_CONFIG)
+                || (UIController.instance().getState() instanceof VELOCITYAGENT_CONFIG)) && (ind % 2) == 1) {
+
+            for (int i = 0; i < GeometryGraphND.targetPoint.getSize(); i++) {
+                GeometryGraphND.cornerStr.setElement(i, wcCoords.getElement(i));
+                GeometryGraphND.cornerRet.setElement(i, 0);
+                GeometryGraphND.targetPoint.setElement(i, 0.);
+            }
+            //System.out.println("Corner da string: " + GeometryUtil.cornerStr);
+
+
+            //*** Botao CLASSIFY para HUGONIOT CURVE
+            if (UIController.instance().getState() instanceof CLASSIFIERAGENT_CONFIG && GeometryUtil.closestCurve_ instanceof HugoniotCurve) {
+            
+                HugoniotSegment segment = (HugoniotSegment)(((SegmentedCurve)GeometryUtil.closestCurve_).segments()).get(GeometryUtil.closestSeg);
+                ClassifierAgent.tipo.add(segment.getType());
+                
+                ClassifierAgent.xStr.add(GeometryGraphND.cornerStr.getElement(1));
+                ClassifierAgent.yStr.add(GeometryGraphND.cornerStr.getElement(0));
+
+                ClassifierAgent.strView.add(1);
+
+                CoordsArray wcCoordsCR = new CoordsArray(GeometryGraphND.cornerStr);
                 Coords2D dcCoordsCR = new Coords2D();
                 transf.viewPlaneTransform(wcCoordsCR, dcCoordsCR);
                 double xCR = dcCoordsCR.getElement(1);
                 double yCR = dcCoordsCR.getElement(0);
-                xDevStr.add(xCR);
-                yDevStr.add(yCR);
+                ClassifierAgent.xDevStr.add(xCR);
+                ClassifierAgent.yDevStr.add(yCR);
 
-                //**
-                xSeta.add(GeometryUtil.pMarca.getElement(1));
-                ySeta.add(GeometryUtil.pMarca.getElement(0));
-                CoordsArray wcCoordsSeta = new CoordsArray(GeometryUtil.pMarca);
+                //***
+                ClassifierAgent.xSeta.add(GeometryGraphND.pMarca.getElement(1));
+                ClassifierAgent.ySeta.add(GeometryGraphND.pMarca.getElement(0));
+                CoordsArray wcCoordsSeta = new CoordsArray(GeometryGraphND.pMarca);
                 Coords2D dcCoordsSeta = new Coords2D();
                 transf.viewPlaneTransform(wcCoordsSeta, dcCoordsSeta);
                 double xSeta_ = dcCoordsSeta.getElement(1);
                 double ySeta_ = dcCoordsSeta.getElement(0);
-                xDevSeta.add(xSeta_);
-                yDevSeta.add(ySeta_);
+                ClassifierAgent.xDevSeta.add(xSeta_);
+                ClassifierAgent.yDevSeta.add(ySeta_);
                 //***
 
+                ClassifierAgent.indCurvaCla.add(GeometryUtil.closestCurve);
+                
                 ind += 1;
                 return;
 
-            }
+            } //***
 
-            else if (UIController.instance().getState() instanceof VELOCITYAGENT_CONFIG  &&  RPnCurve.lista.get(GeometryUtil.closestCurve) instanceof Orbit) {
+            //*** Botao VELOCITY
+            else if (UIController.instance().getState() instanceof VELOCITYAGENT_CONFIG) {
 
-                xVel.add(GeometryUtil.cornerRet.getElement(1));
-                yVel.add(GeometryUtil.cornerRet.getElement(0));
+                if (GeometryUtil.closestCurve_ instanceof Orbit) {
+                    OrbitPoint point = (OrbitPoint) ((Orbit) GeometryUtil.closestCurve_).getPoints()[GeometryUtil.closestSeg];
+                    VelocityAgent.vel.add(point.getLambda());
+                }
+                else if (GeometryUtil.closestCurve_ instanceof HugoniotCurve) {
+                    HugoniotSegment segment = (HugoniotSegment)(((SegmentedCurve)GeometryUtil.closestCurve_).segments()).get(GeometryUtil.closestSeg);
+                    VelocityAgent.vel.add(segment.leftSigma());
+                }
 
-                CoordsArray wcCoordsCR = new CoordsArray(GeometryUtil.cornerRet);
+                VelocityAgent.xVel.add(GeometryGraphND.cornerStr.getElement(1));
+                VelocityAgent.yVel.add(GeometryGraphND.cornerStr.getElement(0));
+
+                VelocityAgent.velView.add(1);
+
+                CoordsArray wcCoordsCR = new CoordsArray(GeometryGraphND.cornerStr);
                 Coords2D dcCoordsCR = new Coords2D();
                 transf.viewPlaneTransform(wcCoordsCR, dcCoordsCR);
                 double xCR = dcCoordsCR.getElement(1);
                 double yCR = dcCoordsCR.getElement(0);
-                xDevVel.add(xCR);
-                yDevVel.add(yCR);
+                VelocityAgent.xDevVel.add(xCR);
+                VelocityAgent.yDevVel.add(yCR);
 
-                //**
-                xSetaVel.add(GeometryUtil.pMarca.getElement(1));
-                ySetaVel.add(GeometryUtil.pMarca.getElement(0));
-                CoordsArray wcCoordsSeta = new CoordsArray(GeometryUtil.pMarca);
+                //***
+                VelocityAgent.xSetaVel.add(GeometryGraphND.pMarca.getElement(1));
+                VelocityAgent.ySetaVel.add(GeometryGraphND.pMarca.getElement(0));
+                CoordsArray wcCoordsSeta = new CoordsArray(GeometryGraphND.pMarca);
                 Coords2D dcCoordsSeta = new Coords2D();
                 transf.viewPlaneTransform(wcCoordsSeta, dcCoordsSeta);
                 double xSeta_ = dcCoordsSeta.getElement(1);
                 double ySeta_ = dcCoordsSeta.getElement(0);
-                xDevSetaVel.add(xSeta_);
-                yDevSetaVel.add(ySeta_);
+                VelocityAgent.xDevSetaVel.add(xSeta_);
+                VelocityAgent.yDevSetaVel.add(ySeta_);
                 //***
+
+                VelocityAgent.indCurvaVel.add(GeometryUtil.closestCurve);
 
                 ind += 1;
                 return;
 
-            }
+            } //***
 
-            else if (UIController.instance().getState() instanceof VELOCITYAGENT_CONFIG  &&  RPnCurve.lista.get(GeometryUtil.closestCurve) instanceof HugoniotCurve) {
-
-                xVel.add(GeometryUtil.cornerRet.getElement(1));
-                yVel.add(GeometryUtil.cornerRet.getElement(0));
-
-                CoordsArray wcCoordsCR = new CoordsArray(GeometryUtil.cornerRet);
-                Coords2D dcCoordsCR = new Coords2D();
-                transf.viewPlaneTransform(wcCoordsCR, dcCoordsCR);
-                double xCR = dcCoordsCR.getElement(1);
-                double yCR = dcCoordsCR.getElement(0);
-                xDevVel.add(xCR);
-                yDevVel.add(yCR);
-
-                //**
-                xSetaVel.add(GeometryUtil.pMarca.getElement(1));
-                ySetaVel.add(GeometryUtil.pMarca.getElement(0));
-                CoordsArray wcCoordsSeta = new CoordsArray(GeometryUtil.pMarca);
-                Coords2D dcCoordsSeta = new Coords2D();
-                transf.viewPlaneTransform(wcCoordsSeta, dcCoordsSeta);
-                double xSeta_ = dcCoordsSeta.getElement(1);
-                double ySeta_ = dcCoordsSeta.getElement(0);
-                xDevSetaVel.add(xSeta_);
-                yDevSetaVel.add(ySeta_);
-                //***
-
-                ind += 1;
-                return;
-
-            }
 
             else {
-                GeometryUtil.zContido.clear();
-                GeometryUtil.wContido.clear();
+                GeometryGraphND.zContido.clear();
+                GeometryGraphND.wContido.clear();
 
                 ind += 1;
                 return;
@@ -267,9 +272,10 @@ public class ControlClick {
 
 
         }
-        //**************************************************************   (Leandro)
-        //**************************************************************    Edson
+
 
     }
-
 }
+
+
+

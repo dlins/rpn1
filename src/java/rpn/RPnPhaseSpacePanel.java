@@ -37,15 +37,19 @@ import org.apache.batik.dom.GenericDOMImplementation;
 import org.apache.batik.svggen.SVGGraphics2D;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
+import rpn.component.util.AREASELECTION_CONFIG2;
 import rpn.component.util.CLASSIFIERAGENT_CONFIG;
+import rpn.component.util.ControlClick;
 import rpn.component.util.GeometryGraph;
 import rpn.component.util.GeometryGraph3D;
+import rpn.component.util.GeometryGraphND;
 import rpn.component.util.GeometryUtil;
 import rpn.component.util.VELOCITYAGENT_CONFIG;
 import rpn.controller.ui.AREASELECTION_CONFIG;
 import rpn.controller.ui.UIController;
 import rpnumerics.BifurcationProfile;
 import rpnumerics.RPNUMERICS;
+import rpnumerics.RPnCurve;
 
 public class RPnPhaseSpacePanel extends JPanel implements Printable {
     //
@@ -57,7 +61,9 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     static public Color DEFAULT_BACKGROUND_COLOR = Color.black;
     static public Color DEFAULT_POINTMARK_COLOR = Color.white;
     //***
+
     public static List<Area> listaArea = new ArrayList<Area>();     //** declarei isso    (Leandro) - ainda nao esta sendo usado
+
     public static int myH_;                                          //** declarei isso    (Leandro)
     public static int myW_;                                          //** declarei isso    (Leandro)
 
@@ -119,8 +125,11 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         int myH = new Double(scene().getViewingTransform().viewPlane().
                 getViewport().getHeight()).intValue();
 
-        //myW = myW/2;             // Basta isso para redefinir os tamanho dos painéis
-        //myH = myH/2;
+        //myW = 3*myW/4;             // Basta isso para redefinir os tamanho dos painéis
+        //myH = 3*myH/4;
+
+        //myW = 2*myW;
+        //myH = 2*myH;
 
         cursorPos_ = new Point(0, 0);
         setBackground(DEFAULT_BOUNDARY_COLOR);
@@ -165,7 +174,6 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     //
     @Override
     public void paintComponent(Graphics g) {
-
 
         super.paintComponent(g);
         Stroke stroke = ((Graphics2D) g).getStroke();
@@ -229,30 +237,21 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         myH_ = getHeight();
         myW_ = getWidth();
 
+
         if (RPNUMERICS.domainDim() == 2) {
-            try {
-                GeometryGraph.class.newInstance().markPoints(GeometryUtil.targetPoint, GeometryUtil.pMarca, scene());
-                GeometryGraph.class.newInstance().paintComponent(g, scene());
-            } catch (InstantiationException ex) {
-                //Logger.getLogger(RPnPhaseSpacePanel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalAccessException ex) {
-                //Logger.getLogger(RPnPhaseSpacePanel.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            
+            GeometryGraph geom = new GeometryGraph();
+            geom.markPoints(scene());
+            geom.paintComponent(g, scene());
+
         }
 
         if (RPNUMERICS.domainDim() == 3) {
-            try {
-                if (scene().geometries().hasNext()) {
-                    GeometryGraph3D.class.newInstance().markPoints(GeometryUtil.targetPoint, GeometryUtil.pMarca, scene());
-                    GeometryGraph3D.class.newInstance().paintComponent(g, scene());
-                }
 
-            } catch (InstantiationException ex) {
-                System.out.println("Clear Space ativo.");
-                //Logger.getLogger(RPnPhaseSpacePanel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalAccessException ex) {
-                //Logger.getLogger(RPnPhaseSpacePanel.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            GeometryGraph3D geom3D = new GeometryGraph3D();
+            geom3D.markPoints(scene());
+            geom3D.paintComponent(g, scene());
+
         }
 
 //        if (RPNUMERICS.domainDim() == 4) {
@@ -260,7 +259,8 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
 //            GeometryGraph4D.paintComponent(g, scene());
 //        }
 
-        if (UIController.instance().getState() instanceof AREASELECTION_CONFIG) {        // acrescentei isso (Leandro)
+        if (UIController.instance().getState() instanceof AREASELECTION_CONFIG ||
+                UIController.instance().getState() instanceof AREASELECTION_CONFIG2) {        // acrescentei isso (Leandro)
             getCastedUI().pointMarkBuffer().clear();
             showCursorLine_ = false;
             repaint();

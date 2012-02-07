@@ -20,6 +20,7 @@ public class RPnConfigurationDialog extends RPnDialog {
 
     public RPnConfigurationDialog() {
         super(false, false);
+        System.out.println("Dentro do construtor de RPnConfigurationDialog");
 
         try {
             jbInit();
@@ -29,6 +30,7 @@ public class RPnConfigurationDialog extends RPnDialog {
     }
 
     private void jbInit() throws Exception {
+        System.out.println("Dentro do método jbInit()");
         setTitle("Configuration");
         extensionPanel_ = new JTabbedPane();
         applyButton.setText("OK");
@@ -36,12 +38,17 @@ public class RPnConfigurationDialog extends RPnDialog {
         HashMap<String, Configuration> configMap = RPNUMERICS.getConfigurations();
 
         Set<Entry<String, Configuration>> configSet = configMap.entrySet();
+        System.out.println("Tamanho de configSet.size() : " +configSet.size());
+
+        System.out.println("Pronto pra entrar no loop");
 
         for (Entry<String, Configuration> entry : configSet) {
+            System.out.println("Entrou no loop");
 
             String configurationType = entry.getValue().getType();
 
             if (!configurationType.equalsIgnoreCase("PHYSICS") && !configurationType.equalsIgnoreCase("VISUAL")) {
+
                 RPnInputComponent inputComponent = new RPnInputComponent(entry.getValue());
 
                 extensionPanel_.addTab(entry.getKey(), inputComponent.getContainer());
@@ -59,7 +66,7 @@ public class RPnConfigurationDialog extends RPnDialog {
         extensionPanel_.getActionMap().put("Apply", applyButton.getAction());
 
 
-
+        System.out.println("Fim do método jbInit()");
         pack();
     }
 

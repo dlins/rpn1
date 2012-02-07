@@ -34,10 +34,12 @@ public class RPnSelectedAreaDialog extends RPnDialog {
     }
 
     private void jbInit() throws Exception {
+        System.out.println("RPnSelectedAreaDialog : jbInit()");
 
         setTitle("Area Selection Resolution");
+        
         UI_ACTION_SELECTED actionSelected = (UI_ACTION_SELECTED) UIController.instance().getState();
-
+        
         resolutionValues_ = new JTextField[actionSelected.actionDimension()];
 
         paramsPanel_.setLayout(new GridLayout(resolutionValues_.length, 2));
@@ -65,6 +67,7 @@ public class RPnSelectedAreaDialog extends RPnDialog {
     }
 
     protected void apply() {
+        System.out.println("RPnSelectedAreaDialog : apply()");
 
         boolean okFlag = true;
 
@@ -77,15 +80,12 @@ public class RPnSelectedAreaDialog extends RPnDialog {
             } catch (NumberFormatException ex) {
                 okFlag = false;
                 JOptionPane.showMessageDialog(this, "Invalid resolution", "Error", JOptionPane.ERROR_MESSAGE);
-                BifurcationRefineAgent.instance().setValidResolution(false);
                 break;
 
             }
         }
 
         if (okFlag) {
-            BifurcationRefineAgent.instance().setValidResolution(true);
-            BifurcationRefineAgent.instance().setResolution(resolutionVector);
             dispose();
 
         }

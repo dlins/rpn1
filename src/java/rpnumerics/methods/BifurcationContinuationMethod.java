@@ -23,4 +23,5 @@ public class BifurcationContinuationMethod extends BifurcationMethod {
     public BifurcationParams getParams() {
         return null;
     }
+
 }

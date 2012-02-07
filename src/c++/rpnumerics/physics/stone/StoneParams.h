@@ -71,15 +71,14 @@ inline const FluxParams & StoneParams::defaultParams()  {
 
 
     RealVector  paramsVector(7);
-
-    paramsVector.component(0) = 1.5;
-
+      
+    paramsVector.component(0) = 1.0;
     paramsVector.component(1)=1.0;
     paramsVector.component(2)=1.0;
     paramsVector.component(3)=1.0;
     paramsVector.component(4)=1.0;
     paramsVector.component(5)=1.0;
-    paramsVector.component(6)=0.0;
+    paramsVector.component(6)=1.0;
 
     StoneParams * fluxParams = new StoneParams(paramsVector);    
     return *fluxParams;

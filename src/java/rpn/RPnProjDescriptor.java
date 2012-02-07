@@ -5,6 +5,7 @@
  */
 package rpn;
 
+import rpn.component.util.GeometryGraphND;
 import wave.multid.view.Viewing2DTransform;
 import wave.multid.view.Viewing3DTransform;
 import wave.multid.view.ViewingTransform;
@@ -44,6 +45,7 @@ public class RPnProjDescriptor {
         projMap_ = new ProjectionMap(domain, projSpace, projIndices);
         label_ = label;
         iso2equi_ = iso2equi;
+
     }
 
     public dcViewport viewport() {

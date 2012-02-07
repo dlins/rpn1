@@ -5,6 +5,7 @@
  */
 package rpnumerics;
 
+import rpn.component.util.GeometryUtil;
 import rpnumerics.methods.HugoniotMethod;
 import rpnumerics.methods.HugoniotContinuationMethod;
 import rpnumerics.methods.HugoniotContourMethod;
@@ -12,8 +13,7 @@ import wave.util.RealVector;
 import wave.util.RealMatrix2;
 import wave.util.VectorFunction;
 
-public class HugoniotCurveCalcND
-        implements HugoniotCurveCalc {
+public class HugoniotCurveCalcND implements HugoniotCurveCalc {
     //
     // Constants
     //
@@ -26,14 +26,27 @@ public class HugoniotCurveCalcND
     private HugoniotMethod hugoniotMethod_;
     private RealVector Uminus_;
     private HugoniotParams hugoniotParams_;
+    private int xRes_;
+    private int yRes_;
+    
 
     private  int resolution_ [];
 
     //
     // Constructors
     //
-    public HugoniotCurveCalcND(RealVector uMinus) {
+    public HugoniotCurveCalcND(RealVector uMinus, int xResolution, int yResolution) {
         Uminus_=new PhasePoint(uMinus);
+        xRes_ = xResolution;
+        yRes_ = yResolution;
+        resolution_ = new int[2];
+        resolution_[0]= xRes_;
+        resolution_[1]= yRes_;
+    
+    }
+
+
+    public HugoniotCurveCalcND(HugoniotContinuationMethod hugoniotMethod) {     // ****** ISTO É USADO? ******
         resolution_=new int[2];
         resolution_[0]=128;
         resolution_[1] = 128;
@@ -47,17 +60,17 @@ public class HugoniotCurveCalcND
 
 
 
-    public HugoniotCurveCalcND(HugoniotContinuationMethod hugoniotMethod) {
+//    public HugoniotCurveCalcND(HugoniotContinuationMethod hugoniotMethod) {
+//
+//        hugoniotMethod_ = hugoniotMethod;
+//
+//        hugoniotParams_ = hugoniotMethod.getParams();
+//        f_ = hugoniotMethod.getFunction();//(HugoniotContinuationParams) hugoniotParams_).getFunction();
+//
+//
+//    }
 
-        hugoniotMethod_ = hugoniotMethod;
-
-        hugoniotParams_ = hugoniotMethod.getParams();
-        f_ = hugoniotMethod.getFunction();//(HugoniotContinuationParams) hugoniotParams_).getFunction();
-
-
-    }
-
-    public HugoniotCurveCalcND(HugoniotContourMethod hugoniotMethod) {
+    public HugoniotCurveCalcND(HugoniotContourMethod hugoniotMethod) {          // ****** ISTO É USADO? ******
         hugoniotMethod_ = hugoniotMethod;
         hugoniotParams_ = hugoniotMethod.getParams();
     }
@@ -114,14 +127,10 @@ public class HugoniotCurveCalcND
 //            initialPoint.setElement(i, initialPoint.getElement(i) + UMINUS_SHIFT);
 //
 //        }
-
-        HugoniotCurve result= (HugoniotCurve) calc(getUMinus(),resolution_);
-
-        //** acrescentei isso (Leandro)
-
-        RPnCurve.lista.add(result);
-        System.out.println("Tamanho da lista: " + RPnCurve.lista.size());
-        //***
+        
+        HugoniotCurve result;
+       
+        result= (HugoniotCurve) calc(getUMinus(), resolution_);
 
         System.out.println("Tamanho de result: " + result.segments().size());
         return result;
@@ -133,5 +142,23 @@ public class HugoniotCurveCalcND
         return calc();
     }
 
+
+    //private native RpSolution calc(PhasePoint initialpoint, int xRes_, int yRes_) throws RpException;
+
+
+    
+
+
+    public RpSolution recalc(Area area) throws RpException {
+
+        HugoniotCurve result;
+        result = (HugoniotCurve) calc(getUMinus(), (int)area.getResolution().getElement(0), (int)area.getResolution().getElement(1), area.getTopRight(), area.getDownLeft());
+
+        return result;
+    }
+
     private native RpSolution calc(PhasePoint initialpoint,int resolution[]) throws RpException;
+
+    private native RpSolution calc(PhasePoint initialpoint, int xRes_, int yRes_, RealVector topR, RealVector dwnL) throws RpException;
+
 }

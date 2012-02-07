@@ -6,10 +6,12 @@
 
 package rpn.controller;
 
+
 import rpn.component.RpGeomFactory;
 import rpn.component.RpCalcBasedGeomFactory;
 import rpn.usecase.*;
 import java.beans.PropertyChangeEvent;
+import rpnumerics.Area;
 
 /** This class implements the methods to manipulate some calculus controllers, this calculus difines the geometric model ofa geometric visualization . When specifics elements (XZero , Profile and Hugoniot )changes its controllers, with methods implemented by this class, do the  visualization properties updates. */
 
@@ -36,7 +38,7 @@ public class RpCalcController implements RpController {
         ChangeFluxParamsAgent.instance().addPropertyChangeListener(this);
         ChangeDirectionAgent.instance().addPropertyChangeListener(this);
         ChangeSigmaAgent.instance().addPropertyChangeListener(this);
-
+        
 
     }
 
@@ -47,7 +49,7 @@ public class RpCalcController implements RpController {
         ChangeFluxParamsAgent.instance().removePropertyChangeListener(this);
         ChangeDirectionAgent.instance().removePropertyChangeListener(this);
         ChangeSigmaAgent.instance().removePropertyChangeListener(this);
-      
+        
         
     }
 
@@ -56,11 +58,29 @@ public class RpCalcController implements RpController {
     public void propertyChange(PropertyChangeEvent change) {
 
         // this is to avoid void notifications of enabled/disbled
-        if (change.getPropertyName().compareTo("enabled") != 0){
-            // updates only if visible
+          if (change.getPropertyName().compareTo("refine")== 0){
+
+             System.out.println( "Refinamento");
+
+             Area area = (Area) change.getNewValue();
+             geomFactory_.updateGeom(area);
+
+             return;
+         }
+
+
+
+
+         if (change.getPropertyName().compareTo("enabled") != 0){
+
+                  // updates only if visible
 //	        if (geomFactory_.geom().viewingAttr().isVisible())
             	geomFactory_.updateGeom();
         }
+
+       
+
+
             
     }
 

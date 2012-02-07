@@ -18,7 +18,7 @@ public class BoundaryExtensionCurveCalc extends BifurcationCurveCalc {
     int characteristicDomain_;
     int edge_;
     int edgeResolution_;
-    static private int contEC = 0;      //** declarei isso (Leandro)
+
 
     public BoundaryExtensionCurveCalc(BifurcationParams params, int edgeResolution, int curveFamily, int domainFamily, int edge, int characteristicDomain) {
         super(params);
@@ -34,22 +34,14 @@ public class BoundaryExtensionCurveCalc extends BifurcationCurveCalc {
     public RpSolution calc() throws RpException {
         RpSolution result = null;
 
-        int resolution[] = getParams().getResolution();
-        result = (BoundaryExtensionCurve) nativeCalc(resolution, edgeResolution_, curveFamily_, domainFamily_, edge_, characteristicDomain_);
+//        int resolution[] = getParams().getResolution();
+//        result = (BoundaryExtensionCurve) nativeCalc(resolution, edgeResolution_, curveFamily_, domainFamily_, edge_, characteristicDomain_);
 
-        //** acrescentei isso (Leandro)
-        if (contEC == 0) {
-            System.out.println("Entrando em ExtensionCurveCalc...");
+        result = (BoundaryExtensionCurve) nativeCalc(xResolution_, yResolution_, edgeResolution_, curveFamily_, domainFamily_, edge_, characteristicDomain_);
 
-            RPnCurve.lista.add((RPnCurve) result);
-            System.out.println("Tamanho da lista: " + RPnCurve.lista.size());
-
-            contEC += 1;
-        }
-
-        //*********************************************
         if (result == null) {
             throw new RpException("Error in native layer");
+
         }
 
 
@@ -84,5 +76,7 @@ public class BoundaryExtensionCurveCalc extends BifurcationCurveCalc {
         return yResolution_;
     }
 
-    private native RpSolution nativeCalc(int [] resolution, int edgeResolution, int leftFamily, int rightFamily, int edge, int characteristicDomain) throws RpException;
+    //private native RpSolution nativeCalc(int [] resolution, int edgeResolution, int leftFamily, int rightFamily, int edge, int characteristicDomain) throws RpException;
+
+    private native RpSolution nativeCalc(int xResolution, int yResolution, int edgeResolution, int leftFamily, int rightFamily, int edge, int characteristicDomain) throws RpException;
 }
