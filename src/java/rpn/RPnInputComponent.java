@@ -31,11 +31,9 @@ import javax.swing.text.Document;
 import rpnumerics.Configuration;
 import wave.util.RealVector;
 
-
 //**** tirar os listeners, que serao enviados para classes especializadas
 //**** basicamente, cada tipo de campo deverá ser tratado por uma classe especialista, munida de um listener
-
-public class RPnInputComponent {
+public class RPnInputComponent {//TODO Refatorar
 
     private JPanel panel_ = new JPanel();
     private JSlider slider_;
@@ -156,8 +154,7 @@ public class RPnInputComponent {
 //
 //
 //    }
-
-     public RPnInputComponent(Configuration configuration) {
+    public RPnInputComponent(Configuration configuration) {
 
         textField_ = new JFormattedTextField[configuration.getParamsSize()];
 
@@ -174,16 +171,16 @@ public class RPnInputComponent {
         gridConstraints.gridx = 0;
 
         GridBagLayout gridBayLayout = new GridBagLayout();
-        
+
         panel_.setLayout(gridBayLayout);
 
         int j = 0;
 
         HashMap<String, String> paramsValues = configuration.getParams();
 
-        Set<Entry<String,String>> paramsSet= paramsValues.entrySet();
+        Set<Entry<String, String>> paramsSet = paramsValues.entrySet();
 
-        for (Entry<String,String> value : paramsSet) {
+        for (Entry<String, String> value : paramsSet) {
 
 //            JFormattedTextField textField = new JFormattedTextField(formatter_);
 
@@ -214,7 +211,43 @@ public class RPnInputComponent {
 
     }
 
-    
+
+
+    public void removeParameter(String parameterName) {
+
+        for (int i = 0; i < textField_.length; i++) {
+            JFormattedTextField jFormattedTextField = textField_[i];
+
+            if (jFormattedTextField.getName().equals(parameterName)) {
+                panel_.remove(jFormattedTextField);
+                panel_.remove(label_[i]);
+            }
+
+
+        }
+
+
+    }
+
+
+
+
+       public void keepParameter(String parameterName) {
+
+        for (int i = 0; i < textField_.length; i++) {
+            JFormattedTextField jFormattedTextField = textField_[i];
+
+            if (!jFormattedTextField.getName().equals(parameterName)) {
+                panel_.remove(jFormattedTextField);
+                panel_.remove(label_[i]);
+            }
+
+
+        }
+
+
+    }
+
     public JFormattedTextField[] getTextField() {
         return textField_;
     }
@@ -262,7 +295,7 @@ public class RPnInputComponent {
             Document doc = (Document) arg0.getDocument();
 
 //            RealVector newValues = new RealVector(textField_.length);
-            String [] newValues = new String[textField_.length];
+            String[] newValues = new String[textField_.length];
 //            double doubleNewValue;
 
             try {
@@ -273,13 +306,13 @@ public class RPnInputComponent {
                         String newValue = doc.getText(0, doc.getLength());
 //                        doubleNewValue = new Double(newValue);
 //                        newValues.setElement(j, doubleNewValue);
-                        newValues[j] =newValue;
+                        newValues[j] = newValue;
 
                     } else {
 //                        doubleNewValue = new Double(textField_[j].getText());
 //                        newValues.setElement(j, doubleNewValue);
 
-                        newValues[j]=textField_[j].getText();
+                        newValues[j] = textField_[j].getText();
 
                     }
 
@@ -322,9 +355,9 @@ public class RPnInputComponent {
                         newValues.setElement(j, doubleNewValue);
                     }
 
-                    
+
                 }
-                
+
                 // chamado qdo subject fica completo (comecando com textFields vazios...)
 //                observerController_.propertyChange(new PropertyChangeEvent(this, "fazendo teste", null, RPnFluxParamsSubject.realVectorToStringArray(newValues)));
 
@@ -363,11 +396,10 @@ public class RPnInputComponent {
         }
     }
 
-
     private class TextFocusListener implements FocusListener {
 
         public void focusGained(FocusEvent e) {
-            System.out.println("Ganhou foco : " +e.getComponent().getName());
+            System.out.println("Ganhou foco : " + e.getComponent().getName());
 
             for (int i = 0; i < textField_.length; i++) {
                 textField_[i].setForeground(Color.black);
@@ -376,35 +408,40 @@ public class RPnInputComponent {
         }
 
         public void focusLost(FocusEvent e) {
-            
+
             for (int i = 0; i < textField_.length; i++) {
                 textField_[i].setForeground(Color.lightGray);
-                
+
             }
 
         }
-
     }
-
 
     private class ListenerRadioButton implements ActionListener {
 
         public void actionPerformed(ActionEvent e) {
 
-            System.out.println("Clicou num RadioButton : " +e.getActionCommand());
+            System.out.println("Clicou num RadioButton : " + e.getActionCommand());
 
-            if (e.getActionCommand().equals("Horizontal")) rb = 0;
-            if (e.getActionCommand().equals("Vertical")) rb = 1;
-            if (e.getActionCommand().equals("Mixed")) rb = 2;
+            if (e.getActionCommand().equals("Horizontal")) {
+                rb = 0;
 
-            //System.out.println("Valor de rb : " +rb);
+            }
+            if (e.getActionCommand().equals("Vertical")) {
+                rb = 1;
 
+            }
+            if (e.getActionCommand().equals("Mixed")) {
+                rb = 2;
+
+                //System.out.println("Valor de rb : " +rb);
+
+
+            }
             RealVector newValues = new RealVector(3);      //*** ESTE SERÄ O BOOLEANO
 
 //            observerController_.propertyChange(new PropertyChangeEvent(this, "fazendo teste", null, RPnFluxParamsSubject.realVectorToStringArray(newValues)));
 
         }
-
     }
-
 }

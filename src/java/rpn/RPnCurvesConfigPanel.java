@@ -10,6 +10,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.Set;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -18,63 +21,64 @@ import rpn.controller.ui.UIController;
 import rpn.controller.ui.UI_ACTION_SELECTED;
 import rpn.usecase.ChangeDirectionAgent;
 import rpn.usecase.RpModelPlotAgent;
+import rpnumerics.Configuration;
 import rpnumerics.RPNUMERICS;
 
 public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListener {
 
     private GridBagLayout gridLayout = new GridBagLayout();
-    private JPanel familyPanel_;
     private JPanel directionPanel_;
-    private JLabel familyLabel_, leftFamilyLabel_, rightFamilyLabel_;
-    private JSpinner familySpinner_, leftFamilySpinner_, rightFamilySpinner_;
+    private JSpinner familySpinner_;
     private JCheckBox forwardCheckBox_;
     private JCheckBox backwardCheckBox_;
-    private static Integer currentOrbitDirection_=OrbitGeom.FORWARD_DIR;
-    private static JToggleButton addLastGeometryButton_;
-    private static ToggleButtonListener buttonListener_;
+    private static Integer currentOrbitDirection_ = OrbitGeom.FORWARD_DIR;
+
+    private JTabbedPane curvesConfigurationPanel_;
 
     public RPnCurvesConfigPanel() {
 
-        buildPanel();
+
         ChangeDirectionAgent.instance().execute();
-        buttonListener_ = new ToggleButtonListener();
+
+        curvesConfigurationPanel_ = new JTabbedPane();
+        buildPanel();
 
     }
 
     public static void setMultipleButton(boolean state) {
-        addLastGeometryButton_.setSelected(state);
-        buttonListener_.actionPerformed(new ActionEvent(addLastGeometryButton_, 0, ""));
+
+      
 
 
     }
 
     private void buildPanel() {
-        addLastGeometryButton_ = new JToggleButton("Multiple plot");
-        addLastGeometryButton_.addActionListener(new ToggleButtonListener());
 
+        HashMap<String, Configuration> configMap = RPNUMERICS.getConfigurations();
+        curvesConfigurationPanel_.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 
-        FamilyListener familyListener = new FamilyListener();
+        Set<Entry<String, Configuration>> configSet = configMap.entrySet();
 
-        familyLabel_ = new JLabel("Family", SwingConstants.CENTER);
-        familyLabel_.setEnabled(false);
+        for (Entry<String, Configuration> entry : configSet) {
 
+            String configurationType = entry.getValue().getType();
 
-        //TODO Qual eh o valor maximo que o JSpinner deve ter ?? Esse valor muda conforme o tipo de curva para a qual ele configura a familia ??
-        int family = new Integer(RPNUMERICS.getParamValue("orbit", "family"));
-        familySpinner_ = new JSpinner(new SpinnerNumberModel(family, 0, RPNUMERICS.domainDim(), 1));
-        familySpinner_.setEnabled(false);
-        familySpinner_.addChangeListener(familyListener);
+            if (!configurationType.equalsIgnoreCase("PHYSICS") && !configurationType.equalsIgnoreCase("VISUAL")) {
+                RPnInputComponent inputComponent = new RPnInputComponent(entry.getValue());
+                inputComponent.removeParameter("resolution");
+                if (inputComponent.getContainer().getComponentCount() >0)
+                curvesConfigurationPanel_.addTab(entry.getKey(), inputComponent.getContainer());
+            }
 
-        GridLayout familyPanelGridLayout = new GridLayout(1, 2, 10, 10);
+        }
 
-        familyPanel_ = new JPanel(familyPanelGridLayout);
+    
         directionPanel_ = new JPanel(new GridLayout(1, 2));
 
         forwardCheckBox_ = new JCheckBox();
         forwardCheckBox_.setSelected(true);//Default 
 
         forwardCheckBox_.setEnabled(false);
-
 
         forwardCheckBox_.addActionListener(new OrbitDirectionListener());
         forwardCheckBox_.setText("Forward");
@@ -90,22 +94,31 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
         directionPanel_.add(forwardCheckBox_);
         directionPanel_.add(backwardCheckBox_);
 
-        familyPanel_.add(familyLabel_);
 
-        familyPanel_.add(familySpinner_);
 
-        this.setLayout(gridLayout);
+        BoxLayout boxLayout = new BoxLayout(this, BoxLayout.Y_AXIS);
+
+        curvesConfigurationPanel_.setMinimumSize(new Dimension(600, 400));
+
+        setLayout(boxLayout);
 
         GridBagConstraints gridConstraints = new GridBagConstraints();
 
-        gridConstraints.ipadx = 40;
 
-        gridConstraints.gridx = 0;
+        gridConstraints.gridheight = 1;
+        gridConstraints.gridwidth =2;
 
-        this.add(directionPanel_, gridConstraints);
-        gridConstraints.gridx = 1;
-        this.add(familyPanel_, gridConstraints);
+        gridConstraints.gridy = 0;
+        gridConstraints.fill=GridBagConstraints.BOTH;
 
+//        add(directionPanel_, gridConstraints);
+        add(directionPanel_);
+
+        gridConstraints.gridy = 1;
+
+     
+//        add(curvesConfigurationPanel_,gridConstraints);
+        add(curvesConfigurationPanel_);
 
     }
 
@@ -116,18 +129,7 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
     public void propertyChange(PropertyChangeEvent evt) {
 
         if (evt.getNewValue().equals("bifurcationcurve")) {//Bifurcation Curves selected
-            if (evt.getPropertyName().equals("family")) {
-
-                familySpinner_.setEnabled(false);
-                familyLabel_.setEnabled(false);
-//                leftFamilyLabel_.setEnabled(true);
-//
-//                rightFamilyLabel_.setEnabled(true);
-//                leftFamilySpinner_.setEnabled(true);
-//                rightFamilySpinner_.setEnabled(true);
-
-
-            }
+           
 
 
             if (evt.getPropertyName().equals("direction")) {
@@ -137,15 +139,7 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
         }
 
         if (evt.getNewValue().equals("phasediagram")) {//Phase Diagram Curves selected
-            if (evt.getPropertyName().equals("family")) {
-
-                familySpinner_.setEnabled(false);
-                familyLabel_.setEnabled(false);
-
-
-
-
-            }
+           
 
             if (evt.getPropertyName().equals("direction")) {
                 forwardCheckBox_.setEnabled(false);
@@ -157,12 +151,7 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
 
 
         if (evt.getNewValue().equals("wavecurve")) {//Wave Curves selected
-            if (evt.getPropertyName().equals("family")) {
-
-                familySpinner_.setEnabled(true);
-                familyLabel_.setEnabled(true);
-
-            }
+           
 
             if (evt.getPropertyName().equals("direction")) {
                 forwardCheckBox_.setEnabled(true);
@@ -202,8 +191,6 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
     }
 
     private class OrbitDirectionListener implements ActionListener {
-
-       
 
         public void actionPerformed(ActionEvent e) {
 

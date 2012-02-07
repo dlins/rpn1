@@ -82,10 +82,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionExtensionCalc_nativeCalc(JN
 
     env->GetIntArrayRegion(resolution, 0, dimension, number_of_grid_points);
 
-
     int singular = 0;
-
-    
 
     const FluxFunction * fluxFunction = &RpNumerics::getPhysics().fluxFunction();
     const AccumulationFunction * accumFunction = &RpNumerics::getPhysics().accumulation();
@@ -94,8 +91,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionExtensionCalc_nativeCalc(JN
 
     RealVector pmin(boundary->minimums());
     RealVector pmax(boundary->maximums());
-
-
 
     Rarefaction_Extension::extension_curve(fluxFunction,
             accumFunction,
@@ -116,8 +111,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionExtensionCalc_nativeCalc(JN
     printf("curve.size()  = %d\n", curve_segments.size());
     printf("domain.size() = %d\n", domain_segments.size());
     printf("rarefaction.size() = %d\n", rarefaction_segments.size());
-
-
 
 
 

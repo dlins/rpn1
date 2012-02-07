@@ -43,11 +43,12 @@ public class RPnConfigurationDialog extends RPnDialog {
 
             if (!configurationType.equalsIgnoreCase("PHYSICS") && !configurationType.equalsIgnoreCase("VISUAL")) {
                 RPnInputComponent inputComponent = new RPnInputComponent(entry.getValue());
-
+                
+                inputComponent.keepParameter("resolution");
+                if (inputComponent.getContainer().getComponentCount() > 0)
                 extensionPanel_.addTab(entry.getKey(), inputComponent.getContainer());
 
             }
-
 
         }
 
@@ -57,8 +58,6 @@ public class RPnConfigurationDialog extends RPnDialog {
 
         extensionPanel_.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "Apply");
         extensionPanel_.getActionMap().put("Apply", applyButton.getAction());
-
-
 
         pack();
     }

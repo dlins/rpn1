@@ -46,13 +46,17 @@ private:
 
     static int compute_last_point(const RealVector &previous_point, const RealVector &new_point, RealVector &last_point);
 
+    static void compute_all_eigenpairs(int n, const RealVector &in, std::vector<eigenpair> &e);
+
     static void compute_eigenpair(int n, const RealVector &in, double &lambda, RealVector &eigenvector);
 
     static double compute_lambda(int n, const RealVector &in);
 
     static int init(const RealVector &initial_point, int increase, double deltaxi, RealVector &second_point);
 
-    static double dirdrv(int n, const RealVector &p);
+    static double dirdrv(int n, const RealVector &p, const RealVector &direction);
+    static double dirdrv(int n, double *point, double *dir);
+    static int initial_dirdrv(int n, const RealVector &p, int increase, double &dd, RealVector &direction);
 
     static int rar_last_point(int n, const RealVector &p0, const RealVector &p1, RealVector &out);
 protected:
@@ -62,12 +66,24 @@ public:
             const RealVector *initial_direction,
             int curve_family,
             int increase,
-            int check_monotony,
+            int check_Monotony,
             double deltaxi,
             const FluxFunction *ff, const AccumulationFunction *aa,
             int type_of_accumulation,
             Boundary *boundary,
             std::vector<RealVector> &rarcurve);
+
+    static int speed_increase(void) {
+        return RAREFACTION_SPEED_INCREASE;
+    }
+
+    static int speed_neutral(void) {
+        return RAREFACTION_SPEED_NEUTRAL;
+    }
+
+    static int speed_decrease(void) {
+        return RAREFACTION_SPEED_DECREASE;
+    }
 };
 
 #endif // _RAREFACTION_
