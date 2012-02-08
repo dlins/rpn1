@@ -21,17 +21,21 @@ public class CoincidenceExtensionCurveCalc extends BifurcationCurveCalc {
     int characteristicDomain_;
 
 
-    //public CoincidenceExtensionCurveCalc(BifurcationParams params, int leftFamily, int rightFamily,int characteristicDomain) {
-    //    super(params);
-    //}
-    
-    public CoincidenceExtensionCurveCalc(int xResolution, int yResolution, int leftFamily, int rightFamily,int characteristicDomain) {
-        this.xResolution_ = xResolution;
-        this.yResolution_ = yResolution;
+    public CoincidenceExtensionCurveCalc(BifurcationParams params, int leftFamily, int rightFamily,int characteristicDomain) {
+        super(params);
         this.curveFamily_ = leftFamily;
         this.domainFamily_ = rightFamily;
         characteristicDomain_=characteristicDomain;
+
     }
+    
+//    public CoincidenceExtensionCurveCalc(int xResolution, int yResolution, int leftFamily, int rightFamily,int characteristicDomain) {
+//        this.xResolution_ = xResolution;
+//        this.yResolution_ = yResolution;
+//        this.curveFamily_ = leftFamily;
+//        this.domainFamily_ = rightFamily;
+//        characteristicDomain_=characteristicDomain;
+//    }
 
   
 

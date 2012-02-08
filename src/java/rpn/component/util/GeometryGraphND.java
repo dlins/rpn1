@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import rpn.RPnPhaseSpacePanel;
 import rpn.component.HugoniotSegGeom;
+import rpn.parser.RPnDataModule;
 import rpnumerics.Orbit;
 import rpnumerics.RPNUMERICS;
 import rpnumerics.SegmentedCurve;
@@ -364,7 +365,11 @@ public class GeometryGraphND {
         g.setColor(Color.gray);
         Graphics2D graph = (Graphics2D) g;
 
-        double xResolution = new Double(RPNUMERICS.getConfiguration("Contour").getParam("x-resolution"));
+        //double xResolution = new Double(RPNUMERICS.getConfiguration("Contour").getParam("x-resolution"));
+        int[] resolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("hugoniotcurve", "resolution"));
+        int xResolution = resolution[0];
+        int yResolution = resolution[1];
+        
         int nu = (int) xResolution;
         double dx = RPnPhaseSpacePanel.myW_/(1.0*nu);
         
@@ -376,7 +381,7 @@ public class GeometryGraphND {
         }
         //*******************************
 
-        double yResolution = new Double(RPNUMERICS.getConfiguration("Contour").getParam("y-resolution"));
+        //double yResolution = new Double(RPNUMERICS.getConfiguration("Contour").getParam("y-resolution"));
         int nv = (int) yResolution;
         double dy = RPnPhaseSpacePanel.myH_/(1.0*nu);
         

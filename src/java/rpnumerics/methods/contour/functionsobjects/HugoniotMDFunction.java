@@ -27,6 +27,7 @@ public class HugoniotMDFunction extends MDVectorFunction {
 
     }
 
+    @Override
     public RealVector value(PointNDimension point) {
 
         double x = 0.0;
@@ -45,7 +46,7 @@ public class HugoniotMDFunction extends MDVectorFunction {
             HugoniotCurveCalc hugoniotCurveCalc = RPNUMERICS.createHugoniotCalc(U);//edsonlan
             PhasePoint uMinus = hugoniotCurveCalc.getUMinus();//edsonlan
 
-            PhasePoint uMinus = null;//edsonlan
+            //PhasePoint uMinus = null;//edsonlan
 
             RealVector fMinus = null;//edsonlan
 

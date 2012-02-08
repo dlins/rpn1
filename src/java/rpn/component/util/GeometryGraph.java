@@ -14,6 +14,7 @@ import org.apache.batik.ext.awt.geom.Polygon2D;
 import rpn.RPnPhaseSpacePanel;
 import rpn.controller.ui.AREASELECTION_CONFIG;
 import rpn.controller.ui.UIController;
+import rpn.parser.RPnDataModule;
 import rpnumerics.Orbit;
 import rpnumerics.RPNUMERICS;
 import rpnumerics.SegmentedCurve;
@@ -136,8 +137,12 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
 
     public void markPoints(Scene scene) {        //*** era do GeometryGraph3D, vou usar para testar mapeamento do square
 
-        double xResolution = new Double(RPNUMERICS.getConfiguration("Contour").getParam("x-resolution"));
-        double yResolution = new Double(RPNUMERICS.getConfiguration("Contour").getParam("y-resolution"));
+        //double xResolution = new Double(RPNUMERICS.getConfiguration("Contour").getParam("x-resolution"));
+        //double yResolution = new Double(RPNUMERICS.getConfiguration("Contour").getParam("y-resolution"));
+
+        int[] resolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("hugoniotcurve", "resolution"));
+        int xResolution = resolution[0];
+        int yResolution = resolution[1];
 
         int nu = (int) xResolution;
         int nv = (int) yResolution;

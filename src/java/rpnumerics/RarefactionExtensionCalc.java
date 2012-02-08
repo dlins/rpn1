@@ -101,12 +101,12 @@ public class RarefactionExtensionCalc extends BifurcationCurveCalc {
 
 
 
-    //private native RpSolution nativeCalc(int [] resolution, PhasePoint start, int increase, int leftFamily, int rightFamily, int characteristicDomain) throws RpException;
+    private native RpSolution nativeCalc(int [] resolution, PhasePoint start, int increase, int leftFamily, int rightFamily, int characteristicDomain) throws RpException;
 
     public RpSolution recalc(Area area) throws RpException {
         return null;
     }
 
-    private native RpSolution nativeCalc(int xResolution, int yResolution, PhasePoint start, int increase, int leftFamily, int rightFamily, int characteristicDomain) throws RpException;
+    //private native RpSolution nativeCalc(int xResolution, int yResolution, PhasePoint start, int increase, int leftFamily, int rightFamily, int characteristicDomain) throws RpException;
 
 }

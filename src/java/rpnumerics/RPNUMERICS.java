@@ -323,9 +323,13 @@ public class RPNUMERICS {
 
     public static HugoniotCurveCalc createHugoniotCalc(RealVector input) {
 
-        double xResolution = new Double(getConfiguration("Contour").getParam("x-resolution"));
-        double yResolution = new Double(getConfiguration("Contour").getParam("y-resolution"));
-
+        //double xResolution = new Double(getConfiguration("Contour").getParam("x-resolution"));
+        //double yResolution = new Double(getConfiguration("Contour").getParam("y-resolution"));
+        
+        int[] resolution = RPnDataModule.processResolution(getParamValue("hugoniotcurve", "resolution"));
+        int xResolution = resolution[0];
+        int yResolution = resolution[1];
+        
         return new HugoniotCurveCalcND(new PhasePoint(input), (int)xResolution, (int)yResolution);
     }
 

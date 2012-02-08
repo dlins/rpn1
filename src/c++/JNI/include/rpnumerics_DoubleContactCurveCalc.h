@@ -12,8 +12,11 @@ extern "C" {
  * Method:    nativeCalc
  * Signature: ([III)Lrpnumerics/RpSolution;
  */
-JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
-  (JNIEnv *, jobject, jintArray, jint, jint);
+//JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
+//  (JNIEnv *, jobject, jintArray, jint, jint);
+
+    JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
+  (JNIEnv *, jobject, jint, jint, jint, jint);
 
 #ifdef __cplusplus
 }
