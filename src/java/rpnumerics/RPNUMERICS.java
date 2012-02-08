@@ -510,14 +510,14 @@ public class RPNUMERICS {
     public static BoundaryExtensionCurveCalc createBoundaryExtensionCurveCalc() {
 
         int[] resolution = RPnDataModule.processResolution(getParamValue("boundaryextensioncurve", "resolution"));
-
+        
         BifurcationParams params = new BifurcationParams(resolution);
 
         int characteristicWhere = new Integer(getParamValue("boundaryextensioncurve", "characteristicwhere"));
         int edge = new Integer(getParamValue("boundaryextensioncurve", "edge"));
-
-
+        
         int edgeResolution = new Integer(getParamValue("boundaryextensioncurve", "edgeresolution"));
+
         return new BoundaryExtensionCurveCalc(params, edgeResolution, new Integer(getParamValue("boundaryextensioncurve", "curvefamily")), new Integer(getParamValue("boundaryextensioncurve", "domainfamily")), edge, characteristicWhere);
 
 

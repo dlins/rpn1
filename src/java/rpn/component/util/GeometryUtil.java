@@ -39,7 +39,7 @@ public class GeometryUtil {
         while (geomList.hasNext()) {
 
             RpGeometry geom = (RpGeometry) geomList.next();
-
+            
             if (geom.viewingAttr().isVisible()) {
 
 //            if (curve instanceof SegmentedCurve) {
@@ -55,7 +55,7 @@ public class GeometryUtil {
 
                 RpGeomFactory factory = geom.geomFactory();
                 RPnCurve curve = (RPnCurve) factory.geomSource();
-
+                
                 seg = curve.findClosestSegment(targetPoint);
                 distancia = curve.distancia;
 

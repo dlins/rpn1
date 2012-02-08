@@ -34,10 +34,8 @@ public class BoundaryExtensionCurveCalc extends BifurcationCurveCalc {
     public RpSolution calc() throws RpException {
         RpSolution result = null;
 
-//        int resolution[] = getParams().getResolution();
-//        result = (BoundaryExtensionCurve) nativeCalc(resolution, edgeResolution_, curveFamily_, domainFamily_, edge_, characteristicDomain_);
-
-        result = (BoundaryExtensionCurve) nativeCalc(xResolution_, yResolution_, edgeResolution_, curveFamily_, domainFamily_, edge_, characteristicDomain_);
+        int resolution[] = getParams().getResolution();
+        result = (BoundaryExtensionCurve) nativeCalc(resolution, edgeResolution_, curveFamily_, domainFamily_, edge_, characteristicDomain_);
 
         if (result == null) {
             throw new RpException("Error in native layer");
@@ -76,7 +74,7 @@ public class BoundaryExtensionCurveCalc extends BifurcationCurveCalc {
         return yResolution_;
     }
 
-    //private native RpSolution nativeCalc(int [] resolution, int edgeResolution, int leftFamily, int rightFamily, int edge, int characteristicDomain) throws RpException;
+    private native RpSolution nativeCalc(int [] resolution, int edgeResolution, int leftFamily, int rightFamily, int edge, int characteristicDomain) throws RpException;
 
-    private native RpSolution nativeCalc(int xResolution, int yResolution, int edgeResolution, int leftFamily, int rightFamily, int edge, int characteristicDomain) throws RpException;
+    
 }

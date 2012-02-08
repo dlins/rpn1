@@ -34,11 +34,9 @@ NOTE :
 using std::vector;
 using namespace std;
 
-//JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
-//(JNIEnv * env, jobject obj, jintArray resolution, jint leftFamily, jint rightFamily) {
-
 JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
-(JNIEnv * env, jobject obj, jint xResolution, jint yResolution, jint leftFamily, jint rightFamily) {
+(JNIEnv * env, jobject obj, jintArray resolution, jint leftFamily, jint rightFamily) {
+
 
     jclass classPhasePoint = (env)->FindClass(PHASEPOINT_LOCATION);
 
@@ -58,8 +56,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
     jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
     jmethodID doubleContactCurveConstructor = env->GetMethodID(doubleContactCurveClass, "<init>", "(Ljava/util/List;Ljava/util/List;)V");
 
-    //int dimension=RpNumerics::getPhysics().domain().dim();
-    int dimension = 2;
+    int dimension=RpNumerics::getPhysics().domain().dim();
+    //int dimension = 2;
 
     jobject leftSegmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
     jobject rightSegmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
@@ -68,24 +66,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
     std::vector<RealVector> left_vrs;
     std::vector<RealVector> right_vrs;
 
-//<<<<<<< HEAD
-    //jint  number_of_grid_pnts [dimension];
-//=======
-    int * number_of_grid_pnts = new int[2];
+    jint  number_of_grid_pnts [dimension];
 
 
-    number_of_grid_pnts[0] = xResolution;
-    number_of_grid_pnts[1] = yResolution;
-
-    //number_of_grid_pnts[0] = resolution[0];
-    //number_of_grid_pnts[1] = resolution[1];
-
-    
-
-    cout << "Chamando com stone" << endl;
-//>>>>>>> master-original/master
-
-    //env->GetIntArrayRegion(resolution, 0, dimension, number_of_grid_pnts );
+    env->GetIntArrayRegion(resolution, 0, dimension, number_of_grid_pnts );
     
     cout << " Parametros " << RpNumerics::getPhysics().fluxFunction().fluxParams().params() << endl;
 
@@ -117,10 +101,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
 
     dc.compute_double_contact(left_vrs, right_vrs);
 
-//<<<<<<< HEAD
-    //if (left_vrs.size()==0||right_vrs.size()==0)return NULL;
-//=======
-//>>>>>>> master-original/master
+
+    if (left_vrs.size()==0||right_vrs.size()==0)return NULL;
+
 
     cout << "left_vrs.size()  = " << left_vrs.size() << endl;
 
