@@ -5,14 +5,11 @@
 
 package rpn.component.util;
 
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import rpn.component.RpGeomFactory;
 import rpn.component.RpGeometry;
 import rpn.parser.RPnDataModule;
 import rpnumerics.RPnCurve;
-import wave.multid.view.GeomObjView;
 import wave.util.RealVector;
 
 /**
@@ -25,7 +22,7 @@ public class GeometryUtil {
     static public RPnCurve closestCurve_ ;      //a curva mais proxima
     static public int closestSeg ;              //indice do segmento mais proximo
 
-
+    
     public static RPnCurve findClosestCurve(RealVector targetPoint) {
 
         double distminCurve = 1000000.;
@@ -37,7 +34,7 @@ public class GeometryUtil {
         Iterator<RpGeometry> geomList = RPnDataModule.PHASESPACE.getGeomObjIterator();
 
         while (geomList.hasNext()) {
-
+            
             RpGeometry geom = (RpGeometry) geomList.next();
             
             if (geom.viewingAttr().isVisible()) {
@@ -55,7 +52,7 @@ public class GeometryUtil {
 
                 RpGeomFactory factory = geom.geomFactory();
                 RPnCurve curve = (RPnCurve) factory.geomSource();
-                
+
                 seg = curve.findClosestSegment(targetPoint);
                 distancia = curve.distancia;
 

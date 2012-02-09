@@ -22,8 +22,10 @@ import java.util.List;
 import rpn.RPnPhaseSpacePanel;
 import rpn.component.HugoniotSegGeom;
 import rpn.parser.RPnDataModule;
+import rpnumerics.BifurcationParams;
 import rpnumerics.Orbit;
 import rpnumerics.RPNUMERICS;
+import rpnumerics.RPnCurve;
 import rpnumerics.SegmentedCurve;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
@@ -277,7 +279,7 @@ public class GeometryGraphND {
 
 
     public void testAreaContains(Scene scene) {
-
+    
         RPnPhaseSpacePanel panel = new RPnPhaseSpacePanel(scene);
         ViewingTransform transf = panel.scene().getViewingTransform();
 
@@ -366,7 +368,11 @@ public class GeometryGraphND {
         Graphics2D graph = (Graphics2D) g;
 
         //double xResolution = new Double(RPNUMERICS.getConfiguration("Contour").getParam("x-resolution"));
-        int[] resolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("hugoniotcurve", "resolution"));
+        //int[] resolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("hugoniotcurve", "resolution"));
+        int[] resolution = {1, 1};
+        //if (RPNUMERICS.listResolution.size()>0) resolution = (int[]) RPNUMERICS.listResolution.get(GeometryUtil.closestCurve);
+        if (scene.geometries().hasNext()) resolution = (int[]) RPNUMERICS.listResolution.get(GeometryUtil.closestCurve);
+        //if (scene.geometries().hasNext()) resolution = (int[]) RPNUMERICS.listResolution.get(RPNUMERICS.listResolution.indexOf(GeometryUtil.closestCurve_));
         int xResolution = resolution[0];
         int yResolution = resolution[1];
         

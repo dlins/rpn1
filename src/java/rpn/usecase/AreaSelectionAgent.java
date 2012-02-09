@@ -30,6 +30,7 @@ import rpnumerics.HugoniotCurveCalcND;
 import rpnumerics.RPNUMERICS;
 import rpnumerics.RPnCurve;
 import rpnumerics.RpException;
+import rpnumerics.SegmentedCurve;
 import wave.util.RealVector;
 
 
@@ -81,7 +82,7 @@ public class AreaSelectionAgent extends RpModelActionAgent {
 
         //**********************************************************************
 
-        if (ControlClick.ind % 2 == 0) {
+        if (ControlClick.ind % 2 == 0  &&  GeometryUtil.closestCurve_ instanceof SegmentedCurve) {
             //****************************
             Area area = null;
             String Re1 = JOptionPane.showInputDialog(null, "Resolucao horizontal", "Resolucao", JOptionPane.QUESTION_MESSAGE);
@@ -114,10 +115,6 @@ public class AreaSelectionAgent extends RpModelActionAgent {
             //****************************
 
 
-//            for (int i = 0; i < GeometryUtil.targetPoint.getSize(); i++) {        // Pode ser útil na hora de fazer inclusao dos novos segmentos (para nao serem eliminados)
-//                GeometryUtil.cornerRet.setElement(i, 0);
-//                GeometryUtil.targetPoint.setElement(i, 0.);
-//            }
         }
 
 

@@ -13,6 +13,7 @@ import java.awt.geom.Rectangle2D;
 import org.apache.batik.ext.awt.geom.Polygon2D;
 import rpn.RPnPhaseSpacePanel;
 import rpn.controller.ui.AREASELECTION_CONFIG;
+import rpn.controller.ui.BIFURCATIONREFINE_CONFIG;
 import rpn.controller.ui.UIController;
 import rpn.parser.RPnDataModule;
 import rpnumerics.Orbit;
@@ -140,7 +141,10 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
         //double xResolution = new Double(RPNUMERICS.getConfiguration("Contour").getParam("x-resolution"));
         //double yResolution = new Double(RPNUMERICS.getConfiguration("Contour").getParam("y-resolution"));
 
-        int[] resolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("hugoniotcurve", "resolution"));
+        //int[] resolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("hugoniotcurve", "resolution"));
+        int[] resolution = {1, 1};
+        //if (RPNUMERICS.listResolution.size()>0) resolution = (int[]) RPNUMERICS.listResolution.get(GeometryUtil.closestCurve);
+        if (scene.geometries().hasNext()) resolution = (int[]) RPNUMERICS.listResolution.get(GeometryUtil.closestCurve);
         int xResolution = resolution[0];
         int yResolution = resolution[1];
 
@@ -211,6 +215,7 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
             }
 
             square1 = mapShape(new Rectangle2D.Double(v_s, u_s, Math.abs(v_i - v_s), Math.abs(u_i - u_s)), scene);
+            indContido.clear();
             testAreaContains(scene);
 
         }

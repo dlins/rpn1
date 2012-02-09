@@ -128,9 +128,6 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         //myW = 3*myW/4;             // Basta isso para redefinir os tamanho dos painéis
         //myH = 3*myH/4;
 
-        //myW = 2*myW;
-        //myH = 2*myH;
-
         cursorPos_ = new Point(0, 0);
         setBackground(DEFAULT_BOUNDARY_COLOR);
         setPreferredSize(new java.awt.Dimension(myW, myH));

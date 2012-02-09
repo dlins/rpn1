@@ -119,6 +119,7 @@ public class RPnPhaseSpaceFrame extends JFrame {
 
             int h = RPnPhaseSpaceFrame.this.frameSize_.height;  //*** Leandro
             int w = h - 91;   //*** Leandro
+
             
             if (keyEvent.getKeyChar() == 'l') {
 
@@ -130,7 +131,7 @@ public class RPnPhaseSpaceFrame extends JFrame {
 
             }
 
-            if (keyEvent.getKeyChar() == 'q') {
+            if (keyEvent.getKeyChar() == 'q'  ||  keyEvent.getKeyChar() == 'Q') {
                 GeometryGraphND.refina = 1;
             }
             else GeometryGraphND.refina = 0;
@@ -175,7 +176,7 @@ public class RPnPhaseSpaceFrame extends JFrame {
 
                 }
             }
-            if (keyEvent.getKeyChar() == 'r') {   //*** reset para o tamanho original dos painéis
+            if (keyEvent.getKeyChar() == 'r'  ||  keyEvent.getKeyChar() == 'R') {   //*** reset para o tamanho original dos painéis
                 for (int i = 0; i < RPnUIFrame.getPhaseSpaceFrames().length; i++) {
 
                     RPnPhaseSpaceFrame frame = RPnUIFrame.getPhaseSpaceFrames()[i];

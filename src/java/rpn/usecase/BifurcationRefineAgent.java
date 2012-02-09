@@ -16,6 +16,7 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import rpn.RPnSelectedAreaDialog;
 import rpn.component.*;
+import rpn.component.util.GeometryGraphND;
 import rpn.component.util.GeometryUtil;
 import rpn.controller.ui.AREASELECTION_CONFIG;
 import rpn.controller.ui.BIFURCATIONREFINE_CONFIG;
@@ -23,6 +24,7 @@ import rpn.controller.ui.UIController;
 import rpn.parser.RPnDataModule;
 import rpnumerics.BifurcationCurve;
 import rpnumerics.BifurcationProfile;
+import rpnumerics.RPNUMERICS;
 import rpnumerics.RPnCurve;
 import rpnumerics.methods.contour.support.CurveDomainManager;
 import rpnumerics.methods.contour.support.DimensionDoenstMatch;
@@ -58,10 +60,16 @@ public class BifurcationRefineAgent extends RpModelConfigChangeAgent {
 
         AreaSelectionAgent.instance().getListArea().clear();
 
-//        for (int i = 0; i < GeometryUtil.targetPoint.getSize(); i++) {        // Pode ser útil na hora de fazer inclusao dos novos segmentos (para nao serem eliminados)
-//            GeometryUtil.cornerRet.setElement(i, 0);
-//            GeometryUtil.targetPoint.setElement(i, 0.);
-//        }
+        for (int i = 0; i < GeometryGraphND.targetPoint.getSize(); i++) {        // Pode ser útil na hora de fazer inclusao dos novos segmentos (para nao serem eliminados)
+            GeometryGraphND.cornerRet.setElement(i, 0);
+            GeometryGraphND.targetPoint.setElement(i, 0.);
+        }
+
+        //*** Deixar isto enquanto a lista auxiliar listResolution estiver sendo usada no código
+        int[] temp = (int[]) RPNUMERICS.listResolution.get(GeometryUtil.closestCurve);
+        RPNUMERICS.listResolution.remove(GeometryUtil.closestCurve);
+        RPNUMERICS.listResolution.add(temp);
+        //***
 
     }
 

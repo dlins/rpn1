@@ -12,6 +12,7 @@ import java.util.List;
 import javax.swing.JToggleButton;
 import rpn.controller.ui.UIController;
 import rpn.usecase.RpModelActionAgent;
+import rpnumerics.RPNUMERICS;
 
 /**
  *
@@ -117,7 +118,7 @@ public class ClassifierAgent extends RpModelActionAgent {
             yDevStr.remove(index);
             ySeta.remove(index);
             yStr.remove(index);
-
+            
             xDevSeta.add(index, 0.);
             xDevStr.add(index, 0.);
             xSeta.add(index, 0.);

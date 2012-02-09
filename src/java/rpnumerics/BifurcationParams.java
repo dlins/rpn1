@@ -3,7 +3,7 @@ package rpnumerics;
 public class BifurcationParams {
 
     private int[] resolution_;
-
+    
     public BifurcationParams(int[] resolution) {
         resolution_ = resolution;
     }

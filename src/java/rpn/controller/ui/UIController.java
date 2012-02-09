@@ -210,26 +210,26 @@ public class UIController extends ComponentUI {
 
                     
                     //*** Leandro
-                    if (UIController.instance().getState() instanceof AREASELECTION_CONFIG) {
-
-                        RealVector local = new RealVector(RPNUMERICS.domainDim());
-                        for (int i = 0; i < RPNUMERICS.domainDim(); i++) {
-                            local.setElement(i, ((HugoniotCurve) GeometryUtil.closestCurve_).getXZero().getElement(i));
-                        }
-                        //System.out.println("local.toString() : " +local.toString());
-
-                        Point input = toDCcoords(local, panel.scene());
-                        updateUserInputTable(panel, input);
-
-                        // execute
-                        userInputComplete(((HugoniotCurve) GeometryUtil.closestCurve_).getXZero());
-                        globalInputTable().reset();
-                        resetPanelsCursorCoords();
-                        RPnUIFrame.enableSliders();
-
-                        return;
-
-                    }
+//                    if (UIController.instance().getState() instanceof AREASELECTION_CONFIG) {
+//
+//                        RealVector local = new RealVector(RPNUMERICS.domainDim());
+//                        for (int i = 0; i < RPNUMERICS.domainDim(); i++) {
+//                            local.setElement(i, ((HugoniotCurve) GeometryUtil.closestCurve_).getXZero().getElement(i));
+//                        }
+//                        //System.out.println("local.toString() : " +local.toString());
+//
+//                        Point input = toDCcoords(local, panel.scene());
+//                        updateUserInputTable(panel, input);
+//
+//                        // execute
+//                        userInputComplete(((HugoniotCurve) GeometryUtil.closestCurve_).getXZero());
+//                        globalInputTable().reset();
+//                        resetPanelsCursorCoords();
+//                        RPnUIFrame.enableSliders();
+//
+//                        return;
+//
+//                    }
                     //***
 
                     //*** original

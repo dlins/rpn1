@@ -81,6 +81,7 @@ public class ControlClick {
         ClassifierAgent.indCurvaCla.clear();
         VelocityAgent.indCurvaVel.clear();
         clearAllStrings();
+        RPNUMERICS.listResolution.clear();
     }
     //***************************************
 

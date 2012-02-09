@@ -16,6 +16,7 @@ import rpn.component.util.ControlClick;
 import rpn.component.util.GeometryGraphND;
 import rpn.component.util.GeometryUtil;
 import rpn.component.util.VelocityAgent;
+import rpnumerics.RPNUMERICS;
 import rpnumerics.RPnCurve;
 import wave.multid.view.*;
 import wave.multid.*;
@@ -150,6 +151,7 @@ public class AbstractScene implements AbstractGeomObj {
         ControlClick.clearpMarca();
         removeStringsCla(geometryIndex);
         removeStringsVel(geometryIndex);
+        RPNUMERICS.listResolution.remove(geometryIndex);        //*** GERA BUG : se a curva removida estiver com o pMarca
         // -----------
 
         MultiGeometry geom = (MultiGeometry) geomList_.remove(geometryIndex);
