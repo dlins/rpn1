@@ -80,19 +80,22 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
 
     const FluxFunction * fluxFunction = &RpNumerics::getPhysics().fluxFunction();
     const AccumulationFunction * accumulationFunction = &RpNumerics::getPhysics().accumulation();
+    cout << "Time direction " << timeDirection << endl;
+    vector<RealVector> inflectionPoints;
+
 
     int info = Rarefaction::curve(realVectorInput,
             RAREFACTION_INITIALIZE_YES,
             (const RealVector *) 0,
             familyIndex,
             timeDirection,
-            CHECK_RAREFACTION_MONOTONY_TRUE,
+            RAREFACTION_FOR_ITSELF,
             deltaxi,
             fluxFunction,
             accumulationFunction,
             RAREFACTION_GENERAL_ACCUMULATION,
             tempBoundary,
-            coords);
+            coords, inflectionPoints);
     delete tempBoundary;
 
     if (coords.size() == 0) {
@@ -112,12 +115,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
         double * dataCoords = tempVector;
 
         //Reading only coodinates
-        jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size()-1);
+        jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size() - 1);
 
-        (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size()-1, dataCoords);
+        (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size() - 1, dataCoords);
 
         //Lambda is the last component.
-        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray,tempVector.component(tempVector.size()-1));
+        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray, tempVector.component(tempVector.size() - 1));
 
         (env)->SetObjectArrayElement(orbitPointArray, i, orbitPoint);
 

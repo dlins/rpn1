@@ -6,14 +6,24 @@
  */
 package rpnumerics;
 
+import wave.util.RealVector;
+
 public class IntegralCurve extends Orbit implements RpSolution {
 
     //
     // Constructor
     //
-    public IntegralCurve(OrbitPoint[] points, int familyIndex,int flag) {
-        super(points,familyIndex, flag);
+    private RealVector[] inflectionPoints_;
+   
 
+    public IntegralCurve(OrbitPoint[] points, int familyIndex, RealVector[] inflectionPoints) {
+        super(points, familyIndex, 0);
+        inflectionPoints_ = inflectionPoints;
+
+    }
+
+    public IntegralCurve(OrbitPoint[] points, int familyIndex) {
+        super(points, familyIndex, 0);
     }
 
     // Methods
@@ -28,23 +38,9 @@ public class IntegralCurve extends Orbit implements RpSolution {
         return buf.toString();
     }
 
-//    @Override
-//    public String toXML() {
-//
-//        StringBuffer buffer = new StringBuffer();
-//        buffer.append("<ORBIT flag=\"" + getDirection() + "\">\n");
-//        for (int i = 0; i < getPoints().length; i++) {
-//
-//            buffer.append("<ORBITPOINT time=\""
-//                    + ((OrbitPoint) getPoints()[i]).getLambda() + "\">");
-//            buffer.append(getPoints()[i].toXML());
-//            buffer.append("</ORBITPOINT>\n");
-//
-//        }
-//        buffer.append("</ORBIT>\n");
-//        return buffer.toString();
-//
-//    }
-    
-   
+    public RealVector[] getInflectionPoints() {
+        return inflectionPoints_;
+    }
+
+  
 }

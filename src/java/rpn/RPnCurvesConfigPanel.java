@@ -16,12 +16,12 @@ import java.util.Set;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import rpn.component.OrbitGeom;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UI_ACTION_SELECTED;
 import rpn.usecase.ChangeDirectionAgent;
 import rpn.usecase.RpModelPlotAgent;
 import rpnumerics.Configuration;
+import rpnumerics.Orbit;
 import rpnumerics.RPNUMERICS;
 
 public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListener {
@@ -31,8 +31,7 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
     private JSpinner familySpinner_;
     private JCheckBox forwardCheckBox_;
     private JCheckBox backwardCheckBox_;
-    private static Integer currentOrbitDirection_ = OrbitGeom.FORWARD_DIR;
-
+    private static Integer currentOrbitDirection_ = Orbit.FORWARD_DIR;
     private JTabbedPane curvesConfigurationPanel_;
 
     public RPnCurvesConfigPanel() {
@@ -46,10 +45,6 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
     }
 
     public static void setMultipleButton(boolean state) {
-
-      
-
-
     }
 
     private void buildPanel() {
@@ -66,13 +61,14 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
             if (!configurationType.equalsIgnoreCase("PHYSICS") && !configurationType.equalsIgnoreCase("VISUAL")) {
                 RPnInputComponent inputComponent = new RPnInputComponent(entry.getValue());
                 inputComponent.removeParameter("resolution");
-                if (inputComponent.getContainer().getComponentCount() >0)
-                curvesConfigurationPanel_.addTab(entry.getKey(), inputComponent.getContainer());
+                if (inputComponent.getContainer().getComponentCount() > 0) {
+                    curvesConfigurationPanel_.addTab(entry.getKey(), inputComponent.getContainer());
+                }
             }
 
         }
 
-    
+
         directionPanel_ = new JPanel(new GridLayout(1, 2));
 
         forwardCheckBox_ = new JCheckBox();
@@ -104,21 +100,15 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
 
         GridBagConstraints gridConstraints = new GridBagConstraints();
 
+        gridConstraints.fill = GridBagConstraints.BOTH;
 
-        gridConstraints.gridheight = 1;
-        gridConstraints.gridwidth =2;
+        add(directionPanel_, gridConstraints);
 
-        gridConstraints.gridy = 0;
-        gridConstraints.fill=GridBagConstraints.BOTH;
+        gridConstraints.fill = GridBagConstraints.BOTH;
 
-//        add(directionPanel_, gridConstraints);
-        add(directionPanel_);
+        gridConstraints.anchor = GridBagConstraints.NORTH;
+        add(curvesConfigurationPanel_, gridConstraints);
 
-        gridConstraints.gridy = 1;
-
-     
-//        add(curvesConfigurationPanel_,gridConstraints);
-        add(curvesConfigurationPanel_);
 
     }
 
@@ -129,7 +119,7 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
     public void propertyChange(PropertyChangeEvent evt) {
 
         if (evt.getNewValue().equals("bifurcationcurve")) {//Bifurcation Curves selected
-           
+
 
 
             if (evt.getPropertyName().equals("direction")) {
@@ -139,7 +129,7 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
         }
 
         if (evt.getNewValue().equals("phasediagram")) {//Phase Diagram Curves selected
-           
+
 
             if (evt.getPropertyName().equals("direction")) {
                 forwardCheckBox_.setEnabled(false);
@@ -151,7 +141,7 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
 
 
         if (evt.getNewValue().equals("wavecurve")) {//Wave Curves selected
-           
+
 
             if (evt.getPropertyName().equals("direction")) {
                 forwardCheckBox_.setEnabled(true);
@@ -204,13 +194,13 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
 
 
             if (forwardCheckBox_.isSelected() == true && backwardCheckBox_.isSelected() == true) {
-                currentOrbitDirection_ = OrbitGeom.BOTH_DIR;
+                currentOrbitDirection_ = Orbit.BOTH_DIR;
 
             } else {
                 if (forwardCheckBox_.isSelected()) {
-                    currentOrbitDirection_ = OrbitGeom.FORWARD_DIR;
+                    currentOrbitDirection_ = Orbit.FORWARD_DIR;
                 } else {
-                    currentOrbitDirection_ = OrbitGeom.BACKWARD_DIR;
+                    currentOrbitDirection_ = Orbit.BACKWARD_DIR;
                 }
 
             }

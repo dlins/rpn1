@@ -10,10 +10,10 @@ extern "C" {
 /*
  * Class:     rpnumerics_IntegralCurveCalc
  * Method:    calc
- * Signature: (Lrpnumerics/PhasePoint;II)Lrpnumerics/RpSolution;
+ * Signature: (Lrpnumerics/PhasePoint;I)Lrpnumerics/RpSolution;
  */
 JNIEXPORT jobject JNICALL Java_rpnumerics_IntegralCurveCalc_calc
-  (JNIEnv *, jobject, jobject, jint, jint);
+  (JNIEnv *, jobject, jobject, jint);
 
 #ifdef __cplusplus
 }

@@ -47,6 +47,10 @@ public class ProfileController extends RpCalcController {
 
            super.propertyChange(change);
 
+            
+
+            
+
            double newSigma = RPNUMERICS.getShockProfile().getSigma();//((ConservationShockFlow)RPNUMERICS.flow()).getSigma();
            ChangeSigmaAgent.instance().applyChange(
               new java.beans.PropertyChangeEvent(this,

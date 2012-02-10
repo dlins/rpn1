@@ -8,13 +8,9 @@ package rpn;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
-import java.util.HashMap;
-import java.util.Map.Entry;
-import java.util.Set;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
-import rpn.parser.ConfigurationProfile;
 import rpnumerics.Configuration;
 import rpnumerics.RPNUMERICS;
 
@@ -28,13 +24,9 @@ public class RPnFluxParamsDialog extends RPnDialog {
         cancelButton.setText("Close");
         paramsPanel_ = new JPanel();
 
-//<<<<<<< HEAD
-//        removeDefaultApplyBehavior();
 
         Configuration physicsConfiguration = RPNUMERICS.getConfiguration(RPNUMERICS.physicsID());
-//=======
-//        HashMap<String, Configuration> configMap = RPNUMERICS.getConfigurations();
-//>>>>>>> inflexao
+
 
         Configuration fluxFunctionConfig = physicsConfiguration.getConfiguration("fluxfunction");
 

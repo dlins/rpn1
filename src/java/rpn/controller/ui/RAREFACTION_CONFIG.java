@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import rpn.usecase.AreaSelectionAgent;
 import rpn.usecase.ChangeFluxParamsAgent;
 import rpn.usecase.ChangeDirectionAgent;
+import rpn.usecase.ChangeOrbitLevel;
 import rpn.usecase.CompositePlotAgent;
 import rpn.usecase.HugoniotPlotAgent;
 import rpn.usecase.IntegralCurvePlotAgent;
@@ -33,6 +34,7 @@ public class RAREFACTION_CONFIG extends UI_ACTION_SELECTED {
         IntegralCurvePlotAgent.instance().setEnabled(true);
         AreaSelectionAgent.instance().setEnabled(true);
         CompositePlotAgent.instance().setEnabled(true);
+        ChangeOrbitLevel.instance().setEnabled(true);
 
 
 

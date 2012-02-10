@@ -79,6 +79,7 @@
 
     <CURVE name="orbit">
         <CURVEPARAM name="family" value="0"/>
+        <CURVEPARAM name="level" value="0.5"/>
 
     </CURVE>
 

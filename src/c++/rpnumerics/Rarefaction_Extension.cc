@@ -16,6 +16,7 @@ void Rarefaction_Extension::extension_curve(const FluxFunction *curve_flux, cons
     domain_segments.clear();
 
     std::vector<RealVector> rarefaction_curve;
+    std::vector<RealVector> inflection_points;
 
 
     int info = Rarefaction::curve(initial_point,
@@ -23,12 +24,12 @@ void Rarefaction_Extension::extension_curve(const FluxFunction *curve_flux, cons
             (const RealVector *) 0,
             curve_family,
             increase,
-            CHECK_RAREFACTION_MONOTONY_TRUE,
+            RAREFACTION_FOR_ITSELF,
             deltaxi,
             curve_flux, curve_accum,
             RAREFACTION_GENERAL_ACCUMULATION,
             (Boundary*) boundary,
-            rarefaction_curve);
+            rarefaction_curve,inflection_points);
 
 
 

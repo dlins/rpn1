@@ -47,46 +47,46 @@ public class RarefactionOrbitView extends OrbitGeomView{
    
    
 
-    private void arrowsCalculations() {
-
-        arrowList_ = new ArrayList();
-
-        for (int i = 0; i < points_.length - 1; i += 2 * ARROWS_STEP) {
-            Coords2D startPoint = new Coords2D();
-            Coords2D endPoint = new Coords2D();
-            getViewingTransform().viewPlaneTransform(new CoordsArray(points_[i]),
-                    startPoint);
-            getViewingTransform().viewPlaneTransform(new CoordsArray(points_[i
-                    + 1]), endPoint);
-            endPoint.sub(startPoint);
-            if (endPoint.norm()
-                    > (getViewingTransform().viewPlane().getViewport().getWidth()
-                    / SCALE)) {
-
-                Coords2D direction_dc = new Coords2D();
-                Coords2D start_dc = new Coords2D();
-                RealVector tempVector = new RealVector(points_[i + 1].getCoords());
-                getViewingTransform().viewPlaneTransform(new CoordsArray(
-                        tempVector),
-                        direction_dc);
-                getViewingTransform().viewPlaneTransform(new CoordsArray(
-                        points_[i].getCoords()), start_dc);
-
-                direction_dc.setElement(0, direction_dc.getX() - start_dc.getX());
-
-
-
-                direction_dc.setElement(1, direction_dc.getY() - start_dc.getY());
-
-                Arrow arrow = new Arrow(new RealVector(start_dc.getCoords()),
-                        new RealVector(direction_dc.getCoords()),
-                        getViewingTransform().viewPlane().
-                        getViewport().getWidth() / SCALE,
-                        getViewingTransform().viewPlane().
-                        getViewport().getWidth() / SCALE);
-
-                arrowList_.add(arrow);
-            }
-        }
-    }
+//    private void arrowsCalculations() {
+//
+//        arrowList_ = new ArrayList();
+//
+//        for (int i = 0; i < points_.length - 1; i += 2 * ARROWS_STEP) {
+//            Coords2D startPoint = new Coords2D();
+//            Coords2D endPoint = new Coords2D();
+//            getViewingTransform().viewPlaneTransform(new CoordsArray(points_[i]),
+//                    startPoint);
+//            getViewingTransform().viewPlaneTransform(new CoordsArray(points_[i
+//                    + 1]), endPoint);
+//            endPoint.sub(startPoint);
+//            if (endPoint.norm()
+//                    > (getViewingTransform().viewPlane().getViewport().getWidth()
+//                    / SCALE)) {
+//
+//                Coords2D direction_dc = new Coords2D();
+//                Coords2D start_dc = new Coords2D();
+//                RealVector tempVector = new RealVector(points_[i + 1].getCoords());
+//                getViewingTransform().viewPlaneTransform(new CoordsArray(
+//                        tempVector),
+//                        direction_dc);
+//                getViewingTransform().viewPlaneTransform(new CoordsArray(
+//                        points_[i].getCoords()), start_dc);
+//
+//                direction_dc.setElement(0, direction_dc.getX() - start_dc.getX());
+//
+//
+//
+//                direction_dc.setElement(1, direction_dc.getY() - start_dc.getY());
+//
+//                Arrow arrow = new Arrow(new RealVector(start_dc.getCoords()),
+//                        new RealVector(direction_dc.getCoords()),
+//                        getViewingTransform().viewPlane().
+//                        getViewport().getWidth() / SCALE,
+//                        getViewingTransform().viewPlane().
+//                        getViewport().getWidth() / SCALE);
+//
+//                arrowList_.add(arrow);
+//            }
+//        }
+//    }
 }

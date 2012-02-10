@@ -31,6 +31,7 @@
 #define ORBIT_LOCATION                        "rpnumerics/Orbit"
 #define RAREFACTIONORBIT_LOCATION             "rpnumerics/RarefactionOrbit"
 #define SHOCKCURVE_LOCATION                   "rpnumerics/ShockCurve"
+#define INTEGRALCURVE_LOCATION                "rpnumerics/IntegralCurve"
 
 
 

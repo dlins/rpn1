@@ -9,6 +9,7 @@ import rpn.component.RpGeomFactory;
 import rpn.component.HugoniotCurveGeomFactory;
 import rpn.usecase.*;
 import java.beans.PropertyChangeEvent;
+import wave.multid.model.MultiGeometry;
 
 public class HugoniotController extends RpCalcController {
     //
@@ -56,6 +57,7 @@ public class HugoniotController extends RpCalcController {
     public void propertyChange(PropertyChangeEvent change) {
         // this is to avoid void notifications of enabled/disbled
         if (change.getPropertyName().compareTo("enabled") != 0) {
+
 //            if (change.getSource() instanceof ChangeOrbitDirectionAgent) {
             // updates the HugoniotFunction xzero
 //TESTE

@@ -83,18 +83,19 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
     //Compute rarefaction
 
     cout << "Increase da rarefacao: " << increase << endl;
+    vector<RealVector> inflectionPoints;
 
     Rarefaction::curve(realVectorInput,
             RAREFACTION_INITIALIZE_YES,
             0,
             familyIndex,
             increase,
-            CHECK_RAREFACTION_MONOTONY_TRUE,
+            RAREFACTION_FOR_ITSELF,
             deltaxi,
             stoneflux, stoneaccum,
             RAREFACTION_GENERAL_ACCUMULATION,
             tempBoundary,
-            rarefactionCurve);
+            rarefactionCurve,inflectionPoints);
 
 
     if (increase == RAREFACTION_SPEED_INCREASE)

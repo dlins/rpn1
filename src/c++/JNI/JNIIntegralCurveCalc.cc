@@ -16,9 +16,7 @@
 #include "JNIDefs.h"
 #include <vector>
 #include <time.h>
-#include "TPCW.h"
-#include "Rarefaction.h"
-
+#include "Integral_Curve.h"
 
 using std::vector;
 
@@ -28,17 +26,24 @@ using std::vector;
  */
 
 
-JNIEXPORT jobject JNICALL Java_rpnumerics_IntegralCurveCalc_calc(JNIEnv * env, jobject obj, jobject initialPoint, jint familyIndex, jint timeDirection) {
+JNIEXPORT jobject JNICALL Java_rpnumerics_IntegralCurveCalc_calc(JNIEnv * env, jobject obj, jobject initialPoint, jint familyIndex) {
 
 
     unsigned int i;
 
     jclass classOrbitPoint = (env)->FindClass(ORBITPOINT_LOCATION);
-    jclass classRarefactionOrbit = (env)->FindClass(RAREFACTIONORBIT_LOCATION);
 
-    jmethodID rarefactionOrbitConstructor = (env)->GetMethodID(classRarefactionOrbit, "<init>", "([Lrpnumerics/OrbitPoint;II)V");
+    jclass classIntegralCurve = (env)->FindClass(INTEGRALCURVE_LOCATION);
+
+    jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
+
+    jmethodID realVectorConstructorID = env->GetMethodID(realVectorClass, "<init>", "(I)V");
+    jmethodID integralCurveConstructor = (env)->GetMethodID(classIntegralCurve, "<init>", "([Lrpnumerics/OrbitPoint;I[Lwave/util/RealVector;)V");
+
     jmethodID orbitPointConstructor = (env)->GetMethodID(classOrbitPoint, "<init>", "([D)V");
     jmethodID toDoubleMethodID = (env)->GetMethodID(classOrbitPoint, "toDouble", "()[D");
+
+    jmethodID setElementMethodID = (env)->GetMethodID(realVectorClass, "setElement", "(ID)V");
 
     //Input processing
     jdoubleArray inputPhasePointArray = (jdoubleArray) (env)->CallObjectMethod(initialPoint, toDoubleMethodID);
@@ -59,40 +64,32 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_IntegralCurveCalc_calc(JNIEnv * env, j
     env->DeleteLocalRef(inputPhasePointArray);
 
 
+    int dimension = RpNumerics::getPhysics().domain().dim();
+
     vector <RealVector> coords;
+    vector<RealVector> inflectionPoints;
+
+    vector<RealVector> arrowPosition;
+    vector<RealVector> arrowOrientation;
 
     Boundary * tempBoundary = RpNumerics::getPhysics().boundary().clone();
 
     double deltaxi = 1e-3;
 
-    cout << " Parametros " << RpNumerics::getPhysics().fluxFunction().fluxParams().params() << endl;
 
     const FluxFunction * fluxFunction = &RpNumerics::getPhysics().fluxFunction();
     const AccumulationFunction * accumulationFunction = &RpNumerics::getPhysics().accumulation();
 
-    int info = Rarefaction::curve(realVectorInput,
-            RAREFACTION_INITIALIZE_YES,
-            (const RealVector *) 0,
-            familyIndex,
-            timeDirection,
-            CHECK_RAREFACTION_MONOTONY_FALSE,
+    Integral_Curve iCurve(fluxFunction, accumulationFunction, tempBoundary);
+
+
+    iCurve.integral_curve(realVectorInput,
             deltaxi,
-            fluxFunction,
-            accumulationFunction,
-            RAREFACTION_GENERAL_ACCUMULATION,
-            tempBoundary,
-            coords);
+            familyIndex,
+            coords, inflectionPoints);
+
 
     delete tempBoundary;
-
-
-
-    //    for (int i = 0; i < coords.size(); i++) cout << "coords(" << i << ") = " << coords[i] << endl;
-
-    //    cout << "Resultado da rarefacao: " << info << ", size = " << coords.size() << endl;
-    //    method.curve(realVectorInput, timeDirection, coords);
-
-    //cout << "Depois de chamar curve: " << (double) (clock() - begin) / (double) CLOCKS_PER_SEC << endl;
 
     if (coords.size() == 0) {
         return NULL;
@@ -102,7 +99,26 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_IntegralCurveCalc_calc(JNIEnv * env, j
 
     //Orbit members creation
 
-//    cout << "Tamanho da curva: " << coords.size() << endl;
+
+   
+
+
+
+    jobjectArray inflectionPointArray = (jobjectArray) (env)->NewObjectArray(inflectionPoints.size(), realVectorClass, NULL);
+
+    for (int i = 0; i < inflectionPoints.size(); i++) {
+
+        jobject inflectionPoint = env->NewObject(realVectorClass, realVectorConstructorID, dimension);
+
+        for (int j = 0; j < dimension; j++) {
+
+            env->CallVoidMethod(inflectionPoint, setElementMethodID, j, inflectionPoints[i].component(j));
+
+        }
+
+        (env)->SetObjectArrayElement(inflectionPointArray, i, inflectionPoint);
+
+    }
 
     jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(coords.size(), classOrbitPoint, NULL);
 
@@ -128,7 +144,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_IntegralCurveCalc_calc(JNIEnv * env, j
 
     //Building the orbit
 
-    jobject rarefactionOrbit = (env)->NewObject(classRarefactionOrbit, rarefactionOrbitConstructor, orbitPointArray, timeDirection);
+    jobject integralCurve = (env)->NewObject(classIntegralCurve, integralCurveConstructor, orbitPointArray, familyIndex, inflectionPointArray);
 
 
     //Cleaning up
@@ -137,8 +153,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_IntegralCurveCalc_calc(JNIEnv * env, j
 
     env->DeleteLocalRef(orbitPointArray);
     env->DeleteLocalRef(classOrbitPoint);
-    env->DeleteLocalRef(classRarefactionOrbit);
 
-    return rarefactionOrbit;
+    return integralCurve;
 
 }

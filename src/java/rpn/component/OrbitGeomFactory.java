@@ -6,6 +6,8 @@
 package rpn.component;
 
 import java.awt.Color;
+import rpn.controller.OrbitController;
+import rpn.controller.RpController;
 import rpnumerics.*;
 import wave.multid.view.ViewingAttr;
 import wave.util.RealVector;
@@ -46,6 +48,11 @@ public class OrbitGeomFactory extends RpCalcBasedGeomFactory {
         return new ViewingAttr(Color.white);
     }
 
+     @Override
+    protected RpController createUI() {
+        return new OrbitController();
+    }
+
     protected RpGeometry createGeomFromSource() {
         Orbit orbit = (Orbit) geomSource();
 
@@ -67,10 +74,10 @@ public class OrbitGeomFactory extends RpCalcBasedGeomFactory {
         
          str.append("<COMMAND name=\"" + commandName + "\"");
 
-        if (((OrbitCalc) rpCalc()).getDirection() != OrbitGeom.BOTH_DIR) {
+        if (((OrbitCalc) rpCalc()).getDirection() != Orbit.BOTH_DIR) {
             String direction = "forward\"";
 
-            if (((OrbitCalc) rpCalc()).getDirection() == OrbitGeom.BACKWARD_DIR) {
+            if (((OrbitCalc) rpCalc()).getDirection() == Orbit.BACKWARD_DIR) {
                 direction = "backward\"";
 
             }

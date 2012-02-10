@@ -5,6 +5,7 @@
  */
 package rpn.component;
 
+import rpnumerics.Orbit;
 import rpnumerics.RarefactionExtensionCalc;
 import rpnumerics.RarefactionExtensionCurve;
 import wave.util.RealSegment;
@@ -65,10 +66,10 @@ public class RarefactionExtensionGeomFactory extends BifurcationCurveGeomFactory
 
         str.append("<COMMAND name=\"" + commandName + "\"");
 
-        if (calc.getIncrease() != OrbitGeom.BOTH_DIR) {
+        if (calc.getIncrease() != Orbit.BOTH_DIR) {
             String direction = "forward\"";
 
-            if (calc.getIncrease() == OrbitGeom.BACKWARD_DIR) {
+            if (calc.getIncrease() == Orbit.BACKWARD_DIR) {
                 direction = "backward\"";
 
             }

@@ -21,16 +21,18 @@ public class Orbit extends RPnCurve implements RpSolution {
     // Members
     //
 
+    public static final int FORWARD_DIR = 20;
+    public static final int BACKWARD_DIR = 22;
+    public static final int BOTH_DIR = 0;
+
     private OrbitPoint[] points_;
     private int increase_;
     private int familyIndex_;
-
     public double distancia = 0;      //** declarei isso (Leandro)
-    
+
     //
     // Constructor
     //
-
     public Orbit(RealVector[] coords, double[] times, int increase) {
         super(MultidAdapter.converseRealVectorsToCoordsArray(coords), new ViewingAttr(Color.white));
 
@@ -38,11 +40,11 @@ public class Orbit extends RPnCurve implements RpSolution {
         points_ = orbitPointsFromRealVectors(coords, times);
     }
 
-    public Orbit(OrbitPoint[] points, int familyIndex,int increase) {
+    public Orbit(OrbitPoint[] points, int familyIndex, int increase) {
         super(MultidAdapter.converseOrbitPointsToCoordsArray(points), new ViewingAttr(Color.white));
         increase_ = increase;
         points_ = points;
-        familyIndex_=familyIndex;
+        familyIndex_ = familyIndex;
     }
 
     public Orbit(Orbit orbit) {
@@ -72,7 +74,6 @@ public class Orbit extends RPnCurve implements RpSolution {
 //        swap.cat(curve2);
 //        return swap;
 //    }
-
     public void cat(Orbit curve) {//TODO Reimplements . Bugged !
         // opposite time directions assumed...
         OrbitPoint[] swap = new OrbitPoint[points_.length
@@ -89,7 +90,7 @@ public class Orbit extends RPnCurve implements RpSolution {
         System.arraycopy(swap, 0, points_, 0, swap.length);
     }
 
-    public static Orbit concat(Orbit backward, Orbit forward,int familyIndex) {
+    public static Orbit concat(Orbit backward, Orbit forward, int familyIndex) {
         // opposite time directions assumed...
         OrbitPoint[] swap = new OrbitPoint[backward.getPoints().length
                 + forward.getPoints().length - 1];
@@ -106,13 +107,9 @@ public class Orbit extends RPnCurve implements RpSolution {
             }
         }
 
-        return new Orbit(swap,familyIndex,OrbitGeom.BOTH_DIR);
+        return new Orbit(swap, familyIndex, Orbit.BOTH_DIR);
 
     }
-
-
-
-
 
     //** inseri este método (Leandro)
     @Override
@@ -195,9 +192,8 @@ public class Orbit extends RPnCurve implements RpSolution {
         return buf.toString();
     }
 
-
     public String toXML() {
-   
+
         StringBuilder buffer = new StringBuilder();
         for (int i = 0; i < getPoints().length; i++) {
 
@@ -239,7 +235,7 @@ public class Orbit extends RPnCurve implements RpSolution {
         return (OrbitPoint) points_[points_.length - 1];
     }
 
-    public OrbitPoint firstPoint(){
+    public OrbitPoint firstPoint() {
         return (OrbitPoint) points_[0];
     }
 
@@ -337,8 +333,7 @@ public class Orbit extends RPnCurve implements RpSolution {
 
     }
 
-
-      public int getFamilyIndex() {
+    public int getFamilyIndex() {
         return familyIndex_;
     }
 }

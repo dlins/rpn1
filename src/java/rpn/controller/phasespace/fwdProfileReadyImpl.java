@@ -9,6 +9,7 @@ package rpn.controller.phasespace;
 import rpn.component.*;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpnumerics.ManifoldOrbit;
+import rpnumerics.Orbit;
 
 
 public class fwdProfileReadyImpl extends PoincareReadyImpl
@@ -40,7 +41,7 @@ public class fwdProfileReadyImpl extends PoincareReadyImpl
         super.plot(phaseSpace, geom);
         // we can keep adding fwd or bwd...
         if (geom.geomFactory().geomSource() instanceof ManifoldOrbit)
-                if (((ManifoldOrbit)geom.geomFactory().geomSource()).getTimeDirection() == OrbitGeom.BACKWARD_DIR)
+                if (((ManifoldOrbit)geom.geomFactory().geomSource()).getTimeDirection() == Orbit.BACKWARD_DIR)
                     phaseSpace.changeState(
                         new ProfileSetupReadyImpl(hugoniotGeom(), xzeroGeom(), poincareGeom(), manifoldGeom_, (ManifoldGeom)geom));
                 else

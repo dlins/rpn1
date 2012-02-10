@@ -8,22 +8,19 @@ package wave.multid.view;
 
 import wave.multid.model.*;
 import wave.multid.Coords2D;
-import wave.multid.map.Map;
 import wave.multid.DimMismatchEx;
 import wave.multid.CoordsArray;
 import java.awt.Shape;
 import java.awt.Color;
 import java.awt.geom.Rectangle2D;
 import java.awt.Graphics2D;
-import java.awt.geom.GeneralPath;
-import java.awt.geom.AffineTransform;
 
 public class PointMark extends ShapedGeometry {
     //
     // Constants
     //
-    public static final double DEFAULT_WIDTH = 2d;
-    public static final double DEFAULT_HEIGHT = 2d;
+    public static final double DEFAULT_WIDTH = 4d;
+    public static final double DEFAULT_HEIGHT = 4d;
 
     //
     // Members
@@ -41,6 +38,7 @@ public class PointMark extends ShapedGeometry {
     //
     // Methods
     //
+    @Override
     public void draw(Graphics2D g) {
         Color previous = g.getColor();
         g.setColor(getViewingAttr().getColor());

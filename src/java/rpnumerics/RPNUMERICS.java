@@ -32,7 +32,7 @@ public class RPNUMERICS {
     static private ODESolver odeSolver_ = null;
     static private ShockProfile shockProfile_ = ShockProfile.instance();
     static private BifurcationProfile bifurcationProfile_ = BifurcationProfile.instance();
-    static private Integer direction_ = OrbitGeom.FORWARD_DIR;
+    static private Integer direction_ = Orbit.FORWARD_DIR;
     //
     // Constructors/Initializers
     //

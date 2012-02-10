@@ -53,7 +53,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JMenuItem inputCoordsMenuItem = new JMenuItem("Input Coords ...");
     private JMenuItem createSVGImageMenuItem = new JMenuItem();
     private JMenuItem printMenuItem = new JMenuItem();
-
     private static RPnPhaseSpaceFrame[] frames_, auxFrames_, leftFrames_, rightFrames_;
     private RPnMenuCommand commandMenu_ = null;
     private JMenuItem networkMenuItem = new JMenuItem();
@@ -87,10 +86,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
             addPropertyChangeListener(this);
             UndoActionController.createInstance();
-
-
-
-
 
             if (commandMenu_ instanceof RPnAppletPlotter) { // Selecting itens to disable in Applet
 
@@ -156,6 +151,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 toolBar_.add(IntegralCurvePlotAgent.instance().getContainer());
                 toolBar_.add(CompositePlotAgent.instance().getContainer());
                 toolBar_.add(RarefactionExtensionCurvePlotAgent.instance().getContainer());
+
+
                 toolBar_.add(AreaSelectionAgent.instance().getContainer());     //** Edson/Leandro
                 toolBar_.add(ClassifierAgent.instance().getContainer());        //** Leandro
                 toolBar_.add(VelocityAgent.instance().getContainer());        //** Leandro
@@ -529,7 +526,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
     //** para o menu de tipos de curvas
     private void jbInit() throws Exception {
-        //setIconImage(Toolkit.getDefaultToolkit().createImage(ShockFlowControlFrame.class.getResource("[Your Icon]")));
+
         setUIFramePosition();
 
         stateComboBox.addItem("Phase Diagram");
@@ -543,26 +540,44 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         GridBagConstraints configPanelConstraints = new GridBagConstraints();
 
-        configPanelConstraints.gridheight=1;
-        configPanelConstraints.gridwidth=2;
+        configPanelConstraints.gridheight = 1;
+        configPanelConstraints.gridwidth = 2;
 
         configPanel_.setLayout(configPanelLayout);
 
-        configPanelConstraints.gridy=0;
-        configPanel_.add(stateComboBox,configPanelConstraints);
-        configPanelConstraints.gridy=1;
-        configPanel_.add(curvesConfigPanel_,configPanelConstraints);
+        configPanelConstraints.gridy = 0;
+        configPanelConstraints.gridx = 0;
+        configPanelConstraints.fill = GridBagConstraints.NONE;
+        configPanel_.add(stateComboBox, configPanelConstraints);
+
+        configPanelConstraints.ipady=40;
 
 
-        GridBagConstraints layoutConstrains = new GridBagConstraints();
+        configPanelConstraints.gridy = 1;
+        configPanelConstraints.gridx = 0;
+        configPanelConstraints.fill=GridBagConstraints.NONE;
+        configPanel_.add(curvesConfigPanel_, configPanelConstraints);
 
-        layoutConstrains.gridheight = 1;
-        layoutConstrains.gridwidth = 3;
-
-        layoutConstrains.gridy = 0;
 
         contentPane = (JPanel) this.getContentPane();
         contentPane.setLayout(uiFrameLayout_);
+
+        GridBagConstraints layoutConstrains = new GridBagConstraints();
+        layoutConstrains.gridy = 0;
+
+        layoutConstrains.gridy = 0;
+
+        contentPane.add(configPanel_, layoutConstrains);
+
+        layoutConstrains.gridy = 1;
+        contentPane.add(toolBarPanel_, layoutConstrains);
+
+
+        layoutConstrains.gridy = 2;
+        getContentPane().add(statusLabel_, layoutConstrains);
+
+
+
 
         toolBar_.setOpaque(true);
 
@@ -781,16 +796,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         jMenuBar1.add(helpMenu);
         setJMenuBar(jMenuBar1);
 
-        layoutConstrains.gridy = 0;
 
-        contentPane.add(configPanel_, layoutConstrains);
-
-        layoutConstrains.gridy = 1;
-        contentPane.add(toolBarPanel_, layoutConstrains);
-
-
-        layoutConstrains.gridy = 2;
-        getContentPane().add(statusLabel_, layoutConstrains);
 
 
         editMenu.add(ClearPhaseSpaceAgent.instance());
@@ -840,6 +846,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         modelInteractionMenu.removeAll();
         modelInteractionMenu.add(ChangeFluxParamsAgent.instance());
+        modelInteractionMenu.add(ChangeOrbitLevel.instance());
 
         modelInteractionMenu.add(inputCoordsMenuItem);
         modelInteractionMenu.addSeparator();

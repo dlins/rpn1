@@ -397,6 +397,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
             Iterator it = scene_.geometries();
             while (it.hasNext()) {
                 GeomObjView geometry = (GeomObjView) it.next();
+                if (geometry.getViewingAttr().isVisible())
                 geometry.draw(svgGenerator);
 
 

@@ -16,6 +16,7 @@ void Rarefaction_ExtensionTPCW::extension_curve(const Flux2Comp2PhasesAdimension
     domain_segments.clear();
 
     std::vector<RealVector> rarefaction_curve;
+    std::vector<RealVector> inflection_points;
 
     //    int info = Rarefaction::curve(initial_point,
     //                                  curve_family,
@@ -32,12 +33,12 @@ void Rarefaction_ExtensionTPCW::extension_curve(const Flux2Comp2PhasesAdimension
             RAREFACTION_INITIALIZE_YES,
             (const RealVector *) 0,
             curve_family,
-            increase,CHECK_RAREFACTION_MONOTONY_TRUE,
+            increase,RAREFACTION_FOR_ITSELF,
             deltaxi,
             curve_flux, curve_accum,
             RAREFACTION_GENERAL_ACCUMULATION,
             (Boundary*) boundary,
-            rarefaction_curve);
+            rarefaction_curve,inflection_points);
 
 
 

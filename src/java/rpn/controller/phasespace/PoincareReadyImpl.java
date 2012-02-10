@@ -10,6 +10,7 @@ import rpn.component.*;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.usecase.*;
 import rpnumerics.ManifoldOrbit;
+import rpnumerics.Orbit;
 import wave.util.RealVector;
 
 public class PoincareReadyImpl extends NumConfigReadyImpl
@@ -51,7 +52,7 @@ public class PoincareReadyImpl extends NumConfigReadyImpl
     public void plot(RPnPhaseSpaceAbstraction phaseSpace, RpGeometry geom) {
         super.plot(phaseSpace, geom);
         if (geom.geomFactory().geomSource() instanceof ManifoldOrbit)
-            if (((ManifoldOrbit)geom.geomFactory().geomSource()).getTimeDirection() == OrbitGeom.BACKWARD_DIR)
+            if (((ManifoldOrbit)geom.geomFactory().geomSource()).getTimeDirection() == Orbit.BACKWARD_DIR)
                 phaseSpace.changeState(
                         new bwdProfileReadyImpl(hugoniotGeom(), xzeroGeom(), poincareGeom(), (ManifoldGeom)geom));
             else

@@ -6,13 +6,8 @@
 
 package wave.multid.model;
 
-import wave.multid.DimMismatchEx;
 import wave.multid.view.*;
 import wave.multid.*;
-import wave.multid.map.Map;
-import java.io.FileWriter;
-import java.io.FileReader;
-import java.awt.Color;
 
 public class MultiPoint extends MultiGeometryImpl {
     //

@@ -669,16 +669,16 @@ public class RPnDataModule {
 
         private int chooseDirection(String stringDirection) {
             if (stringDirection == null) {
-                return OrbitGeom.BOTH_DIR;
+                return Orbit.BOTH_DIR;
             }
             if (stringDirection.equalsIgnoreCase("forward")) {
-                return OrbitGeom.FORWARD_DIR;
+                return Orbit.FORWARD_DIR;
             }
             if (stringDirection.equalsIgnoreCase("backward")) {
-                return OrbitGeom.BACKWARD_DIR;
+                return Orbit.BACKWARD_DIR;
             }
 
-            return OrbitGeom.BOTH_DIR;
+            return Orbit.BOTH_DIR;
 
         }
 

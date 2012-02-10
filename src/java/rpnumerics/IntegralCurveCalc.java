@@ -6,6 +6,8 @@
  */
 package rpnumerics;
 
+import wave.util.RealVector;
+
 public class IntegralCurveCalc extends OrbitCalc implements RpCalculation {
     //
     // Constants
@@ -33,21 +35,7 @@ public class IntegralCurveCalc extends OrbitCalc implements RpCalculation {
     public RpSolution calc() throws RpException {
 
         IntegralCurve result;
-
-        RarefactionOrbit resultForward = (RarefactionOrbit) calc(getStart(), getFamilyIndex(),20);
-        RarefactionOrbit resultBackward = (RarefactionOrbit) calc(getStart(), getFamilyIndex(),22);
-
-        if (resultBackward == null || resultForward == null) {
-            throw new RpException("Error in native layer");
-        }
-
-
-        Orbit resultComplete = Orbit.concat(resultBackward, resultForward,getFamilyIndex());
-
-
-        result = new IntegralCurve(resultComplete.getPoints(), resultComplete.getFamilyIndex(),0);
-
-
+        result = (IntegralCurve) calc(getStart(), getFamilyIndex());
 
         if (result == null) {
             throw new RpException("Error in native layer");
@@ -64,7 +52,7 @@ public class IntegralCurveCalc extends OrbitCalc implements RpCalculation {
 
     }
 
-    private native RpSolution calc(PhasePoint initialpoint, int family,int timeDirection) throws RpException;
+    private native RpSolution calc(PhasePoint initialpoint, int family) throws RpException;
 
    
 }
