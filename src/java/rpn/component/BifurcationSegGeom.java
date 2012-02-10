@@ -26,6 +26,7 @@ public class BifurcationSegGeom extends MultiPolyLine {
 
     }
 
+
 //    private static Color selectColor(HugoniotSegment hsegment) {
 //        if (hsegment.getType() == 18) {
 //            return Color.GREEN;
@@ -41,4 +42,5 @@ public class BifurcationSegGeom extends MultiPolyLine {
 //
 //        return  Color.white;
 //    }
+
 }

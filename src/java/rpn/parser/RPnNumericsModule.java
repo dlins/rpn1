@@ -58,17 +58,21 @@ public class RPnNumericsModule {
             }
 
             if (localName.equals("CURVEPARAM")) {
+
                 currentConfigurationProfile_.addParam(att.getValue(0), att.getValue(1));
             }
 
             if (localName.equals("PHYSICS")) {
                 physicsProfile_ = new ConfigurationProfile(att.getValue(0), ConfigurationProfile.PHYSICS_PROFILE);
-//                physicsID_ = att.getValue(0);
             }
 
             if (localName.equals("BOUNDARY")) {
                 physicsProfile_.addConfigurationProfile(ConfigurationProfile.BOUNDARY, new ConfigurationProfile(att.getValue(0), ConfigurationProfile.BOUNDARY));
+            }
 
+            if (localName.equals("PHYSICSCONFIG")) {
+                currentInnerPhysicsConfigurationProfile_=new ConfigurationProfile(att.getValue(0), ConfigurationProfile.PHYSICS_CONFIG);
+                physicsProfile_.addConfigurationProfile(ConfigurationProfile.BOUNDARY, new ConfigurationProfile(att.getValue(0), ConfigurationProfile.BOUNDARY));
 
             }
 
@@ -118,6 +122,8 @@ public class RPnNumericsModule {
                 RPnConfig.setActivePhysics(physicsProfile_.getName());
                 RPnConfig.addProfile(physicsProfile_.getName(), physicsProfile_);
                 rpnumerics.RPNUMERICS.init(physicsProfile_.getName());
+                RPnConfig.createParamsFluxSubject(physicsProfile_.getName());
+              
 
 //                System.out.println("Adicionando profile: "+physicsProfile_.getName());
 

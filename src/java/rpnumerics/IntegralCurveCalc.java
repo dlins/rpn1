@@ -42,11 +42,6 @@ public class IntegralCurveCalc extends OrbitCalc implements RpCalculation {
         }
        
 
-        //** acrescentei isso (Leandro)
-        RPnCurve.lista.add(result);
-        System.out.println("Tamanho da lista: " + RPnCurve.lista.size());
-        //***
-
         return result;
 
 

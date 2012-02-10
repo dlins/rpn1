@@ -11,7 +11,11 @@ import wave.util.RealVector;
 
 import wave.multid.view.ViewingAttr;
 import java.awt.Color;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import rpn.RPnUIFrame;
 import rpn.component.MultidAdapter;
 import rpn.component.OrbitGeom;
 import wave.util.RealSegment;
@@ -28,7 +32,9 @@ public class Orbit extends RPnCurve implements RpSolution {
     private OrbitPoint[] points_;
     private int increase_;
     private int familyIndex_;
-    public double distancia = 0;      //** declarei isso (Leandro)
+
+//    public double distancia = 0;      //** declarei isso (Leandro)
+
 
     //
     // Constructor
@@ -112,73 +118,72 @@ public class Orbit extends RPnCurve implements RpSolution {
     }
 
     //** inseri este método (Leandro)
-    @Override
-    public int findClosestSegment(RealVector targetPoint, double alpha) {
-
-        ArrayList segments = MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseRPnCurveToCoordsArray(this));
-
-        RealVector target = new RealVector(targetPoint);
-        RealVector closest = null;
-        RealVector segmentVector = null;
-        alpha = 0;
-        int closestSegment = 0;
-        double closestDistance = -1;
-
-        double[] dist = new double[segments.size()];
-        double distmin = 0, distprox;
-
-        for (int i = 0; i < segments.size(); i++) {
-
-            RealSegment segment = (RealSegment) segments.get(i);
-            segmentVector = new RealVector(segment.p1());
-            segmentVector.sub(segment.p2());
-
-            for (int k = 0; k < target.getSize(); k++) {
-                if (target.getElement(k) == 0.) {
-                    segmentVector.setElement(k, 0.);
-                }
-            }
-
-            closest = new RealVector(target);
-
-            closest.sub(segment.p2());
-
-            alpha = closest.dot(segmentVector)
-                    / segmentVector.dot(segmentVector);
-
-            if (alpha < 0) {
-                alpha = 0;
-            }
-            if (alpha > 1) {
-                alpha = 1;
-            }
-            segmentVector.scale(alpha);
-
-            closest.sub(segmentVector);
-
-            for (int k = 0; k < target.getSize(); k++) {
-                if (target.getElement(k) == 0.) {
-                    closest.setElement(k, 0.);
-                }
-            }
-
-            dist[i] = closest.norm();
-        }
-
-        distmin = dist[0];
-
-        for (int i = 1; i < dist.length; i++) {
-            distprox = dist[i];
-            if (distprox <= distmin) {
-                distmin = distprox;
-                closestSegment = i;
-            }
-        }
-
-        distancia = distmin;
-
-        return closestSegment;
-    }
+//    @Override
+//    public int findClosestSegment(RealVector targetPoint) {
+//
+//        System.out.println("findClosestSegment de Orbit");
+//
+//        ArrayList segments = MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseRPnCurveToCoordsArray(this));
+//
+//        RealVector target = new RealVector(targetPoint);
+//        RealVector closest = null;
+//        RealVector segmentVector = null;
+//        double alpha = 0;
+//        int closestSegment = 0;
+//
+//        double[] dist = new double[segments.size()];
+//        double distmin;
+//
+//        for (int i = 0; i < segments.size(); i++) {
+//
+//            RealSegment segment = (RealSegment) segments.get(i);
+//            segmentVector = new RealVector(segment.p1());
+//            segmentVector.sub(segment.p2());
+//
+//            for (int k = 0; k < target.getSize(); k++) {
+//                if (target.getElement(k) == 0.) {
+//                    segmentVector.setElement(k, 0.);
+//                }
+//            }
+//
+//            closest = new RealVector(target);
+//
+//            closest.sub(segment.p2());
+//
+//            alpha = closest.dot(segmentVector)
+//                    / segmentVector.dot(segmentVector);
+//
+//            if (alpha < 0) {
+//                alpha = 0;
+//            }
+//            if (alpha > 1) {
+//                alpha = 1;
+//            }
+//            segmentVector.scale(alpha);
+//
+//            closest.sub(segmentVector);
+//
+//            for (int k = 0; k < target.getSize(); k++) {
+//                if (target.getElement(k) == 0.) {
+//                    closest.setElement(k, 0.);
+//                }
+//            }
+//
+//            dist[i] = closest.norm();
+//        }
+//
+//        distmin = dist[0];
+//        for (int i = 0; i < dist.length; i++) {
+//            if (distmin >= dist[i]) {
+//                distmin = dist[i];
+//                closestSegment = i;
+//            }
+//        }
+//
+//        distancia = distmin;
+//
+//        return closestSegment;
+//    }
     //**************************************************************************
 
     @Override
@@ -204,25 +209,31 @@ public class Orbit extends RPnCurve implements RpSolution {
 
     }
 
+    //*********************************** Alterei este método em 17/08 (Leandro)
     public String toMatlabData(int curveIndex) {
 
         StringBuffer buffer = new StringBuffer();
-        buffer.append("data" + curveIndex + "=[");
 
-        for (int i = 0; i < points_.length; i++) {
-            OrbitPoint orbitPoint = points_[i];
+        try {
+            //FileWriter gravador = new FileWriter("/home/moreira/Documents/data" +curveIndex +".txt");
+            FileWriter gravador = new FileWriter(RPnUIFrame.dir + "/data" +curveIndex +".txt");
+            BufferedWriter saida = new BufferedWriter(gravador);
 
-            buffer.append(orbitPoint.toString());
-            buffer.append(";\n");
+            for (int i = 0; i < points_.length; i++) {
+                OrbitPoint orbitPoint = points_[i];
+                saida.write(orbitPoint.toString() +"\n");
+            }
 
+            saida.close();
         }
-
-        buffer.append("];");
+        catch (IOException e) {
+            System.out.println("Arquivos .txt de Orbit nao foram escritos.");
+        }
 
         return buffer.toString();
 
-
     }
+    //**************************************************************************
 
     //
     // Accessors/Mutators
@@ -251,6 +262,9 @@ public class Orbit extends RPnCurve implements RpSolution {
 
         StringBuffer buffer = new StringBuffer();
 
+        buffer.append("data" +identifier +" = read_data_file('data" +identifier +".txt');\n");        //*** Leandro
+        buffer.append("disp('data" +identifier +".txt')\n");                                          //*** Leandro
+
         String color = null;
         if (this instanceof RarefactionOrbit) {
             RarefactionOrbit rarefactionOrbit = (RarefactionOrbit) this;
@@ -264,6 +278,7 @@ public class Orbit extends RPnCurve implements RpSolution {
         }
 
         buffer.append("plot3(data" + identifier + "(:,1),data" + identifier + "(:,2),data" + identifier + "(:,3),'Color'," + color + ")\n");
+        buffer.append("hold on\n");
 
         RealVector xMin = RPNUMERICS.boundary().getMinimums();
         RealVector xMax = RPNUMERICS.boundary().getMaximums();
@@ -271,6 +286,7 @@ public class Orbit extends RPnCurve implements RpSolution {
         buffer.append("axis([" + xMin.getElement(0) + " " + xMax.getElement(0) + " " + xMin.getElement(1) + " " + xMax.getElement(1) + " " + xMin.getElement(2) + " " + xMax.getElement(2) + "]);\n");
 
         buffer.append("xlabel('s')\nylabel('T')\nzlabel('u')\n");
+        buffer.append("pause\n");
 
         return buffer.toString();
 
@@ -304,6 +320,8 @@ public class Orbit extends RPnCurve implements RpSolution {
         buffer.append(y);
 
         buffer.append("),'Color'" + "," + color + ")\n");
+
+        buffer.append("hold on\n");
 
         RealVector xMin = RPNUMERICS.boundary().getMinimums();
         RealVector xMax = RPNUMERICS.boundary().getMaximums();

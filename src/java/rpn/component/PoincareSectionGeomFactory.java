@@ -8,6 +8,7 @@ package rpn.component;
 
 import rpn.controller.PoincareController;
 import rpn.controller.RpController;
+import rpnumerics.Area;
 import wave.util.SimplexPoincareSection;
 import rpnumerics.PhasePoint;
 
@@ -75,6 +76,10 @@ public class PoincareSectionGeomFactory implements RpGeomFactory {
     }
 
     public String toMatlab(int curveIndex) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void updateGeom(Area area) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }

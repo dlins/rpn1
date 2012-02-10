@@ -15,6 +15,7 @@ extern "C" {
 JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
   (JNIEnv *, jobject, jintArray, jint, jint);
 
+
 #ifdef __cplusplus
 }
 #endif

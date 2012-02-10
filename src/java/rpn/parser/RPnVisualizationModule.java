@@ -15,11 +15,14 @@ import java.util.List;
 import java.io.*;
 import java.util.Map.Entry;
 import java.util.Set;
+import javax.swing.JOptionPane;
 import rpn.RPnConfig;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.XMLReader;
 import rpn.RPnProjDescriptor;
+import rpn.component.util.GeometryGraphND;
 import wave.multid.Space;
+import rpnumerics.RPNUMERICS;
 
 /** This class configures the initial visualization properties. Reading a XML file that contains the necessary information, this class sets the axis, labels , domain, etc to represents correctly the physics. */
 public class RPnVisualizationModule {
@@ -175,6 +178,20 @@ public class RPnVisualizationModule {
 
             Boolean iso = new Boolean(iso2equi);
 
+            // *** Leandro
+            try {
+                if (RPNUMERICS.physicsID().equals("Stone")) {
+                    String str = JOptionPane.showInputDialog(null, "Digite 0 para triangulo retangulo; 1 para triangulo equilatero", "Iso Map To Equi ?", JOptionPane.QUESTION_MESSAGE);
+                    GeometryGraphND.mapToEqui = Integer.parseInt(str);
+                    if (GeometryGraphND.mapToEqui == 0) {
+                        iso = false;
+                    }
+                }
+
+            } catch (Exception e) {
+            }
+            //***
+            
             DESCRIPTORS.add(new RPnProjDescriptor(space, label, w, h, axisArray, iso));
 
         }

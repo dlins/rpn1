@@ -6,6 +6,11 @@
 
 package rpn.controller.ui;
 
+import rpn.component.HugoniotCurveGeomFactory;
+import rpn.component.util.ControlClick;
+import rpn.component.util.GeometryUtil;
+import rpnumerics.HugoniotCurve;
+import rpnumerics.RPnCurve;
 import wave.util.RealVector;
 
 public class UserInputTable {
@@ -20,6 +25,7 @@ public class UserInputTable {
     public void setElement(int i, double value) {
         inputFlag_[i] = true;
         inputValue_.setElement(i, value);
+        
     }
 
     public double getElement(int i) { return inputValue_.getElement(i); }

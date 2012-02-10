@@ -77,7 +77,13 @@ public class OrbitCalc implements RpCalculation {
         return start_;
     }
 
+
     public int getDirection() {
         return timeDirection_;
+
+    }
+
+    public RpSolution recalc(Area area) throws RpException {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

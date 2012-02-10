@@ -12,5 +12,7 @@ public interface RpCalculation {
 
     RpSolution recalc() throws RpException;
 
+    RpSolution recalc(Area area) throws RpException;
+
 
 }

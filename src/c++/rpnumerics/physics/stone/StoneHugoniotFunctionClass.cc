@@ -104,7 +104,13 @@ double StoneHugoniotFunctionClass::HugoniotFunction(const RealVector & u) {
 
     double hugont = dho * dfw - dhw*dfo;
 
+
+    //double hugont = (sw + so -0.5 )*(-0.5*sw +so -0.125);     // isso nao é parte da rotina, foi apenas um teste
+
+    //if (fabs(hugont) <= epsilon * (fabs(dho * dfw) + fabs(dhw * dfo))) hugont = 0.0;   // Verificar se isso estava certo
+
 //    if (fabs(hugont) <= epsilon * (fabs(dho * dfw) + fabs(dhw * dfo))) hugont = 0.0;
+
 
     return hugont;
 }

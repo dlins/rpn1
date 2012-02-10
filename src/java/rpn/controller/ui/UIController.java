@@ -26,9 +26,18 @@ import java.util.Iterator;
 import javax.swing.JOptionPane;
 import rpn.RPnDesktopPlotter;
 import rpn.RPnUIFrame;
-import rpn.component.util.ClassifierAgent;
+import rpn.component.RpGeomFactory;
+import rpn.component.RpGeometry;
 import rpn.component.util.ControlClick;
+import rpn.component.util.GeometryUtil;
 import rpn.message.*;
+import rpn.parser.RPnDataModule;
+import rpnumerics.HugoniotCurve;
+import rpnumerics.RPNUMERICS;
+import rpnumerics.RPnCurve;
+import rpnumerics.SegmentedCurve;
+import wave.multid.view.Scene;
+import wave.multid.view.ViewingTransform;
 
 /** This class implements a general controller to the application. With the UIController class, the state of the application is changed, the controllers of each panel are installed or removed and the user inputs are stored in a global table. */
 public class UIController extends ComponentUI {
@@ -57,7 +66,7 @@ public class UIController extends ComponentUI {
     //
     // Constructors
     //
-    protected UIController() {   //** era protected (Leandro)
+    protected UIController() {
 
         mouseMotionController_ = new MouseMotionController();
         stateController_ = new StateInputController(RPnDesktopPlotter.getUIFrame());
@@ -134,6 +143,22 @@ public class UIController extends ComponentUI {
         return commandArray_.iterator();
 
     }
+
+    //******** Leandro teste
+    private Point toDCcoords(RealVector input, Scene scene) {
+        
+        ViewingTransform transf = scene.getViewingTransform();
+        CoordsArray wcCoords = new CoordsArray(input);
+        Coords2D dcCoords = new Coords2D();
+        transf.viewPlaneTransform(wcCoords, dcCoords);
+        Point point = new Point();
+        point.setLocation(dcCoords.getX(), dcCoords.getY());
+
+        return point;
+
+    }
+    //********
+
     //
     // Inner Classes
     //
@@ -148,6 +173,7 @@ public class UIController extends ComponentUI {
 
                 if (netStatus_.isMaster() || !(netStatus_.isOnline())) {
                     RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
+                    if (ControlClick.ind == 0) ControlClick.mousePressed(event, panel.scene());
 
                     // this will automatically work only for 2D(isComplete())
                     updateUserInputTable(panel, event.getPoint());
@@ -182,6 +208,31 @@ public class UIController extends ComponentUI {
 
                 if (netStatus_.isMaster() || !(netStatus_.isOnline())) {
 
+                    
+                    //*** Leandro
+//                    if (UIController.instance().getState() instanceof AREASELECTION_CONFIG) {
+//
+//                        RealVector local = new RealVector(RPNUMERICS.domainDim());
+//                        for (int i = 0; i < RPNUMERICS.domainDim(); i++) {
+//                            local.setElement(i, ((HugoniotCurve) GeometryUtil.closestCurve_).getXZero().getElement(i));
+//                        }
+//                        //System.out.println("local.toString() : " +local.toString());
+//
+//                        Point input = toDCcoords(local, panel.scene());
+//                        updateUserInputTable(panel, input);
+//
+//                        // execute
+//                        userInputComplete(((HugoniotCurve) GeometryUtil.closestCurve_).getXZero());
+//                        globalInputTable().reset();
+//                        resetPanelsCursorCoords();
+//                        RPnUIFrame.enableSliders();
+//
+//                        return;
+//
+//                    }
+                    //***
+
+                    //*** original
                     int sceneDim = panel.scene().getViewingTransform().projectionMap().getDomain().getDim();
                     if (sceneDim == globalInputTable_.flags().length) {
 
@@ -193,13 +244,13 @@ public class UIController extends ComponentUI {
                             globalInputTable().reset();
                             resetPanelsCursorCoords();
                             RPnUIFrame.enableSliders();
-
                         }
-
-                    } else {
-                        JOptionPane.showMessageDialog(panel, "Wrong space dimension", "Error", JOptionPane.ERROR_MESSAGE);
-
+                        
                     }
+//                    else {
+//                        JOptionPane.showMessageDialog(panel, "Wrong space dimension", "Error", JOptionPane.ERROR_MESSAGE);
+//
+//                    }
 
                 }
             }
@@ -327,6 +378,8 @@ public class UIController extends ComponentUI {
     /** Do a specific action when all user inputs has been made. */
     public void userInputComplete(RealVector userInput) {
         // state dependent
+
+        //System.out.println("Entrei no userInputComplete do UIController");
 
         handler_.userInputComplete(this, userInput);
 

@@ -1,3 +1,4 @@
+
 /*
  * Instituto de Matematica Pura e Aplicada - IMPA
  * Departamento de Dinamica dos Fluidos
@@ -18,6 +19,7 @@ import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.io.FileWriter;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import rpn.component.util.AreaSelectionAgent2;
 import rpn.component.util.ClassifierAgent;
 import rpn.component.util.ControlClick;
 import rpn.component.util.VelocityAgent;
@@ -63,6 +65,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JCheckBoxMenuItem showCurvesPaneltem_ = new JCheckBoxMenuItem("Show Curves Window", true);
     private RPnCurvesConfigPanel curvesConfigPanel_ = new RPnCurvesConfigPanel();
     private JFrame curvesFrame_;
+
     //*** declarei isso  -- Leandro
     private JMenuItem editMenuItem1 = new JMenuItem("Clears All Strings");
     private JMenuItem editMenuItem2 = new JMenuItem("Clears Last String");
@@ -70,6 +73,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JMenuItem editMenuItem4 = new JMenuItem("Clears Classifiers");
     private JMenuItem editMenuItem5 = new JMenuItem("Starts with Black Background");
     private JMenuItem editMenuItem6 = new JMenuItem("Starts with White Background");
+    public static String dir= "";
     //***
 
     //Construct the frame
@@ -150,12 +154,27 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 toolBar_.add(RarefactionOrbitPlotAgent.instance().getContainer());
                 toolBar_.add(IntegralCurvePlotAgent.instance().getContainer());
                 toolBar_.add(CompositePlotAgent.instance().getContainer());
+
+
+                if (RPNUMERICS.boundary() instanceof RectBoundary) {
+                    toolBar_.add(AreaSelectionAgent.instance().getContainer());     //** Edson/Leandro
+                }
+                else {
+                    toolBar_.add(AreaSelectionAgent.instance().getContainer());     //** Leandro  -- completar com 2. opcao de botao de selecao (triangular)
+                    toolBar_.add(AreaSelectionAgent2.instance().getContainer());    //** Leandro
+                }
+                
+                toolBar_.add(ClassifierAgent.instance().getContainer());      //** Leandro
+                toolBar_.add(VelocityAgent.instance().getContainer());        //** Leandro
+                //toolBar_.add(BifurcationRefineAgent.instance().getContainer());     //** Leandro
+
                 toolBar_.add(RarefactionExtensionCurvePlotAgent.instance().getContainer());
 
 
                 toolBar_.add(AreaSelectionAgent.instance().getContainer());     //** Edson/Leandro
                 toolBar_.add(ClassifierAgent.instance().getContainer());        //** Leandro
                 toolBar_.add(VelocityAgent.instance().getContainer());        //** Leandro
+
                 toolBar_.revalidate();
 
             }
@@ -420,11 +439,21 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     void matlabExport_actionPerformed(ActionEvent e) {
         try {
             JFileChooser chooser = new JFileChooser();
-            chooser.setSelectedFile(new File("output.m"));
+            chooser.setSelectedFile(new File("script.m"));
             chooser.setFileFilter(new FileNameExtensionFilter("Matlab file", "m"));
             if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+
+                int nFiles = chooser.getSelectedFile().getParentFile().listFiles().length;
+                
+                for (int k=0; k<nFiles; k++) {
+                    chooser.getSelectedFile().getParentFile().listFiles()[0].delete();
+                }
+
                 FileWriter writer = new FileWriter(chooser.getSelectedFile().
                         getAbsolutePath());
+                dir = chooser.getSelectedFile().getParent();
+                System.out.println("Diretorio selecionado : " +dir);
+
                 RPnDataModule.matlabExport(writer);
 
                 writer.close();
@@ -583,6 +612,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         toolBarPanel_.add(toolBar_);
 
+
         setPreferredSize(new Dimension(650, 650));
 
         setResizable(true);
@@ -689,7 +719,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 new java.awt.event.ActionListener() {
 
                     public void actionPerformed(ActionEvent e) {
-                        ControlClick.clearVelocities();
+                        VelocityAgent.clearVelocities();
                     }
                 });
 
@@ -697,7 +727,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 new java.awt.event.ActionListener() {
 
                     public void actionPerformed(ActionEvent e) {
-                        ControlClick.clearClassifiers();
+                        ClassifierAgent.clearClassifiers();
                     }
                 });
 
@@ -851,6 +881,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         modelInteractionMenu.add(inputCoordsMenuItem);
         modelInteractionMenu.addSeparator();
         modelInteractionMenu.add(configurationMenuItem_);
+        modelInteractionMenu.add(BifurcationRefineAgent.instance());
+        BifurcationRefineAgent.instance().setEnabled(true);
 
 //        modelInteractionMenu.add(errorControlMenuItem);
 
@@ -863,6 +895,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         modelInteractionMenu.removeAll();
         modelInteractionMenu.add(ChangeFluxParamsAgent.instance());
         modelInteractionMenu.add(configurationMenuItem_);
+        
 
     }
 
@@ -941,6 +974,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         }
 
         public void actionPerformed(ActionEvent e) {
+            System.out.println("Entrou em actionPerformed");
             RPnConfigurationDialog extensionCurve = new RPnConfigurationDialog();
             extensionCurve.setVisible(true);
 

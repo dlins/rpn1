@@ -306,7 +306,7 @@ public class HugoniotCurve extends SegmentedCurve {
     public double findSigma(PhasePoint targetPoint) {
 
         int alpha = 0;
-        int hugoniotSegmentIndx = findClosestSegment(targetPoint, alpha);
+        int hugoniotSegmentIndx = findClosestSegment(targetPoint);
 
         HugoniotSegment segment = (HugoniotSegment) segments().get(
                 hugoniotSegmentIndx);

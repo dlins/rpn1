@@ -128,7 +128,9 @@ void TPCW::preProcess(RealVector & input) {
 
 void TPCW::postProcess(vector<RealVector> & input) {
 
+
     cout<<"Em post process"<<endl;
+
 
     int inputSize = input[0].size();
 

@@ -55,6 +55,7 @@ public class ShockCurveCalc extends OrbitCalc implements RpCalculation {
     }
 
     public RpSolution calc() throws RpException {
+
 //        if (getDirection() == 0) {
 //
 //            ShockCurve resultForward = (ShockCurve)calc("methodName_", newtonTolerance_, getStart(), getFamilyIndex(), 20);
@@ -81,15 +82,11 @@ public class ShockCurveCalc extends OrbitCalc implements RpCalculation {
             throw new RpException("Error in native layer");
         }
 
-        //** acrescentei isso (Leandro)
-        RPnCurve.lista.add((RPnCurve) result);
-        System.out.println("Tamanho da lista: " + RPnCurve.lista.size());
-        //***
-
         return result;
     }
 
     private native RpSolution calc(String methodName, double newtonTolerance, PhasePoint initialpoint, int familyIndex, int timeDirection) throws RpException;
 
    
+
 }

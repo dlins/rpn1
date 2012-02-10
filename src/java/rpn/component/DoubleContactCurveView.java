@@ -5,6 +5,7 @@
  */
 package rpn.component;
 
+import java.awt.Color;
 import wave.multid.model.*;
 import wave.multid.view.*;
 import wave.multid.DimMismatchEx;
@@ -70,8 +71,10 @@ public class DoubleContactCurveView
     public void draw(Graphics2D g) {
 
         for (int i = 0; i < viewList_.size(); i++) {
+        //for (int i = 0; i < viewList_.size()/2; i++) {                 // *********  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             ((GeomObjView) viewList_.get(i)).draw(g);
         }
+
     }
 
     //Original update method

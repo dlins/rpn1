@@ -20,9 +20,11 @@ public class Configuration {
     private String name_;
     private String type_;
 
+
     public Configuration(ConfigurationProfile profile) {
 
 //        System.out.println(profile.getName() + "   *********Tamanho dos indices do profile****************: " + profile.getIndicesSize());
+
 
         configurationMap_ = new HashMap<String, Configuration>();
         params_ = profile.getParams();
@@ -30,10 +32,12 @@ public class Configuration {
 
         int index = 0;
 
+
         while (index < profile.getIndicesSize()) {
             Entry<String, String> param = profile.getParam(index);
             setParamOrder(param.getKey(), index);
             index++;
+
 
         }
 
@@ -47,9 +51,6 @@ public class Configuration {
 
         name_ = profile.getName();
         type_ = profile.getType();
-
-
-
 
     }
 
@@ -86,6 +87,7 @@ public class Configuration {
 
     }
 
+
     public int getParamOrder(String paramName) {
 
         return paramOrder_.indexOf(paramName);
@@ -99,16 +101,22 @@ public class Configuration {
         return configurationMap_;
     }
 
-    public String getParam(int paramOrder) {
+    public String getParam(int paramOrder) {        //*** está sempre retornando null
+        System.out.println("Tamanho do paramOrder_ : " +paramOrder_.size());         //paramOrder_ é um ArrayList<String> , mas está com size = 0 (qdo usando Configuration ...)
         try {
+
             String paramName = paramOrder_.get(paramOrder);
+
             return params_.get(paramName);
 
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+
         return null;
+
     }
+    
 
     public String getParamName(int paramOrder) {
 
@@ -124,8 +132,10 @@ public class Configuration {
         return null;
     }
 
+
     public String[] getParamNames() {
         String[] paramNames = new String[params_.keySet().size()];
+
 
         int i = 0;
         for (String string : params_.keySet()) {

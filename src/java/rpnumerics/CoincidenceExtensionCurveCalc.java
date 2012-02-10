@@ -20,14 +20,22 @@ public class CoincidenceExtensionCurveCalc extends BifurcationCurveCalc {
     int domainFamily_;
     int characteristicDomain_;
 
-    static private int contCCE = 0;      //** declarei isso (Leandro)
 
     public CoincidenceExtensionCurveCalc(BifurcationParams params, int leftFamily, int rightFamily,int characteristicDomain) {
         super(params);
         this.curveFamily_ = leftFamily;
         this.domainFamily_ = rightFamily;
         characteristicDomain_=characteristicDomain;
+
     }
+    
+//    public CoincidenceExtensionCurveCalc(int xResolution, int yResolution, int leftFamily, int rightFamily,int characteristicDomain) {
+//        this.xResolution_ = xResolution;
+//        this.yResolution_ = yResolution;
+//        this.curveFamily_ = leftFamily;
+//        this.domainFamily_ = rightFamily;
+//        characteristicDomain_=characteristicDomain;
+//    }
 
   
 
@@ -37,23 +45,13 @@ public class CoincidenceExtensionCurveCalc extends BifurcationCurveCalc {
 
         try {
 
-            int resolution[] = getParams().getResolution();
-            result = (CoincidenceExtensionCurve) nativeCalc(resolution[0],resolution[1], curveFamily_, domainFamily_, characteristicDomain_);
+            //int resolution[] = getParams().getResolution();
+            //result = (CoincidenceExtensionCurve) nativeCalc(resolution[0],resolution[1], curveFamily_, domainFamily_, characteristicDomain_);
 
-            //** acrescentei isso (Leandro)
 
-            if (contCCE == 0) {
-                System.out.println("Entrando em CoincidenceExtCurveCalc...");
-
-                RPnCurve.lista.add((RPnCurve) result);
-                System.out.println("Tamanho da lista: " + RPnCurve.lista.size());
-
-                contCCE += 1;
-            }
-
-            //*********************************************
-
+            result = (CoincidenceExtensionCurve) nativeCalc(xResolution_, yResolution_, curveFamily_, domainFamily_, characteristicDomain_);
             return result;
+
         } catch (RpException ex) {
             Logger.getLogger(CoincidenceExtensionCurveCalc.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -47,9 +47,10 @@ public class ConfigurationProfile {
         paramsIndexMap_.put(index, paramName);
     }
 
+
     public void addParam(String paramName, String value) {
 
-      
+      //System.out.println("Adicionando o parametro: " + paramName + "ao profile: " + name_);
 
         if (!paramsMap_.containsKey(paramName)) {
 
@@ -58,6 +59,7 @@ public class ConfigurationProfile {
         }
 
         paramsMap_.put(paramName, value);
+
 
     }
 

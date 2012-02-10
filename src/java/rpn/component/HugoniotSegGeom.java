@@ -32,14 +32,10 @@ public class HugoniotSegGeom extends MultiPolyLine {
 
         if (segment.getType() == 0) {
             attr = new ViewingAttr(new Color(128, 128, 128));
-
         }
 
         if (segment.getType() == 1) {
-
-
             attr = new ViewingAttr(new Color(128, 128, 128));
-
         }
 
         if (segment.getType() == 2) {
@@ -51,25 +47,18 @@ public class HugoniotSegGeom extends MultiPolyLine {
         }
 
         if (segment.getType() == 4) {
-
             attr = new ViewingAttr(new Color(128, 128, 128));
-
         }
 
         if (segment.getType() == 5) {
-
             attr = new ViewingAttr(new Color(128, 128, 128));
-
         }
 
         if (segment.getType() == 6) {
-
             attr = new ViewingAttr(new Color(128, 128, 128));
-
         }
 
         if (segment.getType() == 7) {
-
             attr = new ViewingAttr(new Color(128, 128, 128));
         }
 
@@ -78,9 +67,7 @@ public class HugoniotSegGeom extends MultiPolyLine {
         }
 
         if (segment.getType() == 9) {
-
             attr = new ViewingAttr(new Color(128, 128, 128));
-
         }
 
         if (segment.getType() == 10) {
@@ -92,17 +79,11 @@ public class HugoniotSegGeom extends MultiPolyLine {
         }
 
         if (segment.getType() == 12) {
-
-
             attr = new ViewingAttr(new Color(128, 128, 128));
-
         }
 
         if (segment.getType() == 13) {
-
-
             attr = new ViewingAttr(new Color(128, 128, 128));
-
         }
 
         if (segment.getType() == 14) {
@@ -110,31 +91,26 @@ public class HugoniotSegGeom extends MultiPolyLine {
         }
 
         if (segment.getType() == 15) {
-
-
             attr = new ViewingAttr(new Color(128, 128, 128));
-
         }
 
 
         //TODO SubInflection Curve segment type .
+
         if (segment.getType() == 16) {
             attr = new ViewingAttr(new Color(243, 123, 46));
-
         }
 
 
         //TODO Coincidence Curve segment type
         if (segment.getType() == 17) {
             attr = new ViewingAttr(new Color(20, 43, 140));
-
         }
 
 
         //TODO  BuckleyLeverettinflection Curve segment type
         if (segment.getType() == 18) {                                        
             attr = new ViewingAttr(new Color(0, 255, 0));
-
         }
         return attr;
     }

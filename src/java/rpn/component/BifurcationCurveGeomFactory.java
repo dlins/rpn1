@@ -36,6 +36,19 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
 
         }
         return new BifurcationCurveGeom(bifurcationArray, this);
+        
+
+//        int rightResultSize = curve.rightSegments().size();
+//
+//        BifurcationSegGeom[] bifurcationRightArray = new BifurcationSegGeom[rightResultSize];
+//        for (int i = 0; i < rightResultSize; i++) {
+//            bifurcationArray[i] = new BifurcationSegGeom((RealSegment) curve.rightSegments().get(i));
+//
+//        }
+//        geometryArray.add(new BifurcationCurveGeom(bifurcationRightArray, this));
+//
+//        return geometryArray;
+
 
     }
 

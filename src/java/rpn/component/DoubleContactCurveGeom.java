@@ -5,6 +5,7 @@
  */
 package rpn.component;
 
+import java.awt.Color;
 import wave.multid.view.*;
 import wave.multid.*;
 
@@ -19,7 +20,8 @@ public class DoubleContactCurveGeom extends BifurcationCurveGeom {//implements M
     public DoubleContactCurveGeom(BifurcationSegGeom[] segArray, BifurcationCurveGeomFactory factory) {
 
         super(segArray, factory);
-
+        System.out.println("Tamanho de segArray em DoubleContactCurveGeom : " +segArray.length);
+        
     }
 
 

@@ -6,7 +6,9 @@
 
 package rpn.component;
 
+
 import rpn.controller.RpController;
+import rpnumerics.Area;
 
 /** This interface declares aditional methods to manipulate the geometric models. Each geometric model has a geometric visual form associated , this class declares methods to handle the model part of the pair model/visual form. */
 
@@ -15,6 +17,9 @@ public interface RpGeomFactory {
 
     /** Do the recalculations required to update de geometric model of any curve. */
     void updateGeom();
+
+
+    void updateGeom(Area area);
 
 
     /** Returns the geometric model of the geometric visualization. */

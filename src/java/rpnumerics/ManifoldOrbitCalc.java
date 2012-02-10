@@ -432,4 +432,8 @@ public class ManifoldOrbitCalc implements RpCalculation {
         return methodName_;
 
     }
+
+    public RpSolution recalc(Area area) throws RpException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

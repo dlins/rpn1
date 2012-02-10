@@ -17,6 +17,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
+
 public abstract class RPnDialog extends JDialog {
 
     protected JPanel buttonsPanel;
@@ -25,6 +26,7 @@ public abstract class RPnDialog extends JDialog {
     protected JButton beginButton;
     private DefaultApplyController defaultApplyAction_;
     private DefaultCancelController defaultCancelAction_;
+    
 
     public RPnDialog() {
         getContentPane().setLayout(new BorderLayout());
@@ -36,11 +38,9 @@ public abstract class RPnDialog extends JDialog {
         buttonsPanel.add(applyButton);
         buttonsPanel.add(cancelButton);
 
-
         addBackButton();
         cancelButton.setEnabled(false);
-
-
+        
         this.getContentPane().add(buttonsPanel, BorderLayout.SOUTH);
 
         setLocationRelativeTo(null);
@@ -69,6 +69,7 @@ public abstract class RPnDialog extends JDialog {
         } else {
             cancelButton.setEnabled(true);
         }
+
 
     }
 

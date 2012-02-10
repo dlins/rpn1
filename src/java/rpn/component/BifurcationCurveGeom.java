@@ -37,7 +37,7 @@ public class BifurcationCurveGeom implements MultiGeometry, RpGeometry {
         } catch (DimMismatchEx dex) {
             dex.printStackTrace();
         }
-
+        
     }
 
     public GeomObjView createView(ViewingTransform transf) throws DimMismatchEx {

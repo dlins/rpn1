@@ -10,6 +10,14 @@ import java.util.ArrayList;
 import java.io.FileReader;
 import java.util.Iterator;
 import rpn.RPnCurvesListFrame;
+import rpn.component.RpGeometry;
+import rpn.component.util.ClassifierAgent;
+import rpn.component.util.ControlClick;
+import rpn.component.util.GeometryGraphND;
+import rpn.component.util.GeometryUtil;
+import rpn.component.util.VelocityAgent;
+import rpnumerics.RPNUMERICS;
+import rpnumerics.RPnCurve;
 import wave.multid.view.*;
 import wave.multid.*;
 import wave.multid.map.Map;
@@ -20,6 +28,7 @@ public class AbstractScene implements AbstractGeomObj {
     //
 
     protected ArrayList geomList_;
+    //public static ArrayList geomList_;
     private String name_;
     private ArrayList viewList_;
     private BoundingBox boundary_;
@@ -38,7 +47,7 @@ public class AbstractScene implements AbstractGeomObj {
         }
         geomList_ = new ArrayList();
         viewList_ = new ArrayList();
-
+        
     }
 
     //
@@ -49,6 +58,7 @@ public class AbstractScene implements AbstractGeomObj {
     }
 
     public Iterator getGeomObjIterator() {
+        //System.out.println("geomList_.size() em AbstractScene : " +geomList_.size());       //*** Informa a quantidade de curvas
         return geomList_.iterator();
     }
 
@@ -73,7 +83,7 @@ public class AbstractScene implements AbstractGeomObj {
         for (int i = 0; i < viewList_.size(); i++) {
             ((Scene) viewList_.get(i)).addViewFor(geom);
         }
-
+        
     }
 
     public void print(FileWriter cout) {
@@ -82,23 +92,82 @@ public class AbstractScene implements AbstractGeomObj {
     public void load(FileReader cin) {
     }
 
+
+    //*** Acrescentei em 19/09 ;  alterei em 27/09  ******************** Leandro
+    public void removeStringsCla(int geometryIndex) {
+
+        for (int i = 0; i < ClassifierAgent.indCurvaCla.size(); i++) {
+            if ((Integer)ClassifierAgent.indCurvaCla.get(i) == geometryIndex) {
+                ClassifierAgent.paraRemoverGeomCla.add(geometryIndex);
+                ClassifierAgent.paraRemoverIndCla.add(i);
+            }
+        }
+
+        if (ClassifierAgent.paraRemoverIndCla.size() > 0) {
+            ClassifierAgent.clearClassifiers(ClassifierAgent.paraRemoverIndCla);
+        }
+
+        ClassifierAgent.paraRemoverGeomCla.clear();
+        ClassifierAgent.paraRemoverIndCla.clear();
+
+        for (int i = 0; i < ClassifierAgent.indCurvaCla.size(); i++) {
+            if ((Integer)ClassifierAgent.indCurvaCla.get(i) > geometryIndex) {
+                ClassifierAgent.indCurvaCla.set(i, (Integer)ClassifierAgent.indCurvaCla.get(i)-1);
+            }
+        }
+        
+    }
+
+    public void removeStringsVel(int geometryIndex) {
+
+        for (int i = 0; i < VelocityAgent.indCurvaVel.size(); i++) {
+            if ((Integer)VelocityAgent.indCurvaVel.get(i) == geometryIndex) {
+                VelocityAgent.paraRemoverGeomVel.add(geometryIndex);
+                VelocityAgent.paraRemoverIndVel.add(i);
+            }
+        }
+
+        if (VelocityAgent.paraRemoverIndVel.size() > 0) {
+            VelocityAgent.clearVelocities(VelocityAgent.paraRemoverIndVel);
+        }
+
+        VelocityAgent.paraRemoverGeomVel.clear();
+        VelocityAgent.paraRemoverIndVel.clear();
+
+        for (int i = 0; i < VelocityAgent.indCurvaVel.size(); i++) {
+            if ((Integer)VelocityAgent.indCurvaVel.get(i) > geometryIndex) {
+                VelocityAgent.indCurvaVel.set(i, (Integer)VelocityAgent.indCurvaVel.get(i)-1);
+            }
+        }
+
+    }
+    //**************************************************************************
+
+    
     public void remove(int geometryIndex) {
 
-        MultiGeometry geom = (MultiGeometry) geomList_.get(geometryIndex);
 
-        remove(geom);
-//
-//        try {
-//            boundary_.resize(geom.getPathIterator());
-//        } catch (DimMismatchEx dex) {
-//            dex.printStackTrace();
-//        }
-//        for (int i = 0; i < viewList_.size(); i++) {
-//            ((Scene) viewList_.get(i)).removeViewOf(geom);
-//        }
-//
-//        geomList_.remove(geometryIndex);
+        // --- Leandro
+        ControlClick.clearpMarca();
+        removeStringsCla(geometryIndex);
+        removeStringsVel(geometryIndex);
+        RPNUMERICS.listResolution.remove(geometryIndex);        //*** GERA BUG : se a curva removida estiver com o pMarca
+        // -----------
 
+        MultiGeometry geom = (MultiGeometry) geomList_.remove(geometryIndex);
+        
+        //RPnCurvesListFrame.removeGeometry(geometryIndex);
+        try {
+            boundary_.resize(geom.getPathIterator());
+        } catch (DimMismatchEx dex) {
+            dex.printStackTrace();
+        }
+        for (int i = 0; i < viewList_.size(); i++) {
+            ((Scene) viewList_.get(i)).removeViewOf(geom);
+        }
+
+        
+        
 
     }
 

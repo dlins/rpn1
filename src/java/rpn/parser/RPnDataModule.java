@@ -128,7 +128,7 @@ public class RPnDataModule {
 
         public InputHandler() {
             orbitListener_ = new OrbitParser();
-            hugolistener_ = new HugoniotParser(new RPnDataModule());
+            hugolistener_ = new HugoniotParser(new RPnDataModule(), tempPoint_);
 
             statPointListener_ = new StationaryPointParser();
             manifoldListener_ = new ManifoldParser();
@@ -746,10 +746,9 @@ public class RPnDataModule {
 
     static public void matlabExport(FileWriter writer) throws java.io.IOException {
 
-
         Iterator<RpGeometry> iterator = PHASESPACE.getGeomObjIterator();
         writer.write("close all; clear all;\n");
-        writer.write(RpCalcBasedGeomFactory.createMatlabColorTable());
+        //writer.write(RpCalcBasedGeomFactory.createMatlabColorTable());
 
 
         //Inserting data

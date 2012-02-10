@@ -8,7 +8,6 @@ package rpnumerics;
 
 public class HysteresisCurveCalc extends BifurcationCurveCalc {
 
-    static private int contCC = 0;      //** declarei isso (Leandro)
     private int domainFamily_;
     private int curveFamily_;
     private int xResolution_;
@@ -38,19 +37,6 @@ public class HysteresisCurveCalc extends BifurcationCurveCalc {
             throw new RpException("Error in native layer");
         }
 
-
-        //** acrescentei isso (Leandro)
-
-        if (contCC == 0) {
-            System.out.println("Entrando em InflectionCalc...");
-
-            RPnCurve.lista.add(result);
-            System.out.println("Tamanho da lista: " + RPnCurve.lista.size());
-
-            contCC += 1;
-        }
-
-        //*********************************************
 
         return result;
     }

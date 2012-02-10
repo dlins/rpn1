@@ -141,4 +141,8 @@ public class StationaryPointCalc implements RpCalculation {
         return flow_;
 
     }
+
+    public RpSolution recalc(Area area) throws RpException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

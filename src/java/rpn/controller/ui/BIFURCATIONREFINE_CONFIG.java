@@ -19,6 +19,7 @@ public class BIFURCATIONREFINE_CONFIG extends UI_ACTION_SELECTED {
     @Override
     public int actionDimension() {
 
-        return rpnumerics.RPNUMERICS.domainDim() * 2;
+        System.out.println("BIFURCATIONREFINE_CONFIG : actionDimension()");
+        return rpnumerics.RPNUMERICS.domainDim() * 2;       //*** Por que o * 2 ?
     }
 }

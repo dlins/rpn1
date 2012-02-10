@@ -46,5 +46,7 @@ public class CompositeCalc extends OrbitCalc  {
         return result;
     }
 
+
     private native RpSolution nativeCalc(PhasePoint start, int increase,int familyIndex) throws RpException;
+
 }

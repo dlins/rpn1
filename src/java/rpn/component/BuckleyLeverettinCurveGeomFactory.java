@@ -37,7 +37,7 @@ public class BuckleyLeverettinCurveGeomFactory extends BifurcationCurveGeomFacto
         StringBuffer buffer = new StringBuffer();
         BuckleyLeverettInflectionCurve curve = (BuckleyLeverettInflectionCurve) geomSource();
         buffer.append("%%\nclose all;clear all;\n");
-        buffer.append(RpCalcBasedGeomFactory.createMatlabColorTable());
+        //buffer.append(RpCalcBasedGeomFactory.createMatlabColorTable());
         buffer.append((curve.toMatlabData(0)));
 
         buffer.append(curve.createMatlabPlotLoop(0, 1, 0));

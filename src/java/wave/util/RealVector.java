@@ -30,11 +30,13 @@ public class RealVector extends GVector {
     //
     @Override
     public String toString() {
+
         StringBuilder buffer = new StringBuilder();
 
         for (int i = 0; i < this.getSize(); i++) {
             buffer.append(getElement(i));
             buffer.append(" ");
+
         }
         return buffer.toString().trim();
     }
