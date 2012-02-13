@@ -4,17 +4,8 @@
  */
 package rpn;
 
-import java.awt.event.TextListener;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map.Entry;
-import java.util.Set;
-import javax.swing.JOptionPane;
-import javax.swing.event.DocumentListener;
 import rpnumerics.Configuration;
-import rpnumerics.FluxParams;
 import rpnumerics.RPNUMERICS;
-import wave.util.RealVector;
 
 /**
  *
@@ -28,12 +19,11 @@ public class RPnFluxParamsObserver implements RPnObserver {
 
     
     public RPnFluxParamsObserver(RPnFluxParamsSubject fluxParamsSubject) {
-        System.out.println("Entrei em RPnFluxParamsObserver(RPnFluxParamsSubject fluxParamsSubject)");
-        fluxParamsSubject_ = fluxParamsSubject;
+               fluxParamsSubject_ = fluxParamsSubject;
     }
 
     public RPnFluxParamsObserver(Configuration fluxConfiguration) {
-        System.out.println("Entrei em RPnFluxParamsObserver(Configuration fluxConfiguration)");
+       
         configuration_ = fluxConfiguration;
     }
 

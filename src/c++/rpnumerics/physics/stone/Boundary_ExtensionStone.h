@@ -28,7 +28,7 @@ class Boundary_ExtensionStone{
                                     int curve_family,
                                     const RealVector &pmin, const RealVector &pmax, int *number_of_grid_points,         // For the domain.
                                     int domain_family,
-                                    const FluxFunction *domain_ff, const AccumulationFunction *domain_aa,
+                                    const FluxFunction *domain_ff, const AccumulationFunction *domain_aa, const Boundary * bb,
                                     //const FluxFunction *domain_reduced_ff, const AccumulationFunction *domain_reduced_aa,
                                     int characteristic_where, int singular,
                                     std::vector<RealVector> &curve_segments,

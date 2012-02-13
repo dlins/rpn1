@@ -155,9 +155,6 @@ public class RPnInputComponent {//TODO Refatorar
 
     public RPnInputComponent(Configuration configuration) {
 
-
-        //System.out.println("Entrou no construtor RPnInputComponent(Configuration configuration)");
-
         textField_ = new JFormattedTextField[configuration.getParamsSize()];
 
         label_ = new JLabel[configuration.getParamsSize()];
@@ -175,10 +172,6 @@ public class RPnInputComponent {//TODO Refatorar
         GridBagLayout gridBayLayout = new GridBagLayout();
 
         panel_.setLayout(gridBayLayout);
-
-        //System.out.println("Pronto pra montar RealVector paramsVector");
-        //System.out.println("O configuration é : " + configuration.toString());
-
 
         int j = 0;
 

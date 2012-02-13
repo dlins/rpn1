@@ -114,12 +114,12 @@ int Polydispersive::Settling_jet(double phi1, double phi2, JetMatrix &vj, int de
                 double d2u2_dphi2 = slipj(1, 0, 0);
 
                 double d2v1_dphi12    = (1.0 - phi1)*d2u1_dphi2 - phi2*d2u2_dphi2 - 2.0*du1_dphi;
-                double d2v1_dphi1phi2 = (1.0 - phi1)*d2u1_dphi2 - phi2*d2u2_dphi2;
+                double d2v1_dphi1phi2 = (1.0 - phi1)*d2u1_dphi2 - phi2*d2u2_dphi2-du1_dphi-du2_dphi;
                 double d2v1_dphi2phi1 = d2v1_dphi1phi2;
                 double d2v1_dphi22    = (1.0 - phi1)*d2u1_dphi2 - phi2*d2u2_dphi2 - 2.0*du2_dphi;
 
                 double d2v2_dphi12    = (1.0 - phi2)*d2u2_dphi2 - phi1*d2u1_dphi2 - 2.0*du1_dphi;
-                double d2v2_dphi1phi2 = (1.0 - phi2)*d2u2_dphi2 - phi1*d2u1_dphi2;
+                double d2v2_dphi1phi2 = (1.0 - phi2)*d2u2_dphi2 - phi1*d2u1_dphi2-du1_dphi-du2_dphi;
                 double d2v2_dphi2phi1 = d2v2_dphi1phi2;
                 double d2v2_dphi22    = (1.0 - phi2)*d2u2_dphi2 - phi1*d2u1_dphi2 - 2.0*du2_dphi;
 

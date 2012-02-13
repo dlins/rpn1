@@ -9,7 +9,6 @@ import wave.util.RealVector;
 import rpn.usecase.*;
 import java.util.ArrayList;
 import java.util.List;
-import rpn.component.util.ControlClick;
 import rpn.component.util.GeometryGraphND;
 
 public class UI_ACTION_SELECTED implements UserInputHandler {
@@ -21,13 +20,12 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
     private List userInputList_;
 
     public UI_ACTION_SELECTED(RpModelActionAgent action) {
-        System.out.println("UI_ACTION_SELECTED : Entrou no construtor de UI_ACTION_SELECTED");
         actionSelected_ = action;
         userInputList_ = new ArrayList();
     }
 
     public RealVector[] userInputList(rpn.controller.ui.UIController ui) {
-        System.out.println("UI_ACTION_SELECTED : userInputList(rpn.controller.ui.UIController ui)");
+
         return UIController.inputConvertion(userInputList_);
     }
 
@@ -97,7 +95,7 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
     }
 
     public void userInputComplete(UIController ui) {
-        System.out.println("UI_ACTION_SELECTED : userInputComplete(UIController ui)");
+    
 
         UIController.instance().addCommand(new Command(this));
         UIController.instance().setWaitCursor();
@@ -110,7 +108,7 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
     }
 
     protected boolean isPoincareInputReady() {
-        System.out.println("UI_ACTION_SELECTED : isPoincareInputReady()");
+      
         if (userInputList_.size() == rpnumerics.RPNUMERICS.domainDim()) {
             return true;
         }
@@ -118,7 +116,7 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
     }
 
     protected boolean isDiagonalSelection() {
-        System.out.println("UI_ACTION_SELECTED : isDiagonalSelection()");
+       
         if (userInputList_.size() == 2) {
             return true;
         }
@@ -131,7 +129,7 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
     }
 
     public ArrayList<RpModelActionAgent> getAgents() {
-        System.out.println("UI_ACTION_SELECTED : getAgents()");
+       
 
         ArrayList<RpModelActionAgent> returnedArray = new ArrayList<RpModelActionAgent>();
         returnedArray.add(actionSelected_);
@@ -139,7 +137,7 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
     }
 
     public int actionDimension() {
-        System.out.println("UI_ACTION_SELECTED : actionDimension() da superclasse");
+        
 
         return rpnumerics.RPNUMERICS.domainDim();
     }

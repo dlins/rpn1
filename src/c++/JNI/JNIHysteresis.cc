@@ -76,7 +76,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HysteresisCurveCalc_nativeCalc
 
     env->GetIntArrayRegion(resolution, 0, dimension, number_of_grid_points);
 
-    Hysteresis::curve(tempBoundary, fluxFunction, accumulationFunction,
+    Hysteresis::curve(&RpNumerics::getPhysics().boundary(), fluxFunction, accumulationFunction,
             curveFamily,
             min, max, number_of_grid_points,
             domainFamily,

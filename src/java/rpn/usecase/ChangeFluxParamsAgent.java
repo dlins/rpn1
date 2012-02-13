@@ -10,20 +10,9 @@ import wave.util.RealVector;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import rpn.RPnConfig;
-import rpn.RPnCorey;
-import rpn.RPnCoreyBrooks;
-import rpn.RPnCoreyToStone;
-import rpn.RPnDefaultParamsFluxSubject;
 import rpn.RPnFluxParamsDialog;
 import rpn.RPnFluxParamsSubject;
-import rpn.RPnPalmeira;
-import rpn.RPnSchearerSchaeffer;
-import rpnumerics.Configuration;
-import rpnumerics.RPNUMERICS;
 import rpn.RPnFluxParamsObserver;
-import rpn.RPnInputComponent;
-import rpn.RPnRadioButtonToStone;
-import rpn.RPnStoneToStone;
 
 public class ChangeFluxParamsAgent extends RpModelConfigChangeAgent {
     //

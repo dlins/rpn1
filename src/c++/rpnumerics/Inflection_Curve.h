@@ -16,7 +16,7 @@ class Inflection_Curve : public ImplicitFunction {
         const AccumulationFunction *aa;
 
 
-        Boundary * boundary;
+        const Boundary * boundary;
 
 
         // For the grid proper.
@@ -37,7 +37,7 @@ class Inflection_Curve : public ImplicitFunction {
     protected:
     public:
 
-        Inflection_Curve(const FluxFunction *f, const AccumulationFunction *a, Boundary *,
+        Inflection_Curve(const FluxFunction *f, const AccumulationFunction *a, const Boundary *,
                          const RealVector &min, const RealVector &max, 
                          const int *cells);
         ~Inflection_Curve();
