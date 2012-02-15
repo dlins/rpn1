@@ -37,8 +37,14 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_IntegralCurveCalc_calc(JNIEnv * env, j
 
     jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
 
+    jclass arrayListClass = env->FindClass("java/util/ArrayList");
+
+
+    jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
+    jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
+
     jmethodID realVectorConstructorID = env->GetMethodID(realVectorClass, "<init>", "(I)V");
-    jmethodID integralCurveConstructor = (env)->GetMethodID(classIntegralCurve, "<init>", "([Lrpnumerics/OrbitPoint;I[Lwave/util/RealVector;)V");
+    jmethodID integralCurveConstructor = (env)->GetMethodID(classIntegralCurve, "<init>", "([Lrpnumerics/OrbitPoint;ILjava/util/List;)V");
 
     jmethodID orbitPointConstructor = (env)->GetMethodID(classOrbitPoint, "<init>", "([D)V");
     jmethodID toDoubleMethodID = (env)->GetMethodID(classOrbitPoint, "toDouble", "()[D");
@@ -69,9 +75,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_IntegralCurveCalc_calc(JNIEnv * env, j
     vector <RealVector> coords;
     vector<RealVector> inflectionPoints;
 
-    vector<RealVector> arrowPosition;
-    vector<RealVector> arrowOrientation;
-
     Boundary * tempBoundary = RpNumerics::getPhysics().boundary().clone();
 
     double deltaxi = 1e-3;
@@ -100,15 +103,14 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_IntegralCurveCalc_calc(JNIEnv * env, j
     //Orbit members creation
 
 
-   
+    jobject inflectionPointList = env->NewObject(arrayListClass, arrayListConstructor, NULL);
 
 
-
-    jobjectArray inflectionPointArray = (jobjectArray) (env)->NewObjectArray(inflectionPoints.size(), realVectorClass, NULL);
 
     for (int i = 0; i < inflectionPoints.size(); i++) {
 
         jobject inflectionPoint = env->NewObject(realVectorClass, realVectorConstructorID, dimension);
+
 
         for (int j = 0; j < dimension; j++) {
 
@@ -116,7 +118,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_IntegralCurveCalc_calc(JNIEnv * env, j
 
         }
 
-        (env)->SetObjectArrayElement(inflectionPointArray, i, inflectionPoint);
+        env->CallObjectMethod(inflectionPointList, arrayListAddMethod, inflectionPoint);
 
     }
 
@@ -144,8 +146,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_IntegralCurveCalc_calc(JNIEnv * env, j
 
     //Building the orbit
 
-    jobject integralCurve = (env)->NewObject(classIntegralCurve, integralCurveConstructor, orbitPointArray, familyIndex, inflectionPointArray);
+    jobject integralCurve = (env)->NewObject(classIntegralCurve, integralCurveConstructor, orbitPointArray, familyIndex, inflectionPointList);
 
+ 
 
     //Cleaning up
 

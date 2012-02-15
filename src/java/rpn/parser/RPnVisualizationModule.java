@@ -177,20 +177,6 @@ public class RPnVisualizationModule {
             Integer h = new Integer(vpheight);
 
             Boolean iso = new Boolean(iso2equi);
-
-            // *** Leandro
-            try {
-                if (RPNUMERICS.physicsID().equals("Stone")) {
-                    String str = JOptionPane.showInputDialog(null, "Digite 0 para triangulo retangulo; 1 para triangulo equilatero", "Iso Map To Equi ?", JOptionPane.QUESTION_MESSAGE);
-                    GeometryGraphND.mapToEqui = Integer.parseInt(str);
-                    if (GeometryGraphND.mapToEqui == 0) {
-                        iso = false;
-                    }
-                }
-
-            } catch (Exception e) {
-            }
-            //***
             
             DESCRIPTORS.add(new RPnProjDescriptor(space, label, w, h, axisArray, iso));
 
