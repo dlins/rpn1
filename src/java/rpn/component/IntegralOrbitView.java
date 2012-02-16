@@ -161,7 +161,7 @@ public class IntegralOrbitView extends OrbitGeomView {
             Coords2D start_dc = new Coords2D();
 
             ArrayList<RealVector> arrowPositions = levelsProcessing(points[i], points[i + 1],  new Double (RPNUMERICS.getParamValue("orbit", "level")));
-
+            
             for (RealVector arrowStartPoint : arrowPositions) {
 
                 RealVector tempVector = new RealVector(points[i + 1].getCoords());

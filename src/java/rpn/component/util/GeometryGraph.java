@@ -143,8 +143,11 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
 
         //int[] resolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("hugoniotcurve", "resolution"));
         int[] resolution = {1, 1};
-        //if (RPNUMERICS.listResolution.size()>0) resolution = (int[]) RPNUMERICS.listResolution.get(GeometryUtil.closestCurve);
-        if (scene.geometries().hasNext()) resolution = (int[]) RPNUMERICS.listResolution.get(GeometryUtil.closestCurve);
+
+        if (RPNUMERICS.listResolution.size()==1) GeometryUtil.closestCurve=0;
+        if (RPNUMERICS.listResolution.size()>0) resolution = (int[]) RPNUMERICS.listResolution.get(GeometryUtil.closestCurve);
+        //if (scene.geometries().hasNext()) resolution = (int[]) RPNUMERICS.listResolution.get(GeometryUtil.closestCurve);
+
         int xResolution = resolution[0];
         int yResolution = resolution[1];
 

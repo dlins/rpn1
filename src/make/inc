@@ -138,6 +138,7 @@ CCSRC = \
 	PhasePoint.cc \
 	ShockFlow.cc \
 	ContinuationRarefactionFlow.cc \
+	Integral_Curve.cc \
 	CompositeCurve.cc \
 	Physics.cc \
 	WavePoint.cc \

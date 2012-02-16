@@ -21,16 +21,15 @@ import java.util.ArrayList;
 import java.util.List;
 import rpn.RPnPhaseSpacePanel;
 import rpn.component.HugoniotSegGeom;
-import rpn.parser.RPnDataModule;
-import rpnumerics.BifurcationParams;
 import rpnumerics.Orbit;
 import rpnumerics.RPNUMERICS;
-import rpnumerics.RPnCurve;
 import rpnumerics.SegmentedCurve;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
 import wave.multid.view.Scene;
 import wave.multid.view.ViewingTransform;
+import wave.util.Boundary;
+import wave.util.IsoTriang2DBoundary;
 import wave.util.RealSegment;
 import wave.util.RealVector;
 
@@ -370,9 +369,10 @@ public class GeometryGraphND {
         //double xResolution = new Double(RPNUMERICS.getConfiguration("Contour").getParam("x-resolution"));
         //int[] resolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("hugoniotcurve", "resolution"));
         int[] resolution = {1, 1};
-        //if (RPNUMERICS.listResolution.size()>0) resolution = (int[]) RPNUMERICS.listResolution.get(GeometryUtil.closestCurve);
-        if (scene.geometries().hasNext()) resolution = (int[]) RPNUMERICS.listResolution.get(GeometryUtil.closestCurve);
-        //if (scene.geometries().hasNext()) resolution = (int[]) RPNUMERICS.listResolution.get(RPNUMERICS.listResolution.indexOf(GeometryUtil.closestCurve_));
+
+        if (RPNUMERICS.listResolution.size()==1) GeometryUtil.closestCurve=0;
+        if (RPNUMERICS.listResolution.size()>0) resolution = (int[]) RPNUMERICS.listResolution.get(GeometryUtil.closestCurve);
+        //if (scene.geometries().hasNext()) resolution = (int[]) RPNUMERICS.listResolution.get(GeometryUtil.closestCurve);
         int xResolution = resolution[0];
         int yResolution = resolution[1];
         
@@ -399,8 +399,9 @@ public class GeometryGraphND {
         }
         //*********************************
 
-        //*** desenha as linhas obliquas para Stone
-        if (RPNUMERICS.physicsID().equals("Stone")) {
+        //*** desenha as linhas obliquas
+        Boundary boundary = RPNUMERICS.boundary();
+        if (boundary instanceof IsoTriang2DBoundary) {
             for (int i = 0; i < nu; i++) {
                 lineObl = new Line2D.Double(0, RPnPhaseSpacePanel.myH_ - i * dy, i * dx, RPnPhaseSpacePanel.myH_);
                 if (mapToEqui == 1) lineObl = mapLine(lineObl);
