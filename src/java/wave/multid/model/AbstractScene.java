@@ -22,7 +22,7 @@ import wave.multid.view.*;
 import wave.multid.*;
 import wave.multid.map.Map;
 
-public class AbstractScene implements AbstractGeomObj {
+   public class AbstractScene implements AbstractGeomObj {
     //
     // Members
     //
