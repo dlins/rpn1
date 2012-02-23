@@ -69,8 +69,6 @@ public class GeometryGraphND {
     protected Line2D.Double linex, liney, lineObl;
     public static int mostraGrid = 0;
     public static int mapToEqui = 0;
-    public static int refina = 0;
-    
     
 
     public void grava() {
@@ -296,7 +294,7 @@ public class GeometryGraphND {
                 double xCurve = dcCoordsCurve.getElement(0);
                 double yCurve = dcCoordsCurve.getElement(1);
 
-                if (square1.contains(xCurve, yCurve)  &&  refina == 1) {
+                if (square1.contains(xCurve, yCurve)) {
                     indContido.add(i);
                     if (zerado == 2) {
                         zContido.add(curve.getPoints()[i].getElement(2));
@@ -327,7 +325,7 @@ public class GeometryGraphND {
                 double xCurve2 = dcCoordsCurve2.getElement(0);
                 double yCurve2 = dcCoordsCurve2.getElement(1);
 
-                if ((square1.contains(xCurve, yCurve) && square1.contains(xCurve2, yCurve2))  &&  refina == 1) {
+                if ((square1.contains(xCurve, yCurve) && square1.contains(xCurve2, yCurve2))) {
                     indContido.add(i);
                     if (zerado == 2) {
                         zContido.add(((RealSegment) (curve.segments()).get(i)).p1().getElement(2));
@@ -360,10 +358,16 @@ public class GeometryGraphND {
 
     public void drawGrid(Graphics g, Scene scene) {
 
+        Coords2D maxDevCoords = toDeviceCoords(scene,  RPNUMERICS.boundary().getMaximums());
+        Coords2D minDevCoords = toDeviceCoords(scene,  RPNUMERICS.boundary().getMinimums());
+        double deltaX = Math.abs(maxDevCoords.getX() - minDevCoords.getX());
+        double deltaY = Math.abs(maxDevCoords.getY() - minDevCoords.getY());
+        
         int index = 0;
         if (RPNUMERICS.domainDim() == 3) index = 1;
 
         g.setColor(Color.gray);
+        
         Graphics2D graph = (Graphics2D) g;
 
         //double xResolution = new Double(RPNUMERICS.getConfiguration("Contour").getParam("x-resolution"));
@@ -377,11 +381,13 @@ public class GeometryGraphND {
         int yResolution = resolution[1];
         
         int nu = (int) xResolution;
-        double dx = RPnPhaseSpacePanel.myW_/(1.0*nu);
+        //double dx = RPnPhaseSpacePanel.myW_/(1.0*nu);
+        double dx = deltaX/(1.0*nu);
         
         //*** desenha as linhas verticais
         for (int i = 0; i < nu; i++) {
-            linex = new Line2D.Double(i * dx, 0, i * dx, RPnPhaseSpacePanel.myH_);
+            //linex = new Line2D.Double(i * dx, 0, i * dx, RPnPhaseSpacePanel.myH_);
+            linex = new Line2D.Double(i * dx, 0, i * dx, deltaY);
             if (index == 0  && mapToEqui == 1) linex = mapLine(linex);
             graph.draw(linex);
         }
@@ -389,11 +395,13 @@ public class GeometryGraphND {
 
         //double yResolution = new Double(RPNUMERICS.getConfiguration("Contour").getParam("y-resolution"));
         int nv = (int) yResolution;
-        double dy = RPnPhaseSpacePanel.myH_/(1.0*nu);
+        //double dy = RPnPhaseSpacePanel.myH_/(1.0*nu);
+        double dy = deltaY/(1.0*nu);
         
         //*** desenha as linhas horizontais
         for (int i = 0; i < nv; i++) {
-            liney = new Line2D.Double(0, i * dy, RPnPhaseSpacePanel.myW_, i * dy);              // preencher com coordenadas do dispositivo
+            //liney = new Line2D.Double(0, i * dy, RPnPhaseSpacePanel.myW_, i * dy);              // preencher com coordenadas do dispositivo
+            liney = new Line2D.Double(0, i * dy, deltaX, i * dy);              // preencher com coordenadas do dispositivo
             if (index == 0  &&  mapToEqui == 1) liney = mapLine(liney);
             graph.draw(liney);
         }

@@ -131,11 +131,6 @@ public class RPnPhaseSpaceFrame extends JFrame {
 
             }
 
-            if (keyEvent.getKeyChar() == 'q'  ||  keyEvent.getKeyChar() == 'Q') {
-                GeometryGraphND.refina = 1;
-            }
-            else GeometryGraphND.refina = 0;
-
 
             //*** solucao provisoria para mostrar/nao mostrar o grid --- Leandro
             if (keyEvent.getKeyChar() == 'g'  ||  keyEvent.getKeyChar() == 'G') {

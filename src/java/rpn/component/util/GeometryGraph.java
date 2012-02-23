@@ -170,8 +170,18 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
         double xCR = dcCoordsCR.getElement(1);
         double yCR = dcCoordsCR.getElement(0);
 
-        double du = (1. * RPnPhaseSpacePanel.myH_) / nu;
-        double dv = (1. * RPnPhaseSpacePanel.myW_) / nv;
+        //----------------------- MEU NOVO TESTE DE AJUSTE
+        Coords2D maxDevCoords = toDeviceCoords(scene,  RPNUMERICS.boundary().getMaximums());
+        Coords2D minDevCoords = toDeviceCoords(scene,  RPNUMERICS.boundary().getMinimums());
+        double deltaX = Math.abs(maxDevCoords.getX() - minDevCoords.getX());
+        double deltaY = Math.abs(maxDevCoords.getY() - minDevCoords.getY());
+        //-----------------------
+
+        //double du = (1. * RPnPhaseSpacePanel.myH_) / nu;
+        //double dv = (1. * RPnPhaseSpacePanel.myW_) / nv;
+
+        double du = (1. * deltaY) / nu;
+        double dv = (1. * deltaX) / nv;
 
         double us = 0, vs = 0, ui = 0, vi = 0, u_s = 0, v_s = 0, u_i = 0, v_i = 0;
 

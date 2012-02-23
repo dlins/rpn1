@@ -10,9 +10,11 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JToggleButton;
 import rpn.RPnDesktopPlotter;
+import rpn.RPnMenuCommand;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpaceFrame;
 import rpn.RPnPhaseSpacePanel;
@@ -53,6 +55,7 @@ public class AreaSelectionAgent extends RpModelActionAgent {
     private boolean validResolution_;
     private List<Area> listArea_;
 
+    
     private AreaSelectionAgent() {
         super(DESC_TEXT, null);
 
@@ -91,38 +94,50 @@ public class AreaSelectionAgent extends RpModelActionAgent {
         //**********************************************************************
 
         if (ControlClick.ind % 2 == 0  &&  GeometryUtil.closestCurve_ instanceof SegmentedCurve) {
-        //if (ControlClick.ind % 2 == 0  &&  GeometryGraphND.refina == 1  &&  GeometryUtil.closestCurve_ instanceof SegmentedCurve) {
-            //****************************
-            Area area = null;
-            String Re1 = JOptionPane.showInputDialog(null, "Resolucao horizontal", "Resolucao", JOptionPane.QUESTION_MESSAGE);
-            String Re2 = JOptionPane.showInputDialog(null, "Resolucao vertical", "Resolucao", JOptionPane.QUESTION_MESSAGE);
+            
+            Object[] options = {"Zoom", "Refine"};
+            int n = JOptionPane.showOptionDialog(new JFrame(),
+                    "Selected area to: ",
+                    "Selected Area",
+                    JOptionPane.YES_NO_CANCEL_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    options,
+                    options[1]);
 
-            try {
-                RealVector resolution = new RealVector(RPNUMERICS.domainDim());
-                resolution.setElement(0, Integer.parseInt(Re1));
-                resolution.setElement(1, Integer.parseInt(Re2));
-
-                if (RPNUMERICS.domainDim() == 2) {
-                    area = new Area(resolution, GeometryGraph.topRight, GeometryGraph.downLeft);
-                    System.out.println(area);
-                    listArea_.add(area);
-                    System.out.println("listArea.size() : " +listArea_.size());
-                    
-                } else if (RPNUMERICS.domainDim() == 3) {
-                    area = new Area(resolution, GeometryGraph3D.topRight, GeometryGraph3D.downLeft);
-                    System.out.println(area);
-                    listArea_.add(area);
-                }
-//                else {
-//                    area = new Area(resolution, GeometryGraphND.targetPoint, GeometryGraphND.cornerRet);
-//                    System.out.println(area);
-//                    listArea_.add(area);
-//                }
-
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, "Resolucao nao foi informada", "ATENCAO", JOptionPane.INFORMATION_MESSAGE);
+            if (n == 0  &&  GeometryGraphND.mapToEqui == 0) {
+                RectBoundary rectBdry = new RectBoundary(GeometryGraph.downLeft, GeometryGraph.topRight);
+                Boundary bdry = (Boundary) rectBdry;
+                RPnDesktopPlotter.getUIFrame().phaseSpaceFramesInit(bdry);
             }
-            //****************************
+
+            if (n == 1) {
+                Area area = null;
+                String Re1 = JOptionPane.showInputDialog(null, "Resolucao horizontal", "Resolucao", JOptionPane.QUESTION_MESSAGE);
+                String Re2 = JOptionPane.showInputDialog(null, "Resolucao vertical", "Resolucao", JOptionPane.QUESTION_MESSAGE);
+
+                try {
+                    RealVector resolution = new RealVector(RPNUMERICS.domainDim());
+                    resolution.setElement(0, Integer.parseInt(Re1));
+                    resolution.setElement(1, Integer.parseInt(Re2));
+
+                    if (RPNUMERICS.domainDim() == 2) {
+                        area = new Area(resolution, GeometryGraph.topRight, GeometryGraph.downLeft);
+                        System.out.println(area);
+                        listArea_.add(area);
+                        System.out.println("listArea.size() : " + listArea_.size());
+
+                    } else if (RPNUMERICS.domainDim() == 3) {
+                        area = new Area(resolution, GeometryGraph3D.topRight, GeometryGraph3D.downLeft);
+                        System.out.println(area);
+                        listArea_.add(area);
+                    }
+
+
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, "Resolucao nao foi informada", "ATENCAO", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
 
 
         }
@@ -148,6 +163,7 @@ public class AreaSelectionAgent extends RpModelActionAgent {
     public List<Area> getListArea() {
         return listArea_;
     }
+
 }
 
 

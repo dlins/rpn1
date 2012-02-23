@@ -8,6 +8,7 @@ package rpn.component;
 import java.util.ArrayList;
 import java.util.List;
 import rpn.RPnDesktopPlotter;
+import rpn.component.util.GeometryGraph;
 import rpn.component.util.GeometryGraphND;
 import rpn.component.util.GeometryUtil;
 import rpn.controller.RpCalcController;
@@ -182,7 +183,7 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
 
                 List segRem = new ArrayList();
 
-                System.out.println("indContido : " +GeometryGraphND.indContido.size());
+                System.out.println("indContido : " +GeometryGraph.indContido.size());
 
                 for (int i = 0; i < GeometryGraphND.indContido.size(); i++) {
                     int ind = Integer.parseInt((GeometryGraphND.indContido.get(i)).toString());
@@ -203,6 +204,7 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
 
                 geom_ = createGeomFromSource();
                 isGeomOutOfDate_ = true;
+
             }
 
         }

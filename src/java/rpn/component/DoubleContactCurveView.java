@@ -69,7 +69,7 @@ public class DoubleContactCurveView
     // Methods
     //
     public void draw(Graphics2D g) {
-
+        
         for (int i = 0; i < viewList_.size(); i++) {
         //for (int i = 0; i < viewList_.size()/2; i++) {                 // *********  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             ((GeomObjView) viewList_.get(i)).draw(g);
