@@ -22,7 +22,7 @@ import java.util.List;
 import rpn.RPnPhaseSpacePanel;
 import rpn.component.HugoniotSegGeom;
 import rpn.parser.RPnDataModule;
-import rpnumerics.BifurcationParams;
+import rpnumerics.ContourParams;
 import rpnumerics.Orbit;
 import rpnumerics.RPNUMERICS;
 import rpnumerics.RPnCurve;

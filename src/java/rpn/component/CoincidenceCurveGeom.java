@@ -16,7 +16,7 @@ public class CoincidenceCurveGeom extends BifurcationCurveGeom {
     // Constructors
     public static Color COLOR = new Color(20, 43, 140);
 
-    public CoincidenceCurveGeom(BifurcationSegGeom[] segArray, CoincidenceCurveGeomFactory factory) {
+    public CoincidenceCurveGeom(RealSegGeom[] segArray, CoincidenceCurveGeomFactory factory) {
 
         super(segArray, factory);
 

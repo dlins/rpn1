@@ -18,21 +18,23 @@ import wave.multid.model.AbstractPath;
 import wave.multid.model.AbstractPathIterator;
 import wave.multid.model.BoundingBox;
 import wave.multid.model.MultiGeometry;
+import wave.multid.model.MultiPolyLine;
 import wave.multid.view.ViewingAttr;
 
 public abstract class SegmentedCurveGeom implements MultiGeometry, RpGeometry {
 
     protected Space space_;
     protected  BoundingBox boundary_;
-    private List<HugoniotSegGeom> hugoniotSegList_;
+    private List<MultiPolyLine> segmentsList_;
     private RpGeomFactory factory_;
     protected  ViewingAttr VIEWING_ATTR = new ViewingAttr(Color.white);
 
-    public SegmentedCurveGeom(HugoniotSegGeom[] segArray, RpGeomFactory factory) {
 
-        hugoniotSegList_ = new ArrayList();
+     public SegmentedCurveGeom(MultiPolyLine[] segArray, RpGeomFactory factory) {
+
+        segmentsList_ = new ArrayList();
         for (int i = 0; i < segArray.length; i++) {
-            hugoniotSegList_.add(segArray[i]);
+            segmentsList_.add(segArray[i]);
         }
         factory_ = factory;
         space_ = rpnumerics.RPNUMERICS.domain();
@@ -42,8 +44,8 @@ public abstract class SegmentedCurveGeom implements MultiGeometry, RpGeometry {
             dex.printStackTrace();
         }
 
-
     }
+
 
     public AbstractPathIterator getPathIterator() {
         AbstractPath nullPath = new AbstractPath(getSpace());
@@ -54,8 +56,6 @@ public abstract class SegmentedCurveGeom implements MultiGeometry, RpGeometry {
         return space_;
     }
 
-//    public void applyMap(Map map) throws DimMismatchEx {
-//    }
     public void print(FileWriter cout) {
     }
 
@@ -75,20 +75,20 @@ public abstract class SegmentedCurveGeom implements MultiGeometry, RpGeometry {
         return VIEWING_ATTR;
     }
 
-    public Iterator getHugoniotSegIterator() {
-        return hugoniotSegList_.iterator();
+    public Iterator getRealSegIterator() {
+        return segmentsList_.iterator();
     }
 
     public void lowLight() {
 
-        for (HugoniotSegGeom object : hugoniotSegList_) {
+        for (MultiPolyLine object : segmentsList_) {
             object.lowLight();
         }
 
     }
 
     public void highLight() {
-        for (HugoniotSegGeom object : hugoniotSegList_) {
+        for (MultiPolyLine object : segmentsList_) {
             object.highLight();
         }
 

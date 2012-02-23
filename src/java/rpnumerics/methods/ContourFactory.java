@@ -41,7 +41,7 @@ public class ContourFactory {
 
     }
     
-    public static ContourBifurcation createContourBifurcation(BifurcationParams bifurcationParams) {
+    public static ContourBifurcation createContourBifurcation(ContourParams bifurcationParams) {
     	
     	/* switch(RPNUMERICS.domainDim()){
          

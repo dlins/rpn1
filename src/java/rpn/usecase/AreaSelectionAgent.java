@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JToggleButton;
 import rpn.RPnSelectedAreaDialog;
-import rpn.component.HugoniotCurveGeomFactory;
+import rpn.component.LevelCurveGeomFactory;
 import rpn.component.util.ControlClick;
 import rpn.component.util.GeometryGraph;
 import rpn.component.util.GeometryGraph3D;

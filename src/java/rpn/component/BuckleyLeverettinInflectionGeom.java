@@ -16,7 +16,7 @@ public class BuckleyLeverettinInflectionGeom extends BifurcationCurveGeom {//imp
     //
     public static Color COLOR = new Color(0, 255, 0);
 
-    public BuckleyLeverettinInflectionGeom(BifurcationSegGeom[] segArray, BuckleyLeverettinCurveGeomFactory factory) {
+    public BuckleyLeverettinInflectionGeom(RealSegGeom[] segArray, BuckleyLeverettinCurveGeomFactory factory) {
         super(segArray, factory);
 
     }

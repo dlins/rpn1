@@ -32,9 +32,9 @@ public class BoundaryExtensionCurveGeomFactory extends BifurcationCurveGeomFacto
 
         int resultSize = curve.segments().size();
 
-        BifurcationSegGeom[] leftBifurcationSegArray = new BifurcationSegGeom[resultSize];
+        RealSegGeom[] leftBifurcationSegArray = new RealSegGeom[resultSize];
         for (int i = 0; i < resultSize; i++) {
-            leftBifurcationSegArray[i] = new BifurcationSegGeom((RealSegment) curve.segments().get(i), viewAtt_);
+            leftBifurcationSegArray[i] = new RealSegGeom((RealSegment) curve.segments().get(i), viewAtt_);
         }
 
         return new BoundaryExtensionCurveGeom(leftBifurcationSegArray, this);

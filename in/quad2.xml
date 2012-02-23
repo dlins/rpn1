@@ -6,7 +6,7 @@
         <BOUNDARY name="rect">
 
             <BOUNDARYPARAM name="dimension" value="2" />
-            <BOUNDARYPARAM name="limits" value="-10.5 -10.5 10.5 10.5" />
+            <BOUNDARYPARAM name="limits" value="-0.5 -0.5 0.5 0.5" />
 
         </BOUNDARY>
 
@@ -34,6 +34,13 @@
         <CURVEPARAM name="resolution" value="128 128"/>
     </CURVE>
 
+
+    <CURVE name="levelcurve">
+        <CURVEPARAM name="family" value="0"/>
+        <CURVEPARAM name="resolution" value="128 128"/>
+        <CURVEPARAM name="levels" value="0.1 0.2 0.5"/>
+
+    </CURVE>
 
     <CURVE name="inflectioncurve">
         <CURVEPARAM name="family" value="0"/>

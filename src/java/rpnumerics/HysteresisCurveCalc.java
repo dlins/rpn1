@@ -6,19 +6,17 @@
  */
 package rpnumerics;
 
-public class HysteresisCurveCalc extends BifurcationCurveCalc {
+public class HysteresisCurveCalc extends ContourCurveCalc {
 
     private int domainFamily_;
     private int curveFamily_;
-    private int xResolution_;
-    private int yResolution_;
     private int characteristic_where_;
     private int singular_;
 
     //
     // Constructors/Initializers
     //
-    public HysteresisCurveCalc(BifurcationParams params, int domainFamily, int curveFamily,
+    public HysteresisCurveCalc(ContourParams params, int domainFamily, int curveFamily,
             int characteristic_where, int singular) {
         super(params);
         domainFamily_ = domainFamily;
@@ -57,15 +55,7 @@ public class HysteresisCurveCalc extends BifurcationCurveCalc {
         return singular_;
     }
 
-    public int getxResolution() {
-        return xResolution_;
-    }
-
-    public int getyResolution() {
-        return yResolution_;
-    }
-
     private native RpSolution nativeCalc(int domainFamily, int curveFamily,
-            int [] resolution,
+            int[] resolution,
             int singular, int characteristicDomain) throws RpException;
 }

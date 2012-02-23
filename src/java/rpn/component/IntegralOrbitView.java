@@ -164,9 +164,6 @@ public class IntegralOrbitView extends OrbitGeomView {
 
                 }
                 arrowPostions.add(pos);
-
-
-
             }
 
         }

@@ -8,7 +8,6 @@ package rpn.component;
 import rpnumerics.*;
 import rpn.controller.HugoniotController;
 import rpn.controller.RpController;
-import wave.util.RealVector;
 
 public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
 
@@ -76,11 +75,13 @@ public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
 
         StringBuilder buffer = new StringBuilder();
 
+        HugoniotCurveCalcND calc = (HugoniotCurveCalcND)rpCalc();
+
         String commandName = geomSource().getClass().getName();
         commandName = commandName.toLowerCase();
         commandName = commandName.replaceAll(".+\\.", "");
 
-        buffer.append("<COMMAND name=\""+commandName+"\""+ " inputpoint=\"" + hugoniotCurve.getXZero().toString() + "\"" + ">\n");
+        buffer.append("<COMMAND name=\""+commandName+"\""+ " inputpoint=\"" + hugoniotCurve.getXZero().toString() + "\" " + calc.getParams().toString()+  ">\n");
 
         buffer.append(((HugoniotCurve) geomSource()).toXML());
 

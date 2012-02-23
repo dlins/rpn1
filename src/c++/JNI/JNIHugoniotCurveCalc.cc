@@ -23,12 +23,7 @@ NOTE :
 #include "RpNumerics.h"
 #include <vector>
 #include <iostream>
-//#include "ContourMethod.h"
-//#include "ReducedTPCWHugoniotFunctionClass.h"
 #include "TPCW.h"
-//#include "StoneHugoniotFunctionClass.h"
-//#include "CoincidenceTPCW.h"
-//#include"SubinflectionTPCW.h"
 #include "ColorCurve.h"
 #include "Hugoniot_Curve.h"
 

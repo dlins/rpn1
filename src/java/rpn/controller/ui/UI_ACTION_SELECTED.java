@@ -128,13 +128,7 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
         return actionSelected_;
     }
 
-    public ArrayList<RpModelActionAgent> getAgents() {
-       
-
-        ArrayList<RpModelActionAgent> returnedArray = new ArrayList<RpModelActionAgent>();
-        returnedArray.add(actionSelected_);
-        return returnedArray;
-    }
+    
 
     public int actionDimension() {
         
