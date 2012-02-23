@@ -83,7 +83,7 @@ public class BuckleyLeverettinCurveView
         viewList_.clear();
         Iterator geomListIterator = ((BuckleyLeverettinInflectionGeom) abstractGeom_).getBifurcationSegmentsIterator();
         while (geomListIterator.hasNext()) {
-            BifurcationSegGeom geomObj = (BifurcationSegGeom) geomListIterator.next();
+            RealSegGeom geomObj = (RealSegGeom) geomListIterator.next();
             geomObj.viewingAttr().setColor(BuckleyLeverettinInflectionGeom.COLOR);
             try {
                 viewList_.add(geomObj.createView(getViewingTransform()));

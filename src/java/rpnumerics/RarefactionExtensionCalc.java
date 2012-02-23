@@ -6,9 +6,7 @@
  */
 package rpnumerics;
 
-import wave.ode.ODESolver;
-
-public class RarefactionExtensionCalc extends BifurcationCurveCalc {
+public class RarefactionExtensionCalc extends ContourCurveCalc {
     //
     // Constants
     //
@@ -17,13 +15,7 @@ public class RarefactionExtensionCalc extends BifurcationCurveCalc {
     //
 
     private PhasePoint start_;
-    private int timeDirection_;
     private int increase_;
-    private String methodName_;
-    private int familyIndex_;
-    private String flowName_;
-    int [] resolution_;
-    int yResolution_;
     int curveFamily_;
     int domainFamily_;
     int characteristicDomain_;
@@ -34,9 +26,8 @@ public class RarefactionExtensionCalc extends BifurcationCurveCalc {
    
     
 
-    public RarefactionExtensionCalc(int [] resolution, PhasePoint startPoint, int increase, int leftFamily, int rightFamily, int characteristicDomain) {
-        super(new BifurcationParams(resolution));
-        resolution_ = resolution;
+    public RarefactionExtensionCalc(ContourParams contourParams, PhasePoint startPoint, int increase, int leftFamily, int rightFamily, int characteristicDomain) {
+        super(contourParams);
         this.curveFamily_ = leftFamily;
         this.domainFamily_ = rightFamily;
 
@@ -65,7 +56,7 @@ public class RarefactionExtensionCalc extends BifurcationCurveCalc {
         RpSolution result = null;
 
 
-        result = (RarefactionExtensionCurve) nativeCalc(resolution_, start_, increase_, curveFamily_, domainFamily_, characteristicDomain_);
+        result = (RarefactionExtensionCurve) nativeCalc(getParams().getResolution(), start_, increase_, curveFamily_, domainFamily_, characteristicDomain_);
         if (result == null) {
             throw new RpException("Error in native layer");
         }
@@ -91,15 +82,9 @@ public class RarefactionExtensionCalc extends BifurcationCurveCalc {
         return increase_;
     }
 
-    public int[] getResolution() {
-        return resolution_;
-    }
-
     public PhasePoint getStart() {
         return start_;
     }
-
-
 
     private native RpSolution nativeCalc(int [] resolution, PhasePoint start, int increase, int leftFamily, int rightFamily, int characteristicDomain) throws RpException;
 
@@ -107,6 +92,5 @@ public class RarefactionExtensionCalc extends BifurcationCurveCalc {
         return null;
     }
 
-    //private native RpSolution nativeCalc(int xResolution, int yResolution, PhasePoint start, int increase, int leftFamily, int rightFamily, int characteristicDomain) throws RpException;
 
 }

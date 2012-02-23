@@ -7,7 +7,7 @@ package rpn.component;
 
 class InflectionCurveGeom extends BifurcationCurveGeom{
 
-    public InflectionCurveGeom(BifurcationSegGeom[] hugoniotArray, InflectionCurveGeomFactory aThis) {
+    public InflectionCurveGeom(RealSegGeom[] hugoniotArray, InflectionCurveGeomFactory aThis) {
         super(hugoniotArray,aThis);
 
     }

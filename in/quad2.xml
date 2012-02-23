@@ -10,7 +10,7 @@
 
         </BOUNDARY>
 
-        <PHYSICSCONFIG name="fluxfunction">
+    <!--    <PHYSICSCONFIG name="fluxfunction">
             <PHYSICSPARAM name="a1" position="0" value ="1" />
             <PHYSICSPARAM name="b1" position="1" value ="-1" />
             <PHYSICSPARAM name="c1" position="2" value ="0" />
@@ -21,7 +21,7 @@
             <PHYSICSPARAM name="c2" position="7" value ="1" />
             <PHYSICSPARAM name="d2" position="8" value ="0" />
             <PHYSICSPARAM name="e2" position="9" value ="0" />
-        </PHYSICSCONFIG>
+        </PHYSICSCONFIG> -->
     </PHYSICS>
 
 
@@ -34,6 +34,13 @@
         <CURVEPARAM name="resolution" value="128 128"/>
     </CURVE>
 
+
+    <CURVE name="levelcurve">
+        <CURVEPARAM name="family" value="0"/>
+        <CURVEPARAM name="resolution" value="128 128"/>
+        <CURVEPARAM name="levels" value="0.1 0.2 0.5"/>
+
+    </CURVE>
 
     <CURVE name="inflectioncurve">
         <CURVEPARAM name="family" value="0"/>
@@ -85,7 +92,7 @@
 
     <CURVE name="orbit">
         <CURVEPARAM name="family" value="0"/>
-	<CURVEPARAM name="level" value="0.5"/>
+        <CURVEPARAM name="level" value="0.5"/>
 
     </CURVE>
 

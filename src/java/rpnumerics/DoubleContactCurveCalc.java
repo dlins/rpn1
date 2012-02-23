@@ -6,10 +6,7 @@
  */
 package rpnumerics;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-public class DoubleContactCurveCalc extends BifurcationCurveCalc {
+public class DoubleContactCurveCalc extends ContourCurveCalc {
 
     //
     // Constructors/Initializers
@@ -20,7 +17,7 @@ public class DoubleContactCurveCalc extends BifurcationCurveCalc {
     int curveFamily_;
     int domainFamily_;
 
-    public DoubleContactCurveCalc(BifurcationParams params, int leftFamily, int rightFamily) {
+    public DoubleContactCurveCalc(ContourParams params, int leftFamily, int rightFamily) {
         super(params);
         this.curveFamily_ = leftFamily;
         this.domainFamily_ = rightFamily;

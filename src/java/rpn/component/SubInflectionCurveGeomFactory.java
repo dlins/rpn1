@@ -23,9 +23,9 @@ public class SubInflectionCurveGeomFactory extends BifurcationCurveGeomFactory {
 
         // assuming a container with HugoniotSegment elements
         int resultSize = curve.segments().size();
-        BifurcationSegGeom[] hugoniotArray = new BifurcationSegGeom[resultSize];
+        RealSegGeom[] hugoniotArray = new RealSegGeom[resultSize];
         for (int i = 0; i < resultSize; i++) {
-            hugoniotArray[i] = new BifurcationSegGeom((HugoniotSegment) curve.segments().get(i));
+            hugoniotArray[i] = new RealSegGeom((HugoniotSegment) curve.segments().get(i));
         }
         return new SubInflectionCurveGeom(hugoniotArray, this);
 

@@ -9,7 +9,7 @@ public class RarefactionExtensionGeom  extends BifurcationCurveGeom {
 
     public static ViewingAttr VIEWING_ATTR = new ViewingAttr(Color.green);
     
-    public RarefactionExtensionGeom(BifurcationSegGeom[] segArray, RarefactionExtensionGeomFactory factory) {
+    public RarefactionExtensionGeom(RealSegGeom[] segArray, RarefactionExtensionGeomFactory factory) {
 
         super(segArray,factory);
 

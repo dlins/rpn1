@@ -69,7 +69,7 @@ public class BifurcationCurveView implements GeomObjView {
         viewList_.clear();
         Iterator geomListIterator = ((BifurcationCurveGeom) abstractGeom_).getBifurcationSegmentsIterator();
         while (geomListIterator.hasNext()) {
-            BifurcationSegGeom geomObj = (BifurcationSegGeom) geomListIterator.next();
+            RealSegGeom geomObj = (RealSegGeom) geomListIterator.next();
             try {
                 viewList_.add(geomObj.createView(getViewingTransform()));
             } catch (DimMismatchEx dex) {

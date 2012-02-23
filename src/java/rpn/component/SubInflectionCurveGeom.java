@@ -15,7 +15,7 @@ public class SubInflectionCurveGeom extends BifurcationCurveGeom{
     //
     // Constructors
     //
-    public SubInflectionCurveGeom(BifurcationSegGeom[] segArray, SubInflectionCurveGeomFactory factory) {
+    public SubInflectionCurveGeom(RealSegGeom[] segArray, SubInflectionCurveGeomFactory factory) {
 
         super(segArray,factory);
     }

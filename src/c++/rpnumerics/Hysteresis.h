@@ -12,7 +12,7 @@ class Hysteresis {
     private:
     protected:
     public:
-        static int curve(Boundary *boundary, 
+        static int curve(const Boundary *boundary,
                          const FluxFunction *curve_flux, const AccumulationFunction *curve_accum,
                          int curve_family,
                          const RealVector &pmin, const RealVector &pmax, int *number_of_cells,         // For the domain.

@@ -22,7 +22,7 @@ public class BifurcationCurveGeom implements MultiGeometry, RpGeometry {
     private Space space_;
     private BoundingBox boundary_;
 
-    public BifurcationCurveGeom(BifurcationSegGeom[] segArray, BifurcationCurveGeomFactory factory) {
+    public BifurcationCurveGeom(RealSegGeom[] segArray, BifurcationCurveGeomFactory factory) {
 
         viewingAttr_=segArray[0].viewingAttr();
 

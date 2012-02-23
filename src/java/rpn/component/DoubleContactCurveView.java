@@ -86,7 +86,7 @@ public class DoubleContactCurveView
 
 
         while (geomListIterator.hasNext()) {
-            BifurcationSegGeom geomObj = (BifurcationSegGeom) geomListIterator.next();
+            RealSegGeom geomObj = (RealSegGeom) geomListIterator.next();
             try {
                 if (geomObj == null) {
                     System.out.println("Eh nulo segmento");

@@ -6,10 +6,9 @@
 package rpn.controller;
 
 import rpn.component.RpGeomFactory;
-import rpn.component.HugoniotCurveGeomFactory;
 import rpn.usecase.*;
 import java.beans.PropertyChangeEvent;
-import wave.multid.model.MultiGeometry;
+import rpn.component.HugoniotCurveGeomFactory;
 
 public class HugoniotController extends RpCalcController {
     //
@@ -17,7 +16,6 @@ public class HugoniotController extends RpCalcController {
     //
 
     private HugoniotCurveGeomFactory geomFactory_;
-
     //
     // Constructors
     //

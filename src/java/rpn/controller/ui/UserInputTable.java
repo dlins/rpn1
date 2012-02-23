@@ -6,7 +6,7 @@
 
 package rpn.controller.ui;
 
-import rpn.component.HugoniotCurveGeomFactory;
+import rpn.component.LevelCurveGeomFactory;
 import rpn.component.util.ControlClick;
 import rpn.component.util.GeometryUtil;
 import rpnumerics.HugoniotCurve;

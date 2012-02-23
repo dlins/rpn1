@@ -5,21 +5,20 @@
  */
 package rpnumerics;
 
-public abstract class BifurcationCurveCalc implements RpCalculation {
+public abstract class ContourCurveCalc implements RpCalculation {
 
-    private BifurcationParams params_;
+    private ContourParams params_;
 
     //
     // Constructors
     //
-    public BifurcationCurveCalc(BifurcationParams params) {
+    public ContourCurveCalc(ContourParams params) {
         params_ = params;
 
     }
 
     public RpSolution recalc() throws RpException {
-
-        System.out.println("Chamando recalc da bifurcacao");
+        
         return calc();
     }
 
@@ -31,7 +30,7 @@ public abstract class BifurcationCurveCalc implements RpCalculation {
     }
 
 
-    public BifurcationParams getParams() {
+    public ContourParams getParams() {
         return params_;
     }
 }

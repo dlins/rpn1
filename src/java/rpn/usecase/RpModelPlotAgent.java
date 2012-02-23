@@ -59,11 +59,6 @@ public abstract class RpModelPlotAgent extends RpModelActionAgent {
 
         RpGeometry geometry = createRpGeometry(userInputList);
 
-      
-
-//        if (geometry instanceof CoincidenceCurveGeom || geometry instanceof SubInflectionCurveGeom){
-//            keepLastGeometry_=true;
-//        }
 
         if (geometry == null) {
             return;

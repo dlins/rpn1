@@ -24,8 +24,16 @@
     </CURVE>
 
 
+    <CURVE name="levelcurve">
+        <CURVEPARAM name="family" value="0"/>
+        <CURVEPARAM name="resolution" value="128 128"/>
+        <CURVEPARAM name="levels" value="0.1 0.2 0.5"/>
+
+    </CURVE>
+
+
     <CURVE name="doublecontactcurve">
-         <CURVEPARAM name="curvefamily" value="0"/>
+        <CURVEPARAM name="curvefamily" value="0"/>
         <CURVEPARAM name="domainfamily" value="1"/>
         <CURVEPARAM name="resolution" value="30 30"/>
     </CURVE>
@@ -67,7 +75,11 @@
 
     <CURVE name="orbit">
         <CURVEPARAM name="family" value="0"/>
+<<<<<<< HEAD
 	<CURVEPARAM name="level" value="0.5"/>
+=======
+        <CURVEPARAM name="level" value="0.5"/>
+>>>>>>> 0978e5f7e8481154d7acd562bb9d6cef1441dc15
 
     </CURVE>
 

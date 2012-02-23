@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 import rpn.RPnPhaseSpacePanel;
 import rpn.component.HugoniotSegGeom;
+import rpn.parser.RPnDataModule;
+import rpnumerics.ContourParams;
 import rpnumerics.Orbit;
 import rpnumerics.RPNUMERICS;
 import rpnumerics.SegmentedCurve;

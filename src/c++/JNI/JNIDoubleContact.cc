@@ -24,12 +24,7 @@ NOTE :
 #include "RpNumerics.h"
 #include <vector>
 #include <iostream>
-#include "ContourMethod.h"
-#include "ReducedTPCWHugoniotFunctionClass.h"
-#include "TPCW.h"
-#include "Flux2Comp2PhasesAdimensionalized.h"
-#include "StoneHugoniotFunctionClass.h"
-#include "Double_ContactTPCW.h"
+
 
 using std::vector;
 using namespace std;
@@ -97,18 +92,15 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
             rightAccum,
             rightFamily, rightBoundary);
 
-
-
     dc.compute_double_contact(left_vrs, right_vrs);
-
-
-    if (left_vrs.size()==0||right_vrs.size()==0)return NULL;
-
 
     cout << "left_vrs.size()  = " << left_vrs.size() << endl;
 
 
     cout << "right_vrs.size()  = " << right_vrs.size() << endl;
+
+
+    if (left_vrs.size() == 0 || right_vrs.size() == 0)return NULL;
 
 
     const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();

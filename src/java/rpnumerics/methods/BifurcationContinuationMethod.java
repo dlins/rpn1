@@ -20,7 +20,7 @@ public class BifurcationContinuationMethod extends BifurcationMethod {
         return null;
     } 
 
-    public BifurcationParams getParams() {
+    public ContourParams getParams() {
         return null;
     }
 

@@ -6,13 +6,13 @@
  */
 package rpnumerics;
 
-public class CoincidenceCurveCalc extends BifurcationCurveCalc {
+public class CoincidenceCurveCalc extends ContourCurveCalc {
 
     //
     // Constructors/Initializers
     //
     public CoincidenceCurveCalc(){
-        super(new BifurcationParams());
+        super(new ContourParams());
     }
 
    

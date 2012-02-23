@@ -9,7 +9,7 @@ import wave.util.*;
 
 public class BifurcationContourMethod extends BifurcationMethod {
 
-    private BifurcationParams params_;
+    private ContourParams params_;
     private ContourBifurcation contourMethod_;
     private double[] boundaryArray_;
     private int[] resolution_;
@@ -33,7 +33,7 @@ public class BifurcationContourMethod extends BifurcationMethod {
 
   
 
-    public BifurcationContourMethod(BifurcationParams params) {
+    public BifurcationContourMethod(ContourParams params) {
         super();
 
         contourMethod_ = ContourFactory.createContourBifurcation(params);
@@ -53,7 +53,7 @@ public class BifurcationContourMethod extends BifurcationMethod {
         }
     }
 
-    public BifurcationParams getParams() {
+    public ContourParams getParams() {
         return params_;
     }
 

@@ -6,14 +6,14 @@
  */
 package rpnumerics;
 
-public class InflectionCurveCalc extends BifurcationCurveCalc {
+public class InflectionCurveCalc extends ContourCurveCalc {
 
     private int family_;
 
     //
     // Constructors/Initializers
     //
-    public InflectionCurveCalc(BifurcationParams params, int family) {
+    public InflectionCurveCalc(ContourParams params, int family) {
         super(params);
         family_ = family;
 

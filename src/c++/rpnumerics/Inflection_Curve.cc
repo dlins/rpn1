@@ -45,7 +45,7 @@ void Inflection_Curve::fill_with_jet(const RpFunction *flux_object, int n, doubl
 }
 
 Inflection_Curve::Inflection_Curve(const FluxFunction *f, const AccumulationFunction *a,
-        Boundary *b,
+        const Boundary *b,
         const RealVector &min, const RealVector &max,
         const int *cells) {
 
@@ -637,7 +637,7 @@ int Inflection_Curve::curve(int fam, std::vector<RealVector> &inflection_curve) 
     rect[3] = pmax.component(1);
    
 
-    int info = ContourMethod::contour2d(this, boundary, rect, number_of_cells, inflection_curve);
+    int info = ContourMethod::contour2d(this,(Boundary *) boundary, rect, number_of_cells, inflection_curve);
 
 
 
