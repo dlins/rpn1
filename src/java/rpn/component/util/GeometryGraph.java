@@ -18,11 +18,14 @@ import rpn.controller.ui.UIController;
 import rpn.parser.RPnDataModule;
 import rpnumerics.Orbit;
 import rpnumerics.RPNUMERICS;
+import rpnumerics.RpCalculation;
 import rpnumerics.SegmentedCurve;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
 import wave.multid.view.Scene;
 import wave.multid.view.ViewingTransform;
+import wave.util.Boundary;
+import wave.util.IsoTriang2DBoundary;
 import wave.util.RealVector;
 import wave.util.RealSegment;
 
@@ -229,8 +232,11 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
 
     public Shape mapShape(Shape shape, Scene scene) {         //*** ESTA CORRETO, MAS AINDA NAO TAO PERFEITO QUANTO O ANTIGO METODO DE DESENHAR A AREA
 
-        defBordo(scene);
-
+        Boundary boundary = RPNUMERICS.boundary();
+        if (boundary instanceof IsoTriang2DBoundary) {
+            defBordo(scene);
+        }
+        
         Polygon poly = new Polygon();
 
         double v_s = shape.getBounds2D().getMinX();
