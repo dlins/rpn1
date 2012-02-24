@@ -23,19 +23,10 @@ import java.beans.PropertyChangeEvent;
 import rpn.controller.*;
 import java.net.*;
 import java.util.Iterator;
-import javax.swing.JOptionPane;
 import rpn.RPnDesktopPlotter;
 import rpn.RPnUIFrame;
-import rpn.component.RpGeomFactory;
-import rpn.component.RpGeometry;
 import rpn.component.util.ControlClick;
-import rpn.component.util.GeometryUtil;
 import rpn.message.*;
-import rpn.parser.RPnDataModule;
-import rpnumerics.HugoniotCurve;
-import rpnumerics.RPNUMERICS;
-import rpnumerics.RPnCurve;
-import rpnumerics.SegmentedCurve;
 import wave.multid.view.Scene;
 import wave.multid.view.ViewingTransform;
 
@@ -55,7 +46,7 @@ public class UIController extends ComponentUI {
     private MouseController mouseController_;
     private MouseMotionController mouseMotionController_;
     private rpn.controller.ui.UserInputTable globalInputTable_;
-    private static UIController instance_ = null;   //** era private (Leandro)
+    private static UIController instance_ = null;   
     private RPnNetworkStatus netStatus_ = null;
     private String clientID_;
     private RPnPhaseSpacePanel focusPanel_;
@@ -143,22 +134,6 @@ public class UIController extends ComponentUI {
         return commandArray_.iterator();
 
     }
-
-    //******** Leandro teste
-    private Point toDCcoords(RealVector input, Scene scene) {
-        
-        ViewingTransform transf = scene.getViewingTransform();
-        CoordsArray wcCoords = new CoordsArray(input);
-        Coords2D dcCoords = new Coords2D();
-        transf.viewPlaneTransform(wcCoords, dcCoords);
-        Point point = new Point();
-        point.setLocation(dcCoords.getX(), dcCoords.getY());
-
-        return point;
-
-    }
-    //********
-
     //
     // Inner Classes
     //
