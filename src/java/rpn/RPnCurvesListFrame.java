@@ -23,10 +23,9 @@ import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableModel;
 import rpn.component.RpCalcBasedGeomFactory;
 import rpn.component.RpGeometry;
-import rpn.controller.ui.UIController;
 import rpn.parser.RPnDataModule;
 import rpnumerics.HugoniotCurveCalcND;
-import rpnumerics.LevelCurveCalc;
+import rpnumerics.HugoniotParams;
 import rpnumerics.OrbitCalc;
 import rpnumerics.PointLevelCalc;
 import rpnumerics.RpCalculation;
@@ -127,7 +126,7 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
 
         if (calc instanceof HugoniotCurveCalcND) {
             HugoniotCurveCalcND hCalc = (HugoniotCurveCalcND) calc;
-            userInput = hCalc.getParams().getXZero();
+            userInput = ((HugoniotParams)hCalc.getParams()).getXZero();
         }
 
 

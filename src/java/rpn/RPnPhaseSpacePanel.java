@@ -39,6 +39,7 @@ import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import rpn.component.util.AREASELECTION_CONFIG2;
 import rpn.component.util.CLASSIFIERAGENT_CONFIG;
+import rpn.component.util.GeometryGraph;
 import rpn.component.util.GeometryGraph3D;
 import rpn.component.util.VELOCITYAGENT_CONFIG;
 import rpn.controller.ui.AREASELECTION_CONFIG;
@@ -230,13 +231,13 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         myW_ = getWidth();
 
 
-//        if (RPNUMERICS.domainDim() == 2) {
-//
-//            GeometryGraph geom = new GeometryGraph();
-//            geom.markPoints(scene());
-//            geom.paintComponent(g, scene());
-//
-//        }
+        if (RPNUMERICS.domainDim() == 2) {
+
+            GeometryGraph geom = new GeometryGraph();
+            geom.markPoints(scene());
+            geom.paintComponent(g, scene());
+
+        }
 
         if (RPNUMERICS.domainDim() == 3) {
 
