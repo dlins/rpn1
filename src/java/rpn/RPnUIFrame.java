@@ -259,8 +259,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 //                rpnumerics.RPNUMERICS.boundary());
 //    }
     //** para criar os frames (paineis) - incluindo os auxiliares
-    //protected void phaseSpaceFramesInit(Boundary boundary) {
-    public void phaseSpaceFramesInit(Boundary boundary) {
+    protected void phaseSpaceFramesInit(Boundary boundary) {
         wave.multid.graphs.ClippedShape clipping = new wave.multid.graphs.ClippedShape(boundary);
         int numOfPanels = RPnVisualizationModule.DESCRIPTORS.size();
 
