@@ -18,6 +18,7 @@ public class XZeroController
     //
     // Members
     //
+
     private XZeroGeomFactory geomFactory_;
 
     //
@@ -29,21 +30,25 @@ public class XZeroController
     //
     // Methods
     //
+    @Override
     protected void register() {
         ChangeFluxParamsAgent.instance().addPropertyChangeListener(this);
         ChangeDirectionAgent.instance().addPropertyChangeListener(this);
     }
 
+    @Override
     protected void unregister() {
         ChangeFluxParamsAgent.instance().removePropertyChangeListener(this);
         ChangeDirectionAgent.instance().removePropertyChangeListener(this);
     }
 
+    @Override
     public void install(RpGeomFactory geom) {
         super.install(geom);
         geomFactory_ = (XZeroGeomFactory) geom;
     }
 
+    @Override
     public void uninstall(RpGeomFactory geom) {
         super.uninstall(geom);
         geomFactory_ = null;
@@ -75,12 +80,11 @@ public class XZeroController
 
 
 //            ((ConservationShockFlow) RPNUMERICS.flow()).setXZero(((StationaryPointCalc) geomFactory_.rpCalc()).getInitPoint());
-        
 
 
-        // UPDATES EIGENS
-        super.propertyChange(change);
+
+            // UPDATES EIGENS
+            super.propertyChange(change);
+        }
     }
-    }
-
 }

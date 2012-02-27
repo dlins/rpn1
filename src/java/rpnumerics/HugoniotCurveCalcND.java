@@ -14,11 +14,11 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
     //
 
     static public final double UMINUS_SHIFT = .01;
-  
+
     //
     // Constructors
     //
-    public HugoniotCurveCalcND(HugoniotParams params ){
+    public HugoniotCurveCalcND(HugoniotParams params) {
         super(params);
 
     }
@@ -35,11 +35,8 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
     public void setUMinus(PhasePoint pPoint) {
 //        Uminus_ = pPoint.getCoords();
 //        Fminus_ = rpnumerics.RPNUMERICS.fluxFunction().F(Uminus_);
-
 //        hugoniotParams_.uMinusChangeNotify(pPoint);
-
 //        hugoniotParams_.setFMinus(rpnumerics.RPNUMERICS.fluxFunction().F(Uminus_));
-
 //        DFminus_ = rpnumerics.RPNUMERICS.fluxFunction().DF(Uminus_);
 //        hugoniotParams_.setDFMinus(rpnumerics.RPNUMERICS.fluxFunction().DF(Uminus_));
 //        hugoniotParams_.setUMinus(Uminus_);
@@ -47,18 +44,16 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
 //        f_ = new GenericHugoniotFunction(hugoniotParams_);
     }
 
-   
-/**
- *
- * @deprecated
- */
+    /**
+     *
+     * @deprecated
+     */
     public RealVector getFMinus() {
 //        return new PhasePoint(hugoniotParams_.getFMinus());
         return null;
 
 
     }
-
 
     /**
      *
@@ -70,13 +65,12 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
         return null;
 
     }
-
-
+  
     public RpSolution calc() throws RpException {
-             
+
         HugoniotCurve result;
-       
-        result= (HugoniotCurve) calc(((HugoniotParams)getParams()).getXZero(), getParams().getResolution());
+
+        result = (HugoniotCurve) calc(((HugoniotParams) getParams()).getXZero(), getParams().getResolution());
         return result;
 
     }
@@ -86,17 +80,15 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
         return calc();
     }
 
-
     @Override
     public RpSolution recalc(Area area) throws RpException {
 
         HugoniotCurve result;
-        result = (HugoniotCurve) calc(((HugoniotParams)getParams()).getXZero(), (int)area.getResolution().getElement(0), (int)area.getResolution().getElement(1), area.getTopRight(), area.getDownLeft());
+        result = (HugoniotCurve) calc(((HugoniotParams) getParams()).getXZero(), (int) area.getResolution().getElement(0), (int) area.getResolution().getElement(1), area.getTopRight(), area.getDownLeft());
 
         return result;
     }
 
-  
     public PhasePoint getUMinus() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -105,11 +97,7 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-
-
     private native RpSolution calc(PhasePoint initialpoint, int resolution[]) throws RpException;
 
     private native RpSolution calc(PhasePoint initialpoint, int xRes_, int yRes_, RealVector topR, RealVector dwnL) throws RpException;
-
-
 }

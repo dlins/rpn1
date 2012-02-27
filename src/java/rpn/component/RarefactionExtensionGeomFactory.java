@@ -5,6 +5,8 @@
  */
 package rpn.component;
 
+import rpn.controller.RarefactionExtensionController;
+import rpn.controller.RpController;
 import rpnumerics.Orbit;
 import rpnumerics.RarefactionExtensionCalc;
 import rpnumerics.RarefactionExtensionCurve;
@@ -51,6 +53,13 @@ public class RarefactionExtensionGeomFactory extends BifurcationCurveGeomFactory
 
     }
 
+
+    @Override
+     protected RpController createUI() {
+        return new RarefactionExtensionController();
+    }
+
+    @Override
     public String toXML() {
         StringBuilder str = new StringBuilder();
 

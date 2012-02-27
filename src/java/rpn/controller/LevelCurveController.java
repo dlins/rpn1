@@ -9,6 +9,7 @@ import java.beans.PropertyChangeEvent;
 import java.util.Iterator;
 import rpn.RPnPhaseSpaceFrame;
 import rpn.RPnUIFrame;
+import rpn.component.LevelCurveGeomFactory;
 import rpn.component.OrbitGeomFactory;
 import rpn.component.OrbitGeomView;
 import rpn.component.RpGeomFactory;
@@ -17,19 +18,21 @@ import rpn.usecase.ChangeFluxParamsAgent;
 import rpn.usecase.ChangeOrbitLevel;
 import rpn.usecase.DragPlotAgent;
 import rpnumerics.OrbitCalc;
+import rpnumerics.PointLevelCalc;
+import rpnumerics.RpCalculation;
 import wave.multid.view.GeomObjView;
 import wave.util.RealVector;
 
-public class OrbitController extends RpCalcController {
+public class LevelCurveController extends RpCalcController {
     //
     // Members
     //
 
-    OrbitGeomFactory factory_;
+    LevelCurveGeomFactory factory_;
 
     @Override
     public void install(RpGeomFactory geom) {
-        factory_ = (OrbitGeomFactory) geom;
+        factory_ = (LevelCurveGeomFactory) geom;
         super.install(geom);
 
     }
@@ -44,7 +47,7 @@ public class OrbitController extends RpCalcController {
     protected void register() {
         DragPlotAgent.instance().addPropertyChangeListener(this);
         ChangeFluxParamsAgent.instance().addPropertyChangeListener(this);
-        ChangeOrbitLevel.instance().addPropertyChangeListener(this);
+
 
 
     }
@@ -53,36 +56,16 @@ public class OrbitController extends RpCalcController {
     protected void unregister() {
         DragPlotAgent.instance().removePropertyChangeListener(this);
         ChangeFluxParamsAgent.instance().removePropertyChangeListener(this);
-        ChangeOrbitLevel.instance().removePropertyChangeListener(this);
+        factory_ = null;
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
 
-        if (evt.getSource() instanceof ChangeOrbitLevel) {//Visual update only
-            RPnPhaseSpaceFrame[] frames = RPnUIFrame.getPhaseSpaceFrames();
 
-            for (int i = 0; i < frames.length; i++) {
-
-                Iterator it = frames[i].phaseSpacePanel().scene().geometries();
-
-                while (it.hasNext()) {
-
-                    GeomObjView geometryView = (GeomObjView) it.next();
-
-                    if (geometryView instanceof OrbitGeomView) {
-                        geometryView.update();
-                    }
-
-                }
-                RPnDataModule.PHASESPACE.update();
-            }
-            return;
-        }
-
-
-        if (evt.getSource() instanceof DragPlotAgent) {
-            ((OrbitCalc) factory_.rpCalc()).setStart((RealVector) evt.getNewValue());
+        RpCalculation calc = factory_.rpCalc();
+        if (evt.getSource() instanceof DragPlotAgent && calc instanceof PointLevelCalc) {
+            ((PointLevelCalc) factory_.rpCalc()).setStartPoint((RealVector) evt.getNewValue());
             factory_.updateGeom();
             return;
         }

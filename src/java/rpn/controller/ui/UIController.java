@@ -27,8 +27,6 @@ import rpn.RPnDesktopPlotter;
 import rpn.RPnUIFrame;
 import rpn.component.util.ControlClick;
 import rpn.message.*;
-import wave.multid.view.Scene;
-import wave.multid.view.ViewingTransform;
 
 /** This class implements a general controller to the application. With the UIController class, the state of the application is changed, the controllers of each panel are installed or removed and the user inputs are stored in a global table. */
 public class UIController extends ComponentUI {
@@ -46,7 +44,7 @@ public class UIController extends ComponentUI {
     private MouseController mouseController_;
     private MouseMotionController mouseMotionController_;
     private rpn.controller.ui.UserInputTable globalInputTable_;
-    private static UIController instance_ = null;   
+    private static UIController instance_ = null;
     private RPnNetworkStatus netStatus_ = null;
     private String clientID_;
     private RPnPhaseSpacePanel focusPanel_;
@@ -146,21 +144,15 @@ public class UIController extends ComponentUI {
 
             if (event.getComponent() instanceof RPnPhaseSpacePanel) {
 
-                if (netStatus_.isMaster() || !(netStatus_.isOnline())) {
-                    RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
-                    if (ControlClick.ind == 0) ControlClick.mousePressed(event, panel.scene());
-
-                    // this will automatically work only for 2D(isComplete())
-                    updateUserInputTable(panel, event.getPoint());
-                    evaluatePanelsCursorCoords(panel, event.getPoint());
-                    if (globalInputTable().isComplete()) {
-                        userInputComplete(globalInputTable().values());
-                        globalInputTable().reset();
-                        resetPanelsCursorCoords();
-                    }
-
-
-
+//                if (netStatus_.isMaster() || !(netStatus_.isOnline())) {
+                RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
+                // this will automatically work only for 2D(isComplete())
+                updateUserInputTable(panel, event.getPoint());
+//                evaluatePanelsCursorCoords(panel, event.getPoint());
+                if (globalInputTable().isComplete()) {
+                    globalInputTable().reset();
+                    resetPanelsCursorCoords();
+                    DragPlotAgent.instance().execute();
                 }
             }
         }
@@ -183,31 +175,7 @@ public class UIController extends ComponentUI {
 
                 if (netStatus_.isMaster() || !(netStatus_.isOnline())) {
 
-                    
-                    //*** Leandro
-//                    if (UIController.instance().getState() instanceof AREASELECTION_CONFIG) {
-//
-//                        RealVector local = new RealVector(RPNUMERICS.domainDim());
-//                        for (int i = 0; i < RPNUMERICS.domainDim(); i++) {
-//                            local.setElement(i, ((HugoniotCurve) GeometryUtil.closestCurve_).getXZero().getElement(i));
-//                        }
-//                        //System.out.println("local.toString() : " +local.toString());
-//
-//                        Point input = toDCcoords(local, panel.scene());
-//                        updateUserInputTable(panel, input);
-//
-//                        // execute
-//                        userInputComplete(((HugoniotCurve) GeometryUtil.closestCurve_).getXZero());
-//                        globalInputTable().reset();
-//                        resetPanelsCursorCoords();
-//                        RPnUIFrame.enableSliders();
-//
-//                        return;
-//
-//                    }
-                    //***
 
-                    //*** original
                     int sceneDim = panel.scene().getViewingTransform().projectionMap().getDomain().getDim();
                     if (sceneDim == globalInputTable_.flags().length) {
 
@@ -220,12 +188,8 @@ public class UIController extends ComponentUI {
                             resetPanelsCursorCoords();
                             RPnUIFrame.enableSliders();
                         }
-                        
+
                     }
-//                    else {
-//                        JOptionPane.showMessageDialog(panel, "Wrong space dimension", "Error", JOptionPane.ERROR_MESSAGE);
-//
-//                    }
 
                 }
             }

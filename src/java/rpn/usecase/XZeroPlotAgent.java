@@ -9,11 +9,7 @@ package rpn.usecase;
 import javax.swing.JToggleButton;
 import rpn.RPnConfig;
 import rpn.component.*;
-import rpnumerics.StationaryPointCalc;
-import rpnumerics.PhasePoint;
 import wave.util.RealVector;
-import rpnumerics.RPNUMERICS;
-import rpnumerics.ShockFlow;
 
 public class XZeroPlotAgent extends RpModelPlotAgent {
     //
