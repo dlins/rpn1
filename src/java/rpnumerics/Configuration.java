@@ -16,15 +16,12 @@ public class Configuration {
 
     private HashMap<String, String> params_;
     private ArrayList<String> paramOrder_;
-    private HashMap<String, Configuration> configurationMap_;//= new HashMap<String, Configuration>();
+    private HashMap<String, Configuration> configurationMap_;
     private String name_;
     private String type_;
 
 
     public Configuration(ConfigurationProfile profile) {
-
-//        System.out.println(profile.getName() + "   *********Tamanho dos indices do profile****************: " + profile.getIndicesSize());
-
 
         configurationMap_ = new HashMap<String, Configuration>();
         params_ = profile.getParams();
@@ -101,8 +98,7 @@ public class Configuration {
         return configurationMap_;
     }
 
-    public String getParam(int paramOrder) {        //*** está sempre retornando null
-        System.out.println("Tamanho do paramOrder_ : " +paramOrder_.size());         //paramOrder_ é um ArrayList<String> , mas está com size = 0 (qdo usando Configuration ...)
+    public String getParam(int paramOrder) {  
         try {
 
             String paramName = paramOrder_.get(paramOrder);
@@ -202,8 +198,6 @@ public class Configuration {
     }
 
     public String toXML() {
-
-        System.out.println(toString());
 
         StringBuffer buffer = new StringBuffer();
         Set<Entry<String, String>> paramsSet = params_.entrySet();

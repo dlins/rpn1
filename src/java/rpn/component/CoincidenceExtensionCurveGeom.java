@@ -23,7 +23,7 @@ public class CoincidenceExtensionCurveGeom extends BifurcationCurveGeom{//implem
     public static Color COLOR = new Color(0, 153, 153);
 
 
-    public CoincidenceExtensionCurveGeom(BifurcationSegGeom[] segArray, CoincidenceExtensionCurveGeomFactory factory) {
+    public CoincidenceExtensionCurveGeom(RealSegGeom[] segArray, CoincidenceExtensionCurveGeomFactory factory) {
 
         super(segArray,factory);
     }

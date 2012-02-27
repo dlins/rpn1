@@ -40,9 +40,9 @@ public class RarefactionExtensionGeomFactory extends BifurcationCurveGeomFactory
        
         int resultSize = curve.segments().size();
 
-        BifurcationSegGeom[] hugoniotArray = new BifurcationSegGeom[resultSize];
+        RealSegGeom[] hugoniotArray = new RealSegGeom[resultSize];
         for (int i = 0; i < resultSize; i++) {
-            hugoniotArray[i] = new BifurcationSegGeom((RealSegment) curve.segments().get(i));
+            hugoniotArray[i] = new RealSegGeom((RealSegment) curve.segments().get(i));
 
 
         }
@@ -77,15 +77,11 @@ public class RarefactionExtensionGeomFactory extends BifurcationCurveGeomFactory
             str.append(direction+" ");
         }
 
-        StringBuilder resolution = new StringBuilder();
+     
 
-        for (int i = 0; i < calc.getResolution().length; i++) {
-            resolution.append(calc.getResolution()[i]);
-            resolution.append(" ");
-        }
-
-        str.append("resolution=\"" + resolution.toString().trim() + "\"" + " inputpoint=\"" + firstPoint.toString() + "\" curvefamily=\"" + calc.getCurveFamily() + "\" domainfamily =\""
-                + calc.getDomainFamily() + "\"" + ">\n");
+       
+        str.append(calc.getParams().toString() + "\"" + " inputpoint=\"" + firstPoint.toString() + "\" curvefamily=\"" + calc.getCurveFamily() + "\" domainfamily =\""
+                + calc.getDomainFamily() + "\" " + "characteristic=\""+ calc.getCharacteristic()+"\""+ ">\n");
         str.append(((RarefactionExtensionCurve) geomSource()).toXML());
         str.append("</COMMAND>\n");
         return str.toString();

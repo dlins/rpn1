@@ -20,7 +20,7 @@ public class RPnRadioButtonToStone extends RPnFluxParamsSubject {
         // trocar RPNUMERICS.getFluxParams().getParams().getSize()   para  paramsValues.size()  -  neste caso, sao os 3 botoes
 
         super(new String[RPNUMERICS.getFluxParams().getParams().getSize()], "Radio", paramsNames, paramsValues);   // depois, trocar o nome de Radio para .... (Pablo???)
-        System.out.println("Reconheceu construtor de RadioButtonStone");
+
 
     }
 

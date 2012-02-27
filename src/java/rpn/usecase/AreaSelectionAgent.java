@@ -21,6 +21,7 @@ import rpn.RPnPhaseSpacePanel;
 import rpn.RPnSelectedAreaDialog;
 import rpn.RPnUIFrame;
 import rpn.component.HugoniotCurveGeomFactory;
+import rpn.component.LevelCurveGeomFactory;
 import rpn.component.util.ControlClick;
 import rpn.component.util.GeometryGraph;
 import rpn.component.util.GeometryGraph3D;

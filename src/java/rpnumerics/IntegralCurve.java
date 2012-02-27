@@ -6,6 +6,8 @@
  */
 package rpnumerics;
 
+import java.util.ArrayList;
+import java.util.List;
 import wave.util.RealVector;
 
 public class IntegralCurve extends Orbit implements RpSolution {
@@ -13,18 +15,16 @@ public class IntegralCurve extends Orbit implements RpSolution {
     //
     // Constructor
     //
-    private RealVector[] inflectionPoints_;
+    private List<RealVector>inflectionPoints_;
    
 
-    public IntegralCurve(OrbitPoint[] points, int familyIndex, RealVector[] inflectionPoints) {
+    public IntegralCurve(OrbitPoint[] points, int familyIndex, List<RealVector>inflectionPoints) {
         super(points, familyIndex, 0);
         inflectionPoints_ = inflectionPoints;
 
     }
 
-    public IntegralCurve(OrbitPoint[] points, int familyIndex) {
-        super(points, familyIndex, 0);
-    }
+  
 
     // Methods
     @Override
@@ -38,7 +38,7 @@ public class IntegralCurve extends Orbit implements RpSolution {
         return buf.toString();
     }
 
-    public RealVector[] getInflectionPoints() {
+    public List<RealVector> getInflectionPoints() {
         return inflectionPoints_;
     }
 

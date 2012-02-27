@@ -6,13 +6,13 @@
  */
 package rpnumerics;
 
-public class BuckleyLeverettinInflectionCurveCalc extends BifurcationCurveCalc {
+public class BuckleyLeverettinInflectionCurveCalc extends ContourCurveCalc {
 
     //
     // Constructors/Initializers
     //
     public BuckleyLeverettinInflectionCurveCalc(){
-        super(new BifurcationParams());
+        super(new ContourParams());
     }
 
 

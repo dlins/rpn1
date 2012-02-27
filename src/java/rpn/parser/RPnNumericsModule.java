@@ -36,21 +36,10 @@ public class RPnNumericsModule {
         private String currentElement_;
         private static ConfigurationProfile currentConfigurationProfile_;
         private static ConfigurationProfile physicsProfile_;
-        private static ConfigurationProfile currentInnerPhysicsConfigurationProfile_;
+        private static ConfigurationProfile innerPhysicsConfigurationProfile_;
 
         public void startElement(String uri, String localName, String qName, Attributes att) throws SAXException {
             currentElement_ = localName;
-
-            if (localName.equals("FLUXPARAMS")) {
-                physicsProfile_.addParam(new Integer(att.getValue(1)), att.getValue(0), att.getValue(2));
-
-            }
-
-             if (localName.equals("ACCUMPARAMS")) {
-                physicsProfile_.addParam(new Integer(att.getValue(1)), att.getValue(0), att.getValue(2));
-
-            }
-            
 
             if (localName.equals("CURVE")) {
                 currentConfigurationProfile_ = new ConfigurationProfile(att.getValue("name"), ConfigurationProfile.CURVE);
@@ -71,28 +60,18 @@ public class RPnNumericsModule {
             }
 
             if (localName.equals("PHYSICSCONFIG")) {
-                currentInnerPhysicsConfigurationProfile_=new ConfigurationProfile(att.getValue(0), ConfigurationProfile.PHYSICS_CONFIG);
-                physicsProfile_.addConfigurationProfile(ConfigurationProfile.BOUNDARY, new ConfigurationProfile(att.getValue(0), ConfigurationProfile.BOUNDARY));
-
+                innerPhysicsConfigurationProfile_ = new ConfigurationProfile(att.getValue("name"), ConfigurationProfile.PHYSICS_CONFIG);
             }
 
-            if (localName.equals("PHYSICSCONFIG")) {
-                currentInnerPhysicsConfigurationProfile_=new ConfigurationProfile(att.getValue(0), ConfigurationProfile.PHYSICS_CONFIG);
-
-            }
             if (localName.equals("PHYSICSPARAM")) {
 
-                currentInnerPhysicsConfigurationProfile_.addParam(new Integer(att.getValue(1)),att.getValue(0), att.getValue(2));
+                innerPhysicsConfigurationProfile_.addParam(new Integer(att.getValue("position")), att.getValue("name"), att.getValue("value"));
 
             }
 
             if (localName.equals("BOUNDARYPARAM")) {
 
-//                System.out.println("Parametro: " + att.getValue(0) + " " + att.getValue(1));
-
-                if (physicsProfile_.profileArraySize() == 1) {
-                    physicsProfile_.getConfigurationProfile(ConfigurationProfile.BOUNDARY).addParam(att.getValue(0), att.getValue(1));
-                }
+                physicsProfile_.getConfigurationProfile(ConfigurationProfile.BOUNDARY).addParam(att.getValue(0), att.getValue(1));
 
             }
 
@@ -123,19 +102,18 @@ public class RPnNumericsModule {
                 RPnConfig.addProfile(physicsProfile_.getName(), physicsProfile_);
                 rpnumerics.RPNUMERICS.init(physicsProfile_.getName());
                 RPnConfig.createParamsFluxSubject(physicsProfile_.getName());
-              
-
-//                System.out.println("Adicionando profile: "+physicsProfile_.getName());
-
             }
+
 
 
             if (localName.equals("PHYSICSCONFIG")) {
 
-                physicsProfile_.addConfigurationProfile(currentInnerPhysicsConfigurationProfile_.getName(), currentInnerPhysicsConfigurationProfile_);
+                physicsProfile_.addConfigurationProfile(innerPhysicsConfigurationProfile_.getName(), innerPhysicsConfigurationProfile_);
+
             }
 
-            if (localName.equals("CURVE") ||localName.equals("METHOD") ) {
+
+            if (localName.equals("CURVE") || localName.equals("METHOD")) {
 
                 RPnConfig.addProfile(currentConfigurationProfile_.getName(), currentConfigurationProfile_);
 

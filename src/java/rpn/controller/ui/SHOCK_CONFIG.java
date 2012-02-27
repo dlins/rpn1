@@ -27,23 +27,7 @@ public class SHOCK_CONFIG extends UI_ACTION_SELECTED {
 
     }
 
-    @Override
-    public ArrayList<RpModelActionAgent> getAgents() {
-
-        ArrayList<RpModelActionAgent> returnedArray = new ArrayList<RpModelActionAgent>();
-
-        returnedArray.add(ForwardManifoldPlotAgent.instance());
-
-        returnedArray.add(BackwardManifoldPlotAgent.instance());
-
-        returnedArray.add(StationaryPointPlotAgent.instance());
-
-        returnedArray.add(PoincareSectionPlotAgent.instance());
-
-        returnedArray.add(HugoniotPlotAgent.instance());
-
-        return returnedArray;
-    }
+   
 
     //
     // Methods

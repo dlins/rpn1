@@ -71,62 +71,6 @@ public class HugoniotSegment extends RealSegment {
         rightSigma_ = rightSigma;
         type_ = type;
 
-        /*        switch (type_.positiveRealPartNo()) {
-
-        case 2 :
-        switch (p2.type().positiveRealPartNo()) {
-
-        case 2 :
-        type_ = WHITE_SEG;
-        break;
-        case 1 :
-        type_ = PINK_SEG;
-        break;
-        case 0 :
-        type_ = WHITE_SEG;
-        break;
-        }
-        break;
-        case 1 :
-        switch (p2.type().positiveRealPartNo()) {
-        case 2 :
-        type_ = RED_SEG;
-        break;
-        case 1 :
-        type_ = GREEN_SEG;
-        break;
-        case 0 :
-        type_ = LIGHT_BLUE_SEG;
-        break;
-        }
-        break;
-        case 0 :
-        switch (p2.type().positiveRealPartNo()) {
-        switch (p1.type().positiveRealPartNo()) {
-        case 2 :
-        type_ = YELLOW_SEG;
-        break;
-        case 1 :
-        type_ = DARK_BLUE_SEG;
-        break;
-        case 0 :
-        type_ = WHITE_SEG;
-        break;
-        }
-        case 2 :
-        switch (p2.type().positiveRealPartNo()) {
-
-        case 2 :
-        type_ = WHITE_SEG;
-        break;
-        case 1 :
-        type_ = PINK_SEG;
-        break;
-        case 0 :
-        type_ = WHITE_SEG;
-        break;
-        }
-         */
     }
 
     public HugoniotSegment(RealVector leftPoint, double leftSigma, RealVector rightPoint, double rightSigma,
@@ -220,7 +164,6 @@ public class HugoniotSegment extends RealSegment {
         return rightSigma_;
     }
 
-//    public HugoniotPointType type() { return type_; }
     public int getType() {
         return intType_;
     }

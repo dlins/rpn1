@@ -48,9 +48,6 @@ public class RPnConfig {
 
             Configuration physicsConfiguration = RPNUMERICS.getConfiguration(physicsName);
 
-            System.out.println("Configuration physicsConfiguration : " +physicsConfiguration.toString());
-            System.out.println("RPNUMERICS.getFluxParams() : " +RPNUMERICS.getFluxParams());
-
             Configuration fluxConfiguration = physicsConfiguration.getConfiguration("fluxfunction");
 
             paramObserver = new RPnFluxParamsObserver(fluxConfiguration);

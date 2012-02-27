@@ -7,7 +7,7 @@ package rpn.component;
 
 class HysteresisCurveGeom extends BifurcationCurveGeom{
 
-    public HysteresisCurveGeom(BifurcationSegGeom[] hugoniotArray, HysteresisCurveGeomFactory aThis) {
+    public HysteresisCurveGeom(RealSegGeom[] hugoniotArray, HysteresisCurveGeomFactory aThis) {
         super(hugoniotArray,aThis);
 
     }

@@ -21,18 +21,15 @@ import javax.swing.JToolBar;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableModel;
-import rpn.component.BifurcationCurveGeom;
-import rpn.component.BifurcationCurveGeomFactory;
-import rpn.component.HugoniotCurveGeom;
-import rpn.component.HugoniotCurveGeomFactory;
-import rpn.component.OrbitGeom;
-import rpn.component.OrbitGeomFactory;
+import rpn.component.RpCalcBasedGeomFactory;
 import rpn.component.RpGeometry;
 import rpn.controller.ui.UIController;
 import rpn.parser.RPnDataModule;
-import rpnumerics.HugoniotCurveCalc;
 import rpnumerics.HugoniotCurveCalcND;
+import rpnumerics.LevelCurveCalc;
 import rpnumerics.OrbitCalc;
+import rpnumerics.PointLevelCalc;
+import rpnumerics.RpCalculation;
 import wave.util.RealVector;
 
 public class RPnCurvesListFrame extends JFrame implements ActionListener {
@@ -117,27 +114,40 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
 
     public static void addGeometry(RpGeometry geometry) {
 
+
         String geometryName = geometry.getClass().getSimpleName();
 
-        RealVector userInput =new RealVector(geometry.getBoundary().getSpace().getDim());
+        RealVector userInput =new RealVector(2);
 
-        if (geometry instanceof OrbitGeom){
-            OrbitGeomFactory factory = (OrbitGeomFactory)geometry.geomFactory();
-            OrbitCalc calc = (OrbitCalc)factory.rpCalc();
-            userInput= calc.getStart();
+
+        RpCalcBasedGeomFactory factory = (RpCalcBasedGeomFactory) geometry.geomFactory();
+
+        RpCalculation calc = factory.rpCalc();
+
+
+        if (calc instanceof HugoniotCurveCalcND) {
+            HugoniotCurveCalcND hCalc = (HugoniotCurveCalcND) calc;
+            userInput = hCalc.getParams().getXZero();
+        }
+
+
+        if (calc instanceof PointLevelCalc) {
+            PointLevelCalc hCalc = (PointLevelCalc) calc;
+            userInput = hCalc.getStartPoint();
 
         }
 
-        if(geometry instanceof HugoniotCurveGeom){
-            HugoniotCurveGeomFactory factory = (HugoniotCurveGeomFactory)geometry.geomFactory();
-            HugoniotCurveCalcND calc = (HugoniotCurveCalcND) factory.rpCalc();
+        if (calc instanceof OrbitCalc) {
 
-            userInput= calc.getUMinus();
+            OrbitCalc orbitCalc = (OrbitCalc) calc;
+
+            userInput = orbitCalc.getStart();
+
+
         }
 
 
         Vector<Object> data = new Vector<Object>();
-
 
         NumberFormat formatter = NumberFormat.getInstance();
         formatter.setMaximumFractionDigits(4);
@@ -174,7 +184,6 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
         }
 
     }
-
 
     public void actionPerformed(ActionEvent e) {
 
@@ -243,15 +252,14 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
             int count = tableModel_.getRowCount();
             int index = 0;
 
-            while (index<count){
-                boolean selected = (Boolean)tableModel_.getValueAt(index, 0);
-                if (selected){
+            while (index < count) {
+                boolean selected = (Boolean) tableModel_.getValueAt(index, 0);
+                if (selected) {
                     tableModel_.removeRow(index);
                     RPnDataModule.PHASESPACE.remove(index);
-                    index=0;
-                    count=tableModel_.getRowCount();
-                }
-                else{
+                    index = 0;
+                    count = tableModel_.getRowCount();
+                } else {
                     index++;
                 }
 

@@ -16,13 +16,18 @@ import rpn.controller.ui.AREASELECTION_CONFIG;
 import rpn.controller.ui.BIFURCATIONREFINE_CONFIG;
 import rpn.controller.ui.UIController;
 import rpn.parser.RPnDataModule;
+import rpnumerics.ContourCurveCalc;
 import rpnumerics.Orbit;
 import rpnumerics.RPNUMERICS;
+import rpnumerics.RPnCurve;
+import rpnumerics.RpCalculation;
 import rpnumerics.SegmentedCurve;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
 import wave.multid.view.Scene;
 import wave.multid.view.ViewingTransform;
+import wave.util.Boundary;
+import wave.util.IsoTriang2DBoundary;
 import wave.util.RealVector;
 import wave.util.RealSegment;
 
@@ -138,15 +143,14 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
 
     public void markPoints(Scene scene) {        //*** era do GeometryGraph3D, vou usar para testar mapeamento do square
 
-        //double xResolution = new Double(RPNUMERICS.getConfiguration("Contour").getParam("x-resolution"));
-        //double yResolution = new Double(RPNUMERICS.getConfiguration("Contour").getParam("y-resolution"));
-
-        //int[] resolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("hugoniotcurve", "resolution"));
         int[] resolution = {1, 1};
 
-        if (RPNUMERICS.listResolution.size()==1) GeometryUtil.closestCurve=0;
-        if (RPNUMERICS.listResolution.size()>0) resolution = (int[]) RPNUMERICS.listResolution.get(GeometryUtil.closestCurve);
+        //if (RPNUMERICS.listResolution.size()==1) GeometryUtil.closestCurve=0;
+        //if (RPNUMERICS.listResolution.size()>0) resolution = (int[]) RPNUMERICS.listResolution.get(GeometryUtil.closestCurve);
         //if (scene.geometries().hasNext()) resolution = (int[]) RPNUMERICS.listResolution.get(GeometryUtil.closestCurve);
+
+        if (GeometryUtil.listResolution.size()==1) GeometryUtil.closestCurve=0;
+        if (GeometryUtil.listResolution.size()>0) resolution = (int[]) GeometryUtil.listResolution.get(GeometryUtil.closestCurve);
 
         int xResolution = resolution[0];
         int yResolution = resolution[1];
@@ -175,16 +179,17 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
         Coords2D minDevCoords = toDeviceCoords(scene,  RPNUMERICS.boundary().getMinimums());
         double deltaX = Math.abs(maxDevCoords.getX() - minDevCoords.getX());
         double deltaY = Math.abs(maxDevCoords.getY() - minDevCoords.getY());
+
+        if (mapToEqui == 1) {
+            deltaX = RPnPhaseSpacePanel.myW_;
+            deltaY = RPnPhaseSpacePanel.myH_;
+        }
         //-----------------------
 
-        //double du = (1. * RPnPhaseSpacePanel.myH_) / nu;
-        //double dv = (1. * RPnPhaseSpacePanel.myW_) / nv;
-
-        double du = (1. * deltaY) / nu;
-        double dv = (1. * deltaX) / nv;
+        double du = (1. * deltaY) / (1. * nu);
+        double dv = (1. * deltaX) / (1. * nv);
 
         double us = 0, vs = 0, ui = 0, vi = 0, u_s = 0, v_s = 0, u_i = 0, v_i = 0;
-
 
         //** Define as geometrias de resposta para interface.
         int h = 5;
@@ -215,10 +220,15 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
 
             if (mapToEqui == 1) {
                 //*** !!!! Nao tem na versao original !!!!
-                vs = vs + 0.57735 * us - RPnPhaseSpacePanel.myW_ / 2 - 0.57735 * 0.13397 * RPnPhaseSpacePanel.myH_;
-                vi = vi + 0.57735 * us - RPnPhaseSpacePanel.myW_ / 2 - 0.57735 * 0.13397 * RPnPhaseSpacePanel.myH_;
-                us = 1.1547 * us - 1.1547 * 0.13397 * RPnPhaseSpacePanel.myH_;
-                ui = 1.1547 * ui - 1.1547 * 0.13397 * RPnPhaseSpacePanel.myH_;
+//                vs = vs + 0.57735 * us - RPnPhaseSpacePanel.myW_ / 2 - 0.57735 * 0.13397 * RPnPhaseSpacePanel.myH_;
+//                vi = vi + 0.57735 * us - RPnPhaseSpacePanel.myW_ / 2 - 0.57735 * 0.13397 * RPnPhaseSpacePanel.myH_;
+//                us = 1.1547 * us - 1.1547 * 0.13397 * RPnPhaseSpacePanel.myH_;
+//                ui = 1.1547 * ui - 1.1547 * 0.13397 * RPnPhaseSpacePanel.myH_;
+
+                vs = vs + 0.57735 * us - deltaX / 2 - 0.57735 * 0.13397 * deltaY;
+                vi = vi + 0.57735 * us - deltaX / 2 - 0.57735 * 0.13397 * deltaY;
+                us = 1.1547 * us - 1.1547 * 0.13397 * deltaY;
+                ui = 1.1547 * ui - 1.1547 * 0.13397 * deltaY;
                 //***
 
                 v_s = (int) (vs / dv) * dv;               //  Ajuste feito diretamente em pixel.
@@ -239,8 +249,11 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
 
     public Shape mapShape(Shape shape, Scene scene) {         //*** ESTA CORRETO, MAS AINDA NAO TAO PERFEITO QUANTO O ANTIGO METODO DE DESENHAR A AREA
 
-        defBordo(scene);
-
+        Boundary boundary = RPNUMERICS.boundary();
+        //if (boundary instanceof IsoTriang2DBoundary) {
+            defBordo(scene);
+        //}
+        
         Polygon poly = new Polygon();
 
         double v_s = shape.getBounds2D().getMinX();
@@ -312,7 +325,6 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
                 poly.addPoint((int) (v2), (int) (u2));
 
             }
-
 
         CoordsArray wcCoordsTopRight = toWorldCoords(new Coords2D(v1, u1), scene);
         CoordsArray wcCoordsDownLeft = toWorldCoords(new Coords2D(v2, u2), scene);

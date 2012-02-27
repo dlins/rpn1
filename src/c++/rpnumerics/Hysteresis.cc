@@ -1,6 +1,6 @@
 #include "Hysteresis.h"
 
-int Hysteresis::curve(Boundary *boundary, 
+int Hysteresis::curve(const Boundary *boundary,
                       const FluxFunction *curve_flux, const AccumulationFunction *curve_accum,
                       int curve_family,
                       const RealVector &pmin, const RealVector &pmax, int *number_of_cells,         // For the domain.
@@ -18,7 +18,7 @@ int Hysteresis::curve(Boundary *boundary,
 
     // Compute the extension curve for the inflection curve.
     //
-    Extension_Curve extension_curve(pmin, pmax, number_of_cells, domain_ff, domain_aa);
+    Extension_Curve extension_curve(pmin, pmax, number_of_cells, domain_ff, domain_aa,boundary);
 
     extension_curve.compute_extension_curve(characteristic_where, singular,
                                             vic, curve_family,

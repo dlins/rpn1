@@ -197,6 +197,7 @@ CCSRC = \
 	JNIRPnDesktopPlotter.cc \
 	JNIRarefactionOrbitCalc.cc \
 	JNIHugoniotCurveCalc.cc \
+	JNILevelCurveCalc.cc \
 	JNIShockCurveCalc.cc
 
 CPPSRC = \
@@ -213,6 +214,7 @@ CPPSRC = \
 	Accum2Comp2PhasesAdimensionalized_Params.cpp \
 	Polydispersive.cpp \
 	Polydispersive_Params.cpp \
+	Eigenvalue_Contour.cpp \
 	idwint.cpp \
 	safesolve.cpp \
 	gq.cpp \

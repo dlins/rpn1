@@ -81,8 +81,7 @@ public class ControlClick {
         ClassifierAgent.indCurvaCla.clear();
         VelocityAgent.indCurvaVel.clear();
         clearAllStrings();
-        RPNUMERICS.listResolution.clear();
-        System.out.println("Size do RPNUMERICS.listResolution : " +RPNUMERICS.listResolution.size());
+        GeometryUtil.listResolution.clear();
     }
     //***************************************
 

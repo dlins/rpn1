@@ -206,8 +206,11 @@ public class RPnVisualizationModule {
                 if (GeometryGraphND.mapToEqui == 0) {
                     iso = false;
                 }
+
             }
             //***
+            //if (iso == false) GeometryGraphND.mapToEqui = 0;
+            //if (iso == true)  GeometryGraphND.mapToEqui = 1;
             
             DESCRIPTORS.add(new RPnProjDescriptor(space, label, w, h, axisArray, iso));
 

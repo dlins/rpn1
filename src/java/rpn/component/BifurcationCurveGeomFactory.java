@@ -14,12 +14,12 @@ import wave.util.*;
 
 public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
 
-    public BifurcationCurveGeomFactory(BifurcationCurveCalc calc) {
+    public BifurcationCurveGeomFactory(ContourCurveCalc calc) {
         super(calc);
     }
 
 
-     public BifurcationCurveGeomFactory(BifurcationCurveCalc calc,RpSolution curve) {
+     public BifurcationCurveGeomFactory(ContourCurveCalc calc,RpSolution curve) {
         super(calc,curve);
     }
 
@@ -30,9 +30,9 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
 
         int resultSize = curve.leftSegments().size();
 
-        BifurcationSegGeom[] bifurcationArray = new BifurcationSegGeom[resultSize];
+        RealSegGeom[] bifurcationArray = new RealSegGeom[resultSize];
         for (int i = 0; i < resultSize; i++) {
-            bifurcationArray[i] = new BifurcationSegGeom((RealSegment) curve.leftSegments().get(i));
+            bifurcationArray[i] = new RealSegGeom((RealSegment) curve.leftSegments().get(i));
 
         }
         return new BifurcationCurveGeom(bifurcationArray, this);
@@ -75,10 +75,10 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
 
                     ArrayList<RealSegment> tempSegmentArray = MultidAdapter.converseRPnCurveToRealSegments(result);
 
-                    BifurcationSegGeom[] bifurcationSegGeoms = new BifurcationSegGeom[tempSegmentArray.size()];
+                    RealSegGeom[] bifurcationSegGeoms = new RealSegGeom[tempSegmentArray.size()];
 
                     for (int i = 0; i < tempSegmentArray.size(); i++) {
-                        BifurcationSegGeom bifurcationSegment = new BifurcationSegGeom(tempSegmentArray.get(i));
+                        RealSegGeom bifurcationSegment = new RealSegGeom(tempSegmentArray.get(i));
                         bifurcationSegGeoms[i] = bifurcationSegment;
                     }
                     BifurcationCurveGeom bifurcationGeom = new BifurcationCurveGeom(bifurcationSegGeoms, factory);
@@ -106,9 +106,9 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
         commandName = commandName.toLowerCase();
         commandName = commandName.replaceAll(".+\\.", "");
 
-        BifurcationCurveCalc calc = ((BifurcationCurveCalc) rpCalc());
+        ContourCurveCalc calc = ((ContourCurveCalc) rpCalc());
 
-        BifurcationParams params = calc.getParams();
+        ContourParams params = calc.getParams();
         
         buffer.append("<COMMAND name=\""+commandName+"\" ");
 

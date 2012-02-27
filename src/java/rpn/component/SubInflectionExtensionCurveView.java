@@ -83,7 +83,7 @@ public class SubInflectionExtensionCurveView
     viewList_.clear();
     Iterator geomListIterator = ( (SubInflectionExtensionCurveGeom) abstractGeom_).getBifurcationSegmentsIterator();
     while (geomListIterator.hasNext()) {
-      BifurcationSegGeom geomObj = (BifurcationSegGeom) geomListIterator.next();
+      RealSegGeom geomObj = (RealSegGeom) geomListIterator.next();
       geomObj.viewingAttr().setColor(SubInflectionExtensionCurveGeom.COLOR);
 
       try {

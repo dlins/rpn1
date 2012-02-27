@@ -32,14 +32,14 @@ public class DoubleContactGeomFactory extends BifurcationCurveGeomFactory {
 
         DoubleContactCurve curve = (DoubleContactCurve) geomSource();
 
-        BifurcationSegGeom[] leftBifurcationSegArray = null;
+        RealSegGeom[] leftBifurcationSegArray = null;
 
         int resultSize = curve.segments().size();
         System.out.println("Tamanho da curve em DoubleContactGeomFactory , metodo createGeomFromSource() : " +resultSize);        //*******************************8
 
-        leftBifurcationSegArray = new BifurcationSegGeom[resultSize];
+        leftBifurcationSegArray = new RealSegGeom[resultSize];
         for (int i = 0; i < resultSize; i++) {
-            leftBifurcationSegArray[i] = new BifurcationSegGeom((RealSegment) curve.segments().get(i),viewAtt_);
+            leftBifurcationSegArray[i] = new RealSegGeom((RealSegment) curve.segments().get(i),viewAtt_);
 
         }
         

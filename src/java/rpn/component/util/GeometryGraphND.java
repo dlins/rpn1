@@ -21,8 +21,13 @@ import java.util.ArrayList;
 import java.util.List;
 import rpn.RPnPhaseSpacePanel;
 import rpn.component.HugoniotSegGeom;
+import rpn.parser.RPnDataModule;
+import rpnumerics.ContourCurveCalc;
+import rpnumerics.ContourParams;
+import rpnumerics.DoubleContactCurveCalc;
 import rpnumerics.Orbit;
 import rpnumerics.RPNUMERICS;
+import rpnumerics.RpCalculation;
 import rpnumerics.SegmentedCurve;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
@@ -343,13 +348,19 @@ public class GeometryGraphND {
 
 
 
-    public Line2D.Double mapLine(Line2D.Double line) {
+    public Line2D.Double mapLine(Line2D.Double line, double deltaX, double deltaY) {
+        
+        line.x1 = line.x1 + 0.5 * (deltaX - line.y1);
+        line.x2 = line.x2 + 0.5 * (deltaX - line.y2);
 
-        line.x1 = line.x1 + 0.5 * (RPnPhaseSpacePanel.myH_ - line.y1);
-        line.x2 = line.x2 + 0.5 * (RPnPhaseSpacePanel.myH_ - line.y2);
-
-        line.y1 = RPnPhaseSpacePanel.myH_ - 0.8660254 * (RPnPhaseSpacePanel.myH_ - line.y1);
-        line.y2 = RPnPhaseSpacePanel.myH_ - 0.8660254 * (RPnPhaseSpacePanel.myH_ - line.y2);
+        line.y1 = deltaY - 0.8660254 * (deltaY - line.y1);
+        line.y2 = deltaY - 0.8660254 * (deltaY - line.y2);
+        
+//        line.x1 = line.x1 + 0.5 * (RPnPhaseSpacePanel.myW_ - line.y1);
+//        line.x2 = line.x2 + 0.5 * (RPnPhaseSpacePanel.myW_ - line.y2);
+//
+//        line.y1 = RPnPhaseSpacePanel.myH_ - 0.8660254 * (RPnPhaseSpacePanel.myH_ - line.y1);
+//        line.y2 = RPnPhaseSpacePanel.myH_ - 0.8660254 * (RPnPhaseSpacePanel.myH_ - line.y2);
 
         return line;
     }
@@ -362,7 +373,12 @@ public class GeometryGraphND {
         Coords2D minDevCoords = toDeviceCoords(scene,  RPNUMERICS.boundary().getMinimums());
         double deltaX = Math.abs(maxDevCoords.getX() - minDevCoords.getX());
         double deltaY = Math.abs(maxDevCoords.getY() - minDevCoords.getY());
-        
+
+        if (mapToEqui == 1) {
+            deltaX = RPnPhaseSpacePanel.myW_;
+            deltaY = RPnPhaseSpacePanel.myH_;
+        }
+
         int index = 0;
         if (RPNUMERICS.domainDim() == 3) index = 1;
 
@@ -370,39 +386,34 @@ public class GeometryGraphND {
         
         Graphics2D graph = (Graphics2D) g;
 
-        //double xResolution = new Double(RPNUMERICS.getConfiguration("Contour").getParam("x-resolution"));
-        //int[] resolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("hugoniotcurve", "resolution"));
         int[] resolution = {1, 1};
 
-        if (RPNUMERICS.listResolution.size()==1) GeometryUtil.closestCurve=0;
-        if (RPNUMERICS.listResolution.size()>0) resolution = (int[]) RPNUMERICS.listResolution.get(GeometryUtil.closestCurve);
-        //if (scene.geometries().hasNext()) resolution = (int[]) RPNUMERICS.listResolution.get(GeometryUtil.closestCurve);
+        if (GeometryUtil.listResolution.size()==1) GeometryUtil.closestCurve=0;
+        if (GeometryUtil.listResolution.size()>0) resolution = (int[]) GeometryUtil.listResolution.get(GeometryUtil.closestCurve);
+
         int xResolution = resolution[0];
         int yResolution = resolution[1];
         
         int nu = (int) xResolution;
-        //double dx = RPnPhaseSpacePanel.myW_/(1.0*nu);
         double dx = deltaX/(1.0*nu);
+
+        int nv = (int) yResolution;
+        double dy = deltaY/(1.0*nv);
         
         //*** desenha as linhas verticais
         for (int i = 0; i < nu; i++) {
             //linex = new Line2D.Double(i * dx, 0, i * dx, RPnPhaseSpacePanel.myH_);
             linex = new Line2D.Double(i * dx, 0, i * dx, deltaY);
-            if (index == 0  && mapToEqui == 1) linex = mapLine(linex);
+            if (index == 0  && mapToEqui == 1) linex = mapLine(linex, deltaX, deltaY);
             graph.draw(linex);
         }
         //*******************************
 
-        //double yResolution = new Double(RPNUMERICS.getConfiguration("Contour").getParam("y-resolution"));
-        int nv = (int) yResolution;
-        //double dy = RPnPhaseSpacePanel.myH_/(1.0*nu);
-        double dy = deltaY/(1.0*nu);
-        
         //*** desenha as linhas horizontais
         for (int i = 0; i < nv; i++) {
             //liney = new Line2D.Double(0, i * dy, RPnPhaseSpacePanel.myW_, i * dy);              // preencher com coordenadas do dispositivo
             liney = new Line2D.Double(0, i * dy, deltaX, i * dy);              // preencher com coordenadas do dispositivo
-            if (index == 0  &&  mapToEqui == 1) liney = mapLine(liney);
+            if (index == 0  &&  mapToEqui == 1) liney = mapLine(liney, deltaX, deltaY);
             graph.draw(liney);
         }
         //*********************************
@@ -411,8 +422,9 @@ public class GeometryGraphND {
         Boundary boundary = RPNUMERICS.boundary();
         if (boundary instanceof IsoTriang2DBoundary) {
             for (int i = 0; i < nu; i++) {
-                lineObl = new Line2D.Double(0, RPnPhaseSpacePanel.myH_ - i * dy, i * dx, RPnPhaseSpacePanel.myH_);
-                if (mapToEqui == 1) lineObl = mapLine(lineObl);
+                //lineObl = new Line2D.Double(0, RPnPhaseSpacePanel.myH_ - i * dy, i * dx, RPnPhaseSpacePanel.myH_);
+                lineObl = new Line2D.Double(0, deltaY - i * dy, i * dx, deltaY);
+                if (mapToEqui == 1) lineObl = mapLine(lineObl, deltaX, deltaY);
                 graph.draw(lineObl);
             }
         }

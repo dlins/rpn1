@@ -151,7 +151,7 @@ public class AbstractScene implements AbstractGeomObj {
         ControlClick.clearpMarca();
         removeStringsCla(geometryIndex);
         removeStringsVel(geometryIndex);
-        RPNUMERICS.listResolution.remove(geometryIndex);        //*** GERA BUG : se a curva removida estiver com o pMarca
+        GeometryUtil.listResolution.remove(geometryIndex);
         // -----------
 
         MultiGeometry geom = (MultiGeometry) geomList_.remove(geometryIndex);

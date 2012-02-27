@@ -1,14 +1,14 @@
 package rpnumerics;
 
-public class BifurcationParams {
+public class ContourParams {
 
     private int[] resolution_;
     
-    public BifurcationParams(int[] resolution) {
+    public ContourParams(int[] resolution) {
         resolution_ = resolution;
     }
 
-    public BifurcationParams(){
+    public ContourParams(){
 
     }
 
