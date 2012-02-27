@@ -13,8 +13,6 @@ import rpn.component.RpGeomFactory;
 import rpn.component.RpGeometry;
 import rpn.parser.RPnDataModule;
 import rpnumerics.ContourCurveCalc;
-import rpnumerics.HugoniotCurve;
-import rpnumerics.HugoniotCurveCalcND;
 import rpnumerics.RPnCurve;
 import rpnumerics.RpCalculation;
 import rpnumerics.SegmentedCurve;
@@ -67,15 +65,8 @@ public class GeometryUtil {
                 if (curve instanceof SegmentedCurve) {
                     RpCalcBasedGeomFactory geomFactory = (RpCalcBasedGeomFactory) factory;
                     RpCalculation calc = geomFactory.rpCalc();
-
-                    if (curve instanceof HugoniotCurve) {
-                        HugoniotCurveCalcND curveCalc = (HugoniotCurveCalcND) calc;
-                        listResolution.add(curveCalc.getParams().getResolution());
-                    }
-                    else {
-                        ContourCurveCalc curveCalc = (ContourCurveCalc) calc;
-                        listResolution.add(curveCalc.getParams().getResolution());
-                    }
+                    ContourCurveCalc curveCalc = (ContourCurveCalc) calc;
+                    listResolution.add(curveCalc.getParams().getResolution());
 
                 }
                 else {

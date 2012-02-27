@@ -16,6 +16,7 @@ import java.util.*;
 import rpn.component.util.ControlClick;
 import rpn.component.util.GeometryGraphND;
 import rpn.controller.ui.UIController;
+import rpn.usecase.DragPlotAgent;
 
 public class RPnPhaseSpaceFrame extends JFrame {
 

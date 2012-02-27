@@ -23,12 +23,12 @@ import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableModel;
 import rpn.component.RpCalcBasedGeomFactory;
 import rpn.component.RpGeometry;
-import rpn.controller.ui.UIController;
 import rpn.parser.RPnDataModule;
 import rpnumerics.HugoniotCurveCalcND;
-import rpnumerics.LevelCurveCalc;
+import rpnumerics.HugoniotParams;
 import rpnumerics.OrbitCalc;
 import rpnumerics.PointLevelCalc;
+import rpnumerics.RarefactionExtensionCalc;
 import rpnumerics.RpCalculation;
 import wave.util.RealVector;
 
@@ -127,7 +127,7 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
 
         if (calc instanceof HugoniotCurveCalcND) {
             HugoniotCurveCalcND hCalc = (HugoniotCurveCalcND) calc;
-            userInput = hCalc.getParams().getXZero();
+            userInput = ((HugoniotParams)hCalc.getParams()).getXZero();
         }
 
 
@@ -138,12 +138,15 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
         }
 
         if (calc instanceof OrbitCalc) {
-
             OrbitCalc orbitCalc = (OrbitCalc) calc;
-
             userInput = orbitCalc.getStart();
 
+        }
 
+
+        if (calc instanceof RarefactionExtensionCalc){
+            RarefactionExtensionCalc rarCalc = (RarefactionExtensionCalc)calc;
+            userInput=rarCalc.getStart();
         }
 
 
@@ -179,9 +182,9 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
 
     public static void removeLastEntry() {
 
-        if (tableModel_.getRowCount() >= 2) {
-            tableModel_.removeRow(tableModel_.getRowCount() - 2);
-        }
+//        if (tableModel_.getRowCount() >= 2) {
+            tableModel_.removeRow(tableModel_.getRowCount() -1);
+//        }
 
     }
 

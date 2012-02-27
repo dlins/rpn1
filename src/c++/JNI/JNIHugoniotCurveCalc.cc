@@ -94,26 +94,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
     RealVector Uref(dimension, input);
 
-    cout << Uref << endl;
-
     Boundary * physicsBoundary = RpNumerics::getPhysics().boundary().clone();
 
     RealVector min(physicsBoundary-> minimums());
     RealVector max(physicsBoundary-> maximums());
 
-
-
-    cout << min << endl;
-    cout << max << endl;
-
-    cout << RpNumerics::getPhysics().fluxFunction().fluxParams().params() << endl;
-    cout << RpNumerics::getPhysics().accumulation().accumulationParams().params() << endl;
-
-    
-    //cout <<"xResolution, yResolution : " << xRes << " " << yRes << endl;
-
     vector<HugoniotPolyLine> hugoniotPolyLineVector;
-
 
     Hugoniot_Curve hugoniotCurve(&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(), physicsBoundary,
             min, max, cells, Uref);

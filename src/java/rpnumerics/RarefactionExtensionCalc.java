@@ -86,6 +86,12 @@ public class RarefactionExtensionCalc extends ContourCurveCalc {
         return start_;
     }
 
+    public void setStart(PhasePoint start) {
+        start_ = start;
+    }
+
+
+
     private native RpSolution nativeCalc(int [] resolution, PhasePoint start, int increase, int leftFamily, int rightFamily, int characteristicDomain) throws RpException;
 
     public RpSolution recalc(Area area) throws RpException {

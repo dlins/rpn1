@@ -36,10 +36,6 @@ public class RpCalcController implements RpController {
     /** Registers  a controller to handle the numerics parameters changes .*/
     protected void register() {
         ChangeFluxParamsAgent.instance().addPropertyChangeListener(this);
-        ChangeDirectionAgent.instance().addPropertyChangeListener(this);
-        ChangeSigmaAgent.instance().addPropertyChangeListener(this);
-        
-
     }
 
 
@@ -47,10 +43,6 @@ public class RpCalcController implements RpController {
 
     protected void unregister() {
         ChangeFluxParamsAgent.instance().removePropertyChangeListener(this);
-        ChangeDirectionAgent.instance().removePropertyChangeListener(this);
-        ChangeSigmaAgent.instance().removePropertyChangeListener(this);
-        
-        
     }
 
     /** Updates the properties of a geometry when any change in its geometry is made.*/
