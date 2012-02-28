@@ -149,7 +149,7 @@ import wave.multid.map.Map;
         ControlClick.clearpMarca();
         removeStringsCla(geometryIndex);
         removeStringsVel(geometryIndex);
-        GeometryUtil.listResolution.remove(geometryIndex);
+//        GeometryUtil.listResolution.remove(geometryIndex);
         // -----------
 
         MultiGeometry geom = (MultiGeometry) geomList_.remove(geometryIndex);
