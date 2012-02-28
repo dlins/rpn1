@@ -18,6 +18,7 @@ import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.io.FileWriter;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import org.apache.batik.ext.swing.GridBagConstants;
 import rpn.component.util.AreaSelectionAgent2;
 import rpn.component.util.ClassifierAgent;
 import rpn.component.util.ControlClick;
@@ -64,7 +65,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JCheckBoxMenuItem showCurvesPaneltem_ = new JCheckBoxMenuItem("Show Curves Window", true);
     private RPnCurvesConfigPanel curvesConfigPanel_ = new RPnCurvesConfigPanel();
     private JFrame curvesFrame_;
-
     //*** declarei isso  -- Leandro
     private JMenuItem editMenuItem1 = new JMenuItem("Clears All Strings");
     private JMenuItem editMenuItem2 = new JMenuItem("Clears Last String");
@@ -72,7 +72,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JMenuItem editMenuItem4 = new JMenuItem("Clears Classifiers");
     private JMenuItem editMenuItem5 = new JMenuItem("Starts with Black Background");
     private JMenuItem editMenuItem6 = new JMenuItem("Starts with White Background");
-    public static String dir= "";
+    public static String dir = "";
     //***
 
     //Construct the frame
@@ -159,12 +159,11 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
                 if (RPNUMERICS.boundary() instanceof RectBoundary) {
                     toolBar_.add(AreaSelectionAgent.instance().getContainer());     //** Edson/Leandro
-                }
-                else {
+                } else {
                     toolBar_.add(AreaSelectionAgent.instance().getContainer());     //** Leandro  -- completar com 2. opcao de botao de selecao (triangular)
                     toolBar_.add(AreaSelectionAgent2.instance().getContainer());    //** Leandro
                 }
-                
+
                 toolBar_.add(ClassifierAgent.instance().getContainer());      //** Leandro
                 toolBar_.add(VelocityAgent.instance().getContainer());        //** Leandro
                 //toolBar_.add(BifurcationRefineAgent.instance().getContainer());     //** Leandro
@@ -445,15 +444,15 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
 
                 int nFiles = chooser.getSelectedFile().getParentFile().listFiles().length;
-                
-                for (int k=0; k<nFiles; k++) {
+
+                for (int k = 0; k < nFiles; k++) {
                     chooser.getSelectedFile().getParentFile().listFiles()[0].delete();
                 }
 
                 FileWriter writer = new FileWriter(chooser.getSelectedFile().
                         getAbsolutePath());
                 dir = chooser.getSelectedFile().getParent();
-                System.out.println("Diretorio selecionado : " +dir);
+                System.out.println("Diretorio selecionado : " + dir);
 
                 RPnDataModule.matlabExport(writer);
 
@@ -570,22 +569,17 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         GridBagConstraints configPanelConstraints = new GridBagConstraints();
 
-        configPanelConstraints.gridheight = 1;
-        configPanelConstraints.gridwidth = 2;
-
         configPanel_.setLayout(configPanelLayout);
 
         configPanelConstraints.gridy = 0;
         configPanelConstraints.gridx = 0;
-        configPanelConstraints.fill = GridBagConstraints.NONE;
+        configPanelConstraints.fill = GridBagConstraints.BOTH;
         configPanel_.add(stateComboBox, configPanelConstraints);
-
-        configPanelConstraints.ipady=40;
 
 
         configPanelConstraints.gridy = 1;
         configPanelConstraints.gridx = 0;
-        configPanelConstraints.fill=GridBagConstraints.NONE;
+        configPanelConstraints.fill = GridBagConstraints.BOTH;
         configPanel_.add(curvesConfigPanel_, configPanelConstraints);
 
 
@@ -597,6 +591,12 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         layoutConstrains.gridy = 0;
 
+        layoutConstrains.fill=GridBagConstants.BOTH;
+
+
+        layoutConstrains.weightx=0.8;
+        layoutConstrains.weighty=0.1;
+
         contentPane.add(configPanel_, layoutConstrains);
 
         layoutConstrains.gridy = 1;
@@ -606,15 +606,12 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         layoutConstrains.gridy = 2;
         getContentPane().add(statusLabel_, layoutConstrains);
 
-
-
-
         toolBar_.setOpaque(true);
 
         toolBarPanel_.add(toolBar_);
 
 
-        setPreferredSize(new Dimension(650, 650));
+        setPreferredSize(new Dimension(350, 680));
 
         setResizable(true);
 
@@ -896,7 +893,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         modelInteractionMenu.removeAll();
         modelInteractionMenu.add(ChangeFluxParamsAgent.instance());
         modelInteractionMenu.add(configurationMenuItem_);
-        
+
 
     }
 
@@ -975,7 +972,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         }
 
         public void actionPerformed(ActionEvent e) {
-     
+
             RPnConfigurationDialog extensionCurve = new RPnConfigurationDialog();
             extensionCurve.setVisible(true);
 
