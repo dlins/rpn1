@@ -72,9 +72,7 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
         else if (UIController.instance().getState() instanceof AREASELECTION_CONFIG) {
             UIController.instance().addCommand(new Command(this, userInput));
             UIController.instance().setWaitCursor();
-            if (GeometryGraphND.refina == 1) {
-                actionSelected_.execute();                    //*** Desativa execute() do refinamento
-            }
+            actionSelected_.execute();
             UIController.instance().resetCursor();
             userInputList_.clear();
             ui.panelsBufferClear();

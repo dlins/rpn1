@@ -146,14 +146,17 @@ public class UIController extends ComponentUI {
 
 //                if (netStatus_.isMaster() || !(netStatus_.isOnline())) {
                 RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
+                if (ControlClick.ind == 0) ControlClick.mousePressed(event, panel.scene());
                 // this will automatically work only for 2D(isComplete())
                 updateUserInputTable(panel, event.getPoint());
 //                evaluatePanelsCursorCoords(panel, event.getPoint());
-                if (globalInputTable().isComplete()) {
+                if (globalInputTable().isComplete() && ControlClick.ind == 0) {
+                //if (globalInputTable().isComplete()) {
                     globalInputTable().reset();
                     resetPanelsCursorCoords();
                     DragPlotAgent.instance().execute();
                 }
+                
             }
         }
     }

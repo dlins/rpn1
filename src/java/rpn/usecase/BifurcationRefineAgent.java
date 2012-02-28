@@ -65,11 +65,9 @@ public class BifurcationRefineAgent extends RpModelConfigChangeAgent {
             GeometryGraphND.targetPoint.setElement(i, 0.);
         }
 
-        //*** Deixar isto enquanto a lista auxiliar listResolution estiver sendo usada no código
-        int[] temp = (int[]) RPNUMERICS.listResolution.get(GeometryUtil.closestCurve);
-        RPNUMERICS.listResolution.remove(GeometryUtil.closestCurve);
-        RPNUMERICS.listResolution.add(temp);
-        //***
+        int[] temp = (int[]) GeometryUtil.listResolution.get(GeometryUtil.closestCurve);
+        GeometryUtil.listResolution.remove(GeometryUtil.closestCurve);
+        GeometryUtil.listResolution.add(temp);
 
     }
 

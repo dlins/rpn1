@@ -400,8 +400,10 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         }
 
+        
     }
 
+    
 //     from here on just for 2D for now...
     void createSVGImage_actionPerformed(ActionEvent e) {
         JFileChooser chooser = new JFileChooser();
@@ -528,7 +530,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         int index = 0;
 
         RPnProjDescriptor projDescriptors[] = new RPnProjDescriptor[RPNUMERICS.domainDim() * 2];
-
+        
         int[] projIndex = new int[projDescriptors.length];
 
         for (int i = 0; i < projDescriptors.length; i++) {

@@ -11,13 +11,16 @@ import java.io.FileReader;
 import java.util.Iterator;
 import rpn.component.util.ClassifierAgent;
 import rpn.component.util.ControlClick;
+
+import rpn.component.util.GeometryUtil;
+
 import rpn.component.util.VelocityAgent;
-import rpnumerics.RPNUMERICS;
+
 import wave.multid.view.*;
 import wave.multid.*;
 import wave.multid.map.Map;
 
-public class AbstractScene implements AbstractGeomObj {
+   public class AbstractScene implements AbstractGeomObj {
     //
     // Members
     //
@@ -146,7 +149,7 @@ public class AbstractScene implements AbstractGeomObj {
         ControlClick.clearpMarca();
         removeStringsCla(geometryIndex);
         removeStringsVel(geometryIndex);
-        RPNUMERICS.listResolution.remove(geometryIndex);        //*** GERA BUG : se a curva removida estiver com o pMarca
+        GeometryUtil.listResolution.remove(geometryIndex);
         // -----------
 
         MultiGeometry geom = (MultiGeometry) geomList_.remove(geometryIndex);

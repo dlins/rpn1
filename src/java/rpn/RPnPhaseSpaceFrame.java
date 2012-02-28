@@ -16,6 +16,7 @@ import java.util.*;
 import rpn.component.util.ControlClick;
 import rpn.component.util.GeometryGraphND;
 import rpn.controller.ui.UIController;
+import rpn.usecase.DragPlotAgent;
 
 public class RPnPhaseSpaceFrame extends JFrame {
 
@@ -130,11 +131,6 @@ public class RPnPhaseSpaceFrame extends JFrame {
                 }
 
             }
-
-            if (keyEvent.getKeyChar() == 'q'  ||  keyEvent.getKeyChar() == 'Q') {
-                GeometryGraphND.refina = 1;
-            }
-            else GeometryGraphND.refina = 0;
 
 
             //*** solucao provisoria para mostrar/nao mostrar o grid --- Leandro

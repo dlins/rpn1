@@ -6,7 +6,7 @@
         <BOUNDARY name="rect">
 
             <BOUNDARYPARAM name="dimension" value="2" />
-            <BOUNDARYPARAM name="limits" value="-0.5 -0.5 0.5 0.5" />
+            <BOUNDARYPARAM name="limits" value="-5.0 -5.0 5.0 5.0" />
 
         </BOUNDARY>
 
@@ -92,7 +92,7 @@
 
     <CURVE name="orbit">
         <CURVEPARAM name="family" value="0"/>
-         <CURVEPARAM name="level" value="0.5"/>
+        <CURVEPARAM name="level" value="0.5"/>
 
     </CURVE>
 
