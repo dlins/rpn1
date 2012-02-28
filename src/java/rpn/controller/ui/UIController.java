@@ -148,10 +148,13 @@ public class UIController extends ComponentUI {
                 RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
                 // this will automatically work only for 2D(isComplete())
                 updateUserInputTable(panel, event.getPoint());
-//                evaluatePanelsCursorCoords(panel, event.getPoint());
+
                 if (globalInputTable().isComplete()) {
                     globalInputTable().reset();
                     resetPanelsCursorCoords();
+                    if (event.isShiftDown())
+                    userInputComplete(globalInputTable().values());
+                    else
                     DragPlotAgent.instance().execute();
                 }
             }
