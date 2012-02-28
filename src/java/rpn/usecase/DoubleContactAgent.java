@@ -47,6 +47,8 @@ public class DoubleContactAgent extends RpModelPlotAgent {
 
         DoubleContactGeomFactory factory = new DoubleContactGeomFactory(RPNUMERICS.createDoubleContactCurveCalc());
 
+
+
         return factory.geom();
 
     }
@@ -55,14 +57,19 @@ public class DoubleContactAgent extends RpModelPlotAgent {
     public void execute() {
         DoubleContactGeomFactory factory = new DoubleContactGeomFactory(RPNUMERICS.createDoubleContactCurveCalc());
 
+        RPnPhaseSpaceAbstraction leftPhaseSpace = RPnDataModule.LEFTPHASESPACE;
+        
+        RPnPhaseSpaceAbstraction rightPhaseSpace = RPnDataModule.RIGHTPHASESPACE;
 
-//        RPnPhaseSpaceAbstraction auxPhaseSpace = RPnDataModule.PHASESPACE;//AUXPHASESPACE;
 
-        RPnPhaseSpaceAbstraction auxPhaseSpace = RPnDataModule.PHASESPACE;
+        RpGeometry leftGeometry = factory.createLeftGeom();
+        RpGeometry rightGeometry= factory.createRightGeom();
 
-        RpGeometry geometry = factory.geom();
+        leftPhaseSpace.plot(leftGeometry);
 
-        auxPhaseSpace.plot(geometry);
+        rightPhaseSpace.plot(rightGeometry);
+
+
 
         System.out.println("Chamando execute");
     }

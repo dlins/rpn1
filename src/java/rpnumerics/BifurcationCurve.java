@@ -33,6 +33,9 @@ public class BifurcationCurve extends SegmentedCurve {
         
         leftSegments_ = leftList;
         rightSegments_ = rightList;
+
+        System.out.println("Segmento a direita: "+ rightSegments_.get(0));
+         System.out.println("Segmento a esquerda: " + leftSegments_.get(0));
     }
 
 
@@ -49,25 +52,12 @@ public class BifurcationCurve extends SegmentedCurve {
         super(new ArrayList());
 
      
-        // segments = MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseRPnCurveToCoordsArray(this));
-//        segments = MultidAdapter.converseRPnCurveToRealSegments(this);
     }
 
     //
     // Accessors/Mutators
     //
-   
-
     public String toXML() {
-
-//        StringBuffer buffer = new StringBuffer();
-//
-//        for (int i = 0; i < segments().size(); i++) {
-//            HugoniotSegment hugoniotSegment = (HugoniotSegment) segments().get(i);
-//            RealSegment realSegment = new RealSegment(hugoniotSegment.p1(), hugoniotSegment.p2());
-//            buffer.append(realSegment.toXML());
-//        }
-//        return buffer.toString();
 
         StringBuilder buffer = new StringBuilder();
 

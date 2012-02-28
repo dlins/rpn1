@@ -244,19 +244,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         UIController.instance().panelsUpdate();
     }
 
-//    void errorControlMenuItem_actionPerformed(ActionEvent e) {
-//        RPnErrorControlDialog dialog = new RPnErrorControlDialog();
-//        Dimension dlgSize = dialog.getPreferredSize();
-//        Dimension frmSize = new Dimension(1280, 1024);
-//        Point loc = new Point(0, 0);
-//        dialog.setLocation((frmSize.width - dlgSize.width) / 2 + loc.x,
-//                (frmSize.height - dlgSize.height) / 2 + loc.y);
-//        dialog.setModal(true);
-//        dialog.pack();
-//        dialog.setVisible(true);
-//        rpnumerics.RPNUMERICS.errorControl().reset(dialog.getEps(),
-//                rpnumerics.RPNUMERICS.boundary());
-//    }
+
     //** para criar os frames (paineis) - incluindo os auxiliares
     protected void phaseSpaceFramesInit(Boundary boundary) {
         wave.multid.graphs.ClippedShape clipping = new wave.multid.graphs.ClippedShape(boundary);
@@ -264,71 +252,46 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         //RPnVisualizationModule.DESCRIPTORS
 
-        auxFrames_ = new RPnPhaseSpaceFrame[numOfPanels * 2];
+        auxFrames_ = new RPnPhaseSpaceFrame[2*numOfPanels];
         frames_ = new RPnPhaseSpaceFrame[numOfPanels];
 
-//        leftFrames_ = new RPnPhaseSpaceFrame[numOfPanels];
-//        rightFrames_ = new RPnPhaseSpaceFrame[numOfPanels];
-
-        //Init Aux Frames
-
-        Boundary auxBoundary = null;
-
-        if (RPNUMERICS.boundary() instanceof RectBoundary) {
-            RealVector originalMax = RPNUMERICS.boundary().getMaximums();
-            RealVector originalMin = RPNUMERICS.boundary().getMinimums();
-
-            RealVector newMax = new RealVector(2 * RPNUMERICS.boundary().getMaximums().getSize());
-            RealVector newMin = new RealVector(2 * RPNUMERICS.boundary().getMinimums().getSize());
-
-            newMin.setElement(0, originalMin.getElement(0));
-            newMin.setElement(1, originalMin.getElement(1));
-            newMin.setElement(2, originalMin.getElement(0));
-            newMin.setElement(3, originalMin.getElement(1));
-
-            newMax.setElement(0, originalMax.getElement(0));
-            newMax.setElement(1, originalMax.getElement(1));
-            newMax.setElement(2, originalMax.getElement(0));
-            newMax.setElement(3, originalMax.getElement(1));
-
-            auxBoundary = new RectBoundary(newMin, newMax);
-
-        } else {
-
-            RealVector A = new RealVector("0 0");
-            RealVector B = new RealVector("0 1");
-            RealVector C = new RealVector("1 0");
-
-            auxBoundary = new IsoTriang2DBoundary(A, B, C);
-        }
-
+      
 //*** CRIA OS PAINEIS AUXILIARES MAS NAO DESENHA NADA NELES
-//        int auxNumOfPanels = RPnVisualizationModule.AUXDESCRIPTORS.size();
-//        System.out.println("Quantidade de projecoes auxiliares: " + RPnVisualizationModule.AUXDESCRIPTORS.size());
-//        wave.multid.graphs.ClippedShape auxClipping = new wave.multid.graphs.ClippedShape(auxBoundary);
-//
-//        for (int i = 0; i < auxNumOfPanels; i++) {
-//            wave.multid.view.ViewingTransform auxViewingTransf =
-//                    ((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(
-//                    i)).createTransform(auxClipping);
-//            try {
-//                wave.multid.view.Scene auxScene = RPnDataModule.AUXPHASESPACE.createScene(auxViewingTransf,
-//                        new wave.multid.view.ViewingAttr(Color.black));
-//                System.out.println("Dimensao do auxiliar: " + RPnDataModule.AUXPHASESPACE.getSpace().getDim());   // Esta dando 6, o q significa?   (Leandro)
-//                auxFrames_[i] = new RPnPhaseSpaceFrame(auxScene, commandMenu_);
-//                auxFrames_[i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i)).label());
-//
-//                UIController.instance().install(auxFrames_[i].phaseSpacePanel());   // Se comentado, parece nao fazer diferenca
-//
-//                setFramesPosition(auxFrames_[i]);
-//                auxFrames_[i].pack();
-//                auxFrames_[i].setVisible(true);
-//
-//            } catch (wave.multid.DimMismatchEx dex) {
-//                dex.printStackTrace();
-//            }
-//
-//        }
+        int auxNumOfPanels = RPnVisualizationModule.AUXDESCRIPTORS.size();
+        System.out.println("Quantidade de projecoes auxiliares: " + RPnVisualizationModule.AUXDESCRIPTORS.size());
+
+
+        for (int i = 0; i < auxNumOfPanels/2; i++) {
+            wave.multid.view.ViewingTransform auxViewingTransf =
+                    ((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(
+                    i)).createTransform(clipping);
+            try {
+                wave.multid.view.Scene leftScene = RPnDataModule.LEFTPHASESPACE.createScene(auxViewingTransf,
+                        new wave.multid.view.ViewingAttr(Color.black));
+
+                 wave.multid.view.Scene rightScene = RPnDataModule.RIGHTPHASESPACE.createScene(auxViewingTransf,
+                        new wave.multid.view.ViewingAttr(Color.black));
+
+                auxFrames_[i] = new RPnPhaseSpaceFrame(leftScene, commandMenu_);
+                auxFrames_[i+1] = new RPnPhaseSpaceFrame(rightScene, commandMenu_);
+
+                auxFrames_[i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i)).label());
+                auxFrames_[i+1].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i)).label());
+
+                UIController.instance().install(auxFrames_[i].phaseSpacePanel());
+                UIController.instance().install(auxFrames_[i+1].phaseSpacePanel());
+                setFramesPosition(auxFrames_[i]);
+                setFramesPosition(auxFrames_[i+1]);
+                auxFrames_[i].pack();
+                auxFrames_[i+1].pack();
+                auxFrames_[i].setVisible(true);
+                auxFrames_[i+1].setVisible(true);
+
+            } catch (wave.multid.DimMismatchEx dex) {
+                dex.printStackTrace();
+            }
+
+        }
 //***
 
 

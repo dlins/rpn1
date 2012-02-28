@@ -64,24 +64,13 @@ public abstract class RpModelPlotAgent extends RpModelActionAgent {
             return;
         }
         phaseSpace.plot(geometry);
-        if (addOnlyLastGeometry_) {
-            if (!keepLastGeometry_) {
-                phaseSpace.removeLastGeometry();
-                RPnCurvesListFrame.removeLastEntry();
-                UIController.instance().removeLastCommand();
+       
 
-            }
-        }
-//        keepLastGeometry_ = false;
-        keepLastGeometry_ = true;
         Iterator newValue = phaseSpace.getGeomObjIterator();
         logAction(new PropertyChangeEvent(this, listString, oldValue, newValue));
 
     }
 
-    public void setMultipleGeometry(boolean multiple) {
-        addOnlyLastGeometry_ = multiple;
-    }
 
     public void unexecute() {
         Iterator current = (Iterator) log().getNewValue();
@@ -100,8 +89,5 @@ public abstract class RpModelPlotAgent extends RpModelActionAgent {
         return button_;
     }
 
-    static void keepLastGeometry() {
-        keepLastGeometry_ = true;
-
-    }
+   
 }

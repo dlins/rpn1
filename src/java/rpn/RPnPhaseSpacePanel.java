@@ -231,13 +231,13 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         myW_ = getWidth();
 
 
-        if (RPNUMERICS.domainDim() == 2) {
-
-            GeometryGraph geom = new GeometryGraph();
-            geom.markPoints(scene());
-            geom.paintComponent(g, scene());
-
-        }
+//        if (RPNUMERICS.domainDim() == 2) {
+//
+//            GeometryGraph geom = new GeometryGraph();
+//            geom.markPoints(scene());
+//            geom.paintComponent(g, scene());
+//
+//        }
 
         if (RPNUMERICS.domainDim() == 3) {
 
