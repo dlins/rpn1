@@ -114,11 +114,7 @@ public class RPnShockConfigDialog extends RPnDialog {
 
                 }
 
-                if (selectedMethod.equals("Contour")) {
-                    RPnContourConfigPanel dialog = new RPnContourConfigPanel();
-                    dialog.setVisible(true);
-
-                }
+              
 
             }
 

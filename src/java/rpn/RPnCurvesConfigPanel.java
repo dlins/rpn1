@@ -14,8 +14,6 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UI_ACTION_SELECTED;
 import rpn.usecase.ChangeDirectionAgent;
@@ -29,18 +27,17 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
 
     private ButtonGroup directionButtonGroup_;
     private JPanel directionPanel_;
-    private JSpinner familySpinner_;
     private JRadioButton forwardCheckBox_;
     private JRadioButton backwardCheckBox_;
     private static Integer currentOrbitDirection_ = Orbit.FORWARD_DIR;
-    private JTabbedPane curvesConfigurationPanel_;
+    private JTabbedPane curvesTabbedPanel_;
 
     public RPnCurvesConfigPanel() {
 
 
         ChangeDirectionAgent.instance().execute();
 
-        curvesConfigurationPanel_ = new JTabbedPane();
+        curvesTabbedPanel_ = new JTabbedPane();
         directionButtonGroup_=new ButtonGroup();
         buildPanel();
 
@@ -52,7 +49,7 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
     private void buildPanel() {
 
         HashMap<String, Configuration> configMap = RPNUMERICS.getConfigurations();
-        curvesConfigurationPanel_.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+        curvesTabbedPanel_.setTabLayoutPolicy(JTabbedPane.WRAP_TAB_LAYOUT);
 
         Set<Entry<String, Configuration>> configSet = configMap.entrySet();
 
@@ -64,7 +61,7 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
                 RPnInputComponent inputComponent = new RPnInputComponent(entry.getValue());
                 inputComponent.removeParameter("resolution");
                 if (inputComponent.getContainer().getComponentCount() > 0) {
-                    curvesConfigurationPanel_.addTab(entry.getKey(), inputComponent.getContainer());
+                    curvesTabbedPanel_.addTab(entry.getKey(), inputComponent.getContainer());
                 }
             }
 
@@ -99,22 +96,27 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
 
 
 
-        BoxLayout boxLayout = new BoxLayout(this, BoxLayout.Y_AXIS);
+        GridBagLayout boxLayout = new GridBagLayout();
 
-        curvesConfigurationPanel_.setMinimumSize(new Dimension(600, 400));
+//        curvesTabbedPanel_.setMinimumSize(new Dimension(600, 400));
 
         setLayout(boxLayout);
 
         GridBagConstraints gridConstraints = new GridBagConstraints();
 
+        gridConstraints.gridx=0;
+        gridConstraints.gridy = 0;
+
         gridConstraints.fill = GridBagConstraints.BOTH;
 
         add(directionPanel_, gridConstraints);
 
+
+        gridConstraints.gridy = 1;
         gridConstraints.fill = GridBagConstraints.BOTH;
 
-        gridConstraints.anchor = GridBagConstraints.NORTH;
-        add(curvesConfigurationPanel_, gridConstraints);
+
+        add(curvesTabbedPanel_, gridConstraints);
 
 
     }
