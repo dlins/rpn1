@@ -2,16 +2,18 @@ package rpnumerics;
 
 import wave.util.*;
 
-public class HugoniotParams {
+public class HugoniotParams extends ContourParams{
 
-    private PhasePoint xZero_;
+    private RealVector xZero_;
     private RealVector fMinus_;
     private RealVector uMinus_;
     private RealMatrix2 dFMinus_;
     private FluxFunction fluxFunction_;
 
-    public HugoniotParams(PhasePoint xZero) {
 
+    public HugoniotParams (PhasePoint xZero, int [] resolution) {
+
+        super(resolution);
         xZero_ = xZero;
 
     }
@@ -51,10 +53,10 @@ public class HugoniotParams {
 
     public PhasePoint getXZero() {
 
-        return xZero_;
+        return new PhasePoint(xZero_);
     }
 
-    public void setXZero(PhasePoint p) {
+    public void setXZero(RealVector p) {
 
 
         xZero_ = p;
@@ -88,4 +90,6 @@ public class HugoniotParams {
     public FluxFunction getFluxFunction() {
         return fluxFunction_;
     }
+
+   
 }

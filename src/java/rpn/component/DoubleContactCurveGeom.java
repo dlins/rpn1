@@ -17,7 +17,7 @@ public class DoubleContactCurveGeom extends BifurcationCurveGeom {//implements M
     //
 
 
-    public DoubleContactCurveGeom(BifurcationSegGeom[] segArray, BifurcationCurveGeomFactory factory) {
+    public DoubleContactCurveGeom(RealSegGeom[] segArray, BifurcationCurveGeomFactory factory) {
 
         super(segArray, factory);
         System.out.println("Tamanho de segArray em DoubleContactCurveGeom : " +segArray.length);

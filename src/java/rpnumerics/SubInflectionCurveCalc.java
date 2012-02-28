@@ -6,13 +6,13 @@
  */
 package rpnumerics;
 
-public class SubInflectionCurveCalc extends BifurcationCurveCalc {
+public class SubInflectionCurveCalc extends ContourCurveCalc {
 
     //
     // Constructors/Initializers
     //
     public SubInflectionCurveCalc(){
-        super(new BifurcationParams());
+        super(new ContourParams());
     }
 
 

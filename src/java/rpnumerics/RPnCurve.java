@@ -329,6 +329,10 @@ public class RPnCurve extends MultiPolyLine {
 
         ArrayList segments = MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseRPnCurveToCoordsArray(this));
 
+        //RPnCurve curve = this;
+        //ArrayList segments = MultidAdapter.converseRPnCurveToRealSegments(curve);
+
+        
         RealSegment closestSegment = (RealSegment) segments.get(
                 findClosestSegment(targetPoint));
 

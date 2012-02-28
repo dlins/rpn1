@@ -79,7 +79,7 @@ public class HugoniotCurveView
 
 
         viewList_.clear();
-        Iterator geomListIterator = ((HugoniotCurveGeom) abstractGeom_).getHugoniotSegIterator();
+        Iterator geomListIterator = ((HugoniotCurveGeom) abstractGeom_).getRealSegIterator();
         while (geomListIterator.hasNext()) {
             HugoniotSegGeom geomObj = (HugoniotSegGeom) geomListIterator.next();
             try {

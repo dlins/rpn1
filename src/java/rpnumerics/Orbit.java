@@ -14,11 +14,8 @@ import java.awt.Color;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import rpn.RPnUIFrame;
 import rpn.component.MultidAdapter;
-import rpn.component.OrbitGeom;
-import wave.util.RealSegment;
 
 public class Orbit extends RPnCurve implements RpSolution {
     //
@@ -32,9 +29,6 @@ public class Orbit extends RPnCurve implements RpSolution {
     private OrbitPoint[] points_;
     private int increase_;
     private int familyIndex_;
-
-//    public double distancia = 0;      //** declarei isso (Leandro)
-
 
     //
     // Constructor

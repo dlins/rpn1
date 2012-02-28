@@ -12,15 +12,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import rpn.RPnUIFrame;
-import rpn.component.HugoniotCurveGeom;
 import rpn.component.HugoniotSegGeom;
 import rpn.component.util.ClassifierAgent;
-import rpn.component.util.ControlClick;
-import rpn.component.util.GeometryUtil;
 import rpn.component.util.VelocityAgent;
 import wave.multid.CoordsArray;
-import wave.multid.model.AbstractScene;
-import wave.multid.model.MultiGeometry;
 import wave.multid.view.ViewingAttr;
 import wave.util.RealSegment;
 import wave.util.RealVector;
@@ -34,6 +29,7 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
     public SegmentedCurve(List<? extends RealSegment> segmentsList) {
         super(coordsArrayFromRealSegments(segmentsList), new ViewingAttr(Color.red));
         segments_ = segmentsList;
+       
 
     }
 

@@ -46,7 +46,7 @@ public class BifurcationPlotAgent extends RpModelPlotAgent {
 
         System.out.println("Calling createGeometry from BifurcationPlotAgent");
 
-        BifurcationCurveCalc curveCalc = RPNUMERICS.createBifurcationCalc();
+        ContourCurveCalc curveCalc = RPNUMERICS.createBifurcationCalc();
         BifurcationCurveGeomFactory factory = new BifurcationCurveGeomFactory(curveCalc);
         BifurcationRefineAgent.instance().setEnabled(true);
 

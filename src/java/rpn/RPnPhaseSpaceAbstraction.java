@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
 import rpn.component.util.ClassifierAgent;
-import rpn.component.util.ControlClick;
 import rpn.component.util.VelocityAgent;
 import rpn.controller.ui.UIController;
 import wave.multid.model.MultiGeometry;
@@ -40,7 +39,6 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         super(id, domain);
         changeState(state);
         selectedGeom_ = null;
-//        groupArrayList_ = new ArrayList<ArrayList>();
     }
 
     //
@@ -72,12 +70,16 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
     }
 
     public void removeLastGeometry() {
-        if (super.geomList_.size() >= 2) {
-            MultiGeometry toBeRemoved = (MultiGeometry) super.geomList_.get(geomList_.size() - 2);
-            remove(toBeRemoved);
-            update();
-        }
 
+        MultiGeometry toBeRemoved = (MultiGeometry) super.geomList_.get(geomList_.size() - 1);
+        remove(toBeRemoved);
+        RPnCurvesListFrame.removeLastEntry();
+        update();
+
+    }
+
+    public RpGeometry getLastGeometry() {
+        return (RpGeometry) super.geomList_.get(geomList_.size() - 1);
     }
 
     @Override
@@ -86,17 +88,11 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         if (geom == null) {
             return;
         }
-//        if (geom instanceof HugoniotCurveGeom) {
-//            ArrayList activeList = new ArrayList();
-//            groupArrayList_.add(activeList);
-//            super.geomList_ = activeList;
-//
-//        }
+
         super.join(geom);
 
-
-        RpGeometry geometry= (RpGeometry)geom;
-
+        RpGeometry geometry = (RpGeometry) geom;
+//
         RPnCurvesListFrame.addGeometry(geometry);
     }
 
@@ -105,16 +101,6 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
 
         super.remove(geom);
 
-
-
-//        for (int i = 0; i < groupArrayList_.size(); i++) {
-//
-//            ArrayList list = groupArrayList_.get(i);
-//
-//            if (list.size() == 0) {
-//                groupArrayList_.remove(i);
-//            }
-//        }
     }
 
     public void clearGeometrySelection() {
@@ -131,12 +117,6 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
                 if (geometry instanceof SegmentedCurveGeom) {
 
                     SegmentedCurveGeom segGeom = (SegmentedCurveGeom) geometry;
-                    segGeom.highLight();
-
-                    //****  OLHAR ISSO
-                    //((HugoniotCurve) (segGeom.geomFactory().geomSource())).segments().get(index);
-                    //((HugoniotCurve) (segGeom.geomFactory().geomSource())).viewingAttr().getColor();
-                    //****************
 
                 } else {
 
@@ -153,15 +133,13 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         UIController.instance().panelsUpdate();
     }
 
-
     //******************************************************* Leandro, em 28/Set
-    
     //*** ClassifierAgent.hideClassifiers - chamado aqui dentro - deverá ser revisto para permitir a simples ocultação dos classificadores
     //*** Por enquanto, é feita a remoção, através de ClassifierAgent.clearClassifiers
     public void ocultaStringsCla(int geometryIndex) {
 
         for (int i = 0; i < ClassifierAgent.indCurvaCla.size(); i++) {
-            if ((Integer)ClassifierAgent.indCurvaCla.get(i) == geometryIndex) {
+            if ((Integer) ClassifierAgent.indCurvaCla.get(i) == geometryIndex) {
                 ClassifierAgent.paraOcultarIndCla.add(i);
             }
         }
@@ -180,7 +158,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
     public void mostraStringsCla(int geometryIndex) {
 
         for (int i = 0; i < ClassifierAgent.indCurvaCla.size(); i++) {
-            if ((Integer)ClassifierAgent.indCurvaCla.get(i) == geometryIndex) {
+            if ((Integer) ClassifierAgent.indCurvaCla.get(i) == geometryIndex) {
                 ClassifierAgent.paraOcultarIndCla.add(i);
             }
         }
@@ -193,13 +171,12 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
 
     }
 
-
     //*** ClassifierAgent.hideVelocities - chamado aqui dentro - deverá ser revisto para permitir a simples ocultação das strings de velocidade
     //*** Por enquanto, é feita a remoção, através de ClassifierAgent.clearVelocities
     public void ocultaStringsVel(int geometryIndex) {
 
         for (int i = 0; i < VelocityAgent.indCurvaVel.size(); i++) {
-            if ((Integer)VelocityAgent.indCurvaVel.get(i) == geometryIndex) {
+            if ((Integer) VelocityAgent.indCurvaVel.get(i) == geometryIndex) {
                 VelocityAgent.paraOcultarIndVel.add(i);
             }
         }
@@ -213,13 +190,12 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
 
     }
 
-
     //*** Este método será usado para recuperar a visao das strings de velocidade
     //*** NÃO USE AINDA !!!
     public void mostraStringsVel(int geometryIndex) {
 
         for (int i = 0; i < VelocityAgent.indCurvaVel.size(); i++) {
-            if ((Integer)VelocityAgent.indCurvaVel.get(i) == geometryIndex) {
+            if ((Integer) VelocityAgent.indCurvaVel.get(i) == geometryIndex) {
                 VelocityAgent.paraOcultarIndVel.add(i);
             }
         }
@@ -233,7 +209,6 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
     }
     //**************************************************************************
 
-    
     public void hideGeometry(int index) {
 
         for (int i = 0; i < geomList_.size(); i++) {

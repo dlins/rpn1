@@ -7,13 +7,13 @@
 package rpn.component;
 
 import rpnumerics.BifurcationCurve;
-import rpnumerics.BifurcationCurveCalc;
+import rpnumerics.ContourCurveCalc;
 import rpnumerics.CoincidenceCurve;
 import rpnumerics.HugoniotSegment;
 
 public class CoincidenceCurveGeomFactory extends BifurcationCurveGeomFactory{
 
-    public CoincidenceCurveGeomFactory(BifurcationCurveCalc calc) {
+    public CoincidenceCurveGeomFactory(ContourCurveCalc calc) {
         super(calc);
     }
 
@@ -26,9 +26,9 @@ public class CoincidenceCurveGeomFactory extends BifurcationCurveGeomFactory{
 
         // assuming a container with HugoniotSegment elements
         int resultSize = curve.segments().size();
-        BifurcationSegGeom[] hugoniotArray = new BifurcationSegGeom[resultSize];
+        RealSegGeom[] hugoniotArray = new RealSegGeom[resultSize];
         for (int i = 0; i < resultSize; i++) {
-            hugoniotArray[i] = new BifurcationSegGeom((HugoniotSegment) curve.segments().get(i));
+            hugoniotArray[i] = new RealSegGeom((HugoniotSegment) curve.segments().get(i));
 
         }
         return new CoincidenceCurveGeom(hugoniotArray, this);

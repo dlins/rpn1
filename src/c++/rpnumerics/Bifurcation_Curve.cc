@@ -484,7 +484,7 @@ void Bifurcation_Curve::fill_values_on_grid(const RealVector &pmin, const RealVe
                                  Matrix<RealVector> &grid,
                                  Matrix<RealVector> &ffv, Matrix<RealVector> &aav, 
                                  Matrix< vector<eigenpair> > &e, Matrix< vector<bool> > &eig_is_real,
-                                 Boundary *b, Matrix<bool> &is_inside){
+                                 const Boundary *b, Matrix<bool> &is_inside){
 
     // Dimension of space
     int dim = pmin.size();
@@ -549,7 +549,7 @@ void Bifurcation_Curve::fill_values_on_grid(const RealVector &pmin, const RealVe
                                  Matrix<RealVector> &grid,
                                  Matrix<RealVector> &ffv, Matrix<RealVector> &aav, 
                                  Matrix< vector<double> > &e, Matrix< vector<bool> > &eig_is_real,
-                                 Boundary *b, Matrix<bool> &is_inside){
+                                 const Boundary *b, Matrix<bool> &is_inside){
 
     Matrix< std::vector<eigenpair> > temp(grid.rows(), grid.cols());
     fill_values_on_grid(pmin, pmax, ff, aa, number_of_grid_pnts, grid, ffv, aav, temp, eig_is_real, b, is_inside);

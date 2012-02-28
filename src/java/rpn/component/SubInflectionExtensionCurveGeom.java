@@ -16,7 +16,7 @@ public class SubInflectionExtensionCurveGeom extends BifurcationCurveGeom {//imp
     //
     public static Color COLOR =new Color(0, 153, 153);
 
-    public SubInflectionExtensionCurveGeom(BifurcationSegGeom[] segArray, SubInflectionExtensionCurveGeomFactory factory) {
+    public SubInflectionExtensionCurveGeom(RealSegGeom[] segArray, SubInflectionExtensionCurveGeomFactory factory) {
 
         super(segArray, factory);
 

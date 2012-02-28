@@ -43,34 +43,7 @@ public class BIFURCATION_CONFIG extends UI_ACTION_SELECTED {
 
     }
 
-    @Override
-    public ArrayList<RpModelActionAgent> getAgents() {
-
-        ArrayList<RpModelActionAgent> returnedArray = new ArrayList<RpModelActionAgent>();
-
-        Set<String> stringSet = RPNUMERICS.getConfigurationNames();
-
-
-        if (stringSet.contains("extensioncurve")) {
-
-            returnedArray.add(CoincidenceExtensionCurvePlotAgent.instance());
-            returnedArray.add(SubInflectionExtensionCurveAgent.instance());
-            returnedArray.add(BoundaryExtensionCurveAgent.instance());
-        }
-
-
-        if (stringSet.contains("bifurcationcurve")) {
-
-            returnedArray.add(CoincidencePlotAgent.instance());
-            returnedArray.add(SubInflectionPlotAgent.instance());
-            returnedArray.add(BuckleyLeverettiInflectionAgent.instance());
-            returnedArray.add(DoubleContactAgent.instance());
-
-        }
-
-
-        return returnedArray;
-    }
+   
 
     @Override
     public void userInputComplete(rpn.controller.ui.UIController ui,

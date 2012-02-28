@@ -6,10 +6,12 @@
 package rpn.controller;
 
 import rpn.component.RpGeomFactory;
-import rpn.component.HugoniotCurveGeomFactory;
 import rpn.usecase.*;
 import java.beans.PropertyChangeEvent;
-import wave.multid.model.MultiGeometry;
+import rpn.component.HugoniotCurveGeomFactory;
+import rpnumerics.HugoniotCurveCalcND;
+import rpnumerics.HugoniotParams;
+import wave.util.RealVector;
 
 public class HugoniotController extends RpCalcController {
     //
@@ -17,7 +19,6 @@ public class HugoniotController extends RpCalcController {
     //
 
     private HugoniotCurveGeomFactory geomFactory_;
-
     //
     // Constructors
     //
@@ -27,18 +28,19 @@ public class HugoniotController extends RpCalcController {
     //
     // Methods
     //
+
     @Override
     protected void register() {
+        DragPlotAgent.instance().addPropertyChangeListener(this);
         ChangeFluxParamsAgent.instance().addPropertyChangeListener(this);
-        ChangeDirectionAgent.instance().addPropertyChangeListener(this);
         BifurcationRefineAgent.instance().addPropertyChangeListener(this);      // ****
 
     }
 
     @Override
     protected void unregister() {
+        DragPlotAgent.instance().removePropertyChangeListener(this);
         ChangeFluxParamsAgent.instance().removePropertyChangeListener(this);
-        ChangeDirectionAgent.instance().removePropertyChangeListener(this);
         BifurcationRefineAgent.instance().removePropertyChangeListener(this);
 
     }
@@ -57,22 +59,14 @@ public class HugoniotController extends RpCalcController {
 
     @Override
     public void propertyChange(PropertyChangeEvent change) {
-        // this is to avoid void notifications of enabled/disbled
-        if (change.getPropertyName().compareTo("enabled") != 0) {
 
-//            if (change.getSource() instanceof ChangeOrbitDirectionAgent) {
-            // updates the HugoniotFunction xzero
-//TESTE
+        if (change.getSource() instanceof DragPlotAgent) {
 
 
-//            ((HugoniotCurveCalc) geomFactory_.rpCalc()).uMinusChangeNotify((PhasePoint) change.getNewValue());
-//            }
-
-//            if (change.getSource() instanceof ChangeHugoniotMethodAgent) {
-//                // updates the Hugoniot calc
-//                RPNUMERICS.changeHugoniotMethod((String)change.getNewValue());
-//            }
-            super.propertyChange(change);
+            ((HugoniotParams) ((HugoniotCurveCalcND) geomFactory_.rpCalc()).getParams()).setXZero((RealVector) change.getNewValue());
+            geomFactory_.updateGeom();
+            return;
         }
+        super.propertyChange(change);
     }
 }

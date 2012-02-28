@@ -5,43 +5,61 @@
  */
 package rpn.controller;
 
-import rpn.component.RpGeomFactory;
 import java.beans.PropertyChangeEvent;
 import java.util.Iterator;
 import rpn.RPnPhaseSpaceFrame;
 import rpn.RPnUIFrame;
+import rpn.component.OrbitGeomFactory;
 import rpn.component.OrbitGeomView;
+import rpn.component.RpGeomFactory;
 import rpn.parser.RPnDataModule;
 import rpn.usecase.ChangeFluxParamsAgent;
 import rpn.usecase.ChangeOrbitLevel;
+import rpn.usecase.DragPlotAgent;
+import rpnumerics.OrbitCalc;
 import wave.multid.view.GeomObjView;
+import wave.util.RealVector;
 
-public class OrbitController implements RpController {
+public class OrbitController extends RpCalcController {
     //
     // Members
     //
 
-    RpGeomFactory factory_;
+    OrbitGeomFactory factory_;
 
+    @Override
     public void install(RpGeomFactory geom) {
-        factory_ = geom;
-        ChangeOrbitLevel.instance().addPropertyChangeListener(this);
-        ChangeFluxParamsAgent.instance().addPropertyChangeListener(this);
+        factory_ = (OrbitGeomFactory) geom;
+        super.install(geom);
 
     }
 
+    @Override
     public void uninstall(RpGeomFactory geom) {
+        super.uninstall(geom);
+
+    }
+
+    @Override
+    protected void register() {
+        DragPlotAgent.instance().addPropertyChangeListener(this);
+        ChangeFluxParamsAgent.instance().addPropertyChangeListener(this);
+        ChangeOrbitLevel.instance().addPropertyChangeListener(this);
+
+
+    }
+
+    @Override
+    protected void unregister() {
+        DragPlotAgent.instance().removePropertyChangeListener(this);
         ChangeFluxParamsAgent.instance().removePropertyChangeListener(this);
         ChangeOrbitLevel.instance().removePropertyChangeListener(this);
-        factory_ = null;
-
     }
 
+    @Override
     public void propertyChange(PropertyChangeEvent evt) {
 
-        if (evt.getPropertyName().equals("level")) {//Visual update only
-
-
+        if (evt.getSource() instanceof ChangeOrbitLevel) {//Visual update only
             RPnPhaseSpaceFrame[] frames = RPnUIFrame.getPhaseSpaceFrames();
 
             for (int i = 0; i < frames.length; i++) {
@@ -50,21 +68,26 @@ public class OrbitController implements RpController {
 
                 while (it.hasNext()) {
 
-                    GeomObjView geometryView = (GeomObjView)it.next();
+                    GeomObjView geometryView = (GeomObjView) it.next();
 
-                    if ( geometryView instanceof OrbitGeomView) {
-                            geometryView.update();
-                      }
+                    if (geometryView instanceof OrbitGeomView) {
+                        geometryView.update();
+                    }
 
                 }
                 RPnDataModule.PHASESPACE.update();
             }
-
-        } else {
-            System.out.println("Atualizando geometria");
-            factory_.updateGeom();
+            return;
         }
 
+
+        if (evt.getSource() instanceof DragPlotAgent) {
+            ((OrbitCalc) factory_.rpCalc()).setStart((RealVector) evt.getNewValue());
+            factory_.updateGeom();
+            return;
+        }
+
+        super.propertyChange(evt);
 
 
     }

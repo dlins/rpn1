@@ -8,20 +8,18 @@ package rpn.component;
 import java.util.ArrayList;
 import java.util.List;
 import rpn.RPnDesktopPlotter;
+import rpn.component.util.GeometryGraph;
 import rpn.component.util.GeometryGraphND;
-import rpn.component.util.GeometryUtil;
 import rpn.controller.RpCalcController;
 import rpn.controller.RpController;
 
 import rpnumerics.Area;
-import rpnumerics.HugoniotSegment;
 import rpnumerics.RPnCurve;
 
 import rpnumerics.RpCalculation;
 import rpnumerics.RpException;
 import rpnumerics.RpSolution;
 import rpnumerics.SegmentedCurve;
-
 
 public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
     //
@@ -73,7 +71,6 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
         setUI(createUI());
         getUI().install(this);
     }
-
 
 //    public static String createMatlabColorTable() {
 //
@@ -129,7 +126,6 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
 //
 //        return buffer.toString();
 //    }
-
     //
     // Accessors/Mutators
     //
@@ -182,14 +178,13 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
 
                 List segRem = new ArrayList();
 
-                System.out.println("indContido : " +GeometryGraphND.indContido.size());
 
                 for (int i = 0; i < GeometryGraphND.indContido.size(); i++) {
                     int ind = Integer.parseInt((GeometryGraphND.indContido.get(i)).toString());
-                    segRem.add(((SegmentedCurve)geomSource_).segments().get(ind));
+                    segRem.add(((SegmentedCurve) geomSource_).segments().get(ind));
                 }
 
-                ((SegmentedCurve)geomSource_).segments().removeAll(segRem);
+                ((SegmentedCurve) geomSource_).segments().removeAll(segRem);
                 GeometryGraphND.indContido.clear();
 
                 for (int i = 0; i < GeometryGraphND.targetPoint.getSize(); i++) {        // Pode ser útil na hora de fazer inclusao dos novos segmentos (para nao serem eliminados)
@@ -199,14 +194,14 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
 
                 SegmentedCurve newCurve = (SegmentedCurve) calc_.recalc(area);
 
-                ((SegmentedCurve)geomSource_).segments().addAll(newCurve.segments());
+                ((SegmentedCurve) geomSource_).segments().addAll(newCurve.segments());
 
                 geom_ = createGeomFromSource();
                 isGeomOutOfDate_ = true;
+
             }
 
-        }
-        catch (RpException rex) {
+        } catch (RpException rex) {
             RPnDesktopPlotter.showCalcExceptionDialog(rex);
         }
     }

@@ -31,8 +31,6 @@ StoneFluxFunction::StoneFluxFunction(const StoneParams & params, const StonePerm
     RealVector tempParamsVector(params.params().size()+permParams.params().size());
 
 
-    cout<<"Valor dos parametros de perm: "<<permParams.params()<<endl;
-
     //FluxParams
     for (int i = 0; i < params.params().size(); i++) {
         tempParamsVector.component(i)=params.params().component(i);
@@ -45,14 +43,9 @@ StoneFluxFunction::StoneFluxFunction(const StoneParams & params, const StonePerm
         tempParamsVector.component(i+params.params().size())=permParams.params().component(i);
     }
 
-
     FluxParams tempParams(tempParamsVector);
 
-
-    cout<<"Valor dos parametros de fluxo no construtor: "<<tempParams.params()<<endl;
-
     fluxParams(tempParams);
-
 
 }
 

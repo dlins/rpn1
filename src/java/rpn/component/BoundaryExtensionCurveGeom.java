@@ -18,7 +18,7 @@ public class BoundaryExtensionCurveGeom extends BifurcationCurveGeom {//implemen
 
   public static Color COLOR = new Color(0, 153, 153);
 
-    public BoundaryExtensionCurveGeom(BifurcationSegGeom[] segArray, BifurcationCurveGeomFactory factory) {
+    public BoundaryExtensionCurveGeom(RealSegGeom[] segArray, BifurcationCurveGeomFactory factory) {
         super(segArray, factory);
     }
 

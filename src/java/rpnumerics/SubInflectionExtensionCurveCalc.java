@@ -9,7 +9,7 @@ package rpnumerics;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class SubInflectionExtensionCurveCalc extends BifurcationCurveCalc {
+public class SubInflectionExtensionCurveCalc extends ContourCurveCalc {
 
     //
     // Constructors/Initializers
@@ -21,7 +21,7 @@ public class SubInflectionExtensionCurveCalc extends BifurcationCurveCalc {
     int characteristicDomain_;
 
     
-    public SubInflectionExtensionCurveCalc(BifurcationParams params, int leftFamily, int rightFamily,int characteristicDomain) {
+    public SubInflectionExtensionCurveCalc(ContourParams params, int leftFamily, int rightFamily,int characteristicDomain) {
         super(params);
         this.curveFamily_ = leftFamily;
         this.domainFamily_ = rightFamily;

@@ -9,7 +9,7 @@ package rpnumerics;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class CoincidenceExtensionCurveCalc extends BifurcationCurveCalc {
+public class CoincidenceExtensionCurveCalc extends ContourCurveCalc {
 
     //
     // Constructors/Initializers
@@ -21,7 +21,7 @@ public class CoincidenceExtensionCurveCalc extends BifurcationCurveCalc {
     int characteristicDomain_;
 
 
-    public CoincidenceExtensionCurveCalc(BifurcationParams params, int leftFamily, int rightFamily,int characteristicDomain) {
+    public CoincidenceExtensionCurveCalc(ContourParams params, int leftFamily, int rightFamily,int characteristicDomain) {
         super(params);
         this.curveFamily_ = leftFamily;
         this.domainFamily_ = rightFamily;

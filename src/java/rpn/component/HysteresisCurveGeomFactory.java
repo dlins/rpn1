@@ -35,9 +35,9 @@ public class HysteresisCurveGeomFactory extends BifurcationCurveGeomFactory {
 
         // assuming a container with HugoniotSegment elements
         int resultSize = curve.segments().size();
-        BifurcationSegGeom[] bifurcationSegArray = new BifurcationSegGeom[resultSize];
+        RealSegGeom[] bifurcationSegArray = new RealSegGeom[resultSize];
         for (int i = 0; i < resultSize; i++) {
-            bifurcationSegArray[i] = new BifurcationSegGeom((RealSegment) curve.segments().get(i),viewAtt_);
+            bifurcationSegArray[i] = new RealSegGeom((RealSegment) curve.segments().get(i),viewAtt_);
 
         }
         return new HysteresisCurveGeom(bifurcationSegArray, this);

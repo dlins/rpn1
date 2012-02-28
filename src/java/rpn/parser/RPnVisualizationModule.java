@@ -15,6 +15,7 @@ import java.util.List;
 import java.io.*;
 import java.util.Map.Entry;
 import java.util.Set;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import rpn.RPnConfig;
 import org.xml.sax.ContentHandler;
@@ -178,34 +179,27 @@ public class RPnVisualizationModule {
 
             Boolean iso = new Boolean(iso2equi);
 
-            // *** Leandro
-            try {
-                if (RPNUMERICS.physicsID().equals("Stone")) {
-                    String str = JOptionPane.showInputDialog(null, "Digite 0 para triangulo retangulo; 1 para triangulo equilatero", "Iso Map To Equi ?", JOptionPane.QUESTION_MESSAGE);
-                    GeometryGraphND.mapToEqui = Integer.parseInt(str);
-                    if (GeometryGraphND.mapToEqui == 0) {
-                        iso = false;
-                    }
-                }
-
-            } catch (Exception e) {
-            }
             //***
+            if (iso == false) GeometryGraphND.mapToEqui = 0;
+            if (iso == true)  GeometryGraphND.mapToEqui = 1;
             
             DESCRIPTORS.add(new RPnProjDescriptor(space, label, w, h, axisArray, iso));
 
         }
         Space auxSpace = new Space("AuxDomain", 2 * dimension);
-
+        
         for (RPnProjDescriptor descriptor : DESCRIPTORS) {
+            System.out.println("No loop dos DESCRIPTORS ...");
             createAuxDescriptor(descriptor, auxSpace, descriptor.isIso2equi());
-
+        
         }
+
 
 
     }
 
     public static void createAuxDescriptor(RPnProjDescriptor descriptor, Space space, boolean isIso2Equi) {
+        System.out.println("Entrou no createAuxDescriptor ...");
 
         int[] projIndices = descriptor.projMap().getCompIndexes();
 
@@ -214,7 +208,7 @@ public class RPnVisualizationModule {
 
         RPnProjDescriptor auxDescriptorLeft = new RPnProjDescriptor(space, "Left " + projIndices[0] + " " + projIndices[1], w, h, projIndices, isIso2Equi);
         AUXDESCRIPTORS.add(auxDescriptorLeft);
-
+        
         System.out.println("auxDescriptorLeft: " + auxDescriptorLeft.label());
 //
         int[] auxProj = new int[2];
@@ -223,6 +217,7 @@ public class RPnVisualizationModule {
 
         RPnProjDescriptor auxDescriptorRight = new RPnProjDescriptor(space, "Right " + auxProj[0] + " " + auxProj[1], w, h, auxProj, isIso2Equi);
         AUXDESCRIPTORS.add(auxDescriptorRight);
+        
         System.out.println("auxDescriptorRight: "+auxDescriptorRight.label());
 
     }

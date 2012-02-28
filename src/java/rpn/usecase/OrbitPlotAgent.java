@@ -3,21 +3,18 @@
  * Departamento de Dinamica dos Fluidos
  *
  */
-
 package rpn.usecase;
 
 import javax.swing.JToggleButton;
 import rpn.component.*;
-import rpnumerics.OrbitPoint;
 import wave.util.RealVector;
-import rpnumerics.RPNUMERICS;
 
 public class OrbitPlotAgent extends RpModelPlotAgent {
     //
     // Constants
     //
-    static public final String DESC_TEXT = "Orbit";
 
+    static public final String DESC_TEXT = "Orbit";
     //
     // Members
     //
@@ -27,7 +24,7 @@ public class OrbitPlotAgent extends RpModelPlotAgent {
     // Constructors/Initializers
     //
     protected OrbitPlotAgent() {
-        super(DESC_TEXT, rpn.RPnConfig.ORBIT_FWD,new JToggleButton());
+        super(DESC_TEXT, rpn.RPnConfig.ORBIT_FWD, new JToggleButton());
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {

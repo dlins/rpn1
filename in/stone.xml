@@ -3,7 +3,7 @@
 <rpnconfiguration>
     <PHYSICS name="Stone">
 
-<!--
+
        <PHYSICSCONFIG name="fluxfunction">
         <PHYSICSPARAM name="grw" position="0" value ="1.0" />
         <PHYSICSPARAM name="grg" position="1" value ="1.0" />
@@ -14,7 +14,7 @@
         <PHYSICSPARAM name="vel" position="6" value ="1.0" />
 
 
-    </PHYSICSCONFIG> -->
+    </PHYSICSCONFIG> 
 
 
     </PHYSICS>
@@ -33,6 +33,14 @@
     <CURVE name="inflectioncurve">
         <CURVEPARAM name="family" value="0"/>
         <CURVEPARAM name="resolution" value="128 128"/>
+    </CURVE>
+
+
+    <CURVE name="levelcurve">
+        <CURVEPARAM name="family" value="0"/>
+        <CURVEPARAM name="resolution" value="128 128"/>
+        <CURVEPARAM name="levels" value="0.1 0.2 0.5"/>
+
     </CURVE>
 
 

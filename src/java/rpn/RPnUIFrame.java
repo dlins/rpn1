@@ -1,4 +1,3 @@
-
 /*
  * Instituto de Matematica Pura e Aplicada - IMPA
  * Departamento de Dinamica dos Fluidos
@@ -46,7 +45,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JMenu helpMenu = new JMenu();
     private JCheckBox resultsOption = new JCheckBox("Save With Results");
     private JMenuItem shockMenuItem_ = new JMenuItem("Shock Configuration ...");
-    private JMenuItem configurationMenuItem_ = new JMenuItem(new ConfigAction());//"Configuration ...");
+    private JMenuItem configurationMenuItem_ = new JMenuItem(new ConfigAction());
     private JMenuItem jMenuFileExit = new JMenuItem();
     private JMenuItem matlabMenuFileExport_ = new JMenuItem("Export to Matlab ...");
     private JMenuItem jMenuHelpAbout = new JMenuItem();
@@ -153,6 +152,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 toolBar_.add(ShockCurvePlotAgent.instance().getContainer());
                 toolBar_.add(RarefactionOrbitPlotAgent.instance().getContainer());
                 toolBar_.add(IntegralCurvePlotAgent.instance().getContainer());
+                toolBar_.add(PointLevelCurvePlotAgent.instance().getContainer());
+                toolBar_.add(LevelCurvePlotAgent.instance().getContainer());
                 toolBar_.add(CompositePlotAgent.instance().getContainer());
 
 
@@ -399,8 +400,10 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         }
 
+        
     }
 
+    
 //     from here on just for 2D for now...
     void createSVGImage_actionPerformed(ActionEvent e) {
         JFileChooser chooser = new JFileChooser();
@@ -527,7 +530,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         int index = 0;
 
         RPnProjDescriptor projDescriptors[] = new RPnProjDescriptor[RPNUMERICS.domainDim() * 2];
-
+        
         int[] projIndex = new int[projDescriptors.length];
 
         for (int i = 0; i < projDescriptors.length; i++) {
@@ -951,7 +954,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         public Object getValue(String key) {
             if (key.equals(Action.NAME)) {
-                return "Configuration ...";
+                return "Change resolution ...";
             }
             return null;
         }
@@ -974,7 +977,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         }
 
         public void actionPerformed(ActionEvent e) {
-            System.out.println("Entrou em actionPerformed");
+     
             RPnConfigurationDialog extensionCurve = new RPnConfigurationDialog();
             extensionCurve.setVisible(true);
 

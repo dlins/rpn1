@@ -6,7 +6,7 @@
  */
 package rpnumerics;
 
-public class BoundaryExtensionCurveCalc extends BifurcationCurveCalc {
+public class BoundaryExtensionCurveCalc extends ContourCurveCalc {
 
     //
     // Constructors/Initializers
@@ -20,7 +20,7 @@ public class BoundaryExtensionCurveCalc extends BifurcationCurveCalc {
     int edgeResolution_;
 
 
-    public BoundaryExtensionCurveCalc(BifurcationParams params, int edgeResolution, int curveFamily, int domainFamily, int edge, int characteristicDomain) {
+    public BoundaryExtensionCurveCalc(ContourParams params, int edgeResolution, int curveFamily, int domainFamily, int edge, int characteristicDomain) {
         super(params);
         curveFamily_ = curveFamily;
         domainFamily_ = domainFamily;

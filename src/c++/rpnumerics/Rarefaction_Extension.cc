@@ -51,7 +51,7 @@ void Rarefaction_Extension::extension_curve(const FluxFunction *curve_flux, cons
 
     // Compute the extension curve for the rarefaction
     Extension_Curve extension_curve(pmin, pmax, number_of_grid_points,
-            domain_flux, domain_accum);
+            domain_flux, domain_accum,boundary);
     //                                            domain_reduced_flux, domain_reduced_accum);
 
     extension_curve.compute_extension_curve(characteristic_where, singular,

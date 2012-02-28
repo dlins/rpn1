@@ -26,11 +26,12 @@ import rpnumerics.RPNUMERICS;
 
 public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListener {
 
-    private GridBagLayout gridLayout = new GridBagLayout();
+
+    private ButtonGroup directionButtonGroup_;
     private JPanel directionPanel_;
     private JSpinner familySpinner_;
-    private JCheckBox forwardCheckBox_;
-    private JCheckBox backwardCheckBox_;
+    private JRadioButton forwardCheckBox_;
+    private JRadioButton backwardCheckBox_;
     private static Integer currentOrbitDirection_ = Orbit.FORWARD_DIR;
     private JTabbedPane curvesConfigurationPanel_;
 
@@ -40,6 +41,7 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
         ChangeDirectionAgent.instance().execute();
 
         curvesConfigurationPanel_ = new JTabbedPane();
+        directionButtonGroup_=new ButtonGroup();
         buildPanel();
 
     }
@@ -71,7 +73,7 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
 
         directionPanel_ = new JPanel(new GridLayout(1, 2));
 
-        forwardCheckBox_ = new JCheckBox();
+        forwardCheckBox_ = new JRadioButton("Forward");
         forwardCheckBox_.setSelected(true);//Default 
 
         forwardCheckBox_.setEnabled(false);
@@ -79,13 +81,18 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
         forwardCheckBox_.addActionListener(new OrbitDirectionListener());
         forwardCheckBox_.setText("Forward");
 
-        backwardCheckBox_ = new JCheckBox("Backward");
+        backwardCheckBox_ = new JRadioButton("Backward");
 
 
         backwardCheckBox_.setEnabled(false);
         backwardCheckBox_.addActionListener(new OrbitDirectionListener());
 
         backwardCheckBox_.setText("Backward");
+
+        directionButtonGroup_.add(forwardCheckBox_);
+        directionButtonGroup_.add(backwardCheckBox_);
+
+
 
         directionPanel_.add(forwardCheckBox_);
         directionPanel_.add(backwardCheckBox_);
@@ -152,16 +159,7 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
         }
     }
 
-    private class FamilyListener implements ChangeListener {
-
-        public void stateChanged(ChangeEvent e) {
-
-            Integer value = (Integer) familySpinner_.getValue();
-            RPNUMERICS.setFamily(value);
-
-
-        }
-    }
+ 
 
     private class ToggleButtonListener implements ActionListener {
 
@@ -184,26 +182,12 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
 
         public void actionPerformed(ActionEvent e) {
 
-            JCheckBox checkBox = (JCheckBox) e.getSource();
-
-
-            if (forwardCheckBox_.isSelected() == false && backwardCheckBox_.isSelected() == false) {
-                checkBox.setSelected(true);
-                return;
-            }
-
-
-            if (forwardCheckBox_.isSelected() == true && backwardCheckBox_.isSelected() == true) {
-                currentOrbitDirection_ = Orbit.BOTH_DIR;
-
-            } else {
-                if (forwardCheckBox_.isSelected()) {
+               if (forwardCheckBox_.isSelected()) {
                     currentOrbitDirection_ = Orbit.FORWARD_DIR;
                 } else {
                     currentOrbitDirection_ = Orbit.BACKWARD_DIR;
                 }
-
-            }
+            
             ChangeDirectionAgent.instance().execute();
         }
     }

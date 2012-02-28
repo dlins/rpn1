@@ -6,7 +6,7 @@ void Boundary_ExtensionStone::extension_curve(const FluxFunction *curve_flux, co
                                               int curve_family,
                                               const RealVector &pmin, const RealVector &pmax, int *number_of_grid_points,         // For the domain.
                                               int domain_family,
-                                              const FluxFunction *domain_ff, const AccumulationFunction *domain_aa,
+                                              const FluxFunction *domain_ff, const AccumulationFunction *domain_aa, const Boundary * boundary,
                                               // const FluxFunction *domain_reduced_ff, const AccumulationFunction *domain_reduced_aa,
                                               int characteristic_where, int singular,
                                               std::vector<RealVector> &curve_segments,
@@ -60,7 +60,7 @@ void Boundary_ExtensionStone::extension_curve(const FluxFunction *curve_flux, co
 
     // Compute the extension curve for the rarefaction
     Extension_Curve extension_curve(pmin, pmax, number_of_grid_points,
-                                    domain_ff, domain_aa);
+                                    domain_ff, domain_aa,boundary);
 
     extension_curve.compute_extension_curve(characteristic_where, singular,
                                             be_segments, curve_family,
