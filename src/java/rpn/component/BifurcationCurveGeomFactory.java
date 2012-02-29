@@ -24,6 +24,9 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
         leftGeom_ = createLeftGeom();
         rightGeom_ = createRightGeom();
 
+        ((BifurcationCurveGeom) leftGeom_).setOtherSide(rightGeom_);
+        ((BifurcationCurveGeom) rightGeom_).setOtherSide(leftGeom_);
+
 
     }
 
@@ -31,6 +34,9 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
         super(calc, curve);
         leftGeom_ = createLeftGeom();
         rightGeom_ = createRightGeom();
+
+        ((BifurcationCurveGeom) leftGeom_).setOtherSide(rightGeom_);
+        ((BifurcationCurveGeom) rightGeom_).setOtherSide(leftGeom_);
     }
 
     private RpGeometry createLeftGeom() {
