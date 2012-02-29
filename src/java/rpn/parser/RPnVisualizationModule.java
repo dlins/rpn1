@@ -186,7 +186,6 @@ public class RPnVisualizationModule {
         Space auxSpace = new Space("AuxDomain", dimension);
         
         for (RPnProjDescriptor descriptor : DESCRIPTORS) {
-            System.out.println("No loop dos DESCRIPTORS ...");
             createAuxDescriptor(descriptor, auxSpace, descriptor.isIso2equi());
         
         }
@@ -196,7 +195,6 @@ public class RPnVisualizationModule {
     }
 
     public static void createAuxDescriptor(RPnProjDescriptor descriptor, Space space, boolean isIso2Equi) {
-        System.out.println("Entrou no createAuxDescriptor ...");
 
         int[] projIndices = descriptor.projMap().getCompIndexes();
 

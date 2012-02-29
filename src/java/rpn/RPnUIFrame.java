@@ -276,7 +276,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 auxFrames_[i+1] = new RPnPhaseSpaceFrame(rightScene, commandMenu_);
 
                 auxFrames_[i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i)).label());
-                auxFrames_[i+1].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i)).label());
+                auxFrames_[i+1].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i+1)).label());
 
                 UIController.instance().install(auxFrames_[i].phaseSpacePanel());
                 UIController.instance().install(auxFrames_[i+1].phaseSpacePanel());

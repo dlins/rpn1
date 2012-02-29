@@ -50,9 +50,8 @@ public class DragPlotAgent extends RpModelConfigChangeAgent {
 
         RPnDataModule.PHASESPACE.update();
 
-        for (RPnPhaseSpaceFrame frame : RPnUIFrame.getPhaseSpaceFrames()) {
-            frame.phaseSpacePanel().repaint();
-        }
+        UIController.instance().panelsUpdate();
+
 
     }
 

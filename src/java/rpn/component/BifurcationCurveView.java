@@ -66,7 +66,6 @@ public class BifurcationCurveView implements GeomObjView {
 
     //Original update method
     public void update() {
-
         viewList_.clear();
         Iterator geomListIterator = ((BifurcationCurveGeom) abstractGeom_).getBifurcationSegmentsIterator();
         while (geomListIterator.hasNext()) {

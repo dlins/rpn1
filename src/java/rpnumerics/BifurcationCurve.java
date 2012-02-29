@@ -34,8 +34,6 @@ public class BifurcationCurve extends SegmentedCurve {
         leftSegments_ = leftList;
         rightSegments_ = rightList;
 
-        System.out.println("Segmento a direita: "+ rightSegments_.get(0));
-         System.out.println("Segmento a esquerda: " + leftSegments_.get(0));
     }
 
 
