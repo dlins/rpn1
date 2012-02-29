@@ -280,9 +280,17 @@ void Rarefaction::compute_eigenpair(int n, const RealVector &in, double &lambda,
 //    } 
 
     std::vector<eigenpair> e;
+    cout <<" valor de n: "<<n<<endl;
+    cout << " valor de in: " << in << endl;
+
     compute_all_eigenpairs(n, in, e);
 
+    cout << " depois de compute all"<<endl;
+
     lambda = e[Rarefaction::family].r;
+
+    cout << " valor de lambda: " << lambda << endl;
+
 
     eigenvector.resize(e[Rarefaction::family].vrr.size());
     for (int i = 0; i < e[Rarefaction::family].vrr.size(); i++) eigenvector.component(i) = e[Rarefaction::family].vrr[i];

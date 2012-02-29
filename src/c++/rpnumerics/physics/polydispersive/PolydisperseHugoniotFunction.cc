@@ -3,14 +3,14 @@
  *
  * RPn Project
  *
- * @(#) PolydispersiveHugoniotFunction.cc
+ * @(#) PolydisperseHugoniotFunction.cc
  */
 
 /*
  * ---------------------------------------------------------------
  * Includes:
  */
-#include "PolydispersiveHugoniotFunction.h"
+#include "PolydisperseHugoniotFunction.h"
 
 /*
  * ---------------------------------------------------------------
@@ -19,7 +19,7 @@
 
 
 
-PolydispersiveHugoniotFunction::PolydispersiveHugoniotFunction(const RealVector& U, const Polydispersive & stoneFluxFunction) : HugoniotFunctionClass(stoneFluxFunction) {
+PolydisperseHugoniotFunction::PolydisperseHugoniotFunction(const RealVector& U, const Polydisperse & stoneFluxFunction) : HugoniotFunctionClass(stoneFluxFunction) {
 
     int n = U.size();
 
@@ -51,10 +51,10 @@ PolydispersiveHugoniotFunction::PolydispersiveHugoniotFunction(const RealVector&
     else Uref_is_elliptic = true;
 }
 
-PolydispersiveHugoniotFunction::~PolydispersiveHugoniotFunction() {
+PolydisperseHugoniotFunction::~PolydisperseHugoniotFunction() {
 }
 
-void PolydispersiveHugoniotFunction::setReferenceVector(const RealVector & refVec) {
+void PolydisperseHugoniotFunction::setReferenceVector(const RealVector & refVec) {
     Uref = refVec;
     const FluxFunction & fluxFunction = getFluxFunction();
     // TODO: The flux object must be initialized somehow (be it created here or outside, etc.)
@@ -84,7 +84,7 @@ void PolydispersiveHugoniotFunction::setReferenceVector(const RealVector & refVe
     HugoniotFunctionClass::setReferenceVector(refVec);
 }
 
-double PolydispersiveHugoniotFunction::HugoniotFunction(const RealVector & u) {
+double PolydisperseHugoniotFunction::HugoniotFunction(const RealVector & u) {
     //        Uref = getReferenceVector();
     const FluxFunction & fluxFunction = getFluxFunction();
     double sw = u(0);

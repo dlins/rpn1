@@ -3,21 +3,21 @@
  *
  * RPn Project
  *
- * @(#) PolydispersivePhysics.h
+ * @(#) PolydispersePhysics.h
  */
 
-#ifndef _PolydispersivePhysics_H
-#define _PolydispersivePhysics_H
+#ifndef _PolydispersePhysics_H
+#define _PolydispersePhysics_H
 
 /*
  * ---------------------------------------------------------------
  * Includes:
  */
-#include "Polydispersive.h"
+#include "Polydisperse.h"
 #include "SubPhysics.h"
 #include "RectBoundary.h"
 #include "StoneAccumulation.h"
-#include "PolydispersiveHugoniotFunction.h"
+#include "PolydisperseHugoniotFunction.h"
 #include "Quad2AccumulationFunction.h"
 
 
@@ -29,7 +29,7 @@
 
 //  SubPhysics(const FluxFunction &,const AccumulationFunction &,const Boundary &,const Space &,const char *,int );
 
-class PolydispersivePhysics:public SubPhysics {
+class PolydispersePhysics:public SubPhysics {
 
 private:
  Boundary * defaultBoundary() const;
@@ -37,12 +37,12 @@ private:
 
 public:
 
-//    PolydispersivePhysics(const Polydispersive &, const Boundary &, const Space &);
+//    PolydispersePhysics(const Polydisperse &, const Boundary &, const Space &);
 
-      PolydispersivePhysics();
+      PolydispersePhysics();
 
-    PolydispersivePhysics(const PolydispersivePhysics &);
-    virtual ~PolydispersivePhysics();
+    PolydispersePhysics(const PolydispersePhysics &);
+    virtual ~PolydispersePhysics();
 
     SubPhysics * clone()const;
 
@@ -50,7 +50,7 @@ public:
 };
 
 
-inline Boundary * PolydispersivePhysics::defaultBoundary() const{
+inline Boundary * PolydispersePhysics::defaultBoundary() const{
 
     RealVector min(2);
 
@@ -65,4 +65,4 @@ inline Boundary * PolydispersivePhysics::defaultBoundary() const{
     return new RectBoundary(min, max);
 }
 
-#endif //! _PolydispersivePhysics_H
+#endif //! _PolydispersePhysics_H

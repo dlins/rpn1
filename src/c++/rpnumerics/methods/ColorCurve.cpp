@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "ColorCurve.h"
 
 // Initialize the color table:
@@ -86,6 +88,9 @@ void ColorCurve::fill_with_jet(const RpFunction & flux_object, int n, double *in
 int ColorCurve::interpolate(int noe, const RealVector &p, const RealVector &q, std::vector<RealVector> &r) {
     r.clear();
     int dim = p.size() - 2 * noe - 1;
+
+    cout <<" noe : "<<noe<<endl;
+    cout << " p : " << p << endl;
 
     double fq[4], fp[4]; // f(p), f(q), the function whose zero is to be found
 
