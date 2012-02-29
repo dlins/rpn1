@@ -28,7 +28,7 @@ public class GeometryUtil {
     static public RPnCurve closestCurve_ ;      //a curva mais proxima
     static public int closestSeg ;              //indice do segmento mais proximo
     static public List listResolution = new ArrayList();
-
+    
     
     public static RPnCurve findClosestCurve(RealVector targetPoint) {
 

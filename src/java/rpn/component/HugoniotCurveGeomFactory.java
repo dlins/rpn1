@@ -84,7 +84,7 @@ public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
         buffer.append("<COMMAND name=\""+commandName+"\""+ " inputpoint=\"" + hugoniotCurve.getXZero().toString() + "\" " + calc.getParams().toString()+  ">\n");
 
         buffer.append(((HugoniotCurve) geomSource()).toXML());
-
+        
         buffer.append("</COMMAND>\n");
 
         return buffer.toString();
