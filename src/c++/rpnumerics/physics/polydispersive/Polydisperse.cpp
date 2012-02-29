@@ -1,16 +1,32 @@
 #include "Polydisperse.h"
 
 Polydisperse::Polydisperse(const Polydisperse_Params &param) : FluxFunction(param){
-//    // Maximum packing concentration
-//    phimax = param.component(0);
-//
-//    // Terminal (settling) velocities
-//    V1inf = param.component(1);
-//    V2inf = param.component(2);
-//
-//    // Power velocities
-//    n1 = param.component(3);
-//    n2 = param.component(4);
+/** The DEFAULT parameters must setted differently for each model
+ *
+ *  For the MLB model, the initial data is
+ *  // Maximum packing concentration, component(0)
+ *     phimax = 1.0
+ *  // Particle densities, component(1) and component(2)
+ *     rho1 = 2.0
+ *     rho2 = 3.0
+ *  // The square diameters, component(3) and component(4)
+ *     d1^2 = 1.0
+ *     d2^2 = 0.25
+ *  // Velocity exponents: there were used equally, component(5) and component(6)
+ *     n1 = n2 = 5.0
+ * 
+ *  For the Bassoon restriction, the initial data is
+ *  // Maximum packing concentration, component(0)
+ *     phimax = 1.0
+ *  // There is no particle densities, component(1) and component(2)
+ *     rho1 = rho2 = 0.0
+ *  // Terminal settling velocities, component(3) and component(4)
+ *     -V1inf = - 1.0
+ *     -Vinf2 = - 0.5
+ *  // Velocity exponents, component(5) and component(6)
+ *     n1 = 3.0
+ *     n2 = 4.0
+**/
 }
 
 Polydisperse * Polydisperse::clone() const {
@@ -18,16 +34,6 @@ Polydisperse * Polydisperse::clone() const {
 }
 
 Polydisperse::Polydisperse(const Polydisperse & copy): FluxFunction(copy.fluxParams()){
-//      // Maximum packing concentration
-//    phimax = copy.fluxParams().params().component(0);
-//
-//    // Terminal (settling) velocities
-//    V1inf = copy.fluxParams().params().component(1);
-//    V2inf = copy.fluxParams().params().component(2);
-//
-//    // Power velocities
-//    n1 = copy.fluxParams().params().component(3);
-//    n2 = copy.fluxParams().params().component(4);
 }
 
 Polydisperse::~Polydisperse(){
@@ -60,25 +66,33 @@ int Polydisperse::Hindered_jet(double phi1, double phi2, JetMatrix &Vj, int degr
     double n2 = fluxParams().component(6);
 
     if (degree >= 0){
-        double V1 = ( (phi < phimax) ? pow(1.0 - phi, n1 - 2.0) : 0.0 );
-        double V2 = ( (phi < phimax) ? pow(1.0 - phi, n2 - 2.0) : 0.0 );
+        double V1 = ( (phi <= phimax) ? pow(1.0 - phi, n1 - 2.0) : 0.0 );
+        double V2 = ( (phi <= phimax) ? pow(1.0 - phi, n2 - 2.0) : 0.0 );
 
         Vj(0, V1);
         Vj(1, V2);
 
         if (degree >= 1){
-            double dV1_dphi = ( (phi < phimax) ? - (n1 - 2.0) * pow(1.0 - phi, n1 - 3.0) : 0.0 );
-            double dV2_dphi = ( (phi < phimax) ? - (n2 - 2.0) * pow(1.0 - phi, n2 - 3.0) : 0.0 );
+            double dV1_dphi = ( (phi <= phimax) ? - (n1 - 2.0) * pow(1.0 - phi, n1 - 3.0) : 0.0 );
+            double dV2_dphi = ( (phi <= phimax) ? - (n2 - 2.0) * pow(1.0 - phi, n2 - 3.0) : 0.0 );
 
             Vj(0, 0, dV1_dphi);
+//            Vj(0, 1, dV1_dphi);
             Vj(1, 0, dV2_dphi);
+//            Vj(1, 1, dV2_dphi);
 
             if (degree >= 2){
-                double d2V1_dphi2 = ( (phi < phimax) ? (n1 - 2.0) * (n1 - 3.0) * pow(1.0 - phi, n1 - 4.0) : 0.0 );
-                double d2V2_dphi2 = ( (phi < phimax) ? (n2 - 2.0) * (n2 - 3.0) * pow(1.0 - phi, n2 - 4.0) : 0.0 );
+                double d2V1_dphi2 = ( (phi <= phimax) ? (n1 - 2.0) * (n1 - 3.0) * pow(1.0 - phi, n1 - 4.0) : 0.0 );
+                double d2V2_dphi2 = ( (phi <= phimax) ? (n2 - 2.0) * (n2 - 3.0) * pow(1.0 - phi, n2 - 4.0) : 0.0 );
 
                 Vj(0, 0, 0, d2V1_dphi2);
+//                Vj(0, 0, 1, d2V1_dphi2);
+//                Vj(0, 1, 0, d2V1_dphi2);
+//                Vj(0, 1, 1, d2V1_dphi2);
                 Vj(1, 0, 0, d2V2_dphi2);
+//                Vj(1, 0, 1, d2V2_dphi2);
+//                Vj(1, 1, 0, d2V2_dphi2);
+//                Vj(1, 1, 1, d2V2_dphi2);
             }
             else return -1; // ABORTED_PROCEDURE
         }
@@ -139,14 +153,14 @@ int Polydisperse::Relative_jet(double phi1, double phi2, JetMatrix &uj, int degr
                 double d2u1_dphi1phi2 = D1 * ( (rho1 - RHO) * d2V1_dphi2 + (2.0 - rho1 - rho2) * dV1_dphi );
                 double d2u2_dphi1phi2 = D2 * ( (rho2 - RHO) * d2V2_dphi2 + (2.0 - rho1 - rho2) * dV2_dphi );
 
-                uj(0, 0, 0, d2u1_dphi12);
+                uj(0, 0, 0, d2u1_dphi12   );
                 uj(0, 1, 0, d2u1_dphi1phi2);
                 uj(0, 0, 1, d2u1_dphi1phi2);
-                uj(0, 1, 1, d2u1_dphi22);
-                uj(1, 0, 0, d2u2_dphi12);
+                uj(0, 1, 1, d2u1_dphi22   );
+                uj(1, 0, 0, d2u2_dphi12   );
                 uj(1, 1, 0, d2u2_dphi1phi2);
                 uj(1, 0, 1, d2u2_dphi1phi2);
-                uj(1, 1, 1, d2u2_dphi22);
+                uj(1, 1, 1, d2u2_dphi22   );
             }
             else return -1; // ABORTED_PROCEDURE
         }
@@ -155,14 +169,12 @@ int Polydisperse::Relative_jet(double phi1, double phi2, JetMatrix &uj, int degr
 }
 
 int Polydisperse::Absolute_jet(double phi1, double phi2, JetMatrix &vj, int degree) const{
-    double phi = phi1 + phi2;      // Total concentration
-
-    JetMatrix hinderedj(2);
-    Relative_jet(phi1, phi2, hinderedj, degree);
+    JetMatrix relativej(2);
+    Relative_jet(phi1, phi2, relativej, degree);
 
     if (degree >= 0){
-        double u1 = hinderedj(0);
-        double u2 = hinderedj(1);
+        double u1 = relativej(0);
+        double u2 = relativej(1);
 
         double v1 = (1.0 - phi1) * u1 - phi2 * u2;
         double v2 = (1.0 - phi2) * u2 - phi1 * u1;
@@ -171,10 +183,10 @@ int Polydisperse::Absolute_jet(double phi1, double phi2, JetMatrix &vj, int degr
         vj(1, v2);
 
         if (degree >= 1){
-            double du1_dphi1 = hinderedj(0, 0);
-            double du1_dphi2 = hinderedj(0, 1);
-            double du2_dphi1 = hinderedj(1, 0);
-            double du2_dphi2 = hinderedj(1, 1);
+            double du1_dphi1 = relativej(0, 0);
+            double du1_dphi2 = relativej(0, 1);
+            double du2_dphi1 = relativej(1, 0);
+            double du2_dphi2 = relativej(1, 1);
 
             double dv1_dphi1 = (1.0 - phi1) * du1_dphi1 - phi2 * du2_dphi1 - u1;
             double dv1_dphi2 = (1.0 - phi1) * du1_dphi2 - phi2 * du2_dphi2 - u2;
@@ -189,12 +201,12 @@ int Polydisperse::Absolute_jet(double phi1, double phi2, JetMatrix &vj, int degr
             vj(1, 1, dv2_dphi2);
 
             if (degree >= 2){
-                double d2u1_dphi12    = hinderedj(0, 0, 0);
-                double d2u1_dphi1phi2 = hinderedj(0, 0, 1);
-                double d2u1_dphi22    = hinderedj(0, 1, 1);
-                double d2u2_dphi12    = hinderedj(1, 0, 0);
-                double d2u2_dphi1phi2 = hinderedj(1, 0, 1);
-                double d2u2_dphi22    = hinderedj(1, 1, 1);
+                double d2u1_dphi12    = relativej(0, 0, 0);
+                double d2u1_dphi1phi2 = relativej(0, 0, 1);
+                double d2u1_dphi22    = relativej(0, 1, 1);
+                double d2u2_dphi12    = relativej(1, 0, 0);
+                double d2u2_dphi1phi2 = relativej(1, 0, 1);
+                double d2u2_dphi22    = relativej(1, 1, 1);
 
                 double d2v1_dphi12    = (1.0 - phi1) * d2u1_dphi12 - phi2 * d2u2_dphi12 - 2.0 * du1_dphi1;
                 double d2v1_dphi1phi2 = (1.0 - phi1) * d2u1_dphi1phi2 - phi2 * d2u2_dphi1phi2 - du1_dphi2 - du2_dphi1;
@@ -223,7 +235,6 @@ int Polydisperse::Absolute_jet(double phi1, double phi2, JetMatrix &vj, int degr
 int Polydisperse::jet(const WaveState &Phi, JetMatrix &flux, int degree) const{
     double phi1 = Phi(0);
     double phi2 = Phi(1);
-    double phi = phi1 + phi2;      // Total concentration
 
     JetMatrix absolutej(2);
     Absolute_jet(phi1, phi2, absolutej, degree);

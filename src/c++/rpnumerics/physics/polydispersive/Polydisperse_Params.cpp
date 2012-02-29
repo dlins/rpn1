@@ -24,17 +24,30 @@ Polydisperse_Params::Polydisperse_Params(const double phimax,
 }
 
 Polydisperse_Params::Polydisperse_Params() : FluxParams(RealVector(7)){
-    // The initial data is for the MLB model
-    component(0, 1.0);
+// The initial data is for the MLB model
+//    component(0, 1.0);	// Maximum packing concentration
 
-    component(1, 2.0);
-    component(2, 3.0);
+//    component(1, 2.0);	// Particle density of concentration 1
+//    component(2, 3.0);	// Particle density of concentration 2
+//                      
+//    component(3, 1.0);	// Square diameter of particle 1
+//    component(4, 0.25);	// Square diameter of particle 2
+
+//    component(5, 5.0);	// Velocity exponents: there were used equally
+//    component(6, 5.0);
+
+// The initial data for the Bassoon restriction
+    component(0, 1.0);	// Maximum packing concentration
+
+    component(1, 0.0);	// There is no particle densities
+    component(2, 0.0);
                       
-    component(3, 1.0);
-    component(4, 0.25);
+    component(3, -1.0);	// (minus) Terminal settling velocity of particle 1
+    component(4, -0.5);	// (minus) Terminal settling velocity of particle 2
 
-    component(5, 1.0);
-    component(6, 0.5);
+    component(5, 3.0);	// Velocity exponent of particle 1
+    component(6, 4.0);	// Velocity exponent of particle 2
+
 }
 
 Polydisperse_Params::~Polydisperse_Params(){
