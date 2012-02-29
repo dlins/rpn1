@@ -79,8 +79,6 @@ public class BifurcationCurve extends SegmentedCurve {
     private static List createSingleSegmentList(List<RealSegment> leftSeg, List<RealSegment> rightSeg) {
 //        int i = 0;
 
-         System.out.println("Listas do d contact: " + leftSeg.size() + " " + rightSeg.size());
-
 //        for (HugoniotSegment hugoniotSegment : leftSeg) {
 //            hugoniotSegment.setIntType(19);
 ////            i++;

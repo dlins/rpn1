@@ -13,16 +13,10 @@ public class BoundaryExtensionCurve extends BifurcationCurve {// RPnCurve implem
     // Members
     //
 
-//    private List hugoniotSegments_;
-//    public DoubleContactCurve(List<HugoniotSegment> hSegments) {
-//        super(hSegments);//, new ViewingAttr(Color.RED));
-////        hugoniotSegments_ = hSegments;
-//
-//    }
     public BoundaryExtensionCurve(List<RealSegment> leftSegments, List<RealSegment> rightSegments) {
-//        super(hSegments, rightSegments);//, new ViewingAttr(Color.RED));
+//        super(leftSegments,rightSegments);
 
-        super(rightSegments);//, new ViewingAttr(Color.RED));
+        super(rightSegments);
 
 
     }

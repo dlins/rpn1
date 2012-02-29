@@ -240,10 +240,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         dialog.pack();
         dialog.setVisible(true);
         // apply the layout changes
-        RPnDataModule.PHASESPACE.update();
+        RPnDataModule.updatePhaseSpaces();
         UIController.instance().panelsUpdate();
     }
-
 
     //** para criar os frames (paineis) - incluindo os auxiliares
     protected void phaseSpaceFramesInit(Boundary boundary) {
@@ -252,16 +251,11 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         //RPnVisualizationModule.DESCRIPTORS
 
-        auxFrames_ = new RPnPhaseSpaceFrame[2*numOfPanels];
+        auxFrames_ = new RPnPhaseSpaceFrame[2 * numOfPanels];
         frames_ = new RPnPhaseSpaceFrame[numOfPanels];
 
-      
-//*** CRIA OS PAINEIS AUXILIARES MAS NAO DESENHA NADA NELES
         int auxNumOfPanels = RPnVisualizationModule.AUXDESCRIPTORS.size();
-        System.out.println("Quantidade de projecoes auxiliares: " + RPnVisualizationModule.AUXDESCRIPTORS.size());
-
-
-        for (int i = 0; i < auxNumOfPanels/2; i++) {
+        for (int i = 0; i < auxNumOfPanels / 2; i++) {
             wave.multid.view.ViewingTransform auxViewingTransf =
                     ((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(
                     i)).createTransform(clipping);
@@ -269,31 +263,29 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 wave.multid.view.Scene leftScene = RPnDataModule.LEFTPHASESPACE.createScene(auxViewingTransf,
                         new wave.multid.view.ViewingAttr(Color.black));
 
-                 wave.multid.view.Scene rightScene = RPnDataModule.RIGHTPHASESPACE.createScene(auxViewingTransf,
+                wave.multid.view.Scene rightScene = RPnDataModule.RIGHTPHASESPACE.createScene(auxViewingTransf,
                         new wave.multid.view.ViewingAttr(Color.black));
 
                 auxFrames_[i] = new RPnPhaseSpaceFrame(leftScene, commandMenu_);
-                auxFrames_[i+1] = new RPnPhaseSpaceFrame(rightScene, commandMenu_);
+                auxFrames_[i + 1] = new RPnPhaseSpaceFrame(rightScene, commandMenu_);
 
                 auxFrames_[i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i)).label());
-                auxFrames_[i+1].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i+1)).label());
+                auxFrames_[i + 1].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i + 1)).label());
 
                 UIController.instance().install(auxFrames_[i].phaseSpacePanel());
-                UIController.instance().install(auxFrames_[i+1].phaseSpacePanel());
+                UIController.instance().install(auxFrames_[i + 1].phaseSpacePanel());
                 setFramesPosition(auxFrames_[i]);
-                setFramesPosition(auxFrames_[i+1]);
+                setFramesPosition(auxFrames_[i + 1]);
                 auxFrames_[i].pack();
-                auxFrames_[i+1].pack();
+                auxFrames_[i + 1].pack();
                 auxFrames_[i].setVisible(true);
-                auxFrames_[i+1].setVisible(true);
+                auxFrames_[i + 1].setVisible(true);
 
             } catch (wave.multid.DimMismatchEx dex) {
                 dex.printStackTrace();
             }
 
         }
-//***
-
 
         // Init Main Frame
         for (int i = 0; i < numOfPanels; i++) {
@@ -304,24 +296,10 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 wave.multid.view.Scene scene = RPnDataModule.PHASESPACE.createScene(viewingTransf,
                         new wave.multid.view.ViewingAttr(Color.black));
 
-////
-//                wave.multid.view.Scene leftScene = RPnDataModule.LEFTPHASESPACE.createScene(viewingTransf,
-//                        new wave.multid.view.ViewingAttr(Color.black));
-//                wave.multid.view.Scene rightScene = RPnDataModule.RIGHTPHASESPACE.createScene(viewingTransf,
-//                        new wave.multid.view.ViewingAttr(Color.black));
 
                 frames_[i] = new RPnPhaseSpaceFrame(scene, commandMenu_);
                 frames_[i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(i)).label());
 
-//
-
-//                leftFrames_[i] = new RPnPhaseSpaceFrame(leftScene, commandMenu_);
-//                leftFrames_[i].setTitle("Left " + ((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(i)).label());
-////
-//
-//                rightFrames_[i] = new RPnPhaseSpaceFrame(rightScene, commandMenu_);
-//                rightFrames_[i].setTitle("Right " + ((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(i)).label());
-////
 //
 //                /*
 //                 * controllers installation
@@ -333,20 +311,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 //                 */
 //
 //
-////
-//                UIController.instance().install(leftFrames_[i].phaseSpacePanel());
-//
-//                setFramesPosition(leftFrames_[i]);
-//                leftFrames_[i].pack();
-//                leftFrames_[i].setVisible(true);
-//
-//
-//                UIController.instance().install(rightFrames_[i].phaseSpacePanel());
-//
-//                setFramesPosition(rightFrames_[i]);
-//                rightFrames_[i].pack();
-//                rightFrames_[i].setVisible(true);
-
 
                 UIController.instance().install(frames_[i].phaseSpacePanel());
 
@@ -362,10 +326,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         }
 
-        
+
     }
 
-    
 //     from here on just for 2D for now...
     void createSVGImage_actionPerformed(ActionEvent e) {
         JFileChooser chooser = new JFileChooser();
@@ -492,7 +455,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         int index = 0;
 
         RPnProjDescriptor projDescriptors[] = new RPnProjDescriptor[RPNUMERICS.domainDim() * 2];
-        
+
         int[] projIndex = new int[projDescriptors.length];
 
         for (int i = 0; i < projDescriptors.length; i++) {
@@ -556,11 +519,11 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         layoutConstrains.gridy = 0;
 
-        layoutConstrains.fill=GridBagConstants.BOTH;
+        layoutConstrains.fill = GridBagConstants.BOTH;
 
 
-        layoutConstrains.weightx=0.8;
-        layoutConstrains.weighty=0.1;
+        layoutConstrains.weightx = 0.8;
+        layoutConstrains.weighty = 0.1;
 
         contentPane.add(configPanel_, layoutConstrains);
 
@@ -908,6 +871,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         curvesFrame_.setVisible(show);
 
     }
+
+
 
     //** nao vi alteracao
     private class ConfigAction implements Action {

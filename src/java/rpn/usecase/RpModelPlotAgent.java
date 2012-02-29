@@ -15,17 +15,14 @@ import java.beans.PropertyChangeEvent;
 import javax.swing.ImageIcon;
 import java.util.Iterator;
 import javax.swing.AbstractButton;
-import rpn.RPnCurvesListFrame;
-import rpn.RPnPhaseSpaceAbstraction;
 import rpn.controller.ui.*;
 
 public abstract class RpModelPlotAgent extends RpModelActionAgent {
 
-    static public final String PHASESPACE_LIST = "Phase Space list of elements";
-    static public final String AUXPHASESPACE_LIST = "Auxiliary Phase Space list of elements";
-    private boolean addOnlyLastGeometry_;
-    private static boolean keepLastGeometry_;
+   
     private AbstractButton button_;
+
+
 
     public RpModelPlotAgent(String shortDesc, ImageIcon icon, AbstractButton button) {
         super(shortDesc, icon);
@@ -42,20 +39,19 @@ public abstract class RpModelPlotAgent extends RpModelActionAgent {
 
         putValue(Action.SHORT_DESCRIPTION, shortDesc);
         setEnabled(false);
-        addOnlyLastGeometry_ = true;
-        keepLastGeometry_ = true;
+   
 
     }
 
     public void execute() {
         RealVector[] userInputList = UIController.instance().userInputList();
-        RPnPhaseSpaceAbstraction phaseSpace = RPnDataModule.PHASESPACE;
+
 
         String listString = "";
         // selecting phase space
 
         // stores the scene
-        Iterator oldValue = phaseSpace.getGeomObjIterator();
+        Iterator oldValue = phaseSpace_.getGeomObjIterator();
 
         RpGeometry geometry = createRpGeometry(userInputList);
 
@@ -63,10 +59,10 @@ public abstract class RpModelPlotAgent extends RpModelActionAgent {
         if (geometry == null) {
             return;
         }
-        phaseSpace.plot(geometry);
+        phaseSpace_.plot(geometry);
        
 
-        Iterator newValue = phaseSpace.getGeomObjIterator();
+        Iterator newValue = phaseSpace_.getGeomObjIterator();
         logAction(new PropertyChangeEvent(this, listString, oldValue, newValue));
 
     }
@@ -88,6 +84,8 @@ public abstract class RpModelPlotAgent extends RpModelActionAgent {
     public AbstractButton getContainer() {
         return button_;
     }
+
+   
 
    
 }

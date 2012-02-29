@@ -9,12 +9,8 @@ import rpnumerics.RPNUMERICS;
 import wave.util.RealVector;
 import java.beans.PropertyChangeEvent;
 import rpn.RPnCurvesListFrame;
-import rpn.RPnPhaseSpaceFrame;
-import rpn.RPnUIFrame;
-import rpn.component.BifurcationCurveGeom;
 import rpn.component.RpGeometry;
 import rpn.controller.ui.*;
-import rpn.parser.RPnDataModule;
 
 public class DragPlotAgent extends RpModelConfigChangeAgent {
     //
@@ -35,22 +31,28 @@ public class DragPlotAgent extends RpModelConfigChangeAgent {
     }
 
     public void execute() {
+        try {
 
-        RpGeometry lastGeometry = RPnDataModule.PHASESPACE.getLastGeometry();
 
-        RPnCurvesListFrame.removeLastEntry();
+            RpGeometry lastGeometry = phaseSpace_.getLastGeometry();
 
-        UserInputTable userInputList = UIController.instance().globalInputTable();
+            RPnCurvesListFrame.removeLastEntry();
 
-        RealVector newValue = userInputList.values();
+            UserInputTable userInputList = UIController.instance().globalInputTable();
 
-        lastGeometry.geomFactory().getUI().propertyChange(new PropertyChangeEvent(this, "enabled", null, newValue));
+            RealVector newValue = userInputList.values();
 
-        RPnCurvesListFrame.addGeometry(lastGeometry);
+            lastGeometry.geomFactory().getUI().propertyChange(new PropertyChangeEvent(this, "enabled", null, newValue));
 
-        RPnDataModule.PHASESPACE.update();
+            RPnCurvesListFrame.addGeometry(lastGeometry);
 
-        UIController.instance().panelsUpdate();
+            phaseSpace_.update();
+
+            UIController.instance().panelsUpdate();
+        } catch (Exception e) {
+
+            return;
+        }
 
 
     }

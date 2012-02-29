@@ -11,8 +11,6 @@ import java.awt.Graphics2D;
 import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.List;
-import rpn.component.SegmentedCurveGeom;
-import rpnumerics.SegmentedCurve;
 
 public class Scene implements GeomObjView {
     //

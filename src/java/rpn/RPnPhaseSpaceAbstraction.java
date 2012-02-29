@@ -40,6 +40,10 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         selectedGeom_ = null;
     }
 
+    public String toString (){
+        return getName() +" "+ getSpace().toString() + " "+ state_.toString();
+    }
+
     //
     // Accessors/Mutators
     //
@@ -78,7 +82,9 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
     }
 
     public RpGeometry getLastGeometry() {
-        return (RpGeometry) super.geomList_.get(geomList_.size() - 1);
+        
+
+        return (RpGeometry) super.geomList_.get(super.geomList_.size() - 1);
     }
 
     @Override

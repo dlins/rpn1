@@ -19,6 +19,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.Point;
+import java.awt.event.MouseAdapter;
 import java.awt.geom.Rectangle2D;
 import rpn.controller.ui.TRACKPOINT_CONFIG;
 import rpn.controller.ui.UIController;
@@ -65,6 +66,7 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
         public void mouseMoved(MouseEvent event) {
             if (event.getComponent() instanceof RPnPhaseSpacePanel) {
                 RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
+
                 int xCursorPos = event.getPoint().x;
                 int yCursorPos = event.getPoint().y;
                 if (UIController.instance().getState() instanceof TRACKPOINT_CONFIG) {
@@ -85,7 +87,16 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
                 panel.repaint();
             }
         }
+
+
+        
+
+
     }
+
+
+
+    
 
     class PanelSizeController extends ComponentAdapter {
 
@@ -185,10 +196,12 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
     public void install(RPnPhaseSpacePanel panel) {
         panel.addMouseMotionListener(mouseMotionController_);
         panel.addComponentListener(new PanelSizeController());
+  
     }
 
     public void uninstall(RPnPhaseSpacePanel panel) {
         panel.removeMouseMotionListener(mouseMotionController_);
+
     }
 
     public void resetCursorCoords() {

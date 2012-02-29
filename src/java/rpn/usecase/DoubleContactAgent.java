@@ -44,9 +44,6 @@ public class DoubleContactAgent extends RpModelPlotAgent {
     public RpGeometry createRpGeometry(RealVector[] input) {
 
         DoubleContactGeomFactory factory = new DoubleContactGeomFactory(RPNUMERICS.createDoubleContactCurveCalc());
-
-
-
         return factory.geom();
 
     }
@@ -60,8 +57,8 @@ public class DoubleContactAgent extends RpModelPlotAgent {
         RPnPhaseSpaceAbstraction rightPhaseSpace = RPnDataModule.RIGHTPHASESPACE;
 
 
-        RpGeometry leftGeometry = factory.createLeftGeom();
-        RpGeometry rightGeometry= factory.createRightGeom();
+        RpGeometry leftGeometry = factory.leftGeom();
+        RpGeometry rightGeometry= factory.rightGeom();
 
         leftPhaseSpace.plot(leftGeometry);
         rightPhaseSpace.plot(rightGeometry);

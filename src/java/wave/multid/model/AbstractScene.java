@@ -26,7 +26,6 @@ import wave.multid.map.Map;
     //
 
     protected ArrayList geomList_;
-    //public static ArrayList geomList_;
     private String name_;
     private ArrayList viewList_;
     private BoundingBox boundary_;
@@ -36,7 +35,7 @@ import wave.multid.map.Map;
     // Constructors
     //
     public AbstractScene(String name, Space space) {
-        name_ = name.toString();
+        name_ = name;
         space_ = space;
         try {
             boundary_ = new BoundingBox(new CoordsArray(space_), new CoordsArray(space_));
@@ -52,7 +51,7 @@ import wave.multid.map.Map;
     // Accessors/Mutators
     //
     public String getName() {
-        return name_.toString();
+        return name_;
     }
 
     public Iterator getGeomObjIterator() {

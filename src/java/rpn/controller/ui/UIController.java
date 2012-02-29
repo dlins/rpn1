@@ -6,6 +6,7 @@
  */
 package rpn.controller.ui;
 
+import rpn.RPnPhaseSpaceAbstraction;
 import rpn.usecase.*;
 import rpn.RPnPhaseSpacePanel;
 import wave.multid.Coords2D;
@@ -143,23 +144,26 @@ public class UIController extends ComponentUI {
             RPnUIFrame.clearStatusMessage();
 
             if (event.getComponent() instanceof RPnPhaseSpacePanel) {
-
-//                if (netStatus_.isMaster() || !(netStatus_.isOnline())) {
                 RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
-                if (ControlClick.ind == 0) ControlClick.mousePressed(event, panel.scene());
+
+                if (ControlClick.ind == 0) {
+                    ControlClick.mousePressed(event, panel.scene());
+                }
                 // this will automatically work only for 2D(isComplete())
                 updateUserInputTable(panel, event.getPoint());
 
-                if (globalInputTable().isComplete()&& ControlClick.ind == 0) {
+                if (globalInputTable().isComplete() && ControlClick.ind == 0) {
 
                     globalInputTable().reset();
                     resetPanelsCursorCoords();
-                    if (event.isShiftDown())
-                    userInputComplete(globalInputTable().values());
-                    else
-                    DragPlotAgent.instance().execute();
+                    if (event.isShiftDown()) {
+                        userInputComplete(globalInputTable().values());
+                    } else {
+                      
+                        DragPlotAgent.instance().execute();
+                    }
                 }
-                
+
             }
         }
     }
@@ -204,8 +208,19 @@ public class UIController extends ComponentUI {
 
         @Override
         public void mouseEntered(MouseEvent event) {
+
             if (event.getSource() instanceof RPnPhaseSpacePanel) {
                 toggleCursorLines();
+                RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
+
+                if (handler_ instanceof UI_ACTION_SELECTED) {
+                    UI_ACTION_SELECTED actionSelected = (UI_ACTION_SELECTED) handler_;
+                    RpModelActionAgent action = (RpModelActionAgent) actionSelected.getAction();
+                    action.setPhaseSpace((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom());
+                    DragPlotAgent.instance().setPhaseSpace((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom());
+
+                }
+
             }
         }
 
