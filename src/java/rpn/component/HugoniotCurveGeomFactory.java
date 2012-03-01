@@ -5,6 +5,9 @@
  */
 package rpn.component;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import rpn.RPnFluxParamsSubject;
 import rpnumerics.*;
 import rpn.controller.HugoniotController;
 import rpn.controller.RpController;

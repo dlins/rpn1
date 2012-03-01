@@ -77,7 +77,6 @@ public class RPnCoreyToStone extends RPnFluxParamsSubject {
 //        }
 
         setState(newState);
-
-
+        
     }
 }
