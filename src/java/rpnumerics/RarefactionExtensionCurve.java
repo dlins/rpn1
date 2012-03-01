@@ -8,13 +8,15 @@ package rpnumerics;
 import java.util.List;
 import wave.util.RealSegment;
 
-public class RarefactionExtensionCurve extends SegmentedCurve {
+public class RarefactionExtensionCurve extends BifurcationCurve {
     //
     // Members
     //
 
     public RarefactionExtensionCurve(List<RealSegment> hSegments, List<RealSegment> rightSegments) {
-        super(createSingleSegmentList(hSegments, rightSegments));
+//        super(createSingleSegmentList(hSegments, rightSegments));
+
+        super(hSegments,rightSegments);
 
 
     }

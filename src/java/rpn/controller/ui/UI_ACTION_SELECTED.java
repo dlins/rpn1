@@ -96,11 +96,8 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
     }
 
     public RpModelActionAgent getAction() {
-        //System.out.println("UI_ACTION_SELECTED : getAction()");
         return actionSelected_;
     }
-
-    
 
     public int actionDimension() {
         

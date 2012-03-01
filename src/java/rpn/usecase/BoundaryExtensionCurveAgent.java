@@ -54,13 +54,31 @@ public class BoundaryExtensionCurveAgent extends RpModelPlotAgent {
 
     @Override
     public void execute() {
-        BoundaryExtensionCurveGeomFactory factory = new BoundaryExtensionCurveGeomFactory(RPNUMERICS.createBoundaryExtensionCurveCalc());
-        RPnPhaseSpaceAbstraction auxPhaseSpace = RPnDataModule.PHASESPACE;
-        RpGeometry geometry = factory.geom();
-        auxPhaseSpace.plot(geometry);
 
+        BoundaryExtensionCurveGeomFactory factory = new BoundaryExtensionCurveGeomFactory(RPNUMERICS.createBoundaryExtensionCurveCalc());
+
+
+        RPnPhaseSpaceAbstraction leftPhaseSpace = RPnDataModule.LEFTPHASESPACE;
+
+        RPnPhaseSpaceAbstraction rightPhaseSpace = RPnDataModule.RIGHTPHASESPACE;
+
+        RpGeometry leftGeometry = factory.leftGeom();
+        RpGeometry rightGeometry = factory.rightGeom();
+
+        leftPhaseSpace.plot(leftGeometry);
+        rightPhaseSpace.plot(rightGeometry);
+
+        System.out.println("Chamando execute");
     }
 
+//    @Override
+//    public void execute() {
+//        BoundaryExtensionCurveGeomFactory factory = new BoundaryExtensionCurveGeomFactory(RPNUMERICS.createBoundaryExtensionCurveCalc());
+//        RPnPhaseSpaceAbstraction auxPhaseSpace = RPnDataModule.PHASESPACE;
+//        RpGeometry geometry = factory.geom();
+//        auxPhaseSpace.plot(geometry);
+//
+//    }
     static public BoundaryExtensionCurveAgent instance() {
         if (instance_ == null) {
             instance_ = new BoundaryExtensionCurveAgent();

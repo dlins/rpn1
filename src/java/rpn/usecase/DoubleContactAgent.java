@@ -30,7 +30,7 @@ public class DoubleContactAgent extends RpModelPlotAgent {
     // Constructors/Initializers
     //
     protected DoubleContactAgent() {
-        super(DESC_TEXT, rpn.RPnConfig.HUGONIOT, new JButton(DESC_TEXT));
+        super(DESC_TEXT, rpn.RPnConfig.HUGONIOT, new JButton());
     }
 
     @Override
@@ -50,22 +50,29 @@ public class DoubleContactAgent extends RpModelPlotAgent {
 
     @Override
     public void execute() {
+
+
         DoubleContactGeomFactory factory = new DoubleContactGeomFactory(RPNUMERICS.createDoubleContactCurveCalc());
+        if (UIController.instance().isAuxPanelsEnabled()) {
+            RPnPhaseSpaceAbstraction leftPhaseSpace = RPnDataModule.LEFTPHASESPACE;
 
-        RPnPhaseSpaceAbstraction leftPhaseSpace = RPnDataModule.LEFTPHASESPACE;
-        
-        RPnPhaseSpaceAbstraction rightPhaseSpace = RPnDataModule.RIGHTPHASESPACE;
+            RPnPhaseSpaceAbstraction rightPhaseSpace = RPnDataModule.RIGHTPHASESPACE;
+
+            RpGeometry leftGeometry = factory.leftGeom();
+            RpGeometry rightGeometry = factory.rightGeom();
+
+            leftPhaseSpace.plot(leftGeometry);
+            rightPhaseSpace.plot(rightGeometry);
+        } else {
+            RPnDataModule.PHASESPACE.plot(factory.geom());
+        }
 
 
-        RpGeometry leftGeometry = factory.leftGeom();
-        RpGeometry rightGeometry= factory.rightGeom();
-
-        leftPhaseSpace.plot(leftGeometry);
-        rightPhaseSpace.plot(rightGeometry);
 
 
 
-        System.out.println("Chamando execute");
+
+
     }
 
     static public DoubleContactAgent instance() {

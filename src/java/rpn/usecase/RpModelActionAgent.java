@@ -19,7 +19,7 @@ public abstract class RpModelActionAgent extends AbstractAction implements Undoa
 
     private PropertyChangeEvent history_;
     private String desc_;
-    protected RPnPhaseSpaceAbstraction phaseSpace_;
+    protected static RPnPhaseSpaceAbstraction phaseSpace_;
 
     public RpModelActionAgent(String shortDesc, ImageIcon icon) {
         super(shortDesc, icon);

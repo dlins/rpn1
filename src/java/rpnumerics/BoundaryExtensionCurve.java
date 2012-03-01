@@ -14,9 +14,9 @@ public class BoundaryExtensionCurve extends BifurcationCurve {// RPnCurve implem
     //
 
     public BoundaryExtensionCurve(List<RealSegment> leftSegments, List<RealSegment> rightSegments) {
-//        super(leftSegments,rightSegments);
+        super(leftSegments,rightSegments);
 
-        super(rightSegments);
+//        super(rightSegments);
 
 
     }

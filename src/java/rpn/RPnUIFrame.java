@@ -26,8 +26,6 @@ import rpn.component.util.VelocityAgent;
 import rpn.controller.ui.*;
 import rpn.message.*;
 import rpnumerics.ShockProfile;
-import wave.util.IsoTriang2DBoundary;
-import wave.util.RealVector;
 import wave.util.RectBoundary;
 
 public class RPnUIFrame extends JFrame implements PropertyChangeListener {
@@ -63,6 +61,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private static JLabel statusLabel_ = new JLabel();
     private JMenu viewMenu_ = new JMenu("View");
     private JCheckBoxMenuItem showCurvesPaneltem_ = new JCheckBoxMenuItem("Show Curves Window", true);
+    private JCheckBoxMenuItem showAuxPanel_ = new JCheckBoxMenuItem("Show Auxiliar Panels", true);
     private RPnCurvesConfigPanel curvesConfigPanel_ = new RPnCurvesConfigPanel();
     private JFrame curvesFrame_;
     //*** declarei isso  -- Leandro
@@ -577,6 +576,20 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                     }
                 });
 
+
+        showAuxPanel_.addActionListener(
+                new java.awt.event.ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+                        UIController.instance().setAuxPanels(showAuxPanel_.isSelected());
+                        for (RPnPhaseSpaceFrame rPnPhaseSpaceFrame : auxFrames_) {
+                            rPnPhaseSpaceFrame.setVisible(showAuxPanel_.isSelected());
+                        }
+
+                    }
+                });
+
+
         resultsOption.addActionListener(
                 new ActionListener() {
 
@@ -744,6 +757,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         jMenuBar1.add(viewMenu_);
         viewMenu_.add(showCursorMenuItem_);
         viewMenu_.add(showCurvesPaneltem_);
+        viewMenu_.add(showAuxPanel_);
         jMenuBar1.add(modelInteractionMenu);
 
 
@@ -871,8 +885,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         curvesFrame_.setVisible(show);
 
     }
-
-
 
     //** nao vi alteracao
     private class ConfigAction implements Action {

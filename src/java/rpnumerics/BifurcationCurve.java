@@ -45,6 +45,13 @@ public class BifurcationCurve extends SegmentedCurve {
         rightSegments_ = singleList;
     }
 
+
+    
+
+    /** @deprecated
+     *
+     */
+
     public BifurcationCurve(int familyIndex, ContourCurve curve, ViewingAttr viewingAttr) {
 
         super(new ArrayList());

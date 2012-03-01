@@ -52,6 +52,7 @@ public class UIController extends ComponentUI {
     private StateInputController stateController_;
     public static UI_ACTION_SELECTED INITSTATE = null;
     private ArrayList<Command> commandArray_;
+    private boolean auxPanelsEnabled_;
 
     //
     // Constructors
@@ -67,6 +68,7 @@ public class UIController extends ComponentUI {
 
         commandArray_ = new ArrayList<Command>();
         handler_ = new SHOCK_CONFIG();
+        auxPanelsEnabled_=true;
 
         initNetStatus();
 
@@ -133,6 +135,19 @@ public class UIController extends ComponentUI {
         return commandArray_.iterator();
 
     }
+
+    public void setAuxPanels(boolean selected) {
+       auxPanelsEnabled_=selected;
+
+
+    }
+
+    public boolean isAuxPanelsEnabled() {
+        return auxPanelsEnabled_;
+    }
+
+
+
     //
     // Inner Classes
     //
@@ -218,7 +233,6 @@ public class UIController extends ComponentUI {
                     RpModelActionAgent action = (RpModelActionAgent) actionSelected.getAction();
                     action.setPhaseSpace((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom());
                     DragPlotAgent.instance().setPhaseSpace((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom());
-
                 }
 
             }

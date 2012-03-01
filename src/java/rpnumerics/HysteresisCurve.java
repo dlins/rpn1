@@ -12,18 +12,9 @@ public class HysteresisCurve extends BifurcationCurve {
     //
     // Members
     //
-
-
-
-
     public HysteresisCurve(List<RealSegment> curveSegments,List<RealSegment> domainSegments) {
         super(curveSegments, domainSegments);
-        
 
       }
-
-  
-
-
    
 }

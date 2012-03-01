@@ -28,26 +28,18 @@ public class DragPlotAgent extends RpModelConfigChangeAgent {
     //
     protected DragPlotAgent() {
         super(DESC_TEXT);
+
     }
 
     public void execute() {
         try {
-
-
             RpGeometry lastGeometry = phaseSpace_.getLastGeometry();
-
             RPnCurvesListFrame.removeLastEntry();
-
             UserInputTable userInputList = UIController.instance().globalInputTable();
-
             RealVector newValue = userInputList.values();
-
             lastGeometry.geomFactory().getUI().propertyChange(new PropertyChangeEvent(this, "enabled", null, newValue));
-
             RPnCurvesListFrame.addGeometry(lastGeometry);
-
             phaseSpace_.update();
-
             UIController.instance().panelsUpdate();
         } catch (Exception e) {
 
