@@ -26,8 +26,10 @@ import javax.swing.table.DefaultTableModel;
 import rpn.component.RpCalcBasedGeomFactory;
 import rpn.component.RpGeometry;
 import rpn.controller.ui.UIController;
+import rpnumerics.HugoniotCurve;
 import rpnumerics.HugoniotCurveCalcND;
 import rpnumerics.HugoniotParams;
+import rpnumerics.LevelCurve;
 import rpnumerics.OrbitCalc;
 import rpnumerics.PointLevelCalc;
 import rpnumerics.RarefactionExtensionCalc;
@@ -119,17 +121,10 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
         phaseSpace_ = phaseSpace;
     }
 
-    public void removeGeometry(Integer geometryIndex) {
-        tableModel_.removeRow(geometryIndex);
-    }
-
     public void addGeometry(RpGeometry geometry) {
 
 
         String geometryName = geometry.getClass().getSimpleName();
-
-
-
         RealVector userInput = new RealVector(2);
 
 
@@ -139,13 +134,21 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
 
 
         if (calc instanceof HugoniotCurveCalcND) {
-            HugoniotCurveCalcND hCalc = (HugoniotCurveCalcND) calc;
-            userInput = ((HugoniotParams) hCalc.getParams()).getXZero();
+
+            HugoniotCurve curve = (HugoniotCurve)factory.geomSource();
+            userInput = curve.getXZero().getCoords();
+
         }
 
 
         if (calc instanceof PointLevelCalc) {
+
+            LevelCurve curve = (LevelCurve)factory.geomSource();
+
             PointLevelCalc hCalc = (PointLevelCalc) calc;
+
+
+
             userInput = hCalc.getStartPoint();
 
         }
@@ -193,10 +196,6 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
 
     }
 
-    public void removeLastEntry() {
-        tableModel_.removeRow(tableModel_.getRowCount() - 1);
-    }
-
     public void actionPerformed(ActionEvent e) {
 
         JButton button = (JButton) e.getSource();
@@ -215,52 +214,11 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
             }
         }
 
-
-
         if (button.getName().equals("Invisible")) {
-
-
-
-
-            int index = 0;
-            boolean selected;
-            Iterator it = phaseSpace_.getGeomObjIterator();
-
-
-            while (it.hasNext()) {
-                selected = (Boolean) curvesTable_.getValueAt(index, 0);
-                MultiGeometry multiGeometry = (MultiGeometry) it.next();
-
-                if (selected) {
-                    multiGeometry.viewingAttr().setVisible(false);
-                    curvesTable_.setValueAt(false, index, 3);
-                }
-                index++;
-            }
-
-
-            UIController.instance().panelsUpdate();
-
+            setGeometryVisible(false);
         }
-
         if (button.getName().equals("Visible")) {
-
-            int index = 0;
-            boolean selected;
-            Iterator it = phaseSpace_.getGeomObjIterator();
-
-
-            while (it.hasNext()) {
-                selected = (Boolean) curvesTable_.getValueAt(index, 0);
-                MultiGeometry multiGeometry = (MultiGeometry) it.next();
-
-                if (selected) {
-                    multiGeometry.viewingAttr().setVisible(true);
-                    curvesTable_.setValueAt(true, index, 3);
-                }
-                index++;
-            }
-            UIController.instance().panelsUpdate();
+            setGeometryVisible(true);
         }
 
 
@@ -279,15 +237,9 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
                 }
                 index++;
             }
-
-
             for (MultiGeometry multiGeometry : toBeRemoved) {
                 phaseSpace_.remove(multiGeometry);
             }
-
-
-
-
         }
 
     }
@@ -299,5 +251,22 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
             addGeometry((RpGeometry) iterator.next());
         }
 
+    }
+
+    private void setGeometryVisible(boolean visible) {
+        int index = 0;
+        boolean selected;
+        Iterator it = phaseSpace_.getGeomObjIterator();
+        while (it.hasNext()) {
+            selected = (Boolean) curvesTable_.getValueAt(index, 0);
+            MultiGeometry multiGeometry = (MultiGeometry) it.next();
+
+            if (selected) {
+                multiGeometry.viewingAttr().setVisible(visible);
+                curvesTable_.setValueAt(visible, index, 3);
+            }
+            index++;
+        }
+        UIController.instance().panelsUpdate();
     }
 }

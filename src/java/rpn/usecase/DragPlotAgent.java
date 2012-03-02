@@ -8,7 +8,6 @@ package rpn.usecase;
 import rpnumerics.RPNUMERICS;
 import wave.util.RealVector;
 import java.beans.PropertyChangeEvent;
-import rpn.RPnCurvesListFrame;
 import rpn.component.RpGeometry;
 import rpn.controller.ui.*;
 

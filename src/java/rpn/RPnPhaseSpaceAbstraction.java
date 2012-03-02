@@ -30,7 +30,6 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
 
     private PhaseSpaceState state_;
     private RpGeometry selectedGeom_;
-
     private List<RPnCurvesListFrame> curvesFrames_;
 
     //
@@ -40,7 +39,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         super(id, domain);
         changeState(state);
         selectedGeom_ = null;
-        curvesFrames_=new ArrayList<RPnCurvesListFrame>();
+        curvesFrames_ = new ArrayList<RPnCurvesListFrame>();
     }
 
     //
@@ -50,19 +49,16 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         state_ = state;
     }
 
-    public void attach(RPnCurvesListFrame curvesFrame){
+    public void attach(RPnCurvesListFrame curvesFrame) {
         curvesFrames_.add(curvesFrame);
     }
 
-
-    public void detach(RPnCurvesListFrame curvesListFrame){
+    public void detach(RPnCurvesListFrame curvesListFrame) {
         curvesFrames_.remove(curvesListFrame);
     }
 
-
-
-    private void notifyState(){
-        for (RPnCurvesListFrame curvesFrame  : curvesFrames_) {
+    private void notifyState() {
+        for (RPnCurvesListFrame curvesFrame : curvesFrames_) {
             curvesFrame.update(this);
         }
 
@@ -89,16 +85,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         state_.delete(this, geom);
     }
 
-    public void removeLastGeometry() {
-
-        MultiGeometry toBeRemoved = (MultiGeometry) super.geomList_.get(geomList_.size() - 1);
-        remove(toBeRemoved);
-        update();
-
-    }
-
     public RpGeometry getLastGeometry() {
-
 
         return (RpGeometry) super.geomList_.get(super.geomList_.size() - 1);
     }
@@ -322,7 +309,6 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
             super.join((RpGeometry) joinList.get(i));
 
         }
-
         notifyState();
     }
 
@@ -343,8 +329,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
             delete((RpGeometry) deleteList.get(i));
         }
 
-
-//        RPnCurvesListFrame.clear();
+        notifyState();
 
     }
 
