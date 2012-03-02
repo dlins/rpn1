@@ -68,7 +68,7 @@ public class UIController extends ComponentUI {
 
         commandArray_ = new ArrayList<Command>();
         handler_ = new SHOCK_CONFIG();
-        auxPanelsEnabled_=true;
+        auxPanelsEnabled_ = true;
 
         initNetStatus();
 
@@ -137,21 +137,24 @@ public class UIController extends ComponentUI {
     }
 
     public void setAuxPanels(boolean selected) {
-       auxPanelsEnabled_=selected;
+
+
+
+
+        auxPanelsEnabled_ = selected;
 
 
     }
 
     public boolean isAuxPanelsEnabled() {
+
+
         return auxPanelsEnabled_;
     }
-
-
 
     //
     // Inner Classes
     //
-
     class MouseMotionController extends MouseMotionAdapter {
 
         @Override
@@ -174,7 +177,14 @@ public class UIController extends ComponentUI {
                     if (event.isShiftDown()) {
                         userInputComplete(globalInputTable().values());
                     } else {
-                      
+
+                        if (handler_ instanceof UI_ACTION_SELECTED) {
+                            UI_ACTION_SELECTED actionSelected = (UI_ACTION_SELECTED) handler_;
+                            RpModelActionAgent action = (RpModelActionAgent) actionSelected.getAction();
+                            action.setPhaseSpace((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom());
+                            DragPlotAgent.instance().setPhaseSpace((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom());
+                        }
+
                         DragPlotAgent.instance().execute();
                     }
                 }

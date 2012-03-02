@@ -110,6 +110,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     public void setCurvesFrame(JFrame curvesFrame) {
         this.curvesFrame_ = curvesFrame;
         UIController.instance().showCurvesPanel(showCurvesPaneltem_.isSelected());
+        
 
     }
 
@@ -324,6 +325,30 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             }
 
         }
+
+
+
+        RPnCurvesListFrame curvesFrame = new RPnCurvesListFrame("Main");
+        RPnCurvesListFrame leftFrame = new RPnCurvesListFrame("Left");
+        RPnCurvesListFrame rightFrame = new RPnCurvesListFrame("Right");
+
+
+
+        RPnDataModule.PHASESPACE.attach(curvesFrame);
+        RPnDataModule.LEFTPHASESPACE.attach(leftFrame);
+        RPnDataModule.RIGHTPHASESPACE.attach(rightFrame);
+
+
+        curvesFrame.attach(RPnDataModule.PHASESPACE);
+        leftFrame.attach(RPnDataModule.LEFTPHASESPACE);
+        rightFrame.attach(RPnDataModule.RIGHTPHASESPACE);
+
+        curvesFrame.setVisible(true);
+        leftFrame.setVisible(true);
+        rightFrame.setVisible(true);
+
+
+
 
 
     }

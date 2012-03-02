@@ -12,7 +12,6 @@ import java.util.Iterator;
 import rpn.component.util.ClassifierAgent;
 import rpn.component.util.ControlClick;
 
-import rpn.component.util.GeometryUtil;
 
 import rpn.component.util.VelocityAgent;
 

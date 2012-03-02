@@ -363,7 +363,7 @@ int Shock::shock_step(const RealVector &p, const RealVector &Uref, const RealVec
     //    printf("    Reason = %d. Proceed_to_bisection = %d\n", reason, proceed_to_bisection);
 
     if (!proceed_to_bisection) {
-        printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
+//        printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
         return SHOCK_ERROR;
     }
 
@@ -533,7 +533,7 @@ int Shock::verify_lax_shock(RealVector &ref, double lambda_0_ref, double lambda_
     // ALL eigenvalues must be real. Extend this by using a for cycle.
     if (fabs(e[family].i) > 1e-6) {
         //        printf("Shock::curve(): Init step, eigenvalue %d is complex: % f %+f.\n", family, e[family].r, e[family].i);
-        printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
+//        printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
         return SHOCK_ERROR;
     }
 
@@ -550,7 +550,7 @@ int Shock::verify_lax_shock(RealVector &ref, double lambda_0_ref, double lambda_
             if ((lambda[1] < sigma && sigma < lambda_1_ref) && sigma > lambda_0_ref) return LAX_SHOCK;
             else return NON_LAX_SHOCK;
         } else {
-            printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
+//            printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
             return SHOCK_ERROR;
         }
     } else if (increase == WAVE_BACKWARD) {
@@ -561,7 +561,7 @@ int Shock::verify_lax_shock(RealVector &ref, double lambda_0_ref, double lambda_
             if ((lambda_1_ref < sigma && sigma < lambda[1]) && sigma > lambda[0]) return LAX_SHOCK;
             else return NON_LAX_SHOCK;
         } else {
-            printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
+//            printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
             return SHOCK_ERROR;
         }
     }
@@ -675,7 +675,7 @@ int Shock::curve_constructor(Boundary *boundary, bool local_shock, int type_of_s
         int info_shock_step = shock_step(p, ref_point, tangent, normal, ff, aa, test_eps, pnext);
         //printf("Curve constructor. After shock_step, pnext = (%lf, %lf), line = %u\n", pnext.component(0), pnext.component(1), __LINE__);
         if (info_shock_step == SHOCK_ERROR) {
-            printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
+//            printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
             return SHOCK_ERROR;
         }
 
@@ -770,18 +770,18 @@ int Shock::curve_constructor(Boundary *boundary, bool local_shock, int type_of_s
                 shockcurve.push_back(pnext);
             } else if (info_boundary == -1) {
                 // Both outside
-                printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
+//                printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
                 return SHOCK_ERROR;
             } else {
                 // One inside, one outside
                 shockcurve.push_back(p_boundary);
-                printf("Curve constructor reached boundary in file \"%s\", line %u\n", __FILE__, __LINE__);
+//                printf("Curve constructor reached boundary in file \"%s\", line %u\n", __FILE__, __LINE__);
                 return SHOCK_REACHED_BOUNDARY;
                 //return SHOCK_ERROR;
             }
         } else if (type_of_shock == SHOCK_AS_ENGINE_FOR_COMPOSITE) {
             if (!boundary->inside(pnext)) {
-                printf("Curve constructor reached boundary in file \"%s\", line %u\n    pnext = (%lf, %lf)\n", __FILE__, __LINE__, pnext.component(0), pnext.component(1));
+//                printf("Curve constructor reached boundary in file \"%s\", line %u\n    pnext = (%lf, %lf)\n", __FILE__, __LINE__, pnext.component(0), pnext.component(1));
                 return SHOCK_REACHED_BOUNDARY;
             }
             shockcurve.push_back(pnext);
@@ -816,7 +816,7 @@ int Shock::curve(const RealVector &ref, bool local_shock, const RealVector &in, 
     if (fabs(e[family].i) > 1e-6) {
         printf("Shock::curve(): Init step, eigenvalue %d is complex: % f %+f.\n", family, e[family].r, e[family].i);
 
-        printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
+//        printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
 
         return SHOCK_ERROR;
     }
@@ -896,8 +896,8 @@ int Shock::curve(const RealVector &ref, bool local_shock, const RealVector &in, 
                     eps = eps_left;
                     printf("Left\n");
                 } else {
-                    printf("******Error init. Engine forward");
-                    printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
+//                    printf("******Error init. Engine forward");
+//                    printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
                     return SHOCK_ERROR;
                 }
             }
@@ -909,8 +909,8 @@ int Shock::curve(const RealVector &ref, bool local_shock, const RealVector &in, 
                     for (int i = 0; i < n; i++) pnext.component(i) = p_right.component(i);
                     eps = eps_right;
                 } else {
-                    printf("******Error init. Itself, forward. sl = %f, lambda = %f, sr = %f\n", s_left, lambda, s_right);
-                    printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
+//                    printf("******Error init. Itself, forward. sl = %f, lambda = %f, sr = %f\n", s_left, lambda, s_right);
+//                    printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
                     return SHOCK_ERROR;
                 }
             }
@@ -929,8 +929,8 @@ int Shock::curve(const RealVector &ref, bool local_shock, const RealVector &in, 
                     for (int i = 0; i < n; i++) pnext.component(i) = p_left.component(i);
                     eps = eps_left;
                 } else {
-                    printf("******Error init. Engine forward");
-                    printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
+//                    printf("******Error init. Engine forward");
+//                    printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
                     return SHOCK_ERROR;
                 }
             } else if (type_of_shock == SHOCK_FOR_ITSELF) {
@@ -941,13 +941,13 @@ int Shock::curve(const RealVector &ref, bool local_shock, const RealVector &in, 
                     for (int i = 0; i < n; i++) pnext.component(i) = p_left.component(i);
                     eps = eps_left;
                 } else {
-                    printf("******Error init. Itself, backward. sl = %f, lambda = %f, sr = %f\n", s_left, lambda, s_right);
-                    printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
+//                    printf("******Error init. Itself, backward. sl = %f, lambda = %f, sr = %f\n", s_left, lambda, s_right);
+//                    printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
                     return SHOCK_ERROR;
                 }
             }
         } else {
-            printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
+//            printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
             return SHOCK_ERROR;
         }
 
@@ -963,7 +963,7 @@ int Shock::curve(const RealVector &ref, bool local_shock, const RealVector &in, 
             // Both inside. Do nothing, carry on.
         } else if (info_boundary == -1) {
             // Both outside
-            printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
+//            printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
             return SHOCK_ERROR;
         } else {
             // One inside, one outside
@@ -987,8 +987,8 @@ int Shock::curve(const RealVector &ref, bool local_shock, const RealVector &in, 
                 sigma, sign_composite, sign_shock,
                 shockcurve);
 
-        printf("After curve_constructor(), info = %d, shockcurve.size() = %d\n", info_curve_constructor, shockcurve.size());
-        printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
+//        printf("After curve_constructor(), info = %d, shockcurve.size() = %d\n", info_curve_constructor, shockcurve.size());
+//        printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
         return info_curve_constructor;
     } else { // Non-local
         int info_lax = verify_lax_shock(ref_point, lambda_0, lambda_1, init, increase, family, ff, aa);
@@ -1047,12 +1047,6 @@ int Shock::curve(const RealVector &ref, bool local_shock, const RealVector &in, 
                 lambda, lambda_0, lambda_1,
                 sigma_left, sign_composite_left, sign_shock_left,
                 shockcurve_alt);
-
-        for (int i = 0; i < shockcurve_alt.size(); i++) {
-            cout << "Shock curve dentro de curve: " << shockcurve_alt[i] << endl;
-
-
-        }
 
 
         return (info_curve_constructor_right && info_curve_constructor_left);

@@ -31,6 +31,8 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
     private PhaseSpaceState state_;
     private RpGeometry selectedGeom_;
 
+    private List<RPnCurvesListFrame> curvesFrames_;
+
     //
     // Constructors
     //
@@ -38,10 +40,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         super(id, domain);
         changeState(state);
         selectedGeom_ = null;
-    }
-
-    public String toString (){
-        return getName() +" "+ getSpace().toString() + " "+ state_.toString();
+        curvesFrames_=new ArrayList<RPnCurvesListFrame>();
     }
 
     //
@@ -49,6 +48,24 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
     //
     public void changeState(PhaseSpaceState state) {
         state_ = state;
+    }
+
+    public void attach(RPnCurvesListFrame curvesFrame){
+        curvesFrames_.add(curvesFrame);
+    }
+
+
+    public void detach(RPnCurvesListFrame curvesListFrame){
+        curvesFrames_.remove(curvesListFrame);
+    }
+
+
+
+    private void notifyState(){
+        for (RPnCurvesListFrame curvesFrame  : curvesFrames_) {
+            curvesFrame.update(this);
+        }
+
     }
 
     /**
@@ -76,13 +93,12 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
 
         MultiGeometry toBeRemoved = (MultiGeometry) super.geomList_.get(geomList_.size() - 1);
         remove(toBeRemoved);
-        RPnCurvesListFrame.removeLastEntry();
         update();
 
     }
 
     public RpGeometry getLastGeometry() {
-        
+
 
         return (RpGeometry) super.geomList_.get(super.geomList_.size() - 1);
     }
@@ -95,17 +111,22 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         }
 
         super.join(geom);
+        notifyState();
 
-        RpGeometry geometry = (RpGeometry) geom;
-//
-        RPnCurvesListFrame.addGeometry(geometry);
+
     }
 
     @Override
     public void remove(MultiGeometry geom) {
 
         super.remove(geom);
+        notifyState();
 
+    }
+
+    @Override
+    public String toString() {
+        return getName() + " " + getSpace().toString() + " " + state_.toString();
     }
 
     public void clearGeometrySelection() {
@@ -299,7 +320,10 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         }
         for (int i = 0; i < joinList.size(); i++) {
             super.join((RpGeometry) joinList.get(i));
+
         }
+
+        notifyState();
     }
 
     // overwriting so we don't remove the last Hugoniot
@@ -320,7 +344,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         }
 
 
-        RPnCurvesListFrame.clear();
+//        RPnCurvesListFrame.clear();
 
     }
 

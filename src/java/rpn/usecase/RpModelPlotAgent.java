@@ -48,9 +48,7 @@ public abstract class RpModelPlotAgent extends RpModelActionAgent {
 
 
         String listString = "";
-        // selecting phase space
 
-        // stores the scene
         Iterator oldValue = phaseSpace_.getGeomObjIterator();
 
         RpGeometry geometry = createRpGeometry(userInputList);

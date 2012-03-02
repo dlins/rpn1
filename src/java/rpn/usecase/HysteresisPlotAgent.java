@@ -54,17 +54,20 @@ public class HysteresisPlotAgent extends RpModelPlotAgent {
 
         HysteresisCurveGeomFactory factory = new HysteresisCurveGeomFactory(RPNUMERICS.createHysteresisCurveCalc());
 
-        RPnPhaseSpaceAbstraction leftPhaseSpace = RPnDataModule.LEFTPHASESPACE;
+         if (UIController.instance().isAuxPanelsEnabled()) {
+            RPnPhaseSpaceAbstraction leftPhaseSpace = RPnDataModule.LEFTPHASESPACE;
 
-        RPnPhaseSpaceAbstraction rightPhaseSpace = RPnDataModule.RIGHTPHASESPACE;
+            RPnPhaseSpaceAbstraction rightPhaseSpace = RPnDataModule.RIGHTPHASESPACE;
 
-        RpGeometry leftGeometry = factory.leftGeom();
-        RpGeometry rightGeometry = factory.rightGeom();
+            RpGeometry leftGeometry = factory.leftGeom();
+            RpGeometry rightGeometry = factory.rightGeom();
 
-        leftPhaseSpace.plot(leftGeometry);
-        rightPhaseSpace.plot(rightGeometry);
+            leftPhaseSpace.plot(leftGeometry);
+            rightPhaseSpace.plot(rightGeometry);
+        } else {
+            RPnDataModule.PHASESPACE.plot(factory.geom());
+        }
 
-        System.out.println("Chamando execute");
     }
 
     static public HysteresisPlotAgent instance() {

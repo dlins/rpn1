@@ -52,21 +52,23 @@ public class InflectionPlotAgent extends RpModelPlotAgent {
     @Override
     public void execute() {
 
+         InflectionCurveGeomFactory factory = new InflectionCurveGeomFactory(RPNUMERICS.createInflectionCurveCalc());
 
-        InflectionCurveGeomFactory factory = new InflectionCurveGeomFactory(RPNUMERICS.createInflectionCurveCalc());
+        if (UIController.instance().isAuxPanelsEnabled()) {
+            RPnPhaseSpaceAbstraction leftPhaseSpace = RPnDataModule.LEFTPHASESPACE;
 
+            RPnPhaseSpaceAbstraction rightPhaseSpace = RPnDataModule.RIGHTPHASESPACE;
 
-        RPnPhaseSpaceAbstraction leftPhaseSpace = RPnDataModule.LEFTPHASESPACE;
+            RpGeometry leftGeometry = factory.leftGeom();
+            RpGeometry rightGeometry = factory.rightGeom();
 
-        RPnPhaseSpaceAbstraction rightPhaseSpace = RPnDataModule.RIGHTPHASESPACE;
+            leftPhaseSpace.plot(leftGeometry);
+            rightPhaseSpace.plot(rightGeometry);
+        } else {
+            RPnDataModule.PHASESPACE.plot(factory.geom());
+        }
 
-        RpGeometry leftGeometry = factory.leftGeom();
-        RpGeometry rightGeometry = factory.rightGeom();
-
-        leftPhaseSpace.plot(leftGeometry);
-        rightPhaseSpace.plot(rightGeometry);
-
-        System.out.println("Chamando execute");
+     
     }
 
     static public InflectionPlotAgent instance() {

@@ -12,6 +12,8 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -23,13 +25,14 @@ import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableModel;
 import rpn.component.RpCalcBasedGeomFactory;
 import rpn.component.RpGeometry;
-import rpn.parser.RPnDataModule;
+import rpn.controller.ui.UIController;
 import rpnumerics.HugoniotCurveCalcND;
 import rpnumerics.HugoniotParams;
 import rpnumerics.OrbitCalc;
 import rpnumerics.PointLevelCalc;
 import rpnumerics.RarefactionExtensionCalc;
 import rpnumerics.RpCalculation;
+import wave.multid.model.MultiGeometry;
 import wave.util.RealVector;
 
 public class RPnCurvesListFrame extends JFrame implements ActionListener {
@@ -38,10 +41,11 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
     private JToolBar toolBar_;
     private JTable curvesTable_;
     private JButton selectNoneButton_, selectAllButton_, invisibleButton_, visibleButton_, removeButton_;
-    private static DefaultTableModel tableModel_ = new RPnCurvesTableModel();
+    private DefaultTableModel tableModel_;
+    private RPnPhaseSpaceAbstraction phaseSpace_;
 
-    public RPnCurvesListFrame() {
-        super("Curves");
+    public RPnCurvesListFrame(String title) {
+        super(title);
 
         this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
@@ -53,10 +57,13 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
 
         this.setLocation((int) (width - (width * .55)), (int) (height - (height * .35)));
 
+        tableModel_ = new RPnCurvesTableModel();
+
 
         toolBar_ = new JToolBar();
 
         curvesTable_ = new JTable(tableModel_);
+
 
         curvesTable_.setRowSelectionAllowed(false);
 
@@ -108,16 +115,22 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
 
     }
 
-    public static void removeGeometry(Integer geometryIndex) {
+    public void attach(RPnPhaseSpaceAbstraction phaseSpace) {
+        phaseSpace_ = phaseSpace;
+    }
+
+    public void removeGeometry(Integer geometryIndex) {
         tableModel_.removeRow(geometryIndex);
     }
 
-    public static void addGeometry(RpGeometry geometry) {
+    public void addGeometry(RpGeometry geometry) {
 
 
         String geometryName = geometry.getClass().getSimpleName();
 
-        RealVector userInput =new RealVector(2);
+
+
+        RealVector userInput = new RealVector(2);
 
 
         RpCalcBasedGeomFactory factory = (RpCalcBasedGeomFactory) geometry.geomFactory();
@@ -127,7 +140,7 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
 
         if (calc instanceof HugoniotCurveCalcND) {
             HugoniotCurveCalcND hCalc = (HugoniotCurveCalcND) calc;
-            userInput = ((HugoniotParams)hCalc.getParams()).getXZero();
+            userInput = ((HugoniotParams) hCalc.getParams()).getXZero();
         }
 
 
@@ -144,9 +157,9 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
         }
 
 
-        if (calc instanceof RarefactionExtensionCalc){
-            RarefactionExtensionCalc rarCalc = (RarefactionExtensionCalc)calc;
-            userInput=rarCalc.getStart();
+        if (calc instanceof RarefactionExtensionCalc) {
+            RarefactionExtensionCalc rarCalc = (RarefactionExtensionCalc) calc;
+            userInput = rarCalc.getStart();
         }
 
 
@@ -169,7 +182,7 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
 
     }
 
-    public static void clear() {
+    public void clear() {
         int rowNumber = tableModel_.getRowCount();
         int i = 0;
 
@@ -180,12 +193,8 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
 
     }
 
-    public static void removeLastEntry() {
-
-//        if (tableModel_.getRowCount() >= 2) {
-            tableModel_.removeRow(tableModel_.getRowCount() -1);
-//        }
-
+    public void removeLastEntry() {
+        tableModel_.removeRow(tableModel_.getRowCount() - 1);
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -193,23 +202,16 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
         JButton button = (JButton) e.getSource();
 
         if (button.getName().equals("SelectAll")) {
-
-
             for (int i = 0; i < curvesTable_.getModel().getRowCount(); i++) {
-
                 curvesTable_.setValueAt(new Boolean(true), i, 0);
-
             }
-
 
         }
 
         if (button.getName().equals("SelectNone")) {
 
             for (int i = 0; i < curvesTable_.getModel().getRowCount(); i++) {
-
                 curvesTable_.setValueAt(new Boolean(false), i, 0);
-
             }
         }
 
@@ -217,57 +219,84 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
 
         if (button.getName().equals("Invisible")) {
 
-            for (int i = 0; i < curvesTable_.getModel().getRowCount(); i++) {
 
-                Boolean selected = (Boolean) curvesTable_.getValueAt(i, 0);
+
+
+            int index = 0;
+            boolean selected;
+            Iterator it = phaseSpace_.getGeomObjIterator();
+
+
+            while (it.hasNext()) {
+                selected = (Boolean) curvesTable_.getValueAt(index, 0);
+                MultiGeometry multiGeometry = (MultiGeometry) it.next();
 
                 if (selected) {
-                    //RPnDataModule.PHASESPACE.displayGeometry(i,false);
-                    RPnDataModule.PHASESPACE.hideGeometry(i);
-                    curvesTable_.setValueAt(false, i, 3);
+                    multiGeometry.viewingAttr().setVisible(false);
+                    curvesTable_.setValueAt(false, index, 3);
                 }
-
-
+                index++;
             }
+
+
+            UIController.instance().panelsUpdate();
 
         }
 
         if (button.getName().equals("Visible")) {
 
+            int index = 0;
+            boolean selected;
+            Iterator it = phaseSpace_.getGeomObjIterator();
 
-            for (int i = 0; i < curvesTable_.getModel().getRowCount(); i++) {
 
-                Boolean selected = (Boolean) curvesTable_.getValueAt(i, 0);
+            while (it.hasNext()) {
+                selected = (Boolean) curvesTable_.getValueAt(index, 0);
+                MultiGeometry multiGeometry = (MultiGeometry) it.next();
 
                 if (selected) {
-                    //RPnDataModule.PHASESPACE.displayGeometry(i,true);
-                    RPnDataModule.PHASESPACE.displayGeometry(i);
-                    curvesTable_.setValueAt(true, i, 3);
+                    multiGeometry.viewingAttr().setVisible(true);
+                    curvesTable_.setValueAt(true, index, 3);
                 }
-
-
+                index++;
             }
-
+            UIController.instance().panelsUpdate();
         }
 
 
         if (button.getName().equals("Remove")) {
-            int count = tableModel_.getRowCount();
             int index = 0;
+            boolean selected;
+            Iterator it = phaseSpace_.getGeomObjIterator();
+            ArrayList<MultiGeometry> toBeRemoved = new ArrayList<MultiGeometry>();
 
-            while (index < count) {
-                boolean selected = (Boolean) tableModel_.getValueAt(index, 0);
+            while (it.hasNext()) {
+                selected = (Boolean) tableModel_.getValueAt(index, 0);
+                MultiGeometry multiGeometry = (MultiGeometry) it.next();
+
                 if (selected) {
-                    tableModel_.removeRow(index);
-                    RPnDataModule.PHASESPACE.remove(index);
-                    index = 0;
-                    count = tableModel_.getRowCount();
-                } else {
-                    index++;
+                    toBeRemoved.add(multiGeometry);
                 }
-
+                index++;
             }
 
+
+            for (MultiGeometry multiGeometry : toBeRemoved) {
+                phaseSpace_.remove(multiGeometry);
+            }
+
+
+
+
+        }
+
+    }
+
+    public void update(RPnPhaseSpaceAbstraction phsaseSpaceAbstraction) {
+        clear();
+        Iterator iterator = phsaseSpaceAbstraction.getGeomObjIterator();
+        while (iterator.hasNext()) {
+            addGeometry((RpGeometry) iterator.next());
         }
 
     }

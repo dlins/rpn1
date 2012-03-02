@@ -57,28 +57,23 @@ public class BoundaryExtensionCurveAgent extends RpModelPlotAgent {
 
         BoundaryExtensionCurveGeomFactory factory = new BoundaryExtensionCurveGeomFactory(RPNUMERICS.createBoundaryExtensionCurveCalc());
 
+        if (UIController.instance().isAuxPanelsEnabled()) {
+            RPnPhaseSpaceAbstraction leftPhaseSpace = RPnDataModule.LEFTPHASESPACE;
 
-        RPnPhaseSpaceAbstraction leftPhaseSpace = RPnDataModule.LEFTPHASESPACE;
+            RPnPhaseSpaceAbstraction rightPhaseSpace = RPnDataModule.RIGHTPHASESPACE;
 
-        RPnPhaseSpaceAbstraction rightPhaseSpace = RPnDataModule.RIGHTPHASESPACE;
+            RpGeometry leftGeometry = factory.leftGeom();
+            RpGeometry rightGeometry = factory.rightGeom();
 
-        RpGeometry leftGeometry = factory.leftGeom();
-        RpGeometry rightGeometry = factory.rightGeom();
+            leftPhaseSpace.plot(leftGeometry);
+            rightPhaseSpace.plot(rightGeometry);
+        } else {
+            RPnDataModule.PHASESPACE.plot(factory.geom());
+        }
 
-        leftPhaseSpace.plot(leftGeometry);
-        rightPhaseSpace.plot(rightGeometry);
 
-        System.out.println("Chamando execute");
     }
 
-//    @Override
-//    public void execute() {
-//        BoundaryExtensionCurveGeomFactory factory = new BoundaryExtensionCurveGeomFactory(RPNUMERICS.createBoundaryExtensionCurveCalc());
-//        RPnPhaseSpaceAbstraction auxPhaseSpace = RPnDataModule.PHASESPACE;
-//        RpGeometry geometry = factory.geom();
-//        auxPhaseSpace.plot(geometry);
-//
-//    }
     static public BoundaryExtensionCurveAgent instance() {
         if (instance_ == null) {
             instance_ = new BoundaryExtensionCurveAgent();
