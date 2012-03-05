@@ -271,4 +271,6 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
         }
 
     }
+
+    
 }

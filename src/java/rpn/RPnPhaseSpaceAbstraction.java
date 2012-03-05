@@ -368,6 +368,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
     }
 
     public void setSelectedGeom(RpGeometry selected) {
+        System.out.println("Selecionou alguma geometria");
         selectedGeom_ = selected;
     }
 

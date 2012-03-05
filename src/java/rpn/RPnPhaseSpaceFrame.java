@@ -147,6 +147,15 @@ public class RPnPhaseSpaceFrame extends JFrame {
             if (keyEvent.getKeyChar() == 'm'  ||  keyEvent.getKeyChar() == 'M') {
                 ControlClick.ind = 0;
             }
+
+            if (keyEvent.getKeyChar() == 'o'  ||  keyEvent.getKeyChar() == 'O') {
+                ControlClick.onCurve = 1;
+                UIController.instance().showCursorLines(false);
+            }
+            else {
+                ControlClick.onCurve = 0;
+                UIController.instance().showCursorLines(true);
+            }
             //*** --------------------------------------------------------------
 
             //*** solucao provisoria para resize dos paineis em tempo de execucao --- Leandro

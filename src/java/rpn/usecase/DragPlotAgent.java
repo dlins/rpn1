@@ -13,8 +13,16 @@ import rpn.RPnPhaseSpaceFrame;
 import rpn.RPnUIFrame;
 import rpn.component.BifurcationCurveGeom;
 import rpn.component.RpGeometry;
+import rpn.component.util.CLASSIFIERAGENT_CONFIG;
+import rpn.component.util.ControlClick;
+import rpn.component.util.GeometryGraphND;
+import rpn.component.util.GeometryUtil;
 import rpn.controller.ui.*;
 import rpn.parser.RPnDataModule;
+import rpnumerics.Orbit;
+import rpnumerics.RPnCurve;
+import rpnumerics.SegmentedCurve;
+import wave.util.RealSegment;
 
 public class DragPlotAgent extends RpModelConfigChangeAgent {
     //
@@ -44,8 +52,10 @@ public class DragPlotAgent extends RpModelConfigChangeAgent {
 
         RealVector newValue = userInputList.values();
 
-        lastGeometry.geomFactory().getUI().propertyChange(new PropertyChangeEvent(this, "enabled", null, newValue));
+        if (ControlClick.onCurve == 1) newValue = GeometryGraphND.pMarca;
 
+        lastGeometry.geomFactory().getUI().propertyChange(new PropertyChangeEvent(this, "enabled", null, newValue));
+        
         RPnCurvesListFrame.addGeometry(lastGeometry);
 
         RPnDataModule.PHASESPACE.update();

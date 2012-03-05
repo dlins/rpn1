@@ -24,9 +24,18 @@ import rpn.controller.*;
 import java.net.*;
 import java.util.Iterator;
 import rpn.RPnDesktopPlotter;
+import rpn.RPnPhaseSpaceFrame;
 import rpn.RPnUIFrame;
 import rpn.component.util.ControlClick;
+import rpn.component.util.GeometryGraphND;
+import rpn.component.util.GeometryUtil;
 import rpn.message.*;
+import rpn.parser.RPnDataModule;
+import rpnumerics.Orbit;
+import rpnumerics.RPnCurve;
+import rpnumerics.SegmentedCurve;
+import wave.multid.view.ViewingTransform;
+import wave.util.RealSegment;
 
 /** This class implements a general controller to the application. With the UIController class, the state of the application is changed, the controllers of each panel are installed or removed and the user inputs are stored in a global table. */
 public class UIController extends ComponentUI {
@@ -147,10 +156,34 @@ public class UIController extends ComponentUI {
 //                if (netStatus_.isMaster() || !(netStatus_.isOnline())) {
                 RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
                 if (ControlClick.ind == 0) ControlClick.mousePressed(event, panel.scene());
+                
+                //*** Permite que o input point de uma curva seja exatamente um ponto sobre outra curva
+                if (ControlClick.onCurve == 1) {
+                    
+                    ViewingTransform transf = panel.scene().getViewingTransform();
+
+                    //** Para usar transfs originais.   FUNCIONANDO!!!
+                    Coords2D dcCoords = new Coords2D(event.getX(), event.getY());
+                    CoordsArray wcCoords = new CoordsArray(transf.projectionMap().getDomain());
+                    transf.dcInverseTransform(dcCoords, wcCoords);
+                    //***
+
+                    for (int i = 0; i < GeometryGraphND.targetPoint.getSize(); i++) {
+                        GeometryGraphND.targetPoint.setElement(i, wcCoords.getElement(i));
+                    }
+
+                    RPnCurve curve = GeometryUtil.findClosestCurve(GeometryGraphND.targetPoint);
+                    if (curve instanceof SegmentedCurve)     GeometryGraphND.pMarca = ((RealSegment) (((SegmentedCurve) curve).segments()).get(GeometryUtil.closestSeg)).p1();
+                    if (curve instanceof Orbit)              GeometryGraphND.pMarca = ((Orbit) curve).getPoints()[GeometryUtil.closestSeg];
+
+                }
+                //***-----------------------------------------------------------------------------------
+                
                 // this will automatically work only for 2D(isComplete())
                 updateUserInputTable(panel, event.getPoint());
 
-                if (globalInputTable().isComplete()&& ControlClick.ind == 0) {
+                if (globalInputTable().isComplete() && ControlClick.ind == 0) {
+                //if (globalInputTable().isComplete()) {
 
                     globalInputTable().reset();
                     resetPanelsCursorCoords();
@@ -178,7 +211,7 @@ public class UIController extends ComponentUI {
 
                 RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
                 ControlClick.mousePressed(event, panel.scene());   //** acrescentei isso (Leandro)
-
+                
                 if (netStatus_.isMaster() || !(netStatus_.isOnline())) {
 
 
