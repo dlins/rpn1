@@ -28,7 +28,6 @@ import rpn.component.RpGeometry;
 import rpn.controller.ui.UIController;
 import rpnumerics.HugoniotCurve;
 import rpnumerics.HugoniotCurveCalcND;
-import rpnumerics.HugoniotParams;
 import rpnumerics.LevelCurve;
 import rpnumerics.OrbitCalc;
 import rpnumerics.PointLevelCalc;
@@ -134,23 +133,14 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
 
 
         if (calc instanceof HugoniotCurveCalcND) {
-
             HugoniotCurve curve = (HugoniotCurve)factory.geomSource();
             userInput = curve.getXZero().getCoords();
-
         }
 
 
         if (calc instanceof PointLevelCalc) {
-
-            LevelCurve curve = (LevelCurve)factory.geomSource();
-
             PointLevelCalc hCalc = (PointLevelCalc) calc;
-
-
-
             userInput = hCalc.getStartPoint();
-
         }
 
         if (calc instanceof OrbitCalc) {
