@@ -5,6 +5,9 @@
  */
 package rpn.component;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import rpn.RPnFluxParamsSubject;
 import rpnumerics.*;
 import rpn.controller.HugoniotController;
 import rpn.controller.RpController;
@@ -30,7 +33,7 @@ public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
     protected RpGeometry createGeomFromSource() {
 
         HugoniotCurve curve = (HugoniotCurve) geomSource();
-        System.out.println("curve.getXZero() : " +curve.getXZero());
+
         
         // assuming a container with HugoniotSegment elements
         int resultSize = curve.segments().size();
@@ -84,7 +87,7 @@ public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
         buffer.append("<COMMAND name=\""+commandName+"\""+ " inputpoint=\"" + hugoniotCurve.getXZero().toString() + "\" " + calc.getParams().toString()+  ">\n");
 
         buffer.append(((HugoniotCurve) geomSource()).toXML());
-
+        
         buffer.append("</COMMAND>\n");
 
         return buffer.toString();

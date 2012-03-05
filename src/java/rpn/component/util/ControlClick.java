@@ -10,6 +10,7 @@ import java.awt.event.MouseEvent;
 import rpn.RPnPhaseSpacePanel;
 import rpn.controller.ui.AREASELECTION_CONFIG;
 import rpn.controller.ui.UIController;
+import rpn.usecase.DragPlotAgent;
 import rpnumerics.DoubleContactCurve;
 import rpnumerics.HugoniotCurve;
 import rpnumerics.HugoniotSegment;
@@ -32,6 +33,7 @@ import wave.util.RealVector;
 public class ControlClick {
 
     public static int ind = 0;
+    public static int onCurve = 0;
 
     //*************************************
     public static void clearpMarca() {
@@ -289,7 +291,6 @@ public class ControlClick {
 
 
         }
-
 
     }
 }

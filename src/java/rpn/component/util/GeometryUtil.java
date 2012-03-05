@@ -13,8 +13,6 @@ import rpn.component.RpGeomFactory;
 import rpn.component.RpGeometry;
 import rpn.parser.RPnDataModule;
 import rpnumerics.ContourCurveCalc;
-import rpnumerics.HugoniotCurve;
-import rpnumerics.HugoniotCurveCalcND;
 import rpnumerics.RPnCurve;
 import rpnumerics.RpCalculation;
 import rpnumerics.SegmentedCurve;
@@ -30,7 +28,7 @@ public class GeometryUtil {
     static public RPnCurve closestCurve_ ;      //a curva mais proxima
     static public int closestSeg ;              //indice do segmento mais proximo
     static public List listResolution = new ArrayList();
-
+    
     
     public static RPnCurve findClosestCurve(RealVector targetPoint) {
 
@@ -44,61 +42,70 @@ public class GeometryUtil {
         //--------------------------
         Iterator<RpGeometry> geomList = RPnDataModule.PHASESPACE.getGeomObjIterator();
 
-        while (geomList.hasNext()) {
+            while (geomList.hasNext()) {
 
             RpGeometry geom = (RpGeometry) geomList.next();
 
-            if (geom.viewingAttr().isVisible()) {
+                if (ControlClick.onCurve == 1) {
 
-//            if (curve instanceof SegmentedCurve) {
-//                SegmentedCurve curveSeg = (SegmentedCurve)curve;
-//                seg = curveSeg.findClosestSegment(targetPoint);
-//                distancia = curveSeg.distancia;
-//            }
-//            if (curve instanceof Orbit) {
-//                Orbit curveOrb = (Orbit)curve;
-//                seg = curveOrb.findClosestSegment(targetPoint);
-//                distancia = curveOrb.distancia;
-//            }
+                    if (geom != RPnDataModule.PHASESPACE.getLastGeometry()) {
+                        if (geom.viewingAttr().isVisible()) {
 
-                RpGeomFactory factory = geom.geomFactory();
-                RPnCurve curve = (RPnCurve) factory.geomSource();
+                            RpGeomFactory factory = geom.geomFactory();
+                            RPnCurve curve = (RPnCurve) factory.geomSource();
 
-                if (curve instanceof SegmentedCurve) {
-                    RpCalcBasedGeomFactory geomFactory = (RpCalcBasedGeomFactory) factory;
-                    RpCalculation calc = geomFactory.rpCalc();
+                            seg = curve.findClosestSegment(targetPoint);
+                            distancia = curve.distancia;
 
-                    if (curve instanceof HugoniotCurve) {
-                        HugoniotCurveCalcND curveCalc = (HugoniotCurveCalcND) calc;
-                        listResolution.add(curveCalc.getParams().getResolution());
-                    }
-                    else {
-                        ContourCurveCalc curveCalc = (ContourCurveCalc) calc;
-                        listResolution.add(curveCalc.getParams().getResolution());
+                            if (distminCurve >= distancia) {
+                                distminCurve = distancia;
+                                closestCurve = k;
+                                closestCurve_ = curve;
+                                closestSeg = seg;
+                            }
+
+                        }
                     }
 
                 }
-                else {
-                    int[] resolution = {1, 1};
-                    listResolution.add(resolution);
+
+                if (ControlClick.onCurve == 0) {
+
+                    if (geom.viewingAttr().isVisible()) {
+
+                        RpGeomFactory factory = geom.geomFactory();
+                        RPnCurve curve = (RPnCurve) factory.geomSource();
+
+                        if (curve instanceof SegmentedCurve) {
+                            RpCalcBasedGeomFactory geomFactory = (RpCalcBasedGeomFactory) factory;
+                            RpCalculation calc = geomFactory.rpCalc();
+                            ContourCurveCalc curveCalc = (ContourCurveCalc) calc;
+                            listResolution.add(curveCalc.getParams().getResolution());
+
+                        } else {
+                            int[] resolution = {1, 1};
+                            listResolution.add(resolution);
+                        }
+
+                        seg = curve.findClosestSegment(targetPoint);
+                        distancia = curve.distancia;
+
+                        if (distminCurve >= distancia) {
+                            distminCurve = distancia;
+                            closestCurve = k;
+                            closestCurve_ = curve;
+                            closestSeg = seg;
+                        }
+
+                    }
+
                 }
-                
-                seg = curve.findClosestSegment(targetPoint);
-                distancia = curve.distancia;
-
-
-                if (distminCurve >= distancia) {
-                    distminCurve = distancia;
-                    closestCurve = k;
-                    closestCurve_ = curve;
-                    closestSeg = seg;
-                }
-
-            }
 
             k++;
 
         }
+        
+        
         //--------------------------
 
         return closestCurve_;   // de todas as curvas no painel

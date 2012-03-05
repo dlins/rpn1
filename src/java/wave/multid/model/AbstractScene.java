@@ -9,20 +9,18 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import java.io.FileReader;
 import java.util.Iterator;
-import rpn.RPnCurvesListFrame;
-import rpn.component.RpGeometry;
 import rpn.component.util.ClassifierAgent;
 import rpn.component.util.ControlClick;
-import rpn.component.util.GeometryGraphND;
+
 import rpn.component.util.GeometryUtil;
+
 import rpn.component.util.VelocityAgent;
-import rpnumerics.RPNUMERICS;
-import rpnumerics.RPnCurve;
+
 import wave.multid.view.*;
 import wave.multid.*;
 import wave.multid.map.Map;
 
-public class AbstractScene implements AbstractGeomObj {
+   public class AbstractScene implements AbstractGeomObj {
     //
     // Members
     //
@@ -151,12 +149,11 @@ public class AbstractScene implements AbstractGeomObj {
         ControlClick.clearpMarca();
         removeStringsCla(geometryIndex);
         removeStringsVel(geometryIndex);
-        GeometryUtil.listResolution.remove(geometryIndex);
+        if (GeometryUtil.listResolution.size()>0) GeometryUtil.listResolution.remove(geometryIndex);
         // -----------
 
         MultiGeometry geom = (MultiGeometry) geomList_.remove(geometryIndex);
         
-        //RPnCurvesListFrame.removeGeometry(geometryIndex);
         try {
             boundary_.resize(geom.getPathIterator());
         } catch (DimMismatchEx dex) {

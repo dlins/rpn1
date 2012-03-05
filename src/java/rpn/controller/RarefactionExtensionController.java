@@ -9,16 +9,19 @@ import rpn.component.RpGeomFactory;
 import rpn.usecase.*;
 import java.beans.PropertyChangeEvent;
 import rpn.component.HugoniotCurveGeomFactory;
+import rpn.component.RarefactionExtensionGeomFactory;
 import rpnumerics.HugoniotCurveCalcND;
 import rpnumerics.HugoniotParams;
+import rpnumerics.PhasePoint;
+import rpnumerics.RarefactionExtensionCalc;
 import wave.util.RealVector;
 
-public class HugoniotController extends RpCalcController {
+public class RarefactionExtensionController extends RpCalcController {
     //
     // Members
     //
 
-    private HugoniotCurveGeomFactory geomFactory_;
+    private RarefactionExtensionGeomFactory geomFactory_;
     //
     // Constructors
     //
@@ -33,7 +36,7 @@ public class HugoniotController extends RpCalcController {
     protected void register() {
         DragPlotAgent.instance().addPropertyChangeListener(this);
         ChangeFluxParamsAgent.instance().addPropertyChangeListener(this);
-        BifurcationRefineAgent.instance().addPropertyChangeListener(this);      // ****
+
 
     }
 
@@ -41,14 +44,14 @@ public class HugoniotController extends RpCalcController {
     protected void unregister() {
         DragPlotAgent.instance().removePropertyChangeListener(this);
         ChangeFluxParamsAgent.instance().removePropertyChangeListener(this);
-        BifurcationRefineAgent.instance().removePropertyChangeListener(this);
+
 
     }
 
     @Override
     public void install(RpGeomFactory geom) {
         super.install(geom);
-        geomFactory_ = (HugoniotCurveGeomFactory) geom;
+        geomFactory_ = (RarefactionExtensionGeomFactory) geom;
     }
 
     @Override
@@ -61,9 +64,7 @@ public class HugoniotController extends RpCalcController {
     public void propertyChange(PropertyChangeEvent change) {
 
         if (change.getSource() instanceof DragPlotAgent) {
-
-
-            ((HugoniotParams) ((HugoniotCurveCalcND) geomFactory_.rpCalc()).getParams()).setXZero((RealVector) change.getNewValue());
+            ((RarefactionExtensionCalc) geomFactory_.rpCalc()).setStart(new PhasePoint((RealVector) change.getNewValue()));
             geomFactory_.updateGeom();
             return;
         }

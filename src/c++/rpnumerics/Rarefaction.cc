@@ -1020,7 +1020,15 @@ int Rarefaction::curve(const RealVector &initial_point,
                     // in order to avoid arrow clutter when displaying the results.
                     // The value of lambda at the inflection point is not being calculated
                     // and this situation affects the method by which the arrows are created.
-                    if (type_of_rarefaction == RAREFACTION_FOR_ITSELF) rarcurve.push_back(last_point);
+
+                    
+                     // Pablo mudou essa linha para que não aparecesse uma seta a mais de direcao contrária na rarefacao (Conferir com o Rodrigo)
+                    //if (type_of_rarefaction == RAREFACTION_FOR_ITSELF) rarcurve.push_back(last_point);
+
+
+                      if (type_of_rarefaction == RAREFACTION_FOR_ITSELF) rarcurve.push_back(new_point);
+
+
                 }
 //                else printf("Last point discarded.\n");
 

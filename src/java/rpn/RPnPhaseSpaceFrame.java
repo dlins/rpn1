@@ -16,6 +16,7 @@ import java.util.*;
 import rpn.component.util.ControlClick;
 import rpn.component.util.GeometryGraphND;
 import rpn.controller.ui.UIController;
+import rpn.usecase.DragPlotAgent;
 
 public class RPnPhaseSpaceFrame extends JFrame {
 
@@ -145,6 +146,15 @@ public class RPnPhaseSpaceFrame extends JFrame {
             //*** solucao provisoria para movimento sobre a curva --- Leandro
             if (keyEvent.getKeyChar() == 'm'  ||  keyEvent.getKeyChar() == 'M') {
                 ControlClick.ind = 0;
+            }
+
+            if (keyEvent.getKeyChar() == 'o'  ||  keyEvent.getKeyChar() == 'O') {
+                ControlClick.onCurve = 1;
+                UIController.instance().showCursorLines(false);
+            }
+            else {
+                ControlClick.onCurve = 0;
+                UIController.instance().showCursorLines(true);
             }
             //*** --------------------------------------------------------------
 

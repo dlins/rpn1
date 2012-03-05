@@ -8,6 +8,7 @@ package rpnumerics;
 
 import wave.ode.ODESolution;
 import wave.ode.ODESolver;
+import wave.util.RealVector;
 
 public class OrbitCalc implements RpCalculation {
     //
@@ -81,6 +82,10 @@ public class OrbitCalc implements RpCalculation {
     public int getDirection() {
         return timeDirection_;
 
+    }
+
+    public void setStart(RealVector startpoint){
+        start_= new OrbitPoint(startpoint);
     }
 
     public RpSolution recalc(Area area) throws RpException {

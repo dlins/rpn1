@@ -23,21 +23,19 @@ import java.beans.PropertyChangeEvent;
 import rpn.controller.*;
 import java.net.*;
 import java.util.Iterator;
-import javax.swing.JOptionPane;
 import rpn.RPnDesktopPlotter;
+import rpn.RPnPhaseSpaceFrame;
 import rpn.RPnUIFrame;
-import rpn.component.RpGeomFactory;
-import rpn.component.RpGeometry;
 import rpn.component.util.ControlClick;
+import rpn.component.util.GeometryGraphND;
 import rpn.component.util.GeometryUtil;
 import rpn.message.*;
 import rpn.parser.RPnDataModule;
-import rpnumerics.HugoniotCurve;
-import rpnumerics.RPNUMERICS;
+import rpnumerics.Orbit;
 import rpnumerics.RPnCurve;
 import rpnumerics.SegmentedCurve;
-import wave.multid.view.Scene;
 import wave.multid.view.ViewingTransform;
+import wave.util.RealSegment;
 
 /** This class implements a general controller to the application. With the UIController class, the state of the application is changed, the controllers of each panel are installed or removed and the user inputs are stored in a global table. */
 public class UIController extends ComponentUI {
@@ -55,7 +53,7 @@ public class UIController extends ComponentUI {
     private MouseController mouseController_;
     private MouseMotionController mouseMotionController_;
     private rpn.controller.ui.UserInputTable globalInputTable_;
-    private static UIController instance_ = null;   //** era private (Leandro)
+    private static UIController instance_ = null;
     private RPnNetworkStatus netStatus_ = null;
     private String clientID_;
     private RPnPhaseSpacePanel focusPanel_;
@@ -143,22 +141,6 @@ public class UIController extends ComponentUI {
         return commandArray_.iterator();
 
     }
-
-    //******** Leandro teste
-    private Point toDCcoords(RealVector input, Scene scene) {
-        
-        ViewingTransform transf = scene.getViewingTransform();
-        CoordsArray wcCoords = new CoordsArray(input);
-        Coords2D dcCoords = new Coords2D();
-        transf.viewPlaneTransform(wcCoords, dcCoords);
-        Point point = new Point();
-        point.setLocation(dcCoords.getX(), dcCoords.getY());
-
-        return point;
-
-    }
-    //********
-
     //
     // Inner Classes
     //
@@ -171,22 +153,46 @@ public class UIController extends ComponentUI {
 
             if (event.getComponent() instanceof RPnPhaseSpacePanel) {
 
-                if (netStatus_.isMaster() || !(netStatus_.isOnline())) {
-                    RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
-                    if (ControlClick.ind == 0) ControlClick.mousePressed(event, panel.scene());
+//                if (netStatus_.isMaster() || !(netStatus_.isOnline())) {
+                RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
+                if (ControlClick.ind == 0) ControlClick.mousePressed(event, panel.scene());
+                
+                //*** Permite que o input point de uma curva seja exatamente um ponto sobre outra curva
+                if (ControlClick.onCurve == 1) {
+                    
+                    ViewingTransform transf = panel.scene().getViewingTransform();
 
-                    // this will automatically work only for 2D(isComplete())
-                    updateUserInputTable(panel, event.getPoint());
-                    evaluatePanelsCursorCoords(panel, event.getPoint());
-                    if (globalInputTable().isComplete()) {
-                        userInputComplete(globalInputTable().values());
-                        globalInputTable().reset();
-                        resetPanelsCursorCoords();
+                    //** Para usar transfs originais.   FUNCIONANDO!!!
+                    Coords2D dcCoords = new Coords2D(event.getX(), event.getY());
+                    CoordsArray wcCoords = new CoordsArray(transf.projectionMap().getDomain());
+                    transf.dcInverseTransform(dcCoords, wcCoords);
+                    //***
+
+                    for (int i = 0; i < GeometryGraphND.targetPoint.getSize(); i++) {
+                        GeometryGraphND.targetPoint.setElement(i, wcCoords.getElement(i));
                     }
 
-
+                    RPnCurve curve = GeometryUtil.findClosestCurve(GeometryGraphND.targetPoint);
+                    if (curve instanceof SegmentedCurve)     GeometryGraphND.pMarca = ((RealSegment) (((SegmentedCurve) curve).segments()).get(GeometryUtil.closestSeg)).p1();
+                    if (curve instanceof Orbit)              GeometryGraphND.pMarca = ((Orbit) curve).getPoints()[GeometryUtil.closestSeg];
 
                 }
+                //***-----------------------------------------------------------------------------------
+                
+                // this will automatically work only for 2D(isComplete())
+                updateUserInputTable(panel, event.getPoint());
+
+                if (globalInputTable().isComplete() && ControlClick.ind == 0) {
+                //if (globalInputTable().isComplete()) {
+
+                    globalInputTable().reset();
+                    resetPanelsCursorCoords();
+                    if (event.isShiftDown())
+                    userInputComplete(globalInputTable().values());
+                    else
+                    DragPlotAgent.instance().execute();
+                }
+                
             }
         }
     }
@@ -205,34 +211,10 @@ public class UIController extends ComponentUI {
 
                 RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
                 ControlClick.mousePressed(event, panel.scene());   //** acrescentei isso (Leandro)
-
+                
                 if (netStatus_.isMaster() || !(netStatus_.isOnline())) {
 
-                    
-                    //*** Leandro
-//                    if (UIController.instance().getState() instanceof AREASELECTION_CONFIG) {
-//
-//                        RealVector local = new RealVector(RPNUMERICS.domainDim());
-//                        for (int i = 0; i < RPNUMERICS.domainDim(); i++) {
-//                            local.setElement(i, ((HugoniotCurve) GeometryUtil.closestCurve_).getXZero().getElement(i));
-//                        }
-//                        //System.out.println("local.toString() : " +local.toString());
-//
-//                        Point input = toDCcoords(local, panel.scene());
-//                        updateUserInputTable(panel, input);
-//
-//                        // execute
-//                        userInputComplete(((HugoniotCurve) GeometryUtil.closestCurve_).getXZero());
-//                        globalInputTable().reset();
-//                        resetPanelsCursorCoords();
-//                        RPnUIFrame.enableSliders();
-//
-//                        return;
-//
-//                    }
-                    //***
 
-                    //*** original
                     int sceneDim = panel.scene().getViewingTransform().projectionMap().getDomain().getDim();
                     if (sceneDim == globalInputTable_.flags().length) {
 
@@ -245,12 +227,8 @@ public class UIController extends ComponentUI {
                             resetPanelsCursorCoords();
                             RPnUIFrame.enableSliders();
                         }
-                        
+
                     }
-//                    else {
-//                        JOptionPane.showMessageDialog(panel, "Wrong space dimension", "Error", JOptionPane.ERROR_MESSAGE);
-//
-//                    }
 
                 }
             }

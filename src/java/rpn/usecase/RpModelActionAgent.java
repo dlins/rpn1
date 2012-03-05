@@ -42,20 +42,18 @@ public abstract class RpModelActionAgent extends AbstractAction implements Undoa
     public void actionPerformed(ActionEvent event) {
         // garbage collection is ok ?
         RpModelPlotAgent.keepLastGeometry();
-        
-        if (!(this instanceof BifurcationPlotAgent)) {//no state change after bifurcation plot
-            UI_ACTION_SELECTED action = new UI_ACTION_SELECTED(this);
 
-            UIController.instance().setState(action);
+        UI_ACTION_SELECTED action = new UI_ACTION_SELECTED(this);
 
+        UIController.instance().setState(action);
+        if (UIController.instance().getNetStatusHandler().isOnline()) { //Sending application state
+            RPnActionMediator.instance().setState(desc_);
 
-            if (UIController.instance().getNetStatusHandler().isOnline()) { //Sending application state
-                RPnActionMediator.instance().setState(desc_);
-
-                System.out.println(desc_);
-            }
-
+            System.out.println(desc_);
         }
+
+
+
 
 
     }

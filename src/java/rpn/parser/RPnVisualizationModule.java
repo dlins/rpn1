@@ -179,38 +179,10 @@ public class RPnVisualizationModule {
 
             Boolean iso = new Boolean(iso2equi);
 
-            // *** Leandro
-//            try {
-//                if (RPNUMERICS.physicsID().equals("Stone")) {
-//                    String str = JOptionPane.showInputDialog(null, "Digite 0 para triangulo retangulo; 1 para triangulo equilatero", "Iso Map To Equi ?", JOptionPane.QUESTION_MESSAGE);
-//                    GeometryGraphND.mapToEqui = Integer.parseInt(str);
-//                    if (GeometryGraphND.mapToEqui == 0) {
-//                        iso = false;
-//                    }
-//                }
-//
-//            } catch (Exception e) {
-//            }
-
-            if (RPNUMERICS.physicsID().equals("Stone")) {
-            Object[] options = {"Iso", "Equi"};
-            GeometryGraphND.mapToEqui = JOptionPane.showOptionDialog(new JFrame(),
-                    "Choose the view: ",
-                    "Triangular domain:",
-                    JOptionPane.YES_NO_CANCEL_OPTION,
-                    JOptionPane.QUESTION_MESSAGE,
-                    null,
-                    options,
-                    options[1]);
-
-                if (GeometryGraphND.mapToEqui == 0) {
-                    iso = false;
-                }
-
-            }
             //***
-            //if (iso == false) GeometryGraphND.mapToEqui = 0;
-            //if (iso == true)  GeometryGraphND.mapToEqui = 1;
+            if (iso == false) GeometryGraphND.mapToEqui = 0;
+            if (iso == true)  GeometryGraphND.mapToEqui = 1;
+            //***
             
             DESCRIPTORS.add(new RPnProjDescriptor(space, label, w, h, axisArray, iso));
 

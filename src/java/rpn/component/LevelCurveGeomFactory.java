@@ -6,8 +6,9 @@
 package rpn.component;
 
 import java.awt.Color;
+import rpn.controller.LevelCurveController;
+import rpn.controller.RpController;
 import rpnumerics.*;
-import wave.multid.view.ViewingAttr;
 import wave.util.RealSegment;
 
 public class LevelCurveGeomFactory extends RpCalcBasedGeomFactory {
@@ -25,13 +26,20 @@ public class LevelCurveGeomFactory extends RpCalcBasedGeomFactory {
 
         LevelCurve curve = (LevelCurve) geomSource();
         int resultSize = curve.segments().size();
-        RealSegGeom[] hugoniotArray = new RealSegGeom[resultSize];
+        RealSegGeom[] realSegArray = new RealSegGeom[resultSize];
         for (int i = 0; i < resultSize; i++) {
-            hugoniotArray[i] = new RealSegGeom((RealSegment) curve.segments().get(i));
-            hugoniotArray[i].viewingAttr().setColor(selectViewingAttribute(curve.getFamily()));
+            realSegArray[i] = new RealSegGeom((RealSegment) curve.segments().get(i));
+            realSegArray[i].viewingAttr().setColor(selectViewingAttribute(curve.getFamily()));
         }
-        return new LevelCurveGeom(hugoniotArray, this);
+        return new LevelCurveGeom(realSegArray, this);
 
+    }
+
+
+
+    @Override
+    protected RpController createUI() {
+        return new LevelCurveController();
     }
 
     private Color selectViewingAttribute(int family) {
