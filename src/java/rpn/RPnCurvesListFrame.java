@@ -28,7 +28,6 @@ import rpn.component.RpGeometry;
 import rpn.controller.ui.UIController;
 import rpnumerics.HugoniotCurve;
 import rpnumerics.HugoniotCurveCalcND;
-import rpnumerics.LevelCurve;
 import rpnumerics.OrbitCalc;
 import rpnumerics.PointLevelCalc;
 import rpnumerics.RarefactionExtensionCalc;
@@ -122,12 +121,13 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
 
     public void addGeometry(RpGeometry geometry) {
 
-
-        String geometryName = geometry.getClass().getSimpleName();
         RealVector userInput = new RealVector(2);
 
 
         RpCalcBasedGeomFactory factory = (RpCalcBasedGeomFactory) geometry.geomFactory();
+
+        String geometryName = factory.geomSource().getClass().getSimpleName();
+
 
         RpCalculation calc = factory.rpCalc();
 

@@ -137,18 +137,10 @@ public class UIController extends ComponentUI {
     }
 
     public void setAuxPanels(boolean selected) {
-
-
-
-
         auxPanelsEnabled_ = selected;
-
-
     }
 
     public boolean isAuxPanelsEnabled() {
-
-
         return auxPanelsEnabled_;
     }
 
@@ -363,7 +355,6 @@ public class UIController extends ComponentUI {
     public void userInputComplete(RealVector userInput) {
         // state dependent
 
-        //System.out.println("Entrei no userInputComplete do UIController");
 
         handler_.userInputComplete(this, userInput);
 
@@ -455,11 +446,20 @@ public class UIController extends ComponentUI {
         return netStatus_;
     }
 
+    /**
+     * @deprecated
+     *
+     *
+     */
     public void setFocusPanel(RPnPhaseSpacePanel phaseSpacePanel) {
         focusPanel_ = phaseSpacePanel;
 
     }
 
+    /**
+     * @deprecated
+     *
+     */
     public RPnPhaseSpacePanel getFocusPanel() {
         return focusPanel_;
     }

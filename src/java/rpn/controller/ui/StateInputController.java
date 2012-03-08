@@ -6,7 +6,6 @@ package rpn.controller.ui;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import rpn.RPnCurvesConfigPanel;
 import rpn.RPnUIFrame;
 
 public class StateInputController implements PropertyChangeListener {
@@ -22,8 +21,6 @@ public class StateInputController implements PropertyChangeListener {
 
         if (evt.getPropertyName().equals("aplication state")) {
                 uiFrame_.propertyChange(evt);
-                RPnCurvesConfigPanel.setMultipleButton(false);
-
         }
 
     }

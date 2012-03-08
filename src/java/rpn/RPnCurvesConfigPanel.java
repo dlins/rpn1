@@ -40,8 +40,7 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
 
     }
 
-    public static void setMultipleButton(boolean state) {
-    }
+  
 
     private void buildPanel() {
 
@@ -86,16 +85,10 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
         directionButtonGroup_.add(forwardCheckBox_);
         directionButtonGroup_.add(backwardCheckBox_);
 
-
-
         directionPanel_.add(forwardCheckBox_);
         directionPanel_.add(backwardCheckBox_);
 
-
-
         GridBagLayout boxLayout = new GridBagLayout();
-
-//        curvesTabbedPanel_.setMinimumSize(new Dimension(600, 400));
 
         setLayout(boxLayout);
 

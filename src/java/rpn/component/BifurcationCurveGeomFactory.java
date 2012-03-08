@@ -41,11 +41,11 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
     }
 
     protected ViewingAttr leftViewingAttr() {
-        return new ViewingAttr(Color.white);
+        return new ViewingAttr(Color.yellow);
     }
 
     protected ViewingAttr rightViewingAttr() {
-        return new ViewingAttr(Color.gray);
+        return new ViewingAttr(Color.magenta);
     }
 
     protected RpGeometry createLeftGeom() {
@@ -98,10 +98,10 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
             bifurcationArray[i] = new RealSegGeom(realSegment, leftViewingAttr());
             i++;
         }
-        
+
         i = leftSegments.size();
         for (RealSegment realSegment : rightSegments) {
-            bifurcationArray[i] = new RealSegGeom(realSegment,rightViewingAttr());
+            bifurcationArray[i] = new RealSegGeom(realSegment, rightViewingAttr());
             i++;
         }
 

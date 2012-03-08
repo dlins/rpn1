@@ -20,7 +20,7 @@ int Hysteresis::curve(const Boundary *boundary,
     //
     Extension_Curve extension_curve(pmin, pmax, number_of_cells, domain_ff, domain_aa,boundary);
 
-    extension_curve.compute_extension_curve(characteristic_where, singular,
+    extension_curve.compute_extension_curve(CHARACTERISTIC_ON_CURVE, 1,
                                             vic, curve_family,
                                             (FluxFunction*)curve_flux, (AccumulationFunction*)curve_accum,
                                             domain_family, 

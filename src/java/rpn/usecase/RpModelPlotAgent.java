@@ -19,10 +19,7 @@ import rpn.controller.ui.*;
 
 public abstract class RpModelPlotAgent extends RpModelActionAgent {
 
-   
     private AbstractButton button_;
-
-
 
     public RpModelPlotAgent(String shortDesc, ImageIcon icon, AbstractButton button) {
         super(shortDesc, icon);
@@ -39,7 +36,7 @@ public abstract class RpModelPlotAgent extends RpModelActionAgent {
 
         putValue(Action.SHORT_DESCRIPTION, shortDesc);
         setEnabled(false);
-   
+
 
     }
 
@@ -58,13 +55,12 @@ public abstract class RpModelPlotAgent extends RpModelActionAgent {
             return;
         }
         phaseSpace_.plot(geometry);
-       
+
 
         Iterator newValue = phaseSpace_.getGeomObjIterator();
         logAction(new PropertyChangeEvent(this, listString, oldValue, newValue));
 
     }
-
 
     public void unexecute() {
         Iterator current = (Iterator) log().getNewValue();
@@ -82,8 +78,4 @@ public abstract class RpModelPlotAgent extends RpModelActionAgent {
     public AbstractButton getContainer() {
         return button_;
     }
-
-   
-
-   
 }

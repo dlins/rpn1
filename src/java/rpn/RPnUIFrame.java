@@ -17,6 +17,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.io.FileWriter;
+import java.util.ArrayList;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.batik.ext.swing.GridBagConstants;
 import rpn.component.util.AreaSelectionAgent2;
@@ -36,6 +37,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JPanel contentPane;
     private JPanel configPanel_ = new JPanel();
     private JPanel toolBarPanel_ = new JPanel();
+    private JPanel panelsChooserPanel_ = new JPanel();
+    private ArrayList<RPnPhaseSpaceFrame> selectectedPanels = new ArrayList<RPnPhaseSpaceFrame>();
     private JComboBox stateComboBox = new JComboBox();
     private JMenuBar jMenuBar1 = new JMenuBar();
     private JMenu editMenu = new JMenu();
@@ -53,7 +56,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JMenuItem inputCoordsMenuItem = new JMenuItem("Input Coords ...");
     private JMenuItem createSVGImageMenuItem = new JMenuItem();
     private JMenuItem printMenuItem = new JMenuItem();
-    private static RPnPhaseSpaceFrame[] frames_, auxFrames_, leftFrames_, rightFrames_;
+    private static RPnPhaseSpaceFrame[] frames_, auxFrames_;
     private RPnMenuCommand commandMenu_ = null;
     private JMenuItem networkMenuItem = new JMenuItem();
     private JCheckBoxMenuItem showCursorMenuItem_ = new JCheckBoxMenuItem("Show Cursor Lines");
@@ -110,11 +113,10 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     public void setCurvesFrame(JFrame curvesFrame) {
         this.curvesFrame_ = curvesFrame;
         UIController.instance().showCurvesPanel(showCurvesPaneltem_.isSelected());
-        
+
 
     }
 
-    //** parece que nao esta sendo usado
     public static RPnPhaseSpaceFrame[] getAuxFrames() {
         return auxFrames_;
     }
@@ -249,8 +251,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         wave.multid.graphs.ClippedShape clipping = new wave.multid.graphs.ClippedShape(boundary);
         int numOfPanels = RPnVisualizationModule.DESCRIPTORS.size();
 
-        //RPnVisualizationModule.DESCRIPTORS
-
         auxFrames_ = new RPnPhaseSpaceFrame[2 * numOfPanels];
         frames_ = new RPnPhaseSpaceFrame[numOfPanels];
 
@@ -327,11 +327,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         }
 
 
-
         RPnCurvesListFrame curvesFrame = new RPnCurvesListFrame("Main");
         RPnCurvesListFrame leftFrame = new RPnCurvesListFrame("Left");
         RPnCurvesListFrame rightFrame = new RPnCurvesListFrame("Right");
-
 
 
         RPnDataModule.PHASESPACE.attach(curvesFrame);
@@ -343,29 +341,69 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         leftFrame.attach(RPnDataModule.LEFTPHASESPACE);
         rightFrame.attach(RPnDataModule.RIGHTPHASESPACE);
 
+
+        createPanelsChooser();
+
         curvesFrame.setVisible(true);
         leftFrame.setVisible(true);
         rightFrame.setVisible(true);
+    }
 
+    private void createPanelsChooser() {
 
+        int rows = getPhaseSpaceFrames().length + getAuxFrames().length;
 
+        panelsChooserPanel_.setLayout(new GridLayout(rows, 1));
 
+        for (RPnPhaseSpaceFrame mainFrame : getPhaseSpaceFrames()) {
+
+            JCheckBox checkBox = new JCheckBox(mainFrame.getTitle());
+            checkBox.addItemListener(new PanelsSeletectedListener(mainFrame));
+            panelsChooserPanel_.add(checkBox);
+        }
+
+        for (RPnPhaseSpaceFrame auxFrame : getAuxFrames()) {
+
+            JCheckBox checkBox = new JCheckBox(auxFrame.getTitle());
+            checkBox.addItemListener(new PanelsSeletectedListener(auxFrame));
+            panelsChooserPanel_.add(checkBox);
+
+        }
 
     }
 
 //     from here on just for 2D for now...
     void createSVGImage_actionPerformed(ActionEvent e) {
         JFileChooser chooser = new JFileChooser();
-        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        chooser.setAccessory(panelsChooserPanel_);
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         chooser.setFileFilter(new FileNameExtensionFilter("SVG File", "svg", "SVG"));
         chooser.setSelectedFile(new File("image.svg"));
+
         int status = chooser.showSaveDialog(this);
 
         if (status == JFileChooser.CANCEL_OPTION || status == JFileChooser.ERROR_OPTION) {
             return;
         }
         try {
-            UIController.instance().getFocusPanel().createSVG(chooser.getSelectedFile());
+            String path = chooser.getSelectedFile().getAbsolutePath();
+
+            if (selectectedPanels.size() == 0) {
+                JOptionPane.showMessageDialog(chooser, "Choose a panel", "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+
+                for (RPnPhaseSpaceFrame phaseSpaceFrame : selectectedPanels) {
+
+                    String fileName = File.separator + phaseSpaceFrame.getTitle();
+
+                    File file = new File(path + fileName);
+                    phaseSpaceFrame.phaseSpacePanel().createSVG(file);
+
+                }
+
+            }
+
+
         } catch (java.lang.NullPointerException ex) {
             ex.printStackTrace();
         }
@@ -468,41 +506,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 0, null));
 
         commandMenu_.networkCommand();
-    }
-
-    //** parece que nao esta sendo usado
-    private RPnProjDescriptor[] generateAuxProjDescriptors() {
-
-
-        int dim = RPNUMERICS.domainDim();
-
-        int index = 0;
-
-        RPnProjDescriptor projDescriptors[] = new RPnProjDescriptor[RPNUMERICS.domainDim() * 2];
-
-        int[] projIndex = new int[projDescriptors.length];
-
-        for (int i = 0; i < projDescriptors.length; i++) {
-            projIndex[i] = i;
-        }
-
-
-        while (index < dim) {
-
-            int[] projI = new int[2];
-
-            projI[0] = projIndex[index];
-            projI[1] = projIndex[index + 1];
-
-            projDescriptors[index] = new RPnProjDescriptor(RPnDataModule.AUXPHASESPACE.getSpace(), "Aux " + "Axis " + projI[0] + " Axis " + projI[1], 200, 200, projI, false);
-            index++;
-
-
-        }
-
-
-        return projDescriptors;
-
     }
 
     //** para o menu de tipos de curvas
@@ -975,6 +978,28 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             }
 
             UIController.instance().setState(newState);
+
+        }
+    }
+
+    private class PanelsSeletectedListener implements ItemListener {
+
+        private RPnPhaseSpaceFrame panel_;
+
+        public PanelsSeletectedListener(RPnPhaseSpaceFrame panel) {
+            panel_ = panel;
+        }
+
+        public void itemStateChanged(ItemEvent e) {
+
+            JCheckBox checkBox = (JCheckBox) e.getItem();
+
+            if (checkBox.isSelected()) {
+                selectectedPanels.add(panel_);
+
+            } else {
+                selectectedPanels.remove(panel_);
+            }
 
         }
     }
