@@ -15,6 +15,7 @@ public class RarefactionExtensionCurvePlotAgent extends RpModelPlotAgent {
     //
     // Constants
     //
+
     static public final String DESC_TEXT = "Rarefaction Extension";    //
     // Members
     //
@@ -24,7 +25,7 @@ public class RarefactionExtensionCurvePlotAgent extends RpModelPlotAgent {
     // Constructors/Initializers
     //
     protected RarefactionExtensionCurvePlotAgent() {
-        super(DESC_TEXT, rpn.RPnConfig.HUGONIOT,new JToggleButton());
+        super(DESC_TEXT, rpn.RPnConfig.HUGONIOT, new JToggleButton());
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {
@@ -32,6 +33,7 @@ public class RarefactionExtensionCurvePlotAgent extends RpModelPlotAgent {
         RarefactionExtensionGeomFactory factory = new RarefactionExtensionGeomFactory(RPNUMERICS.createRarefactionExtensionCalc(oPoint));
         return factory.geom();
     }
+
 
     static public RarefactionExtensionCurvePlotAgent instance() {
         if (instance_ == null) {

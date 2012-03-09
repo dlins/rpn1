@@ -30,7 +30,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
 
     private PhaseSpaceState state_;
     private RpGeometry selectedGeom_;
-    private ArrayList<ArrayList> groupArrayList_;
+    private List<RPnCurvesListFrame> curvesFrames_;
 
     //
     // Constructors
@@ -39,6 +39,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         super(id, domain);
         changeState(state);
         selectedGeom_ = null;
+        curvesFrames_ = new ArrayList<RPnCurvesListFrame>();
     }
 
     //
@@ -46,6 +47,21 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
     //
     public void changeState(PhaseSpaceState state) {
         state_ = state;
+    }
+
+    public void attach(RPnCurvesListFrame curvesFrame) {
+        curvesFrames_.add(curvesFrame);
+    }
+
+    public void detach(RPnCurvesListFrame curvesListFrame) {
+        curvesFrames_.remove(curvesListFrame);
+    }
+
+    private void notifyState() {
+        for (RPnCurvesListFrame curvesFrame : curvesFrames_) {
+            curvesFrame.update(this);
+        }
+
     }
 
     /**
@@ -69,17 +85,9 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         state_.delete(this, geom);
     }
 
-    public void removeLastGeometry() {
-
-        MultiGeometry toBeRemoved = (MultiGeometry) super.geomList_.get(geomList_.size() - 1);
-        remove(toBeRemoved);
-        RPnCurvesListFrame.removeLastEntry();
-        update();
-
-    }
-
     public RpGeometry getLastGeometry() {
-        return (RpGeometry) super.geomList_.get(geomList_.size() - 1);
+
+        return (RpGeometry) super.geomList_.get(super.geomList_.size() - 1);
     }
 
     @Override
@@ -90,17 +98,22 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         }
 
         super.join(geom);
+        notifyState();
 
-        RpGeometry geometry = (RpGeometry) geom;
-//
-        RPnCurvesListFrame.addGeometry(geometry);
+
     }
 
     @Override
     public void remove(MultiGeometry geom) {
 
         super.remove(geom);
+        notifyState();
 
+    }
+
+    @Override
+    public String toString() {
+        return getName() + " " + getSpace().toString() + " " + state_.toString();
     }
 
     public void clearGeometrySelection() {
@@ -294,73 +307,30 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         }
         for (int i = 0; i < joinList.size(); i++) {
             super.join((RpGeometry) joinList.get(i));
+
         }
+        notifyState();
     }
 
-//    public void selectVisibleDirection(int direction) {
-//        Iterator geomList = super.getGeomObjIterator();
-//
-//        while (geomList.hasNext()) {
-//            RpGeometry geom = (RpGeometry) geomList.next();
-//
-//            if (geom instanceof RarefactionGeom) {//Rarefaction Orbit
-//
-//                RarefactionOrbitGeomFactory rarefactionFactory = (RarefactionOrbitGeomFactory) geom.geomFactory();
-//                RarefactionOrbit rarefactionOrbit = (RarefactionOrbit) rarefactionFactory.geomSource();
-//
-//                if (rarefactionOrbit.getIntegrationFlag() == direction || direction == 0) {
-//                    geom.viewingAttr().setVisible(true);
-//
-//                } else {
-//                    geom.viewingAttr().setVisible(false);
-//                }
-//            }
-//
-//            if (geom instanceof OrbitGeom) {//Orbit
-//                OrbitGeomFactory orbitFactory = (OrbitGeomFactory) geom.geomFactory();
-//                Orbit orbit = (Orbit) orbitFactory.geomSource();
-//                if (orbit.getIntegrationFlag() == direction || direction == 0) {
-//                    geom.viewingAttr().setVisible(true);
-//                } else {
-//                    geom.viewingAttr().setVisible(false);
-//                }
-//
-//            }
-//        }
-//    }
     // overwriting so we don't remove the last Hugoniot
     @Override
     public void clear() {
 
         ArrayList deleteList = new ArrayList();
-//        for (int i = 0; i < groupArrayList_.size() - 1; i++) {
-//            ArrayList list = groupArrayList_.get(i);
-//            for (int j = 0; j < list.size(); j++) {
-//                deleteList.add((RpGeometry) list.get(j));
-//            }
-//        }
 
         Iterator geomList = getGeomObjIterator();
         while (geomList.hasNext()) {
             RpGeometry geom = (RpGeometry) geomList.next();
-//            if (!(geom instanceof HugoniotCurveGeom) && !(geom instanceof XZeroGeom)) {
+
             deleteList.add(geom);
-//            }
+
         }
         for (int i = 0; i < deleteList.size(); i++) {
             delete((RpGeometry) deleteList.get(i));
         }
 
-//        if (RPNUMERICS.getCurrentProfile() instanceof ShockProfile) {
-//            changeState(new NumConfigReadyImpl(((NUMCONFIG_READY) state_).hugoniotGeom(), ((NUMCONFIG_READY) state_).xzeroGeom()));
-//        }
+        notifyState();
 
-        RPnCurvesListFrame.clear();
-
-//        deleteList.clear();
-//        deleteList.add(groupArrayList_.get(groupArrayList_.size() - 1));//using deleteList as temporary list
-//        groupArrayList_.clear();
-//        groupArrayList_.add((ArrayList) deleteList.get(0));
     }
 
     public RpGeometry getSelectedGeom() {

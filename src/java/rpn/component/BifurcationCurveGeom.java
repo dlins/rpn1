@@ -1,6 +1,5 @@
 package rpn.component;
 
-import java.awt.Color;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
@@ -21,6 +20,7 @@ public class BifurcationCurveGeom implements MultiGeometry, RpGeometry {
     private ArrayList segList_;
     private Space space_;
     private BoundingBox boundary_;
+    private RpGeometry otherSide_;
 
     public BifurcationCurveGeom(RealSegGeom[] segArray, BifurcationCurveGeomFactory factory) {
 
@@ -31,7 +31,7 @@ public class BifurcationCurveGeom implements MultiGeometry, RpGeometry {
             segList_.add(segArray[i]);
         }
         factory_ = factory;
-        space_ = new Space("Auxiliar Space", rpnumerics.RPNUMERICS.domainDim() * 2);
+        space_ = new Space("Auxiliar Space", rpnumerics.RPNUMERICS.domainDim() );
         try {
             boundary_ = new BoundingBox(new CoordsArray(space_), new CoordsArray(space_));
         } catch (DimMismatchEx dex) {
@@ -39,6 +39,8 @@ public class BifurcationCurveGeom implements MultiGeometry, RpGeometry {
         }
         
     }
+
+
 
     public GeomObjView createView(ViewingTransform transf) throws DimMismatchEx {
         return new BifurcationCurveView(this, transf, viewingAttr());
@@ -61,6 +63,16 @@ public class BifurcationCurveGeom implements MultiGeometry, RpGeometry {
     public ViewingAttr viewingAttr() {
         return viewingAttr_;
     }
+
+    public RpGeometry getOtherSide() {
+        return otherSide_;
+    }
+
+    public void setOtherSide(RpGeometry otherSide) {
+        otherSide_ = otherSide;
+    }
+
+
 
 
 

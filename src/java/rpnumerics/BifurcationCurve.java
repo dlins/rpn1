@@ -33,6 +33,7 @@ public class BifurcationCurve extends SegmentedCurve {
         
         leftSegments_ = leftList;
         rightSegments_ = rightList;
+
     }
 
 
@@ -44,30 +45,24 @@ public class BifurcationCurve extends SegmentedCurve {
         rightSegments_ = singleList;
     }
 
+
+    
+
+    /** @deprecated
+     *
+     */
+
     public BifurcationCurve(int familyIndex, ContourCurve curve, ViewingAttr viewingAttr) {
 
         super(new ArrayList());
 
      
-        // segments = MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseRPnCurveToCoordsArray(this));
-//        segments = MultidAdapter.converseRPnCurveToRealSegments(this);
     }
 
     //
     // Accessors/Mutators
     //
-   
-
     public String toXML() {
-
-//        StringBuffer buffer = new StringBuffer();
-//
-//        for (int i = 0; i < segments().size(); i++) {
-//            HugoniotSegment hugoniotSegment = (HugoniotSegment) segments().get(i);
-//            RealSegment realSegment = new RealSegment(hugoniotSegment.p1(), hugoniotSegment.p2());
-//            buffer.append(realSegment.toXML());
-//        }
-//        return buffer.toString();
 
         StringBuilder buffer = new StringBuilder();
 
@@ -90,8 +85,6 @@ public class BifurcationCurve extends SegmentedCurve {
 
     private static List createSingleSegmentList(List<RealSegment> leftSeg, List<RealSegment> rightSeg) {
 //        int i = 0;
-
-         System.out.println("Listas do d contact: " + leftSeg.size() + " " + rightSeg.size());
 
 //        for (HugoniotSegment hugoniotSegment : leftSeg) {
 //            hugoniotSegment.setIntType(19);

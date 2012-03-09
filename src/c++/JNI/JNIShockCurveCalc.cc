@@ -74,14 +74,14 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
 
     vector <RealVector> coords, shock_alt;
 
-    cout << "Valor de increase" << increase << endl;
+//    cout << "Valor de increase" << increase << endl;
 
     const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
 
     RealVector min(physicsBoundary. minimums());
     RealVector max(physicsBoundary. maximums());
 
-    cout << "Valor de family" << familyIndex << endl;
+//    cout << "Valor de family" << familyIndex << endl;
 
 
     RealVector * originalDirection = new RealVector(realVectorInput.size());
@@ -122,8 +122,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
 
     if(coords.size()==0) return NULL;
 
-    cout << "Tamanho do shock: " << coords.size() << endl;
-
     jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(coords.size(), classOrbitPoint, NULL);
 
     for (i = 0; i < coords.size(); i++) {
@@ -137,9 +135,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
         newVector(2) = 0;
 
         double * dataCoords = newVector;
-
-
-
 
         jdoubleArray jTempArray = (env)->NewDoubleArray(newVector.size());
 

@@ -7,21 +7,15 @@
 package rpn.usecase;
 
 import wave.util.RealVector;
-import wave.util.LoopConstruct;
-import wave.util.LoopIterator;
 import wave.util.Boundary;
 import wave.util.GridProfile;
 import wave.util.MultiGrid;
 import wave.util.GridIterator;
-import wave.multid.model.MultiGeometryImpl;
 import rpnumerics.*;
-import rpn.RPnPhaseSpaceAbstraction;
 import rpn.component.*;
 import javax.swing.AbstractAction;
 import java.awt.event.ActionEvent;
-import java.util.Iterator;
 import rpn.controller.ui.*;
-import rpn.controller.PhaseSpacePanel2DController;
 
 public class FillPhaseSpaceAgent extends AbstractAction {
     static public final String DESC_TEXT = "Fills up the Phase Space";

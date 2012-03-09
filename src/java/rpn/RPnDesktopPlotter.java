@@ -98,21 +98,6 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
         RPnDesktopPlotter plotter = null;
         try {
 
-//            File interfaceConfigFile = new File(INTERFACE_CONFIG_PATH + "defaults.xml");
-//
-//
-//            RPnDesktopConfigReader defaultsReader = new RPnDesktopConfigReader(INTERFACE_CONFIG_PATH + "defaults.xml");
-//
-////            InputStream defaultsConfigStream = new FileInputStream(interfaceConfigFile);
-//
-//            InputStream defaultsConfigStream = defaultsReader.read();
-//
-//            if (args.length == 0) {
-//                RPnConfigReader.readDefaults(defaultsConfigStream);//Reading defaults
-//                throw new FileNotFoundException();
-//            }
-//
-//            RPnConfigReader.readDefaults(defaultsConfigStream);//Reading defaults
 
             plotter = new RPnDesktopPlotter(args[0]);
 
@@ -128,15 +113,14 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
 
             rpnUIFrame_.setVisible(true);
 
-            RPnCurvesListFrame curvesFrame = new RPnCurvesListFrame();
-            rpnUIFrame_.setCurvesFrame(curvesFrame);
-//            System.out.println(RPNUMERICS.toXML());
+//            RPnCurvesListFrame curvesFrame = new RPnCurvesListFrame();
+//            rpnUIFrame_.setCurvesFrame(curvesFrame);
+
 
 
         } catch (FileNotFoundException ex) {
             JOptionPane.showMessageDialog(rpnUIFrame_, "No input file !", "RPn", JOptionPane.ERROR_MESSAGE);
-//            RPnConfigDialog configDialog = new RPnConfigDialog();
-//            configDialog.setVisible(true);
+
 
 
         } catch (VerifierConfigurationException ex) {

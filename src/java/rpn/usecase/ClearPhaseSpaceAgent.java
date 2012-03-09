@@ -39,7 +39,7 @@ public class ClearPhaseSpaceAgent extends javax.swing.AbstractAction {
 
         ControlClick.clearAll();                        //*** Leandro
         
-        BifurcationPlotAgent.instance().getContainer().setEnabled(true);
+
         // ClearScene is not undoable
         UndoActionController.instance().setEnabled(false);
         System.gc();

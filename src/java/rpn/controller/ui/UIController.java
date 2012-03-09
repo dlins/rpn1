@@ -6,6 +6,7 @@
  */
 package rpn.controller.ui;
 
+import rpn.RPnPhaseSpaceAbstraction;
 import rpn.usecase.*;
 import rpn.RPnPhaseSpacePanel;
 import wave.multid.Coords2D;
@@ -51,6 +52,7 @@ public class UIController extends ComponentUI {
     private StateInputController stateController_;
     public static UI_ACTION_SELECTED INITSTATE = null;
     private ArrayList<Command> commandArray_;
+    private boolean auxPanelsEnabled_;
 
     //
     // Constructors
@@ -66,6 +68,7 @@ public class UIController extends ComponentUI {
 
         commandArray_ = new ArrayList<Command>();
         handler_ = new SHOCK_CONFIG();
+        auxPanelsEnabled_ = true;
 
         initNetStatus();
 
@@ -132,10 +135,18 @@ public class UIController extends ComponentUI {
         return commandArray_.iterator();
 
     }
+
+    public void setAuxPanels(boolean selected) {
+        auxPanelsEnabled_ = selected;
+    }
+
+    public boolean isAuxPanelsEnabled() {
+        return auxPanelsEnabled_;
+    }
+
     //
     // Inner Classes
     //
-
     class MouseMotionController extends MouseMotionAdapter {
 
         @Override
@@ -143,23 +154,33 @@ public class UIController extends ComponentUI {
             RPnUIFrame.clearStatusMessage();
 
             if (event.getComponent() instanceof RPnPhaseSpacePanel) {
-
-//                if (netStatus_.isMaster() || !(netStatus_.isOnline())) {
                 RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
-                if (ControlClick.ind == 0) ControlClick.mousePressed(event, panel.scene());
+
+                if (ControlClick.ind == 0) {
+                    ControlClick.mousePressed(event, panel.scene());
+                }
                 // this will automatically work only for 2D(isComplete())
                 updateUserInputTable(panel, event.getPoint());
 
-                if (globalInputTable().isComplete()&& ControlClick.ind == 0) {
+                if (globalInputTable().isComplete() && ControlClick.ind == 0) {
 
                     globalInputTable().reset();
                     resetPanelsCursorCoords();
-                    if (event.isShiftDown())
-                    userInputComplete(globalInputTable().values());
-                    else
-                    DragPlotAgent.instance().execute();
+                    if (event.isShiftDown()) {
+                        userInputComplete(globalInputTable().values());
+                    } else {
+
+                        if (handler_ instanceof UI_ACTION_SELECTED) {
+                            UI_ACTION_SELECTED actionSelected = (UI_ACTION_SELECTED) handler_;
+                            RpModelActionAgent action = (RpModelActionAgent) actionSelected.getAction();
+                            action.setPhaseSpace((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom());
+                            DragPlotAgent.instance().setPhaseSpace((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom());
+                        }
+
+                        DragPlotAgent.instance().execute();
+                    }
                 }
-                
+
             }
         }
     }
@@ -204,8 +225,18 @@ public class UIController extends ComponentUI {
 
         @Override
         public void mouseEntered(MouseEvent event) {
+
             if (event.getSource() instanceof RPnPhaseSpacePanel) {
                 toggleCursorLines();
+                RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
+
+                if (handler_ instanceof UI_ACTION_SELECTED) {
+                    UI_ACTION_SELECTED actionSelected = (UI_ACTION_SELECTED) handler_;
+                    RpModelActionAgent action = (RpModelActionAgent) actionSelected.getAction();
+                    action.setPhaseSpace((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom());
+                    DragPlotAgent.instance().setPhaseSpace((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom());
+                }
+
             }
         }
 
@@ -324,7 +355,6 @@ public class UIController extends ComponentUI {
     public void userInputComplete(RealVector userInput) {
         // state dependent
 
-        //System.out.println("Entrei no userInputComplete do UIController");
 
         handler_.userInputComplete(this, userInput);
 
@@ -416,11 +446,20 @@ public class UIController extends ComponentUI {
         return netStatus_;
     }
 
+    /**
+     * @deprecated
+     *
+     *
+     */
     public void setFocusPanel(RPnPhaseSpacePanel phaseSpacePanel) {
         focusPanel_ = phaseSpacePanel;
 
     }
 
+    /**
+     * @deprecated
+     *
+     */
     public RPnPhaseSpacePanel getFocusPanel() {
         return focusPanel_;
     }

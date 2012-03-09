@@ -5,13 +5,9 @@
  */
 package rpn.usecase;
 
-import java.awt.event.ActionEvent;
 import java.util.ArrayList;
-import javax.swing.JButton;
+import javax.swing.JToggleButton;
 import rpn.component.*;
-import rpn.controller.ui.UIController;
-import rpn.controller.ui.UI_ACTION_SELECTED;
-import rpn.parser.RPnDataModule;
 import rpnumerics.RPNUMERICS;
 import wave.util.RealVector;
 
@@ -30,16 +26,9 @@ public class LevelCurvePlotAgent extends RpModelPlotAgent {
     // Constructors/Initializers
     //
     protected LevelCurvePlotAgent() {
-        super(DESC_TEXT, rpn.RPnConfig.ORBIT_FWD, new JButton());
+        super(DESC_TEXT, rpn.RPnConfig.ORBIT_FWD, new JToggleButton());
     }
 
-    @Override
-    public void actionPerformed(ActionEvent event) {
-
-        UI_ACTION_SELECTED action = new UI_ACTION_SELECTED(this);
-        action.userInputComplete(UIController.instance());// No input needed
-
-    }
 
     public RpGeometry createRpGeometry(RealVector[] input) {
 
@@ -56,12 +45,13 @@ public class LevelCurvePlotAgent extends RpModelPlotAgent {
     @Override
     public void execute() {
 
-
+//        instance_.setPhaseSpace(phaseSpace_);
         ArrayList<Double> levelValues = processLevels(RPNUMERICS.getParamValue("levelcurve", "levels"));
 
         for (Double levelValue : levelValues) {
             LevelCurveGeomFactory factory = new LevelCurveGeomFactory(RPNUMERICS.createLevelCurveCalc(levelValue));
-            RPnDataModule.PHASESPACE.join(factory.geom());
+//            RPnDataModule.PHASESPACE.join(factory.geom());
+        phaseSpace_.join(factory.geom());
         }
 
     }

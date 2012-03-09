@@ -62,6 +62,24 @@ public class OrbitController extends RpCalcController {
         if (evt.getSource() instanceof ChangeOrbitLevel) {//Visual update only
             RPnPhaseSpaceFrame[] frames = RPnUIFrame.getPhaseSpaceFrames();
 
+            RPnPhaseSpaceFrame[] auxFrames = RPnUIFrame.getAuxFrames();
+
+            for (int i = 0; i < auxFrames.length; i++) {
+
+                Iterator it = auxFrames[i].phaseSpacePanel().scene().geometries();
+
+                while (it.hasNext()) {
+
+                    GeomObjView geometryView = (GeomObjView) it.next();
+
+                    if (geometryView instanceof OrbitGeomView) {
+                        geometryView.update();
+                    }
+
+                }
+
+            }
+
             for (int i = 0; i < frames.length; i++) {
 
                 Iterator it = frames[i].phaseSpacePanel().scene().geometries();
@@ -75,8 +93,10 @@ public class OrbitController extends RpCalcController {
                     }
 
                 }
-                RPnDataModule.PHASESPACE.update();
+
             }
+
+            RPnDataModule.updatePhaseSpaces();
             return;
         }
 

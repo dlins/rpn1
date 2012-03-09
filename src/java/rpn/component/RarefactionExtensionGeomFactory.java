@@ -13,7 +13,7 @@ import rpnumerics.RarefactionExtensionCurve;
 import wave.util.RealSegment;
 import wave.util.RealVector;
 
-public class RarefactionExtensionGeomFactory extends BifurcationCurveGeomFactory {
+public class RarefactionExtensionGeomFactory extends RpCalcBasedGeomFactory {
     //
     // Constants
     //

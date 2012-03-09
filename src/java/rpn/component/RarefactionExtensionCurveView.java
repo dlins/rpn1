@@ -123,7 +123,7 @@ public class RarefactionExtensionCurveView implements GeomObjView {
 
         RarefactionExtensionGeom rarefactionExtensionGeom = (RarefactionExtensionGeom) abstractGeom_;
       
-        Iterator geomListIterator = rarefactionExtensionGeom.getBifurcationSegmentsIterator();
+        Iterator geomListIterator = rarefactionExtensionGeom.getRealSegIterator();
 
         while (geomListIterator.hasNext()) {
             RealSegGeom geomObj = (RealSegGeom) geomListIterator.next();
