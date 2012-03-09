@@ -88,6 +88,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             propertyChange(new PropertyChangeEvent(command, "aplication state", null, null));
             jbInit();
             phaseSpaceFramesInit(RPNUMERICS.boundary());//Building default panel
+            createPanelsChooser();
 
             addPropertyChangeListener(this);
             UndoActionController.createInstance();
@@ -342,7 +343,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         rightFrame.attach(RPnDataModule.RIGHTPHASESPACE);
 
 
-        createPanelsChooser();
+
 
         curvesFrame.setVisible(true);
         leftFrame.setVisible(true);
@@ -832,7 +833,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         modelInteractionMenu.add(ChangeFluxParamsAgent.instance());
         modelInteractionMenu.add(inputCoordsMenuItem);
         modelInteractionMenu.add(shockMenuItem_);
-//        modelInteractionMenu.add(errorControlMenuItem);
+
 
 
 
@@ -852,7 +853,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         modelInteractionMenu.add(BifurcationRefineAgent.instance());
         BifurcationRefineAgent.instance().setEnabled(true);
 
-//        modelInteractionMenu.add(errorControlMenuItem);
+      
 
     }
 

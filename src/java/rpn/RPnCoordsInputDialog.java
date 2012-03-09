@@ -66,12 +66,14 @@ public class RPnCoordsInputDialog extends RPnDialog {
         phaseSpaceGroupPanel_.add(rightCheckBox_);
         phaseSpaceGroupPanel_.add(mainCheckBox_);
 
-        mainCheckBox_.setSelected(true);//Default
-
 
         mainCheckBox_.addActionListener(new PhaseSpaceListener());
         rightCheckBox_.addActionListener(new PhaseSpaceListener());
         leftCheckBox_.addActionListener(new PhaseSpaceListener());
+
+
+        mainCheckBox_.setSelected(true);//Default
+        mainCheckBox_.doClick();
 
 
         inputArrayList_ = new ArrayList<JTextField>();
