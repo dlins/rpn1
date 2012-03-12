@@ -14,6 +14,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 import java.util.*;
 import rpn.component.util.ControlClick;
+import rpn.component.util.GeometryGraph;
 import rpn.component.util.GeometryGraphND;
 import rpn.controller.ui.UIController;
 import rpn.usecase.DragPlotAgent;
@@ -131,7 +132,6 @@ public class RPnPhaseSpaceFrame extends JFrame {
                 }
 
             }
-
 
             //*** solucao provisoria para mostrar/nao mostrar o grid --- Leandro
             if (keyEvent.getKeyChar() == 'g'  ||  keyEvent.getKeyChar() == 'G') {

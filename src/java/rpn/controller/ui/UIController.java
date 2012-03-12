@@ -155,11 +155,14 @@ public class UIController extends ComponentUI {
 
 //                if (netStatus_.isMaster() || !(netStatus_.isOnline())) {
                 RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
-                if (ControlClick.ind == 0) ControlClick.mousePressed(event, panel.scene());
+                if (ControlClick.ind == 0) {
+                    ControlClick.mousePressed(event, panel.scene());
+                    panel.repaint();
+                }
                 
                 //*** Permite que o input point de uma curva seja exatamente um ponto sobre outra curva
                 if (ControlClick.onCurve == 1) {
-                    
+
                     ViewingTransform transf = panel.scene().getViewingTransform();
 
                     //** Para usar transfs originais.   FUNCIONANDO!!!
@@ -173,8 +176,11 @@ public class UIController extends ComponentUI {
                     }
 
                     RPnCurve curve = GeometryUtil.findClosestCurve(GeometryGraphND.targetPoint);
-                    if (curve instanceof SegmentedCurve)     GeometryGraphND.pMarca = ((RealSegment) (((SegmentedCurve) curve).segments()).get(GeometryUtil.closestSeg)).p1();
-                    if (curve instanceof Orbit)              GeometryGraphND.pMarca = ((Orbit) curve).getPoints()[GeometryUtil.closestSeg];
+                    //if (curve instanceof SegmentedCurve)     GeometryGraphND.pMarca = ((RealSegment) (((SegmentedCurve) curve).segments()).get(GeometryUtil.closestSeg)).p1();
+                    //if (curve instanceof Orbit)              GeometryGraphND.pMarca = ((Orbit) curve).getPoints()[GeometryUtil.closestSeg];
+
+                    GeometryGraphND.pMarca = curve.findClosestPoint(GeometryGraphND.targetPoint);
+                    panel.repaint();
 
                 }
                 //***-----------------------------------------------------------------------------------
@@ -192,7 +198,7 @@ public class UIController extends ComponentUI {
                     else
                     DragPlotAgent.instance().execute();
                 }
-                
+
             }
         }
     }

@@ -422,8 +422,8 @@ public class GeometryGraphND {
         Boundary boundary = RPNUMERICS.boundary();
         if (boundary instanceof IsoTriang2DBoundary) {
             for (int i = 0; i < nu; i++) {
-                //lineObl = new Line2D.Double(0, RPnPhaseSpacePanel.myH_ - i * dy, i * dx, RPnPhaseSpacePanel.myH_);
-                lineObl = new Line2D.Double(0, deltaY - i * dy, i * dx, deltaY);
+                lineObl = new Line2D.Double(0, RPnPhaseSpacePanel.myH_ - i * dy, i * dx, RPnPhaseSpacePanel.myH_);
+                //lineObl = new Line2D.Double(0, deltaY - i * dy, i * dx, deltaY);
                 if (mapToEqui == 1) lineObl = mapLine(lineObl, deltaX, deltaY);
                 graph.draw(lineObl);
             }

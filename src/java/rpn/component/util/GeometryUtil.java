@@ -54,14 +54,16 @@ public class GeometryUtil {
                             RpGeomFactory factory = geom.geomFactory();
                             RPnCurve curve = (RPnCurve) factory.geomSource();
 
-                            seg = curve.findClosestSegment(targetPoint);
+                            //seg = curve.findClosestSegment(targetPoint);
+                            curve.findClosestSegment(targetPoint);   //***
+                            
                             distancia = curve.distancia;
 
                             if (distminCurve >= distancia) {
                                 distminCurve = distancia;
                                 closestCurve = k;
                                 closestCurve_ = curve;
-                                closestSeg = seg;
+                                //closestSeg = seg;
                             }
 
                         }
@@ -87,14 +89,16 @@ public class GeometryUtil {
                             listResolution.add(resolution);
                         }
 
-                        seg = curve.findClosestSegment(targetPoint);
+                        //seg = curve.findClosestSegment(targetPoint);
+                        curve.findClosestSegment(targetPoint);   //***
+                        
                         distancia = curve.distancia;
 
                         if (distminCurve >= distancia) {
                             distminCurve = distancia;
                             closestCurve = k;
                             closestCurve_ = curve;
-                            closestSeg = seg;
+                            //closestSeg = seg;
                         }
 
                     }

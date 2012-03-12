@@ -189,6 +189,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
          */
 
         if (scene_ != null) {
+
             scene_.draw((Graphics2D) g);
         }
 
@@ -273,7 +274,6 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
             repaint();
             getCastedUI().resetCursorCoords();
         }
-
 
         //** Leandro: fim.
         //*****************************************

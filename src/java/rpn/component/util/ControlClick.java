@@ -101,7 +101,7 @@ public class ControlClick {
         }
 
         RealVector pDC = new RealVector(((RealSegment) ((curve).segments()).get(jDC)).p1());
-
+        
         return pDC;
     }
 
@@ -127,33 +127,22 @@ public class ControlClick {
             for (int i = 0; i < GeometryGraphND.targetPoint.getSize(); i++) {
                 GeometryGraphND.targetPoint.setElement(i, wcCoords.getElement(i));
             }
-            //System.out.println("Target point: " + GeometryUtil.targetPoint);
+            //System.out.println("Target point: " + GeometryGraphND.targetPoint);
 
             RPnCurve curve = GeometryUtil.findClosestCurve(GeometryGraphND.targetPoint);
             
-            if (curve instanceof SegmentedCurve)     GeometryGraphND.pMarca = ((RealSegment) (((SegmentedCurve) curve).segments()).get(GeometryUtil.closestSeg)).p1();
-            if (curve instanceof Orbit)              GeometryGraphND.pMarca = ((Orbit) curve).getPoints()[GeometryUtil.closestSeg];
+            //if (curve instanceof SegmentedCurve)     GeometryGraphND.pMarca = ((RealSegment) (((SegmentedCurve) curve).segments()).get(GeometryUtil.closestSeg)).p1();
+            //if (curve instanceof Orbit)              GeometryGraphND.pMarca = ((Orbit) curve).getPoints()[GeometryUtil.closestSeg];
 
-//            if (curve instanceof SegmentedCurve) {
-//                RealVector V1 = ((RealSegment) (((SegmentedCurve) curve).segments()).get(GeometryUtil.closestSeg)).p1();
-//                RealVector V2 = ((RealSegment) (((SegmentedCurve) curve).segments()).get(GeometryUtil.closestSeg)).p2();
-//                RealVector V1MinusV2 = new RealVector(V1.getSize());
-//
-//                for (int i = 0; i < V1.getSize(); i++) {
-//                    V1MinusV2.setElement(i, V2.getElement(i) - V1.getElement(i));
-//                }
-//
-//                GeometryGraphND.pMarca = curve.findClosestPoint(GeometryGraphND.targetPoint);
-//
-//            }
-//            if (curve instanceof Orbit) {
-//                GeometryGraphND.pMarca = curve.findClosestPoint(GeometryGraphND.targetPoint);
-//            }
             
+            GeometryGraphND.pMarca = curve.findClosestPoint(GeometryGraphND.targetPoint);
+
+
             if (curve instanceof DoubleContactCurve) {
                 GeometryGraphND.pMarcaDC = secondPointDC(curve);
             }
             else GeometryGraphND.pMarcaDC = GeometryGraphND.pMarca;
+            
             
             GeometryGraphND.zContido.clear();
             GeometryGraphND.wContido.clear();

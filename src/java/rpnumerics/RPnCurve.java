@@ -327,14 +327,28 @@ public class RPnCurve extends MultiPolyLine {
     public RealVector findClosestPoint(RealVector targetPoint) {
 
 
-        ArrayList segments = MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseRPnCurveToCoordsArray(this));
+        //ArrayList segments = MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseRPnCurveToCoordsArray(this));
 
+        ArrayList segments = null;
         //RPnCurve curve = this;
-        //ArrayList segments = MultidAdapter.converseRPnCurveToRealSegments(curve);
+        RPnCurve curve = GeometryUtil.closestCurve_;
+
+        if (curve instanceof SegmentedCurve) {
+            segments = (ArrayList) ((SegmentedCurve)curve).segments();
+        }
+        if (curve instanceof Orbit) {
+            segments = MultidAdapter.converseRPnCurveToRealSegments(curve);
+        }
+
+
+        GeometryUtil.closestSeg = findClosestSegment(targetPoint);
+
+        RealSegment closestSegment = (RealSegment) segments.get(GeometryUtil.closestSeg);
+        
+//        RealSegment closestSegment = (RealSegment) segments.get(
+//                findClosestSegment(targetPoint));
 
         
-        RealSegment closestSegment = (RealSegment) segments.get(
-                findClosestSegment(targetPoint));
 
         if (ALFA <= 0) {
             return closestSegment.p1();
