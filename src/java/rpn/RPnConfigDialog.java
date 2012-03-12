@@ -536,8 +536,7 @@ public class RPnConfigDialog extends RPnDialog {
         RPnDesktopPlotter plotter = new RPnDesktopPlotter();
         RPnUIFrame rpnUIFrame = new RPnUIFrame(plotter);
         RPnDesktopPlotter.setUIFrame(rpnUIFrame);
-        RPnCurvesListFrame curvesFrame = new RPnCurvesListFrame("Main");
-        rpnUIFrame.setCurvesFrame(curvesFrame);
+       
         rpnUIFrame.pack();
         rpnUIFrame.setVisible(true);
 

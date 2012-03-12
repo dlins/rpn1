@@ -123,9 +123,7 @@ public class UIController extends ComponentUI {
         return instance_;
     }
 
-    public void showCurvesPanel(boolean selected) {
-        RPnDesktopPlotter.getUIFrame().showCurvesPanel(selected);
-    }
+  
 
     public void removeLastCommand() {
         commandArray_.remove(commandArray_.size() - 1);

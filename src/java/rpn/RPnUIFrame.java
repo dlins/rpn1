@@ -63,10 +63,11 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JToolBar toolBar_ = new JToolBar();
     private static JLabel statusLabel_ = new JLabel();
     private JMenu viewMenu_ = new JMenu("View");
-    private JCheckBoxMenuItem showCurvesPaneltem_ = new JCheckBoxMenuItem("Show Curves Window", true);
+    private JCheckBoxMenuItem showMainCurvesPaneltem_ = new JCheckBoxMenuItem("Show Main Curves Window", true);
+    private JCheckBoxMenuItem showLeftCurvesPaneltem_ = new JCheckBoxMenuItem("Show Left Curves Window", true);
+    private JCheckBoxMenuItem showRightCurvesPaneltem_ = new JCheckBoxMenuItem("Show Right Curves Window", true);
     private JCheckBoxMenuItem showAuxPanel_ = new JCheckBoxMenuItem("Show Auxiliar Panels", true);
     private RPnCurvesConfigPanel curvesConfigPanel_ = new RPnCurvesConfigPanel();
-    private JFrame curvesFrame_;
     //*** declarei isso  -- Leandro
     private JMenuItem editMenuItem1 = new JMenuItem("Clears All Strings");
     private JMenuItem editMenuItem2 = new JMenuItem("Clears Last String");
@@ -109,14 +110,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     //
     // Methods
     //
-
-    //** constroi a tabela de curvas
-    public void setCurvesFrame(JFrame curvesFrame) {
-        this.curvesFrame_ = curvesFrame;
-        UIController.instance().showCurvesPanel(showCurvesPaneltem_.isSelected());
-
-
-    }
 
     public static RPnPhaseSpaceFrame[] getAuxFrames() {
         return auxFrames_;
@@ -594,17 +587,37 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 });
 
 
-        showCurvesPaneltem_.addActionListener(
+        showMainCurvesPaneltem_.addActionListener(
                 new java.awt.event.ActionListener() {
 
                     public void actionPerformed(ActionEvent e) {
 
-                        UIController.instance().showCurvesPanel(showCurvesPaneltem_.isSelected());
+                        RPnDataModule.PHASESPACE.showCurvesFrame(showMainCurvesPaneltem_.isSelected());
 
 
                     }
                 });
 
+        showLeftCurvesPaneltem_.addActionListener(
+                new java.awt.event.ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+
+                        RPnDataModule.LEFTPHASESPACE.showCurvesFrame(showLeftCurvesPaneltem_.isSelected());
+
+                    }
+                });
+
+
+        showRightCurvesPaneltem_.addActionListener(
+                new java.awt.event.ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+
+                        RPnDataModule.RIGHTPHASESPACE.showCurvesFrame(showRightCurvesPaneltem_.isSelected());
+
+                    }
+                });
 
         showAuxPanel_.addActionListener(
                 new java.awt.event.ActionListener() {
@@ -785,7 +798,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         jMenuBar1.add(editMenu);
         jMenuBar1.add(viewMenu_);
         viewMenu_.add(showCursorMenuItem_);
-        viewMenu_.add(showCurvesPaneltem_);
+        viewMenu_.add(showMainCurvesPaneltem_);
+        viewMenu_.add(showLeftCurvesPaneltem_);
+        viewMenu_.add(showRightCurvesPaneltem_);
         viewMenu_.add(showAuxPanel_);
         jMenuBar1.add(modelInteractionMenu);
 
@@ -853,7 +868,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         modelInteractionMenu.add(BifurcationRefineAgent.instance());
         BifurcationRefineAgent.instance().setEnabled(true);
 
-      
+
 
     }
 
@@ -907,12 +922,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             RPnPhaseSpaceFrame frame = RPnUIFrame.getPhaseSpaceFrames()[i];
             frame.getSlider().setEnabled(true);
         }
-    }
-
-    //** para mostrar a tabela de curvas
-    public void showCurvesPanel(boolean show) {
-        curvesFrame_.setVisible(show);
-
     }
 
     //** nao vi alteracao
