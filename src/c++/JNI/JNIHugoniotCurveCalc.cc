@@ -94,19 +94,18 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
     RealVector Uref(dimension, input);
 
-    Boundary * physicsBoundary = RpNumerics::getPhysics().boundary().clone();
-
-    RealVector min(physicsBoundary-> minimums());
-    RealVector max(physicsBoundary-> maximums());
-
     vector<HugoniotPolyLine> hugoniotPolyLineVector;
 
-    Hugoniot_Curve hugoniotCurve(&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(), physicsBoundary,
-            min, max, cells, Uref);
-    hugoniotCurve.classified_curve(hugoniotPolyLineVector);
+    Hugoniot_Curve hugoniotCurve;
+
+    GridValues & gv = RpNumerics::getPhysics().getGrid(0);
 
 
-    delete physicsBoundary;
+    hugoniotCurve.classified_curve(&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(),gv,Uref,hugoniotPolyLineVector);
+
+
+
+    cout <<"tamanho da curva :"<< hugoniotPolyLineVector.size()<<endl;
 
     for (int i = 0; i < hugoniotPolyLineVector.size(); i++) {
 
@@ -148,7 +147,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
 //            cout << leftLambda1 << " " << leftLambda2 << " " << rightLambda1 << " " << rightLambda2 << " "<<leftSigma<<" "<<rightSigma<<endl;
 
-  
+
             jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, leftLambda1, leftLambda2, rightLambda1, rightLambda2, pointType);
             env->CallObjectMethod(segmentsArray, arrayListAddMethod, hugoniotSegment);
 
@@ -164,9 +163,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     // Limpando
 
 
-    env->DeleteLocalRef(hugoniotSegmentClass);
-    env->DeleteLocalRef(realVectorClass);
-    env->DeleteLocalRef(arrayListClass);
+//    env->DeleteLocalRef(hugoniotSegmentClass);
+//    env->DeleteLocalRef(realVectorClass);
+//    env->DeleteLocalRef(arrayListClass);
 
 
 
@@ -236,46 +235,27 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     //    Test testFunction;
 
     //-------------------------------------------------------------------
-    
+
     RealVector Uref(dimension, input);
 
     cout << Uref << endl;
 
-
-//    RealVector min(physicsBoundary. minimums());
-//    RealVector max(physicsBoundary. maximums());
-
-    RealVector min(downLength, downDimension);
-    RealVector max(topLength, topDimension);
-
-    cout << "min, max : " << min << max << endl;
-
-    
-    cout <<"Ponto clicado: "<<Uref<<endl;
+    cout <<"Implementar refinamento !!"<<endl;
 
 
-    cout <<"xResolution, yResolution : " << xRes << " " << yRes << endl;
-
-    
     vector<HugoniotPolyLine> hugoniotPolyLineVector;
 
-    int cells[2];
-    cells[0]=xRes;
-    cells[1]=yRes;
+    Hugoniot_Curve hugoniotCurve;
 
-    Boundary * physicsBoundary = RpNumerics::getPhysics().boundary().clone();
+    GridValues & gv = RpNumerics::getPhysics().getGrid(0);
 
-    Hugoniot_Curve hugoniotCurve(&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(), physicsBoundary,
-            min, max, cells, Uref);
-    hugoniotCurve.classified_curve(hugoniotPolyLineVector);
-
-    delete physicsBoundary;
+    hugoniotCurve.classified_curve(&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(),gv,Uref,hugoniotPolyLineVector);
 
 //    delete tempFluxFunction;
 
     for (int i = 0; i < hugoniotPolyLineVector.size(); i++) {
 
-        
+
 
         for (unsigned int j = 0; j < hugoniotPolyLineVector[i].vec.size() - 1; j++) {
 

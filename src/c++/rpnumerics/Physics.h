@@ -14,6 +14,7 @@
  * Includes:
  */
 #include "SubPhysics.h"
+#include "GridValues.h"
 #include "Quad2.h"
 #include "Quad3.h"
 #include "Quad4.h"
@@ -37,11 +38,13 @@
 class Physics {
 private:
     vector<SubPhysics *> * physicsVector_;
+   
     Boundary * boundary_;
     string * ID_;
     Space * space_;
     int type_;
     static string rpnHome_;
+    vector <GridValues *> * gridArray_;
 
 public:
 
@@ -64,6 +67,8 @@ public:
     const string & ID() const;
 
     SubPhysics & getSubPhysics(const int);
+
+    GridValues & getGrid(const int index) const;
 
     const vector<SubPhysics *> & getPhysicsVector()const;
 

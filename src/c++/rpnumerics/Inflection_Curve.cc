@@ -1,327 +1,6 @@
 #include "ContourMethod.h"
 #include "Inflection_Curve.h"
 
-// TODO: Move or blend fill_with_jet as a method or methods of JetMatrix.
-//
-
-void Inflection_Curve::fill_with_jet(const RpFunction *flux_object, int n, double *in, int degree, double *F, double *J, double *H) {
-    RealVector r(n);
-    double *rp = r;
-    for (int i = 0; i < n; i++) rp[i] = in[i];
-
-    // Will this work? There is a const somewhere in fluxParams.
-    //FluxParams fp(r);
-    //flux_object->fluxParams(FluxParams(r)); // flux_object->fluxParams(fp);
-
-    WaveState state_c(r);
-    JetMatrix c_jet(n);
-
-    flux_object->jet(state_c, c_jet, degree);
-
-    // Fill F
-    if (F != 0) for (int i = 0; i < n; i++) F[i] = c_jet(i);
-
-    // Fill J
-    if (J != 0) {
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                J[i * n + j] = c_jet(i, j);
-            }
-        }
-    }
-
-    // Fill H
-    if (H != 0) {
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                for (int k = 0; k < n; k++) {
-                    H[(i * n + j) * n + k] = c_jet(i, j, k);
-                }
-            }
-        }
-    }
-
-    return;
-}
-
-Inflection_Curve::Inflection_Curve(const FluxFunction *f, const AccumulationFunction *a,
-        const Boundary *b,
-        const RealVector &min, const RealVector &max,
-        const int *cells) {
-
-    ff = f;
-    aa = a;
-
-    boundary = b;
-    
-    cout << "Min" << boundary->minimums() << endl;
-    cout << "Max" << boundary->maximums() << endl;
-    cout << "Type" << boundary->boundaryType() << endl;
-
-
-
-    // Create the grid...
-    //
-
-    pmin.resize(min.size());
-    pmax.resize(max.size());
-    number_of_cells = new int[2];
-    for (int i = 0; i < 2; i++) {
-        number_of_cells[i] = cells[i];
-        pmin.component(i) = min.component(i);
-        pmax.component(i) = max.component(i);
-    }
-
-
-    int dim = 2;
-
-    double delta[2];
-    for (int i = 0; i < pmin.size(); i++) delta[i] = (fabs(pmax.component(i) - pmin.component(i))) / (double) (number_of_cells[i]);
-
-    printf("delta[0] = %f, delta[1] = %f\n", delta[0], delta[1]);
-
-    grid.resize(number_of_cells[0] + 1, number_of_cells[1] + 1);
-    dd.resize(number_of_cells[0] + 1, number_of_cells[1] + 1);
-    e.resize(number_of_cells[0] + 1, number_of_cells[1] + 1);
-    eig_is_real.resize(number_of_cells[0] + 1, number_of_cells[1] + 1);
-
-    for (int i = 0; i <= number_of_cells[0]; i++) {
-        for (int j = 0; j <= number_of_cells[1]; j++) {
-            grid(i, j).resize(dim);
-
-            grid(i, j).component(0) = pmin.component(0) + (double) i * delta[0];
-            grid(i, j).component(1) = pmin.component(1) + (double) j * delta[1];
-        }
-    }
-
-    // ...and fill several values on the grid.
-    //
-    fill_values_on_grid();
-
-
-    // TODO TODO Qual o lugar certo para colocar isso tudo... CONTOUR et al. versus BIFURCACOES TODO TODO
-    // Combinatorial
-
-    /* From: rp/inc/hc21c.inc 
-
-      integer  N, DNCV, DNSIMP
-      parameter (N = 2, DNCV = 4, DNSIMP = 2)
-
-      integer  M, DNSF, DNFACE
-      parameter (M = 1, DNSF = 3, DNFACE = 5)
-
-     */
-
-    /*    hn = 2; // N
-        hm = 1; // M
-
-        ncvert_ = 4; // N^2
-        nsimp_  = 2; // N!
-
-        hc.mkcube(&cvert_[0][0], &bsvert_[0][0], &perm_[0][0], ncvert_, nsimp_, hn);
-
-        nface_ = hc.mkface(&face_[0][0], &facptr_[0][0], &fnbr_[0][0], dimf_, nsimp_, hn, hm, nsface_,
-                           &bsvert_[0][0], &comb_[0][0], &perm_[0][0], &storn_[0], &storm_[0]);
-
-        index = new int[4];
-        index[0] = 0;
-        index[1] = 2;
-        index[2] = 3;
-        index[3] = 1;
-
-        // Set the rectangle sizes and resolutions
-        u0 = rect(1);
-        u1 = rect(2);
-        v0 = rect(3);
-        v1 = rect(4);
-        nu = res(1);
-        nv = res(2);
-        du = ( u1 - u0 ) / nu;
-        dv = ( v1 - v0 ) / nv;
-     */
-
-    // Fill the usual values, AND left- and right-eigenvectors TOO.
-}
-
-Inflection_Curve::~Inflection_Curve() {
-    delete [] number_of_cells;
-    //    delete [] index;
-}
-
-// Given the extreme points of a rectangular domain
-// and the number of grid points along each dimension,
-// compute the vertices of the grid thus defined,
-// and in said vertices a series of values.
-//
-//          pmin, pmax: Extremes of the domain. Ideally, 
-//
-//                          pmin[i] <= pmax[i] for 0 <= i < dimension of space.
-//
-//                      In practice, this will be checked out within the body of the function.
-//                  ff, aa: Flux and accumulation functions that apply from R^n to R^n.
-//     number_of_grid_pnts: The number of cells in each dimension (array defined externally).
-//                    grid: The spatial grid created. Space to hold it must be reserved outside the function.
-//                          The i-th dimension will have number_of_cells[i] cells. Thus, for 2D, which is the case
-//                          that is being implemented, each vertex (i, j) will be of
-//                          the form:
-//
-//                              grid[i*number_of_grid_pnts[1] + j].component(k) = pmin[k] + j*(pmax[k] - pmin[k])/(number_of_grid_pnts[k])
-//
-//                          where:
-//
-//                              0 <= i < number_of_grid_pnts[0],
-//                              0 <= j < number_of_grid_pnts[1],
-//                              0 <= k < 2.
-//
-//                          Thus, grid needs to be of size 
-//
-//                              number_of_grid_pnts[0]*...*number_of_grid_pnts[pmax.size() - 1].
-//
-//                      dd: Array of vectors that will hold the value of the directional derivatives
-//                          at each vertex of the grid. This array, like the grid, must be of size
-//
-//                              number_of_cells[0]*...*number_of_cells[pmax.size() - 1].
-//                      
-//                       e: Array of vectors of eigenpairs that will hold all the eigenpairs at
-//                          each vertex of the grid. These arrays, like the grid, must be of size
-//
-//                              number_of_cells[0]*...*number_of_cells[pmax.size() - 1].
-//
-//             eig_is_real: Array of vectors of booleans that state if each eigenvalue at a given grid vertex is
-//                          real (true) or complex (false). These arrays, like the grid, must be of size
-//
-//                              number_of_cells[0]*...*number_of_cells[pmax.size() - 1].
-//
-
-// TODO: Change indices i, j to k, l. i & j are reserved for grid- or cell-like uses.
-
-void Inflection_Curve::fill_values_on_grid(void) {
-
-    // Dimension of space
-    int dim = pmin.size();
-    //    printf("dim = %d\n", dim);
-
-    //    // Create the grid proper
-    //    create_grid(pmin, pmax, number_of_grid_pnts, grid);
-
-    // Number of elements in the grid.
-    int n = 1;
-
-    // The right and left eigenvector (entry)
-    double l[dim], r[dim];
-
-    // This submatrix is for use ahead (for each family): SubHF[][] = HF[][][n]*r[family][n]
-    double SubHF[dim][dim];
-    //    for (int k = 0; k < dim; k++) {
-    //        for (int m = 0; m < dim; m++) {
-    //            SubHF[m][k] = 0.0;
-    //        }
-    //    }
-
-    double norm, dirdrv;
-
-    for (int i = 0; i < dim; i++) n *= number_of_cells[i] + 1;
-
-    double epsilon = 1e-10;
-
-    // Fill the arrays with the value of the flux and accumulation functions at every point in the grid.
-    // The eigenpairs must also be stored.
-    for (int i = 0; i < n; i++) {
-
-        double point[dim];
-        // We only compute the value of the function on points that are inside the physical domain
-        // given by "boundary".
-        for (int j = 0; j < dim; j++) point[j] = grid(i).component(j);
-
-        if (boundary->inside(point)) {
-            double JF[dim][dim], JG[dim][dim];
-            double HF[dim][dim][dim], HG[dim][dim][dim];
-            fill_with_jet((RpFunction*) ff, dim, point, 2, 0, &JF[0][0], &HF[0][0][0]);
-            fill_with_jet((RpFunction*) aa, dim, point, 2, 0, &JG[0][0], &HG[0][0][0]);
-
-            // TODO: Isso aqui eh para o caso de acumulacao trivial!
-
-            //            // Fill the values of the functions
-            //            for (int j = 0; j < dim; j++){
-            //                ffv(i).component(j) = F[j];
-            //                aav(i).component(j) = G[j];
-            //            }
-
-            // Find the eigenpairs
-            std::vector<eigenpair> etemp;
-            Eigen::eig(dim, &JF[0][0], &JG[0][0], etemp);
-
-            e(i).clear();
-            e(i).resize(etemp.size());
-            for (int j = 0; j < etemp.size(); j++) e(i)[j] = etemp[j];
-
-            // Decide if the eigenvalues are real or complex
-            eig_is_real(i).clear();
-            eig_is_real(i).resize(etemp.size());
-            for (int j = 0; j < etemp.size(); j++) {
-                if (fabs(etemp[j].i) < epsilon) eig_is_real(i)[j] = true; // TODO: Comparacoes devem ser feitas com valores relativos, nao absolutos
-                else eig_is_real(i)[j] = false;
-            }
-
-            // Find the directional derivatives
-            dd(i).resize(dim);
-
-            //                if (eig_is_real(i)[0] == true) {
-            //                    for (int fam = 0; fam < dim; fam++){
-            //                        norm   = 0.0;
-            //                        dirdrv = 0.0;
-
-            //                        for (int entry = 0; entry < dim; entry++){
-            //                            l[entry] = e(i)[fam].vlr[entry];
-            //                            r[entry] = e(i)[fam].vrr[entry];
-            //                        }
-
-            //                        // Reset
-            //                        for (int k = 0; k < dim; k++) {
-            //                            for (int m = 0; m < dim; m++) {
-            //                                SubHF[m][k] = 0.0;
-            //                            }
-            //                        }
-
-            //                        for (int k = 0; k < dim; k++) {
-            //                            for (int m = 0; m < dim; m++) {
-            //                                for (int n = 0; n < dim; n++) {
-            //                                    SubHF[k][m] += HF[k][m][n]*r[n];
-            ////                                    printf("r[%d][%d] = %f\n", fam, n, r[n]);
-            //                                }
-            //                            }
-            //                        }
-
-            //                        for (int n = 0; n < dim; n++) {
-            //                            norm += l[n]*r[n];
-            ////                            if (norm != 1.0) printf("FAILED!\n");
-            //                        }
-
-            //                        for (int k = 0; k < dim; k++) {
-            //                            for (int m = 0; m < dim; m++) {
-            //                                dirdrv += l[k]*SubHF[k][m]*r[m]; // TODO: Substituir para o caso de acumulacao nao trivial
-            //                            }
-            //                        }
-
-            //                        // The directional derivative is
-
-            //                        dd(i)[fam] = dirdrv / norm;
-
-            ////                        printf("dd(%d)[%d] = %f\n", i, fam, dd(i)[fam]);
-            //                    }
-            //
-            //                }
-
-            for (int fam = 0; fam < dim; fam++) {
-
-                dd(i)[fam] = this->dirdrv(2, &point[0], fam);
-            }
-        }
-    }
-
-    return;
-}
-
 //void Inflection_Curve::compute_inflection_curve(int inflection_family, std::vector<RealVector> &inflection_curve_segments){
 
 //    // Clear the output.
@@ -464,7 +143,9 @@ c      call setfam ( family )  before using this routine.
 c
  ***********************************************************************/
 
-int Inflection_Curve::function_on_square(double *foncub, int i, int j, int is_square) { // ver como esta en el ContourMethod.cc
+int Inflection_Curve::function_on_square(double *foncub, int i, int j) { // ver como esta en el ContourMethod.cc
+    int is_square = gv->cell_type(i, j);
+    
     //      integer  consis, rlvect
     //      real     dirdrv
 
@@ -521,16 +202,16 @@ int Inflection_Curve::function_on_square(double *foncub, int i, int j, int is_sq
     deve estar num loop, pois deve testar a "realidade" de todos os autovalores
      */
     //    if ( e(family)[i][j]   == false ) return 0;
-    if (!eig_is_real(i, j)[family]) return 0;
-    if (!eig_is_real(i + 1, j)[family]) return 0;
-    if (!eig_is_real(i, j + 1)[family]) return 0;
+    if (!gv->eig_is_real(i, j)[family]) return 0;
+    if (!gv->eig_is_real(i + 1, j)[family]) return 0;
+    if (!gv->eig_is_real(i, j + 1)[family]) return 0;
     //    if ( e(family)[i+1][j] == false ) return 0;
     //    if ( e(family)[i][j+1] == false ) return 0;
 
     for (int k = 0; k < 2; k++) {
-        rvorig[k] = e(i, j)[family].vrr[k];
-        rvside[k] = e(i + 1, j)[family].vrr[k];
-        rvtop[k] = e(i, j + 1)[family].vrr[k];
+        rvorig[k] = gv->e(i, j)[family].vrr[k];
+        rvside[k] = gv->e(i + 1, j)[family].vrr[k];
+        rvtop[k]  = gv->e(i, j + 1)[family].vrr[k];
     }
 
 
@@ -554,29 +235,29 @@ int Inflection_Curve::function_on_square(double *foncub, int i, int j, int is_sq
     onde int eh igual a orientacao.
      */
     if (consistency(rvtop, rvorig, orient) == 0) return 0;
-    forig = ((double) orient) * dd(i, j)[family];
+    forig = ((double) orient) * gv->dd(i, j)[family];
 
     if (consistency(rvorig, rvside, orient) == 0) return 0;
-    fside = ((double) orient) * dd(i + 1, j)[family];
+    fside = ((double) orient) * gv->dd(i + 1, j)[family];
 
     if (consistency(rvside, rvtop, orient) == 0) return 0;
-    ftop = ((double) orient) * dd(i, j + 1)[family];
+    ftop = ((double) orient) * gv->dd(i, j + 1)[family];
 
     if (orient == -1) return 0;
 
     foncub[1] = forig; // Was: foncub[0][1]
     foncub[0] = fside; // Was: foncub[0][0]
-    foncub[3] = ftop; // Was: foncub[0][3]
+    foncub[3] = ftop;  // Was: foncub[0][3]
     //    printf("Valores(%d,%d) = %f, %f, %f\n", i, j, forig, fside, ftop);
 
     //   lower half (type = 1) of square (type = 2) is complete
-    if (is_square == 1) return 1;
+    if (is_square == CELL_IS_TRIANGLE) return 1;
 
     //   compute the vectors at the opposite corner (top triangle)
     //    if ( e(family)[i+1][j+1] == false ) return 0;
-    if (!eig_is_real(i + 1, j + 1)[family]) return 0;
-    rvopps[0] = e(i + 1, j + 1)[family].vrr[0];
-    rvopps[1] = e(i + 1, j + 1)[family].vrr[1];
+    if (!gv->eig_is_real(i + 1, j + 1)[family]) return 0;
+    rvopps[0] = gv->e(i + 1, j + 1)[family].vrr[0];
+    rvopps[1] = gv->e(i + 1, j + 1)[family].vrr[1];
 
     //    if ( rlvect ( rvopps,  lvopps,  xopps,  family ) .eq. 0 ) return 0;
 
@@ -585,7 +266,7 @@ int Inflection_Curve::function_on_square(double *foncub, int i, int j, int is_sq
     //    if ( consis ( rvopps, rvside, xopps, xside, orient ) .le. 0 ) return 0;
 
     if (consistency(rvtop, rvopps, orient) == 0) return 0;
-    fopps = ((double) orient) * dd(i + 1, j + 1)[family];
+    fopps = ((double) orient) * gv->dd(i + 1, j + 1)[family];
     if (consistency(rvopps, rvside, orient) == 0) return 0;
 
     if (orient == -1) return 0;
@@ -598,6 +279,7 @@ int Inflection_Curve::function_on_square(double *foncub, int i, int j, int is_sq
     // Ja aqui no final faz falta alguma coisa como
     foncub[2] = fopps; // Was: foncub[0][2]
     //    printf("Valores(%d,%d) = %f, %f, %f, %f\n", i, j, forig, fside, ftop, fopps);
+
 
     return 1;
 }
@@ -624,22 +306,18 @@ int Inflection_Curve::consistency(double *v1, double *v2, int &orient) {
     return 1;
 }
 
-int Inflection_Curve::curve(int fam, std::vector<RealVector> &inflection_curve) {
+int Inflection_Curve::curve(const FluxFunction *f, const AccumulationFunction *a, 
+                            GridValues &g, int fam, std::vector<RealVector> &inflection_curve) {
+                            
     inflection_curve.clear();
+    
+    g.fill_dirdrv_on_grid(f, a);printf("Inflection_Curve::curve\n");
+    gv = &g;
 
     // family MUST be a member of Inflection_Curve
     family = fam;
 
-    double rect[4];
-    rect[0] = pmin.component(0);
-    rect[1] = pmax.component(0);
-    rect[2] = pmin.component(1);
-    rect[3] = pmax.component(1);
-   
-
-    int info = ContourMethod::contour2d(this,(Boundary *) boundary, rect, number_of_cells, inflection_curve);
-
-
+    int info = ContourMethod::contour2d(this, inflection_curve);
 
     return info;
 }
@@ -694,16 +372,17 @@ int Inflection_Curve::curve(int fam, std::vector<RealVector> &inflection_curve) 
 // i-th "matrix" of the Hessian.  (Where there are n Hessians.)
 //
 
-  double Inflection_Curve::dirdrv(int n, const RealVector &p, int fam) {
+/*double Inflection_Curve::dirdrv(int n, const RealVector &p, int fam) {
     //    RealVector pp(n);
     //    for (int i = 0; i < n; i++) pp.component(i) = p[i];
     double point[n];
     for (int i = 0; i < n; i++) point[i] = p.component(i);
 
     return dirdrv(n, &point[0], fam);
-}
+}*/
 
-double Inflection_Curve::dirdrv(int n, double *point, int fam) {
+
+/*double Inflection_Curve::dirdrv(int n, double *point, int fam) {
     double A[n][n];
     double B[n][n];
 
@@ -714,7 +393,8 @@ double Inflection_Curve::dirdrv(int n, double *point, int fam) {
 
     // Extract the left and right eigenvalues of the generalized system.
     std::vector<eigenpair> e;
-    int info = Eigen::eig(n, &A[0][0], &B[0][0], e);
+    int info = Eigen::eig(n, 
+, e);
 
     // Extract the indx-th left and right-eigenvector of the GENERALIZED
     // PROBLEM (A - lambda B)r=0  and  l(A - lambda B)=0
@@ -760,31 +440,31 @@ double Inflection_Curve::dirdrv(int n, double *point, int fam) {
     }
 
     return dirdrv / norm;
-}
+}*/
 
-double Inflection_Curve::ddot(int n, double *x, double *y) {
+/*double Inflection_Curve::ddot(int n, double *x, double *y) {
     double p = 0.0;
 
     for (int i = 0; i < n; i++) p += x[i] * y[i];
 
     return p;
-}
+}*/
 
 // C = A*B
 // A = m times p
 // B = p times n
 // C = m times n
 
-void Inflection_Curve::matrixmult(int m, int p, int n, double *A, double *B, double *C) {
-    double sum;
-
-    for (int i = 0; i < m; i++) {
-        for (int j = 0; j < n; j++) {
-            sum = 0.0;
-            for (int k = 0; k < p; k++) sum += A[i * p + k] * B[k * n + j];
-            C[i * n + j] = sum;
-        }
-    }
-
-    return;
-}
+//void Inflection_Curve::matrixmult(int m, int p, int n, double *A, double *B, double *C) {
+//    double sum;
+//
+//    for (int i = 0; i < m; i++) {
+//        for (int j = 0; j < n; j++) {
+//            sum = 0.0;
+//            for (int k = 0; k < p; k++) sum += A[i * p + k] * B[k * n + j];
+//            C[i * n + j] = sum;
+//        }
+//    }
+//
+//    return;
+//}

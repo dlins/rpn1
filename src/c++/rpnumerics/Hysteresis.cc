@@ -10,23 +10,23 @@ int Hysteresis::curve(const Boundary *boundary,
                       std::vector<RealVector> &curve_segments,
                       std::vector<RealVector> &domain_segments){
 
-    // Inflection curve
-    Inflection_Curve ic((FluxFunction*)curve_flux, (AccumulationFunction*)curve_accum, boundary, 
-                         pmin, pmax, number_of_cells);
-    std::vector<RealVector> vic;
-    int info = ic.curve(curve_family, vic);
+//    // Inflection curve
+//    Inflection_Curve ic((FluxFunction*)curve_flux, (AccumulationFunction*)curve_accum, boundary,
+//                         pmin, pmax, number_of_cells);
+//    std::vector<RealVector> vic;
+//    int info = ic.curve(curve_family, vic);
+//
+//    // Compute the extension curve for the inflection curve.
+//    //
+//    Extension_Curve extension_curve(pmin, pmax, number_of_cells, domain_ff, domain_aa,boundary);
+//
+//    extension_curve.compute_extension_curve(CHARACTERISTIC_ON_CURVE, 1,
+//                                            vic, curve_family,
+//                                            (FluxFunction*)curve_flux, (AccumulationFunction*)curve_accum,
+//                                            domain_family,
+//                                            curve_segments,
+//                                            domain_segments);
 
-    // Compute the extension curve for the inflection curve.
-    //
-    Extension_Curve extension_curve(pmin, pmax, number_of_cells, domain_ff, domain_aa,boundary);
-
-    extension_curve.compute_extension_curve(CHARACTERISTIC_ON_CURVE, 1,
-                                            vic, curve_family,
-                                            (FluxFunction*)curve_flux, (AccumulationFunction*)curve_accum,
-                                            domain_family, 
-                                            curve_segments,
-                                            domain_segments);
-
-    return info;
+//    return info;
 }
 

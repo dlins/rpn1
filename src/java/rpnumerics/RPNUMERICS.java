@@ -7,7 +7,6 @@ package rpnumerics;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 import rpn.RPnConfig;
@@ -296,7 +295,7 @@ public class RPNUMERICS {
         int[] resolution = RPnDataModule.processResolution(getParamValue("hugoniotcurve", "resolution"));
 
         HugoniotParams params = new HugoniotParams(new PhasePoint(input), resolution);
-        
+
         return new HugoniotCurveCalcND(params);
     }
 
@@ -322,7 +321,7 @@ public class RPNUMERICS {
 
         int family = new Integer(getParamValue("levelcurve", "family"));
 
-        return new LevelCurveCalc(family, level,new ContourParams(resolution));
+        return new LevelCurveCalc(family, level, new ContourParams(resolution));
 
     }
 
@@ -362,7 +361,7 @@ public class RPNUMERICS {
     public static DoubleContactCurveCalc createDoubleContactCurveCalc() {
 
         int[] resolution = RPnDataModule.processResolution(getParamValue("doublecontactcurve", "resolution"));
-        
+
         int curveFamily = new Integer(getParamValue("doublecontactcurve", "curvefamily"));
         int domainFamily = new Integer(getParamValue("doublecontactcurve", "domainfamily"));
 
@@ -401,7 +400,7 @@ public class RPNUMERICS {
     public static HysteresisCurveCalc createHysteresisCurveCalc() {
 
         int[] resolution = RPnDataModule.processResolution(getParamValue("hysteresiscurve", "resolution"));
-        
+
         ContourParams params = new ContourParams(resolution);
 
         int characteristicWhere = 0;//new Integer(getParamValue("hysteresiscurve", "characteristicwhere"));
@@ -426,7 +425,7 @@ public class RPNUMERICS {
     public static BoundaryExtensionCurveCalc createBoundaryExtensionCurveCalc() {
 
         int[] resolution = RPnDataModule.processResolution(getParamValue("boundaryextensioncurve", "resolution"));
-        
+
         ContourParams params = new ContourParams(resolution);
 
         int characteristicWhere = new Integer(getParamValue("boundaryextensioncurve", "characteristicwhere"));
@@ -486,7 +485,7 @@ public class RPNUMERICS {
     public static InflectionCurveCalc createInflectionCurveCalc() {
 
         int[] resolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("inflectioncurve", "resolution"));
-        
+
         ContourParams params = new ContourParams(resolution);
 
         int family = new Integer(RPNUMERICS.getParamValue("inflectioncurve", "family"));
@@ -504,7 +503,7 @@ public class RPNUMERICS {
     public static RarefactionExtensionCalc createRarefactionExtensionCalc(OrbitPoint orbitPoint) {
 
         int[] resolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("rarefactionextension", "resolution"));
-        
+
         int curveFamily = new Integer(getParamValue("rarefactionextension", "curvefamily"));
         int domainFamily = new Integer(getParamValue("rarefactionextension", "domainfamily"));
         int characteristicDomain = new Integer(getParamValue("rarefactionextension", "characteristic"));

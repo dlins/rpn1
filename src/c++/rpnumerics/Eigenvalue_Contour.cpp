@@ -295,7 +295,7 @@ int Eigenvalue_Contour::curve(std::vector< std::vector<RealVector> > &eigenvalue
     for (int i = 0; i < levels.size(); i++){
         level = levels[i];
         std::vector<RealVector> curve;
-        info = ContourMethod::contour2d(this, (Boundary *)boundary,rect, number_of_cells, curve);
+//        info = ContourMethod::contour2d(this, (Boundary *)boundary,rect, number_of_cells, curve);
 
         if (curve.size() > 0){
             eigenvalues_curves.push_back(curve);
@@ -318,7 +318,7 @@ int Eigenvalue_Contour::curve(std::vector<RealVector> &curve, double &l){
     rect[2] = pmin.component(1);
     rect[3] = pmax.component(1);
 
-    info = ContourMethod::contour2d(this, (Boundary *) boundary,rect, number_of_cells, curve);
+//    info = ContourMethod::contour2d(this, (Boundary *) boundary,rect, number_of_cells, curve);
     l = level;
 
     return info;

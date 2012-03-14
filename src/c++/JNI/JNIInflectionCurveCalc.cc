@@ -62,35 +62,24 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_InflectionCurveCalc_nativeCalc(JNIEnv 
 
     int dimension = RpNumerics::getPhysics().domain().dim();
 
-    Boundary * tempBoundary = RpNumerics::getPhysics().boundary().clone();
-
     int cells [dimension];
 
     env->GetIntArrayRegion(resolution, 0, dimension, cells);
-
-    cout << "min:" << tempBoundary->minimums();
-
-    cout << "max:" << tempBoundary->maximums();
-
-    Inflection_Curve inflectionCurve((FluxFunction *) & RpNumerics::getPhysics().fluxFunction(), (AccumulationFunction *) & RpNumerics::getPhysics().accumulation(), tempBoundary,
-            tempBoundary->minimums(), tempBoundary->maximums(), cells);
-
     
+    GridValues & gv = RpNumerics::getPhysics().getGrid(0);
+    
+    Inflection_Curve inflectionCurve;
+
     std::vector<RealVector> left_vrs;
 
-    inflectionCurve.curve(family, left_vrs);
+    inflectionCurve.curve(& RpNumerics::getPhysics().fluxFunction(),  & RpNumerics::getPhysics().accumulation(),gv, family, left_vrs);
+
     int tamanho = left_vrs.size();
     cout << "Tamanho do vetor de pontos: " << tamanho << endl;
 
     if (left_vrs.size()==0)
         return NULL;
 
-    delete tempBoundary;
-
-   
-
-
-   
     cout << "Familia da inflexao: " << family << endl;
 
 
@@ -115,7 +104,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_InflectionCurveCalc_nativeCalc(JNIEnv 
         jobject realVectorLeftPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRLeft);
         jobject realVectorRightPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRRight);
 
-      
+
         jobject realSegment = env->NewObject(realSegmentClass, realSegmentConstructor, realVectorLeftPoint, realVectorRightPoint);
         env->CallObjectMethod(segmentsArray, arrayListAddMethod, realSegment);
     }
