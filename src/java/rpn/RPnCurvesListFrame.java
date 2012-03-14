@@ -23,6 +23,7 @@ import javax.swing.JToolBar;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableModel;
+import rpn.component.BifurcationCurveGeom;
 import rpn.component.RpCalcBasedGeomFactory;
 import rpn.component.RpGeometry;
 import rpn.controller.ui.UIController;
@@ -43,6 +44,7 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
     private JButton selectNoneButton_, selectAllButton_, invisibleButton_, visibleButton_, removeButton_;
     private DefaultTableModel tableModel_;
     private RPnPhaseSpaceAbstraction phaseSpace_;
+    private BifurcationCurveGeom bifToRemove_;
 
     public RPnCurvesListFrame(String title) {
         super(title);
@@ -115,6 +117,15 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
 
     }
 
+    /**
+     *
+     * @deprecated  Refactor
+     */
+    
+    public void setBifurcationToRemove(BifurcationCurveGeom bif) {
+        bifToRemove_ = bif;
+    }
+
     public void attach(RPnPhaseSpaceAbstraction phaseSpace) {
         phaseSpace_ = phaseSpace;
     }
@@ -133,7 +144,7 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
 
 
         if (calc instanceof HugoniotCurveCalcND) {
-            HugoniotCurve curve = (HugoniotCurve)factory.geomSource();
+            HugoniotCurve curve = (HugoniotCurve) factory.geomSource();
             userInput = curve.getXZero().getCoords();
         }
 
@@ -188,49 +199,63 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
 
-        JButton button = (JButton) e.getSource();
+        if (e.getSource() instanceof JButton) {
+            JButton button = (JButton) e.getSource();
 
-        if (button.getName().equals("SelectAll")) {
-            for (int i = 0; i < curvesTable_.getModel().getRowCount(); i++) {
-                curvesTable_.setValueAt(new Boolean(true), i, 0);
-            }
-
-        }
-
-        if (button.getName().equals("SelectNone")) {
-
-            for (int i = 0; i < curvesTable_.getModel().getRowCount(); i++) {
-                curvesTable_.setValueAt(new Boolean(false), i, 0);
-            }
-        }
-
-        if (button.getName().equals("Invisible")) {
-            setGeometryVisible(false);
-        }
-        if (button.getName().equals("Visible")) {
-            setGeometryVisible(true);
-        }
-
-
-        if (button.getName().equals("Remove")) {
-            int index = 0;
-            boolean selected;
-            Iterator it = phaseSpace_.getGeomObjIterator();
-            ArrayList<MultiGeometry> toBeRemoved = new ArrayList<MultiGeometry>();
-
-            while (it.hasNext()) {
-                selected = (Boolean) tableModel_.getValueAt(index, 0);
-                MultiGeometry multiGeometry = (MultiGeometry) it.next();
-
-                if (selected) {
-                    toBeRemoved.add(multiGeometry);
+            if (button.getName().equals("SelectAll")) {
+                for (int i = 0; i < curvesTable_.getModel().getRowCount(); i++) {
+                    curvesTable_.setValueAt(new Boolean(true), i, 0);
                 }
-                index++;
+
             }
-            for (MultiGeometry multiGeometry : toBeRemoved) {
-                phaseSpace_.remove(multiGeometry);
+
+            if (button.getName().equals("SelectNone")) {
+
+                for (int i = 0; i < curvesTable_.getModel().getRowCount(); i++) {
+                    curvesTable_.setValueAt(new Boolean(false), i, 0);
+                }
             }
+
+            if (button.getName().equals("Invisible")) {
+                setGeometryVisible(false);
+            }
+            if (button.getName().equals("Visible")) {
+                setGeometryVisible(true);
+            }
+
+
+            if (button.getName().equals("Remove")) {
+                int index = 0;
+                boolean selected;
+                Iterator it = phaseSpace_.getGeomObjIterator();
+                ArrayList<MultiGeometry> toBeRemoved = new ArrayList<MultiGeometry>();
+
+                while (it.hasNext()) {
+                    selected = (Boolean) tableModel_.getValueAt(index, 0);
+                    MultiGeometry multiGeometry = (MultiGeometry) it.next();
+
+                    if (selected) {
+                        toBeRemoved.add(multiGeometry);
+                    }
+                    index++;
+                }
+                for (MultiGeometry multiGeometry : toBeRemoved) {
+                    phaseSpace_.remove(multiGeometry);
+
+                    if (multiGeometry instanceof BifurcationCurveGeom) {
+                        RPnPhaseSpaceManager.instance().remove(phaseSpace_, (BifurcationCurveGeom) multiGeometry);
+                    }
+                }
+            }
+
+        } else {
+
+
+            phaseSpace_.remove(bifToRemove_.getOtherSide());
+            System.out.println("Evento de outro phaseSpace");
+
         }
+
 
     }
 

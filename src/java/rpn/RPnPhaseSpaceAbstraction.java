@@ -68,6 +68,10 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         }
     }
 
+    public Iterator curvesFrameIterator() {
+        return curvesListFrames_.iterator();
+    }
+
     /**
      *@todo fix this... shouldn't have access to state_
      *
@@ -110,7 +114,9 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
     @Override
     public void remove(MultiGeometry geom) {
 
+
         super.remove(geom);
+
         notifyState();
 
     }

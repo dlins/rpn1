@@ -331,6 +331,26 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         RPnDataModule.RIGHTPHASESPACE.attach(rightFrame);
 
 
+
+//        RPnDataModule.LEFTPHASESPACE.attachPhasSpace(RPnDataModule.RIGHTPHASESPACE);
+//        RPnDataModule.RIGHTPHASESPACE.attachPhasSpace(RPnDataModule.LEFTPHASESPACE);
+
+
+
+        ArrayList<RPnPhaseSpaceAbstraction> leftPhaseSpaceArray= new ArrayList<RPnPhaseSpaceAbstraction>();
+        ArrayList<RPnPhaseSpaceAbstraction> rightPhaseSpaceArray = new ArrayList<RPnPhaseSpaceAbstraction>();
+
+
+        leftPhaseSpaceArray.add(RPnDataModule.RIGHTPHASESPACE);
+        rightPhaseSpaceArray.add( RPnDataModule.LEFTPHASESPACE);
+
+
+        RPnPhaseSpaceManager.instance().register(RPnDataModule.LEFTPHASESPACE, leftPhaseSpaceArray);
+        RPnPhaseSpaceManager.instance().register(RPnDataModule.RIGHTPHASESPACE, rightPhaseSpaceArray);
+
+
+
+
         curvesFrame.attach(RPnDataModule.PHASESPACE);
         leftFrame.attach(RPnDataModule.LEFTPHASESPACE);
         rightFrame.attach(RPnDataModule.RIGHTPHASESPACE);

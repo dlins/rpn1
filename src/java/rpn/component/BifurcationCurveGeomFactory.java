@@ -157,10 +157,12 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
     }
 
     public RpGeometry leftGeom() {
+        System.out.println("Esquerdo: "+leftGeom_);
         return leftGeom_;
     }
 
     public RpGeometry rightGeom() {
+        System.out.println("Direito: "+ rightGeom_);
         return rightGeom_;
     }
 
