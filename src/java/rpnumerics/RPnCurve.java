@@ -8,10 +8,6 @@ package rpnumerics;
 
 import java.awt.Color;
 import java.awt.Shape;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import rpn.RPnPhaseSpaceAbstraction;
-import rpn.component.RpGeometry;
 import rpnumerics.methods.contour.ContourCurve;
 import wave.multid.*;
 import wave.multid.model.AbstractPathIterator;
@@ -29,12 +25,7 @@ import rpn.component.MultidAdapter;
 import wave.util.*;
 import java.util.ArrayList;
 import java.util.List;
-import rpn.component.SegmentedCurveGeom;
-import rpn.component.util.GeometryGraph3D;
-import rpn.component.util.GeometryUtil;
 import rpn.parser.RPnDataModule;
-import wave.multid.model.AbstractScene;
-import wave.multid.model.MultiGeometry;
 
 
 public class RPnCurve extends MultiPolyLine {
