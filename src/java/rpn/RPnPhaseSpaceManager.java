@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import rpn.component.BifurcationCurveGeom;
-import rpn.component.RpGeometry;
 
 public class RPnPhaseSpaceManager {
 
@@ -31,17 +30,11 @@ public class RPnPhaseSpaceManager {
     }
 
     public void unregister(RPnPhaseSpaceAbstraction phaseSpace) {
-
         phaseSpaceMap_.remove(phaseSpace);
-
-
     }
 
     public void remove(RPnPhaseSpaceAbstraction phaseSpace, BifurcationCurveGeom bifurcationGeom) {
-
-        System.out.println("Chamando remove" + phaseSpace.getName() + "    " + bifurcationGeom);
         ArrayList<RPnPhaseSpaceAbstraction> pointedPhaseSpaceAbstractions = phaseSpaceMap_.get(phaseSpace);
-
 
         for (RPnPhaseSpaceAbstraction pointedPhaseSpace : pointedPhaseSpaceAbstractions) {
 
