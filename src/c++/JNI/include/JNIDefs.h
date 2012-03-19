@@ -33,7 +33,7 @@
 #define SHOCKCURVE_LOCATION                   "rpnumerics/ShockCurve"
 #define INTEGRALCURVE_LOCATION                "rpnumerics/IntegralCurve"
 #define LEVELCURVE_LOCATION                   "rpnumerics/LevelCurve"
-
+#define ELLIPTICBOUNDARY_LOCATION             "rpnumerics/EllipticBoundary"
 
 
 #define SHOCKFLOW_LOCATION                     "rpnumerics/ShockFlow"

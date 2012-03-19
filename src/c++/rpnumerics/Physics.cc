@@ -96,16 +96,11 @@ Physics::Physics(const string & physicsID) : physicsVector_(new vector<SubPhysic
     const Boundary * b = &boundary();
 
     std::vector<int> noc(2);
-    noc[0] = 400;
-    noc[1] = 400;
+    noc[0] = 124;
+    noc[1] = 124;
 
 
     gridArray_->push_back(new GridValues(b, b->minimums(), b->maximums(), noc));
-
-
-    cout<<"Construindo a fisica"<<endl;
-
-
 
 
 }
@@ -135,8 +130,8 @@ Physics::Physics(const Physics & physics) : physicsVector_(new vector<SubPhysics
     const Boundary * b = boundary_;
 
     std::vector<int> noc(2);
-    noc[0] = 400;
-    noc[1] = 400;
+    noc[0] = 128;
+    noc[1] = 128;
 
 
 

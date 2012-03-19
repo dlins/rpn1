@@ -331,6 +331,18 @@ public class RPNUMERICS {
 
     }
 
+
+    public static EllipticBoundaryCalc createEllipticBoundaryCalc(){
+
+
+           int[] resolution = RPnDataModule.processResolution(getParamValue("ellipticboundary", "resolution"));
+
+        return new EllipticBoundaryCalc(new ContourParams(resolution));
+
+
+
+    }
+
 //    public static StationaryPointCalc createStationaryPointCalc(PhasePoint initial) {
 //
 //        ShockFlow shockFlow = createShockFlow();

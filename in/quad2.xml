@@ -35,6 +35,12 @@
     </CURVE>
 
 
+    <CURVE name="ellipticboundary">
+        <CURVEPARAM name="resolution" value="128 128"/>
+    </CURVE>
+    
+
+
     <CURVE name="levelcurve">
         <CURVEPARAM name="family" value="0"/>
         <CURVEPARAM name="resolution" value="128 128"/>

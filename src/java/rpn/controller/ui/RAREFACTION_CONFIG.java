@@ -10,6 +10,7 @@ import rpn.usecase.ChangeFluxParamsAgent;
 import rpn.usecase.ChangeDirectionAgent;
 import rpn.usecase.ChangeOrbitLevel;
 import rpn.usecase.CompositePlotAgent;
+import rpn.usecase.EllipticBoundaryAgent;
 import rpn.usecase.HugoniotPlotAgent;
 import rpn.usecase.IntegralCurvePlotAgent;
 import rpn.usecase.LevelCurvePlotAgent;
@@ -37,6 +38,7 @@ public class RAREFACTION_CONFIG extends UI_ACTION_SELECTED {
         PointLevelCurvePlotAgent.instance().setEnabled(true);
         LevelCurvePlotAgent.instance().setEnabled(true);
         ChangeOrbitLevel.instance().setEnabled(true);
+        EllipticBoundaryAgent.instance().setEnabled(true);
 
 
 
