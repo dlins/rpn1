@@ -5,14 +5,12 @@
  *
  */
 
-
 package rpn;
 
-import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import rpn.component.BifurcationCurveGeom;
+import wave.multid.model.MultiGeometry;
 
 public class RPnPhaseSpaceManager {
 
@@ -33,20 +31,24 @@ public class RPnPhaseSpaceManager {
         phaseSpaceMap_.remove(phaseSpace);
     }
 
-    public void remove(RPnPhaseSpaceAbstraction phaseSpace, BifurcationCurveGeom bifurcationGeom) {
-        ArrayList<RPnPhaseSpaceAbstraction> pointedPhaseSpaceAbstractions = phaseSpaceMap_.get(phaseSpace);
+    public void remove(RPnPhaseSpaceAbstraction phaseSpace, MultiGeometry bifurcationGeom) {
 
-        for (RPnPhaseSpaceAbstraction pointedPhaseSpace : pointedPhaseSpaceAbstractions) {
+        phaseSpace.remove(bifurcationGeom);
+        if (phaseSpaceMap_.containsKey(phaseSpace)) {
+            ArrayList<RPnPhaseSpaceAbstraction> pointedPhaseSpaceAbstractions = phaseSpaceMap_.get(phaseSpace);
+            for (RPnPhaseSpaceAbstraction pointedPhaseSpace : pointedPhaseSpaceAbstractions) {
 
-          Iterator iteratorFrame = pointedPhaseSpace.curvesFrameIterator();
+                Iterator iteratorList = pointedPhaseSpace.curvesListIterator();
 
-            while (iteratorFrame.hasNext()) {
-                RPnCurvesListFrame frame = (RPnCurvesListFrame)iteratorFrame.next();
-                frame.setBifurcationToRemove(bifurcationGeom);
-                frame.actionPerformed(new ActionEvent(this, 0, "Remove"));
+                while (iteratorList.hasNext()) {
+                    RPnCurvesList list = (RPnCurvesList) iteratorList.next();
+                    list.removeGeometrySide(bifurcationGeom);
 
+                }
             }
         }
+
+
 
     }
 

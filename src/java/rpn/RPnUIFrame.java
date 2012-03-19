@@ -88,7 +88,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             UIController.instance().setStateController(new StateInputController(this));
             propertyChange(new PropertyChangeEvent(command, "aplication state", null, null));
             jbInit();
-            phaseSpaceFramesInit(RPNUMERICS.boundary());//Building default panel
+            phaseSpaceFramesInit(RPNUMERICS.boundary());
+            associatesPhaseSpaces();
+            associatePhaseSpacesAndCurvesList();
             createPanelsChooser();
 
             addPropertyChangeListener(this);
@@ -321,46 +323,46 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         }
 
 
-        RPnCurvesListFrame curvesFrame = new RPnCurvesListFrame("Main");
-        RPnCurvesListFrame leftFrame = new RPnCurvesListFrame("Left");
-        RPnCurvesListFrame rightFrame = new RPnCurvesListFrame("Right");
+
+    }
+
+
+    private void associatesPhaseSpaces(){
+
+
+      //Phase Spaces associations
+
+        ArrayList<RPnPhaseSpaceAbstraction> leftPhaseSpaceArray = new ArrayList<RPnPhaseSpaceAbstraction>();
+        ArrayList<RPnPhaseSpaceAbstraction> rightPhaseSpaceArray = new ArrayList<RPnPhaseSpaceAbstraction>();
+
+
+        leftPhaseSpaceArray.add(RPnDataModule.RIGHTPHASESPACE);
+        rightPhaseSpaceArray.add(RPnDataModule.LEFTPHASESPACE);
+
+
+        RPnPhaseSpaceManager.instance().register(RPnDataModule.LEFTPHASESPACE, leftPhaseSpaceArray);
+        RPnPhaseSpaceManager.instance().register(RPnDataModule.RIGHTPHASESPACE, rightPhaseSpaceArray);
+    }
+
+
+    private void associatePhaseSpacesAndCurvesList(){
+        //Phase Spaces and curves list associations
+
+        RPnCurvesList curvesFrame = new RPnCurvesList("Main",RPnDataModule.PHASESPACE);
+        RPnCurvesList leftFrame = new RPnCurvesList("Left",RPnDataModule.LEFTPHASESPACE);
+        RPnCurvesList rightFrame = new RPnCurvesList("Right",RPnDataModule.RIGHTPHASESPACE);
 
 
         RPnDataModule.PHASESPACE.attach(curvesFrame);
         RPnDataModule.LEFTPHASESPACE.attach(leftFrame);
         RPnDataModule.RIGHTPHASESPACE.attach(rightFrame);
 
-
-
-//        RPnDataModule.LEFTPHASESPACE.attachPhasSpace(RPnDataModule.RIGHTPHASESPACE);
-//        RPnDataModule.RIGHTPHASESPACE.attachPhasSpace(RPnDataModule.LEFTPHASESPACE);
-
-
-
-        ArrayList<RPnPhaseSpaceAbstraction> leftPhaseSpaceArray= new ArrayList<RPnPhaseSpaceAbstraction>();
-        ArrayList<RPnPhaseSpaceAbstraction> rightPhaseSpaceArray = new ArrayList<RPnPhaseSpaceAbstraction>();
-
-
-        leftPhaseSpaceArray.add(RPnDataModule.RIGHTPHASESPACE);
-        rightPhaseSpaceArray.add( RPnDataModule.LEFTPHASESPACE);
-
-
-        RPnPhaseSpaceManager.instance().register(RPnDataModule.LEFTPHASESPACE, leftPhaseSpaceArray);
-        RPnPhaseSpaceManager.instance().register(RPnDataModule.RIGHTPHASESPACE, rightPhaseSpaceArray);
-
-
-
-
-        curvesFrame.attach(RPnDataModule.PHASESPACE);
-        leftFrame.attach(RPnDataModule.LEFTPHASESPACE);
-        rightFrame.attach(RPnDataModule.RIGHTPHASESPACE);
-
-
-
-
         curvesFrame.setVisible(true);
         leftFrame.setVisible(true);
         rightFrame.setVisible(true);
+
+
+
     }
 
     private void createPanelsChooser() {

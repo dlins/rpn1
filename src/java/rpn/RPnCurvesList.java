@@ -36,7 +36,7 @@ import rpnumerics.RpCalculation;
 import wave.multid.model.MultiGeometry;
 import wave.util.RealVector;
 
-public class RPnCurvesListFrame extends JFrame implements ActionListener {
+public class RPnCurvesList extends JFrame implements ActionListener {
 
     private JScrollPane tablePanel_;
     private JToolBar toolBar_;
@@ -44,10 +44,12 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
     private JButton selectNoneButton_, selectAllButton_, invisibleButton_, visibleButton_, removeButton_;
     private DefaultTableModel tableModel_;
     private RPnPhaseSpaceAbstraction phaseSpace_;
-    private BifurcationCurveGeom bifToRemove_;
 
-    public RPnCurvesListFrame(String title) {
+    public RPnCurvesList(String title, RPnPhaseSpaceAbstraction phaseSpace) {
         super(title);
+
+        phaseSpace_ = phaseSpace;
+
 
         this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
@@ -117,17 +119,13 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
 
     }
 
-    /**
-     *
-     * @deprecated  Refactor
-     */
-    
-    public void setBifurcationToRemove(BifurcationCurveGeom bif) {
-        bifToRemove_ = bif;
-    }
+    public void removeGeometrySide(MultiGeometry geometry) {
+        if (geometry instanceof BifurcationCurveGeom) {
+            BifurcationCurveGeom bifurcationGeom = (BifurcationCurveGeom) geometry;
+            phaseSpace_.remove(bifurcationGeom.getOtherSide());
 
-    public void attach(RPnPhaseSpaceAbstraction phaseSpace) {
-        phaseSpace_ = phaseSpace;
+        }
+
     }
 
     public void addGeometry(RpGeometry geometry) {
@@ -240,28 +238,18 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
                     index++;
                 }
                 for (MultiGeometry multiGeometry : toBeRemoved) {
-                    phaseSpace_.remove(multiGeometry);
-
-                    if (multiGeometry instanceof BifurcationCurveGeom) {
-                        RPnPhaseSpaceManager.instance().remove(phaseSpace_, (BifurcationCurveGeom) multiGeometry);
-                    }
+                    RPnPhaseSpaceManager.instance().remove(phaseSpace_, multiGeometry);
                 }
             }
-
-        } else {
-
-
-            phaseSpace_.remove(bifToRemove_.getOtherSide());
-            System.out.println("Evento de outro phaseSpace");
 
         }
 
 
     }
 
-    public void update(RPnPhaseSpaceAbstraction phsaseSpaceAbstraction) {
+    public void update() {
         clear();
-        Iterator iterator = phsaseSpaceAbstraction.getGeomObjIterator();
+        Iterator iterator = phaseSpace_.getGeomObjIterator();
         while (iterator.hasNext()) {
             addGeometry((RpGeometry) iterator.next());
         }

@@ -30,7 +30,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
 
     private PhaseSpaceState state_;
     private RpGeometry selectedGeom_;
-    private List<RPnCurvesListFrame> curvesListFrames_;
+    private List<RPnCurvesList> curvesListFrames_;
 
     //
     // Constructors
@@ -39,7 +39,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         super(id, domain);
         changeState(state);
         selectedGeom_ = null;
-        curvesListFrames_ = new ArrayList<RPnCurvesListFrame>();
+        curvesListFrames_ = new ArrayList<RPnCurvesList>();
     }
 
     //
@@ -49,26 +49,26 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         state_ = state;
     }
 
-    public void attach(RPnCurvesListFrame curvesFrame) {
+    public void attach(RPnCurvesList curvesFrame) {
         curvesListFrames_.add(curvesFrame);
     }
 
-    public void detach(RPnCurvesListFrame curvesListFrame) {
+    public void detach(RPnCurvesList curvesListFrame) {
         curvesListFrames_.remove(curvesListFrame);
     }
 
     public void showCurvesFrame(boolean show) {
-        Iterator<RPnCurvesListFrame> iterator = curvesListFrames_.iterator();
+        Iterator<RPnCurvesList> iterator = curvesListFrames_.iterator();
 
         while (iterator.hasNext()) {
-            RPnCurvesListFrame rPnCurvesListFrame = iterator.next();
+            RPnCurvesList rPnCurvesListFrame = iterator.next();
 
             rPnCurvesListFrame.setVisible(show);
 
         }
     }
 
-    public Iterator curvesFrameIterator() {
+    public Iterator curvesListIterator() {
         return curvesListFrames_.iterator();
     }
 
@@ -406,8 +406,8 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
     }
 
     private void notifyState() {
-        for (RPnCurvesListFrame curvesFrame : curvesListFrames_) {
-            curvesFrame.update(this);
+        for (RPnCurvesList curvesFrame : curvesListFrames_) {
+            curvesFrame.update();
         }
 
     }
