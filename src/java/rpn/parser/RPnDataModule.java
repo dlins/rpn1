@@ -107,6 +107,13 @@ public class RPnDataModule {
 
     }
 
+
+    public static void updatePhaseSpaces(){
+        PHASESPACE.update();
+        LEFTPHASESPACE.update();
+        RIGHTPHASESPACE.update();
+    }
+
     static protected class InputHandler implements ContentHandler {
         // for PoincareData
 
@@ -167,9 +174,9 @@ public class RPnDataModule {
             // initialize auxiliary phase space state
             AUXPHASESPACE = new RPnPhaseSpaceAbstraction("Auxiliary Phase Space",
                     new Space("Auxiliary Space", RPNUMERICS.domainDim() * 2), new NumConfigImpl());
-            LEFTPHASESPACE = new RPnPhaseSpaceAbstraction("LeftPhase Space",
+            LEFTPHASESPACE = new RPnLeftPhaseSpaceAbstraction("LeftPhase Space",
                     RPNUMERICS.domain(), new NumConfigImpl());//  RpNumerics.domain(),
-            RIGHTPHASESPACE = new RPnPhaseSpaceAbstraction("RightPhase Space",
+            RIGHTPHASESPACE = new RPnRightPhaseSpaceAbstraction("RightPhase Space",
                     RPNUMERICS.domain(), new NumConfigImpl());//  RpNumerics.domain(),
 
 

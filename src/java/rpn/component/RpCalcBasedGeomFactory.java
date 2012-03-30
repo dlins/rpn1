@@ -8,7 +8,6 @@ package rpn.component;
 import java.util.ArrayList;
 import java.util.List;
 import rpn.RPnDesktopPlotter;
-import rpn.component.util.GeometryGraph;
 import rpn.component.util.GeometryGraphND;
 import rpn.controller.RpCalcController;
 import rpn.controller.RpController;
@@ -72,60 +71,7 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
         getUI().install(this);
     }
 
-//    public static String createMatlabColorTable() {
-//
-//        StringBuffer buffer = new StringBuffer();
-//
-//
-//        int red16 = SubInflectionCurveGeom.COLOR.getRed();
-//        int blue16 = SubInflectionCurveGeom.COLOR.getBlue();
-//        int green16 = SubInflectionCurveGeom.COLOR.getGreen();
-//
-//        int red17 = CoincidenceCurveGeom.COLOR.getRed();
-//        int blue17 = CoincidenceCurveGeom.COLOR.getBlue();
-//        int green17 = CoincidenceCurveGeom.COLOR.getGreen();
-//
-//        int red20 = CoincidenceExtensionCurveGeom.COLOR.getRed();
-//        int blue20 = CoincidenceExtensionCurveGeom.COLOR.getBlue();
-//        int green20 = CoincidenceExtensionCurveGeom.COLOR.getGreen();
-//
-//        buffer.append("toc=[");
-//
-//        double toc[][] = {{128, 128, 128}, //*** tipo 0 ao tipo 15 = para segmentos de Hugoniot
-//            {128, 128, 128}, //***
-//            {255, 0, 0}, //***
-//            {247, 151, 55}, //***
-//            {128, 128, 128}, //***
-//            {128, 128, 128}, //***
-//            {128, 128, 128}, //***
-//            {128, 128, 128}, //***
-//            {255, 0, 255}, //***
-//            {128, 128, 128}, //***
-//            {18, 153, 1}, //***
-//            {0, 0, 255}, //***
-//            {128, 128, 128}, //***
-//            {128, 128, 128}, //***
-//            {0, 255, 255}, //***
-//            {128, 128, 128}, //***
-//            {red16, green16, blue16}, // tipo 16 = SubInflection, era  {243, 123, 46}
-//            {red17, green17, blue17}, // tipo 17 = Coincidence, era  {20, 43, 140}
-//            {0, 255, 0}, // tipo 18 = {uma parte de Double Contact, BuckleyLeverettin}
-//            {248, 17, 47}, // tipo 19 = a outra parte de Double Contact
-//            {red20, green20, blue20} // tipo 20 = {Coincidence Extension, SubInflection Extension, Boundary Extension}
-//        };
-//
-//
-//        for (int i = 0; i < toc.length; i++) {
-//
-//            for (int j = 0; j < 3; j++) {
-//                buffer.append("  " + toc[i][j] / 255.0 + " ");
-//            }
-//            buffer.append(";\n");
-//        }
-//        buffer.append("];\n\n");
-//
-//        return buffer.toString();
-//    }
+
     //
     // Accessors/Mutators
     //

@@ -109,7 +109,8 @@ public class AreaSelectionAgent extends RpModelActionAgent {
             if (n == 0  &&  GeometryGraphND.mapToEqui == 0) {
                 RectBoundary rectBdry = new RectBoundary(GeometryGraph.downLeft, GeometryGraph.topRight);
                 Boundary bdry = (Boundary) rectBdry;
-                RPnDesktopPlotter.getUIFrame().phaseSpaceFramesInit(bdry);
+                //RPnDesktopPlotter.getUIFrame().phaseSpaceFramesInit(bdry);
+                RPnDesktopPlotter.getUIFrame().phaseSpaceFrameZoom(bdry);
             }
 
             if (n == 1) {

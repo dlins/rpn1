@@ -7,9 +7,11 @@
 package rpn.component.util;
 
 import java.awt.event.MouseEvent;
+import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpacePanel;
 import rpn.controller.ui.AREASELECTION_CONFIG;
 import rpn.controller.ui.UIController;
+import rpn.parser.RPnDataModule;
 import rpn.usecase.DragPlotAgent;
 import rpnumerics.DoubleContactCurve;
 import rpnumerics.HugoniotCurve;
@@ -47,6 +49,7 @@ public class ControlClick {
 
         if (UIController.instance().getState() instanceof CLASSIFIERAGENT_CONFIG) {
             int lastIndex = ClassifierAgent.tipo.size() - 1;
+            ClassifierAgent.strView.remove(lastIndex);
             ClassifierAgent.indCurvaCla.remove(lastIndex);
             ClassifierAgent.tipo.remove(lastIndex);
             ClassifierAgent.xDevSeta.remove(lastIndex);
@@ -61,6 +64,7 @@ public class ControlClick {
 
         if (UIController.instance().getState() instanceof VELOCITYAGENT_CONFIG) {
             int lastIndex = VelocityAgent.vel.size() - 1;
+            VelocityAgent.velView.remove(lastIndex);
             VelocityAgent.indCurvaVel.remove(lastIndex);
             VelocityAgent.vel.remove(lastIndex);
             VelocityAgent.xDevSetaVel.remove(lastIndex);
@@ -107,8 +111,8 @@ public class ControlClick {
 
     //---------------------------------------
 
-    public static void mousePressed(MouseEvent event, Scene scene) {
-
+    public static void mousePressed(MouseEvent event) {
+    
         RPnPhaseSpacePanel panel_ = (RPnPhaseSpacePanel) event.getComponent();
         ViewingTransform transf = panel_.scene().getViewingTransform();
 
@@ -196,7 +200,20 @@ public class ControlClick {
                 ClassifierAgent.xStr.add(GeometryGraphND.cornerStr.getElement(1));
                 ClassifierAgent.yStr.add(GeometryGraphND.cornerStr.getElement(0));
 
-                ClassifierAgent.strView.add(1);
+                //ClassifierAgent.strView.add(1);
+                //--------------------------------------------------------------
+                
+                if (panel_.getName().equals("Phase Space")) {
+                    ClassifierAgent.strView.add(1);
+                } //else ClassifierAgent.strView.add(-1);
+                if (panel_.getName().equals("RightPhase Space")) {
+                    ClassifierAgent.strView.add(2);
+                }
+                if (panel_.getName().equals("LeftPhase Space")) {
+                    ClassifierAgent.strView.add(3);
+                }
+
+                //--------------------------------------------------------------
 
                 CoordsArray wcCoordsCR = new CoordsArray(GeometryGraphND.cornerStr);
                 Coords2D dcCoordsCR = new Coords2D();
@@ -240,7 +257,22 @@ public class ControlClick {
                 VelocityAgent.xVel.add(GeometryGraphND.cornerStr.getElement(1));
                 VelocityAgent.yVel.add(GeometryGraphND.cornerStr.getElement(0));
 
-                VelocityAgent.velView.add(1);
+                //VelocityAgent.velView.add(1);
+
+                //--------------------------------------------------------------
+
+                if (panel_.getName().equals("Phase Space")) {
+                    VelocityAgent.velView.add(1);
+                }
+                if (panel_.getName().equals("RightPhase Space")) {
+                    VelocityAgent.velView.add(2);
+                }
+                if (panel_.getName().equals("LeftPhase Space")) {
+                    VelocityAgent.velView.add(3);
+                }
+
+                //--------------------------------------------------------------
+
 
                 CoordsArray wcCoordsCR = new CoordsArray(GeometryGraphND.cornerStr);
                 Coords2D dcCoordsCR = new Coords2D();

@@ -22,8 +22,8 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.XMLReader;
 import rpn.RPnProjDescriptor;
 import rpn.component.util.GeometryGraphND;
-import wave.multid.Space;
 import rpnumerics.RPNUMERICS;
+import wave.multid.Space;
 
 /** This class configures the initial visualization properties. Reading a XML file that contains the necessary information, this class sets the axis, labels , domain, etc to represents correctly the physics. */
 public class RPnVisualizationModule {
@@ -206,10 +206,9 @@ public class RPnVisualizationModule {
             DESCRIPTORS.add(new RPnProjDescriptor(space, label, w, h, axisArray, iso));
 
         }
-        Space auxSpace = new Space("AuxDomain", 2 * dimension);
+        Space auxSpace = new Space("AuxDomain", dimension);
         
         for (RPnProjDescriptor descriptor : DESCRIPTORS) {
-            System.out.println("No loop dos DESCRIPTORS ...");
             createAuxDescriptor(descriptor, auxSpace, descriptor.isIso2equi());
         
         }
@@ -219,7 +218,6 @@ public class RPnVisualizationModule {
     }
 
     public static void createAuxDescriptor(RPnProjDescriptor descriptor, Space space, boolean isIso2Equi) {
-        System.out.println("Entrou no createAuxDescriptor ...");
 
         int[] projIndices = descriptor.projMap().getCompIndexes();
 

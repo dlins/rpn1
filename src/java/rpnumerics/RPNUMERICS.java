@@ -404,11 +404,11 @@ public class RPNUMERICS {
         
         ContourParams params = new ContourParams(resolution);
 
-        int characteristicWhere = new Integer(getParamValue("hysteresiscurve", "characteristicwhere"));
+        int characteristicWhere = 0;//new Integer(getParamValue("hysteresiscurve", "characteristicwhere"));
 
 
-        int curveFamily = new Integer(getParamValue("hysteresiscurve", "curvefamily"));
-        int domainFamily = new Integer(getParamValue("hysteresiscurve", "domainfamily"));
+        int curveFamily = new Integer(getParamValue("hysteresiscurve", "family"));
+        int domainFamily = new Integer(getParamValue("hysteresiscurve", "family"));
 
         int singular = 0;//TODO Pegar do arquivo de entrada
 

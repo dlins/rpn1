@@ -4,6 +4,7 @@
  */
 package rpn.component.util;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
@@ -11,12 +12,14 @@ import java.awt.Shape;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import org.apache.batik.ext.awt.geom.Polygon2D;
+import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpacePanel;
 import rpn.controller.ui.AREASELECTION_CONFIG;
 import rpn.controller.ui.BIFURCATIONREFINE_CONFIG;
 import rpn.controller.ui.UIController;
 import rpn.parser.RPnDataModule;
 import rpnumerics.ContourCurveCalc;
+import rpnumerics.DoubleContactCurve;
 import rpnumerics.Orbit;
 import rpnumerics.RPNUMERICS;
 import rpnumerics.RPnCurve;
@@ -82,30 +85,44 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
     }
 
 
-    public void drawFirstPanel(Graphics g, Scene scene_) {
+    public void drawFirstPanel(Graphics g, Scene scene_, RPnPhaseSpacePanel panel) {
 
-        if (mostraGrid != 0){
+        if (mostraGrid != 0  &&  panel.getName().equals(GeometryUtil.namePhaseSpace)){
             drawGrid(g, scene_);
         }
 
         Graphics2D graph = (Graphics2D) g;
-        
-        if (UIController.instance().getState() instanceof AREASELECTION_CONFIG) {
+
+        if (UIController.instance().getState() instanceof AREASELECTION_CONFIG  &&  panel.getName().equals(GeometryUtil.namePhaseSpace)) {
             g.setColor(cor12);
             graph.draw(line1);
             graph.draw(line2);
+            
         }
 
         g.setColor(cor34);
-        graph.draw(line3);
-        graph.draw(line4);
-        graph.draw(line3DC);
-        graph.draw(line4DC);
+        //graph.draw(line3);
+        //graph.draw(line4);
+        //graph.draw(line3DC);
+        //graph.draw(line4DC);
 
+        if (panel.getName().equals(GeometryUtil.namePhaseSpace)) {
+            graph.draw(line3);
+            graph.draw(line4);
+        }
+
+        
+        if (GeometryUtil.closestCurve_ instanceof DoubleContactCurve) {
+            if (!panel.getName().equals(GeometryUtil.namePhaseSpace)  &&  !panel.getName().equals("Phase Space")) {
+                graph.draw(line3DC);
+                graph.draw(line4DC);
+            }
+        }
+        
 
         if ((ControlClick.ind % 2) == 0) {
 
-            if (UIController.instance().getState() instanceof AREASELECTION_CONFIG) {
+            if (UIController.instance().getState() instanceof AREASELECTION_CONFIG  &&  panel.getName().equals(GeometryUtil.namePhaseSpace)) {
                 g.setColor(cor56);
                 graph.draw(line5);
                 graph.draw(line6);
@@ -120,8 +137,8 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
             if ((UIController.instance().getState() instanceof CLASSIFIERAGENT_CONFIG)
                     || (UIController.instance().getState() instanceof VELOCITYAGENT_CONFIG)) {
 
-                defineClassifiers(g, scene_);
-                defineVelocities(g, scene_);
+                defineClassifiers(g, scene_, panel);
+                defineVelocities(g, scene_, panel);
 
             }
             //*** Fim dos botoes Classify e Velocity
@@ -133,10 +150,13 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
     }
 
 
-    public void paintComponent(Graphics g, Scene scene_) {
-
+    public void paintComponent(Graphics g, Scene scene_, RPnPhaseSpacePanel panel) {
+    
         changeColor();
-        drawFirstPanel(g, scene_);
+        //drawFirstPanel(g, scene_);
+
+        drawFirstPanel(g, scene_, panel);
+        //if (panel.getName().equals(GeometryUtil.namePhaseSpace)) drawFirstPanel(g, scene_, panel);
 
     }
 
@@ -309,7 +329,7 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
                     p2Int.setElement(1, yp2);
 
                 }
-                
+
                 poly.addPoint((int) v_s, (int) u_s);
                 poly.addPoint((int) (v_s - dx), (int) u_i);
                 poly.addPoint((int) v_i, (int) u_i);

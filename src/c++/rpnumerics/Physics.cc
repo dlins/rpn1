@@ -43,9 +43,9 @@ Physics::Physics(const string & physicsID) : physicsVector_(new vector<SubPhysic
     }
 
 
-    if (physicsID.compare("Polydispersive") == 0) {
+    if (physicsID.compare("Polydisperse") == 0) {
 
-        physicsVector_->push_back(new PolydispersivePhysics());
+        physicsVector_->push_back(new PolydispersePhysics());
     }
 
 

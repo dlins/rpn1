@@ -13,13 +13,7 @@ import wave.multid.view.ViewingTransform;
 import wave.multid.DimMismatchEx;
 
 public class OrbitGeom extends MultiPolyLine implements RpGeometry {
-    //
-    // Constants
-    //
-//    public static final int FORWARD_DIR = 20;
-//    public static final int BACKWARD_DIR = 22;
-//    public static final int BOTH_DIR =0;
-
+   
     // Members
     //
     private RpGeomFactory factory_;

@@ -3,17 +3,17 @@
  *
  * RPn Project
  *
- * @(#) PolydispersiveHugoniotFunction.h
+ * @(#) PolydisperseHugoniotFunction.h
  */
 
-#ifndef _PolydispersiveHugoniotFunction_H
-#define _PolydispersiveHugoniotFunction_H
+#ifndef _PolydisperseHugoniotFunction_H
+#define _PolydisperseHugoniotFunction_H
 
 /*
  * ---------------------------------------------------------------
  * Includes:
  */
-#include "Polydispersive.h"
+#include "Polydisperse.h"
 #include "HugoniotFunctionClass.h"
 #include <vector>
 #include "eigen.h" // TODO: Find the place
@@ -24,7 +24,7 @@
  */
 
 
-class PolydispersiveHugoniotFunction : public HugoniotFunctionClass {
+class PolydisperseHugoniotFunction : public HugoniotFunctionClass {
 private:
 
     RealVector Uref;
@@ -38,9 +38,9 @@ private:
 public:
 
 
-    PolydispersiveHugoniotFunction(const RealVector &U, const Polydispersive &);
+    PolydisperseHugoniotFunction(const RealVector &U, const Polydisperse &);
     void setReferenceVector(const RealVector & refVec);
-    ~PolydispersiveHugoniotFunction();
+    ~PolydisperseHugoniotFunction();
 
     double HugoniotFunction(const RealVector &u);
 
@@ -48,4 +48,4 @@ public:
 
 };
 
-#endif //! _PolydispersiveHugoniotFunction_H
+#endif //! _PolydisperseHugoniotFunction_H

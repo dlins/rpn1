@@ -6,7 +6,7 @@
         <BOUNDARY name="rect">
 
             <BOUNDARYPARAM name="dimension" value="2" />
-            <BOUNDARYPARAM name="limits" value="-5.0 -5.0 5.0 5.0" />
+            <BOUNDARYPARAM name="limits" value="-0.5 -0.5 0.5 0.5" />
 
         </BOUNDARY>
 
@@ -56,9 +56,9 @@
 
 
     <CURVE name="hysteresiscurve">
-        <CURVEPARAM name="curvefamily" value="1"/>
-        <CURVEPARAM name="domainfamily" value="1"/>
-        <CURVEPARAM name="characteristicwhere" value="1"/>
+        <CURVEPARAM name="family" value="0"/>
+   
+     
         <CURVEPARAM name="resolution" value="30 30"/>
     </CURVE>
 
@@ -100,8 +100,8 @@
 
         <PROJDESC name="Axis0 Axis1">
             <VIEWPARAM name="axis" value="0 1"/>
-            <VIEWPARAM name="vpwidth" value="650"/>
-            <VIEWPARAM name="vpheight" value="650"/>
+            <VIEWPARAM name="vpwidth" value="450"/>
+            <VIEWPARAM name="vpheight" value="450"/>
             <VIEWPARAM name="iso2equi" value="false"/>
         </PROJDESC>
 

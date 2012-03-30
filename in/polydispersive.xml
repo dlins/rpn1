@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE rpnconfiguration>
 <rpnconfiguration>
-    <PHYSICS name="Polydispersive">
+    <PHYSICS name="Polydisperse">
         <BOUNDARY name="triang">
             <BOUNDARYPARAM name="limits"  value= "0.0 0.0 0.0 1.0 1.0 0.0 "/>
             <BOUNDARYPARAM name="dimension"  value= "2"/>

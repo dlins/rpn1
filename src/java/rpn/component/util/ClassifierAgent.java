@@ -67,7 +67,7 @@ public class ClassifierAgent extends RpModelActionAgent {
     public void actionPerformed(ActionEvent event) {
 
        UIController.instance().setState(new CLASSIFIERAGENT_CONFIG());
-       System.out.println("Estou no actionPerformed do ClassifierAgent");
+       //System.out.println("Estou no actionPerformed do ClassifierAgent");
 
     }
 
@@ -95,6 +95,7 @@ public class ClassifierAgent extends RpModelActionAgent {
 
     public static void clearClassifiers() {
         ControlClick.clearpMarca();
+        strView.clear();
         indCurvaCla.clear();
         tipo.clear();
         xDevSeta.clear();
@@ -118,7 +119,7 @@ public class ClassifierAgent extends RpModelActionAgent {
             yDevStr.remove(index);
             ySeta.remove(index);
             yStr.remove(index);
-            
+
             xDevSeta.add(index, 0.);
             xDevStr.add(index, 0.);
             xSeta.add(index, 0.);

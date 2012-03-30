@@ -35,7 +35,7 @@ public class PointLevelCalc extends LevelCurveCalc {
     }
 
     public void setStartPoint(RealVector startPoint) {
-        startPoint_ = startPoint;
+        startPoint_ = new RealVector(startPoint);
     }
 
     private native RpSolution calcNative(int family, RealVector point, int[] resolution);

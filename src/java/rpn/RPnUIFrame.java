@@ -17,17 +17,17 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.io.FileWriter;
+import java.util.ArrayList;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.batik.ext.swing.GridBagConstants;
 import rpn.component.util.AreaSelectionAgent2;
 import rpn.component.util.ClassifierAgent;
 import rpn.component.util.ControlClick;
+import rpn.component.util.GeometryUtil;
 import rpn.component.util.VelocityAgent;
 import rpn.controller.ui.*;
 import rpn.message.*;
 import rpnumerics.ShockProfile;
-import wave.util.IsoTriang2DBoundary;
-import wave.util.RealVector;
 import wave.util.RectBoundary;
 
 public class RPnUIFrame extends JFrame implements PropertyChangeListener {
@@ -38,6 +38,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JPanel contentPane;
     private JPanel configPanel_ = new JPanel();
     private JPanel toolBarPanel_ = new JPanel();
+    private JPanel panelsChooserPanel_ = new JPanel();
+    private ArrayList<RPnPhaseSpaceFrame> selectectedPanels = new ArrayList<RPnPhaseSpaceFrame>();
     private JComboBox stateComboBox = new JComboBox();
     private JMenuBar jMenuBar1 = new JMenuBar();
     private JMenu editMenu = new JMenu();
@@ -55,7 +57,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JMenuItem inputCoordsMenuItem = new JMenuItem("Input Coords ...");
     private JMenuItem createSVGImageMenuItem = new JMenuItem();
     private JMenuItem printMenuItem = new JMenuItem();
-    private static RPnPhaseSpaceFrame[] frames_, auxFrames_, leftFrames_, rightFrames_;
+    private static RPnPhaseSpaceFrame[] frames_, auxFrames_;
     private RPnMenuCommand commandMenu_ = null;
     private JMenuItem networkMenuItem = new JMenuItem();
     private JCheckBoxMenuItem showCursorMenuItem_ = new JCheckBoxMenuItem("Show Cursor Lines");
@@ -63,6 +65,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private static JLabel statusLabel_ = new JLabel();
     private JMenu viewMenu_ = new JMenu("View");
     private JCheckBoxMenuItem showCurvesPaneltem_ = new JCheckBoxMenuItem("Show Curves Window", true);
+    private JCheckBoxMenuItem showAuxPanel_ = new JCheckBoxMenuItem("Show Auxiliar Panels", true);
     private RPnCurvesConfigPanel curvesConfigPanel_ = new RPnCurvesConfigPanel();
     private JFrame curvesFrame_;
     //*** declarei isso  -- Leandro
@@ -73,6 +76,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JMenuItem editMenuItem5 = new JMenuItem("Starts with Black Background");
     private JMenuItem editMenuItem6 = new JMenuItem("Starts with White Background");
     public static String dir = "";
+    private RPnPhaseSpaceFrame frameZoom = null;
+    private ArrayList<RPnPhaseSpaceFrame> listFrameZoom = new ArrayList();
+    private static int numOfPanelZoom = 0;
     //***
 
     //Construct the frame
@@ -86,6 +92,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             propertyChange(new PropertyChangeEvent(command, "aplication state", null, null));
             jbInit();
             phaseSpaceFramesInit(RPNUMERICS.boundary());//Building default panel
+            createPanelsChooser();
 
             addPropertyChangeListener(this);
             UndoActionController.createInstance();
@@ -112,9 +119,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         this.curvesFrame_ = curvesFrame;
         UIController.instance().showCurvesPanel(showCurvesPaneltem_.isSelected());
 
+
     }
 
-    //** parece que nao esta sendo usado
     public static RPnPhaseSpaceFrame[] getAuxFrames() {
         return auxFrames_;
     }
@@ -240,98 +247,118 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         dialog.pack();
         dialog.setVisible(true);
         // apply the layout changes
-        RPnDataModule.PHASESPACE.update();
+        RPnDataModule.updatePhaseSpaces();
         UIController.instance().panelsUpdate();
     }
 
-//    void errorControlMenuItem_actionPerformed(ActionEvent e) {
-//        RPnErrorControlDialog dialog = new RPnErrorControlDialog();
-//        Dimension dlgSize = dialog.getPreferredSize();
-//        Dimension frmSize = new Dimension(1280, 1024);
-//        Point loc = new Point(0, 0);
-//        dialog.setLocation((frmSize.width - dlgSize.width) / 2 + loc.x,
-//                (frmSize.height - dlgSize.height) / 2 + loc.y);
-//        dialog.setModal(true);
-//        dialog.pack();
-//        dialog.setVisible(true);
-//        rpnumerics.RPNUMERICS.errorControl().reset(dialog.getEps(),
-//                rpnumerics.RPNUMERICS.boundary());
-//    }
+    //*** Leandro
+    public void phaseSpaceFrameZoom(Boundary boundary) {
+        wave.multid.graphs.ClippedShape clipping = new wave.multid.graphs.ClippedShape(boundary);
+
+        JButton closeButton = new JButton("Close");
+
+        // Init Main Frame
+        //for (int i = 0; i < numOfPanelZoom; i++) {
+
+            wave.multid.view.ViewingTransform viewingTransf =
+                    ((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(
+                    0)).createTransform(clipping);
+            try {
+                wave.multid.view.Scene scene = null;
+
+                if (GeometryUtil.namePhaseSpace.equals("Phase Space"))
+                scene = RPnDataModule.PHASESPACE.createScene(viewingTransf,
+                        new wave.multid.view.ViewingAttr(Color.black));
+
+                if (GeometryUtil.namePhaseSpace.equals("RightPhase Space"))
+                scene = RPnDataModule.RIGHTPHASESPACE.createScene(viewingTransf,
+                        new wave.multid.view.ViewingAttr(Color.black));
+
+                if (GeometryUtil.namePhaseSpace.equals("LeftPhase Space"))
+                scene = RPnDataModule.LEFTPHASESPACE.createScene(viewingTransf,
+                        new wave.multid.view.ViewingAttr(Color.black));
+
+                RPnPhaseSpacePanel panel = new RPnPhaseSpacePanel(scene);
+                panel.setBackground(Color.red);
+
+                frameZoom = new RPnPhaseSpaceFrame(scene, commandMenu_);
+                frameZoom.setTitle("Zoom " +GeometryUtil.namePhaseSpace);
+
+                frameZoom.jPanel5.removeAll();
+                frameZoom.jPanel5.add(closeButton);
+
+                UIController.instance().install(frameZoom.phaseSpacePanel());
+
+                setFramesPosition(frameZoom);
+                frameZoom.pack();
+                frameZoom.setVisible(true);
+                
+                listFrameZoom.add(frameZoom);
+
+                //*** Tem que ser melhorado
+                closeButton.addActionListener(
+                new java.awt.event.ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+                        //frameZoom.dispose();
+                        for(int i=0; i<listFrameZoom.size(); i++){
+                            if (listFrameZoom.get(i).phaseSpacePanel().getName().equals(GeometryUtil.namePhaseSpace))
+                            listFrameZoom.get(i).dispose();
+                        }
+
+                    }
+                });
+
+
+            } catch (wave.multid.DimMismatchEx dex) {
+                dex.printStackTrace();
+            }
+
+        //}
+        
+    }
+    //***
+
     //** para criar os frames (paineis) - incluindo os auxiliares
-    //protected void phaseSpaceFramesInit(Boundary boundary) {
-    public void phaseSpaceFramesInit(Boundary boundary) {
+    protected void phaseSpaceFramesInit(Boundary boundary) {
         wave.multid.graphs.ClippedShape clipping = new wave.multid.graphs.ClippedShape(boundary);
         int numOfPanels = RPnVisualizationModule.DESCRIPTORS.size();
 
-        //RPnVisualizationModule.DESCRIPTORS
-
-        auxFrames_ = new RPnPhaseSpaceFrame[numOfPanels * 2];
+        auxFrames_ = new RPnPhaseSpaceFrame[2 * numOfPanels];
         frames_ = new RPnPhaseSpaceFrame[numOfPanels];
 
-//        leftFrames_ = new RPnPhaseSpaceFrame[numOfPanels];
-//        rightFrames_ = new RPnPhaseSpaceFrame[numOfPanels];
+        int auxNumOfPanels = RPnVisualizationModule.AUXDESCRIPTORS.size();
+        for (int i = 0; i < auxNumOfPanels / 2; i++) {
+            wave.multid.view.ViewingTransform auxViewingTransf =
+                    ((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(
+                    i)).createTransform(clipping);
+            try {
+                wave.multid.view.Scene leftScene = RPnDataModule.LEFTPHASESPACE.createScene(auxViewingTransf,
+                        new wave.multid.view.ViewingAttr(Color.black));
 
-        //Init Aux Frames
+                wave.multid.view.Scene rightScene = RPnDataModule.RIGHTPHASESPACE.createScene(auxViewingTransf,
+                        new wave.multid.view.ViewingAttr(Color.black));
 
-        Boundary auxBoundary = null;
+                auxFrames_[i] = new RPnPhaseSpaceFrame(leftScene, commandMenu_);
+                auxFrames_[i + 1] = new RPnPhaseSpaceFrame(rightScene, commandMenu_);
 
-        if (RPNUMERICS.boundary() instanceof RectBoundary) {
-            RealVector originalMax = RPNUMERICS.boundary().getMaximums();
-            RealVector originalMin = RPNUMERICS.boundary().getMinimums();
+                auxFrames_[i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i)).label());
+                auxFrames_[i + 1].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i + 1)).label());
 
-            RealVector newMax = new RealVector(2 * RPNUMERICS.boundary().getMaximums().getSize());
-            RealVector newMin = new RealVector(2 * RPNUMERICS.boundary().getMinimums().getSize());
+                UIController.instance().install(auxFrames_[i].phaseSpacePanel());
+                UIController.instance().install(auxFrames_[i + 1].phaseSpacePanel());
+                setFramesPosition(auxFrames_[i]);
+                setFramesPosition(auxFrames_[i + 1]);
+                auxFrames_[i].pack();
+                auxFrames_[i + 1].pack();
+                auxFrames_[i].setVisible(true);
+                auxFrames_[i + 1].setVisible(true);
 
-            newMin.setElement(0, originalMin.getElement(0));
-            newMin.setElement(1, originalMin.getElement(1));
-            newMin.setElement(2, originalMin.getElement(0));
-            newMin.setElement(3, originalMin.getElement(1));
+            } catch (wave.multid.DimMismatchEx dex) {
+                dex.printStackTrace();
+            }
 
-            newMax.setElement(0, originalMax.getElement(0));
-            newMax.setElement(1, originalMax.getElement(1));
-            newMax.setElement(2, originalMax.getElement(0));
-            newMax.setElement(3, originalMax.getElement(1));
-
-            auxBoundary = new RectBoundary(newMin, newMax);
-
-        } else {
-
-            RealVector A = new RealVector("0 0");
-            RealVector B = new RealVector("0 1");
-            RealVector C = new RealVector("1 0");
-
-            auxBoundary = new IsoTriang2DBoundary(A, B, C);
         }
-
-//*** CRIA OS PAINEIS AUXILIARES MAS NAO DESENHA NADA NELES
-//        int auxNumOfPanels = RPnVisualizationModule.AUXDESCRIPTORS.size();
-//        System.out.println("Quantidade de projecoes auxiliares: " + RPnVisualizationModule.AUXDESCRIPTORS.size());
-//        wave.multid.graphs.ClippedShape auxClipping = new wave.multid.graphs.ClippedShape(auxBoundary);
-//
-//        for (int i = 0; i < auxNumOfPanels; i++) {
-//            wave.multid.view.ViewingTransform auxViewingTransf =
-//                    ((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(
-//                    i)).createTransform(auxClipping);
-//            try {
-//                wave.multid.view.Scene auxScene = RPnDataModule.AUXPHASESPACE.createScene(auxViewingTransf,
-//                        new wave.multid.view.ViewingAttr(Color.black));
-//                System.out.println("Dimensao do auxiliar: " + RPnDataModule.AUXPHASESPACE.getSpace().getDim());   // Esta dando 6, o q significa?   (Leandro)
-//                auxFrames_[i] = new RPnPhaseSpaceFrame(auxScene, commandMenu_);
-//                auxFrames_[i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i)).label());
-//
-//                UIController.instance().install(auxFrames_[i].phaseSpacePanel());   // Se comentado, parece nao fazer diferenca
-//
-//                setFramesPosition(auxFrames_[i]);
-//                auxFrames_[i].pack();
-//                auxFrames_[i].setVisible(true);
-//
-//            } catch (wave.multid.DimMismatchEx dex) {
-//                dex.printStackTrace();
-//            }
-//
-//        }
-//***
-
 
         // Init Main Frame
         for (int i = 0; i < numOfPanels; i++) {
@@ -342,24 +369,10 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 wave.multid.view.Scene scene = RPnDataModule.PHASESPACE.createScene(viewingTransf,
                         new wave.multid.view.ViewingAttr(Color.black));
 
-////
-//                wave.multid.view.Scene leftScene = RPnDataModule.LEFTPHASESPACE.createScene(viewingTransf,
-//                        new wave.multid.view.ViewingAttr(Color.black));
-//                wave.multid.view.Scene rightScene = RPnDataModule.RIGHTPHASESPACE.createScene(viewingTransf,
-//                        new wave.multid.view.ViewingAttr(Color.black));
 
                 frames_[i] = new RPnPhaseSpaceFrame(scene, commandMenu_);
                 frames_[i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(i)).label());
 
-//
-
-//                leftFrames_[i] = new RPnPhaseSpaceFrame(leftScene, commandMenu_);
-//                leftFrames_[i].setTitle("Left " + ((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(i)).label());
-////
-//
-//                rightFrames_[i] = new RPnPhaseSpaceFrame(rightScene, commandMenu_);
-//                rightFrames_[i].setTitle("Right " + ((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(i)).label());
-////
 //
 //                /*
 //                 * controllers installation
@@ -371,20 +384,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 //                 */
 //
 //
-////
-//                UIController.instance().install(leftFrames_[i].phaseSpacePanel());
-//
-//                setFramesPosition(leftFrames_[i]);
-//                leftFrames_[i].pack();
-//                leftFrames_[i].setVisible(true);
-//
-//
-//                UIController.instance().install(rightFrames_[i].phaseSpacePanel());
-//
-//                setFramesPosition(rightFrames_[i]);
-//                rightFrames_[i].pack();
-//                rightFrames_[i].setVisible(true);
-
 
                 UIController.instance().install(frames_[i].phaseSpacePanel());
 
@@ -400,23 +399,84 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         }
 
-        
+
+        RPnCurvesListFrame curvesFrame = new RPnCurvesListFrame("Main");
+        RPnCurvesListFrame leftFrame = new RPnCurvesListFrame("Left");
+        RPnCurvesListFrame rightFrame = new RPnCurvesListFrame("Right");
+
+
+        RPnDataModule.PHASESPACE.attach(curvesFrame);
+        RPnDataModule.LEFTPHASESPACE.attach(leftFrame);
+        RPnDataModule.RIGHTPHASESPACE.attach(rightFrame);
+
+
+        curvesFrame.attach(RPnDataModule.PHASESPACE);
+        leftFrame.attach(RPnDataModule.LEFTPHASESPACE);
+        rightFrame.attach(RPnDataModule.RIGHTPHASESPACE);
+
+
+
+
+        curvesFrame.setVisible(true);
+        leftFrame.setVisible(true);
+        rightFrame.setVisible(true);
     }
 
-    
+    private void createPanelsChooser() {
+
+        int rows = getPhaseSpaceFrames().length + getAuxFrames().length;
+        
+        panelsChooserPanel_.setLayout(new GridLayout(rows, 1));
+
+        for (RPnPhaseSpaceFrame mainFrame : getPhaseSpaceFrames()) {
+
+            JCheckBox checkBox = new JCheckBox(mainFrame.getTitle());
+            checkBox.addItemListener(new PanelsSeletectedListener(mainFrame));
+            panelsChooserPanel_.add(checkBox);
+        }
+
+        for (RPnPhaseSpaceFrame auxFrame : getAuxFrames()) {
+
+            JCheckBox checkBox = new JCheckBox(auxFrame.getTitle());
+            checkBox.addItemListener(new PanelsSeletectedListener(auxFrame));
+            panelsChooserPanel_.add(checkBox);
+
+        }
+
+    }
+
 //     from here on just for 2D for now...
     void createSVGImage_actionPerformed(ActionEvent e) {
         JFileChooser chooser = new JFileChooser();
-        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        chooser.setAccessory(panelsChooserPanel_);
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         chooser.setFileFilter(new FileNameExtensionFilter("SVG File", "svg", "SVG"));
         chooser.setSelectedFile(new File("image.svg"));
+
         int status = chooser.showSaveDialog(this);
 
         if (status == JFileChooser.CANCEL_OPTION || status == JFileChooser.ERROR_OPTION) {
             return;
         }
         try {
-            UIController.instance().getFocusPanel().createSVG(chooser.getSelectedFile());
+            String path = chooser.getSelectedFile().getAbsolutePath();
+
+            if (selectectedPanels.size() == 0) {
+                JOptionPane.showMessageDialog(chooser, "Choose a panel", "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+
+                for (RPnPhaseSpaceFrame phaseSpaceFrame : selectectedPanels) {
+
+                    String fileName = File.separator + phaseSpaceFrame.getTitle();
+
+                    File file = new File(path + fileName);
+                    phaseSpaceFrame.phaseSpacePanel().createSVG(file);
+
+                }
+
+            }
+
+
         } catch (java.lang.NullPointerException ex) {
             ex.printStackTrace();
         }
@@ -521,41 +581,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         commandMenu_.networkCommand();
     }
 
-    //** parece que nao esta sendo usado
-    private RPnProjDescriptor[] generateAuxProjDescriptors() {
-
-
-        int dim = RPNUMERICS.domainDim();
-
-        int index = 0;
-
-        RPnProjDescriptor projDescriptors[] = new RPnProjDescriptor[RPNUMERICS.domainDim() * 2];
-        
-        int[] projIndex = new int[projDescriptors.length];
-
-        for (int i = 0; i < projDescriptors.length; i++) {
-            projIndex[i] = i;
-        }
-
-
-        while (index < dim) {
-
-            int[] projI = new int[2];
-
-            projI[0] = projIndex[index];
-            projI[1] = projIndex[index + 1];
-
-            projDescriptors[index] = new RPnProjDescriptor(RPnDataModule.AUXPHASESPACE.getSpace(), "Aux " + "Axis " + projI[0] + " Axis " + projI[1], 200, 200, projI, false);
-            index++;
-
-
-        }
-
-
-        return projDescriptors;
-
-    }
-
     //** para o menu de tipos de curvas
     private void jbInit() throws Exception {
 
@@ -594,11 +619,11 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         layoutConstrains.gridy = 0;
 
-        layoutConstrains.fill=GridBagConstants.BOTH;
+        layoutConstrains.fill = GridBagConstants.BOTH;
 
 
-        layoutConstrains.weightx=0.8;
-        layoutConstrains.weighty=0.1;
+        layoutConstrains.weightx = 0.8;
+        layoutConstrains.weighty = 0.1;
 
         contentPane.add(configPanel_, layoutConstrains);
 
@@ -651,6 +676,20 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
                     }
                 });
+
+
+        showAuxPanel_.addActionListener(
+                new java.awt.event.ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+                        UIController.instance().setAuxPanels(showAuxPanel_.isSelected());
+                        for (RPnPhaseSpaceFrame rPnPhaseSpaceFrame : auxFrames_) {
+                            rPnPhaseSpaceFrame.setVisible(showAuxPanel_.isSelected());
+                        }
+
+                    }
+                });
+
 
         resultsOption.addActionListener(
                 new ActionListener() {
@@ -819,6 +858,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         jMenuBar1.add(viewMenu_);
         viewMenu_.add(showCursorMenuItem_);
         viewMenu_.add(showCurvesPaneltem_);
+        viewMenu_.add(showAuxPanel_);
         jMenuBar1.add(modelInteractionMenu);
 
 
@@ -865,7 +905,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         modelInteractionMenu.add(ChangeFluxParamsAgent.instance());
         modelInteractionMenu.add(inputCoordsMenuItem);
         modelInteractionMenu.add(shockMenuItem_);
-//        modelInteractionMenu.add(errorControlMenuItem);
+
 
 
 
@@ -885,7 +925,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         modelInteractionMenu.add(BifurcationRefineAgent.instance());
         BifurcationRefineAgent.instance().setEnabled(true);
 
-//        modelInteractionMenu.add(errorControlMenuItem);
+      
 
     }
 
@@ -1011,6 +1051,28 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             }
 
             UIController.instance().setState(newState);
+
+        }
+    }
+
+    private class PanelsSeletectedListener implements ItemListener {
+
+        private RPnPhaseSpaceFrame panel_;
+
+        public PanelsSeletectedListener(RPnPhaseSpaceFrame panel) {
+            panel_ = panel;
+        }
+
+        public void itemStateChanged(ItemEvent e) {
+
+            JCheckBox checkBox = (JCheckBox) e.getItem();
+
+            if (checkBox.isSelected()) {
+                selectectedPanels.add(panel_);
+
+            } else {
+                selectectedPanels.remove(panel_);
+            }
 
         }
     }

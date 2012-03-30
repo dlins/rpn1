@@ -69,8 +69,8 @@ public class GeometryGraph3D extends GeometryGraphND {
                     if ((UIController.instance().getState() instanceof CLASSIFIERAGENT_CONFIG)  ||
                         (UIController.instance().getState() instanceof VELOCITYAGENT_CONFIG)) {
 
-                        defineClassifiers(g, scene_);
-                        defineVelocities(g, scene_);
+                        //defineClassifiers(g, scene_);
+                        //defineVelocities(g, scene_);
 
                     }
                     //*** Fim dos botoes Classify e Velocity

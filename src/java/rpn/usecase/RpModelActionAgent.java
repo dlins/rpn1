@@ -10,19 +10,23 @@ import javax.swing.Action;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import javax.swing.ImageIcon;
+import rpn.RPnPhaseSpaceAbstraction;
 import rpn.controller.ui.*;
 import rpn.message.RPnActionMediator;
+import rpn.parser.RPnDataModule;
 
 public abstract class RpModelActionAgent extends AbstractAction implements UndoableAction {
 
     private PropertyChangeEvent history_;
     private String desc_;
+    protected RPnPhaseSpaceAbstraction phaseSpace_;
 
     public RpModelActionAgent(String shortDesc, ImageIcon icon) {
         super(shortDesc, icon);
         putValue(Action.SHORT_DESCRIPTION, shortDesc);
         desc_ = shortDesc;
         setEnabled(false);
+        phaseSpace_ = RPnDataModule.PHASESPACE;
     }
 
     public abstract void execute();
@@ -41,7 +45,6 @@ public abstract class RpModelActionAgent extends AbstractAction implements Undoa
 
     public void actionPerformed(ActionEvent event) {
         // garbage collection is ok ?
-        RpModelPlotAgent.keepLastGeometry();
 
         UI_ACTION_SELECTED action = new UI_ACTION_SELECTED(this);
 
@@ -52,15 +55,15 @@ public abstract class RpModelActionAgent extends AbstractAction implements Undoa
             System.out.println(desc_);
         }
 
-
-
-
-
     }
 
     //
     // Accessors/Mutators
     //
+    public void setPhaseSpace(RPnPhaseSpaceAbstraction phaseSpace) {
+        phaseSpace_ = phaseSpace;
+    }
+
     public PropertyChangeEvent log() {
         return history_;
     }

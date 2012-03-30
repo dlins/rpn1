@@ -21,7 +21,7 @@ public class DoubleContactCurve extends BifurcationCurve {
 
 
     public DoubleContactCurve(List<RealSegment> hSegments, List<RealSegment> rightSegments) {
-        super(hSegments, rightSegments);//, new ViewingAttr(Color.RED));
+        super(hSegments, rightSegments);
 
     }
 }

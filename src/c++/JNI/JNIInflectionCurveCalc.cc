@@ -60,14 +60,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_InflectionCurveCalc_nativeCalc(JNIEnv 
     jobject segmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
 
 
-    //    Test testFunction;
-
-    //-------------------------------------------------------------------
-    //    SubPhysics & subPhysics = RpNumerics::getPhysics().getSubPhysics(0);
-
-    //    int dimension = subPhysics.domain().dim();
-
-
     int dimension = RpNumerics::getPhysics().domain().dim();
 
     Boundary * tempBoundary = RpNumerics::getPhysics().boundary().clone();

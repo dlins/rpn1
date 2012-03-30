@@ -86,6 +86,7 @@ public class VelocityAgent extends RpModelActionAgent {
 
     public static void clearVelocities() {
         ControlClick.clearpMarca();
+        velView.clear();
         indCurvaVel.clear();
         vel.clear();
         xDevSetaVel.clear();

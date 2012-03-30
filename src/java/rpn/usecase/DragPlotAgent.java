@@ -8,10 +8,6 @@ package rpn.usecase;
 import rpnumerics.RPNUMERICS;
 import wave.util.RealVector;
 import java.beans.PropertyChangeEvent;
-import rpn.RPnCurvesListFrame;
-import rpn.RPnPhaseSpaceFrame;
-import rpn.RPnUIFrame;
-import rpn.component.BifurcationCurveGeom;
 import rpn.component.RpGeometry;
 import rpn.component.util.CLASSIFIERAGENT_CONFIG;
 import rpn.component.util.ControlClick;
@@ -40,29 +36,46 @@ public class DragPlotAgent extends RpModelConfigChangeAgent {
     //
     protected DragPlotAgent() {
         super(DESC_TEXT);
+
     }
 
     public void execute() {
+//<<<<<<< HEAD
 
-        RpGeometry lastGeometry = RPnDataModule.PHASESPACE.getLastGeometry();
+//        RpGeometry lastGeometry = RPnDataModule.PHASESPACE.getLastGeometry();
+//
+//        RPnCurvesListFrame.removeLastEntry();
+//
+//        UserInputTable userInputList = UIController.instance().globalInputTable();
+//
+//        RealVector newValue = userInputList.values();
+//
+//        if (ControlClick.onCurve == 1) newValue = GeometryGraphND.pMarca;
+//
+//        lastGeometry.geomFactory().getUI().propertyChange(new PropertyChangeEvent(this, "enabled", null, newValue));
+//
+//        RPnCurvesListFrame.addGeometry(lastGeometry);
+//
+//        RPnDataModule.PHASESPACE.update();
+//
+//        for (RPnPhaseSpaceFrame frame : RPnUIFrame.getPhaseSpaceFrames()) {
+//            frame.phaseSpacePanel().repaint();
+//        }
+//=======
+        try {
+            RpGeometry lastGeometry = phaseSpace_.getLastGeometry();
+            UserInputTable userInputList = UIController.instance().globalInputTable();
+            RealVector newValue = userInputList.values();
+            if (ControlClick.onCurve == 1) newValue = GeometryGraphND.pMarca;
+            lastGeometry.geomFactory().getUI().propertyChange(new PropertyChangeEvent(this, "enabled", null, newValue));
+            phaseSpace_.update();
+            UIController.instance().panelsUpdate();
+        } catch (Exception e) {
 
-        RPnCurvesListFrame.removeLastEntry();
-
-        UserInputTable userInputList = UIController.instance().globalInputTable();
-
-        RealVector newValue = userInputList.values();
-
-        if (ControlClick.onCurve == 1) newValue = GeometryGraphND.pMarca;
-
-        lastGeometry.geomFactory().getUI().propertyChange(new PropertyChangeEvent(this, "enabled", null, newValue));
-        
-        RPnCurvesListFrame.addGeometry(lastGeometry);
-
-        RPnDataModule.PHASESPACE.update();
-
-        for (RPnPhaseSpaceFrame frame : RPnUIFrame.getPhaseSpaceFrames()) {
-            frame.phaseSpacePanel().repaint();
+            return;
+//>>>>>>> f35dc7fbfcff605ad0a07a4c31682e08101d761b
         }
+
 
     }
 

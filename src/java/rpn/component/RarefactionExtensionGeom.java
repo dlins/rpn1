@@ -1,13 +1,11 @@
 package rpn.component;
 
-import java.awt.Color;
 import wave.multid.*;
 import wave.multid.view.*;
 
-public class RarefactionExtensionGeom  extends BifurcationCurveGeom {
+public class RarefactionExtensionGeom   extends SegmentedCurveGeom {
     
 
-    public static ViewingAttr VIEWING_ATTR = new ViewingAttr(Color.green);
     
     public RarefactionExtensionGeom(RealSegGeom[] segArray, RarefactionExtensionGeomFactory factory) {
 
@@ -20,7 +18,7 @@ public class RarefactionExtensionGeom  extends BifurcationCurveGeom {
         return new RarefactionExtensionCurveView(this, transf, viewingAttr());
         
     }
-    
+
     
     
 }

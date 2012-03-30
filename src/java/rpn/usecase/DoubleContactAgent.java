@@ -30,15 +30,13 @@ public class DoubleContactAgent extends RpModelPlotAgent {
     // Constructors/Initializers
     //
     protected DoubleContactAgent() {
-        super(DESC_TEXT, rpn.RPnConfig.HUGONIOT, new JButton(DESC_TEXT));
+        super(DESC_TEXT, rpn.RPnConfig.HUGONIOT, new JButton());
     }
 
     @Override
     public void actionPerformed(ActionEvent event) {
 
         UI_ACTION_SELECTED action = new UI_ACTION_SELECTED(this);
-//        UIController.instance().setState(new BIFURCATION_CONFIG());
-
         action.userInputComplete(UIController.instance());// No input needed
 
     }
@@ -46,25 +44,35 @@ public class DoubleContactAgent extends RpModelPlotAgent {
     public RpGeometry createRpGeometry(RealVector[] input) {
 
         DoubleContactGeomFactory factory = new DoubleContactGeomFactory(RPNUMERICS.createDoubleContactCurveCalc());
-
         return factory.geom();
 
     }
 
     @Override
     public void execute() {
+
+
         DoubleContactGeomFactory factory = new DoubleContactGeomFactory(RPNUMERICS.createDoubleContactCurveCalc());
+        if (UIController.instance().isAuxPanelsEnabled()) {
+            RPnPhaseSpaceAbstraction leftPhaseSpace = RPnDataModule.LEFTPHASESPACE;
+
+            RPnPhaseSpaceAbstraction rightPhaseSpace = RPnDataModule.RIGHTPHASESPACE;
+            
+            RpGeometry leftGeometry = factory.leftGeom();
+            RpGeometry rightGeometry = factory.rightGeom();
+
+            leftPhaseSpace.plot(leftGeometry);
+            rightPhaseSpace.plot(rightGeometry);
+        } else {
+            RPnDataModule.PHASESPACE.plot(factory.geom());
+        }
 
 
-//        RPnPhaseSpaceAbstraction auxPhaseSpace = RPnDataModule.PHASESPACE;//AUXPHASESPACE;
 
-        RPnPhaseSpaceAbstraction auxPhaseSpace = RPnDataModule.PHASESPACE;
 
-        RpGeometry geometry = factory.geom();
 
-        auxPhaseSpace.plot(geometry);
 
-        System.out.println("Chamando execute");
+
     }
 
     static public DoubleContactAgent instance() {

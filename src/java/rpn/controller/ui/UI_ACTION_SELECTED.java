@@ -9,7 +9,6 @@ import wave.util.RealVector;
 import rpn.usecase.*;
 import java.util.ArrayList;
 import java.util.List;
-import rpn.component.util.GeometryGraphND;
 
 public class UI_ACTION_SELECTED implements UserInputHandler {
     //
@@ -30,34 +29,9 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
     }
 
     public void userInputComplete(rpn.controller.ui.UIController ui,
-            RealVector userInput) {//Limpar esse metodo . Utilizar a versao sem entrada do usuario quando necessario
-
-        //System.out.println("UI_ACTION_SELECTED : userInputComplete(rpn.controller.ui.UIController ui, RealVector userInput)");
-        //System.out.println("Tamanho do RealVector userInput : " +userInput.getSize());
+            RealVector userInput) {
 
         userInputList_.add(new RealVector(userInput));
-
-
-//        if (actionSelected_ instanceof PoincareSectionPlotAgent) {
-//            if (isPoincareInputReady()) {
-//                ArrayList<RealVector> tempInputList = new ArrayList<RealVector>();
-//                for (RealVector inputElement : userInputList(ui)) {
-//                    tempInputList.add(inputElement);
-//                }
-//
-//                UIController.instance().addCommand(new Command(this, tempInputList));
-//            }
-//        }
-//        else {
-//            UIController.instance().addCommand(new Command(this, userInput));
-//            UIController.instance().setWaitCursor();
-//            actionSelected_.execute();
-//            UIController.instance().resetCursor();
-//            userInputList_.clear();
-//            ui.panelsBufferClear();
-//            rpn.parser.RPnDataModule.PHASESPACE.unselectAll();
-//        }
-
 
         if (actionSelected_ instanceof PoincareSectionPlotAgent) {
             if (isPoincareInputReady()) {
@@ -122,11 +96,8 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
     }
 
     public RpModelActionAgent getAction() {
-        //System.out.println("UI_ACTION_SELECTED : getAction()");
         return actionSelected_;
     }
-
-    
 
     public int actionDimension() {
         

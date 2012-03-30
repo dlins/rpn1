@@ -7,7 +7,6 @@ package rpn;
 
 import java.util.ArrayList;
 import java.util.List;
-import wave.util.RealVector;
 
 /**
  *

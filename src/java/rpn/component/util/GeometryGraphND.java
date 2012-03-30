@@ -187,7 +187,7 @@ public class GeometryGraphND {
     }
 
 
-    public void defineClassifiers(Graphics g, Scene scene_) {
+    public void defineClassifiers(Graphics g, Scene scene_, RPnPhaseSpacePanel panel) {
 
         int cont = ClassifierAgent.xDevStr.size();
 
@@ -226,14 +226,17 @@ public class GeometryGraphND {
             int s1 = (Integer) (ClassifierAgent.tipo.get(i));
             Object obj = HugoniotSegGeom.s[s1];
 
-            drawObjects(g, obj, newDC, setaDC);
+            //drawObjects(g, obj, newDC, setaDC);
+            if ((Integer)ClassifierAgent.strView.get(i) == 1  &&  (panel.getName().equals("Phase Space"))) drawObjects(g, obj, newDC, setaDC);
+            if ((Integer)ClassifierAgent.strView.get(i) == 2  &&  (panel.getName().equals("RightPhase Space"))) drawObjects(g, obj, newDC, setaDC);
+            if ((Integer)ClassifierAgent.strView.get(i) == 3  &&  (panel.getName().equals("LeftPhase Space"))) drawObjects(g, obj, newDC, setaDC);
 
         }
 
     }
 
 
-    public void defineVelocities(Graphics g, Scene scene_) {
+    public void defineVelocities(Graphics g, Scene scene_, RPnPhaseSpacePanel panel) {
 
         int cont = VelocityAgent.xDevVel.size();
 
@@ -273,7 +276,10 @@ public class GeometryGraphND {
             String exp = String.format("%.4e", v1);
             Object obj = exp;
 
-            drawObjects(g, obj, newDC, setaDC);
+            //drawObjects(g, obj, newDC, setaDC);
+            if ((Integer)VelocityAgent.velView.get(i) == 1  &&  (panel.getName().equals("Phase Space"))) drawObjects(g, obj, newDC, setaDC);
+            if ((Integer)VelocityAgent.velView.get(i) == 2  &&  (panel.getName().equals("RightPhase Space"))) drawObjects(g, obj, newDC, setaDC);
+            if ((Integer)VelocityAgent.velView.get(i) == 3  &&  (panel.getName().equals("LeftPhase Space"))) drawObjects(g, obj, newDC, setaDC);
 
         }
 
@@ -373,6 +379,7 @@ public class GeometryGraphND {
         Coords2D minDevCoords = toDeviceCoords(scene,  RPNUMERICS.boundary().getMinimums());
         double deltaX = Math.abs(maxDevCoords.getX() - minDevCoords.getX());
         double deltaY = Math.abs(maxDevCoords.getY() - minDevCoords.getY());
+        Boundary boundary = RPNUMERICS.boundary();
 
         if (mapToEqui == 1) {
             deltaX = RPnPhaseSpacePanel.myW_;
@@ -399,7 +406,7 @@ public class GeometryGraphND {
 
         int nv = (int) yResolution;
         double dy = deltaY/(1.0*nv);
-        
+
         //*** desenha as linhas verticais
         for (int i = 0; i < nu; i++) {
             //linex = new Line2D.Double(i * dx, 0, i * dx, RPnPhaseSpacePanel.myH_);
@@ -411,15 +418,14 @@ public class GeometryGraphND {
 
         //*** desenha as linhas horizontais
         for (int i = 0; i < nv; i++) {
-            //liney = new Line2D.Double(0, i * dy, RPnPhaseSpacePanel.myW_, i * dy);              // preencher com coordenadas do dispositivo
-            liney = new Line2D.Double(0, i * dy, deltaX, i * dy);              // preencher com coordenadas do dispositivo
+            //liney = new Line2D.Double(0, i * dy, RPnPhaseSpacePanel.myW_, i * dy);                // preencher com coordenadas do dispositivo
+            liney = new Line2D.Double(0, i * dy, deltaX, i * dy);                                   // preencher com coordenadas do dispositivo
             if (index == 0  &&  mapToEqui == 1) liney = mapLine(liney, deltaX, deltaY);
             graph.draw(liney);
         }
         //*********************************
 
-        //*** desenha as linhas obliquas
-        Boundary boundary = RPNUMERICS.boundary();
+        //*** desenha as linhas obliquas        
         if (boundary instanceof IsoTriang2DBoundary) {
             for (int i = 0; i < nu; i++) {
                 lineObl = new Line2D.Double(0, RPnPhaseSpacePanel.myH_ - i * dy, i * dx, RPnPhaseSpacePanel.myH_);

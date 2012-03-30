@@ -12,6 +12,7 @@ import java.beans.*;
 import java.util.List;
 import java.util.ArrayList;
 import rpn.controller.ui.*;
+import rpn.parser.RPnDataModule;
 
 
 public abstract class RpModelConfigChangeAgent extends RpModelActionAgent {
@@ -31,7 +32,7 @@ public abstract class RpModelConfigChangeAgent extends RpModelActionAgent {
 
         firePropertyChange(change);
         logAction(change);
-        rpn.parser.RPnDataModule.PHASESPACE.update();
+        RPnDataModule.updatePhaseSpaces();
         UIController.instance().panelsUpdate();
 
     }

@@ -41,9 +41,11 @@ import rpn.component.util.AREASELECTION_CONFIG2;
 import rpn.component.util.CLASSIFIERAGENT_CONFIG;
 import rpn.component.util.GeometryGraph;
 import rpn.component.util.GeometryGraph3D;
+import rpn.component.util.GeometryUtil;
 import rpn.component.util.VELOCITYAGENT_CONFIG;
 import rpn.controller.ui.AREASELECTION_CONFIG;
 import rpn.controller.ui.UIController;
+import rpn.parser.RPnDataModule;
 import rpnumerics.BifurcationProfile;
 import rpnumerics.RPNUMERICS;
 
@@ -127,6 +129,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         cursorPos_ = new Point(0, 0);
         setBackground(DEFAULT_BOUNDARY_COLOR);
         setPreferredSize(new java.awt.Dimension(myW, myH));
+        this.setName("");
     }
 
     //
@@ -236,17 +239,20 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
 
             GeometryGraph geom = new GeometryGraph();
             geom.markPoints(scene());
-            geom.paintComponent(g, scene());
+            geom.paintComponent(g, scene(),this);
+
+            //if (this.getName().equals(GeometryUtil.namePhaseSpace)) geom.markPoints(scene());
+            //if (this.getName().equals(GeometryUtil.namePhaseSpace)) geom.paintComponent(g, scene(), this);
 
         }
 
-        if (RPNUMERICS.domainDim() == 3) {
-
-            GeometryGraph3D geom3D = new GeometryGraph3D();
-            geom3D.markPoints(scene());
-            geom3D.paintComponent(g, scene());
-
-        }
+//        if (RPNUMERICS.domainDim() == 3) {
+//
+//            GeometryGraph3D geom3D = new GeometryGraph3D();
+//            geom3D.markPoints(scene());
+//            geom3D.paintComponent(g, scene());
+//
+//        }
 
 //        if (RPNUMERICS.domainDim() == 4) {
 //            GeometryGraph4D.markPoints(GeometryUtil.targetPoint, GeometryUtil.pMarca, scene());

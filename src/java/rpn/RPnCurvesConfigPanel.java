@@ -14,10 +14,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
 import javax.swing.*;
-import rpn.controller.ui.UIController;
-import rpn.controller.ui.UI_ACTION_SELECTED;
 import rpn.usecase.ChangeDirectionAgent;
-import rpn.usecase.RpModelPlotAgent;
 import rpnumerics.Configuration;
 import rpnumerics.Orbit;
 import rpnumerics.RPNUMERICS;
@@ -43,8 +40,7 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
 
     }
 
-    public static void setMultipleButton(boolean state) {
-    }
+  
 
     private void buildPanel() {
 
@@ -89,16 +85,10 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
         directionButtonGroup_.add(forwardCheckBox_);
         directionButtonGroup_.add(backwardCheckBox_);
 
-
-
         directionPanel_.add(forwardCheckBox_);
         directionPanel_.add(backwardCheckBox_);
 
-
-
         GridBagLayout boxLayout = new GridBagLayout();
-
-//        curvesTabbedPanel_.setMinimumSize(new Dimension(600, 400));
 
         setLayout(boxLayout);
 
@@ -163,22 +153,7 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
 
  
 
-    private class ToggleButtonListener implements ActionListener {
-
-        public void actionPerformed(ActionEvent e) {
-            JToggleButton button = (JToggleButton) e.getSource();
-            if (UIController.instance().getState() instanceof UI_ACTION_SELECTED) {
-                UI_ACTION_SELECTED actionSelected = (UI_ACTION_SELECTED) (UIController.instance().getState());
-                if (actionSelected.getAction() instanceof RpModelPlotAgent) {
-                    RpModelPlotAgent plotAgent = (RpModelPlotAgent) actionSelected.getAction();
-                    plotAgent.setMultipleGeometry(!button.isSelected());
-
-                }
-
-            }
-
-        }
-    }
+   
 
     private class OrbitDirectionListener implements ActionListener {
 

@@ -17,12 +17,11 @@ import rpn.component.util.ControlClick;
 import rpn.component.util.GeometryGraph;
 import rpn.component.util.GeometryGraphND;
 import rpn.controller.ui.UIController;
-import rpn.usecase.DragPlotAgent;
 
 public class RPnPhaseSpaceFrame extends JFrame {
 
     JPanel contentPane;
-    RPnPhaseSpacePanel phaseSpacePanel = null;
+    private RPnPhaseSpacePanel phaseSpacePanel = null;
     BorderLayout borderLayout1 = new BorderLayout();
     JPanel statusPanel = new JPanel();
     JPanel jPanel2 = new JPanel();
@@ -44,7 +43,7 @@ public class RPnPhaseSpaceFrame extends JFrame {
         commandMenu_ = command;
         try {
             phaseSpacePanel = new RPnPhaseSpacePanel(scene);
-        
+
             jbInit();
         } catch (Exception e) {
             e.printStackTrace();
@@ -96,7 +95,9 @@ public class RPnPhaseSpaceFrame extends JFrame {
 
     }
 
-    public JSlider getSlider(){return slider;}
+    public JSlider getSlider() {
+        return slider;
+    }
 
     private class FocusController implements WindowFocusListener {
 
@@ -122,7 +123,7 @@ public class RPnPhaseSpaceFrame extends JFrame {
             int h = RPnPhaseSpaceFrame.this.frameSize_.height;  //*** Leandro
             int w = h - 91;   //*** Leandro
 
-            
+
             if (keyEvent.getKeyChar() == 'l') {
 
                 if (RPnPhaseSpacePanel.isCursorLine()) {
@@ -134,17 +135,17 @@ public class RPnPhaseSpaceFrame extends JFrame {
             }
 
             //*** solucao provisoria para mostrar/nao mostrar o grid --- Leandro
-            if (keyEvent.getKeyChar() == 'g'  ||  keyEvent.getKeyChar() == 'G') {
+            if (keyEvent.getKeyChar() == 'g' || keyEvent.getKeyChar() == 'G') {
                 GeometryGraphND.mostraGrid = 1;
             }
-            if (keyEvent.getKeyChar() == 'h'  ||  keyEvent.getKeyChar() == 'H') {
+            if (keyEvent.getKeyChar() == 'h' || keyEvent.getKeyChar() == 'H') {
                 GeometryGraphND.mostraGrid = 0;
             }
             //------------------------------------------------------------------
-            
+
 
             //*** solucao provisoria para movimento sobre a curva --- Leandro
-            if (keyEvent.getKeyChar() == 'm'  ||  keyEvent.getKeyChar() == 'M') {
+            if (keyEvent.getKeyChar() == 'm' || keyEvent.getKeyChar() == 'M') {
                 ControlClick.ind = 0;
             }
 
@@ -157,7 +158,7 @@ public class RPnPhaseSpaceFrame extends JFrame {
                 UIController.instance().showCursorLines(true);
             }
             //*** --------------------------------------------------------------
-
+            
             //*** solucao provisoria para resize dos paineis em tempo de execucao --- Leandro
             if (keyEvent.getKeyChar() == '+') {   //*** aumenta tamanho dos painéis
                 a += 20;
@@ -165,7 +166,15 @@ public class RPnPhaseSpaceFrame extends JFrame {
 
                     RPnPhaseSpaceFrame frame = RPnUIFrame.getPhaseSpaceFrames()[i];
                     //frame.setSize(RPnPhaseSpaceFrame.this.frameSize_.width  * (int)(a/b), RPnPhaseSpaceFrame.this.frameSize_.height * (int)(a/b));
-                    frame.setSize(w+a, h+a);
+                    frame.setSize(w + a, h + a);
+                    frame.validate();
+
+                }
+                for (int i = 0; i < RPnUIFrame.getAuxFrames().length; i++) {
+
+                    RPnPhaseSpaceFrame frame = RPnUIFrame.getAuxFrames()[i];
+                    //frame.setSize(RPnPhaseSpaceFrame.this.frameSize_.width  * (int)(a/b), RPnPhaseSpaceFrame.this.frameSize_.height * (int)(a/b));
+                    frame.setSize(w + a, h + a);
                     frame.validate();
 
                 }
@@ -176,15 +185,30 @@ public class RPnPhaseSpaceFrame extends JFrame {
 
                     RPnPhaseSpaceFrame frame = RPnUIFrame.getPhaseSpaceFrames()[i];
                     //frame.setSize(RPnPhaseSpaceFrame.this.frameSize_.width  * (int)(a/b), RPnPhaseSpaceFrame.this.frameSize_.height * (int)(a/b));
-                    frame.setSize(w+a, h+a);
+                    frame.setSize(w + a, h + a);
+                    frame.validate();
+
+                }
+                for (int i = 0; i < RPnUIFrame.getAuxFrames().length; i++) {
+
+                    RPnPhaseSpaceFrame frame = RPnUIFrame.getAuxFrames()[i];
+                    //frame.setSize(RPnPhaseSpaceFrame.this.frameSize_.width  * (int)(a/b), RPnPhaseSpaceFrame.this.frameSize_.height * (int)(a/b));
+                    frame.setSize(w + a, h + a);
                     frame.validate();
 
                 }
             }
-            if (keyEvent.getKeyChar() == 'r'  ||  keyEvent.getKeyChar() == 'R') {   //*** reset para o tamanho original dos painéis
+            if (keyEvent.getKeyChar() == 'r' || keyEvent.getKeyChar() == 'R') {   //*** reset para o tamanho original dos painéis
                 for (int i = 0; i < RPnUIFrame.getPhaseSpaceFrames().length; i++) {
-
+                    
                     RPnPhaseSpaceFrame frame = RPnUIFrame.getPhaseSpaceFrames()[i];
+                    frame.setSize(w, h);
+                    frame.validate();
+
+                }
+                for (int i = 0; i < RPnUIFrame.getAuxFrames().length; i++) {
+
+                    RPnPhaseSpaceFrame frame = RPnUIFrame.getAuxFrames()[i];
                     frame.setSize(w, h);
                     frame.validate();
 
@@ -193,10 +217,8 @@ public class RPnPhaseSpaceFrame extends JFrame {
 
             //*** ---------------------------------------------------------------------------
 
-            
-        }
 
-        
+        }
     }
 
     private class SliderState implements ChangeListener {
@@ -250,11 +272,44 @@ public class RPnPhaseSpaceFrame extends JFrame {
 
                     frame.getSlider().getModel().setValue(value);
 
+                    frame.getSlider().addChangeListener(changeListener);
+
+
+                }
+
+
+                for (int i = 0; i < RPnUIFrame.getAuxFrames().length; i++) {
+
+                    RPnPhaseSpaceFrame frame = RPnUIFrame.getAuxFrames()[i];
+
+                    frame.setSize(w.intValue(), h.intValue());
+                    frame.validate();
+
+                    ChangeListener changeListener = frame.getSlider().getChangeListeners()[0];
+
+                    frame.getSlider().removeChangeListener(changeListener);
+
+                    frame.getSlider().getModel().setValue(value);
 
                     frame.getSlider().addChangeListener(changeListener);
 
 
                 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //                RPnPhaseSpaceFrame.this.setSize(w.intValue(), h.intValue());

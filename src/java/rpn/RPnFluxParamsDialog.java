@@ -52,7 +52,7 @@ public class RPnFluxParamsDialog extends RPnDialog {
 
 
         
-        for (RPnFluxParamsSubject subject : subjectArray) {
+         for (RPnFluxParamsSubject subject : subjectArray) {
 
             RPnInputComponent inputComponent = new RPnInputComponent(subject);
 
