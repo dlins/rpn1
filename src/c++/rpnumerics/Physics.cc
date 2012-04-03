@@ -14,8 +14,14 @@ const string & Physics::getRPnHome() {
 }
 
 void Physics::setParams(vector<string> paramVector) {
+
+    for (int i = 0; i < paramVector.size(); i++) {
+        cout << paramVector[i] << " Chamando setParams Physics" << endl;
+    }
+
+
     physicsVector_->at(0)->setParams(paramVector);
-    
+
 }
 
 Physics::~Physics() {

@@ -49,6 +49,14 @@ StonePermParams::StonePermParams(double expw, double expg, double expo,
 
 }
 
+StonePermParams::StonePermParams(const RealVector & permVector): comp(new RealVector(13)) {
+
+    for (int i = 0; i < permVector.size(); i++) {
+        comp->component(i)=permVector(i);
+    }
+
+}
+
 StonePermParams::StonePermParams() : comp(new RealVector(13)) {
     reset();
 

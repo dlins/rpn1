@@ -35,6 +35,7 @@ public:
             double low, double log,
             double epsl);
     StonePermParams();
+    StonePermParams (const RealVector &);
     StonePermParams(const StonePermParams &);
     virtual ~StonePermParams();
 

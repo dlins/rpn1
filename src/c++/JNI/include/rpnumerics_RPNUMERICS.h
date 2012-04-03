@@ -41,6 +41,14 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_clean
 
 /*
  * Class:     rpnumerics_RPNUMERICS
+ * Method:    setParams
+ * Signature: ([Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setParams
+  (JNIEnv *, jclass, jobjectArray);
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
  * Method:    setFluxParams
  * Signature: (Lrpnumerics/FluxParams;)V
  */

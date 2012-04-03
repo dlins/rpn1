@@ -61,6 +61,7 @@
 #include "JNIDefs.h"
 #include <string.h>
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
@@ -85,6 +86,39 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setRPnHome
     Physics::setRPnHome(rpnHomeString);
 
     //    cout << "RPn home path in physics: " << Physics::getRPnHome() << endl;
+
+}
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    setParams
+ * Signature: ([Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setParams
+(JNIEnv * env, jclass cls, jobjectArray stringParamsArray) {
+
+    const char *paramNative;
+
+    int paramSize = env->GetArrayLength(stringParamsArray);
+
+    vector<string> paramVector;
+
+    for (int i = 0; i < paramSize; i++) {
+        jstring paramString = (jstring) (env)->GetObjectArrayElement(stringParamsArray, i);
+
+        paramNative = env->GetStringUTFChars(paramString, NULL);
+
+        string paramElementString(paramNative);
+        paramVector.push_back(paramElementString);
+
+    }
+
+
+     RpNumerics::getPhysics().setParams(paramVector);
+
+
+
+
 
 }
 
@@ -306,7 +340,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setBoundary
         RealVector C(aRealVectorSize, cNativeArray);
 
 
-        cout << "O tipo eh isotriang boundary"<< A <<"|||| "<<B <<" |||| "<<C<< endl;
+        cout << "O tipo eh isotriang boundary" << A << "|||| " << B << " |||| " << C << endl;
 
 
         IsoTriang2DBoundary triangBoundary(A, B, C);

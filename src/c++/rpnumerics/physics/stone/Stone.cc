@@ -12,7 +12,6 @@
  */
 #include "Stone.h"
 
-
 /*
  * ---------------------------------------------------------------
  * Definitions:
@@ -35,38 +34,38 @@ Boundary * Stone::defaultBoundary() const {
 
     C.component(0) = 1;
     C.component(1) = 0;
-//
+    //
 
-//Saturacoes negativas 
+    //Saturacoes negativas
 
-//     A.component(0) = -1;
-//    A.component(1) = 2;
-//
-//    RealVector B(2);
-//
-//    B.component(0) = -1;
-//    B.component(1) = 2;
-//
-//    RealVector C(2);
-//
-//    C.component(0) = 2;
-//    C.component(1) = -1;
+    //     A.component(0) = -1;
+    //    A.component(1) = 2;
+    //
+    //    RealVector B(2);
+    //
+    //    B.component(0) = -1;
+    //    B.component(1) = 2;
+    //
+    //    RealVector C(2);
+    //
+    //    C.component(0) = 2;
+    //    C.component(1) = -1;
 
 
 
-//
-//      A.component(0) = -1;
-//    A.component(1) = -1;
-//
-//    RealVector B(2);
-//
-//    B.component(0) = -1;
-//    B.component(1) = 2;
-//
-//    RealVector C(2);
-//
-//    C.component(0) = 2;
-//    C.component(1) = -1;
+    //
+    //      A.component(0) = -1;
+    //    A.component(1) = -1;
+    //
+    //    RealVector B(2);
+    //
+    //    B.component(0) = -1;
+    //    B.component(1) = 2;
+    //
+    //    RealVector C(2);
+    //
+    //    C.component(0) = 2;
+    //    C.component(1) = -1;
 
 
 
@@ -75,20 +74,60 @@ Boundary * Stone::defaultBoundary() const {
 
 }
 
+void Stone::setParams(vector<string> params) {
+
+
+    RealVector fluxParamVector(8);
+
+    //Flux params
+    for (int i = 0; i < fluxParamVector.size(); i++) {
+
+        double paramValue = atof(params[i].c_str());
+
+        fluxParamVector.component(i) = paramValue;
+
+
+    }
+
+    fluxParams(StoneParams(fluxParamVector));
+
+
+    StoneFluxFunction & stoneFlux = (StoneFluxFunction&) fluxFunction();
+
+    RealVector permVector(13);
+
+    cout << "Param de fluxo em stone" << fluxParamVector << endl;
+
+
+    //Perm params
+    for (int i = 8; i < params.size(); i++) {
+
+        double paramValue = atof(params[i].c_str());
+
+        permVector.component(i-8) = paramValue;
+
+
+    }
+    StonePermParams permParams(permVector);
+
+    cout << "Param de permeabilidade em stone" <<  permVector << endl;
+
+}
+
 Stone::Stone() : SubPhysics(StoneFluxFunction(StoneParams(), StonePermParams()), StoneAccumulation(), *defaultBoundary(), Multid::PLANE, "Stone", _SIMPLE_ACCUMULATION_) {
 
-    
+
     RealVector refVec(2);
 
     StoneHugoniotFunctionClass * stoneHugoniotFunction = new StoneHugoniotFunctionClass(refVec, (StoneFluxFunction(StoneParams(), StonePermParams())));
-    
-    
+
+
     setHugoniotFunction(stoneHugoniotFunction);
 
 }
 
 Stone::Stone(const Stone & copy) : SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.boundary(), Multid::PLANE, "Stone", _SIMPLE_ACCUMULATION_) {
-   RealVector refVec(2);
+    RealVector refVec(2);
     StoneHugoniotFunctionClass * stoneHugoniotFunction = new StoneHugoniotFunctionClass(refVec, (StoneFluxFunction(StoneParams(), StonePermParams())));
     setHugoniotFunction(stoneHugoniotFunction);
 }

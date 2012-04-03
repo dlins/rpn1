@@ -666,8 +666,18 @@ public class RPNUMERICS {
         }
 
         FluxParams newFluxParams = new FluxParams(fluxParamsVector);
-        setFluxParams(
-                newFluxParams);
+        setFluxParams(newFluxParams);
+
+
+        String[] testeArayParams = new String[21];
+        for (int i = 0; i < testeArayParams.length; i++) {
+             testeArayParams[i]=i+"";
+
+        }
+
+
+
+        setParams(testeArayParams);
 
         RealVector accumulationParamsVector = new RealVector(accumulationConfiguration.getParamsSize());
 
@@ -690,6 +700,8 @@ public class RPNUMERICS {
      * Clean up the native layer
      */
     public static native void clean();
+
+    public static native void setParams (String [] params);
 
     private static native void setFluxParams(FluxParams fluxParams);
 

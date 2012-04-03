@@ -11,7 +11,7 @@ const FluxParams & FluxFunction::fluxParams(void) const {
     return *params_;
 }
 
-//Colocar na versao principal
+
 void FluxFunction::fluxParams(const FluxParams & params) {
 
     delete params_;

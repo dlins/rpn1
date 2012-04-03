@@ -45,6 +45,8 @@ public:
 
     Boundary * defaultBoundary()const;
 
+    void setParams(vector<string>);
+
 
     SubPhysics * clone()const;
 
