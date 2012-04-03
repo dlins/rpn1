@@ -13,6 +13,11 @@ const string & Physics::getRPnHome() {
     return rpnHome_;
 }
 
+void Physics::setParams(vector<string> paramVector) {
+    physicsVector_->at(0)->setParams(paramVector);
+    
+}
+
 Physics::~Physics() {
 
     delete physicsVector_;
