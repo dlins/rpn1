@@ -110,6 +110,9 @@ void Stone::setParams(vector<string> params) {
     }
     StonePermParams permParams(permVector);
 
+    stoneFlux.setPermParams(permParams);
+
+
     cout << "Param de permeabilidade em stone" <<  permVector << endl;
 
 }

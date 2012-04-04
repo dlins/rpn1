@@ -54,6 +54,15 @@ StoneFluxFunction::StoneFluxFunction(const StoneFluxFunction & copy) : FluxFunct
 
 }
 
+void StoneFluxFunction::setPermParams(const StonePermParams & permParams) {
+
+    delete perm_;
+
+    perm_=new StonePermeability(permParams);
+
+
+}
+
 RpFunction * StoneFluxFunction::clone() const {
     return new StoneFluxFunction(*this);
 }

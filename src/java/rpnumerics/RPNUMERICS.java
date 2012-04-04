@@ -37,12 +37,10 @@ public class RPNUMERICS {
     //
 
     static public void init(String physicsID) {
-        //System.loadLibrary("wave");//TODO libwave is always loaded ?
-        //System.loadLibrary("rpnumerics");
+
         System.loadLibrary("rpn");
         setRPnHome(System.getProperty("rpnhome"));
 
-//        System.out.println("Inicializando a fisica: " + physicsID);
         initNative(physicsID);
 
         //Processing configuration data
@@ -84,32 +82,23 @@ public class RPNUMERICS {
         //Flux function
 
         Configuration fluxFunctionConfig = physicsConfiguration.getConfiguration("fluxfunction");
-        FluxParams fluxParams = getFluxParams();
+
+        String[] paramsArray = new String[20];//Teste para Stone
+
 
         if (fluxFunctionConfig != null) {
 
 
             for (int i = 0; i < fluxFunctionConfig.getParamsSize(); i++) {
-                //SET FLUX PARAMS !!!
-                fluxParams.setParam(i, new Double(fluxFunctionConfig.getParam(i)));
-
-            }
-            setFluxParams(fluxParams);
 
 
-        } else {
+                paramsArray[i] = fluxFunctionConfig.getParam(i);
 
-            RealVector paramsVector = fluxParams.getParams();
 
-            Configuration fluxFunctionConfiguration = new Configuration("fluxfunction", ConfigurationProfile.PHYSICS_CONFIG);
-
-            for (int i = 0; i < paramsVector.getSize(); i++) {
-                fluxFunctionConfiguration.setParamValue("param " + i, String.valueOf(paramsVector.getElement(i)));
-                fluxFunctionConfiguration.setParamOrder("param " + i, i);
 
             }
 
-            physicsConfiguration.addConfiguration("fluxfunction", fluxFunctionConfiguration);
+            setParams(paramsArray);
 
 
             RPnConfig.addProfile(physicsID, physicsProfile);
@@ -331,11 +320,10 @@ public class RPNUMERICS {
 
     }
 
+    public static EllipticBoundaryCalc createEllipticBoundaryCalc() {
 
-    public static EllipticBoundaryCalc createEllipticBoundaryCalc(){
 
-
-           int[] resolution = RPnDataModule.processResolution(getParamValue("ellipticboundary", "resolution"));
+        int[] resolution = RPnDataModule.processResolution(getParamValue("ellipticboundary", "resolution"));
 
         return new EllipticBoundaryCalc(new ContourParams(resolution));
 
@@ -671,7 +659,7 @@ public class RPNUMERICS {
 
         String[] testeArayParams = new String[21];
         for (int i = 0; i < testeArayParams.length; i++) {
-             testeArayParams[i]=i+"";
+            testeArayParams[i] = i + "";
 
         }
 
@@ -701,7 +689,7 @@ public class RPNUMERICS {
      */
     public static native void clean();
 
-    public static native void setParams (String [] params);
+    public static native void setParams(String[] params);
 
     private static native void setFluxParams(FluxParams fluxParams);
 

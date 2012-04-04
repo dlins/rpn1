@@ -135,6 +135,9 @@ public class RPnConfig {
         RPNUMERICS.setConfiguration(configuration.getName(), configuration);
 
 
+        System.out.println(configuration.toString());
+
+
     }
 
     public static ArrayList<ConfigurationProfile> getAllMethodsProfiles() {
