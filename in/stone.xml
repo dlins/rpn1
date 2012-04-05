@@ -14,66 +14,25 @@
             <PHYSICSPARAM name="vel" position="6" value ="1.0" />
 
 
-            <PHYSICSPARAM name="expw" position="7" value ="1.0" />
-            <PHYSICSPARAM name="expg" position="8" value ="1.0" />
-            <PHYSICSPARAM name="expo" position="9" value ="1.0" />
-            <PHYSICSPARAM name="expow" position="10" value ="1.0" />
-            <PHYSICSPARAM name="expog" position="11" value ="1.0" />
-            <PHYSICSPARAM name="cnw" position="12" value ="1.0" />
-            <PHYSICSPARAM name="cng" position="13" value ="1.0" />
-            <PHYSICSPARAM name="cno" position="14" value ="1.0" />
-            <PHYSICSPARAM name="lw" position="15" value ="1.0" />
-            <PHYSICSPARAM name="lg" position="16" value ="1.0" />
-            <PHYSICSPARAM name="low" position="17" value ="1.0" />
-            <PHYSICSPARAM name="log" position="18" value ="1.0" />
-            <PHYSICSPARAM name="epsl" position="19" value ="1.0" />
+            <PHYSICSPARAM name="expw" position="7" value ="2.0" />
+            <PHYSICSPARAM name="expg" position="8" value ="2.0" />
+            <PHYSICSPARAM name="expo" position="9" value ="2.0" />
+            <PHYSICSPARAM name="expow" position="10" value ="2.0" />
+            <PHYSICSPARAM name="expog" position="11" value ="2.0" />
+            <PHYSICSPARAM name="cnw" position="12" value ="0.0" />
+            <PHYSICSPARAM name="cng" position="13" value ="0.0" />
+            <PHYSICSPARAM name="cno" position="14" value ="0.0" />
+            <PHYSICSPARAM name="lw" position="15" value ="0.0" />
+            <PHYSICSPARAM name="lg" position="16" value ="0.0" />
+            <PHYSICSPARAM name="low" position="17" value ="0.0" />
+            <PHYSICSPARAM name="log" position="18" value ="0.0" />
+            <PHYSICSPARAM name="epsl" position="19" value ="0.0" />
 
-
-
-
-            <!-- Test -->
-        </PHYSICSCONFIG>
-
-      <!--  <PHYSICSCONFIG name="permparams">
-
-            <PHYSICSPARAM name="expw" position="0" value ="1.0" />
-            <PHYSICSPARAM name="expg" position="1" value ="1.0" />
-            <PHYSICSPARAM name="expo" position="2" value ="1.0" />
-            <PHYSICSPARAM name="expow" position="3" value ="1.0" />
-            <PHYSICSPARAM name="expog" position="4" value ="1.0" />
-            <PHYSICSPARAM name="cnw" position="5" value ="1.0" />
-            <PHYSICSPARAM name="cng" position="6" value ="1.0" />
-            <PHYSICSPARAM name="cno" position="7" value ="1.0" />
-            <PHYSICSPARAM name="lw" position="8" value ="1.0" />
-            <PHYSICSPARAM name="lg" position="9" value ="1.0" />
-            <PHYSICSPARAM name="low" position="10" value ="1.0" />
-            <PHYSICSPARAM name="log" position="11" value ="1.0" />
-            <PHYSICSPARAM name="epsl" position="12" value ="1.0" />
 
 
         </PHYSICSCONFIG>
 
-
-           <PHYSICSCONFIG name="permparams">
-
-            <PHYSICSPARAM name="expw" position="7" value ="1.0" />
-            <PHYSICSPARAM name="expg" position="8" value ="1.0" />
-            <PHYSICSPARAM name="expo" position="9" value ="1.0" />
-            <PHYSICSPARAM name="expow" position="10" value ="1.0" />
-            <PHYSICSPARAM name="expog" position="11" value ="1.0" />
-            <PHYSICSPARAM name="cnw" position="12" value ="1.0" />
-            <PHYSICSPARAM name="cng" position="13" value ="1.0" />
-            <PHYSICSPARAM name="cno" position="14" value ="1.0" />
-            <PHYSICSPARAM name="lw" position="15" value ="1.0" />
-            <PHYSICSPARAM name="lg" position="16" value ="1.0" />
-            <PHYSICSPARAM name="low" position="17" value ="1.0" />
-            <PHYSICSPARAM name="log" position="18" value ="1.0" />
-            <PHYSICSPARAM name="epsl" position="19" value ="1.0" />
-
-
-        </PHYSICSCONFIG>
--->
-
+        
 
 
 

@@ -83,27 +83,21 @@ public class RPNUMERICS {
 
         Configuration fluxFunctionConfig = physicsConfiguration.getConfiguration("fluxfunction");
 
-        String[] paramsArray = new String[20];//Teste para Stone
+        String[] paramsArray = new String[fluxFunctionConfig.getParamsSize()];
 
 
-        if (fluxFunctionConfig != null) {
+        for (int i = 0; i < fluxFunctionConfig.getParamsSize(); i++) {
 
-
-            for (int i = 0; i < fluxFunctionConfig.getParamsSize(); i++) {
-
-
-                paramsArray[i] = fluxFunctionConfig.getParam(i);
-
-
-
-            }
-
-            setParams(paramsArray);
-
-
-            RPnConfig.addProfile(physicsID, physicsProfile);
+            paramsArray[i] = fluxFunctionConfig.getParam(i);
 
         }
+
+        setParams(paramsArray);
+
+
+        RPnConfig.addProfile(physicsID, physicsProfile);
+
+
 
         ConfigurationProfile boundaryProfile = physicsProfile.getConfigurationProfile(ConfigurationProfile.BOUNDARY);
 
@@ -570,23 +564,12 @@ public class RPNUMERICS {
     // Accessors
     //
 
-//    public static void setCurrentProfile(ShockRarefactionProfile aShockRarefactionProfile_) {
-//        shockRarefactionProfile_ = aShockRarefactionProfile_;
-//    }
-//    public static ShockRarefactionProfile getCurrentProfile() {
-//
-//
-//        return shockRarefactionProfile_;
-//    }
     public static ShockProfile getShockProfile() {
         return shockProfile_;
 
 
     }
 
-//    public static RarefactionProfile getRarefactionProfile() {
-//        return rarefactionProfile_;
-//    }
     public static BifurcationProfile getBifurcationProfile() {
         return bifurcationProfile_;
 
@@ -638,48 +621,18 @@ public class RPNUMERICS {
 
         Configuration physicsConfiguration = configMap_.get(physicsID());
 
-        Configuration fluxConfiguration = physicsConfiguration.getConfiguration("fluxfunction");
-        Configuration accumulationConfiguration = physicsConfiguration.getConfiguration("accumulationfunction");
+        Configuration fluxFunctionConfig = physicsConfiguration.getConfiguration("fluxfunction");
+
+        String[] paramsArray = new String[fluxFunctionConfig.getParamsSize()];
+
+        for (int i = 0; i < fluxFunctionConfig.getParamsSize(); i++) {
 
 
-        RealVector fluxParamsVector = new RealVector(fluxConfiguration.getParamsSize());
-
-
-        for (int i = 0; i
-                < fluxParamsVector.getSize(); i++) {
-            fluxParamsVector.setElement(i, new Double(fluxConfiguration.getParam(i)));
-
-
+            paramsArray[i] = fluxFunctionConfig.getParam(i);
 
         }
 
-        FluxParams newFluxParams = new FluxParams(fluxParamsVector);
-        setFluxParams(newFluxParams);
-
-
-        String[] testeArayParams = new String[21];
-        for (int i = 0; i < testeArayParams.length; i++) {
-            testeArayParams[i] = i + "";
-
-        }
-
-
-
-        setParams(testeArayParams);
-
-        RealVector accumulationParamsVector = new RealVector(accumulationConfiguration.getParamsSize());
-
-
-
-        for (int i = 0; i
-                < accumulationParamsVector.getSize(); i++) {
-            accumulationParamsVector.setElement(i, new Double(accumulationConfiguration.getParam(i)));
-
-
-
-        }
-        setAccumulationParams(accumulationParamsVector);
-
+        setParams(paramsArray);
 
 
     }

@@ -19,6 +19,15 @@ void Physics::setParams(vector<string> paramVector) {
         cout << paramVector[i] << " Chamando setParams Physics" << endl;
     }
 
+    GridValues & grid = getGrid(0);
+
+    grid.e_computed=false;
+    grid.Jacobians_on_grid_computed=false;
+    grid.functions_on_grid_computed=false;
+    grid.dd_computed = false;
+
+
+
 
     physicsVector_->at(0)->setParams(paramVector);
 

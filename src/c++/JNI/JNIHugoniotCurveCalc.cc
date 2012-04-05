@@ -1,4 +1,4 @@
-  /**
+/**
  * IMPA - Fluid Dynamics Laboratory
  *
  * RPn Project
@@ -38,7 +38,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_HugoniotCurveCalcND_setUMinus
 }
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_PhasePoint_2_3I
-  (JNIEnv * env, jobject obj, jobject uMinus, jintArray resolution){
+(JNIEnv * env, jobject obj, jobject uMinus, jintArray resolution) {
 
 
     jclass classPhasePoint = (env)->FindClass(PHASEPOINT_LOCATION);
@@ -101,11 +101,16 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     GridValues & gv = RpNumerics::getPhysics().getGrid(0);
 
 
-    hugoniotCurve.classified_curve(&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(),gv,Uref,hugoniotPolyLineVector);
+    cout << "Parametros de flux stone hugoniot " << RpNumerics::getPhysics().fluxFunction().fluxParams().params() << endl;
+
+    cout << "Parametros de permeablidade stone hugoniot " << ((StoneFluxFunction &)RpNumerics::getPhysics().fluxFunction()).perm().params().params() << endl;
+
+
+    hugoniotCurve.classified_curve(&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(), gv, Uref, hugoniotPolyLineVector);
 
 
 
-    cout <<"tamanho da curva :"<< hugoniotPolyLineVector.size()<<endl;
+    cout << "tamanho da curva :" << hugoniotPolyLineVector.size() << endl;
 
     for (int i = 0; i < hugoniotPolyLineVector.size(); i++) {
 
@@ -145,7 +150,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
             double rightLambda2 = hugoniotPolyLineVector[i].vec[j + 1].component(dimension + m + 2);
 
 
-//            cout << leftLambda1 << " " << leftLambda2 << " " << rightLambda1 << " " << rightLambda2 << " "<<leftSigma<<" "<<rightSigma<<endl;
+            //            cout << leftLambda1 << " " << leftLambda2 << " " << rightLambda1 << " " << rightLambda2 << " "<<leftSigma<<" "<<rightSigma<<endl;
 
 
             jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, leftLambda1, leftLambda2, rightLambda1, rightLambda2, pointType);
@@ -163,9 +168,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     // Limpando
 
 
-//    env->DeleteLocalRef(hugoniotSegmentClass);
-//    env->DeleteLocalRef(realVectorClass);
-//    env->DeleteLocalRef(arrayListClass);
+    //    env->DeleteLocalRef(hugoniotSegmentClass);
+    //    env->DeleteLocalRef(realVectorClass);
+    //    env->DeleteLocalRef(arrayListClass);
 
 
 
@@ -173,10 +178,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     return result;
 }
 
-
-
 JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_PhasePoint_2IILwave_util_RealVector_2Lwave_util_RealVector_2
-  (JNIEnv *env, jobject obj, jobject uMinus, jint xRes, jint yRes, jobject topR, jobject dwnL) {
+(JNIEnv *env, jobject obj, jobject uMinus, jint xRes, jint yRes, jobject topR, jobject dwnL) {
 
 
     jclass classPhasePoint = (env)->FindClass(PHASEPOINT_LOCATION);
@@ -240,7 +243,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
     cout << Uref << endl;
 
-    cout <<"Implementar refinamento !!"<<endl;
+    cout << "Implementar refinamento !!" << endl;
 
 
     vector<HugoniotPolyLine> hugoniotPolyLineVector;
@@ -249,9 +252,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
     GridValues & gv = RpNumerics::getPhysics().getGrid(0);
 
-    hugoniotCurve.classified_curve(&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(),gv,Uref,hugoniotPolyLineVector);
+    hugoniotCurve.classified_curve(&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(), gv, Uref, hugoniotPolyLineVector);
 
-//    delete tempFluxFunction;
+    //    delete tempFluxFunction;
 
     for (int i = 0; i < hugoniotPolyLineVector.size(); i++) {
 
@@ -268,7 +271,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
             double * rightCoords = (double *) hugoniotPolyLineVector[i].vec[j + 1];
 
 
-//            cout << hugoniotPolyLineVector[i].vec[j] << " " << hugoniotPolyLineVector[i].vec[j + 1]<<endl;
+            //            cout << hugoniotPolyLineVector[i].vec[j] << " " << hugoniotPolyLineVector[i].vec[j + 1]<<endl;
 
 
             env->SetDoubleArrayRegion(eigenValRLeft, 0, dimension, leftCoords);
@@ -292,7 +295,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
             double rightLambda2 = hugoniotPolyLineVector[i].vec[j + 1].component(dimension + m + 2);
 
 
-                        cout <<leftLambda1<<" "<<leftLambda2<<" "<<rightLambda1<<" "<<rightLambda2<<endl;
+            cout << leftLambda1 << " " << leftLambda2 << " " << rightLambda1 << " " << rightLambda2 << endl;
 
             //            cout<<"Antes de criar hugoniot segment"<<endl;
             jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, leftLambda1, leftLambda2, rightLambda1, rightLambda2, pointType);

@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <math.h>
 
+
+
 /*    SIMPLE USE EXAMPLE:
 
 #include "Matrix.h"
@@ -32,7 +34,7 @@ int main(){
 }
 
      END OF EXAMPLE */
-
+using namespace std;
 template <typename T>
 class Matrix {
     private:
@@ -115,17 +117,22 @@ template <typename T> Matrix<T> Matrix<T>::operator=(const Matrix<T> &original){
 template <typename T> void Matrix<T>::resize(int newn, int newm){
     if (vec == 0) vec = new T[newn*newm];
     else {
+        cout << "n "<<newn<<endl;
+        cout << "m " << newm << endl;
+
         T *temp0 = new T[newn*newm];
         for (int i = 0; i < min(rows_, newn); i++){
             for (int j = 0; j < min(cols_, newm); j++){
                 temp0[i*newm + j] = vec[i*cols_ + j];
             }
-         }
+        }
+
+
 
         T *temp1 = vec;
         vec = temp0;
         temp0 = temp1;
-        delete [] temp0;
+        delete []temp0;
     }
 
     rows_ = newn;

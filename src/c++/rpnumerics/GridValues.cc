@@ -1,21 +1,22 @@
 #include "GridValues.h"
 
-GridValues::GridValues(const Boundary *b, 
-                       const RealVector &pmin, const RealVector &pmax,
-                       const std::vector<int> &number_of_cells){
+GridValues::GridValues(const Boundary *b,
+        const RealVector &pmin, const RealVector &pmax,
+        const std::vector<int> &number_of_cells) {
 
     set_grid(b, pmin, pmax, number_of_cells);
 }
 
 // Set the grid.
 //
-void GridValues::set_grid(const Boundary *b, 
-                          const RealVector &min, const RealVector &max,
-                          const std::vector<int> &number_of_cells){
 
-    grid_computed = 
-    functions_on_grid_computed = Jacobians_on_grid_computed = 
-    dd_computed = e_computed = false;
+void GridValues::set_grid(const Boundary *b,
+        const RealVector &min, const RealVector &max,
+        const std::vector<int> &number_of_cells) {
+
+    grid_computed =
+            functions_on_grid_computed = Jacobians_on_grid_computed =
+            dd_computed = e_computed = false;
 
     fill_values_on_grid(b, min, max, number_of_cells);
 
@@ -24,13 +25,14 @@ void GridValues::set_grid(const Boundary *b,
 
 // Fill the bare minimum of the grid values.
 //
-void GridValues::fill_values_on_grid(const Boundary *b, 
-                                     const RealVector &pmin, const RealVector &pmax,
-                                     const std::vector<int> &number_of_cells){
-    if (!grid_computed){
+
+void GridValues::fill_values_on_grid(const Boundary *b,
+        const RealVector &pmin, const RealVector &pmax,
+        const std::vector<int> &number_of_cells) {
+    if (!grid_computed) {
         int dim = pmin.size();
 
-printf("Inside GridValues::fill_values_on_grid\n");
+        printf("Inside GridValues::fill_values_on_grid\n");
 
         double delta[2];
         for (int i = 0; i < dim; i++) delta[i] = (fabs(pmax.component(i) - pmin.component(i))) / (double) (number_of_cells[i]);
@@ -60,11 +62,11 @@ printf("Inside GridValues::fill_values_on_grid\n");
             for (int j = 0; j < number_of_cells[1]; j++) {
 
                 cell_type(i, j) = CELL_IS_INVALID;
-                if (point_inside(i, j)){
-                    if (point_inside(i + 1, j)){
-                        if (point_inside(i, j + 1)){
+                if (point_inside(i, j)) {
+                    if (point_inside(i + 1, j)) {
+                        if (point_inside(i, j + 1)) {
                             if (point_inside(i + 1, j + 1)) cell_type(i, j) = CELL_IS_SQUARE;
-                            else                            cell_type(i, j) = CELL_IS_TRIANGLE;
+                            else cell_type(i, j) = CELL_IS_TRIANGLE;
                         }
                     }
                 }
@@ -75,20 +77,20 @@ printf("Inside GridValues::fill_values_on_grid\n");
 
         // Set to false the rest of the values on the grid.
         //
-        functions_on_grid_computed = Jacobians_on_grid_computed = 
-        dd_computed = e_computed = false; 
+        functions_on_grid_computed = Jacobians_on_grid_computed =
+                dd_computed = e_computed = false;
     }
 
     return;
 }
 
-void GridValues::fill_functions_on_grid(const FluxFunction *ff, const AccumulationFunction *aa){
-    if (!functions_on_grid_computed){
-//        fill_values_on_grid(GridValues &gv);
+void GridValues::fill_functions_on_grid(const FluxFunction *ff, const AccumulationFunction *aa) {
+    if (!functions_on_grid_computed) {
+        //        fill_values_on_grid(GridValues &gv);
 
         printf("Inside GridValues::fill_functions_on_grid\n");
 
-        int rows = grid.rows(), cols = grid.cols(); 
+        int rows = grid.rows(), cols = grid.cols();
         int n = rows*cols;
         if (n == 0) return;
 
@@ -115,33 +117,48 @@ void GridValues::fill_functions_on_grid(const FluxFunction *ff, const Accumulati
     return;
 }
 
-void GridValues::fill_Jacobians_on_grid(const FluxFunction *ff, const AccumulationFunction *aa){
-    
-    if (!Jacobians_on_grid_computed){
+void GridValues::fill_Jacobians_on_grid(const FluxFunction *ff, const AccumulationFunction *aa) {
+
+    if (!Jacobians_on_grid_computed) {
         fill_functions_on_grid(ff, aa);
 
-        int rows = grid.rows(), cols = grid.cols(); 
+        int rows = grid.rows(), cols = grid.cols();
         int n = rows*cols;
-        if (n == 0) return; 
+        if (n == 0) return;
 
         int dim = grid(0, 0).size();
 
+
+        cout <<"Antes"<<endl;
+
         JF_on_grid.resize(rows, cols);
+
+        cout <<"Meio"<<endl;
         JG_on_grid.resize(rows, cols);
 
-        for (int i = 0; i < n; i++){
-            
-            if (point_inside(i)){
-                
-                JF_on_grid(i).resize(dim, dim);
-                JG_on_grid(i).resize(dim, dim);//printf("GridValues::fill_Jacobians_on_grid. point inside, i = %d\n", i);
+        cout <<"Depois"<<endl;
 
-                if (functions_on_grid_computed){
+
+
+        for (int i = 0; i < n; i++) {
+
+            if (point_inside(i)) {
+//
+//                cout << "Valor de rows " << rows << endl;
+//                cout << "Valor de cols " << cols << endl;
+//                cout << "Valor de dim " << dim << endl;
+
+
+
+
+                JF_on_grid(i).resize(dim, dim);
+                JG_on_grid(i).resize(dim, dim); //printf("GridValues::fill_Jacobians_on_grid. point inside, i = %d\n", i);
+
+                if (functions_on_grid_computed) {
                     //printf("ff = %p\n", ff);
-                    ff->fill_with_jet(dim, grid(i).components(), 1, 0, JF_on_grid(i).data(), 0); 
+                    ff->fill_with_jet(dim, grid(i).components(), 1, 0, JF_on_grid(i).data(), 0);
                     aa->fill_with_jet(dim, grid(i).components(), 1, 0, JG_on_grid(i).data(), 0);
-                }
-                else {
+                } else {
                     F_on_grid(i).resize(dim);
                     G_on_grid(i).resize(dim);
 
@@ -157,13 +174,13 @@ void GridValues::fill_Jacobians_on_grid(const FluxFunction *ff, const Accumulati
     return;
 }
 
-void GridValues::fill_eigenpairs_on_grid(const FluxFunction *ff, const AccumulationFunction *aa){
-    if (!e_computed){
+void GridValues::fill_eigenpairs_on_grid(const FluxFunction *ff, const AccumulationFunction *aa) {
+    if (!e_computed) {
         fill_Jacobians_on_grid(ff, aa);
 
-        int rows = grid.rows(), cols = grid.cols(); 
+        int rows = grid.rows(), cols = grid.cols();
         int n = rows*cols;
-        if (n == 0) return; 
+        if (n == 0) return;
 
         int dim = grid(0, 0).size();
         double epsilon = 1e-10;
@@ -171,15 +188,15 @@ void GridValues::fill_eigenpairs_on_grid(const FluxFunction *ff, const Accumulat
         e.resize(rows, cols);
         eig_is_real.resize(rows, cols);
 
-        for (int i = 0; i < n; i++){
-            if (point_inside(i)){
+        for (int i = 0; i < n; i++) {
+            if (point_inside(i)) {
                 // Find the eigenpairs
                 std::vector<eigenpair> etemp;
                 Eigen::eig(dim, JF_on_grid(i).data(), JG_on_grid(i).data(), etemp);
 
                 //e(i).clear();
                 e(i).resize(etemp.size());
-            
+
                 for (int j = 0; j < etemp.size(); j++) e(i)[j] = etemp[j];
 
                 // Decide if the eigenvalues are real or complex
@@ -198,13 +215,13 @@ void GridValues::fill_eigenpairs_on_grid(const FluxFunction *ff, const Accumulat
     return;
 }
 
-void GridValues::fill_dirdrv_on_grid(const FluxFunction *ff, const AccumulationFunction *aa){
-    if (!dd_computed){
+void GridValues::fill_dirdrv_on_grid(const FluxFunction *ff, const AccumulationFunction *aa) {
+    if (!dd_computed) {
         fill_eigenpairs_on_grid(ff, aa);
 
-        int rows = grid.rows(), cols = grid.cols(); 
+        int rows = grid.rows(), cols = grid.cols();
         int n = rows*cols;
-        if (n == 0) return; 
+        if (n == 0) return;
 
         double epsilon = 1e-10;
 
@@ -212,9 +229,9 @@ void GridValues::fill_dirdrv_on_grid(const FluxFunction *ff, const AccumulationF
 
         dd.resize(rows, cols);
 
-        for (int i = 0; i < n; i++){
+        for (int i = 0; i < n; i++) {
             //printf("GridValues::fill_dirdrv_on_grid(). i = %d\n", i);
-            if (point_inside(i)){
+            if (point_inside(i)) {
                 //printf("    i = %d\n", i);
                 dd(i).resize(dim);
 
@@ -223,7 +240,7 @@ void GridValues::fill_dirdrv_on_grid(const FluxFunction *ff, const AccumulationF
                 aa->fill_with_jet(dim, grid(i).components(), 2, 0, 0, &M[0][0][0]);
                 ff->fill_with_jet(dim, grid(i).components(), 2, 0, 0, &H[0][0][0]); //printf("    i = %d, e(i).size() = %d\n", i, e(i).size());
 
-                for (int fam = 0; fam < e(i).size(); fam++){
+                for (int fam = 0; fam < e(i).size(); fam++) {
                     double norm = 0.0;
                     double dirdrv = 0.0;
 
@@ -237,8 +254,7 @@ void GridValues::fill_dirdrv_on_grid(const FluxFunction *ff, const AccumulationF
                     if (fabs(e(i)[fam].i) > epsilon) {
                         printf("Inside dirdrv(): Init step, eigenvalue %d is complex: % f %+f.\n", fam, e(i)[fam].r, e(i)[fam].i);
                         continue;
-                    } 
-                    else lambda = e(i)[fam].r;
+                    } else lambda = e(i)[fam].r;
 
                     double SubH[dim][dim];
                     double SubM[dim][dim];

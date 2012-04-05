@@ -77,7 +77,7 @@ Boundary * Stone::defaultBoundary() const {
 void Stone::setParams(vector<string> params) {
 
 
-    RealVector fluxParamVector(8);
+    RealVector fluxParamVector(7);
 
     //Flux params
     for (int i = 0; i < fluxParamVector.size(); i++) {
@@ -89,10 +89,12 @@ void Stone::setParams(vector<string> params) {
 
     }
 
-    fluxParams(StoneParams(fluxParamVector));
+//    fluxParams(StoneParams(fluxParamVector));
 
 
     StoneFluxFunction & stoneFlux = (StoneFluxFunction&) fluxFunction();
+
+    stoneFlux.fluxParams(StoneParams(fluxParamVector));
 
     RealVector permVector(13);
 
@@ -100,11 +102,11 @@ void Stone::setParams(vector<string> params) {
 
 
     //Perm params
-    for (int i = 8; i < params.size(); i++) {
+    for (int i = 7; i < params.size(); i++) {
 
         double paramValue = atof(params[i].c_str());
 
-        permVector.component(i-8) = paramValue;
+        permVector.component(i-7) = paramValue;
 
 
     }
