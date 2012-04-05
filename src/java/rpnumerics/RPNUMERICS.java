@@ -210,8 +210,6 @@ public class RPNUMERICS {
 
         for (Entry<String, Configuration> configurationEntry : configurationSet) {
 
-            System.out.print(configurationEntry.toString());
-
 
 
             if (configurationEntry.getValue().getType().equalsIgnoreCase(ConfigurationProfile.METHOD)) {
@@ -610,9 +608,6 @@ public class RPNUMERICS {
 
     }
 
-//    public static ContourConfiguration getContourConfiguration() {
-//        return (ContourConfiguration) configMap_.get("Contour");
-//    }
     private native void setFamilyIndex(int familyIndex);
 
     private native void setTimeDirection(int timeDirection);

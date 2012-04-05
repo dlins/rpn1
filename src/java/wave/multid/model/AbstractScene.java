@@ -9,11 +9,15 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import java.io.FileReader;
 import java.util.Iterator;
+import rpn.component.RpGeomFactory;
+import rpn.component.RpGeometry;
 import rpn.component.util.ClassifierAgent;
 import rpn.component.util.ControlClick;
 
 
 import rpn.component.util.VelocityAgent;
+import rpn.controller.RpCalcController;
+import rpn.usecase.ChangeFluxParamsAgent;
 
 import wave.multid.view.*;
 import wave.multid.*;
@@ -54,7 +58,7 @@ import wave.multid.map.Map;
     }
 
     public Iterator getGeomObjIterator() {
-        //System.out.println("geomList_.size() em AbstractScene : " +geomList_.size());       //*** Informa a quantidade de curvas
+//        System.out.println("geomList_.size() em AbstractScene : " +geomList_.size());       //*** Informa a quantidade de curvas
         return geomList_.iterator();
     }
 
@@ -168,7 +172,6 @@ import wave.multid.map.Map;
 
     public void remove(MultiGeometry geom) {
         geomList_.remove(geom);
-
         try {
             boundary_.resize(geom.getPathIterator());
         } catch (DimMismatchEx dex) {

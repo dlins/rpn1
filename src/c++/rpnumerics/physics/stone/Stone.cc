@@ -98,7 +98,7 @@ void Stone::setParams(vector<string> params) {
 
     RealVector permVector(13);
 
-    cout << "Param de fluxo em stone" << fluxParamVector << endl;
+
 
 
     //Perm params
@@ -115,7 +115,7 @@ void Stone::setParams(vector<string> params) {
     stoneFlux.setPermParams(permParams);
 
 
-    cout << "Param de permeabilidade em stone" <<  permVector << endl;
+
 
 }
 
