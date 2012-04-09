@@ -111,8 +111,6 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
 
     @Override
     public void remove(MultiGeometry geom) {
-        RpGeometry geometry = (RpGeometry)geom;
-        geometry.geomFactory().getUI().uninstall(geometry.geomFactory());
         super.remove(geom);
         notifyState();
 

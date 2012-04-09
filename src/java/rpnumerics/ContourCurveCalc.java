@@ -18,7 +18,7 @@ public abstract class ContourCurveCalc implements RpCalculation {
     }
 
     public RpSolution recalc() throws RpException {
-        
+        System.out.println("Chamando recalc inflexao");
         return calc();
     }
 

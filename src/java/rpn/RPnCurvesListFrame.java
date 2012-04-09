@@ -228,6 +228,8 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
                 index++;
             }
             for (MultiGeometry multiGeometry : toBeRemoved) {
+                RpGeometry geometry = (RpGeometry)multiGeometry;
+                geometry.geomFactory().getUI().uninstall(geometry.geomFactory());
                 phaseSpace_.remove(multiGeometry);
             }
         }
