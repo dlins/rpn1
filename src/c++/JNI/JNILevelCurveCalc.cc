@@ -61,10 +61,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_PointLevelCalc_calcNative(JNIEnv * env
 
     jobject segmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
 
-
-
-
-
     //Input processing
     jdoubleArray inputPhasePointArray = (jdoubleArray) (env)->CallObjectMethod(initialPoint, toDoubleMethodID);
 
@@ -83,8 +79,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_PointLevelCalc_calcNative(JNIEnv * env
 
     env->DeleteLocalRef(inputPhasePointArray);
 
-
-
     int dimension = RpNumerics::getPhysics().domain().dim();
 
     const Boundary * boundary = &RpNumerics::getPhysics().boundary();
@@ -99,8 +93,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_PointLevelCalc_calcNative(JNIEnv * env
 
     cout << "Parametros de permeablidade level curve " << ((StoneFluxFunction &) RpNumerics::getPhysics().fluxFunction()).perm().params().params() << endl;
 
-
-
+//    cout <<"Familia: "<<family<<endl;
+//
+//    cout << "Ponto: " << realVectorInput << endl;
+//
 
     Eigenvalue_Contour ec;
 
@@ -110,19 +106,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_PointLevelCalc_calcNative(JNIEnv * env
     vector < RealVector > eigen_contours;
     double vec_levels;
 
+    GridValues * gv = RpNumerics::getPhysics().getGrid(0);
 
-    GridValues & gv = RpNumerics::getPhysics().getGrid(0);
-
-    ec.curve(& RpNumerics::getPhysics().fluxFunction(), & RpNumerics::getPhysics().accumulation(),
-            gv, eigen_contours, vec_levels);
-
-
-
+    ec.curve(&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(),
+            *gv, eigen_contours, vec_levels);
 
     if (eigen_contours.size() == 0)
         return NULL;
-
-
 
     for (int i = 0; i < eigen_contours.size() / 2; i++) {
 
@@ -215,10 +205,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_LevelCurveCalc_calcNative(JNIEnv * env
 
     double vec_levels;
 
-    GridValues & gv = RpNumerics::getPhysics().getGrid(0);
+    GridValues * gv = RpNumerics::getPhysics().getGrid(0);
 
     ec.curve(& RpNumerics::getPhysics().fluxFunction(), & RpNumerics::getPhysics().accumulation(),
-            gv, eigen_contours, vec_levels);
+            *gv, eigen_contours, vec_levels);
 
     //    ec.curve(eigen_contours, vec_levels);
 

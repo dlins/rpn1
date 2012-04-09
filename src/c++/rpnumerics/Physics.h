@@ -68,7 +68,7 @@ public:
 
     SubPhysics & getSubPhysics(const int);
 
-    GridValues & getGrid(const int index) const;
+    GridValues  * getGrid(const int index) const;
 
     const vector<SubPhysics *> & getPhysicsVector()const;
 

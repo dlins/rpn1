@@ -19,12 +19,13 @@ void Physics::setParams(vector<string> paramVector) {
 //        cout << paramVector[i] << " Chamando setParams Physics" << endl;
 //    }
 
-    GridValues & grid = getGrid(0);
+    GridValues * grid = getGrid(0);
 
-    grid.e_computed=false;
-    grid.Jacobians_on_grid_computed=false;
-    grid.functions_on_grid_computed=false;
-    grid.dd_computed = false;
+
+    grid->functions_on_grid_computed=false;
+    grid->Jacobians_on_grid_computed=false;
+    grid->e_computed = false;
+    grid->dd_computed = false;
 
 
 
@@ -167,8 +168,8 @@ SubPhysics & Physics::getSubPhysics(const int index) {
 
 }
 
-GridValues & Physics::getGrid(const int index) const {
-    return *gridArray_->at(index);
+GridValues * Physics::getGrid(const int index) const {
+    return gridArray_->at(index);
 }
 
 const Space & Physics::domain() const {

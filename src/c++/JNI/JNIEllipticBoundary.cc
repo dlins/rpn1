@@ -61,12 +61,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_EllipticBoundaryCalc_nativeCalc
 
     env->GetIntArrayRegion(resolution, 0, dimension, number_of_grid_pnts);
 
-    GridValues & gv = RpNumerics::getPhysics().getGrid(0);
+    GridValues * gv = RpNumerics::getPhysics().getGrid(0);
 
     Elliptic_Boundary ellipticBoundary;
 
     ellipticBoundary.curve(&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(),
-            gv, left_vrs);
+            *gv, left_vrs);
 
 
     cout << "left_vrs.size()  = " << left_vrs.size() << endl;

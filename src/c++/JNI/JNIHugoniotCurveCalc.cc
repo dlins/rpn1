@@ -98,7 +98,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
     Hugoniot_Curve hugoniotCurve;
 
-    GridValues & gv = RpNumerics::getPhysics().getGrid(0);
+    GridValues * gv = RpNumerics::getPhysics().getGrid(0);
 
 
     cout << "Parametros de flux stone hugoniot " << RpNumerics::getPhysics().fluxFunction().fluxParams().params() << endl;
@@ -106,7 +106,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     cout << "Parametros de permeablidade stone hugoniot " << ((StoneFluxFunction &)RpNumerics::getPhysics().fluxFunction()).perm().params().params() << endl;
 
 
-    hugoniotCurve.classified_curve(&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(), gv, Uref, hugoniotPolyLineVector);
+    hugoniotCurve.classified_curve(&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(), *gv, Uref, hugoniotPolyLineVector);
 
 
 
@@ -250,9 +250,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
     Hugoniot_Curve hugoniotCurve;
 
-    GridValues & gv = RpNumerics::getPhysics().getGrid(0);
+    GridValues * gv = RpNumerics::getPhysics().getGrid(0);
 
-    hugoniotCurve.classified_curve(&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(), gv, Uref, hugoniotPolyLineVector);
+    hugoniotCurve.classified_curve(&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(), *gv, Uref, hugoniotPolyLineVector);
 
     //    delete tempFluxFunction;
 
