@@ -17,11 +17,11 @@ class ImplicitFunction {
         virtual bool improvable(void){return false;}
 
         virtual void map(const RealVector &p, double &f, RealVector &map_Jacobian) {
-            /*
-            f = 0.0;
-            map_Jacobian.component(0) = 0.0;
-            map_Jacobian.component(1) = 0.0;
-            */
+            /**
+             * f = 0.0;
+             * map_Jacobian.component(0) = 0.0;
+             * map_Jacobian.component(1) = 0.0;
+            **/
 
             printf("ATTENTION, it is using NULL ImplicitFunction::map()\n");
 

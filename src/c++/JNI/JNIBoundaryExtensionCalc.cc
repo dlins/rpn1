@@ -92,16 +92,16 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BoundaryExtensionCurveCalc_nativeCalc
 
     int singular = 0;
 
-    Boundary_ExtensionStone::extension_curve((FluxFunction *) & RpNumerics::getPhysics().fluxFunction(), (AccumulationFunction *) & RpNumerics::getPhysics().accumulation(),
-            edge, edgeResolution,
-            curveFamily,
-            pmin, pmax, number_of_domain_points, // For the domain.
-            domainFamily,
-            (FluxFunction *) & RpNumerics::getPhysics().fluxFunction(), (AccumulationFunction *) & RpNumerics::getPhysics().accumulation(),boundary,
-            characteristicWhere, singular,
-            curve_segments,
-            domain_segments);
-
+//    Boundary_ExtensionStone::extension_curve((FluxFunction *) & RpNumerics::getPhysics().fluxFunction(), (AccumulationFunction *) & RpNumerics::getPhysics().accumulation(),
+//            edge, edgeResolution,
+//            curveFamily,
+//            pmin, pmax, number_of_domain_points, // For the domain.
+//            domainFamily,
+//            (FluxFunction *) & RpNumerics::getPhysics().fluxFunction(), (AccumulationFunction *) & RpNumerics::getPhysics().accumulation(),boundary,
+//            characteristicWhere, singular,
+//            curve_segments,
+//            domain_segments);
+//
 
 
 

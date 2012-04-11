@@ -17,7 +17,7 @@ public class RarefactionExtensionCalc extends ContourCurveCalc {
     private PhasePoint start_;
     private int increase_;
     int curveFamily_;
-    int domainFamily_;
+    int domainFamily_;//TODO Retirar
     int characteristicDomain_;
 
     //
@@ -26,13 +26,13 @@ public class RarefactionExtensionCalc extends ContourCurveCalc {
    
     
 
-    public RarefactionExtensionCalc(ContourParams contourParams, PhasePoint startPoint, int increase, int leftFamily, int rightFamily, int characteristicDomain) {
+    public RarefactionExtensionCalc(ContourParams contourParams, PhasePoint startPoint, int increase, int leftFamily, int characteristicDomain) {
         super(contourParams);
         this.curveFamily_ = leftFamily;
-        this.domainFamily_ = rightFamily;
+
 
         System.out.println("Curve Family:"+curveFamily_);
-        System.out.println("Domain Family:" + domainFamily_);
+
 
 
         characteristicDomain_ = characteristicDomain;
@@ -56,7 +56,7 @@ public class RarefactionExtensionCalc extends ContourCurveCalc {
         RpSolution result = null;
 
 
-        result = (RarefactionExtensionCurve) nativeCalc(getParams().getResolution(), start_, increase_, curveFamily_, domainFamily_, characteristicDomain_);
+        result = (RarefactionExtensionCurve) nativeCalc(getParams().getResolution(), start_, increase_, curveFamily_, 0, characteristicDomain_);
         if (result == null) {
             throw new RpException("Error in native layer");
         }

@@ -6,12 +6,12 @@
 
         <PHYSICSCONFIG name="fluxfunction">
             <PHYSICSPARAM name="grw" position="0" value ="1.0" />
-            <PHYSICSPARAM name="grg" position="1" value ="1.0" />
-            <PHYSICSPARAM name="gro" position="2" value ="1.0" />
-            <PHYSICSPARAM name="muw" position="3" value ="1.0" />
-            <PHYSICSPARAM name="mug" position="4" value ="1.0" />
-            <PHYSICSPARAM name="muo" position="5" value ="1.0" />
-            <PHYSICSPARAM name="vel" position="6" value ="1.0" />
+            <PHYSICSPARAM name="grg" position="1" value ="0.7" />
+            <PHYSICSPARAM name="gro" position="2" value ="0.8" />
+            <PHYSICSPARAM name="muw" position="3" value ="0.515" />
+            <PHYSICSPARAM name="mug" position="4" value ="0.3" />
+            <PHYSICSPARAM name="muo" position="5" value ="0.8" />
+            <PHYSICSPARAM name="vel" position="6" value ="0.0" />
 
 
             <PHYSICSPARAM name="expw" position="7" value ="2.0" />
@@ -101,7 +101,6 @@
 
     <CURVE name="rarefactionextension">
         <CURVEPARAM name="curvefamily" value="0"/>
-        <CURVEPARAM name="domainfamily" value="1"/>
         <CURVEPARAM name="characteristic" value="1"/>
         <CURVEPARAM name="resolution" value="60 60"/>
     </CURVE>

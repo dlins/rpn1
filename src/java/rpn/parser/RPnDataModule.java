@@ -217,7 +217,7 @@ public class RPnDataModule {
                     ContourParams params = new ContourParams(processResolution(att.getValue("resolution")));
                     tempPoint_ = new PhasePoint(new RealVector(att.getValue("inputpoint")));
                     direction_ = chooseDirection(att.getValue("direction"));
-                    calc_ = new RarefactionExtensionCalc(params, tempPoint_, direction_, new Integer(att.getValue("curvefamily")), new Integer(att.getValue("domainfamily")), new Integer(att.getValue("characteristic")));
+                    calc_ = new RarefactionExtensionCalc(params, tempPoint_, direction_, new Integer(att.getValue("curvefamily")), new Integer(att.getValue("characteristic")));
 
                 }
                 if (currentCommand_.equalsIgnoreCase("integralcurve")) {

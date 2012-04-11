@@ -938,6 +938,7 @@ int Rarefaction::curve(const RealVector &initial_point,
 
         // Invoke LSODE.
         lsode_(&flux, &n, p, &xi, &new_xi, &itol, &rtol, atol, &itask, &istate, &iopt, rwork, &lrw, iwork, &liw, 0, &mf, &nparam, param);
+        printf("LSODE: info = %d\n", istate);
 
         // ***ELIPTIC REGION***
         // 2012/02/07.

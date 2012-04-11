@@ -58,6 +58,8 @@ class GridValues {
         bool                             e_computed;                 // Already computed?
 
 
+        RealVector grid_resolution;
+
         // Here the future programmers will add the values that will prove necessary later.
 
         // Constructor. Fills the spatial grid.

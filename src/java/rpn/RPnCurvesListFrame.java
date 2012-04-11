@@ -133,7 +133,7 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
 
 
         if (calc instanceof HugoniotCurveCalcND) {
-            HugoniotCurve curve = (HugoniotCurve)factory.geomSource();
+            HugoniotCurve curve = (HugoniotCurve) factory.geomSource();
             userInput = curve.getXZero().getCoords();
         }
 
@@ -228,7 +228,7 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
                 index++;
             }
             for (MultiGeometry multiGeometry : toBeRemoved) {
-                RpGeometry geometry = (RpGeometry)multiGeometry;
+                RpGeometry geometry = (RpGeometry) multiGeometry;
                 geometry.geomFactory().getUI().uninstall(geometry.geomFactory());
                 phaseSpace_.remove(multiGeometry);
             }

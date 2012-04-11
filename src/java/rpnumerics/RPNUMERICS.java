@@ -497,10 +497,10 @@ public class RPNUMERICS {
         int[] resolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("rarefactionextension", "resolution"));
 
         int curveFamily = new Integer(getParamValue("rarefactionextension", "curvefamily"));
-        int domainFamily = new Integer(getParamValue("rarefactionextension", "domainfamily"));
+
         int characteristicDomain = new Integer(getParamValue("rarefactionextension", "characteristic"));
 
-        return new RarefactionExtensionCalc(new ContourParams(resolution), orbitPoint, direction_, curveFamily, domainFamily, characteristicDomain);
+        return new RarefactionExtensionCalc(new ContourParams(resolution), orbitPoint, direction_, curveFamily, characteristicDomain);
 
     }
 
