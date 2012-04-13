@@ -74,8 +74,8 @@ public class GeometryGraphND {
     protected Line2D.Double linex, liney, lineObl;
     public static int mostraGrid = 0;
     public static int mapToEqui = 0;
-    
 
+    
     public void grava() {
         try {
             //FileWriter gravador = new FileWriter("/impa/home/g/moreira/ListaDePontos/ListaDePontos.txt");

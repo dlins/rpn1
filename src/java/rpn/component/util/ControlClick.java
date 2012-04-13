@@ -7,6 +7,10 @@
 package rpn.component.util;
 
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpacePanel;
 import rpn.controller.ui.AREASELECTION_CONFIG;
@@ -15,6 +19,7 @@ import rpn.parser.RPnDataModule;
 import rpn.usecase.DragPlotAgent;
 import rpnumerics.DoubleContactCurve;
 import rpnumerics.HugoniotCurve;
+import rpnumerics.HugoniotParams;
 import rpnumerics.HugoniotSegment;
 import rpnumerics.Orbit;
 import rpnumerics.OrbitPoint;
@@ -36,6 +41,10 @@ public class ControlClick {
 
     public static int ind = 0;
     public static int onCurve = 0;
+    public static List<RealVector> listaEquil = new ArrayList();  ////////
+    public static List<RealVector> listaVec = new ArrayList();  ////////
+    public static List listaLambda = new ArrayList();  ////////
+    public static double vel = 0;
 
     //*************************************
     public static void clearpMarca() {
@@ -88,6 +97,9 @@ public class ControlClick {
         VelocityAgent.indCurvaVel.clear();
         clearAllStrings();
         GeometryUtil.listResolution.clear();
+        listaEquil.clear();
+        listaLambda.clear();
+        listaVec.clear();
     }
     //***************************************
 
@@ -111,8 +123,100 @@ public class ControlClick {
 
     //---------------------------------------
 
+    private static void testRandAutoPar() {
+
+        double fator = 0.03;
+        
+        RealVector autovet1 = new RealVector(2);
+        double x = 2 * (Math.random() - 0.5);
+        double y = 2 * (Math.random() - 0.5);
+        autovet1.setElement(0, fator * x / Math.sqrt(x * x + y * y));
+        autovet1.setElement(1, fator * y / Math.sqrt(x * x + y * y));
+
+        listaVec.add(autovet1);
+
+        double lambda = 2 * (Math.random() - 0.5);
+        listaLambda.add(lambda);
+        
+    }
+
+//    private static void equilPoints() {
+//
+//        if (GeometryUtil.closestCurve_ instanceof HugoniotCurve) {
+//            HugoniotSegment segment = (HugoniotSegment) (((SegmentedCurve) GeometryUtil.closestCurve_).segments()).get(GeometryUtil.closestSeg);
+//            //VelocityAgent.vel.add(segment.leftSigma());
+//
+//            double lSigma = segment.leftSigma();
+//            double rSigma = segment.rightSigma();
+//            double lX = segment.leftPoint().getElement(0);
+//            double rX = segment.rightPoint().getElement(0);
+//            double X = GeometryGraphND.pMarca.getElement(0);
+//
+//            vel = (rSigma - lSigma) * (X - lX) / (rX - lX) + lSigma;
+//            System.out.println("Valor de vel : " +vel);
+//
+//            //----------------------------------------------------------
+//
+//            listaEquil.clear();
+//            listaVec.clear();
+//            listaLambda.clear();
+//
+//            //----------------------------------------------------------
+//            // inclui o Uref na lista de pontos de equilibrio
+//            RealVector pZero = ((HugoniotCurve) GeometryUtil.closestCurve_).getXZero();
+//            listaEquil.add(pZero);
+//            //*** em cada ponto de equilibro, há 2 autopares
+//            for (int j = 0; j < 2; j++) {
+//                testRandAutoPar();
+//            }
+//            //----------------------------------------------------------
+//
+//            int sz = (((SegmentedCurve) GeometryUtil.closestCurve_).segments().size());
+//            for (int i = 0; i < sz; i++) {
+//                HugoniotSegment segment_ = (HugoniotSegment) (((SegmentedCurve) GeometryUtil.closestCurve_).segments()).get(i);
+//
+//                if ((segment_.leftSigma() <= vel && segment_.rightSigma() >= vel)
+//                        || (segment_.leftSigma() >= vel && segment_.rightSigma() <= vel)) {
+//
+//                    //----------------------------------------------------------
+//                    double lSigma_ = segment_.leftSigma();
+//                    double rSigma_ = segment_.rightSigma();
+//                    double lX_ = segment_.leftPoint().getElement(0);
+//                    double rX_ = segment_.rightPoint().getElement(0);
+//                    double lY_ = segment_.leftPoint().getElement(1);
+//                    double rY_ = segment_.rightPoint().getElement(1);
+//
+//                    double X_ = (rX_ - lX_) * (vel - lSigma_) / (rSigma_ - lSigma_) + lX_;
+//                    double Y_ = (rY_ - lY_) * (vel - lSigma_) / (rSigma_ - lSigma_) + lY_;
+//                    RealVector p = new RealVector(2);
+//                    p.setElement(0, X_);
+//                    p.setElement(1, Y_);
+//
+//                    if (p != pZero) {
+//                        listaEquil.add(p);
+//                    }
+//
+//                    //*** em cada ponto de equilibro, há 2 autopares
+//                    for (int j = 0; j < 2; j++) {
+//                        testRandAutoPar();
+//                    }
+//                    //----------------------------------------------------------
+//
+//                }
+//            }
+//
+//            System.out.println("listaEquil.size() : " +listaEquil.size());
+//            System.out.println("listaLambda.size() : " +listaLambda.size());
+//            System.out.println("Lista de pontos de equilibrio : " +listaEquil.toString());
+//
+//            //----------------------------------------------------------
+//
+//        }
+//
+//    }
+
     public static void mousePressed(MouseEvent event) {
-    
+
         RPnPhaseSpacePanel panel_ = (RPnPhaseSpacePanel) event.getComponent();
         ViewingTransform transf = panel_.scene().getViewingTransform();
 
@@ -150,6 +254,22 @@ public class ControlClick {
             
             GeometryGraphND.zContido.clear();
             GeometryGraphND.wContido.clear();
+
+
+            //*** esboço para encontrar pontos de equilibrio
+//            if (UIController.instance().getState() instanceof VELOCITYAGENT_CONFIG) {
+//                equilPoints();
+//            }
+            //***
+
+
+            //*** esboço para encontrar pontos de equilibrio
+            if (UIController.instance().getState() instanceof VELOCITYAGENT_CONFIG) {
+                if (GeometryUtil.closestCurve_ instanceof HugoniotCurve)
+                   ((HugoniotCurve)(GeometryUtil.closestCurve_)).equilPoints();
+            }
+            //***
+
 
             ind += 1;
 
@@ -250,8 +370,11 @@ public class ControlClick {
                     VelocityAgent.vel.add(point.getLambda());
                 }
                 else if (GeometryUtil.closestCurve_ instanceof HugoniotCurve) {
-                    HugoniotSegment segment = (HugoniotSegment)(((SegmentedCurve)GeometryUtil.closestCurve_).segments()).get(GeometryUtil.closestSeg);
-                    VelocityAgent.vel.add(segment.leftSigma());
+                    //HugoniotSegment segment = (HugoniotSegment)(((SegmentedCurve)GeometryUtil.closestCurve_).segments()).get(GeometryUtil.closestSeg);
+                    //VelocityAgent.vel.add(segment.leftSigma());
+
+                    VelocityAgent.vel.add(vel);
+
                 }
 
                 VelocityAgent.xVel.add(GeometryGraphND.cornerStr.getElement(1));

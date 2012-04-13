@@ -25,6 +25,7 @@ import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableModel;
 import rpn.component.RpCalcBasedGeomFactory;
 import rpn.component.RpGeometry;
+import rpn.component.util.ControlClick;
 import rpn.controller.ui.UIController;
 import rpnumerics.HugoniotCurve;
 import rpnumerics.HugoniotCurveCalcND;
@@ -226,6 +227,10 @@ public class RPnCurvesListFrame extends JFrame implements ActionListener {
                     toBeRemoved.add(multiGeometry);
                     RPnPhaseSpaceAbstraction.ocultaStringsCla(index, phaseSpace_.getName());     //******* Leandro
                     RPnPhaseSpaceAbstraction.ocultaStringsVel(index, phaseSpace_.getName());     //******* Leandro
+                    
+                    ControlClick.listaEquil.clear();
+                    ControlClick.listaLambda.clear();
+                    ControlClick.listaVec.clear();
                 }
                 index++;
             }

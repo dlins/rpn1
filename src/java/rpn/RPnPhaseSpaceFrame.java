@@ -134,6 +134,15 @@ public class RPnPhaseSpaceFrame extends JFrame {
 
             }
 
+            //*** solucao provisoria para mostrar/nao mostrar vetores nos equilibrios --- Leandro
+            if (keyEvent.getKeyChar() == 's' || keyEvent.getKeyChar() == 'S') {
+                GeometryGraph.mostraSing = 1;
+            }
+            if (keyEvent.getKeyChar() == 'h' || keyEvent.getKeyChar() == 'H') {
+                GeometryGraph.mostraSing = 0;
+            }
+            //------------------------------------------------------------------
+
             //*** solucao provisoria para mostrar/nao mostrar o grid --- Leandro
             if (keyEvent.getKeyChar() == 'g' || keyEvent.getKeyChar() == 'G') {
                 GeometryGraphND.mostraGrid = 1;

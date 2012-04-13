@@ -11,6 +11,7 @@ import java.awt.Polygon;
 import java.awt.Shape;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 import org.apache.batik.ext.awt.geom.Polygon2D;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpacePanel;
@@ -29,6 +30,7 @@ import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
 import wave.multid.view.Scene;
 import wave.multid.view.ViewingTransform;
+import wave.util.Arrow;
 import wave.util.Boundary;
 import wave.util.IsoTriang2DBoundary;
 import wave.util.RealVector;
@@ -49,7 +51,9 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
 
     private final double TAN60 = Math.tan(Math.PI/3.);
 
+    public static int mostraSing = 0;
 
+    
     public Polygon defBordo(Scene scene_) {
 
         RealVector V1 = new RealVector(2);
@@ -85,6 +89,48 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
     }
 
 
+    public void drawSource(Graphics g ,double xVecP1, double yVecP1, double xVecP2, double yVecP2, Coords2D dcCoordsImgVecP1, Coords2D dcCoordsImgVecP2) {
+        //*** define uma ponta de cada vetor
+        RealVector direction1 = new RealVector(2);
+        direction1.setElement(0, -xVecP2 + xVecP1);
+        direction1.setElement(1, -yVecP2 + yVecP1);
+        Arrow arrow1 = new Arrow(new RealVector(dcCoordsImgVecP1.getCoords()), direction1, 5, 5);
+        arrow1.paintComponent(g);
+        Arrow arrow3 = new Arrow(new RealVector(dcCoordsImgVecP1.getCoords()), direction1, 10, 10);
+        arrow3.paintComponent(g);
+
+        //*** define outra ponta de cada vetor
+        RealVector direction2 = new RealVector(2);
+        direction2.setElement(0, xVecP2 - xVecP1);
+        direction2.setElement(1, yVecP2 - yVecP1);
+        Arrow arrow2 = new Arrow(new RealVector(dcCoordsImgVecP2.getCoords()), direction2, 5, 5);
+        arrow2.paintComponent(g);
+        Arrow arrow4 = new Arrow(new RealVector(dcCoordsImgVecP2.getCoords()), direction2, 10, 10);
+        arrow4.paintComponent(g);
+    }
+
+    public void drawSink(Graphics g ,double xVecP1, double yVecP1, double xVecP2, double yVecP2, Coords2D dcCoordsImgVecP1, Coords2D dcCoordsImgVecP2) {
+        //*** define uma ponta de cada vetor
+        RealVector direction1 = new RealVector(2);
+        direction1.setElement(0, xVecP2 - xVecP1);
+        direction1.setElement(1, yVecP2 - yVecP1);
+        Arrow arrow1 = new Arrow(new RealVector(dcCoordsImgVecP1.getCoords()), direction1, 5, 5);
+        arrow1.paintComponent(g);
+
+        //*** define outra ponta de cada vetor
+        RealVector direction2 = new RealVector(2);
+        direction2.setElement(0, -xVecP2 + xVecP1);
+        direction2.setElement(1, -yVecP2 + yVecP1);
+        Arrow arrow2 = new Arrow(new RealVector(dcCoordsImgVecP2.getCoords()), direction2, 5, 5);
+        arrow2.paintComponent(g);
+    }
+
+    public void drawSaddle(Graphics g ,double xVecP1, double yVecP1, double xVecP2, double yVecP2, Coords2D dcCoordsImgVecP1, Coords2D dcCoordsImgVecP2, int j) {
+        if (j==0) drawSource(g, xVecP1, yVecP1, xVecP2, yVecP2, dcCoordsImgVecP1, dcCoordsImgVecP2);
+        if (j==1) drawSink(g, xVecP1, yVecP1, xVecP2, yVecP2, dcCoordsImgVecP1, dcCoordsImgVecP2);        
+    }
+
+
     public void drawFirstPanel(Graphics g, Scene scene_, RPnPhaseSpacePanel panel) {
 
         if (mostraGrid != 0  &&  panel.getName().equals(GeometryUtil.namePhaseSpace)){
@@ -109,6 +155,65 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
         if (panel.getName().equals(GeometryUtil.namePhaseSpace)) {
             graph.draw(line3);
             graph.draw(line4);
+
+            //********* esboço de marcação de pontos de equilibrio
+            for (int i=0; i<ControlClick.listaEquil.size(); i++) {
+                RealVector p = ControlClick.listaEquil.get(i);
+
+                Coords2D dcCoordsEQ = toDeviceCoords(scene_, p);
+                double xEQ = dcCoordsEQ.getElement(0);
+                double yEQ = dcCoordsEQ.getElement(1);
+
+                Line2D lineEQ1 = new Line2D.Double(xEQ - 5, yEQ, xEQ + 5, yEQ);
+                Line2D lineEQ2 = new Line2D.Double(xEQ, yEQ - 5, xEQ, yEQ + 5);
+
+                graph.draw(lineEQ1);
+                graph.draw(lineEQ2);
+
+//                double lambda1 = (Double)ControlClick.listaLambda.get(i);
+//                double lambda2 = (Double)ControlClick.listaLambda.get(i+1);
+
+                //--------------------------------------------------------------
+//                for (int j = 0; j < 2; j++) {
+//                    RealVector vec = ControlClick.listaVec.get(i+j);
+//
+//                    RealVector imgVecP1 = new RealVector(2);
+//                    imgVecP1.setElement(0, p.getElement(0) + vec.getElement(0));
+//                    imgVecP1.setElement(1, p.getElement(1) + vec.getElement(1));
+//
+//                    Coords2D dcCoordsImgVecP1 = toDeviceCoords(scene_, imgVecP1);
+//                    double xVecP1 = dcCoordsImgVecP1.getElement(0);
+//                    double yVecP1 = dcCoordsImgVecP1.getElement(1);
+//
+//                    RealVector imgVecP2 = new RealVector(2);
+//                    imgVecP2.setElement(0, p.getElement(0) - vec.getElement(0));
+//                    imgVecP2.setElement(1, p.getElement(1) - vec.getElement(1));
+//
+//                    Coords2D dcCoordsImgVecP2 = toDeviceCoords(scene_, imgVecP2);
+//                    double xVecP2 = dcCoordsImgVecP2.getElement(0);
+//                    double yVecP2 = dcCoordsImgVecP2.getElement(1);
+//
+//                    Line2D lineVecP1P2 = new Line2D.Double(xVecP1, yVecP1, xVecP2, yVecP2);
+//
+//                    if (mostraSing == 1) {
+//                        graph.draw(lineVecP1P2);
+//
+//                        if (lambda1 > 0 && lambda2 > 0) {
+//                            drawSource(g, xVecP1, yVecP1, xVecP2, yVecP2, dcCoordsImgVecP1, dcCoordsImgVecP2);
+//                        } else if (lambda1 < 0 && lambda2 < 0) {
+//                            drawSink(g, xVecP1, yVecP1, xVecP2, yVecP2, dcCoordsImgVecP1, dcCoordsImgVecP2);
+//                        } else if (lambda1 * lambda2 < 0) {
+//                            drawSaddle(g, xVecP1, yVecP1, xVecP2, yVecP2, dcCoordsImgVecP1, dcCoordsImgVecP2, j);
+//                        }
+//                    }
+//
+//
+//                }
+
+                //--------------------------------------------------------------
+
+            }
+            //*********
         }
 
         
