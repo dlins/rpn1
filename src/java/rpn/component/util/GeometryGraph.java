@@ -147,11 +147,7 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
         }
 
         g.setColor(cor34);
-        //graph.draw(line3);
-        //graph.draw(line4);
-        //graph.draw(line3DC);
-        //graph.draw(line4DC);
-
+        
         if (panel.getName().equals(GeometryUtil.namePhaseSpace)) {
             graph.draw(line3);
             graph.draw(line4);
@@ -169,48 +165,6 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
 
                 graph.draw(lineEQ1);
                 graph.draw(lineEQ2);
-
-//                double lambda1 = (Double)ControlClick.listaLambda.get(i);
-//                double lambda2 = (Double)ControlClick.listaLambda.get(i+1);
-
-                //--------------------------------------------------------------
-//                for (int j = 0; j < 2; j++) {
-//                    RealVector vec = ControlClick.listaVec.get(i+j);
-//
-//                    RealVector imgVecP1 = new RealVector(2);
-//                    imgVecP1.setElement(0, p.getElement(0) + vec.getElement(0));
-//                    imgVecP1.setElement(1, p.getElement(1) + vec.getElement(1));
-//
-//                    Coords2D dcCoordsImgVecP1 = toDeviceCoords(scene_, imgVecP1);
-//                    double xVecP1 = dcCoordsImgVecP1.getElement(0);
-//                    double yVecP1 = dcCoordsImgVecP1.getElement(1);
-//
-//                    RealVector imgVecP2 = new RealVector(2);
-//                    imgVecP2.setElement(0, p.getElement(0) - vec.getElement(0));
-//                    imgVecP2.setElement(1, p.getElement(1) - vec.getElement(1));
-//
-//                    Coords2D dcCoordsImgVecP2 = toDeviceCoords(scene_, imgVecP2);
-//                    double xVecP2 = dcCoordsImgVecP2.getElement(0);
-//                    double yVecP2 = dcCoordsImgVecP2.getElement(1);
-//
-//                    Line2D lineVecP1P2 = new Line2D.Double(xVecP1, yVecP1, xVecP2, yVecP2);
-//
-//                    if (mostraSing == 1) {
-//                        graph.draw(lineVecP1P2);
-//
-//                        if (lambda1 > 0 && lambda2 > 0) {
-//                            drawSource(g, xVecP1, yVecP1, xVecP2, yVecP2, dcCoordsImgVecP1, dcCoordsImgVecP2);
-//                        } else if (lambda1 < 0 && lambda2 < 0) {
-//                            drawSink(g, xVecP1, yVecP1, xVecP2, yVecP2, dcCoordsImgVecP1, dcCoordsImgVecP2);
-//                        } else if (lambda1 * lambda2 < 0) {
-//                            drawSaddle(g, xVecP1, yVecP1, xVecP2, yVecP2, dcCoordsImgVecP1, dcCoordsImgVecP2, j);
-//                        }
-//                    }
-//
-//
-//                }
-
-                //--------------------------------------------------------------
 
             }
             //*********
