@@ -147,6 +147,9 @@ public class UIController extends ComponentUI {
     //
     class MouseMotionController extends MouseMotionAdapter {
 
+
+       
+
         @Override
         public void mouseDragged(MouseEvent event) {
             RPnUIFrame.clearStatusMessage();
@@ -187,6 +190,9 @@ public class UIController extends ComponentUI {
 
         public MouseController() {
         }
+
+
+       
 
         @Override
         public void mousePressed(MouseEvent event) {

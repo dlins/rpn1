@@ -25,6 +25,7 @@
 
 
 
+#define RPNSTATEINFO                          "rpnumerics/RPnStateInfo"
 #define STATIONARYPOINT_LOCATION              "rpnumerics/StationaryPoint"
 #define PHASEPOINT_LOCATION                   "rpnumerics/PhasePoint"
 #define ORBITPOINT_LOCATION                   "rpnumerics/OrbitPoint"
@@ -34,6 +35,9 @@
 #define INTEGRALCURVE_LOCATION                "rpnumerics/IntegralCurve"
 #define LEVELCURVE_LOCATION                   "rpnumerics/LevelCurve"
 #define ELLIPTICBOUNDARY_LOCATION             "rpnumerics/EllipticBoundary"
+#define ELLIPTICEXTENSIONBOUNDARY_LOCATION    "rpnumerics/EllipticBoundaryExtension"
+#define ENVELOPECURVE_LOCATION                "rpnumerics/EnvelopeCurve"
+
 
 
 #define SHOCKFLOW_LOCATION                     "rpnumerics/ShockFlow"

@@ -11,20 +11,12 @@
  * Includes:
  */
 #include "rpnumerics_RarefactionOrbitCalc.h"
-#include "RarefactionContinuationMethod.h"
-#include "LSODESolver.h"
-#include "LSODEProfile.h"
 
-#include "ContinuationRarefactionFlow.h"
-
-#include "PluginService.h"
-#include "RPnPluginManager.h"
-#include "RarefactionFlowPlugin.h"
 #include "RpNumerics.h"
 #include "RealVector.h"
 #include "JNIDefs.h"
 #include <vector>
-#include <time.h>
+
 #include "TPCW.h"
 #include "Rarefaction.h"
 

@@ -112,7 +112,7 @@ public class RPNUMERICS {
             }
 
 
-            if (boundaryConfiguration.getName().equals("triang")) {
+            if (boundaryConfiguration.getName().equals("Three_Phase_Boundary")) {
                 setBoundary(new IsoTriang2DBoundary(boundaryConfiguration.getParam("limits")));
             }
 
@@ -131,7 +131,7 @@ public class RPNUMERICS {
             }
 
             if (boundary instanceof IsoTriang2DBoundary) {
-                defaultBoundaryProfile = new ConfigurationProfile("triang", ConfigurationProfile.BOUNDARY);
+                defaultBoundaryProfile = new ConfigurationProfile("Three_Phase_Boundary", ConfigurationProfile.BOUNDARY);
 
             }
 
@@ -296,6 +296,16 @@ public class RPNUMERICS {
 
     }
 
+    public static EnvelopeCurveCalc createEnvelopeCurveCalc() {
+
+        int[] resolution = RPnDataModule.processResolution(getParamValue("levelcurve", "resolution"));
+        int whereIsConstant = new Integer (getParamValue("envelopecurve", "whereisconstant"));
+        int numberOfSteps = new Integer(getParamValue("envelopecurve", "numberofsteps"));
+
+        return new EnvelopeCurveCalc(new ContourParams(resolution),whereIsConstant,numberOfSteps);
+
+    }
+
     public static LevelCurveCalc createLevelCurveCalc(double level) {
 
         int[] resolution = RPnDataModule.processResolution(getParamValue("levelcurve", "resolution"));
@@ -318,6 +328,21 @@ public class RPNUMERICS {
         int[] resolution = RPnDataModule.processResolution(getParamValue("ellipticboundary", "resolution"));
 
         return new EllipticBoundaryCalc(new ContourParams(resolution));
+
+
+
+    }
+
+    public static EllipticBoundaryExtensionCalc createEllipticExtensionCalc() {
+
+
+        int[] resolution = RPnDataModule.processResolution(getParamValue("ellipticextension", "resolution"));
+
+        int family = new Integer(getParamValue("ellipticextension", "family"));
+
+        int characteristicWhere = new Integer(getParamValue("ellipticextension", "characteristicwhere"));
+
+        return new EllipticBoundaryExtensionCalc(new ContourParams(resolution), characteristicWhere, family);
 
 
 
@@ -420,12 +445,11 @@ public class RPNUMERICS {
 
         ContourParams params = new ContourParams(resolution);
 
-        int characteristicWhere = new Integer(getParamValue("boundaryextensioncurve", "characteristicwhere"));
         int edge = new Integer(getParamValue("boundaryextensioncurve", "edge"));
 
         int edgeResolution = new Integer(getParamValue("boundaryextensioncurve", "edgeresolution"));
 
-        return new BoundaryExtensionCurveCalc(params, edgeResolution, new Integer(getParamValue("boundaryextensioncurve", "curvefamily")), new Integer(getParamValue("boundaryextensioncurve", "domainfamily")), edge, characteristicWhere);
+        return new BoundaryExtensionCurveCalc(params, edgeResolution, new Integer(getParamValue("boundaryextensioncurve", "domainfamily")),edge);
 
 
     }

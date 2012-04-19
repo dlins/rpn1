@@ -20,21 +20,17 @@
 
 Boundary * Stone::defaultBoundary() const {
 
-    RealVector A(2);
 
-    A.component(0) = 0;
-    A.component(1) = 0;
-
-    RealVector B(2);
-
-    B.component(0) = 0;
-    B.component(1) = 1;
-
-    RealVector C(2);
-
-    C.component(0) = 1;
-    C.component(1) = 0;
-    //
+    return new Three_Phase_Boundary();
+//    RealVector pmin(2);
+//
+//    pmin.component(0) = 0;
+//    pmin.component(1) = 0;
+//
+//    RealVector pmax(2);
+//
+//    pmax.component(0) = 1.0;
+//    pmax.component(1) = 1.0;
 
     //Saturacoes negativas
 
@@ -69,7 +65,7 @@ Boundary * Stone::defaultBoundary() const {
 
 
 
-    return new IsoTriang2DBoundary(A, B, C);
+ 
 
 
 }
@@ -96,7 +92,7 @@ void Stone::setParams(vector<string> params) {
 
     stoneFlux.fluxParams(StoneParams(fluxParamVector));
 
-    RealVector permVector(13);
+    RealVector permVector(20);
 
 
 
@@ -115,19 +111,22 @@ void Stone::setParams(vector<string> params) {
     stoneFlux.setPermParams(permParams);
 
 
+    cout << "Params em set params Stone: "<<permParams.params() << endl;
+
+
 
 
 }
 
 Stone::Stone() : SubPhysics(StoneFluxFunction(StoneParams(), StonePermParams()), StoneAccumulation(), *defaultBoundary(), Multid::PLANE, "Stone", _SIMPLE_ACCUMULATION_) {
 
-
-    RealVector refVec(2);
-
-    StoneHugoniotFunctionClass * stoneHugoniotFunction = new StoneHugoniotFunctionClass(refVec, (StoneFluxFunction(StoneParams(), StonePermParams())));
-
-
-    setHugoniotFunction(stoneHugoniotFunction);
+//
+//    RealVector refVec(2);
+//
+//    StoneHugoniotFunctionClass * stoneHugoniotFunction = new StoneHugoniotFunctionClass(refVec, (StoneFluxFunction(StoneParams(), StonePermParams())));
+//
+//
+//    setHugoniotFunction(stoneHugoniotFunction);
 
 }
 

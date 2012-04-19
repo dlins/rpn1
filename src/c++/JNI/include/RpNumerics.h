@@ -10,16 +10,8 @@
 #define	_RpNumerics_H
 
 #include "Physics.h"
-#include "FluxFunction.h"
 
-#include "RarefactionFlow.h"
-#include "ShockFlow.h"
 
-#include "RarefactionMethod.h"
-
-#include "ODESolver.h"
-
-#include "Stone.h"
 
 class RpNumerics {
     
@@ -28,8 +20,6 @@ private:
     
     static  Physics * physics_;
     
-    static const ShockFlow * shockFlow_;
-        
     static double sigma;
     
     

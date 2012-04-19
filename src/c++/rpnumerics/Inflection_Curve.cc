@@ -3,6 +3,10 @@
 
 int Inflection_Curve::function_on_square(double *foncub, int i, int j) {
     int is_square = gv->cell_type(i, j);
+
+    cout << "F on grid inflection 0: " << gv->F_on_grid(i, j).component(0) << endl;
+    cout << "F on grid inflection 1: " << gv->F_on_grid(i, j).component(1) << endl;
+
     
     double rvorig[2], rvside[2], rvtop[2], rvopps[2];
     double forig, fside, ftop, fopps;

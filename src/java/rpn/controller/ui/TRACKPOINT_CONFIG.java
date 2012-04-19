@@ -5,10 +5,10 @@
  */
 package rpn.controller.ui;
 
-import rpn.RPnPhaseSpacePanel;
-import rpn.controller.PhaseSpacePanel2DController;
 import rpn.usecase.TrackPointAgent;
-import wave.multid.Coords2D;
+import rpnumerics.RPnStateInfo;
+import rpnumerics.StateInformation;
+import wave.multid.CoordsArray;
 import wave.util.RealVector;
 
 public class TRACKPOINT_CONFIG extends UI_ACTION_SELECTED {
@@ -17,12 +17,20 @@ public class TRACKPOINT_CONFIG extends UI_ACTION_SELECTED {
 
         super(TrackPointAgent.instance());
 
-        System.out.println("Construtor de TRACK_CONFIG");
-        PhaseSpacePanel2DController.track = true;
+      
 
     }
 
-    public void trackPoint(RPnPhaseSpacePanel panel, Coords2D dcCoords) {
+    public void trackPoint(CoordsArray wcCoords) {
+
+
+        System.out.println(wcCoords);
+
+
+
+        System.out.println("Chamando trackPoint");
+        StateInformation stateInformation = new StateInformation();
+        RPnStateInfo stateInfo = stateInformation.getStateInformation(UIController.instance().globalInputTable().values());
 
 //        Iterator geometryIterator = panel.scene().geometries();
 //

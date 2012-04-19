@@ -5,8 +5,6 @@
  */
 package rpnumerics;
 
-import wave.util.RealVector;
-
 public class EllipticBoundaryCalc extends ContourCurveCalc {
 
     //

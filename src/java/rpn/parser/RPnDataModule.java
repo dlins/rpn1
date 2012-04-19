@@ -300,15 +300,11 @@ public class RPnDataModule {
                 if (currentCommand_.equalsIgnoreCase("boundaryextensioncurve")) {
 
                     ContourParams params = new ContourParams(processResolution(att.getValue("resolution")));
-
-                    int curveFamily = new Integer(att.getValue("curvefamily"));
                     int domainFamily = new Integer(att.getValue("domainfamily"));
-                    int characteristic = new Integer(att.getValue("characteristic"));
                     int edge = new Integer(att.getValue("edge"));
                     int edgeResolution = new Integer(att.getValue("edgeresolution"));
 
-                    calc_ = new BoundaryExtensionCurveCalc(params, edgeResolution, curveFamily,
-                            domainFamily, edge, characteristic);
+                    calc_ = new BoundaryExtensionCurveCalc(params, edgeResolution, domainFamily, edge);
 
 
 

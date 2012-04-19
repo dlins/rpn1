@@ -18,8 +18,6 @@
 #include "Quad2.h"
 #include "Quad3.h"
 #include "Quad4.h"
-#include "TriPhase.h"
-#include "Corey.h"
 #include "Stone.h"
 #include "TPCW.h"
 #include "PolydispersePhysics.h"

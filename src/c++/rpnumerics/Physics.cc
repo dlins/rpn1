@@ -54,13 +54,13 @@ Physics::Physics(const string & physicsID) : physicsVector_(new vector<SubPhysic
         physicsVector_->push_back(new Quad4(Quad4FluxParams()));
     }
 
-    if (physicsID.compare("TriPhase") == 0) {
-        physicsVector_->push_back(new TriPhase(TriPhaseParams(), PermParams(), CapilParams(0.4, 3.0, 44.0, 8.0), ViscosityParams(0.5)));
-    }
-
-    if (physicsID.compare("Corey") == 0) {
-        physicsVector_->push_back(new Corey(CoreyParams(), PermParams(), CapilParams(0.4, 3.0, 44.0, 8.0), ViscosityParams(0.5)));
-    }
+//    if (physicsID.compare("TriPhase") == 0) {
+//        physicsVector_->push_back(new TriPhase(TriPhaseParams(), PermParams(), CapilParams(0.4, 3.0, 44.0, 8.0), ViscosityParams(0.5)));
+//    }
+//
+//    if (physicsID.compare("Corey") == 0) {
+//        physicsVector_->push_back(new Corey(CoreyParams(), PermParams(), CapilParams(0.4, 3.0, 44.0, 8.0), ViscosityParams(0.5)));
+//    }
 
     if (physicsID.compare("Stone") == 0) {
         physicsVector_->push_back(new Stone());
@@ -117,8 +117,8 @@ Physics::Physics(const string & physicsID) : physicsVector_(new vector<SubPhysic
     const Boundary * b = &boundary();
 
     std::vector<int> noc(2);
-    noc[0] = 124;
-    noc[1] = 124;
+    noc[0] = 100;
+    noc[1] = 100;
 
 
     gridArray_->push_back(new GridValues(b, b->minimums(), b->maximums(), noc));

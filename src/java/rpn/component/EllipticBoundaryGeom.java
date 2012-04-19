@@ -8,7 +8,7 @@ package rpn.component;
 import wave.multid.view.*;
 import wave.multid.*;
 
-public class EllipticBoundaryGeom extends SegmentedCurveGeom {//implements MultiGeometry, RpGeometry {
+public class EllipticBoundaryGeom extends SegmentedCurveGeom {
    
 
     //

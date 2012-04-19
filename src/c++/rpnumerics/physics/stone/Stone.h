@@ -27,6 +27,8 @@
  */
 
 
+//TODO  Fisicas Corey e Triphase removidas . Pablo irá reprograma-las , se necessario
+
 
 class Stone:public SubPhysics {
 

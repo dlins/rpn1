@@ -31,7 +31,7 @@ int EllipticExtension::curve(const FluxFunction *f, const AccumulationFunction *
 
     Extension_Curve extensionCurve;
 
-
+    cout <<"Familia na extensao: "<<family<<endl;
 
     extensionCurve.curve(f, a,
             g, where_is_characteristic,

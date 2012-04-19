@@ -2,13 +2,12 @@
 
 int Extension_Curve::function_on_vertices(double *foncub, int domain_i, int domain_j, int kl) {
     if (gv == 0 || oc == 0) return INVALID_FUNCTION_ON_VERTICES;
-
+      
     if (!gv->eig_is_real(domain_i, domain_j)[family]) return INVALID_FUNCTION_ON_VERTICES;
 
     double lambda;
     if (characteristic_where == CHARACTERISTIC_ON_CURVE) {
         lambda = segment_lambda[kl];
-//        cout <<"Valor de lambda: "<<lambda<<endl;
     } else {
         lambda = gv->e(domain_i, domain_j)[family].r;
     }
@@ -25,7 +24,7 @@ int Extension_Curve::function_on_vertices(double *foncub, int domain_i, int doma
 bool Extension_Curve::valid_segment(int i){
     if (oc == 0) return false;
 
-    double epsilon = 1e-10;
+    double epsilon = 1e-1;
     
     double F[2], G[2], JF[2][2], JG[2][2];
 
@@ -38,16 +37,18 @@ bool Extension_Curve::valid_segment(int i){
         e.clear();
         Eigen::eig(2, &JF[0][0], &JG[0][0], e);  
         
-        if (characteristic_where == CHARACTERISTIC_ON_DOMAIN){
+        if (characteristic_where == CHARACTERISTIC_ON_CURVE){
             if (fabs(e[family].i) > epsilon) return false;
-        }
-        else {
             segment_lambda.component(j) = e[family].r;
+        }
+//        else {
+//
+//        }
             for (int k = 0; k < 2; k++){
                 segment_flux(k, j)  = F[k];
                 segment_accum(k, j) = G[k];
             }
-        }
+        
     }
     
     return true;
@@ -64,6 +65,8 @@ void Extension_Curve::curve(const FluxFunction *f, const AccumulationFunction *a
     aa = a;
     
     family = fam;
+
+
     characteristic_where = where_is_characteristic;
     singular = is_singular;
 
@@ -75,7 +78,18 @@ void Extension_Curve::curve(const FluxFunction *f, const AccumulationFunction *a
     extension_on_curve.clear(); 
     extension_on_domain.clear(); 
 
-    Contour2p5_Method::contour2p5(this, extension_on_curve, extension_on_domain);        
+    Contour2p5_Method::contour2p5(this, extension_on_curve, extension_on_domain);
+
+
+    for (int i = 0; i < extension_on_curve.size(); i++) {
+        cout <<"Segmento on curve: "<<extension_on_curve.at(i)<<endl;
+    }
+
+
+    for (int i = 0; i < extension_on_domain.size(); i++) {
+        cout << "Segmento on domain: " << extension_on_domain.at(i) << endl;
+    }
+
            
     return;
 }

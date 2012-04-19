@@ -9,9 +9,9 @@ import rpnumerics.*;
 import rpnumerics.EllipticBoundary;
 import wave.util.RealSegment;
 
-public class EllipticBoundaryExtensionFactory extends RpCalcBasedGeomFactory {
+public class EllipticBoundaryExtensionFactory extends BifurcationCurveGeomFactory {
 
-    public EllipticBoundaryExtensionFactory(EllipticBoundaryCalc calc) {
+    public EllipticBoundaryExtensionFactory(EllipticBoundaryExtensionCalc calc) {
         super(calc);
 
 
@@ -44,7 +44,7 @@ public class EllipticBoundaryExtensionFactory extends RpCalcBasedGeomFactory {
 
         StringBuilder buffer = new StringBuilder();
 
-        EllipticBoundaryCalc calc = (EllipticBoundaryCalc) rpCalc();
+        EllipticBoundaryExtensionCalc calc = (EllipticBoundaryExtensionCalc) rpCalc();
 
         String commandName = geomSource().getClass().getName();
         commandName = commandName.toLowerCase();

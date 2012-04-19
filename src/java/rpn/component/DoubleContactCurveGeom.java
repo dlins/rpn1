@@ -5,7 +5,6 @@
  */
 package rpn.component;
 
-import java.awt.Color;
 import wave.multid.view.*;
 import wave.multid.*;
 

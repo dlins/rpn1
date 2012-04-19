@@ -79,7 +79,7 @@ public class EllipticBoundaryExtensionView
 
 
         viewList_.clear();
-        Iterator geomListIterator = ((EllipticBoundaryGeom) abstractGeom_).getRealSegIterator();
+        Iterator geomListIterator = ((EllipticBoundaryExtensionGeom) abstractGeom_).getBifurcationSegmentsIterator();
         while (geomListIterator.hasNext()) {
            RealSegGeom geomObj = (RealSegGeom) geomListIterator.next();
             try {

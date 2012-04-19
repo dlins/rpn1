@@ -20,7 +20,7 @@ public class EllipticBoundaryExtensionAgent extends RpModelPlotAgent {
     // Constants
     //
 
-    static public final String DESC_TEXT = "Elliptic Boundary";
+    static public final String DESC_TEXT = "Elliptic Extension Boundary";
     //
     // Members
     //
@@ -43,7 +43,7 @@ public class EllipticBoundaryExtensionAgent extends RpModelPlotAgent {
 
     public RpGeometry createRpGeometry(RealVector[] input) {
 
-        EllipticBoundaryExtensionFactory factory = new EllipticBoundaryExtensionFactory(RPNUMERICS.createEllipticBoundaryCalc());
+        EllipticBoundaryExtensionFactory factory = new EllipticBoundaryExtensionFactory(RPNUMERICS.createEllipticExtensionCalc());
         return factory.geom();
 
     }
@@ -52,7 +52,7 @@ public class EllipticBoundaryExtensionAgent extends RpModelPlotAgent {
     public void execute() {
 
 
-        EllipticBoundaryFactory factory = new EllipticBoundaryFactory(RPNUMERICS.createEllipticBoundaryCalc());
+        EllipticBoundaryExtensionFactory factory = new EllipticBoundaryExtensionFactory(RPNUMERICS.createEllipticExtensionCalc());
 
         RPnDataModule.PHASESPACE.plot(factory.geom());
 

@@ -3,11 +3,11 @@ package rpnumerics;
 import wave.util.RealSegment;
 import java.util.List;
 
-public class EllipticBoundaryExtension extends SegmentedCurve {
+public class EllipticBoundaryExtension extends BifurcationCurve {
   
 
-    public EllipticBoundaryExtension(List<RealSegment> hSegments) {
-        super(hSegments);
+    public EllipticBoundaryExtension(List<RealSegment> curveSegments,List<RealSegment> domainSegments) {
+        super(curveSegments,domainSegments);
 
     }
 
