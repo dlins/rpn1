@@ -26,7 +26,6 @@
 
 
 
-
             <PHYSICSPARAM name="cnw" position="15" value ="0.0" />
             <PHYSICSPARAM name="cng" position="16" value ="0.0" />
             <PHYSICSPARAM name="cno" position="17" value ="0.0" />
@@ -43,12 +42,7 @@
             <PHYSICSPARAM name="negOS" position="26" value ="0.0" />
 
 
-
         </PHYSICSCONFIG>
-
-
-
-
 
     </PHYSICS>
 
@@ -118,10 +112,11 @@
 
     <CURVE name="boundaryextensioncurve">
 
-        <CURVEPARAM name="domainfamily" value="1"/>
+        <CURVEPARAM name="family" value="1"/>
         <CURVEPARAM name="edge" value="0"/>
         <CURVEPARAM name="edgeresolution" value="128"/>
         <CURVEPARAM name="resolution" value="128 128"/>
+          <CURVEPARAM name="characteristicwhere" value="1"/>
 
 
     </CURVE>

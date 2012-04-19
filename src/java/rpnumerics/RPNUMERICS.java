@@ -449,7 +449,9 @@ public class RPNUMERICS {
 
         int edgeResolution = new Integer(getParamValue("boundaryextensioncurve", "edgeresolution"));
 
-        return new BoundaryExtensionCurveCalc(params, edgeResolution, new Integer(getParamValue("boundaryextensioncurve", "domainfamily")),edge);
+        int characteristic = new Integer(getParamValue("boundaryextensioncurve","characteristicwhere"));
+        
+        return new BoundaryExtensionCurveCalc(params, edgeResolution, new Integer(getParamValue("boundaryextensioncurve", "family")),edge,characteristic);
 
 
     }

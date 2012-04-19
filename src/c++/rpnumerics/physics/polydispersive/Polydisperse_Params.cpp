@@ -23,6 +23,9 @@ Polydisperse_Params::Polydisperse_Params(const double phimax,
     component(6, n2);
 }
 
+Polydisperse_Params::Polydisperse_Params(const RealVector& newParamsVector):FluxParams(newParamsVector){
+
+}
 Polydisperse_Params::Polydisperse_Params() : FluxParams(RealVector(7)){
 // The initial data is for the MLB model
 //    component(0, 1.0);	// Maximum packing concentration

@@ -505,17 +505,15 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_boundary(JNIEnv * env, jcla
     const Boundary & boundary = RpNumerics::getPhysics().boundary();
     const char * boundaryType = boundary.boundaryType();
 
-    cout<<"tipo do boundary"<<boundaryType<<endl;
-
     if (!strcmp(boundaryType, "rect")) {
-
-
 
         jclass boundaryClass = env->FindClass("wave/util/RectBoundary");
         jmethodID boundaryConstructor = (env)->GetMethodID(boundaryClass, "<init>", "(Lwave/util/RealVector;Lwave/util/RealVector;)V");
 
         const RectBoundary & rectBoundary = (RectBoundary &) boundary;
         int boundaryDimension = rectBoundary.minimums().size();
+
+        cout <<"Min: "<<rectBoundary.minimums()<<" Max: "<<rectBoundary.maximums()<<endl;
 
         double minimum [boundaryDimension];
         double maximum [boundaryDimension];
@@ -552,11 +550,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_boundary(JNIEnv * env, jcla
 
     if (!strcmp(boundaryType, "Three_Phase_Boundary")) {
 
-
-
         const Three_Phase_Boundary & boundary = (const Three_Phase_Boundary &) RpNumerics::getPhysics().boundary();
-
-        cout << "Dentro do if do boundary" << " " << boundary.getA() << " " << boundary.getB() << " " << boundary.getC() << endl;
 
         jclass isoRect2DBboundaryClass = env->FindClass("wave/util/IsoTriang2DBoundary");
         jmethodID isoTriang2DBoundaryConstructor = (env)->GetMethodID(isoRect2DBboundaryClass, "<init>",

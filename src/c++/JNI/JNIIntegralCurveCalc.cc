@@ -83,13 +83,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_IntegralCurveCalc_calc(JNIEnv * env, j
     const FluxFunction * fluxFunction = &RpNumerics::getPhysics().fluxFunction();
     const AccumulationFunction * accumulationFunction = &RpNumerics::getPhysics().accumulation();
 
-
-
-    cout << "Parametros de flux stone integral " << RpNumerics::getPhysics().fluxFunction().fluxParams().params() << endl;
-
-    cout << "Parametros de permeablidade stone integral " << ((StoneFluxFunction &) RpNumerics::getPhysics().fluxFunction()).perm().params().params() << endl;
-
-
     Integral_Curve iCurve(fluxFunction, accumulationFunction, tempBoundary);
 
 

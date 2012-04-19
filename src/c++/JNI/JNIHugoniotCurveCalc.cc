@@ -100,17 +100,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
     GridValues * gv = RpNumerics::getPhysics().getGrid(0);
 
-
-    cout << "Parametros de flux stone hugoniot " << RpNumerics::getPhysics().fluxFunction().fluxParams().params() << endl;
-
-    cout << "Parametros de permeablidade stone hugoniot " << ((StoneFluxFunction &)RpNumerics::getPhysics().fluxFunction()).perm().params().params() << endl;
-
-
     hugoniotCurve.classified_curve(&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(), *gv, Uref, hugoniotPolyLineVector);
-
-
-
-    cout << "tamanho da curva :" << hugoniotPolyLineVector.size() << endl;
 
     for (int i = 0; i < hugoniotPolyLineVector.size(); i++) {
 
@@ -148,9 +138,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
             double rightLambda1 = hugoniotPolyLineVector[i].vec[j + 1].component(dimension + m + 1);
             double rightLambda2 = hugoniotPolyLineVector[i].vec[j + 1].component(dimension + m + 2);
-
-
-            //            cout << leftLambda1 << " " << leftLambda2 << " " << rightLambda1 << " " << rightLambda2 << " "<<leftSigma<<" "<<rightSigma<<endl;
 
 
             jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, leftLambda1, leftLambda2, rightLambda1, rightLambda2, pointType);

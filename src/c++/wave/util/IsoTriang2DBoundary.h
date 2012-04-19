@@ -73,7 +73,7 @@ public:
     void extension_curve(const FluxFunction *f, const AccumulationFunction *a,
             GridValues &gv,
             int where_constant, int number_of_steps, bool singular,
-            int fam,
+            int fam,int characteristic,
             std::vector<RealVector> &c, std::vector<RealVector> &d);
 
 

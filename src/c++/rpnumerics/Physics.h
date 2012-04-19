@@ -68,6 +68,8 @@ public:
 
     GridValues  * getGrid(const int index) const;
 
+    void setGridResolution(int,const vector<int> );
+
     const vector<SubPhysics *> & getPhysicsVector()const;
 
     static const string & getRPnHome();

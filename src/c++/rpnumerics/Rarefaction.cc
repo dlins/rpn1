@@ -295,6 +295,7 @@ void Rarefaction::compute_eigenpair(int n, const RealVector &in, double &lambda,
     eigenvector.resize(e[Rarefaction::family].vrr.size());
     for (int i = 0; i < e[Rarefaction::family].vrr.size(); i++) eigenvector.component(i) = e[Rarefaction::family].vrr[i];
 
+
     return;
 }
 
@@ -308,6 +309,8 @@ double Rarefaction::compute_lambda(int n, const RealVector &in){
     RealVector eigenvector; // Discarded on exit.
 
     compute_eigenpair(n, in, lambda, eigenvector);
+
+    cout <<"Depois de compute eigenpair"<<endl;
 
     return lambda;
 }
@@ -950,8 +953,11 @@ int Rarefaction::curve(const RealVector &initial_point,
         // DO IT HERE
 
         // Update new_point.
+
+        cout << "Entrei em compute lambda1 " << endl;
         for (int i = 0; i < n; i++) new_point.component(i) = p[i];
         new_point.component(n) = new_lambda = compute_lambda(n, new_point);
+        
 
         // BEGIN Check Boundary //
         // Modified RectBoundary so that the intersection can be tested using RealVectors of size
@@ -979,6 +985,7 @@ int Rarefaction::curve(const RealVector &initial_point,
         else if (intersection_info == 0){
             // One point is inside, the other is outside. 
             // Store the point lying in the domain's border and get out.
+            r.resize(n+1);
             r.component(n) = compute_lambda(n, r);
             rarcurve.push_back(r);
 

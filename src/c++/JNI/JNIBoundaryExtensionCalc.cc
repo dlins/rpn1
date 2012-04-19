@@ -72,8 +72,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BoundaryExtensionCurveCalc_nativeCalc
 
     int dimension = RpNumerics::getPhysics().domain().dim();
 
-
-
     cout << "Familia do dominio" << domainFamily << endl;
     cout << "edge " << edge << endl;
     cout <<"edgeresolution: "<<edgeResolution<<endl;
@@ -85,24 +83,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BoundaryExtensionCurveCalc_nativeCalc
 
     GridValues * gv = RpNumerics::getPhysics().getGrid(0);
 
-    physicsBoundary.extension_curve(flux, accum, *gv, edge, edgeResolution, true, domainFamily, curve_segments, domain_segments);
+    physicsBoundary.extension_curve(flux, accum, *gv, edge, edgeResolution, true, domainFamily,characteristicWhere, curve_segments, domain_segments);
 
     cout << "Tamanho de curve segments: " << curve_segments.size() << endl;
     cout << "Tamanho de domain segments: " << domain_segments.size() << endl;
 
-    //    Boundary_ExtensionStone::extension_curve((FluxFunction *) & RpNumerics::getPhysics().fluxFunction(), (AccumulationFunction *) & RpNumerics::getPhysics().accumulation(),
-    //            edge, edgeResolution,
-    //            curveFamily,
-    //            pmin, pmax, number_of_domain_points, // For the domain.
-    //            domainFamily,
-    //            (FluxFunction *) & RpNumerics::getPhysics().fluxFunction(), (AccumulationFunction *) & RpNumerics::getPhysics().accumulation(),boundary,
-    //            characteristicWhere, singular,
-    //            curve_segments,
-    //            domain_segments);
-    //
-
-
-
+   
     if (curve_segments.size() == 0)return NULL;
 
 

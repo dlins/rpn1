@@ -72,7 +72,15 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
 
     const FluxFunction * fluxFunction = &RpNumerics::getPhysics().fluxFunction();
     const AccumulationFunction * accumulationFunction = &RpNumerics::getPhysics().accumulation();
-    cout << "Time direction " << timeDirection << endl;
+    
+    
+    
+    cout << "Flux params " << fluxFunction->fluxParams().params()<<endl;
+    cout << "Accum params " << accumulationFunction->accumulationParams().params() << endl;
+
+
+
+
     vector<RealVector> inflectionPoints;
 
 

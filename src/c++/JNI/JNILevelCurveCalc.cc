@@ -89,15 +89,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_PointLevelCalc_calcNative(JNIEnv * env
     env->GetIntArrayRegion(resolution, 0, dimension, cells);
 
 
-    cout << "Parametros de flux stone level curve " << RpNumerics::getPhysics().fluxFunction().fluxParams().params() << endl;
-
-    cout << "Parametros de permeablidade level curve " << ((StoneFluxFunction &) RpNumerics::getPhysics().fluxFunction()).perm().params().params() << endl;
-
-//    cout <<"Familia: "<<family<<endl;
-//
-//    cout << "Ponto: " << realVectorInput << endl;
-//
-
     Eigenvalue_Contour ec;
 
     ec.set_level_from_point(& RpNumerics::getPhysics().fluxFunction(), & RpNumerics::getPhysics().accumulation(),

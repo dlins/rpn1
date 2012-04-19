@@ -14,13 +14,8 @@ const string & Physics::getRPnHome() {
 }
 
 void Physics::setParams(vector<string> paramVector) {
-//
-//    for (int i = 0; i < paramVector.size(); i++) {
-//        cout << paramVector[i] << " Chamando setParams Physics" << endl;
-//    }
 
     GridValues * grid = getGrid(0);
-
 
     grid->functions_on_grid_computed=false;
     grid->Jacobians_on_grid_computed=false;
@@ -28,9 +23,23 @@ void Physics::setParams(vector<string> paramVector) {
     grid->dd_computed = false;
 
 
-
-
     physicsVector_->at(0)->setParams(paramVector);
+
+}
+
+
+void Physics::setGridResolution(int subPhysicsIndex,const vector<int> newResolution){
+
+
+    GridValues * grid = getGrid(subPhysicsIndex);
+
+    SubPhysics * subPhysics = &getSubPhysics(subPhysicsIndex);
+
+    const Boundary & boundary = subPhysics->boundary();
+
+    grid->set_grid(&boundary,boundary.minimums(),boundary.maximums(),newResolution);
+
+
 
 }
 
@@ -53,14 +62,6 @@ Physics::Physics(const string & physicsID) : physicsVector_(new vector<SubPhysic
     if (physicsID.compare("QuadraticR4") == 0) {
         physicsVector_->push_back(new Quad4(Quad4FluxParams()));
     }
-
-//    if (physicsID.compare("TriPhase") == 0) {
-//        physicsVector_->push_back(new TriPhase(TriPhaseParams(), PermParams(), CapilParams(0.4, 3.0, 44.0, 8.0), ViscosityParams(0.5)));
-//    }
-//
-//    if (physicsID.compare("Corey") == 0) {
-//        physicsVector_->push_back(new Corey(CoreyParams(), PermParams(), CapilParams(0.4, 3.0, 44.0, 8.0), ViscosityParams(0.5)));
-//    }
 
     if (physicsID.compare("Stone") == 0) {
         physicsVector_->push_back(new Stone());
@@ -101,10 +102,7 @@ Physics::Physics(const string & physicsID) : physicsVector_(new vector<SubPhysic
         params.component(10) = 998.2;
         params.component(11) = 4.22e-3;
 
-
         physicsVector_->push_back(new TPCW(params, getRPnHome()));
-
-
 
     }
 
@@ -117,8 +115,8 @@ Physics::Physics(const string & physicsID) : physicsVector_(new vector<SubPhysic
     const Boundary * b = &boundary();
 
     std::vector<int> noc(2);
-    noc[0] = 100;
-    noc[1] = 100;
+    noc[0] = 250;
+    noc[1] = 250;
 
 
     gridArray_->push_back(new GridValues(b, b->minimums(), b->maximums(), noc));

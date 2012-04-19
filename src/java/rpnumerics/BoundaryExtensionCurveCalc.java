@@ -20,12 +20,13 @@ public class BoundaryExtensionCurveCalc extends ContourCurveCalc {
     int edgeResolution_;
 
 
-    public BoundaryExtensionCurveCalc(ContourParams params, int edgeResolution, int domainFamily,int edge) {
+    public BoundaryExtensionCurveCalc(ContourParams params, int edgeResolution, int domainFamily,int edge, int characteristicWhere) {
         super(params);
 
         domainFamily_ = domainFamily;
         edge_ = edge;
         edgeResolution_ = edgeResolution;
+        characteristicDomain_ = characteristicWhere;
 
     }
 

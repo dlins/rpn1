@@ -15,9 +15,8 @@
  */
 #include "Polydisperse.h"
 #include "SubPhysics.h"
-#include "RectBoundary.h"
+#include "IsoTriang2DBoundary.h"
 #include "StoneAccumulation.h"
-#include "PolydisperseHugoniotFunction.h"
 #include "Quad2AccumulationFunction.h"
 
 
@@ -39,7 +38,9 @@ public:
 
 //    PolydispersePhysics(const Polydisperse &, const Boundary &, const Space &);
 
-      PolydispersePhysics();
+    void setParams(vector<string>);
+
+    PolydispersePhysics();
 
     PolydispersePhysics(const PolydispersePhysics &);
     virtual ~PolydispersePhysics();
@@ -62,7 +63,7 @@ inline Boundary * PolydispersePhysics::defaultBoundary() const{
     max.component(0) = 1.0;
     max.component(1) = 1.0;
 
-    return new RectBoundary(min, max);
+    return new Three_Phase_Boundary(min, max);
 }
 
 #endif //! _PolydispersePhysics_H
