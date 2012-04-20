@@ -23,6 +23,7 @@ NOTE :
 #include "RpNumerics.h"
 #include <vector>
 #include <iostream>
+#include <iosfwd>
 
 
 using std::vector;
@@ -73,12 +74,29 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_StateInformation_getStateInformation
     const AccumulationFunction * accum = &RpNumerics::getPhysics().accumulation();
 
 
-    WaveState inputState(RealVector(dimension,input));
+
+    RealVector inputPointNative(dimension, input);
+
+
+    std::ostringstream ss;
+
+    WaveState inputState(inputPointNative);
 
     JetMatrix output(dimension);
 
 
     int jetOutput = flux->jet(inputState, output, 2);
+
+
+    ss<<output;
+
+
+    string  strPointer =ss.str();
+
+    cout <<strPointer<<endl;
+
+
+
 
     cout<<"Chamando nativo"<<endl;
 

@@ -24,7 +24,7 @@ int Extension_Curve::function_on_vertices(double *foncub, int domain_i, int doma
 bool Extension_Curve::valid_segment(int i){
     if (oc == 0) return false;
 
-    double epsilon = 1e-1;
+    double epsilon = 1e-7;
     
     double F[2], G[2], JF[2][2], JG[2][2];
 
@@ -79,17 +79,6 @@ void Extension_Curve::curve(const FluxFunction *f, const AccumulationFunction *a
     extension_on_domain.clear(); 
 
     Contour2p5_Method::contour2p5(this, extension_on_curve, extension_on_domain);
-
-
-    for (int i = 0; i < extension_on_curve.size(); i++) {
-        cout <<"Segmento on curve: "<<extension_on_curve.at(i)<<endl;
-    }
-
-
-    for (int i = 0; i < extension_on_domain.size(); i++) {
-        cout << "Segmento on domain: " << extension_on_domain.at(i) << endl;
-    }
-
            
     return;
 }

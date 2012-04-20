@@ -17,20 +17,21 @@ public class TRACKPOINT_CONFIG extends UI_ACTION_SELECTED {
 
         super(TrackPointAgent.instance());
 
-      
+
 
     }
 
     public void trackPoint(CoordsArray wcCoords) {
 
 
-        System.out.println(wcCoords);
+        if (UIController.instance().globalInputTable().values().getSize() == rpnumerics.RPNUMERICS.domainDim()) {
+            System.out.println(wcCoords);
+            StateInformation stateInformation = new StateInformation();
 
+            RealVector realVectorWC = new RealVector(wcCoords.getCoords());
+            RPnStateInfo stateInfo = stateInformation.getStateInformation(realVectorWC);
 
-
-        System.out.println("Chamando trackPoint");
-        StateInformation stateInformation = new StateInformation();
-        RPnStateInfo stateInfo = stateInformation.getStateInformation(UIController.instance().globalInputTable().values());
+        }
 
 //        Iterator geometryIterator = panel.scene().geometries();
 //
@@ -79,7 +80,7 @@ public class TRACKPOINT_CONFIG extends UI_ACTION_SELECTED {
 //            }
 
 
-        }
+    }
 
 //        Coords2D coords2D = new Coords2D();
 //
@@ -98,8 +99,6 @@ public class TRACKPOINT_CONFIG extends UI_ACTION_SELECTED {
 //
 //        panel.repaint();
 //
-
-
 //        RealVector worldPoint = new RealVector(worldCoords.getCoords());
 //
 //        Iterator iterator = panel.scene().geometries();
@@ -147,25 +146,14 @@ public class TRACKPOINT_CONFIG extends UI_ACTION_SELECTED {
 //                    tempVerticesArrayList.add(tempSegment);
 //
 //                }
-
-
 //                BifurcationCurve tempCurve = new BifurcationCurve(bifurcationCurve.getFamilyIndex(), tempVerticesArrayList);
 //                RealVector worldPoint2D = new RealVector(2);
 //                worldPoint2D.setElement(0, worldPoint.getElement(indices[0]));
 //                worldPoint2D.setElement(1, worldPoint.getElement(indices[1]));
 //                RealVector point = bifurcationCurve.projectionCurve(tempCurve, worldPoint2D);
-
 //                trackedPoint(point);
-
-            
-        
 //    }
-
     private void trackedPoint(RealVector nDPoint) {
-
-
-
-
     }
 }
 

@@ -56,3 +56,38 @@ int Elliptic_Boundary::curve(const FluxFunction *f, const AccumulationFunction *
 
     return info;
 }
+
+void Elliptic_Boundary::map(const RealVector &r, double &f, RealVector &map_Jacobian) {
+    int n = r.size();
+    map_Jacobian.resize(n);
+
+    double F[n], JF[n][n], G[n], JG[n][n], HF[n][n][n], HG[n][n][n];
+
+    RealVector p(r);
+
+    ff->fill_with_jet(n, p.components(), 2, F, &JF[0][0], &HF[0][0][0]);
+    aa->fill_with_jet(n, p.components(), 2, G, &JG[0][0], &HG[0][0][0]);
+
+    // See the definition in Elliptic_Boundary::function_on_square; this is not exactly the trace!
+    double trace = JF[0][0]*JG[1][1] - JF[1][1]*JG[0][0];
+    double G_aux = JG[0][0]*JG[1][1];
+
+    double aux_01 = JF[0][1] - JG[0][1];
+    double aux_10 = JF[1][0] - JG[1][0];
+
+    f = trace * trace + 4.0 * G_aux * aux_01 * aux_10;
+
+    map_Jacobian.component(0) = 2.0 * trace * (HF[0][0][0]*JG[1][1] + JF[0][0]*HG[1][1][0] - HF[1][1][0]*JG[0][0] - JF[0][0]*HG[1][1][0])
+                              + 4.0 * (HG[0][0][0]*JG[1][1] + JG[0][0]*HG[1][1][0]) * aux_01 * aux_10
+                              + 4.0 * G_aux * ( (HF[0][1][0] - HG[0][1][0]) * aux_10 + aux_01 * (HF[1][0][0] - HG[1][0][0]) );
+
+    map_Jacobian.component(1) = 2.0 * trace * (HF[0][0][1]*JG[1][1] + JF[0][0]*HG[1][1][1] - HF[1][1][1]*JG[0][0] - JF[0][0]*HG[1][1][1])
+                              + 4.0 * (HG[0][0][1]*JG[1][1] + JG[0][0]*HG[1][1][1]) * aux_01 * aux_10
+                              + 4.0 * G_aux * ( (HF[0][1][1] - HG[0][1][1]) * aux_10 + aux_01 * (HF[1][0][1] - HG[1][0][1]) );
+
+   return;
+}
+
+bool Elliptic_Boundary::improvable(void) {
+    return true;
+}

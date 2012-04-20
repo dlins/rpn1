@@ -426,7 +426,7 @@ public class RPNUMERICS {
         int curveFamily = new Integer(getParamValue("hysteresiscurve", "family"));
         int domainFamily = new Integer(getParamValue("hysteresiscurve", "family"));
 
-        int singular = 0;//TODO Pegar do arquivo de entrada
+        int singular = 1;//TODO Pegar do arquivo de entrada
 
         return new HysteresisCurveCalc(params, domainFamily, curveFamily, characteristicWhere, singular);
 

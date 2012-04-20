@@ -24,6 +24,10 @@ class Elliptic_Boundary : public ImplicitFunction {
 
         int curve(const FluxFunction *f, const AccumulationFunction *a, 
                   GridValues &g, std::vector<RealVector> &elliptic_boundary);
+
+        void map(const RealVector &p, double &f, RealVector &map_Jacobian);
+
+        bool improvable(void);
 };
 
 #endif // _ELLIPTIC_BOUNDARY_
