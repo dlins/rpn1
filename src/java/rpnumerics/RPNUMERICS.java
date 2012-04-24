@@ -420,13 +420,13 @@ public class RPNUMERICS {
 
         ContourParams params = new ContourParams(resolution);
 
-        int characteristicWhere = 0;//new Integer(getParamValue("hysteresiscurve", "characteristicwhere"));
+        int characteristicWhere = 0;//TODO Colocar hardcoded no C++
 
 
         int curveFamily = new Integer(getParamValue("hysteresiscurve", "family"));
         int domainFamily = new Integer(getParamValue("hysteresiscurve", "family"));
 
-        int singular = 1;//TODO Pegar do arquivo de entrada
+        int singular = 1;//TODO Colocar hardcoded no C++
 
         return new HysteresisCurveCalc(params, domainFamily, curveFamily, characteristicWhere, singular);
 
@@ -665,11 +665,9 @@ public class RPNUMERICS {
 
     public static native void setParams(String[] params);
 
-    private static native void setFluxParams(FluxParams fluxParams);
-
     public static native FluxParams getFluxParams();
 
-    private static native void setAccumulationParams(RealVector accumulationParams);
+    public static native void setResolution(RealVector min, RealVector max, int[] newResolution);
 
     public static native RealVector getAccumulationParams();
 
@@ -684,4 +682,9 @@ public class RPNUMERICS {
     public static native int domainDim();
 
     public static native Space domain();
+
+    private static native void setFluxParams(FluxParams fluxParams);
+
+    private static native void setAccumulationParams(RealVector accumulationParams);
+
 }

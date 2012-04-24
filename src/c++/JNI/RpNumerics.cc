@@ -217,6 +217,59 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getAccumulationParams
 
 }
 
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    setResolution
+ * Signature: (Lwave/util/RealVector;Lwave/util/RealVector;[I)V
+ */
+JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setResolution
+  (JNIEnv * env , jclass cls, jobject min, jobject max, jintArray newResolution){
+
+    jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
+
+    jmethodID toDoubleMethodID = (env)->GetMethodID(realVectorClass, "toDouble", "()[D");
+
+
+    int dimension = env->GetArrayLength(newResolution);
+
+    //min  processing
+    jdoubleArray minLimit = (jdoubleArray) (env)->CallObjectMethod(min, toDoubleMethodID);
+
+    double minNativeArray[dimension];
+    env->GetDoubleArrayRegion(minLimit, 0, dimension, minNativeArray);
+    //max processing
+
+    jdoubleArray maxLimit = (jdoubleArray) (env)->CallObjectMethod(max, toDoubleMethodID);
+
+    double maxNativeArray[dimension];
+
+    env->GetDoubleArrayRegion( maxLimit, 0, dimension,maxNativeArray);
+
+
+    RealVector minNativeVector(dimension,minNativeArray);
+
+    RealVector maxNativeVector(dimension, maxNativeArray);
+
+    //Processing resolution
+    vector<int>newResolutionVector;
+
+    int tempResolutionArray[dimension];
+
+
+    env->GetIntArrayRegion(newResolution, 0, dimension, tempResolutionArray);
+
+
+    for (int i = 0; i < dimension; i++) {
+        newResolutionVector.push_back(tempResolutionArray[i]);
+
+    }
+
+    RpNumerics::getPhysics().setGrid(0, minNativeVector, maxNativeVector, newResolutionVector);
+
+}
+
+
 /*
  * Class:     rpnumerics_RPNUMERICS
  * Method:    setFluxParams

@@ -86,9 +86,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
     jobject segmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
 
-
-    //    Test testFunction;
-
     //-------------------------------------------------------------------
 
 
@@ -151,15 +148,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
 
     jobject result = env->NewObject(hugoniotCurveClass, hugoniotCurveConstructor, uMinus, segmentsArray);
-
-    // Limpando
-
-
-    //    env->DeleteLocalRef(hugoniotSegmentClass);
-    //    env->DeleteLocalRef(realVectorClass);
-    //    env->DeleteLocalRef(arrayListClass);
-
-
 
 
     return result;
@@ -231,7 +219,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     cout << Uref << endl;
 
     cout << "Implementar refinamento !!" << endl;
-
 
     vector<HugoniotPolyLine> hugoniotPolyLineVector;
 

@@ -97,18 +97,18 @@
 
     <CURVE name="hysteresiscurve">
         <CURVEPARAM name="family" value="0"/>
-        <CURVEPARAM name="resolution" value="30 30"/>
+        <CURVEPARAM name="resolution" value="128 128"/>
     </CURVE>
 
 
-    <CURVE name="bifurcationcurve">
+    <!--<CURVE name="bifurcationcurve">
         <CURVEPARAM name="curvefamily" value="1"/>
         <CURVEPARAM name="domainfamily" value="1"/>
         <CURVEPARAM name="caracteristicwhere" value="1"/>
         <CURVEPARAM name="singular" value="1"/>
 
 
-    </CURVE>
+    </CURVE>-->
 
     <CURVE name="boundaryextensioncurve">
 
@@ -124,7 +124,7 @@
     <CURVE name="rarefactionextension">
         <CURVEPARAM name="curvefamily" value="0"/>
         <CURVEPARAM name="characteristic" value="1"/>
-        <CURVEPARAM name="resolution" value="60 60"/>
+        <CURVEPARAM name="resolution" value="128 128"/>
     </CURVE>
 
     <CURVE name="orbit">

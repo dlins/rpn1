@@ -276,7 +276,7 @@ inline void JetMatrix::hessian(HessianMatrix & hMatrix) {
     for (i = 0; i < n_comps(); i++) {
         for (j = 0; j < n_comps(); j++) {
             for (k = 0; k < n_comps(); k++) {
-                double value = operator()(i, j, k);
+                double value =  v_.component((n_comps_ * (1 + n_comps_)) + (i * n_comps_ * n_comps_ + j * n_comps_ + k));
                 hMatrix(i, j, k, value);
             }
         }
@@ -317,7 +317,7 @@ inline void JetMatrix::jacobian(JacobianMatrix &jMatrix) {
         throw (JetMatrix::RangeViolation());
     for (i = 0; i < n_comps(); i++) {
         for (j = 0; j < n_comps(); j++) {
-            double value = operator()(i, j);
+            double value = v_.component((n_comps_) + (i * n_comps_ + j));
             jMatrix(i, j, value);
         }
     }

@@ -49,14 +49,6 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setParams
 
 /*
  * Class:     rpnumerics_RPNUMERICS
- * Method:    setFluxParams
- * Signature: (Lrpnumerics/FluxParams;)V
- */
-JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setFluxParams
-  (JNIEnv *, jclass, jobject);
-
-/*
- * Class:     rpnumerics_RPNUMERICS
  * Method:    getFluxParams
  * Signature: ()Lrpnumerics/FluxParams;
  */
@@ -65,11 +57,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getFluxParams
 
 /*
  * Class:     rpnumerics_RPNUMERICS
- * Method:    setAccumulationParams
- * Signature: (Lwave/util/RealVector;)V
+ * Method:    setResolution
+ * Signature: (Lwave/util/RealVector;Lwave/util/RealVector;[I)V
  */
-JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setAccumulationParams
-  (JNIEnv *, jclass, jobject);
+JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setResolution
+  (JNIEnv *, jclass, jobject, jobject, jintArray);
 
 /*
  * Class:     rpnumerics_RPNUMERICS
@@ -126,6 +118,22 @@ JNIEXPORT jint JNICALL Java_rpnumerics_RPNUMERICS_domainDim
  */
 JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_domain
   (JNIEnv *, jclass);
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    setFluxParams
+ * Signature: (Lrpnumerics/FluxParams;)V
+ */
+JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setFluxParams
+  (JNIEnv *, jclass, jobject);
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    setAccumulationParams
+ * Signature: (Lwave/util/RealVector;)V
+ */
+JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setAccumulationParams
+  (JNIEnv *, jclass, jobject);
 
 #ifdef __cplusplus
 }

@@ -28,7 +28,7 @@ void Physics::setParams(vector<string> paramVector) {
 }
 
 
-void Physics::setGridResolution(int subPhysicsIndex,const vector<int> newResolution){
+void Physics::setGrid(int subPhysicsIndex,const RealVector & min, const RealVector & max,const vector<int> newResolution){
 
 
     GridValues * grid = getGrid(subPhysicsIndex);
@@ -37,9 +37,9 @@ void Physics::setGridResolution(int subPhysicsIndex,const vector<int> newResolut
 
     const Boundary & boundary = subPhysics->boundary();
 
-    grid->set_grid(&boundary,boundary.minimums(),boundary.maximums(),newResolution);
+    grid->set_grid(&boundary,min,max,newResolution);
 
-
+    cout<<"Setando resolucao para :"<<newResolution[0]<<" "<<newResolution[1]<<endl;
 
 }
 
