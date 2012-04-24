@@ -239,7 +239,18 @@ public class RPnCurvesList extends JFrame implements ActionListener {
                 }
                 for (MultiGeometry multiGeometry : toBeRemoved) {
                     RPnPhaseSpaceManager.instance().remove(phaseSpace_, multiGeometry);
+                    RpGeometry geometry = (RpGeometry) multiGeometry;
+                    geometry.geomFactory().getUI().uninstall(geometry.geomFactory());
                 }
+//<<<<<<< HEAD:src/java/rpn/RPnCurvesList.java
+//=======
+//                index++;
+//            }
+//            for (MultiGeometry multiGeometry : toBeRemoved) {
+//                RpGeometry geometry = (RpGeometry) multiGeometry;
+//                geometry.geomFactory().getUI().uninstall(geometry.geomFactory());
+//                phaseSpace_.remove(multiGeometry);
+//>>>>>>> gridValues:src/java/rpn/RPnCurvesListFrame.java
             }
 
         }

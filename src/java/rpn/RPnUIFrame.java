@@ -153,6 +153,11 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 toolBar_.add(PointLevelCurvePlotAgent.instance().getContainer());
                 toolBar_.add(LevelCurvePlotAgent.instance().getContainer());
                 toolBar_.add(CompositePlotAgent.instance().getContainer());
+                toolBar_.add(EllipticBoundaryAgent.instance().getContainer());
+//                toolBar_.add(TrackPointAgent.instance().getContainer());
+
+
+         
 
 
                 if (RPNUMERICS.boundary() instanceof RectBoundary) {
@@ -186,6 +191,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 toolBar_.add(BoundaryExtensionCurveAgent.instance().getContainer());
                 toolBar_.add(InflectionPlotAgent.instance().getContainer());
                 toolBar_.add(HysteresisPlotAgent.instance().getContainer());
+                toolBar_.add(EllipticBoundaryExtensionAgent.instance().getContainer());
+                toolBar_.add(EnvelopeCurveAgent.instance().getContainer());
                 toolBar_.revalidate();
 
             }

@@ -89,8 +89,8 @@ int ColorCurve::interpolate(int noe, const RealVector &p, const RealVector &q, s
     r.clear();
     int dim = p.size() - 2 * noe - 1;
 
-    cout <<" noe : "<<noe<<endl;
-    cout << " p : " << p << endl;
+//    cout <<" noe : "<<noe<<endl;
+//    cout << " p : " << p << endl;
 
     double fq[4], fp[4]; // f(p), f(q), the function whose zero is to be found
 

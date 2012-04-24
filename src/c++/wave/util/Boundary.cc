@@ -142,3 +142,6 @@ double Boundary::distance(int n, const double * p, const double * q)const {
 
     return sqrt(d);
 }
+
+
+

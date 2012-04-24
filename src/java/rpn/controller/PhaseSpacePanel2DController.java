@@ -19,11 +19,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.Point;
-import java.awt.event.MouseAdapter;
 import java.awt.geom.Rectangle2D;
 import rpn.controller.ui.TRACKPOINT_CONFIG;
 import rpn.controller.ui.UIController;
 import wave.multid.Coords2D;
+import wave.multid.CoordsArray;
 
 public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpacePanelController {
     //
@@ -41,7 +41,7 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
     private boolean ordComplete_;
     private Point dcCompletePoint_;
     private List<Rectangle2D> selectionAreas_;
-    public static boolean track;
+
 
     //
     // Constructors/Initializers
@@ -62,7 +62,7 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
     //
     class MouseMotionController extends MouseMotionAdapter {
 
-        @Override
+         @Override
         public void mouseMoved(MouseEvent event) {
             if (event.getComponent() instanceof RPnPhaseSpacePanel) {
                 RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
@@ -73,16 +73,23 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
 
                     TRACKPOINT_CONFIG state = (TRACKPOINT_CONFIG) UIController.instance().getState();
                     Coords2D dcCoords = new Coords2D(xCursorPos, yCursorPos);
-                    state.trackPoint(panel, dcCoords);
+                    CoordsArray wcCoords = new Coords2D();
+                    panel.scene().getViewingTransform().dcInverseTransform(dcCoords, wcCoords);
+                    state.trackPoint(wcCoords);
 
 
                 }
+
+
                 if (absComplete_) {
                     xCursorPos = new Double(dcCompletePoint_.getX()).intValue();
                 }
                 if (ordComplete_) {
                     yCursorPos = new Double(dcCompletePoint_.getY()).intValue();
                 }
+
+            
+
                 panel.setCursorPos(new Point(xCursorPos, yCursorPos));
                 panel.repaint();
             }

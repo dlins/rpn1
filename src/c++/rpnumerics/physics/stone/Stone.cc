@@ -12,7 +12,6 @@
  */
 #include "Stone.h"
 
-
 /*
  * ---------------------------------------------------------------
  * Definitions:
@@ -21,74 +20,118 @@
 
 Boundary * Stone::defaultBoundary() const {
 
-    RealVector A(2);
 
-    A.component(0) = 0;
-    A.component(1) = 0;
-
-    RealVector B(2);
-
-    B.component(0) = 0;
-    B.component(1) = 1;
-
-    RealVector C(2);
-
-    C.component(0) = 1;
-    C.component(1) = 0;
+    return new Three_Phase_Boundary();
+//    RealVector pmin(2);
 //
+//    pmin.component(0) = 0;
+//    pmin.component(1) = 0;
+//
+//    RealVector pmax(2);
+//
+//    pmax.component(0) = 1.0;
+//    pmax.component(1) = 1.0;
 
-//Saturacoes negativas 
+    //Saturacoes negativas
 
-//     A.component(0) = -1;
-//    A.component(1) = 2;
-//
-//    RealVector B(2);
-//
-//    B.component(0) = -1;
-//    B.component(1) = 2;
-//
-//    RealVector C(2);
-//
-//    C.component(0) = 2;
-//    C.component(1) = -1;
-
-
-
-//
-//      A.component(0) = -1;
-//    A.component(1) = -1;
-//
-//    RealVector B(2);
-//
-//    B.component(0) = -1;
-//    B.component(1) = 2;
-//
-//    RealVector C(2);
-//
-//    C.component(0) = 2;
-//    C.component(1) = -1;
+    //     A.component(0) = -1;
+    //    A.component(1) = 2;
+    //
+    //    RealVector B(2);
+    //
+    //    B.component(0) = -1;
+    //    B.component(1) = 2;
+    //
+    //    RealVector C(2);
+    //
+    //    C.component(0) = 2;
+    //    C.component(1) = -1;
 
 
 
-    return new IsoTriang2DBoundary(A, B, C);
+    //
+    //      A.component(0) = -1;
+    //    A.component(1) = -1;
+    //
+    //    RealVector B(2);
+    //
+    //    B.component(0) = -1;
+    //    B.component(1) = 2;
+    //
+    //    RealVector C(2);
+    //
+    //    C.component(0) = 2;
+    //    C.component(1) = -1;
+
+
+
+ 
+
+
+}
+
+void Stone::setParams(vector<string> params) {
+
+
+    RealVector fluxParamVector(7);
+
+    //Flux params
+    for (int i = 0; i < fluxParamVector.size(); i++) {
+
+        double paramValue = atof(params[i].c_str());
+
+        fluxParamVector.component(i) = paramValue;
+
+
+    }
+
+//    fluxParams(StoneParams(fluxParamVector));
+
+
+    StoneFluxFunction & stoneFlux = (StoneFluxFunction&) fluxFunction();
+
+    stoneFlux.fluxParams(StoneParams(fluxParamVector));
+
+    RealVector permVector(20);
+
+
+
+
+    //Perm params
+    for (int i = 7; i < params.size(); i++) {
+
+        double paramValue = atof(params[i].c_str());
+
+        permVector.component(i-7) = paramValue;
+
+
+    }
+    StonePermParams permParams(permVector);
+
+    stoneFlux.setPermParams(permParams);
+
+
+    cout << "Params em set params Stone: "<<permParams.params() << endl;
+
+
 
 
 }
 
 Stone::Stone() : SubPhysics(StoneFluxFunction(StoneParams(), StonePermParams()), StoneAccumulation(), *defaultBoundary(), Multid::PLANE, "Stone", _SIMPLE_ACCUMULATION_) {
 
-    
-    RealVector refVec(2);
-
-    StoneHugoniotFunctionClass * stoneHugoniotFunction = new StoneHugoniotFunctionClass(refVec, (StoneFluxFunction(StoneParams(), StonePermParams())));
-    
-    
-    setHugoniotFunction(stoneHugoniotFunction);
+//
+//    RealVector refVec(2);
+//
+//    StoneHugoniotFunctionClass * stoneHugoniotFunction = new StoneHugoniotFunctionClass(refVec, (StoneFluxFunction(StoneParams(), StonePermParams())));
+//
+//
+//    setHugoniotFunction(stoneHugoniotFunction);
 
 }
 
 Stone::Stone(const Stone & copy) : SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.boundary(), Multid::PLANE, "Stone", _SIMPLE_ACCUMULATION_) {
-   RealVector refVec(2);
+    RealVector refVec(2);
     StoneHugoniotFunctionClass * stoneHugoniotFunction = new StoneHugoniotFunctionClass(refVec, (StoneFluxFunction(StoneParams(), StonePermParams())));
     setHugoniotFunction(stoneHugoniotFunction);
 }

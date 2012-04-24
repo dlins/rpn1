@@ -23,6 +23,7 @@
 #include "ImplicitFunction.h"
 #include "Newton_Improvement.h"
 #include "Boundary.h"
+#include "GridValues.h"
 
 /*
  * ---------------------------------------------------------------
@@ -37,11 +38,8 @@ class ContourMethod {
     private:
         int dimension;
 
-//        static int inpdom(double *u);
+//        HugoniotFunctionClass *hugoniot;	 // TODO: Edson, voce deve comentar essa linha (e no .cc)
 
-        HugoniotFunctionClass *hugoniot;	 // TODO: Edson, voce deve comentar essa linha (e no .cc)
-
-        //
         static bool is_first;
 
         static HyperCube hc;
@@ -92,15 +90,10 @@ class ContourMethod {
 
     protected:
     public:
-        ContourMethod(HugoniotFunctionClass *h); // TODO: Edson, voce deve comentar essa linha (e no .cc)
-        ~ContourMethod();			 // TODO: Edson, voce deve comentar essa linha (e no .cc)
+//        ContourMethod(HugoniotFunctionClass *h); // TODO: Edson, voce deve comentar essa linha (e no .cc)
+//        ~ContourMethod();			 // TODO: Edson, voce deve comentar essa linha (e no .cc)
     
-        //int curv2d(int sn, int seglim, double f, double *rect, int *res, int ifirst) ;
-        //int curv2d(int sn, int seglim, double f, double *rect, int *res, int ifirst, std::vector<RealSegment> &vrs) ;
-        int curv2d(int sn, int seglim, double f, double *rect, int *res, int ifirst, std::vector<RealVector> &vrs);
-
-//        static int vect2d(Inflection_Curve *functioninsquare, int &sn, int &seglim, double f, double *rect, int *res, int ifirst, std::vector<RealVector> &vrs);
-        static int contour2d(ImplicitFunction *impf, Boundary *boundary, double *rect, int *res, std::vector<RealVector> &vrs);
+        static int contour2d(ImplicitFunction *impf, std::vector<RealVector> &vrs);
 };
 
 #endif //! _HugoniotContourMethod_H

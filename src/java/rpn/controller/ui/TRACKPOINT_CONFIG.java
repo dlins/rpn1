@@ -5,10 +5,10 @@
  */
 package rpn.controller.ui;
 
-import rpn.RPnPhaseSpacePanel;
-import rpn.controller.PhaseSpacePanel2DController;
 import rpn.usecase.TrackPointAgent;
-import wave.multid.Coords2D;
+import rpnumerics.RPnStateInfo;
+import rpnumerics.StateInformation;
+import wave.multid.CoordsArray;
 import wave.util.RealVector;
 
 public class TRACKPOINT_CONFIG extends UI_ACTION_SELECTED {
@@ -17,12 +17,21 @@ public class TRACKPOINT_CONFIG extends UI_ACTION_SELECTED {
 
         super(TrackPointAgent.instance());
 
-        System.out.println("Construtor de TRACK_CONFIG");
-        PhaseSpacePanel2DController.track = true;
+
 
     }
 
-    public void trackPoint(RPnPhaseSpacePanel panel, Coords2D dcCoords) {
+    public void trackPoint(CoordsArray wcCoords) {
+
+
+        if (UIController.instance().globalInputTable().values().getSize() == rpnumerics.RPNUMERICS.domainDim()) {
+            System.out.println(wcCoords);
+            StateInformation stateInformation = new StateInformation();
+
+            RealVector realVectorWC = new RealVector(wcCoords.getCoords());
+            RPnStateInfo stateInfo = stateInformation.getStateInformation(realVectorWC);
+
+        }
 
 //        Iterator geometryIterator = panel.scene().geometries();
 //
@@ -71,7 +80,7 @@ public class TRACKPOINT_CONFIG extends UI_ACTION_SELECTED {
 //            }
 
 
-        }
+    }
 
 //        Coords2D coords2D = new Coords2D();
 //
@@ -90,8 +99,6 @@ public class TRACKPOINT_CONFIG extends UI_ACTION_SELECTED {
 //
 //        panel.repaint();
 //
-
-
 //        RealVector worldPoint = new RealVector(worldCoords.getCoords());
 //
 //        Iterator iterator = panel.scene().geometries();
@@ -139,25 +146,14 @@ public class TRACKPOINT_CONFIG extends UI_ACTION_SELECTED {
 //                    tempVerticesArrayList.add(tempSegment);
 //
 //                }
-
-
 //                BifurcationCurve tempCurve = new BifurcationCurve(bifurcationCurve.getFamilyIndex(), tempVerticesArrayList);
 //                RealVector worldPoint2D = new RealVector(2);
 //                worldPoint2D.setElement(0, worldPoint.getElement(indices[0]));
 //                worldPoint2D.setElement(1, worldPoint.getElement(indices[1]));
 //                RealVector point = bifurcationCurve.projectionCurve(tempCurve, worldPoint2D);
-
 //                trackedPoint(point);
-
-            
-        
 //    }
-
     private void trackedPoint(RealVector nDPoint) {
-
-
-
-
     }
 }
 

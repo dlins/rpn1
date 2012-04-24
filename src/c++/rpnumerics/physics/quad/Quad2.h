@@ -39,6 +39,8 @@ public:
 
     Boundary * defaultBoundary()const;
 
+    void setParams(vector<string>);
+
 };
 
 inline SubPhysics * Quad2::clone()const {

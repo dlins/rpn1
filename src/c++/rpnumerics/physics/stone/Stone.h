@@ -27,6 +27,8 @@
  */
 
 
+//TODO  Fisicas Corey e Triphase removidas . Pablo irá reprograma-las , se necessario
+
 
 class Stone:public SubPhysics {
 
@@ -44,6 +46,8 @@ public:
     virtual ~Stone();
 
     Boundary * defaultBoundary()const;
+
+    void setParams(vector<string>);
 
 
     SubPhysics * clone()const;

@@ -47,7 +47,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HysteresisCurveCalc_nativeCalc
 
     jmethodID realSegmentConstructor = (env)->GetMethodID(realSegmentClass, "<init>", "(Lwave/util/RealVector;Lwave/util/RealVector;)V");
 
- 
+
     jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
     jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
 
@@ -65,41 +65,40 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HysteresisCurveCalc_nativeCalc
     const FluxFunction * fluxFunction = &RpNumerics::getPhysics().fluxFunction();
     const AccumulationFunction * accumulationFunction = &RpNumerics::getPhysics().accumulation();
 
-    Boundary * tempBoundary = RpNumerics::getPhysics().boundary().clone();
 
-    RealVector min(tempBoundary-> minimums());
-    RealVector max(tempBoundary-> maximums());
+    GridValues * gv = RpNumerics::getPhysics().getGrid(0);
+
 
     int dimension = RpNumerics::getPhysics().domain().dim();
 
-    jint number_of_grid_points [dimension];
 
-    env->GetIntArrayRegion(resolution, 0, dimension, number_of_grid_points);
-
-    Hysteresis::curve(&RpNumerics::getPhysics().boundary(), fluxFunction, accumulationFunction,
-            curveFamily,
-            min, max, number_of_grid_points,
-            domainFamily,
-            fluxFunction, accumulationFunction,
-            characteristicWhere, singular,
-            curve_segments,
-            domain_segments);
-
-
-    delete tempBoundary;
-
-    if(curve_segments.size() ==0 || domain_segments.size()==0)return NULL;
-
-    cout << "Tamanho da coincidence curve extension: " << curve_segments.size() << endl;
-    cout << "Tamanho da coincidence domain extension: " << domain_segments.size() << endl;
-
-//    cout << "Resolucao x " << xResolution << endl;
-//
-//    cout << "Resolucao y " << yResolution << endl;
 
     cout << "Familia da curva" << curveFamily << endl;
     cout << "Familia do dominio" << domainFamily << endl;
     cout << "characteristic " << characteristicWhere << endl;
+
+
+
+
+    Hysteresis::curve(fluxFunction, accumulationFunction, *gv, characteristicWhere,
+            curveFamily, domainFamily,
+            fluxFunction, accumulationFunction,
+            singular,
+            curve_segments,
+            domain_segments);
+
+
+
+
+    if (curve_segments.size() == 0 || domain_segments.size() == 0)return NULL;
+
+    cout << "Tamanho da histerese curve : " << curve_segments.size() << endl;
+    cout << "Tamanho da histerese domain: " << domain_segments.size() << endl;
+
+    //    cout << "Resolucao x " << xResolution << endl;
+    //
+    //    cout << "Resolucao y " << yResolution << endl;
+
 
 
     for (unsigned int i = 0; i < curve_segments.size() / 2; i++) {
@@ -154,7 +153,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HysteresisCurveCalc_nativeCalc
 
         jobject realVectorRightPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRRight);
 
-      
+
 
 
         jobject realSegment = env->NewObject(realSegmentClass, realSegmentConstructor, realVectorLeftPoint, realVectorRightPoint);

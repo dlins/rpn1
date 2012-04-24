@@ -1,32 +1,28 @@
 #include "Hysteresis.h"
 
-int Hysteresis::curve(const Boundary *boundary,
-                      const FluxFunction *curve_flux, const AccumulationFunction *curve_accum,
-                      int curve_family,
-                      const RealVector &pmin, const RealVector &pmax, int *number_of_cells,         // For the domain.
-                      int domain_family,
-                      const FluxFunction *domain_ff, const AccumulationFunction *domain_aa,
-                      int characteristic_where, int singular,
-                      std::vector<RealVector> &curve_segments,
-                      std::vector<RealVector> &domain_segments){
+void Hysteresis::curve(
+        const FluxFunction *curve_flux, const AccumulationFunction *curve_accum, GridValues &gv,
+        int characteristic_where, int curve_family,
+        int domain_family,
+        const FluxFunction *domain_ff, const AccumulationFunction *domain_aa,
+        int singular,
+        std::vector<RealVector> &curve_segments,
+        std::vector<RealVector> &domain_segments) {
 
-    // Inflection curve
-    Inflection_Curve ic((FluxFunction*)curve_flux, (AccumulationFunction*)curve_accum, boundary, 
-                         pmin, pmax, number_of_cells);
-    std::vector<RealVector> vic;
-    int info = ic.curve(curve_family, vic);
+    //    // Inflection curve
 
-    // Compute the extension curve for the inflection curve.
+    std::vector<RealVector> inflectionSegments;
+    Inflection_Curve inflectionCurve;
+
+    inflectionCurve.curve(curve_flux, curve_accum, gv, curve_family, inflectionSegments);
+
+
+    //Compute the extension curve for the inflection curve.
+
+    Extension_Curve extension_curve;
     //
-    Extension_Curve extension_curve(pmin, pmax, number_of_cells, domain_ff, domain_aa,boundary);
+    extension_curve.curve(curve_flux, curve_accum, gv, characteristic_where, singular, curve_family,
+            inflectionSegments, curve_segments, domain_segments);
 
-    extension_curve.compute_extension_curve(CHARACTERISTIC_ON_CURVE, 1,
-                                            vic, curve_family,
-                                            (FluxFunction*)curve_flux, (AccumulationFunction*)curve_accum,
-                                            domain_family, 
-                                            curve_segments,
-                                            domain_segments);
-
-    return info;
 }
 

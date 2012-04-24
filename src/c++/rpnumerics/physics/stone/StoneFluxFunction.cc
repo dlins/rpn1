@@ -17,37 +17,22 @@
  * Definitions:
  */
 
-
 /* Para testar a nova interface de parametros de fluxo da stone*/
-//StoneFluxFunction::StoneFluxFunction(const StoneParams & params, const StonePermParams & permParams) : FluxFunction(FluxParams(params.params())), perm_(new StonePermeability(permParams)) {
-//
-//}
-
-StoneFluxFunction::StoneFluxFunction(const StoneParams & params, const StonePermParams & permParams) : FluxFunction(FluxParams(RealVector(params.params().size() + permParams.params().size()))), perm_(new StonePermeability(permParams)) {
-
-
-    RealVector tempParamsVector(params.params().size() + permParams.params().size());
-
-
-    //FluxParams
-    for (int i = 0; i < params.params().size(); i++) {
-        tempParamsVector.component(i) = params.params().component(i);
-
-
-    }
-    //PermParms
-
-    for (int i = 0; i < permParams.params().size(); i++) {
-        tempParamsVector.component(i + params.params().size()) = permParams.params().component(i);
-    }
-
-    FluxParams tempParams(tempParamsVector);
-
-    fluxParams(tempParams);
+StoneFluxFunction::StoneFluxFunction(const StoneParams & params, const StonePermParams & permParams) : FluxFunction(FluxParams(params.params())), perm_(new StonePermeability(permParams)) {
 
 }
 
+
 StoneFluxFunction::StoneFluxFunction(const StoneFluxFunction & copy) : FluxFunction(copy.fluxParams()), perm_(new StonePermeability(copy.perm())) {
+
+}
+
+void StoneFluxFunction::setPermParams(const StonePermParams & permParams) {
+
+    delete perm_;
+
+    perm_=new StonePermeability(permParams);
+
 
 }
 

@@ -36,7 +36,7 @@ using std::vector;
 using namespace std;
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_BoundaryExtensionCurveCalc_nativeCalc
-(JNIEnv * env, jobject obj, jintArray resolution, jint edgeResolution, jint curveFamily, jint domainFamily, jint edge, jint characteristicWhere) {
+(JNIEnv * env, jobject obj, jintArray resolution, jint edgeResolution, jint domainFamily, jint edge, jint characteristicWhere) {
 
 
 
@@ -72,39 +72,23 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BoundaryExtensionCurveCalc_nativeCalc
 
     int dimension = RpNumerics::getPhysics().domain().dim();
 
-
-    jint number_of_domain_points [dimension];
-
-    env->GetIntArrayRegion(resolution, 0, dimension, number_of_domain_points);
-
-
-    const Boundary * boundary = &RpNumerics::getPhysics().boundary();
-
-    RealVector pmin(boundary->minimums());
-    RealVector pmax(boundary->maximums());
-
-
-    cout << "Familia da curva" << curveFamily << endl;
     cout << "Familia do dominio" << domainFamily << endl;
-    cout << "characteristic " << characteristicWhere << endl;
     cout << "edge " << edge << endl;
+    cout <<"edgeresolution: "<<edgeResolution<<endl;
 
+    Three_Phase_Boundary & physicsBoundary = (Three_Phase_Boundary &) RpNumerics::getPhysics().boundary();
 
-    int singular = 0;
+    const FluxFunction * flux = &RpNumerics::getPhysics().fluxFunction();
+    const AccumulationFunction * accum = &RpNumerics::getPhysics().accumulation();
 
-    Boundary_ExtensionStone::extension_curve((FluxFunction *) & RpNumerics::getPhysics().fluxFunction(), (AccumulationFunction *) & RpNumerics::getPhysics().accumulation(),
-            edge, edgeResolution,
-            curveFamily,
-            pmin, pmax, number_of_domain_points, // For the domain.
-            domainFamily,
-            (FluxFunction *) & RpNumerics::getPhysics().fluxFunction(), (AccumulationFunction *) & RpNumerics::getPhysics().accumulation(),boundary,
-            characteristicWhere, singular,
-            curve_segments,
-            domain_segments);
+    GridValues * gv = RpNumerics::getPhysics().getGrid(0);
 
+    physicsBoundary.extension_curve(flux, accum, *gv, edge, edgeResolution, true, domainFamily,characteristicWhere, curve_segments, domain_segments);
 
+    cout << "Tamanho de curve segments: " << curve_segments.size() << endl;
+    cout << "Tamanho de domain segments: " << domain_segments.size() << endl;
 
-
+   
     if (curve_segments.size() == 0)return NULL;
 
 

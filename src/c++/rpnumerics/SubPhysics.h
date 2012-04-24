@@ -77,6 +77,8 @@ public:
 
     virtual ~SubPhysics();
 
+    virtual void setParams(vector<string>);
+
     const int type() const;
 
     virtual void preProcess(RealVector &);

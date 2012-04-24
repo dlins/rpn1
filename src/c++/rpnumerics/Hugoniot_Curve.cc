@@ -1,196 +1,34 @@
 #include "Hugoniot_Curve.h"
 
-// TODO: Move or blend fill_with_jet as a method or methods of JetMatrix.
-//
-
-void Hugoniot_Curve::fill_with_jet(const RpFunction *flux_object, int n, double *in, int degree,
-        double *F, double *J, double *H) {
-    RealVector r(n);
-    double *rp = r;
-    for (int i = 0; i < n; i++) rp[i] = in[i];
-
-    // Will this work? There is a const somewhere in fluxParams.
-    //FluxParams fp(r);
-    //flux_object->fluxParams(FluxParams(r)); // flux_object->fluxParams(fp);
-
-    WaveState state_c(r);
-    JetMatrix c_jet(n);
-
-    flux_object->jet(state_c, c_jet, degree);
-
-    // Fill F
-    if (F != 0) for (int i = 0; i < n; i++) F[i] = c_jet(i);
-
-    // Fill J
-    if (J != 0) {
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                J[i * n + j] = c_jet(i, j);
-            }
-        }
-    }
-
-    // Fill H
-    if (H != 0) {
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                for (int k = 0; k < n; k++) {
-                    H[(i * n + j) * n + k] = c_jet(i, j, k);
-                }
-            }
-        }
-    }
-
-    return;
-}
-
-void Hugoniot_Curve::set_reference_point(const RealVector &ref) {
-    Uref.resize(2);
-
-    for (int i = 0; i < 2; i++) Uref.component(i) = ref.component(i);
-
-    fill_with_jet(ff, 2, Uref.components(), 1, Fref, JFref, 0);
-    fill_with_jet(aa, 2, Uref.components(), 1, Gref, JGref, 0);
-
-    return;
-}
-
-Hugoniot_Curve::Hugoniot_Curve(const FluxFunction *f, const AccumulationFunction *a,
-        Boundary *b,
-
-        const RealVector &min, const RealVector &max,
-        const int *cells,
-        const RealVector &ref) {
-
-    ff = f;
-    aa = a;
-
-
-    boundary = b;
-
-    pmin.resize(2);
-    pmax.resize(2);
-
-
-    Fref = new double[2];
-    Gref = new double[2];
-    JFref = new double[4];
-    JGref = new double[4];
-
-    set_reference_point(ref);
-
-    pmin.resize(2);
-    pmax.resize(2);
-
-    // Create the grid...
-    //
-    number_of_cells = new int[2];
-    for (int i = 0; i < 2; i++) {
-        number_of_cells[i] = cells[i];
-        pmin.component(i) = min.component(i);
-        pmax.component(i) = max.component(i);
-    }
-
-    int dim = 2;
-
-    double delta[2];
-    for (int i = 0; i < pmin.size(); i++) delta[i] = (fabs(pmax.component(i) - pmin.component(i))) / (double) (number_of_cells[i]);
-
-    grid.resize(number_of_cells[0] + 1, number_of_cells[1] + 1);
-    F_on_grid.resize(number_of_cells[0] + 1, number_of_cells[1] + 1);
-    G_on_grid.resize(number_of_cells[0] + 1, number_of_cells[1] + 1);
-
-    for (int i = 0; i <= number_of_cells[0]; i++) {
-        for (int j = 0; j <= number_of_cells[1]; j++) {
-            grid(i, j).resize(dim);
-            F_on_grid(i, j).resize(dim);
-            G_on_grid(i, j).resize(dim);
-
-            grid(i, j).component(0) = pmin.component(0) + (double) i * delta[0];
-            grid(i, j).component(1) = pmin.component(1) + (double) j * delta[1];
-        }
-    }
-
-    // ...and fill several values on the grid.
-    //
-    hc_fill_values_on_grid();
-}
-
-int Hugoniot_Curve::classified_curve(std::vector<HugoniotPolyLine> &hugoniot_curve) {
+int Hugoniot_Curve::classified_curve(const FluxFunction *f, const AccumulationFunction *a, 
+                                     GridValues &g, const RealVector &r, 
+                                     std::vector<HugoniotPolyLine> &hugoniot_curve){
 
     // Compute the Hugoniot curve as usual
     //
     vector<RealVector> vrs;
-    int info = curve(vrs);
 
-//
-//
-//
-//    //         Para testar o contour sem classificacao
-//    hugoniot_curve.clear();
-//    for (int i = 0; i < vrs.size() / 2; i++) {
-//        HugoniotPolyLine temp;
-//        temp.vec.resize(2);
-//
-//        for (int j = 0; j < 2; j++) {
-//            temp.vec[j].resize(7);
-//            for (int k = 0; k < 2; k++) temp.vec[j].component(k) = vrs[2 * i + j].component(k);
-//        }
-//
-//        //                    temp.vec[0] = vrs[2 * i];
-//        //                    temp.vec[1] = vrs[2 * i + 1];
-//        temp.type = 0;
-//        hugoniot_curve.push_back(temp);
-//    }
-//
-//    cout << "Size (2) of a vector within HugoniotPolyLine: " << hugoniot_curve[0].vec[0].size() << endl;
-//    cout << "Depois do classify: " << hugoniot_curve.size() << endl;
-//
-//
-//
-//    for (int i = 0; i < hugoniot_curve.size(); i++) {
-//
-//        for (unsigned int j = 0; j < hugoniot_curve[i].vec.size() - 1; j++) {
-//
-//            cout << "Depois do classificador: " << hugoniot_curve.size() << endl;
-//            cout << " depois type of " << j << " = " << hugoniot_curve[i].type << endl;
-//            cout << "depois coord 1 " << j << " = " << hugoniot_curve[i].vec[j] << endl;
-//            cout << "depois coord 2 " << j + 1 << " = " << hugoniot_curve[i].vec[j + 1] << endl;
-//
-//
-//        }
-//
-//    }
+    int info = curve(f, a, g, r, vrs);
 
-
-
-        // Prepare the Hugoniot curve to classify it
-        vector<vector<RealVector> > unclassifiedCurve;
+    // Prepare the Hugoniot curve to classify it
+    std::vector<vector<RealVector> > unclassifiedCurve;
     
-        for (int i = 0; i < vrs.size() / 2; i++) {
-            vector< RealVector> temp;
-            temp.push_back(vrs[2 * i]);
-            temp.push_back(vrs[2 * i]);
-            temp.push_back(vrs[2 * i + 1]);
-            //temp.push_back(vrs[2 * i + 1]);
-            unclassifiedCurve.push_back(temp);
-        }
+    for (int i = 0; i < vrs.size() / 2; i++) {
+        std::vector< RealVector> temp;
+        temp.push_back(vrs[2 * i]);
+        temp.push_back(vrs[2 * i]);
+        temp.push_back(vrs[2 * i + 1]);
+        //temp.push_back(vrs[2 * i + 1]);
+        unclassifiedCurve.push_back(temp);
+    }
     
-        ColorCurve colorCurve(*ff, *aa);
-        colorCurve.classify_curve(unclassifiedCurve, Uref, 2, 11, hugoniot_curve);
+    ColorCurve colorCurve(*f, *a);
+    colorCurve.classify_curve(unclassifiedCurve, r, 2, 11, hugoniot_curve);
 
     return info;
-
 }
 
 Hugoniot_Curve::~Hugoniot_Curve() {
-    delete [] number_of_cells;
-
-    delete [] JGref;
-    delete [] JFref;
-
-    delete [] Gref;
-    delete [] Fref;
 }
 
 // Given the extreme points of a rectangular domain
@@ -239,43 +77,6 @@ Hugoniot_Curve::~Hugoniot_Curve() {
 //                              number_of_cells[0]*...*number_of_cells[pmax.size() - 1].
 //
 
-// TODO: Change indices i, j to k, l. i & j are reserved for grid- or cell-like uses.
-
-void Hugoniot_Curve::hc_fill_values_on_grid(void) {
-
-    // Dimension of space
-    int dim = pmin.size();
-
-    // Number of elements in the grid.
-    int n = 1;
-    for (int i = 0; i < dim; i++) n *= number_of_cells[i] + 1;
-
-    // Fill the arrays with the value of the flux and accumulation functions at every point in the grid.
-    double point[dim], F[dim], G[dim];
-
-
-    for (int i = 0; i < n; i++) {
-
-        // We only compute the value of the function on points that are inside the physical domain
-        // given by "boundary".
-        for (int j = 0; j < dim; j++) point[j] = grid(i).component(j);
-        if (boundary->inside(point)) {
-            fill_with_jet((RpFunction*) ff, dim, point, 0, F, 0, 0);
-            fill_with_jet((RpFunction*) aa, dim, point, 0, G, 0, 0);
-
-
-            for (int j = 0; j < dim; j++) {
-                F_on_grid(i).component(j) = F[j];
-                G_on_grid(i).component(j) = G[j];
-            }
-        }
-    }
-
-
-
-    return;
-}
-
 /**
  *  Inside the calculus of the RH condition, when the differences of the accumulation are small, it is
  *  better to approximate the flux differences by the accumulation. Notice that epsilon must be small,
@@ -288,31 +89,32 @@ void Hugoniot_Curve::hc_fill_values_on_grid(void) {
  *  Here the inverse matrix [dG/dU]^(-1) is calculated in the standard form insde the [else] part.
  **/
 
-int Hugoniot_Curve::function_on_square(double *foncub, int i, int j, int is_square) {
+int Hugoniot_Curve::function_on_square(double *foncub, int i, int j) {
+    int is_square = gv->cell_type(i, j);
     double dg1, dg2;
     double f_aux[4];
     double epsilon = 1.0e-5;
 
     for (int l = 0; l < 2; l++) {
         for (int k = 0; k < 2; k++) {
-            dg1 = G_on_grid(i + l, j + k).component(0) - Gref[0];
-            dg2 = G_on_grid(i + l, j + k).component(1) - Gref[1];
+            dg1 = gv->G_on_grid(i + l, j + k).component(0) - Gref.component(0);
+            dg2 = gv->G_on_grid(i + l, j + k).component(1) - Gref.component(1);
 
             if (fabs(dg1) + fabs(dg2) >= epsilon) {
-                double df1 = F_on_grid(i + l, j + k).component(0) - Fref[0];
-                double df2 = F_on_grid(i + l, j + k).component(1) - Fref[1];
+                double df1 = gv->F_on_grid(i + l, j + k).component(0) - Fref.component(0);
+                double df2 = gv->F_on_grid(i + l, j + k).component(1) - Fref.component(1);
 
                 f_aux[l * 2 + k] = dg2 * df1 - dg1*df2;
-            } else {
+            } 
+            else {
                 // First-order expansion of F in terms of G.
                 //
-                // printf("Hugoniot_Curve::function_on_square(): if epsilon.\n");
 
-                double inv_det = 1.0 / (JGref[0] * JGref[3] - JGref[1] * JGref[2]);
+                double inv_det = 1.0 / (JGref(0) * JGref(3) - JGref(1) * JGref(2) );
 
-                f_aux[l * 2 + k] = ((JFref[0] * JGref[3] - JFref[2] * JGref[1] + JFref[1] * JGref[2] - JFref[3] * JGref[0]) * dg1 * dg2 +
-                        (JFref[1] * JGref[3] - JFref[3] * JGref[1]) * dg2 * dg2 +
-                        (JFref[0] * JGref[2] - JFref[2] * JGref[0]) * dg1 * dg1) * inv_det;
+                f_aux[l * 2 + k] = ((JFref(0) * JGref(3) - JFref(2) * JGref(1) + JFref(1) * JGref(2) - JFref(3) * JGref(0)) * dg1 * dg2 +
+                        (JFref(1) * JGref(3) - JFref(3) * JGref(1)) * dg2 * dg2 +
+                        (JFref(0) * JGref(2) - JFref(2) * JGref(0)) * dg1 * dg1) * inv_det;
             }
         }
     }
@@ -321,41 +123,53 @@ int Hugoniot_Curve::function_on_square(double *foncub, int i, int j, int is_squa
     foncub[0] = f_aux[2]; // Was: foncub[0][0]
     foncub[3] = f_aux[1]; // Was: foncub[0][2]
 
-    // Only useful if the cell is a square. Otherwise this information
-    // will be discarded by contour2d.
+    // Only useful if the cell is a square.
     //
-    foncub[2] = f_aux[3]; // Was: foncub[0][2]
+    if (is_square == CELL_IS_SQUARE) foncub[2] = f_aux[3]; // Was: foncub[0][2]
 
     return 1;
 }
 
-int Hugoniot_Curve::curve(std::vector<RealVector> &hugoniot_curve) {
+int Hugoniot_Curve::curve(const FluxFunction *f, const AccumulationFunction *a, 
+                          GridValues &g, const RealVector &r,
+                          std::vector<RealVector> &hugoniot_curve) {
+
+    ff = f;
+    aa = a;
+
+    g.fill_functions_on_grid(f, a);
+    gv = &g;
+
+    int n = r.size();
+
+    Fref.resize(n);
+    Gref.resize(n);
+
+    JFref.resize(n, n); 
+    JGref.resize(n, n);
+
+    RealVector p(r);
+
+    ff->fill_with_jet(n, p.components(), 1, Fref.components(), JFref.data(), 0);
+    aa->fill_with_jet(n, p.components(), 1, Gref.components(), JGref.data(), 0);
+
     hugoniot_curve.clear();
 
-    double rect[4];
-    rect[0] = pmin.component(0);
-    rect[1] = pmax.component(0);
-    rect[2] = pmin.component(1);
-    rect[3] = pmax.component(1);
-
-
-    int info = ContourMethod::contour2d(this, boundary, rect, number_of_cells, hugoniot_curve);
-
+    int info = ContourMethod::contour2d(this, hugoniot_curve);
 
     return info;
 }
 
-void Hugoniot_Curve::map(const RealVector &p, double &f, RealVector &map_Jacobian) {
-    int n = p.size();
+void Hugoniot_Curve::map(const RealVector &r, double &f, RealVector &map_Jacobian) {
+    int n = r.size();
     map_Jacobian.resize(n);
 
     double F[n], JF[n][n], G[n], JG[n][n];
 
-    double pd[n];
-    for (int i = 0; i < n; i++) pd[i] = p.component(i);
+    RealVector p(r);
 
-    fill_with_jet(ff, n, pd, 1, F, &JF[0][0], 0);
-    fill_with_jet(aa, n, pd, 1, G, &JG[0][0], 0);
+    ff->fill_with_jet(n, p.components(), 1, F, &JF[0][0], 0);
+    aa->fill_with_jet(n, p.components(), 1, G, &JG[0][0], 0);
 
     double dg1 = G[0] - Gref[0];
     double dg2 = G[1] - Gref[1];
@@ -367,7 +181,7 @@ void Hugoniot_Curve::map(const RealVector &p, double &f, RealVector &map_Jacobia
     double df1 = F[0] - Fref[0];
     double df2 = F[1] - Fref[1];
 
-    f = dg2 * df1 - dg1*df2;
+    f = dg2*df1 - dg1*df2;
 
     map_Jacobian.component(0) = JF[0][0] * dg2 + JG[1][0] * df1 - JF[1][0] * dg1 - JG[0][0] * df2;
     map_Jacobian.component(1) = JF[0][1] * dg2 + JG[1][1] * df1 - JF[1][1] * dg1 - JG[0][1] * df2;
@@ -392,4 +206,3 @@ void Hugoniot_Curve::map(const RealVector &p, double &f, RealVector &map_Jacobia
 bool Hugoniot_Curve::improvable(void) {
     return true;
 }
-

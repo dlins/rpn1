@@ -12,15 +12,15 @@ class Hysteresis {
     private:
     protected:
     public:
-        static int curve(const Boundary *boundary,
-                         const FluxFunction *curve_flux, const AccumulationFunction *curve_accum,
-                         int curve_family,
-                         const RealVector &pmin, const RealVector &pmax, int *number_of_cells,         // For the domain.
-                         int domain_family,
-                         const FluxFunction *domain_ff, const AccumulationFunction *domain_aa,
-                         int characteristic_where, int singular,
-                         std::vector<RealVector> &curve_segments,
-                         std::vector<RealVector> &domain_segments);
+    static void curve(const FluxFunction *curve_flux,
+            const AccumulationFunction *curve_accum,GridValues &,
+            int characteristic_where, int curve_family,
+            int domain_family,
+            const FluxFunction *domain_ff,
+            const AccumulationFunction *domain_aa,
+            int singular,
+            std::vector<RealVector> &curve_segments,
+            std::vector<RealVector> &domain_segments);
 };
 
 #endif // _HYSTERESIS_

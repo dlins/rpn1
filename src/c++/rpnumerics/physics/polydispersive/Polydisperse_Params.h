@@ -13,6 +13,8 @@ class Polydisperse_Params : public FluxParams {
                               const double n1, const double n2);
         Polydisperse_Params();
 
+        Polydisperse_Params(const RealVector &);
+
         ~Polydisperse_Params();
 
 };

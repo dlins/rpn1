@@ -44,6 +44,8 @@ public:
     StoneFluxFunction(const StoneFluxFunction & );
     
     const StonePermeability & perm() const ;
+
+    void setPermParams(const StonePermParams &);
     
     RpFunction * clone() const;
     

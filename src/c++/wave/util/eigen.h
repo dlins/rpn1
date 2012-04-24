@@ -54,6 +54,27 @@ struct eigenpair {
         vector<double> vli; // Imaginary part of the left-eigenvector
         vector<double> vrr; // Real part of the right-eigenvector
         vector<double> vri; // Imaginary part of the right-eigenvector
+        
+       eigenpair & operator=(const eigenpair &original){
+            r = original.r;
+            i = original.i;
+            
+           int n = original.vlr.size();
+            vlr.resize(n);
+            vli.resize(n);
+            vrr.resize(n);
+            vri.resize(n);
+            
+            for (int i = 0; i < n; i++){
+                vlr[i] = original.vlr[i];
+                vli[i] = original.vli[i];
+                vrr[i] = original.vrr[i];
+                vri[i] = original.vri[i];
+        }
+
+        return *this;
+        }
+        
 };
 /* Struct to hold an eigenpair. */
 

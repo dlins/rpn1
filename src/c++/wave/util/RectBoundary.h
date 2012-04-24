@@ -16,7 +16,7 @@
 #include "Boundary.h"
 #include "math.h"
 #include "stdio.h"
-#include "vector"
+#include <vector>
 
 /*
  * ---------------------------------------------------------------
@@ -61,6 +61,8 @@ public:
     int intersection(const RealVector &, const RealVector &, RealVector &, int &)const;
 
     const char * boundaryType()const;
+
+      virtual void edge_segments(int where_constant, int number_of_steps, std::vector<RealVector> &seg);
 
 };
 

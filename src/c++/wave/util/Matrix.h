@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <math.h>
 
+
+
 /*    SIMPLE USE EXAMPLE:
 
 #include "Matrix.h"
@@ -32,7 +34,7 @@ int main(){
 }
 
      END OF EXAMPLE */
-
+using namespace std;
 template <typename T>
 class Matrix {
     private:
@@ -68,6 +70,7 @@ template <typename T> int Matrix<T>::min(int x, int y){
 }
 
 template <typename T> Matrix<T>::Matrix(void){
+    cols_ = rows_ = 0;
     vec = 0;
 }
 
@@ -106,26 +109,34 @@ template <typename T> T* Matrix<T>::data(void){
 }
 
 template <typename T> Matrix<T> Matrix<T>::operator=(const Matrix<T> &original){
+//    printf("m em igual %d\n",original.cols_);
+//    printf("n em igual %d\n", original.rows_);
+
+
     int n = original.rows_, m = original.cols_;
+    if (n != 0 && m != 0){
     resize(n, m);
     for (int i = 0; i < n*m; i++) vec[i] = original.vec[i];
+    }
     return *this;
 }
 
 template <typename T> void Matrix<T>::resize(int newn, int newm){
+//    printf("Matrix::resize: n = %d, m = %d\n", newn, newm);
+    if (newn == 0 || newm == 0) return;
+
     if (vec == 0) vec = new T[newn*newm];
     else {
-        T *temp0 = new T[newn*newm];
+        T *temp0 = new T[newn * newm];
         for (int i = 0; i < min(rows_, newn); i++){
             for (int j = 0; j < min(cols_, newm); j++){
                 temp0[i*newm + j] = vec[i*cols_ + j];
             }
-         }
-
+        }
         T *temp1 = vec;
         vec = temp0;
         temp0 = temp1;
-        delete [] temp0;
+        delete []temp0;
     }
 
     rows_ = newn;

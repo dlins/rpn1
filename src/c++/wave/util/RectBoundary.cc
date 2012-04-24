@@ -50,6 +50,10 @@ RectBoundary & RectBoundary::operator=(const RectBoundary & source) {
 
 }
 
+void RectBoundary::edge_segments(int where_constant, int number_of_steps, std::vector<RealVector> &seg) {
+
+}
+
 RectBoundary::RectBoundary(const RealVector & minimums, const RealVector & maximums)
 : minimums_(new RealVector(minimums)),
 maximums_(new RealVector(maximums)),
@@ -267,7 +271,7 @@ int RectBoundary::intersection(const RealVector &p, const RealVector &q, RealVec
             }
             pos++;
         }
-       
+
         return 0;
     }
 }

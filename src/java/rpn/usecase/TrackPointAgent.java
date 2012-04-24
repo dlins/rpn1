@@ -7,13 +7,13 @@ package rpn.usecase;
 
 import java.awt.event.ActionEvent;
 import javax.swing.JToggleButton;
-import rpn.controller.PhaseSpacePanel2DController;
 import rpn.controller.ui.TRACKPOINT_CONFIG;
 import rpn.controller.ui.UIController;
 
 public class TrackPointAgent extends RpModelActionAgent {
 
-    static public final String DESC_TEXT = "Track Bifurcation Point";
+    static public final String DESC_TEXT = "Track Point";
+
     static private TrackPointAgent instance_ = null;
     private JToggleButton button_;
 
@@ -45,15 +45,11 @@ public class TrackPointAgent extends RpModelActionAgent {
     @Override
     public void execute() {
 
-//        if (button_.isSelected()) {
-//            PhaseSpacePanel2DController.track = true;
-//        } else {
-//            PhaseSpacePanel2DController.track = false;
-//        }
+        System.out.println("Chamando execute do track agent");
 
     }
 
-      @Override
+    @Override
     public void actionPerformed(ActionEvent event) {
 
 
@@ -61,9 +57,6 @@ public class TrackPointAgent extends RpModelActionAgent {
 
 
     }
-
-
-
 }
 
 

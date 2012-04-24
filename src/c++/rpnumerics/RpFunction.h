@@ -49,13 +49,15 @@ public:
     /*! virtual constructor
      */
    
-    virtual RpFunction * clone() const =0;
+    virtual RpFunction * clone() const = 0;
     
     /*! m coordinates function evaluation at u
      *this is the nth derivative calculation that might be available or not
      */
 
-    virtual int jet(const WaveState &u, JetMatrix &m, int degree) const   = 0;
+    virtual int jet(const WaveState &u, JetMatrix &m, int degree) const = 0;
+
+    void fill_with_jet(int n, double *in, int degree, double *F, double *J, double *H) const;
 };
 
 

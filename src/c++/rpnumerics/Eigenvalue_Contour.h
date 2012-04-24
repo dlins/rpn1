@@ -9,42 +9,22 @@
 
 #include "ImplicitFunction.h"
 #include "ContourMethod.h"
-#include "Boundary.h"
 
 #include <algorithm>
 
 class Eigenvalue_Contour : public ImplicitFunction {
     private:
-        const FluxFunction         *ff;
-        const AccumulationFunction *aa;
-        const Boundary *boundary;
-
-        // For the grid proper.
-        RealVector pmin, pmax;
-
-        int *number_of_cells;
-        
-        // Values on the grid.
-        Matrix<RealVector> grid;
-        Matrix<RealVector> eigenvalues_on_grid;
-        Matrix< std::vector<bool> > eigenvalues_are_real_on_grid;
-        Matrix<bool> vertex_in_domain;
-
+    protected:
         std::vector<double> levels;
         double level;
         int family;
 
-        void fill_with_jet(const RpFunction *flux_object, int n, double *in, int degree, double *F, double *J, double *H);
-    protected:
-    public:
-        Eigenvalue_Contour(const FluxFunction *f, const AccumulationFunction *a, 
-                           const RealVector &min, const RealVector &max, 
-                           const int *cells, const Boundary *b);
-        ~Eigenvalue_Contour();
-
         // Find the minimum and maximum lambdas, as were computed on the grid.
         //
         void find_minmax_lambdas(int family, double &min, double &max);
+    public:
+        Eigenvalue_Contour();
+        ~Eigenvalue_Contour(){}
 
         // Set the levels as a vector with arbitrary values.
         // The levels will be sorted from minimum to maximum.
@@ -66,19 +46,24 @@ class Eigenvalue_Contour : public ImplicitFunction {
 
         // Set the level at the given point.
         //
-        void set_level_from_point(int family, const RealVector &p);
+        void set_level_from_point(const FluxFunction *f, const AccumulationFunction *a,
+                                  int family, const RealVector &p);
 
         // Set the levels radiating from the level at the given point, 
         // with the given distance between levels.
         //
-        void set_levels_from_point(int family, const RealVector &p, double delta_l);
+        void set_levels_from_point(const FluxFunction *f, const AccumulationFunction *a,
+                                   GridValues &g, 
+                                   int family, const RealVector &p, double delta_l);
 
-//        void set_family(int f);
+        int function_on_square(double *foncub, int i, int j);
 
-        int function_on_square(double *foncub, int i, int j, int is_square);
-
-        int curve(std::vector< std::vector<RealVector> > &curve, std::vector<double> &out_levels);
-        int curve(std::vector<RealVector> &curve, double &l);
+        int curve(const FluxFunction *f, const AccumulationFunction *a, 
+                  GridValues &g, 
+                  std::vector< std::vector<RealVector> > &curve, std::vector<double> &out_levels);
+        int curve(const FluxFunction *f, const AccumulationFunction *a, 
+                  GridValues &g,
+                  std::vector<RealVector> &curve, double &l);
 };
 
 #endif // _EIGENVALUE_CONTOUR_

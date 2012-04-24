@@ -217,7 +217,7 @@ public class RPnDataModule {
                     ContourParams params = new ContourParams(processResolution(att.getValue("resolution")));
                     tempPoint_ = new PhasePoint(new RealVector(att.getValue("inputpoint")));
                     direction_ = chooseDirection(att.getValue("direction"));
-                    calc_ = new RarefactionExtensionCalc(params, tempPoint_, direction_, new Integer(att.getValue("curvefamily")), new Integer(att.getValue("domainfamily")), new Integer(att.getValue("characteristic")));
+                    calc_ = new RarefactionExtensionCalc(params, tempPoint_, direction_, new Integer(att.getValue("curvefamily")), new Integer(att.getValue("characteristic")));
 
                 }
                 if (currentCommand_.equalsIgnoreCase("integralcurve")) {
@@ -300,15 +300,11 @@ public class RPnDataModule {
                 if (currentCommand_.equalsIgnoreCase("boundaryextensioncurve")) {
 
                     ContourParams params = new ContourParams(processResolution(att.getValue("resolution")));
-
-                    int curveFamily = new Integer(att.getValue("curvefamily"));
-                    int domainFamily = new Integer(att.getValue("domainfamily"));
-                    int characteristic = new Integer(att.getValue("characteristic"));
+                    int domainFamily = new Integer(att.getValue("family"));
                     int edge = new Integer(att.getValue("edge"));
                     int edgeResolution = new Integer(att.getValue("edgeresolution"));
-
-                    calc_ = new BoundaryExtensionCurveCalc(params, edgeResolution, curveFamily,
-                            domainFamily, edge, characteristic);
+                    int characteristic = new Integer(att.getValue("characteristicwhere"));
+                    calc_ = new BoundaryExtensionCurveCalc(params, edgeResolution, domainFamily, edge,characteristic);
 
 
 

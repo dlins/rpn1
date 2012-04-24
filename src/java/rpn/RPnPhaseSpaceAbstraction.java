@@ -5,6 +5,7 @@
  */
 package rpn;
 
+import rpn.controller.RpController;
 import rpn.controller.phasespace.*;
 import wave.multid.model.AbstractScene;
 import wave.multid.Space;
@@ -15,7 +16,9 @@ import java.util.List;
 import java.util.Iterator;
 import rpn.component.util.ClassifierAgent;
 import rpn.component.util.VelocityAgent;
+import rpn.controller.RpCalcController;
 import rpn.controller.ui.UIController;
+import rpn.usecase.ChangeFluxParamsAgent;
 import wave.multid.model.MultiGeometry;
 import wave.multid.model.MultiPolyLine;
 import wave.util.RealVector;
@@ -84,7 +87,6 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
     // Methods
     //
     public void plot(RpGeometry geom) {
-
         state_.plot(this, geom);
 
     }
@@ -113,7 +115,6 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
 
     @Override
     public void remove(MultiGeometry geom) {
-
 
         super.remove(geom);
 
@@ -313,7 +314,10 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
             }
         }
         for (int i = 0; i < removeList.size(); i++) {
-            super.remove((RpGeometry) removeList.get(i));
+
+            RpGeometry geometryToRemove = (RpGeometry)removeList.get(i);
+
+            super.remove(geometryToRemove);
         }
         for (int i = 0; i < joinList.size(); i++) {
             super.join((RpGeometry) joinList.get(i));
