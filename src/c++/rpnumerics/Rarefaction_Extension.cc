@@ -31,7 +31,6 @@ void Rarefaction_Extension::extension_curve(GridValues & gridValues, const FluxF
             (Boundary*) boundary,
             rarefaction_curve, inflection_points);
 
-    cout << "Tamanho da rarefacao: " << rarefaction_curve.size() << endl;
 
     if (rarefaction_curve.size() < 2) return;
 
@@ -49,30 +48,11 @@ void Rarefaction_Extension::extension_curve(GridValues & gridValues, const FluxF
         }
     }
 
-    cout << "Tamanho da rarefacao: " << rarefaction_segments.size() << endl;
-
-    // Compute the extension curve for the rarefaction
-    Extension_Curve extension_curve; //(pmin, pmax, number_of_grid_points,
-    //            domain_flux, domain_accum,boundary);
-    //                                            domain_reduced_flux, domain_reduced_accum);
-
-    //    extension_curve.compute_extension_curve(characteristic_where, singular,
-    //            rarefaction_segments, curve_family,
-    //            curve_flux, curve_accum,
-    //            domain_family,
-    //            curve_segments,
-    //            domain_segments);
-
-
-
+    Extension_Curve extension_curve; 
     extension_curve.curve(curve_flux, curve_accum, gridValues, characteristic_where,
             true, curve_family, rarefaction_segments,
             curve_segments,
             domain_segments);
-
-    cout << "Tamanho de curve no metodo: " << curve_segments.size() << endl;
-    cout << "Tamanho de domai no metodo: " << domain_segments.size() << endl;
-
 
     return;
 }

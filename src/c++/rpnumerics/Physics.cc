@@ -39,7 +39,6 @@ void Physics::setGrid(int subPhysicsIndex,const RealVector & min, const RealVect
 
     grid->set_grid(&boundary,min,max,newResolution);
 
-    cout<<"Setando resolucao para :"<<newResolution[0]<<" "<<newResolution[1]<<endl;
 
 }
 

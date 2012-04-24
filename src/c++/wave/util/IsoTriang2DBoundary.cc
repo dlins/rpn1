@@ -95,10 +95,6 @@ void Three_Phase_Boundary::envelope_curve(const FluxFunction *f, const Accumulat
     std::vector<RealVector> seg;
     edge_segments(where_constant, number_of_steps, seg);
 
-
-
-
-
     Envelope_Curve envelope_curve;
 
     envelope_curve.curve(f, a, gv, singular,
@@ -116,21 +112,11 @@ void Three_Phase_Boundary::extension_curve(const FluxFunction *f, const Accumula
     c.clear();
     d.clear();
 
-    cout << "where is constant extension curve: " << where_constant << endl;
-    cout << "familia extension curve: " << fam << endl;
-    cout << "singular extension curve: " << singular << endl;
-    cout << "caracteristic: "<<characteristic<<endl;
-
     std::vector<RealVector> seg;
     edge_segments(where_constant, number_of_steps, seg);
 
     Extension_Curve extension_curve;
-
-    for (int i = 0; i < seg.size(); i++) {
-        cout << "Segmento: " << seg.at(i) << endl;
-
-
-    }
+   
         extension_curve.curve(f, a, gv, singular, characteristic, fam,
                               seg,
                               c, d);

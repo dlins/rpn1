@@ -100,16 +100,6 @@
         <CURVEPARAM name="resolution" value="128 128"/>
     </CURVE>
 
-
-    <!--<CURVE name="bifurcationcurve">
-        <CURVEPARAM name="curvefamily" value="1"/>
-        <CURVEPARAM name="domainfamily" value="1"/>
-        <CURVEPARAM name="caracteristicwhere" value="1"/>
-        <CURVEPARAM name="singular" value="1"/>
-
-
-    </CURVE>-->
-
     <CURVE name="boundaryextensioncurve">
 
         <CURVEPARAM name="family" value="1"/>

@@ -75,7 +75,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionExtensionCalc_nativeCalc(JN
 
     std::vector<RealVector> curve_segments;
     std::vector<RealVector> domain_segments;
-//    std::vector<RealVector> rarefaction_segments;
+    //    std::vector<RealVector> rarefaction_segments;
 
 
     jint number_of_grid_points [dimension];
@@ -94,24 +94,15 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionExtensionCalc_nativeCalc(JN
 
     GridValues * gv = RpNumerics::getPhysics().getGrid(0);
 
-    Rarefaction_Extension::extension_curve(*gv,fluxFunction,
+    Rarefaction_Extension::extension_curve(*gv, fluxFunction,
             accumFunction,
             inputPoint,
             .01,
             curveFamily,
             increase,
-            boundary,characteristicWhere,
+            boundary, characteristicWhere,
             curve_segments,
             domain_segments);
-
-    //        delete testBoundary;
-
-    cout<<"curve.size()"<< curve_segments.size()<<endl;
-    cout << "domain.size() " << domain_segments.size() << endl;
-//    cout << "rarefaction.size() " << rarefaction_segments.size() << endl;
-
-
-
 
     if (curve_segments.size() == 0 || domain_segments.size() == 0) {
         printf("curve.size()  = %d\n", curve_segments.size());
