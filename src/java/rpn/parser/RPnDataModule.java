@@ -284,12 +284,10 @@ public class RPnDataModule {
 
                     ContourParams params = new ContourParams(processResolution(att.getValue("resolution")));
 
-                    int curveFamily = new Integer(att.getValue("curvefamily"));
-                    int domainFamily = new Integer(att.getValue("domainfamily"));
-                    int characteristic = new Integer(att.getValue("characteristic"));
-                    int singular = new Integer(att.getValue("singular"));
+                    int family = new Integer(att.getValue("curvefamily"));
 
-                    calc_ = new HysteresisCurveCalc(params, domainFamily, curveFamily, characteristic, singular);
+
+                    calc_ = new HysteresisCurveCalc(params, family);
 
 
 

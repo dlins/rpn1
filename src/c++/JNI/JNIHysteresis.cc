@@ -31,7 +31,7 @@ using std::vector;
 using namespace std;
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_HysteresisCurveCalc_nativeCalc
-(JNIEnv * env, jobject obj, jint domainFamily, jint curveFamily, jintArray resolution, jint singular, jint characteristicWhere) {
+(JNIEnv * env, jobject obj, jint domainFamily, jintArray resolution) {
 
     jclass hugoniotSegmentClass = (env)->FindClass(HUGONIOTSEGMENTCLASS_LOCATION);
 
@@ -71,35 +71,19 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HysteresisCurveCalc_nativeCalc
 
     int dimension = RpNumerics::getPhysics().domain().dim();
 
+    cout << "Familia " << domainFamily << endl;
 
-
-    cout << "Familia da curva" << curveFamily << endl;
-    cout << "Familia do dominio" << domainFamily << endl;
-    cout << "characteristic " << characteristicWhere << endl;
-
-
-
-
-    Hysteresis::curve(fluxFunction, accumulationFunction, *gv, characteristicWhere,
-            curveFamily, domainFamily,
+    Hysteresis::curve(fluxFunction, accumulationFunction, *gv, 0,
+            domainFamily, domainFamily,
             fluxFunction, accumulationFunction,
-            singular,
+            1,
             curve_segments,
             domain_segments);
-
-
-
 
     if (curve_segments.size() == 0 || domain_segments.size() == 0)return NULL;
 
     cout << "Tamanho da histerese curve : " << curve_segments.size() << endl;
     cout << "Tamanho da histerese domain: " << domain_segments.size() << endl;
-
-    //    cout << "Resolucao x " << xResolution << endl;
-    //
-    //    cout << "Resolucao y " << yResolution << endl;
-
-
 
     for (unsigned int i = 0; i < curve_segments.size() / 2; i++) {
 
@@ -123,11 +107,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HysteresisCurveCalc_nativeCalc
 
         jobject realVectorRightPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRRight);
 
-        int pointType = 20;
-
-        double leftSigma = 0;
-        double rightSigma = 0;
-
+//        int pointType = 20;
+//
+//        double leftSigma = 0;
+//        double rightSigma = 0;
+//
 
         jobject realSegment = env->NewObject(realSegmentClass, realSegmentConstructor, realVectorLeftPoint, realVectorRightPoint);
         env->CallObjectMethod(leftSegmentsArray, arrayListAddMethod, realSegment);

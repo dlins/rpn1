@@ -420,15 +420,9 @@ public class RPNUMERICS {
 
         ContourParams params = new ContourParams(resolution);
 
-        int characteristicWhere = 0;//TODO Colocar hardcoded no C++
+        int family = new Integer(getParamValue("hysteresiscurve", "family"));
 
-
-        int curveFamily = new Integer(getParamValue("hysteresiscurve", "family"));
-        int domainFamily = new Integer(getParamValue("hysteresiscurve", "family"));
-
-        int singular = 1;//TODO Colocar hardcoded no C++
-
-        return new HysteresisCurveCalc(params, domainFamily, curveFamily, characteristicWhere, singular);
+        return new HysteresisCurveCalc(params, family);
 
     }
 
