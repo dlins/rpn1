@@ -64,38 +64,39 @@ void JetMatrix::resize(int n_comps) {
 
 std::ostream & operator<<(std::ostream &out, const JetMatrix &r) {
 
-
-
-
     //Function value
-    out<<"Function value: \n";
-//    out << "(";
+    out << "Function value: \n";
+
     for (int i = 0; i < r.n_comps_; i++) {
         out << r(i);
-        if (i != r.n_comps_ - 1) out << ", ";
+       out << " ";
 
     }
-//    out << ")\n";
-    
-
-        out << "\n";
+    out << "\n";
 
 
-
-
-
-    out<<"First derivative: \n";
-    //First derivative value
-
-//    out << "(";
+    out << "First derivative: \n";
+  
     for (int i = 0; i < r.n_comps_; i++) {
         for (int j = 0; j < r.n_comps_; j++) {
-            out << r(i,j);
-            if (i != r.n_comps_ - 2) out << ", ";
+            out << r(i, j);
+            out << " ";
         }
-        out<<"\n";
+        out << "\n";
     }
-//    out << ")";
+
+    out << "Second derivative: \n";
+
+    for (int i = 0; i < r.n_comps_; i++) {
+        for (int j = 0; j < r.n_comps_; j++) {
+            for (int k = 0; k < r.n_comps_; k++) {
+                out << r(i, j, k);
+                out << " ";
+            }
+            
+        }
+        out << "\n";
+    }
 
 
 

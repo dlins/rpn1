@@ -164,7 +164,6 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setAccumulationParams
     jmethodID toDoubleMethodID = (env)->GetMethodID(realVectorClass, "toDouble", "()[D");
 
 
-
     //Input processing
     jdoubleArray newVectorArray = (jdoubleArray) (env)->CallObjectMethod(newParamsVector, toDoubleMethodID);
 

@@ -53,7 +53,14 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_StateInformation_getStateInformation
     jmethodID toDoubleMethodID = (env)->GetMethodID(realVectorClass, "toDouble", "()[D");
     jmethodID hashMapConstructor = env->GetMethodID(hashMapClass, "<init>", "()V");
 
-    jmethodID arrayListAddMethod = env->GetMethodID(hashMapClass, "put", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;");
+    jmethodID putHashMethod = env->GetMethodID(hashMapClass, "put", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;");
+
+
+    jobject hashMapInformation = env->NewObject(hashMapClass, hashMapConstructor);
+
+
+    jmethodID rpnStateInfoConstructor = env-> GetMethodID(stateInfoClass, "<init>", "(Ljava/util/HashMap;)V");
+
 
 
 
@@ -78,7 +85,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_StateInformation_getStateInformation
     RealVector inputPointNative(dimension, input);
 
 
-    std::ostringstream ss;
+
+    std::ostringstream fluxFunctionStream;
 
     WaveState inputState(inputPointNative);
 
@@ -87,21 +95,56 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_StateInformation_getStateInformation
 
     int jetOutput = flux->jet(inputState, output, 2);
 
+    fluxFunctionStream << output;
 
-    ss<<output;
+    jstring fluxInformation = env->NewStringUTF(fluxFunctionStream.str().c_str());
 
+    jstring fluxKey = env->NewStringUTF("fluxfunction");
 
-    string  strPointer =ss.str();
-
-    cout <<strPointer<<endl;
-
-
+    env->CallObjectMethod(hashMapInformation, putHashMethod, fluxKey, fluxInformation);
 
 
-    cout<<"Chamando nativo"<<endl;
+    //Accumulation
+
+    std::ostringstream accumulationFunctionStream;
+
+    JetMatrix outputAccumulation(dimension);
+
+    jetOutput = accum->jet(inputState, outputAccumulation, 2);
+
+    accumulationFunctionStream << outputAccumulation;
+
+    jstring accumulationInformation = env->NewStringUTF(accumulationFunctionStream.str().c_str());
+
+    jstring accumulationKey = env->NewStringUTF("accumulationfunction");
+
+    env->CallObjectMethod(hashMapInformation, putHashMethod, accumulationKey, accumulationInformation);
 
 
-    return NULL;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    jobject result = env->NewObject(stateInfoClass, rpnStateInfoConstructor, hashMapInformation);
+
+    return result;
 
 
 

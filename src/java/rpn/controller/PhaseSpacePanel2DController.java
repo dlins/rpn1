@@ -22,6 +22,7 @@ import java.awt.Point;
 import java.awt.geom.Rectangle2D;
 import rpn.controller.ui.TRACKPOINT_CONFIG;
 import rpn.controller.ui.UIController;
+import rpn.usecase.TrackPointAgent;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
 
@@ -69,16 +70,14 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
 
                 int xCursorPos = event.getPoint().x;
                 int yCursorPos = event.getPoint().y;
-                if (UIController.instance().getState() instanceof TRACKPOINT_CONFIG) {
+//                if (UIController.instance().getState() instanceof TRACKPOINT_CONFIG) {
 
-                    TRACKPOINT_CONFIG state = (TRACKPOINT_CONFIG) UIController.instance().getState();
                     Coords2D dcCoords = new Coords2D(xCursorPos, yCursorPos);
                     CoordsArray wcCoords = new Coords2D();
                     panel.scene().getViewingTransform().dcInverseTransform(dcCoords, wcCoords);
-                    state.trackPoint(wcCoords);
+                    TrackPointAgent.instance().trackPoint(wcCoords);
 
-
-                }
+//                }
 
 
                 if (absComplete_) {
