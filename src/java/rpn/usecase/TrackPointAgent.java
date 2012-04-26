@@ -76,11 +76,6 @@ public class TrackPointAgent extends RpModelActionAgent {
 
         }
 
-
-
-
-
-
     }
 
     //TODO Expandir para n dimensoes . No caso de n > 2 o ponto passado para getStateInformation será
@@ -100,11 +95,6 @@ public class TrackPointAgent extends RpModelActionAgent {
 
 
         }
-
-
-
-
-
     }
 
     public RPnStateInfo getInfo() {
