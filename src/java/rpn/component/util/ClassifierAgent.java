@@ -46,9 +46,7 @@ public class ClassifierAgent extends RpModelActionAgent {
     static public List paraOcultarIndCla = new ArrayList(); // este é usado efetivamente para ocultacao
     static public List strView = new ArrayList();           // este é usado efetivamente para ocultacao
 
-    private RealVector[] userInputList_ = null;
-
-
+    
     private ClassifierAgent() {
         super(DESC_TEXT, null);
 
@@ -112,7 +110,6 @@ public class ClassifierAgent extends RpModelActionAgent {
             }
 
             //*** Botao CLASSIFY para HUGONIOT CURVE
-            //if (UIController.instance().getState() instanceof CLASSIFIERAGENT_CONFIG && GeometryUtil.closestCurve_ instanceof HugoniotCurve) {
             if (curve instanceof HugoniotCurve) {
 
                 HugoniotSegment segment = (HugoniotSegment)(((SegmentedCurve)curve).segments()).get(curve.findClosestSegment(GeometryGraphND.pMarca));

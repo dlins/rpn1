@@ -9,6 +9,7 @@ import wave.util.RealVector;
 import rpn.usecase.*;
 import java.util.ArrayList;
 import java.util.List;
+import rpn.component.util.ClassifierAgent;
 
 public class UI_ACTION_SELECTED implements UserInputHandler {
     //
@@ -32,6 +33,7 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
             RealVector userInput) {
 
         userInputList_.add(new RealVector(userInput));
+
 
         if (actionSelected_ instanceof PoincareSectionPlotAgent) {
             if (isPoincareInputReady()) {
@@ -79,6 +81,7 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
 
     }
 
+    
     protected boolean isPoincareInputReady() {
       
         if (userInputList_.size() == rpnumerics.RPNUMERICS.domainDim()) {

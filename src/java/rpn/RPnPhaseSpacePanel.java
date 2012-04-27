@@ -187,7 +187,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
          * SCENE
          */
 
-        if (scene_ != null) {
+        if (scene_ != null) {     //tentar fazer semelhante a isso para o desenho dos acessorios
 
             scene_.draw((Graphics2D) g);
         }
