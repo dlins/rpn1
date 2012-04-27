@@ -53,16 +53,14 @@ public class FluxFunction implements RpFunction {
     
     
     public int jet(WaveState input, JetMatrix output, int degree) {
-        return nativeJet(input, output, degree);
+        return 0;
     }
 
     public int jet(RealVector input, JetMatrix output, int degree) {
-        return nativeVectorJet(input, output, degree);
+        return 0;
     }
 
-    private native int nativeJet(WaveState input, JetMatrix output, int degree);
-
-    private native int nativeVectorJet(RealVector input, JetMatrix output, int degree);
+   
 
     public HessianMatrix D2F(RealVector toRealVector) {
         JetMatrix output = new JetMatrix(toRealVector.getSize());
