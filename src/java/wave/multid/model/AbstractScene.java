@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.io.FileReader;
 import java.util.Iterator;
 import rpn.component.util.ClassifierAgent;
-import rpn.component.util.ControlClick;
+import rpn.component.util.GeometryGraphND;
 import rpn.component.util.GeometryUtil;
 
 
@@ -145,7 +145,7 @@ import wave.multid.map.Map;
 
 
         // --- Leandro
-        ControlClick.clearpMarca();
+        GeometryGraphND.clearpMarca();
         removeStringsCla(geometryIndex);
         removeStringsVel(geometryIndex);
         if (GeometryUtil.listResolution.size()>0) GeometryUtil.listResolution.remove(geometryIndex);

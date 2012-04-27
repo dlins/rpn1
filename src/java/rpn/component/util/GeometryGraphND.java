@@ -10,7 +10,6 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Polygon;
 import java.awt.Shape;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
@@ -21,13 +20,11 @@ import java.util.ArrayList;
 import java.util.List;
 import rpn.RPnPhaseSpacePanel;
 import rpn.component.HugoniotSegGeom;
-import rpn.parser.RPnDataModule;
-import rpnumerics.ContourCurveCalc;
-import rpnumerics.ContourParams;
-import rpnumerics.DoubleContactCurveCalc;
+import rpn.controller.ui.UIController;
+import rpn.controller.ui.UserInputTable;
 import rpnumerics.Orbit;
 import rpnumerics.RPNUMERICS;
-import rpnumerics.RpCalculation;
+import rpnumerics.RPnCurve;
 import rpnumerics.SegmentedCurve;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
@@ -74,6 +71,74 @@ public class GeometryGraphND {
     protected Line2D.Double linex, liney, lineObl;
     public static int mostraGrid = 0;
     public static int mapToEqui = 0;
+    public static int onCurve = 0;
+
+
+    public static void clearpMarca() {
+        for (int i=0; i<GeometryGraphND.pMarca.getSize(); i++) {
+            GeometryGraphND.pMarca.setElement(i, 100.);
+        }
+    }
+
+    public static void clearLastString() {
+        clearpMarca();
+
+        if (UIController.instance().getState() instanceof CLASSIFIERAGENT_CONFIG) {
+            int lastIndex = ClassifierAgent.tipo.size() - 1;
+            ClassifierAgent.strView.remove(lastIndex);
+            ClassifierAgent.indCurvaCla.remove(lastIndex);
+            ClassifierAgent.tipo.remove(lastIndex);
+            ClassifierAgent.xSeta.remove(lastIndex);
+            ClassifierAgent.xStr.remove(lastIndex);
+            ClassifierAgent.ySeta.remove(lastIndex);
+            ClassifierAgent.yStr.remove(lastIndex);
+        }
+
+        if (UIController.instance().getState() instanceof VELOCITYAGENT_CONFIG) {
+            int lastIndex = VelocityAgent.vel.size() - 1;
+            VelocityAgent.velView.remove(lastIndex);
+            VelocityAgent.indCurvaVel.remove(lastIndex);
+            VelocityAgent.vel.remove(lastIndex);
+            VelocityAgent.xSetaVel.remove(lastIndex);
+            VelocityAgent.xVel.remove(lastIndex);
+            VelocityAgent.ySetaVel.remove(lastIndex);
+            VelocityAgent.yVel.remove(lastIndex);
+        }
+    }
+
+    public static void clearAllStrings() {
+        VelocityAgent.clearVelocities();
+        ClassifierAgent.clearClassifiers();
+    }
+
+    public static void clearAll() {
+        ClassifierAgent.indCurvaCla.clear();
+        VelocityAgent.indCurvaVel.clear();
+        clearAllStrings();
+        GeometryUtil.listResolution.clear();
+        VelocityAgent.listaEquil.clear();
+        
+    }
+
+    public static RealVector secondPointDC(RPnCurve curve_) {
+        int jDC = 0;
+        UserInputTable userInputList = UIController.instance().globalInputTable();
+        RealVector newValue = userInputList.values();
+
+        SegmentedCurve curve = (SegmentedCurve)curve_;
+
+        int index = curve.findClosestSegment(newValue);
+
+        if (index > curve.segments().size() / 2) {
+            jDC = index - curve.segments().size() / 2;
+        } else {
+            jDC = index + curve.segments().size() / 2;
+        }
+
+        RealVector pDC = new RealVector(((RealSegment) ((curve).segments()).get(jDC)).p1());
+
+        return pDC;
+    }
 
     
     public void grava() {
@@ -189,7 +254,8 @@ public class GeometryGraphND {
 
     public void defineClassifiers(Graphics g, Scene scene_, RPnPhaseSpacePanel panel) {
 
-        int cont = ClassifierAgent.xDevStr.size();
+        //int cont = ClassifierAgent.xDevStr.size();
+        int cont = ClassifierAgent.xStr.size();
 
         for (int i = 0; i < cont; i++) {
 
@@ -226,10 +292,10 @@ public class GeometryGraphND {
             int s1 = (Integer) (ClassifierAgent.tipo.get(i));
             Object obj = HugoniotSegGeom.s[s1];
 
-            //drawObjects(g, obj, newDC, setaDC);
+            //drawObjects(g, obj, newDC, setaDC);     // algo equivalente ao panel.getName() deve ser usado
             if ((Integer)ClassifierAgent.strView.get(i) == 1  &&  (panel.getName().equals("Phase Space"))) drawObjects(g, obj, newDC, setaDC);
-            if ((Integer)ClassifierAgent.strView.get(i) == 2  &&  (panel.getName().equals("RightPhase Space"))) drawObjects(g, obj, newDC, setaDC);
-            if ((Integer)ClassifierAgent.strView.get(i) == 3  &&  (panel.getName().equals("LeftPhase Space"))) drawObjects(g, obj, newDC, setaDC);
+            else if ((Integer)ClassifierAgent.strView.get(i) == 2  &&  (panel.getName().equals("RightPhase Space"))) drawObjects(g, obj, newDC, setaDC);
+            else if ((Integer)ClassifierAgent.strView.get(i) == 3  &&  (panel.getName().equals("LeftPhase Space"))) drawObjects(g, obj, newDC, setaDC);
 
         }
 
@@ -238,7 +304,8 @@ public class GeometryGraphND {
 
     public void defineVelocities(Graphics g, Scene scene_, RPnPhaseSpacePanel panel) {
 
-        int cont = VelocityAgent.xDevVel.size();
+        //int cont = VelocityAgent.xDevVel.size();
+        int cont = VelocityAgent.xVel.size();
 
         for (int i = 0; i < cont; i++) {
 
@@ -278,8 +345,8 @@ public class GeometryGraphND {
 
             //drawObjects(g, obj, newDC, setaDC);
             if ((Integer)VelocityAgent.velView.get(i) == 1  &&  (panel.getName().equals("Phase Space"))) drawObjects(g, obj, newDC, setaDC);
-            if ((Integer)VelocityAgent.velView.get(i) == 2  &&  (panel.getName().equals("RightPhase Space"))) drawObjects(g, obj, newDC, setaDC);
-            if ((Integer)VelocityAgent.velView.get(i) == 3  &&  (panel.getName().equals("LeftPhase Space"))) drawObjects(g, obj, newDC, setaDC);
+            else if ((Integer)VelocityAgent.velView.get(i) == 2  &&  (panel.getName().equals("RightPhase Space"))) drawObjects(g, obj, newDC, setaDC);
+            else if ((Integer)VelocityAgent.velView.get(i) == 3  &&  (panel.getName().equals("LeftPhase Space"))) drawObjects(g, obj, newDC, setaDC);
 
         }
 
@@ -291,14 +358,17 @@ public class GeometryGraphND {
         RPnPhaseSpacePanel panel = new RPnPhaseSpacePanel(scene);
         ViewingTransform transf = panel.scene().getViewingTransform();
 
-        if (GeometryUtil.closestCurve_ instanceof Orbit) {
+        UserInputTable userInputList = UIController.instance().globalInputTable();
+        RealVector newValue = userInputList.values();
 
-            Orbit curve = (Orbit) GeometryUtil.closestCurve_;
+        GeometryUtil gU = new GeometryUtil();
+        RPnCurve curve = gU.findClosestCurve(newValue);
 
+        if (curve instanceof Orbit) {
 
-            for (int i = 0; i < curve.getPoints().length; i++) {
+            for (int i = 0; i < ((Orbit)curve).getPoints().length; i++) {
 
-                CoordsArray wcCoordsCurve = new CoordsArray(curve.getPoints()[i]);
+                CoordsArray wcCoordsCurve = new CoordsArray(((Orbit)curve).getPoints()[i]);
                 Coords2D dcCoordsCurve = new Coords2D();
                 transf.viewPlaneTransform(wcCoordsCurve, dcCoordsCurve);
 
@@ -308,9 +378,9 @@ public class GeometryGraphND {
                 if (square1.contains(xCurve, yCurve)) {
                     indContido.add(i);
                     if (zerado == 2) {
-                        zContido.add(curve.getPoints()[i].getElement(2));
+                        zContido.add(((Orbit)curve).getPoints()[i].getElement(2));
                     } else {
-                        zContido.add(curve.getPoints()[i].getElement(1));
+                        zContido.add(((Orbit)curve).getPoints()[i].getElement(1));
                     }
 
                 }
@@ -320,28 +390,26 @@ public class GeometryGraphND {
         }
 
 
-        if (GeometryUtil.closestCurve_ instanceof SegmentedCurve) {
+        if (curve instanceof SegmentedCurve) {
 
-            SegmentedCurve curve = (SegmentedCurve) GeometryUtil.closestCurve_;
-
-            for (int i = 0; i < curve.segments().size(); i++) {
+            for (int i = 0; i < ((SegmentedCurve)curve).segments().size(); i++) {
 
                 Coords2D dcCoordsCurve = new Coords2D();
-                dcCoordsCurve = toDeviceCoords(scene, ((RealSegment) (curve.segments()).get(i)).p1());
+                dcCoordsCurve = toDeviceCoords(scene, ((RealSegment) (((SegmentedCurve)curve).segments()).get(i)).p1());
                 double xCurve = dcCoordsCurve.getElement(0);
                 double yCurve = dcCoordsCurve.getElement(1);
 
                 Coords2D dcCoordsCurve2 = new Coords2D();
-                dcCoordsCurve2 = toDeviceCoords(scene, ((RealSegment) (curve.segments()).get(i)).p2());
+                dcCoordsCurve2 = toDeviceCoords(scene, ((RealSegment) (((SegmentedCurve)curve).segments()).get(i)).p2());
                 double xCurve2 = dcCoordsCurve2.getElement(0);
                 double yCurve2 = dcCoordsCurve2.getElement(1);
 
                 if ((square1.contains(xCurve, yCurve) && square1.contains(xCurve2, yCurve2))) {
                     indContido.add(i);
                     if (zerado == 2) {
-                        zContido.add(((RealSegment) (curve.segments()).get(i)).p1().getElement(2));
+                        zContido.add(((RealSegment) (((SegmentedCurve)curve).segments()).get(i)).p1().getElement(2));
                     } else {
-                        zContido.add(((RealSegment) (curve.segments()).get(i)).p1().getElement(1));
+                        zContido.add(((RealSegment) (((SegmentedCurve)curve).segments()).get(i)).p1().getElement(1));
                     }
 
                 }

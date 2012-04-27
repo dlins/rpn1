@@ -9,16 +9,8 @@ import rpnumerics.RPNUMERICS;
 import wave.util.RealVector;
 import java.beans.PropertyChangeEvent;
 import rpn.component.RpGeometry;
-import rpn.component.util.CLASSIFIERAGENT_CONFIG;
-import rpn.component.util.ControlClick;
 import rpn.component.util.GeometryGraphND;
-import rpn.component.util.GeometryUtil;
 import rpn.controller.ui.*;
-import rpn.parser.RPnDataModule;
-import rpnumerics.Orbit;
-import rpnumerics.RPnCurve;
-import rpnumerics.SegmentedCurve;
-import wave.util.RealSegment;
 
 public class DragPlotAgent extends RpModelConfigChangeAgent {
     //
@@ -40,40 +32,21 @@ public class DragPlotAgent extends RpModelConfigChangeAgent {
     }
 
     public void execute() {
-//<<<<<<< HEAD
 
-//        RpGeometry lastGeometry = RPnDataModule.PHASESPACE.getLastGeometry();
-//
-//        RPnCurvesListFrame.removeLastEntry();
-//
-//        UserInputTable userInputList = UIController.instance().globalInputTable();
-//
-//        RealVector newValue = userInputList.values();
-//
-//        if (ControlClick.onCurve == 1) newValue = GeometryGraphND.pMarca;
-//
-//        lastGeometry.geomFactory().getUI().propertyChange(new PropertyChangeEvent(this, "enabled", null, newValue));
-//
-//        RPnCurvesListFrame.addGeometry(lastGeometry);
-//
-//        RPnDataModule.PHASESPACE.update();
-//
-//        for (RPnPhaseSpaceFrame frame : RPnUIFrame.getPhaseSpaceFrames()) {
-//            frame.phaseSpacePanel().repaint();
-//        }
-//=======
         try {
             RpGeometry lastGeometry = phaseSpace_.getLastGeometry();
             UserInputTable userInputList = UIController.instance().globalInputTable();
             RealVector newValue = userInputList.values();
-            if (ControlClick.onCurve == 1) newValue = GeometryGraphND.pMarca;
+            if (GeometryGraphND.onCurve == 1) {
+                newValue = GeometryGraphND.pMarca;
+            }
             lastGeometry.geomFactory().getUI().propertyChange(new PropertyChangeEvent(this, "enabled", null, newValue));
             phaseSpace_.update();
             UIController.instance().panelsUpdate();
         } catch (Exception e) {
 
             return;
-//>>>>>>> f35dc7fbfcff605ad0a07a4c31682e08101d761b
+
         }
 
 

@@ -25,18 +25,12 @@ import rpn.controller.*;
 import java.net.*;
 import java.util.Iterator;
 import rpn.RPnDesktopPlotter;
-import rpn.RPnPhaseSpaceFrame;
 import rpn.RPnUIFrame;
-import rpn.component.util.ControlClick;
+import rpn.component.util.GeometryGraph;
 import rpn.component.util.GeometryGraphND;
 import rpn.component.util.GeometryUtil;
 import rpn.message.*;
-import rpn.parser.RPnDataModule;
-import rpnumerics.Orbit;
 import rpnumerics.RPnCurve;
-import rpnumerics.SegmentedCurve;
-import wave.multid.view.ViewingTransform;
-import wave.util.RealSegment;
 
 /** This class implements a general controller to the application. With the UIController class, the state of the application is changed, the controllers of each panel are installed or removed and the user inputs are stored in a global table. */
 public class UIController extends ComponentUI {
@@ -165,47 +159,40 @@ public class UIController extends ComponentUI {
             if (event.getComponent() instanceof RPnPhaseSpacePanel) {
                 RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
 
-                //GeometryUtil.namePhaseSpace = ((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom()).getName();   //** acrescentei isso (Leandro)
-                //panel.setName(GeometryUtil.namePhaseSpace);
-
-                if (ControlClick.ind == 0) {
-                    ControlClick.mousePressed(event);
-                    panel.repaint();
-                }
-                
                 //*** Permite que o input point de uma curva seja exatamente um ponto sobre outra curva
-                if (ControlClick.onCurve == 1) {
+                if (GeometryGraphND.onCurve == 1) {
+                    UserInputTable userInputList = UIController.instance().globalInputTable();
+                    RealVector newValue = userInputList.values();
 
-                    ViewingTransform transf = panel.scene().getViewingTransform();
+                    GeometryUtil gU = new GeometryUtil();
+                    RPnCurve curve = gU.findClosestCurve(newValue);
+                    GeometryGraphND.pMarca = curve.findClosestPoint(newValue);
 
-                    //** Para usar transfs originais.   FUNCIONANDO!!!
-                    Coords2D dcCoords = new Coords2D(event.getX(), event.getY());
-                    CoordsArray wcCoords = new CoordsArray(transf.projectionMap().getDomain());
-                    transf.dcInverseTransform(dcCoords, wcCoords);
-                    //***
-
-                    for (int i = 0; i < GeometryGraphND.targetPoint.getSize(); i++) {
-                        GeometryGraphND.targetPoint.setElement(i, wcCoords.getElement(i));
-                    }
-
-                    RPnCurve curve = GeometryUtil.findClosestCurve(GeometryGraphND.targetPoint);
-                    GeometryGraphND.pMarca = curve.findClosestPoint(GeometryGraphND.targetPoint);
                     panel.repaint();
-
                 }
                 //***-----------------------------------------------------------------------------------
 
                 // this will automatically work only for 2D(isComplete())
                 updateUserInputTable(panel, event.getPoint());
 
-                if (globalInputTable().isComplete() && ControlClick.ind == 0) {
-                //if (globalInputTable().isComplete()) {
+                if (globalInputTable().isComplete()) {
 
                     globalInputTable().reset();
                     resetPanelsCursorCoords();
-                    if (event.isShiftDown()) {
+
+
+                    if (event.isShiftDown() && event.isControlDown()) {
                         userInputComplete(globalInputTable().values());
-                    } else {
+                    }
+
+                    else
+                    
+                    if (event.isShiftDown()) {
+                        GeometryGraph.count = 0;
+                        userInputComplete(globalInputTable().values());
+                        GeometryGraph.count = 0;
+                    }
+                    else {
 
                         if (handler_ instanceof UI_ACTION_SELECTED) {
                             UI_ACTION_SELECTED actionSelected = (UI_ACTION_SELECTED) handler_;
@@ -215,6 +202,7 @@ public class UIController extends ComponentUI {
                         }
 
                         DragPlotAgent.instance().execute();
+                        
                     }
                 }
 
@@ -233,14 +221,12 @@ public class UIController extends ComponentUI {
             RPnUIFrame.disableSliders();
 
             if (event.getComponent() instanceof RPnPhaseSpacePanel) {
-
+                
                 RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
 
                 GeometryUtil.namePhaseSpace = ((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom()).getName();   //** acrescentei isso (Leandro)
                 panel.setName(GeometryUtil.namePhaseSpace);
 
-                ControlClick.mousePressed(event);   //** acrescentei isso (Leandro)
-                
                 if (netStatus_.isMaster() || !(netStatus_.isOnline())) {
 
 
@@ -396,7 +382,6 @@ public class UIController extends ComponentUI {
     /** Do a specific action when all user inputs has been made. */
     public void userInputComplete(RealVector userInput) {
         // state dependent
-
 
         handler_.userInputComplete(this, userInput);
 

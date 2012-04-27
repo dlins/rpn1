@@ -22,7 +22,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.batik.ext.swing.GridBagConstants;
 import rpn.component.util.AreaSelectionAgent2;
 import rpn.component.util.ClassifierAgent;
-import rpn.component.util.ControlClick;
+import rpn.component.util.GeometryGraphND;
 import rpn.component.util.GeometryUtil;
 import rpn.component.util.VelocityAgent;
 import rpn.controller.ui.*;
@@ -743,7 +743,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 new java.awt.event.ActionListener() {
 
                     public void actionPerformed(ActionEvent e) {
-                        ControlClick.clearAllStrings();
+                        GeometryGraphND.clearAllStrings();
                     }
                 });
 
@@ -751,7 +751,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 new java.awt.event.ActionListener() {
 
                     public void actionPerformed(ActionEvent e) {
-                        ControlClick.clearLastString();
+                        GeometryGraphND.clearLastString();
                     }
                 });
 

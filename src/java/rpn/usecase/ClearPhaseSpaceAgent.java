@@ -6,11 +6,9 @@
 package rpn.usecase;
 
 import java.awt.event.ActionEvent;
-import rpn.component.util.ControlClick;
+import rpn.component.util.GeometryGraphND;
 import rpn.controller.ui.*;
 import rpn.message.RPnActionMediator;
-import rpnumerics.RPNUMERICS;
-import rpnumerics.RPnCurve;
 
 
 public class ClearPhaseSpaceAgent extends javax.swing.AbstractAction {
@@ -37,7 +35,7 @@ public class ClearPhaseSpaceAgent extends javax.swing.AbstractAction {
         UIController.instance().panelsBufferClear();
         rpn.parser.RPnDataModule.PHASESPACE.clear();
 
-        ControlClick.clearAll();                        //*** Leandro
+        GeometryGraphND.clearAll();
         
 
         // ClearScene is not undoable

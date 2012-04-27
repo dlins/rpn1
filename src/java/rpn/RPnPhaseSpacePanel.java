@@ -23,7 +23,6 @@ import java.awt.image.BufferedImage;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Color;
-
 import javax.swing.JPanel;
 import java.awt.Shape;
 import java.awt.geom.Area;
@@ -40,12 +39,9 @@ import org.w3c.dom.Document;
 import rpn.component.util.AREASELECTION_CONFIG2;
 import rpn.component.util.CLASSIFIERAGENT_CONFIG;
 import rpn.component.util.GeometryGraph;
-import rpn.component.util.GeometryGraph3D;
-import rpn.component.util.GeometryUtil;
 import rpn.component.util.VELOCITYAGENT_CONFIG;
 import rpn.controller.ui.AREASELECTION_CONFIG;
 import rpn.controller.ui.UIController;
-import rpn.parser.RPnDataModule;
 import rpnumerics.BifurcationProfile;
 import rpnumerics.RPNUMERICS;
 

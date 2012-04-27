@@ -8,46 +8,29 @@ package rpn.usecase;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JToggleButton;
 import rpn.RPnDesktopPlotter;
-import rpn.RPnMenuCommand;
-import rpn.RPnPhaseSpaceAbstraction;
-import rpn.RPnPhaseSpaceFrame;
-import rpn.RPnPhaseSpacePanel;
-import rpn.RPnSelectedAreaDialog;
-import rpn.RPnUIFrame;
-import rpn.component.HugoniotCurveGeomFactory;
-import rpn.component.LevelCurveGeomFactory;
-import rpn.component.util.ControlClick;
 import rpn.component.util.GeometryGraph;
 import rpn.component.util.GeometryGraph3D;
 import rpn.component.util.GeometryGraphND;
 import rpn.component.util.GeometryUtil;
-import rpn.controller.phasespace.NumConfigImpl;
 import rpn.controller.ui.AREASELECTION_CONFIG;
-import rpn.controller.ui.BIFURCATIONREFINE_CONFIG;
 import rpn.controller.ui.UIController;
-import rpn.parser.RPnDataModule;
+import rpn.controller.ui.UserInputTable;
 import rpnumerics.Area;
-import rpnumerics.BifurcationProfile;
-import rpnumerics.HugoniotCurve;
-import rpnumerics.HugoniotCurveCalcND;
 import rpnumerics.RPNUMERICS;
 import rpnumerics.RPnCurve;
-import rpnumerics.RpException;
 import rpnumerics.SegmentedCurve;
-import wave.multid.CoordsArray;
-import wave.multid.model.BoundingBox;
 import wave.util.Boundary;
 import wave.util.RealVector;
 import wave.util.RectBoundary;
 
 
 public class AreaSelectionAgent extends RpModelActionAgent {
+
+    public int ind = 0;
 
     static public final String DESC_TEXT = "Select Area";
     static private AreaSelectionAgent instance_ = null;
@@ -89,12 +72,16 @@ public class AreaSelectionAgent extends RpModelActionAgent {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Override
-    public void execute() {
 
-        //**********************************************************************
+    public void execute_() {
 
-        if (ControlClick.ind % 2 == 0  &&  GeometryUtil.closestCurve_ instanceof SegmentedCurve) {
+        UserInputTable userInputList = UIController.instance().globalInputTable();
+        RealVector newValue = userInputList.values();
+
+        GeometryUtil gU = new GeometryUtil();
+        RPnCurve curve = gU.findClosestCurve(newValue);
+
+        if (curve instanceof SegmentedCurve) {
 
             Object[] options = {"Zoom", "Refine"};
             int n = JOptionPane.showOptionDialog(new JFrame(),
@@ -106,10 +93,9 @@ public class AreaSelectionAgent extends RpModelActionAgent {
                     options,
                     options[1]);
 
-            if (n == 0  &&  GeometryGraphND.mapToEqui == 0) {
+            if (n == 0 && GeometryGraphND.mapToEqui == 0) {
                 RectBoundary rectBdry = new RectBoundary(GeometryGraph.downLeft, GeometryGraph.topRight);
                 Boundary bdry = (Boundary) rectBdry;
-                //RPnDesktopPlotter.getUIFrame().phaseSpaceFramesInit(bdry);
                 RPnDesktopPlotter.getUIFrame().phaseSpaceFrameZoom(bdry);
             }
 
@@ -143,9 +129,48 @@ public class AreaSelectionAgent extends RpModelActionAgent {
 
 
         }
+    }
 
 
-        //**********************************************************************
+    @Override
+    public void execute() {
+
+        System.out.println("Entrou no execute() do AreaSelectionAgent");
+
+        UserInputTable userInputList = UIController.instance().globalInputTable();
+        RealVector newValue = userInputList.values();
+
+        //*** ATENCAO: qualquer coisa relacionada a ControlClick deve ser removida
+        if ((GeometryGraph.count % 2) == 0) {
+        
+            for (int i = 0; i < newValue.getSize(); i++) {
+                GeometryGraphND.targetPoint.setElement(i, newValue.getElement(i));
+            }
+
+            GeometryUtil gU = new GeometryUtil();
+            RPnCurve curve = gU.findClosestCurve(newValue);
+            GeometryGraphND.pMarca = curve.findClosestPoint(newValue);
+
+            GeometryGraph.count++;
+            return;
+
+        }
+
+
+        if ((GeometryGraph.count % 2) == 1) {
+        
+            for (int i = 0; i < newValue.getSize(); i++) {
+                GeometryGraphND.cornerRet.setElement(i, newValue.getElement(i));
+            }
+
+            GeometryGraphND.zContido.clear();
+            GeometryGraphND.wContido.clear();
+
+            GeometryGraph.count++;
+            execute_();
+
+        }
+        //******
         
 
     }

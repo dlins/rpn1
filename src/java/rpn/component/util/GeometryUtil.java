@@ -8,9 +8,6 @@ package rpn.component.util;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import rpn.RPnPhaseSpaceAbstraction;
 import rpn.component.RpCalcBasedGeomFactory;
 import rpn.component.RpGeomFactory;
 import rpn.component.RpGeometry;
@@ -28,26 +25,25 @@ import wave.util.RealVector;
 public class GeometryUtil {
 
     static public int closestCurve;             //indice da curva mais proxima
-    static public RPnCurve closestCurve_ ;      //a curva mais proxima
-    static public int closestSeg ;              //indice do segmento mais proximo
     static public List listResolution = new ArrayList();
     static public String namePhaseSpace = "";
+
     
-    
-    public static RPnCurve findClosestCurve(RealVector targetPoint) {
+    public RPnCurve findClosestCurve(RealVector targetPoint) {
+
+        RPnCurve closestCurve_ = null;      //a curva mais proxima
 
         listResolution.clear();
     
         double distminCurve = 1000000.;
         double distancia = 0.;
         int k = 0;
-        int seg = 0;
         Iterator<RpGeometry> geomList = null ;
         //--------------------------
 
-        if (namePhaseSpace.equals("Phase Space")) geomList = RPnDataModule.PHASESPACE.getGeomObjIterator();
+        if (namePhaseSpace.equals("Phase Space"))      geomList = RPnDataModule.PHASESPACE.getGeomObjIterator();
         if (namePhaseSpace.equals("RightPhase Space")) geomList = RPnDataModule.RIGHTPHASESPACE.getGeomObjIterator();
-        if (namePhaseSpace.equals("LeftPhase Space")) geomList = RPnDataModule.LEFTPHASESPACE.getGeomObjIterator();
+        if (namePhaseSpace.equals("LeftPhase Space"))  geomList = RPnDataModule.LEFTPHASESPACE.getGeomObjIterator();
         
         //Iterator<RpGeometry> geomList = RPnDataModule.PHASESPACE.getGeomObjIterator();
         
@@ -55,27 +51,25 @@ public class GeometryUtil {
 
             RpGeometry geom = (RpGeometry) geomList.next();
 
-                if (ControlClick.onCurve == 1) {
+                if (GeometryGraphND.onCurve == 1) {
 
-                    if (geom != RPnDataModule.PHASESPACE.getLastGeometry()
-                            &&  geom!= RPnDataModule.RIGHTPHASESPACE.getLastGeometry()
-                            &&  geom!= RPnDataModule.LEFTPHASESPACE.getLastGeometry()) {
+                    if ((namePhaseSpace.equals("Phase Space")  &&  geom != RPnDataModule.PHASESPACE.getLastGeometry())
+                            || (namePhaseSpace.equals("RightPhase Space")  &&  geom != RPnDataModule.RIGHTPHASESPACE.getLastGeometry())
+                            || (namePhaseSpace.equals("LeftPhase Space")  &&  geom != RPnDataModule.LEFTPHASESPACE.getLastGeometry())) {
 
                         if (geom.viewingAttr().isVisible()) {
 
                             RpGeomFactory factory = geom.geomFactory();
                             RPnCurve curve = (RPnCurve) factory.geomSource();
 
-                            //seg = curve.findClosestSegment(targetPoint);
                             curve.findClosestSegment(targetPoint);   //***
-                            
-                            distancia = curve.distancia;
 
+                            distancia = curve.distancia;
+                            
                             if (distminCurve >= distancia) {
                                 distminCurve = distancia;
                                 closestCurve = k;
                                 closestCurve_ = curve;
-                                //closestSeg = seg;
                             }
 
                         }
@@ -83,7 +77,7 @@ public class GeometryUtil {
 
                 }
 
-                if (ControlClick.onCurve == 0) {
+                if (GeometryGraphND.onCurve == 0) {
 
                     if (geom.viewingAttr().isVisible()) {
 
@@ -101,16 +95,14 @@ public class GeometryUtil {
                             listResolution.add(resolution);
                         }
 
-                        //seg = curve.findClosestSegment(targetPoint);
                         curve.findClosestSegment(targetPoint);   //***
                         
                         distancia = curve.distancia;
-
+                        
                         if (distminCurve >= distancia) {
                             distminCurve = distancia;
                             closestCurve = k;
                             closestCurve_ = curve;
-                            //closestSeg = seg;
                         }
 
                     }

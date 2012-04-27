@@ -6,13 +6,10 @@
 package rpn;
 
 import java.awt.*;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -21,7 +18,7 @@ import javax.swing.KeyStroke;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import rpn.component.util.ControlClick;
+import rpn.component.util.GeometryGraphND;
 
 import rpnumerics.Configuration;
 import rpnumerics.RPNUMERICS;
@@ -146,7 +143,7 @@ public class RPnFluxParamsDialog extends RPnDialog {
     @Override
     protected void apply() {
 
-        ControlClick.clearAllStrings();
+        GeometryGraphND.clearAllStrings();
         RPNUMERICS.applyFluxParams();
 
         rpn.usecase.ChangeFluxParamsAgent.instance().applyChange(new PropertyChangeEvent(rpn.usecase.ChangeFluxParamsAgent.instance(), "", null, RPNUMERICS.getFluxParams()));
