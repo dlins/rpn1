@@ -6,15 +6,9 @@
  */
 package rpnumerics;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import rpn.component.RpGeomFactory;
-import rpn.component.RpGeometry;
 import rpn.component.util.GeometryUtil;
-import rpn.parser.RPnDataModule;
-import wave.multid.model.AbstractScene;
+import rpn.controller.ui.UIController;
+import rpn.controller.ui.UserInputTable;
 import wave.util.RealVector;
 
 public class Area {
@@ -45,7 +39,11 @@ public class Area {
 
 
     public boolean isClosestCurve(RPnCurve curve) {
-        return (curve == GeometryUtil.closestCurve_);
+        UserInputTable userInputList = UIController.instance().globalInputTable();
+        RealVector newValue = userInputList.values();
+        GeometryUtil gU = new GeometryUtil();
+
+        return (curve == gU.findClosestCurve(newValue));
     }
 
 

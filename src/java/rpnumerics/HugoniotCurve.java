@@ -4,9 +4,6 @@ import wave.util.RealVector;
 import wave.util.RealSegment;
 import java.util.List;
 import java.util.ArrayList;
-import rpn.component.util.ControlClick;
-import rpn.component.util.GeometryGraphND;
-import rpn.component.util.GeometryUtil;
 
 public class HugoniotCurve extends SegmentedCurve {
     //
@@ -14,7 +11,7 @@ public class HugoniotCurve extends SegmentedCurve {
     //
 
     private PhasePoint xZero_;
-
+    
     public HugoniotCurve(PhasePoint xZero, List<HugoniotSegment> hSegments) {
         super(hSegments);
 
@@ -341,73 +338,60 @@ public class HugoniotCurve extends SegmentedCurve {
     }
 
 
+
     //****************************
-
-        public void equilPoints() {
-
-        //if (GeometryUtil.closestCurve_ instanceof HugoniotCurve) {
-            HugoniotSegment segment = (HugoniotSegment) (((SegmentedCurve) GeometryUtil.closestCurve_).segments()).get(GeometryUtil.closestSeg);
-            //VelocityAgent.vel.add(segment.leftSigma());
-
-            double lSigma = segment.leftSigma();
-            double rSigma = segment.rightSigma();
-            double lX = segment.leftPoint().getElement(0);
-            double rX = segment.rightPoint().getElement(0);
-            double X = GeometryGraphND.pMarca.getElement(0);
-
-            ControlClick.vel = (rSigma - lSigma) * (X - lX) / (rX - lX) + lSigma;
-            System.out.println("Valor de vel : " +ControlClick.vel);
-
-            //----------------------------------------------------------
-
-            ControlClick.listaEquil.clear();
-            ControlClick.listaVec.clear();
-            ControlClick.listaLambda.clear();
-
-            //----------------------------------------------------------
-            // inclui o Uref na lista de pontos de equilibrio
-            RealVector pZero = ((HugoniotCurve) GeometryUtil.closestCurve_).getXZero();
-            ControlClick.listaEquil.add(pZero);
-
-            int sz = (((SegmentedCurve) GeometryUtil.closestCurve_).segments().size());
-            for (int i = 0; i < sz; i++) {
-                HugoniotSegment segment_ = (HugoniotSegment) (((SegmentedCurve) GeometryUtil.closestCurve_).segments()).get(i);
-
-                if ((segment_.leftSigma() <= ControlClick.vel && segment_.rightSigma() >= ControlClick.vel)
-                        || (segment_.leftSigma() >= ControlClick.vel && segment_.rightSigma() <= ControlClick.vel)) {
-
-                    //----------------------------------------------------------
-                    double lSigma_ = segment_.leftSigma();
-                    double rSigma_ = segment_.rightSigma();
-                    double lX_ = segment_.leftPoint().getElement(0);
-                    double rX_ = segment_.rightPoint().getElement(0);
-                    double lY_ = segment_.leftPoint().getElement(1);
-                    double rY_ = segment_.rightPoint().getElement(1);
-
-                    double X_ = (rX_ - lX_) * (ControlClick.vel - lSigma_) / (rSigma_ - lSigma_) + lX_;
-                    double Y_ = (rY_ - lY_) * (ControlClick.vel - lSigma_) / (rSigma_ - lSigma_) + lY_;
-                    RealVector p = new RealVector(2);
-                    p.setElement(0, X_);
-                    p.setElement(1, Y_);
-
-                    if (p != pZero) {
-                        ControlClick.listaEquil.add(p);
-                    }
-
-
-                }
-            }
-
-            System.out.println("listaEquil.size() : " +ControlClick.listaEquil.size());
-            System.out.println("listaLambda.size() : " +ControlClick.listaLambda.size());
-            System.out.println("Lista de pontos de equilibrio : " +ControlClick.listaEquil.toString());
-
-            //----------------------------------------------------------
-
-        //}
-
+    public double velocity(HugoniotSegment segment, RealVector pMarca) {
+        double lSigma = segment.leftSigma();
+        double rSigma = segment.rightSigma();
+        double lX = segment.leftPoint().getElement(0);
+        double rX = segment.rightPoint().getElement(0);
+        double X = pMarca.getElement(0);
+        
+        return ((rSigma - lSigma) * (X - lX) / (rX - lX) + lSigma);
     }
 
+    //****************************
+    public List<RealVector> equilPoints(RealVector pMarca) {
+
+        List<RealVector> equil = new ArrayList();
+
+        HugoniotSegment segment = (HugoniotSegment) (segments()).get(findClosestSegment(pMarca));    //tirei as referencias externas
+        double velocity = velocity(segment, pMarca);
+
+        // inclui o Uref na lista de pontos de equilibrio
+        //RealVector pZero = getXZero();
+        //equil.add(pZero);
+
+        int sz = segments().size();
+        for (int i = 0; i < sz; i++) {
+            HugoniotSegment segment_ = (HugoniotSegment) segments().get(i);
+
+            if ((segment_.leftSigma() <= velocity && segment_.rightSigma() >= velocity)
+                    || (segment_.leftSigma() >= velocity && segment_.rightSigma() <= velocity)) {
+
+                double lSigma_ = segment_.leftSigma();
+                double rSigma_ = segment_.rightSigma();
+                double lX_ = segment_.leftPoint().getElement(0);
+                double rX_ = segment_.rightPoint().getElement(0);
+                double lY_ = segment_.leftPoint().getElement(1);
+                double rY_ = segment_.rightPoint().getElement(1);
+
+                double X_ = (rX_ - lX_) * (velocity - lSigma_) / (rSigma_ - lSigma_) + lX_;
+                double Y_ = (rY_ - lY_) * (velocity - lSigma_) / (rSigma_ - lSigma_) + lY_;
+                RealVector p = new RealVector(2);
+                p.setElement(0, X_);
+                p.setElement(1, Y_);
+
+                //if (p != pZero) {
+                    equil.add(p);
+                //}
+
+            }
+        }
+
+        return equil;
+
+    }
     //****************************
 
 

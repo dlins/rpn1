@@ -8,10 +8,6 @@ package rpnumerics;
 
 import java.awt.Color;
 import java.awt.Shape;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import rpn.RPnPhaseSpaceAbstraction;
-import rpn.component.RpGeometry;
 import rpnumerics.methods.contour.ContourCurve;
 import wave.multid.*;
 import wave.multid.model.AbstractPathIterator;
@@ -25,16 +21,11 @@ import wave.multid.model.SegmentDegradesPolyline;
 import wave.multid.model.WrongNumberOfDefPointsEx;
 import wave.multid.view.*;
 import rpn.component.MultidAdapter;
-
 import wave.util.*;
 import java.util.ArrayList;
 import java.util.List;
-import rpn.component.SegmentedCurveGeom;
-import rpn.component.util.GeometryGraph3D;
 import rpn.component.util.GeometryUtil;
 import rpn.parser.RPnDataModule;
-import wave.multid.model.AbstractScene;
-import wave.multid.model.MultiGeometry;
 
 
 public class RPnCurve extends MultiPolyLine {
@@ -44,7 +35,7 @@ public class RPnCurve extends MultiPolyLine {
     private double ALFA;
     //** declarei isso (Leandro)
     public double distancia = 0;
-
+    
     public RPnCurve() {//TODO REMOVE !!
         super(new CoordsArray[3], new ViewingAttr(Color.WHITE));
 
@@ -321,8 +312,11 @@ public class RPnCurve extends MultiPolyLine {
         //System.out.println("closestDistance associado       : " +closestDistance);
         distancia = closestDistance;
 
+        //setDistance(closestDistance);
+
         return closestSegment;
     }
+
 
     public RealVector findClosestPoint(RealVector targetPoint) {
 
@@ -331,7 +325,9 @@ public class RPnCurve extends MultiPolyLine {
 
         ArrayList segments = null;
         //RPnCurve curve = this;
-        RPnCurve curve = GeometryUtil.closestCurve_;
+        GeometryUtil gU = new GeometryUtil();
+        RPnCurve curve = gU.findClosestCurve(targetPoint);
+        //RPnCurve curve = GeometryUtil.closestCurve_;
 
         if (curve instanceof SegmentedCurve) {
             segments = (ArrayList) ((SegmentedCurve)curve).segments();
@@ -340,15 +336,7 @@ public class RPnCurve extends MultiPolyLine {
             segments = MultidAdapter.converseRPnCurveToRealSegments(curve);
         }
 
-
-        GeometryUtil.closestSeg = findClosestSegment(targetPoint);
-
-        RealSegment closestSegment = (RealSegment) segments.get(GeometryUtil.closestSeg);
-        
-//        RealSegment closestSegment = (RealSegment) segments.get(
-//                findClosestSegment(targetPoint));
-
-        
+        RealSegment closestSegment = (RealSegment) segments.get(findClosestSegment(targetPoint));
 
         if (ALFA <= 0) {
             return closestSegment.p1();

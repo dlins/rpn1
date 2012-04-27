@@ -11,6 +11,8 @@ import rpn.RPnDesktopPlotter;
 import rpn.component.util.GeometryGraphND;
 import rpn.controller.RpCalcController;
 import rpn.controller.RpController;
+import rpn.controller.ui.UIController;
+import rpn.controller.ui.UserInputTable;
 
 import rpnumerics.Area;
 import rpnumerics.RPnCurve;
@@ -19,6 +21,7 @@ import rpnumerics.RpCalculation;
 import rpnumerics.RpException;
 import rpnumerics.RpSolution;
 import rpnumerics.SegmentedCurve;
+import wave.util.RealVector;
 
 public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
     //
@@ -133,10 +136,15 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
                 ((SegmentedCurve) geomSource_).segments().removeAll(segRem);
                 GeometryGraphND.indContido.clear();
 
-                for (int i = 0; i < GeometryGraphND.targetPoint.getSize(); i++) {        // Pode ser útil na hora de fazer inclusao dos novos segmentos (para nao serem eliminados)
+                // Pode ser útil na hora de fazer inclusao dos novos segmentos (para nao serem eliminados)
+                UserInputTable userInputList = UIController.instance().globalInputTable();
+                RealVector newValue = userInputList.values();
+
+                for (int i = 0; i < newValue.getSize(); i++) {
                     GeometryGraphND.cornerRet.setElement(i, 0);
-                    GeometryGraphND.targetPoint.setElement(i, 0.);
+                    newValue.setElement(i, 0.);
                 }
+                //----------------------------------------------------------------------------------------
 
                 SegmentedCurve newCurve = (SegmentedCurve) calc_.recalc(area);
 

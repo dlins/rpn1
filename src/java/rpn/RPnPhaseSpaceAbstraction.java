@@ -14,14 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
 import rpn.component.util.ClassifierAgent;
-import rpn.component.util.ControlClick;
-import rpn.component.util.GeometryGraph;
-import rpn.component.util.GeometryUtil;
 import rpn.component.util.VelocityAgent;
 import rpn.controller.ui.UIController;
 import wave.multid.model.MultiGeometry;
 import wave.multid.model.MultiPolyLine;
-import wave.multid.view.Scene;
 import wave.util.RealVector;
 
 public class RPnPhaseSpaceAbstraction extends AbstractScene {
