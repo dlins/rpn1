@@ -10,10 +10,10 @@ extern "C" {
 /*
  * Class:     rpnumerics_HysteresisCurveCalc
  * Method:    nativeCalc
- * Signature: (II[III)Lrpnumerics/RpSolution;
+ * Signature: (I[I)Lrpnumerics/RpSolution;
  */
 JNIEXPORT jobject JNICALL Java_rpnumerics_HysteresisCurveCalc_nativeCalc
-  (JNIEnv *, jobject, jint, jint, jintArray, jint, jint);
+  (JNIEnv *, jobject, jint, jintArray);
 
 #ifdef __cplusplus
 }

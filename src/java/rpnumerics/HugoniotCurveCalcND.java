@@ -76,6 +76,7 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
 
     }
 
+    @Override
     public RpSolution recalc() throws RpException {
 
         return calc();

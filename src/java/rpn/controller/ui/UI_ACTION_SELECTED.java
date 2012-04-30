@@ -34,7 +34,6 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
 
         userInputList_.add(new RealVector(userInput));
 
-
         if (actionSelected_ instanceof PoincareSectionPlotAgent) {
             if (isPoincareInputReady()) {
                 ArrayList<RealVector> tempInputList = new ArrayList<RealVector>();
@@ -59,7 +58,7 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
             UIController.instance().setWaitCursor();
             actionSelected_.execute();
             UIController.instance().resetCursor();
-            userInputList_.clear();
+            userInputList_.clear();                          // ESTE CLEAR DEVE PERMANECER?
             ui.panelsBufferClear();
             rpn.parser.RPnDataModule.PHASESPACE.unselectAll();
         }
@@ -81,7 +80,7 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
 
     }
 
-    
+
     protected boolean isPoincareInputReady() {
       
         if (userInputList_.size() == rpnumerics.RPNUMERICS.domainDim()) {

@@ -7,7 +7,6 @@ package rpnumerics;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 import rpn.RPnConfig;
@@ -38,12 +37,10 @@ public class RPNUMERICS {
     //
 
     static public void init(String physicsID) {
-        //System.loadLibrary("wave");//TODO libwave is always loaded ?
-        //System.loadLibrary("rpnumerics");
+
         System.loadLibrary("rpn");
         setRPnHome(System.getProperty("rpnhome"));
 
-//        System.out.println("Inicializando a fisica: " + physicsID);
         initNative(physicsID);
 
         //Processing configuration data
@@ -85,37 +82,22 @@ public class RPNUMERICS {
         //Flux function
 
         Configuration fluxFunctionConfig = physicsConfiguration.getConfiguration("fluxfunction");
-        FluxParams fluxParams = getFluxParams();
 
-        if (fluxFunctionConfig != null) {
-
-
-            for (int i = 0; i < fluxFunctionConfig.getParamsSize(); i++) {
-                //SET FLUX PARAMS !!!
-                fluxParams.setParam(i, new Double(fluxFunctionConfig.getParam(i)));
-
-            }
-            setFluxParams(fluxParams);
+        String[] paramsArray = new String[fluxFunctionConfig.getParamsSize()];
 
 
-        } else {
+        for (int i = 0; i < fluxFunctionConfig.getParamsSize(); i++) {
 
-            RealVector paramsVector = fluxParams.getParams();
-
-            Configuration fluxFunctionConfiguration = new Configuration("fluxfunction", ConfigurationProfile.PHYSICS_CONFIG);
-
-            for (int i = 0; i < paramsVector.getSize(); i++) {
-                fluxFunctionConfiguration.setParamValue("param " + i, String.valueOf(paramsVector.getElement(i)));
-                fluxFunctionConfiguration.setParamOrder("param " + i, i);
-
-            }
-
-            physicsConfiguration.addConfiguration("fluxfunction", fluxFunctionConfiguration);
-
-
-            RPnConfig.addProfile(physicsID, physicsProfile);
+            paramsArray[i] = fluxFunctionConfig.getParam(i);
 
         }
+
+        setParams(paramsArray);
+
+
+        RPnConfig.addProfile(physicsID, physicsProfile);
+
+
 
         ConfigurationProfile boundaryProfile = physicsProfile.getConfigurationProfile(ConfigurationProfile.BOUNDARY);
 
@@ -130,7 +112,7 @@ public class RPNUMERICS {
             }
 
 
-            if (boundaryConfiguration.getName().equals("triang")) {
+            if (boundaryConfiguration.getName().equals("Three_Phase_Boundary")) {
                 setBoundary(new IsoTriang2DBoundary(boundaryConfiguration.getParam("limits")));
             }
 
@@ -149,7 +131,7 @@ public class RPNUMERICS {
             }
 
             if (boundary instanceof IsoTriang2DBoundary) {
-                defaultBoundaryProfile = new ConfigurationProfile("triang", ConfigurationProfile.BOUNDARY);
+                defaultBoundaryProfile = new ConfigurationProfile("Three_Phase_Boundary", ConfigurationProfile.BOUNDARY);
 
             }
 
@@ -228,8 +210,6 @@ public class RPNUMERICS {
 
         for (Entry<String, Configuration> configurationEntry : configurationSet) {
 
-            System.out.print(configurationEntry.toString());
-
 
 
             if (configurationEntry.getValue().getType().equalsIgnoreCase(ConfigurationProfile.METHOD)) {
@@ -296,7 +276,7 @@ public class RPNUMERICS {
         int[] resolution = RPnDataModule.processResolution(getParamValue("hugoniotcurve", "resolution"));
 
         HugoniotParams params = new HugoniotParams(new PhasePoint(input), resolution);
-        
+
         return new HugoniotCurveCalcND(params);
     }
 
@@ -316,19 +296,55 @@ public class RPNUMERICS {
 
     }
 
+    public static EnvelopeCurveCalc createEnvelopeCurveCalc() {
+
+        int[] resolution = RPnDataModule.processResolution(getParamValue("levelcurve", "resolution"));
+        int whereIsConstant = new Integer (getParamValue("envelopecurve", "whereisconstant"));
+        int numberOfSteps = new Integer(getParamValue("envelopecurve", "numberofsteps"));
+
+        return new EnvelopeCurveCalc(new ContourParams(resolution),whereIsConstant,numberOfSteps);
+
+    }
+
     public static LevelCurveCalc createLevelCurveCalc(double level) {
 
         int[] resolution = RPnDataModule.processResolution(getParamValue("levelcurve", "resolution"));
 
         int family = new Integer(getParamValue("levelcurve", "family"));
 
-        return new LevelCurveCalc(family, level,new ContourParams(resolution));
+        return new LevelCurveCalc(family, level, new ContourParams(resolution));
 
     }
 
     public static IntegralCurveCalc createIntegralCurveCalc(OrbitPoint orbitPoint) {
 
         return new IntegralCurveCalc(orbitPoint, Integer.parseInt(getParamValue("orbit", "family")));
+
+    }
+
+    public static EllipticBoundaryCalc createEllipticBoundaryCalc() {
+
+
+        int[] resolution = RPnDataModule.processResolution(getParamValue("ellipticboundary", "resolution"));
+
+        return new EllipticBoundaryCalc(new ContourParams(resolution));
+
+
+
+    }
+
+    public static EllipticBoundaryExtensionCalc createEllipticExtensionCalc() {
+
+
+        int[] resolution = RPnDataModule.processResolution(getParamValue("ellipticextension", "resolution"));
+
+        int family = new Integer(getParamValue("ellipticextension", "family"));
+
+        int characteristicWhere = new Integer(getParamValue("ellipticextension", "characteristicwhere"));
+
+        return new EllipticBoundaryExtensionCalc(new ContourParams(resolution), characteristicWhere, family);
+
+
 
     }
 
@@ -362,7 +378,7 @@ public class RPNUMERICS {
     public static DoubleContactCurveCalc createDoubleContactCurveCalc() {
 
         int[] resolution = RPnDataModule.processResolution(getParamValue("doublecontactcurve", "resolution"));
-        
+
         int curveFamily = new Integer(getParamValue("doublecontactcurve", "curvefamily"));
         int domainFamily = new Integer(getParamValue("doublecontactcurve", "domainfamily"));
 
@@ -401,18 +417,12 @@ public class RPNUMERICS {
     public static HysteresisCurveCalc createHysteresisCurveCalc() {
 
         int[] resolution = RPnDataModule.processResolution(getParamValue("hysteresiscurve", "resolution"));
-        
+
         ContourParams params = new ContourParams(resolution);
 
-        int characteristicWhere = 0;//new Integer(getParamValue("hysteresiscurve", "characteristicwhere"));
+        int family = new Integer(getParamValue("hysteresiscurve", "family"));
 
-
-        int curveFamily = new Integer(getParamValue("hysteresiscurve", "family"));
-        int domainFamily = new Integer(getParamValue("hysteresiscurve", "family"));
-
-        int singular = 0;//TODO Pegar do arquivo de entrada
-
-        return new HysteresisCurveCalc(params, domainFamily, curveFamily, characteristicWhere, singular);
+        return new HysteresisCurveCalc(params, family);
 
     }
 
@@ -426,15 +436,16 @@ public class RPNUMERICS {
     public static BoundaryExtensionCurveCalc createBoundaryExtensionCurveCalc() {
 
         int[] resolution = RPnDataModule.processResolution(getParamValue("boundaryextensioncurve", "resolution"));
-        
+
         ContourParams params = new ContourParams(resolution);
 
-        int characteristicWhere = new Integer(getParamValue("boundaryextensioncurve", "characteristicwhere"));
         int edge = new Integer(getParamValue("boundaryextensioncurve", "edge"));
 
         int edgeResolution = new Integer(getParamValue("boundaryextensioncurve", "edgeresolution"));
 
-        return new BoundaryExtensionCurveCalc(params, edgeResolution, new Integer(getParamValue("boundaryextensioncurve", "curvefamily")), new Integer(getParamValue("boundaryextensioncurve", "domainfamily")), edge, characteristicWhere);
+        int characteristic = new Integer(getParamValue("boundaryextensioncurve","characteristicwhere"));
+        
+        return new BoundaryExtensionCurveCalc(params, edgeResolution, new Integer(getParamValue("boundaryextensioncurve", "family")),edge,characteristic);
 
 
     }
@@ -486,7 +497,7 @@ public class RPNUMERICS {
     public static InflectionCurveCalc createInflectionCurveCalc() {
 
         int[] resolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("inflectioncurve", "resolution"));
-        
+
         ContourParams params = new ContourParams(resolution);
 
         int family = new Integer(RPNUMERICS.getParamValue("inflectioncurve", "family"));
@@ -504,12 +515,12 @@ public class RPNUMERICS {
     public static RarefactionExtensionCalc createRarefactionExtensionCalc(OrbitPoint orbitPoint) {
 
         int[] resolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("rarefactionextension", "resolution"));
-        
+
         int curveFamily = new Integer(getParamValue("rarefactionextension", "curvefamily"));
-        int domainFamily = new Integer(getParamValue("rarefactionextension", "domainfamily"));
+
         int characteristicDomain = new Integer(getParamValue("rarefactionextension", "characteristic"));
 
-        return new RarefactionExtensionCalc(new ContourParams(resolution), orbitPoint, direction_, curveFamily, domainFamily, characteristicDomain);
+        return new RarefactionExtensionCalc(new ContourParams(resolution), orbitPoint, direction_, curveFamily, characteristicDomain);
 
     }
 
@@ -571,23 +582,12 @@ public class RPNUMERICS {
     // Accessors
     //
 
-//    public static void setCurrentProfile(ShockRarefactionProfile aShockRarefactionProfile_) {
-//        shockRarefactionProfile_ = aShockRarefactionProfile_;
-//    }
-//    public static ShockRarefactionProfile getCurrentProfile() {
-//
-//
-//        return shockRarefactionProfile_;
-//    }
     public static ShockProfile getShockProfile() {
         return shockProfile_;
 
 
     }
 
-//    public static RarefactionProfile getRarefactionProfile() {
-//        return rarefactionProfile_;
-//    }
     public static BifurcationProfile getBifurcationProfile() {
         return bifurcationProfile_;
 
@@ -628,9 +628,6 @@ public class RPNUMERICS {
 
     }
 
-//    public static ContourConfiguration getContourConfiguration() {
-//        return (ContourConfiguration) configMap_.get("Contour");
-//    }
     private native void setFamilyIndex(int familyIndex);
 
     private native void setTimeDirection(int timeDirection);
@@ -639,38 +636,18 @@ public class RPNUMERICS {
 
         Configuration physicsConfiguration = configMap_.get(physicsID());
 
-        Configuration fluxConfiguration = physicsConfiguration.getConfiguration("fluxfunction");
-        Configuration accumulationConfiguration = physicsConfiguration.getConfiguration("accumulationfunction");
+        Configuration fluxFunctionConfig = physicsConfiguration.getConfiguration("fluxfunction");
+
+        String[] paramsArray = new String[fluxFunctionConfig.getParamsSize()];
+
+        for (int i = 0; i < fluxFunctionConfig.getParamsSize(); i++) {
 
 
-        RealVector fluxParamsVector = new RealVector(fluxConfiguration.getParamsSize());
-
-
-        for (int i = 0; i
-                < fluxParamsVector.getSize(); i++) {
-            fluxParamsVector.setElement(i, new Double(fluxConfiguration.getParam(i)));
-
-
+            paramsArray[i] = fluxFunctionConfig.getParam(i);
 
         }
 
-        FluxParams newFluxParams = new FluxParams(fluxParamsVector);
-        setFluxParams(
-                newFluxParams);
-
-        RealVector accumulationParamsVector = new RealVector(accumulationConfiguration.getParamsSize());
-
-
-
-        for (int i = 0; i
-                < accumulationParamsVector.getSize(); i++) {
-            accumulationParamsVector.setElement(i, new Double(accumulationConfiguration.getParam(i)));
-
-
-
-        }
-        setAccumulationParams(accumulationParamsVector);
-
+        setParams(paramsArray);
 
 
     }
@@ -680,11 +657,11 @@ public class RPNUMERICS {
      */
     public static native void clean();
 
-    private static native void setFluxParams(FluxParams fluxParams);
+    public static native void setParams(String[] params);
 
     public static native FluxParams getFluxParams();
 
-    private static native void setAccumulationParams(RealVector accumulationParams);
+    public static native void setResolution(RealVector min, RealVector max, int[] newResolution);
 
     public static native RealVector getAccumulationParams();
 
@@ -699,4 +676,9 @@ public class RPNUMERICS {
     public static native int domainDim();
 
     public static native Space domain();
+
+    private static native void setFluxParams(FluxParams fluxParams);
+
+    private static native void setAccumulationParams(RealVector accumulationParams);
+
 }

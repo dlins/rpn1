@@ -126,9 +126,7 @@ public class UIController extends ComponentUI {
         return instance_;
     }
 
-    public void showCurvesPanel(boolean selected) {
-        RPnDesktopPlotter.getUIFrame().showCurvesPanel(selected);
-    }
+  
 
     public void removeLastCommand() {
         commandArray_.remove(commandArray_.size() - 1);
@@ -151,6 +149,9 @@ public class UIController extends ComponentUI {
     // Inner Classes
     //
     class MouseMotionController extends MouseMotionAdapter {
+
+
+       
 
         @Override
         public void mouseDragged(MouseEvent event) {
@@ -214,6 +215,9 @@ public class UIController extends ComponentUI {
 
         public MouseController() {
         }
+
+
+       
 
         @Override
         public void mousePressed(MouseEvent event) {

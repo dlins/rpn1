@@ -24,6 +24,7 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
 
 
     private List<? extends RealSegment> segments_;
+
     
     public SegmentedCurve(List<? extends RealSegment> segmentsList) {
         super(coordsArrayFromRealSegments(segmentsList), new ViewingAttr(Color.red));

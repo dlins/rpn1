@@ -69,10 +69,7 @@ public class HysteresisCurveGeomFactory extends BifurcationCurveGeomFactory {
 
         HysteresisCurveCalc hysteresisCurveCalc = (HysteresisCurveCalc) rpCalc();
 
-        buffer.append(" curvefamily=\"" + hysteresisCurveCalc.getCurveFamily() +
-                "\"" + " domainfamily=\"" + hysteresisCurveCalc.getDomainFamily() +
-                "\"" +" characteristic=\""+hysteresisCurveCalc.getCharacteristicWhere()+
-                "\""+" singular=\""+hysteresisCurveCalc.getSingular()+"\""+ ">\n");
+        buffer.append(" family=\"" + hysteresisCurveCalc.getFamily() + "\""+ ">\n");
 
         buffer.append(((BifurcationCurve) geomSource()).toXML());
 

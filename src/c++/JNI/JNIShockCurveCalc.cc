@@ -11,12 +11,8 @@
  * Includes:
  */
 #include "rpnumerics_ShockCurveCalc.h"
-#include "ShockContinuationMethod.h"
-#include "LSODESolver.h"
-#include "LSODEProfile.h"
 
-#include "ContinuationShockFlow.h"
-#include "ShockContinuationMethod3D2D.h"
+
 
 
 #include "ColorCurve.h"

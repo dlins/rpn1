@@ -9,18 +9,22 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import java.io.FileReader;
 import java.util.Iterator;
+import rpn.component.RpGeomFactory;
+import rpn.component.RpGeometry;
 import rpn.component.util.ClassifierAgent;
 import rpn.component.util.GeometryGraphND;
 import rpn.component.util.GeometryUtil;
 
 
 import rpn.component.util.VelocityAgent;
+import rpn.controller.RpCalcController;
+import rpn.usecase.ChangeFluxParamsAgent;
 
 import wave.multid.view.*;
 import wave.multid.*;
 import wave.multid.map.Map;
 
-   public class AbstractScene implements AbstractGeomObj {
+public class AbstractScene implements AbstractGeomObj {
     //
     // Members
     //
@@ -44,7 +48,7 @@ import wave.multid.map.Map;
         }
         geomList_ = new ArrayList();
         viewList_ = new ArrayList();
-        
+
     }
 
     //
@@ -55,7 +59,7 @@ import wave.multid.map.Map;
     }
 
     public Iterator getGeomObjIterator() {
-        //System.out.println("geomList_.size() em AbstractScene : " +geomList_.size());       //*** Informa a quantidade de curvas
+//        System.out.println("geomList_.size() em AbstractScene : " +geomList_.size());       //*** Informa a quantidade de curvas
         return geomList_.iterator();
     }
 
@@ -80,7 +84,7 @@ import wave.multid.map.Map;
         for (int i = 0; i < viewList_.size(); i++) {
             ((Scene) viewList_.get(i)).addViewFor(geom);
         }
-        
+
     }
 
     public void print(FileWriter cout) {
@@ -89,12 +93,11 @@ import wave.multid.map.Map;
     public void load(FileReader cin) {
     }
 
-
     //*** Acrescentei em 19/09 ;  alterei em 27/09  ******************** Leandro
     public void removeStringsCla(int geometryIndex) {
 
         for (int i = 0; i < ClassifierAgent.indCurvaCla.size(); i++) {
-            if ((Integer)ClassifierAgent.indCurvaCla.get(i) == geometryIndex) {
+            if ((Integer) ClassifierAgent.indCurvaCla.get(i) == geometryIndex) {
                 ClassifierAgent.paraRemoverGeomCla.add(geometryIndex);
                 ClassifierAgent.paraRemoverIndCla.add(i);
             }
@@ -108,17 +111,17 @@ import wave.multid.map.Map;
         ClassifierAgent.paraRemoverIndCla.clear();
 
         for (int i = 0; i < ClassifierAgent.indCurvaCla.size(); i++) {
-            if ((Integer)ClassifierAgent.indCurvaCla.get(i) > geometryIndex) {
-                ClassifierAgent.indCurvaCla.set(i, (Integer)ClassifierAgent.indCurvaCla.get(i)-1);
+            if ((Integer) ClassifierAgent.indCurvaCla.get(i) > geometryIndex) {
+                ClassifierAgent.indCurvaCla.set(i, (Integer) ClassifierAgent.indCurvaCla.get(i) - 1);
             }
         }
-        
+
     }
 
     public void removeStringsVel(int geometryIndex) {
 
         for (int i = 0; i < VelocityAgent.indCurvaVel.size(); i++) {
-            if ((Integer)VelocityAgent.indCurvaVel.get(i) == geometryIndex) {
+            if ((Integer) VelocityAgent.indCurvaVel.get(i) == geometryIndex) {
                 VelocityAgent.paraRemoverGeomVel.add(geometryIndex);
                 VelocityAgent.paraRemoverIndVel.add(i);
             }
@@ -132,15 +135,14 @@ import wave.multid.map.Map;
         VelocityAgent.paraRemoverIndVel.clear();
 
         for (int i = 0; i < VelocityAgent.indCurvaVel.size(); i++) {
-            if ((Integer)VelocityAgent.indCurvaVel.get(i) > geometryIndex) {
-                VelocityAgent.indCurvaVel.set(i, (Integer)VelocityAgent.indCurvaVel.get(i)-1);
+            if ((Integer) VelocityAgent.indCurvaVel.get(i) > geometryIndex) {
+                VelocityAgent.indCurvaVel.set(i, (Integer) VelocityAgent.indCurvaVel.get(i) - 1);
             }
         }
 
     }
     //**************************************************************************
 
-    
     public void remove(int geometryIndex) {
 
 
@@ -152,7 +154,7 @@ import wave.multid.map.Map;
         // -----------
 
         MultiGeometry geom = (MultiGeometry) geomList_.remove(geometryIndex);
-        
+
         try {
             boundary_.resize(geom.getPathIterator());
         } catch (DimMismatchEx dex) {
@@ -162,8 +164,8 @@ import wave.multid.map.Map;
             ((Scene) viewList_.get(i)).removeViewOf(geom);
         }
 
-        
-        
+
+
 
     }
 
@@ -179,7 +181,7 @@ import wave.multid.map.Map;
             ((Scene) viewList_.get(i)).removeViewOf(geom);
             ((Scene) viewList_.get(i)).update();
         }
-
+        geom = null;
 
     }
 

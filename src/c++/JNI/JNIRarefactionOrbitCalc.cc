@@ -11,20 +11,12 @@
  * Includes:
  */
 #include "rpnumerics_RarefactionOrbitCalc.h"
-#include "RarefactionContinuationMethod.h"
-#include "LSODESolver.h"
-#include "LSODEProfile.h"
 
-#include "ContinuationRarefactionFlow.h"
-
-#include "PluginService.h"
-#include "RPnPluginManager.h"
-#include "RarefactionFlowPlugin.h"
 #include "RpNumerics.h"
 #include "RealVector.h"
 #include "JNIDefs.h"
 #include <vector>
-#include <time.h>
+
 #include "TPCW.h"
 #include "Rarefaction.h"
 
@@ -80,7 +72,15 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
 
     const FluxFunction * fluxFunction = &RpNumerics::getPhysics().fluxFunction();
     const AccumulationFunction * accumulationFunction = &RpNumerics::getPhysics().accumulation();
-    cout << "Time direction " << timeDirection << endl;
+    
+    
+    
+    cout << "Flux params " << fluxFunction->fluxParams().params()<<endl;
+    cout << "Accum params " << accumulationFunction->accumulationParams().params() << endl;
+
+
+
+
     vector<RealVector> inflectionPoints;
 
 

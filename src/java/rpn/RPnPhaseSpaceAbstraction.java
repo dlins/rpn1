@@ -5,6 +5,7 @@
  */
 package rpn;
 
+import rpn.controller.RpController;
 import rpn.controller.phasespace.*;
 import wave.multid.model.AbstractScene;
 import wave.multid.Space;
@@ -15,7 +16,9 @@ import java.util.List;
 import java.util.Iterator;
 import rpn.component.util.ClassifierAgent;
 import rpn.component.util.VelocityAgent;
+import rpn.controller.RpCalcController;
 import rpn.controller.ui.UIController;
+import rpn.usecase.ChangeFluxParamsAgent;
 import wave.multid.model.MultiGeometry;
 import wave.multid.model.MultiPolyLine;
 import wave.util.RealVector;
@@ -30,7 +33,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
 
     private PhaseSpaceState state_;
     private RpGeometry selectedGeom_;
-    private List<RPnCurvesListFrame> curvesFrames_;
+    private List<RPnCurvesList> curvesListFrames_;
 
     //
     // Constructors
@@ -39,7 +42,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         super(id, domain);
         changeState(state);
         selectedGeom_ = null;
-        curvesFrames_ = new ArrayList<RPnCurvesListFrame>();
+        curvesListFrames_ = new ArrayList<RPnCurvesList>();
     }
 
     //
@@ -49,19 +52,27 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         state_ = state;
     }
 
-    public void attach(RPnCurvesListFrame curvesFrame) {
-        curvesFrames_.add(curvesFrame);
+    public void attach(RPnCurvesList curvesFrame) {
+        curvesListFrames_.add(curvesFrame);
     }
 
-    public void detach(RPnCurvesListFrame curvesListFrame) {
-        curvesFrames_.remove(curvesListFrame);
+    public void detach(RPnCurvesList curvesListFrame) {
+        curvesListFrames_.remove(curvesListFrame);
     }
 
-    private void notifyState() {
-        for (RPnCurvesListFrame curvesFrame : curvesFrames_) {
-            curvesFrame.update(this);
+    public void showCurvesFrame(boolean show) {
+        Iterator<RPnCurvesList> iterator = curvesListFrames_.iterator();
+
+        while (iterator.hasNext()) {
+            RPnCurvesList rPnCurvesListFrame = iterator.next();
+
+            rPnCurvesListFrame.setVisible(show);
+
         }
+    }
 
+    public Iterator curvesListIterator() {
+        return curvesListFrames_.iterator();
     }
 
     /**
@@ -77,7 +88,6 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
     //
 
     public void plot(RpGeometry geom) {
-
         state_.plot(this, geom);
 
     }
@@ -109,6 +119,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
     public void remove(MultiGeometry geom) {
 
         super.remove(geom);
+
         notifyState();
 
     }
@@ -316,7 +327,10 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
             }
         }
         for (int i = 0; i < removeList.size(); i++) {
-            super.remove((RpGeometry) removeList.get(i));
+
+            RpGeometry geometryToRemove = (RpGeometry)removeList.get(i);
+
+            super.remove(geometryToRemove);
         }
         for (int i = 0; i < joinList.size(); i++) {
             super.join((RpGeometry) joinList.get(i));
@@ -406,5 +420,12 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         if (selectedGeom_ != null) {
             selectedGeom_.viewingAttr().setSelected(false);
         }
+    }
+
+    private void notifyState() {
+        for (RPnCurvesList curvesFrame : curvesListFrames_) {
+            curvesFrame.update();
+        }
+
     }
 }

@@ -5,7 +5,6 @@
  */
 package rpn.component;
 
-import java.awt.Color;
 import wave.multid.model.*;
 import wave.multid.view.*;
 import wave.multid.DimMismatchEx;
@@ -69,9 +68,8 @@ public class DoubleContactCurveView
     // Methods
     //
     public void draw(Graphics2D g) {
-        
+
         for (int i = 0; i < viewList_.size(); i++) {
-        //for (int i = 0; i < viewList_.size()/2; i++) {                 // *********  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             ((GeomObjView) viewList_.get(i)).draw(g);
         }
 
@@ -88,10 +86,6 @@ public class DoubleContactCurveView
         while (geomListIterator.hasNext()) {
             RealSegGeom geomObj = (RealSegGeom) geomListIterator.next();
             try {
-                if (geomObj == null) {
-                    System.out.println("Eh nulo segmento");
-                }
-
                 viewList_.add(geomObj.createView(getViewingTransform()));
             } catch (DimMismatchEx dex) {
                 dex.printStackTrace();

@@ -14,11 +14,10 @@
  * Includes:
  */
 #include "SubPhysics.h"
+#include "GridValues.h"
 #include "Quad2.h"
 #include "Quad3.h"
 #include "Quad4.h"
-#include "TriPhase.h"
-#include "Corey.h"
 #include "Stone.h"
 #include "TPCW.h"
 #include "PolydispersePhysics.h"
@@ -37,11 +36,13 @@
 class Physics {
 private:
     vector<SubPhysics *> * physicsVector_;
+   
     Boundary * boundary_;
     string * ID_;
     Space * space_;
     int type_;
     static string rpnHome_;
+    vector <GridValues *> * gridArray_;
 
 public:
 
@@ -65,11 +66,17 @@ public:
 
     SubPhysics & getSubPhysics(const int);
 
+    GridValues  * getGrid(const int index) const;
+
+    void setGrid(int,const RealVector &,const RealVector &,const vector<int> );
+
     const vector<SubPhysics *> & getPhysicsVector()const;
 
     static const string & getRPnHome();
 
     static void setRPnHome(const string &);
+
+    void setParams(vector<string>);
 
 
     //deprecated

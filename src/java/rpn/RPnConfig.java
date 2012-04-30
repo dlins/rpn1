@@ -134,7 +134,6 @@ public class RPnConfig {
         Configuration configuration = new Configuration(profile);
         RPNUMERICS.setConfiguration(configuration.getName(), configuration);
 
-
     }
 
     public static ArrayList<ConfigurationProfile> getAllMethodsProfiles() {
@@ -194,8 +193,6 @@ public class RPnConfig {
 
     public static void setActiveVisualConfiguration(String visualConfigName) {
         activeVisualConfig_ = visualConfigName;
-
-//        System.out.println("Active visual configuration: " + activeVisualConfig_);
         visualConfiguration_ = new Configuration(configurationsProfileMap_.get(visualConfigName));
     }
 

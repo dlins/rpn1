@@ -18,7 +18,6 @@ public abstract class ContourCurveCalc implements RpCalculation {
     }
 
     public RpSolution recalc() throws RpException {
-        
         return calc();
     }
 

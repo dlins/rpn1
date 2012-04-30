@@ -12,6 +12,8 @@ import rpn.usecase.CoincidenceExtensionCurvePlotAgent;
 import rpn.usecase.CoincidencePlotAgent;
 import rpn.usecase.DoubleContactAgent;
 import rpn.usecase.BoundaryExtensionCurveAgent;
+import rpn.usecase.EllipticBoundaryExtensionAgent;
+import rpn.usecase.EnvelopeCurveAgent;
 import rpn.usecase.HysteresisPlotAgent;
 import rpn.usecase.InflectionPlotAgent;
 import rpn.usecase.SubInflectionExtensionCurveAgent;
@@ -33,6 +35,8 @@ public class BIFURCATION_CONFIG extends UI_ACTION_SELECTED {
         ChangeFluxParamsAgent.instance().setEnabled(true);
         InflectionPlotAgent.instance().setEnabled(true);
         HysteresisPlotAgent.instance().setEnabled(true);
+        EllipticBoundaryExtensionAgent.instance().setEnabled(true);
+        EnvelopeCurveAgent.instance().setEnabled(true);
 
     }
 

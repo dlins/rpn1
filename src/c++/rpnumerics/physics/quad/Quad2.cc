@@ -31,3 +31,32 @@ Quad2::Quad2(const Quad2 & copy) : SubPhysics(copy.fluxFunction(), copy.accumula
     setHugoniotFunction(quad2Hugoniot);
 
 }
+
+void Quad2::setParams(vector<string> params) {
+
+
+    RealVector fluxParamVector(10);
+
+    //Flux params
+    for (int i = 0; i < fluxParamVector.size(); i++) {
+
+        double paramValue = atof(params[i].c_str());
+
+        fluxParamVector.component(i) = paramValue;
+
+
+    }
+
+
+
+
+    fluxFunction_->fluxParams(Quad2FluxParams(fluxParamVector));
+
+
+
+
+
+
+
+
+}

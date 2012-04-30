@@ -84,6 +84,16 @@ public class BifurcationCurve extends SegmentedCurve {
     }
 
     private static List createSingleSegmentList(List<RealSegment> leftSeg, List<RealSegment> rightSeg) {
+
+        ArrayList<RealSegment> returned = new ArrayList<RealSegment>();
+
+        returned.addAll(leftSeg);
+        returned.addAll(rightSeg);
+
+        return returned;
+
+
+
 //        int i = 0;
 
 //        for (HugoniotSegment hugoniotSegment : leftSeg) {
@@ -137,14 +147,7 @@ public class BifurcationCurve extends SegmentedCurve {
 //
 ////            RealVector leftPoint = new RealVector(hSegmentLeft.p1().toString() + hSegmentRight.p1().toString());
 
-        if (leftSeg.addAll(rightSeg)) {
 
-            return leftSeg;
-
-        } else {
-            return null;
-        }
         
-
     }
 }

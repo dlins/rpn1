@@ -77,7 +77,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_IntegralCurveCalc_calc(JNIEnv * env, j
 
     Boundary * tempBoundary = RpNumerics::getPhysics().boundary().clone();
 
-    double deltaxi = 1e-3;
+    double deltaxi = 1e-4;
 
 
     const FluxFunction * fluxFunction = &RpNumerics::getPhysics().fluxFunction();
@@ -148,7 +148,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_IntegralCurveCalc_calc(JNIEnv * env, j
 
     jobject integralCurve = (env)->NewObject(classIntegralCurve, integralCurveConstructor, orbitPointArray, familyIndex, inflectionPointList);
 
- 
+
 
     //Cleaning up
 
