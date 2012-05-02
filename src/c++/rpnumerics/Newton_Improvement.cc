@@ -1,3 +1,6 @@
+#include <math.h>
+#include <cmath>
+
 #include "Newton_Improvement.h"
 
 Newton_Improvement::Newton_Improvement(const ImplicitFunction *m){
@@ -54,6 +57,7 @@ void Newton_Improvement::function_and_derivative(double alpha, const RealVector 
 
 int Newton_Improvement::newton(const RealVector &p0, const RealVector &p1, const RealVector &p_init, RealVector &p_improved){
     int max_it = 10; // Maximum number of iterations
+
 
     int it = 0;
     double alpha;

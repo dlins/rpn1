@@ -90,14 +90,14 @@ StonePermeability::StonePermeability(const StonePermParams & params) : params_(n
         NegativeOilSaturation = true;
 
 
-        // Estes sao krw_p/(pakman:denkw)
-        denkw_ = krw_p_ / ((lw_ + (1. - lw_) * pow(1. - CN, expw_ - 1.))*(1. - CN));
-        denkg_ = krg_p_ / ((lg_ + (1. - lg_) * pow(1. - CN, expg_ - 1.))*(1. - CN));
-        denko_ = kro_p_ / ((lo_ + (1. - lo_) * pow(1. - CN, expo_ - 1.))*(1. - CN));
-    
-        // Estes os antigos 1/(pakman:denkow)
-        denkow_ = 1. / ((low_ + (1. - low_) * pow(1. - CN, expow_ - 1.))*(1. - CN));
-        denkog_ = 1. / ((log_ + (1. - log_) * pow(1. - CN, expog_ - 1.))*(1. - CN));
+    // Estes sao krw_p/(pakman:denkw)
+    denkw_ = krw_p_ / ((lw_ + (1. - lw_) * pow(1. - CN, expw_ - 1.))*(1. - CN));
+    denkg_ = krg_p_ / ((lg_ + (1. - lg_) * pow(1. - CN, expg_ - 1.))*(1. - CN));
+    denko_ = kro_p_ / ((lo_ + (1. - lo_) * pow(1. - CN, expo_ - 1.))*(1. - CN));
+
+    // Estes os antigos 1/(pakman:denkow)
+    denkow_ = 1. / ((low_ + (1. - low_) * pow(1. - CN, expow_ - 1.))*(1. - CN));
+    denkog_ = 1. / ((log_ + (1. - log_) * pow(1. - CN, expog_ - 1.))*(1. - CN));
     //
 
 
@@ -294,23 +294,24 @@ void StonePermeability::Diff_PermabilityOil(double sw, double so, double sg, dou
         }
         double powso2 = pow(socno, expo_ - 2.);
         double powso1 = socno*powso2;
-        double StoneC = epsl_ * kro_p_ * (1. - CN);
 
-        ko = StoneC * socno * ko1den * ko2den
-                + (1. - epsl_)*(lo_ + (1. - lo_) * powso1) * socno*denko_;
-        dko_dsw = StoneC * socno*dko_Aux;
+        ko = (1. - epsl_)*(lo_ + (1. - lo_) * powso1) * socno * denko_;
+        dko_dsw = 0.0;
+        dko_dso = (1. - epsl_)*(lo_ + (1. - lo_) * expo_ * powso1) * denko_;
+        d2ko_dsw2 = 0.0;
+        d2ko_dswso = 0.0;
+        d2ko_dso2 = (1. - epsl_)*(1. - lo_) * expo_ * (expo_ - 1.) * powso2*denko_;
 
+        if (epsl_ != 0.0) {
+            double StoneC = epsl_ * kro_p_ * (1. - CN);
 
-        /* plus zero Corey contribution */
-        dko_dso = StoneC * ko1den * (ko2den + socno * dko2den_ds)
-                + (1. - epsl_)*(lo_ + (1. - lo_) * expo_ * powso1) * denko_;
-
-        d2ko_dsw2 = StoneC * socno*d2ko_Aux;
-        /* plus zero Corey contribution */
-        d2ko_dswso = StoneC * (dko_Aux + socno * dko_Aux2);
-        /* plus zero Corey contribution */
-        d2ko_dso2 = StoneC * ko1den * (2. * dko2den_ds + socno * d2ko2den_ds2)
-                + (1. - epsl_)*(1. - lo_) * expo_ * (expo_ - 1.) * powso2*denko_;
+            ko += StoneC * socno * ko1den * ko2den;
+            dko_dsw += StoneC * socno*dko_Aux;
+            dko_dso += StoneC * ko1den * (ko2den + socno * dko2den_ds);
+            d2ko_dsw2 += StoneC * socno*d2ko_Aux;
+            d2ko_dswso += StoneC * (dko_Aux + socno * dko_Aux2);
+            d2ko_dso2 += StoneC * ko1den * (2. * dko2den_ds + socno * d2ko2den_ds2);
+        }
     }
 
     return;

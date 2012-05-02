@@ -238,6 +238,8 @@ int ContourMethod::contour2d(ImplicitFunction *impf, std::vector<RealVector> &vr
                                 //
                                 for (int jj = 0; jj < 2; jj++) p_init_newton.component(jj) = sol_[jj*dims_ + sp];
 
+                                cout <<"P init em contour: "<<p_init_newton<<endl;
+
                                 Newton_Improvement *newton_improver = new Newton_Improvement(impf);
                                 int newton_info = newton_improver->newton(p0newton, p1newton, p_init_newton, p_improved_newton);
 

@@ -53,7 +53,8 @@ Three_Phase_Boundary::Three_Phase_Boundary(const RealVector &ppmin, const RealVe
 
     pmax = new RealVector(ppmax);
 
-    end_edge = (pmax->component(0) + pmax->component(1)) / 2.0 + 0.000001;
+    end_edge = ( (pmax->component(0) + pmin->component(0)) 
+               + (pmax->component(1) + pmin->component(1)) ) / 2.0 + 0.000001;
 
     A_ = new RealVector(*pmin);
 
@@ -133,14 +134,14 @@ Three_Phase_Boundary::~Three_Phase_Boundary() {
 }
 
 bool Three_Phase_Boundary::inside(const RealVector &p) const {
-    return ((p.component(0) >= pmin->component(0) && p.component(1) >= pmin->component(1)) &&
-            (p.component(0) + p.component(1) <= end_edge)
+    return ((p.component(0) >= pmin->component(0)) && (p.component(1) >= pmin->component(1)) &&
+            ((p.component(0) + p.component(1)) <= end_edge)
             );
 }
 
 bool Three_Phase_Boundary::inside(const double *p) const {
-    return ((p[0] >= pmin->component(0) && p[1] >= pmin->component(1)) &&
-            (p[0] + p[1] <= end_edge)
+    return ((p[0] >= pmin->component(0)) &&( p[1] >= pmin->component(1)) &&
+            ((p[0] + p[1]) <= end_edge)
             );
 }
 
@@ -223,7 +224,7 @@ const char * Three_Phase_Boundary::boundaryType() const {
     return "Three_Phase_Boundary";
 }
 
-void Three_Phase_Boundary::edge_segments(int where_constant, int number_of_steps, std::vector<RealVector> &seg) {
+int Three_Phase_Boundary::edge_segments(int where_constant, int number_of_steps, std::vector<RealVector> &seg) {
     seg.clear();
 
     if (number_of_steps < 3) number_of_steps = 3; // Extremes must be eliminated, thus the minimum number of desired segments is 3: of which only one segment will remain.
@@ -234,21 +235,33 @@ void Three_Phase_Boundary::edge_segments(int where_constant, int number_of_steps
 
     double delta = 1.0 / (double) number_of_steps;
 
+    // The following double is the old end_edge without the kludge.
+    double RealEndEdge = end_edge - 0.000001;
+
     if (where_constant == THREE_PHASE_BOUNDARY_SO_ZERO) {
-        p_alpha[0] = 0.0;
+        // The following protection exists for physical boundary outside the real boundary.
+        if (pmin->component(1) > 0.0) return 0;
+
+        p_alpha[0] = pmin->component(0);
         p_alpha[1] = 0.0;
-        p_beta[0] = 1.0;
-        p_beta[1] = 0.0;
+        p_beta[0]  = RealEndEdge;
+        p_beta[1]  = 0.0;
     } else if (where_constant == THREE_PHASE_BOUNDARY_SW_ZERO) {
+        // The following protection exists for physical boundary outside the real boundary.
+        if (pmin->component(0) > 0.0) return 0;
+
         p_alpha[0] = 0.0;
-        p_alpha[1] = 0.0;
-        p_beta[0] = 0.0;
-        p_beta[1] = 1.0;
+        p_alpha[1] = pmin->component(0);
+        p_beta[0]  = 0.0;
+        p_beta[1]  = RealEndEdge;
     } else { // where_constant == THREE_PHASE_BOUNDARY_SG_ZERO
-        p_alpha[0] = 0.0;
-        p_alpha[1] = 1.0;
-        p_beta[0] = 1.0;
-        p_beta[1] = 0.0;
+        // The following protection exists for physical boundary outside the real boundary.
+        if (RealEndEdge < 1.0) return 0;
+
+        p_alpha[0] = pmin->component(0);
+        p_alpha[1] = 1.0 - pmin->component(0);
+        p_beta[0]  = 1.0 - pmin->component(1);
+        p_beta[1]  = pmin->component(1);
     }
 
     for (int i = 0; i < number_of_steps + 1; i++) {
@@ -271,7 +284,7 @@ void Three_Phase_Boundary::edge_segments(int where_constant, int number_of_steps
 
     }
 
-    return;
+    return 1;
 }
 
 

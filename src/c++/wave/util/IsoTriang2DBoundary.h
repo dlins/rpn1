@@ -44,10 +44,10 @@ protected:
 
     // This number is given as (pmax(0) + pmax(1))/2.0 + 0.000001, where 0.000001 is a trick for
     // the usage in HyperCube sons.
+    // TODO: If the kluge "+ 0.000001" changes in end_edge, it must change also in edge_segments.
     //
     double end_edge;
 
-    virtual void edge_segments(int where_constant, int number_of_steps, std::vector<RealVector> &seg);
 public:
     Three_Phase_Boundary();
     Three_Phase_Boundary(const RealVector &ppmin, const RealVector &ppmax);
@@ -76,6 +76,8 @@ public:
             int fam,int characteristic,
             std::vector<RealVector> &c, std::vector<RealVector> &d);
 
+
+    virtual int edge_segments(int where_constant, int number_of_steps, std::vector<RealVector> &seg);
 
 
 
