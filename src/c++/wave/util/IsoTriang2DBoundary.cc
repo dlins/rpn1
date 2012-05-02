@@ -224,6 +224,23 @@ const char * Three_Phase_Boundary::boundaryType() const {
     return "Three_Phase_Boundary";
 }
 
+void Three_Phase_Boundary::physical_boundary(std::vector<RealVector> &seg) {
+
+    std::vector<RealVector> tempSeg;
+
+    for (int i = 0; i < 2; i++) {
+        edge_segments(i,3,tempSeg);
+
+        for (int j=0; j < tempSeg.size();j++) {
+            seg.push_back(tempSeg[i]);
+        }
+
+
+    }
+
+
+}
+
 int Three_Phase_Boundary::edge_segments(int where_constant, int number_of_steps, std::vector<RealVector> &seg) {
     seg.clear();
 

@@ -48,6 +48,8 @@ protected:
     //
     double end_edge;
 
+    virtual int edge_segments(int where_constant, int number_of_steps, std::vector<RealVector> &seg);
+
 public:
     Three_Phase_Boundary();
     Three_Phase_Boundary(const RealVector &ppmin, const RealVector &ppmax);
@@ -73,12 +75,10 @@ public:
     void extension_curve(const FluxFunction *f, const AccumulationFunction *a,
             GridValues &gv,
             int where_constant, int number_of_steps, bool singular,
-            int fam,int characteristic,
+            int fam, int characteristic,
             std::vector<RealVector> &c, std::vector<RealVector> &d);
 
-
-    virtual int edge_segments(int where_constant, int number_of_steps, std::vector<RealVector> &seg);
-
+    void physical_boundary( std::vector<RealVector> &);
 
 
     const char* boundaryType() const;
