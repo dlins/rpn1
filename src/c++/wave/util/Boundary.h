@@ -57,6 +57,8 @@ public:
 
     virtual int intersection(const RealVector &p, const RealVector &q, RealVector &r,int &)const;
 
+    virtual void physical_boundary(std::vector<RealVector> &)=0;
+
 protected:
     double  epsilon;
 

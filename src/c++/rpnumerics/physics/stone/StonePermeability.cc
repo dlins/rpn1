@@ -154,43 +154,42 @@ StonePermeability::~StonePermeability() {
 }
 
 void StonePermeability::Diff_PermabilityWater(double sw, double so, double sg,
-        double &kw, double &dkw_dsw, double &dkw_dso, double &d2kw_dsw2,
-        double &d2kw_dswso, double &d2kw_dso2) {
-
+                        double &kw, double &dkw_dsw, double &dkw_dso,
+                        double &d2kw_dsw2, double &d2kw_dswso, double &d2kw_dso2) {
     double swcnw = sw - cnw_;
     if (!NegativeWaterSaturation && (swcnw <= 0.)) {
         kw = 0.;
         dkw_dsw = 0.;
         dkw_dso = 0.;
 
-        d2kw_dsw2 = 0.;
+        d2kw_dsw2  = 0.;
         d2kw_dswso = 0.;
-        d2kw_dso2 = 0.;
+        d2kw_dso2  = 0.;
     } else if (!NegativeWaterSaturation && (swcnw > 1. - CN)) {
         kw = krw_p_;
 
         dkw_dsw = 0.;
         dkw_dso = 0.;
 
-        d2kw_dsw2 = 0.;
+        d2kw_dsw2  = 0.;
         d2kw_dswso = 0.;
-        d2kw_dso2 = 0.;
+        d2kw_dso2  = 0.;
     } else {
-        double powsw2 = pow(swcnw, expw_ - 2.);
+        // Because of the use of flags that alow sw = cnw to pass, we need the following condition:
+        //
+        double powsw2 = ( (swcnw != 0.0) ? pow(swcnw, expw_ - 2.) : 0.0);
         double powsw1 = swcnw*powsw2;
 
         kw = (lw_ + (1. - lw_) * powsw1) * swcnw*denkw_;
         dkw_dsw = (lw_ + (1. - lw_) * expw_ * powsw1) * denkw_;
         dkw_dso = 0.; // Zero, kw do not depend on so
 
-        d2kw_dsw2 = (1. - lw_) * expw_ * (expw_ - 1.) * powsw2*denkw_;
+        d2kw_dsw2  = (1. - lw_) * expw_ * (expw_ - 1.) * powsw2*denkw_;
         d2kw_dswso = 0.; // Zero, kw do not depend on so
-        d2kw_dso2 = 0.; // Zero, kw do not depend on so
+        d2kw_dso2  = 0.; // Zero, kw do not depend on so
     }
 
     return;
-
-
 }
 
 /** The complex part of the permeability calculation resides here, for the oil, where a
@@ -216,8 +215,9 @@ void StonePermeability::Diff_PermabilityWater(double sw, double so, double sg,
  **/
 
 
-void StonePermeability::Diff_PermabilityOil(double sw, double so, double sg, double &ko,
-        double &dko_dsw, double &dko_dso, double &d2ko_dsw2, double &d2ko_dswso, double &d2ko_dso2) {
+void StonePermeability::Diff_PermabilityOil(double sw, double so, double sg,
+                        double &ko, double &dko_dsw, double &dko_dso, 
+                        double &d2ko_dsw2, double &d2ko_dswso, double &d2ko_dso2) {
     double socno = so - cno_;
     double sow = 1. - sw - cng_ - cno_;
     double sog = 1. - cnw_ - sg - cno_;
@@ -232,33 +232,37 @@ void StonePermeability::Diff_PermabilityOil(double sw, double so, double sg, dou
         dko_dsw = 0.;
         dko_dso = 0.;
 
-        d2ko_dsw2 = 0.;
+        d2ko_dsw2  = 0.;
         d2ko_dswso = 0.;
-        d2ko_dso2 = 0.;
+        d2ko_dso2  = 0.;
     } else if (!NegativeOilSaturation && (socno > 1. - CN)) {
         ko = kro_p_;
         dko_dsw = 0.;
         dko_dso = 0.;
 
-        d2ko_dsw2 = 0.;
+        d2ko_dsw2  = 0.;
         d2ko_dswso = 0.;
-        d2ko_dso2 = 0.;
+        d2ko_dso2  = 0.;
     } else {
         if (!NegativeWaterSaturation && (sw < cnw_)) {
-            double powso3 = pow(socno, expog_ - 3.);
+            // Because of the use of flags that alow so = cno to pass, we need the following condition:
+            //
+            double powso3 = ( (socno != 0.0) ? pow(socno, expog_ - 3.) : 0.0 );
             double powso2 = socno*powso3;
             double powso1 = socno*powso2;
 
             ko1den = (low_ + (1. - low_) * pow(1. - CN, expow_ - 1.)) * denkow_;
             ko2den = (log_ + (1. - log_) * powso1) * denkog_;
-            dko2den_ds = (1. - log_)*(expog_ - 1.) * powso2*denkog_;
+            dko2den_ds   = (1. - log_)*(expog_ - 1.) * powso2*denkog_;
             d2ko2den_ds2 = (1. - log_)*(expog_ - 2.)*(expog_ - 1.) * powso3*denkog_;
 
-            dko_Aux = 0.;
+            dko_Aux  = 0.;
             dko_Aux2 = 0.;
             d2ko_Aux = 0.;
         } else if (!NegativeGasSaturation && (sg < cng_)) {
-            double powso3 = pow(socno, expow_ - 3.);
+            // Because of the use of flags that alow so = cno to pass, we need the following condition:
+            //
+            double powso3 = ( (socno != 0.0) ? pow(socno, expow_ - 3.) : 0.0 );
             double powso2 = socno*powso3;
             double powso1 = socno*powso2;
 
@@ -267,93 +271,91 @@ void StonePermeability::Diff_PermabilityOil(double sw, double so, double sg, dou
             dko2den_ds = (1. - low_)*(expow_ - 1.) * powso2*denkow_;
             d2ko2den_ds2 = (1. - low_)*(expow_ - 2.)*(expow_ - 1.) * powso3*denkow_;
 
-            dko_Aux = 0.;
+            dko_Aux  = 0.;
             dko_Aux2 = 0.;
             d2ko_Aux = 0.;
         } else {
-            double powsow3 = pow(sow, expow_ - 3.);
+            // Because of the use of flags that alow sow = 0.0 to pass, we need the following condition:
+            //
+            double powsow3 = ( (sow != 0.0) ? pow(sow, expow_ - 3.) : 0.0 );
             double powsow2 = sow*powsow3;
             double powsow1 = sow*powsow2;
 
-            double powsog3 = pow(sog, expog_ - 3.); // sog = (sw - cnw) + (so - cno)
+            // Because of the use of flags that alow sog = 0.0 to pass, we need the following condition:
+            //
+            double powsog3 = ( (sog != 0.0) ? pow(sog, expog_ - 3.) : 0.0 );
             double powsog2 = sog*powsog3;
             double powsog1 = sog*powsog2;
 
-            ko1den = (low_ + (1. - low_) * powsow1) * denkow_;
-            dko1den_ds = (1. - low_)*(expow_ - 1.) * powsow2*denkow_;
+            ko1den       = (low_ + (1. - low_) * powsow1) * denkow_;
+            dko1den_ds   = (1. - low_)*(expow_ - 1.) * powsow2*denkow_;
             d2ko1den_ds2 = (1. - low_)*(expow_ - 2.)*(expow_ - 1.) * powsow3*denkow_;
 
             ko2den = (log_ + (1. - log_) * powsog1) * denkog_;
 
-            dko2den_ds = (1. - log_)*(expog_ - 1.) * powsog2*denkog_;
+            dko2den_ds   = (1. - log_)*(expog_ - 1.) * powsog2*denkog_;
             d2ko2den_ds2 = (1. - log_)*(expog_ - 2.)*(expog_ - 1.) * powsog3*denkog_;
 
-            dko_Aux = dko2den_ds * ko1den - ko2den*dko1den_ds;
+            dko_Aux  = dko2den_ds * ko1den - ko2den*dko1den_ds;
             dko_Aux2 = d2ko2den_ds2 * ko1den - dko2den_ds*dko1den_ds;
             d2ko_Aux = d2ko2den_ds2 * ko1den - 2. * dko2den_ds * dko1den_ds + ko2den*d2ko1den_ds2;
         }
-        double powso2 = pow(socno, expo_ - 2.);
+        // Because of the use of flags that alow so = cno to pass, we need the following condition:
+        //
+        double powso2 = ( (socno != 0.0) ? pow(socno, expo_ - 2.) : 0.0 );
         double powso1 = socno*powso2;
 
-        ko = (1. - epsl_)*(lo_ + (1. - lo_) * powso1) * socno * denko_;
-        dko_dsw = 0.0;
-        dko_dso = (1. - epsl_)*(lo_ + (1. - lo_) * expo_ * powso1) * denko_;
-        d2ko_dsw2 = 0.0;
-        d2ko_dswso = 0.0;
-        d2ko_dso2 = (1. - epsl_)*(1. - lo_) * expo_ * (expo_ - 1.) * powso2*denko_;
-
-        if (epsl_ != 0.0) {
-            double StoneC = epsl_ * kro_p_ * (1. - CN);
-
-            ko += StoneC * socno * ko1den * ko2den;
-            dko_dsw += StoneC * socno*dko_Aux;
-            dko_dso += StoneC * ko1den * (ko2den + socno * dko2den_ds);
-            d2ko_dsw2 += StoneC * socno*d2ko_Aux;
-            d2ko_dswso += StoneC * (dko_Aux + socno * dko_Aux2);
-            d2ko_dso2 += StoneC * ko1den * (2. * dko2den_ds + socno * d2ko2den_ds2);
-        }
+        ko         = StoneC * socno * ko1den * ko2den
+                   + (1. - epsl_)*(lo_ + (1. - lo_) * powso1) * socno * denko_;
+        dko_dsw    = StoneC * socno * dko_Aux;
+                   // Plus zero Corey contribution.
+        dko_dso    = StoneC * ko1den * (ko2den + socno * dko2den_ds)
+                   + (1. - epsl_)*(lo_ + (1. - lo_) * expo_ * powso1) * denko_;
+        d2ko_dsw2  = StoneC * socno * d2ko_Aux;
+                   // Plus zero Corey contribution.
+        d2ko_dswso = StoneC * (dko_Aux + socno * dko_Aux2);
+                   // Plus zero Corey contribution.
+        d2ko_dso2  = StoneC * ko1den * (2. * dko2den_ds + socno * d2ko2den_ds2)
+                   + (1. - epsl_)*(1. - lo_) * expo_ * (expo_ - 1.) * powso2 * denko_;
     }
 
     return;
-
-
 }
 
-void StonePermeability::Diff_PermabilityGas(double sw, double so, double sg, double &kg, double &dkg_dsw, double &dkg_dso, double &d2kg_dsw2, double &d2kg_dswso, double &d2kg_dso2) {
-
-
+void StonePermeability::Diff_PermabilityGas(double sw, double so, double sg, 
+                        double &kg, double &dkg_dsw, double &dkg_dso, 
+                        double &d2kg_dsw2, double &d2kg_dswso, double &d2kg_dso2) {
     double sgcng = sg - cng_;
     if (!NegativeGasSaturation && (sgcng <= 0.)) {
         kg = 0.;
         dkg_dsw = 0.;
         dkg_dso = 0.;
 
-        d2kg_dsw2 = 0.;
+        d2kg_dsw2  = 0.;
         d2kg_dswso = 0.;
-        d2kg_dso2 = 0.;
+        d2kg_dso2  = 0.;
     } else if (!NegativeGasSaturation && (sgcng > 1. - CN)) {
         kg = krg_p_;
         dkg_dsw = 0.;
         dkg_dso = 0.;
 
-        d2kg_dsw2 = 0.;
+        d2kg_dsw2  = 0.;
         d2kg_dswso = 0.;
-        d2kg_dso2 = 0.;
-
+        d2kg_dso2  = 0.;
     } else {
         double powsg2 = pow(sgcng, expg_ - 2.);
         double powsg1 = sgcng*powsg2;
 
         kg = (lg_ + (1. - lg_) * powsg1) * sgcng*denkg_;
+
         dkg_dsw = -(lg_ + (1. - lg_) * expg_ * powsg1) * denkg_;
         dkg_dso = -(lg_ + (1. - lg_) * expg_ * powsg1) * denkg_;
 
-        d2kg_dsw2 = (1. - lg_) * expg_ * (expg_ - 1.) * powsg2*denkg_;
+        d2kg_dsw2  = (1. - lg_) * expg_ * (expg_ - 1.) * powsg2*denkg_;
         d2kg_dswso = (1. - lg_) * expg_ * (expg_ - 1.) * powsg2*denkg_;
-        d2kg_dso2 = (1. - lg_) * expg_ * (expg_ - 1.) * powsg2*denkg_;
+        d2kg_dso2  = (1. - lg_) * expg_ * (expg_ - 1.) * powsg2*denkg_;
     }
 
     return;
-
 }
 

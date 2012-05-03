@@ -37,6 +37,7 @@
 #define ELLIPTICBOUNDARY_LOCATION             "rpnumerics/EllipticBoundary"
 #define ELLIPTICEXTENSIONBOUNDARY_LOCATION    "rpnumerics/EllipticBoundaryExtension"
 #define ENVELOPECURVE_LOCATION                "rpnumerics/EnvelopeCurve"
+#define PHYSICALBOUNDARY_LOCATION             "rpnumerics/PhysicalBoundary"
 
 
 

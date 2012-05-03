@@ -154,6 +154,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 toolBar_.add(LevelCurvePlotAgent.instance().getContainer());
                 toolBar_.add(CompositePlotAgent.instance().getContainer());
                 toolBar_.add(EllipticBoundaryAgent.instance().getContainer());
+                toolBar_.add(PhysicalBoundaryPlotAgent.instance().getContainer());
                 toolBar_.add(TrackPointAgent.instance().getContainer());
 
 

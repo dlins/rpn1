@@ -52,6 +52,11 @@ RectBoundary & RectBoundary::operator=(const RectBoundary & source) {
 
 void RectBoundary::edge_segments(int where_constant, int number_of_steps, std::vector<RealVector> &seg) {
 
+
+}
+
+void RectBoundary::physical_boundary(std::vector<RealVector> &) {
+
 }
 
 RectBoundary::RectBoundary(const RealVector & minimums, const RealVector & maximums)
