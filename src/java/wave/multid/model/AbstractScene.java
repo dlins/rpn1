@@ -9,12 +9,11 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import java.io.FileReader;
 import java.util.Iterator;
+import rpn.RPnPhaseSpaceAbstraction;
 import rpn.component.RpGeomFactory;
 import rpn.component.RpGeometry;
 import rpn.component.util.ClassifierAgent;
 import rpn.component.util.GeometryGraphND;
-import rpn.component.util.GeometryUtil;
-
 
 import rpn.component.util.VelocityAgent;
 import rpn.controller.RpCalcController;
@@ -150,7 +149,7 @@ public class AbstractScene implements AbstractGeomObj {
         GeometryGraphND.clearpMarca();
         removeStringsCla(geometryIndex);
         removeStringsVel(geometryIndex);
-        if (GeometryUtil.listResolution.size()>0) GeometryUtil.listResolution.remove(geometryIndex);
+        if (RPnPhaseSpaceAbstraction.listResolution.size()>0) RPnPhaseSpaceAbstraction.listResolution.remove(geometryIndex);
         // -----------
 
         MultiGeometry geom = (MultiGeometry) geomList_.remove(geometryIndex);

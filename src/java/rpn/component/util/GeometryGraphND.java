@@ -18,8 +18,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpacePanel;
 import rpn.component.HugoniotSegGeom;
+import rpn.component.RpGeometry;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UserInputTable;
 import rpnumerics.Orbit;
@@ -115,7 +117,7 @@ public class GeometryGraphND {
         ClassifierAgent.indCurvaCla.clear();
         VelocityAgent.indCurvaVel.clear();
         clearAllStrings();
-        GeometryUtil.listResolution.clear();
+        RPnPhaseSpaceAbstraction.listResolution.clear();
         VelocityAgent.listaEquil.clear();
         
     }
@@ -148,7 +150,7 @@ public class GeometryGraphND {
             BufferedWriter saida = new BufferedWriter(gravador);
             saida.write("Curva mais proxima: ");
             saida.write(" ");
-            Object obj = GeometryUtil.closestCurve;
+            Object obj = RPnPhaseSpaceAbstraction.closestCurve;
             String str = obj.toString();
             saida.write(str);
             saida.write(" ");
@@ -361,8 +363,8 @@ public class GeometryGraphND {
         UserInputTable userInputList = UIController.instance().globalInputTable();
         RealVector newValue = userInputList.values();
 
-        GeometryUtil gU = new GeometryUtil();
-        RPnCurve curve = gU.findClosestCurve(newValue);
+        RpGeometry geom = RPnPhaseSpaceAbstraction.findClosestGeometry(newValue);
+        RPnCurve curve = (RPnCurve)(geom.geomFactory().geomSource());
 
         if (curve instanceof Orbit) {
 
@@ -463,8 +465,8 @@ public class GeometryGraphND {
 
         int[] resolution = {1, 1};
 
-        if (GeometryUtil.listResolution.size()==1) GeometryUtil.closestCurve=0;
-        if (GeometryUtil.listResolution.size()>0) resolution = (int[]) GeometryUtil.listResolution.get(GeometryUtil.closestCurve);
+        if (RPnPhaseSpaceAbstraction.listResolution.size()==1) RPnPhaseSpaceAbstraction.closestCurve=0;
+        if (RPnPhaseSpaceAbstraction.listResolution.size()>0) resolution = (int[]) RPnPhaseSpaceAbstraction.listResolution.get(RPnPhaseSpaceAbstraction.closestCurve);
 
         int xResolution = resolution[0];
         int yResolution = resolution[1];

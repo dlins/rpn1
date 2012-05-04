@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JToggleButton;
+import rpn.RPnPhaseSpaceAbstraction;
+import rpn.component.RpGeometry;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UserInputTable;
 import rpn.usecase.RpModelActionAgent;
@@ -83,11 +85,11 @@ public class VelocityAgent extends RpModelActionAgent {
         UserInputTable userInputList = UIController.instance().globalInputTable();
         RealVector newValue = userInputList.values();
 
-        GeometryUtil gU = new GeometryUtil();
-        RPnCurve curve = gU.findClosestCurve(newValue);
+        RpGeometry geom = RPnPhaseSpaceAbstraction.findClosestGeometry(newValue);
+        RPnCurve curve = (RPnCurve)(geom.geomFactory().geomSource());
 
         if ((GeometryGraph.count % 2) == 0) {
-        
+
             GeometryGraphND.pMarca = curve.findClosestPoint(newValue);
 
             if (curve instanceof HugoniotCurve)
@@ -114,15 +116,15 @@ public class VelocityAgent extends RpModelActionAgent {
                 yVel.add(GeometryGraphND.cornerStr.getElement(0));
 
                 //--------------------------------------------------------------
-                if (GeometryUtil.namePhaseSpace.equals("Phase Space"))      velView.add(1);
-                if (GeometryUtil.namePhaseSpace.equals("RightPhase Space")) velView.add(2);
-                if (GeometryUtil.namePhaseSpace.equals("LeftPhase Space"))  velView.add(3);
+                if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("Phase Space"))      velView.add(1);
+                if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("RightPhase Space")) velView.add(2);
+                if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("LeftPhase Space"))  velView.add(3);
                 //--------------------------------------------------------------
 
                 xSetaVel.add(GeometryGraphND.pMarca.getElement(1));
                 ySetaVel.add(GeometryGraphND.pMarca.getElement(0));
 
-                indCurvaVel.add(GeometryUtil.closestCurve);
+                indCurvaVel.add(RPnPhaseSpaceAbstraction.closestCurve);
 
                 GeometryGraph.count++;
                 return;

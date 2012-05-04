@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JToggleButton;
+import rpn.RPnPhaseSpaceAbstraction;
+import rpn.component.RpGeometry;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UserInputTable;
 import rpn.usecase.RpModelActionAgent;
@@ -81,6 +83,7 @@ public class ClassifierAgent extends RpModelActionAgent {
         return button_;
     }
 
+
     @Override
     public void execute() {
 
@@ -89,14 +92,15 @@ public class ClassifierAgent extends RpModelActionAgent {
         UserInputTable userInputList = UIController.instance().globalInputTable();
         RealVector newValue = userInputList.values();
 
-        GeometryUtil gU = new GeometryUtil();
-        RPnCurve curve = gU.findClosestCurve(newValue);
+        RpGeometry geom = RPnPhaseSpaceAbstraction.findClosestGeometry(newValue);
+        RPnCurve curve = (RPnCurve)(geom.geomFactory().geomSource());
 
         if ((GeometryGraph.count % 2) == 0) {
 
             GeometryGraphND.pMarca = curve.findClosestPoint(newValue);
 
             if (curve instanceof DoubleContactCurve) {
+                System.out.println("DoubleContactCurve");
                 GeometryGraphND.pMarcaDC = GeometryGraphND.secondPointDC(curve);
             }
             else GeometryGraphND.pMarcaDC = GeometryGraphND.pMarca;
@@ -119,18 +123,18 @@ public class ClassifierAgent extends RpModelActionAgent {
                 yStr.add(GeometryGraphND.cornerStr.getElement(0));
 
                 //--------------------------------------------------------------
-                if (GeometryUtil.namePhaseSpace.equals("Phase Space"))
+                if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("Phase Space"))
                     strView.add(1);
-                if (GeometryUtil.namePhaseSpace.equals("RightPhase Space"))
+                if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("RightPhase Space"))
                     strView.add(2);
-                if (GeometryUtil.namePhaseSpace.equals("LeftPhase Space"))
+                if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("LeftPhase Space"))
                     strView.add(3);
                 //--------------------------------------------------------------
 
                 xSeta.add(GeometryGraphND.pMarca.getElement(1));
                 ySeta.add(GeometryGraphND.pMarca.getElement(0));
 
-                indCurvaCla.add(GeometryUtil.closestCurve);
+                indCurvaCla.add(RPnPhaseSpaceAbstraction.closestCurve);
 
                 GeometryGraph.count++;
                 return;

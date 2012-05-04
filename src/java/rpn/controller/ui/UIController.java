@@ -26,9 +26,9 @@ import java.net.*;
 import java.util.Iterator;
 import rpn.RPnDesktopPlotter;
 import rpn.RPnUIFrame;
+import rpn.component.RpGeometry;
 import rpn.component.util.GeometryGraph;
 import rpn.component.util.GeometryGraphND;
-import rpn.component.util.GeometryUtil;
 import rpn.message.*;
 import rpnumerics.RPnCurve;
 
@@ -160,13 +160,12 @@ public class UIController extends ComponentUI {
             if (event.getComponent() instanceof RPnPhaseSpacePanel) {
                 RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
 
-                //*** Permite que o input point de uma curva seja exatamente um ponto sobre outra curva
+                //***  Permite que o input point de uma curva seja exatamente um ponto sobre outra curva
                 if (GeometryGraphND.onCurve == 1) {
                     UserInputTable userInputList = UIController.instance().globalInputTable();
                     RealVector newValue = userInputList.values();
-
-                    GeometryUtil gU = new GeometryUtil();
-                    RPnCurve curve = gU.findClosestCurve(newValue);
+                    RpGeometry geom = RPnPhaseSpaceAbstraction.findClosestGeometry(newValue);
+                    RPnCurve curve = (RPnCurve)(geom.geomFactory().geomSource());
                     GeometryGraphND.pMarca = curve.findClosestPoint(newValue);
 
                     panel.repaint();
@@ -228,8 +227,8 @@ public class UIController extends ComponentUI {
                 
                 RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
 
-                GeometryUtil.namePhaseSpace = ((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom()).getName();   //** acrescentei isso (Leandro)
-                panel.setName(GeometryUtil.namePhaseSpace);
+                RPnPhaseSpaceAbstraction.namePhaseSpace = ((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom()).getName();   //** acrescentei isso (Leandro)
+                panel.setName(RPnPhaseSpaceAbstraction.namePhaseSpace);
 
                 if (netStatus_.isMaster() || !(netStatus_.isOnline())) {
 

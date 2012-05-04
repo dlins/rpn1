@@ -10,12 +10,15 @@ import java.awt.Polygon;
 import java.awt.Shape;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
+import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpacePanel;
+import rpn.component.RpGeometry;
 import rpn.controller.ui.AREASELECTION_CONFIG;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UserInputTable;
 import rpnumerics.DoubleContactCurve;
 import rpnumerics.RPNUMERICS;
+import rpnumerics.RPnCurve;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
 import wave.multid.view.Scene;
@@ -122,21 +125,16 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
 
     public void drawFirstPanel(Graphics g, Scene scene_, RPnPhaseSpacePanel panel) {
 
-        //GeometryUtil gU = new GeometryUtil();
-        //RPnCurve curve = null;
-        //if(scene_.geometries().hasNext()) curve = gU.findClosestCurve(GeometryGraphND.targetPoint);
-
         UserInputTable userInputList = UIController.instance().globalInputTable();
         RealVector newValue = userInputList.values();
-        GeometryUtil gU = new GeometryUtil();
         
-        if (mostraGrid != 0  &&  panel.getName().equals(GeometryUtil.namePhaseSpace)){
+        if (mostraGrid != 0  &&  panel.getName().equals(RPnPhaseSpaceAbstraction.namePhaseSpace)){
             drawGrid(g, scene_);
         }
 
         Graphics2D graph = (Graphics2D) g;
 
-        if (UIController.instance().getState() instanceof AREASELECTION_CONFIG  &&  panel.getName().equals(GeometryUtil.namePhaseSpace)) {
+        if (UIController.instance().getState() instanceof AREASELECTION_CONFIG  &&  panel.getName().equals(RPnPhaseSpaceAbstraction.namePhaseSpace)) {
             g.setColor(cor12);
             graph.draw(line1);
             graph.draw(line2);
@@ -146,7 +144,7 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
         g.setColor(cor34);
         
 
-        if (panel.getName().equals(GeometryUtil.namePhaseSpace)) {
+        if (panel.getName().equals(RPnPhaseSpaceAbstraction.namePhaseSpace)) {
             graph.draw(line3);
             graph.draw(line4);
 
@@ -169,9 +167,12 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
             //*********
         }
 
+
         try {
-            if (gU.findClosestCurve(newValue) instanceof DoubleContactCurve) {
-                if (!panel.getName().equals(GeometryUtil.namePhaseSpace) && !panel.getName().equals("Phase Space")) {
+            RpGeometry geom = RPnPhaseSpaceAbstraction.findClosestGeometry(newValue);
+            RPnCurve curve = (RPnCurve)(geom.geomFactory().geomSource());
+            if (curve instanceof DoubleContactCurve) {
+                if (!panel.getName().equals(RPnPhaseSpaceAbstraction.namePhaseSpace) && !panel.getName().equals("Phase Space")) {
                     graph.draw(line3DC);
                     graph.draw(line4DC);
                 }
@@ -183,7 +184,7 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
         
         if ((count % 2) == 0) {
 
-            if (UIController.instance().getState() instanceof AREASELECTION_CONFIG  &&  panel.getName().equals(GeometryUtil.namePhaseSpace)) {
+            if (UIController.instance().getState() instanceof AREASELECTION_CONFIG  &&  panel.getName().equals(RPnPhaseSpaceAbstraction.namePhaseSpace)) {
                 g.setColor(cor56);
                 graph.draw(line5);
                 graph.draw(line6);
@@ -216,11 +217,9 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
     public void paintComponent(Graphics g, Scene scene_, RPnPhaseSpacePanel panel) {
     
         changeColor();
-        //drawFirstPanel(g, scene_);
-
+        
         drawFirstPanel(g, scene_, panel);
-        //if (panel.getName().equals(GeometryUtil.namePhaseSpace)) drawFirstPanel(g, scene_, panel);
-
+        
     }
 
 
@@ -228,12 +227,8 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
 
         int[] resolution = {1, 1};
 
-        //if (RPNUMERICS.listResolution.size()==1) GeometryUtil.closestCurve=0;
-        //if (RPNUMERICS.listResolution.size()>0) resolution = (int[]) RPNUMERICS.listResolution.get(GeometryUtil.closestCurve);
-        //if (scene.geometries().hasNext()) resolution = (int[]) RPNUMERICS.listResolution.get(GeometryUtil.closestCurve);
-
-        if (GeometryUtil.listResolution.size()==1) GeometryUtil.closestCurve=0;
-        if (GeometryUtil.listResolution.size()>0) resolution = (int[]) GeometryUtil.listResolution.get(GeometryUtil.closestCurve);
+        if (RPnPhaseSpaceAbstraction.listResolution.size()==1) RPnPhaseSpaceAbstraction.closestCurve=0;
+        if (RPnPhaseSpaceAbstraction.listResolution.size()>0) resolution = (int[]) RPnPhaseSpaceAbstraction.listResolution.get(RPnPhaseSpaceAbstraction.closestCurve);
 
         int xResolution = resolution[0];
         int yResolution = resolution[1];

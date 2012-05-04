@@ -6,7 +6,8 @@
  */
 package rpnumerics;
 
-import rpn.component.util.GeometryUtil;
+import rpn.RPnPhaseSpaceAbstraction;
+import rpn.component.RpGeometry;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UserInputTable;
 import wave.util.RealVector;
@@ -41,9 +42,9 @@ public class Area {
     public boolean isClosestCurve(RPnCurve curve) {
         UserInputTable userInputList = UIController.instance().globalInputTable();
         RealVector newValue = userInputList.values();
-        GeometryUtil gU = new GeometryUtil();
+        RpGeometry geom = RPnPhaseSpaceAbstraction.findClosestGeometry(newValue);
 
-        return (curve == gU.findClosestCurve(newValue));
+        return (curve == (RPnCurve)(geom.geomFactory().geomSource()));
     }
 
 

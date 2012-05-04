@@ -7,8 +7,8 @@ package rpn.usecase;
 
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
+import rpn.RPnPhaseSpaceAbstraction;
 import rpn.component.util.GeometryGraphND;
-import rpn.component.util.GeometryUtil;
 import rpn.controller.ui.BIFURCATIONREFINE_CONFIG;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UserInputTable;
@@ -53,9 +53,9 @@ public class BifurcationRefineAgent extends RpModelConfigChangeAgent {
         }
         //----------------------------------------------------------------------------------------
 
-        int[] temp = (int[]) GeometryUtil.listResolution.get(GeometryUtil.closestCurve);
-        GeometryUtil.listResolution.remove(GeometryUtil.closestCurve);
-        GeometryUtil.listResolution.add(temp);
+        int[] temp = (int[]) RPnPhaseSpaceAbstraction.listResolution.get(RPnPhaseSpaceAbstraction.closestCurve);
+        RPnPhaseSpaceAbstraction.listResolution.remove(RPnPhaseSpaceAbstraction.closestCurve);
+        RPnPhaseSpaceAbstraction.listResolution.add(temp);
 
     }
 

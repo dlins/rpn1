@@ -58,17 +58,15 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
             UIController.instance().setWaitCursor();
             actionSelected_.execute();
             UIController.instance().resetCursor();
-            userInputList_.clear();                          // ESTE CLEAR DEVE PERMANECER?
+            userInputList_.clear();
             ui.panelsBufferClear();
             rpn.parser.RPnDataModule.PHASESPACE.unselectAll();
         }
 
 
-
     }
 
-    public void userInputComplete(UIController ui) {
-    
+    public void userInputComplete(UIController ui) {    
 
         UIController.instance().addCommand(new Command(this));
         UIController.instance().setWaitCursor();

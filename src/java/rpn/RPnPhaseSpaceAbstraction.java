@@ -15,9 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
 import rpn.component.util.ClassifierAgent;
+import rpn.component.util.GeometryGraphND;
 import rpn.component.util.VelocityAgent;
 import rpn.controller.RpCalcController;
 import rpn.controller.ui.UIController;
+import rpn.parser.RPnDataModule;
 import rpn.usecase.ChangeFluxParamsAgent;
 import wave.multid.model.MultiGeometry;
 import wave.multid.model.MultiPolyLine;
@@ -35,6 +37,12 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
     private RpGeometry selectedGeom_;
     private List<RPnCurvesList> curvesListFrames_;
 
+
+    static public String namePhaseSpace = "";
+    static public List listResolution = new ArrayList();
+    static public int closestCurve;             //indice da curva mais proxima
+
+    
     //
     // Constructors
     //
@@ -158,6 +166,97 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
 
         UIController.instance().panelsUpdate();
     }
+
+
+    //**************************************************************************
+    public static RpGeometry findClosestGeometry(RealVector targetPoint) {
+
+        RpGeometry closestGeometry_ = null;      //a curva mais proxima
+
+        listResolution.clear();
+
+        double distminCurve = 1000000.;
+        double distancia = 0.;
+        int k = 0;
+        Iterator<RpGeometry> geomList = null ;
+
+        //--------------------------
+        if (namePhaseSpace.equals("Phase Space"))      geomList = RPnDataModule.PHASESPACE.getGeomObjIterator();
+        if (namePhaseSpace.equals("RightPhase Space")) geomList = RPnDataModule.RIGHTPHASESPACE.getGeomObjIterator();
+        if (namePhaseSpace.equals("LeftPhase Space"))  geomList = RPnDataModule.LEFTPHASESPACE.getGeomObjIterator();
+
+            while (geomList.hasNext()) {
+
+            RpGeometry geom = (RpGeometry) geomList.next();
+
+                if (GeometryGraphND.onCurve == 1) {
+
+                    if ((namePhaseSpace.equals("Phase Space")  &&  geom != RPnDataModule.PHASESPACE.getLastGeometry())
+                            || (namePhaseSpace.equals("RightPhase Space")  &&  geom != RPnDataModule.RIGHTPHASESPACE.getLastGeometry())
+                            || (namePhaseSpace.equals("LeftPhase Space")  &&  geom != RPnDataModule.LEFTPHASESPACE.getLastGeometry())) {
+
+                        if (geom.viewingAttr().isVisible()) {
+
+                            RpGeomFactory factory = geom.geomFactory();
+                            RPnCurve curve = (RPnCurve) factory.geomSource();
+
+                            curve.findClosestSegment(targetPoint);   //***
+
+                            distancia = curve.distancia;
+
+                            if (distminCurve >= distancia) {
+                                distminCurve = distancia;
+                                closestCurve = k;
+                                closestGeometry_ = geom;
+                            }
+
+                        }
+                    }
+
+                }
+
+                if (GeometryGraphND.onCurve == 0) {
+
+                    if (geom.viewingAttr().isVisible()) {
+
+                        RpGeomFactory factory = geom.geomFactory();
+                        RPnCurve curve = (RPnCurve) factory.geomSource();
+
+                        if (curve instanceof SegmentedCurve) {
+                            RpCalcBasedGeomFactory geomFactory = (RpCalcBasedGeomFactory) factory;
+                            RpCalculation calc = geomFactory.rpCalc();
+                            ContourCurveCalc curveCalc = (ContourCurveCalc) calc;
+                            listResolution.add(curveCalc.getParams().getResolution());
+
+                        } else {
+                            int[] resolution = {1, 1};
+                            listResolution.add(resolution);
+                        }
+
+                        curve.findClosestSegment(targetPoint);   //***
+
+                        distancia = curve.distancia;
+
+                        if (distminCurve >= distancia) {
+                            distminCurve = distancia;
+                            closestCurve = k;
+                            closestGeometry_ = geom;
+                        }
+
+                    }
+
+                }
+
+            k++;
+
+        }
+        //--------------------------
+
+        return closestGeometry_;
+    }
+
+
+    //**************************************************************************
 
     //******************************************************* Leandro, em 28/Set
     //*** ClassifierAgent.hideClassifiers - chamado aqui dentro - deverá ser revisto para permitir a simples ocultação dos classificadores

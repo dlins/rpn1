@@ -7,7 +7,6 @@
 package rpn.controller.ui;
 
 import rpn.component.LevelCurveGeomFactory;
-import rpn.component.util.GeometryUtil;
 import rpnumerics.HugoniotCurve;
 import rpnumerics.RPnCurve;
 import wave.util.RealVector;

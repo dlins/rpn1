@@ -15,7 +15,6 @@ import javax.swing.event.*;
 import java.util.*;
 import rpn.component.util.GeometryGraph;
 import rpn.component.util.GeometryGraphND;
-import rpn.component.util.GeometryUtil;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UserInputTable;
 import rpnumerics.RPnCurve;

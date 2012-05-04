@@ -23,7 +23,6 @@ import org.apache.batik.ext.swing.GridBagConstants;
 import rpn.component.util.AreaSelectionAgent2;
 import rpn.component.util.ClassifierAgent;
 import rpn.component.util.GeometryGraphND;
-import rpn.component.util.GeometryUtil;
 import rpn.component.util.VelocityAgent;
 import rpn.controller.ui.*;
 import rpn.message.*;
@@ -268,23 +267,24 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             try {
                 wave.multid.view.Scene scene = null;
 
-                if (GeometryUtil.namePhaseSpace.equals("Phase Space"))
+                if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("Phase Space"))
                 scene = RPnDataModule.PHASESPACE.createScene(viewingTransf,
                         new wave.multid.view.ViewingAttr(Color.black));
 
-                if (GeometryUtil.namePhaseSpace.equals("RightPhase Space"))
+                if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("RightPhase Space"))
                 scene = RPnDataModule.RIGHTPHASESPACE.createScene(viewingTransf,
                         new wave.multid.view.ViewingAttr(Color.black));
 
-                if (GeometryUtil.namePhaseSpace.equals("LeftPhase Space"))
+                if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("LeftPhase Space"))
                 scene = RPnDataModule.LEFTPHASESPACE.createScene(viewingTransf,
                         new wave.multid.view.ViewingAttr(Color.black));
+
 
                 RPnPhaseSpacePanel panel = new RPnPhaseSpacePanel(scene);
                 panel.setBackground(Color.red);
 
                 frameZoom = new RPnPhaseSpaceFrame(scene, commandMenu_);
-                frameZoom.setTitle("Zoom " +GeometryUtil.namePhaseSpace);
+                frameZoom.setTitle("Zoom " +RPnPhaseSpaceAbstraction.namePhaseSpace);
 
                 frameZoom.jPanel5.removeAll();
                 frameZoom.jPanel5.add(closeButton);
@@ -304,7 +304,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                     public void actionPerformed(ActionEvent e) {
                         //frameZoom.dispose();
                         for(int i=0; i<listFrameZoom.size(); i++){
-                            if (listFrameZoom.get(i).phaseSpacePanel().getName().equals(GeometryUtil.namePhaseSpace))
+                            if (listFrameZoom.get(i).phaseSpacePanel().getName().equals(RPnPhaseSpaceAbstraction.namePhaseSpace))
                             listFrameZoom.get(i).dispose();
                         }
 

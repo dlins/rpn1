@@ -24,6 +24,8 @@ import rpn.component.MultidAdapter;
 import wave.util.*;
 import java.util.ArrayList;
 import java.util.List;
+import rpn.RPnPhaseSpaceAbstraction;
+import rpn.component.RpGeometry;
 import rpn.component.util.GeometryUtil;
 import rpn.parser.RPnDataModule;
 
@@ -320,14 +322,13 @@ public class RPnCurve extends MultiPolyLine {
 
     public RealVector findClosestPoint(RealVector targetPoint) {
 
-
         //ArrayList segments = MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseRPnCurveToCoordsArray(this));
 
         ArrayList segments = null;
-        //RPnCurve curve = this;
-        GeometryUtil gU = new GeometryUtil();
-        RPnCurve curve = gU.findClosestCurve(targetPoint);
-        //RPnCurve curve = GeometryUtil.closestCurve_;
+        
+        RpGeometry geom = RPnPhaseSpaceAbstraction.findClosestGeometry(targetPoint);
+        RPnCurve curve = (RPnCurve)(geom.geomFactory().geomSource());
+        
 
         if (curve instanceof SegmentedCurve) {
             segments = (ArrayList) ((SegmentedCurve)curve).segments();

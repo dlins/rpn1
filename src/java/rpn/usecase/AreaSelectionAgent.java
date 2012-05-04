@@ -12,10 +12,11 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JToggleButton;
 import rpn.RPnDesktopPlotter;
+import rpn.RPnPhaseSpaceAbstraction;
+import rpn.component.RpGeometry;
 import rpn.component.util.GeometryGraph;
 import rpn.component.util.GeometryGraph3D;
 import rpn.component.util.GeometryGraphND;
-import rpn.component.util.GeometryUtil;
 import rpn.controller.ui.AREASELECTION_CONFIG;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UserInputTable;
@@ -78,8 +79,8 @@ public class AreaSelectionAgent extends RpModelActionAgent {
         UserInputTable userInputList = UIController.instance().globalInputTable();
         RealVector newValue = userInputList.values();
 
-        GeometryUtil gU = new GeometryUtil();
-        RPnCurve curve = gU.findClosestCurve(newValue);
+        RpGeometry geom = RPnPhaseSpaceAbstraction.findClosestGeometry(newValue);
+        RPnCurve curve = (RPnCurve)(geom.geomFactory().geomSource());
 
         if (curve instanceof SegmentedCurve) {
 
@@ -147,8 +148,9 @@ public class AreaSelectionAgent extends RpModelActionAgent {
                 GeometryGraphND.targetPoint.setElement(i, newValue.getElement(i));
             }
 
-            GeometryUtil gU = new GeometryUtil();
-            RPnCurve curve = gU.findClosestCurve(newValue);
+            RpGeometry geom = RPnPhaseSpaceAbstraction.findClosestGeometry(newValue);
+            RPnCurve curve = (RPnCurve)(geom.geomFactory().geomSource());
+
             GeometryGraphND.pMarca = curve.findClosestPoint(newValue);
 
             GeometryGraph.count++;

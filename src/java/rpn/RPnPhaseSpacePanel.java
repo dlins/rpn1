@@ -237,8 +237,6 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
             geom.markPoints(scene());
             geom.paintComponent(g, scene(),this);
 
-            //if (this.getName().equals(GeometryUtil.namePhaseSpace)) geom.markPoints(scene());
-            //if (this.getName().equals(GeometryUtil.namePhaseSpace)) geom.paintComponent(g, scene(), this);
 
         }
 
