@@ -16,6 +16,7 @@ public class PhysicalBoundaryGeom extends SegmentedCurveGeom {
     public PhysicalBoundaryGeom(RealSegGeom[] segArray, PhysicalBoundaryFactory factory) {
 
         super(segArray, factory);
+        viewAtt_=new ViewingAttr(Color.gray);
 
 
     }

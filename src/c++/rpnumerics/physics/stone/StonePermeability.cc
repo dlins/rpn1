@@ -304,6 +304,7 @@ void StonePermeability::Diff_PermabilityOil(double sw, double so, double sg,
         //
         double powso2 = ( (socno != 0.0) ? pow(socno, expo_ - 2.) : 0.0 );
         double powso1 = socno*powso2;
+        double StoneC = epsl_ * kro_p_ * (1. - CN);
 
         ko         = StoneC * socno * ko1den * ko2den
                    + (1. - epsl_)*(lo_ + (1. - lo_) * powso1) * socno * denko_;
