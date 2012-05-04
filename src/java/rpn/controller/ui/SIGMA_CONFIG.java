@@ -5,17 +5,9 @@
  */
 package rpn.controller.ui;
 
-import rpnumerics.RPNUMERICS;
 
-import rpn.controller.phasespace.*;
-import rpn.parser.RPnDataModule;
 import rpn.usecase.ChangeSigmaAgent;
-import rpn.component.XZeroGeomFactory;
-import rpn.component.StationaryPointGeomFactory;
 import wave.util.RealVector;
-import rpnumerics.HugoniotCurve;
-import rpnumerics.PhasePoint;
-import java.util.List;
 
 public class SIGMA_CONFIG extends UI_ACTION_SELECTED {
 
@@ -33,6 +25,9 @@ public class SIGMA_CONFIG extends UI_ACTION_SELECTED {
     public void userInputComplete(rpn.controller.ui.UIController ui, RealVector userInput) {
 
         super.userInputComplete(ui, userInput);
+
+
+        System.out.println("User input complete de Sigma Config");
 
         // XZERO
 //        XZeroGeomFactory xzeroFactory = new XZeroGeomFactory(new rpnumerics.StationaryPointCalc(RPNUMERICS.getShockProfile().getXZero()));

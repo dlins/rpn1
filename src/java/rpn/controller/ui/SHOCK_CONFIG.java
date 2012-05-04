@@ -5,17 +5,11 @@
  */
 package rpn.controller.ui;
 
-import java.util.ArrayList;
-import rpn.usecase.BackwardManifoldPlotAgent;
 import rpn.usecase.HugoniotPlotAgent;
 import rpnumerics.PhasePoint;
 import rpnumerics.RPNUMERICS;
 import wave.util.RealVector;
 import rpn.usecase.ChangeDirectionAgent;
-import rpn.usecase.ForwardManifoldPlotAgent;
-import rpn.usecase.PoincareSectionPlotAgent;
-import rpn.usecase.RpModelActionAgent;
-import rpn.usecase.StationaryPointPlotAgent;
 
 public class SHOCK_CONFIG extends UI_ACTION_SELECTED {
 
@@ -24,6 +18,7 @@ public class SHOCK_CONFIG extends UI_ACTION_SELECTED {
     //
     public SHOCK_CONFIG() {
         super(HugoniotPlotAgent.instance());
+        HugoniotPlotAgent.instance().setEnabled(true);
 
     }
 
@@ -35,6 +30,8 @@ public class SHOCK_CONFIG extends UI_ACTION_SELECTED {
     @Override
     public void userInputComplete(rpn.controller.ui.UIController ui,
             RealVector userInput) {
+
+        System.out.println("user input complete de shock config");
 
         RPNUMERICS.getShockProfile().setXZero(new PhasePoint(userInput));
 
