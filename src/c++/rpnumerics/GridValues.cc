@@ -32,7 +32,7 @@ void GridValues::fill_values_on_grid(const Boundary *b,
 
 //        printf("Inside GridValues::fill_values_on_grid\n");
 
-        grid_resolution.resize(2);
+        grid_resolution.resize(dim);
         for (int i = 0; i < dim; i++) grid_resolution.component(i) = (fabs(pmax.component(i) - pmin.component(i))) / (double) (number_of_cells[i]);
 
         grid.resize(number_of_cells[0] + 1, number_of_cells[1] + 1);
@@ -43,6 +43,10 @@ void GridValues::fill_values_on_grid(const Boundary *b,
 
                 grid(i, j).component(0) = pmin.component(0) + (double) i * grid_resolution.component(0);
                 grid(i, j).component(1) = pmin.component(1) + (double) j * grid_resolution.component(1);
+
+                if (dim==3) {
+                    grid(i, j).component(2) = 1.0;
+                }
             }
         }
 
@@ -98,8 +102,8 @@ void GridValues::fill_functions_on_grid(const FluxFunction *ff, const Accumulati
         int dim = grid(0, 0).size();
 
         for (int i = 0; i < n; i++) {
-            F_on_grid(i).resize(2);
-            G_on_grid(i).resize(2);
+            F_on_grid(i).resize(dim);
+            G_on_grid(i).resize(dim);
 
             // We only compute the value of the function on points that are inside the physical domain
             // given by "boundary".
