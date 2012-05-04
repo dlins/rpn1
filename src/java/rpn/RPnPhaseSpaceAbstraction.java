@@ -5,7 +5,6 @@
  */
 package rpn;
 
-import rpn.controller.RpController;
 import rpn.controller.phasespace.*;
 import wave.multid.model.AbstractScene;
 import wave.multid.Space;
@@ -17,10 +16,8 @@ import java.util.Iterator;
 import rpn.component.util.ClassifierAgent;
 import rpn.component.util.GeometryGraphND;
 import rpn.component.util.VelocityAgent;
-import rpn.controller.RpCalcController;
 import rpn.controller.ui.UIController;
 import rpn.parser.RPnDataModule;
-import rpn.usecase.ChangeFluxParamsAgent;
 import wave.multid.model.MultiGeometry;
 import wave.multid.model.MultiPolyLine;
 import wave.util.RealVector;
