@@ -162,9 +162,10 @@ RealVector Three_Phase_Boundary::intersect(RealVector &p1, RealVector &p2) const
 }
 
 int Three_Phase_Boundary::intersection(const RealVector &p, const RealVector &q, RealVector &r, int &w) const {
+
     w = -1;
     r.resize(2);
-
+//    return Boundary::intersection(p, q, r, w);
     if (inside(p) && inside(q)) return 1;
     if (!inside(p) && !inside(q)) {
         cout << "Both outside, should abort" << endl;
@@ -202,7 +203,7 @@ int Three_Phase_Boundary::intersection(const RealVector &p, const RealVector &q,
         }
 
         double pout_sum = pout.component(0) + pout.component(1);
-        double end_sum = (pmax->component(0) + pmax->component(1)) / 2.0;
+        double end_sum = (pmax->component(0) + pmax->component(1) +pmin->component(0) + pmin->component(1))  / 2.0;
 
         if (pout_sum > end_sum) {
             double pin_sum = pin.component(0) + pin.component(1);
