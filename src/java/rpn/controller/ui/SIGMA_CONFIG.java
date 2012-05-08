@@ -5,8 +5,13 @@
  */
 package rpn.controller.ui;
 
-
+import java.util.Iterator;
+import java.util.List;
+import rpn.component.RpGeometry;
+import rpn.parser.RPnDataModule;
 import rpn.usecase.ChangeSigmaAgent;
+import rpnumerics.HugoniotCurve;
+import rpnumerics.RPNUMERICS;
 import wave.util.RealVector;
 
 public class SIGMA_CONFIG extends UI_ACTION_SELECTED {
@@ -37,8 +42,29 @@ public class SIGMA_CONFIG extends UI_ACTION_SELECTED {
 //        ((ShockFlow)RPNUMERICS.flow()).getXZero()));
 //        RPnDataModule.PHASESPACE.plot(xzeroFactory.geom());
 //        // plots all other singularities
-//
-//        HugoniotCurve hCurve = (HugoniotCurve) ((NUMCONFIG_READY) RPnDataModule.PHASESPACE.state()).hugoniotGeom().geomFactory().geomSource();
+
+
+        HugoniotCurve hCurve = findHugoniot();//(HugoniotCurve) ((NUMCONFIG_READY) RPnDataModule.PHASESPACE.state()).hugoniotGeom().geomFactory().geomSource();
+
+
+        RealVector closestPoint = hCurve.findClosestPoint(userInput);
+
+        List<RealVector> eqPoints = hCurve.equilPoints(closestPoint);
+
+
+        System.out.println("Sigma do profile: " + RPNUMERICS.getShockProfile().getSigma());
+
+
+        for (RealVector realVector : eqPoints) {
+
+            System.out.println(realVector);
+
+
+        }
+
+
+
+
 //
 ////            List pList = hCurve.findPoints(((ShockFlow) RPNUMERICS.flow()).getSigma());
 //
@@ -55,6 +81,30 @@ public class SIGMA_CONFIG extends UI_ACTION_SELECTED {
 
         ui.setState(new GEOM_SELECTION());
     }
+
+    private HugoniotCurve findHugoniot() {
+
+        Iterator<RpGeometry> iterator = RPnDataModule.PHASESPACE.getGeomObjIterator();
+
+
+        while (iterator.hasNext()) {
+            RpGeometry rpGeometry = iterator.next();
+
+            if (rpGeometry.geomFactory().geomSource() instanceof HugoniotCurve) {
+
+
+                return (HugoniotCurve) rpGeometry.geomFactory().geomSource();
+            }
+
+        }
+
+        return null;
+
+
+    }
 }
+
+
+
 
 

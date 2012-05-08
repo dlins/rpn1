@@ -127,119 +127,120 @@ public class ConnectionOrbitCalc implements RpCalculation {
     }
 
     public RpSolution calc() throws RpException {
-        if (manifoldOrbitA_.getStationaryPoint().getDimP() + manifoldOrbitB_.getStationaryPoint().getDimN() !=
-            RPNUMERICS.domainDim()) {
-                throw new RpException("wrong input");
-        } // incorrect input
-        while (flag_ == RpSolution.CONNECTION_NOT_FINISHED)
-            connectionIterationStep();
-
-        /* WE SHOULD RETURN THE CONNECTION ANYWAY
-      if (flag_ != RpSolution.CONNECTED)
-        throw new RpException("Error in Connection Calc - " + flag_);*/
-
-        return new ConnectionOrbit(manifoldOrbitA_.getStationaryPoint(), manifoldOrbitB_.getStationaryPoint(),
-            createConnectingOrbit());
-    }
-
-    /*
-      This will enable step by step analysis using getManifoldA/B()
-      */
-
-    public void connectionIterationStep() {
-        iterationNumber_ = iterationNumber_ + 1;
-        ManifoldSensitivity manifoldSensitivityA = null;
-        ManifoldSensitivity manifoldSensitivityB = null;
-        manifoldSensitivityA = manifoldOrbitA_.sensitivity();
-        manifoldSensitivityB = manifoldOrbitB_.sensitivity();
-        // extracting information on first orbit
-        RealVector x_StationaryA = new RealVector(manifoldSensitivityA.getx_Stationary());
-        RealVector Xp_StationaryA = new RealVector(manifoldSensitivityA.getXp_Stationary());
-        RealVector x_t0A = new RealVector(manifoldSensitivityA.getx_t0());
-        RealMatrix2 X_t0A = new RealMatrix2(manifoldSensitivityA.getX_t0());
-        RealVector x_t1A = new RealVector(manifoldSensitivityA.getx_t1());
-        RealMatrix2 X_t1A = new RealMatrix2(manifoldSensitivityA.getX_t1());
-        RealVector Xp_t1A = new RealVector(manifoldSensitivityA.getXp_t1());
-        int kA = X_t0A.getNumCol();
-        // extracting information on second orbit
-        RealVector x_StationaryB = new RealVector(manifoldSensitivityB.getx_Stationary());
-        RealVector Xp_StationaryB = new RealVector(manifoldSensitivityB.getXp_Stationary());
-        RealVector x_t0B = new RealVector(manifoldSensitivityB.getx_t0());
-        RealMatrix2 X_t0B = new RealMatrix2(manifoldSensitivityB.getX_t0());
-        RealVector x_t1B = new RealVector(manifoldSensitivityB.getx_t1());
-        RealMatrix2 X_t1B = new RealMatrix2(manifoldSensitivityB.getX_t1());
-        RealVector Xp_t1B = new RealVector(manifoldSensitivityB.getXp_t1());
-        int kB = X_t0B.getNumCol();
-        int m = x_t0B.getSize();
-        // filling matrix A and vectod b
-        RealMatrix2 A = new RealMatrix2(m + 1, kA + kB + 1);
-        X_t1A.copySubMatrix(0, 0, m, kA, 0, 0, A);
-        RealMatrix2 minusX_t1B = new RealMatrix2(X_t1B);
-        minusX_t1B.negate();
-        minusX_t1B.copySubMatrix(0, 0, m, kB, 0, kA, A);
-        int i;
-        for (i = 0; i < m; i++)
-            A.setElement(i, m, Xp_t1A.getElement(i) - Xp_t1B.getElement(i));
-        RealVector n = new RealVector(RPNUMERICS.pSection().getNormal());
-        RealVector tmp = new RealVector(m);
-        for (i = 0; i < kA; i++) {
-            X_t1A.getColumn(i, tmp);
-            A.setElement(m, i, n.dot(tmp));
-        }
-        A.setElement(m, m, n.dot(Xp_t1A));
-        // checking the length of the step
-        RealVector dx = new RealVector(m);
-        dx.sub(x_t1B, x_t1A);
-        RealVector dLastPoint = new RealVector(dx);
-        double dx_norm = RPNUMERICS.errorControl().ode().stateVectorNorm(dx);
-        if (dx_norm > RPNUMERICS.errorControl().conn().maxPSectionStepLength())
-            dx.scale(RPNUMERICS.errorControl().conn().maxPSectionStepLength() / dx_norm);
-        RealVector b = new RealVector(m + 1);
-        for (i = 0; i < m; i++)
-            b.setElement(i, dx.getElement(i));
-        // solve equation A g = b
-        RealVector g = new RealVector(wave.util.MathUtil.linearSolver(A, b));
-        double dsigma = g.getElement(m);
-        if (RPNUMERICS.errorControl().conn().sigmaNorm(dsigma) > RPNUMERICS.errorControl().conn().maxSigmaStepLength()) {
-            double reduce = RPNUMERICS.errorControl().conn().maxSigmaStepLength() /
-                RPNUMERICS.errorControl().conn().sigmaNorm(dsigma);
-            g.scale(reduce);
-            dsigma = g.getElement(m);
-        }
-        RealVector xiA = new RealVector(kA);
-        for (i = 0; i < kA; i++)
-            xiA.setElement(i, g.getElement(i));
-        RealVector xiB = new RealVector(kB);
-        for (i = 0; i < kB; i++)
-            xiB.setElement(i, g.getElement(kA + i));
-        RealVector dFirstPointA = new RealVector(newPointShift(x_StationaryA, x_t0A, X_t0A, xiA));
-        RealVector dFirstPointB = new RealVector(newPointShift(x_StationaryB, x_t0B, X_t0B, xiB));
-        
-        
-        
-        double sigma =RPNUMERICS.getShockProfile().getSigma()+dsigma;//(ConservationShockFlow)RPNUMERICS.flow()).getSigma() + dsigma;
-        RPNUMERICS.getShockProfile().setSigma(sigma);
-//        ((ConservationShockFlow)RPNUMERICS.flow()).setSigma(sigma);
-        
-        // calculation of new stationary points
-        StationaryPoint stationaryPointA = null;
-        StationaryPoint stationaryPointB = null;
-        try {
-            tmp.set(x_StationaryA);
-            Xp_StationaryA.scale(dsigma);
-            tmp.add(Xp_StationaryA);
-            StationaryPointCalc calcA = new StationaryPointCalc(new PhasePoint(tmp),flow_);
-            stationaryPointA = (StationaryPoint)calcA.calc();
-            tmp.set(x_StationaryB);
-            Xp_StationaryB.scale(dsigma);
-            tmp.add(Xp_StationaryB);
-            StationaryPointCalc calcB = new StationaryPointCalc(new PhasePoint(tmp),flow_);
-            stationaryPointB = (StationaryPoint)calcB.calc();
-        } catch (RpException ex) { ex.printStackTrace(); }
-        RealVector firstPointA = new RealVector(m);
-        RealVector firstPointB = new RealVector(m);
-        firstPointA.add(new RealVector(stationaryPointA.getPoint().getCoords()), dFirstPointA);
-        firstPointB.add(new RealVector(stationaryPointB.getPoint().getCoords()), dFirstPointB);
+        return null;
+//        if (manifoldOrbitA_.getStationaryPoint().getDimP() + manifoldOrbitB_.getStationaryPoint().getDimN() !=
+//            RPNUMERICS.domainDim()) {
+//                throw new RpException("wrong input");
+//        } // incorrect input
+//        while (flag_ == RpSolution.CONNECTION_NOT_FINISHED)
+//            connectionIterationStep();
+//
+//        /* WE SHOULD RETURN THE CONNECTION ANYWAY
+//      if (flag_ != RpSolution.CONNECTED)
+//        throw new RpException("Error in Connection Calc - " + flag_);*/
+//
+//        return new ConnectionOrbit(manifoldOrbitA_.getStationaryPoint(), manifoldOrbitB_.getStationaryPoint(),
+//            createConnectingOrbit());
+//    }
+//
+//    /*
+//      This will enable step by step analysis using getManifoldA/B()
+//      */
+//
+//    public void connectionIterationStep() {
+//        iterationNumber_ = iterationNumber_ + 1;
+//        ManifoldSensitivity manifoldSensitivityA = null;
+//        ManifoldSensitivity manifoldSensitivityB = null;
+//        manifoldSensitivityA = manifoldOrbitA_.sensitivity();
+//        manifoldSensitivityB = manifoldOrbitB_.sensitivity();
+//        // extracting information on first orbit
+//        RealVector x_StationaryA = new RealVector(manifoldSensitivityA.getx_Stationary());
+//        RealVector Xp_StationaryA = new RealVector(manifoldSensitivityA.getXp_Stationary());
+//        RealVector x_t0A = new RealVector(manifoldSensitivityA.getx_t0());
+//        RealMatrix2 X_t0A = new RealMatrix2(manifoldSensitivityA.getX_t0());
+//        RealVector x_t1A = new RealVector(manifoldSensitivityA.getx_t1());
+//        RealMatrix2 X_t1A = new RealMatrix2(manifoldSensitivityA.getX_t1());
+//        RealVector Xp_t1A = new RealVector(manifoldSensitivityA.getXp_t1());
+//        int kA = X_t0A.getNumCol();
+//        // extracting information on second orbit
+//        RealVector x_StationaryB = new RealVector(manifoldSensitivityB.getx_Stationary());
+//        RealVector Xp_StationaryB = new RealVector(manifoldSensitivityB.getXp_Stationary());
+//        RealVector x_t0B = new RealVector(manifoldSensitivityB.getx_t0());
+//        RealMatrix2 X_t0B = new RealMatrix2(manifoldSensitivityB.getX_t0());
+//        RealVector x_t1B = new RealVector(manifoldSensitivityB.getx_t1());
+//        RealMatrix2 X_t1B = new RealMatrix2(manifoldSensitivityB.getX_t1());
+//        RealVector Xp_t1B = new RealVector(manifoldSensitivityB.getXp_t1());
+//        int kB = X_t0B.getNumCol();
+//        int m = x_t0B.getSize();
+//        // filling matrix A and vectod b
+//        RealMatrix2 A = new RealMatrix2(m + 1, kA + kB + 1);
+//        X_t1A.copySubMatrix(0, 0, m, kA, 0, 0, A);
+//        RealMatrix2 minusX_t1B = new RealMatrix2(X_t1B);
+//        minusX_t1B.negate();
+//        minusX_t1B.copySubMatrix(0, 0, m, kB, 0, kA, A);
+//        int i;
+//        for (i = 0; i < m; i++)
+//            A.setElement(i, m, Xp_t1A.getElement(i) - Xp_t1B.getElement(i));
+//        RealVector n = new RealVector(RPNUMERICS.pSection().getNormal());
+//        RealVector tmp = new RealVector(m);
+//        for (i = 0; i < kA; i++) {
+//            X_t1A.getColumn(i, tmp);
+//            A.setElement(m, i, n.dot(tmp));
+//        }
+//        A.setElement(m, m, n.dot(Xp_t1A));
+//        // checking the length of the step
+//        RealVector dx = new RealVector(m);
+//        dx.sub(x_t1B, x_t1A);
+//        RealVector dLastPoint = new RealVector(dx);
+//        double dx_norm = RPNUMERICS.errorControl().ode().stateVectorNorm(dx);
+//        if (dx_norm > RPNUMERICS.errorControl().conn().maxPSectionStepLength())
+//            dx.scale(RPNUMERICS.errorControl().conn().maxPSectionStepLength() / dx_norm);
+//        RealVector b = new RealVector(m + 1);
+//        for (i = 0; i < m; i++)
+//            b.setElement(i, dx.getElement(i));
+//        // solve equation A g = b
+//        RealVector g = new RealVector(wave.util.MathUtil.linearSolver(A, b));
+//        double dsigma = g.getElement(m);
+//        if (RPNUMERICS.errorControl().conn().sigmaNorm(dsigma) > RPNUMERICS.errorControl().conn().maxSigmaStepLength()) {
+//            double reduce = RPNUMERICS.errorControl().conn().maxSigmaStepLength() /
+//                RPNUMERICS.errorControl().conn().sigmaNorm(dsigma);
+//            g.scale(reduce);
+//            dsigma = g.getElement(m);
+//        }
+//        RealVector xiA = new RealVector(kA);
+//        for (i = 0; i < kA; i++)
+//            xiA.setElement(i, g.getElement(i));
+//        RealVector xiB = new RealVector(kB);
+//        for (i = 0; i < kB; i++)
+//            xiB.setElement(i, g.getElement(kA + i));
+//        RealVector dFirstPointA = new RealVector(newPointShift(x_StationaryA, x_t0A, X_t0A, xiA));
+//        RealVector dFirstPointB = new RealVector(newPointShift(x_StationaryB, x_t0B, X_t0B, xiB));
+//
+//
+//
+//        double sigma =RPNUMERICS.getShockProfile().getSigma()+dsigma;//(ConservationShockFlow)RPNUMERICS.flow()).getSigma() + dsigma;
+//        RPNUMERICS.getShockProfile().setSigma(sigma);
+////        ((ConservationShockFlow)RPNUMERICS.flow()).setSigma(sigma);
+//
+//        // calculation of new stationary points
+//        StationaryPoint stationaryPointA = null;
+//        StationaryPoint stationaryPointB = null;
+//        try {
+//            tmp.set(x_StationaryA);
+//            Xp_StationaryA.scale(dsigma);
+//            tmp.add(Xp_StationaryA);
+//            StationaryPointCalc calcA = new StationaryPointCalc(new PhasePoint(tmp),flow_);
+//            stationaryPointA = (StationaryPoint)calcA.calc();
+//            tmp.set(x_StationaryB);
+//            Xp_StationaryB.scale(dsigma);
+//            tmp.add(Xp_StationaryB);
+//            StationaryPointCalc calcB = new StationaryPointCalc(new PhasePoint(tmp),flow_);
+//            stationaryPointB = (StationaryPoint)calcB.calc();
+//        } catch (RpException ex) { ex.printStackTrace(); }
+//        RealVector firstPointA = new RealVector(m);
+//        RealVector firstPointB = new RealVector(m);
+//        firstPointA.add(new RealVector(stationaryPointA.getPoint().getCoords()), dFirstPointA);
+//        firstPointB.add(new RealVector(stationaryPointB.getPoint().getCoords()), dFirstPointB);
         // calculation of new manifold orbits
 //        try {
 //            ManifoldOrbitCalc calcManA = RPNUMERICS.createManifoldCalc(stationaryPointA, stationaryPointA, manifoldOrbitA_.getTimeDirection());//( i)new ManifoldOrbitCalc(stationaryPointA,

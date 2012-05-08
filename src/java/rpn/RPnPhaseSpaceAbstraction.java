@@ -177,6 +177,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         int k = 0;
         Iterator<RpGeometry> geomList = null ;
 
+
         //--------------------------
         if (namePhaseSpace.equals("Phase Space"))      geomList = RPnDataModule.PHASESPACE.getGeomObjIterator();
         if (namePhaseSpace.equals("RightPhase Space")) geomList = RPnDataModule.RIGHTPHASESPACE.getGeomObjIterator();

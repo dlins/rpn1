@@ -1,40 +1,102 @@
 #include "Viscous_Profile.h"
 
-const FluxFunction * Viscous_Profile::f = NULL;
-const AccumulationFunction * Viscous_Profile::a = NULL;
+const FluxFunction* Viscous_Profile::f = 0;
+const AccumulationFunction* Viscous_Profile::a = 0;
+Viscosity_Matrix* Viscous_Profile::vmf = 0;
 
-Viscosity_Matrix * Viscous_Profile::vmf = NULL;
+// TODO: This method can be straightforwardly extended to arbitrary dimension:
+// Do so.
+void Viscous_Profile::Newton_improvement(const FluxFunction *ff, const AccumulationFunction *aa, 
+                                         double sigma, const RealVector &p, RealVector &ref, RealVector &out){
 
-void Viscous_Profile::critical_points_linearization(const FluxFunction *ff, const AccumulationFunction *aa, 
-                                                    Viscosity_Matrix *v,
-                                                    double speed, const std::vector<RealVector> &cp, 
-                                                    std::vector< std::vector<eigenpair> > &ep){
-    ep.clear();
+    out.resize(2);
 
-    for (int i = 0; i < cp.size(); i++){
-        RealVector p(cp[i]);
-        Matrix<double> JF(2, 2), JG(2, 2);
-        ff->fill_with_jet(2, p.components(), 1, 0, JF.data(), 0);
-        aa->fill_with_jet(2, p.components(), 1, 0, JG.data(), 0);
+    // TODO: Improve this epsilon
+    double epsilon = 1e-10;
+    double delta_U[2];// = {10.0, 10.0};
 
-        // Find the eigenpairs of:
-        //
-        // [-speed*JG(cp[i]) + JF(cp[i])]*U_mu = mu*D(cp[i])*U_mu.
-        //
-        Matrix<double> RH(2, 2), viscous(2, 2);
-        for (int k = 0; k < 2; k++){
+    double U[2];
+    for (int i = 0; i < 2; i++) U[i] = p.component(i);
+
+    // If this function ever comes to be vectorialized, these lines below are COMMON
+    // to all points (since they deal with the ref point).
+    //
+    double c[2];
+    double F_ref[2], G_ref[2];
+    ff->fill_with_jet(2, ref.components(), 0, F_ref, 0, 0);
+    aa->fill_with_jet(2, ref.components(), 0, G_ref, 0, 0);
+    for (int i = 0; i < 2; i++){
+        c[i] = sigma*G_ref[i] - F_ref[i];
+    }
+
+    do {
+        double F[2], JF[2][2], G[2], JG[2][2];
+        ff->fill_with_jet(2, U, 1, F, &JF[0][0], 0);
+        aa->fill_with_jet(2, U, 1, G, &JG[0][0], 0);
+
+        double A[2][2];
+        double b[2];
+
+        for (int i = 0; i < 2; i++){
+            b[i] = -F[i] + sigma*G[i] + c[i];
+
             for (int j = 0; j < 2; j++){
-                RH(k, j) = -speed*JG(k, j) + JF(k, j);
+                A[i][j] = JF[i][j] - sigma*JG[i][j];
             }
         }
 
-        // Fill the viscous matrix
-        v->fill_viscous_matrix(cp[i], viscous);
+        // Solve
+        double det = A[0][0]*A[1][1] - A[0][1]*A[1][0];
+//        anorm = 0;
+//        for (i = 0; i < n * n; i++) anorm += A[i] * A[i];
 
-        std::vector<eigenpair> e;
-        Eigen::eig(2, RH.data(), viscous.data(), e);
-        ep.push_back(e);
+//        if (fabs(det) <= (eps * anorm)) return -1;
+
+        // Protect against zero-division or use LAPACK (will be done so anyway for n >= 3)
+        delta_U[0] = (b[0]*A[1][1] - b[1]*A[0][1])/det;
+        delta_U[1] = (A[0][0]*b[1] - A[1][0]*b[0])/det;
+
+        // Prepare next step:
+        for (int i = 0; i < 2; i++) U[i] += delta_U[i];
+
+    } while(delta_U[0]*delta_U[0] + delta_U[1]*delta_U[1] > epsilon*epsilon);
+
+    // Output
+    for (int i = 0; i < 2; i++) out.component(i) = U[i]; 
+
+    return;
+}
+
+void Viscous_Profile::critical_points_linearization(const FluxFunction *ff, const AccumulationFunction *aa, 
+                                                    Viscosity_Matrix *v,
+                                                    double speed, const RealVector &cp, RealVector &ref,
+                                                    std::vector<eigenpair> &ep){
+    ep.clear();
+
+    RealVector out;
+    Newton_improvement(ff, aa, speed, cp, ref, out);
+
+    Matrix<double> JF(2, 2), JG(2, 2);
+    ff->fill_with_jet(2, out.components(), 1, 0, JF.data(), 0);
+    aa->fill_with_jet(2, out.components(), 1, 0, JG.data(), 0);
+
+    // Find the eigenpairs of:
+    //
+    // [-speed*JG(cp[i]) + JF(cp[i])]*U_mu = mu*D(cp[i])*U_mu.
+    //
+    Matrix<double> RH(2, 2), viscous(2, 2);
+    for (int k = 0; k < 2; k++){
+        for (int j = 0; j < 2; j++){
+            RH(k, j) = -speed*JG(k, j) + JF(k, j);
+        }
     }
+
+    // Fill the viscous matrix
+    v->fill_viscous_matrix(cp, viscous);
+
+    //std::vector<eigenpair> e;
+    Eigen::eig(2, RH.data(), viscous.data(), ep);
+    //ep.push_back(e);
 
     return;
 }
@@ -50,6 +112,8 @@ int Viscous_Profile::orbit(const FluxFunction *ff, const AccumulationFunction *a
     vmf = v;
 
     out.clear();
+
+    
 
     // The vector of parameters holds 6 elements:
     //
@@ -76,7 +140,7 @@ int Viscous_Profile::orbit(const FluxFunction *ff, const AccumulationFunction *a
 
     if (orbit_direction == ORBIT_FORWARD) param[5] = 1.0;
     else                                  param[5] = -1.0;
-
+    
     // BEGIN Prepare the parameters to be passed to LSODE //
     int n = 2;
 
@@ -131,7 +195,11 @@ int Viscous_Profile::orbit(const FluxFunction *ff, const AccumulationFunction *a
 
     // Find the orbit
     while (true){
-        for (int i = 0; i <= n; i++) previous_point.component(i) = new_point.component(i);
+        // TEMPORAL
+        if (out.size() > 5000) {printf("Max reached!!!\n"); return ABORTED_PROCEDURE;}
+        // TEMPORAL
+
+        for (int i = 0; i < n; i++) previous_point.component(i) = new_point.component(i);
 
         lsode_(&orbit_flux, &n, p, &xi, &new_xi, &itol, &rtol, atol, &itask, &istate, &iopt, rwork, &lrw, iwork, &liw, 0, &mf, &nparam, param);
 
@@ -229,5 +297,66 @@ int Viscous_Profile::orbit_flux(int *neq, double *xi, double *in, double *out, i
     }
 
     return SUCCESSFUL_PROCEDURE;
+}
+
+// Compute the field on a rectangular domain.
+//
+//     grid: Array that holds the vertices of the grid.
+//     dir:  Array that holds the field in each element of the grid.
+//
+// To plot the field:
+//
+//     for (int i = 0; i < grid.size(); i++) line(grid[i], grid[i] + dir[i]);
+//
+// or
+//
+//     for (int i = 0; i < grid.size(); i++) line(grid[i] - dir[i], grid[i] + dir[i]);
+//
+void Viscous_Profile::viscous_field(const FluxFunction *f, const AccumulationFunction *a,
+                   RealVector &ref, double speed,
+                   const RealVector &pmin, const RealVector &pmax, 
+                   const std::vector<int> &noc, 
+                   std::vector<RealVector> &grid, std::vector<RealVector> &dir){
+
+    int n = noc.size();
+    grid.clear();
+    dir.clear();
+
+    int nparam = 6;
+    double param[nparam];
+    
+    double Fref[2], Gref[2];
+    f->fill_with_jet(2, ref.components(), 0, Fref, 0 , 0);
+    a->fill_with_jet(2, ref.components(), 0, Gref, 0 , 0);
+
+    param[0] = speed;
+    for (int i = 0; i < 2; i++){
+        param[1 + i] = Fref[i];
+        param[3 + i] = Gref[i];
+    }
+
+    // Always growing
+    param[5] = 1.0;
+
+    double delta[2];
+    for (int i = 0; i < n; i++) delta[i] = (pmax.component(i) - pmin.component(i))/((double)noc[i] - 1.0);
+
+    RealVector p(n);
+
+    for (int i = 0; i < noc[0]; i++){
+        p.component(0) = pmin.component(0) + (double)i*delta[0];
+        for (int j = 0; j < noc[1]; j++){
+            p.component(1) = pmin.component(1) + (double)j*delta[1];
+            grid.push_back(p);
+
+            double xi = 0.0;
+            RealVector field(2);
+            orbit_flux(&n, &xi, p.components(), field.components(), &nparam, param);
+
+            dir.push_back(field);
+        }
+    }
+
+    return;
 }
 

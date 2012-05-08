@@ -85,6 +85,7 @@ public class VelocityAgent extends RpModelActionAgent {
         UserInputTable userInputList = UIController.instance().globalInputTable();
         RealVector newValue = userInputList.values();
 
+
         RpGeometry geom = RPnPhaseSpaceAbstraction.findClosestGeometry(newValue);
         RPnCurve curve = (RPnCurve)(geom.geomFactory().geomSource());
 
@@ -108,8 +109,7 @@ public class VelocityAgent extends RpModelActionAgent {
                 vel.add(point.getLambda());
             }
             else if (curve instanceof HugoniotCurve) {
-                HugoniotSegment segment = (HugoniotSegment)(((SegmentedCurve)curve).segments()).get(curve.findClosestSegment(GeometryGraphND.pMarca));
-                vel.add(((HugoniotCurve)curve).velocity(segment, GeometryGraphND.pMarca));
+                vel.add(((HugoniotCurve)curve).velocity(GeometryGraphND.pMarca));
             }
 
                 xVel.add(GeometryGraphND.cornerStr.getElement(1));

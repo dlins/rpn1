@@ -9,11 +9,11 @@ extern "C" {
 #endif
 /*
  * Class:     rpnumerics_StationaryPointCalc
- * Method:    calc
- * Signature: (Lrpnumerics/PhasePoint;)Lrpnumerics/RpSolution;
+ * Method:    nativeCalc
+ * Signature: (Lwave/util/RealVector;Lwave/util/RealVector;D)Lrpnumerics/RpSolution;
  */
-JNIEXPORT jobject JNICALL Java_rpnumerics_StationaryPointCalc_calc
-  (JNIEnv *, jobject, jobject);
+JNIEXPORT jobject JNICALL Java_rpnumerics_StationaryPointCalc_nativeCalc
+  (JNIEnv *, jobject, jobject, jobject, jdouble);
 
 #ifdef __cplusplus
 }
