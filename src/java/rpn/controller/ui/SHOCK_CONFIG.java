@@ -10,6 +10,7 @@ import rpnumerics.PhasePoint;
 import rpnumerics.RPNUMERICS;
 import wave.util.RealVector;
 import rpn.usecase.ChangeDirectionAgent;
+import rpn.usecase.OrbitPlotAgent;
 
 public class SHOCK_CONFIG extends UI_ACTION_SELECTED {
 
@@ -19,6 +20,7 @@ public class SHOCK_CONFIG extends UI_ACTION_SELECTED {
     public SHOCK_CONFIG() {
         super(HugoniotPlotAgent.instance());
         HugoniotPlotAgent.instance().setEnabled(true);
+        OrbitPlotAgent.instance().setEnabled(true);
 
     }
 

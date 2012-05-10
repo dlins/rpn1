@@ -299,10 +299,10 @@ public class RPNUMERICS {
     public static EnvelopeCurveCalc createEnvelopeCurveCalc() {
 
         int[] resolution = RPnDataModule.processResolution(getParamValue("levelcurve", "resolution"));
-        int whereIsConstant = new Integer (getParamValue("envelopecurve", "whereisconstant"));
+        int whereIsConstant = new Integer(getParamValue("envelopecurve", "whereisconstant"));
         int numberOfSteps = new Integer(getParamValue("envelopecurve", "numberofsteps"));
 
-        return new EnvelopeCurveCalc(new ContourParams(resolution),whereIsConstant,numberOfSteps);
+        return new EnvelopeCurveCalc(new ContourParams(resolution), whereIsConstant, numberOfSteps);
 
     }
 
@@ -391,6 +391,12 @@ public class RPNUMERICS {
 
     }
 
+    public static OrbitCalc createOrbitCalc(OrbitPoint oPoint) {
+
+        return new OrbitCalc(oPoint, direction_);
+
+    }
+
     public static CoincidenceExtensionCurveCalc createCoincidenceExtensionCurveCalc() {
 
 
@@ -443,9 +449,9 @@ public class RPNUMERICS {
 
         int edgeResolution = new Integer(getParamValue("boundaryextensioncurve", "edgeresolution"));
 
-        int characteristic = new Integer(getParamValue("boundaryextensioncurve","characteristicwhere"));
-        
-        return new BoundaryExtensionCurveCalc(params, edgeResolution, new Integer(getParamValue("boundaryextensioncurve", "family")),edge,characteristic);
+        int characteristic = new Integer(getParamValue("boundaryextensioncurve", "characteristicwhere"));
+
+        return new BoundaryExtensionCurveCalc(params, edgeResolution, new Integer(getParamValue("boundaryextensioncurve", "family")), edge, characteristic);
 
 
     }
@@ -680,5 +686,4 @@ public class RPNUMERICS {
     private static native void setFluxParams(FluxParams fluxParams);
 
     private static native void setAccumulationParams(RealVector accumulationParams);
-
 }

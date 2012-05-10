@@ -35,16 +35,6 @@ public class OrbitGeomFactory extends RpCalcBasedGeomFactory {
     //
     protected ViewingAttr selectViewingAttr() {
 
-        int family = (((Orbit) this.geomSource()).getFamilyIndex());
-
-  
-        if (family == 1) {
-            return new ViewingAttr(Color.red);
-        }
-        if (family == 0) {
-            return new ViewingAttr(Color.blue);
-        }
-
         return new ViewingAttr(Color.white);
     }
 
@@ -85,7 +75,7 @@ public class OrbitGeomFactory extends RpCalcBasedGeomFactory {
             str.append(direction);
         }
        
-        str.append(" inputpoint=\"" + firstPoint.toString() + "\" family=\"" + ((Orbit) geomSource()).getFamilyIndex() + "\" " + ">\n");
+//        str.append(" inputpoint=\"" + firstPoint.toString() + "\" family=\"" + ((Orbit) geomSource()).getFamilyIndex() + "\" " + ">\n");
         str.append(((Orbit) geomSource()).toXML());
         str.append("</COMMAND>\n");
         return str.toString();

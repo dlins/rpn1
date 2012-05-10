@@ -8,10 +8,15 @@ package rpn.controller.ui;
 import java.util.Iterator;
 import java.util.List;
 import rpn.component.RpGeometry;
+import rpn.component.StationaryPointGeomFactory;
+import rpn.controller.phasespace.NUMCONFIG_READY;
+import rpn.controller.phasespace.NumConfigImpl;
 import rpn.parser.RPnDataModule;
 import rpn.usecase.ChangeSigmaAgent;
 import rpnumerics.HugoniotCurve;
+import rpnumerics.PhasePoint;
 import rpnumerics.RPNUMERICS;
+import rpnumerics.StationaryPointCalc;
 import wave.util.RealVector;
 
 public class SIGMA_CONFIG extends UI_ACTION_SELECTED {
@@ -43,24 +48,65 @@ public class SIGMA_CONFIG extends UI_ACTION_SELECTED {
 //        RPnDataModule.PHASESPACE.plot(xzeroFactory.geom());
 //        // plots all other singularities
 
+        Iterator<RpGeometry> iterator = RPnDataModule.PHASESPACE.getGeomObjIterator();
 
-        HugoniotCurve hCurve = findHugoniot();//(HugoniotCurve) ((NUMCONFIG_READY) RPnDataModule.PHASESPACE.state()).hugoniotGeom().geomFactory().geomSource();
 
+
+
+//        while (iterator.hasNext()) {
+//            RpGeometry rpGeometry = iterator.next();
+
+//            if (rpGeometry.geomFactory().geomSource() instanceof HugoniotCurve) {
+
+        HugoniotCurve hCurve = (HugoniotCurve) ((NumConfigImpl) RPnDataModule.PHASESPACE.state()).hugoniotGeom().geomFactory().geomSource();
+//                HugoniotCurve hCurve = (HugoniotCurve) rpGeometry.geomFactory().geomSource();
 
         RealVector closestPoint = hCurve.findClosestPoint(userInput);
 
         List<RealVector> eqPoints = hCurve.equilPoints(closestPoint);
-
-
         System.out.println("Sigma do profile: " + RPNUMERICS.getShockProfile().getSigma());
 
+        eqPoints.add(hCurve.getXZero());
 
         for (RealVector realVector : eqPoints) {
 
-            System.out.println(realVector);
+            StationaryPointGeomFactory xzeroFactory = new StationaryPointGeomFactory(new StationaryPointCalc(new PhasePoint(realVector), hCurve.getXZero()));
 
+            RPnDataModule.PHASESPACE.plot(xzeroFactory.geom());
+
+
+
+//                }
+
+
+
+
+
+//            }
 
         }
+
+
+
+
+
+
+
+//        HugoniotCurve hCurve = findHugoniot();//(HugoniotCurve) ((NUMCONFIG_READY) RPnDataModule.PHASESPACE.state()).hugoniotGeom().geomFactory().geomSource();
+
+
+
+
+
+//        System.out.println("tamanho da lista :"+eqPoints.size());
+//
+////        for (RealVector realVector : eqPoints) {
+////
+////            System.out.println(realVector);
+////
+////        }
+
+
 
 
 
@@ -80,6 +126,8 @@ public class SIGMA_CONFIG extends UI_ACTION_SELECTED {
 
 
         ui.setState(new GEOM_SELECTION());
+
+        return;
     }
 
     private HugoniotCurve findHugoniot() {

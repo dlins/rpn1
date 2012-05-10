@@ -8,7 +8,7 @@ package rpn.component;
 import rpnumerics.RarefactionOrbit;
 import rpnumerics.RarefactionOrbitCalc;
 
-public class RarefactionOrbitGeomFactory extends OrbitGeomFactory {
+public class RarefactionOrbitGeomFactory extends WaveCurveOrbitGeomFactory {
     //
     // Constants
     //
@@ -38,6 +38,11 @@ public class RarefactionOrbitGeomFactory extends OrbitGeomFactory {
         return new RarefactionGeom(MultidAdapter.converseOrbitPointsToCoordsArray(orbit.getPoints()), this);
 
     }
+
+
+
+
+
 
 //    @Override
 //    public String toXML() {

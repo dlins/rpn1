@@ -13,9 +13,7 @@ package rpnumerics;
 // fills the local information of eigenvalues, eigenvectors, schur decompositions
 // the point initial_ is taken as an initial guess.
 //
-import wave.util.*;
 import wave.util.RealVector;
-import wave.util.RealMatrix2;
 
 public class StationaryPointCalc implements RpCalculation {
     //
@@ -32,7 +30,8 @@ public class StationaryPointCalc implements RpCalculation {
     //
     // Constructors
     //
-    public StationaryPointCalc(PhasePoint initial, RealVector referencePoint ) {
+
+    public StationaryPointCalc(PhasePoint initial, RealVector referencePoint) {
         initial_ = initial;
         referencePoint_ = referencePoint;
 
@@ -45,7 +44,6 @@ public class StationaryPointCalc implements RpCalculation {
 //
 //
 //    }
-
     //
     // Accessors/Mutators
     //
@@ -66,9 +64,16 @@ public class StationaryPointCalc implements RpCalculation {
 
     public RpSolution calc() throws RpException {
 
+        StationaryPoint result;
 
 
-        return nativeCalc(initial_, referencePoint_, RPNUMERICS.getShockProfile().getSigma());
+        result = (StationaryPoint) nativeCalc(initial_, referencePoint_, RPNUMERICS.getShockProfile().getSigma());
+        if (result == null) {
+            throw new RpException("Error in native layer");
+        }
+        return result;
+
+
 
 //        int stateSpaceDim = initial_.getCoords().getSize();
 //
@@ -141,7 +146,6 @@ public class StationaryPointCalc implements RpCalculation {
 //    public String getCalcMethodName() {
 //        return methodCalcName_;
 //    }
-
     public WaveFlow getFlow() {
         return flow_;
 
@@ -151,10 +155,5 @@ public class StationaryPointCalc implements RpCalculation {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-
-
-
-    private native RpSolution nativeCalc(RealVector eqPoint, RealVector refPoint, double sigma);
-
-
+    private native RpSolution nativeCalc(RealVector eqPoint, RealVector refPoint, double sigma) throws RpException;
 }

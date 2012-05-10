@@ -6,11 +6,11 @@
  */
 package rpnumerics;
 
-public class ShockCurve extends Orbit implements RpSolution {
+public class WaveCurveOrbit extends Orbit implements RpSolution {
 
     private int familyIndex_;
 
-    public ShockCurve(OrbitPoint[] points, int family, int increase) {
+    public WaveCurveOrbit(OrbitPoint[] points, int family, int increase) {
         super(points, increase);
         familyIndex_ = family;
     }

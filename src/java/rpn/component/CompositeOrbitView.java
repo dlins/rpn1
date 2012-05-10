@@ -13,7 +13,7 @@ import wave.multid.view.ViewingAttr;
 import wave.multid.model.MultiGeometryImpl;
 import wave.util.RealVector;
 
-public class CompositeOrbitView extends OrbitGeomView {
+public class CompositeOrbitView extends WaveCurveOrbitGeomView {
 
     public CompositeOrbitView(MultiGeometryImpl abstractGeom,
             ViewingTransform transf,

@@ -5,7 +5,7 @@
  */
 package rpnumerics;
 
-public class CompositeCurve extends Orbit implements RpSolution {
+public class CompositeCurve extends WaveCurveOrbit implements RpSolution {
   
     //
     // Members
@@ -13,6 +13,7 @@ public class CompositeCurve extends Orbit implements RpSolution {
 
     public CompositeCurve(OrbitPoint [] rarefaction,int increase,int familyIndex) {
         super(rarefaction,familyIndex,increase);
+
 
     }
 

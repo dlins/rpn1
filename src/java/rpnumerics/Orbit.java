@@ -28,7 +28,7 @@ public class Orbit extends RPnCurve implements RpSolution {
 
     private OrbitPoint[] points_;
     private int increase_;
-    private int familyIndex_;
+
 
     //
     // Constructor
@@ -40,11 +40,11 @@ public class Orbit extends RPnCurve implements RpSolution {
         points_ = orbitPointsFromRealVectors(coords, times);
     }
 
-    public Orbit(OrbitPoint[] points, int familyIndex, int increase) {
+    public Orbit(OrbitPoint[] points,  int increase) {
         super(MultidAdapter.converseOrbitPointsToCoordsArray(points), new ViewingAttr(Color.white));
         increase_ = increase;
         points_ = points;
-        familyIndex_ = familyIndex;
+
     }
 
     public Orbit(Orbit orbit) {
@@ -90,26 +90,26 @@ public class Orbit extends RPnCurve implements RpSolution {
         System.arraycopy(swap, 0, points_, 0, swap.length);
     }
 
-    public static Orbit concat(Orbit backward, Orbit forward, int familyIndex) {
-        // opposite time directions assumed...
-        OrbitPoint[] swap = new OrbitPoint[backward.getPoints().length
-                + forward.getPoints().length - 1];
-
-//        double timeAdjust = -backward.getPoints()[0].getLambda();
-
-        for (int i = 0, j = backward.getPoints().length - 1; i < swap.length; i++) {
-            if (i >= backward.getPoints().length) {
-                swap[i] = (OrbitPoint) forward.getPoints()[i - backward.getPoints().length + 1];
-            } else {
-                swap[i] = backward.getPoints()[j--];
-//                swap[i].setLambda(swap[i].getLambda() + timeAdjust);
-
-            }
-        }
-
-        return new Orbit(swap, familyIndex, Orbit.BOTH_DIR);
-
-    }
+//    public static Orbit concat(Orbit backward, Orbit forward, int familyIndex) {
+//        // opposite time directions assumed...
+//        OrbitPoint[] swap = new OrbitPoint[backward.getPoints().length
+//                + forward.getPoints().length - 1];
+//
+////        double timeAdjust = -backward.getPoints()[0].getLambda();
+//
+//        for (int i = 0, j = backward.getPoints().length - 1; i < swap.length; i++) {
+//            if (i >= backward.getPoints().length) {
+//                swap[i] = (OrbitPoint) forward.getPoints()[i - backward.getPoints().length + 1];
+//            } else {
+//                swap[i] = backward.getPoints()[j--];
+////                swap[i].setLambda(swap[i].getLambda() + timeAdjust);
+//
+//            }
+//        }
+//
+//        return new Orbit(swap, familyIndex, Orbit.BOTH_DIR);
+//
+//    }
 
     //** inseri este método (Leandro)
 //    @Override
@@ -252,80 +252,80 @@ public class Orbit extends RPnCurve implements RpSolution {
         increase_ = flag;
     }
 
-    public String createPoint3DMatlabPlot(int identifier) {
+//    public String createPoint3DMatlabPlot(int identifier) {
+//
+//        StringBuffer buffer = new StringBuffer();
+//
+//        buffer.append("data" +identifier +" = read_data_file('data" +identifier +".txt');\n");        //*** Leandro
+//        buffer.append("disp('data" +identifier +".txt')\n");                                          //*** Leandro
+//
+//        String color = null;
+//        if (this instanceof RarefactionOrbit) {
+//            RarefactionOrbit rarefactionOrbit = (RarefactionOrbit) this;
+//            int family = rarefactionOrbit.getFamilyIndex();
+//            if (family == 1) {
+//                color = "[1 0 0]";
+//            } else {
+//                color = "[0 0 1]";
+//            }
+//
+//        }
+//
+//        buffer.append("plot3(data" + identifier + "(:,1),data" + identifier + "(:,2),data" + identifier + "(:,3),'Color'," + color + ")\n");
+//        buffer.append("hold on\n");
+//
+//        RealVector xMin = RPNUMERICS.boundary().getMinimums();
+//        RealVector xMax = RPNUMERICS.boundary().getMaximums();
+//
+//        buffer.append("axis([" + xMin.getElement(0) + " " + xMax.getElement(0) + " " + xMin.getElement(1) + " " + xMax.getElement(1) + " " + xMin.getElement(2) + " " + xMax.getElement(2) + "]);\n");
+//
+//        buffer.append("xlabel('s')\nylabel('T')\nzlabel('u')\n");
+//        buffer.append("pause\n");
+//
+//        return buffer.toString();
+//
+//    }
 
-        StringBuffer buffer = new StringBuffer();
-
-        buffer.append("data" +identifier +" = read_data_file('data" +identifier +".txt');\n");        //*** Leandro
-        buffer.append("disp('data" +identifier +".txt')\n");                                          //*** Leandro
-
-        String color = null;
-        if (this instanceof RarefactionOrbit) {
-            RarefactionOrbit rarefactionOrbit = (RarefactionOrbit) this;
-            int family = rarefactionOrbit.getFamilyIndex();
-            if (family == 1) {
-                color = "[1 0 0]";
-            } else {
-                color = "[0 0 1]";
-            }
-
-        }
-
-        buffer.append("plot3(data" + identifier + "(:,1),data" + identifier + "(:,2),data" + identifier + "(:,3),'Color'," + color + ")\n");
-        buffer.append("hold on\n");
-
-        RealVector xMin = RPNUMERICS.boundary().getMinimums();
-        RealVector xMax = RPNUMERICS.boundary().getMaximums();
-
-        buffer.append("axis([" + xMin.getElement(0) + " " + xMax.getElement(0) + " " + xMin.getElement(1) + " " + xMax.getElement(1) + " " + xMin.getElement(2) + " " + xMax.getElement(2) + "]);\n");
-
-        buffer.append("xlabel('s')\nylabel('T')\nzlabel('u')\n");
-        buffer.append("pause\n");
-
-        return buffer.toString();
-
-    }
-
-    public String create2DPointMatlabPlot(int x, int y, int identifier) {
-
-        StringBuffer buffer = new StringBuffer();
-
-        String color = null;
-
-        if (this instanceof RarefactionOrbit) {
-            RarefactionOrbit rOrbit = (RarefactionOrbit) this;
-
-            int family = rOrbit.getFamilyIndex();
-            if (family == 1) {
-                color = "[1 0 0]";
-            } else {
-                color = "[0 0 1]";
-            }
-        }
-
-
-        x++;
-        y++;
-
-        buffer.append("plot(data" + identifier + "(:,");
-        buffer.append(x);
-        buffer.append("),");
-        buffer.append("data" + identifier + "(:,");
-        buffer.append(y);
-
-        buffer.append("),'Color'" + "," + color + ")\n");
-
-        buffer.append("hold on\n");
-
-        RealVector xMin = RPNUMERICS.boundary().getMinimums();
-        RealVector xMax = RPNUMERICS.boundary().getMaximums();
-
-        buffer.append("axis([" + xMin.getElement(x - 1) + " " + xMax.getElement(x - 1) + " " + xMin.getElement(y - 1) + " " + xMax.getElement(y - 1) + "]);\n");
-
-        buffer.append(createAxisLabel2D(x - 1, y - 1));
-        return buffer.toString();
-
-    }
+//    public String create2DPointMatlabPlot(int x, int y, int identifier) {
+//
+//        StringBuffer buffer = new StringBuffer();
+//
+//        String color = null;
+//
+//        if (this instanceof RarefactionOrbit) {
+//            RarefactionOrbit rOrbit = (RarefactionOrbit) this;
+//
+//            int family = rOrbit.getFamilyIndex();
+//            if (family == 1) {
+//                color = "[1 0 0]";
+//            } else {
+//                color = "[0 0 1]";
+//            }
+//        }
+//
+//
+//        x++;
+//        y++;
+//
+//        buffer.append("plot(data" + identifier + "(:,");
+//        buffer.append(x);
+//        buffer.append("),");
+//        buffer.append("data" + identifier + "(:,");
+//        buffer.append(y);
+//
+//        buffer.append("),'Color'" + "," + color + ")\n");
+//
+//        buffer.append("hold on\n");
+//
+//        RealVector xMin = RPNUMERICS.boundary().getMinimums();
+//        RealVector xMax = RPNUMERICS.boundary().getMaximums();
+//
+//        buffer.append("axis([" + xMin.getElement(x - 1) + " " + xMax.getElement(x - 1) + " " + xMin.getElement(y - 1) + " " + xMax.getElement(y - 1) + "]);\n");
+//
+//        buffer.append(createAxisLabel2D(x - 1, y - 1));
+//        return buffer.toString();
+//
+//    }
 
     private static String createAxisLabel2D(int x, int y) {
 
@@ -345,7 +345,5 @@ public class Orbit extends RPnCurve implements RpSolution {
 
     }
 
-    public int getFamilyIndex() {
-        return familyIndex_;
-    }
+    
 }
