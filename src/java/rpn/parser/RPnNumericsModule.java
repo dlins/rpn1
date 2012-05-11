@@ -187,6 +187,7 @@ public class RPnNumericsModule {
     }
 
     public static void init(XMLReader parser, InputStream configFileStream) {
+
         try {
 
             parser.setContentHandler(new InputHandler());
@@ -194,7 +195,7 @@ public class RPnNumericsModule {
 
             System.out.println("Will parse !");
             parser.parse(new InputSource(configFileStream));
-
+            
             System.out.println("parsed !");
 
         } catch (Exception saxex) {

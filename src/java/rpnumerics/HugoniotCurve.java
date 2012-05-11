@@ -11,7 +11,7 @@ public class HugoniotCurve extends SegmentedCurve {
     //
 
     private PhasePoint xZero_;
-
+    
     public HugoniotCurve(PhasePoint xZero, List<HugoniotSegment> hSegments) {
         super(hSegments);
 
@@ -336,6 +336,62 @@ public class HugoniotCurve extends SegmentedCurve {
         }
         return points;
     }
+
+
+    //****************************
+    public double velocity(RealVector pMarca) {
+        HugoniotSegment segment = (HugoniotSegment) (segments()).get(findClosestSegment(pMarca));
+        double lSigma = segment.leftSigma();
+        double rSigma = segment.rightSigma();
+        double lX = segment.leftPoint().getElement(0);
+        double rX = segment.rightPoint().getElement(0);
+        double X = pMarca.getElement(0);
+        
+        return ((rSigma - lSigma) * (X - lX) / (rX - lX) + lSigma);
+    }
+
+    //****************************
+    public List<RealVector> equilPoints(RealVector pMarca) {
+
+        List<RealVector> equil = new ArrayList();
+
+        double velocity = velocity(pMarca);
+
+        // inclui o Uref na lista de pontos de equilibrio
+        //RealVector pZero = getXZero();
+        //equil.add(pZero);
+
+        int sz = segments().size();
+        for (int i = 0; i < sz; i++) {
+            HugoniotSegment segment_ = (HugoniotSegment) segments().get(i);
+
+            if ((segment_.leftSigma() <= velocity && segment_.rightSigma() >= velocity)
+                    || (segment_.leftSigma() >= velocity && segment_.rightSigma() <= velocity)) {
+
+                double lSigma_ = segment_.leftSigma();
+                double rSigma_ = segment_.rightSigma();
+                double lX_ = segment_.leftPoint().getElement(0);
+                double rX_ = segment_.rightPoint().getElement(0);
+                double lY_ = segment_.leftPoint().getElement(1);
+                double rY_ = segment_.rightPoint().getElement(1);
+
+                double X_ = (rX_ - lX_) * (velocity - lSigma_) / (rSigma_ - lSigma_) + lX_;
+                double Y_ = (rY_ - lY_) * (velocity - lSigma_) / (rSigma_ - lSigma_) + lY_;
+                RealVector p = new RealVector(2);
+                p.setElement(0, X_);
+                p.setElement(1, Y_);
+
+                //if (p != pZero) {
+                    equil.add(p);
+                //}
+
+            }
+        }
+
+        return equil;
+
+    }
+    //****************************
 
 
     public String toXML() {

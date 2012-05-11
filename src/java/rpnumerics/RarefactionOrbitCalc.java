@@ -6,7 +6,7 @@
  */
 package rpnumerics;
 
-public class RarefactionOrbitCalc extends OrbitCalc implements RpCalculation {
+public class RarefactionOrbitCalc extends WaveCurveOrbitCalc implements RpCalculation {
     //
     // Constants
     //
@@ -14,20 +14,11 @@ public class RarefactionOrbitCalc extends OrbitCalc implements RpCalculation {
     // Members
     //
 
-//    private PhasePoint start_;
-//    private int timeDirection_;
-//    private String methodName_;
-//    private String flowName_;
-//    private int familyIndex_;
-//
-
-    //
     // Constructors/Initializers
     //
     public RarefactionOrbitCalc(PhasePoint point, int familyIndex,int timeDirection) {
 
-        super(new OrbitPoint(point), familyIndex, timeDirection);
-       
+        super(new OrbitPoint(point), familyIndex,timeDirection);
     }
 
     //
@@ -42,26 +33,10 @@ public class RarefactionOrbitCalc extends OrbitCalc implements RpCalculation {
 
     }
 
+
     public RpSolution calc() throws RpException {
 
         RarefactionOrbit result;
-        if (getDirection()== 0) {
-
-            RarefactionOrbit resultForward = (RarefactionOrbit) calc("methodName_", "flowName_", getStart(), getFamilyIndex(), 20);
-
-            RarefactionOrbit resultBackward = (RarefactionOrbit) calc("methodName_", "flowName_", getStart(), getFamilyIndex(), 22);
-
-            if (resultBackward == null || resultForward == null) {
-                throw new RpException("Error in native layer");
-            }
-
-
-            Orbit resultComplete = RarefactionOrbit.concat(resultBackward, resultForward,getFamilyIndex());
-            result = new RarefactionOrbit(resultComplete.getPoints(), resultComplete.getFamilyIndex(),resultComplete.getDirection());
-
-            return result;
-
-        }
 
         result = (RarefactionOrbit) calc("methodName_", "flowName_", getStart(), getFamilyIndex(), getDirection());
 

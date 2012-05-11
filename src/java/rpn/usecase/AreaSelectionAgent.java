@@ -8,46 +8,30 @@ package rpn.usecase;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JToggleButton;
 import rpn.RPnDesktopPlotter;
-import rpn.RPnMenuCommand;
 import rpn.RPnPhaseSpaceAbstraction;
-import rpn.RPnPhaseSpaceFrame;
-import rpn.RPnPhaseSpacePanel;
-import rpn.RPnSelectedAreaDialog;
-import rpn.RPnUIFrame;
-import rpn.component.HugoniotCurveGeomFactory;
-import rpn.component.LevelCurveGeomFactory;
-import rpn.component.util.ControlClick;
+import rpn.component.RpGeometry;
 import rpn.component.util.GeometryGraph;
 import rpn.component.util.GeometryGraph3D;
 import rpn.component.util.GeometryGraphND;
-import rpn.component.util.GeometryUtil;
-import rpn.controller.phasespace.NumConfigImpl;
 import rpn.controller.ui.AREASELECTION_CONFIG;
-import rpn.controller.ui.BIFURCATIONREFINE_CONFIG;
 import rpn.controller.ui.UIController;
-import rpn.parser.RPnDataModule;
+import rpn.controller.ui.UserInputTable;
 import rpnumerics.Area;
-import rpnumerics.BifurcationProfile;
-import rpnumerics.HugoniotCurve;
-import rpnumerics.HugoniotCurveCalcND;
 import rpnumerics.RPNUMERICS;
 import rpnumerics.RPnCurve;
-import rpnumerics.RpException;
 import rpnumerics.SegmentedCurve;
-import wave.multid.CoordsArray;
-import wave.multid.model.BoundingBox;
 import wave.util.Boundary;
 import wave.util.RealVector;
 import wave.util.RectBoundary;
 
 
 public class AreaSelectionAgent extends RpModelActionAgent {
+
+    public int ind = 0;
 
     static public final String DESC_TEXT = "Select Area";
     static private AreaSelectionAgent instance_ = null;
@@ -89,44 +73,106 @@ public class AreaSelectionAgent extends RpModelActionAgent {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+
+    public void execute_() {
+
+        UserInputTable userInputList = UIController.instance().globalInputTable();
+        RealVector newValue = userInputList.values();
+
+        RpGeometry geom = RPnPhaseSpaceAbstraction.findClosestGeometry(newValue);
+        RPnCurve curve = (RPnCurve)(geom.geomFactory().geomSource());
+
+        if (curve instanceof SegmentedCurve) {
+
+            Object[] options = {"Zoom", "Refine"};
+            int n = JOptionPane.showOptionDialog(new JFrame(),
+                    "Selected area to: ",
+                    "Selected Area",
+                    JOptionPane.YES_NO_CANCEL_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    options,
+                    options[1]);
+
+            if (n == 0 && GeometryGraphND.mapToEqui == 0) {
+                RectBoundary rectBdry = new RectBoundary(GeometryGraph.downLeft, GeometryGraph.topRight);
+                Boundary bdry = (Boundary) rectBdry;
+                RPnDesktopPlotter.getUIFrame().phaseSpaceFrameZoom(bdry);
+            }
+
+            if (n == 1) {
+                Area area = null;
+                String Re1 = JOptionPane.showInputDialog(null, "Resolucao horizontal", "Resolucao", JOptionPane.QUESTION_MESSAGE);
+                String Re2 = JOptionPane.showInputDialog(null, "Resolucao vertical", "Resolucao", JOptionPane.QUESTION_MESSAGE);
+
+                try {
+                    RealVector resolution = new RealVector(RPNUMERICS.domainDim());
+                    resolution.setElement(0, Integer.parseInt(Re1));
+                    resolution.setElement(1, Integer.parseInt(Re2));
+
+                    if (RPNUMERICS.domainDim() == 2) {
+                        area = new Area(resolution, GeometryGraph.topRight, GeometryGraph.downLeft);
+                        System.out.println(area);
+                        listArea_.add(area);
+                        System.out.println("listArea.size() : " + listArea_.size());
+
+                    } else if (RPNUMERICS.domainDim() == 3) {
+                        area = new Area(resolution, GeometryGraph3D.topRight, GeometryGraph3D.downLeft);
+                        System.out.println(area);
+                        listArea_.add(area);
+                    }
+
+
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, "Resolucao nao foi informada", "ATENCAO", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+
+
+        }
+    }
+
+
     @Override
     public void execute() {
 
-        //**********************************************************************
+        System.out.println("Entrou no execute() do AreaSelectionAgent");
 
-        if (ControlClick.ind % 2 == 0  &&  GeometryUtil.closestCurve_ instanceof SegmentedCurve) {
-            
-            Area area = null;
-            String Re1 = JOptionPane.showInputDialog(null, "Resolucao horizontal", "Resolucao", JOptionPane.QUESTION_MESSAGE);
-            String Re2 = JOptionPane.showInputDialog(null, "Resolucao vertical", "Resolucao", JOptionPane.QUESTION_MESSAGE);
+        UserInputTable userInputList = UIController.instance().globalInputTable();
+        RealVector newValue = userInputList.values();
 
-            try {
-                RealVector resolution = new RealVector(RPNUMERICS.domainDim());
-                resolution.setElement(0, Integer.parseInt(Re1));
-                resolution.setElement(1, Integer.parseInt(Re2));
-
-                if (RPNUMERICS.domainDim() == 2) {
-                    area = new Area(resolution, GeometryGraph.topRight, GeometryGraph.downLeft);
-                    System.out.println(area);
-                    listArea_.add(area);
-                    System.out.println("listArea.size() : " + listArea_.size());
-
-                } else if (RPNUMERICS.domainDim() == 3) {
-                    area = new Area(resolution, GeometryGraph3D.topRight, GeometryGraph3D.downLeft);
-                    System.out.println(area);
-                    listArea_.add(area);
-                }
-
-
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, "Resolucao nao foi informada", "ATENCAO", JOptionPane.INFORMATION_MESSAGE);
+        //*** ATENCAO: qualquer coisa relacionada a ControlClick deve ser removida
+        if ((GeometryGraph.count % 2) == 0) {
+        
+            for (int i = 0; i < newValue.getSize(); i++) {
+                GeometryGraphND.targetPoint.setElement(i, newValue.getElement(i));
             }
-            
+
+            RpGeometry geom = RPnPhaseSpaceAbstraction.findClosestGeometry(newValue);
+            RPnCurve curve = (RPnCurve)(geom.geomFactory().geomSource());
+
+            GeometryGraphND.pMarca = curve.findClosestPoint(newValue);
+
+            GeometryGraph.count++;
+            return;
 
         }
 
 
-        //**********************************************************************
+        if ((GeometryGraph.count % 2) == 1) {
+        
+            for (int i = 0; i < newValue.getSize(); i++) {
+                GeometryGraphND.cornerRet.setElement(i, newValue.getElement(i));
+            }
+
+            GeometryGraphND.zContido.clear();
+            GeometryGraphND.wContido.clear();
+
+            GeometryGraph.count++;
+            execute_();
+
+        }
+        //******
         
 
     }

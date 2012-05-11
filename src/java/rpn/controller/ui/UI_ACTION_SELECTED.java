@@ -63,11 +63,9 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
         }
 
 
-
     }
 
-    public void userInputComplete(UIController ui) {
-    
+    public void userInputComplete(UIController ui) {    
 
         UIController.instance().addCommand(new Command(this));
         UIController.instance().setWaitCursor();
@@ -78,6 +76,7 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
         rpn.parser.RPnDataModule.PHASESPACE.unselectAll();
 
     }
+
 
     protected boolean isPoincareInputReady() {
       

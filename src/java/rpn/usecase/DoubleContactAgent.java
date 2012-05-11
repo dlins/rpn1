@@ -57,7 +57,7 @@ public class DoubleContactAgent extends RpModelPlotAgent {
             RPnPhaseSpaceAbstraction leftPhaseSpace = RPnDataModule.LEFTPHASESPACE;
 
             RPnPhaseSpaceAbstraction rightPhaseSpace = RPnDataModule.RIGHTPHASESPACE;
-
+            
             RpGeometry leftGeometry = factory.leftGeom();
             RpGeometry rightGeometry = factory.rightGeom();
 

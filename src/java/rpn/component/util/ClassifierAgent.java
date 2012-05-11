@@ -6,13 +6,20 @@
 package rpn.component.util;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JToggleButton;
+import rpn.RPnPhaseSpaceAbstraction;
+import rpn.component.RpGeometry;
 import rpn.controller.ui.UIController;
+import rpn.controller.ui.UserInputTable;
 import rpn.usecase.RpModelActionAgent;
-import rpnumerics.RPNUMERICS;
+import rpnumerics.DoubleContactCurve;
+import rpnumerics.HugoniotCurve;
+import rpnumerics.HugoniotSegment;
+import rpnumerics.RPnCurve;
+import rpnumerics.SegmentedCurve;
+import wave.util.RealVector;
 
 /**
  *
@@ -29,15 +36,10 @@ public class ClassifierAgent extends RpModelActionAgent {
     //** Para a posição da string em coordenadas físicas
     static public List xStr = new ArrayList();
     static public List yStr = new ArrayList();
-    //** Para a posição da string em coordenadas do dispositivo
-    static public List xDevStr = new ArrayList();
-    static public List yDevStr = new ArrayList();
     //** Para ponta da seta da string na curva em coordenadas físicas
     static public List xSeta = new ArrayList();
     static public List ySeta = new ArrayList();
-    //** Para ponta da seta da string em coordenadas do dispositivo
-    static public List xDevSeta = new ArrayList();
-    static public List yDevSeta = new ArrayList();
+    
 
     //** Para indicar as curvas com classificadores
     static public List indCurvaCla = new ArrayList();       // vai ser comum para remocao e ocultacao
@@ -46,7 +48,7 @@ public class ClassifierAgent extends RpModelActionAgent {
     static public List paraOcultarIndCla = new ArrayList(); // este é usado efetivamente para ocultacao
     static public List strView = new ArrayList();           // este é usado efetivamente para ocultacao
 
-
+    
     private ClassifierAgent() {
         super(DESC_TEXT, null);
 
@@ -65,9 +67,8 @@ public class ClassifierAgent extends RpModelActionAgent {
 
     @Override
     public void actionPerformed(ActionEvent event) {
-
-       UIController.instance().setState(new CLASSIFIERAGENT_CONFIG());
-       System.out.println("Estou no actionPerformed do ClassifierAgent");
+        
+        UIController.instance().setState(new CLASSIFIERAGENT_CONFIG());
 
     }
 
@@ -82,9 +83,66 @@ public class ClassifierAgent extends RpModelActionAgent {
         return button_;
     }
 
+
     @Override
     public void execute() {
 
+        VelocityAgent.listaEquil.clear();
+
+        UserInputTable userInputList = UIController.instance().globalInputTable();
+        RealVector newValue = userInputList.values();
+
+        RpGeometry geom = RPnPhaseSpaceAbstraction.findClosestGeometry(newValue);
+        RPnCurve curve = (RPnCurve)(geom.geomFactory().geomSource());
+
+        if ((GeometryGraph.count % 2) == 0) {
+
+            GeometryGraphND.pMarca = curve.findClosestPoint(newValue);
+
+            if (curve instanceof DoubleContactCurve) {
+                System.out.println("DoubleContactCurve");
+                GeometryGraphND.pMarcaDC = GeometryGraphND.secondPointDC(curve);
+            }
+            else GeometryGraphND.pMarcaDC = GeometryGraphND.pMarca;
+
+        }
+
+        else if ((GeometryGraph.count % 2) == 1) {
+            for (int i = 0; i < newValue.getSize(); i++) {
+                GeometryGraphND.cornerStr.setElement(i, newValue.getElement(i));
+                GeometryGraphND.cornerRet.setElement(i, 0);
+            }
+
+            //*** Botao CLASSIFY para HUGONIOT CURVE
+            if (curve instanceof HugoniotCurve) {
+
+                HugoniotSegment segment = (HugoniotSegment)(((SegmentedCurve)curve).segments()).get(curve.findClosestSegment(GeometryGraphND.pMarca));
+                tipo.add(segment.getType());
+
+                xStr.add(GeometryGraphND.cornerStr.getElement(1));
+                yStr.add(GeometryGraphND.cornerStr.getElement(0));
+
+                //--------------------------------------------------------------
+                if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("Phase Space"))
+                    strView.add(1);
+                if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("RightPhase Space"))
+                    strView.add(2);
+                if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("LeftPhase Space"))
+                    strView.add(3);
+                //--------------------------------------------------------------
+
+                xSeta.add(GeometryGraphND.pMarca.getElement(1));
+                ySeta.add(GeometryGraphND.pMarca.getElement(0));
+
+                indCurvaCla.add(RPnPhaseSpaceAbstraction.closestCurve);
+
+                GeometryGraph.count++;
+                return;
+
+            } //***
+
+        }
+        GeometryGraph.count++;
     }
 
     @Override
@@ -94,15 +152,12 @@ public class ClassifierAgent extends RpModelActionAgent {
 
 
     public static void clearClassifiers() {
-        ControlClick.clearpMarca();
+        GeometryGraphND.clearpMarca();
+        strView.clear();
         indCurvaCla.clear();
         tipo.clear();
-        xDevSeta.clear();
-        xDevStr.clear();
         xSeta.clear();
         xStr.clear();
-        yDevSeta.clear();
-        yDevStr.clear();
         ySeta.clear();
         yStr.clear();
     }
@@ -110,21 +165,13 @@ public class ClassifierAgent extends RpModelActionAgent {
     public static void clearClassifiers(List paraRemover) {
         for (int i = 0; i < paraRemover.size(); i++) {
             int index = (Integer)paraRemover.get(i);
-            xDevSeta.remove(index);
-            xDevStr.remove(index);
             xSeta.remove(index);
             xStr.remove(index);
-            yDevSeta.remove(index);
-            yDevStr.remove(index);
             ySeta.remove(index);
             yStr.remove(index);
-            
-            xDevSeta.add(index, 0.);
-            xDevStr.add(index, 0.);
+
             xSeta.add(index, 0.);
             xStr.add(index, 0.);
-            yDevSeta.add(index, 0.);
-            yDevStr.add(index, 0.);
             ySeta.add(index, 0.);
             yStr.add(index, 0.);
         }

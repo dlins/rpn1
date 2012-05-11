@@ -8,8 +8,8 @@ class Viscosity_Matrix {
     private:
     protected:
     public:
-        Viscosity_Matrix();
-        ~Viscosity_Matrix();
+        Viscosity_Matrix(){}
+        ~Viscosity_Matrix(){}
 
         virtual void fill_viscous_matrix(const RealVector &p, Matrix<double> &m);
 };

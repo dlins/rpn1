@@ -23,7 +23,7 @@ public class RPnDesktopConfigReader extends RPnConfigReader{
 	    File configFile = new File (file);
 
 	    byte [] bufArray=new byte[(int)configFile.length()];
-
+            
 	    configFileInputStream_.read(bufArray,0,(int)configFile.length());
 
 	    buff_= new ByteArrayInputStream(bufArray);

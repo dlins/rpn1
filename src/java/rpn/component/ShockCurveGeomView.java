@@ -10,7 +10,7 @@ import wave.multid.*;
 import wave.multid.model.*;
 import wave.multid.view.*;
 
-public class ShockCurveGeomView extends OrbitGeomView {
+public class ShockCurveGeomView extends WaveCurveOrbitGeomView {
 
     public ShockCurveGeomView(MultiGeometryImpl geom, ViewingTransform transf,
             ViewingAttr attr) throws DimMismatchEx {

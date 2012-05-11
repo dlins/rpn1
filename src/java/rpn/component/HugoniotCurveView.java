@@ -68,7 +68,7 @@ public class HugoniotCurveView
     // Methods
     //
     public void draw(Graphics2D g) {
-
+        
         for (int i = 0; i < viewList_.size(); i++) {
             ((GeomObjView) viewList_.get(i)).draw(g);
         }

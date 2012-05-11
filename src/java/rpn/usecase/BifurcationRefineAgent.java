@@ -7,28 +7,11 @@ package rpn.usecase;
 
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import rpnumerics.Area;
-import javax.swing.JButton;
-import javax.swing.JOptionPane;
-import rpn.RPnSelectedAreaDialog;
-import rpn.component.*;
+import rpn.RPnPhaseSpaceAbstraction;
 import rpn.component.util.GeometryGraphND;
-import rpn.component.util.GeometryUtil;
-import rpn.controller.ui.AREASELECTION_CONFIG;
 import rpn.controller.ui.BIFURCATIONREFINE_CONFIG;
 import rpn.controller.ui.UIController;
-import rpn.parser.RPnDataModule;
-import rpnumerics.BifurcationCurve;
-import rpnumerics.BifurcationProfile;
-import rpnumerics.RPNUMERICS;
-import rpnumerics.RPnCurve;
-import rpnumerics.methods.contour.support.CurveDomainManager;
-import rpnumerics.methods.contour.support.DimensionDoenstMatch;
-import rpnumerics.methods.contour.support.NoContourMethodDefined;
+import rpn.controller.ui.UserInputTable;
 import wave.util.*;
 
 public class BifurcationRefineAgent extends RpModelConfigChangeAgent {
@@ -60,14 +43,19 @@ public class BifurcationRefineAgent extends RpModelConfigChangeAgent {
 
         AreaSelectionAgent.instance().getListArea().clear();
 
-        for (int i = 0; i < GeometryGraphND.targetPoint.getSize(); i++) {        // Pode ser útil na hora de fazer inclusao dos novos segmentos (para nao serem eliminados)
-            GeometryGraphND.cornerRet.setElement(i, 0);
-            GeometryGraphND.targetPoint.setElement(i, 0.);
-        }
+        // Pode ser útil na hora de fazer inclusao dos novos segmentos (para nao serem eliminados)
+        UserInputTable userInputList = UIController.instance().globalInputTable();
+        RealVector newValue = userInputList.values();
 
-        int[] temp = (int[]) GeometryUtil.listResolution.get(GeometryUtil.closestCurve);
-        GeometryUtil.listResolution.remove(GeometryUtil.closestCurve);
-        GeometryUtil.listResolution.add(temp);
+        for (int i = 0; i < newValue.getSize(); i++) {
+            GeometryGraphND.cornerRet.setElement(i, 0);
+            newValue.setElement(i, 0.);
+        }
+        //----------------------------------------------------------------------------------------
+
+        int[] temp = (int[]) RPnPhaseSpaceAbstraction.listResolution.get(RPnPhaseSpaceAbstraction.closestCurve);
+        RPnPhaseSpaceAbstraction.listResolution.remove(RPnPhaseSpaceAbstraction.closestCurve);
+        RPnPhaseSpaceAbstraction.listResolution.add(temp);
 
     }
 

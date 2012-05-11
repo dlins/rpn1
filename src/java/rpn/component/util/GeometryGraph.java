@@ -10,26 +10,21 @@ import java.awt.Polygon;
 import java.awt.Shape;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
-import org.apache.batik.ext.awt.geom.Polygon2D;
+import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpacePanel;
+import rpn.component.RpGeometry;
 import rpn.controller.ui.AREASELECTION_CONFIG;
-import rpn.controller.ui.BIFURCATIONREFINE_CONFIG;
 import rpn.controller.ui.UIController;
-import rpn.parser.RPnDataModule;
-import rpnumerics.ContourCurveCalc;
-import rpnumerics.Orbit;
+import rpn.controller.ui.UserInputTable;
+import rpnumerics.DoubleContactCurve;
 import rpnumerics.RPNUMERICS;
 import rpnumerics.RPnCurve;
-import rpnumerics.RpCalculation;
-import rpnumerics.SegmentedCurve;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
 import wave.multid.view.Scene;
-import wave.multid.view.ViewingTransform;
+import wave.util.Arrow;
 import wave.util.Boundary;
-import wave.util.IsoTriang2DBoundary;
 import wave.util.RealVector;
-import wave.util.RealSegment;
 
 /**
  *
@@ -46,7 +41,11 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
 
     private final double TAN60 = Math.tan(Math.PI/3.);
 
+    // membros que - possivelmente - serao levados para GGND
+    public static int mostraSing = 0;
+    public static int count = 0;    //substituto do ControlClick.ind
 
+    
     public Polygon defBordo(Scene scene_) {
 
         RealVector V1 = new RealVector(2);
@@ -82,30 +81,110 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
     }
 
 
-    public void drawFirstPanel(Graphics g, Scene scene_) {
+    public void drawSource(Graphics g ,double xVecP1, double yVecP1, double xVecP2, double yVecP2, Coords2D dcCoordsImgVecP1, Coords2D dcCoordsImgVecP2) {
+        //*** define uma ponta de cada vetor
+        RealVector direction1 = new RealVector(2);
+        direction1.setElement(0, -xVecP2 + xVecP1);
+        direction1.setElement(1, -yVecP2 + yVecP1);
+        Arrow arrow1 = new Arrow(new RealVector(dcCoordsImgVecP1.getCoords()), direction1, 5, 5);
+        arrow1.paintComponent(g);
+        Arrow arrow3 = new Arrow(new RealVector(dcCoordsImgVecP1.getCoords()), direction1, 10, 10);
+        arrow3.paintComponent(g);
 
-        if (mostraGrid != 0){
+        //*** define outra ponta de cada vetor
+        RealVector direction2 = new RealVector(2);
+        direction2.setElement(0, xVecP2 - xVecP1);
+        direction2.setElement(1, yVecP2 - yVecP1);
+        Arrow arrow2 = new Arrow(new RealVector(dcCoordsImgVecP2.getCoords()), direction2, 5, 5);
+        arrow2.paintComponent(g);
+        Arrow arrow4 = new Arrow(new RealVector(dcCoordsImgVecP2.getCoords()), direction2, 10, 10);
+        arrow4.paintComponent(g);
+    }
+
+    public void drawSink(Graphics g ,double xVecP1, double yVecP1, double xVecP2, double yVecP2, Coords2D dcCoordsImgVecP1, Coords2D dcCoordsImgVecP2) {
+        //*** define uma ponta de cada vetor
+        RealVector direction1 = new RealVector(2);
+        direction1.setElement(0, xVecP2 - xVecP1);
+        direction1.setElement(1, yVecP2 - yVecP1);
+        Arrow arrow1 = new Arrow(new RealVector(dcCoordsImgVecP1.getCoords()), direction1, 5, 5);
+        arrow1.paintComponent(g);
+
+        //*** define outra ponta de cada vetor
+        RealVector direction2 = new RealVector(2);
+        direction2.setElement(0, -xVecP2 + xVecP1);
+        direction2.setElement(1, -yVecP2 + yVecP1);
+        Arrow arrow2 = new Arrow(new RealVector(dcCoordsImgVecP2.getCoords()), direction2, 5, 5);
+        arrow2.paintComponent(g);
+    }
+
+    public void drawSaddle(Graphics g ,double xVecP1, double yVecP1, double xVecP2, double yVecP2, Coords2D dcCoordsImgVecP1, Coords2D dcCoordsImgVecP2, int j) {
+        if (j==0) drawSource(g, xVecP1, yVecP1, xVecP2, yVecP2, dcCoordsImgVecP1, dcCoordsImgVecP2);
+        if (j==1) drawSink(g, xVecP1, yVecP1, xVecP2, yVecP2, dcCoordsImgVecP1, dcCoordsImgVecP2);        
+    }
+
+
+    public void drawFirstPanel(Graphics g, Scene scene_, RPnPhaseSpacePanel panel) {
+
+        UserInputTable userInputList = UIController.instance().globalInputTable();
+        RealVector newValue = userInputList.values();
+        
+        if (mostraGrid != 0  &&  panel.getName().equals(RPnPhaseSpaceAbstraction.namePhaseSpace)){
             drawGrid(g, scene_);
         }
 
         Graphics2D graph = (Graphics2D) g;
-        
-        if (UIController.instance().getState() instanceof AREASELECTION_CONFIG) {
+
+        if (UIController.instance().getState() instanceof AREASELECTION_CONFIG  &&  panel.getName().equals(RPnPhaseSpaceAbstraction.namePhaseSpace)) {
             g.setColor(cor12);
             graph.draw(line1);
             graph.draw(line2);
+            
         }
 
         g.setColor(cor34);
-        graph.draw(line3);
-        graph.draw(line4);
-        graph.draw(line3DC);
-        graph.draw(line4DC);
+        
+
+        if (panel.getName().equals(RPnPhaseSpaceAbstraction.namePhaseSpace)) {
+            graph.draw(line3);
+            graph.draw(line4);
+
+            
+            //********* esboço de marcação de pontos de equilibrio
+            for (int i=0; i<VelocityAgent.listaEquil.size(); i++) {
+                RealVector p = VelocityAgent.listaEquil.get(i);
+
+                Coords2D dcCoordsEQ = toDeviceCoords(scene_, p);
+                double xEQ = dcCoordsEQ.getElement(0);
+                double yEQ = dcCoordsEQ.getElement(1);
+
+                Line2D lineEQ1 = new Line2D.Double(xEQ - 5, yEQ, xEQ + 5, yEQ);
+                Line2D lineEQ2 = new Line2D.Double(xEQ, yEQ - 5, xEQ, yEQ + 5);
+
+                graph.draw(lineEQ1);
+                graph.draw(lineEQ2);
+
+            }
+            //*********
+        }
 
 
-        if ((ControlClick.ind % 2) == 0) {
+        try {
+            RpGeometry geom = RPnPhaseSpaceAbstraction.findClosestGeometry(newValue);
+            RPnCurve curve = (RPnCurve)(geom.geomFactory().geomSource());
+            if (curve instanceof DoubleContactCurve) {
+                if (!panel.getName().equals(RPnPhaseSpaceAbstraction.namePhaseSpace) && !panel.getName().equals("Phase Space")) {
+                    graph.draw(line3DC);
+                    graph.draw(line4DC);
+                }
+            }
 
-            if (UIController.instance().getState() instanceof AREASELECTION_CONFIG) {
+        } catch (Exception e) {
+        }
+        
+        
+        if ((count % 2) == 0) {
+
+            if (UIController.instance().getState() instanceof AREASELECTION_CONFIG  &&  panel.getName().equals(RPnPhaseSpaceAbstraction.namePhaseSpace)) {
                 g.setColor(cor56);
                 graph.draw(line5);
                 graph.draw(line6);
@@ -115,29 +194,32 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
                 graph.draw(square1);
             }
 
+        }
+
 
             //*** Para os botoes Classify e Velocity
             if ((UIController.instance().getState() instanceof CLASSIFIERAGENT_CONFIG)
                     || (UIController.instance().getState() instanceof VELOCITYAGENT_CONFIG)) {
 
-                defineClassifiers(g, scene_);
-                defineVelocities(g, scene_);
+                defineClassifiers(g, scene_, panel);
+                defineVelocities(g, scene_, panel);
 
             }
             //*** Fim dos botoes Classify e Velocity
 
 
-        }
+        
 
 
     }
 
 
-    public void paintComponent(Graphics g, Scene scene_) {
-
+    public void paintComponent(Graphics g, Scene scene_, RPnPhaseSpacePanel panel) {
+    
         changeColor();
-        drawFirstPanel(g, scene_);
-
+        
+        drawFirstPanel(g, scene_, panel);
+        
     }
 
 
@@ -145,12 +227,8 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
 
         int[] resolution = {1, 1};
 
-        //if (RPNUMERICS.listResolution.size()==1) GeometryUtil.closestCurve=0;
-        //if (RPNUMERICS.listResolution.size()>0) resolution = (int[]) RPNUMERICS.listResolution.get(GeometryUtil.closestCurve);
-        //if (scene.geometries().hasNext()) resolution = (int[]) RPNUMERICS.listResolution.get(GeometryUtil.closestCurve);
-
-        if (GeometryUtil.listResolution.size()==1) GeometryUtil.closestCurve=0;
-        if (GeometryUtil.listResolution.size()>0) resolution = (int[]) GeometryUtil.listResolution.get(GeometryUtil.closestCurve);
+        if (RPnPhaseSpaceAbstraction.listResolution.size()==1) RPnPhaseSpaceAbstraction.closestCurve=0;
+        if (RPnPhaseSpaceAbstraction.listResolution.size()>0) resolution = (int[]) RPnPhaseSpaceAbstraction.listResolution.get(RPnPhaseSpaceAbstraction.closestCurve);
 
         int xResolution = resolution[0];
         int yResolution = resolution[1];
@@ -161,7 +239,7 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
         Coords2D dcCoordsTP = toDeviceCoords(scene, targetPoint);
         double xTP = dcCoordsTP.getElement(1);
         double yTP = dcCoordsTP.getElement(0);
-        
+
         Coords2D dcCoordsMP = toDeviceCoords(scene, pMarca);
         double xMP = dcCoordsMP.getElement(1);
         double yMP = dcCoordsMP.getElement(0);
@@ -204,7 +282,7 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
         //***
 
         //** Testa inclusão na área de selecão.
-        if ((ControlClick.ind % 2) == 0 && (UIController.instance().getState() instanceof AREASELECTION_CONFIG)) {
+        if ((UIController.instance().getState() instanceof AREASELECTION_CONFIG)) {
 
             vs = Math.min(yTP, yCR);                      // Ja estao em coordenadas do dispositivo, mas sem ajuste no grid.
             us = Math.min(xTP, xCR);
@@ -309,7 +387,7 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
                     p2Int.setElement(1, yp2);
 
                 }
-                
+
                 poly.addPoint((int) v_s, (int) u_s);
                 poly.addPoint((int) (v_s - dx), (int) u_i);
                 poly.addPoint((int) v_i, (int) u_i);

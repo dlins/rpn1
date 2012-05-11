@@ -114,8 +114,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_IntegralCurveCalc_calc(JNIEnv * env, j
 
         jobject inflectionPoint = env->NewObject(realVectorClass, realVectorConstructorID, dimension);
 
-
+        cout << "Ponto de inflexao: " << inflectionPoints[i] << endl;
         for (int j = 0; j < dimension; j++) {
+
 
             env->CallVoidMethod(inflectionPoint, setElementMethodID, j, inflectionPoints[i].component(j));
 

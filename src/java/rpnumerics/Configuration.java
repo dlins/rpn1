@@ -240,7 +240,6 @@ public class Configuration {
         }
 
 
-
         if (getType().equalsIgnoreCase(ConfigurationProfile.BOUNDARY)) {
             buffer.append("<BOUNDARY name=\"" + getName() + "\">\n");
             for (Entry<String, String> entry : paramsSet) {
@@ -293,4 +292,5 @@ public class Configuration {
 
         return buffer.toString();
     }
+
 }

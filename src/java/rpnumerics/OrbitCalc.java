@@ -6,8 +6,6 @@
  */
 package rpnumerics;
 
-import wave.ode.ODESolution;
-import wave.ode.ODESolver;
 import wave.util.RealVector;
 
 public class OrbitCalc implements RpCalculation {
@@ -20,26 +18,17 @@ public class OrbitCalc implements RpCalculation {
 
     private OrbitPoint start_;
     private int timeDirection_;
-    private ODESolver odeSolver_;
-    private int familyIndex_;
 
     //
     // Constructors/Initializers
     //
-    public OrbitCalc(OrbitPoint point, int familyIndex, int timeDirection) {
+    public OrbitCalc(OrbitPoint point,  int timeDirection) {
         start_ = point;
         timeDirection_ = timeDirection;
-        familyIndex_ = familyIndex;
-
-    }
-
-    public OrbitCalc(OrbitPoint orbitPoint, int timeDirection, ODESolver odeSolver) {
-        start_ = orbitPoint;
-        timeDirection_ = timeDirection;
-        odeSolver_ = odeSolver;
 
 
     }
+
 
     //
     // Methods
@@ -50,29 +39,29 @@ public class OrbitCalc implements RpCalculation {
 
     public RpSolution calc() throws RpException {
 
-        FlowVectorField flowVectorField = (FlowVectorField) odeSolver_.getProfile().getFunction();
-//        flowVectorField.setWaveFlow(RPNUMERICS.createShockFlow()); //Updating flow parameters
-        if (timeDirection_ == 0) {
+        return nativeCalc(start_, RPNUMERICS.getShockProfile().getXZero(), RPNUMERICS.getShockProfile().getSigma(), timeDirection_);
 
-            ODESolution odeSolForward = odeSolver_.solve(getStart(), 1);
-            ODESolution odeSolBackward = odeSolver_.solve(getStart(), -1);
-            Orbit forwardOrbit = new Orbit(odeSolForward.getWavePoints(), odeSolForward.getTimes(), odeSolForward.getFlag());
-            Orbit backwardOrbit = new Orbit(odeSolBackward.getWavePoints(), odeSolBackward.getTimes(), odeSolBackward.getFlag());
-            Orbit complete = Orbit.concat(backwardOrbit, forwardOrbit,1);
-
-            return complete;
-
-
-        }
-
-        ODESolution odeSol = odeSolver_.solve(getStart(), timeDirection_);
-
-        return new Orbit(odeSol.getWavePoints(), odeSol.getTimes(), odeSol.getFlag());
+//        FlowVectorField flowVectorField = (FlowVectorField) odeSolver_.getProfile().getFunction();
+////        flowVectorField.setWaveFlow(RPNUMERICS.createShockFlow()); //Updating flow parameters
+//        if (timeDirection_ == 0) {
+//
+//            ODESolution odeSolForward = odeSolver_.solve(getStart(), 1);
+//            ODESolution odeSolBackward = odeSolver_.solve(getStart(), -1);
+//            Orbit forwardOrbit = new Orbit(odeSolForward.getWavePoints(), odeSolForward.getTimes(), odeSolForward.getFlag());
+//            Orbit backwardOrbit = new Orbit(odeSolBackward.getWavePoints(), odeSolBackward.getTimes(), odeSolBackward.getFlag());
+//            Orbit complete = Orbit.concat(backwardOrbit, forwardOrbit,1);
+//
+//            return complete;
+//
+//
+//        }
+//
+//        ODESolution odeSol = odeSolver_.solve(getStart(), timeDirection_);
+//
+//        return new Orbit(odeSol.getWavePoints(), odeSol.getTimes(), odeSol.getFlag());
     }
 
-    public int getFamilyIndex() {
-        return familyIndex_;
-    }
+   
 
     public OrbitPoint getStart() {
         return start_;
@@ -91,4 +80,8 @@ public class OrbitCalc implements RpCalculation {
     public RpSolution recalc(Area area) throws RpException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+
+    private native RpSolution nativeCalc (OrbitPoint initialPoint, PhasePoint referencePoint,double speed, int direction ) throws RpException;
+
 }

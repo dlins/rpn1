@@ -21,10 +21,11 @@ import wave.multid.model.SegmentDegradesPolyline;
 import wave.multid.model.WrongNumberOfDefPointsEx;
 import wave.multid.view.*;
 import rpn.component.MultidAdapter;
-
 import wave.util.*;
 import java.util.ArrayList;
 import java.util.List;
+import rpn.RPnPhaseSpaceAbstraction;
+import rpn.component.RpGeometry;
 import rpn.parser.RPnDataModule;
 
 
@@ -35,7 +36,7 @@ public class RPnCurve extends MultiPolyLine {
     private double ALFA;
     //** declarei isso (Leandro)
     public double distancia = 0;
-
+    
     public RPnCurve() {//TODO REMOVE !!
         super(new CoordsArray[3], new ViewingAttr(Color.WHITE));
 
@@ -312,20 +313,30 @@ public class RPnCurve extends MultiPolyLine {
         //System.out.println("closestDistance associado       : " +closestDistance);
         distancia = closestDistance;
 
+        //setDistance(closestDistance);
+
         return closestSegment;
     }
 
+
     public RealVector findClosestPoint(RealVector targetPoint) {
 
+        //ArrayList segments = MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseRPnCurveToCoordsArray(this));
 
-        ArrayList segments = MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseRPnCurveToCoordsArray(this));
-
-        //RPnCurve curve = this;
-        //ArrayList segments = MultidAdapter.converseRPnCurveToRealSegments(curve);
-
+        ArrayList segments = null;
         
-        RealSegment closestSegment = (RealSegment) segments.get(
-                findClosestSegment(targetPoint));
+        RpGeometry geom = RPnPhaseSpaceAbstraction.findClosestGeometry(targetPoint);
+        RPnCurve curve = (RPnCurve)(geom.geomFactory().geomSource());
+        
+
+        if (curve instanceof SegmentedCurve) {
+            segments = (ArrayList) ((SegmentedCurve)curve).segments();
+        }
+        if (curve instanceof Orbit) {
+            segments = MultidAdapter.converseRPnCurveToRealSegments(curve);
+        }
+
+        RealSegment closestSegment = (RealSegment) segments.get(findClosestSegment(targetPoint));
 
         if (ALFA <= 0) {
             return closestSegment.p1();

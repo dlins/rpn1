@@ -5,6 +5,8 @@
  */
 package wave.multid.view;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import wave.multid.model.*;
 import wave.multid.DimMismatchEx;
 import java.awt.Graphics2D;
@@ -75,7 +77,7 @@ public class Scene implements GeomObjView {
             }
         }
     }
-
+        
     public void addViewFor(MultiGeometry geomObj) {
         try {
             GeomObjView updatedGeomView = (GeomObjView) geomObj.createView(getViewingTransform());

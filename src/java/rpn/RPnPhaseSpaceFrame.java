@@ -13,9 +13,12 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import java.util.*;
-import rpn.component.util.ControlClick;
+import rpn.component.util.GeometryGraph;
 import rpn.component.util.GeometryGraphND;
 import rpn.controller.ui.UIController;
+import rpn.controller.ui.UserInputTable;
+import rpnumerics.RPnCurve;
+import wave.util.RealVector;
 
 public class RPnPhaseSpaceFrame extends JFrame {
 
@@ -133,6 +136,14 @@ public class RPnPhaseSpaceFrame extends JFrame {
 
             }
 
+            //*** solucao provisoria para mostrar/nao mostrar vetores nos equilibrios --- Leandro
+            if (keyEvent.getKeyChar() == 's' || keyEvent.getKeyChar() == 'S') {
+                GeometryGraph.mostraSing = 1;
+            }
+            if (keyEvent.getKeyChar() == 'h' || keyEvent.getKeyChar() == 'H') {
+                GeometryGraph.mostraSing = 0;
+            }
+            //------------------------------------------------------------------
 
             //*** solucao provisoria para mostrar/nao mostrar o grid --- Leandro
             if (keyEvent.getKeyChar() == 'g' || keyEvent.getKeyChar() == 'G') {
@@ -143,19 +154,30 @@ public class RPnPhaseSpaceFrame extends JFrame {
             }
             //------------------------------------------------------------------
 
-
-            //*** solucao provisoria para movimento sobre a curva --- Leandro
-            if (keyEvent.getKeyChar() == 'm' || keyEvent.getKeyChar() == 'M') {
-                ControlClick.ind = 0;
+            if (keyEvent.getKeyChar() == 'o'  ||  keyEvent.getKeyChar() == 'O') {
+                GeometryGraphND.onCurve = 1;
+                UIController.instance().showCursorLines(false);
+            }
+            else {
+                GeometryGraphND.onCurve = 0;
+                UIController.instance().showCursorLines(true);
             }
             //*** --------------------------------------------------------------
-
+            
             //*** solucao provisoria para resize dos paineis em tempo de execucao --- Leandro
             if (keyEvent.getKeyChar() == '+') {   //*** aumenta tamanho dos painéis
                 a += 20;
                 for (int i = 0; i < RPnUIFrame.getPhaseSpaceFrames().length; i++) {
 
                     RPnPhaseSpaceFrame frame = RPnUIFrame.getPhaseSpaceFrames()[i];
+                    //frame.setSize(RPnPhaseSpaceFrame.this.frameSize_.width  * (int)(a/b), RPnPhaseSpaceFrame.this.frameSize_.height * (int)(a/b));
+                    frame.setSize(w + a, h + a);
+                    frame.validate();
+
+                }
+                for (int i = 0; i < RPnUIFrame.getAuxFrames().length; i++) {
+
+                    RPnPhaseSpaceFrame frame = RPnUIFrame.getAuxFrames()[i];
                     //frame.setSize(RPnPhaseSpaceFrame.this.frameSize_.width  * (int)(a/b), RPnPhaseSpaceFrame.this.frameSize_.height * (int)(a/b));
                     frame.setSize(w + a, h + a);
                     frame.validate();
@@ -172,11 +194,26 @@ public class RPnPhaseSpaceFrame extends JFrame {
                     frame.validate();
 
                 }
+                for (int i = 0; i < RPnUIFrame.getAuxFrames().length; i++) {
+
+                    RPnPhaseSpaceFrame frame = RPnUIFrame.getAuxFrames()[i];
+                    //frame.setSize(RPnPhaseSpaceFrame.this.frameSize_.width  * (int)(a/b), RPnPhaseSpaceFrame.this.frameSize_.height * (int)(a/b));
+                    frame.setSize(w + a, h + a);
+                    frame.validate();
+
+                }
             }
             if (keyEvent.getKeyChar() == 'r' || keyEvent.getKeyChar() == 'R') {   //*** reset para o tamanho original dos painéis
                 for (int i = 0; i < RPnUIFrame.getPhaseSpaceFrames().length; i++) {
-
+                    
                     RPnPhaseSpaceFrame frame = RPnUIFrame.getPhaseSpaceFrames()[i];
+                    frame.setSize(w, h);
+                    frame.validate();
+
+                }
+                for (int i = 0; i < RPnUIFrame.getAuxFrames().length; i++) {
+
+                    RPnPhaseSpaceFrame frame = RPnUIFrame.getAuxFrames()[i];
                     frame.setSize(w, h);
                     frame.validate();
 

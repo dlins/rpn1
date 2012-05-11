@@ -23,7 +23,6 @@ import java.awt.image.BufferedImage;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Color;
-
 import javax.swing.JPanel;
 import java.awt.Shape;
 import java.awt.geom.Area;
@@ -39,7 +38,7 @@ import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import rpn.component.util.AREASELECTION_CONFIG2;
 import rpn.component.util.CLASSIFIERAGENT_CONFIG;
-import rpn.component.util.GeometryGraph3D;
+import rpn.component.util.GeometryGraph;
 import rpn.component.util.VELOCITYAGENT_CONFIG;
 import rpn.controller.ui.AREASELECTION_CONFIG;
 import rpn.controller.ui.UIController;
@@ -126,6 +125,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         cursorPos_ = new Point(0, 0);
         setBackground(DEFAULT_BOUNDARY_COLOR);
         setPreferredSize(new java.awt.Dimension(myW, myH));
+        this.setName("");
     }
 
     //
@@ -187,7 +187,8 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
          * SCENE
          */
 
-        if (scene_ != null) {
+        if (scene_ != null) {     //tentar fazer semelhante a isso para o desenho dos acessorios
+
             scene_.draw((Graphics2D) g);
         }
 
@@ -230,21 +231,22 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         myW_ = getWidth();
 
 
-//        if (RPNUMERICS.domainDim() == 2) {
-//
-//            GeometryGraph geom = new GeometryGraph();
-//            geom.markPoints(scene());
-//            geom.paintComponent(g, scene());
-//
-//        }
+        if (RPNUMERICS.domainDim() == 2) {
 
-        if (RPNUMERICS.domainDim() == 3) {
+            GeometryGraph geom = new GeometryGraph();
+            geom.markPoints(scene());
+            geom.paintComponent(g, scene(),this);
 
-            GeometryGraph3D geom3D = new GeometryGraph3D();
-            geom3D.markPoints(scene());
-            geom3D.paintComponent(g, scene());
 
         }
+
+//        if (RPNUMERICS.domainDim() == 3) {
+//
+//            GeometryGraph3D geom3D = new GeometryGraph3D();
+//            geom3D.markPoints(scene());
+//            geom3D.paintComponent(g, scene());
+//
+//        }
 
 //        if (RPNUMERICS.domainDim() == 4) {
 //            GeometryGraph4D.markPoints(GeometryUtil.targetPoint, GeometryUtil.pMarca, scene());
@@ -272,7 +274,6 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
             repaint();
             getCastedUI().resetCursorCoords();
         }
-
 
         //** Leandro: fim.
         //*****************************************

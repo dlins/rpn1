@@ -9,6 +9,7 @@ import rpnumerics.RPNUMERICS;
 import wave.util.RealVector;
 import java.beans.PropertyChangeEvent;
 import rpn.component.RpGeometry;
+import rpn.component.util.GeometryGraphND;
 import rpn.controller.ui.*;
 
 public class DragPlotAgent extends RpModelConfigChangeAgent {
@@ -31,16 +32,21 @@ public class DragPlotAgent extends RpModelConfigChangeAgent {
     }
 
     public void execute() {
+
         try {
             RpGeometry lastGeometry = phaseSpace_.getLastGeometry();
             UserInputTable userInputList = UIController.instance().globalInputTable();
             RealVector newValue = userInputList.values();
+            if (GeometryGraphND.onCurve == 1) {
+                newValue = GeometryGraphND.pMarca;
+            }
             lastGeometry.geomFactory().getUI().propertyChange(new PropertyChangeEvent(this, "enabled", null, newValue));
             phaseSpace_.update();
             UIController.instance().panelsUpdate();
         } catch (Exception e) {
 
             return;
+
         }
 
 

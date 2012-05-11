@@ -10,11 +10,7 @@
 #include "Boundary.h"
 #include "Viscosity_Matrix.h"
 
-extern "C"{
-    int lsode_(int (*)(int *, double *, double *, double *, int *, double *), int *, double *, double *, double *,
-            int *, double *, double *, int *, int *, int *, double *, int *,
-            int *, int *, int(*)(int *, double *, double *, int *, int *, double *, int *), int *, int*, double*);
-}
+#include "lsode.h"
 
 #ifndef ORBIT_FORWARD
 #define ORBIT_FORWARD 1
@@ -31,11 +27,14 @@ class Viscous_Profile {
         static const AccumulationFunction *a;
 
         static Viscosity_Matrix *vmf;
+
+        static void Newton_improvement(const FluxFunction *ff, const AccumulationFunction *aa, 
+                                  double sigma, const RealVector &p,  RealVector &ref, RealVector &out);
     public:
         // Critical points
         static void critical_points_linearization(const FluxFunction *ff, const AccumulationFunction *aa, 
                                                   Viscosity_Matrix *v,
-                                                  double speed, const std::vector<RealVector> &cp, std::vector< std::vector<eigenpair> > &ep);
+                                                  double speed, const RealVector &cp,  RealVector &ref, std::vector<eigenpair>  &ep);
 
         // Orbit
         static int orbit(const FluxFunction *ff, const AccumulationFunction *aa, 
@@ -47,6 +46,12 @@ class Viscous_Profile {
                          std::vector<RealVector> &out);
 
         static int orbit_flux(int *neq, double *xi, double *in, double *out, int *nparam, double *param); // For LSODE
+
+        static void viscous_field(const FluxFunction *f, const AccumulationFunction *a,
+                                 RealVector &ref,double speed,
+                                  const RealVector &pmin, const RealVector &pmax, 
+                                  const std::vector<int> &noc, 
+                                  std::vector<RealVector> &grid, std::vector<RealVector> &dir);
 };
 
 #endif // _VISCOUS_PROFILE_

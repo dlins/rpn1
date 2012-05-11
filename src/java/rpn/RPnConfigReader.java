@@ -24,7 +24,7 @@ public abstract class RPnConfigReader {
 
     /** Constructs a configuration object to the applet or the desktop version */
     public static RPnConfigReader getReader(String file, boolean isApplet, JApplet applet) {
-
+        
         RPnConfig.remoteImage();
         if (isApplet) {
 

@@ -22,7 +22,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.batik.ext.swing.GridBagConstants;
 import rpn.component.util.AreaSelectionAgent2;
 import rpn.component.util.ClassifierAgent;
-import rpn.component.util.ControlClick;
+import rpn.component.util.GeometryGraphND;
 import rpn.component.util.VelocityAgent;
 import rpn.controller.ui.*;
 import rpn.message.*;
@@ -76,6 +76,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JMenuItem editMenuItem5 = new JMenuItem("Starts with Black Background");
     private JMenuItem editMenuItem6 = new JMenuItem("Starts with White Background");
     public static String dir = "";
+    private RPnPhaseSpaceFrame frameZoom = null;
+    private ArrayList<RPnPhaseSpaceFrame> listFrameZoom = new ArrayList();
+    private static int numOfPanelZoom = 0;
     //***
 
     //Construct the frame
@@ -250,6 +253,75 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         UIController.instance().panelsUpdate();
     }
 
+    //*** Leandro
+    public void phaseSpaceFrameZoom(Boundary boundary) {
+        wave.multid.graphs.ClippedShape clipping = new wave.multid.graphs.ClippedShape(boundary);
+
+        JButton closeButton = new JButton("Close");
+
+        // Init Main Frame
+        //for (int i = 0; i < numOfPanelZoom; i++) {
+
+            wave.multid.view.ViewingTransform viewingTransf =
+                    ((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(
+                    0)).createTransform(clipping);
+            try {
+                wave.multid.view.Scene scene = null;
+
+                if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("Phase Space"))
+                scene = RPnDataModule.PHASESPACE.createScene(viewingTransf,
+                        new wave.multid.view.ViewingAttr(Color.black));
+
+                if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("RightPhase Space"))
+                scene = RPnDataModule.RIGHTPHASESPACE.createScene(viewingTransf,
+                        new wave.multid.view.ViewingAttr(Color.black));
+
+                if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("LeftPhase Space"))
+                scene = RPnDataModule.LEFTPHASESPACE.createScene(viewingTransf,
+                        new wave.multid.view.ViewingAttr(Color.black));
+
+
+                RPnPhaseSpacePanel panel = new RPnPhaseSpacePanel(scene);
+                panel.setBackground(Color.red);
+
+                frameZoom = new RPnPhaseSpaceFrame(scene, commandMenu_);
+                frameZoom.setTitle("Zoom " +RPnPhaseSpaceAbstraction.namePhaseSpace);
+
+                frameZoom.jPanel5.removeAll();
+                frameZoom.jPanel5.add(closeButton);
+
+                UIController.instance().install(frameZoom.phaseSpacePanel());
+
+                setFramesPosition(frameZoom);
+                frameZoom.pack();
+                frameZoom.setVisible(true);
+                
+                listFrameZoom.add(frameZoom);
+
+                //*** Tem que ser melhorado
+                closeButton.addActionListener(
+                new java.awt.event.ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+                        //frameZoom.dispose();
+                        for(int i=0; i<listFrameZoom.size(); i++){
+                            if (listFrameZoom.get(i).phaseSpacePanel().getName().equals(RPnPhaseSpaceAbstraction.namePhaseSpace))
+                            listFrameZoom.get(i).dispose();
+                        }
+
+                    }
+                });
+
+
+            } catch (wave.multid.DimMismatchEx dex) {
+                dex.printStackTrace();
+            }
+
+        //}
+        
+    }
+    //***
+
     //** para criar os frames (paineis) - incluindo os auxiliares
     protected void phaseSpaceFramesInit(Boundary boundary) {
         wave.multid.graphs.ClippedShape clipping = new wave.multid.graphs.ClippedShape(boundary);
@@ -376,7 +448,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private void createPanelsChooser() {
 
         int rows = getPhaseSpaceFrames().length + getAuxFrames().length;
-
+        
         panelsChooserPanel_.setLayout(new GridLayout(rows, 1));
 
         for (RPnPhaseSpaceFrame mainFrame : getPhaseSpaceFrames()) {
@@ -714,7 +786,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 new java.awt.event.ActionListener() {
 
                     public void actionPerformed(ActionEvent e) {
-                        ControlClick.clearAllStrings();
+                        GeometryGraphND.clearAllStrings();
                     }
                 });
 
@@ -722,7 +794,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 new java.awt.event.ActionListener() {
 
                     public void actionPerformed(ActionEvent e) {
-                        ControlClick.clearLastString();
+                        GeometryGraphND.clearLastString();
                     }
                 });
 
