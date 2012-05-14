@@ -20,14 +20,12 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.batik.ext.swing.GridBagConstants;
-import rpn.component.util.AreaSelectionAgent2;
-import rpn.component.util.ClassifierAgent;
+import rpn.usecase.ClassifierAgent;
 import rpn.component.util.GeometryGraphND;
-import rpn.component.util.VelocityAgent;
+import rpn.usecase.VelocityAgent;
 import rpn.controller.ui.*;
 import rpn.message.*;
 import rpnumerics.ShockProfile;
-import wave.util.RectBoundary;
 
 public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
@@ -159,16 +157,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 toolBar_.add(EllipticBoundaryAgent.instance().getContainer());
                 toolBar_.add(TrackPointAgent.instance().getContainer());
 
-
-         
-
-
-                if (RPNUMERICS.boundary() instanceof RectBoundary) {
-                    toolBar_.add(AreaSelectionAgent.instance().getContainer());     //** Edson/Leandro
-                } else {
-                    toolBar_.add(AreaSelectionAgent.instance().getContainer());     //** Leandro  -- completar com 2. opcao de botao de selecao (triangular)
-                    toolBar_.add(AreaSelectionAgent2.instance().getContainer());    //** Leandro
-                }
+                toolBar_.add(AreaSelectionAgent.instance().getContainer());     //** Edson/Leandro
 
                 toolBar_.add(ClassifierAgent.instance().getContainer());      //** Leandro
                 toolBar_.add(VelocityAgent.instance().getContainer());        //** Leandro
@@ -302,7 +291,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 new java.awt.event.ActionListener() {
 
                     public void actionPerformed(ActionEvent e) {
-                        //frameZoom.dispose();
+                        frameZoom.dispose();
                         for(int i=0; i<listFrameZoom.size(); i++){
                             if (listFrameZoom.get(i).phaseSpacePanel().getName().equals(RPnPhaseSpaceAbstraction.namePhaseSpace))
                             listFrameZoom.get(i).dispose();

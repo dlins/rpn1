@@ -22,6 +22,8 @@ import wave.multid.CoordsArray;
 import wave.multid.view.Scene;
 import wave.multid.view.ViewingTransform;
 import wave.util.RealVector;
+import rpn.controller.ui.CLASSIFIERAGENT_CONFIG;
+import rpn.controller.ui.VELOCITYAGENT_CONFIG;
 
 /**
  *

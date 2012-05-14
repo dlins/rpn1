@@ -25,6 +25,10 @@ import wave.multid.view.Scene;
 import wave.util.Arrow;
 import wave.util.Boundary;
 import wave.util.RealVector;
+import rpn.controller.ui.CLASSIFIERAGENT_CONFIG;
+import rpn.controller.ui.VELOCITYAGENT_CONFIG;
+import rpn.parser.RPnDataModule;
+import rpn.usecase.VelocityAgent;
 
 /**
  *
@@ -169,7 +173,10 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
 
 
         try {
-            RpGeometry geom = RPnPhaseSpaceAbstraction.findClosestGeometry(newValue);
+            RPnPhaseSpaceAbstraction phaseSpace = RPnDataModule.PHASESPACE;
+            RpGeometry geom = phaseSpace.findClosestGeometry(newValue);
+
+            //RpGeometry geom = RPnPhaseSpaceAbstraction.findClosestGeometry(newValue);
             RPnCurve curve = (RPnCurve)(geom.geomFactory().geomSource());
             if (curve instanceof DoubleContactCurve) {
                 if (!panel.getName().equals(RPnPhaseSpaceAbstraction.namePhaseSpace) && !panel.getName().equals("Phase Space")) {

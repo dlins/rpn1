@@ -26,7 +26,7 @@ import javax.swing.table.DefaultTableModel;
 import rpn.component.BifurcationCurveGeom;
 import rpn.component.RpCalcBasedGeomFactory;
 import rpn.component.RpGeometry;
-import rpn.component.util.VelocityAgent;
+import rpn.usecase.VelocityAgent;
 import rpn.controller.ui.UIController;
 import rpnumerics.HugoniotCurve;
 import rpnumerics.HugoniotCurveCalcND;

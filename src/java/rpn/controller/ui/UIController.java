@@ -30,6 +30,7 @@ import rpn.component.RpGeometry;
 import rpn.component.util.GeometryGraph;
 import rpn.component.util.GeometryGraphND;
 import rpn.message.*;
+import rpn.parser.RPnDataModule;
 import rpnumerics.RPnCurve;
 
 /** This class implements a general controller to the application. With the UIController class, the state of the application is changed, the controllers of each panel are installed or removed and the user inputs are stored in a global table. */
@@ -164,7 +165,11 @@ public class UIController extends ComponentUI {
                 if (GeometryGraphND.onCurve == 1) {
                     UserInputTable userInputList = UIController.instance().globalInputTable();
                     RealVector newValue = userInputList.values();
-                    RpGeometry geom = RPnPhaseSpaceAbstraction.findClosestGeometry(newValue);
+                    RPnPhaseSpaceAbstraction phaseSpace = RPnDataModule.PHASESPACE;
+                    RpGeometry geom = phaseSpace.findClosestGeometry(newValue);
+
+
+                    //RpGeometry geom = RPnPhaseSpaceAbstraction.findClosestGeometry(newValue);
                     RPnCurve curve = (RPnCurve)(geom.geomFactory().geomSource());
                     GeometryGraphND.pMarca = curve.findClosestPoint(newValue);
 

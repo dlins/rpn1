@@ -325,8 +325,11 @@ public class RPnCurve extends MultiPolyLine {
         //ArrayList segments = MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseRPnCurveToCoordsArray(this));
 
         ArrayList segments = null;
-        
-        RpGeometry geom = RPnPhaseSpaceAbstraction.findClosestGeometry(targetPoint);
+
+        RPnPhaseSpaceAbstraction phaseSpace = RPnDataModule.PHASESPACE;
+        RpGeometry geom = phaseSpace.findClosestGeometry(targetPoint);
+
+        //RpGeometry geom = RPnPhaseSpaceAbstraction.findClosestGeometry(targetPoint);
         RPnCurve curve = (RPnCurve)(geom.geomFactory().geomSource());
         
 

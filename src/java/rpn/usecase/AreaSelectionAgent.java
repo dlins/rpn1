@@ -20,6 +20,7 @@ import rpn.component.util.GeometryGraphND;
 import rpn.controller.ui.AREASELECTION_CONFIG;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UserInputTable;
+import rpn.parser.RPnDataModule;
 import rpnumerics.Area;
 import rpnumerics.RPNUMERICS;
 import rpnumerics.RPnCurve;
@@ -29,7 +30,7 @@ import wave.util.RealVector;
 import wave.util.RectBoundary;
 
 
-public class AreaSelectionAgent extends RpModelActionAgent {
+public class AreaSelectionAgent extends RpModelPlotAgent {
 
     public int ind = 0;
 
@@ -42,7 +43,8 @@ public class AreaSelectionAgent extends RpModelActionAgent {
 
     
     private AreaSelectionAgent() {
-        super(DESC_TEXT, null);
+        //super(DESC_TEXT, null);
+        super(DESC_TEXT, null ,new JToggleButton());
 
         button_ = new JToggleButton(this);
         button_.setToolTipText(DESC_TEXT);
@@ -79,7 +81,8 @@ public class AreaSelectionAgent extends RpModelActionAgent {
         UserInputTable userInputList = UIController.instance().globalInputTable();
         RealVector newValue = userInputList.values();
 
-        RpGeometry geom = RPnPhaseSpaceAbstraction.findClosestGeometry(newValue);
+        RPnPhaseSpaceAbstraction phaseSpace = RPnDataModule.PHASESPACE;
+        RpGeometry geom = phaseSpace.findClosestGeometry(newValue);
         RPnCurve curve = (RPnCurve)(geom.geomFactory().geomSource());
 
         if (curve instanceof SegmentedCurve) {
@@ -148,7 +151,8 @@ public class AreaSelectionAgent extends RpModelActionAgent {
                 GeometryGraphND.targetPoint.setElement(i, newValue.getElement(i));
             }
 
-            RpGeometry geom = RPnPhaseSpaceAbstraction.findClosestGeometry(newValue);
+            RPnPhaseSpaceAbstraction phaseSpace = RPnDataModule.PHASESPACE;
+            RpGeometry geom = phaseSpace.findClosestGeometry(newValue);
             RPnCurve curve = (RPnCurve)(geom.geomFactory().geomSource());
 
             GeometryGraphND.pMarca = curve.findClosestPoint(newValue);
@@ -177,6 +181,7 @@ public class AreaSelectionAgent extends RpModelActionAgent {
 
     }
 
+    @Override
     public JToggleButton getContainer() {
         return button_;
     }
@@ -191,6 +196,11 @@ public class AreaSelectionAgent extends RpModelActionAgent {
 
     public List<Area> getListArea() {
         return listArea_;
+    }
+
+    @Override
+    public RpGeometry createRpGeometry(RealVector[] coords) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 }

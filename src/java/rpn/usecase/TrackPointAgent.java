@@ -8,6 +8,7 @@ package rpn.usecase;
 import java.awt.event.ActionEvent;
 import javax.swing.JToggleButton;
 import rpn.RPnStateInformationFrame;
+import rpn.component.RpGeometry;
 import rpn.controller.ui.TRACKPOINT_CONFIG;
 import rpn.controller.ui.UIController;
 import rpnumerics.RPnStateInfo;
@@ -25,7 +26,7 @@ public class TrackPointAgent extends RpModelActionAgent {
 
     private TrackPointAgent() {
         super(DESC_TEXT, null);
-
+        
         button_ = new JToggleButton(this);
         button_.setToolTipText(DESC_TEXT);
         button_.setFont(rpn.RPnConfigReader.MODELPLOT_BUTTON_FONT);
@@ -100,6 +101,8 @@ public class TrackPointAgent extends RpModelActionAgent {
     public RPnStateInfo getInfo() {
         return info_;
     }
+
+
 }
 
 

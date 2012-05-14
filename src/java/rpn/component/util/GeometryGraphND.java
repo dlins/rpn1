@@ -36,6 +36,11 @@ import wave.util.Boundary;
 import wave.util.IsoTriang2DBoundary;
 import wave.util.RealSegment;
 import wave.util.RealVector;
+import rpn.controller.ui.CLASSIFIERAGENT_CONFIG;
+import rpn.controller.ui.VELOCITYAGENT_CONFIG;
+import rpn.parser.RPnDataModule;
+import rpn.usecase.ClassifierAgent;
+import rpn.usecase.VelocityAgent;
 
 /**
  *
@@ -363,7 +368,10 @@ public class GeometryGraphND {
         UserInputTable userInputList = UIController.instance().globalInputTable();
         RealVector newValue = userInputList.values();
 
-        RpGeometry geom = RPnPhaseSpaceAbstraction.findClosestGeometry(newValue);
+        RPnPhaseSpaceAbstraction phaseSpace = RPnDataModule.PHASESPACE;
+        RpGeometry geom = phaseSpace.findClosestGeometry(newValue);
+
+        //RpGeometry geom = RPnPhaseSpaceAbstraction.findClosestGeometry(newValue);
         RPnCurve curve = (RPnCurve)(geom.geomFactory().geomSource());
 
         if (curve instanceof Orbit) {

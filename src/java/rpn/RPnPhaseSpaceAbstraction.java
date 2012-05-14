@@ -14,9 +14,9 @@ import rpn.component.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
-import rpn.component.util.ClassifierAgent;
+import rpn.usecase.ClassifierAgent;
 import rpn.component.util.GeometryGraphND;
-import rpn.component.util.VelocityAgent;
+import rpn.usecase.VelocityAgent;
 import rpn.controller.RpCalcController;
 import rpn.controller.ui.UIController;
 import rpn.parser.RPnDataModule;
@@ -41,7 +41,6 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
     static public String namePhaseSpace = "";
     static public List listResolution = new ArrayList();
     static public int closestCurve;             //indice da curva mais proxima
-
     
     //
     // Constructors
@@ -169,7 +168,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
 
 
     //**************************************************************************
-    public static RpGeometry findClosestGeometry(RealVector targetPoint) {
+    public RpGeometry findClosestGeometry(RealVector targetPoint) {             // era static
 
         RpGeometry closestGeometry_ = null;      //a curva mais proxima
 
@@ -185,7 +184,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         if (namePhaseSpace.equals("RightPhase Space")) geomList = RPnDataModule.RIGHTPHASESPACE.getGeomObjIterator();
         if (namePhaseSpace.equals("LeftPhase Space"))  geomList = RPnDataModule.LEFTPHASESPACE.getGeomObjIterator();
 
-            while (geomList.hasNext()) {
+        while (geomList.hasNext()) {
 
             RpGeometry geom = (RpGeometry) geomList.next();
 

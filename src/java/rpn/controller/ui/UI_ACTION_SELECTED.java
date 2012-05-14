@@ -9,7 +9,6 @@ import wave.util.RealVector;
 import rpn.usecase.*;
 import java.util.ArrayList;
 import java.util.List;
-import rpn.component.util.ClassifierAgent;
 
 public class UI_ACTION_SELECTED implements UserInputHandler {
     //

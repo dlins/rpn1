@@ -12,10 +12,10 @@ import java.util.Iterator;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.component.RpGeomFactory;
 import rpn.component.RpGeometry;
-import rpn.component.util.ClassifierAgent;
+import rpn.usecase.ClassifierAgent;
 import rpn.component.util.GeometryGraphND;
 
-import rpn.component.util.VelocityAgent;
+import rpn.usecase.VelocityAgent;
 import rpn.controller.RpCalcController;
 import rpn.usecase.ChangeFluxParamsAgent;
 

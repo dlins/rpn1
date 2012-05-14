@@ -36,14 +36,13 @@ import org.apache.batik.dom.GenericDOMImplementation;
 import org.apache.batik.svggen.SVGGraphics2D;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
-import rpn.component.util.AREASELECTION_CONFIG2;
-import rpn.component.util.CLASSIFIERAGENT_CONFIG;
 import rpn.component.util.GeometryGraph;
-import rpn.component.util.VELOCITYAGENT_CONFIG;
 import rpn.controller.ui.AREASELECTION_CONFIG;
+import rpn.controller.ui.CLASSIFIERAGENT_CONFIG;
 import rpn.controller.ui.UIController;
 import rpnumerics.BifurcationProfile;
 import rpnumerics.RPNUMERICS;
+import rpn.controller.ui.VELOCITYAGENT_CONFIG;
 
 public class RPnPhaseSpacePanel extends JPanel implements Printable {
     //
@@ -253,8 +252,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
 //            GeometryGraph4D.paintComponent(g, scene());
 //        }
 
-        if (UIController.instance().getState() instanceof AREASELECTION_CONFIG ||
-                UIController.instance().getState() instanceof AREASELECTION_CONFIG2) {        // acrescentei isso (Leandro)
+        if (UIController.instance().getState() instanceof AREASELECTION_CONFIG) {        // acrescentei isso (Leandro)
             getCastedUI().pointMarkBuffer().clear();
             showCursorLine_ = false;
             repaint();
