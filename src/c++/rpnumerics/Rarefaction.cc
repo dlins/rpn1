@@ -262,6 +262,22 @@ void Rarefaction::compute_all_eigenpairs(int n, const RealVector &in, std::vecto
 // vector that contains > n components and even so use its first n components.
 //
 void Rarefaction::compute_eigenpair(int n, const RealVector &in, double &lambda, RealVector &eigenvector){
+//    double p[n];
+//    for (int i = 0; i < n; i++) p[i] = in.component(i);
+
+//    std::vector<eigenpair> e;
+
+//    if (type == RAREFACTION_SIMPLE_ACCUMULATION){
+//        double FJ[n][n];
+//        fill_with_jet((RpFunction*)Rarefaction::fluxfunction,         n, p, 1, 0, &FJ[0][0], 0);
+//        Eigen::eig(n, &FJ[0][0], e);
+//    }
+//    else {
+//        double FJ[n][n], FG[n][n];
+//        fill_with_jet((RpFunction*)Rarefaction::fluxfunction,         n, p, 1, 0, &FJ[0][0], 0);
+//        fill_with_jet((RpFunction*)Rarefaction::accumulationfunction, n, p, 1, 0, &FG[0][0], 0);
+//        Eigen::eig(n, &FJ[0][0], &FG[0][0], e);
+//    } 
 
     std::vector<eigenpair> e;
     compute_all_eigenpairs(n, in, e);
@@ -270,7 +286,6 @@ void Rarefaction::compute_eigenpair(int n, const RealVector &in, double &lambda,
 
     eigenvector.resize(e[Rarefaction::family].vrr.size());
     for (int i = 0; i < e[Rarefaction::family].vrr.size(); i++) eigenvector.component(i) = e[Rarefaction::family].vrr[i];
-
 
     return;
 }
@@ -761,6 +776,7 @@ int Rarefaction::curve(const RealVector &initial_point,
                        std::vector<RealVector> &rarcurve,
                        std::vector<RealVector> &inflection_points){
 
+
     // Set the static parameters that will be used throughout.
     // TODO: Decide if increase and deltaxi should be static.
     Rarefaction::fluxfunction         = (FluxFunction*)ff;
@@ -915,7 +931,6 @@ int Rarefaction::curve(const RealVector &initial_point,
 
         // Invoke LSODE.
         lsode_(&flux, &n, p, &xi, &new_xi, &itol, &rtol, atol, &itask, &istate, &iopt, rwork, &lrw, iwork, &liw, 0, &mf, &nparam, param);
-//        printf("LSODE: info = %d\n", istate);
 
         // ***ELIPTIC REGION***
         // 2012/02/07.
@@ -927,10 +942,8 @@ int Rarefaction::curve(const RealVector &initial_point,
         // DO IT HERE
 
         // Update new_point.
-
         for (int i = 0; i < n; i++) new_point.component(i) = p[i];
         new_point.component(n) = new_lambda = compute_lambda(n, new_point);
-        
 
         // BEGIN Check Boundary //
         // Modified RectBoundary so that the intersection can be tested using RealVectors of size
@@ -938,6 +951,8 @@ int Rarefaction::curve(const RealVector &initial_point,
         int where_out;
         RealVector r;
         int intersection_info = boundary->intersection(previous_point, new_point, r, where_out);
+
+        cout<<"Valor de intersection: "<<intersection_info<<endl;
 
 //        printf("Inside while. previous_point = (");
 //        for (int i = 0; i < n; i++){
@@ -958,13 +973,13 @@ int Rarefaction::curve(const RealVector &initial_point,
         else if (intersection_info == 0){
             // One point is inside, the other is outside. 
             // Store the point lying in the domain's border and get out.
-            r.resize(n+1);
+            cout <<"tamanho de r"<< r.size()<<endl;
             r.component(n) = compute_lambda(n, r);
             rarcurve.push_back(r);
 
             printf("Reached boundary\n");
 
-            return SUCCESSFUL_PROCEDURE;
+            return RAREFACTION_REACHED_BOUNDARY;
         }
         else {
             // Both points lie outside the domain. Something went awfully wrong here.
@@ -994,8 +1009,8 @@ int Rarefaction::curve(const RealVector &initial_point,
             for (int i = 0; i < n; i++) r_direction.component(i) = new_point.component(i) - previous_point.component(i);
 
             new_dirdrv = dirdrv(n, new_point, r_direction);
-//            printf("new_dirdrv = %lg, previous_dirdrv = %g, new_dirdrv*previous_dirdrv = %g\n", new_dirdrv, previous_dirdrv, new_dirdrv*previous_dirdrv);
-//            printf("new_lambda = %lg, previous_lambda = %g\n", new_lambda, previous_lambda);
+            printf("new_dirdrv = %lg, previous_dirdrv = %g, new_dirdrv*previous_dirdrv = %g\n", new_dirdrv, previous_dirdrv, new_dirdrv*previous_dirdrv);
+            printf("new_lambda = %lg, previous_lambda = %g\n", new_lambda, previous_lambda);
             if (new_dirdrv*previous_dirdrv <= 0.0){
 		printf("Ok");
                 // printf("new_lambda = %g; previous_lambda = %g.\n", new_lambda, previous_lambda);
@@ -1009,15 +1024,7 @@ int Rarefaction::curve(const RealVector &initial_point,
                     // in order to avoid arrow clutter when displaying the results.
                     // The value of lambda at the inflection point is not being calculated
                     // and this situation affects the method by which the arrows are created.
-
-                    
-                     // Pablo mudou essa linha para que não aparecesse uma seta a mais de direcao contrária na rarefacao (Conferir com o Rodrigo)
-                    //if (type_of_rarefaction == RAREFACTION_FOR_ITSELF) rarcurve.push_back(last_point);
-
-
-                      if (type_of_rarefaction == RAREFACTION_FOR_ITSELF) rarcurve.push_back(new_point);
-
-
+                    if (type_of_rarefaction == RAREFACTION_FOR_ITSELF) rarcurve.push_back(last_point);
                 }
 //                else printf("Last point discarded.\n");
 
@@ -1045,7 +1052,15 @@ int Rarefaction::curve(const RealVector &initial_point,
         new_xi += deltaxi;
 
         // Update the reference vector.
-        for (int i = 0; i < n; i++) param[1 + i] = new_point.component(i) - previous_point.component(i);
+        for (int i = 0; i < n; i++){
+         
+            cout <<"1 + i "<<1+i<<endl;
+            cout <<"Valor de newPoint"<<new_point<<endl;
+            cout << "Valor de previousPoint" << previous_point << endl;
+
+            param[1 + i] = new_point.component(i) - previous_point.component(i);
+
+        }
     }
 
     //return SUCCESSFUL_PROCEDURE;

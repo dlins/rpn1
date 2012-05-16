@@ -103,10 +103,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
 
     Boundary * tempBoundary = RpNumerics::getPhysics().boundary().clone();
 
-    Shock::curve(realVectorInput, true, initPoint, increase, familyIndex, SHOCK_FOR_ITSELF, originalDirection,
+    int info_shock_curve,info_shock_curve_alt;
+
+    Shock::curve(realVectorInput, true, initPoint, increase, familyIndex, SHOCK_FOR_ITSELF, originalDirection,0,
 
             fluxFunction, accumulationFunction,
-            tempBoundary, coords, shock_alt);
+            tempBoundary, coords, info_shock_curve,shock_alt,info_shock_curve_alt);
 
 
     delete tempBoundary;

@@ -50,6 +50,10 @@
 #define SHOCK_REACHED_DOUBLE_CONTACT 30
 #endif 
 
+
+#define NON_LAX_AFTER_BECOMING_RIGHT_CHARACTERISTIC_WITH_CURRENT_FAMILY 40
+#define NON_LAX_FOR_OTHER_REASON                                        41
+
 extern "C" int dgels_(char*, int*, int*, int*, double*, int*, double*, int*, double*, int*, int*);
 
 extern"C" {
@@ -75,7 +79,7 @@ class Shock {
         static int shock_step(const RealVector &p, const RealVector &Uref, const RealVector &tangent, const RealVector &normal, FluxFunction *ff, AccumulationFunction *aa, double &epsilon, RealVector &pnext);
         static void bisection(const RealVector &pp, double pp_sgn, const RealVector &pm, double pm_sgn, const RealVector &Uref, FluxFunction *F, AccumulationFunction *G, RealVector &pnext);
         static int curve_constructor(Boundary *boundary, bool local_shock, int type_of_shock, int family, int increase, RealVector &ref_point, RealVector &pnext, 
-                             RealVector &tangent, RealVector &normal, 
+                             RealVector &tangent, RealVector &normal, int number_ignore_doub_contact, 
                              FluxFunction *ff, AccumulationFunction *aa, 
                              double lambda, double lambda_0, double lambda_1, 
                              double sigma, double sign_composite, double sign_shock,
@@ -99,8 +103,8 @@ class Shock {
         static void hugoniot_der2(const RealVector &U, const RealVector &Uref, FluxFunction *F, AccumulationFunction *G, double *dRH2, double &curvature);
         
     public:
-        static int curve(const RealVector &ref, bool local_shock, const RealVector &in, int increase, int family, int type_of_shock, const RealVector *orig_direction, FluxFunction *ff, AccumulationFunction *aa, Boundary *boundary,
-                         std::vector<RealVector> &shockcurve, std::vector<RealVector> &shockcurve_alt);
+        static void curve(const RealVector &ref, bool local_shock, const RealVector &in, int increase, int family, int type_of_shock, const RealVector *orig_direction, int number_ignore_doub_contact, FluxFunction *ff, AccumulationFunction *aa, Boundary *boundary,
+                         std::vector<RealVector> &shockcurve, int &info_shockcurve, std::vector<RealVector> &shockcurve_alt, int &info_shockcurve_alt);
 };
 
 #endif // _SHOCK_

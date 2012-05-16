@@ -108,7 +108,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
 
     cout << "Rarefaction curve" << rarefactionCurve.size() << endl;
 
-    CompositeCurve::curve(rarefactionCurve, COMPOSITE_FROM_NORMAL_RAREFACTION, familyIndex, increase, stoneflux, stoneaccum, tempBoundary, compositeCurve);
+    CompositeCurve::curve(rarefactionCurve, COMPOSITE_FROM_NORMAL_RAREFACTION, familyIndex,
+            increase, 0,stoneflux, stoneaccum, tempBoundary, compositeCurve);
 
     delete stoneflux;
     delete stoneaccum;

@@ -286,6 +286,12 @@ public class RPNUMERICS {
 
     }
 
+    public static WaveCurveCalc createWaveCurveCalc(OrbitPoint orbitPoint) {
+
+        return new WaveCurveCalc(orbitPoint, Integer.parseInt(getParamValue("orbit", "family")), direction_);
+
+    }
+
     public static LevelCurveCalc createPointLevelCurveCalc(RealVector orbitPoint) {
 
         int[] resolution = RPnDataModule.processResolution(getParamValue("levelcurve", "resolution"));

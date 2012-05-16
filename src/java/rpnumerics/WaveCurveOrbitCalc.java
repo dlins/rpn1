@@ -6,7 +6,7 @@
  */
 package rpnumerics;
 
-public abstract class WaveCurveOrbitCalc extends OrbitCalc implements RpCalculation {
+public  class WaveCurveOrbitCalc extends OrbitCalc  {
     //
     // Constants
     //
@@ -34,10 +34,7 @@ public abstract class WaveCurveOrbitCalc extends OrbitCalc implements RpCalculat
     //
     // Methods
     //
-    public RpSolution recalc() throws RpException {
-        return calc();
-
-    }
+   
 
     public int getFamilyIndex(){
         return familyIndex_;
