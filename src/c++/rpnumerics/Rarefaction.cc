@@ -776,6 +776,7 @@ int Rarefaction::curve(const RealVector &initial_point,
                        std::vector<RealVector> &rarcurve,
                        std::vector<RealVector> &inflection_points){
 
+    printf("Por mi pinga, esto va a funcionar.\n");
 
     // Set the static parameters that will be used throughout.
     // TODO: Decide if increase and deltaxi should be static.
@@ -952,8 +953,6 @@ int Rarefaction::curve(const RealVector &initial_point,
         RealVector r;
         int intersection_info = boundary->intersection(previous_point, new_point, r, where_out);
 
-        cout<<"Valor de intersection: "<<intersection_info<<endl;
-
 //        printf("Inside while. previous_point = (");
 //        for (int i = 0; i < n; i++){
 //            printf("%g", previous_point.component(i));
@@ -973,9 +972,10 @@ int Rarefaction::curve(const RealVector &initial_point,
         else if (intersection_info == 0){
             // One point is inside, the other is outside. 
             // Store the point lying in the domain's border and get out.
-            cout <<"tamanho de r"<< r.size()<<endl;
-            r.component(n) = compute_lambda(n, r);
-            rarcurve.push_back(r);
+            RealVector rtemp(n + 1);
+            for (int i = 0; i < n; i++) rtemp.component(i) = r.component(i);
+            rtemp.component(n) = compute_lambda(n, r);
+            rarcurve.push_back(rtemp);
 
             printf("Reached boundary\n");
 
@@ -1052,15 +1052,7 @@ int Rarefaction::curve(const RealVector &initial_point,
         new_xi += deltaxi;
 
         // Update the reference vector.
-        for (int i = 0; i < n; i++){
-         
-            cout <<"1 + i "<<1+i<<endl;
-            cout <<"Valor de newPoint"<<new_point<<endl;
-            cout << "Valor de previousPoint" << previous_point << endl;
-
-            param[1 + i] = new_point.component(i) - previous_point.component(i);
-
-        }
+        for (int i = 0; i < n; i++) param[1 + i] = new_point.component(i) - previous_point.component(i);
     }
 
     //return SUCCESSFUL_PROCEDURE;

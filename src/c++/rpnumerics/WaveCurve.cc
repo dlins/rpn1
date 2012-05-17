@@ -62,7 +62,7 @@ int WaveCurve::half_wavecurve(int initial_curve, const RealVector &init, int fam
 
             std::vector<RealVector> inflection_points;
 
-            double deltaxi = 1e-2;
+            double deltaxi = 1e-3;
             out = Rarefaction::curve(temp_init,
                     RAREFACTION_INITIALIZE_YES,
                     0,
