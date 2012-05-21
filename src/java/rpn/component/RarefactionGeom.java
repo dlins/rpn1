@@ -3,10 +3,10 @@ package rpn.component;
 import wave.multid.*;
 import wave.multid.view.*;
 
-public class RarefactionGeom extends OrbitGeom implements RpGeometry {
+public class RarefactionGeom extends WaveCurveOrbitGeom implements RpGeometry {
 
 
-    public RarefactionGeom(CoordsArray[] vertices, RarefactionOrbitGeomFactory factory) {
+    public RarefactionGeom(CoordsArray[] vertices, WaveCurveOrbitGeomFactory factory) {
         super(vertices, factory);
 
     }

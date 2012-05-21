@@ -9,7 +9,7 @@ import java.awt.Color;
 import rpnumerics.*;
 import wave.multid.view.ViewingAttr;
 
-public class ShockCurveGeomFactory extends OrbitGeomFactory {
+public class ShockCurveGeomFactory extends WaveCurveOrbitGeomFactory {
     //
     // Constants
     //

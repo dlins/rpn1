@@ -3,9 +3,9 @@ package rpn.component;
 import wave.multid.*;
 import wave.multid.view.*;
 
-public class CompositeGeom extends OrbitGeom implements RpGeometry {
+public class CompositeGeom extends WaveCurveOrbitGeom implements RpGeometry {
 
-    public CompositeGeom(CoordsArray[] coordsArray, CompositeGeomFactory factory) {
+    public CompositeGeom(CoordsArray[] coordsArray, WaveCurveOrbitGeomFactory factory) {
         super(coordsArray, factory);
        
     }

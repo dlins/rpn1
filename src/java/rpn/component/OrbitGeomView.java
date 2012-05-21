@@ -18,8 +18,7 @@ import wave.util.RealVector;
 public class OrbitGeomView extends PolyLine {
 
     private ArrayList arrowList_;
-
-     private OrbitPoint[] points_;
+    private OrbitPoint[] points_;
     private final static int ARROWS_STEP = 10;
     private final static int SCALE = 150;
 
@@ -30,7 +29,10 @@ public class OrbitGeomView extends PolyLine {
 
     }
 
+    @Override
     public Shape createShape() {
+
+        arrowList_= new ArrayList();
 
         GeneralPath composite = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
 
@@ -65,29 +67,22 @@ public class OrbitGeomView extends PolyLine {
         }
     }
 
-
-
-
-
-   
-
-
-     private void arrowsCalculations() {
+    protected void arrowsCalculations() {
 
         arrowList_ = new ArrayList();
-        System.out.println("Qtd de pontos: " +points_.length);
+        System.out.println("Qtd de pontos: " + points_.length);
 
         for (int i = 0; i < points_.length - 1; i += ARROWS_STEP) {
             Coords2D startPoint = new Coords2D();
             Coords2D endPoint = new Coords2D();
             getViewingTransform().viewPlaneTransform(new CoordsArray(points_[i]),
                     startPoint);
-            getViewingTransform().viewPlaneTransform(new CoordsArray(points_[i +
-                    1]), endPoint);
+            getViewingTransform().viewPlaneTransform(new CoordsArray(points_[i
+                    + 1]), endPoint);
             endPoint.sub(startPoint);
-            if (endPoint.norm() >
-                    (getViewingTransform().viewPlane().getViewport().getWidth() /
-                    SCALE)) {
+            if (endPoint.norm()
+                    > (getViewingTransform().viewPlane().getViewport().getWidth()
+                    / SCALE)) {
 
                 Coords2D direction_dc = new Coords2D();
                 Coords2D start_dc = new Coords2D();
@@ -111,9 +106,5 @@ public class OrbitGeomView extends PolyLine {
                 arrowList_.add(arrow);
             }
         }
-     }
-
-
-
-
+    }
 }

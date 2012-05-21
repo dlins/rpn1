@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.awt.geom.Line2D;
 import rpnumerics.CompositeCurve;
+import rpnumerics.WaveCurveOrbit;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
 import wave.multid.view.ViewingTransform;
@@ -36,7 +37,7 @@ public class CompositeOrbitView extends WaveCurveOrbitGeomView {
         super.draw(g);
         g.setStroke(actualStroke);
 
-        CompositeCurve source = (CompositeCurve) (((RpGeometry) getAbstractGeom()).geomFactory().geomSource());
+        WaveCurveOrbit source = (WaveCurveOrbit) (((RpGeometry) getAbstractGeom()).geomFactory().geomSource());
 
         double h = 0.01;
 

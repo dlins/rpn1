@@ -25,6 +25,7 @@ public class WaveCurveOrbitGeomView extends OrbitGeomView {
 
    
 
+    @Override
     protected void arrowsCalculations() {
 
         arrowList_ = new ArrayList();
