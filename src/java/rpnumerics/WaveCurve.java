@@ -18,6 +18,8 @@ public class  WaveCurve extends WaveCurveOrbit {
         super(concatOrbitPoints(points), family, increase);
         curveTypes_ = curveTypes;
         curvesList_= points;
+
+        System.out.println("Tamanho da wave curve: "+ getPoints().length);
     }
 
 

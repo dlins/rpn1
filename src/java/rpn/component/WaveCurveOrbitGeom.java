@@ -15,11 +15,11 @@ public class WaveCurveOrbitGeom extends OrbitGeom  {
 
     }
 
-//    @Override
-//    public GeomObjView createView(ViewingTransform transf) throws DimMismatchEx {
-//        return new WaveCurveOrbitGeomView(this, transf,viewingAttr());
-//
-//    }
+    @Override
+    public GeomObjView createView(ViewingTransform transf) throws DimMismatchEx {
+        return new WaveCurveOrbitGeomView(this, transf,viewingAttr());
+
+    }
 
 
    

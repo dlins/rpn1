@@ -57,6 +57,8 @@ public class OrbitGeomView extends PolyLine {
 
     public void draw(Graphics2D g) {
 
+
+
         g.setColor(getViewingAttr().getColor());
 
         super.draw(g);
