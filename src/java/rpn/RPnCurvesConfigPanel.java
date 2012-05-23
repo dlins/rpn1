@@ -69,7 +69,7 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
         forwardCheckBox_ = new JRadioButton("Forward");
         forwardCheckBox_.setSelected(true);//Default 
 
-        forwardCheckBox_.setEnabled(false);
+        forwardCheckBox_.setEnabled(true);
 
         forwardCheckBox_.addActionListener(new OrbitDirectionListener());
         forwardCheckBox_.setText("Forward");
@@ -77,7 +77,7 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
         backwardCheckBox_ = new JRadioButton("Backward");
 
 
-        backwardCheckBox_.setEnabled(false);
+        backwardCheckBox_.setEnabled(true);
         backwardCheckBox_.addActionListener(new OrbitDirectionListener());
 
         backwardCheckBox_.setText("Backward");
@@ -131,8 +131,8 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
 
 
             if (evt.getPropertyName().equals("direction")) {
-                forwardCheckBox_.setEnabled(false);
-                backwardCheckBox_.setEnabled(false);
+                forwardCheckBox_.setEnabled(true);
+                backwardCheckBox_.setEnabled(true);
 
             }
 

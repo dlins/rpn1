@@ -51,7 +51,7 @@
 
 
     <CURVE name="hugoniotcurve">
-        <CURVEPARAM name="resolution" value="128 128"/>
+        <CURVEPARAM name="resolution" value="20 20"/>
     </CURVE>
 
     <CURVE name="ellipticboundary">
@@ -125,8 +125,8 @@
 
         <PROJDESC name="Axis0 Axis1">
             <VIEWPARAM name="axis" value="0 1"/>
-            <VIEWPARAM name="vpwidth" value="450"/>
-            <VIEWPARAM name="vpheight" value="450"/>
+            <VIEWPARAM name="vpwidth" value="700"/>
+            <VIEWPARAM name="vpheight" value="700"/>
             <VIEWPARAM name="iso2equi" value="true"/>
         </PROJDESC>
 

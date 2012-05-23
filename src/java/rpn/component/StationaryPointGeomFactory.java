@@ -23,6 +23,7 @@ public class StationaryPointGeomFactory extends RpCalcBasedGeomFactory {
     protected RpGeometry createGeomFromSource() {
         StationaryPoint point = (StationaryPoint) geomSource();
         CoordsArray coords = new CoordsArray(point.getPoint().getCoords());
+        System.out.println("Vai chamar o CTR de StationaryPointGeom a partir de createGeomFromSource de StationaryPointGeomFactory");
         return new StationaryPointGeom(coords, this);
     }
 
@@ -31,7 +32,7 @@ public class StationaryPointGeomFactory extends RpCalcBasedGeomFactory {
         StringBuffer str = new StringBuffer();
 
         //TODO Insert plugin name
-        str.append("<STATPOINTCALC coordinates=\"" + ((StationaryPointCalc) rpCalc()).getInitPoint() + "\"" + " calcready=\"" + rpn.parser.RPnDataModule.RESULTS + "\"" + " methodname=\"" + ((StationaryPointCalc) rpCalc()).getCalcMethodName() + "\"" + ">\n");
+//        str.append("<STATPOINTCALC coordinates=\"" + ((StationaryPointCalc) rpCalc()).getInitPoint() + "\"" + " calcready=\"" + rpn.parser.RPnDataModule.RESULTS + "\"" + " methodname=\"" + ((StationaryPointCalc) rpCalc()).getCalcMethodName() + "\"" + ">\n");
         str.append(((StationaryPoint) geomSource()).toXML(rpn.parser.RPnDataModule.RESULTS));
         str.append("</STATPOINTCALC>\n");
         return str.toString();

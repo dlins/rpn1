@@ -44,6 +44,9 @@ public class ProfileSetupReadyImpl extends PoincareReadyImpl
     //
     public void plot(RPnPhaseSpaceAbstraction phaseSpace, RpGeometry geom) {
         super.plot(phaseSpace, geom);
+
+        System.out.println("Esta no plot de ProfileSetupReadyImpl *************************************");
+
         if (geom.geomFactory().geomSource() instanceof ConnectionOrbit)
                 phaseSpace.changeState(
                     new ProfileReadyImpl(hugoniotGeom(), xzeroGeom(), ((POINCARE_READY)phaseSpace.state()).poincareGeom(),

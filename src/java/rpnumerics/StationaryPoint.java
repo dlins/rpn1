@@ -22,7 +22,6 @@ package rpnumerics;
 //        schurFormP   Schur form with positive real part eigenvalues first
 //        schurVecN    corresponding transformation matrix
 //
-import wave.util.*;
 import wave.util.RealVector;
 import wave.util.RealMatrix2;
 
@@ -58,22 +57,13 @@ public class StationaryPoint extends PhasePoint implements RpSolution {
         integrationFlag_ = copy.getIntegrationFlag();
     }
 
-    public StationaryPoint(PhasePoint point, double[] eigenValR, double[] eigenValI, RealVector[] eigenVec, int DimP,
-        RealMatrix2 schurFormP, RealMatrix2 schurVecP, int DimN, RealMatrix2 schurFormN,
-        RealMatrix2 schurVecN, int integrationFlag) {
+    public StationaryPoint(PhasePoint point, double[] eigenValR, double[] eigenValI, RealVector[] eigenVec ) {
             super(point);
             eigenValR_ = eigenValR;
             eigenValI_ = eigenValI;
             eigenVec_ = eigenVec;
-            DimP_ = DimP;
-            schurFormP_ = schurFormP;
-            schurVecP_ = schurVecP;
-            DimN_ = DimN;
-            schurFormN_ = schurFormN;
-            schurVecN_ = schurVecN;
-            integrationFlag_ = integrationFlag;
+           
     }
-
     //
     // Accessors/Mutators
     //

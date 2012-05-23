@@ -8,6 +8,7 @@ package rpn.component;
 
 import rpn.controller.RpController;
 import rpn.controller.XZeroController;
+import rpn.usecase.OrbitPlotAgent;
 import rpnumerics.StationaryPointCalc;
 import rpnumerics.StationaryPoint;
 import wave.multid.CoordsArray;
@@ -21,6 +22,7 @@ public class XZeroGeomFactory extends StationaryPointGeomFactory {
     //
     public XZeroGeomFactory(StationaryPointCalc calc) {
         super(calc);
+        OrbitPlotAgent.instance().setEnabled(true);
     }
 
     @Override

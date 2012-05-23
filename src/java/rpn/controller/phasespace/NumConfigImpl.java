@@ -23,7 +23,7 @@ public class NumConfigImpl implements NUMCONFIG {
     public NumConfigImpl() {
     }
 
-    public NumConfigImpl(HugoniotCurveGeom hugoniotGeom) {
+    public NumConfigImpl(HugoniotCurveGeom hugoniotGeom) {      //*** Parece que nao entra aqui...
         hugoniotGeom_ = hugoniotGeom;
     }
 
@@ -39,10 +39,15 @@ public class NumConfigImpl implements NUMCONFIG {
         phaseSpace.join(geom);
 
         // TODO maybe we could have xzero part of hugoniot geom ?
-        if (geom instanceof XZeroGeom)
+        if (geom instanceof XZeroGeom) {      //************************************************ Mas quando isso é verdade?
+            System.out.println("Finalmente validou o XZeroGeom ***************************************************");
             phaseSpace.changeState(new NumConfigReadyImpl(hugoniotGeom_, (XZeroGeom)geom));
+        }
+
+        
         if (geom instanceof HugoniotCurveGeom)
             hugoniotGeom_ = (HugoniotCurveGeom)geom;
+
     }
 
     public void delete(RPnPhaseSpaceAbstraction phaseSpace, RpGeometry geom) {

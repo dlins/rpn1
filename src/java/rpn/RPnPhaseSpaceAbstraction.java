@@ -5,7 +5,6 @@
  */
 package rpn;
 
-import rpn.controller.RpController;
 import rpn.controller.phasespace.*;
 import wave.multid.model.AbstractScene;
 import wave.multid.Space;
@@ -20,7 +19,6 @@ import rpn.usecase.VelocityAgent;
 import rpn.controller.RpCalcController;
 import rpn.controller.ui.UIController;
 import rpn.parser.RPnDataModule;
-import rpn.usecase.ChangeFluxParamsAgent;
 import wave.multid.model.MultiGeometry;
 import wave.multid.model.MultiPolyLine;
 import wave.util.RealVector;
@@ -179,6 +177,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         int k = 0;
         Iterator<RpGeometry> geomList = null ;
 
+
         //--------------------------
         if (namePhaseSpace.equals("Phase Space"))      geomList = RPnDataModule.PHASESPACE.getGeomObjIterator();
         if (namePhaseSpace.equals("RightPhase Space")) geomList = RPnDataModule.RIGHTPHASESPACE.getGeomObjIterator();
@@ -194,7 +193,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
                             || (namePhaseSpace.equals("RightPhase Space")  &&  geom != RPnDataModule.RIGHTPHASESPACE.getLastGeometry())
                             || (namePhaseSpace.equals("LeftPhase Space")  &&  geom != RPnDataModule.LEFTPHASESPACE.getLastGeometry())) {
 
-                        if (geom.viewingAttr().isVisible()) {
+                        if (geom.viewingAttr().isVisible()  &&  (geom instanceof SegmentedCurveGeom  ||  geom instanceof OrbitGeom)) {
 
                             RpGeomFactory factory = geom.geomFactory();
                             RPnCurve curve = (RPnCurve) factory.geomSource();
@@ -216,21 +215,21 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
 
                 if (GeometryGraphND.onCurve == 0) {
 
-                    if (geom.viewingAttr().isVisible()) {
+                    if (geom.viewingAttr().isVisible()  &&  (geom instanceof SegmentedCurveGeom  ||  geom instanceof OrbitGeom)) {
 
                         RpGeomFactory factory = geom.geomFactory();
                         RPnCurve curve = (RPnCurve) factory.geomSource();
 
-                        if (curve instanceof SegmentedCurve) {
-                            RpCalcBasedGeomFactory geomFactory = (RpCalcBasedGeomFactory) factory;
-                            RpCalculation calc = geomFactory.rpCalc();
-                            ContourCurveCalc curveCalc = (ContourCurveCalc) calc;
-                            listResolution.add(curveCalc.getParams().getResolution());
-
-                        } else {
-                            int[] resolution = {1, 1};
-                            listResolution.add(resolution);
-                        }
+//                        if (curve instanceof SegmentedCurve) {
+//                            RpCalcBasedGeomFactory geomFactory = (RpCalcBasedGeomFactory) factory;
+//                            RpCalculation calc = geomFactory.rpCalc();
+//                            ContourCurveCalc curveCalc = (ContourCurveCalc) calc;
+//                            listResolution.add(curveCalc.getParams().getResolution());
+//
+//                        } else {
+//                            int[] resolution = {1, 1};
+//                            listResolution.add(resolution);
+//                        }
 
                         curve.findClosestSegment(targetPoint);   //***
 

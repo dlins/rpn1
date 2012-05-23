@@ -27,6 +27,7 @@ public class NumConfigReadyImpl extends NumConfigImpl
     //
     public NumConfigReadyImpl(HugoniotCurveGeom hugoniotGeom, XZeroGeom geom) {
         super(hugoniotGeom);
+        System.out.println("//*** Construtor de NumConfigReadyImpl ***********");
         xzeroGeom_ = geom;
         // ENABLED
         OrbitPlotAgent.instance().setEnabled(true);
@@ -58,7 +59,12 @@ public class NumConfigReadyImpl extends NumConfigImpl
     @Override
     public void plot(RPnPhaseSpaceAbstraction phaseSpace, RpGeometry geom) { 
         super.plot(phaseSpace, geom);
-        if (geom instanceof PoincareSectionGeom)
+        if (geom instanceof PoincareSectionGeom) {
+            System.out.println("Testando se geom instanceof PoincareSectionGeom ... ");
             phaseSpace.changeState(new PoincareReadyImpl(hugoniotGeom(), xzeroGeom(), (PoincareSectionGeom)geom));
+        }
+            //phaseSpace.changeState(new PoincareReadyImpl(hugoniotGeom(), xzeroGeom(), (PoincareSectionGeom)geom));
+
+        System.out.println("Saiu do plot de NumConfigReadyImpl");
     }
 }

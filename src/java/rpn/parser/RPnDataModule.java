@@ -633,7 +633,7 @@ public class RPnDataModule {
 
             } else {
                 Orbit orbit = (Orbit) curve;
-                writer.write(orbit.createPoint3DMatlabPlot(entry.getKey()));
+//                writer.write(orbit.createPoint3DMatlabPlot(entry.getKey()));
             }
         }
 
@@ -669,20 +669,20 @@ public class RPnDataModule {
                 writer.write(SegmentedCurve.createSegmentedMatlabPlotLoop(1, 2, entry.getKey()));
 
             } else {
-                Orbit orbit = (Orbit) curve;
+//                Orbit orbit = (Orbit) curve;
+////                writer.write("figure(2)\n");
+////                writer.write(orbit.create2DPointMatlabPlot(0, 1, entry.getKey()));
+////                writer.write("figure(4)\n");
+////                writer.write("figure(3)\n");
+////                writer.write(orbit.create2DPointMatlabPlot(0, 2, entry.getKey()));
+////                writer.write(orbit.create2DPointMatlabPlot(1, 2, entry.getKey()));
+//
 //                writer.write("figure(2)\n");
-//                writer.write(orbit.create2DPointMatlabPlot(0, 1, entry.getKey()));
-//                writer.write("figure(4)\n");
+//                writer.write(orbit.create2DPointMatlabPlot(1, 0, entry.getKey()));
 //                writer.write("figure(3)\n");
-//                writer.write(orbit.create2DPointMatlabPlot(0, 2, entry.getKey()));
+//                writer.write(orbit.create2DPointMatlabPlot(2, 0, entry.getKey()));
+//                writer.write("figure(4)\n");
 //                writer.write(orbit.create2DPointMatlabPlot(1, 2, entry.getKey()));
-
-                writer.write("figure(2)\n");
-                writer.write(orbit.create2DPointMatlabPlot(1, 0, entry.getKey()));
-                writer.write("figure(3)\n");
-                writer.write(orbit.create2DPointMatlabPlot(2, 0, entry.getKey()));
-                writer.write("figure(4)\n");
-                writer.write(orbit.create2DPointMatlabPlot(1, 2, entry.getKey()));
 
             }
 

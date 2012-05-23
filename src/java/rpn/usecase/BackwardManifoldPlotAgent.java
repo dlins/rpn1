@@ -8,6 +8,8 @@ package rpn.usecase;
 import javax.swing.JToggleButton;
 import rpn.RPnConfig;
 import rpn.component.*;
+import rpnumerics.PhasePoint;
+import rpnumerics.RPNUMERICS;
 import rpnumerics.StationaryPoint;
 import wave.util.RealVector;
 
@@ -30,11 +32,18 @@ public class BackwardManifoldPlotAgent extends RpModelPlotAgent {
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {
+
+        System.out.println("Entrou no createRpGeometry de BackwardManifoldPlotAgent ...");
+
         RealVector lastPointAdded = input[input.length - 1];
         StationaryPoint statPoint = (StationaryPoint) rpn.parser.RPnDataModule.PHASESPACE.find(lastPointAdded).geomFactory().geomSource();
+
+        //*** comentado no codigo original
 //        ManifoldGeomFactory factory = new ManifoldGeomFactory(RPNUMERICS.createManifoldCalc(statPoint, new PhasePoint(lastPointAdded), OrbitGeom.BACKWARD_DIR));
 //            new ManifoldOrbitCalc(statPoint, new PhasePoint(lastPointAdded), OrbitGeom.BACKWARD_DIR));
 //        return factory.geom();
+        //*********
+
         return null;
     }
 

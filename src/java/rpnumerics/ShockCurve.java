@@ -8,8 +8,14 @@ package rpnumerics;
 
 public class ShockCurve extends Orbit implements RpSolution {
 
-    public ShockCurve(OrbitPoint[] points, int family, int increase) {
-        super(points, family, increase);
+    private int familyIndex_;
 
+    public ShockCurve(OrbitPoint[] points, int family, int increase) {
+        super(points, increase);
+        familyIndex_ = family;
+    }
+
+    public int getFamilyIndex() {
+        return familyIndex_;
     }
 }

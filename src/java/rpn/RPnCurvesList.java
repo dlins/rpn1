@@ -25,6 +25,7 @@ import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableModel;
 import rpn.component.BifurcationCurveGeom;
 import rpn.component.RpCalcBasedGeomFactory;
+import rpn.component.RpGeomFactory;
 import rpn.component.RpGeometry;
 import rpn.usecase.VelocityAgent;
 import rpn.controller.ui.UIController;
@@ -129,41 +130,104 @@ public class RPnCurvesList extends JFrame implements ActionListener {
 
     }
 
+
+    //*** metodo original
+//    public void addGeometry(RpGeometry geometry) {
+//
+//        RealVector userInput = new RealVector(2);
+//
+//        RpCalcBasedGeomFactory factory = (RpCalcBasedGeomFactory) geometry.geomFactory();
+//
+//        String geometryName = factory.geomSource().getClass().getSimpleName();
+//
+//
+//        RpCalculation calc = factory.rpCalc();
+//
+//
+//        if (calc instanceof HugoniotCurveCalcND) {
+//            HugoniotCurve curve = (HugoniotCurve) factory.geomSource();
+//            userInput = curve.getXZero().getCoords();
+//        }
+//
+//
+//        if (calc instanceof PointLevelCalc) {
+//            PointLevelCalc hCalc = (PointLevelCalc) calc;
+//            userInput = hCalc.getStartPoint();
+//        }
+//
+//        if (calc instanceof OrbitCalc) {
+//            OrbitCalc orbitCalc = (OrbitCalc) calc;
+//            userInput = orbitCalc.getStart();
+//
+//        }
+//
+//
+//        if (calc instanceof RarefactionExtensionCalc) {
+//            RarefactionExtensionCalc rarCalc = (RarefactionExtensionCalc) calc;
+//            userInput = rarCalc.getStart();
+//        }
+//
+//
+//        Vector<Object> data = new Vector<Object>();
+//
+//        NumberFormat formatter = NumberFormat.getInstance();
+//        formatter.setMaximumFractionDigits(4);
+//        data.add(true);
+//        data.add(geometryName);
+//        String userInputString = "";
+//        for (int i = 0; i < userInput.getSize(); i++) {
+//            userInputString = userInputString.concat(formatter.format(userInput.getElement(i)) + " ");
+//
+//        }
+//
+//        data.add(userInputString);
+//        data.add(geometry.viewingAttr().isVisible());
+//
+//        tableModel_.addRow(data);
+//
+//    }
+
+
+    //**** alteracao do metodo original para testar (Leandro)
     public void addGeometry(RpGeometry geometry) {
 
         RealVector userInput = new RealVector(2);
+        String geometryName = "Poincare";
 
 
-        RpCalcBasedGeomFactory factory = (RpCalcBasedGeomFactory) geometry.geomFactory();
+        if (geometry.geomFactory() instanceof RpCalcBasedGeomFactory) {
+            RpCalcBasedGeomFactory factory = (RpCalcBasedGeomFactory) geometry.geomFactory();
 
-        String geometryName = factory.geomSource().getClass().getSimpleName();
-
-
-        RpCalculation calc = factory.rpCalc();
+            geometryName = factory.geomSource().getClass().getSimpleName();
 
 
-        if (calc instanceof HugoniotCurveCalcND) {
-            HugoniotCurve curve = (HugoniotCurve) factory.geomSource();
-            userInput = curve.getXZero().getCoords();
+            RpCalculation calc = factory.rpCalc();
+
+
+            if (calc instanceof HugoniotCurveCalcND) {
+                HugoniotCurve curve = (HugoniotCurve) factory.geomSource();
+                userInput = curve.getXZero().getCoords();
+            }
+
+
+            if (calc instanceof PointLevelCalc) {
+                PointLevelCalc hCalc = (PointLevelCalc) calc;
+                userInput = hCalc.getStartPoint();
+            }
+
+            if (calc instanceof OrbitCalc) {
+                OrbitCalc orbitCalc = (OrbitCalc) calc;
+                userInput = orbitCalc.getStart();
+
+            }
+
+
+            if (calc instanceof RarefactionExtensionCalc) {
+                RarefactionExtensionCalc rarCalc = (RarefactionExtensionCalc) calc;
+                userInput = rarCalc.getStart();
+            }
         }
 
-
-        if (calc instanceof PointLevelCalc) {
-            PointLevelCalc hCalc = (PointLevelCalc) calc;
-            userInput = hCalc.getStartPoint();
-        }
-
-        if (calc instanceof OrbitCalc) {
-            OrbitCalc orbitCalc = (OrbitCalc) calc;
-            userInput = orbitCalc.getStart();
-
-        }
-
-
-        if (calc instanceof RarefactionExtensionCalc) {
-            RarefactionExtensionCalc rarCalc = (RarefactionExtensionCalc) calc;
-            userInput = rarCalc.getStart();
-        }
 
 
         Vector<Object> data = new Vector<Object>();
@@ -184,6 +248,8 @@ public class RPnCurvesList extends JFrame implements ActionListener {
         tableModel_.addRow(data);
 
     }
+
+    //**************************************************************************
 
     public void clear() {
         int rowNumber = tableModel_.getRowCount();
@@ -265,14 +331,35 @@ public class RPnCurvesList extends JFrame implements ActionListener {
 
     }
 
+
+    //*** metodo original
     public void update() {
         clear();
         Iterator iterator = phaseSpace_.getGeomObjIterator();
         while (iterator.hasNext()) {
             addGeometry((RpGeometry) iterator.next());
         }
-
     }
+    //*******************
+
+
+
+    //*** alteracao do metodo original para testar (Leandro)
+//    public void update() {
+//        clear();
+//        Iterator iterator = phaseSpace_.getGeomObjIterator();
+//        while (iterator.hasNext()) {
+//
+//            RpGeometry geom = (RpGeometry) iterator.next();
+//
+//            if (geom.geomFactory() instanceof RpCalcBasedGeomFactory)
+//            addGeometry(geom);
+//
+//        }
+//    }
+    //*******************************************************
+
+
 
     private void setGeometryVisible(boolean visible) {
         int index = 0;

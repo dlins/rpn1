@@ -255,21 +255,46 @@ int ContourMethod::contour2d(ImplicitFunction *impf, std::vector<RealVector> &vr
 
                         //STORE ALL PAIRS OF EDGES THAT WERE FOUND
                         if (nedges_ > 0) {
-                           for (nedg = 0; nedg < nedges_; nedg++) {
+                           if (edges_[1*dime_ + 1] == 3 && nedges_ == 2) {
+                                   // Store the segments by points...
+                                   //
+                                   RealVector ptemp(2);
 
-                               // Store the segments
-                               RealVector p1(2), p2(2);
-                               p1.component(0) = sol_[0*dims_ + edges_[0*dime_ + nedg ]]; //printf("1\n");
-                               p1.component(1) = sol_[1*dims_ + edges_[0*dime_ + nedg ]]; //printf("2\n");
+                                   // first, on edge comprising vertices 0, 1
+                                   ptemp.component(0) = sol_[0*dims_ + edges_[0*dime_ + 0]];
+                                   ptemp.component(1) = sol_[1*dims_ + edges_[0*dime_ + 0]];
+                                   vrs.push_back(ptemp);
 
-// TODO: Pablo comentou a seguinte linha em 11 Janeiro 2012
-//                               if (edges_[1*dime_ + nedg ] < 0) return 0;
-                               p2.component(0) = sol_[0*dims_ + edges_[1*dime_ + nedg ]]; //printf("3\n");
-                               p2.component(1) = sol_[1*dims_ + edges_[1*dime_ + nedg ]]; //printf("4\n");
+                                   // second, on edge comprising vertices 2, 3
+                                   ptemp.component(0) = sol_[0*dims_ + edges_[1*dime_ + 1]];
+                                   ptemp.component(1) = sol_[1*dims_ + edges_[1*dime_ + 1]];
+                                   vrs.push_back(ptemp);
 
-                               vrs.push_back(p1);
-                               vrs.push_back(p2);
+                                   // third, on edge comprising vertices 1, 3
+                                   ptemp.component(0) = sol_[0*dims_ + edges_[1*dime_ + 0]];
+                                   ptemp.component(1) = sol_[1*dims_ + edges_[1*dime_ + 0]];
+                                   vrs.push_back(ptemp);
 
+                                   // fourth, on edge comprising vertices 0, 2
+                                   ptemp.component(0) = sol_[0*dims_ + edges_[0*dime_ + 1]];
+                                   ptemp.component(1) = sol_[1*dims_ + edges_[0*dime_ + 1]];
+                                   vrs.push_back(ptemp);
+                           } else {
+                               for (nedg = 0; nedg < nedges_; nedg++) {
+
+                                   // Store the segments
+                                   RealVector p1(2), p2(2);
+                                   p1.component(0) = sol_[0*dims_ + edges_[0*dime_ + nedg ]];
+                                   p1.component(1) = sol_[1*dims_ + edges_[0*dime_ + nedg ]];
+
+                                   // TODO: Pablo comentou a seguinte linha em 11 Janeiro 2012
+                                   //       if (edges_[1*dime_ + nedg ] < 0) return 0;
+                                   p2.component(0) = sol_[0*dims_ + edges_[1*dime_ + nedg ]];
+                                   p2.component(1) = sol_[1*dims_ + edges_[1*dime_ + nedg ]];
+
+                                   vrs.push_back(p1);
+                                   vrs.push_back(p2);
+                                }
                             }
                         }
                     }

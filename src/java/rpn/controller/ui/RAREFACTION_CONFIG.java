@@ -14,6 +14,7 @@ import rpn.usecase.EllipticBoundaryAgent;
 import rpn.usecase.HugoniotPlotAgent;
 import rpn.usecase.IntegralCurvePlotAgent;
 import rpn.usecase.LevelCurvePlotAgent;
+import rpn.usecase.PhysicalBoundaryPlotAgent;
 import rpn.usecase.PointLevelCurvePlotAgent;
 import rpn.usecase.RarefactionExtensionCurvePlotAgent;
 import rpn.usecase.RarefactionOrbitPlotAgent;
@@ -39,6 +40,7 @@ public class RAREFACTION_CONFIG extends UI_ACTION_SELECTED {
         LevelCurvePlotAgent.instance().setEnabled(true);
         ChangeOrbitLevel.instance().setEnabled(true);
         EllipticBoundaryAgent.instance().setEnabled(true);
+        PhysicalBoundaryPlotAgent.instance().setEnabled(true);
 
        
 

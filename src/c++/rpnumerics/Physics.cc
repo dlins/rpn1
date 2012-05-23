@@ -17,8 +17,8 @@ void Physics::setParams(vector<string> paramVector) {
 
     GridValues * grid = getGrid(0);
 
-    grid->functions_on_grid_computed=false;
-    grid->Jacobians_on_grid_computed=false;
+    grid->functions_on_grid_computed = false;
+    grid->Jacobians_on_grid_computed = false;
     grid->e_computed = false;
     grid->dd_computed = false;
 
@@ -27,8 +27,7 @@ void Physics::setParams(vector<string> paramVector) {
 
 }
 
-
-void Physics::setGrid(int subPhysicsIndex,const RealVector & min, const RealVector & max,const vector<int> newResolution){
+void Physics::setGrid(int subPhysicsIndex, const RealVector & min, const RealVector & max, const vector<int> newResolution) {
 
 
     GridValues * grid = getGrid(subPhysicsIndex);
@@ -37,7 +36,7 @@ void Physics::setGrid(int subPhysicsIndex,const RealVector & min, const RealVect
 
     const Boundary & boundary = subPhysics->boundary();
 
-    grid->set_grid(&boundary,min,max,newResolution);
+    grid->set_grid(&boundary, min, max, newResolution);
 
 
 }
@@ -226,6 +225,13 @@ void Physics::boundary(const Boundary & boundary) {
 
     delete boundary_;
     boundary_ = boundary.clone();
+
+    std::vector<int> noc(2);
+    noc[0] = 128;
+    noc[1] = 128;
+
+
+    gridArray_->at(0)->set_grid(&boundary, boundary.minimums(), boundary.maximums(), noc);
 }
 
 const Boundary & Physics::boundary() const {

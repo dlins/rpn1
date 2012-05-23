@@ -77,11 +77,14 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_IntegralCurveCalc_calc(JNIEnv * env, j
 
     Boundary * tempBoundary = RpNumerics::getPhysics().boundary().clone();
 
-    double deltaxi = 1e-4;
+    double deltaxi = 1e-3;
 
 
     const FluxFunction * fluxFunction = &RpNumerics::getPhysics().fluxFunction();
     const AccumulationFunction * accumulationFunction = &RpNumerics::getPhysics().accumulation();
+
+    cout << "Flux params " << fluxFunction->fluxParams().params() << endl;
+    cout << "Accum params " << accumulationFunction->accumulationParams().params() << endl;
 
     Integral_Curve iCurve(fluxFunction, accumulationFunction, tempBoundary);
 
@@ -111,8 +114,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_IntegralCurveCalc_calc(JNIEnv * env, j
 
         jobject inflectionPoint = env->NewObject(realVectorClass, realVectorConstructorID, dimension);
 
-
+        cout << "Ponto de inflexao: " << inflectionPoints[i] << endl;
         for (int j = 0; j < dimension; j++) {
+
 
             env->CallVoidMethod(inflectionPoint, setElementMethodID, j, inflectionPoints[i].component(j));
 

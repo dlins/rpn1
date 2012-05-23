@@ -180,27 +180,27 @@ public class RPnVisualizationModule {
             Boolean iso = new Boolean(iso2equi);
 
             // *** Leandro
-            if (RPNUMERICS.physicsID().equals("Stone")) {
-            Object[] options = {"Iso", "Equi"};
-            GeometryGraphND.mapToEqui = JOptionPane.showOptionDialog(new JFrame(),
-                    "Choose the view: ",
-                    "Triangular domain:",
-                    JOptionPane.YES_NO_CANCEL_OPTION,
-                    JOptionPane.QUESTION_MESSAGE,
-                    null,
-                    options,
-                    options[1]);
-
-                if (GeometryGraphND.mapToEqui == 0) {
-                    iso = false;
-                }
-
-            }
+//            if (RPNUMERICS.physicsID().equals("Stone")) {
+//            Object[] options = {"Iso", "Equi"};
+//            GeometryGraphND.mapToEqui = JOptionPane.showOptionDialog(new JFrame(),
+//                    "Choose the view: ",
+//                    "Triangular domain:",
+//                    JOptionPane.YES_NO_CANCEL_OPTION,
+//                    JOptionPane.QUESTION_MESSAGE,
+//                    null,
+//                    options,
+//                    options[1]);
+//
+//                if (GeometryGraphND.mapToEqui == 0) {
+//                    iso = false;
+//                }
+//
+//            }
             //***
 
             //***
-            //if (iso == false) GeometryGraphND.mapToEqui = 0;
-            //if (iso == true)  GeometryGraphND.mapToEqui = 1;
+            if (iso == false) GeometryGraphND.mapToEqui = 0;
+            if (iso == true)  GeometryGraphND.mapToEqui = 1;
             //***
             
             DESCRIPTORS.add(new RPnProjDescriptor(space, label, w, h, axisArray, iso));

@@ -8,7 +8,10 @@ package rpn.controller.ui;
 import wave.util.RealVector;
 import rpn.usecase.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import rpn.RPnCurvesList;
+import rpn.parser.RPnDataModule;
 
 public class UI_ACTION_SELECTED implements UserInputHandler {
     //
@@ -41,6 +44,16 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
                 }
 
                 UIController.instance().addCommand(new Command(this, tempInputList));
+
+                //************************ acrescentei para testar (Leandro)
+                UIController.instance().setWaitCursor();
+                actionSelected_.execute();
+                UIController.instance().resetCursor();
+                userInputList_.clear();
+                ui.panelsBufferClear();
+                rpn.parser.RPnDataModule.PHASESPACE.unselectAll();
+                //************************************************
+
             }
         }
         else if (UIController.instance().getState() instanceof AREASELECTION_CONFIG) {
@@ -81,6 +94,7 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
     protected boolean isPoincareInputReady() {
       
         if (userInputList_.size() == rpnumerics.RPNUMERICS.domainDim()) {
+            System.out.println("Return true in isPoincareInputReady() !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             return true;
         }
         return false;

@@ -15,87 +15,135 @@ TODO:
 NOTE : 
 
 @ingroup JNI
-*/
+ */
 
 
 #include "rpnumerics_OrbitCalc.h"
+#include "Viscous_Profile.h"
+#include "Rarefaction.h"
+#include "RpNumerics.h"
 #include "JNIDefs.h"
 #include <vector>
 
 using std::vector;
 
-JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_calc  (JNIEnv * env, jobject obj , jobject initialPoint, jint timeDirection){
-    
-    int i=0, orbitPointSize=2;
-    
-    jclass    classOrbitPoint = (env)->FindClass(ORBITPOINT_LOCATION);
-    jclass    classOrbit = (env)->FindClass(ORBIT_LOCATION);
-    
-    jmethodID    orbitPointConstructor_ = (env)->GetMethodID(classOrbitPoint, "<init>", "([D)V");
-    jmethodID    orbitConstructor_ = (env)->GetMethodID(classOrbit, "<init>", "([Lrpnumerics/OrbitPoint;I)V");
+JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_nativeCalc(JNIEnv * env, jobject obj, jobject initialPoint, jobject referencePoint, jdouble sigma, jint timeDirection) {
+
+    jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
+
+    jclass classOrbitPoint = (env)->FindClass(ORBITPOINT_LOCATION);
+    jclass classOrbit = (env)->FindClass(ORBIT_LOCATION);
+    jclass phasePointClass = (env)->FindClass(PHASEPOINT_LOCATION);
+
+    jmethodID orbitPointConstructorID = (env)->GetMethodID(classOrbitPoint, "<init>", "(Lwave/util/RealVector;)V");
+    jmethodID orbitConstructor_ = (env)->GetMethodID(classOrbit, "<init>", "([Lrpnumerics/OrbitPoint;I)V");
     jmethodID toDoubleMethodID = (env)->GetMethodID(classOrbitPoint, "toDouble", "()[D");
-    
-    
+    jmethodID realVectorConstructorDoubleArrayID = env->GetMethodID(realVectorClass, "<init>", "([D)V");
+
+
     //Input processing
-    jdoubleArray phasePointArray =(jdoubleArray) (env)->CallObjectMethod(initialPoint, toDoubleMethodID);
-    
-    double input [env->GetArrayLength(phasePointArray)];
-    
-    env->GetDoubleArrayRegion(phasePointArray, 0, env->GetArrayLength(phasePointArray), input);
-    
-    env->DeleteLocalRef(phasePointArray);
-    //Calculations
-    
-    vector <double *> resultList;
-    double ix=-0.5;
+    //    jdoubleArray phasePointArray =(jdoubleArray) (env)->CallObjectMethod(initialPoint, toDoubleMethodID);
+    //
+    //    double input [env->GetArrayLength(phasePointArray)];
+    //
+    //    env->GetDoubleArrayRegion(phasePointArray, 0, env->GetArrayLength(phasePointArray), input);
+    //
+    //    env->DeleteLocalRef(phasePointArray);
+    //
 
-    while (ix < 0.5){
-        double * coord = new double [2];
-        
-        coord[0]=input[0]+ix;
-        coord[1]=input[1]+ix;
-        resultList.push_back(coord);
-        ix+=0.005;
-    }
-    
+
+    jdoubleArray initialPointArray = (jdoubleArray) (env)->CallObjectMethod(initialPoint, toDoubleMethodID);
+
+
+    jdoubleArray referencePointArray = (jdoubleArray) (env)->CallObjectMethod(referencePoint, toDoubleMethodID);
+
+
+    int dimension = env->GetArrayLength(referencePointArray);
+
+    double equiPointBuffer [dimension];
+
+    env->GetDoubleArrayRegion(initialPointArray, 0, dimension, equiPointBuffer);
+
+    double refPointBuffer [dimension];
+
+    env->GetDoubleArrayRegion(referencePointArray, 0, dimension, refPointBuffer);
+
+    RealVector nativeEquiPoint(dimension, equiPointBuffer);
+
+    RealVector nativeRefPoint(dimension, refPointBuffer);
+
+    const FluxFunction *fluxFunction = &RpNumerics::getPhysics().fluxFunction();
+    const AccumulationFunction * accumFunction = &RpNumerics::getPhysics().accumulation();
+
+    const Boundary * boundary = &RpNumerics::getPhysics().boundary();
+
+    Viscosity_Matrix v;
+
+
+    double deltaxi = 1e-2;
+
+    std::vector<RealVector> coords;
+
+    //TODO Remove
+
+    if (timeDirection==RAREFACTION_SPEED_INCREASE)
+        timeDirection=ORBIT_FORWARD;
+
+    if (timeDirection==RAREFACTION_SPEED_DECREASE)
+        timeDirection=ORBIT_BACKWARD;
+
+    Viscous_Profile::orbit(fluxFunction, accumFunction,
+            &v,
+            boundary,
+            nativeEquiPoint, nativeRefPoint, sigma,
+            deltaxi,
+            timeDirection,
+            coords);
+
+    jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(coords.size(), classOrbitPoint, NULL);
+
+
     //Orbit memebers creation
-    
-    jobjectArray  orbitPointArray  =(jobjectArray) (env)->NewObjectArray(resultList.size(), classOrbitPoint, NULL);
-    
-    for(i=0;i < resultList.size();i++ ){
-        
-        double * dataCoords = (double *)resultList[i];
-        
-        jdoubleArray jTempArray = (env)->NewDoubleArray(2);
-        
-        (env)->SetDoubleArrayRegion(jTempArray, 0, 2, dataCoords);
-        
-        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor_, jTempArray,timeDirection);
-        
-        (env)->SetObjectArrayElement(orbitPointArray, i, orbitPoint);
-        
-        env->DeleteLocalRef(jTempArray);
-        env->DeleteLocalRef(orbitPoint);
-        
-        delete [] dataCoords;
-    }
-    
-   //Building the orbit
+    for (int i = 0; i < coords.size(); i++) {
 
-    
+        RealVector tempVector = coords.at(i);
+
+        double * dataCoords = tempVector;
+
+        //Reading only coodinates
+        jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size());
+
+        (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size(), dataCoords);
+
+        jobject realVectorCoords = env->NewObject(realVectorClass,realVectorConstructorDoubleArrayID,jTempArray);
+
+        //Lambda is the last component.
+        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructorID, realVectorCoords);
+
+        (env)->SetObjectArrayElement(orbitPointArray, i, orbitPoint);
+
+        env->DeleteLocalRef(jTempArray);
+
+        env->DeleteLocalRef(orbitPoint);
+
+    }
+
+    //Building the orbit
+
+
     jobject orbit = (env)->NewObject(classOrbit, orbitConstructor_, orbitPointArray, timeDirection);
 
     //Cleaning up
-    
-    resultList.clear();
-    
+
+
+
     env->DeleteLocalRef(orbitPointArray);
     env->DeleteLocalRef(classOrbitPoint);
     env->DeleteLocalRef(classOrbit);
-    
-    
+
+
     return orbit;
-    
+
 }
 
 //----------------------------------------------------------------Stub------------------------------------------------------------------

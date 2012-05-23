@@ -7,7 +7,7 @@ package rpn.component;
 
 import rpnumerics.*;
 
-public class IntegralOrbitGeomFactory extends OrbitGeomFactory {
+public class IntegralOrbitGeomFactory extends WaveCurveOrbitGeomFactory {
     //
     // Constants
     //
@@ -29,12 +29,15 @@ public class IntegralOrbitGeomFactory extends OrbitGeomFactory {
     //
    
 
-    @Override
+   @Override
     protected RpGeometry createGeomFromSource() {
-        Orbit orbit = (Orbit) geomSource();
 
-        return new IntegralGeom(MultidAdapter.converseOrbitToCoordsArray(orbit), this);
+       IntegralCurve integralCurve = (IntegralCurve) geomSource();
+
+        return new IntegralGeom(MultidAdapter.converseOrbitPointsToCoordsArray(integralCurve.getPoints()), this);
+
     }
+
 
 
     public String toMatlab(int curveIndex) {

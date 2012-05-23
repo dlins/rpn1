@@ -17,7 +17,7 @@ import wave.multid.view.ViewingAttr;
 import wave.util.Arrow;
 import wave.util.RealVector;
 
-public class IntegralOrbitView extends OrbitGeomView {
+public class IntegralOrbitView extends WaveCurveOrbitGeomView {
 
     private List<PointMark> inflectionPointsMark_;
  
@@ -70,8 +70,7 @@ public class IntegralOrbitView extends OrbitGeomView {
 
         List<RealVector> inflectionPoints = source.getInflectionPoints();
         for (RealVector inflectionPoint : inflectionPoints) {
-
-
+        
             CoordsArray pointCoords = new CoordsArray(inflectionPoint);
             ViewingAttr viewAtt = new ViewingAttr(Color.white);
 

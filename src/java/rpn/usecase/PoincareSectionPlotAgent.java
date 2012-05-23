@@ -31,6 +31,8 @@ public class PoincareSectionPlotAgent extends RpModelPlotAgent {
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {
+        System.out.println("Entrou no createRpGeometry do PoincareSectionPlotAgent");
+        System.out.println("O vetor de input é : " +input[0].toString()  +"  ,  " +input[1].toString());
         return new PoincareSectionGeomFactory(new SimplexPoincareSection(input)).geom();
     }
 

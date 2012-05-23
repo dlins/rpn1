@@ -32,7 +32,7 @@ public class ChangeSigmaAgent extends RpModelConfigChangeAgent {
     }
 
     public void execute() {
-
+        System.out.println("Execute de ChangeSigmaAgent");
         Double oldValue = new Double(RPNUMERICS.getShockProfile().getSigma());
         RealVector[] userInputList = UIController.instance().userInputList();
         RealVector lastPointAdded = userInputList[userInputList.length - 1];

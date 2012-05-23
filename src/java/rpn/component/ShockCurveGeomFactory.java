@@ -5,8 +5,9 @@
  */
 package rpn.component;
 
+import java.awt.Color;
 import rpnumerics.*;
-import wave.util.RealVector;
+import wave.multid.view.ViewingAttr;
 
 public class ShockCurveGeomFactory extends OrbitGeomFactory {
     //
@@ -33,6 +34,24 @@ public class ShockCurveGeomFactory extends OrbitGeomFactory {
 
         return new ShockCurveGeom(MultidAdapter.converseOrbitPointsToCoordsArray(shockCurve.getPoints()), this);
     }
+
+
+     @Override
+      protected ViewingAttr selectViewingAttr() {
+        int family = (((ShockCurve) this.geomSource()).getFamilyIndex());
+
+
+        if (family == 1) {
+            return new ViewingAttr(Color.red);
+        }
+        if (family == 0) {
+            return new ViewingAttr(Color.blue);
+        }
+
+
+        return null;
+
+      }
 
 //    public String toXML() {//TODO Implement
 //         StringBuffer str = new StringBuffer();

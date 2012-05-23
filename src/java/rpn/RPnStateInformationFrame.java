@@ -6,6 +6,7 @@
 
 package rpn;
 
+import java.awt.Dimension;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.logging.Level;
@@ -36,6 +37,9 @@ public class RPnStateInformationFrame extends JFrame  {
         infoArea_ = new JTextArea();
         document_ = new PlainDocument();
         getContentPane().add(infoArea_);
+
+        setPreferredSize(new Dimension (400,200));
+        pack();
 
     }
 

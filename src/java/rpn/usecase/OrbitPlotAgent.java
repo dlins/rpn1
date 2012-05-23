@@ -7,6 +7,8 @@ package rpn.usecase;
 
 import javax.swing.JToggleButton;
 import rpn.component.*;
+import rpnumerics.OrbitPoint;
+import rpnumerics.RPNUMERICS;
 import wave.util.RealVector;
 
 public class OrbitPlotAgent extends RpModelPlotAgent {
@@ -28,10 +30,9 @@ public class OrbitPlotAgent extends RpModelPlotAgent {
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {
-//        OrbitPoint oPoint = new OrbitPoint(input[input.length - 1]);
-//        OrbitGeomFactory factory = new OrbitGeomFactory(RPNUMERICS.createOrbitCalc(oPoint));
-        return null;
-//        return factory.geom();
+        OrbitPoint oPoint = new OrbitPoint(input[input.length - 1]);
+        OrbitGeomFactory factory = new OrbitGeomFactory(RPNUMERICS.createOrbitCalc(oPoint));
+        return factory.geom();
     }
 
     static public OrbitPlotAgent instance() {

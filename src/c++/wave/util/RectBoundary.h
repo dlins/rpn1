@@ -62,7 +62,9 @@ public:
 
     const char * boundaryType()const;
 
-      virtual void edge_segments(int where_constant, int number_of_steps, std::vector<RealVector> &seg);
+    virtual void edge_segments(int where_constant, int number_of_steps, std::vector<RealVector> &seg);
+
+    void physical_boundary(std::vector<RealVector> &);
 
 };
 

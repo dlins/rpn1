@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.component.RpGeometry;
-import rpn.component.util.GeometryUtil;
 import rpn.parser.RPnDataModule;
 
 

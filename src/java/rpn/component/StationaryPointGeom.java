@@ -27,6 +27,7 @@ public class StationaryPointGeom extends MultiPoint implements RpGeometry {
     //
     public StationaryPointGeom(CoordsArray source, StationaryPointGeomFactory factory) {
         super(source, VIEWING_ATTR);
+        System.out.println("//*** Construtor de StationaryPointGeom");
         factory_ = factory;
     }
 

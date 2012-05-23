@@ -6,7 +6,7 @@
  */
 package rpnumerics;
 
-public class CompositeCalc extends OrbitCalc  {
+public class CompositeCalc extends WaveCurveOrbitCalc implements RpCalculation  {
     //
     // Constants
     //
@@ -14,14 +14,13 @@ public class CompositeCalc extends OrbitCalc  {
     // Members
     //
 
- 
-    //
     // Constructors/Initializers
     //
   
 
     public CompositeCalc(OrbitPoint point, int familyIndex, int increase) {
-        super(point, familyIndex,increase);
+        super(point,familyIndex,increase);
+
     }
     //
     // Methods

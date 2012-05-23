@@ -9,7 +9,7 @@ import wave.multid.DimMismatchEx;
 import wave.multid.view.ViewingAttr;
 import wave.util.Arrow;
 
-public class RarefactionOrbitView extends OrbitGeomView{
+public class RarefactionOrbitView extends WaveCurveOrbitGeomView{
 
  
 

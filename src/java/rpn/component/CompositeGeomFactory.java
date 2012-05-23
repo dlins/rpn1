@@ -7,13 +7,8 @@ package rpn.component;
 
 import rpnumerics.CompositeCalc;
 import rpnumerics.CompositeCurve;
-import rpnumerics.Orbit;
-import rpnumerics.OrbitCalc;
-import rpnumerics.RarefactionOrbit;
-import rpnumerics.RarefactionOrbitCalc;
-import wave.util.RealVector;
 
-public class CompositeGeomFactory extends OrbitGeomFactory {
+public class CompositeGeomFactory extends WaveCurveOrbitGeomFactory {
     //
     // Constants
     //
@@ -41,9 +36,10 @@ public class CompositeGeomFactory extends OrbitGeomFactory {
         return new CompositeGeom(MultidAdapter.converseOrbitPointsToCoordsArray(compositeCurve.getPoints()), this);
 
 
-
-
     }
+
+
+  
 
 //    public String toXML() {
 //        StringBuffer str = new StringBuffer();

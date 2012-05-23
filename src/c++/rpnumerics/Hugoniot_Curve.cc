@@ -23,7 +23,7 @@ int Hugoniot_Curve::classified_curve(const FluxFunction *f, const AccumulationFu
     }
     
     ColorCurve colorCurve(*f, *a);
-    colorCurve.classify_curve(unclassifiedCurve, r, 2, 11, hugoniot_curve);
+    colorCurve.classify_curve(unclassifiedCurve, r, 2, 10, hugoniot_curve);
 
     return info;
 }
