@@ -11,13 +11,13 @@ import java.util.List;
 public class WaveCurve extends WaveCurveOrbit {
 
     private int[] curveTypes_;
-    private final List<OrbitPoint[]> curvesList_;
+
     private static int[] curvesIndex_;
 
     public WaveCurve(List<OrbitPoint[]> points, int[] curveTypes, int family, int increase) {
         super(concatOrbitPoints(points), family, increase);
         curveTypes_ = curveTypes;
-        curvesList_ = points;
+
 
 
         System.out.println("Tamanho da wave curve: " + getPoints().length);
@@ -27,9 +27,7 @@ public class WaveCurve extends WaveCurveOrbit {
         return curveTypes_;
     }
 
-    public List<OrbitPoint[]> getCurvesList() {
-        return curvesList_;
-    }
+   
 
     private static OrbitPoint[] concatOrbitPoints(List<OrbitPoint[]> pointsList) {
         curvesIndex_ = new int[pointsList.size()];

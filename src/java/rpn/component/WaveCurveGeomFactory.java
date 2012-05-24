@@ -5,13 +5,12 @@
  */
 package rpn.component;
 
-import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import rpnumerics.OrbitPoint;
 import rpnumerics.WaveCurve;
 import rpnumerics.WaveCurveCalc;
-import wave.multid.view.ViewingAttr;
 
 public class WaveCurveGeomFactory extends WaveCurveOrbitGeomFactory {
     //
@@ -35,84 +34,63 @@ public class WaveCurveGeomFactory extends WaveCurveOrbitGeomFactory {
     // Methods
     //
     @Override
-    protected ViewingAttr selectViewingAttr() {
-        return new ViewingAttr(Color.white);
-
-    }
-
-    @Override
     protected RpGeometry createGeomFromSource() {
 
-        return null;
+        WaveCurve waveCurve = (WaveCurve) geomSource();
 
-//        WaveCurve waveCurve = (WaveCurve) geomSource();
-//
-//
-//        List<OrbitPoint[]> curves = waveCurve.getCurvesList();
-//
-//        int orbitBegin = 0;
-//        int orbitEnd;
-//
-//        List<WaveCurveOrbitGeom> waveCurveGeometries = new ArrayList<WaveCurveOrbitGeom>();
-//
-//
-//        int[] curvesType = waveCurve.getCurveTypes();
-//
-//        for (int i = 0; i < curvesType.length; i++) {
-//
-//            orbitEnd = WaveCurve.getCurvesIndex()[i];
-//
-//            System.out.println("inicio: " + orbitBegin + " Fim: " + orbitEnd);
-//            waveCurveGeometries.add(createOrbits(orbitBegin,orbitBegin+orbitEnd, curvesType[i]));
-//
-//            orbitBegin += orbitEnd;
-//
-//        }
-//
-//
-//        return new WaveCurveGeom(MultidAdapter.converseOrbitToCoordsArray(waveCurve), waveCurveGeometries, this);
+        int orbitBegin = 0;
+        int orbitOffSet;
+
+        List<WaveCurveOrbitGeom> waveCurveGeometries = new ArrayList<WaveCurveOrbitGeom>();
+
+
+        int[] curvesType = waveCurve.getCurveTypes();
+
+        for (int i = 0; i < curvesType.length; i++) {
+
+            orbitOffSet = WaveCurve.getCurvesIndex()[i];
+
+            System.out.println("inicio: " + orbitBegin + " Fim: " + orbitOffSet);
+            waveCurveGeometries.add(createOrbits(orbitBegin, orbitBegin + orbitOffSet, curvesType[i]));
+
+            orbitBegin += orbitOffSet;
+
+        }
+
+
+        return new WaveCurveGeom(MultidAdapter.converseOrbitToCoordsArray(waveCurve), waveCurveGeometries, this);
 
     }
 
     private WaveCurveOrbitGeom createOrbits(int beginOfCurve, int endOfCurve, int curveType) {
 
-        OrbitPoint[] orbitPoints = new OrbitPoint[endOfCurve];
-
-        int arrayIndex = 0;
-
         WaveCurve waveCurve = (WaveCurve) geomSource();
-        for (int i = beginOfCurve; i < beginOfCurve+endOfCurve; i++) {
+        OrbitPoint[] original = waveCurve.getPoints();
+        OrbitPoint[] orbitPoints = Arrays.copyOfRange(original, beginOfCurve, endOfCurve);
+
+        switch (curveType) {
+
+            case 1://Rarefaction
+
+                return new RarefactionGeom(MultidAdapter.converseOrbitPointsToCoordsArray(orbitPoints), this);
 
 
-            orbitPoints[arrayIndex] = new OrbitPoint(waveCurve.getPoints()[i]);
+            case 2://Shock
+
+                return new ShockCurveGeom(MultidAdapter.converseOrbitPointsToCoordsArray(orbitPoints), this);
 
 
-            System.out.println(orbitPoints[arrayIndex]);
-            arrayIndex++;
+            case 3://Composite
 
+                return new CompositeGeom(MultidAdapter.converseOrbitPointsToCoordsArray(orbitPoints), this);
+
+
+            default:
+                return null;
         }
 
 
-
-
-        if (curveType == 1) {
-
-            return new RarefactionGeom(MultidAdapter.converseOrbitPointsToCoordsArray(orbitPoints), this);
-        }//Rarefaction
-
-
-        if (curveType == 2) {
-            return new ShockCurveGeom(MultidAdapter.converseOrbitPointsToCoordsArray(orbitPoints), this);
-        }
-
-
-        if (curveType == 3) {
-            return new CompositeGeom(MultidAdapter.converseOrbitPointsToCoordsArray(orbitPoints), this);
-        }
-
-
-        return null;
-
+        
     }
 
     public String toMatlab(int curveIndex) {

@@ -5,9 +5,15 @@ import java.awt.Graphics2D;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import rpnumerics.OrbitPoint;
+import rpnumerics.WaveCurve;
+import rpnumerics.WaveCurveCalc;
+import wave.multid.CoordsArray;
 import wave.multid.model.MultiGeometryImpl;
 import wave.multid.view.ViewingTransform;
 import wave.multid.DimMismatchEx;
+import wave.multid.model.MultiPoint;
+import wave.multid.view.PointMark;
 import wave.multid.view.ViewingAttr;
 
 public class WaveCurveView extends WaveCurveOrbitGeomView {
@@ -51,7 +57,6 @@ public class WaveCurveView extends WaveCurveOrbitGeomView {
 //
 //                }
 //
-
 //
 //            } //        super.draw(g);
 //            catch (DimMismatchEx ex) {
@@ -74,19 +79,40 @@ public class WaveCurveView extends WaveCurveOrbitGeomView {
 
         System.out.println("tamanho da lista: " + orbitGeomList.size());
 
+        WaveCurveGeom waveCurveGeom = ((WaveCurveGeom) getAbstractGeom());
+
+        RpCalcBasedGeomFactory wCurveFactory = (WaveCurveGeomFactory) waveCurveGeom.geomFactory();
+
+        WaveCurveCalc calc = (WaveCurveCalc) wCurveFactory.rpCalc();
+
+        OrbitPoint initialPoint = calc.getStart();
+
+        CoordsArray coordsArray = new CoordsArray(initialPoint);
+
+        ViewingAttr viewAtt = new ViewingAttr(Color.yellow);
+
+
+        MultiPoint mPoint = new MultiPoint(coordsArray, viewAtt);
+
+        PointMark pointMark = null;
+        try {
+            pointMark = new PointMark(mPoint, getViewingTransform(), viewAtt);
+        } catch (DimMismatchEx ex) {
+            ex.printStackTrace();
+        }
+
+
+
+
+
         for (WaveCurveOrbitGeom orbitGeom : orbitGeomList) {
             try {
                 System.out.println(orbitGeom.getClass().getCanonicalName());
 
                 WaveCurveOrbitGeomView orbitView = (WaveCurveOrbitGeomView) orbitGeom.createView(getViewingTransform());
 
-
-
                 if (orbitView instanceof CompositeOrbitView) {
                     CompositeOrbitView teste = (CompositeOrbitView) orbitView;
-
-
-
 
                     teste.setViewingAttr(new ViewingAttr(Color.green));
 
@@ -113,6 +139,9 @@ public class WaveCurveView extends WaveCurveOrbitGeomView {
             }
 
 
+
+
+                    pointMark.draw(g);
 
         }
 
