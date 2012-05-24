@@ -2,15 +2,12 @@ package rpn.component;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Shape;
-import java.awt.geom.GeneralPath;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import wave.multid.model.MultiGeometryImpl;
 import wave.multid.view.ViewingTransform;
 import wave.multid.DimMismatchEx;
-import wave.multid.view.GeomObjView;
 import wave.multid.view.ViewingAttr;
 
 public class WaveCurveView extends WaveCurveOrbitGeomView {
@@ -54,11 +51,7 @@ public class WaveCurveView extends WaveCurveOrbitGeomView {
 //
 //                }
 //
-//
-//
-//
-//
-//
+
 //
 //            } //        super.draw(g);
 //            catch (DimMismatchEx ex) {
@@ -70,12 +63,6 @@ public class WaveCurveView extends WaveCurveOrbitGeomView {
 //        }
 //
 //
-//
-//
-//
-//
-//
-//
 ////        composite.append(super.createShape(), false);
 //
 //        return composite;
@@ -85,24 +72,31 @@ public class WaveCurveView extends WaveCurveOrbitGeomView {
 
         List<WaveCurveOrbitGeom> orbitGeomList = ((WaveCurveGeom) getAbstractGeom()).getOrbitsGeomList();
 
-
-
         System.out.println("tamanho da lista: " + orbitGeomList.size());
 
         for (WaveCurveOrbitGeom orbitGeom : orbitGeomList) {
             try {
                 System.out.println(orbitGeom.getClass().getCanonicalName());
+
                 WaveCurveOrbitGeomView orbitView = (WaveCurveOrbitGeomView) orbitGeom.createView(getViewingTransform());
+
+
 
                 if (orbitView instanceof CompositeOrbitView) {
                     CompositeOrbitView teste = (CompositeOrbitView) orbitView;
+
+
+
+
                     teste.setViewingAttr(new ViewingAttr(Color.green));
+
                     teste.draw(g);
                 }
 
                 if (orbitView instanceof ShockCurveGeomView) {
                     ShockCurveGeomView teste = (ShockCurveGeomView) orbitView;
                     teste.setViewingAttr(new ViewingAttr(Color.blue));
+
                     teste.draw(g);
                 }
 
@@ -112,13 +106,6 @@ public class WaveCurveView extends WaveCurveOrbitGeomView {
                     teste.setViewingAttr(new ViewingAttr(Color.red));
                     teste.draw(g);
                 }
-
-
-//                g.setColor(orbitView.getViewingAttr().getColor());
-//
-//                orbitView.draw(g);
-
-
 
 
             } catch (DimMismatchEx ex) {
