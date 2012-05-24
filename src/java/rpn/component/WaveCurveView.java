@@ -1,5 +1,6 @@
 package rpn.component;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.GeneralPath;
@@ -19,113 +20,114 @@ public class WaveCurveView extends WaveCurveOrbitGeomView {
         super(geom, transf, attr);
     }
 
+//    @Override
+//    public Shape createShape() {
+//
+//        GeneralPath composite = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
+//
+//        List<WaveCurveOrbitGeom> orbitGeomList = ((WaveCurveGeom) getAbstractGeom()).getOrbitsGeomList();
+//
+//        for (WaveCurveOrbitGeom orbitGeom : orbitGeomList) {
+//            try {
+//                GeomObjView orbitView = orbitGeom.createView(getViewingTransform());
+//
+//                System.out.println("Visual: " + orbitView.getClass().getCanonicalName());
+//
+////                WaveCurveOrbitGeomView orbitGeomView = (WaveCurveOrbitGeomView) orbitView;
+//
+//
+//                if (orbitView instanceof CompositeOrbitView) {
+//                    CompositeOrbitView teste = (CompositeOrbitView) orbitView;
+//                    composite.append(teste.createShape(), false);
+//                }
+//
+//                if (orbitView instanceof ShockCurveGeomView) {
+//                    ShockCurveGeomView teste = (ShockCurveGeomView) orbitView;
+//                    composite.append(teste.createShape(), false);
+//                }
+//
+//
+//                if (orbitView instanceof RarefactionOrbitView) {
+//                    RarefactionOrbitView teste = (RarefactionOrbitView) orbitView;
+//
+//                    composite.append(teste.createShape(), false);
+//
+//                }
+//
+//
+//
+//
+//
+//
+//
+//            } //        super.draw(g);
+//            catch (DimMismatchEx ex) {
+//                Logger.getLogger(WaveCurveView.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//
+//
+//
+//        }
+//
+//
+//
+//
+//
+//
+//
+//
+////        composite.append(super.createShape(), false);
+//
+//        return composite;
+//    }
     @Override
-    public Shape createShape() {
-
-        GeneralPath composite = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
+    public void draw(Graphics2D g) {
 
         List<WaveCurveOrbitGeom> orbitGeomList = ((WaveCurveGeom) getAbstractGeom()).getOrbitsGeomList();
 
+
+
+        System.out.println("tamanho da lista: " + orbitGeomList.size());
+
         for (WaveCurveOrbitGeom orbitGeom : orbitGeomList) {
             try {
-                GeomObjView orbitView = orbitGeom.createView(getViewingTransform());
-
-                System.out.println("Visual: " + orbitView.getClass().getCanonicalName());
-
-//                WaveCurveOrbitGeomView orbitGeomView = (WaveCurveOrbitGeomView) orbitView;
-
+                System.out.println(orbitGeom.getClass().getCanonicalName());
+                WaveCurveOrbitGeomView orbitView = (WaveCurveOrbitGeomView) orbitGeom.createView(getViewingTransform());
 
                 if (orbitView instanceof CompositeOrbitView) {
                     CompositeOrbitView teste = (CompositeOrbitView) orbitView;
-                    composite.append(teste.createShape(), false);
+                    teste.setViewingAttr(new ViewingAttr(Color.green));
+                    teste.draw(g);
                 }
 
                 if (orbitView instanceof ShockCurveGeomView) {
                     ShockCurveGeomView teste = (ShockCurveGeomView) orbitView;
-                    composite.append(teste.createShape(), false);
+                    teste.setViewingAttr(new ViewingAttr(Color.blue));
+                    teste.draw(g);
                 }
 
 
                 if (orbitView instanceof RarefactionOrbitView) {
                     RarefactionOrbitView teste = (RarefactionOrbitView) orbitView;
-
-                    composite.append(teste.createShape(), false);
-
+                    teste.setViewingAttr(new ViewingAttr(Color.red));
+                    teste.draw(g);
                 }
 
 
+//                g.setColor(orbitView.getViewingAttr().getColor());
+//
+//                orbitView.draw(g);
 
 
 
 
-
-            } //        super.draw(g);
-            catch (DimMismatchEx ex) {
+            } catch (DimMismatchEx ex) {
                 Logger.getLogger(WaveCurveView.class.getName()).log(Level.SEVERE, null, ex);
             }
 
 
 
         }
-
-
-
-
-
-
-
-
-//        composite.append(super.createShape(), false);
-
-        return composite;
-    }
-
-    @Override
-    public void draw(Graphics2D g) {
-//
-//        List<WaveCurveOrbitGeom> orbitGeomList = ((WaveCurveGeom) getAbstractGeom()).getOrbitsGeomList();
-//
-//
-//
-//        System.out.println("tamanho da lista: " + orbitGeomList.size());
-//
-//        for (WaveCurveOrbitGeom orbitGeom : orbitGeomList) {
-//            try {
-//                System.out.println(orbitGeom.getClass().getCanonicalName());
-//                WaveCurveOrbitGeomView orbitView = (WaveCurveOrbitGeomView) orbitGeom.createView(getViewingTransform());
-//
-//                if (orbitView instanceof CompositeOrbitView) {
-//                    CompositeOrbitView teste = (CompositeOrbitView) orbitView;
-//                    teste.draw(g);
-//                }
-//
-//                if (orbitView instanceof ShockCurveGeomView) {
-//                    ShockCurveGeomView teste = (ShockCurveGeomView) orbitView;
-//                    teste.draw(g);
-//                }
-//
-//
-//                if (orbitView instanceof RarefactionOrbitView) {
-//                    RarefactionOrbitView teste = (RarefactionOrbitView) orbitView;
-//                    teste.draw(g);
-//                }
-//
-//
-////                g.setColor(orbitView.getViewingAttr().getColor());
-////
-////                orbitView.draw(g);
-
-
-
-//          } //
-        super.draw(g);
-//            catch (DimMismatchEx ex) {
-//                Logger.getLogger(WaveCurveView.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-
-
-
-//        }
 
 
 

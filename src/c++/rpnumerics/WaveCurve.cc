@@ -345,11 +345,11 @@ int WaveCurve::wavecurve(const RealVector &init, int family, int increase, std::
     for (int i = 0; i < c.size(); i++) {
 
         std::vector<RealVector> tempVector;
-        for (int k = 0; k < c[i].curve.size(); k++) {
-
-            cout << "Coordenada original: " << c[i].curve[k] << endl;
-
-        }
+//        for (int k = 0; k < c[i].curve.size(); k++) {
+//
+//            cout << "Coordenada original: " << c[i].curve[k] << endl;
+//
+//        }
 
 
 
@@ -364,7 +364,7 @@ int WaveCurve::wavecurve(const RealVector &init, int family, int increase, std::
         for (int j = 0; j < c[i].curve.size(); j++) {
             c[i].curve[j] = tempVector[j];
 
-            cout << "Coordenada invertida: " << c[i].curve[j] << endl;
+//            cout << "Coordenada invertida: " << c[i].curve[j] << endl;
 
         }
 
