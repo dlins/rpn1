@@ -34,6 +34,7 @@ public class PoincareReadyImpl extends NumConfigReadyImpl
         ForwardManifoldPlotAgent.instance().setEnabled(true);
         // DISABLED
         FindProfileAgent.instance().setEnabled(false);                          //só vai ficar habilitado em ProfileSetupReadyImpl
+
     }
     
     //

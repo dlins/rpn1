@@ -45,8 +45,11 @@ public class NumConfigImpl implements NUMCONFIG {
         }
 
         
-        if (geom instanceof HugoniotCurveGeom)
+        if (geom instanceof HugoniotCurveGeom) {
+            System.out.println("plot de HugoniotCurveGeom ********************************************************");
             hugoniotGeom_ = (HugoniotCurveGeom)geom;
+        }
+            //hugoniotGeom_ = (HugoniotCurveGeom)geom;
 
     }
 

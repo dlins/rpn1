@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class WaveCurveOrbitGeomView extends OrbitGeomView {
 
     protected ArrayList arrowList_;
-
+    
     public WaveCurveOrbitGeomView(MultiGeometryImpl geom, ViewingTransform transf,
             ViewingAttr attr) throws DimMismatchEx {
 
@@ -27,8 +27,6 @@ public class WaveCurveOrbitGeomView extends OrbitGeomView {
 
     protected void arrowsCalculations() {
     
-        System.out.println("arrowsCalculations de WaveCurveOrbitGeomView");
-
         arrowList_ = new ArrayList();
 
         Orbit source = (Orbit) (((RpGeometry) getAbstractGeom()).geomFactory().
@@ -40,7 +38,6 @@ public class WaveCurveOrbitGeomView extends OrbitGeomView {
 
             Coords2D direction_dc = new Coords2D();
             Coords2D start_dc = new Coords2D();
-
 
             ArrayList<RealVector> arrowPositions = levelsProcessing(points[i], points[i + 1], new Double(RPNUMERICS.getParamValue("orbit", "level")));
 
@@ -60,14 +57,10 @@ public class WaveCurveOrbitGeomView extends OrbitGeomView {
 
                 RealVector direction = new RealVector(direction_dc.getCoords());
 
-
                 if (direction.norm() != 0.0) {
 
                     double lambda1 = points[i].getLambda();
-
-
                     double lambda2 = points[i + 1].getLambda();
-
 
                     if (lambda1 > lambda2) {
                         direction.negate();
@@ -76,7 +69,7 @@ public class WaveCurveOrbitGeomView extends OrbitGeomView {
 
                     Arrow arrow = new Arrow(arrowStart,
                             direction,
-                            5.0, 5.0);
+                            5.0, 0.1);     //era 5.0, 5.0
                     arrowList_.add(arrow);
 
                 }
@@ -85,12 +78,9 @@ public class WaveCurveOrbitGeomView extends OrbitGeomView {
         }
     }
 
-    private ArrayList<RealVector> levelsProcessing(OrbitPoint firstPoint, OrbitPoint secondPoint, double level) {
-
+    protected ArrayList<RealVector> levelsProcessing(OrbitPoint firstPoint, OrbitPoint secondPoint, double level) {     //*** ou private?
 
         ArrayList<RealVector> arrowPostions = new ArrayList<RealVector>();
-
-
 
         int lp = firstPoint.getSize();
 
