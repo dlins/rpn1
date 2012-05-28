@@ -37,73 +37,73 @@ public class CompositeOrbitView extends WaveCurveOrbitGeomView {
         super.draw(g);
         g.setStroke(actualStroke);
 
-        WaveCurveOrbit source = (WaveCurveOrbit) (((RpGeometry) getAbstractGeom()).geomFactory().geomSource());
-
-        double h = 0.01;
-
-        if (source.getPoints().length > 1) {
-
-            for (int i = 0; i < source.getPoints().length - 1; i++) {
-
-                Coords2D P1DC = new Coords2D();
-                Coords2D P2DC = new Coords2D();
-                RealVector P1WC = new RealVector(source.getPoints()[i]);
-                RealVector P2WC = new RealVector(source.getPoints()[i + 1]);
-
-                double mperp = -(P2WC.getElement(0) - P1WC.getElement(0)) / (P2WC.getElement(1) - P1WC.getElement(1));
-                double h_ = h / Math.sqrt(mperp * mperp + 1);
-
-                double x1 = P1WC.getElement(0) + h_;
-                double y1 = P1WC.getElement(1) + mperp * h_;
-                double x2 = P1WC.getElement(0) - h_;
-                double y2 = P1WC.getElement(1) - mperp * h_;
-
-                RealVector lineP1 = new RealVector(P1WC.getSize());
-                RealVector lineP2 = new RealVector(P1WC.getSize());
-
-                lineP1.setElement(0, x1);
-                lineP1.setElement(1, y1);
-                lineP2.setElement(0, x2);
-                lineP2.setElement(1, y2);
-
-                getViewingTransform().viewPlaneTransform(new CoordsArray(lineP1), P1DC);
-                getViewingTransform().viewPlaneTransform(new CoordsArray(lineP2), P2DC);
-
-                Line2D line1 = new Line2D.Double(P1DC.getElement(0), P1DC.getElement(1), P2DC.getElement(0), P2DC.getElement(1));
-                g.draw(line1);
-            }
-
-
-            for (int i = source.getPoints().length - 1; i > source.getPoints().length - 2; i--) {
-                Coords2D P1DC = new Coords2D();
-                Coords2D P2DC = new Coords2D();
-                RealVector P1WC = new RealVector(source.getPoints()[i - 1]);
-                RealVector P2WC = new RealVector(source.getPoints()[i]);
-
-                double mperp = -(P2WC.getElement(0) - P1WC.getElement(0)) / (P2WC.getElement(1) - P1WC.getElement(1));
-                double h_ = h / Math.sqrt(mperp * mperp + 1);
-
-                double x1 = P2WC.getElement(0) + h_;
-                double y1 = P2WC.getElement(1) + mperp * h_;
-                double x2 = P2WC.getElement(0) - h_;
-                double y2 = P2WC.getElement(1) - mperp * h_;
-
-                RealVector lineP1 = new RealVector(P1WC.getSize());
-                RealVector lineP2 = new RealVector(P1WC.getSize());
-
-                lineP1.setElement(0, x1);
-                lineP1.setElement(1, y1);
-                lineP2.setElement(0, x2);
-                lineP2.setElement(1, y2);
-
-                getViewingTransform().viewPlaneTransform(new CoordsArray(lineP1), P1DC);
-                getViewingTransform().viewPlaneTransform(new CoordsArray(lineP2), P2DC);
-
-                Line2D line1 = new Line2D.Double(P1DC.getElement(0), P1DC.getElement(1), P2DC.getElement(0), P2DC.getElement(1));
-                g.draw(line1);
-            }
-
-        }
-
+//        WaveCurveOrbit source = (WaveCurveOrbit) (((RpGeometry) getAbstractGeom()).geomFactory().geomSource());
+//
+//        double h = 0.01;
+//
+//        if (source.getPoints().length > 1) {
+//
+//            for (int i = 0; i < source.getPoints().length - 1; i++) {
+//
+//                Coords2D P1DC = new Coords2D();
+//                Coords2D P2DC = new Coords2D();
+//                RealVector P1WC = new RealVector(source.getPoints()[i]);
+//                RealVector P2WC = new RealVector(source.getPoints()[i + 1]);
+//
+//                double mperp = -(P2WC.getElement(0) - P1WC.getElement(0)) / (P2WC.getElement(1) - P1WC.getElement(1));
+//                double h_ = h / Math.sqrt(mperp * mperp + 1);
+//
+//                double x1 = P1WC.getElement(0) + h_;
+//                double y1 = P1WC.getElement(1) + mperp * h_;
+//                double x2 = P1WC.getElement(0) - h_;
+//                double y2 = P1WC.getElement(1) - mperp * h_;
+//
+//                RealVector lineP1 = new RealVector(P1WC.getSize());
+//                RealVector lineP2 = new RealVector(P1WC.getSize());
+//
+//                lineP1.setElement(0, x1);
+//                lineP1.setElement(1, y1);
+//                lineP2.setElement(0, x2);
+//                lineP2.setElement(1, y2);
+//
+//                getViewingTransform().viewPlaneTransform(new CoordsArray(lineP1), P1DC);
+//                getViewingTransform().viewPlaneTransform(new CoordsArray(lineP2), P2DC);
+//
+//                Line2D line1 = new Line2D.Double(P1DC.getElement(0), P1DC.getElement(1), P2DC.getElement(0), P2DC.getElement(1));
+//                g.draw(line1);
+//            }
+//
+//
+//            for (int i = source.getPoints().length - 1; i > source.getPoints().length - 2; i--) {
+//                Coords2D P1DC = new Coords2D();
+//                Coords2D P2DC = new Coords2D();
+//                RealVector P1WC = new RealVector(source.getPoints()[i - 1]);
+//                RealVector P2WC = new RealVector(source.getPoints()[i]);
+//
+//                double mperp = -(P2WC.getElement(0) - P1WC.getElement(0)) / (P2WC.getElement(1) - P1WC.getElement(1));
+//                double h_ = h / Math.sqrt(mperp * mperp + 1);
+//
+//                double x1 = P2WC.getElement(0) + h_;
+//                double y1 = P2WC.getElement(1) + mperp * h_;
+//                double x2 = P2WC.getElement(0) - h_;
+//                double y2 = P2WC.getElement(1) - mperp * h_;
+//
+//                RealVector lineP1 = new RealVector(P1WC.getSize());
+//                RealVector lineP2 = new RealVector(P1WC.getSize());
+//
+//                lineP1.setElement(0, x1);
+//                lineP1.setElement(1, y1);
+//                lineP2.setElement(0, x2);
+//                lineP2.setElement(1, y2);
+//
+//                getViewingTransform().viewPlaneTransform(new CoordsArray(lineP1), P1DC);
+//                getViewingTransform().viewPlaneTransform(new CoordsArray(lineP2), P2DC);
+//
+//                Line2D line1 = new Line2D.Double(P1DC.getElement(0), P1DC.getElement(1), P2DC.getElement(0), P2DC.getElement(1));
+//                g.draw(line1);
+//            }
+//
+//        }
+//
     }
 }

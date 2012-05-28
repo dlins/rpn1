@@ -218,7 +218,7 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
     
         changeColor();
         
-        drawFirstPanel(g, scene_, panel);
+//        drawFirstPanel(g, scene_, panel);
         
     }
 

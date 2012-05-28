@@ -77,8 +77,6 @@ public class WaveCurveView extends WaveCurveOrbitGeomView {
 
         List<WaveCurveOrbitGeom> orbitGeomList = ((WaveCurveGeom) getAbstractGeom()).getOrbitsGeomList();
 
-        System.out.println("tamanho da lista: " + orbitGeomList.size());
-
         WaveCurveGeom waveCurveGeom = ((WaveCurveGeom) getAbstractGeom());
 
         RpCalcBasedGeomFactory wCurveFactory = (WaveCurveGeomFactory) waveCurveGeom.geomFactory();
@@ -107,8 +105,6 @@ public class WaveCurveView extends WaveCurveOrbitGeomView {
 
         for (WaveCurveOrbitGeom orbitGeom : orbitGeomList) {
             try {
-                System.out.println(orbitGeom.getClass().getCanonicalName());
-
                 WaveCurveOrbitGeomView orbitView = (WaveCurveOrbitGeomView) orbitGeom.createView(getViewingTransform());
 
                 if (orbitView instanceof CompositeOrbitView) {

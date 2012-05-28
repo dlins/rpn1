@@ -68,19 +68,28 @@ public class WaveCurveGeomFactory extends WaveCurveOrbitGeomFactory {
         OrbitPoint[] original = waveCurve.getPoints();
         OrbitPoint[] orbitPoints = Arrays.copyOfRange(original, beginOfCurve, endOfCurve);
 
+
+
+
         switch (curveType) {
 
             case 1://Rarefaction
+
 
                 return new RarefactionGeom(MultidAdapter.converseOrbitPointsToCoordsArray(orbitPoints), this);
 
 
             case 2://Shock
 
+
+
                 return new ShockCurveGeom(MultidAdapter.converseOrbitPointsToCoordsArray(orbitPoints), this);
 
 
             case 3://Composite
+
+
+
 
                 return new CompositeGeom(MultidAdapter.converseOrbitPointsToCoordsArray(orbitPoints), this);
 

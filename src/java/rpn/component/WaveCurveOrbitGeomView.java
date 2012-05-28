@@ -35,13 +35,18 @@ public class WaveCurveOrbitGeomView extends OrbitGeomView {
 
         OrbitPoint[] points = source.getPoints();
 
-        for (int i = 0; i < points.length - 1; i++) {
+        for (int i = 2; i < points.length - 2; i++) {//Essse 2 e esse -2 sao para nao desenhar setas nos dois primeiros e dois ultimos pontos da rarefacao
 
             Coords2D direction_dc = new Coords2D();
             Coords2D start_dc = new Coords2D();
 
 
+
             ArrayList<RealVector> arrowPositions = levelsProcessing(points[i], points[i + 1], new Double(RPNUMERICS.getParamValue("orbit", "level")));
+
+
+
+
 
             for (RealVector arrowStartPoint : arrowPositions) {
 
