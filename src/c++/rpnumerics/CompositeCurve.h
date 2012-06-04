@@ -35,6 +35,30 @@
 #define COMPOSITE_FROM_NORMAL_RAREFACTION_START 3
 #endif
 
+#ifndef COMPOSITE_REACHED_BOUNDARY
+#define COMPOSITE_REACHED_BOUNDARY 10
+#endif
+
+#ifndef COMPOSITE_EXHAUSTED_RAREFACTION
+#define COMPOSITE_EXHAUSTED_RAREFACTION 20
+#endif
+
+#ifndef COMPOSITE_DID_NOT_EXHAUST_RAREFACTION
+#define COMPOSITE_DID_NOT_EXHAUST_RAREFACTION 30
+#endif
+
+#ifndef COMPOSITE_REACHED_DOUBLE_CONTACT
+#define COMPOSITE_REACHED_DOUBLE_CONTACT 40
+#endif
+
+#ifndef COMPOSITE_EXHAUSTED_RAREFACTION_AND_REACHED_DOUBLE_CONTACT
+#define COMPOSITE_EXHAUSTED_RAREFACTION_AND_REACHED_DOUBLE_CONTACT 50
+#endif
+
+#ifndef COMPOSITE_ERROR
+#define COMPOSITE_ERROR 60
+#endif
+
 class CompositeCurve {
     private:
 //        FluxFunction         *F;
@@ -46,7 +70,9 @@ class CompositeCurve {
 //        
     protected:
     public:
-        static void curve(const std::vector<RealVector> &rarcurve, int origin, int family, int increase, 
+        static int curve(const std::vector<RealVector> &rarcurve, int origin,
+                int family, int increase,
+                int number_ignore_doub_contact,
                           FluxFunction *ff, AccumulationFunction *aa, 
                           Boundary *boundary, std::vector<RealVector> &compcurve);
 };

@@ -6,8 +6,7 @@ import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
-import rpnumerics.CompositeCurve;
-import rpnumerics.OrbitPoint;
+import rpnumerics.Orbit;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
 import wave.multid.view.ViewingTransform;
@@ -18,11 +17,12 @@ import wave.util.RealVector;
 
 public class CompositeOrbitView extends WaveCurveOrbitGeomView {
 
-    public CompositeOrbitView(MultiGeometryImpl abstractGeom,
+    public CompositeOrbitView(MultiGeometryImpl abstractGeom,   //abstractGeom é a porcao que representa a composta
             ViewingTransform transf,
             ViewingAttr viewAttr) throws DimMismatchEx {
 
         super(abstractGeom, transf, viewAttr);
+
     }
 
 
@@ -31,7 +31,14 @@ public class CompositeOrbitView extends WaveCurveOrbitGeomView {
 
         g.setColor(getViewingAttr().getColor());
 
+        Stroke actualStroke = g.getStroke();
+        float[] dash = {10f};
+        BasicStroke stroke = new BasicStroke(1.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_BEVEL, BasicStroke.JOIN_MITER, dash, 0f);
+
+        g.setStroke(stroke);
+
         super.draw(g);
+        g.setStroke(actualStroke);
 
     }
 
@@ -42,45 +49,13 @@ public class CompositeOrbitView extends WaveCurveOrbitGeomView {
         GeneralPath composite = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
 
         //***
-        composite.append(shapeCalculations(), false);
         composite.append(normalCalculations(), false);
-        setShape(composite);
         //***
 
-        //composite.append(super.createShape(), false);     //Deve mesmo chamar super ? Pq ?
+        composite.append(super.createShape(), false);
 
         return composite;
 
-    }
-
-
-    private Shape shapeCalculations() {
-
-        GeneralPath composite = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
-
-        CompositeCurve source = (CompositeCurve) (((RpGeometry) getAbstractGeom()).geomFactory().
-                geomSource());
-
-        OrbitPoint[] points = source.getPoints();
-
-
-        for (int i = 1; i < points.length; i++) {
-
-            Coords2D direction_dc = new Coords2D();
-            Coords2D start_dc = new Coords2D();
-
-            RealVector tempVector2 = new RealVector(points[i].getCoords());
-            getViewingTransform().viewPlaneTransform(new CoordsArray(tempVector2), direction_dc);
-
-            RealVector tempVector1 = new RealVector(points[i-1].getCoords());
-            getViewingTransform().viewPlaneTransform(new CoordsArray(tempVector1), start_dc);
-
-            Line2D line1 = new Line2D.Double(start_dc.getElement(0), start_dc.getElement(1), direction_dc.getElement(0), direction_dc.getElement(1));
-            composite.append(line1, false);
-
-        }
-
-        return composite;
     }
 
 
@@ -88,14 +63,18 @@ public class CompositeOrbitView extends WaveCurveOrbitGeomView {
 
         GeneralPath composite = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
 
-        CompositeCurve source = (CompositeCurve) (((RpGeometry) getAbstractGeom()).geomFactory().
+        Orbit source = (Orbit) (((RpGeometry) getAbstractGeom()).geomFactory().
                 geomSource());
 
-         double h = 0.01;
+        int begin = ((CompositeGeom) getAbstractGeom()).getBegin();
+        int end   = ((CompositeGeom) getAbstractGeom()).getEnd();
 
-         if (source.getPoints().length > 1) {
+        double h = 0.0075;
 
-             for (int i = 0; i < source.getPoints().length - 1; i++) {
+        if (source.getPoints().length > 1) {
+
+             //for (int i = 0; i < source.getPoints().length - 1; i++) {
+            for (int i = begin; i < end - 1; i++) {
 
                  Coords2D P1DC = new Coords2D();
                  Coords2D P2DC = new Coords2D();
@@ -123,10 +102,12 @@ public class CompositeOrbitView extends WaveCurveOrbitGeomView {
 
                  Line2D line1 = new Line2D.Double(P1DC.getElement(0), P1DC.getElement(1), P2DC.getElement(0), P2DC.getElement(1));
                  composite.append(line1, false);
+
              }
 
 
-             for (int i = source.getPoints().length - 1; i > source.getPoints().length - 2; i--) {
+             //for (int i = source.getPoints().length - 1; i > source.getPoints().length - 2; i--) {
+            for (int i = end - 1; i > end - 2; i--) {
                  Coords2D P1DC = new Coords2D();
                  Coords2D P2DC = new Coords2D();
                  RealVector P1WC = new RealVector(source.getPoints()[i - 1]);
@@ -158,6 +139,7 @@ public class CompositeOrbitView extends WaveCurveOrbitGeomView {
          }
 
         return composite;
+
     }
 
 

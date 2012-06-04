@@ -33,7 +33,6 @@ public class RarefactionOrbitView extends WaveCurveOrbitGeomView{
         
         //***
         composite.append(shapeCalculations(), false);
-        setShape(composite);
         //***
 
         composite.append(super.createShape(), false);
@@ -60,9 +59,13 @@ public class RarefactionOrbitView extends WaveCurveOrbitGeomView{
         Orbit source = (Orbit) (((RpGeometry) getAbstractGeom()).geomFactory().
                 geomSource());
 
+        int begin = ((RarefactionGeom) getAbstractGeom()).getBegin();
+        int end   = ((RarefactionGeom) getAbstractGeom()).getEnd();
+
         OrbitPoint[] points = source.getPoints();
 
-        for (int i = 0; i < points.length - 1; i++) {
+        //for (int i = 2; i < points.length - 2; i++) {       // à espera de confirmacao
+        for (int i = begin + 2; i < end - 2; i++) {
 
             Coords2D direction_dc = new Coords2D();
             Coords2D start_dc = new Coords2D();
@@ -95,9 +98,7 @@ public class RarefactionOrbitView extends WaveCurveOrbitGeomView{
 
                     }
 
-                    Arrow arrow = new Arrow(arrowStart,
-                            direction,
-                            5.0, 1.0);      //tamanho da cabeça, comprimento da flecha
+                    Arrow arrow = new Arrow(arrowStart, direction, 5.0, 1.0);
 
                     RealVector p1 = (RealVector) arrow.getHeadDefPoints().get(0);
                     RealVector p2 = (RealVector) arrow.getHeadDefPoints().get(2);

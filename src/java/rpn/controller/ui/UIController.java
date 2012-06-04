@@ -270,6 +270,7 @@ public class UIController extends ComponentUI {
                     RpModelActionAgent action = (RpModelActionAgent) actionSelected.getAction();
                     action.setPhaseSpace((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom());
                     DragPlotAgent.instance().setPhaseSpace((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom());
+
                 }
 
             }

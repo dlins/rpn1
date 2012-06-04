@@ -43,6 +43,7 @@ import rpn.controller.ui.UIController;
 import rpnumerics.BifurcationProfile;
 import rpnumerics.RPNUMERICS;
 import rpn.controller.ui.VELOCITYAGENT_CONFIG;
+import rpnumerics.WaveCurve;
 
 public class RPnPhaseSpacePanel extends JPanel implements Printable {
     //
@@ -235,7 +236,6 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
             GeometryGraph geom = new GeometryGraph();
             geom.markPoints(scene());
             geom.paintComponent(g, scene(),this);
-
 
         }
 

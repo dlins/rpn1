@@ -11,14 +11,14 @@ import wave.multid.view.GeomObjView;
 import wave.multid.view.ViewingTransform;
 import wave.multid.DimMismatchEx;
 
-public class ShockCurveGeom extends OrbitGeom implements RpGeometry {
+public class ShockCurveGeom extends WaveCurveOrbitGeom implements RpGeometry {
    
   
 
     //
     // Constructors
     //
-    public ShockCurveGeom(CoordsArray[] source, ShockCurveGeomFactory factory) {
+    public ShockCurveGeom(CoordsArray[] source, WaveCurveOrbitGeomFactory factory) {
         super(source, factory);
     }
 

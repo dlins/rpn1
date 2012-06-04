@@ -4,14 +4,20 @@
  */
 package rpn.component.util;
 
+import java.awt.Composite;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Shape;
+import java.awt.event.MouseEvent;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
+import javax.swing.ToolTipManager;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpacePanel;
+import rpn.component.CompositeGeom;
+import rpn.component.RarefactionGeom;
 import rpn.component.RpGeometry;
 import rpn.controller.ui.AREASELECTION_CONFIG;
 import rpn.controller.ui.UIController;
@@ -29,6 +35,7 @@ import rpn.controller.ui.CLASSIFIERAGENT_CONFIG;
 import rpn.controller.ui.VELOCITYAGENT_CONFIG;
 import rpn.parser.RPnDataModule;
 import rpn.usecase.VelocityAgent;
+import rpnumerics.WaveCurve;
 
 /**
  *
@@ -85,6 +92,7 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
     }
 
 
+    //---------------------------------------------------- Excluir estes metodos
     public void drawSource(Graphics g ,double xVecP1, double yVecP1, double xVecP2, double yVecP2, Coords2D dcCoordsImgVecP1, Coords2D dcCoordsImgVecP2) {
         //*** define uma ponta de cada vetor
         RealVector direction1 = new RealVector(2);
@@ -125,13 +133,41 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
         if (j==0) drawSource(g, xVecP1, yVecP1, xVecP2, yVecP2, dcCoordsImgVecP1, dcCoordsImgVecP2);
         if (j==1) drawSink(g, xVecP1, yVecP1, xVecP2, yVecP2, dcCoordsImgVecP1, dcCoordsImgVecP2);        
     }
+    //--------------------------------------------------------------------------
+
+
+    public void infoWaveCurve(RealVector newValue, WaveCurve curve, RPnPhaseSpacePanel panel) {
+        count = 0;
+        
+        int k = ((WaveCurve) curve).getCurveTypes().length;
+
+        String temp = "";
+        String temp1 = "";
+
+        for (int i = 0; i<k; i++) {
+            temp1 = String.valueOf(((WaveCurve) curve).getCurveTypes()[i]);
+            if (temp1.equals("1")) temp1 = "R";
+            else if (temp1.equals("2")) temp1 = "S";
+            else if (temp1.equals("3")) temp1 = "C";
+
+            temp = temp + temp1 + ",";
+
+        }
+        temp = temp.substring(0, temp.length() - 1);
+
+        String index = String.valueOf(((WaveCurve) curve).findClosestSegment(newValue));
+        panel.setToolTipText(index + " " + temp);
+        ToolTipManager ttm = ToolTipManager.sharedInstance();
+        ttm.setInitialDelay(0);
+
+    }
 
 
     public void drawFirstPanel(Graphics g, Scene scene_, RPnPhaseSpacePanel panel) {
 
         UserInputTable userInputList = UIController.instance().globalInputTable();
         RealVector newValue = userInputList.values();
-        
+
         if (mostraGrid != 0  &&  panel.getName().equals(RPnPhaseSpaceAbstraction.namePhaseSpace)){
             drawGrid(g, scene_);
         }
@@ -151,7 +187,6 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
         if (panel.getName().equals(RPnPhaseSpaceAbstraction.namePhaseSpace)) {
             graph.draw(line3);
             graph.draw(line4);
-
             
             //********* esboço de marcação de pontos de equilibrio
             for (int i=0; i<VelocityAgent.listaEquil.size(); i++) {
@@ -169,6 +204,7 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
 
             }
             //*********
+
         }
 
 
@@ -184,6 +220,18 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
                     graph.draw(line4DC);
                 }
             }
+
+
+            //------------------------------------------------------------------
+            else if (curve instanceof WaveCurve) {
+
+                infoWaveCurve(newValue, (WaveCurve) curve, panel);
+
+            }
+            else panel.setToolTipText(null);
+
+            //------------------------------------------------------------------
+
 
         } catch (Exception e) {
         }

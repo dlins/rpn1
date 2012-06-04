@@ -19,8 +19,8 @@ import wave.util.RealVector;
 
 public class OrbitGeomView extends PolyLine {
 
-    //private ArrayList arrowList_;
-    //private OrbitPoint[] points_;
+    private ArrayList arrowList_;
+    private OrbitPoint[] points_;
 
     private final static int ARROWS_STEP = 30;    //era 10
     private final static int SCALE = 800;        //era 150
@@ -30,6 +30,7 @@ public class OrbitGeomView extends PolyLine {
 
         super(geom, transf, attr);
 
+        
     }
 
 
@@ -49,8 +50,8 @@ public class OrbitGeomView extends PolyLine {
         GeneralPath composite = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
 
         //***
-        composite.append(shapeCalculations(), false);
-        setShape(composite);
+        if (getClass().getSimpleName().equals("OrbitGeomView"))
+            composite.append(shapeCalculations(), false);
         //***
 
         try {
@@ -117,7 +118,4 @@ public class OrbitGeomView extends PolyLine {
 
         return composite;
     }
-
-
-
 }

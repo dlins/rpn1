@@ -18,6 +18,8 @@
 #define RAREFACTION_FOR_ITSELF                   40
 #define RAREFACTION_AS_ENGINE_FOR_INTEGRAL_CURVE 41
 
+#define RAREFACTION_REACHED_BOUNDARY             100
+
 #include "FluxFunction.h"
 #include "AccumulationFunction.h"
 #include "eigen.h"
