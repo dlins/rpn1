@@ -28,7 +28,7 @@ class Viscous_Profile {
 
         static Viscosity_Matrix *vmf;
 
-        static void Newton_improvement(const FluxFunction *ff, const AccumulationFunction *aa, 
+        static void Newton_improvement(const FluxFunction *ff, const AccumulationFunction *aa,
                                   double sigma, const RealVector &p,  RealVector &ref, RealVector &out);
     public:
         // Critical points

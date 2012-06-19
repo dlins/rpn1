@@ -39,7 +39,7 @@ public class RarefactionOrbitCalc extends WaveCurveOrbitCalc implements RpCalcul
         RarefactionOrbit result;
 
         result = (RarefactionOrbit) calc("methodName_", "flowName_", getStart(), getFamilyIndex(), getDirection());
-
+        
 
         if (result == null) {
             throw new RpException("Error in native layer");

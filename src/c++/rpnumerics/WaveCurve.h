@@ -68,6 +68,8 @@ struct Curve {
             curve.clear();
             corresponding_point_in_related_curve.clear();
         }
+
+        
 };
 
 class WaveCurve {

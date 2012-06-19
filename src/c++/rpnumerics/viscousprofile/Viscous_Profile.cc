@@ -14,18 +14,23 @@ void Viscous_Profile::Newton_improvement(const FluxFunction *ff, const Accumulat
 
     // TODO: Improve this epsilon
     double epsilon = 1e-10;
+    double anorm;
     double delta_U[2]; // = {10.0, 10.0};
 
     double U[2];
     for (int i = 0; i < 2; i++) U[i] = p.component(i);
-
+    //cout << "Newton_U: (" << U[0] << ", " << U[1] << ")" << endl;
     // If this function ever comes to be vectorialized, these lines below are COMMON
     // to all points (since they deal with the ref point).
     //
     double c[2];
     double F_ref[2], G_ref[2];
-    ff->fill_with_jet(2, ref.components(), 0, F_ref, 0, 0);
-    aa->fill_with_jet(2, ref.components(), 0, G_ref, 0, 0);
+    for (int i; i < 2; i++) c[i] = ref.component(i);
+    //cout << "Newton_R: (" << c[0] << ", " << c[1] << ")" << endl;
+    ff->fill_with_jet(2, c, 0, F_ref, 0, 0);
+    aa->fill_with_jet(2, c, 0, G_ref, 0, 0);
+//    ff->fill_with_jet(2, ref.components(), 0, F_ref, 0, 0);
+//    aa->fill_with_jet(2, ref.components(), 0, G_ref, 0, 0);
     for (int i = 0; i < 2; i++) {
         c[i] = sigma * G_ref[i] - F_ref[i];
     }
@@ -39,19 +44,30 @@ void Viscous_Profile::Newton_improvement(const FluxFunction *ff, const Accumulat
         double b[2];
 
         for (int i = 0; i < 2; i++) {
-            b[i] = -F[i] + sigma * G[i] - c[i];
+            // The minus sign is incorporated within the parentesis
+            b[i] = (F[i] - sigma * G[i]) + c[i];
+            //cout << "b[i] = " << b[i] << "   c[i] = " << c[i] << endl;
 
             for (int j = 0; j < 2; j++) {
-                A[i][j] = JF[i][j] - sigma * JG[i][j];
+                A[i][j] = sigma * JG[i][j] - JF[i][j];
             }
         }
 
         // Solve
         double det = A[0][0] * A[1][1] - A[0][1] * A[1][0];
-        //        anorm = 0;
-        //        for (i = 0; i < n * n; i++) anorm += A[i] * A[i];
+        anorm = 0.0;
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 2; j++) {
+                anorm += A[i][j] * A[i][j];
+            }
+        }
 
-        //        if (fabs(det) <= (eps * anorm)) return -1;
+        // If Newton does not converge, return the original point.
+        if (fabs(det) <= (epsilon * anorm)) {
+            cout << "Viscous_Profile::Newton does not converges." << endl;
+            for (int i = 0; i < 2; i++) out.component(i) = p.component(i);
+            return;
+        }
 
         // Protect against zero-division or use LAPACK (will be done so anyway for n >= 3)
         delta_U[0] = (b[0] * A[1][1] - b[1] * A[0][1]) / det;
@@ -65,6 +81,8 @@ void Viscous_Profile::Newton_improvement(const FluxFunction *ff, const Accumulat
     // Output
     for (int i = 0; i < 2; i++) out.component(i) = U[i];
 
+    cout<<"Valor de out: "<<out<<endl;
+
     return;
 }
 
@@ -76,8 +94,6 @@ void Viscous_Profile::critical_points_linearization(const FluxFunction *ff, cons
 
     RealVector out;
     Newton_improvement(ff, aa, speed, cp, ref, out);
-
-    cout<<"Valor de out: "<<out<<endl;
 
     Matrix<double> JF(2, 2), JG(2, 2);
     ff->fill_with_jet(2, out.components(), 1, 0, JF.data(), 0);
@@ -95,7 +111,8 @@ void Viscous_Profile::critical_points_linearization(const FluxFunction *ff, cons
     }
 
     // Fill the viscous matrix
-    v->fill_viscous_matrix(cp, viscous);
+    //v->fill_viscous_matrix(cp, viscous);
+    v->fill_viscous_matrix(out, viscous);
 
     //std::vector<eigenpair> e;
     Eigen::eig(2, RH.data(), viscous.data(), ep);
@@ -166,7 +183,7 @@ int Viscous_Profile::orbit(const FluxFunction *ff, const AccumulationFunction *a
     for (int i = 0; i < n; i++) atol[i] = 1e-6;
 
     // The Jacobian is provided by the user.
-    // int mf = 21; 
+    // int mf = 21;
     // The Jacobian is NOT provided by the user.
     int mf = 22;
     // Lsode uses rwork to perform its computations.
@@ -230,7 +247,7 @@ int Viscous_Profile::orbit(const FluxFunction *ff, const AccumulationFunction *a
             // Both points inside. Carry on with the rest of the tests, etc.
             out.push_back(new_point);
         } else if (intersection_info == 0) {
-            // One point is inside, the other is outside. 
+            // One point is inside, the other is outside.
             // Store the point lying in the domain's border and get out.
             out.push_back(r);
 
@@ -372,4 +389,3 @@ void Viscous_Profile::viscous_field(const FluxFunction *f, const AccumulationFun
 
     return;
 }
-

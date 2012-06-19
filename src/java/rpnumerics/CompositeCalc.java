@@ -36,7 +36,7 @@ public class CompositeCalc extends WaveCurveOrbitCalc implements RpCalculation  
     public RpSolution calc() throws RpException {
 
         CompositeCurve result = null;
-
+        
         result = (CompositeCurve) nativeCalc(getStart(), getDirection(), getFamilyIndex());
         if (result == null) {
             throw new RpException("Error in native layer");

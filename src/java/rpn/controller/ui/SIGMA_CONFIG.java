@@ -45,7 +45,9 @@ public class SIGMA_CONFIG extends UI_ACTION_SELECTED {
 
 
         //----------------------------------------------------------------------
-        XZeroGeomFactory xzeroRef = new XZeroGeomFactory(new StationaryPointCalc(hCurve.getXZero(), userInput));
+        //*** CTOR de StationaryPointCalc : StationaryPointCalc(PhasePoint initial, RealVector referencePoint)
+        //XZeroGeomFactory xzeroRef = new XZeroGeomFactory(new StationaryPointCalc(hCurve.getXZero(), userInput));
+        XZeroGeomFactory xzeroRef = new XZeroGeomFactory(new StationaryPointCalc(hCurve.getXZero(), hCurve.getXZero()));
         RPnDataModule.PHASESPACE.plot(xzeroRef.geom());
         //----------------------------------------------------------------------
 

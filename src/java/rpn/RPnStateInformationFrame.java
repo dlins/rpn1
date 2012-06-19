@@ -59,6 +59,9 @@ public class RPnStateInformationFrame extends JFrame  {
                 document_.insertString(0, entry.getValue(),null);
                 document_.insertString(0, "-------" + entry.getKey() + "-------\n", null);
 
+                if (entry.getKey().equals("fluxfunction"))
+                    System.out.println("entry.getValue() : " +entry.getValue());
+
             } catch (BadLocationException ex) {
                 Logger.getLogger(RPnStateInformationFrame.class.getName()).log(Level.SEVERE, null, ex);
             }

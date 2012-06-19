@@ -31,7 +31,7 @@ public class ShockCurveGeomFactory extends WaveCurveOrbitGeomFactory {
     //
     protected RpGeometry createGeomFromSource() {
         ShockCurve shockCurve = (ShockCurve) geomSource();
-
+        
         return new ShockCurveGeom(MultidAdapter.converseOrbitPointsToCoordsArray(shockCurve.getPoints()), this);
     }
 

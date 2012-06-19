@@ -4,24 +4,18 @@
  */
 package rpn.component.util;
 
-import java.awt.Composite;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Shape;
-import java.awt.event.MouseEvent;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import javax.swing.ToolTipManager;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpacePanel;
-import rpn.component.CompositeGeom;
-import rpn.component.RarefactionGeom;
 import rpn.component.RpGeometry;
 import rpn.controller.ui.AREASELECTION_CONFIG;
 import rpn.controller.ui.UIController;
-import rpn.controller.ui.UserInputTable;
 import rpnumerics.DoubleContactCurve;
 import rpnumerics.RPNUMERICS;
 import rpnumerics.RPnCurve;
@@ -138,35 +132,42 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
 
     public void infoWaveCurve(RealVector newValue, WaveCurve curve, RPnPhaseSpacePanel panel) {
         count = 0;
+
+        int index = curve.findClosestSegment(newValue);
+        int indBegin = curve.getBeginSubCurve(index);
         
-        int k = ((WaveCurve) curve).getCurveTypes().length;
+        String locSubCurve = String.valueOf(index - indBegin);
+        String name = curve.getName()[index];
+        String family = " Family : " +String.valueOf(curve.getFamilyIndex());
 
-        String temp = "";
-        String temp1 = "";
+//        if (name.equals("Rarefaction"))
+//            panel.setToolTipText(String.valueOf(index) + " " +name + " " +curve.getPoints()[index].getLambda());
 
-        for (int i = 0; i<k; i++) {
-            temp1 = String.valueOf(((WaveCurve) curve).getCurveTypes()[i]);
-            if (temp1.equals("1")) temp1 = "R";
-            else if (temp1.equals("2")) temp1 = "S";
-            else if (temp1.equals("3")) temp1 = "C";
-
-            temp = temp + temp1 + ",";
-
-        }
-        temp = temp.substring(0, temp.length() - 1);
-
-        String index = String.valueOf(((WaveCurve) curve).findClosestSegment(newValue));
-        panel.setToolTipText(index + " " + temp);
+        panel.setToolTipText(locSubCurve + " " + name + " " + family);
         ToolTipManager ttm = ToolTipManager.sharedInstance();
         ttm.setInitialDelay(0);
+        ttm.setDismissDelay(500);
 
     }
 
 
     public void drawFirstPanel(Graphics g, Scene scene_, RPnPhaseSpacePanel panel) {
 
-        UserInputTable userInputList = UIController.instance().globalInputTable();
-        RealVector newValue = userInputList.values();
+        //----------------------------------------------Aqui, o input é um click
+        //UserInputTable userInputList = UIController.instance().globalInputTable();
+        //RealVector newValue = userInputList.values();
+        //----------------------------------------------------------------------
+
+
+        //------------------------------- Manter assim ou voltar à forma antiga?
+        CoordsArray wc = toWorldCoords(new Coords2D(panel.getCursorPos().getX(), panel.getCursorPos().getY()), scene_);
+        RealVector rv = new RealVector(2);
+        rv.setElement(0, wc.getElement(0));
+        rv.setElement(1, wc.getElement(1));
+        RealVector newValue = new RealVector(2);
+        newValue = rv;
+        //----------------------------------------------------------------------
+
 
         if (mostraGrid != 0  &&  panel.getName().equals(RPnPhaseSpaceAbstraction.namePhaseSpace)){
             drawGrid(g, scene_);
@@ -221,11 +222,26 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
                 }
             }
 
-
+            
             //------------------------------------------------------------------
             else if (curve instanceof WaveCurve) {
+                
+                //---------------------------------
+                Coords2D dcCoordsMP = toDeviceCoords(scene_, curve.findClosestPoint(newValue));
+                double xMP = dcCoordsMP.getElement(1);
+                double yMP = dcCoordsMP.getElement(0);
 
-                infoWaveCurve(newValue, (WaveCurve) curve, panel);
+                line3 = new Line2D.Double(yMP - 5, xMP, yMP + 5, xMP);
+                line4 = new Line2D.Double(yMP, xMP - 5, yMP, xMP + 5);
+                if (panel.getName().equals(RPnPhaseSpaceAbstraction.namePhaseSpace)) {
+                    graph.draw(line3);
+                    graph.draw(line4);
+
+                    infoWaveCurve(newValue, (WaveCurve) curve, panel);
+                }
+                //---------------------------------
+
+                //infoWaveCurve(newValue, (WaveCurve) curve, panel);
 
             }
             else panel.setToolTipText(null);

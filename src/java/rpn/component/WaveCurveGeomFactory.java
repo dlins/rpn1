@@ -67,8 +67,7 @@ public class WaveCurveGeomFactory extends WaveCurveOrbitGeomFactory {
         WaveCurve waveCurve = (WaveCurve) geomSource();
         OrbitPoint[] original = waveCurve.getPoints();
         OrbitPoint[] orbitPoints = Arrays.copyOfRange(original, beginOfCurve, endOfCurve);
-
-
+        
         
         switch (curveType) {
 
@@ -78,6 +77,12 @@ public class WaveCurveGeomFactory extends WaveCurveOrbitGeomFactory {
 
                 //return new RarefactionGeom(MultidAdapter.converseOrbitPointsToCoordsArray(orbitPoints), this);
 
+                for (int i = beginOfCurve; i<endOfCurve; i++) {
+                    waveCurve.setName(i, "Rarefaction");
+                    waveCurve.setBeginSubCurves(i, beginOfCurve);
+                }
+
+                
                 return new RarefactionGeom(MultidAdapter.converseOrbitPointsToCoordsArray(orbitPoints), this, beginOfCurve, endOfCurve);
 
 
@@ -85,12 +90,24 @@ public class WaveCurveGeomFactory extends WaveCurveOrbitGeomFactory {
 
                 System.out.println("Shock entre os indices : " +beginOfCurve + " e " +endOfCurve);
 
+                for (int i = beginOfCurve; i<endOfCurve; i++) {
+                    waveCurve.setName(i, "Shock");
+                    waveCurve.setBeginSubCurves(i, beginOfCurve);
+                }
+
+                
                 return new ShockCurveGeom(MultidAdapter.converseOrbitPointsToCoordsArray(orbitPoints), this);
 
 
             case 3://Composite
 
                 System.out.println("Composite entre os indices : " +beginOfCurve + " e " +endOfCurve);
+
+                for (int i = beginOfCurve; i<endOfCurve; i++) {
+                    waveCurve.setName(i, "Composite");
+                    waveCurve.setBeginSubCurves(i, beginOfCurve);
+                }
+                
 
                 //return new CompositeGeom(MultidAdapter.converseOrbitPointsToCoordsArray(orbitPoints), this);
 

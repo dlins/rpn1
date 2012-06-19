@@ -14,11 +14,15 @@ public class WaveCurve extends WaveCurveOrbit {
 
     private static int[] curvesIndex_;
 
+    //--------------------------------
+    private String[] names = new String[getPoints().length];
+    private int[] beginSubCurves_ = new int[getPoints().length];
+    //--------------------------------
+
+    
     public WaveCurve(List<OrbitPoint[]> points, int[] curveTypes, int family, int increase) {
         super(concatOrbitPoints(points), family, increase);
         curveTypes_ = curveTypes;
-
-        System.out.println("Tamanho da wave curve: " + getPoints().length);
 
     }
 
@@ -26,8 +30,25 @@ public class WaveCurve extends WaveCurveOrbit {
         return curveTypes_;
     }
 
-   
+    //--------------------------------------
+    public void setName(int i, String name) {
+        names[i] = name;
+    }
 
+    public String[] getName() {
+        return names;
+    }
+
+    public void setBeginSubCurves(int k, int begin) {
+        beginSubCurves_[k] = begin;
+    }
+
+    public int getBeginSubCurve(int k) {
+        return beginSubCurves_[k];
+    }
+    //--------------------------------------
+
+    
     private static OrbitPoint[] concatOrbitPoints(List<OrbitPoint[]> pointsList) {
         curvesIndex_ = new int[pointsList.size()];
 

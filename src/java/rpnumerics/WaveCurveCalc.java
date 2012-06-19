@@ -29,6 +29,7 @@ public class WaveCurveCalc extends WaveCurveOrbitCalc {
     public RpSolution calc() throws RpException {
 
         RpSolution result = nativeCalc(getStart(), getFamilyIndex(), getDirection());
+        
 
         if (result == null) {
             throw new RpException("Error in native layer");

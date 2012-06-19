@@ -37,7 +37,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_StationaryPointCalc_nativeCalc(JNIEnv 
     jmethodID stationaryPointConstructorID = env->GetMethodID(stationaryPointClass, "<init>", "(Lrpnumerics/PhasePoint;[D[D[Lwave/util/RealVector;)V");
     jmethodID toDoubleMethodID = (env)->GetMethodID(realVectorClass, "toDouble", "()[D");
 
-
+    
     jdoubleArray equiPointArray = (jdoubleArray) (env)->CallObjectMethod(equiPoint, toDoubleMethodID);
 
 
@@ -76,8 +76,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_StationaryPointCalc_nativeCalc(JNIEnv 
             &v, sigma, nativeEquiPoint, nativeRefPoint, ep);
 
 
-
-
     jdoubleArray eigenValR = env->NewDoubleArray(ep.size());
 
     jdoubleArray eigenValI = env->NewDoubleArray(ep.size());
@@ -102,7 +100,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_StationaryPointCalc_nativeCalc(JNIEnv 
 
 
 
-//        cout << "Parte real: " << ep[i].r << endl;
+        cout << "Parte real: " << ep[i].r << endl;
 //        cout << "Parte imaginaria: " << ep[i].i << endl;
 
 
@@ -145,7 +143,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_StationaryPointCalc_nativeCalc(JNIEnv 
 
     jobject stationaryPoint = env->NewObject(stationaryPointClass, stationaryPointConstructorID, stationaryPointCoordsPhasePoint, eigenValR, eigenValI, eigenVecArray);
 
-
+    
     return stationaryPoint;
 
 
