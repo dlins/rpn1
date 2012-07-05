@@ -11,8 +11,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnUIFrame;
 import rpn.component.HugoniotSegGeom;
+import rpn.component.MultidAdapter;
+import rpn.component.RpGeometry;
+import rpn.parser.RPnDataModule;
 import rpn.usecase.ClassifierAgent;
 import rpn.usecase.VelocityAgent;
 import wave.multid.CoordsArray;
@@ -25,11 +29,12 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
 
     private List<? extends RealSegment> segments_;
 
-    
+    private double ALFA;
+
+
     public SegmentedCurve(List<? extends RealSegment> segmentsList) {
         super(coordsArrayFromRealSegments(segmentsList), new ViewingAttr(Color.red));
         segments_ = segmentsList;
-       
 
     }
 
@@ -119,7 +124,7 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
                     buffer.append("'" + ";\n");
                     //buffer.append(s1 + ";\n");
                 }
-                
+
             }
 
             buffer.append("];\n");
@@ -128,7 +133,7 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
 
             // coordenadas das strings de velocidade ---------------------------
             buffer.append("dataVel=[\n");
-            
+
             for (int k = 0; k < VelocityAgent.xVel.size(); k++) {
                 double x = (Double)(VelocityAgent.xVel.get(k));
                 double y = (Double)(VelocityAgent.yVel.get(k));
@@ -179,7 +184,7 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
 
         }
         //********************************************************************** (finaliza Leandro)
-        
+
         try {
             //FileWriter gravador = new FileWriter("/home/moreira/Documents/data" + identifier + ".txt");
             FileWriter gravador = new FileWriter(RPnUIFrame.dir + "/data" +identifier +".txt");
@@ -274,7 +279,7 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
         buffer.append("data" + identifier + "(i," + (y + dimension) + ")],");
         buffer.append("'Color',");
         buffer.append("[data" + identifier + "(i, 13) data" + identifier + "(i, 14) data" + identifier + "(i, 15)])\n");
-        
+
         buffer.append("hold on\n");
 
         buffer.append("end\n");
@@ -371,7 +376,7 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
 
         buffer.append("data" +identifier +" = read_data_file('data" +identifier +".txt');\n");      //*** Leandro
         buffer.append("disp('data" +identifier +".txt')\n");                                        //*** Leandro
-        
+
         buffer.append("for i=1: length(data" + identifier + ")\n");
         buffer.append("plot3([ data" + identifier);
 

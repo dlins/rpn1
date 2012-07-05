@@ -6,6 +6,7 @@
  */
 package rpnumerics;
 
+import java.util.List;
 import wave.util.RealVector;
 import wave.multid.view.ViewingAttr;
 import java.awt.Color;
@@ -130,4 +131,11 @@ public class ConnectionOrbit extends RPnCurve implements RpSolution {
     public Orbit orbit() {
         return orbit_;
     }
+
+    @Override
+    public List segments() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+
 }

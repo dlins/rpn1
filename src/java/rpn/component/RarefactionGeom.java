@@ -1,32 +1,24 @@
 package rpn.component;
 
+import rpnumerics.OrbitPoint;
+import rpnumerics.RarefactionOrbit;
 import wave.multid.*;
 import wave.multid.view.*;
 
 public class RarefactionGeom extends WaveCurveOrbitGeom implements RpGeometry {
 
-    //no RarefactionGeom : criar um get dos indices (inicio e fim da curva). Usar este intervalo para limitar o source
-    //os indices entram no CTR como args
+    private OrbitPoint[] orbitPointsArray_;
 
 
-    private int beginOfRaref_;
-    private int endOfRaref_;
-
-
-    public RarefactionGeom(CoordsArray[] vertices, WaveCurveOrbitGeomFactory factory) {     //args indIni e indFin
+    public RarefactionGeom(CoordsArray[] vertices, WaveCurveOrbitGeomFactory factory) {
         super(vertices, factory);
-        beginOfRaref_ = 0;
-        endOfRaref_   = vertices.length;
+        orbitPointsArray_ = ((RarefactionOrbit) factory.geomSource()).getPoints();
 
     }
 
-
-
-    public RarefactionGeom(CoordsArray[] vertices, WaveCurveOrbitGeomFactory factory, int beginOfRaref, int endOfRaref) {     //args indIni e indFin
+    public RarefactionGeom(CoordsArray[] vertices, WaveCurveOrbitGeomFactory factory, RarefactionOrbit orbit) {
         super(vertices, factory);
-        beginOfRaref_ = beginOfRaref;
-        endOfRaref_   = endOfRaref;
-
+        orbitPointsArray_ = orbit.getPoints();
     }
 
 
@@ -37,15 +29,9 @@ public class RarefactionGeom extends WaveCurveOrbitGeom implements RpGeometry {
     }
 
 
-    //--------------------------------
-    public int getBegin() {
-        return beginOfRaref_;
+    public OrbitPoint[] getPointsArray() {
+        return orbitPointsArray_;
     }
-
-    public int getEnd() {
-        return endOfRaref_;
-    }
-    //--------------------------------
 
 
    

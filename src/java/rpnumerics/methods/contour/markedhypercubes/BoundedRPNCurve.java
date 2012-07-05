@@ -1,5 +1,6 @@
 package rpnumerics.methods.contour.markedhypercubes;
 
+import java.util.List;
 import rpnumerics.RPnCurve;
 import wave.multid.model.*;
 import wave.util.*;
@@ -22,4 +23,11 @@ public class BoundedRPNCurve extends RPnCurve {
 		
 		return polyline;
 	}
+
+    @Override
+    public List segments() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+
 }

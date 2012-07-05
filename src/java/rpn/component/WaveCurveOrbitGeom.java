@@ -1,9 +1,11 @@
 package rpn.component;
 
+import java.util.ArrayList;
+import java.util.List;
 import wave.multid.*;
 import wave.multid.view.*;
 
-public class WaveCurveOrbitGeom extends OrbitGeom  {
+public class WaveCurveOrbitGeom extends OrbitGeom implements WaveCurveBranchGeom {
 
 
 
@@ -19,6 +21,12 @@ public class WaveCurveOrbitGeom extends OrbitGeom  {
     public GeomObjView createView(ViewingTransform transf) throws DimMismatchEx {
         return new WaveCurveOrbitGeomView(this, transf,viewingAttr());
 
+    }
+
+    public List<WaveCurveBranchGeom> getOrbitGeom() {
+        ArrayList<WaveCurveBranchGeom> list = new ArrayList<WaveCurveBranchGeom>();
+        list.add(this);
+        return list;
     }
 
 

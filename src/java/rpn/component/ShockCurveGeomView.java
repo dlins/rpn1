@@ -43,4 +43,48 @@ public class ShockCurveGeomView extends WaveCurveOrbitGeomView {
     }
 
 
+    @Override
+    public Shape createShape() {
+
+        GeneralPath composite = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
+
+        //***
+        composite.append(dash(), false);
+        //***
+
+        return composite;
+
+    }
+
+
+    private Shape dash() {
+        GeneralPath composite = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
+        ShockCurveGeom absGeom = (ShockCurveGeom) getAbstractGeom();
+
+        OrbitPoint[] points = absGeom.getPointsArray();
+        
+        int begin = 0;
+        int end = points.length;
+
+        int k = 10;
+
+        if (end > 1) {
+            for (int i = begin; i < end - k/2; i+=k) {
+                Coords2D P1DC = new Coords2D();
+                Coords2D P2DC = new Coords2D();
+
+                RealVector P1WC = new RealVector(points[i]);
+                RealVector P2WC = new RealVector(points[i + k/2]);
+
+                getViewingTransform().viewPlaneTransform(new CoordsArray(P1WC), P1DC);
+                getViewingTransform().viewPlaneTransform(new CoordsArray(P2WC), P2DC);
+
+                Line2D line1 = new Line2D.Double(P1DC.getElement(0), P1DC.getElement(1), P2DC.getElement(0), P2DC.getElement(1));
+                composite.append(line1, false);
+            }
+        }
+        return composite;
+    }
+
+
 }

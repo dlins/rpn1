@@ -23,7 +23,6 @@ public class StationaryPointGeomFactory extends RpCalcBasedGeomFactory {
     protected RpGeometry createGeomFromSource() {
         StationaryPoint point = (StationaryPoint) geomSource();
         CoordsArray coords = new CoordsArray(point.getPoint().getCoords());
-        System.out.println("Vai chamar o CTR de StationaryPointGeom a partir de createGeomFromSource de StationaryPointGeomFactory");
         return new StationaryPointGeom(coords, this);
     }
 

@@ -50,7 +50,7 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
     public static int mostraSing = 0;
     public static int count = 0;    //substituto do ControlClick.ind
 
-    
+
     public Polygon defBordo(Scene scene_) {
 
         RealVector V1 = new RealVector(2);
@@ -125,28 +125,28 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
 
     public void drawSaddle(Graphics g ,double xVecP1, double yVecP1, double xVecP2, double yVecP2, Coords2D dcCoordsImgVecP1, Coords2D dcCoordsImgVecP2, int j) {
         if (j==0) drawSource(g, xVecP1, yVecP1, xVecP2, yVecP2, dcCoordsImgVecP1, dcCoordsImgVecP2);
-        if (j==1) drawSink(g, xVecP1, yVecP1, xVecP2, yVecP2, dcCoordsImgVecP1, dcCoordsImgVecP2);        
+        if (j==1) drawSink(g, xVecP1, yVecP1, xVecP2, yVecP2, dcCoordsImgVecP1, dcCoordsImgVecP2);
     }
     //--------------------------------------------------------------------------
 
 
     public void infoWaveCurve(RealVector newValue, WaveCurve curve, RPnPhaseSpacePanel panel) {
-        count = 0;
-
-        int index = curve.findClosestSegment(newValue);
-        int indBegin = curve.getBeginSubCurve(index);
-        
-        String locSubCurve = String.valueOf(index - indBegin);
-        String name = curve.getName()[index];
-        String family = " Family : " +String.valueOf(curve.getFamilyIndex());
-
+//        count = 0;
+//
+//        int index = curve.findClosestSegment(newValue);
+//        int indBegin = curve.getBeginSubCurve(index);
+//
+//        String locSubCurve = String.valueOf(index - indBegin);
+//        String name = curve.getName()[index];
+//        String family = " Family : " +String.valueOf(curve.getFamilyIndex());
+//
 //        if (name.equals("Rarefaction"))
 //            panel.setToolTipText(String.valueOf(index) + " " +name + " " +curve.getPoints()[index].getLambda());
-
-        panel.setToolTipText(locSubCurve + " " + name + " " + family);
-        ToolTipManager ttm = ToolTipManager.sharedInstance();
-        ttm.setInitialDelay(0);
-        ttm.setDismissDelay(500);
+//
+//        panel.setToolTipText(locSubCurve + " " + name + " " + family);
+//        ToolTipManager ttm = ToolTipManager.sharedInstance();
+//        ttm.setInitialDelay(0);
+//        ttm.setDismissDelay(500);
 
     }
 
@@ -179,16 +179,16 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
             g.setColor(cor12);
             graph.draw(line1);
             graph.draw(line2);
-            
+
         }
 
         g.setColor(cor34);
-        
+
 
         if (panel.getName().equals(RPnPhaseSpaceAbstraction.namePhaseSpace)) {
             graph.draw(line3);
             graph.draw(line4);
-            
+
             //********* esboço de marcação de pontos de equilibrio
             for (int i=0; i<VelocityAgent.listaEquil.size(); i++) {
                 RealVector p = VelocityAgent.listaEquil.get(i);
@@ -222,28 +222,28 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
                 }
             }
 
-            
+
             //------------------------------------------------------------------
-            else if (curve instanceof WaveCurve) {
-                
-                //---------------------------------
-                Coords2D dcCoordsMP = toDeviceCoords(scene_, curve.findClosestPoint(newValue));
-                double xMP = dcCoordsMP.getElement(1);
-                double yMP = dcCoordsMP.getElement(0);
-
-                line3 = new Line2D.Double(yMP - 5, xMP, yMP + 5, xMP);
-                line4 = new Line2D.Double(yMP, xMP - 5, yMP, xMP + 5);
-                if (panel.getName().equals(RPnPhaseSpaceAbstraction.namePhaseSpace)) {
-                    graph.draw(line3);
-                    graph.draw(line4);
-
-                    infoWaveCurve(newValue, (WaveCurve) curve, panel);
-                }
-                //---------------------------------
-
-                //infoWaveCurve(newValue, (WaveCurve) curve, panel);
-
-            }
+//            else if (curve instanceof WaveCurve) {
+//
+//                //---------------------------------
+//                Coords2D dcCoordsMP = toDeviceCoords(scene_, curve.findClosestPoint(newValue));
+//                double xMP = dcCoordsMP.getElement(1);
+//                double yMP = dcCoordsMP.getElement(0);
+//
+//                line3 = new Line2D.Double(yMP - 5, xMP, yMP + 5, xMP);
+//                line4 = new Line2D.Double(yMP, xMP - 5, yMP, xMP + 5);
+//                if (panel.getName().equals(RPnPhaseSpaceAbstraction.namePhaseSpace)) {
+//                    graph.draw(line3);
+//                    graph.draw(line4);
+//
+//                    infoWaveCurve(newValue, (WaveCurve) curve, panel);
+//                }
+//                //---------------------------------
+//
+//                //infoWaveCurve(newValue, (WaveCurve) curve, panel);
+//
+//            }
             else panel.setToolTipText(null);
 
             //------------------------------------------------------------------
@@ -251,8 +251,8 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
 
         } catch (Exception e) {
         }
-        
-        
+
+
         if ((count % 2) == 0) {
 
             if (UIController.instance().getState() instanceof AREASELECTION_CONFIG  &&  panel.getName().equals(RPnPhaseSpaceAbstraction.namePhaseSpace)) {
@@ -279,18 +279,18 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
             //*** Fim dos botoes Classify e Velocity
 
 
-        
+
 
 
     }
 
 
     public void paintComponent(Graphics g, Scene scene_, RPnPhaseSpacePanel panel) {
-    
+
         changeColor();
-        
+
         drawFirstPanel(g, scene_, panel);
-        
+
     }
 
 
@@ -359,7 +359,7 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
             us = Math.min(xTP, xCR);
             vi = Math.max(yTP, yCR);
             ui = Math.max(xTP, xCR);
-            
+
             if (mapToEqui == 0) {
                 v_s = (int) (vs / dv) * dv;               //  Ajuste feito diretamente em pixel.
                 u_s = (int) (us / du) * du;
@@ -402,7 +402,7 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
         //if (boundary instanceof IsoTriang2DBoundary) {
             defBordo(scene);
         //}
-        
+
         Polygon poly = new Polygon();
 
         double v_s = shape.getBounds2D().getMinX();
@@ -416,7 +416,7 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
         double u2 = u_i;
 
         double dx = 0.;
-        
+
         if (mapToEqui == 1) {
             v_s = v_s + 0.5 * (RPnPhaseSpacePanel.myH_ - u_s);
             v_i = v_i + 0.5 * (RPnPhaseSpacePanel.myH_ - u_i);

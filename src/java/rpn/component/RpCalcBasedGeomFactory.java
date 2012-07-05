@@ -43,6 +43,7 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
         // first calculation is different for some cases...
         try {
 
+            System.out.println("Entrou no calc() do RpCalcBasedGeomFactory");
             geomSource_ = calc_.calc();
             geom_ = createGeomFromSource();
             isGeomOutOfDate_ = false;

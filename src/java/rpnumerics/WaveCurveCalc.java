@@ -6,7 +6,10 @@
  */
 package rpnumerics;
 
+
 public class WaveCurveCalc extends WaveCurveOrbitCalc {
+//public class WaveCurveCalc implements RpCalculation {
+
     //
     // Constants
     //
@@ -27,10 +30,14 @@ public class WaveCurveCalc extends WaveCurveOrbitCalc {
     //
     @Override
     public RpSolution calc() throws RpException {
+        System.out.println("Entrou no calc() de WaveCurveCalc.................");
+        System.out.println("getStart() : " +getStart());
+        System.out.println("getFamilyIndex() : " +getFamilyIndex());
+        System.out.println("getDirection() : " +getDirection());
 
         RpSolution result = nativeCalc(getStart(), getFamilyIndex(), getDirection());
-        
 
+        
         if (result == null) {
             throw new RpException("Error in native layer");
         }
@@ -39,4 +46,12 @@ public class WaveCurveCalc extends WaveCurveOrbitCalc {
     }
 
     private native RpSolution nativeCalc(OrbitPoint initialPoint, int family, int timeDirection);
+
+    public RpSolution recalc() throws RpException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public RpSolution recalc(Area area) throws RpException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

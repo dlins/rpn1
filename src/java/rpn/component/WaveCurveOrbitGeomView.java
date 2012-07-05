@@ -13,10 +13,10 @@ import wave.multid.view.*;
 import wave.util.*;
 import java.util.ArrayList;
 
-public class WaveCurveOrbitGeomView extends OrbitGeomView {
+public class WaveCurveOrbitGeomView extends OrbitGeomView implements WaveCurveBranchView {
 
     protected ArrayList arrowList_;
-    
+
     public WaveCurveOrbitGeomView(MultiGeometryImpl geom, ViewingTransform transf,
             ViewingAttr attr) throws DimMismatchEx {
 
@@ -25,8 +25,9 @@ public class WaveCurveOrbitGeomView extends OrbitGeomView {
 
    
 
+    //@Override
     protected void arrowsCalculations() {
-    
+
         arrowList_ = new ArrayList();
 
         Orbit source = (Orbit) (((RpGeometry) getAbstractGeom()).geomFactory().
@@ -40,7 +41,6 @@ public class WaveCurveOrbitGeomView extends OrbitGeomView {
             Coords2D start_dc = new Coords2D();
 
             ArrayList<RealVector> arrowPositions = levelsProcessing(points[i], points[i + 1], new Double(RPNUMERICS.getParamValue("orbit", "level")));
-
 
             for (RealVector arrowStartPoint : arrowPositions) {
 
@@ -58,10 +58,14 @@ public class WaveCurveOrbitGeomView extends OrbitGeomView {
 
                 RealVector direction = new RealVector(direction_dc.getCoords());
 
+
                 if (direction.norm() != 0.0) {
 
                     double lambda1 = points[i].getLambda();
+
+
                     double lambda2 = points[i + 1].getLambda();
+
 
                     if (lambda1 > lambda2) {
                         direction.negate();
@@ -79,10 +83,12 @@ public class WaveCurveOrbitGeomView extends OrbitGeomView {
         }
     }
 
-    protected ArrayList<RealVector> levelsProcessing(OrbitPoint firstPoint, OrbitPoint secondPoint, double level) {     //*** ou private?
+    protected ArrayList<RealVector> levelsProcessing(OrbitPoint firstPoint, OrbitPoint secondPoint, double level) {
 
 
         ArrayList<RealVector> arrowPostions = new ArrayList<RealVector>();
+
+
 
         int lp = firstPoint.getSize();
 

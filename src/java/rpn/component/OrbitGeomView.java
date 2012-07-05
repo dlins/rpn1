@@ -6,8 +6,6 @@ package rpn.component;
 
 import java.awt.*;
 import java.awt.geom.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import rpnumerics.*;
 import wave.multid.*;
@@ -21,28 +19,16 @@ public class OrbitGeomView extends PolyLine {
 
     private ArrayList arrowList_;
     private OrbitPoint[] points_;
-
-    private final static int ARROWS_STEP = 30;    //era 10
-    private final static int SCALE = 800;        //era 150
+    private final static int ARROWS_STEP = 30;      //era 10
+    private final static int SCALE = 800;           //era 150
     
+
     public OrbitGeomView(MultiGeometryImpl geom, ViewingTransform transf,
             ViewingAttr attr) throws DimMismatchEx {
 
         super(geom, transf, attr);
 
-        
     }
-
-
-    @Override
-    public void draw(Graphics2D g) {
-
-        g.setColor(getViewingAttr().getColor());
-
-        super.draw(g);
-
-    }
-
 
     @Override
     public Shape createShape() {
@@ -118,4 +104,19 @@ public class OrbitGeomView extends PolyLine {
 
         return composite;
     }
+
+    //-----------------------------------------------
+
+
+
+    @Override
+    public void draw(Graphics2D g) {
+
+        g.setColor(getViewingAttr().getColor());
+
+        super.draw(g);
+
+    }
+
+
 }

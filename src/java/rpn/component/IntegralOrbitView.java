@@ -34,7 +34,7 @@ public class IntegralOrbitView extends WaveCurveOrbitGeomView {
 
         createInflectionMarks();
         arrowsCalculations();
-        
+
         composite.append(super.createShape(), false);
 
         return composite;
@@ -61,7 +61,6 @@ public class IntegralOrbitView extends WaveCurveOrbitGeomView {
 
     }
 
-    //*** metodo original, usado para preencher a lista de pontos de inflexao. Originalmente, draw desenha esta lista
     private void createInflectionMarks() {
 
         inflectionPointsMark_ = new ArrayList<PointMark>();
@@ -71,11 +70,12 @@ public class IntegralOrbitView extends WaveCurveOrbitGeomView {
 
         List<RealVector> inflectionPoints = source.getInflectionPoints();
         for (RealVector inflectionPoint : inflectionPoints) {
-
+        
             CoordsArray pointCoords = new CoordsArray(inflectionPoint);
             ViewingAttr viewAtt = new ViewingAttr(Color.white);
 
             MultiPoint point = new MultiPoint(pointCoords, viewAtt);
+
             PointMark pointMark = null;
             try {
                 pointMark = new PointMark(point, getViewingTransform(), viewAtt);
@@ -85,8 +85,8 @@ public class IntegralOrbitView extends WaveCurveOrbitGeomView {
             inflectionPointsMark_.add(pointMark);
         }
 
-
     }
 
+   
    
 }

@@ -258,7 +258,8 @@ public class CurveDomainManager {
 //        }
 
         // limpar
-        newCurve = new RPnCurve(cleanedPolyline, curve.viewingAttr());
+//        newCurve = new RPnCurve(cleanedPolyline, curve.viewingAttr()) {
+//        };
         // set domain
         RPnCurve tempCurve = calculateInitialCurve();
 

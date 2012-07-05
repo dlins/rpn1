@@ -422,7 +422,14 @@ public class ContourND implements Serializable {
     	RPnCurve rpncurve = null;
 		
 		if (curve.numberOfSegments() != 0 ) {
-			rpncurve = new RPnCurve(curve, new ViewingAttr(Color.yellow));
+			rpncurve = new RPnCurve(curve, new ViewingAttr(Color.yellow)) {
+
+                @Override
+                public java.util.List segments() {
+                    throw new UnsupportedOperationException("Not supported yet.");
+                }
+
+            };
 		}		
     	
     	return rpncurve;

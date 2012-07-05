@@ -6,6 +6,7 @@
  */
 package rpnumerics;
 
+import java.util.List;
 import wave.util.RealVector;
 
 
@@ -14,8 +15,10 @@ import java.awt.Color;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import rpn.RPnUIFrame;
 import rpn.component.MultidAdapter;
+import wave.util.RealSegment;
 
 public class Orbit extends RPnCurve implements RpSolution {
     //
@@ -29,6 +32,10 @@ public class Orbit extends RPnCurve implements RpSolution {
     private OrbitPoint[] points_;
     private int increase_;
 
+    private List<? extends RealSegment> segments_;
+
+    private double ALFA;
+
 
     //
     // Constructor
@@ -38,12 +45,16 @@ public class Orbit extends RPnCurve implements RpSolution {
 
         increase_ = increase;
         points_ = orbitPointsFromRealVectors(coords, times);
+
+        segments_ = MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseRPnCurveToCoordsArray(this));
     }
 
     public Orbit(OrbitPoint[] points,  int increase) {
         super(MultidAdapter.converseOrbitPointsToCoordsArray(points), new ViewingAttr(Color.white));
         increase_ = increase;
         points_ = points;
+
+        segments_ = MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseRPnCurveToCoordsArray(this));
 
     }
 
@@ -53,6 +64,8 @@ public class Orbit extends RPnCurve implements RpSolution {
 
         increase_ = orbit.getDirection();
         points_ = orbit.getPoints();
+
+        segments_ = MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseRPnCurveToCoordsArray(this));
     }
 
     private static OrbitPoint[] orbitPointsFromRealVectors(RealVector[] coords,
@@ -90,6 +103,35 @@ public class Orbit extends RPnCurve implements RpSolution {
         System.arraycopy(swap, 0, points_, 0, swap.length);
     }
 
+
+    public void append(Orbit orbit){
+
+        int pointsOldSize=points_.length;
+
+
+        OrbitPoint[] temp = new OrbitPoint[pointsOldSize];
+
+        System.arraycopy(points_, 0, temp, 0, pointsOldSize);
+
+
+        points_= new OrbitPoint[pointsOldSize+orbit.getPoints().length];
+
+
+        for (int i = 0; i < temp.length; i++) {
+            points_[i] = new OrbitPoint(temp[i]);
+
+        }
+
+        for (int i = 0; i < orbit.getPoints().length; i++) {
+
+            points_[i+pointsOldSize] = new OrbitPoint(orbit.getPoints()[i]);
+
+        }
+
+    }
+
+
+
 //    public static Orbit concat(Orbit backward, Orbit forward, int familyIndex) {
 //        // opposite time directions assumed...
 //        OrbitPoint[] swap = new OrbitPoint[backward.getPoints().length
@@ -111,74 +153,7 @@ public class Orbit extends RPnCurve implements RpSolution {
 //
 //    }
 
-    //** inseri este método (Leandro)
-//    @Override
-//    public int findClosestSegment(RealVector targetPoint) {
-//
-//        System.out.println("findClosestSegment de Orbit");
-//
-//        ArrayList segments = MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseRPnCurveToCoordsArray(this));
-//
-//        RealVector target = new RealVector(targetPoint);
-//        RealVector closest = null;
-//        RealVector segmentVector = null;
-//        double alpha = 0;
-//        int closestSegment = 0;
-//
-//        double[] dist = new double[segments.size()];
-//        double distmin;
-//
-//        for (int i = 0; i < segments.size(); i++) {
-//
-//            RealSegment segment = (RealSegment) segments.get(i);
-//            segmentVector = new RealVector(segment.p1());
-//            segmentVector.sub(segment.p2());
-//
-//            for (int k = 0; k < target.getSize(); k++) {
-//                if (target.getElement(k) == 0.) {
-//                    segmentVector.setElement(k, 0.);
-//                }
-//            }
-//
-//            closest = new RealVector(target);
-//
-//            closest.sub(segment.p2());
-//
-//            alpha = closest.dot(segmentVector)
-//                    / segmentVector.dot(segmentVector);
-//
-//            if (alpha < 0) {
-//                alpha = 0;
-//            }
-//            if (alpha > 1) {
-//                alpha = 1;
-//            }
-//            segmentVector.scale(alpha);
-//
-//            closest.sub(segmentVector);
-//
-//            for (int k = 0; k < target.getSize(); k++) {
-//                if (target.getElement(k) == 0.) {
-//                    closest.setElement(k, 0.);
-//                }
-//            }
-//
-//            dist[i] = closest.norm();
-//        }
-//
-//        distmin = dist[0];
-//        for (int i = 0; i < dist.length; i++) {
-//            if (distmin >= dist[i]) {
-//                distmin = dist[i];
-//                closestSegment = i;
-//            }
-//        }
-//
-//        distancia = distmin;
-//
-//        return closestSegment;
-//    }
-    //**************************************************************************
+
 
     @Override
     public String toString() {
@@ -344,6 +319,12 @@ public class Orbit extends RPnCurve implements RpSolution {
         return buffer.toString();
 
     }
+
+    @Override
+    public List segments() {
+        return segments_;
+    }
+
 
     
 }

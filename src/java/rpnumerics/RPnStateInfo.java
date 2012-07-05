@@ -19,9 +19,6 @@ public class RPnStateInfo {
     }
 
     public Iterator<Entry<String, String>> getInformation() {
-        System.out.println("information_.size() ::::::::::::::::::::::::::::::" +information_.size());
-        System.out.println("information_.values() ::::::::::::::::::::::::::::::" +(information_.values()).toArray()[0]);
-        System.out.println("information_.get(fluxfunction) xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx : " +information_.get("fluxfunction").toString());
         return information_.entrySet().iterator();
     }
 }

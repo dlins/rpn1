@@ -6,78 +6,96 @@
 package rpnumerics;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import rpn.component.MultidAdapter;
+import wave.util.RealSegment;
+import wave.util.RealVector;
 
-public class WaveCurve extends WaveCurveOrbit {
+public class WaveCurve extends RPnCurve implements WaveCurveBranch, RpSolution {
+//public class WaveCurve implements WaveCurveBranch, RpSolution {
 
     private int[] curveTypes_;
-
     private static int[] curvesIndex_;
-
-    //--------------------------------
-    private String[] names = new String[getPoints().length];
-    private int[] beginSubCurves_ = new int[getPoints().length];
-    //--------------------------------
-
+    private int family_;
+    private int direction_;
+    private List<WaveCurveBranch> branchList_;
     
-    public WaveCurve(List<OrbitPoint[]> points, int[] curveTypes, int family, int increase) {
-        super(concatOrbitPoints(points), family, increase);
-        curveTypes_ = curveTypes;
+    private double ALFA;
+
+
+    public WaveCurve(int family, int increase) {
+        //nao esquecer de que tem uma chamada implicita para super() aqui
+        System.out.println("Chamando wave curve init");
+        family_ = family;
+        direction_ = increase;
+        branchList_ = new ArrayList<WaveCurveBranch>();
 
     }
+
+
+    public void add(WaveCurveBranch branch) {
+        branchList_.add(branch);
+
+    }
+
+    public void remove(WaveCurveBranch branch) {
+        branchList_.remove(branch);
+    }
+
+  
+
 
     public int[] getCurveTypes() {
         return curveTypes_;
     }
 
-    //--------------------------------------
-    public void setName(int i, String name) {
-        names[i] = name;
+  
+
+    public static int[] getCurvesIndex() {
+        return curvesIndex_;
     }
 
-    public String[] getName() {
-        return names;
+    public int getFamily() {
+        return family_;
     }
 
-    public void setBeginSubCurves(int k, int begin) {
-        beginSubCurves_[k] = begin;
+    public int getDirection() {
+        return direction_;
     }
 
-    public int getBeginSubCurve(int k) {
-        return beginSubCurves_[k];
-    }
-    //--------------------------------------
+  
 
-    
-    private static OrbitPoint[] concatOrbitPoints(List<OrbitPoint[]> pointsList) {
-        curvesIndex_ = new int[pointsList.size()];
+    public List<WaveCurveOrbit> getSubCurvesList() {
 
-        ArrayList<OrbitPoint> tempArrayList = new ArrayList<OrbitPoint>();
+        List<WaveCurveOrbit> result= new ArrayList<WaveCurveOrbit>();
 
-        int curvesEnd = 0;
+        
+        for (WaveCurveBranch branch : branchList_) {
 
+            result.addAll(branch.getSubCurvesList());
 
-        for (OrbitPoint[] orbitPoint : pointsList) {
-            for (int i = 0; i < orbitPoint.length; i++) {
-                tempArrayList.add(orbitPoint[i]);
-                System.out.println(orbitPoint[i]);
-            }
-
-            curvesIndex_[curvesEnd++] = orbitPoint.length;
-            System.out.println("Fim da curva: "+orbitPoint.length);
-
-
-        }
-
-        OrbitPoint[] result = new OrbitPoint[tempArrayList.size()];
-        for (int i = 0; i < result.length; i++) {
-            result[i] = tempArrayList.get(i);
         }
 
         return result;
     }
 
-    public static int[] getCurvesIndex() {
-        return curvesIndex_;
+    
+
+    public List<RealSegment> segments() {
+
+        List temp = new ArrayList();
+
+        for (int i = 0; i < getSubCurvesList().size(); i++) {
+            for (int j = 0; j < getSubCurvesList().get(i).segments().size(); j++) {
+                temp.add(getSubCurvesList().get(i).segments().get(j));
+            }
+        }
+
+        return temp;
+        
     }
+
+
+    
 }

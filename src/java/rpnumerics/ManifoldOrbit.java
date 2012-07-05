@@ -11,6 +11,7 @@
 // orbit            orbit on the manifold starting with firstPoint
 package rpnumerics;
 
+import java.util.List;
 import wave.util.RealVector;
 import wave.util.RealMatrix2;
 import wave.multid.view.ViewingAttr;
@@ -428,4 +429,11 @@ public class ManifoldOrbit extends RPnCurve implements RpSolution {
 
 
     }
+
+    @Override
+    public List segments() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+
 }

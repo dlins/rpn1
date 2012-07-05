@@ -34,7 +34,7 @@ public class PoincareSectionGeomFactory implements RpGeomFactory {
 
     protected void installController() {
         setUI(createUI());
-        //getUI().install(this);
+        getUI().install(this);
     }
 
     //

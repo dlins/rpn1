@@ -31,9 +31,9 @@ public class RarefactionOrbitView extends WaveCurveOrbitGeomView{
 
         GeneralPath composite = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
         
-        //***
+//        //***
         composite.append(shapeCalculations(), false);
-        //***
+//        //***
 
         composite.append(super.createShape(), false);
 
@@ -56,13 +56,22 @@ public class RarefactionOrbitView extends WaveCurveOrbitGeomView{
 
         GeneralPath composite = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
 
-        Orbit source = (Orbit) (((RpGeometry) getAbstractGeom()).geomFactory().
-                geomSource());
+//        Orbit source = (Orbit) (((RpGeometry) getAbstractGeom()).geomFactory().
+//                geomSource());
 
-        int begin = ((RarefactionGeom) getAbstractGeom()).getBegin();
-        int end   = ((RarefactionGeom) getAbstractGeom()).getEnd();
+//        int begin = ((RarefactionGeom) getAbstractGeom()).getBegin();
+//        int end   = ((RarefactionGeom) getAbstractGeom()).getEnd();
 
-        OrbitPoint[] points = source.getPoints();
+        
+        RarefactionGeom absGeom = (RarefactionGeom) getAbstractGeom();
+
+
+        OrbitPoint[] points = absGeom.getPointsArray();
+
+        int begin = 0;
+        int end = points.length;
+
+
 
         //for (int i = 2; i < points.length - 2; i++) {       // à espera de confirmacao
         for (int i = begin + 2; i < end - 2; i++) {

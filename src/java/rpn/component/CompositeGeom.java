@@ -1,33 +1,23 @@
 package rpn.component;
 
+import rpnumerics.CompositeCurve;
+import rpnumerics.OrbitPoint;
 import wave.multid.*;
 import wave.multid.view.*;
 
 public class CompositeGeom extends WaveCurveOrbitGeom implements RpGeometry {
 
-
-    private int beginOfComp_;
-    private int endOfComp_;
-
+    private OrbitPoint[] orbitPointsArray_;
 
     public CompositeGeom(CoordsArray[] coordsArray, WaveCurveOrbitGeomFactory factory) {
         super(coordsArray, factory);
-        System.out.println("coordsArray.length : " +coordsArray.length);
-        beginOfComp_ = 0;
-        endOfComp_   = coordsArray.length;
-       
+        orbitPointsArray_ = ((CompositeCurve) factory.geomSource()).getPoints();
     }
 
-
-
-    public CompositeGeom(CoordsArray[] coordsArray, WaveCurveOrbitGeomFactory factory, int beginOfComp, int endOfComp) {
-        super(coordsArray, factory);
-        beginOfComp_ = beginOfComp;
-        endOfComp_   = endOfComp;
-
+    public CompositeGeom(CoordsArray[] vertices, WaveCurveOrbitGeomFactory factory, CompositeCurve orbit) {
+        super(vertices, factory);
+        orbitPointsArray_ = orbit.getPoints();
     }
-
-
 
     @Override
     public GeomObjView createView(ViewingTransform transf) throws DimMismatchEx {
@@ -35,16 +25,7 @@ public class CompositeGeom extends WaveCurveOrbitGeom implements RpGeometry {
 
     }
 
-
-    //--------------------------------
-    public int getBegin() {
-        return beginOfComp_;
+    public OrbitPoint[] getPointsArray() {
+        return orbitPointsArray_;
     }
-
-    public int getEnd() {
-        return endOfComp_;
-    }
-    //--------------------------------
-
-
 }

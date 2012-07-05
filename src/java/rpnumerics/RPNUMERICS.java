@@ -381,8 +381,6 @@ public class RPNUMERICS {
 //        return new OrbitCalc(orbitPoint, direction_, createODESolver(flow));
 //
 //    }
-
-
     public static DoubleContactCurveCalc createDoubleContactCurveCalc() {
 
         int[] resolution = RPnDataModule.processResolution(getParamValue("doublecontactcurve", "resolution"));

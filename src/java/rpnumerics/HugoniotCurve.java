@@ -393,15 +393,6 @@ public class HugoniotCurve extends SegmentedCurve {
     }
     //****************************
 
-    //****************************
-    // Tem que retornar HugoniotCurve ou RpGeometry???
-    public HugoniotCurve sigmaCurve() {
-        System.out.println("this.getXZero() em sigmaCurve : " +this.getXZero());
-        return this;
-    }
-
-    //****************************
-
 
     public String toXML() {
         StringBuilder buffer = new StringBuilder();

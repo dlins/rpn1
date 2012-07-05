@@ -43,7 +43,7 @@ public final class OrbitPoint extends PhasePoint {
     }
 
     public OrbitPoint(double[] coords) {
-        super(setCoordsAndSpeed(coords));
+        super(extractCoordsVector(coords));
         lambda_ = coords[coords.length - 1];
     }
 
@@ -51,7 +51,7 @@ public final class OrbitPoint extends PhasePoint {
         this(pPoint.getCoords());
     }
 
-    private static RealVector setCoordsAndSpeed(double[] coordsAndSpeed) {
+    private static RealVector extractCoordsVector(double[] coordsAndSpeed) {
 
         RealVector coords = new RealVector(coordsAndSpeed.length - 1);
 

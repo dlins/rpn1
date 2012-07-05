@@ -39,10 +39,23 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc(JNIEnv * env,
     jclass arrayListClass = env->FindClass("java/util/ArrayList");
 
 
+    jclass shockCurveClass = (env)->FindClass(SHOCKCURVE_LOCATION);
+    jclass classRarefactionOrbit = (env)->FindClass(RAREFACTIONORBIT_LOCATION);
+    jclass classComposite = (env)->FindClass(COMPOSITECURVE_LOCATION);
 
-    jmethodID waveCurveConstructor = (env)->GetMethodID(classWaveCurve, "<init>", "(Ljava/util/List;[III)V");
+    jmethodID shockCurveConstructor = (env)->GetMethodID(shockCurveClass, "<init>", "([Lrpnumerics/OrbitPoint;II)V");
+    jmethodID rarefactionOrbitConstructor = (env)->GetMethodID(classRarefactionOrbit, "<init>", "([Lrpnumerics/OrbitPoint;II)V");
+    jmethodID compositeConstructor = (env)->GetMethodID(classComposite, "<init>", "([Lrpnumerics/OrbitPoint;II)V");
+
+
+
+    jmethodID waveCurveConstructor = (env)->GetMethodID(classWaveCurve, "<init>", "(II)V");
     jmethodID orbitPointConstructor = (env)->GetMethodID(classOrbitPoint, "<init>", "([D)V");
     jmethodID toDoubleMethodID = (env)->GetMethodID(classOrbitPoint, "toDouble", "()[D");
+
+
+
+    jmethodID waveCurveAddBranch = (env)->GetMethodID(classWaveCurve, "add", "(Lrpnumerics/WaveCurveBranch;)V");
 
 
     jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
@@ -84,7 +97,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc(JNIEnv * env,
 
     cout << "Parametros " << realVectorInput << " " << familyIndex << " " << timeDirection << endl;
 
-      if (timeDirection == RAREFACTION_SPEED_INCREASE)
+    if (timeDirection == RAREFACTION_SPEED_INCREASE)//TODO REMOVE !!!
 
         timeDirection = WAVE_FORWARD;
 
@@ -95,51 +108,19 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc(JNIEnv * env,
 
     wc.wavecurve(realVectorInput, familyIndex, timeDirection, curves);
 
+    
 
-//   wc.half_wavecurve(RAREFACTION_CURVE, realVectorInput, familyIndex, 10, curves);
-
-//    wc.half_wavecurve(SHOCK_CURVE, realVectorInput, familyIndex, 10, curves);
-
-
-
-    cout << "Saí" << endl;
-
-    cout << "tamanho de curves: " << curves.size() << endl;
+    jobject waveCurveBranch = env->NewObject(classWaveCurve, waveCurveConstructor, familyIndex, timeDirection); //Only one branch for now
 
 
     for (int i = 0; i < curves.size(); i++) {
-
-
-
-
-        cout << "Tipos de curva: " << curves[i].type << endl;
-
-        //        std::vector<RealVector> coords = curvesElement.curve;
-
-
-    }
-
-
-
-    jintArray curvesTypeArray = (env)->NewIntArray(curves.size());
-
-    int tempCurveTypeArray[curves.size()];
-
-    jobject curvesArrayList = env->NewObject(arrayListClass, arrayListConstructor, NULL);
-
-
-    for (int i = 0; i < curves.size(); i++) {
-
-        tempCurveTypeArray[i] = curves[i].type;
 
         std::vector<RealVector> coords = curves[i].curve;
 
-        if (coords.size() == 0) {
-            return NULL;
-        }
-
+//        cout << "Tipo da curva: " << curves[i].type<<" Tamanho da curva: "<< coords.size() << endl;
 
         jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(coords.size(), classOrbitPoint, NULL);
+//        cout << "Tipo da curva: " << curves[i].type << endl;
 
         for (int j = 0; j < coords.size(); j++) {
 
@@ -151,8 +132,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc(JNIEnv * env,
                 tempVector(2) = 0;
 
             }
+//            cout<<tempVector<<endl;
 
-            double  * dataCoords = tempVector ;
+            double * dataCoords = tempVector;
 
             //Reading only coodinates
             jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size());
@@ -169,27 +151,41 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc(JNIEnv * env,
         }
 
 
-        env->CallObjectMethod(curvesArrayList, arrayListAddMethod, orbitPointArray);
+        switch (curves[i].type) {
+            case 1:
+            {
+                jobject rarefactionOrbit = (env)->NewObject(classRarefactionOrbit, rarefactionOrbitConstructor, orbitPointArray, familyIndex, timeDirection);
+                env->CallObjectMethod(waveCurveBranch, waveCurveAddBranch, rarefactionOrbit);
+            }
+                break;
+            case 2:
+            {
+                jobject shockCurve = (env)->NewObject(shockCurveClass, shockCurveConstructor, orbitPointArray, familyIndex, timeDirection);
+                env->CallObjectMethod(waveCurveBranch, waveCurveAddBranch, shockCurve);
+            }
+                break;
+            case 3:
+            {
+                jobject compositeCurve = (env)->NewObject(classComposite, compositeConstructor, orbitPointArray, timeDirection, familyIndex);
+                env->CallObjectMethod(waveCurveBranch, waveCurveAddBranch, compositeCurve);
+            }
+                break;
 
-
+            default:
+                cout << "Tipo de curva nÃ£o conhecido !!" << endl;
+        }
 
 
     }
 
 
-    env->SetIntArrayRegion(curvesTypeArray, 0, curves.size(), tempCurveTypeArray);
-
-
-    //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-    //Orbit members creation
-
-
 
     //Building the orbit
 
-    jobject waveCurve = (env)->NewObject(classWaveCurve, waveCurveConstructor, curvesArrayList, curvesTypeArray, familyIndex, timeDirection);
+    jobject waveCurve = (env)->NewObject(classWaveCurve, waveCurveConstructor, familyIndex, timeDirection);
 
+
+    env->CallObjectMethod(waveCurve, waveCurveAddBranch, waveCurveBranch);
 
     return waveCurve;
     //

@@ -1,86 +1,74 @@
 package rpn.component;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.Shape;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
+import java.awt.geom.PathIterator;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import rpnumerics.OrbitPoint;
-import rpnumerics.WaveCurve;
 import rpnumerics.WaveCurveCalc;
 import wave.multid.CoordsArray;
+import wave.multid.model.AbstractGeomObj;
 import wave.multid.model.MultiGeometryImpl;
 import wave.multid.view.ViewingTransform;
 import wave.multid.DimMismatchEx;
 import wave.multid.model.MultiPoint;
 import wave.multid.view.GeomObjView;
 import wave.multid.view.PointMark;
+import wave.multid.view.ShapedGeometry;
 import wave.multid.view.ViewingAttr;
 
 public class WaveCurveView extends WaveCurveOrbitGeomView {
 
+    
     public WaveCurveView(MultiGeometryImpl geom, ViewingTransform transf,
             ViewingAttr attr) throws DimMismatchEx {
         super(geom, transf, attr);
+        
     }
 
-//    @Override
-//    public Shape createShape() {
-//
-//        GeneralPath composite = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
-//
-//        List<WaveCurveOrbitGeom> orbitGeomList = ((WaveCurveGeom) getAbstractGeom()).getOrbitsGeomList();
-//
-//        for (WaveCurveOrbitGeom orbitGeom : orbitGeomList) {
-//            try {
-//                GeomObjView orbitView = orbitGeom.createView(getViewingTransform());
-//
-//                System.out.println("Visual: " + orbitView.getClass().getCanonicalName());
-//
-////                WaveCurveOrbitGeomView orbitGeomView = (WaveCurveOrbitGeomView) orbitView;
-//
-//
-//                if (orbitView instanceof CompositeOrbitView) {
-//                    CompositeOrbitView teste = (CompositeOrbitView) orbitView;
-//                    composite.append(teste.createShape(), false);
-//                }
-//
-//                if (orbitView instanceof ShockCurveGeomView) {
-//                    ShockCurveGeomView teste = (ShockCurveGeomView) orbitView;
-//                    composite.append(teste.createShape(), false);
-//                }
-//
-//
-//                if (orbitView instanceof RarefactionOrbitView) {
-//                    RarefactionOrbitView teste = (RarefactionOrbitView) orbitView;
-//
-//                    composite.append(teste.createShape(), false);
-//
-//                }
-//
-//
-//            } //        super.draw(g);
-//            catch (DimMismatchEx ex) {
-//                Logger.getLogger(WaveCurveView.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//
-//
-//
-//        }
-//
-//
-////        composite.append(super.createShape(), false);
-//
-//        return composite;
-//    }
+
+    @Override
+    public Shape createShape() {
+
+        List<GeomObjView> objView = new ArrayList<GeomObjView>();
+
+        List<WaveCurveBranchGeom> branchGeomList = ((WaveCurveGeom) getAbstractGeom()).getOrbitGeom();
+
+        GeneralPath gPath = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
+
+        for (WaveCurveBranchGeom branchGeom : branchGeomList) {
+            try {
+                OrbitGeom orbitGeom = (OrbitGeom)branchGeom;
+                WaveCurveOrbitGeomView orbitView = (WaveCurveOrbitGeomView) orbitGeom.createView(getViewingTransform());
+                gPath.append(orbitView.createShape(), false);
+
+            } catch (DimMismatchEx ex) {
+                Logger.getLogger(WaveCurveView.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+
+        return gPath;
+
+    }
+    
 
 
     @Override
     public void draw(Graphics2D g) {
 
-        List<WaveCurveOrbitGeom> orbitGeomList = ((WaveCurveGeom) getAbstractGeom()).getOrbitsGeomList();
+        //List<WaveCurveOrbitGeom> orbitGeomList = ((WaveCurveGeom) getAbstractGeom()).getOrbitsGeomList();
 
         WaveCurveGeom waveCurveGeom = ((WaveCurveGeom) getAbstractGeom());
 
@@ -104,57 +92,53 @@ public class WaveCurveView extends WaveCurveOrbitGeomView {
             ex.printStackTrace();
         }
 
+        pointMark.draw(g);
 
+        super.draw(g);
 
-
-
-        for (WaveCurveOrbitGeom orbitGeom : orbitGeomList) {
-            try {
-                WaveCurveOrbitGeomView orbitView = (WaveCurveOrbitGeomView) orbitGeom.createView(getViewingTransform());
-                orbitView.draw(g);
-
+//        for (WaveCurveOrbitGeom orbitGeom : orbitGeomList) {
+//            try {
+//                WaveCurveOrbitGeomView orbitView = (WaveCurveOrbitGeomView) orbitGeom.createView(getViewingTransform());
+//
 //                if (orbitView instanceof CompositeOrbitView) {
 //                    CompositeOrbitView teste = (CompositeOrbitView) orbitView;
-//
-//                    //teste.setViewingAttr(new ViewingAttr(Color.green));
-//
-//                    teste.draw(g);
+//                    g.setColor(Color.green);
+//                    g.setStroke(new BasicStroke(1.0f));
+//                    g.draw(teste.createShape());
 //                }
 //
 //                if (orbitView instanceof ShockCurveGeomView) {
 //                    ShockCurveGeomView teste = (ShockCurveGeomView) orbitView;
-//                    //teste.setViewingAttr(new ViewingAttr(Color.blue));
 //
-//                    teste.draw(g);
+//                    g.setColor(Color.blue);
+//                    g.setStroke(new BasicStroke(1.0f));
+//                    g.draw(teste.createShape());
+//
 //                }
 //
 //
 //                if (orbitView instanceof RarefactionOrbitView) {
+//
+//
 //                    RarefactionOrbitView teste = (RarefactionOrbitView) orbitView;
-//                    //teste.setViewingAttr(new ViewingAttr(Color.red));
-//                    teste.draw(g);
+//
+//                    g.setColor(Color.red);
+//                    g.setStroke(new BasicStroke(1.0f));
+//                    g.draw(teste.createShape());
+//
 //                }
+//
+//
+//            } catch (DimMismatchEx ex) {
+//                Logger.getLogger(WaveCurveView.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//
+//            pointMark.draw(g);
+//
+//        }
 
-
-            } catch (DimMismatchEx ex) {
-                Logger.getLogger(WaveCurveView.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-
-
-
-                    pointMark.draw(g);
-
-        }
-
-
-
-
-
-
-
-
-//        super.draw(g);
 
     }
+
+    
 }

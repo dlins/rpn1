@@ -38,8 +38,7 @@ public class WaveCurveOrbitGeomFactory extends OrbitGeomFactory {
 
     @Override
       protected ViewingAttr selectViewingAttr() {
-        int family = (((WaveCurveOrbit) this.geomSource()).getFamilyIndex());
-
+        int family = (((WaveCurveOrbit) this.geomSource()).getFamilyIndex());//TODO REMOVE
 
         if (family == 1) {
             return new ViewingAttr(Color.red);

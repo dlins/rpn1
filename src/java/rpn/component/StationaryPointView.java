@@ -69,26 +69,6 @@ public class StationaryPointView extends PointMark {
 
         // create the arrows (WC)
         StationaryPoint statPoint = (StationaryPoint)((RpGeometry)getAbstractGeom()).geomFactory().geomSource();
-
-        //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        System.out.println("statPoint ========================================== : " +statPoint.getCoords().getElement(0) + " , " +statPoint.getCoords().getElement(1));
-        //System.out.println("statPoint.getEigenVec()[0] ========================= : " +statPoint.getEigenVec()[0].toString());
-        //System.out.println("statPoint.getEigenVec()[1] ========================= : " +statPoint.getEigenVec()[1].toString());
-
-        RealVector v1 = new RealVector(2);
-        RealVector v2 = new RealVector(2);
-
-        v1.setElement(0, statPoint.getEigenVec()[0].getElement(0) - statPoint.getCoords().getElement(0));
-        v1.setElement(1, statPoint.getEigenVec()[0].getElement(1) - statPoint.getCoords().getElement(1));
-        
-        v2.setElement(0, statPoint.getEigenVec()[1].getElement(0) - statPoint.getCoords().getElement(0));
-        v2.setElement(1, statPoint.getEigenVec()[1].getElement(1) - statPoint.getCoords().getElement(1));
-        v2.normalize();
-
-
-        System.out.println("Printando v1 e v2 ================================== : " +v1.getElement(0) + " , " +v1.getElement(1) + " | " +v2.getElement(0) + " , " +v2.getElement(1));
-        //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        
         GeneralPath composite = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
         try {
             composite.append(super.createShape(), false);
@@ -104,8 +84,7 @@ public class StationaryPointView extends PointMark {
             // the directions array will be ordered by eigenValuesR... the higher the
             // order the stronger the color
             Coords2D[] directions_dc = new Coords2D[stateSpaceDim];
-            for (int i = 0, j = 0; i < stateSpaceDim; i++, j += 2) {            // (i, j) = (0, 0) , (1, 2)
-                System.out.println("statPoint.getEigenValR()[i] :::::::::::::: : " +statPoint.getEigenValR()[i]);
+            for (int i = 0, j = 0; i < stateSpaceDim; i++, j += 2) {
                 directions_dc[i] = new Coords2D();
                 RealVector eigentr = new RealVector(statPoint.getPoint().getCoords());
                 for (int k = 0; k < stateSpaceDim; k++)
@@ -118,14 +97,14 @@ public class StationaryPointView extends PointMark {
                 double arrowHeadSize = defaultArrowHeadSize();
                 double arrowLength = defaultArrowLength();
                 // the elliptical - no heads
-                if (statPoint.getEigenValR() [i] == 0.) {
+                if (statPoint.getEigenValR() [i] == 0) {
                     arrowHeadSize = .1;
                     arrowLength *= 2;
                 }
-                else if (statPoint.getEigenValR() [i] < 0.)
+                else if (statPoint.getEigenValR() [i] < 0)
                     // inwards
-                        arrowHeadSize *= -1.;
-                arrows_[j] = new Arrow(new RealVector(start_dc.getCoords()),                        // 0 e 1: na mesma direcao ;   2 e 3: na outra direcao
+                        arrowHeadSize *= -1;
+                arrows_[j] = new Arrow(new RealVector(start_dc.getCoords()),
                     new RealVector(directions_dc[i].getCoords()), arrowHeadSize, arrowLength);
                 arrows_[j + 1] = new Arrow(new RealVector(start_dc.getCoords()),
                     new RealVector(directions_dc[i].getCoords()), arrowHeadSize, -arrowLength);

@@ -6,13 +6,18 @@ import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
+import rpnumerics.CompositeCurve;
 import rpnumerics.Orbit;
+import rpnumerics.OrbitPoint;
+import rpnumerics.RPnCurve;
+import rpnumerics.WaveCurve;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
 import wave.multid.view.ViewingTransform;
 import wave.multid.DimMismatchEx;
 import wave.multid.view.ViewingAttr;
 import wave.multid.model.MultiGeometryImpl;
+import wave.util.RealSegment;
 import wave.util.RealVector;
 
 public class CompositeOrbitView extends WaveCurveOrbitGeomView {
@@ -40,6 +45,7 @@ public class CompositeOrbitView extends WaveCurveOrbitGeomView {
         super.draw(g);
         g.setStroke(actualStroke);
 
+
     }
 
 
@@ -50,12 +56,46 @@ public class CompositeOrbitView extends WaveCurveOrbitGeomView {
 
         //***
         composite.append(normalCalculations(), false);
+        composite.append(dash(), false);
         //***
 
-        composite.append(super.createShape(), false);
+        //composite.append(super.createShape(), false);   //possivelmente morre, desde que createShape ja produza a linha tracejada
+
+
 
         return composite;
 
+    }
+
+
+    private Shape dash() {
+        GeneralPath composite = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
+        CompositeGeom absGeom = (CompositeGeom) getAbstractGeom();
+
+        OrbitPoint[] points = absGeom.getPointsArray();
+
+        int begin = 0;
+        int end = points.length;
+
+        int k = 2;
+
+        if (end > 1) {
+            for (int i = begin; i < end - k/2; i+=k) {
+                Coords2D P1DC = new Coords2D();
+                Coords2D P2DC = new Coords2D();
+
+                RealVector P1WC = new RealVector(points[i]);
+                RealVector P2WC = new RealVector(points[i + k/2]);
+
+                getViewingTransform().viewPlaneTransform(new CoordsArray(P1WC), P1DC);
+                getViewingTransform().viewPlaneTransform(new CoordsArray(P2WC), P2DC);
+
+                Line2D line1 = new Line2D.Double(P1DC.getElement(0), P1DC.getElement(1), P2DC.getElement(0), P2DC.getElement(1));
+                composite.append(line1, false);
+            }
+        }
+
+        return composite;
     }
 
 
@@ -63,23 +103,24 @@ public class CompositeOrbitView extends WaveCurveOrbitGeomView {
 
         GeneralPath composite = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
 
-        Orbit source = (Orbit) (((RpGeometry) getAbstractGeom()).geomFactory().
-                geomSource());
+        CompositeGeom absGeom = (CompositeGeom) getAbstractGeom();
 
-        int begin = ((CompositeGeom) getAbstractGeom()).getBegin();
-        int end   = ((CompositeGeom) getAbstractGeom()).getEnd();
+        OrbitPoint[] points = absGeom.getPointsArray();
+
+        int begin = 0;
+        int end = points.length;
 
         double h = 0.0075;
 
-        if (source.getPoints().length > 1) {
+        if (end > 1) {
 
-             //for (int i = 0; i < source.getPoints().length - 1; i++) {
             for (int i = begin; i < end - 1; i++) {
 
                  Coords2D P1DC = new Coords2D();
                  Coords2D P2DC = new Coords2D();
-                 RealVector P1WC = new RealVector(source.getPoints()[i]);
-                 RealVector P2WC = new RealVector(source.getPoints()[i + 1]);
+
+                 RealVector P1WC = new RealVector(points[i]);
+                 RealVector P2WC = new RealVector(points[i + 1]);
 
                  double mperp = -(P2WC.getElement(0) - P1WC.getElement(0)) / (P2WC.getElement(1) - P1WC.getElement(1));
                  double h_ = h / Math.sqrt(mperp * mperp + 1);
@@ -106,12 +147,11 @@ public class CompositeOrbitView extends WaveCurveOrbitGeomView {
              }
 
 
-             //for (int i = source.getPoints().length - 1; i > source.getPoints().length - 2; i--) {
-            for (int i = end - 1; i > end - 2; i--) {
+             for (int i = end - 1; i > end - 2; i--) {
                  Coords2D P1DC = new Coords2D();
                  Coords2D P2DC = new Coords2D();
-                 RealVector P1WC = new RealVector(source.getPoints()[i - 1]);
-                 RealVector P2WC = new RealVector(source.getPoints()[i]);
+                 RealVector P1WC = new RealVector(points[i - 1]);
+                 RealVector P2WC = new RealVector(points[i]);
 
                  double mperp = -(P2WC.getElement(0) - P1WC.getElement(0)) / (P2WC.getElement(1) - P1WC.getElement(1));
                  double h_ = h / Math.sqrt(mperp * mperp + 1);

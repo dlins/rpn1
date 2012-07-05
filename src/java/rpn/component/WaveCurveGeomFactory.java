@@ -5,12 +5,16 @@
  */
 package rpn.component;
 
+import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import rpnumerics.OrbitPoint;
+import rpnumerics.CompositeCurve;
+import rpnumerics.RarefactionOrbit;
+import rpnumerics.ShockCurve;
 import rpnumerics.WaveCurve;
 import rpnumerics.WaveCurveCalc;
+import rpnumerics.WaveCurveOrbit;
+import wave.multid.view.ViewingAttr;
 
 public class WaveCurveGeomFactory extends WaveCurveOrbitGeomFactory {
     //
@@ -34,93 +38,76 @@ public class WaveCurveGeomFactory extends WaveCurveOrbitGeomFactory {
     // Methods
     //
     @Override
-    protected RpGeometry createGeomFromSource() {
+    protected RpGeometry createGeomFromSource() {       // entra aqui uma vez para cada WC
 
         WaveCurve waveCurve = (WaveCurve) geomSource();
+        //waveCurve.segments(); //RealSegment (uniao de todos os branchs)
 
-        int orbitBegin = 0;
-        int orbitOffSet;
+        System.out.println("waveCurve.getSubCurvesList().size() :::::::::::::::: " +waveCurve.getSubCurvesList().size());
 
-        List<WaveCurveOrbitGeom> waveCurveGeometries = new ArrayList<WaveCurveOrbitGeom>();
+        WaveCurveOrbit firstOrbit = waveCurve.getSubCurvesList().get(0);
+        
+        WaveCurveGeom wcGeom = new WaveCurveGeom(MultidAdapter.converseOrbitPointsToCoordsArray(firstOrbit.getPoints()), this);
+        WaveCurveGeom wcGeomComposite = new WaveCurveGeom(MultidAdapter.converseOrbitPointsToCoordsArray(firstOrbit.getPoints()), this);
 
+        
+        for (WaveCurveOrbit waveCurveOrbit : waveCurve.getSubCurvesList()) {
+            //wcGeom.add(createOrbits(waveCurveOrbit));
+            wcGeomComposite.add(createOrbits(waveCurveOrbit));
+        }
 
-        int[] curvesType = waveCurve.getCurveTypes();
+        wcGeom.add(wcGeomComposite);
 
-        for (int i = 0; i < curvesType.length; i++) {
+        return wcGeom;
+        //return wcGeomComposite;
 
-            orbitOffSet = WaveCurve.getCurvesIndex()[i];
+    }
 
-            //System.out.println("inicio: " + orbitBegin + " Fim: " + orbitOffSet);
-            waveCurveGeometries.add(createOrbits(orbitBegin, orbitBegin + orbitOffSet, curvesType[i]));
+    private WaveCurveOrbitGeom createOrbits(WaveCurveOrbit branch) {
 
-            orbitBegin += orbitOffSet;
+        System.out.println(branch.getClass().getCanonicalName());
+
+        if (branch instanceof RarefactionOrbit) {
+
+            System.out.println("Dentro do createOrbits de WaveCurveGeomFactory : Rarefaction --- " +branch.getPoints().length);
+            return new RarefactionGeom(MultidAdapter.converseOrbitPointsToCoordsArray(branch.getPoints()), this, (RarefactionOrbit)branch);
+
+        }
+
+        if (branch instanceof ShockCurve) {
+
+            System.out.println("Dentro do createOrbits de WaveCurveGeomFactory : Shock --- " +branch.getPoints().length);
+            //return new ShockCurveGeom(MultidAdapter.converseOrbitPointsToCoordsArray(branch.getPoints()), this);
+            return new ShockCurveGeom(MultidAdapter.converseOrbitPointsToCoordsArray(branch.getPoints()), this, (ShockCurve)branch);
+
+        }
+
+        if (branch instanceof CompositeCurve) {
+
+            System.out.println("Dentro do createOrbits de WaveCurveGeomFactory : Composite --- " +branch.getPoints().length);
+            return new CompositeGeom(MultidAdapter.converseOrbitPointsToCoordsArray(branch.getPoints()), this, (CompositeCurve)branch);
 
         }
 
 
-        return new WaveCurveGeom(MultidAdapter.converseOrbitToCoordsArray(waveCurve), waveCurveGeometries, this);
+        return null;
 
     }
 
-    private WaveCurveOrbitGeom createOrbits(int beginOfCurve, int endOfCurve, int curveType) {
 
-        WaveCurve waveCurve = (WaveCurve) geomSource();
-        OrbitPoint[] original = waveCurve.getPoints();
-        OrbitPoint[] orbitPoints = Arrays.copyOfRange(original, beginOfCurve, endOfCurve);
-        
-        
-        switch (curveType) {
+     @Override
+      protected ViewingAttr selectViewingAttr() {
+        int family = (((WaveCurve) this.geomSource()).getFamily());
 
-            case 1://Rarefaction
-
-                System.out.println("Rarefaction entre os indices : " +beginOfCurve + " e " +endOfCurve);
-
-                //return new RarefactionGeom(MultidAdapter.converseOrbitPointsToCoordsArray(orbitPoints), this);
-
-                for (int i = beginOfCurve; i<endOfCurve; i++) {
-                    waveCurve.setName(i, "Rarefaction");
-                    waveCurve.setBeginSubCurves(i, beginOfCurve);
-                }
-
-                
-                return new RarefactionGeom(MultidAdapter.converseOrbitPointsToCoordsArray(orbitPoints), this, beginOfCurve, endOfCurve);
-
-
-            case 2://Shock
-
-                System.out.println("Shock entre os indices : " +beginOfCurve + " e " +endOfCurve);
-
-                for (int i = beginOfCurve; i<endOfCurve; i++) {
-                    waveCurve.setName(i, "Shock");
-                    waveCurve.setBeginSubCurves(i, beginOfCurve);
-                }
-
-                
-                return new ShockCurveGeom(MultidAdapter.converseOrbitPointsToCoordsArray(orbitPoints), this);
-
-
-            case 3://Composite
-
-                System.out.println("Composite entre os indices : " +beginOfCurve + " e " +endOfCurve);
-
-                for (int i = beginOfCurve; i<endOfCurve; i++) {
-                    waveCurve.setName(i, "Composite");
-                    waveCurve.setBeginSubCurves(i, beginOfCurve);
-                }
-                
-
-                //return new CompositeGeom(MultidAdapter.converseOrbitPointsToCoordsArray(orbitPoints), this);
-
-                return new CompositeGeom(MultidAdapter.converseOrbitPointsToCoordsArray(orbitPoints), this, beginOfCurve, endOfCurve);
-
-
-            default:
-                return null;
+        if (family == 1) {
+            return new ViewingAttr(Color.red);
         }
+        if (family == 0) {
+            return new ViewingAttr(Color.blue);
+        }
+        return null;
+      }
 
-
-        
-    }
 
     public String toMatlab(int curveIndex) {
         throw new UnsupportedOperationException("Not supported yet.");
