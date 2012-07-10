@@ -7,10 +7,7 @@ package rpn.component;
 import java.awt.*;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
-import rpnumerics.Orbit;
 import rpnumerics.OrbitPoint;
-import rpnumerics.ShockCurve;
-import rpnumerics.WaveCurve;
 
 import wave.multid.*;
 import wave.multid.model.*;
@@ -48,10 +45,8 @@ public class ShockCurveGeomView extends WaveCurveOrbitGeomView {
 
         GeneralPath composite = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
 
-        //***
         composite.append(dash(), false);
-        //***
-
+        
         return composite;
 
     }

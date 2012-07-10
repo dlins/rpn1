@@ -112,7 +112,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc(JNIEnv * env,
 
     jobject waveCurveBranch = env->NewObject(classWaveCurve, waveCurveConstructor, familyIndex, timeDirection); //Only one branch for now
 
-
     for (int i = 0; i < curves.size(); i++) {
 
         std::vector<RealVector> coords = curves[i].curve;
@@ -132,7 +131,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc(JNIEnv * env,
                 tempVector(2) = 0;
 
             }
-//            cout<<tempVector<<endl;
+            //cout<<tempVector<<endl;
 
             double * dataCoords = tempVector;
 
@@ -145,7 +144,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc(JNIEnv * env,
             jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray);
 
             (env)->SetObjectArrayElement(orbitPointArray, j, orbitPoint);
-
 
 
         }
@@ -174,7 +172,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc(JNIEnv * env,
             default:
                 cout << "Tipo de curva nÃ£o conhecido !!" << endl;
         }
-
 
     }
 

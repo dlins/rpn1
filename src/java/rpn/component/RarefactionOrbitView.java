@@ -5,7 +5,6 @@ import java.awt.Shape;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
-import rpnumerics.Orbit;
 import rpnumerics.OrbitPoint;
 import rpnumerics.RPNUMERICS;
 import wave.multid.Coords2D;
@@ -31,10 +30,7 @@ public class RarefactionOrbitView extends WaveCurveOrbitGeomView{
 
         GeneralPath composite = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
         
-//        //***
         composite.append(shapeCalculations(), false);
-//        //***
-
         composite.append(super.createShape(), false);
 
         return composite;
@@ -55,25 +51,13 @@ public class RarefactionOrbitView extends WaveCurveOrbitGeomView{
     private Shape shapeCalculations() {
 
         GeneralPath composite = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
-
-//        Orbit source = (Orbit) (((RpGeometry) getAbstractGeom()).geomFactory().
-//                geomSource());
-
-//        int begin = ((RarefactionGeom) getAbstractGeom()).getBegin();
-//        int end   = ((RarefactionGeom) getAbstractGeom()).getEnd();
-
         
         RarefactionGeom absGeom = (RarefactionGeom) getAbstractGeom();
-
-
         OrbitPoint[] points = absGeom.getPointsArray();
 
         int begin = 0;
         int end = points.length;
 
-
-
-        //for (int i = 2; i < points.length - 2; i++) {       // à espera de confirmacao
         for (int i = begin + 2; i < end - 2; i++) {
 
             Coords2D direction_dc = new Coords2D();

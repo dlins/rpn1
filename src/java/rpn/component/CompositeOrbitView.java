@@ -6,18 +6,13 @@ import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
-import rpnumerics.CompositeCurve;
-import rpnumerics.Orbit;
 import rpnumerics.OrbitPoint;
-import rpnumerics.RPnCurve;
-import rpnumerics.WaveCurve;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
 import wave.multid.view.ViewingTransform;
 import wave.multid.DimMismatchEx;
 import wave.multid.view.ViewingAttr;
 import wave.multid.model.MultiGeometryImpl;
-import wave.util.RealSegment;
 import wave.util.RealVector;
 
 public class CompositeOrbitView extends WaveCurveOrbitGeomView {
@@ -54,15 +49,9 @@ public class CompositeOrbitView extends WaveCurveOrbitGeomView {
 
         GeneralPath composite = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
 
-        //***
         composite.append(normalCalculations(), false);
         composite.append(dash(), false);
-        //***
-
-        //composite.append(super.createShape(), false);   //possivelmente morre, desde que createShape ja produza a linha tracejada
-
-
-
+        
         return composite;
 
     }

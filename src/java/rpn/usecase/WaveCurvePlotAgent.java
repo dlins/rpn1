@@ -1,7 +1,6 @@
 package rpn.usecase;
 
 import javax.swing.JToggleButton;
-import rpn.component.RarefactionOrbitGeomFactory;
 import rpn.component.RpGeometry;
 import rpn.component.WaveCurveGeomFactory;
 import rpnumerics.OrbitPoint;

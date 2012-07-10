@@ -14,6 +14,7 @@ import wave.util.RealVector;
 import rpnumerics.RPnCurve;
 import wave.util.PointNDimension;
 import java.util.ArrayList;
+import java.util.List;
 import wave.multid.Space;
 import wave.util.RealSegment;
 
@@ -46,6 +47,45 @@ public class MultidAdapter {
         }
         return output;
     }
+    
+    
+
+    // -------------------------------------------------------------------------
+
+    static public CoordsArray[] converseRealSegmentsToCoordsArray(List<RealSegment> list) {
+
+        // --- Supondo o pior caso: todos os segmentos desconectados
+//        CoordsArray[] output = new CoordsArray[2*list.size()];
+//
+//        for(int i = 0; i < list.size(); i++) {
+//            RealVector p1 = new RealVector(list.get(i).p1());
+//            RealVector p2 = new RealVector(list.get(i).p2());
+//
+//            output[2*i] = new CoordsArray(p1);
+//            output[2*i+1] = new CoordsArray(p2);
+//        }
+//
+//        return output;
+        // ---------------------------------------------------------
+
+        // --- Supondo o melhor caso: não existe segmento desconectado
+        CoordsArray[] output = new CoordsArray[1+list.size()];
+
+        for(int i = 0; i < list.size(); i++) {
+            RealVector p1 = new RealVector(list.get(i).p1());
+
+            output[i] = new CoordsArray(p1);
+        }
+
+        RealVector p2 = new RealVector(list.get(list.size()-1).p2());
+        output[list.size()] = new CoordsArray(p2);
+
+        return output;
+        // ---------------------------------------------------------
+
+    }
+
+    //--------------------------------------------------------------------------
 
 
 
@@ -100,7 +140,7 @@ public class MultidAdapter {
 
             realSegments.add(new RealSegment(p1, p2));
         }
-
+        
         p1 = new RealVector(coords[coords.length - 2].getCoords());
         p2 = new RealVector(coords[coords.length - 1].getCoords());
         realSegments.add(new RealSegment(p1, p2));

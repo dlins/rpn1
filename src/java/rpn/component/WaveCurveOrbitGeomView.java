@@ -13,7 +13,7 @@ import wave.multid.view.*;
 import wave.util.*;
 import java.util.ArrayList;
 
-public class WaveCurveOrbitGeomView extends OrbitGeomView implements WaveCurveBranchView {
+public class WaveCurveOrbitGeomView extends OrbitGeomView {
 
     protected ArrayList arrowList_;
 

@@ -11,14 +11,11 @@ import rpnumerics.*;
 import wave.multid.*;
 import wave.multid.model.*;
 import wave.multid.view.*;
-import java.util.ArrayList;
 import wave.util.Arrow;
 import wave.util.RealVector;
 
 public class OrbitGeomView extends PolyLine {
 
-    private ArrayList arrowList_;
-    private OrbitPoint[] points_;
     private final static int ARROWS_STEP = 30;      //era 10
     private final static int SCALE = 800;           //era 150
     

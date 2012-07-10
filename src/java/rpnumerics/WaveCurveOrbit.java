@@ -33,19 +33,18 @@ public class WaveCurveOrbit extends Orbit implements WaveCurveBranch, RpSolution
         return familyIndex_;
     }
 
-    
   
 
     public List<WaveCurveBranch>getCurves() {
 
         return orbitList_;
 
-
     }
 
-    public List<WaveCurveOrbit> getSubCurvesList() {
 
-        List<WaveCurveOrbit> result = new ArrayList<WaveCurveOrbit>();
+    public List<WaveCurveBranch> getBranchsList() {
+
+        List<WaveCurveBranch> result = new ArrayList<WaveCurveBranch>();
 
         result.add(this);
 
@@ -58,6 +57,8 @@ public class WaveCurveOrbit extends Orbit implements WaveCurveBranch, RpSolution
     public List<RealSegment> segments() {
         return segments_;
     }
+
+    
 
 
 }

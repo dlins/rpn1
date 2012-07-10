@@ -43,7 +43,6 @@ import rpn.controller.ui.UIController;
 import rpnumerics.BifurcationProfile;
 import rpnumerics.RPNUMERICS;
 import rpn.controller.ui.VELOCITYAGENT_CONFIG;
-import rpnumerics.WaveCurve;
 
 public class RPnPhaseSpacePanel extends JPanel implements Printable {
     //
@@ -118,9 +117,6 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
                 getViewport().getWidth()).intValue();
         int myH = new Double(scene().getViewingTransform().viewPlane().
                 getViewport().getHeight()).intValue();
-
-        //myW = 3*myW/4;             // Basta isso para redefinir os tamanho dos painéis
-        //myH = 3*myH/4;
 
         cursorPos_ = new Point(0, 0);
         setBackground(DEFAULT_BOUNDARY_COLOR);

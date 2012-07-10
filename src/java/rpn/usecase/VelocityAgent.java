@@ -16,14 +16,14 @@ import rpn.component.util.GeometryGraphND;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UserInputTable;
 import rpnumerics.HugoniotCurve;
-import rpnumerics.HugoniotSegment;
 import rpnumerics.Orbit;
 import rpnumerics.OrbitPoint;
 import rpnumerics.RPnCurve;
-import rpnumerics.SegmentedCurve;
 import wave.util.RealVector;
 import rpn.controller.ui.VELOCITYAGENT_CONFIG;
 import rpn.parser.RPnDataModule;
+import rpnumerics.WaveCurve;
+import rpnumerics.WaveCurveOrbit;
 
 /**
  *
@@ -110,13 +110,34 @@ public class VelocityAgent extends RpModelPlotAgent {
                 GeometryGraphND.cornerRet.setElement(i, 0);
             }
 
+
             if (curve instanceof Orbit) {
-                OrbitPoint point = (OrbitPoint) ((Orbit) curve).getPoints()[curve.findClosestSegment(GeometryGraphND.pMarca)];
+                OrbitPoint point = (OrbitPoint)((Orbit) curve).getPoints()[curve.findClosestSegment(GeometryGraphND.pMarca)];
                 vel.add(point.getLambda());
             }
             else if (curve instanceof HugoniotCurve) {
-                HugoniotSegment segment = (HugoniotSegment)(((SegmentedCurve)curve).segments()).get(curve.findClosestSegment(GeometryGraphND.pMarca));
+                //HugoniotSegment segment = (HugoniotSegment)(((SegmentedCurve)curve).segments()).get(curve.findClosestSegment(GeometryGraphND.pMarca));
                 vel.add(((HugoniotCurve)curve).velocity(GeometryGraphND.pMarca));
+            }
+            else if (curve instanceof WaveCurve) {
+                int tam = ((WaveCurve) curve).getBranchsList().size();
+                ArrayList<OrbitPoint> result = new ArrayList<OrbitPoint>();
+
+                for (int i = 0; i < tam; i++) {
+                    WaveCurveOrbit orbit = (WaveCurveOrbit) ((WaveCurve) curve).getBranchsList().get(i);
+                    OrbitPoint[] parcial = orbit.getPoints();
+                    for (int j = 0; j < parcial.length; j++) {
+                        result.add(parcial[j]);
+                    }
+                }
+                
+                int seg = curve.findClosestSegment(GeometryGraphND.pMarca);
+                vel.add(result.get(seg).getLambda());
+
+            }
+
+            else {
+                vel.add(0.0);
             }
 
                 xVel.add(GeometryGraphND.cornerStr.getElement(1));

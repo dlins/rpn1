@@ -6,14 +6,10 @@
 package rpnumerics;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import rpn.component.MultidAdapter;
 import wave.util.RealSegment;
-import wave.util.RealVector;
 
 public class WaveCurve extends RPnCurve implements WaveCurveBranch, RpSolution {
-//public class WaveCurve implements WaveCurveBranch, RpSolution {
 
     private int[] curveTypes_;
     private static int[] curvesIndex_;
@@ -33,7 +29,7 @@ public class WaveCurve extends RPnCurve implements WaveCurveBranch, RpSolution {
 
     }
 
-
+    
     public void add(WaveCurveBranch branch) {
         branchList_.add(branch);
 
@@ -50,7 +46,6 @@ public class WaveCurve extends RPnCurve implements WaveCurveBranch, RpSolution {
         return curveTypes_;
     }
 
-  
 
     public static int[] getCurvesIndex() {
         return curvesIndex_;
@@ -64,37 +59,33 @@ public class WaveCurve extends RPnCurve implements WaveCurveBranch, RpSolution {
         return direction_;
     }
 
-  
 
-    public List<WaveCurveOrbit> getSubCurvesList() {
+    public List<WaveCurveBranch> getBranchsList() {
 
-        List<WaveCurveOrbit> result= new ArrayList<WaveCurveOrbit>();
+        List<WaveCurveBranch> result= new ArrayList<WaveCurveBranch>();
 
-        
         for (WaveCurveBranch branch : branchList_) {
-
-            result.addAll(branch.getSubCurvesList());
-
+            result.addAll(branch.getBranchsList());
         }
 
         return result;
     }
-
     
 
     public List<RealSegment> segments() {
 
         List temp = new ArrayList();
 
-        for (int i = 0; i < getSubCurvesList().size(); i++) {
-            for (int j = 0; j < getSubCurvesList().get(i).segments().size(); j++) {
-                temp.add(getSubCurvesList().get(i).segments().get(j));
+        for (int i = 0; i < getBranchsList().size(); i++) {
+            for (int j = 0; j < ((WaveCurveOrbit)getBranchsList().get(i)).segments().size(); j++) {
+                temp.add(((WaveCurveOrbit)getBranchsList().get(i)).segments().get(j));
             }
         }
 
         return temp;
         
     }
+
 
 
     

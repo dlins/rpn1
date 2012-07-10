@@ -1,31 +1,22 @@
 package rpn.component;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.awt.Shape;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
-import java.awt.geom.PathIterator;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import rpnumerics.OrbitPoint;
 import rpnumerics.WaveCurveCalc;
 import wave.multid.CoordsArray;
-import wave.multid.model.AbstractGeomObj;
 import wave.multid.model.MultiGeometryImpl;
 import wave.multid.view.ViewingTransform;
 import wave.multid.DimMismatchEx;
 import wave.multid.model.MultiPoint;
 import wave.multid.view.GeomObjView;
 import wave.multid.view.PointMark;
-import wave.multid.view.ShapedGeometry;
 import wave.multid.view.ViewingAttr;
 
 public class WaveCurveView extends WaveCurveOrbitGeomView {

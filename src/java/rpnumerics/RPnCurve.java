@@ -466,6 +466,6 @@ public abstract class RPnCurve {
         return this.viewAttr;
     }
 
-    abstract public List segments();
+    abstract public List<RealSegment> segments();
 
 }

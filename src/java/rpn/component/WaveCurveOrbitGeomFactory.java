@@ -78,6 +78,7 @@ public class WaveCurveOrbitGeomFactory extends OrbitGeomFactory {
 //        return str.toString();
 //    }
 
+    @Override
     public String toMatlab(int curveIndex) {
         throw new UnsupportedOperationException("Not supported yet.");
     }

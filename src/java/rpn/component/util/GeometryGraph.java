@@ -138,7 +138,7 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
 //
 //        String locSubCurve = String.valueOf(index - indBegin);
 //        String name = curve.getName()[index];
-//        String family = " Family : " +String.valueOf(curve.getFamilyIndex());
+//        String family = " Family : " +String.valueOf(curve.getFamily());
 //
 //        if (name.equals("Rarefaction"))
 //            panel.setToolTipText(String.valueOf(index) + " " +name + " " +curve.getPoints()[index].getLambda());
@@ -244,8 +244,7 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
 //                //infoWaveCurve(newValue, (WaveCurve) curve, panel);
 //
 //            }
-            else panel.setToolTipText(null);
-
+//            else panel.setToolTipText(null);
             //------------------------------------------------------------------
 
 

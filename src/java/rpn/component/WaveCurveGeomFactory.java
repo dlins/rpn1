@@ -9,12 +9,15 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import rpnumerics.CompositeCurve;
+import rpnumerics.RPnCurve;
 import rpnumerics.RarefactionOrbit;
 import rpnumerics.ShockCurve;
 import rpnumerics.WaveCurve;
+import rpnumerics.WaveCurveBranch;
 import rpnumerics.WaveCurveCalc;
 import rpnumerics.WaveCurveOrbit;
 import wave.multid.view.ViewingAttr;
+import wave.util.RealSegment;
 
 public class WaveCurveGeomFactory extends WaveCurveOrbitGeomFactory {
     //
@@ -41,25 +44,31 @@ public class WaveCurveGeomFactory extends WaveCurveOrbitGeomFactory {
     protected RpGeometry createGeomFromSource() {       // entra aqui uma vez para cada WC
 
         WaveCurve waveCurve = (WaveCurve) geomSource();
-        //waveCurve.segments(); //RealSegment (uniao de todos os branchs)
+        List<RealSegment> list = waveCurve.segments();
 
-        System.out.println("waveCurve.getSubCurvesList().size() :::::::::::::::: " +waveCurve.getSubCurvesList().size());
+        WaveCurveGeom wcGeom = new WaveCurveGeom(MultidAdapter.converseRealSegmentsToCoordsArray(list), this);
 
-        WaveCurveOrbit firstOrbit = waveCurve.getSubCurvesList().get(0);
-        
-        WaveCurveGeom wcGeom = new WaveCurveGeom(MultidAdapter.converseOrbitPointsToCoordsArray(firstOrbit.getPoints()), this);
-        WaveCurveGeom wcGeomComposite = new WaveCurveGeom(MultidAdapter.converseOrbitPointsToCoordsArray(firstOrbit.getPoints()), this);
+        for (WaveCurveBranch branch : waveCurve.getBranchsList()) {
 
-        
-        for (WaveCurveOrbit waveCurveOrbit : waveCurve.getSubCurvesList()) {
-            //wcGeom.add(createOrbits(waveCurveOrbit));
-            wcGeomComposite.add(createOrbits(waveCurveOrbit));
+            List<RealSegment> segList = new ArrayList<RealSegment>();
+
+
+            for (WaveCurveBranch leaf : branch.getBranchsList()) {
+                segList.addAll(((RPnCurve)leaf).segments());
+
+            }
+
+            WaveCurveGeom wcGeomComposite = new WaveCurveGeom(MultidAdapter.converseRealSegmentsToCoordsArray(segList), this);
+
+            for (WaveCurveBranch waveCurveBranch : branch.getBranchsList()) {
+                wcGeomComposite.add(createOrbits((WaveCurveOrbit) waveCurveBranch));
+            }
+
+            wcGeom.add(wcGeomComposite);
+
         }
 
-        wcGeom.add(wcGeomComposite);
-
         return wcGeom;
-        //return wcGeomComposite;
 
     }
 
@@ -109,6 +118,7 @@ public class WaveCurveGeomFactory extends WaveCurveOrbitGeomFactory {
       }
 
 
+    @Override
     public String toMatlab(int curveIndex) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
