@@ -41,7 +41,7 @@ public class WaveCurveGeomFactory extends WaveCurveOrbitGeomFactory {
     // Methods
     //
     @Override
-    protected RpGeometry createGeomFromSource() {       // entra aqui uma vez para cada WC
+    protected RpGeometry createGeomFromSource() { 
 
         WaveCurve waveCurve = (WaveCurve) geomSource();
         List<RealSegment> list = waveCurve.segments();

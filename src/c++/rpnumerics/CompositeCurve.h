@@ -70,11 +70,13 @@ class CompositeCurve {
 //        
     protected:
     public:
-        static int curve(const std::vector<RealVector> &rarcurve, int origin,
-                int family, int increase,
-                int number_ignore_doub_contact,
+        static int curve(const std::vector<RealVector> &rarcurve, int origin, int family, int increase, int number_ignore_doub_contact,
                           FluxFunction *ff, AccumulationFunction *aa, 
                           Boundary *boundary, std::vector<RealVector> &compcurve);
+
+//        static int curve(const std::vector<RealVector> &rarcurve, int origin, int family, int increase, int number_ignore_doub_contact,
+//                          FluxFunction *ff, AccumulationFunction *aa, 
+//                          Boundary *boundary, std::vector<RealVector> &compcurve, std::vector<RealVector> &shock_curve_temp);
 };
 
 #endif // _COMPOSITECURVE_

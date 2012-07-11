@@ -89,6 +89,8 @@ class Shock {
         static int verify_lax_shock(RealVector &ref, double lambda_0_ref, double lambda_1_ref, RealVector &p, int increase, int family, FluxFunction *ff, AccumulationFunction *aa);
 
         //static void lambda_on_point(RealVector &p, FluxFunction *ff, AccumulationFunction *aa, std::vector<double> &lambda);
+
+        static void normalize_vector(int n, double *v);
     public:
         static double find_initial_epsilon(std::vector<RealVector> &right_eigenvector, std::vector<RealVector> &r_dot, double cos_alpha);
     public:
@@ -105,6 +107,8 @@ class Shock {
     public:
         static void curve(const RealVector &ref, bool local_shock, const RealVector &in, int increase, int family, int type_of_shock, const RealVector *orig_direction, int number_ignore_doub_contact, FluxFunction *ff, AccumulationFunction *aa, Boundary *boundary,
                          std::vector<RealVector> &shockcurve, int &info_shockcurve, std::vector<RealVector> &shockcurve_alt, int &info_shockcurve_alt);
+
+        static void add_sigma(const RealVector &ref, const FluxFunction *ff, const AccumulationFunction *aa, std::vector<RealVector> &curve);
 };
 
 #endif // _SHOCK_

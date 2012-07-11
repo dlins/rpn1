@@ -612,6 +612,10 @@ int Shock::curve_constructor(Boundary *boundary, bool local_shock, int type_of_s
                              double sigma, double sign_composite, double sign_shock,
                              std::vector<RealVector> &shockcurve){
 
+    // 
+    int max_number_after_boundary = 0;
+
+
     int reached_double_contacts = 0;                          
 
     int n = ref_point.size(); 
@@ -668,7 +672,7 @@ int Shock::curve_constructor(Boundary *boundary, bool local_shock, int type_of_s
         // Find normal & tangent.
         hugoniot_der(pnext, ref_point, ff, aa, tangent.components(), normal.components());
 
-        if (dotprod(n, tangent.components(), old_tangent.components()) < 0.0){
+        if (ddot(n, tangent.components(), old_tangent.components()) < 0.0){
             for (int i = 0; i < n; i++) tangent.component(i) = -tangent.component(i);
         }
        
@@ -697,13 +701,13 @@ int Shock::curve_constructor(Boundary *boundary, bool local_shock, int type_of_s
         double dRH2[2][2];
         hugoniot_der2(pnext, ref_point, ff, aa, &dRH2[0][0], curvature);
         double eps = min(1e-4, fabs(1.0/curvature));
-        eps = 1e-3;
+        eps = 1e-3; // Was: 1e-4
 
         // Compute pnext.
         RealVector p(pnext);
 
         // Test eps
-        double test_eps = sgn(eps)*1e-3;
+        double test_eps = sgn(eps)*1e-3; // Was: 1e-4
 
 //        shock_step(p, in, tangent, normal, ff, aa, eps, pnext);
 //        std::cout << "Point: " << p << std::endl;
@@ -830,7 +834,8 @@ int Shock::curve_constructor(Boundary *boundary, bool local_shock, int type_of_s
         else if (type_of_shock == SHOCK_AS_ENGINE_FOR_COMPOSITE){
             if (!boundary->inside(pnext)){
                 printf("Curve constructor reached boundary in file \"%s\", line %u\n    pnext = (%lf, %lf)\n", __FILE__, __LINE__, pnext.component(0), pnext.component(1));
-                return SHOCK_REACHED_BOUNDARY;
+                if (max_number_after_boundary >= 100) return SHOCK_REACHED_BOUNDARY;
+                else max_number_after_boundary++;
             }
             shockcurve.push_back(pnext);
         }
@@ -933,6 +938,7 @@ void Shock::curve(const RealVector &ref, bool local_shock, const RealVector &in,
 
 //    for (int i = 0; i < orig_direction->size(); i++) orig_direction_double[i] = orig_direction->component(i);
     double orig_direction_double[in.size()];
+    //for (int i = 0; i < orig_direction->size(); i++) orig_direction_double[i] = orig_direction->component(i);
 
     if (local_shock){
         if (increase == WAVE_FORWARD){
@@ -981,25 +987,39 @@ void Shock::curve(const RealVector &ref, bool local_shock, const RealVector &in,
 
                     info_shockcurve = info_shockcurve_alt = SHOCK_ERROR;
 //                    return SHOCK_ERROR;
+
+                    // Add sigma before returning.
+                    //add_sigma(ref, (const FluxFunction*)ff, (const AccumulationFunction*)aa, shockcurve);
                     return;
                 }
            }
         }
         else if (increase == WAVE_BACKWARD){
               if (type_of_shock == SHOCK_AS_ENGINE_FOR_COMPOSITE){
+                for (int i = 0; i < orig_direction->size(); i++) orig_direction_double[i] = orig_direction->component(i);
+
                 double p_diff_right[n], p_diff_left[n];
                 for (int i = 0; i < n; i++){
                     p_diff_right[i] = p_right.component(i) - ref_point.component(i);
                     p_diff_left[i]  = p_left.component(i) - ref_point.component(i);
                 }
 
-                if      (ddot(n, orig_direction_double, p_diff_right) >0.0){
+                normalize_vector(n, p_diff_right);
+                normalize_vector(n, p_diff_left);
+
+                if      (ddot(n, orig_direction_double, p_diff_right) > 0.0){
                     for (int i = 0; i < n; i++) pnext.component(i) = p_right.component(i);
                     eps = eps_right;
+                    printf("*** Right selected. ddot = %g, eps = %g ***\n", ddot(n, orig_direction_double, p_diff_right), eps);                    
+                    printf("    p_diff_right = (%g, %g)\n", p_diff_right[0], p_diff_right[1]);
+                    printf("            orig = (%g, %g)\n", orig_direction_double[0], orig_direction_double[1]);
                 }
-                else if (ddot(n, orig_direction_double, p_diff_left) >0.0){
+                else if (ddot(n, orig_direction_double, p_diff_left) > 0.0){
                     for (int i = 0; i < n; i++) pnext.component(i) = p_left.component(i);
                     eps = eps_left;
+                    printf("*** Left selected.  ddot = %g, eps = %g ***\n", ddot(n, orig_direction_double, p_diff_left), eps);
+                    printf("    p_diff_left = (%g, %g)\n", p_diff_left[0], p_diff_left[1]);
+                    printf("            orig = (%g, %g)\n", orig_direction_double[0], orig_direction_double[1]);
                 }
                 else {
                     printf("******Error init. Engine forward");
@@ -1025,6 +1045,9 @@ void Shock::curve(const RealVector &ref, bool local_shock, const RealVector &in,
 
                     info_shockcurve = info_shockcurve_alt = SHOCK_ERROR;
 //                    return SHOCK_ERROR;
+
+                    // Add sigma before returning.
+                    //add_sigma(ref, ff, aa, shockcurve);
                     return;
                 }
             }
@@ -1033,6 +1056,10 @@ void Shock::curve(const RealVector &ref, bool local_shock, const RealVector &in,
             printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
             info_shockcurve = info_shockcurve_alt = SHOCK_ERROR;
 //                    return SHOCK_ERROR;
+
+            // COULD BE ELIMINATED
+            // Add sigma before returning.
+            //add_sigma(ref, ff, aa, shockcurve);
             return;
         }
         
@@ -1051,6 +1078,10 @@ void Shock::curve(const RealVector &ref, bool local_shock, const RealVector &in,
             printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
             info_shockcurve = info_shockcurve_alt = SHOCK_ERROR;
 //                    return SHOCK_ERROR;
+
+             // Add sigma before returning.
+             //add_sigma(ref, ff, aa, shockcurve);
+
              return;
         }
         else {
@@ -1059,13 +1090,22 @@ void Shock::curve(const RealVector &ref, bool local_shock, const RealVector &in,
 
             info_shockcurve = SHOCK_REACHED_BOUNDARY;
             info_shockcurve_alt = SHOCK_ERROR; 
+
+            // Add sigma before returning.
+            //add_sigma(ref, ff, aa, shockcurve);
+
             return;
 //            return SHOCK_REACHED_BOUNDARY;
         }
 
         //printf("after boundary, size = %d\n", shockcurve.size());
 
-        if (dotprod(n, tangent.components(), (pnext - init).components()) < 0.0) for (int i = 0; i < n; i++) tangent.component(i) = -tangent.component(i);
+        RealVector diff_init_next(2);
+        for (int i = 0; i < 2; i++) diff_init_next.component(i) = pnext.component(i) - init.component(i);
+
+//        if (dotprod(n, tangent.components(), (pnext - init).components()) < 0.0) for (int i = 0; i < n; i++) tangent.component(i) = -tangent.component(i);
+        if (dotprod(n, tangent.components(), diff_init_next.components()) < 0.0) for (int i = 0; i < n; i++) tangent.component(i) = -
+tangent.component(i);
         double sigma = shockspeed(n, ref_point.components(), pnext.components(), ff, aa);
         double sign_composite = (double)sgn(lambda   - sigma);
         double sign_shock     = (double)sgn(lambda_0 - sigma);
@@ -1084,6 +1124,10 @@ void Shock::curve(const RealVector &ref, bool local_shock, const RealVector &in,
 
         info_shockcurve = info_curve_constructor;
         info_shockcurve_alt = -1; //SHOCK_ERROR; 
+
+        // Add sigma before returning.
+        //add_sigma(ref, ff, aa, shockcurve);
+
         return;
 //        return info_curve_constructor;
     }
@@ -1095,6 +1139,11 @@ void Shock::curve(const RealVector &ref, bool local_shock, const RealVector &in,
             printf("Initial point does not satisfy Lax condition\n");
 
             info_shockcurve = info_shockcurve_alt = NON_LAX_SHOCK;
+
+            // Add sigma before returning.
+            //add_sigma(ref, ff, aa, shockcurve);
+            //add_sigma(ref, ff, aa, shockcurve_alt);
+
             return;
 
 //            return NON_LAX_SHOCK;
@@ -1154,6 +1203,10 @@ void Shock::curve(const RealVector &ref, bool local_shock, const RealVector &in,
                                                        shockcurve_alt);
 
         info_shockcurve_alt = info_curve_constructor_left;
+
+        // Add sigma before returning.
+        //add_sigma(ref, ff, aa, shockcurve);
+        //add_sigma(ref, ff, aa, shockcurve_alt);
 
         return;                                                
 //        return (info_curve_constructor_right && info_curve_constructor_left);
@@ -1704,5 +1757,33 @@ int Shock::cdgesv(int n, double *A, double *b, double *x) {
         for (i = 0; i < n; i++) x[i] = bb[i];
         return SUCCESSFUL_PROCEDURE;
     } else return ABORTED_PROCEDURE;
+}
+
+void Shock::normalize_vector(int n, double *v){
+    double norm_orig = 0.0;
+    for (int j = 0; j < n; j++) norm_orig += v[j]*v[j];
+    norm_orig = 1.0/sqrt(norm_orig);
+    for (int j = 0; j < n; j++) v[j] *= norm_orig;
+
+    return;
+}
+
+void Shock::add_sigma(const RealVector &ref, const FluxFunction *ff, const AccumulationFunction *aa, std::vector<RealVector> &curve){
+    RealVector temp_ref(ref);
+
+    // Check this initial point
+    for (int i = 0; i < curve.size(); i++){
+        int n = curve[i].size();
+
+        RealVector p_sigma(curve[i]);
+        //for (int j = 0; j < n; j++) p_sigma.component(j) = curve[i].component(j);
+        double sigma = shockspeed(n, temp_ref.components(), curve[i].components(), (FluxFunction*)ff, (AccumulationFunction*)aa);
+
+        curve[i].resize(n + 1);
+        for (int j = 0; j < n; j++) curve[i].component(j) = p_sigma.component(j);
+        curve[i].component(n) = sigma;
+    }
+
+    return;
 }
 
