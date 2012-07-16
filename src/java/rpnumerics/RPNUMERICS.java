@@ -145,6 +145,9 @@ public class RPNUMERICS {
 
         }
 
+
+
+
         configMap_.put(physicsID, physicsConfiguration);
         errorControl_ = new RpErrorControl(boundary());
     }
@@ -673,7 +676,7 @@ public class RPNUMERICS {
 
     public static native FluxParams getFluxParams();
 
-    public static native void setResolution(RealVector min, RealVector max, int[] newResolution);
+    public static native void setResolution(RealVector min, RealVector max, String gridName, int[] newResolution);
 
     public static native RealVector getAccumulationParams();
 

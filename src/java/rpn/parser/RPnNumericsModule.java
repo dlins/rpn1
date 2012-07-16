@@ -20,6 +20,7 @@ import rpn.RPnConfig;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.XMLReader;
 import rpnumerics.RPNUMERICS;
+import wave.util.Boundary;
 
 /** This class implements methods to configure the numeric layer. The values are taked from a XML file and this values are used to setup the physics and all others numerics parameters. */
 public class RPnNumericsModule {
@@ -142,7 +143,30 @@ public class RPnNumericsModule {
         public void startDocument() throws SAXException {
         }
 
-        public void endDocument() throws SAXException {
+        public void endDocument() throws SAXException {//Setando a resolucao dos grids.Usando tres grids . Um para Hugoniot, um para DoubleContact e um para as demais curvas (com resolucao da inflexao)
+
+
+        Boundary boundary = RPNUMERICS.boundary();
+
+        RealVector min = boundary.getMinimums();
+        RealVector max = boundary.getMaximums();
+
+        int[] doubleContactResolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("doublecontactcurve", "resolution"));
+
+        int[] hugoniotResolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("hugoniotcurve", "resolution"));
+
+        int[] bifurcationCurvesResolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("inflectioncurve", "resolution"));
+
+
+        RPNUMERICS.setResolution(min, max, "doublecontactcurve", doubleContactResolution);
+
+        RPNUMERICS.setResolution(min, max, "hugoniotcurve", hugoniotResolution);
+
+        RPNUMERICS.setResolution(min, max, "bifurcation", bifurcationCurvesResolution);
+
+
+
+
         }
 
         public void startPrefixMapping(String prefix, String uri) throws SAXException {

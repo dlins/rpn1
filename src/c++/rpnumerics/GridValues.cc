@@ -4,6 +4,8 @@ GridValues::GridValues(const Boundary *b,
                        const RealVector &pmin, const RealVector &pmax,
                        const std::vector<int> &number_of_cells){
 
+    cout << "Min e max dentro de grid values: "<<pmin<<" "<<pmax<<endl;
+
     set_grid(b, pmin, pmax, number_of_cells);
 }
 
@@ -197,6 +199,30 @@ void GridValues::fill_eigenpairs_on_grid(const FluxFunction *ff, const Accumulat
             }
         }
 
+//        cell_is_real.resize(number_of_cells[0], number_of_cells[1]);
+        cell_is_real.resize(rows - 1, cols - 1);
+
+//        for (int i = 0; i < number_of_cells[0]; i++) {
+//            for (int j = 0; j < number_of_cells[1]; j++) {
+        for (int i = 0; i < rows - 1; i++) {
+            for (int j = 0; j < cols - 1; j++) {
+
+                if ( cell_type(i, j) != CELL_IS_INVALID ) {
+                    cell_is_real(i, j) = false;
+                    // TODO: Notice. Only for cases where dim = 2.
+                    // Therefore if one eigenvalue is complex, the other one is complex as well.
+	                if (eig_is_real(i, j)[0]){
+	                    if (eig_is_real(i + 1, j)[0]){
+	                        if (eig_is_real(i, j + 1)[0]){
+	                            if ( cell_type(i, j) == CELL_IS_TRIANGLE ) cell_is_real(i, j) = true;
+	                            else if ( eig_is_real(i + 1, j + 1)[0] )   cell_is_real(i, j) = true;
+	                        }
+	                    }
+	                }
+                }
+            }
+        }
+
         e_computed = true;
     }
 
@@ -256,7 +282,7 @@ void GridValues::fill_dirdrv_on_grid(const FluxFunction *ff, const AccumulationF
                             norm += e(i)[fam].vlr[k] * JG_on_grid(i)(k, m) * e(i)[fam].vrr[m]; // JG_on_grid(k, m) = B[k][m]
                             for (int j = 0; j < dim; j++) {
                                 SubH[k][m] += H[k][m][j] * e(i)[fam].vrr[j];
-                                SubM[k][m] += M[k][m][dim] * e(i)[fam].vrr[dim];
+                                SubM[k][m] += M[k][m][j] * e(i)[fam].vrr[j];
                             }
                             // For trivial accumulation, the directional derivative may be simplified as
                             //     dirdrv += e(i)[fam].vlr[k]*SubH[k][m]*e(i)[fam].vrr[m];

@@ -66,7 +66,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HysteresisCurveCalc_nativeCalc
     const AccumulationFunction * accumulationFunction = &RpNumerics::getPhysics().accumulation();
 
 
-    GridValues * gv = RpNumerics::getPhysics().getGrid(0);
+    GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcation");
 
 
     int dimension = RpNumerics::getPhysics().domain().dim();

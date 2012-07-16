@@ -41,6 +41,8 @@
 //TPCW
 #include "TPCW.h"
 
+
+
 //-------------------------------------
 
 
@@ -53,6 +55,8 @@
 using namespace std;
 
 Physics * RpNumerics::physics_ = NULL;
+
+GridValuesFactory * RpNumerics::gridValuesFactory_=NULL;
 
 double RpNumerics::sigma = 0;
 
@@ -217,13 +221,14 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getAccumulationParams
 }
 
 
+
 /*
  * Class:     rpnumerics_RPNUMERICS
  * Method:    setResolution
- * Signature: (Lwave/util/RealVector;Lwave/util/RealVector;[I)V
+ * Signature: (Lwave/util/RealVector;Lwave/util/RealVector;Ljava/lang/String;[I)V
  */
 JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setResolution
-  (JNIEnv * env , jclass cls, jobject min, jobject max, jintArray newResolution){
+  (JNIEnv * env , jclass cls, jobject min, jobject max, jstring gridName,jintArray newResolution){
 
     jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
 
@@ -264,7 +269,27 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setResolution
 
     }
 
-    RpNumerics::getPhysics().setGrid(0, minNativeVector, maxNativeVector, newResolutionVector);
+
+    const char * gridNameNative = env->GetStringUTFChars(gridName, NULL);
+
+
+    cout<<"Nome do grid: "<<gridNameNative<<endl;
+
+
+
+
+    GridValues * grid = RpNumerics::getGridFactory().getGrid(string(gridNameNative));
+
+
+    const Boundary * boundary = &RpNumerics::getPhysics().boundary();
+
+
+    grid->set_grid(boundary,minNativeVector, maxNativeVector, newResolutionVector);
+
+
+
+    //TODO Mudar a resolucao do grid values adequado
+
 
 }
 

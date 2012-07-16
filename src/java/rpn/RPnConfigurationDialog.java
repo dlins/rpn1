@@ -30,44 +30,8 @@ public class RPnConfigurationDialog extends RPnDialog {
         }
     }
 
-//    private void jbInit() throws Exception {
-//        setTitle("Configuration");
-//        extensionPanel_ = new JTabbedPane();
-//        applyButton.setText("OK");
-//        extensionPanel_.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-//        HashMap<String, Configuration> configMap = RPNUMERICS.getConfigurations();
-//
-//        Set<Entry<String, Configuration>> configSet = configMap.entrySet();
-//
-//
-//        for (Entry<String, Configuration> entry : configSet) {
-//
-//            String configurationType = entry.getValue().getType();
-//
-//            if (!configurationType.equalsIgnoreCase("PHYSICS") && !configurationType.equalsIgnoreCase("VISUAL")) {
-//
-//                RPnInputComponent inputComponent = new RPnInputComponent(entry.getValue());
-//
-//                inputComponent.keepParameter("resolution");
-//                if (inputComponent.getContainer().getComponentCount() > 0)
-//                extensionPanel_.addTab(entry.getKey(), inputComponent.getContainer());
-//
-//            }
-//
-//        }
-//
-//        setMinimumSize(new Dimension(getTitle().length() * 50, 40));
-//
-//        getContentPane().add(extensionPanel_, BorderLayout.CENTER);
-//
-//        extensionPanel_.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "Apply");
-//        extensionPanel_.getActionMap().put("Apply", applyButton.getAction());
-//
-//
-//        pack();
-//    }
     /**
-     * @deprecated Modificar quando cada curva tiver a sua resolucao
+     * @deprecated Usando tres grids . Um para Hugoniot, um para DoubleContact e um para as demais curvas (com resolucao da inflexao)
      * @throws Exception
      *
      */
@@ -86,24 +50,27 @@ public class RPnConfigurationDialog extends RPnDialog {
             String configurationType = entry.getValue().getType();
             RPnInputComponent inputComponent = new RPnInputComponent(entry.getValue());
             inputComponent.keepParameter("resolution");
-//            if (!configurationType.equalsIgnoreCase("PHYSICS") && !configurationType.equalsIgnoreCase("VISUAL") && entry.getValue().getName().equals("hugoniotcurve")) {
-            if (configurationType.equalsIgnoreCase("CURVE") && entry.getValue().getName().equals("hugoniotcurve")) {
-
+            if (configurationType.equalsIgnoreCase("CURVE") && entry.getValue().getName().equals("inflectioncurve")) {
 
                 if (inputComponent.getContainer().getComponentCount() > 0) {
-                    extensionPanel_.addTab("resolution", inputComponent.getContainer());
+                    extensionPanel_.addTab("bifurcation curves", inputComponent.getContainer());
                 }
 
             }
 
             if (entry.getValue().getName().equals("doublecontactcurve")) {
 
+                if (inputComponent.getContainer().getComponentCount() > 0) {
+                    extensionPanel_.addTab(entry.getKey(), inputComponent.getContainer());
+                }
+            }
+
+             if (entry.getValue().getName().equals("hugoniotcurve")) {
+
 
                 if (inputComponent.getContainer().getComponentCount() > 0) {
                     extensionPanel_.addTab(entry.getKey(), inputComponent.getContainer());
                 }
-
-
             }
 
         }
@@ -125,19 +92,28 @@ public class RPnConfigurationDialog extends RPnDialog {
     }
 
     /**
-     * @deprecated Modificar quando cada curva tiver a sua resolucao
+     * @deprecated A resolucao esta sendo setada individualmente para Hugoniot, DoubleContact e outras curvas.
+     * A resolucao da inflexao esta sendo usada no calculo das curvas diferentes de Hugoniot e DoubleContact.
      */
     protected void apply() {
 
 
-        int[] resolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("hugoniotcurve", "resolution"));
+        int[] doubleContactResolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("doublecontactcurve", "resolution"));
+
+        int[] hugoniotResolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("hugoniotcurve", "resolution"));
+
+        int[] bifurcationCurvesResolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("inflectioncurve", "resolution"));
 
         Boundary boundary = RPNUMERICS.boundary();
 
         RealVector min = boundary.getMinimums();
         RealVector max = boundary.getMaximums();
 
-        RPNUMERICS.setResolution(min, max, resolution);
+        RPNUMERICS.setResolution(min, max, "doublecontactcurve",doubleContactResolution);
+
+        RPNUMERICS.setResolution(min, max, "hugoniotcurve", hugoniotResolution);
+
+        RPNUMERICS.setResolution(min, max, "bifurcation", bifurcationCurvesResolution);
 
         HashMap<String, Configuration> configMap = RPNUMERICS.getConfigurations();
 
@@ -148,8 +124,8 @@ public class RPnConfigurationDialog extends RPnDialog {
 
             String configurationType = entry.getValue().getType();
 
-            if (configurationType.equalsIgnoreCase("CURVE") && !entry.getValue().getName().equals("hugoniotcurve")) {
-                entry.getValue().setParamValue("resolution", RPNUMERICS.getParamValue("hugoniotcurve", "resolution"));
+            if (configurationType.equalsIgnoreCase("CURVE") && !entry.getValue().getName().equals("hugoniotcurve") && !entry.getValue().getName().equals("doublecontactcurve")) {
+                entry.getValue().setParamValue("resolution", RPNUMERICS.getParamValue("inflectioncurve", "resolution"));
             }
         }
 

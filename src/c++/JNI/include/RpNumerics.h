@@ -10,6 +10,7 @@
 #define	_RpNumerics_H
 
 #include "Physics.h"
+#include "GridValuesFactory.h"
 
 
 
@@ -19,6 +20,7 @@ class RpNumerics {
 private:
     
     static  Physics * physics_;
+    static GridValuesFactory * gridValuesFactory_;
     
     static double sigma;
     
@@ -26,6 +28,8 @@ private:
 public:
     
     static  Physics & getPhysics();
+
+    static GridValuesFactory & getGridFactory();
     
     static  const FluxFunction & getFlux();
     
@@ -45,6 +49,8 @@ public:
 
 inline Physics & RpNumerics::getPhysics(){return *physics_;}
 
+inline GridValuesFactory & RpNumerics::getGridFactory(){return *gridValuesFactory_;}
+
 inline  const FluxFunction & RpNumerics::getFlux() {return physics_->fluxFunction();}
 
 inline  const AccumulationFunction & RpNumerics::getAccumulation() {return physics_->accumulation();}
@@ -52,6 +58,8 @@ inline  const AccumulationFunction & RpNumerics::getAccumulation() {return physi
 inline void RpNumerics::setPhysics(const Physics & physics){
     delete physics_;
     physics_=physics.clone();
+    delete gridValuesFactory_;
+    gridValuesFactory_=new GridValuesFactory(physics_);
 }
 
 inline void RpNumerics::setSigma(double s){sigma=s;}

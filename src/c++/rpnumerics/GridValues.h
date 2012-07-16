@@ -55,10 +55,11 @@ class GridValues {
 
         Matrix< std::vector<eigenpair> > e;                          // Eigenpairs
         Matrix< std::vector<bool> >      eig_is_real;                // Are the eigenvalue real or complex?
+        Matrix<bool>                     cell_is_real;               // Is the whole cell real or complex?
         bool                             e_computed;                 // Already computed?
 
 
-        RealVector grid_resolution;
+        RealVector grid_resolution;                                  //Number of cells
 
         // Here the future programmers will add the values that will prove necessary later.
 

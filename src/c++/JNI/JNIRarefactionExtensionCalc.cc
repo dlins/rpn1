@@ -92,7 +92,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionExtensionCalc_nativeCalc(JN
     RealVector pmin(boundary->minimums());
     RealVector pmax(boundary->maximums());
 
-    GridValues * gv = RpNumerics::getPhysics().getGrid(0);
+    GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcation");
 
     Rarefaction_Extension::extension_curve(*gv, fluxFunction,
             accumFunction,

@@ -66,7 +66,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_InflectionCurveCalc_nativeCalc(JNIEnv 
 
     env->GetIntArrayRegion(resolution, 0, dimension, cells);
     
-    GridValues * gv = RpNumerics::getPhysics().getGrid(0);
+    GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcation");
     
     Inflection_Curve inflectionCurve;
 

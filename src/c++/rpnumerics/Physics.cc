@@ -1,6 +1,7 @@
 #include <vector>
 
 #include "Physics.h"
+#include "GridValuesFactory.h"
 
 
 string Physics::rpnHome_ = string();
@@ -15,40 +16,20 @@ const string & Physics::getRPnHome() {
 
 void Physics::setParams(vector<string> paramVector) {
 
-    GridValues * grid = getGrid(0);
-
-    grid->functions_on_grid_computed = false;
-    grid->Jacobians_on_grid_computed = false;
-    grid->e_computed = false;
-    grid->dd_computed = false;
-
-
-    physicsVector_->at(0)->setParams(paramVector);
+       physicsVector_->at(0)->setParams(paramVector);
 
 }
 
-void Physics::setGrid(int subPhysicsIndex, const RealVector & min, const RealVector & max, const vector<int> newResolution) {
 
-
-    GridValues * grid = getGrid(subPhysicsIndex);
-
-    SubPhysics * subPhysics = &getSubPhysics(subPhysicsIndex);
-
-    const Boundary & boundary = subPhysics->boundary();
-
-    grid->set_grid(&boundary, min, max, newResolution);
-
-
-}
 
 Physics::~Physics() {
 
     delete physicsVector_;
     delete ID_;
-    delete gridArray_;
+   
 }
 
-Physics::Physics(const string & physicsID) : physicsVector_(new vector<SubPhysics *>()), ID_(new string(physicsID)), gridArray_(new vector<GridValues *>()) {
+Physics::Physics(const string & physicsID) : physicsVector_(new vector<SubPhysics *>()), ID_(new string(physicsID)){
     if (physicsID.compare("QuadraticR2") == 0) {
         physicsVector_->push_back(new Quad2(Quad2FluxParams()));
     }
@@ -102,22 +83,15 @@ Physics::Physics(const string & physicsID) : physicsVector_(new vector<SubPhysic
 
         physicsVector_->push_back(new TPCW(params, getRPnHome()));
 
+
     }
 
 
     boundary_ = physicsVector_->at(0)->boundary().clone(); //TODO Using the default boundary.Replace
     space_ = new Space(physicsVector_->at(0)->domain());
 
+    
 
-
-    const Boundary * b = &boundary();
-
-    std::vector<int> noc(2);
-    noc[0] = 128;
-    noc[1] = 128;
-
-
-    gridArray_->push_back(new GridValues(b, b->minimums(), b->maximums(), noc));
 
 
 }
@@ -134,7 +108,7 @@ Physics::Physics(const vector<SubPhysics> & inputPhysicsVector, const Boundary &
 
 }
 
-Physics::Physics(const Physics & physics) : physicsVector_(new vector<SubPhysics*>()), boundary_(physics.boundary().clone()), ID_(new string(physics.ID())), space_(new Space(physics.domain())), gridArray_(new vector<GridValues *>()) {
+Physics::Physics(const Physics & physics) : physicsVector_(new vector<SubPhysics*>()), boundary_(physics.boundary().clone()), ID_(new string(physics.ID())), space_(new Space(physics.domain())){
 
     for (unsigned int i = 0; i < physics.getPhysicsVector().size(); i++) {
 
@@ -142,20 +116,7 @@ Physics::Physics(const Physics & physics) : physicsVector_(new vector<SubPhysics
 
     }
 
-
-
-    const Boundary * b = boundary_;
-
-    std::vector<int> noc(2);
-    noc[0] = 128;
-    noc[1] = 128;
-
-
-
-
-    gridArray_->push_back(new GridValues(b, b->minimums(), b->maximums(), noc));
-
-
+    
 }
 
 SubPhysics & Physics::getSubPhysics(const int index) {
@@ -164,9 +125,7 @@ SubPhysics & Physics::getSubPhysics(const int index) {
 
 }
 
-GridValues * Physics::getGrid(const int index) const {
-    return gridArray_->at(index);
-}
+
 
 const Space & Physics::domain() const {
     return *space_;
@@ -225,14 +184,8 @@ void Physics::boundary(const Boundary & boundary) {
 
     delete boundary_;
     boundary_ = boundary.clone();
-
-    std::vector<int> noc(2);
-    noc[0] = 128;
-    noc[1] = 128;
-
-
-    gridArray_->at(0)->set_grid(&boundary, boundary.minimums(), boundary.maximums(), noc);
 }
+
 
 const Boundary & Physics::boundary() const {
     return *boundary_;
@@ -242,4 +195,3 @@ Physics * Physics::clone()const {
 
     return new Physics(*this);
 }
-

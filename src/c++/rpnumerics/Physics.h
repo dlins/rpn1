@@ -42,11 +42,9 @@ private:
     Space * space_;
     int type_;
     static string rpnHome_;
-    vector <GridValues *> * gridArray_;
 
+    
 public:
-
-
 
     Physics(const string &);
     Physics(const vector<SubPhysics> &, const Boundary &, const string &);
@@ -66,10 +64,6 @@ public:
 
     SubPhysics & getSubPhysics(const int);
 
-    GridValues  * getGrid(const int index) const;
-
-    void setGrid(int,const RealVector &,const RealVector &,const vector<int> );
-
     const vector<SubPhysics *> & getPhysicsVector()const;
 
     static const string & getRPnHome();
@@ -77,6 +71,7 @@ public:
     static void setRPnHome(const string &);
 
     void setParams(vector<string>);
+
 
 
     //deprecated

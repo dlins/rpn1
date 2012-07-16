@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import rpn.RPnUIFrame;
 import rpn.component.MultidAdapter;
+import wave.multid.CoordsArray;
 import wave.util.RealSegment;
 
 public class Orbit extends RPnCurve implements RpSolution {
@@ -54,7 +55,12 @@ public class Orbit extends RPnCurve implements RpSolution {
         increase_ = increase;
         points_ = points;
 
-        segments_ = MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseRPnCurveToCoordsArray(this));
+        System.out.println("Tamanho de points no construtor: "+points_.length);
+
+        CoordsArray [] arrayTeste = MultidAdapter.converseOrbitPointsToCoordsArray(points);
+
+
+        segments_ = MultidAdapter.converseCoordsArrayToRealSegments(arrayTeste);
 
     }
 

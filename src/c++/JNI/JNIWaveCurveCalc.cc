@@ -114,68 +114,89 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc(JNIEnv * env,
 
     jobject waveCurveBranchForward = env->NewObject(classWaveCurve, waveCurveConstructor, familyIndex, timeDirection); //First branch for now
 
+
+
     wc.half_wavecurve(RAREFACTION_CURVE, realVectorInput, familyIndex, timeDirection, curves);
 
-     for (int i = 0; i < curves.size(); i++) {
+
+    for (int i = 0; i < curves.size(); i++) {
+
+
+        cout << "Branch para frente curva " << i << " " << curves[i].curve.size() << " " << curves[i].type << endl;
+
+
+    }
+
+
+    for (int i = 0; i < curves.size(); i++) {
+
 
         std::vector<RealVector> coords = curves[i].curve;
+        if (coords.size() > 0) {
 
-        //        cout << "Tipo da curva: " << curves[i].type<<" Tamanho da curva: "<< coords.size() << endl;
 
-        jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(coords.size(), classOrbitPoint, NULL);
-        //        cout << "Tipo da curva: " << curves[i].type << endl;
 
-        for (int j = 0; j < coords.size(); j++) {
+            jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(coords.size(), classOrbitPoint, NULL);
+            //        cout << "Tipo da curva: " << curves[i].type << endl;
 
-            RealVector tempVector = coords.at(j);
+            for (int j = 0; j < coords.size(); j++) {
 
-            if (tempVector.size() == 2) {
+                RealVector tempVector = coords.at(j);
 
-                tempVector.resize(3);
-                tempVector(2) = 0;
+                if (tempVector.size() == 2) {
+
+                    tempVector.resize(3);
+                    tempVector(2) = 0;
+
+                }
+                //cout<<tempVector<<endl;
+
+                double * dataCoords = tempVector;
+
+                //Reading only coodinates
+                jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size());
+
+                (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size(), dataCoords);
+
+                //Lambda is the last component.
+                jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray);
+
+                (env)->SetObjectArrayElement(orbitPointArray, j, orbitPoint);
+
 
             }
-            //cout<<tempVector<<endl;
 
-            double * dataCoords = tempVector;
 
-            //Reading only coodinates
-            jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size());
+            switch (curves[i].type) {
+                case 1:
+                {
+                    jobject rarefactionOrbit = (env)->NewObject(classRarefactionOrbit, rarefactionOrbitConstructor, orbitPointArray, familyIndex, timeDirection);
+                    env->CallObjectMethod(waveCurveBranchForward, waveCurveAddBranch, rarefactionOrbit);
+                }
+                    break;
+                case 2:
+                {
+                    jobject shockCurve = (env)->NewObject(shockCurveClass, shockCurveConstructor, orbitPointArray, familyIndex, timeDirection);
+                    env->CallObjectMethod(waveCurveBranchForward, waveCurveAddBranch, shockCurve);
+                }
+                    break;
+                case 3:
+                {
+                    jobject compositeCurve = (env)->NewObject(classComposite, compositeConstructor, orbitPointArray, timeDirection, familyIndex);
+                    env->CallObjectMethod(waveCurveBranchForward, waveCurveAddBranch, compositeCurve);
+                }
+                    break;
 
-            (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size(), dataCoords);
+                default:
+                    cout << "Tipo de curva nao conhecido !!" << endl;
+            }
 
-            //Lambda is the last component.
-            jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray);
+        } else {
 
-            (env)->SetObjectArrayElement(orbitPointArray, j, orbitPoint);
-
+            cout << "CURVA " << i << " VAZIA !! tipo: " << curves[i].type << endl;
 
         }
 
-
-        switch (curves[i].type) {
-            case 1:
-            {
-                jobject rarefactionOrbit = (env)->NewObject(classRarefactionOrbit, rarefactionOrbitConstructor, orbitPointArray, familyIndex, timeDirection);
-                env->CallObjectMethod(waveCurveBranchForward, waveCurveAddBranch, rarefactionOrbit);
-            }
-                break;
-            case 2:
-            {
-                jobject shockCurve = (env)->NewObject(shockCurveClass, shockCurveConstructor, orbitPointArray, familyIndex, timeDirection);
-                env->CallObjectMethod(waveCurveBranchForward, waveCurveAddBranch, shockCurve);
-            }
-                break;
-            case 3:
-            {
-                jobject compositeCurve = (env)->NewObject(classComposite, compositeConstructor, orbitPointArray, timeDirection, familyIndex);
-                env->CallObjectMethod(waveCurveBranchForward, waveCurveAddBranch, compositeCurve);
-            }
-                break;
-
-            default:
-                cout << "Tipo de curva nÃ£o conhecido !!" << endl;
-        }
 
     }
 
@@ -188,6 +209,16 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc(JNIEnv * env,
     wc.half_wavecurve(SHOCK_CURVE, realVectorInput, familyIndex, timeDirection, curves);
 
 
+    for (int i = 0; i < curves.size(); i++) {
+
+
+        cout << "Branch para tras curva " << i << " " << curves[i].curve.size() << endl;
+
+
+    }
+
+
+
 
 
     //    wc.wavecurve(realVectorInput, familyIndex, timeDirection, curves);
@@ -198,64 +229,79 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc(JNIEnv * env,
 
     for (int i = 0; i < curves.size(); i++) {
 
+
+
         std::vector<RealVector> coords = curves[i].curve;
 
-        //        cout << "Tipo da curva: " << curves[i].type<<" Tamanho da curva: "<< coords.size() << endl;
+        if (coords.size() > 0) {
 
-        jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(coords.size(), classOrbitPoint, NULL);
-        //        cout << "Tipo da curva: " << curves[i].type << endl;
 
-        for (int j = 0; j < coords.size(); j++) {
 
-            RealVector tempVector = coords.at(j);
 
-            if (tempVector.size() == 2) {
 
-                tempVector.resize(3);
-                tempVector(2) = 0;
+            jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(coords.size(), classOrbitPoint, NULL);
+            //        cout << "Tipo da curva: " << curves[i].type << endl;
+
+            for (int j = 0; j < coords.size(); j++) {
+
+                RealVector tempVector = coords.at(j);
+
+                if (tempVector.size() == 2) {
+
+                    tempVector.resize(3);
+                    tempVector(2) = 0;
+
+                }
+                //cout<<tempVector<<endl;
+
+                double * dataCoords = tempVector;
+
+                //Reading only coodinates
+                jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size());
+
+                (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size(), dataCoords);
+
+                //Lambda is the last component.
+                jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray);
+
+                (env)->SetObjectArrayElement(orbitPointArray, j, orbitPoint);
+
 
             }
-            //cout<<tempVector<<endl;
 
-            double * dataCoords = tempVector;
 
-            //Reading only coodinates
-            jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size());
+            switch (curves[i].type) {
+                case 1:
+                {
+                    jobject rarefactionOrbit = (env)->NewObject(classRarefactionOrbit, rarefactionOrbitConstructor, orbitPointArray, familyIndex, timeDirection);
+                    env->CallObjectMethod(waveCurveBranchBackward, waveCurveAddBranch, rarefactionOrbit);
+                }
+                    break;
+                case 2:
+                {
+                    jobject shockCurve = (env)->NewObject(shockCurveClass, shockCurveConstructor, orbitPointArray, familyIndex, timeDirection);
+                    env->CallObjectMethod(waveCurveBranchBackward, waveCurveAddBranch, shockCurve);
+                }
+                    break;
+                case 3:
+                {
+                    jobject compositeCurve = (env)->NewObject(classComposite, compositeConstructor, orbitPointArray, timeDirection, familyIndex);
+                    env->CallObjectMethod(waveCurveBranchBackward, waveCurveAddBranch, compositeCurve);
+                }
+                    break;
 
-            (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size(), dataCoords);
+                default:
+                    cout << "Tipo de curva nao conhecido !!" << endl;
+            }
 
-            //Lambda is the last component.
-            jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray);
-
-            (env)->SetObjectArrayElement(orbitPointArray, j, orbitPoint);
 
 
         }
+        else {
+            cout << "CURVA " << i << " VAZIA !! tipo: " << curves[i].type << endl;
 
-
-        switch (curves[i].type) {
-            case 1:
-            {
-                jobject rarefactionOrbit = (env)->NewObject(classRarefactionOrbit, rarefactionOrbitConstructor, orbitPointArray, familyIndex, timeDirection);
-                env->CallObjectMethod(waveCurveBranchBackward, waveCurveAddBranch, rarefactionOrbit);
-            }
-                break;
-            case 2:
-            {
-                jobject shockCurve = (env)->NewObject(shockCurveClass, shockCurveConstructor, orbitPointArray, familyIndex, timeDirection);
-                env->CallObjectMethod(waveCurveBranchBackward, waveCurveAddBranch, shockCurve);
-            }
-                break;
-            case 3:
-            {
-                jobject compositeCurve = (env)->NewObject(classComposite, compositeConstructor, orbitPointArray, timeDirection, familyIndex);
-                env->CallObjectMethod(waveCurveBranchBackward, waveCurveAddBranch, compositeCurve);
-            }
-                break;
-
-            default:
-                cout << "Tipo de curva nÃ£o conhecido !!" << endl;
         }
+
 
     }
 

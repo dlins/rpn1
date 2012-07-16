@@ -5,24 +5,9 @@
  */
 package rpn.component;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.util.HashMap;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import rpn.RPnConfigReader;
-import rpn.RPnFluxParamsSubject;
 import rpnumerics.*;
 import rpn.controller.HugoniotController;
 import rpn.controller.RpController;
-import rpn.parser.ConfigurationProfile;
-import rpn.parser.RPnDataModule;
-import rpn.parser.RPnNumericsModule;
-import rpn.parser.RPnVisualizationModule;
 
 public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
 
