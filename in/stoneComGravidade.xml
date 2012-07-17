@@ -4,13 +4,13 @@
     <PHYSICS name="Stone">
 
         <PHYSICSCONFIG name="fluxfunction">
-            <PHYSICSPARAM name="grw" position="0" value ="1.0" />
+            <PHYSICSPARAM name="grw" position="0" value ="1.5" />
             <PHYSICSPARAM name="grg" position="1" value ="1.0" />
             <PHYSICSPARAM name="gro" position="2" value ="1.0" />
             <PHYSICSPARAM name="muw" position="3" value ="1.0" />
             <PHYSICSPARAM name="mug" position="4" value ="1.0" />
             <PHYSICSPARAM name="muo" position="5" value ="1.0" />
-            <PHYSICSPARAM name="vel" position="6" value ="1.0" />
+            <PHYSICSPARAM name="vel" position="6" value ="0.0" />
             
 
             <PHYSICSPARAM name="expw" position="7" value ="2.0" />
@@ -74,7 +74,7 @@
 
     <CURVE name="inflectioncurve">
         <CURVEPARAM name="family" value="0"/>
-        <CURVEPARAM name="resolution" value="60 60"/>
+        <CURVEPARAM name="resolution" value="128 128"/>
     </CURVE>
 
 
@@ -89,7 +89,7 @@
     <CURVE name="doublecontactcurve">
         <CURVEPARAM name="curvefamily" value="1"/>
         <CURVEPARAM name="domainfamily" value="1"/>
-        <CURVEPARAM name="resolution" value="60 60"/>
+        <CURVEPARAM name="resolution" value="80 80"/>
     </CURVE>
 
 

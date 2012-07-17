@@ -53,7 +53,7 @@ public class RPnConfigurationDialog extends RPnDialog {
             if (configurationType.equalsIgnoreCase("CURVE") && entry.getValue().getName().equals("inflectioncurve")) {
 
                 if (inputComponent.getContainer().getComponentCount() > 0) {
-                    extensionPanel_.addTab("bifurcation curves", inputComponent.getContainer());
+                    extensionPanel_.addTab("Bifurcation Curves", inputComponent.getContainer());
                 }
 
             }
@@ -61,7 +61,7 @@ public class RPnConfigurationDialog extends RPnDialog {
             if (entry.getValue().getName().equals("doublecontactcurve")) {
 
                 if (inputComponent.getContainer().getComponentCount() > 0) {
-                    extensionPanel_.addTab(entry.getKey(), inputComponent.getContainer());
+                    extensionPanel_.addTab("DoubleContact and SecondaryBifurcation", inputComponent.getContainer());
                 }
             }
 

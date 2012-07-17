@@ -8,7 +8,7 @@ package rpn.component;
 import wave.multid.view.*;
 import wave.multid.*;
 
-public class DoubleContactCurveGeom extends BifurcationCurveGeom {
+public class SecondaryBifurcationCurveGeom extends BifurcationCurveGeom {
    
 
     //
@@ -16,10 +16,10 @@ public class DoubleContactCurveGeom extends BifurcationCurveGeom {
     //
 
 
-    public DoubleContactCurveGeom(RealSegGeom[] segArray, BifurcationCurveGeomFactory factory) {
+    public SecondaryBifurcationCurveGeom(RealSegGeom[] segArray, BifurcationCurveGeomFactory factory) {
 
         super(segArray, factory);
-        System.out.println("Tamanho de segArray em DoubleContactCurveGeom : " +segArray.length);
+        System.out.println("Tamanho de segArray em SecondaryBifurcationGeom : " +segArray.length);
         
     }
 
@@ -29,7 +29,7 @@ public class DoubleContactCurveGeom extends BifurcationCurveGeom {
 
     public GeomObjView createView(ViewingTransform transf) throws DimMismatchEx {
 
-        return new DoubleContactCurveView (this, transf, viewingAttr());
+        return new SecondaryBifurcationCurveView(this, transf, viewingAttr());
     }
 
 

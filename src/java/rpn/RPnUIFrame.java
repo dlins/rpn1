@@ -187,6 +187,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 toolBar_.add(HysteresisPlotAgent.instance().getContainer());
                 toolBar_.add(EllipticBoundaryExtensionAgent.instance().getContainer());
                 toolBar_.add(EnvelopeCurveAgent.instance().getContainer());
+                toolBar_.add(SecondaryBifurcationtAgent.instance().getContainer());
                 toolBar_.revalidate();
 
             }

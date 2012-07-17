@@ -400,6 +400,20 @@ public class RPNUMERICS {
 
     }
 
+
+    public static SecondaryBifurcationCurveCalc createSecondaryBifurcationCurveCalc() {
+
+        int[] resolution = RPnDataModule.processResolution(getParamValue("inflectioncurve", "resolution"));
+
+
+        ContourParams params = new ContourParams(resolution);
+
+        return new SecondaryBifurcationCurveCalc(params);
+
+    }
+
+
+
     public static OrbitCalc createOrbitCalc(OrbitPoint oPoint) {
 
         return new OrbitCalc(oPoint, direction_);
