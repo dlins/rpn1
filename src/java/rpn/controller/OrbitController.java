@@ -6,15 +6,20 @@
 package rpn.controller;
 
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import rpn.RPnPhaseSpaceFrame;
 import rpn.RPnUIFrame;
 import rpn.component.OrbitGeomFactory;
 import rpn.component.OrbitGeomView;
 import rpn.component.RpGeomFactory;
+import rpn.component.RpGeometry;
+import rpn.component.StationaryPointGeom;
 import rpn.parser.RPnDataModule;
 import rpn.usecase.ChangeFluxParamsAgent;
 import rpn.usecase.ChangeOrbitLevel;
+import rpn.usecase.ChangeSigmaAgent;
 import rpn.usecase.DragPlotAgent;
 import rpnumerics.OrbitCalc;
 import wave.multid.view.GeomObjView;
@@ -45,6 +50,7 @@ public class OrbitController extends RpCalcController {
         DragPlotAgent.instance().addPropertyChangeListener(this);
         ChangeFluxParamsAgent.instance().addPropertyChangeListener(this);
         ChangeOrbitLevel.instance().addPropertyChangeListener(this);
+        ChangeSigmaAgent.instance().addPropertyChangeListener(this);
 
 
     }
@@ -54,11 +60,14 @@ public class OrbitController extends RpCalcController {
         DragPlotAgent.instance().removePropertyChangeListener(this);
         ChangeFluxParamsAgent.instance().removePropertyChangeListener(this);
         ChangeOrbitLevel.instance().removePropertyChangeListener(this);
+        ChangeSigmaAgent.instance().removePropertyChangeListener(this);
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
 
+        // ---------------------------------------------------------------------
+        // --- Implementar este trecho apenas para RarefactionOrbit
         if (evt.getSource() instanceof ChangeOrbitLevel) {//Visual update only
             RPnPhaseSpaceFrame[] frames = RPnUIFrame.getPhaseSpaceFrames();
 
@@ -99,6 +108,28 @@ public class OrbitController extends RpCalcController {
             RPnDataModule.updatePhaseSpaces();
             return;
         }
+        // ---------------------------------------------------------------------
+
+        // ---------------------------------------------------------------------
+//        if (evt.getSource() instanceof ChangeSigmaAgent) {          // *** Usado para remocao dos pontos de equilibrio
+//            Iterator it =RPnDataModule.PHASESPACE.getGeomObjIterator();
+//            List<StationaryPointGeom> list = new ArrayList<StationaryPointGeom>();
+//
+//            while (it.hasNext()) {
+//                RpGeometry geometry  = (RpGeometry)it.next();
+//
+//                if (geometry instanceof StationaryPointGeom)
+//                    list.add((StationaryPointGeom) geometry);
+//
+//            }
+//
+//            for (StationaryPointGeom stationaryPointGeom : list) {
+//                RPnDataModule.PHASESPACE.remove(stationaryPointGeom);
+//
+//            }
+//
+//        }
+        // ---------------------------------------------------------------------
 
 
         if (evt.getSource() instanceof DragPlotAgent) {

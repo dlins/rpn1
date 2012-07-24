@@ -80,7 +80,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_nativeCalc(JNIEnv * env, job
     Viscosity_Matrix v;
 
 
-    double deltaxi = 1e-2;
+    double deltaxi = 1e-2;      //original = 1e-2
 
     std::vector<RealVector> coords;
 
@@ -99,6 +99,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_nativeCalc(JNIEnv * env, job
             deltaxi,
             timeDirection,
             coords);
+
+    cout << "Tamnho de coords : " << coords.size() << endl;
 
     jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(coords.size(), classOrbitPoint, NULL);
 

@@ -35,12 +35,14 @@ public class StationaryPointView extends PointMark {
     // Members
     //
     private Arrow[] arrows_;
+    private Arrow[] auxArrows_;
 
     //
     // Constructors
     //
     public StationaryPointView(MultiGeometryImpl geom, ViewingTransform transf, ViewingAttr attr) throws DimMismatchEx {
         super(geom, transf, attr);
+
     }
 
     //
@@ -74,6 +76,7 @@ public class StationaryPointView extends PointMark {
             composite.append(super.createShape(), false);
             int stateSpaceDim = getAbstractGeom().getSpace().getDim();
             arrows_ = new Arrow[stateSpaceDim * 2]; // the opposite direction
+            auxArrows_ = new Arrow[stateSpaceDim * 2];
 
       /*
        * CREATE DC COORDS
@@ -108,10 +111,18 @@ public class StationaryPointView extends PointMark {
                     new RealVector(directions_dc[i].getCoords()), arrowHeadSize, arrowLength);
                 arrows_[j + 1] = new Arrow(new RealVector(start_dc.getCoords()),
                     new RealVector(directions_dc[i].getCoords()), arrowHeadSize, -arrowLength);
+
+                auxArrows_[j] = new Arrow(new RealVector(start_dc.getCoords()),
+                    new RealVector(directions_dc[i].getCoords()), arrowHeadSize, 0.8*arrowLength);
+                auxArrows_[j + 1] = new Arrow(new RealVector(start_dc.getCoords()),
+                    new RealVector(directions_dc[i].getCoords()), arrowHeadSize, -0.8*arrowLength);
+
             }
         } catch (DimMismatchEx dex) {
             dex.printStackTrace();
         }
+
+
         return composite;
     }
 
@@ -127,6 +138,7 @@ public class StationaryPointView extends PointMark {
         int j = 0;
         do {
             StationaryPoint statPoint = (StationaryPoint)((RpGeometry)getAbstractGeom()).geomFactory().geomSource();
+
             // inwards
             if (statPoint.getEigenValR() [i] < 0) {
                 arrowColor = inWardColor;
@@ -144,11 +156,28 @@ public class StationaryPointView extends PointMark {
                 }
             }
             g.setColor(arrowColor);
+
+            g.setColor(Color.white);
             arrows_[j].paintComponent(g);
-            arrows_[j + 1].paintComponent(g);
+            arrows_[j + 1].paintComponent(g);     // *** desenha o vetor oposto
+
+            // -----------------------------------------------------------------
+            double lambda1 = statPoint.getEigenValR() [0];
+            double lambda2 = statPoint.getEigenValR() [1];
+            
+            if (Math.abs(lambda1) > Math.abs(lambda2)) {
+                auxArrows_[i].paintComponent(g);
+            }
+            else if (Math.abs(lambda1) < Math.abs(lambda2)) {
+                auxArrows_[i+2].paintComponent(g);
+            }
+            // -----------------------------------------------------------------
+            
             i++;
             j += 2;
         } while (i < stateSpaceDim);
+
+        
         g.setColor(prev);
     }
 }

@@ -26,7 +26,6 @@ public class OrbitCalc implements RpCalculation {
         start_ = point;
         timeDirection_ = timeDirection;
 
-
     }
 
 
@@ -38,7 +37,7 @@ public class OrbitCalc implements RpCalculation {
     }
 
     public RpSolution calc() throws RpException {
-        System.out.println("Entrou no calc() de OrbitCalc");
+        //System.out.println("Entrou no calc() de OrbitCalc");
 
         return nativeCalc(start_, RPNUMERICS.getShockProfile().getXZero(), RPNUMERICS.getShockProfile().getSigma(), timeDirection_);
 

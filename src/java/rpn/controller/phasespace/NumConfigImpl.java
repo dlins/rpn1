@@ -41,7 +41,7 @@ public class NumConfigImpl implements NUMCONFIG {
         // TODO maybe we could have xzero part of hugoniot geom ?
         if (geom instanceof XZeroGeom) {      //************************************************ Mas quando isso é verdade?
             System.out.println("Finalmente validou o XZeroGeom ***************************************************");
-            phaseSpace.changeState(new NumConfigReadyImpl(hugoniotGeom_, (XZeroGeom)geom));
+            phaseSpace.changeState(new NumConfigReadyImpl(hugoniotGeom_, (XZeroGeom)geom, false));
         }
 
         

@@ -169,6 +169,7 @@ public class AbstractScene implements AbstractGeomObj {
     }
 
     public void remove(MultiGeometry geom) {
+
         geomList_.remove(geom);
 
         try {

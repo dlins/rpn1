@@ -80,6 +80,8 @@ public class RPnConfigurationDialog extends RPnDialog {
 
         Set<Entry<String, Configuration>> configSet = configMap.entrySet();
 
+        JComboBox stateComboBox = RPnUIFrame.copyComboBox;
+
 
         for (Entry<String, Configuration> entry : configSet) {
 
@@ -96,9 +98,9 @@ public class RPnConfigurationDialog extends RPnDialog {
 
             }
 
-            if (entry.getValue().getName().equals("doublecontactcurve")) {
-
-
+            //if (entry.getValue().getName().equals("doublecontactcurve")) {
+            if (entry.getValue().getName().equals("doublecontactcurve")  &&  !stateComboBox.getSelectedItem().equals("Phase Diagram")) {
+            
                 if (inputComponent.getContainer().getComponentCount() > 0) {
                     extensionPanel_.addTab(entry.getKey(), inputComponent.getContainer());
                 }

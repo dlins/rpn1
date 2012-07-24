@@ -19,7 +19,8 @@ import rpn.controller.ui.*;
 
 public class FillPhaseSpaceAgent extends AbstractAction {
     static public final String DESC_TEXT = "Fills up the Phase Space";
-    static public final int DEFAULT_NUMOFNODES = 100;
+    //static public final int DEFAULT_NUMOFNODES = 100;
+    static public final int DEFAULT_NUMOFNODES = 10;
     private static FillPhaseSpaceAgent instance_ = null;
 
     protected FillPhaseSpaceAgent() {
@@ -43,19 +44,19 @@ public class FillPhaseSpaceAgent extends AbstractAction {
                 OrbitGeom forward = (OrbitGeom)ForwardOrbitPlotAgent.instance().createRpGeometry(coords);
                 rpn.parser.RPnDataModule.PHASESPACE.plot(forward);
                 // BACKWARD
-                OrbitGeom backward = (OrbitGeom)BackwardOrbitPlotAgent.instance().createRpGeometry(coords);
-                rpn.parser.RPnDataModule.PHASESPACE.plot(backward);
+                //OrbitGeom backward = (OrbitGeom)BackwardOrbitPlotAgent.instance().createRpGeometry(coords);
+                //rpn.parser.RPnDataModule.PHASESPACE.plot(backward);
                 // good for multithread
-                try {
-                    int fPoints = ((Orbit)forward.geomFactory().geomSource()).getPoints().length;
-                    for (int i = 0; i < fPoints; i++)
-                        iterator.remove(((Orbit)forward.geomFactory().geomSource()).getPoints() [i].getCoords());
-                } catch (IllegalArgumentException ex) { }
-                try {
-                    int bPoints = ((Orbit)backward.geomFactory().geomSource()).getPoints().length;
-                    for (int i = 0; i < bPoints; i++)
-                        iterator.remove(((Orbit)backward.geomFactory().geomSource()).getPoints() [i].getCoords());
-                } catch (IllegalArgumentException ex) { }
+//                try {
+//                    int fPoints = ((Orbit)forward.geomFactory().geomSource()).getPoints().length;
+//                    for (int i = 0; i < fPoints; i++)
+//                        iterator.remove(((Orbit)forward.geomFactory().geomSource()).getPoints() [i].getCoords());
+//                } catch (IllegalArgumentException ex) { }
+//                try {
+//                    int bPoints = ((Orbit)backward.geomFactory().geomSource()).getPoints().length;
+//                    for (int i = 0; i < bPoints; i++)
+//                        iterator.remove(((Orbit)backward.geomFactory().geomSource()).getPoints() [i].getCoords());
+//                } catch (IllegalArgumentException ex) { }
             }
         }
     }

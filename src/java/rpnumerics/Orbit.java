@@ -15,7 +15,6 @@ import java.awt.Color;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import rpn.RPnUIFrame;
 import rpn.component.MultidAdapter;
 import wave.util.RealSegment;
@@ -31,6 +30,7 @@ public class Orbit extends RPnCurve implements RpSolution {
 
     private OrbitPoint[] points_;
     private int increase_;
+    private boolean isInvariant;
 
     private List<? extends RealSegment> segments_;
 
@@ -47,6 +47,7 @@ public class Orbit extends RPnCurve implements RpSolution {
         points_ = orbitPointsFromRealVectors(coords, times);
 
         segments_ = MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseRPnCurveToCoordsArray(this));
+        isInvariant = false;
     }
 
     public Orbit(OrbitPoint[] points,  int increase) {
@@ -55,6 +56,7 @@ public class Orbit extends RPnCurve implements RpSolution {
         points_ = points;
 
         segments_ = MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseRPnCurveToCoordsArray(this));
+        isInvariant = false;
 
     }
 
@@ -66,6 +68,8 @@ public class Orbit extends RPnCurve implements RpSolution {
         points_ = orbit.getPoints();
 
         segments_ = MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseRPnCurveToCoordsArray(this));
+        isInvariant = orbit.isInvariant();
+
     }
 
     private static OrbitPoint[] orbitPointsFromRealVectors(RealVector[] coords,
@@ -75,6 +79,14 @@ public class Orbit extends RPnCurve implements RpSolution {
             result[i] = new OrbitPoint(coords[i], times[i]);
         }
         return result;
+    }
+
+    public boolean isInvariant() {
+        return isInvariant;
+    }
+
+    public void setInvariant(boolean isInvariant) {
+        this.isInvariant = isInvariant;
     }
 
     //
@@ -87,6 +99,12 @@ public class Orbit extends RPnCurve implements RpSolution {
 //        swap.cat(curve2);
 //        return swap;
 //    }
+
+
+
+
+
+
     public void cat(Orbit curve) {//TODO Reimplements . Bugged !
         // opposite time directions assumed...
         OrbitPoint[] swap = new OrbitPoint[points_.length

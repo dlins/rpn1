@@ -123,7 +123,11 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
     @Override
     public void remove(MultiGeometry geom) {
 
+        ((RpGeometry) geom).geomFactory().getUI().uninstall(((RpGeometry) geom).geomFactory());
+
         super.remove(geom);
+
+
 
         notifyState();
 
@@ -177,7 +181,6 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         int k = 0;
         Iterator<RpGeometry> geomList = null ;
 
-
         //--------------------------
         if (namePhaseSpace.equals("Phase Space"))      geomList = RPnDataModule.PHASESPACE.getGeomObjIterator();
         if (namePhaseSpace.equals("RightPhase Space")) geomList = RPnDataModule.RIGHTPHASESPACE.getGeomObjIterator();
@@ -193,7 +196,8 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
                             || (namePhaseSpace.equals("RightPhase Space")  &&  geom != RPnDataModule.RIGHTPHASESPACE.getLastGeometry())
                             || (namePhaseSpace.equals("LeftPhase Space")  &&  geom != RPnDataModule.LEFTPHASESPACE.getLastGeometry())) {
 
-                        if (geom.viewingAttr().isVisible()  &&  (geom instanceof SegmentedCurveGeom  ||  geom instanceof OrbitGeom)) {
+                        if (geom.viewingAttr().isVisible()  &&  
+                                (geom instanceof SegmentedCurveGeom  ||  geom instanceof OrbitGeom  ||  geom instanceof ManifoldGeom)) {
 
                             RpGeomFactory factory = geom.geomFactory();
                             RPnCurve curve = (RPnCurve) factory.geomSource();
@@ -215,21 +219,24 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
 
                 if (GeometryGraphND.onCurve == 0) {
 
-                    if (geom.viewingAttr().isVisible()  &&  (geom instanceof SegmentedCurveGeom  ||  geom instanceof OrbitGeom)) {
-
+                    if (geom.viewingAttr().isVisible()  &&  
+                            (geom instanceof SegmentedCurveGeom  ||  geom instanceof OrbitGeom  ||  geom instanceof ManifoldGeom)) {
+                    
                         RpGeomFactory factory = geom.geomFactory();
                         RPnCurve curve = (RPnCurve) factory.geomSource();
 
-//                        if (curve instanceof SegmentedCurve) {
-//                            RpCalcBasedGeomFactory geomFactory = (RpCalcBasedGeomFactory) factory;
-//                            RpCalculation calc = geomFactory.rpCalc();
-//                            ContourCurveCalc curveCalc = (ContourCurveCalc) calc;
-//                            listResolution.add(curveCalc.getParams().getResolution());
-//
-//                        } else {
-//                            int[] resolution = {1, 1};
-//                            listResolution.add(resolution);
-//                        }
+                        // -----------------------------------
+                        if (curve instanceof SegmentedCurve) {
+                            RpCalcBasedGeomFactory geomFactory = (RpCalcBasedGeomFactory) factory;
+                            RpCalculation calc = geomFactory.rpCalc();
+                            ContourCurveCalc curveCalc = (ContourCurveCalc) calc;
+                            listResolution.add(curveCalc.getParams().getResolution());
+
+                        } else {
+                            int[] resolution = {1, 1};
+                            listResolution.add(resolution);
+                        }
+                        // ---------------------------------------------------------------
 
                         curve.findClosestSegment(targetPoint);   //***
 
@@ -242,6 +249,13 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
                         }
 
                     }
+
+                    // ----------------------------------- Evita erro quando no PhaseDiagram
+                    else {
+                        int[] resolution = {1, 1};
+                        listResolution.add(resolution);
+                    }
+                    // -----------------------------------
 
                 }
 

@@ -39,6 +39,7 @@ public class StationaryPoint extends PhasePoint implements RpSolution {
     private RealMatrix2 schurFormN_;
     private RealMatrix2 schurVecN_;
     private int integrationFlag_;
+    private boolean isSaddle = false;
 
     //
     // Constructors
@@ -57,12 +58,15 @@ public class StationaryPoint extends PhasePoint implements RpSolution {
         integrationFlag_ = copy.getIntegrationFlag();
     }
 
-    public StationaryPoint(PhasePoint point, double[] eigenValR, double[] eigenValI, RealVector[] eigenVec ) {
-            super(point);
-            eigenValR_ = eigenValR;
-            eigenValI_ = eigenValI;
-            eigenVec_ = eigenVec;
-           
+    public StationaryPoint(PhasePoint point, double[] eigenValR, double[] eigenValI, RealVector[] eigenVec) {
+        super(point);
+        eigenValR_ = eigenValR;
+        eigenValI_ = eigenValI;
+        eigenVec_ = eigenVec;
+
+        if (eigenValR[0] * eigenValR[1] < 0.)
+            isSaddle = true;
+
     }
     //
     // Accessors/Mutators
@@ -90,10 +94,63 @@ public class StationaryPoint extends PhasePoint implements RpSolution {
 
     public int getIntegrationFlag() { return integrationFlag_; }
 
+    public boolean isSaddle() {
+        return isSaddle;
+    }
+
     //
     // Methods
     //
 
+
+    public RealVector[] initialManifoldPoint() throws RpException {
+
+        System.out.println("Classe StationaryPoint ::: Entrou em  initialManifoldPoint() ...");
+
+        if (isSaddle) {
+            RealVector[] array = new RealVector[4];
+
+            double h = 1E-2;
+
+            RealVector center = new RealVector(getPoint().getCoords());
+            RealVector dir1 = new RealVector(getEigenVec()[0]);
+            RealVector dir2 = new RealVector(getEigenVec()[1]);
+            RealVector p1 = new RealVector(2);
+            RealVector p2 = new RealVector(2);
+            RealVector p3 = new RealVector(2);
+            RealVector p4 = new RealVector(2);
+
+            p1.setElement(0, h * (dir1.getElement(0)) + center.getElement(0));
+            p1.setElement(1, h * (dir1.getElement(1)) + center.getElement(1));
+            array[0] = p1;
+
+            p2.setElement(0, -h * (dir1.getElement(0)) + center.getElement(0));
+            p2.setElement(1, -h * (dir1.getElement(1)) + center.getElement(1));
+            array[1] = p2;
+
+
+
+            p3.setElement(0, h * (dir2.getElement(0)) + center.getElement(0));
+            p3.setElement(1, h * (dir2.getElement(1)) + center.getElement(1));
+            array[2] = p3;
+
+            p4.setElement(0, -h * (dir2.getElement(0)) + center.getElement(0));
+            p4.setElement(1, -h * (dir2.getElement(1)) + center.getElement(1));
+            array[3] = p4;
+
+
+
+            return array;
+        } else {
+            throw new RpException("Stationary Point is not Saddle!");
+        }
+
+
+
+    }
+
+
+    @Override
     public String toXML(){
 
       StringBuffer buffer = new StringBuffer();
@@ -211,6 +268,7 @@ public class StationaryPoint extends PhasePoint implements RpSolution {
 
     }
 
+    @Override
     public String toString() {
         StringBuffer sBuffer = new StringBuffer();
         sBuffer.append("Point = " + getPoint());

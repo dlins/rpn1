@@ -23,8 +23,8 @@ public class PoincareReadyImpl extends NumConfigReadyImpl
     //
     // Constructors
     //
-    public PoincareReadyImpl(HugoniotCurveGeom hugoniotGeom, XZeroGeom xzeroGeom, PoincareSectionGeom simplexGeom) {
-        super(hugoniotGeom, xzeroGeom);
+    public PoincareReadyImpl(HugoniotCurveGeom hugoniotGeom, XZeroGeom xzeroGeom, PoincareSectionGeom simplexGeom, boolean manifold) {
+        super(hugoniotGeom, xzeroGeom, manifold);
         simplexGeom_ = simplexGeom;
 
         System.out.println("Entrou no construtor de PoincareReadyImpl");
@@ -53,7 +53,7 @@ public class PoincareReadyImpl extends NumConfigReadyImpl
         System.out.println("Entrou no delete de PoincareReadyImpl *******************************************");      // Como fazer pra entrar aqui?
 
         if (geom instanceof PoincareSectionGeom)
-            phaseSpace.changeState(new NumConfigReadyImpl(hugoniotGeom(), xzeroGeom()));
+            phaseSpace.changeState(new NumConfigReadyImpl(hugoniotGeom(), xzeroGeom(), isPlotManifold()));
     }
     
     public void plot(RPnPhaseSpaceAbstraction phaseSpace, RpGeometry geom) {
@@ -64,10 +64,10 @@ public class PoincareReadyImpl extends NumConfigReadyImpl
         if (geom.geomFactory().geomSource() instanceof ManifoldOrbit)
             if (((ManifoldOrbit)geom.geomFactory().geomSource()).getTimeDirection() == Orbit.BACKWARD_DIR)
                 phaseSpace.changeState(
-                        new bwdProfileReadyImpl(hugoniotGeom(), xzeroGeom(), poincareGeom(), (ManifoldGeom)geom));
+                        new bwdProfileReadyImpl(hugoniotGeom(), xzeroGeom(), poincareGeom(), (ManifoldGeom)geom, isPlotManifold()));
             else
                 phaseSpace.changeState(
-                        new fwdProfileReadyImpl(hugoniotGeom(), xzeroGeom(), poincareGeom(), (ManifoldGeom)geom));
+                        new fwdProfileReadyImpl(hugoniotGeom(), xzeroGeom(), poincareGeom(), (ManifoldGeom)geom, isPlotManifold()));
         
     }
     

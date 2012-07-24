@@ -399,6 +399,8 @@ public class RPNUMERICS {
 
     public static OrbitCalc createOrbitCalc(OrbitPoint oPoint) {
 
+        System.out.println("Entrou em : public static OrbitCalc createOrbitCalc(OrbitPoint oPoint)");
+        System.out.println("Valor de direction_ : " +direction_);
         return new OrbitCalc(oPoint, direction_);
 
     }

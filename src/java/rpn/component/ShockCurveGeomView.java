@@ -27,15 +27,7 @@ public class ShockCurveGeomView extends WaveCurveOrbitGeomView {
     public void draw(Graphics2D g) {
 
         g.setColor(getViewingAttr().getColor());
-
-        Stroke actualStroke = g.getStroke();
-        float[] dash = {10f};
-        BasicStroke stroke = new BasicStroke(1.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_BEVEL, BasicStroke.JOIN_MITER, dash, 0f);
-
-        g.setStroke(stroke);
-
         super.draw(g);
-        g.setStroke(actualStroke);
         
     }
 
@@ -46,7 +38,7 @@ public class ShockCurveGeomView extends WaveCurveOrbitGeomView {
         GeneralPath composite = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
 
         composite.append(dash(), false);
-        
+
         return composite;
 
     }
@@ -60,8 +52,8 @@ public class ShockCurveGeomView extends WaveCurveOrbitGeomView {
         
         int begin = 0;
         int end = points.length;
-
-        int k = 10;
+        
+        int k = Math.max(10, (int) Math.round(0.15*end));   // *******
 
         if (end > 1) {
             for (int i = begin; i < end - k/2; i+=k) {

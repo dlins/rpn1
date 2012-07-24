@@ -12,7 +12,19 @@ import rpnumerics.PhasePoint;
 import rpnumerics.HugoniotCurve;
 import wave.util.RealVector;
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import rpn.component.HugoniotCurveGeom;
+import rpn.component.ManifoldGeom;
+import rpn.component.RpGeometry;
+import rpn.component.StationaryPointGeom;
+import rpn.component.StationaryPointGeomFactory;
+import rpn.component.XZeroGeom;
+import rpn.component.XZeroGeomFactory;
+import rpn.controller.phasespace.NumConfigReadyImpl;
 import rpn.controller.ui.*;
+import rpnumerics.StationaryPointCalc;
 
 public class ChangeSigmaAgent extends RpModelConfigChangeAgent {
     //
@@ -33,22 +45,67 @@ public class ChangeSigmaAgent extends RpModelConfigChangeAgent {
 
     public void execute() {
         System.out.println("Execute de ChangeSigmaAgent");
+
         Double oldValue = new Double(RPNUMERICS.getShockProfile().getSigma());
         RealVector[] userInputList = UIController.instance().userInputList();
         RealVector lastPointAdded = userInputList[userInputList.length - 1];
         double newSigma;
-        if (rpnumerics.RPNUMERICS.domainDim() == 2) {
-            // finds the best point closest from Hugoniot curve
-            HugoniotCurve hCurve = (HugoniotCurve) ((NUMCONFIG) RPnDataModule.PHASESPACE.state()).hugoniotGeom().geomFactory().geomSource();
-            newSigma = hCurve.findSigma(new PhasePoint(lastPointAdded));
 
-            RPNUMERICS.getShockProfile().setSigma(newSigma);
-        } else {
-        }
-        System.out.println("OLD SIGMA = " + oldValue);
+        HugoniotCurveGeom hGeom = ((NUMCONFIG)RPnDataModule.PHASESPACE.state()).hugoniotGeom();
+        HugoniotCurve hCurve = (HugoniotCurve)hGeom .geomFactory().geomSource();
+
+        newSigma = hCurve.findSigma(new PhasePoint(lastPointAdded));
+        RPNUMERICS.getShockProfile().setSigma(newSigma);
+
+        //System.out.println("OLD SIGMA = " + oldValue);
         Double newValue = new Double(RPNUMERICS.getShockProfile().getSigma());
-        System.out.println("NEW SIGMA = " + newValue);
+        //System.out.println("NEW SIGMA = " + newValue);
+
+       
+        //--- Atualiza o ponto estacionario associado ao XZero
+
+        XZeroGeomFactory xzeroRef = new XZeroGeomFactory(new StationaryPointCalc(hCurve.getXZero(), hCurve.getXZero()));
+
+        boolean manifold = ((NumConfigReadyImpl) RPnDataModule.PHASESPACE.state()).isPlotManifold();
+        NumConfigReadyImpl state = new NumConfigReadyImpl(hGeom, (XZeroGeom) xzeroRef.geom(), manifold);
+        RPnDataModule.PHASESPACE.changeState(state);
+        // ----------------------------------------------------
+
+
+
+        //--------------------- Remove os pontos estacionarios
+        Iterator it = RPnDataModule.PHASESPACE.getGeomObjIterator();
+        List<RpGeometry> list = new ArrayList<RpGeometry>();
+
+        while (it.hasNext()) {
+            RpGeometry geometry = (RpGeometry) it.next();
+
+            if (((geometry instanceof StationaryPointGeom))  &&  !(geometry instanceof XZeroGeom)) {
+                list.add(geometry);
+
+            }
+
+        }
+
+        for (RpGeometry rpgeometry : list) {
+            RPnDataModule.PHASESPACE.remove(rpgeometry);
+        }
+    
+
+        //------------------------- Recalcula os pontos estacionarios
+        RealVector closestPoint = hCurve.findClosestPoint(lastPointAdded);
+        List<RealVector> eqPoints = hCurve.equilPoints(closestPoint);
+
+        for (RealVector realVector : eqPoints) {
+            StationaryPointGeomFactory xzeroFactory = new StationaryPointGeomFactory(new StationaryPointCalc(new PhasePoint(realVector), hCurve.getXZero()));
+            if(state.isPlotManifold())
+            RPnDataModule.PHASESPACE.join(xzeroFactory.geom());
+            RPnDataModule.PHASESPACE.plot(xzeroFactory.geom());
+        }
+     
+        
         applyChange(new PropertyChangeEvent(this, DESC_TEXT, oldValue, newValue));
+
     }
 
     public void unexecute() {

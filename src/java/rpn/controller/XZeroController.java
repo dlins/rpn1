@@ -34,12 +34,14 @@ public class XZeroController
     protected void register() {
         ChangeFluxParamsAgent.instance().addPropertyChangeListener(this);
         ChangeDirectionAgent.instance().addPropertyChangeListener(this);
+        ChangeSigmaAgent.instance().addPropertyChangeListener(this);
     }
 
     @Override
     protected void unregister() {
         ChangeFluxParamsAgent.instance().removePropertyChangeListener(this);
         ChangeDirectionAgent.instance().removePropertyChangeListener(this);
+        ChangeSigmaAgent.instance().removePropertyChangeListener(this);
     }
 
     @Override
@@ -54,37 +56,38 @@ public class XZeroController
         geomFactory_ = null;
     }
 
-    @Override
-    public void propertyChange(PropertyChangeEvent change) {
 
-        // this is to avoid void notifications of enabled/disbled
-        if (change.getPropertyName().compareTo("enabled") != 0) {
-
-            if (change.getSource() instanceof ChangeDirectionAgent) {
-
-                // UPDATES THE CALC INIT POINT
-                ((StationaryPointCalc) geomFactory_.rpCalc()).setInitPoint((PhasePoint) change.getNewValue());
-            }
-
-            /*
-             * WE ARE ASSUMING THAT THIS CONTROLLER IS THE FIRST
-             * TO BE NOTIFIED !!! THIS WILL FORCE THE XZERO TERMS UPDATE TOO !
-             * IT HSA TO GET FROM STATIONARY POINT CALC
-             */
-
-            if (((StationaryPointCalc) geomFactory_.rpCalc()).getFlow() instanceof ShockFlow) {
-                ((StationaryPointCalc) geomFactory_.rpCalc()).getFlow().setXZero(((StationaryPointCalc) geomFactory_.rpCalc()).getInitPoint());
-
-            }
-//            if (RPNUMERICS.flow() instanceof ConservationShockFlow) {
-
-
-//            ((ConservationShockFlow) RPNUMERICS.flow()).setXZero(((StationaryPointCalc) geomFactory_.rpCalc()).getInitPoint());
-
-
-
-            // UPDATES EIGENS
-            super.propertyChange(change);
-        }
-    }
+//    @Override
+//    public void propertyChange(PropertyChangeEvent change) {
+//
+//        // this is to avoid void notifications of enabled/disbled
+//        if (change.getPropertyName().compareTo("enabled") != 0) {
+//
+//            if (change.getSource() instanceof ChangeDirectionAgent) {
+//
+//                // UPDATES THE CALC INIT POINT
+//                ((StationaryPointCalc) geomFactory_.rpCalc()).setInitPoint((PhasePoint) change.getNewValue());
+//            }
+//
+//            /*
+//             * WE ARE ASSUMING THAT THIS CONTROLLER IS THE FIRST
+//             * TO BE NOTIFIED !!! THIS WILL FORCE THE XZERO TERMS UPDATE TOO !
+//             * IT HSA TO GET FROM STATIONARY POINT CALC
+//             */
+//
+//            if (((StationaryPointCalc) geomFactory_.rpCalc()).getFlow() instanceof ShockFlow) {
+//                ((StationaryPointCalc) geomFactory_.rpCalc()).getFlow().setXZero(((StationaryPointCalc) geomFactory_.rpCalc()).getInitPoint());
+//
+//            }
+////            if (RPNUMERICS.flow() instanceof ConservationShockFlow) {
+//
+//
+////            ((ConservationShockFlow) RPNUMERICS.flow()).setXZero(((StationaryPointCalc) geomFactory_.rpCalc()).getInitPoint());
+//
+//
+//
+//            // UPDATES EIGENS
+//            super.propertyChange(change);
+//        }
+//    }
 }

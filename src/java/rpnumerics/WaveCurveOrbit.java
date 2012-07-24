@@ -26,7 +26,7 @@ public class WaveCurveOrbit extends Orbit implements WaveCurveBranch, RpSolution
         orbitList_.add(this);
 
         segments_ = MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseRPnCurveToCoordsArray(this));
-
+        
     }
 
     public int getFamilyIndex() {

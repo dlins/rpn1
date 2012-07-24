@@ -24,8 +24,8 @@ public class bwdProfileReadyImpl extends PoincareReadyImpl
     // Constructors
     //
     public bwdProfileReadyImpl(HugoniotCurveGeom hugoniotGeom, XZeroGeom xzeroGeom, PoincareSectionGeom poincareGeom,
-        ManifoldGeom manifoldGeom) {
-            super(hugoniotGeom, xzeroGeom, poincareGeom);
+        ManifoldGeom manifoldGeom, boolean manifold) {
+            super(hugoniotGeom, xzeroGeom, poincareGeom, manifold);
             manifoldGeom_ = manifoldGeom;
     }
 
@@ -46,10 +46,10 @@ public class bwdProfileReadyImpl extends PoincareReadyImpl
         if (geom.geomFactory().geomSource() instanceof ManifoldOrbit)
                 if (((ManifoldOrbit)geom.geomFactory().geomSource()).getTimeDirection() == Orbit.FORWARD_DIR)
                     phaseSpace.changeState(
-                        new ProfileSetupReadyImpl(hugoniotGeom(), xzeroGeom(), poincareGeom(), (ManifoldGeom)geom, manifoldGeom_));
+                        new ProfileSetupReadyImpl(hugoniotGeom(), xzeroGeom(), poincareGeom(), (ManifoldGeom)geom, manifoldGeom_, isPlotManifold()));
                 else
                     phaseSpace.changeState(
-                        new bwdProfileReadyImpl(hugoniotGeom(), xzeroGeom(), poincareGeom(), (ManifoldGeom)geom));
+                        new bwdProfileReadyImpl(hugoniotGeom(), xzeroGeom(), poincareGeom(), (ManifoldGeom)geom, isPlotManifold()));
 
     }
 
@@ -57,6 +57,6 @@ public class bwdProfileReadyImpl extends PoincareReadyImpl
 
         super.delete(phaseSpace, geom);
         if (geom == manifoldGeom())
-            phaseSpace.changeState(new PoincareReadyImpl(hugoniotGeom(), xzeroGeom(), poincareGeom()));
+            phaseSpace.changeState(new PoincareReadyImpl(hugoniotGeom(), xzeroGeom(), poincareGeom(), isPlotManifold()));
     }
 }

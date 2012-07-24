@@ -18,6 +18,7 @@ import wave.multid.view.ViewingAttr;
 import java.awt.Color;
 import rpn.component.MultidAdapter;
 import wave.util.JetMatrix;
+import wave.util.RealSegment;
 
 public class ManifoldOrbit extends RPnCurve implements RpSolution {
     //
@@ -30,6 +31,8 @@ public class ManifoldOrbit extends RPnCurve implements RpSolution {
     private int timeDirection_;
     private int finishType_;
 
+    private List<? extends RealSegment> segments_;
+
     //
     // Constructor
     //
@@ -40,6 +43,8 @@ public class ManifoldOrbit extends RPnCurve implements RpSolution {
         firstPoint_ = firstPoint;
         timeDirection_ = timeDirection;
         finishType_ = orbit_.getDirection();
+
+        segments_ = MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseRPnCurveToCoordsArray(this));
     }
 
     //
@@ -432,7 +437,7 @@ public class ManifoldOrbit extends RPnCurve implements RpSolution {
 
     @Override
     public List segments() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return segments_;
     }
 
 

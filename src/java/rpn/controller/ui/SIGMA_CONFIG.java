@@ -5,16 +5,13 @@
  */
 package rpn.controller.ui;
 
-import java.util.Iterator;
 import java.util.List;
-import rpn.component.RpGeometry;
 import rpn.component.StationaryPointGeomFactory;
 import rpn.component.XZeroGeomFactory;
-import rpn.controller.phasespace.NUMCONFIG_READY;
+import rpn.controller.phasespace.NUMCONFIG;
 import rpn.controller.phasespace.NumConfigImpl;
 import rpn.parser.RPnDataModule;
 import rpn.usecase.ChangeSigmaAgent;
-import rpn.usecase.PoincareSectionPlotAgent;
 import rpnumerics.HugoniotCurve;
 import rpnumerics.PhasePoint;
 import rpnumerics.RPNUMERICS;
@@ -36,13 +33,17 @@ public class SIGMA_CONFIG extends UI_ACTION_SELECTED {
     @Override
     public void userInputComplete(rpn.controller.ui.UIController ui, RealVector userInput) {
 
-        super.userInputComplete(ui, userInput);
-        
+        // *** ATENCAO: XZERO NAO EH COLOCADO NA LISTA DE EQPOINTS !!! iSSO DEVE SER LEMBRADO
+
+        //super.userInputComplete(ui, userInput);
+
         System.out.println("User input complete de Sigma Config");
-        
+
         HugoniotCurve hCurve = (HugoniotCurve) ((NumConfigImpl) RPnDataModule.PHASESPACE.state()).hugoniotGeom().geomFactory().geomSource();
 
 
+        double newSigma = hCurve.findSigma(new PhasePoint(userInput));
+        RPNUMERICS.getShockProfile().setSigma(newSigma);
 
         //----------------------------------------------------------------------
         //*** CTOR de StationaryPointCalc : StationaryPointCalc(PhasePoint initial, RealVector referencePoint)
@@ -73,27 +74,6 @@ public class SIGMA_CONFIG extends UI_ACTION_SELECTED {
         ui.setState(new GEOM_SELECTION());
 
         return;
-    }
-
-    private HugoniotCurve findHugoniot() {
-
-        Iterator<RpGeometry> iterator = RPnDataModule.PHASESPACE.getGeomObjIterator();
-
-
-        while (iterator.hasNext()) {
-            RpGeometry rpGeometry = iterator.next();
-
-            if (rpGeometry.geomFactory().geomSource() instanceof HugoniotCurve) {
-
-
-                return (HugoniotCurve) rpGeometry.geomFactory().geomSource();
-            }
-
-        }
-
-        return null;
-
-
     }
 }
 

@@ -47,7 +47,7 @@ public class PoincareController implements RpController {
 
     public void install(RpGeomFactory geom) {
         geomFactory_ = (PoincareSectionGeomFactory) geom;
-        ((wave.ode.Rk4BPProfile) rpnumerics.RPNUMERICS.odeSolver().getProfile()).setPoincareSection((SimplexPoincareSection) geomFactory_.geomSource());
+        ((wave.ode.Rk4BPProfile) rpnumerics.RPNUMERICS.odeSolver().getProfile()).setPoincareSection((SimplexPoincareSection) geomFactory_.geomSource());  //ISSO NAO ATRAPALHAVA O PLOT
     }
 
     public void uninstall(RpGeomFactory geom) {

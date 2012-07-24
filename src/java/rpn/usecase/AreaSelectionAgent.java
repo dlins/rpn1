@@ -43,7 +43,6 @@ public class AreaSelectionAgent extends RpModelPlotAgent {
 
     
     private AreaSelectionAgent() {
-        //super(DESC_TEXT, null);
         super(DESC_TEXT, null ,new JToggleButton());
 
         button_ = new JToggleButton(this);

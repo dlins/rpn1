@@ -75,7 +75,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_StationaryPointCalc_nativeCalc(JNIEnv 
     Viscous_Profile::critical_points_linearization(fluxFunction, accumFunction,
             &v, sigma, nativeEquiPoint, nativeRefPoint, ep);
 
-
+    
     jdoubleArray eigenValR = env->NewDoubleArray(ep.size());
 
     jdoubleArray eigenValI = env->NewDoubleArray(ep.size());
@@ -86,7 +86,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_StationaryPointCalc_nativeCalc(JNIEnv 
     double eigenValIBuffer [ep.size()];
 
 
-//    cout <<"Ponto passado: "<<nativeEquiPoint<<endl;
+    //cout <<"Ponto passado: "<<nativeEquiPoint<<endl;
 
 
 
@@ -100,7 +100,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_StationaryPointCalc_nativeCalc(JNIEnv 
 
 
 
-        cout << "Parte real: " << ep[i].r << endl;
+        //cout << "Parte real: " << ep[i].r << endl;
 //        cout << "Parte imaginaria: " << ep[i].i << endl;
 
 

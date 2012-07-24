@@ -34,6 +34,7 @@ public abstract class ShapedGeometry implements GeomObjView {
             setViewingAttr(viewAttr);
             setShape(createShape());
             setBoundaryBox(createBoundaryBox());
+
     }
 
     //
