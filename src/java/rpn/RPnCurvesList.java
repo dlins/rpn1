@@ -34,6 +34,7 @@ import rpnumerics.OrbitCalc;
 import rpnumerics.PointLevelCalc;
 import rpnumerics.RarefactionExtensionCalc;
 import rpnumerics.RpCalculation;
+import rpnumerics.StationaryPoint;
 import rpnumerics.StationaryPointCalc;
 import wave.multid.model.MultiGeometry;
 import wave.util.RealVector;
@@ -226,8 +227,10 @@ public class RPnCurvesList extends JFrame implements ActionListener {
 
             if (calc instanceof StationaryPointCalc) {
 
-                StationaryPointCalc statCalc = (StationaryPointCalc)calc;
-                userInput = statCalc.getInitPoint();
+
+                StationaryPoint point = (StationaryPoint) factory.geomSource();
+
+                userInput = point.getCoords();
             }
 
 

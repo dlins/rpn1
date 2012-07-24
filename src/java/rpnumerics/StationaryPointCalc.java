@@ -68,6 +68,11 @@ public class StationaryPointCalc implements RpCalculation {
 
 
         result = (StationaryPoint) nativeCalc(initial_, referencePoint_, RPNUMERICS.getShockProfile().getSigma());
+
+
+        System.out.println("Coordenada: "+result);
+
+
         if (result == null) {
             throw new RpException("Error in native layer");
         }

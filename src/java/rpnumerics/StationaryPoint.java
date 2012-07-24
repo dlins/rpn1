@@ -268,10 +268,10 @@ public class StationaryPoint extends PhasePoint implements RpSolution {
 
     }
 
-    @Override
-    public String toString() {
-        
-      return getCoords().toString();
-        
-    }
+//    @Override
+//    public String toString() {
+//
+//      return getCoords().toString();
+//
+//    }
 }
