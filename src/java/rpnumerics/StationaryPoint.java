@@ -270,8 +270,8 @@ public class StationaryPoint extends PhasePoint implements RpSolution {
 
     @Override
     public String toString() {
-        StringBuffer sBuffer = new StringBuffer();
-        sBuffer.append("Point = " + getPoint());
-        return sBuffer.toString();
+        
+      return getCoords().toString();
+        
     }
 }

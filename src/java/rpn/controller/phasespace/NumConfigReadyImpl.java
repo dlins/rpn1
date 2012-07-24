@@ -52,27 +52,6 @@ public class NumConfigReadyImpl extends NumConfigImpl
         FindProfileAgent.instance().setEnabled(false);
 
 
-//        //--------------------- Remove os pontos estacionarios, os manifolds ...
-//        Iterator it = RPnDataModule.PHASESPACE.getGeomObjIterator();
-//        List<RpGeometry> list = new ArrayList<RpGeometry>();
-//
-//        while (it.hasNext()) {
-//            RpGeometry geometry = (RpGeometry) it.next();
-//
-//            if (((geometry instanceof StationaryPointGeom)  ||  (geometry instanceof ManifoldGeom))  &&  !(geometry instanceof XZeroGeom)) {
-//                list.add(geometry);
-//                if (geometry instanceof ManifoldGeom) plotManifold_ = true;
-//
-//            }
-//
-//        }
-//
-//        for (RpGeometry rpgeometry : list) {
-//            RPnDataModule.PHASESPACE.remove(rpgeometry);
-//        }
-//        //----------------------------
-
-
     }
 
     //
@@ -101,13 +80,8 @@ public class NumConfigReadyImpl extends NumConfigImpl
     @Override
     public void plot(RPnPhaseSpaceAbstraction phaseSpace, RpGeometry geom) {
 
-
-
-        if (isPlotManifold()) {
-            phaseSpace.changeState(new InvariantsReadyImpl(hugoniotGeom(), xzeroGeom()));
-        } else {
             super.plot(phaseSpace, geom);
-        }
+
 
         if (geom instanceof PoincareSectionGeom) {
             System.out.println("Testando se geom instanceof PoincareSectionGeom ... ");
