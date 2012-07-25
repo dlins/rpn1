@@ -71,7 +71,7 @@ public class UIController extends ComponentUI {
         globalInputTable_ = new UserInputTable(rpnumerics.RPNUMERICS.domainDim());
 
         commandArray_ = new ArrayList<Command>();
-        handler_ = new SHOCK_CONFIG();
+        handler_ = new RAREFACTION_CONFIG();
         auxPanelsEnabled_ = true;
 
         initNetStatus();

@@ -44,8 +44,6 @@ public class RPnConfigurationDialog extends RPnDialog {
 
         Set<Entry<String, Configuration>> configSet = configMap.entrySet();
 
-        JComboBox stateComboBox = RPnUIFrame.copyComboBox;
-
 
         for (Entry<String, Configuration> entry : configSet) {
 

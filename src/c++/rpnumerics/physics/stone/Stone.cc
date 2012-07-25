@@ -85,19 +85,13 @@ void Stone::setParams(vector<string> params) {
 
     }
 
-//    fluxParams(StoneParams(fluxParamVector));
-
-
     StoneFluxFunction & stoneFlux = (StoneFluxFunction&) fluxFunction();
 
     stoneFlux.fluxParams(StoneParams(fluxParamVector));
 
+    //Perm params
     RealVector permVector(20);
 
-
-
-
-    //Perm params
     for (int i = 7; i < params.size(); i++) {
 
         double paramValue = atof(params[i].c_str());
@@ -110,23 +104,9 @@ void Stone::setParams(vector<string> params) {
 
     stoneFlux.setPermParams(permParams);
 
-
-    cout << "Params em set params Stone: "<<permParams.params() << endl;
-
-
-
-
 }
 
 Stone::Stone() : SubPhysics(StoneFluxFunction(StoneParams(), StonePermParams()), StoneAccumulation(), *defaultBoundary(), Multid::PLANE, "Stone", _SIMPLE_ACCUMULATION_) {
-
-//
-//    RealVector refVec(2);
-//
-//    StoneHugoniotFunctionClass * stoneHugoniotFunction = new StoneHugoniotFunctionClass(refVec, (StoneFluxFunction(StoneParams(), StonePermParams())));
-//
-//
-//    setHugoniotFunction(stoneHugoniotFunction);
 
 }
 

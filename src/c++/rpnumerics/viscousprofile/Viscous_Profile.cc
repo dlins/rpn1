@@ -36,6 +36,8 @@ void Viscous_Profile::Newton_improvement(const FluxFunction *ff, const Accumulat
     }
 
     do {
+
+        cout<<"Loop dentro do newton"<<endl;
         double F[2], JF[2][2], G[2], JG[2][2];
         ff->fill_with_jet(2, U, 1, F, &JF[0][0], 0);
         aa->fill_with_jet(2, U, 1, G, &JG[0][0], 0);
@@ -55,6 +57,9 @@ void Viscous_Profile::Newton_improvement(const FluxFunction *ff, const Accumulat
 
         // Solve
         double det = A[0][0] * A[1][1] - A[0][1] * A[1][0];
+
+        cout<<"Determinante : "<<det<<endl;
+
         anorm = 0.0;
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 2; j++) {
@@ -72,6 +77,12 @@ void Viscous_Profile::Newton_improvement(const FluxFunction *ff, const Accumulat
         // Protect against zero-division or use LAPACK (will be done so anyway for n >= 3)
         delta_U[0] = (b[0] * A[1][1] - b[1] * A[0][1]) / det;
         delta_U[1] = (A[0][0] * b[1] - A[1][0] * b[0]) / det;
+
+
+        cout<<"Delta 0 "<<delta_U[0]<<endl;
+        cout << "Delta 1 " << delta_U[1] << endl;
+
+
 
         // Prepare next step:
         for (int i = 0; i < 2; i++) U[i] += delta_U[i];
@@ -233,6 +244,7 @@ int Viscous_Profile::orbit(const FluxFunction *ff, const AccumulationFunction *a
 
     // Find the orbit
     while (true) {
+
         // TEMPORAL
         //if (out.size() > 5000) {
         if (out.size() > 1000) {
