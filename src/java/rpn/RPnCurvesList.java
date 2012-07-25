@@ -25,7 +25,6 @@ import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableModel;
 import rpn.component.BifurcationCurveGeom;
 import rpn.component.RpCalcBasedGeomFactory;
-import rpn.component.RpGeomFactory;
 import rpn.component.RpGeometry;
 import rpn.usecase.VelocityAgent;
 import rpn.controller.ui.UIController;
@@ -35,6 +34,8 @@ import rpnumerics.OrbitCalc;
 import rpnumerics.PointLevelCalc;
 import rpnumerics.RarefactionExtensionCalc;
 import rpnumerics.RpCalculation;
+import rpnumerics.StationaryPoint;
+import rpnumerics.StationaryPointCalc;
 import wave.multid.model.MultiGeometry;
 import wave.util.RealVector;
 
@@ -130,7 +131,6 @@ public class RPnCurvesList extends JFrame implements ActionListener {
 
     }
 
-
     //*** metodo original
 //    public void addGeometry(RpGeometry geometry) {
 //
@@ -186,8 +186,6 @@ public class RPnCurvesList extends JFrame implements ActionListener {
 //        tableModel_.addRow(data);
 //
 //    }
-
-
     //**** alteracao do metodo original para testar (Leandro)
     public void addGeometry(RpGeometry geometry) {
 
@@ -226,6 +224,16 @@ public class RPnCurvesList extends JFrame implements ActionListener {
                 RarefactionExtensionCalc rarCalc = (RarefactionExtensionCalc) calc;
                 userInput = rarCalc.getStart();
             }
+
+            if (calc instanceof StationaryPointCalc) {
+
+
+                StationaryPoint point = (StationaryPoint) factory.geomSource();
+
+                userInput = point.getCoords();
+            }
+
+
         }
 
 
@@ -250,7 +258,6 @@ public class RPnCurvesList extends JFrame implements ActionListener {
     }
 
     //**************************************************************************
-
     public void clear() {
         int rowNumber = tableModel_.getRowCount();
         int i = 0;
@@ -312,8 +319,8 @@ public class RPnCurvesList extends JFrame implements ActionListener {
                 }
                 for (MultiGeometry multiGeometry : toBeRemoved) {
                     RPnPhaseSpaceManager.instance().remove(phaseSpace_, multiGeometry);
-                    RpGeometry geometry = (RpGeometry) multiGeometry;
-                    geometry.geomFactory().getUI().uninstall(geometry.geomFactory());
+                    //RpGeometry geometry = (RpGeometry) multiGeometry;
+                    //geometry.geomFactory().getUI().uninstall(geometry.geomFactory());
                 }
 //<<<<<<< HEAD:src/java/rpn/RPnCurvesList.java
 //=======
@@ -331,7 +338,6 @@ public class RPnCurvesList extends JFrame implements ActionListener {
 
     }
 
-
     //*** metodo original
     public void update() {
         clear();
@@ -341,8 +347,6 @@ public class RPnCurvesList extends JFrame implements ActionListener {
         }
     }
     //*******************
-
-
 
     //*** alteracao do metodo original para testar (Leandro)
 //    public void update() {
@@ -358,9 +362,6 @@ public class RPnCurvesList extends JFrame implements ActionListener {
 //        }
 //    }
     //*******************************************************
-
-
-
     private void setGeometryVisible(boolean visible) {
         int index = 0;
         boolean selected;
@@ -381,6 +382,4 @@ public class RPnCurvesList extends JFrame implements ActionListener {
         }
         UIController.instance().panelsUpdate();
     }
-
-    
 }

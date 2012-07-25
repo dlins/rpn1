@@ -15,7 +15,6 @@ import java.awt.Color;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import rpn.RPnUIFrame;
 import rpn.component.MultidAdapter;
 import wave.multid.CoordsArray;
@@ -33,6 +32,7 @@ public class Orbit extends RPnCurve implements RpSolution {
     private OrbitPoint[] points_;
     private int increase_;
 
+
     private List<? extends RealSegment> segments_;
 
     private double ALFA;
@@ -48,18 +48,14 @@ public class Orbit extends RPnCurve implements RpSolution {
         points_ = orbitPointsFromRealVectors(coords, times);
 
         segments_ = MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseRPnCurveToCoordsArray(this));
+
     }
 
     public Orbit(OrbitPoint[] points,  int increase) {
         super(MultidAdapter.converseOrbitPointsToCoordsArray(points), new ViewingAttr(Color.white));
         increase_ = increase;
         points_ = points;
-
-        System.out.println("Tamanho de points no construtor: "+points_.length);
-
         CoordsArray [] arrayTeste = MultidAdapter.converseOrbitPointsToCoordsArray(points);
-
-
         segments_ = MultidAdapter.converseCoordsArrayToRealSegments(arrayTeste);
 
     }
@@ -72,6 +68,8 @@ public class Orbit extends RPnCurve implements RpSolution {
         points_ = orbit.getPoints();
 
         segments_ = MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseRPnCurveToCoordsArray(this));
+
+
     }
 
     private static OrbitPoint[] orbitPointsFromRealVectors(RealVector[] coords,
@@ -83,6 +81,8 @@ public class Orbit extends RPnCurve implements RpSolution {
         return result;
     }
 
+  
+
     //
     // Methods
     //
@@ -93,6 +93,12 @@ public class Orbit extends RPnCurve implements RpSolution {
 //        swap.cat(curve2);
 //        return swap;
 //    }
+
+
+
+
+
+
     public void cat(Orbit curve) {//TODO Reimplements . Bugged !
         // opposite time directions assumed...
         OrbitPoint[] swap = new OrbitPoint[points_.length

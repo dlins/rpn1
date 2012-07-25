@@ -22,8 +22,8 @@ public class ProfileReadyImpl extends ProfileSetupReadyImpl
     // Constructors
     //
     public ProfileReadyImpl(HugoniotCurveGeom hugoniotGeom, XZeroGeom xzeroGeom, PoincareSectionGeom poincareGeom,
-        ManifoldGeom fwdOrbitGeom, ManifoldGeom bwdOrbitGeom, ProfileGeom connectionGeom) {
-            super(hugoniotGeom, xzeroGeom, poincareGeom, fwdOrbitGeom, bwdOrbitGeom);
+        ManifoldGeom fwdOrbitGeom, ManifoldGeom bwdOrbitGeom, ProfileGeom connectionGeom, boolean manifold) {
+            super(hugoniotGeom, xzeroGeom, poincareGeom, fwdOrbitGeom, bwdOrbitGeom, manifold);
             connectionGeom_ = connectionGeom;
 
         // ENABLED
@@ -61,6 +61,6 @@ public class ProfileReadyImpl extends ProfileSetupReadyImpl
         super.delete(phaseSpace, geom);
         if (geom == connectionGeom())
             phaseSpace.changeState(
-                new ProfileSetupReadyImpl(hugoniotGeom(), xzeroGeom(), poincareGeom(), fwdManifoldGeom(), bwdManifoldGeom()));
+                new ProfileSetupReadyImpl(hugoniotGeom(), xzeroGeom(), poincareGeom(), fwdManifoldGeom(), bwdManifoldGeom(), isPlotManifold()));
     }
 }

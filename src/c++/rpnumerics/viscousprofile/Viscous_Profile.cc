@@ -81,23 +81,32 @@ void Viscous_Profile::Newton_improvement(const FluxFunction *ff, const Accumulat
     // Output
     for (int i = 0; i < 2; i++) out.component(i) = U[i];
 
-    cout<<"Valor de out: "<<out<<endl;
+    //cout<<"Valor de out::: "<<out<<endl;
 
     return;
 }
 
 void Viscous_Profile::critical_points_linearization(const FluxFunction *ff, const AccumulationFunction *aa,
         Viscosity_Matrix *v,
-        double speed, const RealVector &cp, RealVector &ref,
+        double speed,  RealVector &cp, RealVector &ref,
         std::vector<eigenpair> &ep) {
     ep.clear();
 
     RealVector out;
+    
     Newton_improvement(ff, aa, speed, cp, ref, out);
 
+    cp=out;
+
+    // ----------------- Sem usar Newton_improvement
+//    RealVector out;
+//    out.resize(2);
+//    out = cp;
+    // -----------------
+
     Matrix<double> JF(2, 2), JG(2, 2);
-    ff->fill_with_jet(2, out.components(), 1, 0, JF.data(), 0);
-    aa->fill_with_jet(2, out.components(), 1, 0, JG.data(), 0);
+    ff->fill_with_jet(2, cp.components(), 1, 0, JF.data(), 0);
+    aa->fill_with_jet(2, cp.components(), 1, 0, JG.data(), 0);
 
     // Find the eigenpairs of:
     //
@@ -112,15 +121,15 @@ void Viscous_Profile::critical_points_linearization(const FluxFunction *ff, cons
 
     // Fill the viscous matrix
     //v->fill_viscous_matrix(cp, viscous);
-    v->fill_viscous_matrix(out, viscous);
+    v->fill_viscous_matrix(cp, viscous);
 
     //std::vector<eigenpair> e;
     Eigen::eig(2, RH.data(), viscous.data(), ep);
 
-    cout << "Ponto no metodo: " << cp << endl;
+    //cout << "Ponto no metodo: " << cp << endl;
 
-    cout << "eigen0RR: " << ep[0].r << endl;
-    cout << "eigen1RR: " << ep[1].r << endl;
+    //cout << "eigen0RR: " << ep[0].r << endl;
+    //cout << "eigen1RR: " << ep[1].r << endl;
 
     //ep.push_back(e);
 
@@ -179,8 +188,10 @@ int Viscous_Profile::orbit(const FluxFunction *ff, const AccumulationFunction *a
     // Is the tolerance the same for all the elements of U (1) or not (2)?
     int itol = 2; // 1: atol scalar; 2: atol array.
     double rtol = 1e-4;
+    //double rtol = 1e-3;
     double atol[n];
     for (int i = 0; i < n; i++) atol[i] = 1e-6;
+    //for (int i = 0; i < n; i++) atol[i] = 1e-5;
 
     // The Jacobian is provided by the user.
     // int mf = 21;
@@ -223,8 +234,9 @@ int Viscous_Profile::orbit(const FluxFunction *ff, const AccumulationFunction *a
     // Find the orbit
     while (true) {
         // TEMPORAL
-        if (out.size() > 5000) {
-            printf("Max reached!!!\n");
+        //if (out.size() > 5000) {
+        if (out.size() > 1000) {
+            //printf("Max reached!!!\n");
             return ABORTED_PROCEDURE;
         }
         // TEMPORAL
@@ -251,7 +263,7 @@ int Viscous_Profile::orbit(const FluxFunction *ff, const AccumulationFunction *a
             // Store the point lying in the domain's border and get out.
             out.push_back(r);
 
-            printf("Reached boundary\n");
+            //printf("Reached boundary\n");
 
             return SUCCESSFUL_PROCEDURE;
         } else {

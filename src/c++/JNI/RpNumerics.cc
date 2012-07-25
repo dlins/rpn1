@@ -590,7 +590,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_boundary(JNIEnv * env, jcla
         const RectBoundary & rectBoundary = (RectBoundary &) boundary;
         int boundaryDimension = rectBoundary.minimums().size();
 
-        cout <<"Min: "<<rectBoundary.minimums()<<" Max: "<<rectBoundary.maximums()<<endl;
+        //cout <<"Min: "<<rectBoundary.minimums()<<" Max: "<<rectBoundary.maximums()<<endl;
 
         double minimum [boundaryDimension];
         double maximum [boundaryDimension];

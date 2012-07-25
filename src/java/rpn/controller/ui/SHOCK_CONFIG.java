@@ -40,7 +40,7 @@ public class SHOCK_CONFIG extends UI_ACTION_SELECTED {
 
         super.userInputComplete(ui, userInput);
 
-        ChangeDirectionAgent.instance().setEnabled(true);
+        //ChangeDirectionAgent.instance().setEnabled(true);
 
         ui.setState(new SIGMA_CONFIG());
     }

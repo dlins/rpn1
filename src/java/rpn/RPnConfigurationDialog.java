@@ -44,6 +44,8 @@ public class RPnConfigurationDialog extends RPnDialog {
 
         Set<Entry<String, Configuration>> configSet = configMap.entrySet();
 
+        JComboBox stateComboBox = RPnUIFrame.copyComboBox;
+
 
         for (Entry<String, Configuration> entry : configSet) {
 
@@ -59,6 +61,7 @@ public class RPnConfigurationDialog extends RPnDialog {
             }
 
             if (entry.getValue().getName().equals("doublecontactcurve")) {
+
 
                 if (inputComponent.getContainer().getComponentCount() > 0) {
                     extensionPanel_.addTab("DoubleContact and SecondaryBifurcation", inputComponent.getContainer());

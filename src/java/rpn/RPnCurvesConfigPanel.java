@@ -14,7 +14,9 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
 import javax.swing.*;
+import rpn.parser.RPnDataModule;
 import rpn.usecase.ChangeDirectionAgent;
+import rpn.usecase.OrbitPlotAgent;
 import rpnumerics.Configuration;
 import rpnumerics.Orbit;
 import rpnumerics.RPNUMERICS;
@@ -26,11 +28,11 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
     private JPanel directionPanel_;
     private JRadioButton forwardCheckBox_;
     private JRadioButton backwardCheckBox_;
+    private JRadioButton bothCheckBox_;
     private static Integer currentOrbitDirection_ = Orbit.FORWARD_DIR;
     private JTabbedPane curvesTabbedPanel_;
 
     public RPnCurvesConfigPanel() {
-
 
         ChangeDirectionAgent.instance().execute();
 
@@ -41,7 +43,6 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
     }
 
   
-
     private void buildPanel() {
 
         HashMap<String, Configuration> configMap = RPNUMERICS.getConfigurations();
@@ -64,7 +65,8 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
         }
 
 
-        directionPanel_ = new JPanel(new GridLayout(1, 2));
+        //directionPanel_ = new JPanel(new GridLayout(1, 2));
+        directionPanel_ = new JPanel(new GridLayout(1, 3));
 
         forwardCheckBox_ = new JRadioButton("Forward");
         forwardCheckBox_.setSelected(true);//Default 
@@ -82,11 +84,20 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
 
         backwardCheckBox_.setText("Backward");
 
+        // ------------------------------------
+        bothCheckBox_ = new JRadioButton("Both");
+        bothCheckBox_.setEnabled(true);
+        bothCheckBox_.addActionListener(new OrbitDirectionListener());
+        bothCheckBox_.setText("Both");
+        // ------------------------------------
+
         directionButtonGroup_.add(forwardCheckBox_);
         directionButtonGroup_.add(backwardCheckBox_);
+        directionButtonGroup_.add(bothCheckBox_);
 
         directionPanel_.add(forwardCheckBox_);
         directionPanel_.add(backwardCheckBox_);
+        directionPanel_.add(bothCheckBox_);
 
         GridBagLayout boxLayout = new GridBagLayout();
 
@@ -120,10 +131,10 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
         if (evt.getNewValue().equals("bifurcationcurve")) {//Bifurcation Curves selected
 
 
-
             if (evt.getPropertyName().equals("direction")) {
                 forwardCheckBox_.setEnabled(false);
                 backwardCheckBox_.setEnabled(false);
+                bothCheckBox_.setEnabled(false);
             }
         }
 
@@ -133,6 +144,7 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
             if (evt.getPropertyName().equals("direction")) {
                 forwardCheckBox_.setEnabled(true);
                 backwardCheckBox_.setEnabled(true);
+                bothCheckBox_.setEnabled(true);
 
             }
 
@@ -145,6 +157,7 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
             if (evt.getPropertyName().equals("direction")) {
                 forwardCheckBox_.setEnabled(true);
                 backwardCheckBox_.setEnabled(true);
+                bothCheckBox_.setEnabled(true);
 
             }
 
@@ -159,13 +172,25 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
 
         public void actionPerformed(ActionEvent e) {
 
-               if (forwardCheckBox_.isSelected()) {
+//               if (forwardCheckBox_.isSelected()) {
+//                    currentOrbitDirection_ = Orbit.FORWARD_DIR;
+//                } else {
+//                    currentOrbitDirection_ = Orbit.BACKWARD_DIR;
+//                }
+
+
+            if (forwardCheckBox_.isSelected()) {
                     currentOrbitDirection_ = Orbit.FORWARD_DIR;
-                } else {
+                } else if (backwardCheckBox_.isSelected()) {
                     currentOrbitDirection_ = Orbit.BACKWARD_DIR;
+                } else if (bothCheckBox_.isSelected()) {
+                    currentOrbitDirection_ = Orbit.BOTH_DIR;
                 }
-            
+
+
             ChangeDirectionAgent.instance().execute();
+
+
         }
     }
 }

@@ -43,7 +43,6 @@ public class AreaSelectionAgent extends RpModelPlotAgent {
 
     
     private AreaSelectionAgent() {
-        //super(DESC_TEXT, null);
         super(DESC_TEXT, null ,new JToggleButton());
 
         button_ = new JToggleButton(this);
@@ -139,7 +138,6 @@ public class AreaSelectionAgent extends RpModelPlotAgent {
     @Override
     public void execute() {
 
-        System.out.println("Entrou no execute() do AreaSelectionAgent");
 
         UserInputTable userInputList = UIController.instance().globalInputTable();
         RealVector newValue = userInputList.values();

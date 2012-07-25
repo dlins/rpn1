@@ -22,12 +22,16 @@ public class StationaryPointGeom extends MultiPoint implements RpGeometry {
     //
     private RpGeomFactory factory_;
 
+
     //
     // Constructors
     //
     public StationaryPointGeom(CoordsArray source, StationaryPointGeomFactory factory) {
         super(source, VIEWING_ATTR);
         factory_ = factory;
+        
+        //StationaryPoint statPoint = (StationaryPoint) factory_.geomSource();
+
     }
 
     //
@@ -38,6 +42,7 @@ public class StationaryPointGeom extends MultiPoint implements RpGeometry {
     //
     // Methods
     //
+    @Override
     public GeomObjView createView(ViewingTransform transf) throws DimMismatchEx {
         return new StationaryPointView(this, transf, viewingAttr());
     }

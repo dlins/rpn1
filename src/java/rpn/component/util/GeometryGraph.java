@@ -26,6 +26,7 @@ import wave.util.Arrow;
 import wave.util.Boundary;
 import wave.util.RealVector;
 import rpn.controller.ui.CLASSIFIERAGENT_CONFIG;
+import rpn.controller.ui.UserInputTable;
 import rpn.controller.ui.VELOCITYAGENT_CONFIG;
 import rpn.parser.RPnDataModule;
 import rpn.usecase.VelocityAgent;
@@ -154,18 +155,18 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
     public void drawFirstPanel(Graphics g, Scene scene_, RPnPhaseSpacePanel panel) {
 
         //----------------------------------------------Aqui, o input é um click
-        //UserInputTable userInputList = UIController.instance().globalInputTable();
-        //RealVector newValue = userInputList.values();
+        UserInputTable userInputList = UIController.instance().globalInputTable();
+        RealVector newValue = userInputList.values();
         //----------------------------------------------------------------------
 
 
         //------------------------------- Manter assim ou voltar à forma antiga?
-        CoordsArray wc = toWorldCoords(new Coords2D(panel.getCursorPos().getX(), panel.getCursorPos().getY()), scene_);
-        RealVector rv = new RealVector(2);
-        rv.setElement(0, wc.getElement(0));
-        rv.setElement(1, wc.getElement(1));
-        RealVector newValue = new RealVector(2);
-        newValue = rv;
+//        CoordsArray wc = toWorldCoords(new Coords2D(panel.getCursorPos().getX(), panel.getCursorPos().getY()), scene_);
+//        RealVector rv = new RealVector(2);
+//        rv.setElement(0, wc.getElement(0));
+//        rv.setElement(1, wc.getElement(1));
+//        RealVector newValue = new RealVector(2);
+//        newValue = rv;
         //----------------------------------------------------------------------
 
 

@@ -45,13 +45,11 @@ public class OrbitGeomFactory extends RpCalcBasedGeomFactory {
 
     protected RpGeometry createGeomFromSource() {
         Orbit orbit = (Orbit) geomSource();
-
+        
         return new OrbitGeom(MultidAdapter.converseOrbitToCoordsArray(orbit), this);
     }
 
     public String toXML() {
-
-
 
         StringBuffer str = new StringBuffer();
         RealVector firstPoint = new RealVector(((OrbitCalc) rpCalc()).getStart());

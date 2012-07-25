@@ -33,8 +33,6 @@ public class BackwardManifoldPlotAgent extends RpModelPlotAgent {
 
     public RpGeometry createRpGeometry(RealVector[] input) {
 
-        System.out.println("Entrou no createRpGeometry de BackwardManifoldPlotAgent ...");
-
         RealVector lastPointAdded = input[input.length - 1];
         StationaryPoint statPoint = (StationaryPoint) rpn.parser.RPnDataModule.PHASESPACE.find(lastPointAdded).geomFactory().geomSource();
 

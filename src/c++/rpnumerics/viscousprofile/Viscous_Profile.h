@@ -34,8 +34,9 @@ class Viscous_Profile {
         // Critical points
         static void critical_points_linearization(const FluxFunction *ff, const AccumulationFunction *aa, 
                                                   Viscosity_Matrix *v,
-                                                  double speed, const RealVector &cp,  RealVector &ref, std::vector<eigenpair>  &ep);
+                                                  double speed,  RealVector &cp,  RealVector &ref, std::vector<eigenpair>  &ep);
 
+        
         // Orbit
         static int orbit(const FluxFunction *ff, const AccumulationFunction *aa, 
                          Viscosity_Matrix *v,

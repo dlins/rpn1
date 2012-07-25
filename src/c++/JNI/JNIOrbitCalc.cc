@@ -80,7 +80,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_nativeCalc(JNIEnv * env, job
     Viscosity_Matrix v;
 
 
-    double deltaxi = 1e-2;
+    double deltaxi = 1e-2;      //original = 1e-2
 
     std::vector<RealVector> coords;
 

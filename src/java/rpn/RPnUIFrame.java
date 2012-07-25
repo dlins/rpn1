@@ -77,6 +77,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private RPnPhaseSpaceFrame frameZoom = null;
     private ArrayList<RPnPhaseSpaceFrame> listFrameZoom = new ArrayList();
     private static int numOfPanelZoom = 0;
+    public static JComboBox copyComboBox = new JComboBox();
     //***
 
     //Construct the frame
@@ -132,6 +133,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 shockConfigMenu();
                 toolBar_.removeAll();
 
+                toolBar_.add(InvariantPlotAgent.instance().getContainer());
                 toolBar_.add(OrbitPlotAgent.instance().getContainer());
                 toolBar_.add(ForwardManifoldPlotAgent.instance().getContainer());
                 toolBar_.add(BackwardManifoldPlotAgent.instance().getContainer());
@@ -604,6 +606,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         stateComboBox.addItem("Wave Curves");
         stateComboBox.addItem("Bifurcation Curves");
         stateComboBox.addActionListener(new StateHandler());
+
+        copyComboBox = stateComboBox;
+
         UIController.instance().setState(new SHOCK_CONFIG());
 
 
@@ -941,8 +946,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         modelInteractionMenu.add(ChangeFluxParamsAgent.instance());
         modelInteractionMenu.add(inputCoordsMenuItem);
         modelInteractionMenu.add(shockMenuItem_);
-
-
+        modelInteractionMenu.add(configurationMenuItem_);       // ??????
 
 
     }

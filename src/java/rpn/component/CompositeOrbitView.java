@@ -17,7 +17,7 @@ import wave.util.RealVector;
 
 public class CompositeOrbitView extends WaveCurveOrbitGeomView {
 
-    public CompositeOrbitView(MultiGeometryImpl abstractGeom,   //abstractGeom é a porcao que representa a composta
+    public CompositeOrbitView(MultiGeometryImpl abstractGeom,
             ViewingTransform transf,
             ViewingAttr viewAttr) throws DimMismatchEx {
 
@@ -50,7 +50,8 @@ public class CompositeOrbitView extends WaveCurveOrbitGeomView {
         GeneralPath composite = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
 
         composite.append(normalCalculations(), false);
-        composite.append(dash(), false);
+        //composite.append(dash(), false);
+        composite.append(super.createShape(), false);
         
         return composite;
 

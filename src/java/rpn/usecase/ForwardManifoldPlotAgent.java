@@ -32,7 +32,7 @@ public class ForwardManifoldPlotAgent extends RpModelPlotAgent {
 
     public RpGeometry createRpGeometry(RealVector[] input) {
 
-        System.out.println("Entrou no createRpGeometry de ForwardManifoldPlotAgent ...");
+
 
         RealVector lastPointAdded = input[input.length - 1];
         StationaryPoint statPoint = (StationaryPoint)rpn.parser.RPnDataModule.PHASESPACE.find(lastPointAdded).geomFactory().geomSource();

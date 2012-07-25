@@ -15,7 +15,7 @@ public class ManifoldGeom extends MultiPolyLine implements RpGeometry {
     //
     // Constants
     //
-    public static ViewingAttr VIEWING_ATTR = new ViewingAttr(Color.orange);
+    public static ViewingAttr VIEWING_ATTR = new ViewingAttr(Color.orange.darker());
     //
     // Members
     //

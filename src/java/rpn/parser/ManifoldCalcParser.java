@@ -47,7 +47,7 @@ public class ManifoldCalcParser implements ActionListener{
                             RPnDataModule.InputHandler.xZeroGeom_,
                             PoincareParser.tempPoincareSection,
                             ManifoldParser.manifoldGeomA,
-                            ManifoldParser.manifoldGeomB));
+                            ManifoldParser.manifoldGeomB, false));
 
                 }
             }
