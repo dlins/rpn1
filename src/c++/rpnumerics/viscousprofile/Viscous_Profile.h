@@ -20,6 +20,10 @@
 #define ORBIT_BACKWARD (-1)
 #endif
 
+#ifndef ORBIT_REACHED_SEGMENT
+#define ORBIT_REACHED_SEGMENT 10
+#endif
+
 class Viscous_Profile {
     private:
     protected:
@@ -27,6 +31,8 @@ class Viscous_Profile {
         static const AccumulationFunction *a;
 
         static Viscosity_Matrix *vmf;
+
+        static bool segment_intersection(double *p1, double *p2, double *q1, double *q2, double *r);
 
         static void Newton_improvement(const FluxFunction *ff, const AccumulationFunction *aa,
                                   double sigma, const RealVector &p,  RealVector &ref, RealVector &out);
@@ -36,7 +42,6 @@ class Viscous_Profile {
                                                   Viscosity_Matrix *v,
                                                   double speed,  RealVector &cp,  RealVector &ref, std::vector<eigenpair>  &ep);
 
-        
         // Orbit
         static int orbit(const FluxFunction *ff, const AccumulationFunction *aa, 
                          Viscosity_Matrix *v,
@@ -44,7 +49,8 @@ class Viscous_Profile {
                          const RealVector &init, const RealVector &ref, double speed, 
                          double deltaxi,
                          int orbit_direction,
-                         std::vector<RealVector> &out);
+                         std::vector<RealVector> &out,
+                         std::vector<RealVector> *segment = 0);
 
         static int orbit_flux(int *neq, double *xi, double *in, double *out, int *nparam, double *param); // For LSODE
 

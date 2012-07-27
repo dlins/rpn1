@@ -80,17 +80,32 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_nativeCalc(JNIEnv * env, job
     Viscosity_Matrix v;
 
 
-    double deltaxi = 1e-2;      //original = 1e-2
+    double deltaxi = 1e-2; //original = 1e-2
 
     std::vector<RealVector> coords;
 
     //TODO Remove
 
-    if (timeDirection==RAREFACTION_SPEED_INCREASE)
-        timeDirection=ORBIT_FORWARD;
+    if (timeDirection == RAREFACTION_SPEED_INCREASE)
+        timeDirection = ORBIT_FORWARD;
 
-    if (timeDirection==RAREFACTION_SPEED_DECREASE)
-        timeDirection=ORBIT_BACKWARD;
+    if (timeDirection == RAREFACTION_SPEED_DECREASE)
+        timeDirection = ORBIT_BACKWARD;
+
+
+    RealVector p1(2), p2(2);
+
+    p1.component(0) = 0.0;
+    p1.component(1) = 0.4;
+
+    p2.component(0) = 0.5;
+    p2.component(1) = 0.5;
+
+
+    std::vector<RealVector> segment;
+    segment.push_back(p1);
+    segment.push_back(p2);
+
 
     Viscous_Profile::orbit(fluxFunction, accumFunction,
             &v,
@@ -98,7 +113,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_nativeCalc(JNIEnv * env, job
             nativeEquiPoint, nativeRefPoint, sigma,
             deltaxi,
             timeDirection,
-            coords);
+            coords, &segment);
+
+    cout<<"Tamanho da orbita: "<<coords.size()<<endl;
 
     jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(coords.size(), classOrbitPoint, NULL);
 
@@ -115,7 +132,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_nativeCalc(JNIEnv * env, job
 
         (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size(), dataCoords);
 
-        jobject realVectorCoords = env->NewObject(realVectorClass,realVectorConstructorDoubleArrayID,jTempArray);
+        jobject realVectorCoords = env->NewObject(realVectorClass, realVectorConstructorDoubleArrayID, jTempArray);
 
         //Lambda is the last component.
         jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructorID, realVectorCoords);

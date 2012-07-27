@@ -4,6 +4,40 @@ const FluxFunction* Viscous_Profile::f = 0;
 const AccumulationFunction* Viscous_Profile::a = 0;
 Viscosity_Matrix* Viscous_Profile::vmf = 0;
 
+// Find the intesection between two segments: p1-p2 and q1-q2, store the answer in r.
+// If there is no intersection, return false (and r is useless), otherwise return true.
+//
+bool Viscous_Profile::segment_intersection(double *p1, double *p2, double *q1, double *q2, double *r){
+    {
+        printf("    Sign(q1) = %lg\n", (p2[1] - p1[1])*q1[0] + (p1[0] - p2[0])*q1[1] + (p1[1]*p2[0] - p2[1]*p1[0]));
+        printf("    Sign(q2) = %lg\n", (p2[1] - p1[1])*q2[0] + (p1[0] - p2[0])*q2[1] + (p1[1]*p2[0] - p2[1]*p1[0]));
+    }
+
+    double alpha, beta;
+
+    double A[2][2], b[2];
+    for (int i = 0; i < 2; i++){
+        A[i][0] = p1[i] - p2[i];
+        A[i][1] = q2[i] - q1[i];
+
+        b[i]    = q2[i] - p2[i];
+    }
+
+    double delta = A[0][0]*A[1][1] - A[0][1]*A[1][0];
+    if (fabs(delta) < 1e-10) {
+        return false;
+    }
+
+    alpha = (b[0]*A[1][1] - b[1]*A[0][1])/delta;
+    beta  = (b[1]*A[0][0] - b[0]*A[1][0])/delta;
+
+    for (int i = 0; i < 2; i++) r[i] = .5*(alpha*p1[i] + (1.0 - alpha)*p2[i] + beta*q1[i] + (1.0 - beta)*q2[i]);
+
+    printf("        alpha = %g, beta = %g, delta = %g\n", alpha, beta, delta);
+
+    return (alpha >= 0.0 && alpha <= 1.0) && (beta >= 0.0 && beta <= 1.0);
+}
+
 // TODO: This method can be straightforwardly extended to arbitrary dimension:
 // Do so.
 
@@ -36,8 +70,6 @@ void Viscous_Profile::Newton_improvement(const FluxFunction *ff, const Accumulat
     }
 
     do {
-
-        cout<<"Loop dentro do newton"<<endl;
         double F[2], JF[2][2], G[2], JG[2][2];
         ff->fill_with_jet(2, U, 1, F, &JF[0][0], 0);
         aa->fill_with_jet(2, U, 1, G, &JG[0][0], 0);
@@ -57,9 +89,6 @@ void Viscous_Profile::Newton_improvement(const FluxFunction *ff, const Accumulat
 
         // Solve
         double det = A[0][0] * A[1][1] - A[0][1] * A[1][0];
-
-        cout<<"Determinante : "<<det<<endl;
-
         anorm = 0.0;
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 2; j++) {
@@ -78,12 +107,6 @@ void Viscous_Profile::Newton_improvement(const FluxFunction *ff, const Accumulat
         delta_U[0] = (b[0] * A[1][1] - b[1] * A[0][1]) / det;
         delta_U[1] = (A[0][0] * b[1] - A[1][0] * b[0]) / det;
 
-
-        cout<<"Delta 0 "<<delta_U[0]<<endl;
-        cout << "Delta 1 " << delta_U[1] << endl;
-
-
-
         // Prepare next step:
         for (int i = 0; i < 2; i++) U[i] += delta_U[i];
 
@@ -92,7 +115,7 @@ void Viscous_Profile::Newton_improvement(const FluxFunction *ff, const Accumulat
     // Output
     for (int i = 0; i < 2; i++) out.component(i) = U[i];
 
-    //cout<<"Valor de out::: "<<out<<endl;
+    cout<<"Valor de out: "<<out<<endl;
 
     return;
 }
@@ -104,7 +127,7 @@ void Viscous_Profile::critical_points_linearization(const FluxFunction *ff, cons
     ep.clear();
 
     RealVector out;
-    
+
     Newton_improvement(ff, aa, speed, cp, ref, out);
 
     cp=out;
@@ -147,12 +170,72 @@ void Viscous_Profile::critical_points_linearization(const FluxFunction *ff, cons
     return;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//
+//
+//
+//
+//void Viscous_Profile::critical_points_linearization(const FluxFunction *ff, const AccumulationFunction *aa,
+//        Viscosity_Matrix *v,
+//        double speed, const RealVector &cp, RealVector &ref,
+//        std::vector<eigenpair> &ep) {
+//    ep.clear();
+//
+//    RealVector out;
+//    Newton_improvement(ff, aa, speed, cp, ref, out);
+//
+//    Matrix<double> JF(2, 2), JG(2, 2);
+//    ff->fill_with_jet(2, out.components(), 1, 0, JF.data(), 0);
+//    aa->fill_with_jet(2, out.components(), 1, 0, JG.data(), 0);
+//
+//    // Find the eigenpairs of:
+//    //
+//    // [-speed*JG(cp[i]) + JF(cp[i])]*U_mu = mu*D(cp[i])*U_mu.
+//    //
+//    Matrix<double> RH(2, 2), viscous(2, 2);
+//    for (int k = 0; k < 2; k++) {
+//        for (int j = 0; j < 2; j++) {
+//            RH(k, j) = -speed * JG(k, j) + JF(k, j);
+//        }
+//    }
+//
+//    // Fill the viscous matrix
+//    //v->fill_viscous_matrix(cp, viscous);
+//    v->fill_viscous_matrix(out, viscous);
+//
+//    //std::vector<eigenpair> e;
+//    Eigen::eig(2, RH.data(), viscous.data(), ep);
+//
+//    cout << "Ponto no metodo: " << cp << endl;
+//
+//    cout << "eigen0RR: " << ep[0].r << endl;
+//    cout << "eigen1RR: " << ep[1].r << endl;
+//
+//    //ep.push_back(e);
+//
+//    return;
+//}
+
 int Viscous_Profile::orbit(const FluxFunction *ff, const AccumulationFunction *aa,
         Viscosity_Matrix *v,
         const Boundary *boundary, const RealVector &init, const RealVector &ref, double speed,
         double deltaxi,
         int orbit_direction,
-        std::vector<RealVector> &out) {
+        std::vector<RealVector> &out, 
+        std::vector<RealVector> *segment){
     f = ff;
     a = aa;
     vmf = v;
@@ -199,10 +282,8 @@ int Viscous_Profile::orbit(const FluxFunction *ff, const AccumulationFunction *a
     // Is the tolerance the same for all the elements of U (1) or not (2)?
     int itol = 2; // 1: atol scalar; 2: atol array.
     double rtol = 1e-4;
-    //double rtol = 1e-3;
     double atol[n];
     for (int i = 0; i < n; i++) atol[i] = 1e-6;
-    //for (int i = 0; i < n; i++) atol[i] = 1e-5;
 
     // The Jacobian is provided by the user.
     // int mf = 21;
@@ -244,11 +325,9 @@ int Viscous_Profile::orbit(const FluxFunction *ff, const AccumulationFunction *a
 
     // Find the orbit
     while (true) {
-
         // TEMPORAL
-        //if (out.size() > 5000) {
-        if (out.size() > 1000) {
-            //printf("Max reached!!!\n");
+        if (out.size() > 5000) {
+            printf("Max reached!!!\n");
             return ABORTED_PROCEDURE;
         }
         // TEMPORAL
@@ -259,6 +338,29 @@ int Viscous_Profile::orbit(const FluxFunction *ff, const AccumulationFunction *a
 
         // Update new_point.
         for (int i = 0; i < n; i++) new_point.component(i) = p[i];
+
+        // BEGIN Verify that the orbit does not intersect the segment (if given)
+        if (segment != 0){
+            RealVector r(2);
+            if (segment_intersection(segment->at(0).components(), 
+                                     segment->at(1).components(), 
+                                     previous_point.components(), 
+                                     new_point.components(), 
+                                     r.components())){
+                out.push_back(r);
+
+                printf("Reached segment\n");
+                return ORBIT_REACHED_SEGMENT;
+            }
+            else {
+                printf("(%lg, %lg)-(%lg, %lg) not intesecting (%lg, %lg)-(%lg, %lg)\n", 
+                         previous_point.component(0), previous_point.component(1), 
+                         new_point.component(0), new_point.component(1), 
+                         segment->at(0).component(0), segment->at(0).component(1), 
+                         segment->at(1).component(0), segment->at(1).component(1));
+            }
+        }
+        // END   Verify that the orbit does not intersect the segment (if given)
 
         // BEGIN Check Boundary //
         // Modified RectBoundary so that the intersection can be tested using RealVectors of size
@@ -275,7 +377,7 @@ int Viscous_Profile::orbit(const FluxFunction *ff, const AccumulationFunction *a
             // Store the point lying in the domain's border and get out.
             out.push_back(r);
 
-            //printf("Reached boundary\n");
+            printf("Reached boundary\n");
 
             return SUCCESSFUL_PROCEDURE;
         } else {
