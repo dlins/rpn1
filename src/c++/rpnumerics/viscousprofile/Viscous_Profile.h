@@ -24,6 +24,10 @@
 #define ORBIT_REACHED_SEGMENT 10
 #endif
 
+#ifndef ORBIT_STAGNANT
+#define ORBIT_STAGNANT 20
+#endif
+
 class Viscous_Profile {
     private:
     protected:
@@ -31,6 +35,14 @@ class Viscous_Profile {
         static const AccumulationFunction *a;
 
         static Viscosity_Matrix *vmf;
+
+        static double distance(const RealVector &p, const RealVector &q){
+            double d = 0.0;
+
+            for (int i = 0; i < p.size(); i++) d += (p.component(i) - q.component(i))*(p.component(i) - q.component(i));
+
+            return sqrt(d);
+        }
 
         static bool segment_intersection(double *p1, double *p2, double *q1, double *q2, double *r);
 

@@ -63,9 +63,15 @@ public class InvariantsReadyImpl extends NumConfigReadyImpl {
 
             StationaryPoint point = (StationaryPoint) geom.geomFactory().geomSource();
             plotManifolds(point);
+            return;
 
         }
-        else
+        if (geom instanceof PoincareSectionGeom) {
+            System.out.println("Testando se geom instanceof PoincareSectionGeom ... ");
+            removeManifolds(phaseSpace);
+            phaseSpace.changeState(new PoincareReadyImpl(hugoniotGeom(), xzeroGeom(), (PoincareSectionGeom) geom, false));
+        }
+
         phaseSpace.join(geom);
 
 
@@ -77,6 +83,27 @@ public class InvariantsReadyImpl extends NumConfigReadyImpl {
         geom.geomFactory().getUI().uninstall(geom.geomFactory());
         phaseSpace.remove(geom);
     }
+
+
+    private void removeManifolds(RPnPhaseSpaceAbstraction phaseSpace) {
+        Iterator it = phaseSpace.getGeomObjIterator();
+        List<RpGeometry> listManifolds = new ArrayList<RpGeometry>();
+
+        while (it.hasNext()) {
+            RpGeometry geometry = (RpGeometry) it.next();
+
+            if (geometry instanceof ManifoldGeom){
+                listManifolds.add(geometry);
+            }
+
+        }
+
+        for (RpGeometry rpgeometry : listManifolds) {
+            phaseSpace.remove(rpgeometry);
+        }
+    }
+
+
 
       private void plotManifolds(StationaryPoint statPoint) {
 

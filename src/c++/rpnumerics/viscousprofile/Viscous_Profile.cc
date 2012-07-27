@@ -323,6 +323,11 @@ int Viscous_Profile::orbit(const FluxFunction *ff, const AccumulationFunction *a
 
     out.push_back(new_point);
 
+    // Distance between the last and before-the-last points in the orbit, when
+    // it is too small, end the calculations.
+    //
+    double largest_distance = 0.0;
+
     // Find the orbit
     while (true) {
         // TEMPORAL
@@ -338,6 +343,17 @@ int Viscous_Profile::orbit(const FluxFunction *ff, const AccumulationFunction *a
 
         // Update new_point.
         for (int i = 0; i < n; i++) new_point.component(i) = p[i];
+
+        // BEGIN Verify that the orbit does indeed advance, and does not stay at the same point
+        {
+            double d = distance(new_point, previous_point);
+            if (largest_distance < d) largest_distance = d; printf("d = %g, largest = %g\n", d, largest_distance);
+
+            if (out.size() > 5 && d < .01*largest_distance){
+                return ORBIT_STAGNANT;
+            }
+        }
+        // END   Verify that the orbit does indeed advance, and does not stay at the same point
 
         // BEGIN Verify that the orbit does not intersect the segment (if given)
         if (segment != 0){

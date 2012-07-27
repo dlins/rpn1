@@ -6,6 +6,8 @@
  */
 package rpnumerics;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import wave.util.*;
 import wave.ode.ODESolution;
 import org.netlib.lapack.DGEES;
@@ -33,14 +35,31 @@ public class ManifoldOrbitCalc implements RpCalculation {
     private PhasePoint firstPoint_;
     private int timeDirection_;
     private String methodName_;
+    private SimplexPoincareSection poincare_;
     
     //
     // Constructors
     //
 
-    public ManifoldOrbitCalc(StationaryPoint stationaryPoint, int timeDirection) {      //RETOMAR AQUI !!!
+    public ManifoldOrbitCalc(StationaryPoint stationaryPoint, SimplexPoincareSection poincareSection,int timeDirection) {      //RETOMAR AQUI !!!
         stationaryPoint_ = stationaryPoint;
         timeDirection_ = timeDirection;
+        poincare_=poincareSection;
+
+    }
+
+
+       public ManifoldOrbitCalc(StationaryPoint stationaryPoint,int timeDirection) {      //RETOMAR AQUI !!!
+        stationaryPoint_ = stationaryPoint;
+        timeDirection_ = timeDirection;
+
+        try {
+            RealVector[] input = stationaryPoint_.initialManifoldPoint();
+            firstPoint_ = new PhasePoint(input[0]);
+        } catch (RpException ex) {
+            Logger.getLogger(ManifoldOrbitCalc.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
 
     }
 
