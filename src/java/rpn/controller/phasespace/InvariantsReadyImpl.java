@@ -160,6 +160,8 @@ public class InvariantsReadyImpl extends NumConfigReadyImpl {
             }
 
         } catch (Exception e) {
+
+            System.out.println("Excessao no plot invariants");
             System.out.println(e.getMessage());
         }
 

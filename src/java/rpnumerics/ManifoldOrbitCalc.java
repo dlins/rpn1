@@ -41,37 +41,105 @@ public class ManifoldOrbitCalc implements RpCalculation {
     // Constructors
     //
 
-    public ManifoldOrbitCalc(StationaryPoint stationaryPoint, SimplexPoincareSection poincareSection,int timeDirection) {      //RETOMAR AQUI !!!
+    public ManifoldOrbitCalc(StationaryPoint stationaryPoint, SimplexPoincareSection poincareSection,int timeDirection)throws RpException {      //RETOMAR AQUI !!!
         stationaryPoint_ = stationaryPoint;
         timeDirection_ = timeDirection;
         poincare_=poincareSection;
 
-    }
-
-
-       public ManifoldOrbitCalc(StationaryPoint stationaryPoint,int timeDirection) {      //RETOMAR AQUI !!!
-        stationaryPoint_ = stationaryPoint;
-        timeDirection_ = timeDirection;
-
-        try {
-            RealVector[] input = stationaryPoint_.initialManifoldPoint();
-            firstPoint_ = new PhasePoint(input[0]);
-        } catch (RpException ex) {
-            Logger.getLogger(ManifoldOrbitCalc.class.getName()).log(Level.SEVERE, null, ex);
+          if(stationaryPoint.isSaddle()) {
+            firstPoint_ = orbitInitialPoint(stationaryPoint, poincareSection);
         }
 
+        else throw  new RpException("Stationary point is not saddle in Manifold Constructor");
 
     }
-
 
 
     public ManifoldOrbitCalc(StationaryPoint stationaryPoint, PhasePoint firstPoint, int timeDirection) {
         timeDirection_ = timeDirection;
         stationaryPoint_ = stationaryPoint;
         firstPoint_ = firstPoint;
-        methodName_ = "default";//TODO Put the correct method name
+       
+        
+        RealVector [] poincarePoints = new RealVector[2];// Poincare sendo apenas 1 segmento (usando um ponto como default)
+        
+        
+
+        poincarePoints[0]= new RealVector(2);
+
+        poincarePoints[0].setElement(0, 0.0);
+        poincarePoints[0].setElement(1, 0.0);
+
+
+
+        poincarePoints[1]= new RealVector(2);
+
+        poincarePoints[1].setElement(0, 0.0);
+        poincarePoints[1].setElement(1, 0.0);
+
+        SimplexPoincareSection poincare = new SimplexPoincareSection(poincarePoints);
+
+        poincare_=poincare;
+
+
+
+
         
     }
+
+
+    private PhasePoint orbitInitialPoint(StationaryPoint stationaryPoint, SimplexPoincareSection poincareSection) {
+
+        double P10 = poincareSection.getPoints()[0].getElement(0);
+        double P11 = poincareSection.getPoints()[0].getElement(1);
+        double P20 = poincareSection.getPoints()[1].getElement(0);
+        double P21 = poincareSection.getPoints()[1].getElement(1);
+        double a = P11 - P21;
+        double b = P20 - P10;
+        double c = P10*P21 - P20*P11;
+
+        System.out.println("Valores de a, b, c : " +a +" , " +b +" , " +c);
+
+
+        double h = 1E-2;
+        RealVector center = new RealVector(stationaryPoint.getCoords());
+        RealVector point1 = new RealVector(2);
+        RealVector point2 = new RealVector(2);
+        double dist1 = 0.;
+        double dist2 = 0.;
+
+        PhasePoint initialPoint = null;
+
+        for (int i = 0; i < 2; i++) {
+            if (stationaryPoint.getEigenValR()[i] > 0.) {
+                RealVector dir = new RealVector(stationaryPoint.getEigenVec()[i]);
+
+                point1.setElement(0, h * dir.getElement(0) + center.getElement(0));
+                point1.setElement(1, h * dir.getElement(1) + center.getElement(1));
+
+                point2.setElement(0, -h * dir.getElement(0) + center.getElement(0));
+                point2.setElement(1, -h * dir.getElement(1) + center.getElement(1));
+
+                dist1 = (Math.abs(a * point1.getElement(0) + b * point1.getElement(1) + c)) / Math.sqrt(a * a + b * b);
+                dist2 = (Math.abs(a * point2.getElement(0) + b * point2.getElement(1) + c)) / Math.sqrt(a * a + b * b);
+            }
+        }
+
+        System.out.println("Distancias ao segmento de poincare : ");
+        System.out.println("dist1 : " +dist1);
+        System.out.println("dist2 : " +dist2);
+
+        if(dist1 < dist2) {
+            initialPoint = new PhasePoint(point1);
+        }
+        else {
+            initialPoint = new PhasePoint(point2);
+        }
+
+        return initialPoint;
+
+    }
+
 
     //
     // Accessors/Mutators
@@ -90,10 +158,7 @@ public class ManifoldOrbitCalc implements RpCalculation {
     //
 
 
-    public String getCalcMethodName() {
-        return methodName_;
-
-    }
+   
 
     public RpSolution recalc(Area area) throws RpException {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -101,6 +166,8 @@ public class ManifoldOrbitCalc implements RpCalculation {
 
     public RpSolution calc() throws RpException {
         OrbitCalc oCalc = new OrbitCalc(new OrbitPoint(firstPoint_), timeDirection_);
+
+        oCalc.setPoincareSection(poincare_.getPoints());
         Orbit orbit = (Orbit) oCalc.calc();
 
         System.out.println("POntos do manifold : " +orbit.getPoints().length);

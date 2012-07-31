@@ -159,7 +159,12 @@ void Contour2x2_Method::curve2x2(ThreeImplicitFunctions *timpf,
     for (int il = 0; il < gv_left->grid.rows() - 1; il++) {
         for (int jl = 0; jl < gv_left->grid.cols() - 1; jl++) {
             // Only for squares within the domain.
-            if (gv_left->cell_type(il, jl) != CELL_IS_SQUARE) continue;
+            if (gv_left->cell_type(il, jl) != CELL_IS_SQUARE) {
+
+                cout<<"Saiu na coordenada :"<<il<<" "<<jl<<endl;
+                continue;
+            
+            }
             if ( !(gv_left->cell_is_real(il, jl)) ) continue;
 
             if(!timpf->prepare_cell(il, jl)) continue;

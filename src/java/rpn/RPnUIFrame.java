@@ -946,6 +946,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         modelInteractionMenu.add(inputCoordsMenuItem);
         modelInteractionMenu.add(shockMenuItem_);
         modelInteractionMenu.add(configurationMenuItem_);       // ??????
+        modelInteractionMenu.add(ChangeXZeroAgent.instance());
 
 
     }

@@ -10,15 +10,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.swing.JButton;
-import javax.swing.JToggleButton;
 import rpn.component.*;
 import rpn.controller.phasespace.InvariantsReadyImpl;
-import rpn.controller.phasespace.NumConfigImpl;
 import rpn.controller.phasespace.NumConfigReadyImpl;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UI_ACTION_SELECTED;
 import rpn.parser.RPnDataModule;
-import rpnumerics.*;
 import wave.util.RealVector;
 
 /**

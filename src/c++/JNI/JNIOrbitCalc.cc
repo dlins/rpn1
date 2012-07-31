@@ -97,21 +97,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_nativeCalc(JNIEnv * env, job
     if (timeDirection == RAREFACTION_SPEED_DECREASE)
         timeDirection = ORBIT_BACKWARD;
 
-
-    //    RealVector p1(2), p2(2);
-    //
-    //    p1.component(0) = 0.0;
-    //    p1.component(1) = 0.4;
-    //
-    //    p2.component(0) = 0.5;
-    //    p2.component(1) = 0.5;
-    //
-    //
-    //    std::vector<RealVector> segment;
-    //    segment.push_back(p1);
-    //    segment.push_back(p2);
-
-
     if (poincareSection != NULL) { //Apenas para um segmento
 
 
