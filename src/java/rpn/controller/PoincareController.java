@@ -14,8 +14,6 @@ import rpnumerics.ConnectionOrbit;
 import wave.util.SimplexPoincareSection;
 import wave.util.RealVector;
 import java.beans.PropertyChangeEvent;
-import rpnumerics.RPNUMERICS;
-import rpnumerics.ShockFlow;
 
 public class PoincareController implements RpController {
 

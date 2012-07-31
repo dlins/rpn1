@@ -138,7 +138,6 @@ public class AreaSelectionAgent extends RpModelPlotAgent {
     @Override
     public void execute() {
 
-        System.out.println("Entrou no execute() do AreaSelectionAgent");
 
         UserInputTable userInputList = UIController.instance().globalInputTable();
         RealVector newValue = userInputList.values();

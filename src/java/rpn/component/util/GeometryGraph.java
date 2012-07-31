@@ -30,6 +30,7 @@ import rpn.controller.ui.UserInputTable;
 import rpn.controller.ui.VELOCITYAGENT_CONFIG;
 import rpn.parser.RPnDataModule;
 import rpn.usecase.VelocityAgent;
+import rpnumerics.SecondaryBifurcationCurve;
 import rpnumerics.WaveCurve;
 
 /**
@@ -216,7 +217,7 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
 
             //RpGeometry geom = RPnPhaseSpaceAbstraction.findClosestGeometry(newValue);
             RPnCurve curve = (RPnCurve)(geom.geomFactory().geomSource());
-            if (curve instanceof DoubleContactCurve) {
+            if (curve instanceof DoubleContactCurve  ||  curve instanceof SecondaryBifurcationCurve) {
                 if (!panel.getName().equals(RPnPhaseSpaceAbstraction.namePhaseSpace) && !panel.getName().equals("Phase Space")) {
                     graph.draw(line3DC);
                     graph.draw(line4DC);

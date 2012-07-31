@@ -16,6 +16,7 @@ import rpn.usecase.EllipticBoundaryExtensionAgent;
 import rpn.usecase.EnvelopeCurveAgent;
 import rpn.usecase.HysteresisPlotAgent;
 import rpn.usecase.InflectionPlotAgent;
+import rpn.usecase.SecondaryBifurcationtAgent;
 import rpn.usecase.SubInflectionExtensionCurveAgent;
 import rpn.usecase.SubInflectionPlotAgent;
 import wave.util.RealVector;
@@ -37,6 +38,7 @@ public class BIFURCATION_CONFIG extends UI_ACTION_SELECTED {
         HysteresisPlotAgent.instance().setEnabled(true);
         EllipticBoundaryExtensionAgent.instance().setEnabled(true);
         EnvelopeCurveAgent.instance().setEnabled(true);
+        SecondaryBifurcationtAgent.instance().setEnabled(true);
 
     }
 

@@ -41,7 +41,7 @@ public abstract class RpModelPlotAgent extends RpModelActionAgent {
     }
 
     public void execute() {
-        System.out.println("Entrou no execute() de RpModelPlotAgent");
+
         RealVector[] userInputList = UIController.instance().userInputList();
         
         String listString = "";

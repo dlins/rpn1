@@ -17,8 +17,8 @@
             <PHYSICSPARAM name="rho2" position="2" value ="0.0" />
             <PHYSICSPARAM name="dVinf1" position="3" value ="-1.0" />
             <PHYSICSPARAM name="dVinf2" position="4" value ="-0.5" />
-            <PHYSICSPARAM name="n1" position="5" value ="3.0" />
-            <PHYSICSPARAM name="n2" position="6" value ="4.0" />
+            <PHYSICSPARAM name="n1" position="5" value ="4.0" />
+            <PHYSICSPARAM name="n2" position="6" value ="3.0" />
 
         </PHYSICSCONFIG>
 

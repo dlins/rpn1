@@ -68,8 +68,6 @@ struct Curve {
             curve.clear();
             corresponding_point_in_related_curve.clear();
         }
-
-        
 };
 
 class WaveCurve {
@@ -79,12 +77,13 @@ class WaveCurve {
         const AccumulationFunction *aa;
         const Boundary *boundary;
 
-
+       
+        //int half_wavecurve(int initial_curve, const RealVector &init, const RealVector &ref, bool first_curve, int family, int increase, std::vector<Curve> &c);
         double ddot(int n, double *x, double *y);
     public:
         WaveCurve(const FluxFunction *f, const AccumulationFunction *a, const Boundary *b);
         ~WaveCurve();
-        int half_wavecurve(int initial_curve, const RealVector &init, int family, int increase, std::vector<Curve> &c);
+    int half_wavecurve(int initial_curve, const RealVector &init, int family, int increase, std::vector<Curve> &c);
         int wavecurve(const RealVector &init, int family, int increase, std::vector<Curve> &c);
 };
 

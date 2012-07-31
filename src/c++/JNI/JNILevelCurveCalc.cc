@@ -97,7 +97,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_PointLevelCalc_calcNative(JNIEnv * env
     vector < RealVector > eigen_contours;
     double vec_levels;
 
-    GridValues * gv = RpNumerics::getPhysics().getGrid(0);
+    GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcation");
 
     ec.curve(&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(),
             *gv, eigen_contours, vec_levels);
@@ -196,7 +196,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_LevelCurveCalc_calcNative(JNIEnv * env
 
     double vec_levels;
 
-    GridValues * gv = RpNumerics::getPhysics().getGrid(0);
+    GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcation");
 
     ec.curve(& RpNumerics::getPhysics().fluxFunction(), & RpNumerics::getPhysics().accumulation(),
             *gv, eigen_contours, vec_levels);

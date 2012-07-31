@@ -18,6 +18,7 @@ public class OrbitCalc implements RpCalculation {
 
     private OrbitPoint start_;
     private int timeDirection_;
+    private RealVector[] poincareSection_;
 
     //
     // Constructors/Initializers
@@ -25,9 +26,14 @@ public class OrbitCalc implements RpCalculation {
     public OrbitCalc(OrbitPoint point,  int timeDirection) {
         start_ = point;
         timeDirection_ = timeDirection;
+        poincareSection_=null;
 
     }
 
+
+    public void setPoincareSection(RealVector [] poincare){
+        poincareSection_=poincare;
+    }
 
     //
     // Methods
@@ -37,10 +43,9 @@ public class OrbitCalc implements RpCalculation {
     }
 
     public RpSolution calc() throws RpException {
-        //System.out.println("Entrou no calc() de OrbitCalc");
+//        return nativeCalc(start_, RPNUMERICS.getShockProfile().getXZero(), RPNUMERICS.getShockProfile().getSigma(), timeDirection_,poincareSection_);
 
-        return nativeCalc(start_, RPNUMERICS.getShockProfile().getXZero(), RPNUMERICS.getShockProfile().getSigma(), timeDirection_);
-
+        return nativeCalc(start_, RPNUMERICS.getShockProfile().getXZero(), RPNUMERICS.getShockProfile().getSigma(), timeDirection_,poincareSection_);
     }
 
    
@@ -64,6 +69,7 @@ public class OrbitCalc implements RpCalculation {
     }
 
 
-    private native RpSolution nativeCalc (OrbitPoint initialPoint, PhasePoint referencePoint,double speed, int direction ) throws RpException;
+    private native RpSolution nativeCalc (OrbitPoint initialPoint, PhasePoint referencePoint,double speed, int direction ,RealVector[] poincareSection) throws RpException;
+//       private native RpSolution nativeCalc (OrbitPoint initialPoint, PhasePoint referencePoint,double speed, int direction ) throws RpException;
 
 }

@@ -65,20 +65,17 @@ public class InvariantsReadyImpl extends NumConfigReadyImpl {
         // TODO maybe we could have xzero part of hugoniot geom ?
         if (geom instanceof StationaryPointGeom  ||  geom instanceof XZeroGeom) {
 
-            //if (isPlotManifold()) phaseSpace.join(geom);      //*** está dando problema ...
-
-
             StationaryPoint point = (StationaryPoint) geom.geomFactory().geomSource();
-
-            System.out.println("No plot de invariantes: " +point.getElement(0) + " " + point.getElement(1) + " Sela: " + point.isSaddle());
-
-
             plotManifolds(point);
-
-            
+            return;
 
         }
-        else
+        if (geom instanceof PoincareSectionGeom) {
+            System.out.println("Testando se geom instanceof PoincareSectionGeom ... ");
+            removeManifolds(phaseSpace);
+            phaseSpace.changeState(new PoincareReadyImpl(hugoniotGeom(), xzeroGeom(), (PoincareSectionGeom) geom, false));
+        }
+
         phaseSpace.join(geom);
 
 
@@ -91,9 +88,29 @@ public class InvariantsReadyImpl extends NumConfigReadyImpl {
         phaseSpace.remove(geom);
     }
 
-      private void plotManifolds(StationaryPoint statPoint) {
 
-        System.out.println("Classe InvariantPlotAgent ::: Entrou em joinManifolds(StationaryPoint statPoint) ... ");
+
+    private void removeManifolds(RPnPhaseSpaceAbstraction phaseSpace) {
+        Iterator it = phaseSpace.getGeomObjIterator();
+        List<RpGeometry> listManifolds = new ArrayList<RpGeometry>();
+
+        while (it.hasNext()) {
+            RpGeometry geometry = (RpGeometry) it.next();
+
+            if (geometry instanceof ManifoldGeom){
+                listManifolds.add(geometry);
+            }
+
+        }
+
+        for (RpGeometry rpgeometry : listManifolds) {
+            phaseSpace.remove(rpgeometry);
+        }
+    }
+
+
+
+      private void plotManifolds(StationaryPoint statPoint) {
 
         try {
             RealVector[] array = statPoint.initialManifoldPoint();

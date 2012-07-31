@@ -196,8 +196,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
                             || (namePhaseSpace.equals("RightPhase Space")  &&  geom != RPnDataModule.RIGHTPHASESPACE.getLastGeometry())
                             || (namePhaseSpace.equals("LeftPhase Space")  &&  geom != RPnDataModule.LEFTPHASESPACE.getLastGeometry())) {
 
-                        if (geom.viewingAttr().isVisible()  &&  
-                                (geom instanceof SegmentedCurveGeom  ||  geom instanceof OrbitGeom  ||  geom instanceof ManifoldGeom)) {
+                        if (geom.viewingAttr().isVisible()  &&  !(geom instanceof StationaryPointGeom)) {
 
                             RpGeomFactory factory = geom.geomFactory();
                             RPnCurve curve = (RPnCurve) factory.geomSource();
@@ -219,9 +218,8 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
 
                 if (GeometryGraphND.onCurve == 0) {
 
-                    if (geom.viewingAttr().isVisible()  &&  
-                            (geom instanceof SegmentedCurveGeom  ||  geom instanceof OrbitGeom  ||  geom instanceof ManifoldGeom)) {
-                    
+                    if (geom.viewingAttr().isVisible()  &&  !(geom instanceof StationaryPointGeom)) {
+
                         RpGeomFactory factory = geom.geomFactory();
                         RPnCurve curve = (RPnCurve) factory.geomSource();
 

@@ -85,7 +85,7 @@ public class NumConfigReadyImpl extends NumConfigImpl
 
         if (geom instanceof PoincareSectionGeom) {
             System.out.println("Testando se geom instanceof PoincareSectionGeom ... ");
-            phaseSpace.changeState(new PoincareReadyImpl(hugoniotGeom(), xzeroGeom(), (PoincareSectionGeom) geom, isPlotManifold()));
+            phaseSpace.changeState(new PoincareReadyImpl(hugoniotGeom(), xzeroGeom(), (PoincareSectionGeom) geom, false));
         }
         //phaseSpace.changeState(new PoincareReadyImpl(hugoniotGeom(), xzeroGeom(), (PoincareSectionGeom)geom));
 

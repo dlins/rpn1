@@ -10,10 +10,10 @@ extern "C" {
 /*
  * Class:     rpnumerics_OrbitCalc
  * Method:    nativeCalc
- * Signature: (Lrpnumerics/OrbitPoint;Lrpnumerics/PhasePoint;DI)Lrpnumerics/RpSolution;
+ * Signature: (Lrpnumerics/OrbitPoint;Lrpnumerics/PhasePoint;DI[Lwave/util/RealVector;)Lrpnumerics/RpSolution;
  */
 JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_nativeCalc
-  (JNIEnv *, jobject, jobject, jobject, jdouble, jint);
+  (JNIEnv *, jobject, jobject, jobject, jdouble, jint, jobjectArray);
 
 #ifdef __cplusplus
 }

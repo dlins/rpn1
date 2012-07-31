@@ -76,8 +76,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     public static String dir = "";
     private RPnPhaseSpaceFrame frameZoom = null;
     private ArrayList<RPnPhaseSpaceFrame> listFrameZoom = new ArrayList();
-    private static int numOfPanelZoom = 0;
-    public static JComboBox copyComboBox = new JComboBox();
+
+
     //***
 
     //Construct the frame
@@ -189,6 +189,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 toolBar_.add(HysteresisPlotAgent.instance().getContainer());
                 toolBar_.add(EllipticBoundaryExtensionAgent.instance().getContainer());
                 toolBar_.add(EnvelopeCurveAgent.instance().getContainer());
+                toolBar_.add(SecondaryBifurcationtAgent.instance().getContainer());
                 toolBar_.revalidate();
 
             }
@@ -601,15 +602,14 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         setUIFramePosition();
 
-        stateComboBox.addItem("Phase Diagram");
+
         stateComboBox.addItem("Wave Curves");
         stateComboBox.addItem("Bifurcation Curves");
+        stateComboBox.addItem("Phase Diagram");
         stateComboBox.addActionListener(new StateHandler());
 
-        copyComboBox = stateComboBox;
 
-        UIController.instance().setState(new SHOCK_CONFIG());
-
+        UIController.instance().setState(new RAREFACTION_CONFIG());
 
         GridBagLayout configPanelLayout = new GridBagLayout();
 

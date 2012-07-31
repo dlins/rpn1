@@ -39,17 +39,16 @@ public class NumConfigImpl implements NUMCONFIG {
         phaseSpace.join(geom);
 
         // TODO maybe we could have xzero part of hugoniot geom ?
-        if (geom instanceof XZeroGeom) {      //************************************************ Mas quando isso é verdade?
-            System.out.println("Finalmente validou o XZeroGeom ***************************************************");
+        if (geom instanceof XZeroGeom) { 
+
             phaseSpace.changeState(new NumConfigReadyImpl(hugoniotGeom_, (XZeroGeom)geom, false));
         }
-
         
         if (geom instanceof HugoniotCurveGeom) {
-            System.out.println("plot de HugoniotCurveGeom ********************************************************");
+
             hugoniotGeom_ = (HugoniotCurveGeom)geom;
         }
-            //hugoniotGeom_ = (HugoniotCurveGeom)geom;
+
 
     }
 

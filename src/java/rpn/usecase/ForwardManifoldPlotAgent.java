@@ -32,14 +32,14 @@ public class ForwardManifoldPlotAgent extends RpModelPlotAgent {
 
     public RpGeometry createRpGeometry(RealVector[] input) {
 
-        System.out.println("Entrou no createRpGeometry de ForwardManifoldPlotAgent ...");
+
 
         RealVector lastPointAdded = input[input.length - 1];
         StationaryPoint statPoint = (StationaryPoint)rpn.parser.RPnDataModule.PHASESPACE.find(lastPointAdded).geomFactory().geomSource();
-//        ManifoldGeomFactory factory = new ManifoldGeomFactory(RPNUMERICS.createManifoldCalc(statPoint, new PhasePoint(lastPointAdded), OrbitGeom.FORWARD_DIR));
-////            new ManifoldOrbitCalc(statPoint, new PhasePoint(lastPointAdded), OrbitGeom.FORWARD_DIR));
-//        return factory.geom();
-        return null;
+        System.out.println("statPoint.getCoords() : " +statPoint.getCoords());
+        ManifoldGeomFactory factory = new ManifoldGeomFactory(new ManifoldOrbitCalc(statPoint, Orbit.FORWARD_DIR));
+            
+        return factory.geom();
     }
 
     //

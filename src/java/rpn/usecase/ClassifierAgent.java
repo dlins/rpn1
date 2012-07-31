@@ -16,6 +16,7 @@ import rpn.component.util.GeometryGraphND;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UserInputTable;
 import rpnumerics.DoubleContactCurve;
+import rpnumerics.SecondaryBifurcationCurve;
 import rpnumerics.HugoniotCurve;
 import rpnumerics.HugoniotSegment;
 import rpnumerics.RPnCurve;
@@ -103,7 +104,7 @@ public class ClassifierAgent extends RpModelPlotAgent {
 
             GeometryGraphND.pMarca = curve.findClosestPoint(newValue);
 
-            if (curve instanceof DoubleContactCurve) {
+            if (curve instanceof DoubleContactCurve  ||  curve instanceof SecondaryBifurcationCurve) {
                 GeometryGraphND.pMarcaDC = GeometryGraphND.secondPointDC(curve);
             }
             else GeometryGraphND.pMarcaDC = GeometryGraphND.pMarca;

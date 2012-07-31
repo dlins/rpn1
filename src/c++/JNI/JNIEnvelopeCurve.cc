@@ -63,14 +63,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_EnvelopeCurveCalc_nativeCalc
     const FluxFunction * flux = &RpNumerics::getPhysics().fluxFunction();
     const AccumulationFunction * accum = &RpNumerics::getPhysics().accumulation();
 
-    GridValues * gv = RpNumerics::getPhysics().getGrid(0);
+    GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcation");
 
     cout <<"constant : "<<where_constant<<endl;
 
     cout << "number of steps : " << number_of_steps << endl;
     Three_Phase_Boundary & physicsBoundary = (Three_Phase_Boundary &) RpNumerics::getPhysics().boundary();
-
-
 
 
     physicsBoundary.envelope_curve(flux, accum, *gv,

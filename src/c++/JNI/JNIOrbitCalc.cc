@@ -27,7 +27,7 @@ NOTE :
 
 using std::vector;
 
-JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_nativeCalc(JNIEnv * env, jobject obj, jobject initialPoint, jobject referencePoint, jdouble sigma, jint timeDirection) {
+JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_nativeCalc(JNIEnv * env, jobject obj, jobject initialPoint, jobject referencePoint, jdouble sigma, jint timeDirection, jobjectArray poincareSection) {
 
     jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
 
@@ -41,12 +41,17 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_nativeCalc(JNIEnv * env, job
     jmethodID realVectorConstructorDoubleArrayID = env->GetMethodID(realVectorClass, "<init>", "([D)V");
 
 
+
+
+
+
+
     //Input processing
-    //    jdoubleArray phasePointArray =(jdoubleArray) (env)->CallObjectMethod(initialPoint, toDoubleMethodID);
+
     //
     //    double input [env->GetArrayLength(phasePointArray)];
     //
-    //    env->GetDoubleArrayRegion(phasePointArray, 0, env->GetArrayLength(phasePointArray), input);
+
     //
     //    env->DeleteLocalRef(phasePointArray);
     //
@@ -80,27 +85,97 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_nativeCalc(JNIEnv * env, job
     Viscosity_Matrix v;
 
 
-    double deltaxi = 1e-2;      //original = 1e-2
+    double deltaxi = 1e-2; //original = 1e-2
 
     std::vector<RealVector> coords;
 
     //TODO Remove
 
-    if (timeDirection==RAREFACTION_SPEED_INCREASE)
-        timeDirection=ORBIT_FORWARD;
+    if (timeDirection == RAREFACTION_SPEED_INCREASE)
+        timeDirection = ORBIT_FORWARD;
 
-    if (timeDirection==RAREFACTION_SPEED_DECREASE)
-        timeDirection=ORBIT_BACKWARD;
+    if (timeDirection == RAREFACTION_SPEED_DECREASE)
+        timeDirection = ORBIT_BACKWARD;
 
-    Viscous_Profile::orbit(fluxFunction, accumFunction,
-            &v,
-            boundary,
-            nativeEquiPoint, nativeRefPoint, sigma,
-            deltaxi,
-            timeDirection,
-            coords);
 
-    cout << "Tamnho de coords : " << coords.size() << endl;
+    //    RealVector p1(2), p2(2);
+    //
+    //    p1.component(0) = 0.0;
+    //    p1.component(1) = 0.4;
+    //
+    //    p2.component(0) = 0.5;
+    //    p2.component(1) = 0.5;
+    //
+    //
+    //    std::vector<RealVector> segment;
+    //    segment.push_back(p1);
+    //    segment.push_back(p2);
+
+
+    if (poincareSection != NULL) { //Apenas para um segmento
+
+
+    RealVector nativePoincarePoint1(2);
+    RealVector nativePoincarePoint2(2);
+    vector<RealVector> poincareSegment;
+
+        jobject poincarePoint1 = env->GetObjectArrayElement(poincareSection, 0);
+
+        jobject poincarePoint2 = env->GetObjectArrayElement(poincareSection, 1);
+
+
+
+        jdoubleArray poincare1PointArray = (jdoubleArray) (env)->CallObjectMethod(poincarePoint1, toDoubleMethodID);
+        jdoubleArray poincare2PointArray = (jdoubleArray) (env)->CallObjectMethod(poincarePoint2, toDoubleMethodID);
+
+        double tempPoint1[2];
+        double tempPoint2[2];
+
+        env->GetDoubleArrayRegion(poincare1PointArray, 0, 2, tempPoint1);
+        env->GetDoubleArrayRegion(poincare2PointArray, 0, 2, tempPoint2);
+
+
+        nativePoincarePoint1.component(0) = tempPoint1[0];
+        nativePoincarePoint1.component(1) = tempPoint1[1];
+
+
+        nativePoincarePoint2.component(0) = tempPoint2[0];
+        nativePoincarePoint2.component(1) = tempPoint2[1];
+
+        poincareSegment.push_back(nativePoincarePoint1);
+        poincareSegment.push_back(nativePoincarePoint2);
+
+
+
+
+        Viscous_Profile::orbit(fluxFunction, accumFunction,
+                &v,
+                boundary,
+                nativeEquiPoint, nativeRefPoint, sigma,
+                deltaxi,
+                timeDirection,
+                coords, &poincareSegment);
+
+
+        cout <<"Segmento de poincare: "<< nativePoincarePoint1<<" "<<nativePoincarePoint2<<endl;
+
+    } else {
+
+        Viscous_Profile::orbit(fluxFunction, accumFunction,
+                &v,
+                boundary,
+                nativeEquiPoint, nativeRefPoint, sigma,
+                deltaxi,
+                timeDirection,
+                coords);
+
+        cout<<"Sem poincare"<<endl;
+
+
+    }
+
+
+    cout << "Tamanho da orbita: " << coords.size() << endl;
 
     jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(coords.size(), classOrbitPoint, NULL);
 
@@ -117,7 +192,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_nativeCalc(JNIEnv * env, job
 
         (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size(), dataCoords);
 
-        jobject realVectorCoords = env->NewObject(realVectorClass,realVectorConstructorDoubleArrayID,jTempArray);
+        jobject realVectorCoords = env->NewObject(realVectorClass, realVectorConstructorDoubleArrayID, jTempArray);
 
         //Lambda is the last component.
         jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructorID, realVectorCoords);

@@ -26,6 +26,7 @@ NOTE :
 #include "TPCW.h"
 #include "ColorCurve.h"
 #include "Hugoniot_Curve.h"
+#include "GridValuesFactory.h"
 
 using std::vector;
 using namespace std;
@@ -89,14 +90,20 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     //-------------------------------------------------------------------
 
 
+ 
+
+
+
+
     RealVector Uref(dimension, input);
 
     vector<HugoniotPolyLine> hugoniotPolyLineVector;
 
     Hugoniot_Curve hugoniotCurve;
 
-    GridValues * gv = RpNumerics::getPhysics().getGrid(0);
+    GridValues * gv = RpNumerics::getGridFactory().getGrid("hugoniotcurve");
 
+    
     hugoniotCurve.classified_curve(&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(), *gv, Uref, hugoniotPolyLineVector);
 
     for (int i = 0; i < hugoniotPolyLineVector.size(); i++) {
@@ -224,7 +231,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
     Hugoniot_Curve hugoniotCurve;
 
-    GridValues * gv = RpNumerics::getPhysics().getGrid(0);
+    GridValues * gv = RpNumerics::getGridFactory().getGrid("hugoniotcurve");
 
     hugoniotCurve.classified_curve(&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(), *gv, Uref, hugoniotPolyLineVector);
 

@@ -74,25 +74,38 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
     const FluxFunction * rightFlux = leftFlux;
     const AccumulationFunction * rightAccum = rightAccum;
 
-    const Boundary * leftBoundary = &RpNumerics::getPhysics().boundary();
-    const Boundary * rightBoundary = leftBoundary;
+//    const Boundary * leftBoundary = &RpNumerics::getPhysics().boundary();
+//    const Boundary * rightBoundary = leftBoundary;
 
 
-    RealVector pmin(leftBoundary->minimums());
-    RealVector pmax(leftBoundary->maximums());
+
+     GridValues * gv = RpNumerics::getGridFactory().getGrid("doublecontactcurve");
+
+//    RealVector pmin(leftBoundary->minimums());
+//    RealVector pmax(leftBoundary->maximums());
 
     cout <<"left family: "<<leftFamily<<endl;
     cout << "right family: " << rightFamily << endl;
 
-    Double_Contact dc(pmin, pmax, number_of_grid_pnts, leftFlux,
-            leftAccum,
-            leftFamily, leftBoundary,
-            pmin, pmax, number_of_grid_pnts,
-            rightFlux,
-            rightAccum,
-            rightFamily, rightBoundary);
+//    Double_Contact dc(pmin, pmax, number_of_grid_pnts,
+//            leftFamily, leftBoundary,
+//            pmin, pmax, number_of_grid_pnts,
+//
+//            rightFamily, rightBoundary);
 
-    dc.compute_double_contact(left_vrs, right_vrs);
+
+
+    
+
+
+    Double_Contact dc;
+
+
+    dc.curve(leftFlux, leftAccum, gv,leftFamily,
+            rightFlux, rightAccum,gv,rightFamily,
+            left_vrs,right_vrs);
+
+//    dc.compute_double_contact(left_vrs, right_vrs);
 
     cout << "left_vrs.size()  = " << left_vrs.size() << endl;
 
@@ -113,8 +126,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
 
         double * leftCoords = (double *) left_vrs.at(2 * i);
         double * rightCoords = (double *) left_vrs.at(2 * i + 1);
-
-
 
 
         env->SetDoubleArrayRegion(eigenValRLeft, 0, dimension, leftCoords);

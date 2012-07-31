@@ -5,8 +5,6 @@
  */
 package wave.multid.view;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import wave.multid.model.*;
 import wave.multid.DimMismatchEx;
 import java.awt.Graphics2D;
@@ -100,32 +98,13 @@ public class Scene implements GeomObjView {
 
 
 
-//    //****  Leandro Leandro Leandro Leandro Leandro
-//    public void remove(int geometryIndex, List segRem) {
-//        System.out.println("Entrou no meu metodo remove.");
-//        MultiGeometry geometry = (MultiGeometry) AbstractScene.geomList_.get(geometryIndex);
-//        SegmentedCurveGeom segGeom = (SegmentedCurveGeom) geometry;
-//        SegmentedCurve minhaCurva = (SegmentedCurve) ((SegmentedCurve) (segGeom.geomFactory().geomSource()));
-//        System.out.println("Tamanho da minhaCurva antes da remocao: " +minhaCurva.segments().size());
-//        minhaCurva.segments().removeAll(segRem);
-//        System.out.println("Tamanho da minhaCurva depois da remocao: " +minhaCurva.segments().size());
-//        //update();
-//    }
-//    //****
-
-
-
     public void update() {
-        //System.out.println("Entrou no update() em Scene.");
-        //System.out.println("Tamanho de viewList_ antes do clear em Scene : " +viewList_.size());
         viewList_.clear();
-        //System.out.println("Tamanho de viewList_ depois do clear : " +viewList_.size());
         Iterator geomListIterator = ((AbstractScene) abstractGeom_).getGeomObjIterator();
         while (geomListIterator.hasNext()) {
-            //System.out.println("No while do geomListIterator...");
             MultiGeometry geomObj = (MultiGeometry) geomListIterator.next();
             addViewFor(geomObj);
         }
-        //System.out.println("Tamanho de viewList_ no fim do update() de Scene : " +viewList_.size());
+
     }
 }

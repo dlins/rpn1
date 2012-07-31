@@ -145,6 +145,9 @@ public class RPNUMERICS {
 
         }
 
+
+
+
         configMap_.put(physicsID, physicsConfiguration);
         errorControl_ = new RpErrorControl(boundary());
     }
@@ -397,10 +400,22 @@ public class RPNUMERICS {
 
     }
 
+
+    public static SecondaryBifurcationCurveCalc createSecondaryBifurcationCurveCalc() {
+
+        int[] resolution = RPnDataModule.processResolution(getParamValue("inflectioncurve", "resolution"));
+
+
+        ContourParams params = new ContourParams(resolution);
+
+        return new SecondaryBifurcationCurveCalc(params);
+
+    }
+
+
+
     public static OrbitCalc createOrbitCalc(OrbitPoint oPoint) {
 
-        System.out.println("Entrou em : public static OrbitCalc createOrbitCalc(OrbitPoint oPoint)");
-        System.out.println("Valor de direction_ : " +direction_);
         return new OrbitCalc(oPoint, direction_);
 
     }
@@ -675,7 +690,7 @@ public class RPNUMERICS {
 
     public static native FluxParams getFluxParams();
 
-    public static native void setResolution(RealVector min, RealVector max, int[] newResolution);
+    public static native void setResolution(RealVector min, RealVector max, String gridName, int[] newResolution);
 
     public static native RealVector getAccumulationParams();
 

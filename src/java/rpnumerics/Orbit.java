@@ -17,6 +17,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import rpn.RPnUIFrame;
 import rpn.component.MultidAdapter;
+import wave.multid.CoordsArray;
 import wave.util.RealSegment;
 
 public class Orbit extends RPnCurve implements RpSolution {
@@ -30,7 +31,7 @@ public class Orbit extends RPnCurve implements RpSolution {
 
     private OrbitPoint[] points_;
     private int increase_;
-    private boolean isInvariant;
+
 
     private List<? extends RealSegment> segments_;
 
@@ -47,16 +48,15 @@ public class Orbit extends RPnCurve implements RpSolution {
         points_ = orbitPointsFromRealVectors(coords, times);
 
         segments_ = MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseRPnCurveToCoordsArray(this));
-        isInvariant = false;
+
     }
 
     public Orbit(OrbitPoint[] points,  int increase) {
         super(MultidAdapter.converseOrbitPointsToCoordsArray(points), new ViewingAttr(Color.white));
         increase_ = increase;
         points_ = points;
-
-        segments_ = MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseRPnCurveToCoordsArray(this));
-        isInvariant = false;
+        CoordsArray [] arrayTeste = MultidAdapter.converseOrbitPointsToCoordsArray(points);
+        segments_ = MultidAdapter.converseCoordsArrayToRealSegments(arrayTeste);
 
     }
 
@@ -68,7 +68,7 @@ public class Orbit extends RPnCurve implements RpSolution {
         points_ = orbit.getPoints();
 
         segments_ = MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseRPnCurveToCoordsArray(this));
-        isInvariant = orbit.isInvariant();
+
 
     }
 
@@ -81,13 +81,7 @@ public class Orbit extends RPnCurve implements RpSolution {
         return result;
     }
 
-    public boolean isInvariant() {
-        return isInvariant;
-    }
-
-    public void setInvariant(boolean isInvariant) {
-        this.isInvariant = isInvariant;
-    }
+  
 
     //
     // Methods

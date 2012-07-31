@@ -58,10 +58,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getFluxParams
 /*
  * Class:     rpnumerics_RPNUMERICS
  * Method:    setResolution
- * Signature: (Lwave/util/RealVector;Lwave/util/RealVector;[I)V
+ * Signature: (Lwave/util/RealVector;Lwave/util/RealVector;Ljava/lang/String;[I)V
  */
 JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setResolution
-  (JNIEnv *, jclass, jobject, jobject, jintArray);
+  (JNIEnv *, jclass, jobject, jobject, jstring, jintArray);
 
 /*
  * Class:     rpnumerics_RPNUMERICS

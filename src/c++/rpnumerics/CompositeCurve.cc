@@ -1,8 +1,9 @@
-#include "CompositeCurve.h"
+ #include "CompositeCurve.h"
 
 int CompositeCurve::curve(const std::vector<RealVector> &rarcurve, int origin, int family, int increase, int number_ignore_doub_contact,
                            FluxFunction *ff, AccumulationFunction *aa, 
                            Boundary *boundary, std::vector<RealVector> &compcurve){
+//                           Boundary *boundary, std::vector<RealVector> &compcurve, std::vector<RealVector> &shock_curve_temp){
 
     if (origin == COMPOSITE_FROM_NORMAL_RAREFACTION) compcurve.clear();
 
@@ -15,13 +16,15 @@ int CompositeCurve::curve(const std::vector<RealVector> &rarcurve, int origin, i
     if (origin == COMPOSITE_FROM_NORMAL_RAREFACTION) start = COMPOSITE_FROM_NORMAL_RAREFACTION_START;
     else start = 1;
 
+    int dim = rarcurve[rarcurve.size() - 1].size() - 1;
+
     if (rarcurve.size() > 1){
-        RealVector rar_point(rarcurve[rarcurve.size() - 1].size() - 1); // The eigenvalue is not necessary here.
+        RealVector rar_point(dim); // The eigenvalue is not necessary here.
 
         // Only add the last point of the rarefaction (the inflection point) if the rarefaction does not come from a stack.
         // (This is related to the wave curve.)
         if (origin == COMPOSITE_FROM_NORMAL_RAREFACTION){
-            for (int j = 0; j < rarcurve[rarcurve.size() - 1].size() - 1; j++) rar_point.component(j) = rarcurve[rarcurve.size() - 1].component(j);
+            for (int j = 0; j < dim; j++) rar_point.component(j) = rarcurve[rarcurve.size() - 1].component(j);
             compcurve.push_back(rar_point);
         }
 
@@ -30,12 +33,17 @@ int CompositeCurve::curve(const std::vector<RealVector> &rarcurve, int origin, i
             printf("Rarcuve's index = %d\n", i);
             std::vector<RealVector> shockcurve, shockcurve_alt;
 
-            for (int j = 0; j < rarcurve[i].size() - 1; j++) rar_point.component(j) = rarcurve[i].component(j);
+            for (int j = 0; j < dim; j++) rar_point.component(j) = rarcurve[i].component(j);
 
             // Follow the direction given by the vector formed by the difference between the rarefaction's last two points.
-            RealVector orig_direction(rarcurve[i].size());
-            if (i == rarcurve.size() - start) for (int j = 0; j < rarcurve[i].size(); j++) orig_direction.component(j) = rarcurve[i].component(j) - rarcurve[i - 1].component(j);
-            else                              for (int j = 0; j < rarcurve[i].size(); j++) orig_direction.component(j) = rarcurve[i + 1].component(j) - rarcurve[i].component(j);
+            RealVector orig_direction(dim);
+            if (i == rarcurve.size() - start) for (int j = 0; j < dim; j++) orig_direction.component(j) = rarcurve[i].component(j) - rarcurve[i - 1].component(j);
+            else                              for (int j = 0; j < dim; j++) orig_direction.component(j) = rarcurve[i + 1].component(j) - rarcurve[i].component(j);
+
+            double norm_orig = 0.0;
+            for (int j = 0; j < dim; j++) norm_orig += orig_direction.component(j)*orig_direction.component(j);
+            norm_orig = 1.0/sqrt(norm_orig);
+            for (int j = 0; j < dim; j++) orig_direction.component(j) *= norm_orig;
 
             printf("Inside composite: TESTING 2012/04/17.");
             printf("    rar.size() = %d\n", rarcurve.size());
@@ -52,6 +60,10 @@ int CompositeCurve::curve(const std::vector<RealVector> &rarcurve, int origin, i
 
             if (info == SHOCK_ERROR || info == SHOCK_REACHED_BOUNDARY){
                 printf("Composite curve. Shock problem, info = %d.\n", info);
+//                // TEMPORAL BELOW
+//                shock_curve_temp.clear();
+//                for (int i = 0; i < shockcurve.size(); i++) shock_curve_temp.push_back(shockcurve[i]);
+//                // TEMPORAL ABOVE
 
                 return COMPOSITE_REACHED_BOUNDARY;
             }

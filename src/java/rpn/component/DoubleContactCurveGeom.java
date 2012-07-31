@@ -8,7 +8,7 @@ package rpn.component;
 import wave.multid.view.*;
 import wave.multid.*;
 
-public class DoubleContactCurveGeom extends BifurcationCurveGeom {//implements MultiGeometry, RpGeometry {
+public class DoubleContactCurveGeom extends BifurcationCurveGeom {
    
 
     //

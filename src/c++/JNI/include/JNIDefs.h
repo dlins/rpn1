@@ -62,6 +62,7 @@
 #define SUBINFLECTIONCURVE_LOCATION           "rpnumerics/SubInflectionCurve"
 #define BLCURVE_LOCATION                      "rpnumerics/BuckleyLeverettInflectionCurve"
 #define DOUBLECONTACT_LOCATION                "rpnumerics/DoubleContactCurve"
+#define SECONDARY_BIFURCATION_LOCATION        "rpnumerics/SecondaryBifurcationCurve"
 #define BOUNDARYEXTENSIONCURVE_LOCATION       "rpnumerics/BoundaryExtensionCurve"
 #define SUBINFLECTIONEXTENSIONCURVE_LOCATION  "rpnumerics/SubInflectionExtensionCurve"
 #define COINCIDENCEEXTENSIONCURVE_LOCATION    "rpnumerics/CoincidenceExtensionCurve"
