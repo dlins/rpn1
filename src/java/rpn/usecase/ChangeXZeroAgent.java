@@ -77,26 +77,22 @@ public class ChangeXZeroAgent extends RpModelConfigChangeAgent {
         }
 
 
-        System.out.println("Valor de sigma: " + rpnumerics.RPNUMERICS.getShockProfile().getSigma());
-
         XZeroGeomFactory xzeroRef = new XZeroGeomFactory(new StationaryPointCalc(new PhasePoint(lastPointAdded), lastPointAdded));
 
+        rpnumerics.RPNUMERICS.getShockProfile().setXZero(new PhasePoint(lastPointAdded));
 
-
-        
         HugoniotCurveGeom hGeom = ((NUMCONFIG) RPnDataModule.PHASESPACE.state()).hugoniotGeom();
         HugoniotCurve hCurve = (HugoniotCurve) hGeom.geomFactory().geomSource();
         double sigma = rpnumerics.RPNUMERICS.getShockProfile().getSigma();
-
 
         boolean manifold = ((NumConfigReadyImpl) RPnDataModule.PHASESPACE.state()).isPlotManifold();
         NumConfigReadyImpl state = new NumConfigReadyImpl(hGeom, (XZeroGeom) xzeroRef.geom(), manifold);
         RPnDataModule.PHASESPACE.changeState(state);
 
 
-        RPnDataModule.PHASESPACE.plot(xzeroRef.geom());//
+        RPnDataModule.PHASESPACE.plot(xzeroRef.geom());
 
-
+//        RPnDataModule.PHASESPACE.join(xzeroRef.geom());
 
         HugoniotCurveCalcND hCalc = (HugoniotCurveCalcND) (((HugoniotCurveGeomFactory) hGeom.geomFactory()).rpCalc());
 
@@ -105,39 +101,51 @@ public class ChangeXZeroAgent extends RpModelConfigChangeAgent {
         ((HugoniotParams) hCalc.getParams()).setXZero(lastPointAdded);
 
 
-        //------------------------- Recalcula os pontos estacionarios
-        RealVector closestPoint = hCurve.findClosestPoint(lastPointAdded);
-        List<RealVector> eqPoints = hCurve.equilPoints(closestPoint);
 
+        applyChange(new PropertyChangeEvent(this, DESC_TEXT, oldXZero, lastPointAdded));
+
+
+        //------------------------- Recalcula os pontos estacionarios
+        //*** Define a nova curva
+        hGeom = ((NumConfigReadyImpl) RPnDataModule.PHASESPACE.state()).hugoniotGeom();
+        hCurve = (HugoniotCurve) hGeom.geomFactory().geomSource();
+
+        //*** Nova curva chama o método novo
+        List<RealVector> eqPoints = hCurve.equilPoints(sigma);	//***
 
         if (state.isPlotManifold()) {   //*** os plots daqui sao para manifolds
             RPnDataModule.PHASESPACE.changeState(new InvariantsReadyImpl(hGeom, (XZeroGeom) xzeroRef.geom()));
 
             for (RealVector realVector : eqPoints) {
-                StationaryPointGeomFactory xzeroFactory = new StationaryPointGeomFactory(new StationaryPointCalc(new PhasePoint(realVector), hCurve.getXZero()));
+                StationaryPointGeomFactory xzeroFactory = new StationaryPointGeomFactory(new StationaryPointCalc(new PhasePoint(realVector), new PhasePoint(lastPointAdded)));
 
                 StationaryPoint testePoint = (StationaryPoint) xzeroFactory.geomSource();
 
                 System.out.println(testePoint.getElement(0) + " " + testePoint.getElement(1) + " Sela: " + testePoint.isSaddle());
 
-
+                RPnDataModule.PHASESPACE.join(xzeroFactory.geom());
                 RPnDataModule.PHASESPACE.plot(xzeroFactory.geom());
 
             }
-            RPnDataModule.PHASESPACE.plot((XZeroGeom) xzeroRef.geom());
+
+            RPnDataModule.PHASESPACE.plot((XZeroGeom)xzeroRef.geom());
+
+
+        } else {
+
+            for (RealVector realVector : eqPoints) {    // *** o join daqui é para as setas dos pontos estacionarios
+                StationaryPointGeomFactory statPointFactory = new StationaryPointGeomFactory(new StationaryPointCalc(new PhasePoint(realVector), hCurve.getXZero()));
+
+                RPnDataModule.PHASESPACE.plot(statPointFactory.geom());
+
+            }
+            //-------------------------------------------------------------
 
         }
 
 
-        for (RealVector realVector : eqPoints) {    // *** o join daqui é para as setas dos pontos estacionarios
-            StationaryPointGeomFactory xzeroFactory = new StationaryPointGeomFactory(new StationaryPointCalc(new PhasePoint(realVector), hCurve.getXZero()));
-
-            RPnDataModule.PHASESPACE.join(xzeroFactory.geom());
-
-        }
 
 
-        applyChange(new PropertyChangeEvent(this, DESC_TEXT, oldXZero, lastPointAdded));
 
     }
 

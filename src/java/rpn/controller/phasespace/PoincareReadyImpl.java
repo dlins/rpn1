@@ -3,7 +3,6 @@
  * Departamento de Dinamica dos Fluidos
  *
  */
-
 package rpn.controller.phasespace;
 
 import rpn.component.*;
@@ -18,8 +17,9 @@ public class PoincareReadyImpl extends NumConfigReadyImpl
     //
     // Members
     //
+
     private PoincareSectionGeom simplexGeom_;
-    
+
     //
     // Constructors
     //
@@ -33,37 +33,46 @@ public class PoincareReadyImpl extends NumConfigReadyImpl
         FindProfileAgent.instance().setEnabled(false);                          //só vai ficar habilitado em ProfileSetupReadyImpl
 
     }
-    
+
     //
     // Accessors/Mutators
     //
-    public PoincareSectionGeom poincareGeom() { return simplexGeom_; }
-    
+    public PoincareSectionGeom poincareGeom() {
+        return simplexGeom_;
+    }
+
     //
     // Methods
     //
-    
-    
     public void delete(RPnPhaseSpaceAbstraction phaseSpace, RpGeometry geom) {
         super.delete(phaseSpace, geom);
 
-        if (geom instanceof PoincareSectionGeom)
+        if (geom instanceof PoincareSectionGeom) {
             phaseSpace.changeState(new NumConfigReadyImpl(hugoniotGeom(), xzeroGeom(), isPlotManifold()));
+        }
     }
-    
+
     public void plot(RPnPhaseSpaceAbstraction phaseSpace, RpGeometry geom) {
+
+        if ((geom instanceof PoincareSectionGeom)) {
+            phaseSpace.remove(simplexGeom_);
+        }
+
+
         super.plot(phaseSpace, geom);
 
-        if (geom.geomFactory().geomSource() instanceof ManifoldOrbit)
-            if (((ManifoldOrbit)geom.geomFactory().geomSource()).getTimeDirection() == Orbit.BACKWARD_DIR)
+        if (geom.geomFactory().geomSource() instanceof ManifoldOrbit) {
+            if (((ManifoldOrbit) geom.geomFactory().geomSource()).getTimeDirection() == Orbit.BACKWARD_DIR) {
                 phaseSpace.changeState(
-                        new bwdProfileReadyImpl(hugoniotGeom(), xzeroGeom(), poincareGeom(), (ManifoldGeom)geom, isPlotManifold()));
-            else
+                        new bwdProfileReadyImpl(hugoniotGeom(), xzeroGeom(), poincareGeom(), (ManifoldGeom) geom, isPlotManifold()));
+            } else {
                 phaseSpace.changeState(
-                        new fwdProfileReadyImpl(hugoniotGeom(), xzeroGeom(), poincareGeom(), (ManifoldGeom)geom, isPlotManifold()));
-        
+                        new fwdProfileReadyImpl(hugoniotGeom(), xzeroGeom(), poincareGeom(), (ManifoldGeom) geom, isPlotManifold()));
+            }
+        }
+
     }
-    
+
     public void select(RPnPhaseSpaceAbstraction phaseSpace, RealVector coords) {
         super.select(phaseSpace, coords);
 

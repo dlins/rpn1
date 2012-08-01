@@ -59,11 +59,11 @@ public class ManifoldOrbitCalc implements RpCalculation {
         timeDirection_ = timeDirection;
         stationaryPoint_ = stationaryPoint;
         firstPoint_ = firstPoint;
-       
-        
+
+
         RealVector [] poincarePoints = new RealVector[2];// Poincare sendo apenas 1 segmento (usando um ponto como default)
-        
-        
+
+
 
         poincarePoints[0]= new RealVector(2);
 
@@ -84,7 +84,7 @@ public class ManifoldOrbitCalc implements RpCalculation {
 
 
 
-        
+
     }
 
 
@@ -170,7 +170,7 @@ public class ManifoldOrbitCalc implements RpCalculation {
         oCalc.setPoincareSection(poincare_.getPoints());
         Orbit orbit = (Orbit) oCalc.calc();
 
-        System.out.println("POntos do manifold : " +orbit.getPoints().length);
+
 
         return new ManifoldOrbit(stationaryPoint_, firstPoint_, orbit, timeDirection_);
     }

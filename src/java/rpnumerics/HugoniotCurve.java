@@ -316,7 +316,7 @@ public class HugoniotCurve extends SegmentedCurve {
 
     }
 
-    public List findPoints(double sigma) {
+     public List findPoints(double sigma) {
         ArrayList points = new ArrayList();
         double alpha = 0;
         RealVector point = null;
@@ -392,6 +392,48 @@ public class HugoniotCurve extends SegmentedCurve {
 
     }
     //****************************
+
+
+
+       // ------------------------------------------------------------------------
+    public List<RealVector> equilPoints(double sigma) {
+
+        List<RealVector> equil = new ArrayList();
+
+        // inclui o Uref na lista de pontos de equilibrio
+        //RealVector pZero = getXZero();
+        //equil.add(pZero);
+
+        int sz = segments().size();
+        for (int i = 0; i < sz; i++) {
+            HugoniotSegment segment_ = (HugoniotSegment) segments().get(i);
+
+            if ((segment_.leftSigma() <= sigma && segment_.rightSigma() >= sigma)
+                    || (segment_.leftSigma() >= sigma && segment_.rightSigma() <= sigma)) {
+
+                double lSigma_ = segment_.leftSigma();
+                double rSigma_ = segment_.rightSigma();
+                double lX_ = segment_.leftPoint().getElement(0);
+                double rX_ = segment_.rightPoint().getElement(0);
+                double lY_ = segment_.leftPoint().getElement(1);
+                double rY_ = segment_.rightPoint().getElement(1);
+
+                double X_ = (rX_ - lX_) * (sigma - lSigma_) / (rSigma_ - lSigma_) + lX_;
+                double Y_ = (rY_ - lY_) * (sigma - lSigma_) / (rSigma_ - lSigma_) + lY_;
+                RealVector p = new RealVector(2);
+                p.setElement(0, X_);
+                p.setElement(1, Y_);
+
+                //if (p != pZero) {
+                    equil.add(p);
+                //}
+
+            }
+        }
+        return equil;
+    }
+    // ----------------------------------------------------------------------------
+
 
 
     public String toXML() {
