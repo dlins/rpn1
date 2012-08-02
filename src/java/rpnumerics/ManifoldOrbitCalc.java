@@ -41,6 +41,15 @@ public class ManifoldOrbitCalc implements RpCalculation {
     // Constructors
     //
 
+
+    public ManifoldOrbitCalc(StationaryPoint stationaryPoint, PhasePoint firstPoint, SimplexPoincareSection poincareSection,int timeDirection) {
+        stationaryPoint_ = stationaryPoint;
+        timeDirection_ = timeDirection;
+        poincare_=poincareSection;
+        firstPoint_ = firstPoint;
+    }
+
+
     public ManifoldOrbitCalc(StationaryPoint stationaryPoint, SimplexPoincareSection poincareSection,int timeDirection)throws RpException {      //RETOMAR AQUI !!!
         stationaryPoint_ = stationaryPoint;
         timeDirection_ = timeDirection;

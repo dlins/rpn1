@@ -97,6 +97,10 @@ public class ChangeSigmaAgent extends RpModelConfigChangeAgent {
 
         //------------------------- Recalcula os pontos estacionarios
         RealVector closestPoint = hCurve.findClosestPoint(lastPointAdded);
+
+        // -----
+        RPNUMERICS.getShockProfile().setUplus(new PhasePoint(closestPoint));
+
         List<RealVector> eqPoints = hCurve.equilPoints(closestPoint);
 
 

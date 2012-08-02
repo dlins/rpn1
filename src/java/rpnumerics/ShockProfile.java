@@ -16,9 +16,10 @@ public class ShockProfile extends ShockRarefactionProfile {
     private static boolean hugoniotSpecific_=false;
     private static ShockProfile instance_ = null;
     private static RealVector fx0_ = null;
+    private PhasePoint Uplus_ = null;
 
     public static final String SHOCKFLOW_NAME = "ShockFlow";
-    public static final String [] HUGONIOT_METHOD_NAMES={"Continuation","Contour"}; //TODO Put this names into a better place
+    public static final String [] HUGONIOT_METHOD_NAMES={"Continuation","Contour"}; //TODO Put these names into a better place
 
     public RealVector getFx0() {
         return fx0_;
@@ -50,6 +51,15 @@ public class ShockProfile extends ShockRarefactionProfile {
         return new PhasePoint(new RealVector(data));
     }
 
+
+    public PhasePoint getUplus() {
+        return Uplus_;
+    }
+
+    public void setUplus(PhasePoint Uplus) {
+        Uplus_ = Uplus;
+        System.out.println("Valor do novo Uplus : " +Uplus_);
+    }
     
 
     public double getSigma() {

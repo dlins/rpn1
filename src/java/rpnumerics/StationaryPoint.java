@@ -103,6 +103,62 @@ public class StationaryPoint extends PhasePoint implements RpSolution {
     //
 
 
+    private PhasePoint[] orbitInitialPoints(RealVector dir) {
+
+        PhasePoint[] array = new PhasePoint[2];
+
+        double h = 1E-2;
+        RealVector center = new RealVector(getCoords());
+        RealVector point1 = new RealVector(2);
+        RealVector point2 = new RealVector(2);
+
+        for (int i = 0; i < 2; i++) {
+            point1.setElement(0, h * dir.getElement(0) + center.getElement(0));
+            point1.setElement(1, h * dir.getElement(1) + center.getElement(1));
+
+            point2.setElement(0, -h * dir.getElement(0) + center.getElement(0));
+            point2.setElement(1, -h * dir.getElement(1) + center.getElement(1));
+        }
+
+        array[0] = new PhasePoint(point1);
+        array[1] = new PhasePoint(point2);
+
+        return array;
+    }
+    
+    
+
+    public PhasePoint[] orbitDirectionFWD() {
+
+        RealVector dir = new RealVector(2);
+
+        for (int i = 0; i < 2; i++) {
+            if (getEigenValR()[i] > 0.) {
+                dir = new RealVector(getEigenVec()[i]);
+            }
+        }
+
+        return orbitInitialPoints(dir);
+
+    }
+
+
+    public RealVector[] orbitDirectionBWD() {
+
+        RealVector dir = new RealVector(2);
+
+        for (int i = 0; i < 2; i++) {
+            if (getEigenValR()[i] < 0.) {
+                dir = new RealVector(getEigenVec()[i]);
+            }
+        }
+
+        return orbitInitialPoints(dir);
+
+    }
+
+
+
     public RealVector[] initialManifoldPoint() throws RpException {
 
 

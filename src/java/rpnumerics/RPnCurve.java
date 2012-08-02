@@ -302,8 +302,6 @@ public abstract class RPnCurve {
 
     public RealVector findClosestPoint(RealVector targetPoint) {
 
-        //ArrayList segments = MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseRPnCurveToCoordsArray(this));
-
         RPnPhaseSpaceAbstraction phaseSpace = RPnDataModule.PHASESPACE;
         RpGeometry geom = phaseSpace.findClosestGeometry(targetPoint);
         RPnCurve curve = (RPnCurve)(geom.geomFactory().geomSource());

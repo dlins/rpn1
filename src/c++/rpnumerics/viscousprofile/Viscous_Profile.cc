@@ -115,8 +115,6 @@ void Viscous_Profile::Newton_improvement(const FluxFunction *ff, const Accumulat
     // Output
     for (int i = 0; i < 2; i++) out.component(i) = U[i];
 
-    cout<<"Valor de out: "<<out<<endl;
-
     return;
 }
 

@@ -26,6 +26,7 @@ import rpnumerics.HugoniotCurve;
 import rpnumerics.HugoniotCurveCalcND;
 import rpnumerics.HugoniotParams;
 import rpnumerics.PhasePoint;
+import rpnumerics.RPNUMERICS;
 import rpnumerics.StationaryPoint;
 import rpnumerics.StationaryPointCalc;
 
@@ -113,22 +114,25 @@ public class ChangeXZeroAgent extends RpModelConfigChangeAgent {
         //*** Nova curva chama o método novo
         List<RealVector> eqPoints = hCurve.equilPoints(sigma);	//***
 
+        updateUplus(eqPoints);
+        
+
         if (state.isPlotManifold()) {   //*** os plots daqui sao para manifolds
             RPnDataModule.PHASESPACE.changeState(new InvariantsReadyImpl(hGeom, (XZeroGeom) xzeroRef.geom()));
 
             for (RealVector realVector : eqPoints) {
+
                 StationaryPointGeomFactory xzeroFactory = new StationaryPointGeomFactory(new StationaryPointCalc(new PhasePoint(realVector), new PhasePoint(lastPointAdded)));
 
-                StationaryPoint testePoint = (StationaryPoint) xzeroFactory.geomSource();
-
-                System.out.println(testePoint.getElement(0) + " " + testePoint.getElement(1) + " Sela: " + testePoint.isSaddle());
+                //StationaryPoint testePoint = (StationaryPoint) xzeroFactory.geomSource();
+                //System.out.println(testePoint.getElement(0) + " " + testePoint.getElement(1) + " Sela: " + testePoint.isSaddle());
 
                 RPnDataModule.PHASESPACE.join(xzeroFactory.geom());
                 RPnDataModule.PHASESPACE.plot(xzeroFactory.geom());
 
             }
 
-            RPnDataModule.PHASESPACE.plot((XZeroGeom)xzeroRef.geom());
+            RPnDataModule.PHASESPACE.plot((XZeroGeom) xzeroRef.geom());
 
 
         } else {
@@ -148,6 +152,29 @@ public class ChangeXZeroAgent extends RpModelConfigChangeAgent {
 
 
     }
+
+
+    private void updateUplus(List<RealVector> eqPoints) {
+
+        PhasePoint uPlus = RPNUMERICS.getShockProfile().getUplus();
+        System.out.println("Uqem eh uPlus dentro do update : " +uPlus);
+
+        double dist = 1E10;    //***Melhorar criterio
+        double dist2 = 0.;
+        RealVector newUPlus = null;
+
+        for (RealVector realVector : eqPoints) {
+            dist2 = realVector.distance(uPlus);
+            if (dist2 < dist) {
+                dist = dist2;
+                newUPlus = realVector;
+            }
+        }
+
+        RPNUMERICS.getShockProfile().setUplus(new PhasePoint(newUPlus));
+
+    }
+
 
     static public ChangeXZeroAgent instance() {
         if (instance_ == null) {

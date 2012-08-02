@@ -48,6 +48,9 @@ public class SIGMA_CONFIG extends UI_ACTION_SELECTED {
 
         RealVector closestPoint = hCurve.findClosestPoint(userInput);
 
+        // -----
+        RPNUMERICS.getShockProfile().setUplus(new PhasePoint(closestPoint));
+
         List<RealVector> eqPoints = hCurve.equilPoints(closestPoint);
 
         for (RealVector realVector : eqPoints) {
