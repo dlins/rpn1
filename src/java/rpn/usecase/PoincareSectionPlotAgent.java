@@ -31,6 +31,7 @@ public class PoincareSectionPlotAgent extends RpModelPlotAgent {
         super(DESC_TEXT, RPnConfig.POINCARE,new JToggleButton());
     }
 
+
     public RpGeometry createRpGeometry(RealVector[] input) {
 
         return new PoincareSectionGeomFactory(new SimplexPoincareSection(input)).geom();

@@ -218,7 +218,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
 
                 if (GeometryGraphND.onCurve == 0) {
 
-                    if (geom.viewingAttr().isVisible()  &&  !(geom instanceof StationaryPointGeom)) {
+                    if (geom.viewingAttr().isVisible()  &&  !(geom instanceof StationaryPointGeom)  &&  !(geom instanceof PoincareSectionGeom)) {
 
                         RpGeomFactory factory = geom.geomFactory();
                         RPnCurve curve = (RPnCurve) factory.geomSource();

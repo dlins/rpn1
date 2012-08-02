@@ -11,6 +11,7 @@ import rpn.component.XZeroGeomFactory;
 import rpn.controller.phasespace.NumConfigImpl;
 import rpn.parser.RPnDataModule;
 import rpn.usecase.ChangeSigmaAgent;
+import rpn.usecase.ChangeXZeroAgent;
 import rpnumerics.HugoniotCurve;
 import rpnumerics.PhasePoint;
 import rpnumerics.RPNUMERICS;
@@ -27,6 +28,7 @@ public class SIGMA_CONFIG extends UI_ACTION_SELECTED {
     //
     public SIGMA_CONFIG() {
         super(ChangeSigmaAgent.instance());
+        ChangeXZeroAgent.instance().setEnabled(true);
     }
 
     @Override

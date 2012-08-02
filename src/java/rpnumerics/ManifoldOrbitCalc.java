@@ -41,55 +41,18 @@ public class ManifoldOrbitCalc implements RpCalculation {
     // Constructors
     //
 
-    public ManifoldOrbitCalc(StationaryPoint stationaryPoint, SimplexPoincareSection poincareSection,int timeDirection) {      //RETOMAR AQUI !!!
+    public ManifoldOrbitCalc(StationaryPoint stationaryPoint, SimplexPoincareSection poincareSection,int timeDirection)throws RpException {      //RETOMAR AQUI !!!
         stationaryPoint_ = stationaryPoint;
         timeDirection_ = timeDirection;
         poincare_=poincareSection;
 
-    }
-
-
-    // -------------------------------------------------------------------------
-       public ManifoldOrbitCalc(StationaryPoint stationaryPoint,int timeDirection) {      //RETOMAR AQUI !!!
-        stationaryPoint_ = stationaryPoint;
-        timeDirection_ = timeDirection;
-
-
-        if(stationaryPoint.isSaddle()) {
-
-            System.out.println("Sim, o ponto eh de sela");
-            
-            RealVector[] points = new RealVector[2];
-            RealVector p1 = new RealVector(2);
-            RealVector p2 = new RealVector(2);
-
-            p1.setElement(0, 0.0);
-            p1.setElement(1, 0.5);
-            p2.setElement(0, 0.5);
-            p2.setElement(1, 0.5);
-
-            points[0] = p1;
-            points[1] = p2;
-
-            SimplexPoincareSection poincare = new SimplexPoincareSection(points);
-
-            System.out.println("Segmento de poincare construido : " +poincare.getPoints()[0] + " , " +poincare.getPoints()[1]);
-
-            firstPoint_ = orbitInitialPoint(stationaryPoint, poincare);
-
+          if(stationaryPoint.isSaddle()) {
+            firstPoint_ = orbitInitialPoint(stationaryPoint, poincareSection);
         }
 
-
-//        try {
-//            RealVector[] input = stationaryPoint_.initialManifoldPoint();
-//            firstPoint_ = new PhasePoint(input[0]);
-//        } catch (RpException ex) {
-//            Logger.getLogger(ManifoldOrbitCalc.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-
+        else throw  new RpException("Stationary point is not saddle in Manifold Constructor");
 
     }
-    // -------------------------------------------------------------------------
 
 
 
@@ -97,11 +60,32 @@ public class ManifoldOrbitCalc implements RpCalculation {
         timeDirection_ = timeDirection;
         stationaryPoint_ = stationaryPoint;
         firstPoint_ = firstPoint;
-        methodName_ = "default";//TODO Put the correct method name
-        
+
+
+        RealVector [] poincarePoints = new RealVector[2];// Poincare sendo apenas 1 segmento (usando um ponto como default)
+
+
+
+        poincarePoints[0]= new RealVector(2);
+
+        poincarePoints[0].setElement(0, 0.0);
+        poincarePoints[0].setElement(1, 0.0);
+
+
+
+        poincarePoints[1]= new RealVector(2);
+
+        poincarePoints[1].setElement(0, 0.0);
+        poincarePoints[1].setElement(1, 0.0);
+
+        SimplexPoincareSection poincare = new SimplexPoincareSection(poincarePoints);
+
+        poincare_=poincare;
+
+
+
     }
-
-
+    // -------------------------------------------------------------------------
     private PhasePoint orbitInitialPoint(StationaryPoint stationaryPoint, SimplexPoincareSection poincareSection) {
 
         double P10 = poincareSection.getPoints()[0].getElement(0);
@@ -172,10 +156,7 @@ public class ManifoldOrbitCalc implements RpCalculation {
     //
 
 
-    public String getCalcMethodName() {
-        return methodName_;
-
-    }
+   
 
     public RpSolution recalc(Area area) throws RpException {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -183,9 +164,11 @@ public class ManifoldOrbitCalc implements RpCalculation {
 
     public RpSolution calc() throws RpException {
         OrbitCalc oCalc = new OrbitCalc(new OrbitPoint(firstPoint_), timeDirection_);
+
+        oCalc.setPoincareSection(poincare_.getPoints());
         Orbit orbit = (Orbit) oCalc.calc();
 
-        System.out.println("POntos do manifold : " +orbit.getPoints().length);
+
 
         return new ManifoldOrbit(stationaryPoint_, firstPoint_, orbit, timeDirection_);
     }

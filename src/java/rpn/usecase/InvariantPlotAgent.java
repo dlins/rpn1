@@ -16,6 +16,7 @@ import rpn.controller.phasespace.NumConfigReadyImpl;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UI_ACTION_SELECTED;
 import rpn.parser.RPnDataModule;
+import rpnumerics.StationaryPoint;
 import wave.util.RealVector;
 
 /**
@@ -77,6 +78,14 @@ public class InvariantPlotAgent extends RpModelPlotAgent {
         }
 
         for (StationaryPointGeom stationaryPointGeom : listGeom) {
+
+
+                StationaryPoint testePoint = (StationaryPoint) stationaryPointGeom.geomFactory().geomSource();
+
+//                System.out.println(testePoint.getElement(0) + " " + testePoint.getElement(1) + " Plotando invariantes Sela: " + testePoint.isSaddle());
+
+
+
             RPnDataModule.PHASESPACE.plot(stationaryPointGeom);
         }
 
