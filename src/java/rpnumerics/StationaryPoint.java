@@ -105,7 +105,6 @@ public class StationaryPoint extends PhasePoint implements RpSolution {
 
     public RealVector[] initialManifoldPoint() throws RpException {
 
-
         if (isSaddle) {
             RealVector[] array = new RealVector[4];
 
@@ -137,14 +136,10 @@ public class StationaryPoint extends PhasePoint implements RpSolution {
             p4.setElement(1, -h * (dir2.getElement(1)) + center.getElement(1));
             array[3] = p4;
 
-
-
             return array;
         } else {
             throw new RpException("Stationary Point is not Saddle!");
         }
-
-
 
     }
 

@@ -54,11 +54,8 @@ public class ManifoldOrbitCalc implements RpCalculation {
         stationaryPoint_ = stationaryPoint;
         timeDirection_ = timeDirection;
 
-
         if(stationaryPoint.isSaddle()) {
 
-            System.out.println("Sim, o ponto eh de sela");
-            
             RealVector[] points = new RealVector[2];
             RealVector p1 = new RealVector(2);
             RealVector p2 = new RealVector(2);
@@ -73,20 +70,9 @@ public class ManifoldOrbitCalc implements RpCalculation {
 
             SimplexPoincareSection poincare = new SimplexPoincareSection(points);
 
-            System.out.println("Segmento de poincare construido : " +poincare.getPoints()[0] + " , " +poincare.getPoints()[1]);
-
             firstPoint_ = orbitInitialPoint(stationaryPoint, poincare);
 
         }
-
-
-//        try {
-//            RealVector[] input = stationaryPoint_.initialManifoldPoint();
-//            firstPoint_ = new PhasePoint(input[0]);
-//        } catch (RpException ex) {
-//            Logger.getLogger(ManifoldOrbitCalc.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-
 
     }
     // -------------------------------------------------------------------------
