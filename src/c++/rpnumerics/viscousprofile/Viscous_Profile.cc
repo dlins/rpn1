@@ -347,7 +347,7 @@ int Viscous_Profile::orbit(const FluxFunction *ff, const AccumulationFunction *a
             double d = distance(new_point, previous_point);
             if (largest_distance < d) largest_distance = d; //printf("d = %g, largest = %g\n", d, largest_distance);
 
-            if (out.size() > 5 && d < .01*largest_distance){
+            if (out.size() > 5 && d < 0.01*largest_distance){
                 return ORBIT_STAGNANT;
             }
         }

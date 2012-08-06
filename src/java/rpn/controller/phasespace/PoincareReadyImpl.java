@@ -61,15 +61,21 @@ public class PoincareReadyImpl extends NumConfigReadyImpl
 
         super.plot(phaseSpace, geom);
 
-        if (geom.geomFactory().geomSource() instanceof ManifoldOrbit) {
-            if (((ManifoldOrbit) geom.geomFactory().geomSource()).getTimeDirection() == Orbit.BACKWARD_DIR) {
-                phaseSpace.changeState(
-                        new bwdProfileReadyImpl(hugoniotGeom(), xzeroGeom(), poincareGeom(), (ManifoldGeom) geom, isPlotManifold()));
-            } else {
-                phaseSpace.changeState(
-                        new fwdProfileReadyImpl(hugoniotGeom(), xzeroGeom(), poincareGeom(), (ManifoldGeom) geom, isPlotManifold()));
-            }
-        }
+
+
+
+
+
+
+//        if (geom.geomFactory().geomSource() instanceof ManifoldOrbit) {
+//            if (((ManifoldOrbit) geom.geomFactory().geomSource()).getTimeDirection() == Orbit.BACKWARD_DIR) {
+//                phaseSpace.changeState(
+//                        new bwdProfileReadyImpl(hugoniotGeom(), xzeroGeom(), poincareGeom(), (ManifoldGeom) geom, isPlotManifold()));
+//            } else {
+//                phaseSpace.changeState(
+//                        new fwdProfileReadyImpl(hugoniotGeom(), xzeroGeom(), poincareGeom(), (ManifoldGeom) geom, isPlotManifold()));
+//            }
+//        }
 
     }
 

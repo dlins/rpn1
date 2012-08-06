@@ -1,4 +1,4 @@
-/*
+  /*
  *
  * Instituto de Matematica Pura e Aplicada - IMPA
  * Departamento de Dinamica dos Fluidos
@@ -44,7 +44,7 @@ public class OrbitCalc implements RpCalculation {
 
     public RpSolution calc() throws RpException {
 //        return nativeCalc(start_, RPNUMERICS.getShockProfile().getXZero(), RPNUMERICS.getShockProfile().getSigma(), timeDirection_,poincareSection_);
-
+        System.out.println(RPNUMERICS.getShockProfile().getXZero());
         return nativeCalc(start_, RPNUMERICS.getShockProfile().getXZero(), RPNUMERICS.getShockProfile().getSigma(), timeDirection_,poincareSection_);
     }
 

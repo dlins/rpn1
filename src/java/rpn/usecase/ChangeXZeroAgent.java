@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 import rpn.component.HugoniotCurveGeom;
 import rpn.component.HugoniotCurveGeomFactory;
+import rpn.component.ManifoldGeom;
 import rpn.component.RpGeometry;
 import rpn.component.StationaryPointGeom;
 import rpn.component.StationaryPointGeomFactory;
@@ -20,6 +21,7 @@ import rpn.component.XZeroGeomFactory;
 import rpn.controller.phasespace.InvariantsReadyImpl;
 import rpn.controller.phasespace.NUMCONFIG;
 import rpn.controller.phasespace.NumConfigReadyImpl;
+import rpn.controller.phasespace.ProfileSetupReadyImpl;
 import rpn.controller.ui.UIController;
 import rpn.parser.RPnDataModule;
 import rpnumerics.HugoniotCurve;
@@ -27,7 +29,6 @@ import rpnumerics.HugoniotCurveCalcND;
 import rpnumerics.HugoniotParams;
 import rpnumerics.PhasePoint;
 import rpnumerics.RPNUMERICS;
-import rpnumerics.StationaryPoint;
 import rpnumerics.StationaryPointCalc;
 
 public class ChangeXZeroAgent extends RpModelConfigChangeAgent {
@@ -60,6 +61,7 @@ public class ChangeXZeroAgent extends RpModelConfigChangeAgent {
         RealVector[] userInputList = UIController.instance().userInputList();
         RealVector lastPointAdded = userInputList[userInputList.length - 1];
 
+        //--------------------- Remove os pontos estacionarios
         Iterator it = RPnDataModule.PHASESPACE.getGeomObjIterator();
         List<RpGeometry> list = new ArrayList<RpGeometry>();
 
@@ -76,8 +78,9 @@ public class ChangeXZeroAgent extends RpModelConfigChangeAgent {
         for (RpGeometry rpgeometry : list) {
             RPnDataModule.PHASESPACE.remove(rpgeometry);
         }
+        //--------------------------------------------------------
 
-
+        //--- Atualiza o ponto estacionario associado ao XZero
         XZeroGeomFactory xzeroRef = new XZeroGeomFactory(new StationaryPointCalc(new PhasePoint(lastPointAdded), lastPointAdded));
 
         rpnumerics.RPNUMERICS.getShockProfile().setXZero(new PhasePoint(lastPointAdded));
@@ -86,14 +89,8 @@ public class ChangeXZeroAgent extends RpModelConfigChangeAgent {
         HugoniotCurve hCurve = (HugoniotCurve) hGeom.geomFactory().geomSource();
         double sigma = rpnumerics.RPNUMERICS.getShockProfile().getSigma();
 
-        boolean manifold = ((NumConfigReadyImpl) RPnDataModule.PHASESPACE.state()).isPlotManifold();
-        NumConfigReadyImpl state = new NumConfigReadyImpl(hGeom, (XZeroGeom) xzeroRef.geom(), manifold);
-        RPnDataModule.PHASESPACE.changeState(state);
 
-
-        RPnDataModule.PHASESPACE.plot(xzeroRef.geom());
-
-//        RPnDataModule.PHASESPACE.join(xzeroRef.geom());
+        //--- Produz lista de pontos de equilibrio
 
         HugoniotCurveCalcND hCalc = (HugoniotCurveCalcND) (((HugoniotCurveGeomFactory) hGeom.geomFactory()).rpCalc());
 
@@ -102,11 +99,8 @@ public class ChangeXZeroAgent extends RpModelConfigChangeAgent {
         ((HugoniotParams) hCalc.getParams()).setXZero(lastPointAdded);
 
 
-
         applyChange(new PropertyChangeEvent(this, DESC_TEXT, oldXZero, lastPointAdded));
 
-
-        //------------------------- Recalcula os pontos estacionarios
         //*** Define a nova curva
         hGeom = ((NumConfigReadyImpl) RPnDataModule.PHASESPACE.state()).hugoniotGeom();
         hCurve = (HugoniotCurve) hGeom.geomFactory().geomSource();
@@ -115,49 +109,88 @@ public class ChangeXZeroAgent extends RpModelConfigChangeAgent {
         List<RealVector> eqPoints = hCurve.equilPoints(sigma);	//***
 
         updateUplus(eqPoints);
-        
 
-        if (state.isPlotManifold()) {   //*** os plots daqui sao para manifolds
-            RPnDataModule.PHASESPACE.changeState(new InvariantsReadyImpl(hGeom, (XZeroGeom) xzeroRef.geom()));
+//        //------------------------- Recalcula os pontos estacionarios
+        for (RealVector realVector : eqPoints) {    // *** o join daqui é para as setas dos pontos estacionarios
+            StationaryPointGeomFactory statPointFactory = new StationaryPointGeomFactory(new StationaryPointCalc(new PhasePoint(realVector), hCurve.getXZero()));
 
-            for (RealVector realVector : eqPoints) {
+            RPnDataModule.PHASESPACE.join(statPointFactory.geom());
 
-                StationaryPointGeomFactory xzeroFactory = new StationaryPointGeomFactory(new StationaryPointCalc(new PhasePoint(realVector), new PhasePoint(lastPointAdded)));
+        }
 
-                //StationaryPoint testePoint = (StationaryPoint) xzeroFactory.geomSource();
-                //System.out.println(testePoint.getElement(0) + " " + testePoint.getElement(1) + " Sela: " + testePoint.isSaddle());
+        RPnDataModule.PHASESPACE.join(xzeroRef.geom());
+//----------------------
 
-                RPnDataModule.PHASESPACE.join(xzeroFactory.geom());
-                RPnDataModule.PHASESPACE.plot(xzeroFactory.geom());
+        if (RPnDataModule.PHASESPACE.state() instanceof ProfileSetupReadyImpl) {
+
+            Iterator iter = RPnDataModule.PHASESPACE.getGeomObjIterator();
+            List<RpGeometry> listManifolds = new ArrayList<RpGeometry>();
+
+            while (iter.hasNext()) {
+                RpGeometry geometry = (RpGeometry) iter.next();
+
+                if (geometry instanceof ManifoldGeom) {
+                    listManifolds.add(geometry);
+                }
 
             }
 
-            RPnDataModule.PHASESPACE.plot((XZeroGeom) xzeroRef.geom());
+            for (RpGeometry rpgeometry : listManifolds) {
+                RPnDataModule.PHASESPACE.remove(rpgeometry);
+            }
+
+            // ------------------
+            System.out.println("ENtramos no ProfileSetup...............");
+
+            //XZeroGeom newXZeroGeom = ((ProfileSetupReadyImpl) RPnDataModule.PHASESPACE.state()).xzeroGeom();
+
+            //System.out.println("newXZeroGeom.toString() :::::::::: " +newXZeroGeom.toString());
+
+
+            StationaryPointCalc statCalc = new StationaryPointCalc(new PhasePoint(RPNUMERICS.getShockProfile().getUplus()), hCurve.getXZero());
+            StationaryPointGeomFactory statFactory = new StationaryPointGeomFactory(statCalc);
+            StationaryPointGeom statUPlus = (StationaryPointGeom) statFactory.geom();
+            RPnDataModule.PHASESPACE.state().plot(RPnDataModule.PHASESPACE, statUPlus);
+            RPnDataModule.PHASESPACE.state().plot(RPnDataModule.PHASESPACE, xzeroRef.geom());
+        
 
 
         } else {
 
-            for (RealVector realVector : eqPoints) {    // *** o join daqui é para as setas dos pontos estacionarios
-                StationaryPointGeomFactory statPointFactory = new StationaryPointGeomFactory(new StationaryPointCalc(new PhasePoint(realVector), hCurve.getXZero()));
+            boolean manifold = ((NumConfigReadyImpl) RPnDataModule.PHASESPACE.state()).isPlotManifold();
+            NumConfigReadyImpl state = new NumConfigReadyImpl(hGeom, (XZeroGeom) xzeroRef.geom(), manifold);
+            RPnDataModule.PHASESPACE.changeState(state);
 
-                RPnDataModule.PHASESPACE.plot(statPointFactory.geom());
+            if (state.isPlotManifold()) {   //*** os plots daqui sao para manifolds
+                RPnDataModule.PHASESPACE.changeState(new InvariantsReadyImpl(hGeom, (XZeroGeom) xzeroRef.geom()));
+
+                for (RealVector realVector : eqPoints) {
+
+                    StationaryPointGeomFactory xzeroFactory = new StationaryPointGeomFactory(new StationaryPointCalc(new PhasePoint(realVector), new PhasePoint(lastPointAdded)));
+
+                    //StationaryPoint testePoint = (StationaryPoint) xzeroFactory.geomSource();
+                    //System.out.println(testePoint.getElement(0) + " " + testePoint.getElement(1) + " Sela: " + testePoint.isSaddle());
+
+                    //RPnDataModule.PHASESPACE.join(xzeroFactory.geom());
+                    RPnDataModule.PHASESPACE.plot(xzeroFactory.geom());
+
+                }
+
+                RPnDataModule.PHASESPACE.plot((XZeroGeom) xzeroRef.geom());
+
 
             }
-            //-------------------------------------------------------------
 
         }
 
 
 
-
-
     }
-
 
     private void updateUplus(List<RealVector> eqPoints) {
 
         PhasePoint uPlus = RPNUMERICS.getShockProfile().getUplus();
-        System.out.println("Uqem eh uPlus dentro do update : " +uPlus);
+        System.out.println("Uqem eh uPlus dentro do update : " + uPlus);
 
         double dist = 1E10;    //***Melhorar criterio
         double dist2 = 0.;
@@ -174,7 +207,6 @@ public class ChangeXZeroAgent extends RpModelConfigChangeAgent {
         RPNUMERICS.getShockProfile().setUplus(new PhasePoint(newUPlus));
 
     }
-
 
     static public ChangeXZeroAgent instance() {
         if (instance_ == null) {

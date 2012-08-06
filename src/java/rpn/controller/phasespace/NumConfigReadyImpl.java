@@ -80,7 +80,7 @@ public class NumConfigReadyImpl extends NumConfigImpl
     @Override
     public void plot(RPnPhaseSpaceAbstraction phaseSpace, RpGeometry geom) {
 
-            super.plot(phaseSpace, geom);
+        super.plot(phaseSpace, geom);
 
 
         if (geom instanceof PoincareSectionGeom) {

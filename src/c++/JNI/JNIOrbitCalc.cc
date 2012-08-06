@@ -155,7 +155,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_nativeCalc(JNIEnv * env, job
     }
 
 
-//    cout << "Tamanho da orbita: " << coords.size() << endl;
+    cout << "Tamanho da orbita: " << coords.size() << endl;
 
     jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(coords.size(), classOrbitPoint, NULL);
 
