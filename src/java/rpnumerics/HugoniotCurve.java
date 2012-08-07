@@ -224,6 +224,22 @@ public class HugoniotCurve extends SegmentedCurve {
         return segments;
     }
 
+    @Override
+        public RealVector findClosestPoint(RealVector targetPoint) {
+
+        ArrayList segments = (ArrayList) segments();
+
+        RealSegment closestSegment = (RealSegment) segments.get(findClosestSegment(targetPoint));
+
+        RealVector projVec = calcVecProj(closestSegment.p2(), targetPoint,
+                closestSegment.p1());
+
+        return projVec;
+
+    }
+
+
+
     private static List hugoniotSegsFromWaveState(PhasePoint xZero, WaveState[] wStates) {
 
         ArrayList result = new ArrayList();

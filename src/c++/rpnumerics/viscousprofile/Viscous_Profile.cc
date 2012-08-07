@@ -130,11 +130,7 @@ void Viscous_Profile::critical_points_linearization(const FluxFunction *ff, cons
 
     cp=out;
 
-    // ----------------- Sem usar Newton_improvement
-//    RealVector out;
-//    out.resize(2);
-//    out = cp;
-    // -----------------
+    
 
     Matrix<double> JF(2, 2), JG(2, 2);
     ff->fill_with_jet(2, cp.components(), 1, 0, JF.data(), 0);

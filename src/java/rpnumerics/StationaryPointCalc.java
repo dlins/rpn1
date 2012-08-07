@@ -37,6 +37,7 @@ public class StationaryPointCalc implements RpCalculation {
 
     }
 
+
 //    public StationaryPointCalc(PhasePoint initial, ShockFlow flow, String methodCalcName) {
 //        initial_ = initial;
 //        flow_ = flow;
@@ -47,6 +48,17 @@ public class StationaryPointCalc implements RpCalculation {
     //
     // Accessors/Mutators
     //
+
+
+    public RealVector getReferencePoint_() {
+        return referencePoint_;
+    }
+
+    public void setReferencePoint_(RealVector referencePoint) {
+        referencePoint_ = referencePoint;
+    }
+
+
     public PhasePoint getInitPoint() {
         return initial_;
     }

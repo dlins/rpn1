@@ -108,9 +108,9 @@ public class ChangeXZeroAgent extends RpModelConfigChangeAgent {
         //*** Nova curva chama o método novo
         List<RealVector> eqPoints = hCurve.equilPoints(sigma);	//***
 
-        updateUplus(eqPoints);
+        RPNUMERICS.updateUplus(eqPoints);
 
-//        //------------------------- Recalcula os pontos estacionarios
+        //------------------------- Recalcula os pontos estacionarios
         for (RealVector realVector : eqPoints) {    // *** o join daqui é para as setas dos pontos estacionarios
             StationaryPointGeomFactory statPointFactory = new StationaryPointGeomFactory(new StationaryPointCalc(new PhasePoint(realVector), hCurve.getXZero()));
 
@@ -119,7 +119,7 @@ public class ChangeXZeroAgent extends RpModelConfigChangeAgent {
         }
 
         RPnDataModule.PHASESPACE.join(xzeroRef.geom());
-//----------------------
+        //----------------------
 
         if (RPnDataModule.PHASESPACE.state() instanceof ProfileSetupReadyImpl) {
 
@@ -140,19 +140,13 @@ public class ChangeXZeroAgent extends RpModelConfigChangeAgent {
             }
 
             // ------------------
-            System.out.println("ENtramos no ProfileSetup...............");
-
-            //XZeroGeom newXZeroGeom = ((ProfileSetupReadyImpl) RPnDataModule.PHASESPACE.state()).xzeroGeom();
-
-            //System.out.println("newXZeroGeom.toString() :::::::::: " +newXZeroGeom.toString());
-
 
             StationaryPointCalc statCalc = new StationaryPointCalc(new PhasePoint(RPNUMERICS.getShockProfile().getUplus()), hCurve.getXZero());
             StationaryPointGeomFactory statFactory = new StationaryPointGeomFactory(statCalc);
             StationaryPointGeom statUPlus = (StationaryPointGeom) statFactory.geom();
             RPnDataModule.PHASESPACE.state().plot(RPnDataModule.PHASESPACE, statUPlus);
             RPnDataModule.PHASESPACE.state().plot(RPnDataModule.PHASESPACE, xzeroRef.geom());
-        
+
 
 
         } else {
@@ -168,10 +162,6 @@ public class ChangeXZeroAgent extends RpModelConfigChangeAgent {
 
                     StationaryPointGeomFactory xzeroFactory = new StationaryPointGeomFactory(new StationaryPointCalc(new PhasePoint(realVector), new PhasePoint(lastPointAdded)));
 
-                    //StationaryPoint testePoint = (StationaryPoint) xzeroFactory.geomSource();
-                    //System.out.println(testePoint.getElement(0) + " " + testePoint.getElement(1) + " Sela: " + testePoint.isSaddle());
-
-                    //RPnDataModule.PHASESPACE.join(xzeroFactory.geom());
                     RPnDataModule.PHASESPACE.plot(xzeroFactory.geom());
 
                 }
@@ -187,26 +177,7 @@ public class ChangeXZeroAgent extends RpModelConfigChangeAgent {
 
     }
 
-    private void updateUplus(List<RealVector> eqPoints) {
 
-        PhasePoint uPlus = RPNUMERICS.getShockProfile().getUplus();
-        System.out.println("Uqem eh uPlus dentro do update : " + uPlus);
-
-        double dist = 1E10;    //***Melhorar criterio
-        double dist2 = 0.;
-        RealVector newUPlus = null;
-
-        for (RealVector realVector : eqPoints) {
-            dist2 = realVector.distance(uPlus);
-            if (dist2 < dist) {
-                dist = dist2;
-                newUPlus = realVector;
-            }
-        }
-
-        RPNUMERICS.getShockProfile().setUplus(new PhasePoint(newUPlus));
-
-    }
 
     static public ChangeXZeroAgent instance() {
         if (instance_ == null) {

@@ -167,6 +167,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_nativeCalc(JNIEnv * env, job
 
         double * dataCoords = tempVector;
 
+
+        cout<<coords.at(i)<<endl;
+
         //Reading only coodinates
         jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size());
 

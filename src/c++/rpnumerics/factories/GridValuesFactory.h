@@ -40,7 +40,7 @@ private:
 
 public:
 
-
+    //TODO  Fazer um metodo para atualizar os grids quando ha troca de parametros
     GridValues * getGrid(const string &);
     void setResolution(const string &,vector<int>);
     GridValuesFactory(const Physics *);

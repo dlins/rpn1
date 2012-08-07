@@ -99,13 +99,6 @@ public class ProfileSetupReadyImpl extends PoincareReadyImpl
 
         UIController.instance().panelsUpdate();
 
-        //----------------------------------------------
-
-//        if (geom.geomFactory().geomSource() instanceof ConnectionOrbit)
-//                phaseSpace.changeState(
-//                    new ProfileReadyImpl(hugoniotGeom(), xzeroGeom(), ((POINCARE_READY)phaseSpace.state()).poincareGeom(),
-//                    fwdManifoldGeom_, bwdManifoldGeom_, (ProfileGeom)geom, isPlotManifold()));
-
     }
 
     public void delete(RPnPhaseSpaceAbstraction phaseSpace, RpGeometry geom) {

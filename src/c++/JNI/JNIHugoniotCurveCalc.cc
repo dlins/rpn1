@@ -90,8 +90,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     //-------------------------------------------------------------------
 
 
- 
 
+    cout << "Parametros: " << RpNumerics::getPhysics().fluxFunction().fluxParams().params()<<endl;
 
 
 
