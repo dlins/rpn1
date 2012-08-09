@@ -115,7 +115,6 @@ void Viscous_Profile::Newton_improvement(const FluxFunction *ff, const Accumulat
     // Output
     for (int i = 0; i < 2; i++) out.component(i) = U[i];
 
-    //cout<<"Valor de out: "<<out<<endl;
 
     return;
 }
@@ -132,11 +131,7 @@ void Viscous_Profile::critical_points_linearization(const FluxFunction *ff, cons
 
     cp=out;
 
-    // ----------------- Sem usar Newton_improvement
-//    RealVector out;
-//    out.resize(2);
-//    out = cp;
-    // -----------------
+    
 
     Matrix<double> JF(2, 2), JG(2, 2);
     ff->fill_with_jet(2, cp.components(), 1, 0, JF.data(), 0);
@@ -171,63 +166,6 @@ void Viscous_Profile::critical_points_linearization(const FluxFunction *ff, cons
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-//
-//
-//
-//
-//void Viscous_Profile::critical_points_linearization(const FluxFunction *ff, const AccumulationFunction *aa,
-//        Viscosity_Matrix *v,
-//        double speed, const RealVector &cp, RealVector &ref,
-//        std::vector<eigenpair> &ep) {
-//    ep.clear();
-//
-//    RealVector out;
-//    Newton_improvement(ff, aa, speed, cp, ref, out);
-//
-//    Matrix<double> JF(2, 2), JG(2, 2);
-//    ff->fill_with_jet(2, out.components(), 1, 0, JF.data(), 0);
-//    aa->fill_with_jet(2, out.components(), 1, 0, JG.data(), 0);
-//
-//    // Find the eigenpairs of:
-//    //
-//    // [-speed*JG(cp[i]) + JF(cp[i])]*U_mu = mu*D(cp[i])*U_mu.
-//    //
-//    Matrix<double> RH(2, 2), viscous(2, 2);
-//    for (int k = 0; k < 2; k++) {
-//        for (int j = 0; j < 2; j++) {
-//            RH(k, j) = -speed * JG(k, j) + JF(k, j);
-//        }
-//    }
-//
-//    // Fill the viscous matrix
-//    //v->fill_viscous_matrix(cp, viscous);
-//    v->fill_viscous_matrix(out, viscous);
-//
-//    //std::vector<eigenpair> e;
-//    Eigen::eig(2, RH.data(), viscous.data(), ep);
-//
-//    cout << "Ponto no metodo: " << cp << endl;
-//
-//    cout << "eigen0RR: " << ep[0].r << endl;
-//    cout << "eigen1RR: " << ep[1].r << endl;
-//
-//    //ep.push_back(e);
-//
-//    return;
-//}
 
 int Viscous_Profile::orbit(const FluxFunction *ff, const AccumulationFunction *aa,
         Viscosity_Matrix *v,
@@ -349,7 +287,7 @@ int Viscous_Profile::orbit(const FluxFunction *ff, const AccumulationFunction *a
             double d = distance(new_point, previous_point);
             if (largest_distance < d) largest_distance = d; //printf("d = %g, largest = %g\n", d, largest_distance);
 
-            if (out.size() > 5 && d < .01*largest_distance){
+            if (out.size() > 5 && d < 0.01*largest_distance){
                 return ORBIT_STAGNANT;
             }
         }
@@ -391,7 +329,7 @@ int Viscous_Profile::orbit(const FluxFunction *ff, const AccumulationFunction *a
         } else if (intersection_info == 0) {
             // One point is inside, the other is outside.
             // Store the point lying in the domain's border and get out.
-            out.push_back(r);
+//            out.push_back(r);
 
             printf("Reached boundary\n");
 

@@ -20,6 +20,7 @@ import rpn.parser.RPnDataModule;
 import rpn.usecase.ChangeFluxParamsAgent;
 import rpn.usecase.ChangeOrbitLevel;
 import rpn.usecase.ChangeSigmaAgent;
+import rpn.usecase.ChangeXZeroAgent;
 import rpn.usecase.DragPlotAgent;
 import rpnumerics.OrbitCalc;
 import wave.multid.view.GeomObjView;
@@ -51,6 +52,7 @@ public class OrbitController extends RpCalcController {
         ChangeFluxParamsAgent.instance().addPropertyChangeListener(this);
         ChangeOrbitLevel.instance().addPropertyChangeListener(this);
         ChangeSigmaAgent.instance().addPropertyChangeListener(this);
+        ChangeXZeroAgent.instance().addPropertyChangeListener(this);
 
 
     }
@@ -61,6 +63,7 @@ public class OrbitController extends RpCalcController {
         ChangeFluxParamsAgent.instance().removePropertyChangeListener(this);
         ChangeOrbitLevel.instance().removePropertyChangeListener(this);
         ChangeSigmaAgent.instance().removePropertyChangeListener(this);
+        ChangeXZeroAgent.instance().removePropertyChangeListener(this);
     }
 
     @Override

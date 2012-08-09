@@ -7,6 +7,7 @@ package rpnumerics;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 import rpn.RPnConfig;
@@ -400,7 +401,6 @@ public class RPNUMERICS {
 
     }
 
-
     public static SecondaryBifurcationCurveCalc createSecondaryBifurcationCurveCalc() {
 
         int[] resolution = RPnDataModule.processResolution(getParamValue("inflectioncurve", "resolution"));
@@ -411,8 +411,6 @@ public class RPNUMERICS {
         return new SecondaryBifurcationCurveCalc(params);
 
     }
-
-
 
     public static OrbitCalc createOrbitCalc(OrbitPoint oPoint) {
 
@@ -566,6 +564,32 @@ public class RPNUMERICS {
         direction_ = integer;
 
 
+
+    }
+
+    public static void updateUplus(List<RealVector> eqPoints) {
+        RealVector newUPlus = null;
+            PhasePoint uPlus = RPNUMERICS.getShockProfile().getUplus();
+            if(uPlus!=null){//TODO  Inicializar uPlus
+                System.out.println("Uqem eh uPlus dentro do update : " + uPlus);
+
+            double dist = 1E10;    //***Melhorar criterio
+            double dist2 = 0.;
+
+
+            for (RealVector realVector : eqPoints) {
+                dist2 = realVector.distance(uPlus);
+                if (dist2 < dist) {
+                    dist = dist2;
+                    newUPlus = realVector;
+                }
+            }
+
+            RPNUMERICS.getShockProfile().setUplus(new PhasePoint(newUPlus));
+
+            }
+            
+        
 
     }
 

@@ -31,6 +31,7 @@ public class Orbit extends RPnCurve implements RpSolution {
 
     private OrbitPoint[] points_;
     private int increase_;
+    private boolean interPoincare_;
 
 
     private List<? extends RealSegment> segments_;
@@ -49,6 +50,8 @@ public class Orbit extends RPnCurve implements RpSolution {
 
         segments_ = MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseRPnCurveToCoordsArray(this));
 
+        interPoincare_ = false;
+
     }
 
     public Orbit(OrbitPoint[] points,  int increase) {
@@ -57,6 +60,8 @@ public class Orbit extends RPnCurve implements RpSolution {
         points_ = points;
         CoordsArray [] arrayTeste = MultidAdapter.converseOrbitPointsToCoordsArray(points);
         segments_ = MultidAdapter.converseCoordsArrayToRealSegments(arrayTeste);
+
+        interPoincare_ = false;
 
     }
 
@@ -69,6 +74,8 @@ public class Orbit extends RPnCurve implements RpSolution {
 
         segments_ = MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseRPnCurveToCoordsArray(this));
 
+        interPoincare_ = false;
+
 
     }
 
@@ -79,6 +86,16 @@ public class Orbit extends RPnCurve implements RpSolution {
             result[i] = new OrbitPoint(coords[i], times[i]);
         }
         return result;
+    }
+
+
+
+    public boolean isInterPoincare() {
+        return interPoincare_;
+    }
+
+    public void setInterPoincare(boolean interPoincare) {
+        interPoincare_ = interPoincare;
     }
 
   
@@ -144,26 +161,24 @@ public class Orbit extends RPnCurve implements RpSolution {
 
 
 
-//    public static Orbit concat(Orbit backward, Orbit forward, int familyIndex) {
-//        // opposite time directions assumed...
-//        OrbitPoint[] swap = new OrbitPoint[backward.getPoints().length
-//                + forward.getPoints().length - 1];
-//
-////        double timeAdjust = -backward.getPoints()[0].getLambda();
-//
-//        for (int i = 0, j = backward.getPoints().length - 1; i < swap.length; i++) {
-//            if (i >= backward.getPoints().length) {
-//                swap[i] = (OrbitPoint) forward.getPoints()[i - backward.getPoints().length + 1];
-//            } else {
-//                swap[i] = backward.getPoints()[j--];
-////                swap[i].setLambda(swap[i].getLambda() + timeAdjust);
-//
-//            }
-//        }
-//
-//        return new Orbit(swap, familyIndex, Orbit.BOTH_DIR);
-//
-//    }
+    public static Orbit concat(Orbit backward, Orbit forward) {
+        // opposite time directions assumed...
+        OrbitPoint[] swap = new OrbitPoint[backward.getPoints().length
+                + forward.getPoints().length - 1];
+
+
+        for (int i = 0, j = backward.getPoints().length - 1; i < swap.length; i++) {
+            if (i >= backward.getPoints().length) {
+                swap[i] = (OrbitPoint) forward.getPoints()[i - backward.getPoints().length + 1];
+            } else {
+                swap[i] = backward.getPoints()[j--];
+
+            }
+        }
+
+        return new Orbit(swap, Orbit.BOTH_DIR);
+
+    }
 
 
 
@@ -275,7 +290,7 @@ public class Orbit extends RPnCurve implements RpSolution {
 
 //    public String create2DPointMatlabPlot(int x, int y, int identifier) {
 //
-//        StringBuffer buffer = new StringBuffer();
+//        StringBuffer buffer = new StringBuffer();Orbit orbitFWD = (Orbit) nativeCalc(start_, RPNUMERICS.getShockProfile().getXZero(), RPNUMERICS.getShockProfile().getSigma(), Orbit.FORWARD_DIR ,poincareSection_);
 //
 //        String color = null;
 //

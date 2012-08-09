@@ -46,6 +46,7 @@ public class NumConfigReadyImpl extends NumConfigImpl
         FillPhaseSpaceAgent.instance().setEnabled(true);
         HugoniotPlotAgent.instance().setEnabled(true);
         InvariantPlotAgent.instance().setEnabled(true);
+        ChangeXZeroAgent.instance().setEnabled(true);
         // DISABLED
         BackwardManifoldPlotAgent.instance().setEnabled(false);
         ForwardManifoldPlotAgent.instance().setEnabled(false);
@@ -80,7 +81,7 @@ public class NumConfigReadyImpl extends NumConfigImpl
     @Override
     public void plot(RPnPhaseSpaceAbstraction phaseSpace, RpGeometry geom) {
 
-            super.plot(phaseSpace, geom);
+        super.plot(phaseSpace, geom);
 
 
         if (geom instanceof PoincareSectionGeom) {

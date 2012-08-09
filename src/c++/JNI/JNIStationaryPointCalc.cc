@@ -73,6 +73,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_StationaryPointCalc_nativeCalc(JNIEnv 
     const FluxFunction *fluxFunction = &RpNumerics::getPhysics().fluxFunction();
     const AccumulationFunction * accumFunction = &RpNumerics::getPhysics().accumulation();
 
+
+    //cout << "Parametros nos estacionarios: " << RpNumerics::getPhysics().fluxFunction().fluxParams().params()<<endl;
+
     Viscosity_Matrix v;
     Viscous_Profile::critical_points_linearization(fluxFunction, accumFunction,
             &v, sigma, nativeEquiPoint, nativeRefPoint, ep);

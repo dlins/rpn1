@@ -56,7 +56,7 @@ using namespace std;
 
 Physics * RpNumerics::physics_ = NULL;
 
-GridValuesFactory * RpNumerics::gridValuesFactory_=NULL;
+GridValuesFactory * RpNumerics::gridValuesFactory_ = NULL;
 
 double RpNumerics::sigma = 0;
 
@@ -105,11 +105,50 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setParams
     }
 
 
-     RpNumerics::getPhysics().setParams(paramVector);
+    RpNumerics::getPhysics().setParams(paramVector);
+
+    int dimension = RpNumerics::getPhysics().domain().dim();
+
+    const Boundary * boundary = &RpNumerics::getPhysics().boundary();
 
 
+    GridValues * gridHugoniot = RpNumerics::getGridFactory().getGrid("hugoniotcurve");
+
+    GridValues * gridDoubleContact = RpNumerics::getGridFactory().getGrid("doublecontactcurve");
+
+    GridValues * gridBifurcation = RpNumerics::getGridFactory().getGrid("bifurcation");
 
 
+    std::vector<int> resolution;
+
+    resolution.push_back(gridHugoniot->grid.rows());
+    resolution.push_back(gridHugoniot->grid.cols());
+
+    RpNumerics::getGridFactory().updateGrids();
+
+
+    //
+    //    //TODO Substituir por um metodo de atualizacao dos grids no factory
+    //
+    //    gridHugoniot->set_grid(boundary, boundary->minimums(), boundary->maximums(), resolution);
+    //
+    //
+    //    resolution.clear();
+    //
+    //    resolution.push_back(gridDoubleContact->grid.rows());
+    //    resolution.push_back(gridDoubleContact->grid.cols());
+    //
+    //
+    //
+    //    gridDoubleContact->set_grid(boundary, boundary->minimums(), boundary->maximums(), resolution);
+    //
+    //    resolution.clear();
+    //
+    //    resolution.push_back(gridBifurcation->grid.rows());
+    //    resolution.push_back(gridBifurcation->grid.cols());
+    //
+    //
+    //    gridBifurcation->set_grid(boundary, boundary->minimums(), boundary->maximums(), resolution);
 
 }
 
@@ -220,15 +259,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getAccumulationParams
 
 }
 
-
-
 /*
  * Class:     rpnumerics_RPNUMERICS
  * Method:    setResolution
  * Signature: (Lwave/util/RealVector;Lwave/util/RealVector;Ljava/lang/String;[I)V
  */
 JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setResolution
-  (JNIEnv * env , jclass cls, jobject min, jobject max, jstring gridName,jintArray newResolution){
+(JNIEnv * env, jclass cls, jobject min, jobject max, jstring gridName, jintArray newResolution) {
 
     jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
 
@@ -248,10 +285,10 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setResolution
 
     double maxNativeArray[dimension];
 
-    env->GetDoubleArrayRegion( maxLimit, 0, dimension,maxNativeArray);
+    env->GetDoubleArrayRegion(maxLimit, 0, dimension, maxNativeArray);
 
 
-    RealVector minNativeVector(dimension,minNativeArray);
+    RealVector minNativeVector(dimension, minNativeArray);
 
     RealVector maxNativeVector(dimension, maxNativeArray);
 
@@ -273,7 +310,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setResolution
     const char * gridNameNative = env->GetStringUTFChars(gridName, NULL);
 
 
-    cout<<"Nome do grid: "<<gridNameNative<<endl;
+    cout << "Nome do grid: " << gridNameNative << endl;
 
 
 
@@ -284,7 +321,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setResolution
     const Boundary * boundary = &RpNumerics::getPhysics().boundary();
 
 
-    grid->set_grid(boundary,minNativeVector, maxNativeVector, newResolutionVector);
+    grid->set_grid(boundary, minNativeVector, maxNativeVector, newResolutionVector);
 
 
 
@@ -292,7 +329,6 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setResolution
 
 
 }
-
 
 /*
  * Class:     rpnumerics_RPNUMERICS
@@ -382,51 +418,17 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setBoundary
         RealVector maxNativeRealVector(maxSize, maxNativeArray);
 
 
-        cout << "O tipo eh isotriang boundary" <<minNativeRealVector<<" "<<maxNativeRealVector<<endl;
+        cout << "O tipo eh isotriang boundary" << minNativeRealVector << " " << maxNativeRealVector << endl;
 
 
-        Three_Phase_Boundary triangBoundary(minNativeRealVector,maxNativeRealVector);
+        Three_Phase_Boundary triangBoundary(minNativeRealVector, maxNativeRealVector);
 
 
         RpNumerics::getPhysics().boundary(triangBoundary);
 
-//        jobject aRealVector = (env)->CallObjectMethod(newBoundary, getAMethodID);
-//        jobject bRealVector = (env)->CallObjectMethod(newBoundary, getBMethodID);
-//        jobject cRealVector = (env)->CallObjectMethod(newBoundary, getCMethodID);
-//
-//        jdoubleArray aRealVectorArray = (jdoubleArray) (env)->CallObjectMethod(aRealVector, toDoubleMethodID);
-//        jdoubleArray bRealVectorArray = (jdoubleArray) (env)->CallObjectMethod(bRealVector, toDoubleMethodID);
-//        jdoubleArray cRealVectorArray = (jdoubleArray) (env)->CallObjectMethod(cRealVector, toDoubleMethodID);
-//
-//        int aRealVectorSize = env->GetArrayLength(cRealVectorArray);
-//        int bRealVectorSize = env->GetArrayLength(bRealVectorArray);
-//        int cRealVectorSize = env->GetArrayLength(aRealVectorArray);
-//
-//        double aNativeArray [aRealVectorSize];
-//        double bNativeArray [bRealVectorSize];
-//        double cNativeArray [cRealVectorSize];
-//
-//
-//        env->GetDoubleArrayRegion(aRealVectorArray, 0, aRealVectorSize, aNativeArray);
-//        env->GetDoubleArrayRegion(bRealVectorArray, 0, bRealVectorSize, bNativeArray);
-//        env->GetDoubleArrayRegion(cRealVectorArray, 0, cRealVectorSize, cNativeArray);
-//
-//
-//        RealVector A(aRealVectorSize, aNativeArray);
-//        RealVector B(bRealVectorSize, bNativeArray);
-//        RealVector C(aRealVectorSize, cNativeArray);
-
-
-   
-
-
-
-
-
-
 
     }
-
+    RpNumerics::getGridFactory().updateGrids();
 
 
 }
@@ -438,8 +440,6 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setBoundary
  */
 JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setFamilyIndex
 (JNIEnv *env, jobject obj, jint familyIndex) {
-
-    //WaveFlowFactory::setFamilyIndex(familyIndex);
 
 
 }
@@ -679,16 +679,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_boundary(JNIEnv * env, jcla
 
     }
     cout << "Boundary not defined" << endl;
-
-
-
-
-
-
-
-
-
-
 
     return NULL;
 

@@ -189,4 +189,13 @@ public class RealVector extends GVector {
         return data;
 
     }
+
+
+    public double distance(RealVector input) {
+        RealVector p1 = new RealVector(this);
+        p1.sub(input);
+        return (p1.norm());
+    }
+
+
 }

@@ -13,7 +13,6 @@
 #include "GridValuesFactory.h"
 #include <stdexcept>
 
-
 /*
  * ---------------------------------------------------------------
  * Definitions:
@@ -58,6 +57,33 @@ void GridValuesFactory::setResolution(const string & gridName, vector<int> newRe
     const Boundary* boundary = &physics_->boundary();
 
     grid->set_grid(boundary, boundary->minimums(), boundary->maximums(), newResolution);
+
+}
+
+void GridValuesFactory::updateGrids() {
+
+    map<string, GridValues *>::iterator it;
+
+
+    vector<int> resolution;
+
+      const Boundary* boundary = &physics_->boundary();
+
+
+
+    for (it = gridArray_->begin(); it != gridArray_->end(); it++) {
+
+        GridValues * factoryElement = (*it).second;
+
+        resolution.clear();
+
+        resolution.push_back(factoryElement->grid.rows());
+        resolution.push_back(factoryElement->grid.cols());
+
+        factoryElement->set_grid(boundary, boundary->minimums(), boundary->maximums(), resolution);
+
+    }
+
 
 }
 
