@@ -26,6 +26,8 @@ import rpn.controller.phasespace.InvariantsReadyImpl;
 import rpn.controller.phasespace.NumConfigReadyImpl;
 import rpn.controller.phasespace.ProfileSetupReadyImpl;
 import rpn.controller.ui.*;
+import rpnumerics.ManifoldOrbit;
+import rpnumerics.Orbit;
 import rpnumerics.StationaryPoint;
 import rpnumerics.StationaryPointCalc;
 
@@ -39,12 +41,14 @@ public class ChangeSigmaAgent extends RpModelConfigChangeAgent {
     // Members
     //
     private static ChangeSigmaAgent instance_ = null;
+    private double previousDot;
 
     //
     // Constructors
     //
     protected ChangeSigmaAgent() {
         super(DESC_TEXT);
+        previousDot = 0.;
     }
 
     public void execute() {
@@ -129,6 +133,10 @@ public class ChangeSigmaAgent extends RpModelConfigChangeAgent {
             StationaryPointGeomFactory statFactory = new StationaryPointGeomFactory(statCalc);
             StationaryPointGeom statGeom = (StationaryPointGeom) statFactory.geom();
             RPnDataModule.PHASESPACE.state().plot(RPnDataModule.PHASESPACE, statGeom);
+
+            testeDotPoincare();
+
+
         } else {
             boolean manifold = ((NumConfigReadyImpl) RPnDataModule.PHASESPACE.state()).isPlotManifold();
             NumConfigReadyImpl state = new NumConfigReadyImpl(hGeom, (XZeroGeom) xzeroRef.geom(), manifold);
@@ -169,6 +177,46 @@ public class ChangeSigmaAgent extends RpModelConfigChangeAgent {
         System.out.println("NEW SIGMA = " + newValue);
         applyChange(new PropertyChangeEvent(this, DESC_TEXT, oldValue, newValue));
     }
+
+
+    private void testeDotPoincare() {
+
+        ProfileSetupReadyImpl state = (ProfileSetupReadyImpl) RPnDataModule.PHASESPACE.state();
+
+        ManifoldGeom fwdGeom = state.fwdManifoldGeom();
+        ManifoldGeom bwdGeom = state.bwdManifoldGeom();
+
+        ManifoldOrbit fwdManifold = (ManifoldOrbit) fwdGeom.geomFactory().geomSource();
+        ManifoldOrbit bwdManifold = (ManifoldOrbit) bwdGeom.geomFactory().geomSource();
+
+        Orbit fwdOrbit = fwdManifold.getOrbit();
+        Orbit bwdOrbit = bwdManifold.getOrbit();
+
+        RealVector p1 = fwdOrbit.lastPoint();
+        RealVector p2 = bwdOrbit.lastPoint();
+
+        if(fwdOrbit.isInterPoincare() &&  bwdOrbit.isInterPoincare())
+            RPNUMERICS.getShockProfile().updateDelta(p1, p2);
+
+        if(previousDot*RPNUMERICS.getShockProfile().getDot() < 0.){
+            System.out.println("Intervalo de sigma ::::::::::::::: " +RPNUMERICS.getShockProfile().getPreviousSigma() + " , " +RPNUMERICS.getShockProfile().getSigma());
+
+            System.out.println("Intervalo de Uplus ::::::::::::::: " + RPNUMERICS.getShockProfile().getPreviousUPlus() + " , " + RPNUMERICS.getShockProfile().getUplus());
+        }
+
+
+        System.out.println("Sigma sem trocar::::::::::::::: " + RPNUMERICS.getShockProfile().getPreviousSigma());
+
+        System.out.println("Uplus sem trocar::::::::::::::: " + RPNUMERICS.getShockProfile().getPreviousUPlus());
+
+
+
+        previousDot = RPNUMERICS.getShockProfile().getDot();
+
+
+
+    }
+
 
     static public ChangeSigmaAgent instance() {
         if (instance_ == null) {

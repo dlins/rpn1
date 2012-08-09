@@ -40,6 +40,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_nativeCalc(JNIEnv * env, job
     jmethodID toDoubleMethodID = (env)->GetMethodID(classOrbitPoint, "toDouble", "()[D");
     jmethodID realVectorConstructorDoubleArrayID = env->GetMethodID(realVectorClass, "<init>", "([D)V");
 
+    jmethodID setPoincareInterceptionID = env->GetMethodID(classOrbit, "setInterPoincare", "(Z)V");
+
 
 
 
@@ -97,6 +99,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_nativeCalc(JNIEnv * env, job
     if (timeDirection == RAREFACTION_SPEED_DECREASE)
         timeDirection = ORBIT_BACKWARD;
 
+    int intersection;
+
     if (poincareSection != NULL) { //Apenas para um segmento
 
 
@@ -128,7 +132,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_nativeCalc(JNIEnv * env, job
         poincareSegment.push_back(nativePoincarePoint1);
         poincareSegment.push_back(nativePoincarePoint2);
 
-        Viscous_Profile::orbit(fluxFunction, accumFunction,
+
+        intersection = Viscous_Profile::orbit(fluxFunction, accumFunction,
                 &v,
                 boundary,
                 nativeEquiPoint, nativeRefPoint, sigma,
@@ -137,7 +142,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_nativeCalc(JNIEnv * env, job
                 coords, &poincareSegment);
 
 
-//        cout << "Segmento de poincare: " << nativePoincarePoint1 << " " << nativePoincarePoint2 << endl;
+
+        //        cout << "Segmento de poincare: " << nativePoincarePoint1 << " " << nativePoincarePoint2 << endl;
 
     } else {
 
@@ -155,7 +161,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_nativeCalc(JNIEnv * env, job
     }
 
 
-    cout << "Tamanho da orbita: " << coords.size() << endl;
+//    cout << "Tamanho da orbita: " << coords.size() << endl;
 
     jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(coords.size(), classOrbitPoint, NULL);
 
@@ -168,7 +174,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_nativeCalc(JNIEnv * env, job
         double * dataCoords = tempVector;
 
 
-        cout<<coords.at(i)<<endl;
+        //        cout<<coords.at(i)<<endl;
 
         //Reading only coodinates
         jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size());
@@ -194,6 +200,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_nativeCalc(JNIEnv * env, job
     jobject orbit = (env)->NewObject(classOrbit, orbitConstructor_, orbitPointArray, timeDirection);
 
     //Cleaning up
+
+
+
+
+    if (intersection == ORBIT_REACHED_SEGMENT) {
+        (env)->CallObjectMethod(orbit,setPoincareInterceptionID,true);
+    }
 
 
 

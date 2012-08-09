@@ -385,7 +385,7 @@ int Viscous_Profile::orbit(const FluxFunction *ff, const AccumulationFunction *a
         } else if (intersection_info == 0) {
             // One point is inside, the other is outside.
             // Store the point lying in the domain's border and get out.
-            out.push_back(r);
+//            out.push_back(r);
 
             printf("Reached boundary\n");
 

@@ -568,23 +568,28 @@ public class RPNUMERICS {
     }
 
     public static void updateUplus(List<RealVector> eqPoints) {
-
-        PhasePoint uPlus = RPNUMERICS.getShockProfile().getUplus();
-        System.out.println("Uqem eh uPlus dentro do update : " + uPlus);
-
-        double dist = 1E10;    //***Melhorar criterio
-        double dist2 = 0.;
         RealVector newUPlus = null;
+            PhasePoint uPlus = RPNUMERICS.getShockProfile().getUplus();
+            if(uPlus!=null){//TODO  Inicializar uPlus
+                System.out.println("Uqem eh uPlus dentro do update : " + uPlus);
 
-        for (RealVector realVector : eqPoints) {
-            dist2 = realVector.distance(uPlus);
-            if (dist2 < dist) {
-                dist = dist2;
-                newUPlus = realVector;
+            double dist = 1E10;    //***Melhorar criterio
+            double dist2 = 0.;
+
+
+            for (RealVector realVector : eqPoints) {
+                dist2 = realVector.distance(uPlus);
+                if (dist2 < dist) {
+                    dist = dist2;
+                    newUPlus = realVector;
+                }
             }
-        }
 
-        RPNUMERICS.getShockProfile().setUplus(new PhasePoint(newUPlus));
+            RPNUMERICS.getShockProfile().setUplus(new PhasePoint(newUPlus));
+
+            }
+            
+        
 
     }
 

@@ -107,8 +107,6 @@ public class ManifoldOrbitCalc implements RpCalculation {
         double b = P20 - P10;
         double c = P10*P21 - P20*P11;
 
-        System.out.println("Valores de a, b, c : " +a +" , " +b +" , " +c);
-
 
         double h = 1E-2;
         RealVector center = new RealVector(stationaryPoint.getCoords());
@@ -134,9 +132,6 @@ public class ManifoldOrbitCalc implements RpCalculation {
             }
         }
 
-        System.out.println("Distancias ao segmento de poincare : ");
-        System.out.println("dist1 : " +dist1);
-        System.out.println("dist2 : " +dist2);
 
         if(dist1 < dist2) {
             initialPoint = new PhasePoint(point1);
@@ -178,6 +173,9 @@ public class ManifoldOrbitCalc implements RpCalculation {
 
         oCalc.setPoincareSection(poincare_.getPoints());
         Orbit orbit = (Orbit) oCalc.calc();
+
+
+//        System.out.println("A orbita cortou "+ orbit.isInterPoincare()+" em :"+ orbit.getPoints()[orbit.getPoints().length-1]);
 
 
 

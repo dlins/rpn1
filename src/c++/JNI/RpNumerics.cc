@@ -124,28 +124,31 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setParams
     resolution.push_back(gridHugoniot->grid.rows());
     resolution.push_back(gridHugoniot->grid.cols());
 
-
-    //TODO Substituir por um metodo de atualizacao dos grids no factory
-
-    gridHugoniot->set_grid(boundary, boundary->minimums(), boundary->maximums(), resolution);
+    RpNumerics::getGridFactory().updateGrids();
 
 
-    resolution.clear();
-
-    resolution.push_back(gridDoubleContact->grid.rows());
-    resolution.push_back(gridDoubleContact->grid.cols());
-
-
-
-    gridDoubleContact->set_grid(boundary, boundary->minimums(), boundary->maximums(), resolution);
-
-    resolution.clear();
-
-    resolution.push_back(gridBifurcation->grid.rows());
-    resolution.push_back(gridBifurcation->grid.cols());
-
-
-    gridBifurcation->set_grid(boundary, boundary->minimums(), boundary->maximums(), resolution);
+    //
+    //    //TODO Substituir por um metodo de atualizacao dos grids no factory
+    //
+    //    gridHugoniot->set_grid(boundary, boundary->minimums(), boundary->maximums(), resolution);
+    //
+    //
+    //    resolution.clear();
+    //
+    //    resolution.push_back(gridDoubleContact->grid.rows());
+    //    resolution.push_back(gridDoubleContact->grid.cols());
+    //
+    //
+    //
+    //    gridDoubleContact->set_grid(boundary, boundary->minimums(), boundary->maximums(), resolution);
+    //
+    //    resolution.clear();
+    //
+    //    resolution.push_back(gridBifurcation->grid.rows());
+    //    resolution.push_back(gridBifurcation->grid.cols());
+    //
+    //
+    //    gridBifurcation->set_grid(boundary, boundary->minimums(), boundary->maximums(), resolution);
 
 }
 
@@ -423,43 +426,9 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setBoundary
 
         RpNumerics::getPhysics().boundary(triangBoundary);
 
-        //        jobject aRealVector = (env)->CallObjectMethod(newBoundary, getAMethodID);
-        //        jobject bRealVector = (env)->CallObjectMethod(newBoundary, getBMethodID);
-        //        jobject cRealVector = (env)->CallObjectMethod(newBoundary, getCMethodID);
-        //
-        //        jdoubleArray aRealVectorArray = (jdoubleArray) (env)->CallObjectMethod(aRealVector, toDoubleMethodID);
-        //        jdoubleArray bRealVectorArray = (jdoubleArray) (env)->CallObjectMethod(bRealVector, toDoubleMethodID);
-        //        jdoubleArray cRealVectorArray = (jdoubleArray) (env)->CallObjectMethod(cRealVector, toDoubleMethodID);
-        //
-        //        int aRealVectorSize = env->GetArrayLength(cRealVectorArray);
-        //        int bRealVectorSize = env->GetArrayLength(bRealVectorArray);
-        //        int cRealVectorSize = env->GetArrayLength(aRealVectorArray);
-        //
-        //        double aNativeArray [aRealVectorSize];
-        //        double bNativeArray [bRealVectorSize];
-        //        double cNativeArray [cRealVectorSize];
-        //
-        //
-        //        env->GetDoubleArrayRegion(aRealVectorArray, 0, aRealVectorSize, aNativeArray);
-        //        env->GetDoubleArrayRegion(bRealVectorArray, 0, bRealVectorSize, bNativeArray);
-        //        env->GetDoubleArrayRegion(cRealVectorArray, 0, cRealVectorSize, cNativeArray);
-        //
-        //
-        //        RealVector A(aRealVectorSize, aNativeArray);
-        //        RealVector B(bRealVectorSize, bNativeArray);
-        //        RealVector C(aRealVectorSize, cNativeArray);
-
-
-
-
-
-
-
-
-
 
     }
-
+    RpNumerics::getGridFactory().updateGrids();
 
 
 }
@@ -471,8 +440,6 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setBoundary
  */
 JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setFamilyIndex
 (JNIEnv *env, jobject obj, jint familyIndex) {
-
-    //WaveFlowFactory::setFamilyIndex(familyIndex);
 
 
 }
@@ -712,16 +679,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_boundary(JNIEnv * env, jcla
 
     }
     cout << "Boundary not defined" << endl;
-
-
-
-
-
-
-
-
-
-
 
     return NULL;
 

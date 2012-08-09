@@ -32,10 +32,10 @@ public class OrbitGeomView extends PolyLine {
 
         GeneralPath composite = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
 
-        //***
-        if (getClass().getSimpleName().equals("OrbitGeomView"))
-            composite.append(shapeCalculations(), false);
-        //***
+//        //***
+//        if (getClass().getSimpleName().equals("OrbitGeomView"))
+//            composite.append(shapeCalculations(), false);
+//        //***
 
         try {
             composite.append(super.createShape(), false);

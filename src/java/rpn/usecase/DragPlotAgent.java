@@ -32,11 +32,11 @@ public class DragPlotAgent extends RpModelConfigChangeAgent {
     }
 
     public void execute() {
-
         try {
             RpGeometry lastGeometry = phaseSpace_.getLastGeometry();
             UserInputTable userInputList = UIController.instance().globalInputTable();
             RealVector newValue = userInputList.values();
+
             if (GeometryGraphND.onCurve == 1) {
                 newValue = GeometryGraphND.pMarca;
             }

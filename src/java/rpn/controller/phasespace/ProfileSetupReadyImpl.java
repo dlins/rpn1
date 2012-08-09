@@ -6,15 +6,13 @@
 
 package rpn.controller.phasespace;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import rpn.component.*;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.controller.ui.UIController;
 import rpn.parser.RPnDataModule;
 import rpn.usecase.FindProfileAgent;
 import rpn.usecase.OrbitPlotAgent;
+import rpnumerics.ManifoldOrbit;
 import rpnumerics.ManifoldOrbitCalc;
 import rpnumerics.Orbit;
 import rpnumerics.PhasePoint;
@@ -69,37 +67,70 @@ public class ProfileSetupReadyImpl extends PoincareReadyImpl
     @Override
     public void plot(RPnPhaseSpaceAbstraction phaseSpace, RpGeometry geom) {
 
+        ManifoldGeom[] manifoldGeom = null;
+
         System.out.println("Esta no plot de ProfileSetupReadyImpl *************************************");
         
-        SimplexPoincareSection poincareSection = (SimplexPoincareSection)(poincareGeom().geomFactory().geomSource());
         StationaryPoint statPoint = null;
-        PhasePoint[] firstPoint =  null;
         int direction = 0;
 
         if (geom instanceof XZeroGeom) {
-            //statPoint = (StationaryPoint) xzeroGeom().geomFactory().geomSource();
+
             statPoint = (StationaryPoint) geom.geomFactory().geomSource();
-            firstPoint = (PhasePoint[]) statPoint.orbitDirectionFWD();
             direction = Orbit.FORWARD_DIR;
+            manifoldGeom = buildManifold(statPoint, direction);
+            fwdManifoldGeom_ = manifoldGeom[0];
 
         }
         if (geom instanceof StationaryPointGeom  && !(geom instanceof XZeroGeom)) {
             statPoint = (StationaryPoint) geom.geomFactory().geomSource();
-            firstPoint = (PhasePoint[]) statPoint.orbitDirectionBWD();
             direction = Orbit.BACKWARD_DIR;
+            manifoldGeom = buildManifold(statPoint, direction);
+            bwdManifoldGeom_ = manifoldGeom[0];
 
         }
+
+
+        RPnDataModule.PHASESPACE.join(manifoldGeom[0]);
+        RPnDataModule.PHASESPACE.join(manifoldGeom[1]);
+
+        UIController.instance().panelsUpdate();
+
+    }
+
+
+    private ManifoldGeom[] buildManifold (StationaryPoint statPoint, int direction) {
+
+        SimplexPoincareSection poincareSection = (SimplexPoincareSection)(poincareGeom().geomFactory().geomSource());
+
+        PhasePoint[] firstPoint =  null;
+        if (direction == Orbit.FORWARD_DIR) firstPoint = statPoint.orbitDirectionFWD();
+        if (direction == Orbit.BACKWARD_DIR) firstPoint = statPoint.orbitDirectionBWD();
 
 
         ManifoldGeomFactory factoryRef0 = new ManifoldGeomFactory(new ManifoldOrbitCalc(statPoint, firstPoint[0], poincareSection, direction));
         ManifoldGeomFactory factoryRef1 = new ManifoldGeomFactory(new ManifoldOrbitCalc(statPoint, firstPoint[1], poincareSection, direction));
 
-        RPnDataModule.PHASESPACE.join(factoryRef0.geom());
-        RPnDataModule.PHASESPACE.join(factoryRef1.geom());
+        ManifoldGeom geom0 = (ManifoldGeom) factoryRef0.geom();
+        ManifoldGeom geom1 = (ManifoldGeom) factoryRef1.geom();
 
-        UIController.instance().panelsUpdate();
+        Orbit orbit0 = ((ManifoldOrbit)geom0.geomFactory().geomSource()).getOrbit();
 
+        ManifoldGeom[] manifoldGeom = new ManifoldGeom[2];
+
+        if (orbit0.isInterPoincare()) {
+            manifoldGeom[0] = geom0;
+            manifoldGeom[1] = geom1;
+        }
+        else {
+            manifoldGeom[0] = geom1;
+            manifoldGeom[1] = geom0;
+        }
+
+
+        return manifoldGeom;
     }
+
 
     public void delete(RPnPhaseSpaceAbstraction phaseSpace, RpGeometry geom) {
         super.delete(phaseSpace, geom);

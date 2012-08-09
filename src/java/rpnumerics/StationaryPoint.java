@@ -143,7 +143,7 @@ public class StationaryPoint extends PhasePoint implements RpSolution {
     }
 
 
-    public RealVector[] orbitDirectionBWD() {
+    public PhasePoint[] orbitDirectionBWD() {
 
         RealVector dir = new RealVector(2);
 

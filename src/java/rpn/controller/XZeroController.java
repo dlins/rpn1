@@ -36,6 +36,7 @@ public class XZeroController
         ChangeDirectionAgent.instance().addPropertyChangeListener(this);
         ChangeSigmaAgent.instance().addPropertyChangeListener(this);
         ChangeXZeroAgent.instance().addPropertyChangeListener(this);
+
     }
 
     @Override
@@ -44,6 +45,7 @@ public class XZeroController
         ChangeDirectionAgent.instance().removePropertyChangeListener(this);
         ChangeSigmaAgent.instance().removePropertyChangeListener(this);
         ChangeXZeroAgent.instance().removePropertyChangeListener(this);
+
     }
 
     @Override

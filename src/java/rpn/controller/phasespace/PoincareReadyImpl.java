@@ -10,7 +10,9 @@ import rpn.RPnPhaseSpaceAbstraction;
 import rpn.usecase.*;
 import rpnumerics.ManifoldOrbit;
 import rpnumerics.Orbit;
+import rpnumerics.RPNUMERICS;
 import wave.util.RealVector;
+import wave.util.SimplexPoincareSection;
 
 public class PoincareReadyImpl extends NumConfigReadyImpl
         implements POINCARE_READY {
@@ -31,6 +33,10 @@ public class PoincareReadyImpl extends NumConfigReadyImpl
         ForwardManifoldPlotAgent.instance().setEnabled(true);
         // DISABLED
         FindProfileAgent.instance().setEnabled(false);                          //só vai ficar habilitado em ProfileSetupReadyImpl
+
+
+        RPNUMERICS.getShockProfile().setPoincare((SimplexPoincareSection) simplexGeom.geomFactory().geomSource());
+
 
     }
 
@@ -56,26 +62,14 @@ public class PoincareReadyImpl extends NumConfigReadyImpl
 
         if ((geom instanceof PoincareSectionGeom)) {
             phaseSpace.remove(simplexGeom_);
+
+//            PoincareSectionGeom poincareGeom = (PoincareSectionGeom) geom.geomFactory();
+//            RPNUMERICS.getShockProfile().setPoincare((SimplexPoincareSection) poincareGeom.geomFactory().geomSource());
         }
 
 
         super.plot(phaseSpace, geom);
 
-
-
-
-
-
-
-//        if (geom.geomFactory().geomSource() instanceof ManifoldOrbit) {
-//            if (((ManifoldOrbit) geom.geomFactory().geomSource()).getTimeDirection() == Orbit.BACKWARD_DIR) {
-//                phaseSpace.changeState(
-//                        new bwdProfileReadyImpl(hugoniotGeom(), xzeroGeom(), poincareGeom(), (ManifoldGeom) geom, isPlotManifold()));
-//            } else {
-//                phaseSpace.changeState(
-//                        new fwdProfileReadyImpl(hugoniotGeom(), xzeroGeom(), poincareGeom(), (ManifoldGeom) geom, isPlotManifold()));
-//            }
-//        }
 
     }
 
