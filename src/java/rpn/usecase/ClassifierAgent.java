@@ -96,7 +96,8 @@ public class ClassifierAgent extends RpModelPlotAgent {
         UserInputTable userInputList = UIController.instance().globalInputTable();
         RealVector newValue = userInputList.values();
 
-        //RpGeometry geom = RPnPhaseSpaceAbstraction.findClosestGeometry(newValue);
+        //System.out.println("RPnPhaseSpaceAbstraction.namePhaseSpace :::::::::::::::" +RPnPhaseSpaceAbstraction.namePhaseSpace);
+
         RpGeometry geom = phaseSpace_.findClosestGeometry(newValue);
         RPnCurve curve = (RPnCurve)(geom.geomFactory().geomSource());
 
@@ -104,10 +105,10 @@ public class ClassifierAgent extends RpModelPlotAgent {
 
             GeometryGraphND.pMarca = curve.findClosestPoint(newValue);
 
-            if (curve instanceof DoubleContactCurve  ||  curve instanceof SecondaryBifurcationCurve) {
-                GeometryGraphND.pMarcaDC = GeometryGraphND.secondPointDC(curve);
-            }
-            else GeometryGraphND.pMarcaDC = GeometryGraphND.pMarca;
+//            if (curve instanceof DoubleContactCurve  ||  curve instanceof SecondaryBifurcationCurve) {
+//                GeometryGraphND.pMarcaDC = GeometryGraphND.secondPointDC(curve);
+//            }
+//            else GeometryGraphND.pMarcaDC = GeometryGraphND.pMarca;
 
         }
 

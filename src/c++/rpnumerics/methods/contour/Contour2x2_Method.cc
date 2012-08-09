@@ -160,14 +160,12 @@ void Contour2x2_Method::curve2x2(ThreeImplicitFunctions *timpf,
         for (int jl = 0; jl < gv_left->grid.cols() - 1; jl++) {
             // Only for squares within the domain.
             if (gv_left->cell_type(il, jl) != CELL_IS_SQUARE) continue;
-            if ( !(gv_left->cell_is_real(il, jl)) ) continue;
 
             if(!timpf->prepare_cell(il, jl)) continue;
 
             for (int ir = 0; ir < gv_right->grid.rows() - 1; ir++){
                 for (int jr = 0; jr < gv_right->grid.cols() - 1; jr++){
                     if (gv_right->cell_type(ir, jr) == CELL_IS_SQUARE){
-                        if ( !(gv_right->cell_is_real(ir, jr)) ) continue;
                         if ( (timpf->is_singular()) && left_right_adjacency(il, jl, ir, jr)) continue;
 
                         if ( filhcub4(timpf, ir, jr, index, foncub.data()) ) {
@@ -227,6 +225,8 @@ void Contour2x2_Method::filedg4(Matrix<double> &sol_, Matrix<int> &edges_, int n
                                 std::vector<RealVector> &left_vrs, std::vector<RealVector> &right_vrs){
 
     // Store all pairs of edges that were found
+    double temp[2]; temp[0] = 0.0; temp[1] = 0.0;
+    RealVector p1_old(2, temp), p2_old(2, temp), p3_old(2, temp), p4_old(2, temp);
     RealVector p1(2), p2(2), p3(2), p4(2);
     for (int nedg = 0; nedg < nedges_; nedg++) {
         // LX1, LY1
@@ -237,9 +237,6 @@ void Contour2x2_Method::filedg4(Matrix<double> &sol_, Matrix<int> &edges_, int n
         p2.component(0) = ul0 + dul * (il + sol_(0, edges_(1, nedg) ) );
         p2.component(1) = vl0 + dvl * (jl + sol_(1, edges_(1, nedg) ) );
  
-        left_vrs.push_back(p1);
-        left_vrs.push_back(p2);
-
         // RX1, RY1
         p3.component(0) = ur0 + dur * (ir + sol_(2, edges_(0, nedg) ) );
         p3.component(1) = vr0 + dvr * (jr + sol_(3, edges_(0, nedg) ) );
@@ -248,8 +245,27 @@ void Contour2x2_Method::filedg4(Matrix<double> &sol_, Matrix<int> &edges_, int n
         p4.component(0) = ur0 + dur * (ir + sol_(2, edges_(1, nedg) ) );
         p4.component(1) = vr0 + dvr * (jr + sol_(3, edges_(1, nedg) ) );
 
+        /* TODO: These two "neglections" are GAMBIARRAS, HyperCube must be fixed!!! */
+        // Neglect zero segments
+        if ( (p1 == p2) && (p3 == p4) ) continue;
+
+        // Neglect repetition
+        if ( (p1 == p1_old) && (p2 == p2_old) && (p3 == p3_old) && (p4 == p4_old) ) continue;
+        p1_old = p1; p2_old = p2; p3_old = p3; p4_old = p4;
+        /* END of GAMBIARRAS!!! */
+
+        left_vrs.push_back(p1);
+        left_vrs.push_back(p2);
+
         right_vrs.push_back(p3);
         right_vrs.push_back(p4);
+
+//        /* START_DEBUG */
+//        cout << "At points ["<< nedges_ <<"/"<< nedg <<"]: p1 = "<< p1.component(0) << ", " << p1.component(1) << endl;
+//        cout << "          ["<< nedges_ <<"/"<< nedg <<"]: p2 = "<< p2.component(0) << ", " << p2.component(1) << endl;
+//        cout << "          ["<< nedges_ <<"/"<< nedg <<"]: p3 = "<< p3.component(0) << ", " << p3.component(1) << endl;
+//        cout << "          ["<< nedges_ <<"/"<< nedg <<"]: p4 = "<< p4.component(0) << ", " << p4.component(1) << endl;
+//        /* END_DEBUG */
     }
 
     return;

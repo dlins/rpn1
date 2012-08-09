@@ -40,6 +40,7 @@ public:
 
     // Assignment
     RealVector operator=(const RealVector &orig);
+    bool operator==(const RealVector &other);
 
     // Output to stream
     friend std::ostream & operator<<(std::ostream &out, const RealVector &r);

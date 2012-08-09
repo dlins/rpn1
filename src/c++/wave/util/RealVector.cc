@@ -90,6 +90,17 @@ RealVector RealVector::operator=(const RealVector &orig) {
     return *this;
 }
 
+bool RealVector::operator==(const RealVector &other){
+    if (size_ != other.size_) return false;
+
+    for (int i = 0; i < other.size_; i++) {
+        if (data[i] != other.data[i]) return false;
+    }
+
+    return true;
+}
+
+
 RealVector::operator double *(void) {
     return data;
 }

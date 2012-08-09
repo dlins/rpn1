@@ -34,6 +34,7 @@ public class HugoniotController extends RpCalcController {
         DragPlotAgent.instance().addPropertyChangeListener(this);
         ChangeFluxParamsAgent.instance().addPropertyChangeListener(this);
         BifurcationRefineAgent.instance().addPropertyChangeListener(this);      // ****
+        ChangeXZeroAgent.instance().addPropertyChangeListener(this);
 
     }
 
@@ -42,6 +43,7 @@ public class HugoniotController extends RpCalcController {
         DragPlotAgent.instance().removePropertyChangeListener(this);
         ChangeFluxParamsAgent.instance().removePropertyChangeListener(this);
         BifurcationRefineAgent.instance().removePropertyChangeListener(this);
+        ChangeXZeroAgent.instance().removePropertyChangeListener(this);
 
     }
 

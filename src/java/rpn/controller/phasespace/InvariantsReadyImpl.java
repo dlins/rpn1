@@ -115,8 +115,24 @@ public class InvariantsReadyImpl extends NumConfigReadyImpl {
         try {
             RealVector[] array = statPoint.initialManifoldPoint();
 
+
+            System.out.println("Stat point do manifold: "+statPoint.toString());
+            for (RealVector realVector : array) {
+
+                System.out.println("Ponto inicial do manifold : "+realVector);
+
+            }
+
+
             double lambda1 = statPoint.getEigenValR()[0];
             double lambda2 = statPoint.getEigenValR()[1];
+
+
+
+            System.out.println("Valor de sigma em InvariantsImpl: "+rpnumerics.RPNUMERICS.getShockProfile().getSigma());
+
+            System.out.println("Lambda 1: "+lambda1+" Lambda2 :"+lambda2);
+
 
             ManifoldOrbitCalc calc0 = null;
             ManifoldOrbitCalc calc1 = null;
@@ -165,6 +181,8 @@ public class InvariantsReadyImpl extends NumConfigReadyImpl {
             }
 
         } catch (Exception e) {
+
+            System.out.println("Excessao no plot invariants");
             System.out.println(e.getMessage());
         }
 

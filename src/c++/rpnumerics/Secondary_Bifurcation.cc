@@ -96,11 +96,6 @@ void Secondary_Bifurcation::curve(const FluxFunction *lf, const AccumulationFunc
     raa = ra;
     gv_right = &rg;
 
-    // TODO: Eingenpairs are not explicitly used, however, by now the Contour2x2 asks if the cell
-    //       is complex or not. Modifications in this order may come.
-    gv_left->fill_eigenpairs_on_grid(lff, laa);
-    gv_right->fill_eigenpairs_on_grid(rff, raa);
-
     gv_left->fill_Jacobians_on_grid(lff, laa);
     gv_right->fill_Jacobians_on_grid(rff, raa);
 

@@ -97,33 +97,16 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_nativeCalc(JNIEnv * env, job
     if (timeDirection == RAREFACTION_SPEED_DECREASE)
         timeDirection = ORBIT_BACKWARD;
 
-
-    //    RealVector p1(2), p2(2);
-    //
-    //    p1.component(0) = 0.0;
-    //    p1.component(1) = 0.4;
-    //
-    //    p2.component(0) = 0.5;
-    //    p2.component(1) = 0.5;
-    //
-    //
-    //    std::vector<RealVector> segment;
-    //    segment.push_back(p1);
-    //    segment.push_back(p2);
-
-
     if (poincareSection != NULL) { //Apenas para um segmento
 
 
-    RealVector nativePoincarePoint1(2);
-    RealVector nativePoincarePoint2(2);
-    vector<RealVector> poincareSegment;
+        RealVector nativePoincarePoint1(2);
+        RealVector nativePoincarePoint2(2);
+        vector<RealVector> poincareSegment;
 
         jobject poincarePoint1 = env->GetObjectArrayElement(poincareSection, 0);
 
         jobject poincarePoint2 = env->GetObjectArrayElement(poincareSection, 1);
-
-
 
         jdoubleArray poincare1PointArray = (jdoubleArray) (env)->CallObjectMethod(poincarePoint1, toDoubleMethodID);
         jdoubleArray poincare2PointArray = (jdoubleArray) (env)->CallObjectMethod(poincarePoint2, toDoubleMethodID);
@@ -145,9 +128,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_nativeCalc(JNIEnv * env, job
         poincareSegment.push_back(nativePoincarePoint1);
         poincareSegment.push_back(nativePoincarePoint2);
 
-
-
-
         Viscous_Profile::orbit(fluxFunction, accumFunction,
                 &v,
                 boundary,
@@ -157,7 +137,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_nativeCalc(JNIEnv * env, job
                 coords, &poincareSegment);
 
 
-        cout <<"Segmento de poincare: "<< nativePoincarePoint1<<" "<<nativePoincarePoint2<<endl;
+//        cout << "Segmento de poincare: " << nativePoincarePoint1 << " " << nativePoincarePoint2 << endl;
 
     } else {
 
@@ -169,13 +149,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_nativeCalc(JNIEnv * env, job
                 timeDirection,
                 coords);
 
-        cout<<"Sem poincare"<<endl;
+        cout << "Sem poincare" << endl;
 
 
     }
 
 
-    cout << "Tamanho da orbita: " << coords.size() << endl;
+//    cout << "Tamanho da orbita: " << coords.size() << endl;
 
     jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(coords.size(), classOrbitPoint, NULL);
 
@@ -223,83 +203,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_nativeCalc(JNIEnv * env, job
 
 }
 
-//----------------------------------------------------------------Stub------------------------------------------------------------------
-//    TODO Obter os pontos do ODESolution retornado pelo ODESolver
-
-//    int orbitPointArraySize =  solution->getCoords().size(); // TODO Substituir pelo tamanho do array de pontos retornado pelo ODESolution
-//
-//    jobjectArray  orbitPointArray  = (env)->NewObjectArray(orbitPointArraySize, classOrbitPoint, NULL);
-//
-//
-//    for(i=0;i < solution->getCoords().size();i++ ){
-//
-//        jdoubleArray jTempArray = (env)->NewDoubleArray(profile.getDimension());
-//
-//        RealVector vectorCoords = solution->getCoords().at(i);
-//
-//        double bufferArray [profile.getDimension()] ;
-//
-//        for (j=0; j <profile.getDimension();j++ ){
-//
-//            bufferArray[j]=vectorCoords.component(j);
-//        }
-//
-//        (env)->SetDoubleArrayRegion(jTempArray, 0, profile.getDimension(), bufferArray);
-//
-//        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray);
-//
-//        (env)->SetObjectArrayElement(orbitPointArray, i, orbitPoint);
-//
-//        (env)->DeleteLocalRef(orbitPoint);
-//        (env)->DeleteLocalRef(jTempArray);
-//
-////        cout << solution->getCoords().at(i) << endl;
-//
-//    }
-//
-//    //Building the orbit
-//
-//    jclass classOrbit = (env)->FindClass("rpnumerics/Orbit");
-//
-//    jmethodID orbitConstructor = (env)->GetMethodID(classOrbit, "<init>", "([Lrpnumerics/OrbitPoint;I)V");
-//
-//    jobject orbit = (env)->NewObject(classOrbit, orbitConstructor, orbitPointArray, timeDirection);
-//
-//    return orbit;
-//---------------------------------------------------------------------------------------------------------------------------------------
-
-//------------------------------- Stub ---------------------------------
-//
-//    double arrayStub [2];
-//
-//    arrayStub[0]= 0.10;
-//    arrayStub[1]= 0.10;
-//
-//    jdoubleArray jarrayStub = (env)->NewDoubleArray(2);
-//
-//    (env)->SetDoubleArrayRegion(jarrayStub, 0, 2, arrayStub);
-//
-//
-//    jobjectArray  orbitPointArray  = (env)->NewObjectArray(1, classOrbitPoint, NULL);
-//
-//    jmethodID orbitPointConstructor = (env)->GetMethodID(classOrbitPoint, "<init>", "([D)V");
-//
-//    jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jarrayStub);
-//
-//    (env)->SetObjectArrayElement(orbitPointArray, 0, orbitPoint);
-//
-//    //Construindo a Orbita
-//
-//    jclass classOrbit = (env)->FindClass("rpnumerics/Orbit");
-//
-//    jmethodID orbitConstructor = (env)->GetMethodID(classOrbit, "<init>", "([Lrpnumerics/OrbitPoint;I)V");
-//
-//    jobject orbit = (env)->NewObject(classOrbit, orbitConstructor, orbitPointArray, 0);
-//
-//    return orbit;
-//
-
-//---------------------------------------------------------------------------------
 
 
 

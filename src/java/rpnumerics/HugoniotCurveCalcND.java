@@ -33,6 +33,9 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
     }
 
     public void setUMinus(PhasePoint pPoint) {
+
+
+
 //        Uminus_ = pPoint.getCoords();
 //        Fminus_ = rpnumerics.RPNUMERICS.fluxFunction().F(Uminus_);
 //        hugoniotParams_.uMinusChangeNotify(pPoint);
@@ -92,7 +95,8 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
     }
 
     public PhasePoint getUMinus() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return ((HugoniotParams) getParams()).getXZero();
+
     }
 
     public double[] getPrimitiveUMinus() {

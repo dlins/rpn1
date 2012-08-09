@@ -265,8 +265,8 @@ public class UIController extends ComponentUI {
                 toggleCursorLines();
                 RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
 
-                RPnPhaseSpaceAbstraction.namePhaseSpace = ((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom()).getName();   //** acrescentei isso (Leandro)
-                panel.setName(RPnPhaseSpaceAbstraction.namePhaseSpace);
+                //RPnPhaseSpaceAbstraction.namePhaseSpace = ((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom()).getName();   //** acrescentei isso (Leandro)
+                //panel.setName(RPnPhaseSpaceAbstraction.namePhaseSpace);
 
                 if (handler_ instanceof UI_ACTION_SELECTED) {
                     UI_ACTION_SELECTED actionSelected = (UI_ACTION_SELECTED) handler_;

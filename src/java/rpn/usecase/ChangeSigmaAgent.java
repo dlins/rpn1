@@ -60,6 +60,8 @@ public class ChangeSigmaAgent extends RpModelConfigChangeAgent {
 
         //System.out.println("OLD SIGMA = " + oldValue);
         Double newValue = new Double(RPNUMERICS.getShockProfile().getSigma());
+
+
         //System.out.println("NEW SIGMA = " + newValue);
 
 

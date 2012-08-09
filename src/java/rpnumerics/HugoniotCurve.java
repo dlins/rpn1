@@ -4,6 +4,9 @@ import wave.util.RealVector;
 import wave.util.RealSegment;
 import java.util.List;
 import java.util.ArrayList;
+import rpn.RPnPhaseSpaceAbstraction;
+import rpn.component.RpGeometry;
+import rpn.parser.RPnDataModule;
 
 public class HugoniotCurve extends SegmentedCurve {
     //
@@ -316,7 +319,7 @@ public class HugoniotCurve extends SegmentedCurve {
 
     }
 
-    public List findPoints(double sigma) {
+     public List findPoints(double sigma) {
         ArrayList points = new ArrayList();
         double alpha = 0;
         RealVector point = null;
@@ -432,6 +435,21 @@ public class HugoniotCurve extends SegmentedCurve {
 
     }
     //****************************
+
+
+    @Override
+    public RealVector findClosestPoint(RealVector targetPoint) {
+
+        ArrayList segments = (ArrayList) segments();
+
+        RealSegment closestSegment = (RealSegment) segments.get(findClosestSegment(targetPoint));
+
+        RealVector projVec = calcVecProj(closestSegment.p2(), targetPoint,
+                closestSegment.p1());
+
+        return projVec;
+
+    }
 
 
     public String toXML() {

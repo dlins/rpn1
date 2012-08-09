@@ -8,10 +8,10 @@ Viscosity_Matrix* Viscous_Profile::vmf = 0;
 // If there is no intersection, return false (and r is useless), otherwise return true.
 //
 bool Viscous_Profile::segment_intersection(double *p1, double *p2, double *q1, double *q2, double *r){
-    {
-        printf("    Sign(q1) = %lg\n", (p2[1] - p1[1])*q1[0] + (p1[0] - p2[0])*q1[1] + (p1[1]*p2[0] - p2[1]*p1[0]));
-        printf("    Sign(q2) = %lg\n", (p2[1] - p1[1])*q2[0] + (p1[0] - p2[0])*q2[1] + (p1[1]*p2[0] - p2[1]*p1[0]));
-    }
+//    {
+//        printf("    Sign(q1) = %lg\n", (p2[1] - p1[1])*q1[0] + (p1[0] - p2[0])*q1[1] + (p1[1]*p2[0] - p2[1]*p1[0]));
+//        printf("    Sign(q2) = %lg\n", (p2[1] - p1[1])*q2[0] + (p1[0] - p2[0])*q2[1] + (p1[1]*p2[0] - p2[1]*p1[0]));
+//    }
 
     double alpha, beta;
 
@@ -33,7 +33,7 @@ bool Viscous_Profile::segment_intersection(double *p1, double *p2, double *q1, d
 
     for (int i = 0; i < 2; i++) r[i] = .5*(alpha*p1[i] + (1.0 - alpha)*p2[i] + beta*q1[i] + (1.0 - beta)*q2[i]);
 
-    printf("        alpha = %g, beta = %g, delta = %g\n", alpha, beta, delta);
+//    printf("        alpha = %g, beta = %g, delta = %g\n", alpha, beta, delta);
 
     return (alpha >= 0.0 && alpha <= 1.0) && (beta >= 0.0 && beta <= 1.0);
 }
@@ -365,15 +365,15 @@ int Viscous_Profile::orbit(const FluxFunction *ff, const AccumulationFunction *a
                                      r.components())){
                 out.push_back(r);
 
-                printf("Reached segment\n");
+               // printf("Reached segment\n");
                 return ORBIT_REACHED_SEGMENT;
             }
             else {
-                printf("(%lg, %lg)-(%lg, %lg) not intesecting (%lg, %lg)-(%lg, %lg)\n", 
-                         previous_point.component(0), previous_point.component(1), 
-                         new_point.component(0), new_point.component(1), 
-                         segment->at(0).component(0), segment->at(0).component(1), 
-                         segment->at(1).component(0), segment->at(1).component(1));
+//               // printf("(%lg, %lg)-(%lg, %lg) not intesecting (%lg, %lg)-(%lg, %lg)\n",
+//                         previous_point.component(0), previous_point.component(1),
+//                         new_point.component(0), new_point.component(1),
+//                         segment->at(0).component(0), segment->at(0).component(1),
+//                         segment->at(1).component(0), segment->at(1).component(1));
             }
         }
         // END   Verify that the orbit does not intersect the segment (if given)

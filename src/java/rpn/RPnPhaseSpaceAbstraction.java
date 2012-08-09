@@ -170,7 +170,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
 
 
     //**************************************************************************
-    public RpGeometry findClosestGeometry(RealVector targetPoint) {             // era static
+    public RpGeometry findClosestGeometry(RealVector targetPoint) {             //*** Fazer alteracoes !!!!!
 
         RpGeometry closestGeometry_ = null;      //a curva mais proxima
 
@@ -182,6 +182,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         Iterator<RpGeometry> geomList = null ;
 
         //--------------------------
+        // **** Usar direto o objeto, sem testar
         if (namePhaseSpace.equals("Phase Space"))      geomList = RPnDataModule.PHASESPACE.getGeomObjIterator();
         if (namePhaseSpace.equals("RightPhase Space")) geomList = RPnDataModule.RIGHTPHASESPACE.getGeomObjIterator();
         if (namePhaseSpace.equals("LeftPhase Space"))  geomList = RPnDataModule.LEFTPHASESPACE.getGeomObjIterator();
@@ -199,7 +200,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
                         if (geom.viewingAttr().isVisible()  &&  !(geom instanceof StationaryPointGeom)) {
 
                             RpGeomFactory factory = geom.geomFactory();
-                            RPnCurve curve = (RPnCurve) factory.geomSource();
+                            RPnCurve curve = (RPnCurve) factory.geomSource();       // ********* Mudar aqui, apontar o source direito ou esquerdo
 
                             curve.findClosestSegment(targetPoint);   //***
 
@@ -218,7 +219,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
 
                 if (GeometryGraphND.onCurve == 0) {
 
-                    if (geom.viewingAttr().isVisible()  &&  !(geom instanceof StationaryPointGeom)) {
+                    if (geom.viewingAttr().isVisible()  &&  !(geom instanceof StationaryPointGeom)  &&  !(geom instanceof PoincareSectionGeom)) {
 
                         RpGeomFactory factory = geom.geomFactory();
                         RPnCurve curve = (RPnCurve) factory.geomSource();
