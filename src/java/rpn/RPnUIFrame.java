@@ -135,11 +135,11 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
                 toolBar_.add(InvariantPlotAgent.instance().getContainer());
                 toolBar_.add(OrbitPlotAgent.instance().getContainer());
-                toolBar_.add(ForwardManifoldPlotAgent.instance().getContainer());
-                toolBar_.add(BackwardManifoldPlotAgent.instance().getContainer());
-                toolBar_.add(StationaryPointPlotAgent.instance().getContainer());
+                toolBar_.add(ConnectionManifoldPlotAgent.instance().getContainer());
+//                toolBar_.add(BackwardManifoldPlotAgent.instance().getContainer());
+//                toolBar_.add(StationaryPointPlotAgent.instance().getContainer());
                 toolBar_.add(PoincareSectionPlotAgent.instance().getContainer());
-                toolBar_.add(HugoniotPlotAgent.instance().getContainer());
+//                toolBar_.add(HugoniotPlotAgent.instance().getContainer());
                 toolBar_.revalidate();
 
             }
@@ -157,7 +157,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 toolBar_.add(LevelCurvePlotAgent.instance().getContainer());
                 toolBar_.add(CompositePlotAgent.instance().getContainer());
                 toolBar_.add(WaveCurvePlotAgent.instance().getContainer());
-                toolBar_.add(EllipticBoundaryAgent.instance().getContainer());
+
                 toolBar_.add(PhysicalBoundaryPlotAgent.instance().getContainer());
                 toolBar_.add(TrackPointAgent.instance().getContainer());
 
@@ -188,6 +188,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 toolBar_.add(InflectionPlotAgent.instance().getContainer());
                 toolBar_.add(HysteresisPlotAgent.instance().getContainer());
                 toolBar_.add(EllipticBoundaryExtensionAgent.instance().getContainer());
+                toolBar_.add(EllipticBoundaryAgent.instance().getContainer());
                 toolBar_.add(EnvelopeCurveAgent.instance().getContainer());
                 toolBar_.add(SecondaryBifurcationtAgent.instance().getContainer());
                 toolBar_.revalidate();

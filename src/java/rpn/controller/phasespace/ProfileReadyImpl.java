@@ -45,7 +45,7 @@ public class ProfileReadyImpl extends ProfileSetupReadyImpl
         PoincareSectionPlotAgent.instance().setEnabled(false);
         StationaryPointPlotAgent.instance().setEnabled(false);
         BackwardManifoldPlotAgent.instance().setEnabled(false);
-        ForwardManifoldPlotAgent.instance().setEnabled(false);
+        ConnectionManifoldPlotAgent.instance().setEnabled(false);
         FindProfileAgent.instance().setEnabled(false);
     }
 

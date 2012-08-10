@@ -17,8 +17,6 @@ public class SHOCK_CONFIG extends UI_ACTION_SELECTED {
     //
     public SHOCK_CONFIG() {
         super(HugoniotPlotAgent.instance());
-        HugoniotPlotAgent.instance().setEnabled(true);
-
 
     }
 

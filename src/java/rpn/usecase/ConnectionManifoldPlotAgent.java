@@ -6,38 +6,32 @@
 package rpn.usecase;
 
 import java.awt.event.ActionEvent;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JToggleButton;
 import rpn.RPnConfig;
 import rpn.component.*;
 import rpn.component.HugoniotCurveGeom;
-import rpn.controller.phasespace.NumConfigReadyImpl;
 import rpn.controller.phasespace.PoincareReadyImpl;
 import rpn.controller.phasespace.ProfileSetupReadyImpl;
-import rpn.controller.ui.UIController;
-import rpn.controller.ui.UI_ACTION_SELECTED;
-import rpn.message.RPnActionMediator;
 import rpn.parser.RPnDataModule;
 import rpnumerics.*;
 import wave.util.RealVector;
 import wave.util.SimplexPoincareSection;
 
-public class ForwardManifoldPlotAgent extends RpModelPlotAgent {
+public class ConnectionManifoldPlotAgent extends RpModelPlotAgent {
     //
     // Constants
     //
 
-    static public final String DESC_TEXT = "Forward Manifold";
+    static public final String DESC_TEXT = "Connection Manifolds";
     //
     // Members
     //
-    static private ForwardManifoldPlotAgent instance_ = null;
+    static private ConnectionManifoldPlotAgent instance_ = null;
 
     //
     // Constructors/Initializers
     //
-    protected ForwardManifoldPlotAgent() {
+    protected ConnectionManifoldPlotAgent() {
         super(DESC_TEXT, RPnConfig.MANIFOLD_FWD, new JToggleButton());
     }
 
@@ -88,9 +82,9 @@ public class ForwardManifoldPlotAgent extends RpModelPlotAgent {
     //
     // Accessors/Mutators
     //
-    static public ForwardManifoldPlotAgent instance() {
+    static public ConnectionManifoldPlotAgent instance() {
         if (instance_ == null) {
-            instance_ = new ForwardManifoldPlotAgent();
+            instance_ = new ConnectionManifoldPlotAgent();
         }
         return instance_;
     }
