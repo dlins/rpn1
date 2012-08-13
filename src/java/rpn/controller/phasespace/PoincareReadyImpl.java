@@ -35,7 +35,7 @@ public class PoincareReadyImpl extends NumConfigReadyImpl
         FindProfileAgent.instance().setEnabled(false);                          //só vai ficar habilitado em ProfileSetupReadyImpl
 
 
-        RPNUMERICS.getShockProfile().setPoincare((SimplexPoincareSection) simplexGeom.geomFactory().geomSource());
+        RPNUMERICS.getViscousProfileData().setPoincare((SimplexPoincareSection) simplexGeom.geomFactory().geomSource());
 
 
     }

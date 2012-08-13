@@ -31,7 +31,7 @@ public class SHOCK_CONFIG extends UI_ACTION_SELECTED {
 
         System.out.println("user input complete de shock config");
 
-        RPNUMERICS.getShockProfile().setXZero(new PhasePoint(userInput));
+        RPNUMERICS.getViscousProfileData().setXZero(new PhasePoint(userInput));
 
         super.userInputComplete(ui, userInput);
 

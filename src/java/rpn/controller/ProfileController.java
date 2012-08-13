@@ -43,7 +43,7 @@ public class ProfileController extends RpCalcController {
 
            // fires ChangeSigma event...
 //           double oldSigma = ((ConservationShockFlow)RPNUMERICS.flow()).getSigma();
-            double oldSigma = RPNUMERICS.getShockProfile().getSigma();
+            double oldSigma = RPNUMERICS.getViscousProfileData().getSigma();
 
            super.propertyChange(change);
 
@@ -51,7 +51,7 @@ public class ProfileController extends RpCalcController {
 
             
 
-           double newSigma = RPNUMERICS.getShockProfile().getSigma();//((ConservationShockFlow)RPNUMERICS.flow()).getSigma();
+           double newSigma = RPNUMERICS.getViscousProfileData().getSigma();//((ConservationShockFlow)RPNUMERICS.flow()).getSigma();
            ChangeSigmaAgent.instance().applyChange(
               new java.beans.PropertyChangeEvent(this,
               						ChangeSigmaAgent.DESC_TEXT,

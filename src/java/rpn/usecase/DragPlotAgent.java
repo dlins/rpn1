@@ -56,7 +56,7 @@ public class DragPlotAgent extends RpModelConfigChangeAgent {
         Double oldValue = (Double) log().getNewValue();
         System.out.println("OLD XZero = " + oldValue);
         Double newValue = (Double) log().getOldValue();
-        RPNUMERICS.getShockProfile().setSigma(newValue);
+        RPNUMERICS.getViscousProfileData().setSigma(newValue);
         System.out.println("NEW Xzero = " + newValue);
         applyChange(new PropertyChangeEvent(this, DESC_TEXT, oldValue, newValue));
     }

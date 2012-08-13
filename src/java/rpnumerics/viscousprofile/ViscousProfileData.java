@@ -4,24 +4,31 @@
  * Departamento de Dinamica dos Fluidos
  *
  */
-package rpnumerics;
+package rpnumerics.viscousprofile;
 
 import rpn.plugininterface.PluginProfile;
 import rpn.plugininterface.PluginTableModel;
+import rpnumerics.PhasePoint;
+import rpnumerics.ShockRarefactionProfile;
 import wave.util.RealVector;
 import wave.util.SimplexPoincareSection;
 
-public class ShockProfile extends ShockRarefactionProfile {
+public class ViscousProfileData extends ShockRarefactionProfile {
 
     private static String hugoniotMethodName_="Contour";//Default method 
     private static boolean hugoniotSpecific_=false;
-    private static ShockProfile instance_ = null;
+    private static ViscousProfileData instance_ = null;
     private static RealVector fx0_ = null;
     private PhasePoint Uplus_ = null;
     private PhasePoint previousUPlus_;
     private SimplexPoincareSection poincare_;
     private double dot_;
     private double previousSigma;
+    private double sigma_;
+    private PhasePoint previousXZero_;
+    private double previousDot;
+
+    private PhasePoint xZero_;
 
 
     public static final String SHOCKFLOW_NAME = "ShockFlow";
@@ -35,15 +42,16 @@ public class ShockProfile extends ShockRarefactionProfile {
         fx0_ = aFx0_;
     }
 
-    private ShockProfile() {
+    private ViscousProfileData() {
         super(new PhasePoint(new RealVector(2)));
+        previousDot=0;
     }
 
-    public static ShockProfile instance() {
+    public static ViscousProfileData instance() {
 
         if (instance_ == null) {
 
-            instance_ = new ShockProfile();
+            instance_ = new ViscousProfileData();
             return instance_;
         }
 
@@ -77,6 +85,11 @@ public class ShockProfile extends ShockRarefactionProfile {
 
     }
 
+    public boolean changedDotSignal(){
+        return ((previousDot * dot_) < 0.);
+
+    }
+
 
     public void updateDelta(RealVector pUref, RealVector pUPlus){
 
@@ -89,6 +102,8 @@ public class ShockProfile extends ShockRarefactionProfile {
 
 
         connectionLimits.sub(pUref, pUPlus);
+
+        previousDot= getDot();
 
         dot_= Math.signum(poincareLimits.dot(connectionLimits));
 
@@ -107,35 +122,48 @@ public class ShockProfile extends ShockRarefactionProfile {
     }
 
 
+    public PhasePoint getPreviousXZero(){
+        return previousXZero_;
+    }
+
     public double getSigma() {
-        PluginProfile profile = PluginTableModel.getPluginConfig(SHOCKFLOW_NAME);
-        String strValue = profile.getParamValue("sigma");
-        return (new Double(strValue)).doubleValue();
+
+        return sigma_;
+//        PluginProfile profile = PluginTableModel.getPluginConfig(SHOCKFLOW_NAME);
+//        String strValue = profile.getParamValue("sigma");
+//        return (new Double(strValue)).doubleValue();
 
     }
 
-    public void setSigma(double sigma_) {
+    public void setSigma(double sigma) {
 
         previousSigma = getSigma();
 
-        PluginProfile profile = PluginTableModel.getPluginConfig(SHOCKFLOW_NAME);
-        profile.setPluginParm("sigma", new Double(sigma_).toString());
+        sigma_=sigma;
+
+//
+//        PluginProfile profile = PluginTableModel.getPluginConfig(SHOCKFLOW_NAME);
+//        profile.setPluginParm("sigma", new Double(sigma_).toString());
     }
 
     @Override
     public void setXZero(PhasePoint xZero) {
-        PluginProfile profile = PluginTableModel.getPluginConfig(SHOCKFLOW_NAME);
-        profile.setPluginParm("xzero", xZero.toString());
+        previousXZero_=getXZero();
+        xZero_=xZero;
+//        PluginProfile profile = PluginTableModel.getPluginConfig(SHOCKFLOW_NAME);
+//        profile.setPluginParm("xzero", xZero.toString());
 //        uminus_ = xZero;
     }
 
     @Override
     public PhasePoint getXZero() {
 
+        return  xZero_;
+
 //        return uminus_;
-        PluginProfile profile = PluginTableModel.getPluginConfig(SHOCKFLOW_NAME);
-        String data = profile.getParamValue("xzero");
-        return new PhasePoint(new RealVector(data));
+//        PluginProfile profile = PluginTableModel.getPluginConfig(SHOCKFLOW_NAME);
+//        String data = profile.getParamValue("xzero");
+//        return new PhasePoint(new RealVector(data));
     }
 
     public String getHugoniotMethodName() {
@@ -143,7 +171,7 @@ public class ShockProfile extends ShockRarefactionProfile {
     }
 
     public void setHugoniotMethodName(String hugoniotMethodName_) {
-        ShockProfile.hugoniotMethodName_ = hugoniotMethodName_;
+        ViscousProfileData.hugoniotMethodName_ = hugoniotMethodName_;
     }
 
     public boolean isHugoniotSpecific() {
@@ -151,6 +179,6 @@ public class ShockProfile extends ShockRarefactionProfile {
     }
 
     public void setHugoniotSpecific(boolean hugoniotSpecific_) {
-        ShockProfile.hugoniotSpecific_ = hugoniotSpecific_;
+        ViscousProfileData.hugoniotSpecific_ = hugoniotSpecific_;
     }
 }

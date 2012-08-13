@@ -12,7 +12,7 @@ import java.awt.event.MouseListener;
 import rpn.plugininterface.PluginConfigDialog;
 import rpn.plugininterface.PluginTableModel;
 import rpnumerics.RPNUMERICS;
-import rpnumerics.ShockProfile;
+import rpnumerics.viscousprofile.ViscousProfileData;
 
 public class RPnShockConfigDialog extends RPnDialog {
 
@@ -38,7 +38,7 @@ public class RPnShockConfigDialog extends RPnDialog {
     }
 
     private void addMethodName() {
-        methodNameLabel_ = new JLabel(ShockProfile.instance().getHugoniotMethodName());
+        methodNameLabel_ = new JLabel(ViscousProfileData.instance().getHugoniotMethodName());
         methodNameLabel_.setName("methodLabel");
         methodNameLabel_.addMouseListener(new MouseHandler());
         methodPanel_.setLayout(flowLayout1);
@@ -78,9 +78,9 @@ public class RPnShockConfigDialog extends RPnDialog {
     protected void apply() {
 
         if (specificMethodCheckBox_.isSelected()) {
-            RPNUMERICS.getShockProfile().setHugoniotSpecific(true);
+            RPNUMERICS.getViscousProfileData().setHugoniotSpecific(true);
         } else {
-            RPNUMERICS.getShockProfile().setHugoniotSpecific(false);
+            RPNUMERICS.getViscousProfileData().setHugoniotSpecific(false);
         }
     }
 
@@ -99,7 +99,7 @@ public class RPnShockConfigDialog extends RPnDialog {
 
             if (label.getName().equals("pluginLabel") && (e.getButton() == MouseEvent.BUTTON3)) {
 
-                PluginConfigDialog dialog = new PluginConfigDialog(ShockProfile.SHOCKFLOW_NAME);
+                PluginConfigDialog dialog = new PluginConfigDialog(ViscousProfileData.SHOCKFLOW_NAME);
                 dialog.setVisible(true);
 
             }

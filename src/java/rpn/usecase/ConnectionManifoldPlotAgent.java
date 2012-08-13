@@ -48,7 +48,9 @@ public class ConnectionManifoldPlotAgent extends RpModelPlotAgent {
 
         profileSetupState.plot(RPnDataModule.PHASESPACE, zeroGeom);
 
-        StationaryPointCalc statUplusCalc = new StationaryPointCalc(RPNUMERICS.getShockProfile().getUplus(), (RealVector) zeroGeom.geomFactory().geomSource());
+        System.out.println(RPNUMERICS.getViscousProfileData().getUplus());
+
+        StationaryPointCalc statUplusCalc = new StationaryPointCalc(RPNUMERICS.getViscousProfileData().getUplus(), (RealVector) zeroGeom.geomFactory().geomSource());
         StationaryPointGeomFactory uPlusFactory = new StationaryPointGeomFactory(statUplusCalc);
         
         profileSetupState.plot(RPnDataModule.PHASESPACE, uPlusFactory.geom());

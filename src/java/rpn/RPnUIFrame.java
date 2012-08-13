@@ -25,7 +25,7 @@ import rpn.component.util.GeometryGraphND;
 import rpn.usecase.VelocityAgent;
 import rpn.controller.ui.*;
 import rpn.message.*;
-import rpnumerics.ShockProfile;
+import rpnumerics.viscousprofile.ViscousProfileData;
 
 public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
@@ -1067,14 +1067,14 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             if (stateComboBox.getSelectedItem().equals("Phase Diagram")) {
 
                 newState = new SHOCK_CONFIG();
-                RPNUMERICS.getShockProfile().setHugoniotMethodName(ShockProfile.HUGONIOT_METHOD_NAMES[1]);
+                RPNUMERICS.getViscousProfileData().setHugoniotMethodName(ViscousProfileData.HUGONIOT_METHOD_NAMES[1]);
                 curvesConfigPanel_.propertyChange(new PropertyChangeEvent(this, "family", "", "phasediagram"));
                 curvesConfigPanel_.propertyChange(new PropertyChangeEvent(this, "direction", "", "phasediagram"));
             }
 
             if (stateComboBox.getSelectedItem().equals("Wave Curves")) {
                 newState = new RAREFACTION_CONFIG();
-                RPNUMERICS.getShockProfile().setHugoniotMethodName(ShockProfile.HUGONIOT_METHOD_NAMES[0]);
+                RPNUMERICS.getViscousProfileData().setHugoniotMethodName(ViscousProfileData.HUGONIOT_METHOD_NAMES[0]);
                 curvesConfigPanel_.propertyChange(new PropertyChangeEvent(this, "family", "", "wavecurve"));
                 curvesConfigPanel_.propertyChange(new PropertyChangeEvent(this, "direction", "", "wavecurve"));
 

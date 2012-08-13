@@ -5,6 +5,7 @@
  */
 package rpnumerics;
 
+import rpnumerics.viscousprofile.ViscousProfileData;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +31,7 @@ public class RPNUMERICS {
     private static HashMap<String, Configuration> configMap_ = new HashMap<String, Configuration>();
     static private RpErrorControl errorControl_ = null;
     static private ODESolver odeSolver_ = null;
-    static private ShockProfile shockProfile_ = ShockProfile.instance();
+    static private ViscousProfileData shockProfile_ = ViscousProfileData.instance();
     static private BifurcationProfile bifurcationProfile_ = BifurcationProfile.instance();
     static private Integer direction_ = Orbit.FORWARD_DIR;
     //
@@ -569,7 +570,7 @@ public class RPNUMERICS {
 
     public static void updateUplus(List<RealVector> eqPoints) {
         RealVector newUPlus = null;
-            PhasePoint uPlus = RPNUMERICS.getShockProfile().getUplus();
+            PhasePoint uPlus = RPNUMERICS.getViscousProfileData().getUplus();
             if(uPlus!=null){//TODO  Inicializar uPlus
                 System.out.println("Uqem eh uPlus dentro do update : " + uPlus);
 
@@ -585,7 +586,7 @@ public class RPNUMERICS {
                 }
             }
 
-            RPNUMERICS.getShockProfile().setUplus(new PhasePoint(newUPlus));
+            RPNUMERICS.getViscousProfileData().setUplus(new PhasePoint(newUPlus));
 
             }
             
@@ -635,7 +636,7 @@ public class RPNUMERICS {
     // Accessors
     //
 
-    public static ShockProfile getShockProfile() {
+    public static ViscousProfileData getViscousProfileData() {
         return shockProfile_;
 
 
