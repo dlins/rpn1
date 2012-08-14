@@ -122,8 +122,16 @@ public class ProfileSetupReadyImpl extends PoincareReadyImpl
             RPNUMERICS.getViscousProfileData().updateDelta(p1, p2);
             if (RPNUMERICS.getViscousProfileData().changedDotSignal()) {
                 System.out.println("Intervalo de sigma ::::::::::::::: " + RPNUMERICS.getViscousProfileData().getPreviousSigma() + " , " + RPNUMERICS.getViscousProfileData().getSigma());
-                System.out.println("Intervalo de Uplus ::::::::::::::: " + RPNUMERICS.getViscousProfileData().getPreviousUPlus() + " , " + RPNUMERICS.getViscousProfileData().getUplus());
+                //System.out.println("Intervalo de Uplus ::::::::::::::: " + RPNUMERICS.getViscousProfileData().getPreviousUPlus() + " , " + RPNUMERICS.getViscousProfileData().getUplus());
                 System.out.println("Intervalo de XZero ::::::::::::::: " + RPNUMERICS.getViscousProfileData().getPreviousXZero() + " , " + RPNUMERICS.getViscousProfileData().getXZero());
+                int tam = RPNUMERICS.getViscousProfileData().getPreviousPhysicsParams().length;
+                String[] previous = RPNUMERICS.getViscousProfileData().getPreviousPhysicsParams();
+
+
+                System.out.println("Vetor de previous parametros :::::::::::::: ");
+                for (int i = 0; i < previous.length; i++) System.out.print(previous[i] + " ");
+
+                System.out.println("Vetor de atuais parametros :::::::::::::: " +RPNUMERICS.getFluxParams().getParams());
             }
         }
 

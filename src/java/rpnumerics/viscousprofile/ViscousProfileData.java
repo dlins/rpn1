@@ -9,14 +9,16 @@ package rpnumerics.viscousprofile;
 import rpn.plugininterface.PluginProfile;
 import rpn.plugininterface.PluginTableModel;
 import rpnumerics.PhasePoint;
+import rpnumerics.RPNUMERICS;
 import rpnumerics.ShockRarefactionProfile;
 import wave.util.RealVector;
 import wave.util.SimplexPoincareSection;
+import rpnumerics.Configuration;
 
 public class ViscousProfileData extends ShockRarefactionProfile {
 
-    private static String hugoniotMethodName_="Contour";//Default method 
-    private static boolean hugoniotSpecific_=false;
+    private static String hugoniotMethodName_ = "Contour";//Default method
+    private static boolean hugoniotSpecific_ = false;
     private static ViscousProfileData instance_ = null;
     private static RealVector fx0_ = null;
     private PhasePoint Uplus_ = null;
@@ -27,12 +29,10 @@ public class ViscousProfileData extends ShockRarefactionProfile {
     private double sigma_;
     private PhasePoint previousXZero_;
     private double previousDot;
-
+    private String[] previousParams;
     private PhasePoint xZero_;
-
-
     public static final String SHOCKFLOW_NAME = "ShockFlow";
-    public static final String [] HUGONIOT_METHOD_NAMES={"Continuation","Contour"}; //TODO Put these names into a better place
+    public static final String[] HUGONIOT_METHOD_NAMES = {"Continuation", "Contour"}; //TODO Put these names into a better place
 
     public RealVector getFx0() {
         return fx0_;
@@ -44,7 +44,9 @@ public class ViscousProfileData extends ShockRarefactionProfile {
 
     private ViscousProfileData() {
         super(new PhasePoint(new RealVector(2)));
-        previousDot=0;
+        previousDot = 0;
+       
+
     }
 
     public static ViscousProfileData instance() {
@@ -65,33 +67,31 @@ public class ViscousProfileData extends ShockRarefactionProfile {
         return new PhasePoint(new RealVector(data));
     }
 
-
-    public void setPoincare(SimplexPoincareSection poincare){
-        poincare_=poincare;
+    public void setPoincare(SimplexPoincareSection poincare) {
+        poincare_ = poincare;
     }
 
     public PhasePoint getUplus() {
         return Uplus_;
     }
 
-    public PhasePoint getPreviousUPlus(){
+    public PhasePoint getPreviousUPlus() {
         return previousUPlus_;
     }
 
     public void setUplus(PhasePoint Uplus) {
 
-        previousUPlus_=Uplus_;
+        previousUPlus_ = Uplus_;
         Uplus_ = Uplus;
 
     }
 
-    public boolean changedDotSignal(){
+    public boolean changedDotSignal() {
         return ((previousDot * dot_) < 0.);
 
     }
 
-
-    public void updateDelta(RealVector pUref, RealVector pUPlus){
+    public void updateDelta(RealVector pUref, RealVector pUPlus) {
 
         RealVector poincareLimits = new RealVector(2);
 
@@ -103,11 +103,11 @@ public class ViscousProfileData extends ShockRarefactionProfile {
 
         connectionLimits.sub(pUref, pUPlus);
 
-        previousDot= getDot();
+        previousDot = getDot();
 
-        dot_= Math.signum(poincareLimits.dot(connectionLimits));
+        dot_ = Math.signum(poincareLimits.dot(connectionLimits));
 
-        System.out.println("Sinal do produto interno :::::::: " +Math.signum(dot_));
+        System.out.println("Sinal do produto interno :::::::: " + Math.signum(dot_));
 
 
     }
@@ -116,40 +116,72 @@ public class ViscousProfileData extends ShockRarefactionProfile {
         return dot_;
     }
 
-
     public double getPreviousSigma() {
         return previousSigma;
     }
 
-
-    public PhasePoint getPreviousXZero(){
+    public PhasePoint getPreviousXZero() {
         return previousXZero_;
     }
 
     public double getSigma() {
 
         return sigma_;
-//        PluginProfile profile = PluginTableModel.getPluginConfig(SHOCKFLOW_NAME);
-//        String strValue = profile.getParamValue("sigma");
-//        return (new Double(strValue)).doubleValue();
+
 
     }
+
+
+    public void setPreviousSigma(double sigma) {
+        previousSigma = sigma;
+    }
+
 
     public void setSigma(double sigma) {
 
         previousSigma = getSigma();
 
-        sigma_=sigma;
+        sigma_ = sigma;
 
-//
-//        PluginProfile profile = PluginTableModel.getPluginConfig(SHOCKFLOW_NAME);
-//        profile.setPluginParm("sigma", new Double(sigma_).toString());
+        previousXZero_ = getXZero();
+
+        Configuration physics = RPNUMERICS.getConfiguration(RPNUMERICS.physicsID());
+        Configuration previousConfig = physics.getConfiguration("fluxfunction");
+
+        previousParams = new String[previousConfig.getParamsSize()];
+
+        for (int i = 0; i < previousConfig.getParamsSize(); i++) {
+            System.out.println("Parametro: " + i + " " + previousConfig.getParam(i));
+            previousParams[i] = previousConfig.getParam(i);
+        }
+
+
+    }
+
+    public void setPreviousXZero(PhasePoint xZero) {
+        previousXZero_ = xZero;
     }
 
     @Override
     public void setXZero(PhasePoint xZero) {
-        previousXZero_=getXZero();
-        xZero_=xZero;
+        previousXZero_ = getXZero();
+        xZero_ = xZero;
+
+
+
+        Configuration physics = RPNUMERICS.getConfiguration(RPNUMERICS.physicsID());
+        Configuration previousConfig = physics.getConfiguration("fluxfunction");
+
+        previousParams = new String[previousConfig.getParamsSize()];
+
+        for (int i = 0; i < previousConfig.getParamsSize(); i++) {
+            System.out.println("Parametro: " + i + " " + previousConfig.getParam(i));
+            previousParams[i] = previousConfig.getParam(i);
+        }
+
+        previousSigma = sigma_;
+
+
 //        PluginProfile profile = PluginTableModel.getPluginConfig(SHOCKFLOW_NAME);
 //        profile.setPluginParm("xzero", xZero.toString());
 //        uminus_ = xZero;
@@ -158,12 +190,20 @@ public class ViscousProfileData extends ShockRarefactionProfile {
     @Override
     public PhasePoint getXZero() {
 
-        return  xZero_;
+        return xZero_;
 
 //        return uminus_;
 //        PluginProfile profile = PluginTableModel.getPluginConfig(SHOCKFLOW_NAME);
 //        String data = profile.getParamValue("xzero");
 //        return new PhasePoint(new RealVector(data));
+    }
+
+    public void setPreviousPhysicsParams (String[] params) {
+        previousParams = params;
+    }
+
+    public String[] getPreviousPhysicsParams () {
+        return previousParams;
     }
 
     public String getHugoniotMethodName() {

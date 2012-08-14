@@ -701,9 +701,21 @@ public class RPNUMERICS {
 
         }
 
+        FluxParams previousParams = getFluxParams();
+
+        String[] previousParamArray = new String[fluxFunctionConfig.getParamsSize()];
+
+        for (int i = 0; i < previousParamArray.length; i++) {
+            previousParamArray[i]= String.valueOf(previousParams.getElement(i));
+
+        }
+
+
+        getViscousProfileData().setPreviousSigma(getViscousProfileData().getSigma());
+        getViscousProfileData().setPreviousXZero(getViscousProfileData().getXZero());
+        getViscousProfileData().setPreviousPhysicsParams(previousParamArray);
+
         setParams(paramsArray);
-
-
     }
 
     /**
