@@ -67,6 +67,10 @@ public class ViscousProfileData extends ShockRarefactionProfile {
         return new PhasePoint(new RealVector(data));
     }
 
+    public SimplexPoincareSection getPoincare() {
+        return poincare_;
+    }
+
     public void setPoincare(SimplexPoincareSection poincare) {
         poincare_ = poincare;
     }
@@ -110,6 +114,10 @@ public class ViscousProfileData extends ShockRarefactionProfile {
         System.out.println("Sinal do produto interno :::::::: " + Math.signum(dot_));
 
 
+    }
+
+    public double getPreviousDot() {
+        return previousDot;
     }
 
     public double getDot() {

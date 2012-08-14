@@ -7,6 +7,8 @@
 
 package rpnumerics;
 
+import java.util.List;
+import rpnumerics.viscousprofile.ViscousProfileData;
 import wave.ode.ODESolution;
 import wave.util.RealMatrix2;
 import wave.util.RealVector;
@@ -32,6 +34,7 @@ public class ConnectionOrbitCalc implements RpCalculation {
     private double sigmaAccuracy_;
     private String methodCalcName_;
     private ShockFlow flow_;
+    private HugoniotCurve hCurve_;
 
     //
     // Constructor
@@ -60,6 +63,12 @@ public class ConnectionOrbitCalc implements RpCalculation {
         sigmaAccuracy_ = 0;
     }
 
+
+    public ConnectionOrbitCalc(HugoniotCurve hCurve) {
+        hCurve_ = hCurve;
+    }
+
+
     //
     // Accessors/Mutators
     //
@@ -74,6 +83,12 @@ public class ConnectionOrbitCalc implements RpCalculation {
     //
     // Methods
     //
+
+
+
+
+
+
     public RpSolution recalc() throws RpException {
 //        // recalculation for each Manifold
 //        // Manifold A
@@ -127,6 +142,90 @@ public class ConnectionOrbitCalc implements RpCalculation {
     }
 
     public RpSolution calc() throws RpException {
+
+
+        int i = 0;
+        int nmax = 10;
+
+
+        double sigmaM;
+        PhasePoint uPlusM;
+
+        do {
+            double sigmaA = ViscousProfileData.instance().getPreviousSigma();
+            double sigmaB = ViscousProfileData.instance().getSigma();
+            PhasePoint uPlusA = ViscousProfileData.instance().getPreviousUPlus();
+            PhasePoint uPlusB = ViscousProfileData.instance().getUplus();
+
+            sigmaM = 0.5*(sigmaA + sigmaB);
+
+
+            ViscousProfileData.instance().setSigma(sigmaM);
+
+
+            //*** Nova curva chama o método novo
+            List<RealVector> eqPoints = hCurve_.equilPoints(sigmaM);	//***
+            RPNUMERICS.updateUplus(eqPoints);
+
+
+            StationaryPointCalc xZeroCalc = new StationaryPointCalc(ViscousProfileData.instance().getXZero(), ViscousProfileData.instance().getXZero());
+            StationaryPointCalc uPlusCalc = new StationaryPointCalc(ViscousProfileData.instance().getUplus(), ViscousProfileData.instance().getXZero());
+
+            StationaryPoint xZero = (StationaryPoint)xZeroCalc.calc();
+            StationaryPoint uPlus = (StationaryPoint)uPlusCalc.calc();
+
+            PhasePoint[] firstPointXZero = xZero.orbitDirectionFWD();
+            PhasePoint[] firstPointUPlus = uPlus.orbitDirectionBWD();
+
+            ManifoldOrbitCalc manifoldXZeroCalc0 = new ManifoldOrbitCalc(xZero, firstPointXZero[0], ViscousProfileData.instance().getPoincare(), Orbit.FORWARD_DIR);
+            ManifoldOrbitCalc manifoldXZeroCalc1 = new ManifoldOrbitCalc(xZero, firstPointXZero[1], ViscousProfileData.instance().getPoincare(), Orbit.FORWARD_DIR);
+
+            ManifoldOrbit manifoldXZero0 = (ManifoldOrbit)manifoldXZeroCalc0.calc();
+            ManifoldOrbit manifoldXZero1 = (ManifoldOrbit)manifoldXZeroCalc1.calc();
+
+            Orbit orbitXZero;
+
+            if(manifoldXZero0.getOrbit().isInterPoincare())
+                orbitXZero = manifoldXZero0.getOrbit();
+            else
+                orbitXZero = manifoldXZero1.getOrbit();
+
+
+            ManifoldOrbitCalc manifoldUPlusCalc0 = new ManifoldOrbitCalc(uPlus, firstPointUPlus[0], ViscousProfileData.instance().getPoincare(), Orbit.BACKWARD_DIR);
+            ManifoldOrbitCalc manifoldUPlusCalc1 = new ManifoldOrbitCalc(uPlus, firstPointUPlus[1], ViscousProfileData.instance().getPoincare(), Orbit.BACKWARD_DIR);
+
+            ManifoldOrbit manifoldUPlus0 = (ManifoldOrbit)manifoldUPlusCalc0.calc();
+            ManifoldOrbit manifoldUPlus1 = (ManifoldOrbit)manifoldUPlusCalc1.calc();
+
+            Orbit orbitUPlus;
+
+            if(manifoldUPlus0.getOrbit().isInterPoincare())
+                orbitUPlus = manifoldUPlus0.getOrbit();
+            else
+                orbitUPlus = manifoldUPlus1.getOrbit();
+
+
+            RealVector p1 = orbitXZero.lastPoint();
+            RealVector p2 = orbitUPlus.lastPoint();
+
+            ViscousProfileData.instance().updateDelta(p1, p2);
+
+            if(ViscousProfileData.instance().getPreviousDot()*ViscousProfileData.instance().getDot() < 0.) {
+                sigmaB = sigmaM;
+                uPlusB = ViscousProfileData.instance().getUplus();
+            }
+            else {
+                sigmaA = sigmaM;
+                uPlusA = ViscousProfileData.instance().getUplus();
+            }
+
+
+
+        }
+        while (i<nmax);
+
+
+
         return null;
 //        if (manifoldOrbitA_.getStationaryPoint().getDimP() + manifoldOrbitB_.getStationaryPoint().getDimN() !=
 //            RPNUMERICS.domainDim()) {
