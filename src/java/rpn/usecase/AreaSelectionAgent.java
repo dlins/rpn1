@@ -80,6 +80,8 @@ public class AreaSelectionAgent extends RpModelPlotAgent {
         UserInputTable userInputList = UIController.instance().globalInputTable();
         RealVector newValue = userInputList.values();
 
+        String idPanel = UIController.instance().getFocusPanel().getName();
+
         RPnPhaseSpaceAbstraction phaseSpace = RPnDataModule.PHASESPACE;
         RpGeometry geom = phaseSpace.findClosestGeometry(newValue);
         RPnCurve curve = (RPnCurve)(geom.geomFactory().geomSource());

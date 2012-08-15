@@ -39,7 +39,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
     static public String namePhaseSpace = "";
     static public List listResolution = new ArrayList();
     static public int closestCurve;             //indice da curva mais proxima
-    
+
     //
     // Constructors
     //
@@ -53,6 +53,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
     //
     // Accessors/Mutators
     //
+
     public void changeState(PhaseSpaceState state) {
         state_ = state;
     }
@@ -186,6 +187,8 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         if (namePhaseSpace.equals("Phase Space"))      geomList = RPnDataModule.PHASESPACE.getGeomObjIterator();
         if (namePhaseSpace.equals("RightPhase Space")) geomList = RPnDataModule.RIGHTPHASESPACE.getGeomObjIterator();
         if (namePhaseSpace.equals("LeftPhase Space"))  geomList = RPnDataModule.LEFTPHASESPACE.getGeomObjIterator();
+
+        //geomList = getGeomObjIterator();
 
         while (geomList.hasNext()) {
 

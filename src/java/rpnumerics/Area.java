@@ -44,6 +44,7 @@ public class Area {
         UserInputTable userInputList = UIController.instance().globalInputTable();
         RealVector newValue = userInputList.values();
         RPnPhaseSpaceAbstraction phaseSpace = RPnDataModule.PHASESPACE;
+
         RpGeometry geom = phaseSpace.findClosestGeometry(newValue);
         
         return (curve == (RPnCurve)(geom.geomFactory().geomSource()));
