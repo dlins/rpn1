@@ -66,7 +66,7 @@ public class HugoniotContourMethod extends HugoniotMethod {
 
         HugoniotCurve hugoniotCurve = null;
         try {
-            contourMethod_.setInitialPoint(new PointNDimension(RPNUMERICS.getShockProfile().getXZero()));
+            contourMethod_.setInitialPoint(new PointNDimension(RPNUMERICS.getViscousProfileData().getXZero()));
 
             RPnCurve curve = contourMethod_.curvND(boundaryArray_, resolution_);
 

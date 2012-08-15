@@ -129,7 +129,7 @@ public class InvariantsReadyImpl extends NumConfigReadyImpl {
 
 
 
-            System.out.println("Valor de sigma em InvariantsImpl: "+rpnumerics.RPNUMERICS.getShockProfile().getSigma());
+            System.out.println("Valor de sigma em InvariantsImpl: "+rpnumerics.RPNUMERICS.getViscousProfileData().getSigma());
 
             System.out.println("Lambda 1: "+lambda1+" Lambda2 :"+lambda2);
 

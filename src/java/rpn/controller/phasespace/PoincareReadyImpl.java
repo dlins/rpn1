@@ -30,12 +30,12 @@ public class PoincareReadyImpl extends NumConfigReadyImpl
         simplexGeom_ = simplexGeom;
         // ENABLED
         BackwardManifoldPlotAgent.instance().setEnabled(true);
-        ForwardManifoldPlotAgent.instance().setEnabled(true);
+        ConnectionManifoldPlotAgent.instance().setEnabled(true);
         // DISABLED
         FindProfileAgent.instance().setEnabled(false);                          //só vai ficar habilitado em ProfileSetupReadyImpl
 
 
-        RPNUMERICS.getShockProfile().setPoincare((SimplexPoincareSection) simplexGeom.geomFactory().geomSource());
+        RPNUMERICS.getViscousProfileData().setPoincare((SimplexPoincareSection) simplexGeom.geomFactory().geomSource());
 
 
     }

@@ -13,7 +13,12 @@ public class PhysicalBoundaryCalc implements RpCalculation {
     }
 
     public RpSolution calc() throws RpException {
-        return calcNative();
+
+        PhysicalBoundary curve =  (PhysicalBoundary)calcNative();
+
+        if (curve ==null) throw new RpException("Error in native layer");
+
+        return curve;
     }
 
     public RpSolution recalc(Area area) throws RpException {

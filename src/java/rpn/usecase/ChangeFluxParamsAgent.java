@@ -101,7 +101,7 @@ public class ChangeFluxParamsAgent extends RpModelConfigChangeAgent {
         if ((RPnDataModule.PHASESPACE.state() instanceof NumConfigReadyImpl)) {
             HugoniotCurveGeom hGeom = ((NUMCONFIG) RPnDataModule.PHASESPACE.state()).hugoniotGeom();
             HugoniotCurve hCurve = (HugoniotCurve) hGeom.geomFactory().geomSource();
-            double sigma = rpnumerics.RPNUMERICS.getShockProfile().getSigma();
+            double sigma = rpnumerics.RPNUMERICS.getViscousProfileData().getSigma();
 
 
             //*** Nova curva chama o método novo
@@ -142,7 +142,7 @@ public class ChangeFluxParamsAgent extends RpModelConfigChangeAgent {
 
                 RPnDataModule.PHASESPACE.state().plot(RPnDataModule.PHASESPACE, xzeroRef.geom());
 
-                StationaryPointCalc statCalc = new StationaryPointCalc(new PhasePoint(rpnumerics.RPNUMERICS.getShockProfile().getUplus()), hCurve.getXZero());
+                StationaryPointCalc statCalc = new StationaryPointCalc(new PhasePoint(rpnumerics.RPNUMERICS.getViscousProfileData().getUplus()), hCurve.getXZero());
                 StationaryPointGeomFactory statFactory = new StationaryPointGeomFactory(statCalc);
                 StationaryPointGeom statGeom = (StationaryPointGeom) statFactory.geom();
                 RPnDataModule.PHASESPACE.state().plot(RPnDataModule.PHASESPACE, statGeom);

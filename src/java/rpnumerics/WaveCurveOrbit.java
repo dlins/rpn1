@@ -19,9 +19,7 @@ public class WaveCurveOrbit extends Orbit implements WaveCurveBranch, RpSolution
 
     public WaveCurveOrbit(OrbitPoint[] points, int family, int increase) {
         super(points, increase);
-        System.out.println("CTR de WaveCurveOrbit --------------- points.length : " +points.length);
         familyIndex_ = family;
-
         orbitList_= new ArrayList<WaveCurveBranch>();
         orbitList_.add(this);
 

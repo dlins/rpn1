@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import rpn.RPnDesktopPlotter;
 import rpn.parser.RPnDataModule;
 import rpn.usecase.BifurcationRefineAgent;
 import rpnumerics.*;
@@ -22,21 +23,29 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
 
     public BifurcationCurveGeomFactory(ContourCurveCalc calc) {
         super(calc);
-
-        leftGeom_ = createLeftGeom();
-        rightGeom_ = createRightGeom();
-        ((BifurcationCurveGeom) leftGeom_).setOtherSide(rightGeom_);
-        ((BifurcationCurveGeom) rightGeom_).setOtherSide(leftGeom_);
+        try {
+            leftGeom_ = createLeftGeom();
+            rightGeom_ = createRightGeom();
+            ((BifurcationCurveGeom) leftGeom_).setOtherSide(rightGeom_);
+            ((BifurcationCurveGeom) rightGeom_).setOtherSide(leftGeom_);
+        } catch (RpException ex) {
+             RPnDesktopPlotter.showCalcExceptionDialog(ex);
+            
+        }
 
 
     }
 
     public BifurcationCurveGeomFactory(ContourCurveCalc calc, RpSolution curve) {
         super(calc, curve);
-        leftGeom_ = createLeftGeom();
-        rightGeom_ = createRightGeom();
-        ((BifurcationCurveGeom) leftGeom_).setOtherSide(rightGeom_);
-        ((BifurcationCurveGeom) rightGeom_).setOtherSide(leftGeom_);
+        try {
+            leftGeom_ = createLeftGeom();
+            rightGeom_ = createRightGeom();
+            ((BifurcationCurveGeom) leftGeom_).setOtherSide(rightGeom_);
+            ((BifurcationCurveGeom) rightGeom_).setOtherSide(leftGeom_);
+        } catch (RpException ex) {
+             RPnDesktopPlotter.showCalcExceptionDialog(ex);
+        }
 
     }
 
@@ -118,9 +127,12 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
         return new ViewingAttr(Color.magenta);
     }
 
-    protected RpGeometry createLeftGeom() {
+    protected RpGeometry createLeftGeom() throws RpException {
 
         BifurcationCurve curve = (BifurcationCurve) geomSource();
+        if (curve ==null) {
+            throw new RpException("Bifurcation curve empty");
+        }
         RealSegGeom[] bifurcationArray = new RealSegGeom[curve.leftSegments().size()];
 
         for (int i = 0; i < curve.leftSegments().size(); i++) {
@@ -131,11 +143,13 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
 
     }
 
-    protected RpGeometry createRightGeom() {
+    protected RpGeometry createRightGeom() throws RpException {
 
         BifurcationCurve curve = (BifurcationCurve) geomSource();
         RealSegGeom[] bifurcationArray = new RealSegGeom[curve.rightSegments().size()];
-
+        if (curve==null) {
+            throw new RpException("Bifurcation curve empty");
+        }
         for (int i = 0; i < curve.rightSegments().size(); i++) {
             bifurcationArray[i] = new RealSegGeom((RealSegment) curve.rightSegments().get(i), rightViewingAttr());
         }
@@ -144,13 +158,15 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
 
     @Override
     public void updateGeom() {
-
-        super.updateGeom();
-        leftGeom_ = createLeftGeom();
-        rightGeom_ = createRightGeom();
-
-        ((BifurcationCurveGeom) leftGeom_).setOtherSide(rightGeom_);
-        ((BifurcationCurveGeom) rightGeom_).setOtherSide(leftGeom_);
+        try {
+            super.updateGeom();
+            leftGeom_ = createLeftGeom();
+            rightGeom_ = createRightGeom();
+            ((BifurcationCurveGeom) leftGeom_).setOtherSide(rightGeom_);
+            ((BifurcationCurveGeom) rightGeom_).setOtherSide(leftGeom_);
+        } catch (RpException ex) {
+            RPnDesktopPlotter.showCalcExceptionDialog(ex);
+        }
 
     }
 

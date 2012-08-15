@@ -243,7 +243,7 @@ public class RPnMessageListener implements MessageListener {
                         
                     case 5:
                         UIController.instance().setState(new UI_ACTION_SELECTED(
-                                ForwardManifoldPlotAgent.instance()));
+                                ConnectionManifoldPlotAgent.instance()));
                         
                         break;
                         
