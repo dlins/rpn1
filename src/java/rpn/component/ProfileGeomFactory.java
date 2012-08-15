@@ -9,7 +9,6 @@ package rpn.component;
 import rpn.controller.RpController;
 import rpn.controller.ProfileController;
 import rpnumerics.*;
-import wave.multid.view.*;
 
 public class ProfileGeomFactory extends RpCalcBasedGeomFactory {
     //

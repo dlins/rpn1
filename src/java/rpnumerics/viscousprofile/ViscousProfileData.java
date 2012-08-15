@@ -159,7 +159,6 @@ public class ViscousProfileData extends ShockRarefactionProfile {
         previousParams = new String[previousConfig.getParamsSize()];
 
         for (int i = 0; i < previousConfig.getParamsSize(); i++) {
-            System.out.println("Parametro: " + i + " " + previousConfig.getParam(i));
             previousParams[i] = previousConfig.getParam(i);
         }
 
@@ -183,7 +182,6 @@ public class ViscousProfileData extends ShockRarefactionProfile {
         previousParams = new String[previousConfig.getParamsSize()];
 
         for (int i = 0; i < previousConfig.getParamsSize(); i++) {
-            System.out.println("Parametro: " + i + " " + previousConfig.getParam(i));
             previousParams[i] = previousConfig.getParam(i);
         }
 
