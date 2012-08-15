@@ -45,8 +45,8 @@ public class OrbitCalc implements RpCalculation {
     public RpSolution calc() throws RpException {
 
         if(timeDirection_== Orbit.BOTH_DIR) {
-            Orbit orbitFWD = (Orbit) nativeCalc(start_, RPNUMERICS.getShockProfile().getXZero(), RPNUMERICS.getShockProfile().getSigma(), Orbit.FORWARD_DIR ,poincareSection_);
-            Orbit orbitBWD = (Orbit) nativeCalc(start_, RPNUMERICS.getShockProfile().getXZero(), RPNUMERICS.getShockProfile().getSigma(), Orbit.BACKWARD_DIR ,poincareSection_);
+            Orbit orbitFWD = (Orbit) nativeCalc(start_, RPNUMERICS.getViscousProfileData().getXZero(), RPNUMERICS.getViscousProfileData().getSigma(), Orbit.FORWARD_DIR ,poincareSection_);
+            Orbit orbitBWD = (Orbit) nativeCalc(start_, RPNUMERICS.getViscousProfileData().getXZero(), RPNUMERICS.getViscousProfileData().getSigma(), Orbit.BACKWARD_DIR ,poincareSection_);
 
             Orbit concatOrbit =  concat(orbitBWD, orbitFWD);
 
@@ -55,7 +55,7 @@ public class OrbitCalc implements RpCalculation {
         }
 
         else
-        return nativeCalc(start_, RPNUMERICS.getShockProfile().getXZero(), RPNUMERICS.getShockProfile().getSigma(), timeDirection_,poincareSection_);
+        return nativeCalc(start_, RPNUMERICS.getViscousProfileData().getXZero(), RPNUMERICS.getViscousProfileData().getSigma(), timeDirection_,poincareSection_);
     }
 
 

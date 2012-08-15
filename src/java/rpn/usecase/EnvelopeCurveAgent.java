@@ -52,7 +52,7 @@ public class EnvelopeCurveAgent extends RpModelPlotAgent {
     public void execute() {
 
 
-EnvelopeGeomFactory factory = new EnvelopeGeomFactory(RPNUMERICS.createEnvelopeCurveCalc());
+        EnvelopeGeomFactory factory = new EnvelopeGeomFactory(RPNUMERICS.createEnvelopeCurveCalc());
         if (UIController.instance().isAuxPanelsEnabled()) {
             RPnPhaseSpaceAbstraction leftPhaseSpace = RPnDataModule.LEFTPHASESPACE;
 
@@ -60,6 +60,13 @@ EnvelopeGeomFactory factory = new EnvelopeGeomFactory(RPNUMERICS.createEnvelopeC
 
             RpGeometry leftGeometry = factory.leftGeom();
             RpGeometry rightGeometry = factory.rightGeom();
+
+
+            if (leftGeometry == null || rightGeometry == null) {
+                return;
+            }
+
+
 
             leftPhaseSpace.plot(leftGeometry);
             rightPhaseSpace.plot(rightGeometry);

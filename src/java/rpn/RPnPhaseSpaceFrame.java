@@ -16,9 +16,6 @@ import java.util.*;
 import rpn.component.util.GeometryGraph;
 import rpn.component.util.GeometryGraphND;
 import rpn.controller.ui.UIController;
-import rpn.controller.ui.UserInputTable;
-import rpnumerics.RPnCurve;
-import wave.util.RealVector;
 
 public class RPnPhaseSpaceFrame extends JFrame {
 

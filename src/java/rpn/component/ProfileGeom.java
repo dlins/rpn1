@@ -15,7 +15,7 @@ public class ProfileGeom extends MultiPolyLine implements RpGeometry {
     //
     // Constants
     //
-    public static ViewingAttr VIEWING_ATTR = new ViewingAttr(Color.orange);
+    public static ViewingAttr VIEWING_ATTR = new ViewingAttr(Color.magenta);
     //
     // Members
     //

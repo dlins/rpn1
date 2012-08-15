@@ -30,6 +30,7 @@ public class EnvelopeCurveCalc extends ContourCurveCalc {
           if (result == null) {
             throw new RpException("Error in native layer");
         }
+
         return result;
 
     }

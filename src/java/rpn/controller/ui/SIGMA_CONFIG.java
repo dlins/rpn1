@@ -39,7 +39,7 @@ public class SIGMA_CONFIG extends UI_ACTION_SELECTED {
 
 
         double newSigma = hCurve.findSigma(new PhasePoint(userInput));
-        RPNUMERICS.getShockProfile().setSigma(newSigma);
+        RPNUMERICS.getViscousProfileData().setSigma(newSigma);
 
 
         XZeroGeomFactory xzeroRef = new XZeroGeomFactory(new StationaryPointCalc(hCurve.getXZero(), hCurve.getXZero()));
@@ -48,7 +48,7 @@ public class SIGMA_CONFIG extends UI_ACTION_SELECTED {
         RealVector closestPoint = hCurve.findClosestPoint(userInput);
 
         // -----
-        RPNUMERICS.getShockProfile().setUplus(new PhasePoint(closestPoint));
+        RPNUMERICS.getViscousProfileData().setUplus(new PhasePoint(closestPoint));
 
         List<RealVector> eqPoints = hCurve.equilPoints(closestPoint);
 

@@ -86,11 +86,11 @@ public class ChangeXZeroAgent extends RpModelConfigChangeAgent {
         //--- Atualiza o ponto estacionario associado ao XZero
         XZeroGeomFactory xzeroRef = new XZeroGeomFactory(new StationaryPointCalc(new PhasePoint(lastPointAdded), lastPointAdded));
 
-        rpnumerics.RPNUMERICS.getShockProfile().setXZero(new PhasePoint(lastPointAdded));
+        rpnumerics.RPNUMERICS.getViscousProfileData().setXZero(new PhasePoint(lastPointAdded));
 
         HugoniotCurveGeom hGeom = ((NUMCONFIG) RPnDataModule.PHASESPACE.state()).hugoniotGeom();
         HugoniotCurve hCurve = (HugoniotCurve) hGeom.geomFactory().geomSource();
-        double sigma = rpnumerics.RPNUMERICS.getShockProfile().getSigma();
+        double sigma = rpnumerics.RPNUMERICS.getViscousProfileData().getSigma();
 
 
         //--- Produz lista de pontos de equilibrio
@@ -144,12 +144,12 @@ public class ChangeXZeroAgent extends RpModelConfigChangeAgent {
 
             // ------------------
 
-            StationaryPointCalc statCalc = new StationaryPointCalc(new PhasePoint(RPNUMERICS.getShockProfile().getUplus()), hCurve.getXZero());
+            StationaryPointCalc statCalc = new StationaryPointCalc(new PhasePoint(RPNUMERICS.getViscousProfileData().getUplus()), hCurve.getXZero());
             StationaryPointGeomFactory statFactory = new StationaryPointGeomFactory(statCalc);
             StationaryPointGeom statUPlus = (StationaryPointGeom) statFactory.geom();
-            RPnDataModule.PHASESPACE.state().plot(RPnDataModule.PHASESPACE, statUPlus);
-            RPnDataModule.PHASESPACE.state().plot(RPnDataModule.PHASESPACE, xzeroRef.geom());
 
+            RPnDataModule.PHASESPACE.state().plot(RPnDataModule.PHASESPACE, xzeroRef.geom());
+            RPnDataModule.PHASESPACE.state().plot(RPnDataModule.PHASESPACE, statUPlus);
 
 
         } else {

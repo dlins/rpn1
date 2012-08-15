@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 import rpnumerics.RarefactionProfile;
-import rpnumerics.ShockProfile;
+import rpnumerics.viscousprofile.ViscousProfileData;
 import rpnumerics.plugin.RPnPluginManager;
 
 public class PluginTableModel extends DefaultTableModel {
@@ -56,7 +56,7 @@ public class PluginTableModel extends DefaultTableModel {
 
         Vector<String> type1 = new Vector<String>();
 
-        type1.add(ShockProfile.SHOCKFLOW_NAME);
+        type1.add(ViscousProfileData.SHOCKFLOW_NAME);
 
         type1.add("RPnDefaultPlugins.so");
         type1.add("ShockFlowPlugin");
@@ -64,7 +64,7 @@ public class PluginTableModel extends DefaultTableModel {
         type1.add("destroyConservation");
 
 
-        RPnPluginManager.configPlugin(ShockProfile.SHOCKFLOW_NAME, "RPnDefaultPlugins.so", "ShockFlowPlugin", "createConservation", "destroyConservation");
+        RPnPluginManager.configPlugin(ViscousProfileData.SHOCKFLOW_NAME, "RPnDefaultPlugins.so", "ShockFlowPlugin", "createConservation", "destroyConservation");
 
 
         Vector<String> type2 = new Vector<String>();
