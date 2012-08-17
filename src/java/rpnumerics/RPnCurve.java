@@ -40,7 +40,6 @@ public abstract class RPnCurve {
     
     public RPnCurve() {//TODO REMOVE !!
         //super(new CoordsArray[3], new ViewingAttr(Color.WHITE));
-        System.out.println("CTR vazio dwe RPNCURVE");
 
     }
 

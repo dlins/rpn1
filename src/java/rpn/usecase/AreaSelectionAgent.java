@@ -84,7 +84,7 @@ public class AreaSelectionAgent extends RpModelPlotAgent {
         RpGeometry geom = phaseSpace.findClosestGeometry(newValue);
         RPnCurve curve = (RPnCurve)(geom.geomFactory().geomSource());
 
-        if (curve instanceof SegmentedCurve) {
+//        if (curve instanceof SegmentedCurve) {
 
             Object[] options = {"Zoom", "Refine"};
             int n = JOptionPane.showOptionDialog(new JFrame(),
@@ -104,13 +104,13 @@ public class AreaSelectionAgent extends RpModelPlotAgent {
 
             if (n == 1) {
                 Area area = null;
-                String Re1 = JOptionPane.showInputDialog(null, "Resolucao horizontal", "Resolucao", JOptionPane.QUESTION_MESSAGE);
-                String Re2 = JOptionPane.showInputDialog(null, "Resolucao vertical", "Resolucao", JOptionPane.QUESTION_MESSAGE);
+//                String Re1 = JOptionPane.showInputDialog(null, "Resolucao horizontal", "Resolucao", JOptionPane.QUESTION_MESSAGE);
+//                String Re2 = JOptionPane.showInputDialog(null, "Resolucao vertical", "Resolucao", JOptionPane.QUESTION_MESSAGE);
 
                 try {
                     RealVector resolution = new RealVector(RPNUMERICS.domainDim());
-                    resolution.setElement(0, Integer.parseInt(Re1));
-                    resolution.setElement(1, Integer.parseInt(Re2));
+//                    resolution.setElement(0, Integer.parseInt(Re1));
+//                    resolution.setElement(1, Integer.parseInt(Re2));
 
                     if (RPNUMERICS.domainDim() == 2) {
                         area = new Area(resolution, GeometryGraph.topRight, GeometryGraph.downLeft);
@@ -131,7 +131,7 @@ public class AreaSelectionAgent extends RpModelPlotAgent {
             }
 
 
-        }
+//        }
     }
 
 

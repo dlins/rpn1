@@ -126,6 +126,8 @@ int RiemannSolver::saturation_profiles(const std::vector<Curve> &one_wave_curve,
     if (profile[0].component(point_size - 1) > profile[profile.size() - 1].component(point_size - 1)) return RIEMANNSOLVER_ERROR;
 
     // Add the constant regions to the beginning and at the end of the profile
+
+    cout<<"Tamanho do profile: "<<profile.size()<<endl;
     if (profile.size() > 2){
         // Speed component
         int sc = profile[0].size();
@@ -137,6 +139,9 @@ int RiemannSolver::saturation_profiles(const std::vector<Curve> &one_wave_curve,
 
         fp.component(sc - 1) -= delta; 
         lp.component(sc - 1) += delta;
+
+
+        cout<<"Fp: "<<fp<<" "<<"Lp: "<<lp<<endl;
 
         profile.insert(profile.begin(), fp);
         profile.push_back(lp);

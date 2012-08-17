@@ -18,64 +18,56 @@ public class RiemannProfileCalc implements RpCalculation {
     // Members
     //
 
-    private OrbitPoint start_;
-    private int timeDirection_;
-    private RealVector[] poincareSection_;
     private Area area_;
-    private List<OrbitPoint> forwardList_;
-    private List<OrbitPoint>  backwardList_;
+    private List<WaveCurveOrbit> forwardList_;
+    private List<WaveCurveOrbit> backwardList_;
 
     //
     // Constructors/Initializers
     //
     public RiemannProfileCalc(Area area, WaveCurve forwardCurve, WaveCurve backwardCurve) {
 
-        area_=area;
+        area_ = area;
 
 
 
         List<WaveCurveBranch> forwardBranch = forwardCurve.getBranchsList();
 
 
-        forwardList_ = new ArrayList<OrbitPoint>();
+        forwardList_ = new ArrayList<WaveCurveOrbit>();
 
         for (WaveCurveBranch waveCurveBranch : forwardBranch) {
 
 
-            WaveCurveOrbit orbit = (WaveCurveOrbit)waveCurveBranch;
+            for (WaveCurveBranch waveCurveBranch2 : waveCurveBranch.getBranchsList()) {
 
+                WaveCurveOrbit orbit = (WaveCurveOrbit) waveCurveBranch2;
 
-            OrbitPoint[] points = orbit.getPoints();
+                forwardList_.add(orbit);
 
-
-            for (OrbitPoint orbitPoint : points) {
-                forwardList_.add(orbitPoint);
             }
 
         }
 
-          List<WaveCurveBranch> backwardBranch = backwardCurve.getBranchsList();
+        List<WaveCurveBranch> backwardBranch = backwardCurve.getBranchsList();
 
-        backwardList_=new ArrayList<OrbitPoint>();
+        backwardList_ = new ArrayList<WaveCurveOrbit>();
 
         for (WaveCurveBranch waveCurveBranch : backwardBranch) {
 
 
-            WaveCurveOrbit orbit = (WaveCurveOrbit)waveCurveBranch;
+              for (WaveCurveBranch waveCurveBranch2 : waveCurveBranch.getBranchsList()) {
 
+                WaveCurveOrbit orbit = (WaveCurveOrbit) waveCurveBranch2;
 
-            OrbitPoint[] points = orbit.getPoints();
+                backwardList_.add(orbit);
 
-
-            for (OrbitPoint orbitPoint : points) {
-                backwardList_.add(orbitPoint);
-            }
+              }
 
         }
 
 
     }
-
 
     //
     // Methods
@@ -92,7 +84,7 @@ public class RiemannProfileCalc implements RpCalculation {
 
         RpSolution result = nativeCalc(pmin, pmax, forwardList_, backwardList_);
 
-        if (result==null){
+        if (result == null) {
             throw new RpException("Error in native layer");
         }
 
@@ -100,12 +92,9 @@ public class RiemannProfileCalc implements RpCalculation {
         return result;
     }
 
-
-    private native RpSolution nativeCalc (RealVector pmin,RealVector pmax, List<OrbitPoint> forwardWaveCurve,List<OrbitPoint> backwardWaveCurve ) throws RpException;
+    private native RpSolution nativeCalc(RealVector pmin, RealVector pmax, List<WaveCurveOrbit> forwardWaveCurve, List<WaveCurveOrbit> backwardWaveCurve) throws RpException;
 
     public RpSolution recalc(Area area) throws RpException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
-
 }
