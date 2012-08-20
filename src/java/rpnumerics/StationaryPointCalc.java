@@ -78,7 +78,7 @@ public class StationaryPointCalc implements RpCalculation {
 
         StationaryPoint result;
         result = (StationaryPoint) nativeCalc(initial_, referencePoint_, RPNUMERICS.getViscousProfileData().getSigma());
-
+        
         if (result == null) {
             throw new RpException("Error in native layer");
         }

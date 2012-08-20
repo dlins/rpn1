@@ -58,12 +58,6 @@ public class FindProfileAgent extends RpModelPlotAgent {
 
     public RpGeometry createRpGeometry(RealVector[] input) {
 
-
-
-
-
-
-
 //        ConnectionOrbitCalc connCalc = RPNUMERICS.createConnectionOrbitCalc((ManifoldOrbit)
 //            ((PROFILE_SETUP_READY)rpn.parser.RPnDataModule.PHASESPACE.state()).fwdManifoldGeom().geomFactory().geomSource(),
 //            (ManifoldOrbit)((PROFILE_SETUP_READY)rpn.parser.RPnDataModule.PHASESPACE.state()).bwdManifoldGeom().geomFactory().geomSource());
@@ -74,8 +68,6 @@ public class FindProfileAgent extends RpModelPlotAgent {
     }
 
     public void findProfile(){
-
-
         //--------------------- Remove os pontos estacionarios
         Iterator it = RPnDataModule.PHASESPACE.getGeomObjIterator();
         List<RpGeometry> list = new ArrayList<RpGeometry>();
@@ -98,41 +90,31 @@ public class FindProfileAgent extends RpModelPlotAgent {
         //--- Atualiza o ponto estacionario associado ao XZero
         XZeroGeomFactory xzeroRef = new XZeroGeomFactory(new StationaryPointCalc(ViscousProfileData.instance().getXZero(), ViscousProfileData.instance().getXZero()));
 
-
-
         HugoniotCurveGeom hGeom = ((NUMCONFIG) RPnDataModule.PHASESPACE.state()).hugoniotGeom();
         HugoniotCurve hCurve = (HugoniotCurve) hGeom.geomFactory().geomSource();
 
-
-
-
         ConnectionOrbitCalc connCalc = new ConnectionOrbitCalc(hCurve);
-
-
 
         ProfileGeomFactory factory = new ProfileGeomFactory(connCalc);
         
-        
-        
         RPnDataModule.PHASESPACE.join(factory.geom());
-
 
         //*** Nova curva chama o método novo
         List<RealVector> eqPoints = hCurve.equilPoints(ViscousProfileData.instance().getSigma());	//***
+        System.out.println("Sigma atual em FindProfileAgent : " +ViscousProfileData.instance().getSigma());
 
         RPNUMERICS.updateUplus(eqPoints);
 
         //------------------------- Recalcula os pontos estacionarios
         for (RealVector realVector : eqPoints) {    // *** o join daqui é para as setas dos pontos estacionarios
             StationaryPointGeomFactory statPointFactory = new StationaryPointGeomFactory(new StationaryPointCalc(new PhasePoint(realVector), hCurve.getXZero()));
-
             RPnDataModule.PHASESPACE.join(statPointFactory.geom());
-
         }
 
         RPnDataModule.PHASESPACE.join(xzeroRef.geom());
         //----------------------
 
+        UIController.instance().panelsUpdate();
 
 
 

@@ -44,9 +44,7 @@ public class ViscousProfileData extends ShockRarefactionProfile {
 
     private ViscousProfileData() {
         super(new PhasePoint(new RealVector(2)));
-        previousDot = 0;
-       
-
+        previousDot = 0.;
     }
 
     public static ViscousProfileData instance() {
@@ -84,36 +82,37 @@ public class ViscousProfileData extends ShockRarefactionProfile {
     }
 
     public void setUplus(PhasePoint Uplus) {
-
         previousUPlus_ = Uplus_;
         Uplus_ = Uplus;
-
     }
+
+
+    public void setUplusM(PhasePoint Uplus) {
+        Uplus_ = Uplus;
+        System.out.println("Setou UplusM em :::::::::::: " +Uplus.getCoords());
+    }
+
+
+    public void setPreviousUplus(PhasePoint Uplus) {
+        previousUPlus_ = Uplus;
+    }
+
 
     public boolean changedDotSignal() {
         return ((previousDot * dot_) < 0.);
-
     }
 
+    //*** Usado fora da bisseção em sigma
     public void updateDelta(RealVector pUref, RealVector pUPlus) {
-
         RealVector poincareLimits = new RealVector(2);
-
-
         poincareLimits.sub(poincare_.getPoints()[0], poincare_.getPoints()[1]);
-
         RealVector connectionLimits = new RealVector(2);
-
-
         connectionLimits.sub(pUref, pUPlus);
 
         previousDot = getDot();
-
-        dot_ = Math.signum(poincareLimits.dot(connectionLimits));
+        dot_ = poincareLimits.dot(connectionLimits);
 
         System.out.println("Sinal do produto interno :::::::: " + Math.signum(dot_));
-
-
     }
 
     public double getPreviousDot() {
@@ -122,6 +121,10 @@ public class ViscousProfileData extends ShockRarefactionProfile {
 
     public double getDot() {
         return dot_;
+    }
+
+    public void setDot(double dot) {
+        dot_ = dot;
     }
 
     public double getPreviousSigma() {
@@ -133,12 +136,8 @@ public class ViscousProfileData extends ShockRarefactionProfile {
     }
 
     public double getSigma() {
-
         return sigma_;
-
-
     }
-
 
     public void setPreviousSigma(double sigma) {
         previousSigma = sigma;
@@ -146,11 +145,8 @@ public class ViscousProfileData extends ShockRarefactionProfile {
 
 
     public void setSigma(double sigma) {
-
         previousSigma = getSigma();
-
         sigma_ = sigma;
-
         previousXZero_ = getXZero();
 
         Configuration physics = RPNUMERICS.getConfiguration(RPNUMERICS.physicsID());
@@ -162,8 +158,13 @@ public class ViscousProfileData extends ShockRarefactionProfile {
             previousParams[i] = previousConfig.getParam(i);
         }
 
-
     }
+
+
+    public void setSigmaM(double sigma) {
+        sigma_ = sigma;
+    }
+
 
     public void setPreviousXZero(PhasePoint xZero) {
         previousXZero_ = xZero;
@@ -173,8 +174,6 @@ public class ViscousProfileData extends ShockRarefactionProfile {
     public void setXZero(PhasePoint xZero) {
         previousXZero_ = getXZero();
         xZero_ = xZero;
-
-
 
         Configuration physics = RPNUMERICS.getConfiguration(RPNUMERICS.physicsID());
         Configuration previousConfig = physics.getConfiguration("fluxfunction");
@@ -187,10 +186,6 @@ public class ViscousProfileData extends ShockRarefactionProfile {
 
         previousSigma = sigma_;
 
-
-//        PluginProfile profile = PluginTableModel.getPluginConfig(SHOCKFLOW_NAME);
-//        profile.setPluginParm("xzero", xZero.toString());
-//        uminus_ = xZero;
     }
 
     @Override
@@ -198,10 +193,6 @@ public class ViscousProfileData extends ShockRarefactionProfile {
 
         return xZero_;
 
-//        return uminus_;
-//        PluginProfile profile = PluginTableModel.getPluginConfig(SHOCKFLOW_NAME);
-//        String data = profile.getParamValue("xzero");
-//        return new PhasePoint(new RealVector(data));
     }
 
     public void setPreviousPhysicsParams (String[] params) {

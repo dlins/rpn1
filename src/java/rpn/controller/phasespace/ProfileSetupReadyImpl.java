@@ -17,6 +17,7 @@ import rpnumerics.Orbit;
 import rpnumerics.PhasePoint;
 import rpnumerics.RPNUMERICS;
 import rpnumerics.StationaryPoint;
+import rpnumerics.viscousprofile.ViscousProfileData;
 import wave.util.RealVector;
 import wave.util.SimplexPoincareSection;
 
@@ -92,7 +93,6 @@ public class ProfileSetupReadyImpl extends PoincareReadyImpl
         }
 
 
-
         RPnDataModule.PHASESPACE.join(manifoldGeom[0]);
         RPnDataModule.PHASESPACE.join(manifoldGeom[1]);
 
@@ -119,28 +119,35 @@ public class ProfileSetupReadyImpl extends PoincareReadyImpl
         RealVector p2 = bwdOrbit.lastPoint();
 
         if (fwdOrbit.isInterPoincare() && bwdOrbit.isInterPoincare()) {
+
             RPNUMERICS.getViscousProfileData().updateDelta(p1, p2);
+
+
+            System.out.println("Valores dos Dots no ProfileSetup: ");
+            System.out.println(ViscousProfileData.instance().getPreviousDot() + "  e  " +ViscousProfileData.instance().getDot());
+
+
             if (RPNUMERICS.getViscousProfileData().changedDotSignal()) {
-                System.out.println("Intervalo de sigma ::::::::::::::: " + RPNUMERICS.getViscousProfileData().getPreviousSigma() + " , " + RPNUMERICS.getViscousProfileData().getSigma());
+                //System.out.println("Intervalo de sigma ::::::::::::::: " + RPNUMERICS.getViscousProfileData().getPreviousSigma() + " , " + RPNUMERICS.getViscousProfileData().getSigma());
                 //System.out.println("Intervalo de Uplus ::::::::::::::: " + RPNUMERICS.getViscousProfileData().getPreviousUPlus() + " , " + RPNUMERICS.getViscousProfileData().getUplus());
-                System.out.println("Intervalo de XZero ::::::::::::::: " + RPNUMERICS.getViscousProfileData().getPreviousXZero() + " , " + RPNUMERICS.getViscousProfileData().getXZero());
+                //System.out.println("Intervalo de XZero ::::::::::::::: " + RPNUMERICS.getViscousProfileData().getPreviousXZero() + " , " + RPNUMERICS.getViscousProfileData().getXZero());
                 int tam = RPNUMERICS.getViscousProfileData().getPreviousPhysicsParams().length;
                 String[] previous = RPNUMERICS.getViscousProfileData().getPreviousPhysicsParams();
 
 
-                System.out.println("Vetor de previous parametros :::::::::::::: ");
-                for (int i = 0; i < previous.length; i++) System.out.print(previous[i] + " ");
+                //System.out.println("Vetor de previous parametros :::::::::::::: ");
+                //for (int i = 0; i < previous.length; i++) System.out.print(previous[i] + " ");
 
-                System.out.println("Vetor de atuais parametros :::::::::::::: " +RPNUMERICS.getFluxParams().getParams());
+                //System.out.println("Vetor de atuais parametros :::::::::::::: " +RPNUMERICS.getFluxParams().getParams());
             }
         }
 
 
 
 
-        System.out.println("Sigma sem trocar::::::::::::::: " + RPNUMERICS.getViscousProfileData().getPreviousSigma());
+        //System.out.println("Sigma sem trocar::::::::::::::: " + RPNUMERICS.getViscousProfileData().getPreviousSigma());
 
-        System.out.println("Uplus sem trocar::::::::::::::: " + RPNUMERICS.getViscousProfileData().getPreviousUPlus());
+        //System.out.println("Uplus sem trocar::::::::::::::: " + RPNUMERICS.getViscousProfileData().getPreviousUPlus());
 
 
 

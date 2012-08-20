@@ -572,7 +572,7 @@ public class RPNUMERICS {
         RealVector newUPlus = null;
             PhasePoint uPlus = RPNUMERICS.getViscousProfileData().getUplus();
             if(uPlus!=null){//TODO  Inicializar uPlus
-                System.out.println("Uqem eh uPlus dentro do update : " + uPlus);
+                //System.out.println("Uqem eh uPlus dentro do update : " + uPlus);
 
             double dist = 1E10;    //***Melhorar criterio
             double dist2 = 0.;
@@ -590,9 +590,36 @@ public class RPNUMERICS {
 
             }
             
-        
+    }
+
+
+
+    public static void updateUplusM(List<RealVector> eqPoints) {
+        RealVector newUPlus = null;
+            PhasePoint uPlus = RPNUMERICS.getViscousProfileData().getUplus();
+            if(uPlus!=null){//TODO  Inicializar uPlus
+                //System.out.println("Uqem eh uPlus dentro do update : " + uPlus);
+
+            double dist = 1E10;    //***Melhorar criterio
+            double dist2 = 0.;
+
+
+            for (RealVector realVector : eqPoints) {
+                dist2 = realVector.distance(uPlus);
+                if (dist2 < dist) {
+                    dist = dist2;
+                    newUPlus = realVector;
+                }
+            }
+
+            RPNUMERICS.getViscousProfileData().setUplusM(new PhasePoint(newUPlus));
+
+            }
 
     }
+
+
+
 
     private static void setFluxDefaultConfiguration() {
 

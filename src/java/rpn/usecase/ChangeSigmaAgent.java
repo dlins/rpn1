@@ -63,7 +63,8 @@ public class ChangeSigmaAgent extends RpModelConfigChangeAgent {
         HugoniotCurveGeom hGeom = ((NUMCONFIG) RPnDataModule.PHASESPACE.state()).hugoniotGeom();
         HugoniotCurve hCurve = (HugoniotCurve) hGeom.geomFactory().geomSource();
 
-        newSigma = hCurve.findSigma(new PhasePoint(lastPointAdded));
+        //newSigma = hCurve.findSigma(new PhasePoint(lastPointAdded));
+        newSigma = hCurve.velocity(lastPointAdded);
         RPNUMERICS.getViscousProfileData().setSigma(newSigma);
 
         Double newValue = new Double(RPNUMERICS.getViscousProfileData().getSigma());

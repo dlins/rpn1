@@ -38,7 +38,8 @@ public class SIGMA_CONFIG extends UI_ACTION_SELECTED {
         HugoniotCurve hCurve = (HugoniotCurve) ((NumConfigImpl) RPnDataModule.PHASESPACE.state()).hugoniotGeom().geomFactory().geomSource();
 
 
-        double newSigma = hCurve.findSigma(new PhasePoint(userInput));
+        //double newSigma = hCurve.findSigma(new PhasePoint(userInput));
+        double newSigma = hCurve.velocity(userInput);
         RPNUMERICS.getViscousProfileData().setSigma(newSigma);
 
 
