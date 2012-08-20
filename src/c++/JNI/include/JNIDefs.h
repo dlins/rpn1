@@ -40,6 +40,7 @@
 #define PHYSICALBOUNDARY_LOCATION             "rpnumerics/PhysicalBoundary"
 #define WAVECURVE_LOCATION                    "rpnumerics/WaveCurve"
 #define WAVECURVEORBIT_LOCATION               "rpnumerics/WaveCurveOrbit"
+#define RIEMANNPROFILE_LOCATION               "rpnumerics/RiemannProfile"
 
 
 

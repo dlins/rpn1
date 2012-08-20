@@ -398,13 +398,10 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         }
 
-
-
     }
 
 
     private void associatesPhaseSpaces(){
-
 
       //Phase Spaces associations
 

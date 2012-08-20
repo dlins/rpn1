@@ -6,11 +6,9 @@
  */
 package rpnumerics;
 
-import java.awt.Color;
 import java.awt.Shape;
 import rpnumerics.methods.contour.ContourCurve;
 import wave.multid.*;
-import wave.multid.model.AbstractPathIterator;
 import wave.multid.model.AbstractSegment;
 import wave.multid.model.AbstractSegmentAtt;
 import wave.multid.model.MultiPolyLine;
@@ -20,7 +18,6 @@ import wave.multid.model.SegmentCiclesPolyline;
 import wave.multid.model.SegmentDegradesPolyline;
 import wave.multid.model.WrongNumberOfDefPointsEx;
 import wave.multid.view.*;
-import rpn.component.MultidAdapter;
 import wave.util.*;
 import java.util.ArrayList;
 import java.util.List;

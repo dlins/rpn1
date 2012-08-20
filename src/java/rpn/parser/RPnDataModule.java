@@ -77,6 +77,10 @@ public class RPnDataModule {
     static public RPnPhaseSpaceAbstraction AUXPHASESPACE = null;
     static public RPnPhaseSpaceAbstraction LEFTPHASESPACE = null;
     static public RPnPhaseSpaceAbstraction RIGHTPHASESPACE = null;
+    static public RPnPhaseSpaceAbstraction RIEMANNPHASESPACE = null;
+
+
+
     public static Orbit ORBIT = null;
     public static boolean RESULTS = false;
     private static HugoniotCurve hugoniotCurve_;
@@ -174,6 +178,10 @@ public class RPnDataModule {
             // initialize auxiliary phase space state
             AUXPHASESPACE = new RPnPhaseSpaceAbstraction("Auxiliary Phase Space",
                     new Space("Auxiliary Space", RPNUMERICS.domainDim() * 2), new NumConfigImpl());
+            RIEMANNPHASESPACE = new RPnPhaseSpaceAbstraction("Riemann Phase Space",
+                    new Space("Riemann Space", RPNUMERICS.domainDim() ), new NumConfigImpl());
+
+
             LEFTPHASESPACE = new RPnLeftPhaseSpaceAbstraction("LeftPhase Space",
                     RPNUMERICS.domain(), new NumConfigImpl());//  RpNumerics.domain(),
             RIGHTPHASESPACE = new RPnRightPhaseSpaceAbstraction("RightPhase Space",

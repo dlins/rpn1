@@ -101,8 +101,24 @@ public class RiemannProfileAgent extends RpModelPlotAgent {
 
 
         RiemannProfileCalc rc = new RiemannProfileCalc(firstArea, waveCurveForward0, waveCurveBackward1);
+
+
+
+
+
+
         try {
-            rc.calc();
+            RiemannProfile profile = (RiemannProfile)rc.calc();
+
+            System.out.println(profile);
+
+            RiemannProfileGeomFactory riemannProfileGeomFactory = new RiemannProfileGeomFactory(rc);
+
+
+            phaseSpace_.join(riemannProfileGeomFactory.geom());
+
+
+
         } catch (RpException ex) {
 
         }
