@@ -15,6 +15,7 @@ import rpnumerics.HugoniotCurve;
 import rpnumerics.PhasePoint;
 import rpnumerics.RPNUMERICS;
 import rpnumerics.StationaryPointCalc;
+import rpnumerics.viscousprofile.ViscousProfileData;
 import wave.util.RealVector;
 
 public class SIGMA_CONFIG extends UI_ACTION_SELECTED {
@@ -52,6 +53,9 @@ public class SIGMA_CONFIG extends UI_ACTION_SELECTED {
         RPNUMERICS.getViscousProfileData().setUplus(new PhasePoint(closestPoint));
 
         List<RealVector> eqPoints = hCurve.equilPoints(closestPoint);
+
+        ViscousProfileData.instance().updateStationaryList(eqPoints);
+
 
         for (RealVector realVector : eqPoints) {
 
