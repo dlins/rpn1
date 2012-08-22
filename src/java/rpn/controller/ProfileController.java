@@ -45,9 +45,12 @@ public class ProfileController extends RpCalcController {
         // this is to avoid void notifications of enabled/disbled
         if (change.getPropertyName().compareTo("enabled") != 0) {
 
+
            super.propertyChange(change);
 
 
-        }
+
+    }
+
     }
 }

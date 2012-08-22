@@ -6,14 +6,21 @@
  */
 package rpnumerics.viscousprofile;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import rpn.plugininterface.PluginProfile;
 import rpn.plugininterface.PluginTableModel;
 import rpnumerics.PhasePoint;
 import rpnumerics.RPNUMERICS;
+import rpnumerics.RpException;
 import rpnumerics.ShockRarefactionProfile;
 import wave.util.RealVector;
 import wave.util.SimplexPoincareSection;
 import rpnumerics.Configuration;
+import rpnumerics.StationaryPoint;
+import rpnumerics.StationaryPointCalc;
 
 public class ViscousProfileData extends ShockRarefactionProfile {
 
@@ -86,17 +93,14 @@ public class ViscousProfileData extends ShockRarefactionProfile {
         Uplus_ = Uplus;
     }
 
-
     public void setUplusM(PhasePoint Uplus) {
         Uplus_ = Uplus;
-        System.out.println("Setou UplusM em :::::::::::: " +Uplus.getCoords());
+        System.out.println("Setou UplusM em :::::::::::: " + Uplus.getCoords());
     }
-
 
     public void setPreviousUplus(PhasePoint Uplus) {
         previousUPlus_ = Uplus;
     }
-
 
     public boolean changedDotSignal() {
         return ((previousDot * dot_) < 0.);
@@ -147,7 +151,6 @@ public class ViscousProfileData extends ShockRarefactionProfile {
         previousSigma = sigma;
     }
 
-
     public void setSigma(double sigma) {
         previousSigma = getSigma();
         sigma_ = sigma;
@@ -164,11 +167,9 @@ public class ViscousProfileData extends ShockRarefactionProfile {
 
     }
 
-
     public void setSigmaM(double sigma) {
         sigma_ = sigma;
     }
-
 
     public void setPreviousXZero(PhasePoint xZero) {
         previousXZero_ = xZero;
@@ -199,11 +200,29 @@ public class ViscousProfileData extends ShockRarefactionProfile {
 
     }
 
-    public void setPreviousPhysicsParams (String[] params) {
+    public List<StationaryPoint> updateStationaryList(List<RealVector> list) {
+
+        List<StationaryPoint> statList = new ArrayList<StationaryPoint>();
+
+        for (RealVector stat : list) {
+            StationaryPointCalc statCalc = new StationaryPointCalc(new PhasePoint(stat), xZero_);
+            try {
+                statList.add((StationaryPoint) statCalc.calc());
+            } catch (RpException ex) {
+                Logger.getLogger(ViscousProfileData.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        updateStationaryList(statList);
+
+        return statList;
+    }
+
+    public void setPreviousPhysicsParams(String[] params) {
         previousParams = params;
     }
 
-    public String[] getPreviousPhysicsParams () {
+    public String[] getPreviousPhysicsParams() {
         return previousParams;
     }
 
@@ -222,4 +241,6 @@ public class ViscousProfileData extends ShockRarefactionProfile {
     public void setHugoniotSpecific(boolean hugoniotSpecific_) {
         ViscousProfileData.hugoniotSpecific_ = hugoniotSpecific_;
     }
+
+    private native void updateStationaryList(List<StationaryPoint> statList);
 }

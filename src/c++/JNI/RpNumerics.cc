@@ -58,6 +58,8 @@ Physics * RpNumerics::physics_ = NULL;
 
 GridValuesFactory * RpNumerics::gridValuesFactory_ = NULL;
 
+vector<StationaryPoint *>  * RpNumerics::stationaryPointVector_=NULL;
+
 double RpNumerics::sigma = 0;
 
 /*

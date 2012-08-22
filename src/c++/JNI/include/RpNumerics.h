@@ -11,6 +11,7 @@
 
 #include "Physics.h"
 #include "GridValuesFactory.h"
+#include "StationaryPoint.h"
 
 
 
@@ -21,6 +22,7 @@ private:
     
     static  Physics * physics_;
     static GridValuesFactory * gridValuesFactory_;
+    static vector<StationaryPoint* > * stationaryPointVector_;
     
     static double sigma;
     
@@ -30,6 +32,8 @@ public:
     static  Physics & getPhysics();
 
     static GridValuesFactory & getGridFactory();
+
+    static vector<StationaryPoint *> & getStationaryPointVector();
     
     static  const FluxFunction & getFlux();
     
@@ -49,7 +53,12 @@ public:
 
 inline Physics & RpNumerics::getPhysics(){return *physics_;}
 
-inline GridValuesFactory & RpNumerics::getGridFactory(){return *gridValuesFactory_;}
+inline GridValuesFactory & RpNumerics::getGridFactory(){return *gridValuesFactory_;
+}
+
+inline vector<StationaryPoint *> & RpNumerics::getStationaryPointVector() {
+    return *stationaryPointVector_;
+}
 
 inline  const FluxFunction & RpNumerics::getFlux() {return physics_->fluxFunction();}
 
@@ -60,6 +69,7 @@ inline void RpNumerics::setPhysics(const Physics & physics){
     physics_=physics.clone();
     delete gridValuesFactory_;
     gridValuesFactory_=new GridValuesFactory(physics_);
+    stationaryPointVector_=new vector<StationaryPoint *>();
 }
 
 inline void RpNumerics::setSigma(double s){sigma=s;}
