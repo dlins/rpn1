@@ -27,18 +27,16 @@ class StationaryPoint {
 private:
 
     RealVector * coords_;
-    vector<eigenpair> epVector_;
+    int type_;
 
 public:
 
 
-    StationaryPoint(const RealVector &, std::vector<eigenpair> &ep);
+    StationaryPoint(const RealVector &, int);
+    const RealVector & coords();
+    int type();
+
     virtual ~StationaryPoint();
-
-
-    std::ostream & operator<<(std::ostream &out, const StationaryPoint &r);
-
-
 
 
 };
