@@ -127,6 +127,10 @@ public class ViscousProfileData extends ShockRarefactionProfile {
         dot_ = dot;
     }
 
+    public void setPreviousDot(double previous) {
+        previousDot = previous;
+    }
+
     public double getPreviousSigma() {
         return previousSigma;
     }
@@ -149,14 +153,14 @@ public class ViscousProfileData extends ShockRarefactionProfile {
         sigma_ = sigma;
         previousXZero_ = getXZero();
 
-        Configuration physics = RPNUMERICS.getConfiguration(RPNUMERICS.physicsID());
-        Configuration previousConfig = physics.getConfiguration("fluxfunction");
-
-        previousParams = new String[previousConfig.getParamsSize()];
-
-        for (int i = 0; i < previousConfig.getParamsSize(); i++) {
-            previousParams[i] = previousConfig.getParam(i);
-        }
+//        Configuration physics = RPNUMERICS.getConfiguration(RPNUMERICS.physicsID());
+//        Configuration previousConfig = physics.getConfiguration("fluxfunction");
+//
+//        previousParams = new String[previousConfig.getParamsSize()];
+//
+//        for (int i = 0; i < previousConfig.getParamsSize(); i++) {
+//            previousParams[i] = previousConfig.getParam(i);
+//        }
 
     }
 

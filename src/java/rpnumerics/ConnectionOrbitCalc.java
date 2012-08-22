@@ -7,8 +7,10 @@
 package rpnumerics;
 
 import java.util.List;
+import rpn.component.HugoniotCurveGeom;
+import rpn.controller.phasespace.NUMCONFIG;
+import rpn.parser.RPnDataModule;
 import rpnumerics.viscousprofile.ViscousProfileData;
-import wave.ode.ODESolution;
 import wave.util.RealMatrix2;
 import wave.util.RealVector;
 
@@ -27,6 +29,11 @@ public class ConnectionOrbitCalc implements RpCalculation {
     private String methodCalcName_;
     private ShockFlow flow_;
     private HugoniotCurve hCurve_;
+
+    private double sA = ViscousProfileData.instance().getPreviousSigma();
+    private double sB = ViscousProfileData.instance().getSigma();
+    private double dotA = ViscousProfileData.instance().getPreviousDot();
+    private double dotB = ViscousProfileData.instance().getDot();
 
     //
     // Constructor
@@ -58,9 +65,17 @@ public class ConnectionOrbitCalc implements RpCalculation {
     //
     // Methods
     //
+
     public RpSolution recalc() throws RpException {
-        return null;
+        ViscousProfileData.instance().setSigma(sB);
+        ViscousProfileData.instance().setPreviousSigma(sA);
+        ViscousProfileData.instance().setDot(dotB);
+        ViscousProfileData.instance().setPreviousDot(dotA);
+        
+        System.out.println("Entrei no recalc() de ConnectionOrbitCalc ************************");
+        return calc();
     }
+
 
     protected Orbit createConnectingOrbit() {
         return null;
@@ -92,12 +107,23 @@ public class ConnectionOrbitCalc implements RpCalculation {
         double sigmaA = ViscousProfileData.instance().getPreviousSigma();
         double sigmaB = ViscousProfileData.instance().getSigma();
 
+        //System.out.println("Valores de sA e sB : " +sA  +" e " +sB);
+        System.out.println("Valores de sigmaA e sigmaB : " +sigmaA  +" e " +sigmaB);
+
+        long t = System.currentTimeMillis();
+
         do {
             sigmaM = 0.5 * (sigmaA + sigmaB);
             
             ViscousProfileData.instance().setSigma(sigmaM);
-            
-            List<RealVector> eqPoints = hCurve_.equilPoints(sigmaM);
+
+            //*******
+            HugoniotCurveGeom hGeom = ((NUMCONFIG) RPnDataModule.PHASESPACE.state()).hugoniotGeom();
+            HugoniotCurve hCurve = (HugoniotCurve) hGeom.geomFactory().geomSource();
+            List<RealVector> eqPoints = hCurve.equilPoints(sigmaM);
+            //System.out.println("Uref da HUGONIOT : " +hCurve.getXZero().getCoords());
+            //*******
+            //List<RealVector> eqPoints = hCurve_.equilPoints(sigmaM);
             RPNUMERICS.updateUplus(eqPoints);
 
             StationaryPointCalc xZeroCalc = new StationaryPointCalc(ViscousProfileData.instance().getXZero(), ViscousProfileData.instance().getXZero());
@@ -143,23 +169,25 @@ public class ConnectionOrbitCalc implements RpCalculation {
 
 
             if (ViscousProfileData.instance().getPreviousDot() * ViscousProfileData.instance().getDot() < 0.) {
-                System.out.println("f(A)*f(M) < 0");
+                //System.out.println("f(A)*f(M) < 0");
                 sigmaB = sigmaM;
                 ViscousProfileData.instance().setPreviousSigma(sigmaA);
                 
             } else {
-                System.out.println("f(A)*f(M) > 0");
+                //System.out.println("f(A)*f(M) > 0");
                 sigmaA = sigmaM;
                 ViscousProfileData.instance().setPreviousSigma(sigmaB);
             }
 
-            System.out.println("Passo " +i +" Valores dos Uplus depois do teste da bissecao: ");
-            System.out.println(ViscousProfileData.instance().getPreviousUPlus() + "  e  " + ViscousProfileData.instance().getUplus());
-            System.out.println("Passo " +i +" Intervalo de sigma depois do teste da bissecao : " +sigmaA +" , " +sigmaB);
+            //System.out.println("Passo " +i +" Valores dos Uplus depois do teste da bissecao: ");
+            //System.out.println(ViscousProfileData.instance().getPreviousUPlus() + "  e  " + ViscousProfileData.instance().getUplus());
+            //System.out.println("Passo " +i +" Intervalo de sigma depois do teste da bissecao : " +sigmaA +" , " +sigmaB);
 
             i++;
 
         } while (i < nmax);
+
+        System.out.println("Tempo em 10 passos da bissecao :::::::::::::::::::: " +(System.currentTimeMillis()-t));
 
 
         // --- Substituir este trecho pelo concat, talvez...
@@ -176,11 +204,7 @@ public class ConnectionOrbitCalc implements RpCalculation {
         }
         // --------------------------------------------------
 
-
         Orbit result = new Orbit(pointsArray, Orbit.BOTH_DIR);
-
-        System.out.println("Primeiro ponto do result : " +result.firstPoint());
-        System.out.println("  Ultimo ponto do result : " +result.lastPoint());
 
         return new ConnectionOrbit(xZero, uPlus, result);
         

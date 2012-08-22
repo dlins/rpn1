@@ -26,8 +26,6 @@ import rpn.controller.phasespace.InvariantsReadyImpl;
 import rpn.controller.phasespace.NumConfigReadyImpl;
 import rpn.controller.phasespace.ProfileSetupReadyImpl;
 import rpn.controller.ui.*;
-import rpnumerics.ManifoldOrbit;
-import rpnumerics.Orbit;
 import rpnumerics.StationaryPoint;
 import rpnumerics.StationaryPointCalc;
 

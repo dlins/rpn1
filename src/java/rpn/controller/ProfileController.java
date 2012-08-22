@@ -7,7 +7,6 @@
 package rpn.controller;
 
 import rpn.usecase.*;
-import rpnumerics.RPNUMERICS;
 import java.beans.PropertyChangeEvent;
 
 public class ProfileController extends RpCalcController {
@@ -27,36 +26,28 @@ public class ProfileController extends RpCalcController {
     //
     // Methods
     //
+    @Override
     protected void register() {
         ChangeFluxParamsAgent.instance().addPropertyChangeListener(this);
         ChangeDirectionAgent.instance().addPropertyChangeListener(this);
+        ChangeXZeroAgent.instance().addPropertyChangeListener(this);
     }
 
+    @Override
     protected void unregister() {
         ChangeFluxParamsAgent.instance().removePropertyChangeListener(this);
         ChangeDirectionAgent.instance().removePropertyChangeListener(this);
+        ChangeXZeroAgent.instance().removePropertyChangeListener(this);
     }
 
+    @Override
     public void propertyChange(PropertyChangeEvent change) {
         // this is to avoid void notifications of enabled/disbled
         if (change.getPropertyName().compareTo("enabled") != 0) {
 
-           // fires ChangeSigma event...
-//           double oldSigma = ((ConservationShockFlow)RPNUMERICS.flow()).getSigma();
-            double oldSigma = RPNUMERICS.getViscousProfileData().getSigma();
-
            super.propertyChange(change);
 
-            
 
-            
-
-           double newSigma = RPNUMERICS.getViscousProfileData().getSigma();//((ConservationShockFlow)RPNUMERICS.flow()).getSigma();
-           ChangeSigmaAgent.instance().applyChange(
-              new java.beans.PropertyChangeEvent(this,
-              						ChangeSigmaAgent.DESC_TEXT,
-                                    new Double(oldSigma),
-                                    new Double(newSigma)));
         }
     }
 }

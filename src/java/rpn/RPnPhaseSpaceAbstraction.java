@@ -16,7 +16,6 @@ import java.util.Iterator;
 import rpn.usecase.ClassifierAgent;
 import rpn.component.util.GeometryGraphND;
 import rpn.usecase.VelocityAgent;
-import rpn.controller.RpCalcController;
 import rpn.controller.ui.UIController;
 import rpn.parser.RPnDataModule;
 import wave.multid.model.MultiGeometry;
