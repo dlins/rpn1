@@ -62,6 +62,7 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
         isGeomOutOfDate_ = false;
         installController();
 
+
     }
 
     protected RpController createUI() {

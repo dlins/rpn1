@@ -84,6 +84,30 @@ public class RPnConfig {
         }
 
 
+
+         if (physicsName.equals("CoreyQuad")) {
+            teste = new RPnFluxParamsSubject[0];
+
+            Configuration physicsConfiguration = RPNUMERICS.getConfiguration(physicsName);
+
+            Configuration fluxConfiguration = physicsConfiguration.getConfiguration("fluxfunction");
+
+            paramObserver = new RPnFluxParamsObserver(fluxConfiguration);
+//
+//            teste[0] = new RPnCoreyToStone(new String[9], new String[]{"muw", "mug", "muo", "expw", "expg", "expo", "cnw", "cng", "cno"});
+//            teste[1] = new RPnStoneToStone(new String[10], new String[]{"muw", "mug", "muo", "expw", "expg", "expow", "expog", "cnw", "cng", "cno"});
+//            teste[2] = new RPnCoreyBrooks(new String[8], new String[]{"muw", "mug", "muo", "epsl", "cnw", "cng", "cno", "lambda"});
+//            teste[3] = new RPnRadioButtonToStone(new String[3], new String[]{"", "", ""});       // aqui virao os nomes dos botoes
+//
+//            teste[0].attach(paramObserver);
+//            teste[1].attach(paramObserver);
+//            teste[2].attach(paramObserver);
+//            teste[3].attach(paramObserver);
+
+        }
+
+
+
     }
 
     public static RPnFluxParamsSubject[] getFluxParamsSubject() {
