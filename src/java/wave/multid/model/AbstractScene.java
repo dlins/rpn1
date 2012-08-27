@@ -10,14 +10,10 @@ import java.util.ArrayList;
 import java.io.FileReader;
 import java.util.Iterator;
 import rpn.RPnPhaseSpaceAbstraction;
-import rpn.component.RpGeomFactory;
-import rpn.component.RpGeometry;
 import rpn.usecase.ClassifierAgent;
 import rpn.component.util.GeometryGraphND;
 
 import rpn.usecase.VelocityAgent;
-import rpn.controller.RpCalcController;
-import rpn.usecase.ChangeFluxParamsAgent;
 
 import wave.multid.view.*;
 import wave.multid.*;

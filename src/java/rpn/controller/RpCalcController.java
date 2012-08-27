@@ -31,13 +31,13 @@ public class RpCalcController implements RpController {
     /** Registers  a controller to handle the numerics parameters changes .*/
     protected void register() {
         ChangeFluxParamsAgent.instance().addPropertyChangeListener(this);
-        ChangeSigmaAgent.instance().addPropertyChangeListener(this);
+        //ChangeSigmaAgent.instance().addPropertyChangeListener(this);          //*** testar comentado para evitar nova chamada para bifurcacao secundaria
     }
 
     /** Unregisters a controller that handle the changes in numerics parameters.*/
     protected void unregister() {
         ChangeFluxParamsAgent.instance().removePropertyChangeListener(this);
-        ChangeSigmaAgent.instance().removePropertyChangeListener(this);
+        //ChangeSigmaAgent.instance().removePropertyChangeListener(this);
     }
 
     /** Updates the properties of a geometry when any change in its geometry is made.*/

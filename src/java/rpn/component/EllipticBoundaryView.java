@@ -9,6 +9,7 @@ import wave.multid.model.*;
 import wave.multid.view.*;
 import wave.multid.DimMismatchEx;
 import java.awt.Graphics2D;
+import java.awt.geom.Line2D;
 import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,6 +73,7 @@ public class EllipticBoundaryView
         for (int i = 0; i < viewList_.size(); i++) {
             ((GeomObjView) viewList_.get(i)).draw(g);
         }
+
     }
 
     //Original update method

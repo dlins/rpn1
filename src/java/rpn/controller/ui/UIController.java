@@ -235,8 +235,6 @@ public class UIController extends ComponentUI {
                 RPnPhaseSpaceAbstraction.namePhaseSpace = ((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom()).getName();   //** acrescentei isso (Leandro)
                 panel.setName(RPnPhaseSpaceAbstraction.namePhaseSpace);
 
-                //panel.setName(((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom()).getName());
-
                 if (netStatus_.isMaster() || !(netStatus_.isOnline())) {
 
 

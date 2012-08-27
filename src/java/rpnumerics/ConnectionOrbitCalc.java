@@ -89,6 +89,7 @@ public class ConnectionOrbitCalc implements RpCalculation {
         RealVector connectionLimits = new RealVector(2);
 
         connectionLimits.sub(pUref, pUPlus);
+
         ViscousProfileData.instance().setDot(poincareLimits.dot(connectionLimits));
     }
 
@@ -107,7 +108,6 @@ public class ConnectionOrbitCalc implements RpCalculation {
         double sigmaA = ViscousProfileData.instance().getPreviousSigma();
         double sigmaB = ViscousProfileData.instance().getSigma();
 
-        //System.out.println("Valores de sA e sB : " +sA  +" e " +sB);
         System.out.println("Valores de sigmaA e sigmaB : " +sigmaA  +" e " +sigmaB);
 
         long t = System.currentTimeMillis();
@@ -117,13 +117,11 @@ public class ConnectionOrbitCalc implements RpCalculation {
             
             ViscousProfileData.instance().setSigma(sigmaM);
 
-            //*******
             HugoniotCurveGeom hGeom = ((NUMCONFIG) RPnDataModule.PHASESPACE.state()).hugoniotGeom();
             HugoniotCurve hCurve = (HugoniotCurve) hGeom.geomFactory().geomSource();
             List<RealVector> eqPoints = hCurve.equilPoints(sigmaM);
             //System.out.println("Uref da HUGONIOT : " +hCurve.getXZero().getCoords());
-            //*******
-            //List<RealVector> eqPoints = hCurve_.equilPoints(sigmaM);
+
             RPNUMERICS.updateUplus(eqPoints);
 
             StationaryPointCalc xZeroCalc = new StationaryPointCalc(ViscousProfileData.instance().getXZero(), ViscousProfileData.instance().getXZero());
@@ -165,6 +163,7 @@ public class ConnectionOrbitCalc implements RpCalculation {
             RealVector p1 = orbitXZero.lastPoint();
             RealVector p2 = orbitUPlus.lastPoint();
 
+
             updateDeltaM(p1, p2);
 
 
@@ -189,6 +188,8 @@ public class ConnectionOrbitCalc implements RpCalculation {
 
         System.out.println("Tempo em 10 passos da bissecao :::::::::::::::::::: " +(System.currentTimeMillis()-t));
 
+        System.out.println("SAIU DA BISSECAO COM SIGMA = " +ViscousProfileData.instance().getSigma());
+
 
         // --- Substituir este trecho pelo concat, talvez...
         OrbitPoint[] pointsArray = new OrbitPoint[orbitXZero.getPoints().length+orbitUPlus.getPoints().length];
@@ -205,7 +206,7 @@ public class ConnectionOrbitCalc implements RpCalculation {
         // --------------------------------------------------
 
         Orbit result = new Orbit(pointsArray, Orbit.BOTH_DIR);
-
+        
         return new ConnectionOrbit(xZero, uPlus, result);
         
     }

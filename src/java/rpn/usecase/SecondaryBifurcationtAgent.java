@@ -44,6 +44,7 @@ public class SecondaryBifurcationtAgent extends RpModelPlotAgent {
     public RpGeometry createRpGeometry(RealVector[] input) {
 
         SecondaryBifurcationGeomFactory factory = new SecondaryBifurcationGeomFactory(RPNUMERICS.createSecondaryBifurcationCurveCalc());
+
         return factory.geom();
 
     }
