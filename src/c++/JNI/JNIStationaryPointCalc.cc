@@ -50,8 +50,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_StationaryPointCalc_nativeCalc(JNIEnv 
 
     env->GetDoubleArrayRegion(equiPointArray, 0, dimension, equiPointBuffer);
 
-
-
     double refPointBuffer [dimension];
 
     env->GetDoubleArrayRegion(refPointArray, 0, dimension, refPointBuffer);
@@ -74,7 +72,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_StationaryPointCalc_nativeCalc(JNIEnv 
     const AccumulationFunction * accumFunction = &RpNumerics::getPhysics().accumulation();
 
 
-    //cout << "Parametros nos estacionarios: " << RpNumerics::getPhysics().fluxFunction().fluxParams().params()<<endl;
+    cout << "Parametros nos estacionarios: " << RpNumerics::getPhysics().fluxFunction().fluxParams().params()<<endl;
 
     Viscosity_Matrix v;
     Viscous_Profile::critical_points_linearization(fluxFunction, accumFunction,

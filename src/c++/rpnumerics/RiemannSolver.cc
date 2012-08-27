@@ -28,6 +28,101 @@ void RiemannSolver::minmax(const std::vector<Curve> &wave_curve, double &min, do
     return;
 }
 
+//void RiemannSolver::half_profile(const std::vector<Curve> &c, int subc, int subc_point,
+//                                 std::vector<RealVector> &profile){
+//    //
+//    
+//    int curvepos = subc;
+//    int pos = subc_point;
+
+//    do {
+//        //printf("Inside RiemannSolver. curvepos = %d, pos = %d\n", curvepos, pos);
+
+////        profile.push_back(c[curvepos].curve[pos]);
+
+//        // The first point of a rarefaction is not added because such a point
+//        // is already present as the last point of the previous curve, with a different speed.
+//        // Otherwise, the Riemann profile could show one point going backwards at
+//        // the junction of the rarefaction with the previous curve.
+//        //
+//        if (c[curvepos].type != RAREFACTION_CURVE ||
+//            (c[curvepos].type == RAREFACTION_CURVE && pos != 0)
+//           ) profile.push_back(c[curvepos].curve[pos]);
+
+//        // There is a particular situation, in which there are two consecutive shocks 
+//        // with the same speed, which is dealt with here.
+//        //
+//        if (c[curvepos].type == COMPOSITE_CURVE && 
+//            c[curvepos].corresponding_point_in_related_curve[pos] == 0 &&
+//            c[curvepos].index_related_curve > 0 &&
+//            c[c[curvepos].index_related_curve - 1].type == SHOCK_CURVE){
+
+//            // Add the reference point, with the speed of the current point of the composite curve:
+//            RealVector temp(c[curvepos].curve[pos]);
+//            for (int i = 0; i < temp.size() - 1; i++) temp.component(i) = c[0].curve[0].component(i);
+//                
+//            profile.push_back(temp);
+//            return;
+//        }
+
+//        // ************************************************************** //
+//        // The following part must be tested constructing an adequately flux
+//        // with several consecutive double contacts.
+//        // ************************************************************** //
+//        // There is a particular situation, in which there are more than one  
+//        // with the same speed, which is dealt with here.
+//        //
+//        if (c[curvepos].type == COMPOSITE_CURVE && 
+//            c[curvepos].corresponding_point_in_related_curve[pos] == 0 &&
+//            c[curvepos].index_related_curve > 0 &&
+//            c[c[curvepos].index_related_curve - 1].type == COMPOSITE_CURVE){
+
+//            int temp_pos = pos;
+//            int temp_curvepos = curvepos;
+
+//            while (c[curvepos].type == COMPOSITE_CURVE &&
+//                   c[curvepos].corresponding_point_in_related_curve[pos] == 0 &&
+//                   c[curvepos].index_related_curve > 0 &&
+//                   c[c[curvepos].index_related_curve - 1].type == COMPOSITE_CURVE
+//                  ){
+//                // Travel backward until the corresponding point is not the first point
+//                // of the corresponding rarefaction.
+//                //
+//                // Remember that all the points in the composite
+//                // have the same rarefaction as their related curve,
+//                // in this case we choose pos, but it could be 
+//                //     0,..., c[curvepos].related_curve.size() - 1.
+//                curvepos = c[curvepos].related_curve[pos]; 
+//                pos      = c[curvepos].corresponding_point_in_related_curve[pos];
+//            }
+
+//            // Add the reference point, with the speed of the current point of the composite curve:
+//            RealVector temp(c[curvepos].curve[pos]);
+//            temp.component(temp.size() - 1) = c[temp_curvepos].curve[temp_pos].component(temp.size() - 1);
+//                
+//            profile.push_back(temp);
+////            return;
+//        }
+//        // ************************************************************** //
+
+//        int temp_pos = c[curvepos].corresponding_point_in_related_curve[pos];
+//        int old_curvepos = curvepos;
+//        int old_pos = pos;
+
+//        curvepos     = c[curvepos].related_curve[pos];
+//        pos          = temp_pos;
+
+//        if (c[old_curvepos].type == SHOCK_CURVE){
+//            profile.push_back(c[curvepos].curve[pos]);
+//            profile[profile.size() - 1].component(profile[profile.size() - 1].size() - 1) = c[old_curvepos].curve[old_pos].component(c[old_curvepos].curve[old_pos].size() - 1);
+//            break;
+//        }
+
+//    } while (curvepos != -1 && pos != -1);
+
+//    return;
+//}
+
 void RiemannSolver::half_profile(const std::vector<Curve> &c, int subc, int subc_point,
                                  std::vector<RealVector> &profile){
     //
@@ -122,6 +217,7 @@ void RiemannSolver::half_profile(const std::vector<Curve> &c, int subc, int subc
 
     return;
 }
+
 
 //double RiemannSolver::alpha(const RealVector &p0, const RealVector &p1, const RealVector &p){
 //    double a = 0;
