@@ -38,7 +38,7 @@ CoreyQuadPhysics::~CoreyQuadPhysics() {
 void CoreyQuadPhysics::setParams(vector<string> newParams) {
 
    
-    RealVector fluxParamVector(13);
+    RealVector fluxParamVector(7);
 
     //Flux params
     for (int i = 0; i < fluxParamVector.size(); i++) {

@@ -12,14 +12,14 @@
             <PHYSICSPARAM name="muo" position="5" value ="1.0" />
             <PHYSICSPARAM name="vel" position="6" value ="1.0" />
 
-            <PHYSICSPARAM name="krw_p" position="7" value ="1.0" />
+            <!--<PHYSICSPARAM name="krw_p" position="7" value ="1.0" />
             <PHYSICSPARAM name="krg_p" position="8" value ="1.0" />
             <PHYSICSPARAM name="kro_p" position="9" value ="1.0" />
 
 
             <PHYSICSPARAM name="cnw" position="10" value ="0.0" />
             <PHYSICSPARAM name="cng" position="11" value ="0.0" />
-            <PHYSICSPARAM name="cno" position="12" value ="0.0" />
+            <PHYSICSPARAM name="cno" position="12" value ="0.0" />-->
            
 
         </PHYSICSCONFIG>

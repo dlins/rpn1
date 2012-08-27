@@ -2,9 +2,8 @@
 
 CoreyQuad_Params::CoreyQuad_Params(const double grw, const double grg, const double gro,
                            const double muw, const double mug, const double muo,
-                           const double vel,
-                           const double krw_p, const double krg_p, const double kro_p,
-                           const double cnw, const double cng, const double cno) : FluxParams(RealVector(13)){
+                           const double vel
+                           ) : FluxParams(RealVector(7)){
     component(0, grw);
     component(1, grg);
     component(2, gro);
@@ -15,16 +14,10 @@ CoreyQuad_Params::CoreyQuad_Params(const double grw, const double grg, const dou
 
     component(6, vel);
 
-    component(7, krw_p);
-    component(8, krg_p);
-    component(9, kro_p);
-
-    component(10, cnw);
-    component(11, cng);
-    component(12, cno);
+   
 }
 
-CoreyQuad_Params::CoreyQuad_Params() : FluxParams(RealVector(13)){
+CoreyQuad_Params::CoreyQuad_Params() : FluxParams(RealVector(7)){
     component(0, 0.0);
     component(1, 0.0);
     component(2, 0.0);
@@ -35,13 +28,7 @@ CoreyQuad_Params::CoreyQuad_Params() : FluxParams(RealVector(13)){
 
     component(6, 1.0);
 
-    component(7, 1.0);
-    component(8, 1.0);
-    component(9, 1.0);
-
-    component(10, 0.0);
-    component(11, 0.0);
-    component(12, 0.0);
+  
 }
 
 CoreyQuad_Params::CoreyQuad_Params(const RealVector & params):FluxParams(params){}

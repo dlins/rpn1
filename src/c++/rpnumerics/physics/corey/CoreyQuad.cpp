@@ -28,109 +28,126 @@ int CoreyQuad::jet(const WaveState &w, JetMatrix &m, int degree) const {
 
     double vel = fluxParams().component(6);
 
-    double krw_p = fluxParams().component(7);
-    double krg_p = fluxParams().component(8);
-    double kro_p = fluxParams().component(9);
-
-    double cnw = fluxParams().component(10);
-    double cng = fluxParams().component(11);
-    double cno = fluxParams().component(12);
+//    double krw_p = fluxParams().component(7);
+//    double krg_p = fluxParams().component(8);
+//    double kro_p = fluxParams().component(9);
+//
+//    double cnw = fluxParams().component(10);
+//    double cng = fluxParams().component(11);
+//    double cno = fluxParams().component(12);
 
 
     double sw = w(0);
     double so = w(1);
     double sg = 1.0 - sw - so;
-    double CN = cnw + cng + cno;
-
-
+//    double CN = cnw + cng + cno;
+    
+    
+    
+    //    double CN = cnw + cng + cno;
 
     double kw, dkw_dsw, dkw_dso, d2kw_dsw2, d2kw_dswso, d2kw_dso2;
-    double swcnw = sw - cnw;
-    if (swcnw < 0.) {
-        kw = 0.;
-        dkw_dsw = 0.;
-        dkw_dso = 0.;
+//    double swcnw = sw - cnw;
+//    if (swcnw < 0.){ 
+//        kw         = 0.;
+//        dkw_dsw    = 0.;
+//        dkw_dso    = 0.;
 
-        d2kw_dsw2 = 0.;
-        d2kw_dswso = 0.;
-        d2kw_dso2 = 0.;
-    } else if (swcnw > 1. - CN) {
-        kw = krw_p;
-        dkw_dsw = 0.;
-        dkw_dso = 0.;
+//        d2kw_dsw2  = 0.;
+//        d2kw_dswso = 0.;
+//        d2kw_dso2  = 0.;
+//    }
+//    else if (swcnw > 1. - CN) {
+//        kw         = krw_p;
+//        dkw_dsw    = 0.;
+//        dkw_dso    = 0.;
 
-        d2kw_dsw2 = 0.;
-        d2kw_dswso = 0.;
-        d2kw_dso2 = 0.;
-    } else {
-        double denkw = krw_p / ((1. - CN)*(1. - CN));
-        kw = denkw * swcnw*swcnw;
-        dkw_dsw = 2. * denkw*swcnw;
-        dkw_dso = 0.;
+//        d2kw_dsw2  = 0.;
+//        d2kw_dswso = 0.;
+//        d2kw_dso2  = 0.;
+//    }
+//    else {
+//        double denkw = krw_p/((1. - CN)*(1. - CN));
+        kw         = sw * sw;
+        dkw_dsw    = 2. * sw;
+        dkw_dso    = 0.;
 
-        d2kw_dsw2 = 2. * denkw;
+        d2kw_dsw2  = 2.;
         d2kw_dswso = 0.;
-        d2kw_dso2 = 0.;
-    }
+        d2kw_dso2  = 0.;
+//    }
 
     double ko, dko_dsw, dko_dso, d2ko_dsw2, d2ko_dswso, d2ko_dso2;
-    double socno = so - cno;
-    if (socno < 0.) {
-        ko = 0.;
-        dko_dsw = 0.;
-        dko_dso = 0.;
+//    double socno = so - cno;
+//    if (socno < 0.){ 
+//        ko         = 0.;
+//        dko_dsw    = 0.;
+//        dko_dso    = 0.;
 
-        d2ko_dsw2 = 0.;
-        d2ko_dswso = 0.;
-        d2ko_dso2 = 0.;
-    } else if (socno > 1. - CN) {
-        ko = kro_p;
-        dko_dsw = 0.;
-        dko_dso = 0.;
+//        d2ko_dsw2  = 0.;
+//        d2ko_dswso = 0.;
+//        d2ko_dso2  = 0.;
+//    }
+//    else if (socno > 1. - CN) {
+//        ko         = kro_p;
+//        dko_dsw    = 0.;
+//        dko_dso    = 0.;
 
-        d2ko_dsw2 = 0.;
-        d2ko_dswso = 0.;
-        d2ko_dso2 = 0.;
-    } else {
-        double denko = kro_p / ((1. - CN)*(1. - CN));
-        ko = denko * socno*socno;
-        dko_dsw = 0.;
-        dko_dso = 2. * denko*socno;
+//        d2ko_dsw2  = 0.;
+//        d2ko_dswso = 0.;
+//        d2ko_dso2  = 0.;
+//    }
+//    else {
+//        double denko = kro_p/((1. - CN)*(1. - CN));
+        ko         = so * so;
+        dko_dsw    = 0.;
+        dko_dso    = 2. * so;
 
-        d2ko_dsw2 = 0.;
+        d2ko_dsw2  = 0.;
         d2ko_dswso = 0.;
-        d2ko_dso2 = 2. * denko;
-    }
+        d2ko_dso2  = 2.;
+//    }
 
     double kg, dkg_dsw, dkg_dso, d2kg_dsw2, d2kg_dswso, d2kg_dso2;
-    double sgcng = sg - cng;
-    if (sgcng < 0.) {
-        kg = 0.;
-        dkg_dsw = 0.;
-        dkg_dso = 0.;
+//    double sgcng = sg - cng;
+//    if (sgcng < 0.){
+//        kg         = 0.;
+//        dkg_dsw    = 0.;
+//        dkg_dso    = 0.;
 
-        d2kg_dsw2 = 0.;
-        d2kg_dswso = 0.;
-        d2kg_dso2 = 0.;
-    } else if (sgcng > 1. - CN) {
-        kg = krg_p;
-        dkg_dsw = 0.;
-        dkg_dso = 0.;
+//        d2kg_dsw2  = 0.;
+//        d2kg_dswso = 0.;
+//        d2kg_dso2  = 0.;
+//    }
+//    else if (sgcng > 1. - CN){
+//        kg         = krg_p;
+//        dkg_dsw    = 0.;
+//        dkg_dso    = 0.;
 
-        d2kg_dsw2 = 0.;
-        d2kg_dswso = 0.;
-        d2kg_dso2 = 0.;
-    } else {
-        double denkg = krg_p / ((1. - CN)*(1. - CN));
-        kg = denkg * sgcng*sgcng;
-        dkg_dsw = -2. * denkg*sgcng;
-        dkg_dso = -2. * denkg*sgcng;
-        ;
+//        d2kg_dsw2  = 0.;
+//        d2kg_dswso = 0.;
+//        d2kg_dso2  = 0.;
+//    }
+//    else {
+//        double denkg = krg_p/((1. - CN)*(1. - CN));
+        kg         = sg * sg;
+        dkg_dsw    = -2. * sg;
+        dkg_dso    = -2. * sg;;
 
-        d2kg_dsw2 = 2. * denkg;
-        d2kg_dswso = 2. * denkg;
-        d2kg_dso2 = 2. * denkg;
-    }
+        d2kg_dsw2  = 2.;
+        d2kg_dswso = 2.;
+        d2kg_dso2  = 2.;
+//    }
+    
+    
+    
+    
+    
+    
+
+
+
+    
 
     double lkw = kw / muw; // Water mobility
     double lko = ko / muo; // Oil mobility
