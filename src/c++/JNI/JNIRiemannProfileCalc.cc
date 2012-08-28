@@ -131,7 +131,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
             int curveIndex = (env)->CallIntMethod(waveCurveOrbit, getCurveIndexMethodID);
             int curveType = (env)->CallIntMethod(waveCurveOrbit, getCurveTypeMethodID);
 
-            //            cout << "Curva para frente C: " << pointBuffer[0] << " " << pointBuffer[1] << " " << correspondingCurveIndex << " " << correspondingPointIndex << " " << curveIndex << " " << curveType << endl;
+//            cout << "Curva para frente C: " << pointBuffer[0] << " " << pointBuffer[1] << " " << correspondingCurveIndex << " " << correspondingPointIndex << " " << curveIndex << " " << curveType << endl;
 
 
         }
@@ -189,7 +189,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
             int curveIndex = (env)->CallIntMethod(waveCurveOrbit, getCurveIndexMethodID);
             int curveType = (env)->CallIntMethod(waveCurveOrbit, getCurveTypeMethodID);
 
-            //            cout << "Curva para tras C: " << pointBuffer[0] << " " << pointBuffer[1] << " " << correspondingCurveIndex << " " << correspondingPointIndex << " " << curveIndex << " " << curveType << endl;
+            //                        cout << "Curva para tras C: " << pointBuffer[0] << " " << pointBuffer[1] << " " << correspondingCurveIndex << " " << correspondingPointIndex << " " << curveIndex << " " << curveType << endl;
 
 
         }

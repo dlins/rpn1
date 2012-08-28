@@ -147,10 +147,27 @@ void RiemannSolver::half_profile(const std::vector<Curve> &c, int subc, int subc
         // There is a particular situation, in which there are two consecutive shocks 
         // with the same speed, which is dealt with here.
         //
+        
+//         printf("RiemannProfile. Two consecutive shocks detected.\n");
+            printf("    curvepos (this curve\'s index) = %d\n", curvepos);
+            printf("    type (1 = R, 2 = S, 3 = C)     = %d\n", c[curvepos].type);
+            printf("    corresponding curve            = %d\n", c[curvepos].index_related_curve);
+            printf("    corresponding curve (other)    = %d\n", c[curvepos].related_curve[pos]);
+            printf("    corresponding point            = %d\n", c[curvepos].corresponding_point_in_related_curve[pos]);
+
+        
+        
+        
         if (c[curvepos].type == COMPOSITE_CURVE && 
             c[curvepos].corresponding_point_in_related_curve[pos] == 0 &&
             c[curvepos].index_related_curve > 0 &&
             c[c[curvepos].index_related_curve - 1].type == SHOCK_CURVE){
+
+            // FOR TEST PURPOSES, ELIMINATE AFTERWARDS //
+           
+
+            // FOR TEST PURPOSES, ELIMINATE AFTERWARDS //
+
 
             // Add the reference point, with the speed of the current point of the composite curve:
             RealVector temp(c[curvepos].curve[pos]);
@@ -206,6 +223,8 @@ void RiemannSolver::half_profile(const std::vector<Curve> &c, int subc, int subc
 
         curvepos     = c[curvepos].related_curve[pos];
         pos          = temp_pos;
+
+//        int steps = previous(const std::vector<Curve> &c, int current_curve, int current_point, int number_of_steps, int &previous_curve, int &previous_point);
 
         if (c[old_curvepos].type == SHOCK_CURVE){
             profile.push_back(c[curvepos].curve[pos]);
