@@ -160,8 +160,8 @@ void RiemannSolver::half_profile(const std::vector<Curve> &c, int subc, int subc
         
         if (c[curvepos].type == COMPOSITE_CURVE && 
             c[curvepos].corresponding_point_in_related_curve[pos] == 0 &&
-            c[curvepos].index_related_curve > 0 &&
-            c[c[curvepos].index_related_curve - 1].type == SHOCK_CURVE){
+            c[curvepos].related_curve[pos] > 0 &&
+            c[c[curvepos].related_curve[pos] - 1].type == SHOCK_CURVE){
 
             // FOR TEST PURPOSES, ELIMINATE AFTERWARDS //
            
