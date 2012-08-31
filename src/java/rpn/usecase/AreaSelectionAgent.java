@@ -113,6 +113,10 @@ public class AreaSelectionAgent extends RpModelPlotAgent {
                     RealVector resolution = new RealVector(RPNUMERICS.domainDim());
                     //resolution.setElement(0, Integer.parseInt(Re1));
                     //resolution.setElement(1, Integer.parseInt(Re2));
+//                String Re1 = JOptionPane.showInputDialog(null, "Resolucao horizontal", "Resolucao", JOptionPane.QUESTION_MESSAGE);
+//                String Re2 = JOptionPane.showInputDialog(null, "Resolucao vertical", "Resolucao", JOptionPane.QUESTION_MESSAGE);
+
+                
 
                     if (RPNUMERICS.domainDim() == 2) {
                         area = new Area(resolution, GeometryGraph.topRight, GeometryGraph.downLeft);
@@ -133,10 +137,12 @@ public class AreaSelectionAgent extends RpModelPlotAgent {
             }
 
 
+
         //}
 
 
                 System.out.println("Tamanho da lista de areas : " +getListArea().size());
+//        }
     }
 
 

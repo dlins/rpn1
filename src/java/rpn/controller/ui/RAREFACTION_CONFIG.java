@@ -18,6 +18,7 @@ import rpn.usecase.PhysicalBoundaryPlotAgent;
 import rpn.usecase.PointLevelCurvePlotAgent;
 import rpn.usecase.RarefactionExtensionCurvePlotAgent;
 import rpn.usecase.RarefactionOrbitPlotAgent;
+import rpn.usecase.RiemannProfileAgent;
 import rpn.usecase.ShockCurvePlotAgent;
 import rpn.usecase.WaveCurvePlotAgent;
 import wave.util.RealVector;
@@ -42,6 +43,7 @@ public class RAREFACTION_CONFIG extends UI_ACTION_SELECTED {
         ChangeOrbitLevel.instance().setEnabled(true);
         EllipticBoundaryAgent.instance().setEnabled(true);
         PhysicalBoundaryPlotAgent.instance().setEnabled(true);
+        RiemannProfileAgent.instance().setEnabled(true);
         WaveCurvePlotAgent.instance().setEnabled(true);
 
        

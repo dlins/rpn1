@@ -234,7 +234,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
                             listResolution.add(curveCalc.getParams().getResolution());
 
                         } else {
-                            int[] resolution = {1, 1};
+                            int[] resolution = {100, 100};
                             listResolution.add(resolution);
                         }
                         // ---------------------------------------------------------------
@@ -253,7 +253,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
 
                     // ----------------------------------- Evita erro quando no PhaseDiagram
                     else {
-                        int[] resolution = {1, 1};
+                        int[] resolution = {10, 10};
                         listResolution.add(resolution);
                     }
                     // -----------------------------------

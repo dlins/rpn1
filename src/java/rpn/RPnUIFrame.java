@@ -168,11 +168,13 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 //toolBar_.add(BifurcationRefineAgent.instance().getContainer());     //** Leandro
 
                 toolBar_.add(RarefactionExtensionCurvePlotAgent.instance().getContainer());
-
+                toolBar_.add(RiemannProfileAgent.instance().getContainer());
 
                 toolBar_.add(AreaSelectionAgent.instance().getContainer());     //** Edson/Leandro
                 toolBar_.add(ClassifierAgent.instance().getContainer());        //** Leandro
                 toolBar_.add(VelocityAgent.instance().getContainer());        //** Leandro
+
+
 
                 toolBar_.revalidate();
 
@@ -396,13 +398,10 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         }
 
-
-
     }
 
 
     private void associatesPhaseSpaces(){
-
 
       //Phase Spaces associations
 
