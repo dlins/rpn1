@@ -70,14 +70,14 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
 
                 int xCursorPos = event.getPoint().x;
                 int yCursorPos = event.getPoint().y;
-//                if (UIController.instance().getState() instanceof TRACKPOINT_CONFIG) {
+                if (UIController.instance().getState() instanceof TRACKPOINT_CONFIG) {
 
                     Coords2D dcCoords = new Coords2D(xCursorPos, yCursorPos);
                     CoordsArray wcCoords = new Coords2D();
                     panel.scene().getViewingTransform().dcInverseTransform(dcCoords, wcCoords);
                     TrackPointAgent.instance().trackPoint(wcCoords);
 
-//                }
+                }
 
 
                 if (absComplete_) {

@@ -8,6 +8,7 @@ package rpn;
 import rpn.usecase.*;
 import rpn.parser.*;
 import rpnumerics.RPNUMERICS;
+import wave.multid.DimMismatchEx;
 import wave.util.Boundary;
 import java.awt.print.PrinterJob;
 import javax.swing.*;
@@ -26,6 +27,9 @@ import rpn.usecase.VelocityAgent;
 import rpn.controller.ui.*;
 import rpn.message.*;
 import rpnumerics.ShockProfile;
+import wave.multid.Space;
+import wave.util.RealVector;
+import wave.util.RectBoundary;
 
 public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
@@ -76,10 +80,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     public static String dir = "";
     private RPnPhaseSpaceFrame frameZoom = null;
     private ArrayList<RPnPhaseSpaceFrame> listFrameZoom = new ArrayList();
-
+    private RPnPhaseSpaceFrame[] riemannFrames_;
 
     //***
-
     //Construct the frame
     public RPnUIFrame(RPnMenuCommand command) {
         enableEvents(AWTEvent.WINDOW_EVENT_MASK);
@@ -91,6 +94,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             propertyChange(new PropertyChangeEvent(command, "aplication state", null, null));
             jbInit();
             phaseSpaceFramesInit(RPNUMERICS.boundary());
+            riemanProfileFramesInit();
             associatesPhaseSpaces();
             associatePhaseSpacesAndCurvesList();
             createPanelsChooser();
@@ -258,65 +262,127 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         // Init Main Frame
         //for (int i = 0; i < numOfPanelZoom; i++) {
 
-            wave.multid.view.ViewingTransform viewingTransf =
-                    ((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(
-                    0)).createTransform(clipping);
-            try {
-                wave.multid.view.Scene scene = null;
+        wave.multid.view.ViewingTransform viewingTransf =
+                ((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(
+                0)).createTransform(clipping);
+        try {
+            wave.multid.view.Scene scene = null;
 
-                if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("Phase Space"))
+            if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("Phase Space")) {
                 scene = RPnDataModule.PHASESPACE.createScene(viewingTransf,
                         new wave.multid.view.ViewingAttr(Color.black));
-
-                if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("RightPhase Space"))
-                scene = RPnDataModule.RIGHTPHASESPACE.createScene(viewingTransf,
-                        new wave.multid.view.ViewingAttr(Color.black));
-
-                if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("LeftPhase Space"))
-                scene = RPnDataModule.LEFTPHASESPACE.createScene(viewingTransf,
-                        new wave.multid.view.ViewingAttr(Color.black));
-
-
-                RPnPhaseSpacePanel panel = new RPnPhaseSpacePanel(scene);
-                panel.setBackground(Color.red);
-
-                frameZoom = new RPnPhaseSpaceFrame(scene, commandMenu_);
-                frameZoom.setTitle("Zoom " +RPnPhaseSpaceAbstraction.namePhaseSpace);
-
-                frameZoom.jPanel5.removeAll();
-                frameZoom.jPanel5.add(closeButton);
-
-                UIController.instance().install(frameZoom.phaseSpacePanel());
-
-                setFramesPosition(frameZoom);
-                frameZoom.pack();
-                frameZoom.setVisible(true);
-                
-                listFrameZoom.add(frameZoom);
-
-                //*** Tem que ser melhorado
-                closeButton.addActionListener(
-                new java.awt.event.ActionListener() {
-
-                    public void actionPerformed(ActionEvent e) {
-                        frameZoom.dispose();
-                        for(int i=0; i<listFrameZoom.size(); i++){
-                            if (listFrameZoom.get(i).phaseSpacePanel().getName().equals(RPnPhaseSpaceAbstraction.namePhaseSpace))
-                            listFrameZoom.get(i).dispose();
-                        }
-
-                    }
-                });
-
-
-            } catch (wave.multid.DimMismatchEx dex) {
-                dex.printStackTrace();
             }
 
+            if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("RightPhase Space")) {
+                scene = RPnDataModule.RIGHTPHASESPACE.createScene(viewingTransf,
+                        new wave.multid.view.ViewingAttr(Color.black));
+            }
+
+            if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("LeftPhase Space")) {
+                scene = RPnDataModule.LEFTPHASESPACE.createScene(viewingTransf,
+                        new wave.multid.view.ViewingAttr(Color.black));
+            }
+
+
+            RPnPhaseSpacePanel panel = new RPnPhaseSpacePanel(scene);
+            panel.setBackground(Color.red);
+
+            frameZoom = new RPnPhaseSpaceFrame(scene, commandMenu_);
+            frameZoom.setTitle("Zoom " + RPnPhaseSpaceAbstraction.namePhaseSpace);
+
+            frameZoom.jPanel5.removeAll();
+            frameZoom.jPanel5.add(closeButton);
+
+            UIController.instance().install(frameZoom.phaseSpacePanel());
+
+            setFramesPosition(frameZoom);
+            frameZoom.pack();
+            frameZoom.setVisible(true);
+
+            listFrameZoom.add(frameZoom);
+
+            //*** Tem que ser melhorado
+            closeButton.addActionListener(
+                    new java.awt.event.ActionListener() {
+
+                        public void actionPerformed(ActionEvent e) {
+                            frameZoom.dispose();
+                            for (int i = 0; i < listFrameZoom.size(); i++) {
+                                if (listFrameZoom.get(i).phaseSpacePanel().getName().equals(RPnPhaseSpaceAbstraction.namePhaseSpace)) {
+                                    listFrameZoom.get(i).dispose();
+                                }
+                            }
+
+                        }
+                    });
+
+
+        } catch (wave.multid.DimMismatchEx dex) {
+            dex.printStackTrace();
+        }
+
         //}
-        
+
     }
     //***
+
+//    public void updateRiemannFrames(){
+//        
+//        for (int i = 0; i < frames_.length; i++) {
+//            RPnPhaseSpaceFrame rPnPhaseSpaceFrame = frames_[i];
+//            
+//            rPnPhaseSpaceFrame.phaseSpacePanel().u
+//            
+//        }
+//        
+//        
+//        
+//        
+//    }
+    private void riemanProfileFramesInit() {
+
+
+        RealVector min = new RealVector(3);
+        RealVector max = new RealVector(3);
+
+        min.setElement(0, 0);
+        min.setElement(1, 0);
+        min.setElement(2, 0);
+
+
+        max.setElement(0, 1);
+        max.setElement(1, 0.2);
+        max.setElement(2, 0.2);
+
+
+        RectBoundary boundary = new RectBoundary(min, max);
+        Space riemanProfileSpace = new Space("RiemannProfileSpace", RPNUMERICS.domainDim() + 1);
+        riemannFrames_ = new RPnPhaseSpaceFrame[RPNUMERICS.domainDim()];
+
+        for (int i = 0; i < riemannFrames_.length; i++) {
+            int[] testeArrayIndex = {0, i+1};
+
+            wave.multid.graphs.ClippedShape clipping = new wave.multid.graphs.ClippedShape(boundary);
+            RPnProjDescriptor projDescriptor = new RPnProjDescriptor(riemanProfileSpace, "teste", 400, 400, testeArrayIndex, false);
+            wave.multid.view.ViewingTransform riemanTesteTransform = projDescriptor.createTransform(clipping);
+
+            try {
+                wave.multid.view.Scene riemannScene = RPnDataModule.RIEMANNPHASESPACE.createScene(riemanTesteTransform, new wave.multid.view.ViewingAttr(Color.black));
+                riemannFrames_[i] = new RPnPhaseSpaceFrame(riemannScene, commandMenu_);
+
+            } catch (DimMismatchEx ex) {
+                ex.printStackTrace();
+            }
+
+
+            riemannFrames_[i].pack();
+            riemannFrames_[i].setVisible(true);
+
+        }
+
+
+
+    }
 
     //** para criar os frames (paineis) - incluindo os auxiliares
     protected void phaseSpaceFramesInit(Boundary boundary) {
@@ -400,10 +466,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
     }
 
+    private void associatesPhaseSpaces() {
 
-    private void associatesPhaseSpaces(){
-
-      //Phase Spaces associations
+        //Phase Spaces associations
 
         ArrayList<RPnPhaseSpaceAbstraction> leftPhaseSpaceArray = new ArrayList<RPnPhaseSpaceAbstraction>();
         ArrayList<RPnPhaseSpaceAbstraction> rightPhaseSpaceArray = new ArrayList<RPnPhaseSpaceAbstraction>();
@@ -417,13 +482,12 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         RPnPhaseSpaceManager.instance().register(RPnDataModule.RIGHTPHASESPACE, rightPhaseSpaceArray);
     }
 
-
-    private void associatePhaseSpacesAndCurvesList(){
+    private void associatePhaseSpacesAndCurvesList() {
         //Phase Spaces and curves list associations
 
-        RPnCurvesList curvesFrame = new RPnCurvesList("Main",RPnDataModule.PHASESPACE);
-        RPnCurvesList leftFrame = new RPnCurvesList("Left",RPnDataModule.LEFTPHASESPACE);
-        RPnCurvesList rightFrame = new RPnCurvesList("Right",RPnDataModule.RIGHTPHASESPACE);
+        RPnCurvesList curvesFrame = new RPnCurvesList("Main", RPnDataModule.PHASESPACE);
+        RPnCurvesList leftFrame = new RPnCurvesList("Left", RPnDataModule.LEFTPHASESPACE);
+        RPnCurvesList rightFrame = new RPnCurvesList("Right", RPnDataModule.RIGHTPHASESPACE);
 
 
         RPnDataModule.PHASESPACE.attach(curvesFrame);
@@ -441,7 +505,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private void createPanelsChooser() {
 
         int rows = getPhaseSpaceFrames().length + getAuxFrames().length;
-        
+
         panelsChooserPanel_.setLayout(new GridLayout(rows, 1));
 
         for (RPnPhaseSpaceFrame mainFrame : getPhaseSpaceFrames()) {
