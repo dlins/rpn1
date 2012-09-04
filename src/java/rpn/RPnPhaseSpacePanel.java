@@ -228,11 +228,11 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
 
 
 //        if (RPNUMERICS.domainDim() == 2) {
-
+//
 //            GeometryGraph geom = new GeometryGraph();
 //            geom.markPoints(scene());
-//            geom.paintComponent(g, scene(),this);
-
+////            geom.paintComponent(g, scene(),this);
+//
 //        }
 
 //        if (RPNUMERICS.domainDim() == 3) {
