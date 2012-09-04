@@ -99,16 +99,16 @@ public class RiemannProfileAgent extends RpModelPlotAgent {
         List<Area> areaList = AreaSelectionAgent.instance().getListArea();
 
 
-//        Area firstArea = areaList.get(0);
+        Area firstArea = areaList.get(0);
         
         
-        
-        RealVector p1 = new RealVector("0.0075 0.1221");
-        RealVector p2 = new RealVector("0.2385 0.0231");
-        RealVector pres = new RealVector("10 10");
-        
-        Area firstArea = new Area(pres,p1,p2);
-        
+//        
+//        RealVector p1 = new RealVector("0.0075 0.1221");
+//        RealVector p2 = new RealVector("0.2385 0.0231");
+//        RealVector pres = new RealVector("10 10");
+//        
+//        Area firstArea = new Area(pres,p1,p2);
+//        
         
 
         RiemannProfileCalc rc = new RiemannProfileCalc(firstArea, waveCurveForward0, waveCurveBackward1);
