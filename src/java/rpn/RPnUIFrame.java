@@ -80,7 +80,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     public static String dir = "";
     private RPnPhaseSpaceFrame frameZoom = null;
     private ArrayList<RPnPhaseSpaceFrame> listFrameZoom = new ArrayList();
-    private RPnPhaseSpaceFrame[] riemannFrames_;
+    private static RPnPhaseSpaceFrame[] riemannFrames_;
 
     //***
     //Construct the frame
@@ -376,13 +376,17 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
 
             riemannFrames_[i].pack();
-            riemannFrames_[i].setVisible(true);
+
 
         }
 
 
 
     }
+
+   
+    
+    
 
     //** para criar os frames (paineis) - incluindo os auxiliares
     protected void phaseSpaceFramesInit(Boundary boundary) {
@@ -1060,6 +1064,11 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         int newwidth = (int) 100;
         int newheight = (int) 100;
         component.setLocation(newwidth, newheight);
+    }
+    
+    
+     public static RPnPhaseSpaceFrame[] getRiemannFrames() {
+        return riemannFrames_;
     }
 
     //** retorna os frames para representar o phaseSpace e desenhar as curvas

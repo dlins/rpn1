@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.swing.JButton;
+import rpn.RPnPhaseSpaceFrame;
+import rpn.RPnUIFrame;
 import rpn.component.*;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UI_ACTION_SELECTED;
@@ -44,9 +46,9 @@ public class RiemannProfileAgent extends RpModelPlotAgent {
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {
+        
+        return null;
 
-        DoubleContactGeomFactory factory = new DoubleContactGeomFactory(RPNUMERICS.createDoubleContactCurveCalc());
-        return factory.geom();
 
     }
 
@@ -131,6 +133,19 @@ public class RiemannProfileAgent extends RpModelPlotAgent {
         } catch (RpException ex) {
 
         }
+        
+        
+        
+        for (RPnPhaseSpaceFrame frame : RPnUIFrame.getRiemannFrames()) {
+            
+            frame.setVisible(true);
+            
+        }
+        
+        
+        
+        
+        
 
     }
 
