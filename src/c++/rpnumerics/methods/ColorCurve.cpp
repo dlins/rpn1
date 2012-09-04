@@ -172,7 +172,7 @@ void ColorCurve::Left_Newton_improvement(const RealVector &input, const int type
         count++;
     } while (deltaNorm > epsilon2);
 
-    cout << "Saindo de LN(" << count << "). Input = " << input << ", U = " << U[0]<<" "<<U[1] << endl;
+    // cout << "Saindo de LN(" << count << "). Input = " << input << ", U = " << U[0]<<" "<<U[1] << endl;
 
     // Output
     for (int i = 0; i < dim; i++) out.component(i) = U[i];
@@ -312,7 +312,7 @@ void ColorCurve::Right_Newton_improvement(const RealVector &input, const int typ
         count++;
     } while (deltaNorm > epsilon2);
 
-    cout << "Saindo de RN(" << count << "). Input = " << input << ", U = " << U[0]<<" "<<U[1] << endl;
+    // cout << "Saindo de RN(" << count << "). Input = " << input << ", U = " << U[0]<<" "<<U[1] << endl;
 
     // Output
     for (int i = 0; i < dim; i++) out.component(i) = U[i];
@@ -506,17 +506,11 @@ int ColorCurve::classify_point(RealVector &p, double &s, std::vector<double> &ei
         increment *= 2;
     }
 
-    cout<<"Passei por aqui "<< signature<<endl;
-    
-    
     // We reuse the increment integer as a counter
     increment = 0;
     while(complex[increment] != 0)  {
-        cout<<"Vou fazer algo "<<endl;
         signature.replace(complex[increment], 1, sc);
         increment++;
-        cout<<"Fiz "<<signature<<endl;
-
     }
 
     return type;
@@ -533,19 +527,29 @@ void ColorCurve::classify_segment(RealVector &p, RealVector &q,
     int type_p = classify_point(p, s_p, eigenvalue_p, ct_p);
     int type_q = classify_point(q, s_q, eigenvalue_q, ct_q);
 
-    cout<<"Sai "<<ct_p<<" "<<ct_q<<endl;
-    
     int dim = p.size();
+    int fam = eigenvalue_p.size();
+
     HugoniotPolyLine hpl;
+    {
+        hpl.point.resize(2);
+        {
+            hpl.point[0].resize(dim);
+            hpl.point[1].resize(dim);
+        }
+        hpl.speed.resize(2);
+        hpl.eigenvalue.resize(2);
+        {
+            hpl.eigenvalue[0].resize(fam);
+            hpl.eigenvalue[1].resize(fam);
+        }
+    }
 
     // One of the points (or both) could not be classfied. (Output as is.)
     //
     if (type_p == UNCLASSIFIABLE_POINT || type_q == UNCLASSIFIABLE_POINT) {
         hpl.type = UNCLASSIFIABLE_POINT;
-
-        hpl.point.resize(2);
-        hpl.point[0].resize(dim);
-        hpl.point[1].resize(dim);
+        hpl.signature = "0000";
 
         for (int j = 0; j < dim; j++) {
             hpl.point[0].component(j) = p.component(j);
@@ -554,22 +558,13 @@ void ColorCurve::classify_segment(RealVector &p, RealVector &q,
 
         // Unclassifications occurs because of an error in the speed, these values are not trustable.
         //
-        hpl.speed.resize(2);
         hpl.speed[0] = s_p;
         hpl.speed[1] = s_q;
-
-        hpl.eigenvalue.resize(2);
-        int fam = eigenvalue_p.size();
-        hpl.eigenvalue[0].resize(fam);
-        hpl.eigenvalue[1].resize(fam);
 
         for (int j = 0; j < fam; j++) {
             hpl.eigenvalue[0].component(j) = eigenvalue_p[j];
             hpl.eigenvalue[1].component(j) = eigenvalue_q[j];
         }
-        hpl.signature.resize(2);
-        hpl.signature[0] = ct_p;
-        hpl.signature[1] = ct_q;
 
         classified_curve.push_back(hpl);
     }
@@ -577,32 +572,20 @@ void ColorCurve::classify_segment(RealVector &p, RealVector &q,
     //
     else if (type_p == type_q) {
         hpl.type = type_p;
-
-        hpl.point.resize(2);
-        hpl.point[0].resize(dim);
-        hpl.point[1].resize(dim);
+        hpl.signature = ct_p;
 
         for (int j = 0; j < dim; j++) {
             hpl.point[0].component(j) = p.component(j);
             hpl.point[1].component(j) = q.component(j);
         }
 
-        hpl.speed.resize(2);
         hpl.speed[0] = s_p;
         hpl.speed[1] = s_q;
-
-        hpl.eigenvalue.resize(2);
-        int fam = eigenvalue_p.size();
-        hpl.eigenvalue[0].resize(fam);
-        hpl.eigenvalue[1].resize(fam);
 
         for (int j = 0; j < fam; j++) {
             hpl.eigenvalue[0].component(j) = eigenvalue_p[j];
             hpl.eigenvalue[1].component(j) = eigenvalue_q[j];
         }
-        hpl.signature.resize(2);
-        hpl.signature[0] = ct_p;
-        hpl.signature[1] = ct_q;
 
         classified_curve.push_back(hpl);
     }
@@ -660,7 +643,7 @@ void ColorCurve::classify_segment(RealVector &p, RealVector &q,
                     zerotype++;
                     ztype /= 2;
                 }
-                cout << "O tipo de zero eh: " << zerotype << ", desde: " << rttemp[i] << endl;
+                // cout << "O tipo de zero eh: " << zerotype << ", desde: " << rttemp[i] << endl;
                 RealVector out;
                 if (zerotype < fam) Left_Newton_improvement(rtemp[i], zerotype, out);
                 else                Right_Newton_improvement(rtemp[i], zerotype - fam, out);
@@ -718,31 +701,20 @@ void ColorCurve::classify_segment(RealVector &p, RealVector &q,
         //
         for (int k = 0; k < noi; k++) {
             hpl.type = rtype[k];
-
-            hpl.point.resize(2);
-            hpl.point[0].resize(dim);
-            hpl.point[1].resize(dim);
+            hpl.signature = sigtype[k];
 
             for (int j = 0; j < dim; j++) {
                 hpl.point[0].component(j) = r[k].component(j);
                 hpl.point[1].component(j) = r[k + 1].component(j);
             }
 
-            hpl.speed.resize(2);
             hpl.speed[0] = rspeed[k];
             hpl.speed[1] = rspeed[k + 1];
-
-            hpl.eigenvalue.resize(2);
-            hpl.eigenvalue[0].resize(fam);
-            hpl.eigenvalue[1].resize(fam);
 
             for (int j = 0; j < fam; j++) {
                 hpl.eigenvalue[0].component(j) = reigen[k][j];
                 hpl.eigenvalue[1].component(j) = reigen[k + 1][j];
             }
-            hpl.signature.resize(2);
-            hpl.signature[0] = sigtype[k];
-            hpl.signature[1] = sigtype[k + 1];
 
             classified_curve.push_back(hpl);
         }
@@ -783,10 +755,7 @@ void ColorCurve::classify_segmented_curve(std::vector<RealVector > &original,
 
     // Process the list
     for (int i = 0; i < original.size() / 2; i++) {
-        cout<<"Valor de i antes: "<<i<<endl;
-        
         classify_segment(original[2 * i], original[2 * i + 1], classified_curve, transition_list);
-        cout<<"Valor de i depois: "<<i<<endl;
     }
 
     return;
@@ -858,8 +827,8 @@ void ColorCurve::classify_continuous_curve(std::vector<RealVector> &original,
         hpl.eigenvalue[1].component(j) = eigenvalue1[j];
     }
 
-    hpl.signature[0] = ct1;
-    hpl.signature[1] = ct1;
+    hpl.signature = ct1;
+    
 
     classified_curve.push_back(hpl);
 
