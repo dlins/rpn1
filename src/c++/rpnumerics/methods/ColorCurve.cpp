@@ -105,15 +105,15 @@ void ColorCurve::Left_Newton_improvement(const RealVector &input, const int type
     // to all points (since they deal with the ref point).
     //
     double c[dim];
-//    double F_ref[dim], G_ref[dim];
-//    fluxFunction_->fill_with_jet(dim, ref_point.components(), 0, F_ref, 0, 0);
-//    accFunction_->fill_with_jet(dim, ref_point.components(), 0, G_ref, 0, 0);
+    //    double F_ref[dim], G_ref[dim];
+    //    fluxFunction_->fill_with_jet(dim, ref_point.components(), 0, F_ref, 0, 0);
+    //    accFunction_->fill_with_jet(dim, ref_point.components(), 0, G_ref, 0, 0);
     for (int i = 0; i < dim; i++) {
         c[i] = sigma * G_ref.component(i) - F_ref.component(i);
     }
 
     double deltaNorm = 0.0;
-    int    count = 0;
+    int count = 0;
 
     do {
         double F[dim], JF[dim][dim], G[dim], JG[dim][dim];
@@ -143,7 +143,7 @@ void ColorCurve::Left_Newton_improvement(const RealVector &input, const int type
             }
 
             // If Newton does not converge, return the original point.
-            if ((fabs(det) <= (epsilon * anorm))|| (count > 18)) {
+            if ((fabs(det) <= (epsilon * anorm)) || (count > 18)) {
                 cout << "ColorCurve::Left_Newton does not converge." << endl;
                 cout << "count = " << count << " " << input << endl;
                 for (int i = 0; i < dim; i++) out.component(i) = input.component(i);
@@ -201,15 +201,15 @@ void ColorCurve::Right_Newton_improvement(const RealVector &input, const int typ
     double U[dim];
     for (int i = 0; i < dim; i++) U[i] = input.component(i);
 
-//    // If this function ever comes to be vectorialized, these lines below are COMMON
-//    // to all points (since they deal with the ref point).
-//    //
-//    double F_ref[dim], G_ref[dim];
-//    fluxFunction_->fill_with_jet(dim, ref_point.components(), 0, F_ref, 0, 0);
-//    accFunction_->fill_with_jet(dim, ref_point.components(), 0, G_ref, 0, 0);
+    //    // If this function ever comes to be vectorialized, these lines below are COMMON
+    //    // to all points (since they deal with the ref point).
+    //    //
+    //    double F_ref[dim], G_ref[dim];
+    //    fluxFunction_->fill_with_jet(dim, ref_point.components(), 0, F_ref, 0, 0);
+    //    accFunction_->fill_with_jet(dim, ref_point.components(), 0, G_ref, 0, 0);
 
     double deltaNorm = 0.0;
-    int    count = 0;
+    int count = 0;
 
     do {
         double F[dim], JF[dim][dim], HF[dim][dim][dim];
@@ -437,9 +437,9 @@ int ColorCurve::complete_point(RealVector &p, double &s, std::vector<double> &ei
     int complex_count = 0;
     complex[0] = 0;
     for (int i = 1; i < e.size(); i++) {
-        if ( fabs(e[i].i) > 0 ) {
+        if (fabs(e[i].i) > 0) {
             complex[complex_count] = i;
-            complex[complex_count+1] = 0;
+            complex[complex_count + 1] = 0;
             complex_count++;
         }
     }
@@ -471,7 +471,7 @@ int ColorCurve::complete_point(RealVector &p, double &s, std::vector<double> &ei
 int ColorCurve::classify_point(RealVector &p, double &s, std::vector<double> &eigenvalue, std::string &signature) {
     signature.clear();
     int dim = ref_eigenvalue.size();
-    int complex[dim + 1];
+    int complex_ref[dim + 1], complex[dim + 1];
 
     // In order to classify the point, speed and eigenvalues are needed. They are filled in complete:
     // (type is filled as 0 when the classification is possible.)
@@ -506,10 +506,34 @@ int ColorCurve::classify_point(RealVector &p, double &s, std::vector<double> &ei
         increment *= 2;
     }
 
+    // This routine gives the possible pairs that are complex
+    //TODO Para mais de 4 familias isto deve ser melhorado
+    
+    int complex_count = 0;
+    complex_ref[0] = 0;
+    for (int i = 1; i < dim; i++) {
+        if (fabs(ref_e_complex[i]) > 0) {
+            complex_ref[complex_count] = i;
+            complex_ref[complex_count + 1] = 0;
+            complex_count++;
+        }
+    }
+
     // We reuse the increment integer as a counter
+    // Complex eigenvalues at reference point
     increment = 0;
-    while(complex[increment] != 0)  {
-        signature.replace(complex[increment], 1, sc);
+    while (complex_ref[increment] != 0) {
+        signature.replace(complex_ref[increment], 1, sc);
+        increment++;
+    }
+
+    // Complex eigenvalues at segment point
+    increment = 0;
+    while (complex[increment] != 0) {
+        
+//        cout<<"Sig: "<<signature<<" complex"<<complex[increment]<<endl;
+        signature.replace(complex[increment]+dim, 1, sc);
+//        cout<<"Sig depois : "<<signature<<endl;
         increment++;
     }
 
@@ -522,7 +546,8 @@ void ColorCurve::classify_segment(RealVector &p, RealVector &q,
 
     double s_p, s_q;
     std::vector<double> eigenvalue_p, eigenvalue_q;
-    std:string ct_p, ct_q;
+std:
+    string ct_p, ct_q;
 
     int type_p = classify_point(p, s_p, eigenvalue_p, ct_p);
     int type_q = classify_point(q, s_q, eigenvalue_q, ct_q);
@@ -567,9 +592,8 @@ void ColorCurve::classify_segment(RealVector &p, RealVector &q,
         }
 
         classified_curve.push_back(hpl);
-    }
-    // Both points share the same type (the output segment will not be divided).
-    //
+    }        // Both points share the same type (the output segment will not be divided).
+        //
     else if (type_p == type_q) {
         hpl.type = type_p;
         hpl.signature = ct_p;
@@ -588,9 +612,8 @@ void ColorCurve::classify_segment(RealVector &p, RealVector &q,
         }
 
         classified_curve.push_back(hpl);
-    }
-    // Points have different classification, splitting is needed.
-    //
+    }        // Points have different classification, splitting is needed.
+        //
     else {
         // The number of families do not change inside.
         int fam = eigenvalue_p.size();
@@ -601,7 +624,7 @@ void ColorCurve::classify_segment(RealVector &p, RealVector &q,
                 (p.component(i) - q.component(i)) * (p.component(i) - q.component(i));
         epsilon = 0.000005 * sqrt(epsilon); // TODO: Devemos estimar o valor certo.
 
-// TODO: Daqui em diante, NAO foi implementado o que fazer com o complextype !!
+        // TODO: Daqui em diante, NAO foi implementado o que fazer com o complextype !!
 
         // Auxiliary vectors to store data.
         //
@@ -646,7 +669,7 @@ void ColorCurve::classify_segment(RealVector &p, RealVector &q,
                 // cout << "O tipo de zero eh: " << zerotype << ", desde: " << rttemp[i] << endl;
                 RealVector out;
                 if (zerotype < fam) Left_Newton_improvement(rtemp[i], zerotype, out);
-                else                Right_Newton_improvement(rtemp[i], zerotype - fam, out);
+                else Right_Newton_improvement(rtemp[i], zerotype - fam, out);
                 rtemp[i] = out;
             }
         }
@@ -725,6 +748,7 @@ void ColorCurve::classify_segment(RealVector &p, RealVector &q,
 
 // This method classify a Hugoniot Locus given as a collection of segments, typically from Contour 
 //
+
 void ColorCurve::classify_segmented_curve(std::vector<RealVector > &original,
         const RealVector &ref,
         std::vector<HugoniotPolyLine> &classified_curve,
@@ -751,7 +775,11 @@ void ColorCurve::classify_segmented_curve(std::vector<RealVector > &original,
     Eigen::eig(dim, &JF[0][0], &JG[0][0], e);
 
     ref_eigenvalue.resize(e.size());
-    for (int i = 0; i < e.size(); i++) ref_eigenvalue[i] = e[i].r;
+    ref_e_complex.resize(e.size());
+    for (int i = 0; i < e.size(); i++) {
+        ref_eigenvalue[i] = e[i].r;
+        ref_e_complex[i]=e[i].i;
+    }
 
     // Process the list
     for (int i = 0; i < original.size() / 2; i++) {
@@ -763,6 +791,7 @@ void ColorCurve::classify_segmented_curve(std::vector<RealVector > &original,
 
 // This method classify a Hugoniot Locus given as a collection of points, typically from continuation 
 //
+
 void ColorCurve::classify_continuous_curve(std::vector<RealVector> &original,
         const RealVector &ref,
         std::vector<HugoniotPolyLine> &classified_curve,
@@ -789,7 +818,14 @@ void ColorCurve::classify_continuous_curve(std::vector<RealVector> &original,
     Eigen::eig(dim, &JF[0][0], &JG[0][0], e);
 
     ref_eigenvalue.resize(e.size());
-    for (int i = 0; i < e.size(); i++) ref_eigenvalue[i] = e[i].r;
+    ref_e_complex.resize(e.size());
+    for (int i = 0; i < e.size(); i++) {
+        
+        ref_eigenvalue[i] = e[i].r;
+        ref_e_complex[i]=e[i].i;
+    
+    }
+    
 
     // The first segment is classified with the second point:
     //
@@ -828,7 +864,7 @@ void ColorCurve::classify_continuous_curve(std::vector<RealVector> &original,
     }
 
     hpl.signature = ct1;
-    
+
 
     classified_curve.push_back(hpl);
 

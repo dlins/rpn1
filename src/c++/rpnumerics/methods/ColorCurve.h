@@ -78,6 +78,8 @@ class ColorCurve {
 
         RealVector ref_point;
         std::vector<double> ref_eigenvalue;
+        std::vector<double> ref_e_complex;
+        
         RealVector F_ref, G_ref;
     public:
 
