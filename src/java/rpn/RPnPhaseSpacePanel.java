@@ -41,7 +41,6 @@ import rpn.controller.ui.AREASELECTION_CONFIG;
 import rpn.controller.ui.CLASSIFIERAGENT_CONFIG;
 import rpn.controller.ui.UIController;
 import rpnumerics.BifurcationProfile;
-import rpnumerics.RPNUMERICS;
 import rpn.controller.ui.VELOCITYAGENT_CONFIG;
 
 public class RPnPhaseSpacePanel extends JPanel implements Printable {
@@ -59,6 +58,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
 
     public static int myH_;                                          //** declarei isso    (Leandro)
     public static int myW_;                                          //** declarei isso    (Leandro)
+
 
     //*** declarei esses métodos (Leandro)
     public static void blackBackground() {
@@ -227,7 +227,8 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         myW_ = getWidth();
 
 
-        if (RPNUMERICS.domainDim() == 2) {
+        //if (RPNUMERICS.domainDim() == 2) {
+        if ((scene().getAbstractGeom()).getSpace().getDim() == 2) {
 
             GeometryGraph geom = new GeometryGraph();
             geom.markPoints(scene());

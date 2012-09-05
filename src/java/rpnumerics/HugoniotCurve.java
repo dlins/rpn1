@@ -421,7 +421,7 @@ public class HugoniotCurve extends SegmentedCurve {
         List<RealVector> equil = new ArrayList();
 
         // inclui o Uref na lista de pontos de equilibrio
-        //RealVector pZero = getXZero();
+        RealVector pZero = getXZero();
         //equil.add(pZero);
 
         int sz = segments().size();
@@ -444,8 +444,13 @@ public class HugoniotCurve extends SegmentedCurve {
                 p.setElement(0, X_);
                 p.setElement(1, Y_);
 
+                RealVector temp = new RealVector(2);
+                temp.sub(pZero, p);
+
+                if(temp.norm() > 0.01) equil.add(p);
+
                 //if (p != pZero) {
-                    equil.add(p);
+                    //equil.add(p);
                 //}
 
             }

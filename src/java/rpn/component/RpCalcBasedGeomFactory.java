@@ -13,6 +13,7 @@ import rpn.controller.RpCalcController;
 import rpn.controller.RpController;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UserInputTable;
+import rpn.parser.RPnDataModule;
 
 import rpnumerics.Area;
 import rpnumerics.RPnCurve;
@@ -111,6 +112,7 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
     protected abstract RpGeometry createGeomFromSource();
 
     public void updateGeom() {
+        System.out.println("Estou no updateGeom() sem area ... ");
         try {
             geomSource_ = calc_.recalc();
             geom_ = createGeomFromSource();
@@ -121,10 +123,17 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
     }
 
     public void updateGeom(Area area) {
-        try {
+
+        System.out.println("Estou antes do if do updateGeom(Area) ... ");
+
+        //try {
             if (area.isClosestCurve((RPnCurve) geomSource_)) {
 
+                System.out.println("Entrou no if do updateGeom(Area) ... ");
+
                 List segRem = new ArrayList();
+
+                System.out.println("GeometryGraphND.indContido.size() : " +GeometryGraphND.indContido.size());
 
 
                 for (int i = 0; i < GeometryGraphND.indContido.size(); i++) {
@@ -135,27 +144,27 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
                 ((SegmentedCurve) geomSource_).segments().removeAll(segRem);
                 GeometryGraphND.indContido.clear();
 
-                // Pode ser útil na hora de fazer inclusao dos novos segmentos (para nao serem eliminados)
-                UserInputTable userInputList = UIController.instance().globalInputTable();
-                RealVector newValue = userInputList.values();
-
-                for (int i = 0; i < newValue.getSize(); i++) {
-                    GeometryGraphND.cornerRet.setElement(i, 0);
-                    newValue.setElement(i, 0.);
-                }
-                //----------------------------------------------------------------------------------------
-
-                SegmentedCurve newCurve = (SegmentedCurve) calc_.recalc(area);
-
-                ((SegmentedCurve) geomSource_).segments().addAll(newCurve.segments());
-
-                geom_ = createGeomFromSource();
-                isGeomOutOfDate_ = true;
+//                // Pode ser útil na hora de fazer inclusao dos novos segmentos (para nao serem eliminados)
+//                UserInputTable userInputList = UIController.instance().globalInputTable();
+//                RealVector newValue = userInputList.values();
+//
+//                for (int i = 0; i < newValue.getSize(); i++) {
+//                    GeometryGraphND.cornerRet.setElement(i, 0);
+//                    newValue.setElement(i, 0.);
+//                }
+//                //----------------------------------------------------------------------------------------
+//
+//                SegmentedCurve newCurve = (SegmentedCurve) calc_.recalc(area);
+//
+//                ((SegmentedCurve) geomSource_).segments().addAll(newCurve.segments());
+//
+//                geom_ = createGeomFromSource();
+//                isGeomOutOfDate_ = true;
 
             }
 
-        } catch (RpException rex) {
-            RPnDesktopPlotter.showCalcExceptionDialog(rex);
-        }
+        //} catch (RpException rex) {
+        //    RPnDesktopPlotter.showCalcExceptionDialog(rex);
+        //}
     }
 }

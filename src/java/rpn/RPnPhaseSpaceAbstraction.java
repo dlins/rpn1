@@ -38,6 +38,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
     static public String namePhaseSpace = "";
     static public List listResolution = new ArrayList();
     static public int closestCurve;             //indice da curva mais proxima
+    static public boolean areaToGrid;
 
     //
     // Constructors
@@ -228,14 +229,16 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
 
                         // -----------------------------------
                         if (curve instanceof SegmentedCurve) {
+                            areaToGrid = true;
                             RpCalcBasedGeomFactory geomFactory = (RpCalcBasedGeomFactory) factory;
                             RpCalculation calc = geomFactory.rpCalc();
                             ContourCurveCalc curveCalc = (ContourCurveCalc) calc;
                             listResolution.add(curveCalc.getParams().getResolution());
 
-                        } else {
-                            int[] resolution = {1, 1};
-                            listResolution.add(resolution);
+                        }
+                        else {
+                            areaToGrid = false;
+                            listResolution.add(new int[]{0,0});
                         }
                         // ---------------------------------------------------------------
 
@@ -253,8 +256,8 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
 
                     // ----------------------------------- Evita erro quando no PhaseDiagram
                     else {
-                        int[] resolution = {1, 1};
-                        listResolution.add(resolution);
+                        areaToGrid = false;
+                        listResolution.add(new int[]{0,0});
                     }
                     // -----------------------------------
 

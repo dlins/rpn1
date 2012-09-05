@@ -7,10 +7,16 @@
 package rpnumerics;
 
 import rpn.RPnPhaseSpaceAbstraction;
+import rpn.RPnPhaseSpacePanel;
 import rpn.component.RpGeometry;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UserInputTable;
 import rpn.parser.RPnDataModule;
+import wave.multid.Coords2D;
+import wave.multid.CoordsArray;
+import wave.multid.view.Scene;
+import wave.multid.view.ViewingTransform;
+import wave.util.RealSegment;
 import wave.util.RealVector;
 
 public class Area {
@@ -25,6 +31,12 @@ public class Area {
         downLeft_ = downLeft;
         resolution_ = resolution;
         System.out.println("Construtor de Area");
+    }
+
+    public Area(RealVector topRight, RealVector downLeft) {
+        topRight_ = topRight;
+        downLeft_ = downLeft;
+        System.out.println("Construtor de Area sem usar resolucao");
     }
 
     public RealVector getDownLeft() {
@@ -51,16 +63,15 @@ public class Area {
     }
 
 
-
     @Override
     public String toString(){
 
         StringBuffer buffer = new StringBuffer();
 
         buffer.append("<AREA>\n");
-        buffer.append("<RESOLUTION>");
-        buffer.append(resolution_.toString());
-        buffer.append("<\\RESOLUTION>");
+        //buffer.append("<RESOLUTION>");
+        //buffer.append(resolution_.toString());
+        //buffer.append("<\\RESOLUTION>");
         buffer.append("\n");
         buffer.append("<TOP>");
         buffer.append(topRight_.toString());

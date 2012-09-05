@@ -18,6 +18,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JPanel;
 import javax.swing.ToolTipManager;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpacePanel;
@@ -42,6 +43,7 @@ import rpn.controller.ui.VELOCITYAGENT_CONFIG;
 import rpn.parser.RPnDataModule;
 import rpn.usecase.ClassifierAgent;
 import rpn.usecase.VelocityAgent;
+import rpnumerics.WaveCurve;
 
 /**
  *
@@ -198,6 +200,7 @@ public class GeometryGraphND {
 
 
     public Coords2D toDeviceCoords(Scene scene, RealVector point) {
+
         ViewingTransform transf = scene.getViewingTransform();
         CoordsArray wcCoords = new CoordsArray(point);
         Coords2D dcCoords = new Coords2D();
@@ -362,7 +365,7 @@ public class GeometryGraphND {
 
 
     public void testAreaContains(Scene scene) {
-    
+
         RPnPhaseSpacePanel panel = new RPnPhaseSpacePanel(scene);
         ViewingTransform transf = panel.scene().getViewingTransform();
 
@@ -374,6 +377,7 @@ public class GeometryGraphND {
 
         //RpGeometry geom = RPnPhaseSpaceAbstraction.findClosestGeometry(newValue);
         RPnCurve curve = (RPnCurve)(geom.geomFactory().geomSource());
+
 
         if (curve instanceof Orbit) {
 
@@ -426,7 +430,7 @@ public class GeometryGraphND {
                 }
 
             }
-            
+
         }
 
     }
@@ -458,8 +462,7 @@ public class GeometryGraphND {
         Coords2D minDevCoords = toDeviceCoords(scene,  RPNUMERICS.boundary().getMinimums());
         double deltaX = Math.abs(maxDevCoords.getX() - minDevCoords.getX());
         double deltaY = Math.abs(maxDevCoords.getY() - minDevCoords.getY());
-        Boundary boundary = RPNUMERICS.boundary();
-
+        
         if (mapToEqui == 1) {
             deltaX = RPnPhaseSpacePanel.myW_;
             deltaY = RPnPhaseSpacePanel.myH_;
@@ -505,13 +508,10 @@ public class GeometryGraphND {
         //*********************************
 
         //*** desenha as linhas obliquas        
-        if (boundary instanceof IsoTriang2DBoundary) {
-            for (int i = 0; i < nu; i++) {
-                lineObl = new Line2D.Double(0, RPnPhaseSpacePanel.myH_ - i * dy, i * dx, RPnPhaseSpacePanel.myH_);
-                //lineObl = new Line2D.Double(0, deltaY - i * dy, i * dx, deltaY);
-                if (mapToEqui == 1) lineObl = mapLine(lineObl, deltaX, deltaY);
-                graph.draw(lineObl);
-            }
+        for (int i = 0; i < 2 * nu; i++) {
+            lineObl = new Line2D.Double(0, deltaY - i * dy, i * dx, deltaX);
+            if (mapToEqui == 1) lineObl = mapLine(lineObl, deltaX, deltaY);
+            graph.draw(lineObl);
         }
         //*****************************************
         

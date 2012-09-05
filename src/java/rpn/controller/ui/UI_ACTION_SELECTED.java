@@ -54,7 +54,7 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
 
             }
         }
-        else if (UIController.instance().getState() instanceof AREASELECTION_CONFIG) {
+        else if (actionSelected_ instanceof AreaSelectionAgent) {
             UIController.instance().addCommand(new Command(this, userInput));
             UIController.instance().setWaitCursor();
             actionSelected_.execute();

@@ -404,7 +404,9 @@ public class RPNUMERICS {
 
     public static SecondaryBifurcationCurveCalc createSecondaryBifurcationCurveCalc() {
 
-        int[] resolution = RPnDataModule.processResolution(getParamValue("inflectioncurve", "resolution"));
+        //int[] resolution = RPnDataModule.processResolution(getParamValue("inflectioncurve", "resolution"));
+
+        int[] resolution = RPnDataModule.processResolution(getParamValue("doublecontactcurve", "resolution"));
 
 
         ContourParams params = new ContourParams(resolution);

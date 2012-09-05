@@ -168,14 +168,14 @@ public class ConnectionOrbitCalc implements RpCalculation {
 
 
             if (ViscousProfileData.instance().getPreviousDot() * ViscousProfileData.instance().getDot() < 0.) {
-                //System.out.println("f(A)*f(M) < 0");
+                System.out.println("f(A)*f(M) < 0");
                 sigmaB = sigmaM;
-                ViscousProfileData.instance().setPreviousSigma(sigmaA);
+                //ViscousProfileData.instance().setPreviousSigma(sigmaA);
                 
             } else {
-                //System.out.println("f(A)*f(M) > 0");
+                System.out.println("f(A)*f(M) > 0");
                 sigmaA = sigmaM;
-                ViscousProfileData.instance().setPreviousSigma(sigmaB);
+                //ViscousProfileData.instance().setPreviousSigma(sigmaB);
             }
 
             //System.out.println("Passo " +i +" Valores dos Uplus depois do teste da bissecao: ");

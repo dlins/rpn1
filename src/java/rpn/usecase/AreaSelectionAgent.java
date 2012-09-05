@@ -15,7 +15,6 @@ import rpn.RPnDesktopPlotter;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.component.RpGeometry;
 import rpn.component.util.GeometryGraph;
-import rpn.component.util.GeometryGraph3D;
 import rpn.component.util.GeometryGraphND;
 import rpn.controller.ui.AREASELECTION_CONFIG;
 import rpn.controller.ui.UIController;
@@ -25,6 +24,7 @@ import rpnumerics.Area;
 import rpnumerics.RPNUMERICS;
 import rpnumerics.RPnCurve;
 import rpnumerics.SegmentedCurve;
+import rpnumerics.WaveCurve;
 import wave.util.Boundary;
 import wave.util.RealVector;
 import wave.util.RectBoundary;
@@ -50,6 +50,7 @@ public class AreaSelectionAgent extends RpModelPlotAgent {
         button_.setFont(rpn.RPnConfigReader.MODELPLOT_BUTTON_FONT);
         listArea_ = new ArrayList<Area>();
         setEnabled(true);
+
     }
 
     //** Edson / Leandro
@@ -80,15 +81,11 @@ public class AreaSelectionAgent extends RpModelPlotAgent {
         UserInputTable userInputList = UIController.instance().globalInputTable();
         RealVector newValue = userInputList.values();
 
-        String idPanel = UIController.instance().getFocusPanel().getName();
-
         RPnPhaseSpaceAbstraction phaseSpace = RPnDataModule.PHASESPACE;
         RpGeometry geom = phaseSpace.findClosestGeometry(newValue);
         RPnCurve curve = (RPnCurve)(geom.geomFactory().geomSource());
 
-        //if (curve instanceof SegmentedCurve) {
-
-            Object[] options = {"Zoom", "Refine"};
+        Object[] options = {"Zoom", "Refine", "Riemann Solver"};
             int n = JOptionPane.showOptionDialog(new JFrame(),
                     "Selected area to: ",
                     "Selected Area",
@@ -96,53 +93,54 @@ public class AreaSelectionAgent extends RpModelPlotAgent {
                     JOptionPane.QUESTION_MESSAGE,
                     null,
                     options,
-                    options[1]);
+                    options[0]);
 
-            if (n == 0 && GeometryGraphND.mapToEqui == 0) {
-                RectBoundary rectBdry = new RectBoundary(GeometryGraph.downLeft, GeometryGraph.topRight);
-                Boundary bdry = (Boundary) rectBdry;
-                RPnDesktopPlotter.getUIFrame().phaseSpaceFrameZoom(bdry);
-            }
+        Area area = null;
 
-            if (n == 1) {
-                Area area = null;
-                //String Re1 = JOptionPane.showInputDialog(null, "Resolucao horizontal", "Resolucao", JOptionPane.QUESTION_MESSAGE);
-                //String Re2 = JOptionPane.showInputDialog(null, "Resolucao vertical", "Resolucao", JOptionPane.QUESTION_MESSAGE);
+        //if (n == 0 && GeometryGraphND.mapToEqui == 0) {
+        if (n == 0) {
+            RectBoundary rectBdry = new RectBoundary(GeometryGraph.downLeft, GeometryGraph.topRight);
+            Boundary bdry = (Boundary) rectBdry;
+            RPnDesktopPlotter.getUIFrame().phaseSpaceFrameZoom(bdry);
+        }
 
-                try {
-                    RealVector resolution = new RealVector(RPNUMERICS.domainDim());
-                    //resolution.setElement(0, Integer.parseInt(Re1));
-                    //resolution.setElement(1, Integer.parseInt(Re2));
+        if (n == 1  &&  curve instanceof SegmentedCurve) {
+            listArea_.clear();
 
-                    if (RPNUMERICS.domainDim() == 2) {
-                        area = new Area(resolution, GeometryGraph.topRight, GeometryGraph.downLeft);
-                        System.out.println(area);
-                        listArea_.add(area);
-                        System.out.println("listArea.size() : " + listArea_.size());
+            String Re1 = JOptionPane.showInputDialog(null, "Resolucao horizontal", "Resolucao", JOptionPane.QUESTION_MESSAGE);
+            String Re2 = JOptionPane.showInputDialog(null, "Resolucao vertical", "Resolucao", JOptionPane.QUESTION_MESSAGE);
 
-                    } else if (RPNUMERICS.domainDim() == 3) {
-                        area = new Area(resolution, GeometryGraph3D.topRight, GeometryGraph3D.downLeft);
-                        System.out.println(area);
-                        listArea_.add(area);
-                    }
+            try {
+                RealVector resolution = new RealVector(RPNUMERICS.domainDim());
+                resolution.setElement(0, Integer.parseInt(Re1));
+                resolution.setElement(1, Integer.parseInt(Re2));
 
-
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, "Resolucao nao foi informada", "ATENCAO", JOptionPane.INFORMATION_MESSAGE);
+                if (RPNUMERICS.domainDim() == 2) {
+                    area = new Area(GeometryGraph.topRight, GeometryGraph.downLeft);
+                    System.out.println(area);
+                    listArea_.add(area);
                 }
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Resolucao nao foi informada", "ATENCAO", JOptionPane.INFORMATION_MESSAGE);
             }
 
+        }
 
-        //}
+        if (n == 2  &&  curve instanceof WaveCurve) {
+            listArea_.clear();
+            area = new Area(GeometryGraph.topRight, GeometryGraph.downLeft);
+            System.out.println(area);
+            listArea_.add(area);
+            System.out.println("GeometryGraphND.indContido.size() :::::::::::::::::: " +GeometryGraphND.indContido.size());
+        }
 
-
-                System.out.println("Tamanho da lista de areas : " +getListArea().size());
+        System.out.println("Tamanho da lista de areas : " +getListArea().size());
     }
 
 
     @Override
     public void execute() {
-
 
         UserInputTable userInputList = UIController.instance().globalInputTable();
         RealVector newValue = userInputList.values();

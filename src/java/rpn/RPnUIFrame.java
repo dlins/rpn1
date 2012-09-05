@@ -8,6 +8,7 @@ package rpn;
 import rpn.usecase.*;
 import rpn.parser.*;
 import rpnumerics.RPNUMERICS;
+import wave.multid.view.ViewingTransform;
 import wave.util.Boundary;
 import java.awt.print.PrinterJob;
 import javax.swing.*;
@@ -26,6 +27,10 @@ import rpn.usecase.VelocityAgent;
 import rpn.controller.ui.*;
 import rpn.message.*;
 import rpnumerics.viscousprofile.ViscousProfileData;
+import wave.multid.DimMismatchEx;
+import wave.multid.Space;
+import wave.util.RealVector;
+import wave.util.RectBoundary;
 
 public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
@@ -76,6 +81,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     public static String dir = "";
     private RPnPhaseSpaceFrame frameZoom = null;
     private ArrayList<RPnPhaseSpaceFrame> listFrameZoom = new ArrayList();
+    private static RPnPhaseSpaceFrame[] riemannFrames_;
 
 
     //***
@@ -91,6 +97,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             propertyChange(new PropertyChangeEvent(command, "aplication state", null, null));
             jbInit();
             phaseSpaceFramesInit(RPNUMERICS.boundary());
+            riemanProfileFramesInit();
             associatesPhaseSpaces();
             associatePhaseSpacesAndCurvesList();
             createPanelsChooser();
@@ -114,6 +121,54 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     //
     // Methods
     //
+
+
+    private void riemanProfileFramesInit() {
+
+
+        RealVector min = new RealVector(3);
+        RealVector max = new RealVector(3);
+
+        min.setElement(0, 0);
+        min.setElement(1, 0);
+        min.setElement(2, 0);
+
+
+        max.setElement(0, 1);
+        max.setElement(1, 0.2);
+        max.setElement(2, 0.2);
+
+
+        RectBoundary boundary = new RectBoundary(min, max);
+        Space riemanProfileSpace = new Space("RiemannProfileSpace", RPNUMERICS.domainDim() + 1);
+        riemannFrames_ = new RPnPhaseSpaceFrame[RPNUMERICS.domainDim()];
+
+        for (int i = 0; i < riemannFrames_.length; i++) {
+            int[] testeArrayIndex = {0, i+1};
+
+            wave.multid.graphs.ClippedShape clipping = new wave.multid.graphs.ClippedShape(boundary);
+            RPnProjDescriptor projDescriptor = new RPnProjDescriptor(riemanProfileSpace, "teste", 400, 400, testeArrayIndex, false);
+            wave.multid.view.ViewingTransform riemanTesteTransform = projDescriptor.createTransform(clipping);
+
+            try {
+                wave.multid.view.Scene riemannScene = RPnDataModule.RIEMANNPHASESPACE.createScene(riemanTesteTransform, new wave.multid.view.ViewingAttr(Color.black));
+                riemannFrames_[i] = new RPnPhaseSpaceFrame(riemannScene, commandMenu_);
+
+            } catch (DimMismatchEx ex) {
+                ex.printStackTrace();
+            }
+
+
+            riemannFrames_[i].pack();
+            riemannFrames_[i].setVisible(true);
+
+        }
+
+
+
+    }
+
+
 
     public static RPnPhaseSpaceFrame[] getAuxFrames() {
         return auxFrames_;
@@ -251,14 +306,22 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     public void phaseSpaceFrameZoom(Boundary boundary) {
         wave.multid.graphs.ClippedShape clipping = new wave.multid.graphs.ClippedShape(boundary);
 
+        // --------------------------------
+        Space zoomSpace = new Space("teste", RPNUMERICS.domainDim());
+        int[] testeArrayIndex = {0,1};
+        RPnProjDescriptor projDescriptor = new RPnProjDescriptor(zoomSpace, "teste", 400, 400, testeArrayIndex, false);
+            wave.multid.view.ViewingTransform viewingTransf = projDescriptor.createTransform(clipping);
+            // ----------------------------
+
         JButton closeButton = new JButton("Close");
 
         // Init Main Frame
         //for (int i = 0; i < numOfPanelZoom; i++) {
 
-            wave.multid.view.ViewingTransform viewingTransf =
-                    ((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(
-                    0)).createTransform(clipping);
+//            wave.multid.view.ViewingTransform viewingTransf =
+//                    ((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(
+//                    0)).createTransform(clipping);
+
             try {
                 wave.multid.view.Scene scene = null;
 

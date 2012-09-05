@@ -88,10 +88,13 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
     @Override
     public RpSolution recalc(Area area) throws RpException {
 
-        HugoniotCurve result;
-        result = (HugoniotCurve) calc(((HugoniotParams) getParams()).getXZero(), (int) area.getResolution().getElement(0), (int) area.getResolution().getElement(1), area.getTopRight(), area.getDownLeft());
+        System.out.println("Entrou neste recalc(area)");
 
-        return result;
+        HugoniotCurve result;
+        //result = (HugoniotCurve) calc(((HugoniotParams) getParams()).getXZero(), (int) area.getResolution().getElement(0), (int) area.getResolution().getElement(1), area.getTopRight(), area.getDownLeft());
+
+        //return result;
+        return null;
     }
 
     public PhasePoint getUMinus() {

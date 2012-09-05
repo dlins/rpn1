@@ -10,7 +10,6 @@ import java.awt.Polygon;
 import java.awt.Shape;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
-import javax.swing.ToolTipManager;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpacePanel;
 import rpn.component.RpGeometry;
@@ -22,8 +21,6 @@ import rpnumerics.RPnCurve;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
 import wave.multid.view.Scene;
-import wave.util.Arrow;
-import wave.util.Boundary;
 import wave.util.RealVector;
 import rpn.controller.ui.CLASSIFIERAGENT_CONFIG;
 import rpn.controller.ui.UserInputTable;
@@ -53,7 +50,7 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
     public static int count = 0;    //substituto do ControlClick.ind
 
 
-    public Polygon defBordo(Scene scene_) {
+    private Polygon defBordo(Scene scene_) {
 
         RealVector V1 = new RealVector(2);
         V1.setElement(0, 0.);        V1.setElement(1, 0.);
@@ -86,50 +83,6 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
 
         return triangle;
     }
-
-
-    //---------------------------------------------------- Excluir estes metodos
-    public void drawSource(Graphics g ,double xVecP1, double yVecP1, double xVecP2, double yVecP2, Coords2D dcCoordsImgVecP1, Coords2D dcCoordsImgVecP2) {
-        //*** define uma ponta de cada vetor
-        RealVector direction1 = new RealVector(2);
-        direction1.setElement(0, -xVecP2 + xVecP1);
-        direction1.setElement(1, -yVecP2 + yVecP1);
-        Arrow arrow1 = new Arrow(new RealVector(dcCoordsImgVecP1.getCoords()), direction1, 5, 5);
-        arrow1.paintComponent(g);
-        Arrow arrow3 = new Arrow(new RealVector(dcCoordsImgVecP1.getCoords()), direction1, 10, 10);
-        arrow3.paintComponent(g);
-
-        //*** define outra ponta de cada vetor
-        RealVector direction2 = new RealVector(2);
-        direction2.setElement(0, xVecP2 - xVecP1);
-        direction2.setElement(1, yVecP2 - yVecP1);
-        Arrow arrow2 = new Arrow(new RealVector(dcCoordsImgVecP2.getCoords()), direction2, 5, 5);
-        arrow2.paintComponent(g);
-        Arrow arrow4 = new Arrow(new RealVector(dcCoordsImgVecP2.getCoords()), direction2, 10, 10);
-        arrow4.paintComponent(g);
-    }
-
-    public void drawSink(Graphics g ,double xVecP1, double yVecP1, double xVecP2, double yVecP2, Coords2D dcCoordsImgVecP1, Coords2D dcCoordsImgVecP2) {
-        //*** define uma ponta de cada vetor
-        RealVector direction1 = new RealVector(2);
-        direction1.setElement(0, xVecP2 - xVecP1);
-        direction1.setElement(1, yVecP2 - yVecP1);
-        Arrow arrow1 = new Arrow(new RealVector(dcCoordsImgVecP1.getCoords()), direction1, 5, 5);
-        arrow1.paintComponent(g);
-
-        //*** define outra ponta de cada vetor
-        RealVector direction2 = new RealVector(2);
-        direction2.setElement(0, -xVecP2 + xVecP1);
-        direction2.setElement(1, -yVecP2 + yVecP1);
-        Arrow arrow2 = new Arrow(new RealVector(dcCoordsImgVecP2.getCoords()), direction2, 5, 5);
-        arrow2.paintComponent(g);
-    }
-
-    public void drawSaddle(Graphics g ,double xVecP1, double yVecP1, double xVecP2, double yVecP2, Coords2D dcCoordsImgVecP1, Coords2D dcCoordsImgVecP2, int j) {
-        if (j==0) drawSource(g, xVecP1, yVecP1, xVecP2, yVecP2, dcCoordsImgVecP1, dcCoordsImgVecP2);
-        if (j==1) drawSink(g, xVecP1, yVecP1, xVecP2, yVecP2, dcCoordsImgVecP1, dcCoordsImgVecP2);
-    }
-    //--------------------------------------------------------------------------
 
 
     public void infoWaveCurve(RealVector newValue, WaveCurve curve, RPnPhaseSpacePanel panel) {
@@ -362,31 +315,39 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
             ui = Math.max(xTP, xCR);
 
             if (mapToEqui == 0) {
-                v_s = (int) (vs / dv) * dv;               //  Ajuste feito diretamente em pixel.
-                u_s = (int) (us / du) * du;
-                v_i = (int) (vi / dv + 1) * dv;
-                u_i = (int) (ui / du + 1) * du;
+                if (nu == 0 && nv == 0) {
+                    v_s = vs;
+                    u_s = us;
+                    v_i = vi;
+                    u_i = ui;
+                } else {
+                    v_s = (int) (vs / dv) * dv;               //  Ajuste feito diretamente em pixel.
+                    u_s = (int) (us / du) * du;
+                    v_i = (int) (vi / dv + 1) * dv;
+                    u_i = (int) (ui / du + 1) * du;
+                }
             }
 
             if (mapToEqui == 1) {
-                //*** !!!! Nao tem na versao original !!!!
-//                vs = vs + 0.57735 * us - RPnPhaseSpacePanel.myW_ / 2 - 0.57735 * 0.13397 * RPnPhaseSpacePanel.myH_;
-//                vi = vi + 0.57735 * us - RPnPhaseSpacePanel.myW_ / 2 - 0.57735 * 0.13397 * RPnPhaseSpacePanel.myH_;
-//                us = 1.1547 * us - 1.1547 * 0.13397 * RPnPhaseSpacePanel.myH_;
-//                ui = 1.1547 * ui - 1.1547 * 0.13397 * RPnPhaseSpacePanel.myH_;
-
                 vs = vs + 0.57735 * us - deltaX / 2 - 0.57735 * 0.13397 * deltaY;
                 vi = vi + 0.57735 * us - deltaX / 2 - 0.57735 * 0.13397 * deltaY;
                 us = 1.1547 * us - 1.1547 * 0.13397 * deltaY;
                 ui = 1.1547 * ui - 1.1547 * 0.13397 * deltaY;
-                //***
 
-                v_s = (int) (vs / dv) * dv;               //  Ajuste feito diretamente em pixel.
-                u_s = (int) (us / du) * du;
-                v_i = (int) (vi / dv + 1) * dv;
-                u_i = (int) (ui / du + 1) * du;
+                if (nu == 0 && nv == 0) {
+                    v_s = vs;
+                    u_s = us;
+                    v_i = vi;
+                    u_i = ui;
+                } else {
+                    v_s = (int) (vs / dv) * dv;               //  Ajuste feito diretamente em pixel.
+                    u_s = (int) (us / du) * du;
+                    v_i = (int) (vi / dv + 1) * dv;
+                    u_i = (int) (ui / du + 1) * du;
+                }
+
             }
-
+            
             square1 = mapShape(new Rectangle2D.Double(v_s, u_s, Math.abs(v_i - v_s), Math.abs(u_i - u_s)), scene);
             indContido.clear();
             testAreaContains(scene);
@@ -397,13 +358,10 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
 
     }
 
-    public Shape mapShape(Shape shape, Scene scene) {         //*** ESTA CORRETO, MAS AINDA NAO TAO PERFEITO QUANTO O ANTIGO METODO DE DESENHAR A AREA
+    private Shape mapShape(Shape shape, Scene scene) {         //*** ESTA CORRETO, MAS AINDA NAO TAO PERFEITO QUANTO O ANTIGO METODO DE DESENHAR A AREA
 
-        Boundary boundary = RPNUMERICS.boundary();
-        //if (boundary instanceof IsoTriang2DBoundary) {
-            defBordo(scene);
-        //}
-
+        defBordo(scene);
+        
         Polygon poly = new Polygon();
 
         double v_s = shape.getBounds2D().getMinX();
@@ -418,7 +376,9 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
 
         double dx = 0.;
 
+
         if (mapToEqui == 1) {
+
             v_s = v_s + 0.5 * (RPnPhaseSpacePanel.myH_ - u_s);
             v_i = v_i + 0.5 * (RPnPhaseSpacePanel.myH_ - u_i);
 
@@ -432,6 +392,12 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
             u2 = RPnPhaseSpacePanel.myH_ - 0.8660254 * (RPnPhaseSpacePanel.myH_ - u2);
 
             dx = (Math.abs(u_s - u_i)) / 1.73205;
+
+            if (!RPnPhaseSpaceAbstraction.areaToGrid) {
+                v_i = v_i+dx;
+                v1 = v1+dx;
+            }
+            
         }
 
 

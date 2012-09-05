@@ -33,6 +33,7 @@ public class PolyLine extends ShapedGeometry {
     // Methods
     //
     protected Shape createShape() throws DimMismatchEx {
+
         GeneralPath path = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
         AbstractPathIterator modelIterator = ((MultiGeometry)getAbstractGeom()).
             getPathIterator(getViewingTransform().viewingMap());
