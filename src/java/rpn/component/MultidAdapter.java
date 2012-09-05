@@ -112,13 +112,7 @@ public class MultidAdapter {
                 riemannCoords.setElement(j+1, coords[i].getElement(j));
                 
             }
-
-
-            
             vertices[i] = new CoordsArray(riemannCoords);            
-            System.out.println("Dimensao dos pontos" + vertices[i].toString());
-
-
         }
         return vertices;
     }

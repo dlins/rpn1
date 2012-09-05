@@ -5,7 +5,9 @@
  */
 package rpn.usecase;
 
+import java.awt.Shape;
 import java.awt.event.ActionEvent;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -17,6 +19,11 @@ import rpn.controller.ui.UIController;
 import rpn.controller.ui.UI_ACTION_SELECTED;
 import rpn.parser.RPnDataModule;
 import rpnumerics.*;
+import wave.multid.Coords2D;
+import wave.multid.CoordsArray;
+import wave.multid.DimMismatchEx;
+import wave.multid.view.GeomObjView;
+import wave.multid.view.ViewingTransform;
 import wave.util.RealVector;
 
 public class RiemannProfileAgent extends RpModelPlotAgent {
@@ -46,7 +53,7 @@ public class RiemannProfileAgent extends RpModelPlotAgent {
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {
-        
+
         return null;
 
 
@@ -58,13 +65,48 @@ public class RiemannProfileAgent extends RpModelPlotAgent {
         Iterator<RpGeometry> it = RPnDataModule.PHASESPACE.getGeomObjIterator();
         ArrayList<WaveCurve> waveCurveList = new ArrayList<WaveCurve>();
 
+
+        List<Area> areaList = AreaSelectionAgent.instance().getListArea();
+
+
+        Area firstArea = areaList.get(0);
+
+
+        RPnPhaseSpaceFrame[] frames = RPnUIFrame.getPhaseSpaceFrames();
+
+        ViewingTransform viewTransform = frames[0].phaseSpacePanel().scene().getViewingTransform();
+
+
+        Rectangle2D areaRectangle = createAreaRectangle(firstArea);
+        
+        System.out.println("Retangulo: "+ areaRectangle);
+
+
         while (it.hasNext()) {
             RpGeometry rpGeometry = it.next();
 
             if (rpGeometry instanceof WaveCurveGeom) {
+                try {
+                    WaveCurveGeom waveCurveGeom = (WaveCurveGeom) rpGeometry;
 
-                WaveCurve waveCurve = (WaveCurve) rpGeometry.geomFactory().geomSource();
-                waveCurveList.add(waveCurve);
+                    WaveCurveView waveCurveView = (WaveCurveView) waveCurveGeom.createView(viewTransform);
+
+                    Shape waveCurveShape = waveCurveView.createShape();
+                    
+                    
+                    if(waveCurveShape.intersects(areaRectangle)){
+                        
+                        System.out.println("A intercepta "+((WaveCurve)waveCurveGeom.geomFactory().geomSource()).toString());
+                        
+                        
+                    }
+
+
+                    WaveCurve waveCurve = (WaveCurve) rpGeometry.geomFactory().geomSource();
+                    waveCurveList.add(waveCurve);
+                } catch (DimMismatchEx ex) {
+                    ex.printStackTrace();
+                }
 
             }
         }
@@ -90,18 +132,17 @@ public class RiemannProfileAgent extends RpModelPlotAgent {
 
 
 
-        System.out.println("waveCurve forward direcao: "+waveCurveForward0.getDirection()+" "+" familia "+ waveCurveForward0.getFamily());
+        System.out.println("waveCurve forward direcao: " + waveCurveForward0.getDirection() + " " + " familia " + waveCurveForward0.getFamily());
 
         System.out.println("waveCurve backward direcao: " + waveCurveBackward1.getDirection() + " " + " familia " + waveCurveBackward1.getFamily());
 
 
 
-        List<Area> areaList = AreaSelectionAgent.instance().getListArea();
 
 
-        Area firstArea = areaList.get(0);
-        
-        
+        System.out.println(firstArea.toString());
+
+
 //        
 //        RealVector p1 = new RealVector("0.0075 0.1221");
 //        RealVector p2 = new RealVector("0.2385 0.0231");
@@ -109,7 +150,7 @@ public class RiemannProfileAgent extends RpModelPlotAgent {
 //        
 //        Area firstArea = new Area(pres,p1,p2);
 //        
-        
+
 
         RiemannProfileCalc rc = new RiemannProfileCalc(firstArea, waveCurveForward0, waveCurveBackward1);
 
@@ -119,7 +160,7 @@ public class RiemannProfileAgent extends RpModelPlotAgent {
 
 
         try {
-            RiemannProfile profile = (RiemannProfile)rc.calc();
+            RiemannProfile profile = (RiemannProfile) rc.calc();
 
             System.out.println(profile);
 
@@ -131,21 +172,58 @@ public class RiemannProfileAgent extends RpModelPlotAgent {
 
 
         } catch (RpException ex) {
+        }
+
+
+
+        for (RPnPhaseSpaceFrame frame : RPnUIFrame.getRiemannFrames()) {
+
+            frame.setVisible(true);
 
         }
-        
-        
-        
-        for (RPnPhaseSpaceFrame frame : RPnUIFrame.getRiemannFrames()) {
-            
-            frame.setVisible(true);
-            
-        }
-        
-        
-        
-        
-        
+
+
+
+
+
+
+    }
+
+    private Rectangle2D createAreaRectangle(Area area) {
+
+
+        RPnPhaseSpaceFrame[] frames = RPnUIFrame.getPhaseSpaceFrames();
+
+        ViewingTransform viewTransform = frames[0].phaseSpacePanel().scene().getViewingTransform();
+
+
+        RealVector areaTopRight = area.getTopRight();
+        RealVector areaDownLeft = area.getDownLeft();
+
+
+        CoordsArray topRightWC = new CoordsArray(areaTopRight);
+
+        CoordsArray downLeftWC = new CoordsArray(areaDownLeft);
+
+        Coords2D topRightDC = new Coords2D();
+
+        Coords2D downLeftDC = new Coords2D();
+
+
+        viewTransform.viewPlaneTransform(topRightWC, topRightDC);
+        viewTransform.viewPlaneTransform(downLeftWC, downLeftDC);
+
+
+        double x = downLeftDC.getX();
+        double y = topRightDC.getY();
+
+
+        double w = topRightDC.getX() - downLeftDC.getX();
+        double h = topRightDC.getY() - downLeftDC.getY();
+
+
+
+        return new Rectangle2D.Double(x, y, w, h);
 
     }
 
