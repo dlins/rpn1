@@ -149,13 +149,13 @@ void RiemannSolver::half_profile(const std::vector<Curve> &c, int subc, int subc
         //
         
 //         printf("RiemannProfile. Two consecutive shocks detected.\n");
-            printf("    curvepos (this curve\'s index) = %d\n", curvepos);
-            printf("    type (1 = R, 2 = S, 3 = C)     = %d\n", c[curvepos].type);
-            printf("    corresponding curve            = %d\n", c[curvepos].index_related_curve);
-            printf("    corresponding curve (other)    = %d\n", c[curvepos].related_curve[pos]);
-            printf("    corresponding point            = %d\n", c[curvepos].corresponding_point_in_related_curve[pos]);
-
-        
+//            printf("    curvepos (this curve\'s index) = %d\n", curvepos);
+//            printf("    type (1 = R, 2 = S, 3 = C)     = %d\n", c[curvepos].type);
+//            printf("    corresponding curve            = %d\n", c[curvepos].index_related_curve);
+//            printf("    corresponding curve (other)    = %d\n", c[curvepos].related_curve[pos]);
+//            printf("    corresponding point            = %d\n", c[curvepos].corresponding_point_in_related_curve[pos]);
+//
+//        
         
         
         if (c[curvepos].type == COMPOSITE_CURVE && 

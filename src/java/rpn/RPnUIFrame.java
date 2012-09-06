@@ -326,22 +326,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     }
     //***
 
-//    public void updateRiemannFrames(){
-//        
-//        for (int i = 0; i < frames_.length; i++) {
-//            RPnPhaseSpaceFrame rPnPhaseSpaceFrame = frames_[i];
-//            
-//            rPnPhaseSpaceFrame.phaseSpacePanel().u
-//            
-//        }
-//        
-//        
-//        
-//        
-//    }
     private void riemanProfileFramesInit() {
-
-
         RealVector min = new RealVector(3);
         RealVector max = new RealVector(3);
 
@@ -351,8 +336,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
 
         max.setElement(0, 1);
-        max.setElement(1, 0.2);
-        max.setElement(2, 0.2);
+        max.setElement(1, 1);
+        max.setElement(2, 1);
 
 
         RectBoundary boundary = new RectBoundary(min, max);
@@ -373,14 +358,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             } catch (DimMismatchEx ex) {
                 ex.printStackTrace();
             }
-
-
             riemannFrames_[i].pack();
-
-
         }
-
-
 
     }
 

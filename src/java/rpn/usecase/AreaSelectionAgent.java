@@ -76,6 +76,8 @@ public class AreaSelectionAgent extends RpModelPlotAgent {
 
 
     public void execute_() {
+        
+
 
         UserInputTable userInputList = UIController.instance().globalInputTable();
         RealVector newValue = userInputList.values();

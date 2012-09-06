@@ -507,4 +507,13 @@ public class UIController extends ComponentUI {
     public void setStateController(StateInputController stateController) {
         stateController_ = stateController;
     }
+    
+    public Iterator <RPnPhaseSpacePanel> getInstalledPanelsIterator(){
+        return installedPanels_.iterator();
+    }
+    
+    
+    
+    
+    
 }

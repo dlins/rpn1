@@ -8,11 +8,11 @@ package rpn.usecase;
 import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.swing.JButton;
 import rpn.RPnPhaseSpaceFrame;
+import rpn.RPnPhaseSpacePanel;
 import rpn.RPnUIFrame;
 import rpn.component.*;
 import rpn.controller.ui.UIController;
@@ -23,6 +23,8 @@ import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
 import wave.multid.DimMismatchEx;
 import wave.multid.view.GeomObjView;
+import wave.multid.view.Scene;
+import wave.multid.view.ShapedGeometry;
 import wave.multid.view.ViewingTransform;
 import wave.util.RealVector;
 
@@ -62,168 +64,66 @@ public class RiemannProfileAgent extends RpModelPlotAgent {
     @Override
     public void execute() {
 
-        Iterator<RpGeometry> it = RPnDataModule.PHASESPACE.getGeomObjIterator();
-        ArrayList<WaveCurve> waveCurveList = new ArrayList<WaveCurve>();
-
-
         List<Area> areaList = AreaSelectionAgent.instance().getListArea();
 
+        Area firstArea = areaList.get(areaList.size() - 1);
 
-        Area firstArea = areaList.get(0);
+        Iterator<RPnPhaseSpacePanel> panelsIterator = UIController.instance().getInstalledPanelsIterator();
+
+        WaveCurve waveCurveForward0 = null;
+        WaveCurve waveCurveBackward1 = null;
+
+        while (panelsIterator.hasNext()) {
+            RPnPhaseSpacePanel rPnPhaseSpacePanel = panelsIterator.next();
+
+            Scene scene = rPnPhaseSpacePanel.scene();
+
+            Iterator sceneIterator = scene.geometries();
+
+            while (sceneIterator.hasNext()) {
+
+                GeomObjView geomView = (GeomObjView) sceneIterator.next();
+
+                if (geomView instanceof WaveCurveView) {
+
+                    ShapedGeometry shapedGeometry = (ShapedGeometry) geomView;
 
 
-        RPnPhaseSpaceFrame[] frames = RPnUIFrame.getPhaseSpaceFrames();
+                    if (shapedGeometry.intersects(firstArea)) {
 
-        ViewingTransform viewTransform = frames[0].phaseSpacePanel().scene().getViewingTransform();
-
-
-        Rectangle2D areaRectangle = createAreaRectangle(firstArea);
-        
-        System.out.println("Retangulo: "+ areaRectangle);
+                        WaveCurveGeom waveCurveGeom = (WaveCurveGeom) geomView.getAbstractGeom();
 
 
-        while (it.hasNext()) {
-            RpGeometry rpGeometry = it.next();
+                        WaveCurve waveCurve = (WaveCurve) waveCurveGeom.geomFactory().geomSource();
 
-            if (rpGeometry instanceof WaveCurveGeom) {
-                try {
-                    WaveCurveGeom waveCurveGeom = (WaveCurveGeom) rpGeometry;
+                        if (waveCurve.getFamily() == 0 && waveCurve.getDirection() == 10) {
 
-                    WaveCurveView waveCurveView = (WaveCurveView) waveCurveGeom.createView(viewTransform);
+                            waveCurveForward0 = waveCurve;
 
-                    Shape waveCurveShape = waveCurveView.createShape();
-                    
-                    
-                    if(waveCurveShape.intersects(areaRectangle)){
-                        
-                        System.out.println("A intercepta "+((WaveCurve)waveCurveGeom.geomFactory().geomSource()).toString());
-                        
-                        
+                        } else {
+                            waveCurveBackward1 = waveCurve;
+
+                        }
+
                     }
 
-
-                    WaveCurve waveCurve = (WaveCurve) rpGeometry.geomFactory().geomSource();
-                    waveCurveList.add(waveCurve);
-                } catch (DimMismatchEx ex) {
-                    ex.printStackTrace();
                 }
-
             }
         }
 
-
-
-
-
-        WaveCurve waveCurveForward0;
-        WaveCurve waveCurveBackward1;
-
-
-        if (waveCurveList.get(0).getFamily() == 0 && waveCurveList.get(0).getDirection() == 10) {
-
-            waveCurveForward0 = waveCurveList.get(0);
-            waveCurveBackward1 = waveCurveList.get(1);
-
-        } else {
-            waveCurveForward0 = waveCurveList.get(1);
-            waveCurveBackward1 = waveCurveList.get(0);
-
-        }
-
-
-
-        System.out.println("waveCurve forward direcao: " + waveCurveForward0.getDirection() + " " + " familia " + waveCurveForward0.getFamily());
-
-        System.out.println("waveCurve backward direcao: " + waveCurveBackward1.getDirection() + " " + " familia " + waveCurveBackward1.getFamily());
-
-
-
-
-
-        System.out.println(firstArea.toString());
-
-
-//        
-//        RealVector p1 = new RealVector("0.0075 0.1221");
-//        RealVector p2 = new RealVector("0.2385 0.0231");
-//        RealVector pres = new RealVector("10 10");
-//        
-//        Area firstArea = new Area(pres,p1,p2);
-//        
-
-
         RiemannProfileCalc rc = new RiemannProfileCalc(firstArea, waveCurveForward0, waveCurveBackward1);
 
+        RiemannProfileGeomFactory riemannProfileGeomFactory = new RiemannProfileGeomFactory(rc);
 
+        RPnDataModule.RIEMANNPHASESPACE.join(riemannProfileGeomFactory.geom());
 
-
-
-
-        try {
-            RiemannProfile profile = (RiemannProfile) rc.calc();
-
-            System.out.println(profile);
-
-            RiemannProfileGeomFactory riemannProfileGeomFactory = new RiemannProfileGeomFactory(rc);
-
-
-            RPnDataModule.RIEMANNPHASESPACE.join(riemannProfileGeomFactory.geom());
-
-
-
-        } catch (RpException ex) {
-        }
-
-
+        RPnDataModule.RIEMANNPHASESPACE.update();
 
         for (RPnPhaseSpaceFrame frame : RPnUIFrame.getRiemannFrames()) {
 
             frame.setVisible(true);
 
         }
-
-
-
-
-
-
-    }
-
-    private Rectangle2D createAreaRectangle(Area area) {
-
-
-        RPnPhaseSpaceFrame[] frames = RPnUIFrame.getPhaseSpaceFrames();
-
-        ViewingTransform viewTransform = frames[0].phaseSpacePanel().scene().getViewingTransform();
-
-
-        RealVector areaTopRight = area.getTopRight();
-        RealVector areaDownLeft = area.getDownLeft();
-
-
-        CoordsArray topRightWC = new CoordsArray(areaTopRight);
-
-        CoordsArray downLeftWC = new CoordsArray(areaDownLeft);
-
-        Coords2D topRightDC = new Coords2D();
-
-        Coords2D downLeftDC = new Coords2D();
-
-
-        viewTransform.viewPlaneTransform(topRightWC, topRightDC);
-        viewTransform.viewPlaneTransform(downLeftWC, downLeftDC);
-
-
-        double x = downLeftDC.getX();
-        double y = topRightDC.getY();
-
-
-        double w = topRightDC.getX() - downLeftDC.getX();
-        double h = topRightDC.getY() - downLeftDC.getY();
-
-
-
-        return new Rectangle2D.Double(x, y, w, h);
 
     }
 
