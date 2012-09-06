@@ -8,7 +8,6 @@ package rpn.usecase;
 import java.awt.event.ActionEvent;
 import javax.swing.JToggleButton;
 import rpn.RPnStateInformationFrame;
-import rpn.component.RpGeometry;
 import rpn.controller.ui.TRACKPOINT_CONFIG;
 import rpn.controller.ui.UIController;
 import rpnumerics.RPnStateInfo;
@@ -85,7 +84,9 @@ public class TrackPointAgent extends RpModelActionAgent {
 
 
         if (button_.isSelected()) {
-            if (UIController.instance().globalInputTable().values().getSize() == rpnumerics.RPNUMERICS.domainDim()) {
+//            if (UIController.instance().globalInputTable().values().getSize() == rpnumerics.RPNUMERICS.domainDim()) {
+                
+                if (phaseSpace_.getSpace().getDim() == rpnumerics.RPNUMERICS.domainDim()) {
                 StateInformation stateInformation = new StateInformation();
 
                 RealVector realVectorWC = new RealVector(wcCoords.getCoords());

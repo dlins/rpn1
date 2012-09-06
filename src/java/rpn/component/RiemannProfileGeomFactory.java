@@ -40,8 +40,9 @@ public class RiemannProfileGeomFactory extends RpCalcBasedGeomFactory {
 
     protected RpGeometry createGeomFromSource() {
         RiemannProfile riemannProfile = (RiemannProfile) geomSource();
+        
 
-        return new RiemannProfileGeom(MultidAdapter.converseOrbitPointsToCoordsArray(riemannProfile.getPoints()), this);
+        return new RiemannProfileGeom(MultidAdapter.converseRiemannProfileToCoordsArray(riemannProfile.getPoints()), this);
     }
 
     public String toXML() {
