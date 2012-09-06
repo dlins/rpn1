@@ -235,6 +235,8 @@ public abstract class RPnCurve {
 
 
         ArrayList segments = (ArrayList) segments();
+        
+//        System.out.println("tamanho em findClose: "+segments.size());
 
         RealVector target = new RealVector(targetPoint);
         RealVector closest = null;
@@ -247,7 +249,6 @@ public abstract class RPnCurve {
 
             RealSegment segment = (RealSegment) segments.get(i);
             segmentVector = new RealVector(segment.p1());
-
             segmentVector.sub(segment.p2());
 
             //------------------------------------------

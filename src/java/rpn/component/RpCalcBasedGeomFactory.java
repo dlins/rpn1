@@ -16,6 +16,7 @@ import rpn.controller.ui.UserInputTable;
 import rpn.parser.RPnDataModule;
 
 import rpnumerics.Area;
+import rpnumerics.HugoniotCurve;
 import rpnumerics.RPnCurve;
 
 import rpnumerics.RpCalculation;
@@ -135,7 +136,7 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
 
                 System.out.println("GeometryGraphND.indContido.size() : " +GeometryGraphND.indContido.size());
 
-
+//                System.out.println("tamanho antes: "+  ((SegmentedCurve) geomSource_).segments().size());
                 for (int i = 0; i < GeometryGraphND.indContido.size(); i++) {
                     int ind = Integer.parseInt((GeometryGraphND.indContido.get(i)).toString());
                     segRem.add(((SegmentedCurve) geomSource_).segments().get(ind));
@@ -143,6 +144,9 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
 
                 ((SegmentedCurve) geomSource_).segments().removeAll(segRem);
                 GeometryGraphND.indContido.clear();
+                
+
+                
 
 //                // Pode ser útil na hora de fazer inclusao dos novos segmentos (para nao serem eliminados)
 //                UserInputTable userInputList = UIController.instance().globalInputTable();
@@ -157,9 +161,15 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
 //                SegmentedCurve newCurve = (SegmentedCurve) calc_.recalc(area);
 //
 //                ((SegmentedCurve) geomSource_).segments().addAll(newCurve.segments());
-//
-//                geom_ = createGeomFromSource();
-//                isGeomOutOfDate_ = true;
+
+                geom_ = createGeomFromSource();
+
+                isGeomOutOfDate_ = true;
+//                System.out.println("tamanho depois: "+  ((SegmentedCurve) geomSource_).segments().size());
+                
+                System.out.print(((HugoniotCurve) geomSource_).toXML());
+                
+
 
             }
 

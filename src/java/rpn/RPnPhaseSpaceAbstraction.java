@@ -226,6 +226,8 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
 
                         RpGeomFactory factory = geom.geomFactory();
                         RPnCurve curve = (RPnCurve) factory.geomSource();
+                        
+//                        System.out.println("Tamanho na cruz: "+curve.segments().size());
 
                         // -----------------------------------
                         if (curve instanceof SegmentedCurve) {
