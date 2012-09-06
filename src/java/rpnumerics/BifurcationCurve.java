@@ -91,8 +91,7 @@ public class BifurcationCurve extends SegmentedCurve {
         ArrayList<RealSegment> returned = new ArrayList<RealSegment>();
 
         returned.addAll(leftSeg);
-        //returned.addAll(rightSeg);
-        //returned.addAll(leftSeg);
+        returned.addAll(rightSeg);
 
         return returned;
 
