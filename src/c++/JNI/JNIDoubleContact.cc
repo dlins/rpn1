@@ -123,6 +123,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
 
     for (int i = 0; i < left_vrs.size(); i++) {
         cout<<"Ponto esquerda: "<<left_vrs[i]<<" Ponto direita: "<<right_vrs[i]<<endl;
+        //cout<<left_vrs[i](0)<<" "<<left_vrs[i](1)<<endl;
 
 
     }

@@ -103,10 +103,10 @@ public class ClassifierAgent extends RpModelPlotAgent {
 
             GeometryGraphND.pMarca = curve.findClosestPoint(newValue);
 
-            if (curve instanceof DoubleContactCurve  ||  curve instanceof SecondaryBifurcationCurve) {
-                GeometryGraphND.pMarcaDC = GeometryGraphND.secondPointDC(curve);
-            }
-            else GeometryGraphND.pMarcaDC = GeometryGraphND.pMarca;
+//            if (curve instanceof DoubleContactCurve  ||  curve instanceof SecondaryBifurcationCurve) {
+//                GeometryGraphND.pMarcaDC = GeometryGraphND.secondPointDC(curve);
+//            }
+//            else GeometryGraphND.pMarcaDC = GeometryGraphND.pMarca;
 
         }
 
