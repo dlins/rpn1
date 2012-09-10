@@ -37,6 +37,7 @@ import org.apache.batik.svggen.SVGGraphics2D;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import rpn.component.util.GeometryGraph;
+import rpn.controller.RPnPhasePanelBoxPlotter;
 import rpn.controller.ui.AREASELECTION_CONFIG;
 import rpn.controller.ui.CLASSIFIERAGENT_CONFIG;
 import rpn.controller.ui.UIController;
@@ -54,9 +55,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     static public Color DEFAULT_BACKGROUND_COLOR = Color.black;
     static public Color DEFAULT_POINTMARK_COLOR = Color.white;
     //***
-
     public static List<Area> listaArea = new ArrayList<Area>();     //** declarei isso    (Leandro) - ainda nao esta sendo usado
-
     public static int myH_;                                          //** declarei isso    (Leandro)
     public static int myW_;                                          //** declarei isso    (Leandro)
 
@@ -112,6 +111,8 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
                     getCompIndexes()[1]);
         }
         ui_.install(this);
+
+
         // calculates viewing window dimensions
         int myW = new Double(scene().getViewingTransform().viewPlane().
                 getViewport().getWidth()).intValue();
@@ -163,6 +164,9 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     @Override
     public void paintComponent(Graphics g) {
 
+
+
+
         super.paintComponent(g);
         Stroke stroke = ((Graphics2D) g).getStroke();
         BasicStroke newStroke = new BasicStroke(1.1f);
@@ -198,14 +202,21 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
                     ((Point) getCastedUI().pointMarkBuffer().get(i)).y, 5, 5);
         }
 
+
         /*
          * SELECTED AREAS
          */
 
+
+        for (Rectangle2D.Double rectangle : getCastedUI().getSelectionAreas()) {
+
+            g.drawRect((int) rectangle.getX(), (int) rectangle.getY(), (int) rectangle.width, (int) rectangle.height);
+
+        }
+
         g.setColor(DEFAULT_POINTMARK_COLOR);
 
-        for (rpnumerics.Area selectedArea : BifurcationProfile.instance().getSelectedAreas()) {
-        }
+
 
         /*
          * Tracked Point
@@ -215,11 +226,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         }
 
 
-        for (Rectangle2D.Double rectangle : getCastedUI().getSelectionAreas()) {
 
-            g.drawRect((int) rectangle.getX(), (int) rectangle.getY(), (int) rectangle.width, (int) rectangle.height);
-
-        }
 
         //** Leandro: início.
 
@@ -227,13 +234,13 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         myW_ = getWidth();
 
 
-        if ((scene().getAbstractGeom()).getSpace().getDim()==2) {
-
-            GeometryGraph geom = new GeometryGraph();
-            geom.markPoints(scene());
-            geom.paintComponent(g, scene(),this);
-
-        }
+//        if ((scene().getAbstractGeom()).getSpace().getDim() == 2) {
+//            
+//            GeometryGraph geom = new GeometryGraph();
+//            geom.markPoints(scene());
+//            geom.paintComponent(g, scene(), this);
+//            
+//        }
 
 //        if (RPNUMERICS.domainDim() == 3) {
 //
@@ -328,7 +335,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         be enabled assuming that the PrintJob behaviour is to
         stop the callback for print only when the return value
         is NO_SUCH_PAGE or the job is queued to a spooler
-
+        
         we could possibly have a save to file option dialog instead.
          */
 
@@ -384,8 +391,9 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
             Iterator it = scene_.geometries();
             while (it.hasNext()) {
                 GeomObjView geometry = (GeomObjView) it.next();
-                if (geometry.getViewingAttr().isVisible())
-                geometry.draw(svgGenerator);
+                if (geometry.getViewingAttr().isVisible()) {
+                    geometry.draw(svgGenerator);
+                }
 
 
             }
@@ -415,6 +423,37 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         for (Rectangle2D.Double rectangle : getCastedUI().getSelectionAreas()) {
             g.fill(rectangle);
         }
+
+    }
+
+    public List<GeomObjView> intersectAreas() {
+
+        ArrayList<GeomObjView> geomList = new ArrayList<GeomObjView>();
+
+        Iterator<Rectangle2D.Double> areaIterator = getCastedUI().getSelectionAreas().iterator();
+
+        while (areaIterator.hasNext()) {
+            Rectangle2D.Double area = areaIterator.next();
+
+            Iterator<GeomObjView> geomViewIterator = scene_.geometries();
+
+            while (geomViewIterator.hasNext()) {
+                GeomObjView geomObjView = geomViewIterator.next();
+                if (geomObjView instanceof ShapedGeometry) {
+
+                    ShapedGeometry shapedGeometry = (ShapedGeometry) geomObjView;
+
+                    if (shapedGeometry.getShape().intersects(area)) {
+                        geomList.add(geomObjView);
+                    }
+
+                }
+
+            }
+
+        }
+
+        return geomList;
 
     }
 }

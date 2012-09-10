@@ -24,7 +24,7 @@ public class Area {
         topRight_ = topRight;
         downLeft_ = downLeft;
         resolution_ = resolution;
-        System.out.println("Construtor de Area");
+
     }
 
     public RealVector getDownLeft() {

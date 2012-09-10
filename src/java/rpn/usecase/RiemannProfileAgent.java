@@ -5,7 +5,8 @@
  */
 package rpn.usecase;
 
-import java.awt.Shape;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.geom.Rectangle2D;
 import java.util.Iterator;
@@ -21,10 +22,9 @@ import rpn.parser.RPnDataModule;
 import rpnumerics.*;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
-import wave.multid.DimMismatchEx;
+import wave.multid.Space;
 import wave.multid.view.GeomObjView;
 import wave.multid.view.Scene;
-import wave.multid.view.ShapedGeometry;
 import wave.multid.view.ViewingTransform;
 import wave.util.RealVector;
 
@@ -66,64 +66,76 @@ public class RiemannProfileAgent extends RpModelPlotAgent {
 
         List<Area> areaList = AreaSelectionAgent.instance().getListArea();
 
-        Area firstArea = areaList.get(areaList.size() - 1);
+        Area firstArea = null;
 
         Iterator<RPnPhaseSpacePanel> panelsIterator = UIController.instance().getInstalledPanelsIterator();
-
         WaveCurve waveCurveForward0 = null;
         WaveCurve waveCurveBackward1 = null;
 
         while (panelsIterator.hasNext()) {
+
             RPnPhaseSpacePanel rPnPhaseSpacePanel = panelsIterator.next();
+            System.out.println(rPnPhaseSpacePanel.getCastedUI().getSelectionAreas().size());
+            
+for (Rectangle2D.Double rect: rPnPhaseSpacePanel.getCastedUI().getSelectionAreas()){
+    
+    System.out.println(rect);
+    
+    
+}
 
-            Scene scene = rPnPhaseSpacePanel.scene();
-
-            Iterator sceneIterator = scene.geometries();
-
-            while (sceneIterator.hasNext()) {
-
-                GeomObjView geomView = (GeomObjView) sceneIterator.next();
-
-                if (geomView instanceof WaveCurveView) {
-
-                    ShapedGeometry shapedGeometry = (ShapedGeometry) geomView;
-
-
-                    if (shapedGeometry.intersects(firstArea)) {
-
-                        WaveCurveGeom waveCurveGeom = (WaveCurveGeom) geomView.getAbstractGeom();
-
-
-                        WaveCurve waveCurve = (WaveCurve) waveCurveGeom.geomFactory().geomSource();
-
-                        if (waveCurve.getFamily() == 0 && waveCurve.getDirection() == 10) {
-
-                            waveCurveForward0 = waveCurve;
-
-                        } else {
-                            waveCurveBackward1 = waveCurve;
-
-                        }
-
-                    }
-
-                }
-            }
-        }
-
-        RiemannProfileCalc rc = new RiemannProfileCalc(firstArea, waveCurveForward0, waveCurveBackward1);
-
-        RiemannProfileGeomFactory riemannProfileGeomFactory = new RiemannProfileGeomFactory(rc);
-
-        RPnDataModule.RIEMANNPHASESPACE.join(riemannProfileGeomFactory.geom());
-
-        RPnDataModule.RIEMANNPHASESPACE.update();
-
-        for (RPnPhaseSpaceFrame frame : RPnUIFrame.getRiemannFrames()) {
-
-            frame.setVisible(true);
+//            List<GeomObjView> intersectCurves = rPnPhaseSpacePanel.intersectAreas();
+//
+//            for (GeomObjView geomObjView : intersectCurves) {
+//
+//                if (geomObjView instanceof WaveCurveView) {
+//
+//                    WaveCurveGeom waveCurveGeom = (WaveCurveGeom) geomObjView.getAbstractGeom();
+//
+//                    WaveCurve waveCurve = (WaveCurve) waveCurveGeom.geomFactory().geomSource();
+//
+//                    if (waveCurve.getFamily() == 0 && waveCurve.getDirection() == 10) {
+//
+//                        waveCurveForward0 = waveCurve;
+//
+//                    } else {
+//                        waveCurveBackward1 = waveCurve;
+//
+//                    }
+//
+//                }
+//            }
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
 
         }
+
+
+        
+//        
+//        
+//        RiemannProfileCalc rc = new RiemannProfileCalc(firstArea, waveCurveForward0, waveCurveBackward1);
+//
+//        RiemannProfileGeomFactory riemannProfileGeomFactory = new RiemannProfileGeomFactory(rc);
+//
+//        RPnDataModule.RIEMANNPHASESPACE.join(riemannProfileGeomFactory.geom());
+//
+//        RPnDataModule.RIEMANNPHASESPACE.update();
+//
+//        for (RPnPhaseSpaceFrame frame : RPnUIFrame.getRiemannFrames()) {
+//
+//            frame.setVisible(true);
+//
+//        }
 
     }
 
@@ -133,4 +145,48 @@ public class RiemannProfileAgent extends RpModelPlotAgent {
         }
         return instance_;
     }
+    
+    
+    
+     public Area createWCArea(Scene scene, Rectangle2D.Double viewArea) {
+
+        ViewingTransform viewTransform = scene.getViewingTransform();
+
+        Rectangle bounds = viewArea.getBounds();
+        
+        Point upLefPointCorner = bounds.getLocation();
+        
+        Coords2D upLeftCorner = new Coords2D(upLefPointCorner.x,upLefPointCorner.y);
+        
+        Coords2D downRightCorner = new Coords2D(upLefPointCorner.x+bounds.width,upLefPointCorner.y+bounds.height);
+        
+        CoordsArray upLeftCornerArray = new CoordsArray(new Space("", 2));
+        CoordsArray downRightArray = new CoordsArray(new Space("", 2));
+        
+        viewTransform.dcInverseTransform(upLeftCorner,upLeftCornerArray);
+        
+        viewTransform.dcInverseTransform(downRightCorner,downRightArray);
+                
+        RealVector upLeftCornerVector = new RealVector(upLeftCornerArray.getCoords());
+        
+        RealVector downRightArrayVector = new RealVector(downRightArray.getCoords());
+        
+        double [] dummyResolution  = {10,10};
+        
+        RealVector dummyResolutionVector = new RealVector(dummyResolution);
+        
+        Area result = new Area(dummyResolutionVector,upLeftCornerVector,downRightArrayVector);
+        
+        return result;
+        
+
+
+    }
+
+    
+    
+    
+    
+    
+    
 }

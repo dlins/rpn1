@@ -57,6 +57,11 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
         pointMarkBuffer_ = new ArrayList();
         selectionAreas_ = new ArrayList<Rectangle2D>();
     }
+    
+    
+    
+
+    
 
     //
     // Inner Classes
@@ -67,7 +72,6 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
         public void mouseMoved(MouseEvent event) {
             if (event.getComponent() instanceof RPnPhaseSpacePanel) {
                 RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
-
                 int xCursorPos = event.getPoint().x;
                 int yCursorPos = event.getPoint().y;
                 if ((UIController.instance().getState() instanceof TRACKPOINT_CONFIG )&&

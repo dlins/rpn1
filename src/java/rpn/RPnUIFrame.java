@@ -342,7 +342,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         RectBoundary boundary = new RectBoundary(min, max);
         Space riemanProfileSpace = new Space("RiemannProfileSpace", RPNUMERICS.domainDim() + 1);
-        riemannFrames_ = new RPnPhaseSpaceFrame[RPNUMERICS.domainDim()];
+        riemannFrames_ = new RPnRiemannFrame[RPNUMERICS.domainDim()];
 
         for (int i = 0; i < riemannFrames_.length; i++) {
             int[] testeArrayIndex = {0, i+1};
@@ -353,13 +353,16 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
             try {
                 wave.multid.view.Scene riemannScene = RPnDataModule.RIEMANNPHASESPACE.createScene(riemanTesteTransform, new wave.multid.view.ViewingAttr(Color.black));
-                riemannFrames_[i] = new RPnPhaseSpaceFrame(riemannScene, commandMenu_);
+                riemannFrames_[i] = new RPnRiemannFrame(riemannScene, commandMenu_);
 
             } catch (DimMismatchEx ex) {
                 ex.printStackTrace();
             }
             riemannFrames_[i].pack();
+            riemannFrames_[i].setVisible(true);
         }
+        
+        
 
     }
 

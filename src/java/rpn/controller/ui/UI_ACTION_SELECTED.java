@@ -5,10 +5,16 @@
  */
 package rpn.controller.ui;
 
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import wave.util.RealVector;
 import rpn.usecase.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import javax.swing.AbstractButton;
+import rpn.RPnPhaseSpacePanel;
+import rpn.controller.RPnPhasePanelBoxPlotter;
 
 public class UI_ACTION_SELECTED implements UserInputHandler {
     //
@@ -18,10 +24,39 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
     private RpModelActionAgent actionSelected_;
     private List userInputList_;
 
-
     public UI_ACTION_SELECTED(RpModelActionAgent action) {
+
         actionSelected_ = action;
         userInputList_ = new ArrayList();
+
+        if (action instanceof RpModelPlotAgent) {
+            Iterator<RPnPhaseSpacePanel> iterator = UIController.instance().getInstalledPanelsIterator();
+            while (iterator.hasNext()) {
+                RPnPhaseSpacePanel button = iterator.next();
+                MouseMotionListener[] mouseMotionArray = (MouseMotionListener[]) button.getListeners(MouseMotionListener.class);
+                MouseListener[] mouseListenerArray = (MouseListener[]) button.getListeners(MouseListener.class);
+
+                for (MouseListener mouseListener : mouseListenerArray) {
+
+                    if (mouseListener instanceof RPnPhasePanelBoxPlotter) {
+                        button.removeMouseListener(mouseListener);
+                    }
+                }
+
+                for (MouseMotionListener mouseMotionListener : mouseMotionArray) {
+
+                    if (mouseMotionListener instanceof RPnPhasePanelBoxPlotter) {
+                        button.removeMouseMotionListener(mouseMotionListener);
+                    }
+
+                }
+
+            }
+
+        }
+
+
+
     }
 
     public RealVector[] userInputList(rpn.controller.ui.UIController ui) {
@@ -53,8 +88,7 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
                 //************************************************
 
             }
-        }
-        else if (UIController.instance().getState() instanceof AREASELECTION_CONFIG) {
+        } else if (UIController.instance().getState() instanceof AREASELECTION_CONFIG) {
             UIController.instance().addCommand(new Command(this, userInput));
             UIController.instance().setWaitCursor();
             actionSelected_.execute();
@@ -62,8 +96,7 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
             userInputList_.clear();
             ui.panelsBufferClear();
             rpn.parser.RPnDataModule.PHASESPACE.unselectAll();
-        }
-        else {
+        } else {
             UIController.instance().addCommand(new Command(this, userInput));
             UIController.instance().setWaitCursor();
             actionSelected_.execute();
@@ -76,7 +109,7 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
 
     }
 
-    public void userInputComplete(UIController ui) {    
+    public void userInputComplete(UIController ui) {
 
         UIController.instance().addCommand(new Command(this));
         UIController.instance().setWaitCursor();
@@ -88,9 +121,8 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
 
     }
 
-
     protected boolean isPoincareInputReady() {
-      
+
         if (userInputList_.size() == rpnumerics.RPNUMERICS.domainDim()) {
             System.out.println("Return true in isPoincareInputReady() !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             return true;
@@ -99,7 +131,7 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
     }
 
     protected boolean isDiagonalSelection() {
-       
+
         if (userInputList_.size() == 2) {
             return true;
         }
@@ -111,7 +143,7 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
     }
 
     public int actionDimension() {
-        
+
 
         return rpnumerics.RPNUMERICS.domainDim();
     }

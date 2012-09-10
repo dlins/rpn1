@@ -119,6 +119,8 @@ public abstract class ShapedGeometry implements GeomObjView {
         double h = topRightDC.getY() + downLeftDC.getY();
 
         Rectangle2D.Double areaRectangle = new Rectangle2D.Double(x, y, w, h);
+        
+     
 
         return getShape().intersects(areaRectangle);
 
