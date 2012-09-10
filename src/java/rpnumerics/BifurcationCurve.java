@@ -34,6 +34,8 @@ public class BifurcationCurve extends SegmentedCurve {
         leftSegments_ = leftList;
         rightSegments_ = rightList;
 
+        System.out.println("CTOR de BifurcationCurve");
+
     }
 
 
@@ -84,13 +86,14 @@ public class BifurcationCurve extends SegmentedCurve {
     }
 
     private static List createSingleSegmentList(List<RealSegment> leftSeg, List<RealSegment> rightSeg) {
-
+    
         ArrayList<RealSegment> returned = new ArrayList<RealSegment>();
 
         returned.addAll(leftSeg);
         returned.addAll(rightSeg);
 
         return returned;
+
 
 
 

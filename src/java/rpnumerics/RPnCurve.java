@@ -238,6 +238,16 @@ public abstract class RPnCurve {
         
 //        System.out.println("tamanho em findClose: "+segments.size());
 
+        
+        if (this instanceof BifurcationCurve) {
+
+            if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("RightPhase Space"))
+                segments = (ArrayList) ((BifurcationCurve)this).rightSegments();
+
+            if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("LeftPhase Space"))
+                segments = (ArrayList) ((BifurcationCurve)this).leftSegments();
+        }
+
         RealVector target = new RealVector(targetPoint);
         RealVector closest = null;
         RealVector segmentVector = null;

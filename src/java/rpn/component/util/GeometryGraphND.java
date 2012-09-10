@@ -41,6 +41,7 @@ import wave.util.RealVector;
 import rpn.controller.ui.CLASSIFIERAGENT_CONFIG;
 import rpn.controller.ui.VELOCITYAGENT_CONFIG;
 import rpn.parser.RPnDataModule;
+import rpn.parser.RPnVisualizationModule;
 import rpn.usecase.ClassifierAgent;
 import rpn.usecase.VelocityAgent;
 import rpnumerics.WaveCurve;
@@ -419,7 +420,11 @@ public class GeometryGraphND {
                 double xCurve2 = dcCoordsCurve2.getElement(0);
                 double yCurve2 = dcCoordsCurve2.getElement(1);
 
-                if ((square1.contains(xCurve, yCurve) && square1.contains(xCurve2, yCurve2))) {
+                double xMed = (xCurve+xCurve2)*0.5;
+                double yMed = (yCurve+yCurve2)*0.5;
+
+                //if ((square1.contains(xCurve, yCurve) && square1.contains(xCurve2, yCurve2))) {
+                if (square1.contains(xMed, yMed)) {
                     indContido.add(i);
                     if (zerado == 2) {
                         zContido.add(((RealSegment) (((SegmentedCurve)curve).segments()).get(i)).p1().getElement(2));
@@ -489,11 +494,14 @@ public class GeometryGraphND {
         int nv = (int) yResolution;
         double dy = deltaY/(1.0*nv);
 
+
         //*** desenha as linhas verticais
         for (int i = 0; i < nu; i++) {
             //linex = new Line2D.Double(i * dx, 0, i * dx, RPnPhaseSpacePanel.myH_);
             linex = new Line2D.Double(i * dx, 0, i * dx, deltaY);
-            if (index == 0  && mapToEqui == 1) linex = mapLine(linex, deltaX, deltaY);
+            if (index == 0 && mapToEqui == 1) {
+                linex = mapLine(linex, deltaX, deltaY);
+            }
             graph.draw(linex);
         }
         //*******************************
@@ -502,22 +510,25 @@ public class GeometryGraphND {
         for (int i = 0; i < nv; i++) {
             //liney = new Line2D.Double(0, i * dy, RPnPhaseSpacePanel.myW_, i * dy);                // preencher com coordenadas do dispositivo
             liney = new Line2D.Double(0, i * dy, deltaX, i * dy);                                   // preencher com coordenadas do dispositivo
-            if (index == 0  &&  mapToEqui == 1) liney = mapLine(liney, deltaX, deltaY);
+            if (index == 0 && mapToEqui == 1) {
+                liney = mapLine(liney, deltaX, deltaY);
+            }
             graph.draw(liney);
         }
         //*********************************
 
-        //*** desenha as linhas obliquas        
+        //*** desenha as linhas obliquas
         for (int i = 0; i < 2 * nu; i++) {
             lineObl = new Line2D.Double(0, deltaY - i * dy, i * dx, deltaX);
-            if (mapToEqui == 1) lineObl = mapLine(lineObl, deltaX, deltaY);
+            if (mapToEqui == 1) {
+                lineObl = mapLine(lineObl, deltaX, deltaY);
+            }
             graph.draw(lineObl);
         }
         //*****************************************
         
 
     }
-
 
 
 }

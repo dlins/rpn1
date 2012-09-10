@@ -309,9 +309,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         // --------------------------------
         Space zoomSpace = new Space("teste", RPNUMERICS.domainDim());
         int[] testeArrayIndex = {0,1};
-        RPnProjDescriptor projDescriptor = new RPnProjDescriptor(zoomSpace, "teste", 400, 400, testeArrayIndex, false);
+        RPnProjDescriptor projDescriptor = new RPnProjDescriptor(zoomSpace, "teste", 700, 700, testeArrayIndex, false);
             wave.multid.view.ViewingTransform viewingTransf = projDescriptor.createTransform(clipping);
-            // ----------------------------
+        // ----------------------------
 
         JButton closeButton = new JButton("Close");
 

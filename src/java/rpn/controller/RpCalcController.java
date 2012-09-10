@@ -47,14 +47,12 @@ public class RpCalcController implements RpController {
         if (change.getPropertyName().compareTo("refine") == 0) {
 
             System.out.println("Refinamento");
-
+            
             Area area = (Area) change.getNewValue();
             geomFactory_.updateGeom(area);
 
             return;
         }
-
-
 
 
         if (change.getPropertyName().compareTo("enabled") != 0) {
@@ -63,8 +61,6 @@ public class RpCalcController implements RpController {
 //	        if (geomFactory_.geom().viewingAttr().isVisible())
             geomFactory_.updateGeom();
         }
-
-
 
 
 

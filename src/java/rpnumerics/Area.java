@@ -9,6 +9,7 @@ package rpnumerics;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpacePanel;
 import rpn.component.RpGeometry;
+import rpn.component.util.GeometryGraphND;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UserInputTable;
 import rpn.parser.RPnDataModule;
@@ -53,12 +54,15 @@ public class Area {
 
 
     public boolean isClosestCurve(RPnCurve curve) {
-        UserInputTable userInputList = UIController.instance().globalInputTable();
-        RealVector newValue = userInputList.values();
-        RPnPhaseSpaceAbstraction phaseSpace = RPnDataModule.PHASESPACE;
+        //UserInputTable userInputList = UIController.instance().globalInputTable();
+        //RealVector newValue = userInputList.values();
+        //RPnPhaseSpaceAbstraction phaseSpace = RPnDataModule.PHASESPACE;
+        //RpGeometry geom = phaseSpace.findClosestGeometry(newValue);
 
-        RpGeometry geom = phaseSpace.findClosestGeometry(newValue);
-        
+
+        RPnPhaseSpaceAbstraction phaseSpace = RPnDataModule.PHASESPACE;
+        RpGeometry geom = phaseSpace.findClosestGeometry(GeometryGraphND.pMarca);
+
         return (curve == (RPnCurve)(geom.geomFactory().geomSource()));
     }
 
