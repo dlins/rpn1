@@ -12,7 +12,6 @@ import rpnumerics.methods.contour.ContourCurve;
 
 import wave.multid.view.ViewingAttr;
 import wave.util.RealSegment;
-import wave.util.RealVector;
 
 public class BifurcationCurve extends SegmentedCurve {
     //

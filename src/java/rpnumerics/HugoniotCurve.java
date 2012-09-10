@@ -231,6 +231,24 @@ public class HugoniotCurve extends SegmentedCurve {
 
         RealSegment closestSegment = (RealSegment) segments.get(findClosestSegment(targetPoint));
 
+        //*** Acrescentei esse trecho em 07SET2012
+        RealVector segmentVector = new RealVector(closestSegment.p1());
+	segmentVector.sub(closestSegment.p2());
+	RealVector temp = new RealVector(targetPoint);
+	temp.sub(closestSegment.p2());
+	double alpha = temp.dot(segmentVector)
+                    / segmentVector.dot(segmentVector);
+
+	if (alpha <= 0) {
+            return closestSegment.p1();
+        }
+        if (alpha >= 1) {
+            return closestSegment.p2();
+        }
+        //*****
+
+
+
         RealVector projVec = calcVecProj(closestSegment.p2(), targetPoint,
                 closestSegment.p1());
 

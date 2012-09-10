@@ -420,7 +420,11 @@ public class GeometryGraphND {
                 double xCurve2 = dcCoordsCurve2.getElement(0);
                 double yCurve2 = dcCoordsCurve2.getElement(1);
 
-                if ((square1.contains(xCurve, yCurve) && square1.contains(xCurve2, yCurve2))) {
+                double xMed = (xCurve+xCurve2)*0.5;
+                double yMed = (yCurve+yCurve2)*0.5;
+
+                //if ((square1.contains(xCurve, yCurve) && square1.contains(xCurve2, yCurve2))) {
+                if (square1.contains(xMed, yMed)) {
                     indContido.add(i);
                     if (zerado == 2) {
                         zContido.add(((RealSegment) (((SegmentedCurve)curve).segments()).get(i)).p1().getElement(2));

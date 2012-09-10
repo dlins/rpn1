@@ -78,6 +78,8 @@ public class AreaSelectionAgent extends RpModelPlotAgent {
 
     public void execute_() {
 
+        listArea_.clear();
+
         UserInputTable userInputList = UIController.instance().globalInputTable();
         RealVector newValue = userInputList.values();
 
@@ -105,7 +107,7 @@ public class AreaSelectionAgent extends RpModelPlotAgent {
         }
 
         if (n == 1  &&  curve instanceof SegmentedCurve) {
-            listArea_.clear();
+            //listArea_.clear();
 
             String Re1 = JOptionPane.showInputDialog(null, "Resolucao horizontal", "Resolucao", JOptionPane.QUESTION_MESSAGE);
             String Re2 = JOptionPane.showInputDialog(null, "Resolucao vertical", "Resolucao", JOptionPane.QUESTION_MESSAGE);
@@ -128,7 +130,7 @@ public class AreaSelectionAgent extends RpModelPlotAgent {
         }
 
         if (n == 2  &&  curve instanceof WaveCurve) {
-            listArea_.clear();
+            //listArea_.clear();
             area = new Area(GeometryGraph.topRight, GeometryGraph.downLeft);
             System.out.println(area);
             listArea_.add(area);

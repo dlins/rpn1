@@ -8,6 +8,7 @@ package rpn.component;
 import java.util.ArrayList;
 import java.util.List;
 import rpn.RPnDesktopPlotter;
+import rpn.RPnPhaseSpaceAbstraction;
 import rpn.component.util.GeometryGraphND;
 import rpn.controller.RpCalcController;
 import rpn.controller.RpController;
@@ -124,7 +125,7 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
 
     public void updateGeom(Area area) {
 
-        System.out.println("Estou antes do if do updateGeom(Area) ... ");
+        System.out.println("Area dentro do updateGeom(Area) :::::::::: " +area.toString());
 
         //try {
             if (area.isClosestCurve((RPnCurve) geomSource_)) {
@@ -144,6 +145,8 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
                 ((SegmentedCurve) geomSource_).segments().removeAll(segRem);
                 GeometryGraphND.indContido.clear();
 
+
+
 //                // Pode ser útil na hora de fazer inclusao dos novos segmentos (para nao serem eliminados)
 //                UserInputTable userInputList = UIController.instance().globalInputTable();
 //                RealVector newValue = userInputList.values();
@@ -157,9 +160,10 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
 //                SegmentedCurve newCurve = (SegmentedCurve) calc_.recalc(area);
 //
 //                ((SegmentedCurve) geomSource_).segments().addAll(newCurve.segments());
-//
-//                geom_ = createGeomFromSource();
-//                isGeomOutOfDate_ = true;
+
+
+                geom_ = createGeomFromSource();
+                isGeomOutOfDate_ = true;
 
             }
 

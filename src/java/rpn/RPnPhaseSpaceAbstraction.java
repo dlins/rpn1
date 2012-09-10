@@ -234,7 +234,6 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
                             RpCalculation calc = geomFactory.rpCalc();
                             ContourCurveCalc curveCalc = (ContourCurveCalc) calc;
                             listResolution.add(curveCalc.getParams().getResolution());
-
                         }
                         else {
                             areaToGrid = false;

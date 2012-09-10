@@ -23,6 +23,7 @@ import rpnumerics.RPnCurve;
 import rpnumerics.SegmentedCurve;
 import wave.util.RealVector;
 import rpn.controller.ui.CLASSIFIERAGENT_CONFIG;
+import rpn.parser.RPnDataModule;
 
 /**
  *

@@ -242,7 +242,6 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
     public void paintComponent(Graphics g, Scene scene_, RPnPhaseSpacePanel panel) {
 
         changeColor();
-
         drawFirstPanel(g, scene_, panel);
 
     }
