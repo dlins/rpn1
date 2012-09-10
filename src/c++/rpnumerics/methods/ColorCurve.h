@@ -20,33 +20,22 @@
 
 extern "C" void dgesv_(int*,int*,double *,int*,int *,double *,int* ,int*);
 
-
 struct HugoniotPolyLine {
 public:
+    // Elements of extrema, points coordinates, speeds and eginvalues
+    //
     std::vector<RealVector>  point;  	  // Each element has size = dimension (dim).
     std::vector<double>      speed;       // Speed at each point.
     std::vector<RealVector>  eigenvalue;  // Each element has size = number of valid eigenvalues (fam).
-    std::vector<std::string> signature;   // This returns the Hugoniot signature, i.e., "--++", etc
+
+    // Elements of segment, type (color) and signature
+    //
+    int         type;                     // A color table is needed for graphical issues.
+    std::string signature;                // This returns the Hugoniot signature, i.e., "--++", etc
                                           // zero means characteristic, "-." or "+." means complex
                                           // conjugate, with the real part sign.
 
-
-//    std::vector<int>        complextype; // If eigenvalue is real, complextype = 0.
-    /*  [COMPLEX_TYPE explanation:]
-     *
-     *  The complextype (ct) helps in the signature classification, thus ct = 0 means all eigenvalues
-     *  are real. For fam = 2, ct = -1 means the left side has complex eigenvalues, ct = 1 means the
-     *  right side has complex eigenvalues. (It must be written with an asterix after the real part
-     *  sign, for example, +*-- for ct = -1, or -+-* for ct = 1.)
-     *     The ordering of eigenvalues helps for more than 2 valid eigenvalues. With negative ct,
-     *  the number is related with the pair, as well as a positive ct. For example with three valid
-     *  eigenvalues, we can have for ct = -2 the sigature -+*--+, and for ct = 1, we can have the
-     *  signature ----*+. (Notice that   |ct| < fam   always holds.)
-     */
-    int type;
-    
     HugoniotPolyLine() {
-      
         type = -1;
     };
 
@@ -65,7 +54,7 @@ class ColorCurve {
     private:
         std::string sp, sm, sc, sz;
     protected:
-        int solve(const double *A,  double *b, int dim, double *x);
+        int solve(const double *A, double *b, int dim, double *x);
 
         void Left_Newton_improvement(const RealVector &input, const int type, RealVector &out);
         void Right_Newton_improvement(const RealVector &input, const int type, RealVector &out);
@@ -78,7 +67,7 @@ class ColorCurve {
 
         int complete_point(RealVector &p, double &s, std::vector<double> &eigenvalue, int *complex);
 
-        int classify_point(RealVector &p, double &s, std::vector<double> &eigenvalue, std::string signature);
+        int classify_point(RealVector &p, double &s, std::vector<double> &eigenvalue, std::string &signature);
 
         void classify_segment(RealVector &p,  RealVector &q, 
                               std::vector<HugoniotPolyLine> &classified_curve,
@@ -89,6 +78,8 @@ class ColorCurve {
 
         RealVector ref_point;
         std::vector<double> ref_eigenvalue;
+        std::vector<double> ref_e_complex;
+        
         RealVector F_ref, G_ref;
     public:
 

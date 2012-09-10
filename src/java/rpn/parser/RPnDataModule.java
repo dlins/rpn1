@@ -179,7 +179,7 @@ public class RPnDataModule {
             AUXPHASESPACE = new RPnPhaseSpaceAbstraction("Auxiliary Phase Space",
                     new Space("Auxiliary Space", RPNUMERICS.domainDim() * 2), new NumConfigImpl());
             RIEMANNPHASESPACE = new RPnPhaseSpaceAbstraction("Riemann Phase Space",
-                    new Space("Riemann Space", RPNUMERICS.domainDim() ), new NumConfigImpl());
+                    new Space("Riemann Space", RPNUMERICS.domainDim()+1), new NumConfigImpl());
 
 
             LEFTPHASESPACE = new RPnLeftPhaseSpaceAbstraction("LeftPhase Space",

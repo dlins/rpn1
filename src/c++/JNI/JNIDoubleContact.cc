@@ -111,10 +111,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
 
 
 
-
-
-
-
     cout << "right_vrs.size()  = " << right_vrs.size() << endl;
 
 

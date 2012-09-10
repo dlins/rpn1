@@ -129,29 +129,6 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setParams
     RpNumerics::getGridFactory().updateGrids();
 
 
-    //
-    //    //TODO Substituir por um metodo de atualizacao dos grids no factory
-    //
-    //    gridHugoniot->set_grid(boundary, boundary->minimums(), boundary->maximums(), resolution);
-    //
-    //
-    //    resolution.clear();
-    //
-    //    resolution.push_back(gridDoubleContact->grid.rows());
-    //    resolution.push_back(gridDoubleContact->grid.cols());
-    //
-    //
-    //
-    //    gridDoubleContact->set_grid(boundary, boundary->minimums(), boundary->maximums(), resolution);
-    //
-    //    resolution.clear();
-    //
-    //    resolution.push_back(gridBifurcation->grid.rows());
-    //    resolution.push_back(gridBifurcation->grid.cols());
-    //
-    //
-    //    gridBifurcation->set_grid(boundary, boundary->minimums(), boundary->maximums(), resolution);
-
 }
 
 /*
