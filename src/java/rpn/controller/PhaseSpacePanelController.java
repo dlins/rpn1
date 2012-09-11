@@ -22,6 +22,8 @@ public interface PhaseSpacePanelController {
 
     List  pointMarkBuffer();
     List <Rectangle2D.Double> getSelectionAreas();
+    
+
 
     Point get_dc_CompletePoint();
 
