@@ -9,6 +9,7 @@ package rpn.controller;
 import rpn.RPnPhaseSpacePanel;
 import java.util.List;
 import java.awt.Point;
+import java.awt.Polygon;
 import java.awt.geom.Rectangle2D;
 
 public interface PhaseSpacePanelController {
@@ -22,6 +23,8 @@ public interface PhaseSpacePanelController {
 
     List  pointMarkBuffer();
     List <Rectangle2D.Double> getSelectionAreas();
+    
+    List<Polygon> testeSelectedAreas();
     
 
 

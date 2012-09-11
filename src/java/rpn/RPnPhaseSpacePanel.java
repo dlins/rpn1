@@ -23,6 +23,7 @@ import java.awt.image.BufferedImage;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Color;
+import java.awt.Polygon;
 import javax.swing.JPanel;
 import java.awt.Shape;
 import java.awt.geom.Area;
@@ -36,13 +37,9 @@ import org.apache.batik.dom.GenericDOMImplementation;
 import org.apache.batik.svggen.SVGGraphics2D;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
-import rpn.component.util.GeometryGraph;
-import rpn.controller.RPnPhasePanelBoxPlotter;
 import rpn.controller.ui.AREASELECTION_CONFIG;
 import rpn.controller.ui.CLASSIFIERAGENT_CONFIG;
 import rpn.controller.ui.UIController;
-import rpnumerics.BifurcationProfile;
-import rpnumerics.RPNUMERICS;
 import rpn.controller.ui.VELOCITYAGENT_CONFIG;
 
 public class RPnPhaseSpacePanel extends JPanel implements Printable {
@@ -213,6 +210,19 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
             g.drawRect((int) rectangle.getX(), (int) rectangle.getY(), (int) rectangle.width, (int) rectangle.height);
 
         }
+        
+        
+        
+         for (Polygon polygon : getCastedUI().testeSelectedAreas()) {
+
+            g.drawPolygon(polygon);
+
+        }
+
+
+
+        
+        
 
         g.setColor(DEFAULT_POINTMARK_COLOR);
 
