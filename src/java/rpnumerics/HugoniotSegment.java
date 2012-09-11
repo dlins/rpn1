@@ -62,7 +62,6 @@ public class HugoniotSegment extends RealSegment {
         
         signature_=signature;
         
-        System.out.println("Assinatura: "+signature_);
         
     }
 
