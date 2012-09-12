@@ -67,7 +67,7 @@ public class SIGMA_CONFIG extends UI_ACTION_SELECTED {
         }
         eqPoints.add(((StationaryPoint)xzeroRef.geomSource()).getPoint());
 
-        ViscousProfileData.instance().updateStationaryList(eqPoints);
+        ViscousProfileData.instance().updateStationaryPointsList(eqPoints);
 
         ui.setState(new GEOM_SELECTION());
 

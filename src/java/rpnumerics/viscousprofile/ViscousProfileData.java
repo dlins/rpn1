@@ -200,7 +200,7 @@ public class ViscousProfileData extends ShockRarefactionProfile {
 
     }
 
-    public List<StationaryPoint> updateStationaryList(List<RealVector> list) {
+    public List<StationaryPoint> updateStationaryPointsList(List<RealVector> list) {
 
         List<StationaryPoint> statList = new ArrayList<StationaryPoint>();
 
