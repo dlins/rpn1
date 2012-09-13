@@ -11,6 +11,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
+import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Rectangle2D;
 
@@ -34,73 +35,41 @@ public class RPnPhasePanelBoxPlotter implements MouseMotionListener, MouseListen
     private Rectangle2D.Double tempRectangle;
     private boolean addRectangle_ = false;
 
-    @Override
     public void mouseMoved(MouseEvent me) {
 
         if (addRectangle_) {
             RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) me.getSource();
             ViewingTransform viewingTransform = panel.scene().getViewingTransform();
 
-            double x = cursorPos_.getX();
-            double y = cursorPos_.getY();
 
-            //P1
+            double[] cursorPosArray = {cursorPos_.x, cursorPos_.y};
+            double [] mePosArray = {me.getX(),me.getY()};
 
-            double newx = me.getX();
-            double newy = me.getY();
+            CoordsArray cursorPosWC = new CoordsArray(new Space(" ", 2));
+            CoordsArray mePosWC = new CoordsArray(new Space(" ", 2));
 
-            double w = Math.abs(newx - x);
-            double h = Math.abs(newy - y);
+            Coords2D cursorPosDC = new Coords2D(cursorPosArray);
+            Coords2D mePosDC = new Coords2D(mePosArray);
 
+            viewingTransform.dcInverseTransform(cursorPosDC, cursorPosWC);
+            viewingTransform.dcInverseTransform(mePosDC, mePosWC);
+            
+            Path2D.Double selectionPath = new Path2D.Double();
 
-            x = Math.min(x, newx);
-            y = Math.min(y, newy);
+            selectionPath.moveTo(cursorPosWC.getElement(0), cursorPosWC.getElement(1));
+            
+            selectionPath.lineTo(mePosWC.getElement(0),cursorPosWC.getElement(1));
 
-            //P2
-
-            int listSize = panel.getCastedUI().getSelectionAreas().size();
-
-
-            Map testeMap = viewingTransform.projectionMap();
-
-            RealMatrix2 matrixTeste = testeMap.getTransfMatrix();
-            double XScaling = matrixTeste.getElement(0, 0);
-            double YScaling = matrixTeste.getElement(1, 1);
-
-            double XTranslate = matrixTeste.getElement(2, 0);
-            double YTranslate = matrixTeste.getElement(2, 1);
-
-            double XShear = 0;
-            double YShear = 0;
-
-            tempRectangle = new Rectangle2D.Double(x, y, w, h);
-
-
-
-            ///////////////////////////////////////////////
-
-
-
-
-            if (viewingTransform instanceof Iso2EquiTransform) {
-
-                XShear = 0.5;
-                YShear = 0.0;
-
-                XScaling = 1.0;
-                YScaling = Math.sqrt(3) / 2.;
-              
-
-
-            }
-
-            double[] affineMatrix = {XScaling, YShear, XShear, YScaling, XTranslate, YTranslate};
+            
+            selectionPath.lineTo(mePosWC.getElement(0), mePosWC.getElement(1));
+            
+            selectionPath.lineTo(cursorPosWC.getElement(0), mePosWC.getElement(1));
+            
+            selectionPath.closePath();
 
             Polygon testePolygon = new Polygon();
 
-
-            PathIterator iterator = tempRectangle.getPathIterator(new AffineTransform(affineMatrix));
-
+            PathIterator iterator = selectionPath.getPathIterator(null);
 
             while (!iterator.isDone()) {
 
@@ -108,7 +77,15 @@ public class RPnPhasePanelBoxPlotter implements MouseMotionListener, MouseListen
 
                 int segment = iterator.currentSegment(segmentArray);
                 if (segment != PathIterator.SEG_CLOSE) {
-                    testePolygon.addPoint((int) segmentArray[0], (int) segmentArray[1]);
+                    
+                    Coords2D dcSelectionPoint = new Coords2D(0,0);
+                    
+                    CoordsArray wcSelectionPoint = new CoordsArray(segmentArray);
+                    
+                    viewingTransform.viewPlaneTransform(wcSelectionPoint,dcSelectionPoint);
+
+                    testePolygon.addPoint((int) dcSelectionPoint.getX(), (int) dcSelectionPoint.getY());
+
                 }
 
                 iterator.next();
@@ -116,12 +93,7 @@ public class RPnPhasePanelBoxPlotter implements MouseMotionListener, MouseListen
 
             }
 
-
-            //////////////////////////////////////////////////////
-
-
-
-
+            
 
             int polySize = panel.getCastedUI().testeSelectedAreas().size();
 
@@ -145,168 +117,6 @@ public class RPnPhasePanelBoxPlotter implements MouseMotionListener, MouseListen
         }
     }
 
-//    public void mouseMoved(MouseEvent me) {
-//
-//        if (addRectangle_) {
-//            RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) me.getSource();
-//            ViewingTransform viewingTransform = panel.scene().getViewingTransform();
-//
-//            double x = cursorPos_.getX();
-//            double y = cursorPos_.getY();
-//
-//            //P1
-//
-//            double newx = me.getX();
-//            double newy = me.getY();
-//
-//            double w = Math.abs(newx - x);
-//            double h = Math.abs(newy - y);
-//
-//
-//            x = Math.min(x, newx);
-//            y = Math.min(y, newy);
-//
-//            //P2
-//
-//
-//
-//
-//            int listSize = panel.getCastedUI().getSelectionAreas().size();
-//
-//
-//            Map testeMap = viewingTransform.projectionMap();
-//
-//
-//
-//
-//            RealMatrix2 matrixTeste = testeMap.getTransfMatrix();
-//
-//
-//
-//            double XScaling = matrixTeste.getElement(0, 0);
-//            double YScaling = matrixTeste.getElement(1, 1);
-//            
-//            
-//            System.out.println("Scale X: "+XScaling);
-//            System.out.println("Scale Y: "+YScaling);
-//
-//
-//            double XTranslate = matrixTeste.getElement(2, 0);
-//            double YTranslate = matrixTeste.getElement(2, 1);
-//
-//
-//            double XShear = 0;
-//            double YShear = 0;
-//
-//            tempRectangle = new Rectangle2D.Double(x, y, w, h);
-//
-//
-//            Area transfArea = new Area(tempRectangle);
-//
-//
-//            ///////////////////////////////////////////////
-//
-//
-//
-//
-//            if (viewingTransform instanceof Iso2EquiTransform) {
-//
-//                XShear = 0.5;
-//                YShear = 0.0;
-//                
-//                XScaling=1.0;
-//                YScaling=Math.sqrt(3) / 2.;
-//
-//
-//            }
-//
-//            double[] affineMatrix = {XScaling, YShear, XShear, YScaling, XTranslate, YTranslate};
-//            transfArea = transfArea.createTransformedArea(new AffineTransform(affineMatrix));
-//            Polygon testePolygon = new Polygon();
-//            
-//
-//            PathIterator iterator = transfArea.getPathIterator(null);
-//
-//            
-//            testePolygon.addPoint(me.getX(),me.getY());
-//            
-//
-//
-//            while (!iterator.isDone()) {
-//
-//                double[] segmentArray = new double[2];
-//
-//                int segment = iterator.currentSegment(segmentArray);
-//
-//                for (int i = 0; i < segmentArray.length; i++) {
-//                    double d = segmentArray[i];
-//
-//                    System.out.println(d);
-//
-//                    testePolygon.addPoint((int) segmentArray[0], (int) segmentArray[1]);
-//
-//                }
-//
-//
-//                iterator.next();
-//
-//
-//            }
-//
-//
-//            //////////////////////////////////////////////////////
-//
-//
-//            panel.getGraphics().drawPolygon(testePolygon);
-//
-//            System.out.println("--------------------------");
-//
-//
-//
-//            int polySize = panel.getCastedUI().testeSelectedAreas().size();
-//
-//            if (polySize > 0) {
-//                panel.getCastedUI().testeSelectedAreas().set(polySize - 1, testePolygon);
-//            } else {
-//                panel.getCastedUI().testeSelectedAreas().add(testePolygon);
-//            }
-//
-//
-////
-////            if (listSize > 0) {
-////                panel.getCastedUI().getSelectionAreas().set(listSize - 1, tempRectangle);
-////            } else {
-////                panel.getCastedUI().getSelectionAreas().add(tempRectangle);
-////            }
-//
-//
-//            panel.repaint();
-//
-//        }
-//    }
-    private Coords2D testeTransformVertices(Scene scene, double[] oldCoords) {
-
-        ViewingTransform viewingTransform = scene.getViewingTransform();
-
-        Coords2D inDC = new Coords2D(oldCoords);
-//
-        CoordsArray outWC = new CoordsArray(new Space("", 2));
-//
-        viewingTransform.dcInverseTransform(inDC, outWC);
-
-
-
-//
-        Coords2D finalDC = new Coords2D();
-//
-        viewingTransform.viewPlaneTransform(outWC, finalDC);
-
-        return finalDC;
-
-
-
-
-    }
 
     public void mousePressed(MouseEvent me) {
 

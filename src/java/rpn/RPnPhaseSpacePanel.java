@@ -205,11 +205,11 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
          */
 
 
-        for (Rectangle2D.Double rectangle : getCastedUI().getSelectionAreas()) {
-
-            g.drawRect((int) rectangle.getX(), (int) rectangle.getY(), (int) rectangle.width, (int) rectangle.height);
-
-        }
+//        for (Rectangle2D.Double rectangle : getCastedUI().getSelectionAreas()) {
+//
+//            g.drawRect((int) rectangle.getX(), (int) rectangle.getY(), (int) rectangle.width, (int) rectangle.height);
+//
+//        }
         
         
         

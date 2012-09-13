@@ -15,6 +15,7 @@ public class Iso2EquiTransform extends Viewing2DTransform {
         super(projection, viewPlane);
         scale(1., Math.sqrt(3) / 2.);
         shear(.5, 0.);
+        
     }
 
     public void setViewPlane(ViewPlane viewPlane){
