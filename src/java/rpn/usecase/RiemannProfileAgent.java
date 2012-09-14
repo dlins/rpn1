@@ -76,13 +76,13 @@ public class RiemannProfileAgent extends RpModelPlotAgent {
 
             RPnPhaseSpacePanel rPnPhaseSpacePanel = panelsIterator.next();
             System.out.println(rPnPhaseSpacePanel.getCastedUI().getSelectionAreas().size());
-            
-for (Rectangle2D.Double rect: rPnPhaseSpacePanel.getCastedUI().getSelectionAreas()){
+//            
+//for (Rectangle2D.Double rect: rPnPhaseSpacePanel.getCastedUI().getSelectionAreas()){
+//    
+//    System.out.println(rect);
+//    
     
-    System.out.println(rect);
-    
-    
-}
+//}
 
 //            List<GeomObjView> intersectCurves = rPnPhaseSpacePanel.intersectAreas();
 //

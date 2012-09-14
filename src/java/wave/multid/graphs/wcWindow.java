@@ -95,6 +95,7 @@ public class wcWindow {
             dcIterator.next();
         }
         // the Polygon
+        
         int[] defPointsX = new int[vertexList.size()];
         int[] defPointsY = new int[vertexList.size()];
         for (int i = 0; i < vertexList.size(); i++) {

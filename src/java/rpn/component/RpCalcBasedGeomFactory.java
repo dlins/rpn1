@@ -111,13 +111,13 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
     protected abstract RpGeometry createGeomFromSource();
 
     public void updateGeom() {
-        try {
-            geomSource_ = calc_.recalc();
+//        try {
+//            geomSource_ = calc_.recalc();
             geom_ = createGeomFromSource();
             isGeomOutOfDate_ = true;
-        } catch (RpException rex) {
-            RPnDesktopPlotter.showCalcExceptionDialog(rex);
-        }
+//        } catch (RpException rex) {
+//            RPnDesktopPlotter.showCalcExceptionDialog(rex);
+//        }
     }
 
     public void updateGeom(Area area) {

@@ -14,6 +14,7 @@ import java.awt.print.Printable;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Color;
+import java.awt.Polygon;
 import java.awt.Shape;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -30,7 +31,7 @@ public class RPnRiemannPanel extends RPnPhaseSpacePanel implements Printable {
     private Point cursorPos_;
     private Point trackedPoint_;
     private boolean addRectangle_ = false;
-    private Rectangle2D.Double tempRectangle;
+    private Polygon tempRectangle;
 
     //
     // Constructors
@@ -52,7 +53,7 @@ public class RPnRiemannPanel extends RPnPhaseSpacePanel implements Printable {
 
         @Override
         public void mouseDragged(MouseEvent me) {
-//            throw new UnsupportedOperationException("Not supported yet.");
+////            throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
@@ -74,7 +75,7 @@ public class RPnRiemannPanel extends RPnPhaseSpacePanel implements Printable {
                 x = Math.min(x, newx);
                 y = Math.min(y, newy);
 
-                tempRectangle = new Rectangle2D.Double(x, y, w, h);
+//                tempRectangle = new Rectangle2D.Double(x, y, w, h);
 
                 panel.repaint();
 
@@ -180,9 +181,9 @@ public class RPnRiemannPanel extends RPnPhaseSpacePanel implements Printable {
         
         
 
-        for (Rectangle2D.Double rectangle : getCastedUI().getSelectionAreas()) {
+        for (Polygon rectangle : getCastedUI().getSelectionAreas()) {
 
-            g.drawRect((int) rectangle.getX(), (int) rectangle.getY(), (int) rectangle.width, (int) rectangle.height);
+            g.drawPolygon(rectangle);
 
         }
 
@@ -193,7 +194,9 @@ public class RPnRiemannPanel extends RPnPhaseSpacePanel implements Printable {
          */
         
         if(addRectangle_ && tempRectangle!=null)
-        g.drawRect((int) tempRectangle.getX(), (int) tempRectangle.getY(), (int) tempRectangle.width, (int) tempRectangle.height);
+            
+            g.drawPolygon(tempRectangle);
+//        g.drawRect((int) tempRectangle.getX(), (int) tempRectangle.getY(), (int) tempRectangle.width, (int) tempRectangle.height);
         
         
         
@@ -211,15 +214,15 @@ public class RPnRiemannPanel extends RPnPhaseSpacePanel implements Printable {
     public void eraseSelectedArea() {
 
 
-
-
-        Graphics2D g = (Graphics2D) this.getGraphics();
-
-        g.setColor(Color.BLACK);
-
-        for (Rectangle2D.Double rectangle : getCastedUI().getSelectionAreas()) {
-            g.fill(rectangle);
-        }
+//
+//
+//        Graphics2D g = (Graphics2D) this.getGraphics();
+//
+//        g.setColor(Color.BLACK);
+//
+//        for (Rectangle2D.Double rectangle : getCastedUI().getSelectionAreas()) {
+//            g.fill(rectangle);
+//        }
 
     }
 }

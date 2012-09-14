@@ -9,9 +9,11 @@ import wave.multid.model.*;
 import wave.multid.view.*;
 import wave.multid.DimMismatchEx;
 import java.awt.Graphics2D;
+import java.awt.Polygon;
 import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.List;
+import rpn.component.HugoniotSegGeom;
 
 public class HugoniotCurveView
         implements GeomObjView {
@@ -68,10 +70,55 @@ public class HugoniotCurveView
     // Methods
     //
     public void draw(Graphics2D g) {
-        
+
         for (int i = 0; i < viewList_.size(); i++) {
             ((GeomObjView) viewList_.get(i)).draw(g);
         }
+    }
+
+    public boolean intersect(Polygon polygon) {
+
+        boolean inter = false;
+        for (Object object : viewList_) {
+
+
+            PolyLine segment = (PolyLine) object;
+
+            inter = segment.getShape().intersects(polygon.getBounds());
+
+            if (inter) {
+                return inter;
+            }
+
+        }
+        return inter;
+
+
+    }
+
+    public List<Integer> contains(Polygon polygon) {
+
+        ArrayList<Integer> segmentIndex = new ArrayList<Integer>();
+        int segIndex = 0;
+        
+        System.out.println("Tamanho da hugoniot: "+viewList_.size());
+        for (Object object : viewList_) {
+
+            PolyLine segment = (PolyLine) object;
+            double xCenterSegment = segment.getShape().getBounds().getCenterX();
+            double yCenterSegment = segment.getShape().getBounds().getCenterY();
+
+            if (polygon.contains(xCenterSegment, yCenterSegment)) {
+                segmentIndex.add(segIndex);
+
+            }
+
+            segIndex++;
+        }
+
+
+        return segmentIndex;
+
     }
 
     //Original update method

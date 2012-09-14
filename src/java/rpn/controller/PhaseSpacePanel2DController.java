@@ -62,11 +62,7 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
         testeSelectedAreas_=new ArrayList<Polygon>();
     }
 
-    @Override
-    public List<Polygon> testeSelectedAreas() {
-        return testeSelectedAreas_;
-
-    }
+    
     
     
     

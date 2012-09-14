@@ -9,7 +9,6 @@ import java.awt.Polygon;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
@@ -19,11 +18,7 @@ import rpn.RPnPhaseSpacePanel;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
 import wave.multid.Space;
-import wave.multid.graphs.Iso2EquiTransform;
-import wave.multid.map.Map;
-import wave.multid.view.Scene;
 import wave.multid.view.ViewingTransform;
-import wave.util.RealMatrix2;
 
 /**
  *
@@ -32,7 +27,7 @@ import wave.util.RealMatrix2;
 public class RPnPhasePanelBoxPlotter implements MouseMotionListener, MouseListener {
 
     private Point cursorPos_;
-    private Rectangle2D.Double tempRectangle;
+    private Polygon tempRectangle;
     private boolean addRectangle_ = false;
 
     public void mouseMoved(MouseEvent me) {
@@ -66,6 +61,8 @@ public class RPnPhasePanelBoxPlotter implements MouseMotionListener, MouseListen
             selectionPath.lineTo(cursorPosWC.getElement(0), mePosWC.getElement(1));
             
             selectionPath.closePath();
+            
+            
 
             Polygon testePolygon = new Polygon();
 
@@ -92,15 +89,15 @@ public class RPnPhasePanelBoxPlotter implements MouseMotionListener, MouseListen
 
 
             }
-
             
+            tempRectangle=testePolygon;
 
-            int polySize = panel.getCastedUI().testeSelectedAreas().size();
+            int polySize = panel.getCastedUI().getSelectionAreas().size();
 
             if (polySize > 0) {
-                panel.getCastedUI().testeSelectedAreas().set(polySize - 1, testePolygon);
+                panel.getCastedUI().getSelectionAreas().set(polySize - 1, testePolygon);
             } else {
-                panel.getCastedUI().testeSelectedAreas().add(testePolygon);
+                panel.getCastedUI().getSelectionAreas().add(testePolygon);
             }
 
 
@@ -158,7 +155,7 @@ public class RPnPhasePanelBoxPlotter implements MouseMotionListener, MouseListen
 //        throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public Rectangle2D.Double getSelectedRectangle() {
+    public Polygon getSelectedRectangle() {
         return tempRectangle;
     }
 }
