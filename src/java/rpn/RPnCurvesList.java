@@ -237,7 +237,6 @@ public class RPnCurvesList extends JFrame implements ActionListener {
         }
 
 
-
         Vector<Object> data = new Vector<Object>();
 
         NumberFormat formatter = NumberFormat.getInstance();
@@ -254,6 +253,9 @@ public class RPnCurvesList extends JFrame implements ActionListener {
         data.add(geometry.viewingAttr().isVisible());
 
         tableModel_.addRow(data);
+        
+
+
 
     }
 
@@ -268,6 +270,9 @@ public class RPnCurvesList extends JFrame implements ActionListener {
         }
 
     }
+    
+    
+    
 
     public void actionPerformed(ActionEvent e) {
 
