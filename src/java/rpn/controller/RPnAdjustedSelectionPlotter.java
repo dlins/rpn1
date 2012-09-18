@@ -4,7 +4,6 @@
  */
 package rpn.controller;
 
-import java.awt.Color;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.event.MouseEvent;
@@ -15,23 +14,12 @@ import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import rpn.RPnPhaseSpacePanel;
-import rpn.component.HugoniotCurveView;
-import rpn.component.RpCalcBasedGeomFactory;
-import rpn.component.RpGeometry;
-import rpn.parser.RPnDataModule;
-import rpnumerics.Configuration;
-import rpnumerics.HugoniotCurveCalcND;
-import rpnumerics.RPnCurve;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
 import wave.multid.Space;
 import wave.multid.graphs.wcWindow;
-import wave.multid.view.GeomObjView;
 import wave.multid.view.ViewingTransform;
-import wave.util.RealSegment;
 
 /**
  *
@@ -42,6 +30,13 @@ public class RPnAdjustedSelectionPlotter implements MouseMotionListener, MouseLi
     private Point cursorPos_;
     private Polygon selectedPolygon_;
     private boolean addRectangle_ = false;
+    private int xResolution_;
+    private int yResolution_;
+
+    public RPnAdjustedSelectionPlotter(int xResolution, int yResolution) {
+        xResolution_ = xResolution;
+        yResolution_ = yResolution;
+    }
 
     public void mouseMoved(MouseEvent me) {
 
@@ -73,39 +68,8 @@ public class RPnAdjustedSelectionPlotter implements MouseMotionListener, MouseLi
 
             selectionPath.closePath();
 
-            Configuration config = rpnumerics.RPNUMERICS.getConfiguration("hugoniotcurve");
 
-
-            String resolution = config.getParam("resolution");
-
-
-            int[] res = RPnDataModule.processResolution(resolution);
-
-            List<GeomObjView> insideGeometries = panel.intersectAreas();
-
-
-            for (GeomObjView geomObjView : insideGeometries) {
-
-                if (geomObjView instanceof HugoniotCurveView) {
-
-
-                    RpGeometry rpGeometry = (RpGeometry) geomObjView.getAbstractGeom();
-
-                    RpCalcBasedGeomFactory factory = (RpCalcBasedGeomFactory) rpGeometry.geomFactory();
-
-                    HugoniotCurveCalcND calc = (HugoniotCurveCalcND) factory.rpCalc();
-                    res = calc.getParams().getResolution();
-
-
-                }
-
-            }
-
-
-            int xResolution = res[0];
-            int yResolution = res[1];
-
-            Path2D.Double adjustedPath = adjustPath(selectionPath, viewingTransform.viewPlane().getWindow(), xResolution, yResolution);
+            Path2D.Double adjustedPath = adjustPath(selectionPath, viewingTransform.viewPlane().getWindow(), xResolution_, yResolution_);
 
 
             selectedPolygon_ = new Polygon();
@@ -132,24 +96,8 @@ public class RPnAdjustedSelectionPlotter implements MouseMotionListener, MouseLi
                 iterator.next();
 
             }
-
-
-
-            if (!panel.getCastedUI().getSelectionAreas().isEmpty()) {
-                panel.getCastedUI().getSelectionAreas().set(panel.getCastedUI().getSelectionAreas().size() - 1, selectedPolygon_);
-            } else {
-                panel.getCastedUI().getSelectionAreas().add(selectedPolygon_);
-            }
-
-
-//
-//            if (listSize > 0) {
-//                panel.getCastedUI().getSelectionAreas().set(listSize - 1, tempRectangle);
-//            } else {
-//                panel.getCastedUI().getSelectionAreas().add(tempRectangle);
-//            }
-
-
+            int size = panel.getCastedUI().getSelectionAreas().size();
+            panel.getCastedUI().getSelectionAreas().set(size - 1, selectedPolygon_);
             panel.repaint();
 
 
@@ -161,49 +109,56 @@ public class RPnAdjustedSelectionPlotter implements MouseMotionListener, MouseLi
 
     public void mousePressed(MouseEvent me) {
 
-        RPnPhaseSpacePanel source = (RPnPhaseSpacePanel) me.getSource();
+        RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) me.getSource();
         if (addRectangle_ == false) {
 
             cursorPos_ = new Point(me.getX(), me.getY());
-            source.repaint();
+
+            Polygon emptyPolygon = new Polygon();
+
+            emptyPolygon.addPoint(cursorPos_.x, cursorPos_.y);
+
+            panel.getCastedUI().getSelectionAreas().add(emptyPolygon);
+
             addRectangle_ = true;
         } else {
             addRectangle_ = false;
-            source.getCastedUI().getSelectionAreas().add(selectedPolygon_);
-            Iterator geomIterator = source.scene().geometries();
-
-            RPnCurve curve = null;
-            RpCalcBasedGeomFactory factory = null;
-
-            List<RealSegment> segRem = new ArrayList<RealSegment>();
-
-            while (geomIterator.hasNext()) {
-                GeomObjView geomObjView = (GeomObjView) geomIterator.next();
-
-
-                List<Integer> segmentIndex = geomObjView.contains(selectedPolygon_);
-
-                System.out.println(geomObjView + " " + segmentIndex.size());
-
-                RpGeometry rpGeometry = (RpGeometry) geomObjView.getAbstractGeom();
-
-                curve = (RPnCurve) rpGeometry.geomFactory().geomSource();
-                factory = (RpCalcBasedGeomFactory) rpGeometry.geomFactory();
-
-                for (Integer i : segmentIndex) {
-                    segRem.add(curve.segments().get(i));
-                }
-            }
-
-
-            curve.segments().removeAll(segRem);
-
-            factory.updateGeom();
-
-            RPnDataModule.PHASESPACE.update();
+//            panel.getCastedUI().getSelectionAreas().add(selectedPolygon_);
+         
+//            Iterator geomIterator = source.scene().geometries();
+//
+//            RPnCurve curve = null;
+//            RpCalcBasedGeomFactory factory = null;
+//
+//            List<RealSegment> segRem = new ArrayList<RealSegment>();
+//
+//            while (geomIterator.hasNext()) {
+//                GeomObjView geomObjView = (GeomObjView) geomIterator.next();
+//
+//                List<Integer> segmentIndex = geomObjView.contains(selectedPolygon_);
+//
+//                System.out.println(geomObjView + " " + segmentIndex.size());
+//
+//                RpGeometry rpGeometry = (RpGeometry) geomObjView.getAbstractGeom();
+//
+//                curve = (RPnCurve) rpGeometry.geomFactory().geomSource();
+//                factory = (RpCalcBasedGeomFactory) rpGeometry.geomFactory();
+//
+//                for (Integer i : segmentIndex) {
+//                    segRem.add(curve.segments().get(i));
+//                }
+//            }
+//
+//            curve.segments().removeAll(segRem);
+//
+//            factory.updateGeom();
+//
+//            RPnDataModule.PHASESPACE.update();
 
 
         }
+
+        panel.repaint();
 
     }
 
@@ -229,10 +184,6 @@ public class RPnAdjustedSelectionPlotter implements MouseMotionListener, MouseLi
     @Override
     public void mouseDragged(MouseEvent me) {
 //        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public Polygon getSelectedPolygon() {
-        return selectedPolygon_;
     }
 
     private Path2D.Double adjustPath(Path2D.Double input, wcWindow wc, int xResolution, int yResolution) {

@@ -1005,6 +1005,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         modelInteractionMenu.removeAll();
         modelInteractionMenu.add(ChangeFluxParamsAgent.instance());
         modelInteractionMenu.add(ChangeOrbitLevel.instance());
+        modelInteractionMenu.add(CurveRefine.instance());
 
         modelInteractionMenu.add(inputCoordsMenuItem);
         modelInteractionMenu.addSeparator();

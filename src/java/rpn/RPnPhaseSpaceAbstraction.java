@@ -140,10 +140,13 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
     public void clearGeometrySelection() {
         for (int i = 0; i < geomList_.size(); i++) {
             highlightGeometry(i);
+            RpGeometry geometry = (RpGeometry)geomList_.get(i);
+            geometry.viewingAttr().setSelected(false);
         }
     }
 
     public void highlightGeometry(int index) {
+
         for (int i = 0; i < geomList_.size(); i++) {
 
             if (i == index) {
@@ -151,6 +154,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
                 if (geometry instanceof SegmentedCurveGeom) {
 
                     SegmentedCurveGeom segGeom = (SegmentedCurveGeom) geometry;
+                    segGeom.highLight();
 
                 } else {
 
