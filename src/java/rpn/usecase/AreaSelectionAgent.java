@@ -9,6 +9,8 @@ import java.util.List;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Observable;
+import java.util.Observer;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JToggleButton;
@@ -34,7 +36,7 @@ import wave.util.Boundary;
 import wave.util.RealVector;
 import wave.util.RectBoundary;
 
-public class AreaSelectionAgent extends RpModelPlotAgent {
+public class AreaSelectionAgent extends RpModelPlotAgent implements Observer{
 
     public int ind = 0;
     static public final String DESC_TEXT = "Select Area";
@@ -203,5 +205,16 @@ public class AreaSelectionAgent extends RpModelPlotAgent {
     @Override
     public RpGeometry createRpGeometry(RealVector[] coords) {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+       System.out.println("Update de Area selection Agent"+arg);
+       
+       
+       
+       
+       
+       
     }
 }

@@ -480,6 +480,12 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         curvesFrame.setVisible(true);
         leftFrame.setVisible(true);
         rightFrame.setVisible(true);
+        
+        curvesFrame.addObserver(AreaSelectionAgent.instance());
+        leftFrame.addObserver(AreaSelectionAgent.instance());
+        rightFrame.addObserver(AreaSelectionAgent.instance());
+        
+        
 
 
 
