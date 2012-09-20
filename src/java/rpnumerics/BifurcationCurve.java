@@ -31,6 +31,8 @@ public class BifurcationCurve extends SegmentedCurve {
 
         super(createSingleSegmentList(leftList, rightList));
         
+        System.out.println("Tamanho completo:" +segments().size());
+        
         leftSegments_ = leftList;
         rightSegments_ = rightList;
 

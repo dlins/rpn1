@@ -10,6 +10,8 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 import javax.swing.JToggleButton;
+import rpn.RPnLeftPhaseSpaceAbstraction;
+import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpacePanel;
 import rpn.component.RpCalcBasedGeomFactory;
 import rpn.component.RpGeometry;
@@ -19,7 +21,7 @@ import rpn.controller.ui.AREASELECTION_CONFIG;
 import rpn.controller.ui.UIController;
 import rpnumerics.Area;
 import rpnumerics.ContourCurveCalc;
-import rpnumerics.SegmentedCurve;
+import wave.multid.view.ViewingAttr;
 import wave.util.RealVector;
 
 public class CurveRefineAgent extends RpModelPlotAgent {
@@ -37,34 +39,44 @@ public class CurveRefineAgent extends RpModelPlotAgent {
 
     @Override
     public void actionPerformed(ActionEvent event) {
-        
+
 
         UIController.instance().setState(new AREASELECTION_CONFIG());
-
-
         Iterator<RPnPhaseSpacePanel> iterator = UIController.instance().getInstalledPanelsIterator();
-        
-        RpGeometry selectedGeometry = phaseSpace_.getSelectedGeom();
+
+        while (iterator.hasNext()) {
+            RPnPhaseSpacePanel panel = iterator.next();
+            RPnPhaseSpaceAbstraction phaseSpace = (RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom();
+            
+            Iterator phaseSpaceIterator = phaseSpace.getGeomObjIterator();
+            while (phaseSpaceIterator.hasNext()) {
+                RpGeometry phasSpaceGeometry =(RpGeometry) phaseSpaceIterator.next();
+                
+                if (phasSpaceGeometry.viewingAttr().isSelected()) {
+
+                RpCalcBasedGeomFactory factory = (RpCalcBasedGeomFactory) phasSpaceGeometry.geomFactory();
+
+                if (factory.rpCalc() instanceof ContourCurveCalc) {
+                    ContourCurveCalc calc = (ContourCurveCalc) factory.rpCalc();
+
+                    int x = calc.getParams().getResolution()[0];
+                    int y = calc.getParams().getResolution()[1];
+
+                    CurveRefine.instance().setResolution(new RealVector(x + " " + y));
+                    CurveRefine.instance().setRefineGeometry(phasSpaceGeometry, panel);
+                    
+
+                    RPnAdjustedSelectionPlotter boxPlotter = new RPnAdjustedSelectionPlotter(x, y);
+                    panel.addMouseListener(boxPlotter);
+                    panel.addMouseMotionListener(boxPlotter);
+                }
 
 
-        if (selectedGeometry instanceof SegmentedCurveGeom) {
-            SegmentedCurveGeom curveGeom = (SegmentedCurveGeom) selectedGeometry;
-
-            RpCalcBasedGeomFactory factory = (RpCalcBasedGeomFactory) curveGeom.geomFactory();
-
-            ContourCurveCalc calc = (ContourCurveCalc) factory.rpCalc();
-
-
-            int x = calc.getParams().getResolution()[0];
-            int y = calc.getParams().getResolution()[1];
-
-            while (iterator.hasNext()) {
-                RPnPhaseSpacePanel button = iterator.next();
-
-                RPnAdjustedSelectionPlotter boxPlotter = new RPnAdjustedSelectionPlotter(x, y);
-                button.addMouseListener(boxPlotter);
-                button.addMouseMotionListener(boxPlotter);
             }
+                
+            }
+            
+            
 
         }
 

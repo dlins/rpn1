@@ -15,6 +15,7 @@ import java.util.List;
 import javax.swing.AbstractButton;
 import rpn.RPnPhaseSpacePanel;
 import rpn.controller.RPnPhasePanelBoxPlotter;
+import rpn.controller.SelectionPlotter;
 
 public class UI_ACTION_SELECTED implements UserInputHandler {
     //
@@ -32,21 +33,24 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
         if (action instanceof RpModelPlotAgent) {
             Iterator<RPnPhaseSpacePanel> iterator = UIController.instance().getInstalledPanelsIterator();
             while (iterator.hasNext()) {
-                RPnPhaseSpacePanel button = iterator.next();
-                MouseMotionListener[] mouseMotionArray = (MouseMotionListener[]) button.getListeners(MouseMotionListener.class);
-                MouseListener[] mouseListenerArray = (MouseListener[]) button.getListeners(MouseListener.class);
+                RPnPhaseSpacePanel panel = iterator.next();
+                panel.getCastedUI().getSelectionAreas().clear();
+                
+                MouseMotionListener[] mouseMotionArray = (MouseMotionListener[]) panel.getListeners(MouseMotionListener.class);
+                MouseListener[] mouseListenerArray = (MouseListener[]) panel.getListeners(MouseListener.class);
 
                 for (MouseListener mouseListener : mouseListenerArray) {
 
-                    if (mouseListener instanceof RPnPhasePanelBoxPlotter) {
-                        button.removeMouseListener(mouseListener);
+                    if (mouseListener instanceof SelectionPlotter) {
+                        panel.removeMouseListener(mouseListener);
+
                     }
                 }
 
                 for (MouseMotionListener mouseMotionListener : mouseMotionArray) {
 
-                    if (mouseMotionListener instanceof RPnPhasePanelBoxPlotter) {
-                        button.removeMouseMotionListener(mouseMotionListener);
+                    if (mouseMotionListener instanceof SelectionPlotter) {
+                        panel.removeMouseMotionListener(mouseMotionListener);
                     }
 
                 }

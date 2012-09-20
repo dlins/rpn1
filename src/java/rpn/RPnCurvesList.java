@@ -393,11 +393,11 @@ public class RPnCurvesList extends JFrame implements ActionListener, ListSelecti
     @Override
     public void valueChanged(ListSelectionEvent e) {
         
-
+        
         ListSelectionModel listSelectionModel = (ListSelectionModel) e.getSource();
         
         
-        if (listSelectionModel.isSelectionEmpty()){
+        if (listSelectionModel.isSelectionEmpty()) {
             
             phaseSpace_.clearGeometrySelection();
             phaseSpace_.setSelectedGeom(null);
@@ -418,7 +418,7 @@ public class RPnCurvesList extends JFrame implements ActionListener, ListSelecti
                 
             }
             int index = 0;
-
+            
             Iterator it = phaseSpace_.getGeomObjIterator();
             while (it.hasNext()) {
                 
@@ -426,11 +426,12 @@ public class RPnCurvesList extends JFrame implements ActionListener, ListSelecti
                 
                 if (index == selectedCurve) {
                     phaseSpace_.highlightGeometry(index);
+//                    phaseSpace_.setSelectedGeom(geometry);
                     geometry.viewingAttr().setSelected(true);
-                    phaseSpace_.setSelectedGeom(geometry);
                     
                 } else {
                     phaseSpace_.lowlightGeometry(index);
+                    geometry.viewingAttr().setSelected(false);
                 }
                 
                 index++;

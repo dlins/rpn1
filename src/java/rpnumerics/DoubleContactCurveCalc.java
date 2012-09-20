@@ -36,8 +36,6 @@ public class DoubleContactCurveCalc extends ContourCurveCalc {
     public RpSolution calc() throws RpException {
         RpSolution result = null;
 
-        System.out.println("Entrando em DoubleContactCurveCalc... " + curveFamily_ + " " + domainFamily_);
-
         result = (DoubleContactCurve) nativeCalc(getParams().getResolution(), curveFamily_, domainFamily_);
 
         if (result == null) {

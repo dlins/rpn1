@@ -8,11 +8,8 @@ package rpn.component;
 import java.util.ArrayList;
 import java.util.List;
 import rpn.RPnDesktopPlotter;
-import rpn.component.util.GeometryGraphND;
 import rpn.controller.RpCalcController;
 import rpn.controller.RpController;
-import rpn.controller.ui.UIController;
-import rpn.controller.ui.UserInputTable;
 
 import rpnumerics.Area;
 import rpnumerics.RPnCurve;
@@ -21,7 +18,7 @@ import rpnumerics.RpCalculation;
 import rpnumerics.RpException;
 import rpnumerics.RpSolution;
 import rpnumerics.SegmentedCurve;
-import wave.util.RealVector;
+import wave.util.RealSegment;
 
 public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
     //
@@ -73,7 +70,6 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
         getUI().install(this);
     }
 
-
     //
     // Accessors/Mutators
     //
@@ -111,51 +107,43 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
     protected abstract RpGeometry createGeomFromSource();
 
     public void updateGeom() {
-//        try {
-//            geomSource_ = calc_.recalc();
+        try {
+            geomSource_ = calc_.recalc();
             geom_ = createGeomFromSource();
             isGeomOutOfDate_ = true;
-//        } catch (RpException rex) {
-//            RPnDesktopPlotter.showCalcExceptionDialog(rex);
-//        }
-    }
-
-    public void updateGeom(Area area) {
-        try {
-            if (area.isClosestCurve((RPnCurve) geomSource_)) {
-
-                List segRem = new ArrayList();
-
-
-                for (int i = 0; i < GeometryGraphND.indContido.size(); i++) {
-                    int ind = Integer.parseInt((GeometryGraphND.indContido.get(i)).toString());
-                    segRem.add(((SegmentedCurve) geomSource_).segments().get(ind));
-                }
-
-                ((SegmentedCurve) geomSource_).segments().removeAll(segRem);
-                GeometryGraphND.indContido.clear();
-
-                // Pode ser útil na hora de fazer inclusao dos novos segmentos (para nao serem eliminados)
-                UserInputTable userInputList = UIController.instance().globalInputTable();
-                RealVector newValue = userInputList.values();
-
-                for (int i = 0; i < newValue.getSize(); i++) {
-                    GeometryGraphND.cornerRet.setElement(i, 0);
-                    newValue.setElement(i, 0.);
-                }
-                //----------------------------------------------------------------------------------------
-
-                SegmentedCurve newCurve = (SegmentedCurve) calc_.recalc(area);
-
-                ((SegmentedCurve) geomSource_).segments().addAll(newCurve.segments());
-
-                geom_ = createGeomFromSource();
-                isGeomOutOfDate_ = true;
-
-            }
-
         } catch (RpException rex) {
             RPnDesktopPlotter.showCalcExceptionDialog(rex);
         }
+    }
+
+    public void updateGeom(List<Area> areaToRefine, List<Integer> segmentsToRemove) {
+
+        List<RealSegment> segRem = new ArrayList<RealSegment>();
+
+        RPnCurve curve = (RPnCurve) geomSource();
+
+
+        for (Integer i : segmentsToRemove) {
+            segRem.add(curve.segments().get(i));
+        }
+
+        curve.segments().removeAll(segRem);
+        System.out.println("Tamanho completo depois de remover:"+curve.segments().size());
+
+        for (Area area : areaToRefine) {
+            try {
+                RPnCurve newCurve = (RPnCurve) calc_.recalc(area);
+
+                ((RPnCurve) geomSource_).segments().addAll(newCurve.segments());
+            } catch (RpException ex) {
+                ex.printStackTrace();
+            }
+
+        }
+
+        geom_ = createGeomFromSource();
+
+        isGeomOutOfDate_ = true;
+
     }
 }

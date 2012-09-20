@@ -6,6 +6,7 @@
 
 package rpn.component;
 
+import java.util.List;
 import rpn.controller.PoincareController;
 import rpn.controller.RpController;
 import rpnumerics.Area;
@@ -80,6 +81,11 @@ public class PoincareSectionGeomFactory implements RpGeomFactory {
     }
 
     public void updateGeom(Area area) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void updateGeom(List<Area> area, List<Integer> segmentsToRemove) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }

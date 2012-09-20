@@ -85,12 +85,15 @@ public abstract class GeomObjView {
 
     }
 
+        
+    
+    
     public List<Integer> contains(Polygon polygon) {
 
         ArrayList<Integer> segmentIndex = new ArrayList<Integer>();
         int segIndex = 0;
 
-        System.out.println("ViewList size: " + viewList_.size());
+
 
         for (Object object : viewList_) {
             PolyLine segment = (PolyLine) object;
@@ -102,7 +105,7 @@ public abstract class GeomObjView {
             }
             segIndex++;
         }
-
+        System.out.println("Segmentos dentro: " + segmentIndex.size());
         return segmentIndex;
 
     }

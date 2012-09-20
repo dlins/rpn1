@@ -425,7 +425,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
 
  
 
-    public List<GeomObjView> intersectAreas() {
+    public List<GeomObjView> intersectAreas() {//TODO Verificar
 
         ArrayList<GeomObjView> geomList = new ArrayList<GeomObjView>();
 

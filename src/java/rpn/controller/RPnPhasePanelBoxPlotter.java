@@ -1,70 +1,34 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Instituto de Matematica Pura e Aplicada - IMPA
+ * Departamento de Dinamica dos Fluidos
+ *
  */
 package rpn.controller;
 
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.awt.geom.Area;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
-import java.awt.geom.Rectangle2D;
 
 import rpn.RPnPhaseSpacePanel;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
-import wave.multid.Space;
-import wave.multid.view.ViewingTransform;
 
-/**
- *
- * @author edsonlan
- */
-public class RPnPhasePanelBoxPlotter implements MouseMotionListener, MouseListener {
+public class RPnPhasePanelBoxPlotter extends SelectionPlotter  {
 
     private Point cursorPos_;
-    private Polygon tempRectangle;
+    private Polygon selectedPolygon_;
     private boolean addRectangle_ = false;
 
     public void mouseMoved(MouseEvent me) {
 
         if (addRectangle_) {
             RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) me.getSource();
-            ViewingTransform viewingTransform = panel.scene().getViewingTransform();
-
-
-            double[] cursorPosArray = {cursorPos_.x, cursorPos_.y};
-            double [] mePosArray = {me.getX(),me.getY()};
-
-            CoordsArray cursorPosWC = new CoordsArray(new Space(" ", 2));
-            CoordsArray mePosWC = new CoordsArray(new Space(" ", 2));
-
-            Coords2D cursorPosDC = new Coords2D(cursorPosArray);
-            Coords2D mePosDC = new Coords2D(mePosArray);
-
-            viewingTransform.dcInverseTransform(cursorPosDC, cursorPosWC);
-            viewingTransform.dcInverseTransform(mePosDC, mePosWC);
             
-            Path2D.Double selectionPath = new Path2D.Double();
+            Path2D.Double selectionPath = plotWCPath(cursorPos_, me, panel);
 
-            selectionPath.moveTo(cursorPosWC.getElement(0), cursorPosWC.getElement(1));
-            
-            selectionPath.lineTo(mePosWC.getElement(0),cursorPosWC.getElement(1));
-
-            
-            selectionPath.lineTo(mePosWC.getElement(0), mePosWC.getElement(1));
-            
-            selectionPath.lineTo(cursorPosWC.getElement(0), mePosWC.getElement(1));
-            
-            selectionPath.closePath();
-            
-            
-
-            Polygon testePolygon = new Polygon();
+            selectedPolygon_ = new Polygon();
 
             PathIterator iterator = selectionPath.getPathIterator(null);
 
@@ -74,14 +38,14 @@ public class RPnPhasePanelBoxPlotter implements MouseMotionListener, MouseListen
 
                 int segment = iterator.currentSegment(segmentArray);
                 if (segment != PathIterator.SEG_CLOSE) {
-                    
-                    Coords2D dcSelectionPoint = new Coords2D(0,0);
-                    
-                    CoordsArray wcSelectionPoint = new CoordsArray(segmentArray);
-                    
-                    viewingTransform.viewPlaneTransform(wcSelectionPoint,dcSelectionPoint);
 
-                    testePolygon.addPoint((int) dcSelectionPoint.getX(), (int) dcSelectionPoint.getY());
+                    Coords2D dcSelectionPoint = new Coords2D(0, 0);
+
+                    CoordsArray wcSelectionPoint = new CoordsArray(segmentArray);
+
+                    panel.scene().getViewingTransform().viewPlaneTransform(wcSelectionPoint, dcSelectionPoint);
+
+                    selectedPolygon_.addPoint((int) dcSelectionPoint.getX(), (int) dcSelectionPoint.getY());
 
                 }
 
@@ -89,44 +53,28 @@ public class RPnPhasePanelBoxPlotter implements MouseMotionListener, MouseListen
 
 
             }
-            
-            tempRectangle=testePolygon;
 
-            int polySize = panel.getCastedUI().getSelectionAreas().size();
+            int size = panel.getCastedUI().getSelectionAreas().size();
 
-            if (polySize > 0) {
-                panel.getCastedUI().getSelectionAreas().set(polySize - 1, testePolygon);
-            } else {
-                panel.getCastedUI().getSelectionAreas().add(testePolygon);
-            }
-
-
-//
-//            if (listSize > 0) {
-//                panel.getCastedUI().getSelectionAreas().set(listSize - 1, tempRectangle);
-//            } else {
-//                panel.getCastedUI().getSelectionAreas().add(tempRectangle);
-//            }
-
+            panel.getCastedUI().getSelectionAreas().set(size - 1, selectedPolygon_);
 
             panel.repaint();
 
         }
     }
 
-
     public void mousePressed(MouseEvent me) {
 
-        RPnPhaseSpacePanel source = (RPnPhaseSpacePanel) me.getSource();
+        RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) me.getSource();
         if (addRectangle_ == false) {
-
             cursorPos_ = new Point(me.getX(), me.getY());
-            source.repaint();
+            Polygon emptyPolygon = new Polygon();
+            emptyPolygon.addPoint(cursorPos_.x, cursorPos_.y);
+            panel.getCastedUI().getSelectionAreas().add(emptyPolygon);
+
             addRectangle_ = true;
         } else {
             addRectangle_ = false;
-            source.getCastedUI().getSelectionAreas().add(tempRectangle);
-
         }
 
     }
@@ -153,9 +101,5 @@ public class RPnPhasePanelBoxPlotter implements MouseMotionListener, MouseListen
     @Override
     public void mouseDragged(MouseEvent me) {
 //        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public Polygon getSelectedRectangle() {
-        return tempRectangle;
     }
 }

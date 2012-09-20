@@ -22,7 +22,6 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
         super(params);
 
     }
-
     //
     // Accessors/Mutators
     //
