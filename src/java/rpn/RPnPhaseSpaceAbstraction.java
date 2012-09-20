@@ -154,6 +154,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
                 if (geometry instanceof SegmentedCurveGeom) {
 
                     SegmentedCurveGeom segGeom = (SegmentedCurveGeom) geometry;
+                    segGeom.viewingAttr().setSelected(true);
                     segGeom.highLight();
 
                 } else {
@@ -161,6 +162,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
                     if (geometry instanceof MultiPolyLine) {
 
                         MultiPolyLine poly = (MultiPolyLine) geometry;
+                        poly.viewingAttr().setSelected(true);
                         poly.highLight();
 
                     }
@@ -405,6 +407,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
                 if (geometry instanceof SegmentedCurveGeom) {
 
                     SegmentedCurveGeom segGeom = (SegmentedCurveGeom) geometry;
+                    segGeom.viewingAttr().setSelected(false);
                     segGeom.lowLight();
 
 
@@ -413,6 +416,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
                     if (geometry instanceof MultiPolyLine) {
 
                         MultiPolyLine poly = (MultiPolyLine) geometry;
+                        poly.viewingAttr().setSelected(false);
                         poly.lowLight();
 
                     }

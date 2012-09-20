@@ -352,49 +352,32 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
             if (listSelectionModel.isSelectionEmpty()) {
                 phaseSpace_.clearGeometrySelection();
 
-
             } else {
-
-
+                for (int i = 0; i < curvesTable_.getRowCount(); i++) {
+                    phaseSpace_.lowlightGeometry(i);
+                }
                 int minIndex = listSelectionModel.getMinSelectionIndex();
                 int maxIndex = listSelectionModel.getMaxSelectionIndex();
-
 
                 for (int i = minIndex; i <= maxIndex; i++) {
                     if (listSelectionModel.isSelectedIndex(i)) {
                         int index = 0;
                         Iterator it = phaseSpace_.getGeomObjIterator();
                         while (it.hasNext()) {
-
                             RpGeometry geometry = (RpGeometry) it.next();
-
                             if (index == i) {
                                 phaseSpace_.highlightGeometry(index);
-                                geometry.viewingAttr().setSelected(true);
                                 selectedGeometries.add(geometry);
-
-                            } else {
-                                phaseSpace_.lowlightGeometry(index);
-                                geometry.viewingAttr().setSelected(false);
                             }
-
                             index++;
-
                         }
+
                     }
-
                 }
-
             }
-
             setChanged();
             notifyObservers(selectedGeometries);
-
         }
-
-
-
-
     }
 
     void setVisible(boolean show) {

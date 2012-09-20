@@ -37,7 +37,7 @@ public class RAREFACTION_CONFIG extends UI_ACTION_SELECTED {
         ChangeFluxParamsAgent.instance().setEnabled(true);
         RarefactionExtensionCurvePlotAgent.instance().setEnabled(true);
         IntegralCurvePlotAgent.instance().setEnabled(true);
-        AreaSelectionAgent.instance().setEnabled(true);
+        AreaSelectionAgent.instance().setEnabled(false);
         CompositePlotAgent.instance().setEnabled(true);
         PointLevelCurvePlotAgent.instance().setEnabled(true);
         LevelCurvePlotAgent.instance().setEnabled(true);

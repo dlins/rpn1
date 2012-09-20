@@ -43,51 +43,61 @@ public abstract class GeomObjView {
     }
 
     public boolean intersect(Polygon polygon) {
-        ArrayList<double[]> polygonVertices = new ArrayList<double[]>();
-
-        PathIterator polygonIterator = polygon.getPathIterator(null);
-
-        while (!polygonIterator.isDone()) {
-
-            double[] vertexArray = new double[2];
-            int segment = polygonIterator.currentSegment(vertexArray);
-            if (segment != PathIterator.SEG_CLOSE) {
-
-                polygonVertices.add(vertexArray);
-
-            }
-            polygonIterator.next();
-        }
 
         for (Object object : viewList_) {
 
             PolyLine segment = (PolyLine) object;
-            PathIterator segmentPath = segment.getShape().getPathIterator(null);
 
-            ArrayList<double[]> segmentPoints = new ArrayList<double[]>();
-
-            double[] segmentCoords = new double[2];
-
-            while (!segmentPath.isDone()) {
-                segmentPath.currentSegment(segmentCoords);
-                segmentPoints.add(segmentCoords);
-                segmentPath.next();
-            }
-
-
-            if ( segmentIntersectEdge(polygonVertices, segmentPoints)) {
+            if (segment.getShape().intersects(polygon.getBounds())) {
                 return true;
             }
 
         }
+
         return false;
+
+//        ArrayList<double[]> polygonVertices = new ArrayList<double[]>();
+//
+//        PathIterator polygonIterator = polygon.getPathIterator(null);
+//
+//        while (!polygonIterator.isDone()) {
+//
+//            double[] vertexArray = new double[2];
+//            int segment = polygonIterator.currentSegment(vertexArray);
+//            if (segment != PathIterator.SEG_CLOSE) {
+//
+//                polygonVertices.add(vertexArray);
+//
+//            }
+//            polygonIterator.next();
+//        }
+//
+//        for (Object object : viewList_) {
+//
+//            PolyLine segment = (PolyLine) object;
+//            PathIterator segmentPath = segment.getShape().getPathIterator(null);
+//
+//            ArrayList<double[]> segmentPoints = new ArrayList<double[]>();
+//
+//            double[] segmentCoords = new double[2];
+//
+//            while (!segmentPath.isDone()) {
+//                segmentPath.currentSegment(segmentCoords);
+//                segmentPoints.add(segmentCoords);
+//                segmentPath.next();
+//            }
+//
+//
+//            if ( segmentIntersectEdge(polygonVertices, segmentPoints)) {
+//                return true;
+//            }
+//
+//        }
+//        return false;
 
 
     }
 
-        
-    
-    
     public List<Integer> contains(Polygon polygon) {
 
         ArrayList<Integer> segmentIndex = new ArrayList<Integer>();

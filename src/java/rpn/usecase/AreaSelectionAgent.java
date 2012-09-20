@@ -21,6 +21,7 @@ import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpacePanel;
 import rpn.RPnUIFrame;
 import rpn.component.RpGeometry;
+import rpn.component.WaveCurveGeom;
 import rpn.component.util.GeometryGraph;
 import rpn.component.util.GeometryGraph3D;
 import rpn.component.util.GeometryGraphND;
@@ -30,13 +31,15 @@ import rpn.controller.ui.UIController;
 import rpn.controller.ui.UserInputTable;
 import rpn.parser.RPnDataModule;
 import rpnumerics.Area;
+import rpnumerics.Orbit;
 import rpnumerics.RPNUMERICS;
 import rpnumerics.RPnCurve;
+import rpnumerics.WaveCurve;
 import wave.util.Boundary;
 import wave.util.RealVector;
 import wave.util.RectBoundary;
 
-public class AreaSelectionAgent extends RpModelPlotAgent implements Observer{
+public class AreaSelectionAgent extends RpModelPlotAgent implements Observer {
 
     public int ind = 0;
     static public final String DESC_TEXT = "Select Area";
@@ -69,10 +72,7 @@ public class AreaSelectionAgent extends RpModelPlotAgent implements Observer{
             button.addMouseMotionListener(boxPlotter);
 
 
-
         }
-
-
 
 
     }
@@ -209,12 +209,39 @@ public class AreaSelectionAgent extends RpModelPlotAgent implements Observer{
 
     @Override
     public void update(Observable o, Object arg) {
-       System.out.println("Update de Area selection Agent"+arg);
-       
-       
-       
-       
-       
-       
+
+        List<RpGeometry> selectedCurves = (List<RpGeometry>) arg;
+
+        setEnabled(testRiemmanProfile(selectedCurves));
+
+    }
+
+    private boolean testRiemmanProfile(List<RpGeometry> selectedCurves) {
+
+        if (selectedCurves.size() != 2) {
+            return false;
+        }
+
+        boolean waveCurveForward0 = false;
+        boolean waveCurveBackward1 = false;
+
+        for (RpGeometry geometry : selectedCurves) {
+            if (geometry instanceof WaveCurveGeom) {
+                WaveCurveGeom waveCurveGeom = (WaveCurveGeom) geometry;
+                WaveCurve waveCurve = (WaveCurve) waveCurveGeom.geomFactory().geomSource();
+                if (waveCurve.getFamily() == 0 && waveCurve.getDirection() == Orbit.WAVECURVE_FORWARD) {
+                   RiemannProfileAgent.instance().setForwardWaveCurve(waveCurve);
+                   waveCurveForward0=true;
+                }
+                if (waveCurve.getFamily() == 1 && waveCurve.getDirection() == Orbit.WAVECURVE_BACKWARD) {
+                   RiemannProfileAgent.instance().setBackwardWaveCurve(waveCurve);
+                   waveCurveBackward1=true;
+                }
+            }
+        }
+        return (waveCurveForward0  && waveCurveBackward1 );
+            
+
+
     }
 }

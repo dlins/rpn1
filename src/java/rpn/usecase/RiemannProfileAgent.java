@@ -12,13 +12,10 @@ import java.awt.geom.Rectangle2D;
 import java.util.Iterator;
 import java.util.List;
 import javax.swing.JButton;
-import rpn.RPnPhaseSpaceFrame;
 import rpn.RPnPhaseSpacePanel;
-import rpn.RPnUIFrame;
 import rpn.component.*;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UI_ACTION_SELECTED;
-import rpn.parser.RPnDataModule;
 import rpnumerics.*;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
@@ -38,6 +35,8 @@ public class RiemannProfileAgent extends RpModelPlotAgent {
     // Members
     //
     static private RiemannProfileAgent instance_ = null;
+    private WaveCurve waveCurveForward_;
+    private WaveCurve waveCurveBackward_;
 
     //
     // Constructors/Initializers
@@ -55,10 +54,7 @@ public class RiemannProfileAgent extends RpModelPlotAgent {
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {
-
         return null;
-
-
     }
 
     @Override
@@ -75,16 +71,22 @@ public class RiemannProfileAgent extends RpModelPlotAgent {
         while (panelsIterator.hasNext()) {
 
             RPnPhaseSpacePanel rPnPhaseSpacePanel = panelsIterator.next();
-            System.out.println(rPnPhaseSpacePanel.getCastedUI().getSelectionAreas().size());
+
+            List<GeomObjView> intersectCurves = rPnPhaseSpacePanel.intersectAreas();
+
+
+
+
+            System.out.println(intersectCurves);
 //            
 //for (Rectangle2D.Double rect: rPnPhaseSpacePanel.getCastedUI().getSelectionAreas()){
 //    
 //    System.out.println(rect);
 //    
-    
+
 //}
 
-//            List<GeomObjView> intersectCurves = rPnPhaseSpacePanel.intersectAreas();
+
 //
 //            for (GeomObjView geomObjView : intersectCurves) {
 //
@@ -105,22 +107,22 @@ public class RiemannProfileAgent extends RpModelPlotAgent {
 //
 //                }
 //            }
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
+
+
+
+
+
+
+
+
+
+
+
 
         }
 
 
-        
+
 //        
 //        
 //        RiemannProfileCalc rc = new RiemannProfileCalc(firstArea, waveCurveForward0, waveCurveBackward1);
@@ -145,48 +147,47 @@ public class RiemannProfileAgent extends RpModelPlotAgent {
         }
         return instance_;
     }
-    
-    
-    
-     public Area createWCArea(Scene scene, Rectangle2D.Double viewArea) {
+
+    void setForwardWaveCurve(WaveCurve forwardWaveCurve) {
+        waveCurveForward_ = forwardWaveCurve;
+    }
+
+    void setBackwardWaveCurve(WaveCurve backwardWaveCurve) {
+        waveCurveBackward_ = backwardWaveCurve;
+    }
+
+    public Area createWCArea(Scene scene, Rectangle2D.Double viewArea) {
 
         ViewingTransform viewTransform = scene.getViewingTransform();
 
         Rectangle bounds = viewArea.getBounds();
-        
+
         Point upLefPointCorner = bounds.getLocation();
-        
-        Coords2D upLeftCorner = new Coords2D(upLefPointCorner.x,upLefPointCorner.y);
-        
-        Coords2D downRightCorner = new Coords2D(upLefPointCorner.x+bounds.width,upLefPointCorner.y+bounds.height);
-        
+
+        Coords2D upLeftCorner = new Coords2D(upLefPointCorner.x, upLefPointCorner.y);
+
+        Coords2D downRightCorner = new Coords2D(upLefPointCorner.x + bounds.width, upLefPointCorner.y + bounds.height);
+
         CoordsArray upLeftCornerArray = new CoordsArray(new Space("", 2));
         CoordsArray downRightArray = new CoordsArray(new Space("", 2));
-        
-        viewTransform.dcInverseTransform(upLeftCorner,upLeftCornerArray);
-        
-        viewTransform.dcInverseTransform(downRightCorner,downRightArray);
-                
+
+        viewTransform.dcInverseTransform(upLeftCorner, upLeftCornerArray);
+
+        viewTransform.dcInverseTransform(downRightCorner, downRightArray);
+
         RealVector upLeftCornerVector = new RealVector(upLeftCornerArray.getCoords());
-        
+
         RealVector downRightArrayVector = new RealVector(downRightArray.getCoords());
-        
-        double [] dummyResolution  = {10,10};
-        
+
+        double[] dummyResolution = {10, 10};
+
         RealVector dummyResolutionVector = new RealVector(dummyResolution);
-        
-        Area result = new Area(dummyResolutionVector,upLeftCornerVector,downRightArrayVector);
-        
+
+        Area result = new Area(dummyResolutionVector, upLeftCornerVector, downRightArrayVector);
+
         return result;
-        
+
 
 
     }
-
-    
-    
-    
-    
-    
-    
 }
