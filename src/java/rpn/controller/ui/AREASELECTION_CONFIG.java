@@ -5,7 +5,6 @@
  */
 package rpn.controller.ui;
 
-import rpn.controller.RPnPhasePanelBoxPlotter;
 import rpn.usecase.AreaSelectionAgent;
 
 public class AREASELECTION_CONFIG extends UI_ACTION_SELECTED {
@@ -19,3 +18,4 @@ public class AREASELECTION_CONFIG extends UI_ACTION_SELECTED {
 
 
 }
+ 

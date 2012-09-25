@@ -15,10 +15,9 @@ public class RPnCurvesTableModel extends DefaultTableModel {
 
     public RPnCurvesTableModel() {
 
-        columnIdentifiers.add(new String("Selected"));
         columnIdentifiers.add(new String("Curve"));
         columnIdentifiers.add(new String("User Input"));
-        columnIdentifiers.add(new String("Visible"));
+
 
     }
 
@@ -29,7 +28,7 @@ public class RPnCurvesTableModel extends DefaultTableModel {
 
     @Override
     public int getColumnCount() {
-        return 4;
+        return 2;
     }
 
     @Override

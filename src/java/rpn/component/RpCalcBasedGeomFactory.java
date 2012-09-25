@@ -126,9 +126,7 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
         for (Integer i : segmentsToRemove) {
             segRem.add(curve.segments().get(i));
         }
-
         curve.segments().removeAll(segRem);
-        System.out.println("Tamanho completo depois de remover:"+curve.segments().size());
 
         for (Area area : areaToRefine) {
             try {

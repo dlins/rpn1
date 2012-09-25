@@ -5,112 +5,190 @@
  */
 package rpn.usecase;
 
-import java.util.List;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.HeadlessException;
+import java.awt.Insets;
+import java.awt.Polygon;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
-import javax.swing.JToggleButton;
-import rpn.RPnLeftPhaseSpaceAbstraction;
+import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import rpn.RPnDialog;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpacePanel;
 import rpn.component.RpCalcBasedGeomFactory;
 import rpn.component.RpGeometry;
 import rpn.component.SegmentedCurveGeom;
-import rpn.controller.RPnAdjustedSelectionPlotter;
-import rpn.controller.ui.AREASELECTION_CONFIG;
-import rpn.controller.ui.UIController;
 import rpnumerics.Area;
-import rpnumerics.ContourCurveCalc;
-import wave.multid.view.ViewingAttr;
+import wave.multid.view.GeomObjView;
 import wave.util.RealVector;
 
-public class CurveRefineAgent extends RpModelPlotAgent {
+public class CurveRefineAgent extends RpModelConfigChangeAgent  {
+    //
+    // Constants
+    //
 
-    public int ind = 0;
-    static public final String DESC_TEXT = "Refine Curve";
-    static private CurveRefineAgent instance_ = null;
-    private List<Area> listArea_;
+    static public final String DESC_TEXT = "Curve Refine";
+    //
+    // Members
+    //
+    private static CurveRefineAgent instance_ = null;
+    private RealVector resolution_;
+    private RpGeometry curveToRefine_ = null;
+    private RPnPhaseSpacePanel panelToRefine_ = null;
 
-    private CurveRefineAgent() {
-        super(DESC_TEXT, null, new JToggleButton());
-        listArea_ = new ArrayList<Area>();
-        setEnabled(true);
+    //
+    // Constructors
+    //
+    protected CurveRefineAgent() {
+        super(DESC_TEXT);
+        resolution_ = new RealVector(2);
     }
 
-    @Override
-    public void actionPerformed(ActionEvent event) {
+    public void execute() {
 
-
-        UIController.instance().setState(new AREASELECTION_CONFIG());
-        Iterator<RPnPhaseSpacePanel> iterator = UIController.instance().getInstalledPanelsIterator();
-
-        while (iterator.hasNext()) {
-            RPnPhaseSpacePanel panel = iterator.next();
-            RPnPhaseSpaceAbstraction phaseSpace = (RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom();
-            
-            Iterator phaseSpaceIterator = phaseSpace.getGeomObjIterator();
-            while (phaseSpaceIterator.hasNext()) {
-                RpGeometry phasSpaceGeometry =(RpGeometry) phaseSpaceIterator.next();
-                
-                if (phasSpaceGeometry.viewingAttr().isSelected()) {
-
-                RpCalcBasedGeomFactory factory = (RpCalcBasedGeomFactory) phasSpaceGeometry.geomFactory();
-
-                if (factory.rpCalc() instanceof ContourCurveCalc) {
-                    ContourCurveCalc calc = (ContourCurveCalc) factory.rpCalc();
-
-                    int x = calc.getParams().getResolution()[0];
-                    int y = calc.getParams().getResolution()[1];
-
-                    CurveRefine.instance().setResolution(new RealVector(x + " " + y));
-                    CurveRefine.instance().setRefineGeometry(phasSpaceGeometry, panel);
-                    
-
-                    RPnAdjustedSelectionPlotter boxPlotter = new RPnAdjustedSelectionPlotter(x, y);
-                    panel.addMouseListener(boxPlotter);
-                    panel.addMouseMotionListener(boxPlotter);
-                }
-
-
-            }
-                
-            }
-            
-            
-
+        if (curveToRefine_ != null && panelToRefine_ != null) {
+            processGeometry(curveToRefine_, panelToRefine_);
+            RPnPhaseSpaceAbstraction phaseSpace = (RPnPhaseSpaceAbstraction) panelToRefine_.scene().getAbstractGeom();
+            phaseSpace.update();
+            panelToRefine_.getCastedUI().getSelectionAreas().clear();
         }
 
 
-
     }
 
-    public static CurveRefineAgent instance() {
+    public void unexecute() {
+        Double oldValue = (Double) log().getNewValue();
+        Double newValue = (Double) log().getOldValue();
+        applyChange(new PropertyChangeEvent(this, "level", oldValue, newValue));
+    }
+
+    static public CurveRefineAgent instance() {
         if (instance_ == null) {
             instance_ = new CurveRefineAgent();
         }
         return instance_;
     }
 
-    @Override
-    public void unexecute() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void setResolution(RealVector resolution) {
+        resolution_ = resolution;
     }
 
     @Override
-    public void execute() {
+    public void actionPerformed(ActionEvent event) {
 
+        ResolutionDialog resolutionDialog = new ResolutionDialog("Resolution");
+        resolutionDialog.setVisible(true);
+    }
 
+    private void processGeometry(RpGeometry selectedGeometry, RPnPhaseSpacePanel phaseSpacePanel) {
 
-        System.out.println("Resolution de Curve Refine");
+        List<Integer> indexToRemove = new ArrayList<Integer>();
+        List<Area> areasToRefine = new ArrayList<Area>();
+
+        List<Polygon> selectedAreas = phaseSpacePanel.getCastedUI().getSelectionAreas();
+
+        for (Polygon polygon : selectedAreas) {
+
+            Iterator geomIterator = phaseSpacePanel.scene().geometries();
+            while (geomIterator.hasNext()) {
+                GeomObjView geomObjView = (GeomObjView) geomIterator.next();
+                if (((RpGeometry) geomObjView.getAbstractGeom()) == selectedGeometry) {
+                    List<Integer> segmentIndex = geomObjView.contains(polygon);
+                    if (!segmentIndex.isEmpty()) {
+                        indexToRemove.addAll(segmentIndex);
+                        areasToRefine.add(new Area(resolution_, polygon, phaseSpacePanel.scene().getViewingTransform()));
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        RpCalcBasedGeomFactory factory = (RpCalcBasedGeomFactory) selectedGeometry.geomFactory();
+
+        factory.updateGeom(areasToRefine, indexToRemove);
 
     }
 
-    public List<Area> getListArea() {
-        return listArea_;
+    void setRefineGeometryAndPanel(RpGeometry phasSpaceGeometry, RPnPhaseSpacePanel panel) {
+        curveToRefine_ = phasSpaceGeometry;
+        panelToRefine_ = panel;
+
     }
 
-    @Override
-    public RpGeometry createRpGeometry(RealVector[] coords) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    private class ResolutionDialog extends RPnDialog {
+
+        JTextField xresolution_;
+        JTextField yresolution_;
+        JButton okButton_;
+
+        public ResolutionDialog(String title) throws HeadlessException {
+
+            super(false, true);
+            setSize(200, 200);
+            setTitle(title);
+
+            xresolution_ = new JTextField(String.valueOf((int) resolution_.getElement(0)));
+            yresolution_ = new JTextField(String.valueOf((int) resolution_.getElement(1)));
+
+            GridBagLayout gridBagLayout = new GridBagLayout();
+            JPanel resolutionPanel = new JPanel(gridBagLayout);
+
+            GridBagConstraints constraints = new GridBagConstraints();
+            constraints.gridx = 0;
+            constraints.gridy = 0;
+
+            constraints.ipadx = 10;
+            constraints.ipady = 5;
+
+            resolutionPanel.add(xresolution_, constraints);
+
+            constraints.anchor = GridBagConstraints.EAST;
+
+            constraints.insets = new Insets(5, 5, 5, 5);
+
+            constraints.gridx = 1;
+
+            constraints.gridy = 0;
+
+            resolutionPanel.add(yresolution_, constraints);
+
+
+            getContentPane().add(resolutionPanel, BorderLayout.CENTER);
+
+
+            Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+
+            int height = dim.height;
+            int width = dim.width;
+            this.setLocation((int) (width - (width * .55)), (int) (height - (height * .9)));
+            this.setLocation((int) (width - (width * .55)), 100);
+
+        }
+
+        @Override
+        protected void apply() {
+            resolution_ = new RealVector(xresolution_.getText() + " " + yresolution_.getText());
+            execute();
+            dispose();
+
+        }
+
+        @Override
+        protected void begin() {
+        }
     }
 }

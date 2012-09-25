@@ -8,8 +8,6 @@ package wave.multid.view;
 import wave.multid.model.AbstractGeomObj;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
-import java.awt.geom.Line2D;
-import java.awt.geom.PathIterator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,10 +29,10 @@ public abstract class GeomObjView {
 
     }
 
-    /** Updates the visual form of a multidimensional object */
+    /** Update the visual form of a multidimensional object */
     public abstract void update();
 
-    /** Draw a  multidimensional object */
+    /** Draws a  multidimensional object */
     public void draw(Graphics2D g) {
 
         for (int i = 0; i < viewList_.size(); i++) {
@@ -42,6 +40,7 @@ public abstract class GeomObjView {
         }
     }
 
+    /**Tests if this view objects intersects the polygon bounds*/
     public boolean intersect(Polygon polygon) {
 
         for (Object object : viewList_) {
@@ -56,54 +55,13 @@ public abstract class GeomObjView {
 
         return false;
 
-//        ArrayList<double[]> polygonVertices = new ArrayList<double[]>();
-//
-//        PathIterator polygonIterator = polygon.getPathIterator(null);
-//
-//        while (!polygonIterator.isDone()) {
-//
-//            double[] vertexArray = new double[2];
-//            int segment = polygonIterator.currentSegment(vertexArray);
-//            if (segment != PathIterator.SEG_CLOSE) {
-//
-//                polygonVertices.add(vertexArray);
-//
-//            }
-//            polygonIterator.next();
-//        }
-//
-//        for (Object object : viewList_) {
-//
-//            PolyLine segment = (PolyLine) object;
-//            PathIterator segmentPath = segment.getShape().getPathIterator(null);
-//
-//            ArrayList<double[]> segmentPoints = new ArrayList<double[]>();
-//
-//            double[] segmentCoords = new double[2];
-//
-//            while (!segmentPath.isDone()) {
-//                segmentPath.currentSegment(segmentCoords);
-//                segmentPoints.add(segmentCoords);
-//                segmentPath.next();
-//            }
-//
-//
-//            if ( segmentIntersectEdge(polygonVertices, segmentPoints)) {
-//                return true;
-//            }
-//
-//        }
-//        return false;
-
-
     }
 
+    /**Returns the segments indices that are inside the polygon*/
     public List<Integer> contains(Polygon polygon) {
 
         ArrayList<Integer> segmentIndex = new ArrayList<Integer>();
         int segIndex = 0;
-
-
 
         for (Object object : viewList_) {
             PolyLine segment = (PolyLine) object;
@@ -115,7 +73,7 @@ public abstract class GeomObjView {
             }
             segIndex++;
         }
-        System.out.println("Segmentos dentro: " + segmentIndex.size());
+
         return segmentIndex;
 
     }
@@ -150,26 +108,5 @@ public abstract class GeomObjView {
         viewAttr_ = viewAttr;
     }
 
-    private boolean segmentIntersectEdge(List<double[]> polygonVertices, List<double[]> lineSegment) {
-
-        for (int i = 0; i < polygonVertices.size(); i++) {
-            double[] polygonVertex1 = polygonVertices.get(i);
-            double[] polygonVertex2 = null;
-            if (i == polygonVertices.size() - 1) {
-                polygonVertex2 = polygonVertices.get(0);
-            } else {
-                polygonVertex2 = polygonVertices.get(i + 1);
-            }
-
-            boolean intersect = Line2D.linesIntersect(polygonVertex1[0], polygonVertex1[1], polygonVertex2[0], polygonVertex2[1], lineSegment.get(0)[0],
-                    lineSegment.get(0)[1], lineSegment.get(1)[0], lineSegment.get(1)[1]);
-
-            if (intersect) {
-                return intersect;
-            }
-
-
-        }
-        return false;
-    }
+    
 }

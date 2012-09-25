@@ -97,16 +97,11 @@ public class RPnConfig {
     private static void visualConfig() {
         remoteImage();
         RPnDataModule.PHASESPACE = new RPnPhaseSpaceAbstraction("Phase Space",
-                RPNUMERICS.domain(), new NumConfigImpl());//  RpNumerics.domain(),
-
-        RPnDataModule.AUXPHASESPACE = new RPnPhaseSpaceAbstraction("Phase Space",
-                RPNUMERICS.domain(), new NumConfigImpl());//  Rp
-
-
+                RPNUMERICS.domain(), new NumConfigImpl());
         RPnDataModule.LEFTPHASESPACE = new RPnPhaseSpaceAbstraction("LeftPhase Space",
-                RPNUMERICS.domain(), new NumConfigImpl());//  RpNumerics.domain(),
+                RPNUMERICS.domain(), new NumConfigImpl());
         RPnDataModule.RIGHTPHASESPACE = new RPnPhaseSpaceAbstraction("RightPhase Space",
-                RPNUMERICS.domain(), new NumConfigImpl());//  RpNumerics.domain(),
+                RPNUMERICS.domain(), new NumConfigImpl());
 
 
     }

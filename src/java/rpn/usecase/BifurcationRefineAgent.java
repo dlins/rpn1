@@ -37,11 +37,11 @@ public class BifurcationRefineAgent extends RpModelConfigChangeAgent {
         System.out.println("actionPerformed do BifurcationRefineAgent");
         UIController.instance().setState(new BIFURCATIONREFINE_CONFIG());    //*** chamada original
 
-        PropertyChangeEvent propertyEvent = new PropertyChangeEvent(this, "refine", "", AreaSelectionAgent.instance().getListArea().get(0));
+//        PropertyChangeEvent propertyEvent = new PropertyChangeEvent(this, "refine", "", AreaSelectionAgent.instance().getListArea().get(0));
 
-        applyChange(propertyEvent);
+//        applyChange(propertyEvent);
 
-        AreaSelectionAgent.instance().getListArea().clear();
+//        AreaSelectionAgent.instance().getListArea().clear();
 
         // Pode ser útil na hora de fazer inclusao dos novos segmentos (para nao serem eliminados)
         UserInputTable userInputList = UIController.instance().globalInputTable();

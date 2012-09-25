@@ -18,7 +18,6 @@ public class OrbitGeomView extends PolyLine {
 
     private final static int ARROWS_STEP = 30;      //era 10
     private final static int SCALE = 800;           //era 150
-    
 
     public OrbitGeomView(MultiGeometryImpl geom, ViewingTransform transf,
             ViewingAttr attr) throws DimMismatchEx {
@@ -46,7 +45,6 @@ public class OrbitGeomView extends PolyLine {
         return composite;
 
     }
-
 
     private Shape shapeCalculations() {
 
@@ -86,7 +84,7 @@ public class OrbitGeomView extends PolyLine {
 
                 Arrow arrow = new Arrow(new RealVector(start_dc.getCoords()),
                         new RealVector(direction_dc.getCoords()),
-                        5.0, dir*1.0);
+                        5.0, dir * 1.0);
 
                 RealVector p1 = (RealVector) arrow.getHeadDefPoints().get(0);
                 RealVector p2 = (RealVector) arrow.getHeadDefPoints().get(2);
@@ -103,17 +101,13 @@ public class OrbitGeomView extends PolyLine {
     }
 
     //-----------------------------------------------
-
-
-
     @Override
     public void draw(Graphics2D g) {
-
+        Color previous = g.getColor();
         g.setColor(getViewingAttr().getColor());
+        g.draw(getShape());
+        g.setColor(previous);
 
-        super.draw(g);
 
     }
-
-
 }

@@ -94,7 +94,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             propertyChange(new PropertyChangeEvent(command, "aplication state", null, null));
             jbInit();
             phaseSpaceFramesInit(RPNUMERICS.boundary());
-            riemanProfileFramesInit();
             associatesPhaseSpaces();
             associatePhaseSpacesAndCurvesList();
             createPanelsChooser();
@@ -163,10 +162,10 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 toolBar_.add(TrackPointAgent.instance().getContainer());
 
                 toolBar_.add(AreaSelectionAgent.instance().getContainer());     //** Edson/Leandro
-                toolBar_.add(CurveRefineAgent.instance());
+                toolBar_.add(AdjustedSelectionPlotAgent.instance());
                 toolBar_.add(ClassifierAgent.instance().getContainer());      //** Leandro
                 toolBar_.add(VelocityAgent.instance().getContainer());        //** Leandro
-               
+
 
                 toolBar_.add(RarefactionExtensionCurvePlotAgent.instance().getContainer());
                 toolBar_.add(RiemannProfileAgent.instance().getContainer());
@@ -323,29 +322,24 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     }
     //***
 
-    private void riemanProfileFramesInit() {
-        RealVector min = new RealVector(3);
-        RealVector max = new RealVector(3);
+    public void updateRiemannProfileFrames(RealVector profileMin, RealVector profileMax) {
 
-        min.setElement(0, 0);
-        min.setElement(1, 0);
-        min.setElement(2, 0);
-
-
-        max.setElement(0, 1);
-        max.setElement(1, 1);
-        max.setElement(2, 1);
+        if (riemannFrames_ != null) {
+            for (RPnPhaseSpaceFrame rPnPhaseSpaceFrame : riemannFrames_) {
+                rPnPhaseSpaceFrame.dispose();
+            }
+        }
 
 
-        RectBoundary boundary = new RectBoundary(min, max);
+        RectBoundary boundary = new RectBoundary(profileMin, profileMax);
         Space riemanProfileSpace = new Space("RiemannProfileSpace", RPNUMERICS.domainDim() + 1);
         riemannFrames_ = new RPnRiemannFrame[RPNUMERICS.domainDim()];
 
         for (int i = 0; i < riemannFrames_.length; i++) {
-            int[] testeArrayIndex = {0, i+1};
+            int[] riemannProfileIndices = {0, i + 1};
 
             wave.multid.graphs.ClippedShape clipping = new wave.multid.graphs.ClippedShape(boundary);
-            RPnProjDescriptor projDescriptor = new RPnProjDescriptor(riemanProfileSpace, "teste", 400, 400, testeArrayIndex, false);
+            RPnProjDescriptor projDescriptor = new RPnProjDescriptor(riemanProfileSpace, "RiemannProfileSpace", 400, 400, riemannProfileIndices, false);
             wave.multid.view.ViewingTransform riemanTesteTransform = projDescriptor.createTransform(clipping);
 
             try {
@@ -356,16 +350,11 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 ex.printStackTrace();
             }
             riemannFrames_[i].pack();
-            riemannFrames_[i].setVisible(true);
         }
-        
-        
+
+
 
     }
-
-   
-    
-    
 
     //** para criar os frames (paineis) - incluindo os auxiliares
     protected void phaseSpaceFramesInit(Boundary boundary) {
@@ -468,24 +457,33 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private void associatePhaseSpacesAndCurvesList() {
         //Phase Spaces and curves list associations
 
-        RPnCurvesList curvesFrame = new RPnCurvesList("Main", RPnDataModule.PHASESPACE);
-        RPnCurvesList leftFrame = new RPnCurvesList("Left", RPnDataModule.LEFTPHASESPACE);
-        RPnCurvesList rightFrame = new RPnCurvesList("Right", RPnDataModule.RIGHTPHASESPACE);
+        RPnCurvesList curvesList = new RPnCurvesList("Main", RPnDataModule.PHASESPACE);
+        RPnCurvesList leftCurvesList = new RPnCurvesList("Left", RPnDataModule.LEFTPHASESPACE);
+        RPnCurvesList rightCurvesList = new RPnCurvesList("Right", RPnDataModule.RIGHTPHASESPACE);
 
 
-        RPnDataModule.PHASESPACE.attach(curvesFrame);
-        RPnDataModule.LEFTPHASESPACE.attach(leftFrame);
-        RPnDataModule.RIGHTPHASESPACE.attach(rightFrame);
+        RPnDataModule.PHASESPACE.attach(curvesList);
+        RPnDataModule.LEFTPHASESPACE.attach(leftCurvesList);
+        RPnDataModule.RIGHTPHASESPACE.attach(rightCurvesList);
 
-        curvesFrame.setVisible(true);
-        leftFrame.setVisible(true);
-        rightFrame.setVisible(true);
-        
-        curvesFrame.addObserver(AreaSelectionAgent.instance());
-        leftFrame.addObserver(AreaSelectionAgent.instance());
-        rightFrame.addObserver(AreaSelectionAgent.instance());
-        
-        
+        curvesList.setVisible(true);
+        leftCurvesList.setVisible(true);
+        rightCurvesList.setVisible(true);
+
+
+        curvesList.addObserver(RiemannProfileAgent.instance());
+        leftCurvesList.addObserver(RiemannProfileAgent.instance());
+        rightCurvesList.addObserver(AreaSelectionAgent.instance());
+
+
+        curvesList.addObserver(AreaSelectionAgent.instance());
+        leftCurvesList.addObserver(AreaSelectionAgent.instance());
+        rightCurvesList.addObserver(AreaSelectionAgent.instance());
+
+
+        curvesList.addObserver(AdjustedSelectionPlotAgent.instance());
+        leftCurvesList.addObserver(AdjustedSelectionPlotAgent.instance());
+        rightCurvesList.addObserver(AdjustedSelectionPlotAgent.instance());
 
 
 
@@ -1011,7 +1009,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         modelInteractionMenu.removeAll();
         modelInteractionMenu.add(ChangeFluxParamsAgent.instance());
         modelInteractionMenu.add(ChangeOrbitLevel.instance());
-        modelInteractionMenu.add(CurveRefine.instance());
+        modelInteractionMenu.add(CurveRefineAgent.instance());
 
         modelInteractionMenu.add(inputCoordsMenuItem);
         modelInteractionMenu.addSeparator();
@@ -1051,9 +1049,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         int newheight = (int) 100;
         component.setLocation(newwidth, newheight);
     }
-    
-    
-     public static RPnPhaseSpaceFrame[] getRiemannFrames() {
+
+    public static RPnPhaseSpaceFrame[] getRiemannFrames() {
         return riemannFrames_;
     }
 

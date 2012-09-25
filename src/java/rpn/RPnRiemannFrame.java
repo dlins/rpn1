@@ -52,7 +52,7 @@ public class RPnRiemannFrame extends RPnPhaseSpaceFrame {
 
         contentPane = (JPanel) this.getContentPane();
         contentPane.setLayout(borderLayout1);
-        this.setResizable(false);
+        this.setResizable(true);
         jPanel2.setBackground(Color.gray);
         jPanel3.setBackground(Color.gray);
         jPanel4.setBackground(Color.gray);

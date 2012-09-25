@@ -59,6 +59,8 @@ public abstract class ShapedGeometry extends GeomObjView {
 
     protected abstract Shape createShape() throws DimMismatchEx;
 
+    
+    /** Tests if the geometry intersects the polygon*/
     public boolean intersect(Polygon area) {
 
         PathIterator pathIterator = getShape().getPathIterator(null);

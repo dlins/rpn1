@@ -12,9 +12,7 @@ import rpn.usecase.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import javax.swing.AbstractButton;
 import rpn.RPnPhaseSpacePanel;
-import rpn.controller.RPnPhasePanelBoxPlotter;
 import rpn.controller.SelectionPlotter;
 
 public class UI_ACTION_SELECTED implements UserInputHandler {
@@ -34,7 +32,7 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
             Iterator<RPnPhaseSpacePanel> iterator = UIController.instance().getInstalledPanelsIterator();
             while (iterator.hasNext()) {
                 RPnPhaseSpacePanel panel = iterator.next();
-                panel.getCastedUI().getSelectionAreas().clear();
+              
                 
                 MouseMotionListener[] mouseMotionArray = (MouseMotionListener[]) panel.getListeners(MouseMotionListener.class);
                 MouseListener[] mouseListenerArray = (MouseListener[]) panel.getListeners(MouseListener.class);

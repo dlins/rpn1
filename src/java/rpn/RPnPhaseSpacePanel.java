@@ -60,7 +60,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         DEFAULT_BACKGROUND_COLOR = Color.black;
         DEFAULT_POINTMARK_COLOR = Color.white;
     }
-
+    
     public static void whiteBackground() {
         DEFAULT_BACKGROUND_COLOR = Color.white;
         DEFAULT_POINTMARK_COLOR = Color.black;
@@ -87,7 +87,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     //
     public RPnPhaseSpacePanel(Scene scene) {
         scene_ = scene;
-
+        
         if (scene_.getViewingTransform() instanceof Viewing3DTransform) {
             ui_ = new PhaseSpacePanel3DController(scene_.getViewingTransform().
                     projectionMap().
@@ -114,7 +114,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
                 getViewport().getWidth()).intValue();
         int myH = new Double(scene().getViewingTransform().viewPlane().
                 getViewport().getHeight()).intValue();
-
+        
         cursorPos_ = new Point(0, 0);
         setBackground(DEFAULT_BOUNDARY_COLOR);
         setPreferredSize(new java.awt.Dimension(myW, myH));
@@ -127,7 +127,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     public PhaseSpacePanelController getCastedUI() {
         return ui_;
     }
-
+    
     public Scene scene() {
         return scene_;
     }
@@ -136,21 +136,21 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     public void setCursorPos(Point pos) {
         cursorPos_ = pos;
     }
-
+    
     public Point getCursorPos() {
         return cursorPos_;
     }
-
+    
     public static boolean isShowCursor() {
         return showCursorLine_;
     }
-
+    
     public static void setCursorLineVisible(boolean aSetCursorLine_) {
         cursorLine_ = aSetCursorLine_;
     }
-
+    
     public void setTrackedPoint(Point trackedPoint) {
-
+        
         this.trackedPoint_ = trackedPoint;
     }
 
@@ -159,21 +159,17 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     //
     @Override
     public void paintComponent(Graphics g) {
-
-
-
-
+        
         super.paintComponent(g);
         Stroke stroke = ((Graphics2D) g).getStroke();
         BasicStroke newStroke = new BasicStroke(1.1f);
         ((Graphics2D) g).setStroke(newStroke);
         Color prev = g.getColor();
-        Graphics2D gra = (Graphics2D) g;
 
         /*
          * BOUNDARY WINDOW
          */
-
+        
         g.setColor(DEFAULT_BACKGROUND_COLOR);
         Shape s = scene_.getViewingTransform().viewPlane().getWindow().dcView(scene_.getViewingTransform());
         ((Graphics2D) g).fill(s);
@@ -182,7 +178,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         /*
          * SCENE
          */
-
+        
         if (scene_ != null) {     //tentar fazer semelhante a isso para o desenho dos acessorios
 
             scene_.draw((Graphics2D) g);
@@ -191,7 +187,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         /*
          * POINT MARKS
          */
-
+        
         g.setColor(DEFAULT_POINTMARK_COLOR);
         for (int i = 0; i < getCastedUI().pointMarkBuffer().size(); i++) {
             g.fillRect(((Point) getCastedUI().pointMarkBuffer().get(i)).x,
@@ -203,29 +199,15 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
          * SELECTED AREAS
          */
 
-
-//        for (Rectangle2D.Double rectangle : getCastedUI().getSelectionAreas()) {
-//
-//            g.drawRect((int) rectangle.getX(), (int) rectangle.getY(), (int) rectangle.width, (int) rectangle.height);
-//
-//        }
-
-
-
+       
+        
         for (Polygon polygon : getCastedUI().getSelectionAreas()) {
             g.setColor(Color.red);
             g.drawPolygon(polygon);
-
+            
         }
-
-
-
-
-
-
+        
         g.setColor(DEFAULT_POINTMARK_COLOR);
-
-
 
         /*
          * Tracked Point
@@ -233,9 +215,6 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         if (trackedPoint_ != null) {
             g.fillRect(trackedPoint_.x, trackedPoint_.y, 5, 5);
         }
-
-
-
 
         //** Leandro: início.
 
@@ -270,14 +249,14 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
             repaint();
             getCastedUI().resetCursorCoords();
         }
-
+        
         if (UIController.instance().getState() instanceof CLASSIFIERAGENT_CONFIG) {      // acrescentei isso (Leandro)
             getCastedUI().pointMarkBuffer().clear();
             showCursorLine_ = false;
             repaint();
             getCastedUI().resetCursorCoords();
         }
-
+        
         if (UIController.instance().getState() instanceof VELOCITYAGENT_CONFIG) {        // acrescentei isso (Leandro)
             getCastedUI().pointMarkBuffer().clear();
             showCursorLine_ = false;
@@ -295,7 +274,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
          * orientation
          */
         if (showCursorLine_ && isCursorLine()) {
-
+            
             if ((!printFlag_)
                     && (scene().getViewingTransform() instanceof Viewing2DTransform)) {
                 g.setColor(Color.red);
@@ -307,10 +286,10 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
             g.setColor(prev);
             ((Graphics2D) g).setStroke(stroke);
         }
-
-
+        
+        
     }
-
+    
     public BufferedImage createOffSetImageBuffer() {
         GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
         GraphicsDevice dev = env.getDefaultScreenDevice();
@@ -347,7 +326,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         
         we could possibly have a save to file option dialog instead.
          */
-
+        
         if (pageIndx != 0) {
             return NO_SUCH_PAGE;
         }
@@ -371,12 +350,12 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         }
         return PAGE_EXISTS;
     }
-
+    
     public static void setShowCursor(boolean showCursor) {
         showCursorLine_ = showCursor;
-
+        
     }
-
+    
     public void createSVG(File file) {
         try {
 
@@ -403,47 +382,65 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
                 if (geometry.getViewingAttr().isVisible()) {
                     geometry.draw(svgGenerator);
                 }
-
-
+                
+                
             }
             // Finally, stream out SVG to the standard output using
             // UTF-8 encoding.
             svgGenerator.stream(file.getCanonicalPath(), useCSS);
-
+            
         } catch (SVGGraphics2DIOException ex) {
             ex.printStackTrace();
-
+            
         } catch (UnsupportedEncodingException ex) {
             ex.printStackTrace();
-
-
+            
+            
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-
+        
     }
-
- 
-
-    public List<GeomObjView> intersectAreas() {//TODO Verificar
-
-        ArrayList<GeomObjView> geomList = new ArrayList<GeomObjView>();
-
+    
+    public List<Polygon> intersectedArea(GeomObjView geomView) {
+        
         Iterator<Polygon> areaIterator = getCastedUI().getSelectionAreas().iterator();
-
+        
+        ArrayList<Polygon> intersectedAreas = new ArrayList<Polygon>();
+        
         while (areaIterator.hasNext()) {
             Polygon area = areaIterator.next();
+            
+            if (geomView.intersect(area)) {
+                intersectedAreas.add(area);
+            }
+            
+        }
+        
+        return intersectedAreas;
+        
+        
+    }
+    
+    public List<GeomObjView> intersectAreas() {
 
+        ArrayList<GeomObjView> geomList = new ArrayList<GeomObjView>();
+        
+        Iterator<Polygon> areaIterator = getCastedUI().getSelectionAreas().iterator();
+        
+        while (areaIterator.hasNext()) {
+            Polygon area = areaIterator.next();
+            
             Iterator<GeomObjView> geomViewIterator = scene_.geometries();
-
+            
             while (geomViewIterator.hasNext()) {
                 GeomObjView geomObjView = geomViewIterator.next();
                 
                 if (geomObjView.intersect(area)) {
                     geomList.add(geomObjView);
-
+                    
                 }
-
+                
             }
         }
         return geomList;
