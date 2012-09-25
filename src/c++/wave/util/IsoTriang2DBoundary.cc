@@ -284,7 +284,7 @@ int Three_Phase_Boundary::edge_segments(int where_constant, int number_of_steps,
         p_beta[1]  = RealEndEdge;
     } else { // where_constant == THREE_PHASE_BOUNDARY_SG_ZERO
         // The following protection exists for physical boundary outside the real boundary.
-        if (RealEndEdge < 1.0) return 0;
+        if (end_edge < 1.0) return 0;
 
         p_alpha[0] = pmin->component(0);
         p_alpha[1] = 1.0 - pmin->component(0);

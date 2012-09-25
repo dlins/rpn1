@@ -28,12 +28,7 @@ public class RiemannProfileCalc implements RpCalculation {
     public RiemannProfileCalc(Area area, WaveCurve forwardCurve, WaveCurve backwardCurve) {
 
         area_ = area;
-
-
-
         List<WaveCurveBranch> forwardBranch = forwardCurve.getBranchsList();
-
-
         forwardList_ = new ArrayList<WaveCurveOrbit>();
 
         for (WaveCurveBranch waveCurveBranch : forwardBranch) {

@@ -74,7 +74,7 @@ public class RiemannProfileAgent extends RpModelPlotAgent implements Observer {
         AreaSelectionAgent.instance().setEnabled(enable);
 
         if (enable) {
-            selectedCurves = (List<RpGeometry>) arg;
+            instance_.selectedCurves = (List<RpGeometry>) arg;
         }
 
 
@@ -113,21 +113,25 @@ public class RiemannProfileAgent extends RpModelPlotAgent implements Observer {
                         RiemannProfileGeomFactory riemannProfileGeomFactory = new RiemannProfileGeomFactory(rc);
 
                         RiemannProfile riemannProfile = (RiemannProfile) riemannProfileGeomFactory.geomSource();
+                        if (riemannProfile != null) {
 
-                        RealVector profileMin = createProfileMinLimit(riemannProfile);
-                        RealVector profileMax = createProfileMaxLimit(riemannProfile);
+                            RealVector profileMin = createProfileMinLimit(riemannProfile);
+                            RealVector profileMax = createProfileMaxLimit(riemannProfile);
 
-                        RPnDesktopPlotter.getUIFrame().updateRiemannProfileFrames(profileMin, profileMax);
+                            RPnDesktopPlotter.getUIFrame().updateRiemannProfileFrames(profileMin, profileMax);
 
-                        RPnDataModule.RIEMANNPHASESPACE.clear();
-                        RPnDataModule.RIEMANNPHASESPACE.join(riemannProfileGeomFactory.geom());
-                        RPnDataModule.RIEMANNPHASESPACE.update();
+                            RPnDataModule.RIEMANNPHASESPACE.clear();
+                            RPnDataModule.RIEMANNPHASESPACE.join(riemannProfileGeomFactory.geom());
+                            RPnDataModule.RIEMANNPHASESPACE.update();
 
-                        for (RPnPhaseSpaceFrame frame : RPnUIFrame.getRiemannFrames()) {
+                            for (RPnPhaseSpaceFrame frame : RPnUIFrame.getRiemannFrames()) {
 
-                            frame.setVisible(true);
+                                frame.setVisible(true);
+
+                            }
 
                         }
+
 
                     }
 
@@ -182,11 +186,11 @@ public class RiemannProfileAgent extends RpModelPlotAgent implements Observer {
                 WaveCurveGeom waveCurveGeom = (WaveCurveGeom) geometry;
                 WaveCurve waveCurve = (WaveCurve) waveCurveGeom.geomFactory().geomSource();
                 if (waveCurve.getFamily() == 0 && waveCurve.getDirection() == Orbit.WAVECURVE_FORWARD) {
-                    instance_.waveCurveForward_=waveCurve;
+                    instance_.waveCurveForward_ = waveCurve;
                     waveCurveForward0 = true;
                 }
                 if (waveCurve.getFamily() == 1 && waveCurve.getDirection() == Orbit.WAVECURVE_BACKWARD) {
-                    instance_.waveCurveBackward_=waveCurve;
+                    instance_.waveCurveBackward_ = waveCurve;
                     waveCurveBackward1 = true;
                 }
             }
