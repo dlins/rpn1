@@ -4,7 +4,7 @@
  *
  */
 
-package rpn.controller;
+package rpn.controller.ui;
 
 import java.awt.Point;
 import java.awt.event.MouseEvent;
@@ -17,7 +17,7 @@ import wave.multid.CoordsArray;
 import wave.multid.Space;
 import wave.multid.view.ViewingTransform;
 
-public abstract class SelectionPlotter implements  MouseMotionListener, MouseListener{
+public abstract class RPn2DMouseController implements  MouseMotionListener, MouseListener{
 
     protected Path2D.Double plotWCPath(Point cursorPos_, MouseEvent me, RPnPhaseSpacePanel panel) {
         ViewingTransform viewingTransform = panel.scene().getViewingTransform();

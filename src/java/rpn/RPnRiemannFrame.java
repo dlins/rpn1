@@ -77,19 +77,12 @@ public class RPnRiemannFrame extends RPnPhaseSpaceFrame {
 
 
     }
-
-    
-   
-
-   
-   
     //Overridden so we can exit when window is closed
 
     @Override
     protected void processWindowEvent(WindowEvent e) {
-        super.processWindowEvent(e);
         if (e.getID() == WindowEvent.WINDOW_CLOSING) {
-            commandMenu_.finalizeApplication();
+            dispose();
         }
     }
 

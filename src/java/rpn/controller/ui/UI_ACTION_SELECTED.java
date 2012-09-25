@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import rpn.RPnPhaseSpacePanel;
-import rpn.controller.SelectionPlotter;
 
 public class UI_ACTION_SELECTED implements UserInputHandler {
     //
@@ -39,7 +38,7 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
 
                 for (MouseListener mouseListener : mouseListenerArray) {
 
-                    if (mouseListener instanceof SelectionPlotter) {
+                    if (mouseListener instanceof RPn2DMouseController) {
                         panel.removeMouseListener(mouseListener);
 
                     }
@@ -47,7 +46,7 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
 
                 for (MouseMotionListener mouseMotionListener : mouseMotionArray) {
 
-                    if (mouseMotionListener instanceof SelectionPlotter) {
+                    if (mouseMotionListener instanceof RPn2DMouseController) {
                         panel.removeMouseMotionListener(mouseMotionListener);
                     }
 

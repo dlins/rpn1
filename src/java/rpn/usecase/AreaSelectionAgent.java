@@ -12,7 +12,7 @@ import java.util.Observer;
 import javax.swing.JToggleButton;
 import rpn.RPnPhaseSpacePanel;
 import rpn.component.RpGeometry;
-import rpn.controller.RPnPhasePanelBoxPlotter;
+import rpn.controller.ui.RPnSelectionPlotter;
 import rpn.controller.ui.AREASELECTION_CONFIG;
 import rpn.controller.ui.UIController;
 import wave.util.RealVector;
@@ -38,7 +38,7 @@ public class AreaSelectionAgent extends RpModelPlotAgent implements Observer {
         while (iterator.hasNext()) {
             RPnPhaseSpacePanel button = iterator.next();
 
-            RPnPhasePanelBoxPlotter boxPlotter = new RPnPhasePanelBoxPlotter();
+            RPnSelectionPlotter boxPlotter = new RPnSelectionPlotter();
             button.addMouseListener(boxPlotter);
             button.addMouseMotionListener(boxPlotter);
 
