@@ -21,12 +21,9 @@ public interface PhaseSpacePanelController {
     public void resetCursorCoords();
 
     List  pointMarkBuffer();
+
     List <Polygon> getSelectionAreas();
     
-//    List<Polygon> testeSelectedAreas();
-    
-
-
     Point get_dc_CompletePoint();
 
     void set_dc_CompletePoint(Point point);

@@ -30,7 +30,6 @@ import wave.multid.Space;
 import wave.util.RealVector;
 import wave.util.RectBoundary;
 
-
 public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
     //
@@ -473,7 +472,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         curvesList.addObserver(RiemannProfileAgent.instance());
         leftCurvesList.addObserver(RiemannProfileAgent.instance());
-        rightCurvesList.addObserver(AreaSelectionAgent.instance());
+        rightCurvesList.addObserver(RiemannProfileAgent.instance());
 
 
         curvesList.addObserver(AreaSelectionAgent.instance());

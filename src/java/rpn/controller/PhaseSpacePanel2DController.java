@@ -20,7 +20,6 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.Point;
 import java.awt.Polygon;
-import java.awt.geom.Rectangle2D;
 import rpn.controller.ui.TRACKPOINT_CONFIG;
 import rpn.controller.ui.UIController;
 import rpn.usecase.TrackPointAgent;
@@ -42,8 +41,8 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
     private boolean absComplete_;
     private boolean ordComplete_;
     private Point dcCompletePoint_;
-    private List<Rectangle2D> selectionAreas_;
-    private List<Polygon> testeSelectedAreas_;
+    private List<Polygon> selectionAreas_;
+
 
 
     //
@@ -57,9 +56,9 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
         ordComplete_ = false;
         dcCompletePoint_ = new Point(0, 0);
         pointMarkBuffer_ = new ArrayList();
-        selectionAreas_ = new ArrayList<Rectangle2D>();
+        selectionAreas_ = new ArrayList<Polygon>();
         
-        testeSelectedAreas_=new ArrayList<Polygon>();
+
     }
 
     
@@ -183,7 +182,7 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
         return pointMarkBuffer_;
     }
 
-    public List getSelectionAreas() {
+    public List<Polygon> getSelectionAreas() {
         return selectionAreas_;
     }
 
