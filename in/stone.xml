@@ -61,7 +61,7 @@
 
     <CURVE name="envelopecurve">
         <CURVEPARAM name="resolution" value="128 128"/>
-        <CURVEPARAM name="whereisconstant" value="0"/>
+        <CURVEPARAM name="edge" value="0"/>
         <CURVEPARAM name="numberofsteps" value="128"/>
     </CURVE>
 
