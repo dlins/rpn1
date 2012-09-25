@@ -11,10 +11,11 @@ public class AREASELECTION_CONFIG extends UI_ACTION_SELECTED {
 
     public AREASELECTION_CONFIG() {
         super(AreaSelectionAgent.instance());
-        System.out.println("Construtor de AREASELECTION_CONFIG");
+       
 
     }
 
 
 
 }
+ 

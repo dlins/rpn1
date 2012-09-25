@@ -74,9 +74,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
     const AccumulationFunction * accumulationFunction = &RpNumerics::getPhysics().accumulation();
     
     
-    
-    cout << "Flux params " << fluxFunction->fluxParams().params()<<endl;
-    cout << "Accum params " << accumulationFunction->accumulationParams().params() << endl;
+//    
+//    cout << "Flux params " << fluxFunction->fluxParams().params()<<endl;
+//    cout << "Accum params " << accumulationFunction->accumulationParams().params() << endl;
 
 
 

@@ -38,18 +38,6 @@ public class RiemannProfile extends RPnCurve implements RpSolution {
 
     }
 
-
-    
-    private static OrbitPoint[] orbitPointsFromRealVectors(RealVector[] coords,
-            double[] times) {
-        OrbitPoint[] result = new OrbitPoint[times.length];
-        for (int i = 0; i < times.length; i++) {
-            result[i] = new OrbitPoint(coords[i], times[i]);
-        }
-        return result;
-    }
-
-
     @Override
     public String toString() {
         StringBuffer buf = new StringBuffer();

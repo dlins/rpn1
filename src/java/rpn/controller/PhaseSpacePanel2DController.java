@@ -19,6 +19,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.Point;
+import java.awt.Polygon;
 import java.awt.geom.Rectangle2D;
 import rpn.controller.ui.TRACKPOINT_CONFIG;
 import rpn.controller.ui.UIController;
@@ -42,6 +43,7 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
     private boolean ordComplete_;
     private Point dcCompletePoint_;
     private List<Rectangle2D> selectionAreas_;
+    private List<Polygon> testeSelectedAreas_;
 
 
     //
@@ -56,7 +58,16 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
         dcCompletePoint_ = new Point(0, 0);
         pointMarkBuffer_ = new ArrayList();
         selectionAreas_ = new ArrayList<Rectangle2D>();
+        
+        testeSelectedAreas_=new ArrayList<Polygon>();
     }
+
+    
+    
+    
+    
+
+    
 
     //
     // Inner Classes
@@ -67,7 +78,6 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
         public void mouseMoved(MouseEvent event) {
             if (event.getComponent() instanceof RPnPhaseSpacePanel) {
                 RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
-
                 int xCursorPos = event.getPoint().x;
                 int yCursorPos = event.getPoint().y;
                 if ((UIController.instance().getState() instanceof TRACKPOINT_CONFIG )&&

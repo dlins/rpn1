@@ -9,77 +9,37 @@ import wave.multid.model.*;
 import wave.multid.view.*;
 import wave.multid.DimMismatchEx;
 import java.awt.Graphics2D;
+import java.awt.Polygon;
+import java.awt.geom.Line2D;
+import java.awt.geom.PathIterator;
 import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HugoniotCurveView
-        implements GeomObjView {
-    //
-    // Members
-    //
-
-    private List viewList_;
-    private ViewingTransform viewingTransf_;
-    private AbstractGeomObj abstractGeom_;
-    private ViewingAttr viewAttr_;
-
+public class HugoniotCurveView extends GeomObjView {
+   
     //
     // Constructor
     //
     public HugoniotCurveView(HugoniotCurveGeom abstractGeom,
             ViewingTransform transf,
             ViewingAttr viewAttr) throws DimMismatchEx {
-        setAbstractGeom(abstractGeom);
-        setViewingTransform(transf);
-        setViewingAttr(viewAttr);
-        viewList_ = new ArrayList();
-        update();
+        super(abstractGeom, transf, viewAttr);
+
     }
 
     //
     // Accessors/Mutators
     //
-    public AbstractGeomObj getAbstractGeom() {
-        return abstractGeom_;
-    }
-
-    public void setAbstractGeom(AbstractGeomObj abstractGeom) {
-        abstractGeom_ = abstractGeom;
-    }
-
-    public ViewingTransform getViewingTransform() {
-        return viewingTransf_;
-    }
-
-    public void setViewingTransform(ViewingTransform transf) {
-        viewingTransf_ = transf;
-    }
-
-    public ViewingAttr getViewingAttr() {
-        return viewAttr_;
-    }
-
-    public void setViewingAttr(ViewingAttr viewAttr) {
-        viewAttr_ = viewAttr;
-    }
-
-    //
-    // Methods
-    //
-    public void draw(Graphics2D g) {
-        
-        for (int i = 0; i < viewList_.size(); i++) {
-            ((GeomObjView) viewList_.get(i)).draw(g);
-        }
-    }
+   
+    
 
     //Original update method
     public void update() {
 
 
         viewList_.clear();
-        Iterator geomListIterator = ((HugoniotCurveGeom) abstractGeom_).getRealSegIterator();
+        Iterator geomListIterator = ((HugoniotCurveGeom) getAbstractGeom()).getRealSegIterator();
         while (geomListIterator.hasNext()) {
             HugoniotSegGeom geomObj = (HugoniotSegGeom) geomListIterator.next();
             try {

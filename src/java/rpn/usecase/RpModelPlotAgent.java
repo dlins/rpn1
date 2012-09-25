@@ -7,6 +7,7 @@ package rpn.usecase;
 
 import java.awt.Font;
 import java.awt.geom.AffineTransform;
+import javax.swing.event.ChangeEvent;
 import wave.util.RealVector;
 import rpn.parser.RPnDataModule;
 import rpn.component.RpGeometry;
@@ -19,13 +20,14 @@ import rpn.controller.ui.*;
 
 public abstract class RpModelPlotAgent extends RpModelActionAgent {
 
-    private AbstractButton button_;
+    protected AbstractButton button_;
 
     public RpModelPlotAgent(String shortDesc, ImageIcon icon, AbstractButton button) {
         super(shortDesc, icon);
         button_ = button;
         button_.setAction(this);
         button_.setFont(rpn.RPnConfigReader.MODELPLOT_BUTTON_FONT);
+
         AffineTransform fontTransform = new AffineTransform();
 
         fontTransform.scale(1.2, 1.2);
@@ -43,7 +45,7 @@ public abstract class RpModelPlotAgent extends RpModelActionAgent {
     public void execute() {
 
         RealVector[] userInputList = UIController.instance().userInputList();
-        
+
         String listString = "";
 
         Iterator oldValue = phaseSpace_.getGeomObjIterator();
@@ -78,4 +80,10 @@ public abstract class RpModelPlotAgent extends RpModelActionAgent {
     public AbstractButton getContainer() {
         return button_;
     }
+    
+    protected void unselectedButton(ChangeEvent changeEvent){
+        
+    }
+
+    
 }

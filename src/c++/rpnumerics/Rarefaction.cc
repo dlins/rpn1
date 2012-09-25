@@ -776,8 +776,6 @@ int Rarefaction::curve(const RealVector &initial_point,
                        std::vector<RealVector> &rarcurve,
                        std::vector<RealVector> &inflection_points){
 
-    printf("Por mi pinga, esto va a funcionar.\n");
-
     // Set the static parameters that will be used throughout.
     // TODO: Decide if increase and deltaxi should be static.
     Rarefaction::fluxfunction         = (FluxFunction*)ff;

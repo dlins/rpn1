@@ -285,27 +285,14 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setResolution
 
     }
 
-
     const char * gridNameNative = env->GetStringUTFChars(gridName, NULL);
 
-
-    cout << "Nome do grid: " << gridNameNative << endl;
-
-
-
-
     GridValues * grid = RpNumerics::getGridFactory().getGrid(string(gridNameNative));
-
 
     const Boundary * boundary = &RpNumerics::getPhysics().boundary();
 
 
     grid->set_grid(boundary, minNativeVector, maxNativeVector, newResolutionVector);
-
-
-
-    //TODO Mudar a resolucao do grid values adequado
-
 
 }
 
