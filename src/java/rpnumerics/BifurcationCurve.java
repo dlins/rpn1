@@ -67,13 +67,12 @@ public class BifurcationCurve extends SegmentedCurve {
     // Accessors/Mutators
     //
 
-
     //*** Segunda versao: considera as curvas de bifurcacao como sendo formadas de dois conjuntos de geometrias (left e right)
     //*** Aqui, a correspondencia acontece de forma direta: left(i) <--> right(i)
     public RealVector secondPointDC(int i) {
 
         ArrayList segments = new ArrayList();
-
+        
         if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("RightPhase Space"))
             segments = (ArrayList) leftSegments();
 
