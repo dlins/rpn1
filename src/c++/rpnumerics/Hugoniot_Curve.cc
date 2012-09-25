@@ -10,20 +10,28 @@ int Hugoniot_Curve::classified_curve(const FluxFunction *f, const AccumulationFu
 
     int info = curve(f, a, g, r, vrs);
 
-    // Prepare the Hugoniot curve to classify it
-    std::vector<vector<RealVector> > unclassifiedCurve;
-    
-    for (int i = 0; i < vrs.size() / 2; i++) {
-        std::vector< RealVector> temp;
-        temp.push_back(vrs[2 * i]);
-        temp.push_back(vrs[2 * i]);
-        temp.push_back(vrs[2 * i + 1]);
-        //temp.push_back(vrs[2 * i + 1]);
-        unclassifiedCurve.push_back(temp);
-    }
+//    // Prepare the Hugoniot curve to classify it
+//    std::vector<vector<RealVector> > unclassifiedCurve;
+//    
+//    for (int i = 0; i < vrs.size() / 2; i++) {
+//        std::vector< RealVector> temp;
+//        temp.push_back(vrs[2 * i]);
+//        temp.push_back(vrs[2 * i]);
+//        temp.push_back(vrs[2 * i + 1]);
+//        //temp.push_back(vrs[2 * i + 1]);
+//        unclassifiedCurve.push_back(temp);
+//    }
     
     ColorCurve colorCurve(*f, *a);
-    colorCurve.classify_curve(unclassifiedCurve, r, 2, 10, hugoniot_curve);
+    
+    
+    vector<RealVector> testeTransitionalList;
+    
+    
+    
+    colorCurve.classify_segmented_curve(vrs,r,hugoniot_curve,testeTransitionalList);
+    
+//    colorCurve.classify_curve(unclassifiedCurve, r, 2, 10, hugoniot_curve);
 
     return info;
 }

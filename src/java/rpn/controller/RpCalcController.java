@@ -49,7 +49,7 @@ public class RpCalcController implements RpController {
             System.out.println("Refinamento");
             
             Area area = (Area) change.getNewValue();
-            geomFactory_.updateGeom(area);
+//            geomFactory_.updateGeom(area);
 
             return;
         }

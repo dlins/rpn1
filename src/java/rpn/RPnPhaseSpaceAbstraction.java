@@ -126,9 +126,6 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         ((RpGeometry) geom).geomFactory().getUI().uninstall(((RpGeometry) geom).geomFactory());
 
         super.remove(geom);
-
-
-
         notifyState();
 
     }
@@ -141,10 +138,13 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
     public void clearGeometrySelection() {
         for (int i = 0; i < geomList_.size(); i++) {
             highlightGeometry(i);
+            RpGeometry geometry = (RpGeometry)geomList_.get(i);
+            geometry.viewingAttr().setSelected(false);
         }
     }
 
     public void highlightGeometry(int index) {
+
         for (int i = 0; i < geomList_.size(); i++) {
 
             if (i == index) {
@@ -152,12 +152,15 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
                 if (geometry instanceof SegmentedCurveGeom) {
 
                     SegmentedCurveGeom segGeom = (SegmentedCurveGeom) geometry;
+                    segGeom.viewingAttr().setSelected(true);
+                    segGeom.highLight();
 
                 } else {
 
                     if (geometry instanceof MultiPolyLine) {
 
                         MultiPolyLine poly = (MultiPolyLine) geometry;
+                        poly.viewingAttr().setSelected(true);
                         poly.highLight();
 
                     }
@@ -235,6 +238,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
                         }
                         else {
                             listResolution.add(new int[]{0,0});
+
                         }
                         // ---------------------------------------------------------------
 
@@ -353,43 +357,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         VelocityAgent.paraOcultarIndVel.clear();
 
     }
-    //**************************************************************************
-
-//    public void hideGeometry(int index) {
-//
-//        for (int i = 0; i < geomList_.size(); i++) {
-//
-//            if (i == index) {
-//                MultiGeometry geometry = (MultiGeometry) geomList_.get(i);
-//
-//                geometry.viewingAttr().setVisible(false);
-//                //ocultaStringsCla(index);    // ******
-//                ocultaStringsCla(index, this.getName());
-//                ocultaStringsVel(index);    // ******
-//            }
-//        }
-//
-//        UIController.instance().panelsUpdate();
-//
-//    }
-//
-//    public void displayGeometry(int index) {
-//        for (int i = 0; i < geomList_.size(); i++) {
-//
-//            if (i == index) {
-//                MultiGeometry geometry = (MultiGeometry) geomList_.get(i);
-//                geometry.viewingAttr().setVisible(true);
-//                //mostraStringsCla(index);    // ******
-//                //mostraStringsVel(index);    // ******
-//
-//            }
-//
-//        }
-//
-//        UIController.instance().panelsUpdate();
-//
-//
-//    }
+  
 
     public void lowlightGeometry(int index) {
 
@@ -400,7 +368,11 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
                 if (geometry instanceof SegmentedCurveGeom) {
 
                     SegmentedCurveGeom segGeom = (SegmentedCurveGeom) geometry;
+//<<<<<<< HEAD
                     segGeom.getRealSegIterator();
+//=======
+                    //segGeom.viewingAttr().setSelected(false);
+//>>>>>>> ba4a09ab959488672db3325bfe4c6af1c20e157f
                     segGeom.lowLight();
 
 
@@ -409,6 +381,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
                     if (geometry instanceof MultiPolyLine) {
 
                         MultiPolyLine poly = (MultiPolyLine) geometry;
+                        poly.viewingAttr().setSelected(false);
                         poly.lowLight();
 
                     }

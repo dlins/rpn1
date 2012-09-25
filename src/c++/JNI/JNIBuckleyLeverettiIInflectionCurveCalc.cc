@@ -125,18 +125,18 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BuckleyLeverettinInflectionCurveCalc_n
 
     for (int i = 0; i < hugoniotPolyLineVector.size(); i++) {
 
-        for (unsigned int j = 0; j < hugoniotPolyLineVector[i].vec.size() - 1; j++) {
+        for (unsigned int j = 0; j < hugoniotPolyLineVector[i].point.size() - 1; j++) {
 
-            int m = (hugoniotPolyLineVector[i].vec[0].size() - dimension - 1) / 2; // Number of valid eigenvalues
+            int m = (hugoniotPolyLineVector[i].point[0].size() - dimension - 1) / 2; // Number of valid eigenvalues
 
 
             //            cout << "type of " << j << " = " << hugoniotPolyLineVector[i].type << endl;
             //            cout << "coord 1 " << j << " = " << hugoniotPolyLineVector[i].vec[j] << endl;
 
-            hugoniotPolyLineVector[i].vec[j].component(2) = maxDimension.component(2);
-            hugoniotPolyLineVector[i].vec[j + 1].component(2) = maxDimension.component(2);
+            hugoniotPolyLineVector[i].point[j].component(2) = maxDimension.component(2);
+            hugoniotPolyLineVector[i].point[j + 1].component(2) = maxDimension.component(2);
 
-            tpcw.postProcess(hugoniotPolyLineVector[i].vec);
+            tpcw.postProcess(hugoniotPolyLineVector[i].point);
 
 
             //            cout << "coord 2 " << j + 1 << " = " << hugoniotPolyLineVector[i].vec[j + 1] << endl;
@@ -145,8 +145,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BuckleyLeverettinInflectionCurveCalc_n
             jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
 
 
-            double * leftCoords = (double *) hugoniotPolyLineVector[i].vec[j];
-            double * rightCoords = (double *) hugoniotPolyLineVector[i].vec[j + 1];
+            double * leftCoords = (double *) hugoniotPolyLineVector[i].point[j];
+            double * rightCoords = (double *) hugoniotPolyLineVector[i].point[j + 1];
 
 
             env->SetDoubleArrayRegion(eigenValRLeft, 0, dimension, leftCoords);
@@ -159,14 +159,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BuckleyLeverettinInflectionCurveCalc_n
 
             int pointType = hugoniotPolyLineVector[i].type;
 
-            double leftSigma = hugoniotPolyLineVector[i].vec[j].component(dimension + m);
-            double rightSigma = hugoniotPolyLineVector[i].vec[j + 1].component(dimension + m);
+            double leftSigma = hugoniotPolyLineVector[i].point[j].component(0);
+            double rightSigma = hugoniotPolyLineVector[i].point[j + 1].component(1);
 
-            //                        double leftSigma = 0;
-            //                        double rightSigma = 0;
-            //
-
-            //            cout<<"Antes de criar hugoniot segment"<<endl;
             jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, 18);
             env->CallObjectMethod(segmentsArray, arrayListAddMethod, hugoniotSegment);
 
@@ -175,24 +170,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BuckleyLeverettinInflectionCurveCalc_n
 
     }
 
-
-
-    // Limpando
-
-    //        env->DeleteLocalRef(realVectorLeftPoint);
-
-    //        env->DeleteLocalRef(realVectorRightPoint);
-
-    //        env->DeleteLocalRef(hugoniotSegment);
-
-
-
-
-
     jobject result = env->NewObject(coincidenceCurveClass, coincidenceCurveConstructor, segmentsArray);
 
-    //    env->DeleteLocalRef(eigenValRLeft);
-    //    env->DeleteLocalRef(eigenValRRight);
     env->DeleteLocalRef(hugoniotSegmentClass);
     env->DeleteLocalRef(realVectorClass);
     env->DeleteLocalRef(arrayListClass);

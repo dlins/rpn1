@@ -413,7 +413,6 @@ public class UIController extends ComponentUI {
     /** Sets the state of the application. The application works as a state machine and this method changes the actual state.*/
     public void setState(rpn.controller.ui.UserInputHandler newAction) {
         stateController_.propertyChange(new PropertyChangeEvent(this, "aplication state", handler_, newAction));
-        System.out.println(newAction.toString());
 
         if (handler_ instanceof UI_ACTION_SELECTED) {
 
@@ -509,4 +508,13 @@ public class UIController extends ComponentUI {
     public void setStateController(StateInputController stateController) {
         stateController_ = stateController;
     }
+    
+    public Iterator <RPnPhaseSpacePanel> getInstalledPanelsIterator(){
+        return installedPanels_.iterator();
+    }
+    
+    
+    
+    
+    
 }

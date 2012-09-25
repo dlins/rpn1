@@ -10,6 +10,7 @@ import rpn.usecase.ChangeFluxParamsAgent;
 import rpn.usecase.ChangeDirectionAgent;
 import rpn.usecase.ChangeOrbitLevel;
 import rpn.usecase.CompositePlotAgent;
+import rpn.usecase.CurveRefineAgent;
 import rpn.usecase.EllipticBoundaryAgent;
 import rpn.usecase.HugoniotPlotAgent;
 import rpn.usecase.IntegralCurvePlotAgent;
@@ -18,6 +19,7 @@ import rpn.usecase.PhysicalBoundaryPlotAgent;
 import rpn.usecase.PointLevelCurvePlotAgent;
 import rpn.usecase.RarefactionExtensionCurvePlotAgent;
 import rpn.usecase.RarefactionOrbitPlotAgent;
+import rpn.usecase.RiemannProfileAgent;
 import rpn.usecase.ShockCurvePlotAgent;
 import rpn.usecase.WaveCurvePlotAgent;
 import wave.util.RealVector;
@@ -35,14 +37,16 @@ public class RAREFACTION_CONFIG extends UI_ACTION_SELECTED {
         ChangeFluxParamsAgent.instance().setEnabled(true);
         RarefactionExtensionCurvePlotAgent.instance().setEnabled(true);
         IntegralCurvePlotAgent.instance().setEnabled(true);
-        AreaSelectionAgent.instance().setEnabled(true);
+        AreaSelectionAgent.instance().setEnabled(false);
         CompositePlotAgent.instance().setEnabled(true);
         PointLevelCurvePlotAgent.instance().setEnabled(true);
         LevelCurvePlotAgent.instance().setEnabled(true);
         ChangeOrbitLevel.instance().setEnabled(true);
         EllipticBoundaryAgent.instance().setEnabled(true);
         PhysicalBoundaryPlotAgent.instance().setEnabled(true);
+        RiemannProfileAgent.instance().setEnabled(false);
         WaveCurvePlotAgent.instance().setEnabled(true);
+        CurveRefineAgent.instance().setEnabled(false);
 
        
 

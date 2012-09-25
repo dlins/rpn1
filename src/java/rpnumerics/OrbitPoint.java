@@ -18,6 +18,8 @@ public final class OrbitPoint extends PhasePoint {
     // Members
     //
     private double lambda_;
+    private int correspondingPointIndex_;
+    private int correspondingCurveIndex_;
 
     //
     // Constructor
@@ -50,6 +52,26 @@ public final class OrbitPoint extends PhasePoint {
     public OrbitPoint(PhasePoint pPoint) {
         this(pPoint.getCoords());
     }
+
+    public int getCorrespondingCurveIndex() {
+        return correspondingCurveIndex_;
+    }
+
+    public void setCorrespondingCurveIndex(int correspondingCurveIndex_) {
+        this.correspondingCurveIndex_ = correspondingCurveIndex_;
+    }
+
+    public int getCorrespondingPointIndex() {
+        return correspondingPointIndex_;
+    }
+
+    public void setCorrespondingPointIndex(int correspondingPointIndex_) {
+        this.correspondingPointIndex_ = correspondingPointIndex_;
+    }
+
+
+
+
 
     private static RealVector extractCoordsVector(double[] coordsAndSpeed) {
 

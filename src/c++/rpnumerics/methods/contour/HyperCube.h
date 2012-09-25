@@ -10,6 +10,7 @@
 #define _HyperCube_H
 #define ERROR -666
 #define OK 0
+#define KLUDGE 1e-6
 /*
  * ---------------------------------------------------------------
  * Includes:

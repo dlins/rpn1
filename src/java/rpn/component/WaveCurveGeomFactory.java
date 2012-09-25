@@ -41,7 +41,7 @@ public class WaveCurveGeomFactory extends WaveCurveOrbitGeomFactory {
     // Methods
     //
     @Override
-    protected RpGeometry createGeomFromSource() { 
+    protected RpGeometry createGeomFromSource() {
 
         WaveCurve waveCurve = (WaveCurve) geomSource();
         List<RealSegment> list = waveCurve.segments();
@@ -54,7 +54,7 @@ public class WaveCurveGeomFactory extends WaveCurveOrbitGeomFactory {
 
 
             for (WaveCurveBranch leaf : branch.getBranchsList()) {
-                segList.addAll(((RPnCurve)leaf).segments());
+                segList.addAll(((RPnCurve) leaf).segments());
 
             }
 
@@ -78,23 +78,23 @@ public class WaveCurveGeomFactory extends WaveCurveOrbitGeomFactory {
 
         if (branch instanceof RarefactionOrbit) {
 
-            System.out.println("Dentro do createOrbits de WaveCurveGeomFactory : Rarefaction --- " +branch.getPoints().length);
-            return new RarefactionGeom(MultidAdapter.converseOrbitPointsToCoordsArray(branch.getPoints()), this, (RarefactionOrbit)branch);
+//            System.out.println("Dentro do createOrbits de WaveCurveGeomFactory : Rarefaction --- " +branch.getPoints().length);
+            return new RarefactionGeom(MultidAdapter.converseOrbitPointsToCoordsArray(branch.getPoints()), this, (RarefactionOrbit) branch);
 
         }
 
         if (branch instanceof ShockCurve) {
 
-            System.out.println("Dentro do createOrbits de WaveCurveGeomFactory : Shock --- " +branch.getPoints().length);
-            //return new ShockCurveGeom(MultidAdapter.converseOrbitPointsToCoordsArray(branch.getPoints()), this);
-            return new ShockCurveGeom(MultidAdapter.converseOrbitPointsToCoordsArray(branch.getPoints()), this, (ShockCurve)branch);
+//            System.out.println("Dentro do createOrbits de WaveCurveGeomFactory : Shock --- " +branch.getPoints().length);
+
+            return new ShockCurveGeom(MultidAdapter.converseOrbitPointsToCoordsArray(branch.getPoints()), this, (ShockCurve) branch);
 
         }
 
         if (branch instanceof CompositeCurve) {
 
-            System.out.println("Dentro do createOrbits de WaveCurveGeomFactory : Composite --- " +branch.getPoints().length);
-            return new CompositeGeom(MultidAdapter.converseOrbitPointsToCoordsArray(branch.getPoints()), this, (CompositeCurve)branch);
+//            System.out.println("Dentro do createOrbits de WaveCurveGeomFactory : Composite --- " +branch.getPoints().length);
+            return new CompositeGeom(MultidAdapter.converseOrbitPointsToCoordsArray(branch.getPoints()), this, (CompositeCurve) branch);
 
         }
 
@@ -103,9 +103,8 @@ public class WaveCurveGeomFactory extends WaveCurveOrbitGeomFactory {
 
     }
 
-
-     @Override
-      protected ViewingAttr selectViewingAttr() {
+    @Override
+    protected ViewingAttr selectViewingAttr() {
         int family = (((WaveCurve) this.geomSource()).getFamily());
 
         if (family == 1) {
@@ -115,8 +114,7 @@ public class WaveCurveGeomFactory extends WaveCurveOrbitGeomFactory {
             return new ViewingAttr(Color.blue);
         }
         return null;
-      }
-
+    }
 
     @Override
     public String toMatlab(int curveIndex) {

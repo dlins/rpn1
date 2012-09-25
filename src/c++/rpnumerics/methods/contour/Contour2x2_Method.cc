@@ -75,6 +75,7 @@ void Contour2x2_Method::allocate_arrays(void){
         comb_.resize(numberOfCombinations, hm + 1); // Was transposed: hccube.inc:7
         foncub.resize(hm, ncvert_); // NOT transposed, as seen in hcsoln.inc:3.
         nsface_ = hc.mkcomb(comb_.data(), hn + 1, hm + 1);
+
         fnbr_.resize(nsface_, nsface_);
         cpp_sol.resize(hn, dims_); // NOT transposed, as seen in hcsoln.inc:3.
         solptr_.resize(nsimp_, nsface_); // Transposed, as seen in hcsoln.inc:4.
@@ -87,6 +88,23 @@ void Contour2x2_Method::allocate_arrays(void){
                                      // Confirmed in: hcmarc.inc:4.
 
         hc.mkcube(cvert_.data(), bsvert_.data(), perm_.data(), ncvert_, nsimp_, hn);
+
+//// DEBUG perm e bsvert
+//    cout << "perm(" << hn << ", " << nsimp_ << "):" << endl;
+//    for (int i = 0; i < hn; i++) {
+//        for (int j = 0; j < nsimp_; j++) {
+//            cout << " " << perm_(i,j);
+//        }
+//        cout << endl;
+//    }
+//    cout << "bsvert(" << hn << ", " << hn+1 << "):" << endl;
+//    for (int i = 0; i < hn; i++) {
+//        for (int j = 0; j < hn+1; j++) {
+//            cout << " " << bsvert_(j,i);
+//        }
+//        cout << endl;
+//    }
+//// END DEBUG
 
         nface_ = hc.mkface(face_.data(), facptr_.data(), fnbr_.data(), dimf_, nsimp_, hn, hm, nsface_,
                            bsvert_.data(), comb_.data(), perm_.data(), &storn_[0], &storm_[0]);
@@ -158,8 +176,14 @@ void Contour2x2_Method::curve2x2(ThreeImplicitFunctions *timpf,
 
     for (int il = 0; il < gv_left->grid.rows() - 1; il++) {
         for (int jl = 0; jl < gv_left->grid.cols() - 1; jl++) {
+
             // Only for squares within the domain.
-            if (gv_left->cell_type(il, jl) != CELL_IS_SQUARE) continue;
+            if (gv_left->cell_type(il, jl) != CELL_IS_SQUARE) {
+                continue;
+            
+            }
+            if ( !(gv_left->cell_is_real(il, jl)) ) continue;
+
 
             if(!timpf->prepare_cell(il, jl)) continue;
 
@@ -168,8 +192,8 @@ void Contour2x2_Method::curve2x2(ThreeImplicitFunctions *timpf,
                     if (gv_right->cell_type(ir, jr) == CELL_IS_SQUARE){
                         if ( (timpf->is_singular()) && left_right_adjacency(il, jl, ir, jr)) continue;
 
-                        if ( filhcub4(timpf, ir, jr, index, foncub.data()) ) {
-                
+                        if (filhcub4(timpf, ir, jr, index, foncub.data())) {
+
                             nsoln_ = hc.cpp_cubsol(solptr_.data(), cpp_sol, dims_, 
                                                    &sptr_[0], nsoln_, foncub.data(), &exstfc[0], 
                                                    face_.data(), facptr_.data(), dimf_, cvert_.data(), 
@@ -196,11 +220,11 @@ bool Contour2x2_Method::filhcub4(ThreeImplicitFunctions *timpf,
                                  int ir, int jr, int *index, double *foncub){
     bool zero[3] = {false, false, false};
 
-    double val[3];    // To be filled by Double_Contact::function_on_cell();
-    double refval[3]; // To be filled by Double_Contact::function_on_cell();
+    double val[3];    // To be filled e.g. by Double_Contact::function_on_cell();
+    double refval[3]; // To be filled e.g. by Double_Contact::function_on_cell();
     
     if (!timpf->function_on_cell(refval, ir, jr, 0, 0)) return false;
-    
+
     for (int kl = 0; kl < 4; kl++){
         for (int kr = 0; kr < 4; kr++){
             if (!timpf->function_on_cell(val, ir, jr, kl, kr)) return false;
@@ -208,14 +232,23 @@ bool Contour2x2_Method::filhcub4(ThreeImplicitFunctions *timpf,
             for (int comp = 0; comp < 3; comp++){
                 foncub[comp*ncvert_ + 4*index[kl] + index[kr]] = val[comp];
                 // Modified by Morante on 21-06-2011 by advice from Castaneda.
-                if (refval[comp]*val[comp] <= 0.0) zero[comp] = true;
+                if (refval[comp]*val[comp] < 0.0) zero[comp] = true;
             }
         }
     }
+//    // DEBUG: Sufficient condition:
+//    //        Probably next line must be increased becaus index[2] = 3:
+//    //        if (!timpf->function_on_cell(val, ir, jr, 2, 2)) return false;
+//    if ( (refval[0]*val[0] < 0.0) && (refval[1]*val[1] < 0.0) && (refval[2]*val[2] < 0.0) ) {
+//        cout << endl;
+//        cout << "***** Sufficient (" << ir << ", " << jr << "): " << refval[0] << " " << refval[1] << " " << refval[2] << " *****" << endl;
+//        cout << "                 (" << ir << ", " << jr << "): " << val[0]    << " " << val[1]    << " " << val[2] << endl;
+//    }
+//    // END DEBUG
      
-    // Modified by Morante on 21-06-2011 by advice from Castaneda.
-    // if (!zero[0] && !zero[1] && !zero[2]) return 0;
-    if (!zero[0] || !zero[1] || !zero[2]) return false;
+    if (!zero[0]) return false;
+    if (!zero[1]) return false;
+    if (!zero[2]) return false;
 
     return true;
 }
@@ -223,6 +256,21 @@ bool Contour2x2_Method::filhcub4(ThreeImplicitFunctions *timpf,
 void Contour2x2_Method::filedg4(Matrix<double> &sol_, Matrix<int> &edges_, int nedges_, 
                                 int il, int jl, int ir, int jr,
                                 std::vector<RealVector> &left_vrs, std::vector<RealVector> &right_vrs){
+
+    double epsilon = 1e-10;
+
+//    /* START_DEBUG (1/2) */
+//    bool imprime = false;
+//    int segmentos = 0;
+//    if (nedges_ > 0) {
+//        cout << "For " << nedges_ << " nedges (" << il << ", " << jl << ", " << ir << ", " << jr << ") : " << endl;
+//        for(int i = 0; i < nedges_; i++){
+//            cout << edges_(0, i) << " " << edges_(1, i) << " :: ";
+//        }
+//        cout << endl;
+//        imprime = true;
+//    }
+//    /* END_DEBUG (1/2) The second part of DEBUG is not always necessary */
 
     // Store all pairs of edges that were found
     double temp[2]; temp[0] = 0.0; temp[1] = 0.0;
@@ -245,12 +293,26 @@ void Contour2x2_Method::filedg4(Matrix<double> &sol_, Matrix<int> &edges_, int n
         p4.component(0) = ur0 + dur * (ir + sol_(2, edges_(1, nedg) ) );
         p4.component(1) = vr0 + dvr * (jr + sol_(3, edges_(1, nedg) ) );
 
+
         /* TODO: These two "neglections" are GAMBIARRAS, HyperCube must be fixed!!! */
         // Neglect zero segments
-        if ( (p1 == p2) && (p3 == p4) ) continue;
+        double norm1 = 0.0;
+        double norm2 = 0.0;
+        for (int comp = 0; comp < 2; comp++){
+            norm1 += (p1.component(comp)-p2.component(comp))*(p1.component(comp)-p2.component(comp));
+            norm2 += (p3.component(comp)-p4.component(comp))*(p3.component(comp)-p4.component(comp));
+        }
+        if ( (norm1 < epsilon) && (norm2 < epsilon) ) continue;
 
         // Neglect repetition
-        if ( (p1 == p1_old) && (p2 == p2_old) && (p3 == p3_old) && (p4 == p4_old) ) continue;
+        norm1 = 0.0; norm2 = 0.0;
+        for (int comp = 0; comp < 2; comp++){
+            norm1 += (p1.component(comp)-p1_old.component(comp))*(p1.component(comp)-p1_old.component(comp))
+                   + (p3.component(comp)-p3_old.component(comp))*(p3.component(comp)-p3_old.component(comp));
+            norm2 += (p2.component(comp)-p2_old.component(comp))*(p2.component(comp)-p2_old.component(comp))
+                   + (p4.component(comp)-p4_old.component(comp))*(p4.component(comp)-p4_old.component(comp));
+        }
+        if ( (norm1 < epsilon) && (norm2 < epsilon) ) continue;
         p1_old = p1; p2_old = p2; p3_old = p3; p4_old = p4;
         /* END of GAMBIARRAS!!! */
 
@@ -260,13 +322,21 @@ void Contour2x2_Method::filedg4(Matrix<double> &sol_, Matrix<int> &edges_, int n
         right_vrs.push_back(p3);
         right_vrs.push_back(p4);
 
-//        /* START_DEBUG */
-//        cout << "At points ["<< nedges_ <<"/"<< nedg <<"]: p1 = "<< p1.component(0) << ", " << p1.component(1) << endl;
-//        cout << "          ["<< nedges_ <<"/"<< nedg <<"]: p2 = "<< p2.component(0) << ", " << p2.component(1) << endl;
-//        cout << "          ["<< nedges_ <<"/"<< nedg <<"]: p3 = "<< p3.component(0) << ", " << p3.component(1) << endl;
-//        cout << "          ["<< nedges_ <<"/"<< nedg <<"]: p4 = "<< p4.component(0) << ", " << p4.component(1) << endl;
-//        /* END_DEBUG */
+//        /* START_DEBUG (2/2) TODO: It needs the first part of the DEBUG */
+//        if(imprime){
+//            printf("At points (%2d, %2d, %2d, %2d) [%2d/%2d--%2d]: p1 = %1.6f, %1.6f;  p2 = %1.6f, %1.6f\n",
+//                    il, jl, ir, jr, nedges_, edges_(0, nedg), edges_(1, nedg),
+//                    p1.component(0), p1.component(1), p2.component(0), p2.component(1));
+//            printf("                           [%2d/%2d--%2d]: p3 = %1.6f, %1.6f;  p4 = %1.6f, %1.6f\n",
+//                    nedges_, edges_(0, nedg), edges_(1, nedg),
+//                    p3.component(0), p3.component(1), p4.component(0), p4.component(1));
+//        }
+//        segmentos++;
+//        /* END_DEBUG (2/2)*/
+
     }
+
+//    if(nedges_ > 0) cout << "Apos gambiarras, temos " << segmentos << "/" << nedges_ << " segmentos" << endl;
 
     return;
 }

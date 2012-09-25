@@ -9,7 +9,7 @@ package rpn.controller;
 import rpn.RPnPhaseSpacePanel;
 import java.util.List;
 import java.awt.Point;
-import java.awt.geom.Rectangle2D;
+import java.awt.Polygon;
 
 public interface PhaseSpacePanelController {
     void install(RPnPhaseSpacePanel panel);
@@ -21,8 +21,9 @@ public interface PhaseSpacePanelController {
     public void resetCursorCoords();
 
     List  pointMarkBuffer();
-    List <Rectangle2D.Double> getSelectionAreas();
 
+    List <Polygon> getSelectionAreas();
+    
     Point get_dc_CompletePoint();
 
     void set_dc_CompletePoint(Point point);

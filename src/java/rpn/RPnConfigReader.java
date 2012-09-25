@@ -19,12 +19,11 @@ import rpn.plugininterface.PluginInfoParser;
 public abstract class RPnConfigReader {
 
     static public Font MODELPLOT_BUTTON_FONT = new Font("Arial", 1, 8);
-//    static public String XML_HEADER = "<?xml version=\"1.0\"?>\n<!DOCTYPE rpnconfiguration SYSTEM \"rpnDTD.dtd\">\n";
-        static public String XML_HEADER = "<?xml version=\"1.0\"?>\n<!DOCTYPE rpnconfiguration>\n";
+    static public String XML_HEADER = "<?xml version=\"1.0\"?>\n<!DOCTYPE rpnconfiguration>\n";
 
     /** Constructs a configuration object to the applet or the desktop version */
     public static RPnConfigReader getReader(String file, boolean isApplet, JApplet applet) {
-        
+
         RPnConfig.remoteImage();
         if (isApplet) {
 
@@ -110,4 +109,3 @@ public abstract class RPnConfigReader {
     /** Gives a stream with the configuration data */
     public abstract InputStream read();
 }
-

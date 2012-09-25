@@ -5,63 +5,43 @@
  */
 package rpn.usecase;
 
-import java.util.List;
 import java.awt.event.ActionEvent;
-import java.util.ArrayList;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
+import java.util.Iterator;
+import java.util.Observable;
+import java.util.Observer;
 import javax.swing.JToggleButton;
-import rpn.RPnDesktopPlotter;
-import rpn.RPnPhaseSpaceAbstraction;
+import rpn.RPnPhaseSpacePanel;
 import rpn.component.RpGeometry;
-import rpn.component.util.GeometryGraph;
-import rpn.component.util.GeometryGraphND;
+import rpn.controller.ui.RPnSelectionPlotter;
 import rpn.controller.ui.AREASELECTION_CONFIG;
 import rpn.controller.ui.UIController;
-import rpn.controller.ui.UserInputTable;
-import rpn.parser.RPnDataModule;
-import rpnumerics.Area;
-import rpnumerics.RPNUMERICS;
-import rpnumerics.RPnCurve;
-import rpnumerics.SegmentedCurve;
-import rpnumerics.WaveCurve;
-import wave.util.Boundary;
-import wave.util.IsoTriang2DBoundary;
 import wave.util.RealVector;
-import wave.util.RectBoundary;
 
+public class AreaSelectionAgent extends RpModelPlotAgent implements Observer {
 
-public class AreaSelectionAgent extends RpModelPlotAgent {
-
-    public int ind = 0;
-
-    static public final String DESC_TEXT = "Select Area";
+    static public final String DESC_TEXT = "Area Selection";
     static private AreaSelectionAgent instance_ = null;
-    private JToggleButton button_;
-    private RealVector resolution_;
-    private boolean validResolution_;
-    private List<Area> listArea_;
 
-    
+
     private AreaSelectionAgent() {
-        super(DESC_TEXT, null ,new JToggleButton());
-
-        button_ = new JToggleButton(this);
-        button_.setToolTipText(DESC_TEXT);
-        button_.setFont(rpn.RPnConfigReader.MODELPLOT_BUTTON_FONT);
-        listArea_ = new ArrayList<Area>();
-        setEnabled(true);
-
+        super(DESC_TEXT, null, new JToggleButton());
     }
 
-    //** Edson / Leandro
     @Override
     public void actionPerformed(ActionEvent event) {
 
-       UIController.instance().setState(new AREASELECTION_CONFIG());
-       
+        UIController.instance().setState(new AREASELECTION_CONFIG());
+
+        Iterator<RPnPhaseSpacePanel> iterator = UIController.instance().getInstalledPanelsIterator();
+
+        while (iterator.hasNext()) {
+            RPnPhaseSpacePanel panel = iterator.next();
+            RPnSelectionPlotter boxPlotter = new RPnSelectionPlotter();
+            panel.addMouseListener(boxPlotter);
+            panel.addMouseMotionListener(boxPlotter);
+        }
+
     }
-    //***
 
     public static AreaSelectionAgent instance() {
         if (instance_ == null) {
@@ -70,156 +50,29 @@ public class AreaSelectionAgent extends RpModelPlotAgent {
         return instance_;
     }
 
-    
     @Override
     public void unexecute() {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
-
-    public void execute_() {
-
-        listArea_.clear();
-
-        UserInputTable userInputList = UIController.instance().globalInputTable();
-        RealVector newValue = userInputList.values();
-
-        RPnPhaseSpaceAbstraction phaseSpace = RPnDataModule.PHASESPACE;
-        RpGeometry geom = phaseSpace.findClosestGeometry(newValue);
-        RPnCurve curve = (RPnCurve)(geom.geomFactory().geomSource());
-
-        
-        Object[] options = {"Zoom", "Refine", "Riemann Solver"};
-            int n = JOptionPane.showOptionDialog(new JFrame(),
-                    "Selected area to: ",
-                    "Selected Area",
-                    JOptionPane.YES_NO_CANCEL_OPTION,
-                    JOptionPane.QUESTION_MESSAGE,
-                    null,
-                    options,
-                    options[0]);
-
-        Area area = null;
-
-        //if (n == 0 && GeometryGraphND.mapToEqui == 0) {
-        if (n == 0) {
-            RectBoundary rectBdry = new RectBoundary(GeometryGraph.downLeft, GeometryGraph.topRight);
-            Boundary bdry = (Boundary) rectBdry;
-            RPnDesktopPlotter.getUIFrame().phaseSpaceFrameZoom(bdry);
-            
-
-            // *** Ainda trabalhando aqui ...
-//            RealVector A = new RealVector(GeometryGraph.downLeft);
-//            RealVector B = new RealVector(new double[]{GeometryGraph.downLeft.getElement(0), GeometryGraph.topRight.getElement(1)});
-//            RealVector C = new RealVector(new double[]{GeometryGraph.topRight.getElement(0), GeometryGraph.downLeft.getElement(1)});
-//
-//            //IsoTriang2DBoundary triBdry = new IsoTriang2DBoundary(A, B, C);
-//            IsoTriang2DBoundary triBdry = new IsoTriang2DBoundary(new RealVector(new double[]{0.,0.}), new RealVector(new double[]{0.,1.}), new RealVector(new double[]{1.,0.}));
-//            Boundary isoBdry = (Boundary) triBdry;
-//            RPnDesktopPlotter.getUIFrame().phaseSpaceFrameZoom(isoBdry);
-            // ***
-        }
-//
-//        if (n == 1  &&  curve instanceof SegmentedCurve) {
-//            //listArea_.clear();
-//
-//            String Re1 = JOptionPane.showInputDialog(null, "Resolucao horizontal", "Resolucao", JOptionPane.QUESTION_MESSAGE);
-//            String Re2 = JOptionPane.showInputDialog(null, "Resolucao vertical", "Resolucao", JOptionPane.QUESTION_MESSAGE);
-//
-//            try {
-//                RealVector resolution = new RealVector(RPNUMERICS.domainDim());
-//                resolution.setElement(0, Integer.parseInt(Re1));
-//                resolution.setElement(1, Integer.parseInt(Re2));
-//
-//                if (RPNUMERICS.domainDim() == 2) {
-//                    area = new Area(GeometryGraph.topRight, GeometryGraph.downLeft);
-//                    System.out.println(area);
-//                    listArea_.add(area);
-//                }
-//
-//            } catch (Exception e) {
-//                JOptionPane.showMessageDialog(null, "Resolucao nao foi informada", "ATENCAO", JOptionPane.INFORMATION_MESSAGE);
-//            }
-//
-//        }
-//
-//        if (n == 2  &&  curve instanceof WaveCurve) {
-//            //listArea_.clear();
-//            area = new Area(GeometryGraph.topRight, GeometryGraph.downLeft);
-//            System.out.println(area);
-//            listArea_.add(area);
-//            System.out.println("GeometryGraphND.indContido.size() :::::::::::::::::: " +GeometryGraphND.indContido.size());
-//        }
-//
-//        System.out.println("Tamanho da lista de areas : " +getListArea().size());
-    }
-
+    
 
     @Override
     public void execute() {
-
-        UserInputTable userInputList = UIController.instance().globalInputTable();
-        RealVector newValue = userInputList.values();
-
-        //*** ATENCAO: qualquer coisa relacionada a ControlClick deve ser removida
-        if ((GeometryGraph.count % 2) == 0) {
-        
-            for (int i = 0; i < newValue.getSize(); i++) {
-                GeometryGraphND.targetPoint.setElement(i, newValue.getElement(i));
-            }
-
-            RPnPhaseSpaceAbstraction phaseSpace = RPnDataModule.PHASESPACE;
-            RpGeometry geom = phaseSpace.findClosestGeometry(newValue);
-            RPnCurve curve = (RPnCurve)(geom.geomFactory().geomSource());
-
-            GeometryGraphND.pMarca = curve.findClosestPoint(newValue);
-
-            GeometryGraph.count++;
-            return;
-
-        }
-
-
-        if ((GeometryGraph.count % 2) == 1) {
-        
-            for (int i = 0; i < newValue.getSize(); i++) {
-                GeometryGraphND.cornerRet.setElement(i, newValue.getElement(i));
-            }
-
-            GeometryGraphND.zContido.clear();
-            GeometryGraphND.wContido.clear();
-
-            GeometryGraph.count++;
-            execute_();
-
-        }
-        //******
-        
-
     }
 
-    @Override
-    public JToggleButton getContainer() {
-        return button_;
-    }
-
-    public void setResolution(RealVector resolution) {
-        resolution_ = resolution;
-    }
-
-    public void setValidResolution(boolean validResolution) {
-        validResolution_ = validResolution;
-    }
-
-    public List<Area> getListArea() {
-        return listArea_;
-    }
+    
 
     @Override
     public RpGeometry createRpGeometry(RealVector[] coords) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return null;
     }
 
+    @Override
+    public void update(Observable o, Object arg) {
+
+       
+
+    }
+
+  
 }
-
-

@@ -30,7 +30,7 @@ public class RPnPhaseSpaceFrame extends JFrame {
     RPnCursorMonitor coordsField = new RPnCursorMonitor();
     BorderLayout borderLayout2 = new BorderLayout();
     RPnMenuCommand commandMenu_ = null;
-    JSlider slider = new JSlider(-5, 5, 0);
+    private JSlider slider = new JSlider(-5, 5, 0);
     private Hashtable labels_ = new Hashtable();
     private Dimension frameSize_ = null;
 
@@ -221,6 +221,7 @@ public class RPnPhaseSpaceFrame extends JFrame {
 
 
         }
+
     }
 
 

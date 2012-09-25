@@ -31,12 +31,16 @@ public class HugoniotSegment extends RealSegment {
     private int intType_;
     private double[] rightLambdaArray_;
     private double[] leftLambdaArray_;
+    private String signature_;
 
     //
     // Constructors
     //
+    
+    
+    //TODO  Usar array de lambda . A quantidade de lambda varia de acordo com a fisica
     public HugoniotSegment(RealVector leftPoint, double leftSigma, RealVector rightPoint, double rightSigma, double leftLambda1, double leftLambda2, double rightLambda1, double rightLambda2,
-            int type) {
+            int type,String signature) {
         super(leftPoint, rightPoint);
         leftPoint_ = leftPoint;
         leftSigma_ = leftSigma;
@@ -49,13 +53,16 @@ public class HugoniotSegment extends RealSegment {
         leftLambdaArray_[1] = leftLambda2;
 
 
-
         rightLambdaArray_ = new double[2];//TODO Hardcoded para fisica do Helmut
 
         rightLambdaArray_[0] = rightLambda1;
         rightLambdaArray_[1] = rightLambda2;
 
         intType_ = type;
+        
+        signature_=signature;
+        
+        
     }
 
     public void setIntType(int type_) {
@@ -99,6 +106,13 @@ public class HugoniotSegment extends RealSegment {
 
     }
 
+    public String getSignature() {
+        return signature_;
+    }
+
+    
+    
+    
     @Override
     public String toXML() {
 

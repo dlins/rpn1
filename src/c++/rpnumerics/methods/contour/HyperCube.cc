@@ -880,52 +880,70 @@ int HyperCube::cubsol(int *solptr_, double *sol_, int dims_, int *sptr_, int nso
  * Dimension of exstfc should be nface
  */
 int HyperCube::mksoln(double *sol_, int dims_, int *sptr_, int nsoln_, double *foncub, int *exstfc, int *face, int dimf_, double *cvert, int ncvert_, int n_, int m_, int nface, double *u, double *g, double *x, int *wrki) {
-    //TODO: Ver incongruencia entre sol_[n_][dims] e solution[n_][m_], aqui o java usaba solution, mas embaixo era preenchido sol_, e parece que deveria ser sol_[n_][dims], foi o que eu fiz.
-    // I/O: (double sol_[n_][dims], int dims_, int sptr[nface_], int nsoln_, double foncub[m_][ncvert_], int ncvert_,
-    //       int exstfc[nface], int face[m_ + 1][dimf_], int dimf_, double cvert[ncvert_][n_], int n_, int m_,
-    //       int nface, double u[n_][m_ + 1], double g[m_][m_+1], double gx[m_], double x[m_], int wrki[m_])
+																																/* //TODO: Ver incongruencia entre sol_[n_][dims] e solution[n_][m_],
+																																 aqui o java usaba solution, mas embaixo era preenchido sol_, e parece
+																																	que deveria ser sol_[n_][dims], foi o que eu fiz.
+																																		    // I/O: (double sol_[n_][dims], int dims_, int sptr[nface_], int nsoln_,
+																																	 double foncub[m_][ncvert_], int ncvert_,
+																																	    //       int exstfc[nface], int face[m_ + 1][dimf_], int dimf_, 
+																																		double cvert[ncvert_][n_], int n_, int m_,
+																																		    //       int nface, double u[n_][m_ + 1], double g[m_][m_+1],
+																																		 double gx[m_], double x[m_], int wrki[m_]) */
+//int contador = 0;
     //local variables
     int flag, i, j, indf, k, v;
-    double g0[m_];
-    double gtemp[m_][m_ + 1];
+//    double g0[m_];
+//    double gtemp[m_][m_ + 1];
     double soltemp_[dims_][n_];
     // initializing soltemp_
     for (i = 0; i < dims_; i++) {
         for (j = 0; j < n_; j++) soltemp_[i][j] = -999;
-    } //T
-    //printf("dims_ = %d, n_ = %d, nface = %d\n, nsoln_ =%d, dimf_ = %d, m_ =%d, nface = %d", dims_, n_, nface, nsoln_, dimf_, m_, nface);
+    }
+																																	/*
+																																	    //printf("dims_ = %d, n_ = %d, nface = %d\n, nsoln_ =%d, dimf_ = %d, m_ =%d,
+ 																																	nface = %d", dims_, n_, nface, nsoln_, dimf_, m_, nface); */
     // loop over the faces to find each solution (if there is one)
     nsoln_ = -1;
     for (indf = 0; indf < nface; indf++) {
-        // printf("Inside mksoln(): indf = %d, nface = %d\n", indf, nface); // ************************ I commented out this line (Morante, Wed 09 Feb 2011 11:17:13 PM BRST).
+																																		/*       // printf("Inside mksoln(): indf = %d, nface = %d\n", indf, nface); 
+																														// ************************ I commented out this line (Morante, Wed 09 Feb 2011 11:17:13 PM BRST). */
         sptr_[indf] = -1;
-        //if the indf-face is not to be considered by mksoln, skip it
-
-        //        cout <<"Exstfc antes do if "<<exstfc[indf]<<" "<<nsoln_<<endl;
-        //         printf("Inside mksoln(): exstfc[%d] = %d\n", indf, exstfc[indf]); // ************************ I commented out this line (Morante, Wed 09 Feb 2011 11:17:13 PM BRST).
+																															/* //if the indf-face is not to be considered by mksoln, skip it
+																											        //        cout <<"Exstfc antes do if "<<exstfc[indf]<<" "<<nsoln_<<endl;
+																											        //         printf("Inside mksoln(): exstfc[%d] = %d\n", indf, exstfc[indf]); 
+																											// ************************ I commented out this line (Morante, Wed 09 Feb 2011 11:17:13 PM BRST).*/
         if (exstfc[indf] != 0) {
-
             //set the function values  at the face vertices
             for (k = 0; k < m_ + 1; k++) {
-                // nao sei se abaixo eh k ou k+1
+																																	                // nao sei se abaixo eh k ou k+1
                 v = face[(k) * dimf_ + indf];
                 for (i = 0; i < m_; i++) {
                     g[i * (m_ + 1) + k] = foncub[i * ncvert_ + v];
-                    gtemp[i][k] = g[i * (m_ + 1) + k];
-                    //printf("v: %d, indf: %d, k: %d, gtemp(i,k): %f\n", v, indf, k, gtemp[i][k]);
-                    //putmf("FONCUBdentro", foncub, m_, ncvert_);
+//                    gtemp[i][k] = g[i * (m_ + 1) + k];
+																									                    //printf("v: %d, indf: %d, k: %d, gtemp(i,k): %f\n", v, indf, k, gtemp[i][k]);
+                    																												//putmf("FONCUBdentro", foncub, m_, ncvert_);
                 }
             }
 
-//            putmf("gtemp", &gtemp[0][0], m_, m_ + 1);
-
-//            putmf("gaqui", g, m_, m_ + 1);
+																														//            putmf("gtemp", &gtemp[0][0], m_, m_ + 1);
+																																	//            putmf("gaqui", g, m_, m_ + 1);
             //call the affine solver to solve in the standard simplex
-
             flag = affslv(x, g, m_, wrki);
-            // printf("After affslv(): flag = %d\n", flag); // I commented out this line (Morante: Wed 09 Feb 2011 11:17:50 PM BRST )
-            //skip the rest if no solution ( note -- pointer initialized to 0 )
-            //            cout <<"Valor de flag: "<<flag<<endl;
+
+																								            // printf("After affslv(): flag = %d\n", flag); // I commented out this line (Morante: Wed 09 Feb 2011 11:17:50 PM BRST )
+																										            //skip the rest if no solution ( note -- pointer initialized to 0 )
+																											            //            cout <<"Valor de flag: "<<flag<<endl;
+//contador++;
+//cout << "In mksoln, flag(" << contador << "/"<< nsoln_+2 << "): " << flag << endl;
+//for (int i = 0; i < m_; i++) {
+//    for (int j = 0; j < m_+1; j++) {
+//        cout << " " << g[i*(m_+1) + j];
+//    }
+//    cout << endl;
+//}
+//    cout << endl;
+
+ 
             if (flag == 0) {
                 //set the pointer to the solution
                 nsoln_ = nsoln_ + 1;
@@ -941,27 +959,25 @@ int HyperCube::mksoln(double *sol_, int dims_, int *sptr_, int nsoln_, double *f
                 }
                 // printf("Inside mksol(): indf = %d, nsoln_ = %d\n", indf, nsoln_); // I commented out this line (Morante: Wed 09 Feb 2011 11:17:50 PM BRST )
                 sptr_[indf] = nsoln_;
-                //                printf("sptr= %d\n", sptr_[indf]);
-                //                printf("indf= %d\n", indf);
-                //                printf("nsoln= %d\n", nsoln_);
+																										                //                printf("sptr= %d\n", sptr_[indf]);
+																											                //                printf("indf= %d\n", indf);
+																									                //                printf("nsoln= %d\n", nsoln_);
 
                 //set the face vertices
                 for (k = 0; k < m_ + 1; k++) {
-                    v = face[k * dimf_ + indf]; //printf("v,k,dims %d %d %d\n", v, k, dims_);
+                    v = face[k * dimf_ + indf];																				 //printf("v,k,dims %d %d %d\n", v, k, dims_);
                     for (i = 0; i < n_; i++) {
-                        //TODO: Prestar atencao com a ordem a direita, no cvert!!
+																							                        //TODO: Prestar atencao com a ordem a direita, no cvert!!
                         u[i * (m_ + 1) + k] = cvert[(v) * n_ + i];
-                        //                        printf("v: %d, indf: %d, k: %d, u(i,k): %f\n", v, indf, k, u[i * (m_ + 1) + k]);
+																					                        //                        printf("v: %d, indf: %d, k: %d, u(i,k): %f\n", v, indf, k, u[i * (m_ + 1) + k]);
                     }
                 }
 
-                // soltemp_ eh definida como a trnasposta de sol_
-
-
+																														                // soltemp_ eh definida como a trnasposta de sol_
                 //transform the solution back from the standard simplex
 
                 afftrn(&soltemp_[nsoln_][0], u, x, n_, m_);
-                //afftrn (sol_[nsoln_*dims_ + 0], u, x, n_, m_);
+																												                //afftrn (sol_[nsoln_*dims_ + 0], u, x, n_, m_);
             }
         }
     }
@@ -1132,19 +1148,25 @@ int HyperCube::affslv(double *x, double *g, int m_, int *wrki) {
     result = solver(m_, &gt[0][0], g0, x); //TODO: De incluir ipiv[n] aqui deve entrar ", wrki);"
     //check for no solution
 
+//cout << " x:" << x[0] << " " << x[1] << " " << x[2] << endl;
+
     if (result != 0)
         return result;
     //determine whether solution is inside
     sum = 0.0;
     for (i = 0; i < m_; i++) {
-        if (x[i] < 0.0) {
+    /* This NEW condition is made in order to exclude repeated points at common edges */
+        if ( (x[i] < 0.0 + KLUDGE) || (x[i] > 1.0 - KLUDGE) ) {
+//        if (x[i] < 0.0) {
             //solution is outside
             return 1;
         } else {
             sum = sum + x[i];
         }
     }
-    if (sum > 1.0) {
+    /* This NEW condition is made in order to exclude repeated points at common edges */
+    if ( (sum <= 0.0 + KLUDGE) || (sum >= 1.0 - KLUDGE) ) {
+//    if (sum > 1.0) {
         //solution is outside
         return 1;
     }
@@ -1208,32 +1230,31 @@ int HyperCube::solver(int n, double *A, double *b, double *x) {
         x[1] = (A[0] * b[1] - A[2] * b[0]) / det;
 
         return 0;
-//    } else if (n == 3) {
-//        det = A[0]*(A[4] * A[8] - A[5] * A[7])
-//                - A[3]*(A[1] * A[8] - A[7] * A[2])
-//                + A[6]*(A[1] * A[5] - A[4] * A[2]);
-//
-//        anorm = 0;
-//        for (i = 0; i < n * n; i++) anorm += A[i] * A[i];
-//
-//        if (fabs(det) <= (eps * anorm)) return -1;
-//
-//        x[0] = (b[0]*(A[4] * A[8] - A[7] * A[5])
-//                - b[1]*(A[1] * A[8] - A[7] * A[2])
-//                + b[2]*(A[1] * A[5] - A[4] * A[2])
-//                ) / det;
-//
-//        x[1] = (-b[0] * (A[3] * A[8] - A[6] * A[5])
-//                + b[1] * (A[0] * A[8] - A[6] * A[2])
-//                - b[2] * (A[0] * A[5] - A[3] * A[2])
-//                ) / det;
-//
-//        x[2] = (b[0] * (A[3] * A[7] - A[6] * A[4])
-//                - b[1] * (A[0] * A[7] - A[6] * A[1])
-//                + b[2] * (A[0] * A[4] - A[3] * A[1])
-//                ) / det;
-//
-//        return 0;
+    } else if (n == 3) {
+        det = A[0]*(A[4] * A[8] - A[5] * A[7])
+                - A[3]*(A[1] * A[8] - A[7] * A[2])
+                + A[6]*(A[1] * A[5] - A[4] * A[2]);
+
+        anorm = 0;
+        for (i = 0; i < n * n; i++) anorm += A[i] * A[i];
+
+        if (fabs(det) <= (eps * anorm)) return -1;
+
+        x[0] = (b[0]*(A[4] * A[8] - A[7] * A[5])
+                - b[1]*(A[1] * A[8] - A[7] * A[2])
+                + b[2]*(A[1] * A[5] - A[4] * A[2])
+                ) / det;
+
+        x[1] = (-b[0] * (A[3] * A[8] - A[6] * A[5])
+                + b[1] * (A[0] * A[8] - A[6] * A[2])
+                - b[2] * (A[0] * A[5] - A[3] * A[2])
+                ) / det;
+
+        x[2] = (b[0] * (A[3] * A[7] - A[6] * A[4])
+                - b[1] * (A[0] * A[7] - A[6] * A[1])
+                + b[2] * (A[0] * A[4] - A[3] * A[1])
+                ) / det;
+        return 0;
     } else {
         int dim = n;
         int nrhs = 1;

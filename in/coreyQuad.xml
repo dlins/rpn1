@@ -1,0 +1,120 @@
+<?xml version="1.0"?>
+<!DOCTYPE rpnconfiguration >
+<rpnconfiguration>
+    <PHYSICS name="CoreyQuad">
+
+        <PHYSICSCONFIG name="fluxfunction">
+            <PHYSICSPARAM name="grw" position="0" value ="0.0" />
+            <PHYSICSPARAM name="grg" position="1" value ="0.0" />
+            <PHYSICSPARAM name="gro" position="2" value ="0.0" />
+            <PHYSICSPARAM name="muw" position="3" value ="1.0" />
+            <PHYSICSPARAM name="mug" position="4" value ="1.0" />
+            <PHYSICSPARAM name="muo" position="5" value ="1.0" />
+            <PHYSICSPARAM name="vel" position="6" value ="1.0" />
+
+            <!--<PHYSICSPARAM name="krw_p" position="7" value ="1.0" />
+            <PHYSICSPARAM name="krg_p" position="8" value ="1.0" />
+            <PHYSICSPARAM name="kro_p" position="9" value ="1.0" />
+
+
+            <PHYSICSPARAM name="cnw" position="10" value ="0.0" />
+            <PHYSICSPARAM name="cng" position="11" value ="0.0" />
+            <PHYSICSPARAM name="cno" position="12" value ="0.0" />-->
+           
+
+        </PHYSICSCONFIG>
+
+    </PHYSICS>
+
+
+    <METHOD name="Newton">
+        <METHODPARAM  name="tolerance" value="0.001" />
+    </METHOD>
+
+
+    <CURVE name="hugoniotcurve">
+        <CURVEPARAM name="resolution" value="250 250"/>
+    </CURVE>
+
+    <CURVE name="ellipticboundary">
+        <CURVEPARAM name="resolution" value="128 128"/>
+    </CURVE>
+
+
+    <CURVE name="envelopecurve">
+        <CURVEPARAM name="resolution" value="128 128"/>
+        <CURVEPARAM name="whereisconstant" value="0"/>
+        <CURVEPARAM name="numberofsteps" value="128"/>
+    </CURVE>
+
+
+    <CURVE name="ellipticextension">
+        <CURVEPARAM name="resolution" value="128 128"/>
+        <CURVEPARAM name="family" value="0"/>
+        <CURVEPARAM name="characteristicwhere" value="0"/>
+    </CURVE>
+
+    <CURVE name="inflectioncurve">
+        <CURVEPARAM name="family" value="0"/>
+        <CURVEPARAM name="resolution" value="60 60"/>
+    </CURVE>
+
+
+    <CURVE name="levelcurve">
+        <CURVEPARAM name="family" value="0"/>
+        <CURVEPARAM name="resolution" value="128 128"/>
+        <CURVEPARAM name="levels" value="0.1 0.2 0.5"/>
+
+    </CURVE>
+
+
+    <CURVE name="doublecontactcurve">
+        <CURVEPARAM name="curvefamily" value="1"/>
+        <CURVEPARAM name="domainfamily" value="1"/>
+        <CURVEPARAM name="resolution" value="60 60"/>
+    </CURVE>
+
+
+    <CURVE name="hysteresiscurve">
+        <CURVEPARAM name="family" value="0"/>
+        <CURVEPARAM name="resolution" value="128 128"/>
+    </CURVE>
+
+    <CURVE name="boundaryextensioncurve">
+
+        <CURVEPARAM name="family" value="1"/>
+        <CURVEPARAM name="edge" value="0"/>
+        <CURVEPARAM name="edgeresolution" value="128"/>
+        <CURVEPARAM name="resolution" value="128 128"/>
+          <CURVEPARAM name="characteristicwhere" value="1"/>
+
+
+    </CURVE>
+
+    <CURVE name="rarefactionextension">
+        <CURVEPARAM name="curvefamily" value="0"/>
+        <CURVEPARAM name="characteristic" value="1"/>
+        <CURVEPARAM name="resolution" value="128 128"/>
+    </CURVE>
+
+    <CURVE name="orbit">
+        <CURVEPARAM name="family" value="0"/>
+        <CURVEPARAM name="level" value="0.5"/>
+
+    </CURVE>
+
+    <VIEWCONFIGURATION modeldomain="2">
+
+        <PROJDESC name="Axis0 Axis1">
+            <VIEWPARAM name="axis" value="0 1"/>
+            <VIEWPARAM name="vpwidth" value="700"/>
+            <VIEWPARAM name="vpheight" value="700"/>
+            <VIEWPARAM name="iso2equi" value="true"/>
+        </PROJDESC>
+
+    </VIEWCONFIGURATION>
+
+
+
+
+</rpnconfiguration>

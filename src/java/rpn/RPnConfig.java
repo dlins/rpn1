@@ -38,7 +38,7 @@ public class RPnConfig {
         RPNUMERICS.init((String) physicsName);//PHYSICS is INITIALIZATED
         numericsConfig();
         visualConfig();
-        
+
     }
 
     public static void createParamsFluxSubject(String physicsName) {
@@ -60,7 +60,7 @@ public class RPnConfig {
             teste[1].attach(paramObserver);
             teste[2].attach(paramObserver);
 
-            
+
         }
         if (physicsName.equals("Stone")) {
             teste = new RPnFluxParamsSubject[4];
@@ -84,6 +84,48 @@ public class RPnConfig {
         }
 
 
+
+        if (physicsName.equals("CoreyQuad")) {
+            teste = new RPnFluxParamsSubject[0];
+
+            Configuration physicsConfiguration = RPNUMERICS.getConfiguration(physicsName);
+
+            Configuration fluxConfiguration = physicsConfiguration.getConfiguration("fluxfunction");
+
+            paramObserver = new RPnFluxParamsObserver(fluxConfiguration);
+//
+//            teste[0] = new RPnCoreyToStone(new String[9], new String[]{"muw", "mug", "muo", "expw", "expg", "expo", "cnw", "cng", "cno"});
+//            teste[1] = new RPnStoneToStone(new String[10], new String[]{"muw", "mug", "muo", "expw", "expg", "expow", "expog", "cnw", "cng", "cno"});
+//            teste[2] = new RPnCoreyBrooks(new String[8], new String[]{"muw", "mug", "muo", "epsl", "cnw", "cng", "cno", "lambda"});
+//            teste[3] = new RPnRadioButtonToStone(new String[3], new String[]{"", "", ""});       // aqui virao os nomes dos botoes
+//
+//            teste[0].attach(paramObserver);
+//            teste[1].attach(paramObserver);
+//            teste[2].attach(paramObserver);
+//            teste[3].attach(paramObserver);
+
+        }
+
+
+        if (physicsName.equals("Polydisperse")) {
+
+            teste = new RPnFluxParamsSubject[2];
+            Configuration physicsConfiguration = RPNUMERICS.getConfiguration(physicsName);
+
+            Configuration fluxConfiguration = physicsConfiguration.getConfiguration("fluxfunction");
+
+            paramObserver = new RPnFluxParamsObserver(fluxConfiguration);
+
+            teste[0] = new RPnBasson(new String[5], new String[]{"phimax", "Vinf1", "Vinf2", "n1", "n2"});
+            teste[1] = new RPnMLB(new String[7], new String[]{"phimax", "rho1", "rho2", "d1", "d2", "n1", "n2"});
+
+            teste[0].attach(paramObserver);
+            teste[1].attach(paramObserver);
+
+        }
+
+
+
     }
 
     public static RPnFluxParamsSubject[] getFluxParamsSubject() {
@@ -97,16 +139,11 @@ public class RPnConfig {
     private static void visualConfig() {
         remoteImage();
         RPnDataModule.PHASESPACE = new RPnPhaseSpaceAbstraction("Phase Space",
-                RPNUMERICS.domain(), new NumConfigImpl());//  RpNumerics.domain(),
-
-        RPnDataModule.AUXPHASESPACE = new RPnPhaseSpaceAbstraction("Phase Space",
-                RPNUMERICS.domain(), new NumConfigImpl());//  Rp
-
-
+                RPNUMERICS.domain(), new NumConfigImpl());
         RPnDataModule.LEFTPHASESPACE = new RPnPhaseSpaceAbstraction("LeftPhase Space",
-                RPNUMERICS.domain(), new NumConfigImpl());//  RpNumerics.domain(),
+                RPNUMERICS.domain(), new NumConfigImpl());
         RPnDataModule.RIGHTPHASESPACE = new RPnPhaseSpaceAbstraction("RightPhase Space",
-                RPNUMERICS.domain(), new NumConfigImpl());//  RpNumerics.domain(),
+                RPNUMERICS.domain(), new NumConfigImpl());
 
 
     }
@@ -188,7 +225,7 @@ public class RPnConfig {
 
     public static void setActivePhysics(String physicsName) {
         activePhysics_ = physicsName;
-       
+
     }
 
     public static void setActiveVisualConfiguration(String visualConfigName) {
@@ -209,7 +246,6 @@ public class RPnConfig {
     public static Configuration getVisualConfiguration() {
         return visualConfiguration_;
     }
-
 
     @Override
     public String toString() {

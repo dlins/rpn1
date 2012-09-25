@@ -14,7 +14,9 @@ import rpn.usecase.ChangeSigmaAgent;
 import rpnumerics.HugoniotCurve;
 import rpnumerics.PhasePoint;
 import rpnumerics.RPNUMERICS;
+import rpnumerics.StationaryPoint;
 import rpnumerics.StationaryPointCalc;
+import rpnumerics.viscousprofile.ViscousProfileData;
 import wave.util.RealVector;
 
 public class SIGMA_CONFIG extends UI_ACTION_SELECTED {
@@ -53,6 +55,9 @@ public class SIGMA_CONFIG extends UI_ACTION_SELECTED {
 
         List<RealVector> eqPoints = hCurve.equilPoints(closestPoint);
 
+
+
+
         for (RealVector realVector : eqPoints) {
 
             StationaryPointGeomFactory xzeroFactory = new StationaryPointGeomFactory(new StationaryPointCalc(new PhasePoint(realVector), hCurve.getXZero()));
@@ -60,6 +65,9 @@ public class SIGMA_CONFIG extends UI_ACTION_SELECTED {
             RPnDataModule.PHASESPACE.plot(xzeroFactory.geom());
 
         }
+        eqPoints.add(((StationaryPoint)xzeroRef.geomSource()).getPoint());
+
+        ViscousProfileData.instance().updateStationaryPointsList(eqPoints);
 
         ui.setState(new GEOM_SELECTION());
 

@@ -732,7 +732,7 @@ public class RPNUMERICS {
 
         FluxParams previousParams = getFluxParams();
 
-        String[] previousParamArray = new String[fluxFunctionConfig.getParamsSize()];
+        String[] previousParamArray = new String[previousParams.getParams().getSize()];//fluxFunctionConfig.getParamsSize()];
 
         for (int i = 0; i < previousParamArray.length; i++) {
             previousParamArray[i]= String.valueOf(previousParams.getElement(i));

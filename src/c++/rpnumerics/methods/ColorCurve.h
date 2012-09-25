@@ -2,56 +2,45 @@
 #define _COLORCURVE_
 
 #include <vector>
+#include <string>
 
-//#include "../global_composite.h" // SUCCESSFUL OR ABORTED
 #include "FluxFunction.h"
 #include "AccumulationFunction.h"
-//#include "RealVector.h"
-//#include "fill_with_jet.h"
 #include "eigen.h"
-//#include "Shockcurve_Adaptive_Hypersurface_Newton.h"
 
 #define INTERPOLATION_ERROR -1
 #define INTERPOLATION_OK     0
 
-#define _SHOCK_SIMPLE_ACCUMULATION_  10  // Traditional rarefaction, using dgeev.
-#define _SHOCK_GENERAL_ACCUMULATION_ 11  // Rarefaction with generalized eigenpairs, using dggev.
+//#define _SHOCK_SIMPLE_ACCUMULATION_  10  // Traditional rarefaction, using dgeev.
+//#define _SHOCK_GENERAL_ACCUMULATION_ 11  // Rarefaction with generalized eigenpairs, using dggev.
+
+#ifndef UNCLASSIFIABLE_POINT
+#define UNCLASSIFIABLE_POINT (-1)
+#endif
+
+extern "C" void dgesv_(int*,int*,double *,int*,int *,double *,int* ,int*);
 
 struct HugoniotPolyLine {
 public:
-    std::vector<RealVector> vec; // Consolidated
+    // Elements of extrema, points coordinates, speeds and eginvalues
+    //
+    std::vector<RealVector>  point;  	  // Each element has size = dimension (dim).
+    std::vector<double>      speed;       // Speed at each point.
+    std::vector<RealVector>  eigenvalue;  // Each element has size = number of valid eigenvalues (fam).
 
-    std::vector<RealVector> point;  // Each element has size = dimension.
-    std::vector<double>     speed;      // Speed at each point.
-    std::vector<RealVector> eigenvalue; // Each element has size = number of valid eigenvalues (noe).
-    int type;
-    
-    int noe; // assert(eigenvalue.size() == noe);
+    // Elements of segment, type (color) and signature
+    //
+    int         type;                     // A color table is needed for graphical issues.
+    std::string signature;                // This returns the Hugoniot signature, i.e., "--++", etc
+                                          // zero means characteristic, "-." or "+." means complex
+                                          // conjugate, with the real part sign.
 
     HugoniotPolyLine() {
-        vec.clear();
-        type = 0;
+        type = -1;
     };
 
-    void dismember(int noe,int dim){
-        for (int i = 0; i < vec.size(); i++){
-            point[i].resize(dim); // Dim must come from somewhere
-            for (int j = 0; j < dim; j++) point[i].component(j) = vec[i].component(j);
-
-            speed[i] = vec[i].component(dim + noe);
-
-            eigenvalue.resize(noe);
-            for (int j = 0; j < noe; j++) eigenvalue[i].component(j) = vec[i].component(j + dim + noe + 1);
-        }
-        return;
-
-    }
-    
-    
-    
-    
     ~HugoniotPolyLine() {
-        vec.clear();
+      
     };
 };
 
@@ -62,29 +51,52 @@ public:
 //};
 
 class ColorCurve {
-private:
-    static inline int sgn(double x);
-    int interpolate(int ,const RealVector &p, const RealVector &q, std::vector<RealVector> &r);
-    int classify_point(const RealVector &p, int);
-    double shockspeed(int n, double Um[], double Up[], const FluxFunction &ff, const AccumulationFunction &aa, int type);
-    void fill_with_jet(const RpFunction & flux_object, int n, double *in, int degree, double *F, double *J, double *H);
-    FluxFunction * fluxFunction_;
-    AccumulationFunction * accFunction_;
+    private:
+        std::string sp, sm, sc, sz;
+    protected:
+        int solve(const double *A, double *b, int dim, double *x);
 
-protected:
-public:
+        void Left_Newton_improvement(const RealVector &input, const int type, RealVector &out);
+        void Right_Newton_improvement(const RealVector &input, const int type, RealVector &out);
+
+        int interpolate(const RealVector &p, double &s_p,
+                        const std::vector<double> &eigenvalue_p, const int type_p,
+                        const RealVector &q, double &s_q,
+                        const std::vector<double> &eigenvalue_q, const int type_q,
+                        vector<RealVector> &r, vector<int> &rtype);
+
+        int complete_point(RealVector &p, double &s, std::vector<double> &eigenvalue, int *complex);
+
+        int classify_point(RealVector &p, double &s, std::vector<double> &eigenvalue, std::string &signature);
+
+        void classify_segment(RealVector &p,  RealVector &q, 
+                              std::vector<HugoniotPolyLine> &classified_curve,
+                              std::vector<RealVector> &transition_list);
+
+        FluxFunction * fluxFunction_;
+        AccumulationFunction * accFunction_;
+
+        RealVector ref_point;
+        std::vector<double> ref_eigenvalue;
+        std::vector<double> ref_e_complex;
+        
+        RealVector F_ref, G_ref;
+    public:
 
     ColorCurve(const FluxFunction &, const AccumulationFunction &);
     virtual ~ColorCurve();
 
-    void classify_segments(const std::vector<RealVector> &input, int, std::vector<HugoniotPolyLine> &output);
-    int preprocess_data(const std::vector<RealVector> &curve, const RealVector &Uref, int noe,
-            const FluxFunction & ff, const AccumulationFunction &aa, int type,
-            std::vector<RealVector> &out);
-
+// So por chamada deixo este metodo...
     void classify_curve(vector<vector<RealVector> > &, const RealVector &, int, int, vector<HugoniotPolyLine> &output);
+// ... de ser tudo certo, isto va embora.
 
+    void classify_segmented_curve(std::vector<RealVector>  &original, const RealVector &ref,
+                                  std::vector<HugoniotPolyLine> &classified_curve,
+                                  std::vector<RealVector> &transition_list);
+
+    void classify_continuous_curve(std::vector<RealVector>  &original, const RealVector &ref,
+                                   std::vector<HugoniotPolyLine> &classified_curve,
+                                   std::vector<RealVector> &transition_list);
 };
 
 #endif // _COLORCURVE_
-

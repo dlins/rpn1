@@ -4,8 +4,6 @@ GridValues::GridValues(const Boundary *b,
                        const RealVector &pmin, const RealVector &pmax,
                        const std::vector<int> &number_of_cells){
 
-    cout << "Min e max dentro de grid values: "<<pmin<<" "<<pmax<<endl;
-
     set_grid(b, pmin, pmax, number_of_cells);
 }
 
