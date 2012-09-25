@@ -227,7 +227,6 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         myW_ = getWidth();
 
 
-        //if (RPNUMERICS.domainDim() == 2) {
         if ((scene().getAbstractGeom()).getSpace().getDim() == 2) {
 
             GeometryGraph geom = new GeometryGraph();

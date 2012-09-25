@@ -307,10 +307,10 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         wave.multid.graphs.ClippedShape clipping = new wave.multid.graphs.ClippedShape(boundary);
 
         // --------------------------------
-        Space zoomSpace = new Space("teste", RPNUMERICS.domainDim());
+        Space zoomSpace = new Space("", RPNUMERICS.domainDim());
         int[] testeArrayIndex = {0,1};
-        RPnProjDescriptor projDescriptor = new RPnProjDescriptor(zoomSpace, "teste", 700, 700, testeArrayIndex, false);
-            wave.multid.view.ViewingTransform viewingTransf = projDescriptor.createTransform(clipping);
+        RPnProjDescriptor projDescriptor = new RPnProjDescriptor(zoomSpace, "", 700, 700, testeArrayIndex, false);
+        wave.multid.view.ViewingTransform viewingTransf = projDescriptor.createTransform(clipping);
         // ----------------------------
 
         JButton closeButton = new JButton("Close");
@@ -338,21 +338,18 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                         new wave.multid.view.ViewingAttr(Color.black));
 
 
-                RPnPhaseSpacePanel panel = new RPnPhaseSpacePanel(scene);
-                panel.setBackground(Color.red);
-
                 frameZoom = new RPnPhaseSpaceFrame(scene, commandMenu_);
                 frameZoom.setTitle("Zoom " +RPnPhaseSpaceAbstraction.namePhaseSpace);
 
                 frameZoom.jPanel5.removeAll();
                 frameZoom.jPanel5.add(closeButton);
-
+                
                 UIController.instance().install(frameZoom.phaseSpacePanel());
 
                 setFramesPosition(frameZoom);
                 frameZoom.pack();
                 frameZoom.setVisible(true);
-                
+
                 listFrameZoom.add(frameZoom);
 
                 //*** Tem que ser melhorado

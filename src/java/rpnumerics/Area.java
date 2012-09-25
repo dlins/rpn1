@@ -7,17 +7,9 @@
 package rpnumerics;
 
 import rpn.RPnPhaseSpaceAbstraction;
-import rpn.RPnPhaseSpacePanel;
 import rpn.component.RpGeometry;
 import rpn.component.util.GeometryGraphND;
-import rpn.controller.ui.UIController;
-import rpn.controller.ui.UserInputTable;
 import rpn.parser.RPnDataModule;
-import wave.multid.Coords2D;
-import wave.multid.CoordsArray;
-import wave.multid.view.Scene;
-import wave.multid.view.ViewingTransform;
-import wave.util.RealSegment;
 import wave.util.RealVector;
 
 public class Area {

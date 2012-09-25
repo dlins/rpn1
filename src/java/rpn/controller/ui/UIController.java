@@ -209,7 +209,7 @@ public class UIController extends ComponentUI {
                         DragPlotAgent.instance().execute();
                         
                     }
-                }
+                }                
 
             }
         }
@@ -254,6 +254,7 @@ public class UIController extends ComponentUI {
                     }
 
                 }
+
             }
 
         }
@@ -275,6 +276,7 @@ public class UIController extends ComponentUI {
                     DragPlotAgent.instance().setPhaseSpace((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom());
 
                 }
+
 
             }
         }

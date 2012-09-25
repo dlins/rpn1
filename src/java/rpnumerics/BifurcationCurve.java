@@ -8,10 +8,12 @@ package rpnumerics;
 
 import java.util.ArrayList;
 import java.util.List;
+import rpn.RPnPhaseSpaceAbstraction;
 import rpnumerics.methods.contour.ContourCurve;
 
 import wave.multid.view.ViewingAttr;
 import wave.util.RealSegment;
+import wave.util.RealVector;
 
 public class BifurcationCurve extends SegmentedCurve {
     //
@@ -64,6 +66,32 @@ public class BifurcationCurve extends SegmentedCurve {
     //
     // Accessors/Mutators
     //
+
+
+    //*** Segunda versao: considera as curvas de bifurcacao como sendo formadas de dois conjuntos de geometrias (left e right)
+    //*** Aqui, a correspondencia acontece de forma direta: left(i) <--> right(i)
+    public RealVector secondPointDC(int i) {
+
+        ArrayList segments = new ArrayList();
+
+        if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("RightPhase Space"))
+            segments = (ArrayList) leftSegments();
+
+        if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("LeftPhase Space"))
+            segments = (ArrayList) rightSegments();
+
+        RealVector p1 = new RealVector(((RealSegment) (segments).get(i)).p1());
+        RealVector p2 = new RealVector(((RealSegment) (segments).get(i)).p2());
+
+        RealVector pDC = new RealVector(p1.getSize());
+        pDC.sub(p1, p2);
+        pDC.scale(getALFA());
+        pDC.add(p2);
+
+        return pDC;
+    }
+
+
     public String toXML() {
 
         StringBuilder buffer = new StringBuilder();

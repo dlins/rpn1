@@ -38,8 +38,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
     static public String namePhaseSpace = "";
     static public List listResolution = new ArrayList();
     static public int closestCurve;             //indice da curva mais proxima
-    static public boolean areaToGrid;
-
+    
     //
     // Constructors
     //
@@ -203,9 +202,9 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
                         if (geom.viewingAttr().isVisible()  &&  !(geom instanceof StationaryPointGeom)) {
 
                             RpGeomFactory factory = geom.geomFactory();
-                            RPnCurve curve = (RPnCurve) factory.geomSource();       // ********* Mudar aqui, apontar o source direito ou esquerdo
+                            RPnCurve curve = (RPnCurve) factory.geomSource();
 
-                            curve.findClosestSegment(targetPoint);   //***
+                            curve.findClosestSegment(targetPoint);
 
                             distancia = curve.distancia;
 
@@ -229,19 +228,17 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
 
                         // -----------------------------------
                         if (curve instanceof SegmentedCurve) {
-                            areaToGrid = true;
                             RpCalcBasedGeomFactory geomFactory = (RpCalcBasedGeomFactory) factory;
                             RpCalculation calc = geomFactory.rpCalc();
                             ContourCurveCalc curveCalc = (ContourCurveCalc) calc;
                             listResolution.add(curveCalc.getParams().getResolution());
                         }
                         else {
-                            areaToGrid = false;
                             listResolution.add(new int[]{0,0});
                         }
                         // ---------------------------------------------------------------
 
-                        curve.findClosestSegment(targetPoint);   //***
+                        curve.findClosestSegment(targetPoint);
 
                         distancia = curve.distancia;
 
@@ -255,7 +252,6 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
 
                     // ----------------------------------- Evita erro quando no PhaseDiagram
                     else {
-                        areaToGrid = false;
                         listResolution.add(new int[]{0,0});
                     }
                     // -----------------------------------
@@ -397,7 +393,6 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
 
     public void lowlightGeometry(int index) {
 
-
         for (int i = 0; i < geomList_.size(); i++) {
 
             if (i == index) {
@@ -405,6 +400,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
                 if (geometry instanceof SegmentedCurveGeom) {
 
                     SegmentedCurveGeom segGeom = (SegmentedCurveGeom) geometry;
+                    segGeom.getRealSegIterator();
                     segGeom.lowLight();
 
 

@@ -240,10 +240,10 @@ public class HugoniotCurve extends SegmentedCurve {
                     / segmentVector.dot(segmentVector);
 
 	if (alpha <= 0) {
-            return closestSegment.p1();
+            return closestSegment.p2();
         }
         if (alpha >= 1) {
-            return closestSegment.p2();
+            return closestSegment.p1();
         }
         //*****
 

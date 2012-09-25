@@ -26,6 +26,7 @@ import rpnumerics.RPnCurve;
 import rpnumerics.SegmentedCurve;
 import rpnumerics.WaveCurve;
 import wave.util.Boundary;
+import wave.util.IsoTriang2DBoundary;
 import wave.util.RealVector;
 import wave.util.RectBoundary;
 
@@ -87,6 +88,7 @@ public class AreaSelectionAgent extends RpModelPlotAgent {
         RpGeometry geom = phaseSpace.findClosestGeometry(newValue);
         RPnCurve curve = (RPnCurve)(geom.geomFactory().geomSource());
 
+        
         Object[] options = {"Zoom", "Refine", "Riemann Solver"};
             int n = JOptionPane.showOptionDialog(new JFrame(),
                     "Selected area to: ",
@@ -104,40 +106,52 @@ public class AreaSelectionAgent extends RpModelPlotAgent {
             RectBoundary rectBdry = new RectBoundary(GeometryGraph.downLeft, GeometryGraph.topRight);
             Boundary bdry = (Boundary) rectBdry;
             RPnDesktopPlotter.getUIFrame().phaseSpaceFrameZoom(bdry);
+            
+
+            // *** Ainda trabalhando aqui ...
+//            RealVector A = new RealVector(GeometryGraph.downLeft);
+//            RealVector B = new RealVector(new double[]{GeometryGraph.downLeft.getElement(0), GeometryGraph.topRight.getElement(1)});
+//            RealVector C = new RealVector(new double[]{GeometryGraph.topRight.getElement(0), GeometryGraph.downLeft.getElement(1)});
+//
+//            //IsoTriang2DBoundary triBdry = new IsoTriang2DBoundary(A, B, C);
+//            IsoTriang2DBoundary triBdry = new IsoTriang2DBoundary(new RealVector(new double[]{0.,0.}), new RealVector(new double[]{0.,1.}), new RealVector(new double[]{1.,0.}));
+//            Boundary isoBdry = (Boundary) triBdry;
+//            RPnDesktopPlotter.getUIFrame().phaseSpaceFrameZoom(isoBdry);
+            // ***
         }
-
-        if (n == 1  &&  curve instanceof SegmentedCurve) {
-            //listArea_.clear();
-
-            String Re1 = JOptionPane.showInputDialog(null, "Resolucao horizontal", "Resolucao", JOptionPane.QUESTION_MESSAGE);
-            String Re2 = JOptionPane.showInputDialog(null, "Resolucao vertical", "Resolucao", JOptionPane.QUESTION_MESSAGE);
-
-            try {
-                RealVector resolution = new RealVector(RPNUMERICS.domainDim());
-                resolution.setElement(0, Integer.parseInt(Re1));
-                resolution.setElement(1, Integer.parseInt(Re2));
-
-                if (RPNUMERICS.domainDim() == 2) {
-                    area = new Area(GeometryGraph.topRight, GeometryGraph.downLeft);
-                    System.out.println(area);
-                    listArea_.add(area);
-                }
-
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, "Resolucao nao foi informada", "ATENCAO", JOptionPane.INFORMATION_MESSAGE);
-            }
-
-        }
-
-        if (n == 2  &&  curve instanceof WaveCurve) {
-            //listArea_.clear();
-            area = new Area(GeometryGraph.topRight, GeometryGraph.downLeft);
-            System.out.println(area);
-            listArea_.add(area);
-            System.out.println("GeometryGraphND.indContido.size() :::::::::::::::::: " +GeometryGraphND.indContido.size());
-        }
-
-        System.out.println("Tamanho da lista de areas : " +getListArea().size());
+//
+//        if (n == 1  &&  curve instanceof SegmentedCurve) {
+//            //listArea_.clear();
+//
+//            String Re1 = JOptionPane.showInputDialog(null, "Resolucao horizontal", "Resolucao", JOptionPane.QUESTION_MESSAGE);
+//            String Re2 = JOptionPane.showInputDialog(null, "Resolucao vertical", "Resolucao", JOptionPane.QUESTION_MESSAGE);
+//
+//            try {
+//                RealVector resolution = new RealVector(RPNUMERICS.domainDim());
+//                resolution.setElement(0, Integer.parseInt(Re1));
+//                resolution.setElement(1, Integer.parseInt(Re2));
+//
+//                if (RPNUMERICS.domainDim() == 2) {
+//                    area = new Area(GeometryGraph.topRight, GeometryGraph.downLeft);
+//                    System.out.println(area);
+//                    listArea_.add(area);
+//                }
+//
+//            } catch (Exception e) {
+//                JOptionPane.showMessageDialog(null, "Resolucao nao foi informada", "ATENCAO", JOptionPane.INFORMATION_MESSAGE);
+//            }
+//
+//        }
+//
+//        if (n == 2  &&  curve instanceof WaveCurve) {
+//            //listArea_.clear();
+//            area = new Area(GeometryGraph.topRight, GeometryGraph.downLeft);
+//            System.out.println(area);
+//            listArea_.add(area);
+//            System.out.println("GeometryGraphND.indContido.size() :::::::::::::::::: " +GeometryGraphND.indContido.size());
+//        }
+//
+//        System.out.println("Tamanho da lista de areas : " +getListArea().size());
     }
 
 
