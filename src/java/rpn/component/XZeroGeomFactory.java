@@ -29,7 +29,7 @@ public class XZeroGeomFactory extends StationaryPointGeomFactory {
     }
 
     @Override
-    protected RpGeometry createGeomFromSource() {
+    public RpGeometry createGeomFromSource() {
         StationaryPoint point = (StationaryPoint)geomSource();
         CoordsArray coords = new CoordsArray(point.getPoint().getCoords());
         return new XZeroGeom(coords, this);

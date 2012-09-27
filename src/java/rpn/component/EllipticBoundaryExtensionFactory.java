@@ -20,7 +20,7 @@ public class EllipticBoundaryExtensionFactory extends BifurcationCurveGeomFactor
     // Methods
     //
 
-    protected RpGeometry createGeomFromSource() {
+    public RpGeometry createGeomFromSource() {
 
         EllipticBoundaryExtension curve = (EllipticBoundaryExtension) geomSource();
 

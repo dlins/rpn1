@@ -26,7 +26,7 @@ public class BoundaryExtensionCurveGeomFactory extends BifurcationCurveGeomFacto
     // Methods
     //
     @Override
-    protected RpGeometry createGeomFromSource() {
+    public RpGeometry createGeomFromSource() {
 
         BoundaryExtensionCurve curve = (BoundaryExtensionCurve) geomSource();
 

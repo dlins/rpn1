@@ -43,7 +43,7 @@ public class OrbitGeomFactory extends RpCalcBasedGeomFactory {
         return new OrbitController();
     }
 
-    protected RpGeometry createGeomFromSource() {
+    public RpGeometry createGeomFromSource() {
         Orbit orbit = (Orbit) geomSource();
         
         return new OrbitGeom(MultidAdapter.converseOrbitToCoordsArray(orbit), this);

@@ -20,7 +20,7 @@ public class PhysicalBoundaryFactory extends RpCalcBasedGeomFactory {
     // Methods
     //
 
-    protected RpGeometry createGeomFromSource() {
+    public RpGeometry createGeomFromSource() {
 
         PhysicalBoundary curve = (PhysicalBoundary) geomSource();
 
