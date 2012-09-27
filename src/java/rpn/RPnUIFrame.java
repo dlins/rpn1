@@ -483,6 +483,11 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         curvesList.addObserver(AdjustedSelectionPlotAgent.instance());
         leftCurvesList.addObserver(AdjustedSelectionPlotAgent.instance());
         rightCurvesList.addObserver(AdjustedSelectionPlotAgent.instance());
+        
+        curvesList.addObserver(EnableLRPhaseSpaceAgent.instance());
+        leftCurvesList.addObserver(EnableLRPhaseSpaceAgent.instance());
+        rightCurvesList.addObserver(EnableLRPhaseSpaceAgent.instance());
+        
 
 
 
@@ -949,6 +954,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         viewMenu_.add(showLeftCurvesPaneltem_);
         viewMenu_.add(showRightCurvesPaneltem_);
         viewMenu_.add(showAuxPanel_);
+        viewMenu_.add(EnableLRPhaseSpaceAgent.instance());
         jMenuBar1.add(modelInteractionMenu);
 
 

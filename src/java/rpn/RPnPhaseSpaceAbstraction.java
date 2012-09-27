@@ -33,8 +33,6 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
     private PhaseSpaceState state_;
     private RpGeometry selectedGeom_;
     private List<RPnCurvesList> curvesListFrames_;
-
-
     static public String namePhaseSpace = "";
     static public List listResolution = new ArrayList();
     static public int closestCurve;             //indice da curva mais proxima
@@ -52,7 +50,6 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
     //
     // Accessors/Mutators
     //
-
     public void changeState(PhaseSpaceState state) {
         state_ = state;
     }
@@ -91,13 +88,11 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
     //
     // Methods
     //
-
     public void plot(RpGeometry geom) {
         state_.plot(this, geom);
 
     }
 
-    
     public void delete(RpGeometry geom) {
         state_.delete(this, geom);
     }
@@ -120,6 +115,12 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
 
     }
 
+    
+    public boolean contains(MultiGeometry multiGeometry){
+        return geomList_.contains(multiGeometry);
+    }
+    
+    
     @Override
     public void remove(MultiGeometry geom) {
 
@@ -138,7 +139,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
     public void clearGeometrySelection() {
         for (int i = 0; i < geomList_.size(); i++) {
             highlightGeometry(i);
-            RpGeometry geometry = (RpGeometry)geomList_.get(i);
+            RpGeometry geometry = (RpGeometry) geomList_.get(i);
             geometry.viewingAttr().setSelected(false);
         }
     }
@@ -155,22 +156,29 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
                     segGeom.viewingAttr().setSelected(true);
                     segGeom.highLight();
 
-                } else {
+                }
 
-                    if (geometry instanceof MultiPolyLine) {
+                if (geometry instanceof MultiPolyLine) {
 
-                        MultiPolyLine poly = (MultiPolyLine) geometry;
-                        poly.viewingAttr().setSelected(true);
-                        poly.highLight();
+                    MultiPolyLine poly = (MultiPolyLine) geometry;
+                    poly.viewingAttr().setSelected(true);
+                    poly.highLight();
 
-                    }
+                }
+
+
+                if (geometry instanceof BifurcationCurveGeom) {
+
+                    BifurcationCurveGeom segGeom = (BifurcationCurveGeom) geometry;
+                    segGeom.viewingAttr().setSelected(true);
+                    segGeom.highLight();
+
                 }
             }
         }
 
         UIController.instance().panelsUpdate();
     }
-
 
     //**************************************************************************
     public RpGeometry findClosestGeometry(RealVector targetPoint) {             //*** Fazer alteracoes !!!!!
@@ -182,13 +190,19 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         double distminCurve = 1000000.;
         double distancia = 0.;
         int k = 0;
-        Iterator<RpGeometry> geomList = null ;
+        Iterator<RpGeometry> geomList = null;
 
         //--------------------------
         // **** Usar direto o objeto, sem testar
-        if (namePhaseSpace.equals("Phase Space"))      geomList = RPnDataModule.PHASESPACE.getGeomObjIterator();
-        if (namePhaseSpace.equals("RightPhase Space")) geomList = RPnDataModule.RIGHTPHASESPACE.getGeomObjIterator();
-        if (namePhaseSpace.equals("LeftPhase Space"))  geomList = RPnDataModule.LEFTPHASESPACE.getGeomObjIterator();
+        if (namePhaseSpace.equals("Phase Space")) {
+            geomList = RPnDataModule.PHASESPACE.getGeomObjIterator();
+        }
+        if (namePhaseSpace.equals("RightPhase Space")) {
+            geomList = RPnDataModule.RIGHTPHASESPACE.getGeomObjIterator();
+        }
+        if (namePhaseSpace.equals("LeftPhase Space")) {
+            geomList = RPnDataModule.LEFTPHASESPACE.getGeomObjIterator();
+        }
 
         //geomList = getGeomObjIterator();
 
@@ -196,51 +210,16 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
 
             RpGeometry geom = (RpGeometry) geomList.next();
 
-                if (GeometryGraphND.onCurve == 1) {
+            if (GeometryGraphND.onCurve == 1) {
 
-                    if ((namePhaseSpace.equals("Phase Space")  &&  geom != RPnDataModule.PHASESPACE.getLastGeometry())
-                            || (namePhaseSpace.equals("RightPhase Space")  &&  geom != RPnDataModule.RIGHTPHASESPACE.getLastGeometry())
-                            || (namePhaseSpace.equals("LeftPhase Space")  &&  geom != RPnDataModule.LEFTPHASESPACE.getLastGeometry())) {
+                if ((namePhaseSpace.equals("Phase Space") && geom != RPnDataModule.PHASESPACE.getLastGeometry())
+                        || (namePhaseSpace.equals("RightPhase Space") && geom != RPnDataModule.RIGHTPHASESPACE.getLastGeometry())
+                        || (namePhaseSpace.equals("LeftPhase Space") && geom != RPnDataModule.LEFTPHASESPACE.getLastGeometry())) {
 
-                        if (geom.viewingAttr().isVisible()  &&  !(geom instanceof StationaryPointGeom)) {
-
-                            RpGeomFactory factory = geom.geomFactory();
-                            RPnCurve curve = (RPnCurve) factory.geomSource();       // ********* Mudar aqui, apontar o source direito ou esquerdo
-
-                            curve.findClosestSegment(targetPoint);   //***
-
-                            distancia = curve.distancia;
-
-                            if (distminCurve >= distancia) {
-                                distminCurve = distancia;
-                                closestCurve = k;
-                                closestGeometry_ = geom;
-                            }
-
-                        }
-                    }
-
-                }
-
-                if (GeometryGraphND.onCurve == 0) {
-
-                    if (geom.viewingAttr().isVisible()  &&  !(geom instanceof StationaryPointGeom)  &&  !(geom instanceof PoincareSectionGeom)) {
+                    if (geom.viewingAttr().isVisible() && !(geom instanceof StationaryPointGeom)) {
 
                         RpGeomFactory factory = geom.geomFactory();
-                        RPnCurve curve = (RPnCurve) factory.geomSource();
-
-                        // -----------------------------------
-                        if (curve instanceof SegmentedCurve) {
-                            RpCalcBasedGeomFactory geomFactory = (RpCalcBasedGeomFactory) factory;
-                            RpCalculation calc = geomFactory.rpCalc();
-                            ContourCurveCalc curveCalc = (ContourCurveCalc) calc;
-                            listResolution.add(curveCalc.getParams().getResolution());
-
-                        } else {
-                            int[] resolution = {100, 100};
-                            listResolution.add(resolution);
-                        }
-                        // ---------------------------------------------------------------
+                        RPnCurve curve = (RPnCurve) factory.geomSource();       // ********* Mudar aqui, apontar o source direito ou esquerdo
 
                         curve.findClosestSegment(targetPoint);   //***
 
@@ -253,15 +232,48 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
                         }
 
                     }
+                }
 
-                    // ----------------------------------- Evita erro quando no PhaseDiagram
-                    else {
-                        int[] resolution = {10, 10};
+            }
+
+            if (GeometryGraphND.onCurve == 0) {
+
+                if (geom.viewingAttr().isVisible() && !(geom instanceof StationaryPointGeom) && !(geom instanceof PoincareSectionGeom)) {
+
+                    RpGeomFactory factory = geom.geomFactory();
+                    RPnCurve curve = (RPnCurve) factory.geomSource();
+
+                    // -----------------------------------
+                    if (curve instanceof SegmentedCurve) {
+                        RpCalcBasedGeomFactory geomFactory = (RpCalcBasedGeomFactory) factory;
+                        RpCalculation calc = geomFactory.rpCalc();
+                        ContourCurveCalc curveCalc = (ContourCurveCalc) calc;
+                        listResolution.add(curveCalc.getParams().getResolution());
+
+                    } else {
+                        int[] resolution = {100, 100};
                         listResolution.add(resolution);
                     }
-                    // -----------------------------------
+                    // ---------------------------------------------------------------
 
+                    curve.findClosestSegment(targetPoint);   //***
+
+                    distancia = curve.distancia;
+
+                    if (distminCurve >= distancia) {
+                        distminCurve = distancia;
+                        closestCurve = k;
+                        closestGeometry_ = geom;
+                    }
+
+                } // ----------------------------------- Evita erro quando no PhaseDiagram
+                else {
+                    int[] resolution = {10, 10};
+                    listResolution.add(resolution);
                 }
+                // -----------------------------------
+
+            }
 
             k++;
 
@@ -271,21 +283,25 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         return closestGeometry_;
     }
 
-
     //**************************************************************************
-
     //******************************************************* Leandro, em 28/Set
     //*** ClassifierAgent.hideClassifiers - chamado aqui dentro - deverá ser revisto para permitir a simples ocultação dos classificadores
     //*** Por enquanto, é feita a remoção, através de ClassifierAgent.clearClassifiers
     public static void ocultaStringsCla(int geometryIndex, String name) {
 
         int index = 0;
-        if (name.equals("Phase Space")) index = 1;
-        if (name.equals("RightPhase Space")) index = 2;
-        if (name.equals("LeftPhase Space")) index = 3;
+        if (name.equals("Phase Space")) {
+            index = 1;
+        }
+        if (name.equals("RightPhase Space")) {
+            index = 2;
+        }
+        if (name.equals("LeftPhase Space")) {
+            index = 3;
+        }
 
         for (int i = 0; i < ClassifierAgent.indCurvaCla.size(); i++) {
-            if ((Integer) ClassifierAgent.indCurvaCla.get(i) == geometryIndex && index == (Integer)ClassifierAgent.strView.get(i)) {    //************************* Flexibilizar em funcao do painel
+            if ((Integer) ClassifierAgent.indCurvaCla.get(i) == geometryIndex && index == (Integer) ClassifierAgent.strView.get(i)) {    //************************* Flexibilizar em funcao do painel
                 ClassifierAgent.paraOcultarIndCla.add(i);
             }
         }
@@ -322,12 +338,18 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
     public static void ocultaStringsVel(int geometryIndex, String name) {
 
         int index = 0;
-        if (name.equals("Phase Space")) index = 1;
-        if (name.equals("RightPhase Space")) index = 2;
-        if (name.equals("LeftPhase Space")) index = 3;
+        if (name.equals("Phase Space")) {
+            index = 1;
+        }
+        if (name.equals("RightPhase Space")) {
+            index = 2;
+        }
+        if (name.equals("LeftPhase Space")) {
+            index = 3;
+        }
 
         for (int i = 0; i < VelocityAgent.indCurvaVel.size(); i++) {
-            if ((Integer) VelocityAgent.indCurvaVel.get(i) == geometryIndex && index == (Integer)VelocityAgent.velView.get(i)) {
+            if ((Integer) VelocityAgent.indCurvaVel.get(i) == geometryIndex && index == (Integer) VelocityAgent.velView.get(i)) {
                 VelocityAgent.paraOcultarIndVel.add(i);
             }
         }
@@ -358,7 +380,6 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         VelocityAgent.paraOcultarIndVel.clear();
 
     }
-  
 
     public void lowlightGeometry(int index) {
 
@@ -372,20 +393,25 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
                     SegmentedCurveGeom segGeom = (SegmentedCurveGeom) geometry;
                     segGeom.viewingAttr().setSelected(false);
                     segGeom.lowLight();
+                }
 
+                if (geometry instanceof MultiPolyLine) {
 
-                } else {
+                    MultiPolyLine poly = (MultiPolyLine) geometry;
+                    poly.viewingAttr().setSelected(false);
+                    poly.lowLight();
 
-                    if (geometry instanceof MultiPolyLine) {
+                }
+                if (geometry instanceof BifurcationCurveGeom) {
 
-                        MultiPolyLine poly = (MultiPolyLine) geometry;
-                        poly.viewingAttr().setSelected(false);
-                        poly.lowLight();
+                    BifurcationCurveGeom segGeom = (BifurcationCurveGeom) geometry;
+                    segGeom.viewingAttr().setSelected(true);
+                    segGeom.lowLight();
 
-                    }
                 }
             }
         }
+
         UIController.instance().panelsUpdate();
     }
 
@@ -409,7 +435,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         }
         for (int i = 0; i < removeList.size(); i++) {
 
-            RpGeometry geometryToRemove = (RpGeometry)removeList.get(i);
+            RpGeometry geometryToRemove = (RpGeometry) removeList.get(i);
 
             super.remove(geometryToRemove);
         }

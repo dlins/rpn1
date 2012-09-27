@@ -30,4 +30,10 @@ public class BifurcationCurveView extends GeomObjView {
             }
         }
     }
+    
+    
+    
+    
+    
+    
 }

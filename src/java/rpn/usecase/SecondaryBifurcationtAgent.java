@@ -53,7 +53,7 @@ public class SecondaryBifurcationtAgent extends RpModelPlotAgent {
 
         SecondaryBifurcationGeomFactory factory = new SecondaryBifurcationGeomFactory(RPNUMERICS.createSecondaryBifurcationCurveCalc());
 
-        if (UIController.instance().isAuxPanelsEnabled()) {
+       
             RPnPhaseSpaceAbstraction leftPhaseSpace = RPnDataModule.LEFTPHASESPACE;
 
             RPnPhaseSpaceAbstraction rightPhaseSpace = RPnDataModule.RIGHTPHASESPACE;
@@ -61,11 +61,11 @@ public class SecondaryBifurcationtAgent extends RpModelPlotAgent {
             RpGeometry leftGeometry = factory.leftGeom();
             RpGeometry rightGeometry = factory.rightGeom();
 
-            leftPhaseSpace.plot(leftGeometry);
-            rightPhaseSpace.plot(rightGeometry);
-        } else {
-            RPnDataModule.PHASESPACE.plot(factory.geom());
-        }
+            leftPhaseSpace.join(leftGeometry);
+            rightPhaseSpace.join(rightGeometry);
+       
+            RPnDataModule.PHASESPACE.join(factory.geom());
+       
 
 
 
