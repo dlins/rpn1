@@ -1156,8 +1156,8 @@ int HyperCube::affslv(double *x, double *g, int m_, int *wrki) {
     sum = 0.0;
     for (i = 0; i < m_; i++) {
     /* This NEW condition is made in order to exclude repeated points at common edges */
-        if ( (x[i] < 0.0 + KLUDGE) || (x[i] > 1.0 - KLUDGE) ) {
-//        if (x[i] < 0.0) {
+//        if ( (x[i] < 0.0 + KLUDGE) || (x[i] > 1.0 - KLUDGE) ) {
+        if (x[i] <= 0.0) {
             //solution is outside
             return 1;
         } else {
@@ -1165,8 +1165,8 @@ int HyperCube::affslv(double *x, double *g, int m_, int *wrki) {
         }
     }
     /* This NEW condition is made in order to exclude repeated points at common edges */
-    if ( (sum <= 0.0 + KLUDGE) || (sum >= 1.0 - KLUDGE) ) {
-//    if (sum > 1.0) {
+//    if ( (sum <= 0.0 + KLUDGE) || (sum >= 1.0 - KLUDGE) ) {
+    if (sum >=1.0) {
         //solution is outside
         return 1;
     }

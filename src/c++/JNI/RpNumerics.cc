@@ -106,6 +106,8 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setParams
 
     }
 
+    
+    
 
     RpNumerics::getPhysics().setParams(paramVector);
 
