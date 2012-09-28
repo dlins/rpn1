@@ -115,12 +115,24 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
 
     }
 
-    
-    public boolean contains(MultiGeometry multiGeometry){
-        return geomList_.contains(multiGeometry);
+    public boolean contains(MultiGeometry multiGeometry) {
+
+        RpGeometry rpGeometry = (RpGeometry) multiGeometry;
+
+        Object source = rpGeometry.geomFactory().geomSource();
+
+        for (Object object : geomList_) {
+            RpGeometry geometryInList = (RpGeometry) object;
+
+            if (geometryInList.geomFactory().geomSource() == source) {
+                return true;
+            }
+        }
+
+        return false;
+
     }
-    
-    
+
     @Override
     public void remove(MultiGeometry geom) {
 
@@ -405,7 +417,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
                 if (geometry instanceof BifurcationCurveGeom) {
 
                     BifurcationCurveGeom segGeom = (BifurcationCurveGeom) geometry;
-                    segGeom.viewingAttr().setSelected(true);
+                    segGeom.viewingAttr().setSelected(false);
                     segGeom.lowLight();
 
                 }

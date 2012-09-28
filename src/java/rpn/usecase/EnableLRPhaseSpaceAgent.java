@@ -7,10 +7,13 @@ package rpn.usecase;
 
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.JCheckBoxMenuItem;
+import rpn.RPnCurvesList;
+import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpaceFrame;
 import rpn.RPnUIFrame;
 import rpn.component.BifurcationCurveGeom;
@@ -37,7 +40,7 @@ public class EnableLRPhaseSpaceAgent extends RpModelPlotAgent implements Observe
     //
     protected EnableLRPhaseSpaceAgent() {
 //        super(DESC_TEXT);
-        super(DESC_TEXT, null, new JCheckBoxMenuItem(DESC_TEXT,true));
+        super(DESC_TEXT, null, new JCheckBoxMenuItem(DESC_TEXT, true));
 
         setEnabled(true);
         selectedList_ = new ArrayList();
@@ -50,6 +53,11 @@ public class EnableLRPhaseSpaceAgent extends RpModelPlotAgent implements Observe
         for (RPnPhaseSpaceFrame frame : RPnUIFrame.getAuxFrames()) {
             frame.setVisible(!LRPhaseSpaceEnable);
         }
+
+        enableObserver(false, RPnDataModule.PHASESPACE);
+        enableObserver(false, RPnDataModule.RIGHTPHASESPACE);
+        enableObserver(false, RPnDataModule.LEFTPHASESPACE);
+
 
         if (!LRPhaseSpaceEnable) {
             moveGeometriesToLRPhaseSpace();
@@ -64,8 +72,14 @@ public class EnableLRPhaseSpaceAgent extends RpModelPlotAgent implements Observe
         instance_.selectedList_.clear();
 
 
+        enableObserver(true, RPnDataModule.PHASESPACE);
+        enableObserver(true, RPnDataModule.RIGHTPHASESPACE);
+        enableObserver(true, RPnDataModule.LEFTPHASESPACE);
+
+
+
     }
-    
+
     @Override
     public RpGeometry createRpGeometry(RealVector[] coords) {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -86,17 +100,43 @@ public class EnableLRPhaseSpaceAgent extends RpModelPlotAgent implements Observe
 
     @Override
     public void update(Observable o, Object arg) {
-        
-        List<RpGeometry> selectedGeometries = (List<RpGeometry>) arg;
-        
-        for (RpGeometry object : selectedGeometries) {
-            
-            if (!instance_.selectedList_.contains(object)){
-                  instance_.selectedList_.add(object);
+
+        instance_.selectedList_.clear();
+
+        fillSelectedGeometryList(RPnDataModule.PHASESPACE);
+        fillSelectedGeometryList(RPnDataModule.LEFTPHASESPACE);
+        fillSelectedGeometryList(RPnDataModule.RIGHTPHASESPACE);
+
+    }
+
+    private void enableObserver(boolean enabled, RPnPhaseSpaceAbstraction phaseSpaceAbstraction) {
+
+        Iterator<RPnCurvesList> curvesListIterator = phaseSpaceAbstraction.curvesListIterator();
+
+        while (curvesListIterator.hasNext()) {
+            RPnCurvesList rPnCurvesList = curvesListIterator.next();
+            if (enabled) {
+                 rPnCurvesList.addObserver(this);
+               
+            } else {
+                rPnCurvesList.deleteObserver(this);
             }
-            
         }
-        
+
+    }
+
+    private void fillSelectedGeometryList(RPnPhaseSpaceAbstraction phaseSpace) {
+
+        Iterator<RpGeometry> iterator = phaseSpace.getGeomObjIterator();
+
+        while (iterator.hasNext()) {
+            RpGeometry rpGeometry = iterator.next();
+
+            if (!(rpGeometry instanceof BifurcationCurveGeom) && rpGeometry.viewingAttr().isSelected()) {
+                instance_.selectedList_.add(rpGeometry);
+            }
+
+        }
     }
 
     private void moveGeometriesToLRPhaseSpace() {
@@ -104,17 +144,16 @@ public class EnableLRPhaseSpaceAgent extends RpModelPlotAgent implements Observe
 
         for (int i = 0; i < selectedList_.size(); i++) {
             RpGeometry rpGeometry = selectedList_.get(i);
-            if (!(rpGeometry instanceof BifurcationCurveGeom)) {
-                RpCalcBasedGeomFactory factory = (RpCalcBasedGeomFactory)rpGeometry.geomFactory();
-                
-                if (!RPnDataModule.LEFTPHASESPACE.contains(rpGeometry)) {
-                    RPnDataModule.LEFTPHASESPACE.join(factory.createGeomFromSource());
-                }
-                if (!RPnDataModule.RIGHTPHASESPACE.contains(rpGeometry)) {
-                    RPnDataModule.RIGHTPHASESPACE.join(factory.createGeomFromSource());
-                }
 
+            RpCalcBasedGeomFactory factory = (RpCalcBasedGeomFactory) rpGeometry.geomFactory();
+
+            if (!RPnDataModule.LEFTPHASESPACE.contains(rpGeometry)) {
+                RPnDataModule.LEFTPHASESPACE.join(factory.createGeomFromSource());
             }
+            if (!RPnDataModule.RIGHTPHASESPACE.contains(rpGeometry)) {
+                RPnDataModule.RIGHTPHASESPACE.join(factory.createGeomFromSource());
+            }
+
         }
 
 
@@ -124,17 +163,15 @@ public class EnableLRPhaseSpaceAgent extends RpModelPlotAgent implements Observe
 
         for (int i = 0; i < selectedList_.size(); i++) {
             RpGeometry rpGeometry = selectedList_.get(i);
-            if (!(rpGeometry instanceof BifurcationCurveGeom)) {
-                if (!RPnDataModule.PHASESPACE.contains(rpGeometry)) {
-                    RpCalcBasedGeomFactory factory = (RpCalcBasedGeomFactory)rpGeometry.geomFactory();
-                    RPnDataModule.PHASESPACE.join(factory.createGeomFromSource());
-                }
-                RPnDataModule.LEFTPHASESPACE.remove(rpGeometry);
-                RPnDataModule.RIGHTPHASESPACE.remove(rpGeometry);
+
+            if (!RPnDataModule.PHASESPACE.contains(rpGeometry)) {
+                RpCalcBasedGeomFactory factory = (RpCalcBasedGeomFactory) rpGeometry.geomFactory();
+                RPnDataModule.PHASESPACE.join(factory.createGeomFromSource());
             }
+            RPnDataModule.LEFTPHASESPACE.remove(rpGeometry);
+            RPnDataModule.RIGHTPHASESPACE.remove(rpGeometry);
         }
 
-    }
 
-    
+    }
 }
