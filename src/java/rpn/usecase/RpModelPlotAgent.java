@@ -48,7 +48,7 @@ public abstract class RpModelPlotAgent extends RpModelActionAgent {
 
         String listString = "";
 
-        Iterator oldValue = phaseSpace_.getGeomObjIterator();
+        Iterator oldValue = UIController.instance().getActivePhaseSpace().getGeomObjIterator();
 
         RpGeometry geometry = createRpGeometry(userInputList);
 
@@ -56,10 +56,10 @@ public abstract class RpModelPlotAgent extends RpModelActionAgent {
         if (geometry == null) {
             return;
         }
-        phaseSpace_.plot(geometry);
+        UIController.instance().getActivePhaseSpace().plot(geometry);
 
 
-        Iterator newValue = phaseSpace_.getGeomObjIterator();
+        Iterator newValue = UIController.instance().getActivePhaseSpace().getGeomObjIterator();
         logAction(new PropertyChangeEvent(this, listString, oldValue, newValue));
 
     }

@@ -17,6 +17,7 @@ import rpn.usecase.ClassifierAgent;
 import rpn.component.util.GeometryGraphND;
 import rpn.usecase.VelocityAgent;
 import rpn.controller.ui.UIController;
+import rpn.controller.ui.UserInputTable;
 import rpn.parser.RPnDataModule;
 import wave.multid.model.MultiGeometry;
 import wave.multid.model.MultiPolyLine;
@@ -33,6 +34,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
     private PhaseSpaceState state_;
     private RpGeometry selectedGeom_;
     private List<RPnCurvesList> curvesListFrames_;
+    private UserInputTable userInputTable_;
 
 
     static public String namePhaseSpace = "";
@@ -46,6 +48,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         super(id, domain);
         changeState(state);
         selectedGeom_ = null;
+        userInputTable_=new UserInputTable(domain.getDim());
         curvesListFrames_ = new ArrayList<RPnCurvesList>();
     }
 
@@ -96,8 +99,8 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         state_.plot(this, geom);
 
     }
-
     
+        
     public void delete(RpGeometry geom) {
         state_.delete(this, geom);
     }
@@ -170,6 +173,13 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
 
         UIController.instance().panelsUpdate();
     }
+
+    public UserInputTable getUserInputTable() {
+        return userInputTable_;
+    }
+    
+    
+    
 
 
     //**************************************************************************

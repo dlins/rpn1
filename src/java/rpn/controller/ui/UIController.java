@@ -57,6 +57,7 @@ public class UIController extends ComponentUI {
     public static UI_ACTION_SELECTED INITSTATE = null;
     private ArrayList<Command> commandArray_;
     private boolean auxPanelsEnabled_;
+    private RPnPhaseSpaceAbstraction activePhaseSpace_;
 
     //
     // Constructors
@@ -127,8 +128,6 @@ public class UIController extends ComponentUI {
         return instance_;
     }
 
-  
-
     public void removeLastCommand() {
         commandArray_.remove(commandArray_.size() - 1);
     }
@@ -146,13 +145,17 @@ public class UIController extends ComponentUI {
         return auxPanelsEnabled_;
     }
 
+    public void setActivePhaseSpace(RPnPhaseSpaceAbstraction activePhaseSpace_) {
+        this.activePhaseSpace_ = activePhaseSpace_;
+    }
+    
+    
+    
+
     //
     // Inner Classes
     //
     class MouseMotionController extends MouseMotionAdapter {
-
-
-       
 
         @Override
         public void mouseDragged(MouseEvent event) {
@@ -170,7 +173,7 @@ public class UIController extends ComponentUI {
 
 
                     //RpGeometry geom = RPnPhaseSpaceAbstraction.findClosestGeometry(newValue);
-                    RPnCurve curve = (RPnCurve)(geom.geomFactory().geomSource());
+                    RPnCurve curve = (RPnCurve) (geom.geomFactory().geomSource());
                     GeometryGraphND.pMarca = curve.findClosestPoint(newValue);
 
                     panel.repaint();
@@ -188,26 +191,14 @@ public class UIController extends ComponentUI {
 
                     if (event.isShiftDown() && event.isControlDown()) {
                         userInputComplete(globalInputTable().values());
-                    }
-
-                    else
-                    
-                    if (event.isShiftDown()) {
+                    } else if (event.isShiftDown()) {
                         GeometryGraph.count = 0;
                         userInputComplete(globalInputTable().values());
                         GeometryGraph.count = 0;
-                    }
-                    else {
-
-                        if (handler_ instanceof UI_ACTION_SELECTED) {
-                            UI_ACTION_SELECTED actionSelected = (UI_ACTION_SELECTED) handler_;
-                            RpModelActionAgent action = (RpModelActionAgent) actionSelected.getAction();
-                            action.setPhaseSpace((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom());
-                            DragPlotAgent.instance().setPhaseSpace((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom());
-                        }
+                    } else {
 
                         DragPlotAgent.instance().execute();
-                        
+
                     }
                 }
 
@@ -220,18 +211,15 @@ public class UIController extends ComponentUI {
         public MouseController() {
         }
 
-
-       
-
         @Override
         public void mousePressed(MouseEvent event) {
             RPnUIFrame.clearStatusMessage();
             RPnUIFrame.disableSliders();
 
             if (event.getComponent() instanceof RPnPhaseSpacePanel) {
-                
+
                 RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
-                
+
                 RPnPhaseSpaceAbstraction.namePhaseSpace = ((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom()).getName();   //** acrescentei isso (Leandro)
                 panel.setName(RPnPhaseSpaceAbstraction.namePhaseSpace);
 
@@ -266,16 +254,8 @@ public class UIController extends ComponentUI {
             if (event.getSource() instanceof RPnPhaseSpacePanel) {
                 toggleCursorLines();
                 RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
-
-                //RPnPhaseSpaceAbstraction.namePhaseSpace = ((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom()).getName();   //** acrescentei isso (Leandro)
-                //panel.setName(RPnPhaseSpaceAbstraction.namePhaseSpace);
-
                 if (handler_ instanceof UI_ACTION_SELECTED) {
-                    UI_ACTION_SELECTED actionSelected = (UI_ACTION_SELECTED) handler_;
-                    RpModelActionAgent action = (RpModelActionAgent) actionSelected.getAction();
-                    action.setPhaseSpace((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom());
-                    DragPlotAgent.instance().setPhaseSpace((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom());
-
+                    activePhaseSpace_ = (RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom();
                 }
 
             }
@@ -300,7 +280,7 @@ public class UIController extends ComponentUI {
 
     /** Returns a table with all the points entered by the user. The application holds a table with all points entered by the user. This points are taked by mouse clicks in all panels .*/
     public rpn.controller.ui.UserInputTable globalInputTable() {
-        return globalInputTable_;
+        return activePhaseSpace_.getUserInputTable();
     }
 
     //
@@ -487,6 +467,11 @@ public class UIController extends ComponentUI {
         return netStatus_;
     }
 
+    public RPnPhaseSpaceAbstraction getActivePhaseSpace() {
+        return activePhaseSpace_;
+    }
+    
+
     /**
      * @deprecated
      *
@@ -508,13 +493,8 @@ public class UIController extends ComponentUI {
     public void setStateController(StateInputController stateController) {
         stateController_ = stateController;
     }
-    
-    public Iterator <RPnPhaseSpacePanel> getInstalledPanelsIterator(){
+
+    public Iterator<RPnPhaseSpacePanel> getInstalledPanelsIterator() {
         return installedPanels_.iterator();
     }
-    
-    
-    
-    
-    
 }

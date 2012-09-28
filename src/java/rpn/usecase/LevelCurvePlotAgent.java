@@ -8,6 +8,7 @@ package rpn.usecase;
 import java.util.ArrayList;
 import javax.swing.JToggleButton;
 import rpn.component.*;
+import rpn.controller.ui.UIController;
 import rpnumerics.RPNUMERICS;
 import wave.util.RealVector;
 
@@ -51,7 +52,7 @@ public class LevelCurvePlotAgent extends RpModelPlotAgent {
         for (Double levelValue : levelValues) {
             LevelCurveGeomFactory factory = new LevelCurveGeomFactory(RPNUMERICS.createLevelCurveCalc(levelValue));
 //            RPnDataModule.PHASESPACE.join(factory.geom());
-        phaseSpace_.join(factory.geom());
+        UIController.instance().getActivePhaseSpace().join(factory.geom());
         }
 
     }
