@@ -30,7 +30,7 @@ public class RarefactionOrbitGeomFactory extends WaveCurveOrbitGeomFactory {
     // Methods
     //
     @Override
-    protected RpGeometry createGeomFromSource() {
+    public RpGeometry createGeomFromSource() {
 
         RarefactionOrbit orbit = (RarefactionOrbit) geomSource();
 

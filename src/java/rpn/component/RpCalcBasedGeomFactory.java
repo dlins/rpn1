@@ -105,7 +105,7 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
     //
     // Methods
     //
-    protected abstract RpGeometry createGeomFromSource();
+    public abstract RpGeometry createGeomFromSource();
 
     public void updateGeom() {
         try {

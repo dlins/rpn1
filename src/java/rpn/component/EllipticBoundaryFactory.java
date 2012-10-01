@@ -20,7 +20,7 @@ public class EllipticBoundaryFactory extends RpCalcBasedGeomFactory {
     // Methods
     //
 
-    protected RpGeometry createGeomFromSource() {
+    public RpGeometry createGeomFromSource() {
 
         EllipticBoundary curve = (EllipticBoundary) geomSource();
 
