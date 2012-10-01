@@ -5,13 +5,9 @@
  */
 package rpn.component;
 
-import wave.multid.model.*;
 import wave.multid.view.*;
 import wave.multid.DimMismatchEx;
-import java.awt.Graphics2D;
 import java.util.Iterator;
-import java.util.ArrayList;
-import java.util.List;
 
 public class EllipticBoundaryView extends GeomObjView {
     //

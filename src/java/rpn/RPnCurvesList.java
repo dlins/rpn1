@@ -247,7 +247,7 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
 
                 while (phaseSpacePanelIterator.hasNext()) {
                     RPnPhaseSpacePanel rPnPhaseSpacePanel = phaseSpacePanelIterator.next();
-                    rPnPhaseSpacePanel.getCastedUI().getSelectionAreas().clear();
+                    rPnPhaseSpacePanel.clearAreaSelection();
                     rPnPhaseSpacePanel.repaint();
 
                 }

@@ -106,6 +106,7 @@ public class RiemannProfileAgent extends RpModelPlotAgent implements Observer {
 
                     List<Polygon> finalSelectedAreas = processIntersectionAreas(intersectionAreas);
 
+                    System.out.println("Areas processadas: "+finalSelectedAreas.size());
                     for (Polygon polygon : finalSelectedAreas) {
                         RealVector resolution = new RealVector(2);
                         Area selectedArea = new Area(resolution, polygon, phasSpacePanel.scene().getViewingTransform());
