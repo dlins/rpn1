@@ -89,27 +89,31 @@ public class RiemannProfileAgent extends RpModelPlotAgent implements Observer {
 
         while (panelsIterator.hasNext()) {
 
-            RPnPhaseSpacePanel phasSpacePanel = panelsIterator.next();
+            RPnPhaseSpacePanel phaseSpacePanel = panelsIterator.next();
             List<List<Polygon>> intersectionAreas = new ArrayList();
 
-            Iterator<GeomObjView> geomObjViewIterator = phasSpacePanel.scene().geometries();
+            Iterator<GeomObjView> geomObjViewIterator = phaseSpacePanel.scene().geometries();
 
             while (geomObjViewIterator.hasNext()) {
                 GeomObjView geomObjView = geomObjViewIterator.next();
 
                 if (selectedCurves.contains((RpGeometry) geomObjView.getAbstractGeom())) {
-                    List<Polygon> polygonList = phasSpacePanel.intersectedArea(geomObjView);
+                    List<Polygon> polygonList = phaseSpacePanel.intersectedArea(geomObjView);
+                    System.out.println(geomObjView + "intercepta" + polygonList.size());
                     intersectionAreas.add(polygonList);
                 }
-
+                
                 if (intersectionAreas.size() == 2) {
 
-                    List<Polygon> finalSelectedAreas = processIntersectionAreas(intersectionAreas);
+                    
+//                    List<Polygon> finalSelectedAreas = processIntersectionAreas(intersectionAreas);
+                    
+                    List<Polygon> finalSelectedAreas = intersectionAreas.get(0);
 
                     System.out.println("Areas processadas: "+finalSelectedAreas.size());
                     for (Polygon polygon : finalSelectedAreas) {
                         RealVector resolution = new RealVector(2);
-                        Area selectedArea = new Area(resolution, polygon, phasSpacePanel.scene().getViewingTransform());
+                        Area selectedArea = new Area(resolution, polygon, phaseSpacePanel.scene().getViewingTransform());
                         RiemannProfileCalc rc = new RiemannProfileCalc(selectedArea, waveCurveForward_, waveCurveBackward_);
                         RiemannProfileGeomFactory riemannProfileGeomFactory = new RiemannProfileGeomFactory(rc);
 
@@ -135,8 +139,9 @@ public class RiemannProfileAgent extends RpModelPlotAgent implements Observer {
                 }
 
             }
-
+            phaseSpacePanel.clearAreaSelection();
         }
+        
     }
 
     private RealVector createProfileMaxLimit(RiemannProfile riemannProfile) {
