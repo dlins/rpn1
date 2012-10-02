@@ -86,7 +86,7 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
 
     @Override
     public RpSolution recalc(Area area) throws RpException {
-
+        System.out.println("recalc area");
         HugoniotCurve result;
         result = (HugoniotCurve) calc(((HugoniotParams) getParams()).getXZero(), (int) area.getResolution().getElement(0), (int) area.getResolution().getElement(1), area.getTopRight(), area.getDownLeft());
 

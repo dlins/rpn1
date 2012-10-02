@@ -36,6 +36,13 @@ public class Area {
 
         topRight_ = new RealVector(topRightArray);
         downLeft_ = new RealVector(downLeftArray);
+        
+        System.out.println("topRight: "+topRight_);
+        System.out.println("downLeft: "+downLeft_);
+        
+        
+        
+        
         resolution_ = resolution;
     }
 
