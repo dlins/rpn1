@@ -25,7 +25,28 @@ public class Area {
     private RealVector downLeft_;
     private RealVector resolution_;
 
-    public Area(RealVector resolution,Polygon dcPolygon, ViewingTransform viewingTransform) {
+    public Area(RealVector resolution, java.awt.geom.Area wcPolygon) {
+
+        Rectangle wcPolygonBox = wcPolygon.getBounds();
+
+
+        double[] topRightArray = {wcPolygonBox.getX() + wcPolygonBox.getWidth(), wcPolygonBox.getY()};
+        double[] downLeftArray = {wcPolygonBox.getX(), wcPolygonBox.getY()+  wcPolygonBox.getHeight()};
+
+
+        topRight_ = new RealVector(topRightArray);
+        downLeft_ = new RealVector(downLeftArray);
+        
+        System.out.println("topRight: "+topRight_);
+        System.out.println("downLeft: "+downLeft_);
+        
+        
+        
+        
+        resolution_ = resolution;
+    }
+
+    public Area(RealVector resolution, Polygon dcPolygon, ViewingTransform viewingTransform) {
 
         Rectangle dcPolygonBox = dcPolygon.getBounds();
 
@@ -37,10 +58,10 @@ public class Area {
 
         viewingTransform.dcInverseTransform(topRightDCoords, topRightWCCoords);
         viewingTransform.dcInverseTransform(downLeftDCoords, downLeftWCCoords);
-        
-        topRight_=new RealVector(topRightWCCoords.getCoords());
-        downLeft_=new RealVector(downLeftWCCoords.getCoords());
-        resolution_=resolution;
+
+        topRight_ = new RealVector(topRightWCCoords.getCoords());
+        downLeft_ = new RealVector(downLeftWCCoords.getCoords());
+        resolution_ = resolution;
     }
 
     public Area(RealVector resolution, RealVector topRight, RealVector downLeft) {

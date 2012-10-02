@@ -99,30 +99,13 @@ public class RiemannProfileAgent extends RpModelPlotAgent implements Observer {
 
                 if (selectedCurves.contains((RpGeometry) geomObjView.getAbstractGeom())) {
                     List<Polygon> polygonList = phaseSpacePanel.intersectedArea(geomObjView);
-                    System.out.println(geomObjView + "intercepta" + polygonList.size());
                     intersectionAreas.add(polygonList);
                 }
 
-
-
-               
-
-//
-//
-//                for (Polygon polygon : finalSelectedAreas) {
-//                    
-//                    System.out.println("Poligono: "+polygon);
-//                    
-//                }
-
-
                 if (intersectionAreas.size() == 2) {
 
-
-//                    List<Polygon> finalSelectedAreas = intersectionAreas.get(0);
                      List<Polygon> finalSelectedAreas = processIntersectionAreas(intersectionAreas);
 
-                    System.out.println("Areas processadas: " + finalSelectedAreas.size());
                     for (Polygon polygon : finalSelectedAreas) {
                         RealVector resolution = new RealVector(2);
                         Area selectedArea = new Area(resolution, polygon, phaseSpacePanel.scene().getViewingTransform());
