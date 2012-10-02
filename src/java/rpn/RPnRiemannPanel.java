@@ -18,7 +18,7 @@ import java.awt.Polygon;
 import java.awt.Shape;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.awt.geom.Rectangle2D;
+import rpn.component.util.GraphicsUtil;
 
 public class RPnRiemannPanel extends RPnPhaseSpacePanel implements Printable {
     //
@@ -95,16 +95,16 @@ public class RPnRiemannPanel extends RPnPhaseSpacePanel implements Printable {
         @Override
         public void mousePressed(MouseEvent me) {
 
-            RPnRiemannPanel source = (RPnRiemannPanel) me.getSource();
-            if (addRectangle_ == false) {
-
-                cursorPos_ = new Point(me.getX(), me.getY());
-                source.repaint();
-                addRectangle_ = true;
-            } else {
-                addRectangle_ = false;
-                source.getCastedUI().getSelectionAreas().add(tempRectangle);
-            }
+//            RPnRiemannPanel source = (RPnRiemannPanel) me.getSource();
+//            if (addRectangle_ == false) {
+//
+//                cursorPos_ = new Point(me.getX(), me.getY());
+//                source.repaint();
+//                addRectangle_ = true;
+//            } else {
+//                addRectangle_ = false;
+//                source.getCastedUI().getSelectionAreas().add(tempRectangle);
+//            }
 
         }
 
@@ -181,23 +181,23 @@ public class RPnRiemannPanel extends RPnPhaseSpacePanel implements Printable {
         
         
 
-        for (Polygon rectangle : getCastedUI().getSelectionAreas()) {
+        for (GraphicsUtil graphicsUtil : graphicsUtilList_) {
 
-            g.drawPolygon(rectangle);
+            graphicsUtil.draw(gra);
 
         }
 
 
         
-        /*
-         * TEMP SELECTED AREA
-         */
-        
-        if(addRectangle_ && tempRectangle!=null)
-            
-            g.drawPolygon(tempRectangle);
-//        g.drawRect((int) tempRectangle.getX(), (int) tempRectangle.getY(), (int) tempRectangle.width, (int) tempRectangle.height);
-        
+//        /*
+//         * TEMP SELECTED AREA
+//         */
+//        
+//        if(addRectangle_ && tempRectangle!=null)
+//            
+//            g.drawPolygon(tempRectangle);
+////        g.drawRect((int) tempRectangle.getX(), (int) tempRectangle.getY(), (int) tempRectangle.width, (int) tempRectangle.height);
+//        
         
         
 

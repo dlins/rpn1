@@ -59,7 +59,8 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
         frame_ = new JFrame(title);
 
         phaseSpace_ = phaseSpace;
-
+        
+        selectedGeometries_=new ArrayList();
 
         frame_.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
@@ -247,10 +248,11 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
 
                 while (phaseSpacePanelIterator.hasNext()) {
                     RPnPhaseSpacePanel rPnPhaseSpacePanel = phaseSpacePanelIterator.next();
-                    rPnPhaseSpacePanel.getCastedUI().getSelectionAreas().clear();
+                    rPnPhaseSpacePanel.clearAreaSelection();
                     rPnPhaseSpacePanel.repaint();
 
                 }
+
 
             }
 
