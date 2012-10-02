@@ -9,7 +9,7 @@ package rpnumerics;
 import java.util.List;
 import wave.util.RealVector;
 
-public class IntegralCurve extends WaveCurveOrbit implements RpSolution {
+public class IntegralCurve extends FundamentalCurve implements RpSolution {
 
     //
     // Constructor

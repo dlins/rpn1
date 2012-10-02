@@ -6,7 +6,7 @@
  */
 package rpnumerics;
 
-public class RarefactionOrbit extends WaveCurveOrbit implements RpSolution {
+public class RarefactionOrbit extends FundamentalCurve implements RpSolution {
     //
     // Constructor
     //

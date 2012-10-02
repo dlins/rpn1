@@ -23,7 +23,7 @@ import wave.util.RealVector;
 import rpn.controller.ui.VELOCITYAGENT_CONFIG;
 import rpn.parser.RPnDataModule;
 import rpnumerics.WaveCurve;
-import rpnumerics.WaveCurveOrbit;
+import rpnumerics.FundamentalCurve;
 
 /**
  *
@@ -124,7 +124,7 @@ public class VelocityAgent extends RpModelPlotAgent {
                 ArrayList<OrbitPoint> result = new ArrayList<OrbitPoint>();
 
                 for (int i = 0; i < tam; i++) {
-                    WaveCurveOrbit orbit = (WaveCurveOrbit) ((WaveCurve) curve).getBranchsList().get(i);
+                    FundamentalCurve orbit = (FundamentalCurve) ((WaveCurve) curve).getBranchsList().get(i);
                     OrbitPoint[] parcial = orbit.getPoints();
                     for (int j = 0; j < parcial.length; j++) {
                         result.add(parcial[j]);

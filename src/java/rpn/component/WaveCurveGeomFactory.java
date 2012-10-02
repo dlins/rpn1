@@ -15,7 +15,7 @@ import rpnumerics.ShockCurve;
 import rpnumerics.WaveCurve;
 import rpnumerics.WaveCurveBranch;
 import rpnumerics.WaveCurveCalc;
-import rpnumerics.WaveCurveOrbit;
+import rpnumerics.FundamentalCurve;
 import wave.multid.view.ViewingAttr;
 import wave.util.RealSegment;
 
@@ -61,7 +61,7 @@ public class WaveCurveGeomFactory extends WaveCurveOrbitGeomFactory {
             WaveCurveGeom wcGeomComposite = new WaveCurveGeom(MultidAdapter.converseRealSegmentsToCoordsArray(segList), this);
 
             for (WaveCurveBranch waveCurveBranch : branch.getBranchsList()) {
-                wcGeomComposite.add(createOrbits((WaveCurveOrbit) waveCurveBranch));
+                wcGeomComposite.add(createOrbits((FundamentalCurve) waveCurveBranch));
             }
 
             wcGeom.add(wcGeomComposite);
@@ -72,7 +72,7 @@ public class WaveCurveGeomFactory extends WaveCurveOrbitGeomFactory {
 
     }
 
-    private WaveCurveOrbitGeom createOrbits(WaveCurveOrbit branch) {
+    private WaveCurveOrbitGeom createOrbits(FundamentalCurve branch) {
 
         System.out.println(branch.getClass().getCanonicalName());
 
