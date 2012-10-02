@@ -196,51 +196,16 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
 
             RpGeometry geom = (RpGeometry) geomList.next();
 
-                if (GeometryGraphND.onCurve == 1) {
+            if (GeometryGraphND.onCurve == 1) {
 
-                    if ((namePhaseSpace.equals("Phase Space")  &&  geom != RPnDataModule.PHASESPACE.getLastGeometry())
-                            || (namePhaseSpace.equals("RightPhase Space")  &&  geom != RPnDataModule.RIGHTPHASESPACE.getLastGeometry())
-                            || (namePhaseSpace.equals("LeftPhase Space")  &&  geom != RPnDataModule.LEFTPHASESPACE.getLastGeometry())) {
+                if ((namePhaseSpace.equals("Phase Space") && geom != RPnDataModule.PHASESPACE.getLastGeometry())
+                        || (namePhaseSpace.equals("RightPhase Space") && geom != RPnDataModule.RIGHTPHASESPACE.getLastGeometry())
+                        || (namePhaseSpace.equals("LeftPhase Space") && geom != RPnDataModule.LEFTPHASESPACE.getLastGeometry())) {
 
-                        if (geom.viewingAttr().isVisible()  &&  !(geom instanceof StationaryPointGeom)) {
-
-                            RpGeomFactory factory = geom.geomFactory();
-                            RPnCurve curve = (RPnCurve) factory.geomSource();
-
-                            curve.findClosestSegment(targetPoint);
-
-                            distancia = curve.distancia;
-
-                            if (distminCurve >= distancia) {
-                                distminCurve = distancia;
-                                closestCurve = k;
-                                closestGeometry_ = geom;
-                            }
-
-                        }
-                    }
-
-                }
-
-                if (GeometryGraphND.onCurve == 0) {
-
-                    if (geom.viewingAttr().isVisible()  &&  !(geom instanceof StationaryPointGeom)  &&  !(geom instanceof PoincareSectionGeom)) {
+                    if (geom.viewingAttr().isVisible() && !(geom instanceof StationaryPointGeom)) {
 
                         RpGeomFactory factory = geom.geomFactory();
                         RPnCurve curve = (RPnCurve) factory.geomSource();
-
-                        // -----------------------------------
-                        if (curve instanceof SegmentedCurve) {
-                            RpCalcBasedGeomFactory geomFactory = (RpCalcBasedGeomFactory) factory;
-                            RpCalculation calc = geomFactory.rpCalc();
-                            ContourCurveCalc curveCalc = (ContourCurveCalc) calc;
-                            listResolution.add(curveCalc.getParams().getResolution());
-                        }
-                        else {
-                            listResolution.add(new int[]{0,0});
-
-                        }
-                        // ---------------------------------------------------------------
 
                         curve.findClosestSegment(targetPoint);
 
@@ -253,14 +218,47 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
                         }
 
                     }
-
-                    // ----------------------------------- Evita erro quando no PhaseDiagram
-                    else {
-                        listResolution.add(new int[]{0,0});
-                    }
-                    // -----------------------------------
-
                 }
+
+            }
+
+            if (GeometryGraphND.onCurve == 0) {
+
+                //if (geom.viewingAttr().isVisible()  &&  !(geom instanceof StationaryPointGeom)  &&  !(geom instanceof PoincareSectionGeom)) {
+                if (geom.viewingAttr().isSelected() && !(geom instanceof StationaryPointGeom) && !(geom instanceof PoincareSectionGeom)) {
+
+                    RpGeomFactory factory = geom.geomFactory();
+                    RPnCurve curve = (RPnCurve) factory.geomSource();
+
+                    // -----------------------------------
+                    if (curve instanceof SegmentedCurve) {
+                        RpCalcBasedGeomFactory geomFactory = (RpCalcBasedGeomFactory) factory;
+                        RpCalculation calc = geomFactory.rpCalc();
+                        ContourCurveCalc curveCalc = (ContourCurveCalc) calc;
+                        listResolution.add(curveCalc.getParams().getResolution());
+                    } else {
+                        listResolution.add(new int[]{0, 0});
+
+                    }
+                    // ---------------------------------------------------------------
+
+                    curve.findClosestSegment(targetPoint);
+
+                    distancia = curve.distancia;
+
+                    if (distminCurve >= distancia) {
+                        distminCurve = distancia;
+                        closestCurve = k;
+                        closestGeometry_ = geom;
+                    }
+
+                } // ----------------------------------- Evita erro quando no PhaseDiagram
+                else {
+                    listResolution.add(new int[]{0, 0});
+                }
+                // -----------------------------------
+
+            }
 
             k++;
 
@@ -368,11 +366,8 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
                 if (geometry instanceof SegmentedCurveGeom) {
 
                     SegmentedCurveGeom segGeom = (SegmentedCurveGeom) geometry;
-//<<<<<<< HEAD
-                    segGeom.getRealSegIterator();
-//=======
-                    //segGeom.viewingAttr().setSelected(false);
-//>>>>>>> ba4a09ab959488672db3325bfe4c6af1c20e157f
+                    //segGeom.getRealSegIterator();
+                    segGeom.viewingAttr().setSelected(false);
                     segGeom.lowLight();
 
 

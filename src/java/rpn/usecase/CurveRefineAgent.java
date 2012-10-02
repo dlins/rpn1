@@ -18,8 +18,6 @@ import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -28,7 +26,6 @@ import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpacePanel;
 import rpn.component.RpCalcBasedGeomFactory;
 import rpn.component.RpGeometry;
-import rpn.component.SegmentedCurveGeom;
 import rpnumerics.Area;
 import wave.multid.view.GeomObjView;
 import wave.util.RealVector;
@@ -117,9 +114,7 @@ public class CurveRefineAgent extends RpModelConfigChangeAgent  {
 
         }
 
-        System.out.println("areasToRefine.size() ::::::::::::: " +areasToRefine.size());
-        System.out.println("indexToRemove.size() ::::::::::::: " +indexToRemove.size());
-
+        
         RpCalcBasedGeomFactory factory = (RpCalcBasedGeomFactory) selectedGeometry.geomFactory();
 
         factory.updateGeom(areasToRefine, indexToRemove);

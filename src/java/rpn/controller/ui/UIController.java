@@ -186,16 +186,8 @@ public class UIController extends ComponentUI {
                     resetPanelsCursorCoords();
 
 
-                    if (event.isShiftDown() && event.isControlDown()) {
-                        userInputComplete(globalInputTable().values());
-                    }
-
-                    else
-                    
                     if (event.isShiftDown()) {
-                        GeometryGraph.count = 0;
                         userInputComplete(globalInputTable().values());
-                        GeometryGraph.count = 0;
                     }
                     else {
 

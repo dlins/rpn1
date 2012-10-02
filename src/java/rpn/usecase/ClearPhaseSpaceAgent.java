@@ -6,6 +6,7 @@
 package rpn.usecase;
 
 import java.awt.event.ActionEvent;
+import rpn.RPnPhaseSpaceAbstraction;
 import rpn.component.util.GeometryGraphND;
 import rpn.controller.ui.*;
 import rpn.message.RPnActionMediator;
@@ -35,7 +36,15 @@ public class ClearPhaseSpaceAgent extends javax.swing.AbstractAction {
         UIController.instance().panelsBufferClear();
         rpn.parser.RPnDataModule.PHASESPACE.clear();
 
-        GeometryGraphND.clearAll();
+        //GeometryGraphND.clearAll();
+        //
+        RPnVelocityPlotter.instance().clearVelocities();
+        RPnStringPlotter.instance().clearClassifiers();
+        ClassifierAgent.indCurvaCla.clear();
+        VelocityAgent.indCurvaVel.clear();
+        RPnPhaseSpaceAbstraction.listResolution.clear();
+        RPnVelocityPlotter.listaEquil.clear();
+        //
         
 
         // ClearScene is not undoable

@@ -34,7 +34,6 @@ public class AdjustedSelectionPlotAgent extends RpModelPlotAgent implements Obse
     @Override
     public void actionPerformed(ActionEvent event) {
 
-
         UIController.instance().setState(new AREASELECTION_CONFIG());
         Iterator<RPnPhaseSpacePanel> iterator = UIController.instance().getInstalledPanelsIterator();
 

@@ -7,9 +7,11 @@ package rpn.usecase;
 
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import javax.swing.JToggleButton;
 import rpn.RPnPhaseSpaceAbstraction;
+import rpn.RPnPhaseSpacePanel;
 import rpn.component.RpGeometry;
 import rpn.component.util.GeometryGraph;
 import rpn.component.util.GeometryGraphND;
@@ -21,13 +23,15 @@ import rpnumerics.RPnCurve;
 import rpnumerics.SegmentedCurve;
 import wave.util.RealVector;
 import rpn.controller.ui.CLASSIFIERAGENT_CONFIG;
+import rpn.controller.ui.RPnSelectionPlotter;
+import rpn.controller.ui.RPnStringPlotter;
 import rpnumerics.BifurcationCurve;
 
 /**
  *
  * @author moreira
  */
-public class ClassifierAgent extends RpModelPlotAgent {
+public class ClassifierAgent extends RpModelPlotAgent {         // IMPORTANTE: FAZENDO TESTES PARA A NOVA ESTRUTURA DE PLOTAGEM  --- 26 SETEMBRO 2012
 
     static public final String DESC_TEXT = "Classify";
     static private ClassifierAgent instance_ = null;
@@ -70,7 +74,18 @@ public class ClassifierAgent extends RpModelPlotAgent {
     @Override
     public void actionPerformed(ActionEvent event) {
 
+        //////UIController.instance().setState(new CLASSIFIERAGENT_CONFIG());
+
         UIController.instance().setState(new CLASSIFIERAGENT_CONFIG());
+
+        Iterator<RPnPhaseSpacePanel> iterator = UIController.instance().getInstalledPanelsIterator();
+
+        while (iterator.hasNext()) {
+            RPnPhaseSpacePanel panel = iterator.next();
+            RPnStringPlotter stringPlotter = new RPnStringPlotter();
+            panel.addMouseListener(stringPlotter);
+            panel.addMouseMotionListener(stringPlotter);
+        }
 
     }
 
@@ -90,62 +105,62 @@ public class ClassifierAgent extends RpModelPlotAgent {
     @Override
     public void execute() {
 
-        VelocityAgent.listaEquil.clear();
-
-        UserInputTable userInputList = UIController.instance().globalInputTable();
-        RealVector newValue = userInputList.values();
-
-        RpGeometry geom = phaseSpace_.findClosestGeometry(newValue);
-        RPnCurve curve = (RPnCurve)(geom.geomFactory().geomSource());
-
-        if ((GeometryGraph.count % 2) == 0) {
-
-            GeometryGraphND.pMarca = curve.findClosestPoint(newValue);
-
-            if (curve instanceof BifurcationCurve) {
-                int i = curve.findClosestSegment(newValue);
-                GeometryGraphND.pMarcaDC = ((BifurcationCurve)curve).secondPointDC(i);
-            }
-            else GeometryGraphND.pMarcaDC = GeometryGraphND.pMarca;
-
-        }
-
-        else if ((GeometryGraph.count % 2) == 1) {
-            for (int i = 0; i < newValue.getSize(); i++) {
-                GeometryGraphND.cornerStr.setElement(i, newValue.getElement(i));
-                GeometryGraphND.cornerRet.setElement(i, 0);
-            }
-
-            //*** Botao CLASSIFY para HUGONIOT CURVE
-            if (curve instanceof HugoniotCurve) {
-
-                HugoniotSegment segment = (HugoniotSegment)(((SegmentedCurve)curve).segments()).get(curve.findClosestSegment(GeometryGraphND.pMarca));
-                tipo.add(segment.getType());
-
-                xStr.add(GeometryGraphND.cornerStr.getElement(1));
-                yStr.add(GeometryGraphND.cornerStr.getElement(0));
-
-                //--------------------------------------------------------------
-                if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("Phase Space"))
-                    strView.add(1);
-                if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("RightPhase Space"))
-                    strView.add(2);
-                if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("LeftPhase Space"))
-                    strView.add(3);
-                //--------------------------------------------------------------
-
-                xSeta.add(GeometryGraphND.pMarca.getElement(1));
-                ySeta.add(GeometryGraphND.pMarca.getElement(0));
-
-                indCurvaCla.add(RPnPhaseSpaceAbstraction.closestCurve);
-
-                GeometryGraph.count++;
-                return;
-
-            } //***
-
-        }
-        GeometryGraph.count++;
+//        VelocityAgent.listaEquil.clear();
+//
+//        UserInputTable userInputList = UIController.instance().globalInputTable();
+//        RealVector newValue = userInputList.values();
+//
+//        RpGeometry geom = phaseSpace_.findClosestGeometry(newValue);
+//        RPnCurve curve = (RPnCurve)(geom.geomFactory().geomSource());
+//
+//        if ((GeometryGraph.count % 2) == 0) {
+//
+//            GeometryGraphND.pMarca = curve.findClosestPoint(newValue);
+//
+//            if (curve instanceof BifurcationCurve) {
+//                int i = curve.findClosestSegment(newValue);
+//                GeometryGraphND.pMarcaDC = ((BifurcationCurve)curve).secondPointDC(i);
+//            }
+//            else GeometryGraphND.pMarcaDC = GeometryGraphND.pMarca;
+//
+//        }
+//
+//        else if ((GeometryGraph.count % 2) == 1) {
+//            for (int i = 0; i < newValue.getSize(); i++) {
+//                GeometryGraphND.cornerStr.setElement(i, newValue.getElement(i));
+//                GeometryGraphND.cornerRet.setElement(i, 0);
+//            }
+//
+//            //*** Botao CLASSIFY para HUGONIOT CURVE
+//            if (curve instanceof HugoniotCurve) {
+//
+//                HugoniotSegment segment = (HugoniotSegment)(((SegmentedCurve)curve).segments()).get(curve.findClosestSegment(GeometryGraphND.pMarca));
+//                tipo.add(segment.getType());
+//
+//                xStr.add(GeometryGraphND.cornerStr.getElement(1));
+//                yStr.add(GeometryGraphND.cornerStr.getElement(0));
+//
+//                //--------------------------------------------------------------
+//                if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("Phase Space"))
+//                    strView.add(1);
+//                if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("RightPhase Space"))
+//                    strView.add(2);
+//                if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("LeftPhase Space"))
+//                    strView.add(3);
+//                //--------------------------------------------------------------
+//
+//                xSeta.add(GeometryGraphND.pMarca.getElement(1));
+//                ySeta.add(GeometryGraphND.pMarca.getElement(0));
+//
+//                indCurvaCla.add(RPnPhaseSpaceAbstraction.closestCurve);
+//
+//                GeometryGraph.count++;
+//                return;
+//
+//            } //***
+//
+//        }
+//        GeometryGraph.count++;
     }
 
     @Override

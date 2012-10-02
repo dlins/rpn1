@@ -23,10 +23,14 @@ import java.awt.image.BufferedImage;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Polygon;
 import javax.swing.JPanel;
 import java.awt.Shape;
 import java.awt.geom.Area;
+import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -41,6 +45,8 @@ import rpn.controller.ui.AREASELECTION_CONFIG;
 import rpn.controller.ui.CLASSIFIERAGENT_CONFIG;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.VELOCITYAGENT_CONFIG;
+import wave.multid.Coords2D;
+import wave.multid.CoordsArray;
 
 public class RPnPhaseSpacePanel extends JPanel implements Printable {
     //
@@ -168,6 +174,10 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         ((Graphics2D) g).setStroke(newStroke);
         Color prev = g.getColor();
 
+        Font font = new Font("Verdana", Font.PLAIN, 13);
+        g.setFont(font);
+        FontMetrics metrics = new FontMetrics(font) {};
+
         /*
          * BOUNDARY WINDOW
          */
@@ -200,14 +210,51 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         /*
          * SELECTED AREAS
          */
-
-       
         
         for (Polygon polygon : getCastedUI().getSelectionAreas()) {
             g.setColor(Color.red);
             g.drawPolygon(polygon);
             
         }
+
+
+        
+        for (int i = 0; i < getCastedUI().getStringArrows().size(); i++) {
+            Line2D.Double line = getCastedUI().getStringArrows().get(i);
+            String str = getCastedUI().getTypeString().get(i);
+
+            Rectangle2D bounds = metrics.getStringBounds(str, null);
+            int tamPix = (int) bounds.getWidth();
+
+            g.setColor(Color.white);
+
+            g.drawLine((int)line.x1, (int)line.y1, (int)line.x2, (int)line.y2);
+
+            if (line.x1<line.x2)
+                g.drawString(str, (int)(line.x2 + 5), (int)(line.y2 +5));
+            else
+                g.drawString(str, (int)(line.x2 - (tamPix+2)), (int)(line.y2 +5));
+        }
+
+
+
+        for (int i = 0; i < getCastedUI().getVelocityArrows().size(); i++) {
+            Line2D.Double line = getCastedUI().getVelocityArrows().get(i);
+            String str = getCastedUI().getVelocityString().get(i);
+
+            Rectangle2D bounds = metrics.getStringBounds(str, null);
+            int tamPix = (int) bounds.getWidth();
+
+            g.setColor(Color.white);
+            g.drawLine((int)line.x1, (int)line.y1, (int)line.x2, (int)line.y2);
+
+            if (line.x1<line.x2)
+                g.drawString(str, (int)(line.x2 + 5), (int)(line.y2 +5));
+            else
+                g.drawString(str, (int)(line.x2 - (tamPix+2)), (int)(line.y2 +5));
+        }
+
+
         
         g.setColor(DEFAULT_POINTMARK_COLOR);
 
@@ -225,11 +272,11 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
 
 
         if ((scene().getAbstractGeom()).getSpace().getDim() == 2) {
-            
+
             GeometryGraph geom = new GeometryGraph();
             geom.markPoints(scene());
             geom.paintComponent(g, scene(), this);
-            
+
         }
 
 //        if (RPNUMERICS.domainDim() == 3) {

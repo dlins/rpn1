@@ -25,6 +25,7 @@ import rpn.usecase.ClassifierAgent;
 import rpn.component.util.GeometryGraphND;
 import rpn.usecase.VelocityAgent;
 import rpn.controller.ui.*;
+import rpn.controller.ui.UI_ACTION_SELECTED;
 import rpn.message.*;
 import wave.multid.Space;
 import wave.util.RealVector;
@@ -209,12 +210,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 toolBar_.add(PhysicalBoundaryPlotAgent.instance().getContainer());
                 toolBar_.add(TrackPointAgent.instance().getContainer());
 
-                toolBar_.add(AreaSelectionAgent.instance().getContainer());     //** Edson/Leandro
                 toolBar_.add(AdjustedSelectionPlotAgent.instance());
-                toolBar_.add(ClassifierAgent.instance().getContainer());      //** Leandro
-                toolBar_.add(VelocityAgent.instance().getContainer());        //** Leandro
-
-
+                
                 toolBar_.add(RarefactionExtensionCurvePlotAgent.instance().getContainer());
                 toolBar_.add(RiemannProfileAgent.instance().getContainer());
 
@@ -887,7 +884,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 new java.awt.event.ActionListener() {
 
                     public void actionPerformed(ActionEvent e) {
-                        GeometryGraphND.clearAllStrings();
+                        //GeometryGraphND.clearAllStrings();
+                        RPnVelocityPlotter.instance().clearVelocities();
+                        RPnStringPlotter.instance().clearClassifiers();
                     }
                 });
 
@@ -895,7 +894,12 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 new java.awt.event.ActionListener() {
 
                     public void actionPerformed(ActionEvent e) {
-                        GeometryGraphND.clearLastString();
+                        //GeometryGraphND.clearLastString();
+
+                        if(UIController.instance().getState() instanceof CLASSIFIERAGENT_CONFIG)
+                            RPnStringPlotter.instance().clearLastString();
+                        if (UIController.instance().getState() instanceof VELOCITYAGENT_CONFIG)
+                            RPnVelocityPlotter.instance().clearLastString();
                     }
                 });
 
@@ -903,7 +907,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 new java.awt.event.ActionListener() {
 
                     public void actionPerformed(ActionEvent e) {
-                        VelocityAgent.clearVelocities();
+                        //VelocityAgent.clearVelocities();
+                        RPnVelocityPlotter.instance().clearVelocities();
                     }
                 });
 
@@ -911,7 +916,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 new java.awt.event.ActionListener() {
 
                     public void actionPerformed(ActionEvent e) {
-                        ClassifierAgent.clearClassifiers();
+                        //ClassifierAgent.clearClassifiers();
+                        RPnStringPlotter.instance().clearClassifiers();
                     }
                 });
 
