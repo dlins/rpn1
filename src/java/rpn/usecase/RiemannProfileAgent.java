@@ -105,11 +105,11 @@ public class RiemannProfileAgent extends RpModelPlotAgent implements Observer {
 
                 if (intersectionAreas.size() == 2) {
 
-                     List<GraphicsUtil> finalSelectedAreas = processIntersectionAreas(intersectionAreas);
+                    List<GraphicsUtil> finalSelectedAreas = processIntersectionAreas(intersectionAreas);
 
                     for (GraphicsUtil graphicsUtil : finalSelectedAreas) {
                         RealVector resolution = new RealVector(2);
-                        Area selectedArea = new Area(resolution,(Polygon) graphicsUtil.getShape(), phaseSpacePanel.scene().getViewingTransform());
+                        Area selectedArea = new Area(resolution, new java.awt.geom.Area(graphicsUtil.getWCObject()));
                         RiemannProfileCalc rc = new RiemannProfileCalc(selectedArea, waveCurveForward_, waveCurveBackward_);
                         RiemannProfileGeomFactory riemannProfileGeomFactory = new RiemannProfileGeomFactory(rc);
 
@@ -139,18 +139,8 @@ public class RiemannProfileAgent extends RpModelPlotAgent implements Observer {
         }
 
     }
+
     
-    private List<Polygon> generateAreaShape(List<GraphicsUtil> graphicsUtil){
-        ArrayList<Polygon> polygonList = new ArrayList<Polygon>();
-        
-        for (GraphicsUtil polygon : graphicsUtil) {
-            
-            polygonList.add((Polygon)polygon.getShape());
-            
-        }
-        
-        return polygonList;
-    }
 
     private RealVector createProfileMaxLimit(RiemannProfile riemannProfile) {
         RealVector profileMax = new RealVector(RPNUMERICS.domainDim() + 1);
