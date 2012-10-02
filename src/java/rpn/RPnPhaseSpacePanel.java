@@ -461,17 +461,19 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
 
     }
 
-    public List<Polygon> intersectedArea(GeomObjView geomView) {
+    public List<GraphicsUtil> intersectedArea(GeomObjView geomView) {
 
-        Iterator<Polygon> areaIterator = getSelectedAreasShapes().iterator();
+        Iterator<GraphicsUtil> areaIterator = graphicsUtilList_.iterator();
 
-        ArrayList<Polygon> intersectedAreas = new ArrayList<Polygon>();
+        ArrayList<GraphicsUtil> intersectedAreas = new ArrayList<GraphicsUtil>();
 
         while (areaIterator.hasNext()) {
-            Polygon area = areaIterator.next();
+            GraphicsUtil graphicsUtil= areaIterator.next();
+            
+            Polygon area = (Polygon) graphicsUtil.getShape();
 
             if (geomView.intersect(area)) {
-                intersectedAreas.add(area);
+                intersectedAreas.add(graphicsUtil);
             }
 
         }

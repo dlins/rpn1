@@ -18,6 +18,7 @@ import rpn.RPnPhaseSpaceFrame;
 import rpn.RPnPhaseSpacePanel;
 import rpn.RPnUIFrame;
 import rpn.component.*;
+import rpn.component.util.GraphicsUtil;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UI_ACTION_SELECTED;
 import rpn.parser.RPnDataModule;
@@ -90,7 +91,7 @@ public class RiemannProfileAgent extends RpModelPlotAgent implements Observer {
         while (panelsIterator.hasNext()) {
 
             RPnPhaseSpacePanel phaseSpacePanel = panelsIterator.next();
-            List<List<Polygon>> intersectionAreas = new ArrayList();
+            List<List<GraphicsUtil>> intersectionAreas = new ArrayList();
 
             Iterator<GeomObjView> geomObjViewIterator = phaseSpacePanel.scene().geometries();
 
@@ -98,34 +99,17 @@ public class RiemannProfileAgent extends RpModelPlotAgent implements Observer {
                 GeomObjView geomObjView = geomObjViewIterator.next();
 
                 if (selectedCurves.contains((RpGeometry) geomObjView.getAbstractGeom())) {
-                    List<Polygon> polygonList = phaseSpacePanel.intersectedArea(geomObjView);
-                    System.out.println(geomObjView + "intercepta" + polygonList.size());
+                    List<GraphicsUtil> polygonList = phaseSpacePanel.intersectedArea(geomObjView);
                     intersectionAreas.add(polygonList);
                 }
 
-
-
-               
-
-//
-//
-//                for (Polygon polygon : finalSelectedAreas) {
-//                    
-//                    System.out.println("Poligono: "+polygon);
-//                    
-//                }
-
-
                 if (intersectionAreas.size() == 2) {
 
+                     List<GraphicsUtil> finalSelectedAreas = processIntersectionAreas(intersectionAreas);
 
-//                    List<Polygon> finalSelectedAreas = intersectionAreas.get(0);
-                     List<Polygon> finalSelectedAreas = processIntersectionAreas(intersectionAreas);
-
-                    System.out.println("Areas processadas: " + finalSelectedAreas.size());
-                    for (Polygon polygon : finalSelectedAreas) {
+                    for (GraphicsUtil graphicsUtil : finalSelectedAreas) {
                         RealVector resolution = new RealVector(2);
-                        Area selectedArea = new Area(resolution, polygon, phaseSpacePanel.scene().getViewingTransform());
+                        Area selectedArea = new Area(resolution,(Polygon) graphicsUtil.getShape(), phaseSpacePanel.scene().getViewingTransform());
                         RiemannProfileCalc rc = new RiemannProfileCalc(selectedArea, waveCurveForward_, waveCurveBackward_);
                         RiemannProfileGeomFactory riemannProfileGeomFactory = new RiemannProfileGeomFactory(rc);
 
@@ -154,6 +138,18 @@ public class RiemannProfileAgent extends RpModelPlotAgent implements Observer {
 
         }
 
+    }
+    
+    private List<Polygon> generateAreaShape(List<GraphicsUtil> graphicsUtil){
+        ArrayList<Polygon> polygonList = new ArrayList<Polygon>();
+        
+        for (GraphicsUtil polygon : graphicsUtil) {
+            
+            polygonList.add((Polygon)polygon.getShape());
+            
+        }
+        
+        return polygonList;
     }
 
     private RealVector createProfileMaxLimit(RiemannProfile riemannProfile) {
@@ -215,7 +211,7 @@ public class RiemannProfileAgent extends RpModelPlotAgent implements Observer {
 
     }
 
-    private List<Polygon> processIntersectionAreas(List<List<Polygon>> intersectionAreasList) {
+    private List<GraphicsUtil> processIntersectionAreas(List<List<GraphicsUtil>> intersectionAreasList) {
 
         if (intersectionAreasList.get(0).size() > intersectionAreasList.get(1).size()) {
             intersectionAreasList.get(0).retainAll(intersectionAreasList.get(1));
