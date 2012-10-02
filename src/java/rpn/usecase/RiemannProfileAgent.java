@@ -102,15 +102,27 @@ public class RiemannProfileAgent extends RpModelPlotAgent implements Observer {
                     System.out.println(geomObjView + "intercepta" + polygonList.size());
                     intersectionAreas.add(polygonList);
                 }
-                
+
+
+
+               
+
+//
+//
+//                for (Polygon polygon : finalSelectedAreas) {
+//                    
+//                    System.out.println("Poligono: "+polygon);
+//                    
+//                }
+
+
                 if (intersectionAreas.size() == 2) {
 
-                    
-//                    List<Polygon> finalSelectedAreas = processIntersectionAreas(intersectionAreas);
-                    
-                    List<Polygon> finalSelectedAreas = intersectionAreas.get(0);
 
-                    System.out.println("Areas processadas: "+finalSelectedAreas.size());
+//                    List<Polygon> finalSelectedAreas = intersectionAreas.get(0);
+                     List<Polygon> finalSelectedAreas = processIntersectionAreas(intersectionAreas);
+
+                    System.out.println("Areas processadas: " + finalSelectedAreas.size());
                     for (Polygon polygon : finalSelectedAreas) {
                         RealVector resolution = new RealVector(2);
                         Area selectedArea = new Area(resolution, polygon, phaseSpacePanel.scene().getViewingTransform());
@@ -139,9 +151,9 @@ public class RiemannProfileAgent extends RpModelPlotAgent implements Observer {
                 }
 
             }
-            phaseSpacePanel.clearAreaSelection();
+
         }
-        
+
     }
 
     private RealVector createProfileMaxLimit(RiemannProfile riemannProfile) {
@@ -188,11 +200,11 @@ public class RiemannProfileAgent extends RpModelPlotAgent implements Observer {
                 WaveCurveGeom waveCurveGeom = (WaveCurveGeom) geometry;
                 WaveCurve waveCurve = (WaveCurve) waveCurveGeom.geomFactory().geomSource();
                 if (waveCurve.getFamily() == 0 && waveCurve.getDirection() == Orbit.WAVECURVE_FORWARD) {
-                    instance_.waveCurveForward_=waveCurve;
+                    instance_.waveCurveForward_ = waveCurve;
                     waveCurveForward0 = true;
                 }
                 if (waveCurve.getFamily() == 1 && waveCurve.getDirection() == Orbit.WAVECURVE_BACKWARD) {
-                    instance_.waveCurveBackward_=waveCurve;
+                    instance_.waveCurveBackward_ = waveCurve;
                     waveCurveBackward1 = true;
                 }
             }

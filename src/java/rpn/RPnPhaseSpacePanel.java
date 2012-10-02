@@ -167,15 +167,18 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     }
     
     public void clearAreaSelection(){
+        ArrayList<GraphicsUtil> toRemove = new ArrayList();
         
         for (int i = 0; i < graphicsUtilList_.size(); i++) {
+            GraphicsUtil graphUtil =graphicsUtilList_.get(i);
             
-            if(graphicsUtilList_.get(i) instanceof AreaSelected){
-                graphicsUtilList_.remove(i);
+            
+            if(graphUtil instanceof AreaSelected){
+                toRemove.add(graphUtil);
             }
             
         }
-        
+        graphicsUtilList_.removeAll(toRemove);
     }
 
     public void setLastGraphicsUtil(GraphicsUtil lastGraphicsUtil) {
@@ -239,13 +242,6 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
 
         }
 
-
-
-//        for (Polygon polygon : getCastedUI().getSelectionAreas()) {
-//            g.setColor(Color.red);
-//            g.drawPolygon(polygon);
-//            
-//        }
 
         g.setColor(DEFAULT_POINTMARK_COLOR);
 
@@ -455,7 +451,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         for (GraphicsUtil area : graphicsUtilList_) {
 
             if (area instanceof AreaSelected) {
-                selectedAreasList.add((Polygon) area.createShape());
+                selectedAreasList.add((Polygon) area.getShape());
             }
 
         }
