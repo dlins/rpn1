@@ -1,6 +1,7 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Instituto de Matematica Pura e Aplicada - IMPA
+ * Departamento de Dinamica dos Fluidos
+ *
  */
 package rpn.component.util;
 
@@ -14,10 +15,6 @@ import wave.multid.CoordsArray;
 import wave.multid.view.ViewingAttr;
 import wave.multid.view.ViewingTransform;
 
-/**
- *
- * @author edsonlan
- */
 public class AreaSelected extends GraphicsUtil {
 
     public AreaSelected(List<Object> wcObjects, ViewingTransform viewingTransform, ViewingAttr viewAttr) {
