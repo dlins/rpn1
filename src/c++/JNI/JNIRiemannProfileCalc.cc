@@ -214,7 +214,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
             nativeDownLeft, nativeTopRight,
             1.0,
             profile);
-
+    if (profile.size()==0)
+        return NULL;
 
 //    cout << "Retorno do perfil: " << solverOutput << endl;
 

@@ -95,7 +95,7 @@ public class ClassifierAgent extends RpModelPlotAgent {
         UserInputTable userInputList = UIController.instance().globalInputTable();
         RealVector newValue = userInputList.values();
 
-        RpGeometry geom = phaseSpace_.findClosestGeometry(newValue);
+        RpGeometry geom = UIController.instance().getActivePhaseSpace().findClosestGeometry(newValue);
         RPnCurve curve = (RPnCurve)(geom.geomFactory().geomSource());
 
         if ((GeometryGraph.count % 2) == 0) {

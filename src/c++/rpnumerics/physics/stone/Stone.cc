@@ -82,7 +82,6 @@ void Stone::setParams(vector<string> params) {
 
         fluxParamVector.component(i) = paramValue;
 
-
     }
 
     StoneFluxFunction & stoneFlux = (StoneFluxFunction&) fluxFunction();
@@ -95,7 +94,7 @@ void Stone::setParams(vector<string> params) {
     for (int i = 7; i < params.size(); i++) {
 
         double paramValue = atof(params[i].c_str());
-
+        
         permVector.component(i-7) = paramValue;
 
 

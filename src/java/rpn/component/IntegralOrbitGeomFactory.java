@@ -30,7 +30,7 @@ public class IntegralOrbitGeomFactory extends WaveCurveOrbitGeomFactory {
    
 
    @Override
-    protected RpGeometry createGeomFromSource() {
+    public RpGeometry createGeomFromSource() {
 
        IntegralCurve integralCurve = (IntegralCurve) geomSource();
 

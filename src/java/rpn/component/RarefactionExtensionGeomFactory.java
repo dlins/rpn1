@@ -35,7 +35,7 @@ public class RarefactionExtensionGeomFactory extends RpCalcBasedGeomFactory {
     //
 
     @Override
-    protected RpGeometry createGeomFromSource() {
+    public RpGeometry createGeomFromSource() {
 
         RarefactionExtensionCurve curve = (RarefactionExtensionCurve) geomSource();
 

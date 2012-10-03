@@ -163,6 +163,7 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
 
 
                 panel.scene().update();
+                panel.updateGraphicsUtil();
                 panel.repaint();
             }
 

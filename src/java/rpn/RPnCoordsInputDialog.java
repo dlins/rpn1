@@ -35,13 +35,13 @@ import rpnumerics.RPNUMERICS;
 import wave.util.RealVector;
 
 public class RPnCoordsInputDialog extends RPnDialog {
-
+    
     private List<JTextField> inputArrayList_;
     private JPanel inputCoordsPanel_ = new JPanel();
     private JPanel phaseSpaceGroupPanel_;
     private ButtonGroup phaspaceButtonGroup_;
     private JRadioButton rightCheckBox_, leftCheckBox_, mainCheckBox_;
-
+    
     public RPnCoordsInputDialog(boolean displayBeginButton, boolean displayCancelButton) {
         super(displayBeginButton, displayCancelButton);
         setSize(new Dimension(600, 200));
@@ -52,32 +52,32 @@ public class RPnCoordsInputDialog extends RPnDialog {
         phaspaceButtonGroup_ = new ButtonGroup();
         inputCoordsPanel_.setLayout(layout);
         GridBagConstraints constraints = new GridBagConstraints();
-
+        
         rightCheckBox_ = new JRadioButton(RPnDataModule.RIGHTPHASESPACE.getName());
         leftCheckBox_ = new JRadioButton(RPnDataModule.LEFTPHASESPACE.getName());
         mainCheckBox_ = new JRadioButton(RPnDataModule.PHASESPACE.getName());
-
-
+        
+        
         phaspaceButtonGroup_.add(rightCheckBox_);
         phaspaceButtonGroup_.add(leftCheckBox_);
         phaspaceButtonGroup_.add(mainCheckBox_);
-
+        
         phaseSpaceGroupPanel_.add(leftCheckBox_);
         phaseSpaceGroupPanel_.add(rightCheckBox_);
         phaseSpaceGroupPanel_.add(mainCheckBox_);
-
-
+        
+        
         mainCheckBox_.addActionListener(new PhaseSpaceListener());
         rightCheckBox_.addActionListener(new PhaseSpaceListener());
         leftCheckBox_.addActionListener(new PhaseSpaceListener());
-
-
+        
+        
         mainCheckBox_.setSelected(true);//Default
         mainCheckBox_.doClick();
-
-
+        
+        
         inputArrayList_ = new ArrayList<JTextField>();
-
+        
         for (int i = 0; i < RPNUMERICS.domainDim(); i++) {
             NumberFormat numberFormatter = NumberFormat.getInstance();
             numberFormatter.setMaximumFractionDigits(4);
@@ -85,98 +85,86 @@ public class RPnCoordsInputDialog extends RPnDialog {
             JLabel axisNumberLabel = new JLabel("" + i);
             axisNumberLabel.setHorizontalAlignment(SwingConstants.CENTER);
             inputArrayList_.add(textInputField);
-
+            
             constraints.gridx = i;
             constraints.gridy = 0;
-
+            
             constraints.ipadx = 50;
             constraints.ipady = 5;
-
+            
             constraints.anchor = GridBagConstraints.EAST;
-
+            
             constraints.insets = new Insets(5, 5, 5, 5);
-
+            
             inputCoordsPanel_.add(textInputField, constraints);
-
+            
             constraints.gridx = i;
             constraints.gridy = 1;
-
+            
             inputCoordsPanel_.add(axisNumberLabel, constraints);
-
+            
             beginButton.setText("Clear");
-
+            
         }
-
+        
         getContentPane().add(inputCoordsPanel_, BorderLayout.NORTH);
         getContentPane().add(phaseSpaceGroupPanel_, BorderLayout.CENTER);
-
+        
     }
-
+    
     @Override
     protected void apply() {
-
+        
         try {
             RealVector userInput = new RealVector(RPNUMERICS.domainDim());
             for (int i = 0; i < inputArrayList_.size(); i++) {
                 userInput.setElement(i, new Double(inputArrayList_.get(i).getText()));
                 UIController.instance().globalInputTable().setElement(i, new Double(inputArrayList_.get(i).getText()));
-
+                
             }
-
+            
             UIController.instance().userInputComplete(userInput);
-
+            
             UIController.instance().globalInputTable().reset();
-
+            
         } catch (NumberFormatException ex) {
-
+            
             JOptionPane.showMessageDialog(rootPane, "Wrong input", "ERROR", JOptionPane.ERROR_MESSAGE);
-
+            
         }
-
+        
     }
-
+    
     @Override
     protected void begin() {
         for (JTextField jTextField : inputArrayList_) {
-
+            
             jTextField.setText("");
-
+            
         }
-
-
+        
+        
     }
-
+    
     private class PhaseSpaceListener implements ActionListener {
-
+        
         public void actionPerformed(ActionEvent e) {
-
-
+            
+            
             if (UIController.instance().getState() instanceof UI_ACTION_SELECTED) {
-
-                UI_ACTION_SELECTED actionSelected = (UI_ACTION_SELECTED) UIController.instance().getState();
-                RpModelActionAgent action = (RpModelActionAgent) actionSelected.getAction();
-
-
+                
                 if (leftCheckBox_.isSelected()) {
-
-                    action.setPhaseSpace(RPnDataModule.LEFTPHASESPACE);
+                    UIController.instance().setActivePhaseSpace(RPnDataModule.LEFTPHASESPACE);
                 }
-
+                
                 if (rightCheckBox_.isSelected()) {
-                    action.setPhaseSpace(RPnDataModule.RIGHTPHASESPACE);
+                    UIController.instance().setActivePhaseSpace(RPnDataModule.RIGHTPHASESPACE);
                 }
-
-
                 if (mainCheckBox_.isSelected()) {
-                    action.setPhaseSpace(RPnDataModule.PHASESPACE);
+                    UIController.instance().setActivePhaseSpace(RPnDataModule.PHASESPACE);
                 }
-
+                
             }
         }
     }
 }
-
-
-
-
-

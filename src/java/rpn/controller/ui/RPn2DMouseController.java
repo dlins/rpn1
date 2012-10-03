@@ -19,7 +19,7 @@ import wave.multid.view.ViewingTransform;
 
 public abstract class RPn2DMouseController implements  MouseMotionListener, MouseListener{
 
-    protected Path2D.Double plotWCPath(Point cursorPos_, MouseEvent me, RPnPhaseSpacePanel panel) {
+    protected Path2D.Double plotWCArea(Point cursorPos_, MouseEvent me, RPnPhaseSpacePanel panel) {
         ViewingTransform viewingTransform = panel.scene().getViewingTransform();
 
         double[] cursorPosArray = {cursorPos_.x, cursorPos_.y};

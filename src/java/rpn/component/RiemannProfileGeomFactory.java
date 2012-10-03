@@ -38,7 +38,7 @@ public class RiemannProfileGeomFactory extends RpCalcBasedGeomFactory {
         return new ViewingAttr(Color.white);
     }
 
-    protected RpGeometry createGeomFromSource() {
+    public RpGeometry createGeomFromSource() {
         RiemannProfile riemannProfile = (RiemannProfile) geomSource();
         
 

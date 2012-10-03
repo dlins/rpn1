@@ -20,7 +20,7 @@ public class CoincidenceCurveGeomFactory extends BifurcationCurveGeomFactory{
   
     // Methods
     //
-    protected RpGeometry createGeomFromSource() {
+    public RpGeometry createGeomFromSource() {
 
         CoincidenceCurve curve = (CoincidenceCurve) geomSource();
 

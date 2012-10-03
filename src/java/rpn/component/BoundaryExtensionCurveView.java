@@ -5,7 +5,6 @@
  */
 package rpn.component;
 
-import wave.multid.model.*;
 import wave.multid.view.*;
 import wave.multid.DimMismatchEx;
 import java.util.Iterator;
@@ -17,9 +16,7 @@ public class BoundaryExtensionCurveView
     //
 
 
-    private ViewingTransform viewingTransf_;
-    private AbstractGeomObj abstractGeom_;
-    private ViewingAttr viewAttr_;
+
 
     //
     // Constructor
@@ -38,7 +35,7 @@ public class BoundaryExtensionCurveView
     public void update() {
         viewList_.clear();
 
-        BoundaryExtensionCurveGeom extensionCurveGeom = (BoundaryExtensionCurveGeom) abstractGeom_;
+        BoundaryExtensionCurveGeom extensionCurveGeom = (BoundaryExtensionCurveGeom)getAbstractGeom();
        
         Iterator geomListIterator = extensionCurveGeom.getBifurcationSegmentsIterator();
 
