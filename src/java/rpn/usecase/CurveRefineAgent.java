@@ -14,12 +14,11 @@ import java.awt.Insets;
 import java.awt.Polygon;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.awt.geom.Path2D;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -28,12 +27,12 @@ import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpacePanel;
 import rpn.component.RpCalcBasedGeomFactory;
 import rpn.component.RpGeometry;
-import rpn.component.SegmentedCurveGeom;
+import rpn.component.util.AreaSelected;
 import rpnumerics.Area;
 import wave.multid.view.GeomObjView;
 import wave.util.RealVector;
 
-public class CurveRefineAgent extends RpModelConfigChangeAgent  {
+public class CurveRefineAgent extends RpModelConfigChangeAgent {
     //
     // Constants
     //
@@ -61,7 +60,7 @@ public class CurveRefineAgent extends RpModelConfigChangeAgent  {
             processGeometry(curveToRefine_, panelToRefine_);
             RPnPhaseSpaceAbstraction phaseSpace = (RPnPhaseSpaceAbstraction) panelToRefine_.scene().getAbstractGeom();
             phaseSpace.update();
-            panelToRefine_.clearAreaSelection();
+//            panelToRefine_.clearAreaSelection();
         }
 
 
@@ -96,18 +95,18 @@ public class CurveRefineAgent extends RpModelConfigChangeAgent  {
         List<Integer> indexToRemove = new ArrayList<Integer>();
         List<Area> areasToRefine = new ArrayList<Area>();
 
-        List<Polygon> selectedAreas = phaseSpacePanel.getSelectedAreasShapes();
+        List<AreaSelected> graphicsArea = phaseSpacePanel.getSelectedAreas();
 
-        for (Polygon polygon : selectedAreas) {
+        for (AreaSelected polygon : graphicsArea) {
 
             Iterator geomIterator = phaseSpacePanel.scene().geometries();
             while (geomIterator.hasNext()) {
                 GeomObjView geomObjView = (GeomObjView) geomIterator.next();
                 if (((RpGeometry) geomObjView.getAbstractGeom()) == selectedGeometry) {
-                    List<Integer> segmentIndex = geomObjView.contains(polygon);
+                    List<Integer> segmentIndex = geomObjView.contains((Polygon)polygon.getShape());
                     if (!segmentIndex.isEmpty()) {
                         indexToRemove.addAll(segmentIndex);
-                        areasToRefine.add(new Area(resolution_, polygon, phaseSpacePanel.scene().getViewingTransform()));
+                        areasToRefine.add(new Area(resolution_, polygon));
 
                     }
 
