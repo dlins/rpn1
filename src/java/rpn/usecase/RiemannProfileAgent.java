@@ -12,12 +12,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import rpn.RPnDesktopPlotter;
 import rpn.RPnPhaseSpaceFrame;
 import rpn.RPnPhaseSpacePanel;
 import rpn.RPnUIFrame;
 import rpn.component.*;
+import rpn.component.CharacteristicsCurveGeomFactory;
 import rpn.component.util.AreaSelected;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UI_ACTION_SELECTED;
@@ -113,14 +116,49 @@ public class RiemannProfileAgent extends RpModelPlotAgent implements Observer {
                         RiemannProfileGeomFactory riemannProfileGeomFactory = new RiemannProfileGeomFactory(rc);
 
                         RiemannProfile riemannProfile = (RiemannProfile) riemannProfileGeomFactory.geomSource();
+
+
+
+
+
                         if (riemannProfile != null) {
 
+                            CharacteristicsCurveCalc charCalc = new CharacteristicsCurveCalc(riemannProfile, 256);
+                            try {
+                                CharacteristicsCurve charCurve = (CharacteristicsCurve) charCalc.calc();
+                                
+                                CharacteristicsCurveGeomFactory factory = new CharacteristicsCurveGeomFactory(charCalc, charCurve);
+
+                                RpGeometry testeChar=  factory.getFamilyGeometry(0);
+                                
+                                RPnDataModule.RIGHTPHASESPACE.join(testeChar);
+
+//                                List<PhasePoint[]> orbitPoints = charCurve.getFamilyPoints(1);
+//
+//                                for (PhasePoint[] phasePoints : orbitPoints) {
+//
+//
+//                                    for (PhasePoint point : phasePoints) {
+//
+//                                        System.out.println(point);
+//
+//                                    }
+//
+//                                    System.out.println("Familia 0");
+//
+//                                }
+
+
+                            } catch (RpException ex) {
+                                Logger.getLogger(RiemannProfileAgent.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                             RealVector profileMin = createProfileMinLimit(riemannProfile);
                             RealVector profileMax = createProfileMaxLimit(riemannProfile);
 
                             RPnDesktopPlotter.getUIFrame().updateRiemannProfileFrames(profileMin, profileMax);
 
                             RPnDataModule.RIEMANNPHASESPACE.clear();
+
                             RPnDataModule.RIEMANNPHASESPACE.join(riemannProfileGeomFactory.geom());
                             RPnDataModule.RIEMANNPHASESPACE.update();
 
@@ -129,10 +167,7 @@ public class RiemannProfileAgent extends RpModelPlotAgent implements Observer {
                                 frame.setVisible(true);
 
                             }
-
                         }
-
-
                     }
                 }
 
