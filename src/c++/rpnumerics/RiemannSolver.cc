@@ -276,6 +276,8 @@ int RiemannSolver::saturation_profiles(const std::vector<Curve> &one_wave_curve,
 
     int found = WaveCurve::intersection(one_wave_curve, two_wave_curve, pmin, pmax, 
                                         p, subc1, subc1_point, subc2, subc2_point);
+    
+    cout <<"Intersecao:"<<found<<endl;
 
     if (found == WAVE_CURVE_INTERSECTION_NOT_FOUND) return RIEMANNSOLVER_ERROR;
 

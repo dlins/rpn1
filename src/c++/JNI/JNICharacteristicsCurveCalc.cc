@@ -117,18 +117,18 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CharacteristicsCurveCalc_nativeCalc
                 jobject linePointPhasePoint = env->NewObject(classPhasePoint, phasePointConstructorID, linePointRealVector);
                 env->SetObjectArrayElement(lineCoordsArray, k, linePointPhasePoint);
 
-                //                cout << linePoint << endl;
+                cout << linePoint << endl;
 
             }
 
             env->CallObjectMethod(familyLinesList, arrayListAddMethod, lineCoordsArray);
-            //            cout << "Fim da linha: " << j << endl;
+            cout << "Fim da linha: " << j << endl;
 
         }
 
         env->CallObjectMethod(characteristicsList, arrayListAddMethod, familyLinesList);
 
-        //        cout << "Fim da familia: " << i << endl;
+        cout << "Fim da familia: " << i << endl;
 
     }
 

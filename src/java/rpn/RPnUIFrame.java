@@ -13,12 +13,14 @@ import wave.util.Boundary;
 import java.awt.print.PrinterJob;
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 import java.awt.event.*;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.batik.ext.swing.GridBagConstants;
 import rpn.usecase.ClassifierAgent;
@@ -80,6 +82,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private RPnPhaseSpaceFrame frameZoom = null;
     private ArrayList<RPnPhaseSpaceFrame> listFrameZoom = new ArrayList();
     private static RPnPhaseSpaceFrame[] riemannFrames_;
+    private static List<RPnPhaseSpaceFrame> characteristicsFrames_ = new ArrayList<RPnPhaseSpaceFrame>();
 
     //***
     //Construct the frame
@@ -321,6 +324,32 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     }
     //***
 
+    public void updateCharacteristicsFrames(int charPhaseSpaceIndex, RealVector profileMin, RealVector profileMax) {
+
+        RectBoundary boundary = new RectBoundary(profileMin, profileMax);
+        Space characteristicsSpace = new Space("CharacteristicsSpace", 2);
+
+        int[] characteristicsIndices = {0, 1};
+
+        wave.multid.graphs.ClippedShape clipping = new wave.multid.graphs.ClippedShape(boundary);
+        RPnProjDescriptor projDescriptor = new RPnProjDescriptor(characteristicsSpace, "CharacteristicsSpace", 400, 400, characteristicsIndices, false);
+        wave.multid.view.ViewingTransform characteristicsTransform = projDescriptor.createTransform(clipping);
+
+        try {
+            wave.multid.view.Scene characteristicsScene = RPnDataModule.CHARACTERISTICSPHASESPACEARRAY[charPhaseSpaceIndex].createScene(characteristicsTransform, new wave.multid.view.ViewingAttr(Color.black));
+            RPnPhaseSpaceFrame characteristicsFrame = new RPnRiemannFrame(characteristicsScene, commandMenu_);
+
+            characteristicsFrame.setTitle("Characteristic " + charPhaseSpaceIndex);
+            characteristicsFrame.pack();
+            characteristicsFrames_.add(characteristicsFrame);
+
+        } catch (DimMismatchEx ex) {
+            ex.printStackTrace();
+        }
+
+
+    }
+
     public void updateRiemannProfileFrames(RealVector profileMin, RealVector profileMax) {
 
         if (riemannFrames_ != null) {
@@ -483,11 +512,11 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         curvesList.addObserver(AdjustedSelectionPlotAgent.instance());
         leftCurvesList.addObserver(AdjustedSelectionPlotAgent.instance());
         rightCurvesList.addObserver(AdjustedSelectionPlotAgent.instance());
-        
+
         curvesList.addObserver(EnableLRPhaseSpaceAgent.instance());
         leftCurvesList.addObserver(EnableLRPhaseSpaceAgent.instance());
         rightCurvesList.addObserver(EnableLRPhaseSpaceAgent.instance());
-        
+
 
 
 
@@ -650,6 +679,10 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 0, null));
 
         commandMenu_.networkCommand();
+    }
+
+    public static List<RPnPhaseSpaceFrame> getCharacteristicsFrames() {
+        return characteristicsFrames_;
     }
 
     //** para o menu de tipos de curvas

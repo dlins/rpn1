@@ -6,6 +6,7 @@
  */
 package rpn.component;
 
+import java.awt.Color;
 import java.util.List;
 import rpnumerics.CharacteristicsCurve;
 import rpnumerics.PhasePoint;
@@ -20,12 +21,14 @@ public class CharacteristicsCurveGeomFactory extends RpCalcBasedGeomFactory {
 
     public RpGeometry getFamilyGeometry(int index) {
 
-
         List<PhasePoint[]> phasePointList = ((CharacteristicsCurve) geomSource()).getFamilyPoints(index);
-
-        return new CharacteristicCurveGeom(phasePointList, this);
-
-
+        CharacteristicCurveGeom familyGeom =  new CharacteristicCurveGeom(phasePointList, this);
+        
+        if (index ==0)
+            familyGeom.viewingAttr().setColor(Color.blue);
+        if (index==1)
+            familyGeom.viewingAttr().setColor(Color.red);
+                return familyGeom;
 
 
     }

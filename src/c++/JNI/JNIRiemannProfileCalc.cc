@@ -207,6 +207,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
 
 
     vector<RealVector> profile;
+    
+    cout<<"DownLeft: "<<nativeDownLeft<<" TopRight"<<nativeTopRight<<endl;
 
 
     int solverOutput = RiemannSolver::saturation_profiles(forwardCurvesVector, // Family 0, forward
@@ -214,10 +216,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
             nativeDownLeft, nativeTopRight,
             1.0,
             profile);
+
+    cout << "Retorno do perfil: " << solverOutput <<" Tamanho do perfil: "<<profile.size()<< endl;
+    
     if (profile.size()==0)
         return NULL;
 
-//    cout << "Retorno do perfil: " << solverOutput << endl;
+
 
 //    cout << "Coordenadas do perfil" << endl;
 //    for (int i = 0; i < profile.size(); i++) {
