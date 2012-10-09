@@ -95,6 +95,31 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CharacteristicsCurveCalc_nativeCalc
 
     RiemannSolver::characteristics(fluxFunction, accumulationFunction, riemannProfileVector, 0.45, samplingRate, characteristics);
 
+    // Modified below
+    FILE *fid = fopen("characteristics.txt", "w");
+
+    // Number of families
+    fprintf(fid, "%d\n", characteristics.size());
+
+    for (int i = 0; i < characteristics.size(); i++){
+        // Number of lines per family
+        fprintf(fid, "%d\n", characteristics[i].size());
+
+        for (int j = 0; j < characteristics[i].size(); j++){
+            // Number of point per line per family
+            fprintf(fid, "%d\n", characteristics[i][j].size());
+
+            for (int k = 0; k < characteristics[i][j].size(); k++){
+                // Points
+                fprintf(fid, "%g %g\n", characteristics[i][j][k].component(0), characteristics[i][j][k].component(1));
+            }
+        }
+    }
+
+    fclose(fid);
+
+    // Modified above
+
 
     jobject characteristicsList = env->NewObject(arrayListClass, arrayListConstructor);
     for (int i = 0; i < characteristics.size(); i++) {//Family vector

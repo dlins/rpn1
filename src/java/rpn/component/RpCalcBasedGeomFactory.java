@@ -17,7 +17,6 @@ import rpnumerics.RPnCurve;
 import rpnumerics.RpCalculation;
 import rpnumerics.RpException;
 import rpnumerics.RpSolution;
-import rpnumerics.SegmentedCurve;
 import wave.util.RealSegment;
 
 public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {

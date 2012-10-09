@@ -12,8 +12,11 @@ import rpnumerics.CharacteristicsCurve;
 import rpnumerics.PhasePoint;
 import rpnumerics.RpCalculation;
 import rpnumerics.RpSolution;
+import wave.multid.view.ViewingAttr;
 
 public class CharacteristicsCurveGeomFactory extends RpCalcBasedGeomFactory {
+
+    private static Color COLOR = new Color(20, 43, 140);
 
     public CharacteristicsCurveGeomFactory(RpCalculation calc, RpSolution solution) {
         super(calc, solution);
@@ -22,21 +25,28 @@ public class CharacteristicsCurveGeomFactory extends RpCalcBasedGeomFactory {
     public RpGeometry getFamilyGeometry(int index) {
 
         List<PhasePoint[]> phasePointList = ((CharacteristicsCurve) geomSource()).getFamilyPoints(index);
-        CharacteristicCurveGeom familyGeom =  new CharacteristicCurveGeom(phasePointList, this);
-        
-        if (index ==0)
-            familyGeom.viewingAttr().setColor(Color.blue);
-        if (index==1)
-            familyGeom.viewingAttr().setColor(Color.red);
-                return familyGeom;
+        CharacteristicCurveGeom familyGeom = new CharacteristicCurveGeom(phasePointList, this, selectViewingAttr(index));
 
+        return familyGeom;
 
+    }
+
+    public ViewingAttr selectViewingAttr(int familyIndex) {
+        ViewingAttr viewingAttr = new ViewingAttr(COLOR);
+
+        if (familyIndex == 0) {
+            viewingAttr.setColor(Color.blue);
+        }
+        if (familyIndex == 1) {
+            viewingAttr.setColor(Color.red);
+        }
+        return viewingAttr;
     }
 
     @Override
     public RpGeometry createGeomFromSource() {
-        
-        return getFamilyGeometry(0);
+
+        return null;
 
     }
 

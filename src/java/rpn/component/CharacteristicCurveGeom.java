@@ -26,31 +26,28 @@ public class CharacteristicCurveGeom extends MultiGeometryImpl implements RpGeom
 
     //
     // Constructors
-    public static Color COLOR = new Color(20, 43, 140);
+   
     RpGeomFactory factory_;
 
-    public CharacteristicCurveGeom(List<PhasePoint[]> charPoints, CharacteristicsCurveGeomFactory factory) {
-        super(new Space("characteristicsSpace", 2), new ViewingAttr(COLOR));
+    public CharacteristicCurveGeom(List<PhasePoint[]> charPoints, CharacteristicsCurveGeomFactory factory, ViewingAttr viewAttr) {
+        super(new Space("CharacteristicsSpace", 2), viewAttr);
 
         factory_ = factory;
 
         for (int i = 0; i < charPoints.size(); i++) {
-
-
             PhasePoint[] line = charPoints.get(i);
-
-
+            
+            
             List<AbstractSegment> lineSegmentsList = createAbstractSegments(line);
-
-
-            for (AbstractSegment abstractSegment : lineSegmentsList) {
+            for (int j = 0; j < lineSegmentsList.size(); j++) {
+                AbstractSegment abstractSegment = lineSegmentsList.get(j);
                 try {
                     append(abstractSegment, false);
                 } catch (DimMismatchEx ex) {
                     Logger.getLogger(CharacteristicCurveGeom.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }
 
+            }
 
         }
     }
@@ -59,34 +56,25 @@ public class CharacteristicCurveGeom extends MultiGeometryImpl implements RpGeom
 
         ArrayList<AbstractSegment> abstractSegmentsList = new ArrayList<AbstractSegment>();
 
-        for (int i = 0; i < linePoints.length / 2; i++) {
-
-
-
-            PhasePoint firstPoint = linePoints[2 * i];
-            PhasePoint secondPoint = linePoints[2 * i + 1];
+        for (int i = 0; i < linePoints.length; i++) {
             CoordsArray[] segmentCoords = new CoordsArray[AbstractSegment.MAX_DEF_POINTS];
-
-//            System.out.println(firstPoint.getCoords() + " " + secondPoint.getCoords());
-
-
-
-            segmentCoords[0] = new CoordsArray(firstPoint.getCoords());
-            segmentCoords[1] = new CoordsArray(secondPoint.getCoords());
             AbstractSegment segment;
             try {
-                if (i == 0) {
 
+                if (i == 0) {
+                    segmentCoords[0] = new CoordsArray(linePoints[i].getCoords());
+                    segmentCoords[1] = new CoordsArray(new Space("", 2));
                     segment = new AbstractSegment(segmentCoords, new AbstractSegmentAtt(AbstractSegment.SEG_MOVETO));
                 } else {
+
+                    segmentCoords[0] = new CoordsArray(linePoints[i - 1].getCoords());
+                    segmentCoords[1] = new CoordsArray(linePoints[i].getCoords());
                     segment = new AbstractSegment(segmentCoords, new AbstractSegmentAtt(AbstractSegment.SEG_LINETO));
                 }
                 abstractSegmentsList.add(segment);
             } catch (WrongNumberOfDefPointsEx ex) {
                 Logger.getLogger(CharacteristicCurveGeom.class.getName()).log(Level.SEVERE, null, ex);
             }
-
-
 
         }
         return abstractSegmentsList;

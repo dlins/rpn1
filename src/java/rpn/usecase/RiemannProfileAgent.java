@@ -5,7 +5,6 @@
  */
 package rpn.usecase;
 
-import java.awt.Polygon;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -81,10 +80,6 @@ public class RiemannProfileAgent extends RpModelPlotAgent implements Observer {
         if (enable) {
             instance_.selectedCurves = (List<RpGeometry>) arg;
         }
-
-
-
-
     }
 
     @Override
@@ -130,27 +125,17 @@ public class RiemannProfileAgent extends RpModelPlotAgent implements Observer {
                             RPnDataModule.RIEMANNPHASESPACE.update();
 
                             for (RPnPhaseSpaceFrame frame : RPnUIFrame.getRiemannFrames()) {
-
                                 frame.setVisible(true);
-
                             }
-
 
                             for (int i = 0; i < RPNUMERICS.domainDim(); i++) {
-                                plotCharacteristics(i, riemannProfile, profileMax);
+                                plotCharacteristics(i, riemannProfile);
                             }
 
-
                             for (RPnPhaseSpaceFrame charFrame : RPnUIFrame.getCharacteristicsFrames()) {
-
                                 charFrame.setVisible(true);
 
                             }
-
-
-
-
-
                         }
                     }
                 }
@@ -191,22 +176,16 @@ public class RiemannProfileAgent extends RpModelPlotAgent implements Observer {
 
     }
 
-    private void plotCharacteristics(int charFamily, RiemannProfile riemannProfile, RealVector profileMax) {
+    private void plotCharacteristics(int charFamily, RiemannProfile riemannProfile) {
 
         CharacteristicsCurveCalc charCalc = new CharacteristicsCurveCalc(riemannProfile, 256);
         try {
             CharacteristicsCurve charCurve = (CharacteristicsCurve) charCalc.calc();
-
             CharacteristicsCurveGeomFactory factory = new CharacteristicsCurveGeomFactory(charCalc, charCurve);
-
-            RealVector testeMinChar = createCharacteristicAbscissa(charFamily, charCurve);
-
-            System.out.println("Eixo X para familia: " + charFamily + " " + testeMinChar);
-
-            RealVector minChar = new RealVector(testeMinChar.getElement(0) + " " + 0);
-            RealVector maxChar = new RealVector(testeMinChar.getElement(1) + " " + profileMax.getElement(1));
-
-            RPnDesktopPlotter.getUIFrame().updateCharacteristicsFrames(charFamily, minChar, maxChar);
+            RealVector charXAxis = createCharacteristicAbscissa(charFamily, charCurve);
+            RealVector charMinRealVector = new RealVector(charXAxis.getElement(0)+" "+0);
+            RealVector charMaxRealVector = new RealVector(charXAxis.getElement(1)+" "+0.45);
+            RPnDesktopPlotter.getUIFrame().updateCharacteristicsFrames(charFamily, charMinRealVector, charMaxRealVector);
 
             for (int i = 0; i < RPnDataModule.CHARACTERISTICSPHASESPACEARRAY.length; i++) {
                 RPnPhaseSpaceAbstraction charPhaseSpace = RPnDataModule.CHARACTERISTICSPHASESPACEARRAY[i];
@@ -225,36 +204,26 @@ public class RiemannProfileAgent extends RpModelPlotAgent implements Observer {
 
         List<PhasePoint[]> charPoints = charCurve.getFamilyPoints(charFamily);
 
-
-        double maxX = 0;
         double minX = 0;
+        double maxX = 0;
 
+        for (int i = 0; i < charPoints.size(); i++) {
+            PhasePoint[] phasePoints = charPoints.get(i);
 
-        PhasePoint[] lastLine = charPoints.get(charPoints.size() - 1);
-        PhasePoint[] firstLine =charPoints.get(0);
-
-
-        for (int i = 0; i < lastLine.length; i++) {
-
-            if (lastLine[i].getElement(0) > maxX) {
-                maxX = lastLine[i].getElement(0);
+            for (int j = 0; j < phasePoints.length; j++) {
+                PhasePoint phasePoint = phasePoints[j];
+                if (phasePoint.getElement(0) < minX) {
+                    minX = phasePoint.getElement(0);
+                }
+                if (phasePoint.getElement(0) > maxX) {
+                    maxX = phasePoint.getElement(0);
+                }
             }
         }
-        
-        for (int i = 0; i < firstLine.length; i++) {
 
-            if (firstLine[i].getElement(0) < minX) {
-                minX = firstLine[i].getElement(0);
-            }
-        }
-        
-        
-        return new RealVector(minX+" "+maxX);
-        
-        
+        return new RealVector(minX + " " + maxX);
+
     }
-    
-
 
     private boolean testRiemmanProfile(List<RpGeometry> selectedCurves) {
 

@@ -25,9 +25,7 @@ class CharacteristicCurveGeomView extends ShapedGeometry {
     protected Shape createShape() throws DimMismatchEx {
         GeneralPath path = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
 
-
         MultiGeometryImpl abstractGeom = (MultiGeometryImpl) getAbstractGeom();
-
 
         AbstractPathIterator modelIterator = abstractGeom.getPathIterator(getViewingTransform().viewingMap());
 
