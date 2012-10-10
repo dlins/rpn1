@@ -16,7 +16,7 @@
 #include "SubPhysics.h"
 #include "Accum2Comp2PhasesAdimensionalized.h"
 #include "Flux2Comp2PhasesAdimensionalized.h"
-#include "ReducedTPCWHugoniotFunctionClass.h"
+#include "Hugoniot_TP.h"
 #include "RectBoundary.h"
 #include "Multid.h"
 
@@ -49,10 +49,11 @@ public:
     Boundary * defaultBoundary()const;
 
 
-
+    void setParams(vector<string>);
 
     void preProcess(RealVector &);
     void postProcess(vector<RealVector> &);
+    void postProcess(RealVector & );
     
 
 
