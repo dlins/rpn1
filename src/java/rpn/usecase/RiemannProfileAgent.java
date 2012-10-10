@@ -112,30 +112,34 @@ public class RiemannProfileAgent extends RpModelPlotAgent implements Observer {
                         RiemannProfileGeomFactory riemannProfileGeomFactory = new RiemannProfileGeomFactory(rc);
 
                         RiemannProfile riemannProfile = (RiemannProfile) riemannProfileGeomFactory.geomSource();
-                        RealVector profileMin = createProfileMinLimit(riemannProfile);
-                        RealVector profileMax = createProfileMaxLimit(riemannProfile);
+
 
                         if (riemannProfile != null) {
+                            if (riemannProfile.getPoints().length > 0) {
+                                RealVector profileMin = createProfileMinLimit(riemannProfile);
+                                RealVector profileMax = createProfileMaxLimit(riemannProfile);
 
-                            RPnDesktopPlotter.getUIFrame().updateRiemannProfileFrames(profileMin, profileMax);
+                                RPnDesktopPlotter.getUIFrame().updateRiemannProfileFrames(profileMin, profileMax);
 
-                            RPnDataModule.RIEMANNPHASESPACE.clear();
+                                RPnDataModule.RIEMANNPHASESPACE.clear();
 
-                            RPnDataModule.RIEMANNPHASESPACE.join(riemannProfileGeomFactory.geom());
-                            RPnDataModule.RIEMANNPHASESPACE.update();
+                                RPnDataModule.RIEMANNPHASESPACE.join(riemannProfileGeomFactory.geom());
+                                RPnDataModule.RIEMANNPHASESPACE.update();
 
-                            for (RPnPhaseSpaceFrame frame : RPnUIFrame.getRiemannFrames()) {
-                                frame.setVisible(true);
+                                for (RPnPhaseSpaceFrame frame : RPnUIFrame.getRiemannFrames()) {
+                                    frame.setVisible(true);
+                                }
+
+                                for (int i = 0; i < RPNUMERICS.domainDim(); i++) {
+                                    plotCharacteristics(i, riemannProfile);
+                                }
+
+                                for (RPnPhaseSpaceFrame charFrame : RPnUIFrame.getCharacteristicsFrames()) {
+                                    charFrame.setVisible(true);
+
+                                }
                             }
 
-                            for (int i = 0; i < RPNUMERICS.domainDim(); i++) {
-                                plotCharacteristics(i, riemannProfile);
-                            }
-
-                            for (RPnPhaseSpaceFrame charFrame : RPnUIFrame.getCharacteristicsFrames()) {
-                                charFrame.setVisible(true);
-
-                            }
                         }
                     }
                 }
@@ -183,8 +187,8 @@ public class RiemannProfileAgent extends RpModelPlotAgent implements Observer {
             CharacteristicsCurve charCurve = (CharacteristicsCurve) charCalc.calc();
             CharacteristicsCurveGeomFactory factory = new CharacteristicsCurveGeomFactory(charCalc, charCurve);
             RealVector charXAxis = createCharacteristicAbscissa(charFamily, charCurve);
-            RealVector charMinRealVector = new RealVector(charXAxis.getElement(0)+" "+0);
-            RealVector charMaxRealVector = new RealVector(charXAxis.getElement(1)+" "+0.45);
+            RealVector charMinRealVector = new RealVector(charXAxis.getElement(0) + " " + 0);
+            RealVector charMaxRealVector = new RealVector(charXAxis.getElement(1) + " " + 0.45);
             RPnDesktopPlotter.getUIFrame().updateCharacteristicsFrames(charFamily, charMinRealVector, charMaxRealVector);
 
             for (int i = 0; i < RPnDataModule.CHARACTERISTICSPHASESPACEARRAY.length; i++) {
