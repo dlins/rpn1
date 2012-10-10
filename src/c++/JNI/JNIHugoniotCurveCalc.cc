@@ -99,12 +99,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
     vector<HugoniotPolyLine> hugoniotPolyLineVector;
 
-    Hugoniot_Curve hugoniotCurve;
+    Hugoniot_Locus * hugoniotCurve = RpNumerics::getPhysics().getSubPhysics(0).getHugoniotFunction();
 
     GridValues * gv = RpNumerics::getGridFactory().getGrid("hugoniotcurve");
 
 
-    hugoniotCurve.classified_curve(&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(), *gv, Uref, hugoniotPolyLineVector);
+    hugoniotCurve->classified_curve(&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(), *gv, Uref, hugoniotPolyLineVector);
 
     cout << "Saida: " << hugoniotPolyLineVector.size() << endl;
 

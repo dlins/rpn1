@@ -21,6 +21,7 @@
 #include "Space.h"
 #include  "Multid.h"
 #include "eigen.h"
+#include "Hugoniot_Locus.h"
 
 /*
  * ---------------------------------------------------------------
@@ -33,7 +34,7 @@ class SubPhysics {
 private:
 
 
-    HugoniotFunctionClass * hugoniotFunction_;
+    Hugoniot_Locus * hugoniotFunction_;
     Boundary * boundary_;
     Space * space_;
     const char * ID_;
@@ -63,9 +64,9 @@ public:
 
     const FluxFunction & fluxFunction() const;
 
-    HugoniotFunctionClass * getHugoniotFunction() const;
+    Hugoniot_Locus * getHugoniotFunction() const;
 
-    void setHugoniotFunction(HugoniotFunctionClass *);
+    void setHugoniotFunction(Hugoniot_Locus *);
 
     const Space & domain() const;
 

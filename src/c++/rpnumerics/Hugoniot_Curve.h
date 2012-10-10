@@ -10,8 +10,9 @@
 #include "ContourMethod.h"
 #include "ColorCurve.h"
 #include "GridValues.h"
+#include "Hugoniot_Locus.h"
 
-class Hugoniot_Curve : public ImplicitFunction {
+class Hugoniot_Curve : public Hugoniot_Locus {
     private:
         Matrix<double> JFref, JGref;
         RealVector Fref, Gref;

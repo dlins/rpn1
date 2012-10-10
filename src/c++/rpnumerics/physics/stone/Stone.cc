@@ -11,6 +11,7 @@
  * Includes:
  */
 #include "Stone.h"
+#include "Hugoniot_Curve.h"
 
 /*
  * ---------------------------------------------------------------
@@ -106,13 +107,13 @@ void Stone::setParams(vector<string> params) {
 }
 
 Stone::Stone() : SubPhysics(StoneFluxFunction(StoneParams(), StonePermParams()), StoneAccumulation(), *defaultBoundary(), Multid::PLANE, "Stone", _SIMPLE_ACCUMULATION_) {
-
+ setHugoniotFunction(new Hugoniot_Curve());
 }
 
 Stone::Stone(const Stone & copy) : SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.boundary(), Multid::PLANE, "Stone", _SIMPLE_ACCUMULATION_) {
-    RealVector refVec(2);
-    StoneHugoniotFunctionClass * stoneHugoniotFunction = new StoneHugoniotFunctionClass(refVec, (StoneFluxFunction(StoneParams(), StonePermParams())));
-    setHugoniotFunction(stoneHugoniotFunction);
+//    RealVector refVec(2);
+//    StoneHugoniotFunctionClass * stoneHugoniotFunction = new StoneHugoniotFunctionClass(refVec, (StoneFluxFunction(StoneParams(), StonePermParams())));
+    setHugoniotFunction(new Hugoniot_Curve());
 }
 
 SubPhysics * Stone::clone()const {

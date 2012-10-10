@@ -11,6 +11,7 @@
  * Includes:
  */
 #include "PolydispersePhysics.h"
+#include "Hugoniot_Curve.h"
 
 
 /*
@@ -21,7 +22,7 @@
 
 
 PolydispersePhysics::PolydispersePhysics() : SubPhysics(Polydisperse(Polydisperse_Params()), StoneAccumulation(), *defaultBoundary(), Multid::PLANE, "Polydisperse", _SIMPLE_ACCUMULATION_) {
-
+    setHugoniotFunction(new Hugoniot_Curve());
 }
 
 SubPhysics * PolydispersePhysics::clone()const {
@@ -30,6 +31,8 @@ SubPhysics * PolydispersePhysics::clone()const {
 }
 
 PolydispersePhysics::PolydispersePhysics(const PolydispersePhysics & copy) : SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.boundary(), copy.domain(), "Polydisperse", _SIMPLE_ACCUMULATION_) {
+    setHugoniotFunction(new Hugoniot_Curve());
+   
 }
 
 PolydispersePhysics::~PolydispersePhysics() {
