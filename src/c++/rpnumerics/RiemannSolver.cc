@@ -444,11 +444,11 @@ void RiemannSolver::characteristics(const FluxFunction *f, const AccumulationFun
 
     // TEMPORAL
 
-    FILE *file = fopen("riemann_profile_output.txt", "w");
-    for (int i = 0; i < n; i++){
-        fprintf(file, "%d %f %f %f\n", i, grid[i], lambda[0][i], lambda[1][i]);
-    }
-    fclose(file);
+//    FILE *file = fopen("riemann_profile_output.txt", "w");
+//    for (int i = 0; i < n; i++){
+//        fprintf(file, "%d %f %f %f\n", i, grid[i], lambda[0][i], lambda[1][i]);
+//    }
+//    fclose(file);
 
     // TEMPORAL
 
