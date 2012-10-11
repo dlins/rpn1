@@ -75,6 +75,8 @@ public:
     virtual SubPhysics * clone()const = 0;
 
     virtual Boundary * defaultBoundary()const = 0;
+    
+    virtual const Boundary * getPreProcessedBoundary()const ;
 
     virtual ~SubPhysics();
 
@@ -84,6 +86,7 @@ public:
 
     virtual void preProcess(RealVector &);
     virtual void postProcess(vector<RealVector> &);
+    virtual void postProcess(RealVector &);
 
 
 };

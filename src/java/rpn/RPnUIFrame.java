@@ -95,7 +95,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             phaseSpaceFramesInit(RPNUMERICS.boundary());
             associatesPhaseSpaces();
             associatePhaseSpacesAndCurvesList();
-            createPanelsChooser();
+//            createPanelsChooser();
 
             addPropertyChangeListener(this);
             UndoActionController.createInstance();
@@ -506,8 +506,10 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             panelsChooserPanel_.add(checkBox);
         }
 
+        
+        System.out.println("Tamanho dos aux:"+getAuxFrames().length);
         for (RPnPhaseSpaceFrame auxFrame : getAuxFrames()) {
-
+            System.out.println(auxFrame);
             JCheckBox checkBox = new JCheckBox(auxFrame.getTitle());
             checkBox.addItemListener(new PanelsSeletectedListener(auxFrame));
             panelsChooserPanel_.add(checkBox);

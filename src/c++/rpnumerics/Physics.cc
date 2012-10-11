@@ -128,7 +128,7 @@ Physics::Physics(const Physics & physics) : physicsVector_(new vector<SubPhysics
     
 }
 
-SubPhysics & Physics::getSubPhysics(const int index) {
+SubPhysics & Physics::getSubPhysics(const int index) const{
 
     return *physicsVector_->at(index);
 

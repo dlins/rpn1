@@ -20,7 +20,6 @@
 #include "RectBoundary.h"
 #include "Multid.h"
 
-
 /*
  * ---------------------------------------------------------------
  * Definitions:
@@ -31,15 +30,15 @@ class TPCW : public SubPhysics {
 private:
 
     Thermodynamics_SuperCO2_WaterAdimensionalized * TD;
-
+    RectBoundary * preProcessedBoundary_;
 
 
 public:
 
-//    TPCW(const FluxFunction &, const AccumulationFunction &,  const Thermodynamics_SuperCO2_WaterAdimensionalized &);
+    //    TPCW(const FluxFunction &, const AccumulationFunction &,  const Thermodynamics_SuperCO2_WaterAdimensionalized &);
 
 
-    TPCW(const RealVector &,const string &);
+    TPCW(const RealVector &, const string &);
 
 
     TPCW(const TPCW &);
@@ -53,8 +52,11 @@ public:
 
     void preProcess(RealVector &);
     void postProcess(vector<RealVector> &);
-    void postProcess(RealVector & );
-    
+    void postProcess(RealVector &);
+
+
+    const Boundary * getPreProcessedBoundary()const;
+
 
 
     double T2Theta(double)const;

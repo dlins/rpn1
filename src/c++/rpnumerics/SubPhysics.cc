@@ -69,6 +69,11 @@ void SubPhysics::setParams(vector<string> paramsVector) {
 }
 
 
+const Boundary * SubPhysics::getPreProcessedBoundary()const{
+    return boundary_;
+}
+
+
 
 
 Hugoniot_Locus * SubPhysics::getHugoniotFunction()const {
@@ -114,4 +119,8 @@ void SubPhysics::preProcess(RealVector &) {
 }
 
 void SubPhysics::postProcess(vector<RealVector> &) {
+}
+
+
+void SubPhysics::postProcess(RealVector &) {
 }

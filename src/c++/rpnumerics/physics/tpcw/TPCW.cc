@@ -22,23 +22,23 @@ TPCW::TPCW(const RealVector & paramsVector, const string & rpnHomePath) :
 SubPhysics(*defaultBoundary(), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATION_) {
 
 
-//       <PHYSICSPARAM name="abs perm" position="0" value="2e-12"/>
-//                <PHYSICSPARAM name="sin beta" position="1" value="0.0"/>
-//                <PHYSICSPARAM name="has gravity" position="2" value="0.0"/>
-//                <PHYSICSPARAM name="has horizontal" position="3" value="1.0"/>
-//                <PHYSICSPARAM name="cnw" position="4" value="0.3"/>
-//                <PHYSICSPARAM name="cng" position="5" value="0.0"/>
-//                <PHYSICSPARAM name="expw" position="6" value="2.0"/>
-//                <PHYSICSPARAM name="expg" position="7" value="2.0"/>
-//
-//
-//               <PHYSICSPARAM name="phi" position="8" value="0.38"/>
-//
-//
-//
-//                <PHYSICSPARAM name="T_typical" position ="9" value="304.63"/>
-//                <PHYSICSPARAM name="U_typical" position="10" value="998.2"/>
-//                <PHYSICSPARAM name="Rho_typical" position="11" value="4.22e-3"/>
+    //       <PHYSICSPARAM name="abs perm" position="0" value="2e-12"/>
+    //                <PHYSICSPARAM name="sin beta" position="1" value="0.0"/>
+    //                <PHYSICSPARAM name="has gravity" position="2" value="0.0"/>
+    //                <PHYSICSPARAM name="has horizontal" position="3" value="1.0"/>
+    //                <PHYSICSPARAM name="cnw" position="4" value="0.3"/>
+    //                <PHYSICSPARAM name="cng" position="5" value="0.0"/>
+    //                <PHYSICSPARAM name="expw" position="6" value="2.0"/>
+    //                <PHYSICSPARAM name="expg" position="7" value="2.0"/>
+    //
+    //
+    //               <PHYSICSPARAM name="phi" position="8" value="0.38"/>
+    //
+    //
+    //
+    //                <PHYSICSPARAM name="T_typical" position ="9" value="304.63"/>
+    //                <PHYSICSPARAM name="U_typical" position="10" value="998.2"/>
+    //                <PHYSICSPARAM name="Rho_typical" position="11" value="4.22e-3"/>
 
 
 
@@ -67,12 +67,32 @@ SubPhysics(*defaultBoundary(), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATIO
     fluxFunction_ = new Flux2Comp2PhasesAdimensionalized(Flux2Comp2PhasesAdimensionalized_Params(fluxVector, TD));
     accumulationFunction_ = new Accum2Comp2PhasesAdimensionalized(Accum2Comp2PhasesAdimensionalized_Params(TD, paramsVector.component(8)));
 
-    cout<<"Flux: "<<fluxFunction_<<endl;
-    cout<<"Accum: "<<accumulationFunction_<<endl;
+    cout << "Flux: " << fluxFunction_ << endl;
+    cout << "Accum: " << accumulationFunction_ << endl;
 
 
     setHugoniotFunction(new Hugoniot_TP());
 
+
+    RealVector min(boundary().minimums());
+
+    RealVector max(boundary().maximums());
+
+
+    preProcess(min);
+
+    preProcess(max);
+
+
+    preProcessedBoundary_ = new RectBoundary(min, max);
+
+
+
+}
+
+const Boundary * TPCW::getPreProcessedBoundary()const {
+
+    return preProcessedBoundary_;
 
 
 }
@@ -114,6 +134,19 @@ TD(new Thermodynamics_SuperCO2_WaterAdimensionalized(*copy.TD)) {
 
 
     setHugoniotFunction(new Hugoniot_TP((Hugoniot_TP&) * copy.getHugoniotFunction()));
+
+
+    RealVector min(boundary().minimums());
+
+    RealVector max(boundary().maximums());
+
+
+    preProcess(min);
+
+    preProcess(max);
+
+
+    preProcessedBoundary_ = new RectBoundary(min, max);
 
 
 }
@@ -229,6 +262,7 @@ void TPCW::postProcess(vector<RealVector> & input) {
 
 TPCW::~TPCW() {
     delete TD;
+    delete preProcessedBoundary_;
 
 }
 

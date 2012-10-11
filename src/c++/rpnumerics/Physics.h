@@ -63,7 +63,7 @@ public:
 
     const string & ID() const;
 
-    SubPhysics & getSubPhysics(const int);
+    SubPhysics & getSubPhysics(const int)const ;
 
     const vector<SubPhysics *> & getPhysicsVector()const;
 
