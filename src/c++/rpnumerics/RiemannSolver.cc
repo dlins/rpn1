@@ -325,7 +325,7 @@ int RiemannSolver::saturation_profiles(const std::vector<Curve> &one_wave_curve,
         // Speed component
         int sc = profile[0].size();
         //double delta = .25*fabs(profile[profile.size() - 1].component(sc - 1) - profile[0].component(sc - 1));
-        double delta = .10*fabs(profile[profile.size() - 1].component(sc - 1) - profile[0].component(sc - 1));
+        double delta = 1.5*fabs(profile[profile.size() - 1].component(sc - 1) - profile[0].component(sc - 1));
 
         // First and last points:
         //

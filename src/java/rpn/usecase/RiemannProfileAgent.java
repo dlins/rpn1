@@ -124,7 +124,7 @@ public class RiemannProfileAgent extends RpModelPlotAgent implements Observer {
                                 RPnDataModule.RIEMANNPHASESPACE.clear();
 
                                 RPnDataModule.RIEMANNPHASESPACE.join(riemannProfileGeomFactory.geom());
-                                RPnDataModule.RIEMANNPHASESPACE.update();
+
 
                                 for (RPnPhaseSpaceFrame frame : RPnUIFrame.getRiemannFrames()) {
                                     frame.setVisible(true);
@@ -182,20 +182,22 @@ public class RiemannProfileAgent extends RpModelPlotAgent implements Observer {
 
     private void plotCharacteristics(int charFamily, RiemannProfile riemannProfile) {
 
-        CharacteristicsCurveCalc charCalc = new CharacteristicsCurveCalc(riemannProfile, 256);
+        CharacteristicsCurveCalc charCalc = new CharacteristicsCurveCalc(riemannProfile, 512);
         try {
             CharacteristicsCurve charCurve = (CharacteristicsCurve) charCalc.calc();
             CharacteristicsCurveGeomFactory factory = new CharacteristicsCurveGeomFactory(charCalc, charCurve);
             RealVector charXAxis = createCharacteristicAbscissa(charFamily, charCurve);
             RealVector charMinRealVector = new RealVector(charXAxis.getElement(0) + " " + 0);
-            RealVector charMaxRealVector = new RealVector(charXAxis.getElement(1) + " " + 0.45);
+            RealVector charMaxRealVector = new RealVector(charXAxis.getElement(1) + " " + 0.1);
             RPnDesktopPlotter.getUIFrame().updateCharacteristicsFrames(charFamily, charMinRealVector, charMaxRealVector);
 
             for (int i = 0; i < RPnDataModule.CHARACTERISTICSPHASESPACEARRAY.length; i++) {
                 RPnPhaseSpaceAbstraction charPhaseSpace = RPnDataModule.CHARACTERISTICSPHASESPACEARRAY[i];
 
                 RpGeometry testeChar = factory.getFamilyGeometry(i);
+                charPhaseSpace.clear();
                 charPhaseSpace.join(testeChar);
+
             }
 
 
