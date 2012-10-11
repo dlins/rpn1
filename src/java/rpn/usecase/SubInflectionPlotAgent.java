@@ -11,6 +11,7 @@ import rpn.component.*;
 import rpn.controller.ui.BIFURCATION_CONFIG;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UI_ACTION_SELECTED;
+import rpn.parser.RPnDataModule;
 import rpnumerics.*;
 import wave.util.RealVector;
 
@@ -48,6 +49,13 @@ public class SubInflectionPlotAgent extends RpModelPlotAgent {
         SubInflectionCurveGeomFactory factory = new SubInflectionCurveGeomFactory(new SubInflectionCurveCalc());
         return factory.geom();
 
+    }
+    
+    public void execute(){
+        
+        SubInflectionCurveGeomFactory factory = new SubInflectionCurveGeomFactory(new SubInflectionCurveCalc());
+        RPnDataModule.PHASESPACE.join(factory.geom());
+        
     }
 
     static public SubInflectionPlotAgent instance() {

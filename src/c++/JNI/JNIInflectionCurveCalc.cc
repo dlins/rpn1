@@ -23,18 +23,14 @@ NOTE :
 #include "RpNumerics.h"
 #include <vector>
 #include <iostream>
-#include "ContourMethod.h"
-#include "CoincidenceTPCW.h"
-#include "ColorCurve.h"
 #include "Inflection_Curve.h"
-#include "StoneFluxFunction.h"
-#include "StoneAccumulation.h"
+#include "TPCW.h"
 
 
 using std::vector;
 using namespace std;
 
-JNIEXPORT jobject JNICALL Java_rpnumerics_InflectionCurveCalc_nativeCalc(JNIEnv * env, jobject obj, jint family,jintArray resolution) {
+JNIEXPORT jobject JNICALL Java_rpnumerics_InflectionCurveCalc_nativeCalc(JNIEnv * env, jobject obj, jint family, jintArray resolution) {
 
 
     jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
@@ -65,33 +61,32 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_InflectionCurveCalc_nativeCalc(JNIEnv 
     int cells [dimension];
 
     env->GetIntArrayRegion(resolution, 0, dimension, cells);
-    
-    GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcation");
-    
-    int r=    gv->grid.rows();
-    int c=    gv->grid.cols();
-    
-    cout <<gv->grid(0,0)<<endl;
-    cout <<gv->grid(r-1,c-1)<<endl;
-    
-    cout <<gv->grid.rows()<<endl;
-    cout <<gv->grid.cols()<<endl;
-    
-      cout << "Parametros: " << RpNumerics::getPhysics().fluxFunction().fluxParams().params() << endl;
-      
-    
-    
-    
+
+    GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcationcurve");
+
     Inflection_Curve inflectionCurve;
 
     std::vector<RealVector> left_vrs;
+//    TPCW & tpcw = (TPCW &) RpNumerics::getPhysics().getSubPhysics(0);
+//
+//    Flux2Comp2PhasesAdimensionalized * fluxFunction = (Flux2Comp2PhasesAdimensionalized *) & tpcw.fluxFunction();
+//
+//    Accum2Comp2PhasesAdimensionalized * accumulationFunction = (Accum2Comp2PhasesAdimensionalized *) & tpcw.accumulation();
+//
+//    cout << "Parametros de acumulacao" << accumulationFunction->accumulationParams().params() << endl;
+//
+//    cout << "Parametros de fluxo" << tpcw.fluxFunction().fluxParams().params() << endl;
+//
+//    Thermodynamics_SuperCO2_WaterAdimensionalized * thermo = fluxFunction->getThermo();
+//
+//    cout << "Parametros de thermo: " << thermo->U_typical() << " " << thermo->T_typical() << endl;
 
-    inflectionCurve.curve(& RpNumerics::getPhysics().fluxFunction(),  & RpNumerics::getPhysics().accumulation(),*gv, family, left_vrs);
+    inflectionCurve.curve(& RpNumerics::getPhysics().fluxFunction(), & RpNumerics::getPhysics().accumulation(), *gv, family, left_vrs);
 
     int tamanho = left_vrs.size();
     cout << "Tamanho do vetor de pontos: " << tamanho << endl;
 
-    if (left_vrs.size()==0)
+    if (left_vrs.size() == 0)
         return NULL;
 
     cout << "Familia da inflexao: " << family << endl;
@@ -99,12 +94,16 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_InflectionCurveCalc_nativeCalc(JNIEnv 
 
     for (int i = 0; i < left_vrs.size() / 2; i++) {
 
+
+
+        RpNumerics::getPhysics().getSubPhysics(0).postProcess(left_vrs[2 * i]);
+        RpNumerics::getPhysics().getSubPhysics(0).postProcess(left_vrs[2 * i + 1]);
+
+
+
         jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
         jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
 
-
-        //        cout << "Ponto: " << 2*i << left_vrs[2 * i] << endl;
-        //        cout << "Ponto: " << 2*i+1 << left_vrs[2 * i +1] << endl;
 
         double * leftCoords = (double *) left_vrs[2 * i];
         double * rightCoords = (double *) left_vrs[2 * i + 1];
@@ -128,6 +127,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_InflectionCurveCalc_nativeCalc(JNIEnv 
 
     jobject result = env->NewObject(inflectionCurveClass, inflectionCurveConstructor, segmentsArray);
 
+
+    if (result == NULL)cout << "Eh nulo" << endl;
     // Limpando
 
     env->DeleteLocalRef(realSegmentClass);

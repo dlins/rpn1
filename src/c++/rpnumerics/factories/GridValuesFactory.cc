@@ -77,8 +77,6 @@ void GridValuesFactory::updateGrids() {
 
     const Boundary* boundary = physics_->getSubPhysics(0).getPreProcessedBoundary();
 
-
-
     for (it = gridArray_->begin(); it != gridArray_->end(); it++) {
 
         GridValues * factoryElement = (*it).second;
