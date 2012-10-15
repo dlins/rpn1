@@ -76,7 +76,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BoundaryExtensionCurveCalc_nativeCalc
     cout << "edge " << edge << endl;
     cout <<"edgeresolution: "<<edgeResolution<<endl;
 
-    Three_Phase_Boundary & physicsBoundary = (Three_Phase_Boundary &) RpNumerics::getPhysics().boundary();
+RectBoundary & physicsBoundary =  (RectBoundary &)RpNumerics::getPhysics().boundary();
 
     const FluxFunction * flux = &RpNumerics::getPhysics().fluxFunction();
     const AccumulationFunction * accum = &RpNumerics::getPhysics().accumulation();
