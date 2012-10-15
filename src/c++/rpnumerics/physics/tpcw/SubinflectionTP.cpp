@@ -16,7 +16,7 @@ void SubinflectionTP::subinflection_function(double & reduced_lambdae, double & 
     //    const Flux2Comp2PhasesAdimensionalized & fluxFunction = (const Flux2Comp2PhasesAdimensionalized &) getFluxFunction();
 
     fluxFunction_-> Diff_FracFlow2PhasesHorizontalAdimensionalized(sw, Theta, 0, m);
-
+    double phi = 0.38;
 
     double f = m(0);
     double s = u.component(0);
@@ -158,7 +158,7 @@ int SubinflectionTP::curve(const FluxFunction *f, const AccumulationFunction *a,
     Flux2Comp2PhasesAdimensionalized * fluxAdimensional = (Flux2Comp2PhasesAdimensionalized *) f;
     fluxFunction_ = fluxAdimensional->getHorizontalFlux();
 
-    phi = a->accumulationParams().component(0);
+    double phi = a->accumulationParams().component(0);
 
     cout << "Valor de phi em subinflection: " << phi << endl;
 

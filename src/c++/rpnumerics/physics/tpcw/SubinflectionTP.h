@@ -18,7 +18,7 @@ class SubinflectionTP : public ImplicitFunction {
 private:
     const Thermodynamics_SuperCO2_WaterAdimensionalized *td;
     Flux2Comp2PhasesAdimensionalized::FracFlow2PhasesHorizontalAdimensionalized * fluxFunction_;
-    double phi;
+
 
     void subinflection_function(double & reduced_lambdae, double & numeratorchiu,
             double & denominatorchiu, const RealVector &u);
