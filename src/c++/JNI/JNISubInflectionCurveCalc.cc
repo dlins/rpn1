@@ -79,7 +79,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionCurveCalc_nativeCalc(JNIE
     cout<<"Parametros de thermo: "<<thermo->U_typical()<<" "<<thermo->T_typical()<<endl;
 
 
-    SubinflectionTP newSubinflection;
+    SubinflectionTP newSubinflection(accumulationFunction->accumulationParams().component(0));
 
     GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcation");
 

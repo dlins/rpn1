@@ -14,7 +14,7 @@
                 <PHYSICSPARAM name="expg" position="7" value="2.0"/>
 
 
-               <PHYSICSPARAM name="phi" position="8" value="0.38"/>
+               <PHYSICSPARAM name="phi" position="8" value="1.0"/>
 
 
 
@@ -59,12 +59,12 @@
 
 
     <CURVE name="hugoniotcurve">
-        <CURVEPARAM name="resolution" value="20 20 20"/>
+        <CURVEPARAM name="resolution" value="20 20"/>
 
     </CURVE>
 
     <CURVE name="inflectioncurve">
-        <CURVEPARAM name="resolution" value="128 128 128"/>
+        <CURVEPARAM name="resolution" value="128 128"/>
         <CURVEPARAM name="family" value="0"/>
 
     </CURVE>
@@ -75,7 +75,7 @@
         <CURVEPARAM name="family" value="1"/>
         <CURVEPARAM name="edge" value="0"/>
         <CURVEPARAM name="edgeresolution" value="32"/>
-        <CURVEPARAM name="resolution" value="32 32 32"/>
+        <CURVEPARAM name="resolution" value="32 32"/>
           <CURVEPARAM name="characteristicwhere" value="1"/>
 
 
@@ -83,7 +83,7 @@
 
 
      <CURVE name="envelopecurve">
-        <CURVEPARAM name="resolution" value="128 128 128"/>
+        <CURVEPARAM name="resolution" value="128 128"/>
         <CURVEPARAM name="whereisconstant" value="0"/>
         <CURVEPARAM name="numberofsteps" value="128"/>
     </CURVE>
@@ -94,7 +94,7 @@
 
     <CURVE name="levelcurve">
         <CURVEPARAM name="family" value="0"/>
-        <CURVEPARAM name="resolution" value="128 128 128"/>
+        <CURVEPARAM name="resolution" value="128 128"/>
         <CURVEPARAM name="levels" value="0.1 0.2 0.5"/>
 
     </CURVE>

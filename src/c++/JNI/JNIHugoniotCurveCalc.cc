@@ -69,13 +69,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
     double input [dimension];
 
-    //Resolution
-
-    jint cells[dimension];
-    //
-    //
-    env->GetIntArrayRegion(resolution, 0, dimension, cells);
-
+   
     //Input point
 
 

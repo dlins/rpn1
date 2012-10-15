@@ -58,7 +58,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_InflectionCurveCalc_nativeCalc(JNIEnv 
 
     int dimension = RpNumerics::getPhysics().domain().dim();
 
-    GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcationcurve");
+    GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcation");
+    
+    cout <<"Resolution gv:"<<gv->grid_resolution<<endl;
 
     Inflection_Curve inflectionCurve;
 
@@ -90,24 +92,17 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_InflectionCurveCalc_nativeCalc(JNIEnv 
 
     for (int i = 0; i < left_vrs.size() / 2; i++) {
 
-
-
         RpNumerics::getPhysics().getSubPhysics(0).postProcess(left_vrs[2 * i]);
         RpNumerics::getPhysics().getSubPhysics(0).postProcess(left_vrs[2 * i + 1]);
-
-
 
         jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
         jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
 
-
         double * leftCoords = (double *) left_vrs[2 * i];
         double * rightCoords = (double *) left_vrs[2 * i + 1];
 
-
         env->SetDoubleArrayRegion(eigenValRLeft, 0, dimension, leftCoords);
         env->SetDoubleArrayRegion(eigenValRRight, 0, dimension, rightCoords);
-
 
         //Construindo left e right points
         jobject realVectorLeftPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRLeft);

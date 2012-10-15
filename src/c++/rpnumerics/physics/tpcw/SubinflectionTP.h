@@ -22,6 +22,8 @@ private:
 
     void subinflection_function(double & reduced_lambdae, double & numeratorchiu,
             double & denominatorchiu, const RealVector &u);
+    
+    double phi;
 protected:
 public:
     // TODO: Note a fluxo introduzido...
@@ -29,7 +31,7 @@ public:
 
 
 
-    SubinflectionTP();
+    SubinflectionTP(double );
     ~SubinflectionTP();
 
     int function_on_square(double *foncub, int i, int j);

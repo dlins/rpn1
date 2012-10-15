@@ -1,7 +1,8 @@
 #include "SubinflectionTP.h"
 
-SubinflectionTP::SubinflectionTP() {
+SubinflectionTP::SubinflectionTP(double p) {
     gv = 0;
+    phi=p;
 }
 
 void SubinflectionTP::subinflection_function(double & reduced_lambdae, double & numeratorchiu,
@@ -16,7 +17,7 @@ void SubinflectionTP::subinflection_function(double & reduced_lambdae, double & 
     //    const Flux2Comp2PhasesAdimensionalized & fluxFunction = (const Flux2Comp2PhasesAdimensionalized &) getFluxFunction();
 
     fluxFunction_-> Diff_FracFlow2PhasesHorizontalAdimensionalized(sw, Theta, 0, m);
-    double phi = 0.38;
+
 
     double f = m(0);
     double s = u.component(0);
