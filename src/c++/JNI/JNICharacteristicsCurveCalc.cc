@@ -93,7 +93,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CharacteristicsCurveCalc_nativeCalc
 
     std::vector<std::vector<std::vector<RealVector> > > characteristics;
 
-    RiemannSolver::characteristics(fluxFunction, accumulationFunction, riemannProfileVector, 1.0, samplingRate, characteristics);
+    cout <<"Sampling: "<<samplingRate<<endl;
+    
+    RiemannSolver::characteristics(fluxFunction, accumulationFunction, riemannProfileVector,0.45, samplingRate, characteristics);
+    
+    
 
     // Modified below
     FILE *fid = fopen("characteristics.txt", "w");

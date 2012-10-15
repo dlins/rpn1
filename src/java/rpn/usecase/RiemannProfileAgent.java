@@ -182,13 +182,18 @@ public class RiemannProfileAgent extends RpModelPlotAgent implements Observer {
 
     private void plotCharacteristics(int charFamily, RiemannProfile riemannProfile) {
 
-        CharacteristicsCurveCalc charCalc = new CharacteristicsCurveCalc(riemannProfile, 512);
+        CharacteristicsCurveCalc charCalc = new CharacteristicsCurveCalc(riemannProfile, 128);
         try {
             CharacteristicsCurve charCurve = (CharacteristicsCurve) charCalc.calc();
             CharacteristicsCurveGeomFactory factory = new CharacteristicsCurveGeomFactory(charCalc, charCurve);
             RealVector charXAxis = createCharacteristicAbscissa(charFamily, charCurve);
             RealVector charMinRealVector = new RealVector(charXAxis.getElement(0) + " " + 0);
-            RealVector charMaxRealVector = new RealVector(charXAxis.getElement(1) + " " + 0.1);
+            RealVector charMaxRealVector = new RealVector(charXAxis.getElement(1) + " " + 0.45);
+//            
+
+
+
+
             RPnDesktopPlotter.getUIFrame().updateCharacteristicsFrames(charFamily, charMinRealVector, charMaxRealVector);
 
             for (int i = 0; i < RPnDataModule.CHARACTERISTICSPHASESPACEARRAY.length; i++) {
