@@ -63,7 +63,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
     vector <RealVector> coords;
 
 
-    Boundary * tempBoundary = RpNumerics::getPhysics().boundary().clone();
+   const  Boundary * tempBoundary = RpNumerics::getPhysics().getSubPhysics(0).getPreProcessedBoundary();
 
     //    double deltaxi = 1e-3; // This is the original value (Rodrigo/ Panters)
 
@@ -96,7 +96,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
             RAREFACTION_GENERAL_ACCUMULATION,
             tempBoundary,
             coords, inflectionPoints);
-    delete tempBoundary;
+    
+    cout <<"Tamanho da rarefacao: " << coords.size()<<endl;
+
 
     if (coords.size() == 0) {
         return NULL;
