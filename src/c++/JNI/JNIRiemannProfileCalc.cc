@@ -224,10 +224,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
 
 
 
-//    cout << "Coordenadas do perfil" << endl;
-//    for (int i = 0; i < profile.size(); i++) {
-//        cout << profile.at(i)(2) << " " << profile.at(i)(0) << " " << profile.at(i)(1) << endl;
-//    }
+    cout << "Coordenadas do perfil" << endl;
+    for (int i = 0; i < profile.size(); i++) {
+        cout << profile.at(i)(2) << " " << profile.at(i)(0) << " " << profile.at(i)(1) << endl;
+    }
 
 
     jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(profile.size(), classOrbitPoint, NULL);
