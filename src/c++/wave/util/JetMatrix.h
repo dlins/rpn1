@@ -127,7 +127,8 @@ public:
     void resize(int n_comps);
 
     void range_check(int comp) const;
-       
+    
+    
   
     /*! Sets all components to zero
      */
@@ -149,7 +150,7 @@ public:
      *@param j The first derivative component  column
      */
 
-    double operator()(int i, int j)const;
+    double operator()(const int i, const int j)const;
 
     /*! Returns a second derivative component value
      *
@@ -160,7 +161,21 @@ public:
 
     double operator()(int i, int j, int k)const;
 
-   
+    /*!Changes a function component value
+     *@param i The function component index
+     *@param value The new component value
+     */
+
+    void operator()(int i, double value);
+
+    /*! Changes a first derivative component value
+     *@param i The first derivative component row
+     *@param j The first derivative component column
+     *@param value The new first derivative component value
+     */
+
+    void operator()(int i, int j, double value);
+
     /*! Changes a second derivative component value
      *@param i The second derivative component row
      *@param j The second derivative component column
@@ -201,7 +216,7 @@ inline double JetMatrix::operator()(int i) const{
     return v_.component(i);
 }
 
-inline double JetMatrix::operator()(int i, int j)const {
+inline double JetMatrix::operator()(const int i, const int j)const {
     range_check(i);
     range_check(j);
     if (!c1_)
@@ -218,6 +233,20 @@ inline double JetMatrix::operator()(int i, int j, int k) const{
     return v_.component((n_comps_ * (1 + n_comps_)) + (i * n_comps_ * n_comps_ + j * n_comps_ + k));
 }
 
+inline void JetMatrix::operator()(int i, double value) {
+    range_check(i);
+    c0_ = true;
+    double * value_ = &v_.component(i);
+    *value_ = value;
+}
+
+inline void JetMatrix::operator()(int i, int j, double value) {
+    range_check(i);
+    range_check(j);
+    c1_ = true;
+    double * value_ = &v_.component((n_comps_) + (i * n_comps_ + j));
+    *value_ = value;
+}
 
 inline void JetMatrix::operator()(int i, int j, int k, double value) {
     range_check(i);

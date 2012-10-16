@@ -110,9 +110,9 @@ Stone::Stone() : SubPhysics(StoneFluxFunction(StoneParams(), StonePermParams()),
 }
 
 Stone::Stone(const Stone & copy) : SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.boundary(), Multid::PLANE, "Stone", _SIMPLE_ACCUMULATION_) {
-    RealVector refVec(2);
-    StoneHugoniotFunctionClass * stoneHugoniotFunction = new StoneHugoniotFunctionClass(refVec, (StoneFluxFunction(StoneParams(), StonePermParams())));
-    setHugoniotFunction(stoneHugoniotFunction);
+//    RealVector refVec(2);
+//    StoneHugoniotFunctionClass * stoneHugoniotFunction = new StoneHugoniotFunctionClass(refVec, (StoneFluxFunction(StoneParams(), StonePermParams())));
+//    setHugoniotFunction(stoneHugoniotFunction);
 }
 
 SubPhysics * Stone::clone()const {
