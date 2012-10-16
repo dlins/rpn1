@@ -82,6 +82,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
 
 
     vector<RealVector> inflectionPoints;
+    
+    RpNumerics::getPhysics().getSubPhysics(0).preProcess(realVectorInput);
 
 
     int info = Rarefaction::curve(realVectorInput,
@@ -113,16 +115,23 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
     for (i = 0; i < coords.size(); i++) {
 
         RealVector tempVector = coords.at(i);
+ 
+        double lambda = tempVector.component(tempVector.size()-1);
+        
+        
+         RpNumerics::getPhysics().getSubPhysics(0).postProcess(tempVector);
+         
+         cout <<tempVector<<endl;
 
         double * dataCoords = tempVector;
 
         //Reading only coodinates
-        jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size() - 1);
+        jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size());
 
-        (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size() - 1, dataCoords);
+        (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size(), dataCoords);
 
         //Lambda is the last component.
-        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray, tempVector.component(tempVector.size() - 1));
+        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray, lambda);
 
         (env)->SetObjectArrayElement(orbitPointArray, i, orbitPoint);
 
