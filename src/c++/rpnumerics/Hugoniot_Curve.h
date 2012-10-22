@@ -33,6 +33,12 @@ class Hugoniot_Curve : public ImplicitFunction {
                   GridValues &g, const RealVector &r,
                   std::vector<RealVector> &hugoniot_curve);
 
+        int curve(const FluxFunction *f, const AccumulationFunction *a, 
+                  GridValues &g, const RealVector &r,
+                  std::vector<RealVector> &hugoniot_curve,
+                  std::vector<std::deque<RealVector> > &hugoniot_new,
+                  std::vector < bool > &is_circular);
+
         void map(const RealVector &p, double &f, RealVector &map_Jacobian);
 
         bool improvable(void);

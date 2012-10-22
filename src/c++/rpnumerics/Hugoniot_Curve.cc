@@ -10,28 +10,9 @@ int Hugoniot_Curve::classified_curve(const FluxFunction *f, const AccumulationFu
 
     int info = curve(f, a, g, r, vrs);
 
-//    // Prepare the Hugoniot curve to classify it
-//    std::vector<vector<RealVector> > unclassifiedCurve;
-//    
-//    for (int i = 0; i < vrs.size() / 2; i++) {
-//        std::vector< RealVector> temp;
-//        temp.push_back(vrs[2 * i]);
-//        temp.push_back(vrs[2 * i]);
-//        temp.push_back(vrs[2 * i + 1]);
-//        //temp.push_back(vrs[2 * i + 1]);
-//        unclassifiedCurve.push_back(temp);
-//    }
-    
+    std::vector<RealVector> transition_list;
     ColorCurve colorCurve(*f, *a);
-    
-    
-    vector<RealVector> testeTransitionalList;
-    
-    
-    
-    colorCurve.classify_segmented_curve(vrs,r,hugoniot_curve,testeTransitionalList);
-    
-//    colorCurve.classify_curve(unclassifiedCurve, r, 2, 10, hugoniot_curve);
+    colorCurve.classify_segmented_curve(vrs, r, hugoniot_curve,transition_list);
 
     return info;
 }
@@ -141,6 +122,17 @@ int Hugoniot_Curve::function_on_square(double *foncub, int i, int j) {
 int Hugoniot_Curve::curve(const FluxFunction *f, const AccumulationFunction *a, 
                           GridValues &g, const RealVector &r,
                           std::vector<RealVector> &hugoniot_curve) {
+    std::vector<std::deque<RealVector> > hugoniot_new;
+    std::vector < bool > is_circular;
+
+    return curve(f, a, g, r, hugoniot_curve, hugoniot_new, is_circular);
+}
+
+int Hugoniot_Curve::curve(const FluxFunction *f, const AccumulationFunction *a, 
+                          GridValues &g, const RealVector &r,
+                          std::vector<RealVector> &hugoniot_curve,
+                          std::vector<std::deque<RealVector> > &hugoniot_new,
+                          std::vector < bool > &is_circular) {
 
     ff = f;
     aa = a;
@@ -163,7 +155,7 @@ int Hugoniot_Curve::curve(const FluxFunction *f, const AccumulationFunction *a,
 
     hugoniot_curve.clear();
 
-    int info = ContourMethod::contour2d(this, hugoniot_curve);
+    int info = ContourMethod::contour2d(this, hugoniot_curve, hugoniot_new, is_circular);
 
     return info;
 }

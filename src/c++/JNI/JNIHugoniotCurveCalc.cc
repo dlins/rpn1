@@ -96,6 +96,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
 
     RealVector Uref(dimension, input);
+    
+    cout <<"URef "<<Uref<<endl;
 
     vector<HugoniotPolyLine> hugoniotPolyLineVector;
 
@@ -105,10 +107,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
 
     hugoniotCurve.classified_curve(&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(), *gv, Uref, hugoniotPolyLineVector);
-
+    
     cout << "Saida: " << hugoniotPolyLineVector.size() << endl;
-
-
 
     for (int i = 0; i < hugoniotPolyLineVector.size(); i++) {
 
@@ -133,8 +133,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
             int pointType = hugoniotPolyLineVector[i].type;
 
             string signature = hugoniotPolyLineVector[i].signature;
-
-
 
 
             double leftSigma = hugoniotPolyLineVector[i].speed[j];

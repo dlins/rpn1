@@ -19,6 +19,7 @@
 
 #include <iostream>
 #include <vector>
+#include <deque>
 
 #include "ImplicitFunction.h"
 #include "Newton_Improvement.h"
@@ -84,7 +85,16 @@ class ContourMethod {
 //=======
         static void allocate_arrays(void);
 
+        // Auxiliary grid for continuation
+        //
+        static Matrix<int>                                         number_chains;
+        static Matrix<std::vector <std::vector <int> > >           chain_edges;
+        static Matrix<std::vector <std::vector <RealVector> > >    chains;
+        static Matrix<bool>                                        iplus, iminus, jplus, jminus;
 
+        static std::vector < std::vector <int> > chain_list;
+
+        static int topological_sort(int i, int j);
     public:
         static void deallocate_arrays(void);
 
@@ -94,6 +104,10 @@ class ContourMethod {
 //        ~ContourMethod();			 // TODO: Edson, voce deve comentar essa linha (e no .cc)
     
         static int contour2d(ImplicitFunction *impf, std::vector<RealVector> &vrs);
+
+        static int contour2d(ImplicitFunction *impf, std::vector<RealVector> &vrs,
+                             std::vector< std::deque <RealVector> > &curves,
+                             std::vector <bool> &is_circular);
 };
 
 #endif //! _HugoniotContourMethod_H

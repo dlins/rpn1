@@ -4,9 +4,6 @@ import wave.util.RealVector;
 import wave.util.RealSegment;
 import java.util.List;
 import java.util.ArrayList;
-import rpn.RPnPhaseSpaceAbstraction;
-import rpn.component.RpGeometry;
-import rpn.parser.RPnDataModule;
 
 public class HugoniotCurve extends SegmentedCurve {
     //

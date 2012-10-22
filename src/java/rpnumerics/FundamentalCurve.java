@@ -34,11 +34,6 @@ public class FundamentalCurve extends Orbit implements WaveCurveBranch, RpSoluti
         return familyIndex_;
     }
 
-
-
-
-  
-
     public List<WaveCurveBranch>getCurves() {
 
         return orbitList_;
