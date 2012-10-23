@@ -3,9 +3,7 @@
  * Departamento de Dinamica dos Fluidos
  *
  */
-
 package rpn.usecase;
-
 
 import rpn.controller.XZeroController;
 import java.beans.*;
@@ -13,12 +11,13 @@ import java.util.List;
 import java.util.ArrayList;
 import rpn.controller.ui.*;
 import rpn.parser.RPnDataModule;
-
+import wave.util.RealVector;
 
 public abstract class RpModelConfigChangeAgent extends RpModelActionAgent {
     //
     // Members
     //
+
     private List listenersList_;
 
     public RpModelConfigChangeAgent(String shortDesc) {
@@ -30,6 +29,9 @@ public abstract class RpModelConfigChangeAgent extends RpModelActionAgent {
 
     public void applyChange(PropertyChangeEvent change) {
 
+        RealVector newParameters = (RealVector) change.getNewValue();
+
+        UIController.instance().addCommand(new Command(new UI_ACTION_SELECTED(this), newParameters));
         firePropertyChange(change);
         logAction(change);
         RPnDataModule.updatePhaseSpaces();
