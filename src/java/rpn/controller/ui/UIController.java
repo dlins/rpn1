@@ -59,6 +59,7 @@ public class UIController extends ComponentUI {
     private Stack<Command> commandArray_;
     private boolean auxPanelsEnabled_;
     private RPnPhaseSpaceAbstraction activePhaseSpace_;
+    private boolean drag_ = false;
 
     //
     // Constructors
@@ -149,9 +150,6 @@ public class UIController extends ComponentUI {
     public void setActivePhaseSpace(RPnPhaseSpaceAbstraction activePhaseSpace_) {
         this.activePhaseSpace_ = activePhaseSpace_;
     }
-    
-    
-    
 
     //
     // Inner Classes
@@ -161,6 +159,7 @@ public class UIController extends ComponentUI {
         @Override
         public void mouseDragged(MouseEvent event) {
             RPnUIFrame.clearStatusMessage();
+            drag_ = true;
 
             if (event.getComponent() instanceof RPnPhaseSpacePanel) {
                 RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
@@ -200,6 +199,8 @@ public class UIController extends ComponentUI {
 
                         DragPlotAgent.instance().execute();
 
+
+
                     }
                 }
 
@@ -213,7 +214,18 @@ public class UIController extends ComponentUI {
         }
 
         @Override
+        public void mouseReleased(MouseEvent event) {
+
+            if (drag_) {
+                commandArray_.pop();
+                addCommand(new Command((UI_ACTION_SELECTED) handler_, globalInputTable().values()));
+            }
+
+        }
+
+        @Override
         public void mousePressed(MouseEvent event) {
+            drag_ = false;
             RPnUIFrame.clearStatusMessage();
             RPnUIFrame.disableSliders();
 
@@ -387,9 +399,9 @@ public class UIController extends ComponentUI {
     }
 
     public void addCommand(Command command) {
-        
-        System.out.println("Empilhando comando: "+command.getActionSelected().getAction() +" "+command.getInputArray());
-        
+
+        System.out.println("Empilhando comando: " + command.getActionSelected().getAction() + " " + command.getInputArray());
+
         RPnUIFrame.clearStatusMessage();
         commandArray_.push(command);
     }
@@ -474,7 +486,6 @@ public class UIController extends ComponentUI {
     public RPnPhaseSpaceAbstraction getActivePhaseSpace() {
         return activePhaseSpace_;
     }
-    
 
     /**
      * @deprecated
