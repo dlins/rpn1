@@ -41,6 +41,7 @@
 #define WAVECURVE_LOCATION                    "rpnumerics/WaveCurve"
 #define WAVECURVEORBIT_LOCATION               "rpnumerics/FundamentalCurve"
 #define RIEMANNPROFILE_LOCATION               "rpnumerics/RiemannProfile"
+#define CHARACTERISTICSCURVE_LOCATION          "rpnumerics/CharacteristicsCurve"
 
 
 
