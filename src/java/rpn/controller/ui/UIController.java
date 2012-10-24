@@ -24,6 +24,7 @@ import java.beans.PropertyChangeEvent;
 import rpn.controller.*;
 import java.net.*;
 import java.util.Iterator;
+import java.util.Stack;
 import rpn.RPnDesktopPlotter;
 import rpn.RPnUIFrame;
 import rpn.component.RpGeometry;
@@ -55,9 +56,10 @@ public class UIController extends ComponentUI {
     private RPnPhaseSpacePanel focusPanel_;
     private StateInputController stateController_;
     public static UI_ACTION_SELECTED INITSTATE = null;
-    private ArrayList<Command> commandArray_;
+    private Stack<Command> commandArray_;
     private boolean auxPanelsEnabled_;
     private RPnPhaseSpaceAbstraction activePhaseSpace_;
+    private boolean drag_ = false;
 
     //
     // Constructors
@@ -71,7 +73,7 @@ public class UIController extends ComponentUI {
         mouseController_ = new MouseController();
         globalInputTable_ = new UserInputTable(rpnumerics.RPNUMERICS.domainDim());
 
-        commandArray_ = new ArrayList<Command>();
+        commandArray_ = new Stack<Command>();
         handler_ = new RAREFACTION_CONFIG();
         auxPanelsEnabled_ = true;
 
@@ -148,9 +150,6 @@ public class UIController extends ComponentUI {
     public void setActivePhaseSpace(RPnPhaseSpaceAbstraction activePhaseSpace_) {
         this.activePhaseSpace_ = activePhaseSpace_;
     }
-    
-    
-    
 
     //
     // Inner Classes
@@ -160,6 +159,7 @@ public class UIController extends ComponentUI {
         @Override
         public void mouseDragged(MouseEvent event) {
             RPnUIFrame.clearStatusMessage();
+            drag_ = true;
 
             if (event.getComponent() instanceof RPnPhaseSpacePanel) {
                 RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
@@ -199,6 +199,8 @@ public class UIController extends ComponentUI {
 
                         DragPlotAgent.instance().execute();
 
+
+
                     }
                 }
 
@@ -212,7 +214,18 @@ public class UIController extends ComponentUI {
         }
 
         @Override
+        public void mouseReleased(MouseEvent event) {
+
+            if (drag_) {
+                commandArray_.pop();
+                addCommand(new Command((UI_ACTION_SELECTED) handler_, globalInputTable().values()));
+            }
+
+        }
+
+        @Override
         public void mousePressed(MouseEvent event) {
+            drag_ = false;
             RPnUIFrame.clearStatusMessage();
             RPnUIFrame.disableSliders();
 
@@ -386,8 +399,11 @@ public class UIController extends ComponentUI {
     }
 
     public void addCommand(Command command) {
+
+        System.out.println("Empilhando comando: " + command.getActionSelected().getAction() + " " + command.getInputArray());
+
         RPnUIFrame.clearStatusMessage();
-        commandArray_.add(command);
+        commandArray_.push(command);
     }
 
     /** Sets the state of the application. The application works as a state machine and this method changes the actual state.*/
@@ -470,7 +486,6 @@ public class UIController extends ComponentUI {
     public RPnPhaseSpaceAbstraction getActivePhaseSpace() {
         return activePhaseSpace_;
     }
-    
 
     /**
      * @deprecated

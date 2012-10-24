@@ -5,23 +5,20 @@
  */
 package rpn.usecase;
 
-import javax.swing.AbstractAction;
 import javax.swing.Action;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import javax.swing.ImageIcon;
-import rpn.RPnPhaseSpaceAbstraction;
 import rpn.controller.ui.*;
 import rpn.message.RPnActionMediator;
-import rpn.parser.RPnDataModule;
 
-public abstract class RpModelActionAgent extends AbstractAction implements UndoableAction {
+public abstract class RpModelActionAgent extends Command{
 
     private PropertyChangeEvent history_;
     private String desc_;
 
     public RpModelActionAgent(String shortDesc, ImageIcon icon) {
-        super(shortDesc, icon);
+      super(shortDesc, icon);
         putValue(Action.SHORT_DESCRIPTION, shortDesc);
         desc_ = shortDesc;
         setEnabled(false);
@@ -46,6 +43,7 @@ public abstract class RpModelActionAgent extends AbstractAction implements Undoa
         // garbage collection is ok ?
 
         UI_ACTION_SELECTED action = new UI_ACTION_SELECTED(this);
+        setActionSelected(action);
 
         UIController.instance().setState(action);
         if (UIController.instance().getNetStatusHandler().isOnline()) { //Sending application state

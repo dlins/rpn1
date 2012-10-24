@@ -6,15 +6,26 @@
 
 package rpn.controller.ui;
 
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import javax.swing.AbstractAction;
+import javax.swing.Icon;
 import wave.util.RealVector;
 
 
-public class Command {
+public class Command extends AbstractAction implements UndoableAction{// TODO estender AbstractAction e implementar UndoableAction
 
     private ArrayList<RealVector> inputArray_;
     private UI_ACTION_SELECTED actionSelected_;
 
+    public Command(String name, Icon icon) {
+        super(name, icon);
+        inputArray_=new ArrayList<RealVector>();
+    }
+
+    
+    
+    
     public Command(UI_ACTION_SELECTED actionSelected_,RealVector input) {
         this.actionSelected_ = actionSelected_;
         inputArray_=new ArrayList<RealVector>();
@@ -32,8 +43,9 @@ public class Command {
         this.actionSelected_ = actionSelected_;
     }
 
-
-
+    public void setActionSelected(UI_ACTION_SELECTED actionSelected_) {
+        this.actionSelected_ = actionSelected_;
+    }
 
     public UI_ACTION_SELECTED getActionSelected() {
         return actionSelected_;
@@ -57,6 +69,14 @@ public class Command {
 
         return buffer.toString();
 
+    }
+
+    public void unexecute() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 

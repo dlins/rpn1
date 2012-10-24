@@ -144,7 +144,7 @@ public class RPnFluxParamsDialog extends RPnDialog {
         GeometryGraphND.clearAllStrings();
         RPNUMERICS.applyFluxParams();
 
-        rpn.usecase.ChangeFluxParamsAgent.instance().applyChange(new PropertyChangeEvent(rpn.usecase.ChangeFluxParamsAgent.instance(), "", null, RPNUMERICS.getFluxParams()));
+        rpn.usecase.ChangeFluxParamsAgent.instance().applyChange(new PropertyChangeEvent(rpn.usecase.ChangeFluxParamsAgent.instance(), "", null, RPNUMERICS.getFluxParams().getParams()));
 
         rpn.usecase.ChangeFluxParamsAgent.instance().updatePhaseDiagram();
     }
