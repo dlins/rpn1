@@ -59,13 +59,52 @@ SubPhysics(*defaultBoundary(), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATIO
 
 }
 
-
 TPCW::TPCW(const TPCW & copy) :
 SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.boundary(), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATION_),
 TD(new Thermodynamics_SuperCO2_WaterAdimensionalized(*copy.TD)) {
 
     ReducedTPCWHugoniotFunctionClass * tpcwhc = new ReducedTPCWHugoniotFunctionClass((ReducedTPCWHugoniotFunctionClass &) * copy.getHugoniotFunction());
     setHugoniotFunction(tpcwhc);
+
+}
+
+void TPCW::setParams(vector<string> params) {
+
+    for (int i = 0; i < params.size(); i++) {
+        cout << "i: "<<i<<" " <<params.at(i) << endl;
+
+
+    }
+
+    RealVector fluxParamVector(8);
+
+    //Flux params
+    for (int i = 0; i < fluxParamVector.size(); i++) {
+
+        fluxParamVector.component(i) = atof(params[i].c_str());
+
+    }
+
+    cout << "Parametros em setParams:" << fluxParamVector << endl;
+
+
+    fluxFunction_->fluxParams(fluxParamVector); // = new Flux2Comp2PhasesAdimensionalized(Flux2Comp2PhasesAdimensionalized_Params(fluxVector, TD));
+
+
+
+    //    delete TD;
+    TD = new Thermodynamics_SuperCO2_WaterAdimensionalized(params.at(11),
+            atof(params[8].c_str()),
+            atof(params[9].c_str()),
+            atof(params[10].c_str()));
+
+
+
+    double phi = atof(params[12].c_str());
+
+    accumulationFunction_ ->accumulationParams(Accum2Comp2PhasesAdimensionalized_Params(TD, phi));
+
+
 
 }
 
@@ -129,7 +168,7 @@ void TPCW::preProcess(RealVector & input) {
 void TPCW::postProcess(vector<RealVector> & input) {
 
 
-    cout<<"Em post process"<<endl;
+    cout << "Em post process" << endl;
 
 
     int inputSize = input[0].size();
