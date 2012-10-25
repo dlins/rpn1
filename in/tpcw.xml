@@ -4,7 +4,7 @@
     <PHYSICS name="TPCW">
         <PHYSICSCONFIG name="fluxfunction">
 
-                <PHYSICSPARAM name="abs perm" position="0" value="2e-12"/>
+                <PHYSICSPARAM name="abs perm" position="0" value="3e-12"/>
                 <PHYSICSPARAM name="sin beta" position="1" value="0.0"/>
                 <PHYSICSPARAM name="has gravity" position="2" value="0.0"/>
                 <PHYSICSPARAM name="has horizontal" position="3" value="1.0"/>
@@ -14,7 +14,7 @@
                 <PHYSICSPARAM name="expg" position="7" value="2.0"/>
 
 
-               <PHYSICSPARAM name="phi" position="8" value="1.0"/>
+               <PHYSICSPARAM name="phi" position="8" value="0.38"/>
 
 
 
