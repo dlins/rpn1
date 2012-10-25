@@ -89,6 +89,8 @@ int ColorCurve::solve(const double *A, double *bb, int dim, double *x) {
 void ColorCurve::Left_Newton_improvement(const RealVector &input, const int type, RealVector &out) {
     int dim = input.size();
 
+//    cout << "CC::LN_improv: " << type << endl;
+
     double sigma = ref_eigenvalue[type];
     out.resize(dim);
 
@@ -193,7 +195,7 @@ void ColorCurve::Right_Newton_improvement(const RealVector &input, const int typ
     }
 
     // TODO: Improve this epsilon
-    double epsilon = 1e-10;
+    double epsilon  = 1e-6;
     double epsilon2 = epsilon*epsilon;
     double anorm;
     double delta_U[dim];
@@ -257,8 +259,7 @@ void ColorCurve::Right_Newton_improvement(const RealVector &input, const int typ
                     }
                 }
             }
-
-         */
+         *** *** */
 
         // The minus sign is incorporated within the parentesis
         b[0] = 2 * (f1Bracket * g2Bracket - f2Bracket * g1Bracket);
@@ -297,6 +298,7 @@ void ColorCurve::Right_Newton_improvement(const RealVector &input, const int typ
             cout << "ColorCurve::Right_Newton does not converge." << endl;
             cout << "count = " << count << " " << input << endl;
             for (int i = 0; i < dim; i++) out.component(i) = input.component(i);
+
             return;
         }
 
@@ -310,9 +312,8 @@ void ColorCurve::Right_Newton_improvement(const RealVector &input, const int typ
         deltaNorm = 0.0;
         for (int i = 0; i < dim; i++) deltaNorm += (delta_U[i] * delta_U[i]);
         count++;
-    } while (deltaNorm > epsilon2);
 
-    // cout << "Saindo de RN(" << count << "). Input = " << input << ", U = " << U[0]<<" "<<U[1] << endl;
+    } while (deltaNorm > epsilon2);
 
     // Output
     for (int i = 0; i < dim; i++) out.component(i) = U[i];
@@ -325,6 +326,7 @@ int ColorCurve::interpolate(const RealVector &p, double &s_p,
         const RealVector &q, double &s_q,
         const std::vector<double> &eigenvalue_q, const int type_q,
         vector<RealVector> &r, vector<int> &rtype) {
+    double epsilon = 1e-10;
 
     // The number of inequalities show the kind of inequality... zero is an error.
     int abs_ineq = abs(type_p - type_q);
@@ -346,7 +348,8 @@ int ColorCurve::interpolate(const RealVector &p, double &s_p,
     for (int i = 0; i < fam; i++) {
         if (abs_ineq % 2) {
             fp = ref_eigenvalue[i] - s_p;
-            fp = ref_eigenvalue[i] - s_q;
+            fq = ref_eigenvalue[i] - s_q;
+            if ( fabs(fq - fp) < epsilon) return INTERPOLATION_ERROR;
             alpha.push_back(fq / (fq - fp));
             rtype.push_back(increase);
             noi++;
@@ -373,7 +376,8 @@ int ColorCurve::interpolate(const RealVector &p, double &s_p,
     for (int i = 0; i < fam; i++) {
         if (abs_ineq % 2) {
             fp = eigenvalue_p[i] - s_p;
-            fp = eigenvalue_q[i] - s_q;
+            fq = eigenvalue_q[i] - s_q;
+            if ( fabs(fq - fp) < epsilon) return INTERPOLATION_ERROR;
             alpha.push_back(fq / (fq - fp));
             rtype.push_back(increase);
             noi++;
@@ -398,7 +402,7 @@ int ColorCurve::interpolate(const RealVector &p, double &s_p,
     }
 
     // Here the alphas are orginized in increasing order
-    // (Thus alpha[0] will be closer to zero, and r[noi-1] closer one).        
+    // (Thus alpha[0] will be closer to zero, and r[noi-1] closer one).
     std::sort(alpha.begin(), alpha.end());
 
     // If the sign changes more than 2 times the number of families, return an error.
@@ -408,8 +412,11 @@ int ColorCurve::interpolate(const RealVector &p, double &s_p,
         r.resize(noi);
         for (int i = 0; i < noi; i++) {
             r[i].resize(p.size());
-            for (int j = 0; j < p.size(); j++) r[i].component(j) =
-                    (1 - alpha[i]) * p.component(j) + alpha[i] * q.component(j);
+            for (int j = 0; j < p.size(); j++) {
+                if (alpha[i] < 0.0) alpha[i] = 0.0;
+                if (alpha[i] > 1.0) alpha[i] = 1.0;
+                r[i].component(j) = (1 - alpha[i]) * p.component(j) + alpha[i] * q.component(j);
+            }
         }
 
         return INTERPOLATION_OK;
@@ -536,9 +543,7 @@ int ColorCurve::classify_point(RealVector &p, double &s, std::vector<double> &ei
     // Complex eigenvalues at segment point
     increment = 0;
     while (complex[increment] != 0) {
-//        cout<<"Sig: "<<signature<<" complex"<<complex[increment]<<endl;
         signature.replace(complex[increment]+dim, 1, sc);
-//        cout<<"Sig depois : "<<signature<<endl;
         increment++;
     }
 
@@ -551,8 +556,7 @@ void ColorCurve::classify_segment(RealVector &p, RealVector &q,
 
     double s_p, s_q;
     std::vector<double> eigenvalue_p, eigenvalue_q;
-std:
-    string ct_p, ct_q;
+    std::string ct_p, ct_q;
 
     int type_p = classify_point(p, s_p, eigenvalue_p, ct_p);
     int type_q = classify_point(q, s_q, eigenvalue_q, ct_q);
@@ -597,8 +601,10 @@ std:
         }
 
         classified_curve.push_back(hpl);
-    }        // Both points share the same type (the output segment will not be divided).
-        //
+    }
+
+    // Both points share the same type (the output segment will not be divided).
+    //
     else if (type_p == type_q) {
         hpl.type = type_p;
         hpl.signature = ct_p;
@@ -617,8 +623,10 @@ std:
         }
 
         classified_curve.push_back(hpl);
-    }        // Points have different classification, splitting is needed.
-        //
+    }
+
+    // Points have different classification, splitting is needed.
+    //
     else {
         // The number of families do not change inside.
         int fam = eigenvalue_p.size();
@@ -644,6 +652,7 @@ std:
         std::vector< std::vector<double> > reigen;
         reigen.clear();
         std::vector<std::string> sigtype, sigttemp;
+
         sigtype.clear();
         sigttemp.clear();
 
@@ -673,8 +682,8 @@ std:
                 }
                 // cout << "O tipo de zero eh: " << zerotype << ", desde: " << rttemp[i] << endl;
                 RealVector out;
-                if (zerotype < fam) Left_Newton_improvement(rtemp[i], zerotype, out);
-                else Right_Newton_improvement(rtemp[i], zerotype - fam, out);
+                if (zerotype < fam) Left_Newton_improvement(rtemp[i], zerotype,       out);
+                else               Right_Newton_improvement(rtemp[i], zerotype - fam, out);
                 rtemp[i] = out;
             }
         }
