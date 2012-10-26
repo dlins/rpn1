@@ -37,6 +37,9 @@ GridValues * GridValuesFactory::getGrid(const string & gridName) {
         cout << "Min: " << boundary->minimums() << endl;
         cout << "Max: " << boundary->maximums() << endl;
 
+        cout << "Parametros flux: em gv " << physics_->getSubPhysics(0).fluxFunction().fluxParams().params() << endl;
+        cout << "Parametros accum em gv: " << physics_->getSubPhysics(0).accumulation().accumulationParams().params() << endl;
+
         vector<int> noc = getDefaultGridResolution(gridName);
 
         GridValues * returnedGrid = new GridValues(boundary, boundary->minimums(), boundary->maximums(), noc);

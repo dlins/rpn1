@@ -97,6 +97,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     vector<HugoniotPolyLine> hugoniotPolyLineVector;
 
     Hugoniot_Locus * hugoniotCurve = RpNumerics::getPhysics().getSubPhysics(0).getHugoniotFunction();
+   
 
     GridValues * gv = RpNumerics::getGridFactory().getGrid("hugoniotcurve");
 
@@ -141,7 +142,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
             int pointType = hugoniotPolyLineVector[i].type;
 
-            string signature = hugoniotPolyLineVector[i].signature;
+            string signature = "";//hugoniotPolyLineVector[i].signature;
 
 //            cout <<"segmento: "<<hugoniotPolyLineVector[i].point[0]<<" "<<hugoniotPolyLineVector[i].point[1]<<endl;
 
