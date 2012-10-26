@@ -97,6 +97,9 @@ void Eigenvalue_Contour::set_levels_from_point(const FluxFunction *f, const Accu
     g.fill_eigenpairs_on_grid(f, a);
     gv = &g;
 
+
+
+
     family = fam;
 
     levels.clear();
@@ -149,8 +152,10 @@ void Eigenvalue_Contour::set_level_from_point(const FluxFunction *f, const Accum
                                               int fam, const RealVector &p){
     family = fam;
 
-    double JF[4], JG[4];
-    
+
+    cout<<"Tamanho do p: "<<p.size()<<endl;
+    double JF[p.size()*p.size()], JG[p.size()*p.size()];
+
     f->fill_with_jet(p.size(), ((RealVector)p).components(), 1, 0, JF, 0);
     a->fill_with_jet(p.size(), ((RealVector)p).components(), 1, 0, JG, 0);
 
