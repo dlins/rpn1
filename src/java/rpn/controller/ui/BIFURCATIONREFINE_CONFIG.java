@@ -5,13 +5,13 @@
  */
 package rpn.controller.ui;
 
-import rpn.usecase.BifurcationRefineAgent;
+import rpn.command.BifurcationRefineCommand;
 
 public class BIFURCATIONREFINE_CONFIG extends UI_ACTION_SELECTED {
 
     public BIFURCATIONREFINE_CONFIG() {
 
-        super(BifurcationRefineAgent.instance());
+        super(BifurcationRefineCommand.instance());
         System.out.println("Construtor de BIFURCATIONREFINE_CONFIG");
 
     }

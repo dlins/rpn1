@@ -10,7 +10,7 @@ import rpn.component.ProfileGeomFactory;
 import rpn.component.MultidAdapter;
 import rpn.controller.phasespace.ProfileReadyImpl;
 import rpn.controller.phasespace.ProfileSetupReadyImpl;
-import rpn.usecase.FindProfileAgent;
+import rpn.command.FindProfileCommand;
 import rpnumerics.RPNUMERICS;
 
 public class ConnectionOrbitCalcParser implements ActionListener {
@@ -51,7 +51,7 @@ public class ConnectionOrbitCalcParser implements ActionListener {
 //                                    ManifoldParser.manifoldGeomB, profile));
 //
 //                } else {
-//                    FindProfileAgent.instance().actionPerformed(null);
+//                    FindProfileCommand.instance().actionPerformed(null);
 //                }
 //            } catch (Exception ex) {
 //                ex.printStackTrace();

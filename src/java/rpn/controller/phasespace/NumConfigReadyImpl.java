@@ -13,7 +13,7 @@ import rpn.component.XZeroGeom;
 import rpn.component.HugoniotCurveGeom;
 import rpn.component.PoincareSectionGeom;
 import rpn.component.StationaryPointGeom;
-import rpn.usecase.*;
+import rpn.command.*;
 
 public class NumConfigReadyImpl extends NumConfigImpl
         implements NUMCONFIG_READY {
@@ -36,20 +36,20 @@ public class NumConfigReadyImpl extends NumConfigImpl
         plotManifold_ = plotManifold;
 
         // ENABLED
-        OrbitPlotAgent.instance().setEnabled(true);
-        PoincareSectionPlotAgent.instance().setEnabled(true);
-        StationaryPointPlotAgent.instance().setEnabled(true);
-        ChangeDirectionAgent.instance().setEnabled(true);
-        ChangeSigmaAgent.instance().setEnabled(true);
-        ChangeFluxParamsAgent.instance().setEnabled(true);
-        ClearPhaseSpaceAgent.instance().setEnabled(true);
-        FillPhaseSpaceAgent.instance().setEnabled(true);
-        InvariantPlotAgent.instance().setEnabled(true);
-        ChangeXZeroAgent.instance().setEnabled(true);
+        OrbitPlotCommand.instance().setEnabled(true);
+        PoincareSectionPlotCommand.instance().setEnabled(true);
+        StationaryPointPlotCommand.instance().setEnabled(true);
+        ChangeDirectionCommand.instance().setEnabled(true);
+        ChangeSigmaCommand.instance().setEnabled(true);
+        ChangeFluxParamsCommand.instance().setEnabled(true);
+        ClearPhaseSpaceCommand.instance().setEnabled(true);
+        FillPhaseSpaceCommand.instance().setEnabled(true);
+        InvariantPlotCommand.instance().setEnabled(true);
+        ChangeXZeroCommand.instance().setEnabled(true);
         // DISABLED
-        BackwardManifoldPlotAgent.instance().setEnabled(false);
-        ConnectionManifoldPlotAgent.instance().setEnabled(false);
-        FindProfileAgent.instance().setEnabled(false);
+        BackwardManifoldPlotCommand.instance().setEnabled(false);
+        ConnectionManifoldPlotCommand.instance().setEnabled(false);
+        FindProfileCommand.instance().setEnabled(false);
 
 
     }

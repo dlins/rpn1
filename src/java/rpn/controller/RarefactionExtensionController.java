@@ -6,7 +6,7 @@
 package rpn.controller;
 
 import rpn.component.RpGeomFactory;
-import rpn.usecase.*;
+import rpn.command.*;
 import java.beans.PropertyChangeEvent;
 import rpn.component.HugoniotCurveGeomFactory;
 import rpn.component.RarefactionExtensionGeomFactory;
@@ -34,16 +34,16 @@ public class RarefactionExtensionController extends RpCalcController {
 
     @Override
     protected void register() {
-        DragPlotAgent.instance().addPropertyChangeListener(this);
-        ChangeFluxParamsAgent.instance().addPropertyChangeListener(this);
+        DragPlotCommand.instance().addPropertyChangeListener(this);
+        ChangeFluxParamsCommand.instance().addPropertyChangeListener(this);
 
 
     }
 
     @Override
     protected void unregister() {
-        DragPlotAgent.instance().removePropertyChangeListener(this);
-        ChangeFluxParamsAgent.instance().removePropertyChangeListener(this);
+        DragPlotCommand.instance().removePropertyChangeListener(this);
+        ChangeFluxParamsCommand.instance().removePropertyChangeListener(this);
 
 
     }
@@ -63,7 +63,7 @@ public class RarefactionExtensionController extends RpCalcController {
     @Override
     public void propertyChange(PropertyChangeEvent change) {
 
-        if (change.getSource() instanceof DragPlotAgent) {
+        if (change.getSource() instanceof DragPlotCommand) {
             ((RarefactionExtensionCalc) geomFactory_.rpCalc()).setStart(new PhasePoint((RealVector) change.getNewValue()));
             geomFactory_.updateGeom();
             return;

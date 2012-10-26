@@ -30,7 +30,7 @@ import javax.swing.SwingConstants;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UI_ACTION_SELECTED;
 import rpn.parser.RPnDataModule;
-import rpn.usecase.RpModelActionAgent;
+import rpn.command.RpModelActionCommand;
 import rpnumerics.RPNUMERICS;
 import wave.util.RealVector;
 

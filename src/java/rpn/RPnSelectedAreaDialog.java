@@ -9,8 +9,8 @@ import javax.swing.*;
 import java.awt.*;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UI_ACTION_SELECTED;
-import rpn.usecase.AreaSelectionAgent;
-import rpn.usecase.BifurcationRefineAgent;
+import rpn.command.AreaSelectionCommand;
+import rpn.command.BifurcationRefineCommand;
 import wave.util.RealVector;
 
 public class RPnSelectedAreaDialog extends RPnDialog {

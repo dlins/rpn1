@@ -8,7 +8,7 @@ package rpn.controller;
 import rpn.component.PoincareSectionGeomFactory;
 import rpn.component.RpGeomFactory;
 import rpn.controller.phasespace.*;
-import rpn.usecase.*;
+import rpn.command.*;
 import rpn.parser.RPnDataModule;
 import rpnumerics.ConnectionOrbit;
 import wave.util.SimplexPoincareSection;
@@ -20,7 +20,7 @@ public class PoincareController implements RpController {
     private PoincareSectionGeomFactory geomFactory_;
 
     public PoincareController() {
-        ChangeFluxParamsAgent.instance().addPropertyChangeListener(this);
+        ChangeFluxParamsCommand.instance().addPropertyChangeListener(this);
     }
 
     public void propertyChange(PropertyChangeEvent change) {
@@ -52,7 +52,7 @@ public class PoincareController implements RpController {
         if (geomFactory_ == geom) {
             geomFactory_ = null;
             ((wave.ode.Rk4BPProfile) rpnumerics.RPNUMERICS.odeSolver().getProfile()).setPoincareSectionFlag(false);
-            ChangeFluxParamsAgent.instance().removePropertyChangeListener(this);
+            ChangeFluxParamsCommand.instance().removePropertyChangeListener(this);
         }
     }
 }

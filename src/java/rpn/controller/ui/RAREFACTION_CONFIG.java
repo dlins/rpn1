@@ -5,48 +5,48 @@
  */
 package rpn.controller.ui;
 
-import rpn.usecase.AreaSelectionAgent;
-import rpn.usecase.ChangeFluxParamsAgent;
-import rpn.usecase.ChangeDirectionAgent;
-import rpn.usecase.ChangeOrbitLevel;
-import rpn.usecase.CompositePlotAgent;
-import rpn.usecase.CurveRefineAgent;
-import rpn.usecase.EllipticBoundaryAgent;
-import rpn.usecase.HugoniotPlotAgent;
-import rpn.usecase.IntegralCurvePlotAgent;
-import rpn.usecase.LevelCurvePlotAgent;
-import rpn.usecase.PhysicalBoundaryPlotAgent;
-import rpn.usecase.PointLevelCurvePlotAgent;
-import rpn.usecase.RarefactionExtensionCurvePlotAgent;
-import rpn.usecase.RarefactionOrbitPlotAgent;
-import rpn.usecase.RiemannProfileAgent;
-import rpn.usecase.ShockCurvePlotAgent;
-import rpn.usecase.WaveCurvePlotAgent;
+import rpn.command.AreaSelectionCommand;
+import rpn.command.ChangeFluxParamsCommand;
+import rpn.command.ChangeDirectionCommand;
+import rpn.command.ChangeOrbitLevelCommand;
+import rpn.command.CompositePlotCommand;
+import rpn.command.CurveRefineCommand;
+import rpn.command.EllipticBoundaryCommand;
+import rpn.command.HugoniotPlotCommand;
+import rpn.command.IntegralCurvePlotCommand;
+import rpn.command.LevelCurvePlotCommand;
+import rpn.command.PhysicalBoundaryPlotCommand;
+import rpn.command.PointLevelCurvePlotCommand;
+import rpn.command.RarefactionExtensionCurvePlotCommand;
+import rpn.command.RarefactionOrbitPlotCommand;
+import rpn.command.RiemannProfileCommand;
+import rpn.command.ShockCurvePlotCommand;
+import rpn.command.WaveCurvePlotCommand;
 import wave.util.RealVector;
 
 public class RAREFACTION_CONFIG extends UI_ACTION_SELECTED {
 
     public RAREFACTION_CONFIG() {
 
-        super(ChangeDirectionAgent.instance());//Dummy 
+        super(ChangeDirectionCommand.instance());//Dummy
 
-        RarefactionOrbitPlotAgent.instance().setEnabled(true);
-        HugoniotPlotAgent.instance().setEnabled(true);
-        ShockCurvePlotAgent.instance().setEnabled(true);
-        ChangeDirectionAgent.instance().setEnabled(true);
-        ChangeFluxParamsAgent.instance().setEnabled(true);
-        RarefactionExtensionCurvePlotAgent.instance().setEnabled(true);
-        IntegralCurvePlotAgent.instance().setEnabled(true);
-        AreaSelectionAgent.instance().setEnabled(false);
-        CompositePlotAgent.instance().setEnabled(true);
-        PointLevelCurvePlotAgent.instance().setEnabled(true);
-        LevelCurvePlotAgent.instance().setEnabled(true);
-        ChangeOrbitLevel.instance().setEnabled(true);
-        EllipticBoundaryAgent.instance().setEnabled(true);
-        PhysicalBoundaryPlotAgent.instance().setEnabled(true);
-        RiemannProfileAgent.instance().setEnabled(false);
-        WaveCurvePlotAgent.instance().setEnabled(true);
-        CurveRefineAgent.instance().setEnabled(false);
+        RarefactionOrbitPlotCommand.instance().setEnabled(true);
+        HugoniotPlotCommand.instance().setEnabled(true);
+        ShockCurvePlotCommand.instance().setEnabled(true);
+        ChangeDirectionCommand.instance().setEnabled(true);
+        ChangeFluxParamsCommand.instance().setEnabled(true);
+        RarefactionExtensionCurvePlotCommand.instance().setEnabled(true);
+        IntegralCurvePlotCommand.instance().setEnabled(true);
+        AreaSelectionCommand.instance().setEnabled(false);
+        CompositePlotCommand.instance().setEnabled(true);
+        PointLevelCurvePlotCommand.instance().setEnabled(true);
+        LevelCurvePlotCommand.instance().setEnabled(true);
+        ChangeOrbitLevelCommand.instance().setEnabled(true);
+        EllipticBoundaryCommand.instance().setEnabled(true);
+        PhysicalBoundaryPlotCommand.instance().setEnabled(true);
+        RiemannProfileCommand.instance().setEnabled(false);
+        WaveCurvePlotCommand.instance().setEnabled(true);
+        CurveRefineCommand.instance().setEnabled(false);
 
        
 

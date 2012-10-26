@@ -9,8 +9,8 @@ import rpn.component.*;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.controller.ui.UIController;
 import rpn.parser.RPnDataModule;
-import rpn.usecase.FindProfileAgent;
-import rpn.usecase.OrbitPlotAgent;
+import rpn.command.FindProfileCommand;
+import rpn.command.OrbitPlotCommand;
 import rpnumerics.ManifoldOrbit;
 import rpnumerics.ManifoldOrbitCalc;
 import rpnumerics.Orbit;
@@ -38,8 +38,8 @@ public class ProfileSetupReadyImpl extends PoincareReadyImpl
         fwdManifoldGeom_ = null;
         bwdManifoldGeom_ = null;
         // ENABLED
-        FindProfileAgent.instance().setEnabled(true);
-        OrbitPlotAgent.instance().setEnabled(false);
+        FindProfileCommand.instance().setEnabled(true);
+        OrbitPlotCommand.instance().setEnabled(false);
     }
 
     public ProfileSetupReadyImpl(HugoniotCurveGeom hugoniotGeom, XZeroGeom xzeroGeom, PoincareSectionGeom poincareGeom,
@@ -48,8 +48,8 @@ public class ProfileSetupReadyImpl extends PoincareReadyImpl
         fwdManifoldGeom_ = fwdManifoldGeom;
         bwdManifoldGeom_ = bwdManifoldGeom;
         // ENABLED
-        FindProfileAgent.instance().setEnabled(true);
-        OrbitPlotAgent.instance().setEnabled(false);
+        FindProfileCommand.instance().setEnabled(true);
+        OrbitPlotCommand.instance().setEnabled(false);
     }
 
     //

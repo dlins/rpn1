@@ -5,12 +5,12 @@
  */
 package rpn.controller.ui;
 
-import rpn.usecase.AreaSelectionAgent;
+import rpn.command.AreaSelectionCommand;
 
 public class AREASELECTION_CONFIG extends UI_ACTION_SELECTED {
 
     public AREASELECTION_CONFIG() {
-        super(AreaSelectionAgent.instance());
+        super(AreaSelectionCommand.instance());
        
 
     }

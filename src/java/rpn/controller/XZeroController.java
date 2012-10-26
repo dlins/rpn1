@@ -7,7 +7,7 @@ package rpn.controller;
 
 import rpn.component.RpGeomFactory;
 import rpn.component.XZeroGeomFactory;
-import rpn.usecase.*;
+import rpn.command.*;
 import rpnumerics.StationaryPointCalc;
 import rpnumerics.PhasePoint;
 import java.beans.PropertyChangeEvent;
@@ -32,19 +32,19 @@ public class XZeroController
     //
     @Override
     protected void register() {
-        ChangeFluxParamsAgent.instance().addPropertyChangeListener(this);
-        ChangeDirectionAgent.instance().addPropertyChangeListener(this);
-        ChangeSigmaAgent.instance().addPropertyChangeListener(this);
-        ChangeXZeroAgent.instance().addPropertyChangeListener(this);
+        ChangeFluxParamsCommand.instance().addPropertyChangeListener(this);
+        ChangeDirectionCommand.instance().addPropertyChangeListener(this);
+        ChangeSigmaCommand.instance().addPropertyChangeListener(this);
+        ChangeXZeroCommand.instance().addPropertyChangeListener(this);
 
     }
 
     @Override
     protected void unregister() {
-        ChangeFluxParamsAgent.instance().removePropertyChangeListener(this);
-        ChangeDirectionAgent.instance().removePropertyChangeListener(this);
-        ChangeSigmaAgent.instance().removePropertyChangeListener(this);
-        ChangeXZeroAgent.instance().removePropertyChangeListener(this);
+        ChangeFluxParamsCommand.instance().removePropertyChangeListener(this);
+        ChangeDirectionCommand.instance().removePropertyChangeListener(this);
+        ChangeSigmaCommand.instance().removePropertyChangeListener(this);
+        ChangeXZeroCommand.instance().removePropertyChangeListener(this);
 
     }
 

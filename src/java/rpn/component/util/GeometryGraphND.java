@@ -40,8 +40,8 @@ import wave.util.RealVector;
 import rpn.controller.ui.CLASSIFIERAGENT_CONFIG;
 import rpn.controller.ui.VELOCITYAGENT_CONFIG;
 import rpn.parser.RPnDataModule;
-import rpn.usecase.ClassifierAgent;
-import rpn.usecase.VelocityAgent;
+import rpn.command.ClassifierCommand;
+import rpn.command.VelocityCommand;
 
 /**
  *
@@ -92,39 +92,39 @@ public class GeometryGraphND {
         clearpMarca();
 
         if (UIController.instance().getState() instanceof CLASSIFIERAGENT_CONFIG) {
-            int lastIndex = ClassifierAgent.tipo.size() - 1;
-            ClassifierAgent.strView.remove(lastIndex);
-            ClassifierAgent.indCurvaCla.remove(lastIndex);
-            ClassifierAgent.tipo.remove(lastIndex);
-            ClassifierAgent.xSeta.remove(lastIndex);
-            ClassifierAgent.xStr.remove(lastIndex);
-            ClassifierAgent.ySeta.remove(lastIndex);
-            ClassifierAgent.yStr.remove(lastIndex);
+            int lastIndex = ClassifierCommand.tipo.size() - 1;
+            ClassifierCommand.strView.remove(lastIndex);
+            ClassifierCommand.indCurvaCla.remove(lastIndex);
+            ClassifierCommand.tipo.remove(lastIndex);
+            ClassifierCommand.xSeta.remove(lastIndex);
+            ClassifierCommand.xStr.remove(lastIndex);
+            ClassifierCommand.ySeta.remove(lastIndex);
+            ClassifierCommand.yStr.remove(lastIndex);
         }
 
         if (UIController.instance().getState() instanceof VELOCITYAGENT_CONFIG) {
-            int lastIndex = VelocityAgent.vel.size() - 1;
-            VelocityAgent.velView.remove(lastIndex);
-            VelocityAgent.indCurvaVel.remove(lastIndex);
-            VelocityAgent.vel.remove(lastIndex);
-            VelocityAgent.xSetaVel.remove(lastIndex);
-            VelocityAgent.xVel.remove(lastIndex);
-            VelocityAgent.ySetaVel.remove(lastIndex);
-            VelocityAgent.yVel.remove(lastIndex);
+            int lastIndex = VelocityCommand.vel.size() - 1;
+            VelocityCommand.velView.remove(lastIndex);
+            VelocityCommand.indCurvaVel.remove(lastIndex);
+            VelocityCommand.vel.remove(lastIndex);
+            VelocityCommand.xSetaVel.remove(lastIndex);
+            VelocityCommand.xVel.remove(lastIndex);
+            VelocityCommand.ySetaVel.remove(lastIndex);
+            VelocityCommand.yVel.remove(lastIndex);
         }
     }
 
     public static void clearAllStrings() {
-        VelocityAgent.clearVelocities();
-        ClassifierAgent.clearClassifiers();
+        VelocityCommand.clearVelocities();
+        ClassifierCommand.clearClassifiers();
     }
 
     public static void clearAll() {
-        ClassifierAgent.indCurvaCla.clear();
-        VelocityAgent.indCurvaVel.clear();
+        ClassifierCommand.indCurvaCla.clear();
+        VelocityCommand.indCurvaVel.clear();
         clearAllStrings();
         RPnPhaseSpaceAbstraction.listResolution.clear();
-        VelocityAgent.listaEquil.clear();
+        VelocityCommand.listaEquil.clear();
         
     }
 
@@ -262,15 +262,15 @@ public class GeometryGraphND {
 
     public void defineClassifiers(Graphics g, Scene scene_, RPnPhaseSpacePanel panel) {
 
-        //int cont = ClassifierAgent.xDevStr.size();
-        int cont = ClassifierAgent.xStr.size();
+        //int cont = ClassifierCommand.xDevStr.size();
+        int cont = ClassifierCommand.xStr.size();
 
         for (int i = 0; i < cont; i++) {
 
-            double YCR = Double.valueOf(ClassifierAgent.yStr.get(i).toString()).doubleValue();
-            double XCR = Double.valueOf(ClassifierAgent.xStr.get(i).toString()).doubleValue();
+            double YCR = Double.valueOf(ClassifierCommand.yStr.get(i).toString()).doubleValue();
+            double XCR = Double.valueOf(ClassifierCommand.xStr.get(i).toString()).doubleValue();
 
-//            int strView = Integer.valueOf(ClassifierAgent.strView.get(i).toString()).intValue();
+//            int strView = Integer.valueOf(ClassifierCommand.strView.get(i).toString()).intValue();
 //
 //            if (strView == -1) {
 //                g.setColor(RPnPhaseSpacePanel.DEFAULT_BACKGROUND_COLOR);
@@ -287,8 +287,8 @@ public class GeometryGraphND {
             Coords2D newDC = toDeviceCoords(scene_, newRV);
 
             // ***
-            double YSeta = Double.valueOf(ClassifierAgent.ySeta.get(i).toString()).doubleValue();
-            double XSeta = Double.valueOf(ClassifierAgent.xSeta.get(i).toString()).doubleValue();
+            double YSeta = Double.valueOf(ClassifierCommand.ySeta.get(i).toString()).doubleValue();
+            double XSeta = Double.valueOf(ClassifierCommand.xSeta.get(i).toString()).doubleValue();
 
             RealVector setaRV = new RealVector(RPNUMERICS.domainDim());
             setaRV.setElement(0, YSeta);
@@ -297,13 +297,13 @@ public class GeometryGraphND {
             Coords2D setaDC = toDeviceCoords(scene_, setaRV);
             // ***
 
-            int s1 = (Integer) (ClassifierAgent.tipo.get(i));
+            int s1 = (Integer) (ClassifierCommand.tipo.get(i));
             Object obj = HugoniotSegGeom.s[s1];
 
             //drawObjects(g, obj, newDC, setaDC);     // algo equivalente ao panel.getName() deve ser usado
-            if ((Integer)ClassifierAgent.strView.get(i) == 1  &&  (panel.getName().equals("Phase Space"))) drawObjects(g, obj, newDC, setaDC);
-            else if ((Integer)ClassifierAgent.strView.get(i) == 2  &&  (panel.getName().equals("RightPhase Space"))) drawObjects(g, obj, newDC, setaDC);
-            else if ((Integer)ClassifierAgent.strView.get(i) == 3  &&  (panel.getName().equals("LeftPhase Space"))) drawObjects(g, obj, newDC, setaDC);
+            if ((Integer)ClassifierCommand.strView.get(i) == 1  &&  (panel.getName().equals("Phase Space"))) drawObjects(g, obj, newDC, setaDC);
+            else if ((Integer)ClassifierCommand.strView.get(i) == 2  &&  (panel.getName().equals("RightPhase Space"))) drawObjects(g, obj, newDC, setaDC);
+            else if ((Integer)ClassifierCommand.strView.get(i) == 3  &&  (panel.getName().equals("LeftPhase Space"))) drawObjects(g, obj, newDC, setaDC);
 
         }
 
@@ -312,15 +312,15 @@ public class GeometryGraphND {
 
     public void defineVelocities(Graphics g, Scene scene_, RPnPhaseSpacePanel panel) {
 
-        //int cont = VelocityAgent.xDevVel.size();
-        int cont = VelocityAgent.xVel.size();
+        //int cont = VelocityCommand.xDevVel.size();
+        int cont = VelocityCommand.xVel.size();
 
         for (int i = 0; i < cont; i++) {
 
-            double YCR = Double.valueOf(VelocityAgent.yVel.get(i).toString()).doubleValue();
-            double XCR = Double.valueOf(VelocityAgent.xVel.get(i).toString()).doubleValue();
+            double YCR = Double.valueOf(VelocityCommand.yVel.get(i).toString()).doubleValue();
+            double XCR = Double.valueOf(VelocityCommand.xVel.get(i).toString()).doubleValue();
 
-//            int velView = Integer.valueOf(VelocityAgent.velView.get(i).toString()).intValue();
+//            int velView = Integer.valueOf(VelocityCommand.velView.get(i).toString()).intValue();
 //
 //            if (velView == -1) {
 //                g.setColor(RPnPhaseSpacePanel.DEFAULT_BACKGROUND_COLOR);
@@ -337,8 +337,8 @@ public class GeometryGraphND {
             Coords2D newDC = toDeviceCoords(scene_, newRV);
 
             // ***
-            double YSeta = Double.valueOf(VelocityAgent.ySetaVel.get(i).toString()).doubleValue();
-            double XSeta = Double.valueOf(VelocityAgent.xSetaVel.get(i).toString()).doubleValue();
+            double YSeta = Double.valueOf(VelocityCommand.ySetaVel.get(i).toString()).doubleValue();
+            double XSeta = Double.valueOf(VelocityCommand.xSetaVel.get(i).toString()).doubleValue();
 
             RealVector setaRV = new RealVector(RPNUMERICS.domainDim());
             setaRV.setElement(0, YSeta);
@@ -347,14 +347,14 @@ public class GeometryGraphND {
             Coords2D setaDC = toDeviceCoords(scene_, setaRV);
             // ***
 
-            double v1 = (Double) (VelocityAgent.vel.get(i));
+            double v1 = (Double) (VelocityCommand.vel.get(i));
             String exp = String.format("%.4e", v1);
             Object obj = exp;
 
             //drawObjects(g, obj, newDC, setaDC);
-            if ((Integer)VelocityAgent.velView.get(i) == 1  &&  (panel.getName().equals("Phase Space"))) drawObjects(g, obj, newDC, setaDC);
-            else if ((Integer)VelocityAgent.velView.get(i) == 2  &&  (panel.getName().equals("RightPhase Space"))) drawObjects(g, obj, newDC, setaDC);
-            else if ((Integer)VelocityAgent.velView.get(i) == 3  &&  (panel.getName().equals("LeftPhase Space"))) drawObjects(g, obj, newDC, setaDC);
+            if ((Integer)VelocityCommand.velView.get(i) == 1  &&  (panel.getName().equals("Phase Space"))) drawObjects(g, obj, newDC, setaDC);
+            else if ((Integer)VelocityCommand.velView.get(i) == 2  &&  (panel.getName().equals("RightPhase Space"))) drawObjects(g, obj, newDC, setaDC);
+            else if ((Integer)VelocityCommand.velView.get(i) == 3  &&  (panel.getName().equals("LeftPhase Space"))) drawObjects(g, obj, newDC, setaDC);
 
         }
 

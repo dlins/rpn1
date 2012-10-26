@@ -5,7 +5,7 @@
  */
 package rpn;
 
-import rpn.usecase.*;
+import rpn.command.*;
 import rpn.parser.*;
 import rpnumerics.RPNUMERICS;
 import wave.multid.DimMismatchEx;
@@ -23,9 +23,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.batik.ext.swing.GridBagConstants;
-import rpn.usecase.ClassifierAgent;
+import rpn.command.ClassifierCommand;
 import rpn.component.util.GeometryGraphND;
-import rpn.usecase.VelocityAgent;
+import rpn.command.VelocityCommand;
 import rpn.controller.ui.*;
 import rpn.message.*;
 import wave.multid.Space;
@@ -138,10 +138,10 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 shockConfigMenu();
                 toolBar_.removeAll();
 
-                toolBar_.add(InvariantPlotAgent.instance().getContainer());
-                toolBar_.add(OrbitPlotAgent.instance().getContainer());
-                toolBar_.add(ConnectionManifoldPlotAgent.instance().getContainer());
-                toolBar_.add(PoincareSectionPlotAgent.instance().getContainer());
+                toolBar_.add(InvariantPlotCommand.instance().getContainer());
+                toolBar_.add(OrbitPlotCommand.instance().getContainer());
+                toolBar_.add(ConnectionManifoldPlotCommand.instance().getContainer());
+                toolBar_.add(PoincareSectionPlotCommand.instance().getContainer());
                 toolBar_.revalidate();
 
             }
@@ -151,30 +151,30 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 rarefactionConfigMenu();
                 toolBar_.removeAll();
 
-                toolBar_.add(HugoniotPlotAgent.instance().getContainer());
-                toolBar_.add(ShockCurvePlotAgent.instance().getContainer());
-                toolBar_.add(RarefactionOrbitPlotAgent.instance().getContainer());
-                toolBar_.add(IntegralCurvePlotAgent.instance().getContainer());
-                toolBar_.add(PointLevelCurvePlotAgent.instance().getContainer());
-                toolBar_.add(LevelCurvePlotAgent.instance().getContainer());
-                toolBar_.add(CompositePlotAgent.instance().getContainer());
-                toolBar_.add(WaveCurvePlotAgent.instance().getContainer());
+                toolBar_.add(HugoniotPlotCommand.instance().getContainer());
+                toolBar_.add(ShockCurvePlotCommand.instance().getContainer());
+                toolBar_.add(RarefactionOrbitPlotCommand.instance().getContainer());
+                toolBar_.add(IntegralCurvePlotCommand.instance().getContainer());
+                toolBar_.add(PointLevelCurvePlotCommand.instance().getContainer());
+                toolBar_.add(LevelCurvePlotCommand.instance().getContainer());
+                toolBar_.add(CompositePlotCommand.instance().getContainer());
+                toolBar_.add(WaveCurvePlotCommand.instance().getContainer());
 
-                toolBar_.add(PhysicalBoundaryPlotAgent.instance().getContainer());
-                toolBar_.add(TrackPointAgent.instance().getContainer());
+                toolBar_.add(PhysicalBoundaryPlotCommand.instance().getContainer());
+                toolBar_.add(TrackPointCommand.instance().getContainer());
 
-                toolBar_.add(AreaSelectionAgent.instance().getContainer());     //** Edson/Leandro
-                toolBar_.add(AdjustedSelectionPlotAgent.instance());
-                toolBar_.add(ClassifierAgent.instance().getContainer());      //** Leandro
-                toolBar_.add(VelocityAgent.instance().getContainer());        //** Leandro
+                toolBar_.add(AreaSelectionCommand.instance().getContainer());     //** Edson/Leandro
+                toolBar_.add(AdjustedSelectionPlotCommand.instance());
+                toolBar_.add(ClassifierCommand.instance().getContainer());      //** Leandro
+                toolBar_.add(VelocityCommand.instance().getContainer());        //** Leandro
 
 
-                toolBar_.add(RarefactionExtensionCurvePlotAgent.instance().getContainer());
-                toolBar_.add(RiemannProfileAgent.instance().getContainer());
+                toolBar_.add(RarefactionExtensionCurvePlotCommand.instance().getContainer());
+                toolBar_.add(RiemannProfileCommand.instance().getContainer());
 
-                toolBar_.add(AreaSelectionAgent.instance().getContainer());     //** Edson/Leandro
-                toolBar_.add(ClassifierAgent.instance().getContainer());        //** Leandro
-                toolBar_.add(VelocityAgent.instance().getContainer());        //** Leandro
+                toolBar_.add(AreaSelectionCommand.instance().getContainer());     //** Edson/Leandro
+                toolBar_.add(ClassifierCommand.instance().getContainer());        //** Leandro
+                toolBar_.add(VelocityCommand.instance().getContainer());        //** Leandro
 
 
 
@@ -187,14 +187,14 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 bifurcationConfigMenu();
 
                 toolBar_.removeAll();
-                toolBar_.add(DoubleContactAgent.instance().getContainer());
-                toolBar_.add(BoundaryExtensionCurveAgent.instance().getContainer());
-                toolBar_.add(InflectionPlotAgent.instance().getContainer());
-                toolBar_.add(HysteresisPlotAgent.instance().getContainer());
-                toolBar_.add(EllipticBoundaryExtensionAgent.instance().getContainer());
-                toolBar_.add(EllipticBoundaryAgent.instance().getContainer());
-                toolBar_.add(EnvelopeCurveAgent.instance().getContainer());
-                toolBar_.add(SecondaryBifurcationtAgent.instance().getContainer());
+                toolBar_.add(DoubleContactCommand.instance().getContainer());
+                toolBar_.add(BoundaryExtensionCurveCommand.instance().getContainer());
+                toolBar_.add(InflectionPlotCommand.instance().getContainer());
+                toolBar_.add(HysteresisPlotCommand.instance().getContainer());
+                toolBar_.add(EllipticBoundaryExtensionCommand.instance().getContainer());
+                toolBar_.add(EllipticBoundaryCommand.instance().getContainer());
+                toolBar_.add(EnvelopeCurveCommand.instance().getContainer());
+                toolBar_.add(SecondaryBifurcationtCommand.instance().getContainer());
                 toolBar_.revalidate();
 
             }
@@ -499,23 +499,23 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         rightCurvesList.setVisible(true);
 
 
-        curvesList.addObserver(RiemannProfileAgent.instance());
-        leftCurvesList.addObserver(RiemannProfileAgent.instance());
-        rightCurvesList.addObserver(RiemannProfileAgent.instance());
+        curvesList.addObserver(RiemannProfileCommand.instance());
+        leftCurvesList.addObserver(RiemannProfileCommand.instance());
+        rightCurvesList.addObserver(RiemannProfileCommand.instance());
 
 
-        curvesList.addObserver(AreaSelectionAgent.instance());
-        leftCurvesList.addObserver(AreaSelectionAgent.instance());
-        rightCurvesList.addObserver(AreaSelectionAgent.instance());
+        curvesList.addObserver(AreaSelectionCommand.instance());
+        leftCurvesList.addObserver(AreaSelectionCommand.instance());
+        rightCurvesList.addObserver(AreaSelectionCommand.instance());
 
 
-        curvesList.addObserver(AdjustedSelectionPlotAgent.instance());
-        leftCurvesList.addObserver(AdjustedSelectionPlotAgent.instance());
-        rightCurvesList.addObserver(AdjustedSelectionPlotAgent.instance());
+        curvesList.addObserver(AdjustedSelectionPlotCommand.instance());
+        leftCurvesList.addObserver(AdjustedSelectionPlotCommand.instance());
+        rightCurvesList.addObserver(AdjustedSelectionPlotCommand.instance());
 
-        curvesList.addObserver(EnableLRPhaseSpaceAgent.instance());
-        leftCurvesList.addObserver(EnableLRPhaseSpaceAgent.instance());
-        rightCurvesList.addObserver(EnableLRPhaseSpaceAgent.instance());
+        curvesList.addObserver(EnableLRPhaseSpaceCommand.instance());
+        leftCurvesList.addObserver(EnableLRPhaseSpaceCommand.instance());
+        rightCurvesList.addObserver(EnableLRPhaseSpaceCommand.instance());
 
 
 
@@ -885,7 +885,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 new java.awt.event.ActionListener() {
 
                     public void actionPerformed(ActionEvent e) {
-                        VelocityAgent.clearVelocities();
+                        VelocityCommand.clearVelocities();
                     }
                 });
 
@@ -893,7 +893,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 new java.awt.event.ActionListener() {
 
                     public void actionPerformed(ActionEvent e) {
-                        ClassifierAgent.clearClassifiers();
+                        ClassifierCommand.clearClassifiers();
                     }
                 });
 
@@ -987,7 +987,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         viewMenu_.add(showLeftCurvesPaneltem_);
         viewMenu_.add(showRightCurvesPaneltem_);
 //        viewMenu_.add(showAuxPanel_);
-        viewMenu_.add(EnableLRPhaseSpaceAgent.instance());
+        viewMenu_.add(EnableLRPhaseSpaceCommand.instance());
         jMenuBar1.add(modelInteractionMenu);
 
 
@@ -999,7 +999,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
 
 
-        editMenu.add(ClearPhaseSpaceAgent.instance());
+        editMenu.add(ClearPhaseSpaceCommand.instance());
         editMenu.addSeparator();
 
         //*** Leandro
@@ -1017,7 +1017,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         editMenu.addSeparator();
         //******
 
-        editMenu.add(FillPhaseSpaceAgent.instance());
+        editMenu.add(FillPhaseSpaceCommand.instance());
 
 
 
@@ -1027,15 +1027,15 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private void shockConfigMenu() {
 
         modelInteractionMenu.removeAll();
-        modelInteractionMenu.add(ChangeSigmaAgent.instance());
+        modelInteractionMenu.add(ChangeSigmaCommand.instance());
         modelInteractionMenu.addSeparator();
-        modelInteractionMenu.add(FindProfileAgent.instance());
+        modelInteractionMenu.add(FindProfileCommand.instance());
         modelInteractionMenu.addSeparator();
-        modelInteractionMenu.add(ChangeFluxParamsAgent.instance());
+        modelInteractionMenu.add(ChangeFluxParamsCommand.instance());
         modelInteractionMenu.add(inputCoordsMenuItem);
         modelInteractionMenu.add(shockMenuItem_);
         modelInteractionMenu.add(configurationMenuItem_);       // ??????
-        modelInteractionMenu.add(ChangeXZeroAgent.instance());
+        modelInteractionMenu.add(ChangeXZeroCommand.instance());
 
 
     }
@@ -1045,15 +1045,15 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
 
         modelInteractionMenu.removeAll();
-        modelInteractionMenu.add(ChangeFluxParamsAgent.instance());
-        modelInteractionMenu.add(ChangeOrbitLevel.instance());
-        modelInteractionMenu.add(CurveRefineAgent.instance());
+        modelInteractionMenu.add(ChangeFluxParamsCommand.instance());
+        modelInteractionMenu.add(ChangeOrbitLevelCommand.instance());
+        modelInteractionMenu.add(CurveRefineCommand.instance());
 
         modelInteractionMenu.add(inputCoordsMenuItem);
         modelInteractionMenu.addSeparator();
         modelInteractionMenu.add(configurationMenuItem_);
-        modelInteractionMenu.add(BifurcationRefineAgent.instance());
-        BifurcationRefineAgent.instance().setEnabled(true);
+        modelInteractionMenu.add(BifurcationRefineCommand.instance());
+        BifurcationRefineCommand.instance().setEnabled(true);
 
 
 
@@ -1064,7 +1064,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
 
         modelInteractionMenu.removeAll();
-        modelInteractionMenu.add(ChangeFluxParamsAgent.instance());
+        modelInteractionMenu.add(ChangeFluxParamsCommand.instance());
         modelInteractionMenu.add(configurationMenuItem_);
 
 

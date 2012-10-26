@@ -8,7 +8,7 @@ package rpn.controller.phasespace;
 
 import rpn.component.*;
 import rpn.RPnPhaseSpaceAbstraction;
-import rpn.usecase.*;
+import rpn.command.*;
 
 public class ProfileReadyImpl extends ProfileSetupReadyImpl
 	implements PROFILE_READY {
@@ -27,11 +27,11 @@ public class ProfileReadyImpl extends ProfileSetupReadyImpl
             connectionGeom_ = connectionGeom;
 
         // ENABLED
-        ChangeDirectionAgent.instance().setEnabled(true);
-        ChangeSigmaAgent.instance().setEnabled(true);
-        ChangeFluxParamsAgent.instance().setEnabled(true);
-        ClearPhaseSpaceAgent.instance().setEnabled(true);
-        FillPhaseSpaceAgent.instance().setEnabled(true);
+        ChangeDirectionCommand.instance().setEnabled(true);
+        ChangeSigmaCommand.instance().setEnabled(true);
+        ChangeFluxParamsCommand.instance().setEnabled(true);
+        ClearPhaseSpaceCommand.instance().setEnabled(true);
+        FillPhaseSpaceCommand.instance().setEnabled(true);
 
         // DISABLED
 
@@ -40,13 +40,13 @@ public class ProfileReadyImpl extends ProfileSetupReadyImpl
          * CHANGE CONFIGURATION PARAMS
          */
 
-        BackwardOrbitPlotAgent.instance().setEnabled(false);
-        ForwardOrbitPlotAgent.instance().setEnabled(false);
-        PoincareSectionPlotAgent.instance().setEnabled(false);
-        StationaryPointPlotAgent.instance().setEnabled(false);
-        BackwardManifoldPlotAgent.instance().setEnabled(false);
-        ConnectionManifoldPlotAgent.instance().setEnabled(false);
-        FindProfileAgent.instance().setEnabled(false);
+        BackwardOrbitPlotCommand.instance().setEnabled(false);
+        ForwardOrbitPlotCommand.instance().setEnabled(false);
+        PoincareSectionPlotCommand.instance().setEnabled(false);
+        StationaryPointPlotCommand.instance().setEnabled(false);
+        BackwardManifoldPlotCommand.instance().setEnabled(false);
+        ConnectionManifoldPlotCommand.instance().setEnabled(false);
+        FindProfileCommand.instance().setEnabled(false);
     }
 
     //
