@@ -24,7 +24,6 @@ import java.beans.PropertyChangeEvent;
 import rpn.controller.*;
 import java.net.*;
 import java.util.Iterator;
-import java.util.Stack;
 import rpn.RPnDesktopPlotter;
 import rpn.RPnUIFrame;
 import rpn.component.RpGeometry;
@@ -56,7 +55,7 @@ public class UIController extends ComponentUI {
     private RPnPhaseSpacePanel focusPanel_;
     private StateInputController stateController_;
     public static UI_ACTION_SELECTED INITSTATE = null;
-    private Stack<Command> commandArray_;
+    private ArrayList<Command> commandArray_;
     private boolean auxPanelsEnabled_;
     private RPnPhaseSpaceAbstraction activePhaseSpace_;
     private boolean drag_ = false;
@@ -73,7 +72,7 @@ public class UIController extends ComponentUI {
         mouseController_ = new MouseController();
         globalInputTable_ = new UserInputTable(rpnumerics.RPNUMERICS.domainDim());
 
-        commandArray_ = new Stack<Command>();
+        commandArray_ = new ArrayList<Command>();
         handler_ = new RAREFACTION_CONFIG();
         auxPanelsEnabled_ = true;
 
@@ -217,8 +216,10 @@ public class UIController extends ComponentUI {
         public void mouseReleased(MouseEvent event) {
 
             if (drag_) {
-                commandArray_.pop();
-                addCommand(new Command((UI_ACTION_SELECTED) handler_, globalInputTable().values()));
+                if (!commandArray_.isEmpty())
+                    commandArray_.remove(commandArray_.size()-1);
+                    logCommand(new Command((UI_ACTION_SELECTED) handler_, globalInputTable().values()));
+
             }
 
         }
@@ -398,12 +399,9 @@ public class UIController extends ComponentUI {
 
     }
 
-    public void addCommand(Command command) {
-
-        System.out.println("Empilhando comando: " + command.getActionSelected().getAction() + " " + command.getInputArray());
-
+    public void logCommand(Command command) {
         RPnUIFrame.clearStatusMessage();
-        commandArray_.push(command);
+        commandArray_.add(command);
     }
 
     /** Sets the state of the application. The application works as a state machine and this method changes the actual state.*/
