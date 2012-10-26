@@ -133,8 +133,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
 
 
 
-        RpNumerics::getPhysics().getSubPhysics(0).postProcess(left_vrs[i]);
-        RpNumerics::getPhysics().getSubPhysics(0).postProcess(left_vrs[2 * i]);
+        RpNumerics::getPhysics().getSubPhysics(0).postProcess(left_vrs[2*i]);
+        RpNumerics::getPhysics().getSubPhysics(0).postProcess(left_vrs[2 * i+1]);
 
 
 
@@ -144,6 +144,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
 
         double * leftCoords = (double *) left_vrs.at(2 * i);
         double * rightCoords = (double *) left_vrs.at(2 * i + 1);
+        
+        
+        cout<<"Ponto esquerda: "<<left_vrs[2*i]<<" Ponto direita: "<<left_vrs[2*i+1]<<endl;
 
 
         env->SetDoubleArrayRegion(eigenValRLeft, 0, dimension, leftCoords);
@@ -164,8 +167,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
 
 
 
-        RpNumerics::getPhysics().getSubPhysics(0).postProcess(right_vrs[i]);
-        RpNumerics::getPhysics().getSubPhysics(0).postProcess(right_vrs[2 * i]);
+        RpNumerics::getPhysics().getSubPhysics(0).postProcess(right_vrs[2*i]);
+        RpNumerics::getPhysics().getSubPhysics(0).postProcess(right_vrs[2 * i+1]);
 
 
 

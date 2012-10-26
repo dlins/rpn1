@@ -133,7 +133,7 @@ SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.boundary(), *new Space
 TD(new Thermodynamics_SuperCO2_WaterAdimensionalized(*copy.TD)) {
 
 
-    setHugoniotFunction(new Hugoniot_TP((Hugoniot_TP&) * copy.getHugoniotFunction()));
+    setHugoniotFunction(new Hugoniot_TP());
 
 
     RealVector min(boundary().minimums());

@@ -48,9 +48,11 @@ int Extension_Curve::function_on_vertices(double *foncub, int domain_i, int doma
 
         double red_shock_speed;
         double den = X12 * X12 + X31 * X31 + X23*X23;
+        double scaling_factor = (X12_0 * X12 + X31_0 * X31 + X23_0 * X23) / den;
         if ( fabs(den) < 1.0e-8) {
      //       cout << "Den pequeno: " << den;
            den = X12_0 * X12_0 + X31_0 * X31_0 + X23_0 * X23_0;
+          
            red_shock_speed = (Y21 * X12_0 + Y13 * X31_0 + Y32 * X23_0) / den;
       //     cout << " despequeno: " << den << endl;
           if ( fabs(den) < 1.0e-12) return INVALID_FUNCTION_ON_VERTICES;
@@ -65,7 +67,7 @@ int Extension_Curve::function_on_vertices(double *foncub, int domain_i, int doma
 ////
 //        cout << "F10: " << F10<< " F20:" << F20 << " F30: " << F30 << endl;
 
-        double scaling_factor = (X12_0 * X12 + X31_0 * X31 + X23_0 * X23) / den;
+      
 
         red_shock_speed = (Y21 * X12 + Y13 * X31 + Y32 * X23) / den;
         }
@@ -78,8 +80,8 @@ int Extension_Curve::function_on_vertices(double *foncub, int domain_i, int doma
 //            cout << "Valor do lambda: " << lambda << endl;
 
         } else {
-//                    lambda = scaling_factor * gv->e(domain_i, domain_j)[family].r;
-            lambda = gv->e(domain_i, domain_j)[family].r;
+                    lambda = scaling_factor * gv->e(domain_i, domain_j)[family].r;
+//            lambda = gv->e(domain_i, domain_j)[family].r;
 //            cout << "Valor do lambda no else: " << lambda << " scaling factor: " << scaling_factor << endl;
         }
         

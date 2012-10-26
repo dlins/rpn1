@@ -262,7 +262,6 @@ RpFunction * Flux2Comp2PhasesAdimensionalized::ReducedFlux2Comp2PhasesAdimension
 
 int Flux2Comp2PhasesAdimensionalized::jet(const WaveState &w, JetMatrix &m, int degree) const {
     
-    cout <<"tamanho de w: "<<w.stateSpaceDim()<<endl;
     
     double s = w(0); // s_{sigma} = sg in FracFlow2PhasesHorizontal & FracFlow2PhasesVertical
     double Theta = w(1);

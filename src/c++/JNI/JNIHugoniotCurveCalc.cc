@@ -100,13 +100,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
     GridValues * gv = RpNumerics::getGridFactory().getGrid("hugoniotcurve");
 
-    for (int i = 0; i < gv->grid.rows(); i++) {
-        for (int j = 0; j < gv->grid.cols(); j++) {
-            
-            cout<<"Ponto: "<<i<<" "<<j<<" "<<gv->grid(i,j)<<endl;
-
-        }
-    }
+//    for (int i = 0; i < gv->grid.rows(); i++) {
+//        for (int j = 0; j < gv->grid.cols(); j++) {
+//            
+//            cout<<"Ponto: "<<i<<" "<<j<<" "<<gv->grid(i,j)<<endl;
+//
+//        }
+//    }
 
     hugoniotCurve->classified_curve(&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(), *gv, Uref, hugoniotPolyLineVector);
 
