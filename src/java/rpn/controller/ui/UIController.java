@@ -7,7 +7,7 @@
 package rpn.controller.ui;
 
 import rpn.RPnPhaseSpaceAbstraction;
-import rpn.usecase.*;
+import rpn.command.*;
 import rpn.RPnPhaseSpacePanel;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
@@ -197,7 +197,7 @@ public class UIController extends ComponentUI {
                         GeometryGraph.count = 0;
                     } else {
 
-                        DragPlotAgent.instance().execute();
+                        DragPlotCommand.instance().execute();
 
 
 
@@ -419,9 +419,9 @@ public class UIController extends ComponentUI {
             if (newAction instanceof UI_ACTION_SELECTED) {
                 UI_ACTION_SELECTED selectedAction = (UI_ACTION_SELECTED) newAction;
                 // either unselect or new selection
-                if (currentSelection.getAction() instanceof RpModelPlotAgent) {
+                if (currentSelection.getAction() instanceof RpModelPlotCommand) {
 
-                    ((RpModelPlotAgent) currentSelection.getAction()).getContainer().setSelected(false);
+                    ((RpModelPlotCommand) currentSelection.getAction()).getContainer().setSelected(false);
 
                 }
                 // Singletons !

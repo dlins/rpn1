@@ -15,8 +15,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 import javax.swing.*;
 import rpn.parser.RPnDataModule;
-import rpn.usecase.ChangeDirectionAgent;
-import rpn.usecase.OrbitPlotAgent;
+import rpn.command.ChangeDirectionCommand;
+import rpn.command.OrbitPlotCommand;
 import rpnumerics.Configuration;
 import rpnumerics.Orbit;
 import rpnumerics.RPNUMERICS;
@@ -34,7 +34,7 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
 
     public RPnCurvesConfigPanel() {
 
-        ChangeDirectionAgent.instance().execute();
+        ChangeDirectionCommand.instance().execute();
 
         curvesTabbedPanel_ = new JTabbedPane();
         directionButtonGroup_=new ButtonGroup();
@@ -188,7 +188,7 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
                 }
 
 
-            ChangeDirectionAgent.instance().execute();
+            ChangeDirectionCommand.instance().execute();
 
 
         }

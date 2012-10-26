@@ -8,7 +8,7 @@ import rpn.controller.ui.GEOM_SELECTION;
 import rpnumerics.RPNUMERICS;
 import rpnumerics.PhasePoint;
 import rpn.controller.ui.UI_ACTION_SELECTED;
-import rpn.usecase.PoincareSectionPlotAgent;
+import rpn.command.PoincareSectionPlotCommand;
 import wave.util.RealVector;
 import wave.multid.CoordsArray;
 import wave.util.SimplexPoincareSection;
@@ -27,7 +27,7 @@ public class PoincareParser implements ActionListener {
 
             try {
                 UIController.instance().setState(new UI_ACTION_SELECTED(
-                        PoincareSectionPlotAgent.instance()));
+                        PoincareSectionPlotCommand.instance()));
                 ArrayList poincareList = new ArrayList();
                 // number of input points must match phys dim
 

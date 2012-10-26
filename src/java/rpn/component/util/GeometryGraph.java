@@ -29,7 +29,7 @@ import rpn.controller.ui.CLASSIFIERAGENT_CONFIG;
 import rpn.controller.ui.UserInputTable;
 import rpn.controller.ui.VELOCITYAGENT_CONFIG;
 import rpn.parser.RPnDataModule;
-import rpn.usecase.VelocityAgent;
+import rpn.command.VelocityCommand;
 import rpnumerics.SecondaryBifurcationCurve;
 import rpnumerics.WaveCurve;
 
@@ -192,8 +192,8 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
             graph.draw(line4);
 
             //********* esboço de marcação de pontos de equilibrio
-            for (int i=0; i<VelocityAgent.listaEquil.size(); i++) {
-                RealVector p = VelocityAgent.listaEquil.get(i);
+            for (int i=0; i<VelocityCommand.listaEquil.size(); i++) {
+                RealVector p = VelocityCommand.listaEquil.get(i);
 
                 Coords2D dcCoordsEQ = toDeviceCoords(scene_, p);
                 double xEQ = dcCoordsEQ.getElement(0);

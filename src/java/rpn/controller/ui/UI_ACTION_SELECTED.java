@@ -8,7 +8,7 @@ package rpn.controller.ui;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import wave.util.RealVector;
-import rpn.usecase.*;
+import rpn.command.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -19,15 +19,15 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
     // Members
     //
 
-    private RpModelActionAgent actionSelected_;
+    private RpModelActionCommand actionSelected_;
     private List userInputList_;
 
-    public UI_ACTION_SELECTED(RpModelActionAgent action) {
+    public UI_ACTION_SELECTED(RpModelActionCommand action) {
 
         actionSelected_ = action;
         userInputList_ = new ArrayList();
 
-        if (action instanceof RpModelPlotAgent) {
+        if (action instanceof RpModelPlotCommand) {
             Iterator<RPnPhaseSpacePanel> iterator = UIController.instance().getInstalledPanelsIterator();
             while (iterator.hasNext()) {
                 RPnPhaseSpacePanel panel = iterator.next();
@@ -70,7 +70,7 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
 
         userInputList_.add(new RealVector(userInput));
 
-        if (actionSelected_ instanceof PoincareSectionPlotAgent) {
+        if (actionSelected_ instanceof PoincareSectionPlotCommand) {
             if (isPoincareInputReady()) {
                 ArrayList<RealVector> tempInputList = new ArrayList<RealVector>();
                 for (RealVector inputElement : userInputList(ui)) {
@@ -139,7 +139,7 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
         return false;
     }
 
-    public RpModelActionAgent getAction() {
+    public RpModelActionCommand getAction() {
         return actionSelected_;
     }
 

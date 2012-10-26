@@ -12,12 +12,12 @@ import java.util.Iterator;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.component.RpGeomFactory;
 import rpn.component.RpGeometry;
-import rpn.usecase.ClassifierAgent;
+import rpn.command.ClassifierCommand;
 import rpn.component.util.GeometryGraphND;
 
-import rpn.usecase.VelocityAgent;
+import rpn.command.VelocityCommand;
 import rpn.controller.RpCalcController;
-import rpn.usecase.ChangeFluxParamsAgent;
+import rpn.command.ChangeFluxParamsCommand;
 
 import wave.multid.view.*;
 import wave.multid.*;
@@ -95,23 +95,23 @@ public class AbstractScene implements AbstractGeomObj {
     //*** Acrescentei em 19/09 ;  alterei em 27/09  ******************** Leandro
     public void removeStringsCla(int geometryIndex) {
 
-        for (int i = 0; i < ClassifierAgent.indCurvaCla.size(); i++) {
-            if ((Integer) ClassifierAgent.indCurvaCla.get(i) == geometryIndex) {
-                ClassifierAgent.paraRemoverGeomCla.add(geometryIndex);
-                ClassifierAgent.paraRemoverIndCla.add(i);
+        for (int i = 0; i < ClassifierCommand.indCurvaCla.size(); i++) {
+            if ((Integer) ClassifierCommand.indCurvaCla.get(i) == geometryIndex) {
+                ClassifierCommand.paraRemoverGeomCla.add(geometryIndex);
+                ClassifierCommand.paraRemoverIndCla.add(i);
             }
         }
 
-        if (ClassifierAgent.paraRemoverIndCla.size() > 0) {
-            ClassifierAgent.clearClassifiers(ClassifierAgent.paraRemoverIndCla);
+        if (ClassifierCommand.paraRemoverIndCla.size() > 0) {
+            ClassifierCommand.clearClassifiers(ClassifierCommand.paraRemoverIndCla);
         }
 
-        ClassifierAgent.paraRemoverGeomCla.clear();
-        ClassifierAgent.paraRemoverIndCla.clear();
+        ClassifierCommand.paraRemoverGeomCla.clear();
+        ClassifierCommand.paraRemoverIndCla.clear();
 
-        for (int i = 0; i < ClassifierAgent.indCurvaCla.size(); i++) {
-            if ((Integer) ClassifierAgent.indCurvaCla.get(i) > geometryIndex) {
-                ClassifierAgent.indCurvaCla.set(i, (Integer) ClassifierAgent.indCurvaCla.get(i) - 1);
+        for (int i = 0; i < ClassifierCommand.indCurvaCla.size(); i++) {
+            if ((Integer) ClassifierCommand.indCurvaCla.get(i) > geometryIndex) {
+                ClassifierCommand.indCurvaCla.set(i, (Integer) ClassifierCommand.indCurvaCla.get(i) - 1);
             }
         }
 
@@ -119,23 +119,23 @@ public class AbstractScene implements AbstractGeomObj {
 
     public void removeStringsVel(int geometryIndex) {
 
-        for (int i = 0; i < VelocityAgent.indCurvaVel.size(); i++) {
-            if ((Integer) VelocityAgent.indCurvaVel.get(i) == geometryIndex) {
-                VelocityAgent.paraRemoverGeomVel.add(geometryIndex);
-                VelocityAgent.paraRemoverIndVel.add(i);
+        for (int i = 0; i < VelocityCommand.indCurvaVel.size(); i++) {
+            if ((Integer) VelocityCommand.indCurvaVel.get(i) == geometryIndex) {
+                VelocityCommand.paraRemoverGeomVel.add(geometryIndex);
+                VelocityCommand.paraRemoverIndVel.add(i);
             }
         }
 
-        if (VelocityAgent.paraRemoverIndVel.size() > 0) {
-            VelocityAgent.clearVelocities(VelocityAgent.paraRemoverIndVel);
+        if (VelocityCommand.paraRemoverIndVel.size() > 0) {
+            VelocityCommand.clearVelocities(VelocityCommand.paraRemoverIndVel);
         }
 
-        VelocityAgent.paraRemoverGeomVel.clear();
-        VelocityAgent.paraRemoverIndVel.clear();
+        VelocityCommand.paraRemoverGeomVel.clear();
+        VelocityCommand.paraRemoverIndVel.clear();
 
-        for (int i = 0; i < VelocityAgent.indCurvaVel.size(); i++) {
-            if ((Integer) VelocityAgent.indCurvaVel.get(i) > geometryIndex) {
-                VelocityAgent.indCurvaVel.set(i, (Integer) VelocityAgent.indCurvaVel.get(i) - 1);
+        for (int i = 0; i < VelocityCommand.indCurvaVel.size(); i++) {
+            if ((Integer) VelocityCommand.indCurvaVel.get(i) > geometryIndex) {
+                VelocityCommand.indCurvaVel.set(i, (Integer) VelocityCommand.indCurvaVel.get(i) - 1);
             }
         }
 

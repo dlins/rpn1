@@ -5,7 +5,7 @@
  */
 package rpn.controller.ui;
 
-import rpn.usecase.TrackPointAgent;
+import rpn.command.TrackPointCommand;
 
 public class TRACKPOINT_CONFIG extends UI_ACTION_SELECTED {
 
@@ -14,7 +14,7 @@ public class TRACKPOINT_CONFIG extends UI_ACTION_SELECTED {
 
     public TRACKPOINT_CONFIG() {
 
-        super(TrackPointAgent.instance());
+        super(TrackPointCommand.instance());
 
     }
 

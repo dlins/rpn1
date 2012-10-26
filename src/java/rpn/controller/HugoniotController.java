@@ -6,7 +6,7 @@
 package rpn.controller;
 
 import rpn.component.RpGeomFactory;
-import rpn.usecase.*;
+import rpn.command.*;
 import java.beans.PropertyChangeEvent;
 import rpn.component.HugoniotCurveGeomFactory;
 import rpnumerics.HugoniotCurveCalcND;
@@ -31,19 +31,19 @@ public class HugoniotController extends RpCalcController {
 
     @Override
     protected void register() {
-        DragPlotAgent.instance().addPropertyChangeListener(this);
-        ChangeFluxParamsAgent.instance().addPropertyChangeListener(this);
-        BifurcationRefineAgent.instance().addPropertyChangeListener(this);      // ****
-        ChangeXZeroAgent.instance().addPropertyChangeListener(this);
+        DragPlotCommand.instance().addPropertyChangeListener(this);
+        ChangeFluxParamsCommand.instance().addPropertyChangeListener(this);
+        BifurcationRefineCommand.instance().addPropertyChangeListener(this);      // ****
+        ChangeXZeroCommand.instance().addPropertyChangeListener(this);
 
     }
 
     @Override
     protected void unregister() {
-        DragPlotAgent.instance().removePropertyChangeListener(this);
-        ChangeFluxParamsAgent.instance().removePropertyChangeListener(this);
-        BifurcationRefineAgent.instance().removePropertyChangeListener(this);
-        ChangeXZeroAgent.instance().removePropertyChangeListener(this);
+        DragPlotCommand.instance().removePropertyChangeListener(this);
+        ChangeFluxParamsCommand.instance().removePropertyChangeListener(this);
+        BifurcationRefineCommand.instance().removePropertyChangeListener(this);
+        ChangeXZeroCommand.instance().removePropertyChangeListener(this);
 
     }
 
@@ -62,7 +62,7 @@ public class HugoniotController extends RpCalcController {
     @Override
     public void propertyChange(PropertyChangeEvent change) {
 
-        if (change.getSource() instanceof DragPlotAgent) {
+        if (change.getSource() instanceof DragPlotCommand) {
             ((HugoniotParams) ((HugoniotCurveCalcND) geomFactory_.rpCalc()).getParams()).setXZero((RealVector) change.getNewValue());
             geomFactory_.updateGeom();
             return;

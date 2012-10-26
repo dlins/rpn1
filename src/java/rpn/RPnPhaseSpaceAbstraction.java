@@ -13,9 +13,9 @@ import rpn.component.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
-import rpn.usecase.ClassifierAgent;
+import rpn.command.ClassifierCommand;
 import rpn.component.util.GeometryGraphND;
-import rpn.usecase.VelocityAgent;
+import rpn.command.VelocityCommand;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UserInputTable;
 import rpn.parser.RPnDataModule;
@@ -306,8 +306,8 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
 
     //**************************************************************************
     //******************************************************* Leandro, em 28/Set
-    //*** ClassifierAgent.hideClassifiers - chamado aqui dentro - deverá ser revisto para permitir a simples ocultação dos classificadores
-    //*** Por enquanto, é feita a remoção, através de ClassifierAgent.clearClassifiers
+    //*** ClassifierCommand.hideClassifiers - chamado aqui dentro - deverá ser revisto para permitir a simples ocultação dos classificadores
+    //*** Por enquanto, é feita a remoção, através de ClassifierCommand.clearClassifiers
     public static void ocultaStringsCla(int geometryIndex, String name) {
 
         int index = 0;
@@ -321,18 +321,18 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
             index = 3;
         }
 
-        for (int i = 0; i < ClassifierAgent.indCurvaCla.size(); i++) {
-            if ((Integer) ClassifierAgent.indCurvaCla.get(i) == geometryIndex && index == (Integer) ClassifierAgent.strView.get(i)) {    //************************* Flexibilizar em funcao do painel
-                ClassifierAgent.paraOcultarIndCla.add(i);
+        for (int i = 0; i < ClassifierCommand.indCurvaCla.size(); i++) {
+            if ((Integer) ClassifierCommand.indCurvaCla.get(i) == geometryIndex && index == (Integer) ClassifierCommand.strView.get(i)) {    //************************* Flexibilizar em funcao do painel
+                ClassifierCommand.paraOcultarIndCla.add(i);
             }
         }
 
-        if (ClassifierAgent.paraOcultarIndCla.size() > 0) {
-            //ClassifierAgent.hideClassifiers(ClassifierAgent.paraOcultarIndCla);
-            ClassifierAgent.clearClassifiers(ClassifierAgent.paraOcultarIndCla);
+        if (ClassifierCommand.paraOcultarIndCla.size() > 0) {
+            //ClassifierCommand.hideClassifiers(ClassifierCommand.paraOcultarIndCla);
+            ClassifierCommand.clearClassifiers(ClassifierCommand.paraOcultarIndCla);
         }
 
-        ClassifierAgent.paraOcultarIndCla.clear();
+        ClassifierCommand.paraOcultarIndCla.clear();
 
     }
 
@@ -340,22 +340,22 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
     //*** NÃO USE AINDA !!!
     public void mostraStringsCla(int geometryIndex) {
 
-        for (int i = 0; i < ClassifierAgent.indCurvaCla.size(); i++) {
-            if ((Integer) ClassifierAgent.indCurvaCla.get(i) == geometryIndex) {
-                ClassifierAgent.paraOcultarIndCla.add(i);
+        for (int i = 0; i < ClassifierCommand.indCurvaCla.size(); i++) {
+            if ((Integer) ClassifierCommand.indCurvaCla.get(i) == geometryIndex) {
+                ClassifierCommand.paraOcultarIndCla.add(i);
             }
         }
 
-        if (ClassifierAgent.paraOcultarIndCla.size() > 0) {
-            ClassifierAgent.viewClassifiers(ClassifierAgent.paraOcultarIndCla);
+        if (ClassifierCommand.paraOcultarIndCla.size() > 0) {
+            ClassifierCommand.viewClassifiers(ClassifierCommand.paraOcultarIndCla);
         }
 
-        ClassifierAgent.paraOcultarIndCla.clear();
+        ClassifierCommand.paraOcultarIndCla.clear();
 
     }
 
-    //*** ClassifierAgent.hideVelocities - chamado aqui dentro - deverá ser revisto para permitir a simples ocultação das strings de velocidade
-    //*** Por enquanto, é feita a remoção, através de ClassifierAgent.clearVelocities
+    //*** ClassifierCommand.hideVelocities - chamado aqui dentro - deverá ser revisto para permitir a simples ocultação das strings de velocidade
+    //*** Por enquanto, é feita a remoção, através de ClassifierCommand.clearVelocities
     public static void ocultaStringsVel(int geometryIndex, String name) {
 
         int index = 0;
@@ -369,18 +369,18 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
             index = 3;
         }
 
-        for (int i = 0; i < VelocityAgent.indCurvaVel.size(); i++) {
-            if ((Integer) VelocityAgent.indCurvaVel.get(i) == geometryIndex && index == (Integer) VelocityAgent.velView.get(i)) {
-                VelocityAgent.paraOcultarIndVel.add(i);
+        for (int i = 0; i < VelocityCommand.indCurvaVel.size(); i++) {
+            if ((Integer) VelocityCommand.indCurvaVel.get(i) == geometryIndex && index == (Integer) VelocityCommand.velView.get(i)) {
+                VelocityCommand.paraOcultarIndVel.add(i);
             }
         }
 
-        if (VelocityAgent.paraOcultarIndVel.size() > 0) {
-            //VelocityAgent.hideVelocities(VelocityAgent.paraOcultarIndVel);
-            VelocityAgent.clearVelocities(VelocityAgent.paraOcultarIndVel);
+        if (VelocityCommand.paraOcultarIndVel.size() > 0) {
+            //VelocityCommand.hideVelocities(VelocityCommand.paraOcultarIndVel);
+            VelocityCommand.clearVelocities(VelocityCommand.paraOcultarIndVel);
         }
 
-        VelocityAgent.paraOcultarIndVel.clear();
+        VelocityCommand.paraOcultarIndVel.clear();
 
     }
 
@@ -388,17 +388,17 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
     //*** NÃO USE AINDA !!!
     public void mostraStringsVel(int geometryIndex) {
 
-        for (int i = 0; i < VelocityAgent.indCurvaVel.size(); i++) {
-            if ((Integer) VelocityAgent.indCurvaVel.get(i) == geometryIndex) {
-                VelocityAgent.paraOcultarIndVel.add(i);
+        for (int i = 0; i < VelocityCommand.indCurvaVel.size(); i++) {
+            if ((Integer) VelocityCommand.indCurvaVel.get(i) == geometryIndex) {
+                VelocityCommand.paraOcultarIndVel.add(i);
             }
         }
 
-        if (VelocityAgent.paraOcultarIndVel.size() > 0) {
-            VelocityAgent.viewVelocities(VelocityAgent.paraOcultarIndVel);
+        if (VelocityCommand.paraOcultarIndVel.size() > 0) {
+            VelocityCommand.viewVelocities(VelocityCommand.paraOcultarIndVel);
         }
 
-        VelocityAgent.paraOcultarIndVel.clear();
+        VelocityCommand.paraOcultarIndVel.clear();
 
     }
 

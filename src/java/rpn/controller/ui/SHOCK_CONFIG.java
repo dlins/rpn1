@@ -5,7 +5,7 @@
  */
 package rpn.controller.ui;
 
-import rpn.usecase.HugoniotPlotAgent;
+import rpn.command.HugoniotPlotCommand;
 import rpnumerics.PhasePoint;
 import rpnumerics.RPNUMERICS;
 import wave.util.RealVector;
@@ -16,7 +16,7 @@ public class SHOCK_CONFIG extends UI_ACTION_SELECTED {
     // Constructors
     //
     public SHOCK_CONFIG() {
-        super(HugoniotPlotAgent.instance());
+        super(HugoniotPlotCommand.instance());
 
     }
 

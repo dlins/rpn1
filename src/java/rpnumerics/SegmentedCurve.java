@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import rpn.RPnUIFrame;
 import rpn.component.HugoniotSegGeom;
-import rpn.usecase.ClassifierAgent;
-import rpn.usecase.VelocityAgent;
+import rpn.command.ClassifierCommand;
+import rpn.command.VelocityCommand;
 import wave.multid.CoordsArray;
 import wave.multid.view.ViewingAttr;
 import wave.util.RealSegment;
@@ -75,9 +75,9 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
             // coordenadas das strings de classificacao ------------------------
             buffer.append("dataString=[\n");
 
-            for (int k = 0; k < ClassifierAgent.xStr.size(); k++) {
-                double x = (Double)(ClassifierAgent.xStr.get(k));
-                double y = (Double)(ClassifierAgent.yStr.get(k));
+            for (int k = 0; k < ClassifierCommand.xStr.size(); k++) {
+                double x = (Double)(ClassifierCommand.xStr.get(k));
+                double y = (Double)(ClassifierCommand.yStr.get(k));
 
                 if (x!=0.  &&  y!=0.) {
                     buffer.append(x + "   " + y + ";\n");
@@ -92,9 +92,9 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
             // coordenadas das setas das strings de classificacao --------------
             buffer.append("dataSeta=[\n");
 
-            for (int k = 0; k < ClassifierAgent.xSeta.size(); k++) {
-                double x = (Double)(ClassifierAgent.xSeta.get(k));
-                double y = (Double)(ClassifierAgent.ySeta.get(k));
+            for (int k = 0; k < ClassifierCommand.xSeta.size(); k++) {
+                double x = (Double)(ClassifierCommand.xSeta.get(k));
+                double y = (Double)(ClassifierCommand.ySeta.get(k));
 
                 if (x!=0.  &&  y!=0.) {
                     buffer.append(x + "   " + y + ";\n");
@@ -109,12 +109,12 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
             // strings de classificacao ----------------------------------------
             buffer.append("typeString=[\n");
 
-            for (int k = 0; k < ClassifierAgent.xStr.size(); k++) {
-                double x = (Double)(ClassifierAgent.xStr.get(k));
-                double y = (Double)(ClassifierAgent.yStr.get(k));
+            for (int k = 0; k < ClassifierCommand.xStr.size(); k++) {
+                double x = (Double)(ClassifierCommand.xStr.get(k));
+                double y = (Double)(ClassifierCommand.yStr.get(k));
 
                 if (x!=0.  &&  y!=0.) {
-                    int s1 = (Integer) (ClassifierAgent.tipo.get(k));
+                    int s1 = (Integer) (ClassifierCommand.tipo.get(k));
                     buffer.append("'");
                     buffer.append(HugoniotSegGeom.s[s1]);
                     buffer.append("'" + ";\n");
@@ -130,9 +130,9 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
             // coordenadas das strings de velocidade ---------------------------
             buffer.append("dataVel=[\n");
 
-            for (int k = 0; k < VelocityAgent.xVel.size(); k++) {
-                double x = (Double)(VelocityAgent.xVel.get(k));
-                double y = (Double)(VelocityAgent.yVel.get(k));
+            for (int k = 0; k < VelocityCommand.xVel.size(); k++) {
+                double x = (Double)(VelocityCommand.xVel.get(k));
+                double y = (Double)(VelocityCommand.yVel.get(k));
 
                 if (x!=0.  &&  y!=0.) {
                     buffer.append(x + "   " + y + ";\n");
@@ -147,9 +147,9 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
             // coordenadas das setas das strings de velocidade -----------------
             buffer.append("dataSetaVel=[\n");
 
-            for (int k = 0; k < VelocityAgent.xSetaVel.size(); k++) {
-                double x = (Double)(VelocityAgent.xSetaVel.get(k));
-                double y = (Double)(VelocityAgent.ySetaVel.get(k));
+            for (int k = 0; k < VelocityCommand.xSetaVel.size(); k++) {
+                double x = (Double)(VelocityCommand.xSetaVel.get(k));
+                double y = (Double)(VelocityCommand.ySetaVel.get(k));
 
                 if (x!=0.  &&  y!=0.) {
                     buffer.append(x + "   " + y + ";\n");
@@ -164,12 +164,12 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
             // strings de velocidade -------------------------------------------
             buffer.append("velString=[\n");
 
-            for (int k = 0; k < VelocityAgent.xVel.size(); k++) {
-                double x = (Double)(VelocityAgent.xVel.get(k));
-                double y = (Double)(VelocityAgent.yVel.get(k));
+            for (int k = 0; k < VelocityCommand.xVel.size(); k++) {
+                double x = (Double)(VelocityCommand.xVel.get(k));
+                double y = (Double)(VelocityCommand.yVel.get(k));
 
                 if (x!=0.  &&  y!=0.) {
-                    buffer.append(VelocityAgent.vel.get(k) + ";\n");
+                    buffer.append(VelocityCommand.vel.get(k) + ";\n");
                 }
 
             }

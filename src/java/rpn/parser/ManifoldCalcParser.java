@@ -6,8 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UI_ACTION_SELECTED;
-import rpn.usecase.ConnectionManifoldPlotAgent;
-import rpn.usecase.BackwardManifoldPlotAgent;
+import rpn.command.ConnectionManifoldPlotCommand;
+import rpn.command.BackwardManifoldPlotCommand;
 import rpn.controller.ui.GEOM_SELECTION;
 import rpn.controller.phasespace.ProfileSetupReadyImpl;
 
@@ -27,11 +27,11 @@ public class ManifoldCalcParser implements ActionListener{
             if (!RPnDataModule.InputHandler.calcReady_){
                 if (OrbitParser.dir == 1) {
                     UIController.instance().setState(new UI_ACTION_SELECTED(
-                            ConnectionManifoldPlotAgent.instance()));
+                            ConnectionManifoldPlotCommand.instance()));
                 }
                 else {
                     UIController.instance().setState(
-                            new UI_ACTION_SELECTED(BackwardManifoldPlotAgent.instance()));
+                            new UI_ACTION_SELECTED(BackwardManifoldPlotCommand.instance()));
                 }
 
                 UIController.instance().userInputComplete(RPnDataModule.InputHandler.tempVector_);

@@ -8,7 +8,7 @@ package rpn.controller.ui;
 
 import java.awt.Point;
 import javax.swing.JPanel;
-import rpn.usecase.ChangeDirectionAgent;
+import rpn.command.ChangeDirectionCommand;
 import wave.multid.Coords2D;
 import wave.multid.view.ViewingTransform;
 import wave.util.RealVector;
@@ -18,7 +18,7 @@ public class SCRATCH_CONFIG extends UI_ACTION_SELECTED {
     
       public SCRATCH_CONFIG() {
         
-        super(ChangeDirectionAgent.instance());
+        super(ChangeDirectionCommand.instance());
         
     }
     
