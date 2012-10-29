@@ -24,8 +24,8 @@
             <PHYSICSPARAM name="expw" position="7" value ="2.0" />
             <PHYSICSPARAM name="expg" position="8" value ="2.0" />
             <PHYSICSPARAM name="expo" position="9" value ="2.0" />
-            <PHYSICSPARAM name="expow" position="10" value ="2.0" />
-            <PHYSICSPARAM name="expog" position="11" value ="2.0" />
+            <PHYSICSPARAM name="expow" position="10" value ="3.0" />
+            <PHYSICSPARAM name="expog" position="11" value ="3.0" />
 
             <PHYSICSPARAM name="krw_p" position="12" value ="1.0" />
             <PHYSICSPARAM name="krg_p" position="13" value ="1.0" />
@@ -43,9 +43,9 @@
             <PHYSICSPARAM name="epsl" position="23" value ="0.0" />
 
 
-            <PHYSICSPARAM name="negWS" position="24" value ="0.0" />
-            <PHYSICSPARAM name="negGS" position="25" value ="0.0" />
-            <PHYSICSPARAM name="negOS" position="26" value ="0.0" />
+            <PHYSICSPARAM name="negWS" position="24" value ="1.0" />
+            <PHYSICSPARAM name="negGS" position="25" value ="1.0" />
+            <PHYSICSPARAM name="negOS" position="26" value ="1.0" />
 
 
         </PHYSICSCONFIG>

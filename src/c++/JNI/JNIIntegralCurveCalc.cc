@@ -83,9 +83,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_IntegralCurveCalc_calc(JNIEnv * env, j
     const FluxFunction * fluxFunction = &RpNumerics::getPhysics().fluxFunction();
     const AccumulationFunction * accumulationFunction = &RpNumerics::getPhysics().accumulation();
 
-    cout << "Flux params " << fluxFunction->fluxParams().params() << endl;
-    cout << "Accum params " << accumulationFunction->accumulationParams().params() << endl;
-
+  
     Integral_Curve iCurve(fluxFunction, accumulationFunction, tempBoundary);
 
 
