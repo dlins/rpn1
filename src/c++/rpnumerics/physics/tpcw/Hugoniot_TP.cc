@@ -30,6 +30,11 @@ int Hugoniot_TP::classified_curve(const FluxFunction *f, const AccumulationFunct
 //        unclassifiedCurve.push_back(temp);
 //    }
       std::vector<RealVector> transition_list;
+      
+      
+      cout<<"Parametros de fluxo em classified: "<<f->fluxParams().params()<<endl;
+      
+      cout<<"Parametros de accum em classified: "<<a->accumulationParams().params()<<endl;
 
     ColorCurve colorCurve(*f, *a);
     colorCurve.classify_segmented_curve(vrs,r,hugoniot_curve,transition_list);

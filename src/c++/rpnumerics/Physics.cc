@@ -83,7 +83,7 @@ Physics::Physics(const string & physicsID) : physicsVector_(new vector<SubPhysic
 
         //Accumulation parameters
 
-        params.component(8) = 0.38;
+        params.component(8) = 1.0;//0.38;
 
         //Thermodynamics parameters
         params.component(9) = 304.63;
