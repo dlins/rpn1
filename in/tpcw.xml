@@ -8,7 +8,7 @@
                 <PHYSICSPARAM name="sin beta" position="1" value="0.0"/>
                 <PHYSICSPARAM name="has gravity" position="2" value="0.0"/>
                 <PHYSICSPARAM name="has horizontal" position="3" value="1.0"/>
-                <PHYSICSPARAM name="cnw" position="4" value="0.3"/>
+                <PHYSICSPARAM name="cnw" position="4" value="0.0"/>
                 <PHYSICSPARAM name="cng" position="5" value="0.0"/>
                 <PHYSICSPARAM name="expw" position="6" value="2.0"/>
                 <PHYSICSPARAM name="expg" position="7" value="2.0"/>
