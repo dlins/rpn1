@@ -90,13 +90,16 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     
     
     
-    //TODO Remover e colocar dentro do ColorCurve. Isto é uma cochinada por o Pablo
-    Uref(2) = 1.0;
-
+   
     
     cout <<"Valor de Uref na chamada : "<<Uref<<endl;
 
     RpNumerics::getPhysics().getSubPhysics(0).preProcess(Uref);
+    
+    
+     //TODO Remover e colocar dentro do ColorCurve. Isto é uma cochinada por o Pablo
+    Uref(2) = 1.0;
+
 
     const Boundary * testeBoundary = RpNumerics::getPhysics().getSubPhysics(0).getPreProcessedBoundary();
 
