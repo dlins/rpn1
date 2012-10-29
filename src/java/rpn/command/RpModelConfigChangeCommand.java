@@ -31,7 +31,7 @@ public abstract class RpModelConfigChangeCommand extends RpModelActionCommand {
 
         RealVector newParameters = (RealVector) change.getNewValue();
 
-        UIController.instance().logCommand(new Command(new UI_ACTION_SELECTED(this), newParameters));
+        UIController.instance().logCommand(new RpCommand(new UI_ACTION_SELECTED(this), newParameters));
         firePropertyChange(change);
         logAction(change);
         RPnDataModule.updatePhaseSpaces();

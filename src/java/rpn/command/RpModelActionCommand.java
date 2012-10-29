@@ -12,7 +12,7 @@ import javax.swing.ImageIcon;
 import rpn.controller.ui.*;
 import rpn.message.RPnActionMediator;
 
-public abstract class RpModelActionCommand extends Command{
+public abstract class RpModelActionCommand extends RpCommand{
 
     private PropertyChangeEvent history_;
     private String desc_;
