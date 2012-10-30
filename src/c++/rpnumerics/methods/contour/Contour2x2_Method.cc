@@ -182,7 +182,7 @@ void Contour2x2_Method::curve2x2(ThreeImplicitFunctions *timpf,
                 continue;
             
             }
-            if ( !(gv_left->cell_is_real(il, jl)) ) continue;
+//            if ( !(gv_left->cell_is_real(il, jl)) ) continue;
 
 
             if(!timpf->prepare_cell(il, jl)) continue;
