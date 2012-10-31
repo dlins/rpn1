@@ -34,6 +34,10 @@ public abstract class RPnCurve {
     private double ALFA;
     //** declarei isso (Leandro)
     public double distancia = 0;
+    public List claToRemove = new ArrayList();
+    public List velToRemove = new ArrayList();
+    public List claStringToRemove = new ArrayList();
+    public List velStringToRemove = new ArrayList();
     
     public RPnCurve() {//TODO REMOVE !!
         //super(new CoordsArray[3], new ViewingAttr(Color.WHITE));

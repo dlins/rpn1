@@ -13,7 +13,6 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 import wave.multid.*;
 import wave.multid.map.Map;
 import wave.multid.model.AbstractPath;
@@ -27,7 +26,6 @@ public class BifurcationCurveGeom implements MultiGeometry, RpGeometry {
 
     private RpGeomFactory factory_;
     private ViewingAttr viewingAttr_;
-    //private ArrayList segList_;
     private List<MultiPolyLine> segList_;
     private Space space_;
     private BoundingBox boundary_;
@@ -63,6 +61,25 @@ public class BifurcationCurveGeom implements MultiGeometry, RpGeometry {
     public GeomObjView createView(ViewingTransform transf) throws DimMismatchEx {
         return new BifurcationCurveView(this, transf, viewingAttr());
     }
+    
+    
+     public void lowLight() {
+
+        for (MultiPolyLine object : segList_) {
+            object.lowLight();
+        }
+
+    }
+
+    public void highLight() {
+        for (MultiPolyLine object : segList_) {
+            object.highLight();
+        }
+
+    }
+    
+    
+    
 
     public RpGeomFactory geomFactory() {
         return factory_;

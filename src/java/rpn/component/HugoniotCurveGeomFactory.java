@@ -27,11 +27,10 @@ public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
     //
     // Methods
     //
-    protected RpGeometry createGeomFromSource() {
+    public RpGeometry createGeomFromSource() {
 
         HugoniotCurve curve = (HugoniotCurve) geomSource();
 
-        
         // assuming a container with HugoniotSegment elements
         int resultSize = curve.segments().size();
 

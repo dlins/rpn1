@@ -5,59 +5,40 @@
  */
 package rpn.controller.ui;
 
+import java.awt.Color;
 import java.awt.Point;
-import java.awt.Polygon;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Path2D;
-import java.awt.geom.PathIterator;
 
+import java.util.ArrayList;
+import java.util.List;
 import rpn.RPnPhaseSpacePanel;
+import rpn.component.util.AreaSelected;
+import rpn.component.util.GraphicsUtil;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
+import wave.multid.Space;
+import wave.multid.view.ViewingAttr;
 
-public class RPnSelectionPlotter extends RPn2DMouseController  {
+public class RPnSelectionPlotter extends RPn2DMouseController {
 
     private Point cursorPos_;
-    private Polygon selectedPolygon_;
     private boolean addRectangle_ = false;
 
     public void mouseMoved(MouseEvent me) {
 
         if (addRectangle_) {
             RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) me.getSource();
+
+            Path2D.Double selectionPath = plotWCArea(cursorPos_, me, panel);
+
+            List<Object> wcObjList = new ArrayList();
+
+            wcObjList.add(selectionPath);
+            ViewingAttr viewingAttr = new ViewingAttr(Color.red);
+            GraphicsUtil graphicsUtil = new AreaSelected(wcObjList, panel.scene().getViewingTransform(), viewingAttr);
+            panel.setLastGraphicsUtil(graphicsUtil);
             
-            Path2D.Double selectionPath = plotWCPath(cursorPos_, me, panel);
-
-            selectedPolygon_ = new Polygon();
-
-            PathIterator iterator = selectionPath.getPathIterator(null);
-
-            while (!iterator.isDone()) {
-
-                double[] segmentArray = new double[2];
-
-                int segment = iterator.currentSegment(segmentArray);
-                if (segment != PathIterator.SEG_CLOSE) {
-
-                    Coords2D dcSelectionPoint = new Coords2D(0, 0);
-
-                    CoordsArray wcSelectionPoint = new CoordsArray(segmentArray);
-
-                    panel.scene().getViewingTransform().viewPlaneTransform(wcSelectionPoint, dcSelectionPoint);
-
-                    selectedPolygon_.addPoint((int) dcSelectionPoint.getX(), (int) dcSelectionPoint.getY());
-
-                }
-
-                iterator.next();
-
-
-            }
-
-            int size = panel.getCastedUI().getSelectionAreas().size();
-
-            panel.getCastedUI().getSelectionAreas().set(size - 1, selectedPolygon_);
-
             panel.repaint();
 
         }
@@ -68,9 +49,22 @@ public class RPnSelectionPlotter extends RPn2DMouseController  {
         RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) me.getSource();
         if (addRectangle_ == false) {
             cursorPos_ = new Point(me.getX(), me.getY());
-            Polygon emptyPolygon = new Polygon();
-            emptyPolygon.addPoint(cursorPos_.x, cursorPos_.y);
-            panel.getCastedUI().getSelectionAreas().add(emptyPolygon);
+
+            double[] mePosArray = {me.getX(), me.getY()};
+            CoordsArray cursorPosWC = new CoordsArray(new Space(" ", 2));
+            Coords2D mePosDC = new Coords2D(mePosArray);
+            CoordsArray mePosWC = new CoordsArray(new Space(" ", 2));
+            panel.scene().getViewingTransform().dcInverseTransform(mePosDC, mePosWC);
+            Path2D.Double selectionPath = new Path2D.Double();
+            selectionPath.moveTo(cursorPosWC.getElement(0), cursorPosWC.getElement(1));
+            List<Object> wcObjectsList = new ArrayList();
+            wcObjectsList.add(selectionPath);
+            ViewingAttr viewingAttr = new ViewingAttr(Color.red);
+            GraphicsUtil emptyGraphicsUtil = new AreaSelected(wcObjectsList, panel.scene().getViewingTransform(), viewingAttr);
+
+
+            panel.addGraphicUtil(emptyGraphicsUtil);
+
 
             addRectangle_ = true;
         } else {

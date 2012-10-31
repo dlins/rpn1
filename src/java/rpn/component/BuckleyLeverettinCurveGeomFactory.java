@@ -17,7 +17,7 @@ public class BuckleyLeverettinCurveGeomFactory extends BifurcationCurveGeomFacto
     //
     // Methods
     //
-    protected RpGeometry createGeomFromSource() {
+    public RpGeometry createGeomFromSource() {
 
         BuckleyLeverettInflectionCurve curve = (BuckleyLeverettInflectionCurve) geomSource();
 

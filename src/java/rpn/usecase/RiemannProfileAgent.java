@@ -74,7 +74,7 @@ public class RiemannProfileAgent extends RpModelPlotAgent implements Observer {
         AreaSelectionAgent.instance().setEnabled(enable);
 
         if (enable) {
-            selectedCurves = (List<RpGeometry>) arg;
+            instance_.selectedCurves = (List<RpGeometry>) arg;
         }
 
 
@@ -89,45 +89,66 @@ public class RiemannProfileAgent extends RpModelPlotAgent implements Observer {
 
         while (panelsIterator.hasNext()) {
 
-            RPnPhaseSpacePanel phasSpacePanel = panelsIterator.next();
+            RPnPhaseSpacePanel phaseSpacePanel = panelsIterator.next();
             List<List<Polygon>> intersectionAreas = new ArrayList();
 
-            Iterator<GeomObjView> geomObjViewIterator = phasSpacePanel.scene().geometries();
+            Iterator<GeomObjView> geomObjViewIterator = phaseSpacePanel.scene().geometries();
 
             while (geomObjViewIterator.hasNext()) {
                 GeomObjView geomObjView = geomObjViewIterator.next();
 
                 if (selectedCurves.contains((RpGeometry) geomObjView.getAbstractGeom())) {
-                    List<Polygon> polygonList = phasSpacePanel.intersectedArea(geomObjView);
+                    List<Polygon> polygonList = phaseSpacePanel.intersectedArea(geomObjView);
+                    System.out.println(geomObjView + "intercepta" + polygonList.size());
                     intersectionAreas.add(polygonList);
                 }
 
+
+
+               
+
+//
+//
+//                for (Polygon polygon : finalSelectedAreas) {
+//                    
+//                    System.out.println("Poligono: "+polygon);
+//                    
+//                }
+
+
                 if (intersectionAreas.size() == 2) {
 
-                    List<Polygon> finalSelectedAreas = processIntersectionAreas(intersectionAreas);
 
+//                    List<Polygon> finalSelectedAreas = intersectionAreas.get(0);
+                     List<Polygon> finalSelectedAreas = processIntersectionAreas(intersectionAreas);
+
+                    System.out.println("Areas processadas: " + finalSelectedAreas.size());
                     for (Polygon polygon : finalSelectedAreas) {
                         RealVector resolution = new RealVector(2);
-                        Area selectedArea = new Area(resolution, polygon, phasSpacePanel.scene().getViewingTransform());
+                        Area selectedArea = new Area(resolution, polygon, phaseSpacePanel.scene().getViewingTransform());
                         RiemannProfileCalc rc = new RiemannProfileCalc(selectedArea, waveCurveForward_, waveCurveBackward_);
                         RiemannProfileGeomFactory riemannProfileGeomFactory = new RiemannProfileGeomFactory(rc);
 
                         RiemannProfile riemannProfile = (RiemannProfile) riemannProfileGeomFactory.geomSource();
+                        if (riemannProfile != null) {
 
-                        RealVector profileMin = createProfileMinLimit(riemannProfile);
-                        RealVector profileMax = createProfileMaxLimit(riemannProfile);
+                            RealVector profileMin = createProfileMinLimit(riemannProfile);
+                            RealVector profileMax = createProfileMaxLimit(riemannProfile);
 
-                        RPnDesktopPlotter.getUIFrame().updateRiemannProfileFrames(profileMin, profileMax);
+                            RPnDesktopPlotter.getUIFrame().updateRiemannProfileFrames(profileMin, profileMax);
 
-                        RPnDataModule.RIEMANNPHASESPACE.clear();
-                        RPnDataModule.RIEMANNPHASESPACE.join(riemannProfileGeomFactory.geom());
-                        RPnDataModule.RIEMANNPHASESPACE.update();
+                            RPnDataModule.RIEMANNPHASESPACE.clear();
+                            RPnDataModule.RIEMANNPHASESPACE.join(riemannProfileGeomFactory.geom());
+                            RPnDataModule.RIEMANNPHASESPACE.update();
 
-                        for (RPnPhaseSpaceFrame frame : RPnUIFrame.getRiemannFrames()) {
+                            for (RPnPhaseSpaceFrame frame : RPnUIFrame.getRiemannFrames()) {
 
-                            frame.setVisible(true);
+                                frame.setVisible(true);
+
+                            }
 
                         }
+
 
                     }
 
@@ -136,6 +157,7 @@ public class RiemannProfileAgent extends RpModelPlotAgent implements Observer {
             }
 
         }
+
     }
 
     private RealVector createProfileMaxLimit(RiemannProfile riemannProfile) {
@@ -182,11 +204,11 @@ public class RiemannProfileAgent extends RpModelPlotAgent implements Observer {
                 WaveCurveGeom waveCurveGeom = (WaveCurveGeom) geometry;
                 WaveCurve waveCurve = (WaveCurve) waveCurveGeom.geomFactory().geomSource();
                 if (waveCurve.getFamily() == 0 && waveCurve.getDirection() == Orbit.WAVECURVE_FORWARD) {
-                    instance_.waveCurveForward_=waveCurve;
+                    instance_.waveCurveForward_ = waveCurve;
                     waveCurveForward0 = true;
                 }
                 if (waveCurve.getFamily() == 1 && waveCurve.getDirection() == Orbit.WAVECURVE_BACKWARD) {
-                    instance_.waveCurveBackward_=waveCurve;
+                    instance_.waveCurveBackward_ = waveCurve;
                     waveCurveBackward1 = true;
                 }
             }

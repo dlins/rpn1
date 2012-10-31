@@ -28,7 +28,7 @@ public class InflectionCurveGeomFactory extends BifurcationCurveGeomFactory {
     // Methods
     //
     @Override
-    protected RpGeometry createGeomFromSource() {
+    public RpGeometry createGeomFromSource() {
 
         InflectionCurve curve = (InflectionCurve) geomSource();
 

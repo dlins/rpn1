@@ -19,6 +19,7 @@ import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Iterator;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.batik.ext.swing.GridBagConstants;
 import rpn.usecase.ClassifierAgent;
@@ -94,7 +95,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             propertyChange(new PropertyChangeEvent(command, "aplication state", null, null));
             jbInit();
             phaseSpaceFramesInit(RPNUMERICS.boundary());
-            riemanProfileFramesInit();
+            //riemanProfileFramesInit();
             associatesPhaseSpaces();
             associatePhaseSpacesAndCurvesList();
             createPanelsChooser();
@@ -120,50 +121,50 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     //
 
 
-    private void riemanProfileFramesInit() {
-
-
-        RealVector min = new RealVector(3);
-        RealVector max = new RealVector(3);
-
-        min.setElement(0, 0);
-        min.setElement(1, 0);
-        min.setElement(2, 0);
-
-
-        max.setElement(0, 1);
-        max.setElement(1, 0.2);
-        max.setElement(2, 0.2);
-
-
-        RectBoundary boundary = new RectBoundary(min, max);
-        Space riemanProfileSpace = new Space("RiemannProfileSpace", RPNUMERICS.domainDim() + 1);
-        riemannFrames_ = new RPnPhaseSpaceFrame[RPNUMERICS.domainDim()];
-
-        for (int i = 0; i < riemannFrames_.length; i++) {
-            int[] testeArrayIndex = {0, i+1};
-
-            wave.multid.graphs.ClippedShape clipping = new wave.multid.graphs.ClippedShape(boundary);
-            RPnProjDescriptor projDescriptor = new RPnProjDescriptor(riemanProfileSpace, "teste", 400, 400, testeArrayIndex, false);
-            wave.multid.view.ViewingTransform riemanTesteTransform = projDescriptor.createTransform(clipping);
-
-            try {
-                wave.multid.view.Scene riemannScene = RPnDataModule.RIEMANNPHASESPACE.createScene(riemanTesteTransform, new wave.multid.view.ViewingAttr(Color.black));
-                riemannFrames_[i] = new RPnPhaseSpaceFrame(riemannScene, commandMenu_);
-
-            } catch (DimMismatchEx ex) {
-                ex.printStackTrace();
-            }
-
-
-            riemannFrames_[i].pack();
-            riemannFrames_[i].setVisible(true);
-
-        }
-
-
-
-    }
+//    private void riemanProfileFramesInit() {
+//
+//
+//        RealVector min = new RealVector(3);
+//        RealVector max = new RealVector(3);
+//
+//        min.setElement(0, 0);
+//        min.setElement(1, 0);
+//        min.setElement(2, 0);
+//
+//
+//        max.setElement(0, 1);
+//        max.setElement(1, 0.2);
+//        max.setElement(2, 0.2);
+//
+//
+//        RectBoundary boundary = new RectBoundary(min, max);
+//        Space riemanProfileSpace = new Space("RiemannProfileSpace", RPNUMERICS.domainDim() + 1);
+//        riemannFrames_ = new RPnPhaseSpaceFrame[RPNUMERICS.domainDim()];
+//
+//        for (int i = 0; i < riemannFrames_.length; i++) {
+//            int[] testeArrayIndex = {0, i+1};
+//
+//            wave.multid.graphs.ClippedShape clipping = new wave.multid.graphs.ClippedShape(boundary);
+//            RPnProjDescriptor projDescriptor = new RPnProjDescriptor(riemanProfileSpace, "teste", 400, 400, testeArrayIndex, false);
+//            wave.multid.view.ViewingTransform riemanTesteTransform = projDescriptor.createTransform(clipping);
+//
+//            try {
+//                wave.multid.view.Scene riemannScene = RPnDataModule.RIEMANNPHASESPACE.createScene(riemanTesteTransform, new wave.multid.view.ViewingAttr(Color.black));
+//                riemannFrames_[i] = new RPnPhaseSpaceFrame(riemannScene, commandMenu_);
+//
+//            } catch (DimMismatchEx ex) {
+//                ex.printStackTrace();
+//            }
+//
+//
+//            riemannFrames_[i].pack();
+//            riemannFrames_[i].setVisible(true);
+//
+//        }
+//
+//
+//
+//    }
 
 
 
@@ -536,6 +537,11 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         curvesList.addObserver(AdjustedSelectionPlotAgent.instance());
         leftCurvesList.addObserver(AdjustedSelectionPlotAgent.instance());
         rightCurvesList.addObserver(AdjustedSelectionPlotAgent.instance());
+        
+        curvesList.addObserver(EnableLRPhaseSpaceAgent.instance());
+        leftCurvesList.addObserver(EnableLRPhaseSpaceAgent.instance());
+        rightCurvesList.addObserver(EnableLRPhaseSpaceAgent.instance());
+        
 
 
 
@@ -884,9 +890,12 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 new java.awt.event.ActionListener() {
 
                     public void actionPerformed(ActionEvent e) {
-                        //GeometryGraphND.clearAllStrings();
-                        RPnVelocityPlotter.instance().clearVelocities();
-                        RPnStringPlotter.instance().clearClassifiers();
+                        Iterator<RPnPhaseSpacePanel> phaseSpacePanelIterator = UIController.instance().getInstalledPanelsIterator();
+                        while (phaseSpacePanelIterator.hasNext()) {
+                            RPnPhaseSpacePanel panel = phaseSpacePanelIterator.next();
+                            panel.clearAllStrings();
+                            panel.repaint();
+                        }
                     }
                 });
 
@@ -894,12 +903,13 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 new java.awt.event.ActionListener() {
 
                     public void actionPerformed(ActionEvent e) {
-                        //GeometryGraphND.clearLastString();
+                        Iterator<RPnPhaseSpacePanel> phaseSpacePanelIterator = UIController.instance().getInstalledPanelsIterator();
+                        while (phaseSpacePanelIterator.hasNext()) {
+                            RPnPhaseSpacePanel panel = phaseSpacePanelIterator.next();
+                            panel.clearLastString();
+                            panel.repaint();
+                        }
 
-                        if(UIController.instance().getState() instanceof CLASSIFIERAGENT_CONFIG)
-                            RPnStringPlotter.instance().clearLastString();
-                        if (UIController.instance().getState() instanceof VELOCITYAGENT_CONFIG)
-                            RPnVelocityPlotter.instance().clearLastString();
                     }
                 });
 
@@ -907,8 +917,12 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 new java.awt.event.ActionListener() {
 
                     public void actionPerformed(ActionEvent e) {
-                        //VelocityAgent.clearVelocities();
-                        RPnVelocityPlotter.instance().clearVelocities();
+                        Iterator<RPnPhaseSpacePanel> phaseSpacePanelIterator = UIController.instance().getInstalledPanelsIterator();
+                        while (phaseSpacePanelIterator.hasNext()) {
+                            RPnPhaseSpacePanel panel = phaseSpacePanelIterator.next();
+                            panel.clearVelocities();
+                            panel.repaint();
+                        }
                     }
                 });
 
@@ -916,8 +930,12 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 new java.awt.event.ActionListener() {
 
                     public void actionPerformed(ActionEvent e) {
-                        //ClassifierAgent.clearClassifiers();
-                        RPnStringPlotter.instance().clearClassifiers();
+                        Iterator<RPnPhaseSpacePanel> phaseSpacePanelIterator = UIController.instance().getInstalledPanelsIterator();
+                        while (phaseSpacePanelIterator.hasNext()) {
+                            RPnPhaseSpacePanel panel = phaseSpacePanelIterator.next();
+                            panel.clearClassifiers();
+                            panel.repaint();
+                        }
                     }
                 });
 
@@ -1010,7 +1028,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         viewMenu_.add(showMainCurvesPaneltem_);
         viewMenu_.add(showLeftCurvesPaneltem_);
         viewMenu_.add(showRightCurvesPaneltem_);
-        viewMenu_.add(showAuxPanel_);
+//        viewMenu_.add(showAuxPanel_);
+        viewMenu_.add(EnableLRPhaseSpaceAgent.instance());
         jMenuBar1.add(modelInteractionMenu);
 
 

@@ -26,6 +26,7 @@ import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpacePanel;
 import rpn.component.RpCalcBasedGeomFactory;
 import rpn.component.RpGeometry;
+import rpn.component.util.GeometryGraphND;
 import rpnumerics.Area;
 import wave.multid.view.GeomObjView;
 import wave.util.RealVector;
@@ -58,7 +59,7 @@ public class CurveRefineAgent extends RpModelConfigChangeAgent  {
             processGeometry(curveToRefine_, panelToRefine_);
             RPnPhaseSpaceAbstraction phaseSpace = (RPnPhaseSpaceAbstraction) panelToRefine_.scene().getAbstractGeom();
             phaseSpace.update();
-            panelToRefine_.getCastedUI().getSelectionAreas().clear();
+            panelToRefine_.clearAreaSelection();
         }
 
 
@@ -93,7 +94,7 @@ public class CurveRefineAgent extends RpModelConfigChangeAgent  {
         List<Integer> indexToRemove = new ArrayList<Integer>();
         List<Area> areasToRefine = new ArrayList<Area>();
 
-        List<Polygon> selectedAreas = phaseSpacePanel.getCastedUI().getSelectionAreas();
+        List<Polygon> selectedAreas = phaseSpacePanel.getSelectedAreasShapes();
 
         for (Polygon polygon : selectedAreas) {
 

@@ -9,9 +9,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
-import java.awt.Shape;
 import java.awt.geom.Line2D;
-import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -37,38 +35,25 @@ import wave.multid.model.MultiGeometry;
  */
 public class GeometryGraphND {
 
-    protected Line2D line1;
-    protected Line2D line2;
     protected Line2D line3;
     protected Line2D line4;
     protected Line2D line3DC;
     protected Line2D line4DC;
-    protected Line2D line5;
-    protected Line2D line6;
-    protected Line2D line7;
-    protected Line2D line8;
-    protected Shape square1;
-    protected Shape square2;
-    static public Shape squareDC;
-    protected int zerado = 0;
-    protected List<Rectangle2D.Double> listaRet = new ArrayList();  ////////
     static public RealVector topRight = new RealVector(RPNUMERICS.domainDim());
     static public RealVector downLeft = new RealVector(RPNUMERICS.domainDim());
     static public RealVector pMarca = new RealVector(RPNUMERICS.domainDim());
     static public RealVector pMarcaDC = new RealVector(RPNUMERICS.domainDim());
     static public RealVector targetPoint = new RealVector(RPNUMERICS.domainDim());
     static public RealVector cornerRet = new RealVector(RPNUMERICS.domainDim());
-    static public RealVector cornerStr = new RealVector(RPNUMERICS.domainDim());
-    static public List zContido = new ArrayList();
-    static public List wContido = new ArrayList();
     //*** isso é uma lista de indices (Leandro)
     static public List indContido = new ArrayList();
     
-    protected Color cor12 = null, cor34 = null, cor56 = null, cor78 = null, corSquare = null, corString = null;
+    protected Color cor34 = null, corString = null;
     protected Line2D.Double linex, liney, lineObl;
     public static int mostraGrid = 0;
     public static int mapToEqui = 0;
     public static int onCurve = 0;
+
 
 
     public static void clearpMarca() {
@@ -77,75 +62,14 @@ public class GeometryGraphND {
         }
     }
 
-    //*** NAO SERA MAIS USADO
-    public static void clearLastString() {
-        //clearpMarca();
-
-//        if (UIController.instance().getState() instanceof CLASSIFIERAGENT_CONFIG) {
-//            int lastIndex = ClassifierAgent.tipo.size() - 1;
-//            ClassifierAgent.strView.remove(lastIndex);
-//            ClassifierAgent.indCurvaCla.remove(lastIndex);
-//            ClassifierAgent.tipo.remove(lastIndex);
-//            ClassifierAgent.xSeta.remove(lastIndex);
-//            ClassifierAgent.xStr.remove(lastIndex);
-//            ClassifierAgent.ySeta.remove(lastIndex);
-//            ClassifierAgent.yStr.remove(lastIndex);
-//        }
-
-//        if (UIController.instance().getState() instanceof VELOCITYAGENT_CONFIG) {
-//            int lastIndex = VelocityAgent.vel.size() - 1;
-//            VelocityAgent.velView.remove(lastIndex);
-//            VelocityAgent.indCurvaVel.remove(lastIndex);
-//            VelocityAgent.vel.remove(lastIndex);
-//            VelocityAgent.xSetaVel.remove(lastIndex);
-//            VelocityAgent.xVel.remove(lastIndex);
-//            VelocityAgent.ySetaVel.remove(lastIndex);
-//            VelocityAgent.yVel.remove(lastIndex);
-//        }
-    }
-
-
-    //*** NAO SERA MAIS USADO
-    public static void clearAllStrings() {
-//        //VelocityAgent.clearVelocities();
-//        //ClassifierAgent.clearClassifiers();
-//
-//        RPnVelocityPlotter.instance().clearVelocities();
-//        RPnStringPlotter.instance().clearClassifiers();
-    }
-
-
-    //*** NAO SERA MAIS USADO
-    public static void clearAll() {
-//        ClassifierAgent.indCurvaCla.clear();
-//        VelocityAgent.indCurvaVel.clear();
-//        clearAllStrings();
-//        RPnPhaseSpaceAbstraction.listResolution.clear();
-//        VelocityAgent.listaEquil.clear();
-//
-////        clearAllStrings();
-////        RPnPhaseSpaceAbstraction.listResolution.clear();
-////        RPnVelocityPlotter.listaEquil.clear();
-        
-    }
-
-    
 
     public void changeColor() {
         if (RPnPhaseSpacePanel.DEFAULT_BACKGROUND_COLOR == Color.white) {
-            cor12 = Color.red;
             cor34 = Color.red;
-            cor56 = Color.red;
-            cor78 = Color.red;
-            corSquare = Color.red;
             corString = Color.black;
         }
         if (RPnPhaseSpacePanel.DEFAULT_BACKGROUND_COLOR == Color.black) {
-            cor12 = Color.red;
             cor34 = Color.yellow;
-            cor56 = Color.red;
-            cor78 = Color.yellow;
-            corSquare = Color.red;
             corString = Color.white;
         }
     }
@@ -172,153 +96,8 @@ public class GeometryGraphND {
     }
 
 
-    //*** NAO SERA MAIS USADO
-    public void drawObjects(Graphics g, Object obj, Coords2D newDC, Coords2D setaDC) {
-
-//        Graphics2D graph = (Graphics2D) g;
-//
-//        Font font = new Font("Verdana", Font.PLAIN, 13);
-//        g.setFont(font);
-//        FontMetrics metrics = new FontMetrics(font) {
-//        };
-//        Rectangle2D bounds = metrics.getStringBounds(obj.toString(), null);
-//        int tamPix = (int) bounds.getWidth();
-//
-//        //***** Ficou melhor !!!!!!!!!!!!
-//        double raio = 7.;
-//        double Dx = Math.abs(newDC.getX() - setaDC.getX());
-//        double Dy = Math.abs(newDC.getY() - setaDC.getY());
-//        double dist = Math.sqrt(Math.pow(Dy, 2) + Math.pow(Dx, 2));
-//
-//        double dx = (raio * Dx) / dist;
-//        double dy = (raio * Dy) / dist;
-//
-//        if (setaDC.getX() < newDC.getX() && setaDC.getY() < newDC.getY()) {
-//            g.drawString((String) obj, (int) (newDC.getX() + 5), (int) (newDC.getY() + 5));
-//            Line2D line_ = new Line2D.Double(setaDC.getX() + dx, setaDC.getY() + dy, newDC.getX(), newDC.getY());
-//            graph.draw(line_);
-//        } else if (setaDC.getX() > newDC.getX() && setaDC.getY() < newDC.getY()) {
-//            g.drawString((String) obj, (int) (newDC.getX() - (tamPix + 2)), (int) (newDC.getY() + 5));
-//            Line2D line_ = new Line2D.Double(setaDC.getX() - dx, setaDC.getY() + dy, newDC.getX(), newDC.getY());
-//            graph.draw(line_);
-//        } else if (setaDC.getX() > newDC.getX() && setaDC.getY() > newDC.getY()) {
-//            g.drawString((String) obj, (int) (newDC.getX() - (tamPix + 2)), (int) (newDC.getY() + 5));
-//            Line2D line_ = new Line2D.Double(setaDC.getX() - dx, setaDC.getY() - dy, newDC.getX(), newDC.getY());
-//            graph.draw(line_);
-//        } else if (setaDC.getX() < newDC.getX() && setaDC.getY() > newDC.getY()) {
-//            g.drawString((String) obj, (int) (newDC.getX() + 5), (int) (newDC.getY() + 5));
-//            Line2D line_ = new Line2D.Double(setaDC.getX() + dx, setaDC.getY() - dy, newDC.getX(), newDC.getY());
-//            graph.draw(line_);
-//        }
-//        //**************************************************
-
-    }
-
-
-    //*** NAO SERA MAIS USADO
-    public void defineClassifiers(Graphics g, Scene scene_, RPnPhaseSpacePanel panel) {
-
-//        //int cont = ClassifierAgent.xDevStr.size();
-//        int cont = ClassifierAgent.xStr.size();
-//
-//        for (int i = 0; i < cont; i++) {
-//
-//            double YCR = Double.valueOf(ClassifierAgent.yStr.get(i).toString()).doubleValue();
-//            double XCR = Double.valueOf(ClassifierAgent.xStr.get(i).toString()).doubleValue();
-//
-////            int strView = Integer.valueOf(ClassifierAgent.strView.get(i).toString()).intValue();
-////
-////            if (strView == -1) {
-////                g.setColor(RPnPhaseSpacePanel.DEFAULT_BACKGROUND_COLOR);
-////            } else {
-////                g.setColor(corString);
-////            }
-//
-//            g.setColor(corString);
-//
-//            RealVector newRV = new RealVector(RPNUMERICS.domainDim());
-//            newRV.setElement(0, YCR);
-//            newRV.setElement(1, XCR);
-//
-//            Coords2D newDC = toDeviceCoords(scene_, newRV);
-//
-//            // ***
-//            double YSeta = Double.valueOf(ClassifierAgent.ySeta.get(i).toString()).doubleValue();
-//            double XSeta = Double.valueOf(ClassifierAgent.xSeta.get(i).toString()).doubleValue();
-//
-//            RealVector setaRV = new RealVector(RPNUMERICS.domainDim());
-//            setaRV.setElement(0, YSeta);
-//            setaRV.setElement(1, XSeta);
-//
-//            Coords2D setaDC = toDeviceCoords(scene_, setaRV);
-//            // ***
-//
-//            int s1 = (Integer) (ClassifierAgent.tipo.get(i));
-//            Object obj = HugoniotSegGeom.s[s1];
-//
-//            //drawObjects(g, obj, newDC, setaDC);     // algo equivalente ao panel.getName() deve ser usado
-//            if ((Integer)ClassifierAgent.strView.get(i) == 1  &&  (panel.getName().equals("Phase Space"))) drawObjects(g, obj, newDC, setaDC);
-//            else if ((Integer)ClassifierAgent.strView.get(i) == 2  &&  (panel.getName().equals("RightPhase Space"))) drawObjects(g, obj, newDC, setaDC);
-//            else if ((Integer)ClassifierAgent.strView.get(i) == 3  &&  (panel.getName().equals("LeftPhase Space"))) drawObjects(g, obj, newDC, setaDC);
-//
-//        }
-
-    }
-
-
-    //*** NAO SERA MAIS USADO
-    public void defineVelocities(Graphics g, Scene scene_, RPnPhaseSpacePanel panel) {
-
-//        //int cont = VelocityAgent.xDevVel.size();
-//        int cont = VelocityAgent.xVel.size();
-//
-//        for (int i = 0; i < cont; i++) {
-//
-//            double YCR = Double.valueOf(VelocityAgent.yVel.get(i).toString()).doubleValue();
-//            double XCR = Double.valueOf(VelocityAgent.xVel.get(i).toString()).doubleValue();
-//
-////            int velView = Integer.valueOf(VelocityAgent.velView.get(i).toString()).intValue();
-////
-////            if (velView == -1) {
-////                g.setColor(RPnPhaseSpacePanel.DEFAULT_BACKGROUND_COLOR);
-////            } else {
-////                g.setColor(corString);
-////            }
-//
-//            g.setColor(corString);
-//
-//            RealVector newRV = new RealVector(RPNUMERICS.domainDim());
-//            newRV.setElement(0, YCR);
-//            newRV.setElement(1, XCR);
-//
-//            Coords2D newDC = toDeviceCoords(scene_, newRV);
-//
-//            // ***
-//            double YSeta = Double.valueOf(VelocityAgent.ySetaVel.get(i).toString()).doubleValue();
-//            double XSeta = Double.valueOf(VelocityAgent.xSetaVel.get(i).toString()).doubleValue();
-//
-//            RealVector setaRV = new RealVector(RPNUMERICS.domainDim());
-//            setaRV.setElement(0, YSeta);
-//            setaRV.setElement(1, XSeta);
-//
-//            Coords2D setaDC = toDeviceCoords(scene_, setaRV);
-//            // ***
-//
-//            double v1 = (Double) (VelocityAgent.vel.get(i));
-//            String exp = String.format("%.4e", v1);
-//            Object obj = exp;
-//
-//            //drawObjects(g, obj, newDC, setaDC);
-//            if ((Integer)VelocityAgent.velView.get(i) == 1  &&  (panel.getName().equals("Phase Space"))) drawObjects(g, obj, newDC, setaDC);
-//            else if ((Integer)VelocityAgent.velView.get(i) == 2  &&  (panel.getName().equals("RightPhase Space"))) drawObjects(g, obj, newDC, setaDC);
-//            else if ((Integer)VelocityAgent.velView.get(i) == 3  &&  (panel.getName().equals("LeftPhase Space"))) drawObjects(g, obj, newDC, setaDC);
-//
-//        }
-
-    }
-
-
-    public void secondArea(BifurcationCurve curve, Scene scene) {
+    public Polygon secondArea(BifurcationCurve curve, Scene scene) {
+        
         ArrayList segments = new ArrayList();
 
         if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("RightPhase Space"))
@@ -333,6 +112,7 @@ public class GeometryGraphND {
         double wmin = 1.E10;
         double wmax = -1.E10;
 
+        System.out.println("GeometryGraphND.indContido.size() ::: " +GeometryGraphND.indContido.size());
 
         for (int i = 0; i < GeometryGraphND.indContido.size(); i++) {
             int ind = Integer.parseInt((GeometryGraphND.indContido.get(i)).toString());
@@ -353,31 +133,10 @@ public class GeometryGraphND {
 
         }
 
-        
-        double vMin = RPNUMERICS.boundary().getMinimums().getElement(0);
-        double vMax = RPNUMERICS.boundary().getMaximums().getElement(0);
-        double uMin = RPNUMERICS.boundary().getMinimums().getElement(1);
-        double uMax = RPNUMERICS.boundary().getMaximums().getElement(1);
-
-        int[] resolution = {1, 1};
-
-        if (RPnPhaseSpaceAbstraction.listResolution.size()==1) RPnPhaseSpaceAbstraction.closestCurve=0;
-        if (RPnPhaseSpaceAbstraction.listResolution.size()>0) resolution = (int[]) RPnPhaseSpaceAbstraction.listResolution.get(RPnPhaseSpaceAbstraction.closestCurve);
-
-        int nv = resolution[0];
-        int nu = resolution[1];
-
-        double dv = (vMax - vMin)/(1.*nv);
-        double du = (uMax - uMin)/(1.*nu);
-
-        RealVector P1 = new RealVector(new double[]{vMin+(int)((zmin-vMin)/dv)*dv, uMin+(int)((wmin-uMin)/du)*du});
-        RealVector P2 = new RealVector(new double[]{vMin+(int)((zmax-vMin)/dv+1)*dv, uMin+(int)((wmin-uMin)/du)*du});
-        RealVector P3 = new RealVector(new double[]{vMin+(int)((zmax-vMin)/dv+1)*dv, uMin+(int)((wmax-uMin)/du+1)*du});
-        RealVector P4 = new RealVector(new double[]{vMin+(int)((zmin-vMin)/dv)*dv, uMin+(int)((wmax-uMin)/du+1)*du});
-
-        int ResV = (int) Math.round((P2.getElement(0) - P1.getElement(0))/dv);
-        int ResU = (int) Math.round((P4.getElement(1) - P1.getElement(1))/du);
-        //System.out.println("Resolucao local : " +ResV  +" por " +ResU);
+        RealVector P1 = new RealVector(new double[]{zmin, wmin});
+        RealVector P2 = new RealVector(new double[]{zmax, wmin});
+        RealVector P3 = new RealVector(new double[]{zmax, wmax});
+        RealVector P4 = new RealVector(new double[]{zmin, wmax});
 
         Coords2D dcP1 = toDeviceCoords(scene, P1);
         Coords2D dcP2 = toDeviceCoords(scene, P2);
@@ -390,7 +149,7 @@ public class GeometryGraphND {
         pol.addPoint((int)dcP3.getX(), (int)dcP3.getY());
         pol.addPoint((int)dcP4.getX() , (int)dcP4.getY());
 
-        squareDC = pol;
+        return pol;
         
     }
 
@@ -400,32 +159,31 @@ public class GeometryGraphND {
         Iterator<RpGeometry> geomList = RPnDataModule.LEFTPHASESPACE.getGeomObjIterator();
 
         Color color = null;
+        Color otherColor = null;
 
         if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("RightPhase Space")) {
             geomList = RPnDataModule.LEFTPHASESPACE.getGeomObjIterator();
             color = Color.yellow;
+            otherColor = Color.magenta;
         }
         if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("LeftPhase Space"))  {
             geomList = RPnDataModule.RIGHTPHASESPACE.getGeomObjIterator();
             color = Color.magenta;
+            otherColor = Color.yellow;
         }
 
-        int i = 0;
 
+        int i = 0;
         while (geomList.hasNext()) {
             MultiGeometry geometry = geomList.next();
-            //color = geometry.viewingAttr().getColor();
-
+            
             if (geometry instanceof BifurcationCurveGeom) {
                 BifurcationCurveGeom bifurcGeom = (BifurcationCurveGeom) geometry;
-
                 Iterator it = bifurcGeom.getRealSegIterator();
                 while(it.hasNext()) {
                     RealSegGeom geom = (RealSegGeom) it.next();
-
-                    if (i == ind  &&  (GeometryGraph.count%2) == 0) geom.viewingAttr().setColor(Color.red);
-                    if ((GeometryGraph.count%2) == 1) geom.viewingAttr().setColor(color);
-
+                    if ((GeometryGraph.count%2) == 0) geom.viewingAttr().setColor(color);
+                    if (i == ind  &&  (GeometryGraph.count%2) == 1) geom.viewingAttr().setColor(otherColor);
                     i++;
                 }
 
@@ -433,93 +191,9 @@ public class GeometryGraphND {
 
         }
 
+        
     }
 
-
-    //*** NAO SERA MAIS USADO
-    public void testAreaContains(Scene scene) {
-
-//        RPnPhaseSpacePanel panel = new RPnPhaseSpacePanel(scene);
-//        ViewingTransform transf = panel.scene().getViewingTransform();
-//
-//        UserInputTable userInputList = UIController.instance().globalInputTable();
-//        RealVector newValue = userInputList.values();
-//
-//        RPnPhaseSpaceAbstraction phaseSpace = RPnDataModule.PHASESPACE;
-//        RpGeometry geom = phaseSpace.findClosestGeometry(newValue);
-//
-//        //RpGeometry geom = RPnPhaseSpaceAbstraction.findClosestGeometry(newValue);
-//        RPnCurve curve = (RPnCurve)(geom.geomFactory().geomSource());
-//
-//
-//        if (curve instanceof Orbit) {
-//
-//            for (int i = 0; i < ((Orbit)curve).getPoints().length; i++) {
-//
-//                CoordsArray wcCoordsCurve = new CoordsArray(((Orbit)curve).getPoints()[i]);
-//                Coords2D dcCoordsCurve = new Coords2D();
-//                transf.viewPlaneTransform(wcCoordsCurve, dcCoordsCurve);
-//
-//                double xCurve = dcCoordsCurve.getElement(0);
-//                double yCurve = dcCoordsCurve.getElement(1);
-//
-//                if (square1.contains(xCurve, yCurve)) {
-//                    indContido.add(i);
-//                    if (zerado == 2) {
-//                        zContido.add(((Orbit)curve).getPoints()[i].getElement(2));
-//                    } else {
-//                        zContido.add(((Orbit)curve).getPoints()[i].getElement(1));
-//                    }
-//
-//                }
-//
-//            }
-//
-//        }
-//
-//
-//        if (curve instanceof SegmentedCurve) {
-//
-//            ArrayList segments = (ArrayList) curve.segments();
-//
-//            if (curve instanceof BifurcationCurve) {
-//                if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("RightPhase Space"))
-//                    segments = (ArrayList) ((BifurcationCurve)curve).rightSegments();
-//
-//                if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("LeftPhase Space"))
-//                    segments = (ArrayList) ((BifurcationCurve)curve).leftSegments();
-//            }
-//
-//
-//
-//            for (int i = 0; i < segments.size(); i++) {
-//
-//                Coords2D dcCoordsCurve = new Coords2D();
-//                dcCoordsCurve = toDeviceCoords(scene, ((RealSegment) segments.get(i)).p1());
-//                double xCurve = dcCoordsCurve.getElement(0);
-//                double yCurve = dcCoordsCurve.getElement(1);
-//
-//                Coords2D dcCoordsCurve2 = new Coords2D();
-//                dcCoordsCurve2 = toDeviceCoords(scene, ((RealSegment) segments.get(i)).p2());
-//                double xCurve2 = dcCoordsCurve2.getElement(0);
-//                double yCurve2 = dcCoordsCurve2.getElement(1);
-//
-//                double xMed = (xCurve+xCurve2)*0.5;
-//                double yMed = (yCurve+yCurve2)*0.5;
-//
-//                if (square1.contains(xMed, yMed)) {
-//                    indContido.add(i);
-//                }
-//
-//            }
-//
-//            if (curve instanceof BifurcationCurve) {
-//                secondArea((BifurcationCurve) curve, scene);
-//            }
-//
-//        }
-
-    }
 
     
     public void drawGrid(Graphics g, Scene scene) {

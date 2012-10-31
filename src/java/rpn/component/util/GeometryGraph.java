@@ -9,28 +9,20 @@ import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.Shape;
 import java.awt.geom.Line2D;
-import java.awt.geom.Rectangle2D;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpacePanel;
 import rpn.component.RpGeometry;
-import rpn.controller.ui.AREASELECTION_CONFIG;
 import rpn.controller.ui.UIController;
 import rpnumerics.RPNUMERICS;
 import rpnumerics.RPnCurve;
 import wave.multid.Coords2D;
 import wave.multid.view.Scene;
 import wave.util.RealVector;
-import rpn.controller.ui.CLASSIFIERAGENT_CONFIG;
 import rpn.controller.ui.RPnVelocityPlotter;
 import rpn.controller.ui.UserInputTable;
-import rpn.controller.ui.VELOCITYAGENT_CONFIG;
 import rpn.parser.RPnDataModule;
-import rpn.usecase.VelocityAgent;
 import rpnumerics.BifurcationCurve;
 import rpnumerics.WaveCurve;
-import wave.multid.CoordsArray;
-import wave.util.Boundary;
-import wave.util.IsoTriang2DBoundary;
 
 /**
  *
@@ -45,9 +37,6 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
     private double V3x =0.;
     private double V3y =0.;
 
-
-    // membros que - possivelmente - serao levados para GGND
-    public static int mostraSing = 0;
     public static int count = 0;    //substituto do ControlClick.ind
 
 
@@ -80,6 +69,7 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
     }
 
 
+    //*** NAO ESTÁ SENDO USADO   --- MAS, POR ENQUANTO, NÃO DELETAR!!!
     public void infoWaveCurve(RealVector newValue, WaveCurve curve, RPnPhaseSpacePanel panel) {
 //        count = 0;
 //
@@ -105,25 +95,13 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
     public void drawFirstPanel(Graphics g, Scene scene_, RPnPhaseSpacePanel panel) {
 
         UserInputTable userInputList = UIController.instance().globalInputTable();
-        RealVector newValue = userInputList.values();
-        
+        RealVector newValue = userInputList.values();        
 
-        //if (mostraGrid != 0  &&  panel.getName().equals(RPnPhaseSpaceAbstraction.namePhaseSpace)){
-        if(mostraGrid != 0) {
+        if(mostraGrid != 0)
             drawGrid(g, scene_);
-        }
-
+        
         Graphics2D graph = (Graphics2D) g;
-
-        if (UIController.instance().getState() instanceof AREASELECTION_CONFIG  &&  panel.getName().equals(RPnPhaseSpaceAbstraction.namePhaseSpace)) {
-            g.setColor(cor12);
-            graph.draw(line1);
-            graph.draw(line2);
-
-        }
-
         g.setColor(cor34);
-
 
         if (panel.getName().equals(RPnPhaseSpaceAbstraction.namePhaseSpace)) {
             graph.draw(line3);
@@ -148,7 +126,6 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
 
         }
 
-
         try {
             RPnPhaseSpaceAbstraction phaseSpace = RPnDataModule.PHASESPACE;
             RpGeometry geom = phaseSpace.findClosestGeometry(newValue);
@@ -165,42 +142,6 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
         }
 
 
-        if ((count % 2) == 0) {
-
-            if (UIController.instance().getState() instanceof AREASELECTION_CONFIG  &&  panel.getName().equals(RPnPhaseSpaceAbstraction.namePhaseSpace)) {
-                g.setColor(cor56);
-                graph.draw(line5);
-                graph.draw(line6);
-                g.setColor(corSquare);
-            }
-            if (UIController.instance().getState() instanceof AREASELECTION_CONFIG  &&  !panel.getName().equals(RPnPhaseSpaceAbstraction.namePhaseSpace)) {
-
-                RpGeometry geom = RPnDataModule.PHASESPACE.findClosestGeometry(newValue);
-                RPnCurve curve = (RPnCurve)(geom.geomFactory().geomSource());
-                if (curve instanceof BifurcationCurve) {
-                    g.setColor(corSquare);
-                    graph.draw(squareDC);
-                }
-                
-            }
-            
-        }
-
-
-//            //*** Para os botoes Classify e Velocity
-//            if ((UIController.instance().getState() instanceof CLASSIFIERAGENT_CONFIG)
-//                    || (UIController.instance().getState() instanceof VELOCITYAGENT_CONFIG)) {
-//
-//                //defineClassifiers(g, scene_, panel);
-//                //defineVelocities(g, scene_, panel);
-//
-//            }
-//            //*** Fim dos botoes Classify e Velocity
-
-
-
-
-
     }
 
 
@@ -212,71 +153,8 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
     }
 
 
-    //*** NAO SERA MAIS USADO
-    public void markArea(Scene scene) {
 
-//        double vMin = RPNUMERICS.boundary().getMinimums().getElement(0);
-//        double vMax = RPNUMERICS.boundary().getMaximums().getElement(0);
-//        double uMin = RPNUMERICS.boundary().getMinimums().getElement(1);
-//        double uMax = RPNUMERICS.boundary().getMaximums().getElement(1);
-//
-//        RealVector P1, P2, P3, P4;
-//
-//        int[] resolution = {1, 1};
-//
-//        if (RPnPhaseSpaceAbstraction.listResolution.size()==1) RPnPhaseSpaceAbstraction.closestCurve=0;
-//        if (RPnPhaseSpaceAbstraction.listResolution.size()>0) resolution = (int[]) RPnPhaseSpaceAbstraction.listResolution.get(RPnPhaseSpaceAbstraction.closestCurve);
-//
-//        int nv = resolution[0];
-//        int nu = resolution[1];
-//
-//        double zmin = Math.min(targetPoint.getElement(0), cornerRet.getElement(0));
-//        double zmax = Math.max(targetPoint.getElement(0), cornerRet.getElement(0));
-//        double wmin = Math.min(targetPoint.getElement(1), cornerRet.getElement(1));
-//        double wmax = Math.max(targetPoint.getElement(1), cornerRet.getElement(1));
-//
-//        if (nv==0  &&  nu==0) {
-//            P1 = new RealVector(new double[]{zmin, wmin});
-//            P2 = new RealVector(new double[]{zmax, wmin});
-//            P3 = new RealVector(new double[]{zmax, wmax});
-//            P4 = new RealVector(new double[]{zmin, wmax});
-//        }
-//        else {
-//            double dv = (vMax - vMin)/(1.*nv);
-//            double du = (uMax - uMin)/(1.*nu);
-//
-//            P1 = new RealVector(new double[]{vMin + (int) ((zmin - vMin) / dv) * dv, uMin + (int) ((wmin - uMin) / du) * du});
-//            P2 = new RealVector(new double[]{vMin + (int) ((zmax - vMin) / dv + 1) * dv, uMin + (int) ((wmin - uMin) / du) * du});
-//            P3 = new RealVector(new double[]{vMin + (int) ((zmax - vMin) / dv + 1) * dv, uMin + (int) ((wmax - uMin) / du + 1) * du});
-//            P4 = new RealVector(new double[]{vMin + (int) ((zmin - vMin) / dv) * dv, uMin + (int) ((wmax - uMin) / du + 1) * du});
-//
-//            int ResV = (int) Math.round((P2.getElement(0) - P1.getElement(0))/dv);
-//            int ResU = (int) Math.round((P4.getElement(1) - P1.getElement(1))/du);
-//
-//            //System.out.println("Resolucao local : " +ResV  +" por " +ResU);
-//        }
-//
-//        Coords2D dcP1 = toDeviceCoords(scene, P1);
-//        Coords2D dcP2 = toDeviceCoords(scene, P2);
-//        Coords2D dcP3 = toDeviceCoords(scene, P3);
-//        Coords2D dcP4 = toDeviceCoords(scene, P4);
-//
-//        Polygon pol = new Polygon();
-//        pol.addPoint((int)dcP1.getX(), (int)dcP1.getY());
-//        pol.addPoint((int)dcP2.getX(), (int)dcP2.getY());
-//        pol.addPoint((int)dcP3.getX(), (int)dcP3.getY());
-//        pol.addPoint((int)dcP4.getX() , (int)dcP4.getY());
-//
-//        square1 = defShapeWC(pol, scene);
-//
-//        indContido.clear();
-//        testAreaContains(scene);
-
-    }
-
-
-
-    //*** NAO SERA MAIS USADO
+    //*** NAO SERA MAIS USADO   --- MAS, POR ENQUANTO, NÃO DELETAR!!!
     private Shape defShapeWC(Shape shape, Scene scene) {
 
 //        Boundary boundary = RPNUMERICS.boundary();
@@ -345,13 +223,7 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
     }
 
 
-
-    public void markPoints(Scene scene) {        //*** era do GeometryGraph3D, vou usar para testar mapeamento do square
-
-        Coords2D dcCoordsTP = toDeviceCoords(scene, targetPoint);
-        double xTP = dcCoordsTP.getElement(1);
-        double yTP = dcCoordsTP.getElement(0);
-
+    public void markPoints(Scene scene) {
         Coords2D dcCoordsMP = toDeviceCoords(scene, pMarca);
         double xMP = dcCoordsMP.getElement(1);
         double yMP = dcCoordsMP.getElement(0);
@@ -360,28 +232,13 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
         double xMPDCnt = dcCoordsMPDCnt.getElement(1);
         double yMPDCnt = dcCoordsMPDCnt.getElement(0);
 
-        Coords2D dcCoordsCR = toDeviceCoords(scene, cornerRet);
-        double xCR = dcCoordsCR.getElement(1);
-        double yCR = dcCoordsCR.getElement(0);
-
-
         //** Define as geometrias de resposta para interface.
         int h = 5;
-        line1 = new Line2D.Double(yTP - h, xTP, yTP + h, xTP);
-        line2 = new Line2D.Double(yTP, xTP - h, yTP, xTP + h);
         line3 = new Line2D.Double(yMP - h, xMP, yMP + h, xMP);
         line4 = new Line2D.Double(yMP, xMP - h, yMP, xMP + h);
         line3DC = new Line2D.Double(yMPDCnt - h, xMPDCnt, yMPDCnt + h, xMPDCnt);
         line4DC = new Line2D.Double(yMPDCnt, xMPDCnt - h, yMPDCnt, xMPDCnt + h);
-        line5 = new Line2D.Double(yCR - h, xCR, yCR + h, xCR);
-        line6 = new Line2D.Double(yCR, xCR - h, yCR, xCR + h);
         //***
-
-//        if ((UIController.instance().getState() instanceof AREASELECTION_CONFIG)) {
-//            //markArea(scene);
-//        }
-
-
     }
 
 

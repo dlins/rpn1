@@ -46,6 +46,16 @@ public class DoubleContactCurveCalc extends ContourCurveCalc {
         return result;
     }
 
+
+    @Override
+    public RpSolution recalc(Area area) throws RpException {
+
+        System.out.println("DoubleContactCurveCalc ::::: Entrando no recalc(Area area)");
+
+        return null;
+    }
+
+
     private native RpSolution nativeCalc(int [] resolution, int curveFamily, int domainFamily) throws RpException;
  
 }

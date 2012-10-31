@@ -2,6 +2,13 @@
 <!DOCTYPE rpnconfiguration >
 <rpnconfiguration>
     <PHYSICS name="Stone">
+        
+          <BOUNDARY name="Three_Phase_Boundary">
+
+            <BOUNDARYPARAM name="dimension" value="2" />
+            <BOUNDARYPARAM name="limits" value="-1.0 -1.0 -1.0 3.0 3.0 -1.0" />
+
+        </BOUNDARY>
 
         <PHYSICSCONFIG name="fluxfunction">
             <PHYSICSPARAM name="grw" position="0" value ="1.0" />
@@ -61,7 +68,7 @@
 
     <CURVE name="envelopecurve">
         <CURVEPARAM name="resolution" value="128 128"/>
-        <CURVEPARAM name="edge" value="0"/>
+        <CURVEPARAM name="whereisconstant" value="0"/>
         <CURVEPARAM name="numberofsteps" value="128"/>
     </CURVE>
 

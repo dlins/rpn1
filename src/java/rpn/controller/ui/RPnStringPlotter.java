@@ -5,10 +5,13 @@
 
 package rpn.controller.ui;
 
+import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Line2D;
-import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.List;
+import rpn.component.util.GraphicsUtil;
 import rpn.RPnPhaseSpacePanel;
 import rpn.component.HugoniotSegGeom;
 import rpn.component.RpGeometry;
@@ -22,7 +25,10 @@ import rpnumerics.HugoniotSegment;
 import rpnumerics.SegmentedCurve;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
+import wave.multid.Space;
+import wave.multid.view.ViewingAttr;
 import wave.multid.view.ViewingTransform;
+import rpn.component.util.LinePlotted;
 
 /**
  *
@@ -31,17 +37,17 @@ import wave.multid.view.ViewingTransform;
 public class RPnStringPlotter extends RPn2DMouseController {
 
     private Point cursorPos_;
-    private Line2D.Double line_;
     private String typeStr = "";
     private boolean addLine_ = false;
-    static private RPnStringPlotter instance_ = null;
-
+    private static RPnStringPlotter instance_;
 
     public void mouseMoved(MouseEvent me) {
 
-        RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) me.getSource();
-        
         if(addLine_) {
+
+            RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) me.getSource();
+            ViewingTransform viewingTransform = panel.scene().getViewingTransform();
+            
             double raio = 7.;
             double Dx = Math.abs(me.getPoint().getX() - cursorPos_.getX());
             double Dy = Math.abs(me.getPoint().getY() - cursorPos_.getY());
@@ -50,25 +56,44 @@ public class RPnStringPlotter extends RPn2DMouseController {
             double dx = (raio * Dx) / dist;
             double dy = (raio * Dy) / dist;
 
-            Line2D.Double line = new Line2D.Double();
+            Coords2D meDC = new Coords2D(me.getPoint().getX(), me.getPoint().getY());
+            CoordsArray meWC = new CoordsArray(new Space(" ", 2));
+            panel.scene().getViewingTransform().dcInverseTransform(meDC, meWC);
+            
+            CoordsArray cursorWC = new CoordsArray(new Space(" ", 2));
+            Coords2D cursorDC = new Coords2D();
 
-            if (cursorPos_.getX() < me.getPoint().getX() && cursorPos_.getY() < me.getPoint().getY()) {
-                line = new Line2D.Double(cursorPos_.getX()+dx, cursorPos_.getY()+dy, me.getPoint().getX(), me.getPoint().getY());
-                line_ = line;
-            } else if (cursorPos_.getX() > me.getPoint().getX() && cursorPos_.getY() < me.getPoint().getY()) {
-                line = new Line2D.Double(cursorPos_.getX()-dx, cursorPos_.getY()+dy, me.getPoint().getX(), me.getPoint().getY());
-                line_ = line;
-            } else if (cursorPos_.getX() > me.getPoint().getX() && cursorPos_.getY() > me.getPoint().getY()) {
-                line = new Line2D.Double(cursorPos_.getX()-dx, cursorPos_.getY()-dy, me.getPoint().getX(), me.getPoint().getY());
-                line_ = line;
-            } else if (cursorPos_.getX() < me.getPoint().getX() && cursorPos_.getY() > me.getPoint().getY()) {
-                line = new Line2D.Double(cursorPos_.getX()+dx, cursorPos_.getY()-dy, me.getPoint().getX(), me.getPoint().getY());
-                line_ = line;
+
+            if (cursorPos_.getX() <= me.getPoint().getX() && cursorPos_.getY() <= me.getPoint().getY()) {
+                cursorDC.setElement(0, cursorPos_.getX()+dx);
+                cursorDC.setElement(1, cursorPos_.getY()+dy);
+            } else if (cursorPos_.getX() >= me.getPoint().getX() && cursorPos_.getY() <= me.getPoint().getY()) {
+                cursorDC.setElement(0, cursorPos_.getX()-dx);
+                cursorDC.setElement(1, cursorPos_.getY()+dy);
+            } else if (cursorPos_.getX() >= me.getPoint().getX() && cursorPos_.getY() >= me.getPoint().getY()) {
+                cursorDC.setElement(0, cursorPos_.getX()-dx);
+                cursorDC.setElement(1, cursorPos_.getY()-dy);
+            } else if (cursorPos_.getX() <= me.getPoint().getX() && cursorPos_.getY() >= me.getPoint().getY()) {
+                cursorDC.setElement(0, cursorPos_.getX()+dx);
+                cursorDC.setElement(1, cursorPos_.getY()-dy);
             }
 
-            int size = panel.getCastedUI().getStringArrows().size();
-            panel.getCastedUI().getStringArrows().set(size - 1, line_);
+
+            // ---
+            int size = panel.getCastedUI().getTypeString().size();
             panel.getCastedUI().getTypeString().set(size - 1, typeStr);
+            panel.getCastedUI().getVelocityString().set(size - 1, "");
+            // ---
+
+            panel.scene().getViewingTransform().dcInverseTransform(cursorDC, cursorWC);
+            List<Object> wcObject = new ArrayList();
+            wcObject.add(new Line2D.Double(cursorWC.getElement(0), cursorWC.getElement(1), meWC.getElement(0), meWC.getElement(1)));
+            ViewingAttr attr = new ViewingAttr(Color.white);
+            
+            GraphicsUtil plotted = new LinePlotted(wcObject, viewingTransform, attr);
+            panel.setLastGraphicsUtil(plotted);
+            panel.repaint();
+
 
         }
         
@@ -77,6 +102,7 @@ public class RPnStringPlotter extends RPn2DMouseController {
 
 
     public void mousePressed(MouseEvent me) {
+
         RPnVelocityPlotter.listaEquil.clear();
 
         RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) me.getSource();
@@ -89,10 +115,11 @@ public class RPnStringPlotter extends RPn2DMouseController {
             RPnCurve curve = (RPnCurve) (geom.geomFactory().geomSource());
             RealVector closestPoint = curve.findClosestPoint(newValue);
             GeometryGraphND.pMarca = closestPoint;
-
+            
             if (curve instanceof HugoniotCurve) {
                 HugoniotSegment segment = (HugoniotSegment) (((SegmentedCurve) curve).segments()).get(curve.findClosestSegment(closestPoint));
                 typeStr = HugoniotSegGeom.s[segment.getType()];
+                System.out.println("String encontrada : " +typeStr);
 
                 ViewingTransform transf = panel.scene().getViewingTransform();
                 CoordsArray wcCoords = new CoordsArray(closestPoint);
@@ -100,9 +127,16 @@ public class RPnStringPlotter extends RPn2DMouseController {
                 transf.viewPlaneTransform(wcCoords, dcCoords);
                 cursorPos_ = new Point(dcCoords.getIntCoords()[0], dcCoords.getIntCoords()[1]);
 
-                panel.getCastedUI().getStringArrows().add(new Line2D.Double());
                 panel.getCastedUI().getTypeString().add("");
+                panel.getCastedUI().getVelocityString().add("");
 
+                List<Object> wcObjectsList = new ArrayList();
+                ViewingAttr viewingAttr = new ViewingAttr(Color.white);
+                wcObjectsList.add(new Line2D.Double());
+                GraphicsUtil empty = new LinePlotted(wcObjectsList, panel.scene().getViewingTransform(), viewingAttr);
+
+                panel.addGraphicUtil(empty);
+                
                 addLine_ = true;
             }
             if (curve instanceof BifurcationCurve) {
@@ -111,7 +145,8 @@ public class RPnStringPlotter extends RPn2DMouseController {
             } else {
                 GeometryGraphND.pMarcaDC = GeometryGraphND.pMarca;
             }
-            
+
+
         }
         else {
             addLine_ = false;
@@ -138,52 +173,6 @@ public class RPnStringPlotter extends RPn2DMouseController {
     }
     
     
-    public static RPnStringPlotter instance() {
-        if (instance_ == null) {
-            instance_ = new RPnStringPlotter();
-        }
-        return instance_;
-    }
-
-    
-
-    public void clearLastString() {
-        GeometryGraphND.clearpMarca();
-        System.out.println("Entrei no novo clearLastString() .............. ");
-
-        Iterator<RPnPhaseSpacePanel> iterator = UIController.instance().getInstalledPanelsIterator();
-        while (iterator.hasNext()) {
-            RPnPhaseSpacePanel panel = iterator.next();
-
-            int size = panel.getCastedUI().getTypeString().size();
-            if (size > 0) {
-                panel.getCastedUI().getTypeString().remove(size - 1);
-                panel.getCastedUI().getStringArrows().remove(size - 1);
-            }
-            
-        }
-
-    }
-
-
-    public void clearClassifiers() {
-        GeometryGraphND.clearpMarca();
-        System.out.println("Entrei no novo clearClassifiers() .............. ");
-
-        Iterator<RPnPhaseSpacePanel> iterator = UIController.instance().getInstalledPanelsIterator();
-        while (iterator.hasNext()) {
-            RPnPhaseSpacePanel panel = iterator.next();
-            int size = panel.getCastedUI().getTypeString().size();
-            if (size > 0) {
-                panel.getCastedUI().getTypeString().clear();
-                panel.getCastedUI().getStringArrows().clear();
-            }
-            
-        }
-
-    }
-
-
 
     public void mouseClicked(MouseEvent e) {
         //throw new UnsupportedOperationException("Not supported yet.");
@@ -200,6 +189,15 @@ public class RPnStringPlotter extends RPn2DMouseController {
     public void mouseExited(MouseEvent e) {
         //throw new UnsupportedOperationException("Not supported yet.");
     }
+
+
+    public static RPnStringPlotter instance() {
+        if (instance_ == null) {
+            instance_ = new RPnStringPlotter();
+        }
+        return instance_;
+    }
+
 
 
 }

@@ -10,7 +10,6 @@ import rpn.RPnPhaseSpacePanel;
 import java.util.List;
 import java.awt.Point;
 import java.awt.Polygon;
-import java.awt.geom.Line2D;
 
 public interface PhaseSpacePanelController {
     void install(RPnPhaseSpacePanel panel);
@@ -24,10 +23,6 @@ public interface PhaseSpacePanelController {
     List  pointMarkBuffer();
 
     List <Polygon> getSelectionAreas();
-
-    List <Line2D.Double> getStringArrows();
-
-    List <Line2D.Double> getVelocityArrows();
 
     List <String> getTypeString();
 

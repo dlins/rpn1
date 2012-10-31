@@ -22,7 +22,7 @@ public class LevelCurveGeomFactory extends RpCalcBasedGeomFactory {
     //
     // Methods
     //
-    protected RpGeometry createGeomFromSource() {
+    public RpGeometry createGeomFromSource() {
 
         LevelCurve curve = (LevelCurve) geomSource();
         int resultSize = curve.segments().size();

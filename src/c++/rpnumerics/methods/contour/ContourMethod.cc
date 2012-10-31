@@ -255,31 +255,31 @@ int ContourMethod::contour2d(ImplicitFunction *impf, std::vector<RealVector> &vr
 
                         //STORE ALL PAIRS OF EDGES THAT WERE FOUND
                         if (nedges_ > 0) {
-                           if (edges_[1*dime_ + 1] == 3 && nedges_ == 2) {
+//                           if (edges_[1*dime_ + 1] == 3 && nedges_ == 2) {
                                    // Store the segments by points...
-                                   //
-                                   RealVector ptemp(2);
-
-                                   // first, on edge comprising vertices 0, 1
-                                   ptemp.component(0) = sol_[0*dims_ + edges_[0*dime_ + 0]];
-                                   ptemp.component(1) = sol_[1*dims_ + edges_[0*dime_ + 0]];
-                                   vrs.push_back(ptemp);
-
-                                   // second, on edge comprising vertices 2, 3
-                                   ptemp.component(0) = sol_[0*dims_ + edges_[1*dime_ + 1]];
-                                   ptemp.component(1) = sol_[1*dims_ + edges_[1*dime_ + 1]];
-                                   vrs.push_back(ptemp);
-
-                                   // third, on edge comprising vertices 1, 3
-                                   ptemp.component(0) = sol_[0*dims_ + edges_[1*dime_ + 0]];
-                                   ptemp.component(1) = sol_[1*dims_ + edges_[1*dime_ + 0]];
-                                   vrs.push_back(ptemp);
-
-                                   // fourth, on edge comprising vertices 0, 2
-                                   ptemp.component(0) = sol_[0*dims_ + edges_[0*dime_ + 1]];
-                                   ptemp.component(1) = sol_[1*dims_ + edges_[0*dime_ + 1]];
-                                   vrs.push_back(ptemp);
-                           } else {
+//                                   //
+//                                   RealVector ptemp(2);
+//
+//                                   // first, on edge comprising vertices 0, 1
+//                                   ptemp.component(0) = sol_[0*dims_ + edges_[0*dime_ + 0]];
+//                                   ptemp.component(1) = sol_[1*dims_ + edges_[0*dime_ + 0]];
+//                                   vrs.push_back(ptemp);
+//
+//                                   // second, on edge comprising vertices 2, 3
+//                                   ptemp.component(0) = sol_[0*dims_ + edges_[1*dime_ + 1]];
+//                                   ptemp.component(1) = sol_[1*dims_ + edges_[1*dime_ + 1]];
+//                                   vrs.push_back(ptemp);
+//
+//                                   // third, on edge comprising vertices 1, 3
+//                                   ptemp.component(0) = sol_[0*dims_ + edges_[1*dime_ + 0]];
+//                                   ptemp.component(1) = sol_[1*dims_ + edges_[1*dime_ + 0]];
+//                                   vrs.push_back(ptemp);
+//
+//                                   // fourth, on edge comprising vertices 0, 2
+//                                   ptemp.component(0) = sol_[0*dims_ + edges_[0*dime_ + 1]];
+//                                   ptemp.component(1) = sol_[1*dims_ + edges_[0*dime_ + 1]];
+//                                   vrs.push_back(ptemp);
+//                           } else {
                                for (nedg = 0; nedg < nedges_; nedg++) {
 
                                    // Store the segments
@@ -295,7 +295,7 @@ int ContourMethod::contour2d(ImplicitFunction *impf, std::vector<RealVector> &vr
                                    vrs.push_back(p1);
                                    vrs.push_back(p2);
                                 }
-                            }
+//                            }
                         }
                     }
                 //}

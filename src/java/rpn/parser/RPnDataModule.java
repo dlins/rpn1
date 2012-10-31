@@ -74,7 +74,6 @@ import wave.multid.Space;
 public class RPnDataModule {
 
     static public RPnPhaseSpaceAbstraction PHASESPACE = null;
-    static public RPnPhaseSpaceAbstraction AUXPHASESPACE = null;
     static public RPnPhaseSpaceAbstraction LEFTPHASESPACE = null;
     static public RPnPhaseSpaceAbstraction RIGHTPHASESPACE = null;
     static public RPnPhaseSpaceAbstraction RIEMANNPHASESPACE = null;

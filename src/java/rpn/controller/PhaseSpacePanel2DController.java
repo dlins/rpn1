@@ -171,6 +171,7 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
 
 
                 panel.scene().update();
+                panel.updateGraphicsUtil();
                 panel.repaint();
             }
 
@@ -194,14 +195,6 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
 
     public List<Polygon> getSelectionAreas() {
         return selectionAreas_;
-    }
-
-    public List<Line2D.Double> getStringArrows() {
-        return stringArrows_;
-    }
-
-    public List<Line2D.Double> getVelocityArrows() {
-        return velocityArrows_;
     }
 
     public List<String> getTypeString() {

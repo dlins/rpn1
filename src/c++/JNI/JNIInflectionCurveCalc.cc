@@ -68,6 +68,20 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_InflectionCurveCalc_nativeCalc(JNIEnv 
     
     GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcation");
     
+    int r=    gv->grid.rows();
+    int c=    gv->grid.cols();
+    
+    cout <<gv->grid(0,0)<<endl;
+    cout <<gv->grid(r-1,c-1)<<endl;
+    
+    cout <<gv->grid.rows()<<endl;
+    cout <<gv->grid.cols()<<endl;
+    
+      cout << "Parametros: " << RpNumerics::getPhysics().fluxFunction().fluxParams().params() << endl;
+      
+    
+    
+    
     Inflection_Curve inflectionCurve;
 
     std::vector<RealVector> left_vrs;

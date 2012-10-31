@@ -16,9 +16,6 @@ import javax.swing.KeyStroke;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import rpn.component.util.GeometryGraphND;
-import rpn.controller.ui.RPnStringPlotter;
-import rpn.controller.ui.RPnVelocityPlotter;
 
 import rpnumerics.Configuration;
 import rpnumerics.RPNUMERICS;
@@ -144,8 +141,12 @@ public class RPnFluxParamsDialog extends RPnDialog {
     protected void apply() {
 
         //GeometryGraphND.clearAllStrings();
-        RPnStringPlotter.instance().clearClassifiers();
-        RPnVelocityPlotter.instance().clearVelocities();
+
+        // --- Substituir:
+        //RPnStringPlotter.instance().clearClassifiers();
+        //RPnVelocityPlotter.instance().clearVelocities();
+        // ---
+
         RPNUMERICS.applyFluxParams();
 
         rpn.usecase.ChangeFluxParamsAgent.instance().applyChange(new PropertyChangeEvent(rpn.usecase.ChangeFluxParamsAgent.instance(), "", null, RPNUMERICS.getFluxParams()));

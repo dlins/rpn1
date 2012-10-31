@@ -86,7 +86,7 @@ public class TrackPointAgent extends RpModelActionAgent {
         if (button_.isSelected()) {
 //            if (UIController.instance().globalInputTable().values().getSize() == rpnumerics.RPNUMERICS.domainDim()) {
                 
-                if (phaseSpace_.getSpace().getDim() == rpnumerics.RPNUMERICS.domainDim()) {
+                if (UIController.instance().getActivePhaseSpace().getSpace().getDim() == rpnumerics.RPNUMERICS.domainDim()) {
                 StateInformation stateInformation = new StateInformation();
 
                 RealVector realVectorWC = new RealVector(wcCoords.getCoords());

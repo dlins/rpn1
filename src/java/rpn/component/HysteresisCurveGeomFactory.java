@@ -29,7 +29,7 @@ public class HysteresisCurveGeomFactory extends BifurcationCurveGeomFactory {
     // Methods
     //
     @Override
-    protected RpGeometry createGeomFromSource() {
+    public RpGeometry createGeomFromSource() {
 
         HysteresisCurve curve = (HysteresisCurve) geomSource();
 

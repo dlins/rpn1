@@ -5,15 +5,17 @@
 
 package rpn.controller.ui;
 
+import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import rpn.RPnPhaseSpacePanel;
 import rpn.component.RpGeometry;
 import rpn.component.util.GeometryGraphND;
+import rpn.component.util.GraphicsUtil;
+import rpn.component.util.LinePlotted;
 import rpn.parser.RPnDataModule;
 import rpnumerics.HugoniotCurve;
 import rpnumerics.Orbit;
@@ -23,6 +25,8 @@ import rpnumerics.WaveCurve;
 import rpnumerics.WaveCurveOrbit;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
+import wave.multid.Space;
+import wave.multid.view.ViewingAttr;
 import wave.multid.view.ViewingTransform;
 import wave.util.RealVector;
 
@@ -33,18 +37,19 @@ import wave.util.RealVector;
 public class RPnVelocityPlotter extends RPn2DMouseController {
     
     private Point cursorPos_;
-    private Line2D.Double line_;
     private String velStr = "";
     private boolean addLine_ = false;
     public static List<RealVector> listaEquil = new ArrayList();
-    static private RPnVelocityPlotter instance_ = null;
+    private static RPnVelocityPlotter instance_;
 
 
     public void mouseMoved(MouseEvent me) {
 
-        RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) me.getSource();
-
         if(addLine_) {
+
+            RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) me.getSource();
+            ViewingTransform viewingTransform = panel.scene().getViewingTransform();
+
             double raio = 7.;
             double Dx = Math.abs(me.getPoint().getX() - cursorPos_.getX());
             double Dy = Math.abs(me.getPoint().getY() - cursorPos_.getY());
@@ -53,25 +58,41 @@ public class RPnVelocityPlotter extends RPn2DMouseController {
             double dx = (raio * Dx) / dist;
             double dy = (raio * Dy) / dist;
 
-            Line2D.Double line = new Line2D.Double();
+            Coords2D meDC = new Coords2D(me.getPoint().getX(), me.getPoint().getY());
+            CoordsArray meWC = new CoordsArray(new Space(" ", 2));
+            panel.scene().getViewingTransform().dcInverseTransform(meDC, meWC);
 
-            if (cursorPos_.getX() < me.getPoint().getX() && cursorPos_.getY() < me.getPoint().getY()) {
-                line = new Line2D.Double(cursorPos_.getX()+dx, cursorPos_.getY()+dy, me.getPoint().getX(), me.getPoint().getY());
-                line_ = line;
-            } else if (cursorPos_.getX() > me.getPoint().getX() && cursorPos_.getY() < me.getPoint().getY()) {
-                line = new Line2D.Double(cursorPos_.getX()-dx, cursorPos_.getY()+dy, me.getPoint().getX(), me.getPoint().getY());
-                line_ = line;
-            } else if (cursorPos_.getX() > me.getPoint().getX() && cursorPos_.getY() > me.getPoint().getY()) {
-                line = new Line2D.Double(cursorPos_.getX()-dx, cursorPos_.getY()-dy, me.getPoint().getX(), me.getPoint().getY());
-                line_ = line;
-            } else if (cursorPos_.getX() < me.getPoint().getX() && cursorPos_.getY() > me.getPoint().getY()) {
-                line = new Line2D.Double(cursorPos_.getX()+dx, cursorPos_.getY()-dy, me.getPoint().getX(), me.getPoint().getY());
-                line_ = line;
+            CoordsArray cursorWC = new CoordsArray(new Space(" ", 2));
+            Coords2D cursorDC = new Coords2D();
+
+
+            if (cursorPos_.getX() <= me.getPoint().getX() && cursorPos_.getY() <= me.getPoint().getY()) {
+                cursorDC.setElement(0, cursorPos_.getX()+dx);
+                cursorDC.setElement(1, cursorPos_.getY()+dy);
+            } else if (cursorPos_.getX() >= me.getPoint().getX() && cursorPos_.getY() <= me.getPoint().getY()) {
+                cursorDC.setElement(0, cursorPos_.getX()-dx);
+                cursorDC.setElement(1, cursorPos_.getY()+dy);
+            } else if (cursorPos_.getX() >= me.getPoint().getX() && cursorPos_.getY() >= me.getPoint().getY()) {
+                cursorDC.setElement(0, cursorPos_.getX()-dx);
+                cursorDC.setElement(1, cursorPos_.getY()-dy);
+            } else if (cursorPos_.getX() <= me.getPoint().getX() && cursorPos_.getY() >= me.getPoint().getY()) {
+                cursorDC.setElement(0, cursorPos_.getX()+dx);
+                cursorDC.setElement(1, cursorPos_.getY()-dy);
             }
 
-            int size = panel.getCastedUI().getVelocityArrows().size();
-            panel.getCastedUI().getVelocityArrows().set(size - 1, line_);
+            // ---
+            int size = panel.getCastedUI().getVelocityString().size();
             panel.getCastedUI().getVelocityString().set(size - 1, velStr);
+            panel.getCastedUI().getTypeString().set(size - 1, "");
+            // ---
+
+            panel.scene().getViewingTransform().dcInverseTransform(cursorDC, cursorWC);
+            List<Object> wcObject = new ArrayList();
+            wcObject.add(new Line2D.Double(cursorWC.getElement(0), cursorWC.getElement(1), meWC.getElement(0), meWC.getElement(1)));
+            ViewingAttr attr = new ViewingAttr(Color.white);
+            GraphicsUtil plotted = new LinePlotted(wcObject, viewingTransform, attr);
+            panel.setLastGraphicsUtil(plotted);
+            panel.repaint();
 
         }
     }
@@ -125,11 +146,19 @@ public class RPnVelocityPlotter extends RPn2DMouseController {
             transf.viewPlaneTransform(wcCoords, dcCoords);
             cursorPos_ = new Point(dcCoords.getIntCoords()[0], dcCoords.getIntCoords()[1]);
 
-            panel.getCastedUI().getVelocityArrows().add(new Line2D.Double());
             panel.getCastedUI().getVelocityString().add("");
+            panel.getCastedUI().getTypeString().add("");
 
+            List<Object> wcObjectsList = new ArrayList();
+            ViewingAttr viewingAttr = new ViewingAttr(Color.white);
+            wcObjectsList.add(new Line2D.Double());
+            GraphicsUtil empty = new LinePlotted(wcObjectsList, panel.scene().getViewingTransform(), viewingAttr);
+
+            panel.addGraphicUtil(empty);
+            
             addLine_ = true;
 
+            
         }
         else {
             addLine_ = false;
@@ -151,49 +180,6 @@ public class RPnVelocityPlotter extends RPn2DMouseController {
     }
 
 
-    public static RPnVelocityPlotter instance() {
-        if (instance_ == null) {
-            instance_ = new RPnVelocityPlotter();
-        }
-        return instance_;
-    }
-
-
-    public void clearLastString() {
-        GeometryGraphND.clearpMarca();
-        System.out.println("Entrei no novo clearLastString() .............. ");
-
-        Iterator<RPnPhaseSpacePanel> iterator = UIController.instance().getInstalledPanelsIterator();
-        while (iterator.hasNext()) {
-            RPnPhaseSpacePanel panel = iterator.next();
-
-            int size = panel.getCastedUI().getVelocityString().size();
-            if (size > 0) {
-                panel.getCastedUI().getVelocityArrows().remove(size - 1);
-                panel.getCastedUI().getVelocityString().remove(size - 1);
-            }
-            
-        }
-
-    }
-
-
-    public void clearVelocities() {
-        GeometryGraphND.clearpMarca();
-        System.out.println("Entrei no novo clearVelocities() .............. ");
-
-        Iterator<RPnPhaseSpacePanel> iterator = UIController.instance().getInstalledPanelsIterator();
-        while (iterator.hasNext()) {
-            RPnPhaseSpacePanel panel = iterator.next();
-            int size = panel.getCastedUI().getVelocityString().size();
-            if (size > 0) {
-                panel.getCastedUI().getVelocityString().clear();
-                panel.getCastedUI().getVelocityArrows().clear();
-            }
-
-        }
-
-    }
 
 
     public void mouseClicked(MouseEvent e) {
@@ -211,5 +197,15 @@ public class RPnVelocityPlotter extends RPn2DMouseController {
     public void mouseExited(MouseEvent e) {
         //throw new UnsupportedOperationException("Not supported yet.");
     }
+
+
+    public static RPnVelocityPlotter instance() {
+        if (instance_ == null) {
+            instance_ = new RPnVelocityPlotter();
+        }
+        return instance_;
+    }
+
+
 
 }

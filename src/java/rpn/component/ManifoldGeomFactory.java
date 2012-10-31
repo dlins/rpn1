@@ -22,7 +22,7 @@ public class ManifoldGeomFactory extends RpCalcBasedGeomFactory {
     //
     // Methods
     //
-    protected RpGeometry createGeomFromSource() {
+    public RpGeometry createGeomFromSource() {
         ManifoldOrbit orbit = (ManifoldOrbit) geomSource();
         return new ManifoldGeom(MultidAdapter.converseOrbitToCoordsArray(orbit.getOrbit()), this);
     }

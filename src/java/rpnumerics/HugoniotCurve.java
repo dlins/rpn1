@@ -377,11 +377,17 @@ public class HugoniotCurve extends SegmentedCurve {
         HugoniotSegment segment = (HugoniotSegment) (segments()).get(findClosestSegment(pMarca));
         double lSigma = segment.leftSigma();
         double rSigma = segment.rightSigma();
-        double lX = segment.leftPoint().getElement(0);
-        double rX = segment.rightPoint().getElement(0);
-        double X = pMarca.getElement(0);
-        
-        return ((rSigma - lSigma) * (X - lX) / (rX - lX) + lSigma);
+
+        RealVector u = new RealVector(2);
+        u.sub(segment.rightPoint(), segment.leftPoint());
+
+        RealVector v = new RealVector(2);
+        v.sub(pMarca, segment.leftPoint());
+
+        double normV = v.norm();
+        double normU = u.norm();
+
+        return (rSigma - lSigma) * normV / normU + lSigma;
     }
 
     //****************************
@@ -390,7 +396,7 @@ public class HugoniotCurve extends SegmentedCurve {
         List<RealVector> equil = new ArrayList();
 
         double velocity = velocity(pMarca);
-
+        
         // inclui o Uref na lista de pontos de equilibrio
         RealVector pZero = getXZero();
         //equil.add(pZero);

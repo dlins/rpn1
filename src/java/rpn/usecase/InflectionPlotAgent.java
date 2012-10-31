@@ -54,7 +54,7 @@ public class InflectionPlotAgent extends RpModelPlotAgent {
 
          InflectionCurveGeomFactory factory = new InflectionCurveGeomFactory(RPNUMERICS.createInflectionCurveCalc());
 
-        if (UIController.instance().isAuxPanelsEnabled()) {
+
             RPnPhaseSpaceAbstraction leftPhaseSpace = RPnDataModule.LEFTPHASESPACE;
 
             RPnPhaseSpaceAbstraction rightPhaseSpace = RPnDataModule.RIGHTPHASESPACE;
@@ -62,11 +62,11 @@ public class InflectionPlotAgent extends RpModelPlotAgent {
             RpGeometry leftGeometry = factory.leftGeom();
             RpGeometry rightGeometry = factory.rightGeom();
 
-            leftPhaseSpace.plot(leftGeometry);
-            rightPhaseSpace.plot(rightGeometry);
-        } else {
-            RPnDataModule.PHASESPACE.plot(factory.geom());
-        }
+            leftPhaseSpace.join(leftGeometry);
+            rightPhaseSpace.join(rightGeometry);
+
+            RPnDataModule.PHASESPACE.join(factory.geom());
+
 
      
     }
