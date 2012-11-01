@@ -414,6 +414,8 @@ int ColorCurve::interpolate(const RealVector &p, double &s_p,
 
 int ColorCurve::complete_point(RealVector &p, double &s, std::vector<double> &eigenvalue) {
     int dim = p.size();
+    
+    cout<<"tamanho de dim em complete point: "<<dim<<endl;
 
     // F, JF, G & JG at p:
     //
