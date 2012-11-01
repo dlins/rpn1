@@ -12,7 +12,7 @@ int Hugoniot_TP::classified_curve(const FluxFunction *f, const AccumulationFunct
     
     cout<<"Flux e acumm em HTP: "<<f<<" "<<a<<endl;
     
-    
+    cout<<"Ponto de referencia em classified: "<<r<<endl;
     
 
     int info = curve(f, a, g, r, vrs);
@@ -87,7 +87,9 @@ double Hugoniot_TP::complete_points(const RealVector &Uplus) {
     //
     // which must be calculated in the post-processing of the coloring.
 
-    double darcy_speedplus = Uref.component(2)*(X12minus * X12plus + X13minus * X13plus + X23minus * X23plus) / den;
+//    double darcy_speedplus = Uref.component(2)*(X12minus * X12plus + X13minus * X13plus + X23minus * X23plus) / den;
+    
+    double darcy_speedplus = (X12minus * X12plus + X13minus * X13plus + X23minus * X23plus) / den;
 
     return darcy_speedplus;
 }

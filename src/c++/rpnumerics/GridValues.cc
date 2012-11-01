@@ -185,18 +185,49 @@ void GridValues::fill_eigenpairs_on_grid(const FluxFunction *ff, const Accumulat
                 Eigen::eig(dim, JF_on_grid(i).data(), JG_on_grid(i).data(), etemp);
 
                 //e(i).clear();
-                e(i).resize(etemp.size());
+//                e(i).resize(etemp.size());
+//            
+//                for (int j = 0; j < etemp.size(); j++) e(i)[j] = etemp[j];
+//
+//                // Decide if the eigenvalues are real or complex
+//                //eig_is_real(i).clear();
+//                eig_is_real(i).resize(etemp.size());
+//                for (int j = 0; j < etemp.size(); j++) {
+//                    if (fabs(etemp[j].i) < epsilon) eig_is_real(i)[j] = true; // TODO: Comparacoes devem ser feitas com valores relativos, nao absolutos
+//                    else eig_is_real(i)[j] = false;
+//                }
+//            }
+            
+            
+            
+            
+            
+             e(i).resize(etemp.size());
             
                 for (int j = 0; j < etemp.size(); j++) e(i)[j] = etemp[j];
 
                 // Decide if the eigenvalues are real or complex
                 //eig_is_real(i).clear();
-                eig_is_real(i).resize(etemp.size());
-                for (int j = 0; j < etemp.size(); j++) {
+                eig_is_real(i).resize(2);
+                for (int j = 0; j < 2; j++) {
                     if (fabs(etemp[j].i) < epsilon) eig_is_real(i)[j] = true; // TODO: Comparacoes devem ser feitas com valores relativos, nao absolutos
                     else eig_is_real(i)[j] = false;
                 }
             }
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
         }
 
 //        cell_is_real.resize(number_of_cells[0], number_of_cells[1]);
