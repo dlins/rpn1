@@ -9,6 +9,11 @@ int Hugoniot_TP::classified_curve(const FluxFunction *f, const AccumulationFunct
     // Compute the Hugoniot curve as usual
     //
     vector<RealVector> vrs;
+    
+    cout<<"Flux e acumm em HTP: "<<f<<" "<<a<<endl;
+    
+    
+    
 
     int info = curve(f, a, g, r, vrs);
 
@@ -128,6 +133,8 @@ int Hugoniot_TP::curve(const FluxFunction *f, const AccumulationFunction *a,
     ff = f;
     aa = a;
 
+    
+    
     g.fill_functions_on_grid(f, a);
     gv = &g;
 

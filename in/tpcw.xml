@@ -19,19 +19,13 @@
 
 
                 <PHYSICSPARAM name="T_typical" position ="9" value="304.63"/>
-                <PHYSICSPARAM name="U_typical" position="10" value="998.2"/>
-                <PHYSICSPARAM name="Rho_typical" position="11" value="4.22e-3"/>
+                <PHYSICSPARAM name="U_typical" position="11" value="4.22e-3"/>
+                <PHYSICSPARAM name="Rho_typical" position="10" value="998.2"/>
 
 
 
         </PHYSICSCONFIG>
-        <!--  <ACCUMFUNCTION>
-            <ACCUMPARAMS name="porosity" position="0" value="0.15"/>
-        </ACCUMFUNCTION>-->
-
-     <!--   <PHYSICSCONFIG name="accumulationfunction">
-            <PHYSICSPARAM name="phi" position="0" value="1.0"/>
-
+<!--
 
 
         <PHYSICSCONFIG name="thermodynamics">

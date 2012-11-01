@@ -99,7 +99,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     cout <<"Valor de Uref na chamada depois de preprocess: "<<Uref<<endl;
 
 
-    const Boundary * testeBoundary = RpNumerics::getPhysics().getSubPhysics(0).getPreProcessedBoundary();
+//    const Boundary * testeBoundary = RpNumerics::getPhysics().getSubPhysics(0).getPreProcessedBoundary();
 
 //    cout << "Teste" << testeBoundary->minimums() << " " << testeBoundary->maximums() << endl;
 
@@ -154,7 +154,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
         int pointType = hugoniotPolyLine[i].type;
 
 
-        //        cout << "Tipo do ponto: " << pointType << endl;
+        cout << "Tipo do ponto: " << pointType << endl;
 
         string signature = ""; //hugoniotPolyLineVector[i].signature;
 
