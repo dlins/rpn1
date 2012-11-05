@@ -471,15 +471,35 @@ int ColorCurve::classify_point(RealVector &p, double &s, std::vector<double> &ei
     // ****  A T E N T I O N:  *****
     // Further atention in handling the coloring table for number of families is needed outside.
     //
-    for (int fam = 0; fam < ref_eigenvalue.size(); fam++) {
+//    for (int fam = 0; fam < ref_eigenvalue.size(); fam++) {
+//        // Assing increments for left side (reference point)
+//        if (ref_eigenvalue[fam] - s > 0.0) type += increment;
+//        increment *= 2;
+//    }
+//
+//    for (int fam = 0; fam < ref_eigenvalue.size(); fam++) {
+//        // Assing increments for right side (current point)
+//        if (eigenvalue[fam] - s > 0.0) type += increment;
+//        increment *= 2;
+//    }
+    
+    cout<<"Valor de s em CC:"<<s<<endl;
+     for (int fam = 0; fam < ref_eigenvalue.size(); fam++) {
         // Assing increments for left side (reference point)
-        if (ref_eigenvalue[fam] - s > 0.0) type += increment;
+        if (ref_eigenvalue[fam] - s > 0.0) {
+            type += increment;
+            cout<<"dentro do if primeiro:" << type<< " "<<increment<<endl;
+        }
         increment *= 2;
     }
 
     for (int fam = 0; fam < ref_eigenvalue.size(); fam++) {
         // Assing increments for right side (current point)
-        if (eigenvalue[fam] - s > 0.0) type += increment;
+        if (eigenvalue[fam] - s > 0.0){
+            type += increment;
+            
+            cout<<"dentro do if segundo:" << type<< " "<<increment<<endl;
+        }
         increment *= 2;
     }
 
@@ -564,9 +584,6 @@ void ColorCurve::classify_segment(RealVector &p, RealVector &q,
     else {
         // The number of families do not change inside.
         int fam = eigenvalue_p.size();
-
-        cout << "fam: " << fam << endl;
-
         // This value is for closeness proposes.
         double epsilon = 0.0;
         for (int i = 0; i < dim; i++) epsilon +=
