@@ -139,23 +139,27 @@ TD(new Thermodynamics_SuperCO2_WaterAdimensionalized(*copy.TD)) {
 
     setHugoniotFunction(new Hugoniot_TP());
 
-
-    RealVector min(boundary().minimums());
-
-    RealVector max(boundary().maximums());
-
-
-    preProcess(min);
-
-    preProcess(max);
+//
+//    RealVector min(boundary().minimums());
+//
+//    RealVector max(boundary().maximums());
+//
+//
+//    preProcess(min);
+//
+//    preProcess(max);
     
     
       
-    cout<<"Min em gridValues copy: "<<min<<endl;
-    cout<<"Max em gridValues copy: "<<max<<endl;
 
 
-    preProcessedBoundary_ = new RectBoundary(min, max);
+    preProcessedBoundary_ = new RectBoundary(*copy.preProcessedBoundary_);
+    
+    cout<<"Min em gridValues copy: "<<preProcessedBoundary_->minimums()<<endl;
+    cout<<"Max em gridValues copy: "<<preProcessedBoundary_->maximums()<<endl;
+    
+    
+    
 
 
 }

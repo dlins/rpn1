@@ -154,7 +154,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
         int pointType = hugoniotPolyLine[i].type;
 
 
-//        cout << "Tipo do ponto: " << pointType << endl;
+        cout << "Tipo do ponto: " << pointType << endl;
 
         string signature = ""; //hugoniotPolyLineVector[i].signature;
 
