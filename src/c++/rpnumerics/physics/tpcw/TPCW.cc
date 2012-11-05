@@ -82,6 +82,10 @@ SubPhysics(*defaultBoundary(), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATIO
     preProcess(min);
 
     preProcess(max);
+    
+    
+    cout<<"Min em gridValues: "<<min<<endl;
+    cout<<"Max em gridValues: "<<max<<endl;
 
 
     preProcessedBoundary_ = new RectBoundary(min, max);
@@ -144,6 +148,11 @@ TD(new Thermodynamics_SuperCO2_WaterAdimensionalized(*copy.TD)) {
     preProcess(min);
 
     preProcess(max);
+    
+    
+      
+    cout<<"Min em gridValues copy: "<<min<<endl;
+    cout<<"Max em gridValues copy: "<<max<<endl;
 
 
     preProcessedBoundary_ = new RectBoundary(min, max);

@@ -415,8 +415,6 @@ int ColorCurve::interpolate(const RealVector &p, double &s_p,
 int ColorCurve::complete_point(RealVector &p, double &s, std::vector<double> &eigenvalue) {
     int dim = p.size();
     
-    cout<<"tamanho de dim em complete point: "<<dim<<endl;
-
     // F, JF, G & JG at p:
     //
     double F[dim], G[dim], JF[dim][dim], JG[dim][dim];
@@ -445,6 +443,7 @@ int ColorCurve::complete_point(RealVector &p, double &s, std::vector<double> &ei
 
     if (fabs(den) > 1e-20) s = num / den;
     else {
+        cout<<"No else"<<endl;
         // The speed is just approximated. TODO: This is not a good idea, something is needed.
         s = num * 1e20;
         return UNCLASSIFIABLE_POINT;
@@ -709,6 +708,9 @@ void ColorCurve::classify_segmented_curve(std::vector<RealVector > &original,
     ref_point.resize(dim);
 
     for (int i = 0; i < dim; i++) ref_point.component(i) = ref.component(i);
+    
+    
+    cout<<"Ref point em classified: "<<ref_point<<endl;
    
     // Eigenvalues at the reference point.
     //
