@@ -420,6 +420,9 @@ int ColorCurve::complete_point(RealVector &p, double &s, std::vector<double> &ei
     double F[dim], G[dim], JF[dim][dim], JG[dim][dim];
     
     cout<<"Ponto p: "<<p<<endl;
+    
+    
+   
 
     fluxFunction_->fill_with_jet(dim, p.components(), 1, F, &JF[0][0], 0);
     accFunction_->fill_with_jet(dim, p.components(), 1, G, &JG[0][0], 0);

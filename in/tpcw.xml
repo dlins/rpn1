@@ -53,7 +53,7 @@
 
 
     <CURVE name="hugoniotcurve">
-        <CURVEPARAM name="resolution" value="20 20"/>
+        <CURVEPARAM name="resolution" value="128 128"/>
 
     </CURVE>
 

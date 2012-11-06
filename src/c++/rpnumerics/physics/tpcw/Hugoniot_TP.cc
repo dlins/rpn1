@@ -166,6 +166,8 @@ int Hugoniot_TP::curve(const FluxFunction *f, const AccumulationFunction *a,
 
         hugoniot_curve[i].resize(3);
         hugoniot_curve[i].component(2) = complete_points(Utemp);
+        
+        cout<<"Valor de hugoniot[2]: "<<hugoniot_curve[i].component(2)<<endl;
     }
 
     return info;
