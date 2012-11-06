@@ -265,8 +265,8 @@ int Flux2Comp2PhasesAdimensionalized::jet(const WaveState &w, JetMatrix &m, int 
     
     double s = w(0); // s_{sigma} = sg in FracFlow2PhasesHorizontal & FracFlow2PhasesVertical
     double Theta = w(1);
-//    double U = w(2);
-    double U=1.0;
+    double U = w(2);
+//    double U=1.0;
 
     //    cout <<"s: "<<s<<" Theta:"<<Theta<<" U:"<<U<<endl;
 
