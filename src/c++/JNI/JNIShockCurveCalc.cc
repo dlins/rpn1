@@ -70,14 +70,14 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
 
     vector <RealVector> coords, shock_alt;
 
-//    cout << "Valor de increase" << increase << endl;
+    //    cout << "Valor de increase" << increase << endl;
 
-//    const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
-//
-//    RealVector min(physicsBoundary. minimums());
-//    RealVector max(physicsBoundary. maximums());
+    //    const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
+    //
+    //    RealVector min(physicsBoundary. minimums());
+    //    RealVector max(physicsBoundary. maximums());
 
-//    cout << "Valor de family" << familyIndex << endl;
+    //    cout << "Valor de family" << familyIndex << endl;
 
 
     RealVector * originalDirection = new RealVector(realVectorInput.size());
@@ -92,40 +92,54 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
     if (increase == RAREFACTION_SPEED_DECREASE)
         increase = WAVE_BACKWARD;
 
-    RealVector initPoint = realVectorInput;
+
 
     //    initPoint.component(0) = 0.5678;
     //    initPoint.component(1) = 0.4121;
 
 
-    FluxFunction * fluxFunction =  (FluxFunction *)&RpNumerics::getPhysics().getSubPhysics(0).fluxFunction();
-    AccumulationFunction * accumulationFunction =  (AccumulationFunction *)&RpNumerics::getPhysics().getSubPhysics(0).accumulation();
+    FluxFunction * fluxFunction = (FluxFunction *) & RpNumerics::getPhysics().getSubPhysics(0).fluxFunction();
+    AccumulationFunction * accumulationFunction = (AccumulationFunction *) & RpNumerics::getPhysics().getSubPhysics(0).accumulation();
 
-    Boundary * tempBoundary = (Boundary *)RpNumerics::getPhysics().getSubPhysics(0).getPreProcessedBoundary();//boundary().clone();
+    Boundary * tempBoundary = (Boundary *) RpNumerics::getPhysics().getSubPhysics(0).getPreProcessedBoundary(); //boundary().clone();
 
-    int info_shock_curve,info_shock_curve_alt;
-
-    Shock::curve(realVectorInput, true, initPoint, increase, familyIndex, SHOCK_FOR_ITSELF, originalDirection,0,
-
-            fluxFunction, accumulationFunction,
-            tempBoundary, coords, info_shock_curve,shock_alt,info_shock_curve_alt);
+    int info_shock_curve, info_shock_curve_alt;
 
 
-//    delete tempBoundary;
-    delete fluxFunction;
-    delete accumulationFunction;
+
+    ShockContinuationMethod3D2D(int dim, familyIndex, *fluxFunction, *accumulationFunction, *tempBoundary, realVectorInput.components(), newtonTolerance, double epsilon, int t);
+
+    int curve(familyIndex, double maxnum, increase, std::vector<RealVector> &out, int &edge); // If _SHOCK_INIT_IS_REF_
+
+
+
+
+
+
+
+
+
+    //    Shock::curve(realVectorInput, true, initPoint, increase, familyIndex, SHOCK_FOR_ITSELF, originalDirection,0,
+    //
+    //            fluxFunction, accumulationFunction,
+    //            tempBoundary, coords, info_shock_curve,shock_alt,info_shock_curve_alt);
+    //
+    //
+    ////    delete tempBoundary;
+    //    delete fluxFunction;
+    //    delete accumulationFunction;
 
 
     //Orbit members creation
 
-    if(coords.size()==0) return NULL;
+    if (coords.size() == 0) return NULL;
 
     jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(coords.size(), classOrbitPoint, NULL);
 
-    
-    cout<<"Tamanho da curva:"<<coords.size()<<endl;
-    
-    
+
+    cout << "Tamanho da curva:" << coords.size() << endl;
+
+
     for (i = 0; i < coords.size(); i++) {
 
         RealVector tempVector = coords.at(i);
