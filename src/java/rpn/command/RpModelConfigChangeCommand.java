@@ -66,4 +66,40 @@ public abstract class RpModelConfigChangeCommand extends RpModelActionCommand {
 
         }
     }
+    
+    
+    @Override
+    public String toXML(){
+
+          StringBuffer buffer = new StringBuffer();
+
+            buffer.append("<COMMAND name=\"").append(toString()).append("\">\n");
+            for(RealVector input:getInputArray()){
+                buffer.append(input.toXML());
+                buffer.append("\n");
+            }
+
+            buffer.append("</COMMAND>\n");
+
+        return buffer.toString();
+
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }

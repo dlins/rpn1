@@ -15,7 +15,7 @@ import rpn.controller.ui.UndoableAction;
 import wave.util.RealVector;
 
 
-public class RpCommand extends AbstractAction implements UndoableAction{// TODO estender AbstractAction e implementar UndoableAction
+public class RpCommand extends AbstractAction implements UndoableAction{
 
     private ArrayList<RealVector> inputArray_;
     private UI_ACTION_SELECTED actionSelected_;
@@ -74,11 +74,11 @@ public class RpCommand extends AbstractAction implements UndoableAction{// TODO 
     }
 
     public void unexecute() {
-        throw new UnsupportedOperationException("Not supported yet.");
+       
     }
 
     public void actionPerformed(ActionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet.");
+       
     }
 
 

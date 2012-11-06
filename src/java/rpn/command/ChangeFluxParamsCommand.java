@@ -36,7 +36,7 @@ public class ChangeFluxParamsCommand extends RpModelConfigChangeCommand {
     // Constants
     //
 
-    static public final String DESC_TEXT = "Change Flux Parameters...";
+    static public final String DESC_TEXT = "Change Flux Parameters";
     //
     // Members
     //
