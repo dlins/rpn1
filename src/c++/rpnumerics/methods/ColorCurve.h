@@ -64,8 +64,8 @@ protected:
             std::vector<HugoniotPolyLine> &classified_curve,
             std::vector<RealVector> &transition_list);
 
-    const FluxFunction * fluxFunction_;
-    const AccumulationFunction * accFunction_;
+     FluxFunction * fluxFunction_;
+     AccumulationFunction * accFunction_;
 
     RealVector ref_point;
     std::vector<double> ref_eigenvalue;

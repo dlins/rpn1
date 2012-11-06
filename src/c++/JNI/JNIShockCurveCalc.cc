@@ -72,10 +72,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
 
 //    cout << "Valor de increase" << increase << endl;
 
-    const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
-
-    RealVector min(physicsBoundary. minimums());
-    RealVector max(physicsBoundary. maximums());
+//    const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
+//
+//    RealVector min(physicsBoundary. minimums());
+//    RealVector max(physicsBoundary. maximums());
 
 //    cout << "Valor de family" << familyIndex << endl;
 
@@ -98,10 +98,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
     //    initPoint.component(1) = 0.4121;
 
 
-    FluxFunction * fluxFunction = (FluxFunction *) RpNumerics::getPhysics().fluxFunction().clone();
-    AccumulationFunction * accumulationFunction = (AccumulationFunction *) RpNumerics::getPhysics().accumulation().clone();
+    FluxFunction * fluxFunction =  (FluxFunction *)&RpNumerics::getPhysics().getSubPhysics(0).fluxFunction();
+    AccumulationFunction * accumulationFunction =  (AccumulationFunction *)&RpNumerics::getPhysics().getSubPhysics(0).accumulation();
 
-    Boundary * tempBoundary = RpNumerics::getPhysics().boundary().clone();
+    Boundary * tempBoundary = (Boundary *)RpNumerics::getPhysics().getSubPhysics(0).getPreProcessedBoundary();//boundary().clone();
 
     int info_shock_curve,info_shock_curve_alt;
 
@@ -111,7 +111,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
             tempBoundary, coords, info_shock_curve,shock_alt,info_shock_curve_alt);
 
 
-    delete tempBoundary;
+//    delete tempBoundary;
     delete fluxFunction;
     delete accumulationFunction;
 
@@ -122,6 +122,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
 
     jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(coords.size(), classOrbitPoint, NULL);
 
+    
+    cout<<"Tamanho da curva:"<<coords.size()<<endl;
+    
+    
     for (i = 0; i < coords.size(); i++) {
 
         RealVector tempVector = coords.at(i);

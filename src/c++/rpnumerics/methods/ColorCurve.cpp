@@ -20,22 +20,15 @@
 //                                };
 // Sign function. Inlined, should be fast.
 
-//ColorCurve::ColorCurve(const FluxFunction & fluxFunction,
-//        const AccumulationFunction & accumulationFunction) :
-//fluxFunction_((FluxFunction *) fluxFunction.clone()),
-//accFunction_((AccumulationFunction *) accumulationFunction.clone()) {
-//    
-    
-    ColorCurve::ColorCurve(const FluxFunction & fluxFunction,
+ColorCurve::ColorCurve(const FluxFunction & fluxFunction,
         const AccumulationFunction & accumulationFunction) :
-fluxFunction_( &fluxFunction),
-accFunction_(& accumulationFunction) {
+fluxFunction_((FluxFunction *) fluxFunction.clone()),
+accFunction_((AccumulationFunction *) accumulationFunction.clone()) {
+    
+ 
     
     
-    
-    
-    cout<<"Flux no colorcurve"<<fluxFunction_<<endl;
-    cout<<"Accum no colorcurve"<<accFunction_<<endl;
+  
 
 }
 

@@ -94,7 +94,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     
     
      //TODO Remover e colocar dentro do ColorCurve. Isto é uma cochinada por o Pablo
-//    Uref(2) = 1.0;
+    Uref(2) = 1.0; //TODO Colocar no pre process
     
     cout <<"Valor de Uref na chamada depois de preprocess: "<<Uref<<endl;
 
