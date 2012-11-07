@@ -11,6 +11,7 @@
  * Includes:
  */
 #include "SubPhysics.h"
+#include "physics/tpcw/Hugoniot_TP.h"
 
 /*
  * ---------------------------------------------------------------
@@ -68,13 +69,18 @@ void SubPhysics::setParams(vector<string> paramsVector) {
 }
 
 
+const Boundary * SubPhysics::getPreProcessedBoundary()const{
+    return boundary_;
+}
 
 
-HugoniotFunctionClass * SubPhysics::getHugoniotFunction()const {
+
+
+Hugoniot_Locus * SubPhysics::getHugoniotFunction()const {
     return hugoniotFunction_;
 }
 
-void SubPhysics::setHugoniotFunction(HugoniotFunctionClass *hf) {
+void SubPhysics::setHugoniotFunction(Hugoniot_Locus *hf) {
 
     hugoniotFunction_ = hf;
 }
@@ -113,4 +119,8 @@ void SubPhysics::preProcess(RealVector &) {
 }
 
 void SubPhysics::postProcess(vector<RealVector> &) {
+}
+
+
+void SubPhysics::postProcess(RealVector &) {
 }

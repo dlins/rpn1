@@ -16,10 +16,9 @@
 #include "SubPhysics.h"
 #include "Accum2Comp2PhasesAdimensionalized.h"
 #include "Flux2Comp2PhasesAdimensionalized.h"
-#include "ReducedTPCWHugoniotFunctionClass.h"
+#include "Hugoniot_TP.h"
 #include "RectBoundary.h"
 #include "Multid.h"
-
 
 /*
  * ---------------------------------------------------------------
@@ -31,15 +30,15 @@ class TPCW : public SubPhysics {
 private:
 
     Thermodynamics_SuperCO2_WaterAdimensionalized * TD;
-
+    RectBoundary * preProcessedBoundary_;
 
 
 public:
 
-//    TPCW(const FluxFunction &, const AccumulationFunction &,  const Thermodynamics_SuperCO2_WaterAdimensionalized &);
+    //    TPCW(const FluxFunction &, const AccumulationFunction &,  const Thermodynamics_SuperCO2_WaterAdimensionalized &);
 
 
-    TPCW(const RealVector &,const string &);
+    TPCW(const RealVector &, const string &);
 
 
     TPCW(const TPCW &);
@@ -51,11 +50,15 @@ public:
     void setParams(vector<string> params) ;
 
 
-
+    void setParams(vector<string>);
 
     void preProcess(RealVector &);
     void postProcess(vector<RealVector> &);
-    
+    void postProcess(RealVector &);
+
+
+    const Boundary * getPreProcessedBoundary()const;
+
 
 
     double T2Theta(double)const;

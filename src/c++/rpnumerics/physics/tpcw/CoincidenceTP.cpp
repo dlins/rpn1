@@ -1,30 +1,29 @@
-#include "CoincidenceTPCW.h"
+#include "CoincidenceTP.h"
 
-CoincidenceTPCW::CoincidenceTPCW(const Flux2Comp2PhasesAdimensionalized *f, const Accum2Comp2PhasesAdimensionalized * a) : HugoniotFunctionClass(*f), td(f->getThermo()),
-phi(a->accumulationParams().component(0)) {
+CoincidenceTP::CoincidenceTP(const Flux2Comp2PhasesAdimensionalized *f) : fluxFunction_(f), td(f->getThermo()) {
 
 }
 
-double CoincidenceTPCW::lambdas_function(const RealVector &u) {
+double CoincidenceTP::lambdas_function(const RealVector &u) {
     double sw = 1.0 - u.component(0);
     double Theta = u.component(1);
     JetMatrix m(2);
-    const Flux2Comp2PhasesAdimensionalized & fluxFunction = (const Flux2Comp2PhasesAdimensionalized &) getFluxFunction();
-    fluxFunction.getHorizontalFlux()->Diff_FracFlow2PhasesHorizontalAdimensionalized(sw, Theta, 1, m);
+
+    fluxFunction_->getHorizontalFlux()->Diff_FracFlow2PhasesHorizontalAdimensionalized(sw, Theta, 1, m);
 
     return m(0, 0);
 }
 
-double CoincidenceTPCW::lambdae_function(const RealVector &u) {
+double CoincidenceTP::lambdae_function(const RealVector &u) {
 
     // First we define the Buckley-Leverett jet.
 
     double sw = 1.0 - u.component(0);
     double Theta = u.component(1);
     JetMatrix m(2);
-    const Flux2Comp2PhasesAdimensionalized & fluxFunction = (const Flux2Comp2PhasesAdimensionalized &) getFluxFunction();
-    fluxFunction.getHorizontalFlux()-> Diff_FracFlow2PhasesHorizontalAdimensionalized(sw, Theta, 0, m);
 
+
+    fluxFunction_->getHorizontalFlux()->Diff_FracFlow2PhasesHorizontalAdimensionalized(sw, Theta, 0, m);
 
     double f = m(0);
     double s = u.component(0);
@@ -96,13 +95,45 @@ double CoincidenceTPCW::lambdae_function(const RealVector &u) {
     return reduced_lambdae;
 }
 
-double CoincidenceTPCW::HugoniotFunction(const RealVector &u) {
+int CoincidenceTP::function_on_square(double *foncub, int i, int j) {
+    double f_aux[4];
 
-    double lambdas = lambdas_function(u);
-    double lambdae = lambdae_function(u);
-    return lambdas - lambdae;
+    for (int l = 0; l < 2; l++) {
+        for (int k = 0; k < 2; k++) {
+            RealVector u(2);
+            u(0) = gv->grid(i + l, j + k).component(0);
+            u(1) = gv->grid(i + l, j + k).component(1);
+            //            double lambdas = lambdas_function(RealVector(3,gv->grid(i + l, j + k).components()));
+            //            double lambdae = lambdae_function(RealVector(3,gv->grid(i + l, j + k).components()));
+            double lambdas = lambdas_function(u);
+            double lambdae = lambdae_function(u);
+            f_aux[l * 2 + k] = lambdas - lambdae;
+        }
+    }
+
+    foncub[1] = f_aux[0]; // Was: foncub[0][1]
+    foncub[0] = f_aux[2]; // Was: foncub[0][0]
+    foncub[3] = f_aux[1]; // Was: foncub[0][2]
+    foncub[2] = f_aux[3]; // Was: foncub[0][2]
+
+ 
+    return 1;
 }
 
-void CoincidenceTPCW::completeCurve(std::vector<RealVector> & curve) {
+int CoincidenceTP::curve(const FluxFunction *f, const AccumulationFunction *a,
+        GridValues &g, std::vector<RealVector> &coincidence_curve) {
 
+    phi = a->accumulationParams().component(0);
+
+    g.fill_functions_on_grid(f, a);
+    gv = &g;
+
+    coincidence_curve.clear();
+
+    int info = ContourMethod::contour2d(this, coincidence_curve);
+
+    return info;
+}
+
+CoincidenceTP::~CoincidenceTP() {
 }

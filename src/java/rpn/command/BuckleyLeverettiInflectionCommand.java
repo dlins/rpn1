@@ -8,9 +8,9 @@ package rpn.command;
 import java.awt.event.ActionEvent;
 import javax.swing.JButton;
 import rpn.component.*;
-import rpn.controller.ui.BIFURCATION_CONFIG;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UI_ACTION_SELECTED;
+import rpn.parser.RPnDataModule;
 import rpnumerics.*;
 import wave.util.RealVector;
 
@@ -18,8 +18,8 @@ public class BuckleyLeverettiInflectionCommand extends RpModelPlotCommand {
     //
     // Constants
     //
-    static public final String DESC_TEXT = "BuckleyLeverettinInflection Curve";
 
+    static public final String DESC_TEXT = "BuckleyLeverettinInflection Curve";
     //
     // Members
     //
@@ -28,20 +28,21 @@ public class BuckleyLeverettiInflectionCommand extends RpModelPlotCommand {
     //
     // Constructors/Initializers
     //
+
     protected BuckleyLeverettiInflectionCommand() {
         super(DESC_TEXT, rpn.RPnConfig.HUGONIOT,new JButton(DESC_TEXT));
     }
 
-
-     @Override
+    @Override
     public void actionPerformed(ActionEvent event) {
 
         UI_ACTION_SELECTED action = new UI_ACTION_SELECTED(this);
 //        UIController.instance().setState(new BIFURCATION_CONFIG());
-         
+
         action.userInputComplete(UIController.instance());// No input needed
 
     }
+
     public RpGeometry createRpGeometry(RealVector[] input) {
 
         BuckleyLeverettinCurveGeomFactory factory = new BuckleyLeverettinCurveGeomFactory(new BuckleyLeverettinInflectionCurveCalc());
@@ -49,12 +50,20 @@ public class BuckleyLeverettiInflectionCommand extends RpModelPlotCommand {
 
     }
 
+
+    @Override
+    public void execute() {
+
+        BuckleyLeverettinCurveGeomFactory factory = new BuckleyLeverettinCurveGeomFactory(new BuckleyLeverettinInflectionCurveCalc());
+        RPnDataModule.PHASESPACE.join(factory.geom());
+
+    }
+
     static public BuckleyLeverettiInflectionCommand instance() {
+
         if (instance_ == null) {
             instance_ = new BuckleyLeverettiInflectionCommand();
         }
         return instance_;
     }
-
-   
 }

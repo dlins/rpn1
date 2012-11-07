@@ -11,6 +11,7 @@
  * Includes:
  */
 #include "CoreyQuadPhysics.h"
+#include "Hugoniot_Curve.h"
 
 /*
  * ---------------------------------------------------------------
@@ -20,7 +21,7 @@
 
 
 CoreyQuadPhysics::CoreyQuadPhysics() : SubPhysics(CoreyQuad(CoreyQuad_Params()), StoneAccumulation(), *defaultBoundary(), Multid::PLANE, "CoreyQuad", _SIMPLE_ACCUMULATION_) {
-
+    setHugoniotFunction(new Hugoniot_Curve());
 }
 
 SubPhysics * CoreyQuadPhysics::clone()const {
@@ -29,6 +30,7 @@ SubPhysics * CoreyQuadPhysics::clone()const {
 }
 
 CoreyQuadPhysics::CoreyQuadPhysics(const CoreyQuadPhysics & copy) : SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.boundary(), copy.domain(), "CoreyQuad", _SIMPLE_ACCUMULATION_) {
+    setHugoniotFunction(new Hugoniot_Curve());
 }
 
 CoreyQuadPhysics::~CoreyQuadPhysics() {

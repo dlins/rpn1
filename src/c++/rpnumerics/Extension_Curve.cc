@@ -48,23 +48,15 @@ int Extension_Curve::function_on_vertices(double *foncub, int domain_i, int doma
 
         double red_shock_speed;
         double den = X12 * X12 + X31 * X31 + X23*X23;
-        if ( fabs(den) < 1.0e-10 ) {
-            den = X12_0 * X12_0 + X31_0 * X31_0 + X23_0 * X23_0;
-           red_shock_speed = (Y21 * X12_0 + Y13 * X31_0 + Y32 * X23_0) / den;
-          if ( fabs(den) < 1.0e-10) return INVALID_FUNCTION_ON_VERTICES;
-        } else {
-
-//        cout << "den: " << den << endl;
-////
-//        cout << "x12_0: " << X12_0 << "x31_0:" << X31_0 << "x23_0: " << X23_0 << endl;
-        
-//        cout << "x12: " << X12 << " x31_0:" << X31 << " x23: " << X23 << endl;
-////
-////
-//        cout << "F10: " << F10<< " F20:" << F20 << " F30: " << F30 << endl;
-
         double scaling_factor = (X12_0 * X12 + X31_0 * X31 + X23_0 * X23) / den;
+        if ( fabs(den) < 1.0e-8) {
 
+           den = X12_0 * X12_0 + X31_0 * X31_0 + X23_0 * X23_0;
+           red_shock_speed = (Y21 * X12_0 + Y13 * X31_0 + Y32 * X23_0) / den;
+
+          if ( fabs(den) < 1.0e-12) return INVALID_FUNCTION_ON_VERTICES;
+
+        } else {
         red_shock_speed = (Y21 * X12 + Y13 * X31 + Y32 * X23) / den;
         }
         
@@ -76,12 +68,12 @@ int Extension_Curve::function_on_vertices(double *foncub, int domain_i, int doma
 //            cout << "Valor do lambda: " << lambda << endl;
 
         } else {
-//                    lambda = scaling_factor * gv->e(domain_i, domain_j)[family].r;
-            lambda = gv->e(domain_i, domain_j)[family].r;
-//            cout << "Valor do lambda no else: " << lambda << " scaling factor: " << scaling_factor << endl;
+
+                    lambda = scaling_factor * gv->e(domain_i, domain_j)[family].r;
+
         }
         
-//        cout<<"Lambda: "<<lambda<<endl;
+
 
         foncub[0] = dG1 * (F2 * F30 - F3 * F20) - dG2 * (F1 * F30 - F3 * F10) + dG3 * (F1 * F20 - F2 * F10);
         foncub[1] = red_shock_speed - lambda;
@@ -100,7 +92,6 @@ bool Extension_Curve::valid_segment(int i) {
     int dim = oc->at(i).size();
 
 
-//    cout<<"Oc: "<<oc->at(i)<<endl;
 
     double F[dim], G[dim], JF[dim][dim], JG[dim][dim];
 

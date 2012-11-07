@@ -17,11 +17,16 @@
 #include "math.h"
 #include "stdio.h"
 #include <vector>
+#include "Extension_Curve.h"
+#include "Envelope_Curve.h"
 
 /*
  * ---------------------------------------------------------------
  * Definitions:
  */
+
+#define  RECT_BOUNDARY_SG_ZERO 0
+#define  RECT_BOUNDARY_SG_ONE 1
 
 class RectBoundary : public Boundary {
 private:
@@ -30,7 +35,7 @@ private:
     int size_;
     const char * type_;
 
-//    std::vector<int> exception;
+    //    std::vector<int> exception;
     std::vector<bool> test_dimension;
 
 
@@ -62,7 +67,21 @@ public:
 
     const char * boundaryType()const;
 
-    virtual void edge_segments(int where_constant, int number_of_steps, std::vector<RealVector> &seg);
+    virtual int edge_segments(int where_constant, int number_of_steps, const RealVector & limMin, const RealVector & limMax, std::vector<RealVector> &seg);
+
+    void extension_curve(const FluxFunction *f, const AccumulationFunction *a,
+            GridValues &gv,
+            int where_constant, int number_of_steps, bool singular,
+            int fam, int characteristic,
+            std::vector<RealVector> &c, std::vector<RealVector> &d);
+
+
+     void envelope_curve(const FluxFunction *f, const AccumulationFunction *a,
+            GridValues &gv,
+            int where_constant, int number_of_steps, bool singular,
+            std::vector<RealVector> &c, std::vector<RealVector> &d);
+
+
 
     void physical_boundary(std::vector<RealVector> &);
 
@@ -108,7 +127,7 @@ inline RealVector RectBoundary::intersect(RealVector & y1, RealVector & y2) cons
 
     for (int i = 0; i < size_; i++)
         if (y1.component(i) != y2.component(i)) {
-            ratio = (minimums_->component(i) - y1.component(i)) /    \
+            ratio = (minimums_->component(i) - y1.component(i)) /      \
                 (y2.component(i) - y1.component(i));
 
             if ((ratio >= 0) && (ratio <= 1)) {
@@ -130,7 +149,7 @@ inline RealVector RectBoundary::intersect(RealVector & y1, RealVector & y2) cons
                     result = vec2;
             }
 
-            ratio = (maximums_->component(i) - y1.component(i)) /    \
+            ratio = (maximums_->component(i) - y1.component(i)) /      \
                 (y2.component(i) - y1.component(i));
 
             if ((ratio >= 0) && (ratio <= 1)) {

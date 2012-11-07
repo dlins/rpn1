@@ -23,9 +23,8 @@ NOTE :
 #include "RpNumerics.h"
 #include <vector>
 #include <iostream>
-#include "ContourMethod.h"
-#include "SubinflectionTPCW.h"
-#include "ColorCurve.h"
+#include "SubinflectionTP.h"
+
 
 
 using std::vector;
@@ -50,23 +49,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionCurveCalc_nativeCalc(JNIE
     jmethodID hugoniotSegmentConstructor = (env)->GetMethodID(hugoniotSegmentClass, "<init>", "(Lwave/util/RealVector;DLwave/util/RealVector;DI)V");
     jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
     jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
-    //    jmethodID hugoniotPointTypeConstructor = (env)->GetMethodID(hugoniotPointTypeClass, "<init>", "([D[D)V");
+
     jmethodID subinflectionCurveConstructor = env->GetMethodID(subinflectionCurveClass, "<init>", "(Ljava/util/List;)V");
 
 
-    //Input processing
-    //    jdoubleArray phasePointArray = (jdoubleArray) (env)->CallObjectMethod(uMinus, toDoubleMethodID);
-    //
-    //    int dimension = env->GetArrayLength(phasePointArray);
-    //
-    //    double input [dimension];
-    //
-    //
-    //    env->GetDoubleArrayRegion(phasePointArray, 0, dimension, input);
-    //
-    //    env->DeleteLocalRef(phasePointArray);
-    //
-    //Calculations using the input
 
     jobject segmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
 
@@ -74,109 +60,134 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionCurveCalc_nativeCalc(JNIE
     //    Test testFunction;
     int dimension = 3;
     //-------------------------------------------------------------------
-    RealVector Uref(dimension);
-
-    double phi = 1.0;
-
-    double T_Typical = 304.63;
-    double Rho_typical = 998.2;
-    double U_typical = 4.22e-3;
-
-
-
-//    Thermodynamics_SuperCO2_WaterAdimensionalized TD(Physics::getRPnHome(), T_Typical, Rho_typical, U_typical);
-
-    double cnw = 0., cng = 0., expw = 2., expg = 2.;
-//    FracFlow2PhasesHorizontalAdimensionalized fh(cnw, cng, expw, expg, &TD);
-
-//    SubinflectionTPCW subinflection(&TD, &fh, phi);
-
-
+ 
     TPCW & tpcw = (TPCW &) RpNumerics::getPhysics().getSubPhysics(0);
-    const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
 
-
-    SubinflectionTPCW * subInflectionFunction = new SubinflectionTPCW((Flux2Comp2PhasesAdimensionalized*)  &tpcw.fluxFunction(), (Accum2Comp2PhasesAdimensionalized*)  &tpcw.accumulation());
-
-    //    SubPhysics & physics = RpNumerics::getPhysics().getSubPhysics(0);
-    //    const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
 
     Flux2Comp2PhasesAdimensionalized * fluxFunction = (Flux2Comp2PhasesAdimensionalized *) & tpcw.fluxFunction();
 
     Accum2Comp2PhasesAdimensionalized * accumulationFunction = (Accum2Comp2PhasesAdimensionalized *) & tpcw.accumulation();
 
+    cout<<"Parametros de acumulacao"<<accumulationFunction->accumulationParams().params()<<endl;
 
-    RealVector min(physicsBoundary. minimums());
-    RealVector max(physicsBoundary. maximums());
-
-
-    tpcw.preProcess(min);
-    tpcw.preProcess(max);
-
-    cout << "Valor de min:" << min << endl;
-    cout << "Valor de max:" << max << endl;
-
-    RectBoundary tempBoundary(min, max);
-
-//     ContourMethod method(subInflectionFunction);
-//    ContourMethod method(dimension, RpNumerics::getPhysics().fluxFunction(), RpNumerics::getPhysics().accumulation(), tempBoundary, subInflectionFunction);
-
-    vector<HugoniotPolyLine> hugoniotPolyLineVector;
-
-//    method.unclassifiedCurve(Uref, hugoniotPolyLineVector);
-
-    RealVector minDimension(RpNumerics::getPhysics().boundary().minimums());
-    RealVector maxDimension(RpNumerics::getPhysics().boundary().maximums());
-
-    delete subInflectionFunction;
-
-    for (int i = 0; i < hugoniotPolyLineVector.size(); i++) {
-
-        for (unsigned int j = 0; j < hugoniotPolyLineVector[i].point.size() - 1; j++) {
-
-            int m = (hugoniotPolyLineVector[i].point[0].size() - dimension - 1) / 2; // Number of valid eigenvalues
+    cout << "Parametros de fluxo" << tpcw.fluxFunction().fluxParams().params() << endl;
 
 
-            hugoniotPolyLineVector[i].point[j].component(2) = maxDimension.component(2);
-            hugoniotPolyLineVector[i].point[j + 1].component(2) = maxDimension.component(2);
 
-            tpcw.postProcess(hugoniotPolyLineVector[i].point);
-            //            //
-            //                        cout << "type of " << j << " = " << hugoniotPolyLineVector[i].type << endl;
-            //                        cout << "coord 1 " << j << " = " << hugoniotPolyLineVector[i].vec[j] << endl;
-            //                        cout << "coord 2 " << j + 1 << " = " << hugoniotPolyLineVector[i].vec[j + 1] << endl;
+    Thermodynamics_SuperCO2_WaterAdimensionalized * thermo = fluxFunction->getThermo();
 
-            jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
-            jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
-
-            double * leftCoords = (double *) hugoniotPolyLineVector[i].point[j];
-            double * rightCoords = (double *) hugoniotPolyLineVector[i].point[j + 1];
-
-            env->SetDoubleArrayRegion(eigenValRLeft, 0, dimension, leftCoords);
-            env->SetDoubleArrayRegion(eigenValRRight, 0, dimension, rightCoords);
+    cout<<"Parametros de thermo: "<<thermo->U_typical()<<" "<<thermo->T_typical()<<endl;
 
 
-            //Construindo left e right points
-            jobject realVectorLeftPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRLeft);
-            jobject realVectorRightPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRRight);
+    SubinflectionTP newSubinflection(accumulationFunction->accumulationParams().component(0));
 
-            int pointType = hugoniotPolyLineVector[i].type;
+    GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcation");
 
-            double leftSigma = hugoniotPolyLineVector[i].point[j].component(0);
-            double rightSigma = hugoniotPolyLineVector[i].point[j + 1].component(1);
+    cout<<gv<<endl;
 
-            //            double leftSigma = 0;
-            //            double rightSigma = 0;
-            //
+    std::vector< RealVector> outputVector;
 
-            //            cout<<"Antes de criar hugoniot segment"<<endl;
-            jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, 16);
-            env->CallObjectMethod(segmentsArray, arrayListAddMethod, hugoniotSegment);
+    newSubinflection.curve(fluxFunction, accumulationFunction, *gv, outputVector);
 
-        }
 
+    cout<<"Tamanho da curva de subinflexao: "<<outputVector.size()<<endl;
+
+    for (int i = 0; i < outputVector.size() / 2; i++) {
+
+        tpcw.postProcess(outputVector[2 * i]);
+        tpcw.postProcess(outputVector[2 * i + 1]);
+
+
+        jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
+        jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
+
+        double * leftCoords = (double *) outputVector[2 * i];
+        double * rightCoords = (double *) outputVector[2 * i + 1];
+
+        env->SetDoubleArrayRegion(eigenValRLeft, 0, dimension, leftCoords);
+        env->SetDoubleArrayRegion(eigenValRRight, 0, dimension, rightCoords);
+
+
+        //Construindo left e right points
+        jobject realVectorLeftPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRLeft);
+        jobject realVectorRightPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRRight);
+
+        int pointType = 1;
+
+        //            double leftSigma = hugoniotPolyLineVector[i].vec[j].component(dimension + m);
+        //            double rightSigma = hugoniotPolyLineVector[i].vec[j + 1].component(dimension + m);
+
+        double leftSigma = 0;
+        double rightSigma = 0;
+
+
+        //            cout<<"Antes de criar hugoniot segment"<<endl;
+        jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, 17);
+        env->CallObjectMethod(segmentsArray, arrayListAddMethod, hugoniotSegment);
 
     }
+
+
+
+
+
+
+
+
+
+
+
+
+    //
+    //
+    //
+    //    for (int i = 0; i < hugoniotPolyLineVector.size(); i++) {
+    //
+    //        for (unsigned int j = 0; j < hugoniotPolyLineVector[i].vec.size() - 1; j++) {
+    //
+    //            int m = (hugoniotPolyLineVector[i].vec[0].size() - dimension - 1) / 2; // Number of valid eigenvalues
+    //
+    //
+    //            hugoniotPolyLineVector[i].vec[j].component(2) = maxDimension.component(2);
+    //            hugoniotPolyLineVector[i].vec[j + 1].component(2) = maxDimension.component(2);
+    //
+    //            tpcw.postProcess(hugoniotPolyLineVector[i].vec);
+    //            //            //
+    //            //                        cout << "type of " << j << " = " << hugoniotPolyLineVector[i].type << endl;
+    //            //                        cout << "coord 1 " << j << " = " << hugoniotPolyLineVector[i].vec[j] << endl;
+    //            //                        cout << "coord 2 " << j + 1 << " = " << hugoniotPolyLineVector[i].vec[j + 1] << endl;
+    //
+    //            jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
+    //            jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
+    //
+    //            double * leftCoords = (double *) hugoniotPolyLineVector[i].vec[j];
+    //            double * rightCoords = (double *) hugoniotPolyLineVector[i].vec[j + 1];
+    //
+    //            env->SetDoubleArrayRegion(eigenValRLeft, 0, dimension, leftCoords);
+    //            env->SetDoubleArrayRegion(eigenValRRight, 0, dimension, rightCoords);
+    //
+    //
+    //            //Construindo left e right points
+    //            jobject realVectorLeftPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRLeft);
+    //            jobject realVectorRightPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRRight);
+    //
+    //            int pointType = hugoniotPolyLineVector[i].type;
+    //
+    //            double leftSigma = hugoniotPolyLineVector[i].vec[j].component(dimension + m);
+    //            double rightSigma = hugoniotPolyLineVector[i].vec[j + 1].component(dimension + m);
+    //
+    //            //            double leftSigma = 0;
+    //            //            double rightSigma = 0;
+    //            //
+    //
+    //            //            cout<<"Antes de criar hugoniot segment"<<endl;
+    //            jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, 16);
+    //            env->CallObjectMethod(segmentsArray, arrayListAddMethod, hugoniotSegment);
+    //
+    //        }
+    //
+    //
+    //    }
 
 
 

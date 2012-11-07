@@ -77,17 +77,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_PointLevelCalc_calcNative(JNIEnv * env
 
     }
 
-    env->DeleteLocalRef(inputPhasePointArray);
+//    env->DeleteLocalRef(inputPhasePointArray);
 
     int dimension = RpNumerics::getPhysics().domain().dim();
-
-    const Boundary * boundary = &RpNumerics::getPhysics().boundary();
-
-
-    int cells [dimension];
-
-    env->GetIntArrayRegion(resolution, 0, dimension, cells);
-
 
     Eigenvalue_Contour ec;
 
@@ -111,6 +103,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_PointLevelCalc_calcNative(JNIEnv * env
         jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
         jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
 
+        
+          
+        RpNumerics::getPhysics().getSubPhysics(0).postProcess(eigen_contours[2 * i]);
+        RpNumerics::getPhysics().getSubPhysics(0).postProcess(eigen_contours[2 * i+1]);
 
         double * leftCoords = (double *) eigen_contours[2 * i];
         double * rightCoords = (double *) eigen_contours[2 * i + 1];
@@ -178,15 +174,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_LevelCurveCalc_calcNative(JNIEnv * env
     jobject segmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
 
 
-
     int dimension = RpNumerics::getPhysics().domain().dim();
 
-    const Boundary * boundary = &RpNumerics::getPhysics().boundary();
-
-
-    int cells [dimension];
-
-    env->GetIntArrayRegion(resolution, 0, dimension, cells);
 
     Eigenvalue_Contour ec;
 
@@ -211,6 +200,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_LevelCurveCalc_calcNative(JNIEnv * env
 
         jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
         jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
+        
+        RpNumerics::getPhysics().getSubPhysics(0).postProcess(eigen_contours[2 * i]);
+        RpNumerics::getPhysics().getSubPhysics(0).postProcess(eigen_contours[2 * i+1]);
 
 
         double * leftCoords = (double *) eigen_contours[2 * i];

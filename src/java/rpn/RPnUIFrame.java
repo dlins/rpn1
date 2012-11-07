@@ -98,7 +98,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             phaseSpaceFramesInit(RPNUMERICS.boundary());
             associatesPhaseSpaces();
             associatePhaseSpacesAndCurvesList();
-            createPanelsChooser();
+//            createPanelsChooser();
 
             addPropertyChangeListener(this);
             UndoActionController.createInstance();
@@ -187,6 +187,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 bifurcationConfigMenu();
 
                 toolBar_.removeAll();
+
                 toolBar_.add(DoubleContactCommand.instance().getContainer());
                 toolBar_.add(BoundaryExtensionCurveCommand.instance().getContainer());
                 toolBar_.add(InflectionPlotCommand.instance().getContainer());
@@ -195,6 +196,14 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 toolBar_.add(EllipticBoundaryCommand.instance().getContainer());
                 toolBar_.add(EnvelopeCurveCommand.instance().getContainer());
                 toolBar_.add(SecondaryBifurcationtCommand.instance().getContainer());
+
+              
+              
+
+                toolBar_.add(BuckleyLeverettiInflectionCommand.instance().getContainer());
+                toolBar_.add(CoincidencePlotCommand.instance().getContainer());
+                toolBar_.add(SubInflectionPlotCommand.instance().getContainer());
+
                 toolBar_.revalidate();
 
             }
@@ -535,8 +544,10 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             panelsChooserPanel_.add(checkBox);
         }
 
+        
+        System.out.println("Tamanho dos aux:"+getAuxFrames().length);
         for (RPnPhaseSpaceFrame auxFrame : getAuxFrames()) {
-
+            System.out.println(auxFrame);
             JCheckBox checkBox = new JCheckBox(auxFrame.getTitle());
             checkBox.addItemListener(new PanelsSeletectedListener(auxFrame));
             panelsChooserPanel_.add(checkBox);

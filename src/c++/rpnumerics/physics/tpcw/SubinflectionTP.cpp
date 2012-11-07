@@ -1,18 +1,12 @@
-#include "SubinflectionTPCW.h"
+#include "SubinflectionTP.h"
 
-SubinflectionTPCW::SubinflectionTPCW(const Flux2Comp2PhasesAdimensionalized * fluxFunction, const Accum2Comp2PhasesAdimensionalized * accumFunction) :
-HugoniotFunctionClass(*fluxFunction),
-td(fluxFunction->getThermo()){
-
-
-   const Accum2Comp2PhasesAdimensionalized_Params & params = (Accum2Comp2PhasesAdimensionalized_Params &) accumFunction->accumulationParams();
-
-
-    phi=params.getPhi();
-    cout << "Valor de phi em sub inf: " << phi << endl;
+SubinflectionTP::SubinflectionTP(double p) {
+    gv = 0;
+    phi=p;
 }
 
-void SubinflectionTPCW::subinflection_function(double & reduced_lambdae, double & numeratorchiu, double & denominatorchiu, const RealVector &u) {
+void SubinflectionTP::subinflection_function(double & reduced_lambdae, double & numeratorchiu,
+        double & denominatorchiu, const RealVector &u) {
 
     // First we define the Buckley-Leverett jet.
 
@@ -20,8 +14,10 @@ void SubinflectionTPCW::subinflection_function(double & reduced_lambdae, double 
     double Theta = u.component(1);
     JetMatrix m(1);
 
-    const Flux2Comp2PhasesAdimensionalized & fluxFunction = (const Flux2Comp2PhasesAdimensionalized &) getFluxFunction();
-    fluxFunction.getHorizontalFlux()-> Diff_FracFlow2PhasesHorizontalAdimensionalized(sw, Theta, 0, m);
+    //    const Flux2Comp2PhasesAdimensionalized & fluxFunction = (const Flux2Comp2PhasesAdimensionalized &) getFluxFunction();
+
+    fluxFunction_-> Diff_FracFlow2PhasesHorizontalAdimensionalized(sw, Theta, 0, m);
+
 
     double f = m(0);
     double s = u.component(0);
@@ -113,7 +109,6 @@ void SubinflectionTPCW::subinflection_function(double & reduced_lambdae, double 
             (dHr_dT / phi) * drho1_dT * (rho1 * rhoaw - rho2 * rhoac) +
             (dHr_dT / phi) * rho1 * ((drho1_dT * rhoaw + rho1 * drhoaw_dT) - (drho2_dT * rhoac + rho2 * drhoac_dT));
 
-
     reduced_lambdae = (f * M + N1) / (s * M + N2);
 
 
@@ -130,20 +125,60 @@ void SubinflectionTPCW::subinflection_function(double & reduced_lambdae, double 
     denominatorchiu = s * Mchiu + N2chiu;
 
     return;
+
+
+
 }
 
-double SubinflectionTPCW::HugoniotFunction(const RealVector &u) {
-
+int SubinflectionTP::function_on_square(double *foncub, int i, int j) {
+    double f_aux[4];
     double reduc_lambdae;
     double numchiu;
     double denchiu;
 
+    for (int l = 0; l < 2; l++) {
+        for (int k = 0; k < 2; k++) {
+            subinflection_function(reduc_lambdae, numchiu, denchiu, RealVector(2, gv->grid(i + l, j + k).components()));
+            f_aux[l * 2 + k] = (numchiu - reduc_lambdae * denchiu);
+        }
+    }
 
-    subinflection_function(reduc_lambdae, numchiu, denchiu, u);
+    foncub[1] = f_aux[0]; // Was: foncub[0][1]
+    foncub[0] = f_aux[2]; // Was: foncub[0][0]
+    foncub[3] = f_aux[1]; // Was: foncub[0][2]
+    foncub[2] = f_aux[3]; // Was: foncub[0][2]
 
-    return (numchiu - reduc_lambdae * denchiu);
+    return 1;
 }
 
-void SubinflectionTPCW::completeCurve(std::vector<RealVector> & curve) {
+int SubinflectionTP::curve(const FluxFunction *f, const AccumulationFunction *a,
+        GridValues &g, std::vector<RealVector> &subinflection_curve) {
 
+
+
+    Flux2Comp2PhasesAdimensionalized * fluxAdimensional = (Flux2Comp2PhasesAdimensionalized *) f;
+    fluxFunction_ = fluxAdimensional->getHorizontalFlux();
+
+    double phi = a->accumulationParams().component(0);
+
+    cout << "Valor de phi em subinflection: " << phi << endl;
+
+
+    td = fluxAdimensional->getThermo();
+
+    g.fill_functions_on_grid(f, a);
+
+    g.fill_eigenpairs_on_grid(f, a);
+
+
+    gv = &g;
+
+    subinflection_curve.clear();
+
+    int info = ContourMethod::contour2d(this, subinflection_curve);
+
+    return info;
+}
+
+SubinflectionTP::~SubinflectionTP() {
 }
