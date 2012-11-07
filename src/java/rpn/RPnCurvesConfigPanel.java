@@ -10,27 +10,28 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
 import javax.swing.*;
-import rpn.parser.RPnDataModule;
 import rpn.command.ChangeDirectionCommand;
-import rpn.command.OrbitPlotCommand;
 import rpnumerics.Configuration;
 import rpnumerics.Orbit;
 import rpnumerics.RPNUMERICS;
 
-public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListener {
+public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListener,ActionListener {
 
 
     private ButtonGroup directionButtonGroup_;
-    private JPanel directionPanel_;
+    private JPanel directionPanel_,okButtonPanel_;
     private JRadioButton forwardCheckBox_;
     private JRadioButton backwardCheckBox_;
     private JRadioButton bothCheckBox_;
     private static Integer currentOrbitDirection_ = Orbit.FORWARD_DIR;
     private JTabbedPane curvesTabbedPanel_;
+    private ArrayList<RPnInputComponent> inputComponentArray_;
+    private JButton okButton_;
 
     public RPnCurvesConfigPanel() {
 
@@ -44,6 +45,11 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
 
   
     private void buildPanel() {
+        
+        inputComponentArray_=new ArrayList<RPnInputComponent>();
+        okButton_=new JButton("OK");
+        okButton_.addActionListener(this);
+        okButtonPanel_=new JPanel();
 
         HashMap<String, Configuration> configMap = RPNUMERICS.getConfigurations();
         curvesTabbedPanel_.setTabLayoutPolicy(JTabbedPane.WRAP_TAB_LAYOUT);
@@ -55,10 +61,11 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
             String configurationType = entry.getValue().getType();
 
             if (!configurationType.equalsIgnoreCase("PHYSICS") && !configurationType.equalsIgnoreCase("VISUAL")) {
-                RPnInputComponent inputComponent = new RPnInputComponent(entry.getValue());
+                RPnInputComponent inputComponent = new RPnInputComponent(entry.getValue(),false);
                 inputComponent.removeParameter("resolution");
                 if (inputComponent.getContainer().getComponentCount() > 0) {
                     curvesTabbedPanel_.addTab(entry.getKey(), inputComponent.getContainer());
+                    inputComponentArray_.add(inputComponent);
                 }
             }
 
@@ -118,6 +125,12 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
 
 
         add(curvesTabbedPanel_, gridConstraints);
+        
+        gridConstraints.gridy=2;
+        
+        add(okButtonPanel_,gridConstraints);
+        
+        okButtonPanel_.add(okButton_);
 
 
     }
@@ -162,6 +175,16 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
             }
 
         }
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        
+        for (RPnInputComponent rPnInputComponent : inputComponentArray_) {
+
+            rPnInputComponent.applyConfigurationChange();
+            
+        }
+
     }
 
  

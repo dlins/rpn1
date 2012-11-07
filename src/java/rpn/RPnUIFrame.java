@@ -70,7 +70,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JCheckBoxMenuItem showLeftCurvesPaneltem_ = new JCheckBoxMenuItem("Show Left Curves Window", true);
     private JCheckBoxMenuItem showRightCurvesPaneltem_ = new JCheckBoxMenuItem("Show Right Curves Window", true);
     private JCheckBoxMenuItem showAuxPanel_ = new JCheckBoxMenuItem("Show Auxiliar Panels", true);
-    private RPnCurvesConfigPanel curvesConfigPanel_ = new RPnCurvesConfigPanel();
+//    private RPnCurvesConfigPanel curvesConfigPanel_ = new RPnCurvesConfigPanel();
     //*** declarei isso  -- Leandro
     private JMenuItem editMenuItem1 = new JMenuItem("Clears All Strings");
     private JMenuItem editMenuItem2 = new JMenuItem("Clears Last String");
@@ -711,10 +711,10 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         configPanel_.add(stateComboBox, configPanelConstraints);
 
 
-        configPanelConstraints.gridy = 1;
-        configPanelConstraints.gridx = 0;
-        configPanelConstraints.fill = GridBagConstraints.BOTH;
-        configPanel_.add(curvesConfigPanel_, configPanelConstraints);
+//        configPanelConstraints.gridy = 1;
+//        configPanelConstraints.gridx = 0;
+//        configPanelConstraints.fill = GridBagConstraints.BOTH;
+//        configPanel_.add(curvesConfigPanel_, configPanelConstraints);
 
 
         contentPane = (JPanel) this.getContentPane();
@@ -1161,21 +1161,21 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
                 newState = new SHOCK_CONFIG();
 //                RPNUMERICS.getViscousProfileData().setHugoniotMethodName(ViscousProfileData.HUGONIOT_METHOD_NAMES[1]);
-                curvesConfigPanel_.propertyChange(new PropertyChangeEvent(this, "family", "", "phasediagram"));
-                curvesConfigPanel_.propertyChange(new PropertyChangeEvent(this, "direction", "", "phasediagram"));
+//                curvesConfigPanel_.propertyChange(new PropertyChangeEvent(this, "family", "", "phasediagram"));
+//                curvesConfigPanel_.propertyChange(new PropertyChangeEvent(this, "direction", "", "phasediagram"));
             }
 
             if (stateComboBox.getSelectedItem().equals("Wave Curves")) {
                 newState = new RAREFACTION_CONFIG();
                 //                 RPNUMERICS.getViscousProfileData().setHugoniotMethodName(ViscousProfileData.HUGONIOT_METHOD_NAMES[0]);
-                curvesConfigPanel_.propertyChange(new PropertyChangeEvent(this, "family", "", "wavecurve"));
-                curvesConfigPanel_.propertyChange(new PropertyChangeEvent(this, "direction", "", "wavecurve"));
+//                curvesConfigPanel_.propertyChange(new PropertyChangeEvent(this, "family", "", "wavecurve"));
+//                curvesConfigPanel_.propertyChange(new PropertyChangeEvent(this, "direction", "", "wavecurve"));
 
             }
             if (stateComboBox.getSelectedItem().equals("Bifurcation Curves")) {
                 newState = new BIFURCATION_CONFIG();
-                curvesConfigPanel_.propertyChange(new PropertyChangeEvent(this, "family", "", "bifurcationcurve"));
-                curvesConfigPanel_.propertyChange(new PropertyChangeEvent(this, "direction", "", "bifurcationcurve"));
+//                curvesConfigPanel_.propertyChange(new PropertyChangeEvent(this, "family", "", "bifurcationcurve"));
+//                curvesConfigPanel_.propertyChange(new PropertyChangeEvent(this, "direction", "", "bifurcationcurve"));
             }
 
             UIController.instance().setState(newState);

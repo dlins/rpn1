@@ -107,16 +107,15 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
 
             rpnUIFrame_ = new RPnUIFrame(plotter);
 
-
-
             rpnUIFrame_.pack();
 
             rpnUIFrame_.setVisible(true);
+            
+            RPnConfigurationFrame configFrame = new RPnConfigurationFrame("Curves Configuration");
+            
+            configFrame.setSize(rpnUIFrame_.getWidth(), rpnUIFrame_.getHeight()/2);
 
-//            RPnCurvesListFrame curvesFrame = new RPnCurvesListFrame();
-//            rpnUIFrame_.setCurvesFrame(curvesFrame);
-
-
+            configFrame.setVisible(true);
 
         } catch (FileNotFoundException ex) {
             JOptionPane.showMessageDialog(rpnUIFrame_, "No input file !", "RPn", JOptionPane.ERROR_MESSAGE);
