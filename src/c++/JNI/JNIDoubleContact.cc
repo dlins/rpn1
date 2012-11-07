@@ -52,13 +52,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
     jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
     jmethodID doubleContactCurveConstructor = env->GetMethodID(doubleContactCurveClass, "<init>", "(Ljava/util/List;Ljava/util/List;)V");
 
-<<<<<<< HEAD
-    int dimension=RpNumerics::getPhysics().domain().dim();
 
-=======
     int dimension = RpNumerics::getPhysics().domain().dim();
-    //int dimension = 2;
->>>>>>> tpcwMergeMaster2
+
 
     jobject leftSegmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
     jobject rightSegmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);

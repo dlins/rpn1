@@ -107,9 +107,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
 
 
 
-    ShockContinuationMethod3D2D(int dim, familyIndex, *fluxFunction, *accumulationFunction, *tempBoundary, realVectorInput.components(), newtonTolerance, double epsilon, int t);
+//    ShockContinuationMethod3D2D(int dim, familyIndex, *fluxFunction, *accumulationFunction, *tempBoundary, realVectorInput.components(), newtonTolerance, double epsilon, int t);
 
-    int curve(familyIndex, double maxnum, increase, std::vector<RealVector> &out, int &edge); // If _SHOCK_INIT_IS_REF_
+//    int curve(familyIndex, double maxnum, increase, std::vector<RealVector> &out, int &edge); // If _SHOCK_INIT_IS_REF_
 
 
 

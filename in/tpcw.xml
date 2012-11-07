@@ -1,8 +1,5 @@
 <?xml version="1.0"?>
 <!DOCTYPE rpnconfiguration >
-<<<<<<< HEAD
-<RPNCONFIGURATION>
-=======
 <rpnconfiguration>
     <PHYSICS name="TPCW">
         <PHYSICSCONFIG name="fluxfunction">
@@ -29,40 +26,13 @@
 
         </PHYSICSCONFIG>
 <!--
->>>>>>> tpcwMergeMaster2
 
-    <PHYSICS name="TPCW">
-        
-        <PHYSICSCONFIG name="fluxfunction">
-            <PHYSICSPARAM name="grw" position="0" value ="3e-12" />
-            <PHYSICSPARAM name="grg" position="1" value ="0.0" />
-            <PHYSICSPARAM name="gro" position="2" value ="0.0" />
-            <PHYSICSPARAM name="muw" position="3" value ="1.0" />
-            <PHYSICSPARAM name="mug" position="4" value ="0.0" />
-            <PHYSICSPARAM name="muo" position="5" value ="0.0" />
-            <PHYSICSPARAM name="vel" position="6" value ="2.0" />
-            <PHYSICSPARAM name="vel2" position="7" value ="2.0" />
-            
-            <PHYSICSPARAM name="T Typical" position ="8" value="304.63"/>
-            <PHYSICSPARAM name="Rho Typical" position ="9" value="998.2"/>
-            <PHYSICSPARAM name="U Typical" position="10" value="4.22e-3"/>
-            <PHYSICSPARAM name="spline path" position= "11" value="/home/edsonlan/Java/rpn"/>
-      
-            
-            <PHYSICSPARAM name="phi" position="12" value="0.38"/>
 
-<<<<<<< HEAD
-        </PHYSICSCONFIG>
-        
-       
-     
-=======
         <PHYSICSCONFIG name="thermodynamics">
             <PHYSICSPARAM name="absolut permeability" position ="0" value="1.15"/>
             <PHYSICSPARAM name="viscosity" position="1" value="2.15"/>
             <PHYSICSPARAM name="spline path" position= "2" value="/home/edsonlan/Java/rpn"/>
         </PHYSICSCONFIG>-->
->>>>>>> tpcwMergeMaster2
 
 
     </PHYSICS>
@@ -80,19 +50,8 @@
         <METHODPARAM  name="tolerance" value="0.001" />
     </METHOD>
 
-  <CURVECONFIGURATION name="doublecontactcurve">
-        <CURVEPARAM name="curvefamily" value="0"/>
-        <CURVEPARAM name="domainfamily" value="1"/>
-        <CURVEPARAM name="resolution" value="30 30"/>
-    </CURVECONFIGURATION>
 
- <CURVECONFIGURATION name="inflectioncurve">
-        <CURVEPARAM name="family" value="0"/>
-        <CURVEPARAM name="resolution" value="128 128"/>
-    </CURVECONFIGURATION>
 
-<<<<<<< HEAD
-=======
     <CURVE name="hugoniotcurve">
         <CURVEPARAM name="resolution" value="128 128"/>
 
@@ -140,18 +99,10 @@
         <CURVEPARAM name="domainfamily" value="1"/>
         <CURVEPARAM name="characteristicwhere" value="0"/>
         <CURVEPARAM name="singular" value="1"/>
->>>>>>> tpcwMergeMaster2
 
-    <CURVECONFIGURATION name="hugoniotcurve">
-        <CURVEPARAM name="resolution" value="20 20"/>
-    </CURVECONFIGURATION>
 
-        
- <CURVECONFIGURATION name="boundaryextensioncurve">
+    </CURVE>
 
-<<<<<<< HEAD
-        <CURVEPARAM name="family" value="0"/>
-=======
 
      <CURVE name="doublecontactcurve">
         <CURVEPARAM name="curvefamily" value="0"/>
@@ -165,34 +116,26 @@
         <CURVEPARAM name="curvefamily" value="1"/>
         <CURVEPARAM name="domainfamily" value="1"/>
         <CURVEPARAM name="characteristicwhere" value="1"/>
->>>>>>> tpcwMergeMaster2
         <CURVEPARAM name="edge" value="0"/>
-        <CURVEPARAM name="edgeresolution" value="128"/>
-        <CURVEPARAM name="resolution" value="128 128"/>
-        <CURVEPARAM name="characteristicwhere" value="0"/>
+        <CURVEPARAM name="edgeresolution" value="30"/>
 
 
-    </CURVECONFIGURATION>
+    </CURVE>
 
-    <CURVECONFIGURATION name="rarefactionextension">
-        <CURVEPARAM name="curvefamily" value="0"/>
-        <CURVEPARAM name="characteristic" value="1"/>
-        <CURVEPARAM name="resolution" value="60 60"/>
-    </CURVECONFIGURATION>
 
-    <CURVECONFIGURATION name="wavecurve">
+    <CURVE name="wavecurve">
         <CURVEPARAM name="curvefamily" value="0"/>
         <CURVEPARAM name="domainfamily" value="1"/>
         <CURVEPARAM name="characteristicwhere" value="1"/>
 
-    </CURVECONFIGURATION>
+    </CURVE>
 
 
-    <CURVECONFIGURATION name="shock">
+    <CURVE name="shock">
         <CURVEPARAM name="family" value="0"/>
         <CURVEPARAM name="xzero" value="3.4 0.5"/>
         <CURVEPARAM name="sigma" value="0.03"/>
-    </CURVECONFIGURATION>
+    </CURVE>
 
 
     <CURVE name="orbit">
@@ -228,5 +171,4 @@
     </VIEWCONFIGURATION>
 
 
-
-</RPNCONFIGURATION>
+</rpnconfiguration>
