@@ -34,7 +34,13 @@ public class RPnInputController implements PropertyChangeListener {
 
         }
 
+    public Configuration getConfiguration(){return configuration_;}
     }
+
+
+
+
+
 
 
 

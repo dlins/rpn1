@@ -5,11 +5,8 @@
 
 package rpn;
 
-import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import rpnumerics.Configuration;
-import wave.util.RealVector;
 
 /**
  *

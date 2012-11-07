@@ -400,11 +400,9 @@ public class UIController extends ComponentUI {
 
     }
 
-    public void logCommand(RpCommand command) {
+  public void logCommand(RpCommand command) {
         RPnUIFrame.clearStatusMessage();
         commandArray_.add(command);
-        
-//        System.out.println(command.toString());a
     }
 
     /** Sets the state of the application. The application works as a state machine and this method changes the actual state.*/

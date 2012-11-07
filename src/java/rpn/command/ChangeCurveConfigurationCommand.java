@@ -7,6 +7,7 @@ package rpn.command;
 
 import java.beans.PropertyChangeEvent;
 import rpn.controller.ui.UIController;
+import rpn.controller.ui.UI_ACTION_SELECTED;
 import rpnumerics.Configuration;
 
 public class ChangeCurveConfigurationCommand extends RpModelConfigChangeCommand {
@@ -14,7 +15,7 @@ public class ChangeCurveConfigurationCommand extends RpModelConfigChangeCommand 
     // Constants
     //
 
-    static public final String DESC_TEXT = "Curve Param";
+     private static String DESC_TEXT = "Change Curve Configuration Command";
     //
     // Members
     //
@@ -33,7 +34,7 @@ public class ChangeCurveConfigurationCommand extends RpModelConfigChangeCommand 
 
         Configuration newConfiguration = (Configuration) event.getNewValue();
         
-        UIController.instance().logCommand(new RpCommand(this.getActionSelected(), newConfiguration));
+        UIController.instance().logCommand(new RpCommand(new UI_ACTION_SELECTED(this), newConfiguration));
 
 
     }
@@ -43,7 +44,8 @@ public class ChangeCurveConfigurationCommand extends RpModelConfigChangeCommand 
 
     public void unexecute() {
     }
-
+    
+    
     static public ChangeCurveConfigurationCommand instance() {
         if (instance_ == null) {
             instance_ = new ChangeCurveConfigurationCommand();

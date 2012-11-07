@@ -28,6 +28,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
+import rpn.command.ChangeCurveConfigurationCommand;
 import rpnumerics.Configuration;
 import rpnumerics.RPNUMERICS;
 import wave.util.RealVector;
@@ -232,6 +233,8 @@ public class RPnInputComponent {//TODO Refatorar
         controller_.propertyChange(
                 new PropertyChangeEvent(this, parameterName_, newValues, newValues));
 
+
+        ChangeCurveConfigurationCommand.instance().applyChange(new PropertyChangeEvent(this, parameterName_, null, controller_.getConfiguration()));
 
     }
 
