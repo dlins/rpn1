@@ -105,7 +105,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
 
     int info_shock_curve, info_shock_curve_alt;
 
+    double tol = 1e-3;
 
+ShockContinuationMethod3D2D shock (int dim, int family,*fluxFunction, *accumulationFunction, *tempBoundary, realVectorInput.components(),  tol, double epsilon, int t) :
 
 //    ShockContinuationMethod3D2D(int dim, familyIndex, *fluxFunction, *accumulationFunction, *tempBoundary, realVectorInput.components(), newtonTolerance, double epsilon, int t);
 

@@ -20,7 +20,6 @@ import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.batik.ext.swing.GridBagConstants;
 import rpn.command.ClassifierCommand;
@@ -98,7 +97,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             phaseSpaceFramesInit(RPNUMERICS.boundary());
             associatesPhaseSpaces();
             associatePhaseSpacesAndCurvesList();
-//            createPanelsChooser();
+            createPanelsChooser();
 
             addPropertyChangeListener(this);
             UndoActionController.createInstance();
@@ -544,15 +543,15 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             panelsChooserPanel_.add(checkBox);
         }
 
-        
-        System.out.println("Tamanho dos aux:"+getAuxFrames().length);
-        for (RPnPhaseSpaceFrame auxFrame : getAuxFrames()) {
-            System.out.println(auxFrame);
-            JCheckBox checkBox = new JCheckBox(auxFrame.getTitle());
-            checkBox.addItemListener(new PanelsSeletectedListener(auxFrame));
-            panelsChooserPanel_.add(checkBox);
-
-        }
+//        
+//        System.out.println("Tamanho dos aux:"+getAuxFrames().length);
+//        for (RPnPhaseSpaceFrame auxFrame : getAuxFrames()) {
+//            System.out.println(auxFrame);
+//            JCheckBox checkBox = new JCheckBox(auxFrame.getTitle());
+//            checkBox.addItemListener(new PanelsSeletectedListener(auxFrame));
+//            panelsChooserPanel_.add(checkBox);
+//
+//        }
 
     }
 

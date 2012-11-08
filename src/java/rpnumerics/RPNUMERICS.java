@@ -309,7 +309,7 @@ public class RPNUMERICS {
 
     public static EnvelopeCurveCalc createEnvelopeCurveCalc() {
 
-        int[] resolution = RPnDataModule.processResolution(getParamValue("levelcurve", "resolution"));
+        int[] resolution = RPnDataModule.processResolution(getParamValue("envelopecurve", "resolution"));
         int whereIsConstant = new Integer(getParamValue("envelopecurve", "edge"));
         int numberOfSteps = new Integer(getParamValue("envelopecurve", "numberofsteps"));
 

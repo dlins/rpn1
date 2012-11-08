@@ -45,6 +45,11 @@
 
 
 
+
+
+
+
+
     <CURVECONFIGURATION name="hugoniotcurve">
         <CURVEPARAM name="resolution" value="20 20"/>
 
@@ -69,9 +74,12 @@
     </CURVECONFIGURATION>
 
 
+
+   
+
     <CURVECONFIGURATION name="envelopecurve">
         <CURVEPARAM name="resolution" value="128 128"/>
-        <CURVEPARAM name="whereisconstant" value="0"/>
+        <CURVEPARAM name="edge" value="0"/>
         <CURVEPARAM name="numberofsteps" value="128"/>
     </CURVECONFIGURATION>
 

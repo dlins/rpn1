@@ -100,12 +100,15 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
             coords, inflectionPoints);
 
     cout << "Tamanho da rarefacao: " << coords.size() << endl;
+    
+    
 
 
     if (coords.size() == 0) {
         return NULL;
     }
 
+    RpNumerics::getPhysics().getSubPhysics(0).postProcess(coords);
     //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //Orbit members creation
@@ -117,16 +120,16 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
         RealVector tempVector = coords.at(i);
 
         double lambda = tempVector.component(tempVector.size() - 1);
-        RpNumerics::getPhysics().getSubPhysics(0).postProcess(tempVector);
+
 
         cout << tempVector << endl;
 
         double * dataCoords = tempVector;
 
         //Reading only coodinates
-        jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size());
+        jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size()-1);
 
-        (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size(), dataCoords);
+        (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size()-1, dataCoords);
 
         //Lambda is the last component.
         jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray, lambda);

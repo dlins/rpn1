@@ -48,7 +48,7 @@ public:
     Boundary * defaultBoundary()const;
 
     void setParams(vector<string>);
-    void postProcess(RealVector &);
+
 
     SubPhysics * clone()const;
 

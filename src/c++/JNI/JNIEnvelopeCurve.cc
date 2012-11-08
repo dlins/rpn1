@@ -70,11 +70,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_EnvelopeCurveCalc_nativeCalc
     cout << "number of steps : " << number_of_steps << endl;
 
     const Boundary * physicsBoundary = &RpNumerics::getPhysics().boundary();
-    
-     const char * boundaryType = physicsBoundary->boundaryType();
 
-
-
+    const char * boundaryType = physicsBoundary->boundaryType();
 
     if (!strcmp(boundaryType, "Three_Phase_Boundary")) {
 
@@ -83,28 +80,17 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_EnvelopeCurveCalc_nativeCalc
         boundary->envelope_curve(flux, accum, *gv,
                 where_constant, number_of_steps, true,
                 left_vrs, right_vrs);
-
     }
-
-
 
     if (!strcmp(boundaryType, "rect")) {
 
         RectBoundary * boundary = (RectBoundary *) physicsBoundary;
-
-
         boundary->envelope_curve(flux, accum, *gv,
                 where_constant, number_of_steps, true,
                 left_vrs, right_vrs);
 
     }
 
-
-
-//
-//    physicsBoundary.envelope_curve(flux, accum, *gv,
-//            where_constant, number_of_steps, true,
-//            left_vrs, right_vrs);
 
 
     cout << "left_vrs.size()  = " << left_vrs.size() << endl;

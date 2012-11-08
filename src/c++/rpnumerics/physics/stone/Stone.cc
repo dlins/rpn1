@@ -125,9 +125,3 @@ SubPhysics * Stone::clone()const {
 Stone::~Stone() {
 }
 
-void Stone::postProcess(RealVector & input) {//To fix differences between TPCW and other physics in rarefaction's output 
-    if (input.size() > 2) {
-        input.resize(2);
-    }
-
-}

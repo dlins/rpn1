@@ -424,11 +424,6 @@ int ColorCurve::complete_point(RealVector &p, double &s, std::vector<double> &ei
     //
     double F[dim], G[dim], JF[dim][dim], JG[dim][dim];
     
-    cout<<"Ponto p: "<<p<<endl;
-    
-    
-   
-
     fluxFunction_->fill_with_jet(dim, p.components(), 1, F, &JF[0][0], 0);
     accFunction_->fill_with_jet(dim, p.components(), 1, G, &JG[0][0], 0);
 
@@ -495,12 +490,12 @@ int ColorCurve::classify_point(RealVector &p, double &s, std::vector<double> &ei
 //        increment *= 2;
 //    }
     
-    cout<<"Valor de s em CC:"<<s<<endl;
+
      for (int fam = 0; fam < ref_eigenvalue.size(); fam++) {
         // Assing increments for left side (reference point)
         if (ref_eigenvalue[fam] - s > 0.0) {
             type += increment;
-            cout<<"dentro do if primeiro:" << type<< " "<<increment<<endl;
+
         }
         increment *= 2;
     }
@@ -509,8 +504,6 @@ int ColorCurve::classify_point(RealVector &p, double &s, std::vector<double> &ei
         // Assing increments for right side (current point)
         if (eigenvalue[fam] - s > 0.0){
             type += increment;
-            
-            cout<<"dentro do if segundo:" << type<< " "<<increment<<endl;
         }
         increment *= 2;
     }

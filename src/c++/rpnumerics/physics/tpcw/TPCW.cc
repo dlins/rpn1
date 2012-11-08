@@ -206,7 +206,7 @@ Boundary * TPCW::defaultBoundary()const {
     //    min.component(1) = T2Theta(304.63);
     min.component(1) = 304.63;
     //    min.component(2) = TD->u2U(0);
-    min.component(2) = 1 * 4.22e-3;
+    min.component(2) = 0 * 4.22e-3;
 
 
     //    cout <<min.component(0)<<"<--------MIN 0"<<endl;
@@ -247,6 +247,8 @@ void TPCW::postProcess(RealVector & input) {
     input.component(0) = temp.component(0);
     input.component(1) = TD->Theta2T(temp.component(1));
     input.component(2) = boundary().maximums().component(2);
+    
+//    input.component(2) = TD->U2u(temp.component(2));
 }
 
 
