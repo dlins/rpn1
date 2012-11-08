@@ -13,12 +13,12 @@
  * ---------------------------------------------------------------
  * Includes:
  */
-#include "ShockMethod.h"
+
 #include "FluxFunction.h"
 #include "AccumulationFunction.h"
 #include "Boundary.h"
 #include "eigen.h"
-#include "ShockMethod.h"
+
 
 /*
  * ---------------------------------------------------------------
@@ -50,7 +50,7 @@ extern "C" {
     void dgesv_(int*, int*, double*, int*, int*, double*, int*, int*);
 }
 
-class ShockContinuationMethod3D2D:public ShockMethod {
+class ShockContinuationMethod3D2D{//:public ShockMethod {
 private:
 
 
@@ -115,7 +115,7 @@ public:
 
 
 //    void curve(const RealVector &, int direction, vector<RealVector> &);
-    void curve(const RealVector &, int direction, vector<HugoniotPolyLine> &);
+    void curve(int direction, vector<RealVector> &);
 
     //int curve(int family, double maxnum, int increase, double U0[], double refplane[], std::vector<RealVector> &out); // If _SHOCK_INIT_IS_NOT_REF_
 
