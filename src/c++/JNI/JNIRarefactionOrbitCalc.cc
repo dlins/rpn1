@@ -63,7 +63,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
     vector <RealVector> coords;
 
 
-   const  Boundary * tempBoundary = RpNumerics::getPhysics().getSubPhysics(0).getPreProcessedBoundary();
+    const Boundary * tempBoundary = RpNumerics::getPhysics().getSubPhysics(0).getPreProcessedBoundary();
 
     //    double deltaxi = 1e-3; // This is the original value (Rodrigo/ Panters)
 
@@ -72,17 +72,17 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
 
     const FluxFunction * fluxFunction = &RpNumerics::getPhysics().fluxFunction();
     const AccumulationFunction * accumulationFunction = &RpNumerics::getPhysics().accumulation();
-    
-    
-//    
-//    cout << "Flux params " << fluxFunction->fluxParams().params()<<endl;
-//    cout << "Accum params " << accumulationFunction->accumulationParams().params() << endl;
+
+
+    //    
+    //    cout << "Flux params " << fluxFunction->fluxParams().params()<<endl;
+    //    cout << "Accum params " << accumulationFunction->accumulationParams().params() << endl;
 
 
 
 
     vector<RealVector> inflectionPoints;
-    
+
     RpNumerics::getPhysics().getSubPhysics(0).preProcess(realVectorInput);
 
 
@@ -98,8 +98,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
             RAREFACTION_GENERAL_ACCUMULATION,
             tempBoundary,
             coords, inflectionPoints);
-    
-    cout <<"Tamanho da rarefacao: " << coords.size()<<endl;
+
+    cout << "Tamanho da rarefacao: " << coords.size() << endl;
 
 
     if (coords.size() == 0) {
@@ -115,13 +115,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
     for (i = 0; i < coords.size(); i++) {
 
         RealVector tempVector = coords.at(i);
- 
-        double lambda = tempVector.component(tempVector.size()-1);
-        
-        
-         RpNumerics::getPhysics().getSubPhysics(0).postProcess(tempVector);
-         
-         cout <<tempVector<<endl;
+
+        double lambda = tempVector.component(tempVector.size() - 1);
+        RpNumerics::getPhysics().getSubPhysics(0).postProcess(tempVector);
+
+        cout << tempVector << endl;
 
         double * dataCoords = tempVector;
 

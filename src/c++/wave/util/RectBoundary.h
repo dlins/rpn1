@@ -76,7 +76,7 @@ public:
             std::vector<RealVector> &c, std::vector<RealVector> &d);
 
 
-     void envelope_curve(const FluxFunction *f, const AccumulationFunction *a,
+      void envelope_curve(const FluxFunction *f, const AccumulationFunction *a,
             GridValues &gv,
             int where_constant, int number_of_steps, bool singular,
             std::vector<RealVector> &c, std::vector<RealVector> &d);
@@ -91,9 +91,7 @@ inline const char * RectBoundary::boundaryType()const {
     return type_;
 }
 
-inline Boundary * RectBoundary::clone() const {
-    return new RectBoundary(*this);
-}
+
 
 inline double RectBoundary::coordinateSpan(int i) {
     return maximums_->component(i) - minimums_->component(i);

@@ -1,10 +1,11 @@
 #ifndef _DOUBLE_CONTACT_TP_
 #define _DOUBLE_CONTACT_TP_
 
-#include "ThreeImplicitFunctions.h"
-#include "Contour2x2_Method.h"
 
-class Double_Contact_TP : public ThreeImplicitFunctions {
+#include "Contour2x2_Method.h"
+#include "Double_Contact_Function.h"
+
+class Double_Contact_TP : public Double_Contact_Function {
     private:
     protected:
         RealVector lambda_left;
@@ -37,9 +38,14 @@ class Double_Contact_TP : public ThreeImplicitFunctions {
 
         bool function_on_cell(double *val, int ir, int jr, int kl, int kr);
 
-        void curve(const FluxFunction *lf, const AccumulationFunction *la, GridValues &lg, int lfam,
-                   const FluxFunction *rf, const AccumulationFunction *ra, GridValues &rg, int rfam,
+        void curve(const FluxFunction *lf, const AccumulationFunction *la, GridValues *lg, int lfam,
+                   const FluxFunction *rf, const AccumulationFunction *ra, GridValues *rg, int rfam,
                    std::vector<RealVector> &left_curve, std::vector<RealVector> &right_curve);
+        
+        
+        
+        
+       
 };
 
 #endif // _DOUBLE_CONTACT_TP_

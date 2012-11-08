@@ -48,12 +48,6 @@ public:
 
 
 
-
-
-
-
-
-
 };
 
 #endif //! _Hugoniot_Locus_H

@@ -48,19 +48,5 @@ public:
 };
 
 
-inline Boundary * CoreyQuadPhysics::defaultBoundary() const{
-
-    RealVector min(2);
-
-    min.component(0) = 0.0;
-    min.component(1) = 0.0;
-
-    RealVector max(2);
-
-    max.component(0) = 1.0;
-    max.component(1) = 1.0;
-
-    return new Three_Phase_Boundary(min, max);
-}
 
 #endif //! _CoreyQuadPhysics_H

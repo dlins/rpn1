@@ -12,6 +12,7 @@
  */
 #include "PolydispersePhysics.h"
 #include "Hugoniot_Curve.h"
+#include "Double_Contact.h"
 
 
 /*
@@ -23,6 +24,7 @@
 
 PolydispersePhysics::PolydispersePhysics() : SubPhysics(Polydisperse(Polydisperse_Params()), StoneAccumulation(), *defaultBoundary(), Multid::PLANE, "Polydisperse", _SIMPLE_ACCUMULATION_) {
     setHugoniotFunction(new Hugoniot_Curve());
+    setDoubleContactFunction(new Double_Contact());
 }
 
 SubPhysics * PolydispersePhysics::clone()const {
@@ -32,6 +34,7 @@ SubPhysics * PolydispersePhysics::clone()const {
 
 PolydispersePhysics::PolydispersePhysics(const PolydispersePhysics & copy) : SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.boundary(), copy.domain(), "Polydisperse", _SIMPLE_ACCUMULATION_) {
     setHugoniotFunction(new Hugoniot_Curve());
+    setDoubleContactFunction(new Double_Contact());
    
 }
 
@@ -58,4 +61,19 @@ void PolydispersePhysics::setParams(vector<string> newParams) {
 
     fluxFunction_->fluxParams(newPolydisperseParams);
 
+}
+
+Boundary * PolydispersePhysics::defaultBoundary() const{
+
+    RealVector min(2);
+
+    min.component(0) = 0.0;
+    min.component(1) = 0.0;
+
+    RealVector max(2);
+
+    max.component(0) = 1.0;
+    max.component(1) = 1.0;
+
+    return new Three_Phase_Boundary(min, max);
 }

@@ -11,6 +11,7 @@
  * Includes:
  */
 #include "TPCW.h"
+#include "Double_Contact_TP.h"
 
 /*
  * ---------------------------------------------------------------
@@ -72,6 +73,7 @@ SubPhysics(*defaultBoundary(), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATIO
 
 
     setHugoniotFunction(new Hugoniot_TP());
+    setDoubleContactFunction(new Double_Contact_TP());
 
 
     RealVector min(boundary().minimums());
@@ -134,6 +136,7 @@ TD(new Thermodynamics_SuperCO2_WaterAdimensionalized(*copy.TD)) {
 
 
     setHugoniotFunction(new Hugoniot_TP());
+    setDoubleContactFunction(new Double_Contact_TP());
 
     preProcessedBoundary_ = new RectBoundary(*copy.preProcessedBoundary_);
     

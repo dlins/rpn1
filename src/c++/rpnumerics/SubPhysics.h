@@ -22,6 +22,8 @@
 #include  "Multid.h"
 #include "eigen.h"
 #include "Hugoniot_Locus.h"
+#include "ThreeImplicitFunctions.h"
+#include "Double_Contact_Function.h"
 
 /*
  * ---------------------------------------------------------------
@@ -35,6 +37,7 @@ private:
 
 
     Hugoniot_Locus * hugoniotFunction_;
+    Double_Contact_Function * doubleContactFunction_;
     Boundary * boundary_;
     Space * space_;
     const char * ID_;
@@ -67,6 +70,10 @@ public:
     Hugoniot_Locus * getHugoniotFunction() const;
 
     void setHugoniotFunction(Hugoniot_Locus *);
+    
+    void setDoubleContactFunction(Double_Contact_Function *tif);
+    
+    Double_Contact_Function * getDoubleContactFunction();
 
     const Space & domain() const;
 

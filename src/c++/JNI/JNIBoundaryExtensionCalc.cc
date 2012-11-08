@@ -72,20 +72,46 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BoundaryExtensionCurveCalc_nativeCalc
 
     int dimension = RpNumerics::getPhysics().domain().dim();
 
-
-
     cout << "Familia do dominio" << domainFamily << endl;
     cout << "edge " << edge << endl;
     cout << "edgeresolution: " << edgeResolution << endl;
 
-    RectBoundary & physicsBoundary = (RectBoundary &) RpNumerics::getPhysics().boundary();
+
+
+    const Boundary * physicsBoundary = &RpNumerics::getPhysics().boundary();
 
     const FluxFunction * flux = &RpNumerics::getPhysics().fluxFunction();
     const AccumulationFunction * accum = &RpNumerics::getPhysics().accumulation();
 
     GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcation");
 
-    physicsBoundary.extension_curve(flux, accum, *gv, edge, edgeResolution, true, domainFamily, characteristicWhere, curve_segments, domain_segments);
+    const char * boundaryType = physicsBoundary->boundaryType();
+
+    //TODO REMOVE Move extension_curve to boundary superclass
+    
+    if (!strcmp(boundaryType, "Three_Phase_Boundary")) {
+        
+         Three_Phase_Boundary * boundary = ( Three_Phase_Boundary *)physicsBoundary;
+        
+        boundary->extension_curve(flux, accum, *gv, edge, edgeResolution, true, domainFamily, characteristicWhere, curve_segments, domain_segments);
+
+    }
+
+
+
+    if (!strcmp(boundaryType, "rect")) {
+        
+         RectBoundary * boundary = ( RectBoundary *)physicsBoundary;
+        
+        boundary->extension_curve(flux, accum, *gv, edge, edgeResolution, true, domainFamily, characteristicWhere, curve_segments, domain_segments);
+
+
+    }
+
+
+
+
+    //    physicsBoundary.extension_curve(flux, accum, *gv, edge, edgeResolution, true, domainFamily, characteristicWhere, curve_segments, domain_segments);
 
     cout << "Tamanho de curve segments: " << curve_segments.size() << endl;
     cout << "Tamanho de domain segments: " << domain_segments.size() << endl;
@@ -104,7 +130,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BoundaryExtensionCurveCalc_nativeCalc
 
         RpNumerics::getPhysics().getSubPhysics(0).postProcess(curve_segments.at(2 * i));
 
-        RpNumerics::getPhysics().getSubPhysics(0).postProcess(curve_segments.at(2 * i+1));
+        RpNumerics::getPhysics().getSubPhysics(0).postProcess(curve_segments.at(2 * i + 1));
 
 
         double * leftCoords = (double *) curve_segments.at(2 * i);
@@ -131,7 +157,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BoundaryExtensionCurveCalc_nativeCalc
 
         RpNumerics::getPhysics().getSubPhysics(0).postProcess(domain_segments.at(2 * i));
 
-        RpNumerics::getPhysics().getSubPhysics(0).postProcess(domain_segments.at(2 * i+1));
+        RpNumerics::getPhysics().getSubPhysics(0).postProcess(domain_segments.at(2 * i + 1));
 
         double * leftCoords = (double *) domain_segments.at(2 * i);
         double * rightCoords = (double *) domain_segments.at(2 * i + 1);

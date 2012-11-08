@@ -415,6 +415,10 @@ int RectBoundary::intersection(const RealVector &p, const RealVector &q, RealVec
     }
 }
 
+Boundary * RectBoundary::clone() const {
+    return new RectBoundary(*this);
+}
+
 RectBoundary::~RectBoundary() {
     delete minimums_;
     delete maximums_;

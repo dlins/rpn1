@@ -12,6 +12,7 @@
  */
 #include "Stone.h"
 #include "Hugoniot_Curve.h"
+#include "Double_Contact.h"
 
 /*
  * ---------------------------------------------------------------
@@ -23,15 +24,15 @@ Boundary * Stone::defaultBoundary() const {
 
 
     return new Three_Phase_Boundary();
-//    RealVector pmin(2);
-//
-//    pmin.component(0) = 0;
-//    pmin.component(1) = 0;
-//
-//    RealVector pmax(2);
-//
-//    pmax.component(0) = 1.0;
-//    pmax.component(1) = 1.0;
+    //    RealVector pmin(2);
+    //
+    //    pmin.component(0) = 0;
+    //    pmin.component(1) = 0;
+    //
+    //    RealVector pmax(2);
+    //
+    //    pmax.component(0) = 1.0;
+    //    pmax.component(1) = 1.0;
 
     //Saturacoes negativas
 
@@ -66,7 +67,7 @@ Boundary * Stone::defaultBoundary() const {
 
 
 
- 
+
 
 
 }
@@ -95,8 +96,8 @@ void Stone::setParams(vector<string> params) {
     for (int i = 7; i < params.size(); i++) {
 
         double paramValue = atof(params[i].c_str());
-        
-        permVector.component(i-7) = paramValue;
+
+        permVector.component(i - 7) = paramValue;
 
 
     }
@@ -107,11 +108,13 @@ void Stone::setParams(vector<string> params) {
 }
 
 Stone::Stone() : SubPhysics(StoneFluxFunction(StoneParams(), StonePermParams()), StoneAccumulation(), *defaultBoundary(), Multid::PLANE, "Stone", _SIMPLE_ACCUMULATION_) {
- setHugoniotFunction(new Hugoniot_Curve());
+    setHugoniotFunction(new Hugoniot_Curve());
+    setDoubleContactFunction(new Double_Contact());
 }
 
 Stone::Stone(const Stone & copy) : SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.boundary(), Multid::PLANE, "Stone", _SIMPLE_ACCUMULATION_) {
     setHugoniotFunction(new Hugoniot_Curve());
+    setDoubleContactFunction(new Double_Contact());
 
 }
 
@@ -122,4 +125,9 @@ SubPhysics * Stone::clone()const {
 Stone::~Stone() {
 }
 
+void Stone::postProcess(RealVector & input) {//To fix differences between TPCW and other physics in rarefaction's output 
+    if (input.size() > 2) {
+        input.resize(2);
+    }
 
+}

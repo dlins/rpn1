@@ -12,6 +12,7 @@
  */
 #include "SubPhysics.h"
 #include "physics/tpcw/Hugoniot_TP.h"
+#include "ThreeImplicitFunctions.h"
 
 /*
  * ---------------------------------------------------------------
@@ -85,6 +86,14 @@ void SubPhysics::setHugoniotFunction(Hugoniot_Locus *hf) {
     hugoniotFunction_ = hf;
 }
 
+void SubPhysics::setDoubleContactFunction(Double_Contact_Function *dcf){
+    doubleContactFunction_=dcf;
+}
+
+Double_Contact_Function * SubPhysics::getDoubleContactFunction(){
+    return doubleContactFunction_;
+}
+
 const FluxFunction & SubPhysics::fluxFunction() const {
     return *fluxFunction_;
 }
@@ -105,6 +114,7 @@ void SubPhysics::accumulationParams(const AccumulationParams & newAccumulationPa
 SubPhysics::~SubPhysics() {
 
     delete hugoniotFunction_;
+    delete doubleContactFunction_;
     delete space_;
     
     delete fluxFunction_;

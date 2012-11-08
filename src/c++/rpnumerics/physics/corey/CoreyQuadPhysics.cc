@@ -57,3 +57,18 @@ void CoreyQuadPhysics::setParams(vector<string> newParams) {
     fluxFunction_->fluxParams(newCoreyQuadParams);
 
 }
+
+Boundary * CoreyQuadPhysics::defaultBoundary() const{
+
+    RealVector min(2);
+
+    min.component(0) = 0.0;
+    min.component(1) = 0.0;
+
+    RealVector max(2);
+
+    max.component(0) = 1.0;
+    max.component(1) = 1.0;
+
+    return new Three_Phase_Boundary(min, max);
+}

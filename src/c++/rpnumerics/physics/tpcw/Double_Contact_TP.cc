@@ -183,8 +183,8 @@ bool Double_Contact_TP::prepare_cell(int i, int j) {
     return true;
 }
 
-void Double_Contact_TP::curve(const FluxFunction *lf, const AccumulationFunction *la, GridValues &lg, int lfam,
-        const FluxFunction *rf, const AccumulationFunction *ra, GridValues &rg, int rfam,
+void Double_Contact_TP::curve(const FluxFunction *lf, const AccumulationFunction *la, GridValues *lg, int lfam,
+        const FluxFunction *rf, const AccumulationFunction *ra, GridValues *rg, int rfam,
         std::vector<RealVector> &left_curve, std::vector<RealVector> &right_curve) {
 
 
@@ -199,8 +199,8 @@ void Double_Contact_TP::curve(const FluxFunction *lf, const AccumulationFunction
 
 
 
-    cout << "Grid r" << &rg << endl;
-    cout << "Grid l" << &lg << endl;
+    cout << "Grid r" << rg << endl;
+    cout << "Grid l" << lg << endl;
 
     cout << "Fam l" << lfam << endl;
     cout << "Fam r" << rfam << endl;
@@ -208,12 +208,12 @@ void Double_Contact_TP::curve(const FluxFunction *lf, const AccumulationFunction
 
     lff = lf;
     laa = la;
-    gv_left = &lg;
+    gv_left = lg;
     left_family = lfam;
 
     rff = rf;
     raa = ra;
-    gv_right = &rg;
+    gv_right = rg;
     right_family = rfam;
 
     // It is assumed that the grid_value must be the same
