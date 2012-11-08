@@ -4,23 +4,23 @@
     <PHYSICS name="TPCW">
         <PHYSICSCONFIG name="fluxfunction">
 
-                <PHYSICSPARAM name="abs perm" position="0" value="3e-12"/>
-                <PHYSICSPARAM name="sin beta" position="1" value="0.0"/>
-                <PHYSICSPARAM name="has gravity" position="2" value="0.0"/>
-                <PHYSICSPARAM name="has horizontal" position="3" value="1.0"/>
-                <PHYSICSPARAM name="cnw" position="4" value="0.0"/>
-                <PHYSICSPARAM name="cng" position="5" value="0.0"/>
-                <PHYSICSPARAM name="expw" position="6" value="2.0"/>
-                <PHYSICSPARAM name="expg" position="7" value="2.0"/>
+            <PHYSICSPARAM name="abs perm" position="0" value="3e-12"/>
+            <PHYSICSPARAM name="sin beta" position="1" value="0.0"/>
+            <PHYSICSPARAM name="has gravity" position="2" value="0.0"/>
+            <PHYSICSPARAM name="has horizontal" position="3" value="1.0"/>
+            <PHYSICSPARAM name="cnw" position="4" value="0.0"/>
+            <PHYSICSPARAM name="cng" position="5" value="0.0"/>
+            <PHYSICSPARAM name="expw" position="6" value="2.0"/>
+            <PHYSICSPARAM name="expg" position="7" value="2.0"/>
 
 
-               <PHYSICSPARAM name="phi" position="8" value="0.38"/>
+            <PHYSICSPARAM name="phi" position="8" value="0.38"/>
 
 
 
-                <PHYSICSPARAM name="T_typical" position ="9" value="304.63"/>
-                <PHYSICSPARAM name="U_typical" position="10" value="998.2"/>
-                <PHYSICSPARAM name="Rho_typical" position="11" value="4.22e-3"/>
+            <PHYSICSPARAM name="T_typical" position ="9" value="304.63"/>
+            <PHYSICSPARAM name="U_typical" position="10" value="998.2"/>
+            <PHYSICSPARAM name="Rho_typical" position="11" value="4.22e-3"/>
 
 
 
@@ -63,13 +63,13 @@
         <CURVEPARAM name="edge" value="0"/>
         <CURVEPARAM name="edgeresolution" value="32"/>
         <CURVEPARAM name="resolution" value="32 32"/>
-          <CURVEPARAM name="characteristicwhere" value="1"/>
+        <CURVEPARAM name="characteristicwhere" value="1"/>
 
 
     </CURVECONFIGURATION>
 
 
-     <CURVECONFIGURATION name="envelopecurve">
+    <CURVECONFIGURATION name="envelopecurve">
         <CURVEPARAM name="resolution" value="128 128"/>
         <CURVEPARAM name="whereisconstant" value="0"/>
         <CURVEPARAM name="numberofsteps" value="128"/>
@@ -97,7 +97,7 @@
     </CURVECONFIGURATION>
 
 
-     <CURVECONFIGURATION name="doublecontactcurve">
+    <CURVECONFIGURATION name="doublecontactcurve">
         <CURVEPARAM name="curvefamily" value="0"/>
         <CURVEPARAM name="domainfamily" value="1"/>
         <CURVEPARAM name="resolution" value="10 10"/>
