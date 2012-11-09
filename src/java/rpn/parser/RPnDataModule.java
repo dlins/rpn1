@@ -239,7 +239,7 @@ public class RPnDataModule {
                     direction_ = chooseDirection(att.getValue("direction"));
                     int family = new Integer(att.getValue("family"));
 
-                    calc_ = new ShockCurveCalc(tempPoint_, family, direction_);
+                    calc_ = new ShockCurveCalc(tempPoint_, family, direction_, 0.001);//TODO Tolerance hardcoded. Only to compile.
 
                 }
                 if (currentCommand_.equalsIgnoreCase("compositecurve")) {

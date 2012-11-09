@@ -44,12 +44,6 @@
     </METHOD>
 
 
-
-
-
-
-
-
     <CURVECONFIGURATION name="hugoniotcurve">
         <CURVEPARAM name="resolution" value="20 20"/>
 

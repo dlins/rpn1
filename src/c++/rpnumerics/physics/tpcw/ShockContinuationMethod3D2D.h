@@ -18,6 +18,7 @@
 #include "AccumulationFunction.h"
 #include "Boundary.h"
 #include "eigen.h"
+#include "ShockMethod.h"
 
 
 /*
@@ -50,7 +51,7 @@ extern "C" {
     void dgesv_(int*, int*, double*, int*, int*, double*, int*, int*);
 }
 
-class ShockContinuationMethod3D2D{//:public ShockMethod {
+class ShockContinuationMethod3D2D:public ShockMethod {
 private:
 
 
@@ -60,6 +61,9 @@ private:
 //    AccumulationFunction *shock_accumulation_object;
 //
 //    Boundary *boundary;
+    
+    
+    
 
     int family_;
 //    int n; // Dimension
@@ -71,10 +75,6 @@ private:
     double *Uref; // Uref is the same as the initial point
     double *p_outside; // Delete later
     double *v1_outside, *v2_outside;
-
-    
-
-   
 
     void vectprod(double *a, double *b, double *c);
     double dotprod(int n, double x[], double y[]);
@@ -105,16 +105,14 @@ public:
 
 
     int curve(int family, double maxnum, int increase, std::vector<RealVector> &out, int &edge); // If _SHOCK_INIT_IS_REF_
+    
+    
+     void curveCalc(const RealVector &ref, bool local_shock, const RealVector &in, int increase, int family, int type_of_shock, const RealVector *orig_direction, int number_ignore_doub_contact, FluxFunction *ff, AccumulationFunction *aa, Boundary *boundary,
+                         std::vector<RealVector> &shockcurve, int &info_shockcurve, std::vector<RealVector> &shockcurve_alt, int &info_shockcurve_alt,double newtonTolerance);
 
-    ShockContinuationMethod3D2D(int dim,int family, const FluxFunction &, const AccumulationFunction &, const Boundary &, double Ur[], double tol, double epsilon, int t);
+//    ShockContinuationMethod3D2D(int dim,int family, const FluxFunction &, const AccumulationFunction &, const Boundary &, double Ur[], double tol, double epsilon, int t);
     virtual ~ShockContinuationMethod3D2D();
 
-//    ShockContinuationMethod3D2D(const ShockContinuationMethod3D2D &);
-
-//    ShockMethod * clone() const ;
-
-
-//    void curve(const RealVector &, int direction, vector<RealVector> &);
     void curve(int direction, vector<RealVector> &);
 
     //int curve(int family, double maxnum, int increase, double U0[], double refplane[], std::vector<RealVector> &out); // If _SHOCK_INIT_IS_NOT_REF_

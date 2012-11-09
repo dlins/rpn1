@@ -510,7 +510,7 @@ public class RPNUMERICS {
 
         System.out.println(direction_);
 
-        return new ShockCurveCalc(orbitPoint, family, direction_);
+        return new ShockCurveCalc(orbitPoint, family, direction_,tolerance);
 
     }
 

@@ -18,6 +18,7 @@
  */
 
 #include "ShockContinuationMethod3D2D.h"
+#include "Shock.h"
 
 void ShockContinuationMethod3D2D::print_matrix(const char *name, int m, int n, double *A) {
     printf("%s = \n", name);
@@ -71,16 +72,52 @@ double ShockContinuationMethod3D2D::euclidean_norm(int n, double x[]) {
 //
 //}
 
+
+ void ShockContinuationMethod3D2D::curveCalc(const RealVector &ref, bool local_shock, const RealVector &in, int increase, int family, int type_of_shock, const RealVector *orig_direction, int number_ignore_doub_contact, FluxFunction *ff, AccumulationFunction *aa, Boundary *boundary,
+                         std::vector<RealVector> &shockcurve, int &info_shockcurve, std::vector<RealVector> &shockcurve_alt, int &info_shockcurve_alt,double newtonTolerance){
+     
+     fluxFunction_=ff;
+     accFunction_=aa;
+     boundary_=boundary;
+     dimension_=in.size();
+     family_=family;
+     eps=newtonTolerance;
+     type=11;
+     tolerance=1e-15;
+     delta = 1e-10;
+     Uref = ref.components();
+     
+     
+     
+     curve(increase,shockcurve);
+ }
+    
+    
+
 void ShockContinuationMethod3D2D::curve(int direction, vector<RealVector> & output) {
     int maxStepsNumber = 10000;
     
     cout<<"Entrando em curve"<<endl;
 
 
-    int edge;
+    int edge=0;
+
+    cout <<"Familia em curve: "<<family_<<endl;
+    
+    cout <<"Direction em curve: "<<direction<<endl;
+    
+    
 //    vector<RealVector> output;
 
     int info = curve(family_, maxStepsNumber, direction, output, edge);
+
+    cout <<"valor de info em curve: "<<info<<endl;
+    
+    for (int i = 0; i < output.size(); i++) {
+        cout<<"Saida do curve: "<<output.at(i)<<endl;
+
+    }
+
 //    vector <vector <RealVector> > unclassifiedCurve;
 
 //    unclassifiedCurve.push_back(output);
@@ -301,17 +338,6 @@ void ShockContinuationMethod3D2D::fill_with_jet(const RpFunction & flux_object, 
 //    cout << "Dentro de fill with jet shock" << endl;
     return;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // Creamos um metodo que transforma as coordenadas no espaco (a1,a2) em um ponto em 3D contido no plano dado por plane_point, v1 e v2
 
@@ -775,7 +801,7 @@ int ShockContinuationMethod3D2D::init(int family, int increase, Plane &plane, Re
     double Uprevious[n];
 
     // Speed should increase
-    if (increase == 1) {
+    if (increase == WAVE_FORWARD) {
         if (sl > sm && sm > sr) {
             for (int i = 0; i < n; i++) Uprevious[i] = pl[i];
             /*printf("shock init: 1\n");*/
@@ -787,7 +813,7 @@ int ShockContinuationMethod3D2D::init(int family, int increase, Plane &plane, Re
             return ABORTED_PROCEDURE;
         }
     }// Speed should decrease
-    else if (increase == -1) {
+    else if (increase == WAVE_BACKWARD) {
         if (sl < sm && sm < sr) {
             for (int i = 0; i < n; i++) Uprevious[i] = pl[i];
             /*printf("shock init: 4\n");*/
@@ -870,7 +896,6 @@ int ShockContinuationMethod3D2D::curve(int family, double maxnum, int increase, 
     // The curve proper
     int num = 1;
     int counter_rebounds = 0; // This is an auxiliary variable used for counting the number of consecutive points that need only one iteration of the adaptative method.
-
 
 
     while (num < maxnum) {
@@ -962,7 +987,7 @@ int ShockContinuationMethod3D2D::curve(int family, double maxnum, int increase, 
         if (info_intersect == 1) { // Both inside
             out.push_back(q);
         } else if (info_intersect == -1) { // Both outside
-//            cout << "No primeiro else" << endl;
+            //            cout << "No primeiro else" << endl;
             return ABORTED_PROCEDURE;
         } else { // New point outside
             out.push_back(r);
