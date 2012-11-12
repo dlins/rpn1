@@ -71,16 +71,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
 
     vector <RealVector> coords, shock_alt;
 
-    //    cout << "Valor de increase" << increase << endl;
-
-    //    const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
-    //
-    //    RealVector min(physicsBoundary. minimums());
-    //    RealVector max(physicsBoundary. maximums());
-
-    //    cout << "Valor de family" << familyIndex << endl;
-
-
     RealVector * originalDirection = new RealVector(realVectorInput.size());
 
     originalDirection->component(0) = 0;
@@ -93,8 +83,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
     if (increase == RAREFACTION_SPEED_DECREASE)
         increase = WAVE_BACKWARD;
 
-
-
     FluxFunction * fluxFunction = (FluxFunction *) & RpNumerics::getPhysics().getSubPhysics(0).fluxFunction();
     AccumulationFunction * accumulationFunction = (AccumulationFunction *) & RpNumerics::getPhysics().getSubPhysics(0).accumulation();
 
@@ -102,29 +90,20 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
 
     int info_shock_curve, info_shock_curve_alt;
 
-    double tol = 1e-5;
-
     int dim = realVectorInput.size();
-    int t = 11;
 
+    RealVector original_direction(dim);
 
     RpNumerics::getPhysics().getSubPhysics(0).preProcess(realVectorInput);
 
-    ShockContinuationMethod3D2D shock;
+    ShockMethod * shock = RpNumerics::getPhysics().getSubPhysics(0).getShockMethod();
 
-
-    shock.curveCalc(realVectorInput, true, realVectorInput, increase, familyIndex, SHOCK_FOR_ITSELF,
-            const RealVector *orig_direction, int number_ignore_doub_contact,
-            fluxFunction, accumulationFunction, tempBoundary
+    shock->curveCalc(realVectorInput, true, realVectorInput, increase, familyIndex, SHOCK_FOR_ITSELF,
+            &original_direction, 0,
+            fluxFunction, accumulationFunction, tempBoundary,
             coords, info_shock_curve,
-            std::vector<RealVector> shock_alt,
+            shock_alt,
             info_shock_curve_alt, newtonTolerance);
-
-
-    shock.curve(increase, coords); // If _SHOCK_INIT_IS_REF_
-
-
-    cout << "Tolerancia: " << newtonTolerance << endl;
 
     //Orbit members creation
 
@@ -136,7 +115,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
     for (i = 0; i < coords.size(); i++) {
 
         RealVector tempVector = coords.at(i);
-
 
         RpNumerics::getPhysics().getSubPhysics(0).postProcess(tempVector);
 

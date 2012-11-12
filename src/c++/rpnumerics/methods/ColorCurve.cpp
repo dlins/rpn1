@@ -444,8 +444,6 @@ int ColorCurve::complete_point(RealVector &p, double &s, std::vector<double> &ei
         num += (F[i] - F_ref[i]) * delta_G;
 
         den += delta_G*delta_G;
-        
-         cout<<" G:"<<G[i]<<" F:"<<F[i]<<" Fref:"<<F_ref[i]<<" Gref:"<<G_ref[i]<<endl;
     }
 
     if (fabs(den) > 1e-20) s = num / den;

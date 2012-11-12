@@ -78,7 +78,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BoundaryExtensionCurveCalc_nativeCalc
 
 
 
-    const Boundary * physicsBoundary = &RpNumerics::getPhysics().boundary();
+ Boundary * physicsBoundary = (Boundary *)&RpNumerics::getPhysics().boundary();
 
     const FluxFunction * flux = &RpNumerics::getPhysics().fluxFunction();
     const AccumulationFunction * accum = &RpNumerics::getPhysics().accumulation();
@@ -86,27 +86,29 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BoundaryExtensionCurveCalc_nativeCalc
     GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcation");
 
     const char * boundaryType = physicsBoundary->boundaryType();
+    
+    
 
     //TODO REMOVE Move extension_curve to boundary superclass
     
-    if (!strcmp(boundaryType, "Three_Phase_Boundary")) {
+//    if (!strcmp(boundaryType, "Three_Phase_Boundary")) {
+//        
+//         Three_Phase_Boundary * boundary = ( Three_Phase_Boundary *)physicsBoundary;
         
-         Three_Phase_Boundary * boundary = ( Three_Phase_Boundary *)physicsBoundary;
+        physicsBoundary->extension_curve(flux, accum, *gv, edge, edgeResolution, true, domainFamily, characteristicWhere, curve_segments, domain_segments);
+
+//    }
+//
+//
+//
+//    if (!strcmp(boundaryType, "rect")) {
         
-        boundary->extension_curve(flux, accum, *gv, edge, edgeResolution, true, domainFamily, characteristicWhere, curve_segments, domain_segments);
-
-    }
-
-
-
-    if (!strcmp(boundaryType, "rect")) {
-        
-         RectBoundary * boundary = ( RectBoundary *)physicsBoundary;
-        
-        boundary->extension_curve(flux, accum, *gv, edge, edgeResolution, true, domainFamily, characteristicWhere, curve_segments, domain_segments);
-
-
-    }
+//         RectBoundary * boundary = ( RectBoundary *)physicsBoundary;
+//        
+//        boundary->extension_curve(flux, accum, *gv, edge, edgeResolution, true, domainFamily, characteristicWhere, curve_segments, domain_segments);
+//
+//
+//    }
 
 
 

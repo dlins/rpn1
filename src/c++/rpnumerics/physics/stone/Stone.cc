@@ -11,8 +11,7 @@
  * Includes:
  */
 #include "Stone.h"
-#include "Hugoniot_Curve.h"
-#include "Double_Contact.h"
+
 
 /*
  * ---------------------------------------------------------------
@@ -110,11 +109,13 @@ void Stone::setParams(vector<string> params) {
 Stone::Stone() : SubPhysics(StoneFluxFunction(StoneParams(), StonePermParams()), StoneAccumulation(), *defaultBoundary(), Multid::PLANE, "Stone", _SIMPLE_ACCUMULATION_) {
     setHugoniotFunction(new Hugoniot_Curve());
     setDoubleContactFunction(new Double_Contact());
+    setShockMethod(new Shock());
 }
 
 Stone::Stone(const Stone & copy) : SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.boundary(), Multid::PLANE, "Stone", _SIMPLE_ACCUMULATION_) {
     setHugoniotFunction(new Hugoniot_Curve());
     setDoubleContactFunction(new Double_Contact());
+    setShockMethod(new Shock());
 
 }
 

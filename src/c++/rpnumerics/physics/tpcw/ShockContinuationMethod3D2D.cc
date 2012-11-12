@@ -85,7 +85,13 @@ double ShockContinuationMethod3D2D::euclidean_norm(int n, double x[]) {
      type=11;
      tolerance=1e-15;
      delta = 1e-10;
-     Uref = ref.components();
+     Uref = new double[ref.size()];
+     
+     for (int i = 0; i < ref.size(); i++) {
+         Uref[i]=ref.component(i);
+
+    }
+
      
      
      
@@ -711,17 +717,17 @@ int ShockContinuationMethod3D2D::solver(int nn, double *A, double *b, double *x)
 
 }
 
-ShockContinuationMethod3D2D::ShockContinuationMethod3D2D(int dim, int family,const  FluxFunction & f, const AccumulationFunction & a, const Boundary  & b, double Ur[], double tol, double epsilon, int t) :
-            ShockMethod(dim,f,a,b),
-family_(family),
-eps(epsilon),
-type(t),
-tolerance(tol) {
-    delta = 1e-10;
-    Uref = new double[3];
-    for (int i = 0; i < dimension(); i++) Uref[i] = Ur[i];
-
-}
+//ShockContinuationMethod3D2D::ShockContinuationMethod3D2D(int dim, int family,const  FluxFunction & f, const AccumulationFunction & a, const Boundary  & b, double Ur[], double tol, double epsilon, int t) :
+//            ShockMethod(dim,f,a,b),
+//family_(family),
+//eps(epsilon),
+//type(t),
+//tolerance(tol) {
+//    delta = 1e-10;
+//    Uref = new double[3];
+//    for (int i = 0; i < dimension(); i++) Uref[i] = Ur[i];
+//
+//}
 
 ShockContinuationMethod3D2D::~ShockContinuationMethod3D2D() {
 

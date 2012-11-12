@@ -24,6 +24,7 @@
 #include "Hugoniot_Locus.h"
 #include "ThreeImplicitFunctions.h"
 #include "Double_Contact_Function.h"
+#include "methods/ShockMethod.h"
 
 /*
  * ---------------------------------------------------------------
@@ -38,6 +39,7 @@ private:
 
     Hugoniot_Locus * hugoniotFunction_;
     Double_Contact_Function * doubleContactFunction_;
+    ShockMethod * shock_method_;
     Boundary * boundary_;
     Space * space_;
     const char * ID_;
@@ -74,6 +76,10 @@ public:
     void setDoubleContactFunction(Double_Contact_Function *tif);
     
     Double_Contact_Function * getDoubleContactFunction();
+    
+    void setShockMethod(ShockMethod *);
+    
+    ShockMethod * getShockMethod();
 
     const Space & domain() const;
 

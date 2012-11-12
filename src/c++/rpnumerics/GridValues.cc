@@ -1,4 +1,7 @@
 #include "GridValues.h"
+#include "Boundary.h"
+
+
 
 GridValues::GridValues(const Boundary *b, 
                        const RealVector &pmin, const RealVector &pmax,

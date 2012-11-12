@@ -46,8 +46,22 @@
 
     <CURVECONFIGURATION name="hugoniotcurve">
         <CURVEPARAM name="resolution" value="20 20"/>
+        
+        
 
     </CURVECONFIGURATION>
+    
+    
+    
+    
+    <CURVECONFIGURATION name="rarefactionextension">
+        <CURVEPARAM name="curvefamily" value="0"/>
+        <CURVEPARAM name="characteristic" value="1"/>
+        <CURVEPARAM name="resolution" value="128 128"/>
+    </CURVECONFIGURATION>
+    
+    
+    
 
     <CURVECONFIGURATION name="inflectioncurve">
         <CURVEPARAM name="resolution" value="128 128"/>

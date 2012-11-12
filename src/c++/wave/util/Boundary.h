@@ -19,6 +19,8 @@
 #include "mathutil.h"
 #include <iostream>
 #include <vector>
+#include "GridValues.h"
+
 
 
 
@@ -59,6 +61,24 @@ public:
     virtual int intersection(const RealVector &p, const RealVector &q, RealVector &r, int &)const;
 
     virtual void physical_boundary(std::vector<RealVector> &) = 0;
+    
+    
+    
+    
+   virtual void extension_curve(const FluxFunction *f, const AccumulationFunction *a,
+            GridValues &gv,
+            int where_constant, int number_of_steps, bool singular,
+            int fam, int characteristic,
+            std::vector<RealVector> &c, std::vector<RealVector> &d)=0;
+
+
+   virtual      void envelope_curve(const FluxFunction *f, const AccumulationFunction *a,
+            GridValues &gv,
+            int where_constant, int number_of_steps, bool singular,
+            std::vector<RealVector> &c, std::vector<RealVector> &d)=0;
+
+    
+    
 
 
 protected:
