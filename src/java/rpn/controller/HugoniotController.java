@@ -8,16 +8,9 @@ package rpn.controller;
 import rpn.component.RpGeomFactory;
 import rpn.command.*;
 import java.beans.PropertyChangeEvent;
-import java.util.Iterator;
-import rpn.RPnPhaseSpaceFrame;
-import rpn.RPnUIFrame;
 import rpn.component.HugoniotCurveGeomFactory;
-import rpn.component.HugoniotCurveView;
-import rpn.component.OrbitGeomView;
-import rpn.parser.RPnDataModule;
 import rpnumerics.HugoniotCurveCalcND;
 import rpnumerics.HugoniotParams;
-import wave.multid.view.GeomObjView;
 import wave.util.RealVector;
 
 public class HugoniotController extends RpCalcController {
@@ -42,7 +35,7 @@ public class HugoniotController extends RpCalcController {
         ChangeFluxParamsCommand.instance().addPropertyChangeListener(this);
         BifurcationRefineCommand.instance().addPropertyChangeListener(this);      // ****
         ChangeXZeroCommand.instance().addPropertyChangeListener(this);
-        ChangeDirectionCommand.instance().addPropertyChangeListener(this);
+
 
 
     }
@@ -53,7 +46,7 @@ public class HugoniotController extends RpCalcController {
         ChangeFluxParamsCommand.instance().removePropertyChangeListener(this);
         BifurcationRefineCommand.instance().removePropertyChangeListener(this);
         ChangeXZeroCommand.instance().removePropertyChangeListener(this);
-        ChangeDirectionCommand.instance().removePropertyChangeListener(this);
+
     }
 
     @Override
@@ -76,51 +69,6 @@ public class HugoniotController extends RpCalcController {
         if (change.getSource() instanceof DragPlotCommand) {
             ((HugoniotParams) ((HugoniotCurveCalcND) geomFactory_.rpCalc()).getParams()).setXZero((RealVector) change.getNewValue());
             geomFactory_.updateGeom();
-            return;
-        }
-
-
-
-        if (change.getSource() instanceof ChangeDirectionCommand) {//Visual update only
-            RPnPhaseSpaceFrame[] frames = RPnUIFrame.getPhaseSpaceFrames();
-
-            RPnPhaseSpaceFrame[] auxFrames = RPnUIFrame.getAuxFrames();
-
-            for (int i = 0; i < auxFrames.length; i++) {
-
-                Iterator it = auxFrames[i].phaseSpacePanel().scene().geometries();
-
-
-
-                while (it.hasNext()) {
-
-                    GeomObjView geometryView = (GeomObjView) it.next();
-
-                    if (geometryView.getViewingAttr().isSelected() && geometryView instanceof HugoniotCurveView) {
-                        geometryView.update();
-                    }
-
-                }
-
-            }
-
-            for (int i = 0; i < frames.length; i++) {
-
-                Iterator it = frames[i].phaseSpacePanel().scene().geometries();
-
-                while (it.hasNext()) {
-
-                    GeomObjView geometryView = (GeomObjView) it.next();
-
-                    if (geometryView.getViewingAttr().isSelected() && geometryView instanceof HugoniotCurveView) {
-                        geometryView.update();
-                    }
-
-                }
-
-            }
-
-            RPnDataModule.updatePhaseSpaces();
             return;
         }
 

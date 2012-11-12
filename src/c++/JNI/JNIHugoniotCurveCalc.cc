@@ -130,9 +130,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
             jobject realVectorLeftPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRLeft);
             jobject realVectorRightPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRRight);
 
-            int pointType = hugoniotPolyLineVector[i].type;
+            int pointType = hugoniotPolyLineVector[i].type[0];
 
-            string signature = hugoniotPolyLineVector[i].signature;
+            string signature = hugoniotPolyLineVector[i].signature[0];
 
 
 
@@ -279,9 +279,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
             jobject realVectorLeftPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRLeft);
             jobject realVectorRightPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRRight);
 
-            int pointType = hugoniotPolyLineVector[i].type;
+            int pointType = hugoniotPolyLineVector[i].type[0];
 
-            string signature = hugoniotPolyLineVector[i].signature;
+            string signature = hugoniotPolyLineVector[i].signature[0];
 
             double leftSigma = hugoniotPolyLineVector[i].speed[j];
             double rightSigma = hugoniotPolyLineVector[i].speed[j + 1];

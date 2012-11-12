@@ -30,8 +30,6 @@ public class HugoniotSegGeom extends MultiPolyLine {
     public static ViewingAttr viewAttrSelection(HugoniotSegment segment) {
 
         ViewingAttr attr = new ViewingAttr(Color.white);
-        
-        System.out.println("Valor de DIRECTION:"+DIRECTION);
 
         if (DIRECTION == Orbit.FORWARD_DIR) {
 
