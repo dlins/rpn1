@@ -4,9 +4,6 @@ import wave.util.RealVector;
 import wave.util.RealSegment;
 import java.util.List;
 import java.util.ArrayList;
-import rpn.RPnPhaseSpaceAbstraction;
-import rpn.component.RpGeometry;
-import rpn.parser.RPnDataModule;
 
 public class HugoniotCurve extends SegmentedCurve {
     //
@@ -14,14 +11,19 @@ public class HugoniotCurve extends SegmentedCurve {
     //
 
     private PhasePoint xZero_;
+    private int direction_;
     
     public HugoniotCurve(PhasePoint xZero, List<HugoniotSegment> hSegments) {
         super(hSegments);
 
         xZero_ = new PhasePoint(xZero);
-
+        direction_=Orbit.FORWARD_DIR;
 
     }
+    public void setDirection(int direction){
+        direction_=direction;
+    }
+    public int getDirection(){return direction_;}
 
     public static List interpolate(HugoniotPoint v1,
             HugoniotPoint v2) {

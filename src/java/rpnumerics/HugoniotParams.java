@@ -2,26 +2,22 @@ package rpnumerics;
 
 import wave.util.*;
 
-public class HugoniotParams extends ContourParams{
+public class HugoniotParams extends ContourParams {
 
     private RealVector xZero_;
     private RealVector fMinus_;
     private RealVector uMinus_;
     private RealMatrix2 dFMinus_;
     private FluxFunction fluxFunction_;
+    private int direction_;
 
-
-    public HugoniotParams (PhasePoint xZero, int [] resolution) {
+    public HugoniotParams(PhasePoint xZero, int direction, int[] resolution) {
 
         super(resolution);
         xZero_ = xZero;
 
-    }
+        direction_ = direction;
 
-    public HugoniotParams(PhasePoint xZero, FluxFunction fluxFunction) {
-
-        xZero_ = xZero;
-        fluxFunction_ = fluxFunction;
 
     }
 
@@ -91,5 +87,11 @@ public class HugoniotParams extends ContourParams{
         return fluxFunction_;
     }
 
-   
+    public int getDirection() {
+        return direction_;
+    }
+
+    public void setDirection(int direction_) {
+        this.direction_ = direction_;
+    }
 }
