@@ -206,7 +206,7 @@ public class RPnDataModule {
                 orbitPointsList_.clear();
 
                 if (currentCommand_.equalsIgnoreCase("hugoniotcurve")) {
-                    HugoniotParams params = new HugoniotParams(new PhasePoint(new RealVector(att.getValue("inputpoint"))), processResolution(att.getValue("resolution")));
+                    HugoniotParams params = new HugoniotParams(new PhasePoint(new RealVector(att.getValue("inputpoint"))),new Integer(att.getValue("direction")), processResolution(att.getValue("resolution")));
                     calc_ = new HugoniotCurveCalcND(params);
 
                 }

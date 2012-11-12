@@ -5,6 +5,7 @@
  */
 package rpn.command;
 
+import java.beans.PropertyChangeEvent;
 import rpn.RPnCurvesConfigPanel;
 import rpnumerics.RPNUMERICS;
 
@@ -27,6 +28,7 @@ public class ChangeDirectionCommand extends RpModelConfigChangeCommand {
 
     public void execute() {
         RPNUMERICS.setDirection(RPnCurvesConfigPanel.getOrbitDirection());
+        applyChange(new PropertyChangeEvent(this, "direction", null, null));
     }
 
     public void unexecute() {

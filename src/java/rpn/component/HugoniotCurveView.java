@@ -30,7 +30,7 @@ public class HugoniotCurveView extends GeomObjView {
     //Original update method
     public void update() {
 
-
+        System.out.println("Atualizando Hugoniot");
         viewList_.clear();
         Iterator geomListIterator = ((HugoniotCurveGeom) getAbstractGeom()).getRealSegIterator();
         while (geomListIterator.hasNext()) {

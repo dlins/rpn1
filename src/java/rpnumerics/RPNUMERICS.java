@@ -280,7 +280,7 @@ public class RPNUMERICS {
 
         int[] resolution = RPnDataModule.processResolution(getParamValue("hugoniotcurve", "resolution"));
 
-        HugoniotParams params = new HugoniotParams(new PhasePoint(input), resolution);
+        HugoniotParams params = new HugoniotParams(new PhasePoint(input), direction_, resolution);
 
         return new HugoniotCurveCalcND(params);
     }
