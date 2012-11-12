@@ -402,6 +402,7 @@ public class UIController extends ComponentUI {
 
   public void logCommand(RpCommand command) {
         RPnUIFrame.clearStatusMessage();
+        System.out.println(command.toXML());
         commandArray_.add(command);
     }
 
