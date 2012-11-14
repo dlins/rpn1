@@ -99,7 +99,6 @@ int RectBoundary::edge_segments(int where_constant, int number_of_steps, const R
 
 
 
-
     if (where_constant == RECT_BOUNDARY_SG_ZERO) {
         // The following protection exists for physical boundary outside the real boundary.
         //        if (pmin->component(1) > 0.0) return 0;

@@ -15,7 +15,7 @@ public:
     static void extension_curve(GridValues  &, const FluxFunction *curve_flux, const AccumulationFunction *curve_accum,
             RealVector &initial_point,
             double deltaxi,
-            int curve_family,
+            int curve_family, int extension_family,
             int increase,
             const Boundary *boundary,
             //                                    const RealVector &pmin, const RealVector &pmax, int *number_of_grid_points,         // For the domain.

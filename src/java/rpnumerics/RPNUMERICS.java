@@ -547,8 +547,11 @@ public class RPNUMERICS {
         int curveFamily = new Integer(getParamValue("rarefactionextension", "curvefamily"));
 
         int characteristicDomain = new Integer(getParamValue("rarefactionextension", "characteristic"));
+        
+int         extensionFamily = new Integer(getParamValue("rarefactionextension", "extensionfamily"));
+        
 
-        return new RarefactionExtensionCalc(new ContourParams(resolution), orbitPoint, direction_, curveFamily, characteristicDomain);
+        return new RarefactionExtensionCalc(new ContourParams(resolution), orbitPoint, direction_, curveFamily, extensionFamily,characteristicDomain);
 
     }
 
