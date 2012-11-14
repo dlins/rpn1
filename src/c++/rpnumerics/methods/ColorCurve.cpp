@@ -467,6 +467,14 @@ int ColorCurve::complete_point(RealVector &p, double &s, std::vector<double> &ei
         den += delta_G*delta_G;
     }
 
+//printf("Em CC::Complete_point. num = %2.6f, den = %2.6f, speed = %2.6f\n", num, den, num/den);
+//printf("                       F[0] = %2.6f, F[1] = %2.6f, Fref[0] = %2.6f, Fref[1] = %2.6ff\n", F[0], F[1], F_ref[0], F_ref[1]);
+//printf("                       G[0] = %2.6f, G[1] = %2.6f, Gref[0] = %2.6f, Gref[1] = %2.6ff\n", G[0], G[1], G_ref[0], G_ref[1]);
+
+//cout << "Em CC::Complete_point " << p << ". num = " << num << ", den = " << den << ", speed = " << num/den << endl;
+//cout << "                       F[0] = " << F[0] << ", F[1] = " << F[1] << ", Fref[0] = " << F_ref[0] << ", Fref[1] = " << F_ref[1] << endl;
+//cout << "                       G[0] = " << G[0] << ", G[1] = " << F[1] << ", Gref[0] = " << G_ref[0] << ", Gref[1] = " << G_ref[1] << endl;
+
     if (fabs(den) > 1e-20) s = num / den;
     else {
         // The speed is just approximated. TODO: This is not a good idea, something is needed.
@@ -577,52 +585,77 @@ void ColorCurve::classify_segment(RealVector &p, RealVector &q,
             hpl.eigenvalue[0].resize(fam);
             hpl.eigenvalue[1].resize(fam);
         }
+        hpl.type.resize(1);
+        hpl.signature.resize(1);
     }
+
+    for (int j = 0; j < dim; j++) {
+        hpl.point[0].component(j) = p.component(j);
+    }
+
+    // Unclassifications occurs because of an error in the speed, these values are not trustable.
+    //
+    hpl.speed[0] = s_p;
+
+    for (int j = 0; j < fam; j++) {
+        hpl.eigenvalue[0].component(j) = eigenvalue_p[j];
+    }
+
+    classify_segment_with_data(p, s_p, eigenvalue_p, ct_p, type_p,
+                               q, s_q, eigenvalue_q, ct_q, type_q,
+                               hpl, classified_curve, transition_list);
+
+    return;
+}
+
+void ColorCurve::classify_segment_with_data(
+        RealVector &p, double &s_p, std::vector<double> &eigenvalue_p, std::string &ct_p, int &type_p,
+        RealVector &q, double &s_q, std::vector<double> &eigenvalue_q, std::string &ct_q, int &type_q,
+        HugoniotPolyLine &hpl,
+        std::vector<HugoniotPolyLine> &classified_curve,
+        std::vector<RealVector> &transition_list) {
+
+//printf("   Em CC::classify_segment. Temos, s_p = %2.6f, s_q = %2.6f\n", s_p, s_q);
+
+    int dim = p.size();
+    int fam = eigenvalue_p.size();
 
     // One of the points (or both) could not be classfied. (Output as is.)
     //
     if (type_p == UNCLASSIFIABLE_POINT || type_q == UNCLASSIFIABLE_POINT) {
-        hpl.type = UNCLASSIFIABLE_POINT;
-        hpl.signature = "0000";
-
-        for (int j = 0; j < dim; j++) {
-            hpl.point[0].component(j) = p.component(j);
-            hpl.point[1].component(j) = q.component(j);
-        }
-
-        // Unclassifications occurs because of an error in the speed, these values are not trustable.
-        //
-        hpl.speed[0] = s_p;
-        hpl.speed[1] = s_q;
-
-        for (int j = 0; j < fam; j++) {
-            hpl.eigenvalue[0].component(j) = eigenvalue_p[j];
-            hpl.eigenvalue[1].component(j) = eigenvalue_q[j];
-        }
-
-        classified_curve.push_back(hpl);
+        hpl.type[0] = UNCLASSIFIABLE_POINT;
+        hpl.signature[0] = "0000";
+//        for (int j = 0; j < dim; j++) {
+////            hpl.point[0].component(j) = p.component(j);
+//            hpl.point[1].component(j) = q.component(j);
+//        }
+//        // Unclassifications occurs because of an error in the speed, these values are not trustable.
+//        //
+////        hpl.speed[0] = s_p;
+//        hpl.speed[1] = s_q;
+//        for (int j = 0; j < fam; j++) {
+////            hpl.eigenvalue[0].component(j) = eigenvalue_p[j];
+//            hpl.eigenvalue[1].component(j) = eigenvalue_q[j];
+//        }
+//        classified_curve.push_back(hpl);
     }
 
     // Both points share the same type (the output segment will not be divided).
     //
     else if (type_p == type_q) {
-        hpl.type = type_p;
-        hpl.signature = ct_p;
-
-        for (int j = 0; j < dim; j++) {
-            hpl.point[0].component(j) = p.component(j);
-            hpl.point[1].component(j) = q.component(j);
-        }
-
-        hpl.speed[0] = s_p;
-        hpl.speed[1] = s_q;
-
-        for (int j = 0; j < fam; j++) {
-            hpl.eigenvalue[0].component(j) = eigenvalue_p[j];
-            hpl.eigenvalue[1].component(j) = eigenvalue_q[j];
-        }
-
-        classified_curve.push_back(hpl);
+        hpl.type[0] = type_p;
+        hpl.signature[0] = ct_p;
+//        for (int j = 0; j < dim; j++) {
+////            hpl.point[0].component(j) = p.component(j);
+//            hpl.point[1].component(j) = q.component(j);
+//        }
+////        hpl.speed[0] = s_p;
+//        hpl.speed[1] = s_q;
+//        for (int j = 0; j < fam; j++) {
+////            hpl.eigenvalue[0].component(j) = eigenvalue_p[j];
+//            hpl.eigenvalue[1].component(j) = eigenvalue_q[j];
+//        }
+//        classified_curve.push_back(hpl);
     }
 
     // Points have different classification, splitting is needed.
@@ -691,6 +724,10 @@ void ColorCurve::classify_segment(RealVector &p, RealVector &q,
         // Fill the segments will all data. Recall that rt(ype)temp is marked only with the zero
         // signature, here we complete the real signature of the point...
         //
+        hpl.speed[0] = s_p;
+        for (int j = 0; j < dim; j++) hpl.point[0].component(j) = p.component(j);
+        for (int j = 0; j < fam; j++) hpl.eigenvalue[0].component(j) = eigenvalue_p[j];
+
         r.push_back(p);
         rtype.push_back(type_p);
         rspeed.push_back(s_p);
@@ -736,34 +773,42 @@ void ColorCurve::classify_segment(RealVector &p, RealVector &q,
 
         // Now we fill the new segment and its components for the HugoniotPolyLine
         //
-        for (int k = 0; k < noi; k++) {
-            hpl.type = rtype[k];
-            hpl.signature = sigtype[k];
+        for (int k = 0; k < noi-1; k++) {
+            hpl.type[0] = rtype[k];
+            hpl.signature[0] = sigtype[k];
 
-            for (int j = 0; j < dim; j++) {
-                hpl.point[0].component(j) = r[k].component(j);
-                hpl.point[1].component(j) = r[k + 1].component(j);
-            }
-
-            hpl.speed[0] = rspeed[k];
             hpl.speed[1] = rspeed[k + 1];
-
-            for (int j = 0; j < fam; j++) {
-                hpl.eigenvalue[0].component(j) = reigen[k][j];
-                hpl.eigenvalue[1].component(j) = reigen[k + 1][j];
-            }
+            for (int j = 0; j < dim; j++) hpl.point[1].component(j) = r[k + 1].component(j);
+            for (int j = 0; j < fam; j++) hpl.eigenvalue[1].component(j) = reigen[k + 1][j];
 
             classified_curve.push_back(hpl);
+
+            // Fill the first element of the next hpl with the last data.
+            hpl.speed[0] = hpl.speed[1];
+            for (int j = 0; j < dim; j++) hpl.point[0].component(j) = hpl.point[1].component(j);
+            for (int j = 0; j < fam; j++) hpl.eigenvalue[0].component(j) = hpl.eigenvalue[1].component(j);
         }
+
+        // This are the signature and type for the last HugoniotPolyLine:
+        hpl.type[0] = rtype[noi-1];
+        hpl.signature[0] = sigtype[noi-1];
     }
+
+    // Fill the last data of HugoniotPolyLine:
+    hpl.speed[1] = s_q;
+    for (int j = 0; j < dim; j++) hpl.point[1].component(j) = q.component(j);
+    for (int j = 0; j < fam; j++) hpl.eigenvalue[1].component(j) = eigenvalue_q[j];
+
+    classified_curve.push_back(hpl);
+
+//printf("   Em CC::Finally, we get hpl.s_p = %2.6f, hpl.s_q = %2.6f\n", hpl.speed[0], hpl.speed[1]);
 
     return;
 }
 
 // This method classify a Hugoniot Locus given as a collection of segments, typically from Contour 
 //
-
-void ColorCurve::classify_segmented_curve(std::vector<RealVector > &original,
+void ColorCurve::classify_segmented_curve(std::vector<RealVector> &original,
         const RealVector &ref,
         std::vector<HugoniotPolyLine> &classified_curve,
         std::vector<RealVector> &transition_list) {
@@ -805,13 +850,11 @@ void ColorCurve::classify_segmented_curve(std::vector<RealVector > &original,
 
 // This method classify a Hugoniot Locus given as a collection of points, typically from continuation 
 //
-
-void ColorCurve::classify_continuous_curve(std::vector<RealVector> &original,
+void ColorCurve::classify_continuous_curve(std::deque<RealVector> &original,
         const RealVector &ref,
-        std::vector<HugoniotPolyLine> &classified_curve,
+        HugoniotPolyLine &classified_curve,
         std::vector<RealVector> &transition_list) {
 
-    classified_curve.clear();
     transition_list.clear();
 
     // Get the ref point.
@@ -834,57 +877,95 @@ void ColorCurve::classify_continuous_curve(std::vector<RealVector> &original,
     ref_eigenvalue.resize(e.size());
     ref_e_complex.resize(e.size());
     for (int i = 0; i < e.size(); i++) {
-        
         ref_eigenvalue[i] = e[i].r;
         ref_e_complex[i]=e[i].i;
-    
     }
-    
 
-    // The first segment is classified with the second point:
-    //
-    double s1;
-    std::string ct1;
-    std::vector<double> eigenvalue1;
-    int type = classify_point(original[1], s1, eigenvalue1, ct1);
+    double s_p, s_q;
+    std::vector<double> eigenvalue_p, eigenvalue_q;
+    std::string ct_p, ct_q;
+    cout<<" antes de first point"<<endl;
+    // Let the first point be p:
+    RealVector p = original[0];
+    int type_p = classify_point(p, s_p, eigenvalue_p, ct_p);
+    cout<<"depois de first point "<<p<<endl;
 
+    int fam = eigenvalue_p.size();
     HugoniotPolyLine hpl;
-    // This is the first HugoniotPolyLine, storing data
-    hpl.type = type;
-
-    hpl.point.resize(2);
-    hpl.point[0].resize(dim);
-    hpl.point[1].resize(dim);
-
-    for (int j = 0; j < dim; j++) {
-        hpl.point[0].component(j) = ref_point.component(j);
-        hpl.point[1].component(j) = original[1].component(j);
+    {
+        hpl.point.resize(2);
+        {
+            hpl.point[0].resize(dim);
+            hpl.point[1].resize(dim);
+        }
+        hpl.speed.resize(2);
+        hpl.eigenvalue.resize(2);
+        {
+            hpl.eigenvalue[0].resize(fam);
+            hpl.eigenvalue[1].resize(fam);
+        }
+        hpl.type.resize(1);
+        hpl.signature.resize(1);
     }
 
-    hpl.speed.resize(2);
-    // TODO: All shock speeds are trivially valid for the reference point, store s1 and thus in JAVA
-    //       the shock speed returned for the whole segment is fixed.
-    hpl.speed[0] = s1;
-    hpl.speed[1] = s1;
+    RealVector q;
+    int type_q;
+    
+    classified_curve.speed.resize(1);
+    classified_curve.point.resize(1);
+    classified_curve.point[0].resize(2);
+    classified_curve.eigenvalue.resize(1);
+    
+  classified_curve.eigenvalue[0].resize(2);
+    classified_curve.speed[0] = s_p;
+    for (int j = 0; j < dim; j++) classified_curve.point[0].component(j) = p.component(j);
+    for (int j = 0; j < fam; j++) classified_curve.eigenvalue[0].component(j) = eigenvalue_p[j];
 
-    hpl.eigenvalue.resize(2);
-    int fam = eigenvalue1.size();
-    hpl.eigenvalue[0].resize(fam);
-    hpl.eigenvalue[1].resize(fam);
+    int counter = 1;
+    cout <<" antes do for: "<<endl;
+    // Process the whole list
+    //
+    for (int i = 1; i < original.size(); i++) {
+        hpl.speed[0] = s_p;
+        for (int j = 0; j < dim; j++) hpl.point[0].component(j) = p.component(j);
+        for (int j = 0; j < fam; j++) hpl.eigenvalue[0].component(j) = eigenvalue_p[j];
 
-    for (int j = 0; j < fam; j++) {
-        hpl.eigenvalue[0].component(j) = ref_eigenvalue[j];
-        hpl.eigenvalue[1].component(j) = eigenvalue1[j];
-    }
+        q = original[i];
+        type_q = classify_point(q, s_q, eigenvalue_q, ct_q);
 
-    hpl.signature = ct1;
+        std::vector<HugoniotPolyLine> segment_classified;
+        std::vector<RealVector>       transition_list_elements;
 
+        segment_classified.clear();
+        transition_list_elements.clear();
 
-    classified_curve.push_back(hpl);
+        classify_segment_with_data(p, s_p, eigenvalue_p, ct_p, type_p,
+                                   q, s_q, eigenvalue_q, ct_q, type_q,
+                                   hpl, segment_classified, transition_list_elements);
 
-    // Process the (remaining) list
-    for (int i = 1; i < original.size() - 1; i++) {
-        classify_segment(original[i], original[i + 1], classified_curve, transition_list);
+        // Set the last segment point as the first segment point of the next segment
+        //
+        p = q; s_p = s_q; eigenvalue_p = eigenvalue_q; ct_p = ct_q; type_p = type_q;
+
+        for (int j = 0; j < transition_list_elements.size(); j++) {
+            transition_list.push_back(transition_list_elements[j]);
+
+            for (int k = 0; k < dim; k++) classified_curve.point[counter].component(k) = segment_classified[j+1].point[0].component(j);
+            for (int k = 0; k < fam; k++) classified_curve.eigenvalue[counter].component(k) = segment_classified[j+1].eigenvalue[0].component(j);
+            classified_curve.speed[counter] = segment_classified[j+1].speed[0];
+            classified_curve.type[counter] = segment_classified[j].type[0];;
+            classified_curve.signature[counter] = segment_classified[j].signature[0];;
+
+            counter++;
+        }
+
+        for (int j = 0; j < dim; j++) classified_curve.point[counter].component(j) = p.component(j);
+        for (int j = 0; j < fam; j++) classified_curve.eigenvalue[counter].component(j) = eigenvalue_p[j];
+        classified_curve.speed[counter] = s_p;
+        classified_curve.type[counter] = type_p;
+        classified_curve.signature[counter] = ct_p;
+
+        counter++;
     }
 
     return;
@@ -892,7 +973,6 @@ void ColorCurve::classify_continuous_curve(std::vector<RealVector> &original,
 
 
 // TODO: This signature must DIE after removing old codes!!
-
 void ColorCurve::classify_curve(vector < vector < RealVector > > &, const RealVector &, int, int, vector < HugoniotPolyLine > &output) {
     return;
 }

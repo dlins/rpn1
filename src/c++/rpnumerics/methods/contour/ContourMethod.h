@@ -9,6 +9,9 @@
 #ifndef _HugoniotContourMethod_H
 #define _HugoniotContourMethod_H
 
+#define CONTINUATION_METHOD 1
+#define SEGMENTATION_METHOD 0
+
 /*
  * ---------------------------------------------------------------
  * Includes:
@@ -31,15 +34,9 @@
  * Definitions:
  */
 
-// Forward declaration:
-
-//class Inflection_Curve;
-
 class ContourMethod {
     private:
         int dimension;
-
-//        HugoniotFunctionClass *hugoniot;	 // TODO: Edson, voce deve comentar essa linha (e no .cc)
 
         static bool is_first;
 
@@ -79,10 +76,6 @@ class ContourMethod {
         static int tsimp;
         static int tface;
 
-//<<<<<<< HEAD
-    //void classifiedCurve(const RealVector &, int, int, vector<HugoniotPolyLine> &);
-    //void unclassifiedCurve(const RealVector &, vector<HugoniotPolyLine> &);
-//=======
         static void allocate_arrays(void);
 
         // Auxiliary grid for continuation
@@ -95,20 +88,23 @@ class ContourMethod {
         static std::vector < std::vector <int> > chain_list;
 
         static int topological_sort(int i, int j);
+
+       
     public:
         static void deallocate_arrays(void);
 
     protected:
     public:
-//        ContourMethod(HugoniotFunctionClass *h); // TODO: Edson, voce deve comentar essa linha (e no .cc)
-//        ~ContourMethod();			 // TODO: Edson, voce deve comentar essa linha (e no .cc)
-    
         static int contour2d(ImplicitFunction *impf, std::vector<RealVector> &vrs);
 
-        static int contour2d(ImplicitFunction *impf, std::vector<RealVector> &vrs,
+        static int contour2d(ImplicitFunction *impf,
                              std::vector< std::deque <RealVector> > &curves,
                              std::vector <bool> &is_circular);
+        
+         static int contour2d(ImplicitFunction *impf, std::vector<RealVector> &vrs,
+                             std::vector< std::deque <RealVector> > &curves,
+                             std::vector <bool> &is_circular,
+                             const int method);
 };
 
 #endif //! _HugoniotContourMethod_H
-

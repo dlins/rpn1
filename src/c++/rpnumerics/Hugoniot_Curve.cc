@@ -1,19 +1,66 @@
 #include "Hugoniot_Curve.h"
 
+
+// This is the classified Hugoniot given by segments
+//
 int Hugoniot_Curve::classified_curve(const FluxFunction *f, const AccumulationFunction *a, 
                                      GridValues &g, const RealVector &r, 
-                                     std::vector<HugoniotPolyLine> &hugoniot_curve){
+                                     std::vector<HugoniotPolyLine> &hugoniot_curve) {
+
+    // This is auxiliary stuff
+    std::vector<RealVector> vrs;
+    std::vector< std::deque <RealVector> > curves;
+    std::vector < bool > circular;
+    int method = SEGMENTATION_METHOD;
 
     // Compute the Hugoniot curve as usual
     //
-    vector<RealVector> vrs;
+    int info = curve(f, a, g, r, vrs, curves, circular, method);
 
-    int info = curve(f, a, g, r, vrs);
-
-    std::vector<RealVector> transition_list;
     ColorCurve colorCurve(*f, *a);
-    colorCurve.classify_segmented_curve(vrs, r, hugoniot_curve,transition_list);
+    
+    std::vector<RealVector> testeTransitionalList;
+    
+    colorCurve.classify_segmented_curve(vrs,r,hugoniot_curve,testeTransitionalList);
+    
+    return info;
+}
 
+
+
+// This is the classified Hugoniot given by continuous curves
+//
+int Hugoniot_Curve::classified_curve(const FluxFunction *f, const AccumulationFunction *a, 
+                                     GridValues &g, const RealVector &r, 
+                                     std::vector<HugoniotPolyLine> &hugoniot_curve,
+                                     std::vector<bool> &circular) {
+
+    // This is auxiliary stuff
+    std::vector<RealVector> vrs;
+    std::vector< std::deque <RealVector> > curves;
+    int method = CONTINUATION_METHOD;
+
+    // Compute the Hugoniot curve by continuation
+    //
+    int info = curve(f, a, g, r, vrs, curves, circular, method);
+    int no_of_curves = curves.size();
+
+    // There is a single list of Transitional points instead as one list for curve.
+    std::vector<RealVector> testeTransitionalList;
+    testeTransitionalList.clear();
+    hugoniot_curve.clear();
+
+    ColorCurve colorCurve(*f, *a);
+    
+    cout<<"Number of curves: "<<no_of_curves<<endl;
+
+    for (int i = 0; i < no_of_curves; i++) {
+        HugoniotPolyLine hugoniot;
+        colorCurve.classify_continuous_curve(curves[i],r,hugoniot,testeTransitionalList);
+        cout<<"Sai do color curve "<<i<<endl;
+        hugoniot_curve.push_back(hugoniot);
+    }
+    
     return info;
 }
 
@@ -121,18 +168,9 @@ int Hugoniot_Curve::function_on_square(double *foncub, int i, int j) {
 
 int Hugoniot_Curve::curve(const FluxFunction *f, const AccumulationFunction *a, 
                           GridValues &g, const RealVector &r,
-                          std::vector<RealVector> &hugoniot_curve) {
-    std::vector<std::deque<RealVector> > hugoniot_new;
-    std::vector < bool > is_circular;
-
-    return curve(f, a, g, r, hugoniot_curve, hugoniot_new, is_circular);
-}
-
-int Hugoniot_Curve::curve(const FluxFunction *f, const AccumulationFunction *a, 
-                          GridValues &g, const RealVector &r,
                           std::vector<RealVector> &hugoniot_curve,
-                          std::vector<std::deque<RealVector> > &hugoniot_new,
-                          std::vector < bool > &is_circular) {
+                          std::vector< std::deque <RealVector> > &curves, std::vector <bool> &is_circular,
+                          const int method) {
 
     ff = f;
     aa = a;
@@ -154,8 +192,12 @@ int Hugoniot_Curve::curve(const FluxFunction *f, const AccumulationFunction *a,
     aa->fill_with_jet(n, p.components(), 1, Gref.components(), JGref.data(), 0);
 
     hugoniot_curve.clear();
+    curves.clear();
+    is_circular.clear();
 
-    int info = ContourMethod::contour2d(this, hugoniot_curve, hugoniot_new, is_circular);
+    // Notice that method splitts which curve is filled
+    int info = ContourMethod::contour2d(this, hugoniot_curve, curves, is_circular, method);
+//    int info = ContourMethod::contour2d(this, hugoniot_curve);
 
     return info;
 }

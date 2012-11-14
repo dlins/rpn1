@@ -113,6 +113,7 @@ void ContourMethod::allocate_arrays(void){
     return;
 }
 
+
 void ContourMethod::deallocate_arrays(void){
     if (!is_first){
         delete [] sptr_;
@@ -143,31 +144,36 @@ void ContourMethod::deallocate_arrays(void){
     return;
 }
 
-//ContourMethod::ContourMethod(HugoniotFunctionClass *h){
-//    hugoniot = h;
-//}
-
-//ContourMethod::~ContourMethod(){
-//}
 
 int ContourMethod::contour2d(ImplicitFunction *impf, std::vector<RealVector> &vrs) {
     std::vector< std::deque <RealVector> > curves;
     std::vector < bool > is_circular;
-    return contour2d(impf, vrs, curves, is_circular);
+    int method = SEGMENTATION_METHOD;
+
+    return contour2d(impf, vrs, curves, is_circular, method);
 }
 
-int ContourMethod::contour2d(ImplicitFunction *impf, std::vector<RealVector> &vrs, std::vector< std::deque <RealVector> > &curves, std::vector <bool> &is_circular) {
+int ContourMethod::contour2d(ImplicitFunction *impf, std::vector< std::deque <RealVector> > &curves, std::vector <bool> &is_circular) {
+    std::vector<RealVector> vrs;
+    int method = CONTINUATION_METHOD;
+
+    return contour2d(impf, vrs, curves, is_circular, method);
+}
+
+int ContourMethod::contour2d(ImplicitFunction *impf, std::vector<RealVector> &vrs,
+                             std::vector< std::deque <RealVector> > &curves, std::vector <bool> &is_circular,
+                             const int method) {
 
     GridValues *gv = impf->grid_value();
 
-//TODO: int sn must be eliminated (because it is == vrs.size()).
-// TODO: Get rid of seglim & fdummy, ifirst (use ctor instead), and rect will become Domain*.
-    printf("BEGINS: vect2d()\n");
+    printf("BEGINS: Contour2D()\n");
 
 //    deallocate_arrays();
     allocate_arrays();
 
     vrs.clear();
+    curves.clear();
+    is_circular.clear();
 
     int zero;
     int nedg;
@@ -182,6 +188,7 @@ int ContourMethod::contour2d(ImplicitFunction *impf, std::vector<RealVector> &vr
     int rows = gv->grid.rows() - 1;
     int cols = gv->grid.cols() - 1;
 
+if ( method == CONTINUATION_METHOD ) {
     number_chains.resize(rows,cols);
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
@@ -195,12 +202,10 @@ int ContourMethod::contour2d(ImplicitFunction *impf, std::vector<RealVector> &vr
     iminus.resize(rows,cols);
     jplus.resize(rows,cols);
     jminus.resize(rows,cols);
-
-//    chain_list.resize(2,rows+cols);
-
-//    int cell_index = 0;
-    std::vector<int> coordinates(2);
     chain_list.clear();
+}
+
+    std::vector<int> coordinates(2);
 
     /* Recall that the order of vertex index on the rectangles is given by hcube;
        it is not trivial, the order is:
@@ -334,8 +339,8 @@ int ContourMethod::contour2d(ImplicitFunction *impf, std::vector<RealVector> &vr
 //                            }
 
 // TODO: Aqui va ser chamado o top_srt:
-                            chains(i,j).resize(1);
-                            chains(i,j)[0].resize(0);
+
+if ( method == CONTINUATION_METHOD ) {
     if( !topological_sort(i,j) ) continue;
 //    if (chain_list.cols() < cell_index) chain_list.resize(2, chain_list.cols()+cols);
 //    chain_list(0, cell_index) = i;
@@ -348,10 +353,12 @@ int ContourMethod::contour2d(ImplicitFunction *impf, std::vector<RealVector> &vr
 //    cout << "Coordinates: " << coordinates[0] << ", " << coordinates[1] << endl;
 //    cout << "Number of chains: " << number_chains(i,j) << endl;
 //    cout << "The first point:  " << chains(i,j)[0][0] << endl;
+}
 
 // TODO: Final del top_srt...
 
-                            for (nedg = 0; nedg < nedges_; nedg++) {
+                            if ( method == SEGMENTATION_METHOD ) {
+                                for (nedg = 0; nedg < nedges_; nedg++) {
 
                                    // Store the segments
                                    RealVector p1(2), p2(2);
@@ -366,13 +373,15 @@ int ContourMethod::contour2d(ImplicitFunction *impf, std::vector<RealVector> &vr
                                    vrs.push_back(p1);
                                    vrs.push_back(p2);
                                 }
+                            }
                         }
                     }
-                //}
             }
         }
     }
-    printf("ENDS:   vect2d()\n\n");
+    printf("ENDS:   Contour2D()\n\n");
+
+    if ( method == SEGMENTATION_METHOD ) return 0;
 
 // TEST
 //   cout << "Celulas: ";
@@ -400,11 +409,7 @@ int ContourMethod::contour2d(ImplicitFunction *impf, std::vector<RealVector> &vr
         std::deque <RealVector> branch;
         bool circular_is = false;
 
-        cout <<" em j index"<<j_index<<" i index: "<<i_index<<endl;
-        cout<<chains(i_index,j_index)[0].size()<<endl;
         int chain_size = chains(i_index,j_index)[0].size();
-        
-        
 
         for (int j = 0; j < chain_size; j++) branch.push_back( chains(i_index,j_index)[0][j] );
         prev   = chain_edges(i_index,j_index)[0][0];
@@ -416,7 +421,7 @@ int ContourMethod::contour2d(ImplicitFunction *impf, std::vector<RealVector> &vr
 //       ISTO AQUI DEVE DE DIZER COMO ELIMIAR O SEGMENTO USADO EN CASO DE TER DOIS...
        chains(i_index,j_index)[0].erase( chains(i_index,j_index)[0].begin());
        chain_edges(i_index,j_index)[0].erase( chain_edges(i_index,j_index)[0].begin());
-       cout<<chains(i_index,j_index)[0].size()<<endl;
+
         do {
             restore:
 //cout << "middle: " << middle << " prev: " << prev << endl;
@@ -469,7 +474,7 @@ int ContourMethod::contour2d(ImplicitFunction *impf, std::vector<RealVector> &vr
 
 //cout << " :: Edges: " << chain_edges(i_index,j_index)[0][0] << ", " << chain_edges(i_index,j_index)[0][1] << endl;
 
-            for (int k = 0; k < chains(i_index,j_index).size(); k++) {
+            for (int k = 0; k < chains(i_index,j_index)[0].size(); k++) {
                 if ( chain_edges(i_index,j_index)[k][0] == next ) {
                     chain_size = chains(i_index,j_index)[k].size();
                     if (prev == -1)
@@ -548,15 +553,15 @@ for(int ii = 0; ii < chains(i_index,j_index).size(); ii++){
     }
 // TODO: Final de la idea
 
-//    cout << "Finalizei com " << curves.size() << " curvas :: ::   ";
-//    for (int k = 0; k < curves.size(); k++) cout << "Tamanho de " << k << " es: " << curves[k].size() << " y es circular: " << is_circular[k] << "; ";
-//    cout << endl;
-//
-//    for (int k = 0; k < curves.size(); k++) {
-//        cout << "Curva " << k << ":";
-//        for (int l = 0; l < curves[k].size(); l++) cout << " " << curves[k][l];
-//        cout << endl;
-//    }
+    cout << "Finalizei com " << curves.size() << " curvas :: ::   ";
+    for (int k = 0; k < curves.size(); k++) cout << "Tamanho de " << k << " es: " << curves[k].size() << " y es circular: " << is_circular[k] << "; ";
+    cout << endl;
+
+    for (int k = 0; k < curves.size(); k++) {
+        cout << "Curva " << k << ":";
+        for (int l = 0; l < curves[k].size(); l++) cout << " " << curves[k][l];
+        cout << endl;
+    }
 
     return 0;
 }
@@ -564,11 +569,11 @@ for(int ii = 0; ii < chains(i_index,j_index).size(); ii++){
 int ContourMethod::topological_sort(int i, int j) {
     // ISTO eh gabiarra temporaria
     int gamb[5];
-    for (int i = 0; i < 5; i++) {
-         gamb[i] = 9;
-         for (int j = 0; j < 5; j++) {
-             if (i == sptr_[j]) { 
-                 gamb[i] = j;
+    for (int ii = 0; ii < 5; ii++) {
+         gamb[ii] = 9;
+         for (int jj = 0; jj < 5; jj++) {
+             if (ii == sptr_[jj]) { 
+                 gamb[ii] = jj;
                  break;
              }
          }

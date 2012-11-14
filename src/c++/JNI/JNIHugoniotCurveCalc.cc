@@ -105,17 +105,17 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
     GridValues * gv = RpNumerics::getGridFactory().getGrid("hugoniotcurve");
 
-
-    hugoniotCurve.classified_curve(&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(), *gv, Uref, hugoniotPolyLineVector);
+    vector<bool> isCircular;
+    hugoniotCurve.classified_curve(&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(), 
+            *gv, Uref, hugoniotPolyLineVector,isCircular);
     
     cout << "Saida: " << hugoniotPolyLineVector.size() << endl;
 
     for (int i = 0; i < hugoniotPolyLineVector.size(); i++) {
 
 
-        for (unsigned int j = 0; j < hugoniotPolyLineVector[i].point.size() - 1; j++) {
+        for (unsigned int j = 0; j < hugoniotPolyLineVector[i].point.size()-1; j++) {
 
-            int m = (hugoniotPolyLineVector[i].point[0].size() - dimension - 1) / 2; // Number of valid eigenvalues
 
             jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
             jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
@@ -130,9 +130,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
             jobject realVectorLeftPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRLeft);
             jobject realVectorRightPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRRight);
 
-            int pointType = hugoniotPolyLineVector[i].type;
+            int pointType = hugoniotPolyLineVector[i].type[j];
 
-            string signature = hugoniotPolyLineVector[i].signature;
+            string signature = hugoniotPolyLineVector[i].signature[j];
 
 
             double leftSigma = hugoniotPolyLineVector[i].speed[j];
@@ -260,9 +260,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     for (int i = 0; i < hugoniotPolyLineVector.size(); i++) {
 
 
-        for (unsigned int j = 0; j < hugoniotPolyLineVector[i].point.size() - 1; j++) {
+        for (unsigned int j = 0; j < hugoniotPolyLineVector[i].point.size()-1; j++) {
 
-            int m = (hugoniotPolyLineVector[i].point[0].size() - dimension - 1) / 2; // Number of valid eigenvalues
+
 
             jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
             jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
@@ -277,9 +277,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
             jobject realVectorLeftPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRLeft);
             jobject realVectorRightPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRRight);
 
-            int pointType = hugoniotPolyLineVector[i].type;
+            int pointType = hugoniotPolyLineVector[i].type[j];
 
-            string signature = hugoniotPolyLineVector[i].signature;
+            string signature = hugoniotPolyLineVector[i].signature[j];
 
             double leftSigma = hugoniotPolyLineVector[i].speed[j];
             double rightSigma = hugoniotPolyLineVector[i].speed[j + 1];
