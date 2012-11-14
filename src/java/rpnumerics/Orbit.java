@@ -20,7 +20,7 @@ import rpn.component.MultidAdapter;
 import wave.multid.CoordsArray;
 import wave.util.RealSegment;
 
-public class Orbit extends RPnCurve implements RpSolution {
+public class Orbit extends RpCurve implements RpSolution {
     //
     // Members
     //

@@ -1,6 +1,6 @@
 package rpnumerics.methods.contour;
 
-import rpnumerics.RPnCurve;
+import rpnumerics.RpCurve;
 import rpnumerics.methods.contour.exceptions.CanNotInitializeGrid;
 import rpnumerics.methods.contour.exceptions.SolutionNotFound;
 import rpnumerics.methods.contour.functionsobjects.*;
@@ -24,9 +24,9 @@ public class ContourHugoniot extends ContourNDVectorialFunctions {
 		pointSet = true;
 	}
 	
-	public RPnCurve curvND(double[] rect,int[] res) throws CanNotPerformCalculations {		
+	public RpCurve curvND(double[] rect,int[] res) throws CanNotPerformCalculations {
 		if (pointSet) {
-			RPnCurve  curve = super.curvND(rect, res);
+			RpCurve  curve = super.curvND(rect, res);
 			pointSet = false;
 			return curve;
 		} else {

@@ -57,55 +57,55 @@
     </METHOD>
 
 
-    <CURVE name="hugoniotcurve">
+    <CURVECONFIGURATION name="hugoniotcurve">
         <CURVEPARAM name="resolution" value="20 20"/>
-    </CURVE>
+    </CURVECONFIGURATION>
 
-    <CURVE name="ellipticboundary">
+    <CURVECONFIGURATION name="ellipticboundary">
         <CURVEPARAM name="resolution" value="128 128"/>
-    </CURVE>
+    </CURVECONFIGURATION>
 
 
-    <CURVE name="envelopecurve">
+    <CURVECONFIGURATION name="envelopecurve">
         <CURVEPARAM name="resolution" value="128 128"/>
         <CURVEPARAM name="whereisconstant" value="0"/>
         <CURVEPARAM name="numberofsteps" value="128"/>
-    </CURVE>
+    </CURVECONFIGURATION>
 
 
-    <CURVE name="ellipticextension">
+    <CURVECONFIGURATION name="ellipticextension">
         <CURVEPARAM name="resolution" value="128 128"/>
         <CURVEPARAM name="family" value="0"/>
         <CURVEPARAM name="characteristicwhere" value="0"/>
-    </CURVE>
+    </CURVECONFIGURATION>
 
-    <CURVE name="inflectioncurve">
+    <CURVECONFIGURATION name="inflectioncurve">
         <CURVEPARAM name="family" value="0"/>
         <CURVEPARAM name="resolution" value="60 60"/>
-    </CURVE>
+    </CURVECONFIGURATION>
 
 
-    <CURVE name="levelcurve">
+    <CURVECONFIGURATION name="levelcurve">
         <CURVEPARAM name="family" value="0"/>
         <CURVEPARAM name="resolution" value="128 128"/>
         <CURVEPARAM name="levels" value="0.1 0.2 0.5"/>
 
-    </CURVE>
+    </CURVECONFIGURATION>
 
 
-    <CURVE name="doublecontactcurve">
+    <CURVECONFIGURATION name="doublecontactcurve">
         <CURVEPARAM name="curvefamily" value="1"/>
         <CURVEPARAM name="domainfamily" value="1"/>
         <CURVEPARAM name="resolution" value="60 60"/>
-    </CURVE>
+    </CURVECONFIGURATION>
 
 
-    <CURVE name="hysteresiscurve">
+    <CURVECONFIGURATION name="hysteresiscurve">
         <CURVEPARAM name="family" value="0"/>
         <CURVEPARAM name="resolution" value="128 128"/>
-    </CURVE>
+    </CURVECONFIGURATION>
 
-    <CURVE name="boundaryextensioncurve">
+    <CURVECONFIGURATION name="boundaryextensioncurve">
 
         <CURVEPARAM name="family" value="1"/>
         <CURVEPARAM name="edge" value="0"/>
@@ -114,19 +114,19 @@
           <CURVEPARAM name="characteristicwhere" value="1"/>
 
 
-    </CURVE>
+    </CURVECONFIGURATION>
 
-    <CURVE name="rarefactionextension">
+    <CURVECONFIGURATION name="rarefactionextension">
         <CURVEPARAM name="curvefamily" value="0"/>
         <CURVEPARAM name="characteristic" value="1"/>
         <CURVEPARAM name="resolution" value="128 128"/>
-    </CURVE>
+    </CURVECONFIGURATION>
 
-    <CURVE name="orbit">
+    <CURVECONFIGURATION name="orbit">
         <CURVEPARAM name="family" value="0"/>
         <CURVEPARAM name="level" value="0.5"/>
 
-    </CURVE>
+    </CURVECONFIGURATION>
 
     <VIEWCONFIGURATION modeldomain="2">
 

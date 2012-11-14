@@ -38,11 +38,4 @@ public class RarefactionOrbitGeomFactory extends WaveCurveOrbitGeomFactory {
         return new RarefactionGeom(MultidAdapter.converseOrbitPointsToCoordsArray(orbit.getPoints()), this);
 
     }
-
-
-
-    public String toMatlab(int curveIndex) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
 }

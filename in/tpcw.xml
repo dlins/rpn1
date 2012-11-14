@@ -46,16 +46,16 @@
 
 
 
-    <CURVE name="bifurcationcurve">
+    <CURVECONFIGURATION name="bifurcationcurve">
         <CURVEPARAM name="curvefamily" value="1"/>
         <CURVEPARAM name="domainfamily" value="1"/>
         <CURVEPARAM name="characteristicwhere" value="0"/>
         <CURVEPARAM name="singular" value="1"/>
 
 
-    </CURVE>
+    </CURVECONFIGURATION>
 
-    <CURVE name="extensioncurve">
+    <CURVECONFIGURATION name="extensioncurve">
         <CURVEPARAM name="curvefamily" value="1"/>
         <CURVEPARAM name="domainfamily" value="1"/>
         <CURVEPARAM name="characteristicwhere" value="1"/>
@@ -63,22 +63,22 @@
         <CURVEPARAM name="edgeresolution" value="30"/>
 
 
-    </CURVE>
+    </CURVECONFIGURATION>
 
 
-    <CURVE name="wavecurve">
+    <CURVECONFIGURATION name="wavecurve">
         <CURVEPARAM name="curvefamily" value="0"/>
         <CURVEPARAM name="domainfamily" value="1"/>
         <CURVEPARAM name="characteristicwhere" value="1"/>
 
-    </CURVE>
+    </CURVECONFIGURATION>
 
 
-    <CURVE name="shock">
+    <CURVECONFIGURATION name="shock">
         <CURVEPARAM name="family" value="0"/>
         <CURVEPARAM name="xzero" value="3.4 0.5"/>
         <CURVEPARAM name="sigma" value="0.03"/>
-    </CURVE>
+    </CURVECONFIGURATION>
 
 
 

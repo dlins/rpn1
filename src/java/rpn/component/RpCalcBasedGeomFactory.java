@@ -12,7 +12,7 @@ import rpn.controller.RpCalcController;
 import rpn.controller.RpController;
 
 import rpnumerics.Area;
-import rpnumerics.RPnCurve;
+import rpnumerics.RpCurve;
 
 import rpnumerics.RpCalculation;
 import rpnumerics.RpException;
@@ -120,7 +120,7 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
 
         List<RealSegment> segRem = new ArrayList<RealSegment>();
 
-        RPnCurve curve = (RPnCurve) geomSource();
+        RpCurve curve = (RpCurve) geomSource();
 
 
         for (Integer i : segmentsToRemove) {
@@ -130,9 +130,9 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
 
         for (Area area : areaToRefine) {
             try {
-                RPnCurve newCurve = (RPnCurve) calc_.recalc(area);
+                RpCurve newCurve = (RpCurve) calc_.recalc(area);
 
-                ((RPnCurve) geomSource_).segments().addAll(newCurve.segments());
+                ((RpCurve) geomSource_).segments().addAll(newCurve.segments());
             } catch (RpException ex) {
                 ex.printStackTrace();
             }

@@ -27,7 +27,7 @@ import rpn.controller.ui.UIController;
 import rpn.controller.ui.UserInputTable;
 import rpnumerics.Orbit;
 import rpnumerics.RPNUMERICS;
-import rpnumerics.RPnCurve;
+import rpnumerics.RpCurve;
 import rpnumerics.SegmentedCurve;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
@@ -128,7 +128,7 @@ public class GeometryGraphND {
         
     }
 
-    public static RealVector secondPointDC(RPnCurve curve_) {
+    public static RealVector secondPointDC(RpCurve curve_) {
         int jDC = 0;
         UserInputTable userInputList = UIController.instance().globalInputTable();
         RealVector newValue = userInputList.values();
@@ -373,7 +373,7 @@ public class GeometryGraphND {
         RpGeometry geom = phaseSpace.findClosestGeometry(newValue);
 
         //RpGeometry geom = RPnPhaseSpaceAbstraction.findClosestGeometry(newValue);
-        RPnCurve curve = (RPnCurve)(geom.geomFactory().geomSource());
+        RpCurve curve = (RpCurve)(geom.geomFactory().geomSource());
 
         if (curve instanceof Orbit) {
 

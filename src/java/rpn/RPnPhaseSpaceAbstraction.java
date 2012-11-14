@@ -240,7 +240,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
                     if (geom.viewingAttr().isVisible() && !(geom instanceof StationaryPointGeom)) {
 
                         RpGeomFactory factory = geom.geomFactory();
-                        RPnCurve curve = (RPnCurve) factory.geomSource();       // ********* Mudar aqui, apontar o source direito ou esquerdo
+                        RpCurve curve = (RpCurve) factory.geomSource();       // ********* Mudar aqui, apontar o source direito ou esquerdo
 
                         curve.findClosestSegment(targetPoint);   //***
 
@@ -262,7 +262,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
                 if (geom.viewingAttr().isVisible() && !(geom instanceof StationaryPointGeom) && !(geom instanceof PoincareSectionGeom)) {
 
                     RpGeomFactory factory = geom.geomFactory();
-                    RPnCurve curve = (RPnCurve) factory.geomSource();
+                    RpCurve curve = (RpCurve) factory.geomSource();
 
                     // -----------------------------------
                     if (curve instanceof SegmentedCurve) {

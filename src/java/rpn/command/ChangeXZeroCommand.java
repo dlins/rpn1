@@ -108,7 +108,7 @@ public class ChangeXZeroCommand extends RpModelConfigChangeCommand {
         hGeom = ((NumConfigImpl) RPnDataModule.PHASESPACE.state()).hugoniotGeom();
         hCurve = (HugoniotCurve) hGeom.geomFactory().geomSource();
 
-        //*** Nova curva chama o método novo
+        //*** Nova curva chama o metodo novo
         List<RealVector> eqPoints = hCurve.equilPoints(sigma);	//***
 
         RPNUMERICS.updateUplus(eqPoints);

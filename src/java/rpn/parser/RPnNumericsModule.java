@@ -28,7 +28,7 @@ public class RPnNumericsModule {
     // Constants
     //
 
-    static class InputHandler implements ContentHandler {
+    static class RPnNumericsParser implements ContentHandler {
         //
         // Members
         //
@@ -42,8 +42,8 @@ public class RPnNumericsModule {
         public void startElement(String uri, String localName, String qName, Attributes att) throws SAXException {
             currentElement_ = localName;
 
-            if (localName.equals("CURVE")) {
-                currentConfigurationProfile_ = new ConfigurationProfile(att.getValue("name"), ConfigurationProfile.CURVE);
+            if (localName.equals("CURVECONFIGURATION")) {
+                currentConfigurationProfile_ = new ConfigurationProfile(att.getValue("name"), ConfigurationProfile.CURVECONFIGURATION);
 
             }
 
@@ -114,7 +114,7 @@ public class RPnNumericsModule {
             }
 
 
-            if (localName.equals("CURVE") || localName.equals("METHOD")) {
+            if (localName.equals("CURVECONFIGURATION") || localName.equals("METHOD")) {
 
                 RPnConfig.addProfile(currentConfigurationProfile_.getName(), currentConfigurationProfile_);
 
@@ -202,7 +202,7 @@ public class RPnNumericsModule {
     //
     public static void init(XMLReader parser, String file) {
         try {
-            parser.setContentHandler(new InputHandler());
+            parser.setContentHandler(new RPnNumericsParser());
             parser.parse(file);
         } catch (Exception saxex) {
             saxex.printStackTrace();
@@ -214,7 +214,7 @@ public class RPnNumericsModule {
 
         try {
 
-            parser.setContentHandler(new InputHandler());
+            parser.setContentHandler(new RPnNumericsParser());
             System.out.println("Numerics Module");
 
             System.out.println("Will parse !");

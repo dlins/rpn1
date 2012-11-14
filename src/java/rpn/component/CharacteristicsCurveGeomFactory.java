@@ -49,12 +49,4 @@ public class CharacteristicsCurveGeomFactory extends RpCalcBasedGeomFactory {
         return null;
 
     }
-
-    public String toXML() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public String toMatlab(int curveIndex) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
 }

@@ -40,7 +40,7 @@ public class ContourBifurcation extends ContourNDVectorialFunctions {
 	}	  
 	
     @Override
-	protected RPnCurve setRPnCurve(ContourCurve curve) {
+	protected RpCurve setRPnCurve(ContourCurve curve) {
     	
 		BifurcationCurve rpncurve = null;
 		

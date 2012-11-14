@@ -12,7 +12,7 @@ import rpn.component.MultidAdapter;
 import rpnumerics.HugoniotCurve;
 import rpnumerics.HugoniotParams;
 import rpnumerics.RPNUMERICS;
-import rpnumerics.RPnCurve;
+import rpnumerics.RpCurve;
 import rpnumerics.methods.contour.ContourHugoniot;
 import rpnumerics.methods.contour.functionsobjects.CanNotPerformCalculations;
 import wave.multid.CoordsArray;
@@ -68,7 +68,7 @@ public class HugoniotContourMethod extends HugoniotMethod {
         try {
             contourMethod_.setInitialPoint(new PointNDimension(RPNUMERICS.getViscousProfileData().getXZero()));
 
-            RPnCurve curve = contourMethod_.curvND(boundaryArray_, resolution_);
+            RpCurve curve = contourMethod_.curvND(boundaryArray_, resolution_);
 
             PointNDimension[][] polyline = curve.getPolylines();
 

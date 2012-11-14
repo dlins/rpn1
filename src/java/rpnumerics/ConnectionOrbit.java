@@ -12,7 +12,7 @@ import wave.multid.view.ViewingAttr;
 import java.awt.Color;
 import rpn.component.MultidAdapter;
 
-public class ConnectionOrbit extends RPnCurve implements RpSolution {
+public class ConnectionOrbit extends RpCurve implements RpSolution {
     //
     // Members
     //

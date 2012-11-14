@@ -32,7 +32,7 @@ import rpn.component.util.GeometryGraph;
 import rpn.component.util.GeometryGraphND;
 import rpn.message.*;
 import rpn.parser.RPnDataModule;
-import rpnumerics.RPnCurve;
+import rpnumerics.RpCurve;
 
 /** This class implements a general controller to the application. With the UIController class, the state of the application is changed, the controllers of each panel are installed or removed and the user inputs are stored in a global table. */
 public class UIController extends ComponentUI {
@@ -42,6 +42,8 @@ public class UIController extends ComponentUI {
 
     static public final Cursor WAIT_CURSOR = Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR);
     static public final Cursor DEFAULT_CURSOR = Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR);
+    static public UI_ACTION_SELECTED INITSTATE = null;
+
     //
     // Members
     //
@@ -54,8 +56,7 @@ public class UIController extends ComponentUI {
     private RPnNetworkStatus netStatus_ = null;
     private String clientID_;
     private RPnPhaseSpacePanel focusPanel_;
-    private StateInputController stateController_;
-    public static UI_ACTION_SELECTED INITSTATE = null;
+    private StateInputController stateController_;    
     private Stack<Command> commandArray_;
     private boolean auxPanelsEnabled_;
     private RPnPhaseSpaceAbstraction activePhaseSpace_;
@@ -78,7 +79,6 @@ public class UIController extends ComponentUI {
         auxPanelsEnabled_ = true;
 
         initNetStatus();
-
     }
 
     private void initNetStatus() {
@@ -173,7 +173,7 @@ public class UIController extends ComponentUI {
 
 
                     //RpGeometry geom = RPnPhaseSpaceAbstraction.findClosestGeometry(newValue);
-                    RPnCurve curve = (RPnCurve) (geom.geomFactory().geomSource());
+                    RpCurve curve = (RpCurve) (geom.geomFactory().geomSource());
                     GeometryGraphND.pMarca = curve.findClosestPoint(newValue);
 
                     panel.repaint();
