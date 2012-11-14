@@ -702,7 +702,7 @@ int Shock::curve_constructor(Boundary *boundary, bool local_shock, int type_of_s
         hugoniot_der2(pnext, ref_point, ff, aa, &dRH2[0][0], curvature);
         double eps = min(1e-4, fabs(1.0/curvature));
 
-        eps = 1e-4; // Was: 1e-4
+        eps = 1e-3; // Was: 1e-4
 
 
         // Compute pnext.
@@ -710,7 +710,7 @@ int Shock::curve_constructor(Boundary *boundary, bool local_shock, int type_of_s
 
         // Test eps
 
-        double test_eps = sgn(eps)*1e-4; // Was: 1e-4
+        double test_eps = sgn(eps)*1e-3; // Was: 1e-4
 
 
 //        shock_step(p, in, tangent, normal, ff, aa, eps, pnext);
