@@ -97,8 +97,6 @@ int Rarefaction::flux(int *neq, double *xi, double *in, double *out, int *nparam
     // The dimension of the problem:
     int n = *neq;
 
-    cout <<"N em info: "<<n<<endl;
-    
     // The family:
 //    int family = (int)param[0];
     
@@ -489,7 +487,7 @@ double Rarefaction::dirdrv(int n, const RealVector &p, const RealVector &directi
 
 double Rarefaction::dirdrv(int n, double *point, double *dir){
     int fam = family;
-    cout<<"Valor de n em dir drv: "<<n<<endl;
+
     double A[n][n];
     double B[n][n];
 
