@@ -8,7 +8,9 @@ int Hugoniot_TP::classified_curve(const FluxFunction *f, const AccumulationFunct
                              GridValues &g, const RealVector &r, 
                              std::vector<HugoniotPolyLine> &hugoniot_curve,
                              std::vector<bool> &circular){
-    return 0;
+
+    return classified_curve(f, a,g,r,hugoniot_curve); 
+
     
 }
 

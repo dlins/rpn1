@@ -102,15 +102,7 @@ void ContourMethod::allocate_arrays(void){
 
         // This is a useful GAMBIARRA
         gamb = new int[5];
-        for (int ii = 0; ii < 5; ii++) {
-            gamb[ii] = 9;
-            for (int jj = 0; jj < 5; jj++) {
-                if (ii == sptr_[jj]) { 
-                    gamb[ii] = jj;
-                    break;
-                }
-            }
-        }
+
 
         is_first = false;
 
@@ -363,10 +355,10 @@ if ( method == CONTINUATION_METHOD ) {
     }
 
     if ( method == SEGMENTATION_METHOD ) {
-       
+        printf("ENDS:     Contour2D()/For Segments\n\n");
         return 0;
     }
- printf("ENDS:     Contour2D()/For Segments\n\n");
+
 // TEST
 //   cout << "Cells: ";
 //   for (int i = 0; i < chain_list.size(); i++) {
@@ -459,7 +451,7 @@ if ( method == CONTINUATION_METHOD ) {
             }
 
             // Some restriction may cut the continuation of the curve, the following IF saves this issues.
-            if ( chain_edges(i_index,j_index).size() == 0 ) break;
+            if( chain_edges(i_index,j_index).size() == 0 ) break;
 
             // Store the points in the [branch] and eliminate the points of the list.
             // The chain in (i, j) must be identified with [next] the direction of push_back or
@@ -472,10 +464,8 @@ if ( method == CONTINUATION_METHOD ) {
                     else
                         for (int j = 1; j < chain_size; j++) branch.push_back( chains(i_index,j_index)[k][j] );
                     middle = chain_edges(i_index,j_index)[k][1];
-
                     chains(i_index,j_index).erase( chains(i_index,j_index).begin() + k );
                     chain_edges(i_index,j_index).erase( chain_edges(i_index,j_index).begin() + k);
-
                     if ( (i_index == i_start) && (j_index == j_start) && (next == prev) ) {
                         // TODO: The repeated point it is not deleted! It is convenient to keep it.
                         // branch.erase( branch.begin() );
@@ -490,10 +480,8 @@ if ( method == CONTINUATION_METHOD ) {
                     else            
                         for (int j = chain_size-2; j >= 0; j--) branch.push_back( chains(i_index,j_index)[k][j] );
                     middle = chain_edges(i_index,j_index)[k][0];
-
                     chains(i_index,j_index).erase( chains(i_index,j_index).begin() + k );
                     chain_edges(i_index,j_index).erase( chain_edges(i_index,j_index).begin() + k);
-
                     if ( (i_index == i_start) && (j_index == j_start) && (next == prev) ) {
                         // TODO: The repeated point it is not deleted! It is convenient to keep it.
                         // branch.erase( branch.begin() );
@@ -560,7 +548,15 @@ if ( method == CONTINUATION_METHOD ) {
 **/
 
 int ContourMethod::topological_sort(int i, int j) {
-
+        for (int ii = 0; ii < 5; ii++) {
+            gamb[ii] = 9;
+            for (int jj = 0; jj < 5; jj++) {
+                if (ii == sptr_[jj]) { 
+                    gamb[ii] = jj;
+                    break;
+                }
+            }
+        }
     /* Aqui entra o topological sort */
     if (nedges_ == 2) {
         if (edges_[dime_ + 1] == 3) {
