@@ -141,7 +141,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceCurveCalc_nativeCalc(JNIEnv
             jobject realVectorRightPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRRight);
 
 
-
             double leftSigma = hugoniotPolyLineVector[i].point[j].component(0);
             double rightSigma = hugoniotPolyLineVector[i].point[j + 1].component(1);
 

@@ -8,7 +8,6 @@ package rpn.command;
 import java.awt.event.ActionEvent;
 import javax.swing.JButton;
 import rpn.component.*;
-import rpn.controller.ui.BIFURCATION_CONFIG;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UI_ACTION_SELECTED;
 import rpnumerics.*;

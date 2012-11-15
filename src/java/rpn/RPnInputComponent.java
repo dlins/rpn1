@@ -188,7 +188,7 @@ public class RPnInputComponent {//TODO Refatorar
 
             textField.setText(configuration.getParam(j));
 
-            textField.setColumns(4);
+            textField.setColumns(8);
 
             textField_[j] = textField;
             textField.setName(configuration.getParamName(j));

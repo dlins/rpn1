@@ -80,7 +80,7 @@ public class RPnCoordsInputDialog extends RPnDialog {
         
         for (int i = 0; i < RPNUMERICS.domainDim(); i++) {
             NumberFormat numberFormatter = NumberFormat.getInstance();
-            numberFormatter.setMaximumFractionDigits(4);
+            numberFormatter.setMaximumFractionDigits(8);
             JTextField textInputField = new JFormattedTextField(numberFormatter);
             JLabel axisNumberLabel = new JLabel("" + i);
             axisNumberLabel.setHorizontalAlignment(SwingConstants.CENTER);
