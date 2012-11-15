@@ -112,7 +112,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc(JNIEnv * env,
 
     WaveCurve wc(fluxFunction, accumulationFunction, boundary);
 
-    cout << "Parametros " << realVectorInput << " " << familyIndex << " " << timeDirection << endl;
+
 
     if (timeDirection == RAREFACTION_SPEED_INCREASE)//TODO REMOVE !!!
 
@@ -122,7 +122,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc(JNIEnv * env,
 
         timeDirection = WAVE_BACKWARD;
 
-
+    cout << "Parametros " << realVectorInput << " " << familyIndex << " " << timeDirection << endl;
 
     jobject waveCurve = (env)->NewObject(classWaveCurve, waveCurveConstructor, familyIndex, timeDirection);
 
