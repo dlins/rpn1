@@ -2,11 +2,8 @@
 #define _COLORCURVE_
 
 #include <vector>
-<<<<<<< HEAD
 #include <deque>
 #include <string>
-=======
->>>>>>> tpcwMergeMaster5
 
 #include "FluxFunction.h"
 #include "AccumulationFunction.h"
@@ -22,11 +19,10 @@
 #define UNCLASSIFIABLE_POINT (-1)
 #endif
 
-extern "C" void dgesv_(int*, int*, double *, int*, int *, double *, int*, int*);
+extern "C" void dgesv_(int*,int*,double *,int*,int *,double *,int* ,int*);
 
 struct HugoniotPolyLine {
 public:
-
     // Elements of extrema, points coordinates, speeds and eginvalues
     //
     std::vector<RealVector>  point;  	  // Each element has size = dimension (dim).
@@ -40,8 +36,10 @@ public:
                                           // zero means characteristic, "-." or "+." means complex
                                           // conjugate, with the real part sign.
 
-    ~HugoniotPolyLine() {
+    HugoniotPolyLine() {
+    };
 
+    ~HugoniotPolyLine() {      
     };
 };
 
@@ -52,27 +50,27 @@ public:
 //};
 
 class ColorCurve {
-private:
-protected:
-    int solve(const double *A, double *b, int dim, double *x);
+    private:
+        std::string sp, sm, sc, sz;
+    protected:
+        int solve(const double *A, double *b, int dim, double *x);
 
-    void Left_Newton_improvement(const RealVector &input, const int type, RealVector &out);
-    void Right_Newton_improvement(const RealVector &input, const int type, RealVector &out);
+        void Left_Newton_improvement(const RealVector &input, const int type, RealVector &out);
+        void Right_Newton_improvement(const RealVector &input, const int type, RealVector &out);
 
-    int interpolate(const RealVector &p, double &s_p,
-            const std::vector<double> &eigenvalue_p, const int type_p,
-            const RealVector &q, double &s_q,
-            const std::vector<double> &eigenvalue_q, const int type_q,
-            vector<RealVector> &r, vector<int> &rtype);
+        int interpolate(const RealVector &p, double &s_p,
+                        const std::vector<double> &eigenvalue_p, const int type_p,
+                        const RealVector &q, double &s_q,
+                        const std::vector<double> &eigenvalue_q, const int type_q,
+                        vector<RealVector> &r, vector<int> &rtype);
 
-    int complete_point(RealVector &p, double &s, std::vector<double> &eigenvalue);
+        int complete_point(RealVector &p, double &s, std::vector<double> &eigenvalue, int *complex);
 
-    int classify_point(RealVector &p, double &s, std::vector<double> &eigenvalue);
+        int classify_point(RealVector &p, double &s, std::vector<double> &eigenvalue, std::string &signature);
 
-    void classify_segment(RealVector &p, RealVector &q,
-            std::vector<HugoniotPolyLine> &classified_curve,
-            std::vector<RealVector> &transition_list);
-
+        void classify_segment(RealVector &p,  RealVector &q, 
+                              std::vector<HugoniotPolyLine> &classified_curve,
+                              std::vector<RealVector> &transition_list);
 
         void classify_segment_with_data(
             RealVector &p, double &s_p, std::vector<double> &eigenvalue_p, std::string &ct_p, int &type_p,
@@ -81,31 +79,26 @@ protected:
             std::vector<HugoniotPolyLine> &classified_curve,
             std::vector<RealVector> &transition_list);
 
-     FluxFunction * fluxFunction_;
-     AccumulationFunction * accFunction_;
+        FluxFunction * fluxFunction_;
+        AccumulationFunction * accFunction_;
 
-
-    RealVector ref_point;
-    std::vector<double> ref_eigenvalue;
-    RealVector F_ref, G_ref;
-public:
+        RealVector ref_point;
+        std::vector<double> ref_eigenvalue;
+        std::vector<double> ref_e_complex;
+        
+        RealVector F_ref, G_ref;
+    public:
 
     ColorCurve(const FluxFunction &, const AccumulationFunction &);
     virtual ~ColorCurve();
 
-    // So por chamada deixo este metodo...
-    void classify_curve(vector<vector<RealVector> > &, const RealVector &, int, int, vector<HugoniotPolyLine> &output);
-    // ... de ser tudo certo, isto va embora.
+    void classify_segmented_curve(std::vector<RealVector>  &original, const RealVector &ref,
+                                  std::vector<HugoniotPolyLine> &classified_curve,
+                                  std::vector<RealVector> &transition_list);
 
-    void classify_segmented_curve(std::vector<RealVector> &original, const RealVector &ref,
-            std::vector<HugoniotPolyLine> &classified_curve,
-            std::vector<RealVector> &transition_list);
-
-
-    void classify_continuous_curve(std::vector<RealVector> &original, const RealVector &ref,
-            std::vector<HugoniotPolyLine> &classified_curve,
-            std::vector<RealVector> &transition_list);
-
+    void classify_continuous_curve(std::deque<RealVector>  &original, const RealVector &ref,
+                                   HugoniotPolyLine &classified_curve,
+                                   std::vector<RealVector> &transition_list);
 };
 
 #endif // _COLORCURVE_

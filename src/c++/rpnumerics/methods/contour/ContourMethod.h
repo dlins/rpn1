@@ -73,6 +73,9 @@ class ContourMethod {
         static int *exstfc;
         static int *sptr_;
 
+        // This array is a useful GAMBIARRA.
+        static int *gamb;
+
         static int tsimp;
         static int tface;
 
@@ -83,25 +86,24 @@ class ContourMethod {
         static Matrix<int>                                         number_chains;
         static Matrix<std::vector <std::vector <int> > >           chain_edges;
         static Matrix<std::vector <std::vector <RealVector> > >    chains;
-        static Matrix<bool>                                        iplus, iminus, jplus, jminus;
+        // static Matrix<bool>                                        iplus, iminus, jplus, jminus;
 
         static std::vector < std::vector <int> > chain_list;
 
         static int topological_sort(int i, int j);
 
+        
+
        
-    public:
-        static void deallocate_arrays(void);
 
     protected:
     public:
         static int contour2d(ImplicitFunction *impf, std::vector<RealVector> &vrs);
-
+        static void deallocate_arrays(void);
         static int contour2d(ImplicitFunction *impf,
                              std::vector< std::deque <RealVector> > &curves,
                              std::vector <bool> &is_circular);
-        
-         static int contour2d(ImplicitFunction *impf, std::vector<RealVector> &vrs,
+        static int contour2d(ImplicitFunction *impf, std::vector<RealVector> &vrs,
                              std::vector< std::deque <RealVector> > &curves,
                              std::vector <bool> &is_circular,
                              const int method);

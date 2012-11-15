@@ -12,12 +12,10 @@
 #include "GridValues.h"
 #include "Hugoniot_Locus.h"
 
-
 #include <vector>
 #include <deque>
 
-class Hugoniot_Curve : public ImplicitFunction {
-
+class Hugoniot_Curve : public Hugoniot_Locus {
     private:
         Matrix<double> JFref, JGref;
         RealVector Fref, Gref;
@@ -47,6 +45,11 @@ class Hugoniot_Curve : public ImplicitFunction {
                   std::vector<RealVector> &hugoniot_curve,
                   std::vector< std::deque <RealVector> > &curves, std::vector <bool> &is_circular,
                   const int method);
+        
+        int curve(const FluxFunction *f, const AccumulationFunction *a,
+            GridValues &g, const RealVector &r,
+            std::vector<RealVector> &hugoniot_curve);
+        
 
         void map(const RealVector &p, double &f, RealVector &map_Jacobian);
 

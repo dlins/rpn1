@@ -2,6 +2,16 @@
 
 #include "Hugoniot_TP.h"
 
+
+
+int Hugoniot_TP::classified_curve(const FluxFunction *f, const AccumulationFunction *a, 
+                             GridValues &g, const RealVector &r, 
+                             std::vector<HugoniotPolyLine> &hugoniot_curve,
+                             std::vector<bool> &circular){
+    return 0;
+    
+}
+
 int Hugoniot_TP::classified_curve(const FluxFunction *f, const AccumulationFunction *a, 
                                      GridValues &g, const RealVector &r, 
                                      std::vector<HugoniotPolyLine> &hugoniot_curve){

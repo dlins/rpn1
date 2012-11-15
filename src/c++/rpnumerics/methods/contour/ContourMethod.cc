@@ -56,6 +56,7 @@ int * ContourMethod::edges_;
 int * ContourMethod::smpedg_;
 int * ContourMethod::exstfc;
 int * ContourMethod::sptr_;
+int * ContourMethod::gamb;
 
 int ContourMethod::tsimp = 1;
 int ContourMethod::tface = 3;
@@ -63,8 +64,8 @@ int ContourMethod::tface = 3;
 Matrix<int>  ContourMethod::number_chains;
 Matrix<std::vector <std::vector <int> > > ContourMethod::chain_edges;
 Matrix<std::vector <std::vector <RealVector> > > ContourMethod::chains;
-Matrix<bool> ContourMethod::iplus, ContourMethod::iminus; 
-Matrix<bool> ContourMethod::jplus, ContourMethod::jminus;
+// Matrix<bool> ContourMethod::iplus, ContourMethod::iminus; 
+// Matrix<bool> ContourMethod::jplus, ContourMethod::jminus;
 
 std::vector <std::vector <int> > ContourMethod::chain_list;
 
@@ -91,12 +92,6 @@ void ContourMethod::allocate_arrays(void){
         nface_ = hc.mkface(face_, facptr_, fnbr_, dimf_, nsimp_, hn, hm, nsface_,
                            bsvert_, comb_, perm_, storn_, storm_);
 
-//cout << "Face: " << endl;
-//for (int i = 0; i < hm+1; i++) {
-//    for (int j = 0; j < dimf_; j++) cout << " " << face_[i*dimf_ + j];
-//    cout << endl;
-//}
-
         sol_ = new double[hn*dims_];
         solptr_ = new int[nsimp_*nsface_];
         edges_ = new int[2*dime_];
@@ -104,6 +99,18 @@ void ContourMethod::allocate_arrays(void){
 
         exstfc = new int[nface_]; for (int i = 0; i < nface_; i++) exstfc[i] = 1;
         sptr_ = new int[nface_];
+
+        // This is a useful GAMBIARRA
+        gamb = new int[5];
+        for (int ii = 0; ii < 5; ii++) {
+            gamb[ii] = 9;
+            for (int jj = 0; jj < 5; jj++) {
+                if (ii == sptr_[jj]) { 
+                    gamb[ii] = jj;
+                    break;
+                }
+            }
+        }
 
         is_first = false;
 
@@ -116,6 +123,7 @@ void ContourMethod::allocate_arrays(void){
 
 void ContourMethod::deallocate_arrays(void){
     if (!is_first){
+        delete [] gamb;
         delete [] sptr_;
         delete [] exstfc;
 
@@ -188,6 +196,9 @@ int ContourMethod::contour2d(ImplicitFunction *impf, std::vector<RealVector> &vr
     int rows = gv->grid.rows() - 1;
     int cols = gv->grid.cols() - 1;
 
+
+// There are two methods, when the search algorithm is concatenated, some new structures are need.
+// Here the structures initialize. [number_chains(i,j) = 0] is used as a flag below.
 if ( method == CONTINUATION_METHOD ) {
     number_chains.resize(rows,cols);
     for (int i = 0; i < rows; i++) {
@@ -198,10 +209,10 @@ if ( method == CONTINUATION_METHOD ) {
 
     chains.resize(rows,cols);
     chain_edges.resize(rows,cols);
-    iplus.resize(rows,cols);
-    iminus.resize(rows,cols);
-    jplus.resize(rows,cols);
-    jminus.resize(rows,cols);
+//    iplus.resize(rows,cols);
+//    iminus.resize(rows,cols);
+//    jplus.resize(rows,cols);
+//    jminus.resize(rows,cols);
     chain_list.clear();
 }
 
@@ -305,7 +316,7 @@ if ( method == CONTINUATION_METHOD ) {
                             }
                         }
 
-                        //MAKE THE LIST OF EDGE POINTERS
+                        // MAKE THE LIST OF EDGE POINTERS
                         int N_EDGES = hc.mkedge(edges_, dime_, nedges_, smpedg_, solptr_,
                                             fnbr_, ssimp, nsface_); // TODO: Em Fortran esta nsimp_
 
@@ -313,50 +324,21 @@ if ( method == CONTINUATION_METHOD ) {
 
                         //STORE ALL PAIRS OF EDGES THAT WERE FOUND
                         if (nedges_ > 0) {
+                            // A Topological Sort is called for ordering the segments in each cell.
+                            //
+                            if ( method == CONTINUATION_METHOD ) {
+                                if( !topological_sort(i,j) ) continue;
+                                coordinates[0] = i; coordinates[1] = j;
+                                // Store the coodinates of the GridValues that have solution, so after
+                                // the sort, a list of order n is used and not the whole grid n^2.
+                                chain_list.push_back(coordinates);
+//                                cout << "Coordinates: " << coordinates[0] << ", " << coordinates[1] << endl;
+//                                cout << "Number of chains: " << number_chains(i,j) << endl;
+//                                cout << "The first point:  " << chains(i,j)[0][0] << endl;
+                            }
 
-
-//                            cout << "For nedges(" << nedges_ << ")      FACES(EDGES)      FACES:" << endl;
-//                            for (int i = 0; i < nedges_; i++) cout << "   " << edges_[0*dime_ + i] << " " << edges_[1*dime_ + i]
-////                            cout << "For faces (Dan):" << endl;
-//                            /*for (int i = 0; i < nedges_; i++) cout*/ << "        " << face_[0*dimf_ + edges_[0*dime_ + i]]  << " " << face_[1*dimf_ + edges_[0*dime_ + i]]  << "   " << face_[0*dimf_ + edges_[1*dime_ + i]]  << " " << face_[1*dimf_ + edges_[1*dime_ + i]]
-////                            cout << "For faces:" << endl;
-//                            /*for (int i = 0; i < nedges_; i++) cout*/ << "        " << face_[0*dimf_ + i]  << " " << face_[1*dimf_ + i]
-//                            << "        " << vert[face_[0*dimf_ + edges_[0*dime_ + i]]]  << " " << vert[face_[0*dimf_ + edges_[0*dime_ + i]] + 1]  << "   " << vert[face_[1*dimf_ + edges_[1*dime_ + i]]]  << " " << vert[face_[1*dimf_ + edges_[1*dime_ + i]] +1]  << endl;
-//cout << endl;
-//                            cout << "For sptr(" << sface << "):     ";
-//                            for (int i = 0; i < 5; i++) cout << "     " << sptr_[i];
-//                            cout << endl;
-
-////cout << "nsimp: " << nsimp_ << ", nsface: " << nsface_ << endl;
-
-//                            cout << "For solptr:    " << endl;
-//                            for (int i = 0; i<nsface_; i++) {
-//                                cout << "               ";
-//                                for (int j = 0; j < nsimp_; j++) {
-//                                    cout << solptr_[nsimp_*i + j] << " ";
-//                                }
-//                                cout << endl;
-//                            }
-
-// TODO: Aqui va ser chamado o top_srt:
-
-if ( method == CONTINUATION_METHOD ) {
-    if( !topological_sort(i,j) ) continue;
-//    if (chain_list.cols() < cell_index) chain_list.resize(2, chain_list.cols()+cols);
-//    chain_list(0, cell_index) = i;
-//    chain_list(1, cell_index) = j;
-//    cell_index++;
-    coordinates[0] = i;
-    coordinates[1] = j;
-    chain_list.push_back(coordinates);
-
-//    cout << "Coordinates: " << coordinates[0] << ", " << coordinates[1] << endl;
-//    cout << "Number of chains: " << number_chains(i,j) << endl;
-//    cout << "The first point:  " << chains(i,j)[0][0] << endl;
-}
-
-// TODO: Final del top_srt...
-
+                            // The segments are store in pairs
+                            //
                             if ( method == SEGMENTATION_METHOD ) {
                                 for (nedg = 0; nedg < nedges_; nedg++) {
 
@@ -379,59 +361,59 @@ if ( method == CONTINUATION_METHOD ) {
             }
         }
     }
-    printf("ENDS:   Contour2D()\n\n");
 
-    if ( method == SEGMENTATION_METHOD ) return 0;
-
+    if ( method == SEGMENTATION_METHOD ) {
+       
+        return 0;
+    }
+ printf("ENDS:     Contour2D()/For Segments\n\n");
 // TEST
-//   cout << "Celulas: ";
+//   cout << "Cells: ";
 //   for (int i = 0; i < chain_list.size(); i++) {
 //       cout << number_chains(chain_list[i][0],chain_list[i][1]) << " ";
 //   }
 //   cout << endl;
 // End TEST
 
-// TODO: Idea para guardar las curvas...
+    // The following integers keep the path of the concatenation
     int prev, middle, next;
-//    std::vector < std::deque <RealVector> > curves;
-//    std::vector < bool > is_circular;
 
     curves.clear();
     is_circular.clear();
 
+    // The loop is given over the active cell grid stored in [chain_list]
     for (int i = 0; i < chain_list.size(); /*For two segments, the cell is used twice*/) {
         int i_index = chain_list[i][0]; int i_start = i_index;
         int j_index = chain_list[i][1]; int j_start = j_index;
 
+        // Here is the increment of [int i], when needed
         if ( number_chains(i_index, j_index) < 2 ) i++;
         if ( number_chains(i_index, j_index) == 0 ) continue;
 
+        // Reused for each branch, is a <deque> because it can be filled by both sides.
         std::deque <RealVector> branch;
         bool circular_is = false;
-        cout <<"Antes "<<i_index<<" "<<j_index<<endl;
         int chain_size = chains(i_index,j_index)[0].size();
 
-        cout <<"Depois"<<endl;
-        
-        for (int j = 0; j < chain_size; j++) branch.push_back( chains(i_index,j_index)[0][j] );
+        // [prev] store the direction not followed, [middle] the direction to follow; [next] will
+        // store the entering direction in the next cell.
         prev   = chain_edges(i_index,j_index)[0][0];
         middle = chain_edges(i_index,j_index)[0][1];
 
-cout << endl << "Aqui: " << i_index << ", " << j_index << " desde: " << i_start << ", " << j_start << " com prev: "<< prev << " :: Edges: " << chain_edges(i_index,j_index)[0][0] << ", " << chain_edges(i_index,j_index)[0][1] << endl;
-
-
-//       ISTO AQUI DEVE DE DIZER COMO ELIMIAR O SEGMENTO USADO EN CASO DE TER DOIS...
-       chains(i_index,j_index)[0].erase( chains(i_index,j_index)[0].begin());
-       chain_edges(i_index,j_index)[0].erase( chain_edges(i_index,j_index)[0].begin());
+        // Store the points in the [branch] and eliminate the points of the list 
+        for (int j = 0; j < chain_size; j++) branch.push_back( chains(i_index,j_index)[0][j] );
+        chains(i_index,j_index)[0].erase( chains(i_index,j_index)[0].begin());
+        chain_edges(i_index,j_index)[0].erase( chain_edges(i_index,j_index)[0].begin());
 
         do {
             restore:
-cout << "middle: " << middle << " prev: " << prev << endl;
-            cout << "i index: " << i_index << " j index: " << j_index << endl;
 
+            // [middle] also works as a flag. If it is used once then it is setted as -1, there are
+            //          no previous direction, then returning to the same cell end the procedure.
             if (middle == -1) break;
             number_chains(i_index, j_index)--;
 
+            // [middle] gives the direction to follow and the index of the next point
             switch ( middle ) {
                 case 0: {
                     j_index--;
@@ -461,26 +443,27 @@ cout << "middle: " << middle << " prev: " << prev << endl;
                 break;
             }
 
-cout << "index(" << next << "): " << i_index << ", " << j_index;
-
+            // Preventing to leave the domain.
             if ( (i_index < 0) || (j_index < 0) || (i_index > rows) || (j_index > cols) || middle == 1 ) {
                 middle = prev;
                 i_index = i_start;
                 j_index = j_start;
                 prev = -1;
-                cout << " :: FIZ __RESTORE__" << endl;
-                cout << "index(" << next << "): " << i_index << ", " << j_index << endl;
-                cout << "i: " << i_index << ", " << i_start << endl;
-                cout << "j: " << j_index << ", " << j_start << endl;
+//                /* DEBUG... */
+//                cout << " :: FIZ __RESTORE__" << endl;
+//                cout << "index(" << next << "): " << i_index << ", " << j_index << endl;
+//                cout << "i: " << i_index << ", " << i_start << endl;
+//                cout << "j: " << j_index << ", " << j_start << endl;
+//                /* ... END DEBUG */
                 goto restore;
             }
-if(chain_edges(i_index,j_index).size()==0) {
-    cout<<"SAI POR BREAK"<<endl;
-    break;
-    
-}
-cout << " :: Edges: " << chain_edges(i_index,j_index)[0][0] << ", " << chain_edges(i_index,j_index)[0][1] << endl;
 
+            // Some restriction may cut the continuation of the curve, the following IF saves this issues.
+            if ( chain_edges(i_index,j_index).size() == 0 ) break;
+
+            // Store the points in the [branch] and eliminate the points of the list.
+            // The chain in (i, j) must be identified with [next] the direction of push_back or
+            // push_front is denoted by the use of [prev = -1], else it will be the middle direction.
             for (int k = 0; k < chains(i_index,j_index)[0].size(); k++) {
                 if ( chain_edges(i_index,j_index)[k][0] == next ) {
                     chain_size = chains(i_index,j_index)[k].size();
@@ -489,28 +472,13 @@ cout << " :: Edges: " << chain_edges(i_index,j_index)[0][0] << ", " << chain_edg
                     else
                         for (int j = 1; j < chain_size; j++) branch.push_back( chains(i_index,j_index)[k][j] );
                     middle = chain_edges(i_index,j_index)[k][1];
-/* DEBUG...*/
-cout << "Antes de deletar "<<i_index<<" " <<j_index<< endl;
-for(int ii = 0; ii < chains(i_index,j_index).size(); ii++){
-    for (int jj = 0; jj < chains(i_index,j_index)[ii].size(); jj++){
-        cout << " " << chains(i_index,j_index)[ii][jj];
-    }
-    cout << endl;
-}
-/*... END DEBUG */ 
+
                     chains(i_index,j_index).erase( chains(i_index,j_index).begin() + k );
                     chain_edges(i_index,j_index).erase( chain_edges(i_index,j_index).begin() + k);
-/* DEBUG...*/
-cout << "Depois de deletar (1) tenho: "<< endl;
-for(int ii = 0; ii < chains(i_index,j_index).size(); ii++){
-    for (int jj = 0; jj < chains(i_index,j_index)[ii].size(); jj++){
-        cout << " " << chains(i_index,j_index)[ii][jj];
-    }
-    cout << endl;
-}
-/*... END DEBUG */
+
                     if ( (i_index == i_start) && (j_index == j_start) && (next == prev) ) {
-                        branch.erase( branch.begin() );
+                        // TODO: The repeated point it is not deleted! It is convenient to keep it.
+                        // branch.erase( branch.begin() );
                         circular_is = true;
                     }
                     break;
@@ -522,78 +490,76 @@ for(int ii = 0; ii < chains(i_index,j_index).size(); ii++){
                     else            
                         for (int j = chain_size-2; j >= 0; j--) branch.push_back( chains(i_index,j_index)[k][j] );
                     middle = chain_edges(i_index,j_index)[k][0];
-/* DEBUG...*/
-//cout << "Antes de deletar tenho: "<< endl;
-cout << "Antes de deletar "<<i_index<<" " <<j_index<< endl;
-for(int ii = 0; ii < chains(i_index,j_index).size(); ii++){
-    for (int jj = 0; jj < chains(i_index,j_index)[ii].size(); jj++){
-        cout << " " << chains(i_index,j_index)[ii][jj];
-    }
-    cout << endl;
-}
-/*... END DEBUG */
+
                     chains(i_index,j_index).erase( chains(i_index,j_index).begin() + k );
                     chain_edges(i_index,j_index).erase( chain_edges(i_index,j_index).begin() + k);
 
-/* DEBUG...*/
-cout << "Depois de deletar (2) tenho: "<< endl;
-for(int ii = 0; ii < chains(i_index,j_index).size(); ii++){
-    for (int jj = 0; jj < chains(i_index,j_index)[ii].size(); jj++){
-        cout << " " << chains(i_index,j_index)[ii][jj];
-    }
-    cout << endl;
-}
-/*... END DEBUG */
                     if ( (i_index == i_start) && (j_index == j_start) && (next == prev) ) {
-                        branch.erase( branch.begin() );
+                        // TODO: The repeated point it is not deleted! It is convenient to keep it.
+                        // branch.erase( branch.begin() );
                         circular_is = true;
                     }
                     break;
                 }
             }
 
-cout << "Pase los for/if" << endl;
-
         } while ( number_chains(i_index, j_index) > 0 );
 
         curves.push_back(branch);
         is_circular.push_back(circular_is);
     }
-// TODO: Final de la idea
 
-    cout << "Finalizei com " << curves.size() << " curvas :: ::   ";
-    for (int k = 0; k < curves.size(); k++) cout << "Tamanho de " << k << " es: " << curves[k].size() << " y es circular: " << is_circular[k] << "; ";
-    cout << endl;
+// For DEBUGING, the following lines can be included instead of the two ereasing statements.
+///* DEBUG...
+//cout << "Antes de deletar tenho: "<< endl;
+//for(int ii = 0; ii < chains(i_index,j_index).size(); ii++){
+//    for (int jj = 0; jj < chains(i_index,j_index)[ii].size(); jj++){
+//        cout << " " << chains(i_index,j_index)[ii][jj];
+//    }
+//    cout << endl;
+//}
+//... END DEBUG */
+//                    chains(i_index,j_index).erase( chains(i_index,j_index).begin() + k );
+//                    chain_edges(i_index,j_index).erase( chain_edges(i_index,j_index).begin() + k);
+///* DEBUG...
+//cout << "Depois de deletar tenho: "<< endl;
+//for(int ii = 0; ii < chains(i_index,j_index).size(); ii++){
+//    for (int jj = 0; jj < chains(i_index,j_index)[ii].size(); jj++){
+//        cout << " " << chains(i_index,j_index)[ii][jj];
+//    }
+//    cout << endl;
+//}
+//... END DEBUG */
 
-    for (int k = 0; k < curves.size(); k++) {
-        cout << "Curva " << k << ":";
-        for (int l = 0; l < curves[k].size(); l++) cout << " " << curves[k][l];
-        cout << endl;
-    }
+///*DEBUG: Impressions*/
+//    cout << "Finalizei com " << curves.size() << " curvas :: ::   ";
+//    for (int k = 0; k < curves.size(); k++) cout << "Tamanho de " << k << " es: " << curves[k].size() << " y es circular: " << is_circular[k] << "; ";
+//    cout << endl;
+
+//    for (int k = 0; k < curves.size(); k++) {
+//        cout << "Curva " << k << ":";
+//        for (int l = 0; l < curves[k].size(); l++) cout << " " << curves[k][l];
+//        cout << endl;
+//    }
+///*END DEBUG...*/
+
+    printf("ENDS:     Contour2D()/Continuous\n\n");
 
     return 0;
 }
 
+
+/**
+ *  This method is the key to the segments ordering finded by the search algorithm.
+ *  There are some tricks :
+ *     [number_chains] stores the two possible cases, 1 segment or 1 chain or two chains given
+ *                     by a segment each.
+ *     [chains] has the dimension given by the number of chains, each chain is given separetally.
+ *     [chain_edges] uses the useful GAMBIARRA which for each initial and final point gives the
+ *                   index of the cell face reached.
+**/
+
 int ContourMethod::topological_sort(int i, int j) {
-    // ISTO eh gabiarra temporaria
-    int gamb[5];
-    for (int ii = 0; ii < 5; ii++) {
-         gamb[ii] = 9;
-         for (int jj = 0; jj < 5; jj++) {
-             if (ii == sptr_[jj]) { 
-                 gamb[ii] = jj;
-                 break;
-             }
-         }
-    }
-
-// Impressoes para debugar
-////if ( i == 0 && j == 7 ) {
-//    cout << "For nedges(" << nedges_ << "):" << endl;
-//    for (int i = 0; i < nedges_; i++) cout << "   " << edges_[0*dime_ + i] << " " << edges_[1*dime_ + i] << endl;
-////}
-// Fim debug
-
 
     /* Aqui entra o topological sort */
     if (nedges_ == 2) {
@@ -623,10 +589,10 @@ int ContourMethod::topological_sort(int i, int j) {
             // jplus e iplus
             chain_edges(i,j)[1][0] = gamb[2]; chain_edges(i,j)[1][1] = gamb[3];
 
-            iminus(i,j) = iplus(i,j) = jminus(i,j) = jplus(i,j) = true;
+            // iminus(i,j) = iplus(i,j) = jminus(i,j) = jplus(i,j) = true;
         }
         else if ( (edges_[1] + edges_[dime_ + 1]) == 3) {
-//cout << "Ordem: 0 1 2: 3 = " << edges_[1] << " + " << edges_[dime_ + 1] << endl;
+            //cout << "Ordem: 0 1 2: 3 = " << edges_[1] << " + " << edges_[dime_ + 1] << endl;
             // TODO: Podemos inferir quem eh quem
             number_chains(i,j) = 1;
             chains(i,j).resize(1);
@@ -646,7 +612,7 @@ int ContourMethod::topological_sort(int i, int j) {
             chain_edges(i,j)[0][0] = gamb[0]; chain_edges(i,j)[0][1] = gamb[2];
         }
         else {
-//cout << "Ordem: 1 0 2: 2 = " << edges_[1] << " + " << edges_[dime_ + 1] << endl;
+            //cout << "Ordem: 1 0 2: 2 = " << edges_[1] << " + " << edges_[dime_ + 1] << endl;
             // TODO: Sabemos exatamente quem eh quem
             number_chains(i,j) = 1;
             chains(i,j).resize(1);
@@ -683,8 +649,7 @@ int ContourMethod::topological_sort(int i, int j) {
         // chain = {0, 1}
         chain_edges(i,j)[0][0] = gamb[0]; chain_edges(i,j)[0][1] = gamb[1];
     }
-
-                            /* Aqui termina o tsort */
+    /* Aqui termina o tsort */
 
 /* DEBUG...
     cout << "Impressoes para (" << i << ", " << j << "): " << number_chains(i,j) << " Chains" << endl;

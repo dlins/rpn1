@@ -24,6 +24,12 @@ class Hugoniot_TP : public Hugoniot_Locus {
                              GridValues &g, const RealVector &r, 
                              std::vector<HugoniotPolyLine> &hugoniot_curve);
 
+        int classified_curve(const FluxFunction *f, const AccumulationFunction *a, 
+                             GridValues &g, const RealVector &r, 
+                             std::vector<HugoniotPolyLine> &hugoniot_curve,
+                             std::vector<bool> &circular);
+        
+        
         int curve(const FluxFunction *f, const AccumulationFunction *a, 
                   GridValues &g, const RealVector &r,
                   std::vector<RealVector> &hugoniot_curve);

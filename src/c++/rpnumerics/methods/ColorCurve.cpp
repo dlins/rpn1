@@ -19,6 +19,10 @@
 //                                 255, 255, 255, // 15 = Right transport    COLOR = white      ++++
 //                                };
 // Sign function. Inlined, should be fast.
+//
+// There must be a different ColorTable for the reference point at right. It can be obtained from
+// the first one noticing that --++ changes to ++-- or -.-+ to -+-. for example.
+
 
 ColorCurve::ColorCurve(const FluxFunction & fluxFunction,
         const AccumulationFunction & accumulationFunction) :
@@ -46,7 +50,8 @@ ColorCurve::~ColorCurve() {
  ** the ColorTable above.)
  **
 ::::: INPUT :::::::::
- **    original_curve: Vector of RealVectors comprising the Hugoniot Locus.
+ **    original_curve: Vector of RealVectors comprising the Hugoniot Locus by general segmented curve
+                       Deque of RealVectors for a Hugoniot part given as a continuous curve.
  **              Uref: Reference point of the curve.
  **
 ::::: OUTPUT ::::::::
@@ -63,8 +68,6 @@ ColorCurve::~ColorCurve() {
  **/
 
 int ColorCurve::solve(const double *A, double *bb, int dim, double *x) {
-    //    int i, j;
-    //    int dim = A.rows();
     int nrhs = 1;
     int lda = dim;
     int ipiv[dim];
@@ -86,10 +89,10 @@ int ColorCurve::solve(const double *A, double *bb, int dim, double *x) {
     return info;
 }
 
+// Newton improvement when the shock is characteristic at Left
+//
 void ColorCurve::Left_Newton_improvement(const RealVector &input, const int type, RealVector &out) {
     int dim = input.size();
-
-//    cout << "CC::LN_improv: " << type << endl;
 
     double sigma = ref_eigenvalue[type];
     out.resize(dim);
@@ -145,7 +148,7 @@ void ColorCurve::Left_Newton_improvement(const RealVector &input, const int type
             }
 
             // If Newton does not converge, return the original point.
-            if ((fabs(det) <= (epsilon * anorm)) || (count > 18)) {
+            if ((fabs(det) <= (epsilon * anorm)) || (count > 19)) {
                 cout << "ColorCurve::Left_Newton does not converge." << endl;
                 cout << "count = " << count << " " << input << endl;
                 for (int i = 0; i < dim; i++) out.component(i) = input.component(i);
@@ -174,14 +177,14 @@ void ColorCurve::Left_Newton_improvement(const RealVector &input, const int type
         count++;
     } while (deltaNorm > epsilon2);
 
-    // cout << "Saindo de LN(" << count << "). Input = " << input << ", U = " << U[0]<<" "<<U[1] << endl;
-
     // Output
     for (int i = 0; i < dim; i++) out.component(i) = U[i];
 
     return;
 }
 
+// Newton improvement when the shock is characteristic at Right
+//
 void ColorCurve::Right_Newton_improvement(const RealVector &input, const int type, RealVector &out) {
     int dim = input.size();
     out.resize(dim);
@@ -195,7 +198,7 @@ void ColorCurve::Right_Newton_improvement(const RealVector &input, const int typ
     }
 
     // TODO: Improve this epsilon
-    double epsilon  = 1e-6;
+    double epsilon = 1e-6;
     double epsilon2 = epsilon*epsilon;
     double anorm;
     double delta_U[dim];
@@ -321,6 +324,9 @@ void ColorCurve::Right_Newton_improvement(const RealVector &input, const int typ
     return;
 }
 
+
+// For two given segments points with different signature, intermediate points are found by interpolation.
+//
 int ColorCurve::interpolate(const RealVector &p, double &s_p,
         const std::vector<double> &eigenvalue_p, const int type_p,
         const RealVector &q, double &s_q,
@@ -349,7 +355,7 @@ int ColorCurve::interpolate(const RealVector &p, double &s_p,
         if (abs_ineq % 2) {
             fp = ref_eigenvalue[i] - s_p;
             fq = ref_eigenvalue[i] - s_q;
-            if ( fabs(fq - fp) < epsilon) return INTERPOLATION_ERROR;
+            if (fabs(fq - fp) < epsilon) return INTERPOLATION_ERROR;
             alpha.push_back(fq / (fq - fp));
             rtype.push_back(increase);
             noi++;
@@ -377,7 +383,7 @@ int ColorCurve::interpolate(const RealVector &p, double &s_p,
         if (abs_ineq % 2) {
             fp = eigenvalue_p[i] - s_p;
             fq = eigenvalue_q[i] - s_q;
-            if ( fabs(fq - fp) < epsilon) return INTERPOLATION_ERROR;
+            if (fabs(fq - fp) < epsilon) return INTERPOLATION_ERROR;
             alpha.push_back(fq / (fq - fp));
             rtype.push_back(increase);
             noi++;
@@ -423,6 +429,9 @@ int ColorCurve::interpolate(const RealVector &p, double &s_p,
     }
 }
 
+
+// For a given point in the Hugoniot locus, speed, eigenvalues and if it is real is computed.
+//
 int ColorCurve::complete_point(RealVector &p, double &s, std::vector<double> &eigenvalue, int *complex) {
     int dim = p.size();
 
@@ -444,7 +453,7 @@ int ColorCurve::complete_point(RealVector &p, double &s, std::vector<double> &ei
     // For that reason, when such a pair is found, it jumps twice (i++) to look for new pairs.
     int complex_count = 0;
     complex[0] = 0;
-    for (int i = 0; i < e.size(); ) {
+    for (int i = 0; i < e.size();) {
         if (fabs(e[i].i) > 0) {
             // The complex notation ("+." or "-.") will be introduced on the second eigenvalue.
             i++;
@@ -467,13 +476,13 @@ int ColorCurve::complete_point(RealVector &p, double &s, std::vector<double> &ei
         den += delta_G*delta_G;
     }
 
-//printf("Em CC::Complete_point. num = %2.6f, den = %2.6f, speed = %2.6f\n", num, den, num/den);
-//printf("                       F[0] = %2.6f, F[1] = %2.6f, Fref[0] = %2.6f, Fref[1] = %2.6ff\n", F[0], F[1], F_ref[0], F_ref[1]);
-//printf("                       G[0] = %2.6f, G[1] = %2.6f, Gref[0] = %2.6f, Gref[1] = %2.6ff\n", G[0], G[1], G_ref[0], G_ref[1]);
+    //printf("Em CC::Complete_point. num = %2.6f, den = %2.6f, speed = %2.6f\n", num, den, num/den);
+    //printf("                       F[0] = %2.6f, F[1] = %2.6f, Fref[0] = %2.6f, Fref[1] = %2.6ff\n", F[0], F[1], F_ref[0], F_ref[1]);
+    //printf("                       G[0] = %2.6f, G[1] = %2.6f, Gref[0] = %2.6f, Gref[1] = %2.6ff\n", G[0], G[1], G_ref[0], G_ref[1]);
 
-//cout << "Em CC::Complete_point " << p << ". num = " << num << ", den = " << den << ", speed = " << num/den << endl;
-//cout << "                       F[0] = " << F[0] << ", F[1] = " << F[1] << ", Fref[0] = " << F_ref[0] << ", Fref[1] = " << F_ref[1] << endl;
-//cout << "                       G[0] = " << G[0] << ", G[1] = " << F[1] << ", Gref[0] = " << G_ref[0] << ", Gref[1] = " << G_ref[1] << endl;
+    //cout << "Em CC::Complete_point " << p << ". num = " << num << ", den = " << den << ", speed = " << num/den << endl;
+    //cout << "                       F[0] = " << F[0] << ", F[1] = " << F[1] << ", Fref[0] = " << F_ref[0] << ", Fref[1] = " << F_ref[1] << endl;
+    //cout << "                       G[0] = " << G[0] << ", G[1] = " << F[1] << ", Gref[0] = " << G_ref[0] << ", Gref[1] = " << G_ref[1] << endl;
 
     if (fabs(den) > 1e-20) s = num / den;
     else {
@@ -487,6 +496,9 @@ int ColorCurve::complete_point(RealVector &p, double &s, std::vector<double> &ei
     return 0;
 }
 
+// This method returns the number associated with the signature, this number is the classification
+// in the ColorTable. [signature] may be slightly different to [type], because of complex eigenvalues.
+//
 int ColorCurve::classify_point(RealVector &p, double &s, std::vector<double> &eigenvalue, std::string &signature) {
     signature.clear();
     int dim = ref_eigenvalue.size();
@@ -529,7 +541,7 @@ int ColorCurve::classify_point(RealVector &p, double &s, std::vector<double> &ei
     // For that reason, when such a pair is found, it jumps twice (i++) to look for new pairs.
     int complex_count = 0;
     complex_ref[0] = 0;
-    for (int i = 0; i < dim; ) {
+    for (int i = 0; i < dim;) {
         if (fabs(ref_e_complex[i]) > 0) {
             // The complex notation ("+." or "-.") will be introduced on the second eigenvalue.
             i++;
@@ -551,13 +563,16 @@ int ColorCurve::classify_point(RealVector &p, double &s, std::vector<double> &ei
     // Complex eigenvalues at segment point
     increment = 0;
     while (complex[increment] != 0) {
-        signature.replace(complex[increment]+dim, 1, sc);
+        signature.replace(complex[increment] + dim, 1, sc);
         increment++;
     }
 
     return type;
 }
 
+
+// The classify_segment_with_data method will be call, here the values are filled.
+//
 void ColorCurve::classify_segment(RealVector &p, RealVector &q,
         std::vector<HugoniotPolyLine> &classified_curve,
         std::vector<RealVector> &transition_list) {
@@ -602,20 +617,20 @@ void ColorCurve::classify_segment(RealVector &p, RealVector &q,
     }
 
     classify_segment_with_data(p, s_p, eigenvalue_p, ct_p, type_p,
-                               q, s_q, eigenvalue_q, ct_q, type_q,
-                               hpl, classified_curve, transition_list);
+            q, s_q, eigenvalue_q, ct_q, type_q,
+            hpl, classified_curve, transition_list);
 
     return;
 }
 
+// It is assumed that p and q are already classified outside; useful for continuous curves.
+//
 void ColorCurve::classify_segment_with_data(
         RealVector &p, double &s_p, std::vector<double> &eigenvalue_p, std::string &ct_p, int &type_p,
         RealVector &q, double &s_q, std::vector<double> &eigenvalue_q, std::string &ct_q, int &type_q,
         HugoniotPolyLine &hpl,
         std::vector<HugoniotPolyLine> &classified_curve,
         std::vector<RealVector> &transition_list) {
-
-//printf("   Em CC::classify_segment. Temos, s_p = %2.6f, s_q = %2.6f\n", s_p, s_q);
 
     int dim = p.size();
     int fam = eigenvalue_p.size();
@@ -625,19 +640,6 @@ void ColorCurve::classify_segment_with_data(
     if (type_p == UNCLASSIFIABLE_POINT || type_q == UNCLASSIFIABLE_POINT) {
         hpl.type[0] = UNCLASSIFIABLE_POINT;
         hpl.signature[0] = "0000";
-//        for (int j = 0; j < dim; j++) {
-////            hpl.point[0].component(j) = p.component(j);
-//            hpl.point[1].component(j) = q.component(j);
-//        }
-//        // Unclassifications occurs because of an error in the speed, these values are not trustable.
-//        //
-////        hpl.speed[0] = s_p;
-//        hpl.speed[1] = s_q;
-//        for (int j = 0; j < fam; j++) {
-////            hpl.eigenvalue[0].component(j) = eigenvalue_p[j];
-//            hpl.eigenvalue[1].component(j) = eigenvalue_q[j];
-//        }
-//        classified_curve.push_back(hpl);
     }
 
     // Both points share the same type (the output segment will not be divided).
@@ -645,17 +647,6 @@ void ColorCurve::classify_segment_with_data(
     else if (type_p == type_q) {
         hpl.type[0] = type_p;
         hpl.signature[0] = ct_p;
-//        for (int j = 0; j < dim; j++) {
-////            hpl.point[0].component(j) = p.component(j);
-//            hpl.point[1].component(j) = q.component(j);
-//        }
-////        hpl.speed[0] = s_p;
-//        hpl.speed[1] = s_q;
-//        for (int j = 0; j < fam; j++) {
-////            hpl.eigenvalue[0].component(j) = eigenvalue_p[j];
-//            hpl.eigenvalue[1].component(j) = eigenvalue_q[j];
-//        }
-//        classified_curve.push_back(hpl);
     }
 
     // Points have different classification, splitting is needed.
@@ -713,10 +704,9 @@ void ColorCurve::classify_segment_with_data(
                     zerotype++;
                     ztype /= 2;
                 }
-                // cout << "O tipo de zero eh: " << zerotype << ", desde: " << rttemp[i] << endl;
                 RealVector out;
-                if (zerotype < fam) Left_Newton_improvement(rtemp[i], zerotype,       out);
-                else               Right_Newton_improvement(rtemp[i], zerotype - fam, out);
+                if (zerotype < fam) Left_Newton_improvement(rtemp[i], zerotype, out);
+                else Right_Newton_improvement(rtemp[i], zerotype - fam, out);
                 rtemp[i] = out;
             }
         }
@@ -773,7 +763,7 @@ void ColorCurve::classify_segment_with_data(
 
         // Now we fill the new segment and its components for the HugoniotPolyLine
         //
-        for (int k = 0; k < noi-1; k++) {
+        for (int k = 0; k < noi - 1; k++) {
             hpl.type[0] = rtype[k];
             hpl.signature[0] = sigtype[k];
 
@@ -790,8 +780,8 @@ void ColorCurve::classify_segment_with_data(
         }
 
         // This are the signature and type for the last HugoniotPolyLine:
-        hpl.type[0] = rtype[noi-1];
-        hpl.signature[0] = sigtype[noi-1];
+        hpl.type[0] = rtype[noi - 1];
+        hpl.signature[0] = sigtype[noi - 1];
     }
 
     // Fill the last data of HugoniotPolyLine:
@@ -800,8 +790,6 @@ void ColorCurve::classify_segment_with_data(
     for (int j = 0; j < fam; j++) hpl.eigenvalue[1].component(j) = eigenvalue_q[j];
 
     classified_curve.push_back(hpl);
-
-//printf("   Em CC::Finally, we get hpl.s_p = %2.6f, hpl.s_q = %2.6f\n", hpl.speed[0], hpl.speed[1]);
 
     return;
 }
@@ -837,7 +825,7 @@ void ColorCurve::classify_segmented_curve(std::vector<RealVector> &original,
     ref_e_complex.resize(e.size());
     for (int i = 0; i < e.size(); i++) {
         ref_eigenvalue[i] = e[i].r;
-        ref_e_complex[i]=e[i].i;
+        ref_e_complex[i] = e[i].i;
     }
 
     // Process the list
@@ -878,19 +866,18 @@ void ColorCurve::classify_continuous_curve(std::deque<RealVector> &original,
     ref_e_complex.resize(e.size());
     for (int i = 0; i < e.size(); i++) {
         ref_eigenvalue[i] = e[i].r;
-        ref_e_complex[i]=e[i].i;
+        ref_e_complex[i] = e[i].i;
     }
 
     double s_p, s_q;
     std::vector<double> eigenvalue_p, eigenvalue_q;
     std::string ct_p, ct_q;
-    cout<<" antes de first point"<<endl;
+
     // Let the first point be p:
     RealVector p = original[0];
     RealVector q;
     int type_p = classify_point(p, s_p, eigenvalue_p, ct_p);
     int type_q;
-    cout<<"depois de first point "<<p<<endl;
 
     int fam = eigenvalue_p.size();
     HugoniotPolyLine hpl;
@@ -910,21 +897,16 @@ void ColorCurve::classify_continuous_curve(std::deque<RealVector> &original,
         hpl.signature.resize(1);
     }
 
-//    classified_curve.speed.resize(1);
-//    classified_curve.point.resize(1);
-//    classified_curve.point[0].resize(2);
-//    classified_curve.eigenvalue.resize(1);
-//    classified_curve.eigenvalue[0].resize(2);
+    RealVector eigenRealVector(fam);
 
-//    classified_curve.speed[0] = s_p;
-//    for (int j = 0; j < dim; j++) classified_curve.point[0].component(j) = p.component(j);
-//    for (int j = 0; j < fam; j++) classified_curve.eigenvalue[0].component(j) = eigenvalue_p[j];
-
+    // Store the elements in classified_curve
     classified_curve.speed.push_back(s_p);
     classified_curve.point.push_back(p);
-    classified_curve.eigenvalue.push_back(RealVector(2, eigenvalue_p));
+    for (int i = 0; i < fam; i++) {
+        eigenRealVector.component(i) = eigenvalue_p[i];
+    }
+    classified_curve.eigenvalue.push_back(eigenRealVector);
 
-    cout <<" antes do for: "<<endl;
     // Process the whole list
     //
     for (int i = 1; i < original.size(); i++) {
@@ -936,53 +918,62 @@ void ColorCurve::classify_continuous_curve(std::deque<RealVector> &original,
         type_q = classify_point(q, s_q, eigenvalue_q, ct_q);
 
         std::vector<HugoniotPolyLine> segment_classified;
-        std::vector<RealVector>       transition_list_elements;
+        std::vector<RealVector> transition_list_elements;
 
         segment_classified.clear();
         transition_list_elements.clear();
 
         classify_segment_with_data(p, s_p, eigenvalue_p, ct_p, type_p,
-                                   q, s_q, eigenvalue_q, ct_q, type_q,
-                                   hpl, segment_classified, transition_list_elements);
+                q, s_q, eigenvalue_q, ct_q, type_q,
+                hpl, segment_classified, transition_list_elements);
 
         // Set the last segment point as the first segment point of the next segment
         //
-        p = q; s_p = s_q; eigenvalue_p = eigenvalue_q; ct_p = ct_q; type_p = type_q;
+        p = q;
+        s_p = s_q;
+        eigenvalue_p = eigenvalue_q;
+        ct_p = ct_q;
+        type_p = type_q;
 
         for (int j = 0; j < transition_list_elements.size(); j++) {
             transition_list.push_back(transition_list_elements[j]);
 
-//            for (int k = 0; k < dim; k++) classified_curve.point[counter].component(k) = segment_classified[j+1].point[0].component(j);
-//            for (int k = 0; k < fam; k++) classified_curve.eigenvalue[counter].component(k) = segment_classified[j+1].eigenvalue[0].component(j);
-//            classified_curve.speed[counter] = segment_classified[j+1].speed[0];
-//            classified_curve.type[counter] = segment_classified[j].type[0];
-//            classified_curve.signature[counter] = segment_classified[j].signature[0];
+            //            for (int k = 0; k < dim; k++) classified_curve.point[counter].component(k) = segment_classified[j+1].point[0].component(j);
+            //            for (int k = 0; k < fam; k++) classified_curve.eigenvalue[counter].component(k) = segment_classified[j+1].eigenvalue[0].component(j);
+            //            classified_curve.speed[counter] = segment_classified[j+1].speed[0];
+            //            classified_curve.type[counter] = segment_classified[j].type[0];
+            //            classified_curve.signature[counter] = segment_classified[j].signature[0];
 
             classified_curve.type.push_back(segment_classified[j].type[0]);
-            classified_curve.speed.push_back(segment_classified[j+1].speed[0]);
+            classified_curve.speed.push_back(segment_classified[j + 1].speed[0]);
             classified_curve.signature.push_back(segment_classified[j].signature[0]);
-            classified_curve.point.push_back(segment_classified[j+1].point[0]);
-            classified_curve.eigenvalue.push_back(RealVector(2, segment_classified[j+1].eigenvalue[0]));
+            classified_curve.point.push_back(segment_classified[j + 1].point[0]);
+
+
+            for (int i = 0; i < fam; i++) {
+                eigenRealVector.component(i) = segment_classified[j + 1].eigenvalue[0].component(i);
+            }
+
+            classified_curve.eigenvalue.push_back(eigenRealVector);
         }
 
-//        for (int j = 0; j < dim; j++) classified_curve.point[counter].component(j) = p.component(j);
-//        for (int j = 0; j < fam; j++) classified_curve.eigenvalue[counter].component(j) = eigenvalue_p[j];
-//        classified_curve.speed[counter] = s_p;
-//        classified_curve.type[counter] = type_p;
-//        classified_curve.signature[counter] = ct_p;
+        //        for (int j = 0; j < dim; j++) classified_curve.point[counter].component(j) = p.component(j);
+        //        for (int j = 0; j < fam; j++) classified_curve.eigenvalue[counter].component(j) = eigenvalue_p[j];
+        //        classified_curve.speed[counter] = s_p;
+        //        classified_curve.type[counter] = type_p;
+        //        classified_curve.signature[counter] = ct_p;
 
         classified_curve.type.push_back(type_p);
         classified_curve.speed.push_back(s_p);
         classified_curve.signature.push_back(ct_p);
-        classified_curve.point.push_back(P);
-        classified_curve.eigenvalue.push_back(RealVector(2, eigenvalue_p));
+        classified_curve.point.push_back(p);
+
+        for (int i = 0; i < fam; i++) {
+            eigenRealVector.component(i) = eigenvalue_p[i];
+        }
+
+        classified_curve.eigenvalue.push_back(eigenRealVector);
     }
 
-    return;
-}
-
-
-// TODO: This signature must DIE after removing old codes!!
-void ColorCurve::classify_curve(vector < vector < RealVector > > &, const RealVector &, int, int, vector < HugoniotPolyLine > &output) {
     return;
 }

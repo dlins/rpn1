@@ -35,9 +35,9 @@
             <PHYSICSPARAM name="epsl" position="23" value ="0.0" />
 
 
-            <PHYSICSPARAM name="negWS" position="24" value ="0.0" />
-            <PHYSICSPARAM name="negGS" position="25" value ="0.0" />
-            <PHYSICSPARAM name="negOS" position="26" value ="0.0" />
+            <PHYSICSPARAM name="negWS" position="24" value ="1.0" />
+            <PHYSICSPARAM name="negGS" position="25" value ="1.0" />
+            <PHYSICSPARAM name="negOS" position="26" value ="1.0" />
 
 
         </PHYSICSCONFIG>
