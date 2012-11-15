@@ -67,7 +67,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc(JNIEnv * env,
 
 
     jmethodID waveCurveConstructor = (env)->GetMethodID(classWaveCurve, "<init>", "(II)V");
-    jmethodID orbitPointConstructor = (env)->GetMethodID(classOrbitPoint, "<init>", "([D)V");
+    jmethodID orbitPointConstructor = (env)->GetMethodID(classOrbitPoint, "<init>", "([DD)V");
     jmethodID toDoubleMethodID = (env)->GetMethodID(classOrbitPoint, "toDouble", "()[D");
 
 
@@ -112,7 +112,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc(JNIEnv * env,
 
     WaveCurve wc(fluxFunction, accumulationFunction, boundary);
 
-    cout << "Parametros " << realVectorInput << " " << familyIndex << " " << timeDirection << endl;
+
 
     if (timeDirection == RAREFACTION_SPEED_INCREASE)//TODO REMOVE !!!
 
@@ -122,7 +122,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc(JNIEnv * env,
 
         timeDirection = WAVE_BACKWARD;
 
-
+    cout << "Parametros " << realVectorInput << " " << familyIndex << " " << timeDirection << endl;
 
     jobject waveCurve = (env)->NewObject(classWaveCurve, waveCurveConstructor, familyIndex, timeDirection);
 
@@ -139,12 +139,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc(JNIEnv * env,
         std::vector<int> correspondingPointIndexVector=curves[i].corresponding_point_in_related_curve;
         if (coords.size() > 0) {
 
-
+            cout<<"tamanho de coords: "<<coords.size()<<endl;
 
             jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(coords.size(), classOrbitPoint, NULL);
-            //        cout << "Tipo da curva: " << curves[i].type << endl;
-
+            cout << "Tipo da curva: " << curves[i].type << endl;
             for (int j = 0; j < coords.size(); j++) {
+
 
                 RealVector tempVector = coords.at(j);
 
@@ -153,13 +153,14 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc(JNIEnv * env,
                 double * dataCoords = tempVector;
 
                 //Reading only coodinates
-                jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size());
+                jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size()-1);
 
-                (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size(), dataCoords);
+                (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size()-1, dataCoords);
 
                 //Lambda is the last component.
-                jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray);
-                env->CallVoidMethod(orbitPoint,setLambdaID,tempVector(tempVector.size()-1));
+                double lambda = tempVector.component(tempVector.size()-1);
+                jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray,lambda);
+//                env->CallVoidMethod(orbitPoint,setLambdaID,tempVector(tempVector.size()-1));
 
                 env->CallObjectMethod(orbitPoint, setCorrespondingCurveIndexID, relatedCurvesIndexVector[j]);
                 env->CallObjectMethod(orbitPoint,setCorrespondingPointIndexID, correspondingPointIndexVector[j]);

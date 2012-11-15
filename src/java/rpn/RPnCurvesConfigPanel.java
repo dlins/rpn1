@@ -14,9 +14,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
 import javax.swing.*;
-import rpn.parser.RPnDataModule;
 import rpn.command.ChangeDirectionCommand;
-import rpn.command.OrbitPlotCommand;
 import rpnumerics.Configuration;
 import rpnumerics.Orbit;
 import rpnumerics.RPNUMERICS;
@@ -171,13 +169,6 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
     private class OrbitDirectionListener implements ActionListener {
 
         public void actionPerformed(ActionEvent e) {
-
-//               if (forwardCheckBox_.isSelected()) {
-//                    currentOrbitDirection_ = Orbit.FORWARD_DIR;
-//                } else {
-//                    currentOrbitDirection_ = Orbit.BACKWARD_DIR;
-//                }
-
 
             if (forwardCheckBox_.isSelected()) {
                     currentOrbitDirection_ = Orbit.FORWARD_DIR;

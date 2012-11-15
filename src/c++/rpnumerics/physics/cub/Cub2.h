@@ -41,26 +41,7 @@ public:
 
 };
 
-inline SubPhysics * Cub2::clone()const {
-    return new Cub2(*this);
-}
 
-
-inline Boundary * Cub2::defaultBoundary() const{
-
-    RealVector min(2);
-
-    min.component(0) = -10.0;
-    min.component(1) = -10.0;
-
-    RealVector max(2);
-
-    max.component(0) = 10.0;
-    max.component(1) = 10.0;
-
-    return new RectBoundary(min, max);
-
-}
 
 
 #endif //! _CUB2_H

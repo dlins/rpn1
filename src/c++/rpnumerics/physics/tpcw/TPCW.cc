@@ -11,6 +11,8 @@
  * Includes:
  */
 #include "TPCW.h"
+#include "Double_Contact_TP.h"
+#include "ShockContinuationMethod3D2D.h"
 
 /*
  * ---------------------------------------------------------------
@@ -20,6 +22,30 @@
 
 TPCW::TPCW(const RealVector & paramsVector, const string & rpnHomePath) :
 SubPhysics(*defaultBoundary(), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATION_) {
+
+
+    //       <PHYSICSPARAM name="abs perm" position="0" value="2e-12"/>
+    //                <PHYSICSPARAM name="sin beta" position="1" value="0.0"/>
+    //                <PHYSICSPARAM name="has gravity" position="2" value="0.0"/>
+    //                <PHYSICSPARAM name="has horizontal" position="3" value="1.0"/>
+    //                <PHYSICSPARAM name="cnw" position="4" value="0.3"/>
+    //                <PHYSICSPARAM name="cng" position="5" value="0.0"/>
+    //                <PHYSICSPARAM name="expw" position="6" value="2.0"/>
+    //                <PHYSICSPARAM name="expg" position="7" value="2.0"/>
+    //
+    //
+    //               <PHYSICSPARAM name="phi" position="8" value="0.38"/>
+    //
+    //
+    //
+    //                <PHYSICSPARAM name="T_typical" position ="9" value="304.63"/>
+    //                <PHYSICSPARAM name="U_typical" position="10" value="998.2"/>
+    //                <PHYSICSPARAM name="Rho_typical" position="11" value="4.22e-3"/>
+
+
+
+
+
 
 
     RealVector fluxVector(8);
@@ -43,70 +69,122 @@ SubPhysics(*defaultBoundary(), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATIO
     fluxFunction_ = new Flux2Comp2PhasesAdimensionalized(Flux2Comp2PhasesAdimensionalized_Params(fluxVector, TD));
     accumulationFunction_ = new Accum2Comp2PhasesAdimensionalized(Accum2Comp2PhasesAdimensionalized_Params(TD, paramsVector.component(8)));
 
-
-    RealVector Uref(3);
-    Uref.component(0) = 0;
-    Uref.component(1) = 0;
-    Uref.component(2) = 0;
-
-    ReducedTPCWHugoniotFunctionClass * tpcwhc = new ReducedTPCWHugoniotFunctionClass(Uref, (Flux2Comp2PhasesAdimensionalized*) fluxFunction_, (Accum2Comp2PhasesAdimensionalized *) accumulationFunction_);
-    //
-    setHugoniotFunction(tpcwhc);
+    cout << "Flux: " << fluxFunction_ << endl;
+    cout << "Accum: " << accumulationFunction_ << endl;
 
 
+    setHugoniotFunction(new Hugoniot_TP());
+    setDoubleContactFunction(new Double_Contact_TP());
+    setShockMethod(new ShockContinuationMethod3D2D());
+
+
+    RealVector min(boundary().minimums());
+
+    RealVector max(boundary().maximums());
+
+
+    preProcess(min);
+
+    preProcess(max);
+    
+    preProcessedBoundary_ = new RectBoundary(min, max);
 
 
 
 }
 
-TPCW::TPCW(const TPCW & copy) :
-SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.boundary(), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATION_),
-TD(new Thermodynamics_SuperCO2_WaterAdimensionalized(*copy.TD)) {
+const Boundary * TPCW::getPreProcessedBoundary()const {
 
-    ReducedTPCWHugoniotFunctionClass * tpcwhc = new ReducedTPCWHugoniotFunctionClass((ReducedTPCWHugoniotFunctionClass &) * copy.getHugoniotFunction());
-    setHugoniotFunction(tpcwhc);
+    return preProcessedBoundary_;
+
 
 }
 
 void TPCW::setParams(vector<string> params) {
 
-    for (int i = 0; i < params.size(); i++) {
-        cout << "i: "<<i<<" " <<params.at(i) << endl;
 
 
-    }
+    TD->setTtypical(atof(params[9].c_str()));
+    TD->setRhoTypical(atof(params[10].c_str()));
+    TD->UTypical(atof(params[11].c_str()));
 
     RealVector fluxParamVector(8);
 
     //Flux params
     for (int i = 0; i < fluxParamVector.size(); i++) {
 
-        fluxParamVector.component(i) = atof(params[i].c_str());
-
+        double paramValue = atof(params[i].c_str());
+        fluxParamVector.component(i) = paramValue;
     }
 
-    cout << "Parametros em setParams:" << fluxParamVector << endl;
 
 
-    fluxFunction_->fluxParams(fluxParamVector); // = new Flux2Comp2PhasesAdimensionalized(Flux2Comp2PhasesAdimensionalized_Params(fluxVector, TD));
+    fluxFunction_->fluxParams(Flux2Comp2PhasesAdimensionalized_Params(fluxParamVector, TD));
 
 
-
-    //    delete TD;
-    TD = new Thermodynamics_SuperCO2_WaterAdimensionalized(params.at(11),
-            atof(params[8].c_str()),
-            atof(params[9].c_str()),
-            atof(params[10].c_str()));
+    accumulationFunction_->accumulationParams(Accum2Comp2PhasesAdimensionalized_Params(TD, atof(params[8].c_str())));
 
 
 
-    double phi = atof(params[12].c_str());
-
-    accumulationFunction_ ->accumulationParams(Accum2Comp2PhasesAdimensionalized_Params(TD, phi));
 
 
 
 }
+
+
+TPCW::TPCW(const TPCW & copy) :
+SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.boundary(), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATION_),
+TD(new Thermodynamics_SuperCO2_WaterAdimensionalized(*copy.TD)) {
+
+
+    setHugoniotFunction(new Hugoniot_TP());
+    setDoubleContactFunction(new Double_Contact_TP());
+    setShockMethod(new ShockContinuationMethod3D2D());
+
+    preProcessedBoundary_ = new RectBoundary(*copy.preProcessedBoundary_);
+    
+
+}
+
+//void TPCW::setParams(vector<string> params) {
+//
+//    for (int i = 0; i < params.size(); i++) {
+//        cout << "i: "<<i<<" " <<params.at(i) << endl;
+//
+//
+//    }
+//
+//    RealVector fluxParamVector(8);
+//
+//    //Flux params
+//    for (int i = 0; i < fluxParamVector.size(); i++) {
+//
+//        fluxParamVector.component(i) = atof(params[i].c_str());
+//
+//    }
+//
+//    cout << "Parametros em setParams:" << fluxParamVector << endl;
+//
+//
+//    fluxFunction_->fluxParams(fluxParamVector); // = new Flux2Comp2PhasesAdimensionalized(Flux2Comp2PhasesAdimensionalized_Params(fluxVector, TD));
+//
+//
+//
+//    //    delete TD;
+//    TD = new Thermodynamics_SuperCO2_WaterAdimensionalized(params.at(11),
+//            atof(params[8].c_str()),
+//            atof(params[9].c_str()),
+//            atof(params[10].c_str()));
+//
+//
+//
+//    double phi = atof(params[12].c_str());
+//
+//    accumulationFunction_ ->accumulationParams(Accum2Comp2PhasesAdimensionalized_Params(TD, phi));
+//
+//
+//
+//}
 
 SubPhysics * TPCW::clone() const {
 
@@ -114,6 +192,7 @@ SubPhysics * TPCW::clone() const {
 }
 
 double TPCW::T2Theta(double T)const {
+
     return TD->T2Theta(T);
 }
 
@@ -130,7 +209,7 @@ Boundary * TPCW::defaultBoundary()const {
     //    min.component(1) = T2Theta(304.63);
     min.component(1) = 304.63;
     //    min.component(2) = TD->u2U(0);
-    min.component(2) = 1 * 4.22e-3;
+    min.component(2) = 0 * 4.22e-3;
 
 
     //    cout <<min.component(0)<<"<--------MIN 0"<<endl;
@@ -150,7 +229,6 @@ Boundary * TPCW::defaultBoundary()const {
     //    cout << max.component(1) << "<-------MAX 1" << endl;
     //    cout << max.component(2) << "<------MAX 2" << endl;
 
-
     return new RectBoundary(min, max);
 
 }
@@ -165,11 +243,21 @@ void TPCW::preProcess(RealVector & input) {
 
 }
 
+void TPCW::postProcess(RealVector & input) {
+
+    RealVector temp(input);
+    
+    
+    input.resize(3);
+    input.component(0) = temp.component(0);
+    input.component(1) = TD->Theta2T(temp.component(1));
+    input.component(2) = boundary().maximums().component(2);
+    
+//    input.component(2) = TD->U2u(temp.component(2));
+}
+
+
 void TPCW::postProcess(vector<RealVector> & input) {
-
-
-    cout << "Em post process" << endl;
-
 
     int inputSize = input[0].size();
 
@@ -178,8 +266,8 @@ void TPCW::postProcess(vector<RealVector> & input) {
         switch (inputSize) {
             case 4://Rarefaction
                 input[i].component(1) = TD->Theta2T(input[i].component(1));
-                input[i].component(2) = TD->U2u(input[i].component(2));
-                input[i].component(3) = TD->U2u(input[i].component(3));
+                input[i].component(2) = TD->U2u(input[i].component(2)); // redimensionaliaztion of the darcy speed.
+                input[i].component(3) = TD->U2u(input[i].component(3)); // redimensionalization of the the eigenvalue.
                 break;
 
             case 8://Shock
@@ -201,6 +289,7 @@ void TPCW::postProcess(vector<RealVector> & input) {
                 input[i].component(0) = temp.component(0);
                 input[i].component(1) = TD->Theta2T(temp.component(1));
                 input[i].component(2) = boundary().maximums().component(2);
+
                 break;
 
         }
@@ -212,6 +301,7 @@ void TPCW::postProcess(vector<RealVector> & input) {
 
 TPCW::~TPCW() {
     delete TD;
+    delete preProcessedBoundary_;
 
 }
 

@@ -77,8 +77,17 @@ public class RPnAdjustedSelectionPlotter extends RPn2DMouseController  {
             double[] mePosArray = {me.getX(), me.getY()};
             CoordsArray cursorPosWC = new CoordsArray(new Space(" ", 2));
             Coords2D mePosDC = new Coords2D(mePosArray);
-            CoordsArray mePosWC = new CoordsArray(new Space(" ", 2));
+            CoordsArray mePosWC = new CoordsArray(new Space(" ",3));
             panel.scene().getViewingTransform().dcInverseTransform(mePosDC, mePosWC);
+            
+            
+            
+            
+            
+            
+            
+            
+            
             Path2D.Double selectionPath = new Path2D.Double();
             selectionPath.moveTo(cursorPosWC.getElement(0), cursorPosWC.getElement(1));
             List<Object> wcObjectsList = new ArrayList();

@@ -222,7 +222,7 @@ public class RPnDataModule {
                     ContourParams params = new ContourParams(processResolution(att.getValue("resolution")));
                     tempPoint_ = new PhasePoint(new RealVector(att.getValue("inputpoint")));
                     direction_ = chooseDirection(att.getValue("direction"));
-                    calc_ = new RarefactionExtensionCalc(params, tempPoint_, direction_, new Integer(att.getValue("curvefamily")), new Integer(att.getValue("characteristic")));
+                    calc_ = new RarefactionExtensionCalc(params, tempPoint_, direction_, new Integer(att.getValue("curvefamily")),  new Integer(att.getValue("extensionfamily")),new Integer(att.getValue("characteristic")));
 
                 }
                 if (currentCommand_.equalsIgnoreCase("integralcurve")) {
@@ -239,7 +239,7 @@ public class RPnDataModule {
                     direction_ = chooseDirection(att.getValue("direction"));
                     int family = new Integer(att.getValue("family"));
 
-                    calc_ = new ShockCurveCalc(tempPoint_, family, direction_);
+                    calc_ = new ShockCurveCalc(tempPoint_, family, direction_, 0.001);//TODO Tolerance hardcoded. Only to compile.
 
                 }
                 if (currentCommand_.equalsIgnoreCase("compositecurve")) {

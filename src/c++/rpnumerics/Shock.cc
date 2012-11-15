@@ -2,6 +2,10 @@
 
 int Shock::reason = 0;
 
+Shock::Shock(){
+    
+}
+
 double Shock::ddot(int n, double *x, double *y){
     double res = 0.0;
     for (int i = 0; i < n; i++) res += x[i]*y[i];
@@ -53,6 +57,7 @@ double Shock::euclidean_norm(int n, double x[]){
 
     return sqrt(norm);
 }
+
 
 void Shock::fill_with_jet(RpFunction * flux_object, int n, double *in, int degree, double *F, double *J, double *H) {
     RealVector r(n);
@@ -847,6 +852,13 @@ int Shock::curve_constructor(Boundary *boundary, bool local_shock, int type_of_s
     
     return SHOCK_OK;
 }
+
+
+
+void Shock::curveCalc(const RealVector &ref, bool local_shock, const RealVector &in, int increase, int family, int type_of_shock, const RealVector *orig_direction, int number_ignore_doub_contact, FluxFunction *ff, AccumulationFunction *aa, Boundary *boundary,
+            std::vector<RealVector> &shockcurve, int &info_shockcurve, std::vector<RealVector> &shockcurve_alt, int &info_shockcurve_alt,double newtonTolerance) {
+    curve(ref,local_shock,in,increase,family,type_of_shock,orig_direction,number_ignore_doub_contact,ff,aa,boundary,shockcurve,info_shockcurve,shockcurve_alt,info_shockcurve_alt);
+  }
 
 //int Shock::curve(const RealVector &ref, bool local_shock, const RealVector &in, int increase, int family, int type_of_shock, const RealVector *orig_direction, FluxFunction *ff, AccumulationFunction *aa, Boundary *boundary, 
 //                 std::vector<RealVector> &shockcurve, std::vector<RealVector> &shockcurve_alt){

@@ -11,6 +11,7 @@
  * Includes:
  */
 #include "CoreyQuadPhysics.h"
+#include "Hugoniot_Curve.h"
 
 /*
  * ---------------------------------------------------------------
@@ -20,7 +21,7 @@
 
 
 CoreyQuadPhysics::CoreyQuadPhysics() : SubPhysics(CoreyQuad(CoreyQuad_Params()), StoneAccumulation(), *defaultBoundary(), Multid::PLANE, "CoreyQuad", _SIMPLE_ACCUMULATION_) {
-
+    setHugoniotFunction(new Hugoniot_Curve());
 }
 
 SubPhysics * CoreyQuadPhysics::clone()const {
@@ -29,6 +30,7 @@ SubPhysics * CoreyQuadPhysics::clone()const {
 }
 
 CoreyQuadPhysics::CoreyQuadPhysics(const CoreyQuadPhysics & copy) : SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.boundary(), copy.domain(), "CoreyQuad", _SIMPLE_ACCUMULATION_) {
+    setHugoniotFunction(new Hugoniot_Curve());
 }
 
 CoreyQuadPhysics::~CoreyQuadPhysics() {
@@ -54,4 +56,19 @@ void CoreyQuadPhysics::setParams(vector<string> newParams) {
     CoreyQuad_Params newCoreyQuadParams(fluxParamVector);
     fluxFunction_->fluxParams(newCoreyQuadParams);
 
+}
+
+Boundary * CoreyQuadPhysics::defaultBoundary() const{
+
+    RealVector min(2);
+
+    min.component(0) = 0.0;
+    min.component(1) = 0.0;
+
+    RealVector max(2);
+
+    max.component(0) = 1.0;
+    max.component(1) = 1.0;
+
+    return new Three_Phase_Boundary(min, max);
 }

@@ -25,6 +25,7 @@
 #include <vector>
 #include "Shock.h"
 #include "Rarefaction.h"
+#include "ShockContinuationMethod3D2D.h"
 
 
 using std::vector;
@@ -44,7 +45,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
     jclass shockCurveClass = (env)->FindClass(SHOCKCURVE_LOCATION);
 
     jmethodID shockCurveConstructor = (env)->GetMethodID(shockCurveClass, "<init>", "([Lrpnumerics/OrbitPoint;II)V");
-    jmethodID orbitPointConstructor = (env)->GetMethodID(classOrbitPoint, "<init>", "([D)V");
+    jmethodID orbitPointConstructor = (env)->GetMethodID(classOrbitPoint, "<init>", "([DD)V");
     jmethodID toDoubleMethodID = (env)->GetMethodID(classOrbitPoint, "toDouble", "()[D");
 
     //Input processing
@@ -70,16 +71,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
 
     vector <RealVector> coords, shock_alt;
 
-//    cout << "Valor de increase" << increase << endl;
-
-    const Boundary & physicsBoundary = RpNumerics::getPhysics().boundary();
-
-    RealVector min(physicsBoundary. minimums());
-    RealVector max(physicsBoundary. maximums());
-
-//    cout << "Valor de family" << familyIndex << endl;
-
-
     RealVector * originalDirection = new RealVector(realVectorInput.size());
 
     originalDirection->component(0) = 0;
@@ -92,53 +83,50 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
     if (increase == RAREFACTION_SPEED_DECREASE)
         increase = WAVE_BACKWARD;
 
-    RealVector initPoint = realVectorInput;
+    FluxFunction * fluxFunction = (FluxFunction *) & RpNumerics::getPhysics().getSubPhysics(0).fluxFunction();
+    AccumulationFunction * accumulationFunction = (AccumulationFunction *) & RpNumerics::getPhysics().getSubPhysics(0).accumulation();
 
-    //    initPoint.component(0) = 0.5678;
-    //    initPoint.component(1) = 0.4121;
+    Boundary * tempBoundary = (Boundary *) RpNumerics::getPhysics().getSubPhysics(0).getPreProcessedBoundary();
 
+    int info_shock_curve, info_shock_curve_alt;
 
-    FluxFunction * fluxFunction = (FluxFunction *) RpNumerics::getPhysics().fluxFunction().clone();
-    AccumulationFunction * accumulationFunction = (AccumulationFunction *) RpNumerics::getPhysics().accumulation().clone();
+    int dim = realVectorInput.size();
 
-    Boundary * tempBoundary = RpNumerics::getPhysics().boundary().clone();
+    RealVector original_direction(dim);
 
-    int info_shock_curve,info_shock_curve_alt;
+    RpNumerics::getPhysics().getSubPhysics(0).preProcess(realVectorInput);
 
-    Shock::curve(realVectorInput, true, initPoint, increase, familyIndex, SHOCK_FOR_ITSELF, originalDirection,0,
+    ShockMethod * shock = RpNumerics::getPhysics().getSubPhysics(0).getShockMethod();
 
-            fluxFunction, accumulationFunction,
-            tempBoundary, coords, info_shock_curve,shock_alt,info_shock_curve_alt);
-
-
-    delete tempBoundary;
-    delete fluxFunction;
-    delete accumulationFunction;
-
+    shock->curveCalc(realVectorInput, true, realVectorInput, increase, familyIndex, SHOCK_FOR_ITSELF,
+            &original_direction, 0,
+            fluxFunction, accumulationFunction, tempBoundary,
+            coords, info_shock_curve,
+            shock_alt,
+            info_shock_curve_alt, newtonTolerance);
 
     //Orbit members creation
 
-    if(coords.size()==0) return NULL;
+    if (coords.size() == 0) return NULL;
 
     jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(coords.size(), classOrbitPoint, NULL);
+
 
     for (i = 0; i < coords.size(); i++) {
 
         RealVector tempVector = coords.at(i);
 
-        RealVector newVector(tempVector.size() + 1);
+        RpNumerics::getPhysics().getSubPhysics(0).postProcess(tempVector);
 
-        newVector(0) = tempVector(0);
-        newVector(1) = tempVector(1);
-        newVector(2) = 0;
+        double lambda = tempVector.component(tempVector.size() - 1);
 
-        double * dataCoords = newVector;
+        double * dataCoords = tempVector;
 
-        jdoubleArray jTempArray = (env)->NewDoubleArray(newVector.size());
+        jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size());
 
-        (env)->SetDoubleArrayRegion(jTempArray, 0, newVector.size(), dataCoords);
+        (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size(), dataCoords);
 
-        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray);
+        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray, lambda);
 
         (env)->SetObjectArrayElement(orbitPointArray, i, orbitPoint);
 

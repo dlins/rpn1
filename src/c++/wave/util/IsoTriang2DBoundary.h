@@ -67,10 +67,9 @@ public:
     RealVector intersect(RealVector &p1, RealVector &p2) const;
     int intersection(const RealVector &p, const RealVector &q, RealVector &r, int &w) const;
 
-    void envelope_curve(const FluxFunction *f, const AccumulationFunction *a,
-            GridValues &gv,
-            int where_constant, int number_of_steps, bool singular,
-            std::vector<RealVector> &c, std::vector<RealVector> &d);
+
+
+
 
     void extension_curve(const FluxFunction *f, const AccumulationFunction *a,
             GridValues &gv,
@@ -78,7 +77,17 @@ public:
             int fam, int characteristic,
             std::vector<RealVector> &c, std::vector<RealVector> &d);
 
-    void physical_boundary( std::vector<RealVector> &);
+
+    void envelope_curve(const FluxFunction *f, const AccumulationFunction *a,
+            GridValues &gv,
+            int where_constant, int number_of_steps, bool singular,
+            std::vector<RealVector> &c, std::vector<RealVector> &d);
+
+
+
+
+
+    void physical_boundary(std::vector<RealVector> &);
 
 
     const char* boundaryType() const;
@@ -94,75 +103,6 @@ public:
 
 
 
-
-
-//
-//
-//class IsoTriang2DBoundary : public Boundary {
-//private:
-//
-//    RealVector * minimums_;
-//    RealVector * maximums_;
-//
-//    const char * type_;
-//
-//    // This number is given as (pmax(0) + pmax(1))/2.0 + 0.000001, where 0.000001 is a trick for
-//    // the usage in HyperCube sons.
-//    //
-//    double end_edge;
-//
-//
-//protected:
-//
-//
-//    void edge_segments(int where_constant, int number_of_steps, std::vector<RealVector> &seg);
-//
-//public:
-//
-//    virtual ~IsoTriang2DBoundary();
-//
-//    IsoTriang2DBoundary(const RealVector & A, const RealVector & B, const RealVector & C);
-//
-//    IsoTriang2DBoundary(const IsoTriang2DBoundary &);
-//
-//    bool inside(const RealVector &y) const;
-//
-//    bool inside(const double*)const;
-//
-//    //! Virtual constructor
-//    Boundary * clone()const;
-//
-//    const RealVector & minimums() const;
-//
-//    const RealVector & maximums() const;
-//
-//    RealVector intersect(RealVector &y1, RealVector &y2) const;
-//
-//
-//
-//    int intersection(const RealVector &p, const RealVector &q, RealVector &r, int &w) const;
-//
-//
-//    virtual void envelope_curve(const FluxFunction *f, const AccumulationFunction *a,
-//            GridValues &gv,
-//            int where_constant, int number_of_steps, bool singular,
-//            std::vector<RealVector> &c, std::vector<RealVector> &d);
-//
-//    virtual void extension_curve(const FluxFunction *f, const AccumulationFunction *a,
-//            GridValues &gv,
-//            int where_constant, int number_of_steps, bool singular,
-//            int fam,
-//            std::vector<RealVector> &c, std::vector<RealVector> &d);
-//
-//
-//
-//
-//
-
-//
-//};
-//
-
 inline const RealVector & Three_Phase_Boundary::getA()const {
     return *A_;
 }
@@ -175,13 +115,6 @@ inline const RealVector & Three_Phase_Boundary::getC()const {
     return *C_;
 }
 
-//inline const RealVector & IsoTriang2DBoundary::minimums() const {
-//    return *minimums_;
-//}
-//
-//inline const RealVector & IsoTriang2DBoundary::maximums() const {
-//    return *maximums_;
-//}
 
 
 #endif //! _IsoTriang2DBoundary_H

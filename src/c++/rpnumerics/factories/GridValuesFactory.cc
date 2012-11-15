@@ -32,7 +32,13 @@ GridValues * GridValuesFactory::getGrid(const string & gridName) {
         return gridArray_->operator [](gridName);
     } else {
 
-        const Boundary* boundary = &physics_->boundary();
+        const Boundary* boundary = physics_->getSubPhysics(0).getPreProcessedBoundary();
+
+        cout << "Min: " << boundary->minimums() << endl;
+        cout << "Max: " << boundary->maximums() << endl;
+
+        cout << "Parametros flux: em gv " << physics_->getSubPhysics(0).fluxFunction().fluxParams().params() << endl;
+        cout << "Parametros accum em gv: " << physics_->getSubPhysics(0).accumulation().accumulationParams().params() << endl;
 
         vector<int> noc = getDefaultGridResolution(gridName);
 
@@ -54,7 +60,9 @@ void GridValuesFactory::setResolution(const string & gridName, vector<int> newRe
 
     GridValues * grid = getGrid(gridName);
 
-    const Boundary* boundary = &physics_->boundary();
+    //    const Boundary* boundary = &physics_->boundary();
+
+    const Boundary* boundary = physics_->getSubPhysics(0).getPreProcessedBoundary();
 
     grid->set_grid(boundary, boundary->minimums(), boundary->maximums(), newResolution);
 
@@ -67,9 +75,10 @@ void GridValuesFactory::updateGrids() {
 
     vector<int> resolution;
 
-      const Boundary* boundary = &physics_->boundary();
+    //      const Boundary* boundary = &physics_->boundary();
 
 
+    const Boundary* boundary = physics_->getSubPhysics(0).getPreProcessedBoundary();
 
     for (it = gridArray_->begin(); it != gridArray_->end(); it++) {
 

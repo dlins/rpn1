@@ -78,6 +78,8 @@ public class OrbitController extends RpCalcController {
 
             for (int i = 0; i < auxFrames.length; i++) {
 
+                if(auxFrames[i]!=null){//TODO REMOVE !!
+                     
                 Iterator it = auxFrames[i].phaseSpacePanel().scene().geometries();
 
                 while (it.hasNext()) {
@@ -89,6 +91,8 @@ public class OrbitController extends RpCalcController {
                     }
 
                 }
+                }
+               
 
             }
 
