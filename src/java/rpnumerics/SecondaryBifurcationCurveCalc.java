@@ -23,9 +23,6 @@ public class SecondaryBifurcationCurveCalc extends ContourCurveCalc {
     @Override
     public RpSolution calc() throws RpException {
         RpSolution result = null;
-
-        System.out.println("Entrando em SecondaryBifurcationCalc... ");
-
         result = (SecondaryBifurcationCurve) nativeCalc();
 
         if (result == null) {

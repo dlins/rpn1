@@ -22,8 +22,7 @@ public class HysteresisCurveCalc extends ContourCurveCalc {
     @Override
     public RpSolution calc() throws RpException {
 
-        int resolution[] = getParams().getResolution();
-        HysteresisCurve result = (HysteresisCurve) nativeCalc(family_, resolution);
+        HysteresisCurve result = (HysteresisCurve) nativeCalc(family_);
 
         if (result == null) {
             throw new RpException("Error in native layer");
@@ -41,7 +40,5 @@ public class HysteresisCurveCalc extends ContourCurveCalc {
 
    
 
-    private native RpSolution nativeCalc(int family,
-            int[] resolution
-            ) throws RpException;
+    private native RpSolution nativeCalc(int family) throws RpException;
 }

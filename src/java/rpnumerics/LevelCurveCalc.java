@@ -28,7 +28,7 @@ public class LevelCurveCalc extends ContourCurveCalc {
 
     public RpSolution calc() throws RpException {
 
-        LevelCurve result = (LevelCurve) calcNative(family_, level_,getParams().getResolution());
+        LevelCurve result = (LevelCurve) calcNative(family_, level_);
 
         if (result == null) {
             throw new RpException("Error in native layer");
@@ -44,7 +44,7 @@ public class LevelCurveCalc extends ContourCurveCalc {
 
    
 
-    private native RpSolution calcNative(int family, double level, int[] resolution);
+    private native RpSolution calcNative(int family, double level);
 
    
 }

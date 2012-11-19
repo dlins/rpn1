@@ -22,9 +22,8 @@ public class InflectionCurveCalc extends ContourCurveCalc {
     @Override
     public RpSolution calc() throws RpException {
 
-        int[] resolution = getParams().getResolution();
 
-        InflectionCurve result = (InflectionCurve) nativeCalc(family_, resolution);
+        InflectionCurve result = (InflectionCurve) nativeCalc(family_);
 
         if (result == null) {
             throw new RpException("Error in native layer");
@@ -38,5 +37,5 @@ public class InflectionCurveCalc extends ContourCurveCalc {
         return family_;
     }
 
-    private native RpSolution nativeCalc(int family, int[] resolution) throws RpException;
+    private native RpSolution nativeCalc(int family) throws RpException;
 }

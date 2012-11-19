@@ -30,7 +30,7 @@ using std::vector;
  */
 
 
-JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionExtensionCalc_nativeCalc(JNIEnv * env, jobject obj, jintArray resolution, jobject initialPoint, jint increase, jint curveFamily, jint domainFamily, jint characteristicWhere) {
+JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionExtensionCalc_nativeCalc(JNIEnv * env, jobject obj,jobject initialPoint, jint increase, jint curveFamily, jint domainFamily, jint characteristicWhere) {
 
 
     jclass classPhasePoint = (env)->FindClass(PHASEPOINT_LOCATION);
@@ -75,12 +75,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionExtensionCalc_nativeCalc(JN
 
     std::vector<RealVector> curve_segments;
     std::vector<RealVector> domain_segments;
-    //    std::vector<RealVector> rarefaction_segments;
-
-
-//    jint number_of_grid_points [dimension];
-//
-//    env->GetIntArrayRegion(resolution, 0, dimension, number_of_grid_points);
+  
 
     int singular = 0;
 
@@ -88,8 +83,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionExtensionCalc_nativeCalc(JN
     const AccumulationFunction * accumFunction = &RpNumerics::getPhysics().accumulation();
 
     const Boundary * boundary = RpNumerics::getPhysics().getSubPhysics(0).getPreProcessedBoundary();
-
-
 
     GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcation");
 
@@ -105,25 +98,15 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionExtensionCalc_nativeCalc(JN
             curve_segments,
             domain_segments);
 
-    cout << "Dimensao: " << dimension << endl;
-
-    cout << "curve:" << curve_segments.size() << endl;
-    cout << "domain: " << domain_segments.size() << endl;
 
     if (curve_segments.size() == 0 || domain_segments.size() == 0) {
-        cout << "curve:" << curve_segments.size() << endl;
-        cout << "domain: " << domain_segments.size() << endl;
+
 
         return NULL;
     }
 
-    cout << "Depois null" << endl;
+
     for (unsigned int i = 0; i < curve_segments.size() / 2; i++) {
-        //    for (unsigned int i = 0; i < right_vrs.size() / 2; i++) {
-
-        //        cout << "Coordenada : " << left_vrs.at(2 * i) << endl;
-        //        cout << "Coordenada : " << left_vrs.at(2 * i + 1) << endl;
-
 
         jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
         jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
@@ -134,12 +117,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionExtensionCalc_nativeCalc(JN
 
         double * leftCoords = (double *) curve_segments.at(2 * i);
         double * rightCoords = (double *) curve_segments.at(2 * i + 1);
-
-        cout << "Lado curva: " << curve_segments.at(2 * i) << " " << curve_segments.at(2 * i + 1) << endl;
-
-        //
-        //        double * leftCoords = (double *) right_vrs.at(2 * i);
-        //        double * rightCoords = (double *) right_vrs.at(2 * i + 1 );
 
 
         env->SetDoubleArrayRegion(eigenValRLeft, 0, dimension, leftCoords);
@@ -162,10 +139,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionExtensionCalc_nativeCalc(JN
 
     for (unsigned int i = 0; i < domain_segments.size() / 2; i++) {
 
-        //        cout << "Coordenada : " << left_vrs.at(2 * i) << endl;
-        //        cout << "Coordenada : " << left_vrs.at(2 * i + 1) << endl;
-
-
         jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
         jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
 
@@ -176,7 +149,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionExtensionCalc_nativeCalc(JN
         double * leftCoords = (double *) domain_segments.at(2 * i);
         double * rightCoords = (double *) domain_segments.at(2 * i + 1);
 
-        cout << "Lado domain: " << domain_segments.at(2 * i) << " " << domain_segments.at(2 * i + 1) << endl;
 
         env->SetDoubleArrayRegion(eigenValRLeft, 0, dimension, leftCoords);
         env->SetDoubleArrayRegion(eigenValRRight, 0, dimension, rightCoords);
@@ -187,26 +159,14 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionExtensionCalc_nativeCalc(JN
 
         jobject realVectorRightPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRRight);
 
-        //            cout << "type of " << j << " = " << classified[i].type << endl;
-        //            cout << "speed of " << j << " = " << classified[i].vec[j].component(dimension + m) << endl;
-        //            cout << "speed of " << j + 1 << " = " << classified[i].vec[j + 1].component(dimension + m) << endl;
-
         jobject realSegment = env->NewObject(realSegmentClass, realSegmentConstructor, realVectorLeftPoint, realVectorRightPoint);
 
 
         env->CallObjectMethod(rightSegmentsArray, arrayListAddMethod, realSegment);
 
     }
-    cout<<"depois dos loops"<<endl;
+
     jobject result = env->NewObject(compositeCurveClass, compositeCurveConstructor, leftSegmentsArray, rightSegmentsArray);
-
-
-    //    env->DeleteLocalRef(eigenValRLeft);
-    //    env->DeleteLocalRef(eigenValRRight);
-    //    env->DeleteLocalRef(hugoniotSegmentClass);
-    //    env->DeleteLocalRef(realVectorClass);
-    //    env->DeleteLocalRef(arrayListClass);
-
 
 
     return result;

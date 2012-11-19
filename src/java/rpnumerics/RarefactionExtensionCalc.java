@@ -57,7 +57,7 @@ public class RarefactionExtensionCalc extends ContourCurveCalc {
         RpSolution result = null;
 
 
-        result = (RarefactionExtensionCurve) nativeCalc(getParams().getResolution(), start_, increase_, curveFamily_,domainFamily_, characteristicDomain_);
+        result = (RarefactionExtensionCurve) nativeCalc(start_, increase_, curveFamily_,domainFamily_, characteristicDomain_);
         if (result == null) {
             throw new RpException("Error in native layer");
         }
@@ -93,7 +93,7 @@ public class RarefactionExtensionCalc extends ContourCurveCalc {
 
 
 
-    private native RpSolution nativeCalc(int [] resolution, PhasePoint start, int increase, int leftFamily, int rightFamily, int characteristicDomain) throws RpException;
+    private native RpSolution nativeCalc(PhasePoint start, int increase, int leftFamily, int rightFamily, int characteristicDomain) throws RpException;
 
     public RpSolution recalc(Area area) throws RpException {
         return null;

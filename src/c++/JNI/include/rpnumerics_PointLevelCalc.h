@@ -10,10 +10,10 @@ extern "C" {
 /*
  * Class:     rpnumerics_PointLevelCalc
  * Method:    calcNative
- * Signature: (ILwave/util/RealVector;[I)Lrpnumerics/RpSolution;
+ * Signature: (ILwave/util/RealVector;)Lrpnumerics/RpSolution;
  */
 JNIEXPORT jobject JNICALL Java_rpnumerics_PointLevelCalc_calcNative
-  (JNIEnv *, jobject, jint, jobject, jintArray);
+  (JNIEnv *, jobject, jint, jobject);
 
 #ifdef __cplusplus
 }

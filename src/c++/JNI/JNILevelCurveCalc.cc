@@ -30,7 +30,7 @@ NOTE :
 using std::vector;
 using namespace std;
 
-JNIEXPORT jobject JNICALL Java_rpnumerics_PointLevelCalc_calcNative(JNIEnv * env, jobject obj, jint family, jobject initialPoint, jintArray resolution) {
+JNIEXPORT jobject JNICALL Java_rpnumerics_PointLevelCalc_calcNative(JNIEnv * env, jobject obj, jint family, jobject initialPoint) {
 
 
     jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
@@ -39,16 +39,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_PointLevelCalc_calcNative(JNIEnv * env
 
     jclass arrayListClass = env->FindClass("java/util/ArrayList");
 
-    jclass doubleClass = env->FindClass("java/lang/Double");
-
     jclass levelCurveClass = env->FindClass(LEVELCURVE_LOCATION);
 
-
-
     jmethodID realVectorConstructorDoubleArray = env->GetMethodID(realVectorClass, "<init>", "([D)V");
-
-
-    jmethodID doubleConstructor = env->GetMethodID(doubleClass, "<init>", "(D)V");
 
     jmethodID realSegmentConstructor = (env)->GetMethodID(realSegmentClass, "<init>", "(Lwave/util/RealVector;Lwave/util/RealVector;)V");
 
@@ -77,7 +70,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_PointLevelCalc_calcNative(JNIEnv * env
 
     }
 
-    //    env->DeleteLocalRef(inputPhasePointArray);
 
     int dimension = RpNumerics::getPhysics().domain().dim();
 
@@ -154,7 +146,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_PointLevelCalc_calcNative(JNIEnv * env
 
 }
 
-JNIEXPORT jobject JNICALL Java_rpnumerics_LevelCurveCalc_calcNative(JNIEnv * env, jobject obj, jint family, jdouble level, jintArray resolution) {
+JNIEXPORT jobject JNICALL Java_rpnumerics_LevelCurveCalc_calcNative(JNIEnv * env, jobject obj, jint family, jdouble level) {
 
 
     jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
@@ -162,23 +154,15 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_LevelCurveCalc_calcNative(JNIEnv * env
     jclass realSegmentClass = env->FindClass(REALSEGMENT_LOCATION);
 
     jclass arrayListClass = env->FindClass("java/util/ArrayList");
-
-    jclass doubleClass = env->FindClass("java/lang/Double");
-
     jclass levelCurveClass = env->FindClass(LEVELCURVE_LOCATION);
 
-
-
     jmethodID realVectorConstructorDoubleArray = env->GetMethodID(realVectorClass, "<init>", "([D)V");
-
-
-    jmethodID doubleConstructor = env->GetMethodID(doubleClass, "<init>", "(D)V");
 
     jmethodID realSegmentConstructor = (env)->GetMethodID(realSegmentClass, "<init>", "(Lwave/util/RealVector;Lwave/util/RealVector;)V");
 
     jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
     jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
-    jmethodID toDoubleMethodID = (env)->GetMethodID(realVectorClass, "toDouble", "()[D");
+
 
     jmethodID levelCurveConstructor = env->GetMethodID(levelCurveClass, "<init>", "(ILjava/util/List;D)V");
 
@@ -201,8 +185,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_LevelCurveCalc_calcNative(JNIEnv * env
 
     ec.curve(& RpNumerics::getPhysics().fluxFunction(), & RpNumerics::getPhysics().accumulation(),
             *gv, eigen_contours, vec_levels);
-
-    //    ec.curve(eigen_contours, vec_levels);
 
     if (eigen_contours.size() == 0)
         return NULL;

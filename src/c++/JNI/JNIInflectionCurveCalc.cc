@@ -30,7 +30,7 @@ NOTE :
 using std::vector;
 using namespace std;
 
-JNIEXPORT jobject JNICALL Java_rpnumerics_InflectionCurveCalc_nativeCalc(JNIEnv * env, jobject obj, jint family, jintArray resolution) {
+JNIEXPORT jobject JNICALL Java_rpnumerics_InflectionCurveCalc_nativeCalc(JNIEnv * env, jobject obj, jint family) {
 
 
     jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
@@ -51,43 +51,20 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_InflectionCurveCalc_nativeCalc(JNIEnv 
 
     jmethodID inflectionCurveConstructor = env->GetMethodID(inflectionCurveClass, "<init>", "(Ljava/util/List;)V");
 
-
     jobject segmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
-
 
     int dimension = RpNumerics::getPhysics().domain().dim();
 
     GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcation");
-    
-    cout <<"Resolution gv:"<<gv->grid_resolution<<endl;
 
     Inflection_Curve inflectionCurve;
 
     std::vector<RealVector> left_vrs;
-//    TPCW & tpcw = (TPCW &) RpNumerics::getPhysics().getSubPhysics(0);
-//
-//    Flux2Comp2PhasesAdimensionalized * fluxFunction = (Flux2Comp2PhasesAdimensionalized *) & tpcw.fluxFunction();
-//
-//    Accum2Comp2PhasesAdimensionalized * accumulationFunction = (Accum2Comp2PhasesAdimensionalized *) & tpcw.accumulation();
-//
-//    cout << "Parametros de acumulacao" << accumulationFunction->accumulationParams().params() << endl;
-//
-//    cout << "Parametros de fluxo" << tpcw.fluxFunction().fluxParams().params() << endl;
-//
-//    Thermodynamics_SuperCO2_WaterAdimensionalized * thermo = fluxFunction->getThermo();
-//
-//    cout << "Parametros de thermo: " << thermo->U_typical() << " " << thermo->T_typical() << endl;
 
     inflectionCurve.curve(& RpNumerics::getPhysics().fluxFunction(), & RpNumerics::getPhysics().accumulation(), *gv, family, left_vrs);
 
-    int tamanho = left_vrs.size();
-    cout << "Tamanho do vetor de pontos: " << tamanho << endl;
-
     if (left_vrs.size() == 0)
         return NULL;
-
-    cout << "Familia da inflexao: " << family << endl;
-
 
     for (int i = 0; i < left_vrs.size() / 2; i++) {
 
