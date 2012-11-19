@@ -227,7 +227,7 @@ void Bifurcation_CurveTPCW::fill_with_jet(RpFunction *flux_object, int n, double
     if (J != 0) {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                J[i * n + j] = c_jet(i, j);
+                J[i * n + j] = c_jet((int)i, (int)j);
             }
         }
     }

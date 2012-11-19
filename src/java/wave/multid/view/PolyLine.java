@@ -37,6 +37,8 @@ public class PolyLine extends ShapedGeometry {
         GeneralPath path = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
         AbstractPathIterator modelIterator = ((MultiGeometry)getAbstractGeom()).
             getPathIterator(getViewingTransform().viewingMap());
+        
+
         while (!modelIterator.isDone()) {
             modelIterator.next();
             CoordsArray[] currSegCoords = new CoordsArray[AbstractSegment.MAX_DEF_POINTS];

@@ -9,6 +9,10 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import java.io.FileReader;
 import java.util.Iterator;
+import rpn.command.ClassifierCommand;
+
+import rpn.command.VelocityCommand;
+
 import wave.multid.view.*;
 import wave.multid.*;
 import wave.multid.map.Map;

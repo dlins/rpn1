@@ -6,8 +6,9 @@
  */
 package rpn.controller.ui;
 
+import rpn.command.RpCommand;
 import rpn.RPnPhaseSpaceAbstraction;
-import rpn.usecase.*;
+import rpn.command.*;
 import rpn.RPnPhaseSpacePanel;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
@@ -55,9 +56,10 @@ public class UIController extends ComponentUI {
     private RPnPhaseSpacePanel focusPanel_;
     private StateInputController stateController_;
     public static UI_ACTION_SELECTED INITSTATE = null;
-    private ArrayList<Command> commandArray_;
+    private ArrayList<RpCommand> commandArray_;
     private boolean auxPanelsEnabled_;
     private RPnPhaseSpaceAbstraction activePhaseSpace_;
+    private boolean drag_ = false;
 
     //
     // Constructors
@@ -71,7 +73,7 @@ public class UIController extends ComponentUI {
         mouseController_ = new MouseController();
         globalInputTable_ = new UserInputTable(rpnumerics.RPNUMERICS.domainDim());
 
-        commandArray_ = new ArrayList<Command>();
+        commandArray_ = new ArrayList<RpCommand>();
         handler_ = new RAREFACTION_CONFIG();
         auxPanelsEnabled_ = true;
 
@@ -134,7 +136,7 @@ public class UIController extends ComponentUI {
         commandArray_.remove(commandArray_.size() - 1);
     }
 
-    public Iterator<Command> getCommandIterator() {
+    public Iterator<RpCommand> getCommandIterator() {
         return commandArray_.iterator();
 
     }
@@ -150,9 +152,6 @@ public class UIController extends ComponentUI {
     public void setActivePhaseSpace(RPnPhaseSpaceAbstraction activePhaseSpace_) {
         this.activePhaseSpace_ = activePhaseSpace_;
     }
-    
-    
-    
 
     //
     // Inner Classes
@@ -162,6 +161,7 @@ public class UIController extends ComponentUI {
         @Override
         public void mouseDragged(MouseEvent event) {
             RPnUIFrame.clearStatusMessage();
+            drag_ = true;
 
             if (event.getComponent() instanceof RPnPhaseSpacePanel) {
                 RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
@@ -204,7 +204,9 @@ public class UIController extends ComponentUI {
 //                        }
 
 
-                        DragPlotAgent.instance().execute();
+                        DragPlotCommand.instance().execute();
+
+
 
                     }
                 }                
@@ -219,7 +221,20 @@ public class UIController extends ComponentUI {
         }
 
         @Override
+        public void mouseReleased(MouseEvent event) {
+
+            if (drag_) {
+                if (!commandArray_.isEmpty())
+                    commandArray_.remove(commandArray_.size()-1);
+                    logCommand(new RpCommand((UI_ACTION_SELECTED) handler_, globalInputTable().values()));
+
+            }
+
+        }
+
+        @Override
         public void mousePressed(MouseEvent event) {
+            drag_ = false;
             RPnUIFrame.clearStatusMessage();
             RPnUIFrame.disableSliders();
 
@@ -392,7 +407,7 @@ public class UIController extends ComponentUI {
 
     }
 
-    public void addCommand(Command command) {
+    public void logCommand(RpCommand command) {
         RPnUIFrame.clearStatusMessage();
         commandArray_.add(command);
     }
@@ -410,9 +425,9 @@ public class UIController extends ComponentUI {
             if (newAction instanceof UI_ACTION_SELECTED) {
                 UI_ACTION_SELECTED selectedAction = (UI_ACTION_SELECTED) newAction;
                 // either unselect or new selection
-                if (currentSelection.getAction() instanceof RpModelPlotAgent) {
+                if (currentSelection.getAction() instanceof RpModelPlotCommand) {
 
-                    ((RpModelPlotAgent) currentSelection.getAction()).getContainer().setSelected(false);
+                    ((RpModelPlotCommand) currentSelection.getAction()).getContainer().setSelected(false);
 
                 }
                 // Singletons !
@@ -477,7 +492,6 @@ public class UIController extends ComponentUI {
     public RPnPhaseSpaceAbstraction getActivePhaseSpace() {
         return activePhaseSpace_;
     }
-    
 
     /**
      * @deprecated

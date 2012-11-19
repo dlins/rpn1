@@ -6,16 +6,15 @@
  */
 package rpnumerics;
 
-import java.awt.Polygon;
-import java.awt.Rectangle;
+import java.awt.geom.Path2D;
+import java.awt.geom.PathIterator;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.component.RpGeometry;
 import rpn.component.util.GeometryGraphND;
+import rpn.component.util.AreaSelected;
+import rpn.controller.ui.UIController;
+import rpn.controller.ui.UserInputTable;
 import rpn.parser.RPnDataModule;
-import wave.multid.Coords2D;
-import wave.multid.CoordsArray;
-import wave.multid.Space;
-import wave.multid.view.ViewingTransform;
 import wave.util.RealVector;
 
 public class Area {
@@ -24,23 +23,45 @@ public class Area {
     private RealVector downLeft_;
     private RealVector resolution_;
 
-    public Area(RealVector resolution,Polygon dcPolygon, ViewingTransform viewingTransform) {
-
-        Rectangle dcPolygonBox = dcPolygon.getBounds();
-
-        Coords2D topRightDCoords = new Coords2D(dcPolygonBox.x + dcPolygonBox.width, dcPolygonBox.y);
-        Coords2D downLeftDCoords = new Coords2D(dcPolygonBox.x, dcPolygonBox.y + dcPolygonBox.height);
-
-        CoordsArray topRightWCCoords = new CoordsArray(new Space(" ", 2));
-        CoordsArray downLeftWCCoords = new CoordsArray(new Space(" ", 2));
-
-        viewingTransform.dcInverseTransform(topRightDCoords, topRightWCCoords);
-        viewingTransform.dcInverseTransform(downLeftDCoords, downLeftWCCoords);
-        
-        topRight_=new RealVector(topRightWCCoords.getCoords());
-        downLeft_=new RealVector(downLeftWCCoords.getCoords());
-        resolution_=resolution;
+    
+    public Area(AreaSelected wcPolygon) {
+        this(new RealVector(2),wcPolygon);//No resolution needed
     }
+    
+    public Area(RealVector resolution, AreaSelected wcPolygon) {
+
+        Path2D.Double path = wcPolygon.getWCObject();
+
+        PathIterator pathIterator = path.getPathIterator(null);
+
+        int index = 0;
+        while (!pathIterator.isDone()) {
+
+            double[] segmentArray = new double[2];
+
+            int segment = pathIterator.currentSegment(segmentArray);
+            if (segment != PathIterator.SEG_CLOSE) {
+                if (index == 1) {
+                    topRight_ = new RealVector(segmentArray);
+
+                }
+
+                if (index == 3) {
+                    downLeft_ = new RealVector(segmentArray);
+                }
+
+
+            }
+            index++;
+            pathIterator.next();
+        }
+
+        resolution_ = resolution;
+    }
+
+    
+
+    
 
     public Area(RealVector resolution, RealVector topRight, RealVector downLeft) {
         topRight_ = topRight;

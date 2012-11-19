@@ -14,9 +14,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
 import javax.swing.*;
-import rpn.parser.RPnDataModule;
-import rpn.usecase.ChangeDirectionAgent;
-import rpn.usecase.OrbitPlotAgent;
+import rpn.command.ChangeDirectionCommand;
 import rpnumerics.Configuration;
 import rpnumerics.Orbit;
 import rpnumerics.RPNUMERICS;
@@ -34,7 +32,7 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
 
     public RPnCurvesConfigPanel() {
 
-        ChangeDirectionAgent.instance().execute();
+        ChangeDirectionCommand.instance().execute();
 
         curvesTabbedPanel_ = new JTabbedPane();
         directionButtonGroup_=new ButtonGroup();
@@ -172,13 +170,6 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
 
         public void actionPerformed(ActionEvent e) {
 
-//               if (forwardCheckBox_.isSelected()) {
-//                    currentOrbitDirection_ = Orbit.FORWARD_DIR;
-//                } else {
-//                    currentOrbitDirection_ = Orbit.BACKWARD_DIR;
-//                }
-
-
             if (forwardCheckBox_.isSelected()) {
                     currentOrbitDirection_ = Orbit.FORWARD_DIR;
                 } else if (backwardCheckBox_.isSelected()) {
@@ -188,7 +179,7 @@ public class RPnCurvesConfigPanel extends JPanel implements PropertyChangeListen
                 }
 
 
-            ChangeDirectionAgent.instance().execute();
+            ChangeDirectionCommand.instance().execute();
 
 
         }

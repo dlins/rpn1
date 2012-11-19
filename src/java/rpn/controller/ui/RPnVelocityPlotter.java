@@ -22,7 +22,7 @@ import rpnumerics.Orbit;
 import rpnumerics.OrbitPoint;
 import rpnumerics.RPnCurve;
 import rpnumerics.WaveCurve;
-import rpnumerics.WaveCurveOrbit;
+import rpnumerics.FundamentalCurve;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
 import wave.multid.Space;
@@ -124,13 +124,23 @@ public class RPnVelocityPlotter extends RPn2DMouseController {
                 int tam = ((WaveCurve) curve).getBranchsList().size();
                 ArrayList<OrbitPoint> result = new ArrayList<OrbitPoint>();
 
+//                for (int i = 0; i < tam; i++) {
+//                    WaveCurveOrbit orbit = (WaveCurveOrbit) ((WaveCurve) curve).getBranchsList().get(i);
+//                    OrbitPoint[] parcial = orbit.getPoints();
+//                    for (int j = 0; j < parcial.length; j++) {
+//                        result.add(parcial[j]);
+//                    }
+//                }
+
+
                 for (int i = 0; i < tam; i++) {
-                    WaveCurveOrbit orbit = (WaveCurveOrbit) ((WaveCurve) curve).getBranchsList().get(i);
+                    FundamentalCurve orbit = (FundamentalCurve) ((WaveCurve) curve).getBranchsList().get(i);
                     OrbitPoint[] parcial = orbit.getPoints();
                     for (int j = 0; j < parcial.length; j++) {
                         result.add(parcial[j]);
                     }
                 }
+
 
                 int seg = curve.findClosestSegment(closestPoint);
                 velStr = String.format("%.4e", result.get(seg).getLambda());

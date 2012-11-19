@@ -71,7 +71,7 @@ int Inflection_Curve::consistency(double *v1, double *v2, int &orient) {
     // The angle between vectors must be lower than 45degrees ( cos45 = 0.7071... )
     // We are assuming normal vectors.
     // TODO: O angulo de 45graus eh arbitrario
-    if ((v1[0] * v2[0] + v1[1] * v2[1]) < 0.7071) return 0;
+//    if ((v1[0] * v2[0] + v1[1] * v2[1]) < 0.7071) return 0;
 
     return 1;
 }

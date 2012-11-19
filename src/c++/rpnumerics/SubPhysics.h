@@ -21,6 +21,10 @@
 #include "Space.h"
 #include  "Multid.h"
 #include "eigen.h"
+#include "Hugoniot_Locus.h"
+#include "ThreeImplicitFunctions.h"
+#include "Double_Contact_Function.h"
+#include "methods/ShockMethod.h"
 
 /*
  * ---------------------------------------------------------------
@@ -33,7 +37,9 @@ class SubPhysics {
 private:
 
 
-    HugoniotFunctionClass * hugoniotFunction_;
+    Hugoniot_Locus * hugoniotFunction_;
+    Double_Contact_Function * doubleContactFunction_;
+    ShockMethod * shock_method_;
     Boundary * boundary_;
     Space * space_;
     const char * ID_;
@@ -63,9 +69,17 @@ public:
 
     const FluxFunction & fluxFunction() const;
 
-    HugoniotFunctionClass * getHugoniotFunction() const;
+    Hugoniot_Locus * getHugoniotFunction() const;
 
-    void setHugoniotFunction(HugoniotFunctionClass *);
+    void setHugoniotFunction(Hugoniot_Locus *);
+    
+    void setDoubleContactFunction(Double_Contact_Function *tif);
+    
+    Double_Contact_Function * getDoubleContactFunction();
+    
+    void setShockMethod(ShockMethod *);
+    
+    ShockMethod * getShockMethod();
 
     const Space & domain() const;
 
@@ -74,6 +88,8 @@ public:
     virtual SubPhysics * clone()const = 0;
 
     virtual Boundary * defaultBoundary()const = 0;
+    
+    virtual const Boundary * getPreProcessedBoundary()const ;
 
     virtual ~SubPhysics();
 
@@ -83,6 +99,7 @@ public:
 
     virtual void preProcess(RealVector &);
     virtual void postProcess(vector<RealVector> &);
+    virtual void postProcess(RealVector &);
 
 
 };

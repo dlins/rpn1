@@ -5,8 +5,8 @@
 
 package rpn.controller.ui;
 
-//import rpn.component.util.ClassifierAgent;
-import rpn.usecase.ClassifierAgent;
+//import rpn.component.util.ClassifierCommand;
+import rpn.command.ClassifierCommand;
 
 /**
  *
@@ -16,7 +16,7 @@ public class CLASSIFIERAGENT_CONFIG extends UI_ACTION_SELECTED {
 
     public CLASSIFIERAGENT_CONFIG() {
 
-        super(ClassifierAgent.instance());
+        super(ClassifierCommand.instance());
 
     }
 

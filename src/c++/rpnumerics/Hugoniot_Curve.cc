@@ -1,89 +1,77 @@
 #include "Hugoniot_Curve.h"
 
+// This is the classified Hugoniot given by segments
+//
 int Hugoniot_Curve::classified_curve(const FluxFunction *f, const AccumulationFunction *a, 
                                      GridValues &g, const RealVector &r, 
-                                     std::vector<HugoniotPolyLine> &hugoniot_curve){
+                                     std::vector<HugoniotPolyLine> &hugoniot_curve) {
+
+    // The segments by a search algorithm are stored here, to be used in the ColorCurve
+    std::vector<RealVector> vrs;
+    std::vector<RealVector> testeTransitionalList;
+
+    // This is auxiliary stuff (not filled, not used)
+    std::vector< std::deque <RealVector> > curves;
+    std::vector < bool > circular;
+    int method = SEGMENTATION_METHOD;
 
     // Compute the Hugoniot curve as usual
     //
-    vector<RealVector> vrs;
+    int info = curve(f, a, g, r, vrs, curves, circular, method);
 
-    int info = curve(f, a, g, r, vrs);
-
-//    // Prepare the Hugoniot curve to classify it
-//    std::vector<vector<RealVector> > unclassifiedCurve;
-//    
-//    for (int i = 0; i < vrs.size() / 2; i++) {
-//        std::vector< RealVector> temp;
-//        temp.push_back(vrs[2 * i]);
-//        temp.push_back(vrs[2 * i]);
-//        temp.push_back(vrs[2 * i + 1]);
-//        //temp.push_back(vrs[2 * i + 1]);
-//        unclassifiedCurve.push_back(temp);
-//    }
-    
     ColorCurve colorCurve(*f, *a);
-    
-    
-    vector<RealVector> testeTransitionalList;
-    
-    
-    
     colorCurve.classify_segmented_curve(vrs,r,hugoniot_curve,testeTransitionalList);
     
-//    colorCurve.classify_curve(unclassifiedCurve, r, 2, 10, hugoniot_curve);
-
     return info;
 }
 
-Hugoniot_Curve::~Hugoniot_Curve() {
+        
+
+// This is the classified Hugoniot given by continuous curves
+//
+int Hugoniot_Curve::classified_curve(const FluxFunction *f, const AccumulationFunction *a, 
+                                     GridValues &g, const RealVector &r, 
+                                     std::vector<HugoniotPolyLine> &hugoniot_curve,
+                                     std::vector<bool> &circular) {
+
+    // The continuous curve is stored by Contour2D
+    std::vector< std::deque <RealVector> > curves;
+
+    // This is auxiliary stuff (not filled, not used)
+    std::vector<RealVector> vrs;
+    int method = CONTINUATION_METHOD;
+
+    // Compute the Hugoniot curve by continuation
+    //
+    int info = curve(f, a, g, r, vrs, curves, circular, method);
+    int no_of_curves = curves.size();
+
+    // There is a single list of Transitional points instead as one list for curves.
+    std::vector<RealVector> testeTransitionalList;
+    testeTransitionalList.clear();
+    hugoniot_curve.clear();
+
+    ColorCurve colorCurve(*f, *a);
+
+    for (int i = 0; i < no_of_curves; i++) {
+        HugoniotPolyLine hugoniot;
+        colorCurve.classify_continuous_curve(curves[i],r,hugoniot,testeTransitionalList);
+        hugoniot_curve.push_back(hugoniot);
+    }
+    
+    return info;
 }
 
-// Given the extreme points of a rectangular domain
-// and the number of grid points along each dimension,
-// compute the vertices of the grid thus defined,
-// and in said vertices a series of values.
-//
-//           pmin, pmax: Extremes of the domain. Ideally, 
-//
-//                             pmin[i] <= pmax[i] for 0 <= i < dimension of space.
-//
-//                       In practice, this will be checked out within the body of the function.
-//               ff, aa: Flux and accumulationdouble *Fref, *Gref; functions that apply from R^n to R^n.
-//  number_of_grid_pnts: The number of cells in each dimension (array defined externally).
-//                 grid: The spatial grid created. Space to hold must be reserved outside the function.
-//                       The i-th dimension will have number_of_cells[i] cells. Thus, for 2D, which is
-//                       the case that is being implemented, each vertex (i, j) will be of the form:
-//
-//                              grid[i*number_of_grid_pnts[1] + j].component(k)
-//                                           =   pmin[k] + j*(pmax[k] - pmin[k])/(number_of_grid_pnts[k])
-//
-//                       where:
-//
-//                              0 <= i < number_of_grid_pnts[0],
-//                              0 <= j < number_of_grid_pnts[1],
-//                              0 <= k < 2.
-//
-//                       Thus, grid needs to be of size 
-//
-//                              number_of_grid_pnts[0]*...*number_of_grid_pnts[pmax.size() - 1].
-//
-//                   dd: Array of vectors that will hold the value of the directional derivatives
-//                       at each vertex of the grid. This array, like the grid, must be of size
-//
-//                              number_of_cells[0]*...*number_of_cells[pmax.size() - 1].
-//                      
-//                    e: Array of vectors of eigenpairs that will hold all the eigenpairs at each
-//                       vertex of the grid. These arrays, like the grid, must be of size
-//
-//                              number_of_cells[0]*...*number_of_cells[pmax.size() - 1].
-//
-//          eig_is_real: Array of vectors of booleans that state if each eigenvalue at a given grid
-//                       vertex is real (true) or complex (false). These arrays, like the grid, must
-//                       be of size
-//
-//                              number_of_cells[0]*...*number_of_cells[pmax.size() - 1].
-//
+ int Hugoniot_Curve::curve(const FluxFunction *f, const AccumulationFunction *a,
+            GridValues &g, const RealVector &r,
+            std::vector<RealVector> &hugoniot_curve){
+     return 0;
+     
+ }
+
+
+Hugoniot_Curve::~Hugoniot_Curve() {
+}
 
 /**
  *  Inside the calculus of the RH condition, when the differences of the accumulation are small, it is
@@ -140,7 +128,9 @@ int Hugoniot_Curve::function_on_square(double *foncub, int i, int j) {
 
 int Hugoniot_Curve::curve(const FluxFunction *f, const AccumulationFunction *a, 
                           GridValues &g, const RealVector &r,
-                          std::vector<RealVector> &hugoniot_curve) {
+                          std::vector<RealVector> &hugoniot_curve,
+                          std::vector< std::deque <RealVector> > &curves, std::vector <bool> &is_circular,
+                          const int method) {
 
     ff = f;
     aa = a;
@@ -162,8 +152,11 @@ int Hugoniot_Curve::curve(const FluxFunction *f, const AccumulationFunction *a,
     aa->fill_with_jet(n, p.components(), 1, Gref.components(), JGref.data(), 0);
 
     hugoniot_curve.clear();
+    curves.clear();
+    is_circular.clear();
 
-    int info = ContourMethod::contour2d(this, hugoniot_curve);
+    // Notice that method splitts which curve is filled
+    int info = ContourMethod::contour2d(this, hugoniot_curve, curves, is_circular, method);
 
     return info;
 }

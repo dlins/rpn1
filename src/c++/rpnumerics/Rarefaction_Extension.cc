@@ -3,7 +3,7 @@
 void Rarefaction_Extension::extension_curve(GridValues & gridValues, const FluxFunction *curve_flux, const AccumulationFunction *curve_accum,
         RealVector &initial_point,
         double deltaxi,
-        int curve_family,
+        int curve_family, int extension_family,
         int increase,
         const Boundary *boundary,
         //        const RealVector &pmin, const RealVector &pmax, int *number_of_grid_points, // For the domain.
@@ -35,6 +35,8 @@ void Rarefaction_Extension::extension_curve(GridValues & gridValues, const FluxF
     if (rarefaction_curve.size() < 2) return;
 
     int n = initial_point.size();
+    
+    cout<<"Tamanho do n: "<<n<<endl;
 
     // Turn the curve of points into a curve of segments.
     vector <RealVector> rarefaction_segments;
@@ -42,15 +44,20 @@ void Rarefaction_Extension::extension_curve(GridValues & gridValues, const FluxF
     for (int i = 0; i < rarefaction_curve.size() - 1; i++) {
         rarefaction_segments[2 * i].resize(n);
         rarefaction_segments[2 * i + 1].resize(n);
-        for (int j = 0; j < n; j++) {
+        for (int j = 0; j < 2; j++) {
             rarefaction_segments[2 * i].component(j) = rarefaction_curve[i].component(j);
             rarefaction_segments[2 * i + 1].component(j) = rarefaction_curve[i + 1].component(j);
         }
+        if (n == 3){
+            rarefaction_segments[2 * i + 1].component(2) = 1.0;
+            rarefaction_segments[2 * i ].component(2) = 1.0;
+        }
+            
     }
 
     Extension_Curve extension_curve; 
     extension_curve.curve(curve_flux, curve_accum, gridValues, characteristic_where,
-            true, curve_family, rarefaction_segments,
+            true, extension_family, rarefaction_segments,
             curve_segments,
             domain_segments);
 

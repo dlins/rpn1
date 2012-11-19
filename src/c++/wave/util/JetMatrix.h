@@ -127,7 +127,9 @@ public:
     void resize(int n_comps);
 
     void range_check(int comp) const;
-
+    
+    
+  
     /*! Sets all components to zero
      */
 
@@ -148,7 +150,7 @@ public:
      *@param j The first derivative component  column
      */
 
-    double operator()(int i, int j)const;
+    double operator()(const int i, const int j)const;
 
     /*! Returns a second derivative component value
      *
@@ -214,7 +216,7 @@ inline double JetMatrix::operator()(int i) const{
     return v_.component(i);
 }
 
-inline double JetMatrix::operator()(int i, int j)const {
+inline double JetMatrix::operator()(const int i, const int j)const {
     range_check(i);
     range_check(j);
     if (!c1_)

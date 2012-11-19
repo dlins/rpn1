@@ -42,7 +42,7 @@ public class RPnNumericsModule {
         public void startElement(String uri, String localName, String qName, Attributes att) throws SAXException {
             currentElement_ = localName;
 
-            if (localName.equals("CURVE")) {
+            if (localName.equals("CURVECONFIGURATION")) {
                 currentConfigurationProfile_ = new ConfigurationProfile(att.getValue("name"), ConfigurationProfile.CURVE);
 
             }
@@ -114,7 +114,7 @@ public class RPnNumericsModule {
             }
 
 
-            if (localName.equals("CURVE") || localName.equals("METHOD")) {
+            if (localName.equals("CURVECONFIGURATION") || localName.equals("METHOD")) {
 
                 RPnConfig.addProfile(currentConfigurationProfile_.getName(), currentConfigurationProfile_);
 
@@ -163,8 +163,6 @@ public class RPnNumericsModule {
         RPNUMERICS.setResolution(min, max, "hugoniotcurve", hugoniotResolution);
 
         RPNUMERICS.setResolution(min, max, "bifurcation", bifurcationCurvesResolution);
-
-
 
 
         }

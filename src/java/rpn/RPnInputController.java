@@ -1,20 +1,16 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Instituto de Matematica Pura e Aplicada - IMPA
+ * Departamento de Dinamica dos Fluidos
+ *
  */
+
 package rpn;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.List;
-import javax.swing.JFormattedTextField;
 import rpnumerics.Configuration;
 
-/**
- *
- * @author edsonlan
- */
+
 public class RPnInputController implements PropertyChangeListener {
 
     private RPnInputComponent inputComponent_;

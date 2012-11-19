@@ -7,8 +7,8 @@ import java.awt.event.ActionListener;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.GEOM_SELECTION;
 
-import rpn.usecase.ForwardOrbitPlotAgent;
-import rpn.usecase.BackwardOrbitPlotAgent;
+import rpn.command.ForwardOrbitPlotCommand;
+import rpn.command.BackwardOrbitPlotCommand;
 import rpn.controller.ui.UI_ACTION_SELECTED;
 
 
@@ -20,10 +20,10 @@ public class OrbitCalcParser implements ActionListener {
             if (!RPnDataModule.InputHandler.calcReady_) {
                 if (OrbitParser.dir == 1) {
                     UIController.instance().setState(new UI_ACTION_SELECTED(
-                            ForwardOrbitPlotAgent.instance()));
+                            ForwardOrbitPlotCommand.instance()));
                 } else {
                     UIController.instance().setState(new UI_ACTION_SELECTED(
-                            BackwardOrbitPlotAgent.instance()));
+                            BackwardOrbitPlotCommand.instance()));
                 }
                 UIController.instance().userInputComplete(RPnDataModule.
                         InputHandler.tempVector_);

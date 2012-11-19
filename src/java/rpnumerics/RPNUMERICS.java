@@ -280,7 +280,7 @@ public class RPNUMERICS {
 
         int[] resolution = RPnDataModule.processResolution(getParamValue("hugoniotcurve", "resolution"));
 
-        HugoniotParams params = new HugoniotParams(new PhasePoint(input), resolution);
+        HugoniotParams params = new HugoniotParams(new PhasePoint(input), direction_, resolution);
 
         return new HugoniotCurveCalcND(params);
     }
@@ -309,7 +309,7 @@ public class RPNUMERICS {
 
     public static EnvelopeCurveCalc createEnvelopeCurveCalc() {
 
-        int[] resolution = RPnDataModule.processResolution(getParamValue("levelcurve", "resolution"));
+        int[] resolution = RPnDataModule.processResolution(getParamValue("envelopecurve", "resolution"));
         int whereIsConstant = new Integer(getParamValue("envelopecurve", "edge"));
         int numberOfSteps = new Integer(getParamValue("envelopecurve", "numberofsteps"));
 
@@ -512,7 +512,7 @@ public class RPNUMERICS {
 
         System.out.println(direction_);
 
-        return new ShockCurveCalc(orbitPoint, family, direction_);
+        return new ShockCurveCalc(orbitPoint, family, direction_,tolerance);
 
     }
 
@@ -549,8 +549,11 @@ public class RPNUMERICS {
         int curveFamily = new Integer(getParamValue("rarefactionextension", "curvefamily"));
 
         int characteristicDomain = new Integer(getParamValue("rarefactionextension", "characteristic"));
+        
+int         extensionFamily = new Integer(getParamValue("rarefactionextension", "extensionfamily"));
+        
 
-        return new RarefactionExtensionCalc(new ContourParams(resolution), orbitPoint, direction_, curveFamily, characteristicDomain);
+        return new RarefactionExtensionCalc(new ContourParams(resolution), orbitPoint, direction_, curveFamily, extensionFamily,characteristicDomain);
 
     }
 

@@ -3,7 +3,6 @@
  * Departamento de Dinamica dos Fluidos
  *
  */
-
 package rpn.parser;
 
 import org.xml.sax.Attributes;
@@ -77,6 +76,7 @@ public class RPnDataModule {
     static public RPnPhaseSpaceAbstraction LEFTPHASESPACE = null;
     static public RPnPhaseSpaceAbstraction RIGHTPHASESPACE = null;
     static public RPnPhaseSpaceAbstraction RIEMANNPHASESPACE = null;
+    static public RPnPhaseSpaceAbstraction[] CHARACTERISTICSPHASESPACEARRAY = null;
     public static Orbit ORBIT = null;
     public static boolean RESULTS = false;
     private static HugoniotCurve hugoniotCurve_;
@@ -107,8 +107,7 @@ public class RPnDataModule {
 
     }
 
-
-    public static void updatePhaseSpaces(){
+    public static void updatePhaseSpaces() {
         PHASESPACE.update();
         LEFTPHASESPACE.update();
         RIGHTPHASESPACE.update();
@@ -172,9 +171,9 @@ public class RPnDataModule {
             PHASESPACE = new RPnPhaseSpaceAbstraction("Phase Space",
                     RPNUMERICS.domain(), new NumConfigImpl());//  RpNumerics.domain(),
             // initialize auxiliary phase space state
-           
+
             RIEMANNPHASESPACE = new RPnPhaseSpaceAbstraction("Riemann Phase Space",
-                    new Space("Riemann Space", RPNUMERICS.domainDim()+1), new NumConfigImpl());
+                    new Space("Riemann Space", RPNUMERICS.domainDim() + 1), new NumConfigImpl());
             LEFTPHASESPACE = new RPnLeftPhaseSpaceAbstraction("LeftPhase Space",
                     RPNUMERICS.domain(), new NumConfigImpl());//  RpNumerics.domain(),
             RIGHTPHASESPACE = new RPnRightPhaseSpaceAbstraction("RightPhase Space",
@@ -182,6 +181,13 @@ public class RPnDataModule {
             RIEMANNPHASESPACE = new RPnPhaseSpaceAbstraction("Riemann Phase Space",
                     new Space("Riemann Space", RPNUMERICS.domainDim() +1), new NumConfigImpl());
 
+            CHARACTERISTICSPHASESPACEARRAY = new RPnPhaseSpaceAbstraction[RPNUMERICS.domainDim()];
+
+            for (int i = 0; i < CHARACTERISTICSPHASESPACEARRAY.length; i++) {
+                CHARACTERISTICSPHASESPACEARRAY[i] = new RPnPhaseSpaceAbstraction("Characteristics Phase Space",
+                        new Space("Characteristics Space: " + i, 2), new NumConfigImpl());
+
+            }
 
         }
 
@@ -202,9 +208,9 @@ public class RPnDataModule {
                 orbitPointsList_.clear();
 
                 if (currentCommand_.equalsIgnoreCase("hugoniotcurve")) {
-                    HugoniotParams params = new HugoniotParams(new PhasePoint(new RealVector(att.getValue("inputpoint"))), processResolution(att.getValue("resolution")));
+                    HugoniotParams params = new HugoniotParams(new PhasePoint(new RealVector(att.getValue("inputpoint"))),new Integer(att.getValue("direction")), processResolution(att.getValue("resolution")));
                     calc_ = new HugoniotCurveCalcND(params);
-                    
+
                 }
                 if (currentCommand_.equalsIgnoreCase("rarefactionorbit")) {
                     tempPoint_ = new PhasePoint(new RealVector(att.getValue("inputpoint")));
@@ -218,7 +224,7 @@ public class RPnDataModule {
                     ContourParams params = new ContourParams(processResolution(att.getValue("resolution")));
                     tempPoint_ = new PhasePoint(new RealVector(att.getValue("inputpoint")));
                     direction_ = chooseDirection(att.getValue("direction"));
-                    calc_ = new RarefactionExtensionCalc(params, tempPoint_, direction_, new Integer(att.getValue("curvefamily")), new Integer(att.getValue("characteristic")));
+                    calc_ = new RarefactionExtensionCalc(params, tempPoint_, direction_, new Integer(att.getValue("curvefamily")),  new Integer(att.getValue("extensionfamily")),new Integer(att.getValue("characteristic")));
 
                 }
                 if (currentCommand_.equalsIgnoreCase("integralcurve")) {
@@ -235,7 +241,7 @@ public class RPnDataModule {
                     direction_ = chooseDirection(att.getValue("direction"));
                     int family = new Integer(att.getValue("family"));
 
-                    calc_ = new ShockCurveCalc(tempPoint_, family, direction_);
+                    calc_ = new ShockCurveCalc(tempPoint_, family, direction_, 0.001);//TODO Tolerance hardcoded. Only to compile.
 
                 }
                 if (currentCommand_.equalsIgnoreCase("compositecurve")) {
@@ -303,7 +309,7 @@ public class RPnDataModule {
                     int edge = new Integer(att.getValue("edge"));
                     int edgeResolution = new Integer(att.getValue("edgeresolution"));
                     int characteristic = new Integer(att.getValue("characteristicwhere"));
-                    calc_ = new BoundaryExtensionCurveCalc(params, edgeResolution, domainFamily, edge,characteristic);
+                    calc_ = new BoundaryExtensionCurveCalc(params, edgeResolution, domainFamily, edge, characteristic);
 
 
 
@@ -686,12 +692,9 @@ public class RPnDataModule {
 //                writer.write(orbit.create2DPointMatlabPlot(2, 0, entry.getKey()));
 //                writer.write("figure(4)\n");
 //                writer.write(orbit.create2DPointMatlabPlot(1, 2, entry.getKey()));
-
             }
 
         }
 
     }
 }
-
-  

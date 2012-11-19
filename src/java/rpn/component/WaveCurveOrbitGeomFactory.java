@@ -6,7 +6,7 @@
 package rpn.component;
 
 import java.awt.Color;
-import rpnumerics.WaveCurveOrbit;
+import rpnumerics.FundamentalCurve;
 import rpnumerics.WaveCurveOrbitCalc;
 import wave.multid.view.ViewingAttr;
 
@@ -38,7 +38,7 @@ public class WaveCurveOrbitGeomFactory extends OrbitGeomFactory {
 
     @Override
       protected ViewingAttr selectViewingAttr() {
-        int family = (((WaveCurveOrbit) this.geomSource()).getFamilyIndex());//TODO REMOVE
+        int family = (((FundamentalCurve) this.geomSource()).getFamilyIndex());//TODO REMOVE
 
         if (family == 1) {
             return new ViewingAttr(Color.red);

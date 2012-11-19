@@ -22,6 +22,7 @@ import rpn.controller.ui.RPnVelocityPlotter;
 import rpn.controller.ui.UserInputTable;
 import rpn.parser.RPnDataModule;
 import rpnumerics.BifurcationCurve;
+import rpn.command.VelocityCommand;
 import rpnumerics.WaveCurve;
 
 /**
@@ -137,6 +138,11 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
                     graph.draw(line4DC);
                 }
             }
+            if (curve instanceof WaveCurve) {
+                infoWaveCurve(newValue, (WaveCurve)curve, panel);
+                graph.draw(line3WC);
+                graph.draw(line4WC);
+            }
 
         } catch (Exception e) {
         }
@@ -232,12 +238,24 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
         double xMPDCnt = dcCoordsMPDCnt.getElement(1);
         double yMPDCnt = dcCoordsMPDCnt.getElement(0);
 
+        // ---------
+        Coords2D dcCoordsMPWCurve = toDeviceCoords(scene, pMarcaWC);
+        double xMPWCurve = dcCoordsMPWCurve.getElement(1);
+        double yMPWCurve = dcCoordsMPWCurve.getElement(0);
+        // ---------
+
         //** Define as geometrias de resposta para interface.
         int h = 5;
         line3 = new Line2D.Double(yMP - h, xMP, yMP + h, xMP);
         line4 = new Line2D.Double(yMP, xMP - h, yMP, xMP + h);
         line3DC = new Line2D.Double(yMPDCnt - h, xMPDCnt, yMPDCnt + h, xMPDCnt);
         line4DC = new Line2D.Double(yMPDCnt, xMPDCnt - h, yMPDCnt, xMPDCnt + h);
+
+        // --------
+        line3WC = new Line2D.Double(yMPWCurve - h, xMPWCurve, yMPWCurve + h, xMPWCurve);
+        line4WC = new Line2D.Double(yMPWCurve, xMPWCurve - h, yMPWCurve, xMPWCurve + h);
+        // --------
+
         //***
     }
 

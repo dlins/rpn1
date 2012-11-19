@@ -2,7 +2,7 @@
 
 CoincidenceTPCW::CoincidenceTPCW(const Flux2Comp2PhasesAdimensionalized *f, const Accum2Comp2PhasesAdimensionalized * a) : HugoniotFunctionClass(*f), td(f->getThermo()),
 phi(a->accumulationParams().component(0)) {
-    phi = 1.0;
+
 }
 
 double CoincidenceTPCW::lambdas_function(const RealVector &u) {

@@ -11,6 +11,8 @@
  * Includes:
  */
 #include "SubPhysics.h"
+#include "physics/tpcw/Hugoniot_TP.h"
+#include "ThreeImplicitFunctions.h"
 
 /*
  * ---------------------------------------------------------------
@@ -26,13 +28,12 @@ type_(type) {
 
 }
 
-
- SubPhysics::SubPhysics(const Boundary & boundary, const Space & space, const char * name, int type):boundary_(boundary.clone()),
+SubPhysics::SubPhysics(const Boundary & boundary, const Space & space, const char * name, int type) : boundary_(boundary.clone()),
 space_(new Space(space)),
 ID_(name),
 type_(type) {
 
- }
+}
 
 const Space &SubPhysics::domain() const {
     return *space_;
@@ -59,24 +60,41 @@ void SubPhysics::boundary(const Boundary & newBoundary) {
 
 void SubPhysics::setParams(vector<string> paramsVector) {
 
-    for (int i =0; i<paramsVector.size();i++){
-        cout<<"Param "<<i<<" :"<<paramsVector[i]<<endl;
+    for (int i = 0; i < paramsVector.size(); i++) {
+        cout << "Param " << i << " :" << paramsVector[i] << endl;
 
     }
 
 
 }
 
+const Boundary * SubPhysics::getPreProcessedBoundary()const {
+    return boundary_;
+}
 
-
-
-HugoniotFunctionClass * SubPhysics::getHugoniotFunction()const {
+Hugoniot_Locus * SubPhysics::getHugoniotFunction()const {
     return hugoniotFunction_;
 }
 
-void SubPhysics::setHugoniotFunction(HugoniotFunctionClass *hf) {
+void SubPhysics::setHugoniotFunction(Hugoniot_Locus *hf) {
 
     hugoniotFunction_ = hf;
+}
+
+void SubPhysics::setDoubleContactFunction(Double_Contact_Function *dcf) {
+    doubleContactFunction_ = dcf;
+}
+
+void SubPhysics::setShockMethod(ShockMethod * shockMethod) {
+    shock_method_ = shockMethod;
+}
+
+ShockMethod * SubPhysics::getShockMethod() {
+    return shock_method_;
+}
+
+Double_Contact_Function * SubPhysics::getDoubleContactFunction() {
+    return doubleContactFunction_;
 }
 
 const FluxFunction & SubPhysics::fluxFunction() const {
@@ -99,8 +117,9 @@ void SubPhysics::accumulationParams(const AccumulationParams & newAccumulationPa
 SubPhysics::~SubPhysics() {
 
     delete hugoniotFunction_;
+    delete doubleContactFunction_;
     delete space_;
-    
+
     delete fluxFunction_;
     delete accumulationFunction_;
     delete boundary_;
@@ -113,4 +132,7 @@ void SubPhysics::preProcess(RealVector &) {
 }
 
 void SubPhysics::postProcess(vector<RealVector> &) {
+}
+
+void SubPhysics::postProcess(RealVector &) {
 }

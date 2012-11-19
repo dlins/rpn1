@@ -1,4 +1,5 @@
 #include "RiemannSolver.h"
+#include "plotter.h"
 
 double RiemannSolver::min(double x, double y){
     return (x < y) ? x : y;
@@ -147,26 +148,23 @@ void RiemannSolver::half_profile(const std::vector<Curve> &c, int subc, int subc
         // There is a particular situation, in which there are two consecutive shocks 
         // with the same speed, which is dealt with here.
         //
-        
-//         printf("RiemannProfile. Two consecutive shocks detected.\n");
+        if (c[curvepos].type == COMPOSITE_CURVE && 
+            c[curvepos].corresponding_point_in_related_curve[pos] == 0 &&
+            //c[curvepos].index_related_curve > 0 &&
+            c[curvepos].related_curve[pos] > 0 &&
+            //c[c[curvepos].index_related_curve - 1].type == SHOCK_CURVE){
+            c[c[curvepos].related_curve[pos] - 1].type == SHOCK_CURVE){
+
+//            // FOR TEST PURPOSES, ELIMINATE AFTERWARDS //
+//            printf("RiemannProfile. Two consecutive shocks detected.\n");
 //            printf("    curvepos (this curve\'s index) = %d\n", curvepos);
 //            printf("    type (1 = R, 2 = S, 3 = C)     = %d\n", c[curvepos].type);
 //            printf("    corresponding curve            = %d\n", c[curvepos].index_related_curve);
 //            printf("    corresponding curve (other)    = %d\n", c[curvepos].related_curve[pos]);
 //            printf("    corresponding point            = %d\n", c[curvepos].corresponding_point_in_related_curve[pos]);
-//
-//        
-        
-        
-        if (c[curvepos].type == COMPOSITE_CURVE && 
-            c[curvepos].corresponding_point_in_related_curve[pos] == 0 &&
-            c[curvepos].related_curve[pos] > 0 &&
-            c[c[curvepos].related_curve[pos] - 1].type == SHOCK_CURVE){
 
-            // FOR TEST PURPOSES, ELIMINATE AFTERWARDS //
-           
 
-            // FOR TEST PURPOSES, ELIMINATE AFTERWARDS //
+//            // FOR TEST PURPOSES, ELIMINATE AFTERWARDS //
 
 
             // Add the reference point, with the speed of the current point of the composite curve:
@@ -186,16 +184,20 @@ void RiemannSolver::half_profile(const std::vector<Curve> &c, int subc, int subc
         //
         if (c[curvepos].type == COMPOSITE_CURVE && 
             c[curvepos].corresponding_point_in_related_curve[pos] == 0 &&
-            c[curvepos].index_related_curve > 0 &&
-            c[c[curvepos].index_related_curve - 1].type == COMPOSITE_CURVE){
+            //c[curvepos].index_related_curve > 0 &&
+            c[curvepos].related_curve[pos] > 0 &&
+            //c[c[curvepos].index_related_curve - 1].type == SHOCK_CURVE){
+            c[c[curvepos].related_curve[pos] - 1].type == SHOCK_CURVE){
 
             int temp_pos = pos;
             int temp_curvepos = curvepos;
 
             while (c[curvepos].type == COMPOSITE_CURVE &&
                    c[curvepos].corresponding_point_in_related_curve[pos] == 0 &&
-                   c[curvepos].index_related_curve > 0 &&
-                   c[c[curvepos].index_related_curve - 1].type == COMPOSITE_CURVE
+//                   c[curvepos].index_related_curve > 0 &&
+                   c[curvepos].related_curve[pos] > 0 &&
+//                   c[c[curvepos].index_related_curve - 1].type == COMPOSITE_CURVE
+                   c[c[curvepos].related_curve[pos] - 1].type == COMPOSITE_CURVE
                   ){
                 // Travel backward until the corresponding point is not the first point
                 // of the corresponding rarefaction.
@@ -275,6 +277,8 @@ int RiemannSolver::saturation_profiles(const std::vector<Curve> &one_wave_curve,
 
     int found = WaveCurve::intersection(one_wave_curve, two_wave_curve, pmin, pmax, 
                                         p, subc1, subc1_point, subc2, subc2_point);
+    
+    cout <<"Intersecao:"<<found<<endl;
 
     if (found == WAVE_CURVE_INTERSECTION_NOT_FOUND) return RIEMANNSOLVER_ERROR;
 
@@ -321,7 +325,8 @@ int RiemannSolver::saturation_profiles(const std::vector<Curve> &one_wave_curve,
     if (profile.size() > 2){
         // Speed component
         int sc = profile[0].size();
-        double delta = .25*fabs(profile[profile.size() - 1].component(sc - 1) - profile[0].component(sc - 1));
+        //double delta = .25*fabs(profile[profile.size() - 1].component(sc - 1) - profile[0].component(sc - 1));
+        double delta = 0.25*fabs(profile[profile.size() - 1].component(sc - 1) - profile[0].component(sc - 1));
 
         // First and last points:
         //
@@ -334,6 +339,161 @@ int RiemannSolver::saturation_profiles(const std::vector<Curve> &one_wave_curve,
         profile.push_back(lp);
     }
 
+    int dim = profile[0].size();
+    for (int i = 0; i < profile.size(); i++){
+        profile[i].component(dim - 1) *= time;
+    }
+
     return RIEMANNSOLVER_OK;
+}
+
+// Assume real_grid[i] < real_grid[i + 1] for all i.
+//
+void RiemannSolver::sample_grid(const std::vector<double> &real_grid, int n, std::vector<int> &index, std::vector<double> &alpha){
+    // The real grid must start with zero!
+
+    index.resize(n);
+    alpha.resize(n);
+
+    // Distance between two consecutive points in the sampled grid.
+    //
+    double delta = (real_grid[real_grid.size() - 1] - real_grid[0])/(double)(n - 1);
+
+    double s[n];
+    for (int i = 0; i < n; i++) s[i] = real_grid[0] + (double)i*delta;
+
+    int pos = 0;
+    for (int i = 1; i < n - 1; i++){
+        while (real_grid[pos] < s[i]) pos++;
+
+        index[i] = pos - 1;
+        alpha[i] = (s[i] - real_grid[pos])/(real_grid[pos - 1] - real_grid[pos]);
+    }
+
+    // Add beggining and end
+    index[0] = 0;
+    alpha[0] = 1.0;
+
+    index[n - 1] = real_grid.size() - 2;
+    alpha[n - 1] = 0.0;
+
+    return;
+}
+
+void RiemannSolver::characteristics(const FluxFunction *f, const AccumulationFunction *a,
+                                    const std::vector<RealVector> &profile, 
+                                    double time,
+                                    int n, 
+                                    std::vector<std::vector<std::vector<RealVector> > > &characteristics){
+    if (profile.size() < 2) return;
+
+    characteristics.clear();
+
+    // Sample the domain
+    int dim = profile[0].size() - 1;
+
+    // If the velocities at the extremes of the grid have different sign
+    // then nothing is done. If the signs are the same then zero is added, at the beginnig
+    // or at the end. A copy is used, not the original profile, which is const.
+    //
+    std::vector<RealVector> profile_extended(profile.size());
+    for (int i = 0; i < profile.size(); i++){
+        profile_extended[i].resize(profile[i].size());
+        for (int j = 0; j < profile[i].size(); j++) profile_extended[i].component(j) = profile[i].component(j);
+    }
+
+    if (profile_extended[0].component(dim)*profile_extended[profile_extended.size() - 1].component(dim) > 0.0){
+        if (profile_extended[0].component(dim) > 0.0){
+            profile_extended[0].component(dim) = 0.0;
+        }
+        else {
+            profile_extended[profile_extended.size() - 1].component(dim) = 0.0;
+        }
+    }
+
+//    std::vector<double> real_grid(profile.size());
+//    for (int i = 0; i < profile.size(); i++) real_grid[i] = profile[i].component(dim); // The last component is the speed.
+
+    std::vector<double> real_grid(profile_extended.size());
+    for (int i = 0; i < profile_extended.size(); i++) real_grid[i] = profile_extended[i].component(dim); // The last component is the speed.
+
+    std::vector<int> index;
+    std::vector<double> alpha;
+    sample_grid(real_grid, n, index, alpha);
+
+    // Obtain the grid and the lambdas.
+    //
+    double grid[n], lambda[dim][n];
+
+    for (int i = 0; i < n; i++){
+        double in[dim], JF[dim][dim], JG[dim][dim];
+
+        in[0] = alpha[i]*profile_extended[index[i]].component(0) + (1.0 - alpha[i])*profile_extended[index[i] + 1].component(0);
+        in[1] = alpha[i]*profile_extended[index[i]].component(1) + (1.0 - alpha[i])*profile_extended[index[i] + 1].component(1);
+
+        f->fill_with_jet(2, in, 1, 0, &JF[0][0], 0);
+        a->fill_with_jet(2, in, 1, 0, &JG[0][0], 0);
+
+        std::vector<eigenpair> e;
+        Eigen::eig(2, &JF[0][0], &JG[0][0], e);
+
+        // Fill the grid and lambdas proper.
+        //
+        grid[i] = alpha[i]*profile_extended[index[i]].component(2) + (1.0 - alpha[i])*profile_extended[index[i] + 1].component(2);
+        for (int j = 0; j < dim; j++) lambda[j][i] = e[j].r;
+    }
+
+    // TEMPORAL
+
+//    FILE *file = fopen("riemann_profile_output.txt", "w");
+//    for (int i = 0; i < n; i++){
+//        fprintf(file, "%d %f %f %f\n", i, grid[i], lambda[0][i], lambda[1][i]);
+//    }
+//    fclose(file);
+
+    // TEMPORAL
+
+    // Copy of the data, so it does not conflict with the plotter
+    float grid_float[n];
+    float lambda_float[dim][n];
+
+    for (int i = 0; i < n; i++){
+        grid_float[i] = (float)grid[i];
+
+        for (int j = 0; j < dim; j++) lambda_float[j][i] = (float)lambda[j][i];
+    }
+
+    // For each family...
+    for (int i = 0; i < dim; i++){
+        std::vector<std::vector<RealVector> > char_temp;
+
+        float *__RPLOTTER_XVals = new float[500];
+        float *__RPLOTTER_YVals = new float[500];
+
+//        RiemannPlotter Temp((float)grid[0], (float)grid[n - 1], (float)time,
+//                            0.045,
+//                            n, (float*)grid, (float*)&lambda[i][0],
+//                            0, //PlotInterface,
+//			    __RPLOTTER_XVals, __RPLOTTER_YVals,
+//                            1, 1,
+//                            0.001, 0.05);
+
+        RiemannPlotter Temp(grid_float[0], grid_float[n - 1], time,
+                            0.045,
+                            n, grid_float, &lambda_float[i][0],
+                            0, //PlotInterface,
+			    __RPLOTTER_XVals, __RPLOTTER_YVals,
+                            1, 1,
+                            0.001, 0.05);
+
+        Temp.gen_family(char_temp);
+
+        if (char_temp.size() > 0) characteristics.push_back(char_temp);
+
+        delete [] __RPLOTTER_XVals;
+        delete [] __RPLOTTER_YVals;
+    }
+
+    return;
 }
 

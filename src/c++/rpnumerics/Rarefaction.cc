@@ -96,7 +96,7 @@ void Rarefaction::fill_with_jet(const RpFunction *flux_object, int n, double *in
 int Rarefaction::flux(int *neq, double *xi, double *in, double *out, int *nparam, double *param){
     // The dimension of the problem:
     int n = *neq;
-    
+
     // The family:
 //    int family = (int)param[0];
     
@@ -115,6 +115,7 @@ int Rarefaction::flux(int *neq, double *xi, double *in, double *out, int *nparam
 
     if (type == RAREFACTION_SIMPLE_ACCUMULATION)
         info = Eigen::eig(n, &FJ[0][0], e);
+
     else {
         double GJ[n][n];
         double GH[n][n][n];
@@ -207,31 +208,31 @@ int Rarefaction::compute_last_point(const RealVector &previous_point, const Real
     //last_point.resize(n + 1);
 
     int info = rar_last_point(n, previous_point, new_point, last_point);
-//    printf("Inside compute_last_point:\n");
+    printf("Inside compute_last_point:\n");
 
-//    printf("previous_point = (");
-//    for (int i = 0; i < n; i++){
-//        printf("%g", previous_point.component(i));
-//        if (i <= (n - 2)) printf(", ");
-//    }
-//    printf(")\n");
-//
-//    printf("new_point = (");
-//    for (int i = 0; i < n; i++){
-//        printf("%g", new_point.component(i));
-//        if (i <= (n - 2)) printf(", ");
-//    }
-//    printf(")\n");
-//
-//    printf("last_point = (");
-//    if (info == SUCCESSFUL_PROCEDURE){
-//        for (int i = 0; i < n; i++){
-//            printf("%g", last_point.component(i));
-//            if (i <= (n - 2)) printf(", ");
-//        }
-//        printf(")\n");
-//    }
-//    else printf("GARBAGE HERE)\n");
+    printf("previous_point = (");
+    for (int i = 0; i < n; i++){
+        printf("%g", previous_point.component(i));
+        if (i <= (n - 2)) printf(", ");
+    }
+    printf(")\n");
+
+    printf("new_point = (");
+    for (int i = 0; i < n; i++){
+        printf("%g", new_point.component(i));
+        if (i <= (n - 2)) printf(", ");
+    }
+    printf(")\n");
+
+    printf("last_point = (");
+    if (info == SUCCESSFUL_PROCEDURE){
+        for (int i = 0; i < n; i++){
+            printf("%g", last_point.component(i));
+            if (i <= (n - 2)) printf(", ");
+        }
+        printf(")\n");
+    }
+    else printf("GARBAGE HERE)\n");
 
     return info;
 }
@@ -262,22 +263,6 @@ void Rarefaction::compute_all_eigenpairs(int n, const RealVector &in, std::vecto
 // vector that contains > n components and even so use its first n components.
 //
 void Rarefaction::compute_eigenpair(int n, const RealVector &in, double &lambda, RealVector &eigenvector){
-//    double p[n];
-//    for (int i = 0; i < n; i++) p[i] = in.component(i);
-
-//    std::vector<eigenpair> e;
-
-//    if (type == RAREFACTION_SIMPLE_ACCUMULATION){
-//        double FJ[n][n];
-//        fill_with_jet((RpFunction*)Rarefaction::fluxfunction,         n, p, 1, 0, &FJ[0][0], 0);
-//        Eigen::eig(n, &FJ[0][0], e);
-//    }
-//    else {
-//        double FJ[n][n], FG[n][n];
-//        fill_with_jet((RpFunction*)Rarefaction::fluxfunction,         n, p, 1, 0, &FJ[0][0], 0);
-//        fill_with_jet((RpFunction*)Rarefaction::accumulationfunction, n, p, 1, 0, &FG[0][0], 0);
-//        Eigen::eig(n, &FJ[0][0], &FG[0][0], e);
-//    } 
 
     std::vector<eigenpair> e;
     compute_all_eigenpairs(n, in, e);
@@ -286,6 +271,7 @@ void Rarefaction::compute_eigenpair(int n, const RealVector &in, double &lambda,
 
     eigenvector.resize(e[Rarefaction::family].vrr.size());
     for (int i = 0; i < e[Rarefaction::family].vrr.size(); i++) eigenvector.component(i) = e[Rarefaction::family].vrr[i];
+
 
     return;
 }
@@ -538,7 +524,7 @@ double Rarefaction::dirdrv(int n, double *point, double *dir){
     double lambda;
 
     if (e[fam].i != 0){
-//        printf("Inside dirdrv(): Init step, eigenvalue %d is complex: % f %+f.\n", fam, e[fam].r, e[fam].i);
+        printf("Inside dirdrv(): Init step, eigenvalue %d is complex: % f %+f.\n", fam, e[fam].r, e[fam].i);
         return ABORTED_PROCEDURE;     
     }
     else lambda = e[fam].r;
@@ -554,7 +540,7 @@ double Rarefaction::dirdrv(int n, double *point, double *dir){
             norm += l[k] * B[k][m] * r[m];
             for (int i = 0; i < n; i++) {
                 SubH[k][m] += H[k][m][i]*r[i];
-                SubM[k][m] += M[k][m][n]*r[n];
+                SubM[k][m] += M[k][m][i]*r[i];
             } 
             // For trivial accumulation, the directional derivative may be simplified as
 //                 dirdrv += l[k]*SubH[k][m]*r[m];
@@ -592,66 +578,66 @@ int Rarefaction::initial_dirdrv(int n, const RealVector &p, int increase, double
     int fam = family;
     double point[n];
     for (int i = 0; i < n; i++) point[i] = p.component(i);
-
+//
     double A[n][n];
     double B[n][n];
-
-    double H[n][n][n];
-    double M[n][n][n];
-    fill_with_jet((RpFunction*)accumulationfunction, n, point, 2, 0, &B[0][0], &M[0][0][0]);
-    fill_with_jet((RpFunction*)fluxfunction, n, point, 2, 0, &A[0][0], &H[0][0][0]);
-
-    // Extract the left and right eigenvalues of the generalized system.
+//
+//    double H[n][n][n];
+//    double M[n][n][n];
+    fill_with_jet((RpFunction*)accumulationfunction, n, point, 1, 0, &B[0][0], 0);
+    fill_with_jet((RpFunction*)fluxfunction, n, point, 1, 0, &A[0][0], 0);
+//
+//    // Extract the left and right eigenvalues of the generalized system.
     std::vector<eigenpair> e;
     int info = Eigen::eig(n, &A[0][0], &B[0][0], e);
 
-    // Extract the indx-th left and right-eigenvector of the GENERALIZED
-    // PROBLEM (A - lambda B)r=0  and  l(A - lambda B)=0
-
+//    // Extract the indx-th left and right-eigenvector of the GENERALIZED
+//    // PROBLEM (A - lambda B)r=0  and  l(A - lambda B)=0
+//
     double l[n], r[n];
-    double norm   = 0.0;
-    double dirdrv = 0.0;
-
+//    double norm   = 0.0;
+//    double dirdrv = 0.0;
+//
     for (int i = 0; i < n; i++){
         l[i] = e[fam].vlr[i];
         r[i] = e[fam].vrr[i];
     }
-
-    // Extract lambda.
-    // The i-th eigenvalue must be real. 
-    // The eigenvalues must be chosen carefully in the n-dimensional case.
-    // ALL eigenvalues must be real. Extend this by using a for cycle.
-    //
-    double lambda;
-
-    if (e[fam].i != 0){
+//
+//    // Extract lambda.
+//    // The i-th eigenvalue must be real.
+//    // The eigenvalues must be chosen carefully in the n-dimensional case.
+//    // ALL eigenvalues must be real. Extend this by using a for cycle.
+//    //
+//    double lambda;
+//
+//    if (e[fam].i != 0){
 //        printf("Inside dirdrv(): Init step, eigenvalue %d is complex: % f %+f.\n", fam, e[fam].r, e[fam].i);
-        return ABORTED_PROCEDURE;     
-    }
-    else lambda = e[fam].r;
-
-    double SubH[n][n];
-    double SubM[n][n];
-
-    // Nested loops, constructing SubH, SubM as H, M times r and the norm.
-    for (int k = 0; k < n; k++) {
-        for (int m = 0; m < n; m++) {
-            SubH[k][m] = 0.0;
-            SubM[k][m] = 0.0;
-            norm += l[k] * B[k][m] * r[m];
-            for (int i = 0; i < n; i++) {
-                SubH[k][m] += H[k][m][i]*r[i];
-                SubM[k][m] += M[k][m][n]*r[n];
-            } 
-            // For trivial accumulation, the directional derivative may be simplified as
-//                 dirdrv += l[k]*SubH[k][m]*r[m];
-            dirdrv += l[k]*(SubH[k][m]*r[m] - lambda*SubM[k][m]*r[m]);
-        }
-    }
-
-    dd = dirdrv/norm;
-    dir.resize(n);
-
+//        return ABORTED_PROCEDURE;
+//    }
+//    else lambda = e[fam].r;
+//
+//    double SubH[n][n];
+//    double SubM[n][n];
+//
+//    // Nested loops, constructing SubH, SubM as H, M times r and the norm.
+//    for (int k = 0; k < n; k++) {
+//        for (int m = 0; m < n; m++) {
+//            SubH[k][m] = 0.0;
+//            SubM[k][m] = 0.0;
+//            norm += l[k] * B[k][m] * r[m];
+//            for (int i = 0; i < n; i++) {
+//                SubH[k][m] += H[k][m][i]*r[i];
+//                SubM[k][m] += M[k][m][n]*r[n];
+//            }
+//            // For trivial accumulation, the directional derivative may be simplified as
+////                 dirdrv += l[k]*SubH[k][m]*r[m];
+//            dirdrv += l[k]*(SubH[k][m]*r[m] - lambda*SubM[k][m]*r[m]);
+//        }
+//    }
+//
+//    dd = dirdrv/norm;
+//    dir.resize(n);
+   dd= dirdrv(n,point,dir);
     if (increase == RAREFACTION_SPEED_INCREASE){
         if (dd > 0.0) for (int i = 0; i < n; i++) dir.component(i) = r[i];
         else {
@@ -667,7 +653,7 @@ int Rarefaction::initial_dirdrv(int n, const RealVector &p, int increase, double
         }
     }
 
-//    printf("initial_dirdrv. dd = %lf\n", dd);
+    printf("initial_dirdrv. dd = %lf\n", dd);
 
     return RAREFACTION_INIT_OK;
 }
@@ -782,7 +768,7 @@ int Rarefaction::curve(const RealVector &initial_point,
     Rarefaction::accumulationfunction = (AccumulationFunction*)aa;
     Rarefaction::type                 = type_of_accumulation;
     Rarefaction::family               = curve_family;
-
+    cout <<"Valor de deltaxi: "<<deltaxi<<endl;
     // Space dimension.
     int n = initial_point.size();
 
@@ -930,6 +916,7 @@ int Rarefaction::curve(const RealVector &initial_point,
 
         // Invoke LSODE.
         lsode_(&flux, &n, p, &xi, &new_xi, &itol, &rtol, atol, &itask, &istate, &iopt, rwork, &lrw, iwork, &liw, 0, &mf, &nparam, param);
+//        printf("LSODE: info = %d\n", istate);
 
         // ***ELIPTIC REGION***
         // 2012/02/07.
@@ -941,8 +928,10 @@ int Rarefaction::curve(const RealVector &initial_point,
         // DO IT HERE
 
         // Update new_point.
+
         for (int i = 0; i < n; i++) new_point.component(i) = p[i];
         new_point.component(n) = new_lambda = compute_lambda(n, new_point);
+        
 
         // BEGIN Check Boundary //
         // Modified RectBoundary so that the intersection can be tested using RealVectors of size
@@ -970,31 +959,30 @@ int Rarefaction::curve(const RealVector &initial_point,
         else if (intersection_info == 0){
             // One point is inside, the other is outside. 
             // Store the point lying in the domain's border and get out.
-            RealVector rtemp(n + 1);
-            for (int i = 0; i < n; i++) rtemp.component(i) = r.component(i);
-            rtemp.component(n) = compute_lambda(n, r);
-            rarcurve.push_back(rtemp);
+            r.resize(n+1);
+            r.component(n) = compute_lambda(n, r);
+            rarcurve.push_back(r);
 
-//            printf("Reached boundary\n");
+            printf("Reached boundary\n");
 
-            return RAREFACTION_REACHED_BOUNDARY;
+            return SUCCESSFUL_PROCEDURE;
         }
         else {
             // Both points lie outside the domain. Something went awfully wrong here.
-//            printf("Both outside\n");
-//            printf("previous_point = (");
-//            for (int i = 0; i < n; i++){
-////                printf("%g", previous_point.component(i));
-//                if (i < n - 1) printf(", ");
-//            }
-//            printf(")\n");
-//
-//            printf("new_point      = (");
-//            for (int i = 0; i < n; i++){
-//                printf("%g", new_point.component(i));
-//                if (i < n - 1) printf(", ");
-//            }
-//            printf(")\n");
+            printf("Both outside\n");
+            printf("previous_point = (");
+            for (int i = 0; i < n; i++){
+                printf("%g", previous_point.component(i));
+                if (i < n - 1) printf(", ");
+            }
+            printf(")\n");
+
+            printf("new_point      = (");
+            for (int i = 0; i < n; i++){
+                printf("%g", new_point.component(i));
+                if (i < n - 1) printf(", ");
+            }
+            printf(")\n");
 
             return ABORTED_PROCEDURE;
         }
@@ -1010,7 +998,7 @@ int Rarefaction::curve(const RealVector &initial_point,
 //            printf("new_dirdrv = %lg, previous_dirdrv = %g, new_dirdrv*previous_dirdrv = %g\n", new_dirdrv, previous_dirdrv, new_dirdrv*previous_dirdrv);
 //            printf("new_lambda = %lg, previous_lambda = %g\n", new_lambda, previous_lambda);
             if (new_dirdrv*previous_dirdrv <= 0.0){
-//		printf("Ok");
+		printf("Ok");
                 // printf("new_lambda = %g; previous_lambda = %g.\n", new_lambda, previous_lambda);
 
                 // Find the point where lambda reaches a minimum, store it and get out.
@@ -1022,13 +1010,21 @@ int Rarefaction::curve(const RealVector &initial_point,
                     // in order to avoid arrow clutter when displaying the results.
                     // The value of lambda at the inflection point is not being calculated
                     // and this situation affects the method by which the arrows are created.
-                    if (type_of_rarefaction == RAREFACTION_FOR_ITSELF) rarcurve.push_back(last_point);
+
+                    
+                     // Pablo mudou essa linha para que não aparecesse uma seta a mais de direcao contrária na rarefacao (Conferir com o Rodrigo)
+                    //if (type_of_rarefaction == RAREFACTION_FOR_ITSELF) rarcurve.push_back(last_point);
+
+
+                      if (type_of_rarefaction == RAREFACTION_FOR_ITSELF) rarcurve.push_back(new_point);
+
+
                 }
 //                else printf("Last point discarded.\n");
 
-//                std::cout << "Rarefaction. Inflection point at: " << last_point << std::endl;
+                std::cout << "Rarefaction. Inflection point at: " << last_point << std::endl;
 
-//                printf("RAREFACTION_NOT_MONOTONOUS\n");
+                printf("RAREFACTION_NOT_MONOTONOUS\n");
                 
                 if (type_of_rarefaction == RAREFACTION_FOR_ITSELF) return RAREFACTION_NOT_MONOTONOUS;
                 else if (type_of_rarefaction == RAREFACTION_AS_ENGINE_FOR_INTEGRAL_CURVE) {

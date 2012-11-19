@@ -3,6 +3,7 @@
 
 #include "TwoImplicitFunctions.h"
 #include "Contour2p5_Method.h"
+#include "GridValues.h"
 
 class Envelope_Curve : public TwoImplicitFunctions {
 private:

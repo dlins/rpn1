@@ -3,8 +3,9 @@
 
 #include "ThreeImplicitFunctions.h"
 #include "Contour2x2_Method.h"
+#include "Double_Contact_Function.h"
 
-class Double_Contact : public ThreeImplicitFunctions {
+class Double_Contact : public Double_Contact_Function {
     private:
     protected:
         RealVector lambda_left;

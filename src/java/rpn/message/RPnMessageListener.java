@@ -9,7 +9,7 @@ package rpn.message;
 import javax.jms.*;
 import javax.swing.*;
 import org.xml.sax.Parser;
-import rpn.usecase.*;
+import rpn.command.*;
 import rpn.controller.ui.*;
 import wave.util.*;
 import java.awt.event.ActionEvent;
@@ -221,59 +221,59 @@ public class RPnMessageListener implements MessageListener {
                     case 1:
                         
                         UIController.instance().setState(new UI_ACTION_SELECTED(
-                                ForwardOrbitPlotAgent.instance()));
+                                ForwardOrbitPlotCommand.instance()));
                         break;
                         
                     case 2:
                         UIController.instance().setState(new UI_ACTION_SELECTED(
-                                BackwardOrbitPlotAgent.instance()));
+                                BackwardOrbitPlotCommand.instance()));
                         break;
                         
                     case 3:
                         UIController.instance().setState(new UI_ACTION_SELECTED(
-                                PoincareSectionPlotAgent.instance()));
+                                PoincareSectionPlotCommand.instance()));
                         
                         break;
                         
                     case 4:
                         UIController.instance().setState(new UI_ACTION_SELECTED(
-                                BackwardManifoldPlotAgent.instance()));
+                                BackwardManifoldPlotCommand.instance()));
                         
                         break;
                         
                     case 5:
                         UIController.instance().setState(new UI_ACTION_SELECTED(
-                                ConnectionManifoldPlotAgent.instance()));
+                                ConnectionManifoldPlotCommand.instance()));
                         
                         break;
                         
                     case 6:
                         UIController.instance().setState(new UI_ACTION_SELECTED(
-                                StationaryPointPlotAgent.instance()));
+                                StationaryPointPlotCommand.instance()));
                         
                         break;
                         
                     case 7:
                         
-                        FindProfileAgent.instance().findProfile();
+                        FindProfileCommand.instance().findProfile();
                         break;
                         
                     case 8:
                         
                         UIController.instance().setState(new UI_ACTION_SELECTED(
-                                ChangeDirectionAgent.instance()));
+                                ChangeDirectionCommand.instance()));
                         
                         break;
                         
                     case 9:
                         
                         UIController.instance().setState(new UI_ACTION_SELECTED(
-                                ChangeSigmaAgent.instance()));
+                                ChangeSigmaCommand.instance()));
                         
                         break;
                         
                     case 10:
-                        ClearPhaseSpaceAgent.instance().clear();
+                        ClearPhaseSpaceCommand.instance().clear();
                         
                         break;
                         

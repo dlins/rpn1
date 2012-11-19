@@ -66,8 +66,8 @@ public class WaveCurve extends RPnCurve implements WaveCurveBranch, RpSolution {
         List temp = new ArrayList();
 
         for (int i = 0; i < getBranchsList().size(); i++) {
-            for (int j = 0; j < ((WaveCurveOrbit) getBranchsList().get(i)).segments().size(); j++) {
-                temp.add(((WaveCurveOrbit) getBranchsList().get(i)).segments().get(j));
+            for (int j = 0; j < ((FundamentalCurve) getBranchsList().get(i)).segments().size(); j++) {
+                temp.add(((FundamentalCurve) getBranchsList().get(i)).segments().get(j));
             }
         }
 
@@ -84,7 +84,7 @@ public class WaveCurve extends RPnCurve implements WaveCurveBranch, RpSolution {
 
             for (WaveCurveBranch waveCurveBranch2 : waveCurveBranch.getBranchsList()) {
 
-                WaveCurveOrbit orbit = (WaveCurveOrbit) waveCurveBranch2;
+                FundamentalCurve orbit = (FundamentalCurve) waveCurveBranch2;
 
                 stringBuilder.append("--------Inicio branch-------------"+orbit.getCurveType()+"\n");
 

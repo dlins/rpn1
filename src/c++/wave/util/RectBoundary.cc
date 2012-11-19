@@ -50,10 +50,118 @@ RectBoundary & RectBoundary::operator=(const RectBoundary & source) {
 
 }
 
-void RectBoundary::edge_segments(int where_constant, int number_of_steps, std::vector<RealVector> &seg) {
+void RectBoundary::extension_curve(const FluxFunction *f, const AccumulationFunction *a,
+        GridValues &gv,
+        int where_constant, int number_of_steps, bool singular,
+        int fam, int characteristic,
+        std::vector<RealVector> &c, std::vector<RealVector> &d) {
+    c.clear();
+    d.clear();
 
+    std::vector<RealVector> seg;
 
+    RealVector limMin = gv.grid(0, 0);
+//    RealVector limMax = gv.grid(gv.noc[0], gv.noc[1]);
+    
+
+    RealVector limMax = gv.grid(gv.grid.rows()-1,gv.grid.cols()-1);
+    edge_segments(where_constant, number_of_steps, limMin, limMax, seg);
+
+    Extension_Curve extension_curve;
+
+    cout<<"Primeiro seg: "<<seg[0]<<endl;
+
+    cout <<"Ultimo seg: "<<seg[seg.size()-1]<<endl;
+
+    extension_curve.curve(f, a, gv, singular, characteristic, fam,
+            seg,
+            c, d);
+    return;
 }
+
+int RectBoundary::edge_segments(int where_constant, int number_of_steps, const RealVector & limMin, const RealVector & limMax, std::vector<RealVector> &seg) {
+    seg.clear();
+
+    if (number_of_steps < 3) number_of_steps = 3; // Extremes must be eliminated, thus the minimum number of desired segments is 3: of which only one segment will remain.
+
+    double p[number_of_steps + 1][3];
+
+    double p_alpha[3], p_beta[3];
+
+    double delta = 1.0 / (double) number_of_steps;
+
+    //    double end_edge = 1.000001;
+
+    // The following double is the old end_edge without the kludge.
+    //    double RealEndEdge = end_edge - 0.000001;
+
+
+
+
+
+    if (where_constant == RECT_BOUNDARY_SG_ZERO) {
+        // The following protection exists for physical boundary outside the real boundary.
+        //        if (pmin->component(1) > 0.0) return 0;
+
+        p_alpha[0] = 0.0;
+        p_alpha[1] = limMin(1);
+        p_alpha[2] = limMin(2);
+        p_beta[0] = 0.0;
+        p_beta[1] = limMax(1);
+        p_beta[2] = limMax(2);
+    } else { // where_constant == RECT_BOUNDARY_SG_ONE
+        // The following protection exists for physical boundary outside the real boundary.
+        //        if (RealEndEdge < 1.0) return 0;
+
+
+
+        p_alpha[0] = 1.0;
+        p_alpha[1] = limMin(1);
+        p_alpha[2] = limMin(2);
+        p_beta[0] = 1.0;
+        p_beta[1] = limMax(1);
+        p_beta[2] = limMax(2);
+
+
+    }
+
+//
+//    p_alpha[2]=1.0;
+//    p_beta[2] = 1.0;
+
+
+    for (int i = 0; i < number_of_steps + 1; i++) {
+        double beta = (double) i*delta;
+        double alpha = 1.0 - beta;
+        for (int j = 0; j < 3; j++) p[i][j] = p_alpha[j] * alpha + p_beta[j] * beta;
+    }
+
+    // Boundary extension segments.
+    seg.resize(2 * (number_of_steps));
+
+    for (int i = 0; i < number_of_steps; i++) {
+        seg[2 * i].resize(3);
+        seg[2 * i + 1].resize(3);
+
+        for (int j = 0; j < 3; j++) {
+            seg[2 * i].component(j) = p[i][j];
+            seg[2 * i + 1].component(j) = p[i + 1][j];
+        }
+
+    }
+
+    return 1;
+}
+
+
+
+
+//
+//
+//void RectBoundary::edge_segments(int where_constant, int number_of_steps, std::vector<RealVector> &seg) {
+//
+//
+//}
 
 void RectBoundary::physical_boundary(std::vector<RealVector> &) {
 
@@ -234,6 +342,31 @@ bool RectBoundary::inside(const RealVector &p) const {
 // HyperBox.h.
 //
 
+void RectBoundary::envelope_curve(const FluxFunction *f, const AccumulationFunction *a,
+        GridValues &gv,
+        int where_constant, int number_of_steps, bool singular,
+        std::vector<RealVector> &c, std::vector<RealVector> &d) {
+    c.clear();
+    d.clear();
+
+    std::vector<RealVector> seg;
+    RealVector limMin = gv.grid(0, 0);
+//    RealVector limMax = gv.grid(gv.noc[0], gv.noc[1]);
+    
+    RealVector limMax = gv.grid(gv.grid.rows()-1,gv.grid.cols()-1);
+
+    edge_segments(where_constant, number_of_steps, limMin, limMax, seg);
+
+
+    Envelope_Curve envelope_curve;
+
+    envelope_curve.curve(f, a, gv, singular,
+            seg,
+            c, d);
+
+    return;
+}
+
 int RectBoundary::intersection(const RealVector &p, const RealVector &q, RealVector &r, int &w)const {
 
 
@@ -279,6 +412,10 @@ int RectBoundary::intersection(const RealVector &p, const RealVector &q, RealVec
 
         return 0;
     }
+}
+
+Boundary * RectBoundary::clone() const {
+    return new RectBoundary(*this);
 }
 
 RectBoundary::~RectBoundary() {

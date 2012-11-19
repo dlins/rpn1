@@ -88,7 +88,7 @@ public class RPnAdjustedSelectionPlotter extends RPn2DMouseController  {
             double[] mePosArray = {me.getX(), me.getY()};
             CoordsArray cursorPosWC = new CoordsArray(new Space(" ", 2));
             Coords2D mePosDC = new Coords2D(mePosArray);
-            CoordsArray mePosWC = new CoordsArray(new Space(" ", 2));
+            CoordsArray mePosWC = new CoordsArray(new Space(" ",3));
             panel.scene().getViewingTransform().dcInverseTransform(mePosDC, mePosWC);
             Path2D.Double selectionPath = new Path2D.Double();
             selectionPath.moveTo(cursorPosWC.getElement(0), cursorPosWC.getElement(1));
@@ -171,21 +171,21 @@ public class RPnAdjustedSelectionPlotter extends RPn2DMouseController  {
     }
 
 
-    private void indexToRemove(RPnPhaseSpacePanel panel) {
-        List<Integer> indexToRemove = new ArrayList<Integer>();
-        List<Polygon> selectedAreas = panel.getSelectedAreasShapes();
-
-        for (Polygon polygon : selectedAreas) {
-            Iterator geomIterator = panel.scene().geometries();
-            while (geomIterator.hasNext()) {
-                GeomObjView geomObjView = (GeomObjView) geomIterator.next();
-                List<Integer> segmentIndex = geomObjView.contains(polygon);
-                if (!segmentIndex.isEmpty()) {
-                    indexToRemove.addAll(segmentIndex);
-                }
-            }
-        }
-        GeometryGraphND.indContido = indexToRemove;
+    private void indexToRemove(RPnPhaseSpacePanel panel) {      // --- ATENCAO: está dando erro devido às alteracoes que foram feitas no gitorious
+//        List<Integer> indexToRemove = new ArrayList<Integer>();
+//        List<AreaSelected> selectedAreas = panel.getSelectedAreas();
+//
+//        for (AreaSelected area : selectedAreas) {
+//            Iterator geomIterator = panel.scene().geometries();
+//            while (geomIterator.hasNext()) {
+//                GeomObjView geomObjView = (GeomObjView) geomIterator.next();
+//                List<Integer> segmentIndex = geomObjView.contains(area);
+//                if (!segmentIndex.isEmpty()) {
+//                    indexToRemove.addAll(segmentIndex);
+//                }
+//            }
+//        }
+//        GeometryGraphND.indContido = indexToRemove;
     }
 
 

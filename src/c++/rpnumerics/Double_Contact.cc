@@ -3,12 +3,14 @@
 bool Double_Contact::function_on_cell(double *val, int ir, int jr, int kl, int kr){
     int domain_i, domain_j;
 
+    if ( !(gv_left->cell_is_real(ir, jr)) ) return false;
+
     if      (kr == 0) {domain_i = ir;     domain_j = jr;}
     else if (kr == 1) {domain_i = ir + 1; domain_j = jr;}
     else if (kr == 2) {domain_i = ir + 1; domain_j = jr + 1;}
     else if (kr == 3) {domain_i = ir;     domain_j = jr + 1;}
 
-    if (!gv_right->eig_is_real(domain_i, domain_j)[right_family]) return false;
+//    if (!gv_right->eig_is_real(domain_i, domain_j)[right_family]) return false;
 
     double lr  = gv_right->e(domain_i, domain_j)[right_family].r;
     double fr  = gv_right->F_on_grid(domain_i, domain_j).component(0);

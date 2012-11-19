@@ -19,8 +19,8 @@ public class RiemannProfileCalc implements RpCalculation {
     //
 
     private Area area_;
-    private List<WaveCurveOrbit> forwardList_;
-    private List<WaveCurveOrbit> backwardList_;
+    private List<FundamentalCurve> forwardList_;
+    private List<FundamentalCurve> backwardList_;
 
     //
     // Constructors/Initializers
@@ -29,14 +29,14 @@ public class RiemannProfileCalc implements RpCalculation {
 
         area_ = area;
         List<WaveCurveBranch> forwardBranch = forwardCurve.getBranchsList();
-        forwardList_ = new ArrayList<WaveCurveOrbit>();
+        forwardList_ = new ArrayList<FundamentalCurve>();
 
         for (WaveCurveBranch waveCurveBranch : forwardBranch) {
 
 
             for (WaveCurveBranch waveCurveBranch2 : waveCurveBranch.getBranchsList()) {
 
-                WaveCurveOrbit orbit = (WaveCurveOrbit) waveCurveBranch2;
+                FundamentalCurve orbit = (FundamentalCurve) waveCurveBranch2;
 
                 forwardList_.add(orbit);
 
@@ -46,14 +46,14 @@ public class RiemannProfileCalc implements RpCalculation {
 
         List<WaveCurveBranch> backwardBranch = backwardCurve.getBranchsList();
 
-        backwardList_ = new ArrayList<WaveCurveOrbit>();
+        backwardList_ = new ArrayList<FundamentalCurve>();
 
         for (WaveCurveBranch waveCurveBranch : backwardBranch) {
 
 
               for (WaveCurveBranch waveCurveBranch2 : waveCurveBranch.getBranchsList()) {
 
-                WaveCurveOrbit orbit = (WaveCurveOrbit) waveCurveBranch2;
+                FundamentalCurve orbit = (FundamentalCurve) waveCurveBranch2;
 
                 backwardList_.add(orbit);
 
@@ -87,7 +87,7 @@ public class RiemannProfileCalc implements RpCalculation {
         return result;
     }
 
-    private native RpSolution nativeCalc(RealVector pmin, RealVector pmax, List<WaveCurveOrbit> forwardWaveCurve, List<WaveCurveOrbit> backwardWaveCurve) throws RpException;
+    private native RpSolution nativeCalc(RealVector pmin, RealVector pmax, List<FundamentalCurve> forwardWaveCurve, List<FundamentalCurve> backwardWaveCurve) throws RpException;
 
     public RpSolution recalc(Area area) throws RpException {
         throw new UnsupportedOperationException("Not supported yet.");

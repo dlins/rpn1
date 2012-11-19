@@ -11,13 +11,11 @@ import rpn.controller.RpController;
 
 public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
 
-
     public HugoniotCurveGeomFactory(HugoniotCurveCalc calc) {
         super(calc);
-      
+
 
     }
-   
 
     @Override
     protected RpController createUI() {
@@ -30,6 +28,8 @@ public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
     public RpGeometry createGeomFromSource() {
 
         HugoniotCurve curve = (HugoniotCurve) geomSource();
+
+        HugoniotSegGeom.DIRECTION = curve.getDirection();
 
         // assuming a container with HugoniotSegment elements
         int resultSize = curve.segments().size();
@@ -74,20 +74,20 @@ public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
 
         StringBuilder buffer = new StringBuilder();
 
-        HugoniotCurveCalcND calc = (HugoniotCurveCalcND)rpCalc();
+        HugoniotCurveCalcND calc = (HugoniotCurveCalcND) rpCalc();
 
         String commandName = geomSource().getClass().getName();
         commandName = commandName.toLowerCase();
         commandName = commandName.replaceAll(".+\\.", "");
 
-        buffer.append("<COMMAND name=\""+commandName+"\""+ " inputpoint=\"" + hugoniotCurve.getXZero().toString() + "\" " + calc.getParams().toString()+  ">\n");
+        buffer.append("<COMMAND name=\"" + commandName + "\"" + " inputpoint=\"" + hugoniotCurve.getXZero().toString() + "\" " + calc.getParams().toString() + ">\n");
 
         //buffer.append(((HugoniotCurve) geomSource()).toXML());        //*** ISSO ESTÁ NO CÓDIGO ORIGINAL, COMENTEI APENAS PARA TESTE
 
         buffer.append("</COMMAND>\n");
 
         return buffer.toString();
-   
+
 
     }
 }

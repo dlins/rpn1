@@ -46,7 +46,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_IntegralCurveCalc_calc(JNIEnv * env, j
     jmethodID realVectorConstructorID = env->GetMethodID(realVectorClass, "<init>", "(I)V");
     jmethodID integralCurveConstructor = (env)->GetMethodID(classIntegralCurve, "<init>", "([Lrpnumerics/OrbitPoint;ILjava/util/List;)V");
 
-    jmethodID orbitPointConstructor = (env)->GetMethodID(classOrbitPoint, "<init>", "([D)V");
+    jmethodID orbitPointConstructor = (env)->GetMethodID(classOrbitPoint, "<init>", "([DD)V");
     jmethodID toDoubleMethodID = (env)->GetMethodID(classOrbitPoint, "toDouble", "()[D");
 
     jmethodID setElementMethodID = (env)->GetMethodID(realVectorClass, "setElement", "(ID)V");
@@ -69,13 +69,14 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_IntegralCurveCalc_calc(JNIEnv * env, j
 
     env->DeleteLocalRef(inputPhasePointArray);
 
+    RpNumerics::getPhysics().getSubPhysics(0).preProcess(realVectorInput);
 
     int dimension = RpNumerics::getPhysics().domain().dim();
 
     vector <RealVector> coords;
     vector<RealVector> inflectionPoints;
 
-    Boundary * tempBoundary = RpNumerics::getPhysics().boundary().clone();
+    const Boundary * tempBoundary = RpNumerics::getPhysics().getSubPhysics(0).getPreProcessedBoundary();
 
     double deltaxi = 1e-3;
 
@@ -83,9 +84,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_IntegralCurveCalc_calc(JNIEnv * env, j
     const FluxFunction * fluxFunction = &RpNumerics::getPhysics().fluxFunction();
     const AccumulationFunction * accumulationFunction = &RpNumerics::getPhysics().accumulation();
 
-    cout << "Flux params " << fluxFunction->fluxParams().params() << endl;
-    cout << "Accum params " << accumulationFunction->accumulationParams().params() << endl;
-
+  
     Integral_Curve iCurve(fluxFunction, accumulationFunction, tempBoundary);
 
 
@@ -93,9 +92,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_IntegralCurveCalc_calc(JNIEnv * env, j
             deltaxi,
             familyIndex,
             coords, inflectionPoints);
-
-
-    delete tempBoundary;
 
     if (coords.size() == 0) {
         return NULL;
@@ -127,15 +123,22 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_IntegralCurveCalc_calc(JNIEnv * env, j
 
     for (i = 0; i < coords.size(); i++) {
 
-        RealVector tempVector = coords.at(i);
+        RealVector tempVector = coords.at(i); 
+        
+        jdoubleArray jTempArray = (env)->NewDoubleArray(dimension);
+        
+        cout <<tempVector<<endl;
+
+        double lambda = tempVector.component(dimension);
+
+        RpNumerics::getPhysics().getSubPhysics(0).postProcess(tempVector);
 
         double * dataCoords = tempVector;
+       
 
-        jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size());
+        (env)->SetDoubleArrayRegion(jTempArray, 0, dimension, dataCoords);
 
-        (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size(), dataCoords);
-
-        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray);
+        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray, lambda);
 
         (env)->SetObjectArrayElement(orbitPointArray, i, orbitPoint);
 

@@ -39,10 +39,13 @@ public class GeometryGraphND {
     protected Line2D line4;
     protected Line2D line3DC;
     protected Line2D line4DC;
+    protected Line2D line3WC;
+    protected Line2D line4WC;
     static public RealVector topRight = new RealVector(RPNUMERICS.domainDim());
     static public RealVector downLeft = new RealVector(RPNUMERICS.domainDim());
     static public RealVector pMarca = new RealVector(RPNUMERICS.domainDim());
     static public RealVector pMarcaDC = new RealVector(RPNUMERICS.domainDim());
+    static public RealVector pMarcaWC = new RealVector(RPNUMERICS.domainDim());
     static public RealVector targetPoint = new RealVector(RPNUMERICS.domainDim());
     static public RealVector cornerRet = new RealVector(RPNUMERICS.domainDim());
     //*** isso é uma lista de indices (Leandro)
@@ -61,7 +64,6 @@ public class GeometryGraphND {
             GeometryGraphND.pMarca.setElement(i, 100.);
         }
     }
-
 
     public void changeColor() {
         if (RPnPhaseSpacePanel.DEFAULT_BACKGROUND_COLOR == Color.white) {
@@ -106,7 +108,6 @@ public class GeometryGraphND {
         if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("LeftPhase Space"))
             segments = (ArrayList) ((BifurcationCurve)curve).rightSegments();
 
-
         double zmin = 1.E10;
         double zmax = -1.E10;
         double wmin = 1.E10;
@@ -147,10 +148,10 @@ public class GeometryGraphND {
         pol.addPoint((int)dcP1.getX(), (int)dcP1.getY());
         pol.addPoint((int)dcP2.getX(), (int)dcP2.getY());
         pol.addPoint((int)dcP3.getX(), (int)dcP3.getY());
-        pol.addPoint((int)dcP4.getX() , (int)dcP4.getY());
+        pol.addPoint((int)dcP4.getX(), (int)dcP4.getY());
 
         return pol;
-        
+
     }
 
 

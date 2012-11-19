@@ -23,7 +23,7 @@ import java.awt.Polygon;
 import java.awt.geom.Line2D;
 import rpn.controller.ui.TRACKPOINT_CONFIG;
 import rpn.controller.ui.UIController;
-import rpn.usecase.TrackPointAgent;
+import rpn.command.TrackPointCommand;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
 
@@ -99,7 +99,7 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
                     
 
                     
-                    TrackPointAgent.instance().trackPoint(wcCoords);
+                    TrackPointCommand.instance().trackPoint(wcCoords);
 
                 }
 
