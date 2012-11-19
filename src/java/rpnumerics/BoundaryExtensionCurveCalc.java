@@ -35,8 +35,7 @@ public class BoundaryExtensionCurveCalc extends ContourCurveCalc {
     public RpSolution calc() throws RpException {
         RpSolution result = null;
 
-        int resolution[] = getParams().getResolution();
-        result = (BoundaryExtensionCurve) nativeCalc(resolution, edgeResolution_,domainFamily_, edge_, characteristicDomain_);
+        result = (BoundaryExtensionCurve) nativeCalc(edgeResolution_,domainFamily_, edge_, characteristicDomain_);
 
         if (result == null) {
             throw new RpException("Error in native layer");
@@ -67,15 +66,9 @@ public class BoundaryExtensionCurveCalc extends ContourCurveCalc {
         return edge_;
     }
 
-    public int getxResolution() {
-        return xResolution_;
-    }
+   
 
-    public int getyResolution() {
-        return yResolution_;
-    }
-
-    private native RpSolution nativeCalc(int [] resolution, int edgeResolution,  int rightFamily, int edge, int characteristicDomain) throws RpException;
+    private native RpSolution nativeCalc(int edgeResolution,  int rightFamily, int edge, int characteristicDomain) throws RpException;
 
     
 }

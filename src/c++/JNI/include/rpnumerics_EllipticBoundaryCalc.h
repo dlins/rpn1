@@ -10,10 +10,10 @@ extern "C" {
 /*
  * Class:     rpnumerics_EllipticBoundaryCalc
  * Method:    nativeCalc
- * Signature: ([I)Lrpnumerics/RpSolution;
+ * Signature: ()Lrpnumerics/RpSolution;
  */
 JNIEXPORT jobject JNICALL Java_rpnumerics_EllipticBoundaryCalc_nativeCalc
-  (JNIEnv *, jobject, jintArray);
+  (JNIEnv *, jobject);
 
 #ifdef __cplusplus
 }

@@ -36,7 +36,7 @@ using std::vector;
 using namespace std;
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_BoundaryExtensionCurveCalc_nativeCalc
-(JNIEnv * env, jobject obj, jintArray resolution, jint edgeResolution, jint domainFamily, jint edge, jint characteristicWhere) {
+(JNIEnv * env, jobject obj, jint edgeResolution, jint domainFamily, jint edge, jint characteristicWhere) {
 
 
 

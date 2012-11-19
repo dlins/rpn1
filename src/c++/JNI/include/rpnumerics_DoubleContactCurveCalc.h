@@ -10,11 +10,10 @@ extern "C" {
 /*
  * Class:     rpnumerics_DoubleContactCurveCalc
  * Method:    nativeCalc
- * Signature: ([III)Lrpnumerics/RpSolution;
+ * Signature: (II)Lrpnumerics/RpSolution;
  */
 JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
-  (JNIEnv *, jobject, jintArray, jint, jint);
-
+  (JNIEnv *, jobject, jint, jint);
 
 #ifdef __cplusplus
 }

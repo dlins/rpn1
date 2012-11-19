@@ -19,7 +19,7 @@ public class EllipticBoundaryCalc extends ContourCurveCalc {
 
         EllipticBoundary result;
 
-        result = (EllipticBoundary) nativeCalc(getParams().getResolution());
+        result = (EllipticBoundary) nativeCalc();
 
           if (result == null) {
             throw new RpException("Error in native layer");
@@ -33,18 +33,7 @@ public class EllipticBoundaryCalc extends ContourCurveCalc {
         return calc();
     }
 
-//    @Override
-//    public RpSolution recalc(Area area) throws RpException {
-//
-//        EllipticBoundary result;
-//
-//
-//        result = (EllipticBoundary) nativeCalc((int) area.getResolution().getElement(0), (int) area.getResolution().getElement(1), area.getTopRight(), area.getDownLeft());
-//
-//        return result;
-//    }
+    private native RpSolution nativeCalc() throws RpException;
 
-    private native RpSolution nativeCalc(int resolution[]) throws RpException;
 
-//    private native RpSolution nativeCalc(int xRes_, int yRes_, RealVector topR, RealVector dwnL) throws RpException;
 }
