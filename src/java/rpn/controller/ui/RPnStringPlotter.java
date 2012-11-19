@@ -111,6 +111,7 @@ public class RPnStringPlotter extends RPn2DMouseController {
 
             UserInputTable userInputList = UIController.instance().globalInputTable();
             RealVector newValue = userInputList.values();
+            
             RpGeometry geom = RPnDataModule.PHASESPACE.findClosestGeometry(newValue);
             RPnCurve curve = (RPnCurve) (geom.geomFactory().geomSource());
             RealVector closestPoint = curve.findClosestPoint(newValue);

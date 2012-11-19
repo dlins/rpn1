@@ -124,15 +124,6 @@ public class RPnVelocityPlotter extends RPn2DMouseController {
                 int tam = ((WaveCurve) curve).getBranchsList().size();
                 ArrayList<OrbitPoint> result = new ArrayList<OrbitPoint>();
 
-//                for (int i = 0; i < tam; i++) {
-//                    WaveCurveOrbit orbit = (WaveCurveOrbit) ((WaveCurve) curve).getBranchsList().get(i);
-//                    OrbitPoint[] parcial = orbit.getPoints();
-//                    for (int j = 0; j < parcial.length; j++) {
-//                        result.add(parcial[j]);
-//                    }
-//                }
-
-
                 for (int i = 0; i < tam; i++) {
                     FundamentalCurve orbit = (FundamentalCurve) ((WaveCurve) curve).getBranchsList().get(i);
                     OrbitPoint[] parcial = orbit.getPoints();

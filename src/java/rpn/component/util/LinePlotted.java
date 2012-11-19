@@ -29,10 +29,12 @@ public class LinePlotted extends GraphicsUtil {
     public Shape createShape() {
 
         Line2D line = (Line2D) wcObjects_.get(0);
+
         Coords2D dcPoint1 = new Coords2D();
         Coords2D dcPoint2 = new Coords2D();
         CoordsArray wcPoint1 = new CoordsArray(new double[]{line.getX1(), line.getY1()});
         CoordsArray wcPoint2 = new CoordsArray(new double[]{line.getX2(), line.getY2()});
+
         getViewingTransform().viewPlaneTransform(wcPoint1, dcPoint1);
         getViewingTransform().viewPlaneTransform(wcPoint2, dcPoint2);
 

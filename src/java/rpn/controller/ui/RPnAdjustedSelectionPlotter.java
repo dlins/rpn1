@@ -171,21 +171,21 @@ public class RPnAdjustedSelectionPlotter extends RPn2DMouseController  {
     }
 
 
-    private void indexToRemove(RPnPhaseSpacePanel panel) {      // --- ATENCAO: está dando erro devido às alteracoes que foram feitas no gitorious
-//        List<Integer> indexToRemove = new ArrayList<Integer>();
-//        List<AreaSelected> selectedAreas = panel.getSelectedAreas();
-//
-//        for (AreaSelected area : selectedAreas) {
-//            Iterator geomIterator = panel.scene().geometries();
-//            while (geomIterator.hasNext()) {
-//                GeomObjView geomObjView = (GeomObjView) geomIterator.next();
-//                List<Integer> segmentIndex = geomObjView.contains(area);
-//                if (!segmentIndex.isEmpty()) {
-//                    indexToRemove.addAll(segmentIndex);
-//                }
-//            }
-//        }
-//        GeometryGraphND.indContido = indexToRemove;
+    private void indexToRemove(RPnPhaseSpacePanel panel) {
+        List<Integer> indexToRemove = new ArrayList<Integer>();
+        List<AreaSelected> selectedAreas = panel.getSelectedAreas();
+
+        for (AreaSelected area : selectedAreas) {
+            Iterator geomIterator = panel.scene().geometries();
+            while (geomIterator.hasNext()) {
+                GeomObjView geomObjView = (GeomObjView) geomIterator.next();
+                List<Integer> segmentIndex = geomObjView.contains((Polygon)area.getShape());
+                if (!segmentIndex.isEmpty()) {
+                    indexToRemove.addAll(segmentIndex);
+                }
+            }
+        }
+        GeometryGraphND.indContido = indexToRemove;
     }
 
 
@@ -195,11 +195,19 @@ public class RPnAdjustedSelectionPlotter extends RPn2DMouseController  {
 
         Point2D.Double lowerLeftCorner = wc.getOriginPosition();
 
-        double vMin = lowerLeftCorner.x;
-        double uMin = lowerLeftCorner.y;
+//        double vMin = lowerLeftCorner.x;
+//        double uMin = lowerLeftCorner.y;
+//
+//        double dv = wc.getWidth() / xResolution;
+//        double du = wc.getHeight() / yResolution;
 
-        double dv = wc.getWidth() / xResolution;
-        double du = wc.getHeight() / yResolution;
+        // --- Teste rápido para a TPCW, aguardar confirmacao do Edson
+        double vMin = lowerLeftCorner.y;
+        double uMin = lowerLeftCorner.x;
+
+        double dv = wc.getHeight() / yResolution;
+        double du = wc.getWidth() / xResolution;
+        // ---
 
         PathIterator inputIterator = input.getPathIterator(null);
 

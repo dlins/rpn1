@@ -9,6 +9,8 @@ import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.Shape;
 import java.awt.geom.Line2D;
+import java.util.ArrayList;
+import javax.swing.ToolTipManager;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpacePanel;
 import rpn.component.RpGeometry;
@@ -22,8 +24,9 @@ import rpn.controller.ui.RPnVelocityPlotter;
 import rpn.controller.ui.UserInputTable;
 import rpn.parser.RPnDataModule;
 import rpnumerics.BifurcationCurve;
-import rpn.command.VelocityCommand;
+import rpnumerics.OrbitPoint;
 import rpnumerics.WaveCurve;
+import rpnumerics.FundamentalCurve;
 
 /**
  *
@@ -70,24 +73,37 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
     }
 
 
-    //*** NAO ESTÁ SENDO USADO   --- MAS, POR ENQUANTO, NÃO DELETAR!!!
+    //*** COMECEI A ADAPTAR E RESTAURAR USO EM 05NOV
     public void infoWaveCurve(RealVector newValue, WaveCurve curve, RPnPhaseSpacePanel panel) {
-//        count = 0;
-//
-//        int index = curve.findClosestSegment(newValue);
-//        int indBegin = curve.getBeginSubCurve(index);
-//
-//        String locSubCurve = String.valueOf(index - indBegin);
-//        String name = curve.getName()[index];
-//        String family = " Family : " +String.valueOf(curve.getFamily());
-//
-//        if (name.equals("Rarefaction"))
-//            panel.setToolTipText(String.valueOf(index) + " " +name + " " +curve.getPoints()[index].getLambda());
-//
-//        panel.setToolTipText(locSubCurve + " " + name + " " + family);
-//        ToolTipManager ttm = ToolTipManager.sharedInstance();
-//        ttm.setInitialDelay(0);
-//        ttm.setDismissDelay(500);
+
+        int tam = ((WaveCurve) curve).getBranchsList().size();
+        ArrayList<Integer> result = new ArrayList<Integer>();
+        ArrayList<OrbitPoint> resultPoint = new ArrayList<OrbitPoint>();
+        ArrayList<String> name = new ArrayList<String>();
+
+        for (int i = 0; i < tam; i++) {
+            FundamentalCurve orbit = (FundamentalCurve) ((WaveCurve) curve).getBranchsList().get(i);
+            OrbitPoint[] parcial = orbit.getPoints();
+            for (int j = 0; j < parcial.length; j++) {
+                result.add(j);
+                resultPoint.add(parcial[j]);
+                name.add(orbit.getClass().getSimpleName());
+            }
+        }
+
+        int segTotal = curve.findClosestSegment(newValue);
+        int segBranch = result.get(segTotal);
+
+        panel.setToolTipText(String.valueOf(segBranch) +" , " +String.valueOf(curve.segments().size()));
+        ToolTipManager ttm = ToolTipManager.sharedInstance();
+        ttm.setInitialDelay(0);
+        ttm.setDismissDelay(500);
+
+        int other = resultPoint.get(segTotal).getCorrespondingPointIndex();
+        pMarcaWC = resultPoint.get(other).getCoords();
+
+        if (name.get(segTotal).equals("RarefactionOrbit"))
+            pMarcaWC = resultPoint.get(segTotal).getCoords();
 
     }
 
