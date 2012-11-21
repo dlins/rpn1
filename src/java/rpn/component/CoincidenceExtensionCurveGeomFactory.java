@@ -36,34 +36,5 @@ public class CoincidenceExtensionCurveGeomFactory extends BifurcationCurveGeomFa
 
     }
 
-    public String toMatlab(int curveIndex) {
 
-        StringBuffer buffer = new StringBuffer();
-        CoincidenceCurve curve = (CoincidenceCurve) geomSource();
-        buffer.append("%%\nclose all;clear all;\n");
-        //buffer.append(RpCalcBasedGeomFactory.createMatlabColorTable());
-        buffer.append(curve.toMatlabData(0));
-
-        buffer.append("%%\n% begin plot x y\n");
-        buffer.append("figure; set(gca, 'Color',[0 0 0]); hold on\n");
-        buffer.append(curve.createMatlabPlotLoop(0, 1, 0));
-
-        return buffer.toString();
-
-    }
-
-    public String toXML() {
-        StringBuffer buffer = new StringBuffer();
-
-        BifurcationCurve curve = (BifurcationCurve) geomSource();
-
-        buffer.append("<COMMAND name=\"coincidenceextension\">\n");
-
-        buffer.append(curve.toXML());
-
-        buffer.append("</COMMAND>\n");
-
-        return buffer.toString();
-
-    }
 }

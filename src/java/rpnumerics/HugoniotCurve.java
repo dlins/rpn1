@@ -493,4 +493,10 @@ public class HugoniotCurve extends SegmentedCurve {
     public PhasePoint getXZero() {
         return xZero_;
     }
+
+
+    public String toMatlab(int curveIndex) {
+        return null;
+    }
+
 }

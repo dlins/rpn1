@@ -64,30 +64,4 @@ public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
 
     }
 
-    public String toMatlab(int curveIndex) {
-        return null;
-    }
-
-    public String toXML() {
-
-        HugoniotCurve hugoniotCurve = (HugoniotCurve) geomSource();
-
-        StringBuilder buffer = new StringBuilder();
-
-        HugoniotCurveCalcND calc = (HugoniotCurveCalcND) rpCalc();
-
-        String commandName = geomSource().getClass().getName();
-        commandName = commandName.toLowerCase();
-        commandName = commandName.replaceAll(".+\\.", "");
-
-        buffer.append("<COMMAND name=\"" + commandName + "\"" + " inputpoint=\"" + hugoniotCurve.getXZero().toString() + "\" " + calc.getParams().toString() + ">\n");
-
-        //buffer.append(((HugoniotCurve) geomSource()).toXML());        //*** ISSO ESTÁ NO CÓDIGO ORIGINAL, COMENTEI APENAS PARA TESTE
-
-        buffer.append("</COMMAND>\n");
-
-        return buffer.toString();
-
-
-    }
 }

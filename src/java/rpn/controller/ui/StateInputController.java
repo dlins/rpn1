@@ -20,6 +20,7 @@ public class StateInputController implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
 
         if (evt.getPropertyName().equals("aplication state")) {
+            if (uiFrame_ != null)
                 uiFrame_.propertyChange(evt);
         }
 

@@ -8,6 +8,7 @@
 package rpnumerics;
 
 public interface RpSolution {
+
     public static final int DEFAULT_NULL_FLAG = -1;
     public static final int OUT_OF_THE_BOUNDARY = 0;
     public static final int INTERSECTION_WITH_POINCARE = 1;
@@ -29,6 +30,14 @@ public interface RpSolution {
     public static int NO_POINCARE_SECTION = 14;
     public static int CONNECTED = 15;
 
+    /*
+     * XML output
+     */
+    String toXML();
 
+    /*
+     * Matlab formatted output
+     */
+    String toMatlab(int curveIndex);
 
-    }
+}

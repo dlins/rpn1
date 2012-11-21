@@ -20,7 +20,7 @@ import wave.multid.view.ViewingAttr;
 import wave.util.RealSegment;
 import wave.util.RealVector;
 
-public class SegmentedCurve extends RPnCurve implements RpSolution {
+public class SegmentedCurve extends RpCurve implements RpSolution {
 
 
     private List<? extends RealSegment> segments_;

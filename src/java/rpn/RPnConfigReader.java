@@ -106,6 +106,27 @@ public abstract class RPnConfigReader {
 
     }
 
+    /** Initializes the XML parser that reads the configuration file */
+    public void exec(InputStream configStream) {
+
+        try {
+
+            XMLReader xmlReader = XMLReaderFactory.createXMLReader();
+
+            configStream.reset();
+
+
+            RPnDataModule.exec(xmlReader, configStream);
+
+
+        } catch (Throwable any) {
+
+
+            any.printStackTrace();
+        }
+
+    }
+
     /** Gives a stream with the configuration data */
     public abstract InputStream read();
 }

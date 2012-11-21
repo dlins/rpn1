@@ -8,7 +8,7 @@ package rpn.controller.ui;
 
 import rpn.component.LevelCurveGeomFactory;
 import rpnumerics.HugoniotCurve;
-import rpnumerics.RPnCurve;
+import rpnumerics.RpCurve;
 import wave.util.RealVector;
 
 public class UserInputTable {

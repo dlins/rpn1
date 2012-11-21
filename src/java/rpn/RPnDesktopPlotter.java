@@ -25,6 +25,7 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
 
     public static String DTDPATH = System.getProperty("rpnhome") + System.getProperty("file.separator") + "share" + System.getProperty("file.separator") + "rpn-dtd" + System.getProperty("file.separator");
     public static String INTERFACE_CONFIG_PATH = System.getProperty("rpnhome") + System.getProperty("file.separator") + "share" + System.getProperty("file.separator") + "rpn-examples" + System.getProperty("file.separator");
+
     private static RPnConfigReader configReader_;
     private static InputStream configStream_;
     private static RPnUIFrame rpnUIFrame_;
@@ -107,14 +108,14 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
 
             rpnUIFrame_ = new RPnUIFrame(plotter);
 
-
-
             rpnUIFrame_.pack();
 
             rpnUIFrame_.setVisible(true);
 
 //            RPnCurvesListFrame curvesFrame = new RPnCurvesListFrame();
 //            rpnUIFrame_.setCurvesFrame(curvesFrame);
+
+            RPnDesktopPlotter.configReader_.exec(configStream_); //Reading input file
 
 
 

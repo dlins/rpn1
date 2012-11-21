@@ -7,7 +7,7 @@ import wave.util.*;
 import wave.multid.model.*;
 import wave.multid.view.*;
 import wave.util.exceptions.*;
-import rpnumerics.RPnCurve;
+import rpnumerics.RpCurve;
 import rpnumerics.methods.contour.exceptions.*;
 import rpnumerics.methods.contour.functionsobjects.*;
 import rpnumerics.methods.contour.functionsobjects.CubeFunction;
@@ -71,7 +71,7 @@ public class ContourND implements Serializable {
 		setNameOfMethod("ContourND");	
 	}
 	
-	public RPnCurve curvND(double[] rect,int[] res) throws CanNotPerformCalculations {
+	public RpCurve curvND(double[] rect,int[] res) throws CanNotPerformCalculations {
 				
 		// intervalos em rect
 		// numero de divisoes estah em res para cada dimensao
@@ -417,12 +417,12 @@ public class ContourND implements Serializable {
     	this.nameOfMethod = method;
     }
     
-    protected RPnCurve setRPnCurve (ContourCurve curve) {
+    protected RpCurve setRPnCurve (ContourCurve curve) {
     	
-    	RPnCurve rpncurve = null;
+    	RpCurve rpncurve = null;
 		
 		if (curve.numberOfSegments() != 0 ) {
-			rpncurve = new RPnCurve(curve, new ViewingAttr(Color.yellow)) {
+			rpncurve = new RpCurve(curve, new ViewingAttr(Color.yellow)) {
 
                 @Override
                 public java.util.List segments() {

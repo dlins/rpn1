@@ -27,11 +27,11 @@
     </FLUXFUNCTION>-->
 </PHYSICS>
 
-<CURVE name="shock">
+<CURVECONFIGURATION name="shock">
     <CURVEPARAM name="family" value="0"/>
     <CURVEPARAM name="xzero" value="3.4 0.5"/>
     <CURVEPARAM name="sigma" value="0.03"/>
-</CURVE>
+</CURVECONFIGURATION>
 
 
 <VIEWCONFIGURATION modeldomain="3">

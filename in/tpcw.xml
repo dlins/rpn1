@@ -54,21 +54,21 @@
         <CURVEPARAM name="resolution" value="128 128"/>
     </CURVECONFIGURATION>
 
-
-    <CURVECONFIGURATION name="hugoniotcurve">
-        <CURVEPARAM name="resolution" value="20 20"/>
+    <CURVECONFIGURATION name="bifurcationcurve">
+        <CURVEPARAM name="curvefamily" value="1"/>
+        <CURVEPARAM name="domainfamily" value="1"/>
+        <CURVEPARAM name="characteristicwhere" value="0"/>
+        <CURVEPARAM name="singular" value="1"/>
     </CURVECONFIGURATION>
 
-        
- <CURVECONFIGURATION name="boundaryextensioncurve">
-
-        <CURVEPARAM name="family" value="0"/>
+    <CURVECONFIGURATION name="extensioncurve">
+        <CURVEPARAM name="curvefamily" value="1"/>
+        <CURVEPARAM name="domainfamily" value="1"/>
+        <CURVEPARAM name="characteristicwhere" value="1"/>
         <CURVEPARAM name="edge" value="0"/>
         <CURVEPARAM name="edgeresolution" value="128"/>
         <CURVEPARAM name="resolution" value="128 128"/>
         <CURVEPARAM name="characteristicwhere" value="0"/>
-
-
     </CURVECONFIGURATION>
 
     <CURVECONFIGURATION name="rarefactionextension">

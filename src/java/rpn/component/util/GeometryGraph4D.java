@@ -24,7 +24,7 @@ import rpn.RPnPhaseSpacePanel;
 //import rpn.parser.RPnDataModule;
 import rpnumerics.Orbit;
 import rpnumerics.RPNUMERICS;
-import rpnumerics.RPnCurve;
+import rpnumerics.RpCurve;
 //import rpnumerics.RarefactionOrbitCalc;
 import rpnumerics.SegmentedCurve;
 import wave.multid.Coords2D;

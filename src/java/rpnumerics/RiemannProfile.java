@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import rpn.component.MultidAdapter;
 import wave.util.RealSegment;
 
-public class RiemannProfile extends RPnCurve implements RpSolution {
+public class RiemannProfile extends RpCurve  {
     //
     // Members
     //

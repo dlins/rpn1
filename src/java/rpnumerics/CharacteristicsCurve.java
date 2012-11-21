@@ -11,7 +11,7 @@ import java.util.List;
 
 import wave.util.RealSegment;
 
-public class CharacteristicsCurve extends RPnCurve implements RpSolution {
+public class CharacteristicsCurve extends RpCurve {
     //
     // Members
     //
@@ -62,12 +62,4 @@ public class CharacteristicsCurve extends RPnCurve implements RpSolution {
         return segments_;
 
     }
-
-
-
-
-    
-
-
-    
 }

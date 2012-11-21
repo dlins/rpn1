@@ -223,7 +223,7 @@ public class RPNUMERICS {
 
             }
 
-            if (configurationEntry.getValue().getType().equalsIgnoreCase(ConfigurationProfile.CURVE)) {
+            if (configurationEntry.getValue().getType().equalsIgnoreCase(ConfigurationProfile.CURVECONFIGURATION)) {
                 curveConfiguration.add(configurationEntry.getValue());
 
 

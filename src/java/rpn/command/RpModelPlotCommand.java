@@ -56,8 +56,8 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand {
         if (geometry == null) {
             return;
         }
+       
         UIController.instance().getActivePhaseSpace().plot(geometry);
-
 
         Iterator newValue = UIController.instance().getActivePhaseSpace().getGeomObjIterator();
         logAction(new PropertyChangeEvent(this, listString, oldValue, newValue));

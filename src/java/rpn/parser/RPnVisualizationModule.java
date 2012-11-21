@@ -33,44 +33,32 @@ public class RPnVisualizationModule {
     private static ConfigurationProfile currentConfigurationProfile_;
     private static ConfigurationProfile currentProjConfigurationProfile_;
 
-    private static class InputHandler implements ContentHandler {
+    private static class RPnVisualizationParser implements ContentHandler {
 
         public void startElement(String uri, String localName, String qName, Attributes att) throws SAXException {
 
-            if (localName.equals("VIEWCONFIGURATION")) {
+            if (localName.equals("VIEWCONFIGURATION")) 
 
-                currentConfigurationProfile_ = new ConfigurationProfile(att.getValue(0), ConfigurationProfile.VISUALIZATION);
+                currentConfigurationProfile_ = new ConfigurationProfile(att.getValue(0), ConfigurationProfile.VISUALIZATION);           
 
-            }
+            else if (localName.equals("PROJDESC"))
 
+                currentProjConfigurationProfile_ = new ConfigurationProfile(att.getValue(0), ConfigurationProfile.VISUALIZATION);        
 
-            if (localName.equals("PROJDESC")) {
+            else if (localName.equals("VIEWPARAM"))
 
-                currentProjConfigurationProfile_ = new ConfigurationProfile(att.getValue(0), ConfigurationProfile.VISUALIZATION);
-
-            }
-
-            if (localName.equals("VIEWPARAM")) {
-
-                currentProjConfigurationProfile_.addParam(att.getValue(0), att.getValue(1));
-
-            }
+                currentProjConfigurationProfile_.addParam(att.getValue(0), att.getValue(1));            
 
         }
 
         public void endElement(String uri, String localName, String qName) throws SAXException {
 
 
-            if (localName.equals("PROJDESC")) {
-
-
-                currentConfigurationProfile_.addConfigurationProfile(currentProjConfigurationProfile_.getName(), currentProjConfigurationProfile_);
-
-            }
+            if (localName.equals("PROJDESC"))
+                currentConfigurationProfile_.addConfigurationProfile(currentProjConfigurationProfile_.getName(), currentProjConfigurationProfile_);          
 
 
             if (localName.equals("VIEWCONFIGURATION")) {
-
 
                 RPnConfig.addProfile(currentConfigurationProfile_.getName(), currentConfigurationProfile_);
                 RPnConfig.setActiveVisualConfiguration(currentConfigurationProfile_.getName());
@@ -116,7 +104,7 @@ public class RPnVisualizationModule {
 
             DESCRIPTORS = new ArrayList<RPnProjDescriptor>();
             AUXDESCRIPTORS = new ArrayList<RPnProjDescriptor>();
-            parser.setContentHandler(new InputHandler());
+            parser.setContentHandler(new RPnVisualizationParser());
             parser.parse(file);
 
 
@@ -132,7 +120,7 @@ public class RPnVisualizationModule {
         try {
             DESCRIPTORS = new ArrayList<RPnProjDescriptor>();
             AUXDESCRIPTORS = new ArrayList<RPnProjDescriptor>();
-            parser.setContentHandler(new InputHandler());
+            parser.setContentHandler(new RPnVisualizationParser());
             System.out.println("Visualization Module");
 
             System.out.println("Will parse !");
@@ -149,6 +137,7 @@ public class RPnVisualizationModule {
     }
 
     private static void processActiveVisualConfiguration() {
+
         ConfigurationProfile visualizationProfile = RPnConfig.getActiveVisualProfile();
 
         Integer dimension = new Integer(visualizationProfile.getName());

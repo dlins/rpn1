@@ -30,28 +30,4 @@ public class SubInflectionCurveGeomFactory extends BifurcationCurveGeomFactory {
         return new SubInflectionCurveGeom(hugoniotArray, this);
 
     }
-
-
-
-    public String toXML() {
-
-        StringBuffer buffer = new StringBuffer();
-
-        buffer.append(super.toXML());
-        BifurcationCurve curve = (BifurcationCurve) geomSource();
-
-        buffer.append(">\n");
-
-        buffer.append(curve.toXML());
-
-        buffer.append("</COMMAND>\n");
-
-
-        return buffer.toString();
-
-    }
-
-    public String toMatlab(int curveIndex) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
 }

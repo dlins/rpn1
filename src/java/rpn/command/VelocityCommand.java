@@ -18,7 +18,7 @@ import rpn.controller.ui.UserInputTable;
 import rpnumerics.HugoniotCurve;
 import rpnumerics.Orbit;
 import rpnumerics.OrbitPoint;
-import rpnumerics.RPnCurve;
+import rpnumerics.RpCurve;
 import wave.util.RealVector;
 import rpn.controller.ui.VELOCITYAGENT_CONFIG;
 import rpn.parser.RPnDataModule;
@@ -93,7 +93,7 @@ public class VelocityCommand extends RpModelPlotCommand {
         RpGeometry geom = phaseSpace.findClosestGeometry(newValue);
 
         //RpGeometry geom = RPnPhaseSpaceAbstraction.findClosestGeometry(newValue);
-        RPnCurve curve = (RPnCurve)(geom.geomFactory().geomSource());
+        RpCurve curve = (RpCurve)(geom.geomFactory().geomSource());
 
         if ((GeometryGraph.count % 2) == 0) {
 

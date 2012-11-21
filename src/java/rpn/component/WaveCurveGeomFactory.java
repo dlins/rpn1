@@ -9,7 +9,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import rpnumerics.CompositeCurve;
-import rpnumerics.RPnCurve;
+import rpnumerics.RpCurve;
 import rpnumerics.RarefactionOrbit;
 import rpnumerics.ShockCurve;
 import rpnumerics.WaveCurve;
@@ -54,7 +54,7 @@ public class WaveCurveGeomFactory extends WaveCurveOrbitGeomFactory {
 
 
             for (WaveCurveBranch leaf : branch.getBranchsList()) {
-                segList.addAll(((RPnCurve) leaf).segments());
+                segList.addAll(((RpCurve) leaf).segments());
 
             }
 
@@ -114,10 +114,5 @@ public class WaveCurveGeomFactory extends WaveCurveOrbitGeomFactory {
             return new ViewingAttr(Color.blue);
         }
         return null;
-    }
-
-    @Override
-    public String toMatlab(int curveIndex) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

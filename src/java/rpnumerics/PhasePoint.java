@@ -7,7 +7,7 @@ package rpnumerics;
 
 import wave.util.RealVector;
 
-public class PhasePoint extends RealVector {
+public class PhasePoint extends RealVector implements RpSolution {
     //
     // Constants
     //
@@ -47,4 +47,9 @@ public class PhasePoint extends RealVector {
 
         return str.toString();
     }
+
+    public String toMatlab(int curveIndex) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 }

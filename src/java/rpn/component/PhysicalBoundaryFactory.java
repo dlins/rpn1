@@ -35,29 +35,4 @@ public class PhysicalBoundaryFactory extends RpCalcBasedGeomFactory {
         return new PhysicalBoundaryGeom(segmentsArray, this);
 
     }
-
-    public String toMatlab(int curveIndex) {
-        return null;
-    }
-
-    public String toXML() {
-
-        StringBuilder buffer = new StringBuilder();
-
-        EllipticBoundaryCalc calc = (EllipticBoundaryCalc) rpCalc();
-
-        String commandName = geomSource().getClass().getName();
-        commandName = commandName.toLowerCase();
-        commandName = commandName.replaceAll(".+\\.", "");
-
-        buffer.append("<COMMAND name=\"" + commandName + "\"" + calc.getParams().toString() + ">\n");
-
-        buffer.append(((EllipticBoundary) geomSource()).toXML());
-
-        buffer.append("</COMMAND>\n");
-
-        return buffer.toString();
-
-
-    }
 }

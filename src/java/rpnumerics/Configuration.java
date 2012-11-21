@@ -253,13 +253,13 @@ public class Configuration {
         }
 
 
-        if (getType().equalsIgnoreCase(ConfigurationProfile.CURVE)) {
-            buffer.append("<CURVE name=\"" + getName() + "\">\n");
+        if (getType().equalsIgnoreCase(ConfigurationProfile.CURVECONFIGURATION)) {
+            buffer.append("<CURVECONFIGURATION name=\"" + getName() + "\">\n");
             for (Entry<String, String> entry : paramsSet) {
                 buffer.append("<CURVEPARAM name=\"" + entry.getKey() + "\" " + "value= \"" + entry.getValue() + "\"/>");
                 buffer.append("\n");
             }
-            buffer.append("</CURVE>\n");
+            buffer.append("</CURVECONFIGURATION>\n");
         }
 
         if (getType().equalsIgnoreCase(ConfigurationProfile.METHOD)) {

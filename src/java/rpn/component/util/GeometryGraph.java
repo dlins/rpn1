@@ -18,7 +18,7 @@ import rpn.controller.ui.AREASELECTION_CONFIG;
 import rpn.controller.ui.UIController;
 import rpnumerics.DoubleContactCurve;
 import rpnumerics.RPNUMERICS;
-import rpnumerics.RPnCurve;
+import rpnumerics.RpCurve;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
 import wave.multid.view.Scene;
@@ -216,7 +216,7 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
             RpGeometry geom = phaseSpace.findClosestGeometry(newValue);
 
             //RpGeometry geom = RPnPhaseSpaceAbstraction.findClosestGeometry(newValue);
-            RPnCurve curve = (RPnCurve)(geom.geomFactory().geomSource());
+            RpCurve curve = (RpCurve)(geom.geomFactory().geomSource());
             if (curve instanceof DoubleContactCurve  ||  curve instanceof SecondaryBifurcationCurve) {
                 if (!panel.getName().equals(RPnPhaseSpaceAbstraction.namePhaseSpace) && !panel.getName().equals("Phase Space")) {
                     graph.draw(line3DC);
