@@ -172,8 +172,6 @@ public class RPnDataModule {
 
         private StringBuilder stringBuffer_ = new StringBuilder();
 
-        private boolean pause_after_ = false;
-
 
         public RPnCommandParser() {
 
@@ -201,7 +199,6 @@ public class RPnDataModule {
 
 
                 currentCommand_ = att.getValue("name");
-                pause_after_ = Boolean.valueOf(att.getValue("pause_after"));
 
 
                 if (currentCommand_.equalsIgnoreCase("hugoniotcurve"))
@@ -270,7 +267,7 @@ public class RPnDataModule {
             if (name.equals("REALVECTOR"))
                 UIController.instance().userInputComplete(new RealVector(stringBuffer_.toString()));
 
-            if (name.equals("COMMAND") && pause_after_)
+            if (name.equals("PAUSE"))
                 try {
                     System.in.read();
                 } catch (java.io.IOException ex) {}

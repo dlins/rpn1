@@ -134,8 +134,9 @@
 
  </RPNCONFIGURATION>
 
- <COMMAND name="hugoniotcurve" pause_after="true">
+ <COMMAND name="hugoniotcurve">
   <REALVECTOR dimension="2">0.1974 0.1623</REALVECTOR>
+  <PAUSE></PAUSE>
  </COMMAND>
  <COMMAND name="hugoniotcurve">
   <REALVECTOR dimension="2">0.2974 0.2623</REALVECTOR>
