@@ -11,7 +11,7 @@ import wave.multid.CoordsArray;
 
 import wave.util.RealVector;
 
-import rpnumerics.RPnCurve;
+import rpnumerics.RpCurve;
 import wave.util.PointNDimension;
 import java.util.ArrayList;
 import java.util.List;
@@ -123,7 +123,7 @@ public class MultidAdapter {
     
     
 
-    static public CoordsArray[] converseRPnCurveToCoordsArray(RPnCurve rpncurve) {
+    static public CoordsArray[] converseRPnCurveToCoordsArray(RpCurve rpncurve) {
 
         PointNDimension[][] polyline = rpncurve.getPolylines();
 
@@ -173,7 +173,7 @@ public class MultidAdapter {
 
     }
     
-    static public ArrayList converseRPnCurveToRealSegments(RPnCurve rpncurve) {
+    static public ArrayList converseRPnCurveToRealSegments(RpCurve rpncurve) {
   	
         PointNDimension[][] polyline = rpncurve.getPolylines();
 

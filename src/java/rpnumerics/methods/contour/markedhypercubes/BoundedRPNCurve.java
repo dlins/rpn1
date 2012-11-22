@@ -1,17 +1,17 @@
 package rpnumerics.methods.contour.markedhypercubes;
 
 import java.util.List;
-import rpnumerics.RPnCurve;
+import rpnumerics.RpCurve;
 import wave.multid.model.*;
 import wave.util.*;
 
-public class BoundedRPNCurve extends RPnCurve {
+public class BoundedRPNCurve extends RpCurve {
 
-	public BoundedRPNCurve(RPnCurve curve, double error) {
+	public BoundedRPNCurve(RpCurve curve, double error) {
 		super(fromRPNCurveToBounded(curve, error), curve.getViewAttr());
 	}	
 	
-	private static PointNDimension[][] fromRPNCurveToBounded(RPnCurve curve, double tolerance) {
+	private static PointNDimension[][] fromRPNCurveToBounded(RpCurve curve, double tolerance) {
 		
 		PointNDimension[][] polyline = curve.getPolylines();
 		

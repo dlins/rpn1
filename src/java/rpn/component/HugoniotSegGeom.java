@@ -10,10 +10,12 @@ import wave.multid.model.*;
 import wave.multid.view.*;
 import wave.multid.*;
 import java.awt.Color;
+import rpnumerics.Orbit;
 
 public class HugoniotSegGeom extends MultiPolyLine {
 
     static public String[] s = {"----", "", "-+--", "++--", "", "", "", "", "---+", "", "-+-+", "++-+", "--++", "", "-+++", "++++"};   //** declarei isso (Leandro)
+    static public int DIRECTION = Orbit.FORWARD_DIR;
 
     public HugoniotSegGeom(HugoniotSegment segment, ViewingAttr viewingAtt) {
         super(new CoordsArray[]{new CoordsArray(segment.leftPoint()), new CoordsArray(segment.rightPoint())}, viewingAtt);
@@ -27,71 +29,144 @@ public class HugoniotSegGeom extends MultiPolyLine {
 
     public static ViewingAttr viewAttrSelection(HugoniotSegment segment) {
 
-        
         ViewingAttr attr = new ViewingAttr(Color.white);
 
-        if (segment.getType() == 0) {
-            attr = new ViewingAttr(new Color(128, 128, 128));
-        }
+        if (DIRECTION == Orbit.FORWARD_DIR) {
 
-        if (segment.getType() == 1) {
-            attr = new ViewingAttr(new Color(128, 128, 128));
-        }
 
-        if (segment.getType() == 2) {
-            attr = new ViewingAttr(new Color(255, 0, 0));
-        }
+            if (segment.getType() == 0) {
+                attr = new ViewingAttr(new Color(128, 128, 128));
+            }
 
-        if (segment.getType() == 3) {
-            attr = new ViewingAttr(new Color(247, 151, 55));
-        }
+            if (segment.getType() == 1) {
+                attr = new ViewingAttr(new Color(128, 128, 128));
+            }
 
-        if (segment.getType() == 4) {
-            attr = new ViewingAttr(new Color(128, 128, 128));
-        }
+            if (segment.getType() == 2) {
+                attr = new ViewingAttr(new Color(255, 0, 0));
+            }
 
-        if (segment.getType() == 5) {
-            attr = new ViewingAttr(new Color(128, 128, 128));
-        }
+            if (segment.getType() == 3) {
+                attr = new ViewingAttr(new Color(247, 151, 55));
+            }
 
-        if (segment.getType() == 6) {
-            attr = new ViewingAttr(new Color(128, 128, 128));
-        }
+            if (segment.getType() == 4) {
+                attr = new ViewingAttr(new Color(128, 128, 128));
+            }
 
-        if (segment.getType() == 7) {
-            attr = new ViewingAttr(new Color(128, 128, 128));
-        }
+            if (segment.getType() == 5) {
+                attr = new ViewingAttr(new Color(128, 128, 128));
+            }
 
-        if (segment.getType() == 8) {
-            attr = new ViewingAttr(new Color(255, 0, 255));
-        }
+            if (segment.getType() == 6) {
+                attr = new ViewingAttr(new Color(128, 128, 128));
+            }
 
-        if (segment.getType() == 9) {
-            attr = new ViewingAttr(new Color(128, 128, 128));
-        }
+            if (segment.getType() == 7) {
+                attr = new ViewingAttr(new Color(128, 128, 128));
+            }
 
-        if (segment.getType() == 10) {
-            attr = new ViewingAttr(new Color(18, 153, 1));
-        }
+            if (segment.getType() == 8) {
+                attr = new ViewingAttr(new Color(255, 0, 255));
+            }
 
-        if (segment.getType() == 11) {
-            attr = new ViewingAttr(new Color(0, 0, 255));
-        }
+            if (segment.getType() == 9) {
+                attr = new ViewingAttr(new Color(128, 128, 128));
+            }
 
-        if (segment.getType() == 12) {
-            attr = new ViewingAttr(new Color(128, 128, 128));
-        }
+            if (segment.getType() == 10) {
+                attr = new ViewingAttr(new Color(18, 153, 1));
+            }
 
-        if (segment.getType() == 13) {
-            attr = new ViewingAttr(new Color(128, 128, 128));
-        }
+            if (segment.getType() == 11) {
+                attr = new ViewingAttr(new Color(0, 0, 255));
+            }
 
-        if (segment.getType() == 14) {
-            attr = new ViewingAttr(new Color(0, 255, 255));
-        }
+            if (segment.getType() == 12) {
+                attr = new ViewingAttr(new Color(128, 128, 128));
+            }
 
-        if (segment.getType() == 15) {
-            attr = new ViewingAttr(new Color(128, 128, 128));
+            if (segment.getType() == 13) {
+                attr = new ViewingAttr(new Color(128, 128, 128));
+            }
+
+            if (segment.getType() == 14) {
+                attr = new ViewingAttr(new Color(0, 255, 255));
+            }
+
+            if (segment.getType() == 15) {
+                attr = new ViewingAttr(new Color(128, 128, 128));
+            }
+
+
+        }
+        if (DIRECTION == Orbit.BACKWARD_DIR) {
+
+            if (segment.getType() == 0) {
+                attr = new ViewingAttr(new Color(128, 128, 128));
+            }
+
+            if (segment.getType() == 1) {
+                attr = new ViewingAttr(new Color(128, 128, 128));
+            }
+
+            if (segment.getType() == 2) {
+                attr = new ViewingAttr(new Color(255, 0, 255));
+            }
+
+            if (segment.getType() == 3) {
+                attr = new ViewingAttr(new Color(128, 128, 128));
+            }
+
+            if (segment.getType() == 4) {
+                attr = new ViewingAttr(new Color(128, 128, 128));
+            }
+
+            if (segment.getType() == 5) {
+                attr = new ViewingAttr(new Color(128, 128, 128));
+            }
+
+            if (segment.getType() == 6) {
+                attr = new ViewingAttr(new Color(128, 128, 128));
+            }
+
+            if (segment.getType() == 7) {
+                attr = new ViewingAttr(new Color(128, 128, 128));
+            }
+
+            if (segment.getType() == 8) {
+                attr = new ViewingAttr(new Color(255, 0, 0));
+            }
+
+            if (segment.getType() == 9) {
+                attr = new ViewingAttr(new Color(128, 128, 128));
+            }
+
+            if (segment.getType() == 10) {
+                attr = new ViewingAttr(new Color(18, 153, 1));
+            }
+
+            if (segment.getType() == 11) {
+                attr = new ViewingAttr(new Color(0, 255, 255));
+            }
+
+            if (segment.getType() == 12) {
+                attr = new ViewingAttr(new Color(247, 151, 55));
+            }
+
+            if (segment.getType() == 13) {
+                attr = new ViewingAttr(new Color(128, 128, 128));
+            }
+
+            if (segment.getType() == 14) {
+                attr = new ViewingAttr(new Color(0, 0, 255));
+            }
+
+            if (segment.getType() == 15) {
+                attr = new ViewingAttr(new Color(128, 128, 128));
+            }
+
+
         }
 
 
@@ -109,10 +184,9 @@ public class HugoniotSegGeom extends MultiPolyLine {
 
 
         //TODO  BuckleyLeverettinflection Curve segment type
-        if (segment.getType() == 18) {                                        
+        if (segment.getType() == 18) {
             attr = new ViewingAttr(new Color(0, 255, 0));
         }
         return attr;
     }
 }
-

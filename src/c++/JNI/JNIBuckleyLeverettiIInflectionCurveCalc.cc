@@ -157,7 +157,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BuckleyLeverettinInflectionCurveCalc_n
             jobject realVectorLeftPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRLeft);
             jobject realVectorRightPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRRight);
 
-            int pointType = hugoniotPolyLineVector[i].type;
+
 
             double leftSigma = hugoniotPolyLineVector[i].point[j].component(0);
             double rightSigma = hugoniotPolyLineVector[i].point[j + 1].component(1);

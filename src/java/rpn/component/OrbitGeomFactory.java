@@ -49,40 +49,5 @@ public class OrbitGeomFactory extends RpCalcBasedGeomFactory {
         return new OrbitGeom(MultidAdapter.converseOrbitToCoordsArray(orbit), this);
     }
 
-    public String toXML() {
 
-        StringBuffer str = new StringBuffer();
-        RealVector firstPoint = new RealVector(((OrbitCalc) rpCalc()).getStart());
-
-        String commandName = geomSource().getClass().getName();
-
-        commandName = commandName.toLowerCase();
-
-        commandName = commandName.replaceAll(".+\\.", "");
-        
-         str.append("<COMMAND name=\"" + commandName + "\"");
-
-        if (((OrbitCalc) rpCalc()).getDirection() != Orbit.BOTH_DIR) {
-            String direction = "forward\"";
-
-            if (((OrbitCalc) rpCalc()).getDirection() == Orbit.BACKWARD_DIR) {
-                direction = "backward\"";
-
-            }
-            str.append(" direction=\"");
-            str.append(direction);
-        }
-       
-//        str.append(" inputpoint=\"" + firstPoint.toString() + "\" family=\"" + ((Orbit) geomSource()).getFamilyIndex() + "\" " + ">\n");
-        str.append(((Orbit) geomSource()).toXML());
-        str.append("</COMMAND>\n");
-        return str.toString();
-
-
-
-    }
-
-    public String toMatlab(int curveIndex) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
 }

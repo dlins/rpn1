@@ -822,7 +822,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
                     public void actionPerformed(ActionEvent e) {
                         JCheckBox checkB = (JCheckBox) e.getSource();
-                        rpn.parser.RPnDataModule.RESULTS = checkB.isSelected();
+                        // TODO RPnDataModule refactoring
+                       // rpn.parser.RPnDataModule.RESULTS = checkB.isSelected();
                     }
                 });
 

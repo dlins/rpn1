@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE rpnconfiguration >
-<PHASESPACE name="Phase Space">
- <RPNCONFIGURATION>
+<rpnconfiguration>
     <PHYSICS name="Stone">
 
         <PHYSICSCONFIG name="fluxfunction">
@@ -52,7 +51,7 @@
 
 
     <CURVECONFIGURATION name="hugoniotcurve">
-        <CURVEPARAM name="resolution" value="120 120"/>
+        <CURVEPARAM name="resolution" value="20 20"/>
     </CURVECONFIGURATION>
 
     <CURVECONFIGURATION name="ellipticboundary">
@@ -105,7 +104,8 @@
         <CURVEPARAM name="edge" value="0"/>
         <CURVEPARAM name="edgeresolution" value="128"/>
         <CURVEPARAM name="resolution" value="128 128"/>
-        <CURVEPARAM name="characteristicwhere" value="1"/>
+          <CURVEPARAM name="characteristicwhere" value="1"/>
+
 
     </CURVECONFIGURATION>
 
@@ -132,13 +132,4 @@
 
     </VIEWCONFIGURATION>
 
- </RPNCONFIGURATION>
-
- <COMMAND name="hugoniotcurve">
-  <REALVECTOR dimension="2">0.1974 0.1623</REALVECTOR>
-  <PAUSE></PAUSE>
- </COMMAND>
- <COMMAND name="hugoniotcurve">
-  <REALVECTOR dimension="2">0.2974 0.2623</REALVECTOR>
- </COMMAND>
-</PHASESPACE>
+</rpnconfiguration>

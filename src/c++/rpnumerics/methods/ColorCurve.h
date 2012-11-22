@@ -2,6 +2,7 @@
 #define _COLORCURVE_
 
 #include <vector>
+#include <deque>
 #include <string>
 
 #include "FluxFunction.h"
@@ -30,13 +31,18 @@ public:
 
     // Elements of segment, type (color) and signature
     //
-    int         type;                     // A color table is needed for graphical issues.
-    std::string signature;                // This returns the Hugoniot signature, i.e., "--++", etc
+//    int         type;                     // A color table is needed for graphical issues.
+//    std::string signature;                // This returns the Hugoniot signature, i.e., "--++", etc
+//                                          // zero means characteristic, "-." or "+." means complex
+//                                          // conjugate, with the real part sign.
+    std::vector<int>         type;        // A color table is needed for graphical issues.
+    std::vector<std::string> signature;   // This returns the Hugoniot signature, i.e., "--++", etc
                                           // zero means characteristic, "-." or "+." means complex
                                           // conjugate, with the real part sign.
 
     HugoniotPolyLine() {
-        type = -1;
+//        type      = -1;
+//        signature = "0000";
     };
 
     ~HugoniotPolyLine() {
@@ -73,6 +79,13 @@ class ColorCurve {
                               std::vector<HugoniotPolyLine> &classified_curve,
                               std::vector<RealVector> &transition_list);
 
+        void classify_segment_with_data(
+            RealVector &p, double &s_p, std::vector<double> &eigenvalue_p, std::string &ct_p, int &type_p,
+            RealVector &q, double &s_q, std::vector<double> &eigenvalue_q, std::string &ct_q, int &type_q,
+            HugoniotPolyLine &hpl,
+            std::vector<HugoniotPolyLine> &classified_curve,
+            std::vector<RealVector> &transition_list);
+
         FluxFunction * fluxFunction_;
         AccumulationFunction * accFunction_;
 
@@ -94,8 +107,8 @@ class ColorCurve {
                                   std::vector<HugoniotPolyLine> &classified_curve,
                                   std::vector<RealVector> &transition_list);
 
-    void classify_continuous_curve(std::vector<RealVector>  &original, const RealVector &ref,
-                                   std::vector<HugoniotPolyLine> &classified_curve,
+    void classify_continuous_curve(std::deque<RealVector>  &original, const RealVector &ref,
+                                   HugoniotPolyLine &classified_curve,
                                    std::vector<RealVector> &transition_list);
 };
 

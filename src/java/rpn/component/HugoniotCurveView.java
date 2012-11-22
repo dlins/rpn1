@@ -29,8 +29,6 @@ public class HugoniotCurveView extends GeomObjView {
 
     //Original update method
     public void update() {
-
-
         viewList_.clear();
         Iterator geomListIterator = ((HugoniotCurveGeom) getAbstractGeom()).getRealSegIterator();
         while (geomListIterator.hasNext()) {

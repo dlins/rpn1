@@ -74,7 +74,7 @@ public class CurveDomainManager {
         return this.area;
     }
 
-    public RPnCurve calculateInitialCurve() throws NoContourMethodDefined {
+    public RpCurve calculateInitialCurve() throws NoContourMethodDefined {
         /*
          * it returns a curve based on the area set on RPNProfile
          */
@@ -88,7 +88,7 @@ public class CurveDomainManager {
         RealVector p1 = null;
         RealVector p2 = null;
 
-        RPnCurve curve = null;
+        RpCurve curve = null;
 
         try {
 
@@ -135,7 +135,7 @@ public class CurveDomainManager {
             return new CanNotCalculateCurve();
         } //try fo primeiro ContourND
 
-//        return new RPnCurve(coordsArrayFromRealSegments(realSegments), new ViewingAttr(Color.white));
+//        return new RpCurve(coordsArrayFromRealSegments(realSegments), new ViewingAttr(Color.white));
         
         return curve;
 
@@ -175,9 +175,9 @@ public class CurveDomainManager {
 
     }
 
-    public RPnCurve fillSubDomain(RPnCurve curve, Area subdomain) throws NoContourMethodDefined {
+    public RpCurve fillSubDomain(RpCurve curve, Area subdomain) throws NoContourMethodDefined {
 
-        RPnCurve newCurve = null;
+        RpCurve newCurve = null;
 
         double[] boundaryArrayTemp = new double[dimension * 2];
         int[] resolutionTemp = new int[dimension];
@@ -258,10 +258,10 @@ public class CurveDomainManager {
 //        }
 
         // limpar
-//        newCurve = new RPnCurve(cleanedPolyline, curve.viewingAttr()) {
+//        newCurve = new RpCurve(cleanedPolyline, curve.viewingAttr()) {
 //        };
         // set domain
-        RPnCurve tempCurve = calculateInitialCurve();
+        RpCurve tempCurve = calculateInitialCurve();
 
         PointNDimension[][] tempPolyline = tempCurve.getPolylines();
 

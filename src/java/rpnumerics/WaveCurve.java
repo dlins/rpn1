@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import wave.util.RealSegment;
 
-public class WaveCurve extends RPnCurve implements WaveCurveBranch, RpSolution {
+public class WaveCurve extends RpCurve implements WaveCurveBranch, RpSolution {
 
     private int[] curveTypes_;
     private static int[] curvesIndex_;

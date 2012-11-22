@@ -223,7 +223,7 @@ public class RPNUMERICS {
 
             }
 
-            if (configurationEntry.getValue().getType().equalsIgnoreCase(ConfigurationProfile.CURVE)) {
+            if (configurationEntry.getValue().getType().equalsIgnoreCase(ConfigurationProfile.CURVECONFIGURATION)) {
                 curveConfiguration.add(configurationEntry.getValue());
 
 
@@ -280,7 +280,7 @@ public class RPNUMERICS {
 
         int[] resolution = RPnDataModule.processResolution(getParamValue("hugoniotcurve", "resolution"));
 
-        HugoniotParams params = new HugoniotParams(new PhasePoint(input), resolution);
+        HugoniotParams params = new HugoniotParams(new PhasePoint(input), direction_, resolution);
 
         return new HugoniotCurveCalcND(params);
     }

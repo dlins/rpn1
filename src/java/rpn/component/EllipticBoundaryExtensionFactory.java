@@ -39,25 +39,4 @@ public class EllipticBoundaryExtensionFactory extends BifurcationCurveGeomFactor
     public String toMatlab(int curveIndex) {
         return null;
     }
-
-    public String toXML() {
-
-        StringBuilder buffer = new StringBuilder();
-
-        EllipticBoundaryExtensionCalc calc = (EllipticBoundaryExtensionCalc) rpCalc();
-
-        String commandName = geomSource().getClass().getName();
-        commandName = commandName.toLowerCase();
-        commandName = commandName.replaceAll(".+\\.", "");
-
-        buffer.append("<COMMAND name=\"" + commandName + "\"" + calc.getParams().toString() + ">\n");
-
-        buffer.append(((EllipticBoundary) geomSource()).toXML());
-
-        buffer.append("</COMMAND>\n");
-
-        return buffer.toString();
-
-
-    }
 }

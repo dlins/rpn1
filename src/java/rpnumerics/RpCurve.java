@@ -28,8 +28,8 @@ import rpn.component.RpGeometry;
 import rpn.parser.RPnDataModule;
 
 
-//public abstract class RPnCurve extends MultiPolyLine {
-public abstract class RPnCurve {
+//public abstract class RpCurve extends MultiPolyLine {
+public abstract class RpCurve implements RpSolution {
 
     private RelaxedChainedPolylineSet polyLinesSetList_ = null;
     private ViewingAttr viewAttr = null;
@@ -37,12 +37,12 @@ public abstract class RPnCurve {
     //** declarei isso (Leandro)
     public double distancia = 0;
     
-    public RPnCurve() {//TODO REMOVE !!
+    public RpCurve() {//TODO REMOVE !!
         //super(new CoordsArray[3], new ViewingAttr(Color.WHITE));
 
     }
 
-    public RPnCurve(PointNDimension[][] polyline, ViewingAttr viewAttr) {
+    public RpCurve(PointNDimension[][] polyline, ViewingAttr viewAttr) {
         //super(fromPointNDimensionCurveToSegment(polyline), viewAttr);
 
         try {
@@ -53,7 +53,7 @@ public abstract class RPnCurve {
         this.viewAttr = viewAttr;
     }
 
-    public RPnCurve(CoordsArray[] vertices, ViewingAttr viewAttr) {
+    public RpCurve(CoordsArray[] vertices, ViewingAttr viewAttr) {
         //super(vertices, viewAttr);
 
         PointNDimension[][] polyline = new PointNDimension[1][vertices.length];
@@ -72,7 +72,7 @@ public abstract class RPnCurve {
 
     }
 
-    public RPnCurve(AbstractSegment[] segments, ViewingAttr viewAttr) {
+    public RpCurve(AbstractSegment[] segments, ViewingAttr viewAttr) {
         //super(segments, viewAttr);
         // converter para chained
     }
@@ -113,7 +113,7 @@ public abstract class RPnCurve {
 
 
 //    //-------------------------------------------- Parece que não é mais usado
-//    public RealVector projectionCurve(RPnCurve curve, RealVector targetPoint) {
+//    public RealVector projectionCurve(RpCurve curve, RealVector targetPoint) {
 //
 //        int segmentIndex = curve.findClosestSegment(targetPoint);
 //
@@ -209,9 +209,9 @@ public abstract class RPnCurve {
         return segments;
     }
 
-    public RPnCurve(ContourCurve curve, ViewingAttr viewingAttr) {
+    public RpCurve(ContourCurve curve, ViewingAttr viewingAttr) {
 
-        //super(RPnCurve.fromPointNDimensionCurveToSegment(curve.getCurve()), viewingAttr);
+        //super(RpCurve.fromPointNDimensionCurveToSegment(curve.getCurve()), viewingAttr);
 
         viewAttr = viewingAttr;
         try {
@@ -304,7 +304,7 @@ public abstract class RPnCurve {
         //System.out.println("Nome do phaseSpace ::::::::::::::::::::::::::::::::: " +RPnPhaseSpaceAbstraction.namePhaseSpace);
 
         RpGeometry geom = phaseSpace.findClosestGeometry(targetPoint);
-        RPnCurve curve = (RPnCurve)(geom.geomFactory().geomSource());
+        RpCurve curve = (RpCurve)(geom.geomFactory().geomSource());
         ArrayList segments = (ArrayList) curve.segments();
 
         RealSegment closestSegment = (RealSegment) segments.get(findClosestSegment(targetPoint));
@@ -465,5 +465,13 @@ public abstract class RPnCurve {
     }
 
     abstract public List<RealSegment> segments();
+
+    public String toXML() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public String toMatlab(int curveIndex) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
 }

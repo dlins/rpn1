@@ -74,6 +74,9 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
 
         result = (HugoniotCurve) calc(((HugoniotParams) getParams()).getXZero(), getParams().getResolution());
 
+        result.setDirection(((HugoniotParams)getParams()).getDirection());
+        
+        
         return result;
 
     }

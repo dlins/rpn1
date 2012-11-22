@@ -19,7 +19,7 @@ import rpnumerics.DoubleContactCurve;
 import rpnumerics.SecondaryBifurcationCurve;
 import rpnumerics.HugoniotCurve;
 import rpnumerics.HugoniotSegment;
-import rpnumerics.RPnCurve;
+import rpnumerics.RpCurve;
 import rpnumerics.SegmentedCurve;
 import wave.util.RealVector;
 import rpn.controller.ui.CLASSIFIERAGENT_CONFIG;
@@ -97,7 +97,7 @@ public class ClassifierCommand extends RpModelPlotCommand {
         RealVector newValue = userInputList.values();
 
         RpGeometry geom = UIController.instance().getActivePhaseSpace().findClosestGeometry(newValue);
-        RPnCurve curve = (RPnCurve)(geom.geomFactory().geomSource());
+        RpCurve curve = (RpCurve)(geom.geomFactory().geomSource());
 
         if ((GeometryGraph.count % 2) == 0) {
 

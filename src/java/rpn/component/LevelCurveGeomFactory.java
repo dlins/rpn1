@@ -81,45 +81,4 @@ public class LevelCurveGeomFactory extends RpCalcBasedGeomFactory {
 
 
     }
-
-    public String toMatlab(int curveIndex) {
-        return null;
-    }
-
-    public String toXML() {
-
-        LevelCurve levelCurve = (LevelCurve) geomSource();
-
-        StringBuilder buffer = new StringBuilder();
-
-        String commandName = geomSource().getClass().getName();
-        commandName = commandName.toLowerCase();
-        commandName = commandName.replaceAll(".+\\.", "");
-
-
-        LevelCurveCalc curveCalc = (LevelCurveCalc) rpCalc();
-
-        if (curveCalc instanceof PointLevelCalc) {
-            PointLevelCalc pointLevelCalc = (PointLevelCalc) curveCalc;
-            buffer.append("<COMMAND name=\"" + commandName + "\" " + " inputpoint=\"" + pointLevelCalc.getStartPoint() + "\" "
-                    + "family=\"" + levelCurve.getFamily() + "\" " + "level=\"" + levelCurve.getLevel() + "\" " + curveCalc.getParams().toString()+">\n");
-        }
-
-        else{
-
-            buffer.append("<COMMAND name=\"" + commandName + "\" " + "family=\"" + levelCurve.getFamily() + "\" " + "level=\"" + levelCurve.getLevel() + "\" " +curveCalc.getParams().toString()+ ">\n");
-
-        }
-
-
-
-
-        buffer.append(((LevelCurve) geomSource()).toXML());
-
-        buffer.append("</COMMAND>\n");
-
-        return buffer.toString();
-
-
-    }
 }

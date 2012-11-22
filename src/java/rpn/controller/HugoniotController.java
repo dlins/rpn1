@@ -36,6 +36,8 @@ public class HugoniotController extends RpCalcController {
         BifurcationRefineCommand.instance().addPropertyChangeListener(this);      // ****
         ChangeXZeroCommand.instance().addPropertyChangeListener(this);
 
+
+
     }
 
     @Override
@@ -61,6 +63,8 @@ public class HugoniotController extends RpCalcController {
 
     @Override
     public void propertyChange(PropertyChangeEvent change) {
+        
+        System.out.println(change);
 
         if (change.getSource() instanceof DragPlotCommand) {
             ((HugoniotParams) ((HugoniotCurveCalcND) geomFactory_.rpCalc()).getParams()).setXZero((RealVector) change.getNewValue());

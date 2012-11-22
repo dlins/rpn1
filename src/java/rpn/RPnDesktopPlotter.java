@@ -25,6 +25,7 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
 
     public static String DTDPATH = System.getProperty("rpnhome") + System.getProperty("file.separator") + "share" + System.getProperty("file.separator") + "rpn-dtd" + System.getProperty("file.separator");
     public static String INTERFACE_CONFIG_PATH = System.getProperty("rpnhome") + System.getProperty("file.separator") + "share" + System.getProperty("file.separator") + "rpn-examples" + System.getProperty("file.separator");
+
     private static RPnConfigReader configReader_;
     private static InputStream configStream_;
     private static RPnUIFrame rpnUIFrame_;
@@ -115,7 +116,12 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
             
             configFrame.setSize(rpnUIFrame_.getWidth(), rpnUIFrame_.getHeight()/2);
 
+
             configFrame.setVisible(true);
+
+
+            RPnDesktopPlotter.configReader_.exec(configStream_); //Reading input file
+
 
         } catch (FileNotFoundException ex) {
             JOptionPane.showMessageDialog(rpnUIFrame_, "No input file !", "RPn", JOptionPane.ERROR_MESSAGE);
