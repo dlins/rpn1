@@ -49,6 +49,7 @@ public class RpCommand extends AbstractAction implements UndoableAction {
     }
 
     public RpCommand(UI_ACTION_SELECTED actionSelected_, RealVector input) {
+
         this.actionSelected_ = actionSelected_;
         inputArray_ = new ArrayList<String>();
         inputArray_.add(input.toString());

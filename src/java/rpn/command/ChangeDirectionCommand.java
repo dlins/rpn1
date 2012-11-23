@@ -8,6 +8,7 @@ package rpn.command;
 import java.beans.PropertyChangeEvent;
 import rpn.RPnCurvesConfigPanel;
 import rpnumerics.RPNUMERICS;
+import wave.util.RealVector;
 
 public class ChangeDirectionCommand extends RpModelConfigChangeCommand {
     //
@@ -27,8 +28,13 @@ public class ChangeDirectionCommand extends RpModelConfigChangeCommand {
     }
 
     public void execute() {
+        
+        RealVector  oldDirection = new RealVector(1);
+        oldDirection.setElement(0, new Double (RPnCurvesConfigPanel.getOrbitDirection()));
         RPNUMERICS.setDirection(RPnCurvesConfigPanel.getOrbitDirection());
-        applyChange(new PropertyChangeEvent(this, "direction", null, null));
+
+        
+        applyChange(new PropertyChangeEvent(this, "direction", null, oldDirection));
     }
 
     public void unexecute() {
