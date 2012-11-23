@@ -71,10 +71,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
 
     vector <RealVector> coords, shock_alt;
 
-    RealVector * originalDirection = new RealVector(realVectorInput.size());
-
-    originalDirection->component(0) = 0;
-    originalDirection->component(1) = 0;
+//    RealVector * originalDirection = new RealVector(realVectorInput.size());
+//
+//    originalDirection->component(0) = 0;
+//    originalDirection->component(1) = 0;
 
 
     if (increase == RAREFACTION_SPEED_INCREASE)
