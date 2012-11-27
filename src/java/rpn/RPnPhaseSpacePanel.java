@@ -23,10 +23,14 @@ import java.awt.image.BufferedImage;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Polygon;
 import javax.swing.JPanel;
 import java.awt.Shape;
 import java.awt.geom.Area;
+import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,6 +41,9 @@ import org.apache.batik.svggen.SVGGraphics2D;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import rpn.component.util.AreaSelected;
+import rpn.component.util.LinePlotted;
+import rpn.component.util.GeometryGraph;
+import rpn.component.util.GeometryGraphND;
 import rpn.component.util.GraphicsUtil;
 import rpn.controller.ui.AREASELECTION_CONFIG;
 import rpn.controller.ui.CLASSIFIERAGENT_CONFIG;
@@ -53,10 +60,10 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     static public Color DEFAULT_BACKGROUND_COLOR = Color.black;
     static public Color DEFAULT_POINTMARK_COLOR = Color.white;
     //***
-    public static List<Area> listaArea = new ArrayList<Area>();     //** declarei isso    (Leandro) - ainda nao esta sendo usado
     public static int myH_;                                          //** declarei isso    (Leandro)
     public static int myW_;                                          //** declarei isso    (Leandro)
     protected List<GraphicsUtil> graphicsUtilList_;
+
 
     //*** declarei esses métodos (Leandro)
     public static void blackBackground() {
@@ -190,6 +197,102 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         }
     }
 
+    // -----
+
+    public List<GraphicsUtil> getGraphicsUtil() {
+        return graphicsUtilList_;
+    }
+
+
+
+    public void clearAllStrings() {
+        GeometryGraphND.clearpMarca();
+        ArrayList<GraphicsUtil> toRemove = new ArrayList();
+
+        for (int i = 0; i < graphicsUtilList_.size(); i++) {
+            GraphicsUtil graphUtil =graphicsUtilList_.get(i);
+
+            if(graphUtil instanceof LinePlotted){
+                toRemove.add(graphUtil);
+            }
+
+        }
+        graphicsUtilList_.removeAll(toRemove);
+        getCastedUI().getTypeString().clear();
+        getCastedUI().getVelocityString().clear();
+
+    }
+
+
+    
+    public void clearLastString() {
+        GeometryGraphND.clearpMarca();
+        ArrayList<GraphicsUtil> toRemove = new ArrayList();
+        for (int i = 0; i < graphicsUtilList_.size(); i++) {
+            GraphicsUtil graphUtil =graphicsUtilList_.get(i);
+
+            if(graphUtil instanceof LinePlotted){
+                toRemove.add(graphUtil);
+            }
+
+        }
+        int index = toRemove.size() - 1;
+        if (index >= 0) {
+            graphicsUtilList_.remove(index);
+            getCastedUI().getTypeString().remove(index);
+            getCastedUI().getVelocityString().remove(index);
+        }
+    }
+
+
+    public void clearVelocities() {
+        GeometryGraphND.clearpMarca();
+        ArrayList<GraphicsUtil> toRemove = new ArrayList();
+        ArrayList<String> velRemove = new ArrayList();
+        ArrayList<String> strRemove = new ArrayList();
+        for (int i = 0; i < graphicsUtilList_.size(); i++) {
+            GraphicsUtil graphUtil =graphicsUtilList_.get(i);
+
+            if(graphUtil instanceof LinePlotted  &&  !(getCastedUI().getVelocityString().get(i).equals(""))){
+                toRemove.add(graphUtil);
+                velRemove.add(getCastedUI().getVelocityString().get(i));
+                strRemove.add(getCastedUI().getTypeString().get(i));
+            }
+
+        }
+
+        graphicsUtilList_.removeAll(toRemove);
+        getCastedUI().getVelocityString().removeAll(velRemove);
+        getCastedUI().getTypeString().removeAll(strRemove);
+
+    }
+
+
+    public void clearClassifiers() {
+        GeometryGraphND.clearpMarca();
+        ArrayList<GraphicsUtil> toRemove = new ArrayList();
+        ArrayList<String> velRemove = new ArrayList();
+        ArrayList<String> strRemove = new ArrayList();
+        for (int i = 0; i < graphicsUtilList_.size(); i++) {
+            GraphicsUtil graphUtil =graphicsUtilList_.get(i);
+
+            if(graphUtil instanceof LinePlotted  &&  !(getCastedUI().getTypeString().get(i).equals(""))){
+                toRemove.add(graphUtil);
+                velRemove.add(getCastedUI().getVelocityString().get(i));
+                strRemove.add(getCastedUI().getTypeString().get(i));
+            }
+
+        }
+
+        graphicsUtilList_.removeAll(toRemove);
+        getCastedUI().getVelocityString().removeAll(velRemove);
+        getCastedUI().getTypeString().removeAll(strRemove);
+
+    }
+    // -----
+
+    
+
     //
     // Methods
     //
@@ -201,6 +304,10 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         BasicStroke newStroke = new BasicStroke(1.1f);
         ((Graphics2D) g).setStroke(newStroke);
         Color prev = g.getColor();
+
+        Font font = new Font("Verdana", Font.PLAIN, 13);
+        g.setFont(font);
+        FontMetrics metrics = new FontMetrics(font) {};
 
         /*
          * BOUNDARY WINDOW
@@ -214,9 +321,9 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         /*
          * SCENE
          */
-        
-        if (scene_ != null) {     //tentar fazer semelhante a isso para o desenho dos acessorios
 
+
+        if (scene_ != null) {
             scene_.draw((Graphics2D) g);
         }
 
@@ -234,15 +341,37 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         /*
          * SELECTED AREAS
          */
-        
-        
+
+        int i = 0;
         for (GraphicsUtil graphicUtil : graphicsUtilList_) {
-            
+
+            // ------------
+            if (graphicUtil instanceof LinePlotted) {
+                String typeStr = getCastedUI().getTypeString().get(i);
+                String velStr  = getCastedUI().getVelocityString().get(i);
+                i++;
+                Line2D.Double line = (Line2D.Double) graphicUtil.createShape();
+                Rectangle2D boundsType = metrics.getStringBounds(typeStr, null);
+                Rectangle2D boundsVel  = metrics.getStringBounds(velStr, null);
+                int typeWidth = (int) boundsType.getWidth();
+                int velWidth  = (int) boundsVel.getWidth();
+
+                if (line.x1<line.x2) {
+                    g.drawString(typeStr, (int)(line.x2 + 5), (int)(line.y2 +5));
+                    g.drawString(velStr,  (int)(line.x2 + 5), (int)(line.y2 +5));
+                }
+                else {
+                    g.drawString(typeStr, (int)(line.x2 - (typeWidth+2)), (int)(line.y2 +5));
+                    g.drawString(velStr,  (int)(line.x2 - (velWidth+2)), (int)(line.y2 +5));
+                }
+
+            }
+            // ------------
+
             graphicUtil.draw((Graphics2D) g);
-            
+
         }
-        
-        
+
         g.setColor(DEFAULT_POINTMARK_COLOR);
 
         /*
@@ -257,27 +386,14 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         myH_ = getHeight();
         myW_ = getWidth();
 
-//        
-//        if ((scene().getAbstractGeom()).getSpace().getDim() == 2) {
-//            
-//            GeometryGraph geom = new GeometryGraph();
-//            geom.markPoints(scene());
-//            geom.paintComponent(g, scene(), this);
-//            
-//        }
 
-//        if (RPNUMERICS.domainDim() == 3) {
-//
-//            GeometryGraph3D geom3D = new GeometryGraph3D();
-//            geom3D.markPoints(scene());
-//            geom3D.paintComponent(g, scene());
-//
-//        }
+        //if ((scene().getAbstractGeom()).getSpace().getDim() == 2) {
+            GeometryGraph geom = new GeometryGraph();
+            geom.markPoints(scene());
+            geom.paintComponent(g, scene(), this);
+        //}
 
-//        if (RPNUMERICS.domainDim() == 4) {
-//            GeometryGraph4D.markPoints(GeometryUtil.targetPoint, GeometryUtil.pMarca, scene());
-//            GeometryGraph4D.paintComponent(g, scene());
-//        }
+        
 
         if (UIController.instance().getState() instanceof AREASELECTION_CONFIG) {        // acrescentei isso (Leandro)
             getCastedUI().pointMarkBuffer().clear();
@@ -486,4 +602,6 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         
         
     }
+
+
 }

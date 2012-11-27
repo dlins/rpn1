@@ -12,7 +12,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
-
 import java.util.List;
 import wave.multid.*;
 import wave.multid.map.Map;
@@ -49,6 +48,13 @@ public class BifurcationCurveGeom implements MultiGeometry, RpGeometry {
         }
         
     }
+
+
+    // ************************************************
+    public Iterator getRealSegIterator() {
+        return segList_.iterator();
+    }
+    // ************************************************
 
 
 

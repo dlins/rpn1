@@ -1,4 +1,5 @@
 #include "RiemannSolver.h"
+#include "plotter.h"
 
 double RiemannSolver::min(double x, double y){
     return (x < y) ? x : y;

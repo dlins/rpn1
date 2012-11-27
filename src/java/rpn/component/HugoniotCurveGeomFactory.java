@@ -28,6 +28,9 @@ public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
     public RpGeometry createGeomFromSource() {
 
         HugoniotCurve curve = (HugoniotCurve) geomSource();
+        
+        
+//        System.out.println("tamanho dentro do factory: "+curve.segments().size());
 
         HugoniotSegGeom.DIRECTION = curve.getDirection();
 

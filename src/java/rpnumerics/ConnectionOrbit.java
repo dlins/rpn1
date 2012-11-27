@@ -11,6 +11,7 @@ import wave.util.RealVector;
 import wave.multid.view.ViewingAttr;
 import java.awt.Color;
 import rpn.component.MultidAdapter;
+import wave.util.RealSegment;
 
 public class ConnectionOrbit extends RPnCurve implements RpSolution {
     //
@@ -19,6 +20,7 @@ public class ConnectionOrbit extends RPnCurve implements RpSolution {
     private StationaryPoint uMinus_;
     private StationaryPoint uPlus_;
     private Orbit orbit_;
+    private List<? extends RealSegment> segments_;
 
     //
     // Constructors
@@ -28,6 +30,7 @@ public class ConnectionOrbit extends RPnCurve implements RpSolution {
         uMinus_ = uMinus;
         uPlus_ = uPlus;
         orbit_ = orbit;
+        segments_ = MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseRPnCurveToCoordsArray(orbit));
     }
     //
     // Methods
@@ -134,7 +137,7 @@ public class ConnectionOrbit extends RPnCurve implements RpSolution {
 
     @Override
     public List segments() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return segments_;
     }
 
 

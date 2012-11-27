@@ -13,6 +13,7 @@ import java.util.Observer;
 import javax.swing.JToggleButton;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpacePanel;
+import rpn.component.BifurcationCurveGeom;
 import rpn.component.RpCalcBasedGeomFactory;
 import rpn.component.RpGeometry;
 import rpn.component.SegmentedCurveGeom;
@@ -33,7 +34,6 @@ public class AdjustedSelectionPlotCommand extends RpModelPlotCommand implements 
 
     @Override
     public void actionPerformed(ActionEvent event) {
-
 
         UIController.instance().setState(new AREASELECTION_CONFIG());
         Iterator<RPnPhaseSpacePanel> iterator = UIController.instance().getInstalledPanelsIterator();
@@ -101,7 +101,7 @@ public class AdjustedSelectionPlotCommand extends RpModelPlotCommand implements 
             CurveRefineCommand.instance().setEnabled(false);
         } else {
 
-            if (geometryList.get(0) instanceof SegmentedCurveGeom) {
+            if (geometryList.get(0) instanceof SegmentedCurveGeom  ||  geometryList.get(0) instanceof BifurcationCurveGeom) {    // -----
                 setEnabled(true);
             } else {
                 setEnabled(false);

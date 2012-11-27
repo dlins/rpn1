@@ -14,6 +14,7 @@ import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
 import wave.multid.view.ViewingAttr;
 import wave.multid.view.ViewingTransform;
+import rpnumerics.RPNUMERICS;
 
 public class AreaSelected extends GraphicsUtil {
 
@@ -29,7 +30,7 @@ public class AreaSelected extends GraphicsUtil {
 
         while (!iterator.isDone()) {
 
-            double[] segmentArray = new double[2];
+            double[] segmentArray = new double[RPNUMERICS.domainDim()];      // *** Estava hard
 
             int segment = iterator.currentSegment(segmentArray);
             if (segment != PathIterator.SEG_CLOSE) {
@@ -45,8 +46,8 @@ public class AreaSelected extends GraphicsUtil {
                 System.out.println("Dimensao da saida: "+dcSelectionPoint.getDim());
                 
                 getViewingTransform().viewPlaneTransform(wcSelectionPoint, dcSelectionPoint);
-                
-                selectedPolygon.addPoint((int) dcSelectionPoint.getX(), (int) dcSelectionPoint.getY());
+
+                selectedPolygon.addPoint((int) dcSelectionPoint.getX(), (int) dcSelectionPoint.getY());   // --- original
             }
 
             iterator.next();

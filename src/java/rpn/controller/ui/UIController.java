@@ -77,6 +77,8 @@ public class UIController extends ComponentUI {
         handler_ = new RAREFACTION_CONFIG();
         auxPanelsEnabled_ = true;
 
+        activePhaseSpace_ = RPnDataModule.PHASESPACE;       //***
+
         initNetStatus();
 
     }
@@ -189,20 +191,25 @@ public class UIController extends ComponentUI {
                     resetPanelsCursorCoords();
 
 
-                    if (event.isShiftDown() && event.isControlDown()) {
+                    if (event.isShiftDown()) {
                         userInputComplete(globalInputTable().values());
-                    } else if (event.isShiftDown()) {
-                        GeometryGraph.count = 0;
-                        userInputComplete(globalInputTable().values());
-                        GeometryGraph.count = 0;
-                    } else {
+                    }
+                    else {
+
+//                        if (handler_ instanceof UI_ACTION_SELECTED) {
+//                            UI_ACTION_SELECTED actionSelected = (UI_ACTION_SELECTED) handler_;
+//                            RpModelActionAgent action = (RpModelActionAgent) actionSelected.getAction();
+//                            action.setPhaseSpace((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom());
+//                            DragPlotAgent.instance().setPhaseSpace((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom());
+//                        }
+
 
                         DragPlotCommand.instance().execute();
 
 
 
                     }
-                }
+                }                
 
             }
         }
@@ -238,8 +245,6 @@ public class UIController extends ComponentUI {
                 RPnPhaseSpaceAbstraction.namePhaseSpace = ((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom()).getName();   //** acrescentei isso (Leandro)
                 panel.setName(RPnPhaseSpaceAbstraction.namePhaseSpace);
 
-                //panel.setName(((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom()).getName());
-
                 if (netStatus_.isMaster() || !(netStatus_.isOnline())) {
 
 
@@ -259,6 +264,7 @@ public class UIController extends ComponentUI {
                     }
 
                 }
+
             }
 
         }
@@ -272,6 +278,7 @@ public class UIController extends ComponentUI {
                 if (handler_ instanceof UI_ACTION_SELECTED) {
                     activePhaseSpace_ = (RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom();
                 }
+
 
             }
         }

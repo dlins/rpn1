@@ -29,6 +29,7 @@ public class RPnRightPhaseSpaceAbstraction extends RPnPhaseSpaceAbstraction {
         super(id, domain, state);
     }
 
+
     @Override
     public void update() {
 

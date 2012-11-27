@@ -91,8 +91,10 @@ public class RPnPhaseSpaceFrame extends JFrame {
         setFocusable(true);
         addWindowFocusListener(new FocusController());
         addKeyListener(new KeyController());
+        addMouseWheelListener(new MouseListener());
 
     }
+
 
     public JSlider getSlider() {
         return slider;
@@ -112,116 +114,152 @@ public class RPnPhaseSpaceFrame extends JFrame {
 
     private class KeyController extends KeyAdapter {
 
-//        int a = 0;
-//
-//        @Override
-//        public void keyPressed(KeyEvent keyEvent) {
-//            //double h = RPnPhaseSpaceFrame.this.frameSize_.height;  //*** Leandro
-//            //double w = RPnPhaseSpaceFrame.this.frameSize_.width;   //*** Leandro
-//
-//            int h = RPnPhaseSpaceFrame.this.frameSize_.height;  //*** Leandro
-//            int w = h - 91;   //*** Leandro
-//
-//
-//            if (keyEvent.getKeyChar() == 'l') {
-//
-//                if (RPnPhaseSpacePanel.isCursorLine()) {
-//                    UIController.instance().showCursorLines(false);
-//                } else {
-//                    UIController.instance().showCursorLines(true);
-//                }
-//
-//            }
-//
-//            //*** solucao provisoria para mostrar/nao mostrar vetores nos equilibrios --- Leandro
-//            if (keyEvent.getKeyChar() == 's' || keyEvent.getKeyChar() == 'S') {
-//                GeometryGraph.mostraSing = 1;
-//            }
-//            if (keyEvent.getKeyChar() == 'h' || keyEvent.getKeyChar() == 'H') {
-//                GeometryGraph.mostraSing = 0;
-//            }
-//            //------------------------------------------------------------------
-//
-//            //*** solucao provisoria para mostrar/nao mostrar o grid --- Leandro
-//            if (keyEvent.getKeyChar() == 'g' || keyEvent.getKeyChar() == 'G') {
-//                GeometryGraphND.mostraGrid = 1;
-//            }
-//            if (keyEvent.getKeyChar() == 'h' || keyEvent.getKeyChar() == 'H') {
-//                GeometryGraphND.mostraGrid = 0;
-//            }
-//            //------------------------------------------------------------------
-//
-//            if (keyEvent.getKeyChar() == 'o'  ||  keyEvent.getKeyChar() == 'O') {
-//                GeometryGraphND.onCurve = 1;
-//                UIController.instance().showCursorLines(false);
-//            }
-//            else {
-//                GeometryGraphND.onCurve = 0;
-//                UIController.instance().showCursorLines(true);
-//            }
-//            //*** --------------------------------------------------------------
-//            
-//            //*** solucao provisoria para resize dos paineis em tempo de execucao --- Leandro
-//            if (keyEvent.getKeyChar() == '+') {   //*** aumenta tamanho dos painéis
-//                a += 20;
-//                for (int i = 0; i < RPnUIFrame.getPhaseSpaceFrames().length; i++) {
-//
-//                    RPnPhaseSpaceFrame frame = RPnUIFrame.getPhaseSpaceFrames()[i];
-//                    //frame.setSize(RPnPhaseSpaceFrame.this.frameSize_.width  * (int)(a/b), RPnPhaseSpaceFrame.this.frameSize_.height * (int)(a/b));
-//                    frame.setSize(w + a, h + a);
-//                    frame.validate();
-//
-//                }
-//                for (int i = 0; i < RPnUIFrame.getAuxFrames().length; i++) {
-//
-//                    RPnPhaseSpaceFrame frame = RPnUIFrame.getAuxFrames()[i];
-//                    //frame.setSize(RPnPhaseSpaceFrame.this.frameSize_.width  * (int)(a/b), RPnPhaseSpaceFrame.this.frameSize_.height * (int)(a/b));
-//                    frame.setSize(w + a, h + a);
-//                    frame.validate();
-//
-//                }
-//            }
-//            if (keyEvent.getKeyChar() == '-') {   //*** reduz tamanho dos painéis
-//                a -= 20;
-//                for (int i = 0; i < RPnUIFrame.getPhaseSpaceFrames().length; i++) {
-//
-//                    RPnPhaseSpaceFrame frame = RPnUIFrame.getPhaseSpaceFrames()[i];
-//                    //frame.setSize(RPnPhaseSpaceFrame.this.frameSize_.width  * (int)(a/b), RPnPhaseSpaceFrame.this.frameSize_.height * (int)(a/b));
-//                    frame.setSize(w + a, h + a);
-//                    frame.validate();
-//
-//                }
-//                for (int i = 0; i < RPnUIFrame.getAuxFrames().length; i++) {
-//
-//                    RPnPhaseSpaceFrame frame = RPnUIFrame.getAuxFrames()[i];
-//                    //frame.setSize(RPnPhaseSpaceFrame.this.frameSize_.width  * (int)(a/b), RPnPhaseSpaceFrame.this.frameSize_.height * (int)(a/b));
-//                    frame.setSize(w + a, h + a);
-//                    frame.validate();
-//
-//                }
-//            }
-//            if (keyEvent.getKeyChar() == 'r' || keyEvent.getKeyChar() == 'R') {   //*** reset para o tamanho original dos painéis
-//                for (int i = 0; i < RPnUIFrame.getPhaseSpaceFrames().length; i++) {
-//                    
-//                    RPnPhaseSpaceFrame frame = RPnUIFrame.getPhaseSpaceFrames()[i];
-//                    frame.setSize(w, h);
-//                    frame.validate();
-//
-//                }
-//                for (int i = 0; i < RPnUIFrame.getAuxFrames().length; i++) {
-//
-//                    RPnPhaseSpaceFrame frame = RPnUIFrame.getAuxFrames()[i];
-//                    frame.setSize(w, h);
-//                    frame.validate();
-//
-//                }
-//            }
-//
-//            //*** ---------------------------------------------------------------------------
-//
-//
-//        }
+        int a = 0;
+
+        @Override
+        public void keyPressed(KeyEvent keyEvent) {
+            
+            int h = frameSize_.height;  //*** Leandro
+            int w = frameSize_.width;   //*** Leandro
+            //int w = h - 91;   //*** Leandro
+
+            
+            if (keyEvent.getKeyChar() == 'l') {
+
+                if (RPnPhaseSpacePanel.isCursorLine()) {
+                    UIController.instance().showCursorLines(false);
+                } else {
+                    UIController.instance().showCursorLines(true);
+                }
+
+            }
+
+            //*** solucao provisoria para mostrar/nao mostrar o grid --- Leandro
+            if (keyEvent.getKeyChar() == 'g' || keyEvent.getKeyChar() == 'G') {
+                GeometryGraphND.mostraGrid = 1;
+            }
+            if (keyEvent.getKeyChar() == 'h' || keyEvent.getKeyChar() == 'H') {
+                GeometryGraphND.mostraGrid = 0;
+            }
+            //------------------------------------------------------------------
+
+            if (keyEvent.getKeyChar() == 'o'  ||  keyEvent.getKeyChar() == 'O') {
+                GeometryGraphND.onCurve = 1;
+                UIController.instance().showCursorLines(false);
+            }
+            else {
+                GeometryGraphND.onCurve = 0;
+                UIController.instance().showCursorLines(true);
+            }
+            //*** --------------------------------------------------------------
+            
+            //*** solucao provisoria para resize dos paineis em tempo de execucao --- Leandro
+            if (keyEvent.getKeyChar() == '+') {   //*** aumenta tamanho dos painéis
+                a += 20;
+                for (int i = 0; i < RPnUIFrame.getPhaseSpaceFrames().length; i++) {
+
+                    RPnPhaseSpaceFrame frame = RPnUIFrame.getPhaseSpaceFrames()[i];
+                    //frame.setSize(RPnPhaseSpaceFrame.this.frameSize_.width  * (int)(a/b), RPnPhaseSpaceFrame.this.frameSize_.height * (int)(a/b));
+                    frame.setSize(w + a, h + a);
+                    frame.validate();
+
+                }
+                for (int i = 0; i < RPnUIFrame.getAuxFrames().length; i++) {
+
+                    RPnPhaseSpaceFrame frame = RPnUIFrame.getAuxFrames()[i];
+                    //frame.setSize(RPnPhaseSpaceFrame.this.frameSize_.width  * (int)(a/b), RPnPhaseSpaceFrame.this.frameSize_.height * (int)(a/b));
+                    frame.setSize(w + a, h + a);
+                    frame.validate();
+
+                }
+            }
+            if (keyEvent.getKeyChar() == '-') {   //*** reduz tamanho dos painéis
+                a -= 20;
+                for (int i = 0; i < RPnUIFrame.getPhaseSpaceFrames().length; i++) {
+
+                    RPnPhaseSpaceFrame frame = RPnUIFrame.getPhaseSpaceFrames()[i];
+                    //frame.setSize(RPnPhaseSpaceFrame.this.frameSize_.width  * (int)(a/b), RPnPhaseSpaceFrame.this.frameSize_.height * (int)(a/b));
+                    frame.setSize(w + a, h + a);
+                    frame.validate();
+
+                }
+                for (int i = 0; i < RPnUIFrame.getAuxFrames().length; i++) {
+
+                    RPnPhaseSpaceFrame frame = RPnUIFrame.getAuxFrames()[i];
+                    //frame.setSize(RPnPhaseSpaceFrame.this.frameSize_.width  * (int)(a/b), RPnPhaseSpaceFrame.this.frameSize_.height * (int)(a/b));
+                    frame.setSize(w + a, h + a);
+                    frame.validate();
+
+                }
+            }
+            if (keyEvent.getKeyChar() == 'r' || keyEvent.getKeyChar() == 'R') {   //*** reset para o tamanho original dos painéis
+                for (int i = 0; i < RPnUIFrame.getPhaseSpaceFrames().length; i++) {
+                    
+                    RPnPhaseSpaceFrame frame = RPnUIFrame.getPhaseSpaceFrames()[i];
+                    frame.setSize(w, h);
+                    frame.validate();
+
+                }
+                for (int i = 0; i < RPnUIFrame.getAuxFrames().length; i++) {
+
+                    RPnPhaseSpaceFrame frame = RPnUIFrame.getAuxFrames()[i];
+                    frame.setSize(w, h);
+                    frame.validate();
+
+                }
+            }
+            //*** ---------------------------------------------------------------------------
+
+
+        }
+
     }
+
+
+
+
+    private class MouseListener implements MouseWheelListener {
+
+        int a = 0;
+
+        public void mouseWheelMoved(MouseWheelEvent e) {
+
+            int h = frameSize_.height;
+            int w = frameSize_.width;
+
+            if(e.getWheelRotation()<0) {
+                a += 20;
+                for (int i = 0; i < RPnUIFrame.getPhaseSpaceFrames().length; i++) {
+                    RPnPhaseSpaceFrame frame = RPnUIFrame.getPhaseSpaceFrames()[i];
+                    frame.setSize(w + a, h + a);
+                    frame.setLocationRelativeTo(null);
+                    frame.validate();
+                }
+                for (int i = 0; i < RPnUIFrame.getAuxFrames().length; i++) {
+                    RPnPhaseSpaceFrame frame = RPnUIFrame.getAuxFrames()[i];
+                    frame.setSize(w + a, h + a);
+                    frame.validate();
+                }
+            }
+            if(e.getWheelRotation()>0) {
+                a -= 20;
+                for (int i = 0; i < RPnUIFrame.getPhaseSpaceFrames().length; i++) {
+                    RPnPhaseSpaceFrame frame = RPnUIFrame.getPhaseSpaceFrames()[i];
+                    frame.setSize(w + a, h + a);
+                    frame.setLocationRelativeTo(null);
+                    frame.validate();
+                }
+                for (int i = 0; i < RPnUIFrame.getAuxFrames().length; i++) {
+                    RPnPhaseSpaceFrame frame = RPnUIFrame.getAuxFrames()[i];
+                    frame.setSize(w + a, h + a);
+                    frame.validate();
+                }
+            }
+        }
+
+    }
+
+
 
     private class SliderState implements ChangeListener {
 

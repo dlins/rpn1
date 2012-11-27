@@ -49,7 +49,7 @@ public class BifurcationRefineCommand extends RpModelConfigChangeCommand {
 
         for (int i = 0; i < newValue.getSize(); i++) {
             GeometryGraphND.cornerRet.setElement(i, 0);
-            newValue.setElement(i, 0.);
+            GeometryGraphND.targetPoint.setElement(i, 0.);
         }
         //----------------------------------------------------------------------------------------
 

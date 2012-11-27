@@ -31,11 +31,14 @@ import javax.swing.table.DefaultTableModel;
 import rpn.component.BifurcationCurveGeom;
 import rpn.component.RpCalcBasedGeomFactory;
 import rpn.component.RpGeometry;
+import rpn.controller.ui.RPnStringPlotter;
+import rpn.controller.ui.RPnVelocityPlotter;
 import rpn.controller.ui.UIController;
 import rpnumerics.HugoniotCurve;
 import rpnumerics.HugoniotCurveCalcND;
 import rpnumerics.OrbitCalc;
 import rpnumerics.PointLevelCalc;
+import rpnumerics.RPnCurve;
 import rpnumerics.RarefactionExtensionCalc;
 import rpnumerics.RpCalculation;
 import rpnumerics.StationaryPoint;
@@ -53,6 +56,7 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
     private RPnPhaseSpaceAbstraction phaseSpace_;
     private JFrame frame_;
     private List<RpGeometry> selectedGeometries_;
+    private List indexGeometries;
 
     public RPnCurvesList(String title, RPnPhaseSpaceAbstraction phaseSpace) {
 
@@ -227,14 +231,72 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
 
     }
 
+
+    // ---- BUGGED : tentativa de remover somente as strings da curva selecionada, mas acontece erro na remoção
+    public void removeStrings() {
+
+        List claStringToRemove = new ArrayList();
+        List velStringToRemove = new ArrayList();
+        List claToRemove = new ArrayList();
+        List velToRemove = new ArrayList();
+
+        for (MultiGeometry multiGeometry : selectedGeometries_) {
+            RpGeometry geometry = ((RpGeometry) multiGeometry).geomFactory().geom();
+            RPnCurve curve = (RPnCurve) geometry.geomFactory().geomSource();
+
+            System.out.println("VERIFICANDO curve.claStringToRemove.size() ::: " +curve.claStringToRemove.size());
+
+            claStringToRemove.addAll(curve.claStringToRemove);
+            velStringToRemove.addAll(curve.velStringToRemove);
+            claToRemove.addAll(curve.claToRemove);
+            velToRemove.addAll(curve.velToRemove);
+
+            curve.claToRemove.clear();
+            curve.velToRemove.clear();
+            curve.claStringToRemove.clear();
+            curve.velStringToRemove.clear();
+        }
+
+        System.out.println("RPnCurvesList : linha string para remover --- " + claToRemove.size());
+        System.out.println("RPnCurvesList : linha vel para remover    --- " + velToRemove.size());
+        System.out.println("RPnCurvesList : claString para remover    --- " + claStringToRemove.size());
+        System.out.println("RPnCurvesList : velString para remover    --- " + velStringToRemove.size());
+
+        Iterator<RPnPhaseSpacePanel> phaseSpacePanelIterator = UIController.instance().getInstalledPanelsIterator();
+        while (phaseSpacePanelIterator.hasNext()) {
+            RPnPhaseSpacePanel panel = phaseSpacePanelIterator.next();
+
+            if (panel.getName().equals("Phase Space")) {
+            // *** sem fazer estas remocoes, o programa erra quando volta a classificar (depois de alguma remocao de strings)
+            //panel.getCastedUI().getTypeString().removeAll(claStringToRemove);
+            //panel.getCastedUI().getVelocityString().removeAll(velStringToRemove);
+            // ***
+            panel.getGraphicsUtil().removeAll(claToRemove);
+            panel.getGraphicsUtil().removeAll(velToRemove);
+
+            System.out.println("getTypeString().size() antes de remover : " +panel.getCastedUI().getTypeString().size());
+
+            panel.getCastedUI().getTypeString().removeAll(claStringToRemove);
+
+            System.out.println("getTypeString().size() depois de remover : " +panel.getCastedUI().getTypeString().size());
+
+            panel.getCastedUI().getVelocityString().removeAll(velStringToRemove);
+            panel.repaint();
+            }
+            
+        }
+
+    }
+
+
     public void actionPerformed(ActionEvent e) {
+
 
         if (e.getSource() instanceof JButton) {
             JButton button = (JButton) e.getSource();
 
             if (button.getName().equals("SelectAll")) {
                 curvesTable_.selectAll();
-
             }
 
             if (button.getName().equals("SelectNone")) {
@@ -258,10 +320,23 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
 
 
             if (button.getName().equals("Remove")) {
+
+                // --- Por enquanto, remove todas as strings do painel onde está a curva selecionada
+                String panelName = panelName(frame_.getTitle());
+                Iterator<RPnPhaseSpacePanel> phaseSpacePanelIterator = UIController.instance().getInstalledPanelsIterator();
+
+                while (phaseSpacePanelIterator.hasNext()) {
+                    RPnPhaseSpacePanel rPnPhaseSpacePanel = phaseSpacePanelIterator.next();
+                    if (rPnPhaseSpacePanel.getName().equals(panelName)) {
+                        rPnPhaseSpacePanel.clearAllStrings();
+                    }
+                }
+                // ---------------------------------------------------------------------------------                
+                
                 for (MultiGeometry multiGeometry : selectedGeometries_) {
                     RPnPhaseSpaceManager.instance().remove(phaseSpace_, multiGeometry);
-
                 }
+
             }
 
 
@@ -270,6 +345,18 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
 
 
     }
+
+
+    private String panelName(String frameName) {
+        String panelName = "";
+
+        if(frameName.equals("Main"))  panelName = "Phase Space";
+        if(frameName.equals("Right")) panelName = "RightPhase Space";
+        if(frameName.equals("Left"))  panelName = "LeftPhase Space";
+
+        return panelName;
+    }
+
 
     //*** metodo original
     public void update() {
@@ -287,7 +374,12 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
 
         List<RpGeometry> selectedGeometries = new ArrayList();
 
+        // ---
+        indexGeometries = new ArrayList();
+        // ---
+
         ListSelectionModel listSelectionModel = (ListSelectionModel) e.getSource();
+
         if (!e.getValueIsAdjusting()) {
 
             if (listSelectionModel.isSelectionEmpty()) {
@@ -309,17 +401,43 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
                             if (index == i) {
                                 phaseSpace_.highlightGeometry(index);
                                 selectedGeometries.add(geometry);
+
+                                System.out.println("Curva que está selecionada : " +index);
+                                indexGeometries.add(index);
+
                             }
+                            // ---
+//                            if (index != i) {
+//                                System.out.println("index na chamada de ocultaStringsCla ::::: " +index);
+//                                RPnPhaseSpaceAbstraction.ocultaStringsCla(index, "Phase Space");
+//                            }
+                            // ---
+
+
                             index++;
                         }
 
                     }
+                    
                 }
             }
             setChanged();
             notifyObservers(selectedGeometries);
             selectedGeometries_ = selectedGeometries;
         }
+
+        // ----- Talvez assim ...
+//        Iterator<RPnPhaseSpacePanel> phaseSpacePanelIterator = UIController.instance().getInstalledPanelsIterator();
+//        while (phaseSpacePanelIterator.hasNext()) {
+//            RPnPhaseSpacePanel panel = phaseSpacePanelIterator.next();
+//            boolean visible = false;
+//            if (selectedGeometries_.size() == 0) visible = true; else visible = false;
+//            panel.setStringVisible(visible);
+//            panel.repaint();
+//        }
+        // -----
+
+
     }
 
     void setVisible(boolean show) {

@@ -9,6 +9,7 @@ import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Path2D;
 import java.util.List;
+import rpn.RPnPhaseSpacePanel;
 import wave.multid.view.ViewingAttr;
 import wave.multid.view.ViewingTransform;
 
@@ -35,7 +36,6 @@ public abstract class GraphicsUtil {
         Color previous = g.getColor();
         g.setColor(viewAttr_.getColor());
         g.draw(getShape());
-
         g.setColor(previous);
     }
 
@@ -56,6 +56,13 @@ public abstract class GraphicsUtil {
         viewingTransform_=viewingTransform;
         setShape(createShape());
     }
+
+    // ---------------
+    public void update(ViewingAttr viewAttr){
+        viewAttr_ = viewAttr;
+        setShape(createShape());
+    }
+    // ---------------
     
     public abstract Shape createShape();
 

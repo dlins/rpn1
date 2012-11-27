@@ -23,6 +23,10 @@ public interface PhaseSpacePanelController {
     List  pointMarkBuffer();
 
     List <Polygon> getSelectionAreas();
+
+    List <String> getTypeString();
+
+    List <String> getVelocityString();
     
     Point get_dc_CompletePoint();
 

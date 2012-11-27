@@ -78,6 +78,15 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc
             rightFlux, rightAccum, gv, rightFamily,
             left_vrs, right_vrs);
 
+
+    cout << "left_vrs.size()  = " << left_vrs.size() << endl;
+
+
+
+    cout << "right_vrs.size()  = " << right_vrs.size() << endl;
+
+
+
     if (left_vrs.size() == 0 || right_vrs.size() == 0)return NULL;
 
 

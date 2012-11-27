@@ -90,6 +90,7 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
                 //************************************************
 
             }
+
         } else if (UIController.instance().getState() instanceof AREASELECTION_CONFIG) {
             UIController.instance().logCommand(new RpCommand(this, userInput));
             UIController.instance().setWaitCursor();

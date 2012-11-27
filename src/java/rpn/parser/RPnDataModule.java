@@ -178,6 +178,8 @@ public class RPnDataModule {
                     RPNUMERICS.domain(), new NumConfigImpl());//  RpNumerics.domain(),
             RIGHTPHASESPACE = new RPnRightPhaseSpaceAbstraction("RightPhase Space",
                     RPNUMERICS.domain(), new NumConfigImpl());//  RpNumerics.domain(),
+            RIEMANNPHASESPACE = new RPnPhaseSpaceAbstraction("Riemann Phase Space",
+                    new Space("Riemann Space", RPNUMERICS.domainDim() +1), new NumConfigImpl());
 
             CHARACTERISTICSPHASESPACEARRAY = new RPnPhaseSpaceAbstraction[RPNUMERICS.domainDim()];
 

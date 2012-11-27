@@ -10,6 +10,7 @@ import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.component.RpGeometry;
+import rpn.component.util.GeometryGraphND;
 import rpn.component.util.AreaSelected;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UserInputTable;
@@ -69,6 +70,12 @@ public class Area {
 
     }
 
+    public Area(RealVector topRight, RealVector downLeft) {
+        topRight_ = topRight;
+        downLeft_ = downLeft;
+        System.out.println("Construtor de Area sem usar resolucao");
+    }
+
     public RealVector getDownLeft() {
         return downLeft_;
     }
@@ -82,14 +89,18 @@ public class Area {
     }
 
     public boolean isClosestCurve(RPnCurve curve) {
-        UserInputTable userInputList = UIController.instance().globalInputTable();
-        RealVector newValue = userInputList.values();
+        //UserInputTable userInputList = UIController.instance().globalInputTable();
+        //RealVector newValue = userInputList.values();
+        //RPnPhaseSpaceAbstraction phaseSpace = RPnDataModule.PHASESPACE;
+        //RpGeometry geom = phaseSpace.findClosestGeometry(newValue);
+
+
         RPnPhaseSpaceAbstraction phaseSpace = RPnDataModule.PHASESPACE;
+        RpGeometry geom = phaseSpace.findClosestGeometry(GeometryGraphND.pMarca);
 
-        RpGeometry geom = phaseSpace.findClosestGeometry(newValue);
-
-        return (curve == (RPnCurve) (geom.geomFactory().geomSource()));
+        return (curve == (RPnCurve)(geom.geomFactory().geomSource()));
     }
+
 
     @Override
     public String toString() {
@@ -97,9 +108,9 @@ public class Area {
         StringBuffer buffer = new StringBuffer();
 
         buffer.append("<AREA>\n");
-        buffer.append("<RESOLUTION>");
-        buffer.append(resolution_.toString());
-        buffer.append("<\\RESOLUTION>");
+        //buffer.append("<RESOLUTION>");
+        //buffer.append(resolution_.toString());
+        //buffer.append("<\\RESOLUTION>");
         buffer.append("\n");
         buffer.append("<TOP>");
         buffer.append(topRight_.toString());

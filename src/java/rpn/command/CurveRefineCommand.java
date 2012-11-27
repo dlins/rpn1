@@ -14,7 +14,6 @@ import java.awt.Insets;
 import java.awt.Polygon;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
-import java.awt.geom.Path2D;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -28,6 +27,7 @@ import rpn.RPnPhaseSpacePanel;
 import rpn.component.RpCalcBasedGeomFactory;
 import rpn.component.RpGeometry;
 import rpn.component.util.AreaSelected;
+import rpn.controller.ui.UIController;
 import rpnumerics.Area;
 import wave.multid.view.GeomObjView;
 import wave.util.RealVector;
@@ -60,7 +60,7 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
             processGeometry(curveToRefine_, panelToRefine_);
             RPnPhaseSpaceAbstraction phaseSpace = (RPnPhaseSpaceAbstraction) panelToRefine_.scene().getAbstractGeom();
             phaseSpace.update();
-//            panelToRefine_.clearAreaSelection();
+            panelToRefine_.clearAreaSelection();
         }
 
 
@@ -97,6 +97,22 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
 
         List<AreaSelected> graphicsArea = phaseSpacePanel.getSelectedAreas();
 
+
+        // ------ Preenche uma lista de areas correspondentes, caso existam
+        List<AreaSelected> correspondentAreas = new ArrayList<AreaSelected>();
+        Iterator<RPnPhaseSpacePanel> phaseSpacePanelIterator = UIController.instance().getInstalledPanelsIterator();
+        while (phaseSpacePanelIterator.hasNext()) {
+            RPnPhaseSpacePanel panel = phaseSpacePanelIterator.next();
+            if (panel!=phaseSpacePanel  &&  panel.getSelectedAreas().size()>0) {
+                correspondentAreas.addAll(panel.getSelectedAreas());
+                // ??? Necessario instanciar objeto Area ???
+                areasToRefine.add(new Area(resolution_, correspondentAreas.get(0)));
+            }
+        }
+        // -------------------
+
+
+
         for (AreaSelected polygon : graphicsArea) {
 
             Iterator geomIterator = phaseSpacePanel.scene().geometries();
@@ -116,6 +132,7 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
 
         }
 
+        
         RpCalcBasedGeomFactory factory = (RpCalcBasedGeomFactory) selectedGeometry.geomFactory();
 
         factory.updateGeom(areasToRefine, indexToRemove);

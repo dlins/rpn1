@@ -18,10 +18,11 @@ import rpn.component.util.GeometryGraphND;
 import rpn.command.VelocityCommand;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UserInputTable;
-import rpn.parser.RPnDataModule;
 import wave.multid.model.MultiGeometry;
 import wave.multid.model.MultiPolyLine;
 import wave.util.RealVector;
+import rpn.parser.RPnDataModule;
+
 
 public class RPnPhaseSpaceAbstraction extends AbstractScene {
     //
@@ -41,6 +42,8 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
     static public List listResolution = new ArrayList();
     static public int closestCurve;             //indice da curva mais proxima
 
+    private List stringsToRemove = new ArrayList();
+    
     //
     // Constructors
     //
@@ -158,6 +161,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
             highlightGeometry(i);
             RpGeometry geometry = (RpGeometry) geomList_.get(i);
             geometry.viewingAttr().setSelected(false);
+            geometry.viewingAttr().setHighLight(true);
         }
     }
 
@@ -211,19 +215,13 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         double distminCurve = 1000000.;
         double distancia = 0.;
         int k = 0;
-        Iterator<RpGeometry> geomList = null;
+        Iterator<RpGeometry> geomList = null ;
 
         //--------------------------
         // **** Usar direto o objeto, sem testar
-        if (namePhaseSpace.equals("Phase Space")) {
-            geomList = RPnDataModule.PHASESPACE.getGeomObjIterator();
-        }
-        if (namePhaseSpace.equals("RightPhase Space")) {
-            geomList = RPnDataModule.RIGHTPHASESPACE.getGeomObjIterator();
-        }
-        if (namePhaseSpace.equals("LeftPhase Space")) {
-            geomList = RPnDataModule.LEFTPHASESPACE.getGeomObjIterator();
-        }
+        if (namePhaseSpace.equals("Phase Space"))      geomList = RPnDataModule.PHASESPACE.getGeomObjIterator();
+        if (namePhaseSpace.equals("RightPhase Space")) geomList = RPnDataModule.RIGHTPHASESPACE.getGeomObjIterator();
+        if (namePhaseSpace.equals("LeftPhase Space"))  geomList = RPnDataModule.LEFTPHASESPACE.getGeomObjIterator();
 
         //geomList = getGeomObjIterator();
 
@@ -232,17 +230,17 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
             RpGeometry geom = (RpGeometry) geomList.next();
 
             if (GeometryGraphND.onCurve == 1) {
-
                 if ((namePhaseSpace.equals("Phase Space") && geom != RPnDataModule.PHASESPACE.getLastGeometry())
                         || (namePhaseSpace.equals("RightPhase Space") && geom != RPnDataModule.RIGHTPHASESPACE.getLastGeometry())
                         || (namePhaseSpace.equals("LeftPhase Space") && geom != RPnDataModule.LEFTPHASESPACE.getLastGeometry())) {
 
-                    if (geom.viewingAttr().isVisible() && !(geom instanceof StationaryPointGeom)) {
-
+                    if (geom.viewingAttr().hasHighLight() && !(geom instanceof StationaryPointGeom)) {
                         RpGeomFactory factory = geom.geomFactory();
-                        RPnCurve curve = (RPnCurve) factory.geomSource();       // ********* Mudar aqui, apontar o source direito ou esquerdo
+                        RPnCurve curve = (RPnCurve) factory.geomSource();
+                        
+//                        System.out.println("Tamanho na cruz: "+curve.segments().size());
 
-                        curve.findClosestSegment(targetPoint);   //***
+                        curve.findClosestSegment(targetPoint);
 
                         distancia = curve.distancia;
 
@@ -258,8 +256,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
             }
 
             if (GeometryGraphND.onCurve == 0) {
-
-                if (geom.viewingAttr().isVisible() && !(geom instanceof StationaryPointGeom) && !(geom instanceof PoincareSectionGeom)) {
+                if (geom.viewingAttr().hasHighLight()  &&  !(geom instanceof StationaryPointGeom)  &&  !(geom instanceof PoincareSectionGeom)) {
 
                     RpGeomFactory factory = geom.geomFactory();
                     RPnCurve curve = (RPnCurve) factory.geomSource();
@@ -270,14 +267,13 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
                         RpCalculation calc = geomFactory.rpCalc();
                         ContourCurveCalc curveCalc = (ContourCurveCalc) calc;
                         listResolution.add(curveCalc.getParams().getResolution());
-
                     } else {
-                        int[] resolution = {100, 100};
-                        listResolution.add(resolution);
+                        listResolution.add(new int[]{0, 0});
+
                     }
                     // ---------------------------------------------------------------
 
-                    curve.findClosestSegment(targetPoint);   //***
+                    curve.findClosestSegment(targetPoint);
 
                     distancia = curve.distancia;
 
@@ -289,8 +285,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
 
                 } // ----------------------------------- Evita erro quando no PhaseDiagram
                 else {
-                    int[] resolution = {10, 10};
-                    listResolution.add(resolution);
+                    listResolution.add(new int[]{0, 0});
                 }
                 // -----------------------------------
 
@@ -304,106 +299,8 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         return closestGeometry_;
     }
 
-    //**************************************************************************
-    //******************************************************* Leandro, em 28/Set
-    //*** ClassifierCommand.hideClassifiers - chamado aqui dentro - deverá ser revisto para permitir a simples ocultação dos classificadores
-    //*** Por enquanto, é feita a remoção, através de ClassifierCommand.clearClassifiers
-    public static void ocultaStringsCla(int geometryIndex, String name) {
-
-        int index = 0;
-        if (name.equals("Phase Space")) {
-            index = 1;
-        }
-        if (name.equals("RightPhase Space")) {
-            index = 2;
-        }
-        if (name.equals("LeftPhase Space")) {
-            index = 3;
-        }
-
-        for (int i = 0; i < ClassifierCommand.indCurvaCla.size(); i++) {
-            if ((Integer) ClassifierCommand.indCurvaCla.get(i) == geometryIndex && index == (Integer) ClassifierCommand.strView.get(i)) {    //************************* Flexibilizar em funcao do painel
-                ClassifierCommand.paraOcultarIndCla.add(i);
-            }
-        }
-
-        if (ClassifierCommand.paraOcultarIndCla.size() > 0) {
-            //ClassifierCommand.hideClassifiers(ClassifierCommand.paraOcultarIndCla);
-            ClassifierCommand.clearClassifiers(ClassifierCommand.paraOcultarIndCla);
-        }
-
-        ClassifierCommand.paraOcultarIndCla.clear();
-
-    }
-
-    //*** Este método será usado para recuperar a visao das strings de classificacao
-    //*** NÃO USE AINDA !!!
-    public void mostraStringsCla(int geometryIndex) {
-
-        for (int i = 0; i < ClassifierCommand.indCurvaCla.size(); i++) {
-            if ((Integer) ClassifierCommand.indCurvaCla.get(i) == geometryIndex) {
-                ClassifierCommand.paraOcultarIndCla.add(i);
-            }
-        }
-
-        if (ClassifierCommand.paraOcultarIndCla.size() > 0) {
-            ClassifierCommand.viewClassifiers(ClassifierCommand.paraOcultarIndCla);
-        }
-
-        ClassifierCommand.paraOcultarIndCla.clear();
-
-    }
-
-    //*** ClassifierCommand.hideVelocities - chamado aqui dentro - deverá ser revisto para permitir a simples ocultação das strings de velocidade
-    //*** Por enquanto, é feita a remoção, através de ClassifierCommand.clearVelocities
-    public static void ocultaStringsVel(int geometryIndex, String name) {
-
-        int index = 0;
-        if (name.equals("Phase Space")) {
-            index = 1;
-        }
-        if (name.equals("RightPhase Space")) {
-            index = 2;
-        }
-        if (name.equals("LeftPhase Space")) {
-            index = 3;
-        }
-
-        for (int i = 0; i < VelocityCommand.indCurvaVel.size(); i++) {
-            if ((Integer) VelocityCommand.indCurvaVel.get(i) == geometryIndex && index == (Integer) VelocityCommand.velView.get(i)) {
-                VelocityCommand.paraOcultarIndVel.add(i);
-            }
-        }
-
-        if (VelocityCommand.paraOcultarIndVel.size() > 0) {
-            //VelocityCommand.hideVelocities(VelocityCommand.paraOcultarIndVel);
-            VelocityCommand.clearVelocities(VelocityCommand.paraOcultarIndVel);
-        }
-
-        VelocityCommand.paraOcultarIndVel.clear();
-
-    }
-
-    //*** Este método será usado para recuperar a visao das strings de velocidade
-    //*** NÃO USE AINDA !!!
-    public void mostraStringsVel(int geometryIndex) {
-
-        for (int i = 0; i < VelocityCommand.indCurvaVel.size(); i++) {
-            if ((Integer) VelocityCommand.indCurvaVel.get(i) == geometryIndex) {
-                VelocityCommand.paraOcultarIndVel.add(i);
-            }
-        }
-
-        if (VelocityCommand.paraOcultarIndVel.size() > 0) {
-            VelocityCommand.viewVelocities(VelocityCommand.paraOcultarIndVel);
-        }
-
-        VelocityCommand.paraOcultarIndVel.clear();
-
-    }
 
     public void lowlightGeometry(int index) {
-
 
         for (int i = 0; i < geomList_.size(); i++) {
 
@@ -412,6 +309,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
                 if (geometry instanceof SegmentedCurveGeom) {
 
                     SegmentedCurveGeom segGeom = (SegmentedCurveGeom) geometry;
+                    //segGeom.getRealSegIterator();
                     segGeom.viewingAttr().setSelected(false);
                     segGeom.lowLight();
                 }

@@ -32,8 +32,6 @@ public class AreaSelectionCommand extends RpModelPlotCommand implements Observer
 
         UIController.instance().setState(new AREASELECTION_CONFIG());
 
-
-
         Iterator<RPnPhaseSpacePanel> iterator = UIController.instance().getInstalledPanelsIterator();
 
         while (iterator.hasNext()) {
@@ -41,11 +39,7 @@ public class AreaSelectionCommand extends RpModelPlotCommand implements Observer
             RPnSelectionPlotter boxPlotter = new RPnSelectionPlotter();
             panel.addMouseListener(boxPlotter);
             panel.addMouseMotionListener(boxPlotter);
-
-
-
         }
-
 
     }
 

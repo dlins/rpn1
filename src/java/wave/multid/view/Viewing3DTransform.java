@@ -203,6 +203,7 @@ public class Viewing3DTransform implements ViewingTransform {
     public void dcInverseTransform(Coords2D dcCoords, CoordsArray worldCoords) {
         // we will use the matrix multiplication
         // for the image only for now...
+
         try {
             CoordsArray swapCoords = new CoordsArray(Multid.SPACE);
             // 0. is given just to avoid a dimMismatchException

@@ -115,17 +115,19 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
     }
 
     public RpGeometry createGeomFromSource() {
+
         BifurcationCurve curve = (BifurcationCurve) geomSource();
+
         RealSegGeom[] bifurcationArray = new RealSegGeom[curve.segments().size()];
 
         int i = 0;
         for (Object realSegment : curve.segments()) {
-
+        
             bifurcationArray[i] = new RealSegGeom((RealSegment) realSegment, leftViewingAttr());
             i++;
         }
 
-
+        
         return new BifurcationCurveGeom(bifurcationArray, this);
 
     }

@@ -22,7 +22,6 @@ public class EllipticBoundaryView extends GeomObjView {
             ViewingTransform transf,
             ViewingAttr viewAttr) throws DimMismatchEx {
         super(abstractGeom, transf, viewAttr);
-
     }
 
    

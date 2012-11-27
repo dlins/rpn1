@@ -25,6 +25,7 @@ public class ViewingAttr {
     private Color color_;
     private boolean visible_;
     private boolean selected_;
+    private boolean highLight_;
 
     //
     // Constructors
@@ -33,20 +34,24 @@ public class ViewingAttr {
         color_ = new Color(color.getRed(), color.getGreen(), color.getBlue());
         visible_ = true;
         selected_ = false;
+        highLight_ = true;
     }
 
     public ViewingAttr(Color color, boolean visible) {
         this(color);
         visible_ = visible;
+        highLight_ = true;
     }
 
     public ViewingAttr(Color color, boolean visible, boolean selected) {
         this(color, visible);
         selected_ = selected;
+        highLight_ = true;
     }
 
     public ViewingAttr(ViewingAttr attr) {
         this(attr.getColor(), attr.isVisible());
+        highLight_ = true;
     }
 
     //
@@ -62,5 +67,13 @@ public class ViewingAttr {
 
     public boolean isSelected() { return selected_; }
 
-    public void setSelected(boolean flag) { selected_ = flag; }
+    public void setSelected(boolean flag) { 
+        selected_ = flag;
+        highLight_ = flag;
+    }
+
+    public boolean hasHighLight() {return highLight_;}
+
+    public void setHighLight(boolean flag) {highLight_ = flag;}
+    
 }

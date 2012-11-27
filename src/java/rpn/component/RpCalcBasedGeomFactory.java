@@ -10,8 +10,10 @@ import java.util.List;
 import rpn.RPnDesktopPlotter;
 import rpn.controller.RpCalcController;
 import rpn.controller.RpController;
+import rpn.parser.RPnDataModule;
 
 import rpnumerics.Area;
+import rpnumerics.HugoniotCurve;
 import rpnumerics.RPnCurve;
 
 import rpnumerics.RpCalculation;
@@ -107,6 +109,7 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
     public abstract RpGeometry createGeomFromSource();
 
     public void updateGeom() {
+        System.out.println("Estou no updateGeom() sem area ... ");
         try {
             geomSource_ = calc_.recalc();
             geom_ = createGeomFromSource();
@@ -116,18 +119,19 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
         }
     }
 
+
     public void updateGeom(List<Area> areaToRefine, List<Integer> segmentsToRemove) {
 
         List<RealSegment> segRem = new ArrayList<RealSegment>();
 
         RPnCurve curve = (RPnCurve) geomSource();
 
-
         for (Integer i : segmentsToRemove) {
             segRem.add(curve.segments().get(i));
         }
-        curve.segments().removeAll(segRem);
 
+        curve.segments().removeAll(segRem);
+        
         for (Area area : areaToRefine) {
             try {
                 RPnCurve newCurve = (RPnCurve) calc_.recalc(area);
@@ -142,6 +146,5 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
         geom_ = createGeomFromSource();
 
         isGeomOutOfDate_ = true;
-
     }
 }

@@ -12,8 +12,9 @@ public class BifurcationCurveView extends GeomObjView {
     public BifurcationCurveView(BifurcationCurveGeom abstractGeom,
             ViewingTransform transf,
             ViewingAttr viewAttr) throws DimMismatchEx {
+
         super(abstractGeom, transf, viewAttr);
-       
+
     }
    
 

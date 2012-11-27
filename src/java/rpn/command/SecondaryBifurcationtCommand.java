@@ -44,6 +44,7 @@ public class SecondaryBifurcationtCommand extends RpModelPlotCommand {
     public RpGeometry createRpGeometry(RealVector[] input) {
 
         SecondaryBifurcationGeomFactory factory = new SecondaryBifurcationGeomFactory(RPNUMERICS.createSecondaryBifurcationCurveCalc());
+
         return factory.geom();
 
     }

@@ -20,6 +20,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.Point;
 import java.awt.Polygon;
+import java.awt.geom.Line2D;
 import rpn.controller.ui.TRACKPOINT_CONFIG;
 import rpn.controller.ui.UIController;
 import rpn.command.TrackPointCommand;
@@ -42,6 +43,10 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
     private boolean ordComplete_;
     private Point dcCompletePoint_;
     private List<Polygon> selectionAreas_;
+    private List<Line2D.Double> stringArrows_;
+    private List<String> typeStrings_;
+    private List<Line2D.Double> velocityArrows_;
+    private List<String> velocityStrings_;
 
 
 
@@ -57,7 +62,10 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
         dcCompletePoint_ = new Point(0, 0);
         pointMarkBuffer_ = new ArrayList();
         selectionAreas_ = new ArrayList<Polygon>();
-        
+        stringArrows_ = new ArrayList<Line2D.Double>();
+        typeStrings_ = new ArrayList<String>();
+        velocityArrows_ = new ArrayList<Line2D.Double>();
+        velocityStrings_ = new ArrayList<String>();
 
     }
 
@@ -79,9 +87,11 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
                 RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
                 int xCursorPos = event.getPoint().x;
                 int yCursorPos = event.getPoint().y;
+//<<<<<<< HEAD
+//                if (UIController.instance().getState() instanceof TRACKPOINT_CONFIG) {
+//=======
                 if ((UIController.instance().getState() instanceof TRACKPOINT_CONFIG )&&
                         (panel.scene().getViewingTransform().projectionMap().getDomain().getDim()==rpnumerics.RPNUMERICS.domainDim())){
-                    
 
                     Coords2D dcCoords = new Coords2D(xCursorPos, yCursorPos);
                     CoordsArray wcCoords = new Coords2D();
@@ -185,6 +195,14 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
 
     public List<Polygon> getSelectionAreas() {
         return selectionAreas_;
+    }
+
+    public List<String> getTypeString() {
+        return typeStrings_;
+    }
+
+    public List <String> getVelocityString() {
+        return velocityStrings_;
     }
 
     public Point get_dc_CompletePoint() {
