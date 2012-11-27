@@ -161,6 +161,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
             highlightGeometry(i);
             RpGeometry geometry = (RpGeometry) geomList_.get(i);
             geometry.viewingAttr().setSelected(false);
+            geometry.viewingAttr().setHighLight(true);
         }
     }
 
@@ -229,14 +230,11 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
             RpGeometry geom = (RpGeometry) geomList.next();
 
             if (GeometryGraphND.onCurve == 1) {
-
                 if ((namePhaseSpace.equals("Phase Space") && geom != RPnDataModule.PHASESPACE.getLastGeometry())
                         || (namePhaseSpace.equals("RightPhase Space") && geom != RPnDataModule.RIGHTPHASESPACE.getLastGeometry())
                         || (namePhaseSpace.equals("LeftPhase Space") && geom != RPnDataModule.LEFTPHASESPACE.getLastGeometry())) {
 
-                    if (geom.viewingAttr().isVisible() && !(geom instanceof StationaryPointGeom)) {
-                    //if (geom.viewingAttr().isSelected() && !(geom instanceof StationaryPointGeom)) {
-
+                    if (geom.viewingAttr().hasHighLight() && !(geom instanceof StationaryPointGeom)) {
                         RpGeomFactory factory = geom.geomFactory();
                         RPnCurve curve = (RPnCurve) factory.geomSource();
 
@@ -256,9 +254,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
             }
 
             if (GeometryGraphND.onCurve == 0) {
-
-                if (geom.viewingAttr().isVisible()  &&  !(geom instanceof StationaryPointGeom)  &&  !(geom instanceof PoincareSectionGeom)) {
-                //if (geom.viewingAttr().isSelected() && !(geom instanceof StationaryPointGeom) && !(geom instanceof PoincareSectionGeom)) {
+                if (geom.viewingAttr().hasHighLight()  &&  !(geom instanceof StationaryPointGeom)  &&  !(geom instanceof PoincareSectionGeom)) {
 
                     RpGeomFactory factory = geom.geomFactory();
                     RPnCurve curve = (RPnCurve) factory.geomSource();
@@ -301,106 +297,6 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         return closestGeometry_;
     }
 
-//<<<<<<< HEAD
-//=======
-//    //**************************************************************************
-//    //******************************************************* Leandro, em 28/Set
-//    //*** ClassifierCommand.hideClassifiers - chamado aqui dentro - deverá ser revisto para permitir a simples ocultação dos classificadores
-//    //*** Por enquanto, é feita a remoção, através de ClassifierCommand.clearClassifiers
-//    public static void ocultaStringsCla(int geometryIndex, String name) {
-//
-//        int index = 0;
-//        if (name.equals("Phase Space")) {
-//            index = 1;
-//        }
-//        if (name.equals("RightPhase Space")) {
-//            index = 2;
-//        }
-//        if (name.equals("LeftPhase Space")) {
-//            index = 3;
-//        }
-//
-//        for (int i = 0; i < ClassifierCommand.indCurvaCla.size(); i++) {
-//            if ((Integer) ClassifierCommand.indCurvaCla.get(i) == geometryIndex && index == (Integer) ClassifierCommand.strView.get(i)) {    //************************* Flexibilizar em funcao do painel
-//                ClassifierCommand.paraOcultarIndCla.add(i);
-//            }
-//        }
-//
-//        if (ClassifierCommand.paraOcultarIndCla.size() > 0) {
-//            //ClassifierCommand.hideClassifiers(ClassifierCommand.paraOcultarIndCla);
-//            ClassifierCommand.clearClassifiers(ClassifierCommand.paraOcultarIndCla);
-//        }
-//
-//        ClassifierCommand.paraOcultarIndCla.clear();
-//
-//    }
-//
-//    //*** Este método será usado para recuperar a visao das strings de classificacao
-//    //*** NÃO USE AINDA !!!
-//    public void mostraStringsCla(int geometryIndex) {
-//
-//        for (int i = 0; i < ClassifierCommand.indCurvaCla.size(); i++) {
-//            if ((Integer) ClassifierCommand.indCurvaCla.get(i) == geometryIndex) {
-//                ClassifierCommand.paraOcultarIndCla.add(i);
-//            }
-//        }
-//
-//        if (ClassifierCommand.paraOcultarIndCla.size() > 0) {
-//            ClassifierCommand.viewClassifiers(ClassifierCommand.paraOcultarIndCla);
-//        }
-//
-//        ClassifierCommand.paraOcultarIndCla.clear();
-//
-//    }
-//
-//    //*** ClassifierCommand.hideVelocities - chamado aqui dentro - deverá ser revisto para permitir a simples ocultação das strings de velocidade
-//    //*** Por enquanto, é feita a remoção, através de ClassifierCommand.clearVelocities
-//    public static void ocultaStringsVel(int geometryIndex, String name) {
-//
-//        int index = 0;
-//        if (name.equals("Phase Space")) {
-//            index = 1;
-//        }
-//        if (name.equals("RightPhase Space")) {
-//            index = 2;
-//        }
-//        if (name.equals("LeftPhase Space")) {
-//            index = 3;
-//        }
-//
-//        for (int i = 0; i < VelocityCommand.indCurvaVel.size(); i++) {
-//            if ((Integer) VelocityCommand.indCurvaVel.get(i) == geometryIndex && index == (Integer) VelocityCommand.velView.get(i)) {
-//                VelocityCommand.paraOcultarIndVel.add(i);
-//            }
-//        }
-//
-//        if (VelocityCommand.paraOcultarIndVel.size() > 0) {
-//            //VelocityCommand.hideVelocities(VelocityCommand.paraOcultarIndVel);
-//            VelocityCommand.clearVelocities(VelocityCommand.paraOcultarIndVel);
-//        }
-//
-//        VelocityCommand.paraOcultarIndVel.clear();
-//
-//    }
-//
-//    //*** Este método será usado para recuperar a visao das strings de velocidade
-//    //*** NÃO USE AINDA !!!
-//    public void mostraStringsVel(int geometryIndex) {
-//
-//        for (int i = 0; i < VelocityCommand.indCurvaVel.size(); i++) {
-//            if ((Integer) VelocityCommand.indCurvaVel.get(i) == geometryIndex) {
-//                VelocityCommand.paraOcultarIndVel.add(i);
-//            }
-//        }
-//
-//        if (VelocityCommand.paraOcultarIndVel.size() > 0) {
-//            VelocityCommand.viewVelocities(VelocityCommand.paraOcultarIndVel);
-//        }
-//
-//        VelocityCommand.paraOcultarIndVel.clear();
-//
-//    }
-//>>>>>>> 2560b51f459299b72ebe7062eb47564cf813e193
 
     public void lowlightGeometry(int index) {
 

@@ -5,10 +5,16 @@ import java.awt.Shape;
 import java.awt.geom.Line2D;
 import java.awt.geom.Path2D.Double;
 import java.util.List;
+import rpn.RPnPhaseSpaceAbstraction;
+import rpn.RPnPhaseSpaceFrame;
+import rpn.RPnPhaseSpacePanel;
+import rpn.controller.ui.UIController;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
 import wave.multid.view.ViewingAttr;
 import wave.multid.view.ViewingTransform;
+import rpnumerics.RPNUMERICS;
+import wave.util.RealVector;
 
 /*
  * To change this template, choose Tools | Templates
@@ -21,6 +27,9 @@ import wave.multid.view.ViewingTransform;
  */
 public class LinePlotted extends GraphicsUtil {
 
+    public static RPnPhaseSpacePanel panel_;
+
+
     public LinePlotted(List<Object> wcObjects, ViewingTransform viewingTransform, ViewingAttr viewAttr) {
         super(wcObjects, viewingTransform, viewAttr);
     }
@@ -28,19 +37,35 @@ public class LinePlotted extends GraphicsUtil {
     @Override
     public Shape createShape() {
 
+        int[] compIndex = panel_.scene().getViewingTransform().projectionMap().getCompIndexes();
+        int biggestIndex = Math.max(compIndex[0], compIndex[1]);
+        int smallestIndex = Math.min(compIndex[0], compIndex[1]);
+
+        int dim = RPNUMERICS.domainDim();
         Line2D line = (Line2D) wcObjects_.get(0);
 
         Coords2D dcPoint1 = new Coords2D();
         Coords2D dcPoint2 = new Coords2D();
-        CoordsArray wcPoint1 = new CoordsArray(new double[]{line.getX1(), line.getY1()});
-        CoordsArray wcPoint2 = new CoordsArray(new double[]{line.getX2(), line.getY2()});
 
+        RealVector point1 = new RealVector(dim);
+        RealVector point2 = new RealVector(dim);
+        
+        point1.setElement(smallestIndex, line.getX1());
+        point1.setElement(biggestIndex, line.getY1());
+
+        point2.setElement(smallestIndex, line.getX2());
+        point2.setElement(biggestIndex, line.getY2());
+
+        CoordsArray wcPoint1 = new CoordsArray(point1);
+        CoordsArray wcPoint2 = new CoordsArray(point2);
         getViewingTransform().viewPlaneTransform(wcPoint1, dcPoint1);
         getViewingTransform().viewPlaneTransform(wcPoint2, dcPoint2);
 
-        return new Line2D.Double(dcPoint1.getX(), dcPoint1.getY(), dcPoint2.getX(), dcPoint2.getY());
+        UIController.instance().globalInputTable().reset();
 
+        return new Line2D.Double(dcPoint1.getX(), dcPoint1.getY(), dcPoint2.getX(), dcPoint2.getY());
     }
+
 
     @Override
     public Double getWCObject() {

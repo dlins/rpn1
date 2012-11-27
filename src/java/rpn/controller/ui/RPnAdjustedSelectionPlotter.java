@@ -37,6 +37,7 @@ import wave.multid.view.GeomObjView;
 import wave.multid.view.ViewingAttr;
 import wave.multid.view.ViewingTransform;
 import wave.util.RealVector;
+import rpnumerics.RPNUMERICS;
 
 
 public class RPnAdjustedSelectionPlotter extends RPn2DMouseController  {
@@ -84,14 +85,18 @@ public class RPnAdjustedSelectionPlotter extends RPn2DMouseController  {
             GeometryGraph.count = 0;
 
             cursorPos_ = new Point(me.getX(), me.getY());
-
+            
             double[] mePosArray = {me.getX(), me.getY()};
-            CoordsArray cursorPosWC = new CoordsArray(new Space(" ", 2));
+            
+            CoordsArray cursorPosWC = new CoordsArray(new Space(" ", RPNUMERICS.domainDim()));
             Coords2D mePosDC = new Coords2D(mePosArray);
-            CoordsArray mePosWC = new CoordsArray(new Space(" ",3));
+            CoordsArray mePosWC = new CoordsArray(new Space(" ",RPNUMERICS.domainDim()));
             panel.scene().getViewingTransform().dcInverseTransform(mePosDC, mePosWC);
+
             Path2D.Double selectionPath = new Path2D.Double();
+
             selectionPath.moveTo(cursorPosWC.getElement(0), cursorPosWC.getElement(1));
+            
             List<Object> wcObjectsList = new ArrayList();
             wcObjectsList.add(selectionPath);
             ViewingAttr viewingAttr = new ViewingAttr(Color.red);
@@ -195,19 +200,25 @@ public class RPnAdjustedSelectionPlotter extends RPn2DMouseController  {
 
         Point2D.Double lowerLeftCorner = wc.getOriginPosition();
 
+        
+        // --- original (só funciona para stone [sem permutacao dos eixos])
 //        double vMin = lowerLeftCorner.x;
 //        double uMin = lowerLeftCorner.y;
 //
 //        double dv = wc.getWidth() / xResolution;
 //        double du = wc.getHeight() / yResolution;
+        // ---
+
 
         // --- Teste rápido para a TPCW, aguardar confirmacao do Edson
+        // --- funciona para stone e tpcw (incluindo eixos permutados)
         double vMin = lowerLeftCorner.y;
         double uMin = lowerLeftCorner.x;
 
         double dv = wc.getHeight() / yResolution;
         double du = wc.getWidth() / xResolution;
         // ---
+
 
         PathIterator inputIterator = input.getPathIterator(null);
 
@@ -235,10 +246,8 @@ public class RPnAdjustedSelectionPlotter extends RPn2DMouseController  {
 
         vertex = selectionVertex.get(2);
 
-
         double downLeftXAdjusted = vMin + (int) ((vertex[0] - vMin) / dv + 1) * dv;
         double downLeftYAdjusted = uMin + (int) ((vertex[1] - uMin) / du) * du;
-
 
         output.moveTo(topRightXAdjusted, topRigthYAdjusted);
 

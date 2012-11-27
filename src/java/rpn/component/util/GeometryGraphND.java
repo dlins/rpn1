@@ -200,7 +200,7 @@ public class GeometryGraphND {
     public void drawGrid(Graphics g, Scene scene) {
         RealVector maxCoords = RPNUMERICS.boundary().getMaximums();
         RealVector minCoords = RPNUMERICS.boundary().getMinimums();
-        
+
         g.setColor(Color.gray);
         Graphics2D graph = (Graphics2D)g;
         
@@ -211,7 +211,7 @@ public class GeometryGraphND {
 
         int nv = resolution[0];
         int nu = resolution[1];
-        
+
         double dv = (maxCoords.getElement(0)-minCoords.getElement(0))/nv;
         double du = (maxCoords.getElement(1)-minCoords.getElement(1))/nu;
         
@@ -219,6 +219,8 @@ public class GeometryGraphND {
         for (int i = 0; i < nv; i++) {
             RealVector P1 = new RealVector(new double[]{i*dv + minCoords.getElement(0), maxCoords.getElement(1)});
             RealVector P2 = new RealVector(new double[]{i*dv + minCoords.getElement(0), minCoords.getElement(1)});
+            P1.setSize(RPNUMERICS.domainDim());
+            P2.setSize(RPNUMERICS.domainDim());
             
             Coords2D dcP1 = toDeviceCoords(scene, P1);
             Coords2D dcP2 = toDeviceCoords(scene, P2);
@@ -233,6 +235,8 @@ public class GeometryGraphND {
         for (int i = 0; i < nu; i++) {
             RealVector P1 = new RealVector(new double[]{minCoords.getElement(0), i*du + minCoords.getElement(1)});
             RealVector P2 = new RealVector(new double[]{maxCoords.getElement(0), i*du + minCoords.getElement(1)});
+            P1.setSize(RPNUMERICS.domainDim());
+            P2.setSize(RPNUMERICS.domainDim());
 
             Coords2D dcP1 = toDeviceCoords(scene, P1);
             Coords2D dcP2 = toDeviceCoords(scene, P2);
@@ -247,6 +251,8 @@ public class GeometryGraphND {
         for (int i = 0; i < (nu+nv); i++) {
             RealVector P1 = new RealVector(new double[]{minCoords.getElement(0), i * du + minCoords.getElement(1)});
             RealVector P2 = new RealVector(new double[]{i * dv + minCoords.getElement(0), minCoords.getElement(1)});
+            P1.setSize(RPNUMERICS.domainDim());
+            P2.setSize(RPNUMERICS.domainDim());
 
             Coords2D dcP1 = toDeviceCoords(scene, P1);
             Coords2D dcP2 = toDeviceCoords(scene, P2);

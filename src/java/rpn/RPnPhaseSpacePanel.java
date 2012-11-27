@@ -355,6 +355,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
                 Rectangle2D boundsVel  = metrics.getStringBounds(velStr, null);
                 int typeWidth = (int) boundsType.getWidth();
                 int velWidth  = (int) boundsVel.getWidth();
+
                 if (line.x1<line.x2) {
                     g.drawString(typeStr, (int)(line.x2 + 5), (int)(line.y2 +5));
                     g.drawString(velStr,  (int)(line.x2 + 5), (int)(line.y2 +5));
@@ -386,11 +387,11 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         myW_ = getWidth();
 
 
-        if ((scene().getAbstractGeom()).getSpace().getDim() == 2) {
+        //if ((scene().getAbstractGeom()).getSpace().getDim() == 2) {
             GeometryGraph geom = new GeometryGraph();
             geom.markPoints(scene());
             geom.paintComponent(g, scene(), this);
-        }
+        //}
 
         
 

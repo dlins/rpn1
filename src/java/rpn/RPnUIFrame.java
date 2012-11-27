@@ -215,8 +215,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 toolBar_.add(PhysicalBoundaryPlotCommand.instance().getContainer());
                 toolBar_.add(TrackPointCommand.instance().getContainer());
 
-                toolBar_.add(AdjustedSelectionPlotCommand.instance());
-                
                 toolBar_.add(RarefactionExtensionCurvePlotCommand.instance().getContainer());
                 toolBar_.add(RiemannProfileCommand.instance().getContainer());
 
@@ -226,14 +224,10 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 toolBar_.add(VelocityCommand.instance().getContainer());        //** Leandro
 
 
+                toolBar_.add(AreaSelectionToExtensionCurveCommand.instance().getContainer());
+
                 toolBar_.add(RarefactionExtensionCurvePlotCommand.instance().getContainer());
                 toolBar_.add(RiemannProfileCommand.instance().getContainer());
-
-
-                toolBar_.add(AreaSelectionCommand.instance().getContainer());     //** Edson/Leandro
-                toolBar_.add(ClassifierCommand.instance().getContainer());        //** Leandro
-                toolBar_.add(VelocityCommand.instance().getContainer());        //** Leandro
-
 
 
                 toolBar_.revalidate();
@@ -484,6 +478,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 auxFrames_[i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i)).label());
                 auxFrames_[i + 1].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i + 1)).label());
 
+                System.out.println("auxFrames_[i].getTitle() ::::::: " +auxFrames_[i].getTitle());
+                System.out.println("auxFrames_[i+1].getTitle() ::::: " +auxFrames_[i+1].getTitle());
+
                 UIController.instance().install(auxFrames_[i].phaseSpacePanel());
                 UIController.instance().install(auxFrames_[i + 1].phaseSpacePanel());
                 setFramesPosition(auxFrames_[i]);
@@ -591,7 +588,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         leftCurvesList.addObserver(EnableLRPhaseSpaceCommand.instance());
         rightCurvesList.addObserver(EnableLRPhaseSpaceCommand.instance());
 
-
+        curvesList.addObserver(AreaSelectionToExtensionCurveCommand.instance());
+        leftCurvesList.addObserver(AreaSelectionToExtensionCurveCommand.instance());
+        rightCurvesList.addObserver(AreaSelectionToExtensionCurveCommand.instance());
 
 
     }
@@ -1150,6 +1149,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         modelInteractionMenu.add(ChangeFluxParamsCommand.instance());
         modelInteractionMenu.add(ChangeOrbitLevelCommand.instance());
         modelInteractionMenu.add(CurveRefineCommand.instance());
+        modelInteractionMenu.add(GenericExtensionCurveCommand.instance());
 
         modelInteractionMenu.add(inputCoordsMenuItem);
         modelInteractionMenu.addSeparator();

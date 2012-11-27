@@ -379,15 +379,15 @@ public class HugoniotCurve extends SegmentedCurve {
 
     //****************************
      
-       public double velocity(RealVector pMarca) {
+    public double velocity(RealVector pMarca) {
         HugoniotSegment segment = (HugoniotSegment) (segments()).get(findClosestSegment(pMarca));
         double lSigma = segment.leftSigma();
         double rSigma = segment.rightSigma();
 
-        RealVector u = new RealVector(2);
+        RealVector u = new RealVector(RPNUMERICS.domainDim());
         u.sub(segment.rightPoint(), segment.leftPoint());
 
-        RealVector v = new RealVector(2);
+        RealVector v = new RealVector(RPNUMERICS.domainDim());
         v.sub(pMarca, segment.leftPoint());
 
         double normV = v.norm();
@@ -434,11 +434,11 @@ public class HugoniotCurve extends SegmentedCurve {
 
                 double X_ = (rX_ - lX_) * (velocity - lSigma_) / (rSigma_ - lSigma_) + lX_;
                 double Y_ = (rY_ - lY_) * (velocity - lSigma_) / (rSigma_ - lSigma_) + lY_;
-                RealVector p = new RealVector(2);
+                RealVector p = new RealVector(RPNUMERICS.domainDim());
                 p.setElement(0, X_);
                 p.setElement(1, Y_);
 
-                RealVector temp = new RealVector(2);
+                RealVector temp = new RealVector(RPNUMERICS.domainDim());
                 temp.sub(pZero, p);
 
                 if(temp.norm() > 0.01) equil.add(p);

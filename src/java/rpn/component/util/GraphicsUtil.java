@@ -9,6 +9,7 @@ import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Path2D;
 import java.util.List;
+import rpn.RPnPhaseSpacePanel;
 import wave.multid.view.ViewingAttr;
 import wave.multid.view.ViewingTransform;
 

@@ -19,6 +19,7 @@ import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
 import wave.multid.Space;
 import wave.multid.view.ViewingAttr;
+import rpnumerics.RPNUMERICS;
 
 public class RPnSelectionPlotter extends RPn2DMouseController {
 
@@ -51,9 +52,9 @@ public class RPnSelectionPlotter extends RPn2DMouseController {
             cursorPos_ = new Point(me.getX(), me.getY());
 
             double[] mePosArray = {me.getX(), me.getY()};
-            CoordsArray cursorPosWC = new CoordsArray(new Space(" ", 2));
+            CoordsArray cursorPosWC = new CoordsArray(new Space(" ", RPNUMERICS.domainDim()));
             Coords2D mePosDC = new Coords2D(mePosArray);
-            CoordsArray mePosWC = new CoordsArray(new Space(" ", 2));
+            CoordsArray mePosWC = new CoordsArray(new Space(" ", RPNUMERICS.domainDim()));
             panel.scene().getViewingTransform().dcInverseTransform(mePosDC, mePosWC);
             Path2D.Double selectionPath = new Path2D.Double();
             selectionPath.moveTo(cursorPosWC.getElement(0), cursorPosWC.getElement(1));

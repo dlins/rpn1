@@ -272,11 +272,11 @@ public abstract class RPnCurve {
 
             //------------------------------------------
             //** para calcular na projecao
-            for (int k = 0; k < target.getSize(); k++) {
-                if (target.getElement(k) == 0.) {
-                    segmentVector.setElement(k, 0.);
-                }
-            }
+//            for (int k = 0; k < target.getSize(); k++) {
+//                if (target.getElement(k) == 0.) {
+//                    segmentVector.setElement(k, 0.);
+//                }
+//            }
             //------------------------------------------
 
             closest = new RealVector(target);
