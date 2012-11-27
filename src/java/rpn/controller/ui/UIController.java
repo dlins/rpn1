@@ -25,6 +25,9 @@ import java.beans.PropertyChangeEvent;
 import rpn.controller.*;
 import java.net.*;
 import java.util.Iterator;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import rpn.RPnCurvesDirectionPanel;
 import rpn.RPnDesktopPlotter;
 import rpn.RPnUIFrame;
 import rpn.component.RpGeometry;
@@ -43,7 +46,6 @@ public class UIController extends ComponentUI {
     static public final Cursor WAIT_CURSOR = Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR);
     static public final Cursor DEFAULT_CURSOR = Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR);
     static public UI_ACTION_SELECTED INITSTATE = null;
-
     //
     // Members
     //
@@ -217,9 +219,10 @@ public class UIController extends ComponentUI {
         public void mouseReleased(MouseEvent event) {
 
             if (drag_) {
-                if (!commandArray_.isEmpty())
-                    commandArray_.remove(commandArray_.size()-1);
-                    logCommand(new RpCommand((UI_ACTION_SELECTED) handler_, globalInputTable().values()));
+                if (!commandArray_.isEmpty()) {
+                    commandArray_.remove(commandArray_.size() - 1);
+                }
+                logCommand(new RpCommand((UI_ACTION_SELECTED) handler_, globalInputTable().values()));
 
             }
 
@@ -230,36 +233,52 @@ public class UIController extends ComponentUI {
             drag_ = false;
             RPnUIFrame.clearStatusMessage();
             RPnUIFrame.disableSliders();
+            if (event.getButton() == MouseEvent.BUTTON1) {
+                if (event.getComponent() instanceof RPnPhaseSpacePanel) {
 
-            if (event.getComponent() instanceof RPnPhaseSpacePanel) {
+                    RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
 
-                RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
+                    RPnPhaseSpaceAbstraction.namePhaseSpace = ((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom()).getName();   //** acrescentei isso (Leandro)
+                    panel.setName(RPnPhaseSpaceAbstraction.namePhaseSpace);
 
-                RPnPhaseSpaceAbstraction.namePhaseSpace = ((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom()).getName();   //** acrescentei isso (Leandro)
-                panel.setName(RPnPhaseSpaceAbstraction.namePhaseSpace);
+                    //panel.setName(((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom()).getName());
 
-                //panel.setName(((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom()).getName());
-
-                if (netStatus_.isMaster() || !(netStatus_.isOnline())) {
+                    if (netStatus_.isMaster() || !(netStatus_.isOnline())) {
 
 
-                    int sceneDim = panel.scene().getViewingTransform().projectionMap().getDomain().getDim();
-                    if (sceneDim == globalInputTable_.flags().length) {
+                        int sceneDim = panel.scene().getViewingTransform().projectionMap().getDomain().getDim();
+                        if (sceneDim == globalInputTable_.flags().length) {
 
-                        updateUserInputTable(panel, event.getPoint());
-                        evaluatePanelsCursorCoords(panel, event.getPoint());
-                        // execute
-                        if (globalInputTable().isComplete()) {
-                            userInputComplete(globalInputTable().values());
-                            globalInputTable().reset();
-                            resetPanelsCursorCoords();
-                            RPnUIFrame.enableSliders();
+                            updateUserInputTable(panel, event.getPoint());
+                            evaluatePanelsCursorCoords(panel, event.getPoint());
+                            // execute
+                            if (globalInputTable().isComplete()) {
+                                userInputComplete(globalInputTable().values());
+                                globalInputTable().reset();
+                                resetPanelsCursorCoords();
+                                RPnUIFrame.enableSliders();
+                            }
+
                         }
 
                     }
-
                 }
+
             }
+            
+            
+            if (event.getButton()==MouseEvent.BUTTON3){
+
+
+                JPopupMenu popMenu = new JPopupMenu("teste menu");
+                
+                popMenu.add(new RPnCurvesDirectionPanel().getContainer());
+                
+                
+                popMenu.show((RPnPhaseSpacePanel) event.getComponent(),event.getX(),event.getY());
+                
+            }
+
 
         }
 
@@ -400,9 +419,9 @@ public class UIController extends ComponentUI {
 
     }
 
-  public void logCommand(RpCommand command) {
+    public void logCommand(RpCommand command) {
         RPnUIFrame.clearStatusMessage();
-        System.out.println(command.toXML());
+//        System.out.println(command.toXML());
         commandArray_.add(command);
     }
 

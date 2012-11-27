@@ -232,6 +232,12 @@ public class RPnDataModule {
                     UIController.instance().setState(new UI_ACTION_SELECTED(HysteresisPlotCommand.instance()));
                 else if (currentCommand_.equalsIgnoreCase("boundaryextensioncurve"))
                     UIController.instance().setState(new UI_ACTION_SELECTED(BoundaryExtensionCurveCommand.instance()));
+                
+                 else if (currentCommand_.equalsIgnoreCase("changeorbitdirection"))
+                    UIController.instance().setState(new UI_ACTION_SELECTED(ChangeDirectionCommand.instance()));
+                
+                
+                
             }
 
             else if (currentElement_.equals("REALVECTOR")) {
@@ -265,6 +271,7 @@ public class RPnDataModule {
 
 
             if (name.equals("REALVECTOR"))
+                
                 UIController.instance().userInputComplete(new RealVector(stringBuffer_.toString()));
 
             if (name.equals("PAUSE"))

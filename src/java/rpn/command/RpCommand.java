@@ -87,8 +87,10 @@ public class RpCommand extends AbstractAction implements UndoableAction {
     private void createXMLOutput() {
 
         StringBuffer buffer = new StringBuffer();
-
-        buffer.append("<COMMAND name=\"" + actionSelected_.getAction().toString() + "\">\n");
+        System.out.println("entrando");
+        String commandName = actionSelected_.getAction().toString();
+      
+        buffer.append("<COMMAND name=\"" + commandName.replaceAll(" ", "").toLowerCase() + "\">\n");
         for (String input : inputArray_) {
             RealVector inputVector = new RealVector(input);
             buffer.append(inputVector.toXML());

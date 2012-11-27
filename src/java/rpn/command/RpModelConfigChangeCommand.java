@@ -57,6 +57,7 @@ public abstract class RpModelConfigChangeCommand extends RpModelActionCommand {
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         listenersList_.remove(listener);
     }
+    
 
     public void firePropertyChange(PropertyChangeEvent event) {
 
