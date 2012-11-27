@@ -38,6 +38,18 @@ public class WaveCurveCalc extends WaveCurveOrbitCalc {
             throw new RpException("Error in native layer");
         }
 
+
+
+//        System.out.println(result);
+
+
+
+
+
+
+
+
+
         return result;
     }
 

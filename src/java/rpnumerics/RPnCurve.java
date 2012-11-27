@@ -34,10 +34,13 @@ public abstract class RPnCurve {
     private double ALFA;
     //** declarei isso (Leandro)
     public double distancia = 0;
+    public List claToRemove = new ArrayList();
+    public List velToRemove = new ArrayList();
+    public List claStringToRemove = new ArrayList();
+    public List velStringToRemove = new ArrayList();
     
     public RPnCurve() {//TODO REMOVE !!
         //super(new CoordsArray[3], new ViewingAttr(Color.WHITE));
-        System.out.println("CTR vazio dwe RPNCURVE");
 
     }
 
@@ -51,6 +54,7 @@ public abstract class RPnCurve {
         }
         this.viewAttr = viewAttr;
     }
+
 
     public RPnCurve(CoordsArray[] vertices, ViewingAttr viewAttr) {
         //super(vertices, viewAttr);
@@ -225,6 +229,11 @@ public abstract class RPnCurve {
     }
 
 
+    public double getALFA() {
+        return ALFA;
+    }
+
+
     public int findClosestSegment(RealVector targetPoint) {
 
         //*** A conversão abaixo não retorna número certo de segmentos se a curva é SegmentedCurve.
@@ -248,6 +257,7 @@ public abstract class RPnCurve {
                 segments = (ArrayList) ((BifurcationCurve)this).leftSegments();
         }
 
+
         RealVector target = new RealVector(targetPoint);
         RealVector closest = null;
         RealVector segmentVector = null;
@@ -263,11 +273,11 @@ public abstract class RPnCurve {
 
             //------------------------------------------
             //** para calcular na projecao
-            for (int k = 0; k < target.getSize(); k++) {
-                if (target.getElement(k) == 0.) {
-                    segmentVector.setElement(k, 0.);
-                }
-            }
+//            for (int k = 0; k < target.getSize(); k++) {
+//                if (target.getElement(k) == 0.) {
+//                    segmentVector.setElement(k, 0.);
+//                }
+//            }
             //------------------------------------------
 
             closest = new RealVector(target);
@@ -316,13 +326,22 @@ public abstract class RPnCurve {
         RPnCurve curve = (RPnCurve)(geom.geomFactory().geomSource());
         ArrayList segments = (ArrayList) curve.segments();
 
+        if (this instanceof BifurcationCurve) {
+
+            if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("RightPhase Space"))
+                segments = (ArrayList) ((BifurcationCurve)this).rightSegments();
+
+            if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("LeftPhase Space"))
+                segments = (ArrayList) ((BifurcationCurve)this).leftSegments();
+        }
+
         RealSegment closestSegment = (RealSegment) segments.get(findClosestSegment(targetPoint));
 
         if (ALFA <= 0) {
-            return closestSegment.p1();
+            return closestSegment.p2();
         }
         if (ALFA >= 1) {
-            return closestSegment.p2();
+            return closestSegment.p1();
         }
 
         RealVector projVec = calcVecProj(closestSegment.p2(), targetPoint,
@@ -410,7 +429,7 @@ public abstract class RPnCurve {
         PointNDimension[][] polyline = polyLinesSetList_.getPolylines();
 
         int size = polyline[index].length;
-
+        
         CoordsArray[] coordsPolyline = new CoordsArray[size];
 
         for (int pont_point = 0; pont_point < size; pont_point++) {

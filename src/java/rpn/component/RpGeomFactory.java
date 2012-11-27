@@ -7,6 +7,7 @@
 package rpn.component;
 
 
+import java.util.List;
 import rpn.controller.RpController;
 import rpnumerics.Area;
 
@@ -19,7 +20,7 @@ public interface RpGeomFactory {
     void updateGeom();
 
 
-    void updateGeom(Area area);
+    void updateGeom(List<Area> area,List<Integer> segmentsToRemove);
 
 
     /** Returns the geometric model of the geometric visualization. */

@@ -32,6 +32,8 @@ public class RPnPhaseSpaceManager {
     }
 
     public void remove(RPnPhaseSpaceAbstraction phaseSpace, MultiGeometry bifurcationGeom) {
+        System.out.println("metodo remove de RPnPhaseSpaceManager");
+        System.out.println("phaseSpace.getName() : " +phaseSpace.getName());
 
         phaseSpace.remove(bifurcationGeom);
         if (phaseSpaceMap_.containsKey(phaseSpace)) {
@@ -41,13 +43,13 @@ public class RPnPhaseSpaceManager {
                 Iterator iteratorList = pointedPhaseSpace.curvesListIterator();
 
                 while (iteratorList.hasNext()) {
+                    System.out.println("iteratorList.hasNext()");
                     RPnCurvesList list = (RPnCurvesList) iteratorList.next();
                     list.removeGeometrySide(bifurcationGeom);
 
                 }
             }
         }
-
 
 
     }

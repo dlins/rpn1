@@ -30,7 +30,7 @@ public class RPnPhaseSpaceFrame extends JFrame {
     RPnCursorMonitor coordsField = new RPnCursorMonitor();
     BorderLayout borderLayout2 = new BorderLayout();
     RPnMenuCommand commandMenu_ = null;
-    JSlider slider = new JSlider(-5, 5, 0);
+    private JSlider slider = new JSlider(-5, 5, 0);
     private Hashtable labels_ = new Hashtable();
     private Dimension frameSize_ = null;
 
@@ -91,8 +91,10 @@ public class RPnPhaseSpaceFrame extends JFrame {
         setFocusable(true);
         addWindowFocusListener(new FocusController());
         addKeyListener(new KeyController());
+        addMouseWheelListener(new MouseListener());
 
     }
+
 
     public JSlider getSlider() {
         return slider;
@@ -116,13 +118,12 @@ public class RPnPhaseSpaceFrame extends JFrame {
 
         @Override
         public void keyPressed(KeyEvent keyEvent) {
-            //double h = RPnPhaseSpaceFrame.this.frameSize_.height;  //*** Leandro
-            //double w = RPnPhaseSpaceFrame.this.frameSize_.width;   //*** Leandro
+            
+            int h = frameSize_.height;  //*** Leandro
+            int w = frameSize_.width;   //*** Leandro
+            //int w = h - 91;   //*** Leandro
 
-            int h = RPnPhaseSpaceFrame.this.frameSize_.height;  //*** Leandro
-            int w = h - 91;   //*** Leandro
-
-
+            
             if (keyEvent.getKeyChar() == 'l') {
 
                 if (RPnPhaseSpacePanel.isCursorLine()) {
@@ -132,15 +133,6 @@ public class RPnPhaseSpaceFrame extends JFrame {
                 }
 
             }
-
-            //*** solucao provisoria para mostrar/nao mostrar vetores nos equilibrios --- Leandro
-            if (keyEvent.getKeyChar() == 's' || keyEvent.getKeyChar() == 'S') {
-                GeometryGraph.mostraSing = 1;
-            }
-            if (keyEvent.getKeyChar() == 'h' || keyEvent.getKeyChar() == 'H') {
-                GeometryGraph.mostraSing = 0;
-            }
-            //------------------------------------------------------------------
 
             //*** solucao provisoria para mostrar/nao mostrar o grid --- Leandro
             if (keyEvent.getKeyChar() == 'g' || keyEvent.getKeyChar() == 'G') {
@@ -216,12 +208,58 @@ public class RPnPhaseSpaceFrame extends JFrame {
 
                 }
             }
-
             //*** ---------------------------------------------------------------------------
 
 
         }
+
     }
+
+
+
+
+    private class MouseListener implements MouseWheelListener {
+
+        int a = 0;
+
+        public void mouseWheelMoved(MouseWheelEvent e) {
+
+            int h = frameSize_.height;
+            int w = frameSize_.width;
+
+            if(e.getWheelRotation()<0) {
+                a += 20;
+                for (int i = 0; i < RPnUIFrame.getPhaseSpaceFrames().length; i++) {
+                    RPnPhaseSpaceFrame frame = RPnUIFrame.getPhaseSpaceFrames()[i];
+                    frame.setSize(w + a, h + a);
+                    frame.setLocationRelativeTo(null);
+                    frame.validate();
+                }
+                for (int i = 0; i < RPnUIFrame.getAuxFrames().length; i++) {
+                    RPnPhaseSpaceFrame frame = RPnUIFrame.getAuxFrames()[i];
+                    frame.setSize(w + a, h + a);
+                    frame.validate();
+                }
+            }
+            if(e.getWheelRotation()>0) {
+                a -= 20;
+                for (int i = 0; i < RPnUIFrame.getPhaseSpaceFrames().length; i++) {
+                    RPnPhaseSpaceFrame frame = RPnUIFrame.getPhaseSpaceFrames()[i];
+                    frame.setSize(w + a, h + a);
+                    frame.setLocationRelativeTo(null);
+                    frame.validate();
+                }
+                for (int i = 0; i < RPnUIFrame.getAuxFrames().length; i++) {
+                    RPnPhaseSpaceFrame frame = RPnUIFrame.getAuxFrames()[i];
+                    frame.setSize(w + a, h + a);
+                    frame.validate();
+                }
+            }
+        }
+
+    }
+
+
 
     private class SliderState implements ChangeListener {
 

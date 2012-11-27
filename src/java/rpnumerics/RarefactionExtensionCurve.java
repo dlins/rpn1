@@ -14,8 +14,6 @@ public class RarefactionExtensionCurve extends BifurcationCurve {
     //
 
     public RarefactionExtensionCurve(List<RealSegment> hSegments, List<RealSegment> rightSegments) {
-//        super(createSingleSegmentList(hSegments, rightSegments));
-
         super(hSegments,rightSegments);
 
 

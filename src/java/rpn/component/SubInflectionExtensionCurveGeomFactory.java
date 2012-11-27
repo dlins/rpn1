@@ -17,7 +17,7 @@ public class SubInflectionExtensionCurveGeomFactory extends BifurcationCurveGeom
     // Methods
     //
     @Override
-    protected RpGeometry createGeomFromSource() {
+    public RpGeometry createGeomFromSource() {
 
         SubInflectionExtensionCurve curve = (SubInflectionExtensionCurve) geomSource();
 

@@ -58,6 +58,8 @@ Physics * RpNumerics::physics_ = NULL;
 
 GridValuesFactory * RpNumerics::gridValuesFactory_ = NULL;
 
+vector<StationaryPoint *>  * RpNumerics::stationaryPointVector_=NULL;
+
 double RpNumerics::sigma = 0;
 
 /*
@@ -104,51 +106,30 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setParams
 
     }
 
+    
+    
 
     RpNumerics::getPhysics().setParams(paramVector);
 
-    int dimension = RpNumerics::getPhysics().domain().dim();
-
-    const Boundary * boundary = &RpNumerics::getPhysics().boundary();
-
-
-    GridValues * gridHugoniot = RpNumerics::getGridFactory().getGrid("hugoniotcurve");
-
-    GridValues * gridDoubleContact = RpNumerics::getGridFactory().getGrid("doublecontactcurve");
-
-    GridValues * gridBifurcation = RpNumerics::getGridFactory().getGrid("bifurcation");
-
-
-    std::vector<int> resolution;
-
-    resolution.push_back(gridHugoniot->grid.rows());
-    resolution.push_back(gridHugoniot->grid.cols());
+//    int dimension = RpNumerics::getPhysics().domain().dim();
+//
+//    const Boundary * boundary = &RpNumerics::getPhysics().boundary();
+//
+//
+//    GridValues * gridHugoniot = RpNumerics::getGridFactory().getGrid("hugoniotcurve");
+//
+//    GridValues * gridDoubleContact = RpNumerics::getGridFactory().getGrid("doublecontactcurve");
+//
+//    GridValues * gridBifurcation = RpNumerics::getGridFactory().getGrid("bifurcation");
+//
+//
+//    std::vector<int> resolution;
+//
+//    resolution.push_back(gridHugoniot->grid.rows());
+//    resolution.push_back(gridHugoniot->grid.cols());
 
     RpNumerics::getGridFactory().updateGrids();
 
-
-    //
-    //    //TODO Substituir por um metodo de atualizacao dos grids no factory
-    //
-    //    gridHugoniot->set_grid(boundary, boundary->minimums(), boundary->maximums(), resolution);
-    //
-    //
-    //    resolution.clear();
-    //
-    //    resolution.push_back(gridDoubleContact->grid.rows());
-    //    resolution.push_back(gridDoubleContact->grid.cols());
-    //
-    //
-    //
-    //    gridDoubleContact->set_grid(boundary, boundary->minimums(), boundary->maximums(), resolution);
-    //
-    //    resolution.clear();
-    //
-    //    resolution.push_back(gridBifurcation->grid.rows());
-    //    resolution.push_back(gridBifurcation->grid.cols());
-    //
-    //
-    //    gridBifurcation->set_grid(boundary, boundary->minimums(), boundary->maximums(), resolution);
 
 }
 
@@ -306,27 +287,16 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setResolution
 
     }
 
-
     const char * gridNameNative = env->GetStringUTFChars(gridName, NULL);
-
-
-    cout << "Nome do grid: " << gridNameNative << endl;
-
-
-
 
     GridValues * grid = RpNumerics::getGridFactory().getGrid(string(gridNameNative));
 
+    const Boundary * boundary = RpNumerics::getPhysics().getSubPhysics(0).getPreProcessedBoundary();
 
-    const Boundary * boundary = &RpNumerics::getPhysics().boundary();
+    
+    cout<<"Chamando set Grid"<<gridNameNative<<endl;
 
-
-    grid->set_grid(boundary, minNativeVector, maxNativeVector, newResolutionVector);
-
-
-
-    //TODO Mudar a resolucao do grid values adequado
-
+    grid->set_grid(boundary, boundary->minimums(), boundary->maximums(), newResolutionVector);
 
 }
 

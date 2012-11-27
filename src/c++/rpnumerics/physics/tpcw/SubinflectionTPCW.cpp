@@ -7,8 +7,9 @@ td(fluxFunction->getThermo()){
 
    const Accum2Comp2PhasesAdimensionalized_Params & params = (Accum2Comp2PhasesAdimensionalized_Params &) accumFunction->accumulationParams();
 
-    phi=params.getPhi();
 
+    phi=params.getPhi();
+    cout << "Valor de phi em sub inf: " << phi << endl;
 }
 
 void SubinflectionTPCW::subinflection_function(double & reduced_lambdae, double & numeratorchiu, double & denominatorchiu, const RealVector &u) {
@@ -140,7 +141,7 @@ double SubinflectionTPCW::HugoniotFunction(const RealVector &u) {
 
     subinflection_function(reduc_lambdae, numchiu, denchiu, u);
 
-    return 1e20 * (numchiu - reduc_lambdae * denchiu);
+    return (numchiu - reduc_lambdae * denchiu);
 }
 
 void SubinflectionTPCW::completeCurve(std::vector<RealVector> & curve) {

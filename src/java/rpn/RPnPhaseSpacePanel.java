@@ -23,9 +23,13 @@ import java.awt.image.BufferedImage;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Polygon;
 import javax.swing.JPanel;
 import java.awt.Shape;
 import java.awt.geom.Area;
+import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.IOException;
@@ -36,11 +40,14 @@ import org.apache.batik.dom.GenericDOMImplementation;
 import org.apache.batik.svggen.SVGGraphics2D;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
+import rpn.component.util.AreaSelected;
+import rpn.component.util.LinePlotted;
 import rpn.component.util.GeometryGraph;
+import rpn.component.util.GeometryGraphND;
+import rpn.component.util.GraphicsUtil;
 import rpn.controller.ui.AREASELECTION_CONFIG;
 import rpn.controller.ui.CLASSIFIERAGENT_CONFIG;
 import rpn.controller.ui.UIController;
-import rpnumerics.BifurcationProfile;
 import rpn.controller.ui.VELOCITYAGENT_CONFIG;
 
 public class RPnPhaseSpacePanel extends JPanel implements Printable {
@@ -53,11 +60,9 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     static public Color DEFAULT_BACKGROUND_COLOR = Color.black;
     static public Color DEFAULT_POINTMARK_COLOR = Color.white;
     //***
-
-    public static List<Area> listaArea = new ArrayList<Area>();     //** declarei isso    (Leandro) - ainda nao esta sendo usado
-
     public static int myH_;                                          //** declarei isso    (Leandro)
     public static int myW_;                                          //** declarei isso    (Leandro)
+    protected List<GraphicsUtil> graphicsUtilList_;
 
 
     //*** declarei esses métodos (Leandro)
@@ -65,7 +70,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         DEFAULT_BACKGROUND_COLOR = Color.black;
         DEFAULT_POINTMARK_COLOR = Color.white;
     }
-
+    
     public static void whiteBackground() {
         DEFAULT_BACKGROUND_COLOR = Color.white;
         DEFAULT_POINTMARK_COLOR = Color.black;
@@ -92,7 +97,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     //
     public RPnPhaseSpacePanel(Scene scene) {
         scene_ = scene;
-
+        
         if (scene_.getViewingTransform() instanceof Viewing3DTransform) {
             ui_ = new PhaseSpacePanel3DController(scene_.getViewingTransform().
                     projectionMap().
@@ -112,15 +117,18 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
                     getCompIndexes()[1]);
         }
         ui_.install(this);
+
+
         // calculates viewing window dimensions
         int myW = new Double(scene().getViewingTransform().viewPlane().
                 getViewport().getWidth()).intValue();
         int myH = new Double(scene().getViewingTransform().viewPlane().
                 getViewport().getHeight()).intValue();
-
+        
         cursorPos_ = new Point(0, 0);
         setBackground(DEFAULT_BOUNDARY_COLOR);
         setPreferredSize(new java.awt.Dimension(myW, myH));
+        graphicsUtilList_ = new ArrayList();
         this.setName("");
     }
 
@@ -130,7 +138,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     public PhaseSpacePanelController getCastedUI() {
         return ui_;
     }
-
+    
     public Scene scene() {
         return scene_;
     }
@@ -139,41 +147,172 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     public void setCursorPos(Point pos) {
         cursorPos_ = pos;
     }
-
+    
     public Point getCursorPos() {
         return cursorPos_;
     }
-
+    
     public static boolean isShowCursor() {
         return showCursorLine_;
     }
-
+    
     public static void setCursorLineVisible(boolean aSetCursorLine_) {
         cursorLine_ = aSetCursorLine_;
     }
-
+    
     public void setTrackedPoint(Point trackedPoint) {
-
+        
         this.trackedPoint_ = trackedPoint;
     }
+    
+    public void addGraphicUtil(GraphicsUtil gu) {
+        graphicsUtilList_.add(gu);
+    }
+    
+    public void clearGraphicsList() {
+        graphicsUtilList_.clear();
+    }
+    
+    public void clearAreaSelection() {
+        ArrayList<GraphicsUtil> toRemove = new ArrayList();
+        
+        for (int i = 0; i < graphicsUtilList_.size(); i++) {
+            GraphicsUtil graphUtil = graphicsUtilList_.get(i);
+            
+            
+            if (graphUtil instanceof AreaSelected) {
+                toRemove.add(graphUtil);
+            }
+            
+        }
+        graphicsUtilList_.removeAll(toRemove);
+    }
+    
+    public void setLastGraphicsUtil(GraphicsUtil lastGraphicsUtil) {
+        
+        if (graphicsUtilList_.isEmpty()) {
+            graphicsUtilList_.add(lastGraphicsUtil);
+        } else {
+            graphicsUtilList_.set(graphicsUtilList_.size() - 1, lastGraphicsUtil);
+        }
+    }
+
+    // -----
+
+    public List<GraphicsUtil> getGraphicsUtil() {
+        return graphicsUtilList_;
+    }
+
+
+
+    public void clearAllStrings() {
+        GeometryGraphND.clearpMarca();
+        ArrayList<GraphicsUtil> toRemove = new ArrayList();
+
+        for (int i = 0; i < graphicsUtilList_.size(); i++) {
+            GraphicsUtil graphUtil =graphicsUtilList_.get(i);
+
+            if(graphUtil instanceof LinePlotted){
+                toRemove.add(graphUtil);
+            }
+
+        }
+        graphicsUtilList_.removeAll(toRemove);
+        getCastedUI().getTypeString().clear();
+        getCastedUI().getVelocityString().clear();
+
+    }
+
+
+    
+    public void clearLastString() {
+        GeometryGraphND.clearpMarca();
+        ArrayList<GraphicsUtil> toRemove = new ArrayList();
+        for (int i = 0; i < graphicsUtilList_.size(); i++) {
+            GraphicsUtil graphUtil =graphicsUtilList_.get(i);
+
+            if(graphUtil instanceof LinePlotted){
+                toRemove.add(graphUtil);
+            }
+
+        }
+        int index = toRemove.size() - 1;
+        if (index >= 0) {
+            graphicsUtilList_.remove(index);
+            getCastedUI().getTypeString().remove(index);
+            getCastedUI().getVelocityString().remove(index);
+        }
+    }
+
+
+    public void clearVelocities() {
+        GeometryGraphND.clearpMarca();
+        ArrayList<GraphicsUtil> toRemove = new ArrayList();
+        ArrayList<String> velRemove = new ArrayList();
+        ArrayList<String> strRemove = new ArrayList();
+        for (int i = 0; i < graphicsUtilList_.size(); i++) {
+            GraphicsUtil graphUtil =graphicsUtilList_.get(i);
+
+            if(graphUtil instanceof LinePlotted  &&  !(getCastedUI().getVelocityString().get(i).equals(""))){
+                toRemove.add(graphUtil);
+                velRemove.add(getCastedUI().getVelocityString().get(i));
+                strRemove.add(getCastedUI().getTypeString().get(i));
+            }
+
+        }
+
+        graphicsUtilList_.removeAll(toRemove);
+        getCastedUI().getVelocityString().removeAll(velRemove);
+        getCastedUI().getTypeString().removeAll(strRemove);
+
+    }
+
+
+    public void clearClassifiers() {
+        GeometryGraphND.clearpMarca();
+        ArrayList<GraphicsUtil> toRemove = new ArrayList();
+        ArrayList<String> velRemove = new ArrayList();
+        ArrayList<String> strRemove = new ArrayList();
+        for (int i = 0; i < graphicsUtilList_.size(); i++) {
+            GraphicsUtil graphUtil =graphicsUtilList_.get(i);
+
+            if(graphUtil instanceof LinePlotted  &&  !(getCastedUI().getTypeString().get(i).equals(""))){
+                toRemove.add(graphUtil);
+                velRemove.add(getCastedUI().getVelocityString().get(i));
+                strRemove.add(getCastedUI().getTypeString().get(i));
+            }
+
+        }
+
+        graphicsUtilList_.removeAll(toRemove);
+        getCastedUI().getVelocityString().removeAll(velRemove);
+        getCastedUI().getTypeString().removeAll(strRemove);
+
+    }
+    // -----
+
+    
 
     //
     // Methods
     //
     @Override
     public void paintComponent(Graphics g) {
-
+        
         super.paintComponent(g);
         Stroke stroke = ((Graphics2D) g).getStroke();
         BasicStroke newStroke = new BasicStroke(1.1f);
         ((Graphics2D) g).setStroke(newStroke);
         Color prev = g.getColor();
-        Graphics2D gra = (Graphics2D) g;
+
+        Font font = new Font("Verdana", Font.PLAIN, 13);
+        g.setFont(font);
+        FontMetrics metrics = new FontMetrics(font) {};
 
         /*
          * BOUNDARY WINDOW
          */
-
+        
         g.setColor(DEFAULT_BACKGROUND_COLOR);
         Shape s = scene_.getViewingTransform().viewPlane().getWindow().dcView(scene_.getViewingTransform());
         ((Graphics2D) g).fill(s);
@@ -183,29 +322,57 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
          * SCENE
          */
 
-        if (scene_ != null) {     //tentar fazer semelhante a isso para o desenho dos acessorios
 
+        if (scene_ != null) {
             scene_.draw((Graphics2D) g);
         }
 
         /*
          * POINT MARKS
          */
-
+        
         g.setColor(DEFAULT_POINTMARK_COLOR);
         for (int i = 0; i < getCastedUI().pointMarkBuffer().size(); i++) {
             g.fillRect(((Point) getCastedUI().pointMarkBuffer().get(i)).x,
                     ((Point) getCastedUI().pointMarkBuffer().get(i)).y, 5, 5);
         }
 
+
         /*
          * SELECTED AREAS
          */
 
-        g.setColor(DEFAULT_POINTMARK_COLOR);
+        int i = 0;
+        for (GraphicsUtil graphicUtil : graphicsUtilList_) {
 
-        for (rpnumerics.Area selectedArea : BifurcationProfile.instance().getSelectedAreas()) {
+            // ------------
+            if (graphicUtil instanceof LinePlotted) {
+                String typeStr = getCastedUI().getTypeString().get(i);
+                String velStr  = getCastedUI().getVelocityString().get(i);
+                i++;
+                Line2D.Double line = (Line2D.Double) graphicUtil.createShape();
+                Rectangle2D boundsType = metrics.getStringBounds(typeStr, null);
+                Rectangle2D boundsVel  = metrics.getStringBounds(velStr, null);
+                int typeWidth = (int) boundsType.getWidth();
+                int velWidth  = (int) boundsVel.getWidth();
+
+                if (line.x1<line.x2) {
+                    g.drawString(typeStr, (int)(line.x2 + 5), (int)(line.y2 +5));
+                    g.drawString(velStr,  (int)(line.x2 + 5), (int)(line.y2 +5));
+                }
+                else {
+                    g.drawString(typeStr, (int)(line.x2 - (typeWidth+2)), (int)(line.y2 +5));
+                    g.drawString(velStr,  (int)(line.x2 - (velWidth+2)), (int)(line.y2 +5));
+                }
+
+            }
+            // ------------
+
+            graphicUtil.draw((Graphics2D) g);
+
         }
+
+        g.setColor(DEFAULT_POINTMARK_COLOR);
 
         /*
          * Tracked Point
@@ -214,40 +381,19 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
             g.fillRect(trackedPoint_.x, trackedPoint_.y, 5, 5);
         }
 
-
-        for (Rectangle2D.Double rectangle : getCastedUI().getSelectionAreas()) {
-
-            g.drawRect((int) rectangle.getX(), (int) rectangle.getY(), (int) rectangle.width, (int) rectangle.height);
-
-        }
-
         //** Leandro: início.
 
         myH_ = getHeight();
         myW_ = getWidth();
 
 
-        //if (RPNUMERICS.domainDim() == 2) {
-        if ((scene().getAbstractGeom()).getSpace().getDim() == 2) {
-
+        //if ((scene().getAbstractGeom()).getSpace().getDim() == 2) {
             GeometryGraph geom = new GeometryGraph();
             geom.markPoints(scene());
-            geom.paintComponent(g, scene(),this);
+            geom.paintComponent(g, scene(), this);
+        //}
 
-        }
-
-//        if (RPNUMERICS.domainDim() == 3) {
-//
-//            GeometryGraph3D geom3D = new GeometryGraph3D();
-//            geom3D.markPoints(scene());
-//            geom3D.paintComponent(g, scene());
-//
-//        }
-
-//        if (RPNUMERICS.domainDim() == 4) {
-//            GeometryGraph4D.markPoints(GeometryUtil.targetPoint, GeometryUtil.pMarca, scene());
-//            GeometryGraph4D.paintComponent(g, scene());
-//        }
+        
 
         if (UIController.instance().getState() instanceof AREASELECTION_CONFIG) {        // acrescentei isso (Leandro)
             getCastedUI().pointMarkBuffer().clear();
@@ -255,14 +401,14 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
             repaint();
             getCastedUI().resetCursorCoords();
         }
-
+        
         if (UIController.instance().getState() instanceof CLASSIFIERAGENT_CONFIG) {      // acrescentei isso (Leandro)
             getCastedUI().pointMarkBuffer().clear();
             showCursorLine_ = false;
             repaint();
             getCastedUI().resetCursorCoords();
         }
-
+        
         if (UIController.instance().getState() instanceof VELOCITYAGENT_CONFIG) {        // acrescentei isso (Leandro)
             getCastedUI().pointMarkBuffer().clear();
             showCursorLine_ = false;
@@ -280,7 +426,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
          * orientation
          */
         if (showCursorLine_ && isCursorLine()) {
-
+            
             if ((!printFlag_)
                     && (scene().getViewingTransform() instanceof Viewing2DTransform)) {
                 g.setColor(Color.red);
@@ -292,10 +438,18 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
             g.setColor(prev);
             ((Graphics2D) g).setStroke(stroke);
         }
-
-
+        
+        
     }
-
+    
+    public void updateGraphicsUtil() {
+        for (GraphicsUtil graphicsUtil : graphicsUtilList_) {
+            
+            graphicsUtil.update(scene().getViewingTransform());
+            
+        }
+    }
+    
     public BufferedImage createOffSetImageBuffer() {
         GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
         GraphicsDevice dev = env.getDefaultScreenDevice();
@@ -329,10 +483,10 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         be enabled assuming that the PrintJob behaviour is to
         stop the callback for print only when the return value
         is NO_SUCH_PAGE or the job is queued to a spooler
-
+        
         we could possibly have a save to file option dialog instead.
          */
-
+        
         if (pageIndx != 0) {
             return NO_SUCH_PAGE;
         }
@@ -356,12 +510,12 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         }
         return PAGE_EXISTS;
     }
-
+    
     public static void setShowCursor(boolean showCursor) {
         showCursorLine_ = showCursor;
-
+        
     }
-
+    
     public void createSVG(File file) {
         try {
 
@@ -385,37 +539,69 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
             Iterator it = scene_.geometries();
             while (it.hasNext()) {
                 GeomObjView geometry = (GeomObjView) it.next();
-                if (geometry.getViewingAttr().isVisible())
-                geometry.draw(svgGenerator);
-
-
+                if (geometry.getViewingAttr().isVisible()) {
+                    geometry.draw(svgGenerator);
+                }
+                
+                
             }
             // Finally, stream out SVG to the standard output using
             // UTF-8 encoding.
             svgGenerator.stream(file.getCanonicalPath(), useCSS);
-
+            
         } catch (SVGGraphics2DIOException ex) {
             ex.printStackTrace();
-
+            
         } catch (UnsupportedEncodingException ex) {
             ex.printStackTrace();
-
-
+            
+            
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-
+        
     }
-
-    public void eraseSelectedArea() {
-
-        Graphics2D g = (Graphics2D) this.getGraphics();
-
-        g.setColor(Color.BLACK);
-
-        for (Rectangle2D.Double rectangle : getCastedUI().getSelectionAreas()) {
-            g.fill(rectangle);
+    
+    public List<AreaSelected> getSelectedAreas() {
+        List<AreaSelected> selectedAreasList = new ArrayList();
+        for (GraphicsUtil area : graphicsUtilList_) {
+            
+            if (area instanceof AreaSelected) {
+                selectedAreasList.add((AreaSelected) area);
+            }
         }
-
+        return selectedAreasList;
+        
     }
+    
+    public void removeGraphicsUtil(List<? extends GraphicsUtil> listToRemove) {
+        graphicsUtilList_.removeAll(listToRemove);
+    }
+    
+    public void removeGraphicsUtil(GraphicsUtil g) {
+        graphicsUtilList_.remove(g);
+    }
+    
+    public List<AreaSelected> interceptedAreas(GeomObjView geomView) {
+        
+        Iterator<AreaSelected> areaIterator = getSelectedAreas().iterator();
+        
+        ArrayList<AreaSelected> intersectedAreas = new ArrayList<AreaSelected>();
+        
+        
+        while (areaIterator.hasNext()) {
+            AreaSelected area = areaIterator.next();
+            
+            if (geomView.intersect((Polygon) area.getShape())) {
+                intersectedAreas.add(area);
+            }
+            
+        }
+        
+        return intersectedAreas;
+        
+        
+    }
+
+
 }

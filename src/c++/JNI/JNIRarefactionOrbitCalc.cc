@@ -63,7 +63,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
     vector <RealVector> coords;
 
 
-    Boundary * tempBoundary = RpNumerics::getPhysics().boundary().clone();
+    const Boundary * tempBoundary = RpNumerics::getPhysics().getSubPhysics(0).getPreProcessedBoundary();
 
     //    double deltaxi = 1e-3; // This is the original value (Rodrigo/ Panters)
 
@@ -72,16 +72,18 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
 
     const FluxFunction * fluxFunction = &RpNumerics::getPhysics().fluxFunction();
     const AccumulationFunction * accumulationFunction = &RpNumerics::getPhysics().accumulation();
-    
-    
-    
-    cout << "Flux params " << fluxFunction->fluxParams().params()<<endl;
-    cout << "Accum params " << accumulationFunction->accumulationParams().params() << endl;
+
+
+    //    
+    //    cout << "Flux params " << fluxFunction->fluxParams().params()<<endl;
+    //    cout << "Accum params " << accumulationFunction->accumulationParams().params() << endl;
 
 
 
 
     vector<RealVector> inflectionPoints;
+
+    RpNumerics::getPhysics().getSubPhysics(0).preProcess(realVectorInput);
 
 
     int info = Rarefaction::curve(realVectorInput,
@@ -96,12 +98,17 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
             RAREFACTION_GENERAL_ACCUMULATION,
             tempBoundary,
             coords, inflectionPoints);
-    delete tempBoundary;
+
+    cout << "Tamanho da rarefacao: " << coords.size() << endl;
+    
+    
+
 
     if (coords.size() == 0) {
         return NULL;
     }
 
+    RpNumerics::getPhysics().getSubPhysics(0).postProcess(coords);
     //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //Orbit members creation
@@ -112,15 +119,20 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
 
         RealVector tempVector = coords.at(i);
 
+        double lambda = tempVector.component(tempVector.size() - 1);
+
+
+        cout << tempVector << endl;
+
         double * dataCoords = tempVector;
 
         //Reading only coodinates
-        jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size() - 1);
+        jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size()-1);
 
-        (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size() - 1, dataCoords);
+        (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size()-1, dataCoords);
 
         //Lambda is the last component.
-        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray, tempVector.component(tempVector.size() - 1));
+        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray, lambda);
 
         (env)->SetObjectArrayElement(orbitPointArray, i, orbitPoint);
 

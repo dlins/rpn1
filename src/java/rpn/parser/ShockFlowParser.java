@@ -5,9 +5,9 @@ import java.awt.event.ActionListener;
 
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.GEOM_SELECTION;
-import rpn.usecase.HugoniotPlotAgent;
+import rpn.command.HugoniotPlotCommand;
 import rpn.controller.ui.UI_ACTION_SELECTED;
-import rpn.usecase.XZeroPlotAgent;
+import rpn.command.XZeroPlotCommand;
 
 
 
@@ -19,7 +19,7 @@ public class ShockFlowParser implements ActionListener {
             if (!RPnDataModule.InputHandler.calcReady_) {
                 UIController.instance().setState(new
                                                  UI_ACTION_SELECTED(
-                        XZeroPlotAgent.
+                        XZeroPlotCommand.
                         instance()));
 
                 UIController.instance().userInputComplete(
@@ -29,7 +29,7 @@ public class ShockFlowParser implements ActionListener {
 //                // plots hugoniot
                 UIController.instance().setState(new
                                                  UI_ACTION_SELECTED(
-                        HugoniotPlotAgent.instance()));
+                        HugoniotPlotCommand.instance()));
                  UIController.instance().userInputComplete(
                         RPnDataModule.XZERO.getCoords());
 //                UIController.instance().userInputComplete(

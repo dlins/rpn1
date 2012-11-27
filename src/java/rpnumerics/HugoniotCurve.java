@@ -11,14 +11,19 @@ public class HugoniotCurve extends SegmentedCurve {
     //
 
     private PhasePoint xZero_;
+    private int direction_;
     
     public HugoniotCurve(PhasePoint xZero, List<HugoniotSegment> hSegments) {
         super(hSegments);
 
         xZero_ = new PhasePoint(xZero);
-
+        direction_=Orbit.FORWARD_DIR;
 
     }
+    public void setDirection(int direction){
+        direction_=direction;
+    }
+    public int getDirection(){return direction_;}
 
     public static List interpolate(HugoniotPoint v1,
             HugoniotPoint v2) {
@@ -240,10 +245,10 @@ public class HugoniotCurve extends SegmentedCurve {
                     / segmentVector.dot(segmentVector);
 
 	if (alpha <= 0) {
-            return closestSegment.p1();
+            return closestSegment.p2();
         }
         if (alpha >= 1) {
-            return closestSegment.p2();
+            return closestSegment.p1();
         }
         //*****
 
@@ -373,16 +378,34 @@ public class HugoniotCurve extends SegmentedCurve {
 
 
     //****************************
+     
     public double velocity(RealVector pMarca) {
         HugoniotSegment segment = (HugoniotSegment) (segments()).get(findClosestSegment(pMarca));
         double lSigma = segment.leftSigma();
         double rSigma = segment.rightSigma();
-        double lX = segment.leftPoint().getElement(0);
-        double rX = segment.rightPoint().getElement(0);
-        double X = pMarca.getElement(0);
-        
-        return ((rSigma - lSigma) * (X - lX) / (rX - lX) + lSigma);
+
+        RealVector u = new RealVector(RPNUMERICS.domainDim());
+        u.sub(segment.rightPoint(), segment.leftPoint());
+
+        RealVector v = new RealVector(RPNUMERICS.domainDim());
+        v.sub(pMarca, segment.leftPoint());
+
+        double normV = v.norm();
+        double normU = u.norm();
+
+        return (rSigma - lSigma) * normV / normU + lSigma;
     }
+     
+//    public double velocity(RealVector pMarca) {
+//        HugoniotSegment segment = (HugoniotSegment) (segments()).get(findClosestSegment(pMarca));
+//        double lSigma = segment.leftSigma();
+//        double rSigma = segment.rightSigma();
+//        double lX = segment.leftPoint().getElement(0);
+//        double rX = segment.rightPoint().getElement(0);
+//        double X = pMarca.getElement(0);
+//        
+//        return ((rSigma - lSigma) * (X - lX) / (rX - lX) + lSigma);
+//    }
 
     //****************************
     public List<RealVector> equilPoints(RealVector pMarca) {
@@ -390,7 +413,7 @@ public class HugoniotCurve extends SegmentedCurve {
         List<RealVector> equil = new ArrayList();
 
         double velocity = velocity(pMarca);
-
+        
         // inclui o Uref na lista de pontos de equilibrio
         RealVector pZero = getXZero();
         //equil.add(pZero);
@@ -411,11 +434,11 @@ public class HugoniotCurve extends SegmentedCurve {
 
                 double X_ = (rX_ - lX_) * (velocity - lSigma_) / (rSigma_ - lSigma_) + lX_;
                 double Y_ = (rY_ - lY_) * (velocity - lSigma_) / (rSigma_ - lSigma_) + lY_;
-                RealVector p = new RealVector(2);
+                RealVector p = new RealVector(RPNUMERICS.domainDim());
                 p.setElement(0, X_);
                 p.setElement(1, Y_);
 
-                RealVector temp = new RealVector(2);
+                RealVector temp = new RealVector(RPNUMERICS.domainDim());
                 temp.sub(pZero, p);
 
                 if(temp.norm() > 0.01) equil.add(p);

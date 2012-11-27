@@ -30,7 +30,7 @@ public class CompositeGeomFactory extends WaveCurveOrbitGeomFactory {
     //
 
     @Override
-    protected RpGeometry createGeomFromSource() {
+    public RpGeometry createGeomFromSource() {
 
         CompositeCurve compositeCurve = (CompositeCurve) geomSource();
 

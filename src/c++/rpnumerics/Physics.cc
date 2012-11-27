@@ -53,6 +53,15 @@ Physics::Physics(const string & physicsID) : physicsVector_(new vector<SubPhysic
     }
 
 
+     if (physicsID.compare("CoreyQuad") == 0) {
+
+        physicsVector_->push_back(new CoreyQuadPhysics());
+    }
+
+
+
+
+
     if (physicsID.compare("Cub2") == 0) {
         physicsVector_->push_back(new Cub2(Cub2FluxParams()));
     }
@@ -74,7 +83,7 @@ Physics::Physics(const string & physicsID) : physicsVector_(new vector<SubPhysic
 
         //Accumulation parameters
 
-        params.component(8) = 0.38;
+        params.component(8) = 0.38;//0.38;
 
         //Thermodynamics parameters
         params.component(9) = 304.63;
@@ -119,7 +128,7 @@ Physics::Physics(const Physics & physics) : physicsVector_(new vector<SubPhysics
     
 }
 
-SubPhysics & Physics::getSubPhysics(const int index) {
+SubPhysics & Physics::getSubPhysics(const int index) const{
 
     return *physicsVector_->at(index);
 

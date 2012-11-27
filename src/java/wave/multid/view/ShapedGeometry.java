@@ -3,62 +3,52 @@
  * Departamento de Dinamica dos Fluidos
  *
  */
-
 package wave.multid.view;
 
 import wave.multid.DimMismatchEx;
-import wave.multid.model.AbstractGeomObj;
 import java.awt.Shape;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Polygon;
+import java.awt.geom.PathIterator;
 import wave.multid.model.MultiGeometryImpl;
 
-public abstract class ShapedGeometry implements GeomObjView {
+public abstract class ShapedGeometry extends GeomObjView {
     //
     // Members
     //
-    private ViewingTransform viewingTransf_;
+
     private Shape shape_;
     private Box boundaryBox_;
-    private AbstractGeomObj abstractGeom_;
-    private ViewingAttr viewAttr_;
 
     //
     // Constructors
     //
     // TODO make ViewTransform member of ViewingAttr ?
     protected ShapedGeometry(MultiGeometryImpl abstractGeom, ViewingTransform transf,
-        ViewingAttr viewAttr) throws DimMismatchEx {
-            setAbstractGeom(abstractGeom);
-            setViewingTransform(transf);
-            setViewingAttr(viewAttr);
-            setShape(createShape());
-            setBoundaryBox(createBoundaryBox());
+            ViewingAttr viewAttr) throws DimMismatchEx {
+        super(abstractGeom, transf, viewAttr);
+
+        setShape(createShape());
+        setBoundaryBox(createBoundaryBox());
 
     }
 
-    //
-    // Accessors/Mutators
-    //
-    public AbstractGeomObj getAbstractGeom() { return abstractGeom_; }
+    public Shape getShape() {
+        return shape_;
+    }
 
-    public void setAbstractGeom(AbstractGeomObj abstractGeom) { abstractGeom_ = abstractGeom; }
+    public void setShape(Shape shape) {
+        shape_ = shape;
+    }
 
-    public Shape getShape() { return shape_; }
+    public Box getBoundaryBox() {
+        return boundaryBox_;
+    }
 
-    public void setShape(Shape shape) { shape_ = shape; }
-
-    public ViewingTransform getViewingTransform() { return viewingTransf_; }
-
-    public void setViewingTransform(ViewingTransform transf) { viewingTransf_ = transf; }
-
-    public Box getBoundaryBox() { return boundaryBox_; }
-
-    public void setBoundaryBox(Box box) { boundaryBox_ = box; }
-
-    public ViewingAttr getViewingAttr() { return viewAttr_; }
-
-    public void setViewingAttr(ViewingAttr viewAttr) { viewAttr_ = viewAttr; }
+    public void setBoundaryBox(Box box) {
+        boundaryBox_ = box;
+    }
 
     //
     // Methods
@@ -69,12 +59,38 @@ public abstract class ShapedGeometry implements GeomObjView {
 
     protected abstract Shape createShape() throws DimMismatchEx;
 
+    
+    /** Tests if the geometry intersects the polygon*/
+    public boolean intersect(Polygon area) {
+
+        PathIterator pathIterator = getShape().getPathIterator(null);
+
+        while (!pathIterator.isDone()) {
+
+            double[] segmentArray = new double[2];
+
+            int segment = pathIterator.currentSegment(segmentArray);
+            
+            if (segment != PathIterator.SEG_MOVETO) {
+                if (area.contains(segmentArray[0], segmentArray[1]))
+                return true;
+            }
+
+            pathIterator.next();
+        }
+
+        return false;
+    }
+
     public void draw(Graphics2D g) {
+        
+
         Color previous = g.getColor();
         g.setColor(getViewingAttr().getColor());
         g.draw(getShape());
-        if (getViewingAttr().isSelected())
-            getBoundaryBox().draw(g);
+//        if (getViewingAttr().isSelected()) {
+//            getBoundaryBox().draw(g);
+//        }
         g.setColor(previous);
     }
 

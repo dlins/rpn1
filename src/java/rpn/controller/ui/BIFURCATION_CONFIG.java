@@ -5,40 +5,40 @@
  */
 package rpn.controller.ui;
 
-import rpn.usecase.BifurcationPlotAgent;
-import rpn.usecase.BuckleyLeverettiInflectionAgent;
-import rpn.usecase.ChangeFluxParamsAgent;
-import rpn.usecase.CoincidenceExtensionCurvePlotAgent;
-import rpn.usecase.CoincidencePlotAgent;
-import rpn.usecase.DoubleContactAgent;
-import rpn.usecase.BoundaryExtensionCurveAgent;
-import rpn.usecase.EllipticBoundaryExtensionAgent;
-import rpn.usecase.EnvelopeCurveAgent;
-import rpn.usecase.HysteresisPlotAgent;
-import rpn.usecase.InflectionPlotAgent;
-import rpn.usecase.SecondaryBifurcationtAgent;
-import rpn.usecase.SubInflectionExtensionCurveAgent;
-import rpn.usecase.SubInflectionPlotAgent;
+import rpn.command.BifurcationPlotCommand;
+import rpn.command.BuckleyLeverettiInflectionCommand;
+import rpn.command.ChangeFluxParamsCommand;
+import rpn.command.CoincidenceExtensionCurvePlotAgent;
+import rpn.command.CoincidencePlotCommand;
+import rpn.command.DoubleContactCommand;
+import rpn.command.BoundaryExtensionCurveCommand;
+import rpn.command.EllipticBoundaryExtensionCommand;
+import rpn.command.EnvelopeCurveCommand;
+import rpn.command.HysteresisPlotCommand;
+import rpn.command.InflectionPlotCommand;
+import rpn.command.SecondaryBifurcationtCommand;
+import rpn.command.SubInflectionExtensionCurveCommand;
+import rpn.command.SubInflectionPlotCommand;
 import wave.util.RealVector;
 
 public class BIFURCATION_CONFIG extends UI_ACTION_SELECTED {
 
     public BIFURCATION_CONFIG() {
 
-        super(BifurcationPlotAgent.instance());
-        CoincidencePlotAgent.instance().setEnabled(true);
-        SubInflectionPlotAgent.instance().setEnabled(true);
-        BuckleyLeverettiInflectionAgent.instance().setEnabled(true);
-        DoubleContactAgent.instance().setEnabled(true);
-        BoundaryExtensionCurveAgent.instance().setEnabled(true);
-        SubInflectionExtensionCurveAgent.instance().setEnabled(true);
+        super(BifurcationPlotCommand.instance());
+        CoincidencePlotCommand.instance().setEnabled(true);
+        SubInflectionPlotCommand.instance().setEnabled(true);
+        BuckleyLeverettiInflectionCommand.instance().setEnabled(true);
+        DoubleContactCommand.instance().setEnabled(true);
+        BoundaryExtensionCurveCommand.instance().setEnabled(true);
+        SubInflectionExtensionCurveCommand.instance().setEnabled(true);
         CoincidenceExtensionCurvePlotAgent.instance().setEnabled(true);
-        ChangeFluxParamsAgent.instance().setEnabled(true);
-        InflectionPlotAgent.instance().setEnabled(true);
-        HysteresisPlotAgent.instance().setEnabled(true);
-        EllipticBoundaryExtensionAgent.instance().setEnabled(true);
-        EnvelopeCurveAgent.instance().setEnabled(true);
-        SecondaryBifurcationtAgent.instance().setEnabled(true);
+        ChangeFluxParamsCommand.instance().setEnabled(true);
+        InflectionPlotCommand.instance().setEnabled(true);
+        HysteresisPlotCommand.instance().setEnabled(true);
+        EllipticBoundaryExtensionCommand.instance().setEnabled(true);
+        EnvelopeCurveCommand.instance().setEnabled(true);
+        SecondaryBifurcationtCommand.instance().setEnabled(true);
 
     }
 

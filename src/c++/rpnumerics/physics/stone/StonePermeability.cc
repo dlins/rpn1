@@ -177,7 +177,8 @@ void StonePermeability::Diff_PermabilityWater(double sw, double so, double sg,
     } else {
         // Because of the use of flags that alow sw = cnw to pass, we need the following condition:
         //
-        double powsw2 = ( (swcnw != 0.0) ? pow(swcnw, expw_ - 2.) : 0.0);
+        double signal = ( ( swcnw < 0.0 ) ? -1.0 : 1.0 );
+        double powsw2 = signal * ( (swcnw != 0.0) ? pow( fabs(swcnw), expw_ - 2.) : 0.0);
         double powsw1 = swcnw*powsw2;
 
         kw = (lw_ + (1. - lw_) * powsw1) * swcnw*denkw_;
@@ -277,13 +278,13 @@ void StonePermeability::Diff_PermabilityOil(double sw, double so, double sg,
         } else {
             // Because of the use of flags that alow sow = 0.0 to pass, we need the following condition:
             //
-            double powsow3 = ( (sow != 0.0) ? pow(sow, expow_ - 3.) : 0.0 );
+            double powsow3 = ( (sow != 0.0) ? pow( fabs(sow), expow_ - 3.) : 0.0 );
             double powsow2 = sow*powsow3;
             double powsow1 = sow*powsow2;
 
             // Because of the use of flags that alow sog = 0.0 to pass, we need the following condition:
             //
-            double powsog3 = ( (sog != 0.0) ? pow(sog, expog_ - 3.) : 0.0 );
+            double powsog3 = ( (sog != 0.0) ? pow( fabs(sog), expog_ - 3.) : 0.0 );
             double powsog2 = sog*powsog3;
             double powsog1 = sog*powsog2;
 
@@ -292,7 +293,6 @@ void StonePermeability::Diff_PermabilityOil(double sw, double so, double sg,
             d2ko1den_ds2 = (1. - low_)*(expow_ - 2.)*(expow_ - 1.) * powsow3*denkow_;
 
             ko2den = (log_ + (1. - log_) * powsog1) * denkog_;
-
             dko2den_ds   = (1. - log_)*(expog_ - 1.) * powsog2*denkog_;
             d2ko2den_ds2 = (1. - log_)*(expog_ - 2.)*(expog_ - 1.) * powsog3*denkog_;
 
@@ -302,7 +302,8 @@ void StonePermeability::Diff_PermabilityOil(double sw, double so, double sg,
         }
         // Because of the use of flags that alow so = cno to pass, we need the following condition:
         //
-        double powso2 = ( (socno != 0.0) ? pow(socno, expo_ - 2.) : 0.0 );
+        double signal = ( ( socno < 0.0 ) ? -1.0 : 1.0 );
+        double powso2 = signal * ( (socno != 0.0) ? pow( fabs(socno), expo_ - 2.) : 0.0 );
         double powso1 = socno*powso2;
         double StoneC = epsl_ * kro_p_ * (1. - CN);
 
@@ -318,6 +319,10 @@ void StonePermeability::Diff_PermabilityOil(double sw, double so, double sg,
                    // Plus zero Corey contribution.
         d2ko_dso2  = StoneC * ko1den * (2. * dko2den_ds + socno * d2ko2den_ds2)
                    + (1. - epsl_)*(1. - lo_) * expo_ * (expo_ - 1.) * powso2 * denko_;
+
+//cout << "Dentro de StonePermeability::Diff_PermabilityOil, so = " << socno << " (" << NegativeWaterSaturation << ", " << NegativeGasSaturation << ", " << NegativeOilSaturation << "): " << ko << ", " << dko_dsw << ", " << dko_dso << ", " << d2ko_dsw2 << ", " << d2ko_dswso << ", " << d2ko_dso2 << endl;
+//cout << "Params auxiliares: " << StoneC << ", " << powso1 << ", " << powso2 << endl;
+
     }
 
     return;
@@ -344,7 +349,8 @@ void StonePermeability::Diff_PermabilityGas(double sw, double so, double sg,
         d2kg_dswso = 0.;
         d2kg_dso2  = 0.;
     } else {
-        double powsg2 = pow(sgcng, expg_ - 2.);
+        double signal = ( ( sgcng < 0.0 ) ? -1.0 : 1.0 );
+        double powsg2 = signal * pow( fabs(sgcng), expg_ - 2.);
         double powsg1 = sgcng*powsg2;
 
         kg = (lg_ + (1. - lg_) * powsg1) * sgcng*denkg_;

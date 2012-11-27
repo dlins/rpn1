@@ -155,9 +155,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_nativeCalc(JNIEnv * env, job
                 timeDirection,
                 coords);
 
-        cout << "Sem poincare" << endl;
-
-
     }
 
 

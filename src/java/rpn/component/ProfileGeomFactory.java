@@ -28,7 +28,7 @@ public class ProfileGeomFactory extends RpCalcBasedGeomFactory {
     //
     // Methods
     //
-    protected RpGeometry createGeomFromSource() {
+    public RpGeometry createGeomFromSource() {
         ConnectionOrbit orbit = (ConnectionOrbit)geomSource();
         return new ProfileGeom(MultidAdapter.converseOrbitToCoordsArray(orbit.orbit()), this);
     }

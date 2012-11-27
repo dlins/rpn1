@@ -8,8 +8,8 @@ package rpn.controller;
 import java.beans.PropertyChangeEvent;
 import rpn.component.LevelCurveGeomFactory;
 import rpn.component.RpGeomFactory;
-import rpn.usecase.ChangeFluxParamsAgent;
-import rpn.usecase.DragPlotAgent;
+import rpn.command.ChangeFluxParamsCommand;
+import rpn.command.DragPlotCommand;
 import rpnumerics.PointLevelCalc;
 import rpnumerics.RpCalculation;
 import wave.util.RealVector;
@@ -37,8 +37,8 @@ public class LevelCurveController extends RpCalcController {
 
     @Override
     protected void register() {
-        DragPlotAgent.instance().addPropertyChangeListener(this);
-        ChangeFluxParamsAgent.instance().addPropertyChangeListener(this);
+        DragPlotCommand.instance().addPropertyChangeListener(this);
+        ChangeFluxParamsCommand.instance().addPropertyChangeListener(this);
 
 
 
@@ -46,8 +46,8 @@ public class LevelCurveController extends RpCalcController {
 
     @Override
     protected void unregister() {
-        DragPlotAgent.instance().removePropertyChangeListener(this);
-        ChangeFluxParamsAgent.instance().removePropertyChangeListener(this);
+        DragPlotCommand.instance().removePropertyChangeListener(this);
+        ChangeFluxParamsCommand.instance().removePropertyChangeListener(this);
         factory_ = null;
     }
 
@@ -56,7 +56,7 @@ public class LevelCurveController extends RpCalcController {
 
 
         RpCalculation calc = factory_.rpCalc();
-        if (evt.getSource() instanceof DragPlotAgent && calc instanceof PointLevelCalc) {
+        if (evt.getSource() instanceof DragPlotCommand && calc instanceof PointLevelCalc) {
 
 
             ((PointLevelCalc) factory_.rpCalc()).setStartPoint((RealVector) evt.getNewValue());

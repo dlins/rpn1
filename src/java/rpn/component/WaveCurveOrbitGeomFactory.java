@@ -6,7 +6,7 @@
 package rpn.component;
 
 import java.awt.Color;
-import rpnumerics.WaveCurveOrbit;
+import rpnumerics.FundamentalCurve;
 import rpnumerics.WaveCurveOrbitCalc;
 import wave.multid.view.ViewingAttr;
 
@@ -38,7 +38,7 @@ public class WaveCurveOrbitGeomFactory extends OrbitGeomFactory {
 
     @Override
       protected ViewingAttr selectViewingAttr() {
-        int family = (((WaveCurveOrbit) this.geomSource()).getFamilyIndex());//TODO REMOVE
+        int family = (((FundamentalCurve) this.geomSource()).getFamilyIndex());//TODO REMOVE
 
         if (family == 1) {
             return new ViewingAttr(Color.red);
@@ -53,30 +53,6 @@ public class WaveCurveOrbitGeomFactory extends OrbitGeomFactory {
       }
 
 
-//    @Override
-//    public String toXML() {
-//        StringBuffer str = new StringBuffer();
-//        RealVector firstPoint = new RealVector(((RarefactionOrbitCalc) rpCalc()).getStart());
-//
-//        String direction = "forward\"";
-//        str.append("<COMMAND name=\"rarefaction");
-//        System.out.println("Direcao: "+((RarefactionOrbitCalc) rpCalc()).getDirection());
-//
-//        if (((RarefactionOrbitCalc) rpCalc()).getDirection() == OrbitGeom.BACKWARD_DIR) {
-//            direction = "backward\"";
-//
-//        }
-//
-////        if (((RarefactionOrbitCalc) rpCalc()).getDirection()== OrbitGeom.BOTH_DIR) {
-////            direction = "both\"";
-////        }
-//
-//        str.append(direction);
-//        str.append(" inputpoint=\""+firstPoint.toString()+"\" family=\""+ ((RarefactionOrbit)geomSource()).getFamilyIndex()+"\" "+">\n");
-//        str.append(((Orbit) geomSource()).toXML());
-//        str.append("</COMMAND>\n");
-//        return str.toString();
-//    }
 
     @Override
     public String toMatlab(int curveIndex) {

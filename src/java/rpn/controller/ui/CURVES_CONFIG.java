@@ -5,7 +5,7 @@
  */
 package rpn.controller.ui;
 
-import rpn.usecase.ChangeSigmaAgent;
+import rpn.command.ChangeSigmaCommand;
 import wave.util.RealVector;
 
 public class CURVES_CONFIG extends UI_ACTION_SELECTED {
@@ -17,7 +17,7 @@ public class CURVES_CONFIG extends UI_ACTION_SELECTED {
     // Constructors
     //
     public CURVES_CONFIG() {
-        super(ChangeSigmaAgent.instance());
+        super(ChangeSigmaCommand.instance());
     }
 
     @Override

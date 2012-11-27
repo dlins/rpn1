@@ -6,7 +6,9 @@
 #include "AccumulationFunction.h"
 #include "RealVector.h"
 #include "eigen.h"
-#include "Boundary.h"
+//#include "Boundary.h"
+
+class Boundary;
 
 #include "Matrix.h"
 

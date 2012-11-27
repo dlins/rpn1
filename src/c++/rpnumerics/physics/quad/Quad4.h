@@ -47,28 +47,5 @@ public:
 
 };
 
-inline SubPhysics * Quad4::clone()const {
-    return new Quad4(*this);
-}
 
-
-inline Boundary * Quad4::defaultBoundary()const {
-
-    RealVector min(4);
-
-    min.component(0) = -0.5;
-    min.component(1) = -0.5;
-    min.component(2) = -0.5;
-    min.component(3) = -0.5;
-
-    RealVector max(4);
-
-    max.component(0) = 0.5;
-    max.component(1) = 0.5;
-    max.component(2) = 0.5;
-    max.component(3) = 0.5;
-
-    return new RectBoundary(min, max);
-
-}
 #endif //! _Quad4_H

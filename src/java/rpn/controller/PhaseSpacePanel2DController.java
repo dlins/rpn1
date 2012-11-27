@@ -19,10 +19,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.Point;
-import java.awt.geom.Rectangle2D;
+import java.awt.Polygon;
+import java.awt.geom.Line2D;
 import rpn.controller.ui.TRACKPOINT_CONFIG;
 import rpn.controller.ui.UIController;
-import rpn.usecase.TrackPointAgent;
+import rpn.command.TrackPointCommand;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
 
@@ -41,7 +42,12 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
     private boolean absComplete_;
     private boolean ordComplete_;
     private Point dcCompletePoint_;
-    private List<Rectangle2D> selectionAreas_;
+    private List<Polygon> selectionAreas_;
+    private List<Line2D.Double> stringArrows_;
+    private List<String> typeStrings_;
+    private List<Line2D.Double> velocityArrows_;
+    private List<String> velocityStrings_;
+
 
 
     //
@@ -55,8 +61,20 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
         ordComplete_ = false;
         dcCompletePoint_ = new Point(0, 0);
         pointMarkBuffer_ = new ArrayList();
-        selectionAreas_ = new ArrayList<Rectangle2D>();
+        selectionAreas_ = new ArrayList<Polygon>();
+        stringArrows_ = new ArrayList<Line2D.Double>();
+        typeStrings_ = new ArrayList<String>();
+        velocityArrows_ = new ArrayList<Line2D.Double>();
+        velocityStrings_ = new ArrayList<String>();
+
     }
+
+    
+    
+    
+    
+
+    
 
     //
     // Inner Classes
@@ -67,15 +85,21 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
         public void mouseMoved(MouseEvent event) {
             if (event.getComponent() instanceof RPnPhaseSpacePanel) {
                 RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
-
                 int xCursorPos = event.getPoint().x;
                 int yCursorPos = event.getPoint().y;
-                if (UIController.instance().getState() instanceof TRACKPOINT_CONFIG) {
+//<<<<<<< HEAD
+//                if (UIController.instance().getState() instanceof TRACKPOINT_CONFIG) {
+//=======
+                if ((UIController.instance().getState() instanceof TRACKPOINT_CONFIG )&&
+                        (panel.scene().getViewingTransform().projectionMap().getDomain().getDim()==rpnumerics.RPNUMERICS.domainDim())){
 
                     Coords2D dcCoords = new Coords2D(xCursorPos, yCursorPos);
                     CoordsArray wcCoords = new Coords2D();
                     panel.scene().getViewingTransform().dcInverseTransform(dcCoords, wcCoords);
-                    TrackPointAgent.instance().trackPoint(wcCoords);
+                    
+
+                    
+                    TrackPointCommand.instance().trackPoint(wcCoords);
 
                 }
 
@@ -147,6 +171,7 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
 
 
                 panel.scene().update();
+                panel.updateGraphicsUtil();
                 panel.repaint();
             }
 
@@ -168,8 +193,16 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
         return pointMarkBuffer_;
     }
 
-    public List getSelectionAreas() {
+    public List<Polygon> getSelectionAreas() {
         return selectionAreas_;
+    }
+
+    public List<String> getTypeString() {
+        return typeStrings_;
+    }
+
+    public List <String> getVelocityString() {
+        return velocityStrings_;
     }
 
     public Point get_dc_CompletePoint() {

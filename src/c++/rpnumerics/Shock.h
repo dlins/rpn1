@@ -5,6 +5,7 @@
 #include "FluxFunction.h"
 #include "AccumulationFunction.h"
 #include "Boundary.h"
+#include "ShockMethod.h"
 
 #ifndef SHOCK_OK
 #define SHOCK_OK 0
@@ -65,9 +66,10 @@ extern"C" {
 
 }
 
-class Shock {
+class Shock :public ShockMethod{
     public:
         static int reason;
+        Shock();
     protected:
         static void matrixmult(int m, int n, int p, double *A, double *B, double *C);
         static int sgn(double x);
@@ -108,6 +110,10 @@ class Shock {
         static void curve(const RealVector &ref, bool local_shock, const RealVector &in, int increase, int family, int type_of_shock, const RealVector *orig_direction, int number_ignore_doub_contact, FluxFunction *ff, AccumulationFunction *aa, Boundary *boundary,
                          std::vector<RealVector> &shockcurve, int &info_shockcurve, std::vector<RealVector> &shockcurve_alt, int &info_shockcurve_alt);
 
+        
+        void curveCalc(const RealVector &ref, bool local_shock, const RealVector &in, int increase, int family, int type_of_shock, const RealVector *orig_direction, int number_ignore_doub_contact, FluxFunction *ff, AccumulationFunction *aa, Boundary *boundary,
+            std::vector<RealVector> &shockcurve, int &info_shockcurve, std::vector<RealVector> &shockcurve_alt, int &info_shockcurve_alt,double newtonTolerance) ;
+        
         static void add_sigma(const RealVector &ref, const FluxFunction *ff, const AccumulationFunction *aa, std::vector<RealVector> &curve);
 };
 

@@ -16,7 +16,7 @@ CC = cc
 CPP = cc -E
 else
 #CC = gcc -ansi -Wall
-CC = gcc -Wall
+CC = gcc -Wall -fPIC
 CPP = gcc -E
 endif
 CFLAGS =
@@ -62,7 +62,7 @@ else
 CCC = CC
 endif
 else
-CCC = g++ -Wall -Wno-deprecated
+CCC = g++ -Wall -fPIC -Wno-deprecated
 endif
 ifeq ($(RPHOSTTYPE),solaris)
 # The -D_XOPEN_SOURCE flag is needed if __SUNPRO_CC == 0x540
@@ -152,7 +152,7 @@ FC = gfortran
 FLIBS =
 endif
 endif
-FFLAGS = -u -C
+FFLAGS = -u -C -fPIC
 CPPFLAGS +=
 COMPILE.F = $(FC) $(FFLAGS) $(CPPFLAGS) $(DEBUGFLAG) -c
 LINK.F = $(FC) $(FFLAGS) $(CPPFLAGS) $(DEBUGFLAG) $(LDFLAGS)

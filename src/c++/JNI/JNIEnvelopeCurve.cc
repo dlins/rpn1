@@ -29,7 +29,7 @@ using std::vector;
 using namespace std;
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_EnvelopeCurveCalc_nativeCalc
-(JNIEnv * env, jobject obj,jint where_constant,jint number_of_steps){
+(JNIEnv * env, jobject obj, jint where_constant, jint number_of_steps) {
 
 
     jclass classPhasePoint = (env)->FindClass(PHASEPOINT_LOCATION);
@@ -50,7 +50,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_EnvelopeCurveCalc_nativeCalc
     jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
     jmethodID envelopeCurveConstructor = env->GetMethodID(envelopeCurveClass, "<init>", "(Ljava/util/List;Ljava/util/List;)V");
 
-    int dimension=RpNumerics::getPhysics().domain().dim();
+    int dimension = RpNumerics::getPhysics().domain().dim();
 
     jobject leftSegmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
     jobject rightSegmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
@@ -65,16 +65,33 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_EnvelopeCurveCalc_nativeCalc
 
     GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcation");
 
-    cout <<"constant : "<<where_constant<<endl;
+    cout << "constant : " << where_constant << endl;
 
     cout << "number of steps : " << number_of_steps << endl;
-    Three_Phase_Boundary & physicsBoundary = (Three_Phase_Boundary &) RpNumerics::getPhysics().boundary();
+
+     Boundary * physicsBoundary = (Boundary *)&RpNumerics::getPhysics().boundary();
+
+    const char * boundaryType = physicsBoundary->boundaryType();
+
+//    if (!strcmp(boundaryType, "Three_Phase_Boundary")) {
+//
+//        Three_Phase_Boundary * boundary = (Three_Phase_Boundary *) physicsBoundary;
+
+        physicsBoundary->envelope_curve(flux, accum, *gv,
+                where_constant, number_of_steps, true,
+                left_vrs, right_vrs);
+//    }
+//
+//    if (!strcmp(boundaryType, "rect")) {
+
+        RectBoundary * boundary = (RectBoundary *) physicsBoundary;
+        boundary->envelope_curve(flux, accum, *gv,
+                where_constant, number_of_steps, true,
+                left_vrs, right_vrs);
+//
+//    }
 
 
-    physicsBoundary.envelope_curve(flux, accum, *gv,
-            where_constant, number_of_steps, true,
-            left_vrs, right_vrs);
-   
 
     cout << "left_vrs.size()  = " << left_vrs.size() << endl;
 
@@ -103,7 +120,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_EnvelopeCurveCalc_nativeCalc
 
         jobject realVectorRightPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRRight);
 
-       
+
         jobject realSegment = env->NewObject(realSegmentClass, realSegmentConstructor, realVectorLeftPoint, realVectorRightPoint);
         env->CallObjectMethod(leftSegmentsArray, arrayListAddMethod, realSegment);
 

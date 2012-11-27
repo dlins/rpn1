@@ -5,7 +5,7 @@
 
 package rpn.controller.ui;
 
-import rpn.usecase.VelocityAgent;
+import rpn.command.VelocityCommand;
 
 /**
  *
@@ -14,7 +14,7 @@ import rpn.usecase.VelocityAgent;
 public class VELOCITYAGENT_CONFIG extends UI_ACTION_SELECTED {
 
     public VELOCITYAGENT_CONFIG() {
-        super(VelocityAgent.instance());
+        super(VelocityCommand.instance());
     }
 
 }

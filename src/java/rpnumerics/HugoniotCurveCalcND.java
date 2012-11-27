@@ -22,7 +22,6 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
         super(params);
 
     }
-
     //
     // Accessors/Mutators
     //
@@ -75,6 +74,9 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
 
         result = (HugoniotCurve) calc(((HugoniotParams) getParams()).getXZero(), getParams().getResolution());
 
+        result.setDirection(((HugoniotParams)getParams()).getDirection());
+        
+        
         return result;
 
     }
@@ -90,11 +92,10 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
 
         System.out.println("Entrou neste recalc(area)");
 
-        //HugoniotCurve result;
-        //result = (HugoniotCurve) calc(((HugoniotParams) getParams()).getXZero(), (int) area.getResolution().getElement(0), (int) area.getResolution().getElement(1), area.getTopRight(), area.getDownLeft());
+        HugoniotCurve result;
+        result = (HugoniotCurve) calc(((HugoniotParams) getParams()).getXZero(), (int) area.getResolution().getElement(0), (int) area.getResolution().getElement(1), area.getTopRight(), area.getDownLeft());
 
-        //return result;
-        return null;
+        return result;
     }
 
     public PhasePoint getUMinus() {

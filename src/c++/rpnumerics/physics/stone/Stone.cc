@@ -12,6 +12,7 @@
  */
 #include "Stone.h"
 
+
 /*
  * ---------------------------------------------------------------
  * Definitions:
@@ -22,15 +23,15 @@ Boundary * Stone::defaultBoundary() const {
 
 
     return new Three_Phase_Boundary();
-//    RealVector pmin(2);
-//
-//    pmin.component(0) = 0;
-//    pmin.component(1) = 0;
-//
-//    RealVector pmax(2);
-//
-//    pmax.component(0) = 1.0;
-//    pmax.component(1) = 1.0;
+    //    RealVector pmin(2);
+    //
+    //    pmin.component(0) = 0;
+    //    pmin.component(1) = 0;
+    //
+    //    RealVector pmax(2);
+    //
+    //    pmax.component(0) = 1.0;
+    //    pmax.component(1) = 1.0;
 
     //Saturacoes negativas
 
@@ -65,7 +66,7 @@ Boundary * Stone::defaultBoundary() const {
 
 
 
- 
+
 
 
 }
@@ -82,7 +83,6 @@ void Stone::setParams(vector<string> params) {
 
         fluxParamVector.component(i) = paramValue;
 
-
     }
 
     StoneFluxFunction & stoneFlux = (StoneFluxFunction&) fluxFunction();
@@ -96,7 +96,7 @@ void Stone::setParams(vector<string> params) {
 
         double paramValue = atof(params[i].c_str());
 
-        permVector.component(i-7) = paramValue;
+        permVector.component(i - 7) = paramValue;
 
 
     }
@@ -107,13 +107,16 @@ void Stone::setParams(vector<string> params) {
 }
 
 Stone::Stone() : SubPhysics(StoneFluxFunction(StoneParams(), StonePermParams()), StoneAccumulation(), *defaultBoundary(), Multid::PLANE, "Stone", _SIMPLE_ACCUMULATION_) {
-
+    setHugoniotFunction(new Hugoniot_Curve());
+    setDoubleContactFunction(new Double_Contact());
+    setShockMethod(new Shock());
 }
 
 Stone::Stone(const Stone & copy) : SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.boundary(), Multid::PLANE, "Stone", _SIMPLE_ACCUMULATION_) {
-    RealVector refVec(2);
-    StoneHugoniotFunctionClass * stoneHugoniotFunction = new StoneHugoniotFunctionClass(refVec, (StoneFluxFunction(StoneParams(), StonePermParams())));
-    setHugoniotFunction(stoneHugoniotFunction);
+    setHugoniotFunction(new Hugoniot_Curve());
+    setDoubleContactFunction(new Double_Contact());
+    setShockMethod(new Shock());
+
 }
 
 SubPhysics * Stone::clone()const {
@@ -122,5 +125,4 @@ SubPhysics * Stone::clone()const {
 
 Stone::~Stone() {
 }
-
 

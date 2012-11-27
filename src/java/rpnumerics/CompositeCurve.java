@@ -5,7 +5,7 @@
  */
 package rpnumerics;
 
-public class CompositeCurve extends WaveCurveOrbit implements RpSolution {
+public class CompositeCurve extends FundamentalCurve implements RpSolution {
   
     //
     // Members

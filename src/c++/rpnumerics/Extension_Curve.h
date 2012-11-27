@@ -30,10 +30,10 @@ public:
         oc = 0;
         singular = true;
         
-        segment_flux.resize(2, 2);
-        segment_accum.resize(2, 2);
+        segment_flux.resize(3, 2);
+        segment_accum.resize(3, 2);
         
-        segment_lambda.resize(2);
+        segment_lambda.resize(3);
         family = 0;
     }
     

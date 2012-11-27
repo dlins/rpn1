@@ -7,7 +7,7 @@ package rpn.controller;
 
 import rpn.component.RpGeomFactory;
 import rpn.component.RpCalcBasedGeomFactory;
-import rpn.usecase.*;
+import rpn.command.*;
 import java.beans.PropertyChangeEvent;
 import rpnumerics.Area;
 
@@ -30,14 +30,14 @@ public class RpCalcController implements RpController {
     //
     /** Registers  a controller to handle the numerics parameters changes .*/
     protected void register() {
-        ChangeFluxParamsAgent.instance().addPropertyChangeListener(this);
-        //ChangeSigmaAgent.instance().addPropertyChangeListener(this);          //*** testar comentado para evitar nova chamada para bifurcacao secundaria
+        ChangeFluxParamsCommand.instance().addPropertyChangeListener(this);
+        ChangeSigmaCommand.instance().addPropertyChangeListener(this);
     }
 
     /** Unregisters a controller that handle the changes in numerics parameters.*/
     protected void unregister() {
-        ChangeFluxParamsAgent.instance().removePropertyChangeListener(this);
-        //ChangeSigmaAgent.instance().removePropertyChangeListener(this);
+        ChangeFluxParamsCommand.instance().removePropertyChangeListener(this);
+        ChangeSigmaCommand.instance().removePropertyChangeListener(this);
     }
 
     /** Updates the properties of a geometry when any change in its geometry is made.*/
@@ -49,7 +49,7 @@ public class RpCalcController implements RpController {
             System.out.println("Refinamento");
             
             Area area = (Area) change.getNewValue();
-            geomFactory_.updateGeom(area);
+//            geomFactory_.updateGeom(area);
 
             return;
         }

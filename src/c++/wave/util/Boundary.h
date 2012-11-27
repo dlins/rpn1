@@ -19,10 +19,14 @@
 #include "mathutil.h"
 #include <iostream>
 #include <vector>
+#include "GridValues.h"
+
+
 
 
 
 //!
+
 /*!
  *
  * TODO:
@@ -32,7 +36,6 @@
  */
 
 class Boundary {
-
 public:
 
     virtual ~Boundary();
@@ -43,32 +46,51 @@ public:
     virtual bool inside(const double*)const = 0;
 
     //! Virtual constructor
-    virtual Boundary * clone()const =0;
+    virtual Boundary * clone()const = 0;
 
     //! Minimums boundary values accessor
-    virtual const  RealVector & minimums() const = 0;
+    virtual const RealVector & minimums() const = 0;
 
     //! Maximums boundary values accessor
-    virtual const  RealVector & maximums() const = 0;
+    virtual const RealVector & maximums() const = 0;
 
     virtual RealVector intersect(RealVector &y1, RealVector &y2) const = 0;
     //! Returns the boundary type
-    virtual const char * boundaryType()const =0;
+    virtual const char * boundaryType()const = 0;
 
-    virtual int intersection(const RealVector &p, const RealVector &q, RealVector &r,int &)const;
+    virtual int intersection(const RealVector &p, const RealVector &q, RealVector &r, int &)const;
 
-    virtual void physical_boundary(std::vector<RealVector> &)=0;
+    virtual void physical_boundary(std::vector<RealVector> &) = 0;
+    
+    
+    
+    
+   virtual void extension_curve(const FluxFunction *f, const AccumulationFunction *a,
+            GridValues &gv,
+            int where_constant, int number_of_steps, bool singular,
+            int fam, int characteristic,
+            std::vector<RealVector> &c, std::vector<RealVector> &d)=0;
 
-protected:
-    double  epsilon;
 
-    double distance(int ,const double *, const double *)const;
-
-
-
-
+   virtual      void envelope_curve(const FluxFunction *f, const AccumulationFunction *a,
+            GridValues &gv,
+            int where_constant, int number_of_steps, bool singular,
+            std::vector<RealVector> &c, std::vector<RealVector> &d)=0;
 
     
+    
+
+
+protected:
+    double epsilon;
+
+    double distance(int, const double *, const double *)const;
+
+
+
+
+
+
 };
 
 

@@ -7,7 +7,7 @@ package rpn.controller.phasespace;
 
 import rpn.component.*;
 import rpn.RPnPhaseSpaceAbstraction;
-import rpn.usecase.*;
+import rpn.command.*;
 import rpnumerics.ManifoldOrbit;
 import rpnumerics.Orbit;
 import rpnumerics.RPNUMERICS;
@@ -29,10 +29,10 @@ public class PoincareReadyImpl extends NumConfigReadyImpl
         super(hugoniotGeom, xzeroGeom, manifold);
         simplexGeom_ = simplexGeom;
         // ENABLED
-        BackwardManifoldPlotAgent.instance().setEnabled(true);
-        ConnectionManifoldPlotAgent.instance().setEnabled(true);
+        BackwardManifoldPlotCommand.instance().setEnabled(true);
+        ConnectionManifoldPlotCommand.instance().setEnabled(true);
         // DISABLED
-        FindProfileAgent.instance().setEnabled(false);                          //só vai ficar habilitado em ProfileSetupReadyImpl
+        FindProfileCommand.instance().setEnabled(false);                          //só vai ficar habilitado em ProfileSetupReadyImpl
 
 
         RPNUMERICS.getViscousProfileData().setPoincare((SimplexPoincareSection) simplexGeom.geomFactory().geomSource());
@@ -76,6 +76,6 @@ public class PoincareReadyImpl extends NumConfigReadyImpl
     public void select(RPnPhaseSpaceAbstraction phaseSpace, RealVector coords) {
         super.select(phaseSpace, coords);
 
-        rpn.usecase.FindProfileAgent.instance().setEnabled(true);
+        rpn.command.FindProfileCommand.instance().setEnabled(true);
     }
 }

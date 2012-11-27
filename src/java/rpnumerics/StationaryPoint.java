@@ -1,10 +1,9 @@
 /*
-*
-* Instituto de Matematica Pura e Aplicada - IMPA
-* Departamento de Dinamica dos Fluidos
-*
-*/
-
+ *
+ * Instituto de Matematica Pura e Aplicada - IMPA
+ * Departamento de Dinamica dos Fluidos
+ *
+ */
 package rpnumerics;
 
 //
@@ -29,6 +28,7 @@ public class StationaryPoint extends PhasePoint implements RpSolution {
     //
     // Members
     //
+
     private double[] eigenValR_;
     private double[] eigenValI_;
     private RealVector[] eigenVec_;
@@ -40,6 +40,7 @@ public class StationaryPoint extends PhasePoint implements RpSolution {
     private RealMatrix2 schurVecN_;
     private int integrationFlag_;
     private boolean isSaddle = false;
+    private int type;
 
     //
     // Constructors
@@ -64,35 +65,79 @@ public class StationaryPoint extends PhasePoint implements RpSolution {
         eigenValI_ = eigenValI;
         eigenVec_ = eigenVec;
 
-        if (eigenValR[0] * eigenValR[1] < 0.)
-            isSaddle = true;
+        if (eigenValI[0] != 0 || eigenValI[1] != 0) {
+            type = 2; // com autovalores complexos
+        } else {
+            if (eigenValR[0] * eigenValR[1] < 0.) {
+                isSaddle = true;
+                type = 0; //sela
+            }
+
+            if (eigenValR[0] > 0. && eigenValR[1] > 0.) {
+                type = 1;     //repulsor
+            }
+
+            if (eigenValR[0] < 0. && eigenValR[1] < 0.) {
+                type = -1;     //atrator
+            }
+
+        }
+
+
 
     }
     //
     // Accessors/Mutators
     //
     // TODO should be deprecated !
-    public PhasePoint getPoint() { return this; }
 
-    public double[] getEigenValR() { return eigenValR_; }
+    public int getType() {
+        return type;
+    }
 
-    public double[] getEigenValI() { return eigenValI_; }
+    public PhasePoint getPoint() {
+        return this;
+    }
 
-    public RealVector[] getEigenVec() { return eigenVec_; }
+    public double[] getEigenValR() {
+        return eigenValR_;
+    }
 
-    public int getDimP() { return DimP_; }
+    public double[] getEigenValI() {
+        return eigenValI_;
+    }
 
-    public RealMatrix2 getSchurFormP() { return schurFormP_; }
+    public RealVector[] getEigenVec() {
+        return eigenVec_;
+    }
 
-    public RealMatrix2 getSchurVecP() { return schurVecP_; }
+    public int getDimP() {
+        return DimP_;
+    }
 
-    public int getDimN() { return DimN_; }
+    public RealMatrix2 getSchurFormP() {
+        return schurFormP_;
+    }
 
-    public RealMatrix2 getSchurFormN() { return schurFormN_; }
+    public RealMatrix2 getSchurVecP() {
+        return schurVecP_;
+    }
 
-    public RealMatrix2 getSchurVecN() { return schurVecN_; }
+    public int getDimN() {
+        return DimN_;
+    }
 
-    public int getIntegrationFlag() { return integrationFlag_; }
+    public RealMatrix2 getSchurFormN() {
+        return schurFormN_;
+    }
+
+    public RealMatrix2 getSchurVecN() {
+        return schurVecN_;
+    }
+
+    public int getIntegrationFlag() {
+        return integrationFlag_;
+    }
 
     public boolean isSaddle() {
         return isSaddle;
@@ -101,8 +146,6 @@ public class StationaryPoint extends PhasePoint implements RpSolution {
     //
     // Methods
     //
-
-
     private PhasePoint[] orbitInitialPoints(RealVector dir) {
 
         PhasePoint[] array = new PhasePoint[2];
@@ -125,8 +168,6 @@ public class StationaryPoint extends PhasePoint implements RpSolution {
 
         return array;
     }
-    
-    
 
     public PhasePoint[] orbitDirectionFWD() {
 
@@ -142,7 +183,6 @@ public class StationaryPoint extends PhasePoint implements RpSolution {
 
     }
 
-
     public PhasePoint[] orbitDirectionBWD() {
 
         RealVector dir = new RealVector(2);
@@ -156,8 +196,6 @@ public class StationaryPoint extends PhasePoint implements RpSolution {
         return orbitInitialPoints(dir);
 
     }
-
-
 
     public RealVector[] initialManifoldPoint() throws RpException {
 
@@ -199,68 +237,10 @@ public class StationaryPoint extends PhasePoint implements RpSolution {
 
     }
 
-
     @Override
-    public String toXML(){
+    public String toXML() {
 
-      StringBuffer buffer = new StringBuffer();
-
-      buffer.append("<STATPOINT>\n");
-      buffer.append("\n");
-
-      buffer.append("<EIGENVALR>");
-      for (int i = 0 ; i < getEigenValR().length;i++){
-
-        buffer.append(getEigenValR()[i]+" ");
-
-      }
-
-      buffer.append("</EIGENVALR>\n");
-      buffer.append("\n");
-
-      buffer.append("<EIGENVALI>");
-
-      for (int i = 0 ; i < getEigenValI().length;i++){
-        buffer.append(getEigenValI()[i]+" ");
-      }
-
-      buffer.append("</EIGENVALI>\n");
-      buffer.append("\n");
-      buffer.append("<EIGENVEC>\n");
-
-      for (int i=0;i <getEigenVec().length;i++){
-
-        buffer.append(getEigenVec()[i].toXML()+"\n");
-
-      }
-      buffer.append("\n");
-      buffer.append("</EIGENVEC>\n");
-      buffer.append("\n");
-      buffer.append("<DIMP>"+getDimP()+"</DIMP>\n");
-      buffer.append("\n");
-      buffer.append("<DIMN>"+getDimN()+"</DIMN>\n");
-      buffer.append("\n");
-      buffer.append("<INTEGRATIONFLAG>"+getIntegrationFlag()+"</INTEGRATIONFLAG>\n");
-      buffer.append("\n");
-      buffer.append("<SCHURFORMN>\n"+getSchurFormN().toXML()+"</SCHURFORMN>\n");
-      buffer.append("\n");
-      buffer.append("<SCHURFORMP>\n"+getSchurFormP().toXML()+"</SCHURFORMP>\n");
-      buffer.append("\n");
-      buffer.append("<SCHURVECP>\n"+getSchurVecP().toXML()+"</SCHURVECP>\n");
-      buffer.append("\n");
-      buffer.append("<SCHURVECN>\n"+getSchurVecN().toXML()+"</SCHURVECN>\n");
-      buffer.append("\n");
-      buffer.append("</STATPOINT>\n");
-
-      return buffer.toString();
-
-    }
-
-    public String toXML(boolean calcReady){
-      StringBuffer buffer = new StringBuffer();
-
-      if (calcReady){
-
+        StringBuffer buffer = new StringBuffer();
 
         buffer.append("<STATPOINT>\n");
         buffer.append("\n");
@@ -268,7 +248,7 @@ public class StationaryPoint extends PhasePoint implements RpSolution {
         buffer.append("<EIGENVALR>");
         for (int i = 0; i < getEigenValR().length; i++) {
 
-          buffer.append(getEigenValR()[i] + " ");
+            buffer.append(getEigenValR()[i] + " ");
 
         }
 
@@ -278,7 +258,7 @@ public class StationaryPoint extends PhasePoint implements RpSolution {
         buffer.append("<EIGENVALI>");
 
         for (int i = 0; i < getEigenValI().length; i++) {
-          buffer.append(getEigenValI()[i] + " ");
+            buffer.append(getEigenValI()[i] + " ");
         }
 
         buffer.append("</EIGENVALI>\n");
@@ -287,7 +267,7 @@ public class StationaryPoint extends PhasePoint implements RpSolution {
 
         for (int i = 0; i < getEigenVec().length; i++) {
 
-          buffer.append(getEigenVec()[i].toXML() + "\n");
+            buffer.append(getEigenVec()[i].toXML() + "\n");
 
         }
         buffer.append("\n");
@@ -297,14 +277,11 @@ public class StationaryPoint extends PhasePoint implements RpSolution {
         buffer.append("\n");
         buffer.append("<DIMN>" + getDimN() + "</DIMN>\n");
         buffer.append("\n");
-        buffer.append("<INTEGRATIONFLAG>" + getIntegrationFlag() +
-                      "</INTEGRATIONFLAG>\n");
+        buffer.append("<INTEGRATIONFLAG>" + getIntegrationFlag() + "</INTEGRATIONFLAG>\n");
         buffer.append("\n");
-        buffer.append("<SCHURFORMN>\n" + getSchurFormN().toXML() +
-                      "</SCHURFORMN>\n");
+        buffer.append("<SCHURFORMN>\n" + getSchurFormN().toXML() + "</SCHURFORMN>\n");
         buffer.append("\n");
-        buffer.append("<SCHURFORMP>\n" + getSchurFormP().toXML() +
-                      "</SCHURFORMP>\n");
+        buffer.append("<SCHURFORMP>\n" + getSchurFormP().toXML() + "</SCHURFORMP>\n");
         buffer.append("\n");
         buffer.append("<SCHURVECP>\n" + getSchurVecP().toXML() + "</SCHURVECP>\n");
         buffer.append("\n");
@@ -312,12 +289,71 @@ public class StationaryPoint extends PhasePoint implements RpSolution {
         buffer.append("\n");
         buffer.append("</STATPOINT>\n");
 
-      }
-
         return buffer.toString();
 
     }
 
+    public String toXML(boolean calcReady) {
+        StringBuffer buffer = new StringBuffer();
+
+        if (calcReady) {
+
+
+            buffer.append("<STATPOINT>\n");
+            buffer.append("\n");
+
+            buffer.append("<EIGENVALR>");
+            for (int i = 0; i < getEigenValR().length; i++) {
+
+                buffer.append(getEigenValR()[i] + " ");
+
+            }
+
+            buffer.append("</EIGENVALR>\n");
+            buffer.append("\n");
+
+            buffer.append("<EIGENVALI>");
+
+            for (int i = 0; i < getEigenValI().length; i++) {
+                buffer.append(getEigenValI()[i] + " ");
+            }
+
+            buffer.append("</EIGENVALI>\n");
+            buffer.append("\n");
+            buffer.append("<EIGENVEC>\n");
+
+            for (int i = 0; i < getEigenVec().length; i++) {
+
+                buffer.append(getEigenVec()[i].toXML() + "\n");
+
+            }
+            buffer.append("\n");
+            buffer.append("</EIGENVEC>\n");
+            buffer.append("\n");
+            buffer.append("<DIMP>" + getDimP() + "</DIMP>\n");
+            buffer.append("\n");
+            buffer.append("<DIMN>" + getDimN() + "</DIMN>\n");
+            buffer.append("\n");
+            buffer.append("<INTEGRATIONFLAG>" + getIntegrationFlag()
+                    + "</INTEGRATIONFLAG>\n");
+            buffer.append("\n");
+            buffer.append("<SCHURFORMN>\n" + getSchurFormN().toXML()
+                    + "</SCHURFORMN>\n");
+            buffer.append("\n");
+            buffer.append("<SCHURFORMP>\n" + getSchurFormP().toXML()
+                    + "</SCHURFORMP>\n");
+            buffer.append("\n");
+            buffer.append("<SCHURVECP>\n" + getSchurVecP().toXML() + "</SCHURVECP>\n");
+            buffer.append("\n");
+            buffer.append("<SCHURVECN>\n" + getSchurVecN().toXML() + "</SCHURVECN>\n");
+            buffer.append("\n");
+            buffer.append("</STATPOINT>\n");
+
+        }
+
+        return buffer.toString();
+
+    }
 //    @Override
 //    public String toString() {
 //

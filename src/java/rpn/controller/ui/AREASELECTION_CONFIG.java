@@ -5,18 +5,17 @@
  */
 package rpn.controller.ui;
 
-import rpn.usecase.AreaSelectionAgent;
+import rpn.command.AreaSelectionCommand;
+
 
 
 public class AREASELECTION_CONFIG extends UI_ACTION_SELECTED {
 
-    public static int flagArea;
-
     public AREASELECTION_CONFIG() {
-        super(AreaSelectionAgent.instance());
-        System.out.println("Construtor de AREASELECTION_CONFIG");
+        super(AreaSelectionCommand.instance());
 
     }
 
 
 }
+ 

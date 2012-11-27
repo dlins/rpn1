@@ -7,14 +7,8 @@ import wave.multid.view.*;
 
 public class WaveCurveOrbitGeom extends OrbitGeom implements WaveCurveBranchGeom {
 
-
-
-
     public WaveCurveOrbitGeom(CoordsArray[] vertices,WaveCurveOrbitGeomFactory factory) {
         super(vertices, factory);
-
-
-
     }
 
     @Override

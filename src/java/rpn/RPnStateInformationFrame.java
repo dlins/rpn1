@@ -17,7 +17,7 @@ import javax.swing.JTextArea;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
-import rpn.usecase.TrackPointAgent;
+import rpn.command.TrackPointCommand;
 import rpnumerics.RPnStateInfo;
 
 
@@ -44,7 +44,7 @@ public class RPnStateInformationFrame extends JFrame  {
     }
 
     public void update() {
-        RPnStateInfo info = TrackPointAgent.instance().getInfo();
+        RPnStateInfo info = TrackPointCommand.instance().getInfo();
         Iterator<Entry<String, String>> it = info.getInformation();
         try {
             document_.remove(0, document_.getLength());

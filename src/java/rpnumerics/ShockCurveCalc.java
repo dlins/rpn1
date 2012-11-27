@@ -19,8 +19,9 @@ public class ShockCurveCalc extends WaveCurveOrbitCalc implements RpCalculation 
     //
     // Constructors/Initializers
     //
-    public ShockCurveCalc(PhasePoint point, int family, int increase) {
+    public ShockCurveCalc(PhasePoint point, int family, int increase, double tolerance) {
         super(new OrbitPoint(point),family,  increase);
+        newtonTolerance_=tolerance;
 
     }
 

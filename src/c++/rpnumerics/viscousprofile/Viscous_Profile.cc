@@ -59,7 +59,7 @@ void Viscous_Profile::Newton_improvement(const FluxFunction *ff, const Accumulat
     //
     double c[2];
     double F_ref[2], G_ref[2];
-    for (int i; i < 2; i++) c[i] = ref.component(i);
+    for (int i=0; i < 2; i++) c[i] = ref.component(i);
     //cout << "Newton_R: (" << c[0] << ", " << c[1] << ")" << endl;
     ff->fill_with_jet(2, c, 0, F_ref, 0, 0);
     aa->fill_with_jet(2, c, 0, G_ref, 0, 0);

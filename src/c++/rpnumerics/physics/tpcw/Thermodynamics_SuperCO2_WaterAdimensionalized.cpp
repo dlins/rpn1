@@ -95,6 +95,10 @@ h_typical_(copy.h_typical_),
 rpnHomePath_(copy.rpnHomePath_) {
 
     cout << "construtor de copia da termodinamica" << endl;
+    
+    cout<<"No ctr de copia da thermo:" <<T_typical_<<" "<<U_typical_<<" "<<Rho_typical_<<endl;
+    
+    
     // Generate the splines
 
     info_rhosigmac = create_spline("rhosigmac_spline.txt", "rhosigmac", P, rhosigmac_);

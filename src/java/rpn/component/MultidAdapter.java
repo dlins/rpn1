@@ -98,6 +98,30 @@ public class MultidAdapter {
         }
         return vertices;
     }
+    
+    public static CoordsArray[] converseRiemannProfileToCoordsArray(OrbitPoint[] coords) {
+
+        CoordsArray[] vertices = new CoordsArray[coords.length];
+
+        for (int i = 0; i < coords.length; i++) {
+            
+            RealVector riemannCoords = new RealVector(coords[i].getCoords().getSize()+1);
+            riemannCoords.setElement(0, coords[i].getLambda());
+            for (int j = 0; j < coords[i].getSize(); j++) {
+
+                riemannCoords.setElement(j+1, coords[i].getElement(j));
+                
+            }
+            vertices[i] = new CoordsArray(riemannCoords);            
+        }
+        return vertices;
+    }
+    
+    
+    
+    
+    
+    
 
     static public CoordsArray[] converseRPnCurveToCoordsArray(RPnCurve rpncurve) {
 

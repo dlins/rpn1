@@ -20,7 +20,7 @@ public class StationaryPointGeomFactory extends RpCalcBasedGeomFactory {
         super(calc);
     }
 
-    protected RpGeometry createGeomFromSource() {
+    public RpGeometry createGeomFromSource() {
         StationaryPoint point = (StationaryPoint) geomSource();
         CoordsArray coords = new CoordsArray(point.getPoint().getCoords());
         return new StationaryPointGeom(coords, this);

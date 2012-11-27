@@ -20,6 +20,10 @@
 #include "StoneFluxFunction.h"
 #include "StoneHugoniotFunctionClass.h"
 #include "StoneAccumulation.h"
+#include "ShockMethod.h"
+#include "Hugoniot_Curve.h"
+#include "Double_Contact.h"
+#include "Shock.h"
 
 /*
  * ---------------------------------------------------------------

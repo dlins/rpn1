@@ -66,15 +66,9 @@ public class ConnectionOrbitCalc implements RpCalculation {
     // Methods
     //
 
-    public RpSolution recalc() throws RpException {
-        ViscousProfileData.instance().setSigma(sB);
-        ViscousProfileData.instance().setPreviousSigma(sA);
-        ViscousProfileData.instance().setDot(dotB);
-        ViscousProfileData.instance().setPreviousDot(dotA);
-        
-        System.out.println("Entrei no recalc() de ConnectionOrbitCalc ************************");
-        return calc();
-    }
+
+   
+
 
 
     protected Orbit createConnectingOrbit() {
@@ -242,7 +236,19 @@ public class ConnectionOrbitCalc implements RpCalculation {
 
     }
 
+     public RpSolution recalc() throws RpException {
+        ViscousProfileData.instance().setSigma(sB);
+        ViscousProfileData.instance().setPreviousSigma(sA);
+        ViscousProfileData.instance().setDot(dotB);
+        ViscousProfileData.instance().setPreviousDot(dotA);
+
+        System.out.println("Entrei no recalc() de ConnectionOrbitCalc ************************");
+        return calc();
+    }
+
     public RpSolution recalc(Area area) throws RpException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+   
 }

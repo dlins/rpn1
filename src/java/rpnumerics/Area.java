@@ -6,18 +6,15 @@
  */
 package rpnumerics;
 
+import java.awt.geom.Path2D;
+import java.awt.geom.PathIterator;
 import rpn.RPnPhaseSpaceAbstraction;
-import rpn.RPnPhaseSpacePanel;
 import rpn.component.RpGeometry;
 import rpn.component.util.GeometryGraphND;
+import rpn.component.util.AreaSelected;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UserInputTable;
 import rpn.parser.RPnDataModule;
-import wave.multid.Coords2D;
-import wave.multid.CoordsArray;
-import wave.multid.view.Scene;
-import wave.multid.view.ViewingTransform;
-import wave.util.RealSegment;
 import wave.util.RealVector;
 
 public class Area {
@@ -25,13 +22,52 @@ public class Area {
     private RealVector topRight_;
     private RealVector downLeft_;
     private RealVector resolution_;
+
+    
+    public Area(AreaSelected wcPolygon) {
+        this(new RealVector(2),wcPolygon);//No resolution needed
+    }
+    
+    public Area(RealVector resolution, AreaSelected wcPolygon) {
+
+        Path2D.Double path = wcPolygon.getWCObject();
+
+        PathIterator pathIterator = path.getPathIterator(null);
+
+        int index = 0;
+        while (!pathIterator.isDone()) {
+
+            double[] segmentArray = new double[2];
+
+            int segment = pathIterator.currentSegment(segmentArray);
+            if (segment != PathIterator.SEG_CLOSE) {
+                if (index == 1) {
+                    topRight_ = new RealVector(segmentArray);
+
+                }
+
+                if (index == 3) {
+                    downLeft_ = new RealVector(segmentArray);
+                }
+
+
+            }
+            index++;
+            pathIterator.next();
+        }
+
+        resolution_ = resolution;
+    }
+
+    
+
     
 
     public Area(RealVector resolution, RealVector topRight, RealVector downLeft) {
         topRight_ = topRight;
         downLeft_ = downLeft;
         resolution_ = resolution;
-        System.out.println("Construtor de Area");
+
     }
 
     public Area(RealVector topRight, RealVector downLeft) {
@@ -52,7 +88,6 @@ public class Area {
         return topRight_;
     }
 
-
     public boolean isClosestCurve(RPnCurve curve) {
         //UserInputTable userInputList = UIController.instance().globalInputTable();
         //RealVector newValue = userInputList.values();
@@ -68,7 +103,7 @@ public class Area {
 
 
     @Override
-    public String toString(){
+    public String toString() {
 
         StringBuffer buffer = new StringBuffer();
 
@@ -86,13 +121,9 @@ public class Area {
         buffer.append("<\\DOWN>");
         buffer.append("\n");
         buffer.append("<\\AREA>");
-        
+
 
         return buffer.toString();
 
     }
-
-
-
-
 }

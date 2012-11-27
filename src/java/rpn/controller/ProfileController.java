@@ -6,7 +6,7 @@
 
 package rpn.controller;
 
-import rpn.usecase.*;
+import rpn.command.*;
 import java.beans.PropertyChangeEvent;
 
 public class ProfileController extends RpCalcController {
@@ -28,16 +28,16 @@ public class ProfileController extends RpCalcController {
     //
     @Override
     protected void register() {
-        ChangeFluxParamsAgent.instance().addPropertyChangeListener(this);
-        ChangeDirectionAgent.instance().addPropertyChangeListener(this);
-        ChangeXZeroAgent.instance().addPropertyChangeListener(this);
+        ChangeFluxParamsCommand.instance().addPropertyChangeListener(this);
+        ChangeDirectionCommand.instance().addPropertyChangeListener(this);
+        ChangeXZeroCommand.instance().addPropertyChangeListener(this);
     }
 
     @Override
     protected void unregister() {
-        ChangeFluxParamsAgent.instance().removePropertyChangeListener(this);
-        ChangeDirectionAgent.instance().removePropertyChangeListener(this);
-        ChangeXZeroAgent.instance().removePropertyChangeListener(this);
+        ChangeFluxParamsCommand.instance().removePropertyChangeListener(this);
+        ChangeDirectionCommand.instance().removePropertyChangeListener(this);
+        ChangeXZeroCommand.instance().removePropertyChangeListener(this);
     }
 
     @Override
@@ -45,9 +45,12 @@ public class ProfileController extends RpCalcController {
         // this is to avoid void notifications of enabled/disbled
         if (change.getPropertyName().compareTo("enabled") != 0) {
 
+
            super.propertyChange(change);
 
 
-        }
+
+    }
+
     }
 }

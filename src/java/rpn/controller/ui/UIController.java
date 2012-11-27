@@ -6,8 +6,9 @@
  */
 package rpn.controller.ui;
 
+import rpn.command.RpCommand;
 import rpn.RPnPhaseSpaceAbstraction;
-import rpn.usecase.*;
+import rpn.command.*;
 import rpn.RPnPhaseSpacePanel;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
@@ -55,8 +56,10 @@ public class UIController extends ComponentUI {
     private RPnPhaseSpacePanel focusPanel_;
     private StateInputController stateController_;
     public static UI_ACTION_SELECTED INITSTATE = null;
-    private ArrayList<Command> commandArray_;
+    private ArrayList<RpCommand> commandArray_;
     private boolean auxPanelsEnabled_;
+    private RPnPhaseSpaceAbstraction activePhaseSpace_;
+    private boolean drag_ = false;
 
     //
     // Constructors
@@ -70,9 +73,11 @@ public class UIController extends ComponentUI {
         mouseController_ = new MouseController();
         globalInputTable_ = new UserInputTable(rpnumerics.RPNUMERICS.domainDim());
 
-        commandArray_ = new ArrayList<Command>();
+        commandArray_ = new ArrayList<RpCommand>();
         handler_ = new RAREFACTION_CONFIG();
         auxPanelsEnabled_ = true;
+
+        activePhaseSpace_ = RPnDataModule.PHASESPACE;       //***
 
         initNetStatus();
 
@@ -127,13 +132,11 @@ public class UIController extends ComponentUI {
         return instance_;
     }
 
-  
-
     public void removeLastCommand() {
         commandArray_.remove(commandArray_.size() - 1);
     }
 
-    public Iterator<Command> getCommandIterator() {
+    public Iterator<RpCommand> getCommandIterator() {
         return commandArray_.iterator();
 
     }
@@ -146,17 +149,19 @@ public class UIController extends ComponentUI {
         return auxPanelsEnabled_;
     }
 
+    public void setActivePhaseSpace(RPnPhaseSpaceAbstraction activePhaseSpace_) {
+        this.activePhaseSpace_ = activePhaseSpace_;
+    }
+
     //
     // Inner Classes
     //
     class MouseMotionController extends MouseMotionAdapter {
 
-
-       
-
         @Override
         public void mouseDragged(MouseEvent event) {
             RPnUIFrame.clearStatusMessage();
+            drag_ = true;
 
             if (event.getComponent() instanceof RPnPhaseSpacePanel) {
                 RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
@@ -170,7 +175,7 @@ public class UIController extends ComponentUI {
 
 
                     //RpGeometry geom = RPnPhaseSpaceAbstraction.findClosestGeometry(newValue);
-                    RPnCurve curve = (RPnCurve)(geom.geomFactory().geomSource());
+                    RPnCurve curve = (RPnCurve) (geom.geomFactory().geomSource());
                     GeometryGraphND.pMarca = curve.findClosestPoint(newValue);
 
                     panel.repaint();
@@ -186,30 +191,25 @@ public class UIController extends ComponentUI {
                     resetPanelsCursorCoords();
 
 
-                    if (event.isShiftDown() && event.isControlDown()) {
-                        userInputComplete(globalInputTable().values());
-                    }
-
-                    else
-                    
                     if (event.isShiftDown()) {
-                        GeometryGraph.count = 0;
                         userInputComplete(globalInputTable().values());
-                        GeometryGraph.count = 0;
                     }
                     else {
 
-                        if (handler_ instanceof UI_ACTION_SELECTED) {
-                            UI_ACTION_SELECTED actionSelected = (UI_ACTION_SELECTED) handler_;
-                            RpModelActionAgent action = (RpModelActionAgent) actionSelected.getAction();
-                            action.setPhaseSpace((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom());
-                            DragPlotAgent.instance().setPhaseSpace((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom());
-                        }
+//                        if (handler_ instanceof UI_ACTION_SELECTED) {
+//                            UI_ACTION_SELECTED actionSelected = (UI_ACTION_SELECTED) handler_;
+//                            RpModelActionAgent action = (RpModelActionAgent) actionSelected.getAction();
+//                            action.setPhaseSpace((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom());
+//                            DragPlotAgent.instance().setPhaseSpace((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom());
+//                        }
 
-                        DragPlotAgent.instance().execute();
-                        
+
+                        DragPlotCommand.instance().execute();
+
+
+
                     }
-                }
+                }                
 
             }
         }
@@ -220,18 +220,28 @@ public class UIController extends ComponentUI {
         public MouseController() {
         }
 
+        @Override
+        public void mouseReleased(MouseEvent event) {
 
-       
+            if (drag_) {
+                if (!commandArray_.isEmpty())
+                    commandArray_.remove(commandArray_.size()-1);
+                    logCommand(new RpCommand((UI_ACTION_SELECTED) handler_, globalInputTable().values()));
+
+            }
+
+        }
 
         @Override
         public void mousePressed(MouseEvent event) {
+            drag_ = false;
             RPnUIFrame.clearStatusMessage();
             RPnUIFrame.disableSliders();
 
             if (event.getComponent() instanceof RPnPhaseSpacePanel) {
-                
+
                 RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
-                
+
                 RPnPhaseSpaceAbstraction.namePhaseSpace = ((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom()).getName();   //** acrescentei isso (Leandro)
                 panel.setName(RPnPhaseSpaceAbstraction.namePhaseSpace);
 
@@ -254,6 +264,7 @@ public class UIController extends ComponentUI {
                     }
 
                 }
+
             }
 
         }
@@ -264,17 +275,10 @@ public class UIController extends ComponentUI {
             if (event.getSource() instanceof RPnPhaseSpacePanel) {
                 toggleCursorLines();
                 RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
-
-                //RPnPhaseSpaceAbstraction.namePhaseSpace = ((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom()).getName();   //** acrescentei isso (Leandro)
-                //panel.setName(RPnPhaseSpaceAbstraction.namePhaseSpace);
-
                 if (handler_ instanceof UI_ACTION_SELECTED) {
-                    UI_ACTION_SELECTED actionSelected = (UI_ACTION_SELECTED) handler_;
-                    RpModelActionAgent action = (RpModelActionAgent) actionSelected.getAction();
-                    action.setPhaseSpace((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom());
-                    DragPlotAgent.instance().setPhaseSpace((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom());
-
+                    activePhaseSpace_ = (RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom();
                 }
+
 
             }
         }
@@ -298,7 +302,7 @@ public class UIController extends ComponentUI {
 
     /** Returns a table with all the points entered by the user. The application holds a table with all points entered by the user. This points are taked by mouse clicks in all panels .*/
     public rpn.controller.ui.UserInputTable globalInputTable() {
-        return globalInputTable_;
+        return activePhaseSpace_.getUserInputTable();
     }
 
     //
@@ -403,7 +407,7 @@ public class UIController extends ComponentUI {
 
     }
 
-    public void addCommand(Command command) {
+    public void logCommand(RpCommand command) {
         RPnUIFrame.clearStatusMessage();
         commandArray_.add(command);
     }
@@ -411,7 +415,6 @@ public class UIController extends ComponentUI {
     /** Sets the state of the application. The application works as a state machine and this method changes the actual state.*/
     public void setState(rpn.controller.ui.UserInputHandler newAction) {
         stateController_.propertyChange(new PropertyChangeEvent(this, "aplication state", handler_, newAction));
-        System.out.println(newAction.toString());
 
         if (handler_ instanceof UI_ACTION_SELECTED) {
 
@@ -422,9 +425,9 @@ public class UIController extends ComponentUI {
             if (newAction instanceof UI_ACTION_SELECTED) {
                 UI_ACTION_SELECTED selectedAction = (UI_ACTION_SELECTED) newAction;
                 // either unselect or new selection
-                if (currentSelection.getAction() instanceof RpModelPlotAgent) {
+                if (currentSelection.getAction() instanceof RpModelPlotCommand) {
 
-                    ((RpModelPlotAgent) currentSelection.getAction()).getContainer().setSelected(false);
+                    ((RpModelPlotCommand) currentSelection.getAction()).getContainer().setSelected(false);
 
                 }
                 // Singletons !
@@ -486,6 +489,10 @@ public class UIController extends ComponentUI {
         return netStatus_;
     }
 
+    public RPnPhaseSpaceAbstraction getActivePhaseSpace() {
+        return activePhaseSpace_;
+    }
+
     /**
      * @deprecated
      *
@@ -506,5 +513,9 @@ public class UIController extends ComponentUI {
 
     public void setStateController(StateInputController stateController) {
         stateController_ = stateController;
+    }
+
+    public Iterator<RPnPhaseSpacePanel> getInstalledPanelsIterator() {
+        return installedPanels_.iterator();
     }
 }

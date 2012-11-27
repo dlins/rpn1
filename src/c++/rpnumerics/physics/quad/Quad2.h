@@ -43,26 +43,8 @@ public:
 
 };
 
-inline SubPhysics * Quad2::clone()const {
-    return new Quad2(*this);
-}
 
 
-inline Boundary * Quad2::defaultBoundary() const{
-
-    RealVector min(2);
-
-    min.component(0) = -0.5;
-    min.component(1) = -0.5;
-
-    RealVector max(2);
-
-    max.component(0) = 0.5;
-    max.component(1) = 0.5;
-
-    return new RectBoundary(min, max);
-
-}
 
 
 #endif //! _Quad2_H

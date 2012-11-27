@@ -1,10 +1,11 @@
 #include "GridValues.h"
+#include "Boundary.h"
+
+
 
 GridValues::GridValues(const Boundary *b, 
                        const RealVector &pmin, const RealVector &pmax,
                        const std::vector<int> &number_of_cells){
-
-    cout << "Min e max dentro de grid values: "<<pmin<<" "<<pmax<<endl;
 
     set_grid(b, pmin, pmax, number_of_cells);
 }
@@ -93,6 +94,8 @@ void GridValues::fill_functions_on_grid(const FluxFunction *ff, const Accumulati
 //        fill_values_on_grid(GridValues &gv);
 
         printf("Inside GridValues::fill_functions_on_grid\n");
+        
+           cout<<"Flux e acumm em grid values: "<<ff<<" "<<aa<<endl;
 
         int rows = grid.rows(), cols = grid.cols(); 
         int n = rows*cols;
@@ -185,18 +188,49 @@ void GridValues::fill_eigenpairs_on_grid(const FluxFunction *ff, const Accumulat
                 Eigen::eig(dim, JF_on_grid(i).data(), JG_on_grid(i).data(), etemp);
 
                 //e(i).clear();
-                e(i).resize(etemp.size());
+//                e(i).resize(etemp.size());
+//            
+//                for (int j = 0; j < etemp.size(); j++) e(i)[j] = etemp[j];
+//
+//                // Decide if the eigenvalues are real or complex
+//                //eig_is_real(i).clear();
+//                eig_is_real(i).resize(etemp.size());
+//                for (int j = 0; j < etemp.size(); j++) {
+//                    if (fabs(etemp[j].i) < epsilon) eig_is_real(i)[j] = true; // TODO: Comparacoes devem ser feitas com valores relativos, nao absolutos
+//                    else eig_is_real(i)[j] = false;
+//                }
+//            }
+            
+            
+            
+            
+            
+             e(i).resize(etemp.size());
             
                 for (int j = 0; j < etemp.size(); j++) e(i)[j] = etemp[j];
 
                 // Decide if the eigenvalues are real or complex
                 //eig_is_real(i).clear();
-                eig_is_real(i).resize(etemp.size());
-                for (int j = 0; j < etemp.size(); j++) {
+                eig_is_real(i).resize(2);
+                for (int j = 0; j < 2; j++) {
                     if (fabs(etemp[j].i) < epsilon) eig_is_real(i)[j] = true; // TODO: Comparacoes devem ser feitas com valores relativos, nao absolutos
                     else eig_is_real(i)[j] = false;
                 }
             }
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
         }
 
 //        cell_is_real.resize(number_of_cells[0], number_of_cells[1]);

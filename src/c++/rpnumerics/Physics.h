@@ -21,6 +21,7 @@
 #include "Stone.h"
 #include "TPCW.h"
 #include "PolydispersePhysics.h"
+#include "CoreyQuadPhysics.h"
 #include "Cub2.h"
 
 //!
@@ -62,7 +63,7 @@ public:
 
     const string & ID() const;
 
-    SubPhysics & getSubPhysics(const int);
+    SubPhysics & getSubPhysics(const int)const ;
 
     const vector<SubPhysics *> & getPhysicsVector()const;
 
