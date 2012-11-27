@@ -363,7 +363,7 @@ public class RPnDataModule {
     // Methods
     //
     /** Writes the data of actual session into a XML file. */
-    static public void export(FileWriter writer) throws java.io.IOException {
+    static public void commandsExport(FileWriter writer) throws java.io.IOException {
 
         System.out.println("Data module export started...");
 
@@ -376,7 +376,7 @@ public class RPnDataModule {
         System.out.println("Data module export finished sucessfully !");
     }
 
-    static public void matlabExport(FileWriter writer) throws java.io.IOException {
+    static public void elementsExport(FileWriter writer) throws java.io.IOException {
 
         Iterator<RpGeometry> iterator = PHASESPACE.getGeomObjIterator();
         writer.write("close all; clear all;\n");

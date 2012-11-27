@@ -617,7 +617,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 dir = chooser.getSelectedFile().getParent();
                 System.out.println("Diretorio selecionado : " + dir);
 
-                RPnDataModule.matlabExport(writer);
+                RPnDataModule.elementsExport(writer);
 
                 writer.close();
             }
@@ -641,7 +641,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 writer.write("<rpnconfiguration>\n");
                 RPnNumericsModule.export(writer);
                 RPnVisualizationModule.export(writer);
-                RPnDataModule.export(writer);
+                RPnDataModule.commandsExport(writer);
                 writer.write("</rpnconfiguration>");
                 writer.close();
             }
