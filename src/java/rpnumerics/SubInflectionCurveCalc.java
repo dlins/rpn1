@@ -6,6 +6,8 @@
  */
 package rpnumerics;
 
+import rpn.configuration.CommandConfiguration;
+
 public class SubInflectionCurveCalc extends ContourCurveCalc {
 
     //
@@ -13,6 +15,17 @@ public class SubInflectionCurveCalc extends ContourCurveCalc {
     //
     public SubInflectionCurveCalc(){
         super(new ContourParams());
+        
+          String className = getClass().getSimpleName().toLowerCase();
+
+        String curveName = className.replace("calc", "");
+
+        configuration_ = new CommandConfiguration(curveName);
+
+        
+
+        
+        
     }
 
 

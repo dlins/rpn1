@@ -5,14 +5,17 @@
  */
 package rpnumerics;
 
+import rpn.configuration.Configuration;
 import rpnumerics.viscousprofile.ViscousProfileData;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
-import rpn.RPnConfig;
-import rpn.parser.ConfigurationProfile;
+import rpn.configuration.BoundaryConfiguration;
+import rpn.configuration.RPnConfig;
+import rpn.configuration.ConfigurationProfile;
+import rpn.configuration.PhysicsConfiguration;
 import rpn.parser.RPnDataModule;
 import wave.util.*;
 import wave.ode.*;
@@ -49,7 +52,7 @@ public class RPNUMERICS {
 
         ConfigurationProfile physicsProfile = RPnConfig.getActivePhysicsProfile();
 
-        Configuration physicsConfiguration = new Configuration(physicsProfile);
+        Configuration physicsConfiguration = new PhysicsConfiguration(physicsProfile);
 
 
         //Accumulation function
@@ -71,7 +74,7 @@ public class RPNUMERICS {
 
             RealVector paramsVector = getAccumulationParams();
 
-            Configuration accumlationFunctionConfiguration = new Configuration("accumulationfunction", ConfigurationProfile.PHYSICS_CONFIG);
+            Configuration accumlationFunctionConfiguration = new PhysicsConfiguration("accumulationfunction");
 
             for (int i = 0; i < paramsVector.getSize(); i++) {
                 accumlationFunctionConfiguration.setParamValue("param " + i, String.valueOf(paramsVector.getElement(i)));
@@ -107,7 +110,7 @@ public class RPNUMERICS {
 
 //            System.out.println("Pegando do arquivo de entrada");
 
-            Configuration boundaryConfiguration = new Configuration(boundaryProfile);
+            Configuration boundaryConfiguration = new BoundaryConfiguration(boundaryProfile);
 
             if (boundaryConfiguration.getName().equals("rect")) {
                 setBoundary(new RectBoundary(boundaryConfiguration.getParam("limits")));
@@ -141,7 +144,7 @@ public class RPNUMERICS {
             defaultBoundaryProfile.addParam("dimension", String.valueOf(min.getSize()));
             physicsProfile.addConfigurationProfile(ConfigurationProfile.BOUNDARY, boundaryProfile);
 
-            Configuration boundaryConfiguration = new Configuration(defaultBoundaryProfile);
+            Configuration boundaryConfiguration = new BoundaryConfiguration(defaultBoundaryProfile);
             physicsConfiguration.addConfiguration(boundaryConfiguration.getName(), boundaryConfiguration);
 
 
@@ -251,7 +254,7 @@ public class RPNUMERICS {
     public static String toXML() {
 
 
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
 
         ArrayList<Configuration> configurationArray = sortConfigurations();
 

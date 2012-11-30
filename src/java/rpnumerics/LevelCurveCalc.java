@@ -5,6 +5,10 @@
  */
 package rpnumerics;
 
+import rpn.configuration.CommandConfiguration;
+import rpn.configuration.Configuration;
+import rpn.configuration.ConfigurationProfile;
+
 public class LevelCurveCalc extends ContourCurveCalc {
 
     private int family_;
@@ -16,6 +20,16 @@ public class LevelCurveCalc extends ContourCurveCalc {
         super(params);
         family_ = family;
         level_ = level;
+        
+        
+         String className = getClass().getSimpleName().toLowerCase();
+
+        String curveName = className.replace("calc", "");
+
+        configuration_ = new CommandConfiguration(curveName);
+        configuration_.setParamValue("family", String.valueOf(family));
+        configuration_.setParamValue("level", String.valueOf(family));
+        
 
     }
 

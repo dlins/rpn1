@@ -15,5 +15,6 @@ public interface RpGeometry extends MultiGeometry {
     /** Returns the object that constructs the geometric model. */
 
     RpGeomFactory geomFactory();
+  
 
 }

@@ -31,6 +31,8 @@ public class BifurcationCurveGeom implements MultiGeometry, RpGeometry {
     private Space space_;
     private BoundingBox boundary_;
     private RpGeometry otherSide_;
+    
+
 
     public BifurcationCurveGeom(RealSegGeom[] segArray, BifurcationCurveGeomFactory factory) {
 
@@ -128,4 +130,6 @@ public class BifurcationCurveGeom implements MultiGeometry, RpGeometry {
 
     public void load(FileReader cin) {
     }
+
+   
 }

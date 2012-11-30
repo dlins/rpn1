@@ -5,6 +5,9 @@
  */
 package rpnumerics;
 
+import rpn.configuration.CommandConfiguration;
+import rpn.configuration.Configuration;
+import rpn.configuration.ConfigurationProfile;
 import wave.util.RealVector;
 
 public class PointLevelCalc extends LevelCurveCalc {
@@ -14,6 +17,20 @@ public class PointLevelCalc extends LevelCurveCalc {
     public PointLevelCalc(RealVector point, int family, ContourParams params) {
         super(family, params);
         startPoint_ = point;
+
+
+        String className = getClass().getSimpleName().toLowerCase();
+
+        String curveName = className.replace("calc", "");
+
+        configuration_ = new CommandConfiguration(curveName);
+        configuration_.setParamValue("family", String.valueOf(family));
+        configuration_.setParamValue("level", String.valueOf(family));
+
+
+
+
+
     }
 
     @Override

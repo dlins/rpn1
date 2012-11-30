@@ -222,7 +222,7 @@ public class UIController extends ComponentUI {
                 if (!commandArray_.isEmpty()) {
                     commandArray_.remove(commandArray_.size() - 1);
                 }
-                logCommand(new RpCommand((UI_ACTION_SELECTED) handler_, globalInputTable().values()));
+//                logCommand(new RpCommand((UI_ACTION_SELECTED) handler_, globalInputTable().values()));
 
             }
 

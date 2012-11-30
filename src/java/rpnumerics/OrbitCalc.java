@@ -6,6 +6,7 @@
  */
 package rpnumerics;
 
+import rpn.configuration.Configuration;
 import wave.util.RealVector;
 
 public class OrbitCalc implements RpCalculation {
@@ -19,7 +20,7 @@ public class OrbitCalc implements RpCalculation {
     private OrbitPoint start_;
     private int timeDirection_;
     private RealVector[] poincareSection_;
-
+    protected Configuration configuration_;
     //
     // Constructors/Initializers
     //
@@ -104,5 +105,9 @@ public class OrbitCalc implements RpCalculation {
 
     private native RpSolution nativeCalc (OrbitPoint initialPoint, PhasePoint referencePoint,double speed, int direction ,RealVector[] poincareSection) throws RpException;
 //       private native RpSolution nativeCalc (OrbitPoint initialPoint, PhasePoint referencePoint,double speed, int direction ) throws RpException;
+
+    public Configuration getConfiguration() {
+        return configuration_;
+    }
 
 }

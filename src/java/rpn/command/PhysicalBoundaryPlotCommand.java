@@ -30,7 +30,7 @@ public class PhysicalBoundaryPlotCommand extends RpModelPlotCommand {
     // Constructors/Initializers
     //
     protected PhysicalBoundaryPlotCommand() {
-        super(DESC_TEXT, rpn.RPnConfig.HUGONIOT, new JButton());
+        super(DESC_TEXT, rpn.configuration.RPnConfig.HUGONIOT, new JButton());
     }
 
     @Override

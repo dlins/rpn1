@@ -3,23 +3,21 @@
  * Departamento de Dinamica dos Fluidos
  *
  */
-package rpnumerics;
+package rpn.configuration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
-import rpn.parser.ConfigurationProfile;
-import wave.util.RealVector;
 
-public class Configuration {
+public abstract class Configuration {
 
     private HashMap<String, String> params_;
     private ArrayList<String> paramOrder_;
     private HashMap<String, Configuration> configurationMap_;
     private String name_;
     private String type_;
-
 
     public Configuration(ConfigurationProfile profile) {
 
@@ -38,25 +36,41 @@ public class Configuration {
 
         }
 
-        if (!profile.getProfiles().isEmpty()) {
 
-            Set<Entry<String, ConfigurationProfile>> profilesSet = profile.getProfiles().entrySet();
-            for (Entry<String, ConfigurationProfile> profileEntry : profilesSet) {
-                configurationMap_.put(profileEntry.getKey(), new Configuration(profileEntry.getValue()));
-            }
-        }
+//        if (!profile.getProfiles().isEmpty()) {
+//
+//            Set<Entry<String, ConfigurationProfile>> profilesSet = profile.getProfiles().entrySet();
+//            for (Entry<String, ConfigurationProfile> profileEntry : profilesSet) {
+//                configurationMap_.put(profileEntry.getKey(), new Configuration(profileEntry.getValue()));
+//            }
+//        }
+
 
         name_ = profile.getName();
         type_ = profile.getType();
 
     }
 
-    public Configuration(String name, String type) {
+    public Configuration(ConfigurationProfile profile, List<Configuration> innerConfigurations) {
+
+
+        this(profile);
+
+        for (Configuration configuration : innerConfigurations) {
+            configurationMap_.put(configuration.getName(), configuration);
+        }
+
+
+
+
+    }
+
+    public Configuration(String name) {
         params_ = new HashMap<String, String>();
         paramOrder_ = new ArrayList<String>();
         configurationMap_ = new HashMap<String, Configuration>();
         name_ = name;
-        type_ = type;
+
     }
 
     public void removeParam(String paramName) {
@@ -84,7 +98,6 @@ public class Configuration {
 
     }
 
-
     public int getParamOrder(String paramName) {
 
         return paramOrder_.indexOf(paramName);
@@ -98,7 +111,7 @@ public class Configuration {
         return configurationMap_;
     }
 
-    public String getParam(int paramOrder) {  
+    public String getParam(int paramOrder) {
         try {
 
             String paramName = paramOrder_.get(paramOrder);
@@ -112,7 +125,6 @@ public class Configuration {
         return null;
 
     }
-    
 
     public String getParamName(int paramOrder) {
 
@@ -127,7 +139,6 @@ public class Configuration {
 
         return null;
     }
-
 
     public String[] getParamNames() {
         String[] paramNames = new String[params_.keySet().size()];
@@ -177,6 +188,7 @@ public class Configuration {
         return type_;
     }
 
+//    public abstract toXML();
     @Override
     public String toString() {
 
@@ -209,17 +221,17 @@ public class Configuration {
 
             for (Entry<String, Configuration> entry : configurationSet) {//Printing boundary first
 
-                if(entry.getValue().getType().equals(ConfigurationProfile.BOUNDARY))
-
-                buffer.append(entry.getValue().toXML());
+                if (entry.getValue().getType().equals(ConfigurationProfile.BOUNDARY)) {
+                    buffer.append(entry.getValue().toXML());
+                }
 
             }
 
             for (Entry<String, Configuration> entry : configurationSet) {//Printing the rest
 
-                if (!entry.getValue().getType().equals(ConfigurationProfile.BOUNDARY))
-
+                if (!entry.getValue().getType().equals(ConfigurationProfile.BOUNDARY)) {
                     buffer.append(entry.getValue().toXML());
+                }
 
             }
 
@@ -252,7 +264,7 @@ public class Configuration {
 
         }
 
-
+       
 
         if (getType().equalsIgnoreCase(ConfigurationProfile.CURVECONFIGURATION)) {
             buffer.append("<CURVECONFIGURATION name=\"" + getName() + "\">\n");
@@ -296,5 +308,4 @@ public class Configuration {
 
         return buffer.toString();
     }
-
 }

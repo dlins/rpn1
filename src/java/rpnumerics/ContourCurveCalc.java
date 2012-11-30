@@ -5,15 +5,20 @@
  */
 package rpnumerics;
 
+import rpn.configuration.Configuration;
+
 public abstract class ContourCurveCalc implements RpCalculation {
 
     private ContourParams params_;
+    protected Configuration configuration_;
 
     //
     // Constructors
     //
     public ContourCurveCalc(ContourParams params) {
         params_ = params;
+        
+        
 
     }
 
@@ -32,4 +37,8 @@ public abstract class ContourCurveCalc implements RpCalculation {
     public ContourParams getParams() {
         return params_;
     }
+    
+    
+    public Configuration getConfiguration(){return configuration_;}
+    
 }

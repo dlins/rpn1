@@ -18,7 +18,7 @@ import rpnumerics.RpException;
 import rpnumerics.ShockRarefactionProfile;
 import wave.util.RealVector;
 import wave.util.SimplexPoincareSection;
-import rpnumerics.Configuration;
+import rpn.configuration.Configuration;
 import rpnumerics.StationaryPoint;
 import rpnumerics.StationaryPointCalc;
 

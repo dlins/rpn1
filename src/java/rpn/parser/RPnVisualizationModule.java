@@ -6,6 +6,7 @@
 package rpn.parser;
 
 //import wave.multid.Space;
+import rpn.configuration.ConfigurationProfile;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
@@ -17,7 +18,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import rpn.RPnConfig;
+import rpn.configuration.RPnConfig;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.XMLReader;
 import rpn.RPnProjDescriptor;

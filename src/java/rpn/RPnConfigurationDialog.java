@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
 import rpn.parser.RPnDataModule;
-import rpnumerics.Configuration;
+import rpn.configuration.Configuration;
 import rpnumerics.RPNUMERICS;
 import wave.util.Boundary;
 import wave.util.RealVector;

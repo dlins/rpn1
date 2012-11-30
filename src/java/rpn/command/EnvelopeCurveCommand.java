@@ -30,7 +30,7 @@ public class EnvelopeCurveCommand extends RpModelPlotCommand {
     // Constructors/Initializers
     //
     protected EnvelopeCurveCommand() {
-        super(DESC_TEXT, rpn.RPnConfig.HUGONIOT, new JButton());
+        super(DESC_TEXT, rpn.configuration.RPnConfig.HUGONIOT, new JButton());
     }
 
     @Override

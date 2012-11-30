@@ -16,14 +16,18 @@ import java.beans.PropertyChangeEvent;
 import javax.swing.ImageIcon;
 import java.util.Iterator;
 import javax.swing.AbstractButton;
+import rpn.component.RpCalcBasedGeomFactory;
 import rpn.controller.ui.*;
+import rpnumerics.RpCurve;
 
 public abstract class RpModelPlotCommand extends RpModelActionCommand {
 
     protected AbstractButton button_;
+    private int idCounter_;
 
     public RpModelPlotCommand(String shortDesc, ImageIcon icon, AbstractButton button) {
         super(shortDesc, icon);
+        idCounter_=0;
         button_ = button;
         button_.setAction(this);
         button_.setFont(rpn.RPnConfigReader.MODELPLOT_BUTTON_FONT);
@@ -46,21 +50,39 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand {
 
         RealVector[] userInputList = UIController.instance().userInputList();
 
-        String listString = "";
-
         Iterator oldValue = UIController.instance().getActivePhaseSpace().getGeomObjIterator();
 
         RpGeometry geometry = createRpGeometry(userInputList);
+        idCounter_++;
+        
+        RpCalcBasedGeomFactory factory  = (RpCalcBasedGeomFactory)geometry.geomFactory();
+        
+        RpCurve curve = (RpCurve) factory.geomSource();
+        
+
 
 
         if (geometry == null) {
             return;
         }
-       
+
+        
+        curve.setId(idCounter_);
+        
         UIController.instance().getActivePhaseSpace().plot(geometry);
 
         Iterator newValue = UIController.instance().getActivePhaseSpace().getGeomObjIterator();
-        logAction(new PropertyChangeEvent(this, listString, oldValue, newValue));
+        
+        PropertyChangeEvent event = new PropertyChangeEvent(this,UIController.instance().getActivePhaseSpace().getName(), oldValue, newValue);
+
+        RpCommand command = new RpCommand(event);
+        logCommand(command);
+        
+        
+        System.out.println(command.toXML());
+        
+        
+        
 
     }
 

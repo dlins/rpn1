@@ -5,6 +5,7 @@
  */
 package rpn.parser;
 
+import rpn.configuration.ConfigurationProfile;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXParseException;
@@ -16,7 +17,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.InputSource;
 import java.io.FileWriter;
 import java.io.InputStream;
-import rpn.RPnConfig;
+import rpn.configuration.RPnConfig;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.XMLReader;
 import rpnumerics.RPNUMERICS;

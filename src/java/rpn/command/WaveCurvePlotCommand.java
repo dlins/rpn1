@@ -6,6 +6,7 @@ import rpn.component.WaveCurveGeomFactory;
 import rpnumerics.OrbitPoint;
 import wave.util.RealVector;
 import rpnumerics.RPNUMERICS;
+import rpnumerics.WaveCurveCalc;
 
 public class WaveCurvePlotCommand extends RpModelPlotCommand {
 
@@ -14,13 +15,14 @@ public class WaveCurvePlotCommand extends RpModelPlotCommand {
 
     public WaveCurvePlotCommand() {
 
-        super(DESC_TEXT, rpn.RPnConfig.ORBIT_FWD,new JToggleButton());
+        super(DESC_TEXT, rpn.configuration.RPnConfig.ORBIT_FWD,new JToggleButton());
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {
 
         OrbitPoint oPoint = new OrbitPoint(input[input.length - 1]);
-        WaveCurveGeomFactory factory = new WaveCurveGeomFactory(RPNUMERICS.createWaveCurveCalc(oPoint));
+        WaveCurveCalc waveCurveCalc = RPNUMERICS.createWaveCurveCalc(oPoint);
+        WaveCurveGeomFactory factory = new WaveCurveGeomFactory(waveCurveCalc);
 
         return factory.geom();
 

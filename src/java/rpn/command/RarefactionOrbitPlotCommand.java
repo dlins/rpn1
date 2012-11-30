@@ -14,7 +14,7 @@ public class RarefactionOrbitPlotCommand extends RpModelPlotCommand {
 
     public RarefactionOrbitPlotCommand() {
 
-        super(DESC_TEXT, rpn.RPnConfig.ORBIT_FWD,new JToggleButton());
+        super(DESC_TEXT, rpn.configuration.RPnConfig.ORBIT_FWD,new JToggleButton());
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {

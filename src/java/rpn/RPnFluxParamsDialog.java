@@ -18,7 +18,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import rpn.component.util.GeometryGraphND;
 
-import rpnumerics.Configuration;
+import rpn.controller.ui.UIController;
+import rpn.configuration.Configuration;
 import rpnumerics.RPNUMERICS;
 
 public class RPnFluxParamsDialog extends RPnDialog {
@@ -142,10 +143,19 @@ public class RPnFluxParamsDialog extends RPnDialog {
     protected void apply() {
 
         GeometryGraphND.clearAllStrings();
+        
+        Configuration physicsConfiguration = RPNUMERICS.getConfiguration(RPNUMERICS.physicsID());
+        
+        Configuration fluxConfiguration = physicsConfiguration.getConfiguration("fluxfunction");
         RPNUMERICS.applyFluxParams();
 
-        rpn.command.ChangeFluxParamsCommand.instance().applyChange(new PropertyChangeEvent(rpn.command.ChangeFluxParamsCommand.instance(), "", null, RPNUMERICS.getFluxParams().getParams()));
-
+        String phaseSpaceName = UIController.instance().getActivePhaseSpace().getName();
+        
+        
+        
+        rpn.command.ChangeFluxParamsCommand.instance().applyChange(new PropertyChangeEvent(rpn.command.ChangeFluxParamsCommand.instance(),phaseSpaceName,
+        fluxConfiguration,
+                fluxConfiguration));
         rpn.command.ChangeFluxParamsCommand.instance().updatePhaseDiagram();
     }
 

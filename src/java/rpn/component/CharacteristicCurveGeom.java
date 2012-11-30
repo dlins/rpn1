@@ -27,7 +27,7 @@ public class CharacteristicCurveGeom extends MultiGeometryImpl implements RpGeom
     //
     // Constructors
    
-    RpGeomFactory factory_;
+private    RpGeomFactory factory_;
 
     public CharacteristicCurveGeom(List<PhasePoint[]> charPoints, CharacteristicsCurveGeomFactory factory, ViewingAttr viewAttr) {
         super(new Space("CharacteristicsSpace", 2), viewAttr);
@@ -92,4 +92,6 @@ public class CharacteristicCurveGeom extends MultiGeometryImpl implements RpGeom
     public RpGeomFactory geomFactory() {
         return factory_;
     }
+
+    
 }

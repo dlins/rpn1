@@ -30,7 +30,7 @@ public class DoubleContactCommand extends RpModelPlotCommand {
     // Constructors/Initializers
     //
     protected DoubleContactCommand() {
-        super(DESC_TEXT, rpn.RPnConfig.HUGONIOT, new JButton());
+        super(DESC_TEXT, rpn.configuration.RPnConfig.HUGONIOT, new JButton());
     }
 
     @Override

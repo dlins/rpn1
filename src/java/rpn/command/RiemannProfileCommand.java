@@ -48,7 +48,7 @@ public class RiemannProfileCommand extends RpModelPlotCommand implements Observe
     // Constructors/Initializers
     //
     protected RiemannProfileCommand() {
-        super(DESC_TEXT, rpn.RPnConfig.HUGONIOT, new JButton());
+        super(DESC_TEXT, rpn.configuration.RPnConfig.HUGONIOT, new JButton());
     }
 
     @Override

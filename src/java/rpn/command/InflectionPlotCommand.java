@@ -30,7 +30,7 @@ public class InflectionPlotCommand extends RpModelPlotCommand {
     // Constructors/Initializers
     //
     protected InflectionPlotCommand() {
-        super(DESC_TEXT, rpn.RPnConfig.HUGONIOT, new JButton(DESC_TEXT));
+        super(DESC_TEXT, rpn.configuration.RPnConfig.HUGONIOT, new JButton(DESC_TEXT));
     }
 
     @Override

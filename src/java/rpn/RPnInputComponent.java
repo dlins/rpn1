@@ -29,7 +29,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import rpn.command.ChangeCurveConfigurationCommand;
-import rpnumerics.Configuration;
+import rpn.configuration.Configuration;
 import rpnumerics.RPNUMERICS;
 import wave.util.RealVector;
 

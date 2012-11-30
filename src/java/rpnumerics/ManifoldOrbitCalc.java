@@ -6,14 +6,14 @@
  */
 package rpnumerics;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import rpn.configuration.Configuration;
 import wave.util.*;
-import wave.ode.ODESolution;
 import org.netlib.lapack.DGEES;
 import org.netlib.lapack.DTRSYL;
 import org.netlib.util.intW;
 import org.netlib.util.doubleW;
+import rpn.configuration.CommandConfiguration;
+import rpn.configuration.ConfigurationProfile;
 import wave.util.RealVector;
 import wave.util.RealMatrix2;
 
@@ -31,66 +31,101 @@ public class ManifoldOrbitCalc implements RpCalculation {
     //
     // Members
     //
+
     private StationaryPoint stationaryPoint_;
     private PhasePoint firstPoint_;
     private int timeDirection_;
     private String methodName_;
     private SimplexPoincareSection poincare_;
-    
     //
     // Constructors
     //
+    private Configuration configuration_;
 
-
-    public ManifoldOrbitCalc(StationaryPoint stationaryPoint, PhasePoint firstPoint, SimplexPoincareSection poincareSection,int timeDirection) {
+    public ManifoldOrbitCalc(StationaryPoint stationaryPoint, PhasePoint firstPoint, SimplexPoincareSection poincareSection, int timeDirection) {
         stationaryPoint_ = stationaryPoint;
         timeDirection_ = timeDirection;
-        poincare_=poincareSection;
+        poincare_ = poincareSection;
         firstPoint_ = firstPoint;
+
+        String className = getClass().getSimpleName().toLowerCase();
+
+        String curveName = className.replace("calc", "");
+
+        configuration_ = new CommandConfiguration(curveName);
+
+
+        configuration_.setParamValue("firstPoint", firstPoint.toString());
+        configuration_.setParamValue("direction", String.valueOf(timeDirection));
+
+
+
+
     }
 
-
-    public ManifoldOrbitCalc(StationaryPoint stationaryPoint, SimplexPoincareSection poincareSection,int timeDirection)throws RpException {      //RETOMAR AQUI !!!
+    public ManifoldOrbitCalc(StationaryPoint stationaryPoint, SimplexPoincareSection poincareSection, int timeDirection) throws RpException {      //RETOMAR AQUI !!!
         stationaryPoint_ = stationaryPoint;
         timeDirection_ = timeDirection;
-        poincare_=poincareSection;
+        poincare_ = poincareSection;
 
-          if(stationaryPoint.isSaddle()) {
+        if (stationaryPoint.isSaddle()) {
             firstPoint_ = orbitInitialPoint(stationaryPoint, poincareSection);
+
+            String className = getClass().getSimpleName().toLowerCase();
+
+            String curveName = className.replace("calc", "");
+
+            configuration_ = new CommandConfiguration(curveName);
+
+
+            configuration_.setParamValue("firstPoint", firstPoint_.toString());
+            configuration_.setParamValue("direction", String.valueOf(timeDirection));
+
+
+
+        } else {
+            throw new RpException("Stationary point is not saddle in Manifold Constructor");
         }
 
-        else throw  new RpException("Stationary point is not saddle in Manifold Constructor");
-
     }
-
-
-
 
     public ManifoldOrbitCalc(StationaryPoint stationaryPoint, PhasePoint firstPoint, int timeDirection) {
         timeDirection_ = timeDirection;
         stationaryPoint_ = stationaryPoint;
         firstPoint_ = firstPoint;
 
-        RealVector [] poincarePoints = new RealVector[2];// Poincare sendo apenas 1 segmento (usando um ponto como default)
 
-        poincarePoints[0]= new RealVector(2);
+        String className = getClass().getSimpleName().toLowerCase();
+
+        String curveName = className.replace("calc", "");
+
+        configuration_ = new CommandConfiguration(curveName);
+
+
+        configuration_.setParamValue("firstPoint", firstPoint_.toString());
+        configuration_.setParamValue("direction", String.valueOf(timeDirection));
+
+        RealVector[] poincarePoints = new RealVector[2];// Poincare sendo apenas 1 segmento (usando um ponto como default)
+
+        poincarePoints[0] = new RealVector(2);
 
         poincarePoints[0].setElement(0, 0.0);
         poincarePoints[0].setElement(1, 0.0);
 
-    
-        poincarePoints[1]= new RealVector(2);
+
+        poincarePoints[1] = new RealVector(2);
 
         poincarePoints[1].setElement(0, 0.0);
         poincarePoints[1].setElement(1, 0.0);
 
         SimplexPoincareSection poincare = new SimplexPoincareSection(poincarePoints);
 
-        poincare_=poincare;
+        poincare_ = poincare;
 
 
     }
     // -------------------------------------------------------------------------
+
     private PhasePoint orbitInitialPoint(StationaryPoint stationaryPoint, SimplexPoincareSection poincareSection) {
 
         double P10 = poincareSection.getPoints()[0].getElement(0);
@@ -99,7 +134,7 @@ public class ManifoldOrbitCalc implements RpCalculation {
         double P21 = poincareSection.getPoints()[1].getElement(1);
         double a = P11 - P21;
         double b = P20 - P10;
-        double c = P10*P21 - P20*P11;
+        double c = P10 * P21 - P20 * P11;
 
 
         double h = 1E-2;
@@ -127,17 +162,15 @@ public class ManifoldOrbitCalc implements RpCalculation {
         }
 
 
-        if(dist1 < dist2) {
+        if (dist1 < dist2) {
             initialPoint = new PhasePoint(point1);
-        }
-        else {
+        } else {
             initialPoint = new PhasePoint(point2);
         }
 
         return initialPoint;
 
     }
-
 
     //
     // Accessors/Mutators
@@ -154,10 +187,6 @@ public class ManifoldOrbitCalc implements RpCalculation {
     //
     // Methods
     //
-
-
-   
-
     public RpSolution recalc(Area area) throws RpException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -180,13 +209,8 @@ public class ManifoldOrbitCalc implements RpCalculation {
         return calc();
     }
 
-
-
-
-
-
 //    public RpSolution recalc() throws RpException {
-        // stores the delta from the previous stationary point
+    // stores the delta from the previous stationary point
 //        PhasePoint firstDelta = new PhasePoint(firstPoint_);
 //        firstDelta.getCoords().sub(firstPoint_.getCoords(), stationaryPoint_.getPoint().getCoords());
 //        // recalculation of stationary point
@@ -198,7 +222,6 @@ public class ManifoldOrbitCalc implements RpCalculation {
 //        return calc();
 //        return null;
 //    }
-
 //    public RpSolution calc() throws RpException {
 //        int m = RPNUMERICS.domainDim();
 //        // checking input
@@ -477,10 +500,7 @@ public class ManifoldOrbitCalc implements RpCalculation {
 //        }
 //
 //        return new ManifoldOrbit(stationaryPoint_, firstPoint_, orbit, timeDirection_);
-
-
 //    }
-
     protected double errorValue(RealMatrix2 A, RealVector q) {
         // evaluates the error  =  ||0.5 q^T A q||
         int m = RPNUMERICS.domainDim();
@@ -551,7 +571,7 @@ public class ManifoldOrbitCalc implements RpCalculation {
         return D;
     }
 
-
-
-    
+    public Configuration getConfiguration() {
+        return configuration_;
+    }
 }

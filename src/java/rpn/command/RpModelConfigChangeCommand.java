@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.ArrayList;
 import rpn.controller.ui.*;
 import rpn.parser.RPnDataModule;
-import wave.util.RealVector;
 
 public abstract class RpModelConfigChangeCommand extends RpModelActionCommand {
     //
@@ -29,11 +28,15 @@ public abstract class RpModelConfigChangeCommand extends RpModelActionCommand {
 
     public void applyChange(PropertyChangeEvent change) {
 
-        RealVector newParameters = (RealVector) change.getNewValue();
 
-        UIController.instance().logCommand(new RpCommand(new UI_ACTION_SELECTED(this), newParameters));
+        RpCommand command = new RpCommand(change);
+
+        logCommand(command);
+        
+        System.out.println(command.toXML());
+
         firePropertyChange(change);
-        logAction(change);
+
         RPnDataModule.updatePhaseSpaces();
         UIController.instance().panelsUpdate();
 
@@ -57,7 +60,6 @@ public abstract class RpModelConfigChangeCommand extends RpModelActionCommand {
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         listenersList_.remove(listener);
     }
-    
 
     public void firePropertyChange(PropertyChangeEvent event) {
 
@@ -67,25 +69,4 @@ public abstract class RpModelConfigChangeCommand extends RpModelActionCommand {
 
         }
     }
-    
-    
-   
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 }

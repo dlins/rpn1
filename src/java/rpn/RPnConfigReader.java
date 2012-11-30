@@ -5,6 +5,7 @@
  */
 package rpn;
 
+import rpn.configuration.RPnConfig;
 import java.io.*;
 import javax.swing.JApplet;
 import java.awt.Font;

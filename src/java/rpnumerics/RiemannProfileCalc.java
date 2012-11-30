@@ -6,8 +6,11 @@
  */
 package rpnumerics;
 
+import rpn.configuration.Configuration;
 import java.util.ArrayList;
 import java.util.List;
+import rpn.configuration.CommandConfiguration;
+import rpn.configuration.ConfigurationProfile;
 import wave.util.RealVector;
 
 public class RiemannProfileCalc implements RpCalculation {
@@ -21,6 +24,7 @@ public class RiemannProfileCalc implements RpCalculation {
     private Area area_;
     private List<FundamentalCurve> forwardList_;
     private List<FundamentalCurve> backwardList_;
+    private Configuration configuration_;
 
     //
     // Constructors/Initializers
@@ -51,15 +55,27 @@ public class RiemannProfileCalc implements RpCalculation {
         for (WaveCurveBranch waveCurveBranch : backwardBranch) {
 
 
-              for (WaveCurveBranch waveCurveBranch2 : waveCurveBranch.getBranchsList()) {
+            for (WaveCurveBranch waveCurveBranch2 : waveCurveBranch.getBranchsList()) {
 
                 FundamentalCurve orbit = (FundamentalCurve) waveCurveBranch2;
 
                 backwardList_.add(orbit);
 
-              }
+            }
 
         }
+
+
+
+        String className = getClass().getSimpleName().toLowerCase();
+
+        String curveName = className.replace("calc", "");
+
+        configuration_ = new CommandConfiguration(curveName);
+
+        configuration_.setParamValue("forwardwavecurve", String.valueOf(forwardCurve.getId()));
+        configuration_.setParamValue("backwardwavecurve", String.valueOf(backwardCurve.getId()));
+
 
 
     }
@@ -69,6 +85,10 @@ public class RiemannProfileCalc implements RpCalculation {
     //
     public RpSolution recalc() throws RpException {
         return calc();
+    }
+
+    public Configuration getConfiguration() {
+        return configuration_;
     }
 
     public RpSolution calc() throws RpException {

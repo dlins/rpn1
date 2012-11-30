@@ -27,7 +27,6 @@ import rpn.RPnPhaseSpaceFrame;
 import rpn.component.RpGeometry;
 import rpn.parser.RPnDataModule;
 
-
 //public abstract class RpCurve extends MultiPolyLine {
 public abstract class RpCurve implements RpSolution {
 
@@ -36,10 +35,10 @@ public abstract class RpCurve implements RpSolution {
     private double ALFA;
     //** declarei isso (Leandro)
     public double distancia = 0;
-    
+    public int id_;
+
     public RpCurve() {//TODO REMOVE !!
         //super(new CoordsArray[3], new ViewingAttr(Color.WHITE));
-
     }
 
     public RpCurve(PointNDimension[][] polyline, ViewingAttr viewAttr) {
@@ -81,12 +80,11 @@ public abstract class RpCurve implements RpSolution {
 //    public String toString() {
 //        //return getPath().toString();
 //    }
-
     //******** Era usado no refinamento local
     public static void remove(SegmentedCurve curve, List indexList, Shape square, double zmin, double zmax, Scene scene) {    // tentar colocar isso na classe SegmentedCurve.java
 
-        System.out.println("Tamanho de indexList : " +indexList.size());
-        System.out.println("Tamanho da curva antes da remocao : " +curve.segments().size());
+        System.out.println("Tamanho de indexList : " + indexList.size());
+        System.out.println("Tamanho da curva antes da remocao : " + curve.segments().size());
 
         List segRem = new ArrayList();
 
@@ -96,13 +94,13 @@ public abstract class RpCurve implements RpSolution {
         }
 
         curve.segments().removeAll(segRem);
-        
+
         scene.update();
         RPnDataModule.PHASESPACE.update();
 
-        System.out.println("Tamanho da curva depois da remocao : " +curve.segments().size());
+        System.out.println("Tamanho da curva depois da remocao : " + curve.segments().size());
 
-        
+
 //        for (int i = 0; i < GeometryUtil.targetPoint.getSize(); i++) {        // Pode ser útil na hora de fazer inclusao dos novos segmentos (para nao serem eliminados)
 //            GeometryUtil.cornerRet.setElement(i, 0);
 //            GeometryUtil.targetPoint.setElement(i, 0.);
@@ -110,7 +108,6 @@ public abstract class RpCurve implements RpSolution {
 
     }
     //********
-
 
 //    //-------------------------------------------- Parece que não é mais usado
 //    public RealVector projectionCurve(RpCurve curve, RealVector targetPoint) {
@@ -161,9 +158,6 @@ public abstract class RpCurve implements RpSolution {
 //        return null;
 //    }
 //    --------------------------------------------------------------------------
-
-   
-
     private static AbstractSegment[] fromPointNDimensionCurveToSegment(
             PointNDimension[][] polyline) {
         int numberOfPolylines = polyline.length;
@@ -224,7 +218,6 @@ public abstract class RpCurve implements RpSolution {
         }
 
     }
-
 
     public int findClosestSegment(RealVector targetPoint) {
 
@@ -297,6 +290,13 @@ public abstract class RpCurve implements RpSolution {
         return closestSegment;
     }
 
+    public int getId() {
+        return id_;
+    }
+
+    public void setId(int id) {
+        id_ = id;
+    }
 
     public RealVector findClosestPoint(RealVector targetPoint) {
 
@@ -304,7 +304,7 @@ public abstract class RpCurve implements RpSolution {
         //System.out.println("Nome do phaseSpace ::::::::::::::::::::::::::::::::: " +RPnPhaseSpaceAbstraction.namePhaseSpace);
 
         RpGeometry geom = phaseSpace.findClosestGeometry(targetPoint);
-        RpCurve curve = (RpCurve)(geom.geomFactory().geomSource());
+        RpCurve curve = (RpCurve) (geom.geomFactory().geomSource());
         ArrayList segments = (ArrayList) curve.segments();
 
         RealSegment closestSegment = (RealSegment) segments.get(findClosestSegment(targetPoint));
@@ -322,8 +322,6 @@ public abstract class RpCurve implements RpSolution {
         return projVec;
 
     }
-
-
 
     public RealVector calcVecProj(RealVector a, RealVector b, RealVector o) {
 
@@ -382,7 +380,6 @@ public abstract class RpCurve implements RpSolution {
 //        }
 //
 //    }
-
     public PointNDimension[] getPolyLineAt(int index) {
         PointNDimension[][] polyline = polyLinesSetList_.getPolylines();
         return polyline[index];
@@ -416,7 +413,6 @@ public abstract class RpCurve implements RpSolution {
 //            DimMismatchEx {
 //        // nao sei como implementar
 //    }
-
 //    @Override
 //    public void append(AbstractSegment toAppend, boolean connect) throws
 //            DimMismatchEx {
@@ -432,7 +428,6 @@ public abstract class RpCurve implements RpSolution {
 //
 //        updateMultiPolyline();
 //    }
-
     public void append(PointNDimension point1, PointNDimension point2) {
         try {
             polyLinesSetList_.addSegment(point1, point2);
@@ -473,5 +468,4 @@ public abstract class RpCurve implements RpSolution {
     public String toMatlab(int curveIndex) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
 }

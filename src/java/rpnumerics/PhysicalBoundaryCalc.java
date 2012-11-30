@@ -6,8 +6,29 @@
  */
 package rpnumerics;
 
+import rpn.configuration.CommandConfiguration;
+import rpn.configuration.Configuration;
+import rpn.configuration.ConfigurationProfile;
+
 public class PhysicalBoundaryCalc implements RpCalculation {
+
+    
+    protected Configuration configuration_;
+    
+    public PhysicalBoundaryCalc() {
+        
+        
+        String className = getClass().getSimpleName().toLowerCase();
+
+        String curveName = className.replace("calc", "");
+
+        configuration_ = new CommandConfiguration(curveName);
+
+        
+        
+    }
   
+    
     public RpSolution recalc() throws RpException {
         return calc();
     }
@@ -26,4 +47,8 @@ public class PhysicalBoundaryCalc implements RpCalculation {
     }
 
     private native RpSolution calcNative();
+
+    public Configuration getConfiguration() {
+        return configuration_;
+    }
 }

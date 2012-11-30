@@ -3,7 +3,6 @@
  * Departamento de Dinamica dos Fluidos
  *
  */
-
 package rpn.component;
 
 import wave.multid.model.MultiPoint;
@@ -16,6 +15,7 @@ public class StationaryPointGeom extends MultiPoint implements RpGeometry {
     //
     // Constants
     //
+
     public static ViewingAttr VIEWING_ATTR = new ViewingAttr(Color.white);
     //
     // Members
@@ -29,7 +29,7 @@ public class StationaryPointGeom extends MultiPoint implements RpGeometry {
     public StationaryPointGeom(CoordsArray source, StationaryPointGeomFactory factory) {
         super(source, VIEWING_ATTR);
         factory_ = factory;
-        
+
         //StationaryPoint statPoint = (StationaryPoint) factory_.geomSource();
 
     }
@@ -37,7 +37,9 @@ public class StationaryPointGeom extends MultiPoint implements RpGeometry {
     //
     // Accessors/Mutators
     //
-    public RpGeomFactory geomFactory() { return factory_; }
+    public RpGeomFactory geomFactory() {
+        return factory_;
+    }
 
     //
     // Methods
@@ -46,4 +48,6 @@ public class StationaryPointGeom extends MultiPoint implements RpGeometry {
     public GeomObjView createView(ViewingTransform transf) throws DimMismatchEx {
         return new StationaryPointView(this, transf, viewingAttr());
     }
+
+   
 }

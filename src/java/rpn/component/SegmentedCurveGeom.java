@@ -30,6 +30,7 @@ public abstract class SegmentedCurveGeom implements MultiGeometry, RpGeometry {
     protected  ViewingAttr VIEWING_ATTR = new ViewingAttr(Color.white);
 
 
+
      public SegmentedCurveGeom(MultiPolyLine[] segArray, RpGeomFactory factory) {
 
         segmentsList_ = new ArrayList();
@@ -98,6 +99,9 @@ public abstract class SegmentedCurveGeom implements MultiGeometry, RpGeometry {
         return factory_;
     }
 
+   
+    
+    
     public void applyMap(wave.multid.map.Map map) throws DimMismatchEx {
     }
 }

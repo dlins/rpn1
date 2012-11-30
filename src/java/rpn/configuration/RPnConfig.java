@@ -4,7 +4,7 @@
  * Departamento de Dinamica dos Fluidos
  *
  */
-package rpn;
+package rpn.configuration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,13 +12,25 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Set;
 import javax.swing.ImageIcon;
+import rpn.RPnBasson;
+import rpn.RPnCorey;
+import rpn.RPnCoreyBrooks;
+import rpn.RPnCoreyToStone;
+import rpn.RPnFluxParamsObserver;
+import rpn.RPnFluxParamsSubject;
+import rpn.RPnMLB;
+import rpn.RPnPalmeira;
+import rpn.RPnPhaseSpaceAbstraction;
+import rpn.RPnRadioButtonToStone;
+import rpn.RPnSchearerSchaeffer;
+import rpn.RPnStoneToStone;
 import rpn.controller.phasespace.NumConfigImpl;
 
-import rpn.parser.ConfigurationProfile;
+import rpn.configuration.ConfigurationProfile;
 import rpn.parser.RPnDataModule;
 import rpn.plugininterface.PluginInfoController;
 import rpn.plugininterface.PluginInfoParser;
-import rpnumerics.Configuration;
+import rpn.configuration.Configuration;
 import rpnumerics.RPNUMERICS;
 
 public class RPnConfig {
@@ -168,7 +180,18 @@ public class RPnConfig {
     public static void addProfile(String configurationName, ConfigurationProfile profile) {
 
         configurationsProfileMap_.put(configurationName, profile);
-        Configuration configuration = new Configuration(profile);
+        Configuration configuration = null;
+
+
+        if (profile.getType().equals(ConfigurationProfile.PHYSICS_CONFIG)) {
+            configuration = new PhysicsConfiguration(profile);
+        }
+
+        
+         if (profile.getType().equals(ConfigurationProfile.VISUALIZATION)) {
+            configuration = new VisualConfiguration(profile);
+        }
+
         RPNUMERICS.setConfiguration(configuration.getName(), configuration);
 
     }
@@ -230,7 +253,7 @@ public class RPnConfig {
 
     public static void setActiveVisualConfiguration(String visualConfigName) {
         activeVisualConfig_ = visualConfigName;
-        visualConfiguration_ = new Configuration(configurationsProfileMap_.get(visualConfigName));
+        visualConfiguration_ = new VisualConfiguration(configurationsProfileMap_.get(visualConfigName));
     }
 
     public static ConfigurationProfile getActivePhysicsProfile() {

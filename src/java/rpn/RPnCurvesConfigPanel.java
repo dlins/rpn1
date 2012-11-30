@@ -17,7 +17,7 @@ import java.util.Observable;
 import java.util.Set;
 import javax.swing.*;
 import rpn.command.ChangeDirectionCommand;
-import rpnumerics.Configuration;
+import rpn.configuration.Configuration;
 import rpnumerics.Orbit;
 import rpnumerics.RPNUMERICS;
 

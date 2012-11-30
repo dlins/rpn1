@@ -6,10 +6,13 @@
  */
 package rpnumerics;
 
+import rpn.configuration.CommandConfiguration;
+import rpn.configuration.Configuration;
+import rpn.configuration.ConfigurationProfile;
+
 public class HysteresisCurveCalc extends ContourCurveCalc {
 
     private int family_;
-
 
     //
     // Constructors/Initializers
@@ -17,6 +20,15 @@ public class HysteresisCurveCalc extends ContourCurveCalc {
     public HysteresisCurveCalc(ContourParams params, int family) {
         super(params);
         family_ = family;
+
+
+        String className = getClass().getSimpleName().toLowerCase();
+
+        String curveName = className.replace("calc", "");
+
+        configuration_ = new CommandConfiguration(curveName);
+        configuration_.setParamValue("family", String.valueOf(family));
+
     }
 
     @Override
@@ -33,15 +45,10 @@ public class HysteresisCurveCalc extends ContourCurveCalc {
         return result;
     }
 
-   
-
     public int getFamily() {
         return family_;
     }
 
-   
-
     private native RpSolution nativeCalc(int family,
-            int[] resolution
-            ) throws RpException;
+            int[] resolution) throws RpException;
 }
