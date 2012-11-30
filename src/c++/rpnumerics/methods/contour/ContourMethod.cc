@@ -434,9 +434,8 @@ if ( method == CONTINUATION_METHOD ) {
                 default:
                 break;
             }
-
             // Preventing to leave the domain.
-            if ( (i_index < 0) || (j_index < 0) || (i_index > rows) || (j_index > cols) || middle == 1 ) {
+            if ( (i_index < 0) || (j_index < 0) || (i_index >= rows) || (j_index >= cols) || middle == 1 ) {
                 middle = prev;
                 i_index = i_start;
                 j_index = j_start;
@@ -452,7 +451,6 @@ if ( method == CONTINUATION_METHOD ) {
 
             // Some restriction may cut the continuation of the curve, the following IF saves this issues.
             if( chain_edges(i_index,j_index).size() == 0 ) break;
-
             // Store the points in the [branch] and eliminate the points of the list.
             // The chain in (i, j) must be identified with [next] the direction of push_back or
             // push_front is denoted by the use of [prev = -1], else it will be the middle direction.
