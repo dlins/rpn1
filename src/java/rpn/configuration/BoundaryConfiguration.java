@@ -5,6 +5,7 @@
  */
 package rpn.configuration;
 
+import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -15,6 +16,10 @@ public class BoundaryConfiguration extends Configuration{
         
         super(configurationProfile);
 
+    }
+
+    BoundaryConfiguration(ConfigurationProfile profile, HashMap<String, Configuration> innerConfigurations) {
+        super(profile, innerConfigurations);
     }
  
     @Override

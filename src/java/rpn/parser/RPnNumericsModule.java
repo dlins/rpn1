@@ -20,6 +20,10 @@ import java.io.InputStream;
 import rpn.configuration.RPnConfig;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.XMLReader;
+import rpn.configuration.BoundaryConfiguration;
+import rpn.configuration.Configuration;
+import rpn.configuration.PhysicsConfiguration;
+import rpn.configuration.VisualConfiguration;
 import rpnumerics.RPNUMERICS;
 import wave.util.Boundary;
 
@@ -148,23 +152,23 @@ public class RPnNumericsModule {
         public void endDocument() throws SAXException {//Setando a resolucao dos grids.Usando tres grids . Um para Hugoniot, um para DoubleContact e um para as demais curvas (com resolucao da inflexao)
 
 
-        Boundary boundary = RPNUMERICS.boundary();
+            Boundary boundary = RPNUMERICS.boundary();
 
-        RealVector min = boundary.getMinimums();
-        RealVector max = boundary.getMaximums();
+            RealVector min = boundary.getMinimums();
+            RealVector max = boundary.getMaximums();
 
-        int[] doubleContactResolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("doublecontactcurve", "resolution"));
+            int[] doubleContactResolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("doublecontactcurve", "resolution"));
 
-        int[] hugoniotResolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("hugoniotcurve", "resolution"));
+            int[] hugoniotResolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("hugoniotcurve", "resolution"));
 
-        int[] bifurcationCurvesResolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("inflectioncurve", "resolution"));
+            int[] bifurcationCurvesResolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("inflectioncurve", "resolution"));
 
 
-        RPNUMERICS.setResolution(min, max, "doublecontactcurve", doubleContactResolution);
+            RPNUMERICS.setResolution(min, max, "doublecontactcurve", doubleContactResolution);
 
-        RPNUMERICS.setResolution(min, max, "hugoniotcurve", hugoniotResolution);
+            RPNUMERICS.setResolution(min, max, "hugoniotcurve", hugoniotResolution);
 
-        RPNUMERICS.setResolution(min, max, "bifurcation", bifurcationCurvesResolution);
+            RPNUMERICS.setResolution(min, max, "bifurcation", bifurcationCurvesResolution);
 
 
         }
@@ -192,6 +196,8 @@ public class RPnNumericsModule {
                 System.exit(1);
             }
         }
+
+        
     }
 
     //
@@ -219,7 +225,7 @@ public class RPnNumericsModule {
 
             System.out.println("Will parse !");
             parser.parse(new InputSource(configFileStream));
-            
+
             System.out.println("parsed !");
 
         } catch (Exception saxex) {

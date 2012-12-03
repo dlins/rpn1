@@ -51,17 +51,12 @@ public abstract class Configuration {
 
     }
 
-    public Configuration(ConfigurationProfile profile, List<Configuration> innerConfigurations) {
+    public Configuration(ConfigurationProfile profile, HashMap<String,Configuration> innerConfigurations) {
 
 
         this(profile);
-
-        for (Configuration configuration : innerConfigurations) {
-            configurationMap_.put(configuration.getName(), configuration);
-        }
-
-
-
+        
+        configurationMap_=innerConfigurations;
 
     }
 
@@ -77,7 +72,7 @@ public abstract class Configuration {
         params_.remove(paramName);
     }
 
-    public void setParamOrder(String paramName, int order) {
+    public final void setParamOrder(String paramName, int order) {
         paramOrder_.add(order, paramName);
     }
 

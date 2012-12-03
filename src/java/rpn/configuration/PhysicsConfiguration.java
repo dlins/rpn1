@@ -5,15 +5,16 @@
  */
 package rpn.configuration;
 
+import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
 
 public class PhysicsConfiguration extends Configuration{
 
 
-    public PhysicsConfiguration(ConfigurationProfile configurationProfile){
+    public PhysicsConfiguration(ConfigurationProfile configurationProfile,HashMap <String,Configuration> configurationHash ){
         
-        super(configurationProfile);
+        super(configurationProfile,configurationHash);
 
     }
     
@@ -22,6 +23,9 @@ public class PhysicsConfiguration extends Configuration{
         super(name);
         
     }
+    
+    
+    
     
  
     @Override

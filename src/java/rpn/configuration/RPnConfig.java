@@ -9,8 +9,11 @@ package rpn.configuration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import rpn.RPnBasson;
 import rpn.RPnCorey;
@@ -178,21 +181,77 @@ public class RPnConfig {
     }
 
     public static void addProfile(String configurationName, ConfigurationProfile profile) {
+        try {
+            System.out.println("Nome do profile:" + profile.getName() + " tipo do profile:" + profile.getType());
 
-        configurationsProfileMap_.put(configurationName, profile);
-        Configuration configuration = null;
+            /*O Configuration da fisica nao esta com
+            os outros configurations dentro . Usar o construtor com a lista de
+            configurations ou buscas outra solucao*/
+
+            configurationsProfileMap_.put(configurationName, profile);
 
 
-        if (profile.getType().equals(ConfigurationProfile.PHYSICS_CONFIG)) {
-            configuration = new PhysicsConfiguration(profile);
+            HashMap<String,Configuration> innerConfigurations = createConfigurationList(profile);
+            
+            Configuration configuration = null;
+            
+            
+             if (profile.getType().equals(ConfigurationProfile.PHYSICS_PROFILE)) {
+                 configuration=new PhysicsConfiguration(profile,innerConfigurations);
+                }
+
+
+                if (profile.getType().equals(ConfigurationProfile.VISUALIZATION)) {
+                   configuration=new VisualConfiguration(profile,innerConfigurations);
+                }
+
+
+                if (profile.getType().equals(ConfigurationProfile.BOUNDARY)) {
+                     configuration=new BoundaryConfiguration(profile,innerConfigurations);
+                }
+            
+
+
+
+
+            RPNUMERICS.setConfiguration(configuration.getName(), configuration);
+        } catch (Exception ex) {
+            Logger.getLogger(RPnConfig.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        
-         if (profile.getType().equals(ConfigurationProfile.VISUALIZATION)) {
-            configuration = new VisualConfiguration(profile);
+    }
+
+    private static HashMap<String,Configuration> createConfigurationList(ConfigurationProfile profile) throws Exception {
+
+
+        HashMap<String,Configuration> configuration = new HashMap<String, Configuration>();
+
+
+
+        Set<Entry<String, ConfigurationProfile>> configurationProfileSet = profile.getProfiles().entrySet();
+
+
+        for (Entry<String, ConfigurationProfile> entry : configurationProfileSet) {
+            if (entry.getValue().getType().equals(ConfigurationProfile.PHYSICS_PROFILE)) {
+                configuration.put(entry.getKey(),new PhysicsConfiguration(entry.getKey()));
+            }
+
+
+            if (entry.getValue().getType().equals(ConfigurationProfile.VISUALIZATION)) {
+                configuration.put(entry.getKey(),new VisualConfiguration(entry.getValue()));
+            }
+
+
+            if (entry.getValue().getType().equals(ConfigurationProfile.BOUNDARY)) {
+                configuration.put(entry.getKey(),new BoundaryConfiguration(entry.getValue()));
+            }
         }
 
-        RPNUMERICS.setConfiguration(configuration.getName(), configuration);
+
+
+
+
+        throw new Exception("Profile type unknow:" + profile.getName() + " " + profile.getType());
 
     }
 
