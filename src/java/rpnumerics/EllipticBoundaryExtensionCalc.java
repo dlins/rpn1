@@ -25,7 +25,7 @@ public class EllipticBoundaryExtensionCalc extends ContourCurveCalc {
 
         EllipticBoundaryExtension result;
 
-        result = (EllipticBoundaryExtension) nativeCalc(getParams().getResolution(),characteristic_,family_);
+        result = (EllipticBoundaryExtension) nativeCalc(characteristic_,family_);
 
           if (result == null) {
             throw new RpException("Error in native layer");
@@ -40,7 +40,7 @@ public class EllipticBoundaryExtensionCalc extends ContourCurveCalc {
     }
 
 
-    private native RpSolution nativeCalc(int resolution[],int where_is_characteristic, int family) throws RpException;
+    private native RpSolution nativeCalc(int where_is_characteristic, int family) throws RpException;
 
 
 }

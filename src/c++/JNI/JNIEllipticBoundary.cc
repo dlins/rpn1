@@ -30,7 +30,7 @@ using std::vector;
 using namespace std;
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_EllipticBoundaryCalc_nativeCalc
-(JNIEnv * env, jobject obj, jintArray resolution) {
+(JNIEnv * env, jobject obj) {
 
     jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
 
@@ -53,13 +53,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_EllipticBoundaryCalc_nativeCalc
 
     jobject leftSegmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
 
-
     // Storage space for the segments:
     std::vector<RealVector> left_vrs;
-
-    jint number_of_grid_pnts [dimension];
-
-    env->GetIntArrayRegion(resolution, 0, dimension, number_of_grid_pnts);
 
     GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcation");
 

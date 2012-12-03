@@ -37,10 +37,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_HugoniotCurveCalcND_setUMinus
     printf("Seting UMinus\n");
 
 }
-
-JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_PhasePoint_2_3I
-(JNIEnv * env, jobject obj, jobject uMinus, jintArray resolution) {
-
+JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_PhasePoint_2(JNIEnv * env, jobject obj, jobject uMinus){
 
     jclass classPhasePoint = (env)->FindClass(PHASEPOINT_LOCATION);
 
@@ -68,8 +65,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     int dimension = env->GetArrayLength(phasePointArray);
 
     double input [dimension];
-
-    
 
     //Input point
 

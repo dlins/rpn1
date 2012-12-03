@@ -18,6 +18,7 @@ Quad2::Quad2(const Quad2FluxParams & params) : SubPhysics(*defaultBoundary(), *n
     //
     setHugoniotFunction(new Hugoniot_Curve());
     setDoubleContactFunction(new Double_Contact());
+    setShockMethod(new Shock());
 
 
 }
@@ -52,6 +53,7 @@ Quad2::Quad2(const Quad2 & copy) : SubPhysics(copy.fluxFunction(), copy.accumula
 
     setHugoniotFunction(new Hugoniot_Curve());
     setDoubleContactFunction(new Double_Contact());
+    setShockMethod(new Shock());
 
 }
 

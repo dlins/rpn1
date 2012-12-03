@@ -31,9 +31,8 @@ using std::vector;
 using namespace std;
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_HysteresisCurveCalc_nativeCalc
-(JNIEnv * env, jobject obj, jint domainFamily, jintArray resolution) {
+(JNIEnv * env, jobject obj, jint domainFamily) {
 
-    jclass hugoniotSegmentClass = (env)->FindClass(HUGONIOTSEGMENTCLASS_LOCATION);
 
     jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
 

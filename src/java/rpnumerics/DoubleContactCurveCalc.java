@@ -36,7 +36,7 @@ public class DoubleContactCurveCalc extends ContourCurveCalc {
     public RpSolution calc() throws RpException {
         RpSolution result = null;
 
-        result = (DoubleContactCurve) nativeCalc(getParams().getResolution(), curveFamily_, domainFamily_);
+        result = (DoubleContactCurve) nativeCalc(curveFamily_, domainFamily_);
 
         if (result == null) {
             throw new RpException("Error in native layer");
@@ -45,6 +45,9 @@ public class DoubleContactCurveCalc extends ContourCurveCalc {
 
         return result;
     }
+
+
+    private native RpSolution nativeCalc(int curveFamily, int domainFamily) throws RpException;
 
 
     @Override
@@ -56,6 +59,7 @@ public class DoubleContactCurveCalc extends ContourCurveCalc {
     }
 
 
-    private native RpSolution nativeCalc(int [] resolution, int curveFamily, int domainFamily) throws RpException;
+
+
  
 }

@@ -10,10 +10,10 @@ extern "C" {
 /*
  * Class:     rpnumerics_LevelCurveCalc
  * Method:    calcNative
- * Signature: (ID[I)Lrpnumerics/RpSolution;
+ * Signature: (ID)Lrpnumerics/RpSolution;
  */
 JNIEXPORT jobject JNICALL Java_rpnumerics_LevelCurveCalc_calcNative
-  (JNIEnv *, jobject, jint, jdouble, jintArray);
+  (JNIEnv *, jobject, jint, jdouble);
 
 #ifdef __cplusplus
 }

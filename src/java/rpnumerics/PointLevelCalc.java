@@ -18,7 +18,7 @@ public class PointLevelCalc extends LevelCurveCalc {
 
     @Override
     public RpSolution calc() throws RpException {
-        LevelCurve result = (LevelCurve) calcNative(getFamily(), startPoint_, getParams().getResolution());
+        LevelCurve result = (LevelCurve) calcNative(getFamily(), startPoint_);
 
         if (result == null) {
             throw new RpException("Error in native layer");
@@ -38,5 +38,5 @@ public class PointLevelCalc extends LevelCurveCalc {
         startPoint_ = new RealVector(startPoint);
     }
 
-    private native RpSolution calcNative(int family, RealVector point, int[] resolution);
+    private native RpSolution calcNative(int family, RealVector point);
 }

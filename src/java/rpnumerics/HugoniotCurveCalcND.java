@@ -72,7 +72,7 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
 
         HugoniotCurve result;
 
-        result = (HugoniotCurve) calc(((HugoniotParams) getParams()).getXZero(), getParams().getResolution());
+        result = (HugoniotCurve) calc(((HugoniotParams) getParams()).getXZero());
 
         result.setDirection(((HugoniotParams)getParams()).getDirection());
         
@@ -107,7 +107,7 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    private native RpSolution calc(PhasePoint initialpoint, int resolution[]) throws RpException;
+    private native RpSolution calc(PhasePoint initialpoint) throws RpException;
 
     private native RpSolution calc(PhasePoint initialpoint, int xRes_, int yRes_, RealVector topR, RealVector dwnL) throws RpException;
 }

@@ -12,18 +12,18 @@ extern "C" {
 /*
  * Class:     rpnumerics_HugoniotCurveCalcND
  * Method:    calc
- * Signature: (Lrpnumerics/PhasePoint;IILwave/util/RealVector;Lwave/util/RealVector;)Lrpnumerics/RpSolution;
+ * Signature: (Lrpnumerics/PhasePoint;)Lrpnumerics/RpSolution;
  */
-JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_PhasePoint_2IILwave_util_RealVector_2Lwave_util_RealVector_2
-  (JNIEnv *, jobject, jobject, jint, jint, jobject, jobject);
+JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_PhasePoint_2
+  (JNIEnv *, jobject, jobject);
 
 /*
  * Class:     rpnumerics_HugoniotCurveCalcND
  * Method:    calc
- * Signature: (Lrpnumerics/PhasePoint;[I)Lrpnumerics/RpSolution;
+ * Signature: (Lrpnumerics/PhasePoint;IILwave/util/RealVector;Lwave/util/RealVector;)Lrpnumerics/RpSolution;
  */
-JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_PhasePoint_2_3I
-  (JNIEnv *, jobject, jobject, jintArray);
+JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_PhasePoint_2IILwave_util_RealVector_2Lwave_util_RealVector_2
+  (JNIEnv *, jobject, jobject, jint, jint, jobject, jobject);
 
 #ifdef __cplusplus
 }

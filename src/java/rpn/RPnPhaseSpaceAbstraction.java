@@ -237,6 +237,8 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
                     if (geom.viewingAttr().hasHighLight() && !(geom instanceof StationaryPointGeom)) {
                         RpGeomFactory factory = geom.geomFactory();
                         RPnCurve curve = (RPnCurve) factory.geomSource();
+                        
+//                        System.out.println("Tamanho na cruz: "+curve.segments().size());
 
                         curve.findClosestSegment(targetPoint);
 

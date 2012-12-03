@@ -20,6 +20,7 @@
 #include "Quad2HugoniotFunction.h"
 #include "Quad2FluxParams.h"
 #include "RectBoundary.h"
+#include "Shock.h"
 
 class Quad2 : public SubPhysics {
 private:

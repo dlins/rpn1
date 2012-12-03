@@ -13,6 +13,7 @@ import rpn.controller.RpController;
 import rpn.parser.RPnDataModule;
 
 import rpnumerics.Area;
+import rpnumerics.HugoniotCurve;
 import rpnumerics.RPnCurve;
 
 import rpnumerics.RpCalculation;
@@ -145,6 +146,5 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
         geom_ = createGeomFromSource();
 
         isGeomOutOfDate_ = true;
-
     }
 }

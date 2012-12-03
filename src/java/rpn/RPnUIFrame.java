@@ -472,23 +472,23 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 wave.multid.view.Scene rightScene = RPnDataModule.RIGHTPHASESPACE.createScene(auxViewingTransf,
                         new wave.multid.view.ViewingAttr(Color.black));
 
-                auxFrames_[i] = new RPnPhaseSpaceFrame(leftScene, commandMenu_);
-                auxFrames_[i + 1] = new RPnPhaseSpaceFrame(rightScene, commandMenu_);
+                auxFrames_[2*i] = new RPnPhaseSpaceFrame(leftScene, commandMenu_);
+                auxFrames_[2*i + 1] = new RPnPhaseSpaceFrame(rightScene, commandMenu_);
 
-                auxFrames_[i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i)).label());
-                auxFrames_[i + 1].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i + 1)).label());
+                auxFrames_[2*i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i)).label());
+                auxFrames_[2*i + 1].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i + 1)).label());
 
                 System.out.println("auxFrames_[i].getTitle() ::::::: " +auxFrames_[i].getTitle());
                 System.out.println("auxFrames_[i+1].getTitle() ::::: " +auxFrames_[i+1].getTitle());
 
-                UIController.instance().install(auxFrames_[i].phaseSpacePanel());
-                UIController.instance().install(auxFrames_[i + 1].phaseSpacePanel());
-                setFramesPosition(auxFrames_[i]);
-                setFramesPosition(auxFrames_[i + 1]);
-                auxFrames_[i].pack();
-                auxFrames_[i + 1].pack();
-                auxFrames_[i].setVisible(true);
-                auxFrames_[i + 1].setVisible(true);
+                UIController.instance().install(auxFrames_[2*i].phaseSpacePanel());
+                UIController.instance().install(auxFrames_[2*i + 1].phaseSpacePanel());
+                setFramesPosition(auxFrames_[2*i]);
+                setFramesPosition(auxFrames_[2*i + 1]);
+                auxFrames_[2*i].pack();
+                auxFrames_[2*i + 1].pack();
+                auxFrames_[2*i].setVisible(true);
+                auxFrames_[2*i + 1].setVisible(true);
 
             } catch (wave.multid.DimMismatchEx dex) {
                 dex.printStackTrace();
