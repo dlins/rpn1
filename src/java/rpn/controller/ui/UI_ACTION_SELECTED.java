@@ -73,9 +73,9 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
 
         if (actionSelected_ instanceof PoincareSectionPlotCommand) {
             if (isPoincareInputReady()) {
-                ArrayList<RealVector> tempInputList = new ArrayList<RealVector>();
+                ArrayList<String> tempInputList = new ArrayList<String>();
                 for (RealVector inputElement : userInputList(ui)) {
-                    tempInputList.add(inputElement);
+                    tempInputList.add(inputElement.toString());
                 }
 
                 UIController.instance().logCommand(new RpCommand(this, tempInputList));

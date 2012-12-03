@@ -45,6 +45,7 @@ public abstract class RpModelActionCommand extends RpCommand{
         UI_ACTION_SELECTED action = new UI_ACTION_SELECTED(this);
         setActionSelected(action);
 
+
         UIController.instance().setState(action);
         if (UIController.instance().getNetStatusHandler().isOnline()) { //Sending application state
             RPnActionMediator.instance().setState(desc_);

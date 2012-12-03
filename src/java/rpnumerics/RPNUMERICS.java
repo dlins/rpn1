@@ -285,9 +285,9 @@ public class RPNUMERICS {
         return new HugoniotCurveCalcND(params);
     }
 
-    public static RarefactionOrbitCalc createRarefactionCalc(OrbitPoint orbitPoint) {
+    public static RarefactionCurveCalc createRarefactionCalc(OrbitPoint orbitPoint) {
 
-        return new RarefactionOrbitCalc(orbitPoint, Integer.parseInt(getParamValue("orbit", "family")), direction_);
+        return new RarefactionCurveCalc(orbitPoint, Integer.parseInt(getParamValue("orbit", "family")), direction_);
 
     }
 

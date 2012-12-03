@@ -24,12 +24,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSlider;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
+import rpn.command.ChangeCurveConfigurationCommand;
 import rpnumerics.Configuration;
 import rpnumerics.RPNUMERICS;
 import wave.util.RealVector;
@@ -93,11 +92,11 @@ public class RPnInputComponent {//TODO Refatorar
 
             for (int i = 0; i < subject.getParamsNames().length; i++) {         //********* Fazer tratamento se o campo for vazio, para preservar os formatos
 
-      
+
 
                 JFormattedTextField textField = new JFormattedTextField(formatter_);
 
-    
+
                 textField.setColumns(4);
                 textField_[i] = textField;
 
@@ -153,7 +152,7 @@ public class RPnInputComponent {//TODO Refatorar
 
     }
 
-    public RPnInputComponent(Configuration configuration) {
+    public RPnInputComponent(Configuration configuration, boolean useEvents) {
 
         textField_ = new JFormattedTextField[configuration.getParamsSize()];
 
@@ -192,7 +191,10 @@ public class RPnInputComponent {//TODO Refatorar
 
             textField_[j] = textField;
             textField.setName(configuration.getParamName(j));
-            textField.getDocument().addDocumentListener(new TextValueHandler());
+
+            if (useEvents) {
+                textField.getDocument().addDocumentListener(new TextValueHandler());
+            }
 
             JLabel label = new JLabel(configuration.getParamName(j));
 
@@ -212,6 +214,27 @@ public class RPnInputComponent {//TODO Refatorar
 
         controller_ = new RPnInputController(this, configuration);
 
+
+    }
+
+    public void applyConfigurationChange() {
+
+        String[] newValues = new String[textField_.length];
+
+        for (int j = 0; j < textField_.length; j++) {
+
+            parameterName_ = textField_[j].getName();
+
+
+            newValues[j] = textField_[j].getText();
+
+        }
+
+        controller_.propertyChange(
+                new PropertyChangeEvent(this, parameterName_, newValues, newValues));
+
+
+        ChangeCurveConfigurationCommand.instance().applyChange(new PropertyChangeEvent(this, parameterName_, null, controller_.getConfiguration()));
 
     }
 
@@ -272,19 +295,8 @@ public class RPnInputComponent {//TODO Refatorar
 
     public void removeSlider() {
         panel_.remove(slider_);
-    }
 
-    private Double setValue(int sliderPosition) {
-        double deltaValue = (maxRange_ - minRange_);
-        int deltaSlider = slider_.getMaximum() - slider_.getMinimum();
-        Double x = new Double(sliderPosition - slider_.getMinimum());
-        return (((x / (deltaSlider)) * deltaValue) + minRange_);
-    }
 
-    private int setSliderPosition(double value) {
-        double deltaValue = (maxRange_ - minRange_);
-        int deltaSlider = slider_.getMaximum() - slider_.getMinimum();
-        return (int) ((((value - minRange_) / (deltaValue)) * deltaSlider) + slider_.getMinimum());
     }
 
     private class TextValueHandler implements DocumentListener {
@@ -431,6 +443,4 @@ public class RPnInputComponent {//TODO Refatorar
 
         }
     }
-    
 }
-

@@ -3,14 +3,14 @@
  *
  * RPn Project
  *
- * @(#) JNIRarefactionOrbitCalc.cc
+ * @(#) JNIRarefactionCurveCalc.cc
  */
 
 /*
  * ---------------------------------------------------------------
  * Includes:
  */
-#include "rpnumerics_RarefactionOrbitCalc.h"
+#include "rpnumerics_RarefactionCurveCalc.h"
 
 #include "RpNumerics.h"
 #include "RealVector.h"
@@ -29,13 +29,13 @@ using std::vector;
  */
 
 
-JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env, jobject obj, jstring methodName, jstring flowName, jobject initialPoint, jint familyIndex, jint timeDirection) {
+JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env, jobject obj, jstring methodName, jstring flowName, jobject initialPoint, jint familyIndex, jint timeDirection) {
 
 
     unsigned int i;
 
     jclass classOrbitPoint = (env)->FindClass(ORBITPOINT_LOCATION);
-    jclass classRarefactionOrbit = (env)->FindClass(RAREFACTIONORBIT_LOCATION);
+    jclass classRarefactionOrbit = (env)->FindClass(RAREFACTIONCURVE_LOCATION);
 
     jmethodID rarefactionOrbitConstructor = (env)->GetMethodID(classRarefactionOrbit, "<init>", "([Lrpnumerics/OrbitPoint;II)V");
     jmethodID orbitPointConstructor = (env)->GetMethodID(classOrbitPoint, "<init>", "([DD)V");

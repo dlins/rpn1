@@ -6,10 +6,13 @@
 package rpn.command;
 
 import java.beans.PropertyChangeEvent;
+import java.util.Observable;
+import java.util.Observer;
 import rpn.RPnCurvesConfigPanel;
 import rpnumerics.RPNUMERICS;
+import wave.util.RealVector;
 
-public class ChangeDirectionCommand extends RpModelConfigChangeCommand {
+public class ChangeDirectionCommand extends RpModelConfigChangeCommand implements Observer{
     //
     // Constants
     //
@@ -27,8 +30,10 @@ public class ChangeDirectionCommand extends RpModelConfigChangeCommand {
     }
 
     public void execute() {
-        RPNUMERICS.setDirection(RPnCurvesConfigPanel.getOrbitDirection());
-        applyChange(new PropertyChangeEvent(this, "direction", null, null));
+        
+        RealVector  oldDirection = new RealVector(1);
+        oldDirection.setElement(0, new Double (RPnCurvesConfigPanel.getOrbitDirection()));
+        applyChange(new PropertyChangeEvent(this, "direction", null, oldDirection));
     }
 
     public void unexecute() {
@@ -40,5 +45,15 @@ public class ChangeDirectionCommand extends RpModelConfigChangeCommand {
             instance_ = new ChangeDirectionCommand();
         }
         return instance_;
+        
+    }
+
+    public void update(Observable o, Object arg) {
+        System.out.println("Em update command");
+        Integer newDirection = (Integer)arg;
+        System.out.println(newDirection);
+        RPNUMERICS.setDirection(newDirection);
+        execute();
+
     }
 }

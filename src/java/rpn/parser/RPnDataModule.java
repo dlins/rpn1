@@ -19,9 +19,8 @@ import rpn.component.RpGeometry;
 
 import rpnumerics.RPNUMERICS;
 import rpnumerics.RpSolution;
-import rpnumerics.RpCurve;
-import rpnumerics.SegmentedCurve;
-import rpnumerics.Orbit;
+import rpnumerics.RiemannProfile;
+
 
 import wave.util.RealVector;
 import wave.util.RealMatrix2;
@@ -49,6 +48,8 @@ public class RPnDataModule {
     static public RPnPhaseSpaceAbstraction RIGHTPHASESPACE = null;
     static public RPnPhaseSpaceAbstraction RIEMANNPHASESPACE = null;
     static public RPnPhaseSpaceAbstraction[] CHARACTERISTICSPHASESPACEARRAY = null;
+
+    static public boolean RIEMANN_EXCLUSIVE_EXPORT = false;
 
 
     // TODO move out to somewhere else RPNUMERICS
@@ -118,6 +119,7 @@ public class RPnDataModule {
         public void endDocument() {
 
 
+            UIController.instance().setActivePhaseSpace(RPnDataModule.PHASESPACE);
         }
 
         @Override
@@ -125,11 +127,6 @@ public class RPnDataModule {
                 SAXException {
 
             currentElement_ = name;
-
-            if (currentElement_.equalsIgnoreCase("PHASESPACE"))
-
-                if (att.getValue("name").equals("Phase Space"))
-                    UIController.instance().setActivePhaseSpace(PHASESPACE);
 
         }
 
@@ -165,137 +162,6 @@ public class RPnDataModule {
         }
     }
 
-    static protected class RPnCommandParser implements ContentHandler {
-
-        private String currentElement_;
-        private String currentCommand_;
-
-        private StringBuilder stringBuffer_ = new StringBuilder();
-
-
-        public RPnCommandParser() {
-
-
-            stringBuffer_ = new StringBuilder();
-
-        }
-
-        @Override
-        public void endDocument() {
-
-
-        }
-
-        @Override
-        public void startElement(String uri, String name, String qName, Attributes att) throws
-                SAXException {
-
-            // TODO : eventually the COMMANDs should be in a differente file from the CONFIG
-            // and the COMMAND tag would carry away the phasespace information with it !??
-            currentElement_ = name;
-
-
-            if (currentElement_.equalsIgnoreCase("COMMAND")) {
-
-
-                currentCommand_ = att.getValue("name");
-
-
-                if (currentCommand_.equalsIgnoreCase("hugoniotcurve"))
-                    UIController.instance().setState(new UI_ACTION_SELECTED(HugoniotPlotCommand.instance()));
-                else if (currentCommand_.equalsIgnoreCase("integralcurve"))
-                    UIController.instance().setState(new UI_ACTION_SELECTED(IntegralCurvePlotCommand.instance()));
-                else if (currentCommand_.equalsIgnoreCase("levelcurve"))
-
-/*                    if (att.getValue("inputpoint") == null)
-                        calc_ = RPNUMERICS.createLevelCurveCalc(new Integer(att.getValue("family")), new Double(att.getValue("level")), params);
-                     else
-                        calc_ = RPNUMERICS.createPointLevelCalc(new RealVector(att.getValue("inputpoint")), new Integer(att.getValue("family")), params);
-
-
-                    factory_ = new LevelCurveGeomFactory((LevelCurveCalc) calc_);*/
-                    LevelCurvePlotCommand.instance().execute();
-
-                else if (currentCommand_.equalsIgnoreCase("compositecurve"))
-                    UIController.instance().setState(new UI_ACTION_SELECTED(CompositePlotCommand.instance()));
-                else if (currentCommand_.equalsIgnoreCase("rarefactionorbit"))
-                    UIController.instance().setState(new UI_ACTION_SELECTED(RarefactionOrbitPlotCommand.instance()));
-                else if (currentCommand_.equalsIgnoreCase("rarefactionextensioncurve"))
-                    UIController.instance().setState(new UI_ACTION_SELECTED(RarefactionExtensionCurvePlotCommand.instance()));
-                else if (currentCommand_.equalsIgnoreCase("shockcurve"))
-                    UIController.instance().setState(new UI_ACTION_SELECTED(ShockCurvePlotCommand.instance()));
-                else if (currentCommand_.equalsIgnoreCase("doublecontactcurve"))
-                    UIController.instance().setState(new UI_ACTION_SELECTED(DoubleContactCommand.instance()));
-                else if (currentCommand_.equalsIgnoreCase("inflectioncurve"))
-                    UIController.instance().setState(new UI_ACTION_SELECTED(InflectionPlotCommand.instance()));
-                else if (currentCommand_.equalsIgnoreCase("hysteresiscurve"))
-                    UIController.instance().setState(new UI_ACTION_SELECTED(HysteresisPlotCommand.instance()));
-                else if (currentCommand_.equalsIgnoreCase("boundaryextensioncurve"))
-                    UIController.instance().setState(new UI_ACTION_SELECTED(BoundaryExtensionCurveCommand.instance()));
-            }
-
-            else if (currentElement_.equals("REALVECTOR")) {
-
-                stringBuffer_ = new StringBuilder();
-            }
-        }
-
-        @Override
-        public void characters(char[] buff, int offset, int len) throws
-                SAXException {
-
-            try {
-
-                String data = new String(buff, offset, len);
-                if (data.length() != 0) {
-                    if (currentElement_.equals("REALVECTOR"))
-                        stringBuffer_.append(data);
-
-                }
-
-            } catch (NumberFormatException ex) {
-                System.out.println("Wrong format ! " + ex.getMessage());
-                ex.printStackTrace();
-
-            }
-        }
-
-        @Override
-        public void endElement(String uri, String name, String qName) throws SAXException {
-
-
-            if (name.equals("REALVECTOR"))
-                UIController.instance().userInputComplete(new RealVector(stringBuffer_.toString()));
-
-            if (name.equals("PAUSE"))
-                try {
-                    System.in.read();
-                } catch (java.io.IOException ex) {}
-
-
-        }
-
-        public void setDocumentLocator(Locator locator) {
-        }
-
-        public void startDocument() throws SAXException {
-        }
-
-        public void startPrefixMapping(String prefix, String uri) throws SAXException {
-        }
-
-        public void endPrefixMapping(String prefix) throws SAXException {
-        }
-
-        public void ignorableWhitespace(char[] ch, int start, int length) throws SAXException {
-        }
-
-        public void processingInstruction(String target, String data) throws SAXException {
-        }
-
-        public void skippedEntity(String name) throws SAXException {
-        }
-    }
 
 
 
@@ -335,54 +201,19 @@ public class RPnDataModule {
             saxex.printStackTrace();
         }
     }
-
-    public static void exec(XMLReader parser, InputStream configFileStream) {
-        try {
-            parser.setContentHandler(new RPnCommandParser());
-            System.out.println("Data Module command parsing started...");
-            parser.parse(new InputSource((configFileStream)));
-            System.out.println("Data Module command parsing finished sucessfully !");
-        } catch (Exception saxex) {
-
-            if (saxex instanceof org.xml.sax.SAXParseException) {
-                System.out.println("Line: "
-                        + ((org.xml.sax.SAXParseException) saxex).getLineNumber());
-                System.out.println("Column: "
-                        + ((org.xml.sax.SAXParseException) saxex).getColumnNumber());
-            }
-
-            saxex.printStackTrace();
-        }
-    }
-
-
-
-
-
+    
     //
     // Methods
     //
     /** Writes the data of actual session into a XML file. */
-    static public void commandsExport(FileWriter writer) throws java.io.IOException {
+    static public void export(FileWriter writer) throws java.io.IOException {
 
-        System.out.println("Data module export started...");
-
-        Iterator<RpCommand> iterator1 = UIController.instance().getCommandIterator();
-
-        while (iterator1.hasNext()) {
-            writer.write(((RpCommand)iterator1.next()).toXML());
-        }
-
-        System.out.println("Data module export finished sucessfully !");
-    }
-
-    static public void elementsExport(FileWriter writer) throws java.io.IOException {
-
+        // TODO : this is working only for PHASESPACE ... must be implemented to all
+        // others phasespaces (L , R etc...)
         Iterator<RpGeometry> iterator = PHASESPACE.getGeomObjIterator();
-        writer.write("close all; clear all;\n");
-        //writer.write(RpCalcBasedGeomFactory.createMatlabColorTable());
-
-
+        
+        writer.write("<RPNDATA> \n");
+        
         // Inserting data
         HashMap<Integer, RpGeometry> visibleGeometries = new HashMap<Integer, RpGeometry>();
         int geometryCounter = 0;
@@ -398,13 +229,26 @@ public class RPnDataModule {
         }
 
         // Inserting data
-        Set<Entry<Integer, RpGeometry>> geometrySet = visibleGeometries.entrySet();
+        Set<Entry<Integer, RpGeometry>> visibleGeometrySet = visibleGeometries.entrySet();
 
-        for (Entry<Integer, RpGeometry> entry : geometrySet) {
+        for (Entry<Integer, RpGeometry> entry : visibleGeometrySet) {
 
-            RpCurve curve = (RpCurve) entry.getValue().geomFactory().geomSource();
+            RpSolution element = (RpSolution) entry.getValue().geomFactory().geomSource();
 
-            if (curve instanceof SegmentedCurve) {
+            if ((RIEMANN_EXCLUSIVE_EXPORT) && (element instanceof RiemannProfile))
+
+                writer.write(element.toXML() + "\n");
+
+            else
+                writer.write(element.toXML() + "\n");
+        }
+
+        writer.write("</RPNDATA> \n");
+    }
+}
+
+
+/*            if (curve instanceof SegmentedCurve) {
 
                 SegmentedCurve sCurve = (SegmentedCurve) curve;
                 writer.write(sCurve.toMatlabData(entry.getKey()));
@@ -413,15 +257,14 @@ public class RPnDataModule {
 
                 Orbit orbit = (Orbit) curve;
                 writer.write(orbit.toMatlabData(entry.getKey()));
-            }
+            }*/
 
-        }
 
-        //Plotting 3D view
+/*        //Plotting 3D view
         writer.write("%% plotting 3D \n");
-        writer.write("figure(1)\n");
+        writer.write("figure(1)\n");*/
 
-        for (Entry<Integer, RpGeometry> entry : geometrySet) {
+/*        for (Entry<Integer, RpGeometry> entry : geometrySet) {
 
             RpCurve curve = (RpCurve) entry.getValue().geomFactory().geomSource();
 
@@ -486,6 +329,5 @@ public class RPnDataModule {
             }
 
         }
-
-    }
-}
+ *
+ */

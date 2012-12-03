@@ -57,6 +57,7 @@ public abstract class RpModelConfigChangeCommand extends RpModelActionCommand {
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         listenersList_.remove(listener);
     }
+    
 
     public void firePropertyChange(PropertyChangeEvent event) {
 
@@ -68,22 +69,7 @@ public abstract class RpModelConfigChangeCommand extends RpModelActionCommand {
     }
     
     
-    @Override
-    public String toXML(){
-
-          StringBuffer buffer = new StringBuffer();
-
-            buffer.append("<COMMAND name=\"").append(toString()).append("\">\n");
-            for(RealVector input:getInputArray()){
-                buffer.append(input.toXML());
-                buffer.append("\n");
-            }
-
-            buffer.append("</COMMAND>\n");
-
-        return buffer.toString();
-
-    }
+   
     
     
     

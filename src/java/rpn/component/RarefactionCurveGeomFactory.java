@@ -5,10 +5,10 @@
  */
 package rpn.component;
 
-import rpnumerics.RarefactionOrbit;
-import rpnumerics.RarefactionOrbitCalc;
+import rpnumerics.RarefactionCurve;
+import rpnumerics.RarefactionCurveCalc;
 
-public class RarefactionOrbitGeomFactory extends WaveCurveOrbitGeomFactory {
+public class RarefactionCurveGeomFactory extends WaveCurveOrbitGeomFactory {
     //
     // Constants
     //
@@ -19,7 +19,7 @@ public class RarefactionOrbitGeomFactory extends WaveCurveOrbitGeomFactory {
     // Constructors/Initializers
     //
 
-    public RarefactionOrbitGeomFactory(RarefactionOrbitCalc calc) {
+    public RarefactionCurveGeomFactory(RarefactionCurveCalc calc) {
         super(calc);
     }
 
@@ -32,10 +32,10 @@ public class RarefactionOrbitGeomFactory extends WaveCurveOrbitGeomFactory {
     @Override
     public RpGeometry createGeomFromSource() {
 
-        RarefactionOrbit orbit = (RarefactionOrbit) geomSource();
+        RarefactionCurve orbit = (RarefactionCurve) geomSource();
 
 
-        return new RarefactionGeom(MultidAdapter.converseOrbitPointsToCoordsArray(orbit.getPoints()), this);
+        return new RarefactionCurveGeom(MultidAdapter.converseOrbitPointsToCoordsArray(orbit.getPoints()), this);
 
     }
 }
