@@ -42,6 +42,18 @@ public class RPnStringPlotter extends RPn2DMouseController {
     private boolean addLine_ = false;
     private static RPnStringPlotter instance_;
 
+
+    private String permuteString(String string, int flag) {
+        String str = string;
+        if(flag == 22) {
+            String str1 = str.substring(0, 2);
+            String str2 = str.substring(2, 4);
+            str = str2.concat(str1);
+        }
+        return str;
+    }
+
+
     public void mouseMoved(MouseEvent me) {
 
         if(addLine_) {
@@ -151,8 +163,9 @@ public class RPnStringPlotter extends RPn2DMouseController {
             GeometryGraphND.pMarca = closestPoint;
             
             if (curve instanceof HugoniotCurve) {
+                int dir = ((HugoniotCurve)curve).getDirection();
                 HugoniotSegment segment = (HugoniotSegment) (((SegmentedCurve) curve).segments()).get(curve.findClosestSegment(closestPoint));
-                typeStr = HugoniotSegGeom.s[segment.getType()];
+                typeStr = permuteString(HugoniotSegGeom.s[segment.getType()], dir);
 
                 CoordsArray wcCoords = new CoordsArray(closestPoint);
                 Coords2D dcCoords = new Coords2D();
