@@ -568,8 +568,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_boundary(JNIEnv * env, jcla
         for (int i = 0; i < boundaryDimension; i++) {
             minimum[i] = boundary.minimums().component(i);
             maximum[i] = boundary.maximums().component(i);
+            
         }
-
 
         //-----------------------------------------------------------------------
 

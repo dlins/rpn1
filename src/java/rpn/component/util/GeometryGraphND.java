@@ -78,6 +78,8 @@ public class GeometryGraphND {
 
 
     public Coords2D toDeviceCoords(Scene scene, RealVector point) {
+        int dim = Math.max((scene.getAbstractGeom()).getSpace().getDim(), RPNUMERICS.domainDim());
+        point.setSize(dim);
         ViewingTransform transf = scene.getViewingTransform();
         CoordsArray wcCoords = new CoordsArray(point);
         Coords2D dcCoords = new Coords2D();

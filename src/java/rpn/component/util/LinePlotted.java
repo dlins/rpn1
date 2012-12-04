@@ -5,10 +5,7 @@ import java.awt.Shape;
 import java.awt.geom.Line2D;
 import java.awt.geom.Path2D.Double;
 import java.util.List;
-import rpn.RPnPhaseSpaceAbstraction;
-import rpn.RPnPhaseSpaceFrame;
 import rpn.RPnPhaseSpacePanel;
-import rpn.controller.ui.UIController;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
 import wave.multid.view.ViewingAttr;
@@ -60,8 +57,6 @@ public class LinePlotted extends GraphicsUtil {
         CoordsArray wcPoint2 = new CoordsArray(point2);
         getViewingTransform().viewPlaneTransform(wcPoint1, dcPoint1);
         getViewingTransform().viewPlaneTransform(wcPoint2, dcPoint2);
-
-        UIController.instance().globalInputTable().reset();
 
         return new Line2D.Double(dcPoint1.getX(), dcPoint1.getY(), dcPoint2.getX(), dcPoint2.getY());
     }

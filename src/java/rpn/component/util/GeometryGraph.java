@@ -94,10 +94,10 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
         int segTotal = curve.findClosestSegment(newValue);
         int segBranch = result.get(segTotal);
 
-        panel.setToolTipText(String.valueOf(segBranch) +" , " +String.valueOf(curve.segments().size()));
-        ToolTipManager ttm = ToolTipManager.sharedInstance();
-        ttm.setInitialDelay(0);
-        ttm.setDismissDelay(500);
+        //panel.setToolTipText(String.valueOf(segBranch) +" , " +String.valueOf(curve.segments().size()));
+        //ToolTipManager ttm = ToolTipManager.sharedInstance();
+        //ttm.setInitialDelay(0);
+        //ttm.setDismissDelay(500);
 
         int other = resultPoint.get(segTotal).getCorrespondingPointIndex();
         pMarcaWC = resultPoint.get(other).getCoords();

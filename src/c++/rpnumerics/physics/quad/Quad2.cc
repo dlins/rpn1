@@ -37,8 +37,8 @@ Boundary * Quad2::defaultBoundary() const {
 
     RealVector max(2);
 
-    max.component(0) = 0.5;
-    max.component(1) = 0.5;
+    max.component(0) = 0.5 * 8.;
+    max.component(1) = 0.5 * 8.;
 
     return new RectBoundary(min, max);
 
