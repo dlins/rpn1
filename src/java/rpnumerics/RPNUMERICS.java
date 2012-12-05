@@ -5,6 +5,8 @@
  */
 package rpnumerics;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import rpn.configuration.Configuration;
 import rpnumerics.viscousprofile.ViscousProfileData;
 import java.util.ArrayList;
@@ -42,119 +44,135 @@ public class RPNUMERICS {
     //
 
     static public void init(String physicsID) {
+        try {
+            System.loadLibrary("rpn");
+            setRPnHome(System.getProperty("rpnhome"));
 
-        System.loadLibrary("rpn");
-        setRPnHome(System.getProperty("rpnhome"));
+            initNative(physicsID);
 
-        initNative(physicsID);
+            //Processing configuration data
 
-        //Processing configuration data
+            ConfigurationProfile physicsProfile = RPnConfig.getActivePhysicsProfile();
 
-        ConfigurationProfile physicsProfile = RPnConfig.getActivePhysicsProfile();
+            HashMap<String, Configuration> configurationList = RPnConfig.createConfigurationList(physicsProfile);
 
-        Configuration physicsConfiguration = new PhysicsConfiguration(physicsProfile);
+            Configuration physicsConfiguration = new PhysicsConfiguration(physicsProfile, configurationList);
 
 
-        //Accumulation function
+//            //Accumulation function
+//
+//            Configuration accumulationFunctionConfig = physicsConfiguration.getConfiguration("accumulationfunction");
+//
+//            if (accumulationFunctionConfig != null) {
+//                //            System.out.println("Printando configuration para acumulacao: " + accumulationFunctionConfig.getParamsSize());
+//                //            System.out.println(accumulationFunctionConfig);
+//
+//                RealVector newAccParams = new RealVector(accumulationFunctionConfig.getParamsSize());
+//                for (int i = 0; i < newAccParams.getSize(); i++) {
+//                    //            System.out.println(accumulationFunctionConfig);
+//                    newAccParams.setElement(i, new Double(accumulationFunctionConfig.getParam(i)));
+//
+//                }
+//                setAccumulationParams(newAccParams);
+//            } else {
+//
+//                RealVector paramsVector = getAccumulationParams();
+//
+//                Configuration accumlationFunctionConfiguration = new PhysicsConfiguration("accumulationfunction");
+//
+//                for (int i = 0; i < paramsVector.getSize(); i++) {
+//                    accumlationFunctionConfiguration.setParamValue("param " + i, String.valueOf(paramsVector.getElement(i)));
+//                    accumlationFunctionConfiguration.setParamOrder("param " + i, i);
+//                }
+//
+//                physicsConfiguration.addConfiguration("accumulationfunction", accumlationFunctionConfiguration);
+//            }
 
-        Configuration accumulationFunctionConfig = physicsConfiguration.getConfiguration("accumulationfunction");
+            //Flux function
 
-        if (accumulationFunctionConfig != null) {
-//            System.out.println("Printando configuration para acumulacao: " + accumulationFunctionConfig.getParamsSize());
-//            System.out.println(accumulationFunctionConfig);
+            Configuration fluxFunctionConfig = physicsConfiguration.getConfiguration("fluxfunction");
+            
+            
+            if(fluxFunctionConfig ==null){
+                System.out.println("Nulo !");
+            }
+            
+            else{
+                System.out.println("Tamanho do vetor de fluxo Java:"+fluxFunctionConfig.getParamsSize());
+            }
 
-            RealVector newAccParams = new RealVector(accumulationFunctionConfig.getParamsSize());
-            for (int i = 0; i < newAccParams.getSize(); i++) {
-                //SET ACCUM PARAMS !!!
-                newAccParams.setElement(i, new Double(accumulationFunctionConfig.getParam(i)));
+
+            String[] paramsArray = new String[fluxFunctionConfig.getParamsSize()];
+
+
+            for (int i = 0; i < fluxFunctionConfig.getParamsSize(); i++) {
+
+                paramsArray[i] = fluxFunctionConfig.getParam(i);
+                System.out.println("Param:"+fluxFunctionConfig.getParamName(i)+" "+fluxFunctionConfig.getParam(i));
 
             }
-            setAccumulationParams(newAccParams);
-        } else {
 
-            RealVector paramsVector = getAccumulationParams();
+            setParams(paramsArray);
 
-            Configuration accumlationFunctionConfiguration = new PhysicsConfiguration("accumulationfunction");
 
-            for (int i = 0; i < paramsVector.getSize(); i++) {
-                accumlationFunctionConfiguration.setParamValue("param " + i, String.valueOf(paramsVector.getElement(i)));
-                accumlationFunctionConfiguration.setParamOrder("param " + i, i);
+            RPnConfig.addProfile(physicsID, physicsProfile);
+
+
+
+            ConfigurationProfile boundaryProfile = physicsProfile.getConfigurationProfile(ConfigurationProfile.BOUNDARY);
+
+            if (boundaryProfile != null) { //Catching boundary from input file
+
+                //Catching boundary from input file
+
+                Configuration boundaryConfiguration = new BoundaryConfiguration(boundaryProfile);
+
+                if (boundaryConfiguration.getName().equals("rect")) {
+                    setBoundary(new RectBoundary(boundaryConfiguration.getParam("limits")));
+                }
+
+
+                if (boundaryConfiguration.getName().equals("Three_Phase_Boundary")) {
+                    setBoundary(new IsoTriang2DBoundary(boundaryConfiguration.getParam("limits")));
+                }
+
+                //            System.out.println("Limits : " + boundaryConfiguration.getParam("limits"));
+
+            } else {//            System.out.println("Limits : " + boundaryConfiguration.getParam("limits"));
+
+                Boundary boundary = boundary();
+
+                RealVector min = boundary.getMinimums();
+
+                ConfigurationProfile defaultBoundaryProfile = null;
+
+                if (boundary instanceof RectBoundary) {
+                    defaultBoundaryProfile = new ConfigurationProfile("rect", ConfigurationProfile.BOUNDARY);
+                }
+
+                if (boundary instanceof IsoTriang2DBoundary) {
+                    defaultBoundaryProfile = new ConfigurationProfile("Three_Phase_Boundary", ConfigurationProfile.BOUNDARY);
+
+                }
+
+                defaultBoundaryProfile.addParam("limits", boundary.limits());
+                defaultBoundaryProfile.addParam("dimension", String.valueOf(min.getSize()));
+                physicsProfile.addConfigurationProfile(ConfigurationProfile.BOUNDARY, boundaryProfile);
+
+                Configuration boundaryConfiguration = new BoundaryConfiguration(defaultBoundaryProfile);
+                physicsConfiguration.addConfiguration(boundaryConfiguration.getName(), boundaryConfiguration);
+
+
             }
 
-            physicsConfiguration.addConfiguration("accumulationfunction", accumlationFunctionConfiguration);
+
+
+
+            configMap_.put(physicsID, physicsConfiguration);
+            errorControl_ = new RpErrorControl(boundary());
+        } catch (Exception ex) {
+            Logger.getLogger(RPNUMERICS.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        //Flux function
-
-        Configuration fluxFunctionConfig = physicsConfiguration.getConfiguration("fluxfunction");
-
-        String[] paramsArray = new String[fluxFunctionConfig.getParamsSize()];
-
-
-        for (int i = 0; i < fluxFunctionConfig.getParamsSize(); i++) {
-
-            paramsArray[i] = fluxFunctionConfig.getParam(i);
-
-        }
-
-        setParams(paramsArray);
-
-
-        RPnConfig.addProfile(physicsID, physicsProfile);
-
-
-
-        ConfigurationProfile boundaryProfile = physicsProfile.getConfigurationProfile(ConfigurationProfile.BOUNDARY);
-
-        if (boundaryProfile != null) { //Catching boundary from input file
-
-//            System.out.println("Pegando do arquivo de entrada");
-
-            Configuration boundaryConfiguration = new BoundaryConfiguration(boundaryProfile);
-
-            if (boundaryConfiguration.getName().equals("rect")) {
-                setBoundary(new RectBoundary(boundaryConfiguration.getParam("limits")));
-            }
-
-
-            if (boundaryConfiguration.getName().equals("Three_Phase_Boundary")) {
-                setBoundary(new IsoTriang2DBoundary(boundaryConfiguration.getParam("limits")));
-            }
-
-//            System.out.println("Limits : " + boundaryConfiguration.getParam("limits"));
-
-        } else {//Catching boundary from numerics layer
-
-            Boundary boundary = boundary();
-
-            RealVector min = boundary.getMinimums();
-
-            ConfigurationProfile defaultBoundaryProfile = null;
-
-            if (boundary instanceof RectBoundary) {
-                defaultBoundaryProfile = new ConfigurationProfile("rect", ConfigurationProfile.BOUNDARY);
-            }
-
-            if (boundary instanceof IsoTriang2DBoundary) {
-                defaultBoundaryProfile = new ConfigurationProfile("Three_Phase_Boundary", ConfigurationProfile.BOUNDARY);
-
-            }
-
-            defaultBoundaryProfile.addParam("limits", boundary.limits());
-            defaultBoundaryProfile.addParam("dimension", String.valueOf(min.getSize()));
-            physicsProfile.addConfigurationProfile(ConfigurationProfile.BOUNDARY, boundaryProfile);
-
-            Configuration boundaryConfiguration = new BoundaryConfiguration(defaultBoundaryProfile);
-            physicsConfiguration.addConfiguration(boundaryConfiguration.getName(), boundaryConfiguration);
-
-
-        }
-
-
-
-
-        configMap_.put(physicsID, physicsConfiguration);
-        errorControl_ = new RpErrorControl(boundary());
     }
 
     public static Set<String> getConfigurationNames() {
@@ -573,9 +591,9 @@ public class RPNUMERICS {
 
     public static void updateUplus(List<RealVector> eqPoints) {
         RealVector newUPlus = null;
-            PhasePoint uPlus = RPNUMERICS.getViscousProfileData().getUplus();
-            if(uPlus!=null){//TODO  Inicializar uPlus
-                //System.out.println("Uqem eh uPlus dentro do update : " + uPlus);
+        PhasePoint uPlus = RPNUMERICS.getViscousProfileData().getUplus();
+        if (uPlus != null) {//TODO  Inicializar uPlus
+            //System.out.println("Uqem eh uPlus dentro do update : " + uPlus);
 
             double dist = 1E10;    //***Melhorar criterio
             double dist2 = 0.;
@@ -591,17 +609,15 @@ public class RPNUMERICS {
 
             RPNUMERICS.getViscousProfileData().setUplus(new PhasePoint(newUPlus));
 
-            }
-            
+        }
+
     }
-
-
 
     public static void updateUplusM(List<RealVector> eqPoints) {
         RealVector newUPlus = null;
-            PhasePoint uPlus = RPNUMERICS.getViscousProfileData().getUplus();
-            if(uPlus!=null){//TODO  Inicializar uPlus
-                //System.out.println("Uqem eh uPlus dentro do update : " + uPlus);
+        PhasePoint uPlus = RPNUMERICS.getViscousProfileData().getUplus();
+        if (uPlus != null) {//TODO  Inicializar uPlus
+            //System.out.println("Uqem eh uPlus dentro do update : " + uPlus);
 
             double dist = 1E10;    //***Melhorar criterio
             double dist2 = 0.;
@@ -617,12 +633,9 @@ public class RPNUMERICS {
 
             RPNUMERICS.getViscousProfileData().setUplusM(new PhasePoint(newUPlus));
 
-            }
+        }
 
     }
-
-
-
 
     private static void setFluxDefaultConfiguration() {
 
@@ -736,7 +749,7 @@ public class RPNUMERICS {
         String[] previousParamArray = new String[previousParams.getParams().getSize()];//fluxFunctionConfig.getParamsSize()];
 
         for (int i = 0; i < previousParamArray.length; i++) {
-            previousParamArray[i]= String.valueOf(previousParams.getElement(i));
+            previousParamArray[i] = String.valueOf(previousParams.getElement(i));
 
         }
 

@@ -24,19 +24,25 @@ public class VisualConfiguration extends Configuration{
  
     @Override
     public String toXML() {
-
-        StringBuilder buffer = new StringBuilder();
         
-        Set<Entry<String, String>> paramsSet = getParams().entrySet();
+        StringBuilder buffer = new StringBuilder();
 
-            buffer.append("<COMMAND name=\"").append(getName()).append("\" ");
+            buffer.append("<VIEWCONFIGURATION modeldomain=\"" + getName() + "\">\n");
+            
+            Set<Entry<String, Configuration>> configurationEntry = getConfigurationMap().entrySet();
+            for (Entry<String, Configuration> configEntry : configurationEntry) {
 
-            for (Entry<String, String> entry : paramsSet) {
-                buffer.append(entry.getKey()).append("=\"").append(entry.getValue()).append("\"");
-                buffer.append(" ");
+                buffer.append("<PROJDESC name=\"" + configEntry.getValue().getName() + "\">\n");
+                HashMap<String, String> configParams = configEntry.getValue().getParams();
+                Set<Entry<String, String>> configSet = configParams.entrySet();
+                for (Entry<String, String> internalConfigEntry : configSet) {
+                    buffer.append("<VIEWPARAM name=\"" + internalConfigEntry.getKey() + "\" " + "value= \"" + internalConfigEntry.getValue() + "\"/>");
+                    buffer.append("\n");
+                }
+                buffer.append("</PROJDESC>\n");
             }
-
-            buffer.append("/>");
+            buffer.append("</VIEWCONFIGURATION>\n");
+                
 
         return buffer.toString();
     }

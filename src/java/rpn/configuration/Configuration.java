@@ -7,7 +7,6 @@ package rpn.configuration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -51,12 +50,12 @@ public abstract class Configuration {
 
     }
 
-    public Configuration(ConfigurationProfile profile, HashMap<String,Configuration> innerConfigurations) {
+    public Configuration(ConfigurationProfile profile, HashMap<String, Configuration> innerConfigurations) {
 
 
         this(profile);
-        
-        configurationMap_=innerConfigurations;
+
+        configurationMap_ = innerConfigurations;
 
     }
 
@@ -187,11 +186,11 @@ public abstract class Configuration {
     @Override
     public String toString() {
 
-        StringBuffer stringBuffer = new StringBuffer();
-        stringBuffer.append("Configuration name: " + name_ + " Configuration type: " + type_ + "\n");
+        StringBuilder stringBuffer = new StringBuilder();
+        stringBuffer.append("Configuration name: ").append(name_).append(" Configuration type: ").append(type_).append("\n");
         Set<Entry<String, String>> paramsSet = params_.entrySet();
         for (Entry<String, String> paramsEntry : paramsSet) {
-            stringBuffer.append(paramsEntry.getKey() + " " + paramsEntry.getValue() + "\n");
+            stringBuffer.append(paramsEntry.getKey()).append(" ").append(paramsEntry.getValue()).append("\n");
         }
 
         Set<Entry<String, Configuration>> configurationSet = configurationMap_.entrySet();
@@ -204,103 +203,6 @@ public abstract class Configuration {
 
     }
 
-    public String toXML() {
+    public abstract  String toXML();
 
-        StringBuffer buffer = new StringBuffer();
-        Set<Entry<String, String>> paramsSet = params_.entrySet();
-
-        if (getType().equalsIgnoreCase(ConfigurationProfile.PHYSICS_PROFILE)) {
-            buffer.append("<PHYSICS name=\"" + getName() + "\">\n");
-
-            Set<Entry<String, Configuration>> configurationSet = configurationMap_.entrySet();
-
-            for (Entry<String, Configuration> entry : configurationSet) {//Printing boundary first
-
-                if (entry.getValue().getType().equals(ConfigurationProfile.BOUNDARY)) {
-                    buffer.append(entry.getValue().toXML());
-                }
-
-            }
-
-            for (Entry<String, Configuration> entry : configurationSet) {//Printing the rest
-
-                if (!entry.getValue().getType().equals(ConfigurationProfile.BOUNDARY)) {
-                    buffer.append(entry.getValue().toXML());
-                }
-
-            }
-
-            buffer.append("</PHYSICS>\n");
-        }
-
-
-        if (getType().equalsIgnoreCase(ConfigurationProfile.PHYSICS_CONFIG)) {
-            buffer.append("<PHYSICSCONFIG name=\"" + getName() + "\">\n");
-            for (Entry<String, String> entry : paramsSet) {
-
-                buffer.append("<PHYSICSPARAM name=\"" + entry.getKey() + "\" " + "position=\"" + getParamOrder(entry.getKey()) + "\"" + " value= \"" + entry.getValue() + "\"/>");
-                buffer.append("\n");
-            }
-
-            buffer.append("</PHYSICSCONFIG>\n");
-
-        }
-
-
-        if (getType().equalsIgnoreCase(ConfigurationProfile.BOUNDARY)) {
-            buffer.append("<BOUNDARY name=\"" + getName() + "\">\n");
-            for (Entry<String, String> entry : paramsSet) {
-
-                buffer.append("<BOUNDARYPARAM name=\"" + entry.getKey() + "\" " + " value= \"" + entry.getValue() + "\"/>");
-                buffer.append("\n");
-            }
-
-            buffer.append("</BOUNDARY>\n");
-
-        }
-
-       
-
-        if (getType().equalsIgnoreCase(ConfigurationProfile.CURVECONFIGURATION)) {
-            buffer.append("<CURVECONFIGURATION name=\"" + getName() + "\">\n");
-
-            for (Entry<String, String> entry : paramsSet) {
-                buffer.append("<CURVEPARAM name=\"" + entry.getKey() + "\" " + "value= \"" + entry.getValue() + "\"/>");
-                buffer.append("\n");
-            }
-
-            buffer.append("</CURVECONFIGURATION>\n");
-
-        }
-
-        if (getType().equalsIgnoreCase(ConfigurationProfile.METHOD)) {
-            buffer.append("<METHOD name=\"" + getName() + "\">\n");
-            for (Entry<String, String> entry : paramsSet) {
-                buffer.append("<METHODPARAM name=\"" + entry.getKey() + "\" " + "value= \"" + entry.getValue() + "\"/>");
-                buffer.append("\n");
-            }
-            buffer.append("</METHOD>\n");
-        }
-
-
-        if (getType().equalsIgnoreCase(ConfigurationProfile.VISUALIZATION)) {
-            buffer.append("<VIEWCONFIGURATION modeldomain=\"" + getName() + "\">\n");
-            Set<Entry<String, Configuration>> configurationEntry = configurationMap_.entrySet();
-            for (Entry<String, Configuration> configEntry : configurationEntry) {
-
-                buffer.append("<PROJDESC name=\"" + configEntry.getValue().getName() + "\">\n");
-                HashMap<String, String> configParams = configEntry.getValue().getParams();
-                Set<Entry<String, String>> configSet = configParams.entrySet();
-                for (Entry<String, String> internalConfigEntry : configSet) {
-                    buffer.append("<VIEWPARAM name=\"" + internalConfigEntry.getKey() + "\" " + "value= \"" + internalConfigEntry.getValue() + "\"/>");
-                    buffer.append("\n");
-                }
-                buffer.append("</PROJDESC>\n");
-            }
-            buffer.append("</VIEWCONFIGURATION>\n");
-        }
-
-
-        return buffer.toString();
-    }
-}
+  }

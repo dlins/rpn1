@@ -9,16 +9,16 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
 
-public class BoundaryConfiguration extends Configuration{
+public class CurveConfiguration extends Configuration{
 
 
-    public BoundaryConfiguration(ConfigurationProfile configurationProfile){
+    public CurveConfiguration(ConfigurationProfile configurationProfile){
         
         super(configurationProfile);
 
     }
 
-    BoundaryConfiguration(ConfigurationProfile profile, HashMap<String, Configuration> innerConfigurations) {
+    CurveConfiguration(ConfigurationProfile profile, HashMap<String, Configuration> innerConfigurations) {
         super(profile, innerConfigurations);
     }
  
@@ -26,25 +26,16 @@ public class BoundaryConfiguration extends Configuration{
     public String toXML() {
 
         StringBuilder buffer = new StringBuilder();
-        
-        
-        
 
-            buffer.append("<BOUNDARY name=\"" + getName() + "\">\n");
-            
-            
+            buffer.append("<CURVECONFIGURATION name=\"" + getName() + "\">\n");
             Set<Entry<String,String>> paramsSet = getParams().entrySet();
-            
             for (Entry<String, String> entry : paramsSet) {
-
-                buffer.append("<BOUNDARYPARAM name=\"" + entry.getKey() + "\" " + " value= \"" + entry.getValue() + "\"/>");
+                buffer.append("<CURVEPARAM name=\"" + entry.getKey() + "\" " + "value= \"" + entry.getValue() + "\"/>");
                 buffer.append("\n");
             }
 
-            buffer.append("</BOUNDARY>\n");
+            buffer.append("</CURVECONFIGURATION>\n");
 
-
-
-              return buffer.toString();
+        return buffer.toString();
     }
 }

@@ -16,14 +16,11 @@ import java.util.List;
 import java.io.*;
 import java.util.Map.Entry;
 import java.util.Set;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import rpn.configuration.RPnConfig;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.XMLReader;
 import rpn.RPnProjDescriptor;
 import rpn.component.util.GeometryGraphND;
-import rpnumerics.RPNUMERICS;
 import wave.multid.Space;
 
 /** This class configures the initial visualization properties. Reading a XML file that contains the necessary information, this class sets the axis, labels , domain, etc to represents correctly the physics. */

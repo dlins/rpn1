@@ -182,36 +182,37 @@ public class RPnConfig {
 
     public static void addProfile(String configurationName, ConfigurationProfile profile) {
         try {
-            System.out.println("Nome do profile:" + profile.getName() + " tipo do profile:" + profile.getType());
-
-            /*O Configuration da fisica nao esta com
-            os outros configurations dentro . Usar o construtor com a lista de
-            configurations ou buscas outra solucao*/
 
             configurationsProfileMap_.put(configurationName, profile);
-
-
-            HashMap<String,Configuration> innerConfigurations = createConfigurationList(profile);
             
+            HashMap<String, Configuration> innerConfigurations = createConfigurationList(profile);
+
             Configuration configuration = null;
+
+
+            if (profile.getType().equals(ConfigurationProfile.PHYSICS_PROFILE)) {
+                configuration = new PhysicsConfiguration(profile, innerConfigurations);
+            }
+
+
+            if (profile.getType().equals(ConfigurationProfile.VISUALIZATION)) {
+                configuration = new VisualConfiguration(profile, innerConfigurations);
+            }
+
+
+            if (profile.getType().equals(ConfigurationProfile.BOUNDARY)) {
+                configuration = new BoundaryConfiguration(profile, innerConfigurations);
+            }
             
             
-             if (profile.getType().equals(ConfigurationProfile.PHYSICS_PROFILE)) {
-                 configuration=new PhysicsConfiguration(profile,innerConfigurations);
-                }
-
-
-                if (profile.getType().equals(ConfigurationProfile.VISUALIZATION)) {
-                   configuration=new VisualConfiguration(profile,innerConfigurations);
-                }
-
-
-                if (profile.getType().equals(ConfigurationProfile.BOUNDARY)) {
-                     configuration=new BoundaryConfiguration(profile,innerConfigurations);
-                }
+            if (profile.getType().equals(ConfigurationProfile.METHOD)) {
+                configuration = new MethodConfiguration(profile);
+            }
             
-
-
+             if (profile.getType().equals(ConfigurationProfile.CURVECONFIGURATION)) {
+                configuration = new CurveConfiguration(profile);
+            }
+            
 
 
             RPNUMERICS.setConfiguration(configuration.getName(), configuration);
@@ -221,10 +222,10 @@ public class RPnConfig {
 
     }
 
-    private static HashMap<String,Configuration> createConfigurationList(ConfigurationProfile profile) throws Exception {
+    public static HashMap<String, Configuration> createConfigurationList(ConfigurationProfile profile) throws Exception {
 
 
-        HashMap<String,Configuration> configuration = new HashMap<String, Configuration>();
+        HashMap<String, Configuration> configurationMap = new HashMap<String, Configuration>();
 
 
 
@@ -232,26 +233,48 @@ public class RPnConfig {
 
 
         for (Entry<String, ConfigurationProfile> entry : configurationProfileSet) {
-            if (entry.getValue().getType().equals(ConfigurationProfile.PHYSICS_PROFILE)) {
-                configuration.put(entry.getKey(),new PhysicsConfiguration(entry.getKey()));
+
+
+            if (entry.getValue().getType().equals(ConfigurationProfile.PHYSICS_PROFILE)
+                    || entry.getValue().getType().equals(ConfigurationProfile.PHYSICS_CONFIG)
+                    || entry.getValue().getType().equals(ConfigurationProfile.BOUNDARY)
+                    || entry.getValue().getType().equals(ConfigurationProfile.VISUALIZATION)) {
+
+
+                if (entry.getValue().getType().equals(ConfigurationProfile.PHYSICS_PROFILE)) {
+                    
+                    configurationMap.put(entry.getKey(), new PhysicsConfiguration(entry.getValue()));
+                }
+
+
+                if (entry.getValue().getType().equals(ConfigurationProfile.PHYSICS_CONFIG)) {
+                    configurationMap.put(entry.getKey(), new PhysicsConfiguration(entry.getValue()));
+                }
+
+                if (entry.getValue().getType().equals(ConfigurationProfile.VISUALIZATION)) {
+                    configurationMap.put(entry.getKey(), new VisualConfiguration(entry.getValue()));
+                }
+
+
+                if (entry.getValue().getType().equals(ConfigurationProfile.BOUNDARY)) {
+                    configurationMap.put(entry.getKey(), new BoundaryConfiguration(entry.getValue()));
+                }
+
+
+
+                
+                
+                
+            } else {
+                throw new Exception("Profile type unknow:" + entry.getValue().getName() + " " + entry.getValue().getType());
             }
 
-
-            if (entry.getValue().getType().equals(ConfigurationProfile.VISUALIZATION)) {
-                configuration.put(entry.getKey(),new VisualConfiguration(entry.getValue()));
-            }
-
-
-            if (entry.getValue().getType().equals(ConfigurationProfile.BOUNDARY)) {
-                configuration.put(entry.getKey(),new BoundaryConfiguration(entry.getValue()));
-            }
         }
 
 
 
 
-
-        throw new Exception("Profile type unknow:" + profile.getName() + " " + profile.getType());
+        return configurationMap;
 
     }
 
