@@ -36,7 +36,7 @@ public abstract class RpModelActionCommand extends RpCommand {
         if (UndoActionController.instance() == null) {
             UndoActionController.createInstance();
         } else {
-            UndoActionController.instance().addAction(this);
+            UndoActionController.instance().addAction(command);
         }
     }
 

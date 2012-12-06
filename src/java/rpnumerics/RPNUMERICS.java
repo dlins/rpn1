@@ -93,22 +93,13 @@ public class RPNUMERICS {
             Configuration fluxFunctionConfig = physicsConfiguration.getConfiguration("fluxfunction");
             
             
-            if(fluxFunctionConfig ==null){
-                System.out.println("Nulo !");
-            }
-            
-            else{
-                System.out.println("Tamanho do vetor de fluxo Java:"+fluxFunctionConfig.getParamsSize());
-            }
-
-
             String[] paramsArray = new String[fluxFunctionConfig.getParamsSize()];
 
 
             for (int i = 0; i < fluxFunctionConfig.getParamsSize(); i++) {
 
                 paramsArray[i] = fluxFunctionConfig.getParam(i);
-                System.out.println("Param:"+fluxFunctionConfig.getParamName(i)+" "+fluxFunctionConfig.getParam(i));
+
 
             }
 

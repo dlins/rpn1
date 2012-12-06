@@ -184,7 +184,7 @@ public class RPnConfig {
         try {
 
             configurationsProfileMap_.put(configurationName, profile);
-            
+
             HashMap<String, Configuration> innerConfigurations = createConfigurationList(profile);
 
             Configuration configuration = null;
@@ -196,6 +196,8 @@ public class RPnConfig {
 
 
             if (profile.getType().equals(ConfigurationProfile.VISUALIZATION)) {
+
+//                configuration = new VisualConfiguration(profile);
                 configuration = new VisualConfiguration(profile, innerConfigurations);
             }
 
@@ -203,16 +205,16 @@ public class RPnConfig {
             if (profile.getType().equals(ConfigurationProfile.BOUNDARY)) {
                 configuration = new BoundaryConfiguration(profile, innerConfigurations);
             }
-            
-            
+
+
             if (profile.getType().equals(ConfigurationProfile.METHOD)) {
                 configuration = new MethodConfiguration(profile);
             }
-            
-             if (profile.getType().equals(ConfigurationProfile.CURVECONFIGURATION)) {
+
+            if (profile.getType().equals(ConfigurationProfile.CURVECONFIGURATION)) {
                 configuration = new CurveConfiguration(profile);
             }
-            
+
 
 
             RPNUMERICS.setConfiguration(configuration.getName(), configuration);
@@ -227,9 +229,15 @@ public class RPnConfig {
 
         HashMap<String, Configuration> configurationMap = new HashMap<String, Configuration>();
 
-
+        
+        if(profile.getType().equals(ConfigurationProfile.VISUALIZATION)){
+            
+            System.out.println("Quantidade de profiles dentro do visual:" +profile.getProfiles().values().size());
+        }
+        
 
         Set<Entry<String, ConfigurationProfile>> configurationProfileSet = profile.getProfiles().entrySet();
+        
 
 
         for (Entry<String, ConfigurationProfile> entry : configurationProfileSet) {
@@ -242,16 +250,21 @@ public class RPnConfig {
 
 
                 if (entry.getValue().getType().equals(ConfigurationProfile.PHYSICS_PROFILE)) {
-                    
+
                     configurationMap.put(entry.getKey(), new PhysicsConfiguration(entry.getValue()));
                 }
 
 
                 if (entry.getValue().getType().equals(ConfigurationProfile.PHYSICS_CONFIG)) {
-                    configurationMap.put(entry.getKey(), new PhysicsConfiguration(entry.getValue()));
+                    configurationMap.put(entry.getKey(), new PhysicsConfigurationParams(entry.getValue()));
                 }
 
                 if (entry.getValue().getType().equals(ConfigurationProfile.VISUALIZATION)) {
+
+
+
+
+
                     configurationMap.put(entry.getKey(), new VisualConfiguration(entry.getValue()));
                 }
 
@@ -262,9 +275,9 @@ public class RPnConfig {
 
 
 
-                
-                
-                
+
+
+
             } else {
                 throw new Exception("Profile type unknow:" + entry.getValue().getName() + " " + entry.getValue().getType());
             }
@@ -335,7 +348,18 @@ public class RPnConfig {
 
     public static void setActiveVisualConfiguration(String visualConfigName) {
         activeVisualConfig_ = visualConfigName;
-        visualConfiguration_ = new VisualConfiguration(configurationsProfileMap_.get(visualConfigName));
+        
+         HashMap<String, Configuration> innerConfigurations;
+        try {
+            innerConfigurations = createConfigurationList(configurationsProfileMap_.get(visualConfigName));
+            visualConfiguration_ = new VisualConfiguration(configurationsProfileMap_.get(visualConfigName),innerConfigurations);
+        } catch (Exception ex) {
+            Logger.getLogger(RPnConfig.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        
+        
     }
 
     public static ConfigurationProfile getActivePhysicsProfile() {

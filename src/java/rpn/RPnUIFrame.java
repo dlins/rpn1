@@ -641,8 +641,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 writer.write("<RPNCONFIGURATION>\n");
                 RPnNumericsModule.export(writer);
                 RPnVisualizationModule.export(writer);
+                writer.write("</RPNCONFIGURATION>\n");
                 RPnDataModule.export(writer);
-                writer.write("</RPNCONFIGURATION>");
+
                 writer.close();
             }
 

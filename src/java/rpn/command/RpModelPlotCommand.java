@@ -73,13 +73,13 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand {
 
         Iterator newValue = UIController.instance().getActivePhaseSpace().getGeomObjIterator();
         
-        PropertyChangeEvent event = new PropertyChangeEvent(this,UIController.instance().getActivePhaseSpace().getName(), oldValue, newValue);
+        PropertyChangeEvent event = new PropertyChangeEvent(this,UIController.instance().getActivePhaseSpace().getName(), oldValue, geometry);
 
         RpCommand command = new RpCommand(event);
         logCommand(command);
         
         
-        System.out.println(command.toXML());
+//        System.out.println(command.toXML());
         
         
         

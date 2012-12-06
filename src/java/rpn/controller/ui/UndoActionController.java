@@ -9,6 +9,7 @@ package rpn.controller.ui;
 import javax.swing.AbstractAction;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.Iterator;
 import rpn.command.RpCommand;
 
 public class UndoActionController extends AbstractAction {
@@ -46,6 +47,9 @@ public class UndoActionController extends AbstractAction {
     }
 
     static public UndoActionController instance() { return instance_; }
+    
+    
+    public Iterator<RpCommand> getCommandIterator(){return commandArray_.iterator();}
 
     public RpCommand getLastCommand() {
         return lastCommand_;

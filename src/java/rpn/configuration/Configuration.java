@@ -182,7 +182,6 @@ public abstract class Configuration {
         return type_;
     }
 
-//    public abstract toXML();
     @Override
     public String toString() {
 

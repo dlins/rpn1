@@ -31,7 +31,7 @@ public class CommandConfiguration extends Configuration{
                 buffer.append(" ");
             }
 
-            buffer.append("/>");
+            buffer.append("/>\n");
 
         return buffer.toString();
     }

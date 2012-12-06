@@ -44,25 +44,13 @@ public class PhysicsConfiguration extends Configuration {
 
             }
 
-            buffer.append("<PHYSICSCONFIG name=\"" + getName() + "\">\n");
-
             for (Entry<String, Configuration> entry : configurationSet) {
-
-                Set<Entry<String, String>> paramsSet = entry.getValue().getParams().entrySet();
-
-                for (Entry<String, String> paramEntry : paramsSet) {
-
-                    buffer.append("<PHYSICSPARAM name=\"" + paramEntry.getKey() + "\" " + "position=\"" + getParamOrder(paramEntry.getKey()) + "\"" + " value= \"" + paramEntry.getValue() + "\"/>");
-                    buffer.append("\n");
+                  if (!entry.getValue().getType().equals(ConfigurationProfile.BOUNDARY)) {
+                    buffer.append(entry.getValue().toXML());
                 }
 
             }
-
-
-            buffer.append("</PHYSICSCONFIG>\n");
-
-        
-
+            buffer.append("</PHYSICS>\n");
 
         return buffer.toString();
     }

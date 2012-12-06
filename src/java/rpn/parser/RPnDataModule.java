@@ -39,6 +39,7 @@ import java.util.Set;
 import java.util.HashMap;
 
 
+import rpn.controller.ui.UndoActionController;
 import wave.multid.Space;
 
 /** With this class the calculus made in a previous session can be reloaded. A previous state can be reloaded reading a XML file that is used by this class */
@@ -374,7 +375,7 @@ public class RPnDataModule {
 
         System.out.println("Data module export started...");
 
-        Iterator<RpCommand> iterator1 = UIController.instance().getCommandIterator();
+        Iterator<RpCommand> iterator1 = UndoActionController.instance().getCommandIterator();
 
         while (iterator1.hasNext()) {
             writer.write(((RpCommand)iterator1.next()).toXML());

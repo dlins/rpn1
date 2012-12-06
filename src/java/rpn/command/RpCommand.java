@@ -78,19 +78,18 @@ public class RpCommand extends AbstractAction implements UndoableAction {
         this.actionSelected_ = actionSelected_;
         inputArray_ = new ArrayList<String>();
         inputArray_.add(input.toString());
-//        createXMLOutput();
     }
 
     public RpCommand(UI_ACTION_SELECTED actionSelected_, ArrayList<String> inputArray_) {
         this.inputArray_ = inputArray_;
         this.actionSelected_ = actionSelected_;
-//        createXMLOutput();
+
     }
 
     public RpCommand(UI_ACTION_SELECTED actionSelected_) {
         this.inputArray_ = new ArrayList<String>();
         this.actionSelected_ = actionSelected_;
-//        createXMLOutput();
+
     }
 
     public void setActionSelected(UI_ACTION_SELECTED actionSelected_) {
@@ -112,24 +111,15 @@ public class RpCommand extends AbstractAction implements UndoableAction {
     public String toXML() {
         
         if (event_.getSource() instanceof RpModelPlotCommand)
-//
-        {
 
-            Iterator iterator = ((Iterator) event_.getNewValue());
-            
-            
-             RpGeometry geometry =null;
-            while (iterator.hasNext()) {
-               geometry  = (RpGeometry) iterator.next();
-                
-            }
-            
+        {
+            RpGeometry geometry =(RpGeometry)event_.getNewValue();
+
             RpCalcBasedGeomFactory factory = (RpCalcBasedGeomFactory) geometry.geomFactory();
             
             RpCalculation calc = (RpCalculation) factory.rpCalc();
             
             return calc.getConfiguration().toXML();
-            
             
         }
         
@@ -138,41 +128,10 @@ public class RpCommand extends AbstractAction implements UndoableAction {
             Configuration configuration = (Configuration)event_.getNewValue();
             return configuration.toXML();
         }
-//        
-//        else {
-//            
-//            Configuration curveParams = new Configuration(event_.getNewValue());
-//            
-//            createXMLOutput(c);
-//            
-//            
-//        }
-        
-        
-        
-        
         
         return xmlOutput_;
     }
 
-    private void createPlottingXMLOutput(Configuration c) {
-
-        StringBuffer buffer = new StringBuffer();
-        System.out.println("entrando");
-        String commandName = actionSelected_.getAction().toString();
-      
-        buffer.append("<COMMAND name=\"" + commandName.replaceAll(" ", "").toLowerCase() + "\">\n");
-        for (String input : inputArray_) {
-            RealVector inputVector = new RealVector(input);
-            buffer.append(inputVector.toXML());
-            buffer.append("\n");
-        }
-
-        buffer.append("</COMMAND>\n");
-
-        xmlOutput_ = buffer.toString();
-
-    }
 
     public void unexecute() {
     }
