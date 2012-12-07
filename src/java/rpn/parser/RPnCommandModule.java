@@ -234,7 +234,7 @@ public class RPnCommandModule {
     // Methods
     //
     /** Writes the data of actual session into a XML file. */
-    static public void commandsExport(FileWriter writer) throws java.io.IOException {
+    static public void export(FileWriter writer) throws java.io.IOException {
 
         System.out.println("Command module export started...");
 

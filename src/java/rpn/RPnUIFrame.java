@@ -51,10 +51,10 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JMenuItem shockMenuItem_ = new JMenuItem("Shock Configuration ...");
     private JMenuItem configurationMenuItem_ = new JMenuItem(new ConfigAction());
     private JMenuItem jMenuFileExit = new JMenuItem();
-    private JMenuItem dataMenuFileExport_ = new JMenuItem("Export Data ...");
+    private JMenuItem exportRPMenuItem_ = new JMenuItem("Export Riemann Profile results ...");
     private JMenuItem jMenuHelpAbout = new JMenuItem();
     private GridBagLayout uiFrameLayout_ = new GridBagLayout();
-    private JMenuItem exportMenuItem = new JMenuItem();
+    private JMenuItem saveSessionMenuItem_ = new JMenuItem("Save Session As ...");
     private JMenuItem inputCoordsMenuItem = new JMenuItem("Input Coords ...");
     private JMenuItem createSVGImageMenuItem = new JMenuItem();
     private JMenuItem printMenuItem = new JMenuItem();
@@ -100,6 +100,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             createPanelsChooser();
 
             addPropertyChangeListener(this);
+
+            RiemannProfileCommand.instance().addPropertyChangeListener(this);
+
             UndoActionController.createInstance();
 
             if (commandMenu_ instanceof RPnAppletPlotter) { // Selecting itens to disable in Applet
@@ -107,8 +110,11 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 networkMenuItem.setEnabled(false);
                 createSVGImageMenuItem.setEnabled(false);
                 printMenuItem.setEnabled(false);
-                exportMenuItem.setEnabled(false);
+                saveSessionMenuItem_.setEnabled(false);
             }
+
+            // should be enabled only when a RP profile is present...
+            exportRPMenuItem_.setEnabled(false);
 
 
         } catch (Exception e) {
@@ -210,6 +216,11 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         if (evt.getPropertyName().equals("Dialog Closed")) {
             networkMenuItem.setEnabled(true);
         }
+
+        if (evt.getPropertyName().equals("Riemann Profile Added")) {
+            exportRPMenuItem_.setEnabled(true);
+        }
+
 
     }
     //File | Exit action performed
@@ -597,12 +608,12 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         }
     }
 
-    //** ???
-    void dataExport_actionPerformed(ActionEvent e) {
+    // Exports the Riemann Profile solution only...
+    void exportRP_actionPerformed(ActionEvent e) {
         try {
             JFileChooser chooser = new JFileChooser();
-            chooser.setSelectedFile(new File("rpn.out"));
-            chooser.setFileFilter(new FileNameExtensionFilter("data output file", "out"));
+            chooser.setSelectedFile(new File("RP.OUT"));
+            chooser.setFileFilter(new FileNameExtensionFilter("rpn session output file", "out"));
             if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
 
                 int nFiles = chooser.getSelectedFile().getParentFile().listFiles().length;
@@ -616,8 +627,12 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 dir = chooser.getSelectedFile().getParent();
                 System.out.println("Selected Directory : " + dir);
 
-                RPnDataModule.export(writer);
-
+                writer.write(RPnConfigReader.XML_HEADER);
+                RPnNumericsModule.export(writer);
+                writer.write("<RPNDATA>\n");
+                RPnDataModule.exportRP(writer);
+                writer.write("</RPNDATA>\n");
+                RPnCommandModule.export(writer);
                 writer.close();
             }
 
@@ -627,21 +642,25 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         }
     }
 
-    //**  ???
-    void export_actionPerformed(ActionEvent e) {
+    // saves the whole user commands session...
+    void saveSession_actionPerformed(ActionEvent e) {
         try {
             JFileChooser chooser = new JFileChooser();
-            chooser.setSelectedFile(new File("output.xml"));
+            chooser.setSelectedFile(new File("RPNSESSION.XML"));
             chooser.setFileFilter(new FileNameExtensionFilter("XML File", "xml", "XML"));
             if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
                 FileWriter writer = new FileWriter(chooser.getSelectedFile().
                         getAbsolutePath());
                 writer.write(RPnConfigReader.XML_HEADER);
-                writer.write("<RPNCONFIGURATION>\n");
+                writer.write("<RPNSESSION>\n");
+                writer.write(" <PHASESPACE name=\"Phase Space\">\n");
+                writer.write("  <RPNCONFIGURATION>\n");
                 RPnNumericsModule.export(writer);
-                RPnVisualizationModule.export(writer);
-                RPnDataModule.export(writer);
-                writer.write("</RPNCONFIGURATION>");
+                RPnVisualizationModule.export(writer);               
+                writer.write("  </RPNCONFIGURATION>\n");
+                writer.write(" </PHASESPACE>\n");
+                RPnCommandModule.export(writer);
+                writer.write("</RPNSESSION>");
                 writer.close();
             }
 
@@ -823,11 +842,12 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                     }
                 });
 
-        dataMenuFileExport_.addActionListener(
+        exportRPMenuItem_.addActionListener(
+
                 new ActionListener() {
 
                     public void actionPerformed(ActionEvent e) {
-                        dataExport_actionPerformed(e);
+                        exportRP_actionPerformed(e);
                     }
                 });
 
@@ -841,12 +861,12 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                         jMenuHelpAbout_actionPerformed(e);
                     }
                 });
-        exportMenuItem.setText("Save As...");
-        exportMenuItem.addActionListener(
+
+        saveSessionMenuItem_.addActionListener(
                 new ActionListener() {
 
                     public void actionPerformed(ActionEvent e) {
-                        export_actionPerformed(e);
+                        saveSession_actionPerformed(e);
                     }
                 });
         editMenu.setText("Edit");
@@ -956,8 +976,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 });
 
 
-        fileMenu.add(exportMenuItem);
-        fileMenu.add(dataMenuFileExport_);
+        fileMenu.add(saveSessionMenuItem_);
+        fileMenu.add(exportRPMenuItem_);
         fileMenu.addSeparator();
         fileMenu.add(networkMenuItem);
 

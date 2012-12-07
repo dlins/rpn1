@@ -49,9 +49,6 @@ public class RPnDataModule {
     static public RPnPhaseSpaceAbstraction RIEMANNPHASESPACE = null;
     static public RPnPhaseSpaceAbstraction[] CHARACTERISTICSPHASESPACEARRAY = null;
 
-    static public boolean RIEMANN_EXCLUSIVE_EXPORT = false;
-
-
     // TODO move out to somewhere else RPNUMERICS
     public static int[] processResolution(String resolution) {
 
@@ -206,13 +203,11 @@ public class RPnDataModule {
     // Methods
     //
     /** Writes the data of actual session into a XML file. */
-    static public void export(FileWriter writer) throws java.io.IOException {
+    static public void exportRP(FileWriter writer) throws java.io.IOException {
 
         // TODO : this is working only for PHASESPACE ... must be implemented to all
         // others phasespaces (L , R etc...)
-        Iterator<RpGeometry> iterator = PHASESPACE.getGeomObjIterator();
-        
-        writer.write("<RPNDATA> \n");
+        Iterator<RpGeometry> iterator = PHASESPACE.getGeomObjIterator();                
         
         // Inserting data
         HashMap<Integer, RpGeometry> visibleGeometries = new HashMap<Integer, RpGeometry>();
@@ -235,15 +230,13 @@ public class RPnDataModule {
 
             RpSolution element = (RpSolution) entry.getValue().geomFactory().geomSource();
 
-            if ((RIEMANN_EXCLUSIVE_EXPORT) && (element instanceof RiemannProfile))
+            if (element instanceof RiemannProfile)
 
                 writer.write(element.toXML() + "\n");
 
             else
                 writer.write(element.toXML() + "\n");
-        }
-
-        writer.write("</RPNDATA> \n");
+        }       
     }
 }
 

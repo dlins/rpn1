@@ -90,7 +90,7 @@ public class RpCommand extends AbstractAction implements UndoableAction {
         System.out.println("entrando");
         String commandName = actionSelected_.getAction().toString();
       
-        buffer.append("<COMMAND name=\"" + commandName.replaceAll(" ", "").toLowerCase() + "\">\n");
+        buffer.append("<COMMAND name=\"" + commandName.replaceAll(" ", "").toLowerCase() + "\"" + " phasespace=\"Phase Space\" >\n");
         for (String input : inputArray_) {
             RealVector inputVector = new RealVector(input);
             buffer.append(inputVector.toXML());

@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <!DOCTYPE rpnconfiguration >
-<PHASESPACE name="Phase Space">
- <RPNCONFIGURATION>
+<RPNSESSION>
+ <PHASESPACE name="Phase Space">
+  <RPNCONFIGURATION>
     <PHYSICS name="Stone">
 
         <PHYSICSCONFIG name="fluxfunction">
@@ -132,6 +133,8 @@
 
     </VIEWCONFIGURATION>
 
- </RPNCONFIGURATION>
+  </RPNCONFIGURATION>
 
-</PHASESPACE>
+ </PHASESPACE>
+
+</RPNSESSION>
