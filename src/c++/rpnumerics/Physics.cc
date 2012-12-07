@@ -96,7 +96,7 @@ Physics::Physics(const string & physicsID) : physicsVector_(new vector<SubPhysic
     }
 
 
-    boundary_ = physicsVector_->at(0)->boundary().clone(); //TODO Using the default boundary.Replace
+    boundary_ = physicsVector_->at(0)->getBoundary().clone(); //TODO Using the default boundary.Replace
     space_ = new Space(physicsVector_->at(0)->domain());
 
     
@@ -190,9 +190,12 @@ void Physics::accumulationParams(const AccumulationParams & newParams) {
 }
 
 void Physics::boundary(const Boundary & boundary) {
+    
+    SubPhysics * subPhysics = physicsVector_->at(0);
+    
+    subPhysics->boundary(boundary);
 
-    delete boundary_;
-    boundary_ = boundary.clone();
+    boundary_= &subPhysics->getBoundary();
 }
 
 

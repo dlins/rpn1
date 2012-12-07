@@ -13,7 +13,7 @@ Quad4::~Quad4() {
 
 }
 
-Quad4::Quad4(const Quad4 & copy):SubPhysics(copy.fluxFunction(),copy.accumulation(),copy.boundary(),*new Space("R4",4),"QuadraticR4",_SIMPLE_ACCUMULATION_) {
+Quad4::Quad4(const Quad4 & copy):SubPhysics(copy.fluxFunction(),copy.accumulation(),copy.getBoundary(),*new Space("R4",4),"QuadraticR4",_SIMPLE_ACCUMULATION_) {
     DEFAULT_SIGMA = "-.021";
     DEFAULT_XZERO = ".13 .07";
 

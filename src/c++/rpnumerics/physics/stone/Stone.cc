@@ -112,7 +112,7 @@ Stone::Stone() : SubPhysics(StoneFluxFunction(StoneParams(), StonePermParams()),
     setShockMethod(new Shock());
 }
 
-Stone::Stone(const Stone & copy) : SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.boundary(), Multid::PLANE, "Stone", _SIMPLE_ACCUMULATION_) {
+Stone::Stone(const Stone & copy) : SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.getBoundary(), Multid::PLANE, "Stone", _SIMPLE_ACCUMULATION_) {
     setHugoniotFunction(new Hugoniot_Curve());
     setDoubleContactFunction(new Double_Contact());
     setShockMethod(new Shock());

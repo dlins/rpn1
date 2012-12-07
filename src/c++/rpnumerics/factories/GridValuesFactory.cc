@@ -28,10 +28,11 @@ GridValuesFactory::GridValuesFactory(const Physics * physics) : gridArray_(new m
 GridValues * GridValuesFactory::getGrid(const string & gridName) {
 
 
+    
     if (gridArray_->count(gridName) == 1) {
         return gridArray_->operator [](gridName);
     } else {
-
+    cout <<"Nome do grid:"<<gridName<<endl;
         const Boundary* boundary = physics_->getSubPhysics(0).getPreProcessedBoundary();
 
         cout << "Min: " << boundary->minimums() << endl;

@@ -25,7 +25,7 @@ Cub2::~Cub2() {
 
 }
 
-Cub2::Cub2(const Cub2 & copy) : SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.boundary(), *new Space("R2", 2), "Cub2", _SIMPLE_ACCUMULATION_) {
+Cub2::Cub2(const Cub2 & copy) : SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.getBoundary(), *new Space("R2", 2), "Cub2", _SIMPLE_ACCUMULATION_) {
 
 
     setHugoniotFunction(new Hugoniot_Curve());

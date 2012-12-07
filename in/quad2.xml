@@ -7,7 +7,7 @@
         <BOUNDARY name="rect">
 
             <BOUNDARYPARAM name="dimension" value="2" />
-	    <BOUNDARYPARAM name="limits" value="-0.5 -0.5 0.5 0.5" />
+	    <BOUNDARYPARAM name="limits" value="-10.5 -10.5 10.5 10.5" />
             
         </BOUNDARY>
 

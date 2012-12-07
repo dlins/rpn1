@@ -38,7 +38,7 @@ class Physics {
 private:
     vector<SubPhysics *> * physicsVector_;
    
-    Boundary * boundary_;
+    const Boundary * boundary_;
     string * ID_;
     Space * space_;
     int type_;

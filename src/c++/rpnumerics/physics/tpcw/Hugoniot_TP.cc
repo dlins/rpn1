@@ -2,61 +2,33 @@
 
 #include "Hugoniot_TP.h"
 
+int Hugoniot_TP::classified_curve(const FluxFunction *f, const AccumulationFunction *a,
+        GridValues &g, const RealVector &r,
+        std::vector<HugoniotPolyLine> &hugoniot_curve,
+        std::vector<bool> &circular) {
+
+    return classified_curve(f, a, g, r, hugoniot_curve);
 
 
-int Hugoniot_TP::classified_curve(const FluxFunction *f, const AccumulationFunction *a, 
-                             GridValues &g, const RealVector &r, 
-                             std::vector<HugoniotPolyLine> &hugoniot_curve,
-                             std::vector<bool> &circular){
-
-    return classified_curve(f, a,g,r,hugoniot_curve); 
-
-    
 }
 
-int Hugoniot_TP::classified_curve(const FluxFunction *f, const AccumulationFunction *a, 
-                                     GridValues &g, const RealVector &r, 
-                                     std::vector<HugoniotPolyLine> &hugoniot_curve){
+int Hugoniot_TP::classified_curve(const FluxFunction *f, const AccumulationFunction *a,
+        GridValues &g, const RealVector &r,
+        std::vector<HugoniotPolyLine> &hugoniot_curve) {
 
     // Compute the Hugoniot curve as usual
     //
     vector<RealVector> vrs;
-    
-    cout<<"Flux e acumm em HTP: "<<f<<" "<<a<<endl;
-    
-    cout<<"Ponto de referencia em classified: "<<r<<endl;
-    
 
     int info = curve(f, a, g, r, vrs);
 
-    cout<<"Tamanho do vrs:"<<vrs.size()<<endl;
 
-    cout<<"primeiro : "<<vrs[0].size()<<endl;
-
-    // Prepare the Hugoniot curve to classify it
-//    std::vector<vector<RealVector> > unclassifiedCurve;
-//
-//    for (int i = 0; i < vrs.size() / 2; i++) {
-//        std::vector< RealVector> temp;
-//        temp.push_back(vrs[2 * i]);     // TODO EDSON! Essa eh a mesma chamada para TPCW?
-//        temp.push_back(vrs[2 * i]);
-////        cout <<" vrs 2: "<<vrs[2*i]<<" " <<vrs[2 * i+1] << endl;
-//
-//        temp.push_back(vrs[2 * i + 1]);
-//        //temp.push_back(vrs[2 * i + 1]);
-//        unclassifiedCurve.push_back(temp);
-//    }
-      std::vector<RealVector> transition_list;
-      
-      
-      cout<<"Parametros de fluxo em classified: "<<f->fluxParams().params()<<endl;
-      
-      cout<<"Parametros de accum em classified: "<<a->accumulationParams().params()<<endl;
+    std::vector<RealVector> transition_list;
 
     ColorCurve colorCurve(*f, *a);
-    colorCurve.classify_segmented_curve(vrs,r,hugoniot_curve,transition_list);
+    colorCurve.classify_segmented_curve(vrs, r, hugoniot_curve, transition_list);
 
-    cout<<"Depois de classify "<<hugoniot_curve[0].point.size()<<endl;
+
 
     return info;
 }
@@ -99,8 +71,8 @@ double Hugoniot_TP::complete_points(const RealVector &Uplus) {
     //
     // which must be calculated in the post-processing of the coloring.
 
-//    double darcy_speedplus = Uref.component(2)*(X12minus * X12plus + X13minus * X13plus + X23minus * X23plus) / den;
-    
+    //    double darcy_speedplus = Uref.component(2)*(X12minus * X12plus + X13minus * X13plus + X23minus * X23plus) / den;
+
     double darcy_speedplus = (X12minus * X12plus + X13minus * X13plus + X23minus * X23plus) / den;
 
     return darcy_speedplus;
@@ -127,8 +99,8 @@ int Hugoniot_TP::function_on_square(double *foncub, int i, int j) {
             F3 = gv->F_on_grid(i + l, j + k).component(2);
 
             f_aux[l * 2 + k] = dG1 * (F2 * F30 - F3 * F20)
-                             - dG2 * (F1 * F30 - F3 * F10)
-                             + dG3 * (F1 * F20 - F2 * F10);
+                    - dG2 * (F1 * F30 - F3 * F10)
+                    + dG3 * (F1 * F20 - F2 * F10);
         }
     }
 
@@ -140,28 +112,21 @@ int Hugoniot_TP::function_on_square(double *foncub, int i, int j) {
     return 1;
 }
 
-int Hugoniot_TP::curve(const FluxFunction *f, const AccumulationFunction *a, 
-                          GridValues &g, const RealVector &r,
-                          std::vector<RealVector> &hugoniot_curve) {
+int Hugoniot_TP::curve(const FluxFunction *f, const AccumulationFunction *a,
+        GridValues &g, const RealVector &r,
+        std::vector<RealVector> &hugoniot_curve) {
 
     ff = f;
     aa = a;
 
-    
-    
     g.fill_functions_on_grid(f, a);
     gv = &g;
-
-    cout <<"Valor de uref em curve "<<r<<endl;
-
-    cout<<"Valor 0 0 de grid values: "<<gv->grid(0,0)<<endl;
-
     int n = r.size();
 
     Fref.resize(n);
     Gref.resize(n);
 
-    Uref=r;
+    Uref = r;
 
     ff->fill_with_jet(n, Uref.components(), 0, Fref.components(), 0, 0);
     aa->fill_with_jet(n, Uref.components(), 0, Gref.components(), 0, 0);
@@ -178,8 +143,7 @@ int Hugoniot_TP::curve(const FluxFunction *f, const AccumulationFunction *a,
 
         hugoniot_curve[i].resize(3);
         hugoniot_curve[i].component(2) = complete_points(Utemp);
-        
-        cout<<"Valor de hugoniot[2]: "<<hugoniot_curve[i].component(2)<<endl;
+
     }
 
     return info;
@@ -187,14 +151,14 @@ int Hugoniot_TP::curve(const FluxFunction *f, const AccumulationFunction *a,
 
 void Hugoniot_TP::map(const RealVector &r, double &f, RealVector &map_Jacobian) {
 
-    int n = r.size()+1;
+    int n = r.size() + 1;
     map_Jacobian.resize(2);
 
     double F[n], JF[n][n], G[n], JG[n][n];
 
     RealVector p(r);
     p.resize(3);
-    p.component(2)=1.0;
+    p.component(2) = 1.0;
 
     ff->fill_with_jet(3, p.components(), 1, F, &JF[0][0], 0);
     aa->fill_with_jet(3, p.components(), 1, G, &JG[0][0], 0);
@@ -209,12 +173,12 @@ void Hugoniot_TP::map(const RealVector &r, double &f, RealVector &map_Jacobian) 
 
     f = dG0 * F0_aux - dG1 * F1_aux + dG2 * F2_aux;
 
-    map_Jacobian.component(0) = JG[0][0]*F0_aux + dG0*(JF[1][0]*Fref[2]-JF[2][0]*Fref[1])
-                              - JG[1][0]*F1_aux - dG1*(JF[0][0]*Fref[2]-JF[2][0]*Fref[0])
-                              + JG[2][0]*F2_aux + dG2*(JF[0][0]*Fref[1]-JF[1][0]*Fref[0]);
-    map_Jacobian.component(1) = JG[0][1]*F0_aux + dG0*(JF[1][1]*Fref[2]-JF[2][1]*Fref[1])
-                              - JG[1][1]*F1_aux - dG1*(JF[0][1]*Fref[2]-JF[2][1]*Fref[0])
-                              + JG[2][1]*F2_aux + dG2*(JF[0][1]*Fref[1]-JF[1][1]*Fref[0]);
+    map_Jacobian.component(0) = JG[0][0] * F0_aux + dG0 * (JF[1][0] * Fref[2] - JF[2][0] * Fref[1])
+            - JG[1][0] * F1_aux - dG1 * (JF[0][0] * Fref[2] - JF[2][0] * Fref[0])
+            + JG[2][0] * F2_aux + dG2 * (JF[0][0] * Fref[1] - JF[1][0] * Fref[0]);
+    map_Jacobian.component(1) = JG[0][1] * F0_aux + dG0 * (JF[1][1] * Fref[2] - JF[2][1] * Fref[1])
+            - JG[1][1] * F1_aux - dG1 * (JF[0][1] * Fref[2] - JF[2][1] * Fref[0])
+            + JG[2][1] * F2_aux + dG2 * (JF[0][1] * Fref[1] - JF[1][1] * Fref[0]);
     return;
 }
 

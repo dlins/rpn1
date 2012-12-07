@@ -77,26 +77,37 @@ SubPhysics(*defaultBoundary(), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATIO
     setDoubleContactFunction(new Double_Contact_TP());
     setShockMethod(new ShockContinuationMethod3D2D());
 
+        
+    RealVector min(getBoundary().minimums());
 
-    RealVector min(boundary().minimums());
+    RealVector max(getBoundary().maximums());
+    
 
-    RealVector max(boundary().maximums());
 
 
     preProcess(min);
 
     preProcess(max);
-    
+
     preProcessedBoundary_ = new RectBoundary(min, max);
 
 
 
 }
 
-const Boundary * TPCW::getPreProcessedBoundary()const {
+void TPCW::boundary(const Boundary & newBoundary) {
 
-    return preProcessedBoundary_;
+    SubPhysics::boundary(newBoundary);
 
+    RealVector min(getBoundary().minimums());
+
+    RealVector max(getBoundary().maximums());
+
+    preProcess(min);
+
+    preProcess(max);
+
+    preProcessedBoundary_ = new RectBoundary(min, max);
 
 }
 
@@ -131,9 +142,8 @@ void TPCW::setParams(vector<string> params) {
 
 }
 
-
 TPCW::TPCW(const TPCW & copy) :
-SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.boundary(), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATION_),
+SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.getBoundary(), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATION_),
 TD(new Thermodynamics_SuperCO2_WaterAdimensionalized(*copy.TD)) {
 
 
@@ -141,8 +151,13 @@ TD(new Thermodynamics_SuperCO2_WaterAdimensionalized(*copy.TD)) {
     setDoubleContactFunction(new Double_Contact_TP());
     setShockMethod(new ShockContinuationMethod3D2D());
 
-    preProcessedBoundary_ = new RectBoundary(*copy.preProcessedBoundary_);
     
+    RealVector min = copy.preProcessedBoundary_->minimums();
+    RealVector max = copy.preProcessedBoundary_->maximums();
+    
+    
+    preProcessedBoundary_ = new RectBoundary(min,max);
+
 
 }
 
@@ -246,16 +261,15 @@ void TPCW::preProcess(RealVector & input) {
 void TPCW::postProcess(RealVector & input) {
 
     RealVector temp(input);
-    
-    
+
+
     input.resize(3);
     input.component(0) = temp.component(0);
     input.component(1) = TD->Theta2T(temp.component(1));
-    input.component(2) = boundary().maximums().component(2);
-    
-//    input.component(2) = TD->U2u(temp.component(2));
-}
+    input.component(2) = getBoundary().maximums().component(2);
 
+    //    input.component(2) = TD->U2u(temp.component(2));
+}
 
 void TPCW::postProcess(vector<RealVector> & input) {
 
@@ -288,7 +302,7 @@ void TPCW::postProcess(vector<RealVector> & input) {
                 input[i].resize(3);
                 input[i].component(0) = temp.component(0);
                 input[i].component(1) = TD->Theta2T(temp.component(1));
-                input[i].component(2) = boundary().maximums().component(2);
+                input[i].component(2) = getBoundary().maximums().component(2);
 
                 break;
 

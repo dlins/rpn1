@@ -43,7 +43,7 @@ const char * SubPhysics::ID() const {
     return ID_;
 }
 
-const Boundary & SubPhysics::boundary() const {
+const Boundary & SubPhysics::getBoundary() const {
     return *boundary_;
 }
 
@@ -54,7 +54,9 @@ const int SubPhysics::type() const {
 void SubPhysics::boundary(const Boundary & newBoundary) {
 
     delete boundary_;
+    delete preProcessedBoundary_;
     boundary_ = newBoundary.clone();
+    preProcessedBoundary_= newBoundary.clone();
 
 }
 
@@ -69,7 +71,7 @@ void SubPhysics::setParams(vector<string> paramsVector) {
 }
 
 const Boundary * SubPhysics::getPreProcessedBoundary()const {
-    return boundary_;
+    return preProcessedBoundary_;
 }
 
 Hugoniot_Locus * SubPhysics::getHugoniotFunction()const {
@@ -123,7 +125,7 @@ SubPhysics::~SubPhysics() {
     delete fluxFunction_;
     delete accumulationFunction_;
     delete boundary_;
-
+    delete preProcessedBoundary_;
 
 
 }

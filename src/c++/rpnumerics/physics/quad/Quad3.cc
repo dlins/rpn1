@@ -13,7 +13,7 @@ Quad3::~Quad3() {
   
 }
 
-Quad3::Quad3(const Quad3 & copy):SubPhysics(copy.fluxFunction(),copy.accumulation(),copy.boundary(), *new Space("R3",3),"QuadraticR3",_SIMPLE_ACCUMULATION_){
+Quad3::Quad3(const Quad3 & copy):SubPhysics(copy.fluxFunction(),copy.accumulation(),copy.getBoundary(), *new Space("R3",3),"QuadraticR3",_SIMPLE_ACCUMULATION_){
 
 
 }

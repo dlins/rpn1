@@ -44,11 +44,13 @@ private:
     Space * space_;
     const char * ID_;
     int type_;
+    
 
 protected:
 
     FluxFunction * fluxFunction_;
     AccumulationFunction * accumulationFunction_;
+    Boundary * preProcessedBoundary_;
 
 public:
 
@@ -63,9 +65,9 @@ public:
 
     const AccumulationFunction & accumulation() const;
 
-    const Boundary & boundary() const;
+    const Boundary & getBoundary() const;
 
-    void boundary(const Boundary &);
+    virtual void boundary(const Boundary &);
 
     const FluxFunction & fluxFunction() const;
 
@@ -89,7 +91,7 @@ public:
 
     virtual Boundary * defaultBoundary()const = 0;
     
-    virtual const Boundary * getPreProcessedBoundary()const ;
+    const Boundary * getPreProcessedBoundary()const ;
 
     virtual ~SubPhysics();
 

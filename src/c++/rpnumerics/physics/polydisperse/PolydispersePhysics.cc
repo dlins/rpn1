@@ -32,7 +32,7 @@ SubPhysics * PolydispersePhysics::clone()const {
     return new PolydispersePhysics(*this);
 }
 
-PolydispersePhysics::PolydispersePhysics(const PolydispersePhysics & copy) : SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.boundary(), copy.domain(), "Polydisperse", _SIMPLE_ACCUMULATION_) {
+PolydispersePhysics::PolydispersePhysics(const PolydispersePhysics & copy) : SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.getBoundary(), copy.domain(), "Polydisperse", _SIMPLE_ACCUMULATION_) {
     setHugoniotFunction(new Hugoniot_Curve());
     setDoubleContactFunction(new Double_Contact());
    

@@ -29,7 +29,7 @@ SubPhysics * CoreyQuadPhysics::clone()const {
     return new CoreyQuadPhysics(*this);
 }
 
-CoreyQuadPhysics::CoreyQuadPhysics(const CoreyQuadPhysics & copy) : SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.boundary(), copy.domain(), "CoreyQuad", _SIMPLE_ACCUMULATION_) {
+CoreyQuadPhysics::CoreyQuadPhysics(const CoreyQuadPhysics & copy) : SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.getBoundary(), copy.domain(), "CoreyQuad", _SIMPLE_ACCUMULATION_) {
     setHugoniotFunction(new Hugoniot_Curve());
 }
 

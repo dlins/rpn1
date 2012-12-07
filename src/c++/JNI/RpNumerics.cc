@@ -378,6 +378,9 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setBoundary
         RealVector maxNativeRealVector(maxSize, maxNativeArray);
         RectBoundary nativeBoundary(minNativeRealVector, maxNativeRealVector);
         RpNumerics::getPhysics().boundary(nativeBoundary);
+        
+        cout<<"Min nativo: "<<nativeBoundary.minimums()<<endl;
+        cout<<"Max nativo: "<<nativeBoundary.maximums()<<endl;
 
     }
 

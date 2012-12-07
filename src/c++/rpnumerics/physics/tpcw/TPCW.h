@@ -30,7 +30,7 @@ class TPCW : public SubPhysics {
 private:
 
     Thermodynamics_SuperCO2_WaterAdimensionalized * TD;
-    RectBoundary * preProcessedBoundary_;
+   
 
 
 public:
@@ -56,9 +56,8 @@ public:
     void postProcess(vector<RealVector> &);
     void postProcess(RealVector &);
 
-
-    const Boundary * getPreProcessedBoundary()const;
-
+    void boundary(const Boundary &);
+    
 
 
     double T2Theta(double)const;
