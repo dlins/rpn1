@@ -40,7 +40,16 @@ public class DragPlotCommand extends RpModelConfigChangeCommand {
             if (GeometryGraphND.onCurve == 1) {
                 newValue = GeometryGraphND.pMarca;
             }
-            lastGeometry.geomFactory().getUI().propertyChange(new PropertyChangeEvent(this, "enabled", null, newValue));
+
+            PropertyChangeEvent change = new PropertyChangeEvent(this, "enabled", null, newValue);
+            lastGeometry.geomFactory().getUI().propertyChange(change);
+
+            RpCommand command = new RpCommand(change);
+
+            UndoActionController.instance().removeLastCommand();
+            logCommand(command);
+
+
             UIController.instance().getActivePhaseSpace().update();
             UIController.instance().panelsUpdate();
         } catch (Exception e) {

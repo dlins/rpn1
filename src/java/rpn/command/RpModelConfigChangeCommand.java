@@ -33,7 +33,6 @@ public abstract class RpModelConfigChangeCommand extends RpModelActionCommand {
 
         logCommand(command);
         
-        System.out.println(command.toXML());
 
         firePropertyChange(change);
 

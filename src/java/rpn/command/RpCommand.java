@@ -119,7 +119,12 @@ public class RpCommand extends AbstractAction implements UndoableAction {
             
             RpCalculation calc = (RpCalculation) factory.rpCalc();
             
-            return calc.getConfiguration().toXML();
+            String configurationXML= calc.getConfiguration().toXML();
+            
+            String phaseSpaceNameString = "<COMMAND phasespace=\""+event_.getPropertyName()+"\"";
+            String xmlStringWithPhaseSpace = configurationXML.replaceAll("<COMMAND", phaseSpaceNameString);
+            
+            return xmlStringWithPhaseSpace;
             
         }
         

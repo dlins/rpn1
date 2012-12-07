@@ -51,6 +51,13 @@ public class UndoActionController extends AbstractAction {
     
     public Iterator<RpCommand> getCommandIterator(){return commandArray_.iterator();}
 
+    
+    public void removeLastCommand(){
+        
+        if(lastCommand_!=null)
+        commandArray_.remove(lastCommand_);
+    }
+    
     public RpCommand getLastCommand() {
         return lastCommand_;
     }

@@ -59,7 +59,6 @@ public class UIController extends ComponentUI {
     private String clientID_;
     private RPnPhaseSpacePanel focusPanel_;
     private StateInputController stateController_;
-    private ArrayList<RpCommand> commandArray_;
     private boolean auxPanelsEnabled_;
     private RPnPhaseSpaceAbstraction activePhaseSpace_;
     private boolean drag_ = false;
@@ -76,7 +75,7 @@ public class UIController extends ComponentUI {
         mouseController_ = new MouseController();
         globalInputTable_ = new UserInputTable(rpnumerics.RPNUMERICS.domainDim());
 
-        commandArray_ = new ArrayList<RpCommand>();
+
         handler_ = new RAREFACTION_CONFIG();
         auxPanelsEnabled_ = true;
 
@@ -132,14 +131,7 @@ public class UIController extends ComponentUI {
         return instance_;
     }
 
-    public void removeLastCommand() {
-        commandArray_.remove(commandArray_.size() - 1);
-    }
-
-    public Iterator<RpCommand> getCommandIterator() {
-        return commandArray_.iterator();
-
-    }
+   
 
     public void setAuxPanels(boolean selected) {
         auxPanelsEnabled_ = selected;
@@ -218,13 +210,16 @@ public class UIController extends ComponentUI {
         @Override
         public void mouseReleased(MouseEvent event) {
 
-            if (drag_) {
-                if (!commandArray_.isEmpty()) {
-                    commandArray_.remove(commandArray_.size() - 1);
-                }
+//            if (drag_) {
+//                if (!commandArray_.isEmpty()) {
+//                    commandArray_.remove(commandArray_.size() - 1);
+//                }
+                
+//                UndoActionController.instance().removeLastCommand();
+                
 //                logCommand(new RpCommand((UI_ACTION_SELECTED) handler_, globalInputTable().values()));
 
-            }
+//            }
 
         }
 
@@ -419,11 +414,7 @@ public class UIController extends ComponentUI {
 
     }
 
-    public void logCommand(RpCommand command) {
-        RPnUIFrame.clearStatusMessage();
-//        System.out.println(command.toXML());
-        commandArray_.add(command);
-    }
+   
 
     /** Sets the state of the application. The application works as a state machine and this method changes the actual state.*/
     public void setState(rpn.controller.ui.UserInputHandler newAction) {
