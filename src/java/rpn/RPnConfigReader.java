@@ -117,7 +117,7 @@ public abstract class RPnConfigReader {
             configStream.reset();
 
 
-            RPnDataModule.exec(xmlReader, configStream);
+            RPnCommandModule.init(xmlReader, configStream);
 
 
         } catch (Throwable any) {

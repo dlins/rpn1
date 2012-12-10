@@ -5,9 +5,6 @@
  */
 package rpnumerics;
 
-import rpn.configuration.CommandConfiguration;
-import rpn.configuration.Configuration;
-import rpn.configuration.ConfigurationProfile;
 import wave.util.RealVector;
 import wave.util.RealMatrix2;
 
@@ -23,16 +20,15 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
     //
     public HugoniotCurveCalcND(HugoniotParams params) {
         super(params);
-        
-        configuration_= new CommandConfiguration("hugoniotcurve");
-        configuration_.setParamValue("direction", String.valueOf(params.getDirection()));
-        configuration_.setParamValue("inputpoint", params.getXZero().toString());
-                
+
+        configuration_ = RPNUMERICS.getConfiguration("hugoniotcurve");
+
 
     }
     //
     // Accessors/Mutators
     //
+
     public void uMinusChangeNotify(PhasePoint uMinus) {
 
         setUMinus(uMinus);
@@ -40,9 +36,6 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
     }
 
     public void setUMinus(PhasePoint pPoint) {
-
-
-
 //        Uminus_ = pPoint.getCoords();
 //        Fminus_ = rpnumerics.RPNUMERICS.fluxFunction().F(Uminus_);
 //        hugoniotParams_.uMinusChangeNotify(pPoint);
@@ -75,16 +68,16 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
         return null;
 
     }
-  
+
     public RpSolution calc() throws RpException {
 
         HugoniotCurve result;
 
         result = (HugoniotCurve) calc(((HugoniotParams) getParams()).getXZero(), getParams().getResolution());
 
-        result.setDirection(((HugoniotParams)getParams()).getDirection());
-        
-        
+        result.setDirection(((HugoniotParams) getParams()).getDirection());
+
+
         return result;
 
     }

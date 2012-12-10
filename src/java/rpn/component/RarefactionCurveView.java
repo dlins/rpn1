@@ -16,11 +16,11 @@ import wave.multid.view.ViewingAttr;
 import wave.util.Arrow;
 import wave.util.RealVector;
 
-public class RarefactionOrbitView extends WaveCurveOrbitGeomView{
+public class RarefactionCurveView extends WaveCurveOrbitGeomView{
 
  
 
-    public RarefactionOrbitView(MultiGeometryImpl geom, ViewingTransform transf,
+    public RarefactionCurveView(MultiGeometryImpl geom, ViewingTransform transf,
             ViewingAttr attr) throws DimMismatchEx {
         super(geom, transf, attr);
     }
@@ -52,7 +52,7 @@ public class RarefactionOrbitView extends WaveCurveOrbitGeomView{
 
         GeneralPath composite = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
         
-        RarefactionGeom absGeom = (RarefactionGeom) getAbstractGeom();
+        RarefactionCurveGeom absGeom = (RarefactionCurveGeom) getAbstractGeom();
         OrbitPoint[] points = absGeom.getPointsArray();
 
         int begin = 0;

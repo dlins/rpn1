@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <!DOCTYPE rpnconfiguration >
-<PHASESPACE name="Phase Space">
- <RPNCONFIGURATION>
+<RPNSESSION>
+ <PHASESPACE name="Phase Space">
+  <RPNCONFIGURATION>
     <PHYSICS name="Stone">
 
         <PHYSICSCONFIG name="fluxfunction">
@@ -50,6 +51,11 @@
         <METHODPARAM  name="tolerance" value="0.001" />
     </METHOD>
 
+
+    <CURVECONFIGURATION name="fundamentalcurve">
+        <CURVEPARAM name="direction" value="20"/>
+        <CURVEPARAM name="family" value="0"/>
+    </CURVECONFIGURATION>
 
     <CURVECONFIGURATION name="hugoniotcurve">
         <CURVEPARAM name="resolution" value="120 120"/>
@@ -132,13 +138,8 @@
 
     </VIEWCONFIGURATION>
 
- </RPNCONFIGURATION>
+  </RPNCONFIGURATION>
 
- <COMMAND name="hugoniotcurve">
-  <REALVECTOR dimension="2">0.1974 0.1623</REALVECTOR>
-  <PAUSE></PAUSE>
- </COMMAND>
- <COMMAND name="hugoniotcurve">
-  <REALVECTOR dimension="2">0.2974 0.2623</REALVECTOR>
- </COMMAND>
-</PHASESPACE>
+ </PHASESPACE>
+
+</RPNSESSION>

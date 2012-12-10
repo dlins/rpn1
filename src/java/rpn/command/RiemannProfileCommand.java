@@ -148,6 +148,9 @@ public class RiemannProfileCommand extends RpModelPlotCommand implements Observe
 
         }
 
+        firePropertyChange("Riemann Profile Added", "oldValue",
+                               "newValue");
+
     }
 
     private RealVector createProfileMaxLimit(RiemannProfile riemannProfile) {

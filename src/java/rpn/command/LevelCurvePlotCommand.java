@@ -5,7 +5,9 @@
  */
 package rpn.command;
 
+import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
+import java.util.Iterator;
 import javax.swing.JToggleButton;
 import rpn.component.*;
 import rpn.controller.ui.UIController;
@@ -30,7 +32,6 @@ public class LevelCurvePlotCommand extends RpModelPlotCommand {
         super(DESC_TEXT, rpn.configuration.RPnConfig.ORBIT_FWD, new JToggleButton());
     }
 
-
     public RpGeometry createRpGeometry(RealVector[] input) {
 
         return null;
@@ -46,13 +47,19 @@ public class LevelCurvePlotCommand extends RpModelPlotCommand {
     @Override
     public void execute() {
 
-//        instance_.setPhaseSpace(phaseSpace_);
+
         ArrayList<Double> levelValues = processLevels(RPNUMERICS.getParamValue("levelcurve", "levels"));
 
         for (Double levelValue : levelValues) {
             LevelCurveGeomFactory factory = new LevelCurveGeomFactory(RPNUMERICS.createLevelCurveCalc(levelValue));
-//            RPnDataModule.PHASESPACE.join(factory.geom());
-        UIController.instance().getActivePhaseSpace().join(factory.geom());
+
+            UIController.instance().getActivePhaseSpace().join(factory.geom());
+
+            Iterator oldValue = UIController.instance().getActivePhaseSpace().getGeomObjIterator();
+            event_ = new PropertyChangeEvent(this, UIController.instance().getActivePhaseSpace().getName(), oldValue, factory.geom());
+
+             logCommand(this);
+
         }
 
     }

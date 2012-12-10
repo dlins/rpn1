@@ -6,7 +6,7 @@
  */
 package rpnumerics;
 
-public class RarefactionOrbitCalc extends WaveCurveOrbitCalc implements RpCalculation {
+public class RarefactionCurveCalc extends WaveCurveOrbitCalc implements RpCalculation {
     //
     // Constants
     //
@@ -16,7 +16,7 @@ public class RarefactionOrbitCalc extends WaveCurveOrbitCalc implements RpCalcul
 
     // Constructors/Initializers
     //
-    public RarefactionOrbitCalc(PhasePoint point, int familyIndex,int timeDirection) {
+    public RarefactionCurveCalc(PhasePoint point, int familyIndex,int timeDirection) {
 
         super(new OrbitPoint(point), familyIndex,timeDirection);
     }
@@ -36,9 +36,9 @@ public class RarefactionOrbitCalc extends WaveCurveOrbitCalc implements RpCalcul
 
     public RpSolution calc() throws RpException {
 
-        RarefactionOrbit result;
+        RarefactionCurve result;
 
-        result = (RarefactionOrbit) calc("methodName_", "flowName_", getStart(), getFamilyIndex(), getDirection());
+        result = (RarefactionCurve) calc("methodName_", "flowName_", getStart(), getFamilyIndex(), getDirection());
 
 
         if (result == null) {

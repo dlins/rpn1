@@ -15,17 +15,8 @@ public class SubInflectionCurveCalc extends ContourCurveCalc {
     //
     public SubInflectionCurveCalc(){
         super(new ContourParams());
-        
-          String className = getClass().getSimpleName().toLowerCase();
 
-        String curveName = className.replace("calc", "");
-
-        configuration_ = new CommandConfiguration(curveName);
-
-        
-
-        
-        
+        configuration_ = RPNUMERICS.getConfiguration("subinflectioncurve");
     }
 
 

@@ -9,6 +9,7 @@ import rpn.controller.XZeroController;
 import java.beans.*;
 import java.util.List;
 import java.util.ArrayList;
+import rpn.configuration.Configuration;
 import rpn.controller.ui.*;
 import rpn.parser.RPnDataModule;
 
@@ -28,10 +29,14 @@ public abstract class RpModelConfigChangeCommand extends RpModelActionCommand {
 
     public void applyChange(PropertyChangeEvent change) {
 
+        
+       System.out.println(change);
+       
+       event_=change;
 
-        RpCommand command = new RpCommand(change);
 
-        logCommand(command);
+
+        logCommand(this);
         
 
         firePropertyChange(change);
@@ -68,4 +73,10 @@ public abstract class RpModelConfigChangeCommand extends RpModelActionCommand {
 
         }
     }
+    
+    public String toXML(){
+        Configuration configuration = (Configuration)event_.getNewValue();
+        return configuration.toXML();
+    }
+    
 }

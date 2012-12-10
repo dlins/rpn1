@@ -210,6 +210,7 @@ public class UIController extends ComponentUI {
         @Override
         public void mouseReleased(MouseEvent event) {
 
+//<<<<<<< HEAD
 //            if (drag_) {
 //                if (!commandArray_.isEmpty()) {
 //                    commandArray_.remove(commandArray_.size() - 1);
@@ -218,17 +219,25 @@ public class UIController extends ComponentUI {
 //                UndoActionController.instance().removeLastCommand();
                 
 //                logCommand(new RpCommand((UI_ACTION_SELECTED) handler_, globalInputTable().values()));
-
-//            }
+//=======
+//            if (drag_) {
+//                if (!commandArray_.isEmpty()) {
+//                    commandArray_.remove(commandArray_.size() - 1);
+//                }
+//                //logCommand(new RpCommand((UI_ACTION_SELECTED) handler_, globalInputTable().values()));
+//>>>>>>> ee2dd9b19625a014a1150feafec12fa2738af685
+//
+////            }
 
         }
 
         @Override
         public void mousePressed(MouseEvent event) {
+
             drag_ = false;
             RPnUIFrame.clearStatusMessage();
             RPnUIFrame.disableSliders();
-            if (event.getButton() == MouseEvent.BUTTON1) {
+
                 if (event.getComponent() instanceof RPnPhaseSpacePanel) {
 
                     RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
@@ -258,22 +267,6 @@ public class UIController extends ComponentUI {
 
                     }
                 }
-
-            }
-            
-            
-            if (event.getButton()==MouseEvent.BUTTON3){
-
-
-                JPopupMenu popMenu = new JPopupMenu("teste menu");
-                
-                popMenu.add(new RPnCurvesDirectionPanel().getContainer());
-                
-                
-                popMenu.show((RPnPhaseSpacePanel) event.getComponent(),event.getX(),event.getY());
-                
-            }
-
 
         }
 
@@ -437,7 +430,7 @@ public class UIController extends ComponentUI {
                 // Singletons !
                 if (currentSelection.getAction() == selectedAction.getAction()) // unselect
                 {
-//                    setState(new GEOM_SELECTION());
+                    setState(new GEOM_SELECTION());
                 } else {
                     handler_ = newAction;
                 }

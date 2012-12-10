@@ -52,6 +52,10 @@ public class RiemannProfile extends RpCurve  {
     }
 
 
+    public String toXML() {
+
+        return toString();
+    }
 
     public OrbitPoint [] getPoints(){
         return points_;
@@ -64,12 +68,5 @@ public class RiemannProfile extends RpCurve  {
         return segments_;
 
     }
-
-
-
-
-    
-
-
     
 }

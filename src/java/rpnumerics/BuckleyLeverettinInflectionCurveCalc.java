@@ -13,6 +13,8 @@ public class BuckleyLeverettinInflectionCurveCalc extends ContourCurveCalc {
     //
     public BuckleyLeverettinInflectionCurveCalc(){
         super(new ContourParams());
+        
+//        configuration_= RPNUMERICS.getConfiguration(
     }
 
 

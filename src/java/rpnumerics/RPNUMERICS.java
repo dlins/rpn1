@@ -297,9 +297,9 @@ public class RPNUMERICS {
         return new HugoniotCurveCalcND(params);
     }
 
-    public static RarefactionOrbitCalc createRarefactionCalc(OrbitPoint orbitPoint) {
+    public static RarefactionCurveCalc createRarefactionCalc(OrbitPoint orbitPoint) {
 
-        return new RarefactionOrbitCalc(orbitPoint, Integer.parseInt(getParamValue("orbit", "family")), direction_);
+        return new RarefactionCurveCalc(orbitPoint, Integer.parseInt(getParamValue("orbit", "family")), direction_);
 
     }
 
@@ -520,7 +520,6 @@ public class RPNUMERICS {
         Integer family = new Integer(getParamValue("orbit", "family"));
         Double tolerance = new Double(getParamValue("Newton", "tolerance"));
 
-        System.out.println(direction_);
 
         return new ShockCurveCalc(orbitPoint, family, direction_);
 
@@ -575,8 +574,6 @@ public class RPNUMERICS {
 
     public static void setDirection(Integer integer) {
         direction_ = integer;
-
-
 
     }
 

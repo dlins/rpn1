@@ -29,20 +29,8 @@ public  class WaveCurveOrbitCalc extends OrbitCalc  {
         super(new OrbitPoint(point), timeDirection);
         familyIndex_=familyIndex;
         
-        String className = getClass().getSimpleName().toLowerCase();
+        configuration_= RPNUMERICS.getConfiguration("fundamentalcurve");
         
-        String curveName = className.replace("calc", "");
-        
-        configuration_= new CommandConfiguration(curveName);
-        
-        configuration_.setParamValue("family", String.valueOf(familyIndex));
-        configuration_.setParamValue("direction", String.valueOf(timeDirection));
-        configuration_.setParamValue("inputpoint", point.toString());
-        
-        
-        
-
-       
     }
 
     //
