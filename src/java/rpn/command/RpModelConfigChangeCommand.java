@@ -29,9 +29,10 @@ public abstract class RpModelConfigChangeCommand extends RpModelActionCommand {
 
     public void applyChange(PropertyChangeEvent change) {
 
-        RealVector newParameters = (RealVector) change.getNewValue();
+        // --- Comentei em 11/12/12, para testar o perfil viscoso (Leandro)
+        //RealVector newParameters = (RealVector) change.getNewValue();
+        //UIController.instance().logCommand(new RpCommand(new UI_ACTION_SELECTED(this), newParameters));
 
-        UIController.instance().logCommand(new RpCommand(new UI_ACTION_SELECTED(this), newParameters));
         firePropertyChange(change);
         logAction(change);
         RPnDataModule.updatePhaseSpaces();
