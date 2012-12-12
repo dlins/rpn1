@@ -6,10 +6,6 @@
  */
 package rpnumerics;
 
-import rpn.configuration.CommandConfiguration;
-import rpn.configuration.Configuration;
-import rpn.configuration.ConfigurationProfile;
-
 public class HysteresisCurveCalc extends ContourCurveCalc {
 
     private int family_;
@@ -21,13 +17,8 @@ public class HysteresisCurveCalc extends ContourCurveCalc {
         super(params);
         family_ = family;
 
+        configuration_ = RPNUMERICS.getConfiguration("hysteresiscurve");
 
-        String className = getClass().getSimpleName().toLowerCase();
-
-        String curveName = className.replace("calc", "");
-
-        configuration_ = new CommandConfiguration(curveName);
-        configuration_.setParamValue("family", String.valueOf(family));
 
     }
 

@@ -125,10 +125,10 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand {
         }
 
 
-
-        String configurationXML = calc.getConfiguration().toXML();
-
-        buffer.append(configurationXML);
+        if (calc.getConfiguration() != null) {
+            String configurationXML = calc.getConfiguration().toXML();
+            buffer.append(configurationXML);
+        }
 
         buffer.append("</COMMAND>\n");
 

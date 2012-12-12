@@ -17,7 +17,8 @@ public class SecondaryBifurcationCurveCalc extends ContourCurveCalc {
 
     public SecondaryBifurcationCurveCalc(ContourParams params) {
         super(params);
-
+        
+      
     }
 
     @Override

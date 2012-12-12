@@ -6,6 +6,8 @@
 package rpn.command;
 
 import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.util.Iterator;
 import javax.swing.JButton;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.component.*;
@@ -54,22 +56,24 @@ public class DoubleContactCommand extends RpModelPlotCommand {
 
         DoubleContactGeomFactory factory = new DoubleContactGeomFactory(RPNUMERICS.createDoubleContactCurveCalc());
 
-            RPnPhaseSpaceAbstraction leftPhaseSpace = RPnDataModule.LEFTPHASESPACE;
+        RPnPhaseSpaceAbstraction leftPhaseSpace = RPnDataModule.LEFTPHASESPACE;
 
-            RPnPhaseSpaceAbstraction rightPhaseSpace = RPnDataModule.RIGHTPHASESPACE;
-            
-            RpGeometry leftGeometry = factory.leftGeom();
-            RpGeometry rightGeometry = factory.rightGeom();
+        RPnPhaseSpaceAbstraction rightPhaseSpace = RPnDataModule.RIGHTPHASESPACE;
 
-            leftPhaseSpace.join(leftGeometry);
-            rightPhaseSpace.join(rightGeometry);
+        RpGeometry leftGeometry = factory.leftGeom();
+        RpGeometry rightGeometry = factory.rightGeom();
 
-            RPnDataModule.PHASESPACE.join(factory.geom());
+        leftPhaseSpace.join(leftGeometry);
+        rightPhaseSpace.join(rightGeometry);
+        
+        
+        Iterator oldValue = RPnDataModule.PHASESPACE.getGeomObjIterator();
+        event_ = new PropertyChangeEvent(this, UIController.instance().getActivePhaseSpace().getName(), oldValue, factory.geom());
+
+        logCommand(this);
 
 
-
-
-
+        RPnDataModule.PHASESPACE.join(factory.geom());
 
 
 

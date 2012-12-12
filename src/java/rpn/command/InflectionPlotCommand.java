@@ -6,6 +6,8 @@
 package rpn.command;
 
 import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.util.Iterator;
 import javax.swing.JButton;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.component.*;
@@ -64,6 +66,13 @@ public class InflectionPlotCommand extends RpModelPlotCommand {
 
             leftPhaseSpace.join(leftGeometry);
             rightPhaseSpace.join(rightGeometry);
+            
+             
+        Iterator oldValue = RPnDataModule.PHASESPACE.getGeomObjIterator();
+        event_ = new PropertyChangeEvent(this, UIController.instance().getActivePhaseSpace().getName(), oldValue, factory.geom());
+
+        logCommand(this);
+
 
             RPnDataModule.PHASESPACE.join(factory.geom());
 

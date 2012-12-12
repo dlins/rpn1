@@ -6,6 +6,8 @@
 package rpn.command;
 
 import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.util.Iterator;
 import javax.swing.JButton;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.component.*;
@@ -53,19 +55,26 @@ public class SecondaryBifurcationtCommand extends RpModelPlotCommand {
 
         SecondaryBifurcationGeomFactory factory = new SecondaryBifurcationGeomFactory(RPNUMERICS.createSecondaryBifurcationCurveCalc());
 
-       
-            RPnPhaseSpaceAbstraction leftPhaseSpace = RPnDataModule.LEFTPHASESPACE;
 
-            RPnPhaseSpaceAbstraction rightPhaseSpace = RPnDataModule.RIGHTPHASESPACE;
-            
-            RpGeometry leftGeometry = factory.leftGeom();
-            RpGeometry rightGeometry = factory.rightGeom();
+        RPnPhaseSpaceAbstraction leftPhaseSpace = RPnDataModule.LEFTPHASESPACE;
 
-            leftPhaseSpace.join(leftGeometry);
-            rightPhaseSpace.join(rightGeometry);
-       
-            RPnDataModule.PHASESPACE.join(factory.geom());
-       
+        RPnPhaseSpaceAbstraction rightPhaseSpace = RPnDataModule.RIGHTPHASESPACE;
+
+        RpGeometry leftGeometry = factory.leftGeom();
+        RpGeometry rightGeometry = factory.rightGeom();
+
+        leftPhaseSpace.join(leftGeometry);
+        rightPhaseSpace.join(rightGeometry);
+
+
+        Iterator oldValue = RPnDataModule.PHASESPACE.getGeomObjIterator();
+        event_ = new PropertyChangeEvent(this, UIController.instance().getActivePhaseSpace().getName(), oldValue, factory.geom());
+
+        logCommand(this);
+
+
+        RPnDataModule.PHASESPACE.join(factory.geom());
+
 
 
 
