@@ -13,6 +13,7 @@
 #include "PolydispersePhysics.h"
 #include "Hugoniot_Curve.h"
 #include "Double_Contact.h"
+#include "Shock.h"
 
 
 /*
@@ -25,6 +26,8 @@
 PolydispersePhysics::PolydispersePhysics() : SubPhysics(Polydisperse(Polydisperse_Params()), StoneAccumulation(), *defaultBoundary(), Multid::PLANE, "Polydisperse", _SIMPLE_ACCUMULATION_) {
     setHugoniotFunction(new Hugoniot_Curve());
     setDoubleContactFunction(new Double_Contact());
+    setShockMethod(new Shock());
+    preProcessedBoundary_=defaultBoundary();
 }
 
 SubPhysics * PolydispersePhysics::clone()const {
@@ -35,6 +38,8 @@ SubPhysics * PolydispersePhysics::clone()const {
 PolydispersePhysics::PolydispersePhysics(const PolydispersePhysics & copy) : SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.getBoundary(), copy.domain(), "Polydisperse", _SIMPLE_ACCUMULATION_) {
     setHugoniotFunction(new Hugoniot_Curve());
     setDoubleContactFunction(new Double_Contact());
+    setShockMethod(new Shock());
+    preProcessedBoundary_=copy.getPreProcessedBoundary()->clone();
    
 }
 

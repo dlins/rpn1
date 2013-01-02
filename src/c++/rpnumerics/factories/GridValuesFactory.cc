@@ -33,6 +33,7 @@ GridValues * GridValuesFactory::getGrid(const string & gridName) {
         return gridArray_->operator [](gridName);
     } else {
     cout <<"Nome do grid:"<<gridName<<endl;
+    cout <<"Nome da subfisica :"<<physics_->getSubPhysics(0).ID()<<endl;
         const Boundary* boundary = physics_->getSubPhysics(0).getPreProcessedBoundary();
 
         cout << "Min: " << boundary->minimums() << endl;
