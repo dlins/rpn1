@@ -40,11 +40,21 @@ public class RPnFluxParamsDialog extends RPnDialog {
     
         removeDefaultApplyBehavior();
 
-
         tabsPanel = new JTabbedPane();
-        tabsPanel.setPreferredSize(new Dimension(400, 250));
+        tabsPanel.setPreferredSize(new Dimension(400, 600));
 
+        JPanel[] panels = new JPanel[subjectArray.length];
 
+//        for (int i=0; i < panels.length; i++) {
+//            System.out.println("Tamanho do subjectArray :::::::::::: " +subjectArray[i].getParamsNames().length);
+//            GridLayout layout = new GridLayout(subjectArray[i].getParamsNames().length/2, 2);
+//            JPanel panel = new JPanel(layout);
+//            panel.setName(subjectArray[i].getName());
+//            panels[i] = panel;
+//            RPnInputComponent inputComponent = new RPnInputComponent(subjectArray[i]);
+//            panels[i].add(inputComponent.getContainer());
+//            tabsPanel.add(panels[i]);
+//        }
         
          for (RPnFluxParamsSubject subject : subjectArray) {
 
@@ -63,6 +73,8 @@ public class RPnFluxParamsDialog extends RPnDialog {
 
 
         }
+
+         
 
         
         //------------

@@ -116,6 +116,17 @@
         <CURVEPARAM name="extensionfamily" value="1"/>
         <CURVEPARAM name="characteristic" value="1"/>
     </CURVECONFIGURATION>
+
+
+
+        
+      <CURVECONFIGURATION name="extensioncurve">
+        <CURVEPARAM name="family" value="0"/>
+        
+         <CURVEPARAM name="resolution" value="128 128"/>
+               
+        <CURVEPARAM name="characteristic" value="1"/>
+    </CURVECONFIGURATION>
     
     
 

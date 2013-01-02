@@ -307,6 +307,20 @@ public class RPNUMERICS {
 
     }
 
+
+
+    public static ExtensionCurveCalc createExtensionCurveCalc(List<RealSegment> segments) {
+
+        int[] resolution = RPnDataModule.processResolution(getParamValue("extensioncurve", "resolution"));
+        int family= new Integer(getParamValue("extensioncurve", "family"));
+        int characteristic = new Integer(getParamValue("extensioncurve", "characteristic"));
+
+        return new ExtensionCurveCalc(new ContourParams(resolution), segments, family, characteristic, false);
+
+    }
+
+    //public ExtensionCurveCalc(ContourParams contourParams, List<RealSegment> list, int extensionFamily, int characteristicDomain, boolean singular) {
+
     public static EnvelopeCurveCalc createEnvelopeCurveCalc() {
 
         int[] resolution = RPnDataModule.processResolution(getParamValue("envelopecurve", "resolution"));
