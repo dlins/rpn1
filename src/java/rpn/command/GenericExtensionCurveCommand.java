@@ -12,9 +12,12 @@ import java.util.Iterator;
 import java.util.List;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpacePanel;
+import rpn.component.BifurcationCurveGeomFactory;
 import rpn.component.RpGeomFactory;
 import rpn.component.RpGeometry;
 import rpn.component.util.AreaSelected;
+import rpn.controller.ui.UIController;
+import rpnumerics.ExtensionCurveCalc;
 import rpnumerics.RPnCurve;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
@@ -46,7 +49,8 @@ public class GenericExtensionCurveCommand extends RpModelConfigChangeCommand{
 
     public void execute() {
         if (curveToProcess_ != null && panelToProcess_ != null) {
-            processGeometry(curveToProcess_, panelToProcess_);
+            //processGeometry(curveToProcess_, panelToProcess_);
+            UIController.instance().getActivePhaseSpace().join(processGeometry(curveToProcess_, panelToProcess_));
             RPnPhaseSpaceAbstraction phaseSpace = (RPnPhaseSpaceAbstraction) panelToProcess_.scene().getAbstractGeom();
             phaseSpace.update();
             panelToProcess_.clearAreaSelection();
@@ -75,7 +79,7 @@ public class GenericExtensionCurveCommand extends RpModelConfigChangeCommand{
         execute();
     }
 
-    private void processGeometry(RpGeometry selectedGeometry, RPnPhaseSpacePanel phaseSpacePanel) {
+    private RpGeometry processGeometry(RpGeometry selectedGeometry, RPnPhaseSpacePanel phaseSpacePanel) {
 
         List<Integer> indexToRemove = new ArrayList<Integer>();
         List<AreaSelected> selectedAreas = phaseSpacePanel.getSelectedAreas();
@@ -98,7 +102,14 @@ public class GenericExtensionCurveCommand extends RpModelConfigChangeCommand{
         }
 
         System.out.println("indexToRemove.size() ::::::::::::: " +indexToRemove.size());
-        segmentsIntoArea(selectedGeometry, indexToRemove);
+
+
+        List<RealSegment> segments = segmentsIntoArea(selectedGeometry, indexToRemove);
+        
+        ExtensionCurveCalc calc = rpnumerics.RPNUMERICS.createExtensionCurveCalc(segments);
+        BifurcationCurveGeomFactory bifurcationFactory = new BifurcationCurveGeomFactory(calc);
+
+        return bifurcationFactory.geom();
 
     }
 
@@ -109,7 +120,7 @@ public class GenericExtensionCurveCommand extends RpModelConfigChangeCommand{
     }
 
 
-    private void segmentsIntoArea(RpGeometry selectedGeometry, List<Integer> indexToRemove) {
+    private List<RealSegment> segmentsIntoArea(RpGeometry selectedGeometry, List<Integer> indexToRemove) {
         List<RealSegment> listSeg = new ArrayList<RealSegment>();
         RpGeomFactory factory = selectedGeometry.geomFactory();
         RPnCurve curve = (RPnCurve) factory.geomSource();
@@ -120,6 +131,8 @@ public class GenericExtensionCurveCommand extends RpModelConfigChangeCommand{
         }
 
         System.out.println("listSeg.size() ::::::::::::::::::: " +listSeg.size());
+
+        return listSeg;
     }
 
 

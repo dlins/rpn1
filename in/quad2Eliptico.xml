@@ -19,11 +19,11 @@
             <PHYSICSPARAM name="b1" position="1" value ="0.0" />
             <PHYSICSPARAM name="c1" position="2" value ="2.0" />
             <PHYSICSPARAM name="d1" position="3" value ="0.0" />
-            <PHYSICSPARAM name="e1" position="4" value ="1.0" />
+            <PHYSICSPARAM name="e1" position="4" value ="2.0" />
             <PHYSICSPARAM name="a2" position="5" value ="0.0" />
             <PHYSICSPARAM name="b2" position="6" value ="2.0" />
             <PHYSICSPARAM name="c2" position="7" value ="0.0" />
-            <PHYSICSPARAM name="d2" position="8" value ="-1.0" />
+            <PHYSICSPARAM name="d2" position="8" value ="-2.0" />
             <PHYSICSPARAM name="e2" position="9" value ="0.0" />
         </PHYSICSCONFIG>
 

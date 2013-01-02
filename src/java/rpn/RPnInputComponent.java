@@ -79,7 +79,7 @@ public class RPnInputComponent {//TODO Refatorar
 
         gridConstraints.gridwidth = 1;
         gridConstraints.gridheight = 1;
-        gridConstraints.ipadx = 50;
+        gridConstraints.ipadx = 10;
         gridConstraints.gridy = 0;
         gridConstraints.gridx = 0;
 
@@ -93,10 +93,7 @@ public class RPnInputComponent {//TODO Refatorar
 
             for (int i = 0; i < subject.getParamsNames().length; i++) {         //********* Fazer tratamento se o campo for vazio, para preservar os formatos
 
-      
-
                 JFormattedTextField textField = new JFormattedTextField(formatter_);
-
     
                 textField.setColumns(4);
                 textField_[i] = textField;
@@ -115,13 +112,30 @@ public class RPnInputComponent {//TODO Refatorar
 
                 label_[i] = labelName;
 
-                gridConstraints.gridx = 0;
-                panel_.add(label_[i], gridConstraints);
-                panel_.add(textField_[i], gridConstraints);
-                gridConstraints.gridx = 1;
-                panel_.add(textField_[i], gridConstraints);
+                if (i==(subject.getParamsNames().length)/2) {
+                    gridConstraints.gridy=0;
+                }
 
-                gridConstraints.gridy++;
+                if (i<(subject.getParamsNames().length)/2) {
+                    gridConstraints.gridx = 0;
+                    panel_.add(label_[i], gridConstraints);
+                    panel_.add(textField_[i], gridConstraints);
+                    gridConstraints.gridx = 1;
+                    panel_.add(textField_[i], gridConstraints);
+                    gridConstraints.gridy++;
+                }                
+                else {
+                    gridConstraints.gridx = 2;
+                    panel_.add(label_[i], gridConstraints);
+                    panel_.add(textField_[i], gridConstraints);
+                    gridConstraints.gridx = 3;
+                    panel_.add(textField_[i], gridConstraints);
+                    gridConstraints.gridy++;
+                }
+
+                
+
+                //gridConstraints.gridy++;
 
 
             }
