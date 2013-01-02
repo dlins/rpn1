@@ -56,9 +56,21 @@ public class LevelCurvePlotCommand extends RpModelPlotCommand {
             UIController.instance().getActivePhaseSpace().join(factory.geom());
 
             Iterator oldValue = UIController.instance().getActivePhaseSpace().getGeomObjIterator();
-            event_ = new PropertyChangeEvent(this, UIController.instance().getActivePhaseSpace().getName(), oldValue, factory.geom());
+            PropertyChangeEvent event = new PropertyChangeEvent(this, UIController.instance().getActivePhaseSpace().getName(), oldValue, factory.geom());
 
-             logCommand(this);
+
+
+            ArrayList<RealVector> emptyInput = new ArrayList<RealVector>();
+            logCommand(new RpCommand(event, emptyInput));
+
+
+
+
+
+
+
+
+
 
         }
 

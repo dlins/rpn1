@@ -48,20 +48,6 @@
 <CURVEPARAM name="family" value= "1"/>
 <CURVEPARAM name="resolution" value= "128 128"/>
 </CURVECONFIGURATION>
-<CURVECONFIGURATION name="levelcurve">
-<CURVEPARAM name="levels" value= "0.1 0.2 0.5"/>
-<CURVEPARAM name="family" value= "0"/>
-<CURVEPARAM name="resolution" value= "128 128"/>
-</CURVECONFIGURATION>
-<CURVECONFIGURATION name="hysteresiscurve">
-<CURVEPARAM name="family" value= "0"/>
-<CURVEPARAM name="resolution" value= "128 128"/>
-</CURVECONFIGURATION>
-<CURVECONFIGURATION name="ellipticextension">
-<CURVEPARAM name="characteristicwhere" value= "0"/>
-<CURVEPARAM name="family" value= "0"/>
-<CURVEPARAM name="resolution" value= "128 128"/>
-</CURVECONFIGURATION>
 <CURVECONFIGURATION name="envelopecurve">
 <CURVEPARAM name="edge" value= "0"/>
 <CURVEPARAM name="numberofsteps" value= "128"/>
@@ -72,23 +58,38 @@
 <CURVEPARAM name="characteristic" value= "1"/>
 <CURVEPARAM name="curvefamily" value= "0"/>
 </CURVECONFIGURATION>
+<CURVECONFIGURATION name="ellipticboundary">
+<CURVEPARAM name="resolution" value= "128 128"/>
+</CURVECONFIGURATION>
 <CURVECONFIGURATION name="inflectioncurve">
 <CURVEPARAM name="family" value= "0"/>
 <CURVEPARAM name="resolution" value= "60 60"/>
 </CURVECONFIGURATION>
-<CURVECONFIGURATION name="ellipticboundary">
+<CURVECONFIGURATION name="fundamentalcurve">
+<CURVEPARAM name="level" value= "0.5"/>
+<CURVEPARAM name="family" value= "0"/>
+<CURVEPARAM name="direction" value= "20"/>
+</CURVECONFIGURATION>
+<CURVECONFIGURATION name="levelcurve">
+<CURVEPARAM name="levels" value= "0.1 0.2 0.5"/>
+<CURVEPARAM name="family" value= "0"/>
+<CURVEPARAM name="resolution" value= "128 128"/>
+</CURVECONFIGURATION>
+<CURVECONFIGURATION name="ellipticextension">
+<CURVEPARAM name="characteristicwhere" value= "0"/>
+<CURVEPARAM name="family" value= "0"/>
+<CURVEPARAM name="resolution" value= "128 128"/>
+</CURVECONFIGURATION>
+<CURVECONFIGURATION name="hysteresiscurve">
+<CURVEPARAM name="family" value= "0"/>
 <CURVEPARAM name="resolution" value= "128 128"/>
 </CURVECONFIGURATION>
 <CURVECONFIGURATION name="hugoniotcurve">
 <CURVEPARAM name="resolution" value= "120 120"/>
 </CURVECONFIGURATION>
-<CURVECONFIGURATION name="orbit">
-<CURVEPARAM name="level" value= "0.5"/>
-<CURVEPARAM name="family" value= "0"/>
-</CURVECONFIGURATION>
 <CURVECONFIGURATION name="doublecontactcurve">
 <CURVEPARAM name="domainfamily" value= "1"/>
-<CURVEPARAM name="resolution" value= "60 60"/>
+<CURVEPARAM name="resolution" value= "30 30"/>
 <CURVEPARAM name="curvefamily" value= "1"/>
 </CURVECONFIGURATION>
 <VIEWCONFIGURATION modeldomain="2">
@@ -101,8 +102,28 @@
 </VIEWCONFIGURATION>
   </RPNCONFIGURATION>
  </PHASESPACE>
-<COMMAND phasespace="Phase Space" name="hugoniotcurve" direction="20" inputpoint="0.4812149346253766 0.28042727360638964" />
-<COMMAND phasespace="Phase Space" name="hugoniotcurve" direction="20" inputpoint="0.28769904104859945 0.13031620361708685" />
-<COMMAND name="orbitdirection" direction="22" />
-<COMMAND phasespace="Phase Space" name="hugoniotcurve" direction="22" inputpoint="0.2309896822685581 0.4437349211771695" />
+<COMMAND name="pointlevelcurve" phasespace="Phase Space">
+<REALVECTOR dimension="2">0.11207031579738458 0.7901450826909451</REALVECTOR>
+<CURVECONFIGURATION name="levelcurve">
+<CURVEPARAM name="levels" value= "0.1 0.2 0.5"/>
+<CURVEPARAM name="family" value= "0"/>
+<CURVEPARAM name="resolution" value= "128 128"/>
+</CURVECONFIGURATION>
+</COMMAND>
+<COMMAND name="pointlevelcurve" phasespace="Phase Space">
+<REALVECTOR dimension="2">0.11207031579738458 0.7901450826909451</REALVECTOR>
+<CURVECONFIGURATION name="levelcurve">
+<CURVEPARAM name="levels" value= "0.1 0.2 0.5"/>
+<CURVEPARAM name="family" value= "0"/>
+<CURVEPARAM name="resolution" value= "128 128"/>
+</CURVECONFIGURATION>
+</COMMAND>
+<COMMAND name="pointlevelcurve" phasespace="Phase Space">
+<REALVECTOR dimension="2">0.11207031579738458 0.7901450826909451</REALVECTOR>
+<CURVECONFIGURATION name="levelcurve">
+<CURVEPARAM name="levels" value= "0.1 0.2 0.5"/>
+<CURVEPARAM name="family" value= "0"/>
+<CURVEPARAM name="resolution" value= "128 128"/>
+</CURVECONFIGURATION>
+</COMMAND>
 </RPNSESSION>

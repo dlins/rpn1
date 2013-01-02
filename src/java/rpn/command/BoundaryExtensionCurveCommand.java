@@ -6,10 +6,12 @@
 package rpn.command;
 
 import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
+import java.util.Iterator;
 import javax.swing.JButton;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.component.*;
-import rpn.controller.ui.BIFURCATION_CONFIG;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UI_ACTION_SELECTED;
 import rpn.parser.RPnDataModule;
@@ -58,17 +60,27 @@ public class BoundaryExtensionCurveCommand extends RpModelPlotCommand {
         BoundaryExtensionCurveGeomFactory factory = new BoundaryExtensionCurveGeomFactory(RPNUMERICS.createBoundaryExtensionCurveCalc());
 
 
-            RPnPhaseSpaceAbstraction leftPhaseSpace = RPnDataModule.LEFTPHASESPACE;
+        RPnPhaseSpaceAbstraction leftPhaseSpace = RPnDataModule.LEFTPHASESPACE;
 
-            RPnPhaseSpaceAbstraction rightPhaseSpace = RPnDataModule.RIGHTPHASESPACE;
+        RPnPhaseSpaceAbstraction rightPhaseSpace = RPnDataModule.RIGHTPHASESPACE;
 
-            RpGeometry leftGeometry = factory.leftGeom();
-            RpGeometry rightGeometry = factory.rightGeom();
+        RpGeometry leftGeometry = factory.leftGeom();
+        RpGeometry rightGeometry = factory.rightGeom();
 
-            leftPhaseSpace.join(leftGeometry);
-            rightPhaseSpace.join(rightGeometry);
+        leftPhaseSpace.join(leftGeometry);
+        rightPhaseSpace.join(rightGeometry);
 
-            RPnDataModule.PHASESPACE.join(factory.geom());
+
+
+        Iterator oldValue = RPnDataModule.PHASESPACE.getGeomObjIterator();
+        PropertyChangeEvent event_ = new PropertyChangeEvent(this, UIController.instance().getActivePhaseSpace().getName(), oldValue, factory.geom());
+
+        ArrayList<RealVector> emptyInput = new ArrayList<RealVector>();
+        logCommand(new RpCommand(event_, emptyInput));
+
+
+
+        RPnDataModule.PHASESPACE.join(factory.geom());
 
 
 

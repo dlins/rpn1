@@ -8,9 +8,10 @@ package rpn.configuration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.Observable;
 import java.util.Set;
 
-public abstract class Configuration {
+public abstract class Configuration extends Observable{
 
     private HashMap<String, String> params_;
     private ArrayList<String> paramOrder_;
@@ -70,6 +71,32 @@ public abstract class Configuration {
     public void removeParam(String paramName) {
         params_.remove(paramName);
     }
+    
+    public void keepParameters(String [] parametersToKeep){
+        
+      ArrayList<String> tempMap = new ArrayList<String>();
+      
+
+      for (int i=0; i < parametersToKeep.length; i++){
+          
+          tempMap.add(getParam(parametersToKeep[i]));
+          
+          
+      }
+      
+        
+        params_.clear();
+        paramOrder_.clear();       
+        
+        for (int i =0; i < tempMap.size(); i++) {
+            
+            params_.put(parametersToKeep[i], tempMap.get(i));
+            paramOrder_.add(parametersToKeep[i]);
+        }
+       
+
+        
+    } 
 
     public final void setParamOrder(String paramName, int order) {
         paramOrder_.add(order, paramName);
@@ -157,6 +184,9 @@ public abstract class Configuration {
         if (paramOrder_.indexOf(paramName) == -1) {
             paramOrder_.add(paramName);
         }
+        
+        setChanged();
+        notifyObservers();
 
     }
 

@@ -16,7 +16,7 @@ import rpn.command.EllipticBoundaryExtensionCommand;
 import rpn.command.EnvelopeCurveCommand;
 import rpn.command.HysteresisPlotCommand;
 import rpn.command.InflectionPlotCommand;
-import rpn.command.SecondaryBifurcationtCommand;
+import rpn.command.SecondaryBifurcationCurveCommand;
 import rpn.command.SubInflectionExtensionCurveCommand;
 import rpn.command.SubInflectionPlotCommand;
 import wave.util.RealVector;
@@ -38,7 +38,7 @@ public class BIFURCATION_CONFIG extends UI_ACTION_SELECTED {
         HysteresisPlotCommand.instance().setEnabled(true);
         EllipticBoundaryExtensionCommand.instance().setEnabled(true);
         EnvelopeCurveCommand.instance().setEnabled(true);
-        SecondaryBifurcationtCommand.instance().setEnabled(true);
+        SecondaryBifurcationCurveCommand.instance().setEnabled(true);
 
     }
 

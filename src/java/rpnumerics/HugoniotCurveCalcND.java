@@ -5,6 +5,7 @@
  */
 package rpnumerics;
 
+import rpn.configuration.CurveConfiguration;
 import wave.util.RealVector;
 import wave.util.RealMatrix2;
 
@@ -21,7 +22,18 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
     public HugoniotCurveCalcND(HugoniotParams params) {
         super(params);
 
-        configuration_ = RPNUMERICS.getConfiguration("hugoniotcurve");
+        
+        CurveConfiguration  config  = (CurveConfiguration)RPNUMERICS.getConfiguration("fundamentalcurve");
+        
+        configuration_= config.clone();
+        
+        String [] parameterToKeep  = {"direction"};
+        
+        configuration_.keepParameters(parameterToKeep);
+        
+        System.out.println("Curve Config: "+config);
+        
+        System.out.println("Hugoniot Config: "+configuration_);
 
 
     }

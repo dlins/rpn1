@@ -5,7 +5,6 @@
  */
 package rpn.configuration;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -21,17 +20,6 @@ public class VisualConfiguration extends Configuration{
 
     public VisualConfiguration(ConfigurationProfile profile, HashMap<String, Configuration> innerConfigurations) {
         super(profile, innerConfigurations);
-        
-        System.out.println("Entrando no construtor:"+innerConfigurations.values().size());
-        
-        Collection<Configuration> testeSet = innerConfigurations.values();
-        
-        for (Configuration configuration : testeSet) {
-            
-            System.out.println("No construtor : "+configuration.toString());
-            
-        }
-        
         
         
     }

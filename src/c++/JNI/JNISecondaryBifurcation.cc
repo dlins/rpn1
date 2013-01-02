@@ -83,12 +83,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SecondaryBifurcationCurveCalc_nativeCa
 
     cout << "left_vrs.size()  = " << left_vrs.size() << endl;
 
-
-    for (int i = 0; i < left_vrs.size(); i++) {
-        cout<<"Ponto esquerda: "<<left_vrs[i]<<endl;
-
-
-    }
+//
+//    for (int i = 0; i < left_vrs.size(); i++) {
+//        cout<<"Ponto esquerda: "<<left_vrs[i]<<endl;
+//
+//
+//    }
 
 
 
@@ -96,12 +96,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SecondaryBifurcationCurveCalc_nativeCa
     cout << "right_vrs.size()  = " << right_vrs.size() << endl;
 
 
-
-        for (int i = 0; i < right_vrs.size(); i++) {
-        cout<<"Ponto direita: "<<right_vrs[i]<<endl;
-
-
-    }
+//
+//        for (int i = 0; i < right_vrs.size(); i++) {
+//        cout<<"Ponto direita: "<<right_vrs[i]<<endl;
+//
+//
+//    }
 
 
 

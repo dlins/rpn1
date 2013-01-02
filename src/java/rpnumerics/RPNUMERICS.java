@@ -177,7 +177,7 @@ public class RPNUMERICS {
     }
 
     public static void setFamily(int family) {
-        setParamValue("orbit", "family", String.valueOf(family));
+        setParamValue("fundamentalcurve", "family", String.valueOf(family));
     }
 
     public static void setConfiguration(String configurationName, Configuration configuration) {
@@ -292,20 +292,22 @@ public class RPNUMERICS {
 
         int[] resolution = RPnDataModule.processResolution(getParamValue("hugoniotcurve", "resolution"));
 
-        HugoniotParams params = new HugoniotParams(new PhasePoint(input), direction_, resolution);
+        Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
+        
+        HugoniotParams params = new HugoniotParams(new PhasePoint(input), direction, resolution);
 
         return new HugoniotCurveCalcND(params);
     }
 
     public static RarefactionCurveCalc createRarefactionCalc(OrbitPoint orbitPoint) {
-
-        return new RarefactionCurveCalc(orbitPoint, Integer.parseInt(getParamValue("orbit", "family")), direction_);
+        Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
+        return new RarefactionCurveCalc(orbitPoint, Integer.parseInt(getParamValue("fundamentalcurve", "family")), direction);
 
     }
 
     public static WaveCurveCalc createWaveCurveCalc(OrbitPoint orbitPoint) {
-
-        return new WaveCurveCalc(orbitPoint, Integer.parseInt(getParamValue("orbit", "family")), direction_);
+        Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
+        return new WaveCurveCalc(orbitPoint, Integer.parseInt(getParamValue("fundamentalcurve", "family")), direction);
 
     }
 
@@ -341,7 +343,7 @@ public class RPNUMERICS {
 
     public static IntegralCurveCalc createIntegralCurveCalc(OrbitPoint orbitPoint) {
 
-        return new IntegralCurveCalc(orbitPoint, Integer.parseInt(getParamValue("orbit", "family")));
+        return new IntegralCurveCalc(orbitPoint, Integer.parseInt(getParamValue("fundamentalcurve", "family")));
 
     }
 
@@ -426,8 +428,8 @@ public class RPNUMERICS {
     }
 
     public static OrbitCalc createOrbitCalc(OrbitPoint oPoint) {
-
-        return new OrbitCalc(oPoint, direction_);
+        Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
+        return new OrbitCalc(oPoint, direction);
 
     }
 
@@ -467,8 +469,8 @@ public class RPNUMERICS {
     }
 
     public static CompositeCalc createCompositeCalc(OrbitPoint initialPoint) {
-
-        return new CompositeCalc(initialPoint, Integer.parseInt(getParamValue("orbit", "family")), direction_);
+        Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
+        return new CompositeCalc(initialPoint, Integer.parseInt(getParamValue("fundamentalcurve", "family")), direction);
 
 
     }
@@ -517,11 +519,11 @@ public class RPNUMERICS {
 
     public static ShockCurveCalc createShockCurveCalc(OrbitPoint orbitPoint) {
 
-        Integer family = new Integer(getParamValue("orbit", "family"));
+        Integer family = new Integer(getParamValue("fundamentalcurve", "family"));
         Double tolerance = new Double(getParamValue("Newton", "tolerance"));
 
-
-        return new ShockCurveCalc(orbitPoint, family, direction_);
+        Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
+        return new ShockCurveCalc(orbitPoint, family, direction);
 
     }
 
@@ -558,8 +560,10 @@ public class RPNUMERICS {
         int curveFamily = new Integer(getParamValue("rarefactionextension", "curvefamily"));
 
         int characteristicDomain = new Integer(getParamValue("rarefactionextension", "characteristic"));
+        
+        Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
 
-        return new RarefactionExtensionCalc(new ContourParams(resolution), orbitPoint, direction_, curveFamily, characteristicDomain);
+        return new RarefactionExtensionCalc(new ContourParams(resolution), orbitPoint, direction, curveFamily, characteristicDomain);
 
     }
 

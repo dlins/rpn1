@@ -50,7 +50,7 @@ public class RPnConfigurationDialog extends RPnDialog {
             String configurationType = entry.getValue().getType();
             RPnInputComponent inputComponent = new RPnInputComponent(entry.getValue(),true);
             inputComponent.keepParameter("resolution");
-            if (configurationType.equalsIgnoreCase("CURVE") && entry.getValue().getName().equals("inflectioncurve")) {
+            if (entry.getValue().getName().equals("inflectioncurve")) {
 
                 if (inputComponent.getContainer().getComponentCount() > 0) {
                     extensionPanel_.addTab("Bifurcation Curves", inputComponent.getContainer());

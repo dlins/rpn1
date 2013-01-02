@@ -19,6 +19,7 @@ public class RPnInputController implements PropertyChangeListener {
     public RPnInputController(RPnInputComponent inputComponent, Configuration config) {
         inputComponent_ = inputComponent;
         configuration_ = config;
+        config.addObserver(inputComponent);
 
     }
 

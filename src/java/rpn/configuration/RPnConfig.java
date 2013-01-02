@@ -9,7 +9,6 @@ package rpn.configuration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.logging.Level;
@@ -29,11 +28,9 @@ import rpn.RPnSchearerSchaeffer;
 import rpn.RPnStoneToStone;
 import rpn.controller.phasespace.NumConfigImpl;
 
-import rpn.configuration.ConfigurationProfile;
 import rpn.parser.RPnDataModule;
 import rpn.plugininterface.PluginInfoController;
 import rpn.plugininterface.PluginInfoParser;
-import rpn.configuration.Configuration;
 import rpnumerics.RPNUMERICS;
 
 public class RPnConfig {

@@ -6,6 +6,8 @@
  */
 package rpnumerics;
 
+import rpn.configuration.CurveConfiguration;
+
 public class IntegralCurveCalc extends WaveCurveOrbitCalc implements RpCalculation {
 
     //
@@ -20,6 +22,17 @@ public class IntegralCurveCalc extends WaveCurveOrbitCalc implements RpCalculati
 
     public IntegralCurveCalc(PhasePoint point, int familyIndex) {
         super(new OrbitPoint(point), familyIndex, 0);
+        
+        
+         CurveConfiguration  config  = (CurveConfiguration)RPNUMERICS.getConfiguration("fundamentalcurve");
+        
+        configuration_= config.clone();
+        
+        String [] parameterToKeep  = {"family","level"};
+        
+        configuration_.keepParameters(parameterToKeep);
+        
+        
 
     }
     //

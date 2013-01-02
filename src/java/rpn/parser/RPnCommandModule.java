@@ -8,64 +8,49 @@ package rpn.parser;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
 
-import rpn.*;
-import rpn.controller.phasespace.*;
 import rpn.command.*;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.GEOM_SELECTION;
 import rpn.controller.ui.UI_ACTION_SELECTED;
-import rpn.controller.ui.RAREFACTION_CONFIG;
-import rpn.component.RpGeometry;
-
 
 import rpnumerics.RPNUMERICS;
-import rpnumerics.RpSolution;
-import rpnumerics.RpCurve;
-import rpnumerics.SegmentedCurve;
-import rpnumerics.Orbit;
+
 
 import wave.util.RealVector;
-import wave.util.RealMatrix2;
 
 import org.xml.sax.SAXException;
 import org.xml.sax.InputSource;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.XMLReader;
 
-import java.util.ArrayList;
 import java.io.*;
 import java.util.Iterator;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.HashMap;
 
 
+import rpn.configuration.Configuration;
 import rpn.controller.ui.UndoActionController;
-import wave.multid.Space;
 
 /** With this class the calculus made in a previous session can be reloaded. A previous state can be reloaded reading a XML file that is used by this class */
 public class RPnCommandModule {
-
 
     static protected class RPnCommandParser implements ContentHandler {
 
         private String currentElement_;
         private String currentCommand_;
-
         private StringBuilder stringBuffer_ = new StringBuilder();
-
+        private Configuration currentConfiguration_;
+        private boolean isChangePhysicsParamsCommand_;
 
         public RPnCommandParser() {
 
 
             stringBuffer_ = new StringBuilder();
+            isChangePhysicsParamsCommand_ = false;
 
         }
 
         @Override
         public void endDocument() {
-
-
         }
 
         @Override
@@ -76,57 +61,98 @@ public class RPnCommandModule {
             // and the COMMAND tag would carry away the phasespace information with it !??
             currentElement_ = name;
 
+            if (isChangePhysicsParamsCommand_) {
+                if (currentElement_.equals("PHYSICSCONFIG")) {
+                    System.out.println("Current configuration: " + currentConfiguration_.getName());
+
+                    currentConfiguration_ = currentConfiguration_.getConfiguration(att.getValue("name"));
+
+                }
+
+
+                if (currentElement_.equals("PHYSICSPARAM")) {
+
+                    currentConfiguration_.setParamValue(att.getValue("name"), att.getValue("value"));
+
+                }
+
+            }
+
+
+
+            if (currentElement_.equals("CURVECONFIGURATION")) {
+                
+                
+
+                currentConfiguration_ = rpnumerics.RPNUMERICS.getConfiguration(att.getValue("name"));
+
+            }
+
+            if (currentElement_.equals("CURVEPARAM")) {
+
+                
+//                System.out.println("Antes configuration : "+currentConfiguration_ +" "+currentConfiguration_.getParamsSize());
+                
+                currentConfiguration_.setParamValue(att.getValue(0), att.getValue(1));
+                
+                
+//                System.out.println("Depois configuration : "+currentConfiguration_ +" "+currentConfiguration_.getParamsSize());
+            }
+
+
 
             if (currentElement_.equalsIgnoreCase("COMMAND")) {
 
 
                 currentCommand_ = att.getValue("name");
 
-                if (att.getValue("phasespace").equals("Phase Space"))
-                    UIController.instance().setActivePhaseSpace(RPnDataModule.PHASESPACE);
+                System.out.println("Current command :" + currentCommand_);
 
+                selectPhaseSpace(att.getValue("phasespace"));
 
-
-                if (currentCommand_.equalsIgnoreCase("hugoniotcurve"))
+                if (currentCommand_.equalsIgnoreCase("Change Flux Parameters")) {
+                    currentConfiguration_ = RPNUMERICS.getConfiguration(RPNUMERICS.physicsID());
+                } else if (currentCommand_.equalsIgnoreCase("hugoniotcurve")) {
                     UIController.instance().setState(new UI_ACTION_SELECTED(HugoniotPlotCommand.instance()));
-                else if (currentCommand_.equalsIgnoreCase("integralcurve"))
+                } else if (currentCommand_.equalsIgnoreCase("integralcurve")) {
                     UIController.instance().setState(new UI_ACTION_SELECTED(IntegralCurvePlotCommand.instance()));
-                else if (currentCommand_.equalsIgnoreCase("levelcurve"))
-
-/*                    if (att.getValue("inputpoint") == null)
-                        calc_ = RPNUMERICS.createLevelCurveCalc(new Integer(att.getValue("family")), new Double(att.getValue("level")), params);
-                     else
-                        calc_ = RPNUMERICS.createPointLevelCalc(new RealVector(att.getValue("inputpoint")), new Integer(att.getValue("family")), params);
-
-
-                    factory_ = new LevelCurveGeomFactory((LevelCurveCalc) calc_);*/
+                } else if (currentCommand_.equalsIgnoreCase("wavecurve")) {
+                    UIController.instance().setState(new UI_ACTION_SELECTED(WaveCurvePlotCommand.instance()));
+                } else if (currentCommand_.equalsIgnoreCase("levelcurve")) {
                     LevelCurvePlotCommand.instance().execute();
-
-                else if (currentCommand_.equalsIgnoreCase("compositecurve"))
+                } else if (currentCommand_.equalsIgnoreCase("pointlevelcurve")) {
+                    UIController.instance().setState(new UI_ACTION_SELECTED(PointLevelCurvePlotCommand.instance()));
+                } else if (currentCommand_.equalsIgnoreCase("compositecurve")) {
                     UIController.instance().setState(new UI_ACTION_SELECTED(CompositePlotCommand.instance()));
-                else if (currentCommand_.equalsIgnoreCase("rarefactioncurve"))
+                } else if (currentCommand_.equalsIgnoreCase("rarefactioncurve")) {
                     UIController.instance().setState(new UI_ACTION_SELECTED(RarefactionCurvePlotCommand.instance()));
-                else if (currentCommand_.equalsIgnoreCase("rarefactionextensioncurve"))
+                } else if (currentCommand_.equalsIgnoreCase("rarefactionextensioncurve")) {
                     UIController.instance().setState(new UI_ACTION_SELECTED(RarefactionExtensionCurvePlotCommand.instance()));
-                else if (currentCommand_.equalsIgnoreCase("shockcurve"))
+                } else if (currentCommand_.equalsIgnoreCase("shockcurve")) {
                     UIController.instance().setState(new UI_ACTION_SELECTED(ShockCurvePlotCommand.instance()));
-                else if (currentCommand_.equalsIgnoreCase("doublecontactcurve"))
+                } else if (currentCommand_.equalsIgnoreCase("doublecontactcurve")) {
                     UIController.instance().setState(new UI_ACTION_SELECTED(DoubleContactCommand.instance()));
-                else if (currentCommand_.equalsIgnoreCase("inflectioncurve"))
+                    DoubleContactCommand.instance().execute();
+                } else if (currentCommand_.equalsIgnoreCase("inflectioncurve")) {
                     UIController.instance().setState(new UI_ACTION_SELECTED(InflectionPlotCommand.instance()));
-                else if (currentCommand_.equalsIgnoreCase("hysteresiscurve"))
+                    InflectionPlotCommand.instance().execute();
+                } else if (currentCommand_.equalsIgnoreCase("hysteresiscurve")) {
                     UIController.instance().setState(new UI_ACTION_SELECTED(HysteresisPlotCommand.instance()));
-                else if (currentCommand_.equalsIgnoreCase("boundaryextensioncurve"))
+                    HysteresisPlotCommand.instance().execute();
+                } else if (currentCommand_.equalsIgnoreCase("boundaryextensioncurve")) {
                     UIController.instance().setState(new UI_ACTION_SELECTED(BoundaryExtensionCurveCommand.instance()));
-                
-                 else if (currentCommand_.equalsIgnoreCase("changeorbitdirection"))
-                    UIController.instance().setState(new UI_ACTION_SELECTED(ChangeDirectionCommand.instance()));
-                
-                
-                
+                    BoundaryExtensionCurveCommand.instance().execute();
+
+                } else if (currentCommand_.equalsIgnoreCase("secondarybifurcationcurve")) {
+                    UIController.instance().setState(new UI_ACTION_SELECTED(SecondaryBifurcationCurveCommand.instance()));
+                    SecondaryBifurcationCurveCommand.instance().execute();
+
+                }
             }
 
-            else if (currentElement_.equals("REALVECTOR")) {
+
+
+            if (currentElement_.equals("REALVECTOR")) {
 
                 stringBuffer_ = new StringBuilder();
             }
@@ -140,8 +166,9 @@ public class RPnCommandModule {
 
                 String data = new String(buff, offset, len);
                 if (data.length() != 0) {
-                    if (currentElement_.equals("REALVECTOR"))
+                    if (currentElement_.equals("REALVECTOR")) {
                         stringBuffer_.append(data);
+                    }
 
                 }
 
@@ -160,14 +187,18 @@ public class RPnCommandModule {
                 UIController.instance().userInputComplete(new RealVector(stringBuffer_.toString()));
                 UIController.instance().setState(new GEOM_SELECTION());
             }
-                
 
-            if (name.equals("PAUSE"))
+
+            if (name.equals("PAUSE")) {
                 try {
                     System.in.read();
-                } catch (java.io.IOException ex) {}
+                } catch (java.io.IOException ex) {
+                }
+            }
 
-
+            if (name.equals("RPCONFIGURATION")) {
+                isChangePhysicsParamsCommand_ = true;
+            }
         }
 
         public void setDocumentLocator(Locator locator) {
@@ -190,9 +221,22 @@ public class RPnCommandModule {
 
         public void skippedEntity(String name) throws SAXException {
         }
+
+        private void selectPhaseSpace(String phaseSpaceName) {
+
+            if (phaseSpaceName != null) {
+
+                if (phaseSpaceName.equals("Phase Space")) {
+                    UIController.instance().setActivePhaseSpace(RPnDataModule.PHASESPACE);
+                } else if (phaseSpaceName.equals("Left Phase Space")) {
+                    UIController.instance().setActivePhaseSpace(RPnDataModule.LEFTPHASESPACE);
+                } else if (phaseSpaceName.equals("Right Phase Space")) {
+                    UIController.instance().setActivePhaseSpace(RPnDataModule.RIGHTPHASESPACE);
+                }
+
+            }
+        }
     }
-
-
 
     //
     // Initializers
@@ -242,10 +286,9 @@ public class RPnCommandModule {
         Iterator<RpCommand> iterator1 = UndoActionController.instance().getCommandIterator();
 
         while (iterator1.hasNext()) {
-            writer.write(((RpCommand)iterator1.next()).toXML());
+            writer.write(((RpCommand) iterator1.next()).toXML());
         }
 
         System.out.println("Command module export finished sucessfully !");
     }
-
 }

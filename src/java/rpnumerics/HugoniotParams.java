@@ -17,6 +17,8 @@ public class HugoniotParams extends ContourParams {
         xZero_ = xZero;
 
         direction_ = direction;
+        
+        System.out.println("Valor da direcao: "+direction);
 
 
     }

@@ -32,8 +32,6 @@ public class ChangeDirectionCommand extends RpModelConfigChangeCommand implement
 
     public void execute() {
         
-
-
         
         CommandConfiguration newConfiguration = new CommandConfiguration("orbitdirection");
         

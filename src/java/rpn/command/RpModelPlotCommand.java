@@ -51,7 +51,11 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand {
 
     public void execute() {
 
+
+
         RealVector[] userInputList = UIController.instance().userInputList();
+
+        System.out.println("execute do  plot" + userInputList[0]);
 
         Iterator oldValue = UIController.instance().getActivePhaseSpace().getGeomObjIterator();
 
@@ -72,15 +76,14 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand {
 
         UIController.instance().getActivePhaseSpace().plot(geometry);
 
-        event_ = new PropertyChangeEvent(this, UIController.instance().getActivePhaseSpace().getName(), oldValue, geometry);
-
+        PropertyChangeEvent event_ = new PropertyChangeEvent(this, UIController.instance().getActivePhaseSpace().getName(), oldValue, geometry);
 
         ArrayList<RealVector> inputArray = new ArrayList<RealVector>();
         inputArray.addAll(Arrays.asList(userInputList));
 
         setInput(inputArray);
 
-        logCommand(this);
+        logCommand(new RpCommand(event_, inputArray));
     }
 
     public void unexecute() {
@@ -101,39 +104,5 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand {
     }
 
     protected void unselectedButton(ChangeEvent changeEvent) {
-    }
-
-    @Override
-    public String toXML() {
-        RpGeometry geometry = (RpGeometry) event_.getNewValue();
-        RpCalcBasedGeomFactory factory = (RpCalcBasedGeomFactory) geometry.geomFactory();
-
-        RpCalculation calc = (RpCalculation) factory.rpCalc();
-
-        StringBuilder buffer = new StringBuilder();
-
-        String className = calc.getClass().getSimpleName().toLowerCase();
-
-        String curveName = className.replace("calc", "");
-        buffer.append("<COMMAND name=\"").append(curveName).append("\"");
-        buffer.append("phasespace=\"").append(UIController.instance().getActivePhaseSpace().getName());
-
-        buffer.append("\"/>\n");
-
-        for (RealVector inputPoint : getInput()) {
-            buffer.append(inputPoint.toXML());
-        }
-
-
-        if (calc.getConfiguration() != null) {
-            String configurationXML = calc.getConfiguration().toXML();
-            buffer.append(configurationXML);
-        }
-
-        buffer.append("</COMMAND>\n");
-
-        return buffer.toString();
-
-
     }
 }

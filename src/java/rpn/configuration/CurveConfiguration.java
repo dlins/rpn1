@@ -18,8 +18,24 @@ public class CurveConfiguration extends Configuration{
 
     }
 
-    CurveConfiguration(ConfigurationProfile profile, HashMap<String, Configuration> innerConfigurations) {
-        super(profile, innerConfigurations);
+    
+    
+    @Override
+    public CurveConfiguration clone(){
+        
+        ConfigurationProfile profile = new ConfigurationProfile(getName(), ConfigurationProfile.CURVECONFIGURATION);
+        
+        HashMap <String,String> paramsMap = getParams();
+        
+        Set<Entry<String,String> > entrySet = paramsMap.entrySet();
+        
+        for (Entry<String, String> entry : entrySet) {
+            
+            profile.addParam(entry.getKey(), entry.getValue());
+            
+        }
+        return new CurveConfiguration(profile);
+        
     }
  
     @Override

@@ -203,11 +203,8 @@ public class RPnCurvesConfigPanel extends Observable implements PropertyChangeLi
             } else if (bothCheckBox_.isSelected()) {
                 currentOrbitDirection_ = Orbit.BOTH_DIR;
             }
-            setChanged();
-            notifyObservers(new Integer(currentOrbitDirection_));
-
-
-
+            
+            RPNUMERICS.setParamValue("fundamentalcurve", "direction", currentOrbitDirection_.toString());
         }
     }
 }

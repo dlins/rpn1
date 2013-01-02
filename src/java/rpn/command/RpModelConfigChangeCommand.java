@@ -29,15 +29,6 @@ public abstract class RpModelConfigChangeCommand extends RpModelActionCommand {
 
     public void applyChange(PropertyChangeEvent change) {
 
-        
-       System.out.println(change);
-       
-       event_=change;
-
-
-
-        logCommand(this);
-        
 
         firePropertyChange(change);
 
@@ -73,18 +64,5 @@ public abstract class RpModelConfigChangeCommand extends RpModelActionCommand {
 
         }
     }
-    
-    public String toXML(){
-        
-        StringBuffer buffer = new StringBuffer();
-        Configuration configuration = (Configuration)event_.getNewValue();
-        
-        buffer.append("<COMMAND name=\"").append(event_.getSource()).append("\">\n");
-        buffer.append(configuration.toXML());
-        buffer.append("</COMMAND>");
-        
-        return buffer.toString();
-    }
-
     
 }

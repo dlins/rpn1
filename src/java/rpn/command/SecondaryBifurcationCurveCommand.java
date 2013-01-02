@@ -7,6 +7,7 @@ package rpn.command;
 
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
 import java.util.Iterator;
 import javax.swing.JButton;
 import rpn.RPnPhaseSpaceAbstraction;
@@ -17,21 +18,21 @@ import rpn.parser.RPnDataModule;
 import rpnumerics.*;
 import wave.util.RealVector;
 
-public class SecondaryBifurcationtCommand extends RpModelPlotCommand {
+public class SecondaryBifurcationCurveCommand extends RpModelPlotCommand {
     //
     // Constants
     //
 
-    static public final String DESC_TEXT = "Secondary Bifurcation";
+    static public final String DESC_TEXT = "Secondary Bifurcation Curve";
     //
     // Members
     //
-    static private SecondaryBifurcationtCommand instance_ = null;
+    static private SecondaryBifurcationCurveCommand instance_ = null;
 
     //
     // Constructors/Initializers
     //
-    protected SecondaryBifurcationtCommand() {
+    protected SecondaryBifurcationCurveCommand() {
         super(DESC_TEXT, rpn.configuration.RPnConfig.HUGONIOT, new JButton());
     }
 
@@ -68,9 +69,14 @@ public class SecondaryBifurcationtCommand extends RpModelPlotCommand {
 
 
         Iterator oldValue = RPnDataModule.PHASESPACE.getGeomObjIterator();
-        event_ = new PropertyChangeEvent(this, UIController.instance().getActivePhaseSpace().getName(), oldValue, factory.geom());
+        PropertyChangeEvent event = new PropertyChangeEvent(this, UIController.instance().getActivePhaseSpace().getName(), oldValue, factory.geom());
 
-        logCommand(this);
+
+
+        ArrayList<RealVector> emptyInput = new ArrayList<RealVector>();
+        logCommand(new RpCommand(event, emptyInput));
+
+
 
 
         RPnDataModule.PHASESPACE.join(factory.geom());
@@ -84,9 +90,9 @@ public class SecondaryBifurcationtCommand extends RpModelPlotCommand {
 
     }
 
-    static public SecondaryBifurcationtCommand instance() {
+    static public SecondaryBifurcationCurveCommand instance() {
         if (instance_ == null) {
-            instance_ = new SecondaryBifurcationtCommand();
+            instance_ = new SecondaryBifurcationCurveCommand();
         }
         return instance_;
     }

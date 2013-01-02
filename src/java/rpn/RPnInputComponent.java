@@ -17,6 +17,8 @@ import java.beans.PropertyChangeEvent;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Set;
 import javax.swing.ButtonGroup;
 import javax.swing.JFormattedTextField;
@@ -35,7 +37,7 @@ import wave.util.RealVector;
 
 //**** tirar os listeners, que serao enviados para classes especializadas
 //**** basicamente, cada tipo de campo deverá ser tratado por uma classe especialista, munida de um listener
-public class RPnInputComponent {//TODO Refatorar
+public class RPnInputComponent implements Observer{//TODO Refatorar
 
     private JPanel panel_ = new JPanel();
     private JSlider slider_;
@@ -153,6 +155,8 @@ public class RPnInputComponent {//TODO Refatorar
     }
 
     public RPnInputComponent(Configuration configuration, boolean useEvents) {
+        
+
 
         textField_ = new JFormattedTextField[configuration.getParamsSize()];
 
@@ -213,6 +217,8 @@ public class RPnInputComponent {//TODO Refatorar
         }
 
         controller_ = new RPnInputController(this, configuration);
+        
+
 
 
     }
@@ -297,6 +303,21 @@ public class RPnInputComponent {//TODO Refatorar
         panel_.remove(slider_);
 
 
+    }
+
+    public void update(Observable o, Object arg) {
+        
+        Configuration config =(Configuration)o;
+        
+        for (int i = 0; i < textField_.length; i++) {
+            
+            textField_[i].setText(config.getParam(textField_[i].getName()));
+            
+        }
+        
+        
+        
+        
     }
 
     private class TextValueHandler implements DocumentListener {

@@ -5,9 +5,6 @@
  */
 package rpn.configuration;
 
-import java.util.Map.Entry;
-import java.util.Set;
-
 public class PhysicsConfigurationParams extends Configuration {
 
     public PhysicsConfigurationParams(String name) {
@@ -25,16 +22,17 @@ public class PhysicsConfigurationParams extends Configuration {
 
         StringBuilder buffer = new StringBuilder();
 
-        buffer.append("<PHYSICSCONFIG name=\"" + getName() + "\">\n");
+        buffer.append("<PHYSICSCONFIG name=\"").append(getName()).append("\">\n");
 
-        Set<Entry<String, String>> configurationSet = getParams().entrySet();
 
-        for (Entry<String, String> paramEntry : configurationSet) {
+        for (int i = 0; i < getParamsSize(); i++) {
 
-            buffer.append("<PHYSICSPARAM name=\"" + paramEntry.getKey() + "\" " + "position=\"" + getParamOrder(paramEntry.getKey()) + "\"" + " value= \"" + paramEntry.getValue() + "\"/>");
+            buffer.append("<PHYSICSPARAM name=\"").append(getParamName(i)).append("\" " + "position=\"").append(i).append("\"" + " value= \"").append(getParam(i)).append("\"/>");
             buffer.append("\n");
 
         }
+
+
         buffer.append("</PHYSICSCONFIG>\n");
 
         return buffer.toString();
