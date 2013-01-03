@@ -89,6 +89,15 @@ public class ConnectionOrbitCalc implements RpCalculation {
 
 
     public RpSolution calc() throws RpException {
+
+        // ---
+        int directionXZero = 0;
+        int directionUPlus = 0;
+
+        PhasePoint[] firstPointXZero = null;
+        PhasePoint[] firstPointUPlus = null;
+        // ---
+
         int i = 0;
         int nmax = 10;
         double sigmaM = 0.;
@@ -116,6 +125,17 @@ public class ConnectionOrbitCalc implements RpCalculation {
             List<RealVector> eqPoints = hCurve.equilPoints(sigmaM);
             //System.out.println("Uref da HUGONIOT : " +hCurve.getXZero().getCoords());
 
+            // ---
+            if (hCurve.getDirection()==Orbit.FORWARD_DIR) {
+                directionXZero = Orbit.FORWARD_DIR;
+                directionUPlus = Orbit.BACKWARD_DIR;
+            }
+            if (hCurve.getDirection()==Orbit.BACKWARD_DIR) {
+                directionXZero = Orbit.BACKWARD_DIR;
+                directionUPlus = Orbit.FORWARD_DIR;
+            }
+            // ---
+
             RPNUMERICS.updateUplus(eqPoints);
 
             StationaryPointCalc xZeroCalc = new StationaryPointCalc(ViscousProfileData.instance().getXZero(), ViscousProfileData.instance().getXZero());
@@ -123,11 +143,21 @@ public class ConnectionOrbitCalc implements RpCalculation {
             xZero = (StationaryPoint) xZeroCalc.calc();
             uPlus = (StationaryPoint) uPlusCalc.calc();
 
-            PhasePoint[] firstPointXZero = xZero.orbitDirectionFWD();
-            PhasePoint[] firstPointUPlus = uPlus.orbitDirectionBWD();
+            // ---
+            if (hCurve.getDirection()==Orbit.FORWARD_DIR) {
+                firstPointXZero = xZero.orbitDirectionFWD();
+                firstPointUPlus = uPlus.orbitDirectionBWD();
+            }
+            if (hCurve.getDirection()==Orbit.BACKWARD_DIR) {
+                firstPointXZero = xZero.orbitDirectionBWD();
+                firstPointUPlus = uPlus.orbitDirectionFWD();
+            }
+            // ---
 
-            ManifoldOrbitCalc manifoldXZeroCalc0 = new ManifoldOrbitCalc(xZero, firstPointXZero[0], ViscousProfileData.instance().getPoincare(), Orbit.FORWARD_DIR);
-            ManifoldOrbitCalc manifoldXZeroCalc1 = new ManifoldOrbitCalc(xZero, firstPointXZero[1], ViscousProfileData.instance().getPoincare(), Orbit.FORWARD_DIR);
+            // ---
+            ManifoldOrbitCalc manifoldXZeroCalc0 = new ManifoldOrbitCalc(xZero, firstPointXZero[0], ViscousProfileData.instance().getPoincare(), directionXZero);
+            ManifoldOrbitCalc manifoldXZeroCalc1 = new ManifoldOrbitCalc(xZero, firstPointXZero[1], ViscousProfileData.instance().getPoincare(), directionXZero);
+            // ---
 
             ManifoldOrbit manifoldXZero0 = (ManifoldOrbit) manifoldXZeroCalc0.calc();
             ManifoldOrbit manifoldXZero1 = (ManifoldOrbit) manifoldXZeroCalc1.calc();
@@ -140,8 +170,10 @@ public class ConnectionOrbitCalc implements RpCalculation {
             }
             
 
-            ManifoldOrbitCalc manifoldUPlusCalc0 = new ManifoldOrbitCalc(uPlus, firstPointUPlus[0], ViscousProfileData.instance().getPoincare(), Orbit.BACKWARD_DIR);
-            ManifoldOrbitCalc manifoldUPlusCalc1 = new ManifoldOrbitCalc(uPlus, firstPointUPlus[1], ViscousProfileData.instance().getPoincare(), Orbit.BACKWARD_DIR);
+            // ---
+            ManifoldOrbitCalc manifoldUPlusCalc0 = new ManifoldOrbitCalc(uPlus, firstPointUPlus[0], ViscousProfileData.instance().getPoincare(), directionUPlus);
+            ManifoldOrbitCalc manifoldUPlusCalc1 = new ManifoldOrbitCalc(uPlus, firstPointUPlus[1], ViscousProfileData.instance().getPoincare(), directionUPlus);
+            // ---
 
             ManifoldOrbit manifoldUPlus0 = (ManifoldOrbit) manifoldUPlusCalc0.calc();
             ManifoldOrbit manifoldUPlus1 = (ManifoldOrbit) manifoldUPlusCalc1.calc();
