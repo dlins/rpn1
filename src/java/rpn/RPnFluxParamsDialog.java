@@ -37,7 +37,7 @@ public class RPnFluxParamsDialog extends RPnDialog {
         beginButton.setText("Close");
         subjectParamsPanel_ = new JPanel();
         fluxParamsPanel_ = new JPanel();
-    
+
         removeDefaultApplyBehavior();
 
         tabsPanel = new JTabbedPane();
@@ -55,10 +55,15 @@ public class RPnFluxParamsDialog extends RPnDialog {
 //            panels[i].add(inputComponent.getContainer());
 //            tabsPanel.add(panels[i]);
 //        }
-        
-         for (RPnFluxParamsSubject subject : subjectArray) {
 
-            RPnInputComponent inputComponent = new RPnInputComponent(subject);
+        for (RPnFluxParamsSubject subject : subjectArray) {
+            RPnInputComponent inputComponent = null;
+
+            if (subject instanceof RPnFluxConvexCombination) {
+                inputComponent = new RPnInputComponent(subject, "alpha");
+            } else {
+                inputComponent = new RPnInputComponent(subject);
+            }
 
             tabsPanel.add(inputComponent.getContainer());
 
@@ -69,14 +74,16 @@ public class RPnFluxParamsDialog extends RPnDialog {
 
             //-----------------------------------------
 
-            if (subject.getName().equals("Radio")) {radioPanel_.add(inputComponent.getContainer());}
+            if (subject.getName().equals("Radio")) {
+                radioPanel_.add(inputComponent.getContainer());
+            }
 
 
         }
 
-         
 
-        
+
+
         //------------
         ChangeListener changeListener = new ChangeListener() {
 
@@ -91,12 +98,12 @@ public class RPnFluxParamsDialog extends RPnDialog {
 
 
         tabsPanel.addChangeListener(changeListener);
-        
+
         //------------
 
         subjectParamsPanel_.add(tabsPanel);
         subjectParamsPanel_.add(radioPanel_);
-        
+
         subjectParamsPanel_.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "Apply");
 
         subjectParamsPanel_.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "Cancel");
@@ -115,7 +122,7 @@ public class RPnFluxParamsDialog extends RPnDialog {
         fluxParamsPanel_.add(observerInputComponent.getContainer());
 
         this.getContentPane().add(fluxParamsPanel_, BorderLayout.WEST);
-        
+
         pack();
 
 
@@ -123,7 +130,7 @@ public class RPnFluxParamsDialog extends RPnDialog {
 
     public RPnFluxParamsDialog() {
         super(true, false);
-        
+
         setTitle(RPNUMERICS.physicsID());
         beginButton.setText("OK");
         fluxParamsPanel_ = new JPanel();
@@ -146,7 +153,7 @@ public class RPnFluxParamsDialog extends RPnDialog {
         this.getContentPane().add(fluxParamsPanel_, BorderLayout.CENTER);
 
         pack();
-        
+
     }
 
     @Override
@@ -171,11 +178,5 @@ public class RPnFluxParamsDialog extends RPnDialog {
 
         dispose();
     }
-
     //----------------------------------------------------------
-    
-   
-
-  
-
 }

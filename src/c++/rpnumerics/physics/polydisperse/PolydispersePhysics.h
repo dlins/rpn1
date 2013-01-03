@@ -39,6 +39,7 @@ public:
 //    PolydispersePhysics(const Polydisperse &, const Boundary &, const Space &);
 
     void setParams(vector<string>);
+    vector<double> * getParams();
 
     PolydispersePhysics();
 

@@ -43,6 +43,8 @@ public:
     SubPhysics * clone() const;
 
     Boundary * defaultBoundary()const;
+    
+    vector<double> *  getParams();
 
 
 };

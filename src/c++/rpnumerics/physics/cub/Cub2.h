@@ -36,6 +36,9 @@ public:
     virtual ~Cub2();
 
     SubPhysics * clone() const;
+    
+    
+    vector<double> *  getParams();
 
     Boundary * defaultBoundary()const;
 

@@ -142,6 +142,36 @@ void TPCW::setParams(vector<string> params) {
 
 }
 
+
+
+vector<double> *  TPCW::getParams(){
+     
+     
+     
+     vector<double> * paramsVector = new vector<double>();
+      
+      for (int i = 0; i < fluxFunction_->fluxParams().params().size(); i++) {
+          paramsVector->push_back(fluxFunction_->fluxParams().params().component(i));
+
+    }
+     
+     for (int i = 0; i < accumulationFunction_->accumulationParams().params().size(); i++) {
+
+         
+         paramsVector->push_back( accumulationFunction_->accumulationParams().component(i));
+
+
+    }
+
+     
+
+
+      return paramsVector;
+
+}
+
+
+
 TPCW::TPCW(const TPCW & copy) :
 SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.getBoundary(), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATION_),
 TD(new Thermodynamics_SuperCO2_WaterAdimensionalized(*copy.TD)) {

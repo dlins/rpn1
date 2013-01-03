@@ -1,6 +1,7 @@
 #include "Cub2.h"
 #include "Hugoniot_Curve.h"
 
+
 Cub2::Cub2(const Cub2FluxParams & params) : SubPhysics(*defaultBoundary(), *new Space("R2", 2), "Cub2", _SIMPLE_ACCUMULATION_) {
 
     fluxFunction_ = new Cub2FluxFunction(params);
@@ -31,6 +32,31 @@ Cub2::Cub2(const Cub2 & copy) : SubPhysics(copy.fluxFunction(), copy.accumulatio
     setHugoniotFunction(new Hugoniot_Curve());
 
 }
+
+ 
+
+
+
+vector<double> *  Cub2::getParams(){
+     
+     
+     
+     vector<double> * paramsVector = new vector<double>();
+      
+      for (int i = 0; i < fluxFunction().fluxParams().params().size(); i++) {
+          paramsVector->push_back(fluxFunction().fluxParams().params().component(i));
+
+    }
+
+      return paramsVector;
+
+}
+
+
+
+
+
+
 
 SubPhysics * Cub2::clone()const {
     return new Cub2(*this);

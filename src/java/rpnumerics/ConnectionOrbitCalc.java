@@ -111,7 +111,7 @@ public class ConnectionOrbitCalc implements RpCalculation {
         double sigmaA = ViscousProfileData.instance().getPreviousSigma();
         double sigmaB = ViscousProfileData.instance().getSigma();
 
-        System.out.println("Valores de sigmaA e sigmaB : " +sigmaA  +" e " +sigmaB);
+//        System.out.println("Valores de sigmaA e sigmaB : " +sigmaA  +" e " +sigmaB);
 
         long t = System.currentTimeMillis();
 

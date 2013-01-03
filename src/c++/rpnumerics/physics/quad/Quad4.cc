@@ -19,6 +19,23 @@ Quad4::Quad4(const Quad4 & copy):SubPhysics(copy.fluxFunction(),copy.accumulatio
 
 }
 
+
+
+vector<double> *  Quad4::getParams(){
+     
+     
+     
+     vector<double> * paramsVector = new vector<double>();
+      
+      for (int i = 0; i < fluxFunction_->fluxParams().params().size(); i++) {
+          paramsVector->push_back(fluxFunction_->fluxParams().params().component(i));
+
+    }
+
+      return paramsVector;
+
+}
+
 SubPhysics * Quad4::clone()const {
     return new Quad4(*this);
 }

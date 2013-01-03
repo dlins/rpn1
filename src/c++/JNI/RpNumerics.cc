@@ -148,23 +148,21 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getFluxParams
     jmethodID fluxParamsConstructorID = (env)->GetMethodID(fluxParamsClass, "<init>", "(Lwave/util/RealVector;)V");
     jmethodID realVectorConstructorID = env->GetMethodID(realVectorClass, "<init>", "([D)V");
 
+    
+    
+    vector<double> * paramsVector = RpNumerics::getPhysics().getSubPhysics(0).getParams();
 
-    const FluxParams & nativeFluxParams = RpNumerics::getPhysics().fluxFunction().fluxParams();
+//    const FluxParams & nativeFluxParams = RpNumerics::getPhysics().fluxFunction().fluxParams();
 
-    const RealVector & nativeRealVectorParams = nativeFluxParams.params();
+    double nativeRealVectorArray[paramsVector->size()];
 
-    int paramsSize = nativeRealVectorParams.size();
+    for (int i = 0; i < paramsVector->size(); i++) {
 
-
-    double nativeRealVectorArray[paramsSize];
-
-    for (int i = 0; i < paramsSize; i++) {
-
-        nativeRealVectorArray[i] = nativeRealVectorParams.component(i);
+        nativeRealVectorArray[i] = paramsVector->at(i);
     }
 
-    jdoubleArray realVectorArray = env->NewDoubleArray(paramsSize);
-    env->SetDoubleArrayRegion(realVectorArray, 0, paramsSize, nativeRealVectorArray);
+    jdoubleArray realVectorArray = env->NewDoubleArray(paramsVector->size());
+    env->SetDoubleArrayRegion(realVectorArray, 0, paramsVector->size(), nativeRealVectorArray);
 
     jobject realVector = (env)->NewObject(realVectorClass, realVectorConstructorID, realVectorArray);
     jobject fluxParams = (env)->NewObject(fluxParamsClass, fluxParamsConstructorID, realVector);

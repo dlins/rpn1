@@ -67,7 +67,7 @@ public class XZeroController
         // this is to avoid void notifications of enabled/disbled
         if (change.getPropertyName().compareTo("enabled") != 0) {
 
-            System.out.println("Atualizando xzero");
+//            System.out.println("Atualizando xzero");
 
                 // UPDATES THE CALC INIT POINT
                 ((StationaryPointCalc) geomFactory_.rpCalc()).setInitPoint(rpnumerics.RPNUMERICS.getViscousProfileData().getXZero());

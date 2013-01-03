@@ -41,6 +41,7 @@ public:
     ~CoreyQuadPhysics();
 
     void setParams(vector<string>);
+    vector<double> *  getParams();
 
     SubPhysics * clone()const;
 

@@ -106,6 +106,33 @@ void Stone::setParams(vector<string> params) {
 
 }
 
+
+ vector<double> *  Stone::getParams(){
+     
+     
+     
+     vector<double> * paramsVector = new vector<double>();
+      
+      for (int i = 0; i < fluxFunction_->fluxParams().params().size(); i++) {
+
+          
+          paramsVector->push_back(fluxFunction_->fluxParams().component(i));
+
+
+    }
+   StoneFluxFunction & stoneFluxFunction = (StoneFluxFunction &) fluxFunction();
+   
+   
+      
+      for (int i = 0; i < stoneFluxFunction.perm().params().params().size(); i++) {
+          paramsVector->push_back(stoneFluxFunction.perm().params().params().component(i));
+    }
+      
+      return paramsVector;
+      
+      
+}
+
 Stone::Stone() : SubPhysics(StoneFluxFunction(StoneParams(), StonePermParams()), StoneAccumulation(), *defaultBoundary(), Multid::PLANE, "Stone", _SIMPLE_ACCUMULATION_) {
     setHugoniotFunction(new Hugoniot_Curve());
     setDoubleContactFunction(new Double_Contact());

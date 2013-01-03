@@ -71,3 +71,19 @@ void Quad2::setParams(vector<string> params) {
     fluxFunction_->fluxParams(Quad2FluxParams(fluxParamVector));
 
 }
+
+
+vector<double> *  Quad2::getParams(){
+     
+     
+     
+     vector<double> * paramsVector = new vector<double>();
+      
+      for (int i = 0; i < fluxFunction_->fluxParams().params().size(); i++) {
+          paramsVector->push_back(fluxFunction_->fluxParams().params().component(i));
+
+    }
+
+      return paramsVector;
+
+}

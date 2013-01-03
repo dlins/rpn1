@@ -30,6 +30,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
+import rpn.command.ChangeFluxParamsCommand;
 import rpnumerics.Configuration;
 import rpnumerics.RPNUMERICS;
 import wave.util.RealVector;
@@ -72,6 +73,10 @@ public class RPnInputComponent {//TODO Refatorar
 
         label_ = new JLabel[subject.getParamsNames().length];
 
+        slider_ = new JSlider(0, 1, 0);
+
+
+
         observerController_ = new RPnObserverController(this, subject);
         GridBagConstraints gridConstraints = new GridBagConstraints();
 
@@ -94,7 +99,7 @@ public class RPnInputComponent {//TODO Refatorar
             for (int i = 0; i < subject.getParamsNames().length; i++) {         //********* Fazer tratamento se o campo for vazio, para preservar os formatos
 
                 JFormattedTextField textField = new JFormattedTextField(formatter_);
-    
+
                 textField.setColumns(4);
                 textField_[i] = textField;
 
@@ -112,19 +117,18 @@ public class RPnInputComponent {//TODO Refatorar
 
                 label_[i] = labelName;
 
-                if (i==(subject.getParamsNames().length)/2) {
-                    gridConstraints.gridy=0;
+                if (i == (subject.getParamsNames().length) / 2) {
+                    gridConstraints.gridy = 0;
                 }
 
-                if (i<(subject.getParamsNames().length)/2) {
+                if (i < (subject.getParamsNames().length) / 2) {
                     gridConstraints.gridx = 0;
                     panel_.add(label_[i], gridConstraints);
                     panel_.add(textField_[i], gridConstraints);
                     gridConstraints.gridx = 1;
                     panel_.add(textField_[i], gridConstraints);
                     gridConstraints.gridy++;
-                }                
-                else {
+                } else {
                     gridConstraints.gridx = 2;
                     panel_.add(label_[i], gridConstraints);
                     panel_.add(textField_[i], gridConstraints);
@@ -133,7 +137,7 @@ public class RPnInputComponent {//TODO Refatorar
                     gridConstraints.gridy++;
                 }
 
-                
+
 
                 //gridConstraints.gridy++;
 
@@ -142,6 +146,131 @@ public class RPnInputComponent {//TODO Refatorar
 
         }
 
+
+        if (subject.getName().equals("Radio")) {
+            if (RPNUMERICS.physicsID().equals("Stone")) {
+                for (int i = 0; i < option.length; i++) {
+                    option[i].addActionListener(new ListenerRadioButton());
+                    group.add(option[i]);
+                    panel_.add(option[i]);
+                }
+
+            }
+
+        }
+
+
+
+        //*** deverá ser retirado. Tratamentos assim serao feitos a partir do throws (RPnSubject)
+        if (subject.getName().equals("Corey") && RPNUMERICS.physicsID().equals("QuadraticR2")) {
+            panel_.add(new JLabel("A > 0 , B > 0 , A + B < 1"));
+        }
+        //***
+
+
+
+    }
+
+    public RPnInputComponent(RPnSubject subject, String sliderName) {
+
+        // desfazer a associacao com grupo
+        JRadioButton[] option = new JRadioButton[3];
+        ButtonGroup group = new ButtonGroup();
+        option[0] = new JRadioButton("Horizontal");
+        option[1] = new JRadioButton("Vertical");
+        option[2] = new JRadioButton("Mixed");
+
+        textField_ = new JFormattedTextField[subject.getParamsNames().length];
+
+        label_ = new JLabel[subject.getParamsNames().length];
+
+        slider_ = new JSlider(0, 10, 0);
+
+
+        slider_.setMinorTickSpacing(1);
+
+        slider_.setMajorTickSpacing(10);
+
+        slider_.setName(sliderName);
+
+
+
+
+        slider_.addChangeListener(new SliderHandler());
+
+
+        observerController_ = new RPnObserverController(this, subject);
+        GridBagConstraints gridConstraints = new GridBagConstraints();
+
+        gridConstraints.fill = GridBagConstraints.BOTH;
+
+        gridConstraints.gridwidth = 1;
+        gridConstraints.gridheight = 1;
+        gridConstraints.ipadx = 10;
+        gridConstraints.gridy = 0;
+        gridConstraints.gridx = 0;
+
+        GridBagLayout gridBayLayout = new GridBagLayout();
+
+        panel_.setLayout(gridBayLayout);
+        panel_.setName(subject.getName());
+
+
+        if (subject.getName() == null ? "Radio" != null : !subject.getName().equals("Radio")) {   //*** Leandro teste (introduzi o if)
+
+            for (int i = 0; i < subject.getParamsNames().length; i++) {         //********* Fazer tratamento se o campo for vazio, para preservar os formatos
+
+                JFormattedTextField textField = new JFormattedTextField(formatter_);
+
+                textField.setColumns(4);
+                textField_[i] = textField;
+
+                textField.addFocusListener(new TextFocusListener());
+
+                textField.setName(subject.getParamsNames()[i]);
+                textField.getDocument().addDocumentListener(new TextObserverValueHandler());
+
+
+                JLabel labelName = new JLabel(subject.getParamsNames()[i]);
+
+                if (subject.getParamsNames()[i].equals("lambda")) {
+                    labelName = new JLabel("  \u03BB");
+                }
+
+                label_[i] = labelName;
+
+                if (i == (subject.getParamsNames().length) / 2) {
+                    gridConstraints.gridy = 0;
+                }
+
+                if (i < (subject.getParamsNames().length) / 2) {
+                    gridConstraints.gridx = 0;
+                    panel_.add(label_[i], gridConstraints);
+                    panel_.add(textField_[i], gridConstraints);
+                    gridConstraints.gridx = 1;
+                    panel_.add(textField_[i], gridConstraints);
+                    gridConstraints.gridy++;
+                } else {
+                    gridConstraints.gridx = 2;
+                    panel_.add(label_[i], gridConstraints);
+                    panel_.add(textField_[i], gridConstraints);
+                    gridConstraints.gridx = 3;
+                    panel_.add(textField_[i], gridConstraints);
+                    gridConstraints.gridy++;
+                }
+
+
+
+                //gridConstraints.gridy++;
+
+
+            }
+
+        }
+
+        gridConstraints.gridy++;
+//        panel_.add(new JLabel(sliderName),gridConstraints);
+        panel_.add(slider_, gridConstraints);
 
         if (subject.getName().equals("Radio")) {
             if (RPNUMERICS.physicsID().equals("Stone")) {
@@ -301,6 +430,45 @@ public class RPnInputComponent {//TODO Refatorar
         return (int) ((((value - minRange_) / (deltaValue)) * deltaSlider) + slider_.getMinimum());
     }
 
+    private class SliderHandler implements ChangeListener {
+
+        public void stateChanged(ChangeEvent e) {
+
+            JSlider slider = (JSlider) e.getSource();
+            String[] newValues = new String[textField_.length];
+
+
+
+            for (int j = 0; j < textField_.length; j++) {
+
+                if (textField_[j].getName().equals(slider.getName())) {
+                    Double sliderValue = new Double(slider.getValue());
+                    sliderValue /= 10;
+                    textField_[j].setText(String.valueOf(sliderValue));
+
+                }
+
+                newValues[j] = textField_[j].getText();
+            }
+
+
+//            if (!slider.getValueIsAdjusting()) {
+
+                observerController_.propertyChange(new PropertyChangeEvent(this, slider.getName(), newValues, newValues));
+
+                RPNUMERICS.applyFluxParams();
+                rpn.command.ChangeFluxParamsCommand.instance().applyChange(new PropertyChangeEvent(rpn.command.ChangeFluxParamsCommand.instance(), "", null, RPNUMERICS.getFluxParams().getParams()));
+
+//            }
+
+
+                rpn.command.ChangeFluxParamsCommand.instance().updatePhaseDiagram();
+
+
+
+        }
+    }
+
     private class TextValueHandler implements DocumentListener {
 
         public void insertUpdate(DocumentEvent arg0) {
@@ -445,6 +613,4 @@ public class RPnInputComponent {//TODO Refatorar
 
         }
     }
-    
 }
-

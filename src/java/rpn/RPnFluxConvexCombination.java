@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package rpn;
 
 import rpnumerics.Configuration;
@@ -15,15 +14,11 @@ import wave.util.RealVector;
  */
 public class RPnFluxConvexCombination extends RPnFluxParamsSubject {
 
-
-
     //*** Leandro teste
     public RPnFluxConvexCombination(String[] paramsValues, String[] paramsNames) {
         super(new String[RPNUMERICS.getFluxParams().getParams().getSize()], "Combination", paramsNames, paramsValues);
-System.out.println("Tamanho do fluxo: "+RPNUMERICS.getFluxParams().getParams().getSize());
+        System.out.println("Tamanho do fluxo: " + RPNUMERICS.getFluxParams().getParams().getSize());
     }
-
-
 
     //*** Leandro teste
     @Override
@@ -34,28 +29,33 @@ System.out.println("Tamanho do fluxo: "+RPNUMERICS.getFluxParams().getParams().g
         RealVector A = new RealVector(newState.getSize());  //initial
         RealVector B = new RealVector(newState.getSize());
 
-        Double alpha = new Double(stringArray[stringArray.length-1]);
 
-        for (int i=0; i<(stringArray.length-1)/2; i++) {
+        for (int j = 0; j < stringArray.length; j++) {
+            String string = stringArray[j];
+            System.out.println(string);
+
+        }
+
+
+        Double alpha = new Double(stringArray[stringArray.length - 1]);
+
+        for (int i = 0; i < (stringArray.length - 1) / 2; i++) {
             A.setElement(i, new Double(stringArray[i]));
         }
 
-        for (int i=(stringArray.length-1)/2; i<stringArray.length-1; i++) {
-            B.setElement(i-(stringArray.length-1)/2, new Double(stringArray[i]));
+        for (int i = (stringArray.length - 1) / 2; i < stringArray.length - 1; i++) {
+            B.setElement(i - (stringArray.length - 1) / 2, new Double(stringArray[i]));
         }
 
-        A.scale(1-alpha);
+        A.scale(1 - alpha);
         B.scale(alpha);
         A.add(B);
 
-        for (int i=0; i<newState.getSize();i++) {
+        for (int i = 0; i < newState.getSize(); i++) {
             newState.setElement(i, A.getElement(i));
         }
 
         setState(RPnFluxParamsSubject.realVectorToStringArray(newState));       //*** Leandro teste
 
     }
-
-
-
 }

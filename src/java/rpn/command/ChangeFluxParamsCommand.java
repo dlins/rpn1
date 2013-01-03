@@ -75,7 +75,7 @@ public class ChangeFluxParamsCommand extends RpModelConfigChangeCommand {
 
     public void updatePhaseDiagram() {
 
-        System.out.println("RPnDataModule.PHASESPACE.state() ::::: " + RPnDataModule.PHASESPACE.state());
+//        System.out.println("RPnDataModule.PHASESPACE.state() ::::: " + RPnDataModule.PHASESPACE.state());
 
         //--------------------- Remove os pontos estacionarios
         Iterator it = RPnDataModule.PHASESPACE.getGeomObjIterator();

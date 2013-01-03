@@ -41,6 +41,7 @@ public:
     Boundary * defaultBoundary()const;
 
     void setParams(vector<string>);
+    vector<double> * getParams();
 
 };
 

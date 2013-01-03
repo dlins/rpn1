@@ -116,7 +116,7 @@ public class ViscousProfileData extends ShockRarefactionProfile {
         previousDot = getDot();
         dot_ = poincareLimits.dot(connectionLimits);
 
-        System.out.println("Sinal do produto interno :::::::: " + Math.signum(dot_));
+//        System.out.println("Sinal do produto interno :::::::: " + Math.signum(dot_));
     }
 
     public double getPreviousDot() {

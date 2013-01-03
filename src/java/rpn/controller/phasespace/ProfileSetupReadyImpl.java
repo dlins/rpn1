@@ -151,7 +151,7 @@ public class ProfileSetupReadyImpl extends PoincareReadyImpl
             RPNUMERICS.getViscousProfileData().updateDelta(p1, p2);
 
 
-            System.out.println("Valores dos Dots no ProfileSetup: ");
+//            System.out.println("Valores dos Dots no ProfileSetup: ");
             System.out.println(ViscousProfileData.instance().getPreviousDot() + "  e  " +ViscousProfileData.instance().getDot());
 
 

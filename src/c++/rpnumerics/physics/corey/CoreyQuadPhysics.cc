@@ -58,6 +58,21 @@ void CoreyQuadPhysics::setParams(vector<string> newParams) {
 
 }
 
+
+vector<double> *  CoreyQuadPhysics::getParams(){
+     
+     
+     vector<double> * paramsVector = new vector<double>();
+      
+      for (int i = 0; i < fluxFunction_->fluxParams().params().size(); i++) {
+          paramsVector->push_back(fluxFunction_->fluxParams().params().component(i));
+
+    }
+
+      return paramsVector;
+
+}
+
 Boundary * CoreyQuadPhysics::defaultBoundary() const{
 
     RealVector min(2);

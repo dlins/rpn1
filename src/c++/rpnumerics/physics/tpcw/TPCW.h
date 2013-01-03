@@ -52,6 +52,7 @@ public:
 
     void setParams(vector<string>);
 
+    vector<double> *  getParams();
     void preProcess(RealVector &);
     void postProcess(vector<RealVector> &);
     void postProcess(RealVector &);

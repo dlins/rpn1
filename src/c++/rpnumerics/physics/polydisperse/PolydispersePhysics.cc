@@ -68,6 +68,22 @@ void PolydispersePhysics::setParams(vector<string> newParams) {
 
 }
 
+
+vector<double> *  PolydispersePhysics::getParams(){
+     
+     
+     
+     vector<double> * paramsVector = new vector<double>();
+      
+      for (int i = 0; i < fluxFunction_->fluxParams().params().size(); i++) {
+          paramsVector->push_back(fluxFunction_->fluxParams().params().component(i));
+
+    }
+
+      return paramsVector;
+
+}
+
 Boundary * PolydispersePhysics::defaultBoundary() const{
 
     RealVector min(2);

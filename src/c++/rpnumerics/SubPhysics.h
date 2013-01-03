@@ -96,6 +96,8 @@ public:
     virtual ~SubPhysics();
 
     virtual void setParams(vector<string>);
+    
+    virtual vector<double> * getParams()=0;
 
     const int type() const;
 
