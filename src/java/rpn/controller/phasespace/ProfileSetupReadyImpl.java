@@ -11,6 +11,7 @@ import rpn.controller.ui.UIController;
 import rpn.parser.RPnDataModule;
 import rpn.command.FindProfileCommand;
 import rpn.command.OrbitPlotCommand;
+import rpnumerics.HugoniotCurve;
 import rpnumerics.ManifoldOrbit;
 import rpnumerics.ManifoldOrbitCalc;
 import rpnumerics.Orbit;
@@ -71,6 +72,11 @@ public class ProfileSetupReadyImpl extends PoincareReadyImpl
 
         ManifoldGeom[] manifoldGeom = null;
 
+        // ---
+        HugoniotCurveGeom hGeom = ((NUMCONFIG) RPnDataModule.PHASESPACE.state()).hugoniotGeom();
+        HugoniotCurve hCurve = (HugoniotCurve) hGeom.geomFactory().geomSource();
+        // ---
+
         System.out.println("Esta no plot de ProfileSetupReadyImpl *************************************");
 
         StationaryPoint statPoint = null;
@@ -79,16 +85,38 @@ public class ProfileSetupReadyImpl extends PoincareReadyImpl
         if (geom instanceof XZeroGeom) {
 
             statPoint = (StationaryPoint) geom.geomFactory().geomSource();
-            direction = Orbit.FORWARD_DIR;
-            manifoldGeom = buildManifold(statPoint, direction);
-            fwdManifoldGeom_ = manifoldGeom[0];
+
+            // ---
+            if (hCurve.getDirection()==Orbit.FORWARD_DIR) {
+                direction = Orbit.FORWARD_DIR;
+                manifoldGeom = buildManifold(statPoint, direction);
+                fwdManifoldGeom_ = manifoldGeom[0];
+            }
+            if (hCurve.getDirection()==Orbit.BACKWARD_DIR) {
+                direction = Orbit.BACKWARD_DIR;
+                manifoldGeom = buildManifold(statPoint, direction);
+                bwdManifoldGeom_ = manifoldGeom[0];
+            }
+            // ---
 
         }
         if (geom instanceof StationaryPointGeom && !(geom instanceof XZeroGeom)) {
             statPoint = (StationaryPoint) geom.geomFactory().geomSource();
-            direction = Orbit.BACKWARD_DIR;
-            manifoldGeom = buildManifold(statPoint, direction);
-            bwdManifoldGeom_ = manifoldGeom[0];
+
+            // ---
+            if (hCurve.getDirection()==Orbit.FORWARD_DIR) {
+                direction = Orbit.BACKWARD_DIR;
+                manifoldGeom = buildManifold(statPoint, direction);
+                bwdManifoldGeom_ = manifoldGeom[0];
+            }
+            if (hCurve.getDirection()==Orbit.BACKWARD_DIR) {
+                direction = Orbit.FORWARD_DIR;
+                manifoldGeom = buildManifold(statPoint, direction);
+                fwdManifoldGeom_ = manifoldGeom[0];
+            }
+            // ---
+
+
             testeDotPoincare();
         }
 
