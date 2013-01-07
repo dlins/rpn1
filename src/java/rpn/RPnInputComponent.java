@@ -184,7 +184,8 @@ public class RPnInputComponent {//TODO Refatorar
 
         label_ = new JLabel[subject.getParamsNames().length];
 
-        slider_ = new JSlider(0, 10, 0);
+        //slider_ = new JSlider(0, 10, 0);
+        slider_ = new JSlider(0, 100, 0);
 
 
         slider_.setMinorTickSpacing(1);
@@ -437,13 +438,12 @@ public class RPnInputComponent {//TODO Refatorar
             JSlider slider = (JSlider) e.getSource();
             String[] newValues = new String[textField_.length];
 
-
-
             for (int j = 0; j < textField_.length; j++) {
 
                 if (textField_[j].getName().equals(slider.getName())) {
                     Double sliderValue = new Double(slider.getValue());
-                    sliderValue /= 10;
+                    //sliderValue /= 10;
+                    sliderValue /= 100;
                     textField_[j].setText(String.valueOf(sliderValue));
 
                 }
@@ -451,20 +451,16 @@ public class RPnInputComponent {//TODO Refatorar
                 newValues[j] = textField_[j].getText();
             }
 
-
-//            if (!slider.getValueIsAdjusting()) {
-
+            // Este if estava comentado! Com isso, a cada evento do slider, o cálculo da Hugoniot era feito mais de uma vez...
+            // Com o if ativo, o cálculo é feito uma vez por evento (correto!)
+            // MAS O SLIDER PERDE PASSAGEM CONTÍNUA DE EVENTO
+            //if (!slider.getValueIsAdjusting()) {
                 observerController_.propertyChange(new PropertyChangeEvent(this, slider.getName(), newValues, newValues));
-
                 RPNUMERICS.applyFluxParams();
                 rpn.command.ChangeFluxParamsCommand.instance().applyChange(new PropertyChangeEvent(rpn.command.ChangeFluxParamsCommand.instance(), "", null, RPNUMERICS.getFluxParams().getParams()));
+            //}
 
-//            }
-
-
-                rpn.command.ChangeFluxParamsCommand.instance().updatePhaseDiagram();
-
-
+            rpn.command.ChangeFluxParamsCommand.instance().updatePhaseDiagram();
 
         }
     }

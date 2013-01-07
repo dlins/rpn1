@@ -88,6 +88,11 @@ void GridValuesFactory::updateGrids() {
 
         resolution.clear();
 
+        //---
+        cout << "Valor de factoryElement->grid.rows() ::: " << factoryElement->grid.rows() << endl;
+        cout << "Valor de factoryElement->grid.cols() ::: " << factoryElement->grid.cols() << endl;
+        //---
+
         resolution.push_back(factoryElement->grid.rows());
         resolution.push_back(factoryElement->grid.cols());
 
