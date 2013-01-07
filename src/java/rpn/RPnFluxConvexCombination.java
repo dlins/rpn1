@@ -29,12 +29,12 @@ public class RPnFluxConvexCombination extends RPnFluxParamsSubject {
         RealVector A = new RealVector(newState.getSize());  //initial
         RealVector B = new RealVector(newState.getSize());
 
-
-        for (int j = 0; j < stringArray.length; j++) {
-            String string = stringArray[j];
-            System.out.println(string);
-
-        }
+//
+//        for (int j = 0; j < stringArray.length; j++) {
+//            String string = stringArray[j];
+//            System.out.println(string);
+//
+//        }
 
 
         Double alpha = new Double(stringArray[stringArray.length - 1]);
@@ -47,6 +47,8 @@ public class RPnFluxConvexCombination extends RPnFluxParamsSubject {
             B.setElement(i - (stringArray.length - 1) / 2, new Double(stringArray[i]));
         }
 
+        
+        System.out.println(alpha);
         A.scale(1 - alpha);
         B.scale(alpha);
         A.add(B);

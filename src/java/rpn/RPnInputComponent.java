@@ -16,6 +16,7 @@ import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
 import java.text.DecimalFormat;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map.Entry;
 import java.util.Set;
 import javax.swing.ButtonGroup;
@@ -184,7 +185,21 @@ public class RPnInputComponent {//TODO Refatorar
 
         label_ = new JLabel[subject.getParamsNames().length];
 
-        slider_ = new JSlider(0, 10, 0);
+        slider_ = new JSlider(0, 20, 0);
+
+        slider_.setSnapToTicks(false);
+
+
+//        Hashtable<String, Integer> hashLabel = new Hashtable<String, Integer>();
+//
+//
+//        hashLabel.put("0", 0);
+//        hashLabel.put("20", 1);
+
+
+//        slider_.setLabelTable(hashLabel);
+
+        slider_.setPaintTicks(true);
 
 
         slider_.setMinorTickSpacing(1);
@@ -192,9 +207,6 @@ public class RPnInputComponent {//TODO Refatorar
         slider_.setMajorTickSpacing(10);
 
         slider_.setName(sliderName);
-
-
-
 
         slider_.addChangeListener(new SliderHandler());
 
@@ -438,12 +450,12 @@ public class RPnInputComponent {//TODO Refatorar
             String[] newValues = new String[textField_.length];
 
 
-
+            Double sliderValue = new Double(slider.getValue());
             for (int j = 0; j < textField_.length; j++) {
 
                 if (textField_[j].getName().equals(slider.getName())) {
-                    Double sliderValue = new Double(slider.getValue());
-                    sliderValue /= 10;
+
+                    sliderValue /= 20;
                     textField_[j].setText(String.valueOf(sliderValue));
 
                 }
@@ -452,17 +464,25 @@ public class RPnInputComponent {//TODO Refatorar
             }
 
 
-//            if (!slider.getValueIsAdjusting()) {
 
+
+
+            Double alpha = new Double(textField_[textField_.length - 1].getText());
+
+            System.out.println("Valor de alpha: " + alpha + " Slider value: " + sliderValue);
+
+            if (sliderValue != alpha) {
                 observerController_.propertyChange(new PropertyChangeEvent(this, slider.getName(), newValues, newValues));
 
                 RPNUMERICS.applyFluxParams();
                 rpn.command.ChangeFluxParamsCommand.instance().applyChange(new PropertyChangeEvent(rpn.command.ChangeFluxParamsCommand.instance(), "", null, RPNUMERICS.getFluxParams().getParams()));
 
-//            }
-
-
                 rpn.command.ChangeFluxParamsCommand.instance().updatePhaseDiagram();
+
+            }
+
+
+
 
 
 

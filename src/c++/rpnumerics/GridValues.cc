@@ -38,6 +38,9 @@ void GridValues::fill_values_on_grid(const Boundary *b,
         grid_resolution.resize(dim);
         for (int i = 0; i < dim; i++) grid_resolution.component(i) = (fabs(pmax.component(i) - pmin.component(i))) / (double) (number_of_cells[i]);
 
+        
+        cout<<"Number of cells: "<<number_of_cells[0]<<" "<<number_of_cells[1]<<endl;
+        
         grid.resize(number_of_cells[0] + 1, number_of_cells[1] + 1);
 
         for (int i = 0; i <= number_of_cells[0]; i++) {

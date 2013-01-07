@@ -28,19 +28,12 @@ GridValuesFactory::GridValuesFactory(const Physics * physics) : gridArray_(new m
 GridValues * GridValuesFactory::getGrid(const string & gridName) {
 
 
-    
+
     if (gridArray_->count(gridName) == 1) {
         return gridArray_->operator [](gridName);
     } else {
-    cout <<"Nome do grid:"<<gridName<<endl;
-    cout <<"Nome da subfisica :"<<physics_->getSubPhysics(0).ID()<<endl;
+       
         const Boundary* boundary = physics_->getSubPhysics(0).getPreProcessedBoundary();
-
-        cout << "Min: " << boundary->minimums() << endl;
-        cout << "Max: " << boundary->maximums() << endl;
-
-        cout << "Parametros flux: em gv " << physics_->getSubPhysics(0).fluxFunction().fluxParams().params() << endl;
-        cout << "Parametros accum em gv: " << physics_->getSubPhysics(0).accumulation().accumulationParams().params() << endl;
 
         vector<int> noc = getDefaultGridResolution(gridName);
 
@@ -48,8 +41,6 @@ GridValues * GridValuesFactory::getGrid(const string & gridName) {
 
 
         gridArray_->operator [](gridName) = returnedGrid;
-
-        cout << "Criando grid values " << gridName << endl;
 
 
         return returnedGrid;
@@ -70,28 +61,19 @@ void GridValuesFactory::setResolution(const string & gridName, vector<int> newRe
 
 }
 
-void GridValuesFactory::updateGrids() {
+void GridValuesFactory::invalidateGrids() {
 
     map<string, GridValues *>::iterator it;
-
-
-    vector<int> resolution;
-
-    //      const Boundary* boundary = &physics_->boundary();
-
-
-    const Boundary* boundary = physics_->getSubPhysics(0).getPreProcessedBoundary();
 
     for (it = gridArray_->begin(); it != gridArray_->end(); it++) {
 
         GridValues * factoryElement = (*it).second;
 
-        resolution.clear();
-
-        resolution.push_back(factoryElement->grid.rows());
-        resolution.push_back(factoryElement->grid.cols());
-
-        factoryElement->set_grid(boundary, boundary->minimums(), boundary->maximums(), resolution);
+        factoryElement->grid_computed = false;
+        factoryElement->functions_on_grid_computed = false;
+        factoryElement-> Jacobians_on_grid_computed = false;
+        factoryElement-> dd_computed = false;
+        factoryElement->e_computed = false;
 
     }
 

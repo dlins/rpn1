@@ -74,18 +74,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_PointLevelCalc_calcNative(JNIEnv * env
     int dimension = RpNumerics::getPhysics().domain().dim();
 
     Eigenvalue_Contour ec;
-    
-    cout <<"Antes de pre processar: "<<realVectorInput<<endl;
 
     RpNumerics::getPhysics().getSubPhysics(0).preProcess(realVectorInput);
-    
     
     if (realVectorInput.size()==3){//TODO REMOVE !!
         realVectorInput.component(2)=1.0;
     }
-    
-    
-    cout <<"Depois de pre processar: "<<realVectorInput<<endl;
 
     ec.set_level_from_point(& RpNumerics::getPhysics().fluxFunction(), & RpNumerics::getPhysics().accumulation(),
             family, realVectorInput);

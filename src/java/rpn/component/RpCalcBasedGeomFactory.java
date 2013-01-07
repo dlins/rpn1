@@ -10,10 +10,8 @@ import java.util.List;
 import rpn.RPnDesktopPlotter;
 import rpn.controller.RpCalcController;
 import rpn.controller.RpController;
-import rpn.parser.RPnDataModule;
 
 import rpnumerics.Area;
-import rpnumerics.HugoniotCurve;
 import rpnumerics.RPnCurve;
 
 import rpnumerics.RpCalculation;
@@ -111,6 +109,9 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
     public void updateGeom() {
 //        System.out.println("Estou no updateGeom() sem area ... ");
         try {
+            geomSource_=null;
+            geom_=null;
+//            System.gc();
             geomSource_ = calc_.recalc();
             geom_ = createGeomFromSource();
             isGeomOutOfDate_ = true;
