@@ -1,7 +1,12 @@
 package rpn.component;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import rpn.RPnDesktopPlotter;
+import rpn.parser.RPnDataModule;
 import rpnumerics.*;
 import wave.multid.view.ViewingAttr;
 import wave.util.*;
@@ -114,20 +119,98 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
 
     }
 
+
+    // ----------------------------------- NAO HAVIA ATÉ 31/10
+    @Override
+    public void updateGeom(List<Area> areaToRefine, List<Integer> segmentsToRemove) {
+
+        System.out.println("updateGeom de Bifurcation...");
+
+        List<RealSegment> segRem = new ArrayList<RealSegment>();
+        List<RealSegment> segRemLeft = new ArrayList<RealSegment>();
+
+        BifurcationCurve curve = (BifurcationCurve) geomSource();
+
+        isGeomOutOfDate_ = true;
+
+        for (Integer i : segmentsToRemove) {
+            segRem.add(((BifurcationCurve) curve).rightSegments().get(i));
+            segRemLeft.add(((BifurcationCurve) curve).leftSegments().get(i));
+        }
+
+        ((BifurcationCurve) curve).rightSegments().removeAll(segRem);
+        ((BifurcationCurve) curve).leftSegments().removeAll(segRemLeft);
+        segRem.addAll(segRemLeft);
+        curve.segments().removeAll(segRem);
+
+        try {
+            leftGeom_ = createLeftGeom();
+            rightGeom_ = createRightGeom();
+
+        } catch (RpException ex) {
+            Logger.getLogger(BifurcationCurveGeomFactory.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        RPnDataModule.LEFTPHASESPACE.update();
+        isGeomOutOfDate_ = true;
+        RPnDataModule.RIGHTPHASESPACE.update();
+
+        geom_ = createGeomFromSource();
+
+        isGeomOutOfDate_ = true;
+        RPnDataModule.PHASESPACE.update();
+
+    }
+    // -----------------------------------
+
+
+//    public RpGeometry createGeomFromSource() {
+//
+//        BifurcationCurve curve = (BifurcationCurve) geomSource();
+//
+//        RealSegGeom[] bifurcationArray = new RealSegGeom[curve.segments().size()];
+//
+//        int i = 0;
+//        for (Object realSegment : curve.segments()) {
+//
+//            bifurcationArray[i] = new RealSegGeom((RealSegment) realSegment, leftViewingAttr());
+//            i++;
+//        }
+//
+//
+//        return new BifurcationCurveGeom(bifurcationArray, this);
+//
+//    }
+
+
     public RpGeometry createGeomFromSource() {
 
         BifurcationCurve curve = (BifurcationCurve) geomSource();
 
         RealSegGeom[] bifurcationArray = new RealSegGeom[curve.segments().size()];
 
+        RealSegGeom[] bifurcationArrayRight = new RealSegGeom[curve.rightSegments().size()];
+        RealSegGeom[] bifurcationArrayLeft = new RealSegGeom[curve.leftSegments().size()];
+
+        System.out.println("curve.segments().size() ::::::: " +curve.segments().size());
+        System.out.println("curve.rightSegments().size() :: " +curve.rightSegments().size());
+        System.out.println("curve.leftSegments().size() ::: " +curve.leftSegments().size());
+
         int i = 0;
-        for (Object realSegment : curve.segments()) {
-        
-            bifurcationArray[i] = new RealSegGeom((RealSegment) realSegment, leftViewingAttr());
+        for (Object realSegment : curve.rightSegments()) {
+            bifurcationArrayRight[i] = new RealSegGeom((RealSegment) realSegment, rightViewingAttr());
+            bifurcationArray[i] = bifurcationArrayRight[i];
             i++;
         }
 
-        
+        int j = 0;
+        for (Object realSegment : curve.leftSegments()) {
+            bifurcationArrayLeft[j] = new RealSegGeom((RealSegment) realSegment, leftViewingAttr());
+            bifurcationArray[i+j] = bifurcationArrayLeft[j];
+            j++;
+        }
+
+
         return new BifurcationCurveGeom(bifurcationArray, this);
 
     }
