@@ -6,6 +6,7 @@
  */
 package rpnumerics;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import wave.util.*;
@@ -549,6 +550,10 @@ public class ManifoldOrbitCalc implements RpCalculation {
         DT.mul(UA);
         D.transpose(DT);
         return D;
+    }
+
+    public RpSolution recalc(List<Area> area) throws RpException {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 

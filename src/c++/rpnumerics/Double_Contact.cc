@@ -80,13 +80,20 @@ void Double_Contact::curve(const FluxFunction *lf, const AccumulationFunction *l
     right_family = rfam;
 
     // It is assumed that the grid_value must be the same
-    singular = ( (left_family == right_family) && (lg == rg) );
-
+//    singular = ( (left_family == right_family) && (lg == rg) );
+    singular=true;
     gv_left->fill_eigenpairs_on_grid(lff, laa);
+    
+    cout<<"Acabei left"<<endl;
     gv_right->fill_eigenpairs_on_grid(rff, raa);
 
+    cout<<"Acabei right"<<endl;
+    
+    
     left_curve.clear(); 
     right_curve.clear(); 
+    
+    
 
     Contour2x2_Method::curve2x2(this, left_curve, right_curve);
 

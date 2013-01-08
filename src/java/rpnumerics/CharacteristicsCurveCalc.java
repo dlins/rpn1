@@ -6,6 +6,8 @@
  */
 package rpnumerics;
 
+import java.util.List;
+
 public class CharacteristicsCurveCalc implements RpCalculation {
     //
     // Constants
@@ -48,6 +50,10 @@ public class CharacteristicsCurveCalc implements RpCalculation {
     private native RpSolution nativeCalc(OrbitPoint[] riemannProfilePoints, int samplingRate) throws RpException;
 
     public RpSolution recalc(Area area) throws RpException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public RpSolution recalc(List<Area> area) throws RpException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }

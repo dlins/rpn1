@@ -106,7 +106,9 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
             if (panel!=phaseSpacePanel  &&  panel.getSelectedAreas().size()>0) {
                 correspondentAreas.addAll(panel.getSelectedAreas());
                 // ??? Necessario instanciar objeto Area ???
-                areasToRefine.add(new Area(resolution_, correspondentAreas.get(0)));
+                Area correspondentArea = new Area(resolution_, correspondentAreas.get(0));
+                System.out.println("Correspondent area: "+correspondentArea);
+                areasToRefine.add(correspondentArea);
             }
         }
         // -------------------
@@ -122,7 +124,15 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
                     List<Integer> segmentIndex = geomObjView.contains((Polygon)polygon.getShape());
                     if (!segmentIndex.isEmpty()) {
                         indexToRemove.addAll(segmentIndex);
-                        areasToRefine.add(new Area(resolution_, polygon));
+                        
+                        Area principalArea = new Area(resolution_, polygon);
+                        
+                        areasToRefine.add(principalArea);
+                        
+                        System.out.println("Resolucao: "+resolution_);
+                        System.out.println("Principal area: "+ principalArea);
+                        
+                        
 
                     }
 

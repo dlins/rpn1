@@ -5,6 +5,8 @@
  */
 package rpnumerics;
 
+import java.util.List;
+
 public abstract class ContourCurveCalc implements RpCalculation {
 
     private ContourParams params_;
@@ -24,7 +26,7 @@ public abstract class ContourCurveCalc implements RpCalculation {
       //
     // Accessors/Mutators
     //
-    public RpSolution recalc(Area area) throws RpException {
+    public RpSolution recalc(List<Area> area) throws RpException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
