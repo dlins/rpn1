@@ -48,7 +48,7 @@ public class RPnConfigurationDialog extends RPnDialog {
         for (Entry<String, Configuration> entry : configSet) {
 
             String configurationType = entry.getValue().getType();
-            RPnInputComponent inputComponent = new RPnInputComponent(entry.getValue());
+            RPnInputComponent inputComponent = new RPnInputComponent(entry.getValue(),true);
             inputComponent.keepParameter("resolution");
             if (configurationType.equalsIgnoreCase("CURVE") && entry.getValue().getName().equals("inflectioncurve")) {
 

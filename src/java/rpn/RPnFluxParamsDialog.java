@@ -116,7 +116,7 @@ public class RPnFluxParamsDialog extends RPnDialog {
 
         removeDefaultApplyBehavior();
 
-        RPnInputComponent observerInputComponent = new RPnInputComponent(paramObserver.getConfiguration());
+        RPnInputComponent observerInputComponent = new RPnInputComponent(paramObserver.getConfiguration(),true);
         paramObserver.setView(observerInputComponent);
 
         fluxParamsPanel_.add(observerInputComponent.getContainer());
@@ -139,7 +139,7 @@ public class RPnFluxParamsDialog extends RPnDialog {
 
 
         Configuration physicsConfiguration = RPNUMERICS.getConfiguration(RPNUMERICS.physicsID());
-        fluxParamInputComponent_ = new RPnInputComponent(physicsConfiguration.getConfiguration("fluxfunction"));
+        fluxParamInputComponent_ = new RPnInputComponent(physicsConfiguration.getConfiguration("fluxfunction"),true);
         fluxParamsPanel_.add(fluxParamInputComponent_.getContainer());
 
 
