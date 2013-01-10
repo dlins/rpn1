@@ -98,20 +98,7 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
         List<AreaSelected> graphicsArea = phaseSpacePanel.getSelectedAreas();
 
 
-        // ------ Preenche uma lista de areas correspondentes, caso existam
-        List<AreaSelected> correspondentAreas = new ArrayList<AreaSelected>();
-        Iterator<RPnPhaseSpacePanel> phaseSpacePanelIterator = UIController.instance().getInstalledPanelsIterator();
-        while (phaseSpacePanelIterator.hasNext()) {
-            RPnPhaseSpacePanel panel = phaseSpacePanelIterator.next();
-            if (panel!=phaseSpacePanel  &&  panel.getSelectedAreas().size()>0) {
-                correspondentAreas.addAll(panel.getSelectedAreas());
-                // ??? Necessario instanciar objeto Area ???
-                Area correspondentArea = new Area(resolution_, correspondentAreas.get(0));
-                System.out.println("Correspondent area: "+correspondentArea);
-                areasToRefine.add(correspondentArea);
-            }
-        }
-        // -------------------
+    
 
 
 
@@ -141,6 +128,22 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
             }
 
         }
+        
+        
+//            // ------ Preenche uma lista de areas correspondentes, caso existam
+//        List<AreaSelected> correspondentAreas = new ArrayList<AreaSelected>();
+//        Iterator<RPnPhaseSpacePanel> phaseSpacePanelIterator = UIController.instance().getInstalledPanelsIterator();
+//        while (phaseSpacePanelIterator.hasNext()) {
+//            RPnPhaseSpacePanel panel = phaseSpacePanelIterator.next();
+//            if (panel!=phaseSpacePanel  &&  panel.getSelectedAreas().size()>0) {
+//                correspondentAreas.addAll(panel.getSelectedAreas());
+//                // ??? Necessario instanciar objeto Area ???
+//                Area correspondentArea = new Area(resolution_, correspondentAreas.get(0));
+//                System.out.println("Correspondent area: "+correspondentArea);
+//                areasToRefine.add(correspondentArea);
+//            }
+//        }
+//        // -------------------
 
         
         RpCalcBasedGeomFactory factory = (RpCalcBasedGeomFactory) selectedGeometry.geomFactory();

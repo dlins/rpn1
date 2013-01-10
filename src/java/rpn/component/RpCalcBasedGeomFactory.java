@@ -133,7 +133,6 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
 
         curve.segments().removeAll(segRem);
         
-//        for (Area area : areaToRefine) {
             try {
                 RPnCurve newCurve = (RPnCurve) calc_.recalc(areaToRefine);
 
@@ -141,8 +140,6 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
             } catch (RpException ex) {
                 ex.printStackTrace();
             }
-
-//        }
 
         geom_ = createGeomFromSource();
 

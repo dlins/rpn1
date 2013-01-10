@@ -141,7 +141,7 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
         segRem.addAll(segRemLeft);
         curve.segments().removeAll(segRem);
 
-
+        System.out.println("Segmentos removidos: "+segRem.size());
 
             try {
                 RPnCurve newCurve = (RPnCurve) calc_.recalc(areaToRefine);
@@ -151,7 +151,7 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
             }
 
         
-
+///////////////////////////////////////////////////////////
 
 
 
@@ -175,54 +175,61 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
     }
     // -----------------------------------
 
-    public RpGeometry createGeomFromSource() {
-
-        BifurcationCurve curve = (BifurcationCurve) geomSource();
-
-        RealSegGeom[] bifurcationArray = new RealSegGeom[curve.segments().size()];
-
-        int i = 0;
-        for (Object realSegment : curve.segments()) {
-
-            bifurcationArray[i] = new RealSegGeom((RealSegment) realSegment, leftViewingAttr());
-            i++;
-        }
-
-
-        return new BifurcationCurveGeom(bifurcationArray, this);
-
-    }
 //    public RpGeometry createGeomFromSource() {
 //
 //        BifurcationCurve curve = (BifurcationCurve) geomSource();
 //
 //        RealSegGeom[] bifurcationArray = new RealSegGeom[curve.segments().size()];
 //
-//        RealSegGeom[] bifurcationArrayRight = new RealSegGeom[curve.rightSegments().size()];
-//        RealSegGeom[] bifurcationArrayLeft = new RealSegGeom[curve.leftSegments().size()];
-//
-//        System.out.println("curve.segments().size() ::::::: " + curve.segments().size());
-//        System.out.println("curve.rightSegments().size() :: " + curve.rightSegments().size());
-//        System.out.println("curve.leftSegments().size() ::: " + curve.leftSegments().size());
-//
 //        int i = 0;
-//        for (Object realSegment : curve.rightSegments()) {
-//            bifurcationArrayRight[i] = new RealSegGeom((RealSegment) realSegment, rightViewingAttr());
-//            bifurcationArray[i] = bifurcationArrayRight[i];
-//            i++;
-//        }
+//        for (Object realSegment : curve.segments()) {
 //
-//        int j = 0;
-//        for (Object realSegment : curve.leftSegments()) {
-//            bifurcationArrayLeft[j] = new RealSegGeom((RealSegment) realSegment, leftViewingAttr());
-//            bifurcationArray[i + j] = bifurcationArrayLeft[j];
-//            j++;
+//            bifurcationArray[i] = new RealSegGeom((RealSegment) realSegment, leftViewingAttr());
+//            i++;
 //        }
 //
 //
 //        return new BifurcationCurveGeom(bifurcationArray, this);
 //
 //    }
+    public RpGeometry createGeomFromSource() {
+
+        BifurcationCurve curve = (BifurcationCurve) geomSource();
+
+        RealSegGeom[] bifurcationArray = new RealSegGeom[curve.segments().size()];
+
+        RealSegGeom[] bifurcationArrayRight = new RealSegGeom[curve.rightSegments().size()];
+        RealSegGeom[] bifurcationArrayLeft = new RealSegGeom[curve.leftSegments().size()];
+
+        System.out.println("curve.segments().size() ::::::: " + curve.segments().size());
+        System.out.println("curve.rightSegments().size() :: " + curve.rightSegments().size());
+        System.out.println("curve.leftSegments().size() ::: " + curve.leftSegments().size());
+
+        int i = 0;
+        for (Object realSegment : curve.rightSegments()) {
+            bifurcationArrayRight[i] = new RealSegGeom((RealSegment) realSegment, rightViewingAttr());
+//            bifurcationArray[i] = bifurcationArrayRight[i];
+            
+            
+            bifurcationArray[i] =new RealSegGeom((RealSegment) realSegment, rightViewingAttr());
+            i++;
+        }
+
+        int j = 0;
+        for (Object realSegment : curve.leftSegments()) {
+            bifurcationArrayLeft[j] = new RealSegGeom((RealSegment) realSegment, leftViewingAttr());
+//            bifurcationArray[i + j] = bifurcationArrayLeft[j];
+            
+            
+            
+            bifurcationArray[i + j] =  new RealSegGeom((RealSegment) realSegment, leftViewingAttr());
+            j++;
+        }
+
+
+        return new BifurcationCurveGeom(bifurcationArray, this);
+
+    }
 
     public RpGeometry leftGeom() {
         return leftGeom_;
