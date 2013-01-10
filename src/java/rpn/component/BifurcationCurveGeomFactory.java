@@ -142,6 +142,7 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
         ((BifurcationCurve) curve).leftSegments().removeAll(segRemLeft);
         segRem.addAll(segRemLeft);
         curve.segments().removeAll(segRem);
+        System.out.println("updateGeom : segmentos removidos ::: " +segRem.size());
 
         try {
             leftGeom_ = createLeftGeom();
@@ -151,11 +152,15 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
             Logger.getLogger(BifurcationCurveGeomFactory.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        //geom_ = createGeomFromSource();
+
         RPnDataModule.LEFTPHASESPACE.update();
         isGeomOutOfDate_ = true;
         RPnDataModule.RIGHTPHASESPACE.update();
 
-        geom_ = createGeomFromSource();
+        geom_ = createGeomFromSource();     // VERIFICAR COM O EDSON SE ESTA CHAMADA,
+                                            // QUANDO FEITA ANTES DOS UPDATES LATERAIS,
+                                            // ALTERA OS RESULTADOS OBTIDOS NO REFINAMENTO
 
         isGeomOutOfDate_ = true;
         RPnDataModule.PHASESPACE.update();
@@ -202,6 +207,7 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
             bifurcationArray[i] = bifurcationArrayRight[i];
             i++;
         }
+        System.out.println("createGeomFromSource() : valor de i ::: " +i);
 
         int j = 0;
         for (Object realSegment : curve.leftSegments()) {
@@ -209,6 +215,9 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
             bifurcationArray[i+j] = bifurcationArrayLeft[j];
             j++;
         }
+        System.out.println("createGeomFromSource() : valor de j ::: " +j);
+
+        System.out.println("createGeomFromSource() : valor de i+j ::: " +(i+j));
 
 
         return new BifurcationCurveGeom(bifurcationArray, this);

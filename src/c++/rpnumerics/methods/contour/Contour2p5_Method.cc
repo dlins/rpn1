@@ -130,7 +130,7 @@ void Contour2p5_Method::contour2p5(TwoImplicitFunctions *timpf, std::vector<Real
 void Contour2p5_Method::curve2p5(TwoImplicitFunctions *timpf, int current_segment_index, 
                                  std::vector<RealVector> &curve_vrs, 
                                  std::vector<RealVector> &domain_vrs){
-                                 
+
     // Get the current segment, etc.
     //
     GridValues *gv = timpf->grid_value();
