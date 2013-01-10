@@ -79,9 +79,11 @@ void Double_Contact::curve(const FluxFunction *lf, const AccumulationFunction *l
     gv_right = rg;
     right_family = rfam;
 
-    // It is assumed that the grid_value must be the same
-//    singular = ( (left_family == right_family) && (lg == rg) );
-    singular=true;
+    //For the same domain singular must be true
+    singular = ( (left_family == right_family) && (lf == rf) && (la==ra) );
+    
+    cout<<"Singular: "<<singular<<endl;
+
     gv_left->fill_eigenpairs_on_grid(lff, laa);
     
     cout<<"Acabei left"<<endl;

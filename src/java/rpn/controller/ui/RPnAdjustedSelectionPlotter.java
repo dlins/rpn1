@@ -194,7 +194,10 @@ public class RPnAdjustedSelectionPlotter extends RPn2DMouseController  {
     }
 
 
-    private Path2D.Double adjustPath(Path2D.Double input, wcWindow wc, int xResolution, int yResolution) {
+    
+    
+    
+     private Path2D.Double adjustPath(Path2D.Double input, wcWindow wc, int xResolution, int yResolution) {
 
         Path2D.Double output = new Path2D.Double();
 
@@ -238,19 +241,20 @@ public class RPnAdjustedSelectionPlotter extends RPn2DMouseController  {
             inputIterator.next();
         }
 
+        // ---------- Coloquei o ajuste em função de mínimos e máximos de coordenadas do array selectionVertex (08JAN2013)
+        double vs = Math.min(selectionVertex.get(0)[0], selectionVertex.get(2)[0]);
+        double vi = Math.max(selectionVertex.get(0)[0], selectionVertex.get(2)[0]);
+        double us = Math.max(selectionVertex.get(0)[1], selectionVertex.get(2)[1]);
+        double ui = Math.min(selectionVertex.get(0)[1], selectionVertex.get(2)[1]);
+        // ---------
 
-        double[] vertex = selectionVertex.get(0);
+        double topRightXAdjusted = vMin + (int) ((vs - vMin) / dv) * dv;
+        double topRigthYAdjusted = uMin + (int) ((us - uMin) / du + 1) * du;
 
-        double topRightXAdjusted = vMin + (int) ((vertex[0] - vMin) / dv) * dv;
-        double topRigthYAdjusted = uMin + (int) ((vertex[1] - uMin) / du + 1) * du;
-
-        vertex = selectionVertex.get(2);
-
-        double downLeftXAdjusted = vMin + (int) ((vertex[0] - vMin) / dv + 1) * dv;
-        double downLeftYAdjusted = uMin + (int) ((vertex[1] - uMin) / du) * du;
+        double downLeftXAdjusted = vMin + (int) ((vi - vMin) / dv + 1) * dv;
+        double downLeftYAdjusted = uMin + (int) ((ui - uMin) / du) * du;
 
         output.moveTo(topRightXAdjusted, topRigthYAdjusted);
-
 
         output.lineTo(downLeftXAdjusted, topRigthYAdjusted);
         output.lineTo(downLeftXAdjusted, downLeftYAdjusted);
@@ -262,5 +266,20 @@ public class RPnAdjustedSelectionPlotter extends RPn2DMouseController  {
         return output;
 
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+   
   
 }

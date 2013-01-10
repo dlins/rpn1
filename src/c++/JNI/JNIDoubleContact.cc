@@ -69,7 +69,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc__II
     const AccumulationFunction * leftAccum = &RpNumerics::getPhysics().accumulation();
 
     const FluxFunction * rightFlux = leftFlux;
-    const AccumulationFunction * rightAccum = rightAccum;
+    const AccumulationFunction * rightAccum = leftAccum;
 
 
     GridValues * gv = RpNumerics::getGridFactory().getGrid("doublecontactcurve");
@@ -207,7 +207,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc__Lja
     //LEFT GRID VALUES
 
 
-    jobject leftArea = env->CallObjectMethod(areasList, listGetMethodID, 0);
+    jobject leftArea = env->CallObjectMethod(areasList, listGetMethodID, 1);
 
     jobject leftResolutionRealVector = env->CallObjectMethod(leftArea, areaGetResolutionMethodID);
 
@@ -257,58 +257,40 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc__Lja
     //RIGHT GRID VALUES
 
 
-//    jobject rightArea = env->CallObjectMethod(areasList, listGetMethodID, 1);
-//
-//    jobject rightResolutionRealVector = env->CallObjectMethod(rightArea, areaGetResolutionMethodID);
-//
-//    jdoubleArray rightResolutionArray = (jdoubleArray) env->CallObjectMethod(rightResolutionRealVector, toDoubleMethodID);
-//
-//    env->GetDoubleArrayRegion(rightResolutionArray, 0, 2, resolutionBuffer);
+    jobject rightArea = env->CallObjectMethod(areasList, listGetMethodID, 0);
+
+    jobject rightResolutionRealVector = env->CallObjectMethod(rightArea, areaGetResolutionMethodID);
+
+    jdoubleArray rightResolutionArray = (jdoubleArray) env->CallObjectMethod(rightResolutionRealVector, toDoubleMethodID);
+
+    env->GetDoubleArrayRegion(rightResolutionArray, 0, 2, resolutionBuffer);
 
     vector<int> rightResolution;
 
 
     for (int i = 0; i < 2; i++) {
-//        rightResolution.push_back((int) resolutionBuffer[i]);
-        rightResolution.push_back(30);
+        rightResolution.push_back((int) resolutionBuffer[i]);
     }
 
-//    jobject downRightRealVector = env->CallObjectMethod(rightArea, downLeftMethodID);
-//
-//    jdoubleArray downRightArray = (jdoubleArray) env->CallObjectMethod(downRightRealVector, toDoubleMethodID);
-//
-//
-//
-//    env->GetDoubleArrayRegion(downRightArray, 0, 2, downLeftBuffer);
-//
-//    jobject topRightR = env->CallObjectMethod(rightArea, topRightMethodID);
-//
-//    jdoubleArray topRightArrayR = (jdoubleArray) env->CallObjectMethod(topRightR, toDoubleMethodID);
-//
-//
-//
-//    env->GetDoubleArrayRegion(topRightArrayR, 0, 2, topRightBuffer);
+    jobject downRightRealVector = env->CallObjectMethod(rightArea, downLeftMethodID);
 
-    
-    double  testeMin [2];
-    
-    
-    testeMin[0]=0.0;
-    testeMin[1]=0.0;
-    
-    double testeMax[2];
-    
-    testeMax[0]=1.0;
-    testeMax[1]=1.0;
-    
-    
-//    RealVector leftPminR(2, downLeftBuffer);
-//    RealVector rightPmaxR(2, topRightBuffer);
+    jdoubleArray downRightArray = (jdoubleArray) env->CallObjectMethod(downRightRealVector, toDoubleMethodID);
 
-    
-    RealVector leftPminR(2, testeMin);
-    RealVector rightPmaxR(2, testeMax);
-    
+
+
+    env->GetDoubleArrayRegion(downRightArray, 0, 2, downLeftBuffer);
+
+    jobject topRightR = env->CallObjectMethod(rightArea, topRightMethodID);
+
+    jdoubleArray topRightArrayR = (jdoubleArray) env->CallObjectMethod(topRightR, toDoubleMethodID);
+
+
+
+    env->GetDoubleArrayRegion(topRightArrayR, 0, 2, topRightBuffer);
+
+    RealVector leftPminR(2, downLeftBuffer);
+    RealVector rightPmaxR(2, topRightBuffer);
+
 
     
     cout<<"No JNI RIGHT: "<<leftPminR<<" "<<rightPmaxR<<endl;
@@ -322,7 +304,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc__Lja
     const AccumulationFunction * leftAccum = &RpNumerics::getPhysics().accumulation();
 
     const FluxFunction * rightFlux = leftFlux;
-    const AccumulationFunction * rightAccum = rightAccum;
+    const AccumulationFunction * rightAccum = leftAccum;
 
 
 
@@ -330,7 +312,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc__Lja
     Double_Contact_Function * doubleContactFunction = RpNumerics::getPhysics().getSubPhysics(0).getDoubleContactFunction();
 
 
-    doubleContactFunction->curve(leftFlux, leftAccum, &rightGridValues, leftFamily,
+    doubleContactFunction->curve(leftFlux, leftAccum, &leftGridValues, leftFamily,
             rightFlux, rightAccum, &rightGridValues, rightFamily,
             left_vrs, right_vrs);
 

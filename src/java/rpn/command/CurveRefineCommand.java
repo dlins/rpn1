@@ -96,11 +96,23 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
         List<Area> areasToRefine = new ArrayList<Area>();
 
         List<AreaSelected> graphicsArea = phaseSpacePanel.getSelectedAreas();
-
-
-    
-
-
+        
+        
+            // ------ Preenche uma lista de areas correspondentes, caso existam
+        List<AreaSelected> correspondentAreas = new ArrayList<AreaSelected>();
+        Iterator<RPnPhaseSpacePanel> phaseSpacePanelIterator = UIController.instance().getInstalledPanelsIterator();
+        while (phaseSpacePanelIterator.hasNext()) {
+            RPnPhaseSpacePanel panel = phaseSpacePanelIterator.next();
+            if (panel!=phaseSpacePanel  &&  panel.getSelectedAreas().size()>0) {
+                correspondentAreas.addAll(panel.getSelectedAreas());
+                // ??? Necessario instanciar objeto Area ???
+                Area correspondentArea = new Area(resolution_, correspondentAreas.get(0));
+                System.out.println("Correspondent area: "+correspondentArea);
+                areasToRefine.add(correspondentArea);
+            }
+        }
+        // -------------------
+        
 
         for (AreaSelected polygon : graphicsArea) {
 
@@ -113,9 +125,7 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
                         indexToRemove.addAll(segmentIndex);
                         
                         Area principalArea = new Area(resolution_, polygon);
-                        
                         areasToRefine.add(principalArea);
-                        
                         System.out.println("Resolucao: "+resolution_);
                         System.out.println("Principal area: "+ principalArea);
                         
@@ -130,20 +140,7 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
         }
         
         
-//            // ------ Preenche uma lista de areas correspondentes, caso existam
-//        List<AreaSelected> correspondentAreas = new ArrayList<AreaSelected>();
-//        Iterator<RPnPhaseSpacePanel> phaseSpacePanelIterator = UIController.instance().getInstalledPanelsIterator();
-//        while (phaseSpacePanelIterator.hasNext()) {
-//            RPnPhaseSpacePanel panel = phaseSpacePanelIterator.next();
-//            if (panel!=phaseSpacePanel  &&  panel.getSelectedAreas().size()>0) {
-//                correspondentAreas.addAll(panel.getSelectedAreas());
-//                // ??? Necessario instanciar objeto Area ???
-//                Area correspondentArea = new Area(resolution_, correspondentAreas.get(0));
-//                System.out.println("Correspondent area: "+correspondentArea);
-//                areasToRefine.add(correspondentArea);
-//            }
-//        }
-//        // -------------------
+        
 
         
         RpCalcBasedGeomFactory factory = (RpCalcBasedGeomFactory) selectedGeometry.geomFactory();
