@@ -11,6 +11,7 @@ package rpn.controller.ui;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.Polygon;
+import java.awt.Shape;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Area;
 import java.awt.geom.Path2D;
@@ -151,10 +152,14 @@ public class RPnAdjustedSelectionPlotter extends RPn2DMouseController  {
         RpGeometry geom = RPnDataModule.PHASESPACE.findClosestGeometry(newValue);
         RPnCurve curve = (RPnCurve) (geom.geomFactory().geomSource());
         if (curve instanceof BifurcationCurve) {
+            List<RealVector> list = new ArrayList<RealVector>();
             GeometryGraphND geomND = new GeometryGraphND();
-            Polygon pol = geomND.secondArea((BifurcationCurve) curve, panel.scene());
-            Point point1 = new Point((int) pol.getBounds2D().getMinX(), (int) pol.getBounds2D().getMinY());
-            Point point2 = new Point((int) pol.getBounds2D().getMaxX(), (int) pol.getBounds2D().getMaxY());
+            list = geomND.secondArea((BifurcationCurve) curve, panel.scene());
+
+            RealVector p1 = list.get(0);
+            RealVector p2 = list.get(1);
+            Point point1 = new Point((int)p1.getElement(0), (int)p1.getElement(1));
+            Point point2 = new Point((int)p2.getElement(0), (int)p2.getElement(1));
 
             Path2D.Double selectionPath = plotWCArea(point1, point2, panel);
             Path2D.Double adjustedPath = adjustPath(selectionPath, viewingTransform.viewPlane().getWindow(), xResolution_, yResolution_);

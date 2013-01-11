@@ -10,10 +10,8 @@ import java.util.List;
 import rpn.RPnDesktopPlotter;
 import rpn.controller.RpCalcController;
 import rpn.controller.RpController;
-
 import rpnumerics.Area;
 import rpnumerics.RPnCurve;
-
 import rpnumerics.RpCalculation;
 import rpnumerics.RpException;
 import rpnumerics.RpSolution;
@@ -24,10 +22,12 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
     // Members
     //
 
+
     protected RpCalculation calc_;
     protected RpGeometry geom_;
     protected Object geomSource_;
     private RpController ui_;
+
     protected boolean isGeomOutOfDate_;
 
     //

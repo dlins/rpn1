@@ -46,6 +46,8 @@ public class ConnectionOrbitCalc implements RpCalculation {
     //
     // Accessors/Mutators
     //
+
+
     public ManifoldOrbit getManifoldOrbitA() {
         return manifoldOrbitA_;
     }
@@ -110,8 +112,6 @@ public class ConnectionOrbitCalc implements RpCalculation {
 
         double sigmaA = ViscousProfileData.instance().getPreviousSigma();
         double sigmaB = ViscousProfileData.instance().getSigma();
-
-//        System.out.println("Valores de sigmaA e sigmaB : " +sigmaA  +" e " +sigmaB);
 
         long t = System.currentTimeMillis();
 
@@ -189,7 +189,6 @@ public class ConnectionOrbitCalc implements RpCalculation {
             RealVector p1 = orbitXZero.lastPoint();
             RealVector p2 = orbitUPlus.lastPoint();
 
-
             updateDeltaM(p1, p2);
 
 
@@ -204,18 +203,12 @@ public class ConnectionOrbitCalc implements RpCalculation {
                 //ViscousProfileData.instance().setPreviousSigma(sigmaB);
             }
 
-            //System.out.println("Passo " +i +" Valores dos Uplus depois do teste da bissecao: ");
-            //System.out.println(ViscousProfileData.instance().getPreviousUPlus() + "  e  " + ViscousProfileData.instance().getUplus());
-            //System.out.println("Passo " +i +" Intervalo de sigma depois do teste da bissecao : " +sigmaA +" , " +sigmaB);
-
             i++;
 
         } while (i < nmax);
 
+
         System.out.println("Tempo em 10 passos da bissecao :::::::::::::::::::: " +(System.currentTimeMillis()-t));
-
-        System.out.println("SAIU DA BISSECAO COM SIGMA = " +ViscousProfileData.instance().getSigma());
-
 
         // --- Substituir este trecho pelo concat, talvez...
         OrbitPoint[] pointsArray = new OrbitPoint[orbitXZero.getPoints().length+orbitUPlus.getPoints().length];
@@ -268,11 +261,28 @@ public class ConnectionOrbitCalc implements RpCalculation {
 
     }
 
-     public RpSolution recalc() throws RpException {
-        ViscousProfileData.instance().setSigma(sB);
-        ViscousProfileData.instance().setPreviousSigma(sA);
-        ViscousProfileData.instance().setDot(dotB);
-        ViscousProfileData.instance().setPreviousDot(dotA);
+//    // --- recalc() original
+//    public RpSolution recalc() throws RpException {
+//        ViscousProfileData.instance().setSigma(sB);
+//        ViscousProfileData.instance().setPreviousSigma(sA);
+//        ViscousProfileData.instance().setDot(dotB);
+//        ViscousProfileData.instance().setPreviousDot(dotA);
+//
+//        System.out.println("Entrei no recalc() de ConnectionOrbitCalc ************************");
+//        return calc();
+//    }
+
+
+    //--- Ensaio para o intervalo adaptativo (08JAN -- ainda nao fiz commit)
+    public RpSolution recalc() throws RpException {
+        double h = 0.5*(Math.abs(sA-sB));
+        double sigmaM = ViscousProfileData.instance().getSigma();
+        double sign = Math.signum(sA-sB);
+
+        ViscousProfileData.instance().setSigma(sigmaM - sign*h*2.);
+        ViscousProfileData.instance().setPreviousSigma(sigmaM + sign*h*2.);
+        ViscousProfileData.instance().setDot(Math.signum(dotB));
+        ViscousProfileData.instance().setPreviousDot(Math.signum(dotA));
 
         System.out.println("Entrei no recalc() de ConnectionOrbitCalc ************************");
         return calc();

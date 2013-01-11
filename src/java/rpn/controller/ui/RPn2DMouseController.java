@@ -66,7 +66,7 @@ public abstract class RPn2DMouseController implements  MouseMotionListener, Mous
         int dimension = panel.scene().getViewingTransform().projectionMap().getDomain().getDim();
         CoordsArray cursorPosWC = new CoordsArray(new Space(" ", dimension));
         CoordsArray mePosWC = new CoordsArray(new Space(" ", dimension));
-        
+
         int[] compIndex = panel.scene().getViewingTransform().projectionMap().getCompIndexes();
 
         int biggestIndex = Math.max(compIndex[0], compIndex[1]);

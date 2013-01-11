@@ -185,6 +185,7 @@ public class RPnInputComponent {//TODO Refatorar
 
         label_ = new JLabel[subject.getParamsNames().length];
 
+
         slider_ = new JSlider(0, 20, 0);
 
         slider_.setSnapToTicks(false);
@@ -450,12 +451,15 @@ public class RPnInputComponent {//TODO Refatorar
             String[] newValues = new String[textField_.length];
 
 
+
             Double sliderValue = new Double(slider.getValue());
             for (int j = 0; j < textField_.length; j++) {
 
                 if (textField_[j].getName().equals(slider.getName())) {
 
                     sliderValue /= 20;
+
+           
                     textField_[j].setText(String.valueOf(sliderValue));
 
                 }
@@ -467,24 +471,19 @@ public class RPnInputComponent {//TODO Refatorar
 
 
 
+
             Double alpha = new Double(textField_[textField_.length - 1].getText());
 
             System.out.println("Valor de alpha: " + alpha + " Slider value: " + sliderValue);
 
             if (sliderValue != alpha) {
                 observerController_.propertyChange(new PropertyChangeEvent(this, slider.getName(), newValues, newValues));
-
                 RPNUMERICS.applyFluxParams();
                 rpn.command.ChangeFluxParamsCommand.instance().applyChange(new PropertyChangeEvent(rpn.command.ChangeFluxParamsCommand.instance(), "", null, RPNUMERICS.getFluxParams().getParams()));
 
                 rpn.command.ChangeFluxParamsCommand.instance().updatePhaseDiagram();
 
             }
-
-
-
-
-
 
         }
     }

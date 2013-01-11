@@ -149,7 +149,7 @@ void Contour2x2_Method::deallocate_arrays(void){
 void Contour2x2_Method::curve2x2(ThreeImplicitFunctions *timpf,
                                  std::vector<RealVector> &left_vrs,   // on_domain
                                  std::vector<RealVector> &right_vrs){ // on_curve
-                            
+
     allocate_arrays();
      
     // Get the current data.
