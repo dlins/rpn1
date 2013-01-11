@@ -24,11 +24,11 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
     // Members
     //
 
-    protected  RpCalculation calc_;
-    protected  RpGeometry geom_;
-    protected  Object geomSource_;
+    protected RpCalculation calc_;
+    protected RpGeometry geom_;
+    protected Object geomSource_;
     private RpController ui_;
-    protected  boolean isGeomOutOfDate_;
+    protected boolean isGeomOutOfDate_;
 
     //
     // Constructors/Initializers
@@ -120,7 +120,6 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
         }
     }
 
-
     public void updateGeom(List<Area> areaToRefine, List<Integer> segmentsToRemove) {
 
         List<RealSegment> segRem = new ArrayList<RealSegment>();
@@ -132,14 +131,14 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
         }
 
         curve.segments().removeAll(segRem);
-        
-            try {
-                RPnCurve newCurve = (RPnCurve) calc_.recalc(areaToRefine);
 
-                ((RPnCurve) geomSource_).segments().addAll(newCurve.segments());
-            } catch (RpException ex) {
-                ex.printStackTrace();
-            }
+        try {
+            RPnCurve newCurve = (RPnCurve) calc_.recalc(areaToRefine);
+
+            ((RPnCurve) geomSource_).segments().addAll(newCurve.segments());
+        } catch (RpException ex) {
+            ex.printStackTrace();
+        }
 
         geom_ = createGeomFromSource();
 

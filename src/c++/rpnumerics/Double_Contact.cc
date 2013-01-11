@@ -14,8 +14,8 @@ bool Double_Contact::function_on_cell(double *val, int ir, int jr, int kl, int k
 
     double lr  = gv_right->e(domain_i, domain_j)[right_family].r;
     double fr  = gv_right->F_on_grid(domain_i, domain_j).component(0);
-
     double hur = gv_right->G_on_grid(domain_i, domain_j).component(0);
+
     double gr  = gv_right->F_on_grid(domain_i, domain_j).component(1);
     double hvr = gv_right->G_on_grid(domain_i, domain_j).component(1);
 

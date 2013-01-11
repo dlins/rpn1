@@ -38,13 +38,6 @@ public class AreaSelected extends GraphicsUtil {
                 Coords2D dcSelectionPoint = new Coords2D(0, 0);
                 CoordsArray wcSelectionPoint = new CoordsArray(segmentArray);
                 
-                int [] compIndex= getViewingTransform().projectionMap().getCompIndexes();
-                
-                System.out.println("Comp index: "+compIndex.length +" "+compIndex[0]+" "+compIndex[1]);
-                
-                System.out.println("Dimensao da entrada: " +wcSelectionPoint.getDim());
-                System.out.println("Dimensao da saida: "+dcSelectionPoint.getDim());
-                
                 getViewingTransform().viewPlaneTransform(wcSelectionPoint, dcSelectionPoint);
 
                 selectedPolygon.addPoint((int) dcSelectionPoint.getX(), (int) dcSelectionPoint.getY());   // --- original
