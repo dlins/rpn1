@@ -16,8 +16,8 @@ void GridValues::set_grid(const Boundary *b,
                           const RealVector &min, const RealVector &max,
                           const std::vector<int> &number_of_cells){
 
-    grid_computed = 
-    functions_on_grid_computed = Jacobians_on_grid_computed = 
+    grid_computed =
+    functions_on_grid_computed = Jacobians_on_grid_computed =
     dd_computed = e_computed = false;
 
     fill_values_on_grid(b, min, max, number_of_cells);
