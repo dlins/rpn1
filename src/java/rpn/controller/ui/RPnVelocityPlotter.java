@@ -23,6 +23,7 @@ import rpnumerics.OrbitPoint;
 import rpnumerics.RPnCurve;
 import rpnumerics.WaveCurve;
 import rpnumerics.FundamentalCurve;
+import rpnumerics.LevelCurve;
 import rpnumerics.RPNUMERICS;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
@@ -149,6 +150,11 @@ public class RPnVelocityPlotter extends RPn2DMouseController {
                 OrbitPoint point = (OrbitPoint) ((Orbit) curve).getPoints()[curve.findClosestSegment(closestPoint)];
                 velStr = String.format("%.4e", point.getLambda());
             }
+            // --- Acrescentei em 14JAN2013
+            else if (curve instanceof LevelCurve) {
+                velStr = String.format("%.4e", ((LevelCurve)curve).getLevel());
+            }
+            // ---
             else if (curve instanceof HugoniotCurve) {
                 velStr = String.format("%.4e", ((HugoniotCurve)curve).velocity(closestPoint));
             }

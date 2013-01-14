@@ -31,7 +31,7 @@ public class HugoniotContinuation {
     }
 
     public HugoniotCurve curve(RealVector initialPoint) {
-
+        
         ArrayList statesResult = new ArrayList();
 
         HugoniotFunctionOnPlane HF = new HugoniotFunctionOnPlane(f_,
