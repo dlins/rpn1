@@ -72,7 +72,8 @@ public class RPnAdjustedSelectionPlotter extends RPn2DMouseController  {
             panel.repaint();
             
             indexToRemove(panel);
-            //secondArea(panel, viewingTransform);
+            if (UIController.instance().isAuxPanelsEnabled())
+                secondArea(panel, viewingTransform);
             
         }
 
