@@ -5,9 +5,14 @@
  */
 package rpnumerics;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import rpn.RPnUIFrame;
 import wave.util.RealSegment;
+import wave.util.RealVector;
 
 public class WaveCurve extends RPnCurve implements WaveCurveBranch, RpSolution {
 
@@ -100,4 +105,70 @@ public class WaveCurve extends RPnCurve implements WaveCurveBranch, RpSolution {
         return stringBuilder.toString();
 
     }
+
+
+    // ------------------------ Acrescentei estes métodos em 15JAN2013 (Leandro)
+    // ------- Isso foi feito para atender a uma necessidade emergencial do Cido
+    public String toMatlabData(int curveIndex) {
+
+        StringBuffer buffer = new StringBuffer();
+
+        try {
+            FileWriter gravador = new FileWriter(RPnUIFrame.dir + "/data" +curveIndex +".txt");
+            BufferedWriter saida = new BufferedWriter(gravador);
+
+            for (int i = 0; i < segments().size(); i++) {
+                saida.write(segments().get(i).toString() +"\n");
+            }
+
+            saida.close();
+        }
+        catch (IOException e) {
+            System.out.println("Arquivos .txt de WaveCurve nao foram escritos.");
+        }
+
+        return buffer.toString();
+
+    }
+    
+
+    public String create2DPointMatlabPlot(int x, int y, int identifier) {
+
+        System.out.println("Entrei no create2DPointMatlabPlot da classe WaveCurve");
+
+        StringBuffer buffer = new StringBuffer();
+
+        String color = null;
+
+        color = "[0 0 1]";
+
+        x++;
+        y++;
+
+        // ---
+        buffer.append("data" +identifier +" = read_data_file('data" +identifier +".txt');\n");
+        buffer.append("disp('data" +identifier +".txt')\n");
+        // ---
+
+        buffer.append("plot(data" + identifier + "(:,");
+        buffer.append(x);
+        buffer.append("),");
+        buffer.append("data" + identifier + "(:,");
+        buffer.append(y);
+
+        buffer.append("),'Color'" + "," + color + ")\n");
+
+        buffer.append("hold on\n");
+
+        RealVector xMin = RPNUMERICS.boundary().getMinimums();
+        RealVector xMax = RPNUMERICS.boundary().getMaximums();
+
+        buffer.append("axis([" + xMin.getElement(x - 1) + " " + xMax.getElement(x - 1) + " " + xMin.getElement(y - 1) + " " + xMax.getElement(y - 1) + "]);\n");
+        
+        return buffer.toString();
+
+    }
+    // -------------------------------------------------------------------------
+
+
 }

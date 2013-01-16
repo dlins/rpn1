@@ -7,6 +7,9 @@
 package rpnumerics;
 
 import java.awt.Shape;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import rpnumerics.methods.contour.ContourCurve;
 import wave.multid.*;
 import wave.multid.model.AbstractSegment;
@@ -22,6 +25,7 @@ import wave.util.*;
 import java.util.ArrayList;
 import java.util.List;
 import rpn.RPnPhaseSpaceAbstraction;
+import rpn.RPnUIFrame;
 import rpn.component.RpGeometry;
 import rpn.parser.RPnDataModule;
 
@@ -164,6 +168,10 @@ public abstract class RPnCurve {
 //        return null;
 //    }
 //    --------------------------------------------------------------------------
+
+
+
+
 
    
 

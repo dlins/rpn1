@@ -9,6 +9,7 @@ package rpnumerics;
 import java.util.ArrayList;
 import java.util.List;
 import rpn.RPnPhaseSpaceAbstraction;
+import rpn.controller.ui.UIController;
 import rpnumerics.methods.contour.ContourCurve;
 
 import wave.multid.view.ViewingAttr;
@@ -89,6 +90,51 @@ public class BifurcationCurve extends SegmentedCurve {
 
         return pDC;
     }
+
+
+    // ----- Protótipo de versao única, para ficar em BifurcationCurve (16JAN2013)
+    public RealVector secondPointDCOtherVersion(int i) {
+
+        RealVector p1, p2, pDC = null;
+
+        ArrayList segments = (ArrayList)segments();
+
+        if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("RightPhase Space"))
+            segments = (ArrayList) leftSegments();
+
+        if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("LeftPhase Space"))
+            segments = (ArrayList) rightSegments();
+
+
+        if (UIController.instance().isAuxPanelsEnabled()) {
+            p1 = new RealVector(((RealSegment) (segments).get(i)).p1());
+            p2 = new RealVector(((RealSegment) (segments).get(i)).p2());
+
+            pDC = new RealVector(p1.getSize());
+            pDC.sub(p1, p2);
+            pDC.scale(getALFA());
+            pDC.add(p2);
+        }
+        else {
+            int jDC = 0;
+            if (i >= segments.size() / 2) {
+                jDC = i - segments.size() / 2;
+            } else {
+                jDC = i + segments.size() / 2;
+            }
+
+            p1 = new RealVector(((RealSegment) (segments).get(jDC)).p1());
+            p2 = new RealVector(((RealSegment) (segments).get(jDC)).p2());
+
+            pDC = new RealVector(p1.getSize());
+            pDC.sub(p1, p2);
+            pDC.scale(getALFA());
+            pDC.add(p2);
+        }
+
+        return pDC;
+    }
+    // -----
 
 
     public String toXML() {

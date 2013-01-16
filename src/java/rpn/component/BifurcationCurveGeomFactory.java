@@ -152,15 +152,11 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
             Logger.getLogger(BifurcationCurveGeomFactory.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        //geom_ = createGeomFromSource();
-
         RPnDataModule.LEFTPHASESPACE.update();
         isGeomOutOfDate_ = true;
         RPnDataModule.RIGHTPHASESPACE.update();
 
-        geom_ = createGeomFromSource();     // VERIFICAR COM O EDSON SE ESTA CHAMADA,
-                                            // QUANDO FEITA ANTES DOS UPDATES LATERAIS,
-                                            // ALTERA OS RESULTADOS OBTIDOS NO REFINAMENTO
+        geom_ = createGeomFromSource();
 
         isGeomOutOfDate_ = true;
         RPnDataModule.PHASESPACE.update();

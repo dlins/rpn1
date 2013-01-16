@@ -186,7 +186,8 @@ public class RPnStringPlotter extends RPn2DMouseController {
             }
             if (curve instanceof BifurcationCurve) {
                 int i = curve.findClosestSegment(newValue);
-                GeometryGraphND.pMarcaDC = ((BifurcationCurve) curve).secondPointDC(i);
+                //GeometryGraphND.pMarcaDC = ((BifurcationCurve) curve).secondPointDC(i);
+                GeometryGraphND.pMarcaDC = ((BifurcationCurve) curve).secondPointDCOtherVersion(i);
             } else {
                 GeometryGraphND.pMarcaDC = GeometryGraphND.pMarca;
             }
@@ -226,7 +227,8 @@ public class RPnStringPlotter extends RPn2DMouseController {
         GeometryGraphND.pMarca = closestPoint;
         if (curve instanceof BifurcationCurve) {
             int i = curve.findClosestSegment(newValue);
-            GeometryGraphND.pMarcaDC = ((BifurcationCurve) curve).secondPointDC(i);
+            //GeometryGraphND.pMarcaDC = ((BifurcationCurve) curve).secondPointDC(i);
+            GeometryGraphND.pMarcaDC = ((BifurcationCurve) curve).secondPointDCOtherVersion(i);
         } else {
             GeometryGraphND.pMarcaDC = GeometryGraphND.pMarca;
         }

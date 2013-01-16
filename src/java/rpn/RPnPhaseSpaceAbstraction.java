@@ -13,9 +13,7 @@ import rpn.component.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
-import rpn.command.ClassifierCommand;
 import rpn.component.util.GeometryGraphND;
-import rpn.command.VelocityCommand;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UserInputTable;
 import wave.multid.model.MultiGeometry;
@@ -238,8 +236,6 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
                         RpGeomFactory factory = geom.geomFactory();
                         RPnCurve curve = (RPnCurve) factory.geomSource();
                         
-//                        System.out.println("Tamanho na cruz: "+curve.segments().size());
-
                         curve.findClosestSegment(targetPoint);
 
                         distancia = curve.distancia;

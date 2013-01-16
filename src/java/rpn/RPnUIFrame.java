@@ -692,7 +692,10 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 dir = chooser.getSelectedFile().getParent();
                 System.out.println("Diretorio selecionado : " + dir);
 
-                RPnDataModule.matlabExport(writer);
+                if (RPNUMERICS.domainDim()==3)
+                    RPnDataModule.matlabExport(writer);
+                else
+                    RPnDataModule.matlabExport2D(writer);
 
                 writer.close();
             }

@@ -72,7 +72,7 @@ public class RPnAdjustedSelectionPlotter extends RPn2DMouseController  {
             panel.repaint();
             
             indexToRemove(panel);
-            secondArea(panel, viewingTransform);
+            //secondArea(panel, viewingTransform);
             
         }
 

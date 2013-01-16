@@ -149,10 +149,19 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
 
             RPnCurve curve = (RPnCurve)(geom.geomFactory().geomSource());
             if (curve instanceof BifurcationCurve) {
-                if (!panel.getName().equals(RPnPhaseSpaceAbstraction.namePhaseSpace) && !panel.getName().equals("Phase Space")) {
+
+                if (UIController.instance().isAuxPanelsEnabled()) {
+                    if (!panel.getName().equals(RPnPhaseSpaceAbstraction.namePhaseSpace) && !panel.getName().equals("Phase Space")) {
+                        graph.draw(line3DC);
+                        graph.draw(line4DC);
+                    }
+                }
+                else {
                     graph.draw(line3DC);
                     graph.draw(line4DC);
                 }
+
+                
             }
             if (curve instanceof WaveCurve) {
                 infoWaveCurve(newValue, (WaveCurve)curve, panel);

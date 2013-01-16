@@ -67,6 +67,7 @@ import rpnumerics.RarefactionOrbitCalc;
 import rpnumerics.RpCalculation;
 import rpnumerics.SegmentedCurve;
 import rpnumerics.ShockCurveCalc;
+import rpnumerics.WaveCurve;
 import wave.multid.Space;
 
 /** With this class the calculus made in a previous session can be reloaded. A previous state can be reloaded reading a XML file that is used by this class */
@@ -585,15 +586,110 @@ public class RPnDataModule {
 
     }
 
+
+    //---- Acrescentei este método
+    // --- Isso foi feito em 16JAN, para atender a uma necessidade emergencial do Cido
+    public static void toMatlabReadFile() {
+        try {
+            //FileWriter gravador = new FileWriter("/home/moreira/Documents/read_data_file.m");
+            FileWriter gravador = new FileWriter(RPnUIFrame.dir + "/read_data_file.m");
+            BufferedWriter saida = new BufferedWriter(gravador);
+            saida.write("function [A] = read_data_file(name)\n");
+            saida.write("% Function [A] = read_data_file(name)\n");
+            saida.write("%\n");
+            saida.write("% Read into A the contents of the file.\n\n");
+            saida.write("    fid = fopen(name, 'r');\n");
+            saida.write("    tline = fgetl(fid);\n");
+            saida.write("    noc = length(str2num(tline));\n");
+            saida.write("    A = fscanf(fid, '%lg %lg', [noc inf]);\n");
+            saida.write("    fclose(fid);\n");
+            saida.write("    A = A';\n\n");
+            saida.write("end");
+            saida.close();
+
+        } catch (IOException e) {
+            System.out.println("Não deu para escrever o arquivo");
+        }
+    }
+    // ----------------------------------------------------------------
+
+
+    // ---------- 15JAN Método para exportar dados 2D e gerar script Matlab (apenas para físicas 2D)
+    // --- Isso foi feito para atender a uma necessidade emergencial do Cido
+    static public void matlabExport2D(FileWriter writer) throws java.io.IOException {
+        Iterator<RpGeometry> iterator = PHASESPACE.getGeomObjIterator();
+        writer.write("close all; clear all;\n");
+
+        //Inserting data
+        HashMap<Integer, RpGeometry> visibleGeometries = new HashMap<Integer, RpGeometry>();
+        int geometryCounter = 0;
+
+        while (iterator.hasNext()) {
+            RpGeometry geometry = iterator.next();
+            if (geometry.viewingAttr().isVisible()) {
+                visibleGeometries.put(geometryCounter, geometry);
+                geometryCounter++;
+            }
+
+        }
+
+        // Inserting data
+        Set<Entry<Integer, RpGeometry>> geometrySet = visibleGeometries.entrySet();
+
+        for (Entry<Integer, RpGeometry> entry : geometrySet) {
+
+            RPnCurve curve = (RPnCurve) entry.getValue().geomFactory().geomSource();
+            toMatlabReadFile();
+
+            if (curve instanceof SegmentedCurve) {
+                SegmentedCurve sCurve = (SegmentedCurve) curve;
+                writer.write(sCurve.toMatlabOnlyCoords(entry.getKey()));
+            }
+            if (curve instanceof Orbit) {
+                Orbit orbit = (Orbit) curve;
+                writer.write(orbit.toMatlabData(entry.getKey()));
+            }
+            if (curve instanceof WaveCurve) {
+                WaveCurve wave = (WaveCurve) curve;
+                writer.write(wave.toMatlabData(entry.getKey()));
+            }
+
+        }
+
+        //Plotting 2D view
+        writer.write("%% plotting 2D\n");
+
+        for (Entry<Integer, RpGeometry> entry : geometrySet) {
+
+            RPnCurve curve = (RPnCurve) entry.getValue().geomFactory().geomSource();
+
+            writer.write("figure(1)\n");
+
+            if (curve instanceof SegmentedCurve) {
+                writer.write(SegmentedCurve.createSegmentedMatlabPlotLoop2D(0, 1, entry.getKey()));
+
+            }
+            if (curve instanceof Orbit) {
+                Orbit orbit = (Orbit) curve;
+                writer.write(orbit.create2DPointMatlabPlot(0, 1, entry.getKey()));      //ATENCAO: este método (create2D...) estava comentado em Orbit
+            }
+            if (curve instanceof WaveCurve) {
+                WaveCurve wave = (WaveCurve) curve;
+                writer.write(wave.create2DPointMatlabPlot(0, 1, entry.getKey()));
+            }
+
+        }
+    }
+    // ----------
+
+
     static public void matlabExport(FileWriter writer) throws java.io.IOException {
 
         Iterator<RpGeometry> iterator = PHASESPACE.getGeomObjIterator();
         writer.write("close all; clear all;\n");
         //writer.write(RpCalcBasedGeomFactory.createMatlabColorTable());
 
-
         //Inserting data
-
         HashMap<Integer, RpGeometry> visibleGeometries = new HashMap<Integer, RpGeometry>();
         int geometryCounter = 0;
 
@@ -625,6 +721,7 @@ public class RPnDataModule {
 
         }
 
+        ////// TESTAR COMENTADO NA STONE ---
         //Plotting 3D view
         writer.write("%% plotting 3D \n");
         writer.write("figure(1)\n");
@@ -638,13 +735,14 @@ public class RPnDataModule {
 
                 SegmentedCurve sCurve = (SegmentedCurve) curve;
 
-                writer.write(sCurve.createSegment3DPlotMatlabPlot(entry.getKey()));
+                writer.write(sCurve.createSegment3DPlotMatlabPlot(entry.getKey()));       // TESTAR COMENTADO NA STONE
 
             } else {
                 Orbit orbit = (Orbit) curve;
 //                writer.write(orbit.createPoint3DMatlabPlot(entry.getKey()));
             }
         }
+        ////// ---
 
         //Plotting 2D view
         writer.write("%% plotting 2D\n");
@@ -663,19 +761,15 @@ public class RPnDataModule {
 
             if (curve instanceof SegmentedCurve) {                              //** Alterei os eixos (Leandro)
 
-//                writer.write("figure(2)\n");
-//                writer.write(SegmentedCurve.createSegmentedMatlabPlotLoop(0, 1, entry.getKey()));
-//                writer.write("figure(3)\n");
-//                writer.write(SegmentedCurve.createSegmentedMatlabPlotLoop(0, 2, entry.getKey()));
-//                writer.write("figure(4)\n");
-//                writer.write(SegmentedCurve.createSegmentedMatlabPlotLoop(1, 2, entry.getKey()));
-
                 writer.write("figure(2)\n");
                 writer.write(SegmentedCurve.createSegmentedMatlabPlotLoop(1, 0, entry.getKey()));
+                
+                ////// TESTAR COMENTADO NA STONE
                 writer.write("figure(3)\n");
                 writer.write(SegmentedCurve.createSegmentedMatlabPlotLoop(2, 0, entry.getKey()));
                 writer.write("figure(4)\n");
                 writer.write(SegmentedCurve.createSegmentedMatlabPlotLoop(1, 2, entry.getKey()));
+                //////
 
             } else {
 //                Orbit orbit = (Orbit) curve;
