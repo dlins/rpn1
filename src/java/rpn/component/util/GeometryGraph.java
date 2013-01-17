@@ -161,7 +161,6 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
                     graph.draw(line4DC);
                 }
 
-                
             }
             if (curve instanceof WaveCurve) {
                 infoWaveCurve(newValue, (WaveCurve)curve, panel);

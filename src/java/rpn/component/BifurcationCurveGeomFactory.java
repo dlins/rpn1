@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import rpn.RPnDesktopPlotter;
+import rpn.controller.ui.UIController;
 import rpn.parser.RPnDataModule;
 import rpnumerics.*;
 import wave.multid.view.ViewingAttr;
@@ -133,10 +134,34 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
 
         isGeomOutOfDate_ = true;
 
+        // --- loop original: remoção correta atuando apenas a partir dos painéis auxiliares
+//        for (Integer i : segmentsToRemove) {
+//            segRem.add(((BifurcationCurve) curve).rightSegments().get(i));
+//            segRemLeft.add(((BifurcationCurve) curve).leftSegments().get(i));
+//        }
+
+
+        // --- 17JAN : permite remover corretamente, mesmo atuando sobre o painel principal
         for (Integer i : segmentsToRemove) {
-            segRem.add(((BifurcationCurve) curve).rightSegments().get(i));
-            segRemLeft.add(((BifurcationCurve) curve).leftSegments().get(i));
+            if (UIController.instance().isAuxPanelsEnabled()) {
+                segRem.add(((BifurcationCurve) curve).rightSegments().get(i));
+                segRemLeft.add(((BifurcationCurve) curve).leftSegments().get(i));
+            }
+            else {
+                int j = 0;
+                if (i>=curve.segments().size()/2) {
+                    j = i - curve.segments().size()/2;
+                    segRem.add(((BifurcationCurve) curve).rightSegments().get(j));
+                    segRemLeft.add(((BifurcationCurve) curve).leftSegments().get(j));
+                }
+                else {
+                    segRem.add(((BifurcationCurve) curve).rightSegments().get(i));
+                    segRemLeft.add(((BifurcationCurve) curve).leftSegments().get(i));
+                }
+            }
         }
+        // ---------------
+
 
         ((BifurcationCurve) curve).rightSegments().removeAll(segRem);
         ((BifurcationCurve) curve).leftSegments().removeAll(segRemLeft);
