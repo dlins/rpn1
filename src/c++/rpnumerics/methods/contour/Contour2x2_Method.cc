@@ -167,8 +167,8 @@ void Contour2x2_Method::curve2x2(ThreeImplicitFunctions *timpf,
     dur = gv_right->grid_resolution.component(0);
     dvr = gv_right->grid_resolution.component(1);
 
-    dumax = 2.0 * max ( dur, dul );
-    dvmax = 2.0 * max ( dvr, dvl );
+    dumax = 3.0 * max ( dur, dul ) ;//+ min ( dur, dul );
+    dvmax = 3.0 * max ( dvr, dvl ) ;//+ min ( dvr, dvl );
 
     double u[hn][hm + 1];
     double g[hm][hm + 1];

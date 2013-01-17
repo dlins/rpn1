@@ -5,6 +5,7 @@
  */
 package rpnumerics;
 
+import java.util.List;
 import wave.util.RealVector;
 import wave.util.RealMatrix2;
 
@@ -87,10 +88,13 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
         return calc();
     }
 
+    
     @Override
-    public RpSolution recalc(Area area) throws RpException {
+    public RpSolution recalc(List<Area> areaList) throws RpException {
 
         System.out.println("Entrou neste recalc(area)");
+        Area area = areaList.get(0);
+        
 
         HugoniotCurve result;
         result = (HugoniotCurve) calc(((HugoniotParams) getParams()).getXZero(), (int) area.getResolution().getElement(0), (int) area.getResolution().getElement(1), area.getTopRight(), area.getDownLeft());
@@ -108,6 +112,7 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
     }
 
     private native RpSolution calc(PhasePoint initialpoint) throws RpException;
+    
 
     private native RpSolution calc(PhasePoint initialpoint, int xRes_, int yRes_, RealVector topR, RealVector dwnL) throws RpException;
 }

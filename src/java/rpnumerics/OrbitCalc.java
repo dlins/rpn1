@@ -6,6 +6,7 @@
  */
 package rpnumerics;
 
+import java.util.List;
 import wave.util.RealVector;
 
 public class OrbitCalc implements RpCalculation {
@@ -97,12 +98,14 @@ public class OrbitCalc implements RpCalculation {
         start_= new OrbitPoint(startpoint);
     }
 
-    public RpSolution recalc(Area area) throws RpException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+   
 
 
     private native RpSolution nativeCalc (OrbitPoint initialPoint, PhasePoint referencePoint,double speed, int direction ,RealVector[] poincareSection) throws RpException;
 //       private native RpSolution nativeCalc (OrbitPoint initialPoint, PhasePoint referencePoint,double speed, int direction ) throws RpException;
+
+    public RpSolution recalc(List<Area> area) throws RpException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
 }

@@ -6,6 +6,8 @@
  */
 package rpnumerics;
 
+import java.util.List;
+
 public class BoundaryExtensionCurveCalc extends ContourCurveCalc {
 
     //
@@ -69,6 +71,10 @@ public class BoundaryExtensionCurveCalc extends ContourCurveCalc {
    
 
     private native RpSolution nativeCalc(int edgeResolution,  int rightFamily, int edge, int characteristicDomain) throws RpException;
+
+    public RpSolution recalc(List<Area> area) throws RpException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
     
 }

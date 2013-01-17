@@ -44,7 +44,7 @@ public:
     GridValues * getGrid(const string &);
     void setResolution(const string &,vector<int>);
     GridValuesFactory(const Physics *);
-    void updateGrids();
+    void invalidateGrids();
 
 };
 

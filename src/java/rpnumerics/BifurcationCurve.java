@@ -33,7 +33,8 @@ public class BifurcationCurve extends SegmentedCurve {
      public BifurcationCurve(List<RealSegment> leftList, List<RealSegment> rightList) {
 
         super(createSingleSegmentList(leftList, rightList));
-
+        
+         
         leftSegments_ = leftList;
         rightSegments_ = rightList;
 

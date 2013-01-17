@@ -292,5 +292,9 @@ public class ConnectionOrbitCalc implements RpCalculation {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    public RpSolution recalc(List<Area> area) throws RpException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
    
 }

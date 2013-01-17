@@ -122,7 +122,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionOrbitCalc_calc(JNIEnv * env
         double lambda = tempVector.component(tempVector.size() - 1);
 
 
-        cout << tempVector << endl;
+//        cout << tempVector << endl;
 
         double * dataCoords = tempVector;
 

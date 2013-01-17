@@ -105,31 +105,9 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setParams
         paramVector.push_back(paramElementString);
 
     }
-
-    
-    
-
     RpNumerics::getPhysics().setParams(paramVector);
 
-//    int dimension = RpNumerics::getPhysics().domain().dim();
-//
-//    const Boundary * boundary = &RpNumerics::getPhysics().boundary();
-//
-//
-//    GridValues * gridHugoniot = RpNumerics::getGridFactory().getGrid("hugoniotcurve");
-//
-//    GridValues * gridDoubleContact = RpNumerics::getGridFactory().getGrid("doublecontactcurve");
-//
-//    GridValues * gridBifurcation = RpNumerics::getGridFactory().getGrid("bifurcation");
-//
-//
-//    std::vector<int> resolution;
-//
-//    resolution.push_back(gridHugoniot->grid.rows());
-//    resolution.push_back(gridHugoniot->grid.cols());
-
-    RpNumerics::getGridFactory().updateGrids();
-
+    RpNumerics::getGridFactory().invalidateGrids();
 
 }
 
@@ -267,10 +245,6 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setResolution
     env->GetDoubleArrayRegion(maxLimit, 0, dimension, maxNativeArray);
 
 
-    RealVector minNativeVector(dimension, minNativeArray);
-
-    RealVector maxNativeVector(dimension, maxNativeArray);
-
     //Processing resolution
     vector<int>newResolutionVector;
 
@@ -399,7 +373,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setBoundary
 
 
     }
-    RpNumerics::getGridFactory().updateGrids();
+    RpNumerics::getGridFactory().invalidateGrids();
 
 
 }

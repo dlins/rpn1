@@ -13,6 +13,7 @@ package rpnumerics;
 // fills the local information of eigenvalues, eigenvectors, schur decompositions
 // the point initial_ is taken as an initial guess.
 //
+import java.util.List;
 import wave.util.RealVector;
 
 public class StationaryPointCalc implements RpCalculation {
@@ -162,7 +163,7 @@ public class StationaryPointCalc implements RpCalculation {
 
     }
 
-    public RpSolution recalc(Area area) throws RpException {
+    public RpSolution recalc(List<Area> area) throws RpException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

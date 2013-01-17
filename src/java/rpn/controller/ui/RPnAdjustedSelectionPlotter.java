@@ -200,7 +200,10 @@ public class RPnAdjustedSelectionPlotter extends RPn2DMouseController  {
     }
 
 
-    private Path2D.Double adjustPath(Path2D.Double input, wcWindow wc, int xResolution, int yResolution) {
+    
+    
+    
+     private Path2D.Double adjustPath(Path2D.Double input, wcWindow wc, int xResolution, int yResolution) {
 
         Path2D.Double output = new Path2D.Double();
 
@@ -269,5 +272,20 @@ public class RPnAdjustedSelectionPlotter extends RPn2DMouseController  {
         return output;
 
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+   
   
 }

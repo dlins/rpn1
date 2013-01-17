@@ -81,13 +81,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
 
 
-    cout << "Parametros: " << RpNumerics::getPhysics().fluxFunction().fluxParams().params() << endl;
+//    cout << "Parametros: " << RpNumerics::getPhysics().fluxFunction().fluxParams().params() << endl;
 
 
 
     RealVector Uref(dimension, input);
 
-    cout << "URef " << Uref << endl;
+//    cout << "URef " << Uref << endl;
 
     RpNumerics::getPhysics().getSubPhysics(0).preProcess(Uref);
 
@@ -96,13 +96,14 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     Hugoniot_Locus *hugoniotCurve = RpNumerics::getPhysics().getSubPhysics(0).getHugoniotFunction();
 
     GridValues * gv = RpNumerics::getGridFactory().getGrid("hugoniotcurve");
+    
+    cout<<"Resolucao: "<<gv->grid_resolution<<endl;
 
     vector<bool> isCircular;
 
     hugoniotCurve->classified_curve(&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(),
             *gv, Uref, hugoniotPolyLineVector, isCircular);
 
-    cout << "Saida: " << hugoniotPolyLineVector.size() << endl;
 
     for (int i = 0; i < hugoniotPolyLineVector.size(); i++) {
 
@@ -125,6 +126,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
             //Construindo left e right points
             jobject realVectorLeftPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRLeft);
             jobject realVectorRightPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRRight);
+            
+            env->DeleteLocalRef(eigenValRLeft);
+            env->DeleteLocalRef(eigenValRRight);
 
             int pointType = hugoniotPolyLineVector[i].type[j];
 

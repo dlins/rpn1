@@ -54,7 +54,7 @@ public class RPnConfig {
             paramObserver = new RPnFluxParamsObserver(fluxConfiguration);
 
 
-              System.out.println("VETOTR A : ");
+//              System.out.println("VETOTR A : ");
             String[] namesA = new String[fluxConfiguration.getParamsSize()];
             for (int i=0; i<namesA.length;i++) {
                 namesA[i] = "A " +fluxConfiguration.getParamName(i);
@@ -62,7 +62,7 @@ public class RPnConfig {
             }
 
 
-            System.out.println("VETOTR B : ");
+//            System.out.println("VETOTR B : ");
             String[] namesB = new String[fluxConfiguration.getParamsSize()];
             for (int i=0; i<namesB.length;i++) {
                 namesB[i] = "B " +fluxConfiguration.getParamName(i);
@@ -79,11 +79,11 @@ public class RPnConfig {
             }
 
             finalNames[finalNames.length - 1] = "alpha";
-
-            System.out.println("VETOTR FINAL_NAMES : ");
-            for (int i=0; i<finalNames.length; i++) {
-                System.out.println(finalNames[i]);
-            }
+//
+//            System.out.println("VETOTR FINAL_NAMES : ");
+//            for (int i=0; i<finalNames.length; i++) {
+//                System.out.println(finalNames[i]);
+//            }
 
 
             String[] values = new String[fluxConfiguration.getParamsSize()*2 + 1];
