@@ -207,7 +207,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc__Lja
     //LEFT GRID VALUES
 
 
-    jobject leftArea = env->CallObjectMethod(areasList, listGetMethodID, 1);
+    jobject leftArea = env->CallObjectMethod(areasList, listGetMethodID, 0);
 
     jobject leftResolutionRealVector = env->CallObjectMethod(leftArea, areaGetResolutionMethodID);
 
@@ -257,7 +257,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc__Lja
     //RIGHT GRID VALUES
 
 
-    jobject rightArea = env->CallObjectMethod(areasList, listGetMethodID, 0);
+    jobject rightArea = env->CallObjectMethod(areasList, listGetMethodID, 1);
 
     jobject rightResolutionRealVector = env->CallObjectMethod(rightArea, areaGetResolutionMethodID);
 
@@ -296,7 +296,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc__Lja
     cout<<"No JNI RIGHT: "<<leftPminR<<" "<<rightPmaxR<<endl;
     
 
-    GridValues rightGridValues(boundary, leftPminR, rightPmaxR, leftResolution);
+    GridValues rightGridValues(boundary, leftPminR, rightPmaxR, rightResolution);
 
 //---------------------------------------------------------------------------------------------------
 

@@ -19,11 +19,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import rpn.RPnDialog;
+import rpn.RPnLeftPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpacePanel;
+import rpn.component.BifurcationCurveGeom;
 import rpn.component.RpCalcBasedGeomFactory;
 import rpn.component.RpGeometry;
 import rpn.component.util.AreaSelected;
@@ -42,7 +45,8 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
     // Members
     //
     private static CurveRefineCommand instance_ = null;
-    private RealVector resolution_;
+    private RealVector leftResolution_;
+    private RealVector rightResolution_;
     private RpGeometry curveToRefine_ = null;
     private RPnPhaseSpacePanel panelToRefine_ = null;
 
@@ -51,7 +55,9 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
     //
     protected CurveRefineCommand() {
         super(DESC_TEXT);
-        resolution_ = new RealVector(2);
+        leftResolution_ = new RealVector(2);
+        rightResolution_ = new RealVector(2);
+
     }
 
     public void execute() {
@@ -79,15 +85,28 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
         return instance_;
     }
 
-    public void setResolution(RealVector resolution) {
-        resolution_ = resolution;
+    public void setLeftResolution(RealVector resolution) {
+        leftResolution_ = resolution;
+    }
+
+    public void setRightResolution(RealVector resolution) {
+        rightResolution_ = resolution;
     }
 
     @Override
     public void actionPerformed(ActionEvent event) {
+        if (curveToRefine_ instanceof BifurcationCurveGeom) {
+            System.out.println("Eh curva de bifurcacao");
 
-        ResolutionDialog resolutionDialog = new ResolutionDialog("Resolution");
-        resolutionDialog.setVisible(true);
+            CorrespondentResolutionDialog rightResolutionDialog = new CorrespondentResolutionDialog("Resolution");
+            rightResolutionDialog.setVisible(true);
+
+        } else {
+            ResolutionDialog resolutionDialog = new ResolutionDialog("Resolution");
+            resolutionDialog.setVisible(true);
+
+        }
+
     }
 
     private void processGeometry(RpGeometry selectedGeometry, RPnPhaseSpacePanel phaseSpacePanel) {
@@ -96,23 +115,31 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
         List<Area> areasToRefine = new ArrayList<Area>();
 
         List<AreaSelected> graphicsArea = phaseSpacePanel.getSelectedAreas();
-        
-        
-            // ------ Preenche uma lista de areas correspondentes, caso existam
+
+        RPnPhaseSpaceAbstraction phaseSpace = (RPnPhaseSpaceAbstraction) phaseSpacePanel.scene().getAbstractGeom();
+
+        System.out.println("Right res: " + rightResolution_ + " Left res: " + leftResolution_);
+
+        // ------ Preenche uma lista de areas correspondentes, caso existam
         List<AreaSelected> correspondentAreas = new ArrayList<AreaSelected>();
         Iterator<RPnPhaseSpacePanel> phaseSpacePanelIterator = UIController.instance().getInstalledPanelsIterator();
         while (phaseSpacePanelIterator.hasNext()) {
             RPnPhaseSpacePanel panel = phaseSpacePanelIterator.next();
-            if (panel!=phaseSpacePanel  &&  panel.getSelectedAreas().size()>0) {
+            if (panel != phaseSpacePanel && panel.getSelectedAreas().size() > 0) {
                 correspondentAreas.addAll(panel.getSelectedAreas());
-                // ??? Necessario instanciar objeto Area ???
-                Area correspondentArea = new Area(resolution_, correspondentAreas.get(0));
-                System.out.println("Correspondent area: "+correspondentArea);
+                Area correspondentArea = null;
+                if (phaseSpace instanceof RPnLeftPhaseSpaceAbstraction) {
+                    correspondentArea = new Area(rightResolution_, correspondentAreas.get(0));
+                } else {
+                    correspondentArea = new Area(leftResolution_, correspondentAreas.get(0));
+                }
+                System.out.println("Correspondent area: " + correspondentArea);
+                System.out.println("Correspondent area res: " + correspondentArea.getResolution());
                 areasToRefine.add(correspondentArea);
             }
         }
         // -------------------
-        
+
 
         for (AreaSelected polygon : graphicsArea) {
 
@@ -120,16 +147,25 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
             while (geomIterator.hasNext()) {
                 GeomObjView geomObjView = (GeomObjView) geomIterator.next();
                 if (((RpGeometry) geomObjView.getAbstractGeom()) == selectedGeometry) {
-                    List<Integer> segmentIndex = geomObjView.contains((Polygon)polygon.getShape());
+                    List<Integer> segmentIndex = geomObjView.contains((Polygon) polygon.getShape());
                     if (!segmentIndex.isEmpty()) {
                         indexToRemove.addAll(segmentIndex);
-                        
-                        Area principalArea = new Area(resolution_, polygon);
+                        Area principalArea = null;
+                        if (phaseSpace instanceof RPnLeftPhaseSpaceAbstraction || phaseSpace instanceof RPnPhaseSpaceAbstraction) {
+                            principalArea = new Area(leftResolution_, polygon);
+                        } else {
+                            principalArea = new Area(rightResolution_, polygon);
+                        }
+
+
+
                         areasToRefine.add(principalArea);
-                        System.out.println("Resolucao: "+resolution_);
-                        System.out.println("Principal area: "+ principalArea);
-                        
-                        
+
+
+                        System.out.println("Principal area: " + principalArea);
+                        System.out.println("Principal area res: " + principalArea.getResolution());
+
+
 
                     }
 
@@ -138,11 +174,11 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
             }
 
         }
-        
-        
-        
 
-        
+
+
+
+
         RpCalcBasedGeomFactory factory = (RpCalcBasedGeomFactory) selectedGeometry.geomFactory();
 
         factory.updateGeom(areasToRefine, indexToRemove);
@@ -159,7 +195,6 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
 
         JTextField xresolution_;
         JTextField yresolution_;
-        JButton okButton_;
 
         public ResolutionDialog(String title) throws HeadlessException {
 
@@ -167,8 +202,8 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
             setSize(200, 200);
             setTitle(title);
 
-            xresolution_ = new JTextField(String.valueOf((int) resolution_.getElement(0)));
-            yresolution_ = new JTextField(String.valueOf((int) resolution_.getElement(1)));
+            xresolution_ = new JTextField(String.valueOf((int) leftResolution_.getElement(0)));
+            yresolution_ = new JTextField(String.valueOf((int) leftResolution_.getElement(1)));
 
             GridBagLayout gridBagLayout = new GridBagLayout();
             JPanel resolutionPanel = new JPanel(gridBagLayout);
@@ -207,10 +242,97 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
 
         @Override
         protected void apply() {
-            resolution_ = new RealVector(xresolution_.getText() + " " + yresolution_.getText());
+            setLeftResolution(new RealVector(xresolution_.getText() + " " + yresolution_.getText()));
             execute();
             dispose();
 
+
+        }
+
+        @Override
+        protected void begin() {
+        }
+    }
+
+    private class CorrespondentResolutionDialog extends RPnDialog {
+
+        JTextField leftXResolution_;
+        JTextField leftYResolution_;
+        JTextField rightXResolution_;
+        JTextField rightYResolution_;
+
+        public CorrespondentResolutionDialog(String title) throws HeadlessException {
+
+            super(false, true);
+            setSize(200, 200);
+            setTitle(title);
+
+
+            leftXResolution_ = new JTextField(String.valueOf((int) leftResolution_.getElement(0)));
+            leftYResolution_ = new JTextField(String.valueOf((int) leftResolution_.getElement(1)));
+
+
+
+            rightXResolution_ = new JTextField(String.valueOf((int) leftResolution_.getElement(0)));
+            rightYResolution_ = new JTextField(String.valueOf((int) leftResolution_.getElement(1)));
+
+
+            GridBagLayout gridBagLayout = new GridBagLayout();
+            JPanel resolutionPanel = new JPanel(gridBagLayout);
+
+            GridBagConstraints constraints = new GridBagConstraints();
+
+
+            constraints.weightx = 1.0;
+            constraints.fill = GridBagConstraints.BOTH;
+
+            constraints.gridx = 0;
+            resolutionPanel.add(new JLabel("Left Resolution"), constraints);
+
+            constraints.gridy = 1;
+            resolutionPanel.add(leftXResolution_, constraints);
+
+            constraints.gridy = 2;
+            resolutionPanel.add(leftYResolution_, constraints);
+
+
+            constraints.gridx = 1;
+
+
+            constraints.gridy = 0;
+
+            resolutionPanel.add(new JLabel("Right Resolution"), constraints);
+
+            constraints.gridy = 1;
+
+            resolutionPanel.add(rightXResolution_, constraints);
+
+            constraints.gridy = 2;
+
+            resolutionPanel.add(rightYResolution_, constraints);
+
+
+            getContentPane().add(resolutionPanel, BorderLayout.CENTER);
+
+
+
+            Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+
+            int height = dim.height;
+            int width = dim.width;
+
+            this.setLocation((int) (width - (width * .45)), (int) (height - (height * .9)));
+            this.setLocation((int) (width - (width * .45)), 100);
+
+
+        }
+
+        @Override
+        protected void apply() {
+            setLeftResolution(new RealVector(leftXResolution_.getText() + " " + leftYResolution_.getText()));
+            setRightResolution(new RealVector(rightXResolution_.getText() + " " + rightYResolution_.getText()));
+            execute();
+            dispose();
         }
 
         @Override
