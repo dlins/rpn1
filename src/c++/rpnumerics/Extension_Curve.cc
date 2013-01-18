@@ -1,87 +1,161 @@
 #include "Extension_Curve.h"
 
+int Extension_Curve::species_physic(Extension_Curve *ec, double *foncub, int domain_i, int domain_j, int kl){
+    double lambda;
+
+    if (ec->characteristic_where == CHARACTERISTIC_ON_CURVE) {
+        lambda = ec->segment_lambda[kl];
+    } else {
+        lambda = ec->gv->e(domain_i, domain_j)[ec->family].r;
+    }
+
+    foncub[0] = lambda * (ec->gv->G_on_grid(domain_i, domain_j).component(0) - ec->segment_accum(0, kl))
+            - (ec->gv->F_on_grid(domain_i, domain_j).component(0) - ec->segment_flux(0, kl));
+    foncub[1] = lambda * (ec->gv->G_on_grid(domain_i, domain_j).component(1) - ec->segment_accum(1, kl))
+            - (ec->gv->F_on_grid(domain_i, domain_j).component(1) - ec->segment_flux(1, kl));
+
+    return VALID_FUNCTION_ON_VERTICES;
+}
+
+int Extension_Curve::compositional_physic(Extension_Curve *ec, double *foncub, int domain_i, int domain_j, int kl){
+    double lambda;
+
+    double F10 = ec->segment_flux(0, kl);
+    double F20 = ec->segment_flux(1, kl);
+    double F30 = ec->segment_flux(2, kl);
+
+    double dG1 = ec->gv->G_on_grid(domain_i, domain_j).component(0) - ec->segment_accum(0, kl);
+    double dG2 = ec->gv->G_on_grid(domain_i, domain_j).component(1) - ec->segment_accum(1, kl);
+    double dG3 = ec->gv->G_on_grid(domain_i, domain_j).component(2) - ec->segment_accum(2, kl);
+
+    double F1 = ec->gv->F_on_grid(domain_i, domain_j).component(0);
+    double F2 = ec->gv->F_on_grid(domain_i, domain_j).component(1);
+    double F3 = ec->gv->F_on_grid(domain_i, domain_j).component(2);
+
+    double X12 = F1 * dG2 - F2 * dG1;
+    double X31 = F3 * dG1 - F1 * dG3;
+    double X23 = F2 * dG3 - F3 * dG2;
+
+    double X12_0 = F10 * dG2 - F20 * dG1;
+    double X31_0 = F30 * dG1 - F10 * dG3;
+    double X23_0 = F20 * dG3 - F30 * dG2;
+
+    double Y21 = F2 * F10 - F1*F20;
+    double Y13 = F1 * F30 - F3*F10;
+    double Y32 = F3 * F20 - F2*F30;
+
+    double red_shock_speed;
+    double den = X12 * X12 + X31 * X31 + X23*X23;
+    double scaling_factor = (X12_0 * X12 + X31_0 * X31 + X23_0 * X23) / den;
+
+    if ( fabs(den) < 1.0e-8) {
+
+        den = X12_0 * X12_0 + X31_0 * X31_0 + X23_0 * X23_0;
+        red_shock_speed = (Y21 * X12_0 + Y13 * X31_0 + Y32 * X23_0) / den;
+
+        if ( fabs(den) < 1.0e-12) return INVALID_FUNCTION_ON_VERTICES;
+
+    } else {
+        red_shock_speed = (Y21 * X12 + Y13 * X31 + Y32 * X23) / den;
+    }
+        
+    if (ec->characteristic_where == CHARACTERISTIC_ON_CURVE) {
+        lambda = ec->segment_lambda[kl];
+    } else {
+        lambda = scaling_factor * ec->gv->e(domain_i, domain_j)[ec->family].r;
+    }
+        
+    foncub[0] = dG1 * (F2 * F30 - F3 * F20) - dG2 * (F1 * F30 - F3 * F10) + dG3 * (F1 * F20 - F2 * F10);
+    foncub[1] = red_shock_speed - lambda;
+
+    return VALID_FUNCTION_ON_VERTICES;
+}
+
 int Extension_Curve::function_on_vertices(double *foncub, int domain_i, int domain_j, int kl) {
     if (gv == 0 || oc == 0) return INVALID_FUNCTION_ON_VERTICES;
 
     if (!gv->eig_is_real(domain_i, domain_j)[family]) return INVALID_FUNCTION_ON_VERTICES;
 
-    double lambda;
+//    double lambda;
+    
+    int info = (*type_of_physic)(this, foncub, domain_i, domain_j, kl);
+
+//    if (gv->grid(0, 0).size() == 2) {
+//        if (characteristic_where == CHARACTERISTIC_ON_CURVE) {
+//            lambda = segment_lambda[kl];
+//        } else {
+//            lambda = gv->e(domain_i, domain_j)[family].r;
+//        }
+
+//        foncub[0] = lambda * (gv->G_on_grid(domain_i, domain_j).component(0) - segment_accum(0, kl))
+//                - (gv->F_on_grid(domain_i, domain_j).component(0) - segment_flux(0, kl));
+//        foncub[1] = lambda * (gv->G_on_grid(domain_i, domain_j).component(1) - segment_accum(1, kl))
+//                - (gv->F_on_grid(domain_i, domain_j).component(1) - segment_flux(1, kl));
+//    }
+
+//    else {
+//        double F10 = segment_flux(0, kl);
+//        double F20 = segment_flux(1, kl);
+//        double F30 = segment_flux(2, kl);
+
+//        double dG1 = gv->G_on_grid(domain_i, domain_j).component(0) - segment_accum(0, kl);
+//        double dG2 = gv->G_on_grid(domain_i, domain_j).component(1) - segment_accum(1, kl);
+//        double dG3 = gv->G_on_grid(domain_i, domain_j).component(2) - segment_accum(2, kl);
+
+//        double F1 = gv->F_on_grid(domain_i, domain_j).component(0);
+
+//        double F2 = gv->F_on_grid(domain_i, domain_j).component(1);
+//        double F3 = gv->F_on_grid(domain_i, domain_j).component(2);
+
+//        double X12 = F1 * dG2 - F2 * dG1;
+//        double X31 = F3 * dG1 - F1 * dG3;
+//        double X23 = F2 * dG3 - F3 * dG2;
+
+//        double X12_0 = F10 * dG2 - F20 * dG1;
+//        double X31_0 = F30 * dG1 - F10 * dG3;
+//        double X23_0 = F20 * dG3 - F30 * dG2;
+
+//        double Y21 = F2 * F10 - F1*F20;
+//        double Y13 = F1 * F30 - F3*F10;
+//        double Y32 = F3 * F20 - F2*F30;
+
+//        double red_shock_speed;
+//        double den = X12 * X12 + X31 * X31 + X23*X23;
+//        double scaling_factor = (X12_0 * X12 + X31_0 * X31 + X23_0 * X23) / den;
+//        if ( fabs(den) < 1.0e-8) {
+
+//           den = X12_0 * X12_0 + X31_0 * X31_0 + X23_0 * X23_0;
+//           red_shock_speed = (Y21 * X12_0 + Y13 * X31_0 + Y32 * X23_0) / den;
+
+//          if ( fabs(den) < 1.0e-12) return INVALID_FUNCTION_ON_VERTICES;
+
+//        } else {
+//        red_shock_speed = (Y21 * X12 + Y13 * X31 + Y32 * X23) / den;
+//        }
+//        
+////        cout<<"red : "<<red_shock_speed<<endl;
 
 
-    if (gv->grid(0, 0).size() == 2) {
-        if (characteristic_where == CHARACTERISTIC_ON_CURVE) {
-            lambda = segment_lambda[kl];
-        } else {
-            lambda = gv->e(domain_i, domain_j)[family].r;
-        }
+//        if (characteristic_where == CHARACTERISTIC_ON_CURVE) {
 
-        foncub[0] = lambda * (gv->G_on_grid(domain_i, domain_j).component(0) - segment_accum(0, kl))
-                - (gv->F_on_grid(domain_i, domain_j).component(0) - segment_flux(0, kl));
-        foncub[1] = lambda * (gv->G_on_grid(domain_i, domain_j).component(1) - segment_accum(1, kl))
-                - (gv->F_on_grid(domain_i, domain_j).component(1) - segment_flux(1, kl));
-    }
+//            lambda = segment_lambda[kl];
+////            cout << "Valor do lambda: " << lambda << endl;
 
-    else {
-        double F10 = segment_flux(0, kl);
-        double F20 = segment_flux(1, kl);
-        double F30 = segment_flux(2, kl);
+//        } else {
 
-        double dG1 = gv->G_on_grid(domain_i, domain_j).component(0) - segment_accum(0, kl);
-        double dG2 = gv->G_on_grid(domain_i, domain_j).component(1) - segment_accum(1, kl);
-        double dG3 = gv->G_on_grid(domain_i, domain_j).component(2) - segment_accum(2, kl);
+//                    lambda = scaling_factor * gv->e(domain_i, domain_j)[family].r;
 
-        double F1 = gv->F_on_grid(domain_i, domain_j).component(0);
-        double F2 = gv->F_on_grid(domain_i, domain_j).component(1);
-        double F3 = gv->F_on_grid(domain_i, domain_j).component(2);
-
-        double X12 = F1 * dG2 - F2 * dG1;
-        double X31 = F3 * dG1 - F1 * dG3;
-        double X23 = F2 * dG3 - F3 * dG2;
-
-        double X12_0 = F10 * dG2 - F20 * dG1;
-        double X31_0 = F30 * dG1 - F10 * dG3;
-        double X23_0 = F20 * dG3 - F30 * dG2;
-
-        double Y21 = F2 * F10 - F1*F20;
-        double Y13 = F1 * F30 - F3*F10;
-        double Y32 = F3 * F20 - F2*F30;
-
-        double red_shock_speed;
-        double den = X12 * X12 + X31 * X31 + X23*X23;
-        double scaling_factor = (X12_0 * X12 + X31_0 * X31 + X23_0 * X23) / den;
-        if ( fabs(den) < 1.0e-8) {
-
-           den = X12_0 * X12_0 + X31_0 * X31_0 + X23_0 * X23_0;
-           red_shock_speed = (Y21 * X12_0 + Y13 * X31_0 + Y32 * X23_0) / den;
-
-          if ( fabs(den) < 1.0e-12) return INVALID_FUNCTION_ON_VERTICES;
-
-        } else {
-        red_shock_speed = (Y21 * X12 + Y13 * X31 + Y32 * X23) / den;
-        }
-        
-//        cout<<"red : "<<red_shock_speed<<endl;
+//        }if (gv->grid(0, 0).size() == 2) {
+//        
 
 
-        if (characteristic_where == CHARACTERISTIC_ON_CURVE) {
-            lambda = segment_lambda[kl];
-//            cout << "Valor do lambda: " << lambda << endl;
-
-        } else {
-
-                    lambda = scaling_factor * gv->e(domain_i, domain_j)[family].r;
-
-        }
-        
+//        foncub[0] = dG1 * (F2 * F30 - F3 * F20) - dG2 * (F1 * F30 - F3 * F10) + dG3 * (F1 * F20 - F2 * F10);
+//        foncub[1] = red_shock_speed - lambda;
 
 
-        foncub[0] = dG1 * (F2 * F30 - F3 * F20) - dG2 * (F1 * F30 - F3 * F10) + dG3 * (F1 * F20 - F2 * F10);
-        foncub[1] = red_shock_speed - lambda;
+//    }
 
-
-    }
-
-    return VALID_FUNCTION_ON_VERTICES;
+    return info;
 }
 
 bool Extension_Curve::valid_segment(int i) {
@@ -90,8 +164,6 @@ bool Extension_Curve::valid_segment(int i) {
     double epsilon = 1e-7;
 
     int dim = oc->at(i).size();
-
-
 
     double F[dim], G[dim], JF[dim][dim], JG[dim][dim];
 
@@ -134,7 +206,6 @@ void Extension_Curve::curve(const FluxFunction *f, const AccumulationFunction *a
 
     family = fam;
 
-
     characteristic_where = where_is_characteristic;
     singular = is_singular;
 
@@ -146,7 +217,11 @@ void Extension_Curve::curve(const FluxFunction *f, const AccumulationFunction *a
     extension_on_curve.clear();
     extension_on_domain.clear();
 
+    if (gv->grid(0, 0).size() == 2) type_of_physic = &species_physic;
+    else                            type_of_physic = &compositional_physic;
+
     Contour2p5_Method::contour2p5(this, extension_on_curve, extension_on_domain);
 
     return;
 }
+

@@ -22,6 +22,11 @@ protected:
     
     const FluxFunction *ff;
     const AccumulationFunction *aa;
+
+    static int species_physic(Extension_Curve*, double*, int, int, int);
+    static int compositional_physic(Extension_Curve*, double*, int, int, int);
+
+    int (*type_of_physic)(Extension_Curve*, double*, int, int, int);
 public:
     // TODO: Maybe this class could be formed by purely static. In that case the ctor() may be useless.
     // The convenience of this approach is to be discussed sometime.
