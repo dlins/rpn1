@@ -72,7 +72,7 @@ public abstract class RPn2DMouseController implements  MouseMotionListener, Mous
         int biggestIndex = Math.max(compIndex[0], compIndex[1]);
         int smallestIndex = Math.min(compIndex[0], compIndex[1]);
 
-        System.out.println("smallestIndex , biggestIndex ::::: " +smallestIndex +" , " +biggestIndex);
+        //System.out.println("smallestIndex , biggestIndex ::::: " +smallestIndex +" , " +biggestIndex);
 
         Coords2D cursorPosDC = new Coords2D(cursorPosArray);
         Coords2D mePosDC = new Coords2D(mePosArray);
@@ -92,7 +92,7 @@ public abstract class RPn2DMouseController implements  MouseMotionListener, Mous
         mePosWC.setElement(0, tempCoords2.getElement(smallestIndex));
         mePosWC.setElement(1, tempCoords2.getElement(biggestIndex));
 
-        System.out.println("mePosWC ::::::::::::::::::::::::::::::::::::::: " +mePosWC.getElement(0) +" , " +mePosWC.getElement(1));
+        //System.out.println("mePosWC ::::::::::::::::::::::::::::::::::::::: " +mePosWC.getElement(0) +" , " +mePosWC.getElement(1));
 
         Path2D.Double selectionPath = new Path2D.Double();
 
@@ -114,7 +114,7 @@ public abstract class RPn2DMouseController implements  MouseMotionListener, Mous
 
     // ----- Testar com outra assinatura
     protected Path2D.Double plotWCArea(Point cursorPos_, Point me, RPnPhaseSpacePanel panel) {
-        System.out.println("plotWCArea com nova assinatura");
+        //System.out.println("plotWCArea com nova assinatura");
 
         ViewingTransform viewingTransform = panel.scene().getViewingTransform();
 
@@ -132,9 +132,9 @@ public abstract class RPn2DMouseController implements  MouseMotionListener, Mous
 
         Path2D.Double selectionPath = new Path2D.Double();
 
-        System.out.println("Coordenadas do mundo encontradas : ");
-        System.out.println("cursorPosWC ::: " +cursorPosWC.getElement(0) +" , " +cursorPosWC.getElement(1));
-        System.out.println("mePosWC     ::: " +mePosWC.getElement(0) +" , " +mePosWC.getElement(1));
+        //System.out.println("Coordenadas do mundo encontradas : ");
+        //System.out.println("cursorPosWC ::: " +cursorPosWC.getElement(0) +" , " +cursorPosWC.getElement(1));
+        //System.out.println("mePosWC     ::: " +mePosWC.getElement(0) +" , " +mePosWC.getElement(1));
 
         selectionPath.moveTo(cursorPosWC.getElement(0), cursorPosWC.getElement(1));
 

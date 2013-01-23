@@ -109,13 +109,19 @@ public class WaveCurve extends RPnCurve implements WaveCurveBranch, RpSolution {
 
     // ------------------------ Acrescentei estes métodos em 15JAN2013 (Leandro)
     // ------- Isso foi feito para atender a uma necessidade emergencial do Cido
-    public String toMatlabData(int curveIndex) {
+    public String toMatlabData2D(int curveIndex) {
 
         StringBuffer buffer = new StringBuffer();
 
         try {
             FileWriter gravador = new FileWriter(RPnUIFrame.dir + "/data" +curveIndex +".txt");
             BufferedWriter saida = new BufferedWriter(gravador);
+
+            String direction = "Forward";
+            if (getDirection()==Orbit.WAVECURVE_BACKWARD) direction = "Backward";
+
+            saida.write("%% " +getClass().getSimpleName() + " Family:" +getFamily() + " Direction:" +direction +"\n");
+            saida.write("%% xcoord1 ycoord1 xcoord2 ycoord2\n");
 
             for (int i = 0; i < segments().size(); i++) {
                 saida.write(segments().get(i).toString() +"\n");
@@ -134,19 +140,21 @@ public class WaveCurve extends RPnCurve implements WaveCurveBranch, RpSolution {
 
     public String create2DPointMatlabPlot(int x, int y, int identifier) {
 
-        System.out.println("Entrei no create2DPointMatlabPlot da classe WaveCurve");
-
         StringBuffer buffer = new StringBuffer();
 
         String color = null;
 
-        color = "[0 0 1]";
+        if (getFamily()==0)
+            color = "[0 0 1]";
+        if (getFamily()==1)
+            color = "[1 0 0]";
 
         x++;
         y++;
 
         // ---
-        buffer.append("data" +identifier +" = read_data_file('data" +identifier +".txt');\n");
+        //buffer.append("data" +identifier +" = read_data_file('data" +identifier +".txt');\n");
+        buffer.append("data" +identifier +" = importdata('data" +identifier +".txt');\n");
         buffer.append("disp('data" +identifier +".txt')\n");
         // ---
 

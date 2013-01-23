@@ -45,6 +45,7 @@ import rpnumerics.BoundaryExtensionCurveCalc;
 import rpnumerics.CompositeCalc;
 import rpnumerics.DoubleContactCurve;
 import rpnumerics.DoubleContactCurveCalc;
+import rpnumerics.FundamentalCurve;
 import rpnumerics.HugoniotCurve;
 import rpnumerics.HugoniotCurveCalc;
 import rpnumerics.HugoniotCurveCalcND;
@@ -617,7 +618,13 @@ public class RPnDataModule {
     // ---------- 15JAN Método para exportar dados 2D e gerar script Matlab (apenas para físicas 2D)
     // --- Isso foi feito para atender a uma necessidade emergencial do Cido
     static public void matlabExport2D(FileWriter writer) throws java.io.IOException {
-        Iterator<RpGeometry> iterator = PHASESPACE.getGeomObjIterator();
+
+        RPnPhaseSpaceAbstraction phaseSpace = null;
+        if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("Phase Space"))      phaseSpace = RPnDataModule.PHASESPACE;
+        if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("RightPhase Space")) phaseSpace = RPnDataModule.RIGHTPHASESPACE;
+        if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("LeftPhase Space"))  phaseSpace = RPnDataModule.LEFTPHASESPACE;
+        Iterator<RpGeometry> iterator = phaseSpace.getGeomObjIterator();
+        
         writer.write("close all; clear all;\n");
 
         //Inserting data
@@ -639,19 +646,19 @@ public class RPnDataModule {
         for (Entry<Integer, RpGeometry> entry : geometrySet) {
 
             RPnCurve curve = (RPnCurve) entry.getValue().geomFactory().geomSource();
-            toMatlabReadFile();
+            //toMatlabReadFile();
 
             if (curve instanceof SegmentedCurve) {
                 SegmentedCurve sCurve = (SegmentedCurve) curve;
-                writer.write(sCurve.toMatlabOnlyCoords(entry.getKey()));
+                writer.write(sCurve.toMatlabData2D(entry.getKey(), phaseSpace));
             }
-            if (curve instanceof Orbit) {
-                Orbit orbit = (Orbit) curve;
-                writer.write(orbit.toMatlabData(entry.getKey()));
+            if (curve instanceof FundamentalCurve) {
+                FundamentalCurve fundamental = (FundamentalCurve) curve;
+                writer.write(fundamental.toMatlabData2D(entry.getKey()));
             }
             if (curve instanceof WaveCurve) {
                 WaveCurve wave = (WaveCurve) curve;
-                writer.write(wave.toMatlabData(entry.getKey()));
+                writer.write(wave.toMatlabData2D(entry.getKey()));
             }
 
         }
@@ -666,12 +673,12 @@ public class RPnDataModule {
             writer.write("figure(1)\n");
 
             if (curve instanceof SegmentedCurve) {
-                writer.write(SegmentedCurve.createSegmentedMatlabPlotLoop2D(0, 1, entry.getKey()));
-
+                SegmentedCurve sCurve = (SegmentedCurve) curve;
+                writer.write(sCurve.createSegmentedMatlabPlotLoop2D(0, 1, entry.getKey()));
             }
-            if (curve instanceof Orbit) {
-                Orbit orbit = (Orbit) curve;
-                writer.write(orbit.create2DPointMatlabPlot(0, 1, entry.getKey()));      //ATENCAO: este método (create2D...) estava comentado em Orbit
+            if (curve instanceof FundamentalCurve) {
+                FundamentalCurve fundamental = (FundamentalCurve) curve;
+                writer.write(fundamental.create2DPointMatlabPlot(0, 1, entry.getKey()));
             }
             if (curve instanceof WaveCurve) {
                 WaveCurve wave = (WaveCurve) curve;
@@ -716,7 +723,7 @@ public class RPnDataModule {
 
             } else {
                 Orbit orbit = (Orbit) curve;
-                writer.write(orbit.toMatlabData(entry.getKey()));
+                //writer.write(orbit.toMatlabData(entry.getKey()));
             }
 
         }

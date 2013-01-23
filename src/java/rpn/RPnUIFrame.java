@@ -679,7 +679,17 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             JFileChooser chooser = new JFileChooser();
             chooser.setSelectedFile(new File("script.m"));
             chooser.setFileFilter(new FileNameExtensionFilter("Matlab file", "m"));
-            if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+
+            // ---
+            Object[] options = { "Yes", "No" };
+            int n = JOptionPane.showOptionDialog(null,
+                     "Contents of the selected folder will be erased. Continue?",
+                     "WARNING", JOptionPane.YES_NO_OPTION,
+                     JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+            // ---
+
+            if (n==0) {
+                if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
 
                 int nFiles = chooser.getSelectedFile().getParentFile().listFiles().length;
 
@@ -698,7 +708,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                     RPnDataModule.matlabExport2D(writer);
 
                 writer.close();
+                }
             }
+
 
         } catch (java.io.IOException ioex) {
             ioex.printStackTrace();

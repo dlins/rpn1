@@ -184,7 +184,8 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
                 oldBifurcationCurve.rightSegments().addAll(newBifurcation.rightSegments());
 
 
-                geomSource_ = new BifurcationCurve(oldBifurcationCurve.leftSegments(), oldBifurcationCurve.rightSegments());
+                //geomSource_ = new BifurcationCurve(oldBifurcationCurve.leftSegments(), oldBifurcationCurve.rightSegments());
+                geomSource_ = new DoubleContactCurve(oldBifurcationCurve.leftSegments(), oldBifurcationCurve.rightSegments());
 
 
             } catch (RpException ex) {

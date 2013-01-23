@@ -46,6 +46,8 @@ public class HysteresisCurveGeomFactory extends BifurcationCurveGeomFactory {
 
     public String toMatlab(int curveIndex) {
 
+        System.out.println("Entrei no toMatlab de Hysteresis");
+
         StringBuffer buffer = new StringBuffer();
         CoincidenceCurve curve = (CoincidenceCurve) geomSource();
         buffer.append("%%\nclose all;clear all;\n");

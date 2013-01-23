@@ -6,10 +6,15 @@
  */
 package rpnumerics;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import rpn.RPnUIFrame;
 import rpn.component.MultidAdapter;
 import wave.util.RealSegment;
+import wave.util.RealVector;
 
 public class FundamentalCurve extends Orbit implements WaveCurveBranch, RpSolution {
 
@@ -86,7 +91,76 @@ public class FundamentalCurve extends Orbit implements WaveCurveBranch, RpSoluti
         return segments_;
     }
 
-    
+
+
+    // ---------------------------- Acrescentei estes métodos em 18JAN2013 (Leandro)
+    public String toMatlabData2D(int curveIndex) {
+
+        StringBuffer buffer = new StringBuffer();
+
+        try {
+            FileWriter gravador = new FileWriter(RPnUIFrame.dir + "/data" +curveIndex +".txt");
+            BufferedWriter saida = new BufferedWriter(gravador);
+
+            String direction = "Forward";
+            if (getDirection()==Orbit.BACKWARD_DIR) direction = "Backward";
+
+            saida.write("%% " +getClass().getSimpleName() + " Family:" +getFamilyIndex() + " Direction:" +direction +"\n");
+            saida.write("%% xcoord1 ycoord1 xcoord2 ycoord2\n");
+
+            for (int i = 0; i < segments().size(); i++) {
+                RealSegment orbitPoint = segments().get(i);
+                saida.write(orbitPoint.toString() +"\n");
+            }
+
+            saida.close();
+        }
+        catch (IOException e) {
+            System.out.println("Arquivos .txt de Orbit nao foram escritos.");
+        }
+
+        return buffer.toString();
+
+    }
+
+
+    public String create2DPointMatlabPlot(int x, int y, int identifier) {
+
+        StringBuffer buffer = new StringBuffer();
+
+        String color = null;
+
+        if (getFamilyIndex()==0)
+            color = "[0 0 1]";
+        if (getFamilyIndex()==1)
+            color = "[1 0 0]";
+
+        x++;
+        y++;
+
+        buffer.append("data" +identifier +" = importdata('data" +identifier +".txt');\n");
+        buffer.append("disp('data" +identifier +".txt')\n");
+
+        buffer.append("plot(data" + identifier + "(:,");
+        buffer.append(x);
+        buffer.append("),");
+        buffer.append("data" + identifier + "(:,");
+        buffer.append(y);
+
+        buffer.append("),'Color'" + "," + color + ")\n");
+
+        buffer.append("hold on\n");
+
+        RealVector xMin = RPNUMERICS.boundary().getMinimums();
+        RealVector xMax = RPNUMERICS.boundary().getMaximums();
+
+        buffer.append("axis([" + xMin.getElement(x - 1) + " " + xMax.getElement(x - 1) + " " + xMin.getElement(y - 1) + " " + xMax.getElement(y - 1) + "]);\n");
+
+        return buffer.toString();
+
+    }
+    // -------------------------------------------------------------------------
+
 
 
 }

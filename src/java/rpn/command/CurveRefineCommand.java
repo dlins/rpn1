@@ -25,12 +25,18 @@ import rpn.RPnDialog;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpacePanel;
 import rpn.component.RpCalcBasedGeomFactory;
+import rpn.component.RpGeomFactory;
 import rpn.component.RpGeometry;
 import rpn.component.util.AreaSelected;
 import rpn.controller.ui.UIController;
+import rpn.parser.RPnDataModule;
 import rpnumerics.Area;
+import rpnumerics.ContourCurveCalc;
+import rpnumerics.RpCalculation;
 import wave.multid.view.GeomObjView;
 import wave.util.RealVector;
+import rpnumerics.RPNUMERICS;
+import wave.util.Boundary;
 
 public class CurveRefineCommand extends RpModelConfigChangeCommand {
     //
@@ -45,6 +51,8 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
     private RealVector resolution_;
     private RpGeometry curveToRefine_ = null;
     private RPnPhaseSpacePanel panelToRefine_ = null;
+    private int[] arrayCellsPrincipal = {0, 0};
+    private int[] arrayCellsCorrespondent = {0, 0};
 
     //
     // Constructors
@@ -90,32 +98,51 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
         resolutionDialog.setVisible(true);
     }
 
+
+
+    // --- Acrescentei este método em 21JAN2013
+    private int[] cellsInsideArea(RpGeometry geometry, Area area) {
+        int[] arrayCells = {0, 0};
+
+        RpGeomFactory factory = geometry.geomFactory();
+        RpCalcBasedGeomFactory geomFactory = (RpCalcBasedGeomFactory) factory;
+        RpCalculation calc = geomFactory.rpCalc();
+        ContourCurveCalc curveCalc = (ContourCurveCalc) calc;
+        int[] calcRes = curveCalc.getParams().getResolution();
+
+        Boundary boundary = RPNUMERICS.boundary();
+        double bdryWidth = boundary.getMaximums().getElement(0) - boundary.getMinimums().getElement(0);
+        double dx = bdryWidth / (1. * calcRes[0]);
+        double areaWidth = area.getTopRight().getElement(0) - area.getDownLeft().getElement(0);
+        arrayCells[0] = (int) Math.round(areaWidth / dx);
+
+        double bdryHeight = boundary.getMaximums().getElement(1) - boundary.getMinimums().getElement(1);
+        double dy = bdryHeight / (1. * calcRes[1]);
+        double areaHeight = area.getTopRight().getElement(1) - area.getDownLeft().getElement(1);
+        arrayCells[1] = (int) Math.round(areaHeight / dy);
+
+        return arrayCells;
+    }
+    // ---
+
+
+    // --- 21JAN : Nova versão de processGeometry(...) : decide quem é área direita/esquerda e seta no array de áreas sempre a ordem (direita, esquerda)
+    // --- No JNIDoubleContact, fica mantido: leftArea index 0; rightArea index 1
     private void processGeometry(RpGeometry selectedGeometry, RPnPhaseSpacePanel phaseSpacePanel) {
 
         List<Integer> indexToRemove = new ArrayList<Integer>();
         List<Area> areasToRefine = new ArrayList<Area>();
 
+        // ---
+        Area principalArea = null;
+        Area correspondentArea = null;
+        Area areaLeft  = null;
+        Area areaRight = null;
+        // ---
+
         List<AreaSelected> graphicsArea = phaseSpacePanel.getSelectedAreas();
-        
-        
-            // ------ Preenche uma lista de areas correspondentes, caso existam
-        List<AreaSelected> correspondentAreas = new ArrayList<AreaSelected>();
-        Iterator<RPnPhaseSpacePanel> phaseSpacePanelIterator = UIController.instance().getInstalledPanelsIterator();
-        while (phaseSpacePanelIterator.hasNext()) {
-            RPnPhaseSpacePanel panel = phaseSpacePanelIterator.next();
-            if (panel!=phaseSpacePanel  &&  panel.getSelectedAreas().size()>0) {
-                correspondentAreas.addAll(panel.getSelectedAreas());
-                // ??? Necessario instanciar objeto Area ???
-                Area correspondentArea = new Area(resolution_, correspondentAreas.get(0));
-                System.out.println("Correspondent area: "+correspondentArea);
-                areasToRefine.add(correspondentArea);
-            }
-        }
-        // -------------------
-        
 
         for (AreaSelected polygon : graphicsArea) {
-
             Iterator geomIterator = phaseSpacePanel.scene().geometries();
             while (geomIterator.hasNext()) {
                 GeomObjView geomObjView = (GeomObjView) geomIterator.next();
@@ -124,12 +151,17 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
                     if (!segmentIndex.isEmpty()) {
                         indexToRemove.addAll(segmentIndex);
                         
-                        Area principalArea = new Area(resolution_, polygon);
-                        areasToRefine.add(principalArea);
+                        principalArea = new Area(resolution_, polygon);
+                        System.out.println();
                         System.out.println("Resolucao: "+resolution_);
                         System.out.println("Principal area: "+ principalArea);
-                        
-                        
+
+                        // -----
+                        arrayCellsPrincipal = cellsInsideArea(selectedGeometry, principalArea);
+                        System.out.println("Contagem de células na área principal:");
+                        System.out.println("Quantidade de células na horizontal : " + arrayCellsPrincipal[0]);
+                        System.out.println("Quantidade de células na vertical   : " + arrayCellsPrincipal[1]);
+                        // -----
 
                     }
 
@@ -139,15 +171,49 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
 
         }
         
-        
-        
+        // ------ Preenche uma lista de areas correspondentes, caso existam
+        List<AreaSelected> correspondentAreas = new ArrayList<AreaSelected>();
+        Iterator<RPnPhaseSpacePanel> phaseSpacePanelIterator = UIController.instance().getInstalledPanelsIterator();
+        while (phaseSpacePanelIterator.hasNext()) {
+            RPnPhaseSpacePanel panel = phaseSpacePanelIterator.next();
+            if (panel!=phaseSpacePanel  &&  panel.getSelectedAreas().size()>0) {
+                correspondentAreas.addAll(panel.getSelectedAreas());
+                correspondentArea = new Area(resolution_, correspondentAreas.get(0));
+                System.out.println("Correspondent area: "+correspondentArea);
 
+                // ---
+                if (panel.getName().equals("LeftPhase Space")) {
+                    areaLeft  = correspondentArea;
+                    areaRight = principalArea;
+                }
+                if (panel.getName().equals("RightPhase Space")) {
+                    areaRight = correspondentArea;
+                    areaLeft  = principalArea;
+                }
+                // ---
+
+                // -----
+                arrayCellsCorrespondent = cellsInsideArea(selectedGeometry, correspondentArea);
+                System.out.println("Contagem de células na área correspondente:");
+                System.out.println("Quantidade de células na horizontal : " + arrayCellsCorrespondent[0]);
+                System.out.println("Quantidade de células na vertical   : " + arrayCellsCorrespondent[1]);
+                // -----
+            }
+        }
+        // -------------------
+
+        // !!! ISTO É IMPORTANTE
+        areasToRefine.add(areaRight);
+        areasToRefine.add(areaLeft);
+        
         
         RpCalcBasedGeomFactory factory = (RpCalcBasedGeomFactory) selectedGeometry.geomFactory();
 
         factory.updateGeom(areasToRefine, indexToRemove);
 
     }
+
+
 
     void setRefineGeometryAndPanel(RpGeometry phasSpaceGeometry, RPnPhaseSpacePanel panel) {
         curveToRefine_ = phasSpaceGeometry;

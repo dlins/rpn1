@@ -1,9 +1,18 @@
 package rpnumerics;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import wave.util.RealVector;
 import wave.util.RealSegment;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Iterator;
+import rpn.RPnPhaseSpaceAbstraction;
+import rpn.RPnUIFrame;
+import rpn.component.RpCalcBasedGeomFactory;
+import rpn.component.RpGeomFactory;
+import rpn.component.RpGeometry;
 
 public class HugoniotCurve extends SegmentedCurve {
     //
@@ -377,8 +386,6 @@ public class HugoniotCurve extends SegmentedCurve {
     }
 
 
-    //****************************
-     
     public double velocity(RealVector pMarca) {
         HugoniotSegment segment = (HugoniotSegment) (segments()).get(findClosestSegment(pMarca));
         double lSigma = segment.leftSigma();
@@ -396,18 +403,7 @@ public class HugoniotCurve extends SegmentedCurve {
         return (rSigma - lSigma) * normV / normU + lSigma;
     }
      
-//    public double velocity(RealVector pMarca) {
-//        HugoniotSegment segment = (HugoniotSegment) (segments()).get(findClosestSegment(pMarca));
-//        double lSigma = segment.leftSigma();
-//        double rSigma = segment.rightSigma();
-//        double lX = segment.leftPoint().getElement(0);
-//        double rX = segment.rightPoint().getElement(0);
-//        double X = pMarca.getElement(0);
-//        
-//        return ((rSigma - lSigma) * (X - lX) / (rX - lX) + lSigma);
-//    }
 
-    //****************************
     public List<RealVector> equilPoints(RealVector pMarca) {
 
         List<RealVector> equil = new ArrayList();
@@ -456,7 +452,7 @@ public class HugoniotCurve extends SegmentedCurve {
 
     }
 
-    //****************************
+
     public List<RealVector> equilPoints(double sigma) {
 
         List<RealVector> equil = new ArrayList();
@@ -500,10 +496,58 @@ public class HugoniotCurve extends SegmentedCurve {
         return equil;
 
     }
-    //****************************
 
 
-    
+    @Override
+    public String toMatlabData2D(int identifier, RPnPhaseSpaceAbstraction phaseSpace) {
+
+        StringBuffer buffer = new StringBuffer();
+
+        int[] calcRes = {0, 0};
+        Iterator<RpGeometry> geomList = phaseSpace.getGeomObjIterator();
+
+        while (geomList.hasNext()) {
+            RpGeometry geom = (RpGeometry) geomList.next();
+            RpGeomFactory factory = geom.geomFactory();
+            RPnCurve curve = (RPnCurve) factory.geomSource();
+            if (curve==this) {
+                RpCalcBasedGeomFactory geomFactory = (RpCalcBasedGeomFactory) factory;
+                RpCalculation calc = geomFactory.rpCalc();
+                ContourCurveCalc curveCalc = (ContourCurveCalc) calc;
+                calcRes = curveCalc.getParams().getResolution();
+            }
+        }
+
+        try {
+            FileWriter gravador = new FileWriter(RPnUIFrame.dir + "/data" +identifier +".txt");
+            BufferedWriter saida = new BufferedWriter(gravador);
+
+            String direction = "Forward";
+            if (getDirection() == Orbit.BACKWARD_DIR) {
+                direction = "Backward";
+            }
+            saida.write("%% " + getClass().getSimpleName() + " InputPoint: " + getXZero() + " Resolution: " + calcRes[0] + " " + calcRes[1] + " Direction:" + direction + "\n");
+            saida.write("%% xcoord1 ycoord1 xcoord2 ycoord2 firstPointShockSpeed secondPointShockSpeed leftEigenValue0 leftEigenValue1 rightEigenValue0 rightEigenValue1\n");
+
+            for (int i = 0; i < segments().size(); i++) {
+                HugoniotSegment hSegment = ((HugoniotSegment) segments().get(i));
+                RealSegment rSegment = new RealSegment(hSegment.leftPoint(), hSegment.rightPoint());
+                double leftSigma = hSegment.leftSigma();
+                double rightSigma = hSegment.rightSigma();
+                saida.write(rSegment.toString() + "   " + leftSigma + " " + rightSigma + " "
+                              + hSegment.getLeftLambdaArray()[0] + " " + hSegment.getLeftLambdaArray()[1] + " "
+                              + hSegment.getRightLambdaArray()[0] + " " + hSegment.getRightLambdaArray()[1] + "\n");
+            }
+
+            saida.close();
+
+        } catch (IOException e) {
+            System.out.println("Arquivos .txt de HugoniotCurve não foram escritos.");
+        }
+
+        return buffer.toString();
+        
+    }
 
 
     public String toXML() {

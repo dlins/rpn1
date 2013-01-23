@@ -209,31 +209,36 @@ public class Orbit extends RPnCurve implements RpSolution {
 
     }
 
-    //*********************************** Alterei este método em 17/08 (Leandro)
-    public String toMatlabData(int curveIndex) {
-
-        StringBuffer buffer = new StringBuffer();
-
-        try {
-            //FileWriter gravador = new FileWriter("/home/moreira/dataFromRPN/data" +curveIndex +".txt");
-            FileWriter gravador = new FileWriter(RPnUIFrame.dir + "/data" +curveIndex +".txt");
-            BufferedWriter saida = new BufferedWriter(gravador);
-
-            for (int i = 0; i < points_.length; i++) {
-                OrbitPoint orbitPoint = points_[i];
-                saida.write(orbitPoint.toString() +"\n");
-            }
-
-            saida.close();
-        }
-        catch (IOException e) {
-            System.out.println("Arquivos .txt de Orbit nao foram escritos.");
-        }
-
-        return buffer.toString();
-
-    }
-    //**************************************************************************
+//    //*********************************** Alterei este método em 17/08 (Leandro)
+//    public String toMatlabData(int curveIndex) {
+//
+//        StringBuffer buffer = new StringBuffer();
+//
+//        try {
+//            //FileWriter gravador = new FileWriter("/home/moreira/dataFromRPN/data" +curveIndex +".txt");
+//            FileWriter gravador = new FileWriter(RPnUIFrame.dir + "/data" +curveIndex +".txt");
+//            BufferedWriter saida = new BufferedWriter(gravador);
+//
+//            // ---
+//            saida.write("%% " +getClass().getSimpleName() +"\n");
+//            saida.write("%% xcoord ycoord\n");
+//            // ---
+//
+//            for (int i = 0; i < points_.length; i++) {
+//                OrbitPoint orbitPoint = points_[i];
+//                saida.write(orbitPoint.toString() +"\n");
+//            }
+//
+//            saida.close();
+//        }
+//        catch (IOException e) {
+//            System.out.println("Arquivos .txt de Orbit nao foram escritos.");
+//        }
+//
+//        return buffer.toString();
+//
+//    }
+//    //**************************************************************************
 
     //
     // Accessors/Mutators
@@ -292,68 +297,69 @@ public class Orbit extends RPnCurve implements RpSolution {
 //
 //    }
 
-    public String create2DPointMatlabPlot(int x, int y, int identifier) {
-
-        System.out.println("Entrei no create2DPointMatlabPlot da classe Orbit");
-
-        StringBuffer buffer = new StringBuffer();
-        //Orbit orbitFWD = (Orbit) nativeCalc(start_, RPNUMERICS.getShockProfile().getXZero(), RPNUMERICS.getShockProfile().getSigma(), Orbit.FORWARD_DIR ,poincareSection_);
-
-        String color = null;
-
-//        if (this instanceof RarefactionOrbit) {
-//            System.out.println("Entrei no  if  do create2DPointMatlabPlot da classe Orbit");
-//            RarefactionOrbit rOrbit = (RarefactionOrbit) this;
+//    public String create2DPointMatlabPlot(int x, int y, int identifier) {
 //
-//            int family = rOrbit.getFamilyIndex();
-//            if (family == 1) {
-//                color = "[1 0 0]";
-//            } else {
-//                color = "[0 0 1]";
-//            }
-//        }
-
-//        System.out.println("Entrei no  if  do create2DPointMatlabPlot da classe Orbit");
-//        //RarefactionOrbit rOrbit = (RarefactionOrbit) this;
+//        System.out.println("Entrei no create2DPointMatlabPlot da classe Orbit");
 //
-//        //int family = getFamilyIndex();
-//        if (family == 1) {
-//            color = "[1 0 0]";
-//        } else {
-//            color = "[0 0 1]";
-//        }
-
-
-        color = "[0 0 1]";
-
-
-        x++;
-        y++;
-
-        // ---
-        buffer.append("data" +identifier +" = read_data_file('data" +identifier +".txt');\n");
-        buffer.append("disp('data" +identifier +".txt')\n");
-        // ---
-
-        buffer.append("plot(data" + identifier + "(:,");
-        buffer.append(x);
-        buffer.append("),");
-        buffer.append("data" + identifier + "(:,");
-        buffer.append(y);
-
-        buffer.append("),'Color'" + "," + color + ")\n");
-
-        buffer.append("hold on\n");
-
-        RealVector xMin = RPNUMERICS.boundary().getMinimums();
-        RealVector xMax = RPNUMERICS.boundary().getMaximums();
-
-        buffer.append("axis([" + xMin.getElement(x - 1) + " " + xMax.getElement(x - 1) + " " + xMin.getElement(y - 1) + " " + xMax.getElement(y - 1) + "]);\n");
-
-        buffer.append(createAxisLabel2D(x - 1, y - 1));
-        return buffer.toString();
-
-    }
+//        StringBuffer buffer = new StringBuffer();
+//        //Orbit orbitFWD = (Orbit) nativeCalc(start_, RPNUMERICS.getShockProfile().getXZero(), RPNUMERICS.getShockProfile().getSigma(), Orbit.FORWARD_DIR ,poincareSection_);
+//
+//        String color = null;
+//
+////        if (this instanceof RarefactionOrbit) {
+////            System.out.println("Entrei no  if  do create2DPointMatlabPlot da classe Orbit");
+////            RarefactionOrbit rOrbit = (RarefactionOrbit) this;
+////
+////            int family = rOrbit.getFamilyIndex();
+////            if (family == 1) {
+////                color = "[1 0 0]";
+////            } else {
+////                color = "[0 0 1]";
+////            }
+////        }
+//
+////        System.out.println("Entrei no  if  do create2DPointMatlabPlot da classe Orbit");
+////        //RarefactionOrbit rOrbit = (RarefactionOrbit) this;
+////
+////        //int family = getFamilyIndex();
+////        if (family == 1) {
+////            color = "[1 0 0]";
+////        } else {
+////            color = "[0 0 1]";
+////        }
+//
+//
+//        color = "[0 0 1]";
+//
+//
+//        x++;
+//        y++;
+//
+//        // ---
+//        //buffer.append("data" +identifier +" = read_data_file('data" +identifier +".txt');\n");
+//        buffer.append("data" +identifier +" = importdata('data" +identifier +".txt');\n");
+//        buffer.append("disp('data" +identifier +".txt')\n");
+//        // ---
+//
+//        buffer.append("plot(data" + identifier + "(:,");
+//        buffer.append(x);
+//        buffer.append("),");
+//        buffer.append("data" + identifier + "(:,");
+//        buffer.append(y);
+//
+//        buffer.append("),'Color'" + "," + color + ")\n");
+//
+//        buffer.append("hold on\n");
+//
+//        RealVector xMin = RPNUMERICS.boundary().getMinimums();
+//        RealVector xMax = RPNUMERICS.boundary().getMaximums();
+//
+//        buffer.append("axis([" + xMin.getElement(x - 1) + " " + xMax.getElement(x - 1) + " " + xMin.getElement(y - 1) + " " + xMax.getElement(y - 1) + "]);\n");
+//
+//        buffer.append(createAxisLabel2D(x - 1, y - 1));
+//        return buffer.toString();
+//
+//    }
 
     private static String createAxisLabel2D(int x, int y) {
 
