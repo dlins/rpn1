@@ -18,6 +18,7 @@ import rpn.component.StationaryPointGeom;
 import rpn.component.StationaryPointGeomFactory;
 import rpn.component.XZeroGeom;
 import rpn.component.XZeroGeomFactory;
+import rpn.component.util.GeometryGraphND;
 import rpn.controller.phasespace.InvariantsReadyImpl;
 import rpn.controller.phasespace.NUMCONFIG;
 import rpn.controller.phasespace.NumConfigImpl;
@@ -62,8 +63,7 @@ public class ChangeXZeroCommand extends RpModelConfigChangeCommand {
 
         UserInputTable userInputList = UIController.instance().globalInputTable();
         RealVector lastPointAdded = userInputList.values();
-
-
+        
         //--------------------- Remove os pontos estacionarios
         Iterator it = RPnDataModule.PHASESPACE.getGeomObjIterator();
         List<RpGeometry> list = new ArrayList<RpGeometry>();

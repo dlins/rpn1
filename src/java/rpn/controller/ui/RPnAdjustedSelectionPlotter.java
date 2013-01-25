@@ -11,13 +11,10 @@ package rpn.controller.ui;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.Polygon;
-import java.awt.Shape;
 import java.awt.event.MouseEvent;
-import java.awt.geom.Area;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -70,7 +67,7 @@ public class RPnAdjustedSelectionPlotter extends RPn2DMouseController  {
             GraphicsUtil selectedArea= new AreaSelected(wcObject, viewingTransform, viewingAttr);
             panel.setLastGraphicsUtil(selectedArea);
             panel.repaint();
-            
+
             indexToRemove(panel);
             if (UIController.instance().isAuxPanelsEnabled())
                 secondArea(panel, viewingTransform);
@@ -153,6 +150,7 @@ public class RPnAdjustedSelectionPlotter extends RPn2DMouseController  {
         RpGeometry geom = RPnDataModule.PHASESPACE.findClosestGeometry(newValue);
         RPnCurve curve = (RPnCurve) (geom.geomFactory().geomSource());
         if (curve instanceof BifurcationCurve) {
+
             List<RealVector> list = new ArrayList<RealVector>();
             GeometryGraphND geomND = new GeometryGraphND();
             list = geomND.secondArea((BifurcationCurve) curve, panel.scene());

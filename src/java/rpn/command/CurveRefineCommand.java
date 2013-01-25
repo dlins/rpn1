@@ -22,14 +22,15 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import rpn.RPnDialog;
+import rpn.RPnLeftPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpacePanel;
+import rpn.RPnRightPhaseSpaceAbstraction;
 import rpn.component.RpCalcBasedGeomFactory;
 import rpn.component.RpGeomFactory;
 import rpn.component.RpGeometry;
 import rpn.component.util.AreaSelected;
 import rpn.controller.ui.UIController;
-import rpn.parser.RPnDataModule;
 import rpnumerics.Area;
 import rpnumerics.ContourCurveCalc;
 import rpnumerics.RpCalculation;
@@ -142,6 +143,10 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
 
         List<AreaSelected> graphicsArea = phaseSpacePanel.getSelectedAreas();
 
+        // ---
+        RPnPhaseSpaceAbstraction phaseSpace = (RPnPhaseSpaceAbstraction) phaseSpacePanel.scene().getAbstractGeom();
+        // ---
+
         for (AreaSelected polygon : graphicsArea) {
             Iterator geomIterator = phaseSpacePanel.scene().geometries();
             while (geomIterator.hasNext()) {
@@ -177,18 +182,19 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
         while (phaseSpacePanelIterator.hasNext()) {
             RPnPhaseSpacePanel panel = phaseSpacePanelIterator.next();
             if (panel!=phaseSpacePanel  &&  panel.getSelectedAreas().size()>0) {
+
                 correspondentAreas.addAll(panel.getSelectedAreas());
                 correspondentArea = new Area(resolution_, correspondentAreas.get(0));
                 System.out.println("Correspondent area: "+correspondentArea);
 
                 // ---
-                if (panel.getName().equals("LeftPhase Space")) {
+                if (phaseSpace instanceof RPnLeftPhaseSpaceAbstraction) {
+                    areaLeft  = principalArea;
+                    areaRight = correspondentArea;
+                }
+                if (phaseSpace instanceof RPnRightPhaseSpaceAbstraction) {
                     areaLeft  = correspondentArea;
                     areaRight = principalArea;
-                }
-                if (panel.getName().equals("RightPhase Space")) {
-                    areaRight = correspondentArea;
-                    areaLeft  = principalArea;
                 }
                 // ---
 
@@ -203,12 +209,14 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
         // -------------------
 
         // !!! ISTO É IMPORTANTE
-        areasToRefine.add(areaRight);
-        areasToRefine.add(areaLeft);
-        
+        if (areaRight==null && areaLeft==null)
+            areasToRefine.add(principalArea);
+        else {
+            areasToRefine.add(areaRight);
+            areasToRefine.add(areaLeft);
+        }
         
         RpCalcBasedGeomFactory factory = (RpCalcBasedGeomFactory) selectedGeometry.geomFactory();
-
         factory.updateGeom(areasToRefine, indexToRemove);
 
     }
@@ -281,6 +289,7 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
 
         @Override
         protected void begin() {
+
         }
     }
 }

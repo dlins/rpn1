@@ -112,7 +112,7 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
     public void drawFirstPanel(Graphics g, Scene scene_, RPnPhaseSpacePanel panel) {
 
         UserInputTable userInputList = UIController.instance().globalInputTable();
-        RealVector newValue = userInputList.values();        
+        RealVector newValue = userInputList.values();
 
         if(mostraGrid != 0)
             drawGrid(g, scene_);

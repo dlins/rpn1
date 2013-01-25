@@ -12,8 +12,6 @@ import rpn.RPnPhaseSpaceAbstraction;
 import rpn.component.RpGeometry;
 import rpn.component.util.GeometryGraphND;
 import rpn.component.util.AreaSelected;
-import rpn.controller.ui.UIController;
-import rpn.controller.ui.UserInputTable;
 import rpn.parser.RPnDataModule;
 import wave.util.RealVector;
 
