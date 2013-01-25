@@ -9,12 +9,13 @@ package rpnumerics;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import rpn.RPnPhaseSpaceAbstraction;
+import rpn.component.RpCalcBasedGeomFactory;
+import rpn.component.RpGeomFactory;
 import rpn.component.RpGeometry;
 import rpn.component.util.GeometryGraphND;
 import rpn.component.util.AreaSelected;
-import rpn.controller.ui.UIController;
-import rpn.controller.ui.UserInputTable;
 import rpn.parser.RPnDataModule;
+import wave.util.Boundary;
 import wave.util.RealVector;
 
 public class Area {
@@ -80,6 +81,13 @@ public class Area {
         return downLeft_;
     }
 
+    public void setResolution(RealVector resolution) {
+        this.resolution_ = resolution;
+    }
+    
+    
+    
+
     public RealVector getResolution() {
         return resolution_;
     }
@@ -126,4 +134,29 @@ public class Area {
         return buffer.toString();
 
     }
+    
+    
+     // --- Acrescentei este método em 21JAN2013
+    public int[] cellsInsideArea(int [] gridResolution) {
+        int[] arrayCells = {0, 0};
+
+        int[] calcRes = gridResolution;
+
+        Boundary boundary = RPNUMERICS.boundary();
+        double bdryWidth = boundary.getMaximums().getElement(0) - boundary.getMinimums().getElement(0);
+        double dx = bdryWidth / (1. * calcRes[0]);
+        double areaWidth = getTopRight().getElement(0) - getDownLeft().getElement(0);
+        arrayCells[0] = (int) Math.round(areaWidth / dx);
+
+        double bdryHeight = boundary.getMaximums().getElement(1) - boundary.getMinimums().getElement(1);
+        double dy = bdryHeight / (1. * calcRes[1]);
+        double areaHeight = getTopRight().getElement(1) - getDownLeft().getElement(1);
+        arrayCells[1] = (int) Math.round(areaHeight / dy);
+
+        return arrayCells;
+    }
+    // ---
+    
+    
+    
 }

@@ -18,7 +18,6 @@ import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -26,12 +25,14 @@ import rpn.RPnDialog;
 import rpn.RPnLeftPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpacePanel;
+import rpn.RPnRightPhaseSpaceAbstraction;
 import rpn.component.BifurcationCurveGeom;
 import rpn.component.RpCalcBasedGeomFactory;
 import rpn.component.RpGeometry;
 import rpn.component.util.AreaSelected;
 import rpn.controller.ui.UIController;
 import rpnumerics.Area;
+import rpnumerics.ContourCurveCalc;
 import wave.multid.view.GeomObjView;
 import wave.util.RealVector;
 
@@ -114,34 +115,24 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
         List<Integer> indexToRemove = new ArrayList<Integer>();
         List<Area> areasToRefine = new ArrayList<Area>();
 
+        Area principalArea = null;
+        Area correspondentArea = null;
+        Area areaLeft = null;
+        Area areaRight = null;
+
+
         List<AreaSelected> graphicsArea = phaseSpacePanel.getSelectedAreas();
 
         RPnPhaseSpaceAbstraction phaseSpace = (RPnPhaseSpaceAbstraction) phaseSpacePanel.scene().getAbstractGeom();
 
+        System.out.println("Phase space para refinar: " + phaseSpace.getName());
+
         System.out.println("Right res: " + rightResolution_ + " Left res: " + leftResolution_);
-
-        // ------ Preenche uma lista de areas correspondentes, caso existam
-        List<AreaSelected> correspondentAreas = new ArrayList<AreaSelected>();
-        Iterator<RPnPhaseSpacePanel> phaseSpacePanelIterator = UIController.instance().getInstalledPanelsIterator();
-        while (phaseSpacePanelIterator.hasNext()) {
-            RPnPhaseSpacePanel panel = phaseSpacePanelIterator.next();
-            if (panel != phaseSpacePanel && panel.getSelectedAreas().size() > 0) {
-                correspondentAreas.addAll(panel.getSelectedAreas());
-                Area correspondentArea = null;
-                if (phaseSpace instanceof RPnLeftPhaseSpaceAbstraction) {
-                    correspondentArea = new Area(rightResolution_, correspondentAreas.get(0));
-                } else {
-                    correspondentArea = new Area(leftResolution_, correspondentAreas.get(0));
-                }
-                System.out.println("Correspondent area: " + correspondentArea);
-                System.out.println("Correspondent area res: " + correspondentArea.getResolution());
-                areasToRefine.add(correspondentArea);
-            }
-        }
-        // -------------------
-
-
-        for (AreaSelected polygon : graphicsArea) {
+        
+        
+        
+        
+            for (AreaSelected polygon : graphicsArea) {
 
             Iterator geomIterator = phaseSpacePanel.scene().geometries();
             while (geomIterator.hasNext()) {
@@ -150,21 +141,9 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
                     List<Integer> segmentIndex = geomObjView.contains((Polygon) polygon.getShape());
                     if (!segmentIndex.isEmpty()) {
                         indexToRemove.addAll(segmentIndex);
-                        Area principalArea = null;
-                        if (phaseSpace instanceof RPnLeftPhaseSpaceAbstraction || phaseSpace instanceof RPnPhaseSpaceAbstraction) {
-                            principalArea = new Area(leftResolution_, polygon);
-                        } else {
-                            principalArea = new Area(rightResolution_, polygon);
-                        }
-
-
-
-                        areasToRefine.add(principalArea);
-
-
+                        System.out.println("Nome do painel principal :" + phaseSpacePanel.getName());
+                        principalArea = new Area(polygon);
                         System.out.println("Principal area: " + principalArea);
-                        System.out.println("Principal area res: " + principalArea.getResolution());
-
 
 
                     }
@@ -174,8 +153,69 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
             }
 
         }
+        
+        
+        
+
+        // ------ Preenche uma lista de areas correspondentes, caso existam
+        List<AreaSelected> correspondentAreas = new ArrayList<AreaSelected>();
+        Iterator<RPnPhaseSpacePanel> phaseSpacePanelIterator = UIController.instance().getInstalledPanelsIterator();
+        while (phaseSpacePanelIterator.hasNext()) {
+            RPnPhaseSpacePanel panel = phaseSpacePanelIterator.next();
+
+            RPnPhaseSpaceAbstraction auxiliarPhaseSpace = (RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom();
 
 
+            if (auxiliarPhaseSpace != phaseSpace && panel.getSelectedAreas().size() > 0) {
+                correspondentAreas.addAll(panel.getSelectedAreas());
+                System.out.println("Nome do painel auxiliar :" + panel.getName());
+                correspondentArea = new Area(correspondentAreas.get(0));
+                System.out.println("Correspondent area: " + correspondentArea);
+
+
+
+                if (phaseSpace instanceof RPnLeftPhaseSpaceAbstraction) {
+                    areaLeft = principalArea;
+                    areaRight = correspondentArea;
+
+
+                }
+                if (phaseSpace instanceof RPnRightPhaseSpaceAbstraction) {
+                    areaLeft = correspondentArea;
+                    areaRight = principalArea;
+                }
+
+            }
+
+
+
+
+
+
+        }
+        // -------------------
+
+
+    
+
+
+
+
+
+
+        if (areaRight == null && areaLeft == null) {
+            areasToRefine.add(principalArea);
+            principalArea.setResolution(leftResolution_);
+        } else {
+
+
+            areaLeft.setResolution(leftResolution_);
+            areaRight.setResolution(rightResolution_);
+
+            areasToRefine.add(areaLeft);
+            areasToRefine.add(areaRight);
+
+        }
 
 
 
@@ -264,8 +304,81 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
         public CorrespondentResolutionDialog(String title) throws HeadlessException {
 
             super(false, true);
-            setSize(200, 200);
+            setSize(600, 200);
             setTitle(title);
+
+
+            BifurcationCurveGeom bifurcationCurveGeom = (BifurcationCurveGeom) curveToRefine_;
+
+            RpCalcBasedGeomFactory factory = (RpCalcBasedGeomFactory) bifurcationCurveGeom.geomFactory();
+
+            ContourCurveCalc calc = (ContourCurveCalc) factory.rpCalc();
+
+
+            int resolution[] = calc.getParams().getResolution();
+
+            JLabel leftResolutionLabel = new JLabel();
+            JLabel rightResolutionLabel = new JLabel();
+
+
+
+            Iterator<RPnPhaseSpacePanel> phaseSpacePanelIterator = UIController.instance().getInstalledPanelsIterator();
+
+
+            while (phaseSpacePanelIterator.hasNext()) {
+                RPnPhaseSpacePanel rPnPhaseSpacePanel = phaseSpacePanelIterator.next();
+                RPnPhaseSpaceAbstraction phaseSpace = (RPnPhaseSpaceAbstraction) rPnPhaseSpacePanel.scene().getAbstractGeom();
+
+                List<AreaSelected> graphicsArea = rPnPhaseSpacePanel.getSelectedAreas();
+
+
+                if (phaseSpace instanceof RPnLeftPhaseSpaceAbstraction) {
+
+
+                    Area leftArea = new Area(graphicsArea.get(0));
+
+                    int leftCells[] = leftArea.cellsInsideArea(resolution);
+
+
+                    leftResolutionLabel.setText("Cells inside area:" + leftCells[0] + " x " + leftCells[1]);
+
+                }
+
+
+                if (phaseSpace instanceof RPnRightPhaseSpaceAbstraction) {
+
+                    Area rightArea = new Area(graphicsArea.get(0));
+
+
+                    int rightCells[] = rightArea.cellsInsideArea(resolution);
+
+
+                    rightResolutionLabel.setText("Cells inside area:" + rightCells[0] + " x " + rightCells[1]);
+
+
+
+                }
+
+
+
+
+
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
             leftXResolution_ = new JTextField(String.valueOf((int) leftResolution_.getElement(0)));
@@ -294,6 +407,8 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
 
             constraints.gridy = 2;
             resolutionPanel.add(leftYResolution_, constraints);
+            constraints.gridy = 3;
+            resolutionPanel.add(leftResolutionLabel, constraints);
 
 
             constraints.gridx = 1;
@@ -310,6 +425,9 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
             constraints.gridy = 2;
 
             resolutionPanel.add(rightYResolution_, constraints);
+
+            constraints.gridy = 3;
+            resolutionPanel.add(rightResolutionLabel, constraints);
 
 
             getContentPane().add(resolutionPanel, BorderLayout.CENTER);
