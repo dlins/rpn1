@@ -191,15 +191,6 @@ public class RPnInputComponent {//TODO Refatorar
         slider_.setSnapToTicks(false);
 
 
-//        Hashtable<String, Integer> hashLabel = new Hashtable<String, Integer>();
-//
-//
-//        hashLabel.put("0", 0);
-//        hashLabel.put("20", 1);
-
-
-//        slider_.setLabelTable(hashLabel);
-
         slider_.setPaintTicks(true);
 
 
