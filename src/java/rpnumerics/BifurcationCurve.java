@@ -138,6 +138,38 @@ public class BifurcationCurve extends SegmentedCurve {
     // -----
 
 
+    // --- Acresecenti este método em 28JAN2013
+    public List<RealVector> correspondentPoints(RealVector pMarca) {
+
+        List<RealVector> correspondent = new ArrayList();
+        ArrayList segments = (ArrayList)segments();         // segments() retorna os segmentos da união (Left U Right)
+        ArrayList toRestore = new ArrayList();
+        // --- Testar com 3; estabelecer critério
+        int n = 3;
+        int[] index = new int[n];
+
+        for (int k=0; k<n; k++) {
+            int i = findClosestSegment(pMarca);
+            RealSegment realSeg = (RealSegment) segments().get(i);
+            RealVector p = secondPointDCOtherVersion(i);
+            correspondent.add(p);
+            index[k] = i;
+            if (k<(n-1)) {
+                toRestore.add(realSeg);
+                segments.remove(i);
+            }
+            
+        }
+
+        for (int k=0; k<(n-1); k++) {
+            segments.add(index[k], toRestore.get(k));
+        }
+
+        return correspondent;
+    }
+    // ---
+
+
     public String toXML() {
 
         StringBuilder buffer = new StringBuilder();

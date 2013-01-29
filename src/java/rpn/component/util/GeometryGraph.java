@@ -4,16 +4,17 @@
  */
 package rpn.component.util;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.Shape;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
-import javax.swing.ToolTipManager;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpacePanel;
 import rpn.component.RpGeometry;
+import rpn.controller.ui.RPnStringPlotter;
 import rpn.controller.ui.UIController;
 import rpnumerics.RPNUMERICS;
 import rpnumerics.RPnCurve;
@@ -108,6 +109,46 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
     }
 
 
+    private void drawEquilPoints(Graphics g, Scene scene_) {
+        Graphics2D graph = (Graphics2D) g;
+        g.setColor(cor34);
+
+        for (int i = 0; i < RPnVelocityPlotter.listaEquil.size(); i++) {
+            RealVector p = RPnVelocityPlotter.listaEquil.get(i);
+
+            Coords2D dcCoordsEQ = toDeviceCoords(scene_, p);
+            double xEQ = dcCoordsEQ.getElement(0);
+            double yEQ = dcCoordsEQ.getElement(1);
+
+            Line2D lineEQ1 = new Line2D.Double(xEQ - 5, yEQ, xEQ + 5, yEQ);
+            Line2D lineEQ2 = new Line2D.Double(xEQ, yEQ - 5, xEQ, yEQ + 5);
+
+            graph.draw(lineEQ1);
+            graph.draw(lineEQ2);
+        }
+    }
+
+
+    private void drawCorrespondentPoints(Graphics g, Scene scene_) {
+        Graphics2D graph = (Graphics2D) g;
+        g.setColor(cor34);
+
+        for (int i = 0; i < RPnStringPlotter.correspondentList.size(); i++) {
+            RealVector p = RPnStringPlotter.correspondentList.get(i);
+            Coords2D dcCoordsEQ = toDeviceCoords(scene_, p);
+            double xEQ = dcCoordsEQ.getElement(0);
+            double yEQ = dcCoordsEQ.getElement(1);
+
+            Line2D lineEQ1 = new Line2D.Double(xEQ - 5, yEQ, xEQ + 5, yEQ);
+            Line2D lineEQ2 = new Line2D.Double(xEQ, yEQ - 5, xEQ, yEQ + 5);
+
+            graph.draw(lineEQ1);
+            graph.draw(lineEQ2);
+        }
+
+    }
+
+
 
     public void drawFirstPanel(Graphics g, Scene scene_, RPnPhaseSpacePanel panel) {
 
@@ -124,22 +165,7 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
             graph.draw(line3);
             graph.draw(line4);
 
-            //********* esboço de marcação de pontos de equilibrio
-            for (int i=0; i<RPnVelocityPlotter.listaEquil.size(); i++) {
-                RealVector p = RPnVelocityPlotter.listaEquil.get(i);
-
-                Coords2D dcCoordsEQ = toDeviceCoords(scene_, p);
-                double xEQ = dcCoordsEQ.getElement(0);
-                double yEQ = dcCoordsEQ.getElement(1);
-
-                Line2D lineEQ1 = new Line2D.Double(xEQ - 5, yEQ, xEQ + 5, yEQ);
-                Line2D lineEQ2 = new Line2D.Double(xEQ, yEQ - 5, xEQ, yEQ + 5);
-
-                graph.draw(lineEQ1);
-                graph.draw(lineEQ2);
-
-            }
-            //*********
+            drawEquilPoints(g, scene_);
 
         }
 
@@ -152,13 +178,17 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
 
                 if (UIController.instance().isAuxPanelsEnabled()) {
                     if (!panel.getName().equals(RPnPhaseSpaceAbstraction.namePhaseSpace) && !panel.getName().equals("Phase Space")) {
-                        graph.draw(line3DC);
-                        graph.draw(line4DC);
+                        //graph.draw(line3DC);
+                        //graph.draw(line4DC);
+
+                        drawCorrespondentPoints(g, scene_);
                     }
                 }
                 else {
-                    graph.draw(line3DC);
-                    graph.draw(line4DC);
+                    //graph.draw(line3DC);
+                    //graph.draw(line4DC);
+
+                    drawCorrespondentPoints(g, scene_);
                 }
 
             }
