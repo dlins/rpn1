@@ -110,10 +110,11 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
             rpnUIFrame_.pack();
 
             rpnUIFrame_.setVisible(true);
-            
+ 
             RPnConfigurationFrame configFrame = new RPnConfigurationFrame("Curves Configuration");
             
             configFrame.setSize(rpnUIFrame_.getWidth(), rpnUIFrame_.getHeight()/2);
+
 
             configFrame.setVisible(true);
 

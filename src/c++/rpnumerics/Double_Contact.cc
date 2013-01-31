@@ -14,8 +14,8 @@ bool Double_Contact::function_on_cell(double *val, int ir, int jr, int kl, int k
 
     double lr  = gv_right->e(domain_i, domain_j)[right_family].r;
     double fr  = gv_right->F_on_grid(domain_i, domain_j).component(0);
-
     double hur = gv_right->G_on_grid(domain_i, domain_j).component(0);
+
     double gr  = gv_right->F_on_grid(domain_i, domain_j).component(1);
     double hvr = gv_right->G_on_grid(domain_i, domain_j).component(1);
 
@@ -79,14 +79,23 @@ void Double_Contact::curve(const FluxFunction *lf, const AccumulationFunction *l
     gv_right = rg;
     right_family = rfam;
 
-    // It is assumed that the grid_value must be the same
-    singular = ( (left_family == right_family) && (lg == rg) );
+    //For the same domain singular must be true
+    singular = ( (left_family == right_family) && (lf == rf) && (la==ra) );
+    
+    cout<<"Singular: "<<singular<<endl;
 
     gv_left->fill_eigenpairs_on_grid(lff, laa);
+    
+    cout<<"Acabei left"<<endl;
     gv_right->fill_eigenpairs_on_grid(rff, raa);
 
+    cout<<"Acabei right"<<endl;
+    
+    
     left_curve.clear(); 
     right_curve.clear(); 
+    
+    
 
     Contour2x2_Method::curve2x2(this, left_curve, right_curve);
 

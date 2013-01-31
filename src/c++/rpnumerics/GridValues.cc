@@ -16,8 +16,8 @@ void GridValues::set_grid(const Boundary *b,
                           const RealVector &min, const RealVector &max,
                           const std::vector<int> &number_of_cells){
 
-    grid_computed = 
-    functions_on_grid_computed = Jacobians_on_grid_computed = 
+    grid_computed =
+    functions_on_grid_computed = Jacobians_on_grid_computed =
     dd_computed = e_computed = false;
 
     fill_values_on_grid(b, min, max, number_of_cells);
@@ -33,7 +33,7 @@ void GridValues::fill_values_on_grid(const Boundary *b,
     if (!grid_computed){
         int dim = pmin.size();
 
-//        printf("Inside GridValues::fill_values_on_grid\n");
+        printf("Inside GridValues::fill_values_on_grid\n");
 
         grid_resolution.resize(dim);
         for (int i = 0; i < dim; i++) grid_resolution.component(i) = (fabs(pmax.component(i) - pmin.component(i))) / (double) (number_of_cells[i]);
@@ -96,18 +96,21 @@ void GridValues::fill_functions_on_grid(const FluxFunction *ff, const Accumulati
     if (!functions_on_grid_computed){
 //        fill_values_on_grid(GridValues &gv);
 
-        printf("Inside GridValues::fill_functions_on_grid\n");
+//        printf("Inside GridValues::fill_functions_on_grid\n");
         
-           cout<<"Flux e acumm em grid values: "<<ff<<" "<<aa<<endl;
+  
 
         int rows = grid.rows(), cols = grid.cols(); 
         int n = rows*cols;
         if (n == 0) return;
+        
+
 
         F_on_grid.resize(rows, cols);
         G_on_grid.resize(rows, cols);
 
         int dim = grid(0, 0).size();
+        
 
         for (int i = 0; i < n; i++) {
             F_on_grid(i).resize(dim);
@@ -116,6 +119,7 @@ void GridValues::fill_functions_on_grid(const FluxFunction *ff, const Accumulati
             // We only compute the value of the function on points that are inside the physical domain
             // given by "boundary".
             if (point_inside(i)) {
+
                 ff->fill_with_jet(dim, grid(i).components(), 0, F_on_grid(i).components(), 0, 0);
                 aa->fill_with_jet(dim, grid(i).components(), 0, G_on_grid(i).components(), 0, 0);
             }

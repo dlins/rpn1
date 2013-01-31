@@ -9,6 +9,7 @@ package rpnumerics;
 import java.util.ArrayList;
 import java.util.List;
 import rpn.RPnPhaseSpaceAbstraction;
+import rpn.controller.ui.UIController;
 import rpnumerics.methods.contour.ContourCurve;
 
 import wave.multid.view.ViewingAttr;
@@ -32,7 +33,8 @@ public class BifurcationCurve extends SegmentedCurve {
      public BifurcationCurve(List<RealSegment> leftList, List<RealSegment> rightList) {
 
         super(createSingleSegmentList(leftList, rightList));
-
+        
+         
         leftSegments_ = leftList;
         rightSegments_ = rightList;
 
@@ -89,6 +91,83 @@ public class BifurcationCurve extends SegmentedCurve {
 
         return pDC;
     }
+
+
+    // ----- Protótipo de versao única, para ficar em BifurcationCurve (16JAN2013)
+    public RealVector secondPointDCOtherVersion(int i) {
+
+        RealVector p1, p2, pDC = null;
+
+        ArrayList segments = (ArrayList)segments();
+
+        if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("RightPhase Space"))
+            segments = (ArrayList) leftSegments();
+
+        if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("LeftPhase Space"))
+            segments = (ArrayList) rightSegments();
+
+
+        if (UIController.instance().isAuxPanelsEnabled()) {
+            p1 = new RealVector(((RealSegment) (segments).get(i)).p1());
+            p2 = new RealVector(((RealSegment) (segments).get(i)).p2());
+
+            pDC = new RealVector(p1.getSize());
+            pDC.sub(p1, p2);
+            pDC.scale(getALFA());
+            pDC.add(p2);
+        }
+        else {
+            int jDC = 0;
+            if (i >= segments.size() / 2) {
+                jDC = i - segments.size() / 2;
+            } else {
+                jDC = i + segments.size() / 2;
+            }
+
+            p1 = new RealVector(((RealSegment) (segments).get(jDC)).p1());
+            p2 = new RealVector(((RealSegment) (segments).get(jDC)).p2());
+
+            pDC = new RealVector(p1.getSize());
+            pDC.sub(p1, p2);
+            pDC.scale(getALFA());
+            pDC.add(p2);
+        }
+
+        return pDC;
+    }
+    // -----
+
+
+    // --- Acresecenti este método em 28JAN2013
+    public List<RealVector> correspondentPoints(RealVector pMarca) {
+
+        List<RealVector> correspondent = new ArrayList();
+        ArrayList segments = (ArrayList)segments();         // segments() retorna os segmentos da união (Left U Right)
+        ArrayList toRestore = new ArrayList();
+        // --- Testar com 3; estabelecer critério
+        int n = 3;
+        int[] index = new int[n];
+
+        for (int k=0; k<n; k++) {
+            int i = findClosestSegment(pMarca);
+            RealSegment realSeg = (RealSegment) segments().get(i);
+            RealVector p = secondPointDCOtherVersion(i);
+            correspondent.add(p);
+            index[k] = i;
+            if (k<(n-1)) {
+                toRestore.add(realSeg);
+                segments.remove(i);
+            }
+            
+        }
+
+        for (int k=0; k<(n-1); k++) {
+            segments.add(index[k], toRestore.get(k));
+        }
+
+        return correspondent;
+    }
+    // ---
 
 
     public String toXML() {

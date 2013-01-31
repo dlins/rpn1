@@ -149,7 +149,7 @@ void Contour2x2_Method::deallocate_arrays(void){
 void Contour2x2_Method::curve2x2(ThreeImplicitFunctions *timpf,
                                  std::vector<RealVector> &left_vrs,   // on_domain
                                  std::vector<RealVector> &right_vrs){ // on_curve
-                            
+
     allocate_arrays();
      
     // Get the current data.
@@ -167,8 +167,8 @@ void Contour2x2_Method::curve2x2(ThreeImplicitFunctions *timpf,
     dur = gv_right->grid_resolution.component(0);
     dvr = gv_right->grid_resolution.component(1);
 
-    dumax = 2.0 * max ( dur, dul );
-    dvmax = 2.0 * max ( dvr, dvl );
+    dumax = 3.0 * max ( dur, dul ) ;//+ min ( dur, dul );
+    dvmax = 3.0 * max ( dvr, dvl ) ;//+ min ( dvr, dvl );
 
     double u[hn][hm + 1];
     double g[hm][hm + 1];

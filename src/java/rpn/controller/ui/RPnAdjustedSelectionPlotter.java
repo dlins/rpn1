@@ -12,11 +12,9 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.event.MouseEvent;
-import java.awt.geom.Area;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -69,9 +67,10 @@ public class RPnAdjustedSelectionPlotter extends RPn2DMouseController  {
             GraphicsUtil selectedArea= new AreaSelected(wcObject, viewingTransform, viewingAttr);
             panel.setLastGraphicsUtil(selectedArea);
             panel.repaint();
-            
+
             indexToRemove(panel);
-            secondArea(panel, viewingTransform);
+            if (UIController.instance().isAuxPanelsEnabled())
+                secondArea(panel, viewingTransform);
             
         }
 
@@ -151,10 +150,15 @@ public class RPnAdjustedSelectionPlotter extends RPn2DMouseController  {
         RpGeometry geom = RPnDataModule.PHASESPACE.findClosestGeometry(newValue);
         RPnCurve curve = (RPnCurve) (geom.geomFactory().geomSource());
         if (curve instanceof BifurcationCurve) {
+
+            List<RealVector> list = new ArrayList<RealVector>();
             GeometryGraphND geomND = new GeometryGraphND();
-            Polygon pol = geomND.secondArea((BifurcationCurve) curve, panel.scene());
-            Point point1 = new Point((int) pol.getBounds2D().getMinX(), (int) pol.getBounds2D().getMinY());
-            Point point2 = new Point((int) pol.getBounds2D().getMaxX(), (int) pol.getBounds2D().getMaxY());
+            list = geomND.secondArea((BifurcationCurve) curve, panel.scene());
+
+            RealVector p1 = list.get(0);
+            RealVector p2 = list.get(1);
+            Point point1 = new Point((int)p1.getElement(0), (int)p1.getElement(1));
+            Point point2 = new Point((int)p2.getElement(0), (int)p2.getElement(1));
 
             Path2D.Double selectionPath = plotWCArea(point1, point2, panel);
             Path2D.Double adjustedPath = adjustPath(selectionPath, viewingTransform.viewPlane().getWindow(), xResolution_, yResolution_);
@@ -194,7 +198,10 @@ public class RPnAdjustedSelectionPlotter extends RPn2DMouseController  {
     }
 
 
-    private Path2D.Double adjustPath(Path2D.Double input, wcWindow wc, int xResolution, int yResolution) {
+    
+    
+    
+     private Path2D.Double adjustPath(Path2D.Double input, wcWindow wc, int xResolution, int yResolution) {
 
         Path2D.Double output = new Path2D.Double();
 
@@ -238,19 +245,20 @@ public class RPnAdjustedSelectionPlotter extends RPn2DMouseController  {
             inputIterator.next();
         }
 
+        // ---------- Coloquei o ajuste em função de mínimos e máximos de coordenadas do array selectionVertex (08JAN2013)
+        double vs = Math.min(selectionVertex.get(0)[0], selectionVertex.get(2)[0]);
+        double vi = Math.max(selectionVertex.get(0)[0], selectionVertex.get(2)[0]);
+        double us = Math.max(selectionVertex.get(0)[1], selectionVertex.get(2)[1]);
+        double ui = Math.min(selectionVertex.get(0)[1], selectionVertex.get(2)[1]);
+        // ---------
 
-        double[] vertex = selectionVertex.get(0);
+        double topRightXAdjusted = vMin + (int) ((vs - vMin) / dv) * dv;
+        double topRigthYAdjusted = uMin + (int) ((us - uMin) / du + 1) * du;
 
-        double topRightXAdjusted = vMin + (int) ((vertex[0] - vMin) / dv) * dv;
-        double topRigthYAdjusted = uMin + (int) ((vertex[1] - uMin) / du + 1) * du;
-
-        vertex = selectionVertex.get(2);
-
-        double downLeftXAdjusted = vMin + (int) ((vertex[0] - vMin) / dv + 1) * dv;
-        double downLeftYAdjusted = uMin + (int) ((vertex[1] - uMin) / du) * du;
+        double downLeftXAdjusted = vMin + (int) ((vi - vMin) / dv + 1) * dv;
+        double downLeftYAdjusted = uMin + (int) ((ui - uMin) / du) * du;
 
         output.moveTo(topRightXAdjusted, topRigthYAdjusted);
-
 
         output.lineTo(downLeftXAdjusted, topRigthYAdjusted);
         output.lineTo(downLeftXAdjusted, downLeftYAdjusted);
@@ -262,5 +270,20 @@ public class RPnAdjustedSelectionPlotter extends RPn2DMouseController  {
         return output;
 
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+   
   
 }

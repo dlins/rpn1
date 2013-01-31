@@ -56,7 +56,7 @@ public class AdjustedSelectionPlotCommand extends RpModelPlotCommand implements 
                         int x = calc.getParams().getResolution()[0];
                         int y = calc.getParams().getResolution()[1];
 
-                        CurveRefineCommand.instance().setResolution(new RealVector(x + " " + y));
+                        CurveRefineCommand.instance().setLeftResolution(new RealVector(x + " " + y));
                         CurveRefineCommand.instance().setRefineGeometryAndPanel(phasSpaceGeometry, panel);
                         CurveRefineCommand.instance().setEnabled(true);
 

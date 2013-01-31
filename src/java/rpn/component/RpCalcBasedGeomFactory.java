@@ -10,10 +10,8 @@ import java.util.List;
 import rpn.RPnDesktopPlotter;
 import rpn.controller.RpCalcController;
 import rpn.controller.RpController;
-
 import rpnumerics.Area;
 import rpnumerics.RPnCurve;
-
 import rpnumerics.RpCalculation;
 import rpnumerics.RpException;
 import rpnumerics.RpSolution;
@@ -24,11 +22,13 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
     // Members
     //
 
-    private RpCalculation calc_;
-    private RpGeometry geom_;
-    private Object geomSource_;
+
+    protected RpCalculation calc_;
+    protected RpGeometry geom_;
+    protected Object geomSource_;
     private RpController ui_;
-    private boolean isGeomOutOfDate_;
+
+    protected boolean isGeomOutOfDate_;
 
     //
     // Constructors/Initializers
@@ -109,8 +109,8 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
     public void updateGeom() {
 //        System.out.println("Estou no updateGeom() sem area ... ");
         try {
-            geomSource_=null;
-            geom_=null;
+//            geomSource_=null;
+//            geom_=null;
 //            System.gc();
             geomSource_ = calc_.recalc();
             geom_ = createGeomFromSource();
@@ -119,7 +119,6 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
             RPnDesktopPlotter.showCalcExceptionDialog(rex);
         }
     }
-
 
     public void updateGeom(List<Area> areaToRefine, List<Integer> segmentsToRemove) {
 
@@ -132,16 +131,13 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
         }
 
         curve.segments().removeAll(segRem);
-        
-        for (Area area : areaToRefine) {
-            try {
-                RPnCurve newCurve = (RPnCurve) calc_.recalc(area);
 
-                ((RPnCurve) geomSource_).segments().addAll(newCurve.segments());
-            } catch (RpException ex) {
-                ex.printStackTrace();
-            }
+        try {
+            RPnCurve newCurve = (RPnCurve) calc_.recalc(areaToRefine);
 
+            ((RPnCurve) geomSource_).segments().addAll(newCurve.segments());
+        } catch (RpException ex) {
+            ex.printStackTrace();
         }
 
         geom_ = createGeomFromSource();

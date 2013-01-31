@@ -6,6 +6,8 @@
  */
 package rpnumerics;
 
+import java.util.List;
+
 public class DoubleContactCurveCalc extends ContourCurveCalc {
 
     //
@@ -47,16 +49,18 @@ public class DoubleContactCurveCalc extends ContourCurveCalc {
     }
 
 
-    private native RpSolution nativeCalc(int curveFamily, int domainFamily) throws RpException;
-
-
     @Override
-    public RpSolution recalc(Area area) throws RpException {
+    public RpSolution recalc(List<Area> area) throws RpException {
 
-        System.out.println("DoubleContactCurveCalc ::::: Entrando no recalc(Area area)");
-
-        return null;
+        System.out.println("DoubleContactCurveCalc ::::: Entrando no recalc(List<Area> area)");
+        
+        return nativeCalc(area, curveFamily_, domainFamily_);
     }
+
+
+    private native RpSolution nativeCalc(int curveFamily, int domainFamily) throws RpException;
+    
+    private native RpSolution nativeCalc(List<Area> areasList,int curveFamily, int domainFamily) throws RpException;
 
 
 

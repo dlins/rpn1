@@ -69,12 +69,12 @@ void GridValuesFactory::invalidateGrids() {
 
         GridValues * factoryElement = (*it).second;
 
-        factoryElement->grid_computed = false;
         factoryElement->functions_on_grid_computed = false;
         factoryElement-> Jacobians_on_grid_computed = false;
         factoryElement-> dd_computed = false;
         factoryElement->e_computed = false;
 
+   
     }
 
 

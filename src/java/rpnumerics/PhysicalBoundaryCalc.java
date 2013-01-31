@@ -6,6 +6,8 @@
  */
 package rpnumerics;
 
+import java.util.List;
+
 public class PhysicalBoundaryCalc implements RpCalculation {
   
     public RpSolution recalc() throws RpException {
@@ -26,4 +28,8 @@ public class PhysicalBoundaryCalc implements RpCalculation {
     }
 
     private native RpSolution calcNative();
+
+    public RpSolution recalc(List<Area> area) throws RpException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

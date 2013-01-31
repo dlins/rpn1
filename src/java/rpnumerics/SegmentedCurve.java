@@ -10,11 +10,17 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnUIFrame;
 import rpn.component.HugoniotSegGeom;
 import rpn.command.ClassifierCommand;
 import rpn.command.VelocityCommand;
+import rpn.component.RpCalcBasedGeomFactory;
+import rpn.component.RpGeomFactory;
+import rpn.component.RpGeometry;
+import rpn.parser.RPnDataModule;
 import wave.multid.CoordsArray;
 import wave.multid.view.ViewingAttr;
 import wave.util.RealSegment;
@@ -60,10 +66,57 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
     }
     //*************************************************************************
 
+
+    // --- Começou a ser feito em 16JAN, para atender a uma necessidade emergencial do Cido
+    public String toMatlabData2D(int identifier, RPnPhaseSpaceAbstraction phaseSpace) {
+
+        StringBuffer buffer = new StringBuffer();
+
+        int[] calcRes = {0, 0};
+        Iterator<RpGeometry> geomList = phaseSpace.getGeomObjIterator();
+
+        while (geomList.hasNext()) {
+            RpGeometry geom = (RpGeometry) geomList.next();
+            RpGeomFactory factory = geom.geomFactory();
+            RPnCurve curve = (RPnCurve) factory.geomSource();
+
+            if (curve == this  &&  !(this instanceof PhysicalBoundary)) {
+                RpCalcBasedGeomFactory geomFactory = (RpCalcBasedGeomFactory) factory;
+                RpCalculation calc = geomFactory.rpCalc();
+                ContourCurveCalc curveCalc = (ContourCurveCalc) calc;
+                calcRes = curveCalc.getParams().getResolution();
+            }
+
+        }
+
+        try {
+            FileWriter gravador = new FileWriter(RPnUIFrame.dir + "/data" +identifier +".txt");
+            BufferedWriter saida = new BufferedWriter(gravador);
+
+            saida.write("%% " +getClass().getSimpleName() + " Resolution: " +calcRes[0] +" "+calcRes[1] +"\n");
+            saida.write("%% xcoord1 ycoord1 xcoord2 ycoord2\n");
+
+            for (int i = 0; i < segments_.size(); i++) {
+                RealSegment rSegment = segments_.get(i);
+                saida.write(rSegment.toString() + "\n");
+            }
+
+            saida.close();
+
+        } catch (IOException e) {
+            System.out.println("Arquivos .txt de SegmentedCurve não foram escritos.");
+        }
+
+        return buffer.toString();
+    }
+    // -----------------------------------------------------
+
+
+
     @SuppressWarnings("static-access")
     public String toMatlabData(int identifier) {
 
-        toMatlabReadFile();
+        //toMatlabReadFile();
 
         StringBuffer buffer = new StringBuffer();
         System.out.println(segments_.size());
@@ -182,7 +235,7 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
         //********************************************************************** (finaliza Leandro)
 
         try {
-            //FileWriter gravador = new FileWriter("/home/moreira/Documents/data" + identifier + ".txt");
+            //FileWriter gravador = new FileWriter("/home/moreira/dataFromRPN/data" + identifier + ".txt");
             FileWriter gravador = new FileWriter(RPnUIFrame.dir + "/data" +identifier +".txt");
             BufferedWriter saida = new BufferedWriter(gravador);
 
@@ -222,36 +275,13 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
                         + " " + R + " " + G + " " + B + "\n");
 
             }
-            saida.close();
 
-//        buffer.append("%% xcoord ycoord zcoord firstPointShockSpeed secondPointShockSpeed leftEigenValue0 leftEigenValue1 rightEigenValue0 rightEigenValue1\n");
-//
-//        buffer.append("data" + identifier + "= [\n");
-//        for (int i = 0; i < segments_.size(); i++) {
-//
-//            HugoniotSegment hSegment = ((HugoniotSegment) segments_.get(i));
-//            RealSegment rSegment = new RealSegment(hSegment.leftPoint(),
-//                    hSegment.rightPoint());
-//            double leftSigma = hSegment.leftSigma();
-//            double rightSigma = hSegment.rightSigma();
-//            buffer.append(rSegment.toString() + "   " + leftSigma + " " + rightSigma + " " + hSegment.getLeftLambdaArray()[0] + " " + hSegment.getLeftLambdaArray()[1] + " " + hSegment.getRightLambdaArray()[0] + " " + hSegment.getRightLambdaArray()[1] + "\n");
+            saida.close();
 
 
         } catch (IOException e) {
             System.out.println("Arquivos .txt de SegmentedCurve não foram escritos.");
         }
-
-        //**********************************************************************
-
-//        buffer.append("];\n");
-//
-//        buffer.append("type" + identifier + "=[\n");
-//
-//        for (int i = 0; i < segments_.size(); i++) {
-//            HugoniotSegment hSegment = ((HugoniotSegment) segments_.get(i));
-//            buffer.append((hSegment.getType() + 1) + ";\n");
-//        }
-//        buffer.append("];\n");
 
         return buffer.toString();
     }
@@ -283,6 +313,47 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
         return buffer.toString();
 
     }
+
+
+    // --- 15JAN Apenas para físicas 2D
+    // --- Isso foi feito em 16JAN, para atender a uma necessidade emergencial do Cido
+    public String createSegmentedMatlabPlotLoop2D(int x, int y, int identifier) {
+        x++;
+        y++;//Adjusting to Matlab's indices
+
+        RealVector xMin = RPNUMERICS.boundary().getMinimums();
+        RealVector xMax = RPNUMERICS.boundary().getMaximums();
+
+        int dimension = RPNUMERICS.domainDim();
+        StringBuffer buffer = new StringBuffer();
+
+        //buffer.append("data" +identifier +" = read_data_file('data" +identifier +".txt');\n");
+        buffer.append("data" +identifier +" = importdata('data" +identifier +".txt');\n");
+        buffer.append("disp('data" +identifier +".txt')\n");
+
+        buffer.append("for i=1: length(data" + identifier + ")\n");
+        buffer.append("plot([ data" + identifier);
+
+        buffer.append("(i" + "," + x + ") ");
+        buffer.append("data" + identifier + "(i," + (x + dimension) + ")],");
+
+        buffer.append("[ data" + identifier);
+
+        buffer.append("(i" + "," + y + ") ");
+        buffer.append("data" + identifier + "(i," + (y + dimension) + ")])\n");
+        buffer.append("hold on\n");
+        buffer.append("end\n");
+
+        buffer.append("set(gca, 'Color',[1 1 1]);\n");
+        x--;
+        y--;
+        buffer.append("axis([" + xMin.getElement(x) + " " + xMax.getElement(x) + " " + xMin.getElement(y) + " " + xMax.getElement(y) + "]);\n");
+        buffer.append(createAxisLabel2D(x, y));
+        return buffer.toString();
+    }
+    // ---
+
+
 
     public static String createSegmentedMatlabPlotLoop(int x, int y, int identifier) {
         x++;
@@ -445,4 +516,6 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
     public List segments() {
         return segments_;
     }
+
+
 }

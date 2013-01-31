@@ -8,7 +8,6 @@ package rpn.component.util;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Polygon;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -100,7 +99,7 @@ public class GeometryGraphND {
     }
 
 
-    public Polygon secondArea(BifurcationCurve curve, Scene scene) {
+    public List<RealVector> secondArea(BifurcationCurve curve, Scene scene) {
         
         ArrayList segments = new ArrayList();
 
@@ -115,7 +114,7 @@ public class GeometryGraphND {
         double wmin = 1.E10;
         double wmax = -1.E10;
 
-        System.out.println("GeometryGraphND.indContido.size() ::: " +GeometryGraphND.indContido.size());
+        //System.out.println("GeometryGraphND.indContido.size() ::: " +GeometryGraphND.indContido.size());
 
         for (int i = 0; i < GeometryGraphND.indContido.size(); i++) {
             int ind = Integer.parseInt((GeometryGraphND.indContido.get(i)).toString());
@@ -133,27 +132,20 @@ public class GeometryGraphND {
             if(wmax < w2) wmax = w2;
 
             lightTest(ind);
-
         }
 
-        RealVector P1 = new RealVector(new double[]{zmin, wmin});
-        RealVector P2 = new RealVector(new double[]{zmax, wmin});
-        RealVector P3 = new RealVector(new double[]{zmax, wmax});
-        RealVector P4 = new RealVector(new double[]{zmin, wmax});
+        RealVector pMin = new RealVector(new double[]{zmin, wmin});
+        RealVector pMax = new RealVector(new double[]{zmax, wmax});
 
-        Coords2D dcP1 = toDeviceCoords(scene, P1);
-        Coords2D dcP2 = toDeviceCoords(scene, P2);
-        Coords2D dcP3 = toDeviceCoords(scene, P3);
-        Coords2D dcP4 = toDeviceCoords(scene, P4);
+        Coords2D dc_pMin = toDeviceCoords(scene, pMin);
+        Coords2D dc_pMax = toDeviceCoords(scene, pMax);
 
-        Polygon pol = new Polygon();
-        pol.addPoint((int)dcP1.getX(), (int)dcP1.getY());
-        pol.addPoint((int)dcP2.getX(), (int)dcP2.getY());
-        pol.addPoint((int)dcP3.getX(), (int)dcP3.getY());
-        pol.addPoint((int)dcP4.getX(), (int)dcP4.getY());
+        List<RealVector> list = new ArrayList<RealVector>();
 
-        return pol;
+        list.add(new RealVector(new double[]{dc_pMin.getX(), dc_pMin.getY()}));
+        list.add(new RealVector(new double[]{dc_pMax.getX(), dc_pMax.getY()}));
 
+        return list;
     }
 
 

@@ -40,6 +40,7 @@ import org.apache.batik.dom.GenericDOMImplementation;
 import org.apache.batik.svggen.SVGGraphics2D;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
+import rpn.command.AdjustedSelectionPlotCommand;
 import rpn.component.util.AreaSelected;
 import rpn.component.util.LinePlotted;
 import rpn.component.util.GeometryGraph;
@@ -48,6 +49,8 @@ import rpn.component.util.GraphicsUtil;
 import rpn.controller.ui.AREASELECTION_CONFIG;
 import rpn.controller.ui.CLASSIFIERAGENT_CONFIG;
 import rpn.controller.ui.UIController;
+import rpn.controller.ui.UI_ACTION_SELECTED;
+import rpn.controller.ui.UserInputHandler;
 import rpn.controller.ui.VELOCITYAGENT_CONFIG;
 
 public class RPnPhaseSpacePanel extends JPanel implements Printable {
@@ -166,12 +169,31 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     }
     
     public void addGraphicUtil(GraphicsUtil gu) {
+        
+        
+        UserInputHandler uiState = UIController.instance().getState();
+        
+
+        
+        if (uiState instanceof UI_ACTION_SELECTED){
+            
+            UI_ACTION_SELECTED  actionSelected = (UI_ACTION_SELECTED)uiState;
+            
+            System.out.println(actionSelected.getAction().toString());
+            
+            
+        }
+        
+
+        
         graphicsUtilList_.add(gu);
     }
     
     public void clearGraphicsList() {
         graphicsUtilList_.clear();
     }
+    
+    
     
     public void clearAreaSelection() {
         ArrayList<GraphicsUtil> toRemove = new ArrayList();

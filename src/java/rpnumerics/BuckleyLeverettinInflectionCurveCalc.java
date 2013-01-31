@@ -6,6 +6,8 @@
  */
 package rpnumerics;
 
+import java.util.List;
+
 public class BuckleyLeverettinInflectionCurveCalc extends ContourCurveCalc {
 
     //
@@ -29,6 +31,10 @@ public class BuckleyLeverettinInflectionCurveCalc extends ContourCurveCalc {
     }
 
     private native RpSolution nativeCalc() throws RpException;
+
+    public RpSolution recalc(List<Area> area) throws RpException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
 
 }

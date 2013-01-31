@@ -29,6 +29,7 @@ import wave.multid.Space;
 import wave.multid.view.ViewingAttr;
 import wave.multid.view.ViewingTransform;
 import rpn.component.util.LinePlotted;
+import rpnumerics.Orbit;
 import rpnumerics.RPNUMERICS;
 
 /**
@@ -40,12 +41,13 @@ public class RPnStringPlotter extends RPn2DMouseController {
     private Point cursorPos_;
     private String typeStr = "";
     private boolean addLine_ = false;
+    public static List<RealVector> correspondentList = new ArrayList();
     private static RPnStringPlotter instance_;
 
 
     private String permuteString(String string, int flag) {
         String str = string;
-        if(flag == 22) {
+        if(flag == Orbit.BACKWARD_DIR) {
             String str1 = str.substring(0, 2);
             String str2 = str.substring(2, 4);
             str = str2.concat(str1);
@@ -186,7 +188,9 @@ public class RPnStringPlotter extends RPn2DMouseController {
             }
             if (curve instanceof BifurcationCurve) {
                 int i = curve.findClosestSegment(newValue);
-                GeometryGraphND.pMarcaDC = ((BifurcationCurve) curve).secondPointDC(i);
+                GeometryGraphND.pMarcaDC = ((BifurcationCurve) curve).secondPointDCOtherVersion(i);
+                correspondentList = ((BifurcationCurve)(curve)).correspondentPoints(GeometryGraphND.pMarca);
+                
             } else {
                 GeometryGraphND.pMarcaDC = GeometryGraphND.pMarca;
             }
@@ -226,7 +230,9 @@ public class RPnStringPlotter extends RPn2DMouseController {
         GeometryGraphND.pMarca = closestPoint;
         if (curve instanceof BifurcationCurve) {
             int i = curve.findClosestSegment(newValue);
-            GeometryGraphND.pMarcaDC = ((BifurcationCurve) curve).secondPointDC(i);
+            GeometryGraphND.pMarcaDC = ((BifurcationCurve) curve).secondPointDCOtherVersion(i);
+            correspondentList = ((BifurcationCurve)(curve)).correspondentPoints(GeometryGraphND.pMarca);
+
         } else {
             GeometryGraphND.pMarcaDC = GeometryGraphND.pMarca;
         }

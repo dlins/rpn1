@@ -34,9 +34,12 @@ public class BifurcationCurveGeom implements MultiGeometry, RpGeometry {
     public BifurcationCurveGeom(RealSegGeom[] segArray, BifurcationCurveGeomFactory factory) {
 
         viewingAttr_=segArray[0].viewingAttr();
+        
+//        System.out.println("Tamanho do array no construtor: "+segArray.length);
 
         segList_ = new ArrayList();
         for (int i = 0; i < segArray.length; i++) {
+//            System.out.println("Segmento no array: "+segArray[i]);
             segList_.add(segArray[i]);
         }
         factory_ = factory;
