@@ -28,27 +28,76 @@ public class RarefactionOrbitCalc extends WaveCurveOrbitCalc implements RpCalcul
     //
     // Methods
     //
+    @Override
     public RpSolution recalc() throws RpException {
         return calc();
 
     }
 
 
+    // ----- 30JAN : Dan pediu para fazer rarefação em ambas as direções
+    // ----- Incluí o método concat(...)
+    @Override
     public RpSolution calc() throws RpException {
-
         RarefactionOrbit result;
 
-        result = (RarefactionOrbit) calc("methodName_", "flowName_", getStart(), getFamilyIndex(), getDirection());
-
+        if(getDirection()== Orbit.BOTH_DIR) {
+            RarefactionOrbit forward  = (RarefactionOrbit) calc("methodName_", "flowName_", getStart(), getFamilyIndex(), Orbit.FORWARD_DIR);
+            RarefactionOrbit backward = (RarefactionOrbit) calc("methodName_", "flowName_", getStart(), getFamilyIndex(), Orbit.BACKWARD_DIR);
+            result =  concat(backward, forward);
+        }
+        else {
+            result = (RarefactionOrbit) calc("methodName_", "flowName_", getStart(), getFamilyIndex(), getDirection());
+        }
 
         if (result == null) {
             throw new RpException("Error in native layer");
         }
-      
 
         return result;
 
     }
+
+    private  RarefactionOrbit concat(RarefactionOrbit backward, RarefactionOrbit forward) {
+        // opposite time directions assumed...
+        OrbitPoint[] swap = new OrbitPoint[backward.getPoints().length
+                + forward.getPoints().length - 1];
+
+        for (int i = 0, j = backward.getPoints().length - 1; i < swap.length; i++) {
+            if (i >= backward.getPoints().length) {
+                swap[i] = (OrbitPoint) forward.getPoints()[i - backward.getPoints().length + 1];
+            } else {
+                swap[i] = backward.getPoints()[j--];
+
+            }
+        }
+
+        return new RarefactionOrbit(swap, getFamilyIndex(), Orbit.BOTH_DIR);
+
+    }
+    // -----
+
+
+      // --- Método calc() original
+//    public RpSolution calc() throws RpException {
+//
+//        RarefactionOrbit result;
+//
+//        result = (RarefactionOrbit) calc("methodName_", "flowName_", getStart(), getFamilyIndex(), getDirection());
+//
+//
+//        if (result == null) {
+//            throw new RpException("Error in native layer");
+//        }
+//
+//
+//        return result;
+//
+//    }
+
+
+
+
 
     private native RpSolution calc(String methodName, String flowName, PhasePoint initialpoint, int familyIndex, int timeDirection) throws RpException;
 

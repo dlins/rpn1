@@ -16,6 +16,8 @@ public class RarefactionOrbit extends FundamentalCurve implements RpSolution {
       
     }
 
+
+
     // Methods
     @Override
     public String toString() {
