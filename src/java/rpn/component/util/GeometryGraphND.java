@@ -9,15 +9,26 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpacePanel;
+import rpn.command.ClassifierCommand;
+import rpn.command.VelocityCommand;
 import rpn.component.BifurcationCurveGeom;
 import rpn.component.RealSegGeom;
 import rpn.component.RpGeometry;
+import rpn.controller.ui.CLASSIFIERAGENT_CONFIG;
+import rpn.controller.ui.UIController;
+import rpn.controller.ui.UserInputTable;
+import rpn.controller.ui.VELOCITYAGENT_CONFIG;
 import rpnumerics.RPNUMERICS;
+import rpnumerics.RPnCurve;
+import rpnumerics.SegmentedCurve;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
 import wave.multid.view.Scene;
@@ -26,6 +37,7 @@ import wave.util.RealSegment;
 import wave.util.RealVector;
 import rpn.parser.RPnDataModule;
 import rpnumerics.BifurcationCurve;
+import rpnumerics.Orbit;
 import wave.multid.model.MultiGeometry;
 
 /**
@@ -63,6 +75,61 @@ public class GeometryGraphND {
             GeometryGraphND.pMarca.setElement(i, 100.);
         }
     }
+
+
+   
+
+   
+
+    public static RealVector secondPointDC(RPnCurve curve_) {
+        int jDC = 0;
+        UserInputTable userInputList = UIController.instance().globalInputTable();
+        RealVector newValue = userInputList.values();
+
+        SegmentedCurve curve = (SegmentedCurve)curve_;
+
+        int index = curve.findClosestSegment(newValue);
+
+        if (index > curve.segments().size() / 2) {
+            jDC = index - curve.segments().size() / 2;
+        } else {
+            jDC = index + curve.segments().size() / 2;
+        }
+
+        RealVector pDC = new RealVector(((RealSegment) ((curve).segments()).get(jDC)).p1());
+
+        return pDC;
+    }
+
+    
+    public void grava() {
+        try {
+            //FileWriter gravador = new FileWriter("/impa/home/g/moreira/ListaDePontos/ListaDePontos.txt");
+            FileWriter gravador = new FileWriter("/home/moreira/ListaDePontos/ListaDePontos.txt");
+            BufferedWriter saida = new BufferedWriter(gravador);
+            saida.write("Curva mais proxima: ");
+            saida.write(" ");
+            Object obj = RPnPhaseSpaceAbstraction.closestCurve;
+            String str = obj.toString();
+            saida.write(str);
+            saida.write(" ");
+            saida.flush();
+            saida.write("\n\n");
+            saida.write("Pontos da curva:\n");
+            for (int i = 0; i < indContido.size(); i++) {
+                saida.write(indContido.get(i).toString());
+                saida.write(" ");
+                saida.flush();
+                saida.write("\n");
+            }
+            saida.close();
+
+        } catch (IOException e) {
+            System.out.println("Não deu para escrever o arquivo");
+        }
+    }
+
+
 
     public void changeColor() {
         if (RPnPhaseSpacePanel.DEFAULT_BACKGROUND_COLOR == Color.white) {
@@ -147,6 +214,7 @@ public class GeometryGraphND {
 
         return list;
     }
+
 
 
     public void lightTest(int ind) {       //*** ALterei BifurcationCurveGeom

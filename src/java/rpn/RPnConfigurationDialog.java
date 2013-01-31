@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
 import rpn.parser.RPnDataModule;
-import rpnumerics.Configuration;
+import rpn.configuration.Configuration;
 import rpnumerics.RPNUMERICS;
 import wave.util.Boundary;
 import wave.util.RealVector;
@@ -50,7 +50,7 @@ public class RPnConfigurationDialog extends RPnDialog {
             String configurationType = entry.getValue().getType();
             RPnInputComponent inputComponent = new RPnInputComponent(entry.getValue(),true);
             inputComponent.keepParameter("resolution");
-            if (configurationType.equalsIgnoreCase("CURVE") && entry.getValue().getName().equals("inflectioncurve")) {
+            if (entry.getValue().getName().equals("inflectioncurve")) {
 
                 if (inputComponent.getContainer().getComponentCount() > 0) {
                     extensionPanel_.addTab("Bifurcation Curves", inputComponent.getContainer());

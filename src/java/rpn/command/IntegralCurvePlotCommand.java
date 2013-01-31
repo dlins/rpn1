@@ -3,6 +3,7 @@ package rpn.command;
 import javax.swing.JToggleButton;
 import rpn.component.IntegralOrbitGeomFactory;
 import rpn.component.RpGeometry;
+import rpnumerics.IntegralCurveCalc;
 import rpnumerics.OrbitPoint;
 import wave.util.RealVector;
 import rpnumerics.RPNUMERICS;
@@ -14,13 +15,17 @@ public class IntegralCurvePlotCommand extends RpModelPlotCommand {
 
     public IntegralCurvePlotCommand() {
 
-        super(DESC_TEXT, rpn.RPnConfig.ORBIT_FWD,new JToggleButton());
+        super(DESC_TEXT, rpn.configuration.RPnConfig.ORBIT_FWD,new JToggleButton());
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {
 
         OrbitPoint oPoint = new OrbitPoint(input[input.length - 1]);
-        IntegralOrbitGeomFactory factory = new IntegralOrbitGeomFactory(RPNUMERICS.createIntegralCurveCalc(oPoint));
+
+        IntegralCurveCalc calc = RPNUMERICS.createIntegralCurveCalc(oPoint);
+        IntegralOrbitGeomFactory factory = new IntegralOrbitGeomFactory(calc);
+
+
 
         return factory.geom();
 

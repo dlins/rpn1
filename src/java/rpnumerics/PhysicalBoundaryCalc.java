@@ -6,10 +6,31 @@
  */
 package rpnumerics;
 
+
 import java.util.List;
 
+import rpn.configuration.CommandConfiguration;
+import rpn.configuration.Configuration;
+
 public class PhysicalBoundaryCalc implements RpCalculation {
+
+    
+    protected Configuration configuration_;
+    
+    public PhysicalBoundaryCalc() {
+        
+        
+        String className = getClass().getSimpleName().toLowerCase();
+
+        String curveName = className.replace("calc", "");
+
+        configuration_ = new CommandConfiguration(curveName);
+
+        
+        
+    }
   
+    
     public RpSolution recalc() throws RpException {
         return calc();
     }
@@ -29,7 +50,12 @@ public class PhysicalBoundaryCalc implements RpCalculation {
 
     private native RpSolution calcNative();
 
+
     public RpSolution recalc(List<Area> area) throws RpException {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+    public Configuration getConfiguration() {
+        return configuration_;
+
     }
 }

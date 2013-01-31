@@ -78,7 +78,7 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
                     tempInputList.add(inputElement.toString());
                 }
 
-                UIController.instance().logCommand(new RpCommand(this, tempInputList));
+
 
                 //************************ acrescentei para testar (Leandro)
                 UIController.instance().setWaitCursor();
@@ -92,7 +92,7 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
             }
 
         } else if (UIController.instance().getState() instanceof AREASELECTION_CONFIG) {
-            UIController.instance().logCommand(new RpCommand(this, userInput));
+
             UIController.instance().setWaitCursor();
             actionSelected_.execute();
             UIController.instance().resetCursor();
@@ -100,7 +100,7 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
             ui.panelsBufferClear();
             rpn.parser.RPnDataModule.PHASESPACE.unselectAll();
         } else {
-            UIController.instance().logCommand(new RpCommand(this, userInput));
+
             UIController.instance().setWaitCursor();
             actionSelected_.execute();
             UIController.instance().resetCursor();
@@ -114,7 +114,7 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
 
     public void userInputComplete(UIController ui) {
 
-        UIController.instance().logCommand(new RpCommand(this));
+
         UIController.instance().setWaitCursor();
         actionSelected_.execute();
         UIController.instance().resetCursor();

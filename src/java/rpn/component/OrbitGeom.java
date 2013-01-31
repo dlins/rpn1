@@ -18,6 +18,7 @@ public class OrbitGeom extends MultiPolyLine implements RpGeometry {
     //
     private RpGeomFactory factory_;
 
+
     //
     // Constructors
     //
@@ -40,4 +41,6 @@ public class OrbitGeom extends MultiPolyLine implements RpGeometry {
     public RpGeomFactory geomFactory() {
         return factory_;
     }
+
+   
 }

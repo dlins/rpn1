@@ -11,7 +11,7 @@ import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import rpn.RPnConfig;
+import rpn.configuration.RPnConfig;
 import rpn.RPnFluxParamsDialog;
 import rpn.RPnFluxParamsSubject;
 import rpn.RPnFluxParamsObserver;
@@ -26,6 +26,7 @@ import rpn.controller.phasespace.InvariantsReadyImpl;
 import rpn.controller.phasespace.NUMCONFIG;
 import rpn.controller.phasespace.NumConfigReadyImpl;
 import rpn.controller.phasespace.ProfileSetupReadyImpl;
+import rpn.controller.ui.UIController;
 import rpn.parser.RPnDataModule;
 import rpnumerics.HugoniotCurve;
 import rpnumerics.PhasePoint;
@@ -64,6 +65,15 @@ public class ChangeFluxParamsCommand extends RpModelConfigChangeCommand {
         RPnFluxParamsDialog dialog = new RPnFluxParamsDialog(fluxParamsSubject, fluxParamsObserver);
         dialog.setVisible(true);
 
+
+    }
+    
+    
+    @Override
+    public void applyChange(PropertyChangeEvent change) {
+
+        logCommand( new RpCommand(change));
+        super.applyChange(change);
 
     }
 

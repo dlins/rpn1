@@ -5,6 +5,7 @@
  */
 package rpn;
 
+import rpn.configuration.RPnConfig;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import javax.swing.*;
@@ -24,10 +25,11 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
-import rpn.parser.ConfigurationProfile;
+import rpn.configuration.CommandConfiguration;
+import rpn.configuration.ConfigurationProfile;
 import rpn.parser.RPnVisualizationModule;
 import rpnumerics.RPNUMERICS;
-import rpnumerics.Configuration;
+import rpn.configuration.Configuration;
 import wave.multid.Space;
 import wave.util.RealVector;
 import wave.util.RectBoundary;
@@ -96,7 +98,7 @@ public class RPnConfigDialog extends RPnDialog {
 
 //            Configuration methodConfiguration = new Configuration(profile.getName(), profile.getType(), profileParams);
 
-            Configuration methodConfiguration = new Configuration(profile);
+            Configuration methodConfiguration = new CommandConfiguration(methodName);//nfiguration(profile);
 
             methodConfigMap_.put(methodName, methodConfiguration);
 

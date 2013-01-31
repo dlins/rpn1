@@ -8,7 +8,7 @@ package rpn.command;
 import java.beans.PropertyChangeEvent;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UI_ACTION_SELECTED;
-import rpnumerics.Configuration;
+import rpn.configuration.Configuration;
 
 public class ChangeCurveConfigurationCommand extends RpModelConfigChangeCommand {
     //
@@ -32,9 +32,7 @@ public class ChangeCurveConfigurationCommand extends RpModelConfigChangeCommand 
     @Override
     public void applyChange(PropertyChangeEvent event) {
 
-        Configuration newConfiguration = (Configuration) event.getNewValue();
-        
-        UIController.instance().logCommand(new RpCommand(new UI_ACTION_SELECTED(this), newConfiguration));
+      
 
 
     }

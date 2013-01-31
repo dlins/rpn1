@@ -6,7 +6,7 @@
 package rpn.command;
 
 import javax.swing.JToggleButton;
-import rpn.RPnConfig;
+import rpn.configuration.RPnConfig;
 import rpn.component.*;
 import rpn.controller.phasespace.PoincareReadyImpl;
 import rpn.parser.RPnDataModule;

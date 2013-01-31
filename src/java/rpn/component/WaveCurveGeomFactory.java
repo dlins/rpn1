@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import rpnumerics.CompositeCurve;
 import rpnumerics.RPnCurve;
-import rpnumerics.RarefactionOrbit;
+import rpnumerics.RarefactionCurve;
 import rpnumerics.ShockCurve;
 import rpnumerics.WaveCurve;
 import rpnumerics.WaveCurveBranch;
@@ -76,10 +76,10 @@ public class WaveCurveGeomFactory extends WaveCurveOrbitGeomFactory {
 
         System.out.println(branch.getClass().getCanonicalName());
 
-        if (branch instanceof RarefactionOrbit) {
+        if (branch instanceof RarefactionCurve) {
 
 //            System.out.println("Dentro do createOrbits de WaveCurveGeomFactory : Rarefaction --- " +branch.getPoints().length);
-            return new RarefactionGeom(MultidAdapter.converseOrbitPointsToCoordsArray(branch.getPoints()), this, (RarefactionOrbit) branch);
+            return new RarefactionCurveGeom(MultidAdapter.converseOrbitPointsToCoordsArray(branch.getPoints()), this, (RarefactionCurve) branch);
 
         }
 
@@ -114,10 +114,5 @@ public class WaveCurveGeomFactory extends WaveCurveOrbitGeomFactory {
             return new ViewingAttr(Color.blue);
         }
         return null;
-    }
-
-    @Override
-    public String toMatlab(int curveIndex) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

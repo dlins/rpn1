@@ -30,7 +30,7 @@ public class EllipticBoundaryExtensionCommand extends RpModelPlotCommand {
     // Constructors/Initializers
     //
     protected EllipticBoundaryExtensionCommand() {
-        super(DESC_TEXT, rpn.RPnConfig.HUGONIOT, new JButton());
+        super(DESC_TEXT, rpn.configuration.RPnConfig.HUGONIOT, new JButton());
     }
 
     @Override

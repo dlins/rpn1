@@ -17,6 +17,8 @@ import java.beans.PropertyChangeEvent;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Set;
 import javax.swing.ButtonGroup;
 import javax.swing.JFormattedTextField;
@@ -31,7 +33,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import rpn.command.ChangeCurveConfigurationCommand;
-import rpnumerics.Configuration;
+import rpn.configuration.Configuration;
 import rpnumerics.RPNUMERICS;
 import wave.util.RealVector;
 
@@ -302,6 +304,8 @@ public class RPnInputComponent {//TODO Refatorar
     }
 
     public RPnInputComponent(Configuration configuration, boolean useEvents) {
+        
+
 
         textField_ = new JFormattedTextField[configuration.getParamsSize()];
 
@@ -362,6 +366,8 @@ public class RPnInputComponent {//TODO Refatorar
         }
 
         controller_ = new RPnInputController(this, configuration);
+        
+
 
 
     }
@@ -448,34 +454,25 @@ public class RPnInputComponent {//TODO Refatorar
 
     }
 
+
     private class SliderHandler implements ChangeListener {
 
         public void stateChanged(ChangeEvent e) {
 
             JSlider slider = (JSlider) e.getSource();
             String[] newValues = new String[textField_.length];
-
-
-
             Double sliderValue = new Double(slider.getValue());
             for (int j = 0; j < textField_.length; j++) {
 
                 if (textField_[j].getName().equals(slider.getName())) {
 
                     sliderValue /= 20;
-
-           
                     textField_[j].setText(String.valueOf(sliderValue));
 
                 }
 
                 newValues[j] = textField_[j].getText();
             }
-
-
-
-
-
 
             Double alpha = new Double(textField_[textField_.length - 1].getText());
 
@@ -491,6 +488,7 @@ public class RPnInputComponent {//TODO Refatorar
             }
 
         }
+
     }
 
     private class TextValueHandler implements DocumentListener {

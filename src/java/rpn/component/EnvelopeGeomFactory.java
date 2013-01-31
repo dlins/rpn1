@@ -34,28 +34,4 @@ public class EnvelopeGeomFactory extends BifurcationCurveGeomFactory {
     protected ViewingAttr rightViewingAttr() {
         return new ViewingAttr(Color.magenta);
     }
-
-
-    //TODO
-
-    @Override
-    public String toXML() {
-
-        StringBuffer buffer = new StringBuffer();
-
-        buffer.append(super.toXML());
-
-        BifurcationCurve curve = (BifurcationCurve) geomSource();
-
-        EnvelopeCurveCalc doubleContactCalc = (EnvelopeCurveCalc) rpCalc();
-
-        buffer.append(" envelope curve");
-
-        buffer.append(curve.toXML());
-
-        buffer.append("</COMMAND>\n");
-
-        return buffer.toString();
-
-    }
 }

@@ -6,9 +6,12 @@
  */
 package rpnumerics;
 
+import rpn.configuration.Configuration;
 import java.util.List;
 import rpn.component.HugoniotCurveGeom;
+import rpn.configuration.CommandConfiguration;
 import rpn.controller.phasespace.NUMCONFIG;
+import rpn.configuration.ConfigurationProfile;
 import rpn.parser.RPnDataModule;
 import rpnumerics.viscousprofile.ViscousProfileData;
 import wave.util.RealMatrix2;
@@ -34,6 +37,7 @@ public class ConnectionOrbitCalc implements RpCalculation {
     private double sB = ViscousProfileData.instance().getSigma();
     private double dotA = ViscousProfileData.instance().getPreviousDot();
     private double dotB = ViscousProfileData.instance().getDot();
+    private Configuration configuration_;
 
     //
     // Constructor
@@ -41,6 +45,13 @@ public class ConnectionOrbitCalc implements RpCalculation {
 
     public ConnectionOrbitCalc(HugoniotCurve hCurve) {
         hCurve_ = hCurve;
+         String className = getClass().getSimpleName().toLowerCase();
+
+        String curveName = className.replace("calc", "");
+
+        configuration_ = new CommandConfiguration(curveName);
+
+
     }
 
     //
@@ -292,8 +303,13 @@ public class ConnectionOrbitCalc implements RpCalculation {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+
     public RpSolution recalc(List<Area> area) throws RpException {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+    
+    public Configuration getConfiguration() {
+        return configuration_;
     }
 
    

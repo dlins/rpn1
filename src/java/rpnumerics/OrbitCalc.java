@@ -7,6 +7,9 @@
 package rpnumerics;
 
 import java.util.List;
+
+import rpn.configuration.Configuration;
+
 import wave.util.RealVector;
 
 public class OrbitCalc implements RpCalculation {
@@ -20,20 +23,20 @@ public class OrbitCalc implements RpCalculation {
     private OrbitPoint start_;
     private int timeDirection_;
     private RealVector[] poincareSection_;
-
+    protected Configuration configuration_;
     //
     // Constructors/Initializers
     //
-    public OrbitCalc(OrbitPoint point,  int timeDirection) {
+
+    public OrbitCalc(OrbitPoint point, int timeDirection) {
         start_ = point;
         timeDirection_ = timeDirection;
-        poincareSection_=null;
+        poincareSection_ = null;
 
     }
 
-
-    public void setPoincareSection(RealVector [] poincare){
-        poincareSection_=poincare;
+    public void setPoincareSection(RealVector[] poincare) {
+        poincareSection_ = poincare;
     }
 
     //
@@ -45,24 +48,20 @@ public class OrbitCalc implements RpCalculation {
 
     public RpSolution calc() throws RpException {
 
-        if(timeDirection_== Orbit.BOTH_DIR) {
-            Orbit orbitFWD = (Orbit) nativeCalc(start_, RPNUMERICS.getViscousProfileData().getXZero(), RPNUMERICS.getViscousProfileData().getSigma(), Orbit.FORWARD_DIR ,poincareSection_);
-            Orbit orbitBWD = (Orbit) nativeCalc(start_, RPNUMERICS.getViscousProfileData().getXZero(), RPNUMERICS.getViscousProfileData().getSigma(), Orbit.BACKWARD_DIR ,poincareSection_);
+        if (timeDirection_ == Orbit.BOTH_DIR) {
+            Orbit orbitFWD = (Orbit) nativeCalc(start_, RPNUMERICS.getViscousProfileData().getXZero(), RPNUMERICS.getViscousProfileData().getSigma(), Orbit.FORWARD_DIR, poincareSection_);
+            Orbit orbitBWD = (Orbit) nativeCalc(start_, RPNUMERICS.getViscousProfileData().getXZero(), RPNUMERICS.getViscousProfileData().getSigma(), Orbit.BACKWARD_DIR, poincareSection_);
 
-            Orbit concatOrbit =  concat(orbitBWD, orbitFWD);
+            Orbit concatOrbit = concat(orbitBWD, orbitFWD);
 
             return concatOrbit;
-            
-        }
 
-        else
-        return nativeCalc(start_, RPNUMERICS.getViscousProfileData().getXZero(), RPNUMERICS.getViscousProfileData().getSigma(), timeDirection_,poincareSection_);
+        } else {
+            return nativeCalc(start_, RPNUMERICS.getViscousProfileData().getXZero(), RPNUMERICS.getViscousProfileData().getSigma(), timeDirection_, poincareSection_);
+        }
     }
 
-
-
-
-   private  Orbit concat(Orbit backward, Orbit forward) {
+    private Orbit concat(Orbit backward, Orbit forward) {
         // opposite time directions assumed...
         OrbitPoint[] swap = new OrbitPoint[backward.getPoints().length
                 + forward.getPoints().length - 1];
@@ -81,31 +80,28 @@ public class OrbitCalc implements RpCalculation {
 
     }
 
-
-  
-
     public OrbitPoint getStart() {
         return start_;
     }
-
 
     public int getDirection() {
         return timeDirection_;
 
     }
 
-    public void setStart(RealVector startpoint){
-        start_= new OrbitPoint(startpoint);
+    public void setStart(RealVector startpoint) {
+        start_ = new OrbitPoint(startpoint);
     }
 
-   
-
-
-    private native RpSolution nativeCalc (OrbitPoint initialPoint, PhasePoint referencePoint,double speed, int direction ,RealVector[] poincareSection) throws RpException;
+    private native RpSolution nativeCalc(OrbitPoint initialPoint, PhasePoint referencePoint, double speed, int direction, RealVector[] poincareSection) throws RpException;
 //       private native RpSolution nativeCalc (OrbitPoint initialPoint, PhasePoint referencePoint,double speed, int direction ) throws RpException;
 
     public RpSolution recalc(List<Area> area) throws RpException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    public Configuration getConfiguration() {
+        return configuration_;
+
+    }
 }

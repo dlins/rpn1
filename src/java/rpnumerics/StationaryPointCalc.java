@@ -13,7 +13,12 @@ package rpnumerics;
 // fills the local information of eigenvalues, eigenvectors, schur decompositions
 // the point initial_ is taken as an initial guess.
 //
+
 import java.util.List;
+
+import rpn.configuration.CommandConfiguration;
+import rpn.configuration.Configuration;
+
 import wave.util.RealVector;
 
 public class StationaryPointCalc implements RpCalculation {
@@ -27,7 +32,7 @@ public class StationaryPointCalc implements RpCalculation {
     private PhasePoint initial_;
     private ShockFlow flow_;
     private RealVector referencePoint_;
-//    private String methodCalcName_ = "default";
+    protected Configuration configuration_;
     //
     // Constructors
     //
@@ -35,6 +40,17 @@ public class StationaryPointCalc implements RpCalculation {
     public StationaryPointCalc(PhasePoint initial, RealVector referencePoint) {
         initial_ = initial;
         referencePoint_ = referencePoint;
+        
+        String className = getClass().getSimpleName().toLowerCase();
+        
+        String curveName = className.replace("calc", "");
+        
+        configuration_= new CommandConfiguration(curveName);
+        
+
+        configuration_.setParamValue("referencepoint", referencePoint.toString());
+        configuration_.setParamValue("initialpoint", initial.toString());
+        
 
     }
 
@@ -162,10 +178,15 @@ public class StationaryPointCalc implements RpCalculation {
         return flow_;
 
     }
+public Configuration getConfiguration() {
+        return configuration_;
+    }
 
     public RpSolution recalc(List<Area> area) throws RpException {
+
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     private native RpSolution nativeCalc(RealVector eqPoint, RealVector refPoint, double sigma) throws RpException;
+
 }

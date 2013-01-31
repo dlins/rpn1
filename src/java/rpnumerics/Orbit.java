@@ -199,13 +199,7 @@ public class Orbit extends RPnCurve implements RpSolution {
 
     public String toXML() {
 
-        StringBuilder buffer = new StringBuilder();
-        for (int i = 0; i < getPoints().length; i++) {
-
-            buffer.append(getPoints()[i].toXML());
-
-        }
-        return buffer.toString();
+        return toString();
 
     }
 

@@ -17,6 +17,8 @@ public class LevelCurveCalc extends ContourCurveCalc {
         family_ = family;
         level_ = level;
 
+        configuration_=RPNUMERICS.getConfiguration("levelcurve");
+
     }
 
 

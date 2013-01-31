@@ -6,6 +6,8 @@
  */
 package rpnumerics;
 
+import rpn.configuration.CommandConfiguration;
+
 public  class WaveCurveOrbitCalc extends OrbitCalc  {
     //
     // Constants
@@ -15,6 +17,8 @@ public  class WaveCurveOrbitCalc extends OrbitCalc  {
     //
 
     private int familyIndex_;
+    
+
 
 
     //
@@ -24,13 +28,15 @@ public  class WaveCurveOrbitCalc extends OrbitCalc  {
 
         super(new OrbitPoint(point), timeDirection);
         familyIndex_=familyIndex;
-       
+        
+        configuration_= RPNUMERICS.getConfiguration("fundamentalcurve");
+        
     }
 
     //
     // Accessors/Mutators
     //
-   
+ 
     //
     // Methods
     //

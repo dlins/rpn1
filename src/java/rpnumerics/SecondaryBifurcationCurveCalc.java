@@ -17,12 +17,14 @@ public class SecondaryBifurcationCurveCalc extends ContourCurveCalc {
 
     public SecondaryBifurcationCurveCalc(ContourParams params) {
         super(params);
-
+        
+      
     }
 
     @Override
     public RpSolution calc() throws RpException {
         RpSolution result = null;
+
         result = (SecondaryBifurcationCurve) nativeCalc();
 
         if (result == null) {

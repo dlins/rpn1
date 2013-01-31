@@ -7,23 +7,30 @@ package rpn.command;
 
 import java.awt.Font;
 import java.awt.geom.AffineTransform;
+import java.util.Arrays;
 import javax.swing.event.ChangeEvent;
 import wave.util.RealVector;
 import rpn.parser.RPnDataModule;
 import rpn.component.RpGeometry;
 import javax.swing.Action;
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import java.util.Iterator;
 import javax.swing.AbstractButton;
+import rpn.component.RpCalcBasedGeomFactory;
 import rpn.controller.ui.*;
+import rpnumerics.RpCalculation;
+import rpnumerics.RPnCurve;
 
 public abstract class RpModelPlotCommand extends RpModelActionCommand {
 
     protected AbstractButton button_;
+    private int idCounter_;
 
     public RpModelPlotCommand(String shortDesc, ImageIcon icon, AbstractButton button) {
         super(shortDesc, icon);
+        idCounter_ = 0;
         button_ = button;
         button_.setAction(this);
         button_.setFont(rpn.RPnConfigReader.MODELPLOT_BUTTON_FONT);
@@ -44,24 +51,39 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand {
 
     public void execute() {
 
+
+
         RealVector[] userInputList = UIController.instance().userInputList();
 
-        String listString = "";
+        System.out.println("execute do  plot" + userInputList[0]);
 
         Iterator oldValue = UIController.instance().getActivePhaseSpace().getGeomObjIterator();
 
         RpGeometry geometry = createRpGeometry(userInputList);
+        idCounter_++;
+
+        RpCalcBasedGeomFactory factory = (RpCalcBasedGeomFactory) geometry.geomFactory();
+
+
+        RPnCurve curve = (RPnCurve) factory.geomSource();
 
 
         if (geometry == null) {
             return;
         }
+
+        curve.setId(idCounter_);
+
         UIController.instance().getActivePhaseSpace().plot(geometry);
 
+        PropertyChangeEvent event_ = new PropertyChangeEvent(this, UIController.instance().getActivePhaseSpace().getName(), oldValue, geometry);
 
-        Iterator newValue = UIController.instance().getActivePhaseSpace().getGeomObjIterator();
-        logAction(new PropertyChangeEvent(this, listString, oldValue, newValue));
+        ArrayList<RealVector> inputArray = new ArrayList<RealVector>();
+        inputArray.addAll(Arrays.asList(userInputList));
 
+        setInput(inputArray);
+
+        logCommand(new RpCommand(event_, inputArray));
     }
 
     public void unexecute() {
@@ -80,10 +102,7 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand {
     public AbstractButton getContainer() {
         return button_;
     }
-    
-    protected void unselectedButton(ChangeEvent changeEvent){
-        
-    }
 
-    
+    protected void unselectedButton(ChangeEvent changeEvent) {
+    }
 }

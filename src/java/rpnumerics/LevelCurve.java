@@ -26,17 +26,4 @@ public class LevelCurve extends SegmentedCurve {
         return level_;
     }
 
-    public String toXML() {
-        StringBuilder buffer = new StringBuilder();
-
-        for (int i = 0; i < segments().size(); i++) {
-            RealSegment hSegment = ((RealSegment) segments().get(
-                    i));
-            buffer.append(hSegment.toXML());
-
-        }
-
-        return buffer.toString();
-
-    }
 }

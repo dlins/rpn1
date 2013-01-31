@@ -51,26 +51,4 @@ public class BuckleyLeverettinCurveGeomFactory extends BifurcationCurveGeomFacto
         return buffer.toString();
 
     }
-
-    public String toXML() {
-
-
-        StringBuffer buffer = new StringBuffer();
-
-        BifurcationCurve curve = (BifurcationCurve) geomSource();
-
-
-        buffer.append(super.toXML());
-
-
-        buffer.append(">\n");
-
-        buffer.append(curve.toXML());
-
-        buffer.append("</COMMAND>\n");
-
-        return buffer.toString();
-
-
-    }
 }

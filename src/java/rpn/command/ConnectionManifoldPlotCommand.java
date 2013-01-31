@@ -7,7 +7,7 @@ package rpn.command;
 
 import java.awt.event.ActionEvent;
 import javax.swing.JToggleButton;
-import rpn.RPnConfig;
+import rpn.configuration.RPnConfig;
 import rpn.component.*;
 import rpn.component.HugoniotCurveGeom;
 import rpn.controller.phasespace.PoincareReadyImpl;

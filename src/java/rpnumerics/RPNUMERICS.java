@@ -5,14 +5,19 @@
  */
 package rpnumerics;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import rpn.configuration.Configuration;
 import rpnumerics.viscousprofile.ViscousProfileData;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
-import rpn.RPnConfig;
-import rpn.parser.ConfigurationProfile;
+import rpn.configuration.BoundaryConfiguration;
+import rpn.configuration.RPnConfig;
+import rpn.configuration.ConfigurationProfile;
+import rpn.configuration.PhysicsConfiguration;
 import rpn.parser.RPnDataModule;
 import wave.util.*;
 import wave.ode.*;
@@ -39,119 +44,126 @@ public class RPNUMERICS {
     //
 
     static public void init(String physicsID) {
+        try {
+            System.loadLibrary("rpn");
+            setRPnHome(System.getProperty("rpnhome"));
 
-        System.loadLibrary("rpn");
-        setRPnHome(System.getProperty("rpnhome"));
+            initNative(physicsID);
 
-        initNative(physicsID);
+            //Processing configuration data
 
-        //Processing configuration data
+            ConfigurationProfile physicsProfile = RPnConfig.getActivePhysicsProfile();
 
-        ConfigurationProfile physicsProfile = RPnConfig.getActivePhysicsProfile();
+            HashMap<String, Configuration> configurationList = RPnConfig.createConfigurationList(physicsProfile);
 
-        Configuration physicsConfiguration = new Configuration(physicsProfile);
+            Configuration physicsConfiguration = new PhysicsConfiguration(physicsProfile, configurationList);
 
 
-        //Accumulation function
+//            //Accumulation function
+//
+//            Configuration accumulationFunctionConfig = physicsConfiguration.getConfiguration("accumulationfunction");
+//
+//            if (accumulationFunctionConfig != null) {
+//                //            System.out.println("Printando configuration para acumulacao: " + accumulationFunctionConfig.getParamsSize());
+//                //            System.out.println(accumulationFunctionConfig);
+//
+//                RealVector newAccParams = new RealVector(accumulationFunctionConfig.getParamsSize());
+//                for (int i = 0; i < newAccParams.getSize(); i++) {
+//                    //            System.out.println(accumulationFunctionConfig);
+//                    newAccParams.setElement(i, new Double(accumulationFunctionConfig.getParam(i)));
+//
+//                }
+//                setAccumulationParams(newAccParams);
+//            } else {
+//
+//                RealVector paramsVector = getAccumulationParams();
+//
+//                Configuration accumlationFunctionConfiguration = new PhysicsConfiguration("accumulationfunction");
+//
+//                for (int i = 0; i < paramsVector.getSize(); i++) {
+//                    accumlationFunctionConfiguration.setParamValue("param " + i, String.valueOf(paramsVector.getElement(i)));
+//                    accumlationFunctionConfiguration.setParamOrder("param " + i, i);
+//                }
+//
+//                physicsConfiguration.addConfiguration("accumulationfunction", accumlationFunctionConfiguration);
+//            }
 
-        Configuration accumulationFunctionConfig = physicsConfiguration.getConfiguration("accumulationfunction");
+            //Flux function
 
-        if (accumulationFunctionConfig != null) {
-//            System.out.println("Printando configuration para acumulacao: " + accumulationFunctionConfig.getParamsSize());
-//            System.out.println(accumulationFunctionConfig);
+            Configuration fluxFunctionConfig = physicsConfiguration.getConfiguration("fluxfunction");
 
-            RealVector newAccParams = new RealVector(accumulationFunctionConfig.getParamsSize());
-            for (int i = 0; i < newAccParams.getSize(); i++) {
-                //SET ACCUM PARAMS !!!
-                newAccParams.setElement(i, new Double(accumulationFunctionConfig.getParam(i)));
+
+            String[] paramsArray = new String[fluxFunctionConfig.getParamsSize()];
+
+
+            for (int i = 0; i < fluxFunctionConfig.getParamsSize(); i++) {
+
+                paramsArray[i] = fluxFunctionConfig.getParam(i);
+
 
             }
-            setAccumulationParams(newAccParams);
-        } else {
 
-            RealVector paramsVector = getAccumulationParams();
+            setParams(paramsArray);
 
-            Configuration accumlationFunctionConfiguration = new Configuration("accumulationfunction", ConfigurationProfile.PHYSICS_CONFIG);
 
-            for (int i = 0; i < paramsVector.getSize(); i++) {
-                accumlationFunctionConfiguration.setParamValue("param " + i, String.valueOf(paramsVector.getElement(i)));
-                accumlationFunctionConfiguration.setParamOrder("param " + i, i);
+            RPnConfig.addProfile(physicsID, physicsProfile);
+
+
+
+            ConfigurationProfile boundaryProfile = physicsProfile.getConfigurationProfile(ConfigurationProfile.BOUNDARY);
+
+            if (boundaryProfile != null) { //Catching boundary from input file
+
+                //Catching boundary from input file
+
+                Configuration boundaryConfiguration = new BoundaryConfiguration(boundaryProfile);
+
+                if (boundaryConfiguration.getName().equals("rect")) {
+                    setBoundary(new RectBoundary(boundaryConfiguration.getParam("limits")));
+                }
+
+
+                if (boundaryConfiguration.getName().equals("Three_Phase_Boundary")) {
+                    setBoundary(new IsoTriang2DBoundary(boundaryConfiguration.getParam("limits")));
+                }
+
+                //            System.out.println("Limits : " + boundaryConfiguration.getParam("limits"));
+
+            } else {//            System.out.println("Limits : " + boundaryConfiguration.getParam("limits"));
+
+                Boundary boundary = boundary();
+
+                RealVector min = boundary.getMinimums();
+
+                ConfigurationProfile defaultBoundaryProfile = null;
+
+                if (boundary instanceof RectBoundary) {
+                    defaultBoundaryProfile = new ConfigurationProfile("rect", ConfigurationProfile.BOUNDARY);
+                }
+
+                if (boundary instanceof IsoTriang2DBoundary) {
+                    defaultBoundaryProfile = new ConfigurationProfile("Three_Phase_Boundary", ConfigurationProfile.BOUNDARY);
+
+                }
+
+                defaultBoundaryProfile.addParam("limits", boundary.limits());
+                defaultBoundaryProfile.addParam("dimension", String.valueOf(min.getSize()));
+                physicsProfile.addConfigurationProfile(ConfigurationProfile.BOUNDARY, boundaryProfile);
+
+                Configuration boundaryConfiguration = new BoundaryConfiguration(defaultBoundaryProfile);
+                physicsConfiguration.addConfiguration(boundaryConfiguration.getName(), boundaryConfiguration);
+
+
             }
 
-            physicsConfiguration.addConfiguration("accumulationfunction", accumlationFunctionConfiguration);
+
+
+
+            configMap_.put(physicsID, physicsConfiguration);
+            errorControl_ = new RpErrorControl(boundary());
+        } catch (Exception ex) {
+            Logger.getLogger(RPNUMERICS.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        //Flux function
-
-        Configuration fluxFunctionConfig = physicsConfiguration.getConfiguration("fluxfunction");
-
-        String[] paramsArray = new String[fluxFunctionConfig.getParamsSize()];
-
-
-        for (int i = 0; i < fluxFunctionConfig.getParamsSize(); i++) {
-
-            paramsArray[i] = fluxFunctionConfig.getParam(i);
-
-        }
-
-        setParams(paramsArray);
-
-
-        RPnConfig.addProfile(physicsID, physicsProfile);
-
-
-
-        ConfigurationProfile boundaryProfile = physicsProfile.getConfigurationProfile(ConfigurationProfile.BOUNDARY);
-
-        if (boundaryProfile != null) { //Catching boundary from input file
-
-//            System.out.println("Pegando do arquivo de entrada");
-
-            Configuration boundaryConfiguration = new Configuration(boundaryProfile);
-
-            if (boundaryConfiguration.getName().equals("rect")) {
-                setBoundary(new RectBoundary(boundaryConfiguration.getParam("limits")));
-            }
-
-
-            if (boundaryConfiguration.getName().equals("Three_Phase_Boundary")) {
-                setBoundary(new IsoTriang2DBoundary(boundaryConfiguration.getParam("limits")));
-            }
-
-//            System.out.println("Limits : " + boundaryConfiguration.getParam("limits"));
-
-        } else {//Catching boundary from numerics layer
-
-            Boundary boundary = boundary();
-
-            RealVector min = boundary.getMinimums();
-
-            ConfigurationProfile defaultBoundaryProfile = null;
-
-            if (boundary instanceof RectBoundary) {
-                defaultBoundaryProfile = new ConfigurationProfile("rect", ConfigurationProfile.BOUNDARY);
-            }
-
-            if (boundary instanceof IsoTriang2DBoundary) {
-                defaultBoundaryProfile = new ConfigurationProfile("Three_Phase_Boundary", ConfigurationProfile.BOUNDARY);
-
-            }
-
-            defaultBoundaryProfile.addParam("limits", boundary.limits());
-            defaultBoundaryProfile.addParam("dimension", String.valueOf(min.getSize()));
-            physicsProfile.addConfigurationProfile(ConfigurationProfile.BOUNDARY, boundaryProfile);
-
-            Configuration boundaryConfiguration = new Configuration(defaultBoundaryProfile);
-            physicsConfiguration.addConfiguration(boundaryConfiguration.getName(), boundaryConfiguration);
-
-
-        }
-
-
-
-
-        configMap_.put(physicsID, physicsConfiguration);
-        errorControl_ = new RpErrorControl(boundary());
     }
 
     public static Set<String> getConfigurationNames() {
@@ -165,7 +177,7 @@ public class RPNUMERICS {
     }
 
     public static void setFamily(int family) {
-        setParamValue("orbit", "family", String.valueOf(family));
+        setParamValue("fundamentalcurve", "family", String.valueOf(family));
     }
 
     public static void setConfiguration(String configurationName, Configuration configuration) {
@@ -223,7 +235,7 @@ public class RPNUMERICS {
 
             }
 
-            if (configurationEntry.getValue().getType().equalsIgnoreCase(ConfigurationProfile.CURVE)) {
+            if (configurationEntry.getValue().getType().equalsIgnoreCase(ConfigurationProfile.CURVECONFIGURATION)) {
                 curveConfiguration.add(configurationEntry.getValue());
 
 
@@ -251,7 +263,7 @@ public class RPNUMERICS {
     public static String toXML() {
 
 
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
 
         ArrayList<Configuration> configurationArray = sortConfigurations();
 
@@ -280,20 +292,22 @@ public class RPNUMERICS {
 
         int[] resolution = RPnDataModule.processResolution(getParamValue("hugoniotcurve", "resolution"));
 
-        HugoniotParams params = new HugoniotParams(new PhasePoint(input), direction_, resolution);
+        Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
+
+        HugoniotParams params = new HugoniotParams(new PhasePoint(input), direction, resolution);
 
         return new HugoniotCurveCalcND(params);
     }
 
-    public static RarefactionOrbitCalc createRarefactionCalc(OrbitPoint orbitPoint) {
-
-        return new RarefactionOrbitCalc(orbitPoint, Integer.parseInt(getParamValue("orbit", "family")), direction_);
+    public static RarefactionCurveCalc createRarefactionCalc(OrbitPoint orbitPoint) {
+        Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
+        return new RarefactionCurveCalc(orbitPoint, Integer.parseInt(getParamValue("fundamentalcurve", "family")), direction);
 
     }
 
     public static WaveCurveCalc createWaveCurveCalc(OrbitPoint orbitPoint) {
-
-        return new WaveCurveCalc(orbitPoint, Integer.parseInt(getParamValue("orbit", "family")), direction_);
+        Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
+        return new WaveCurveCalc(orbitPoint, Integer.parseInt(getParamValue("fundamentalcurve", "family")), direction);
 
     }
 
@@ -307,12 +321,10 @@ public class RPNUMERICS {
 
     }
 
-
-
     public static ExtensionCurveCalc createExtensionCurveCalc(List<RealSegment> segments) {
 
         int[] resolution = RPnDataModule.processResolution(getParamValue("extensioncurve", "resolution"));
-        int family= new Integer(getParamValue("extensioncurve", "family"));
+        int family = new Integer(getParamValue("extensioncurve", "family"));
         int characteristic = new Integer(getParamValue("extensioncurve", "characteristic"));
 
         return new ExtensionCurveCalc(new ContourParams(resolution), segments, family, characteristic, false);
@@ -320,7 +332,6 @@ public class RPNUMERICS {
     }
 
     //public ExtensionCurveCalc(ContourParams contourParams, List<RealSegment> list, int extensionFamily, int characteristicDomain, boolean singular) {
-
     public static EnvelopeCurveCalc createEnvelopeCurveCalc() {
 
         int[] resolution = RPnDataModule.processResolution(getParamValue("envelopecurve", "resolution"));
@@ -343,7 +354,7 @@ public class RPNUMERICS {
 
     public static IntegralCurveCalc createIntegralCurveCalc(OrbitPoint orbitPoint) {
 
-        return new IntegralCurveCalc(orbitPoint, Integer.parseInt(getParamValue("orbit", "family")));
+        return new IntegralCurveCalc(orbitPoint, Integer.parseInt(getParamValue("fundamentalcurve", "family")));
 
     }
 
@@ -430,8 +441,8 @@ public class RPNUMERICS {
     }
 
     public static OrbitCalc createOrbitCalc(OrbitPoint oPoint) {
-
-        return new OrbitCalc(oPoint, direction_);
+        Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
+        return new OrbitCalc(oPoint, direction);
 
     }
 
@@ -471,8 +482,8 @@ public class RPNUMERICS {
     }
 
     public static CompositeCalc createCompositeCalc(OrbitPoint initialPoint) {
-
-        return new CompositeCalc(initialPoint, Integer.parseInt(getParamValue("orbit", "family")), direction_);
+        Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
+        return new CompositeCalc(initialPoint, Integer.parseInt(getParamValue("fundamentalcurve", "family")), direction);
 
 
     }
@@ -521,12 +532,12 @@ public class RPNUMERICS {
 
     public static ShockCurveCalc createShockCurveCalc(OrbitPoint orbitPoint) {
 
-        Integer family = new Integer(getParamValue("orbit", "family"));
+        Integer family = new Integer(getParamValue("fundamentalcurve", "family"));
         Double tolerance = new Double(getParamValue("Newton", "tolerance"));
 
-        System.out.println(direction_);
+        Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
+        return new ShockCurveCalc(orbitPoint, family, direction, tolerance);
 
-        return new ShockCurveCalc(orbitPoint, family, direction_,tolerance);
 
     }
 
@@ -563,11 +574,13 @@ public class RPNUMERICS {
         int curveFamily = new Integer(getParamValue("rarefactionextension", "curvefamily"));
 
         int characteristicDomain = new Integer(getParamValue("rarefactionextension", "characteristic"));
-        
-int         extensionFamily = new Integer(getParamValue("rarefactionextension", "extensionfamily"));
-        
 
-        return new RarefactionExtensionCalc(new ContourParams(resolution), orbitPoint, direction_, curveFamily, extensionFamily,characteristicDomain);
+        int extensionFamily = new Integer(getParamValue("rarefactionextension", "extensionfamily"));
+
+        Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
+
+        return new RarefactionExtensionCalc(new ContourParams(resolution), orbitPoint, direction, curveFamily, extensionFamily, characteristicDomain);
+
 
     }
 
@@ -583,15 +596,13 @@ int         extensionFamily = new Integer(getParamValue("rarefactionextension", 
     public static void setDirection(Integer integer) {
         direction_ = integer;
 
-
-
     }
 
     public static void updateUplus(List<RealVector> eqPoints) {
         RealVector newUPlus = null;
-            PhasePoint uPlus = RPNUMERICS.getViscousProfileData().getUplus();
-            if(uPlus!=null){//TODO  Inicializar uPlus
-                //System.out.println("Uqem eh uPlus dentro do update : " + uPlus);
+        PhasePoint uPlus = RPNUMERICS.getViscousProfileData().getUplus();
+        if (uPlus != null) {//TODO  Inicializar uPlus
+            //System.out.println("Uqem eh uPlus dentro do update : " + uPlus);
 
             double dist = 1E10;    //***Melhorar criterio
             double dist2 = 0.;
@@ -607,17 +618,15 @@ int         extensionFamily = new Integer(getParamValue("rarefactionextension", 
 
             RPNUMERICS.getViscousProfileData().setUplus(new PhasePoint(newUPlus));
 
-            }
-            
+        }
+
     }
-
-
 
     public static void updateUplusM(List<RealVector> eqPoints) {
         RealVector newUPlus = null;
-            PhasePoint uPlus = RPNUMERICS.getViscousProfileData().getUplus();
-            if(uPlus!=null){//TODO  Inicializar uPlus
-                //System.out.println("Uqem eh uPlus dentro do update : " + uPlus);
+        PhasePoint uPlus = RPNUMERICS.getViscousProfileData().getUplus();
+        if (uPlus != null) {//TODO  Inicializar uPlus
+            //System.out.println("Uqem eh uPlus dentro do update : " + uPlus);
 
             double dist = 1E10;    //***Melhorar criterio
             double dist2 = 0.;
@@ -633,12 +642,9 @@ int         extensionFamily = new Integer(getParamValue("rarefactionextension", 
 
             RPNUMERICS.getViscousProfileData().setUplusM(new PhasePoint(newUPlus));
 
-            }
+        }
 
     }
-
-
-
 
     private static void setFluxDefaultConfiguration() {
 
@@ -752,7 +758,7 @@ int         extensionFamily = new Integer(getParamValue("rarefactionextension", 
         String[] previousParamArray = new String[previousParams.getParams().getSize()];//fluxFunctionConfig.getParamsSize()];
 
         for (int i = 0; i < previousParamArray.length; i++) {
-            previousParamArray[i]= String.valueOf(previousParams.getElement(i));
+            previousParamArray[i] = String.valueOf(previousParams.getElement(i));
 
         }
 

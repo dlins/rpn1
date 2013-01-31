@@ -59,46 +59,5 @@ public class RarefactionExtensionGeomFactory extends RpCalcBasedGeomFactory {
         return new RarefactionExtensionController();
     }
 
-    @Override
-    public String toXML() {
-        StringBuilder str = new StringBuilder();
-
-        RarefactionExtensionCalc calc = (RarefactionExtensionCalc) rpCalc();
-
-        RealVector firstPoint = new RealVector(calc.getStart());
-
-        String commandName = geomSource().getClass().getName();
-
-        commandName = commandName.toLowerCase();
-
-        commandName = commandName.replaceAll(".+\\.", "");
-
-        str.append("<COMMAND name=\"" + commandName + "\"");
-
-        if (calc.getIncrease() != Orbit.BOTH_DIR) {
-            String direction = "forward\"";
-
-            if (calc.getIncrease() == Orbit.BACKWARD_DIR) {
-                direction = "backward\"";
-
-            }
-            str.append(" direction=\"");
-            str.append(direction+" ");
-        }
-
-     
-
-       
-        str.append(calc.getParams().toString() + "\"" + " inputpoint=\"" + firstPoint.toString() + "\" curvefamily=\"" + calc.getCurveFamily() + "\" domainfamily =\""
-                + calc.getDomainFamily() + "\" " + "characteristic=\""+ calc.getCharacteristic()+"\""+ ">\n");
-        str.append(((RarefactionExtensionCurve) geomSource()).toXML());
-        str.append("</COMMAND>\n");
-        return str.toString();
-
-
-    }
-
-    public String toMatlab(int curveIndex) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+   
 }

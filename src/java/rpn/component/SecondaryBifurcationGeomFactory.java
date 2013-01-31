@@ -31,21 +31,5 @@ public class SecondaryBifurcationGeomFactory extends BifurcationCurveGeomFactory
         return new ViewingAttr(Color.magenta);
     }
 
-    @Override
-    public String toXML() {
 
-        StringBuffer buffer = new StringBuffer();
-
-        buffer.append(super.toXML());
-
-        BifurcationCurve curve = (BifurcationCurve) geomSource();
-
-
-        buffer.append(curve.toXML());
-
-        buffer.append("</COMMAND>\n");
-
-        return buffer.toString();
-
-    }
 }

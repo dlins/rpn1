@@ -12,6 +12,7 @@ public class EllipticBoundaryCalc extends ContourCurveCalc {
     //
     public EllipticBoundaryCalc(ContourParams params) {
         super(params);
+        configuration_=RPNUMERICS.getConfiguration("ellipticboundarycurve");
 
     }
 

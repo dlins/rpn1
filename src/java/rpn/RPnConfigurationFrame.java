@@ -15,7 +15,7 @@ public class RPnConfigurationFrame extends JFrame {
     public RPnConfigurationFrame(String title) throws HeadlessException {
         super(title);
 
-        getContentPane().add(new RPnCurvesConfigPanel());
+        getContentPane().add(new RPnCurvesConfigPanel().getContainer());
         setUIFramePosition();
 
 

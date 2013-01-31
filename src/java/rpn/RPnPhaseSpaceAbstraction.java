@@ -234,8 +234,8 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
 
                     if (geom.viewingAttr().hasHighLight() && !(geom instanceof StationaryPointGeom)) {
                         RpGeomFactory factory = geom.geomFactory();
-                        RPnCurve curve = (RPnCurve) factory.geomSource();
 
+                        RPnCurve curve = (RPnCurve) factory.geomSource();
                         curve.findClosestSegment(targetPoint);
 
                         distancia = curve.distancia;

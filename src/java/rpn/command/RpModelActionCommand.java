@@ -12,13 +12,13 @@ import javax.swing.ImageIcon;
 import rpn.controller.ui.*;
 import rpn.message.RPnActionMediator;
 
-public abstract class RpModelActionCommand extends RpCommand{
+public abstract class RpModelActionCommand extends RpCommand {
 
-    private PropertyChangeEvent history_;
+
     private String desc_;
 
     public RpModelActionCommand(String shortDesc, ImageIcon icon) {
-      super(shortDesc, icon);
+        super(shortDesc, icon);
         putValue(Action.SHORT_DESCRIPTION, shortDesc);
         desc_ = shortDesc;
         setEnabled(false);
@@ -27,23 +27,26 @@ public abstract class RpModelActionCommand extends RpCommand{
 
     public abstract void execute();
 
+    @Override
     public abstract void unexecute();
 
-    public void logAction(PropertyChangeEvent event) {
-        history_ = event;
+    public void logCommand(RpCommand command) {
 
+//        history_ = event;
         if (UndoActionController.instance() == null) {
             UndoActionController.createInstance();
         } else {
-            UndoActionController.instance().setLastAction(this);
+            UndoActionController.instance().addAction(command);
         }
     }
 
+    @Override
     public void actionPerformed(ActionEvent event) {
         // garbage collection is ok ?
 
         UI_ACTION_SELECTED action = new UI_ACTION_SELECTED(this);
         setActionSelected(action);
+
 
         UIController.instance().setState(action);
         if (UIController.instance().getNetStatusHandler().isOnline()) { //Sending application state
@@ -57,10 +60,8 @@ public abstract class RpModelActionCommand extends RpCommand{
     //
     // Accessors/Mutators
     //
-   
-
     public PropertyChangeEvent log() {
-        return history_;
+        return UndoActionController.instance().getLastCommand().getEvent();
     }
 
     @Override

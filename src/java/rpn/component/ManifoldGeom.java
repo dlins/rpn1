@@ -21,6 +21,7 @@ public class ManifoldGeom extends MultiPolyLine implements RpGeometry {
     //
     private RpGeomFactory factory_;
 
+
     //
     // Constructors
     //
@@ -33,4 +34,6 @@ public class ManifoldGeom extends MultiPolyLine implements RpGeometry {
     // Accessors/Mutators
     //
     public RpGeomFactory geomFactory() { return factory_; }
+
+    
 }

@@ -16,6 +16,11 @@ public class InflectionCurveCalc extends ContourCurveCalc {
     public InflectionCurveCalc(ContourParams params, int family) {
         super(params);
         family_ = family;
+        
+        configuration_=RPNUMERICS.getConfiguration("inflectioncurve");
+        
+        
+        
 
     }
 

@@ -24,7 +24,7 @@ public class ContourHugoniot extends ContourNDVectorialFunctions {
 		pointSet = true;
 	}
 	
-	public RPnCurve curvND(double[] rect,int[] res) throws CanNotPerformCalculations {		
+	public RPnCurve curvND(double[] rect,int[] res) throws CanNotPerformCalculations {
 		if (pointSet) {
 			RPnCurve  curve = super.curvND(rect, res);
 			pointSet = false;

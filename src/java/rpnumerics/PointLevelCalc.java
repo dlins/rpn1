@@ -14,6 +14,8 @@ public class PointLevelCalc extends LevelCurveCalc {
     public PointLevelCalc(RealVector point, int family, ContourParams params) {
         super(family, params);
         startPoint_ = point;
+        configuration_ = RPNUMERICS.getConfiguration("levelcurve");
+
     }
 
     @Override

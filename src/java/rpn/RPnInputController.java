@@ -8,7 +8,7 @@ package rpn;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import rpnumerics.Configuration;
+import rpn.configuration.Configuration;
 
 
 public class RPnInputController implements PropertyChangeListener {
@@ -19,6 +19,7 @@ public class RPnInputController implements PropertyChangeListener {
     public RPnInputController(RPnInputComponent inputComponent, Configuration config) {
         inputComponent_ = inputComponent;
         configuration_ = config;
+
 
     }
 

@@ -30,7 +30,7 @@ public class BuckleyLeverettiInflectionCommand extends RpModelPlotCommand {
     //
 
     protected BuckleyLeverettiInflectionCommand() {
-        super(DESC_TEXT, rpn.RPnConfig.HUGONIOT,new JButton(DESC_TEXT));
+        super(DESC_TEXT, rpn.configuration.RPnConfig.HUGONIOT,new JButton(DESC_TEXT));
     }
 
     @Override

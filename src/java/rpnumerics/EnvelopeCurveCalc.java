@@ -18,6 +18,8 @@ public class EnvelopeCurveCalc extends ContourCurveCalc {
         super(params);
         whereIsConstant_=whereIsConstant;
         numberOfSteps_=numberOfSteps;
+        
+        configuration_=RPNUMERICS.getConfiguration("envelopecurve");
 
     }
 

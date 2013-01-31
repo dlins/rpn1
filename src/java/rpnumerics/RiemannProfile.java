@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import rpn.component.MultidAdapter;
 import wave.util.RealSegment;
 
-public class RiemannProfile extends RPnCurve implements RpSolution {
+public class RiemannProfile extends RPnCurve  {
     //
     // Members
     //
@@ -52,6 +52,10 @@ public class RiemannProfile extends RPnCurve implements RpSolution {
     }
 
 
+    public String toXML() {
+
+        return toString();
+    }
 
     public OrbitPoint [] getPoints(){
         return points_;
@@ -64,12 +68,5 @@ public class RiemannProfile extends RPnCurve implements RpSolution {
         return segments_;
 
     }
-
-
-
-
-    
-
-
     
 }
