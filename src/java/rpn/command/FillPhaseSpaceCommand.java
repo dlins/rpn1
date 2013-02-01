@@ -6,6 +6,7 @@
 
 package rpn.command;
 
+import java.util.Collection;
 import wave.util.RealVector;
 import wave.util.Boundary;
 import wave.util.GridProfile;
@@ -16,9 +17,11 @@ import rpn.component.*;
 import javax.swing.AbstractAction;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 import rpn.controller.ui.*;
 import wave.multid.CoordsArray;
+import wave.util.RealSegment;
 
 public class FillPhaseSpaceCommand extends AbstractAction {
     static public final String DESC_TEXT = "Fills up the Phase Space";
@@ -97,23 +100,27 @@ public class FillPhaseSpaceCommand extends AbstractAction {
                 System.out.println("Tamanho da órbita : " +nPoints);
                 int count = nPoints/2;
                 OrbitPoint[] toRemove = new OrbitPoint[count];
-                //ArrayList toRemove = new ArrayList();
                 for (int i=0; i<nPoints; i++) {
                     if (i<count) {
                         toRemove[i] = ((Orbit)forward.geomFactory().geomSource()).getPoints()[i];
-                        //toRemove.add(((Orbit)forward.geomFactory().geomSource()).getPoints()[i]);
                     }
                 }
-                //System.out.println("Tamanho do array toRemove : " +toRemove.size());
 
                 RpGeomFactory factory = forward.geomFactory();
                 RPnCurve curve = (RPnCurve) factory.geomSource();
+                //System.out.println("Tamanho de curve antes de remover: " +curve.segments().size());
+                CoordsArray[] orbitArray = MultidAdapter.converseOrbitToCoordsArray((Orbit) curve);
+                List<RealSegment> orbitSegments = MultidAdapter.converseCoordsArrayToRealSegments(orbitArray);
+                System.out.println("Tamanho de curve antes de remover: " +orbitSegments.size());
 
                 CoordsArray[] coordsArray = MultidAdapter.converseOrbitPointsToCoordsArray(toRemove);
-                ArrayList realSegments = MultidAdapter.converseCoordsArrayToRealSegments(coordsArray);
+                List<RealSegment> realSegments = MultidAdapter.converseCoordsArrayToRealSegments(coordsArray);
                 System.out.println("Tamanho de realSegments : " +realSegments.size());
-                curve.segments().removeAll(realSegments);
-                System.out.println("Tamanho de curve : " +curve.segments().size());
+                //curve.segments().removeAll(realSegments);
+                //System.out.println("Tamanho de curve depois de remover: " +curve.segments().size());
+
+                orbitSegments.removeAll(realSegments);
+                System.out.println("Tamanho de curve depois de remover: " +orbitSegments.size());
 
 
                 //rpn.parser.RPnDataModule.PHASESPACE.plot((OrbitGeom)curve);
