@@ -5,7 +5,7 @@
 
 package rpn;
 
-import rpnumerics.Configuration;
+import rpn.configuration.Configuration;
 import rpnumerics.RPNUMERICS;
 import wave.util.RealVector;
 

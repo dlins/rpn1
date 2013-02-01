@@ -4,7 +4,6 @@
  */
 package rpn.component.util;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
@@ -17,7 +16,6 @@ import rpn.component.RpGeometry;
 import rpn.controller.ui.RPnStringPlotter;
 import rpn.controller.ui.UIController;
 import rpnumerics.RPNUMERICS;
-import rpnumerics.RPnCurve;
 import wave.multid.Coords2D;
 import wave.multid.view.Scene;
 import wave.util.RealVector;
@@ -28,6 +26,7 @@ import rpnumerics.BifurcationCurve;
 import rpnumerics.OrbitPoint;
 import rpnumerics.WaveCurve;
 import rpnumerics.FundamentalCurve;
+import rpnumerics.RPnCurve;
 
 /**
  *
@@ -173,8 +172,10 @@ public class GeometryGraph extends GeometryGraphND {   //*** Versão para 2-D
             RPnPhaseSpaceAbstraction phaseSpace = RPnDataModule.PHASESPACE;
             RpGeometry geom = phaseSpace.findClosestGeometry(newValue);
 
+
             RPnCurve curve = (RPnCurve)(geom.geomFactory().geomSource());
             if (curve instanceof BifurcationCurve) {
+
 
                 if (UIController.instance().isAuxPanelsEnabled()) {
                     if (!panel.getName().equals(RPnPhaseSpaceAbstraction.namePhaseSpace) && !panel.getName().equals("Phase Space")) {

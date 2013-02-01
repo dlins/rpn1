@@ -32,7 +32,7 @@ public class CoincidenceExtensionCurvePlotAgent extends RpModelPlotCommand {
     //
     protected CoincidenceExtensionCurvePlotAgent() {
 //        super(DESC_TEXT, rpn.RPnConfig.HUGONIOT, new JToggleButton());
-        super(DESC_TEXT, rpn.RPnConfig.HUGONIOT, new JButton(DESC_TEXT));
+        super(DESC_TEXT, rpn.configuration.RPnConfig.HUGONIOT, new JButton(DESC_TEXT));
     }
 
     @Override

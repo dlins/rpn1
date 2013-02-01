@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.ArrayList;
 import rpn.controller.ui.*;
 import rpn.parser.RPnDataModule;
-import wave.util.RealVector;
 
 public abstract class RpModelConfigChangeCommand extends RpModelActionCommand {
     //
@@ -29,12 +28,13 @@ public abstract class RpModelConfigChangeCommand extends RpModelActionCommand {
 
     public void applyChange(PropertyChangeEvent change) {
 
+
         // --- Comentei em 11/12/12, para testar o perfil viscoso (Leandro)
         //RealVector newParameters = (RealVector) change.getNewValue();
         //UIController.instance().logCommand(new RpCommand(new UI_ACTION_SELECTED(this), newParameters));
 
         firePropertyChange(change);
-        logAction(change);
+
         RPnDataModule.updatePhaseSpaces();
         UIController.instance().panelsUpdate();
 
@@ -67,40 +67,5 @@ public abstract class RpModelConfigChangeCommand extends RpModelActionCommand {
 
         }
     }
-    
-    
-    @Override
-    public String toXML(){
-
-          StringBuffer buffer = new StringBuffer();
-
-            buffer.append("<COMMAND name=\"").append(toString()).append("\">\n");
-            for(RealVector input:getInputArray()){
-                buffer.append(input.toXML());
-                buffer.append("\n");
-            }
-
-            buffer.append("</COMMAND>\n");
-
-        return buffer.toString();
-
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
 }

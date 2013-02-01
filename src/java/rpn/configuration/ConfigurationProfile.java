@@ -4,7 +4,7 @@
  * Departamento de Dinamica dos Fluidos
  *
  */
-package rpn.parser;
+package rpn.configuration;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -19,7 +19,8 @@ public class ConfigurationProfile {
     private HashMap<Integer, String> paramsIndexMap_;
     public static final String PHYSICS_PROFILE = "PHYSICS";
     public static final String PHYSICS_CONFIG = "PHYSICS CONFIGURATION";
-    public static final String CURVE = "CURVE";
+    public static final String CURVECONFIGURATION = "CURVE CONFIGURATION";
+    public static final String COMMANDCONFIGURATION = "COMMAND";
     public static final String METHOD = "METHOD";
     public static final String BOUNDARY = "BOUNDARY";
     public static final String VISUALIZATION = "VISUAL";

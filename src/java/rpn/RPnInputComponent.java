@@ -16,8 +16,9 @@ import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
 import java.text.DecimalFormat;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Map.Entry;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Set;
 import javax.swing.ButtonGroup;
 import javax.swing.JFormattedTextField;
@@ -31,8 +32,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
-import rpn.command.ChangeFluxParamsCommand;
-import rpnumerics.Configuration;
+import rpn.command.ChangeCurveConfigurationCommand;
+import rpn.configuration.Configuration;
 import rpnumerics.RPNUMERICS;
 import wave.util.RealVector;
 
@@ -98,6 +99,7 @@ public class RPnInputComponent {//TODO Refatorar
         if (subject.getName() == null ? "Radio" != null : !subject.getName().equals("Radio")) {   //*** Leandro teste (introduzi o if)
 
             for (int i = 0; i < subject.getParamsNames().length; i++) {         //********* Fazer tratamento se o campo for vazio, para preservar os formatos
+
 
                 JFormattedTextField textField = new JFormattedTextField(formatter_);
 
@@ -226,6 +228,7 @@ public class RPnInputComponent {//TODO Refatorar
 
                 JFormattedTextField textField = new JFormattedTextField(formatter_);
 
+
                 textField.setColumns(4);
                 textField_[i] = textField;
 
@@ -300,7 +303,9 @@ public class RPnInputComponent {//TODO Refatorar
 
     }
 
-    public RPnInputComponent(Configuration configuration) {
+    public RPnInputComponent(Configuration configuration, boolean useEvents) {
+        
+
 
         textField_ = new JFormattedTextField[configuration.getParamsSize()];
 
@@ -339,7 +344,10 @@ public class RPnInputComponent {//TODO Refatorar
 
             textField_[j] = textField;
             textField.setName(configuration.getParamName(j));
-            textField.getDocument().addDocumentListener(new TextValueHandler());
+
+            if (useEvents) {
+                textField.getDocument().addDocumentListener(new TextValueHandler());
+            }
 
             JLabel label = new JLabel(configuration.getParamName(j));
 
@@ -358,7 +366,30 @@ public class RPnInputComponent {//TODO Refatorar
         }
 
         controller_ = new RPnInputController(this, configuration);
+        
 
+
+
+    }
+
+    public void applyConfigurationChange() {
+
+        String[] newValues = new String[textField_.length];
+
+        for (int j = 0; j < textField_.length; j++) {
+
+            parameterName_ = textField_[j].getName();
+
+
+            newValues[j] = textField_[j].getText();
+
+        }
+
+        controller_.propertyChange(
+                new PropertyChangeEvent(this, parameterName_, newValues, newValues));
+
+
+        ChangeCurveConfigurationCommand.instance().applyChange(new PropertyChangeEvent(this, parameterName_, null, controller_.getConfiguration()));
 
     }
 
@@ -419,20 +450,10 @@ public class RPnInputComponent {//TODO Refatorar
 
     public void removeSlider() {
         panel_.remove(slider_);
+
+
     }
 
-    private Double setValue(int sliderPosition) {
-        double deltaValue = (maxRange_ - minRange_);
-        int deltaSlider = slider_.getMaximum() - slider_.getMinimum();
-        Double x = new Double(sliderPosition - slider_.getMinimum());
-        return (((x / (deltaSlider)) * deltaValue) + minRange_);
-    }
-
-    private int setSliderPosition(double value) {
-        double deltaValue = (maxRange_ - minRange_);
-        int deltaSlider = slider_.getMaximum() - slider_.getMinimum();
-        return (int) ((((value - minRange_) / (deltaValue)) * deltaSlider) + slider_.getMinimum());
-    }
 
     private class SliderHandler implements ChangeListener {
 
@@ -440,28 +461,18 @@ public class RPnInputComponent {//TODO Refatorar
 
             JSlider slider = (JSlider) e.getSource();
             String[] newValues = new String[textField_.length];
-
-
-
             Double sliderValue = new Double(slider.getValue());
             for (int j = 0; j < textField_.length; j++) {
 
                 if (textField_[j].getName().equals(slider.getName())) {
 
                     sliderValue /= 20;
-
-           
                     textField_[j].setText(String.valueOf(sliderValue));
 
                 }
 
                 newValues[j] = textField_[j].getText();
             }
-
-
-
-
-
 
             Double alpha = new Double(textField_[textField_.length - 1].getText());
 
@@ -477,6 +488,7 @@ public class RPnInputComponent {//TODO Refatorar
             }
 
         }
+
     }
 
     private class TextValueHandler implements DocumentListener {

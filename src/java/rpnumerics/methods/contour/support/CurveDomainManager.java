@@ -135,7 +135,7 @@ public class CurveDomainManager {
             return new CanNotCalculateCurve();
         } //try fo primeiro ContourND
 
-//        return new RPnCurve(coordsArrayFromRealSegments(realSegments), new ViewingAttr(Color.white));
+//        return new RpCurve(coordsArrayFromRealSegments(realSegments), new ViewingAttr(Color.white));
         
         return curve;
 
@@ -258,7 +258,7 @@ public class CurveDomainManager {
 //        }
 
         // limpar
-//        newCurve = new RPnCurve(cleanedPolyline, curve.viewingAttr()) {
+//        newCurve = new RpCurve(cleanedPolyline, curve.viewingAttr()) {
 //        };
         // set domain
         RPnCurve tempCurve = calculateInitialCurve();

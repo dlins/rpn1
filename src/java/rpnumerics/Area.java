@@ -9,8 +9,6 @@ package rpnumerics;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import rpn.RPnPhaseSpaceAbstraction;
-import rpn.component.RpCalcBasedGeomFactory;
-import rpn.component.RpGeomFactory;
 import rpn.component.RpGeometry;
 import rpn.component.util.GeometryGraphND;
 import rpn.component.util.AreaSelected;
@@ -96,17 +94,15 @@ public class Area {
         return topRight_;
     }
 
-    public boolean isClosestCurve(RPnCurve curve) {
-        //UserInputTable userInputList = UIController.instance().globalInputTable();
-        //RealVector newValue = userInputList.values();
-        //RPnPhaseSpaceAbstraction phaseSpace = RPnDataModule.PHASESPACE;
-        //RpGeometry geom = phaseSpace.findClosestGeometry(newValue);
 
+    public boolean isClosestCurve(RPnCurve curve) {
 
         RPnPhaseSpaceAbstraction phaseSpace = RPnDataModule.PHASESPACE;
+
         RpGeometry geom = phaseSpace.findClosestGeometry(GeometryGraphND.pMarca);
 
-        return (curve == (RPnCurve)(geom.geomFactory().geomSource()));
+        return (curve == (RPnCurve) (geom.geomFactory().geomSource()));
+
     }
 
 

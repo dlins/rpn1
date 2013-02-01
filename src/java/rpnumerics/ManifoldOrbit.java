@@ -20,7 +20,7 @@ import rpn.component.MultidAdapter;
 import wave.util.JetMatrix;
 import wave.util.RealSegment;
 
-public class ManifoldOrbit extends RPnCurve implements RpSolution {
+public class ManifoldOrbit extends RPnCurve {
     //
     // Members
     //
@@ -77,6 +77,14 @@ public class ManifoldOrbit extends RPnCurve implements RpSolution {
     public int getFinishType() {
         return finishType_;
     }
+
+
+    @Override
+    public List segments() {
+        return segments_;
+    }
+
+
 
     //
     // Methods
@@ -417,28 +425,5 @@ public class ManifoldOrbit extends RPnCurve implements RpSolution {
 
 
     }
-
-    public String toXML(boolean calcReady) {
-
-        StringBuffer buffer = new StringBuffer();
-        if (calcReady) {
-
-            buffer.append("<MANIFOLD timedirection=\"" + getTimeDirection() + "\">\n");
-            buffer.append(getStationaryPoint().toXML());
-//      buffer.append(getFirstPoint().toXML());
-            buffer.append(getOrbit().toXML());
-            buffer.append("</MANIFOLD>");
-
-        }
-        return buffer.toString();
-
-
-    }
-
-    @Override
-    public List segments() {
-        return segments_;
-    }
-
-
+  
 }

@@ -8,7 +8,7 @@ package rpn;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import rpnumerics.Configuration;
+import rpn.configuration.Configuration;
 
 
 public class RPnInputController implements PropertyChangeListener {
@@ -20,36 +20,28 @@ public class RPnInputController implements PropertyChangeListener {
         inputComponent_ = inputComponent;
         configuration_ = config;
 
+
     }
 
     public void propertyChange(PropertyChangeEvent evt) {
-
-
-//
-//        System.out.println(evt.getPropertyName());
-//        System.out.println(evt.getOldValue());
-//        System.out.println(evt.getNewValue());
-//
-
         String[] parameterNames = configuration_.getParamNames();
-//        RealVector newValue = (RealVector) evt.getNewValue();
-
         String [] newValues = (String []) evt.getNewValue();
 
         for (int i = 0; i < parameterNames.length; i++) {
             String paramName = configuration_.getParamName(i);
-
-            //configuration_.setParamValue(paramName, String.valueOf(newValue.getElement(i)));
-
             configuration_.setParamValue(paramName, newValues[i]);
 
         }
 
-
         }
 
-
+    public Configuration getConfiguration(){return configuration_;}
     }
+
+
+
+
+
 
 
 

@@ -23,6 +23,7 @@ public class DoubleContactCurveCalc extends ContourCurveCalc {
         super(params);
         this.curveFamily_ = leftFamily;
         this.domainFamily_ = rightFamily;
+        configuration_=RPNUMERICS.getConfiguration("doublecontactcurve");
     }
 
     

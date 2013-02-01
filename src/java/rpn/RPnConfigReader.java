@@ -5,6 +5,7 @@
  */
 package rpn;
 
+import rpn.configuration.RPnConfig;
 import java.io.*;
 import javax.swing.JApplet;
 import java.awt.Font;
@@ -97,6 +98,27 @@ public abstract class RPnConfigReader {
 
             PluginInfoParser pluginParser = new PluginInfoParser();
             PluginInfoController.updatePluginInfo(pluginParser);
+
+        } catch (Throwable any) {
+
+
+            any.printStackTrace();
+        }
+
+    }
+
+    /** Initializes the XML parser that reads the configuration file */
+    public void exec(InputStream configStream) {
+
+        try {
+
+            XMLReader xmlReader = XMLReaderFactory.createXMLReader();
+
+            configStream.reset();
+
+
+            RPnCommandModule.init(xmlReader, configStream);
+
 
         } catch (Throwable any) {
 

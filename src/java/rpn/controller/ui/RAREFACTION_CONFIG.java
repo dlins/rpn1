@@ -18,7 +18,7 @@ import rpn.command.LevelCurvePlotCommand;
 import rpn.command.PhysicalBoundaryPlotCommand;
 import rpn.command.PointLevelCurvePlotCommand;
 import rpn.command.RarefactionExtensionCurvePlotCommand;
-import rpn.command.RarefactionOrbitPlotCommand;
+import rpn.command.RarefactionCurvePlotCommand;
 import rpn.command.RiemannProfileCommand;
 import rpn.command.ShockCurvePlotCommand;
 import rpn.command.WaveCurvePlotCommand;
@@ -30,7 +30,7 @@ public class RAREFACTION_CONFIG extends UI_ACTION_SELECTED {
 
         super(ChangeDirectionCommand.instance());//Dummy
 
-        RarefactionOrbitPlotCommand.instance().setEnabled(true);
+        RarefactionCurvePlotCommand.instance().setEnabled(true);
         HugoniotPlotCommand.instance().setEnabled(true);
         ShockCurvePlotCommand.instance().setEnabled(true);
         ChangeDirectionCommand.instance().setEnabled(true);

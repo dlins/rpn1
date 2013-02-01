@@ -7,7 +7,7 @@
 package rpn.command;
 
 import javax.swing.JToggleButton;
-import rpn.RPnConfig;
+import rpn.configuration.RPnConfig;
 import rpn.component.*;
 import rpnumerics.OrbitPoint;
 import wave.util.RealVector;

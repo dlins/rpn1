@@ -31,7 +31,7 @@
 #define PHASEPOINT_LOCATION                   "rpnumerics/PhasePoint"
 #define ORBITPOINT_LOCATION                   "rpnumerics/OrbitPoint"
 #define ORBIT_LOCATION                        "rpnumerics/Orbit"
-#define RAREFACTIONORBIT_LOCATION             "rpnumerics/RarefactionOrbit"
+#define RAREFACTIONCURVE_LOCATION             "rpnumerics/RarefactionCurve"
 #define SHOCKCURVE_LOCATION                   "rpnumerics/ShockCurve"
 #define INTEGRALCURVE_LOCATION                "rpnumerics/IntegralCurve"
 #define LEVELCURVE_LOCATION                   "rpnumerics/LevelCurve"
@@ -43,6 +43,7 @@
 #define WAVECURVEORBIT_LOCATION               "rpnumerics/FundamentalCurve"
 #define RIEMANNPROFILE_LOCATION               "rpnumerics/RiemannProfile"
 #define CHARACTERISTICSCURVE_LOCATION         "rpnumerics/CharacteristicsCurve"
+
 #define BIFURCATIONCURVE_LOCATION             "rpnumerics/BifurcationCurve"
 
 

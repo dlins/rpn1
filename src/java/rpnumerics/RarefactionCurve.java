@@ -6,11 +6,11 @@
  */
 package rpnumerics;
 
-public class RarefactionOrbit extends FundamentalCurve implements RpSolution {
+public class RarefactionCurve extends FundamentalCurve implements RpSolution {
     //
     // Constructor
     //
-    public RarefactionOrbit(OrbitPoint[] points, int familyIndex,int flag) {
+    public RarefactionCurve(OrbitPoint[] points, int familyIndex,int flag) {
         super(points,familyIndex,flag);
 
       

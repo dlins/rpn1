@@ -4,7 +4,6 @@
  */
 package rpn;
 
-import rpnumerics.Configuration;
 import rpnumerics.RPNUMERICS;
 import wave.util.RealVector;
 

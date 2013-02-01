@@ -20,4 +20,34 @@ public class BoundaryExtensionCurve extends BifurcationCurve {// RPnCurve implem
 
 
     }
+
+    /*
+    @Override
+    public String toXML() {
+
+
+        StringBuffer buffer = new StringBuffer();
+
+        buffer.append(super.toXML());
+
+        BoundaryExtensionCurveCalc boundaryExtensionCurveCalc = (BoundaryExtensionCurveCalc) rpCalc();
+
+        buffer.append("curvefamily=\"" + boundaryExtensionCurveCalc.getCurveFamily()
+                + "\"" + " domainfamily=\"" + boundaryExtensionCurveCalc.getDomainFamily()
+                + "\"" + " characteristic=\"" + boundaryExtensionCurveCalc.getCharacteristicWhere()
+                + "\"" + " edge=\"" + boundaryExtensionCurveCalc.getEdge()
+                + "\"" + " edgeresolution=\"" + boundaryExtensionCurveCalc.getEdgeResolution() + "\""
+                + ">\n");
+
+        buffer.append(((BifurcationCurve) geomSource()).toXML());
+
+        buffer.append("</COMMAND>\n");
+
+        return buffer.toString();
+
+
+    }
+     *
+     */
+
 }

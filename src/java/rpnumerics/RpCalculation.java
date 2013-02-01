@@ -7,7 +7,11 @@
 
 package rpnumerics;
 
+
 import java.util.List;
+
+import rpn.configuration.Configuration;
+
 
 public interface RpCalculation {
     RpSolution calc() throws RpException;
@@ -15,6 +19,9 @@ public interface RpCalculation {
     RpSolution recalc() throws RpException;
 
     RpSolution recalc(List<Area> area) throws RpException;
+    
+    Configuration getConfiguration();
+
 
 
 }

@@ -6,6 +6,9 @@
 package rpn.command;
 
 import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
+import java.util.Iterator;
 import javax.swing.JButton;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.component.*;
@@ -30,7 +33,7 @@ public class InflectionPlotCommand extends RpModelPlotCommand {
     // Constructors/Initializers
     //
     protected InflectionPlotCommand() {
-        super(DESC_TEXT, rpn.RPnConfig.HUGONIOT, new JButton(DESC_TEXT));
+        super(DESC_TEXT, rpn.configuration.RPnConfig.HUGONIOT, new JButton(DESC_TEXT));
     }
 
     @Override
@@ -52,23 +55,34 @@ public class InflectionPlotCommand extends RpModelPlotCommand {
     @Override
     public void execute() {
 
-         InflectionCurveGeomFactory factory = new InflectionCurveGeomFactory(RPNUMERICS.createInflectionCurveCalc());
+        InflectionCurveGeomFactory factory = new InflectionCurveGeomFactory(RPNUMERICS.createInflectionCurveCalc());
 
 
-            RPnPhaseSpaceAbstraction leftPhaseSpace = RPnDataModule.LEFTPHASESPACE;
+        RPnPhaseSpaceAbstraction leftPhaseSpace = RPnDataModule.LEFTPHASESPACE;
 
-            RPnPhaseSpaceAbstraction rightPhaseSpace = RPnDataModule.RIGHTPHASESPACE;
+        RPnPhaseSpaceAbstraction rightPhaseSpace = RPnDataModule.RIGHTPHASESPACE;
 
-            RpGeometry leftGeometry = factory.leftGeom();
-            RpGeometry rightGeometry = factory.rightGeom();
+        RpGeometry leftGeometry = factory.leftGeom();
+        RpGeometry rightGeometry = factory.rightGeom();
 
-            leftPhaseSpace.join(leftGeometry);
-            rightPhaseSpace.join(rightGeometry);
-
-            RPnDataModule.PHASESPACE.join(factory.geom());
+        leftPhaseSpace.join(leftGeometry);
+        rightPhaseSpace.join(rightGeometry);
 
 
-     
+        Iterator oldValue = RPnDataModule.PHASESPACE.getGeomObjIterator();
+        PropertyChangeEvent event = new PropertyChangeEvent(this, UIController.instance().getActivePhaseSpace().getName(), oldValue, factory.geom());
+
+
+        ArrayList<RealVector> emptyInput = new ArrayList<RealVector>();
+        logCommand(new RpCommand(event, emptyInput));
+
+
+
+
+        RPnDataModule.PHASESPACE.join(factory.geom());
+
+
+
     }
 
     static public InflectionPlotCommand instance() {

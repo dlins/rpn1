@@ -17,7 +17,8 @@ import javax.swing.KeyStroke;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import rpnumerics.Configuration;
+import rpn.controller.ui.UIController;
+import rpn.configuration.Configuration;
 import rpnumerics.RPNUMERICS;
 
 public class RPnFluxParamsDialog extends RPnDialog {
@@ -116,7 +117,7 @@ public class RPnFluxParamsDialog extends RPnDialog {
 
         removeDefaultApplyBehavior();
 
-        RPnInputComponent observerInputComponent = new RPnInputComponent(paramObserver.getConfiguration());
+        RPnInputComponent observerInputComponent = new RPnInputComponent(paramObserver.getConfiguration(),true);
         paramObserver.setView(observerInputComponent);
 
         fluxParamsPanel_.add(observerInputComponent.getContainer());
@@ -139,7 +140,7 @@ public class RPnFluxParamsDialog extends RPnDialog {
 
 
         Configuration physicsConfiguration = RPNUMERICS.getConfiguration(RPNUMERICS.physicsID());
-        fluxParamInputComponent_ = new RPnInputComponent(physicsConfiguration.getConfiguration("fluxfunction"));
+        fluxParamInputComponent_ = new RPnInputComponent(physicsConfiguration.getConfiguration("fluxfunction"),true);
         fluxParamsPanel_.add(fluxParamInputComponent_.getContainer());
 
 
@@ -158,18 +159,20 @@ public class RPnFluxParamsDialog extends RPnDialog {
 
     @Override
     protected void apply() {
-
-        //GeometryGraphND.clearAllStrings();
-
-        // --- Substituir:
-        //RPnStringPlotter.instance().clearClassifiers();
-        //RPnVelocityPlotter.instance().clearVelocities();
-        // ---
+        
+        Configuration physicsConfiguration = RPNUMERICS.getConfiguration(RPNUMERICS.physicsID());
+        
+        Configuration fluxConfiguration = physicsConfiguration.getConfiguration("fluxfunction");
 
         RPNUMERICS.applyFluxParams();
 
-        rpn.command.ChangeFluxParamsCommand.instance().applyChange(new PropertyChangeEvent(rpn.command.ChangeFluxParamsCommand.instance(), "", null, RPNUMERICS.getFluxParams().getParams()));
-
+        String phaseSpaceName = UIController.instance().getActivePhaseSpace().getName();
+        
+        
+        
+        rpn.command.ChangeFluxParamsCommand.instance().applyChange(new PropertyChangeEvent(rpn.command.ChangeFluxParamsCommand.instance(),phaseSpaceName,
+        fluxConfiguration,
+                fluxConfiguration));
         rpn.command.ChangeFluxParamsCommand.instance().updatePhaseDiagram();
     }
 

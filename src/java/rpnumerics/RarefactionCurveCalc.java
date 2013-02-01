@@ -6,7 +6,7 @@
  */
 package rpnumerics;
 
-public class RarefactionOrbitCalc extends WaveCurveOrbitCalc implements RpCalculation {
+public class RarefactionCurveCalc extends WaveCurveOrbitCalc implements RpCalculation {
     //
     // Constants
     //
@@ -16,7 +16,7 @@ public class RarefactionOrbitCalc extends WaveCurveOrbitCalc implements RpCalcul
 
     // Constructors/Initializers
     //
-    public RarefactionOrbitCalc(PhasePoint point, int familyIndex,int timeDirection) {
+    public RarefactionCurveCalc(PhasePoint point, int familyIndex,int timeDirection) {
 
         super(new OrbitPoint(point), familyIndex,timeDirection);
     }
@@ -39,15 +39,15 @@ public class RarefactionOrbitCalc extends WaveCurveOrbitCalc implements RpCalcul
     // ----- Incluí o método concat(...)
     @Override
     public RpSolution calc() throws RpException {
-        RarefactionOrbit result;
+        RarefactionCurve result;
 
         if(getDirection()== Orbit.BOTH_DIR) {
-            RarefactionOrbit forward  = (RarefactionOrbit) calc("methodName_", "flowName_", getStart(), getFamilyIndex(), Orbit.FORWARD_DIR);
-            RarefactionOrbit backward = (RarefactionOrbit) calc("methodName_", "flowName_", getStart(), getFamilyIndex(), Orbit.BACKWARD_DIR);
+            RarefactionCurve forward  = (RarefactionCurve) calc("methodName_", "flowName_", getStart(), getFamilyIndex(), Orbit.FORWARD_DIR);
+            RarefactionCurve backward = (RarefactionCurve) calc("methodName_", "flowName_", getStart(), getFamilyIndex(), Orbit.BACKWARD_DIR);
             result =  concat(backward, forward);
         }
         else {
-            result = (RarefactionOrbit) calc("methodName_", "flowName_", getStart(), getFamilyIndex(), getDirection());
+            result = (RarefactionCurve) calc("methodName_", "flowName_", getStart(), getFamilyIndex(), getDirection());
         }
 
         if (result == null) {
@@ -58,7 +58,7 @@ public class RarefactionOrbitCalc extends WaveCurveOrbitCalc implements RpCalcul
 
     }
 
-    private  RarefactionOrbit concat(RarefactionOrbit backward, RarefactionOrbit forward) {
+    private  RarefactionCurve concat(RarefactionCurve backward, RarefactionCurve forward) {
         // opposite time directions assumed...
         OrbitPoint[] swap = new OrbitPoint[backward.getPoints().length
                 + forward.getPoints().length - 1];
@@ -72,18 +72,19 @@ public class RarefactionOrbitCalc extends WaveCurveOrbitCalc implements RpCalcul
             }
         }
 
-        return new RarefactionOrbit(swap, getFamilyIndex(), Orbit.BOTH_DIR);
+        return new RarefactionCurve(swap, getFamilyIndex(), Orbit.BOTH_DIR);
 
     }
     // -----
 
 
-      // --- Método calc() original
+    // --- Método calc() original
+//    @Override
 //    public RpSolution calc() throws RpException {
 //
-//        RarefactionOrbit result;
+//        RarefactionCurve result;
 //
-//        result = (RarefactionOrbit) calc("methodName_", "flowName_", getStart(), getFamilyIndex(), getDirection());
+//        result = (RarefactionCurve) calc("methodName_", "flowName_", getStart(), getFamilyIndex(), getDirection());
 //
 //
 //        if (result == null) {

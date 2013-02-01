@@ -10,7 +10,7 @@ import java.awt.event.ActionEvent;
 import java.util.Iterator;
 import java.util.List;
 import javax.swing.JToggleButton;
-import rpn.RPnConfig;
+import rpn.configuration.RPnConfig;
 import rpn.component.*;
 import rpn.controller.phasespace.NumConfigReadyImpl;
 import rpn.controller.ui.UIController;

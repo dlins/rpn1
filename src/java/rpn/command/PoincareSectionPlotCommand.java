@@ -9,7 +9,7 @@ package rpn.command;
 import javax.swing.JToggleButton;
 import rpn.component.*;
 import wave.util.SimplexPoincareSection;
-import rpn.RPnConfig;
+import rpn.configuration.RPnConfig;
 import wave.util.RealVector;
 
 

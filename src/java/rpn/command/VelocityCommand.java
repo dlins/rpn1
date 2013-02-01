@@ -14,11 +14,9 @@ import rpn.RPnPhaseSpacePanel;
 import rpn.component.RpGeometry;
 import rpn.controller.ui.RPnVelocityPlotter;
 import rpn.controller.ui.UIController;
+
 import wave.util.RealVector;
 import rpn.controller.ui.VELOCITYAGENT_CONFIG;
-import rpn.parser.RPnDataModule;
-import rpnumerics.WaveCurve;
-import rpnumerics.FundamentalCurve;
 
 /**
  *

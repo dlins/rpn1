@@ -66,19 +66,6 @@ public class PoincareSectionGeomFactory implements RpGeomFactory {
         isGeomOutOfDate_ = true;
     }
 
-    public String toXML() {
-        StringBuffer str = new StringBuffer();
-        str.append("<POINCAREDATA>\n");
-        SimplexPoincareSection pSection = (SimplexPoincareSection)geomSource_;
-        for (int i = 0; i < pSection.getPoints().length; i++)
-            str.append(new PhasePoint(pSection.getPoints() [i]).toXML());
-        str.append("</POINCAREDATA>\n");
-        return str.toString();
-    }
-
-    public String toMatlab(int curveIndex) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
 
     public void updateGeom(Area area) {
         throw new UnsupportedOperationException("Not supported yet.");

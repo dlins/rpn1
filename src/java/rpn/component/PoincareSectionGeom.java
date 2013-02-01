@@ -3,7 +3,6 @@
  * Departamento de Dinamica dos Fluidos
  *
  */
-
 package rpn.component;
 
 import wave.multid.model.MultiPolygon;
@@ -15,11 +14,13 @@ public class PoincareSectionGeom extends MultiPolygon implements RpGeometry {
     //
     // Constants
     //
+
     public static ViewingAttr VIEWING_ATTR = new ViewingAttr(Color.white);
     //
     // Members
     //
     private RpGeomFactory factory_;
+
 
     //
     // Constructors
@@ -32,5 +33,9 @@ public class PoincareSectionGeom extends MultiPolygon implements RpGeometry {
     //
     // Accessors/Mutators
     //
-    public RpGeomFactory geomFactory() { return factory_; }
+    public RpGeomFactory geomFactory() {
+        return factory_;
+    }
+
+    
 }

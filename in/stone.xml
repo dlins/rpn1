@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <!DOCTYPE rpnconfiguration >
-<RPNCONFIGURATION>
+<RPNSESSION>
+ <PHASESPACE name="Phase Space">
+  <RPNCONFIGURATION>
     <PHYSICS name="Stone">
 
         <PHYSICSCONFIG name="fluxfunction">
@@ -50,8 +52,14 @@
     </METHOD>
 
 
+    <CURVECONFIGURATION name="fundamentalcurve">
+        <CURVEPARAM name="direction" value="20"/>
+        <CURVEPARAM name="family" value="0"/>
+        <CURVEPARAM name="level" value="0.5"/>
+    </CURVECONFIGURATION>
+
     <CURVECONFIGURATION name="hugoniotcurve">
-        <CURVEPARAM name="resolution" value="20 20"/>
+        <CURVEPARAM name="resolution" value="120 120"/>
     </CURVECONFIGURATION>
 
     <CURVECONFIGURATION name="ellipticboundary">
@@ -131,12 +139,7 @@
     
 
 
-    <CURVECONFIGURATION name="orbit">
-        <CURVEPARAM name="family" value="0"/>
-        <CURVEPARAM name="level" value="0.5"/>
-
-    </CURVECONFIGURATION>
-
+  
     <VIEWCONFIGURATION modeldomain="2">
 
         <PROJDESC name="Axis0 Axis1">
@@ -148,4 +151,9 @@
 
     </VIEWCONFIGURATION>
 
-</RPNCONFIGURATION>
+  </RPNCONFIGURATION>
+
+ </PHASESPACE>
+
+</RPNSESSION>
+

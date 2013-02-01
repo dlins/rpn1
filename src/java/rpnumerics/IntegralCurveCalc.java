@@ -6,7 +6,10 @@
  */
 package rpnumerics;
 
+import rpn.configuration.CurveConfiguration;
+
 public class IntegralCurveCalc extends WaveCurveOrbitCalc implements RpCalculation {
+
     //
     // Constants
     //
@@ -16,17 +19,26 @@ public class IntegralCurveCalc extends WaveCurveOrbitCalc implements RpCalculati
     //
     // Constructors/Initializers
     //
-    public IntegralCurveCalc(PhasePoint point,int familyIndex) {
-        super(new OrbitPoint(point), familyIndex,0);
 
+    public IntegralCurveCalc(PhasePoint point, int familyIndex) {
+        super(new OrbitPoint(point), familyIndex, 0);
+        
+        
+         CurveConfiguration  config  = (CurveConfiguration)RPNUMERICS.getConfiguration("fundamentalcurve");
+        
+        configuration_= config.clone();
+        
+        String [] parameterToKeep  = {"family","level"};
+        
+        configuration_.keepParameters(parameterToKeep);
+        
+        
 
-       
     }
     //
     // Methods
     //
 
-  
     @Override
     public RpSolution calc() throws RpException {
 
@@ -36,7 +48,7 @@ public class IntegralCurveCalc extends WaveCurveOrbitCalc implements RpCalculati
         if (result == null) {
             throw new RpException("Error in native layer");
         }
-       
+
 
         return result;
 
@@ -44,6 +56,4 @@ public class IntegralCurveCalc extends WaveCurveOrbitCalc implements RpCalculati
     }
 
     private native RpSolution calc(PhasePoint initialpoint, int family) throws RpException;
-
-   
 }

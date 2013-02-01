@@ -24,7 +24,7 @@ package rpnumerics;
 import wave.util.RealVector;
 import wave.util.RealMatrix2;
 
-public class StationaryPoint extends PhasePoint implements RpSolution {
+public class StationaryPoint extends PhasePoint  {
     //
     // Members
     //
@@ -354,10 +354,9 @@ public class StationaryPoint extends PhasePoint implements RpSolution {
         return buffer.toString();
 
     }
-//    @Override
-//    public String toString() {
-//
-//      return getCoords().toString();
-//
-//    }
+    
+    public String toMatlab(int curveIndex) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 }

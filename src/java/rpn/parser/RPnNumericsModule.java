@@ -5,6 +5,7 @@
  */
 package rpn.parser;
 
+import rpn.configuration.ConfigurationProfile;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXParseException;
@@ -16,7 +17,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.InputSource;
 import java.io.FileWriter;
 import java.io.InputStream;
-import rpn.RPnConfig;
+import rpn.configuration.RPnConfig;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.XMLReader;
 import rpnumerics.RPNUMERICS;
@@ -28,7 +29,7 @@ public class RPnNumericsModule {
     // Constants
     //
 
-    static class InputHandler implements ContentHandler {
+    static class RPnNumericsParser implements ContentHandler {
         //
         // Members
         //
@@ -38,12 +39,14 @@ public class RPnNumericsModule {
         private static ConfigurationProfile currentConfigurationProfile_;
         private static ConfigurationProfile physicsProfile_;
         private static ConfigurationProfile innerPhysicsConfigurationProfile_;
+        private static boolean initialConfiguration_;
 
         public void startElement(String uri, String localName, String qName, Attributes att) throws SAXException {
             currentElement_ = localName;
 
             if (localName.equals("CURVECONFIGURATION")) {
-                currentConfigurationProfile_ = new ConfigurationProfile(att.getValue("name"), ConfigurationProfile.CURVE);
+
+                currentConfigurationProfile_ = new ConfigurationProfile(att.getValue("name"), ConfigurationProfile.CURVECONFIGURATION);
 
             }
 
@@ -53,19 +56,23 @@ public class RPnNumericsModule {
             }
 
             if (localName.equals("PHYSICS")) {
+                initialConfiguration_=true;
                 physicsProfile_ = new ConfigurationProfile(att.getValue(0), ConfigurationProfile.PHYSICS_PROFILE);
             }
 
+            
+            
             if (localName.equals("BOUNDARY")) {
                 physicsProfile_.addConfigurationProfile(ConfigurationProfile.BOUNDARY, new ConfigurationProfile(att.getValue(0), ConfigurationProfile.BOUNDARY));
             }
 
             if (localName.equals("PHYSICSCONFIG")) {
+                if (initialConfiguration_)
                 innerPhysicsConfigurationProfile_ = new ConfigurationProfile(att.getValue("name"), ConfigurationProfile.PHYSICS_CONFIG);
             }
 
             if (localName.equals("PHYSICSPARAM")) {
-
+                if(initialConfiguration_)
                 innerPhysicsConfigurationProfile_.addParam(new Integer(att.getValue("position")), att.getValue("name"), att.getValue("value"));
 
             }
@@ -103,6 +110,7 @@ public class RPnNumericsModule {
                 RPnConfig.addProfile(physicsProfile_.getName(), physicsProfile_);
                 rpnumerics.RPNUMERICS.init(physicsProfile_.getName());
                 RPnConfig.createParamsFluxSubject(physicsProfile_.getName());
+                initialConfiguration_=false;
             }
 
 
@@ -146,23 +154,23 @@ public class RPnNumericsModule {
         public void endDocument() throws SAXException {//Setando a resolucao dos grids.Usando tres grids . Um para Hugoniot, um para DoubleContact e um para as demais curvas (com resolucao da inflexao)
 
 
-        Boundary boundary = RPNUMERICS.boundary();
+            Boundary boundary = RPNUMERICS.boundary();
 
-        RealVector min = boundary.getMinimums();
-        RealVector max = boundary.getMaximums();
+            RealVector min = boundary.getMinimums();
+            RealVector max = boundary.getMaximums();
 
-        int[] doubleContactResolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("doublecontactcurve", "resolution"));
+            int[] doubleContactResolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("doublecontactcurve", "resolution"));
 
-        int[] hugoniotResolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("hugoniotcurve", "resolution"));
+            int[] hugoniotResolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("hugoniotcurve", "resolution"));
 
-        int[] bifurcationCurvesResolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("inflectioncurve", "resolution"));
+            int[] bifurcationCurvesResolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("inflectioncurve", "resolution"));
 
 
-        RPNUMERICS.setResolution(min, max, "doublecontactcurve", doubleContactResolution);
+            RPNUMERICS.setResolution(min, max, "doublecontactcurve", doubleContactResolution);
 
-        RPNUMERICS.setResolution(min, max, "hugoniotcurve", hugoniotResolution);
+            RPNUMERICS.setResolution(min, max, "hugoniotcurve", hugoniotResolution);
 
-        RPNUMERICS.setResolution(min, max, "bifurcation", bifurcationCurvesResolution);
+            RPNUMERICS.setResolution(min, max, "bifurcation", bifurcationCurvesResolution);
 
 
         }
@@ -190,6 +198,8 @@ public class RPnNumericsModule {
                 System.exit(1);
             }
         }
+
+        
     }
 
     //
@@ -200,7 +210,7 @@ public class RPnNumericsModule {
     //
     public static void init(XMLReader parser, String file) {
         try {
-            parser.setContentHandler(new InputHandler());
+            parser.setContentHandler(new RPnNumericsParser());
             parser.parse(file);
         } catch (Exception saxex) {
             saxex.printStackTrace();
@@ -212,12 +222,12 @@ public class RPnNumericsModule {
 
         try {
 
-            parser.setContentHandler(new InputHandler());
+            parser.setContentHandler(new RPnNumericsParser());
             System.out.println("Numerics Module");
 
             System.out.println("Will parse !");
             parser.parse(new InputSource(configFileStream));
-            
+
             System.out.println("parsed !");
 
         } catch (Exception saxex) {

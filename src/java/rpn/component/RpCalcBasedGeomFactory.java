@@ -11,7 +11,9 @@ import rpn.RPnDesktopPlotter;
 import rpn.controller.RpCalcController;
 import rpn.controller.RpController;
 import rpnumerics.Area;
+
 import rpnumerics.RPnCurve;
+
 import rpnumerics.RpCalculation;
 import rpnumerics.RpException;
 import rpnumerics.RpSolution;
@@ -130,15 +132,17 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
             segRem.add(curve.segments().get(i));
         }
 
+
         curve.segments().removeAll(segRem);
 
         try {
             RPnCurve newCurve = (RPnCurve) calc_.recalc(areaToRefine);
-
             ((RPnCurve) geomSource_).segments().addAll(newCurve.segments());
-        } catch (RpException ex) {
-            ex.printStackTrace();
-        }
+
+            } catch (RpException ex) {
+                ex.printStackTrace();
+            }
+
 
         geom_ = createGeomFromSource();
 

@@ -31,7 +31,7 @@ public class CoincidencePlotCommand extends RpModelPlotCommand {
     // Constructors/Initializers
     //
     protected CoincidencePlotCommand() {
-        super(DESC_TEXT, rpn.RPnConfig.HUGONIOT,new JButton(DESC_TEXT));
+        super(DESC_TEXT, rpn.configuration.RPnConfig.HUGONIOT,new JButton(DESC_TEXT));
     }
 
 

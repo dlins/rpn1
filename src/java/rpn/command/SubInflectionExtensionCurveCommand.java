@@ -6,10 +6,12 @@
 package rpn.command;
 
 import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
+import java.util.Iterator;
 import javax.swing.JButton;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.component.*;
-import rpn.controller.ui.BIFURCATION_CONFIG;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UI_ACTION_SELECTED;
 import rpn.parser.RPnDataModule;
@@ -31,7 +33,7 @@ public class SubInflectionExtensionCurveCommand extends RpModelPlotCommand {
     // Constructors/Initializers
     //
     protected SubInflectionExtensionCurveCommand() {
-        super(DESC_TEXT, rpn.RPnConfig.HUGONIOT, new JButton(DESC_TEXT));
+        super(DESC_TEXT, rpn.configuration.RPnConfig.HUGONIOT, new JButton(DESC_TEXT));
     }
 
     @Override
@@ -59,6 +61,16 @@ public class SubInflectionExtensionCurveCommand extends RpModelPlotCommand {
         RPnPhaseSpaceAbstraction auxPhaseSpace = RPnDataModule.PHASESPACE;
         RpGeometry geometry = factory.geom();
         auxPhaseSpace.plot(geometry);
+        
+        
+         
+        Iterator oldValue = RPnDataModule.PHASESPACE.getGeomObjIterator();
+        PropertyChangeEvent event = new PropertyChangeEvent(this, UIController.instance().getActivePhaseSpace().getName(), oldValue, factory.geom());
+
+        
+        ArrayList<RealVector> emptyInput = new ArrayList<RealVector>();
+        logCommand(new RpCommand(event, emptyInput));
+        
 
     }
 

@@ -63,8 +63,7 @@ public class HugoniotController extends RpCalcController {
 
     @Override
     public void propertyChange(PropertyChangeEvent change) {
-        
-        System.out.println(change);
+
 
         if (change.getSource() instanceof DragPlotCommand) {
             ((HugoniotParams) ((HugoniotCurveCalcND) geomFactory_.rpCalc()).getParams()).setXZero((RealVector) change.getNewValue());

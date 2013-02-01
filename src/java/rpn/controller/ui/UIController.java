@@ -25,6 +25,9 @@ import java.beans.PropertyChangeEvent;
 import rpn.controller.*;
 import java.net.*;
 import java.util.Iterator;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import rpn.RPnCurvesDirectionPanel;
 import rpn.RPnDesktopPlotter;
 import rpn.RPnUIFrame;
 import rpn.component.RpGeometry;
@@ -42,6 +45,7 @@ public class UIController extends ComponentUI {
 
     static public final Cursor WAIT_CURSOR = Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR);
     static public final Cursor DEFAULT_CURSOR = Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR);
+    static public UI_ACTION_SELECTED INITSTATE = null;
     //
     // Members
     //
@@ -55,8 +59,6 @@ public class UIController extends ComponentUI {
     private String clientID_;
     private RPnPhaseSpacePanel focusPanel_;
     private StateInputController stateController_;
-    public static UI_ACTION_SELECTED INITSTATE = null;
-    private ArrayList<RpCommand> commandArray_;
     private boolean auxPanelsEnabled_;
     private RPnPhaseSpaceAbstraction activePhaseSpace_;
     private boolean drag_ = false;
@@ -73,14 +75,13 @@ public class UIController extends ComponentUI {
         mouseController_ = new MouseController();
         globalInputTable_ = new UserInputTable(rpnumerics.RPNUMERICS.domainDim());
 
-        commandArray_ = new ArrayList<RpCommand>();
+
         handler_ = new RAREFACTION_CONFIG();
         auxPanelsEnabled_ = true;
 
         activePhaseSpace_ = RPnDataModule.PHASESPACE;       //***
 
         initNetStatus();
-
     }
 
     private void initNetStatus() {
@@ -132,14 +133,7 @@ public class UIController extends ComponentUI {
         return instance_;
     }
 
-    public void removeLastCommand() {
-        commandArray_.remove(commandArray_.size() - 1);
-    }
-
-    public Iterator<RpCommand> getCommandIterator() {
-        return commandArray_.iterator();
-
-    }
+   
 
     public void setAuxPanels(boolean selected) {
         auxPanelsEnabled_ = selected;
@@ -223,49 +217,46 @@ public class UIController extends ComponentUI {
         @Override
         public void mouseReleased(MouseEvent event) {
 
-            if (drag_) {
-                if (!commandArray_.isEmpty())
-                    commandArray_.remove(commandArray_.size()-1);
-                    logCommand(new RpCommand((UI_ACTION_SELECTED) handler_, globalInputTable().values()));
-
-            }
 
         }
 
         @Override
         public void mousePressed(MouseEvent event) {
+
             drag_ = false;
             RPnUIFrame.clearStatusMessage();
             RPnUIFrame.disableSliders();
 
-            if (event.getComponent() instanceof RPnPhaseSpacePanel) {
+                if (event.getComponent() instanceof RPnPhaseSpacePanel) {
 
-                RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
+                    RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
 
-                RPnPhaseSpaceAbstraction.namePhaseSpace = ((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom()).getName();   //** acrescentei isso (Leandro)
-                panel.setName(RPnPhaseSpaceAbstraction.namePhaseSpace);
+                    RPnPhaseSpaceAbstraction.namePhaseSpace = ((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom()).getName();   //** acrescentei isso (Leandro)
+                    panel.setName(RPnPhaseSpaceAbstraction.namePhaseSpace);
 
-                if (netStatus_.isMaster() || !(netStatus_.isOnline())) {
+                    //panel.setName(((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom()).getName());
+
+                    if (netStatus_.isMaster() || !(netStatus_.isOnline())) {
 
 
-                    int sceneDim = panel.scene().getViewingTransform().projectionMap().getDomain().getDim();
-                    if (sceneDim == globalInputTable_.flags().length) {
 
-                        updateUserInputTable(panel, event.getPoint());
-                        evaluatePanelsCursorCoords(panel, event.getPoint());
-                        // execute
-                        if (globalInputTable().isComplete()) {
-                            userInputComplete(globalInputTable().values());
-                            globalInputTable().reset();
-                            resetPanelsCursorCoords();
-                            RPnUIFrame.enableSliders();
+                        int sceneDim = panel.scene().getViewingTransform().projectionMap().getDomain().getDim();
+                        if (sceneDim == globalInputTable_.flags().length) {
+
+                            updateUserInputTable(panel, event.getPoint());
+                            evaluatePanelsCursorCoords(panel, event.getPoint());
+                            // execute
+                            if (globalInputTable().isComplete()) {
+                                userInputComplete(globalInputTable().values());
+                                globalInputTable().reset();
+                                resetPanelsCursorCoords();
+                                RPnUIFrame.enableSliders();
+                            }
+
                         }
 
                     }
-
                 }
-
-            }
 
         }
 
@@ -407,10 +398,7 @@ public class UIController extends ComponentUI {
 
     }
 
-    public void logCommand(RpCommand command) {
-        RPnUIFrame.clearStatusMessage();
-        commandArray_.add(command);
-    }
+   
 
     /** Sets the state of the application. The application works as a state machine and this method changes the actual state.*/
     public void setState(rpn.controller.ui.UserInputHandler newAction) {
@@ -433,7 +421,7 @@ public class UIController extends ComponentUI {
                 // Singletons !
                 if (currentSelection.getAction() == selectedAction.getAction()) // unselect
                 {
-//                    setState(new GEOM_SELECTION());
+                    setState(new GEOM_SELECTION());
                 } else {
                     handler_ = newAction;
                 }

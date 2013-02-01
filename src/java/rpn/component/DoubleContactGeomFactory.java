@@ -31,24 +31,4 @@ public class DoubleContactGeomFactory extends BifurcationCurveGeomFactory {
         return new ViewingAttr(Color.magenta);
     }
 
-    @Override
-    public String toXML() {
-
-        StringBuffer buffer = new StringBuffer();
-
-        buffer.append(super.toXML());
-
-        BifurcationCurve curve = (BifurcationCurve) geomSource();
-
-        DoubleContactCurveCalc doubleContactCalc = (DoubleContactCurveCalc) rpCalc();
-
-        buffer.append(" curvefamily=\"" + doubleContactCalc.getCurveFamily() + "\"" + " domainfamily=\"" + doubleContactCalc.getDomainFamily() + "\"" + ">\n");
-
-        buffer.append(curve.toXML());
-
-        buffer.append("</COMMAND>\n");
-
-        return buffer.toString();
-
-    }
 }

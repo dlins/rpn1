@@ -20,17 +20,17 @@ import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+
 import org.apache.batik.ext.swing.GridBagConstants;
 import rpn.command.ClassifierCommand;
 import rpn.command.VelocityCommand;
 import rpn.controller.ui.*;
 import rpn.controller.ui.UI_ACTION_SELECTED;
 import rpn.message.*;
-//import rpn.usecase.AdjustedSelectionPlotAgent;
-//import rpn.usecase.RarefactionExtensionCurvePlotAgent;
-//import rpn.usecase.RiemannProfileAgent;
 import wave.multid.Space;
 import wave.util.RealVector;
 import wave.util.RectBoundary;
@@ -51,14 +51,14 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JMenu fileMenu = new JMenu();
     private JMenu modelInteractionMenu = new JMenu();
     private JMenu helpMenu = new JMenu();
-    private JCheckBox resultsOption = new JCheckBox("Save With Results");
     private JMenuItem shockMenuItem_ = new JMenuItem("Shock Configuration ...");
     private JMenuItem configurationMenuItem_ = new JMenuItem(new ConfigAction());
     private JMenuItem jMenuFileExit = new JMenuItem();
-    private JMenuItem matlabMenuFileExport_ = new JMenuItem("Export to Matlab ...");
+    private JMenuItem exportRPMenuItem_ = new JMenuItem("Export Riemann Profile results ...");
+    private JMenuItem matlabExportMenuItem_ = new JMenuItem("Export to Matlab ...");
     private JMenuItem jMenuHelpAbout = new JMenuItem();
     private GridBagLayout uiFrameLayout_ = new GridBagLayout();
-    private JMenuItem exportMenuItem = new JMenuItem();
+    private JMenuItem saveSessionMenuItem_ = new JMenuItem("Save Session As ...");
     private JMenuItem inputCoordsMenuItem = new JMenuItem("Input Coords ...");
     private JMenuItem createSVGImageMenuItem = new JMenuItem();
     private JMenuItem printMenuItem = new JMenuItem();
@@ -73,7 +73,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JCheckBoxMenuItem showLeftCurvesPaneltem_ = new JCheckBoxMenuItem("Show Left Curves Window", true);
     private JCheckBoxMenuItem showRightCurvesPaneltem_ = new JCheckBoxMenuItem("Show Right Curves Window", true);
     private JCheckBoxMenuItem showAuxPanel_ = new JCheckBoxMenuItem("Show Auxiliar Panels", true);
-    private RPnCurvesConfigPanel curvesConfigPanel_ = new RPnCurvesConfigPanel();
+//    private RPnCurvesConfigPanel curvesConfigPanel_ = new RPnCurvesConfigPanel();
     //*** declarei isso  -- Leandro
     private JMenuItem editMenuItem1 = new JMenuItem("Clears All Strings");
     private JMenuItem editMenuItem2 = new JMenuItem("Clears Last String");
@@ -105,6 +105,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             createPanelsChooser();
 
             addPropertyChangeListener(this);
+
+            RiemannProfileCommand.instance().addPropertyChangeListener(this);
+
             UndoActionController.createInstance();
 
             if (commandMenu_ instanceof RPnAppletPlotter) { // Selecting itens to disable in Applet
@@ -112,8 +115,13 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 networkMenuItem.setEnabled(false);
                 createSVGImageMenuItem.setEnabled(false);
                 printMenuItem.setEnabled(false);
-                exportMenuItem.setEnabled(false);
+                saveSessionMenuItem_.setEnabled(false);
             }
+
+            // should be enabled only when a RP profile is present...
+            exportRPMenuItem_.setEnabled(false);
+
+            matlabExportMenuItem_.setEnabled(true);
 
 
         } catch (Exception e) {
@@ -123,7 +131,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     //
     // Methods
     //
-
 
 //    private void riemanProfileFramesInit() {
 //
@@ -169,9 +176,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 //
 //
 //    }
-
-
-
     public static RPnPhaseSpaceFrame[] getAuxFrames() {
         return auxFrames_;
     }
@@ -205,7 +209,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
                 toolBar_.add(HugoniotPlotCommand.instance().getContainer());
                 toolBar_.add(ShockCurvePlotCommand.instance().getContainer());
-                toolBar_.add(RarefactionOrbitPlotCommand.instance().getContainer());
+                toolBar_.add(RarefactionCurvePlotCommand.instance().getContainer());
                 toolBar_.add(IntegralCurvePlotCommand.instance().getContainer());
                 toolBar_.add(PointLevelCurvePlotCommand.instance().getContainer());
                 toolBar_.add(LevelCurvePlotCommand.instance().getContainer());
@@ -247,14 +251,13 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 toolBar_.add(EllipticBoundaryExtensionCommand.instance().getContainer());
                 toolBar_.add(EllipticBoundaryCommand.instance().getContainer());
                 toolBar_.add(EnvelopeCurveCommand.instance().getContainer());
-                toolBar_.add(SecondaryBifurcationtCommand.instance().getContainer());
 
-              
-              
+
 
                 toolBar_.add(BuckleyLeverettiInflectionCommand.instance().getContainer());
                 toolBar_.add(CoincidencePlotCommand.instance().getContainer());
                 toolBar_.add(SubInflectionPlotCommand.instance().getContainer());
+                toolBar_.add(SecondaryBifurcationCurveCommand.instance().getContainer());
 
                 toolBar_.revalidate();
 
@@ -272,6 +275,11 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         if (evt.getPropertyName().equals("Dialog Closed")) {
             networkMenuItem.setEnabled(true);
         }
+
+        if (evt.getPropertyName().equals("Riemann Profile Added")) {
+            exportRPMenuItem_.setEnabled(true);
+        }
+
 
     }
     //File | Exit action performed
@@ -318,7 +326,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         // --------------------------------
         Space zoomSpace = new Space("", RPNUMERICS.domainDim());
-        int[] testeArrayIndex = {0,1};
+        int[] testeArrayIndex = {0, 1};
         RPnProjDescriptor projDescriptor = new RPnProjDescriptor(zoomSpace, "", 700, 700, testeArrayIndex, false);
         wave.multid.view.ViewingTransform viewingTransf = projDescriptor.createTransform(clipping);
         // ----------------------------
@@ -332,8 +340,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 //                    ((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(
 //                    0)).createTransform(clipping);
 
-            try {
-                wave.multid.view.Scene scene = null;
+        try {
+            wave.multid.view.Scene scene = null;
 
             if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("Phase Space")) {
                 scene = RPnDataModule.PHASESPACE.createScene(viewingTransf,
@@ -351,19 +359,19 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             }
 
 
-                frameZoom = new RPnPhaseSpaceFrame(scene, commandMenu_);
-                frameZoom.setTitle("Zoom " + RPnPhaseSpaceAbstraction.namePhaseSpace);
+            frameZoom = new RPnPhaseSpaceFrame(scene, commandMenu_);
+            frameZoom.setTitle("Zoom " + RPnPhaseSpaceAbstraction.namePhaseSpace);
 
-                frameZoom.jPanel5.removeAll();
-                frameZoom.jPanel5.add(closeButton);
+            frameZoom.jPanel5.removeAll();
+            frameZoom.jPanel5.add(closeButton);
 
-                UIController.instance().install(frameZoom.phaseSpacePanel());
+            UIController.instance().install(frameZoom.phaseSpacePanel());
 
-                setFramesPosition(frameZoom);
-                frameZoom.pack();
-                frameZoom.setVisible(true);
+            setFramesPosition(frameZoom);
+            frameZoom.pack();
+            frameZoom.setVisible(true);
 
-                listFrameZoom.add(frameZoom);
+            listFrameZoom.add(frameZoom);
 
 
 
@@ -472,23 +480,23 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 wave.multid.view.Scene rightScene = RPnDataModule.RIGHTPHASESPACE.createScene(auxViewingTransf,
                         new wave.multid.view.ViewingAttr(Color.black));
 
-                auxFrames_[2*i] = new RPnPhaseSpaceFrame(leftScene, commandMenu_);
-                auxFrames_[2*i + 1] = new RPnPhaseSpaceFrame(rightScene, commandMenu_);
+                auxFrames_[2 * i] = new RPnPhaseSpaceFrame(leftScene, commandMenu_);
+                auxFrames_[2 * i + 1] = new RPnPhaseSpaceFrame(rightScene, commandMenu_);
 
-                auxFrames_[2*i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i)).label());
-                auxFrames_[2*i + 1].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i + 1)).label());
+                auxFrames_[2 * i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i)).label());
+                auxFrames_[2 * i + 1].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i + 1)).label());
 
-                System.out.println("auxFrames_[i].getTitle() ::::::: " +auxFrames_[i].getTitle());
-                System.out.println("auxFrames_[i+1].getTitle() ::::: " +auxFrames_[i+1].getTitle());
+                System.out.println("auxFrames_[i].getTitle() ::::::: " + auxFrames_[i].getTitle());
+                System.out.println("auxFrames_[i+1].getTitle() ::::: " + auxFrames_[i + 1].getTitle());
 
-                UIController.instance().install(auxFrames_[2*i].phaseSpacePanel());
-                UIController.instance().install(auxFrames_[2*i + 1].phaseSpacePanel());
-                setFramesPosition(auxFrames_[2*i]);
-                setFramesPosition(auxFrames_[2*i + 1]);
-                auxFrames_[2*i].pack();
-                auxFrames_[2*i + 1].pack();
-                auxFrames_[2*i].setVisible(true);
-                auxFrames_[2*i + 1].setVisible(true);
+                UIController.instance().install(auxFrames_[2 * i].phaseSpacePanel());
+                UIController.instance().install(auxFrames_[2 * i + 1].phaseSpacePanel());
+                setFramesPosition(auxFrames_[2 * i]);
+                setFramesPosition(auxFrames_[2 * i + 1]);
+                auxFrames_[2 * i].pack();
+                auxFrames_[2 * i + 1].pack();
+                auxFrames_[2 * i].setVisible(true);
+                auxFrames_[2 * i + 1].setVisible(true);
 
             } catch (wave.multid.DimMismatchEx dex) {
                 dex.printStackTrace();
@@ -673,7 +681,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         }
     }
 
-    //** ???
+
     void matlabExport_actionPerformed(ActionEvent e) {
         try {
             JFileChooser chooser = new JFileChooser();
@@ -681,34 +689,64 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             chooser.setFileFilter(new FileNameExtensionFilter("Matlab file", "m"));
 
             // ---
-            Object[] options = { "Yes", "No" };
-            int n = JOptionPane.showOptionDialog(null,
-                     "Contents of the selected folder will be erased. Continue?",
-                     "WARNING", JOptionPane.YES_NO_OPTION,
-                     JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+//            Object[] options = { "Yes", "No" };
+//            int n = JOptionPane.showOptionDialog(null,
+//                     "Contents of the selected folder will be erased. Continue?",
+//                     "WARNING", JOptionPane.YES_NO_OPTION,
+//                     JOptionPane.WARNING_MESSAGE, null, options, options[0]);
             // ---
 
-            if (n==0) {
-                if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+//            if (n==0) {
+            if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
 
-                int nFiles = chooser.getSelectedFile().getParentFile().listFiles().length;
+//                int nFiles = chooser.getSelectedFile().getParentFile().listFiles().length;
 
-                for (int k = 0; k < nFiles; k++) {
-                    chooser.getSelectedFile().getParentFile().listFiles()[0].delete();
-                }
+//                for (int k = 0; k < nFiles; k++) {
+//                    chooser.getSelectedFile().getParentFile().listFiles()[0].delete();
+//                }
 
                 FileWriter writer = new FileWriter(chooser.getSelectedFile().
                         getAbsolutePath());
                 dir = chooser.getSelectedFile().getParent();
                 System.out.println("Diretorio selecionado : " + dir);
 
-                if (RPNUMERICS.domainDim()==3)
+                if (RPNUMERICS.domainDim() == 3) {
                     RPnDataModule.matlabExport(writer);
-                else
+                } else {
                     RPnDataModule.matlabExport2D(writer);
+                }
 
                 writer.close();
-                }
+            }
+//            }
+
+
+        } catch (java.io.IOException ioex) {
+            ioex.printStackTrace();
+        } catch (java.lang.NullPointerException nullEx) {
+        }
+    }
+
+
+    // Exports the Riemann Profile solution only...
+    void exportRP_actionPerformed(ActionEvent e) {
+        try {
+            JFileChooser chooser = new JFileChooser();
+            chooser.setSelectedFile(new File("RP.OUT"));
+            chooser.setFileFilter(new FileNameExtensionFilter("rpn session output file", "out"));
+            if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+
+                FileWriter writer = new FileWriter(chooser.getSelectedFile().
+                        getAbsolutePath());
+                dir = chooser.getSelectedFile().getParent();
+
+                writer.write(RPnConfigReader.XML_HEADER);
+                RPnNumericsModule.export(writer);
+                writer.write("<RPNDATA>\n");
+                RPnDataModule.exportRP(writer);
+                writer.write("</RPNDATA>\n");
+                RPnCommandModule.export(writer);
+                writer.close();
             }
 
 
@@ -718,21 +756,32 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         }
     }
 
-    //**  ???
-    void export_actionPerformed(ActionEvent e) {
+    // saves the whole user commands session...
+    void saveSession_actionPerformed(ActionEvent e) {
         try {
             JFileChooser chooser = new JFileChooser();
-            chooser.setSelectedFile(new File("output.xml"));
+            chooser.setSelectedFile(new File("RPNSESSION.XML"));
             chooser.setFileFilter(new FileNameExtensionFilter("XML File", "xml", "XML"));
             if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
                 FileWriter writer = new FileWriter(chooser.getSelectedFile().
                         getAbsolutePath());
                 writer.write(RPnConfigReader.XML_HEADER);
-                writer.write("<rpnconfiguration>\n");
+                writer.write("<RPNSESSION>\n");
+                writer.write(" <PHASESPACE name=\"Phase Space\">\n");
+                writer.write("  <RPNCONFIGURATION>\n");
                 RPnNumericsModule.export(writer);
+//<<<<<<< HEAD
+//                RPnVisualizationModule.export(writer);
+//                writer.write("</RPNCONFIGURATION>\n");
+//                RPnDataModule.export(writer);
+//
+//=======
                 RPnVisualizationModule.export(writer);
-                RPnDataModule.export(writer);
-                writer.write("</rpnconfiguration>");
+                writer.write("  </RPNCONFIGURATION>\n");
+                writer.write(" </PHASESPACE>\n");
+                RPnCommandModule.export(writer);
+                writer.write("</RPNSESSION>");
+//>>>>>>> ee2dd9b19625a014a1150feafec12fa2738af685
                 writer.close();
             }
 
@@ -801,10 +850,10 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         configPanel_.add(stateComboBox, configPanelConstraints);
 
 
-        configPanelConstraints.gridy = 1;
-        configPanelConstraints.gridx = 0;
-        configPanelConstraints.fill = GridBagConstraints.BOTH;
-        configPanel_.add(curvesConfigPanel_, configPanelConstraints);
+//        configPanelConstraints.gridy = 1;
+//        configPanelConstraints.gridx = 0;
+//        configPanelConstraints.fill = GridBagConstraints.BOTH;
+//        configPanel_.add(curvesConfigPanel_, configPanelConstraints);
 
 
         contentPane = (JPanel) this.getContentPane();
@@ -907,16 +956,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                     }
                 });
 
-
-        resultsOption.addActionListener(
-                new ActionListener() {
-
-                    public void actionPerformed(ActionEvent e) {
-                        JCheckBox checkB = (JCheckBox) e.getSource();
-                        rpn.parser.RPnDataModule.RESULTS = checkB.isSelected();
-                    }
-                });
-
         jMenuFileExit.addActionListener(
                 new ActionListener() {
 
@@ -925,11 +964,11 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                     }
                 });
 
-        matlabMenuFileExport_.addActionListener(
+        exportRPMenuItem_.addActionListener(
                 new ActionListener() {
 
                     public void actionPerformed(ActionEvent e) {
-                        matlabExport_actionPerformed(e);
+                        exportRP_actionPerformed(e);
                     }
                 });
 
@@ -943,12 +982,12 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                         jMenuHelpAbout_actionPerformed(e);
                     }
                 });
-        exportMenuItem.setText("Save As...");
-        exportMenuItem.addActionListener(
+
+        saveSessionMenuItem_.addActionListener(
                 new ActionListener() {
 
                     public void actionPerformed(ActionEvent e) {
-                        export_actionPerformed(e);
+                        saveSession_actionPerformed(e);
                     }
                 });
         editMenu.setText("Edit");
@@ -1081,10 +1120,19 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
                     }
                 });
+        
+        matlabExportMenuItem_.addActionListener(new java.awt.event.ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+                       matlabExport_actionPerformed(e);
+
+                    }
+                });
 
 
-        fileMenu.add(exportMenuItem);
-        fileMenu.add(matlabMenuFileExport_);
+        fileMenu.add(saveSessionMenuItem_);
+        fileMenu.add(exportRPMenuItem_);
+        fileMenu.add(matlabExportMenuItem_);
         fileMenu.addSeparator();
         fileMenu.add(networkMenuItem);
 
@@ -1278,21 +1326,21 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
                 newState = new SHOCK_CONFIG();
 //                RPNUMERICS.getViscousProfileData().setHugoniotMethodName(ViscousProfileData.HUGONIOT_METHOD_NAMES[1]);
-                curvesConfigPanel_.propertyChange(new PropertyChangeEvent(this, "family", "", "phasediagram"));
-                curvesConfigPanel_.propertyChange(new PropertyChangeEvent(this, "direction", "", "phasediagram"));
+//                curvesConfigPanel_.propertyChange(new PropertyChangeEvent(this, "family", "", "phasediagram"));
+//                curvesConfigPanel_.propertyChange(new PropertyChangeEvent(this, "direction", "", "phasediagram"));
             }
 
             if (stateComboBox.getSelectedItem().equals("Wave Curves")) {
                 newState = new RAREFACTION_CONFIG();
                 //                 RPNUMERICS.getViscousProfileData().setHugoniotMethodName(ViscousProfileData.HUGONIOT_METHOD_NAMES[0]);
-                curvesConfigPanel_.propertyChange(new PropertyChangeEvent(this, "family", "", "wavecurve"));
-                curvesConfigPanel_.propertyChange(new PropertyChangeEvent(this, "direction", "", "wavecurve"));
+//                curvesConfigPanel_.propertyChange(new PropertyChangeEvent(this, "family", "", "wavecurve"));
+//                curvesConfigPanel_.propertyChange(new PropertyChangeEvent(this, "direction", "", "wavecurve"));
 
             }
             if (stateComboBox.getSelectedItem().equals("Bifurcation Curves")) {
                 newState = new BIFURCATION_CONFIG();
-                curvesConfigPanel_.propertyChange(new PropertyChangeEvent(this, "family", "", "bifurcationcurve"));
-                curvesConfigPanel_.propertyChange(new PropertyChangeEvent(this, "direction", "", "bifurcationcurve"));
+//                curvesConfigPanel_.propertyChange(new PropertyChangeEvent(this, "family", "", "bifurcationcurve"));
+//                curvesConfigPanel_.propertyChange(new PropertyChangeEvent(this, "direction", "", "bifurcationcurve"));
             }
 
             UIController.instance().setState(newState);

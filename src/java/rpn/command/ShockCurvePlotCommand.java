@@ -3,7 +3,6 @@
  * Departamento de Dinamica dos Fluidos
  *
  */
-
 package rpn.command;
 
 import javax.swing.JToggleButton;
@@ -11,13 +10,14 @@ import rpn.component.*;
 import rpnumerics.OrbitPoint;
 import wave.util.RealVector;
 import rpnumerics.RPNUMERICS;
+import rpnumerics.ShockCurveCalc;
 
 public class ShockCurvePlotCommand extends RpModelPlotCommand {
     //
     // Constants
     //
-    static public final String DESC_TEXT = "Shock Curve";
 
+    static public final String DESC_TEXT = "Shock Curve";
     //
     // Members
     //
@@ -27,12 +27,16 @@ public class ShockCurvePlotCommand extends RpModelPlotCommand {
     // Constructors/Initializers
     //
     protected ShockCurvePlotCommand() {
-        super(DESC_TEXT, rpn.RPnConfig.ORBIT_FWD,new JToggleButton());
+        super(DESC_TEXT, rpn.configuration.RPnConfig.ORBIT_FWD, new JToggleButton());
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {
         OrbitPoint oPoint = new OrbitPoint(input[input.length - 1]);
-       ShockCurveGeomFactory factory = new ShockCurveGeomFactory(RPNUMERICS.createShockCurveCalc(oPoint));
+        ShockCurveCalc shockCalc = RPNUMERICS.createShockCurveCalc(oPoint);
+        ShockCurveGeomFactory factory = new ShockCurveGeomFactory(shockCalc);
+        
+        
+        
         return factory.geom();
     }
 

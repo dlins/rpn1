@@ -40,7 +40,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc(JNIEnv * env,
 
 
     jclass shockCurveClass = (env)->FindClass(SHOCKCURVE_LOCATION);
-    jclass classRarefactionOrbit = (env)->FindClass(RAREFACTIONORBIT_LOCATION);
+    jclass classRarefactionOrbit = (env)->FindClass(RAREFACTIONCURVE_LOCATION);
     jclass classComposite = (env)->FindClass(COMPOSITECURVE_LOCATION);
     jclass classWaveCurveOrbit = (env)->FindClass(WAVECURVEORBIT_LOCATION);
 
