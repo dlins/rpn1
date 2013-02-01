@@ -151,6 +151,7 @@ public class UIController extends ComponentUI {
     // Inner Classes
     //
     class MouseMotionController extends MouseMotionAdapter {
+        
 
         @Override
         public void mouseDragged(MouseEvent event) {

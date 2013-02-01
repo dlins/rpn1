@@ -66,6 +66,8 @@ public class HugoniotController extends RpCalcController {
 
 
         if (change.getSource() instanceof DragPlotCommand) {
+            
+            
             ((HugoniotParams) ((HugoniotCurveCalcND) geomFactory_.rpCalc()).getParams()).setXZero((RealVector) change.getNewValue());
             geomFactory_.updateGeom();
             return;

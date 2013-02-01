@@ -42,8 +42,8 @@
 <METHODPARAM name="tolerance" value= "0.001"/>
 </METHOD>
 <CURVECONFIGURATION name="boundaryextensioncurve">
-<CURVEPARAM name="characteristicwhere" value= "1"/>
 <CURVEPARAM name="edgeresolution" value= "128"/>
+<CURVEPARAM name="characteristicwhere" value= "1"/>
 <CURVEPARAM name="edge" value= "0"/>
 <CURVEPARAM name="family" value= "1"/>
 <CURVEPARAM name="resolution" value= "128 128"/>
@@ -112,6 +112,13 @@
 <CURVECONFIGURATION name="fundamentalcurve">
 <CURVEPARAM name="direction" value= "20"/>
 </CURVECONFIGURATION>
-<REALVECTOR dimension="2">0.2812900187443161 0.22599139108279642</REALVECTOR>
+<REALVECTOR dimension="2">0.2289414583689286 0.48497422611928565</REALVECTOR>
+</COMMAND>
+<COMMAND name="integralcurve" phasespace="Phase Space">
+<CURVECONFIGURATION name="fundamentalcurve">
+<CURVEPARAM name="level" value= "0.5"/>
+<CURVEPARAM name="family" value= "0"/>
+</CURVECONFIGURATION>
+<REALVECTOR dimension="2">0.3242613439689747 0.3629058834906219</REALVECTOR>
 </COMMAND>
 </RPNSESSION>
