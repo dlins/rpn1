@@ -41,6 +41,13 @@
     </METHOD>
 
 
+    <CURVECONFIGURATION name="fundamentalcurve">
+        <CURVEPARAM name="direction" value="20"/>
+        <CURVEPARAM name="family" value="0"/>
+        <CURVEPARAM name="level" value="0.5"/>
+    </CURVECONFIGURATION>
+
+
     <CURVECONFIGURATION name="hugoniotcurve">
         <CURVEPARAM name="resolution" value="20 20"/>
     </CURVECONFIGURATION>
