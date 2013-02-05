@@ -87,7 +87,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
     RealVector Uref(dimension, input);
 
-//    cout << "URef " << Uref << endl;
+    cout << "URef " << Uref << endl;
 
     RpNumerics::getPhysics().getSubPhysics(0).preProcess(Uref);
 
