@@ -682,32 +682,40 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     }
 
 
+    // --- Implementando criacao automatica de diretorio
     void matlabExport_actionPerformed(ActionEvent e) {
         try {
             JFileChooser chooser = new JFileChooser();
             chooser.setSelectedFile(new File("script.m"));
             chooser.setFileFilter(new FileNameExtensionFilter("Matlab file", "m"));
 
-            // ---
-//            Object[] options = { "Yes", "No" };
-//            int n = JOptionPane.showOptionDialog(null,
-//                     "Contents of the selected folder will be erased. Continue?",
-//                     "WARNING", JOptionPane.YES_NO_OPTION,
-//                     JOptionPane.WARNING_MESSAGE, null, options, options[0]);
-            // ---
-
-//            if (n==0) {
             if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
-
-//                int nFiles = chooser.getSelectedFile().getParentFile().listFiles().length;
-
-//                for (int k = 0; k < nFiles; k++) {
-//                    chooser.getSelectedFile().getParentFile().listFiles()[0].delete();
-//                }
 
                 FileWriter writer = new FileWriter(chooser.getSelectedFile().
                         getAbsolutePath());
                 dir = chooser.getSelectedFile().getParent();
+
+                // --- definindo data e hora
+                GregorianCalendar calendar = new GregorianCalendar();
+
+                String day = String.valueOf(calendar.get(GregorianCalendar.DATE));
+                String month = String.valueOf(GregorianCalendar.MONTH);
+                String year = String.valueOf(calendar.get(GregorianCalendar.YEAR));
+                String date = day + "_" +month + "_" +year ;
+                System.out.println(date);
+
+                String hour = String.valueOf(calendar.get(GregorianCalendar.HOUR_OF_DAY));
+                String minute = String.valueOf(calendar.get(GregorianCalendar.MINUTE));
+                String time = hour + ":" +minute;
+                System.out.println(time);
+                // ---
+
+                String newPath = "/" +date + " " +time;
+                File folder = new File(dir + newPath);
+                folder.mkdir();
+
+                dir = dir + newPath;
+
                 System.out.println("Diretorio selecionado : " + dir);
 
                 if (RPNUMERICS.domainDim() == 3) {
@@ -718,7 +726,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
                 writer.close();
             }
-//            }
 
 
         } catch (java.io.IOException ioex) {
@@ -726,6 +733,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         } catch (java.lang.NullPointerException nullEx) {
         }
     }
+    // ---
 
 
     // Exports the Riemann Profile solution only...
