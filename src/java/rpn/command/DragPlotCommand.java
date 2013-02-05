@@ -8,6 +8,7 @@ package rpn.command;
 import rpnumerics.RPNUMERICS;
 import wave.util.RealVector;
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
 import rpn.component.RpGeometry;
 import rpn.component.util.GeometryGraphND;
 import rpn.controller.ui.*;
@@ -37,22 +38,41 @@ public class DragPlotCommand extends RpModelConfigChangeCommand {
             UserInputTable userInputList = UIController.instance().globalInputTable();
             RealVector newValue = userInputList.values();
 
+            ArrayList<RealVector> inputList = new ArrayList<RealVector>();
+
+            inputList.add(newValue);
+
             if (GeometryGraphND.onCurve == 1) {
                 newValue = GeometryGraphND.pMarca;
             }
-
             PropertyChangeEvent change = new PropertyChangeEvent(this, "enabled", null, newValue);
+
+
+
+
             lastGeometry.geomFactory().getUI().propertyChange(change);
-
-            RpCommand command = new RpCommand(change);
-
-            UndoActionController.instance().removeLastCommand();
-            logCommand(command);
 
 
             UIController.instance().getActivePhaseSpace().update();
             UIController.instance().panelsUpdate();
+
+
+
+            UI_ACTION_SELECTED actionSelected = (UI_ACTION_SELECTED) UIController.instance().getState();
+
+
+            PropertyChangeEvent commandEvent = new PropertyChangeEvent(actionSelected.getAction(), "enabled", null, lastGeometry);
+
+
+            RpCommand command = new RpCommand(commandEvent, inputList);
+            UndoActionController.instance().removeLastCommand();
+            logCommand(command);
+
+
+
         } catch (Exception e) {
+
+            e.printStackTrace();
 
             return;
 
