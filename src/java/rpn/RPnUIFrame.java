@@ -107,7 +107,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
             RiemannProfileCommand.instance().addPropertyChangeListener(this);
 
-            UndoActionController.createInstance();
+//            UndoActionController.createInstance();
 
             if (commandMenu_ instanceof RPnAppletPlotter) { // Selecting itens to disable in Applet
 
@@ -130,50 +130,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     // Methods
     //
 
-//    private void riemanProfileFramesInit() {
-//
-//
-//        RealVector min = new RealVector(3);
-//        RealVector max = new RealVector(3);
-//
-//        min.setElement(0, 0);
-//        min.setElement(1, 0);
-//        min.setElement(2, 0);
-//
-//
-//        max.setElement(0, 1);
-//        max.setElement(1, 0.2);
-//        max.setElement(2, 0.2);
-//
-//
-//        RectBoundary boundary = new RectBoundary(min, max);
-//        Space riemanProfileSpace = new Space("RiemannProfileSpace", RPNUMERICS.domainDim() + 1);
-//        riemannFrames_ = new RPnPhaseSpaceFrame[RPNUMERICS.domainDim()];
-//
-//        for (int i = 0; i < riemannFrames_.length; i++) {
-//            int[] testeArrayIndex = {0, i+1};
-//
-//            wave.multid.graphs.ClippedShape clipping = new wave.multid.graphs.ClippedShape(boundary);
-//            RPnProjDescriptor projDescriptor = new RPnProjDescriptor(riemanProfileSpace, "teste", 400, 400, testeArrayIndex, false);
-//            wave.multid.view.ViewingTransform riemanTesteTransform = projDescriptor.createTransform(clipping);
-//
-//            try {
-//                wave.multid.view.Scene riemannScene = RPnDataModule.RIEMANNPHASESPACE.createScene(riemanTesteTransform, new wave.multid.view.ViewingAttr(Color.black));
-//                riemannFrames_[i] = new RPnPhaseSpaceFrame(riemannScene, commandMenu_);
-//
-//            } catch (DimMismatchEx ex) {
-//                ex.printStackTrace();
-//            }
-//
-//
-//            riemannFrames_[i].pack();
-//            riemannFrames_[i].setVisible(true);
-//
-//        }
-//
-//
-//
-//    }
+
     public static RPnPhaseSpaceFrame[] getAuxFrames() {
         return auxFrames_;
     }
@@ -597,7 +554,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         curvesList.addObserver(AreaSelectionToExtensionCurveCommand.instance());
         leftCurvesList.addObserver(AreaSelectionToExtensionCurveCommand.instance());
         rightCurvesList.addObserver(AreaSelectionToExtensionCurveCommand.instance());
-
+  
 
     }
 

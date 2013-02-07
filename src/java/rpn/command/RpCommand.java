@@ -7,6 +7,7 @@ package rpn.command;
 
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
+import java.io.Serializable;
 import java.util.ArrayList;
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
@@ -19,7 +20,7 @@ import rpn.controller.ui.UndoableAction;
 import rpnumerics.RpCalculation;
 import wave.util.RealVector;
 
-public class RpCommand extends AbstractAction implements UndoableAction {
+public class RpCommand extends AbstractAction implements UndoableAction,Serializable {
 
     private ArrayList<String> inputArray_;
     private UI_ACTION_SELECTED actionSelected_;
@@ -31,9 +32,22 @@ public class RpCommand extends AbstractAction implements UndoableAction {
         super(name, icon);
         inputArray_ = new ArrayList<String>();
         inputPointList_ = new ArrayList<RealVector>();
+        
+         StringBuilder buffer = new StringBuilder();
+
+
+        buffer.append("<COMMAND name=\"").append(name).append("\">\n");
+
+        buffer.append("</COMMAND>\n");
+
+        xmlString_ = buffer.toString();
+
+        
+        
 
     }
 
+    
     public RpCommand(PropertyChangeEvent event) {
         event_ = event;
         inputPointList_ = new ArrayList<RealVector>();
@@ -50,11 +64,6 @@ public class RpCommand extends AbstractAction implements UndoableAction {
 
 
     }
-    
-    
-    
-    
-    
     
 
     public RpCommand(PropertyChangeEvent event, ArrayList<RealVector> inputList) {
@@ -86,10 +95,6 @@ public class RpCommand extends AbstractAction implements UndoableAction {
         for (RealVector realVector : inputPointList_) {
             buffer.append(realVector.toXML());
         }
-
-
-
-
 
         buffer.append("</COMMAND>\n");
 
