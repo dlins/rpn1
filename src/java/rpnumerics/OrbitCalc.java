@@ -49,7 +49,10 @@ public class OrbitCalc implements RpCalculation {
 
     public RpSolution calc() throws RpException {
 
-        if (timeDirection_ == Orbit.BOTH_DIR  ||  FillPhaseSpaceCommand.instance().isBothDir()) {
+        if (FillPhaseSpaceCommand.instance().isBothDir())
+            timeDirection_ = Orbit.BOTH_DIR;
+
+        if (timeDirection_ == Orbit.BOTH_DIR) {
             Orbit orbitFWD = (Orbit) nativeCalc(start_, RPNUMERICS.getViscousProfileData().getXZero(), RPNUMERICS.getViscousProfileData().getSigma(), Orbit.FORWARD_DIR, poincareSection_);
             Orbit orbitBWD = (Orbit) nativeCalc(start_, RPNUMERICS.getViscousProfileData().getXZero(), RPNUMERICS.getViscousProfileData().getSigma(), Orbit.BACKWARD_DIR, poincareSection_);
 
