@@ -66,6 +66,10 @@ public class PoincareSectionPlotCommand extends RpModelPlotCommand {
 
         ArrayList<RealVector> inputArray = new ArrayList<RealVector>();
         inputArray.addAll(Arrays.asList(userInputList));
+        
+        
+        logCommand(new RpCommand(event_, inputArray));
+        
 
         setInput(inputArray);
 

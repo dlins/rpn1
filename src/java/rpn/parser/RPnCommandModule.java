@@ -143,6 +143,7 @@ public class RPnCommandModule {
                 } else if (currentCommand_.equalsIgnoreCase("levelcurve")) {
                     LevelCurvePlotCommand.instance().execute();
                 } else if (currentCommand_.equalsIgnoreCase("pointlevelcurve")) {
+
                     UIController.instance().setState(new UI_ACTION_SELECTED(PointLevelCurvePlotCommand.instance()));
                 } else if (currentCommand_.equalsIgnoreCase("compositecurve")) {
                     UIController.instance().setState(new UI_ACTION_SELECTED(CompositePlotCommand.instance()));
@@ -152,6 +153,10 @@ public class RPnCommandModule {
                     UIController.instance().setState(new UI_ACTION_SELECTED(RarefactionExtensionCurvePlotCommand.instance()));
                 } else if (currentCommand_.equalsIgnoreCase("shockcurve")) {
                     UIController.instance().setState(new UI_ACTION_SELECTED(ShockCurvePlotCommand.instance()));
+                    
+                }else if (currentCommand_.equalsIgnoreCase("poincaresection")) {
+
+                    UIController.instance().setState(new UI_ACTION_SELECTED(PoincareSectionPlotCommand.instance()));
                 } else if (currentCommand_.equalsIgnoreCase("doublecontactcurve")) {
                     UIController.instance().setState(new UI_ACTION_SELECTED(DoubleContactCommand.instance()));
                     DoubleContactCommand.instance().execute();
@@ -207,7 +212,7 @@ public class RPnCommandModule {
 
             if (name.equals("REALVECTOR")) {
                 UIController.instance().userInputComplete(new RealVector(stringBuffer_.toString()));
-                UIController.instance().setState(new GEOM_SELECTION());
+//                UIController.instance().setState(new GEOM_SELECTION());
             }
 
 
