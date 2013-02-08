@@ -72,7 +72,7 @@ public class RiemannProfileCommand extends RpModelPlotCommand implements Observe
     @Override
     public void update(Observable o, Object arg) {
 
-        boolean enable = testRiemmanProfile((List<RpGeometry>) arg);
+        boolean enable = checkCurvesForRiemmanProfile((List<RpGeometry>) arg);
 
         setEnabled(enable);
         AreaSelectionCommand.instance().setEnabled(enable);
@@ -239,7 +239,7 @@ public class RiemannProfileCommand extends RpModelPlotCommand implements Observe
 
     }
 
-    private boolean testRiemmanProfile(List<RpGeometry> selectedCurves) {
+    private boolean checkCurvesForRiemmanProfile(List<RpGeometry> selectedCurves) {
 
         if (selectedCurves.size() != 2) {
             return false;
