@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.controller.ui.UIController;
+import rpn.parser.RPnDataModule;
 import rpnumerics.methods.contour.ContourCurve;
 
 import wave.multid.view.ViewingAttr;
@@ -75,10 +76,10 @@ public class BifurcationCurve extends SegmentedCurve {
 
         ArrayList segments = new ArrayList();
         
-        if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("RightPhase Space"))
+        if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals(RPnDataModule.RIGHTPHASESPACE.getName()))
             segments = (ArrayList) leftSegments();
 
-        if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("LeftPhase Space"))
+        if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals(RPnDataModule.LEFTPHASESPACE.getName()))
             segments = (ArrayList) rightSegments();
 
         RealVector p1 = new RealVector(((RealSegment) (segments).get(i)).p1());
@@ -100,10 +101,10 @@ public class BifurcationCurve extends SegmentedCurve {
 
         ArrayList segments = (ArrayList)segments();
 
-        if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("RightPhase Space"))
+        if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals(RPnDataModule.RIGHTPHASESPACE.getName()))
             segments = (ArrayList) leftSegments();
 
-        if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("LeftPhase Space"))
+        if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals(RPnDataModule.LEFTPHASESPACE.getName()))
             segments = (ArrayList) rightSegments();
 
 

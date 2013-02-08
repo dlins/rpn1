@@ -232,9 +232,9 @@ public class RPnConfig {
         remoteImage();
         RPnDataModule.PHASESPACE = new RPnPhaseSpaceAbstraction("Phase Space",
                 RPNUMERICS.domain(), new NumConfigImpl());
-        RPnDataModule.LEFTPHASESPACE = new RPnPhaseSpaceAbstraction("LeftPhase Space",
+        RPnDataModule.LEFTPHASESPACE = new RPnPhaseSpaceAbstraction("Left Phase Space",
                 RPNUMERICS.domain(), new NumConfigImpl());
-        RPnDataModule.RIGHTPHASESPACE = new RPnPhaseSpaceAbstraction("RightPhase Space",
+        RPnDataModule.RIGHTPHASESPACE = new RPnPhaseSpaceAbstraction("Right Phase Space",
                 RPNUMERICS.domain(), new NumConfigImpl());
 
 

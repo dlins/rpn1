@@ -217,20 +217,18 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
 
         //--------------------------
         // **** Usar direto o objeto, sem testar
-        if (namePhaseSpace.equals("Phase Space"))      geomList = RPnDataModule.PHASESPACE.getGeomObjIterator();
-        if (namePhaseSpace.equals("RightPhase Space")) geomList = RPnDataModule.RIGHTPHASESPACE.getGeomObjIterator();
-        if (namePhaseSpace.equals("LeftPhase Space"))  geomList = RPnDataModule.LEFTPHASESPACE.getGeomObjIterator();
-
-        //geomList = getGeomObjIterator();
+        if (namePhaseSpace.equals(RPnDataModule.PHASESPACE.getName()))      geomList = RPnDataModule.PHASESPACE.getGeomObjIterator();
+        if (namePhaseSpace.equals(RPnDataModule.RIGHTPHASESPACE.getName())) geomList = RPnDataModule.RIGHTPHASESPACE.getGeomObjIterator();
+        if (namePhaseSpace.equals(RPnDataModule.LEFTPHASESPACE.getName()))  geomList = RPnDataModule.LEFTPHASESPACE.getGeomObjIterator();
 
         while (geomList.hasNext()) {
 
             RpGeometry geom = (RpGeometry) geomList.next();
 
             if (GeometryGraphND.onCurve == 1) {
-                if ((namePhaseSpace.equals("Phase Space") && geom != RPnDataModule.PHASESPACE.getLastGeometry())
-                        || (namePhaseSpace.equals("RightPhase Space") && geom != RPnDataModule.RIGHTPHASESPACE.getLastGeometry())
-                        || (namePhaseSpace.equals("LeftPhase Space") && geom != RPnDataModule.LEFTPHASESPACE.getLastGeometry())) {
+                if ((namePhaseSpace.equals(RPnDataModule.PHASESPACE.getName()) && geom != RPnDataModule.PHASESPACE.getLastGeometry())
+                        || (namePhaseSpace.equals(RPnDataModule.RIGHTPHASESPACE.getName()) && geom != RPnDataModule.RIGHTPHASESPACE.getLastGeometry())
+                        || (namePhaseSpace.equals(RPnDataModule.LEFTPHASESPACE.getName()) && geom != RPnDataModule.LEFTPHASESPACE.getLastGeometry())) {
 
                     if (geom.viewingAttr().hasHighLight() && !(geom instanceof StationaryPointGeom)) {
                         RpGeomFactory factory = geom.geomFactory();

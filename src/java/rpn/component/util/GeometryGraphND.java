@@ -170,10 +170,10 @@ public class GeometryGraphND {
         
         ArrayList segments = new ArrayList();
 
-        if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("RightPhase Space"))
+        if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals(RPnDataModule.RIGHTPHASESPACE.getName()))
             segments = (ArrayList) ((BifurcationCurve)curve).leftSegments();
 
-        if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("LeftPhase Space"))
+        if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals(RPnDataModule.LEFTPHASESPACE.getName()))
             segments = (ArrayList) ((BifurcationCurve)curve).rightSegments();
 
         double zmin = 1.E10;
@@ -224,12 +224,12 @@ public class GeometryGraphND {
         Color color = null;
         Color otherColor = null;
 
-        if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("RightPhase Space")) {
+        if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals(RPnDataModule.RIGHTPHASESPACE.getName())) {
             geomList = RPnDataModule.LEFTPHASESPACE.getGeomObjIterator();
             color = Color.yellow;
             otherColor = Color.magenta;
         }
-        if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("LeftPhase Space"))  {
+        if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals(RPnDataModule.LEFTPHASESPACE.getName()))  {
             geomList = RPnDataModule.RIGHTPHASESPACE.getGeomObjIterator();
             color = Color.magenta;
             otherColor = Color.yellow;

@@ -68,19 +68,12 @@ public class ClearPhaseSpaceCommand extends javax.swing.AbstractAction {
         }
 
 
-
-
-        // --- Está correto??? Algum modo de determinar o "panel" certo sem usar o nome???
         Iterator<RPnPhaseSpacePanel> phaseSpacePanelIterator = UIController.instance().getInstalledPanelsIterator();
         while (phaseSpacePanelIterator.hasNext()) {
             RPnPhaseSpacePanel panel = phaseSpacePanelIterator.next();
-            if (panel.getName().equals("Phase Space")) {
-                panel.clearAllStrings();
-                panel.repaint();
-            }
-
+            panel.clearAllStrings();
+            panel.repaint();
         }
-        // ---
 
 
         // ClearScene is not undoable

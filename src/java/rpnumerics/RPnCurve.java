@@ -245,10 +245,10 @@ public abstract class RPnCurve implements RpSolution {
         
         if (this instanceof BifurcationCurve) {
 
-            if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("RightPhase Space"))
+            if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals(RPnDataModule.RIGHTPHASESPACE.getName()))
                 segments = (ArrayList) ((BifurcationCurve)this).rightSegments();
 
-            if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("LeftPhase Space"))
+            if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals(RPnDataModule.LEFTPHASESPACE.getName()))
                 segments = (ArrayList) ((BifurcationCurve)this).leftSegments();
         }
 
@@ -330,10 +330,10 @@ public abstract class RPnCurve implements RpSolution {
 
         if (this instanceof BifurcationCurve) {
 
-            if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("RightPhase Space"))
+            if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("Right Phase Space"))
                 segments = (ArrayList) ((BifurcationCurve)this).rightSegments();
 
-            if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("LeftPhase Space"))
+            if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("Left Phase Space"))
                 segments = (ArrayList) ((BifurcationCurve)this).leftSegments();
         }
 

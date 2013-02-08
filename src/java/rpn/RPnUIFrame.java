@@ -305,12 +305,12 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                         new wave.multid.view.ViewingAttr(Color.black));
             }
 
-            if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("RightPhase Space")) {
+            if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("Right Phase Space")) {
                 scene = RPnDataModule.RIGHTPHASESPACE.createScene(viewingTransf,
                         new wave.multid.view.ViewingAttr(Color.black));
             }
 
-            if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("LeftPhase Space")) {
+            if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("Left Phase Space")) {
                 scene = RPnDataModule.LEFTPHASESPACE.createScene(viewingTransf,
                         new wave.multid.view.ViewingAttr(Color.black));
             }

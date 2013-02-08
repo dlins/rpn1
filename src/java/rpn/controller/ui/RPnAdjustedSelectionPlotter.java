@@ -140,10 +140,11 @@ public class RPnAdjustedSelectionPlotter extends RPn2DMouseController  {
 
         String panelName = panel.getName();
         String secondPanelName = "";
-        if(panelName.equals("RightPhase Space"))
-            secondPanelName = "LeftPhase Space";
-        if(panelName.equals("LeftPhase Space"))
-            secondPanelName = "RightPhase Space";
+
+        if(panelName.equals(RPnDataModule.RIGHTPHASESPACE.getName()))
+            secondPanelName = RPnDataModule.LEFTPHASESPACE.getName();
+        if(panelName.equals(RPnDataModule.LEFTPHASESPACE.getName()))
+            secondPanelName = RPnDataModule.RIGHTPHASESPACE.getName();
 
         UserInputTable userInputList = UIController.instance().globalInputTable();
         RealVector newValue = userInputList.values();

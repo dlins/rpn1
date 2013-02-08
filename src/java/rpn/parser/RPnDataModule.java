@@ -350,13 +350,13 @@ public class RPnDataModule {
     static public void matlabExport2D(FileWriter writer) throws java.io.IOException {
 
         RPnPhaseSpaceAbstraction phaseSpace = null;
-        if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("Phase Space")) {
+        if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals(RPnDataModule.PHASESPACE.getName())) {
             phaseSpace = RPnDataModule.PHASESPACE;
         }
-        if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("RightPhase Space")) {
+        if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals(RPnDataModule.RIGHTPHASESPACE.getName())) {
             phaseSpace = RPnDataModule.RIGHTPHASESPACE;
         }
-        if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("LeftPhase Space")) {
+        if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals(RPnDataModule.LEFTPHASESPACE.getName())) {
             phaseSpace = RPnDataModule.LEFTPHASESPACE;
         }
         Iterator<RpGeometry> iterator = phaseSpace.getGeomObjIterator();

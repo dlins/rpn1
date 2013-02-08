@@ -35,6 +35,7 @@ import rpn.component.RpGeometry;
 import rpn.controller.ui.RPnStringPlotter;
 import rpn.controller.ui.RPnVelocityPlotter;
 import rpn.controller.ui.UIController;
+import rpn.parser.RPnDataModule;
 import rpnumerics.HugoniotCurve;
 import rpnumerics.HugoniotCurveCalcND;
 import rpnumerics.OrbitCalc;
@@ -349,13 +350,13 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
         String panelName = "";
         
         if (frameName.equals("Main")) {
-            panelName = "Phase Space";
+            panelName = RPnDataModule.PHASESPACE.getName();
         }
         if (frameName.equals("Right")) {
-            panelName = "RightPhase Space";
+            panelName = RPnDataModule.RIGHTPHASESPACE.getName();
         }
         if (frameName.equals("Left")) {
-            panelName = "LeftPhase Space";
+            panelName = RPnDataModule.LEFTPHASESPACE.getName();
         }
         
         return panelName;
