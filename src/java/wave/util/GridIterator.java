@@ -121,6 +121,7 @@ public class GridIterator implements Iterator {
             for (int i = 0; i < shifts.length; i++) {
                 shifts[i] = 0;
                 double pointer = profiles_[i].minimum();
+                //double pointer = profiles_[i].minimum() + profiles_[i].delta()/2;
                 while (pointer < coords.getElement(i)) {
                     shifts[i] ++;
                     pointer += profiles_[i].delta();

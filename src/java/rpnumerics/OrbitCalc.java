@@ -7,6 +7,7 @@
 package rpnumerics;
 
 import java.util.List;
+import rpn.command.FillPhaseSpaceCommand;
 
 import rpn.configuration.Configuration;
 
@@ -48,7 +49,7 @@ public class OrbitCalc implements RpCalculation {
 
     public RpSolution calc() throws RpException {
 
-        if (timeDirection_ == Orbit.BOTH_DIR) {
+        if (timeDirection_ == Orbit.BOTH_DIR  ||  FillPhaseSpaceCommand.instance().isBothDir()) {
             Orbit orbitFWD = (Orbit) nativeCalc(start_, RPNUMERICS.getViscousProfileData().getXZero(), RPNUMERICS.getViscousProfileData().getSigma(), Orbit.FORWARD_DIR, poincareSection_);
             Orbit orbitBWD = (Orbit) nativeCalc(start_, RPNUMERICS.getViscousProfileData().getXZero(), RPNUMERICS.getViscousProfileData().getSigma(), Orbit.BACKWARD_DIR, poincareSection_);
 

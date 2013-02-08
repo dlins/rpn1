@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.util.Observable;
 import javax.swing.*;
 import rpn.command.ChangeDirectionCommand;
+import rpn.command.FillPhaseSpaceCommand;
 import rpnumerics.Orbit;
 
 public class RPnCurvesDirectionPanel extends Observable  {
@@ -32,6 +33,8 @@ public class RPnCurvesDirectionPanel extends Observable  {
 
         directionButtonGroup_ = new ButtonGroup();
         buildPanel();
+
+        
 
     }
 
@@ -88,6 +91,7 @@ public class RPnCurvesDirectionPanel extends Observable  {
             } else if (bothCheckBox_.isSelected()) {
                 currentOrbitDirection_ = Orbit.BOTH_DIR;
             }
+
             setChanged();
             notifyObservers(new Integer(currentOrbitDirection_));
 

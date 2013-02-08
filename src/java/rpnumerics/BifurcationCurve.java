@@ -138,7 +138,7 @@ public class BifurcationCurve extends SegmentedCurve {
     // -----
 
 
-    // --- Acresecenti este método em 28JAN2013
+    // --- Acrescentei este método em 28JAN2013
     public List<RealVector> correspondentPoints(RealVector pMarca) {
 
         List<RealVector> correspondent = new ArrayList();
@@ -158,7 +158,7 @@ public class BifurcationCurve extends SegmentedCurve {
                 toRestore.add(realSeg);
                 segments.remove(i);
             }
-            
+
         }
 
         for (int k=0; k<(n-1); k++) {

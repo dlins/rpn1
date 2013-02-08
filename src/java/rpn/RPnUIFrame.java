@@ -691,8 +691,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
             if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
 
-                FileWriter writer = new FileWriter(chooser.getSelectedFile().
-                        getAbsolutePath());
                 dir = chooser.getSelectedFile().getParent();
 
                 // --- definindo data e hora
@@ -717,6 +715,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 dir = dir + newPath;
 
                 System.out.println("Diretorio selecionado : " + dir);
+
+                FileWriter writer = new FileWriter(dir + "/" +chooser.getSelectedFile().getName());
 
                 if (RPNUMERICS.domainDim() == 3) {
                     RPnDataModule.matlabExport(writer);
