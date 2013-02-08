@@ -38,7 +38,7 @@ public abstract class RPnCurve implements RpSolution {
     public List velToRemove = new ArrayList();
     public List claStringToRemove = new ArrayList();
     public List velStringToRemove = new ArrayList();
-    public int id_;
+    private int id_;
 
 
     public RPnCurve() {//TODO REMOVE !!

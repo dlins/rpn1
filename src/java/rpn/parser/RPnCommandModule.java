@@ -40,6 +40,7 @@ public class RPnCommandModule {
         private StringBuilder stringBuffer_ = new StringBuilder();
         private Configuration currentConfiguration_;
         private boolean isChangePhysicsParamsCommand_;
+        private Integer curveId_;
 
         public RPnCommandParser() {
 
@@ -81,8 +82,8 @@ public class RPnCommandModule {
 
 
             if (currentElement_.equals("CURVECONFIGURATION")) {
-                
-                
+
+
 
                 currentConfiguration_ = rpnumerics.RPNUMERICS.getConfiguration(att.getValue("name"));
 
@@ -90,13 +91,33 @@ public class RPnCommandModule {
 
             if (currentElement_.equals("CURVEPARAM")) {
 
-                
+
 //                System.out.println("Antes configuration : "+currentConfiguration_ +" "+currentConfiguration_.getParamsSize());
-                
+
                 currentConfiguration_.setParamValue(att.getValue(0), att.getValue(1));
-                
-                
+
+
 //                System.out.println("Depois configuration : "+currentConfiguration_ +" "+currentConfiguration_.getParamsSize());
+            }
+
+
+            if (currentElement_.equals("COMMANDPARAM")) {
+
+                for (int i = 0; i < att.getLength(); i++) {
+
+                    System.out.println(att.getValue(i));
+                }
+
+
+                if (att.getValue("name").equals("phasespace")) {
+                    
+                    UIController.instance().setActivePhaseSpace(RPnDataModule.getPhaseSpace(att.getValue("value")));
+
+                }
+
+                if (att.getValue("name").equals("curveid")) {
+                    curveId_ = new Integer(att.getValue("value"));
+                }
             }
 
 
@@ -108,7 +129,8 @@ public class RPnCommandModule {
 
                 System.out.println("Current command :" + currentCommand_);
 
-                selectPhaseSpace(att.getValue("phasespace"));
+                UIController.instance().setActivePhaseSpace(RPnDataModule.getPhaseSpace(att.getValue("phasespace")));
+
 
                 if (currentCommand_.equalsIgnoreCase("Change Flux Parameters")) {
                     currentConfiguration_ = RPNUMERICS.getConfiguration(RPNUMERICS.physicsID());
@@ -199,6 +221,16 @@ public class RPnCommandModule {
             if (name.equals("RPCONFIGURATION")) {
                 isChangePhysicsParamsCommand_ = true;
             }
+
+
+            if (name.equals("COMMAND")) {
+
+                if (currentCommand_.equals("Curve Remove Command")) {
+                    CurveRemoveCommand.instance().remove(curveId_);
+                }
+            }
+
+
         }
 
         public void setDocumentLocator(Locator locator) {
@@ -221,21 +253,7 @@ public class RPnCommandModule {
 
         public void skippedEntity(String name) throws SAXException {
         }
-
-        private void selectPhaseSpace(String phaseSpaceName) {
-
-            if (phaseSpaceName != null) {
-
-                if (phaseSpaceName.equals("Phase Space")) {
-                    UIController.instance().setActivePhaseSpace(RPnDataModule.PHASESPACE);
-                } else if (phaseSpaceName.equals("Left Phase Space")) {
-                    UIController.instance().setActivePhaseSpace(RPnDataModule.LEFTPHASESPACE);
-                } else if (phaseSpaceName.equals("Right Phase Space")) {
-                    UIController.instance().setActivePhaseSpace(RPnDataModule.RIGHTPHASESPACE);
-                }
-
-            }
-        }
+        
     }
 
     //

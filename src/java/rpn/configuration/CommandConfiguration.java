@@ -31,30 +31,21 @@ public class CommandConfiguration extends Configuration {
             }
 
         } else {
-            buffer.append("<COMMAND name=\"").append(getName()).append("\" ").append("/>\n");
+
+
+            Set<Entry<String, String>> paramsSet = getParams().entrySet();
+
+            for (Entry<String, String> entry : paramsSet) {
+                buffer.append("<COMMANDPARAM name=\"").append(entry.getKey()).append("\"").append(" value=\"").
+                        append(entry.getValue()).append("\"");
+                buffer.append("/>\n");
+            }
+
+
+
         }
 
-
-
-        Set<Entry<String, String>> paramsSet = getParams().entrySet();
-
-
-
-        for (Entry<String, String> entry : paramsSet) {
-
-            buffer.append(entry.getValue().toString()).append("\n");
-
-            buffer.append(entry.getKey()).append("=\"").append(entry.getValue()).append("\"");
-            
-
-            buffer.append(" ");
-        }
         System.out.println("Tamanho do map:" + getConfigurationMap().size());
-
-
-
-
-        buffer.append("</COMMAND>\n");
 
         return buffer.toString();
     }

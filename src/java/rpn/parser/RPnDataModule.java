@@ -21,8 +21,11 @@ import org.xml.sax.InputSource;
 
 import java.io.*;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 import org.xml.sax.ContentHandler;
@@ -49,6 +52,15 @@ public class RPnDataModule {
     static public RPnPhaseSpaceAbstraction RIGHTPHASESPACE = null;
     static public RPnPhaseSpaceAbstraction RIEMANNPHASESPACE = null;
     static public RPnPhaseSpaceAbstraction[] CHARACTERISTICSPHASESPACEARRAY = null;
+    private static HashMap<String, RPnPhaseSpaceAbstraction> phaseSpaceMap_ = new HashMap<String, RPnPhaseSpaceAbstraction>();
+
+    public RPnDataModule() {
+
+        phaseSpaceMap_.put(PHASESPACE.getName(), PHASESPACE);
+        phaseSpaceMap_.put(LEFTPHASESPACE.getName(), LEFTPHASESPACE);
+        phaseSpaceMap_.put(RIGHTPHASESPACE.getName(), RIGHTPHASESPACE);
+
+    }
 
     // TODO move out to somewhere else RPNUMERICS
     public static int[] processResolution(String resolution) {
@@ -81,6 +93,19 @@ public class RPnDataModule {
 
     }
 
+    public static Iterator<RPnPhaseSpaceAbstraction> phaseSpaceIterator() {
+
+      
+
+        return phaseSpaceMap_.values().iterator();
+    }
+
+    public static RPnPhaseSpaceAbstraction getPhaseSpace(String phaseSpaceName) {
+
+        return phaseSpaceMap_.get(phaseSpaceName);
+
+    }
+
     static protected class RPnDataParser implements ContentHandler {
 
         private String currentElement_;
@@ -98,9 +123,9 @@ public class RPnDataModule {
             // initialize auxiliary phase space state
             RIEMANNPHASESPACE = new RPnPhaseSpaceAbstraction("Riemann Phase Space",
                     new Space("Riemann Space", RPNUMERICS.domainDim() + 1), new NumConfigImpl());
-            LEFTPHASESPACE = new RPnLeftPhaseSpaceAbstraction("LeftPhase Space",
+            LEFTPHASESPACE = new RPnLeftPhaseSpaceAbstraction("Left Phase Space",
                     RPNUMERICS.domain(), new NumConfigImpl());//  RpNumerics.domain(),
-            RIGHTPHASESPACE = new RPnRightPhaseSpaceAbstraction("RightPhase Space",
+            RIGHTPHASESPACE = new RPnRightPhaseSpaceAbstraction("Right Phase Space",
                     RPNUMERICS.domain(), new NumConfigImpl());//  RpNumerics.domain(),
             RIEMANNPHASESPACE = new RPnPhaseSpaceAbstraction("Riemann Phase Space",
                     new Space("Riemann Space", RPNUMERICS.domainDim() + 1), new NumConfigImpl());
@@ -112,6 +137,12 @@ public class RPnDataModule {
                         new Space("Characteristics Space: " + i, 2), new NumConfigImpl());
 
             }
+            
+            
+
+        phaseSpaceMap_.put(PHASESPACE.getName(), PHASESPACE);
+        phaseSpaceMap_.put(LEFTPHASESPACE.getName(), LEFTPHASESPACE);
+        phaseSpaceMap_.put(RIGHTPHASESPACE.getName(), RIGHTPHASESPACE);
 
         }
 
