@@ -181,7 +181,7 @@ public class GeometryGraphND {
         double wmin = 1.E10;
         double wmax = -1.E10;
 
-        //System.out.println("GeometryGraphND.indContido.size() ::: " +GeometryGraphND.indContido.size());
+        System.out.println("GeometryGraphND.indContido.size() ::: " +GeometryGraphND.indContido.size());
 
         for (int i = 0; i < GeometryGraphND.indContido.size(); i++) {
             int ind = Integer.parseInt((GeometryGraphND.indContido.get(i)).toString());

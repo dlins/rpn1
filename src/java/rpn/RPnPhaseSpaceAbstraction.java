@@ -22,7 +22,7 @@ import wave.util.RealVector;
 import rpn.parser.RPnDataModule;
 
 
-public class RPnPhaseSpaceAbstraction extends AbstractScene {
+public  class RPnPhaseSpaceAbstraction extends AbstractScene {
     //
     // Constants
     //
@@ -56,7 +56,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
     //
     // Accessors/Mutators
     //
-    public void changeState(PhaseSpaceState state) {
+    public final void changeState(PhaseSpaceState state) {
         state_ = state;
     }
 

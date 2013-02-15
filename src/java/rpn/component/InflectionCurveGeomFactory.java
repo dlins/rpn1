@@ -6,8 +6,6 @@
 package rpn.component;
 
 import java.awt.Color;
-import rpnumerics.BifurcationCurve;
-import rpnumerics.CoincidenceCurve;
 import rpnumerics.InflectionCurve;
 import rpnumerics.InflectionCurveCalc;
 import wave.multid.view.ViewingAttr;

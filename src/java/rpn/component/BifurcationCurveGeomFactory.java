@@ -46,7 +46,7 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
     }
 
     public String toXML() {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
 
         String commandName = geomSource().getClass().getName();
         commandName = commandName.toLowerCase();
@@ -56,7 +56,7 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
 
         ContourParams params = calc.getParams();
 
-        buffer.append("<COMMAND name=\"" + commandName + "\" ");
+        buffer.append("<COMMAND name=\"").append(commandName).append("\" ");
 
         buffer.append(params.toString());
 
@@ -76,7 +76,7 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
         return new ViewingAttr(Color.magenta);
     }
 
-    protected RpGeometry createLeftGeom() throws RpException {
+    protected final RpGeometry createLeftGeom() throws RpException {
 
         BifurcationCurve curve = (BifurcationCurve) geomSource();
         if (curve == null) {
@@ -92,7 +92,7 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
 
     }
 
-    protected RpGeometry createRightGeom() throws RpException {
+    protected final RpGeometry createRightGeom() throws RpException {
 
         BifurcationCurve curve = (BifurcationCurve) geomSource();
         RealSegGeom[] bifurcationArray = new RealSegGeom[curve.rightSegments().size()];
@@ -119,10 +119,9 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
 
     }
 
-
     // ----------------------------------- NAO HAVIA ATÉ 31/10
     @Override
-    public void updateGeom(List<Area> areaToRefine, List<Integer> segmentsToRemove) {
+    public void updateGeom(List<Area> areaListToRefine, List<Integer> segmentsToRemove) {
 
         System.out.println("updateGeom de Bifurcation...");
 
@@ -145,15 +144,13 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
             if (UIController.instance().isAuxPanelsEnabled()) {
                 segRem.add(((BifurcationCurve) curve).rightSegments().get(i));
                 segRemLeft.add(((BifurcationCurve) curve).leftSegments().get(i));
-            }
-            else {
+            } else {
                 int j = 0;
-                if (i>=curve.segments().size()/2) {
-                    j = i - curve.segments().size()/2;
+                if (i >= curve.segments().size() / 2) {
+                    j = i - curve.segments().size() / 2;
                     segRem.add(((BifurcationCurve) curve).rightSegments().get(j));
                     segRemLeft.add(((BifurcationCurve) curve).leftSegments().get(j));
-                }
-                else {
+                } else {
                     segRem.add(((BifurcationCurve) curve).rightSegments().get(i));
                     segRemLeft.add(((BifurcationCurve) curve).leftSegments().get(i));
                 }
@@ -172,10 +169,10 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
 
 
         // --- 17JAN : por enquanto, chamar o recalc apenas para DoubleContact
-        if (curve instanceof DoubleContactCurve) {
+        if (curve instanceof DoubleContactCurve) {//REMOVE
             try {
 
-                BifurcationCurve newBifurcation = (BifurcationCurve) calc_.recalc(areaToRefine);
+                BifurcationCurve newBifurcation = (BifurcationCurve) calc_.recalc(areaListToRefine);
 
                 BifurcationCurve oldBifurcationCurve = (BifurcationCurve) geomSource_;
 
@@ -184,21 +181,37 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
                 oldBifurcationCurve.rightSegments().addAll(newBifurcation.rightSegments());
 
 
-                //geomSource_ = new BifurcationCurve(oldBifurcationCurve.leftSegments(), oldBifurcationCurve.rightSegments());
+
                 geomSource_ = new DoubleContactCurve(oldBifurcationCurve.leftSegments(), oldBifurcationCurve.rightSegments());
 
 
             } catch (RpException ex) {
                 ex.printStackTrace();
             }
+
+
+        }
+        if (curve instanceof InflectionCurve) {             //REMOVE
+            try {
+                System.out.println("Entrando em inflection");
+                InflectionCurve newBifurcation = (InflectionCurve) calc_.recalc(areaListToRefine);
+
+                InflectionCurve oldBifurcationCurve = (InflectionCurve) geomSource_;
+
+
+                oldBifurcationCurve.leftSegments().addAll(newBifurcation.leftSegments());
+//                    oldBifurcationCurve.rightSegments().addAll(newBifurcation.rightSegments());
+
+
+//geomSource_ = new BifurcationCurve(oldBifurcationCurve.leftSegments(), oldBifurcationCurve.rightSegments());
+                geomSource_ = new InflectionCurve(oldBifurcationCurve.leftSegments());//, oldBifurcationCurve.rightSegments());
+            } catch (RpException ex) {
+                Logger.getLogger(BifurcationCurveGeomFactory.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
 
-///////////////////////////////////////////////////////////
-
-
-
-        System.out.println("updateGeom : segmentos removidos ::: " +segRem.size());
+        System.out.println("updateGeom : segmentos removidos ::: " + segRem.size());
 
 
         try {
@@ -223,7 +236,6 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
     }
     // -----------------------------------
 
-
 //    public RpGeometry createGeomFromSource() {
 //
 //        BifurcationCurve curve = (BifurcationCurve) geomSource();
@@ -241,9 +253,6 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
 //        return new BifurcationCurveGeom(bifurcationArray, this);
 //
 //    }
-
-
-
     public RpGeometry createGeomFromSource() {
 
         BifurcationCurve curve = (BifurcationCurve) geomSource();
@@ -254,9 +263,9 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
         RealSegGeom[] bifurcationArrayLeft = new RealSegGeom[curve.leftSegments().size()];
 
 
-        System.out.println("curve.segments().size() ::::::: " +curve.segments().size());
-        System.out.println("curve.rightSegments().size() :: " +curve.rightSegments().size());
-        System.out.println("curve.leftSegments().size() ::: " +curve.leftSegments().size());
+        System.out.println("curve.segments().size() ::::::: " + curve.segments().size());
+        System.out.println("curve.rightSegments().size() :: " + curve.rightSegments().size());
+        System.out.println("curve.leftSegments().size() ::: " + curve.leftSegments().size());
 
 
         int i = 0;
@@ -266,17 +275,17 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
 
             i++;
         }
-        System.out.println("createGeomFromSource() : valor de i ::: " +i);
+        System.out.println("createGeomFromSource() : valor de i ::: " + i);
 
         int j = 0;
         for (Object realSegment : curve.leftSegments()) {
             bifurcationArrayLeft[j] = new RealSegGeom((RealSegment) realSegment, leftViewingAttr());
-            bifurcationArray[i+j] = bifurcationArrayLeft[j];
+            bifurcationArray[i + j] = bifurcationArrayLeft[j];
             j++;
         }
-        System.out.println("createGeomFromSource() : valor de j ::: " +j);
+        System.out.println("createGeomFromSource() : valor de j ::: " + j);
 
-        System.out.println("createGeomFromSource() : valor de i+j ::: " +(i+j));
+        System.out.println("createGeomFromSource() : valor de i+j ::: " + (i + j));
 
 
 
