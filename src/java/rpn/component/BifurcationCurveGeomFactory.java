@@ -119,7 +119,20 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
 
     }
 
-    // ----------------------------------- NAO HAVIA ATÉ 31/10
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+     void updateGeomSource(List<Area> areaListToRifine){
+        
+    }
+    
     @Override
     public void updateGeom(List<Area> areaListToRefine, List<Integer> segmentsToRemove) {
 
@@ -131,13 +144,6 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
         BifurcationCurve curve = (BifurcationCurve) geomSource();
 
         isGeomOutOfDate_ = true;
-
-        // --- loop original: remoção correta atuando apenas a partir dos painéis auxiliares
-//        for (Integer i : segmentsToRemove) {
-//            segRem.add(((BifurcationCurve) curve).rightSegments().get(i));
-//            segRemLeft.add(((BifurcationCurve) curve).leftSegments().get(i));
-//        }
-
 
         // --- 17JAN : permite remover corretamente, mesmo atuando sobre o painel principal
         for (Integer i : segmentsToRemove) {
@@ -167,49 +173,8 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
 
         System.out.println("Segmentos removidos: " + segRem.size());
 
-
-        // --- 17JAN : por enquanto, chamar o recalc apenas para DoubleContact
-        if (curve instanceof DoubleContactCurve) {//REMOVE
-            try {
-
-                BifurcationCurve newBifurcation = (BifurcationCurve) calc_.recalc(areaListToRefine);
-
-                BifurcationCurve oldBifurcationCurve = (BifurcationCurve) geomSource_;
-
-
-                oldBifurcationCurve.leftSegments().addAll(newBifurcation.leftSegments());
-                oldBifurcationCurve.rightSegments().addAll(newBifurcation.rightSegments());
-
-
-
-                geomSource_ = new DoubleContactCurve(oldBifurcationCurve.leftSegments(), oldBifurcationCurve.rightSegments());
-
-
-            } catch (RpException ex) {
-                ex.printStackTrace();
-            }
-
-
-        }
-        if (curve instanceof InflectionCurve) {             //REMOVE
-            try {
-                System.out.println("Entrando em inflection");
-                InflectionCurve newBifurcation = (InflectionCurve) calc_.recalc(areaListToRefine);
-
-                InflectionCurve oldBifurcationCurve = (InflectionCurve) geomSource_;
-
-
-                oldBifurcationCurve.leftSegments().addAll(newBifurcation.leftSegments());
-//                    oldBifurcationCurve.rightSegments().addAll(newBifurcation.rightSegments());
-
-
-//geomSource_ = new BifurcationCurve(oldBifurcationCurve.leftSegments(), oldBifurcationCurve.rightSegments());
-                geomSource_ = new InflectionCurve(oldBifurcationCurve.leftSegments());//, oldBifurcationCurve.rightSegments());
-            } catch (RpException ex) {
-                Logger.getLogger(BifurcationCurveGeomFactory.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
+        updateGeomSource(areaListToRefine);
+  
 
         System.out.println("updateGeom : segmentos removidos ::: " + segRem.size());
 
@@ -234,25 +199,7 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
 
 
     }
-    // -----------------------------------
-
-//    public RpGeometry createGeomFromSource() {
-//
-//        BifurcationCurve curve = (BifurcationCurve) geomSource();
-//
-//        RealSegGeom[] bifurcationArray = new RealSegGeom[curve.segments().size()];
-//
-//        int i = 0;
-//        for (Object realSegment : curve.segments()) {
-//
-//            bifurcationArray[i] = new RealSegGeom((RealSegment) realSegment, leftViewingAttr());
-//            i++;
-//        }
-//
-//
-//        return new BifurcationCurveGeom(bifurcationArray, this);
-//
-//    }
+ 
     public RpGeometry createGeomFromSource() {
 
         BifurcationCurve curve = (BifurcationCurve) geomSource();

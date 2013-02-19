@@ -80,7 +80,7 @@ public class HysteresisPlotCommand extends RpModelPlotCommand {
 
 
         RPnDataModule.PHASESPACE.join(factory.geom());
-
+      
 
     }
 

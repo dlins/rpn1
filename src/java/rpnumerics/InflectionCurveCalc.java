@@ -29,14 +29,11 @@ public class InflectionCurveCalc extends ContourCurveCalc {
 
     @Override
     public RpSolution calc() throws RpException {
-
-
         InflectionCurve result = (InflectionCurve) nativeCalc(family_);
 
         if (result == null) {
             throw new RpException("Error in native layer");
         }
-
 
         return result;
     }
@@ -47,11 +44,7 @@ public class InflectionCurveCalc extends ContourCurveCalc {
 
     @Override
     public RpSolution recalc(List<Area> areaListToRefine) throws RpException {
-
-
         Area area = areaListToRefine.get(0);
-
-
         return nativeCalc(family_,(int) area.getResolution().getElement(0), (int) area.getResolution().getElement(1), area.getTopRight(), area.getDownLeft());
 
     }

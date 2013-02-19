@@ -114,7 +114,7 @@ public  class RPnPhaseSpaceAbstraction extends AbstractScene {
         if (geom == null) {
             return;
         }
-
+        System.out.println(getName() + " "+ geom.viewingAttr().getColor().toString());
         super.join(geom);
         notifyState();
 
