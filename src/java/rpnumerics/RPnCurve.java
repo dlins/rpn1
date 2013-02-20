@@ -240,9 +240,6 @@ public abstract class RPnCurve implements RpSolution {
 
         ArrayList segments = (ArrayList) segments();
         
-//        System.out.println("tamanho em findClose: "+segments.size());
-
-        
         if (this instanceof BifurcationCurve) {
 
             if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals(RPnDataModule.RIGHTPHASESPACE.getName()))
@@ -330,10 +327,10 @@ public abstract class RPnCurve implements RpSolution {
 
         if (this instanceof BifurcationCurve) {
 
-            if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("Right Phase Space"))
+            if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals(RPnDataModule.RIGHTPHASESPACE.getName()))
                 segments = (ArrayList) ((BifurcationCurve)this).rightSegments();
 
-            if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("Left Phase Space"))
+            if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals(RPnDataModule.LEFTPHASESPACE.getName()))
                 segments = (ArrayList) ((BifurcationCurve)this).leftSegments();
         }
 

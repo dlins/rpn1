@@ -2,8 +2,13 @@
 
 // This is the classified Hugoniot given by segments
 //
-int Hugoniot_Curve::classified_curve(const FluxFunction *f, const AccumulationFunction *a, 
-                                     GridValues &g, const RealVector &r, 
+// TODO : Implementar com esta assinatura (Pablo/Leandro 18FEV)
+//int Hugoniot_Curve::classified_curve(const FluxFunction *f, const AccumulationFunction *a,
+//                                     GridValues &g, const RealVector &r,
+//                                     std::vector<HugoniotPolyLine> &hugoniot_curve, std::vector<RealVector> &testeTransitionalList) {
+
+int Hugoniot_Curve::classified_curve(const FluxFunction *f, const AccumulationFunction *a,
+                                     GridValues &g, const RealVector &r,
                                      std::vector<HugoniotPolyLine> &hugoniot_curve) {
 
     // The segments by a search algorithm are stored here, to be used in the ColorCurve
@@ -29,10 +34,23 @@ int Hugoniot_Curve::classified_curve(const FluxFunction *f, const AccumulationFu
 
 // This is the classified Hugoniot given by continuous curves
 //
+// TODO : Implementar com esta assinatura (Pablo/Leandro 18FEV)
+//int Hugoniot_Curve::classified_curve(const FluxFunction *f, const AccumulationFunction *a,
+//                                     GridValues &g, const RealVector &r,
+//                                     std::vector<HugoniotPolyLine> &hugoniot_curve, std::vector<RealVector> &transitionList,
+//                                     std::vector<bool> &circular) {
+
 int Hugoniot_Curve::classified_curve(const FluxFunction *f, const AccumulationFunction *a, 
                                      GridValues &g, const RealVector &r, 
                                      std::vector<HugoniotPolyLine> &hugoniot_curve,
                                      std::vector<bool> &circular) {
+
+    // --- Pablo/Leandro 18FEV
+    std::vector<RealVector> transitionList;
+    transitionList.clear();
+    // ---
+
+    cout << "Hugoniot: classified_curve por continuacao" << endl;
 
     // The continuous curve is stored by Contour2D
     std::vector< std::deque <RealVector> > curves;
@@ -57,7 +75,18 @@ int Hugoniot_Curve::classified_curve(const FluxFunction *f, const AccumulationFu
         HugoniotPolyLine hugoniot;
         colorCurve.classify_continuous_curve(curves[i],r,hugoniot,testeTransitionalList);
         hugoniot_curve.push_back(hugoniot);
+        cout << "Size da lista de transicao " << i  <<  "  " << testeTransitionalList.size() << endl;
+
+        // --- Pablo/Leandro 18FEV
+        for (int j=0; j< testeTransitionalList.size(); j++) {
+            transitionList.push_back(testeTransitionalList[j]);
+        }
+        // ---
     }
+
+    cout << "Size da lista total " << transitionList.size() << endl;
+
+    
     
     return info;
 }

@@ -149,10 +149,16 @@ public class BifurcationCurve extends SegmentedCurve {
         int n = 3;
         int[] index = new int[n];
 
+        // ---
+//        int j = findClosestSegment(pMarca);
+//        RealVector temp = secondPointDCOtherVersion(j);
+        // ---
+
         for (int k=0; k<n; k++) {
             int i = findClosestSegment(pMarca);
             RealSegment realSeg = (RealSegment) segments().get(i);
             RealVector p = secondPointDCOtherVersion(i);
+
             correspondent.add(p);
             index[k] = i;
             if (k<(n-1)) {

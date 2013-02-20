@@ -16,7 +16,11 @@ import rpn.component.*;
 import javax.swing.AbstractAction;
 import java.awt.event.ActionEvent;
 import javax.swing.JOptionPane;
+import rpn.controller.phasespace.NUMCONFIG;
+import rpn.controller.phasespace.NumConfigImpl;
+import rpn.controller.phasespace.NumConfigReadyImpl;
 import rpn.controller.ui.*;
+import rpn.parser.RPnDataModule;
 
 public class FillPhaseSpaceCommand extends AbstractAction {
     static public final String DESC_TEXT = "Fills up the Phase Space";
@@ -71,7 +75,7 @@ public class FillPhaseSpaceCommand extends AbstractAction {
     public void actionPerformed(ActionEvent action) {
 
         setBothDir(true);
-
+        
         String strNodes = JOptionPane.showInputDialog("Resolution:");
         int numOfNodes  = Integer.parseInt(strNodes);
 
@@ -88,11 +92,6 @@ public class FillPhaseSpaceCommand extends AbstractAction {
             UIController.instance().userInputComplete(coords[0]);
             if (bounds.inside(coords[0])) {
 
-                if (coords[0].getElement(0)+coords[0].getElement(1)==1) {
-                    coords[0].setElement(0, coords[0].getElement(0)-0.01);
-                    coords[0].setElement(1, coords[0].getElement(1)-0.01);
-                }
-                
                 OrbitGeom orbitGeom = (OrbitGeom)OrbitPlotCommand.instance().createRpGeometry(coords);
 
                 try {

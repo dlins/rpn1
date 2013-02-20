@@ -170,29 +170,31 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
             if (i == index) {
                 MultiGeometry geometry = (MultiGeometry) geomList_.get(i);
                 if (geometry instanceof SegmentedCurveGeom) {
-
                     SegmentedCurveGeom segGeom = (SegmentedCurveGeom) geometry;
                     segGeom.viewingAttr().setSelected(true);
                     segGeom.highLight();
-
                 }
 
                 if (geometry instanceof MultiPolyLine) {
-
                     MultiPolyLine poly = (MultiPolyLine) geometry;
                     poly.viewingAttr().setSelected(true);
                     poly.highLight();
-
                 }
 
 
                 if (geometry instanceof BifurcationCurveGeom) {
-
                     BifurcationCurveGeom segGeom = (BifurcationCurveGeom) geometry;
                     segGeom.viewingAttr().setSelected(true);
                     segGeom.highLight();
-
                 }
+
+
+                if (geometry instanceof StationaryPointGeom) {
+                    StationaryPointGeom pointGeom = (StationaryPointGeom) geometry;
+                    pointGeom.viewingAttr().setSelected(true);
+                    pointGeom.highLight();
+                }
+
             }
         }
 
@@ -222,7 +224,6 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
         if (namePhaseSpace.equals(RPnDataModule.LEFTPHASESPACE.getName()))  geomList = RPnDataModule.LEFTPHASESPACE.getGeomObjIterator();
 
         while (geomList.hasNext()) {
-
             RpGeometry geom = (RpGeometry) geomList.next();
 
             if (GeometryGraphND.onCurve == 1) {
@@ -301,7 +302,6 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
             if (i == index) {
                 MultiGeometry geometry = (MultiGeometry) geomList_.get(i);
                 if (geometry instanceof SegmentedCurveGeom) {
-
                     SegmentedCurveGeom segGeom = (SegmentedCurveGeom) geometry;
                     //segGeom.getRealSegIterator();
                     segGeom.viewingAttr().setSelected(false);
@@ -309,19 +309,24 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene {
                 }
 
                 if (geometry instanceof MultiPolyLine) {
-
                     MultiPolyLine poly = (MultiPolyLine) geometry;
                     poly.viewingAttr().setSelected(false);
                     poly.lowLight();
-
                 }
                 if (geometry instanceof BifurcationCurveGeom) {
-
                     BifurcationCurveGeom segGeom = (BifurcationCurveGeom) geometry;
                     segGeom.viewingAttr().setSelected(false);
                     segGeom.lowLight();
-
                 }
+
+
+                if (geometry instanceof StationaryPointGeom) {
+                    StationaryPointGeom pointGeom = (StationaryPointGeom) geometry;
+                    pointGeom.viewingAttr().setSelected(false);
+                    pointGeom.lowLight();
+                }
+
+
             }
         }
 

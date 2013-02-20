@@ -158,8 +158,11 @@ public class RPnStringPlotter extends RPn2DMouseController {
             for (int i=0; i < dim; i++) {
                 newValue.setElement(i, coordsWC.getElement(i));
             }
+
+            System.out.println("Valor do newValue : " +newValue);
             
             RpGeometry geom = RPnDataModule.PHASESPACE.findClosestGeometry(newValue);
+            if(geom==null) System.out.println("geom eh null .....");
             RPnCurve curve = (RPnCurve) (geom.geomFactory().geomSource());
             RealVector closestPoint = curve.findClosestPoint(newValue);
             GeometryGraphND.pMarca = closestPoint;

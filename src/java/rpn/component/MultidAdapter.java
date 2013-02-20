@@ -164,10 +164,12 @@ public class MultidAdapter {
 
             realSegments.add(new RealSegment(p1, p2));
         }
-        
-        p1 = new RealVector(coords[coords.length - 2].getCoords());
-        p2 = new RealVector(coords[coords.length - 1].getCoords());
-        realSegments.add(new RealSegment(p1, p2));
+
+        if (coords.length>=2) {
+            p1 = new RealVector(coords[coords.length - 2].getCoords());
+            p2 = new RealVector(coords[coords.length - 1].getCoords());
+            realSegments.add(new RealSegment(p1, p2));
+        }
 
         return realSegments;
 

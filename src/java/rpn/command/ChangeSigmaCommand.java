@@ -5,6 +5,7 @@
  */
 package rpn.command;
 
+import java.awt.event.ActionEvent;
 import rpn.controller.phasespace.NUMCONFIG;
 import rpn.parser.RPnDataModule;
 import rpnumerics.RPNUMERICS;
@@ -48,6 +49,7 @@ public class ChangeSigmaCommand extends RpModelConfigChangeCommand {
         super(DESC_TEXT);
 
     }
+
 
     public void execute() {
 
@@ -163,7 +165,6 @@ public class ChangeSigmaCommand extends RpModelConfigChangeCommand {
             }
 
         }
-
 
         applyChange(new PropertyChangeEvent(this, DESC_TEXT, oldValue, newValue));
 
