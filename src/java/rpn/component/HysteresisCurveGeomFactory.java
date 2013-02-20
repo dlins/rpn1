@@ -6,10 +6,15 @@
 package rpn.component;
 
 import java.awt.Color;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import rpnumerics.Area;
 import rpnumerics.BifurcationCurve;
 import rpnumerics.CoincidenceCurve;
 import rpnumerics.HysteresisCurve;
 import rpnumerics.HysteresisCurveCalc;
+import rpnumerics.RpException;
 import wave.multid.view.ViewingAttr;
 import wave.util.RealSegment;
 
@@ -28,21 +33,20 @@ public class HysteresisCurveGeomFactory extends BifurcationCurveGeomFactory {
 
     // Methods
     //
-    @Override
-    public RpGeometry createGeomFromSource() {
-
-        HysteresisCurve curve = (HysteresisCurve) geomSource();
-
-        // assuming a container with HugoniotSegment elements
-        int resultSize = curve.segments().size();
-        RealSegGeom[] bifurcationSegArray = new RealSegGeom[resultSize];
-        for (int i = 0; i < resultSize; i++) {
-            bifurcationSegArray[i] = new RealSegGeom((RealSegment) curve.segments().get(i),viewAtt_);
-
-        }
-        return new HysteresisCurveGeom(bifurcationSegArray, this);
-
-    }
+//    @Override
+//    public RpGeometry createGeomFromSource() {
+//
+//        HysteresisCurve curve = (HysteresisCurve) geomSource();
+//
+//        int resultSize = curve.segments().size();
+//        RealSegGeom[] bifurcationSegArray = new RealSegGeom[resultSize];
+//        for (int i = 0; i < resultSize; i++) {
+//            bifurcationSegArray[i] = new RealSegGeom((RealSegment) curve.segments().get(i),viewAtt_);
+//
+//        }
+//        return new HysteresisCurveGeom(bifurcationSegArray, this);
+//
+//    }
 
     public String toMatlab(int curveIndex) {
 
@@ -61,7 +65,28 @@ public class HysteresisCurveGeomFactory extends BifurcationCurveGeomFactory {
         return buffer.toString();
 
     }
+    
+    
+    
+    
+    @Override
+    void updateGeomSource (List<Area> areaListToRefine){
 
+            try {
+                System.out.println("Entrando em hyesteresis");
+                HysteresisCurve newBifurcation = (HysteresisCurve) calc_.recalc(areaListToRefine);
+
+                HysteresisCurve oldBifurcationCurve = (HysteresisCurve) geomSource_;
+                oldBifurcationCurve.leftSegments().addAll(newBifurcation.leftSegments());
+                oldBifurcationCurve.rightSegments().addAll(newBifurcation.rightSegments());
+                geomSource_ = new HysteresisCurve(oldBifurcationCurve.leftSegments(),oldBifurcationCurve.rightSegments());
+            } catch (RpException ex) {
+                Logger.getLogger(BifurcationCurveGeomFactory.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        
+
+    }
+    
     @Override
     public String toXML() {
 

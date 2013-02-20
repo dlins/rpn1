@@ -49,7 +49,7 @@
 
 
     <CURVECONFIGURATION name="hugoniotcurve">
-        <CURVEPARAM name="resolution" value="20 20"/>
+        <CURVEPARAM name="resolution" value="200 200"/>
     </CURVECONFIGURATION>
 
 

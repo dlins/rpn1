@@ -5,8 +5,10 @@
  */
 package rpnumerics;
 
+import java.util.ArrayList;
 import java.util.List;
 import wave.util.RealSegment;
+import wave.util.RealVector;
 
 public class InflectionCurve extends BifurcationCurve {
     //
@@ -16,10 +18,26 @@ public class InflectionCurve extends BifurcationCurve {
         super(hSegments);
         
     }
+    
+    
+    
+  
+    @Override
+    public List<RealVector> correspondentPoints(RealVector pMarca) {
 
+        List<RealVector> correspondent = new ArrayList();
+        int i = findClosestSegment(pMarca);
+        RealVector p = secondPointDCOtherVersion(i);
+        correspondent.add(p);
+
+        return correspondent;
+    }
+    // ---
+
+    @Override
     public String toMatlab(int curveIndex) {
 
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         buffer.append("%%\nclose all;clear all;\n");
         //buffer.append(RpCalcBasedGeomFactory.createMatlabColorTable());
         buffer.append(toMatlabData(0));
@@ -30,4 +48,9 @@ public class InflectionCurve extends BifurcationCurve {
 
         return buffer.toString();
     }
+    
+    
+    
+    
+    
 }

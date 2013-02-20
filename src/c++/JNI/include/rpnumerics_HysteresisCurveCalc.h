@@ -12,8 +12,16 @@ extern "C" {
  * Method:    nativeCalc
  * Signature: (I)Lrpnumerics/RpSolution;
  */
-JNIEXPORT jobject JNICALL Java_rpnumerics_HysteresisCurveCalc_nativeCalc
+JNIEXPORT jobject JNICALL Java_rpnumerics_HysteresisCurveCalc_nativeCalc__I
   (JNIEnv *, jobject, jint);
+
+/*
+ * Class:     rpnumerics_HysteresisCurveCalc
+ * Method:    nativeCalc
+ * Signature: (IIILwave/util/RealVector;Lwave/util/RealVector;)Lrpnumerics/RpSolution;
+ */
+JNIEXPORT jobject JNICALL Java_rpnumerics_HysteresisCurveCalc_nativeCalc__IIILwave_util_RealVector_2Lwave_util_RealVector_2
+  (JNIEnv *, jobject, jint, jint, jint, jobject, jobject);
 
 #ifdef __cplusplus
 }

@@ -12,8 +12,16 @@ extern "C" {
  * Method:    nativeCalc
  * Signature: ()Lrpnumerics/RpSolution;
  */
-JNIEXPORT jobject JNICALL Java_rpnumerics_SecondaryBifurcationCurveCalc_nativeCalc
+JNIEXPORT jobject JNICALL Java_rpnumerics_SecondaryBifurcationCurveCalc_nativeCalc__
   (JNIEnv *, jobject);
+
+/*
+ * Class:     rpnumerics_SecondaryBifurcationCurveCalc
+ * Method:    nativeCalc
+ * Signature: (Ljava/util/List;)Lrpnumerics/RpSolution;
+ */
+JNIEXPORT jobject JNICALL Java_rpnumerics_SecondaryBifurcationCurveCalc_nativeCalc__Ljava_util_List_2
+  (JNIEnv *, jobject, jobject);
 
 #ifdef __cplusplus
 }

@@ -6,6 +6,8 @@
  */
 package rpnumerics;
 
+import java.util.List;
+
 public class SecondaryBifurcationCurveCalc extends ContourCurveCalc {
 
     //
@@ -34,7 +36,14 @@ public class SecondaryBifurcationCurveCalc extends ContourCurveCalc {
 
         return result;
     }
+    
+    
+      @Override
+    public RpSolution recalc(List<Area> areaListToRefine) throws RpException {
+        return nativeCalc(areaListToRefine);
+    }
 
     private native RpSolution nativeCalc() throws RpException;
+    private native RpSolution nativeCalc(List<Area> areasToRefine) throws RpException;
  
 }

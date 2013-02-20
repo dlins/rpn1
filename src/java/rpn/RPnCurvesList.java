@@ -28,12 +28,9 @@ import javax.swing.WindowConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
-import rpn.command.CurveRemoveCommand;
 import rpn.component.BifurcationCurveGeom;
 import rpn.component.RpCalcBasedGeomFactory;
 import rpn.component.RpGeometry;
-import rpn.controller.ui.RPnStringPlotter;
-import rpn.controller.ui.RPnVelocityPlotter;
 import rpn.controller.ui.UIController;
 import rpn.parser.RPnDataModule;
 import rpnumerics.HugoniotCurve;
@@ -412,14 +409,6 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
                                 indexGeometries.add(index);
                                 
                             }
-                            // ---
-//                            if (index != i) {
-//                                System.out.println("index na chamada de ocultaStringsCla ::::: " +index);
-//                                RPnPhaseSpaceAbstraction.ocultaStringsCla(index, "Phase Space");
-//                            }
-                            // ---
-
-                            
                             index++;
                         }
                         

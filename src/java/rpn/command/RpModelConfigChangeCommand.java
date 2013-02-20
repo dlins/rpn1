@@ -9,8 +9,12 @@ import rpn.controller.XZeroController;
 import java.beans.*;
 import java.util.List;
 import java.util.ArrayList;
+
+import rpn.configuration.CommandConfiguration;
+import rpn.configuration.Configuration;
 import rpn.controller.ui.*;
 import rpn.parser.RPnDataModule;
+import wave.util.RealVector;
 
 public abstract class RpModelConfigChangeCommand extends RpModelActionCommand {
     //
@@ -30,8 +34,7 @@ public abstract class RpModelConfigChangeCommand extends RpModelActionCommand {
 
 
         // --- Comentei em 11/12/12, para testar o perfil viscoso (Leandro)
-        //RealVector newParameters = (RealVector) change.getNewValue();
-        //UIController.instance().logCommand(new RpCommand(new UI_ACTION_SELECTED(this), newParameters));
+  
 
         firePropertyChange(change);
 
