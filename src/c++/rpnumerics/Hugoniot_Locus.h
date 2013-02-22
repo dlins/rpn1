@@ -46,10 +46,17 @@ public:
             GridValues &g, const RealVector &r,
             std::vector<HugoniotPolyLine> &hugoniot_curve) = 0;
 
-    virtual int classified_curve(const FluxFunction *f, const AccumulationFunction *a, 
-                             GridValues &g, const RealVector &r, 
-                             std::vector<HugoniotPolyLine> &hugoniot_curve,
-                             std::vector<bool> &circular)=0;
+//    virtual int classified_curve(const FluxFunction *f, const AccumulationFunction *a, 
+//                             GridValues &g, const RealVector &r, 
+//                             std::vector<HugoniotPolyLine> &hugoniot_curve,
+//                             std::vector<bool> &circular)=0;
+    
+    
+    virtual int classified_curve(const FluxFunction *f, const AccumulationFunction *a,
+                                     GridValues &g, const RealVector &r,
+                                     std::vector<HugoniotPolyLine> &hugoniot_curve, std::vector<RealVector> &transitionList,
+                                     std::vector<bool> &circular) =0;
+    
 
 };
 

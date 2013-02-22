@@ -35,18 +35,18 @@ int Hugoniot_Curve::classified_curve(const FluxFunction *f, const AccumulationFu
 // This is the classified Hugoniot given by continuous curves
 //
 // TODO : Implementar com esta assinatura (Pablo/Leandro 18FEV)
-//int Hugoniot_Curve::classified_curve(const FluxFunction *f, const AccumulationFunction *a,
-//                                     GridValues &g, const RealVector &r,
-//                                     std::vector<HugoniotPolyLine> &hugoniot_curve, std::vector<RealVector> &transitionList,
-//                                     std::vector<bool> &circular) {
-
-int Hugoniot_Curve::classified_curve(const FluxFunction *f, const AccumulationFunction *a, 
-                                     GridValues &g, const RealVector &r, 
-                                     std::vector<HugoniotPolyLine> &hugoniot_curve,
+int Hugoniot_Curve::classified_curve(const FluxFunction *f, const AccumulationFunction *a,
+                                     GridValues &g, const RealVector &r,
+                                     std::vector<HugoniotPolyLine> &hugoniot_curve, std::vector<RealVector> &transitionList,
                                      std::vector<bool> &circular) {
 
+//int Hugoniot_Curve::classified_curve(const FluxFunction *f, const AccumulationFunction *a, 
+//                                     GridValues &g, const RealVector &r, 
+//                                     std::vector<HugoniotPolyLine> &hugoniot_curve,
+//                                     std::vector<bool> &circular) {
+
     // --- Pablo/Leandro 18FEV
-    std::vector<RealVector> transitionList;
+//    std::vector<RealVector> transitionList;
     transitionList.clear();
     // ---
 

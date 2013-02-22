@@ -303,14 +303,16 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
             
             if (button.getName().equals("RemoveAreas")) {
                 
-                Iterator<RPnPhaseSpacePanel> phaseSpacePanelIterator = UIController.instance().getInstalledPanelsIterator();
+                UIController.instance().clearAllAreas();
                 
-                while (phaseSpacePanelIterator.hasNext()) {
-                    RPnPhaseSpacePanel rPnPhaseSpacePanel = phaseSpacePanelIterator.next();
-                    rPnPhaseSpacePanel.clearAreaSelection();
-                    rPnPhaseSpacePanel.repaint();
-                    
-                }
+//                Iterator<RPnPhaseSpacePanel> phaseSpacePanelIterator = UIController.instance().getInstalledPanelsIterator();
+//                
+//                while (phaseSpacePanelIterator.hasNext()) {
+//                    RPnPhaseSpacePanel rPnPhaseSpacePanel = phaseSpacePanelIterator.next();
+//                    rPnPhaseSpacePanel.clearAreaSelection();
+//                    rPnPhaseSpacePanel.repaint();
+//                    
+//                }
                 
                 
             }

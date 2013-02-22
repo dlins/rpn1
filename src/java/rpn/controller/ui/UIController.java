@@ -147,6 +147,19 @@ public class UIController extends ComponentUI {
         this.activePhaseSpace_ = activePhaseSpace_;
     }
 
+    public void clearAllAreas() {
+        
+         Iterator<RPnPhaseSpacePanel> phaseSpacePanelIterator = getInstalledPanelsIterator();
+                
+                while (phaseSpacePanelIterator.hasNext()) {
+                    RPnPhaseSpacePanel rPnPhaseSpacePanel = phaseSpacePanelIterator.next();
+                    rPnPhaseSpacePanel.clearAreaSelection();
+                    rPnPhaseSpacePanel.repaint();
+                    
+                }
+
+    }
+
     //
     // Inner Classes
     //

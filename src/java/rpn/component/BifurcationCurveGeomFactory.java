@@ -119,20 +119,9 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
 
     }
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-     void updateGeomSource(List<Area> areaListToRifine){
-        
+    void updateGeomSource(List<Area> areaListToRifine) {
     }
-    
+
     @Override
     public void updateGeom(List<Area> areaListToRefine, List<Integer> segmentsToRemove) {
 
@@ -173,8 +162,10 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
 
         System.out.println("Segmentos removidos: " + segRem.size());
 
+
+
         updateGeomSource(areaListToRefine);
-  
+
 
         System.out.println("updateGeom : segmentos removidos ::: " + segRem.size());
 
@@ -182,6 +173,9 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
         try {
             leftGeom_ = createLeftGeom();
             rightGeom_ = createRightGeom();
+
+            ((BifurcationCurveGeom) leftGeom_).setOtherSide(rightGeom_);
+            ((BifurcationCurveGeom) rightGeom_).setOtherSide(leftGeom_);
 
         } catch (RpException ex) {
             Logger.getLogger(BifurcationCurveGeomFactory.class.getName()).log(Level.SEVERE, null, ex);
@@ -199,7 +193,7 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
 
 
     }
- 
+
     public RpGeometry createGeomFromSource() {
 
         BifurcationCurve curve = (BifurcationCurve) geomSource();

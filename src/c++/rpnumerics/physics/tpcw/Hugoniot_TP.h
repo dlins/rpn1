@@ -5,38 +5,47 @@
 #include "Hugoniot_Locus.h"
 
 class Hugoniot_TP : public Hugoniot_Locus {
-    private:
-        RealVector Fref, Gref;
-        RealVector Uref;
+private:
+    RealVector Fref, Gref;
+    RealVector Uref;
 
-        const FluxFunction *ff;
-        const AccumulationFunction *aa;
- 
-    public:
-        Hugoniot_TP(){gv = 0;}
-        ~Hugoniot_TP();
+    const FluxFunction *ff;
+    const AccumulationFunction *aa;
 
-        double complete_points(const RealVector &Uplus);
+public:
 
-        int function_on_square(double *foncub, int i, int j);
+    Hugoniot_TP() {
+        gv = 0;
+    }
+    ~Hugoniot_TP();
 
-        int classified_curve(const FluxFunction *f, const AccumulationFunction *a, 
-                             GridValues &g, const RealVector &r, 
-                             std::vector<HugoniotPolyLine> &hugoniot_curve);
+    double complete_points(const RealVector &Uplus);
 
-        int classified_curve(const FluxFunction *f, const AccumulationFunction *a, 
-                             GridValues &g, const RealVector &r, 
-                             std::vector<HugoniotPolyLine> &hugoniot_curve,
-                             std::vector<bool> &circular);
-        
-        
-        int curve(const FluxFunction *f, const AccumulationFunction *a, 
-                  GridValues &g, const RealVector &r,
-                  std::vector<RealVector> &hugoniot_curve);
+    int function_on_square(double *foncub, int i, int j);
 
-        void map(const RealVector &p, double &f, RealVector &map_Jacobian);
 
-        bool improvable(void);
+    int classified_curve(const FluxFunction *f, const AccumulationFunction *a,
+            GridValues &g, const RealVector &r,
+            std::vector<HugoniotPolyLine> &hugoniot_curve);
+
+
+    int classified_curve(const FluxFunction *f, const AccumulationFunction *a,
+            GridValues &g, const RealVector &r,
+            std::vector<HugoniotPolyLine> &hugoniot_curve, std::vector<RealVector> & transitionList);
+
+    int classified_curve(const FluxFunction *f, const AccumulationFunction *a,
+            GridValues &g, const RealVector &r,
+            std::vector<HugoniotPolyLine> &hugoniot_curve, std::vector<RealVector> &transitionList,
+            std::vector<bool> &circular);
+
+
+    int curve(const FluxFunction *f, const AccumulationFunction *a,
+            GridValues &g, const RealVector &r,
+            std::vector<RealVector> &hugoniot_curve);
+
+    void map(const RealVector &p, double &f, RealVector &map_Jacobian);
+
+    bool improvable(void);
 };
 
 #endif // _HUGONIOT_TP_

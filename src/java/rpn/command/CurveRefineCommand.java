@@ -74,7 +74,8 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
             processGeometry(curveToRefine_, panelToRefine_);
             RPnPhaseSpaceAbstraction phaseSpace = (RPnPhaseSpaceAbstraction) panelToRefine_.scene().getAbstractGeom();
             phaseSpace.update();
-            panelToRefine_.clearAreaSelection();
+//            panelToRefine_.clearAreaSelection();
+            UIController.instance().clearAllAreas();
         }
 
 

@@ -127,7 +127,13 @@
     </CURVECONFIGURATION>
 
     
-
+    <CURVECONFIGURATION name="fundamentalcurve">
+        <CURVEPARAM name="direction" value="20"/>
+        <CURVEPARAM name="family" value="0"/>
+        <CURVEPARAM name="level" value="0.5"/>
+    </CURVECONFIGURATION>
+    
+    
     <CURVECONFIGURATION name="extensioncurve">
         <CURVEPARAM name="curvefamily" value="1"/>
         <CURVEPARAM name="domainfamily" value="1"/>

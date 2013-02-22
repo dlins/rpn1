@@ -22,11 +22,24 @@ public class HugoniotCurve extends SegmentedCurve {
     private PhasePoint xZero_;
     private int direction_;
     
-    public HugoniotCurve(PhasePoint xZero, List<HugoniotSegment> hSegments) {
+    private List<RealVector> transitionList_;
+
+  
+    
+    
+    public HugoniotCurve(PhasePoint xZero, List<HugoniotSegment> hSegments,List<RealVector> transitionList) {
         super(hSegments);
 
         xZero_ = new PhasePoint(xZero);
         direction_=Orbit.FORWARD_DIR;
+        transitionList_=transitionList;
+        
+        
+        for (RealVector realVector : transitionList) {
+            
+            System.out.println("Ponto de transicao em Java:"+realVector);
+            
+        }
 
     }
     public void setDirection(int direction){
@@ -237,6 +250,12 @@ public class HugoniotCurve extends SegmentedCurve {
         }
         return segments;
     }
+    
+    
+      public List<RealVector> getTransitionList() {
+        return transitionList_;
+    }
+    
 
     @Override
         public RealVector findClosestPoint(RealVector targetPoint) {

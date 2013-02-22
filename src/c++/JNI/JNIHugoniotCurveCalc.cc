@@ -57,7 +57,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
     jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
 
-    jmethodID hugoniotCurveConstructor = env->GetMethodID(hugoniotCurveClass, "<init>", "(Lrpnumerics/PhasePoint;Ljava/util/List;)V");
+    jmethodID hugoniotCurveConstructor = env->GetMethodID(hugoniotCurveClass, "<init>", "(Lrpnumerics/PhasePoint;Ljava/util/List;Ljava/util/List;)V");
 
     //Input processing
     jdoubleArray phasePointArray = (jdoubleArray) (env)->CallObjectMethod(uMinus, toDoubleMethodID);
@@ -100,10 +100,37 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     cout<<"Resolucao: "<<gv->grid_resolution<<endl;
 
     vector<bool> isCircular;
+    
+    vector<RealVector> transitionList;
 
     hugoniotCurve->classified_curve(&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(),
-            *gv, Uref, hugoniotPolyLineVector, isCircular);
+            *gv, Uref, hugoniotPolyLineVector,transitionList, isCircular);
+    
+    
+    jobject transitionArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
+    
+    for (int i = 0; i < transitionList.size(); i++) {
 
+//        cout<<"Ponto de transicao: "<<transitionList[i]<<endl;
+        
+         jdoubleArray transPointArray = env->NewDoubleArray(dimension);
+         double * leftCoords = (double *) transitionList[i];
+         
+         env->SetDoubleArrayRegion(transPointArray, 0, dimension, leftCoords);
+         
+         jobject transPointrealVector = env->NewObject(realVectorClass, realVectorConstructorDoubleArray,transPointArray);
+         
+         env->CallObjectMethod(transitionArray, arrayListAddMethod, transPointrealVector);
+
+
+    }
+
+
+   
+    
+    
+
+    
 
     for (int i = 0; i < hugoniotPolyLineVector.size(); i++) {
 
@@ -155,7 +182,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
 
 
-    jobject result = env->NewObject(hugoniotCurveClass, hugoniotCurveConstructor, uMinus, segmentsArray);
+    jobject result = env->NewObject(hugoniotCurveClass, hugoniotCurveConstructor, uMinus, segmentsArray,transitionArray);
 
 
     return result;

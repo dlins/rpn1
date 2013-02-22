@@ -6,6 +6,7 @@
 package rpnumerics.methods.continuation;
 
 import java.util.ArrayList;
+import java.util.List;
 import wave.util.*;
 import rpnumerics.HugoniotCurve;
 import rpnumerics.HugoniotParams;
@@ -96,8 +97,9 @@ public class HugoniotContinuation {
 
 //        RPNUMERICS.odeSolver().getProfile().setFunction(flowVF);
         solver_.getProfile().setFunction(flowVF);
+        List<RealVector> tList = null;
 
-        return new HugoniotCurve(new PhasePoint(continuationParams_.getUMinus()), statesResult);
+        return new HugoniotCurve(new PhasePoint(continuationParams_.getUMinus()), statesResult,tList);
 
     }
 
