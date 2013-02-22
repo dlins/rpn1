@@ -31,6 +31,7 @@ import rpn.component.RpCalcBasedGeomFactory;
 import rpn.component.RpGeometry;
 import rpn.component.util.AreaSelected;
 import rpn.controller.ui.UIController;
+import rpn.parser.RPnDataModule;
 import rpnumerics.Area;
 import rpnumerics.BoundaryExtensionCurve;
 import rpnumerics.ContourCurveCalc;
@@ -334,11 +335,8 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
 
                 if (phaseSpace instanceof RPnLeftPhaseSpaceAbstraction) {
 
-
                     Area leftArea = new Area(graphicsArea.get(0));
-
                     int leftCells[] = leftArea.cellsInsideArea(resolution);
-
 
                     leftResolutionLabel.setText("Cells inside area:" + leftCells[0] + " x " + leftCells[1]);
 
@@ -348,10 +346,7 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
                 if (phaseSpace instanceof RPnRightPhaseSpaceAbstraction) {
 
                     Area rightArea = new Area(graphicsArea.get(0));
-
-
                     int rightCells[] = rightArea.cellsInsideArea(resolution);
-
 
                     rightResolutionLabel.setText("Cells inside area:" + rightCells[0] + " x " + rightCells[1]);
 

@@ -205,7 +205,8 @@ public  class RPnPhaseSpaceAbstraction extends AbstractScene {
     public UserInputTable getUserInputTable() {
         return userInputTable_;
     }
-    //**************************************************************************
+
+
     public RpGeometry findClosestGeometry(RealVector targetPoint) {             //*** Fazer alteracoes !!!!!
 
         RpGeometry closestGeometry_ = null;      //a curva mais proxima

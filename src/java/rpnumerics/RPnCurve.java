@@ -32,7 +32,7 @@ public abstract class RPnCurve implements RpSolution {
     private ViewingAttr viewAttr = null;
     private double ALFA;
     //** declarei isso (Leandro)
-    public double distancia = 0;
+    public double distancia = 0.;
 
     public List claToRemove = new ArrayList();
     public List velToRemove = new ArrayList();
@@ -249,13 +249,12 @@ public abstract class RPnCurve implements RpSolution {
                 segments = (ArrayList) ((BifurcationCurve)this).leftSegments();
         }
 
-
         RealVector target = new RealVector(targetPoint);
         RealVector closest = null;
         RealVector segmentVector = null;
-        double alpha = 0;
+        double alpha = 0.;
         int closestSegment = 0;
-        double closestDistance = -1;
+        double closestDistance = -1.;
 
         for (int i = 0; i < segments.size(); i++) {
 
@@ -275,14 +274,18 @@ public abstract class RPnCurve implements RpSolution {
             closest = new RealVector(target);
 
             closest.sub(segment.p2());
-            alpha = closest.dot(segmentVector)
-                    / segmentVector.dot(segmentVector);
 
-            if (alpha < 0) {
-                alpha = 0;
+            if (segmentVector.norm() != 0.)
+                alpha = closest.dot(segmentVector)
+                        / segmentVector.dot(segmentVector);
+            else
+                alpha = 0.;
+
+            if (alpha <= 0) {
+                alpha = 0.;
             }
-            if (alpha > 1) {
-                alpha = 1;
+            if (alpha >= 1) {
+                alpha = 1.;
             }
             segmentVector.scale(alpha);
             closest.sub(segmentVector);
@@ -296,10 +299,9 @@ public abstract class RPnCurve implements RpSolution {
             }
             //------------------------------------------
 
-            if ((closestDistance < 0) || (closestDistance > closest.norm())) {
+            if ((closestDistance < 0.) || (closestDistance > closest.norm())) {
                 closestSegment = i;
                 closestDistance = closest.norm();
-
                 ALFA = alpha;
             }
         }

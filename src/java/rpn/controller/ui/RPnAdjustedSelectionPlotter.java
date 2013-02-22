@@ -15,6 +15,7 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpacePanel;
 import rpn.component.RpGeometry;
 import rpn.component.util.AreaSelected;
@@ -169,10 +170,13 @@ public class RPnAdjustedSelectionPlotter extends RPn2DMouseController {
             Iterator<RPnPhaseSpacePanel> phaseSpacePanelIterator = UIController.instance().getInstalledPanelsIterator();
             while (phaseSpacePanelIterator.hasNext()) {
                 RPnPhaseSpacePanel secondPanel = phaseSpacePanelIterator.next();
-                if (secondPanel.getName().equals(secondPanelName)) {
+                RPnPhaseSpaceAbstraction secondPhaseSpace = (RPnPhaseSpaceAbstraction) secondPanel.scene().getAbstractGeom();
+
+                if (secondPhaseSpace.getName().equals(secondPanelName)) {
                     secondPanel.setLastGraphicsUtil(selectedArea);
                     secondPanel.repaint();
                 }
+
             }
 
         }
