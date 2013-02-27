@@ -228,9 +228,9 @@ public class RPnCommandModule {
 
                 if (phaseSpaceName.equals("Phase Space")) {
                     UIController.instance().setActivePhaseSpace(RPnDataModule.PHASESPACE);
-                } else if (phaseSpaceName.equals("Left Phase Space")) {
+                } else if (phaseSpaceName.equals("LeftPhase Space")) {
                     UIController.instance().setActivePhaseSpace(RPnDataModule.LEFTPHASESPACE);
-                } else if (phaseSpaceName.equals("Right Phase Space")) {
+                } else if (phaseSpaceName.equals("RightPhase Space")) {
                     UIController.instance().setActivePhaseSpace(RPnDataModule.RIGHTPHASESPACE);
                 }
 
