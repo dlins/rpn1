@@ -46,7 +46,15 @@ public class UndoActionController extends AbstractAction {
         setEnabled(false);
     }
 
-    static public UndoActionController instance() { return instance_; }
+    static public UndoActionController instance() { 
+        if (instance_==null){
+            instance_=new UndoActionController();
+            return instance_;
+        }
+        
+        
+        return instance_; 
+    }
     
     
     public Iterator<RpCommand> getCommandIterator(){return commandArray_.iterator();}

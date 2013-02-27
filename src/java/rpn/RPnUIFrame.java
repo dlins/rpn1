@@ -20,6 +20,7 @@ import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -107,7 +108,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
             RiemannProfileCommand.instance().addPropertyChangeListener(this);
 
-            UndoActionController.createInstance();
+//            UndoActionController.createInstance();
 
             if (commandMenu_ instanceof RPnAppletPlotter) { // Selecting itens to disable in Applet
 
@@ -119,7 +120,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
             // should be enabled only when a RP profile is present...
             exportRPMenuItem_.setEnabled(false);
-            matlabExportMenuItem_.setEnabled(false);
+
+            matlabExportMenuItem_.setEnabled(true);
 
 
         } catch (Exception e) {
@@ -130,50 +132,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     // Methods
     //
 
-//    private void riemanProfileFramesInit() {
-//
-//
-//        RealVector min = new RealVector(3);
-//        RealVector max = new RealVector(3);
-//
-//        min.setElement(0, 0);
-//        min.setElement(1, 0);
-//        min.setElement(2, 0);
-//
-//
-//        max.setElement(0, 1);
-//        max.setElement(1, 0.2);
-//        max.setElement(2, 0.2);
-//
-//
-//        RectBoundary boundary = new RectBoundary(min, max);
-//        Space riemanProfileSpace = new Space("RiemannProfileSpace", RPNUMERICS.domainDim() + 1);
-//        riemannFrames_ = new RPnPhaseSpaceFrame[RPNUMERICS.domainDim()];
-//
-//        for (int i = 0; i < riemannFrames_.length; i++) {
-//            int[] testeArrayIndex = {0, i+1};
-//
-//            wave.multid.graphs.ClippedShape clipping = new wave.multid.graphs.ClippedShape(boundary);
-//            RPnProjDescriptor projDescriptor = new RPnProjDescriptor(riemanProfileSpace, "teste", 400, 400, testeArrayIndex, false);
-//            wave.multid.view.ViewingTransform riemanTesteTransform = projDescriptor.createTransform(clipping);
-//
-//            try {
-//                wave.multid.view.Scene riemannScene = RPnDataModule.RIEMANNPHASESPACE.createScene(riemanTesteTransform, new wave.multid.view.ViewingAttr(Color.black));
-//                riemannFrames_[i] = new RPnPhaseSpaceFrame(riemannScene, commandMenu_);
-//
-//            } catch (DimMismatchEx ex) {
-//                ex.printStackTrace();
-//            }
-//
-//
-//            riemannFrames_[i].pack();
-//            riemannFrames_[i].setVisible(true);
-//
-//        }
-//
-//
-//
-//    }
+
     public static RPnPhaseSpaceFrame[] getAuxFrames() {
         return auxFrames_;
     }
@@ -346,12 +305,12 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                         new wave.multid.view.ViewingAttr(Color.black));
             }
 
-            if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("RightPhase Space")) {
+            if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("Right Phase Space")) {
                 scene = RPnDataModule.RIGHTPHASESPACE.createScene(viewingTransf,
                         new wave.multid.view.ViewingAttr(Color.black));
             }
 
-            if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("LeftPhase Space")) {
+            if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals("Left Phase Space")) {
                 scene = RPnDataModule.LEFTPHASESPACE.createScene(viewingTransf,
                         new wave.multid.view.ViewingAttr(Color.black));
             }
@@ -597,7 +556,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         curvesList.addObserver(AreaSelectionToExtensionCurveCommand.instance());
         leftCurvesList.addObserver(AreaSelectionToExtensionCurveCommand.instance());
         rightCurvesList.addObserver(AreaSelectionToExtensionCurveCommand.instance());
-
+  
 
     }
 
@@ -679,33 +638,42 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         }
     }
 
+
+    // --- Implementando criacao automatica de diretorio
     void matlabExport_actionPerformed(ActionEvent e) {
         try {
             JFileChooser chooser = new JFileChooser();
             chooser.setSelectedFile(new File("script.m"));
             chooser.setFileFilter(new FileNameExtensionFilter("Matlab file", "m"));
 
-            // ---
-//            Object[] options = { "Yes", "No" };
-//            int n = JOptionPane.showOptionDialog(null,
-//                     "Contents of the selected folder will be erased. Continue?",
-//                     "WARNING", JOptionPane.YES_NO_OPTION,
-//                     JOptionPane.WARNING_MESSAGE, null, options, options[0]);
-            // ---
-
-//            if (n==0) {
             if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
 
-//                int nFiles = chooser.getSelectedFile().getParentFile().listFiles().length;
-
-//                for (int k = 0; k < nFiles; k++) {
-//                    chooser.getSelectedFile().getParentFile().listFiles()[0].delete();
-//                }
-
-                FileWriter writer = new FileWriter(chooser.getSelectedFile().
-                        getAbsolutePath());
                 dir = chooser.getSelectedFile().getParent();
+
+                // --- definindo data e hora
+                GregorianCalendar calendar = new GregorianCalendar();
+
+                String day = String.valueOf(calendar.get(GregorianCalendar.DATE));
+                String month = String.valueOf(GregorianCalendar.MONTH);
+                String year = String.valueOf(calendar.get(GregorianCalendar.YEAR));
+                String date = day + "_" +month + "_" +year ;
+                System.out.println(date);
+
+                String hour = String.valueOf(calendar.get(GregorianCalendar.HOUR_OF_DAY));
+                String minute = String.valueOf(calendar.get(GregorianCalendar.MINUTE));
+                String time = hour + ":" +minute;
+                System.out.println(time);
+                // ---
+
+                String newPath = "/" +date + " " +time;
+                File folder = new File(dir + newPath);
+                folder.mkdir();
+
+                dir = dir + newPath;
+
                 System.out.println("Diretorio selecionado : " + dir);
+
+                FileWriter writer = new FileWriter(dir + "/" +chooser.getSelectedFile().getName());
 
                 if (RPNUMERICS.domainDim() == 3) {
                     RPnDataModule.matlabExport(writer);
@@ -715,7 +683,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
                 writer.close();
             }
-//            }
 
 
         } catch (java.io.IOException ioex) {
@@ -723,6 +690,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         } catch (java.lang.NullPointerException nullEx) {
         }
     }
+    // ---
+
 
     // Exports the Riemann Profile solution only...
     void exportRP_actionPerformed(ActionEvent e) {

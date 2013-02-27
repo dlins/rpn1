@@ -155,9 +155,7 @@ public class StationaryPointView extends PointMark {
                     outWardColor = outWardColor.darker();
                 }
             }
-            g.setColor(arrowColor);
 
-            g.setColor(Color.white);
             arrows_[j].paintComponent(g);
             arrows_[j + 1].paintComponent(g);     // *** desenha o vetor oposto
 

@@ -16,6 +16,8 @@ public class RarefactionCurve extends FundamentalCurve implements RpSolution {
       
     }
 
+
+
     // Methods
     @Override
     public String toString() {

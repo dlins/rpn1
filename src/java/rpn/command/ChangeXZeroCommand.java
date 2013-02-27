@@ -18,7 +18,8 @@ import rpn.component.StationaryPointGeom;
 import rpn.component.StationaryPointGeomFactory;
 import rpn.component.XZeroGeom;
 import rpn.component.XZeroGeomFactory;
-import rpn.component.util.GeometryGraphND;
+import rpn.configuration.CommandConfiguration;
+import rpn.configuration.Configuration;
 import rpn.controller.phasespace.InvariantsReadyImpl;
 import rpn.controller.phasespace.NUMCONFIG;
 import rpn.controller.phasespace.NumConfigImpl;
@@ -39,7 +40,7 @@ public class ChangeXZeroCommand extends RpModelConfigChangeCommand {
     // Constants
     //
 
-    static public final String DESC_TEXT = "Change X-Zero...";
+    static public final String DESC_TEXT = "Change X-Zero ...";
     //
     // Members
     //
@@ -177,6 +178,28 @@ public class ChangeXZeroCommand extends RpModelConfigChangeCommand {
 
 
 
+    }
+    
+    
+    public void applyChange(PropertyChangeEvent event ){
+        
+        RealVector newParameters = (RealVector) event.getNewValue();
+    
+        Configuration newConfiguration = new CommandConfiguration(toString());
+        
+        newConfiguration.setParamValue("xzero", newParameters.toString());
+
+        PropertyChangeEvent commandEvent = new PropertyChangeEvent(this, null, null,newConfiguration);
+                
+        logCommand(new RpCommand(commandEvent));
+        
+        super.applyChange(event);
+        
+    }
+    
+    
+    public String toString (){
+        return "changexzero";
     }
 
     static public ChangeXZeroCommand instance() {

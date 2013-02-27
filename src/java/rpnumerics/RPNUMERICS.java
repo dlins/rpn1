@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
+import rpn.command.FillPhaseSpaceCommand;
 import rpn.configuration.BoundaryConfiguration;
 import rpn.configuration.RPnConfig;
 import rpn.configuration.ConfigurationProfile;
@@ -442,6 +443,7 @@ public class RPNUMERICS {
 
     public static OrbitCalc createOrbitCalc(OrbitPoint oPoint) {
         Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
+
         return new OrbitCalc(oPoint, direction);
 
     }

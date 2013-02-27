@@ -7,10 +7,12 @@ package rpn.command;
 
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
+import java.io.Serializable;
 import java.util.ArrayList;
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
 import rpn.component.RpCalcBasedGeomFactory;
+import rpn.component.RpGeomFactory;
 import rpn.component.RpGeometry;
 import rpn.configuration.Configuration;
 import rpn.controller.ui.UIController;
@@ -19,7 +21,7 @@ import rpn.controller.ui.UndoableAction;
 import rpnumerics.RpCalculation;
 import wave.util.RealVector;
 
-public class RpCommand extends AbstractAction implements UndoableAction {
+public class RpCommand extends AbstractAction implements UndoableAction, Serializable {
 
     private ArrayList<String> inputArray_;
     private UI_ACTION_SELECTED actionSelected_;
@@ -31,6 +33,17 @@ public class RpCommand extends AbstractAction implements UndoableAction {
         super(name, icon);
         inputArray_ = new ArrayList<String>();
         inputPointList_ = new ArrayList<RealVector>();
+
+        StringBuilder buffer = new StringBuilder();
+
+        buffer.append("<COMMAND name=\"").append(name).append("\">\n");
+
+        buffer.append("</COMMAND>\n");
+
+        xmlString_ = buffer.toString();
+
+
+
 
     }
 
@@ -50,46 +63,49 @@ public class RpCommand extends AbstractAction implements UndoableAction {
 
 
     }
-    
-    
-    
-    
-    
-    
 
     public RpCommand(PropertyChangeEvent event, ArrayList<RealVector> inputList) {
         event_ = event;
         inputPointList_ = inputList;
 
         RpGeometry geometry = (RpGeometry) event_.getNewValue();
-        RpCalcBasedGeomFactory factory = (RpCalcBasedGeomFactory) geometry.geomFactory();
 
-        RpCalculation calc = (RpCalculation) factory.rpCalc();
+
+        RpGeomFactory factory = geometry.geomFactory();
 
         StringBuilder buffer = new StringBuilder();
-
         String sourceName = event_.getSource().toString().replace(" ", "");
+        String curveName = sourceName.toLowerCase();
 
         System.out.println("source name :" + sourceName);
+        if (factory instanceof RpCalcBasedGeomFactory) {
 
-        String curveName = sourceName.toLowerCase();
-        buffer.append("<COMMAND name=\"").append(curveName).append("\" ");
-        buffer.append("phasespace=\"").append(UIController.instance().getActivePhaseSpace().getName());
+            RpCalcBasedGeomFactory calFactory = (RpCalcBasedGeomFactory) factory;
+            RpCalculation calc = (RpCalculation) calFactory.rpCalc();
 
-        buffer.append("\">\n");
 
-        if (calc.getConfiguration() != null) {
-            String configurationXML = calc.getConfiguration().toXML();
-            buffer.append(configurationXML);
+            buffer.append("<COMMAND name=\"").append(curveName).append("\" ");
+            buffer.append("phasespace=\"").append(UIController.instance().getActivePhaseSpace().getName());
+
+            buffer.append("\">\n");
+
+            if (calc.getConfiguration() != null) {
+                String configurationXML = calc.getConfiguration().toXML();
+                buffer.append(configurationXML);
+            }
+
+        } else {
+
+            buffer.append("<COMMAND name=\"").append(curveName).append("\" ");
+            buffer.append("phasespace=\"").append(UIController.instance().getActivePhaseSpace().getName());
+            buffer.append("\">\n");
+
         }
+
 
         for (RealVector realVector : inputPointList_) {
             buffer.append(realVector.toXML());
         }
-
-
-
-
 
         buffer.append("</COMMAND>\n");
 

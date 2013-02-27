@@ -5,8 +5,10 @@
  */
 package rpnumerics;
 
+import java.util.ArrayList;
 import java.util.List;
 import wave.util.RealSegment;
+import wave.util.RealVector;
 
 
 public class SecondaryBifurcationCurve extends BifurcationCurve {
@@ -26,4 +28,18 @@ public class SecondaryBifurcationCurve extends BifurcationCurve {
         System.out.println("Usou o CTOR com hSegments e rightSegments ...");
 
     }
+
+    // --- Acrescentei este método em 06FEV2013
+    @Override
+    public List<RealVector> correspondentPoints(RealVector pMarca) {
+
+        List<RealVector> correspondent = new ArrayList();
+        int i = findClosestSegment(pMarca);
+        RealVector p = secondPointDCOtherVersion(i);
+        correspondent.add(p);
+
+        return correspondent;
+    }
+    // ---
+
 }

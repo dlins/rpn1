@@ -11,8 +11,6 @@ import rpn.component.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
-import rpn.parser.RPnDataModule;
-import wave.multid.model.MultiGeometry;
 
 public class RPnRightPhaseSpaceAbstraction extends RPnPhaseSpaceAbstraction {
     //

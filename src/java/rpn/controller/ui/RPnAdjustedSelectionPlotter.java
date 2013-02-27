@@ -3,9 +3,6 @@
  * Departamento de Dinamica dos Fluidos
  *
  */
-
-
-
 package rpn.controller.ui;
 
 import java.awt.Color;
@@ -18,6 +15,7 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpacePanel;
 import rpn.component.RpGeometry;
 import rpn.component.util.AreaSelected;
@@ -37,8 +35,7 @@ import wave.multid.view.ViewingTransform;
 import wave.util.RealVector;
 import rpnumerics.RPNUMERICS;
 
-
-public class RPnAdjustedSelectionPlotter extends RPn2DMouseController  {
+public class RPnAdjustedSelectionPlotter extends RPn2DMouseController {
 
     private Point cursorPos_;
     private boolean addRectangle_ = false;
@@ -63,15 +60,16 @@ public class RPnAdjustedSelectionPlotter extends RPn2DMouseController  {
             Path2D.Double adjustedPath = adjustPath(selectionPath, viewingTransform.viewPlane().getWindow(), xResolution_, yResolution_);
             List<Object> wcObject = new ArrayList();
             wcObject.add(adjustedPath);
-            ViewingAttr viewingAttr =new ViewingAttr(Color.red);
-            GraphicsUtil selectedArea= new AreaSelected(wcObject, viewingTransform, viewingAttr);
+            ViewingAttr viewingAttr = new ViewingAttr(Color.red);
+            GraphicsUtil selectedArea = new AreaSelected(wcObject, viewingTransform, viewingAttr);
             panel.setLastGraphicsUtil(selectedArea);
             panel.repaint();
 
             indexToRemove(panel);
-            if (UIController.instance().isAuxPanelsEnabled())
+            if (UIController.instance().isAuxPanelsEnabled()) {
                 secondArea(panel, viewingTransform);
-            
+            }
+
         }
 
     }
@@ -84,18 +82,18 @@ public class RPnAdjustedSelectionPlotter extends RPn2DMouseController  {
             GeometryGraph.count = 0;
 
             cursorPos_ = new Point(me.getX(), me.getY());
-            
+
             double[] mePosArray = {me.getX(), me.getY()};
-            
+
             CoordsArray cursorPosWC = new CoordsArray(new Space(" ", RPNUMERICS.domainDim()));
             Coords2D mePosDC = new Coords2D(mePosArray);
-            CoordsArray mePosWC = new CoordsArray(new Space(" ",RPNUMERICS.domainDim()));
+            CoordsArray mePosWC = new CoordsArray(new Space(" ", RPNUMERICS.domainDim()));
             panel.scene().getViewingTransform().dcInverseTransform(mePosDC, mePosWC);
 
             Path2D.Double selectionPath = new Path2D.Double();
 
             selectionPath.moveTo(cursorPosWC.getElement(0), cursorPosWC.getElement(1));
-            
+
             List<Object> wcObjectsList = new ArrayList();
             wcObjectsList.add(selectionPath);
             ViewingAttr viewingAttr = new ViewingAttr(Color.red);
@@ -135,15 +133,17 @@ public class RPnAdjustedSelectionPlotter extends RPn2DMouseController  {
 //        throw new UnsupportedOperationException("Not supported yet.");
     }
 
-
     private void secondArea(RPnPhaseSpacePanel panel, ViewingTransform viewingTransform) {
 
         String panelName = panel.getName();
         String secondPanelName = "";
-        if(panelName.equals("RightPhase Space"))
-            secondPanelName = "LeftPhase Space";
-        if(panelName.equals("LeftPhase Space"))
-            secondPanelName = "RightPhase Space";
+
+        if (panelName.equals(RPnDataModule.RIGHTPHASESPACE.getName())) {
+            secondPanelName = RPnDataModule.LEFTPHASESPACE.getName();
+        }
+        if (panelName.equals(RPnDataModule.LEFTPHASESPACE.getName())) {
+            secondPanelName = RPnDataModule.RIGHTPHASESPACE.getName();
+        }
 
         UserInputTable userInputList = UIController.instance().globalInputTable();
         RealVector newValue = userInputList.values();
@@ -157,8 +157,8 @@ public class RPnAdjustedSelectionPlotter extends RPn2DMouseController  {
 
             RealVector p1 = list.get(0);
             RealVector p2 = list.get(1);
-            Point point1 = new Point((int)p1.getElement(0), (int)p1.getElement(1));
-            Point point2 = new Point((int)p2.getElement(0), (int)p2.getElement(1));
+            Point point1 = new Point((int) p1.getElement(0), (int) p1.getElement(1));
+            Point point2 = new Point((int) p2.getElement(0), (int) p2.getElement(1));
 
             Path2D.Double selectionPath = plotWCArea(point1, point2, panel);
             Path2D.Double adjustedPath = adjustPath(selectionPath, viewingTransform.viewPlane().getWindow(), xResolution_, yResolution_);
@@ -170,15 +170,17 @@ public class RPnAdjustedSelectionPlotter extends RPn2DMouseController  {
             Iterator<RPnPhaseSpacePanel> phaseSpacePanelIterator = UIController.instance().getInstalledPanelsIterator();
             while (phaseSpacePanelIterator.hasNext()) {
                 RPnPhaseSpacePanel secondPanel = phaseSpacePanelIterator.next();
-                if (secondPanel.getName().equals(secondPanelName)) {
+                RPnPhaseSpaceAbstraction secondPhaseSpace = (RPnPhaseSpaceAbstraction) secondPanel.scene().getAbstractGeom();
+
+                if (secondPhaseSpace.getName().equals(secondPanelName)) {
                     secondPanel.setLastGraphicsUtil(selectedArea);
                     secondPanel.repaint();
                 }
+
             }
 
         }
     }
-
 
     private void indexToRemove(RPnPhaseSpacePanel panel) {
         List<Integer> indexToRemove = new ArrayList<Integer>();
@@ -188,26 +190,27 @@ public class RPnAdjustedSelectionPlotter extends RPn2DMouseController  {
             Iterator geomIterator = panel.scene().geometries();
             while (geomIterator.hasNext()) {
                 GeomObjView geomObjView = (GeomObjView) geomIterator.next();
-                List<Integer> segmentIndex = geomObjView.contains((Polygon)area.getShape());
-                if (!segmentIndex.isEmpty()) {
-                    indexToRemove.addAll(segmentIndex);
+
+                if (geomObjView.getViewingAttr().isSelected()) {
+                    List<Integer> segmentIndex = geomObjView.contains((Polygon) area.getShape());
+                    if (!segmentIndex.isEmpty()) {
+                        indexToRemove.addAll(segmentIndex);
+                    }
+
                 }
+
             }
         }
         GeometryGraphND.indContido = indexToRemove;
     }
 
-
-    
-    
-    
-     private Path2D.Double adjustPath(Path2D.Double input, wcWindow wc, int xResolution, int yResolution) {
+    private Path2D.Double adjustPath(Path2D.Double input, wcWindow wc, int xResolution, int yResolution) {
 
         Path2D.Double output = new Path2D.Double();
 
         Point2D.Double lowerLeftCorner = wc.getOriginPosition();
 
-        
+
         // --- original (só funciona para stone [sem permutacao dos eixos])
 //        double vMin = lowerLeftCorner.x;
 //        double uMin = lowerLeftCorner.y;
@@ -270,20 +273,4 @@ public class RPnAdjustedSelectionPlotter extends RPn2DMouseController  {
         return output;
 
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-   
-  
 }

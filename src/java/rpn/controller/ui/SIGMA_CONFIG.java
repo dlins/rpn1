@@ -5,12 +5,16 @@
  */
 package rpn.controller.ui;
 
+import java.beans.PropertyChangeEvent;
 import java.util.List;
 import rpn.component.StationaryPointGeomFactory;
 import rpn.component.XZeroGeomFactory;
 import rpn.controller.phasespace.NumConfigImpl;
 import rpn.parser.RPnDataModule;
 import rpn.command.ChangeSigmaCommand;
+import rpn.command.RpCommand;
+import rpn.configuration.CommandConfiguration;
+import rpn.configuration.Configuration;
 import rpnumerics.HugoniotCurve;
 import rpnumerics.PhasePoint;
 import rpnumerics.RPNUMERICS;
@@ -24,11 +28,14 @@ public class SIGMA_CONFIG extends UI_ACTION_SELECTED {
     //
     // Members
     //
+
     //
     // Constructors
     //
+
     public SIGMA_CONFIG() {
         super(ChangeSigmaCommand.instance());
+
 
     }
 
@@ -43,7 +50,8 @@ public class SIGMA_CONFIG extends UI_ACTION_SELECTED {
         //double newSigma = hCurve.findSigma(new PhasePoint(userInput));
         double newSigma = hCurve.velocity(userInput);
         RPNUMERICS.getViscousProfileData().setSigma(newSigma);
-
+        
+        logSigmaCommand(newSigma);
 
         XZeroGeomFactory xzeroRef = new XZeroGeomFactory(new StationaryPointCalc(hCurve.getXZero(), hCurve.getXZero()));
         RPnDataModule.PHASESPACE.plot(xzeroRef.geom());
@@ -65,7 +73,7 @@ public class SIGMA_CONFIG extends UI_ACTION_SELECTED {
             RPnDataModule.PHASESPACE.plot(xzeroFactory.geom());
 
         }
-        eqPoints.add(((StationaryPoint)xzeroRef.geomSource()).getPoint());
+        eqPoints.add(((StationaryPoint) xzeroRef.geomSource()).getPoint());
 
         ViscousProfileData.instance().updateStationaryPointsList(eqPoints);
 
@@ -73,9 +81,25 @@ public class SIGMA_CONFIG extends UI_ACTION_SELECTED {
 
         return;
     }
+
+    public void logSigmaCommand(double sigma) {
+
+        Configuration newConfiguration = new CommandConfiguration(toString());
+
+        newConfiguration.setParamValue("sigma", String.valueOf(sigma));
+
+        PropertyChangeEvent commandEvent = new PropertyChangeEvent(this, null, null, newConfiguration);
+
+        UndoActionController.instance().addAction(new RpCommand(commandEvent));
+
+
+
+    }
+    
+    
+    public String toString (){
+        
+        return "sigmaconfig";
+    }
+    
 }
-
-
-
-
-

@@ -101,8 +101,8 @@ public class HugoniotContourMethod extends HugoniotMethod {
                 realSegments.add(new RealSegment(p1, p2));
             
             }            
-            
-            hugoniotCurve = new HugoniotCurve(hugoniotParams_.getXZero(), realSegments);
+            List<RealVector> tList=null;
+            hugoniotCurve = new HugoniotCurve(hugoniotParams_.getXZero(), realSegments,tList);
 
         } catch (CanNotPerformCalculations ex) {
             ex.printStackTrace();

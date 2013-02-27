@@ -14,7 +14,6 @@ import rpn.message.RPnActionMediator;
 
 public abstract class RpModelActionCommand extends RpCommand {
 
-
     private String desc_;
 
     public RpModelActionCommand(String shortDesc, ImageIcon icon) {
@@ -32,12 +31,8 @@ public abstract class RpModelActionCommand extends RpCommand {
 
     public void logCommand(RpCommand command) {
 
-//        history_ = event;
-        if (UndoActionController.instance() == null) {
-            UndoActionController.createInstance();
-        } else {
-            UndoActionController.instance().addAction(command);
-        }
+        UndoActionController.instance().addAction(command);
+
     }
 
     @Override

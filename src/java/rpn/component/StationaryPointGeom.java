@@ -22,6 +22,9 @@ public class StationaryPointGeom extends MultiPoint implements RpGeometry {
     //
     private RpGeomFactory factory_;
 
+    private final int ALFA_DOWN = 20;
+    private final int ALFA_UP = 255;
+
 
     //
     // Constructors
@@ -48,6 +51,19 @@ public class StationaryPointGeom extends MultiPoint implements RpGeometry {
     public GeomObjView createView(ViewingTransform transf) throws DimMismatchEx {
         return new StationaryPointView(this, transf, viewingAttr());
     }
+
+
+    // --- 14FEV : Acrescentei estes métodos
+    public void lowLight() {
+        Color newColor = new Color(viewingAttr().getColor().getRed(), viewingAttr().getColor().getGreen(), viewingAttr().getColor().getBlue(), ALFA_DOWN);
+        viewingAttr().setColor(newColor);
+    }
+
+    public void highLight() {
+        Color newColor = new Color(viewingAttr().getColor().getRed(), viewingAttr().getColor().getGreen(), viewingAttr().getColor().getBlue(), ALFA_UP);
+        viewingAttr().setColor(newColor);
+    }
+    // -------------------------------------
 
    
 }

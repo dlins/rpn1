@@ -5,6 +5,7 @@
  */
 package rpn.command;
 
+import java.awt.event.ActionEvent;
 import rpn.controller.phasespace.NUMCONFIG;
 import rpn.parser.RPnDataModule;
 import rpnumerics.RPNUMERICS;
@@ -22,6 +23,8 @@ import rpn.component.StationaryPointGeom;
 import rpn.component.StationaryPointGeomFactory;
 import rpn.component.XZeroGeom;
 import rpn.component.XZeroGeomFactory;
+import rpn.configuration.CommandConfiguration;
+import rpn.configuration.Configuration;
 import rpn.controller.phasespace.InvariantsReadyImpl;
 import rpn.controller.phasespace.NumConfigReadyImpl;
 import rpn.controller.phasespace.ProfileSetupReadyImpl;
@@ -48,6 +51,7 @@ public class ChangeSigmaCommand extends RpModelConfigChangeCommand {
         super(DESC_TEXT);
 
     }
+
 
     public void execute() {
 
@@ -164,10 +168,30 @@ public class ChangeSigmaCommand extends RpModelConfigChangeCommand {
 
         }
 
-
         applyChange(new PropertyChangeEvent(this, DESC_TEXT, oldValue, newValue));
 
     }
+    
+    
+    
+    @Override
+     public void applyChange(PropertyChangeEvent event ){
+        
+        Double newParameters = (Double) event.getNewValue();
+    
+        Configuration newConfiguration = new CommandConfiguration(toString());
+        
+        newConfiguration.setParamValue("sigma", newParameters.toString());
+
+        PropertyChangeEvent commandEvent = new PropertyChangeEvent(this, null, null,newConfiguration);
+                
+        logCommand(new RpCommand(commandEvent));
+        
+        super.applyChange(event);
+        
+    }
+    
+    
 
     public void unexecute() {
         Double oldValue = (Double) log().getNewValue();

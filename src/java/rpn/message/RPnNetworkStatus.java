@@ -40,7 +40,7 @@ public class RPnNetworkStatus {
 
      public static int PORTNUMBER = 1099;
 
-     public static String SERVERNAME = new String("strauss.fluid.impa.br");
+     public static String SERVERNAME = new String("gluck.fluid.impa.br");
 
     public RPnNetworkStatus(String clientID) {
 

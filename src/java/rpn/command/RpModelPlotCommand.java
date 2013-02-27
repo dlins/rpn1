@@ -20,7 +20,6 @@ import java.util.Iterator;
 import javax.swing.AbstractButton;
 import rpn.component.RpCalcBasedGeomFactory;
 import rpn.controller.ui.*;
-import rpnumerics.RpCalculation;
 import rpnumerics.RPnCurve;
 
 public abstract class RpModelPlotCommand extends RpModelActionCommand {
@@ -51,8 +50,6 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand {
 
     public void execute() {
 
-
-
         RealVector[] userInputList = UIController.instance().userInputList();
 
         System.out.println("execute do  plot" + userInputList[0]);
@@ -64,9 +61,7 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand {
 
         RpCalcBasedGeomFactory factory = (RpCalcBasedGeomFactory) geometry.geomFactory();
 
-
         RPnCurve curve = (RPnCurve) factory.geomSource();
-
 
         if (geometry == null) {
             return;
@@ -85,6 +80,7 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand {
 
         logCommand(new RpCommand(event_, inputArray));
     }
+
 
     public void unexecute() {
         Iterator current = (Iterator) log().getNewValue();

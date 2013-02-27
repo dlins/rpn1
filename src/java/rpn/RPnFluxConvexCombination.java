@@ -25,6 +25,8 @@ public class RPnFluxConvexCombination extends RPnFluxParamsSubject {
         System.out.println("Entrei no setValues de Combination");
         RealVector newState = new RealVector(RPNUMERICS.getFluxParams().getParams().getSize()); //A*
 
+        System.out.println("RPNUMERICS.getFluxParams().getParams().getSize() : " +RPNUMERICS.getFluxParams().getParams().getSize());
+
         RealVector A = new RealVector(newState.getSize());  //initial
         RealVector B = new RealVector(newState.getSize());
 

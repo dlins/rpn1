@@ -40,6 +40,7 @@ public class RPnCommandModule {
         private StringBuilder stringBuffer_ = new StringBuilder();
         private Configuration currentConfiguration_;
         private boolean isChangePhysicsParamsCommand_;
+        private Integer curveId_;
 
         public RPnCommandParser() {
 
@@ -81,8 +82,8 @@ public class RPnCommandModule {
 
 
             if (currentElement_.equals("CURVECONFIGURATION")) {
-                
-                
+
+
 
                 currentConfiguration_ = rpnumerics.RPNUMERICS.getConfiguration(att.getValue("name"));
 
@@ -90,13 +91,33 @@ public class RPnCommandModule {
 
             if (currentElement_.equals("CURVEPARAM")) {
 
-                
+
 //                System.out.println("Antes configuration : "+currentConfiguration_ +" "+currentConfiguration_.getParamsSize());
-                
+
                 currentConfiguration_.setParamValue(att.getValue(0), att.getValue(1));
-                
-                
+
+
 //                System.out.println("Depois configuration : "+currentConfiguration_ +" "+currentConfiguration_.getParamsSize());
+            }
+
+
+            if (currentElement_.equals("COMMANDPARAM")) {
+
+                for (int i = 0; i < att.getLength(); i++) {
+
+                    System.out.println(att.getValue(i));
+                }
+
+
+                if (att.getValue("name").equals("phasespace")) {
+                    
+                    UIController.instance().setActivePhaseSpace(RPnDataModule.getPhaseSpace(att.getValue("value")));
+
+                }
+
+                if (att.getValue("name").equals("curveid")) {
+                    curveId_ = new Integer(att.getValue("value"));
+                }
             }
 
 
@@ -108,7 +129,8 @@ public class RPnCommandModule {
 
                 System.out.println("Current command :" + currentCommand_);
 
-                selectPhaseSpace(att.getValue("phasespace"));
+                UIController.instance().setActivePhaseSpace(RPnDataModule.getPhaseSpace(att.getValue("phasespace")));
+
 
                 if (currentCommand_.equalsIgnoreCase("Change Flux Parameters")) {
                     currentConfiguration_ = RPNUMERICS.getConfiguration(RPNUMERICS.physicsID());
@@ -121,6 +143,7 @@ public class RPnCommandModule {
                 } else if (currentCommand_.equalsIgnoreCase("levelcurve")) {
                     LevelCurvePlotCommand.instance().execute();
                 } else if (currentCommand_.equalsIgnoreCase("pointlevelcurve")) {
+
                     UIController.instance().setState(new UI_ACTION_SELECTED(PointLevelCurvePlotCommand.instance()));
                 } else if (currentCommand_.equalsIgnoreCase("compositecurve")) {
                     UIController.instance().setState(new UI_ACTION_SELECTED(CompositePlotCommand.instance()));
@@ -130,6 +153,10 @@ public class RPnCommandModule {
                     UIController.instance().setState(new UI_ACTION_SELECTED(RarefactionExtensionCurvePlotCommand.instance()));
                 } else if (currentCommand_.equalsIgnoreCase("shockcurve")) {
                     UIController.instance().setState(new UI_ACTION_SELECTED(ShockCurvePlotCommand.instance()));
+                    
+                }else if (currentCommand_.equalsIgnoreCase("poincaresection")) {
+
+                    UIController.instance().setState(new UI_ACTION_SELECTED(PoincareSectionPlotCommand.instance()));
                 } else if (currentCommand_.equalsIgnoreCase("doublecontactcurve")) {
                     UIController.instance().setState(new UI_ACTION_SELECTED(DoubleContactCommand.instance()));
                     DoubleContactCommand.instance().execute();
@@ -185,7 +212,7 @@ public class RPnCommandModule {
 
             if (name.equals("REALVECTOR")) {
                 UIController.instance().userInputComplete(new RealVector(stringBuffer_.toString()));
-                UIController.instance().setState(new GEOM_SELECTION());
+//                UIController.instance().setState(new GEOM_SELECTION());
             }
 
 
@@ -199,6 +226,16 @@ public class RPnCommandModule {
             if (name.equals("RPCONFIGURATION")) {
                 isChangePhysicsParamsCommand_ = true;
             }
+
+
+            if (name.equals("COMMAND")) {
+
+                if (currentCommand_.equals("Curve Remove Command")) {
+                    CurveRemoveCommand.instance().remove(curveId_);
+                }
+            }
+
+
         }
 
         public void setDocumentLocator(Locator locator) {

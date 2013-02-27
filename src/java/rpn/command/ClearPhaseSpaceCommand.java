@@ -6,16 +6,20 @@
 package rpn.command;
 
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 import java.util.Iterator;
+import rpn.RPnPhaseSpaceAbstraction;
+import rpn.RPnPhaseSpaceManager;
 import rpn.RPnPhaseSpacePanel;
+import rpn.component.RpGeometry;
 import rpn.controller.ui.*;
 import rpn.message.RPnActionMediator;
-
 
 public class ClearPhaseSpaceCommand extends javax.swing.AbstractAction {
     //
     // Constants
     //
+
     static public final String DESC_TEXT = "Clears the Phase Space";
     //
     // Members
@@ -30,25 +34,47 @@ public class ClearPhaseSpaceCommand extends javax.swing.AbstractAction {
     }
 
     public void clear() {
-        
+
         // rpn.RPnUIFrame.instance().setTitle(" completing ...  " + DESC_TEXT);
         UIController.instance().setWaitCursor();
         UIController.instance().panelsBufferClear();
-        rpn.parser.RPnDataModule.PHASESPACE.clear();
+//        rpn.parser.RPnDataModule.PHASESPACE.clear();
+
+        
 
 
-        // --- Está correto??? Algum modo de determinar o "panel" certo sem usar o nome???
+        Iterator<RPnPhaseSpaceAbstraction> phaseSpaceIterator = rpn.parser.RPnDataModule.phaseSpaceIterator();
+
+        while (phaseSpaceIterator.hasNext()) {
+            
+            System.out.println("Chamando clear");
+            
+            RPnPhaseSpaceAbstraction phaseSpace = phaseSpaceIterator.next();
+
+            Iterator<RpGeometry> geometryIterator = phaseSpace.getGeomObjIterator();
+
+            ArrayList<RpGeometry> toRemove = new ArrayList<RpGeometry>();
+
+            while (geometryIterator.hasNext()) {
+                toRemove.add(geometryIterator.next());
+            }
+
+            for (RpGeometry rpGeometry : toRemove) {
+                RPnPhaseSpaceManager.instance().remove(phaseSpace, rpGeometry);
+            }
+
+
+
+        }
+
+
         Iterator<RPnPhaseSpacePanel> phaseSpacePanelIterator = UIController.instance().getInstalledPanelsIterator();
         while (phaseSpacePanelIterator.hasNext()) {
             RPnPhaseSpacePanel panel = phaseSpacePanelIterator.next();
-            if (panel.getName().equals("Phase Space")) {
-                panel.clearAllStrings();
-                panel.repaint();    
-            }
-
+            panel.clearAllStrings();
+            panel.repaint();
         }
-        // ---
-        
+
 
         // ClearScene is not undoable
         UndoActionController.instance().setEnabled(false);
@@ -57,7 +83,6 @@ public class ClearPhaseSpaceCommand extends javax.swing.AbstractAction {
         UIController.instance().resetCursor();
 
     }
-   
 
     public void actionPerformed(ActionEvent event) {
 

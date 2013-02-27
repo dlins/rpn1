@@ -1,20 +1,21 @@
 #include <iostream>
 
 #include "Hugoniot_TP.h"
+#include "Hugoniot_Curve.h"
 
 int Hugoniot_TP::classified_curve(const FluxFunction *f, const AccumulationFunction *a,
         GridValues &g, const RealVector &r,
-        std::vector<HugoniotPolyLine> &hugoniot_curve,
+        std::vector<HugoniotPolyLine> &hugoniot_curve,std::vector<RealVector> &transitionList,
         std::vector<bool> &circular) {
 
-    return classified_curve(f, a, g, r, hugoniot_curve);
+    return classified_curve(f, a, g, r, hugoniot_curve,transitionList);
 
 
 }
 
 int Hugoniot_TP::classified_curve(const FluxFunction *f, const AccumulationFunction *a,
         GridValues &g, const RealVector &r,
-        std::vector<HugoniotPolyLine> &hugoniot_curve) {
+        std::vector<HugoniotPolyLine> &hugoniot_curve,std::vector<RealVector> &transition_list) {
 
     // Compute the Hugoniot curve as usual
     //
@@ -23,7 +24,7 @@ int Hugoniot_TP::classified_curve(const FluxFunction *f, const AccumulationFunct
     int info = curve(f, a, g, r, vrs);
 
 
-    std::vector<RealVector> transition_list;
+//    std::vector<RealVector> transition_list;
 
     ColorCurve colorCurve(*f, *a);
     colorCurve.classify_segmented_curve(vrs, r, hugoniot_curve, transition_list);
@@ -32,6 +33,16 @@ int Hugoniot_TP::classified_curve(const FluxFunction *f, const AccumulationFunct
 
     return info;
 }
+
+
+
+ int Hugoniot_TP::classified_curve(const FluxFunction *f, const AccumulationFunction *a,
+            GridValues &g, const RealVector &r,
+            std::vector<HugoniotPolyLine> &hugoniot_curve){
+     
+     return 0;
+     
+ }
 
 Hugoniot_TP::~Hugoniot_TP() {
 }

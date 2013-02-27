@@ -31,8 +31,13 @@ import rpn.component.RpCalcBasedGeomFactory;
 import rpn.component.RpGeometry;
 import rpn.component.util.AreaSelected;
 import rpn.controller.ui.UIController;
+import rpn.parser.RPnDataModule;
 import rpnumerics.Area;
+import rpnumerics.BoundaryExtensionCurve;
 import rpnumerics.ContourCurveCalc;
+import rpnumerics.DoubleContactCurve;
+import rpnumerics.RpSolution;
+import rpnumerics.SecondaryBifurcationCurve;
 import wave.multid.view.GeomObjView;
 import wave.util.RealVector;
 
@@ -69,7 +74,8 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
             processGeometry(curveToRefine_, panelToRefine_);
             RPnPhaseSpaceAbstraction phaseSpace = (RPnPhaseSpaceAbstraction) panelToRefine_.scene().getAbstractGeom();
             phaseSpace.update();
-            panelToRefine_.clearAreaSelection();
+//            panelToRefine_.clearAreaSelection();
+            UIController.instance().clearAllAreas();
         }
 
 
@@ -98,7 +104,20 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
 
     @Override
     public void actionPerformed(ActionEvent event) {
-        if (curveToRefine_ instanceof BifurcationCurveGeom) {
+        
+         RpCalcBasedGeomFactory factory = (RpCalcBasedGeomFactory) curveToRefine_.geomFactory();
+         
+         RpSolution solution = (RpSolution) factory.geomSource();
+        
+
+        System.out.println(curveToRefine_.getClass().getCanonicalName());
+
+//        if ((curveToRefine_ instanceof DoubleContactCurveGeom) || (curveToRefine_ instanceof BoundaryExtensionCurveGeom)
+//                || (curveToRefine_ instanceof SecondaryBifurcationCurveGeom)) {
+            
+              if ((solution instanceof DoubleContactCurve) || (solution instanceof BoundaryExtensionCurve)
+                || (solution instanceof SecondaryBifurcationCurve)) {
+            
             System.out.println("Eh curva de bifurcacao");
 
             CorrespondentResolutionDialog rightResolutionDialog = new CorrespondentResolutionDialog("Resolution");
@@ -111,7 +130,6 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
         }
 
     }
-
 
     // --- 21JAN : Nova versão de processGeometry(...) : decide quem é área direita/esquerda e seta no array de áreas sempre a ordem (direita, esquerda)
     // --- No JNIDoubleContact, fica mantido: leftArea index 0; rightArea index 1
@@ -133,7 +151,7 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
         System.out.println("Phase space para refinar: " + phaseSpace.getName());
 
         System.out.println("Right res: " + rightResolution_ + " Left res: " + leftResolution_);
-        
+
 
         for (AreaSelected polygon : graphicsArea) {
             Iterator geomIterator = phaseSpacePanel.scene().geometries();
@@ -155,7 +173,7 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
             }
 
         }
-        
+
         // ------ Preenche uma lista de areas correspondentes, caso existam
         List<AreaSelected> correspondentAreas = new ArrayList<AreaSelected>();
         Iterator<RPnPhaseSpacePanel> phaseSpacePanelIterator = UIController.instance().getInstalledPanelsIterator();
@@ -206,8 +224,6 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
         factory.updateGeom(areasToRefine, indexToRemove);
 
     }
-
-
 
     void setRefineGeometryAndPanel(RpGeometry phasSpaceGeometry, RPnPhaseSpacePanel panel) {
         curveToRefine_ = phasSpaceGeometry;
@@ -267,6 +283,8 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
         @Override
         protected void apply() {
             setLeftResolution(new RealVector(xresolution_.getText() + " " + yresolution_.getText()));
+            setRightResolution(new RealVector(xresolution_.getText() + " " + yresolution_.getText()));
+
             execute();
             dispose();
 
@@ -318,11 +336,8 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
 
                 if (phaseSpace instanceof RPnLeftPhaseSpaceAbstraction) {
 
-
                     Area leftArea = new Area(graphicsArea.get(0));
-
                     int leftCells[] = leftArea.cellsInsideArea(resolution);
-
 
                     leftResolutionLabel.setText("Cells inside area:" + leftCells[0] + " x " + leftCells[1]);
 
@@ -332,10 +347,7 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
                 if (phaseSpace instanceof RPnRightPhaseSpaceAbstraction) {
 
                     Area rightArea = new Area(graphicsArea.get(0));
-
-
                     int rightCells[] = rightArea.cellsInsideArea(resolution);
-
 
                     rightResolutionLabel.setText("Cells inside area:" + rightCells[0] + " x " + rightCells[1]);
 
@@ -418,7 +430,6 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
 
         @Override
         protected void begin() {
-
         }
     }
 }
