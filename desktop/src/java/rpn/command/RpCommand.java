@@ -70,14 +70,12 @@ public class RpCommand extends AbstractAction implements UndoableAction, Seriali
 
         RpGeometry geometry = (RpGeometry) event_.getNewValue();
 
-
         RpGeomFactory factory = geometry.geomFactory();
 
         StringBuilder buffer = new StringBuilder();
         String sourceName = event_.getSource().toString().replace(" ", "");
         String curveName = sourceName.toLowerCase();
 
-        System.out.println("source name :" + sourceName);
         if (factory instanceof RpCalcBasedGeomFactory) {
 
             RpCalcBasedGeomFactory calFactory = (RpCalcBasedGeomFactory) factory;

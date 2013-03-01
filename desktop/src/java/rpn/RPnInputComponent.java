@@ -39,7 +39,7 @@ import wave.util.RealVector;
 
 //**** tirar os listeners, que serao enviados para classes especializadas
 //**** basicamente, cada tipo de campo deverá ser tratado por uma classe especialista, munida de um listener
-public class RPnInputComponent {//TODO Refatorar
+public class RPnInputComponent extends Observable {//TODO Refatorar
 
     private JPanel panel_ = new JPanel();
     private JSlider slider_;
@@ -304,7 +304,9 @@ public class RPnInputComponent {//TODO Refatorar
     }
 
     public RPnInputComponent(Configuration configuration, boolean useEvents) {
-        
+
+
+
 
 
         textField_ = new JFormattedTextField[configuration.getParamsSize()];
@@ -347,6 +349,8 @@ public class RPnInputComponent {//TODO Refatorar
 
             if (useEvents) {
                 textField.getDocument().addDocumentListener(new TextValueHandler());
+            } else {
+                textField.getDocument().addDocumentListener(new TextChangedHandler());
             }
 
             JLabel label = new JLabel(configuration.getParamName(j));
@@ -366,7 +370,7 @@ public class RPnInputComponent {//TODO Refatorar
         }
 
         controller_ = new RPnInputController(this, configuration);
-        
+
 
 
 
@@ -379,15 +383,13 @@ public class RPnInputComponent {//TODO Refatorar
         for (int j = 0; j < textField_.length; j++) {
 
             parameterName_ = textField_[j].getName();
-
-
             newValues[j] = textField_[j].getText();
-
         }
 
-        controller_.propertyChange(
-                new PropertyChangeEvent(this, parameterName_, newValues, newValues));
+        String[] oldValues = null;
 
+        controller_.propertyChange(
+                new PropertyChangeEvent(this, parameterName_, oldValues, newValues));
 
         ChangeCurveConfigurationCommand.instance().applyChange(new PropertyChangeEvent(this, parameterName_, null, controller_.getConfiguration()));
 
@@ -454,7 +456,6 @@ public class RPnInputComponent {//TODO Refatorar
 
     }
 
-
     private class SliderHandler implements ChangeListener {
 
         public void stateChanged(ChangeEvent e) {
@@ -488,26 +489,27 @@ public class RPnInputComponent {//TODO Refatorar
             }
 
         }
+    }
 
+    private class TextChangedHandler implements DocumentListener {
+
+        public void insertUpdate(DocumentEvent arg0) {
+            setChanged();
+            notifyObservers();
+        }
+
+        public void removeUpdate(DocumentEvent arg0) {
+        }
+
+        public void changedUpdate(DocumentEvent arg0) {
+        }
     }
 
     private class TextValueHandler implements DocumentListener {
 
         public void insertUpdate(DocumentEvent arg0) {
-
-
-
-//            RealVector newValues = new RealVector(textField_.length);
             String[] newValues = new String[textField_.length];
-//            double doubleNewValue;
-
             Document doc = (Document) arg0.getDocument();
-
-            //RealVector newValues = new RealVector(textField_.length);
-
-            //double doubleNewValue;
-
-
             try {
                 for (int j = 0; j < textField_.length; j++) {
 
@@ -518,15 +520,12 @@ public class RPnInputComponent {//TODO Refatorar
                         newValues[j] = newValue;
 
                     } else {
-                        //doubleNewValue = new Double(textField_[j].getText());
-                        //newValues.setElement(j, doubleNewValue);
-
                         newValues[j] = textField_[j].getText();
-
                     }
 
-
                     controller_.propertyChange(new PropertyChangeEvent(this, parameterName_, newValues, newValues));
+                    setChanged();
+                    notifyObservers();
                 }
             } catch (BadLocationException ex) {
                 //System.out.println("Excessao Bad" + ex.getMessage());
@@ -572,7 +571,7 @@ public class RPnInputComponent {//TODO Refatorar
 //                observerController_.propertyChange(new PropertyChangeEvent(this, "fazendo teste", null, RPnFluxParamsSubject.realVectorToStringArray(newValues)));
 
                 // chamado qdo subject fica completo (comecando com textFields vazios...)
-                observerController_.propertyChange(new PropertyChangeEvent(this, "fazendo teste", null, RPnFluxParamsSubject.realVectorToStringArray(newValues)));
+                observerController_.propertyChange(new PropertyChangeEvent(this, "input component change", null, RPnFluxParamsSubject.realVectorToStringArray(newValues)));
 
             } catch (BadLocationException ex) {
                 //System.out.println("Excessao Bad" + ex.getMessage());

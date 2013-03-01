@@ -14,14 +14,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Observable;
+import java.util.Observer;
 import java.util.Set;
+import javax.jws.Oneway;
 import javax.swing.*;
 import rpn.command.ChangeDirectionCommand;
 import rpn.configuration.Configuration;
 import rpnumerics.Orbit;
 import rpnumerics.RPNUMERICS;
 
-public class RPnCurvesConfigPanel extends Observable implements PropertyChangeListener, ActionListener {
+public class RPnCurvesConfigPanel extends Observable implements PropertyChangeListener, ActionListener,Observer {
 
     private ButtonGroup directionButtonGroup_;
     private JPanel directionPanel_, okButtonPanel_;
@@ -33,6 +35,7 @@ public class RPnCurvesConfigPanel extends Observable implements PropertyChangeLi
     private ArrayList<RPnInputComponent> inputComponentArray_;
     private JButton okButton_;
     private JPanel mainPainel_;
+    private OrbitDirectionListener orbitDirectionListener_;
 
     public RPnCurvesConfigPanel() {
 
@@ -49,6 +52,8 @@ public class RPnCurvesConfigPanel extends Observable implements PropertyChangeLi
 
         inputComponentArray_ = new ArrayList<RPnInputComponent>();
         okButton_ = new JButton("OK");
+        okButton_.setEnabled(false);
+        orbitDirectionListener_ = new OrbitDirectionListener();
         okButton_.addActionListener(this);
         okButtonPanel_ = new JPanel();
 
@@ -63,6 +68,7 @@ public class RPnCurvesConfigPanel extends Observable implements PropertyChangeLi
 
             if (!configurationType.equalsIgnoreCase("PHYSICS") && !configurationType.equalsIgnoreCase("VISUAL")) {
                 RPnInputComponent inputComponent = new RPnInputComponent(entry.getValue(), false);
+                inputComponent.addObserver(this);
                 inputComponent.removeParameter("resolution");
                 if (inputComponent.getContainer().getComponentCount() > 0) {
                     curvesTabbedPanel_.addTab(entry.getKey(), inputComponent.getContainer());
@@ -184,12 +190,17 @@ public class RPnCurvesConfigPanel extends Observable implements PropertyChangeLi
 
     public void actionPerformed(ActionEvent e) {
 
+        
         for (RPnInputComponent rPnInputComponent : inputComponentArray_) {
-
             rPnInputComponent.applyConfigurationChange();
-
         }
 
+        orbitDirectionListener_.actionPerformed(e);
+        okButton_.setEnabled(false);
+    }
+
+    public void update(Observable o, Object arg) {
+        okButton_.setEnabled(true);
     }
 
     private class OrbitDirectionListener implements ActionListener {

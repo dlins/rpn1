@@ -6,9 +6,6 @@
 package rpn.command;
 
 import java.beans.PropertyChangeEvent;
-import rpn.controller.ui.UIController;
-import rpn.controller.ui.UI_ACTION_SELECTED;
-import rpn.configuration.Configuration;
 
 public class ChangeCurveConfigurationCommand extends RpModelConfigChangeCommand {
     //

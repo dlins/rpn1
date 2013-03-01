@@ -11,7 +11,6 @@ import java.awt.event.ActionListener;
 import java.util.Observable;
 import javax.swing.*;
 import rpn.command.ChangeDirectionCommand;
-import rpn.command.FillPhaseSpaceCommand;
 import rpnumerics.Orbit;
 
 public class RPnCurvesDirectionPanel extends Observable  {
