@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+<!DOCTYPE rpnconfiguration>
+<RPNSESSION>
+ <PHASESPACE name="Phase Space">
+  <RPNCONFIGURATION>
+<PHYSICS name="QuadraticR2">
+<BOUNDARY name="rect">
+<BOUNDARYPARAM name="limits"  value= "-4.0 -4.0 4.0 4.0"/>
+<BOUNDARYPARAM name="dimension"  value= "2"/>
+</BOUNDARY>
+<PHYSICSCONFIG name="fluxfunction">
+<PHYSICSPARAM name="a1" position="0" value= "-2.0"/>
+<PHYSICSPARAM name="b1" position="1" value= "0.0"/>
+<PHYSICSPARAM name="c1" position="2" value= "2.0"/>
+<PHYSICSPARAM name="d1" position="3" value= "0.0"/>
+<PHYSICSPARAM name="e1" position="4" value= "2.0"/>
+<PHYSICSPARAM name="a2" position="5" value= "0.0"/>
+<PHYSICSPARAM name="b2" position="6" value= "2.0"/>
+<PHYSICSPARAM name="c2" position="7" value= "0.0"/>
+<PHYSICSPARAM name="d2" position="8" value= "-2.0"/>
+<PHYSICSPARAM name="e2" position="9" value= "0.0"/>
+</PHYSICSCONFIG>
+</PHYSICS>
+<METHOD name="Newton">
+<METHODPARAM name="tolerance" value= "0.001"/>
+</METHOD>
+<CURVECONFIGURATION name="boundaryextensioncurve">
+<CURVEPARAM name="edgeresolution" value= "30"/>
+<CURVEPARAM name="characteristicwhere" value= "1"/>
+<CURVEPARAM name="edge" value= "0"/>
+<CURVEPARAM name="family" value= "1"/>
+<CURVEPARAM name="resolution" value= "60 60"/>
+</CURVECONFIGURATION>
+<CURVECONFIGURATION name="envelopecurve">
+<CURVEPARAM name="numberofsteps" value= "128"/>
+<CURVEPARAM name="resolution" value= "128 128"/>
+<CURVEPARAM name="whereisconstant" value= "0"/>
+</CURVECONFIGURATION>
+<CURVECONFIGURATION name="rarefactionextension">
+<CURVEPARAM name="domainfamily" value= "1"/>
+<CURVEPARAM name="resolution" value= "60 60"/>
+<CURVEPARAM name="characteristic" value= "1"/>
+<CURVEPARAM name="curvefamily" value= "0"/>
+</CURVECONFIGURATION>
+<CURVECONFIGURATION name="ellipticboundary">
+<CURVEPARAM name="resolution" value= "128 128"/>
+</CURVECONFIGURATION>
+<CURVECONFIGURATION name="inflectioncurve">
+<CURVEPARAM name="family" value= "0"/>
+<CURVEPARAM name="resolution" value= "128 128"/>
+</CURVECONFIGURATION>
+<CURVECONFIGURATION name="fundamentalcurve">
+<CURVEPARAM name="level" value= "0.5"/>
+<CURVEPARAM name="family" value= "0"/>
+<CURVEPARAM name="direction" value= "20"/>
+</CURVECONFIGURATION>
+<CURVECONFIGURATION name="orbit">
+<CURVEPARAM name="level" value= "0.5"/>
+<CURVEPARAM name="family" value= "0"/>
+</CURVECONFIGURATION>
+<CURVECONFIGURATION name="levelcurve">
+<CURVEPARAM name="levels" value= "0.1 0.2 0.5"/>
+<CURVEPARAM name="family" value= "0"/>
+<CURVEPARAM name="resolution" value= "128 128"/>
+</CURVECONFIGURATION>
+<CURVECONFIGURATION name="ellipticextension">
+<CURVEPARAM name="characteristicwhere" value= "0"/>
+<CURVEPARAM name="family" value= "0"/>
+<CURVEPARAM name="resolution" value= "128 128"/>
+</CURVECONFIGURATION>
+<CURVECONFIGURATION name="hysteresiscurve">
+<CURVEPARAM name="family" value= "0"/>
+<CURVEPARAM name="resolution" value= "30 30"/>
+</CURVECONFIGURATION>
+<CURVECONFIGURATION name="bifurcationcurve">
+<CURVEPARAM name="domainfamily" value= "1"/>
+<CURVEPARAM name="singular" value= "1"/>
+<CURVEPARAM name="caracteristicwhere" value= "1"/>
+<CURVEPARAM name="curvefamily" value= "1"/>
+</CURVECONFIGURATION>
+<CURVECONFIGURATION name="hugoniotcurve">
+<CURVEPARAM name="resolution" value= "60 60"/>
+</CURVECONFIGURATION>
+<CURVECONFIGURATION name="doublecontactcurve">
+<CURVEPARAM name="domainfamily" value= "1"/>
+<CURVEPARAM name="resolution" value= "30 30"/>
+<CURVEPARAM name="curvefamily" value= "0"/>
+</CURVECONFIGURATION>
+<VIEWCONFIGURATION modeldomain="2">
+<PROJDESC name="Axis0 Axis1">
+<VIEWPARAM name="axis" value= "0 1"/>
+<VIEWPARAM name="iso2equi" value= "false"/>
+<VIEWPARAM name="vpwidth" value= "450"/>
+<VIEWPARAM name="vpheight" value= "450"/>
+</PROJDESC>
+</VIEWCONFIGURATION>
+  </RPNCONFIGURATION>
+ </PHASESPACE>
+<COMMAND name="hugoniotcurve" phasespace="Phase Space">
+<CURVECONFIGURATION name="fundamentalcurve">
+<CURVEPARAM name="direction" value= "20"/>
+</CURVECONFIGURATION>
+<REALVECTOR dimension="2">1.6711111111111112 0.7288888888888887</REALVECTOR>
+</COMMAND>
+<COMMAND name="sigmaconfig">
+<COMMANDPARAM name="sigma" value="-0.7524099637131666"/>
+</COMMAND>
+<COMMAND name="changexzero">
+<COMMANDPARAM name="xzero" value="-1.1733333333333333 1.688888888888889"/>
+</COMMAND>
+</RPNSESSION>
