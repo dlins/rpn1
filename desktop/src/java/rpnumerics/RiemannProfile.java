@@ -31,7 +31,7 @@ public class RiemannProfile extends RPnCurve  {
     //
    
     public RiemannProfile(OrbitPoint[] points) {
-        super(MultidAdapter.converseOrbitPointsToCoordsArray(points), new ViewingAttr(Color.white));
+        super(MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseOrbitPointsToCoordsArray(points)), new ViewingAttr(Color.white));
         segments_= MultidAdapter.converseRPnCurveToRealSegments(this);
         points_ = points;
 
