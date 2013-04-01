@@ -12,10 +12,6 @@ import wave.util.RealVector;
 
 import wave.multid.view.ViewingAttr;
 import java.awt.Color;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import rpn.RPnUIFrame;
 import rpn.component.MultidAdapter;
 import wave.multid.CoordsArray;
 import wave.util.RealSegment;

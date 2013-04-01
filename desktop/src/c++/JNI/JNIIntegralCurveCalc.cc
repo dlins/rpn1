@@ -127,8 +127,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_IntegralCurveCalc_calc(JNIEnv * env, j
         
         jdoubleArray jTempArray = (env)->NewDoubleArray(dimension);
         
-        cout <<tempVector<<endl;
-
         double lambda = tempVector.component(dimension);
 
         RpNumerics::getPhysics().getSubPhysics(0).postProcess(tempVector);

@@ -12,6 +12,9 @@ void Integral_Curve::integral_curve(const RealVector &init,
 
     std::vector<RealVector> rarcurve;
     std::vector<RealVector> inflection_points;
+    
+    
+    cout <<"Flag: "<<RAREFACTION_SPEED_DECREASE<<" "<< RAREFACTION_AS_ENGINE_FOR_INTEGRAL_CURVE <<" "<< RAREFACTION_GENERAL_ACCUMULATION<<" "<< RAREFACTION_INITIALIZE_YES<<" "<<RAREFACTION_INITIALIZE_YES<<endl;
 
     int info_decrease = Rarefaction::curve(init, 
                                            RAREFACTION_INITIALIZE_YES,
