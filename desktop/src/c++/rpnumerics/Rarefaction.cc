@@ -637,7 +637,10 @@ int Rarefaction::initial_dirdrv(int n, const RealVector &p, int increase, double
     //
     //    dd = dirdrv/norm;
     //    dir.resize(n);
-    dd = dirdrv(n, point, dir);
+    //dd = dirdrv(n, point, dir);
+
+    dd= dirdrv(n,point,r);
+    
     if (increase == RAREFACTION_SPEED_INCREASE) {
         if (dd > 0.0) for (int i = 0; i < n; i++) dir.component(i) = r[i];
         else {
