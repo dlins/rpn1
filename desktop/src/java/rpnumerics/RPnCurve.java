@@ -7,7 +7,6 @@
 package rpnumerics;
 
 import java.awt.Shape;
-import rpnumerics.methods.contour.ContourCurve;
 import wave.multid.*;
 import wave.multid.model.AbstractSegment;
 import wave.multid.model.AbstractSegmentAtt;
@@ -29,6 +28,8 @@ import rpn.parser.RPnDataModule;
 public abstract class RPnCurve implements RpSolution {
 
     private RelaxedChainedPolylineSet polyLinesSetList_ = null;
+    
+    private List<? extends RealSegment>  segments_;
     private ViewingAttr viewAttr = null;
     private double ALFA;
     //** declarei isso (Leandro)
@@ -48,26 +49,28 @@ public abstract class RPnCurve implements RpSolution {
     public RPnCurve(PointNDimension[][] polyline, ViewingAttr viewAttr) {
         //super(fromPointNDimensionCurveToSegment(polyline), viewAttr);
 
-        try {
-            polyLinesSetList_ = new RelaxedChainedPolylineSet(polyline);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            polyLinesSetList_ = new RelaxedChainedPolylineSet(polyline);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
         this.viewAttr = viewAttr;
     }
 
-    public RPnCurve(CoordsArray[] vertices, ViewingAttr viewAttr) {
+    public RPnCurve(List<? extends RealSegment> segments, ViewingAttr viewAttr) {
+        
+        segments_=segments;
 
-        PointNDimension[][] polyline = new PointNDimension[1][vertices.length];
+//        PointNDimension[][] polyline = new PointNDimension[1][vertices.length];
+//
+//        for (int pont_point = 0; pont_point < vertices.length; pont_point++) {
+//            polyline[0][pont_point] = new PointNDimension(vertices[pont_point]);
+//        }
 
-        for (int pont_point = 0; pont_point < vertices.length; pont_point++) {
-            polyline[0][pont_point] = new PointNDimension(vertices[pont_point]);
-        }
-
-        try {
-            polyLinesSetList_ = new RelaxedChainedPolylineSet(polyline);
-        } catch (Exception e) {
-        }
+//        try {
+//            polyLinesSetList_ = new RelaxedChainedPolylineSet(polyline);
+//        } catch (Exception e) {
+//        }
 
         this.viewAttr = viewAttr;
 
@@ -206,22 +209,22 @@ public abstract class RPnCurve implements RpSolution {
 
         return segments;
     }
-
-    public RPnCurve(ContourCurve curve, ViewingAttr viewingAttr) {
-
-        //super(RpCurve.fromPointNDimensionCurveToSegment(curve.getCurve()), viewingAttr);
-
-        viewAttr = viewingAttr;
-        try {
-            polyLinesSetList_ = new RelaxedChainedPolylineSet(curve.getCurve());
-            //TODO Construtor para usar com o contour
-        } catch (Exception ex) {
-
-            ex.printStackTrace();
-
-        }
-
-    }
+//
+//    public RPnCurve(ContourCurve curve, ViewingAttr viewingAttr) {
+//
+//        //super(RpCurve.fromPointNDimensionCurveToSegment(curve.getCurve()), viewingAttr);
+//
+//        viewAttr = viewingAttr;
+//        try {
+//            polyLinesSetList_ = new RelaxedChainedPolylineSet(curve.getCurve());
+//            //TODO Construtor para usar com o contour
+//        } catch (Exception ex) {
+//
+//            ex.printStackTrace();
+//
+//        }
+//
+//    }
 
 
 
@@ -418,6 +421,12 @@ public abstract class RPnCurve implements RpSolution {
         return polyLinesSetList_.getPolylines();
     }
 
+    
+
+    public List<RealSegment> segments() {
+        return (List<RealSegment>) segments_;
+    }
+    
     public int getNumberOfPolylines() {
         return polyLinesSetList_.size();
     }
@@ -488,7 +497,7 @@ public abstract class RPnCurve implements RpSolution {
         return this.viewAttr;
     }
 
-    abstract public List<RealSegment> segments();
+//    abstract public List<RealSegment> segments();
 
     public String toXML() {
         throw new UnsupportedOperationException("Not supported yet.");

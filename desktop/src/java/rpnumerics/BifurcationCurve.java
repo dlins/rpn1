@@ -11,7 +11,7 @@ import java.util.List;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.controller.ui.UIController;
 import rpn.parser.RPnDataModule;
-import rpnumerics.methods.contour.ContourCurve;
+
 
 import wave.multid.view.ViewingAttr;
 import wave.util.RealSegment;
@@ -55,17 +55,6 @@ public class BifurcationCurve extends SegmentedCurve {
 
 
     
-
-    /** @deprecated
-     *
-     */
-
-    public BifurcationCurve(int familyIndex, ContourCurve curve, ViewingAttr viewingAttr) {
-
-        super(new ArrayList());
-
-     
-    }
 
     //
     // Accessors/Mutators

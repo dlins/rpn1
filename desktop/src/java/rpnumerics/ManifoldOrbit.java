@@ -37,7 +37,7 @@ public class ManifoldOrbit extends RPnCurve {
     // Constructor
     //
     public ManifoldOrbit(StationaryPoint stationaryPoint, PhasePoint firstPoint, Orbit orbit, int timeDirection) {
-        super(MultidAdapter.converseOrbitPointsToCoordsArray(orbit.getPoints()), new ViewingAttr(Color.ORANGE));
+        super(MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseOrbitPointsToCoordsArray(orbit.getPoints())), new ViewingAttr(Color.ORANGE));
         stationaryPoint_ = new StationaryPoint(stationaryPoint);
         orbit_ = orbit;
         firstPoint_ = firstPoint;

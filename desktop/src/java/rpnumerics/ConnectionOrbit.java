@@ -26,7 +26,7 @@ public class ConnectionOrbit extends RPnCurve implements RpSolution {
     // Constructors
     //
     public ConnectionOrbit(StationaryPoint uMinus, StationaryPoint uPlus, Orbit orbit) {
-        super(MultidAdapter.converseOrbitPointsToCoordsArray(orbit.getPoints()), new ViewingAttr(Color.orange));
+        super(MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseOrbitPointsToCoordsArray(orbit.getPoints())), new ViewingAttr(Color.ORANGE));
         uMinus_ = uMinus;
         uPlus_ = uPlus;
         orbit_ = orbit;

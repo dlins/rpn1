@@ -20,7 +20,6 @@ public class FundamentalCurve extends Orbit implements WaveCurveBranch, RpSoluti
 
     private int familyIndex_;
     private List<WaveCurveBranch> orbitList_;
-    private ArrayList<RealSegment> segments_ = new ArrayList();
     private int curveType_;
     private int curveIndex_;
     private boolean initialSubCurve_;
@@ -30,8 +29,6 @@ public class FundamentalCurve extends Orbit implements WaveCurveBranch, RpSoluti
         familyIndex_ = family;
         orbitList_= new ArrayList<WaveCurveBranch>();
         orbitList_.add(this);
-
-        segments_ = MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseRPnCurveToCoordsArray(this));
         
     }
 
@@ -86,12 +83,6 @@ public class FundamentalCurve extends Orbit implements WaveCurveBranch, RpSoluti
     }
 
 
-    @Override
-    public List<RealSegment> segments() {
-        return segments_;
-    }
-
-
 
     // ---------------------------- Acrescentei estes métodos em 18JAN2013 (Leandro)
     public String toMatlabData2D(int curveIndex) {
@@ -109,7 +100,7 @@ public class FundamentalCurve extends Orbit implements WaveCurveBranch, RpSoluti
             saida.write("%% xcoord1 ycoord1 xcoord2 ycoord2\n");
 
             for (int i = 0; i < segments().size(); i++) {
-                RealSegment orbitPoint = segments().get(i);
+                RealSegment orbitPoint = (RealSegment) segments().get(i);
                 saida.write(orbitPoint.toString() +"\n");
             }
 
