@@ -1,29 +1,34 @@
 #include "Contour2x2_Method.h"
 
+
+#include <iostream>
+#include <cstring>
+#ifdef _OPENMP
+#include <omp.h>
+#endif
+
 // Static variables are defined here:
 //
 bool Contour2x2_Method::is_first = true;
 
 HyperCube Contour2x2_Method::hc;
 
-int Contour2x2_Method::hn = 4;
-int Contour2x2_Method::hm = 3;
+const int Contour2x2_Method::hn = 4;
+const int Contour2x2_Method::hm = 3;
 
 // Estos numeros todavia no fueron determindados...
 int Contour2x2_Method::nsface_;  // =  3; colocarlos en la primera salida de impresion y ver cuanto valen.
 int Contour2x2_Method::nface_;   // =  5;TODO: pero no es importante.
-int Contour2x2_Method::nsoln_  = -1;
-int Contour2x2_Method::nedges_;
 // Hasta aqui. (Los dos ultimos no parecen ser importantes.)
 
-int Contour2x2_Method::dims_   = 125;
-int Contour2x2_Method::dime_   = 200;
-int Contour2x2_Method::dimf_   =  84;
-int Contour2x2_Method::ncvert_ =  16;
-int Contour2x2_Method::dncv    =  16; //TODO, ver si este no es el ncvert_
-int Contour2x2_Method::nsimp_  =  24;
+const int Contour2x2_Method::dims_   = 125;
+const int Contour2x2_Method::dime_   = 200;
+const int Contour2x2_Method::dimf_   =  84;
+const int Contour2x2_Method::ncvert_ =  16;
+const int Contour2x2_Method::dncv    =  16; //TODO, ver si este no es el ncvert_
+const int Contour2x2_Method::nsimp_  =  24;
 
-int Contour2x2_Method::numberOfCombinations = 5;
+const int Contour2x2_Method::numberOfCombinations = 5;
 
 double Contour2x2_Method::ul0;
 double Contour2x2_Method::vl0;
@@ -38,113 +43,146 @@ double Contour2x2_Method::dvr;
 double Contour2x2_Method::dumax;
 double Contour2x2_Method::dvmax;
 
-int * Contour2x2_Method::storn_;
-int * Contour2x2_Method::storm_;
-
-Matrix<double> Contour2x2_Method::cvert_;
-Matrix<double> Contour2x2_Method::vert;
-Matrix<int>    Contour2x2_Method::bsvert_;
-Matrix<int>    Contour2x2_Method::perm_;
-Matrix<int>    Contour2x2_Method::comb_;
-Matrix<double> Contour2x2_Method::foncub;
+/********** used by all threads *********/
 Matrix<int>    Contour2x2_Method::fnbr_;
+Matrix<double> Contour2x2_Method::cvert_;
 Matrix<int>    Contour2x2_Method::facptr_;
 Matrix<int>    Contour2x2_Method::face_;
-Matrix<double> Contour2x2_Method::cpp_sol;
-Matrix<int>    Contour2x2_Method::solptr_;
-Matrix<int>    Contour2x2_Method::cpp_edges_;
-Matrix<int>    Contour2x2_Method::smpedg_;
-int * Contour2x2_Method::exstfc;
-int * Contour2x2_Method::sptr_;
-
-//int Contour2x2_Method::tsimp = 1;
-//int Contour2x2_Method::tface = 3;
-
 int * Contour2x2_Method::index;
 int * Contour2x2_Method::usevrt;
 
 void Contour2x2_Method::allocate_arrays(void){
     if (is_first){
-        storn_ = new int[hn + 1];
-        storm_ = new int[hm + 1];
-                
+        // local variable
+        Matrix<int> comb_(numberOfCombinations, hm + 1); // Was transposed: hccube.inc:7
+        Matrix<int> perm_(hn, nsimp_); // Was NOT transposed: hccube.inc:5
+        Matrix<int> bsvert_(hn + 1, hn); // Was transposed: hccube.inc:5
+        // used by all threads
         cvert_.resize(ncvert_, hn); // Was transposed: hccube.inc:4
-        vert.resize(ncvert_, hn);
-        bsvert_.resize(hn + 1, hn); // Was transposed: hccube.inc:5
-        perm_.resize(hn, nsimp_); // Was NOT transposed: hccube.inc:5
-        comb_.resize(numberOfCombinations, hm + 1); // Was transposed: hccube.inc:7
-        foncub.resize(hm, ncvert_); // NOT transposed, as seen in hcsoln.inc:3.
+        // writes on comb
         nsface_ = hc.mkcomb(comb_.data(), hn + 1, hm + 1);
-
         fnbr_.resize(nsface_, nsface_);
-        cpp_sol.resize(hn, dims_); // NOT transposed, as seen in hcsoln.inc:3.
-        solptr_.resize(nsimp_, nsface_); // Transposed, as seen in hcsoln.inc:4.
-        cpp_edges_.resize(2, dime_); // NOT transposed as seen in hcedge.inc:3.
-        smpedg_.resize(nsimp_, 2); // Transposed, as seen in hcedge.inc:3.
-        //TODO: Ver o que acontece, pois se nao sao inicializadas coloca valores estranhos
-        for (int i = 0; i < nsimp_*2; i++) smpedg_(i) = 0;
+        face_.resize(hm + 1, dimf_); // Was NOT transposed: hccube.inc:7 // Confirmed in: hcmarc.inc:4.
         facptr_.resize(nsimp_, nsface_);
-        face_.resize(hm + 1, dimf_); // Was NOT transposed: hccube.inc:7
-                                     // Confirmed in: hcmarc.inc:4.
-
-        hc.mkcube(cvert_.data(), bsvert_.data(), perm_.data(), ncvert_, nsimp_, hn);
-
-//// DEBUG perm e bsvert
-//    cout << "perm(" << hn << ", " << nsimp_ << "):" << endl;
-//    for (int i = 0; i < hn; i++) {
-//        for (int j = 0; j < nsimp_; j++) {
-//            cout << " " << perm_(i,j);
-//        }
-//        cout << endl;
-//    }
-//    cout << "bsvert(" << hn << ", " << hn+1 << "):" << endl;
-//    for (int i = 0; i < hn; i++) {
-//        for (int j = 0; j < hn+1; j++) {
-//            cout << " " << bsvert_(j,i);
-//        }
-//        cout << endl;
-//    }
-//// END DEBUG
-
-        nface_ = hc.mkface(face_.data(), facptr_.data(), fnbr_.data(), dimf_, nsimp_, hn, hm, nsface_,
-                           bsvert_.data(), comb_.data(), perm_.data(), &storn_[0], &storm_[0]);
-
-        // Verify that nface_ is DNFACE.
-        exstfc = new int[nface_]; for (int i = 0; i < nface_; i++) exstfc[i] = 1;
-        sptr_  = new int[nface_];
-
         index = new int[4]; index[0] = 0; index[1] = 2; index[2] = 3; index[3] = 1; 
-        
         usevrt = new int[dncv]; // Defined in: contour3.F.
         for (int i = 0; i < dncv; i++) usevrt[i] = 1;
+
+        // writes on cvert, bsvert, perm
+        hc.mkcube(cvert_.data(), bsvert_.data(), perm_.data(), ncvert_, nsimp_, hn);
+
+        // writes on face, facptr, fnbr
+        // storm_, storn_ are only used inside the function as local storage
+        int * storm_ = new int[hm + 1];
+        int * storn_ = new int[hn + 1];
+        nface_ = hc.mkface(face_.data(), facptr_.data(), fnbr_.data(), dimf_, nsimp_, hn, hm, nsface_,
+                           bsvert_.data(), comb_.data(), perm_.data(), &storn_[0], &storm_[0]);
+        delete[] storm_;
+        delete[] storn_;
+        // Verify that nface_ is DNFACE.
+        //exstfc = new int[nface_]; for (int i = 0; i < nface_; i++) exstfc[i] = 1;
+        //sptr_  = new int[nface_];
 
         is_first = false;
 
         printf("++++++++++++++++ Contour2x2_Method: REMEMBER TO INVOKE deallocate_arrays() AT QUIT-TIME!!!\n++++++++++++++++ DON\'T SAY I DIDN\'T WARN YOU!!!\n");
         printf("    After allocating arrays, nsface_ = %d, nface_ =  %d\n", nsface_, nface_);
     }
-
-    return;
 }
 
 void Contour2x2_Method::deallocate_arrays(void){
     if (!is_first){
         delete [] usevrt;
         delete [] index;
-    
-        delete [] sptr_;
-        delete [] exstfc;
-
-        delete [] storm_;
-        delete [] storn_;
-
         is_first = true;
     }
-
     printf("++++++++++++++++ Contour2x2_Method: arrays deallocated. ++++++++++++++++\n");
-
-    return;
 }
+
+typedef std::vector<RealVector> rvector;
+struct context {
+    //
+    Matrix<int>    fnbr_;
+    Matrix<double> cvert_;
+    Matrix<int>    facptr_;
+    Matrix<int>    face_;
+    int *index;
+    int *usevrt; // TODO, ver si es necesario, sino, matar [dncv]
+    //
+    Matrix<double> foncub;
+    Matrix<int> solptr_;
+    Matrix<double> cpp_sol;
+    Matrix<int> cpp_edges_;
+    Matrix<int> smpedg_;
+    int * storm_; 
+    int * exstfc;
+    int * sptr_;
+    double * u;
+    double * g;
+    double * stormd;
+    rvector lvecs;
+    rvector rvecs;
+    //
+    context( const Matrix<int>& fnbr_, const Matrix<double>& cvert_, 
+            const Matrix<int>& facptr_, const Matrix<int>& face_,
+            const int *index_, const int *usevrt_, int dncv,
+            unsigned hm, unsigned ncvert, unsigned nsimp, unsigned nsface, unsigned hn, unsigned dims, unsigned dime, unsigned nface )
+        : fnbr_(fnbr_), cvert_(cvert_), facptr_(facptr_), face_(face_), 
+            foncub(hm, ncvert), solptr_(nsimp, nsface), cpp_sol(hn, dims), cpp_edges_(2, dime), smpedg_(nsimp,2)
+    { 
+        index = new int[4];
+        memcpy( index, index_, 4*sizeof(int) ); 
+        usevrt = new int[dncv];
+        memcpy( usevrt, usevrt_, dncv*sizeof(int) ); 
+        storm_ = new int[hm+1];
+        exstfc = new int[nface]; 
+        for (unsigned int i = 0; i < nface; i++) exstfc[i] = 1;
+        sptr_ = new int[nface];
+        u = new double[hn * (hn+1)];
+        g = new double[hn * (hn+1)];
+        stormd = new double[hn];
+    }
+
+    void reset() {
+        unsigned size = lvecs.size();
+        lvecs.clear();
+        lvecs.reserve( size );
+        size = rvecs.size();
+        rvecs.clear();
+        rvecs.reserve( size );
+    }
+
+    ~context ( ) {
+        delete[] index;
+        delete[] usevrt;
+        delete[] storm_;
+        delete[] exstfc;
+        delete[] sptr_;
+        delete[] u;
+        delete[] g;
+        delete[] stormd;
+    }
+};
+
+void Contour2x2_Method::process_cell( context * cnt, ThreeImplicitFunctions *timpf, int il, int jl, int ir, int jr )
+{
+    if (filhcub4(timpf, ir, jr, cnt->index, cnt->foncub.data())) {
+        int nsoln_  = -1;
+        nsoln_ = hc.cpp_cubsol(cnt->solptr_.data(), cnt->cpp_sol, dims_, 
+                               cnt->sptr_, nsoln_, cnt->foncub.data(), cnt->exstfc, 
+                               cnt->face_.data(), cnt->facptr_.data(), dimf_, cnt->cvert_.data(), 
+                               ncvert_, hn, hm, nsimp_, nsface_, nface_, cnt->u, 
+                               cnt->g, cnt->stormd, cnt->storm_);
+        // writes on cpp_edges, smpedg 
+        // smpedg is used inside to hold temp data
+        int nedges_ = -1 ;
+        nedges_ = hc.cpp_mkedge(cnt->cpp_edges_, dime_, nedges_, cnt->smpedg_.data(), 
+                                cnt->solptr_.data(), cnt->fnbr_.data(), nsimp_, nsface_);
+       
+        filedg4(cnt->cpp_sol, cnt->cpp_edges_, nedges_, il, jl, ir, jr, cnt->lvecs, cnt->rvecs);
+    }
+}
+
 
 void Contour2x2_Method::curve2x2(ThreeImplicitFunctions *timpf,
                                  std::vector<RealVector> &left_vrs,   // on_domain
@@ -170,51 +208,61 @@ void Contour2x2_Method::curve2x2(ThreeImplicitFunctions *timpf,
     dumax = 3.0 * max ( dur, dul ) ;//+ min ( dur, dul );
     dvmax = 3.0 * max ( dvr, dvl ) ;//+ min ( dvr, dvl );
 
-    double u[hn][hm + 1];
-    double g[hm][hm + 1];
-    double stormd[hm];
-
+    std::cerr << "Contour2x2_Method::curve2x2() " << std::endl;
+//    timer tm;
+//    tm.reset();
+    double time = 0;
+    unsigned int size = (gv_right->grid.rows()-1)*(gv_right->grid.cols()-1);
+    std::vector< rvector * > rvecs( size );
+    std::vector< rvector * > lvecs( size );
+    int num_threads = omp_get_max_threads();
+    std::cerr << "Number of threads: " << num_threads << std::endl;
+    std::vector<context*> contexts(num_threads);
+    for ( int i=0; i<num_threads; i++ ) {
+        contexts[i] = new context( fnbr_, cvert_, facptr_, face_, index, usevrt, dncv, 
+                hm, ncvert_, nsimp_, nsface_, hn, dims_, dime_, nface_ );
+    }
+    int ls = 0;
     for (int il = 0; il < gv_left->grid.rows() - 1; il++) {
         for (int jl = 0; jl < gv_left->grid.cols() - 1; jl++) {
-
             // Only for squares within the domain.
             if (gv_left->cell_type(il, jl) != CELL_IS_SQUARE) {
                 continue;
-            
             }
-//            if ( !(gv_left->cell_is_real(il, jl)) ) continue;
-
-
+            //if ( !(gv_left->cell_is_real(il, jl)) ) continue;
             if(!timpf->prepare_cell(il, jl)) continue;
-
+//            double t1 = tm.elapsed();
+            #pragma omp parallel for schedule(dynamic)
             for (int ir = 0; ir < gv_right->grid.rows() - 1; ir++){
+                unsigned int id = omp_get_thread_num();
+                context * cnt = contexts[id];
                 for (int jr = 0; jr < gv_right->grid.cols() - 1; jr++){
                     if (gv_right->cell_type(ir, jr) == CELL_IS_SQUARE){
                         if ( (timpf->is_singular()) && left_right_adjacency(il, jl, ir, jr)) continue;
-
-                        if (filhcub4(timpf, ir, jr, index, foncub.data())) {
-
-                            nsoln_ = hc.cpp_cubsol(solptr_.data(), cpp_sol, dims_, 
-                                                   &sptr_[0], nsoln_, foncub.data(), &exstfc[0], 
-                                                   face_.data(), facptr_.data(), dimf_, cvert_.data(), 
-                                                   ncvert_, hn, hm, nsimp_, nsface_, nface_, &u[0][0], 
-                                                   &g[0][0], &stormd[0], &storm_[0]);
-                        
-                            nedges_ = hc.cpp_mkedge(cpp_edges_, dime_, nedges_, smpedg_.data(), 
-                                                    solptr_.data(), fnbr_.data(), nsimp_, nsface_);
-                           
-                            filedg4(cpp_sol, cpp_edges_, nedges_,
-                                     il, jl, ir, jr, left_vrs, right_vrs);
-
-                        }
+                        process_cell( cnt, timpf, il, jl, ir, jr ); 
                     }
-                } // For jr
+                }
             } // For ir
+//            time += tm.elapsed() - t1;
         } // For jl
     } // For il
-
-    return;
+    for (int id = 0; id < num_threads; id++){
+        context *cnt = contexts[id];
+        rvector::iterator lend = left_vrs.end();
+        rvector::iterator rend = right_vrs.end();
+        ls += cnt->lvecs.size();
+        left_vrs.insert( lend, cnt->lvecs.begin(), cnt->lvecs.end() );
+        right_vrs.insert( rend, cnt->rvecs.begin(), cnt->rvecs.end() );
+        //delete vectors!!!!
+    }
+    //delete contexts
+    for ( int i=0; i<num_threads; i++ ) {
+        delete contexts[i];
+    }
+//    std::cerr << "Elapsed Time: " << tm.elapsed() << "s" << std::endl;
+//    std::cerr << "Working Time: " << time << "s" << std::endl;
 }
+
 
 bool Contour2x2_Method::filhcub4(ThreeImplicitFunctions *timpf,
                                  int ir, int jr, int *index, double *foncub){

@@ -1,7 +1,6 @@
 #include "GridValues.h"
 #include "Boundary.h"
-
-
+//#include "timer.h"
 
 GridValues::GridValues(const Boundary *b, 
                        const RealVector &pmin, const RealVector &pmax,
@@ -30,7 +29,9 @@ void GridValues::set_grid(const Boundary *b,
 void GridValues::fill_values_on_grid(const Boundary *b, 
                                      const RealVector &pmin, const RealVector &pmax,
                                      const std::vector<int> &number_of_cells){
+//    timer tm;
     if (!grid_computed){
+//        tm.reset();
         int dim = pmin.size();
 
         printf("Inside GridValues::fill_values_on_grid\n");
@@ -43,6 +44,9 @@ void GridValues::fill_values_on_grid(const Boundary *b,
         
         grid.resize(number_of_cells[0] + 1, number_of_cells[1] + 1);
 
+#ifdef _OPENMP
+        #pragma omp parallel for schedule(dynamic)
+#endif
         for (int i = 0; i <= number_of_cells[0]; i++) {
             for (int j = 0; j <= number_of_cells[1]; j++) {
                 grid(i, j).resize(dim);
@@ -87,24 +91,22 @@ void GridValues::fill_values_on_grid(const Boundary *b,
         //
         functions_on_grid_computed = Jacobians_on_grid_computed = 
         dd_computed = e_computed = false; 
+//        std::cerr << "--------------------------------------Fill values on grid: " << tm.elapsed() << "s" << std::endl;
     }
 
     return;
 }
 
 void GridValues::fill_functions_on_grid(const FluxFunction *ff, const AccumulationFunction *aa){
+//    timer tm;
     if (!functions_on_grid_computed){
+//        tm.reset();
 //        fill_values_on_grid(GridValues &gv);
-
 //        printf("Inside GridValues::fill_functions_on_grid\n");
-        
-  
 
         int rows = grid.rows(), cols = grid.cols(); 
         int n = rows*cols;
         if (n == 0) return;
-        
-
 
         F_on_grid.resize(rows, cols);
         G_on_grid.resize(rows, cols);
@@ -112,6 +114,7 @@ void GridValues::fill_functions_on_grid(const FluxFunction *ff, const Accumulati
         int dim = grid(0, 0).size();
         
 
+        #pragma omp parallel for schedule(dynamic)
         for (int i = 0; i < n; i++) {
             F_on_grid(i).resize(dim);
             G_on_grid(i).resize(dim);
@@ -126,6 +129,7 @@ void GridValues::fill_functions_on_grid(const FluxFunction *ff, const Accumulati
         }
 
         functions_on_grid_computed = true;
+//        std::cerr << "--------------------------------------Fill functions on grid: " << tm.elapsed() << "s" << std::endl;
     }
 
     return;
