@@ -135,10 +135,6 @@
                
         <CURVEPARAM name="characteristic" value="1"/>
     </CURVECONFIGURATION>
-    
-    
-
-
   
     <VIEWCONFIGURATION modeldomain="2">
 
@@ -152,8 +148,6 @@
     </VIEWCONFIGURATION>
 
   </RPNCONFIGURATION>
-
  </PHASESPACE>
-
 </RPNSESSION>
 
