@@ -6,6 +6,7 @@
 package wave.util;
 
 import javax.vecmath.GVector;
+import java.text.NumberFormat;
 
 public class RealVector extends GVector {
 
@@ -34,7 +35,9 @@ public class RealVector extends GVector {
         StringBuilder buffer = new StringBuilder();
 
         for (int i = 0; i < this.getSize(); i++) {
-            buffer.append(getElement(i));
+
+            buffer.append(String.format("%3.6e",getElement(i)));
+            //buffer.append(getElement(i));
             buffer.append(" ");
 
         }
@@ -55,10 +58,16 @@ public class RealVector extends GVector {
         String[] components = data.split(" ");
         double[] doubleList = new double[components.length];
 
-        for (int j = 0; j < components.length; j++) {
-            Double element = new Double(components[j]);
-            doubleList[j] = element;
-        }
+        for (int j = 0; j < components.length; j++) 
+          try {
+		Number element = NumberFormat.getInstance().parse(components[j]);
+            	doubleList[j] = element.doubleValue();
+
+          }
+
+          catch (java.text.ParseException ex) {
+               	System.out.println("Error parsing the Double string" + "\n" + ex);
+          }
 
         return doubleList;
     }

@@ -52,7 +52,8 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand {
 
         RealVector[] userInputList = UIController.instance().userInputList();
 
-        System.out.println("execute do  plot" + userInputList[0]);
+        for (int i=0;i < userInputList.length;i++)
+            System.out.println("execute do  plot" + userInputList[0]);
 
         Iterator oldValue = UIController.instance().getActivePhaseSpace().getGeomObjIterator();
 

@@ -230,7 +230,6 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
         
     }
 
-    // ---- BUGGED : tentativa de remover somente as strings da curva selecionada, mas acontece erro na remoção
     public void removeStrings() {
         
         List claStringToRemove = new ArrayList();

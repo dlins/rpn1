@@ -58,6 +58,12 @@ public class InflectionPlotCommand extends RpModelPlotCommand {
         InflectionCurveGeomFactory factory = new InflectionCurveGeomFactory(RPNUMERICS.createInflectionCurveCalc());
 
 
+        joinGeomToPhaseSpaces(factory);
+
+    }
+
+    public void joinGeomToPhaseSpaces(InflectionCurveGeomFactory factory) {
+
         RPnPhaseSpaceAbstraction leftPhaseSpace = RPnDataModule.LEFTPHASESPACE;
 
         RPnPhaseSpaceAbstraction rightPhaseSpace = RPnDataModule.RIGHTPHASESPACE;
@@ -76,12 +82,7 @@ public class InflectionPlotCommand extends RpModelPlotCommand {
         ArrayList<RealVector> emptyInput = new ArrayList<RealVector>();
         logCommand(new RpCommand(event, emptyInput));
 
-
-
-
         RPnDataModule.PHASESPACE.join(factory.geom());
-
-
 
     }
 

@@ -7,51 +7,52 @@ package rpn.parser;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
+import org.xml.sax.SAXException;
+import org.xml.sax.InputSource;
 
 import rpn.*;
 import rpn.controller.phasespace.*;
 import rpn.controller.ui.UIController;
-
-
-
-
-
-import org.xml.sax.SAXException;
-import org.xml.sax.InputSource;
-
-import java.io.*;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.Set;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.XMLReader;
+import rpn.command.*;
+import rpn.configuration.Configuration;
 import rpn.component.RpGeometry;
+import rpn.component.InflectionCurveGeomFactory;
 import rpnumerics.FundamentalCurve;
+import rpnumerics.InflectionCurve;
 import rpnumerics.Orbit;
 import rpnumerics.RPNUMERICS;
-
-
-
 import rpnumerics.RPnCurve;
-import rpnumerics.RiemannProfile;
-import rpnumerics.RpSolution;
 import rpnumerics.SegmentedCurve;
 import rpnumerics.WaveCurve;
 import wave.multid.Space;
+import wave.util.RealVector;
+import wave.util.RealSegment;
+
+import java.io.*;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.Vector;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
+import java.util.Set;
+
+
+import org.xml.sax.ContentHandler;
+import org.xml.sax.XMLReader;
+import rpn.component.RpGeomFactory;
 
 /** With this class the calculus made in a previous session can be reloaded. A previous state can be reloaded reading a XML file that is used by this class */
 public class RPnDataModule {
+
+    static public String XML_TAG="RPNDATA";
 
     static public RPnPhaseSpaceAbstraction PHASESPACE = null;
     static public RPnPhaseSpaceAbstraction LEFTPHASESPACE = null;
     static public RPnPhaseSpaceAbstraction RIGHTPHASESPACE = null;
     static public RPnPhaseSpaceAbstraction RIEMANNPHASESPACE = null;
     static public RPnPhaseSpaceAbstraction[] CHARACTERISTICSPHASESPACEARRAY = null;
+
     private static HashMap<String, RPnPhaseSpaceAbstraction> phaseSpaceMap_ = new HashMap<String, RPnPhaseSpaceAbstraction>();
 
     public RPnDataModule() {
@@ -108,8 +109,19 @@ public class RPnDataModule {
 
     static protected class RPnDataParser implements ContentHandler {
 
-        private String currentElement_;
-        private StringBuilder stringBuffer_ = new StringBuilder();
+        private String          currentElement_;
+        private Attributes      currentElementAtt_;
+        private Vector          curveSegments_;
+        private StringBuilder   stringBuffer_ = new StringBuilder();
+        private String          dimension_;
+        private String          curve_name_;
+	private StringBuffer 	realSegDataBuffer_ = new StringBuffer();
+
+        private Configuration currentConfiguration_;
+
+        // vector for reading the segments data for segmented curves
+        private Vector curveSegmentsCoords_;
+
 
         public RPnDataParser() {
 
@@ -137,12 +149,10 @@ public class RPnDataModule {
                         new Space("Characteristics Space: " + i, 2), new NumConfigImpl());
 
             }
-            
-            
-
-        phaseSpaceMap_.put(PHASESPACE.getName(), PHASESPACE);
-        phaseSpaceMap_.put(LEFTPHASESPACE.getName(), LEFTPHASESPACE);
-        phaseSpaceMap_.put(RIGHTPHASESPACE.getName(), RIGHTPHASESPACE);
+                        
+            phaseSpaceMap_.put(PHASESPACE.getName(), PHASESPACE);
+            phaseSpaceMap_.put(LEFTPHASESPACE.getName(), LEFTPHASESPACE);
+            phaseSpaceMap_.put(RIGHTPHASESPACE.getName(), RIGHTPHASESPACE);
 
         }
 
@@ -157,20 +167,106 @@ public class RPnDataModule {
         public void startElement(String uri, String name, String qName, Attributes att) throws
                 SAXException {
 
-
-
-
             currentElement_ = name;
+            currentElementAtt_ = att;
+
+            if (currentElement_.equals(XML_TAG)){
+
+                RPnCommandModule.RPnCommandParser.selectPhaseSpace(att.getValue("phasespace"));
+
+            } else
+
+            if (currentElement_.equals(SegmentedCurve.XML_TAG)){
+
+                  curveSegmentsCoords_ = new Vector();
+                  dimension_ = att.getValue("dimension");
+                  curve_name_ = att.getValue("curve_name");
+
+            }
+
+            if (currentElement_.equals("CURVECONFIGURATION")) {
+
+
+                  currentConfiguration_ = rpnumerics.RPNUMERICS.getConfiguration(att.getValue("name"));
+
+            }
 
         }
 
         @Override
         public void characters(char[] buff, int offset, int len) throws
                 SAXException {
+            
+            if (currentElement_.equals("REALSEG")) {
+
+            	realSegDataBuffer_.append(buff, offset, len);
+            	String data = realSegDataBuffer_.toString().trim();
+            	if (data.length() != 0) {
+
+                        RealVector newV = new RealVector(data);
+
+			for (int i=0;i < newV.getSize();i++) {
+
+				Double dVal = new Double(newV.getElement(i));
+                       		curveSegmentsCoords_.add(dVal);
+
+			}
+                }
+
+            }     
+
         }
 
         @Override
         public void endElement(String uri, String name, String qName) throws SAXException {
+
+            currentElement_ = name;
+
+            if (currentElement_.equals("REALSEG")){
+
+		realSegDataBuffer_.delete(0,realSegDataBuffer_.length());
+            }
+
+            if (currentElement_.equals(SegmentedCurve.XML_TAG)){
+
+                int dimension = Integer.parseInt(dimension_);
+                int num_of_coords_per_segment = dimension*2;
+
+                int num_of_segments = curveSegmentsCoords_.size()/num_of_coords_per_segment;
+		System.out.println("NUM OF SEGS = " + num_of_segments);
+
+                curveSegments_ = new Vector();
+
+
+                RealVector c1 = new RealVector(dimension);
+                RealVector c2 = new RealVector(dimension);
+
+                for (int i=0;i < num_of_segments;i++) {                                        
+                    for (int j=0;j < dimension;j++) {
+
+                        c1.setElement(j,((Double)curveSegmentsCoords_.elementAt(i*num_of_coords_per_segment + j)).doubleValue());
+                        c2.setElement(j,((Double)curveSegmentsCoords_.elementAt(i*num_of_coords_per_segment + dimension + j)).doubleValue());
+
+                    }
+
+                    curveSegments_.add(new RealSegment(c1,c2));
+
+                }
+
+		// this is going to be a Bifurcation generic curve
+                InflectionCurve inflectionCurve = new InflectionCurve(curveSegments_);
+                if (curve_name_.equals(inflectionCurve.getClass().getSimpleName())) {
+
+			System.out.println("BUIDING THE INFLECTION CURVE...");
+                    InflectionCurveGeomFactory factory =
+                            new InflectionCurveGeomFactory(RPNUMERICS.createInflectionCurveCalc(Integer.parseInt(currentConfiguration_.getParam("family"))),
+                            inflectionCurve);
+                    InflectionPlotCommand.instance().joinGeomToPhaseSpaces(factory);
+
+                }
+                
+            }
+
         }
 
         public void setDocumentLocator(Locator locator) {
@@ -425,15 +521,14 @@ public class RPnDataModule {
     }
     // ----------
 
-    static public void exportRP(FileWriter writer) throws java.io.IOException {
+    static public void export(FileWriter writer) throws java.io.IOException {
 
 
         // TODO : this is working only for PHASESPACE ... must be implemented to all
         // others phasespaces (L , R etc...)
         Iterator<RpGeometry> iterator = PHASESPACE.getGeomObjIterator();
 
-        // Inserting data
-
+        // selecting visible data
         HashMap<Integer, RpGeometry> visibleGeometries = new HashMap<Integer, RpGeometry>();
         int geometryCounter = 0;
 
@@ -447,18 +542,18 @@ public class RPnDataModule {
 
         }
 
-        // Inserting data
+        writer.write("<" + XML_TAG + " phasespace=" + '\"' + PHASESPACE.getName() + '\"' + ">\n");
+
+        // writing RpSolution data
         Set<Entry<Integer, RpGeometry>> visibleGeometrySet = visibleGeometries.entrySet();
 
         for (Entry<Integer, RpGeometry> entry : visibleGeometrySet) {
 
-            RpSolution element = (RpSolution) entry.getValue().geomFactory().geomSource();
-
-            if (element instanceof RiemannProfile) {
-                writer.write(element.toXML() + "\n");
-            } else {
-                writer.write(element.toXML() + "\n");
-            }
+            RpGeomFactory factory = (RpGeomFactory) entry.getValue().geomFactory();
+            writer.write(factory.toXML() + "\n");
         }
+
+        writer.write("</" + XML_TAG + ">\n");
+
     }
 }

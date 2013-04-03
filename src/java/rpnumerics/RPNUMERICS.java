@@ -552,15 +552,19 @@ public class RPNUMERICS {
     }
 
     public static InflectionCurveCalc createInflectionCurveCalc() {
+        
+        int family = new Integer(RPNUMERICS.getParamValue("inflectioncurve", "family"));
+        return createInflectionCurveCalc(family);
+    }
+
+    public static InflectionCurveCalc createInflectionCurveCalc(int family) {
 
         int[] resolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("inflectioncurve", "resolution"));
-
         ContourParams params = new ContourParams(resolution);
-
-        int family = new Integer(RPNUMERICS.getParamValue("inflectioncurve", "family"));
 
         return new InflectionCurveCalc(params, family);
     }
+
 
     public static CoincidenceCurveCalc createCoincidenceCurveCalc() {
 

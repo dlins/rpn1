@@ -45,24 +45,43 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
 
     }
 
+    @Override
     public String toXML() {
+
         StringBuilder buffer = new StringBuilder();
 
-        String commandName = geomSource().getClass().getName();
-        commandName = commandName.toLowerCase();
-        commandName = commandName.replaceAll(".+\\.", "");
+        // TODO confirm that all geomSource() calls will return a SegmentedCurve instance type
+        SegmentedCurve geomSource = (SegmentedCurve) geomSource();
 
-        ContourCurveCalc calc = ((ContourCurveCalc) rpCalc());
+        String curve_name = '\"' + geomSource.getClass().getSimpleName() + '\"';
+        String dimension = '\"' + Integer.toString(RPNUMERICS.domainDim())  + '\"';
 
-        ContourParams params = calc.getParams();
 
-        buffer.append("<COMMAND name=\"").append(commandName).append("\" ");
+        //
+        // PRINTS OUT THE CURVE ATTS
+        //
+        buffer.append("<" + SegmentedCurve.XML_TAG + " curve_name=" + ' ' + curve_name + ' ' +  "dimension=" + ' ' +  dimension + ' ' +  "format_desc=\"1 segment per row\">" + "\n");
 
-        buffer.append(params.toString());
 
+        //
+        // PRINTS OUT THE CONFIGURATION INFORMATION
+        //
+        buffer.append(rpCalc().getConfiguration().toXML());
+
+        //
+        // PRINTS OUT THE SEGMENTS COORDS
+        //
+        for (int i = 0; i < geomSource.segments().size(); i++) {
+
+            RealSegment realSegment =(RealSegment) geomSource.segments().get(i);
+            buffer.append(realSegment.toXML() + "\n");
+        }
+
+        buffer.append("</" + SegmentedCurve.XML_TAG + ">" + "\n");
 
         return buffer.toString();
     }
+
 
     public String toMatlab(int curveIndex) {
         throw new UnsupportedOperationException("Not supported yet.");

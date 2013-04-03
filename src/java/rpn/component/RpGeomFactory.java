@@ -49,4 +49,12 @@ public interface RpGeomFactory {
     /** Gets the controller of the geometric model. */
 
     RpController getUI();
+
+     /*
+     * XML output
+     */
+    String toXML();
+
+
+
 }

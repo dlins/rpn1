@@ -23,8 +23,6 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
-
 import org.apache.batik.ext.swing.GridBagConstants;
 import rpn.command.ClassifierCommand;
 import rpn.command.VelocityCommand;
@@ -54,8 +52,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JMenuItem shockMenuItem_ = new JMenuItem("Shock Configuration ...");
     private JMenuItem configurationMenuItem_ = new JMenuItem(new ConfigAction());
     private JMenuItem jMenuFileExit = new JMenuItem();
-    private JMenuItem exportRPMenuItem_ = new JMenuItem("Export Riemann Profile results ...");
-    private JMenuItem matlabExportMenuItem_ = new JMenuItem("Export to Matlab ...");
+    private JMenuItem exportMenuItem_ = new JMenuItem("Export results to XML ...");
+    private JMenuItem matlabExportMenuItem_ = new JMenuItem("Export results to Matlab ...");
     private JMenuItem jMenuHelpAbout = new JMenuItem();
     private GridBagLayout uiFrameLayout_ = new GridBagLayout();
     private JMenuItem saveSessionMenuItem_ = new JMenuItem("Save Session As ...");
@@ -97,12 +95,20 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             RPnNetworkStatusController.instance().addPropertyChangeListener(this);
             UIController.instance().setStateController(new StateInputController(this));
             propertyChange(new PropertyChangeEvent(command, "aplication state", null, null));
+
             jbInit();
+
             phaseSpaceFramesInit(RPNUMERICS.boundary());
-            //riemanProfileFramesInit();
+
+            int numOfPanels = RPnVisualizationModule.DESCRIPTORS.size();
+            auxFrames_ = new RPnPhaseSpaceFrame[2 * numOfPanels];
+
+            frames_ = new RPnPhaseSpaceFrame[numOfPanels];
+
             associatesPhaseSpaces();
             associatePhaseSpacesAndCurvesList();
-            createPanelsChooser();
+
+            //createPanelsChooser();
 
             addPropertyChangeListener(this);
 
@@ -118,8 +124,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 saveSessionMenuItem_.setEnabled(false);
             }
 
-            // should be enabled only when a RP profile is present...
-            exportRPMenuItem_.setEnabled(false);
+            exportMenuItem_.setEnabled(true);
 
             matlabExportMenuItem_.setEnabled(true);
 
@@ -234,7 +239,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         }
 
         if (evt.getPropertyName().equals("Riemann Profile Added")) {
-            exportRPMenuItem_.setEnabled(true);
+            exportMenuItem_.setEnabled(true);
         }
 
 
@@ -419,6 +424,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
     //** para criar os frames (paineis) - incluindo os auxiliares
     protected void phaseSpaceFramesInit(Boundary boundary) {
+
         wave.multid.graphs.ClippedShape clipping = new wave.multid.graphs.ClippedShape(boundary);
         int numOfPanels = RPnVisualizationModule.DESCRIPTORS.size();
 
@@ -473,6 +479,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
                 frames_[i] = new RPnPhaseSpaceFrame(scene, commandMenu_);
                 frames_[i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(i)).label());
+		System.out.println("TITLE : "+ ((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(i)).label());
 
 //
 //                /*
@@ -694,7 +701,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
 
     // Exports the Riemann Profile solution only...
-    void exportRP_actionPerformed(ActionEvent e) {
+    void exportData_actionPerformed(ActionEvent e) {
         try {
             JFileChooser chooser = new JFileChooser();
             chooser.setSelectedFile(new File("RP.OUT"));
@@ -706,11 +713,11 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 dir = chooser.getSelectedFile().getParent();
 
                 writer.write(RPnConfigReader.XML_HEADER);
+
                 RPnNumericsModule.export(writer);
-                writer.write("<RPNDATA>\n");
-                RPnDataModule.exportRP(writer);
-                writer.write("</RPNDATA>\n");
+                RPnDataModule.export(writer);                
                 RPnCommandModule.export(writer);
+
                 writer.close();
             }
 
@@ -735,18 +742,11 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 writer.write(" <PHASESPACE name=\"Phase Space\">\n");
                 writer.write("  <RPNCONFIGURATION>\n");
                 RPnNumericsModule.export(writer);
-//<<<<<<< HEAD
-//                RPnVisualizationModule.export(writer);
-//                writer.write("</RPNCONFIGURATION>\n");
-//                RPnDataModule.export(writer);
-//
-//=======
                 RPnVisualizationModule.export(writer);
                 writer.write("  </RPNCONFIGURATION>\n");
                 writer.write(" </PHASESPACE>\n");
                 RPnCommandModule.export(writer);
                 writer.write("</RPNSESSION>");
-//>>>>>>> ee2dd9b19625a014a1150feafec12fa2738af685
                 writer.close();
             }
 
@@ -929,11 +929,11 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                     }
                 });
 
-        exportRPMenuItem_.addActionListener(
+        exportMenuItem_.addActionListener(
                 new ActionListener() {
 
                     public void actionPerformed(ActionEvent e) {
-                        exportRP_actionPerformed(e);
+                        exportData_actionPerformed(e);
                     }
                 });
 
@@ -1096,7 +1096,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
 
         fileMenu.add(saveSessionMenuItem_);
-        fileMenu.add(exportRPMenuItem_);
+        fileMenu.add(exportMenuItem_);
         fileMenu.add(matlabExportMenuItem_);
         fileMenu.addSeparator();
         fileMenu.add(networkMenuItem);

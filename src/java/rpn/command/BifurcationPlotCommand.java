@@ -52,7 +52,7 @@ public class BifurcationPlotCommand extends RpModelPlotCommand {
 
         return factory.geom();
     }
-
+    
     static public BifurcationPlotCommand instance() {
         if (instance_ == null) {
             instance_ = new BifurcationPlotCommand();

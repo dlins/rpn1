@@ -75,4 +75,6 @@ public class PoincareSectionGeomFactory implements RpGeomFactory {
     public void updateGeom(List<Area> area, List<Integer> segmentsToRemove) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    public String toXML() { return "TODO: toXML()"; }
 }
