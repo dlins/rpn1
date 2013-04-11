@@ -18,7 +18,6 @@ import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Observable;
-import java.util.Observer;
 import java.util.Set;
 import javax.swing.ButtonGroup;
 import javax.swing.JFormattedTextField;
