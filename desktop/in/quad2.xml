@@ -39,6 +39,16 @@
     <METHOD name="Newton">
         <METHODPARAM  name="tolerance" value="0.001" />
     </METHOD>
+    
+    
+    
+    <METHOD name="HugoniotMethod">
+        <METHODPARAM  name="implicit" value="0" />
+        <METHODPARAM  name="explicit" value="1" />
+    </METHOD>
+
+    
+    
 
 
     <CURVECONFIGURATION name="fundamentalcurve">
@@ -57,6 +67,7 @@
         <CURVEPARAM name="resolution" value="128 128"/>
         <CURVEPARAM name="family" value="0"/>
         <CURVEPARAM name="characteristicwhere" value="0"/>
+        
     </CURVECONFIGURATION>
 
 

@@ -58,6 +58,13 @@ Physics::Physics(const string & physicsID) : physicsVector_(new vector<SubPhysic
         physicsVector_->push_back(new CoreyQuadPhysics());
     }
 
+    
+    
+     if (physicsID.compare("TriPhase") == 0) {
+
+        physicsVector_->push_back(new TriPhase());
+    }
+
 
 
 

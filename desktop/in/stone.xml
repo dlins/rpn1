@@ -50,6 +50,12 @@
     <METHOD name="Newton">
         <METHODPARAM  name="tolerance" value="0.001" />
     </METHOD>
+    
+     
+    <METHOD name="HugoniotMethod">
+        <METHODPARAM  name="implicit" value="0" />
+        <METHODPARAM  name="explicit" value="1" />
+    </METHOD>
 
 
     <CURVECONFIGURATION name="fundamentalcurve">
