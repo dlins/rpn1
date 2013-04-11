@@ -24,6 +24,10 @@
 #include "Hugoniot_Locus.h"
 #include "ThreeImplicitFunctions.h"
 #include "Double_Contact_Function.h"
+#include "Double_Contact.h"
+#include "Hugoniot_Curve.h"
+#include "ShockMethod.h"
+#include "Shock.h"
 #include "methods/ShockMethod.h"
 
 /*

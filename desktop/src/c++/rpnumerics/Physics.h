@@ -23,6 +23,7 @@
 #include "PolydispersePhysics.h"
 #include "CoreyQuadPhysics.h"
 #include "Cub2.h"
+#include "TriPhase.h"
 
 //!
 
