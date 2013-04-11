@@ -21,7 +21,7 @@ TriPhaseFluxFunction::TriPhaseFluxFunction(const TriPhaseParams & params, const 
 
     capil_ = new Capillarity(capilParams);
     perm_ = new Permeability(permParams);
-    viscParams_ = new ViscosityParams(viscParams.epsl());
+    viscParams_ = new ViscosityParams(viscParams.getEpsl());
 
 }
 
@@ -160,7 +160,7 @@ void TriPhaseFluxFunction::viscosity(const RealVector & U, RealMatrix2 & viscosi
 
     capil().jacobian(U, capillarity_jacobian);
     viscosity.mul(capillarity_jacobian);
-    viscosity.scale(viscParams_->epsl());
+    viscosity.scale(viscParams_->getEpsl());
 
 }
 

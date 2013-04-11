@@ -60,7 +60,7 @@ vector<double> * TriPhase::getParams() {
         paramsVector->push_back(triPhaseFluxFunction.capil().params().getParam(i));
     }
 
-    double eps = triPhaseFluxFunction.visc().epsl();
+    double eps = triPhaseFluxFunction.visc().getEpsl();
 
     paramsVector->push_back(eps);
 
@@ -105,7 +105,7 @@ void TriPhase::setParams(vector<string> params) {
 
     //Viscosity params 
 
-    triPhaseFlux.visc().epsl() = atof(params[params.size() - 1].c_str());
+    triPhaseFlux.visc().setEpsl(atof(params[params.size() - 1].c_str()));
 
 }
 

@@ -31,13 +31,18 @@ public:
     ViscosityParams(double eps);
     ViscosityParams();
 
-    double & epsl();
+    void setEpsl(double ) ;
+    double getEpsl()const;
     virtual ~ViscosityParams();
 
 };
 
-inline double & ViscosityParams::epsl()  {
+inline double ViscosityParams::getEpsl()const{
     return epsl_;
+}
+
+inline void ViscosityParams::setEpsl(double eps) {
+    epsl_=eps;
 }
 
 #endif //! _ViscosityParams_H
