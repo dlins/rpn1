@@ -41,11 +41,7 @@
 //TPCW
 #include "TPCW.h"
 
-
-
 //-------------------------------------
-
-
 
 #include "JNIDefs.h"
 #include <string.h>
@@ -58,7 +54,7 @@ Physics * RpNumerics::physics_ = NULL;
 
 GridValuesFactory * RpNumerics::gridValuesFactory_ = NULL;
 
-vector<StationaryPoint *>  * RpNumerics::stationaryPointVector_=NULL;
+vector<StationaryPoint *> * RpNumerics::stationaryPointVector_ = NULL;
 
 double RpNumerics::sigma = 0;
 
@@ -126,11 +122,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getFluxParams
     jmethodID fluxParamsConstructorID = (env)->GetMethodID(fluxParamsClass, "<init>", "(Lwave/util/RealVector;)V");
     jmethodID realVectorConstructorID = env->GetMethodID(realVectorClass, "<init>", "([D)V");
 
-    
-    
+
+
     vector<double> * paramsVector = RpNumerics::getPhysics().getSubPhysics(0).getParams();
 
-//    const FluxParams & nativeFluxParams = RpNumerics::getPhysics().fluxFunction().fluxParams();
+    //    const FluxParams & nativeFluxParams = RpNumerics::getPhysics().fluxFunction().fluxParams();
 
     double nativeRealVectorArray[paramsVector->size()];
 
@@ -177,6 +173,62 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setAccumulationParams
 
     AccumulationParams newAccumulationParams(newAccumulationParamsVector);
     RpNumerics::getPhysics().accumulationParams(newAccumulationParams);
+
+}
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    setMethod
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setMethod
+(JNIEnv * env, jclass cls, jstring methodType, jstring methodName) {
+
+    string nativeMethodType(env->GetStringUTFChars(methodType, NULL));
+    string nativeMethodName(env->GetStringUTFChars(methodName, NULL));
+
+    
+    cout<<nativeMethodType<<" "<<nativeMethodName<<endl;
+    
+    delete RpNumerics::getPhysics().getSubPhysics(0).getHugoniotFunction();
+
+    if (RpNumerics::getPhysics().ID().compare("Stone") == 0) {
+
+        if (nativeMethodType.compare("hugoniotmethod")==0){
+
+            
+            if (nativeMethodName.compare("explicit") ){
+            
+                RpNumerics::getPhysics().getSubPhysics(0).setHugoniotFunction(new StoneHugoniot());
+                
+            }
+            
+            else {
+                RpNumerics::getPhysics().getSubPhysics(0).setHugoniotFunction(new Hugoniot_Curve());
+            }
+            
+        }
+
+    }
+
+
+    if (RpNumerics::getPhysics().ID().compare("Quad2") == 0) {
+
+        if (nativeMethodType.compare("hugoniotmethod")){
+
+            if (nativeMethodName.compare("explicit") ){
+                RpNumerics::getPhysics().getSubPhysics(0).setHugoniotFunction(new Quad2Hugoniot());
+            }
+            else{
+                RpNumerics::getPhysics().getSubPhysics(0).setHugoniotFunction(new Hugoniot_Curve());
+            }
+            
+            
+        }
+        
+
+    }
+
 
 }
 
@@ -265,8 +317,8 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setResolution
 
     const Boundary * boundary = RpNumerics::getPhysics().getSubPhysics(0).getPreProcessedBoundary();
 
-    
-    cout<<"Chamando set Grid"<<gridNameNative<<endl;
+
+    cout << "Chamando set Grid" << gridNameNative << endl;
 
     grid->set_grid(boundary, boundary->minimums(), boundary->maximums(), newResolutionVector);
 
@@ -350,9 +402,9 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setBoundary
         RealVector maxNativeRealVector(maxSize, maxNativeArray);
         RectBoundary nativeBoundary(minNativeRealVector, maxNativeRealVector);
         RpNumerics::getPhysics().boundary(nativeBoundary);
-        
-        cout<<"Min nativo: "<<nativeBoundary.minimums()<<endl;
-        cout<<"Max nativo: "<<nativeBoundary.maximums()<<endl;
+
+        cout << "Min nativo: " << nativeBoundary.minimums() << endl;
+        cout << "Max nativo: " << nativeBoundary.maximums() << endl;
 
     }
 
@@ -543,7 +595,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_boundary(JNIEnv * env, jcla
         for (int i = 0; i < boundaryDimension; i++) {
             minimum[i] = boundary.minimums().component(i);
             maximum[i] = boundary.maximums().component(i);
-            
+
         }
 
         //-----------------------------------------------------------------------

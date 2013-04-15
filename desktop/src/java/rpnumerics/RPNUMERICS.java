@@ -792,6 +792,8 @@ public class RPNUMERICS {
     public static native Boundary boundary();
 
     public static native void setBoundary(Boundary newBoundary);
+    
+    public static native void setMethod (String methodType,String methodName);
 
     public static native int domainDim();
 

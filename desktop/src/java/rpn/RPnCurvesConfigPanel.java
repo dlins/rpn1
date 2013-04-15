@@ -5,6 +5,7 @@
  */
 package rpn;
 
+import rpn.ui.RPnInputComponent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,18 +13,19 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
-import javax.jws.Oneway;
 import javax.swing.*;
 import rpn.command.ChangeDirectionCommand;
 import rpn.configuration.Configuration;
+import rpn.ui.UIComponentCreator;
 import rpnumerics.Orbit;
 import rpnumerics.RPNUMERICS;
 
-public class RPnCurvesConfigPanel extends Observable implements PropertyChangeListener, ActionListener,Observer {
+public class RPnCurvesConfigPanel extends Observable implements PropertyChangeListener, ActionListener, Observer {
 
     private ButtonGroup directionButtonGroup_;
     private JPanel directionPanel_, okButtonPanel_;
@@ -54,8 +56,6 @@ public class RPnCurvesConfigPanel extends Observable implements PropertyChangeLi
         okButton_ = new JButton("OK");
         okButton_.setEnabled(false);
         orbitDirectionListener_ = new OrbitDirectionListener();
-        okButton_.addActionListener(this);
-        okButtonPanel_ = new JPanel();
 
         HashMap<String, Configuration> configMap = RPNUMERICS.getConfigurations();
         curvesTabbedPanel_.setTabLayoutPolicy(JTabbedPane.WRAP_TAB_LAYOUT);
@@ -67,19 +67,34 @@ public class RPnCurvesConfigPanel extends Observable implements PropertyChangeLi
             String configurationType = entry.getValue().getType();
 
             if (!configurationType.equalsIgnoreCase("PHYSICS") && !configurationType.equalsIgnoreCase("VISUAL")) {
-                RPnInputComponent inputComponent = new RPnInputComponent(entry.getValue(), false);
-                inputComponent.addObserver(this);
-                inputComponent.removeParameter("resolution");
-                if (inputComponent.getContainer().getComponentCount() > 0) {
-                    curvesTabbedPanel_.addTab(entry.getKey(), inputComponent.getContainer());
-                    inputComponentArray_.add(inputComponent);
+
+                Configuration config = entry.getValue();
+
+                HashMap<String, String> configParams = config.getParams();
+
+                Set<Entry<String, String>> paramSet = configParams.entrySet();
+
+                JPanel paramsPanel = new JPanel();
+                int i=0;
+                for (Entry<String, String> paramEntry : paramSet) {
+                    if (!paramEntry.getKey().contains("resolution")){
+                    UIComponentCreator componentCreator = new UIComponentCreator(config, paramEntry.getKey());
+                    JComponent component = componentCreator.createUIComponent();
+                    paramsPanel.add(component);
+                    i++;
+                        
+                    }
+
                 }
+
+                if (paramsPanel.getComponentCount()>0)
+                curvesTabbedPanel_.addTab(config.getName(), paramsPanel);
             }
 
         }
 
 
-        //directionPanel_ = new JPanel(new GridLayout(1, 2));
+
         directionPanel_ = new JPanel(new GridLayout(1, 3));
 
         forwardCheckBox_ = new JRadioButton("Forward");
@@ -124,7 +139,7 @@ public class RPnCurvesConfigPanel extends Observable implements PropertyChangeLi
 
         gridConstraints.fill = GridBagConstraints.BOTH;
 
-        mainPainel_.add(directionPanel_, gridConstraints);
+//        mainPainel_.add(directionPanel_, gridConstraints);
 
 
         gridConstraints.gridy = 1;
@@ -135,9 +150,9 @@ public class RPnCurvesConfigPanel extends Observable implements PropertyChangeLi
 
         gridConstraints.gridy = 2;
 
-        mainPainel_.add(okButtonPanel_, gridConstraints);
+//        mainPainel_.add(okButtonPanel_, gridConstraints);
 
-        okButtonPanel_.add(okButton_);
+//        okButtonPanel_.add(okButton_);
 
 
     }
@@ -145,10 +160,10 @@ public class RPnCurvesConfigPanel extends Observable implements PropertyChangeLi
     public static Integer getOrbitDirection() {
         return currentOrbitDirection_;
     }
-    
-    public JPanel getContainer(){return mainPainel_;}
-    
 
+    public JPanel getContainer() {
+        return mainPainel_;
+    }
 
     public void propertyChange(PropertyChangeEvent evt) {
 
@@ -190,7 +205,7 @@ public class RPnCurvesConfigPanel extends Observable implements PropertyChangeLi
 
     public void actionPerformed(ActionEvent e) {
 
-        
+
         for (RPnInputComponent rPnInputComponent : inputComponentArray_) {
             rPnInputComponent.applyConfigurationChange();
         }
@@ -214,7 +229,7 @@ public class RPnCurvesConfigPanel extends Observable implements PropertyChangeLi
             } else if (bothCheckBox_.isSelected()) {
                 currentOrbitDirection_ = Orbit.BOTH_DIR;
             }
-            
+
             RPNUMERICS.setParamValue("fundamentalcurve", "direction", currentOrbitDirection_.toString());
         }
     }

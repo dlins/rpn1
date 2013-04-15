@@ -5,6 +5,7 @@
 
 package rpn;
 
+import rpn.ui.RPnInputComponent;
 import rpnumerics.RPNUMERICS;
 import wave.util.RealVector;
 

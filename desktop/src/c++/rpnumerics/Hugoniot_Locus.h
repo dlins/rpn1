@@ -36,6 +36,8 @@ private:
 
 public:
 
+    virtual ~Hugoniot_Locus();
+    
 
     virtual int curve(const FluxFunction *f, const AccumulationFunction *a,
             GridValues &g, const RealVector &r,

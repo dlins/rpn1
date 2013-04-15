@@ -6,6 +6,7 @@
 
 package rpn;
 
+import rpn.ui.RPnInputComponent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import rpn.configuration.Configuration;

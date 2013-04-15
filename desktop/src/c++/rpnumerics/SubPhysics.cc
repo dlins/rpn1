@@ -79,7 +79,6 @@ Hugoniot_Locus * SubPhysics::getHugoniotFunction()const {
 }
 
 void SubPhysics::setHugoniotFunction(Hugoniot_Locus *hf) {
-
     hugoniotFunction_ = hf;
 }
 

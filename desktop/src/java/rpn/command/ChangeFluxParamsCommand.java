@@ -26,7 +26,6 @@ import rpn.controller.phasespace.InvariantsReadyImpl;
 import rpn.controller.phasespace.NUMCONFIG;
 import rpn.controller.phasespace.NumConfigReadyImpl;
 import rpn.controller.phasespace.ProfileSetupReadyImpl;
-import rpn.controller.ui.UIController;
 import rpn.parser.RPnDataModule;
 import rpnumerics.HugoniotCurve;
 import rpnumerics.PhasePoint;

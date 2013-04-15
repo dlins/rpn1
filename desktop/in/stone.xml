@@ -52,7 +52,7 @@
     </METHOD>
     
      
-    <METHOD name="HugoniotMethod">
+    <METHOD name="hugoniotmethod">
         <METHODPARAM  name="implicit" value="0" />
         <METHODPARAM  name="explicit" value="1" />
     </METHOD>

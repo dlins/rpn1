@@ -105,6 +105,14 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setBoundary
 
 /*
  * Class:     rpnumerics_RPNUMERICS
+ * Method:    setMethod
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setMethod
+  (JNIEnv *, jclass, jstring, jstring);
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
  * Method:    domainDim
  * Signature: ()I
  */

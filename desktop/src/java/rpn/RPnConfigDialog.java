@@ -5,6 +5,7 @@
  */
 package rpn;
 
+import rpn.ui.RPnInputComponent;
 import rpn.configuration.RPnConfig;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;

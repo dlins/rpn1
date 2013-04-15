@@ -4,6 +4,7 @@
  */
 package rpn;
 
+import rpn.ui.RPnInputComponent;
 import rpn.configuration.Configuration;
 import rpnumerics.RPNUMERICS;
 

@@ -4,7 +4,7 @@
  * Departamento de Dinamica dos Fluidos
  *
  */
-package rpn;
+package rpn.ui;
 
 import java.awt.Color;
 import java.awt.GridBagConstraints;
@@ -15,11 +15,14 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Observable;
+import java.util.Observer;
 import java.util.Set;
 import javax.swing.ButtonGroup;
+import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -31,6 +34,10 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
+import rpn.RPnFluxParamsSubject;
+import rpn.RPnInputController;
+import rpn.RPnObserverController;
+import rpn.RPnSubject;
 import rpn.command.ChangeCurveConfigurationCommand;
 import rpn.configuration.Configuration;
 import rpnumerics.RPNUMERICS;
@@ -38,11 +45,12 @@ import wave.util.RealVector;
 
 //**** tirar os listeners, que serao enviados para classes especializadas
 //**** basicamente, cada tipo de campo deverá ser tratado por uma classe especialista, munida de um listener
-public class RPnInputComponent extends Observable {//TODO Refatorar
+public class RPnInputComponent extends Observable implements Observer{//TODO Refatorar
 
     private JPanel panel_ = new JPanel();
     private JSlider slider_;
-    private JFormattedTextField[] textField_;
+    private JComponent[] textField_;
+    private String [] stringValues_;
     private JLabel[] label_;
     private DecimalFormat formatter_;
     private DecimalFormat doubleFormatter_ = new DecimalFormat("0.000");
@@ -62,7 +70,7 @@ public class RPnInputComponent extends Observable {//TODO Refatorar
     public static int rb = -1;
 
     public RPnInputComponent(RPnSubject subject) {
-
+        stringValues_= new String[subject.getParamsNames().length];
         // desfazer a associacao com grupo
         JRadioButton[] option = new JRadioButton[3];
         ButtonGroup group = new ButtonGroup();
@@ -174,7 +182,7 @@ public class RPnInputComponent extends Observable {//TODO Refatorar
     }
 
     public RPnInputComponent(RPnSubject subject, String sliderName) {
-
+     stringValues_= new String[subject.getParamsNames().length];
         // desfazer a associacao com grupo
         JRadioButton[] option = new JRadioButton[3];
         ButtonGroup group = new ButtonGroup();
@@ -304,70 +312,76 @@ public class RPnInputComponent extends Observable {//TODO Refatorar
 
     public RPnInputComponent(Configuration configuration, boolean useEvents) {
 
+//        textField_ = new JFormattedTextField[configuration.getParamsSize()];
+//        
+//        stringValues_= new String[configuration.getParamsSize()];
+//
+//        label_ = new JLabel[configuration.getParamsSize()];
+//
+//        GridBagConstraints gridConstraints = new GridBagConstraints();
+//
+//        gridConstraints.fill = GridBagConstraints.BOTH;
+//
+//        gridConstraints.gridwidth = 1;
+//        gridConstraints.gridheight = 1;
+//        gridConstraints.ipadx = 50;
+//        gridConstraints.gridy = 0;
+//        gridConstraints.gridx = 0;
+//
+//        GridBagLayout gridBayLayout = new GridBagLayout();
+//
+//        panel_.setLayout(gridBayLayout);
+//        
+        UIComponentCreator componentCreator = new UIComponentCreator(configuration, this);
+        stringValues_=new String[configuration.getParamsSize()];
+        
+        panel_= (JPanel)componentCreator.createUIComponent();
+        
 
 
-
-
-        textField_ = new JFormattedTextField[configuration.getParamsSize()];
-
-        label_ = new JLabel[configuration.getParamsSize()];
-
-        GridBagConstraints gridConstraints = new GridBagConstraints();
-
-        gridConstraints.fill = GridBagConstraints.BOTH;
-
-        gridConstraints.gridwidth = 1;
-        gridConstraints.gridheight = 1;
-        gridConstraints.ipadx = 50;
-        gridConstraints.gridy = 0;
-        gridConstraints.gridx = 0;
-
-        GridBagLayout gridBayLayout = new GridBagLayout();
-
-        panel_.setLayout(gridBayLayout);
-
-        int j = 0;
-
-        HashMap<String, String> paramsValues = configuration.getParams();
-
-        Set<Entry<String, String>> paramsSet = paramsValues.entrySet();
-
-        for (Entry<String, String> value : paramsSet) {
-
-
-            //JFormattedTextField textField = new JFormattedTextField(formatter_);
-
-            JFormattedTextField textField = new JFormattedTextField();
-
-            textField.setText(configuration.getParam(j));
-
-            textField.setColumns(8);
-
-            textField_[j] = textField;
-            textField.setName(configuration.getParamName(j));
-
-            if (useEvents) {
-                textField.getDocument().addDocumentListener(new TextValueHandler());
-            } else {
-                textField.getDocument().addDocumentListener(new TextChangedHandler());
-            }
-
-            JLabel label = new JLabel(configuration.getParamName(j));
-
-            label_[j] = label;
-
-            gridConstraints.gridx = 0;
-            panel_.add(label, gridConstraints);
-            gridConstraints.gridx = 1;
-            panel_.add(textField, gridConstraints);
-
-            gridConstraints.gridy++;
-
-            j++;
-
-
-        }
-
+//        int j = 0;
+//
+//        HashMap<String, String> paramsValues = configuration.getParams();
+//
+//        Set<Entry<String, String>> paramsSet = paramsValues.entrySet();
+//
+//        for (Entry<String, String> value : paramsSet) {
+//
+//
+//            //JFormattedTextField textField = new JFormattedTextField(formatter_);
+//
+//            JFormattedTextField textField = new JFormattedTextField();
+//
+//            textField.setText(configuration.getParam(j));
+//            stringValues_[j]=configuration.getParam(j);
+//
+//            textField.setColumns(8);
+//
+//            textField_[j] = textField;
+//            textField.setName(configuration.getParamName(j));
+//
+//            if (useEvents) {
+//                textField.getDocument().addDocumentListener(new TextValueHandler());
+//            } else {
+//                textField.getDocument().addDocumentListener(new TextChangedHandler());
+//            }
+//
+//            JLabel label = new JLabel(configuration.getParamName(j));
+//
+//            label_[j] = label;
+//
+//            gridConstraints.gridx = 0;
+//            panel_.add(label, gridConstraints);
+//            gridConstraints.gridx = 1;
+//            panel_.add(textField, gridConstraints);
+//
+//            gridConstraints.gridy++;
+//
+//            j++;
+//
+//
+//        }
+//
         controller_ = new RPnInputController(this, configuration);
 
 
@@ -376,19 +390,22 @@ public class RPnInputComponent extends Observable {//TODO Refatorar
     }
 
     public void applyConfigurationChange() {
-
-        String[] newValues = new String[textField_.length];
-
-        for (int j = 0; j < textField_.length; j++) {
-
-            parameterName_ = textField_[j].getName();
-            newValues[j] = textField_[j].getText();
-        }
+//
+//        String[] newValues = new String[textField_.length];
+//
+//        for (int j = 0; j < textField_.length; j++) {
+//
+//            parameterName_ = textField_[j].getName();
+//            newValues[j] = textField_[j].getText();
+//        }
 
         String[] oldValues = null;
+        
+       
+        
 
         controller_.propertyChange(
-                new PropertyChangeEvent(this, parameterName_, oldValues, newValues));
+                new PropertyChangeEvent(this, parameterName_, oldValues, stringValues_));
 
         ChangeCurveConfigurationCommand.instance().applyChange(new PropertyChangeEvent(this, parameterName_, null, controller_.getConfiguration()));
 
@@ -397,7 +414,7 @@ public class RPnInputComponent extends Observable {//TODO Refatorar
     public void removeParameter(String parameterName) {
 
         for (int i = 0; i < textField_.length; i++) {
-            JFormattedTextField jFormattedTextField = textField_[i];
+            JComponent jFormattedTextField = textField_[i];
 
             if (jFormattedTextField.getName().equals(parameterName)) {
                 panel_.remove(jFormattedTextField);
@@ -413,7 +430,7 @@ public class RPnInputComponent extends Observable {//TODO Refatorar
     public void keepParameter(String parameterName) {
 
         for (int i = 0; i < textField_.length; i++) {
-            JFormattedTextField jFormattedTextField = textField_[i];
+            JComponent jFormattedTextField = textField_[i];
 
             if (!jFormattedTextField.getName().equals(parameterName)) {
                 panel_.remove(jFormattedTextField);
@@ -427,7 +444,19 @@ public class RPnInputComponent extends Observable {//TODO Refatorar
     }
 
     public JFormattedTextField[] getTextField() {
-        return textField_;
+        
+        ArrayList<JFormattedTextField> textFieldArrayList = new ArrayList<JFormattedTextField>();
+        
+        for(JComponent component : textField_){
+            if (component instanceof JFormattedTextField){
+                textFieldArrayList.add((JFormattedTextField)component);
+            }
+            
+        }
+        
+        return (JFormattedTextField[]) textFieldArrayList.toArray();
+        
+//        return textField_;
     }
 
     public void setRelativeRange(int min, int max) {
@@ -455,6 +484,22 @@ public class RPnInputComponent extends Observable {//TODO Refatorar
 
     }
 
+    public void update(Observable o, Object arg) {
+        
+        String [] newParamsValues = (String [])arg;
+        
+        for (String string : newParamsValues) {
+
+            System.out.println(string);
+            
+        }
+        System.arraycopy(newParamsValues, 0, stringValues_, 0, newParamsValues.length);
+        
+        applyConfigurationChange();
+        
+
+    }
+
     private class SliderHandler implements ChangeListener {
 
         public void stateChanged(ChangeEvent e) {
@@ -467,14 +512,14 @@ public class RPnInputComponent extends Observable {//TODO Refatorar
                 if (textField_[j].getName().equals(slider.getName())) {
 
                     sliderValue /= 20;
-                    textField_[j].setText(String.valueOf(sliderValue));
+                  ((JFormattedTextField)  textField_[j]).setText(String.valueOf(sliderValue));
 
                 }
 
-                newValues[j] = textField_[j].getText();
+                newValues[j] = ((JFormattedTextField) textField_[j]).getText();
             }
 
-            Double alpha = new Double(textField_[textField_.length - 1].getText());
+            Double alpha = new Double(((JFormattedTextField) textField_[textField_.length - 1]).getText());
 
             System.out.println("Valor de alpha: " + alpha + " Slider value: " + sliderValue);
 
@@ -512,17 +557,17 @@ public class RPnInputComponent extends Observable {//TODO Refatorar
             try {
                 for (int j = 0; j < textField_.length; j++) {
 
-                    if (textField_[j].getDocument() == doc) {
+                    if (((JFormattedTextField) textField_[j]).getDocument() == doc) {
                         parameterName_ = textField_[j].getName();
                         String newValue = doc.getText(0, doc.getLength());
 
-                        newValues[j] = newValue;
+                       stringValues_[j] = newValue;
 
                     } else {
-                        newValues[j] = textField_[j].getText();
+                        stringValues_[j] = ((JFormattedTextField) textField_[j]).getText();
                     }
 
-                    controller_.propertyChange(new PropertyChangeEvent(this, parameterName_, newValues, newValues));
+                    controller_.propertyChange(new PropertyChangeEvent(this, parameterName_, stringValues_, stringValues_));
                     setChanged();
                     notifyObservers();
                 }
@@ -554,12 +599,12 @@ public class RPnInputComponent extends Observable {//TODO Refatorar
 
                 for (int j = 0; j < textField_.length; j++) {
 
-                    if (textField_[j].getDocument() == doc) {
+                    if (((JFormattedTextField) textField_[j]).getDocument() == doc) {
                         String newValue = doc.getText(0, doc.getLength());
                         doubleNewValue = new Double(newValue);
                         newValues.setElement(j, doubleNewValue);
                     } else {
-                        doubleNewValue = new Double(textField_[j].getText());
+                        doubleNewValue = new Double(((JFormattedTextField) textField_[j]).getText());
                         newValues.setElement(j, doubleNewValue);
                     }
 
@@ -633,4 +678,14 @@ public class RPnInputComponent extends Observable {//TODO Refatorar
 
         }
     }
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
 }
