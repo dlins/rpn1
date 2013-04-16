@@ -15,7 +15,7 @@ import rpn.parser.RPnDataModule;
 import rpnumerics.*;
 import wave.util.RealVector;
 
-public class EnvelopeCurveCommand extends RpModelPlotCommand {
+public class EnvelopeCurveCommand extends BifurcationPlotCommand {
     //
     // Constants
     //

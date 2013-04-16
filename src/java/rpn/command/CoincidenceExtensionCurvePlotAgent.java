@@ -16,7 +16,7 @@ import rpn.parser.RPnDataModule;
 import rpnumerics.*;
 import wave.util.RealVector;
 
-public class CoincidenceExtensionCurvePlotAgent extends RpModelPlotCommand {
+public class CoincidenceExtensionCurvePlotAgent extends BifurcationPlotCommand {
     //
     // Constants
     //

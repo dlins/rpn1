@@ -8,17 +8,19 @@ package rpn.command;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
+import java.util.Vector;
 import java.util.Iterator;
 import javax.swing.JButton;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.component.*;
+import rpn.configuration.Configuration;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UI_ACTION_SELECTED;
 import rpn.parser.RPnDataModule;
 import rpnumerics.*;
 import wave.util.RealVector;
 
-public class DoubleContactCommand extends RpModelPlotCommand {
+public class DoubleContactCommand extends BifurcationPlotCommand {
     //
     // Constants
     //
@@ -56,34 +58,9 @@ public class DoubleContactCommand extends RpModelPlotCommand {
 
 
         DoubleContactGeomFactory factory = new DoubleContactGeomFactory(RPNUMERICS.createDoubleContactCurveCalc());
-
-        RPnPhaseSpaceAbstraction leftPhaseSpace = RPnDataModule.LEFTPHASESPACE;
-
-        RPnPhaseSpaceAbstraction rightPhaseSpace = RPnDataModule.RIGHTPHASESPACE;
-
-        RpGeometry leftGeometry = factory.leftGeom();
-        RpGeometry rightGeometry = factory.rightGeom();
-
-        leftPhaseSpace.join(leftGeometry);
-        rightPhaseSpace.join(rightGeometry);
-
-
-        Iterator oldValue = RPnDataModule.PHASESPACE.getGeomObjIterator();
-        PropertyChangeEvent event_ = new PropertyChangeEvent(this, UIController.instance().getActivePhaseSpace().getName(), oldValue, factory.geom());
-
-        ArrayList<RealVector> emptyInput = new ArrayList<RealVector>();
-        logCommand(new RpCommand(event_, emptyInput));
-
-
-
-
-
-
-        RPnDataModule.PHASESPACE.join(factory.geom());
-
-
-
+    	execute(factory);
     }
+
 
     static public DoubleContactCommand instance() {
         if (instance_ == null) {

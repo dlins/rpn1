@@ -24,6 +24,7 @@ public class Orbit extends RPnCurve implements RpSolution {
     //
     // Members
     //
+    public static String XML_TAG = "CURVE";
 
     public static final int FORWARD_DIR = 20;
     public static final int BACKWARD_DIR = 22;
@@ -199,7 +200,15 @@ public class Orbit extends RPnCurve implements RpSolution {
 
     public String toXML() {
 
-        return toString();
+        StringBuffer buf = new StringBuffer();
+
+
+        for (int i = 0; i < points_.length; i++) 
+            buf.append(points_[i].toXML());
+
+
+
+        return buf.toString();
 
     }
 

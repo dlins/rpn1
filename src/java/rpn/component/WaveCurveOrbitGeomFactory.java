@@ -7,6 +7,7 @@ package rpn.component;
 
 import java.awt.Color;
 import rpnumerics.FundamentalCurve;
+import rpnumerics.Orbit;
 import rpnumerics.WaveCurveOrbitCalc;
 import wave.multid.view.ViewingAttr;
 
@@ -25,6 +26,9 @@ public class WaveCurveOrbitGeomFactory extends OrbitGeomFactory {
         super(calc);
     }
 
+    public WaveCurveOrbitGeomFactory(WaveCurveOrbitCalc calc,Orbit curve) {
+        super(calc,curve);
+    }
     //
     // Accessors/Mutators
     //

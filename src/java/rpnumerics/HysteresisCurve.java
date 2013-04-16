@@ -21,5 +21,11 @@ public class HysteresisCurve extends BifurcationCurve {
 
       }
 
+     public HysteresisCurve(List<RealSegment> curveSegments) {
+        super(curveSegments);
+
+      }
+
+
    
 }

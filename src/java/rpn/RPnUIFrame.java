@@ -71,8 +71,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JCheckBoxMenuItem showLeftCurvesPaneltem_ = new JCheckBoxMenuItem("Show Left Curves Window", true);
     private JCheckBoxMenuItem showRightCurvesPaneltem_ = new JCheckBoxMenuItem("Show Right Curves Window", true);
     private JCheckBoxMenuItem showAuxPanel_ = new JCheckBoxMenuItem("Show Auxiliar Panels", true);
-//    private RPnCurvesConfigPanel curvesConfigPanel_ = new RPnCurvesConfigPanel();
-    //*** declarei isso  -- Leandro
     private JMenuItem editMenuItem1 = new JMenuItem("Clears All Strings");
     private JMenuItem editMenuItem2 = new JMenuItem("Clears Last String");
     private JMenuItem editMenuItem3 = new JMenuItem("Clears Velocities");
@@ -85,11 +83,13 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private static RPnPhaseSpaceFrame[] riemannFrames_;
     private static List<RPnPhaseSpaceFrame> characteristicsFrames_ = new ArrayList<RPnPhaseSpaceFrame>();
 
-    //***
-    //Construct the frame
+
+
+
     public RPnUIFrame(RPnMenuCommand command) {
         enableEvents(AWTEvent.WINDOW_EVENT_MASK);
         try {
+
             // TODO may be UIController should control PHASESPACE as well
             commandMenu_ = command;
             RPnNetworkStatusController.instance().addPropertyChangeListener(this);
@@ -100,21 +100,14 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
             phaseSpaceFramesInit(RPNUMERICS.boundary());
 
-            int numOfPanels = RPnVisualizationModule.DESCRIPTORS.size();
-            auxFrames_ = new RPnPhaseSpaceFrame[2 * numOfPanels];
-
-            frames_ = new RPnPhaseSpaceFrame[numOfPanels];
-
             associatesPhaseSpaces();
             associatePhaseSpacesAndCurvesList();
-
-            //createPanelsChooser();
 
             addPropertyChangeListener(this);
 
             RiemannProfileCommand.instance().addPropertyChangeListener(this);
 
-//            UndoActionController.createInstance();
+            UndoActionController.createInstance();
 
             if (commandMenu_ instanceof RPnAppletPlotter) { // Selecting itens to disable in Applet
 
@@ -142,7 +135,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         return auxFrames_;
     }
 
-    //** para os botoes do menu de tipos de curvas
     public void propertyChange(PropertyChangeEvent evt) {
 
         if (evt.getPropertyName().equals("aplication state")) {
@@ -245,20 +237,16 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
     }
     //File | Exit action performed
-
-    //** para fechar a aplicacao pelo menu de tipos de curvas
     public void jMenuFileExit_actionPerformed(ActionEvent e) {
         commandMenu_.finalizeApplication();
     }
 
-    //** ainda nao implementado
     //Help | About action performed
     public void jMenuHelpAbout_actionPerformed(ActionEvent e) {
     }
 
     //Overridden so we can exit when window is closed
     @Override
-    // para fechar a aplicacao a partir de qualquer janela
     protected void processWindowEvent(WindowEvent e) {
         super.processWindowEvent(e);
         if (e.getID() == WindowEvent.WINDOW_CLOSING) {
@@ -266,7 +254,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         }
     }
 
-    //** nao vi alteracao
     void layoutMenuItem_actionPerformed(ActionEvent e) {
         RPnLayoutDialog dialog = new RPnLayoutDialog();
         Dimension dlgSize = dialog.getPreferredSize();
@@ -282,16 +269,14 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         UIController.instance().panelsUpdate();
     }
 
-    //*** Leandro
     public void phaseSpaceFrameZoom(Boundary boundary) {
+
         wave.multid.graphs.ClippedShape clipping = new wave.multid.graphs.ClippedShape(boundary);
 
-        // --------------------------------
         Space zoomSpace = new Space("", RPNUMERICS.domainDim());
         int[] testeArrayIndex = {0, 1};
         RPnProjDescriptor projDescriptor = new RPnProjDescriptor(zoomSpace, "", 700, 700, testeArrayIndex, false);
         wave.multid.view.ViewingTransform viewingTransf = projDescriptor.createTransform(clipping);
-        // ----------------------------
 
         JButton closeButton = new JButton("Close");
 
@@ -335,9 +320,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
             listFrameZoom.add(frameZoom);
 
-
-
-            //*** Tem que ser melhorado
             closeButton.addActionListener(
                     new java.awt.event.ActionListener() {
 
@@ -357,10 +339,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             dex.printStackTrace();
         }
 
-        //}
 
     }
-    //***
 
     public void updateCharacteristicsFrames(int charPhaseSpaceIndex, RealVector profileMin, RealVector profileMax) {
 
@@ -422,7 +402,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
     }
 
-    //** para criar os frames (paineis) - incluindo os auxiliares
     protected void phaseSpaceFramesInit(Boundary boundary) {
 
         wave.multid.graphs.ClippedShape clipping = new wave.multid.graphs.ClippedShape(boundary);
@@ -467,7 +446,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         }
 
-        // Init Main Frame
         for (int i = 0; i < numOfPanels; i++) {
             wave.multid.view.ViewingTransform viewingTransf =
                     ((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(
@@ -479,19 +457,14 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
                 frames_[i] = new RPnPhaseSpaceFrame(scene, commandMenu_);
                 frames_[i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(i)).label());
-		System.out.println("TITLE : "+ ((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(i)).label());
 
-//
-//                /*
-//                 * controllers installation
-//                 *
-//                 * Each controller will be installed in Panel
-//                 * constructor and the central UIController
-//                 * will be controlling all Panels.
-//                 * All Panels listen to all Panels...
-//                 */
-//
-//
+                 /*
+                 * Each controller will be installed in Panel
+                 * constructor and the central UIController
+                 * will be controlling all Panels.
+                 * All Panels listen to all Panels...
+                 */
+
 
                 UIController.instance().install(frames_[i].phaseSpacePanel());
 
@@ -526,6 +499,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     }
 
     private void associatePhaseSpacesAndCurvesList() {
+
         //Phase Spaces and curves list associations
 
         RPnCurvesList curvesList = new RPnCurvesList("Main", RPnDataModule.PHASESPACE);
@@ -629,7 +603,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         }
     }
 
-    //** nao vi alteracao
     void printMenuItem_actionPerformed(ActionEvent e) {
 
         PrinterJob pj = PrinterJob.getPrinterJob();
@@ -645,8 +618,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         }
     }
 
-
-    // --- Implementando criacao automatica de diretorio
     void matlabExport_actionPerformed(ActionEvent e) {
         try {
             JFileChooser chooser = new JFileChooser();
@@ -657,7 +628,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
                 dir = chooser.getSelectedFile().getParent();
 
-                // --- definindo data e hora
                 GregorianCalendar calendar = new GregorianCalendar();
 
                 String day = String.valueOf(calendar.get(GregorianCalendar.DATE));
@@ -697,35 +667,21 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         } catch (java.lang.NullPointerException nullEx) {
         }
     }
-    // ---
-
 
     // Exports the Riemann Profile solution only...
     void exportData_actionPerformed(ActionEvent e) {
-        try {
+
+
             JFileChooser chooser = new JFileChooser();
             chooser.setSelectedFile(new File("RP.OUT"));
             chooser.setFileFilter(new FileNameExtensionFilter("rpn session output file", "out"));
+
             if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
 
-                FileWriter writer = new FileWriter(chooser.getSelectedFile().
-                        getAbsolutePath());
+                RPnFileWriter.desktopExport(chooser.getSelectedFile().getAbsolutePath());
                 dir = chooser.getSelectedFile().getParent();
-
-                writer.write(RPnConfigReader.XML_HEADER);
-
-                RPnNumericsModule.export(writer);
-                RPnDataModule.export(writer);                
-                RPnCommandModule.export(writer);
-
-                writer.close();
+                
             }
-
-
-        } catch (java.io.IOException ioex) {
-            ioex.printStackTrace();
-        } catch (java.lang.NullPointerException nullEx) {
-        }
     }
 
     // saves the whole user commands session...
@@ -757,13 +713,11 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         }
     }
 
-    //** nao vi alteracao
     public static void clearStatusMessage() {
         statusLabel_.setForeground(Color.black);
         setStatusMessage("", 0);
     }
 
-    //** nao vi alteracao
     public static void setStatusMessage(String message, int messageType) {
         switch (messageType) {
             case 1://Error message;
@@ -776,7 +730,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
     }
 
-    //** nao vi alteracao
     void networkMenuItem_actionPerformed(ActionEvent e) {
 
         RPnNetworkStatusController.instance().actionPerformed(new ActionEvent(this,
@@ -789,7 +742,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         return characteristicsFrames_;
     }
 
-    //** para o menu de tipos de curvas
     private void jbInit() throws Exception {
 
         setUIFramePosition();
@@ -957,9 +909,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 });
         editMenu.setText("Edit");
 
-
-
-        //*** Leandro
         editMenuItem1.addActionListener(
                 new java.awt.event.ActionListener() {
 
@@ -1032,7 +981,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                         RPnPhaseSpacePanel.whiteBackground();
                     }
                 });
-        //******************************************************
 
         inputCoordsMenuItem.addActionListener(
                 new java.awt.event.ActionListener() {
@@ -1131,7 +1079,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         editMenu.add(ClearPhaseSpaceCommand.instance());
         editMenu.addSeparator();
 
-        //*** Leandro
         editMenu.add(editMenuItem1);
         editMenu.addSeparator();
         editMenu.add(editMenuItem2);
@@ -1144,7 +1091,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         editMenu.addSeparator();
         editMenu.add(editMenuItem6);
         editMenu.addSeparator();
-        //******
 
         editMenu.add(FillPhaseSpaceCommand.instance());
 
@@ -1200,7 +1146,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
     }
 
-    //** define a posicao inicial do menu de tipos de curvas
     private void setUIFramePosition() {
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -1210,7 +1155,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         this.setLocation((int) (width - (width * .55)), 100);
     }
 
-    //** define a posicao inicial dos frames
     private void setFramesPosition(Component component) {
 
         int newwidth = (int) 100;
@@ -1222,12 +1166,10 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         return riemannFrames_;
     }
 
-    //** retorna os frames para representar o phaseSpace e desenhar as curvas
     public static RPnPhaseSpaceFrame[] getPhaseSpaceFrames() {
         return frames_;
     }
 
-    //** nao vi alteracao
     public static void disableSliders() {
         for (int i = 0; i < RPnUIFrame.getPhaseSpaceFrames().length; i++) {
 
@@ -1236,7 +1178,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         }
     }
 
-    //** nao vi alteracao
     public static void enableSliders() {
         for (int i = 0; i < RPnUIFrame.getPhaseSpaceFrames().length; i++) {
 
@@ -1245,7 +1186,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         }
     }
 
-    //** nao vi alteracao
     private class ConfigAction implements Action {
 
         public Object getValue(String key) {
@@ -1280,7 +1220,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         }
     }
 
-    //** desativa os botoes do menu de tipos de curvas
     private class StateHandler implements ActionListener {
 
         public void actionPerformed(ActionEvent e) {

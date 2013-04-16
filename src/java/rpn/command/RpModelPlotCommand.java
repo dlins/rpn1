@@ -19,6 +19,7 @@ import javax.swing.ImageIcon;
 import java.util.Iterator;
 import javax.swing.AbstractButton;
 import rpn.component.RpCalcBasedGeomFactory;
+import rpn.component.RpGeomFactory;
 import rpn.controller.ui.*;
 import rpnumerics.RPnCurve;
 
@@ -28,6 +29,7 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand {
     private int idCounter_;
 
     public RpModelPlotCommand(String shortDesc, ImageIcon icon, AbstractButton button) {
+
         super(shortDesc, icon);
         idCounter_ = 0;
         button_ = button;
@@ -82,6 +84,26 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand {
         logCommand(new RpCommand(event_, inputArray));
     }
 
+    public void execute (RpGeomFactory factory) {
+
+        RPnCurve curve = (RPnCurve) factory.geomSource();
+
+        curve.setId(idCounter_);
+
+        Iterator oldValue = RPnDataModule.PHASESPACE.getGeomObjIterator();
+
+        PropertyChangeEvent event = new PropertyChangeEvent(this,
+                UIController.instance().getActivePhaseSpace().getName(),
+                oldValue,
+                factory.geom());
+
+        ArrayList<RealVector> emptyInput = new ArrayList<RealVector>();
+        logCommand(new RpCommand(event, emptyInput));
+
+        RPnDataModule.PHASESPACE.join(factory.geom());
+
+    }
+
 
     public void unexecute() {
         Iterator current = (Iterator) log().getNewValue();
@@ -102,4 +124,5 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand {
 
     protected void unselectedButton(ChangeEvent changeEvent) {
     }
+
 }

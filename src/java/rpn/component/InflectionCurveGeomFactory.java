@@ -20,6 +20,8 @@ public class InflectionCurveGeomFactory extends BifurcationCurveGeomFactory {
 
     private static ViewingAttr viewAtt_ = new ViewingAttr(Color.ORANGE);
 
+
+
     public InflectionCurveGeomFactory(InflectionCurveCalc calc) {
         super(calc);
     }
@@ -28,6 +30,7 @@ public class InflectionCurveGeomFactory extends BifurcationCurveGeomFactory {
         super(calc, curve);
     }
 
+    //
     // Methods
     //
     @Override
@@ -37,14 +40,15 @@ public class InflectionCurveGeomFactory extends BifurcationCurveGeomFactory {
 
         // assuming a container with HugoniotSegment elements
         int resultSize = curve.segments().size();
+
         RealSegGeom[] bifurcationSegArray = new RealSegGeom[resultSize];
         for (int i = 0; i < resultSize; i++) {
             bifurcationSegArray[i] = new RealSegGeom((RealSegment) curve.segments().get(i), viewAtt_);
         }
+
         return new InflectionCurveGeom(bifurcationSegArray, this);
 
     }
-
     
     @Override
     void updateGeomSource (List<Area> areaListToRefine){
@@ -57,11 +61,10 @@ public class InflectionCurveGeomFactory extends BifurcationCurveGeomFactory {
                 oldBifurcationCurve.leftSegments().addAll(newBifurcation.leftSegments());
 
                 geomSource_ = new InflectionCurve(oldBifurcationCurve.leftSegments());
+
             } catch (RpException ex) {
                 Logger.getLogger(BifurcationCurveGeomFactory.class.getName()).log(Level.SEVERE, null, ex);
             }
-        
-
     }
     
 

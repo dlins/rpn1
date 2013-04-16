@@ -9,6 +9,12 @@ public class EnvelopeCurve extends BifurcationCurve {
         super(curveSegments, domainSegments);
     }
 
+    public EnvelopeCurve(List<RealSegment> curveSegments) {
+        super(curveSegments);
+    }
+
+
+
     public String toXML() {
         StringBuilder buffer = new StringBuilder();
         for (int i = 0; i < segments().size(); i++) {

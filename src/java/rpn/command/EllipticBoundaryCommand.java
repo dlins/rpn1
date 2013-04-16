@@ -15,7 +15,7 @@ import rpn.parser.RPnDataModule;
 import rpnumerics.*;
 import wave.util.RealVector;
 
-public class EllipticBoundaryCommand extends RpModelPlotCommand {
+public class EllipticBoundaryCommand extends BifurcationPlotCommand {
     //
     // Constants
     //

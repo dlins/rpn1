@@ -23,6 +23,7 @@ public class CoincidenceCurve extends BifurcationCurve{// RPnCurve implements Rp
 
     }
 
+
     private static CoordsArray[] coordsArrayFromRealSegments(List segments) {
 
         ArrayList tempCoords = new ArrayList(segments.size());

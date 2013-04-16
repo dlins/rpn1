@@ -23,7 +23,6 @@ public class RarefactionCurvePlotCommand extends RpModelPlotCommand {
         RarefactionCurveGeomFactory factory = new RarefactionCurveGeomFactory(RPNUMERICS.createRarefactionCalc(oPoint));
 
         return factory.geom();
-
      }
 
     static public RarefactionCurvePlotCommand instance() {

@@ -7,8 +7,13 @@ package wave.util;
 
 import javax.vecmath.GVector;
 import java.text.NumberFormat;
+import java.text.DecimalFormat;
+import java.text.ParsePosition;
 
 public class RealVector extends GVector {
+
+    static public int XML_FORMAT_PRECISION_USED = 4;
+
 
     public RealVector(int size) {
         super(size);
@@ -32,11 +37,12 @@ public class RealVector extends GVector {
     @Override
     public String toString() {
 
-        StringBuilder buffer = new StringBuilder();
+        StringBuilder buffer = new StringBuilder(); 
 
         for (int i = 0; i < this.getSize(); i++) {
 
-            buffer.append(String.format("%3.6e",getElement(i)));
+            //buffer.append(String.format("%3.6E",getElement(i)));
+            buffer.append(String.format("%.4f",getElement(i)));
             //buffer.append(getElement(i));
             buffer.append(" ");
 
@@ -55,12 +61,27 @@ public class RealVector extends GVector {
 
     private static double[] fromString(String data) {
 
+    	DecimalFormat parseFormatter = new DecimalFormat();
+
+	/*try {
+
+		parseFormatter.applyPattern("0.######E0#");
+
+	} catch (IllegalArgumentException ex) {
+
+		System.out.println(ex);
+
+	}*/
+
         String[] components = data.split(" ");
         double[] doubleList = new double[components.length];
 
         for (int j = 0; j < components.length; j++) 
-          try {
+	
+          try {		
 		Number element = NumberFormat.getInstance().parse(components[j]);
+		
+		//Number element = parseFormatter.parse(components[j],new ParsePosition(0));
             	doubleList[j] = element.doubleValue();
 
           }
@@ -68,6 +89,8 @@ public class RealVector extends GVector {
           catch (java.text.ParseException ex) {
                	System.out.println("Error parsing the Double string" + "\n" + ex);
           }
+
+	//}
 
         return doubleList;
     }

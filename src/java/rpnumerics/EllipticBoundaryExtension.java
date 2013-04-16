@@ -11,6 +11,11 @@ public class EllipticBoundaryExtension extends BifurcationCurve {
 
     }
 
+     public EllipticBoundaryExtension(List<RealSegment> hSegments) {
+        super(hSegments);
+
+    }
+
 
      public String toXML() {
         StringBuilder buffer = new StringBuilder();

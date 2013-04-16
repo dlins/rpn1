@@ -18,7 +18,7 @@ import rpn.parser.RPnDataModule;
 import rpnumerics.*;
 import wave.util.RealVector;
 
-public class HysteresisPlotCommand extends RpModelPlotCommand {
+public class HysteresisPlotCommand extends BifurcationPlotCommand {
     //
     // Constants
     //

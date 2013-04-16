@@ -15,7 +15,7 @@ import rpn.parser.RPnDataModule;
 import rpnumerics.*;
 import wave.util.RealVector;
 
-public class SubInflectionPlotCommand extends RpModelPlotCommand {
+public class SubInflectionPlotCommand extends BifurcationPlotCommand {
     //
     // Constants
     //

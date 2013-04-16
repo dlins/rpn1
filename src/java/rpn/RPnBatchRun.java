@@ -53,40 +53,8 @@ public class RPnBatchRun {
        
             public static void exportData(String fileName) {
 
-                try {
-
-                    FileWriter writer = new FileWriter(fileName);
-                    writer.write(RPnConfigReader.XML_HEADER);
-                    writer.write("<RPNSESSION>\n");
-                    writer.write(" <PHASESPACE name=\"Phase Space\">\n");
-                    writer.write("  <RPNCONFIGURATION>\n");
-                    RPnNumericsModule.export(writer);
-                    RPnVisualizationModule.export(writer);
-                    writer.write("  </RPNCONFIGURATION>\n");
+                RPnFileWriter.batchExport(fileName);
                     
-                    RPnDataModule.export(writer);
-                    
-                    writer.write(" </PHASESPACE>\n");
-                    writer.write("</RPNSESSION>");
-                    writer.close();
 
-                } catch (FileNotFoundException ex) {
-                    System.out.println("Could not write to output file");
-
-
-                } catch (IOException exception) {}
-
-                finally {
-
-                    try {
-
-                        configStream_.close();
-
-                    } catch (NullPointerException ex) {
-                    } catch (IOException ex) {
-
-                        System.out.println("IO Error");
-                 }
-        }
-    }
+            }
 }

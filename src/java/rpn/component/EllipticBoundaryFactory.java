@@ -9,10 +9,16 @@ import rpnumerics.*;
 import rpnumerics.EllipticBoundary;
 import wave.util.RealSegment;
 
-public class EllipticBoundaryFactory extends RpCalcBasedGeomFactory {
+public class EllipticBoundaryFactory extends BifurcationCurveGeomFactory {
 
     public EllipticBoundaryFactory(EllipticBoundaryCalc calc) {
         super(calc);
+
+
+    }
+
+     public EllipticBoundaryFactory(EllipticBoundaryCalc calc,EllipticBoundary boundary) {
+        super(calc,boundary);
 
 
     }
