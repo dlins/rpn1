@@ -39,7 +39,7 @@ public class RPnPhaseSpaceManager {
         phaseSpaceMap_.remove(phaseSpace);
     }
     
-    private void logCommand(RPnPhaseSpaceAbstraction phaseSpace, MultiGeometry bifurcationGeom) {
+    private void logRemoveCommand(RPnPhaseSpaceAbstraction phaseSpace, MultiGeometry bifurcationGeom) {
         RpGeometry geometry = (RpGeometry) bifurcationGeom;
         
         RpGeomFactory factory = (RpGeomFactory) geometry.geomFactory();
@@ -64,7 +64,7 @@ public class RPnPhaseSpaceManager {
         System.out.println("phaseSpace.getName() : " + phaseSpace.getName());
         
         
-        logCommand(phaseSpace, bifurcationGeom);
+        logRemoveCommand(phaseSpace, bifurcationGeom);
         
         
         phaseSpace.remove(bifurcationGeom);

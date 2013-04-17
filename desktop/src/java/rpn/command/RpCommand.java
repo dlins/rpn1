@@ -18,6 +18,7 @@ import rpn.configuration.Configuration;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UI_ACTION_SELECTED;
 import rpn.controller.ui.UndoableAction;
+import rpnumerics.RPnCurve;
 import rpnumerics.RpCalculation;
 import wave.util.RealVector;
 
@@ -76,14 +77,18 @@ public class RpCommand extends AbstractAction implements UndoableAction, Seriali
         String sourceName = event_.getSource().toString().replace(" ", "");
         String curveName = sourceName.toLowerCase();
 
+        
         if (factory instanceof RpCalcBasedGeomFactory) {
 
             RpCalcBasedGeomFactory calFactory = (RpCalcBasedGeomFactory) factory;
             RpCalculation calc = (RpCalculation) calFactory.rpCalc();
 
+            RPnCurve curve = (RPnCurve) calFactory.geomSource();
 
             buffer.append("<COMMAND name=\"").append(curveName).append("\" ");
-            buffer.append("phasespace=\"").append(UIController.instance().getActivePhaseSpace().getName());
+            buffer.append("phasespace=\"").append(UIController.instance().getActivePhaseSpace().getName()).append("\" ");
+            buffer.append("curveid=\"").append(curve.getId());
+            
 
             buffer.append("\">\n");
 

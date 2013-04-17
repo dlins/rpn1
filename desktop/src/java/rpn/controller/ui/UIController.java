@@ -6,7 +6,6 @@
  */
 package rpn.controller.ui;
 
-import rpn.command.RpCommand;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.command.*;
 import rpn.RPnPhaseSpacePanel;
@@ -25,13 +24,10 @@ import java.beans.PropertyChangeEvent;
 import rpn.controller.*;
 import java.net.*;
 import java.util.Iterator;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-import rpn.RPnCurvesDirectionPanel;
+import javax.swing.JPanel;
 import rpn.RPnDesktopPlotter;
 import rpn.RPnUIFrame;
 import rpn.component.RpGeometry;
-import rpn.component.util.GeometryGraph;
 import rpn.component.util.GeometryGraphND;
 import rpn.message.*;
 import rpn.parser.RPnDataModule;
@@ -133,8 +129,6 @@ public class UIController extends ComponentUI {
         return instance_;
     }
 
-   
-
     public void setAuxPanels(boolean selected) {
         auxPanelsEnabled_ = selected;
     }
@@ -148,15 +142,15 @@ public class UIController extends ComponentUI {
     }
 
     public void clearAllAreas() {
-        
-         Iterator<RPnPhaseSpacePanel> phaseSpacePanelIterator = getInstalledPanelsIterator();
-                
-                while (phaseSpacePanelIterator.hasNext()) {
-                    RPnPhaseSpacePanel rPnPhaseSpacePanel = phaseSpacePanelIterator.next();
-                    rPnPhaseSpacePanel.clearAreaSelection();
-                    rPnPhaseSpacePanel.repaint();
-                    
-                }
+
+        Iterator<RPnPhaseSpacePanel> phaseSpacePanelIterator = getInstalledPanelsIterator();
+
+        while (phaseSpacePanelIterator.hasNext()) {
+            RPnPhaseSpacePanel rPnPhaseSpacePanel = phaseSpacePanelIterator.next();
+            rPnPhaseSpacePanel.clearAreaSelection();
+            rPnPhaseSpacePanel.repaint();
+
+        }
 
     }
 
@@ -164,45 +158,48 @@ public class UIController extends ComponentUI {
     // Inner Classes
     //
     class MouseMotionController extends MouseMotionAdapter {
-        
 
         @Override
         public void mouseDragged(MouseEvent event) {
-            RPnUIFrame.clearStatusMessage();
-            drag_ = true;
 
-            if (event.getComponent() instanceof RPnPhaseSpacePanel) {
-                RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
-
-                //***  Permite que o input point de uma curva seja exatamente um ponto sobre outra curva
-                if (GeometryGraphND.onCurve == 1) {
-                    UserInputTable userInputList = UIController.instance().globalInputTable();
-                    RealVector newValue = userInputList.values();
-                    RPnPhaseSpaceAbstraction phaseSpace = RPnDataModule.PHASESPACE;
-                    RpGeometry geom = phaseSpace.findClosestGeometry(newValue);
+            System.out.println("Botao: " + event.getModifiersEx());
+            if (event.getModifiersEx() == MouseEvent.BUTTON1_DOWN_MASK) {
 
 
-                    //RpGeometry geom = RPnPhaseSpaceAbstraction.findClosestGeometry(newValue);
-                    RPnCurve curve = (RPnCurve) (geom.geomFactory().geomSource());
-                    GeometryGraphND.pMarca = curve.findClosestPoint(newValue);
+                RPnUIFrame.clearStatusMessage();
+                drag_ = true;
 
-                    panel.repaint();
-                }
-                //***-----------------------------------------------------------------------------------
+                if (event.getComponent() instanceof RPnPhaseSpacePanel) {
+                    RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
 
-                // this will automatically work only for 2D(isComplete())
-                updateUserInputTable(panel, event.getPoint());
-
-                if (globalInputTable().isComplete()) {
-
-                    globalInputTable().reset();
-                    resetPanelsCursorCoords();
+                    //***  Permite que o input point de uma curva seja exatamente um ponto sobre outra curva
+                    if (GeometryGraphND.onCurve == 1) {
+                        UserInputTable userInputList = UIController.instance().globalInputTable();
+                        RealVector newValue = userInputList.values();
+                        RPnPhaseSpaceAbstraction phaseSpace = RPnDataModule.PHASESPACE;
+                        RpGeometry geom = phaseSpace.findClosestGeometry(newValue);
 
 
-                    if (event.isShiftDown()) {
-                        userInputComplete(globalInputTable().values());
+                        //RpGeometry geom = RPnPhaseSpaceAbstraction.findClosestGeometry(newValue);
+                        RPnCurve curve = (RPnCurve) (geom.geomFactory().geomSource());
+                        GeometryGraphND.pMarca = curve.findClosestPoint(newValue);
+
+                        panel.repaint();
                     }
-                    else {
+                    //***-----------------------------------------------------------------------------------
+
+                    // this will automatically work only for 2D(isComplete())
+                    updateUserInputTable(panel, event.getPoint());
+
+                    if (globalInputTable().isComplete()) {
+
+                        globalInputTable().reset();
+                        resetPanelsCursorCoords();
+
+
+                        if (event.isShiftDown()) {
+                            userInputComplete(globalInputTable().values());
+                        } else {
 
 //                        if (handler_ instanceof UI_ACTION_SELECTED) {
 //                            UI_ACTION_SELECTED actionSelected = (UI_ACTION_SELECTED) handler_;
@@ -212,13 +209,14 @@ public class UIController extends ComponentUI {
 //                        }
 
 
-                        DragPlotCommand.instance().execute();
+                            DragPlotCommand.instance().execute();
 
 
 
+                        }
                     }
-                }                
 
+                }
             }
         }
     }
@@ -230,8 +228,6 @@ public class UIController extends ComponentUI {
 
         @Override
         public void mouseReleased(MouseEvent event) {
-
-
         }
 
         @Override
@@ -241,36 +237,36 @@ public class UIController extends ComponentUI {
             RPnUIFrame.clearStatusMessage();
             RPnUIFrame.disableSliders();
 
-                if (event.getComponent() instanceof RPnPhaseSpacePanel) {
+            if (event.getComponent() instanceof RPnPhaseSpacePanel) {
 
-                    RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
+                RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
 
-                    RPnPhaseSpaceAbstraction.namePhaseSpace = ((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom()).getName();   //** acrescentei isso (Leandro)
-                    panel.setName(RPnPhaseSpaceAbstraction.namePhaseSpace);
+                RPnPhaseSpaceAbstraction.namePhaseSpace = ((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom()).getName();   //** acrescentei isso (Leandro)
+                panel.setName(RPnPhaseSpaceAbstraction.namePhaseSpace);
 
-                    //panel.setName(((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom()).getName());
+                //panel.setName(((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom()).getName());
 
-                    if (netStatus_.isMaster() || !(netStatus_.isOnline())) {
+                if (netStatus_.isMaster() || !(netStatus_.isOnline())) {
 
 
 
-                        int sceneDim = panel.scene().getViewingTransform().projectionMap().getDomain().getDim();
-                        if (sceneDim == globalInputTable_.flags().length) {
+                    int sceneDim = panel.scene().getViewingTransform().projectionMap().getDomain().getDim();
+                    if (sceneDim == globalInputTable_.flags().length) {
 
-                            updateUserInputTable(panel, event.getPoint());
-                            evaluatePanelsCursorCoords(panel, event.getPoint());
-                            // execute
-                            if (globalInputTable().isComplete()) {
-                                userInputComplete(globalInputTable().values());
-                                globalInputTable().reset();
-                                resetPanelsCursorCoords();
-                                RPnUIFrame.enableSliders();
-                            }
-
+                        updateUserInputTable(panel, event.getPoint());
+                        evaluatePanelsCursorCoords(panel, event.getPoint());
+                        // execute
+                        if (globalInputTable().isComplete()) {
+                            userInputComplete(globalInputTable().values());
+                            globalInputTable().reset();
+                            resetPanelsCursorCoords();
+                            RPnUIFrame.enableSliders();
                         }
 
                     }
+
                 }
+            }
 
         }
 
@@ -412,8 +408,6 @@ public class UIController extends ComponentUI {
 
     }
 
-   
-
     /** Sets the state of the application. The application works as a state machine and this method changes the actual state.*/
     public void setState(rpn.controller.ui.UserInputHandler newAction) {
         stateController_.propertyChange(new PropertyChangeEvent(this, "aplication state", handler_, newAction));
@@ -435,7 +429,49 @@ public class UIController extends ComponentUI {
                 // Singletons !
                 if (currentSelection.getAction() == selectedAction.getAction()) // unselect
                 {
-                    setState(new GEOM_SELECTION());
+
+//                    if (RPnDesktopPlotter.getUIFrame() != null) {
+//                        RPnDesktopPlotter.getUIFrame().setConfigurationPanel(new JPanel());
+//                    }
+
+
+                    setState(new GEOM_SELECTION());  // To avoid command unselection in  xml file reading 
+                } else {
+                    handler_ = newAction;
+                }
+            } else {
+                handler_ = newAction;
+                // TODO we should have a checkbox for menu actions
+            }
+        } else {
+            handler_ = newAction;
+        }
+
+
+    }
+
+    /** Sets the state of the application when a input file is read. The application works as a state machine and this method changes the actual state.*/
+    public void setStateFromFile(rpn.controller.ui.UserInputHandler newAction) {
+        stateController_.propertyChange(new PropertyChangeEvent(this, "aplication state", handler_, newAction));
+
+        if (handler_ instanceof UI_ACTION_SELECTED) {
+
+            UI_ACTION_SELECTED currentSelection = (UI_ACTION_SELECTED) handler_;
+
+            globalInputTable_ = new UserInputTable(currentSelection.actionDimension());
+
+            if (newAction instanceof UI_ACTION_SELECTED) {
+                UI_ACTION_SELECTED selectedAction = (UI_ACTION_SELECTED) newAction;
+                // either unselect or new selection
+                if (currentSelection.getAction() instanceof RpModelPlotCommand) {
+
+                    ((RpModelPlotCommand) currentSelection.getAction()).getContainer().setSelected(false);
+
+                }
+                // Singletons !
+                if (currentSelection.getAction() == selectedAction.getAction()) // unselect
+                {
+//                    setState(new GEOM_SELECTION());  // To avoid command unselection in  xml file reading 
                 } else {
                     handler_ = newAction;
                 }

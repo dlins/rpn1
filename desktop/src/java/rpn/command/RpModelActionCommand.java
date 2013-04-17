@@ -25,6 +25,9 @@ public abstract class RpModelActionCommand extends RpCommand {
     }
 
     public abstract void execute();
+    
+    public void execute (int curveId){execute();}
+
 
     @Override
     public abstract void unexecute();

@@ -25,11 +25,10 @@ import rpnumerics.RPnCurve;
 public abstract class RpModelPlotCommand extends RpModelActionCommand {
 
     protected AbstractButton button_;
-    private int idCounter_;
+
 
     public RpModelPlotCommand(String shortDesc, ImageIcon icon, AbstractButton button) {
         super(shortDesc, icon);
-        idCounter_ = 0;
         button_ = button;
         button_.setAction(this);
         button_.setFont(rpn.RPnConfigReader.MODELPLOT_BUTTON_FONT);
@@ -48,26 +47,26 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand {
 
     }
 
-    public void execute() {
-
+    @Override
+    public void execute(int curveId) {
         RealVector[] userInputList = UIController.instance().userInputList();
 
-        System.out.println("execute do  plot" + userInputList[0]);
+        System.out.println("execute int curveId " + userInputList[0]);
 
         Iterator oldValue = UIController.instance().getActivePhaseSpace().getGeomObjIterator();
 
         RpGeometry geometry = createRpGeometry(userInputList);
-        idCounter_++;
 
         RpCalcBasedGeomFactory factory = (RpCalcBasedGeomFactory) geometry.geomFactory();
 
         RPnCurve curve = (RPnCurve) factory.geomSource();
 
+
         if (geometry == null) {
             return;
         }
+        curve.setId(curveId);
 
-        curve.setId(idCounter_);
 
         UIController.instance().getActivePhaseSpace().plot(geometry);
 
@@ -79,8 +78,46 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand {
         setInput(inputArray);
 
         logCommand(new RpCommand(event_, inputArray));
+
     }
 
+    public void execute() {
+
+        RealVector[] userInputList = UIController.instance().userInputList();
+
+        System.out.println("execute do  plot" + userInputList[0]);
+
+        Iterator oldValue = UIController.instance().getActivePhaseSpace().getGeomObjIterator();
+
+        RpGeometry geometry = createRpGeometry(userInputList);
+
+
+        RpCalcBasedGeomFactory factory = (RpCalcBasedGeomFactory) geometry.geomFactory();
+
+        RPnCurve curve = (RPnCurve) factory.geomSource();
+        
+        
+
+        if (geometry == null) {
+            return;
+        }
+
+
+        curve.setId(curve.hashCode());
+
+        UIController.instance().getActivePhaseSpace().plot(geometry);
+        
+      
+
+        PropertyChangeEvent event_ = new PropertyChangeEvent(this, UIController.instance().getActivePhaseSpace().getName(), oldValue, geometry);
+
+        ArrayList<RealVector> inputArray = new ArrayList<RealVector>();
+        inputArray.addAll(Arrays.asList(userInputList));
+
+        setInput(inputArray);
+
+        logCommand(new RpCommand(event_, inputArray));
+    }
 
     public void unexecute() {
         Iterator current = (Iterator) log().getNewValue();
