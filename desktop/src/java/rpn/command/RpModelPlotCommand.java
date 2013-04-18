@@ -51,7 +51,7 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand {
     public void execute(int curveId) {
         RealVector[] userInputList = UIController.instance().userInputList();
 
-        System.out.println("execute int curveId " + userInputList[0]);
+//        System.out.println("execute int curveId " + userInputList[0]);
 
         Iterator oldValue = UIController.instance().getActivePhaseSpace().getGeomObjIterator();
 
@@ -89,6 +89,8 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand {
 
         Iterator oldValue = UIController.instance().getActivePhaseSpace().getGeomObjIterator();
 
+        
+        
         RpGeometry geometry = createRpGeometry(userInputList);
 
 
@@ -102,6 +104,11 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand {
             return;
         }
 
+        
+
+        
+
+        
 
         curve.setId(curve.hashCode());
 

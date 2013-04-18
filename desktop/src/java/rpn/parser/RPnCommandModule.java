@@ -124,6 +124,8 @@ public class RPnCommandModule {
                 UIController.instance().setActivePhaseSpace(RPnDataModule.getPhaseSpace(att.getValue("phasespace")));
 
 
+
+
                 if (currentCommand_.equalsIgnoreCase("Change Flux Parameters")) {
                     currentConfiguration_ = RPNUMERICS.getConfiguration(RPNUMERICS.physicsID());
                 } else if (currentCommand_.equalsIgnoreCase("hugoniotcurve")) {
@@ -133,8 +135,8 @@ public class RPnCommandModule {
                     UIController.instance().setStateFromFile(new UI_ACTION_SELECTED(IntegralCurvePlotCommand.instance()));
                 } else if (currentCommand_.equalsIgnoreCase("wavecurve")) {
                     UIController.instance().setStateFromFile(new UI_ACTION_SELECTED(WaveCurvePlotCommand.instance()));
-                } else if (currentCommand_.equalsIgnoreCase("levelcurve")) {
-                    LevelCurvePlotCommand.instance().execute();
+                } else if (currentCommand_.equalsIgnoreCase("levelcurve")) {// execute() called in endElement()
+
                 } else if (currentCommand_.equalsIgnoreCase("pointlevelcurve")) {
 
                     UIController.instance().setStateFromFile(new UI_ACTION_SELECTED(PointLevelCurvePlotCommand.instance()));
@@ -168,6 +170,9 @@ public class RPnCommandModule {
                     SecondaryBifurcationCurveCommand.instance().execute();
 
                 }
+
+
+
             }
 
 
@@ -205,24 +210,24 @@ public class RPnCommandModule {
 
             if (name.equals("REALVECTOR")) {
 
+
+
+
                 UserInputHandler userInput = UIController.instance().getState();
                 if (userInput instanceof UI_ACTION_SELECTED) {
                     UI_ACTION_SELECTED actionSelected = (UI_ACTION_SELECTED) userInput;
                     RealVector input = new RealVector(stringBuffer_.toString());
-                    UIController.instance().globalInputTable().reset();
+                    System.out.println("Valor de input: " + input);
 
-                    for (int i = 0; i < input.getSize(); i++) {
-
-                        UIController.instance().globalInputTable().setElement(i, input.getElement(i));
-                    }
+                    actionSelected.clearUserInputList();
 
                     actionSelected.userInputComplete(UIController.instance(), input, curveId_);
 
-  
+
                 } else {
                     UIController.instance().userInputComplete(new RealVector(stringBuffer_.toString()));
                 }
-                  
+
 
 
             }
@@ -246,6 +251,17 @@ public class RPnCommandModule {
                 if (currentCommand_.equals("Curve Remove Command")) {
                     CurveRemoveCommand.instance().remove(curveId_);
                 }
+                if (currentCommand_.equalsIgnoreCase("levelcurve")) {
+                    LevelCurvePlotCommand.instance().execute(curveId_);
+                }
+
+
+                UserInputHandler userInput = UIController.instance().getState();
+                if (userInput instanceof UI_ACTION_SELECTED) {
+                    UI_ACTION_SELECTED actionSelected = (UI_ACTION_SELECTED) userInput;
+                    actionSelected.clearUserInputList();
+                }
+
             }
 
 
