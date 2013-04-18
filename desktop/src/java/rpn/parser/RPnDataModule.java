@@ -7,51 +7,43 @@ package rpn.parser;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
+import org.xml.sax.SAXException;
+import org.xml.sax.InputSource;
 
 import rpn.*;
 import rpn.controller.phasespace.*;
 import rpn.controller.ui.UIController;
-
-
-
-
-
-import org.xml.sax.SAXException;
-import org.xml.sax.InputSource;
+import rpn.command.*;
+import rpn.component.*;
+import rpn.configuration.Configuration;
+import rpnumerics.*;
+import wave.multid.Space;
+import wave.util.RealVector;
+import wave.util.RealSegment;
 
 import java.io.*;
-
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Vector;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
+
+
 import org.xml.sax.ContentHandler;
 import org.xml.sax.XMLReader;
-import rpn.component.RpGeometry;
-import rpnumerics.FundamentalCurve;
-import rpnumerics.Orbit;
-import rpnumerics.RPNUMERICS;
-
-
-
-import rpnumerics.RPnCurve;
-import rpnumerics.RiemannProfile;
-import rpnumerics.RpSolution;
-import rpnumerics.SegmentedCurve;
-import rpnumerics.WaveCurve;
-import wave.multid.Space;
+import rpn.component.RpGeomFactory;
 
 /** With this class the calculus made in a previous session can be reloaded. A previous state can be reloaded reading a XML file that is used by this class */
 public class RPnDataModule {
+
+    static public String XML_TAG="RPNDATA";
 
     static public RPnPhaseSpaceAbstraction PHASESPACE = null;
     static public RPnPhaseSpaceAbstraction LEFTPHASESPACE = null;
     static public RPnPhaseSpaceAbstraction RIGHTPHASESPACE = null;
     static public RPnPhaseSpaceAbstraction RIEMANNPHASESPACE = null;
     static public RPnPhaseSpaceAbstraction[] CHARACTERISTICSPHASESPACEARRAY = null;
+
     private static HashMap<String, RPnPhaseSpaceAbstraction> phaseSpaceMap_ = new HashMap<String, RPnPhaseSpaceAbstraction>();
 
     public RPnDataModule() {
@@ -108,8 +100,21 @@ public class RPnDataModule {
 
     static protected class RPnDataParser implements ContentHandler {
 
-        private String currentElement_;
-        private StringBuilder stringBuffer_ = new StringBuilder();
+        private String          currentElement_;
+        private Attributes      currentElementAtt_;
+        private Vector          curveSegments_ = new Vector();
+        private StringBuilder   stringBuffer_ = new StringBuilder();
+        private String          dimension_;
+        private String          curve_name_;
+	private StringBuffer 	realSegDataBuffer_;
+        private Vector          orbitPoints_ = new Vector();
+        private OrbitPoint      startPoint_;
+
+        private Configuration currentConfiguration_;
+
+        // vector for reading the segments data for segmented curves
+        private Vector curveSegmentsCoords_;
+
 
         public RPnDataParser() {
 
@@ -137,12 +142,10 @@ public class RPnDataModule {
                         new Space("Characteristics Space: " + i, 2), new NumConfigImpl());
 
             }
-            
-            
-
-        phaseSpaceMap_.put(PHASESPACE.getName(), PHASESPACE);
-        phaseSpaceMap_.put(LEFTPHASESPACE.getName(), LEFTPHASESPACE);
-        phaseSpaceMap_.put(RIGHTPHASESPACE.getName(), RIGHTPHASESPACE);
+                        
+            phaseSpaceMap_.put(PHASESPACE.getName(), PHASESPACE);
+            phaseSpaceMap_.put(LEFTPHASESPACE.getName(), LEFTPHASESPACE);
+            phaseSpaceMap_.put(RIGHTPHASESPACE.getName(), RIGHTPHASESPACE);
 
         }
 
@@ -157,20 +160,216 @@ public class RPnDataModule {
         public void startElement(String uri, String name, String qName, Attributes att) throws
                 SAXException {
 
-
-
-
             currentElement_ = name;
+            currentElementAtt_ = att;
+
+            if (currentElement_.equals(XML_TAG)){
+
+                RPnCommandModule.RPnCommandParser.selectPhaseSpace(att.getValue("phasespace"));
+
+            } else
+
+            if (currentElement_.equals(SegmentedCurve.XML_TAG)){
+
+                  curveSegmentsCoords_ = new Vector();
+                  dimension_ = att.getValue("dimension");
+                  curve_name_ = att.getValue("curve_name");
+
+            } else
+
+            if (currentElement_.equals(RPnCurve.XML_TAG)){
+
+                  orbitPoints_ = new Vector();
+                  curve_name_ = att.getValue("curve_name");
+                  startPoint_ = new OrbitPoint(new RealVector(att.getValue("startpoint")));
+
+            } else
+
+            if (currentElement_.equals("CURVECONFIGURATION")) {
+
+                  currentConfiguration_ = rpnumerics.RPNUMERICS.getConfiguration(att.getValue("name"));
+
+            } else
+
+            if (currentElement_.equals("REALSEG")) {
+                
+            	String data_1 = att.getValue("coords_1").trim();
+                String data_2 = att.getValue("coords_2").trim();
+
+                int dimension = Integer.parseInt(dimension_);
+
+            	if ((data_1.length() != 0) && (data_2.length() != 0)) {
+
+                        RealVector p1 = new RealVector(data_1);
+                        RealVector p2 = new RealVector(data_2);
+
+                        curveSegments_.add(new RealSegment(p1,p2));
+
+                }               
+
+            }
+
+            if (currentElement_.equals("ORBITPOINT")) {
+
+            	String coords_s = att.getValue("coords").trim();
+                String lambda_s = att.getValue("lambda").trim();
+
+                RealVector coords = new RealVector(coords_s);
+                double lambda = Double.parseDouble(lambda_s);
+
+                orbitPoints_.add(new OrbitPoint(coords,lambda));
+            }
+
 
         }
 
         @Override
         public void characters(char[] buff, int offset, int len) throws
                 SAXException {
+
         }
 
         @Override
         public void endElement(String uri, String name, String qName) throws SAXException {
+
+            currentElement_ = name;
+
+            if (currentElement_.equals(SegmentedCurve.XML_TAG)) {
+
+
+                if (curve_name_.equals(rpnumerics.InflectionCurve.class.getSimpleName())) {
+
+                    InflectionCurve curve = new InflectionCurve(curveSegments_);
+                    InflectionCurveGeomFactory factory =
+                            new InflectionCurveGeomFactory(RPNUMERICS.createInflectionCurveCalc(currentConfiguration_),curve);
+                    InflectionPlotCommand.instance().execute(factory);
+
+                } else
+
+                if (curve_name_.equals(rpnumerics.DoubleContactCurve.class.getSimpleName())) {
+
+                    DoubleContactCurve curve = new DoubleContactCurve(curveSegments_);
+                    DoubleContactGeomFactory factory =
+                            new DoubleContactGeomFactory(RPNUMERICS.createDoubleContactCurveCalc(currentConfiguration_),curve);
+                    DoubleContactCommand.instance().execute(factory);
+
+                }
+
+                if (curve_name_.equals(rpnumerics.EllipticBoundaryExtension.class.getSimpleName())) {
+
+                    EllipticBoundaryExtension curve = new EllipticBoundaryExtension(curveSegments_);
+                    EllipticBoundaryExtensionFactory factory =
+                            new EllipticBoundaryExtensionFactory(RPNUMERICS.createEllipticBoundaryExtensionCalc(currentConfiguration_), curve);
+                    EllipticBoundaryExtensionCommand.instance().execute(factory);
+
+                }
+
+                if (curve_name_.equals(rpnumerics.EnvelopeCurve.class.getSimpleName())) {
+
+                    EnvelopeCurve curve = new EnvelopeCurve(curveSegments_);
+                    EnvelopeGeomFactory factory =
+                            new EnvelopeGeomFactory(RPNUMERICS.createEnvelopeCurveCalc(currentConfiguration_), curve);
+                    CoincidencePlotCommand.instance().execute(factory);
+
+                }
+
+
+
+                if (curve_name_.equals(rpnumerics.CoincidenceCurve.class.getSimpleName())) {
+
+                    CoincidenceCurve curve = new CoincidenceCurve(curveSegments_);
+                    CoincidenceCurveGeomFactory factory =
+                            new CoincidenceCurveGeomFactory(RPNUMERICS.createCoincidenceExtensionCurveCalc(currentConfiguration_), curve);
+                    CoincidencePlotCommand.instance().execute(factory);
+
+                }
+
+
+                if (curve_name_.equals(rpnumerics.SecondaryBifurcationCurve.class.getSimpleName())) {
+
+                    SecondaryBifurcationCurve curve = new SecondaryBifurcationCurve(curveSegments_);
+                    SecondaryBifurcationGeomFactory factory =
+                            new SecondaryBifurcationGeomFactory(RPNUMERICS.createSecondaryBifurcationCurveCalc(currentConfiguration_), curve);
+                    CoincidencePlotCommand.instance().execute(factory);
+
+                }
+
+                if (curve_name_.equals(rpnumerics.BoundaryExtensionCurve.class.getSimpleName())) {
+
+                    BoundaryExtensionCurve curve = new BoundaryExtensionCurve(curveSegments_);
+                    BoundaryExtensionCurveGeomFactory factory =
+                            new BoundaryExtensionCurveGeomFactory(RPNUMERICS.createBoundaryExtensionCurveCalc(currentConfiguration_), curve);
+                    EllipticBoundaryExtensionCommand.instance().execute(factory);
+
+                }
+
+                if (curve_name_.equals(rpnumerics.HysteresisCurve.class.getSimpleName())) {
+
+                    HysteresisCurve curve = new HysteresisCurve(curveSegments_);
+                    HysteresisCurveGeomFactory factory =
+                            new HysteresisCurveGeomFactory(RPNUMERICS.createHysteresisCurveCalc(currentConfiguration_), curve);
+                    HysteresisPlotCommand.instance().execute(factory);
+
+                }
+
+                if (curve_name_.equals(rpnumerics.EllipticBoundary.class.getSimpleName())) {
+
+                    EllipticBoundary curve = new EllipticBoundary(curveSegments_);
+                    EllipticBoundaryFactory factory =
+                            new EllipticBoundaryFactory(RPNUMERICS.createEllipticBoundaryCalc(currentConfiguration_), curve);
+                    EllipticBoundaryCommand.instance().execute(factory);
+
+                }
+
+
+/*              TODO : THIS ELEMENT IS MISSING IN THE RPNUMERICS...
+
+                if (curve_name_.equals(rpnumerics.BuckleyLeverettInflectionCurve.class.getSimpleName())) {
+
+
+                    BuckleyLeverettInflectionCurve curve = new BuckleyLeverettInflectionCurve(curveSegments_);
+                    BuckleyLeverettinInflectionCurveGeomFactory factory =
+                            new BuckleyLeverettinInflectionCurveGeomFactory(RPNUMERICS.createBuckleyLeverettinInflectionCurveCalc(currentConfiguration_), curve);
+                    BuckleyLeverettInflectionCurveCommand.instance().execute(factory);
+
+                }
+
+
+
+                TODO : IS THIS THE SAME AS A SUBINFLECTIONEXTENSION ???
+ *
+
+                if (curve_name_.equals(rpnumerics.SubInflectionCurve.class.getSimpleName())) {
+
+
+                    SubInflectionCurve curve = new SubInflectionCurve(curveSegments_);
+                    SubInflectionCurveGeomFactory factory =
+                            new SubInflectionCurveGeomFactory(RPNUMERICS.createSubInflectionCurveCalc(currentConfiguration_), curve);
+                    SubInflectionPlotCommand.instance().execute(factory);
+
+                }
+
+*/
+
+
+            } else if (currentElement_.equals(RPnCurve.XML_TAG)) {
+
+                OrbitPoint[] orbitPointsArray = new OrbitPoint[orbitPoints_.size()];
+
+                for (int i=0; i < orbitPoints_.size();i++)
+                    orbitPointsArray[i] = (OrbitPoint)orbitPoints_.elementAt(i);
+
+                if (curve_name_.equals(rpnumerics.RarefactionCurve.class.getSimpleName())) {
+
+                    RarefactionCurve curve = new RarefactionCurve(orbitPointsArray,
+                                                                  Integer.parseInt(currentConfiguration_.getParam("family")),
+                                                                  Integer.parseInt(currentConfiguration_.getParam("direction")));
+                    RarefactionCurveGeomFactory factory =
+                            new RarefactionCurveGeomFactory(RPNUMERICS.createRarefactionCalc(currentConfiguration_,startPoint_), curve);
+                    RarefactionCurvePlotCommand.instance().execute(factory);
+
+                }
+            }
         }
 
         public void setDocumentLocator(Locator locator) {
@@ -219,6 +418,7 @@ public class RPnDataModule {
             System.out.println("Data Module parsing started...");
             parser.parse(new InputSource((configFileStream)));
             System.out.println("Data Module parsing finished sucessfully !");
+
         } catch (Exception saxex) {
 
             if (saxex instanceof org.xml.sax.SAXParseException) {
@@ -425,15 +625,14 @@ public class RPnDataModule {
     }
     // ----------
 
-    static public void exportRP(FileWriter writer) throws java.io.IOException {
+    static public void export(FileWriter writer) throws java.io.IOException {
 
 
         // TODO : this is working only for PHASESPACE ... must be implemented to all
         // others phasespaces (L , R etc...)
         Iterator<RpGeometry> iterator = PHASESPACE.getGeomObjIterator();
 
-        // Inserting data
-
+        // selecting visible data
         HashMap<Integer, RpGeometry> visibleGeometries = new HashMap<Integer, RpGeometry>();
         int geometryCounter = 0;
 
@@ -447,18 +646,18 @@ public class RPnDataModule {
 
         }
 
-        // Inserting data
+        writer.write("<" + XML_TAG + " phasespace=" + '\"' + PHASESPACE.getName() + '\"' + ">\n");
+
+        // writing RpSolution data
         Set<Entry<Integer, RpGeometry>> visibleGeometrySet = visibleGeometries.entrySet();
 
         for (Entry<Integer, RpGeometry> entry : visibleGeometrySet) {
 
-            RpSolution element = (RpSolution) entry.getValue().geomFactory().geomSource();
-
-            if (element instanceof RiemannProfile) {
-                writer.write(element.toXML() + "\n");
-            } else {
-                writer.write(element.toXML() + "\n");
-            }
+            RpGeomFactory factory = (RpGeomFactory) entry.getValue().geomFactory();
+            writer.write(factory.toXML() + "\n");
         }
+
+        writer.write("</" + XML_TAG + ">\n");
+
     }
 }

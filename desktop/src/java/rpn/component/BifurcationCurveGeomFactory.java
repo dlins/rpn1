@@ -18,6 +18,7 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
     private RpGeometry rightGeom_;
 
     public BifurcationCurveGeomFactory(ContourCurveCalc calc) {
+
         super(calc);
         try {
             leftGeom_ = createLeftGeom();
@@ -26,13 +27,11 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
             ((BifurcationCurveGeom) rightGeom_).setOtherSide(leftGeom_);
         } catch (RpException ex) {
             RPnDesktopPlotter.showCalcExceptionDialog(ex);
-
         }
-
-
     }
 
     public BifurcationCurveGeomFactory(ContourCurveCalc calc, RpSolution curve) {
+
         super(calc, curve);
         try {
             leftGeom_ = createLeftGeom();
@@ -45,24 +44,43 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
 
     }
 
+    @Override
     public String toXML() {
+
         StringBuilder buffer = new StringBuilder();
 
-        String commandName = geomSource().getClass().getName();
-        commandName = commandName.toLowerCase();
-        commandName = commandName.replaceAll(".+\\.", "");
+        // TODO confirm that all geomSource() calls will return a SegmentedCurve instance type
+        SegmentedCurve geomSource = (SegmentedCurve) geomSource();
 
-        ContourCurveCalc calc = ((ContourCurveCalc) rpCalc());
+        String curve_name = '\"' + geomSource.getClass().getSimpleName() + '\"';
+        String dimension = '\"' + Integer.toString(RPNUMERICS.domainDim())  + '\"';
 
-        ContourParams params = calc.getParams();
 
-        buffer.append("<COMMAND name=\"").append(commandName).append("\" ");
+        //
+        // PRINTS OUT THE CURVE ATTS
+        //
+        buffer.append("<" + SegmentedCurve.XML_TAG + " curve_name=" + ' ' + curve_name + ' ' +  "dimension=" + ' ' +  dimension + ' ' +  "format_desc=\"1 segment per row\">" + "\n");
 
-        buffer.append(params.toString());
 
+        //
+        // PRINTS OUT THE CONFIGURATION INFORMATION
+        //
+        buffer.append(rpCalc().getConfiguration().toXML());
+
+        //
+        // PRINTS OUT THE SEGMENTS COORDS
+        //
+        for (int i = 0; i < geomSource.segments().size(); i++) {
+
+            RealSegment realSegment =(RealSegment) geomSource.segments().get(i);
+            buffer.append(realSegment.toXML() + "\n");
+        }
+
+        buffer.append("</" + SegmentedCurve.XML_TAG + ">" + "\n");
 
         return buffer.toString();
     }
+
 
     public String toMatlab(int curveIndex) {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -95,10 +113,12 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
     protected final RpGeometry createRightGeom() throws RpException {
 
         BifurcationCurve curve = (BifurcationCurve) geomSource();
-        RealSegGeom[] bifurcationArray = new RealSegGeom[curve.rightSegments().size()];
         if (curve == null) {
             throw new RpException("Bifurcation curve empty");
         }
+
+        RealSegGeom[] bifurcationArray = new RealSegGeom[curve.rightSegments().size()];
+
         for (int i = 0; i < curve.rightSegments().size(); i++) {
             bifurcationArray[i] = new RealSegGeom((RealSegment) curve.rightSegments().get(i), rightViewingAttr());
         }
@@ -107,12 +127,15 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
 
     @Override
     public void updateGeom() {
+
         try {
+
             super.updateGeom();
             leftGeom_ = createLeftGeom();
             rightGeom_ = createRightGeom();
             ((BifurcationCurveGeom) leftGeom_).setOtherSide(rightGeom_);
             ((BifurcationCurveGeom) rightGeom_).setOtherSide(leftGeom_);
+
         } catch (RpException ex) {
             RPnDesktopPlotter.showCalcExceptionDialog(ex);
         }

@@ -14,7 +14,7 @@ import rpn.parser.RPnDataModule;
 import rpnumerics.*;
 import wave.util.RealVector;
 
-public class BuckleyLeverettiInflectionCommand extends RpModelPlotCommand {
+public class BuckleyLeverettiInflectionCommand extends BifurcationPlotCommand {
     //
     // Constants
     //

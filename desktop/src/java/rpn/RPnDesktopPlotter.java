@@ -9,8 +9,6 @@ package rpn;
 import org.iso_relax.verifier.VerifierConfigurationException;
 import org.xml.sax.SAXException;
 
-
-
 import rpn.message.*;
 import rpnumerics.RpException;
 import java.io.*;

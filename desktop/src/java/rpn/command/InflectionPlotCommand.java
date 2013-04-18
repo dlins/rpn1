@@ -9,16 +9,18 @@ import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Vector;
 import javax.swing.JButton;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.component.*;
+import rpn.configuration.Configuration;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UI_ACTION_SELECTED;
 import rpn.parser.RPnDataModule;
 import rpnumerics.*;
 import wave.util.RealVector;
 
-public class InflectionPlotCommand extends RpModelPlotCommand {
+public class InflectionPlotCommand extends BifurcationPlotCommand {
     //
     // Constants
     //
@@ -56,32 +58,7 @@ public class InflectionPlotCommand extends RpModelPlotCommand {
     public void execute() {
 
         InflectionCurveGeomFactory factory = new InflectionCurveGeomFactory(RPNUMERICS.createInflectionCurveCalc());
-
-
-        RPnPhaseSpaceAbstraction leftPhaseSpace = RPnDataModule.LEFTPHASESPACE;
-
-        RPnPhaseSpaceAbstraction rightPhaseSpace = RPnDataModule.RIGHTPHASESPACE;
-
-        RpGeometry leftGeometry = factory.leftGeom();
-        RpGeometry rightGeometry = factory.rightGeom();
-
-        leftPhaseSpace.join(leftGeometry);
-        rightPhaseSpace.join(rightGeometry);
-
-
-        Iterator oldValue = RPnDataModule.PHASESPACE.getGeomObjIterator();
-        PropertyChangeEvent event = new PropertyChangeEvent(this, UIController.instance().getActivePhaseSpace().getName(), oldValue, factory.geom());
-
-
-        ArrayList<RealVector> emptyInput = new ArrayList<RealVector>();
-        logCommand(new RpCommand(event, emptyInput));
-
-
-
-
-        RPnDataModule.PHASESPACE.join(factory.geom());
-
-
+        execute(factory);
 
     }
 

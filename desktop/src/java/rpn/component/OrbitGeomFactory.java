@@ -27,6 +27,9 @@ public class OrbitGeomFactory extends RpCalcBasedGeomFactory {
         super(calc);
     }
 
+    public OrbitGeomFactory(OrbitCalc calc,Orbit orbit) {
+        super(calc,orbit);
+    }
     //
     // Accessors/Mutators
     //

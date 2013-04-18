@@ -18,7 +18,7 @@ import rpn.parser.RPnDataModule;
 import rpnumerics.*;
 import wave.util.RealVector;
 
-public class BoundaryExtensionCurveCommand extends RpModelPlotCommand {
+public class BoundaryExtensionCurveCommand extends BifurcationPlotCommand {
     //
     // Constants
     //

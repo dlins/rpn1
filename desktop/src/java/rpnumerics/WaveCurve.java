@@ -24,9 +24,11 @@ public class WaveCurve extends RPnCurve implements WaveCurveBranch, RpSolution {
     private double ALFA;
 
     public WaveCurve(int family, int increase) {
+        
         family_ = family;
         direction_ = increase;
         branchList_ = new ArrayList<WaveCurveBranch>();
+
 
     }
 

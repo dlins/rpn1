@@ -33,7 +33,7 @@ public interface RpSolution {
     /*
      * XML output
      */
-    String toXML();
+    String toXML();    
 
     /*
      * Matlab formatted output

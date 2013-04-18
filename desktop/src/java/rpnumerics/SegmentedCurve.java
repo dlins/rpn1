@@ -28,9 +28,11 @@ import wave.util.RealVector;
 
 public class SegmentedCurve extends RPnCurve implements RpSolution {
 
+    public static String XML_TAG = "SEGMENTEDCURVE";
+
+    
 
     private List<? extends RealSegment> segments_;
-
     private double ALFA;
 
 
@@ -38,7 +40,6 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
 //        super(coordsArrayFromRealSegments(segmentsList), new ViewingAttr(Color.red));
         super(segmentsList, new ViewingAttr(Color.red));
         segments_ = segmentsList;
-
     }
 
 
@@ -517,6 +518,5 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
     public List segments() {
         return segments_;
     }
-
 
 }

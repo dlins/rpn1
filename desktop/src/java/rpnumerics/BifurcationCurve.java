@@ -209,21 +209,6 @@ public class BifurcationCurve extends SegmentedCurve {
     }
     // ---
 
-
-
-    public String toXML() {
-
-        StringBuilder buffer = new StringBuilder();
-
-        for (int i = 0; i < segments().size(); i++) {
-
-            RealSegment realSegment =(RealSegment) segments().get(i);
-            buffer.append(realSegment.toXML());
-        }
-        return buffer.toString();
-
-    }
-
     public List<RealSegment> leftSegments() {
         return leftSegments_;
     }

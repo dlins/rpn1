@@ -15,7 +15,7 @@ import rpn.parser.RPnDataModule;
 import rpnumerics.*;
 import wave.util.RealVector;
 
-public class EllipticBoundaryExtensionCommand extends RpModelPlotCommand {
+public class EllipticBoundaryExtensionCommand extends BifurcationPlotCommand {
     //
     // Constants
     //
@@ -53,8 +53,7 @@ public class EllipticBoundaryExtensionCommand extends RpModelPlotCommand {
 
 
         EllipticBoundaryExtensionFactory factory = new EllipticBoundaryExtensionFactory(RPNUMERICS.createEllipticExtensionCalc());
-
-        RPnDataModule.PHASESPACE.plot(factory.geom());
+        execute(factory);
 
     }
 

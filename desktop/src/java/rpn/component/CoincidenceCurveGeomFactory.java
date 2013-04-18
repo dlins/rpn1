@@ -17,6 +17,9 @@ public class CoincidenceCurveGeomFactory extends BifurcationCurveGeomFactory{
         super(calc);
     }
 
+    public CoincidenceCurveGeomFactory(ContourCurveCalc calc,CoincidenceCurve curve) {
+        super(calc,curve);
+    }
   
     // Methods
     //

@@ -19,6 +19,7 @@ import javax.swing.ImageIcon;
 import java.util.Iterator;
 import javax.swing.AbstractButton;
 import rpn.component.RpCalcBasedGeomFactory;
+import rpn.component.RpGeomFactory;
 import rpn.controller.ui.*;
 import rpnumerics.RPnCurve;
 
@@ -28,6 +29,7 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand {
 
 
     public RpModelPlotCommand(String shortDesc, ImageIcon icon, AbstractButton button) {
+
         super(shortDesc, icon);
         button_ = button;
         button_.setAction(this);
@@ -85,7 +87,8 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand {
 
         RealVector[] userInputList = UIController.instance().userInputList();
 
-        System.out.println("execute do  plot" + userInputList[0]);
+        for (int i=0;i < userInputList.length;i++)
+            System.out.println("execute do  plot" + userInputList[0]);
 
         Iterator oldValue = UIController.instance().getActivePhaseSpace().getGeomObjIterator();
 
@@ -119,6 +122,26 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand {
         logCommand(new RpCommand(event_, inputArray));
     }
 
+    public void execute (RpGeomFactory factory) {
+
+        RPnCurve curve = (RPnCurve) factory.geomSource();
+
+        curve.setId(idCounter_);
+
+        Iterator oldValue = RPnDataModule.PHASESPACE.getGeomObjIterator();
+
+        PropertyChangeEvent event = new PropertyChangeEvent(this,
+                UIController.instance().getActivePhaseSpace().getName(),
+                oldValue,
+                factory.geom());
+
+        ArrayList<RealVector> emptyInput = new ArrayList<RealVector>();
+        logCommand(new RpCommand(event, emptyInput));
+
+        RPnDataModule.PHASESPACE.join(factory.geom());
+
+    }
+
     public void unexecute() {
         Iterator current = (Iterator) log().getNewValue();
         RpGeometry added = null;
@@ -138,4 +161,5 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand {
 
     protected void unselectedButton(ChangeEvent changeEvent) {
     }
+
 }

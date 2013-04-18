@@ -33,7 +33,7 @@ import rpn.controller.ui.UserInputHandler;
 /** With this class the calculus made in a previous session can be reloaded. A previous state can be reloaded reading a XML file that is used by this class */
 public class RPnCommandModule {
 
-    static protected class RPnCommandParser implements ContentHandler {
+    static public class RPnCommandParser implements ContentHandler {
 
         private String currentElement_;
         private String currentCommand_;
@@ -270,6 +270,21 @@ public class RPnCommandModule {
         }
 
         public void skippedEntity(String name) throws SAXException {
+        }
+
+        public static void selectPhaseSpace(String phaseSpaceName) {
+
+            if (phaseSpaceName != null) {
+
+                if (phaseSpaceName.equals("Phase Space")) {
+                    UIController.instance().setActivePhaseSpace(RPnDataModule.PHASESPACE);
+                } else if (phaseSpaceName.equals("LeftPhase Space")) {
+                    UIController.instance().setActivePhaseSpace(RPnDataModule.LEFTPHASESPACE);
+                } else if (phaseSpaceName.equals("RightPhase Space")) {
+                    UIController.instance().setActivePhaseSpace(RPnDataModule.RIGHTPHASESPACE);
+                }
+
+            }
         }
     }
 

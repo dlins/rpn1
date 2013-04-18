@@ -1,0 +1,320 @@
+<?xml version="1.0"?>
+<!DOCTYPE rpnconfiguration>
+<RPNSESSION>
+ <PHASESPACE name="Phase Space">
+  <RPNCONFIGURATION>
+<PHYSICS name="Stone">
+<BOUNDARY name="Three_Phase_Boundary">
+<BOUNDARYPARAM name="limits"  value= "0.0 0.0 0.0 1.0 1.0 0.0 "/>
+<BOUNDARYPARAM name="dimension"  value= "2"/>
+</BOUNDARY>
+<PHYSICSCONFIG name="fluxfunction">
+<PHYSICSPARAM name="grw" position="0" value= "1.0"/>
+<PHYSICSPARAM name="grg" position="1" value= "1.0"/>
+<PHYSICSPARAM name="gro" position="2" value= "1.0"/>
+<PHYSICSPARAM name="muw" position="3" value= "1.0"/>
+<PHYSICSPARAM name="mug" position="4" value= "1.0"/>
+<PHYSICSPARAM name="muo" position="5" value= "1.0"/>
+<PHYSICSPARAM name="vel" position="6" value= "1.0"/>
+<PHYSICSPARAM name="expw" position="7" value= "2.0"/>
+<PHYSICSPARAM name="expg" position="8" value= "2.0"/>
+<PHYSICSPARAM name="expo" position="9" value= "2.0"/>
+<PHYSICSPARAM name="expow" position="10" value= "2.0"/>
+<PHYSICSPARAM name="expog" position="11" value= "2.0"/>
+<PHYSICSPARAM name="krw_p" position="12" value= "1.0"/>
+<PHYSICSPARAM name="krg_p" position="13" value= "1.0"/>
+<PHYSICSPARAM name="kro_p" position="14" value= "1.0"/>
+<PHYSICSPARAM name="cnw" position="15" value= "0.0"/>
+<PHYSICSPARAM name="cng" position="16" value= "0.0"/>
+<PHYSICSPARAM name="cno" position="17" value= "0.0"/>
+<PHYSICSPARAM name="lw" position="18" value= "0.0"/>
+<PHYSICSPARAM name="lg" position="19" value= "0.0"/>
+<PHYSICSPARAM name="lo" position="20" value= "0.0"/>
+<PHYSICSPARAM name="low" position="21" value= "0.0"/>
+<PHYSICSPARAM name="log" position="22" value= "0.0"/>
+<PHYSICSPARAM name="epsl" position="23" value= "0.0"/>
+<PHYSICSPARAM name="negWS" position="24" value= "1.0"/>
+<PHYSICSPARAM name="negGS" position="25" value= "1.0"/>
+<PHYSICSPARAM name="negOS" position="26" value= "1.0"/>
+</PHYSICSCONFIG>
+</PHYSICS>
+<METHOD name="Newton">
+<METHODPARAM name="tolerance" value= "0.001"/>
+</METHOD>
+<CURVECONFIGURATION name="ellipticextension">
+<CURVEPARAM name="characteristicwhere" value= "0"/>
+<CURVEPARAM name="resolution" value= "128 128"/>
+<CURVEPARAM name="family" value= "0"/>
+</CURVECONFIGURATION>
+<CURVECONFIGURATION name="inflectioncurve">
+<CURVEPARAM name="resolution" value= "60 60"/>
+<CURVEPARAM name="family" value= "0"/>
+</CURVECONFIGURATION>
+<CURVECONFIGURATION name="extensioncurve">
+<CURVEPARAM name="characteristic" value= "1"/>
+<CURVEPARAM name="resolution" value= "128 128"/>
+<CURVEPARAM name="family" value= "0"/>
+</CURVECONFIGURATION>
+<CURVECONFIGURATION name="hysteresiscurve">
+<CURVEPARAM name="resolution" value= "128 128"/>
+<CURVEPARAM name="family" value= "0"/>
+</CURVECONFIGURATION>
+<CURVECONFIGURATION name="hugoniotcurve">
+<CURVEPARAM name="resolution" value= "120 120"/>
+</CURVECONFIGURATION>
+<CURVECONFIGURATION name="envelopecurve">
+<CURVEPARAM name="edge" value= "0"/>
+<CURVEPARAM name="resolution" value= "128 128"/>
+<CURVEPARAM name="numberofsteps" value= "128"/>
+</CURVECONFIGURATION>
+<CURVECONFIGURATION name="boundaryextensioncurve">
+<CURVEPARAM name="edgeresolution" value= "128"/>
+<CURVEPARAM name="characteristicwhere" value= "1"/>
+<CURVEPARAM name="resolution" value= "128 128"/>
+<CURVEPARAM name="edge" value= "0"/>
+<CURVEPARAM name="family" value= "1"/>
+</CURVECONFIGURATION>
+<CURVECONFIGURATION name="doublecontactcurve">
+<CURVEPARAM name="curvefamily" value= "1"/>
+<CURVEPARAM name="domainfamily" value= "1"/>
+<CURVEPARAM name="resolution" value= "30 30"/>
+</CURVECONFIGURATION>
+<CURVECONFIGURATION name="ellipticboundary">
+<CURVEPARAM name="resolution" value= "128 128"/>
+</CURVECONFIGURATION>
+<CURVECONFIGURATION name="fundamentalcurve">
+<CURVEPARAM name="level" value= "0.5"/>
+<CURVEPARAM name="direction" value= "20"/>
+<CURVEPARAM name="family" value= "0"/>
+</CURVECONFIGURATION>
+<CURVECONFIGURATION name="levelcurve">
+<CURVEPARAM name="resolution" value= "128 128"/>
+<CURVEPARAM name="levels" value= "0.1 0.2 0.5"/>
+<CURVEPARAM name="family" value= "0"/>
+</CURVECONFIGURATION>
+<CURVECONFIGURATION name="rarefactionextension">
+<CURVEPARAM name="curvefamily" value= "0"/>
+<CURVEPARAM name="extensionfamily" value= "1"/>
+<CURVEPARAM name="characteristic" value= "1"/>
+<CURVEPARAM name="resolution" value= "128 128"/>
+</CURVECONFIGURATION>
+<VIEWCONFIGURATION modeldomain="2">
+<PROJDESC name="Axis0 Axis1">
+<VIEWPARAM name="vpwidth" value= "700"/>
+<VIEWPARAM name="axis" value= "0 1"/>
+<VIEWPARAM name="iso2equi" value= "true"/>
+<VIEWPARAM name="vpheight" value= "700"/>
+</PROJDESC>
+</VIEWCONFIGURATION>
+  </RPNCONFIGURATION>
+<RPNDATA phasespace="Phase Space">
+<SEGMENTEDCURVE curve_name= "InflectionCurve" dimension= "2" format_desc="1 segment per row">
+<CURVECONFIGURATION name="inflectioncurve">
+<CURVEPARAM name="resolution" value= "60 60"/>
+<CURVEPARAM name="family" value= "0"/>
+</CURVECONFIGURATION>
+<REALSEG coords_1="0.0250 0.0250" coords_2="0.0167 0.0167"/>
+<REALSEG coords_1="0.0333 0.9333" coords_2="0.0333 0.9333"/>
+<REALSEG coords_1="0.0500 0.9000" coords_2="0.0500 0.9000"/>
+<REALSEG coords_1="0.0667 0.0667" coords_2="0.0583 0.0583"/>
+<REALSEG coords_1="0.0667 0.0667" coords_2="0.0667 0.0667"/>
+<REALSEG coords_1="0.0667 0.0667" coords_2="0.0667 0.0667"/>
+<REALSEG coords_1="0.0667 0.0667" coords_2="0.0750 0.0750"/>
+<REALSEG coords_1="0.0750 0.0750" coords_2="0.0833 0.0833"/>
+<REALSEG coords_1="0.0833 0.0833" coords_2="0.0833 0.0833"/>
+<REALSEG coords_1="0.0833 0.0833" coords_2="0.0833 0.0833"/>
+<REALSEG coords_1="0.0833 0.8333" coords_2="0.0833 0.8333"/>
+<REALSEG coords_1="0.0667 0.8667" coords_2="0.0667 0.8667"/>
+<REALSEG coords_1="0.0917 0.0917" coords_2="0.0833 0.0833"/>
+<REALSEG coords_1="0.1000 0.1000" coords_2="0.0917 0.0917"/>
+<REALSEG coords_1="0.1000 0.8000" coords_2="0.1000 0.8000"/>
+<REALSEG coords_1="0.1000 0.8000" coords_2="0.1000 0.8000"/>
+<REALSEG coords_1="0.1000 0.8000" coords_2="0.0897 0.8167"/>
+<REALSEG coords_1="0.0897 0.8167" coords_2="0.0833 0.8333"/>
+<REALSEG coords_1="0.1000 0.1000" coords_2="0.1000 0.1000"/>
+<REALSEG coords_1="0.1000 0.1000" coords_2="0.1000 0.1000"/>
+<REALSEG coords_1="0.1000 0.1000" coords_2="0.1083 0.1083"/>
+<REALSEG coords_1="0.1083 0.1083" coords_2="0.1167 0.1167"/>
+<REALSEG coords_1="0.1167 0.1167" coords_2="0.1167 0.1167"/>
+<REALSEG coords_1="0.1167 0.1167" coords_2="0.1167 0.1167"/>
+<REALSEG coords_1="0.1167 0.7667" coords_2="0.1066 0.7833"/>
+<REALSEG coords_1="0.1066 0.7833" coords_2="0.1000 0.8000"/>
+<REALSEG coords_1="0.1250 0.1250" coords_2="0.1167 0.1167"/>
+<REALSEG coords_1="0.1250 0.1250" coords_2="0.1333 0.1333"/>
+<REALSEG coords_1="0.1333 0.1333" coords_2="0.1333 0.1333"/>
+<REALSEG coords_1="0.1333 0.1333" coords_2="0.1333 0.1333"/>
+<REALSEG coords_1="0.1333 0.7333" coords_2="0.1235 0.7500"/>
+<REALSEG coords_1="0.1235 0.7500" coords_2="0.1167 0.7667"/>
+<REALSEG coords_1="0.1167 0.7667" coords_2="0.1167 0.7667"/>
+<REALSEG coords_1="0.1167 0.7667" coords_2="0.1167 0.7667"/>
+<REALSEG coords_1="0.1417 0.1417" coords_2="0.1333 0.1333"/>
+<REALSEG coords_1="0.1417 0.1417" coords_2="0.1500 0.1500"/>
+<REALSEG coords_1="0.1500 0.1500" coords_2="0.1500 0.1500"/>
+<REALSEG coords_1="0.1500 0.1500" coords_2="0.1500 0.1500"/>
+<REALSEG coords_1="0.1500 0.7000" coords_2="0.1404 0.7167"/>
+<REALSEG coords_1="0.1404 0.7167" coords_2="0.1333 0.7333"/>
+<REALSEG coords_1="0.1333 0.7333" coords_2="0.1333 0.7333"/>
+<REALSEG coords_1="0.1333 0.7333" coords_2="0.1333 0.7333"/>
+<REALSEG coords_1="0.1583 0.1583" coords_2="0.1500 0.1500"/>
+<REALSEG coords_1="0.1583 0.1583" coords_2="0.1667 0.1667"/>
+<REALSEG coords_1="0.1667 0.1667" coords_2="0.1667 0.1667"/>
+<REALSEG coords_1="0.1667 0.1667" coords_2="0.1667 0.1667"/>
+<REALSEG coords_1="0.1667 0.6667" coords_2="0.1572 0.6833"/>
+<REALSEG coords_1="0.1572 0.6833" coords_2="0.1500 0.7000"/>
+<REALSEG coords_1="0.1500 0.7000" coords_2="0.1500 0.7000"/>
+<REALSEG coords_1="0.1500 0.7000" coords_2="0.1500 0.7000"/>
+<REALSEG coords_1="0.1750 0.1750" coords_2="0.1667 0.1667"/>
+<REALSEG coords_1="0.1833 0.1833" coords_2="0.1750 0.1750"/>
+<REALSEG coords_1="0.1833 0.6333" coords_2="0.1833 0.6333"/>
+<REALSEG coords_1="0.1833 0.6333" coords_2="0.1833 0.6333"/>
+<REALSEG coords_1="0.1833 0.6333" coords_2="0.1741 0.6500"/>
+<REALSEG coords_1="0.1741 0.6500" coords_2="0.1667 0.6667"/>
+<REALSEG coords_1="0.1667 0.6667" coords_2="0.1667 0.6667"/>
+<REALSEG coords_1="0.1667 0.6667" coords_2="0.1667 0.6667"/>
+<REALSEG coords_1="0.1833 0.1833" coords_2="0.1833 0.1833"/>
+<REALSEG coords_1="0.1833 0.1833" coords_2="0.1833 0.1833"/>
+<REALSEG coords_1="0.1833 0.1833" coords_2="0.1917 0.1917"/>
+<REALSEG coords_1="0.1917 0.1917" coords_2="0.2000 0.2000"/>
+<REALSEG coords_1="0.2000 0.2000" coords_2="0.2000 0.2000"/>
+<REALSEG coords_1="0.2000 0.2000" coords_2="0.2000 0.2000"/>
+<REALSEG coords_1="0.2000 0.6000" coords_2="0.1909 0.6167"/>
+<REALSEG coords_1="0.1909 0.6167" coords_2="0.1833 0.6333"/>
+<REALSEG coords_1="0.2083 0.2083" coords_2="0.2000 0.2000"/>
+<REALSEG coords_1="0.2083 0.2083" coords_2="0.2167 0.2167"/>
+<REALSEG coords_1="0.2167 0.2167" coords_2="0.2167 0.2167"/>
+<REALSEG coords_1="0.2167 0.2167" coords_2="0.2167 0.2167"/>
+<REALSEG coords_1="0.2167 0.5667" coords_2="0.2076 0.5833"/>
+<REALSEG coords_1="0.2076 0.5833" coords_2="0.2000 0.6000"/>
+<REALSEG coords_1="0.2000 0.6000" coords_2="0.2000 0.6000"/>
+<REALSEG coords_1="0.2000 0.6000" coords_2="0.2000 0.6000"/>
+<REALSEG coords_1="0.2250 0.2250" coords_2="0.2167 0.2167"/>
+<REALSEG coords_1="0.2250 0.2250" coords_2="0.2333 0.2333"/>
+<REALSEG coords_1="0.2333 0.2333" coords_2="0.2333 0.2333"/>
+<REALSEG coords_1="0.2333 0.2333" coords_2="0.2333 0.2333"/>
+<REALSEG coords_1="0.2333 0.5333" coords_2="0.2333 0.5333"/>
+<REALSEG coords_1="0.2333 0.5333" coords_2="0.2333 0.5333"/>
+<REALSEG coords_1="0.2333 0.5333" coords_2="0.2244 0.5500"/>
+<REALSEG coords_1="0.2244 0.5500" coords_2="0.2167 0.5667"/>
+<REALSEG coords_1="0.2167 0.5667" coords_2="0.2167 0.5667"/>
+<REALSEG coords_1="0.2167 0.5667" coords_2="0.2167 0.5667"/>
+<REALSEG coords_1="0.2417 0.2417" coords_2="0.2333 0.2333"/>
+<REALSEG coords_1="0.2411 0.5167" coords_2="0.2333 0.5333"/>
+<REALSEG coords_1="0.2583 0.2583" coords_2="0.2667 0.2667"/>
+<REALSEG coords_1="0.2667 0.2667" coords_2="0.2667 0.2667"/>
+<REALSEG coords_1="0.2667 0.2667" coords_2="0.2667 0.2667"/>
+<REALSEG coords_1="0.2667 0.4667" coords_2="0.2578 0.4833"/>
+<REALSEG coords_1="0.2750 0.2750" coords_2="0.2667 0.2667"/>
+<REALSEG coords_1="0.2833 0.2833" coords_2="0.2750 0.2750"/>
+<REALSEG coords_1="0.2833 0.4333" coords_2="0.2833 0.4333"/>
+<REALSEG coords_1="0.2833 0.4333" coords_2="0.2833 0.4333"/>
+<REALSEG coords_1="0.2833 0.4333" coords_2="0.2745 0.4500"/>
+<REALSEG coords_1="0.2745 0.4500" coords_2="0.2667 0.4667"/>
+<REALSEG coords_1="0.2667 0.4667" coords_2="0.2667 0.4667"/>
+<REALSEG coords_1="0.2667 0.4667" coords_2="0.2667 0.4667"/>
+<REALSEG coords_1="0.2833 0.2833" coords_2="0.2833 0.2833"/>
+<REALSEG coords_1="0.2833 0.2833" coords_2="0.2833 0.2833"/>
+<REALSEG coords_1="0.2833 0.2833" coords_2="0.2917 0.2917"/>
+<REALSEG coords_1="0.2917 0.2917" coords_2="0.3000 0.3000"/>
+<REALSEG coords_1="0.3000 0.3000" coords_2="0.3000 0.3000"/>
+<REALSEG coords_1="0.3000 0.3000" coords_2="0.3000 0.3000"/>
+<REALSEG coords_1="0.3000 0.4000" coords_2="0.3000 0.4000"/>
+<REALSEG coords_1="0.3000 0.4000" coords_2="0.3000 0.4000"/>
+<REALSEG coords_1="0.3000 0.4000" coords_2="0.2911 0.4167"/>
+<REALSEG coords_1="0.2911 0.4167" coords_2="0.2833 0.4333"/>
+<REALSEG coords_1="0.3083 0.3083" coords_2="0.3000 0.3000"/>
+<REALSEG coords_1="0.3083 0.3083" coords_2="0.3167 0.3167"/>
+<REALSEG coords_1="0.3167 0.3167" coords_2="0.3167 0.3167"/>
+<REALSEG coords_1="0.3167 0.3167" coords_2="0.3167 0.3167"/>
+<REALSEG coords_1="0.3167 0.3667" coords_2="0.3077 0.3833"/>
+<REALSEG coords_1="0.3077 0.3833" coords_2="0.3000 0.4000"/>
+<REALSEG coords_1="0.3250 0.3250" coords_2="0.3167 0.3167"/>
+<REALSEG coords_1="0.3333 0.3231" coords_2="0.3250 0.3250"/>
+<REALSEG coords_1="0.3333 0.3416" coords_2="0.3237 0.3500"/>
+<REALSEG coords_1="0.3237 0.3500" coords_2="0.3167 0.3667"/>
+<REALSEG coords_1="0.3167 0.3667" coords_2="0.3167 0.3667"/>
+<REALSEG coords_1="0.3167 0.3667" coords_2="0.3167 0.3667"/>
+<REALSEG coords_1="0.3416 0.3333" coords_2="0.3333 0.3416"/>
+<REALSEG coords_1="0.3667 0.3167" coords_2="0.3667 0.3167"/>
+<REALSEG coords_1="0.3667 0.3167" coords_2="0.3500 0.3237"/>
+<REALSEG coords_1="0.3667 0.3167" coords_2="0.3667 0.3167"/>
+<REALSEG coords_1="0.3833 0.3077" coords_2="0.3667 0.3167"/>
+<REALSEG coords_1="0.4000 0.3000" coords_2="0.4000 0.3000"/>
+<REALSEG coords_1="0.4000 0.3000" coords_2="0.3833 0.3077"/>
+<REALSEG coords_1="0.4000 0.3000" coords_2="0.4000 0.3000"/>
+<REALSEG coords_1="0.4167 0.2911" coords_2="0.4000 0.3000"/>
+<REALSEG coords_1="0.4167 0.5754" coords_2="0.4087 0.5833"/>
+<REALSEG coords_1="0.4087 0.5833" coords_2="0.4083 0.5917"/>
+<REALSEG coords_1="0.4333 0.2833" coords_2="0.4333 0.2833"/>
+<REALSEG coords_1="0.4333 0.2833" coords_2="0.4167 0.2911"/>
+<REALSEG coords_1="0.4249 0.5751" coords_2="0.4167 0.5754"/>
+<REALSEG coords_1="0.4333 0.2833" coords_2="0.4333 0.2833"/>
+<REALSEG coords_1="0.4500 0.2745" coords_2="0.4333 0.2833"/>
+<REALSEG coords_1="0.4667 0.2667" coords_2="0.4667 0.2667"/>
+<REALSEG coords_1="0.4667 0.2667" coords_2="0.4500 0.2745"/>
+<REALSEG coords_1="0.4667 0.2667" coords_2="0.4667 0.2667"/>
+<REALSEG coords_1="0.4833 0.2578" coords_2="0.4667 0.2667"/>
+<REALSEG coords_1="0.5500 0.4420" coords_2="0.5421 0.4500"/>
+<REALSEG coords_1="0.5421 0.4500" coords_2="0.5417 0.4583"/>
+<REALSEG coords_1="0.5667 0.2167" coords_2="0.5500 0.2244"/>
+<REALSEG coords_1="0.5667 0.2167" coords_2="0.5667 0.2167"/>
+<REALSEG coords_1="0.5584 0.4416" coords_2="0.5500 0.4420"/>
+<REALSEG coords_1="0.5833 0.2076" coords_2="0.5667 0.2167"/>
+<REALSEG coords_1="0.5667 0.2167" coords_2="0.5667 0.2167"/>
+<REALSEG coords_1="0.5833 0.4087" coords_2="0.5754 0.4167"/>
+<REALSEG coords_1="0.5754 0.4167" coords_2="0.5751 0.4249"/>
+<REALSEG coords_1="0.6000 0.2000" coords_2="0.6000 0.2000"/>
+<REALSEG coords_1="0.6000 0.2000" coords_2="0.5833 0.2076"/>
+<REALSEG coords_1="0.5917 0.4083" coords_2="0.5833 0.4087"/>
+<REALSEG coords_1="0.6000 0.2000" coords_2="0.6000 0.2000"/>
+<REALSEG coords_1="0.6167 0.1909" coords_2="0.6000 0.2000"/>
+<REALSEG coords_1="0.6333 0.1833" coords_2="0.6167 0.1909"/>
+<REALSEG coords_1="0.6333 0.1833" coords_2="0.6333 0.1833"/>
+<REALSEG coords_1="0.6500 0.1741" coords_2="0.6333 0.1833"/>
+<REALSEG coords_1="0.6333 0.1833" coords_2="0.6333 0.1833"/>
+<REALSEG coords_1="0.6667 0.1667" coords_2="0.6500 0.1741"/>
+<REALSEG coords_1="0.6667 0.1667" coords_2="0.6667 0.1667"/>
+<REALSEG coords_1="0.6833 0.1572" coords_2="0.6667 0.1667"/>
+<REALSEG coords_1="0.6667 0.1667" coords_2="0.6667 0.1667"/>
+<REALSEG coords_1="0.7000 0.1500" coords_2="0.6833 0.1572"/>
+<REALSEG coords_1="0.7000 0.1500" coords_2="0.7000 0.1500"/>
+<REALSEG coords_1="0.7167 0.1404" coords_2="0.7000 0.1500"/>
+<REALSEG coords_1="0.7000 0.1500" coords_2="0.7000 0.1500"/>
+<REALSEG coords_1="0.7333 0.1333" coords_2="0.7167 0.1404"/>
+<REALSEG coords_1="0.7333 0.1333" coords_2="0.7333 0.1333"/>
+<REALSEG coords_1="0.7500 0.1235" coords_2="0.7333 0.1333"/>
+<REALSEG coords_1="0.7333 0.1333" coords_2="0.7333 0.1333"/>
+<REALSEG coords_1="0.7667 0.1167" coords_2="0.7500 0.1235"/>
+<REALSEG coords_1="0.7667 0.1167" coords_2="0.7667 0.1167"/>
+<REALSEG coords_1="0.7833 0.1066" coords_2="0.7667 0.1167"/>
+<REALSEG coords_1="0.7667 0.1167" coords_2="0.7667 0.1167"/>
+<REALSEG coords_1="0.8000 0.1000" coords_2="0.8000 0.1000"/>
+<REALSEG coords_1="0.8000 0.1000" coords_2="0.7833 0.1066"/>
+<REALSEG coords_1="0.8000 0.1920" coords_2="0.7921 0.2000"/>
+<REALSEG coords_1="0.7921 0.2000" coords_2="0.7918 0.2082"/>
+<REALSEG coords_1="0.8000 0.1000" coords_2="0.8000 0.1000"/>
+<REALSEG coords_1="0.8167 0.0897" coords_2="0.8000 0.1000"/>
+<REALSEG coords_1="0.8085 0.1915" coords_2="0.8000 0.1920"/>
+<REALSEG coords_1="0.8333 0.0833" coords_2="0.8333 0.0833"/>
+<REALSEG coords_1="0.8333 0.0833" coords_2="0.8167 0.0897"/>
+<REALSEG coords_1="0.8333 0.1586" coords_2="0.8255 0.1667"/>
+<REALSEG coords_1="0.8255 0.1667" coords_2="0.8252 0.1748"/>
+<REALSEG coords_1="0.8419 0.1581" coords_2="0.8333 0.1586"/>
+<REALSEG coords_1="0.8667 0.1253" coords_2="0.8588 0.1333"/>
+<REALSEG coords_1="0.8588 0.1333" coords_2="0.8585 0.1415"/>
+<REALSEG coords_1="0.8667 0.0667" coords_2="0.8667 0.0667"/>
+<REALSEG coords_1="0.8752 0.1248" coords_2="0.8667 0.1253"/>
+<REALSEG coords_1="0.9000 0.0500" coords_2="0.9000 0.0500"/>
+<REALSEG coords_1="0.9000 0.0920" coords_2="0.8922 0.1000"/>
+<REALSEG coords_1="0.8922 0.1000" coords_2="0.8919 0.1081"/>
+<REALSEG coords_1="0.9085 0.0915" coords_2="0.9000 0.0920"/>
+<REALSEG coords_1="0.9333 0.0333" coords_2="0.9333 0.0333"/>
+<REALSEG coords_1="0.9333 0.0586" coords_2="0.9255 0.0667"/>
+<REALSEG coords_1="0.9255 0.0667" coords_2="0.9252 0.0748"/>
+<REALSEG coords_1="0.9419 0.0581" coords_2="0.9333 0.0586"/>
+<REALSEG coords_1="0.9589 0.0333" coords_2="0.9585 0.0415"/>
+<REALSEG coords_1="0.9752 0.0248" coords_2="0.9667 0.0167"/>
+</SEGMENTEDCURVE>
+
+</RPNDATA>
+ </PHASESPACE>
+</RPNSESSION>

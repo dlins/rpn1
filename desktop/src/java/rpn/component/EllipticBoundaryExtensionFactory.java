@@ -16,6 +16,12 @@ public class EllipticBoundaryExtensionFactory extends BifurcationCurveGeomFactor
 
 
     }
+
+    public EllipticBoundaryExtensionFactory(EllipticBoundaryExtensionCalc calc,EllipticBoundaryExtension curve) {
+        super(calc,curve);
+
+
+    }
     //
     // Methods
     //

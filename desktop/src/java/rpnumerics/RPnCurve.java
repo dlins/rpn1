@@ -27,6 +27,9 @@ import rpn.parser.RPnDataModule;
 //public abstract class RpCurve extends MultiPolyLine {
 public abstract class RPnCurve implements RpSolution {
 
+    
+    public static String XML_TAG = "CURVE";
+
     private RelaxedChainedPolylineSet polyLinesSetList_ = null;
     
     private List<? extends RealSegment>  segments_;

@@ -11,6 +11,7 @@ import wave.util.RealSegment;
 import wave.util.RealVector;
 
 public class InflectionCurve extends BifurcationCurve {
+
     //
     // Members
     //

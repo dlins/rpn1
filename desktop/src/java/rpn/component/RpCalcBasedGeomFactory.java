@@ -11,6 +11,7 @@ import rpn.RPnDesktopPlotter;
 import rpn.controller.RpCalcController;
 import rpn.controller.RpController;
 import rpnumerics.Area;
+import rpnumerics.RPNUMERICS;
 
 import rpnumerics.RPnCurve;
 
@@ -23,19 +24,17 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
     //
     // Members
     //
-
-
     protected RpCalculation calc_;
     protected RpGeometry geom_;
     protected Object geomSource_;
     private RpController ui_;
-
     protected boolean isGeomOutOfDate_;
 
     //
     // Constructors/Initializers
     //
     public RpCalcBasedGeomFactory(RpCalculation calc) {
+
         calc_ = calc;
 
         // first calculation is different for some cases...
@@ -54,13 +53,12 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
     }
 
     public RpCalcBasedGeomFactory(RpCalculation calc, RpSolution solution) {
+
         calc_ = calc;
         geomSource_ = solution;
         geom_ = createGeomFromSource();
         isGeomOutOfDate_ = false;
         installController();
-
-
     }
 
     protected RpController createUI() {
@@ -147,5 +145,10 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
         geom_ = createGeomFromSource();
 
         isGeomOutOfDate_ = true;
+    }
+    
+    public String toXML() {
+
+        return "TODO: toXML()";
     }
 }

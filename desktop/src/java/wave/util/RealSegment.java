@@ -17,11 +17,10 @@ public class RealSegment {
     // Constructors
     //
     public RealSegment(RealVector p1, RealVector p2) {
+
         p1_ = new RealVector(p1);
         p2_ = new RealVector(p2);
     }
-
-
 
     @Override
     public String toString() {
@@ -38,14 +37,12 @@ public class RealSegment {
 
 
         StringBuffer buffer = new StringBuffer();
-        buffer.append("<REALSEGMENT>" + "\n");
-        buffer.append("<PHASEPOINT dimension=\"" + p1_.getSize() + "\">" + p1_.toString() + "</PHASEPOINT>\n");
-        buffer.append("<PHASEPOINT dimension=\"" + p2_.getSize() + "\">" + p2_.toString() + "</PHASEPOINT>\n");
-        buffer.append("</REALSEGMENT>" + "\n");
+        buffer.append("<REALSEG coords_1=\"" + p1_.toString() + "\"" + ' ' + "coords_2=\"" + p2_.toString() + "\"" + "/>");
 
         return buffer.toString();
 
     }
+
 
     //
     // Accessors/Mutators
