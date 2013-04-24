@@ -126,7 +126,7 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand {
 
         RPnCurve curve = (RPnCurve) factory.geomSource();
 
-        curve.setId(idCounter_);
+        curve.setId(curve.hashCode());
 
         Iterator oldValue = RPnDataModule.PHASESPACE.getGeomObjIterator();
 
