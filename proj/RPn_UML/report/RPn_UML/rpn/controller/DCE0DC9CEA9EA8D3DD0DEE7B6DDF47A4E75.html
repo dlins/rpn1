@@ -1,0 +1,178 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Interface</TITLE>
+<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=UTF-8">
+<LINK REL ="stylesheet" TYPE="text/css" HREF="../../../stylesheet.css" TITLE="Style"></HEAD>
+<BODY BGCOLOR="white">
+<!-- ========= START OF NAVBAR ======= -->
+<A NAME="navbar_top"></A>
+<A HREF="#skip-navbar_top" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_top_firstrow"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1"> &nbsp;<A HREF="../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <FONT CLASS="NavBarFont1">Package</FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1Rev">    <FONT CLASS="NavBarFont1Rev"><B>Element</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <FONT CLASS="NavBarFont1">Diagram</FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../help.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>NetBeans UML Modeling</b>
+</TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_top"></A>
+<!-- ========= END OF NAVBAR ========= -->
+
+<HR>
+<H2>
+<FONT SIZE="-1">rpn::controller</FONT>
+<BR>
+Interface RpController</H2>
+<PRE>
+<A HREF="../../../RPn_UML/java/beans/DCE77922228E124408A825691DD35998FB4.html" title="Interface inrpn::controller">PropertyChangeListener</A>
+  <IMG SRC="../../../images/inherit.gif" ALT="extended by "><B>rpn::controller::RpController</B>
+</PRE>
+<DL>
+<DT><B>All Dependency Clients:</B><DD><IMG SRC="../../../images/implementation.png" ALT="(Implementation) ">&nbsp;Implementation&nbsp;<A HREF="../../../RPn_UML/rpn/controller/DCEE458A1185BC6C5AF70172144BCCD7ED5.html" title="dependency in rpn::controller">PoincareController</A></DD>
+<DD><IMG SRC="../../../images/implementation.png" ALT="(Implementation) ">&nbsp;Implementation&nbsp;<A HREF="../../../RPn_UML/rpn/controller/DCE6D587CF9F7791F48411EE76B73910A4D.html" title="dependency in rpn::controller">RpCalcController</A></DD>
+</DL>
+<DL>
+<DT><B>All Known Associations: </B><DD><IMG SRC="../../../images/navigable-aggregation.png" ALT="(Navigable_Aggregation) "> <A HREF="../../../RPn_UML/rpn/component/DCEBB3FDF73E8BE9BE78B571EE8ADED88E2.html">Navigable_Aggregation</A>: <A HREF="../../../RPn_UML/rpn/component/DCECC5993F5C530926F277EE7514F3D1485.html" title="association in rpn::component">PoincareSectionGeomFactory</A></DD>
+<DD><IMG SRC="../../../images/navigable-aggregation.png" ALT="(Navigable_Aggregation) "> <A HREF="../../../RPn_UML/rpn/component/DCEE3877858F75D7B185CAD93CAE7D2BDD2.html">Navigable_Aggregation</A>: <A HREF="../../../RPn_UML/rpn/component/DCE5F2708588D47945590835684017DF6E2.html" title="association in rpn::component">RpCalcBasedGeomFactory</A></DD>
+</DL>
+<HR>
+<DL>
+<DT><PRE>public interface <B>RpController</B></DT><DT>extends <A HREF="../../../RPn_UML/java/beans/DCE77922228E124408A825691DD35998FB4.html" title="Interface inrpn::controller">PropertyChangeListener</A></DL>
+</PRE>
+
+<P>
+This interface declares basic methods to add and remove controllers of  visual elements . When a orbit ,point , etc is recalculated the controller of this element sends a signal to change its visual properties .</P><HR>
+<!-- =========== PROPERTY SUMMARY =========== -->
+<A NAME="property_summary"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Properties</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Alias</B></TD>
+<TD>RpController</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Visibility</B></TD>
+<TD>public</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Final</B></TD>
+<TD><IMG src="../../../images/unchecked.png" border=n></TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Transient</B></TD>
+<TD><IMG src="../../../images/checked.png" border=n></TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Abstract</B></TD>
+<TD><IMG src="../../../images/checked.png" border=n></TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Leaf</B></TD>
+<TD><IMG src="../../../images/unchecked.png" border=n></TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- =========== OPERATION SUMMARY =========== -->
+<A NAME="operation_summary"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Operation Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../RPn_UML/DCE065324643F3067896121D454D1FB2F97.html">void</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#install">install</A></B>(<A HREF="../../../RPn_UML/rpn/component/DCEEAF4814184A61968C5D7BC90DC8665E4.html">RpGeomFactory</A>&nbsp;geom)</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Installs a controller in a geometric object </TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../RPn_UML/DCE065324643F3067896121D454D1FB2F97.html">void</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#uninstall">uninstall</A></B>(<A HREF="../../../RPn_UML/rpn/component/DCEEAF4814184A61968C5D7BC90DC8665E4.html">RpGeomFactory</A>&nbsp;geom)</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Uninstalls the  controller of the  geometric object </TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- =========== STEREOTYPE SUMMARY =========== -->
+
+<A NAME="stereotype_summary"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Stereotype Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="left" VALIGN="top" WIDTH="15%">
+interface
+</TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- =========== OPERATION DETAIL =========== -->
+
+<A NAME="operationr_detail"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Operation Detail</B></FONT></TH>
+</TR>
+</TABLE>
+<A NAME="install"></A><H3>install</H3>
+<PRE>
+public abstract <A HREF="../../../RPn_UML/DCE065324643F3067896121D454D1FB2F97.html">void</A> <B>install</B>(<A HREF="../../../RPn_UML/rpn/component/DCEEAF4814184A61968C5D7BC90DC8665E4.html">RpGeomFactory</A>&nbsp;geom)</PRE>
+<DL>
+<DD>Installs a controller in a geometric object 
+<P>
+</DD></DL>
+<HR>
+<A NAME="uninstall"></A><H3>uninstall</H3>
+<PRE>
+public abstract <A HREF="../../../RPn_UML/DCE065324643F3067896121D454D1FB2F97.html">void</A> <B>uninstall</B>(<A HREF="../../../RPn_UML/rpn/component/DCEEAF4814184A61968C5D7BC90DC8665E4.html">RpGeomFactory</A>&nbsp;geom)</PRE>
+<DL>
+<DD>Uninstalls the  controller of the  geometric object 
+<P>
+</DD></DL>
+
+<HR>
+<!-- ========= START OF NAVBAR ======= -->
+<A NAME="navbar_top"></A>
+<A HREF="#skip-navbar_top" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_top_firstrow"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1"> &nbsp;<A HREF="../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <FONT CLASS="NavBarFont1">Package</FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1Rev">    <FONT CLASS="NavBarFont1Rev"><B>Element</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <FONT CLASS="NavBarFont1">Diagram</FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../help.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>NetBeans UML Modeling</b>
+</TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_top"></A>
+<!-- ========= END OF NAVBAR ========= -->
+
+</BODY>
+</HTML>

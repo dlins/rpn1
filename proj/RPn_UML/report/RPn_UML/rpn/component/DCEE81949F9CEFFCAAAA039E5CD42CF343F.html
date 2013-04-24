@@ -1,0 +1,373 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Class</TITLE>
+<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=UTF-8">
+<LINK REL ="stylesheet" TYPE="text/css" HREF="../../../stylesheet.css" TITLE="Style"></HEAD>
+<BODY BGCOLOR="white">
+<!-- ========= START OF NAVBAR ======= -->
+<A NAME="navbar_top"></A>
+<A HREF="#skip-navbar_top" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_top_firstrow"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1"> &nbsp;<A HREF="../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <FONT CLASS="NavBarFont1">Package</FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1Rev">    <FONT CLASS="NavBarFont1Rev"><B>Element</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <FONT CLASS="NavBarFont1">Diagram</FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../help.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>NetBeans UML Modeling</b>
+</TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_top"></A>
+<!-- ========= END OF NAVBAR ========= -->
+
+<HR>
+<H2>
+<FONT SIZE="-1">rpn::component</FONT>
+<BR>
+Class HugoniotCurveGeom</H2>
+<PRE>
+<B>rpn::component::HugoniotCurveGeom</B>
+</PRE>
+<DL>
+<DT><B>All Implemented Interfaces:</B> <DD><A HREF="../../../RPn_UML/wave/multid/model/DCEB7E27E9BD6B79197E2F194E070605D44.html" title="interface in wave::multid::model">MultiGeometry</A>, <A HREF="../../../RPn_UML/rpn/component/DCE40A5D6EF7B81624169066BB8880E9F61.html" title="interface in rpn::component">RpGeometry</A></DD>
+</DL>
+<DL>
+<DT><B>All Dependency Suppliers:</B><DD><IMG SRC="../../../images/implementation.png" ALT="(Implementation) ">&nbsp;Implementation&nbsp;<A HREF="../../../RPn_UML/wave/multid/model/DCEB7E27E9BD6B79197E2F194E070605D44.html" title="dependency in wave::multid::model">MultiGeometry</A></DD>
+<DD><IMG SRC="../../../images/implementation.png" ALT="(Implementation) ">&nbsp;Implementation&nbsp;<A HREF="../../../RPn_UML/rpn/component/DCE40A5D6EF7B81624169066BB8880E9F61.html" title="dependency in rpn::component">RpGeometry</A></DD>
+</DL>
+<DL>
+<DT><B>All Known Associations: </B><DD><IMG SRC="../../../images/navigable-aggregation.png" ALT="(Navigable_Aggregation) "> <A HREF="../../../RPn_UML/rpn/controller/phasespace/DCEFDDA4BC4884323B9B66E2F1256FB6E86.html">Navigable_Aggregation</A>: <A HREF="../../../RPn_UML/rpn/controller/phasespace/DCEE87691D84DF1A4EBA6F8BEBED4E3CC7A.html" title="association in rpn::controller::phasespace">NumConfigImpl</A></DD>
+<DD><IMG SRC="../../../images/navigable-aggregation.png" ALT="(Navigable_Aggregation) "> <A HREF="../../../RPn_UML/rpn/component/DCE3D34D08C9579C6663843E05B49A11BC1.html">Navigable_Aggregation</A>: <A HREF="../../../RPn_UML/wave/multid/view/DCE2AA3119709B7568652855CA5E5AD584B.html" title="association in wave::multid::view">ViewingAttr</A></DD>
+<DD><IMG SRC="../../../images/navigable-aggregation.png" ALT="(Navigable_Aggregation) "> <A HREF="../../../RPn_UML/rpn/component/DCE4762F0CFCE5FB10D31A653D32CA59939.html">Navigable_Aggregation</A>: <A HREF="../../../RPn_UML/wave/multid/DCE0E8A4DA00F46E25C661039402EE3460F.html" title="association in wave::multid">Space</A></DD>
+<DD><IMG SRC="../../../images/navigable-aggregation.png" ALT="(Navigable_Aggregation) "> <A HREF="../../../RPn_UML/rpn/component/DCEBF67C2CDDF2EF505147EDE5E7358D88A.html">Navigable_Aggregation</A>: <A HREF="../../../RPn_UML/rpn/component/DCEEAF4814184A61968C5D7BC90DC8665E4.html" title="association in rpn::component">RpGeomFactory</A></DD>
+<DD><IMG SRC="../../../images/navigable-aggregation.png" ALT="(Navigable_Aggregation) "> <A HREF="../../../RPn_UML/rpn/component/DCE9271F555539F203E304F526B54CE6EF2.html">Navigable_Aggregation</A>: <A HREF="../../../RPn_UML/wave/multid/model/DCEB6FCF51B9D9980398EFD87ABAC8E0A44.html" title="association in wave::multid::model">BoundingBox</A></DD>
+<DD><IMG SRC="../../../images/navigable-aggregation.png" ALT="(Navigable_Aggregation) "> <A HREF="../../../RPn_UML/rpn/parser/DCE480968F33D845DBB49314B2D82F416A6.html">Navigable_Aggregation</A>: <A HREF="../../../RPn_UML/rpn/parser/DCE44E2FE66B9A726B92C3B20BBD142259F.html" title="association in rpn::parser">HugoniotParser</A></DD>
+</DL>
+<HR>
+<DL>
+<DT><PRE>public class <B>HugoniotCurveGeom</B></DT><DT>implements <A HREF="../../../RPn_UML/wave/multid/model/DCEB7E27E9BD6B79197E2F194E070605D44.html" title="interface in wave::multid::model">MultiGeometry</A>, <A HREF="../../../RPn_UML/rpn/component/DCE40A5D6EF7B81624169066BB8880E9F61.html" title="interface in rpn::component">RpGeometry</A></DL>
+</PRE>
+
+<!-- =========== PROPERTY SUMMARY =========== -->
+<A NAME="property_summary"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Properties</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Alias</B></TD>
+<TD>HugoniotCurveGeom</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Visibility</B></TD>
+<TD>public</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Final</B></TD>
+<TD><IMG src="../../../images/unchecked.png" border=n></TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Transient</B></TD>
+<TD><IMG src="../../../images/checked.png" border=n></TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Abstract</B></TD>
+<TD><IMG src="../../../images/unchecked.png" border=n></TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Leaf</B></TD>
+<TD><IMG src="../../../images/unchecked.png" border=n></TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- =========== ATTRIBUTE SUMMARY =========== -->
+<A NAME="attribute_summary"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Attribute Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../RPn_UML/java/util/DCE932BB1756A2BC54039B3BA9990438144.html">List</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#hugoniotSegList_">hugoniotSegList_</A></B></CODE>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- =========== CONSTRUCTOR SUMMARY =========== -->
+
+<A NAME="constructor_summary"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Constructor Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><B><A HREF="#HugoniotCurveGeom">HugoniotCurveGeom</A></B>(<A HREF="../../../RPn_UML/rpn/component/DCE822FADFEEA3455118B6BD5F516CE6563.html">HugoniotSegGeom</A>&nbsp;segArray[0..*],&nbsp;<A HREF="../../../RPn_UML/rpn/component/DCEDCA82F723442A41058D2AF60E60A541B.html">HugoniotCurveGeomFactory</A>&nbsp;factory)</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Constructors
+</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><B><A HREF="#HugoniotCurveGeom">HugoniotCurveGeom</A></B>(<A HREF="../../../RPn_UML/rpnumerics/DCE101C95DB05EDB1F6F88B44E2BCF43999.html">HugoniotCurve</A>&nbsp;hugoniotCurve,&nbsp;<A HREF="../../../RPn_UML/rpn/component/DCEDCA82F723442A41058D2AF60E60A541B.html">HugoniotCurveGeomFactory</A>&nbsp;factory)</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- =========== OPERATION SUMMARY =========== -->
+<A NAME="operation_summary"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Operation Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../RPn_UML/rpn/component/DCEEAF4814184A61968C5D7BC90DC8665E4.html">RpGeomFactory</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#geomFactory">geomFactory</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Accessors/Mutators
+</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../RPn_UML/wave/multid/model/DCE802C4AA3D24919DB2D9CEC7A399C4DFA.html">AbstractPathIterator</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#getPathIterator">getPathIterator</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../RPn_UML/wave/multid/model/DCE802C4AA3D24919DB2D9CEC7A399C4DFA.html">AbstractPathIterator</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#getPathIterator">getPathIterator</A></B>(<A HREF="../../../RPn_UML/wave/multid/map/DCE6E4A3DA75C683FE93A786AC3EB74C1DF.html">Map</A>&nbsp;map)</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../RPn_UML/wave/multid/view/DCE2AA3119709B7568652855CA5E5AD584B.html">ViewingAttr</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#viewingAttr">viewingAttr</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../RPn_UML/java/util/DCEDDF326C02F5E4EA4B2659AC790120C09.html">Iterator</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#getHugoniotSegIterator">getHugoniotSegIterator</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../RPn_UML/wave/multid/model/DCEB6FCF51B9D9980398EFD87ABAC8E0A44.html">BoundingBox</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#getBoundary">getBoundary</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../RPn_UML/wave/multid/DCE0E8A4DA00F46E25C661039402EE3460F.html">Space</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#getSpace">getSpace</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../RPn_UML/DCE065324643F3067896121D454D1FB2F97.html">void</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#applyMap">applyMap</A></B>(<A HREF="../../../RPn_UML/wave/multid/map/DCE6E4A3DA75C683FE93A786AC3EB74C1DF.html">Map</A>&nbsp;map)</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Methods
+</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../RPn_UML/DCE065324643F3067896121D454D1FB2F97.html">void</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#print">print</A></B>(<A HREF="../../../RPn_UML/java/io/DCE6414DDB622F7E1B1D4FE38BAEC68052C.html">FileWriter</A>&nbsp;cout)</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../RPn_UML/DCE065324643F3067896121D454D1FB2F97.html">void</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#load">load</A></B>(<A HREF="../../../RPn_UML/java/io/DCEB51A273F1515AA6088915579C6C4C38D.html">FileReader</A>&nbsp;cin)</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../RPn_UML/wave/multid/view/DCE8219B436FC7A10A094DA02C1FCD37A15.html">GeomObjView</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#createView">createView</A></B>(<A HREF="../../../RPn_UML/wave/multid/view/DCE43251B4033E039A2C4D6B9D6C3B1BCF9.html">ViewingTransform</A>&nbsp;transf)</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- =========== ATTRIBUTE DETAIL =========== -->
+<A NAME="attribute_detail"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Attribute Detail</B></FONT></TH>
+</TR>
+</TABLE>
+<A NAME="hugoniotSegList_"></A><H3>hugoniotSegList_</H3>
+<PRE>private <A HREF="../../../RPn_UML/java/util/DCE932BB1756A2BC54039B3BA9990438144.html">List</A> <B>hugoniotSegList_</B></PRE><DL>
+<DD>
+<P>
+</DD>
+</DL>
+
+<!-- =========== CONSTRUCTOR DETAIL =========== -->
+
+<A NAME="constructor_detail"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Constructor Detail</B></FONT></TH>
+</TR>
+</TABLE>
+<A NAME="HugoniotCurveGeom"></A><H3>HugoniotCurveGeom</H3>
+<PRE>
+public <B>HugoniotCurveGeom</B>(<A HREF="../../../RPn_UML/rpn/component/DCE822FADFEEA3455118B6BD5F516CE6563.html">HugoniotSegGeom</A>&nbsp;segArray[0..*],&nbsp;<A HREF="../../../RPn_UML/rpn/component/DCEDCA82F723442A41058D2AF60E60A541B.html">HugoniotCurveGeomFactory</A>&nbsp;factory)</PRE>
+<DL>
+<DD>Constructors
+
+<P>
+</DD></DL>
+<HR>
+<A NAME="HugoniotCurveGeom"></A><H3>HugoniotCurveGeom</H3>
+<PRE>
+public <B>HugoniotCurveGeom</B>(<A HREF="../../../RPn_UML/rpnumerics/DCE101C95DB05EDB1F6F88B44E2BCF43999.html">HugoniotCurve</A>&nbsp;hugoniotCurve,&nbsp;<A HREF="../../../RPn_UML/rpn/component/DCEDCA82F723442A41058D2AF60E60A541B.html">HugoniotCurveGeomFactory</A>&nbsp;factory)</PRE>
+<DL>
+<DD>
+<P>
+</DD></DL>
+
+<!-- =========== OPERATION DETAIL =========== -->
+
+<A NAME="operationr_detail"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Operation Detail</B></FONT></TH>
+</TR>
+</TABLE>
+<A NAME="geomFactory"></A><H3>geomFactory</H3>
+<PRE>
+public <A HREF="../../../RPn_UML/rpn/component/DCEEAF4814184A61968C5D7BC90DC8665E4.html">RpGeomFactory</A> <B>geomFactory</B>()</PRE>
+<DL>
+<DD>Accessors/Mutators
+
+<P>
+</DD></DL>
+<HR>
+<A NAME="getPathIterator"></A><H3>getPathIterator</H3>
+<PRE>
+public <A HREF="../../../RPn_UML/wave/multid/model/DCE802C4AA3D24919DB2D9CEC7A399C4DFA.html">AbstractPathIterator</A> <B>getPathIterator</B>()</PRE>
+<DL>
+<DD>
+<P>
+</DD></DL>
+<HR>
+<A NAME="getPathIterator"></A><H3>getPathIterator</H3>
+<PRE>
+public <A HREF="../../../RPn_UML/wave/multid/model/DCE802C4AA3D24919DB2D9CEC7A399C4DFA.html">AbstractPathIterator</A> <B>getPathIterator</B>(<A HREF="../../../RPn_UML/wave/multid/map/DCE6E4A3DA75C683FE93A786AC3EB74C1DF.html">Map</A>&nbsp;map)</PRE>
+<DL>
+<DD>
+<P>
+</DD></DL>
+<HR>
+<A NAME="viewingAttr"></A><H3>viewingAttr</H3>
+<PRE>
+public <A HREF="../../../RPn_UML/wave/multid/view/DCE2AA3119709B7568652855CA5E5AD584B.html">ViewingAttr</A> <B>viewingAttr</B>()</PRE>
+<DL>
+<DD>
+<P>
+</DD></DL>
+<HR>
+<A NAME="getHugoniotSegIterator"></A><H3>getHugoniotSegIterator</H3>
+<PRE>
+public <A HREF="../../../RPn_UML/java/util/DCEDDF326C02F5E4EA4B2659AC790120C09.html">Iterator</A> <B>getHugoniotSegIterator</B>()</PRE>
+<DL>
+<DD>
+<P>
+</DD></DL>
+<HR>
+<A NAME="getBoundary"></A><H3>getBoundary</H3>
+<PRE>
+public <A HREF="../../../RPn_UML/wave/multid/model/DCEB6FCF51B9D9980398EFD87ABAC8E0A44.html">BoundingBox</A> <B>getBoundary</B>()</PRE>
+<DL>
+<DD>
+<P>
+</DD></DL>
+<HR>
+<A NAME="getSpace"></A><H3>getSpace</H3>
+<PRE>
+public <A HREF="../../../RPn_UML/wave/multid/DCE0E8A4DA00F46E25C661039402EE3460F.html">Space</A> <B>getSpace</B>()</PRE>
+<DL>
+<DD>
+<P>
+</DD></DL>
+<HR>
+<A NAME="applyMap"></A><H3>applyMap</H3>
+<PRE>
+public <A HREF="../../../RPn_UML/DCE065324643F3067896121D454D1FB2F97.html">void</A> <B>applyMap</B>(<A HREF="../../../RPn_UML/wave/multid/map/DCE6E4A3DA75C683FE93A786AC3EB74C1DF.html">Map</A>&nbsp;map)</PRE>
+<DL>
+<DD>Methods
+
+<P>
+</DD></DL>
+<HR>
+<A NAME="print"></A><H3>print</H3>
+<PRE>
+public <A HREF="../../../RPn_UML/DCE065324643F3067896121D454D1FB2F97.html">void</A> <B>print</B>(<A HREF="../../../RPn_UML/java/io/DCE6414DDB622F7E1B1D4FE38BAEC68052C.html">FileWriter</A>&nbsp;cout)</PRE>
+<DL>
+<DD>
+<P>
+</DD></DL>
+<HR>
+<A NAME="load"></A><H3>load</H3>
+<PRE>
+public <A HREF="../../../RPn_UML/DCE065324643F3067896121D454D1FB2F97.html">void</A> <B>load</B>(<A HREF="../../../RPn_UML/java/io/DCEB51A273F1515AA6088915579C6C4C38D.html">FileReader</A>&nbsp;cin)</PRE>
+<DL>
+<DD>
+<P>
+</DD></DL>
+<HR>
+<A NAME="createView"></A><H3>createView</H3>
+<PRE>
+public <A HREF="../../../RPn_UML/wave/multid/view/DCE8219B436FC7A10A094DA02C1FCD37A15.html">GeomObjView</A> <B>createView</B>(<A HREF="../../../RPn_UML/wave/multid/view/DCE43251B4033E039A2C4D6B9D6C3B1BCF9.html">ViewingTransform</A>&nbsp;transf)</PRE>
+<DL>
+<DD>
+<P>
+</DD></DL>
+
+<HR>
+<!-- ========= START OF NAVBAR ======= -->
+<A NAME="navbar_top"></A>
+<A HREF="#skip-navbar_top" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_top_firstrow"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1"> &nbsp;<A HREF="../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <FONT CLASS="NavBarFont1">Package</FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1Rev">    <FONT CLASS="NavBarFont1Rev"><B>Element</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <FONT CLASS="NavBarFont1">Diagram</FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../help.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>NetBeans UML Modeling</b>
+</TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_top"></A>
+<!-- ========= END OF NAVBAR ========= -->
+
+</BODY>
+</HTML>

@@ -1,0 +1,379 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Class</TITLE>
+<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=UTF-8">
+<LINK REL ="stylesheet" TYPE="text/css" HREF="../../../stylesheet.css" TITLE="Style"></HEAD>
+<BODY BGCOLOR="white">
+<!-- ========= START OF NAVBAR ======= -->
+<A NAME="navbar_top"></A>
+<A HREF="#skip-navbar_top" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_top_firstrow"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1"> &nbsp;<A HREF="../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <FONT CLASS="NavBarFont1">Package</FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1Rev">    <FONT CLASS="NavBarFont1Rev"><B>Element</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <FONT CLASS="NavBarFont1">Diagram</FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../help.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>NetBeans UML Modeling</b>
+</TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_top"></A>
+<!-- ========= END OF NAVBAR ========= -->
+
+<HR>
+<H2>
+<FONT SIZE="-1">wave::ode</FONT>
+<BR>
+Class Rk4BPMethod</H2>
+<PRE>
+<B>wave::ode::Rk4BPMethod</B>
+</PRE>
+<DL>
+<DT><B>All Implemented Interfaces:</B> <DD><A HREF="../../../RPn_UML/wave/ode/DCE34E6F863C45BAFD83175A0674093EB18.html" title="interface in wave::ode">ODESolver</A></DD>
+</DL>
+<DL>
+<DT><B>All Dependency Suppliers:</B><DD><IMG SRC="../../../images/implementation.png" ALT="(Implementation) ">&nbsp;Implementation&nbsp;<A HREF="../../../RPn_UML/wave/ode/DCE34E6F863C45BAFD83175A0674093EB18.html" title="dependency in wave::ode">ODESolver</A></DD>
+</DL>
+<DL>
+<DT><B>All Known Associations: </B><DD><IMG SRC="../../../images/navigable-aggregation.png" ALT="(Navigable_Aggregation) "> <A HREF="../../../RPn_UML/wave/ode/DCE9C585BCA8115F16A23379CF89A5C1327.html">Navigable_Aggregation</A>: <A HREF="../../../RPn_UML/wave/util/DCE33A196BDE13EE19ED1F73D7F91144BB8.html" title="association in wave::util">RealVector</A></DD>
+<DD><IMG SRC="../../../images/navigable-aggregation.png" ALT="(Navigable_Aggregation) "> <A HREF="../../../RPn_UML/wave/ode/DCEDFC4746E4F5E9E94D6420B25B6B8BF91.html">Navigable_Aggregation</A>: <A HREF="../../../RPn_UML/wave/ode/DCE5B336F694BB4B8CE44E9D54E73EE7E31.html" title="association in wave::ode">Rk4BPProfile</A></DD>
+</DL>
+<HR>
+<DL>
+<DT><PRE>public class <B>Rk4BPMethod</B></DT><DT>implements <A HREF="../../../RPn_UML/wave/ode/DCE34E6F863C45BAFD83175A0674093EB18.html" title="interface in wave::ode">ODESolver</A></DL>
+</PRE>
+
+<!-- =========== PROPERTY SUMMARY =========== -->
+<A NAME="property_summary"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Properties</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Alias</B></TD>
+<TD>Rk4BPMethod</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Visibility</B></TD>
+<TD>public</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Final</B></TD>
+<TD><IMG src="../../../images/unchecked.png" border=n></TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Transient</B></TD>
+<TD><IMG src="../../../images/checked.png" border=n></TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Abstract</B></TD>
+<TD><IMG src="../../../images/unchecked.png" border=n></TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Leaf</B></TD>
+<TD><IMG src="../../../images/unchecked.png" border=n></TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- =========== ATTRIBUTE SUMMARY =========== -->
+<A NAME="attribute_summary"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Attribute Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../RPn_UML/DCE1BF8DA2C3948887826F74A3BBF2C68E6.html">double</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#PGROW">PGROW</A></B></CODE>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Constants
+</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../RPn_UML/DCE1BF8DA2C3948887826F74A3BBF2C68E6.html">double</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#PSHRINK">PSHRINK</A></B></CODE>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../RPn_UML/DCE1BF8DA2C3948887826F74A3BBF2C68E6.html">double</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#FCOR">FCOR</A></B></CODE>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../RPn_UML/DCE1BF8DA2C3948887826F74A3BBF2C68E6.html">double</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#SAFETY">SAFETY</A></B></CODE>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../RPn_UML/DCE1BF8DA2C3948887826F74A3BBF2C68E6.html">double</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#ERRCON">ERRCON</A></B></CODE>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#MADE_MAXIMUM_STEP_NUMBER">MADE_MAXIMUM_STEP_NUMBER</A></B></CODE>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../RPn_UML/DCE1BF8DA2C3948887826F74A3BBF2C68E6.html">double</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#times_">times_</A></B>[0..*]</CODE>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#flag_">flag_</A></B></CODE>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- =========== CONSTRUCTOR SUMMARY =========== -->
+
+<A NAME="constructor_summary"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Constructor Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><B><A HREF="#Rk4BPMethod">Rk4BPMethod</A></B>(<A HREF="../../../RPn_UML/wave/ode/DCE5B336F694BB4B8CE44E9D54E73EE7E31.html">Rk4BPProfile</A>&nbsp;opt)</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Constructors
+</TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- =========== OPERATION SUMMARY =========== -->
+<A NAME="operation_summary"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Operation Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../RPn_UML/wave/ode/DCEAB887668BD75FD50FAA69497133691D1.html">ODESolution</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#solve">solve</A></B>(<A HREF="../../../RPn_UML/wave/util/DCE33A196BDE13EE19ED1F73D7F91144BB8.html">RealVector</A>&nbsp;firstPoint,&nbsp;<A HREF="../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;timeDirection)</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../RPn_UML/wave/ode/DCE2F3A9B48E37BD13F975E754A313F93F7.html">ODESolverProfile</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#getProfile">getProfile</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Accessors
+</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../RPn_UML/wave/util/DCE33A196BDE13EE19ED1F73D7F91144BB8.html">RealVector</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#rk4">rk4</A></B>(<A HREF="../../../RPn_UML/wave/util/DCE33A196BDE13EE19ED1F73D7F91144BB8.html">RealVector</A>&nbsp;y0,&nbsp;<A HREF="../../../RPn_UML/DCE1BF8DA2C3948887826F74A3BBF2C68E6.html">double</A>&nbsp;h)</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Methods
+</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../RPn_UML/DCE1BF8DA2C3948887826F74A3BBF2C68E6.html">double</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#rkqc">rkqc</A></B>(<A HREF="../../../RPn_UML/wave/util/DCE33A196BDE13EE19ED1F73D7F91144BB8.html">RealVector</A>&nbsp;y0,&nbsp;<A HREF="../../../RPn_UML/DCE1BF8DA2C3948887826F74A3BBF2C68E6.html">double</A>&nbsp;hTry,&nbsp;<A HREF="../../../RPn_UML/wave/util/DCE33A196BDE13EE19ED1F73D7F91144BB8.html">RealVector</A>&nbsp;result)</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../RPn_UML/DCE1BF8DA2C3948887826F74A3BBF2C68E6.html">double</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#norm">norm</A></B>(<A HREF="../../../RPn_UML/wave/util/DCE33A196BDE13EE19ED1F73D7F91144BB8.html">RealVector</A>&nbsp;y)</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- =========== ATTRIBUTE DETAIL =========== -->
+<A NAME="attribute_detail"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Attribute Detail</B></FONT></TH>
+</TR>
+</TABLE>
+<A NAME="PGROW"></A><H3>PGROW</H3>
+<PRE>package <A HREF="../../../RPn_UML/DCE1BF8DA2C3948887826F74A3BBF2C68E6.html">double</A> <B>PGROW</B></PRE><DL>
+<DD>Constants
+
+<P>
+</DD>
+</DL>
+<HR>
+
+<A NAME="PSHRINK"></A><H3>PSHRINK</H3>
+<PRE>package <A HREF="../../../RPn_UML/DCE1BF8DA2C3948887826F74A3BBF2C68E6.html">double</A> <B>PSHRINK</B></PRE><DL>
+<DD>
+<P>
+</DD>
+</DL>
+<HR>
+
+<A NAME="FCOR"></A><H3>FCOR</H3>
+<PRE>package <A HREF="../../../RPn_UML/DCE1BF8DA2C3948887826F74A3BBF2C68E6.html">double</A> <B>FCOR</B></PRE><DL>
+<DD>
+<P>
+</DD>
+</DL>
+<HR>
+
+<A NAME="SAFETY"></A><H3>SAFETY</H3>
+<PRE>package <A HREF="../../../RPn_UML/DCE1BF8DA2C3948887826F74A3BBF2C68E6.html">double</A> <B>SAFETY</B></PRE><DL>
+<DD>
+<P>
+</DD>
+</DL>
+<HR>
+
+<A NAME="ERRCON"></A><H3>ERRCON</H3>
+<PRE>package <A HREF="../../../RPn_UML/DCE1BF8DA2C3948887826F74A3BBF2C68E6.html">double</A> <B>ERRCON</B></PRE><DL>
+<DD>
+<P>
+</DD>
+</DL>
+<HR>
+
+<A NAME="MADE_MAXIMUM_STEP_NUMBER"></A><H3>MADE_MAXIMUM_STEP_NUMBER</H3>
+<PRE>package <A HREF="../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A> <B>MADE_MAXIMUM_STEP_NUMBER</B></PRE><DL>
+<DD>
+<P>
+</DD>
+</DL>
+<HR>
+
+<A NAME="times_"></A><H3>times_</H3>
+<PRE>private <A HREF="../../../RPn_UML/DCE1BF8DA2C3948887826F74A3BBF2C68E6.html">double</A> <B>times_</B>[0..*]</PRE><DL>
+<DD>
+<P>
+</DD>
+</DL>
+<HR>
+
+<A NAME="flag_"></A><H3>flag_</H3>
+<PRE>private <A HREF="../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A> <B>flag_</B></PRE><DL>
+<DD>
+<P>
+</DD>
+</DL>
+
+<!-- =========== CONSTRUCTOR DETAIL =========== -->
+
+<A NAME="constructor_detail"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Constructor Detail</B></FONT></TH>
+</TR>
+</TABLE>
+<A NAME="Rk4BPMethod"></A><H3>Rk4BPMethod</H3>
+<PRE>
+public <B>Rk4BPMethod</B>(<A HREF="../../../RPn_UML/wave/ode/DCE5B336F694BB4B8CE44E9D54E73EE7E31.html">Rk4BPProfile</A>&nbsp;opt)</PRE>
+<DL>
+<DD>Constructors
+
+<P>
+</DD></DL>
+
+<!-- =========== OPERATION DETAIL =========== -->
+
+<A NAME="operationr_detail"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Operation Detail</B></FONT></TH>
+</TR>
+</TABLE>
+<A NAME="solve"></A><H3>solve</H3>
+<PRE>
+public <A HREF="../../../RPn_UML/wave/ode/DCEAB887668BD75FD50FAA69497133691D1.html">ODESolution</A> <B>solve</B>(<A HREF="../../../RPn_UML/wave/util/DCE33A196BDE13EE19ED1F73D7F91144BB8.html">RealVector</A>&nbsp;firstPoint,&nbsp;<A HREF="../../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;timeDirection)</PRE>
+<DL>
+<DD>
+<P>
+</DD></DL>
+<HR>
+<A NAME="getProfile"></A><H3>getProfile</H3>
+<PRE>
+public <A HREF="../../../RPn_UML/wave/ode/DCE2F3A9B48E37BD13F975E754A313F93F7.html">ODESolverProfile</A> <B>getProfile</B>()</PRE>
+<DL>
+<DD>Accessors
+
+<P>
+</DD></DL>
+<HR>
+<A NAME="rk4"></A><H3>rk4</H3>
+<PRE>
+protected <A HREF="../../../RPn_UML/wave/util/DCE33A196BDE13EE19ED1F73D7F91144BB8.html">RealVector</A> <B>rk4</B>(<A HREF="../../../RPn_UML/wave/util/DCE33A196BDE13EE19ED1F73D7F91144BB8.html">RealVector</A>&nbsp;y0,&nbsp;<A HREF="../../../RPn_UML/DCE1BF8DA2C3948887826F74A3BBF2C68E6.html">double</A>&nbsp;h)</PRE>
+<DL>
+<DD>Methods
+
+<P>
+</DD></DL>
+<HR>
+<A NAME="rkqc"></A><H3>rkqc</H3>
+<PRE>
+protected <A HREF="../../../RPn_UML/DCE1BF8DA2C3948887826F74A3BBF2C68E6.html">double</A> <B>rkqc</B>(<A HREF="../../../RPn_UML/wave/util/DCE33A196BDE13EE19ED1F73D7F91144BB8.html">RealVector</A>&nbsp;y0,&nbsp;<A HREF="../../../RPn_UML/DCE1BF8DA2C3948887826F74A3BBF2C68E6.html">double</A>&nbsp;hTry,&nbsp;<A HREF="../../../RPn_UML/wave/util/DCE33A196BDE13EE19ED1F73D7F91144BB8.html">RealVector</A>&nbsp;result)</PRE>
+<DL>
+<DD>
+<P>
+</DD></DL>
+<HR>
+<A NAME="norm"></A><H3>norm</H3>
+<PRE>
+protected <A HREF="../../../RPn_UML/DCE1BF8DA2C3948887826F74A3BBF2C68E6.html">double</A> <B>norm</B>(<A HREF="../../../RPn_UML/wave/util/DCE33A196BDE13EE19ED1F73D7F91144BB8.html">RealVector</A>&nbsp;y)</PRE>
+<DL>
+<DD>
+<P>
+</DD></DL>
+
+<HR>
+<!-- ========= START OF NAVBAR ======= -->
+<A NAME="navbar_top"></A>
+<A HREF="#skip-navbar_top" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_top_firstrow"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1"> &nbsp;<A HREF="../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <FONT CLASS="NavBarFont1">Package</FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1Rev">    <FONT CLASS="NavBarFont1Rev"><B>Element</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <FONT CLASS="NavBarFont1">Diagram</FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../help.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>NetBeans UML Modeling</b>
+</TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_top"></A>
+<!-- ========= END OF NAVBAR ========= -->
+
+</BODY>
+</HTML>
