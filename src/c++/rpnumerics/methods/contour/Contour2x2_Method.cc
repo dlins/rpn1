@@ -211,13 +211,12 @@ void Contour2x2_Method::curve2x2(ThreeImplicitFunctions *timpf,
     std::cerr << "Contour2x2_Method::curve2x2() " << std::endl;
 //    timer tm;
 //    tm.reset();
-//TODO remove:  double time = 0;
+    double time = 0;
     unsigned int size = (gv_right->grid.rows()-1)*(gv_right->grid.cols()-1);
     std::vector< rvector * > rvecs( size );
     std::vector< rvector * > lvecs( size );
-//TODO ifdef:    int num_threads = omp_get_max_threads();
-    int num_threads = 0;
-//TODO ifdef:    std::cerr << "Number of threads: " << num_threads << std::endl;
+    int num_threads = omp_get_max_threads();
+    std::cerr << "Number of threads: " << num_threads << std::endl;
     std::vector<context*> contexts(num_threads);
     for ( int i=0; i<num_threads; i++ ) {
         contexts[i] = new context( fnbr_, cvert_, facptr_, face_, index, usevrt, dncv, 
@@ -233,10 +232,9 @@ void Contour2x2_Method::curve2x2(ThreeImplicitFunctions *timpf,
             //if ( !(gv_left->cell_is_real(il, jl)) ) continue;
             if(!timpf->prepare_cell(il, jl)) continue;
 //            double t1 = tm.elapsed();
-//TODO ifdef:            #pragma omp parallel for schedule(dynamic)
+            #pragma omp parallel for schedule(dynamic)
             for (int ir = 0; ir < gv_right->grid.rows() - 1; ir++){
-//TODO ifdef:                unsigned int id = omp_get_thread_num();
-                unsigned int id = 0;
+                unsigned int id = omp_get_thread_num();
                 context * cnt = contexts[id];
                 for (int jr = 0; jr < gv_right->grid.cols() - 1; jr++){
                     if (gv_right->cell_type(ir, jr) == CELL_IS_SQUARE){
