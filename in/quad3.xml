@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <!DOCTYPE rpnconfiguration >
-<rpnconfiguration>
+<RPNSESSION>
+ <PHASESPACE name="Phase Space">
+<RPNCONFIGURATION>
 <PHYSICS name="QuadraticR3">
 
  <BOUNDARY name="rect">
@@ -56,4 +58,6 @@
 </VIEWCONFIGURATION>
 
 
-</rpnconfiguration>
+</RPNCONFIGURATION>
+</PHASESPACE>
+</RPNSESSION>

@@ -74,7 +74,6 @@ public class RPnFileWriter extends FileWriter {
             writer.write("  </RPNCONFIGURATION>\n");
 
             RPnDataModule.export(writer);
-            RPnCommandModule.export(writer);
 
             writer.closeSession();
 

@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <!DOCTYPE rpnconfiguration >
-<rpnconfiguration>
+<RPNSESSION>
+ <PHASESPACE name="Phase Space">
+<RPNCONFIGURATION>
 
     <PHYSICS name="Corey">
     </PHYSICS>
@@ -21,4 +23,6 @@
         <PROJDESC  projlabel="AUX Axis0 X Axis1" projaxisid="0 1" vpwidth="650" vpheight="650"><ISO2EQUI_TRANSFORM/></PROJDESC>
     </AUXVIEWINGPARAMS>
 
-</rpnconfiguration>
+</RPNCONFIGURATION>
+</PHASESPACE>
+</RPNSESSION>

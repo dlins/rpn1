@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE rpnconfiguration >
+<RPNSESSION>
+ <PHASESPACE name="Phase Space">
     <RPNCONFIGURATION>
     <PHYSICS name="CoreyQuad">
 
@@ -104,6 +106,6 @@
 
     </VIEWCONFIGURATION>
 
-
-
 </RPNCONFIGURATION>
+</PHASESPACE>
+</RPNSESSION>

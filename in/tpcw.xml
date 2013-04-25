@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE rpnconfiguration >
+<RPNSESSION>
+ <PHASESPACE name="Phase Space">
 <RPNCONFIGURATION>
     <PHYSICS name="TPCW">
         <PHYSICSCONFIG name="fluxfunction">
@@ -191,3 +193,5 @@
 
 
 </RPNCONFIGURATION>
+</PHASESPACE>
+</RPNSESSION>

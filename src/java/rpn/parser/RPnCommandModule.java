@@ -63,6 +63,7 @@ public class RPnCommandModule {
             currentElement_ = name;
 
             if (isChangePhysicsParamsCommand_) {
+
                 if (currentElement_.equals("PHYSICSCONFIG")) {
                     System.out.println("Current configuration: " + currentConfiguration_.getName());
 
@@ -175,27 +176,7 @@ public class RPnCommandModule {
             if (currentElement_.equals("REALVECTOR")) {
 
                 stringBuffer_ = new StringBuilder();
-            }
-        }
-
-        @Override
-        public void characters(char[] buff, int offset, int len) throws
-                SAXException {
-
-            try {
-
-                String data = new String(buff, offset, len);
-                if (data.length() != 0) {
-                    if (currentElement_.equals("REALVECTOR")) {
-                        stringBuffer_.append(data);
-                    }
-
-                }
-
-            } catch (NumberFormatException ex) {
-                System.out.println("Wrong format ! " + ex.getMessage());
-                ex.printStackTrace();
-
+		stringBuffer_.append(att.getValue("coords"));
             }
         }
 
@@ -206,7 +187,9 @@ public class RPnCommandModule {
             if (name.equals("REALVECTOR")) {
 
                 UserInputHandler userInput = UIController.instance().getState();
+
                 if (userInput instanceof UI_ACTION_SELECTED) {
+
                     UI_ACTION_SELECTED actionSelected = (UI_ACTION_SELECTED) userInput;
                     RealVector input = new RealVector(stringBuffer_.toString());
                     UIController.instance().globalInputTable().reset();
@@ -250,6 +233,9 @@ public class RPnCommandModule {
 
 
         }
+
+	public void characters(char[] c,int i,int j) {
+	}
 
         public void setDocumentLocator(Locator locator) {
         }

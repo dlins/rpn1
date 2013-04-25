@@ -49,40 +49,6 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand {
 
     }
 
-    @Override
-    public void execute(int curveId) {
-        RealVector[] userInputList = UIController.instance().userInputList();
-
-        System.out.println("execute int curveId " + userInputList[0]);
-
-        Iterator oldValue = UIController.instance().getActivePhaseSpace().getGeomObjIterator();
-
-        RpGeometry geometry = createRpGeometry(userInputList);
-
-        RpCalcBasedGeomFactory factory = (RpCalcBasedGeomFactory) geometry.geomFactory();
-
-        RPnCurve curve = (RPnCurve) factory.geomSource();
-
-
-        if (geometry == null) {
-            return;
-        }
-        curve.setId(curveId);
-
-
-        UIController.instance().getActivePhaseSpace().plot(geometry);
-
-        PropertyChangeEvent event_ = new PropertyChangeEvent(this, UIController.instance().getActivePhaseSpace().getName(), oldValue, geometry);
-
-        ArrayList<RealVector> inputArray = new ArrayList<RealVector>();
-        inputArray.addAll(Arrays.asList(userInputList));
-
-        setInput(inputArray);
-
-        logCommand(new RpCommand(event_, inputArray));
-
-    }
-
     public void execute() {
 
         RealVector[] userInputList = UIController.instance().userInputList();

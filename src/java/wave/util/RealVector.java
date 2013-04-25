@@ -53,9 +53,7 @@ public class RealVector extends GVector {
     public String toXML() {
 
         StringBuffer buffer = new StringBuffer();
-        buffer.append("<REALVECTOR dimension=\"" + getSize() + "\">");
-        buffer.append(toString());
-        buffer.append("</REALVECTOR>\n");
+        buffer.append("<REALVECTOR dimension=\"" + getSize() + "\"" + " coords=\"" + toString() + "\"/>" + '\n');
         return buffer.toString();
     }
 
