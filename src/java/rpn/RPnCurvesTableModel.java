@@ -15,8 +15,8 @@ public class RPnCurvesTableModel extends DefaultTableModel {
 
     public RPnCurvesTableModel() {
 
-        columnIdentifiers.add(new String("Curve"));
-        columnIdentifiers.add(new String("User Input"));
+        columnIdentifiers.add("Curve");
+        columnIdentifiers.add("User Input");
 
 
     }

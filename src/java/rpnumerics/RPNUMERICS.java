@@ -318,7 +318,7 @@ public class RPNUMERICS {
 
     public static LevelCurveCalc createPointLevelCurveCalc(RealVector orbitPoint) {
 
-        int[] resolution = RPnDataModule.processResolution(getParamValue("levelcurve", "resolution"));
+        int[] resolution = RPnDataModule.processResolution(getParamValue("hugoniotcurve", "resolution"));
 
         int family = new Integer(getParamValue("levelcurve", "family"));
 
@@ -360,7 +360,7 @@ public class RPNUMERICS {
 
     public static LevelCurveCalc createLevelCurveCalc(double level) {
 
-        int[] resolution = RPnDataModule.processResolution(getParamValue("levelcurve", "resolution"));
+        int[] resolution = RPnDataModule.processResolution(getParamValue("hugoniotcurve", "resolution"));
 
         int family = new Integer(getParamValue("levelcurve", "family"));
 

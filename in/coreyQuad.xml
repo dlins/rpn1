@@ -89,11 +89,11 @@
         <CURVEPARAM name="resolution" value="128 128"/>
     </CURVECONFIGURATION>
 
-    <CURVECONFIGURATION name="orbit">
+   <!-- <CURVECONFIGURATION name="orbit">
         <CURVEPARAM name="family" value="0"/>
         <CURVEPARAM name="level" value="0.5"/>
 
-    </CURVECONFIGURATION>
+    </CURVECONFIGURATION>-->
 
     <VIEWCONFIGURATION modeldomain="2">
 

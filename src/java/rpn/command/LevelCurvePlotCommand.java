@@ -10,8 +10,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import javax.swing.JToggleButton;
 import rpn.component.*;
+import rpn.configuration.Configuration;
 import rpn.controller.ui.UIController;
 import rpnumerics.RPNUMERICS;
+import rpnumerics.RPnCurve;
+import rpnumerics.RpCalculation;
 import wave.util.RealVector;
 
 public class LevelCurvePlotCommand extends RpModelPlotCommand {
@@ -49,30 +52,71 @@ public class LevelCurvePlotCommand extends RpModelPlotCommand {
 
 
         ArrayList<Double> levelValues = processLevels(RPNUMERICS.getParamValue("levelcurve", "levels"));
-
+        LevelCurveGeomFactory factory = null;
         for (Double levelValue : levelValues) {
-            LevelCurveGeomFactory factory = new LevelCurveGeomFactory(RPNUMERICS.createLevelCurveCalc(levelValue));
-
-            UIController.instance().getActivePhaseSpace().join(factory.geom());
-
-            Iterator oldValue = UIController.instance().getActivePhaseSpace().getGeomObjIterator();
-            PropertyChangeEvent event = new PropertyChangeEvent(this, UIController.instance().getActivePhaseSpace().getName(), oldValue, factory.geom());
-
-
-
-            ArrayList<RealVector> emptyInput = new ArrayList<RealVector>();
-            logCommand(new RpCommand(event, emptyInput));
-
-
-
-
-
-
-
-
-
+            System.out.println("Valor do nivel" + levelValue);
+            factory = new LevelCurveGeomFactory(RPNUMERICS.createLevelCurveCalc(levelValue));
+            logLevelCurvePlotCommand(factory, levelValue);
+            UIController.instance().getActivePhaseSpace().plot(factory.geom());
 
         }
+
+
+    }
+
+    @Override
+    public void execute(int curveId) {
+
+
+        ArrayList<Double> levelValues = processLevels(RPNUMERICS.getParamValue("levelcurve", "levels"));
+
+        Double levelValue = levelValues.get(0);
+
+        RpCalcBasedGeomFactory factory = factory = new LevelCurveGeomFactory(RPNUMERICS.createLevelCurveCalc(levelValue));
+
+        RpGeometry geometry = factory.geom();
+
+        if (geometry == null) {
+            return;
+        }
+
+        logLevelCurvePlotCommand(factory, levelValue, curveId);
+
+        UIController.instance().getActivePhaseSpace().plot(geometry);
+
+
+    }
+
+    private void logLevelCurvePlotCommand(RpCalcBasedGeomFactory factory, double level, int curveId) {
+        RpCalculation calc = (RpCalculation) factory.rpCalc();
+        Configuration configuration = calc.getConfiguration();
+        configuration.setParamValue("levels", String.valueOf(level));
+
+        RPnCurve curve = (RPnCurve) factory.geomSource();
+        curve.setId(curveId);
+
+        Iterator oldValue = UIController.instance().getActivePhaseSpace().getGeomObjIterator();
+        PropertyChangeEvent event = new PropertyChangeEvent(this, UIController.instance().getActivePhaseSpace().getName(), oldValue, factory.geom());
+
+        ArrayList<RealVector> emptyInput = new ArrayList<RealVector>();
+        logCommand(new RpCommand(event, emptyInput));
+    }
+
+    private void logLevelCurvePlotCommand(RpCalcBasedGeomFactory factory, double level) {
+
+        RpCalculation calc = (RpCalculation) factory.rpCalc();
+        Configuration configuration = calc.getConfiguration();
+        configuration.setParamValue("levels", String.valueOf(level));
+
+        RPnCurve curve = (RPnCurve) factory.geomSource();
+        curve.setId(curveID_);
+        curveID_++;
+
+        Iterator oldValue = UIController.instance().getActivePhaseSpace().getGeomObjIterator();
+        PropertyChangeEvent event = new PropertyChangeEvent(this, UIController.instance().getActivePhaseSpace().getName(), oldValue, factory.geom());
+
+        ArrayList<RealVector> emptyInput = new ArrayList<RealVector>();
+        logCommand(new RpCommand(event, emptyInput));
 
     }
 

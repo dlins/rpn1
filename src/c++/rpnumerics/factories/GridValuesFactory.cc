@@ -27,8 +27,9 @@ GridValuesFactory::GridValuesFactory(const Physics * physics) : gridArray_(new m
 
 GridValues * GridValuesFactory::getGrid(const string & gridName) {
 
-
-
+    
+    cout<<"Nome do grid: "<<gridName<<endl;
+    
     if (gridArray_->count(gridName) == 1) {
         return gridArray_->operator [](gridName);
     } else {
@@ -51,6 +52,9 @@ GridValues * GridValuesFactory::getGrid(const string & gridName) {
 
 void GridValuesFactory::setResolution(const string & gridName, vector<int> newResolution) {
 
+
+    
+    
     GridValues * grid = getGrid(gridName);
 
     //    const Boundary* boundary = &physics_->boundary();

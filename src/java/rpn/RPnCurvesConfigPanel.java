@@ -16,7 +16,6 @@ import java.util.Map.Entry;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
-import javax.jws.Oneway;
 import javax.swing.*;
 import rpn.command.ChangeDirectionCommand;
 import rpn.configuration.Configuration;
@@ -67,7 +66,7 @@ public class RPnCurvesConfigPanel extends Observable implements PropertyChangeLi
             String configurationType = entry.getValue().getType();
 
             if (!configurationType.equalsIgnoreCase("PHYSICS") && !configurationType.equalsIgnoreCase("VISUAL")) {
-                RPnInputComponent inputComponent = new RPnInputComponent(entry.getValue(), false);
+                RPnInputComponent inputComponent = new RPnInputComponent(entry.getValue(), true);
                 inputComponent.addObserver(this);
                 inputComponent.removeParameter("resolution");
                 if (inputComponent.getContainer().getComponentCount() > 0) {

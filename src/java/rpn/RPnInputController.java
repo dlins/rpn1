@@ -29,6 +29,7 @@ public class RPnInputController implements PropertyChangeListener {
         
         for (int i = 0; i < parameterNames.length; i++) {
             String paramName = configuration_.getParamName(i);
+            System.out.println("Valor: "+i+" "+newValues[i]);
             configuration_.setParamValue(paramName, newValues[i]);
 
         }

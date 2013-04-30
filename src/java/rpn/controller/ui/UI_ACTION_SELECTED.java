@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import rpn.RPnPhaseSpacePanel;
-import rpn.parser.RPnDataModule;
 
 public class UI_ACTION_SELECTED implements UserInputHandler {
     //
@@ -61,6 +60,10 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
         
     }
     
+    public void clearUserInputList(){
+        userInputList_.clear();
+    }
+    
     public RealVector[] userInputList(rpn.controller.ui.UIController ui) {
         
         return UIController.inputConvertion(userInputList_);
@@ -69,6 +72,14 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
     public void userInputComplete(rpn.controller.ui.UIController ui,
             RealVector userInput, int curveId) {
         userInputList_.add(new RealVector(userInput));
+        System.out.println("User input list");
+        for (Object object : userInputList_) {
+            
+            
+            System.out.println((RealVector)object);
+            
+            
+        }
         
         actionSelected_.execute(curveId);
 
@@ -87,8 +98,6 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
                 for (RealVector inputElement : userInputList(ui)) {
                     tempInputList.add(inputElement.toString());
                 }
-
-
 
                 //************************ acrescentei para testar (Leandro)
                 UIController.instance().setWaitCursor();

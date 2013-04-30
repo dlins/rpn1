@@ -26,9 +26,13 @@ import java.io.*;
 import java.util.Iterator;
 
 
+import rpn.component.RpGeomFactory;
+import rpn.component.RpGeometry;
 import rpn.configuration.Configuration;
+import rpn.controller.ui.FILE_ACTION_SELECTED;
 import rpn.controller.ui.UndoActionController;
 import rpn.controller.ui.UserInputHandler;
+import rpnumerics.RPnCurve;
 
 /** With this class the calculus made in a previous session can be reloaded. A previous state can be reloaded reading a XML file that is used by this class */
 public class RPnCommandModule {
@@ -116,6 +120,7 @@ public class RPnCommandModule {
             if (currentElement_.equalsIgnoreCase("COMMAND")) {
                 if (att.getValue("curveid") != null) {
                     curveId_ = new Integer(att.getValue("curveid"));
+                    RpModelPlotCommand.curveID_=curveId_;
 
                 }
                 currentCommand_ = att.getValue("name");
@@ -128,55 +133,54 @@ public class RPnCommandModule {
                 if (currentCommand_.equalsIgnoreCase("Change Flux Parameters")) {
                     currentConfiguration_ = RPNUMERICS.getConfiguration(RPNUMERICS.physicsID());
                 } else if (currentCommand_.equalsIgnoreCase("hugoniotcurve")) {
-                    UIController.instance().setStateFromFile(new UI_ACTION_SELECTED(HugoniotPlotCommand.instance()));
+                    UIController.instance().setState(new FILE_ACTION_SELECTED(HugoniotPlotCommand.instance()));
 
                 } else if (currentCommand_.equalsIgnoreCase("integralcurve")) {
-                    UIController.instance().setStateFromFile(new UI_ACTION_SELECTED(IntegralCurvePlotCommand.instance()));
+                    UIController.instance().setState(new FILE_ACTION_SELECTED(IntegralCurvePlotCommand.instance()));
                 } else if (currentCommand_.equalsIgnoreCase("wavecurve")) {
-                    UIController.instance().setStateFromFile(new UI_ACTION_SELECTED(WaveCurvePlotCommand.instance()));
+                    UIController.instance().setState(new FILE_ACTION_SELECTED(WaveCurvePlotCommand.instance()));
                 } else if (currentCommand_.equalsIgnoreCase("levelcurve")) {
-                    LevelCurvePlotCommand.instance().execute();
+                      UIController.instance().setState(new FILE_ACTION_SELECTED(LevelCurvePlotCommand.instance()));
+
                 } else if (currentCommand_.equalsIgnoreCase("pointlevelcurve")) {
 
-                    UIController.instance().setStateFromFile(new UI_ACTION_SELECTED(PointLevelCurvePlotCommand.instance()));
+                    UIController.instance().setState(new FILE_ACTION_SELECTED(PointLevelCurvePlotCommand.instance()));
                 } else if (currentCommand_.equalsIgnoreCase("compositecurve")) {
-                    UIController.instance().setStateFromFile(new UI_ACTION_SELECTED(CompositePlotCommand.instance()));
+                    UIController.instance().setState(new FILE_ACTION_SELECTED(CompositePlotCommand.instance()));
                 } else if (currentCommand_.equalsIgnoreCase("rarefactioncurve")) {
-                    UIController.instance().setStateFromFile(new UI_ACTION_SELECTED(RarefactionCurvePlotCommand.instance()));
+                    UIController.instance().setState(new FILE_ACTION_SELECTED(RarefactionCurvePlotCommand.instance()));
                 } else if (currentCommand_.equalsIgnoreCase("rarefactionextensioncurve")) {
-                    UIController.instance().setStateFromFile(new UI_ACTION_SELECTED(RarefactionExtensionCurvePlotCommand.instance()));
+                    UIController.instance().setState(new FILE_ACTION_SELECTED(RarefactionExtensionCurvePlotCommand.instance()));
                 } else if (currentCommand_.equalsIgnoreCase("shockcurve")) {
-                    UIController.instance().setStateFromFile(new UI_ACTION_SELECTED(ShockCurvePlotCommand.instance()));
+                    UIController.instance().setState(new FILE_ACTION_SELECTED(ShockCurvePlotCommand.instance()));
 
                 } else if (currentCommand_.equalsIgnoreCase("poincaresection")) {
 
-                    UIController.instance().setStateFromFile(new UI_ACTION_SELECTED(PoincareSectionPlotCommand.instance()));
+                    UIController.instance().setState(new FILE_ACTION_SELECTED(PoincareSectionPlotCommand.instance()));
                 } else if (currentCommand_.equalsIgnoreCase("doublecontactcurve")) {
-                    UIController.instance().setStateFromFile(new UI_ACTION_SELECTED(DoubleContactCommand.instance()));
+                    UIController.instance().setState(new FILE_ACTION_SELECTED(DoubleContactCommand.instance()));
                     DoubleContactCommand.instance().execute();
                 } else if (currentCommand_.equalsIgnoreCase("inflectioncurve")) {
-                    UIController.instance().setStateFromFile(new UI_ACTION_SELECTED(InflectionPlotCommand.instance()));
+                    UIController.instance().setState(new FILE_ACTION_SELECTED(InflectionPlotCommand.instance()));
                     InflectionPlotCommand.instance().execute();
                 } else if (currentCommand_.equalsIgnoreCase("hysteresiscurve")) {
-                    UIController.instance().setStateFromFile(new UI_ACTION_SELECTED(HysteresisPlotCommand.instance()));
+                    UIController.instance().setState(new FILE_ACTION_SELECTED(HysteresisPlotCommand.instance()));
                     HysteresisPlotCommand.instance().execute();
                 } else if (currentCommand_.equalsIgnoreCase("boundaryextensioncurve")) {
-                    UIController.instance().setStateFromFile(new UI_ACTION_SELECTED(BoundaryExtensionCurveCommand.instance()));
+                    UIController.instance().setState(new FILE_ACTION_SELECTED(BoundaryExtensionCurveCommand.instance()));
                     BoundaryExtensionCurveCommand.instance().execute();
 
                 } else if (currentCommand_.equalsIgnoreCase("secondarybifurcationcurve")) {
-                    UIController.instance().setStateFromFile(new UI_ACTION_SELECTED(SecondaryBifurcationCurveCommand.instance()));
+                    UIController.instance().setState(new FILE_ACTION_SELECTED(SecondaryBifurcationCurveCommand.instance()));
                     SecondaryBifurcationCurveCommand.instance().execute();
 
                 }
             }
 
-
-
             if (currentElement_.equals("REALVECTOR")) {
 
                 stringBuffer_ = new StringBuilder();
-		stringBuffer_.append(att.getValue("coords"));
+                stringBuffer_.append(att.getValue("coords"));
             }
         }
 
@@ -186,28 +190,26 @@ public class RPnCommandModule {
 
             if (name.equals("REALVECTOR")) {
 
-                UserInputHandler userInput = UIController.instance().getState();
+                UIController.instance().userInputComplete(new RealVector(stringBuffer_.toString()));
+                
+                
+                 if (UIController.instance().getState() instanceof FILE_ACTION_SELECTED){
+                    
+                    FILE_ACTION_SELECTED fileAction = (FILE_ACTION_SELECTED)UIController.instance().getState();
+                
+                    if (fileAction.getAction() instanceof RpModelPlotCommand){
+                        System.out.println("Setando id : "+curveId_);
+                        
+                        RpGeometry geometry = UIController.instance().getActivePhaseSpace().getLastGeometry();
+                        RPnCurve curve = (RPnCurve) geometry.geomFactory().geomSource();
+                        curve.setId(curveId_);
 
-                if (userInput instanceof UI_ACTION_SELECTED) {
-
-                    UI_ACTION_SELECTED actionSelected = (UI_ACTION_SELECTED) userInput;
-                    RealVector input = new RealVector(stringBuffer_.toString());
-                    UIController.instance().globalInputTable().reset();
-
-                    for (int i = 0; i < input.getSize(); i++) {
-
-                        UIController.instance().globalInputTable().setElement(i, input.getElement(i));
+                        
+                        
                     }
-
-                    actionSelected.userInputComplete(UIController.instance(), input, curveId_);
-
-  
-                } else {
-                    UIController.instance().userInputComplete(new RealVector(stringBuffer_.toString()));
+                                        
                 }
-                  
-
-
+                
             }
 
 
@@ -229,13 +231,18 @@ public class RPnCommandModule {
                 if (currentCommand_.equals("Curve Remove Command")) {
                     CurveRemoveCommand.instance().remove(curveId_);
                 }
+
+                
+                if (currentCommand_.equals("levelcurve")){
+                    LevelCurvePlotCommand.instance().execute();
+                }
             }
 
 
         }
 
-	public void characters(char[] c,int i,int j) {
-	}
+        public void characters(char[] c, int i, int j) {
+        }
 
         public void setDocumentLocator(Locator locator) {
         }

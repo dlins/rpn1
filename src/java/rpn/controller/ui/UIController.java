@@ -430,12 +430,10 @@ public class UIController extends ComponentUI {
                 if (currentSelection.getAction() == selectedAction.getAction()) // unselect
                 {
 
-//                    if (RPnDesktopPlotter.getUIFrame() != null) {
-//                        RPnDesktopPlotter.getUIFrame().setConfigurationPanel(new JPanel());
-//                    }
+                    if (!(newAction instanceof FILE_ACTION_SELECTED)) { // To avoid command unselection in  xml file reading 
 
-
-                    setState(new GEOM_SELECTION());  // To avoid command unselection in  xml file reading 
+                        setState(new GEOM_SELECTION());
+                    }
                 } else {
                     handler_ = newAction;
                 }

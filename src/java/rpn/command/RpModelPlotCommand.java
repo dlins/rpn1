@@ -26,6 +26,7 @@ import rpnumerics.RPnCurve;
 public abstract class RpModelPlotCommand extends RpModelActionCommand {
 
     protected AbstractButton button_;
+    public static int curveID_;
 
 
     public RpModelPlotCommand(String shortDesc, ImageIcon icon, AbstractButton button) {
@@ -72,11 +73,10 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand {
         }
 
 
-        curve.setId(curve.hashCode());
+        curve.setId(curveID_);
+        curveID_++;
 
         UIController.instance().getActivePhaseSpace().plot(geometry);
-        
-      
 
         PropertyChangeEvent event_ = new PropertyChangeEvent(this, UIController.instance().getActivePhaseSpace().getName(), oldValue, geometry);
 
@@ -92,7 +92,8 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand {
 
         RPnCurve curve = (RPnCurve) factory.geomSource();
 
-        curve.setId(curve.hashCode());
+        curve.setId(curveID_);
+        curveID_++;
 
         Iterator oldValue = RPnDataModule.PHASESPACE.getGeomObjIterator();
 

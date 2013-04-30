@@ -22,6 +22,7 @@
 
 CoreyQuadPhysics::CoreyQuadPhysics() : SubPhysics(CoreyQuad(CoreyQuad_Params()), StoneAccumulation(), *defaultBoundary(), Multid::PLANE, "CoreyQuad", _SIMPLE_ACCUMULATION_) {
     setHugoniotFunction(new Hugoniot_Curve());
+      preProcessedBoundary_= defaultBoundary();
 }
 
 SubPhysics * CoreyQuadPhysics::clone()const {
@@ -31,6 +32,7 @@ SubPhysics * CoreyQuadPhysics::clone()const {
 
 CoreyQuadPhysics::CoreyQuadPhysics(const CoreyQuadPhysics & copy) : SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.getBoundary(), copy.domain(), "CoreyQuad", _SIMPLE_ACCUMULATION_) {
     setHugoniotFunction(new Hugoniot_Curve());
+    preProcessedBoundary_= defaultBoundary();
 }
 
 CoreyQuadPhysics::~CoreyQuadPhysics() {
