@@ -22,21 +22,21 @@ public class BifurcationCurve extends SegmentedCurve {
     // Members
     //
 
-
+    public static String XML_TAG  = "BIFURCATIONCURVE";
+    public static String LEFT_TAG = "LEFTSEGMENTS";
+    public static String RIGHT_TAG = "RIGHTSEGMENTS";
+    
     private List leftSegments_;
     private List rightSegments_;
     private int jDC;
 
     //
     // Constructor
-
-
-
-     public BifurcationCurve(List<RealSegment> leftList, List<RealSegment> rightList) {
+    public BifurcationCurve(List<RealSegment> leftList, List<RealSegment> rightList) {
 
         super(createSingleSegmentList(leftList, rightList));
-        
-         
+
+
         leftSegments_ = leftList;
         rightSegments_ = rightList;
 
@@ -44,33 +44,29 @@ public class BifurcationCurve extends SegmentedCurve {
 
     }
 
-
-
     public BifurcationCurve(List<? extends RealSegment> singleList) {
-        
+
         super(singleList);
         leftSegments_ = singleList;
         rightSegments_ = singleList;
     }
 
-
-    
-
     //
     // Accessors/Mutators
     //
-
     //*** Segunda versao: considera as curvas de bifurcacao como sendo formadas de dois conjuntos de geometrias (left e right)
     //*** Aqui, a correspondencia acontece de forma direta: left(i) <--> right(i)
     public RealVector secondPointDC(int i) {
 
         ArrayList segments = new ArrayList();
-        
-        if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals(RPnDataModule.RIGHTPHASESPACE.getName()))
-            segments = (ArrayList) leftSegments();
 
-        if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals(RPnDataModule.LEFTPHASESPACE.getName()))
+        if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals(RPnDataModule.RIGHTPHASESPACE.getName())) {
+            segments = (ArrayList) leftSegments();
+        }
+
+        if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals(RPnDataModule.LEFTPHASESPACE.getName())) {
             segments = (ArrayList) rightSegments();
+        }
 
         RealVector p1 = new RealVector(((RealSegment) (segments).get(i)).p1());
         RealVector p2 = new RealVector(((RealSegment) (segments).get(i)).p2());
@@ -83,19 +79,20 @@ public class BifurcationCurve extends SegmentedCurve {
         return pDC;
     }
 
-
     // ----- Protótipo de versao única, para ficar em BifurcationCurve (16JAN2013)
     public RealVector secondPointDCOtherVersion(int i) {
 
         RealVector p1, p2, pDC = null;
 
-        ArrayList segments = (ArrayList)segments();
+        ArrayList segments = (ArrayList) segments();
 
-        if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals(RPnDataModule.RIGHTPHASESPACE.getName()))
+        if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals(RPnDataModule.RIGHTPHASESPACE.getName())) {
             segments = (ArrayList) leftSegments();
+        }
 
-        if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals(RPnDataModule.LEFTPHASESPACE.getName()))
+        if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals(RPnDataModule.LEFTPHASESPACE.getName())) {
             segments = (ArrayList) rightSegments();
+        }
 
 
         if (UIController.instance().isAuxPanelsEnabled()) {
@@ -106,8 +103,7 @@ public class BifurcationCurve extends SegmentedCurve {
             pDC.sub(p1, p2);
             pDC.scale(getALFA());
             pDC.add(p2);
-        }
-        else {
+        } else {
 
             //int jDC = 0;
             if (i >= segments.size() / 2) {
@@ -129,7 +125,6 @@ public class BifurcationCurve extends SegmentedCurve {
     }
     // -----
 
-
     // --- Acrescentei este método em 20FEV
     private double minDist(List<RealVector> list, RealVector point) {
         double dist = 1E6;
@@ -137,20 +132,20 @@ public class BifurcationCurve extends SegmentedCurve {
 
         for (RealVector realVector : list) {
             dist2 = realVector.distance(point);
-            if (dist2 < dist)
+            if (dist2 < dist) {
                 dist = dist2;
+            }
         }
 
         return dist;
     }
     // ---
 
-
     // --- Alterando este método em 20FEV2013 : segunda versão
     public List<RealVector> correspondentPoints(RealVector pMarca) {
 
         List<RealVector> correspondent = new ArrayList();
-        ArrayList segments = (ArrayList)segments();         // segments() retorna os segmentos da união (Left U Right)
+        ArrayList segments = (ArrayList) segments();         // segments() retorna os segmentos da união (Left U Right)
         ArrayList toRestore = new ArrayList();
         ArrayList index = new ArrayList();
 
@@ -172,12 +167,12 @@ public class BifurcationCurve extends SegmentedCurve {
         double eps = 0.1;
 
         // --- busca e trata outras correspondências
-        for (int k=0; k<n; k++) {
+        for (int k = 0; k < n; k++) {
 
             int i = findClosestSegment(pMarca);
             RealVector p = secondPointDCOtherVersion(i);
 
-            if (minDist(correspondent, p)>eps) {
+            if (minDist(correspondent, p) > eps) {
                 correspondent.add(p);
                 index.add(i);
                 index.add(jDC);
@@ -193,13 +188,12 @@ public class BifurcationCurve extends SegmentedCurve {
         for (int k = 0; k < toRestore.size() / 2; k++) {
             int size = segments.size();
 
-            if ((Integer)index.get(2*k)>=size/2) {
-                segments.add(size -1, toRestore.get(2*k));
-                segments.add(size/2 -1, toRestore.get(2*k + 1));
-            }
-            else {
-                segments.add(size/2 -1, toRestore.get(2*k));
-                segments.add(size -1, toRestore.get(2*k + 1));
+            if ((Integer) index.get(2 * k) >= size / 2) {
+                segments.add(size - 1, toRestore.get(2 * k));
+                segments.add(size / 2 - 1, toRestore.get(2 * k + 1));
+            } else {
+                segments.add(size / 2 - 1, toRestore.get(2 * k));
+                segments.add(size - 1, toRestore.get(2 * k + 1));
             }
 
         }
@@ -218,7 +212,7 @@ public class BifurcationCurve extends SegmentedCurve {
     }
 
     private static List createSingleSegmentList(List<RealSegment> leftSeg, List<RealSegment> rightSeg) {
-    
+
         ArrayList<RealSegment> returned = new ArrayList<RealSegment>();
 
         returned.addAll(leftSeg);
@@ -283,6 +277,6 @@ public class BifurcationCurve extends SegmentedCurve {
 ////            RealVector leftPoint = new RealVector(hSegmentLeft.p1().toString() + hSegmentRight.p1().toString());
 
 
-        
+
     }
 }

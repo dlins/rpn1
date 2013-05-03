@@ -50,7 +50,7 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
         StringBuilder buffer = new StringBuilder();
 
         // TODO confirm that all geomSource() calls will return a SegmentedCurve instance type
-        SegmentedCurve geomSource = (SegmentedCurve) geomSource();
+        BifurcationCurve geomSource = (BifurcationCurve) geomSource();
 
         String curve_name = '\"' + geomSource.getClass().getSimpleName() + '\"';
         String dimension = '\"' + Integer.toString(RPNUMERICS.domainDim())  + '\"';
@@ -59,24 +59,37 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
         //
         // PRINTS OUT THE CURVE ATTS
         //
-        buffer.append("<" + SegmentedCurve.XML_TAG + " curve_name=" + ' ' + curve_name + ' ' +  "dimension=" + ' ' +  dimension + ' ' +  "format_desc=\"1 segment per row\">" + "\n");
+        buffer.append("<" + BifurcationCurve.XML_TAG + " curve_name=" + ' ' + curve_name + ' ' +  "dimension=" + ' ' +  dimension + ' ' +  "format_desc=\"1 segment per row\">" + "\n");
 
 
         //
         // PRINTS OUT THE CONFIGURATION INFORMATION
         //
         buffer.append(rpCalc().getConfiguration().toXML());
-
+        
+           
         //
         // PRINTS OUT THE SEGMENTS COORDS
         //
-        for (int i = 0; i < geomSource.segments().size(); i++) {
+        buffer.append("<" + BifurcationCurve.LEFT_TAG +">" + "\n");
+        
+        for (int i = 0; i < geomSource.leftSegments().size(); i++) {
 
-            RealSegment realSegment =(RealSegment) geomSource.segments().get(i);
+            RealSegment realSegment =(RealSegment) geomSource.leftSegments().get(i);
             buffer.append(realSegment.toXML() + "\n");
         }
+        buffer.append("</" + BifurcationCurve.LEFT_TAG +">" + "\n");
 
-        buffer.append("</" + SegmentedCurve.XML_TAG + ">" + "\n");
+        
+        buffer.append("<" + BifurcationCurve.RIGHT_TAG +">" + "\n");
+        
+        for (int i = 0; i < geomSource.rightSegments().size(); i++) {
+
+            RealSegment realSegment =(RealSegment) geomSource.rightSegments().get(i);
+            buffer.append(realSegment.toXML() + "\n");
+        }
+        buffer.append("</" + BifurcationCurve.RIGHT_TAG +">" + "\n");
+      buffer.append("</" + BifurcationCurve.XML_TAG +">" );
 
         return buffer.toString();
     }

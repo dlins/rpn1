@@ -22,8 +22,8 @@ public class DoubleContactCurve extends BifurcationCurve {
     }
 
 
-    public DoubleContactCurve(List<RealSegment> hSegments, List<RealSegment> rightSegments) {
-        super(hSegments, rightSegments);
+    public DoubleContactCurve(List<RealSegment> leftSegments, List<RealSegment> rightSegments) {
+        super(leftSegments, rightSegments);
 
     }
 
