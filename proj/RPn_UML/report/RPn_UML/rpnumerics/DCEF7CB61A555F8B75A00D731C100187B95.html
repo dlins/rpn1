@@ -1,0 +1,324 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Class</TITLE>
+<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=UTF-8">
+<LINK REL ="stylesheet" TYPE="text/css" HREF="../../stylesheet.css" TITLE="Style"></HEAD>
+<BODY BGCOLOR="white">
+<!-- ========= START OF NAVBAR ======= -->
+<A NAME="navbar_top"></A>
+<A HREF="#skip-navbar_top" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_top_firstrow"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1"> &nbsp;<A HREF="../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <FONT CLASS="NavBarFont1">Package</FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1Rev">    <FONT CLASS="NavBarFont1Rev"><B>Element</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <FONT CLASS="NavBarFont1">Diagram</FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../help.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>NetBeans UML Modeling</b>
+</TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_top"></A>
+<!-- ========= END OF NAVBAR ========= -->
+
+<HR>
+<H2>
+<FONT SIZE="-1">rpnumerics</FONT>
+<BR>
+Class ManifoldOrbitCalc</H2>
+<PRE>
+<B>rpnumerics::ManifoldOrbitCalc</B>
+</PRE>
+<DL>
+<DT><B>All Implemented Interfaces:</B> <DD><A HREF="../../RPn_UML/rpnumerics/DCEEBB7B0C8BB37D05FD1C843D8B2D4AE83.html" title="interface in rpnumerics">RpCalculation</A></DD>
+</DL>
+<DL>
+<DT><B>All Dependency Suppliers:</B><DD><IMG SRC="../../images/implementation.png" ALT="(Implementation) ">&nbsp;Implementation&nbsp;<A HREF="../../RPn_UML/rpnumerics/DCEEBB7B0C8BB37D05FD1C843D8B2D4AE83.html" title="dependency in rpnumerics">RpCalculation</A></DD>
+</DL>
+<DL>
+<DT><B>All Known Associations: </B><DD><IMG SRC="../../images/navigable-aggregation.png" ALT="(Navigable_Aggregation) "> <A HREF="../../RPn_UML/rpnumerics/DCEB1175FECB3C171EC41DD4C27DE78BA52.html">Navigable_Aggregation</A>: <A HREF="../../RPn_UML/rpnumerics/DCE39757C5719FDF732F711E7081AF8E05E.html" title="association in rpnumerics">StationaryPoint</A></DD>
+<DD><IMG SRC="../../images/navigable-aggregation.png" ALT="(Navigable_Aggregation) "> <A HREF="../../RPn_UML/rpnumerics/DCE0990CAEFC03349E29145E793A1235CB4.html">Navigable_Aggregation</A>: <A HREF="../../RPn_UML/rpnumerics/DCE4E2A917E11B9E2D47B54A143D2DA31E1.html" title="association in rpnumerics">PhasePoint</A></DD>
+<DD><IMG SRC="../../images/navigable-aggregation.png" ALT="(Navigable_Aggregation) "> <A HREF="../../RPn_UML/rpnumerics/DCE8E683B81984570C4612F89E18A52F0CE.html">Navigable_Aggregation</A>: <A HREF="../../RPn_UML/rpnumerics/DCE749A2B79469A1AD470ECE119B17B5BC1.html" title="association in rpnumerics">ShockFlow</A></DD>
+</DL>
+<HR>
+<DL>
+<DT><PRE>public class <B>ManifoldOrbitCalc</B></DT><DT>implements <A HREF="../../RPn_UML/rpnumerics/DCEEBB7B0C8BB37D05FD1C843D8B2D4AE83.html" title="interface in rpnumerics">RpCalculation</A></DL>
+</PRE>
+
+<P>
+Computations:
+a)evaluates the second order approximation of the manifold, see Section 4.2
+b)finds value of h = UuT(firstPoint - stationaryPoint)
+c)corrects value of h using formula (4.27), where T  is chosen such that the inequalities ||x(T) - xapp(T)||  eps and ||x(T) - x(-)||  prefDeltaNorm are satisfied (the bisection method is used to find the value of T  such that one of the inequalities is satisfied as an equality).
+d)numerical integrations from the point x(T) = x0 + Uuh,  where we set T = 0.</P><HR>
+<!-- =========== PROPERTY SUMMARY =========== -->
+<A NAME="property_summary"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Properties</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Alias</B></TD>
+<TD>ManifoldOrbitCalc</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Visibility</B></TD>
+<TD>public</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Final</B></TD>
+<TD><IMG src="../../images/unchecked.png" border=n></TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Transient</B></TD>
+<TD><IMG src="../../images/checked.png" border=n></TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Abstract</B></TD>
+<TD><IMG src="../../images/unchecked.png" border=n></TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Leaf</B></TD>
+<TD><IMG src="../../images/unchecked.png" border=n></TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- =========== ATTRIBUTE SUMMARY =========== -->
+<A NAME="attribute_summary"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Attribute Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#timeDirection_">timeDirection_</A></B></CODE>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../RPn_UML/DCE1DAE3130FDB46D61C5C4BEE71AB9345E.html">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#methodName_">methodName_</A></B></CODE>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- =========== CONSTRUCTOR SUMMARY =========== -->
+
+<A NAME="constructor_summary"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Constructor Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><B><A HREF="#ManifoldOrbitCalc">ManifoldOrbitCalc</A></B>(<A HREF="../../RPn_UML/rpnumerics/DCE39757C5719FDF732F711E7081AF8E05E.html">StationaryPoint</A>&nbsp;stationaryPoint,&nbsp;<A HREF="../../RPn_UML/rpnumerics/DCE4E2A917E11B9E2D47B54A143D2DA31E1.html">PhasePoint</A>&nbsp;firstPoint,&nbsp;<A HREF="../../RPn_UML/rpnumerics/DCE749A2B79469A1AD470ECE119B17B5BC1.html">ShockFlow</A>&nbsp;flow,&nbsp;<A HREF="../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;timeDirection)</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Constructors
+</TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- =========== OPERATION SUMMARY =========== -->
+<A NAME="operation_summary"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Operation Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../RPn_UML/rpnumerics/DCE4E2A917E11B9E2D47B54A143D2DA31E1.html">PhasePoint</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#orbitRefPoint">orbitRefPoint</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Accessors/Mutators
+TODO Alexei, is this really the first point ?
+</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#tDirection">tDirection</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../RPn_UML/rpnumerics/DCE373831C467C2330AFB328C437E5AFD1E.html">RpSolution</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#recalc">recalc</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Methods
+</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../RPn_UML/rpnumerics/DCE373831C467C2330AFB328C437E5AFD1E.html">RpSolution</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#calc">calc</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../RPn_UML/DCE1BF8DA2C3948887826F74A3BBF2C68E6.html">double</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#errorValue">errorValue</A></B>(<A HREF="../../RPn_UML/wave/util/DCE9E4CB46FD5628414AD909931DA117AA8.html">RealMatrix2</A>&nbsp;A,&nbsp;<A HREF="../../RPn_UML/wave/util/DCE33A196BDE13EE19ED1F73D7F91144BB8.html">RealVector</A>&nbsp;q)</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../RPn_UML/wave/util/DCE9E4CB46FD5628414AD909931DA117AA8.html">RealMatrix2</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#sylvester">sylvester</A></B>(<A HREF="../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;n1,&nbsp;<A HREF="../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;n2,&nbsp;<A HREF="../../RPn_UML/wave/util/DCE9E4CB46FD5628414AD909931DA117AA8.html">RealMatrix2</A>&nbsp;A,&nbsp;<A HREF="../../RPn_UML/wave/util/DCE9E4CB46FD5628414AD909931DA117AA8.html">RealMatrix2</A>&nbsp;B,&nbsp;<A HREF="../../RPn_UML/wave/util/DCE9E4CB46FD5628414AD909931DA117AA8.html">RealMatrix2</A>&nbsp;C)</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../RPn_UML/DCE1DAE3130FDB46D61C5C4BEE71AB9345E.html">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#getCalcMethodName">getCalcMethodName</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- =========== ATTRIBUTE DETAIL =========== -->
+<A NAME="attribute_detail"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Attribute Detail</B></FONT></TH>
+</TR>
+</TABLE>
+<A NAME="timeDirection_"></A><H3>timeDirection_</H3>
+<PRE>private <A HREF="../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A> <B>timeDirection_</B></PRE><DL>
+<DD>
+<P>
+</DD>
+</DL>
+<HR>
+
+<A NAME="methodName_"></A><H3>methodName_</H3>
+<PRE>private <A HREF="../../RPn_UML/DCE1DAE3130FDB46D61C5C4BEE71AB9345E.html">String</A> <B>methodName_</B></PRE><DL>
+<DD>
+<P>
+</DD>
+</DL>
+
+<!-- =========== CONSTRUCTOR DETAIL =========== -->
+
+<A NAME="constructor_detail"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Constructor Detail</B></FONT></TH>
+</TR>
+</TABLE>
+<A NAME="ManifoldOrbitCalc"></A><H3>ManifoldOrbitCalc</H3>
+<PRE>
+public <B>ManifoldOrbitCalc</B>(<A HREF="../../RPn_UML/rpnumerics/DCE39757C5719FDF732F711E7081AF8E05E.html">StationaryPoint</A>&nbsp;stationaryPoint,&nbsp;<A HREF="../../RPn_UML/rpnumerics/DCE4E2A917E11B9E2D47B54A143D2DA31E1.html">PhasePoint</A>&nbsp;firstPoint,&nbsp;<A HREF="../../RPn_UML/rpnumerics/DCE749A2B79469A1AD470ECE119B17B5BC1.html">ShockFlow</A>&nbsp;flow,&nbsp;<A HREF="../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;timeDirection)</PRE>
+<DL>
+<DD>Constructors
+
+<P>
+</DD></DL>
+
+<!-- =========== OPERATION DETAIL =========== -->
+
+<A NAME="operationr_detail"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Operation Detail</B></FONT></TH>
+</TR>
+</TABLE>
+<A NAME="orbitRefPoint"></A><H3>orbitRefPoint</H3>
+<PRE>
+public <A HREF="../../RPn_UML/rpnumerics/DCE4E2A917E11B9E2D47B54A143D2DA31E1.html">PhasePoint</A> <B>orbitRefPoint</B>()</PRE>
+<DL>
+<DD>Accessors/Mutators
+TODO Alexei, is this really the first point ?
+
+<P>
+</DD></DL>
+<HR>
+<A NAME="tDirection"></A><H3>tDirection</H3>
+<PRE>
+public <A HREF="../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A> <B>tDirection</B>()</PRE>
+<DL>
+<DD>
+<P>
+</DD></DL>
+<HR>
+<A NAME="recalc"></A><H3>recalc</H3>
+<PRE>
+public <A HREF="../../RPn_UML/rpnumerics/DCE373831C467C2330AFB328C437E5AFD1E.html">RpSolution</A> <B>recalc</B>()</PRE>
+<DL>
+<DD>Methods
+
+<P>
+</DD></DL>
+<HR>
+<A NAME="calc"></A><H3>calc</H3>
+<PRE>
+public <A HREF="../../RPn_UML/rpnumerics/DCE373831C467C2330AFB328C437E5AFD1E.html">RpSolution</A> <B>calc</B>()</PRE>
+<DL>
+<DD>
+<P>
+</DD></DL>
+<HR>
+<A NAME="errorValue"></A><H3>errorValue</H3>
+<PRE>
+protected <A HREF="../../RPn_UML/DCE1BF8DA2C3948887826F74A3BBF2C68E6.html">double</A> <B>errorValue</B>(<A HREF="../../RPn_UML/wave/util/DCE9E4CB46FD5628414AD909931DA117AA8.html">RealMatrix2</A>&nbsp;A,&nbsp;<A HREF="../../RPn_UML/wave/util/DCE33A196BDE13EE19ED1F73D7F91144BB8.html">RealVector</A>&nbsp;q)</PRE>
+<DL>
+<DD>
+<P>
+</DD></DL>
+<HR>
+<A NAME="sylvester"></A><H3>sylvester</H3>
+<PRE>
+protected <A HREF="../../RPn_UML/wave/util/DCE9E4CB46FD5628414AD909931DA117AA8.html">RealMatrix2</A> <B>sylvester</B>(<A HREF="../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;n1,&nbsp;<A HREF="../../RPn_UML/DCE0EB20E88AC378915F0B5994B33B63CA9.html">int</A>&nbsp;n2,&nbsp;<A HREF="../../RPn_UML/wave/util/DCE9E4CB46FD5628414AD909931DA117AA8.html">RealMatrix2</A>&nbsp;A,&nbsp;<A HREF="../../RPn_UML/wave/util/DCE9E4CB46FD5628414AD909931DA117AA8.html">RealMatrix2</A>&nbsp;B,&nbsp;<A HREF="../../RPn_UML/wave/util/DCE9E4CB46FD5628414AD909931DA117AA8.html">RealMatrix2</A>&nbsp;C)</PRE>
+<DL>
+<DD>
+<P>
+</DD></DL>
+<HR>
+<A NAME="getCalcMethodName"></A><H3>getCalcMethodName</H3>
+<PRE>
+public <A HREF="../../RPn_UML/DCE1DAE3130FDB46D61C5C4BEE71AB9345E.html">String</A> <B>getCalcMethodName</B>()</PRE>
+<DL>
+<DD>
+<P>
+</DD></DL>
+
+<HR>
+<!-- ========= START OF NAVBAR ======= -->
+<A NAME="navbar_top"></A>
+<A HREF="#skip-navbar_top" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_top_firstrow"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1"> &nbsp;<A HREF="../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <FONT CLASS="NavBarFont1">Package</FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1Rev">    <FONT CLASS="NavBarFont1Rev"><B>Element</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <FONT CLASS="NavBarFont1">Diagram</FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../help.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>NetBeans UML Modeling</b>
+</TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_top"></A>
+<!-- ========= END OF NAVBAR ========= -->
+
+</BODY>
+</HTML>
