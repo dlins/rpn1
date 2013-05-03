@@ -30,6 +30,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.XMLReader;
 import rpn.component.RpGeomFactory;
@@ -196,8 +197,10 @@ public class RPnDataModule {
                     RealVector p2 = new RealVector(data_2);
                     
                     if (isLeft_) {
+
                         leftSegmentsCoords_.add(new RealSegment(p1, p2));
                     } else {
+
                         rightSegmentsCoords_.add(new RealSegment(p1, p2));
                     }
 
