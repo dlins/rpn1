@@ -36,6 +36,7 @@ void StoneExplicitHugoniot::set_reference_point(const RealVector &ref){
 
 void StoneExplicitHugoniot::PolarHugoniot(void *o, double theta, RealVector &out){
 
+    cout<<"Passando pelo polar"<<endl;
     StoneExplicitHugoniot *obj = (StoneExplicitHugoniot*)o;
     if (obj->valid_){
         double muw = obj->muw;

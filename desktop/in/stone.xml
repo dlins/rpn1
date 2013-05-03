@@ -47,14 +47,9 @@
     </PHYSICS>
 
 
-    <METHOD name="Newton">
-        <METHODPARAM  name="tolerance" value="0.001" />
-    </METHOD>
-    
-     
     <METHOD name="hugoniotmethod">
-        <METHODPARAM  name="implicit" value="0" />
-        <METHODPARAM  name="explicit" value="1" />
+        <METHODPARAM  name="implicit" value="1" />
+        <METHODPARAM  name="explicit" value="0" />
     </METHOD>
 
 

@@ -312,76 +312,76 @@ public class RPnInputComponent extends Observable implements Observer{//TODO Ref
 
     public RPnInputComponent(Configuration configuration, boolean useEvents) {
 
-//        textField_ = new JFormattedTextField[configuration.getParamsSize()];
-//        
-//        stringValues_= new String[configuration.getParamsSize()];
-//
-//        label_ = new JLabel[configuration.getParamsSize()];
-//
-//        GridBagConstraints gridConstraints = new GridBagConstraints();
-//
-//        gridConstraints.fill = GridBagConstraints.BOTH;
-//
-//        gridConstraints.gridwidth = 1;
-//        gridConstraints.gridheight = 1;
-//        gridConstraints.ipadx = 50;
-//        gridConstraints.gridy = 0;
-//        gridConstraints.gridx = 0;
-//
-//        GridBagLayout gridBayLayout = new GridBagLayout();
-//
-//        panel_.setLayout(gridBayLayout);
-//        
-        UIComponentCreator componentCreator = new UIComponentCreator(configuration, this);
-        stringValues_=new String[configuration.getParamsSize()];
+        textField_ = new JFormattedTextField[configuration.getParamsSize()];
         
-        panel_= (JPanel)componentCreator.createUIComponent();
+        stringValues_= new String[configuration.getParamsSize()];
+
+        label_ = new JLabel[configuration.getParamsSize()];
+
+        GridBagConstraints gridConstraints = new GridBagConstraints();
+
+        gridConstraints.fill = GridBagConstraints.BOTH;
+
+        gridConstraints.gridwidth = 1;
+        gridConstraints.gridheight = 1;
+        gridConstraints.ipadx = 50;
+        gridConstraints.gridy = 0;
+        gridConstraints.gridx = 0;
+
+        GridBagLayout gridBayLayout = new GridBagLayout();
+
+        panel_.setLayout(gridBayLayout);
         
+//        UIComponentCreator componentCreator = new UIComponentCreator(configuration, this);
+//        stringValues_=new String[configuration.getParamsSize()];
+//        
+//        panel_= (JPanel)componentCreator.createUIComponent();
+//        
 
 
-//        int j = 0;
-//
-//        HashMap<String, String> paramsValues = configuration.getParams();
-//
-//        Set<Entry<String, String>> paramsSet = paramsValues.entrySet();
-//
-//        for (Entry<String, String> value : paramsSet) {
-//
-//
-//            //JFormattedTextField textField = new JFormattedTextField(formatter_);
-//
-//            JFormattedTextField textField = new JFormattedTextField();
-//
-//            textField.setText(configuration.getParam(j));
-//            stringValues_[j]=configuration.getParam(j);
-//
-//            textField.setColumns(8);
-//
-//            textField_[j] = textField;
-//            textField.setName(configuration.getParamName(j));
-//
-//            if (useEvents) {
-//                textField.getDocument().addDocumentListener(new TextValueHandler());
-//            } else {
-//                textField.getDocument().addDocumentListener(new TextChangedHandler());
-//            }
-//
-//            JLabel label = new JLabel(configuration.getParamName(j));
-//
-//            label_[j] = label;
-//
-//            gridConstraints.gridx = 0;
-//            panel_.add(label, gridConstraints);
-//            gridConstraints.gridx = 1;
-//            panel_.add(textField, gridConstraints);
-//
-//            gridConstraints.gridy++;
-//
-//            j++;
-//
-//
-//        }
-//
+        int j = 0;
+
+        HashMap<String, String> paramsValues = configuration.getParams();
+
+        Set<Entry<String, String>> paramsSet = paramsValues.entrySet();
+
+        for (Entry<String, String> value : paramsSet) {
+
+
+            //JFormattedTextField textField = new JFormattedTextField(formatter_);
+
+            JFormattedTextField textField = new JFormattedTextField();
+
+            textField.setText(configuration.getParam(j));
+            stringValues_[j]=configuration.getParam(j);
+
+            textField.setColumns(8);
+
+            textField_[j] = textField;
+            textField.setName(configuration.getParamName(j));
+
+            if (useEvents) {
+                textField.getDocument().addDocumentListener(new TextValueHandler());
+            } else {
+                textField.getDocument().addDocumentListener(new TextChangedHandler());
+            }
+
+            JLabel label = new JLabel(configuration.getParamName(j));
+
+            label_[j] = label;
+
+            gridConstraints.gridx = 0;
+            panel_.add(label, gridConstraints);
+            gridConstraints.gridx = 1;
+            panel_.add(textField, gridConstraints);
+
+            gridConstraints.gridy++;
+
+            j++;
+
+
+        }
+
         controller_ = new RPnInputController(this, configuration);
 
 

@@ -21,6 +21,7 @@ import java.util.Set;
 import javax.swing.*;
 import rpn.command.ChangeDirectionCommand;
 import rpn.configuration.Configuration;
+import rpn.ui.ComboBoxCreator;
 import rpn.ui.UIComponentCreator;
 import rpnumerics.Orbit;
 import rpnumerics.RPNUMERICS;
@@ -28,7 +29,7 @@ import rpnumerics.RPNUMERICS;
 public class RPnCurvesConfigPanel extends Observable implements PropertyChangeListener, ActionListener, Observer {
 
     private ButtonGroup directionButtonGroup_;
-    private JPanel directionPanel_, okButtonPanel_;
+    private JPanel directionPanel_, methodsPanel_;
     private JRadioButton forwardCheckBox_;
     private JRadioButton backwardCheckBox_;
     private JRadioButton bothCheckBox_;
@@ -41,9 +42,9 @@ public class RPnCurvesConfigPanel extends Observable implements PropertyChangeLi
 
     public RPnCurvesConfigPanel() {
 
-
         addObserver(ChangeDirectionCommand.instance());
         mainPainel_ = new JPanel();
+        methodsPanel_ = new JPanel();
         curvesTabbedPanel_ = new JTabbedPane();
         directionButtonGroup_ = new ButtonGroup();
         buildPanel();
@@ -66,7 +67,7 @@ public class RPnCurvesConfigPanel extends Observable implements PropertyChangeLi
 
             String configurationType = entry.getValue().getType();
 
-            if (!configurationType.equalsIgnoreCase("PHYSICS") && !configurationType.equalsIgnoreCase("VISUAL")) {
+            if (!configurationType.equalsIgnoreCase("PHYSICS") && !configurationType.equalsIgnoreCase("VISUAL") && !configurationType.equalsIgnoreCase("METHOD")) {
 
                 Configuration config = entry.getValue();
 
@@ -75,21 +76,35 @@ public class RPnCurvesConfigPanel extends Observable implements PropertyChangeLi
                 Set<Entry<String, String>> paramSet = configParams.entrySet();
 
                 JPanel paramsPanel = new JPanel();
-                int i=0;
+                int i = 0;
                 for (Entry<String, String> paramEntry : paramSet) {
-                    if (!paramEntry.getKey().contains("resolution")){
-                    UIComponentCreator componentCreator = new UIComponentCreator(config, paramEntry.getKey());
-                    JComponent component = componentCreator.createUIComponent();
-                    paramsPanel.add(component);
-                    i++;
-                        
+                    if (!paramEntry.getKey().contains("resolution")) {
+                        UIComponentCreator componentCreator = new UIComponentCreator(config, paramEntry.getKey());
+                        JComponent component = componentCreator.createUIComponent();
+                        paramsPanel.add(component);
+                        i++;
+
                     }
 
                 }
 
-                if (paramsPanel.getComponentCount()>0)
-                curvesTabbedPanel_.addTab(config.getName(), paramsPanel);
+                if (paramsPanel.getComponentCount() > 0) {
+                    curvesTabbedPanel_.addTab(config.getName(), paramsPanel);
+                }
+
+
+            } else {
+
+
+                if (configurationType.equalsIgnoreCase("METHOD")) {
+                    Configuration config = entry.getValue();
+                    ComboBoxCreator comboCreator = new ComboBoxCreator(config, config.getName());
+                    methodsPanel_.add(comboCreator.createUIComponent());
+
+                }
             }
+
+
 
         }
 
@@ -139,7 +154,7 @@ public class RPnCurvesConfigPanel extends Observable implements PropertyChangeLi
 
         gridConstraints.fill = GridBagConstraints.BOTH;
 
-//        mainPainel_.add(directionPanel_, gridConstraints);
+
 
 
         gridConstraints.gridy = 1;
@@ -148,11 +163,11 @@ public class RPnCurvesConfigPanel extends Observable implements PropertyChangeLi
 
         mainPainel_.add(curvesTabbedPanel_, gridConstraints);
 
+
         gridConstraints.gridy = 2;
 
-//        mainPainel_.add(okButtonPanel_, gridConstraints);
+        mainPainel_.add(methodsPanel_, gridConstraints);
 
-//        okButtonPanel_.add(okButton_);
 
 
     }

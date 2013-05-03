@@ -5,6 +5,8 @@
  */
 package rpn.parser;
 
+import java.util.Map.Entry;
+import java.util.Set;
 import rpn.configuration.ConfigurationProfile;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
@@ -17,9 +19,11 @@ import org.xml.sax.SAXException;
 import org.xml.sax.InputSource;
 import java.io.FileWriter;
 import java.io.InputStream;
+import java.util.HashMap;
 import rpn.configuration.RPnConfig;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.XMLReader;
+import rpn.configuration.Configuration;
 import rpnumerics.RPNUMERICS;
 import wave.util.Boundary;
 
@@ -40,6 +44,7 @@ public class RPnNumericsModule {
         private static ConfigurationProfile physicsProfile_;
         private static ConfigurationProfile innerPhysicsConfigurationProfile_;
         private static boolean initialConfiguration_;
+        private static String [] METHODNAMES = {"hugoniotmethod"};
 
         public void startElement(String uri, String localName, String qName, Attributes att) throws SAXException {
             currentElement_ = localName;
@@ -56,24 +61,26 @@ public class RPnNumericsModule {
             }
 
             if (localName.equals("PHYSICS")) {
-                initialConfiguration_=true;
+                initialConfiguration_ = true;
                 physicsProfile_ = new ConfigurationProfile(att.getValue(0), ConfigurationProfile.PHYSICS_PROFILE);
             }
 
-            
-            
+
+
             if (localName.equals("BOUNDARY")) {
                 physicsProfile_.addConfigurationProfile(ConfigurationProfile.BOUNDARY, new ConfigurationProfile(att.getValue(0), ConfigurationProfile.BOUNDARY));
             }
 
             if (localName.equals("PHYSICSCONFIG")) {
-                if (initialConfiguration_)
-                innerPhysicsConfigurationProfile_ = new ConfigurationProfile(att.getValue("name"), ConfigurationProfile.PHYSICS_CONFIG);
+                if (initialConfiguration_) {
+                    innerPhysicsConfigurationProfile_ = new ConfigurationProfile(att.getValue("name"), ConfigurationProfile.PHYSICS_CONFIG);
+                }
             }
 
             if (localName.equals("PHYSICSPARAM")) {
-                if(initialConfiguration_)
-                innerPhysicsConfigurationProfile_.addParam(new Integer(att.getValue("position")), att.getValue("name"), att.getValue("value"));
+                if (initialConfiguration_) {
+                    innerPhysicsConfigurationProfile_.addParam(new Integer(att.getValue("position")), att.getValue("name"), att.getValue("value"));
+                }
 
             }
 
@@ -93,6 +100,8 @@ public class RPnNumericsModule {
             if (localName.equals("METHODPARAM")) {
                 checkNumberFormat(att.getValue("value"));
                 currentConfigurationProfile_.addParam(att.getValue("name"), att.getValue("value"));
+
+
             }
 
 
@@ -110,7 +119,7 @@ public class RPnNumericsModule {
                 RPnConfig.addProfile(physicsProfile_.getName(), physicsProfile_);
                 rpnumerics.RPNUMERICS.init(physicsProfile_.getName());
                 RPnConfig.createParamsFluxSubject(physicsProfile_.getName());
-                initialConfiguration_=false;
+                initialConfiguration_ = false;
             }
 
 
@@ -173,6 +182,23 @@ public class RPnNumericsModule {
             RPNUMERICS.setResolution(min, max, "bifurcation", bifurcationCurvesResolution);
 
 
+            for (String methodName : METHODNAMES) {
+                
+                setMethod(methodName);
+                
+            }
+
+
+
+
+
+
+
+
+
+
+
+
         }
 
         public void startPrefixMapping(String prefix, String uri) throws SAXException {
@@ -190,6 +216,35 @@ public class RPnNumericsModule {
         public void skippedEntity(String name) throws SAXException {
         }
 
+        private void setMethod(String methodName) {
+
+
+            HashMap<String, Configuration> configurationMap = RPNUMERICS.getConfigurations();
+
+            if (configurationMap.containsKey(methodName)) {
+
+                Configuration hugoniotConfig = configurationMap.get(methodName);
+
+                HashMap<String, String> configParams = hugoniotConfig.getParams();
+                Set<Entry<String, String>> entrySet = configParams.entrySet();
+
+                for (Entry<String, String> entry : entrySet) {
+
+                    if (entry.getValue().equals("1")) {
+                        RPNUMERICS.setMethod(methodName, entry.getKey());
+                    }
+
+                }
+
+
+
+
+
+            }
+
+
+        }
+
         private void checkNumberFormat(String value) {
             try {
                 Double test = new Double(value);
@@ -198,8 +253,6 @@ public class RPnNumericsModule {
                 System.exit(1);
             }
         }
-
-        
     }
 
     //

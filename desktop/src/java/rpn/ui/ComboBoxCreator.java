@@ -53,6 +53,8 @@ public class ComboBoxCreator extends UIComponentCreator {
         gridConstraints.gridx = 0;
 
         GridBagLayout gridBayLayout = new GridBagLayout();
+        
+        JLabel methodLabel = new JLabel(configurationParameter_);
 
         panel_.setLayout(gridBayLayout);
 
@@ -60,9 +62,30 @@ public class ComboBoxCreator extends UIComponentCreator {
 
         JComboBox comboBox = new JComboBox(paramsValues.keySet().toArray());
 
+        Set<Entry<String, String>> entrySet = paramsValues.entrySet();
+        
+        
+        for (Entry<String, String> entry : entrySet) {
+            
+            if (entry.getValue().equals("1")){
+                comboBox.setSelectedItem(entry.getKey());
+            }
+            
+        }
+
         comboBox.addActionListener(new ComboEventHandler());
 
-        panel_.add(comboBox);
+        gridConstraints.gridy = 0;
+        gridConstraints.gridx = 0;
+        panel_.add(methodLabel,gridConstraints);
+   
+        
+        gridConstraints.gridy = 1;
+        gridConstraints.gridx = 0;
+        
+        panel_.add(comboBox,gridConstraints);
+
+        
         return panel_;
 
     }

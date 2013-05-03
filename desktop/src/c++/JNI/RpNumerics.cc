@@ -187,26 +187,25 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setMethod
     string nativeMethodType(env->GetStringUTFChars(methodType, NULL));
     string nativeMethodName(env->GetStringUTFChars(methodName, NULL));
 
-    
-    cout<<nativeMethodType<<" "<<nativeMethodName<<endl;
-    
+
+    cout << nativeMethodType << " " << nativeMethodName << endl;
+
     delete RpNumerics::getPhysics().getSubPhysics(0).getHugoniotFunction();
 
     if (RpNumerics::getPhysics().ID().compare("Stone") == 0) {
 
-        if (nativeMethodType.compare("hugoniotmethod")==0){
+        if (nativeMethodType.compare("hugoniotmethod") == 0) {
 
-            
-            if (nativeMethodName.compare("explicit") ){
-            
+
+            if (nativeMethodName.compare("explicit")) {
+
                 RpNumerics::getPhysics().getSubPhysics(0).setHugoniotFunction(new StoneHugoniot());
-                
+
             }
-            
             else {
                 RpNumerics::getPhysics().getSubPhysics(0).setHugoniotFunction(new Hugoniot_Curve());
             }
-            
+
         }
 
     }
@@ -214,18 +213,17 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setMethod
 
     if (RpNumerics::getPhysics().ID().compare("Quad2") == 0) {
 
-        if (nativeMethodType.compare("hugoniotmethod")){
+        if (nativeMethodType.compare("hugoniotmethod")) {
 
-            if (nativeMethodName.compare("explicit") ){
+            if (nativeMethodName.compare("explicit")) {
                 RpNumerics::getPhysics().getSubPhysics(0).setHugoniotFunction(new Quad2Hugoniot());
-            }
-            else{
+            } else {
                 RpNumerics::getPhysics().getSubPhysics(0).setHugoniotFunction(new Hugoniot_Curve());
             }
-            
-            
+
+
         }
-        
+
 
     }
 

@@ -34,12 +34,12 @@ public class HugoniotCurve extends SegmentedCurve {
         direction_=Orbit.FORWARD_DIR;
         transitionList_=transitionList;
         
-        
-        for (RealVector realVector : transitionList) {
-            
-            System.out.println("Ponto de transicao em Java:"+realVector);
-            
-        }
+//        
+//        for (RealVector realVector : transitionList) {
+//            
+//            System.out.println("Ponto de transicao em Java:"+realVector);
+//            
+//        }
 
     }
     public void setDirection(int direction){

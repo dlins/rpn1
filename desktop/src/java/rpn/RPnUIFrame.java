@@ -573,15 +573,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             panelsChooserPanel_.add(checkBox);
         }
 
-//        
-//        System.out.println("Tamanho dos aux:"+getAuxFrames().length);
-//        for (RPnPhaseSpaceFrame auxFrame : getAuxFrames()) {
-//            System.out.println(auxFrame);
-//            JCheckBox checkBox = new JCheckBox(auxFrame.getTitle());
-//            checkBox.addItemListener(new PanelsSeletectedListener(auxFrame));
-//            panelsChooserPanel_.add(checkBox);
-//
-//        }
 
     }
 
@@ -848,9 +839,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         toolBarPanel_.add(toolBar_);
 
-
-        //setPreferredSize(new Dimension(350, 680));
-        setPreferredSize(new Dimension(500, 680));
+        setPreferredSize(new Dimension(600, 680));
 
         setResizable(true);
 
