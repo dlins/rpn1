@@ -34,7 +34,7 @@ ColorCurve::ColorCurve(const FluxFunction & fluxFunction,
     sc = std::string(".");
     sz = std::string("0");
     
-    vm = v;
+    vm = (Viscosity_Matrix *) v;
 }
 
 ColorCurve::~ColorCurve() {
@@ -350,8 +350,8 @@ int ColorCurve::interpolate(const RealVector &p, double &s_p,
 
     // TODO: Pensar em mandar isto na chamada
     std::vector<eigenpair> ep, eq;
-    Eigen::eigen(dim, (JF_ref - s_p*JG_ref).data(), B_ref.M().data(), ep);
-    Eigen::eigen(dim, (JF_ref - s_q*JG_ref).data(), B_ref.M().data(), eq);
+    Eigen::eig(dim, (JF_ref - s_p*JG_ref).data(), B_ref.M().data(), ep);
+    Eigen::eig(dim, (JF_ref - s_q*JG_ref).data(), B_ref.M().data(), eq);
     
     // Number of inequalities
     int noi = 0;
@@ -361,8 +361,8 @@ int ColorCurve::interpolate(const RealVector &p, double &s_p,
     //
     for (int i = 0; i < fam; i++) {
         if (abs_ineq % 2) {
-            fp = ep.r[i] - s_p;
-            fq = eq.r[i] - s_q;
+            fp = ep[i].r - s_p;
+            fq = eq[i].r - s_q;
             if (fabs(fq - fp) < epsilon) return INTERPOLATION_ERROR;
             alpha.push_back(fq / (fq - fp));
             rtype.push_back(increase);
@@ -457,7 +457,7 @@ int ColorCurve::complete_point(RealVector &p, double &s, std::vector<double> &ei
 //    Eigen::eig(dim, &JF[0][0], &JG[0][0], e);
 
     ViscosityJetMatrix B(dim, dim, dim);
-    vm->fill_viscosity_matrix(p, B);
+    vm->fill_viscous_matrix(p, B);
     
     Eigen::eig(dim, (JF-s*JG).data(), B.M().data(), e);
     eigenvalue.resize(e.size());
@@ -515,17 +515,21 @@ int ColorCurve::complete_point(RealVector &p, double &s, std::vector<double> &ei
 //
 int ColorCurve::classify_point(RealVector &p, double &s, std::vector<double> &eigenvalue, std::string &signature) {
     signature.clear();
-    int dim = ref_eigenvalue.size();
+    int dim = p.size();
+    
+
     int complex_ref[dim + 1], complex[dim + 1];
 
     // In order to classify the point, speed and eigenvalues are needed. They are filled in complete:
     // (type is filled as 0 when the classification is possible.)
     //
     int type = complete_point(p, s, eigenvalue, complex);
+    
+
     if (type == UNCLASSIFIABLE_POINT) return UNCLASSIFIABLE_POINT;
     
     std::vector<eigenpair> e;
-    Eigen::eigen(dim, (JF_ref - s*JG_ref).data(), B_ref.M().data(), e);
+    Eigen::eig(dim, (JF_ref - s*JG_ref).data(), B_ref.M().data(), e);
 
     int increment = 1;
 
@@ -538,7 +542,7 @@ int ColorCurve::classify_point(RealVector &p, double &s, std::vector<double> &ei
     //
     for (int fam = 0; fam < dim; fam++) {
         // Assing increments for left side (reference point)
-        if (e.r[fam] > 0.0) {
+        if (e[fam].r > 0.0) {
             type += increment;
             signature += sp;
         } else signature += sm;
@@ -559,7 +563,7 @@ int ColorCurve::classify_point(RealVector &p, double &s, std::vector<double> &ei
     int complex_count = 0;
     complex_ref[0] = 0;
     for (int i = 0; i < dim;) {
-        if (fabs(e.i[i]) > 0) {
+        if (fabs(e[i].i) > 0) {
             // The complex notation ("+." or "-.") will be introduced on the second eigenvalue.
             i++;
             complex_ref[complex_count] = i;
@@ -722,10 +726,10 @@ void ColorCurve::classify_segment_with_data(
                     ztype /= 2;
                 }
                 RealVector out;
-                if (zerotype < fam) Left_Newton_improvement(rtemp[i], zerotype, out);
-                else Right_Newton_improvement(rtemp[i], zerotype - fam, out);
+//                if (zerotype < fam) Left_Newton_improvement(rtemp[i], zerotype, out);
+//                else Right_Newton_improvement(rtemp[i], zerotype - fam, out);
                 cout << "Quem eh out : " << out << endl;
-                rtemp[i] = out;
+//                rtemp[i] = out;
             }
         }
 
@@ -879,6 +883,7 @@ void ColorCurve::classify_continuous_curve(std::deque<RealVector> &original,
     G_ref.resize(dim);
     JF_ref.resize(dim, dim); JG_ref.resize(dim, dim);
     B_ref.M().resize(dim, dim);
+
     fluxFunction_->fill_with_jet(dim, ref_point.components(), 1, F_ref.components(), JF_ref.data(), 0);
     accFunction_->fill_with_jet(dim, ref_point.components(), 1, G_ref.components(), JG_ref.data(), 0);
     
@@ -894,7 +899,8 @@ void ColorCurve::classify_continuous_curve(std::deque<RealVector> &original,
 //        ref_e_complex[i] = e[i].i;
 //    }
 
-    double s_p, s_q;
+    double s_p=0;
+    double s_q=0;
     std::vector<double> eigenvalue_p, eigenvalue_q;
     std::string ct_p, ct_q;
 
@@ -940,6 +946,8 @@ void ColorCurve::classify_continuous_curve(std::deque<RealVector> &original,
         for (int j = 0; j < fam; j++) hpl.eigenvalue[0].component(j) = eigenvalue_p[j];
 
         q = original[i];
+        
+        
         type_q = classify_point(q, s_q, eigenvalue_q, ct_q);
 
         std::vector<HugoniotPolyLine> segment_classified;
