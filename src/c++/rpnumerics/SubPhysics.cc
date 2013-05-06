@@ -35,6 +35,24 @@ type_(type) {
 
 }
 
+
+//
+// SubPhysics::SubPhysics(const FluxFunction & fluxFunction, const AccumulationFunction & accumulationFunction,
+//         const Boundary & boundary,  Viscosity_Matrix * viscosityMatrix,const Space & space, const char * id, int type):fluxFunction_((FluxFunction *) fluxFunction.clone()),
+//accumulationFunction_((AccumulationFunction*) accumulationFunction.clone()), viscosityMatrix_(viscosityMatrix),
+//boundary_(boundary.clone()),
+//space_(new Space(space)),
+//ID_(id),
+//type_(type) {
+//     
+//     
+//     
+//     
+// }
+
+
+
+
 const Space &SubPhysics::domain() const {
     return *space_;
 }
@@ -79,8 +97,20 @@ Hugoniot_Locus * SubPhysics::getHugoniotFunction()const {
 }
 
 void SubPhysics::setHugoniotFunction(Hugoniot_Locus *hf) {
+
     hugoniotFunction_ = hf;
 }
+
+
+Viscosity_Matrix * SubPhysics::getViscosityMatrix() const{
+    return viscosityMatrix_;
+}
+    
+void SubPhysics::setViscosityMatrix(Viscosity_Matrix * newViscosityMatrix){
+
+    viscosityMatrix_=newViscosityMatrix;
+}
+
 
 void SubPhysics::setDoubleContactFunction(Double_Contact_Function *dcf) {
     doubleContactFunction_ = dcf;
@@ -125,6 +155,8 @@ SubPhysics::~SubPhysics() {
     delete accumulationFunction_;
     delete boundary_;
     delete preProcessedBoundary_;
+    
+    delete viscosityMatrix_;
 
 
 }

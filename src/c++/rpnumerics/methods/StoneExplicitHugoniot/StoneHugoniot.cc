@@ -29,7 +29,7 @@ int StoneHugoniot::classified_curve(const FluxFunction *f, const AccumulationFun
 int StoneHugoniot::classified_curve(const FluxFunction *f, const AccumulationFunction *a,
         GridValues &g, const RealVector &r,
         std::vector<HugoniotPolyLine> &hugoniot_curve, std::vector<RealVector> &transitionList,
-        std::vector<bool> &circular) {
+        std::vector<bool> &circular,const Viscosity_Matrix * vm) {
 
 
 
@@ -63,7 +63,7 @@ int StoneHugoniot::classified_curve(const FluxFunction *f, const AccumulationFun
             out);
     delete q2eh;
 
-    ColorCurve colorCurve(*f, *a);
+    ColorCurve colorCurve(*f, *a,vm);
 
     for (int i = 0; i < out.size(); i++) {
 
