@@ -35,7 +35,8 @@ public class HugoniotSegGeom extends MultiPolyLine {
 
 
             if (segment.getType() == 0) {
-                attr = new ViewingAttr(new Color(128, 128, 128));
+//                attr = new ViewingAttr(new Color(128, 128, 128));
+                attr = new ViewingAttr(new Color(255,255,255));
             }
 
             if (segment.getType() == 1) {
@@ -83,7 +84,8 @@ public class HugoniotSegGeom extends MultiPolyLine {
             }
 
             if (segment.getType() == 12) {
-                attr = new ViewingAttr(new Color(128, 128, 128));
+//                attr = new ViewingAttr(new Color(128, 128, 128));
+                attr = new ViewingAttr(new Color(255,255,0));
             }
 
             if (segment.getType() == 13) {
@@ -95,7 +97,8 @@ public class HugoniotSegGeom extends MultiPolyLine {
             }
 
             if (segment.getType() == 15) {
-                attr = new ViewingAttr(new Color(128, 128, 128));
+//                attr = new ViewingAttr(new Color(128, 128, 128));
+                attr = new ViewingAttr(new Color(127,127,127));
             }
 
 
@@ -103,7 +106,7 @@ public class HugoniotSegGeom extends MultiPolyLine {
         if (DIRECTION == Orbit.BACKWARD_DIR) {
 
             if (segment.getType() == 0) {
-                attr = new ViewingAttr(new Color(128, 128, 128));
+                attr = new ViewingAttr(new Color(255, 255, 255));
             }
 
             if (segment.getType() == 1) {
@@ -115,7 +118,7 @@ public class HugoniotSegGeom extends MultiPolyLine {
             }
 
             if (segment.getType() == 3) {
-                attr = new ViewingAttr(new Color(128, 128, 128));
+                attr = new ViewingAttr(new Color(255,255,0));
             }
 
             if (segment.getType() == 4) {
@@ -163,7 +166,7 @@ public class HugoniotSegGeom extends MultiPolyLine {
             }
 
             if (segment.getType() == 15) {
-                attr = new ViewingAttr(new Color(128, 128, 128));
+                attr = new ViewingAttr(new Color(127, 127, 127));
             }
 
 

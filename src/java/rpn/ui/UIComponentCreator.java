@@ -1,7 +1,10 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ *
+ * Instituto de Matematica Pura e Aplicada - IMPA
+ * Departamento de Dinamica dos Fluidos
+ *
  */
+
 package rpn.ui;
 
 import java.util.Observable;
@@ -9,10 +12,7 @@ import javax.swing.JComponent;
 import rpn.configuration.Configuration;
 import rpn.configuration.ConfigurationProfile;
 
-/**
- *
- * @author edsonlan
- */
+
 public class UIComponentCreator extends Observable {
 
     Configuration configuration_;

@@ -27,6 +27,7 @@ PolydispersePhysics::PolydispersePhysics() : SubPhysics(Polydisperse(Polydispers
     setHugoniotFunction(new Hugoniot_Curve());
     setDoubleContactFunction(new Double_Contact());
     setShockMethod(new Shock());
+    setViscosityMatrix( new Viscosity_Matrix());
     preProcessedBoundary_=defaultBoundary();
 }
 
@@ -39,6 +40,7 @@ PolydispersePhysics::PolydispersePhysics(const PolydispersePhysics & copy) : Sub
     setHugoniotFunction(new Hugoniot_Curve());
     setDoubleContactFunction(new Double_Contact());
     setShockMethod(new Shock());
+      setViscosityMatrix( copy.getViscosityMatrix());
     preProcessedBoundary_=copy.getPreProcessedBoundary()->clone();
    
 }

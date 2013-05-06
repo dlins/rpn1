@@ -1,6 +1,8 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ *
+ * Instituto de Matematica Pura e Aplicada - IMPA
+ * Departamento de Dinamica dos Fluidos
+ *
  */
 package rpn.ui;
 
@@ -17,16 +19,9 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import rpn.configuration.Configuration;
 
-/**
- *
- * @author edsonlan
- */
 public class TextFieldCreator extends UIComponentCreator {
 
     private JFormattedTextField textField_;
-
-
-
 
     public TextFieldCreator(Configuration configuration, RPnInputComponent inputComponent) {
         super(configuration, inputComponent);
@@ -34,7 +29,7 @@ public class TextFieldCreator extends UIComponentCreator {
     }
 
     public TextFieldCreator(Configuration configuration, String configurationParameter) {
-        super(configuration,configurationParameter);
+        super(configuration, configurationParameter);
         textField_ = new JFormattedTextField();
 
     }
@@ -43,7 +38,7 @@ public class TextFieldCreator extends UIComponentCreator {
     public JComponent createUIComponent() {
 
         JPanel panel_ = new JPanel();
-        
+
         GridBagConstraints gridConstraints = new GridBagConstraints();
 
         gridConstraints.fill = GridBagConstraints.BOTH;
@@ -57,13 +52,13 @@ public class TextFieldCreator extends UIComponentCreator {
         GridLayout gridBayLayout = new GridLayout(configuration_.getParamsSize(), 1);
 
         panel_.setLayout(gridBayLayout);
-        
-
-            gridConstraints.gridx = 0;
-                panel_.add(createTextField(configurationParameter_, configuration_.getParam(configurationParameter_)));
 
 
-            gridConstraints.gridy++;
+        gridConstraints.gridx = 0;
+        panel_.add(createTextField(configurationParameter_, configuration_.getParam(configurationParameter_)));
+
+
+        gridConstraints.gridy++;
 
 
         return panel_;
@@ -71,9 +66,9 @@ public class TextFieldCreator extends UIComponentCreator {
     }
 
     private JPanel createTextField(String paramName, String paramValue) {
-        
-        
-        System.out.println(paramName +" "+ paramValue);
+
+
+        System.out.println(paramName + " " + paramValue);
 
         JFormattedTextField textField = new JFormattedTextField();
         GridBagConstraints gridConstraints = new GridBagConstraints();
@@ -102,8 +97,6 @@ public class TextFieldCreator extends UIComponentCreator {
 
     }
 
-  
-    
     private class TextValueHandler implements DocumentListener {
 
         private String paramName_;
@@ -131,12 +124,12 @@ public class TextFieldCreator extends UIComponentCreator {
         }
 
         public void removeUpdate(DocumentEvent arg0) {
+            
+            System.out.println("Evento remove");
         }
 
         public void changedUpdate(DocumentEvent arg0) {
+            System.out.println("Evento update");
         }
     }
-
-   
- 
 }
