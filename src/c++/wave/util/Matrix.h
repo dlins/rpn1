@@ -4,8 +4,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-
-
 /*    SIMPLE USE EXAMPLE:
 
 #include "Matrix.h"
@@ -34,33 +32,42 @@ int main(){
 }
 
      END OF EXAMPLE */
-using namespace std;
+
 template <typename T>
 class Matrix {
     private:
+
+    protected:
         T *vec;
         int rows_, cols_;
 
         int min(int x, int y);
 
+        void copy(int n, int m, const T *orig);
+
     public:
-        Matrix(void);
+        Matrix();
         Matrix(int n, int m);
         Matrix(const Matrix<T> &original);
+        Matrix(const Matrix<T> *original);
         Matrix(int n, int m, const T *original);
         ~Matrix();
 
-        T& operator()(int i, int j);
-        T& operator()(int i);
+        virtual T&       operator()(int i, int j);
+        virtual T const& operator()(int i, int j) const;
 
-        T* data(void);
+        virtual T&       operator()(int i);
+        virtual T const& operator()(int i) const;
+
+        virtual T*       data(void);
+        virtual T const* data(void) const;
 
         Matrix<T> operator=(const Matrix<T> &original);
 
         void resize(int newn, int newm);
 
-        int rows(void);
-        int cols(void);
+        int rows(void) const;
+        int cols(void) const;
 
         void size(int &r, int &c) const;
 };
@@ -69,27 +76,42 @@ template <typename T> int Matrix<T>::min(int x, int y){
     return (x < y) ? x : y;
 }
 
-template <typename T> Matrix<T>::Matrix(void){
-    cols_ = rows_ = 0;
+template <typename T> void Matrix<T>::copy(int n, int m, const T *orig){
+    resize(n, m);
+
+    for (int i = 0; i < n*m; i++) vec[i] = orig[i];
+
+    return;
+}
+
+template <typename T> Matrix<T>::Matrix(){
     vec = 0;
+
+    cols_ = rows_ = 0;
 }
 
 template <typename T> Matrix<T>::Matrix(int n, int m){
     vec = 0;
+
     resize(n, m);
 }
 
 template <typename T> Matrix<T>::Matrix(const Matrix<T> &original){
-    int n = original.rows_, m = original.cols_;
     vec = 0;
-    resize(n, m);
-    for (int i = 0; i < n*m; i++) vec[i] = original.vec[i];
+
+    copy(original.rows_, original.cols_, original.vec);
+}
+
+template <typename T> Matrix<T>::Matrix(const Matrix<T> *original){
+    vec = 0;
+
+    copy(original->rows_, original->cols_, original->vec);
 }
 
 template <typename T> Matrix<T>::Matrix(int n, int m, const T *original){
     vec = 0;
-    resize(n, m);
-    for (int i = 0; i < n*m; i++) vec[i] = original[i];
+
+    copy(n, m, original);
 }
 
 template <typename T> Matrix<T>::~Matrix(){
@@ -100,7 +122,15 @@ template <typename T> T& Matrix<T>::operator()(int i, int j){
     return vec[i*cols_ + j];
 }
 
+template <typename T> T const& Matrix<T>::operator()(int i, int j) const {
+    return vec[i*cols_ + j];
+}
+
 template <typename T> T& Matrix<T>::operator()(int i){
+    return vec[i];
+}
+
+template <typename T> T const& Matrix<T>::operator()(int i) const {
     return vec[i];
 }
 
@@ -108,35 +138,31 @@ template <typename T> T* Matrix<T>::data(void){
     return &vec[0];
 }
 
+template <typename T> T const* Matrix<T>::data(void) const {
+    return &vec[0];
+}
+
 template <typename T> Matrix<T> Matrix<T>::operator=(const Matrix<T> &original){
-//    printf("m em igual %d\n",original.cols_);
-//    printf("n em igual %d\n", original.rows_);
+    if (this != &original) copy(original.rows_, original.cols_, original.vec);
 
-
-    int n = original.rows_, m = original.cols_;
-    if (n != 0 && m != 0){
-    resize(n, m);
-    for (int i = 0; i < n*m; i++) vec[i] = original.vec[i];
-    }
     return *this;
 }
 
 template <typename T> void Matrix<T>::resize(int newn, int newm){
-//    printf("Matrix::resize: n = %d, m = %d\n", newn, newm);
     if (newn == 0 || newm == 0) return;
 
     if (vec == 0) vec = new T[newn*newm];
     else {
-        T *temp0 = new T[newn * newm];
+        T *temp = new T[newn * newm];
         for (int i = 0; i < min(rows_, newn); i++){
             for (int j = 0; j < min(cols_, newm); j++){
-                temp0[i*newm + j] = vec[i*cols_ + j];
+                temp[i*newm + j] = vec[i*cols_ + j];
             }
         }
-        T *temp1 = vec;
-        vec = temp0;
-        temp0 = temp1;
-        delete []temp0;
+
+        delete [] vec;
+
+        vec = temp;
     }
 
     rows_ = newn;
@@ -145,11 +171,11 @@ template <typename T> void Matrix<T>::resize(int newn, int newm){
     return;
 }
 
-template <typename T> int Matrix<T>::rows(void){
+template <typename T> int Matrix<T>::rows(void) const {
     return rows_;
 }
 
-template <typename T> int Matrix<T>::cols(void){
+template <typename T> int Matrix<T>::cols(void) const {
     return cols_;
 }
 
