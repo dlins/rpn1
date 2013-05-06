@@ -7,7 +7,10 @@
 
 #include "FluxFunction.h"
 #include "AccumulationFunction.h"
+
 #include "eigen.h"
+#include "ViscosityJetMatrix.h"
+#include "Viscosity_Matrix.h"
 
 #define INTERPOLATION_ERROR -1
 #define INTERPOLATION_OK     0
@@ -28,6 +31,7 @@ public:
     std::vector<RealVector>  point;  	  // Each element has size = dimension (dim).
     std::vector<double>      speed;       // Speed at each point.
     std::vector<RealVector>  eigenvalue;  // Each element has size = number of valid eigenvalues (fam).
+                                          // Notice that [ mu ~= lambda - s ] is stored.
 
     // Elements of segment, type (color) and signature
     //
@@ -81,15 +85,20 @@ class ColorCurve {
 
         FluxFunction * fluxFunction_;
         AccumulationFunction * accFunction_;
+        
+        const Viscosity_Matrix *vm;
 
         RealVector ref_point;
-        std::vector<double> ref_eigenvalue;
-        std::vector<double> ref_e_complex;
+//        std::vector<double> ref_eigenvalue;
+//        std::vector<double> ref_e_complex;
         
+        // The values at reference point are stored, as the Viscosity Matrix
         RealVector F_ref, G_ref;
+        DoubleMatrix JF_ref, JG_ref;
+        ViscosityJetMatrix B_ref;
     public:
 
-    ColorCurve(const FluxFunction &, const AccumulationFunction &);
+    ColorCurve(const FluxFunction &, const AccumulationFunction &, const Viscosity_Matrix*);
     virtual ~ColorCurve();
 
     void classify_segmented_curve(std::vector<RealVector>  &original, const RealVector &ref,
