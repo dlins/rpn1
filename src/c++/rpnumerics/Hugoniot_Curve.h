@@ -32,7 +32,7 @@ class Hugoniot_Curve : public Hugoniot_Locus {
         // For classification of segmented curves
         int classified_curve(const FluxFunction *f, const AccumulationFunction *a, 
                              GridValues &g, const RealVector &r, 
-                             std::vector<HugoniotPolyLine> &hugoniot_curve);
+                             std::vector<HugoniotPolyLine> &hugoniot_curve,const Viscosity_Matrix *);
 
         // For classification of continuous curves
 //        int classified_curve(const FluxFunction *f, const AccumulationFunction *a, 
@@ -44,7 +44,7 @@ class Hugoniot_Curve : public Hugoniot_Locus {
         int classified_curve(const FluxFunction *f, const AccumulationFunction *a,
                                      GridValues &g, const RealVector &r,
                                      std::vector<HugoniotPolyLine> &hugoniot_curve, std::vector<RealVector> &transitionList,
-                                     std::vector<bool> &circular) ;
+                                     std::vector<bool> &circular,const Viscosity_Matrix * vm ) ;
         
         
 
