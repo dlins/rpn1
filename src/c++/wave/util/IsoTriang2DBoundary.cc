@@ -118,7 +118,7 @@ void Three_Phase_Boundary::extension_curve(const FluxFunction *f, const Accumula
 
     Extension_Curve extension_curve;
    
-        extension_curve.curve(f, a, gv, singular, characteristic, fam,
+        extension_curve.curve(f, a, gv, characteristic, singular, fam,
                               seg,
                               c, d);
        return;

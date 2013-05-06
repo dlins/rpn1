@@ -72,6 +72,18 @@ vector<double> * TriPhase::getParams() {
 
 void TriPhase::setParams(vector<string> params) {
 
+    
+    
+    
+    for (int i = 0; i < params.size(); i++) {
+        cout <<"i: "<<i<<params[i]<<endl;
+
+
+    }
+
+    
+    
+    
 
     RealVector fluxParamVector(7);
 

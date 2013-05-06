@@ -47,7 +47,7 @@ void Viscous_Profile::Newton_improvement(const FluxFunction *ff, const Accumulat
     out.resize(2);
 
     // TODO: Improve this epsilon
-    double epsilon = 1e-10;
+    double epsilon = 1e-6;
     double anorm;
     double delta_U[2]; // = {10.0, 10.0};
 
@@ -125,11 +125,11 @@ void Viscous_Profile::critical_points_linearization(const FluxFunction *ff, cons
         std::vector<eigenpair> &ep) {
     ep.clear();
 
-    RealVector out;
-
-    Newton_improvement(ff, aa, speed, cp, ref, out);
-
-    cp=out;
+//    RealVector out;
+//
+//    Newton_improvement(ff, aa, speed, cp, ref, out);
+//
+//    cp=out;
 
     
 
@@ -141,7 +141,8 @@ void Viscous_Profile::critical_points_linearization(const FluxFunction *ff, cons
     //
     // [-speed*JG(cp[i]) + JF(cp[i])]*U_mu = mu*D(cp[i])*U_mu.
     //
-    Matrix<double> RH(2, 2), viscous(2, 2);
+    Matrix<double> RH(2, 2);
+    ViscosityJetMatrix viscous(2, 2,2);
     for (int k = 0; k < 2; k++) {
         for (int j = 0; j < 2; j++) {
             RH(k, j) = -speed * JG(k, j) + JF(k, j);
@@ -153,12 +154,12 @@ void Viscous_Profile::critical_points_linearization(const FluxFunction *ff, cons
     v->fill_viscous_matrix(cp, viscous);
 
     //std::vector<eigenpair> e;
-    Eigen::eig(2, RH.data(), viscous.data(), ep);
+    Eigen::eig(2, RH.data(), viscous.M().data(), ep);
 
-    //cout << "Ponto no metodo: " << cp << endl;
+    cout << "Ponto no metodo: " << cp << endl;
 
-    //cout << "eigen0RR: " << ep[0].r << endl;
-    //cout << "eigen1RR: " << ep[1].r << endl;
+    cout << "eigen0RR: " << ep[0].r << endl;
+    cout << "eigen1RR: " << ep[1].r << endl;
 
     //ep.push_back(e);
 
@@ -370,16 +371,16 @@ int Viscous_Profile::orbit(const FluxFunction *ff, const AccumulationFunction *a
 int Viscous_Profile::orbit_flux(int *neq, double *xi, double *in, double *out, int *nparam, double *param) {
     // Compute the viscous matrix for the current point and invert it
     RealVector p(2, in);
-    Matrix<double> vm(2, 2);
+    ViscosityJetMatrix vm(2, 2,2);
     vmf->fill_viscous_matrix(p, vm);
 
-    double inv_det = 1.0 / (vm(0, 0) * vm(1, 1) - vm(0, 1) * vm(1, 0));
+    double inv_det = 1.0 / (vm.M()(0, 0) * vm.M()(1, 1) - vm.M()(0, 1) * vm.M()(1, 0));
 
     Matrix<double> inv_D(2, 2);
-    inv_D(0, 0) = vm(1, 1) * inv_det;
-    inv_D(0, 1) = -vm(0, 1) * inv_det;
-    inv_D(1, 0) = -vm(1, 0) * inv_det;
-    inv_D(1, 1) = vm(0, 0) * inv_det;
+    inv_D(0, 0) = vm.M()(1, 1) * inv_det;
+    inv_D(0, 1) = -vm.M()(0, 1) * inv_det;
+    inv_D(1, 0) = -vm.M()(1, 0) * inv_det;
+    inv_D(1, 1) = vm.M()(0, 0) * inv_det;
 
     // Fill some stuff
     //

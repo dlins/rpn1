@@ -33,7 +33,7 @@
                     <PHYSICSPARAM name="lcg" position="17" value ="1.0" />
                     <PHYSICSPARAM name="lcw" position="18" value ="1.0" />
                     
-                    <PHYSICSPARAM name="eps" position="19" value ="0.1" />
+                    <PHYSICSPARAM name="eps" position="19" value ="0.0" />
 
                 </PHYSICSCONFIG>
 
