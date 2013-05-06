@@ -12,9 +12,6 @@
  */
 #include "Hugoniot_Locus.h"
 
-
- Hugoniot_Locus::~Hugoniot_Locus(){}
-
 /*
  * ---------------------------------------------------------------
  * Definitions:
