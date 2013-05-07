@@ -67,7 +67,7 @@
     <CURVECONFIGURATION name="doublecontactcurve">
         <CURVEPARAM name="curvefamily" value="1"/>
         <CURVEPARAM name="domainfamily" value="1"/>
-        <CURVEPARAM name="resolution" value="60 60"/>
+        <CURVEPARAM name="resolution" value="30 30"/>
     </CURVECONFIGURATION>
 
 
