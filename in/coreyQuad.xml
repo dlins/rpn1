@@ -19,6 +19,10 @@
             </PHYSICS>
 
 
+            <METHOD name="Newton">
+                <METHODPARAM  name="tolerance" value="0.001" />
+            </METHOD>
+
     
        
 
