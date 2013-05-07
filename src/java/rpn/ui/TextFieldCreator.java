@@ -83,12 +83,11 @@ public class TextFieldCreator extends UIComponentCreator {
 
         textField_.add(textField);
 
-        textField.getDocument().addDocumentListener(new TextValueHandler(paramValue));
+        textField.getDocument().addDocumentListener(new TextValueHandler());
 
         JLabel label = new JLabel(paramName);
 
         gridConstraints.gridx = 0;
-//        gridConstraints.ipadx = 20;
         textPanel.add(label, gridConstraints);
         gridConstraints.gridx = 1;
         textPanel.add(textField, gridConstraints);
@@ -99,11 +98,8 @@ public class TextFieldCreator extends UIComponentCreator {
 
     private class TextValueHandler implements DocumentListener {
 
-        private String paramName_;
 
-        public TextValueHandler(String paramName_) {
-            this.paramName_ = paramName_;
-        }
+
 
         public void insertUpdate(DocumentEvent arg0) {
 
@@ -112,7 +108,8 @@ public class TextFieldCreator extends UIComponentCreator {
 
             try {
                 String newValue = doc.getText(0, doc.getLength());
-                configuration_.setParamValue(paramName_, newValue);
+                configuration_.setParamValue(configurationParameter_, newValue);
+
 
 
             } catch (BadLocationException ex) {

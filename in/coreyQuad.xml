@@ -23,10 +23,6 @@
                 <METHODPARAM  name="tolerance" value="0.001" />
             </METHOD>
 
-    
-       
-
-
             <CURVECONFIGURATION name="hugoniotcurve">
                 <CURVEPARAM name="resolution" value="250 250"/>
             </CURVECONFIGURATION>
@@ -85,12 +81,16 @@
 
 
             </CURVECONFIGURATION>
-
+            
+            
             <CURVECONFIGURATION name="rarefactionextension">
                 <CURVEPARAM name="curvefamily" value="0"/>
-                <CURVEPARAM name="characteristic" value="1"/>
                 <CURVEPARAM name="resolution" value="128 128"/>
+                <CURVEPARAM name="extensionfamily" value="1"/>
+                <CURVEPARAM name="characteristic" value="1"/>
             </CURVECONFIGURATION>
+
+       
 
             <CURVECONFIGURATION name="fundamentalcurve">
                 <CURVEPARAM name="direction" value="20"/>
