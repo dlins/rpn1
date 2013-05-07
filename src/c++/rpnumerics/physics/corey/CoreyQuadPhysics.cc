@@ -11,7 +11,7 @@
  * Includes:
  */
 #include "CoreyQuadPhysics.h"
-#include "Hugoniot_Curve.h"
+
 
 /*
  * ---------------------------------------------------------------
@@ -22,6 +22,17 @@
 
 CoreyQuadPhysics::CoreyQuadPhysics() : SubPhysics(CoreyQuad(CoreyQuad_Params()), StoneAccumulation(), *defaultBoundary(), Multid::PLANE, "CoreyQuad", _SIMPLE_ACCUMULATION_) {
     setHugoniotFunction(new Hugoniot_Curve());
+
+    setDoubleContactFunction(new Double_Contact());
+    setShockMethod(new Shock());
+    setViscosityMatrix(new Viscosity_Matrix());
+    preProcessedBoundary_ = defaultBoundary();
+
+
+
+
+
+
 }
 
 SubPhysics * CoreyQuadPhysics::clone()const {
@@ -31,6 +42,15 @@ SubPhysics * CoreyQuadPhysics::clone()const {
 
 CoreyQuadPhysics::CoreyQuadPhysics(const CoreyQuadPhysics & copy) : SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.getBoundary(), copy.domain(), "CoreyQuad", _SIMPLE_ACCUMULATION_) {
     setHugoniotFunction(new Hugoniot_Curve());
+
+
+    setDoubleContactFunction(new Double_Contact());
+    setShockMethod(new Shock());
+    setViscosityMatrix(copy.getViscosityMatrix());
+    preProcessedBoundary_ = copy.getPreProcessedBoundary()->clone();
+
+
+
 }
 
 CoreyQuadPhysics::~CoreyQuadPhysics() {
@@ -39,7 +59,7 @@ CoreyQuadPhysics::~CoreyQuadPhysics() {
 
 void CoreyQuadPhysics::setParams(vector<string> newParams) {
 
-   
+
     RealVector fluxParamVector(7);
 
     //Flux params
@@ -58,22 +78,21 @@ void CoreyQuadPhysics::setParams(vector<string> newParams) {
 
 }
 
+vector<double> * CoreyQuadPhysics::getParams() {
 
-vector<double> *  CoreyQuadPhysics::getParams(){
-     
-     
-     vector<double> * paramsVector = new vector<double>();
-      
-      for (int i = 0; i < fluxFunction_->fluxParams().params().size(); i++) {
-          paramsVector->push_back(fluxFunction_->fluxParams().params().component(i));
+
+    vector<double> * paramsVector = new vector<double>();
+
+    for (int i = 0; i < fluxFunction_->fluxParams().params().size(); i++) {
+        paramsVector->push_back(fluxFunction_->fluxParams().params().component(i));
 
     }
 
-      return paramsVector;
+    return paramsVector;
 
 }
 
-Boundary * CoreyQuadPhysics::defaultBoundary() const{
+Boundary * CoreyQuadPhysics::defaultBoundary() const {
 
     RealVector min(2);
 
