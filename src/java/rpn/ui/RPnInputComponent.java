@@ -49,7 +49,7 @@ public class RPnInputComponent extends Observable implements Observer{//TODO Ref
 
     private JPanel panel_ = new JPanel();
     private JSlider slider_;
-    private JComponent[] textField_;
+    private JFormattedTextField[] textField_;
     private String [] stringValues_;
     private JLabel[] label_;
     private DecimalFormat formatter_;
@@ -444,19 +444,8 @@ public class RPnInputComponent extends Observable implements Observer{//TODO Ref
     }
 
     public JFormattedTextField[] getTextField() {
-        
-        ArrayList<JFormattedTextField> textFieldArrayList = new ArrayList<JFormattedTextField>();
-        
-        for(JComponent component : textField_){
-            if (component instanceof JFormattedTextField){
-                textFieldArrayList.add((JFormattedTextField)component);
-            }
-            
-        }
-        
-        return (JFormattedTextField[]) textFieldArrayList.toArray();
-        
-//        return textField_;
+              
+        return textField_;
     }
 
     public void setRelativeRange(int min, int max) {
