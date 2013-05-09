@@ -211,9 +211,11 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setMethod
     }
 
 
-    if (RpNumerics::getPhysics().ID().compare("Quad2") == 0) {
+    if (RpNumerics::getPhysics().ID().compare("QuadraticR2") == 0) {
+        
+        cout <<"Nome do metodo: "<<nativeMethodName<<endl;
 
-        if (nativeMethodType.compare("hugoniotmethod")) {
+        if (nativeMethodType.compare("hugoniotmethod")==0) {
 
             if (nativeMethodName.compare("explicit")) {
                 RpNumerics::getPhysics().getSubPhysics(0).setHugoniotFunction(new Quad2Hugoniot());
