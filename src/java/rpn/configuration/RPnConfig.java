@@ -27,6 +27,7 @@ import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnRadioButtonToStone;
 import rpn.RPnSchearerSchaeffer;
 import rpn.RPnStoneToStone;
+import rpn.RPnViscosityMatrix;
 import rpn.controller.phasespace.NumConfigImpl;
 
 import rpn.parser.RPnDataModule;
@@ -57,7 +58,7 @@ public class RPnConfig {
     public static void createParamsFluxSubject(String physicsName) {
 
         if (physicsName.equals("QuadraticR2")) {
-            teste = new RPnFluxParamsSubject[4];
+            teste = new RPnFluxParamsSubject[5];
 
             Configuration physicsConfiguration = RPNUMERICS.getConfiguration(physicsName);
 
@@ -106,11 +107,14 @@ public class RPnConfig {
             teste[1] = new RPnPalmeira(new String[3], new String[]{"B1", "B2", "C"});
             teste[2] = new RPnCorey(new String[2], new String[]{"A", "B"});
             teste[3] = new RPnFluxConvexCombination(values, finalNames);
+            teste[4]= new RPnViscosityMatrix(new String[4], new String[]{"f1","g1","f2","g2"});
+            
 
             teste[0].attach(paramObserver);
             teste[1].attach(paramObserver);
             teste[2].attach(paramObserver);
             teste[3].attach(paramObserver);
+            teste[4].attach(paramObserver);
 
 
         }

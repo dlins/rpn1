@@ -9,12 +9,12 @@ Quad2::Quad2(const Quad2FluxParams & params) : SubPhysics(*defaultBoundary(), *n
 
     DEFAULT_SIGMA = "-.021";
     DEFAULT_XZERO = ".13 .07";
-   
+
     setHugoniotFunction(new Hugoniot_Curve());
     setDoubleContactFunction(new Double_Contact());
-    setViscosityMatrix( new Viscosity_Matrix());
+    setViscosityMatrix(new Viscosity_Matrix());
     setShockMethod(new Shock());
-    preProcessedBoundary_= defaultBoundary();
+    preProcessedBoundary_ = defaultBoundary();
 
 
 }
@@ -50,13 +50,13 @@ Quad2::Quad2(const Quad2 & copy) : SubPhysics(copy.fluxFunction(), copy.accumula
     setHugoniotFunction(new Hugoniot_Curve());
     setDoubleContactFunction(new Double_Contact());
     setShockMethod(new Shock());
-     setViscosityMatrix( copy.getViscosityMatrix());
-    preProcessedBoundary_=copy.getPreProcessedBoundary()->clone();
+    setViscosityMatrix(copy.getViscosityMatrix());
+    preProcessedBoundary_ = copy.getPreProcessedBoundary()->clone();
 }
 
 void Quad2::setParams(vector<string> params) {
 
-    
+
     RealVector fluxParamVector(10);
 
     //Flux params
@@ -66,25 +66,44 @@ void Quad2::setParams(vector<string> params) {
 
         fluxParamVector.component(i) = paramValue;
 
-
     }
-  
+
+    //Viscosity Matrix
+
+
+    RealVector viscosityElements(4);
+
+    viscosityElements(0) = atof(params[10].c_str());
+    viscosityElements(1) = atof(params[11].c_str());
+    viscosityElements(2) = atof(params[12].c_str());
+    viscosityElements(3) = atof(params[13].c_str());
+    
+
+    Quad2_Viscosity_Matrix *  viscosityMatrix = new Quad2_Viscosity_Matrix (viscosityElements);
+
+    delete getViscosityMatrix();
+
+    setViscosityMatrix(viscosityMatrix);
+
+
+
+
+
     fluxFunction_->fluxParams(Quad2FluxParams(fluxParamVector));
 
 }
 
+vector<double> * Quad2::getParams() {
 
-vector<double> *  Quad2::getParams(){
-     
-     
-     
-     vector<double> * paramsVector = new vector<double>();
-      
-      for (int i = 0; i < fluxFunction_->fluxParams().params().size(); i++) {
-          paramsVector->push_back(fluxFunction_->fluxParams().params().component(i));
+
+
+    vector<double> * paramsVector = new vector<double>();
+
+    for (int i = 0; i < fluxFunction_->fluxParams().params().size(); i++) {
+        paramsVector->push_back(fluxFunction_->fluxParams().params().component(i));
 
     }
 
-      return paramsVector;
+    return paramsVector;
 
 }
