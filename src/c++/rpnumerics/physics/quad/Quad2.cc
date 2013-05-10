@@ -56,7 +56,7 @@ Quad2::Quad2(const Quad2 & copy) : SubPhysics(copy.fluxFunction(), copy.accumula
 
 void Quad2::setParams(vector<string> params) {
 
-
+    
     RealVector fluxParamVector(10);
 
     //Flux params
@@ -68,8 +68,7 @@ void Quad2::setParams(vector<string> params) {
 
 
     }
-
-
+  
     fluxFunction_->fluxParams(Quad2FluxParams(fluxParamVector));
 
 }
