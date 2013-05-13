@@ -197,7 +197,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setMethod
         if (nativeMethodType.compare("hugoniotmethod") == 0) {
 
 
-            if (nativeMethodName.compare("explicit")) {
+            if (nativeMethodName.compare("explicit")==0) {
 
                 RpNumerics::getPhysics().getSubPhysics(0).setHugoniotFunction(new StoneHugoniot());
 
@@ -217,7 +217,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setMethod
 
         if (nativeMethodType.compare("hugoniotmethod")==0) {
 
-            if (nativeMethodName.compare("explicit")) {
+            if (nativeMethodName.compare("explicit")==0) {
                 RpNumerics::getPhysics().getSubPhysics(0).setHugoniotFunction(new Quad2Hugoniot());
             } else {
                 RpNumerics::getPhysics().getSubPhysics(0).setHugoniotFunction(new Hugoniot_Curve());

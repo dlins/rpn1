@@ -25,18 +25,16 @@
 class Quad2_Viscosity_Matrix : public Viscosity_Matrix {
 private:
 
-    double f1,g1,f2,g2;
-    
-    
+    double f1, g1, f2, g2;
+
+
 public:
     Quad2_Viscosity_Matrix(const RealVector &);
 
 
     void fill_viscous_matrix(const RealVector &p, ViscosityJetMatrix &m, int degree);
 
-    bool is_identity(void) {
-        return false;
-    }
+    bool is_identity(void);
 
 };
 

@@ -101,7 +101,6 @@ public class RPNUMERICS {
 
                 paramsArray[i] = fluxFunctionConfig.getParam(i);
 
-
             }
 
             setParams(paramsArray);

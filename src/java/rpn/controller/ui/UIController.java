@@ -162,7 +162,7 @@ public class UIController extends ComponentUI {
         @Override
         public void mouseDragged(MouseEvent event) {
 
-            System.out.println("Botao: " + event.getModifiersEx());
+
             if (event.getModifiersEx() == MouseEvent.BUTTON1_DOWN_MASK) {
 
 

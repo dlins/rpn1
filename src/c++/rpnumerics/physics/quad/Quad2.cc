@@ -70,20 +70,32 @@ void Quad2::setParams(vector<string> params) {
 
     //Viscosity Matrix
 
+    double f1 = atof(params[10].c_str());
+    double g1 = atof(params[11].c_str());
+    double f2 = atof(params[12].c_str());
+    double g2 = atof(params[13].c_str());
 
-    RealVector viscosityElements(4);
+    if (!(f1 == 1.0 && g1 == 0.0 && f2 == 0.0 && g2 == 1.0)) {
+        cout <<"Setando a matriz de viscosidade"<<endl;
+        RealVector viscosityElements(4);
+        viscosityElements(0) = f1;
+        viscosityElements(1) = g1;
+        viscosityElements(2) = f2;
+        viscosityElements(3) = g2;
 
-    viscosityElements(0) = atof(params[10].c_str());
-    viscosityElements(1) = atof(params[11].c_str());
-    viscosityElements(2) = atof(params[12].c_str());
-    viscosityElements(3) = atof(params[13].c_str());
-    
+        Quad2_Viscosity_Matrix * viscosityMatrix = new Quad2_Viscosity_Matrix(viscosityElements);
 
-    Quad2_Viscosity_Matrix *  viscosityMatrix = new Quad2_Viscosity_Matrix (viscosityElements);
+        delete getViscosityMatrix();
 
-    delete getViscosityMatrix();
+        setViscosityMatrix(viscosityMatrix);
+    }
+    else {
+        delete getViscosityMatrix();
+        setViscosityMatrix(new Viscosity_Matrix());
 
-    setViscosityMatrix(viscosityMatrix);
+    }
+
+
 
 
 
