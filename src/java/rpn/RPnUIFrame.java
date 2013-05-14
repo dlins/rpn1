@@ -555,11 +555,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             checkBox.addItemListener(new PanelsSeletectedListener(mainFrame));
             panelsChooserPanel_.add(checkBox);
         }
-
         
-        System.out.println("Tamanho dos aux:"+getAuxFrames().length);
+
         for (RPnPhaseSpaceFrame auxFrame : getAuxFrames()) {
-            System.out.println(auxFrame);
             JCheckBox checkBox = new JCheckBox(auxFrame.getTitle());
             checkBox.addItemListener(new PanelsSeletectedListener(auxFrame));
             panelsChooserPanel_.add(checkBox);
