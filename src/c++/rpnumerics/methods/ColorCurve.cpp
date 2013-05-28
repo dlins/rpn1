@@ -534,13 +534,6 @@ int ColorCurve::classify_point(RealVector &p, double &s, std::vector<double> &ei
 
     std::vector<eigenpair> e;
 
-    cout << " valor em classify point:" << B_ref.M()(0, 0) << endl;
-    cout << " valor em classify point:" << B_ref.M()(0, 1) << endl;
-    cout << " valor em classify point:" << B_ref.M()(1, 0) << endl;
-    cout << " valor em classify point:" << B_ref.M()(1, 1) << endl;
-
-
-
 
     Eigen::eig(dim, (JF_ref - s * JG_ref).data(), B_ref.M().data(), e);
 

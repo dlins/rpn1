@@ -58,11 +58,16 @@ void Quad2::setParams(vector<string> params) {
 
 
     RealVector fluxParamVector(10);
-
+    double paramValue;
     //Flux params
     for (int i = 0; i < fluxParamVector.size(); i++) {
 
-        double paramValue = atof(params[i].c_str());
+
+
+        std::stringstream stream(params[i]);
+        stream >> paramValue;
+
+
 
         fluxParamVector.component(i) = paramValue;
 
@@ -70,26 +75,35 @@ void Quad2::setParams(vector<string> params) {
 
     //Viscosity Matrix
 
-    double f1 = atof(params[10].c_str());
-    double g1 = atof(params[11].c_str());
-    double f2 = atof(params[12].c_str());
-    double g2 = atof(params[13].c_str());
+
+    double f1, g1, f2, g2;
+
+    std::stringstream f1Stream(params[10]);
+    std::stringstream g1Stream(params[11]);
+    std::stringstream f2Stream(params[12]);
+    std::stringstream g2Stream(params[13]);
+
+
+    f1Stream >> f1;
+    g1Stream >> g1;
+    f2Stream >> f2;
+    g2Stream >> g2;
+
 
     if (!(f1 == 1.0 && g1 == 0.0 && f2 == 0.0 && g2 == 1.0)) {
-        cout <<"Setando a matriz de viscosidade"<<endl;
+
         RealVector viscosityElements(4);
-        viscosityElements(0) = f1;
-        viscosityElements(1) = g1;
-        viscosityElements(2) = f2;
-        viscosityElements(3) = g2;
+        f1Stream >> viscosityElements(0);
+        g1Stream >> viscosityElements(1);
+        f2Stream >> viscosityElements(2);
+        g2Stream >> viscosityElements(3);
 
         Quad2_Viscosity_Matrix * viscosityMatrix = new Quad2_Viscosity_Matrix(viscosityElements);
 
         delete getViscosityMatrix();
 
         setViscosityMatrix(viscosityMatrix);
-    }
-    else {
+    } else {
         delete getViscosityMatrix();
         setViscosityMatrix(new Viscosity_Matrix());
 

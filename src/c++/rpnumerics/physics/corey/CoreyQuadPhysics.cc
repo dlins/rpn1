@@ -12,7 +12,6 @@
  */
 #include "CoreyQuadPhysics.h"
 
-
 /*
  * ---------------------------------------------------------------
  * Definitions:
@@ -61,11 +60,12 @@ void CoreyQuadPhysics::setParams(vector<string> newParams) {
 
 
     RealVector fluxParamVector(7);
-
+    double paramValue ;
     //Flux params
     for (int i = 0; i < fluxParamVector.size(); i++) {
+        std::stringstream stream(newParams[i]);
+        stream >> paramValue;
 
-        double paramValue = atof(newParams[i].c_str());
 
         fluxParamVector.component(i) = paramValue;
 

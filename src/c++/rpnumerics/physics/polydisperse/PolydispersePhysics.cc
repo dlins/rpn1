@@ -15,7 +15,6 @@
 #include "Double_Contact.h"
 #include "Shock.h"
 
-
 /*
  * ---------------------------------------------------------------
  * Definitions:
@@ -27,8 +26,8 @@ PolydispersePhysics::PolydispersePhysics() : SubPhysics(Polydisperse(Polydispers
     setHugoniotFunction(new Hugoniot_Curve());
     setDoubleContactFunction(new Double_Contact());
     setShockMethod(new Shock());
-    setViscosityMatrix( new Viscosity_Matrix());
-    preProcessedBoundary_=defaultBoundary();
+    setViscosityMatrix(new Viscosity_Matrix());
+    preProcessedBoundary_ = defaultBoundary();
 }
 
 SubPhysics * PolydispersePhysics::clone()const {
@@ -40,9 +39,9 @@ PolydispersePhysics::PolydispersePhysics(const PolydispersePhysics & copy) : Sub
     setHugoniotFunction(new Hugoniot_Curve());
     setDoubleContactFunction(new Double_Contact());
     setShockMethod(new Shock());
-      setViscosityMatrix( copy.getViscosityMatrix());
-    preProcessedBoundary_=copy.getPreProcessedBoundary()->clone();
-   
+    setViscosityMatrix(copy.getViscosityMatrix());
+    preProcessedBoundary_ = copy.getPreProcessedBoundary()->clone();
+
 }
 
 PolydispersePhysics::~PolydispersePhysics() {
@@ -51,12 +50,14 @@ PolydispersePhysics::~PolydispersePhysics() {
 
 void PolydispersePhysics::setParams(vector<string> newParams) {
 
- RealVector fluxParamVector(7);
-
+    RealVector fluxParamVector(7);
+    double paramValue;
     //Flux params
     for (int i = 0; i < fluxParamVector.size(); i++) {
 
-        double paramValue = atof(newParams[i].c_str());
+        std::stringstream stream(newParams[i]);
+        stream >> paramValue;
+
 
         fluxParamVector.component(i) = paramValue;
 
@@ -70,23 +71,22 @@ void PolydispersePhysics::setParams(vector<string> newParams) {
 
 }
 
+vector<double> * PolydispersePhysics::getParams() {
 
-vector<double> *  PolydispersePhysics::getParams(){
-     
-     
-     
-     vector<double> * paramsVector = new vector<double>();
-      
-      for (int i = 0; i < fluxFunction_->fluxParams().params().size(); i++) {
-          paramsVector->push_back(fluxFunction_->fluxParams().params().component(i));
+
+
+    vector<double> * paramsVector = new vector<double>();
+
+    for (int i = 0; i < fluxFunction_->fluxParams().params().size(); i++) {
+        paramsVector->push_back(fluxFunction_->fluxParams().params().component(i));
 
     }
 
-      return paramsVector;
+    return paramsVector;
 
 }
 
-Boundary * PolydispersePhysics::defaultBoundary() const{
+Boundary * PolydispersePhysics::defaultBoundary() const {
 
     RealVector min(2);
 

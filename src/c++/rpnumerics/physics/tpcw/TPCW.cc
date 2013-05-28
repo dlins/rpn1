@@ -77,11 +77,11 @@ SubPhysics(*defaultBoundary(), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATIO
     setDoubleContactFunction(new Double_Contact_TP());
     setShockMethod(new ShockContinuationMethod3D2D());
 
-        
+
     RealVector min(getBoundary().minimums());
 
     RealVector max(getBoundary().maximums());
-    
+
 
 
 
@@ -120,11 +120,12 @@ void TPCW::setParams(vector<string> params) {
     TD->UTypical(atof(params[11].c_str()));
 
     RealVector fluxParamVector(8);
-
+    double paramValue;
     //Flux params
     for (int i = 0; i < fluxParamVector.size(); i++) {
+        std::stringstream stream(params[i]);
+        stream >> paramValue;
 
-        double paramValue = atof(params[i].c_str());
         fluxParamVector.component(i) = paramValue;
     }
 
@@ -142,35 +143,31 @@ void TPCW::setParams(vector<string> params) {
 
 }
 
+vector<double> * TPCW::getParams() {
 
 
-vector<double> *  TPCW::getParams(){
-     
-     
-     
-     vector<double> * paramsVector = new vector<double>();
-      
-      for (int i = 0; i < fluxFunction_->fluxParams().params().size(); i++) {
-          paramsVector->push_back(fluxFunction_->fluxParams().params().component(i));
+
+    vector<double> * paramsVector = new vector<double>();
+
+    for (int i = 0; i < fluxFunction_->fluxParams().params().size(); i++) {
+        paramsVector->push_back(fluxFunction_->fluxParams().params().component(i));
 
     }
-     
-     for (int i = 0; i < accumulationFunction_->accumulationParams().params().size(); i++) {
 
-         
-         paramsVector->push_back( accumulationFunction_->accumulationParams().component(i));
+    for (int i = 0; i < accumulationFunction_->accumulationParams().params().size(); i++) {
+
+
+        paramsVector->push_back(accumulationFunction_->accumulationParams().component(i));
 
 
     }
 
-     
 
 
-      return paramsVector;
+
+    return paramsVector;
 
 }
-
-
 
 TPCW::TPCW(const TPCW & copy) :
 SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.getBoundary(), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATION_),
@@ -181,12 +178,12 @@ TD(new Thermodynamics_SuperCO2_WaterAdimensionalized(*copy.TD)) {
     setDoubleContactFunction(new Double_Contact_TP());
     setShockMethod(new ShockContinuationMethod3D2D());
 
-    
+
     RealVector min = copy.preProcessedBoundary_->minimums();
     RealVector max = copy.preProcessedBoundary_->maximums();
-    
-    
-    preProcessedBoundary_ = new RectBoundary(min,max);
+
+
+    preProcessedBoundary_ = new RectBoundary(min, max);
 
 
 }
