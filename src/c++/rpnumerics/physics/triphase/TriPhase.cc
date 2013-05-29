@@ -119,22 +119,7 @@ void TriPhase::setParams(vector<string> params) {
 }
 
 Boundary * TriPhase::defaultBoundary() const {
-    //
-    //    RealVector A(2);
-    //
-    //    A.component(0) = 0;
-    //    A.component(1) = 0;
-    //
-    //    RealVector B(2);
-    //
-    //    B.component(0) = 0;
-    //    B.component(1) = 1;
-    //
-    //    RealVector C(2);
-    //
-    //    C.component(0) = 1;
-    //    C.component(1) = 0;
-
+    
 
     return new Three_Phase_Boundary();
 
