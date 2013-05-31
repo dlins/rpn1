@@ -24,6 +24,7 @@ public class RPnCoreyBrooks extends RPnFluxParamsSubject {
     public void setValues(String[] stringArray) {
         System.out.println("Entrei no setValues de CoreyBrooks");
         String[] newState = new String[RPNUMERICS.getFluxParams().getParams().getSize()];
+        RealVector fluxParams = RPNUMERICS.getFluxParams().getParams();
 
         newState[0] = "1.5";
         newState[1] = "1";
@@ -71,10 +72,16 @@ public class RPnCoreyBrooks extends RPnFluxParamsSubject {
         newState[17] = "0";
         newState[18] = "0";
 
-        newState[20] = "0";
-        newState[21] = "0";
-        newState[22] = "0";
-        newState[23] = "0";
+        
+        
+        
+        newState[20] = String.valueOf(fluxParams.getElement(20));
+        newState[21] = String.valueOf(fluxParams.getElement(21));
+        newState[22] = String.valueOf(fluxParams.getElement(22));
+        
+        
+       
+        newState[23] = stringArray[6];
         newState[24] = "1";
         newState[25] = "1";
         newState[26] = "1";

@@ -6,6 +6,7 @@ package rpn;
 
 import rpn.ui.RPnInputComponent;
 import rpnumerics.RPNUMERICS;
+import wave.util.RealVector;
 
 /**
  *
@@ -23,6 +24,7 @@ public class RPnStoneToStone extends RPnFluxParamsSubject {
     public void setValues(String[] stringArray) {
         System.out.println("Entrei no setValues de Stone");
         String[] newState = new String[RPNUMERICS.getFluxParams().getParams().getSize()];
+        RealVector fluxParams = RPNUMERICS.getFluxParams().getParams();
 
         newState[0] = "1.5";
         newState[1] = "1";
@@ -54,23 +56,26 @@ public class RPnStoneToStone extends RPnFluxParamsSubject {
         newState[5] = stringArray[2];
         newState[7] = stringArray[3];
         newState[8] = stringArray[4];
+        newState[9] = "0";
         newState[10] = stringArray[5];
         newState[11] = stringArray[6];
-        newState[12] = stringArray[7];
-        newState[13] = stringArray[8];
-        newState[14] = stringArray[9];
+        
+        newState[12] = String.valueOf(fluxParams.getElement(12));
+        newState[13] = String.valueOf(fluxParams.getElement(13));
+        newState[14] = String.valueOf(fluxParams.getElement(14));
 
-        newState[9] = "0";
-        newState[15] = "0";
-        newState[16] = "0";
-        newState[17] = "0";
+
+        newState[15] = stringArray[7];
+        newState[16] = stringArray[8];
+        newState[17] = stringArray[9];
         newState[18] = "0";
         newState[19] = "1";
 
-        newState[20] = "0";
-        newState[21] = "0";
-        newState[22] = "0";
-        newState[23] = "0";
+        newState[20] = String.valueOf(fluxParams.getElement(20));
+        newState[21] = String.valueOf(fluxParams.getElement(21));
+        newState[22] = String.valueOf(fluxParams.getElement(22));
+
+        newState[23] = "1";
         newState[24] = "1";
         newState[25] = "1";
         newState[26] = "1";
