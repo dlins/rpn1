@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package rpn;
 
 import rpn.ui.RPnInputComponent;
@@ -15,12 +14,10 @@ import wave.util.RealVector;
  */
 public class RPnCoreyBrooks extends RPnFluxParamsSubject {
 
-
     //*** Leandro teste
-    public RPnCoreyBrooks (String[] paramsValues, String[] paramsNames) {
+    public RPnCoreyBrooks(String[] paramsValues, String[] paramsNames) {
         super(new String[RPNUMERICS.getFluxParams().getParams().getSize()], "Corey-Brooks", paramsNames, paramsValues);
     }
-
 
     //*** Leandro teste
     @Override
@@ -51,7 +48,7 @@ public class RPnCoreyBrooks extends RPnFluxParamsSubject {
             newState[2] = "";
             newState[6] = "";
         }
-        
+
         newState[3] = stringArray[0];
         newState[4] = stringArray[1];
         newState[5] = stringArray[2];
@@ -63,16 +60,26 @@ public class RPnCoreyBrooks extends RPnFluxParamsSubject {
 
         double lambda = Double.parseDouble(stringArray[7]);
 
-        newState[7] = String.valueOf((2. + 3.*lambda)/lambda);
-        newState[8] = String.valueOf(2. + lambda/10.);
-        newState[9] = String.valueOf(1. + (2. + 3.*lambda)/lambda + lambda*lambda/30.);
-        newState[10] = String.valueOf(2. + lambda/10.);
-        newState[11] = String.valueOf((2. + 3.*lambda)/lambda);
+        newState[7] = String.valueOf((2. + 3. * lambda) / lambda);
+        newState[8] = String.valueOf(2. + lambda / 10.);
+        newState[9] = String.valueOf(1. + (2. + 3. * lambda) / lambda + lambda * lambda / 30.);
+        newState[10] = String.valueOf(2. + lambda / 10.);
+        newState[11] = String.valueOf((2. + 3. * lambda) / lambda);
 
         newState[15] = "0";
         newState[16] = "0";
         newState[17] = "0";
         newState[18] = "0";
+
+        newState[20] = "0";
+        newState[21] = "0";
+        newState[22] = "0";
+        newState[23] = "0";
+        newState[24] = "1";
+        newState[25] = "1";
+        newState[26] = "1";
+
+
 
 
         setState(newState);
@@ -80,7 +87,4 @@ public class RPnCoreyBrooks extends RPnFluxParamsSubject {
 
 
     }
-
-
-
 }

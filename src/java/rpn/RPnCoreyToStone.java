@@ -6,7 +6,6 @@ package rpn;
 
 import rpn.ui.RPnInputComponent;
 import rpnumerics.RPNUMERICS;
-import wave.util.RealVector;
 
 /**
  *
@@ -14,20 +13,18 @@ import wave.util.RealVector;
  */
 public class RPnCoreyToStone extends RPnFluxParamsSubject {
 
-    
     //*** Leandro teste
     public RPnCoreyToStone(String[] paramsValues, String[] paramsNames) {
         super(new String[RPNUMERICS.getFluxParams().getParams().getSize()], "Corey", paramsNames, paramsValues);
 
     }
 
-
     //*** Leandro teste
     @Override
     public void setValues(String[] stringArray) {      // no novo subject (radios) recebe o vetor de booleanos "como strings"
         System.out.println("Entrei no setValues de Corey");
         String[] newState = new String[RPNUMERICS.getFluxParams().getParams().getSize()];
-        
+
         newState[0] = "1.5";
         newState[1] = "1";
         newState[2] = "1";
@@ -72,12 +69,16 @@ public class RPnCoreyToStone extends RPnFluxParamsSubject {
         newState[18] = "0";
         newState[19] = "0";
 
-//        System.out.println("Valor do newState : ");
-//        for (String string : newState) {
-//            System.out.println(string);
-//        }
+
+        newState[20] = "0";
+        newState[21] = "0";
+        newState[22] = "0";
+        newState[23] = "0";
+        newState[24] = "1";
+        newState[25] = "1";
+        newState[26] = "1";
 
         setState(newState);
-        
+
     }
 }

@@ -45,12 +45,12 @@ import wave.util.RealVector;
 
 //**** tirar os listeners, que serao enviados para classes especializadas
 //**** basicamente, cada tipo de campo deverá ser tratado por uma classe especialista, munida de um listener
-public class RPnInputComponent extends Observable implements Observer{//TODO Refatorar
+public class RPnInputComponent extends Observable implements Observer {//TODO Refatorar
 
     private JPanel panel_ = new JPanel();
     private JSlider slider_;
     private JFormattedTextField[] textField_;
-    private String [] stringValues_;
+    private String[] stringValues_;
     private JLabel[] label_;
     private DecimalFormat formatter_;
     private DecimalFormat doubleFormatter_ = new DecimalFormat("0.000");
@@ -70,7 +70,7 @@ public class RPnInputComponent extends Observable implements Observer{//TODO Ref
     public static int rb = -1;
 
     public RPnInputComponent(RPnSubject subject) {
-        stringValues_= new String[subject.getParamsNames().length];
+        stringValues_ = new String[subject.getParamsNames().length];
         // desfazer a associacao com grupo
         JRadioButton[] option = new JRadioButton[3];
         ButtonGroup group = new ButtonGroup();
@@ -182,7 +182,7 @@ public class RPnInputComponent extends Observable implements Observer{//TODO Ref
     }
 
     public RPnInputComponent(RPnSubject subject, String sliderName) {
-     stringValues_= new String[subject.getParamsNames().length];
+        stringValues_ = new String[subject.getParamsNames().length];
         // desfazer a associacao com grupo
         JRadioButton[] option = new JRadioButton[3];
         ButtonGroup group = new ButtonGroup();
@@ -313,8 +313,8 @@ public class RPnInputComponent extends Observable implements Observer{//TODO Ref
     public RPnInputComponent(Configuration configuration, boolean useEvents) {
 
         textField_ = new JFormattedTextField[configuration.getParamsSize()];
-        
-        stringValues_= new String[configuration.getParamsSize()];
+
+        stringValues_ = new String[configuration.getParamsSize()];
 
         label_ = new JLabel[configuration.getParamsSize()];
 
@@ -331,7 +331,7 @@ public class RPnInputComponent extends Observable implements Observer{//TODO Ref
         GridBagLayout gridBayLayout = new GridBagLayout();
 
         panel_.setLayout(gridBayLayout);
-        
+
 //        UIComponentCreator componentCreator = new UIComponentCreator(configuration, this);
 //        stringValues_=new String[configuration.getParamsSize()];
 //        
@@ -353,7 +353,7 @@ public class RPnInputComponent extends Observable implements Observer{//TODO Ref
             JFormattedTextField textField = new JFormattedTextField();
 
             textField.setText(configuration.getParam(j));
-            stringValues_[j]=configuration.getParam(j);
+            stringValues_[j] = configuration.getParam(j);
 
             textField.setColumns(8);
 
@@ -400,9 +400,9 @@ public class RPnInputComponent extends Observable implements Observer{//TODO Ref
 //        }
 
         String[] oldValues = null;
-        
-       
-        
+
+
+
 
         controller_.propertyChange(
                 new PropertyChangeEvent(this, parameterName_, oldValues, stringValues_));
@@ -444,7 +444,7 @@ public class RPnInputComponent extends Observable implements Observer{//TODO Ref
     }
 
     public JFormattedTextField[] getTextField() {
-              
+
         return textField_;
     }
 
@@ -474,18 +474,18 @@ public class RPnInputComponent extends Observable implements Observer{//TODO Ref
     }
 
     public void update(Observable o, Object arg) {
-        
-        String [] newParamsValues = (String [])arg;
-        
+
+        String[] newParamsValues = (String[]) arg;
+
         for (String string : newParamsValues) {
 
             System.out.println(string);
-            
+
         }
         System.arraycopy(newParamsValues, 0, stringValues_, 0, newParamsValues.length);
-        
+
         applyConfigurationChange();
-        
+
 
     }
 
@@ -501,7 +501,7 @@ public class RPnInputComponent extends Observable implements Observer{//TODO Ref
                 if (textField_[j].getName().equals(slider.getName())) {
 
                     sliderValue /= 20;
-                  ((JFormattedTextField)  textField_[j]).setText(String.valueOf(sliderValue));
+                    ((JFormattedTextField) textField_[j]).setText(String.valueOf(sliderValue));
 
                 }
 
@@ -515,7 +515,13 @@ public class RPnInputComponent extends Observable implements Observer{//TODO Ref
             if (sliderValue != alpha) {
                 observerController_.propertyChange(new PropertyChangeEvent(this, slider.getName(), newValues, newValues));
                 RPNUMERICS.applyFluxParams();
-                rpn.command.ChangeFluxParamsCommand.instance().applyChange(new PropertyChangeEvent(rpn.command.ChangeFluxParamsCommand.instance(), "", null, RPNUMERICS.getFluxParams().getParams()));
+
+                Configuration physicsConfiguration = RPNUMERICS.getConfiguration(RPNUMERICS.physicsID());
+
+                Configuration fluxFunctionConfig = physicsConfiguration.getConfiguration("fluxfunction");
+
+
+                rpn.command.ChangeFluxParamsCommand.instance().applyChange(new PropertyChangeEvent(rpn.command.ChangeFluxParamsCommand.instance(), "", null, fluxFunctionConfig));
 
                 rpn.command.ChangeFluxParamsCommand.instance().updatePhaseDiagram();
 
@@ -550,7 +556,7 @@ public class RPnInputComponent extends Observable implements Observer{//TODO Ref
                         parameterName_ = textField_[j].getName();
                         String newValue = doc.getText(0, doc.getLength());
 
-                       stringValues_[j] = newValue;
+                        stringValues_[j] = newValue;
 
                     } else {
                         stringValues_[j] = ((JFormattedTextField) textField_[j]).getText();
@@ -667,14 +673,4 @@ public class RPnInputComponent extends Observable implements Observer{//TODO Ref
 
         }
     }
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
 }

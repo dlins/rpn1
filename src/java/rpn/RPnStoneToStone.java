@@ -6,7 +6,6 @@ package rpn;
 
 import rpn.ui.RPnInputComponent;
 import rpnumerics.RPNUMERICS;
-import wave.util.RealVector;
 
 /**
  *
@@ -14,13 +13,10 @@ import wave.util.RealVector;
  */
 public class RPnStoneToStone extends RPnFluxParamsSubject {
 
-
     //*** Leandro teste
     public RPnStoneToStone(String[] paramsValues, String[] paramsNames) {
         super(new String[RPNUMERICS.getFluxParams().getParams().getSize()], "Stone", paramsNames, paramsValues);
     }
-
-
 
     //*** Leandro teste
     @Override
@@ -52,7 +48,7 @@ public class RPnStoneToStone extends RPnFluxParamsSubject {
             newState[6] = "";
         }
 
-        
+
         newState[3] = stringArray[0];
         newState[4] = stringArray[1];
         newState[5] = stringArray[2];
@@ -71,9 +67,16 @@ public class RPnStoneToStone extends RPnFluxParamsSubject {
         newState[18] = "0";
         newState[19] = "1";
 
+        newState[20] = "0";
+        newState[21] = "0";
+        newState[22] = "0";
+        newState[23] = "0";
+        newState[24] = "1";
+        newState[25] = "1";
+        newState[26] = "1";
+
+
         setState(newState);
 
     }
-
-
 }
