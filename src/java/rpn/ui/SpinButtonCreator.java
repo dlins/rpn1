@@ -6,25 +6,30 @@
  */
 package rpn.ui;
 
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import javax.swing.InputVerifier;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JSpinner.DefaultEditor;
+import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
 import rpn.configuration.Configuration;
 import rpn.parser.RPnDataModule;
 import rpnumerics.RPNUMERICS;
 import wave.util.Boundary;
 import wave.util.RealVector;
-
 
 public class SpinButtonCreator extends UIComponentCreator {
 
@@ -40,7 +45,7 @@ public class SpinButtonCreator extends UIComponentCreator {
     public JComponent createUIComponent() {
 
         JPanel panel_ = new JPanel();
-        
+
         GridBagConstraints gridConstraints = new GridBagConstraints();
 
         gridConstraints.fill = GridBagConstraints.BOTH;
@@ -135,8 +140,9 @@ public class SpinButtonCreator extends UIComponentCreator {
 
             resolutionSpinnerArray_[i] = new JSpinner(spinerModel);
 
-            ((DefaultEditor) resolutionSpinnerArray_[i].getEditor()).getTextField().setEditable(false);
-//            ((DefaultEditor) resolutionSpinnerArray_[i].getEditor()).getTextField().getDocument().addDocumentListener(new ResolutionTextValueHandler(paramName));
+            ((DefaultEditor) resolutionSpinnerArray_[i].getEditor()).getTextField().setEditable(true);
+            ((DefaultEditor) resolutionSpinnerArray_[i].getEditor()).getTextField().setInputVerifier(new ResolutionFormatVerifier());
+            ((DefaultEditor) resolutionSpinnerArray_[i].getEditor()).getTextField().getDocument().addDocumentListener(new ResolutionTextValueHandler(paramName));
 
             resolutionSpinnerArray_[i].addChangeListener(new ResolutionChangeHandler(paramName));
 
@@ -227,6 +233,16 @@ public class SpinButtonCreator extends UIComponentCreator {
         }
 
         public void removeUpdate(DocumentEvent arg0) {
+
+            for (JSpinner resolutionPart : resolutionSpinnerArray_) {
+
+                String resolutionValue = ((DefaultEditor) resolutionPart.getEditor()).getTextField().getText();
+                if (resolutionValue.isEmpty()) {
+                }
+
+            }
+
+
         }
 
         public void changedUpdate(DocumentEvent arg0) {
@@ -247,6 +263,37 @@ public class SpinButtonCreator extends UIComponentCreator {
             RealVector max = boundary.getMaximums();
 
             RPNUMERICS.setResolution(min, max, configuration_.getName(), RPnDataModule.processResolution(resolution.toString()));
+
+        }
+    }
+
+    private class ResolutionFormatVerifier extends InputVerifier {
+
+        @Override
+        public boolean verify(JComponent input) {
+            JTextField textField = (JTextField) input;
+
+
+            String textString = textField.getText();
+            System.out.println(textField);
+
+            if (textString.isEmpty()) {
+                return false;
+            }
+
+            try {
+                Integer testeInteger = new Integer(textString);
+            } catch (NumberFormatException ex) {
+
+                return false;
+            }
+
+            return true;
+
+
+
+
+
 
         }
     }

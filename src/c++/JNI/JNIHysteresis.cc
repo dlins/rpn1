@@ -74,6 +74,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HysteresisCurveCalc_nativeCalc__I
     int dimension = RpNumerics::getPhysics().domain().dim();
 
     cout << "Familia " << domainFamily << endl;
+    
+    cout <<"FluxFunction "<<fluxFunction<<endl;
+    cout <<"AccumuationFunction "<<accumulationFunction<<endl;
+    
+    
 
     Hysteresis::curve(fluxFunction, accumulationFunction, *gv, 0,
             domainFamily, domainFamily,

@@ -108,18 +108,15 @@
 
 
             </CURVECONFIGURATION>
-
+            
             <CURVECONFIGURATION name="rarefactionextension">
                 <CURVEPARAM name="curvefamily" value="0"/>
+                <CURVEPARAM name="resolution" value="128 128"/>
+                <CURVEPARAM name="extensionfamily" value="1"/>
                 <CURVEPARAM name="characteristic" value="1"/>
-                <CURVEPARAM name="resolution" value="60 60"/>
             </CURVECONFIGURATION>
 
-            <CURVECONFIGURATION name="orbit">
-                <CURVEPARAM name="family" value="0"/>
-                <CURVEPARAM name="level" value="0.5"/>
-
-            </CURVECONFIGURATION>
+         
 
             <VIEWCONFIGURATION modeldomain="2">
 

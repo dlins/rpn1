@@ -40,6 +40,10 @@
             </PHYSICS>
      
 
+            <METHOD name="Newton">
+                <METHODPARAM  name="tolerance" value="0.001" />
+            </METHOD>
+
 
             <CURVECONFIGURATION name="fundamentalcurve">
                 <CURVEPARAM name="direction" value="20"/>

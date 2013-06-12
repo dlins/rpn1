@@ -8,7 +8,7 @@
         <BOUNDARY name="rect">
 
             <BOUNDARYPARAM name="dimension" value="2" />
-	    <BOUNDARYPARAM name="limits" value="-4.0 -4.0 4.0 4.0" />
+	    <BOUNDARYPARAM name="limits" value="-0.5 -0.5 0.5 0.5" />
             
         </BOUNDARY>
 
@@ -39,12 +39,15 @@
 
     
     
-    <METHOD name="HugoniotMethod">
-        <METHODPARAM  name="implicit" value="0" />
-        <METHODPARAM  name="explicit" value="1" />
+    <METHOD name="hugoniotmethod">
+        <METHODPARAM  name="implicit" value="1" />
+        <METHODPARAM  name="explicit" value="0" />
     </METHOD>
 
-    
+     <METHOD name="Newton">
+        <METHODPARAM  name="tolerance" value="0.001" />
+    </METHOD>
+
     
 
 

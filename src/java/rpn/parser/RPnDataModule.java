@@ -71,7 +71,7 @@ public class RPnDataModule {
 
         } catch (NumberFormatException ex) {
             System.out.println("Error in resolution format !");
-            ex.printStackTrace();
+
         }
 
         return result;

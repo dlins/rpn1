@@ -36,19 +36,6 @@ type_(type) {
 }
 
 
-//
-// SubPhysics::SubPhysics(const FluxFunction & fluxFunction, const AccumulationFunction & accumulationFunction,
-//         const Boundary & boundary,  Viscosity_Matrix * viscosityMatrix,const Space & space, const char * id, int type):fluxFunction_((FluxFunction *) fluxFunction.clone()),
-//accumulationFunction_((AccumulationFunction*) accumulationFunction.clone()), viscosityMatrix_(viscosityMatrix),
-//boundary_(boundary.clone()),
-//space_(new Space(space)),
-//ID_(id),
-//type_(type) {
-//     
-//     
-//     
-//     
-// }
 
 
 

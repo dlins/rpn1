@@ -25,6 +25,7 @@
 #include "ThreeImplicitFunctions.h"
 #include "Double_Contact_Function.h"
 #include "methods/ShockMethod.h"
+#include <sstream>
 
 /*
  * ---------------------------------------------------------------

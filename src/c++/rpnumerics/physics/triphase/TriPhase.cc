@@ -28,7 +28,7 @@ SubPhysics(TriPhaseFluxFunction(params, permParams, capilParams, viscParams), Tr
 
     setDoubleContactFunction(new Double_Contact());
     setShockMethod(new Shock());
-    setViscosityMatrix( new Viscosity_Matrix());
+    setViscosityMatrix(new Viscosity_Matrix());
     preProcessedBoundary_ = defaultBoundary();
 
 }
@@ -37,7 +37,7 @@ TriPhase::TriPhase() : SubPhysics(TriPhaseFluxFunction(TriPhaseParams(), PermPar
     setHugoniotFunction(new Hugoniot_Curve());
     setDoubleContactFunction(new Double_Contact());
     setShockMethod(new Shock());
-    setViscosityMatrix( new Viscosity_Matrix());
+    setViscosityMatrix(new Viscosity_Matrix());
     preProcessedBoundary_ = defaultBoundary();
 
 
@@ -72,25 +72,17 @@ vector<double> * TriPhase::getParams() {
 
 void TriPhase::setParams(vector<string> params) {
 
-    
-    
-    
-    for (int i = 0; i < params.size(); i++) {
-        cout <<"i: "<<i<<params[i]<<endl;
-
-
-    }
-
-    
-    
-    
 
     RealVector fluxParamVector(7);
-
+    double paramValue;
     //Flux params
+
     for (int i = 0; i < fluxParamVector.size(); i++) {
 
-        double paramValue = atof(params[i].c_str());
+        std::stringstream stream(params[i]);
+        stream >> paramValue;
+
+
 
         fluxParamVector.component(i) = paramValue;
 
@@ -104,41 +96,30 @@ void TriPhase::setParams(vector<string> params) {
 
 
     for (int i = 8; i < 14; i++) {
+        std::stringstream stream(params[i]);
+        stream >> paramValue;
 
-        double paramValue = atof(params[i].c_str());
         triPhaseFlux.perm().setParams(i - 8, paramValue);
     }
     //Capil params
 
     for (int i = 15; i < 18; i++) {
+        std::stringstream stream(params[i]);
+        stream >> paramValue;
 
-        double paramValue = atof(params[i].c_str());
         triPhaseFlux.capil().params().setParam(i - 15, paramValue);
     }
 
     //Viscosity params 
-
-    triPhaseFlux.visc().setEpsl(atof(params[params.size() - 1].c_str()));
+    
+    std::stringstream stream(params[params.size() - 1]);
+    stream >> paramValue;
+    triPhaseFlux.visc().setEpsl(paramValue);
 
 }
 
 Boundary * TriPhase::defaultBoundary() const {
-    //
-    //    RealVector A(2);
-    //
-    //    A.component(0) = 0;
-    //    A.component(1) = 0;
-    //
-    //    RealVector B(2);
-    //
-    //    B.component(0) = 0;
-    //    B.component(1) = 1;
-    //
-    //    RealVector C(2);
-    //
-    //    C.component(0) = 1;
-    //    C.component(1) = 0;
-
+    
 
     return new Three_Phase_Boundary();
 
@@ -149,7 +130,7 @@ TriPhase::TriPhase(const TriPhase & copy) : SubPhysics(copy.fluxFunction(), copy
     setHugoniotFunction(new Hugoniot_Curve());
     setDoubleContactFunction(new Double_Contact());
     setShockMethod(new Shock());
-    setViscosityMatrix( copy.getViscosityMatrix());
+    setViscosityMatrix(copy.getViscosityMatrix());
     preProcessedBoundary_ = defaultBoundary();
 
 

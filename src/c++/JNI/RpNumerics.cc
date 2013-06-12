@@ -197,7 +197,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setMethod
         if (nativeMethodType.compare("hugoniotmethod") == 0) {
 
 
-            if (nativeMethodName.compare("explicit")) {
+            if (nativeMethodName.compare("explicit")==0) {
 
                 RpNumerics::getPhysics().getSubPhysics(0).setHugoniotFunction(new StoneHugoniot());
 
@@ -211,11 +211,13 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setMethod
     }
 
 
-    if (RpNumerics::getPhysics().ID().compare("Quad2") == 0) {
+    if (RpNumerics::getPhysics().ID().compare("QuadraticR2") == 0) {
+        
+        cout <<"Nome do metodo: "<<nativeMethodName<<endl;
 
-        if (nativeMethodType.compare("hugoniotmethod")) {
+        if (nativeMethodType.compare("hugoniotmethod")==0) {
 
-            if (nativeMethodName.compare("explicit")) {
+            if (nativeMethodName.compare("explicit")==0) {
                 RpNumerics::getPhysics().getSubPhysics(0).setHugoniotFunction(new Quad2Hugoniot());
             } else {
                 RpNumerics::getPhysics().getSubPhysics(0).setHugoniotFunction(new Hugoniot_Curve());
@@ -310,9 +312,13 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setResolution
     }
 
     const char * gridNameNative = env->GetStringUTFChars(gridName, NULL);
+    
+
 
     GridValues * grid = RpNumerics::getGridFactory().getGrid(string(gridNameNative));
 
+    cout <<"Nome do grid: "<<gridNameNative<<endl;
+    
     const Boundary * boundary = RpNumerics::getPhysics().getSubPhysics(0).getPreProcessedBoundary();
 
 

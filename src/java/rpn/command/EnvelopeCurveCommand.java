@@ -67,12 +67,6 @@ public class EnvelopeCurveCommand extends BifurcationPlotCommand {
             RPnDataModule.PHASESPACE.join(factory.geom());
 
 
-
-
-
-
-
-
     }
 
     static public EnvelopeCurveCommand instance() {
