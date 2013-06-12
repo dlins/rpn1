@@ -22,6 +22,7 @@ import rpn.component.RpCalcBasedGeomFactory;
 import rpn.component.RpGeomFactory;
 import rpn.controller.ui.*;
 import rpnumerics.RPnCurve;
+import rpn.message.RPnNetworkStatus;
 
 public abstract class RpModelPlotCommand extends RpModelActionCommand {
 
@@ -74,9 +75,7 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand {
 
 
         curve.setId(curveID_);
-        curveID_++;
-
-        UIController.instance().getActivePhaseSpace().plot(geometry);
+        curveID_++;                 
 
         PropertyChangeEvent event_ = new PropertyChangeEvent(this, UIController.instance().getActivePhaseSpace().getName(), oldValue, geometry);
 
@@ -86,6 +85,12 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand {
         setInput(inputArray);
 
         logCommand(new RpCommand(event_, inputArray));
+        
+        RPnDataModule.PHASESPACE.join(geometry);
+
+        if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster())
+            RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());
+
     }
 
     public void execute (RpGeomFactory factory) {
@@ -107,6 +112,8 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand {
 
         RPnDataModule.PHASESPACE.join(factory.geom());
 
+        if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster())            
+            RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());       
     }
 
     public void unexecute() {

@@ -9,7 +9,7 @@
 
 int Hugoniot_Curve::classified_curve(const FluxFunction *f, const AccumulationFunction *a,
                                      GridValues &g, const RealVector &r,
-                                     std::vector<HugoniotPolyLine> &hugoniot_curve) {
+                                     std::vector<HugoniotPolyLine> &hugoniot_curve,const Viscosity_Matrix * vm) {
 
     // The segments by a search algorithm are stored here, to be used in the ColorCurve
     std::vector<RealVector> vrs;
@@ -24,7 +24,7 @@ int Hugoniot_Curve::classified_curve(const FluxFunction *f, const AccumulationFu
     //
     int info = curve(f, a, g, r, vrs, curves, circular, method);
 
-    ColorCurve colorCurve(*f, *a);
+    ColorCurve colorCurve(*f, *a,vm);
     colorCurve.classify_segmented_curve(vrs,r,hugoniot_curve,testeTransitionalList);
     
     return info;
@@ -38,7 +38,7 @@ int Hugoniot_Curve::classified_curve(const FluxFunction *f, const AccumulationFu
 int Hugoniot_Curve::classified_curve(const FluxFunction *f, const AccumulationFunction *a,
                                      GridValues &g, const RealVector &r,
                                      std::vector<HugoniotPolyLine> &hugoniot_curve, std::vector<RealVector> &transitionList,
-                                     std::vector<bool> &circular) {
+                                     std::vector<bool> &circular,const Viscosity_Matrix * vm) {
 
 //int Hugoniot_Curve::classified_curve(const FluxFunction *f, const AccumulationFunction *a, 
 //                                     GridValues &g, const RealVector &r, 
@@ -69,7 +69,7 @@ int Hugoniot_Curve::classified_curve(const FluxFunction *f, const AccumulationFu
     testeTransitionalList.clear();
     hugoniot_curve.clear();
 
-    ColorCurve colorCurve(*f, *a);
+    ColorCurve colorCurve(*f, *a,vm);
 
     for (int i = 0; i < no_of_curves; i++) {
         HugoniotPolyLine hugoniot;

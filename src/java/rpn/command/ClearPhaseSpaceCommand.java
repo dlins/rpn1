@@ -13,7 +13,7 @@ import rpn.RPnPhaseSpaceManager;
 import rpn.RPnPhaseSpacePanel;
 import rpn.component.RpGeometry;
 import rpn.controller.ui.*;
-import rpn.message.RPnActionMediator;
+import rpn.message.RPnNetworkStatus;
 
 public class ClearPhaseSpaceCommand extends javax.swing.AbstractAction {
     //
@@ -86,8 +86,8 @@ public class ClearPhaseSpaceCommand extends javax.swing.AbstractAction {
 
     public void actionPerformed(ActionEvent event) {
 
-        if (UIController.instance().getNetStatusHandler().isOnline() && UIController.instance().getNetStatusHandler().isMaster()) {
-            RPnActionMediator.instance().setState(DESC_TEXT);
+        if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
+            RPnNetworkStatus.instance().sendCommand(DESC_TEXT);
         }
 
         clear();

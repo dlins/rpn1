@@ -1,6 +1,8 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ *
+ * Instituto de Matematica Pura e Aplicada - IMPA
+ * Departamento de Dinamica dos Fluidos
+ *
  */
 package rpn.ui;
 
@@ -18,10 +20,7 @@ import javax.swing.JPanel;
 import rpn.configuration.Configuration;
 import rpnumerics.RPNUMERICS;
 
-/**
- *
- * @author edsonlan
- */
+
 public class ComboBoxCreator extends UIComponentCreator {
 
 

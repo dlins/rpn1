@@ -22,9 +22,9 @@ import java.awt.event.MouseEvent;
 import java.awt.Cursor;
 import java.beans.PropertyChangeEvent;
 import rpn.controller.*;
-import java.net.*;
+
 import java.util.Iterator;
-import javax.swing.JPanel;
+
 import rpn.RPnDesktopPlotter;
 import rpn.RPnUIFrame;
 import rpn.component.RpGeometry;
@@ -50,8 +50,7 @@ public class UIController extends ComponentUI {
     private MouseController mouseController_;
     private MouseMotionController mouseMotionController_;
     private rpn.controller.ui.UserInputTable globalInputTable_;
-    private static UIController instance_ = null;
-    private RPnNetworkStatus netStatus_ = null;
+    private static UIController instance_ = null;    
     private String clientID_;
     private RPnPhaseSpacePanel focusPanel_;
     private StateInputController stateController_;
@@ -77,20 +76,7 @@ public class UIController extends ComponentUI {
 
         activePhaseSpace_ = RPnDataModule.PHASESPACE;       //***
 
-        initNetStatus();
-    }
-
-    private void initNetStatus() {
-
-        try {
-            InetAddress ip_ = InetAddress.getLocalHost();
-            String from2_ = ip_.getHostAddress();
-            clientID_ = from2_.replace('.', '_');
-            netStatus_ = new RPnNetworkStatus(clientID_);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        
     }
 
     private void toggleCursorLines() {
@@ -210,9 +196,6 @@ public class UIController extends ComponentUI {
 
 
                             DragPlotCommand.instance().execute();
-
-
-
                         }
                     }
 
@@ -246,7 +229,7 @@ public class UIController extends ComponentUI {
 
                 //panel.setName(((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom()).getName());
 
-                if (netStatus_.isMaster() || !(netStatus_.isOnline())) {
+                if (RPnNetworkStatus.instance().isMaster() || !(RPnNetworkStatus.instance().isOnline())) {
 
 
 
@@ -402,15 +385,17 @@ public class UIController extends ComponentUI {
 
         handler_.userInputComplete(this, userInput);
 
-        if (netStatus_.isOnline()) {
-            RPnActionMediator.instance().sendMessage(userInput);
-        }
+        //if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
+          //  RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());
+       // }
 
     }
 
     /** Sets the state of the application. The application works as a state machine and this method changes the actual state.*/
     public void setState(rpn.controller.ui.UserInputHandler newAction) {
-        stateController_.propertyChange(new PropertyChangeEvent(this, "aplication state", handler_, newAction));
+
+
+        stateController_.propertyChange(new PropertyChangeEvent(this, "aplication state", handler_, newAction));       
 
         if (handler_ instanceof UI_ACTION_SELECTED) {
 
@@ -520,11 +505,7 @@ public class UIController extends ComponentUI {
     public UserInputHandler getState() {
         return handler_;
     }
-
-    public RPnNetworkStatus getNetStatusHandler() {
-        return netStatus_;
-    }
-
+    
     public RPnPhaseSpaceAbstraction getActivePhaseSpace() {
         return activePhaseSpace_;
     }

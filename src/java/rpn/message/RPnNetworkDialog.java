@@ -5,12 +5,12 @@
  */
 package rpn.message;
 
+import java.net.*;
 import java.awt.*;
 import javax.swing.*;
 import java.beans.*;
 import java.awt.event.*;
 import javax.swing.JDialog;
-import rpn.controller.ui.UIController;
 
 /**
  *
@@ -19,27 +19,29 @@ import rpn.controller.ui.UIController;
  */
 public class RPnNetworkDialog extends JDialog implements PropertyChangeListener {
 
+
+
     JPanel mainPanel = new JPanel();
     JPanel inputPanel = new JPanel();
     JPanel infoPanel = new JPanel();
     JPanel masterPanel = new JPanel();
     JPanel buttonsPanel = new JPanel();
     JPanel statusPanel = new JPanel();
-    JButton onlineButton = new JButton();
-    JButton cancelButton = new JButton("Cancel");
+    JButton onlineButton = new JButton();    
     JScrollPane scrollPane = new JScrollPane();
+
     public static JTextField serverTextBox = new JTextField(RPnNetworkStatus.SERVERNAME);
-    public static JTextField portTextBox = new JTextField((new Integer(
-            RPnNetworkStatus.PORTNUMBER)).toString());
+    public static JTextArea infoText = new JTextArea();
+    
     BorderLayout gridLayout = new BorderLayout();
     JCheckBox masterCheckBox = new JCheckBox("Master");
     public static JLabel infoLabel = new JLabel();
-    public JLabel serverLabel = new JLabel("Server");
-    private JTextArea infoText = new JTextArea();
+    
+    
 
     public RPnNetworkDialog() {
         try {
-            jbInit();
+            init();
             this.setLocationRelativeTo(null);
         } catch (Exception e) {
             e.printStackTrace();
@@ -50,9 +52,16 @@ public class RPnNetworkDialog extends JDialog implements PropertyChangeListener 
 
         if (evt.getPropertyName().equals("Master Status")) {
 
-            Boolean masterStatus = (Boolean) evt.getNewValue();
+            Boolean masterNewStatus = (Boolean) evt.getNewValue();
 
-            if (masterStatus.booleanValue()) {
+            if (masterNewStatus.booleanValue()) {
+
+                // willing to become master ???
+                if (RPnNetworkStatus.instance().isOnline()) {
+
+                    RPnNetworkStatus.instance().disconnect();
+                    RPnNetworkStatus.instance().sendMasterRequest();
+                }
 
             } else {
 
@@ -71,8 +80,8 @@ public class RPnNetworkDialog extends JDialog implements PropertyChangeListener 
                 masterCheckBox.setEnabled(false);
 
             } else {
-                onlineButton.setText("Connect");
 
+                onlineButton.setText("Connect");
                 masterCheckBox.setEnabled(true);
             }
 
@@ -91,23 +100,24 @@ public class RPnNetworkDialog extends JDialog implements PropertyChangeListener 
 
             }
 
-            RPnNetworkDialog.infoLabel.setText("Server: " + RPnNetworkStatus.SERVERNAME + " Port: " + RPnNetworkStatus.PORTNUMBER);
+            RPnNetworkDialog.infoLabel.setText("Server: " + RPnNetworkStatus.SERVERNAME);
         }
 
     }
 
-    private void jbInit() throws Exception {
+    private void init() throws Exception {
 
-        this.getContentPane().add(mainPanel);
+        onlineButton.setText("Connect");
+
+        getContentPane().add(mainPanel);
         scrollPane = new JScrollPane(infoText);
         mainPanel.setLayout(gridLayout);
 
 
         mainPanel.add(inputPanel,BorderLayout.NORTH);
 
-        inputPanel.add(serverLabel);
+    
         inputPanel.add(serverTextBox);
-        inputPanel.add(portTextBox);
         inputPanel.add(masterCheckBox);
 
 
@@ -120,13 +130,12 @@ public class RPnNetworkDialog extends JDialog implements PropertyChangeListener 
         infoText.setLineWrap(false);
 
 
-        infoText.setText(UIController.instance().getNetStatusHandler().getLogMessages());
+        infoText.setText(RPnNetworkStatus.instance().log());
 
         mainPanel.add(buttonsPanel,BorderLayout.CENTER);
 
         buttonsPanel.add(onlineButton);
-        buttonsPanel.add(cancelButton);
-        cancelButton.setEnabled(true);
+    
 
 
         mainPanel.add(statusPanel,BorderLayout.SOUTH);
@@ -135,23 +144,19 @@ public class RPnNetworkDialog extends JDialog implements PropertyChangeListener 
         this.addComponentListener(new ComponentAdapter() {
 
             public void componentShown(ComponentEvent e) {
-                this_componentShown(e);
+               // this_componentShown(e);
 
 
             }
         });
+
         this.addWindowListener(new java.awt.event.WindowAdapter() {
 
             public void windowClosing(WindowEvent e) {
-                this_windowClosing(e);
+               // this_windowClosing(e);
             }
         });
-
-
-        RPnNetworkStatusController.instance().addPropertyChangeListener(this);
-
-
-
+       
         this.setResizable(false);
         this.setTitle("Network");
 
@@ -162,7 +167,8 @@ public class RPnNetworkDialog extends JDialog implements PropertyChangeListener 
                 onlineButton_actionPerformed(e);
             }
         });
-        this.pack();
+
+        pack();
 
 
     }
@@ -172,36 +178,45 @@ public class RPnNetworkDialog extends JDialog implements PropertyChangeListener 
 
     void onlineButton_actionPerformed(ActionEvent e) {
 
-        if (masterCheckBox.isSelected()) {
-            RPnNetworkStatusController.instance().actionPerformed(new ActionEvent(this, 0, "ConnectPressedWithMaster"));
-        } else {
-            RPnNetworkStatusController.instance().actionPerformed(new ActionEvent(this, 0, "ConnectPressed"));
+        
+        try {
+            
+            InetAddress ip_ = InetAddress.getLocalHost();
+            String from2_ = ip_.getHostAddress();
+            String clientID = from2_.replace('.', '_');
+                      
+
+            if (RPnNetworkStatus.instance().isOnline()) {
+               
+                RPnNetworkStatus.instance().disconnect();
+
+                // stops listening...
+                infoText.append("RPn user : " +  clientID + " is now off RPNSESSION with ID : " + rpn.parser.RPnCommandModule.SESSION_ID_ + '\n');
+                               
+                onlineButton.setText("Connect");
+                onlineButton.repaint();
+
+            } else {
+
+                // either starts listening or becomes master...
+                onlineButton.setText("Disconnect");
+                onlineButton.repaint();
+
+                if (masterCheckBox.isSelected())
+                    infoText.append("RPn user : " +  clientID + " is now master of RPNSESSION with ID : " + rpn.parser.RPnCommandModule.SESSION_ID_ + '\n');
+                else
+                    infoText.append("RPn user : " +  clientID + " is now following RPNSESSION with ID : " + rpn.parser.RPnCommandModule.SESSION_ID_ + '\n');
+
+                RPnNetworkStatus.instance().connect(clientID,masterCheckBox.isSelected());
+                masterCheckBox.setEnabled(false);
+
+            }
+
+        } catch (UnknownHostException ex) {
+                    System.out.println(ex);
         }
 
-        RPnNetworkStatusController.instance().actionPerformed(new ActionEvent(this,
-                0, "Display Status"));
-
     }
 
-    void this_windowClosing(WindowEvent e) {
-        RPnNetworkStatusController.instance().actionPerformed(new ActionEvent(this,
-                0, "closeDialog"));
-    }
 
-    public void this_componentShown(ComponentEvent e) {
-
-        RPnNetworkStatusController.instance().actionPerformed(new ActionEvent(this,
-                0, "Display Status"));
-
-    }
-
-    public void domainsButton_actionPerformed(ActionEvent e) {
-
-        RPnNetworkStatusController.instance().actionPerformed(new ActionEvent(this,
-                0, "Domains Pressed"));
-
-        RPnDomainsDialog domainsDialog = new RPnDomainsDialog();
-
-        domainsDialog.setVisible(true);
-    }
 }

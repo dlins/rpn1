@@ -36,8 +36,6 @@ private:
 
 public:
 
-    virtual ~Hugoniot_Locus();
-    
 
     virtual int curve(const FluxFunction *f, const AccumulationFunction *a,
             GridValues &g, const RealVector &r,
@@ -46,7 +44,7 @@ public:
 
     virtual int classified_curve(const FluxFunction *f, const AccumulationFunction *a,
             GridValues &g, const RealVector &r,
-            std::vector<HugoniotPolyLine> &hugoniot_curve) = 0;
+            std::vector<HugoniotPolyLine> &hugoniot_curve,const Viscosity_Matrix *) = 0;
 
 //    virtual int classified_curve(const FluxFunction *f, const AccumulationFunction *a, 
 //                             GridValues &g, const RealVector &r, 
@@ -57,7 +55,7 @@ public:
     virtual int classified_curve(const FluxFunction *f, const AccumulationFunction *a,
                                      GridValues &g, const RealVector &r,
                                      std::vector<HugoniotPolyLine> &hugoniot_curve, std::vector<RealVector> &transitionList,
-                                     std::vector<bool> &circular) =0;
+                                     std::vector<bool> &circular,const Viscosity_Matrix *) =0;
     
 
 };

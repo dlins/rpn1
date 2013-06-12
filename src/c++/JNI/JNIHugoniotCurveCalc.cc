@@ -81,12 +81,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
 
 
-    cout << "Parametros: " << RpNumerics::getPhysics().fluxFunction().fluxParams().params() << endl;
-    
-    cout << "Parametros accum: " << RpNumerics::getPhysics().accumulation().accumulationParams().params() << endl;
-    
-    
-    
+//    cout << "Parametros: " << RpNumerics::getPhysics().fluxFunction().fluxParams().params() << endl;
 
 
 
@@ -107,9 +102,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     vector<bool> isCircular;
     
     vector<RealVector> transitionList;
+    
+    Viscosity_Matrix * vm = RpNumerics::getPhysics().getSubPhysics(0).getViscosityMatrix();
+    
 
     hugoniotCurve->classified_curve(&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(),
-            *gv, Uref, hugoniotPolyLineVector,transitionList, isCircular);
+            *gv, Uref, hugoniotPolyLineVector,transitionList, isCircular,vm);
     
     
     jobject transitionArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
@@ -287,8 +285,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     Hugoniot_Curve hugoniotCurve;
 
     GridValues gv(&RpNumerics::getPhysics().boundary(), pMin, pMax, resolution);
+    
+    const    Viscosity_Matrix vm;
 
-    hugoniotCurve.classified_curve(&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(), gv, Uref, hugoniotPolyLineVector);
+    hugoniotCurve.classified_curve(&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(), gv, Uref, hugoniotPolyLineVector,&vm);
 
     //    delete tempFluxFunction;
 

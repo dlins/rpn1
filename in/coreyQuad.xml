@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE rpnconfiguration >
-<RPNSESSION>
+<RPNSESSION id="1234">
  <PHASESPACE name="Phase Space">
     <RPNCONFIGURATION>
     <PHYSICS name="CoreyQuad">

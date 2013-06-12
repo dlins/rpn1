@@ -25,13 +25,16 @@
 
 
 ColorCurve::ColorCurve(const FluxFunction & fluxFunction,
-        const AccumulationFunction & accumulationFunction) :
-fluxFunction_((FluxFunction *) fluxFunction.clone()),
-accFunction_((AccumulationFunction *) accumulationFunction.clone()) {
+                       const AccumulationFunction & accumulationFunction,
+                       const Viscosity_Matrix *v) :
+                       fluxFunction_((FluxFunction *) fluxFunction.clone()),
+                       accFunction_((AccumulationFunction *) accumulationFunction.clone()) {
     sp = std::string("+");
     sm = std::string("-");
     sc = std::string(".");
     sz = std::string("0");
+    
+    vm = (Viscosity_Matrix *) v;
 }
 
 ColorCurve::~ColorCurve() {
@@ -92,93 +95,93 @@ int ColorCurve::solve(const double *A, double *bb, int dim, double *x) {
 // Newton improvement when the shock is characteristic at Left
 //
 void ColorCurve::Left_Newton_improvement(const RealVector &input, const int type, RealVector &out) {
-    int dim = input.size();
+//    int dim = input.size();
 
-    double sigma = ref_eigenvalue[type];
-    out.resize(dim);
+//    double sigma = ref_eigenvalue[type];
+//    out.resize(dim);
 
-    // TODO: Improve this epsilon
-    double epsilon = 1e-10;
-    double epsilon2 = epsilon*epsilon;
-    double anorm;
-    double delta_U[dim];
+//    // TODO: Improve this epsilon
+//    double epsilon = 1e-10;
+//    double epsilon2 = epsilon*epsilon;
+//    double anorm;
+//    double delta_U[dim];
 
-    double U[dim];
-    for (int i = 0; i < dim; i++) U[i] = input.component(i);
+//    double U[dim];
+//    for (int i = 0; i < dim; i++) U[i] = input.component(i);
 
-    // If this function ever comes to be vectorialized, these lines below are COMMON
-    // to all points (since they deal with the ref point).
-    //
-    double c[dim];
-    //    double F_ref[dim], G_ref[dim];
-    //    fluxFunction_->fill_with_jet(dim, ref_point.components(), 0, F_ref, 0, 0);
-    //    accFunction_->fill_with_jet(dim, ref_point.components(), 0, G_ref, 0, 0);
-    for (int i = 0; i < dim; i++) {
-        c[i] = sigma * G_ref.component(i) - F_ref.component(i);
-    }
+//    // If this function ever comes to be vectorialized, these lines below are COMMON
+//    // to all points (since they deal with the ref point).
+//    //
+//    double c[dim];
+//    //    double F_ref[dim], G_ref[dim];
+//    //    fluxFunction_->fill_with_jet(dim, ref_point.components(), 0, F_ref, 0, 0);
+//    //    accFunction_->fill_with_jet(dim, ref_point.components(), 0, G_ref, 0, 0);
+//    for (int i = 0; i < dim; i++) {
+//        c[i] = sigma * G_ref.component(i) - F_ref.component(i);
+//    }
 
-    double deltaNorm = 0.0;
-    int count = 0;
+//    double deltaNorm = 0.0;
+//    int count = 0;
 
-    do {
-        double F[dim], JF[dim][dim], G[dim], JG[dim][dim];
-        double A[dim][dim];
-        double b[dim];
+//    do {
+//        double F[dim], JF[dim][dim], G[dim], JG[dim][dim];
+//        double A[dim][dim];
+//        double b[dim];
 
-        fluxFunction_->fill_with_jet(dim, U, 1, F, &JF[0][0], 0);
-        accFunction_->fill_with_jet(dim, U, 1, G, &JG[0][0], 0);
+//        fluxFunction_->fill_with_jet(dim, U, 1, F, &JF[0][0], 0);
+//        accFunction_->fill_with_jet(dim, U, 1, G, &JG[0][0], 0);
 
-        for (int i = 0; i < dim; i++) {
-            // The minus sign is incorporated within the parentesis
-            b[i] = (F[i] - sigma * G[i]) + c[i];
+//        for (int i = 0; i < dim; i++) {
+//            // The minus sign is incorporated within the parentesis
+//            b[i] = (F[i] - sigma * G[i]) + c[i];
 
-            for (int j = 0; j < dim; j++) {
-                A[i][j] = sigma * JG[i][j] - JF[i][j];
-            }
-        }
+//            for (int j = 0; j < dim; j++) {
+//                A[i][j] = sigma * JG[i][j] - JF[i][j];
+//            }
+//        }
 
-        // Solve
-        if (dim == 2) {
-            double det = A[0][0] * A[1][1] - A[0][1] * A[1][0];
-            anorm = 0.0;
-            for (int i = 0; i < 2; i++) {
-                for (int j = 0; j < 2; j++) {
-                    anorm += A[i][j] * A[i][j];
-                }
-            }
+//        // Solve
+//        if (dim == 2) {
+//            double det = A[0][0] * A[1][1] - A[0][1] * A[1][0];
+//            anorm = 0.0;
+//            for (int i = 0; i < 2; i++) {
+//                for (int j = 0; j < 2; j++) {
+//                    anorm += A[i][j] * A[i][j];
+//                }
+//            }
 
-            // If Newton does not converge, return the original point.
-            if ((fabs(det) <= (epsilon * anorm)) || (count > 19)) {
-                cout << "ColorCurve::Left_Newton does not converge." << endl;
-                cout << "count = " << count << " " << input << endl;
-                for (int i = 0; i < dim; i++) out.component(i) = input.component(i);
-                return;
-            }
+//            // If Newton does not converge, return the original point.
+//            if ((fabs(det) <= (epsilon * anorm)) || (count > 19)) {
+//                cout << "ColorCurve::Left_Newton does not converge." << endl;
+//                cout << "count = " << count << " " << input << endl;
+//                for (int i = 0; i < dim; i++) out.component(i) = input.component(i);
+//                return;
+//            }
 
-            // Protect against zero-division or use LAPACK (will be done so anyway for n >= 3)
-            delta_U[0] = (b[0] * A[1][1] - b[1] * A[0][1]) / det;
-            delta_U[1] = (A[0][0] * b[1] - A[1][0] * b[0]) / det;
-        } else {
-            // For dimension larger than 2, it uses LAPACK
-            int info = solve(&A[0][0], &b[0], dim, & delta_U[0]);
+//            // Protect against zero-division or use LAPACK (will be done so anyway for n >= 3)
+//            delta_U[0] = (b[0] * A[1][1] - b[1] * A[0][1]) / det;
+//            delta_U[1] = (A[0][0] * b[1] - A[1][0] * b[0]) / det;
+//        } else {
+//            // For dimension larger than 2, it uses LAPACK
+//            int info = solve(&A[0][0], &b[0], dim, & delta_U[0]);
 
-            if (info != 0) {
-                cout << "ColorCurve::Left_Newton does not converge." << endl;
-                for (int i = 0; i < dim; i++) out.component(i) = input.component(i);
-                return;
-            }
-        }
+//            if (info != 0) {
+//                cout << "ColorCurve::Left_Newton does not converge." << endl;
+//                for (int i = 0; i < dim; i++) out.component(i) = input.component(i);
+//                return;
+//            }
+//        }
 
-        // Prepare next step:
-        for (int i = 0; i < dim; i++) U[i] += delta_U[i];
+//        // Prepare next step:
+//        for (int i = 0; i < dim; i++) U[i] += delta_U[i];
 
-        deltaNorm = 0.0;
-        for (int i = 0; i < dim; i++) deltaNorm += (delta_U[i] * delta_U[i]);
-        count++;
-    } while (deltaNorm > epsilon2);
+//        deltaNorm = 0.0;
+//        for (int i = 0; i < dim; i++) deltaNorm += (delta_U[i] * delta_U[i]);
+//        count++;
+//    } while (deltaNorm > epsilon2);
 
-    // Output
-    for (int i = 0; i < dim; i++) out.component(i) = U[i];
+//    // Output
+//    for (int i = 0; i < dim; i++) out.component(i) = U[i];
 
     return;
 }
@@ -186,140 +189,140 @@ void ColorCurve::Left_Newton_improvement(const RealVector &input, const int type
 // Newton improvement when the shock is characteristic at Right
 //
 void ColorCurve::Right_Newton_improvement(const RealVector &input, const int type, RealVector &out) {
-    int dim = input.size();
-    out.resize(dim);
+//    int dim = input.size();
+//    out.resize(dim);
 
-    // TODO: For dimension larger than 2, the implementation is missing. The input point is returned
-    //       as output. (This method pretends to refine the input.)
-    if (dim > 2) {
-        cout << "ColorCurve::Right_Newton was not implemented for dimension larger than two." << endl;
-        for (int i = 0; i < dim; i++) out.component(i) = input.component(i);
-        return;
-    }
+//    // TODO: For dimension larger than 2, the implementation is missing. The input point is returned
+//    //       as output. (This method pretends to refine the input.)
+//    if (dim > 2) {
+//        cout << "ColorCurve::Right_Newton was not implemented for dimension larger than two." << endl;
+//        for (int i = 0; i < dim; i++) out.component(i) = input.component(i);
+//        return;
+//    }
 
-    // TODO: Improve this epsilon
-    double epsilon = 1e-6;
-    double epsilon2 = epsilon*epsilon;
-    double anorm;
-    double delta_U[dim];
+//    // TODO: Improve this epsilon
+//    double epsilon = 1e-6;
+//    double epsilon2 = epsilon*epsilon;
+//    double anorm;
+//    double delta_U[dim];
 
-    double U[dim];
-    for (int i = 0; i < dim; i++) U[i] = input.component(i);
+//    double U[dim];
+//    for (int i = 0; i < dim; i++) U[i] = input.component(i);
 
-    //    // If this function ever comes to be vectorialized, these lines below are COMMON
-    //    // to all points (since they deal with the ref point).
-    //    //
-    //    double F_ref[dim], G_ref[dim];
-    //    fluxFunction_->fill_with_jet(dim, ref_point.components(), 0, F_ref, 0, 0);
-    //    accFunction_->fill_with_jet(dim, ref_point.components(), 0, G_ref, 0, 0);
+//    //    // If this function ever comes to be vectorialized, these lines below are COMMON
+//    //    // to all points (since they deal with the ref point).
+//    //    //
+//    //    double F_ref[dim], G_ref[dim];
+//    //    fluxFunction_->fill_with_jet(dim, ref_point.components(), 0, F_ref, 0, 0);
+//    //    accFunction_->fill_with_jet(dim, ref_point.components(), 0, G_ref, 0, 0);
 
-    double deltaNorm = 0.0;
-    int count = 0;
+//    double deltaNorm = 0.0;
+//    int count = 0;
 
-    do {
-        double F[dim], JF[dim][dim], HF[dim][dim][dim];
-        double G[dim], JG[dim][dim], HG[dim][dim][dim];
-        double A[dim][dim];
-        double b[dim];
+//    do {
+//        double F[dim], JF[dim][dim], HF[dim][dim][dim];
+//        double G[dim], JG[dim][dim], HG[dim][dim][dim];
+//        double A[dim][dim];
+//        double b[dim];
 
-        fluxFunction_->fill_with_jet(dim, U, 2, F, &JF[0][0], &HF[0][0][0]);
-        accFunction_->fill_with_jet(dim, U, 2, G, &JG[0][0], &HG[0][0][0]);
+//        fluxFunction_->fill_with_jet(dim, U, 2, F, &JF[0][0], &HF[0][0][0]);
+//        accFunction_->fill_with_jet(dim, U, 2, G, &JG[0][0], &HG[0][0][0]);
 
-        std::vector<eigenpair> e;
-        Eigen::eig(dim, &JF[0][0], &JG[0][0], e);
-        // The eigenvalue to use is e[type].r
-        double sigma = e[type].r;
+//        std::vector<eigenpair> e;
+//        Eigen::eig(dim, &JF[0][0], &JG[0][0], e);
+//        // The eigenvalue to use is e[type].r
+//        double sigma = e[type].r;
 
-        // Some auxiliary number used in system Ax = b
-        //
+//        // Some auxiliary number used in system Ax = b
+//        //
 
-        // For Rankine-Hugoniot condition
-        double f1Bracket = F[0] - F_ref.component(0);
-        double f2Bracket = F[1] - F_ref.component(1);
-        double g1Bracket = G[0] - G_ref.component(0);
-        double g2Bracket = G[1] - G_ref.component(1);
+//        // For Rankine-Hugoniot condition
+//        double f1Bracket = F[0] - F_ref.component(0);
+//        double f2Bracket = F[1] - F_ref.component(1);
+//        double g1Bracket = G[0] - G_ref.component(0);
+//        double g2Bracket = G[1] - G_ref.component(1);
 
-        // For det(lambda*JG - JF)
-        double det11Bracket = sigma * JG[0][0] - JF[0][0];
-        double det12Bracket = sigma * JG[0][1] - JF[0][1];
-        double det21Bracket = sigma * JG[1][0] - JF[1][0];
-        double det22Bracket = sigma * JG[1][1] - JF[1][1];
+//        // For det(lambda*JG - JF)
+//        double det11Bracket = sigma * JG[0][0] - JF[0][0];
+//        double det12Bracket = sigma * JG[0][1] - JF[0][1];
+//        double det21Bracket = sigma * JG[1][0] - JF[1][0];
+//        double det22Bracket = sigma * JG[1][1] - JF[1][1];
 
-        /* TODO: Para o caso de dimensao generica, deve ser alguma coisa como:
-            // For Rankine-Hugoniot condition, flux and accumulation brackets
-            double fBracket[dim], gBracket[dim];
-            // For eigenvalue determinant the characteristic matrix, the derivatives are store inside the
-            // auxiliary tensor dCM.
-            double CharMatrix[dim][dim], dCM[dim][dim][dim];
+//        /* TODO: Para o caso de dimensao generica, deve ser alguma coisa como:
+//            // For Rankine-Hugoniot condition, flux and accumulation brackets
+//            double fBracket[dim], gBracket[dim];
+//            // For eigenvalue determinant the characteristic matrix, the derivatives are store inside the
+//            // auxiliary tensor dCM.
+//            double CharMatrix[dim][dim], dCM[dim][dim][dim];
 
-            for (int i = 0; i < dim; i++) {
-                fBracket[i] = F[i] - F_ref.component(i);
-                gBracket[i] = G[i] - G_ref.component(i);
-                for (int j = 0; j < dim; j++) {
-                    CharMatrix[i][j] = sigma*JG[i][j] - JF[i][j];
-                    for (int k = 0; k < dim; k++) {
-                        dCM[i][j][k] = sigma*HG[i][j][k] - HF[i][j][k];
-                    }
-                }
-            }
-         *** *** */
+//            for (int i = 0; i < dim; i++) {
+//                fBracket[i] = F[i] - F_ref.component(i);
+//                gBracket[i] = G[i] - G_ref.component(i);
+//                for (int j = 0; j < dim; j++) {
+//                    CharMatrix[i][j] = sigma*JG[i][j] - JF[i][j];
+//                    for (int k = 0; k < dim; k++) {
+//                        dCM[i][j][k] = sigma*HG[i][j][k] - HF[i][j][k];
+//                    }
+//                }
+//            }
+//         *** *** */
 
-        // The minus sign is incorporated within the parentesis
-        b[0] = 2 * (f1Bracket * g2Bracket - f2Bracket * g1Bracket);
-        b[1] = 2 * (det12Bracket * det21Bracket - det11Bracket * det22Bracket);
+//        // The minus sign is incorporated within the parentesis
+//        b[0] = 2 * (f1Bracket * g2Bracket - f2Bracket * g1Bracket);
+//        b[1] = 2 * (det12Bracket * det21Bracket - det11Bracket * det22Bracket);
 
-        for (int j = 0; j < dim; j++) {
-            A[0][j] = JG[0][j] * f2Bracket + g1Bracket * JF[1][j]
-                    - JG[1][j] * f1Bracket - g2Bracket * JF[0][j];
-            A[1][j] = (sigma * HG[0][0][j] - HF[0][0][j]) * det22Bracket
-                    + (sigma * HG[1][1][j] - HF[1][1][j]) * det11Bracket
-                    - (sigma * HG[0][1][j] - HF[0][1][j]) * det21Bracket
-                    - (sigma * HG[1][0][j] - HF[1][0][j]) * det12Bracket;
-        }
+//        for (int j = 0; j < dim; j++) {
+//            A[0][j] = JG[0][j] * f2Bracket + g1Bracket * JF[1][j]
+//                    - JG[1][j] * f1Bracket - g2Bracket * JF[0][j];
+//            A[1][j] = (sigma * HG[0][0][j] - HF[0][0][j]) * det22Bracket
+//                    + (sigma * HG[1][1][j] - HF[1][1][j]) * det11Bracket
+//                    - (sigma * HG[0][1][j] - HF[0][1][j]) * det21Bracket
+//                    - (sigma * HG[1][0][j] - HF[1][0][j]) * det12Bracket;
+//        }
 
-        /* TODO: Para o caso de dimensao generica, deve ser alguma coisa como:
-           TODO: Mudei a ordem do que esta escrito acima...
-            b[0] = -2*det(CharMatrix);
-            for (int i = 1; i < dim; i++) {
-                b[i] = 2*(fBracket[0]*gBracket[i] - fBracket[i]*gBracket[0]);
-            }
-         */
+//        /* TODO: Para o caso de dimensao generica, deve ser alguma coisa como:
+//           TODO: Mudei a ordem do que esta escrito acima...
+//            b[0] = -2*det(CharMatrix);
+//            for (int i = 1; i < dim; i++) {
+//                b[i] = 2*(fBracket[0]*gBracket[i] - fBracket[i]*gBracket[0]);
+//            }
+//         */
 
-        double det = A[0][0] * A[1][1] - A[0][1] * A[1][0];
-        anorm = 0.0;
+//        double det = A[0][0] * A[1][1] - A[0][1] * A[1][0];
+//        anorm = 0.0;
 
-        // Only dim = 2 is here.
-        for (int i = 0; i < 2; i++) {
-            for (int j = 0; j < 2; j++) {
-                anorm += A[i][j] * A[i][j];
-            }
-        }
+//        // Only dim = 2 is here.
+//        for (int i = 0; i < 2; i++) {
+//            for (int j = 0; j < 2; j++) {
+//                anorm += A[i][j] * A[i][j];
+//            }
+//        }
 
-        // If Newton does not converge, return the original point.
+//        // If Newton does not converge, return the original point.
 
-        if ((fabs(det) <= (epsilon * anorm)) || (count > 18)) {
-            cout << "ColorCurve::Right_Newton does not converge." << endl;
-            cout << "count = " << count << " " << input << endl;
-            for (int i = 0; i < dim; i++) out.component(i) = input.component(i);
+//        if ((fabs(det) <= (epsilon * anorm)) || (count > 18)) {
+//            cout << "ColorCurve::Right_Newton does not converge." << endl;
+//            cout << "count = " << count << " " << input << endl;
+//            for (int i = 0; i < dim; i++) out.component(i) = input.component(i);
 
-            return;
-        }
+//            return;
+//        }
 
-        // Protect against zero-division or use LAPACK (will be done so anyway for n >= 3)
-        delta_U[0] = (b[0] * A[1][1] - b[1] * A[0][1]) / det;
-        delta_U[1] = (A[0][0] * b[1] - A[1][0] * b[0]) / det;
+//        // Protect against zero-division or use LAPACK (will be done so anyway for n >= 3)
+//        delta_U[0] = (b[0] * A[1][1] - b[1] * A[0][1]) / det;
+//        delta_U[1] = (A[0][0] * b[1] - A[1][0] * b[0]) / det;
 
-        // Prepare next step:
-        for (int i = 0; i < dim; i++) U[i] += delta_U[i];
+//        // Prepare next step:
+//        for (int i = 0; i < dim; i++) U[i] += delta_U[i];
 
-        deltaNorm = 0.0;
-        for (int i = 0; i < dim; i++) deltaNorm += (delta_U[i] * delta_U[i]);
-        count++;
+//        deltaNorm = 0.0;
+//        for (int i = 0; i < dim; i++) deltaNorm += (delta_U[i] * delta_U[i]);
+//        count++;
 
-    } while (deltaNorm > epsilon2);
+//    } while (deltaNorm > epsilon2);
 
-    // Output
-    for (int i = 0; i < dim; i++) out.component(i) = U[i];
+//    // Output
+//    for (int i = 0; i < dim; i++) out.component(i) = U[i];
 
     return;
 }
@@ -345,6 +348,11 @@ int ColorCurve::interpolate(const RealVector &p, double &s_p,
     double fp, fq; // f(p), f(q), the function whose zero is to be found
     std::vector<double> alpha;
 
+    // TODO: Pensar em mandar isto na chamada
+    std::vector<eigenpair> ep, eq;
+    Eigen::eig(dim, (JF_ref - s_p*JG_ref).data(), B_ref.M().data(), ep);
+    Eigen::eig(dim, (JF_ref - s_q*JG_ref).data(), B_ref.M().data(), eq);
+    
     // Number of inequalities
     int noi = 0;
 
@@ -353,8 +361,8 @@ int ColorCurve::interpolate(const RealVector &p, double &s_p,
     //
     for (int i = 0; i < fam; i++) {
         if (abs_ineq % 2) {
-            fp = ref_eigenvalue[i] - s_p;
-            fq = ref_eigenvalue[i] - s_q;
+            fp = ep[i].r - s_p;
+            fq = eq[i].r - s_q;
             if (fabs(fq - fp) < epsilon) return INTERPOLATION_ERROR;
             alpha.push_back(fq / (fq - fp));
             rtype.push_back(increase);
@@ -363,7 +371,7 @@ int ColorCurve::interpolate(const RealVector &p, double &s_p,
         abs_ineq /= 2;
         increase *= 2;
 
-        // Here the alphas are orginized in increasing order
+/*        // Here the alphas are orginized in increasing order
         // (Thus alpha[0] will be closer to zero, and r[noi-1] closer one).        
         if (noi > 1) {
             for (int j = noi; j > 0; j--) {
@@ -376,7 +384,7 @@ int ColorCurve::interpolate(const RealVector &p, double &s_p,
                     rtype[j] = rtemp;
                 } else break;
             }
-        }
+        } */
     }
 
     for (int i = 0; i < fam; i++) {
@@ -391,7 +399,7 @@ int ColorCurve::interpolate(const RealVector &p, double &s_p,
         abs_ineq /= 2;
         increase *= 2;
 
-        // Here the alphas are orginized in increasing order
+/*        // Here the alphas are orginized in increasing order
         // (Thus alpha[0] will be closer to zero, and r[noi-1] closer to one).        
         if (noi > 1) {
             for (int j = noi; j > 0; j--) {
@@ -404,11 +412,11 @@ int ColorCurve::interpolate(const RealVector &p, double &s_p,
                     rtype[j] = rtemp;
                 } else break;
             }
-        }
+        } */
     }
 
     // Here the alphas are orginized in increasing order
-    // (Thus alpha[0] will be closer to zero, and r[noi-1] closer one).
+    // (Thus alpha[0] will be closer to zero, and alpha[noi-1] closer one).
     std::sort(alpha.begin(), alpha.end());
 
     // If the sign changes more than 2 times the number of families, return an error.
@@ -421,7 +429,7 @@ int ColorCurve::interpolate(const RealVector &p, double &s_p,
             for (int j = 0; j < p.size(); j++) {
                 if (alpha[i] < 0.0) alpha[i] = 0.0;
                 if (alpha[i] > 1.0) alpha[i] = 1.0;
-                r[i].component(j) = (1 - alpha[i]) * p.component(j) + alpha[i] * q.component(j);
+                r[i].component(j) = alpha[i] * p.component(j) + (1.0 - alpha[i]) * q.component(j);
             }
         }
 
@@ -437,17 +445,23 @@ int ColorCurve::complete_point(RealVector &p, double &s, std::vector<double> &ei
 
     // F, JF, G & JG at p:
     //
-    double F[dim], G[dim], JF[dim][dim], JG[dim][dim];
+    double F[dim], G[dim];
+    DoubleMatrix JF(dim, dim), JG(dim, dim);
 
-    fluxFunction_->fill_with_jet(dim, p.components(), 1, F, &JF[0][0], 0);
-    accFunction_->fill_with_jet(dim, p.components(), 1, G, &JG[0][0], 0);
+    fluxFunction_->fill_with_jet(dim, p.components(), 1, F, JF.data(), 0);
+    accFunction_->fill_with_jet(dim, p.components(), 1, G, JG.data(), 0);
 
     // Eigenvalues.
     //
     std::vector<eigenpair> e;
-    Eigen::eig(dim, &JF[0][0], &JG[0][0], e);
+//    Eigen::eig(dim, &JF[0][0], &JG[0][0], e);
+
+    ViscosityJetMatrix B(dim, dim, dim);
+    vm->fill_viscous_matrix(p, B);
+    
+    Eigen::eig(dim, (JF-s*JG).data(), B.M().data(), e);
     eigenvalue.resize(e.size());
-    for (int i = 0; i < e.size(); i++) eigenvalue[i] = e[i].r;
+    for (int i = 0; i < e.size(); i++) eigenvalue[i] = e[i].r + s;
 
     // This routine gives the possible pairs that are complex, just one position is stored.
     // For that reason, when such a pair is found, it jumps twice (i++) to look for new pairs.
@@ -501,14 +515,21 @@ int ColorCurve::complete_point(RealVector &p, double &s, std::vector<double> &ei
 //
 int ColorCurve::classify_point(RealVector &p, double &s, std::vector<double> &eigenvalue, std::string &signature) {
     signature.clear();
-    int dim = ref_eigenvalue.size();
+    int dim = p.size();
+    
+
     int complex_ref[dim + 1], complex[dim + 1];
 
     // In order to classify the point, speed and eigenvalues are needed. They are filled in complete:
     // (type is filled as 0 when the classification is possible.)
     //
     int type = complete_point(p, s, eigenvalue, complex);
+    
+
     if (type == UNCLASSIFIABLE_POINT) return UNCLASSIFIABLE_POINT;
+    
+    std::vector<eigenpair> e;
+    Eigen::eig(dim, (JF_ref - s*JG_ref).data(), B_ref.M().data(), e);
 
     int increment = 1;
 
@@ -521,7 +542,7 @@ int ColorCurve::classify_point(RealVector &p, double &s, std::vector<double> &ei
     //
     for (int fam = 0; fam < dim; fam++) {
         // Assing increments for left side (reference point)
-        if (ref_eigenvalue[fam] - s > 0.0) {
+        if (e[fam].r > 0.0) {
             type += increment;
             signature += sp;
         } else signature += sm;
@@ -542,7 +563,7 @@ int ColorCurve::classify_point(RealVector &p, double &s, std::vector<double> &ei
     int complex_count = 0;
     complex_ref[0] = 0;
     for (int i = 0; i < dim;) {
-        if (fabs(ref_e_complex[i]) > 0) {
+        if (fabs(e[i].i) > 0) {
             // The complex notation ("+." or "-.") will be introduced on the second eigenvalue.
             i++;
             complex_ref[complex_count] = i;
@@ -705,10 +726,10 @@ void ColorCurve::classify_segment_with_data(
                     ztype /= 2;
                 }
                 RealVector out;
-                if (zerotype < fam) Left_Newton_improvement(rtemp[i], zerotype, out);
-                else Right_Newton_improvement(rtemp[i], zerotype - fam, out);
+//                if (zerotype < fam) Left_Newton_improvement(rtemp[i], zerotype, out);
+//                else Right_Newton_improvement(rtemp[i], zerotype - fam, out);
                 cout << "Quem eh out : " << out << endl;
-                rtemp[i] = out;
+//                rtemp[i] = out;
             }
         }
 
@@ -812,23 +833,26 @@ void ColorCurve::classify_segmented_curve(std::vector<RealVector> &original,
     ref_point.resize(dim);
     for (int i = 0; i < dim; i++) ref_point.component(i) = ref.component(i);
 
-    // Eigenvalues at the reference point.
+    // Flux, accumulation and viscosity matrix at the reference point.
     //
     F_ref.resize(dim);
     G_ref.resize(dim);
-    double JF[dim][dim], JG[dim][dim];
-    fluxFunction_->fill_with_jet(dim, ref_point.components(), 1, F_ref.components(), &JF[0][0], 0);
-    accFunction_->fill_with_jet(dim, ref_point.components(), 1, G_ref.components(), &JG[0][0], 0);
+    JF_ref.resize(dim, dim); JG_ref.resize(dim, dim);
+    B_ref.M().resize(dim, dim);
+    fluxFunction_->fill_with_jet(dim, ref_point.components(), 1, F_ref.components(), JF_ref.data(), 0);
+    accFunction_->fill_with_jet(dim, ref_point.components(), 1, G_ref.components(), JG_ref.data(), 0);
+    
+    vm->fill_viscous_matrix(ref, B_ref);
 
-    std::vector<eigenpair> e;
-    Eigen::eig(dim, &JF[0][0], &JG[0][0], e);
-
-    ref_eigenvalue.resize(e.size());
-    ref_e_complex.resize(e.size());
-    for (int i = 0; i < e.size(); i++) {
-        ref_eigenvalue[i] = e[i].r;
-        ref_e_complex[i] = e[i].i;
-    }
+//    std::vector<eigenpair> e;
+//    Eigen::eig(dim, &JF[0][0], &JG[0][0], e);
+//
+//    ref_eigenvalue.resize(e.size());
+//    ref_e_complex.resize(e.size());
+//    for (int i = 0; i < e.size(); i++) {
+//       ref_eigenvalue[i] = e[i].r;
+//        ref_e_complex[i] = e[i].i;
+//    }
 
     // Process the list
     for (int i = 0; i < original.size() / 2; i++) {
@@ -857,21 +881,26 @@ void ColorCurve::classify_continuous_curve(std::deque<RealVector> &original,
     //
     F_ref.resize(dim);
     G_ref.resize(dim);
-    double JF[dim][dim], JG[dim][dim];
-    fluxFunction_->fill_with_jet(dim, ref_point.components(), 1, F_ref.components(), &JF[0][0], 0);
-    accFunction_->fill_with_jet(dim, ref_point.components(), 1, G_ref.components(), &JG[0][0], 0);
+    JF_ref.resize(dim, dim); JG_ref.resize(dim, dim);
+    B_ref.M().resize(dim, dim);
 
-    std::vector<eigenpair> e;
-    Eigen::eig(dim, &JF[0][0], &JG[0][0], e);
+    fluxFunction_->fill_with_jet(dim, ref_point.components(), 1, F_ref.components(), JF_ref.data(), 0);
+    accFunction_->fill_with_jet(dim, ref_point.components(), 1, G_ref.components(), JG_ref.data(), 0);
+    
+    vm->fill_viscous_matrix(ref, B_ref);
 
-    ref_eigenvalue.resize(e.size());
-    ref_e_complex.resize(e.size());
-    for (int i = 0; i < e.size(); i++) {
-        ref_eigenvalue[i] = e[i].r;
-        ref_e_complex[i] = e[i].i;
-    }
+//    std::vector<eigenpair> e;
+//    Eigen::eig(dim, &JF[0][0], &JG[0][0], e);
+//
+//    ref_eigenvalue.resize(e.size());
+//    ref_e_complex.resize(e.size());
+//    for (int i = 0; i < e.size(); i++) {
+//        ref_eigenvalue[i] = e[i].r;
+//        ref_e_complex[i] = e[i].i;
+//    }
 
-    double s_p, s_q;
+    double s_p=0;
+    double s_q=0;
     std::vector<double> eigenvalue_p, eigenvalue_q;
     std::string ct_p, ct_q;
 
@@ -917,6 +946,8 @@ void ColorCurve::classify_continuous_curve(std::deque<RealVector> &original,
         for (int j = 0; j < fam; j++) hpl.eigenvalue[0].component(j) = eigenvalue_p[j];
 
         q = original[i];
+        
+        
         type_q = classify_point(q, s_q, eigenvalue_q, ct_q);
 
         std::vector<HugoniotPolyLine> segment_classified;

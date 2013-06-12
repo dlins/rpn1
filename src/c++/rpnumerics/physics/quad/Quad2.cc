@@ -11,8 +11,8 @@ Quad2::Quad2(const Quad2FluxParams & params) : SubPhysics(*defaultBoundary(), *n
     DEFAULT_XZERO = ".13 .07";
    
     setHugoniotFunction(new Hugoniot_Curve());
-//    setHugoniotFunction (new Quad2Hugoniot());
     setDoubleContactFunction(new Double_Contact());
+    setViscosityMatrix( new Viscosity_Matrix());
     setShockMethod(new Shock());
     preProcessedBoundary_= defaultBoundary();
 
@@ -48,9 +48,9 @@ Quad2::Quad2(const Quad2 & copy) : SubPhysics(copy.fluxFunction(), copy.accumula
 
 
     setHugoniotFunction(new Hugoniot_Curve());
-//    setHugoniotFunction (new Quad2Hugoniot());
     setDoubleContactFunction(new Double_Contact());
     setShockMethod(new Shock());
+     setViscosityMatrix( copy.getViscosityMatrix());
     preProcessedBoundary_=copy.getPreProcessedBoundary()->clone();
 }
 

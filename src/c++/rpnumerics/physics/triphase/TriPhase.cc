@@ -28,15 +28,16 @@ SubPhysics(TriPhaseFluxFunction(params, permParams, capilParams, viscParams), Tr
 
     setDoubleContactFunction(new Double_Contact());
     setShockMethod(new Shock());
+    setViscosityMatrix( new Viscosity_Matrix());
     preProcessedBoundary_ = defaultBoundary();
 
 }
 
 TriPhase::TriPhase() : SubPhysics(TriPhaseFluxFunction(TriPhaseParams(), PermParams(), CapilParams(), ViscosityParams()), TriPhaseAccumulationFunction(), *defaultBoundary(), Multid::PLANE, "TriPhase", _SIMPLE_ACCUMULATION_) {
     setHugoniotFunction(new Hugoniot_Curve());
-
     setDoubleContactFunction(new Double_Contact());
     setShockMethod(new Shock());
+    setViscosityMatrix( new Viscosity_Matrix());
     preProcessedBoundary_ = defaultBoundary();
 
 
@@ -71,6 +72,18 @@ vector<double> * TriPhase::getParams() {
 
 void TriPhase::setParams(vector<string> params) {
 
+    
+    
+    
+    for (int i = 0; i < params.size(); i++) {
+        cout <<"i: "<<i<<params[i]<<endl;
+
+
+    }
+
+    
+    
+    
 
     RealVector fluxParamVector(7);
 
@@ -134,9 +147,9 @@ Boundary * TriPhase::defaultBoundary() const {
 
 TriPhase::TriPhase(const TriPhase & copy) : SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.getBoundary(), Multid::PLANE, "TriPhase", _SIMPLE_ACCUMULATION_) {
     setHugoniotFunction(new Hugoniot_Curve());
-
     setDoubleContactFunction(new Double_Contact());
     setShockMethod(new Shock());
+    setViscosityMatrix( copy.getViscosityMatrix());
     preProcessedBoundary_ = defaultBoundary();
 
 

@@ -12,7 +12,7 @@ import javax.swing.JToggleButton;
 import rpn.controller.ui.SCRATCH_CONFIG;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UserInputHandler;
-import rpn.message.RPnActionMediator;
+import rpn.message.RPnNetworkStatus;
 
 
 public class ScratchCommand extends javax.swing.AbstractAction {
@@ -53,10 +53,8 @@ public class ScratchCommand extends javax.swing.AbstractAction {
             currentSelection_= UIController.instance().getState();
             UIController.instance().setState(scratchSelected_);
             
-            
-            if (UIController.instance().getNetStatusHandler().isOnline()){ //Sending application state
-                RPnActionMediator.instance().setState(DESC_TEXT);
-            }
+           if (RPnNetworkStatus.instance().isOnline())
+            RPnNetworkStatus.instance().sendCommand(DESC_TEXT);
 
         }
         

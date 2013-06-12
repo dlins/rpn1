@@ -24,10 +24,6 @@
 #include "Hugoniot_Locus.h"
 #include "ThreeImplicitFunctions.h"
 #include "Double_Contact_Function.h"
-#include "Double_Contact.h"
-#include "Hugoniot_Curve.h"
-#include "ShockMethod.h"
-#include "Shock.h"
 #include "methods/ShockMethod.h"
 
 /*
@@ -54,6 +50,7 @@ protected:
 
     FluxFunction * fluxFunction_;
     AccumulationFunction * accumulationFunction_;
+    Viscosity_Matrix * viscosityMatrix_;
     Boundary * preProcessedBoundary_;
 
 public:
@@ -62,6 +59,8 @@ public:
     SubPhysics(const Boundary &, const Space &, const char *, int);
 
     SubPhysics(const FluxFunction &, const AccumulationFunction &, const Boundary &, const Space &, const char *, int);
+    
+//    SubPhysics(const FluxFunction &, const AccumulationFunction &, const Boundary &,  Viscosity_Matrix *,const Space &, const char *, int);
 
     void fluxParams(const FluxParams &);
 
@@ -76,6 +75,10 @@ public:
     const FluxFunction & fluxFunction() const;
 
     Hugoniot_Locus * getHugoniotFunction() const;
+    
+    Viscosity_Matrix * getViscosityMatrix() const;
+    
+    void setViscosityMatrix(Viscosity_Matrix *);
 
     void setHugoniotFunction(Hugoniot_Locus *);
     

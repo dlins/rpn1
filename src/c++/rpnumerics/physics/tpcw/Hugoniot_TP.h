@@ -26,17 +26,17 @@ public:
 
     int classified_curve(const FluxFunction *f, const AccumulationFunction *a,
             GridValues &g, const RealVector &r,
-            std::vector<HugoniotPolyLine> &hugoniot_curve);
+            std::vector<HugoniotPolyLine> &hugoniot_curve,const Viscosity_Matrix *);
 
 
     int classified_curve(const FluxFunction *f, const AccumulationFunction *a,
             GridValues &g, const RealVector &r,
-            std::vector<HugoniotPolyLine> &hugoniot_curve, std::vector<RealVector> & transitionList);
+            std::vector<HugoniotPolyLine> &hugoniot_curve, std::vector<RealVector> & transitionList,const Viscosity_Matrix *);
 
     int classified_curve(const FluxFunction *f, const AccumulationFunction *a,
             GridValues &g, const RealVector &r,
             std::vector<HugoniotPolyLine> &hugoniot_curve, std::vector<RealVector> &transitionList,
-            std::vector<bool> &circular);
+            std::vector<bool> &circular,const Viscosity_Matrix *);
 
 
     int curve(const FluxFunction *f, const AccumulationFunction *a,

@@ -73,9 +73,10 @@ void RectBoundary::extension_curve(const FluxFunction *f, const AccumulationFunc
 
     cout <<"Ultimo seg: "<<seg[seg.size()-1]<<endl;
 
-    extension_curve.curve(f, a, gv, singular, characteristic, fam,
+    extension_curve.curve(f, a, gv, characteristic, singular, fam,
             seg,
             c, d);
+
     return;
 }
 

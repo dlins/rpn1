@@ -17,6 +17,7 @@
 #include "SubPhysics.h"
 #include "Cub2FluxFunction.h"
 #include "Cub2AccumulationFunction.h"
+#include "CubHugoniotFunction.h"
 #include "Cub2FluxParams.h"
 #include "RectBoundary.h"
 
