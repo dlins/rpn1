@@ -15,8 +15,6 @@
 #include "Hugoniot_Curve.h"
 #include "Double_Contact.h"
 #include "Shock.h"
-=======
->>>>>>> b534e68b19e6831710f42e3cd6a6513d38a6f3f1
 
 /*
  * ---------------------------------------------------------------
@@ -30,21 +28,9 @@ CoreyQuadPhysics::CoreyQuadPhysics() : SubPhysics(CoreyQuad(CoreyQuad_Params()),
     setDoubleContactFunction(new Double_Contact());
     setShockMethod(new Shock());
     setHugoniotFunction(new Hugoniot_Curve());
-<<<<<<< HEAD
-    preProcessedBoundary_= defaultBoundary();
-=======
-
-    setDoubleContactFunction(new Double_Contact());
-    setShockMethod(new Shock());
     setViscosityMatrix(new Viscosity_Matrix());
     preProcessedBoundary_ = defaultBoundary();
 
-
-
-
-
-
->>>>>>> b534e68b19e6831710f42e3cd6a6513d38a6f3f1
 }
 
 SubPhysics * CoreyQuadPhysics::clone()const {
@@ -54,22 +40,13 @@ SubPhysics * CoreyQuadPhysics::clone()const {
 
 CoreyQuadPhysics::CoreyQuadPhysics(const CoreyQuadPhysics & copy) : SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.getBoundary(), copy.domain(), "CoreyQuad", _SIMPLE_ACCUMULATION_) {
 
+
     setDoubleContactFunction(new Double_Contact());
     setShockMethod(new Shock());
     setHugoniotFunction(new Hugoniot_Curve());
-<<<<<<< HEAD
-    preProcessedBoundary_= defaultBoundary();
-=======
-
-
-    setDoubleContactFunction(new Double_Contact());
-    setShockMethod(new Shock());
     setViscosityMatrix(copy.getViscosityMatrix());
     preProcessedBoundary_ = copy.getPreProcessedBoundary()->clone();
 
-
-
->>>>>>> b534e68b19e6831710f42e3cd6a6513d38a6f3f1
 }
 
 CoreyQuadPhysics::~CoreyQuadPhysics() {
