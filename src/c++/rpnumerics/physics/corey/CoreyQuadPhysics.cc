@@ -11,7 +11,6 @@
  * Includes:
  */
 #include "CoreyQuadPhysics.h"
-<<<<<<< HEAD
 #include "Hugoniot_Curve.h"
 #include "Double_Contact.h"
 #include "Shock.h"

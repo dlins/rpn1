@@ -40,9 +40,13 @@ public class RPnNetworkDialog extends JDialog implements PropertyChangeListener 
     
 
     public RPnNetworkDialog() {
+
         try {
+
             init();
-            this.setLocationRelativeTo(null);
+
+            setLocationRelativeTo(null);
+
         } catch (Exception e) {
             e.printStackTrace();
         }

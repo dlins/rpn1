@@ -11,6 +11,7 @@ import javax.jms.*;
 import java.io.StringBufferInputStream;
 import rpn.parser.*;
 import org.xml.sax.helpers.XMLReaderFactory;
+import org.hornetq.api.jms.management.JMSServerControl;
 
 /**
  *
@@ -23,6 +24,7 @@ public class RPnConsumer  {
     public static QueueReceiver receiver = null;
     public static QueueConnectionFactory cf = null;
     public static javax.jms.Queue queue = null;
+    
 
     public static void main(String[] args) {
                
@@ -39,6 +41,10 @@ public class RPnConsumer  {
 
             cf = (QueueConnectionFactory) context.lookup("jms/RemoteConnectionFactory");
             queue = (javax.jms.Queue) context.lookup(queueName);
+
+            JMSServerControl controller = (JMSServerControl) context.lookup("jms.server");
+            controller.createQueue("MYQUEUE");
+            
     
         } catch (Exception exc) {
 
@@ -67,6 +73,7 @@ public class RPnConsumer  {
             QueueSession queueSession = queueConnection.createQueueSession(false, Session.CLIENT_ACKNOWLEDGE);
 
             receiver = queueSession.createReceiver(queue);
+            
             queueConnection.start();
 
             while (!end) {         
