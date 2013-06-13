@@ -72,7 +72,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceExtensionCurveCalc_nativeCa
 
     if (RpNumerics::getPhysics().ID().compare("TPCW") == 0) {
 
-        cout << "Chamando extension com tpcw" << endl;
+        IF_DEBUG
+            cout << "Chamando extension com tpcw" << endl;
+        END_DEBUG
         dimension = 3;
 
 
@@ -127,20 +129,22 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceExtensionCurveCalc_nativeCa
                 curve_segments,
                 domain_segments);
 
-        cout << "Tamanho da coincidence curve extension: " << curve_segments.size() << endl;
-        cout << "Tamanho da coincidence domain extension: " << domain_segments.size() << endl;
+        IF_DEBUG
+            cout << "Tamanho da coincidence curve extension: " << curve_segments.size() << endl;
+            cout << "Tamanho da coincidence domain extension: " << domain_segments.size() << endl;
+        END_DEBUG
 
         tpcw.postProcess(curve_segments);
         tpcw.postProcess(domain_segments);
 
 
-        cout << "Resolucao x " << xResolution << endl;
-
-        cout << "Resolucao y " << yResolution << endl;
-
-        cout << "Familia da curva" << curveFamily << endl;
-        cout << "Familia do dominio" << domainFamily << endl;
-        cout << "characteristic " << characteristicWhere << endl;
+        IF_DEBUG
+            cout << "Resolucao x " << xResolution << endl;
+            cout << "Resolucao y " << yResolution << endl;
+            cout << "Familia da curva" << curveFamily << endl;
+            cout << "Familia do dominio" << domainFamily << endl;
+            cout << "characteristic " << characteristicWhere << endl;
+        END_DEBUG
 
 
         delete number_of_grid_points;

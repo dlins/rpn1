@@ -210,30 +210,32 @@ int Rarefaction::compute_last_point(const RealVector &previous_point, const Real
     //last_point.resize(n + 1);
 
     int info = rar_last_point(n, previous_point, new_point, last_point);
-    printf("Inside compute_last_point:\n");
+    IF_DEBUG
+        printf("Inside compute_last_point:\n");
+        printf("previous_point = (");
 
-    printf("previous_point = (");
-    for (int i = 0; i < n; i++) {
-        printf("%g", previous_point.component(i));
-        if (i <= (n - 2)) printf(", ");
-    }
-    printf(")\n");
-
-    printf("new_point = (");
-    for (int i = 0; i < n; i++) {
-        printf("%g", new_point.component(i));
-        if (i <= (n - 2)) printf(", ");
-    }
-    printf(")\n");
-
-    printf("last_point = (");
-    if (info == SUCCESSFUL_PROCEDURE) {
         for (int i = 0; i < n; i++) {
-            printf("%g", last_point.component(i));
+            printf("%g", previous_point.component(i));
             if (i <= (n - 2)) printf(", ");
         }
         printf(")\n");
-    } else printf("GARBAGE HERE)\n");
+
+        printf("new_point = (");
+        for (int i = 0; i < n; i++) {
+            printf("%g", new_point.component(i));
+            if (i <= (n - 2)) printf(", ");
+        }
+        printf(")\n");
+
+        printf("last_point = (");
+        if (info == SUCCESSFUL_PROCEDURE) {
+            for (int i = 0; i < n; i++) {
+                printf("%g", last_point.component(i));
+                if (i <= (n - 2)) printf(", ");
+            }
+            printf(")\n");
+        } else printf("GARBAGE HERE)\n");
+    END_DEBUG
 
     return info;
 }
@@ -418,7 +420,9 @@ int Rarefaction::init(const RealVector &initial_point, int increase, double delt
 //    double lambda;
 
 //    if (e[family].i != 0){
+//    IF_DEBUG
 //        printf("Inside dirdrv(): Init step, eigenvalue %d is complex: % f %+f.\n", family, e[family].r, e[family].i);
+//    END_DEBUG
 //        return ABORTED_PROCEDURE;     
 //    }
 //    else lambda = e[family].r;
@@ -466,9 +470,11 @@ int Rarefaction::init(const RealVector &initial_point, int increase, double delt
 //    double Dtimesr_minus_lambdaEtimesr[n];
 //    for (int i = 0; i < n; i++) Dtimesr_minus_lambdaEtimesr[i] = Dtimesr[i] - lambda*Etimesr[i];
 
-//    //for (int i = 0; i < n; i++) printf("l[%d] = %g, r[%d] = %g, Dtimesr[%d] = %g, lambda = %g, Etimesr[%d] = %g\n", i, l[i], i, r[i], i, Dtimesr[i], lambda, i, Etimesr[i]);
+//    IF_DEBUG
+//        for (int i = 0; i < n; i++) printf("l[%d] = %g, r[%d] = %g, Dtimesr[%d] = %g, lambda = %g, Etimesr[%d] = %g\n", i, l[i], i, r[i], i, Dtimesr[i], lambda, i, Etimesr[i]);
 
-//    //printf("Dirdrv = %g divided by %g.\n", ddot(n, Dtimesr_minus_lambdaEtimesr,l), ddot(n, Btimesr, l));
+//        printf("Dirdrv = %g divided by %g.\n", ddot(n, Dtimesr_minus_lambdaEtimesr,l), ddot(n, Btimesr, l));
+//    END_DEBUG
 
 //    return ddot(n, Dtimesr_minus_lambdaEtimesr, l)/ddot(n, Btimesr, l);
 ////   return ddot(n, Dtimesr, l)/ddot(n, r, l);
@@ -481,7 +487,9 @@ double Rarefaction::dirdrv(int n, const RealVector &p, const RealVector &directi
         dir[i] = direction.component(i);
     }
 
-   cout <<"Ponto: "<<p<<" direcao: "<<direction<<endl;
+    IF_DEBUG
+        cout <<"Ponto: "<<p<<" direcao: "<<direction<<endl;
+    END_DEBUG
     return dirdrv(n, &point[0], &dir[0]);
 }
 
@@ -524,7 +532,9 @@ double Rarefaction::dirdrv(int n, double *point, double *dir) {
     double lambda;
 
     if (e[fam].i != 0) {
-        printf("Inside dirdrv(): Init step, eigenvalue %d is complex: % f %+f.\n", fam, e[fam].r, e[fam].i);
+        IF_DEBUG
+            printf("Inside dirdrv(): Init step, eigenvalue %d is complex: % f %+f.\n", fam, e[fam].r, e[fam].i);
+        END_DEBUG
         return ABORTED_PROCEDURE;
     } else lambda = e[fam].r;
 
@@ -611,7 +621,9 @@ int Rarefaction::initial_dirdrv(int n, const RealVector &p, int increase, double
     //    double lambda;
     //
     //    if (e[fam].i != 0){
-    //        printf("Inside dirdrv(): Init step, eigenvalue %d is complex: % f %+f.\n", fam, e[fam].r, e[fam].i);
+    //        IF_DEBUG
+    //            printf("Inside dirdrv(): Init step, eigenvalue %d is complex: % f %+f.\n", fam, e[fam].r, e[fam].i);
+    //        END_DEBUG
     //        return ABORTED_PROCEDURE;
     //    }
     //    else lambda = e[fam].r;
@@ -655,7 +667,9 @@ int Rarefaction::initial_dirdrv(int n, const RealVector &p, int increase, double
         }
     }
 
-    printf("initial_dirdrv. dd = %lf\n", dd);
+    IF_DEBUG
+        printf("initial_dirdrv. dd = %lf\n", dd);
+    END_DEBUG
 
     return RAREFACTION_INIT_OK;
 }
@@ -771,7 +785,9 @@ int Rarefaction::curve(const RealVector &initial_point,
     Rarefaction::accumulationfunction = (AccumulationFunction*) aa;
     Rarefaction::type = type_of_accumulation;
     Rarefaction::family = curve_family;
-    cout << "Valor de deltaxi: " << deltaxi << endl;
+    IF_DEBUG
+        cout << "Valor de deltaxi: " << deltaxi << endl;
+    END_DEBUG
 
 
 //
@@ -793,8 +809,10 @@ int Rarefaction::curve(const RealVector &initial_point,
 //    directionTest.component(1) = 0.00054363;
 //    //
 //    //    
-//    std::cout << "Test. " << test0 << " dd: " << dirdrv(2, test0, directionTest) << endl;
-//    std::cout << "Test2. " << test1 << " dd: " << dirdrv(2, test1, directionTest) << endl;
+//    IF_DEBUG
+//        std::cout << "Test. " << test0 << " dd: " << dirdrv(2, test0, directionTest) << endl;
+//        std::cout << "Test2. " << test1 << " dd: " << dirdrv(2, test1, directionTest) << endl;
+//    END_DEBUG
 //
 //
 //    return -7;
@@ -823,7 +841,9 @@ int Rarefaction::curve(const RealVector &initial_point,
     //    if (initialize == RAREFACTION_INITIALIZE_YES){
     //        int init_info = init(initial_point, increase, deltaxi, new_point);
     //        if (init_info != RAREFACTION_INIT_OK){
-    //            printf("Rarefaction::curve(): Initialization failure.\n");
+    //            IF_DEBUG
+    //                printf("Rarefaction::curve(): Initialization failure.\n");
+    //            END_DEBUG
     //            return init_info;
     //        }
     //    }
@@ -835,25 +855,29 @@ int Rarefaction::curve(const RealVector &initial_point,
     //        double d = 0;
     //        for (int i = 0; i < n; i++) d += tempev.component(i)*initial_direction->component(i);
 
-    //        printf("d = %f\n", d);
-    //        printf("Eigenvector = (");
-    //        for (int i = 0; i < n; i++){
-    //            printf("%g", tempev.component(i));
-    //            if (i < n - 1) printf(", ");
-    //        }
-    //        printf(")\n");
+    //        IF_DEBUG
+    //            printf("d = %f\n", d);
+    //            printf("Eigenvector = (");
+    //            for (int i = 0; i < n; i++){
+    //                printf("%g", tempev.component(i));
+    //                if (i < n - 1) printf(", ");
+    //            }
+    //            printf(")\n");
+    //        END_DEBUG
 
     //        if (d >= 0.0) for (int i = 0; i < n; i++) new_point.component(i) += deltaxi*tempev.component(i);
     //        else          for (int i = 0; i < n; i++) new_point.component(i) -= deltaxi*tempev.component(i);
 
     //        new_point.component(n) = compute_lambda(n, new_point);
 
-    //        printf("New point   = (");
-    //        for (int i = 0; i < n; i++){
-    //            printf("%g", new_point.component(i));
-    //            if (i < n - 1) printf(", ");
-    //        }
-    //        printf(")\n");
+    //        IF_DEBUG
+    //           printf("New point   = (");
+    //           for (int i = 0; i < n; i++){
+    //               printf("%g", new_point.component(i));
+    //               if (i < n - 1) printf(", ");
+    //           }
+    //           printf(")\n");
+    //        END_DEBUG
     //    }
 
     //    rarcurve.push_back(new_point);
@@ -947,7 +971,9 @@ int Rarefaction::curve(const RealVector &initial_point,
 
         // Invoke LSODE.
         lsode_(&flux, &n, p, &xi, &new_xi, &itol, &rtol, atol, &itask, &istate, &iopt, rwork, &lrw, iwork, &liw, 0, &mf, &nparam, param);
-        //        printf("LSODE: info = %d\n", istate);
+        IF_DEBUG
+            printf("LSODE: info = %d\n", istate);
+        END_DEBUG
 
         // ***ELIPTIC REGION***
         // 2012/02/07.
@@ -971,18 +997,20 @@ int Rarefaction::curve(const RealVector &initial_point,
         RealVector r;
         int intersection_info = boundary->intersection(previous_point, new_point, r, where_out);
 
-        //        printf("Inside while. previous_point = (");
-        //        for (int i = 0; i < n; i++){
-        //            printf("%g", previous_point.component(i));
-        //            if (i < n - 1) printf(", ");
-        //        }
-        //        printf(")\n");
-        //        printf("Inside while.      new_point = (");
-        //        for (int i = 0; i < n; i++){
-        //            printf("%g", new_point.component(i));
-        //            if (i < n - 1) printf(", ");
-        //        }
-        //        printf(")\n");
+        IF_DEBUG
+            printf("Inside while. previous_point = (");
+            for (int i = 0; i < n; i++){
+                printf("%g", previous_point.component(i));
+                if (i < n - 1) printf(", ");
+            }
+            printf(")\n");
+            printf("Inside while.      new_point = (");
+            for (int i = 0; i < n; i++){
+                printf("%g", new_point.component(i));
+                if (i < n - 1) printf(", ");
+            }
+            printf(")\n");
+        END_DEBUG
 
         if (intersection_info == 1) {
             // Both points inside. Carry on with the rest of the tests, etc.
@@ -993,25 +1021,29 @@ int Rarefaction::curve(const RealVector &initial_point,
             r.component(n) = compute_lambda(n, r);
             rarcurve.push_back(r);
 
-            printf("Reached boundary\n");
+            IF_DEBUG
+                printf("Reached boundary\n");
+            END_DEBUG
 
             return SUCCESSFUL_PROCEDURE;
         } else {
             // Both points lie outside the domain. Something went awfully wrong here.
-            printf("Both outside\n");
-            printf("previous_point = (");
-            for (int i = 0; i < n; i++) {
-                printf("%g", previous_point.component(i));
-                if (i < n - 1) printf(", ");
-            }
-            printf(")\n");
+            IF_DEBUG
+                printf("Both outside\n");
+                printf("previous_point = (");
+                for (int i = 0; i < n; i++) {
+                    printf("%g", previous_point.component(i));
+                    if (i < n - 1) printf(", ");
+                }
+                printf(")\n");
 
-            printf("new_point      = (");
-            for (int i = 0; i < n; i++) {
-                printf("%g", new_point.component(i));
-                if (i < n - 1) printf(", ");
-            }
-            printf(")\n");
+                printf("new_point      = (");
+                for (int i = 0; i < n; i++) {
+                    printf("%g", new_point.component(i));
+                    if (i < n - 1) printf(", ");
+                }
+                printf(")\n");
+            END_DEBUG
 
             return ABORTED_PROCEDURE;
         }
@@ -1024,11 +1056,15 @@ int Rarefaction::curve(const RealVector &initial_point,
         for (int i = 0; i < n; i++) r_direction.component(i) = new_point.component(i) - previous_point.component(i);
 
         new_dirdrv = dirdrv(n, new_point, r_direction);
-        //            printf("new_dirdrv = %lg, previous_dirdrv = %g, new_dirdrv*previous_dirdrv = %g\n", new_dirdrv, previous_dirdrv, new_dirdrv*previous_dirdrv);
-        //            printf("new_lambda = %lg, previous_lambda = %g\n", new_lambda, previous_lambda);
+        IF_DEBUG
+            printf("new_dirdrv = %lg, previous_dirdrv = %g, new_dirdrv*previous_dirdrv = %g\n", new_dirdrv, previous_dirdrv, new_dirdrv*previous_dirdrv);
+            printf("new_lambda = %lg, previous_lambda = %g\n", new_lambda, previous_lambda);
+        END_DEBUG
         if (new_dirdrv * previous_dirdrv <= 0.0) {
-            printf("Ok");
-            // printf("new_lambda = %g; previous_lambda = %g.\n", new_lambda, previous_lambda);
+            IF_DEBUG
+                printf("Ok");
+                printf("new_lambda = %g; previous_lambda = %g.\n", new_lambda, previous_lambda);
+            END_DEBUG
 
             // Find the point where lambda reaches a minimum, store it and get out.
             RealVector last_point;
@@ -1049,11 +1085,12 @@ int Rarefaction::curve(const RealVector &initial_point,
 
 
             }
-            //                else printf("Last point discarded.\n");
-
-            std::cout << "Rarefaction. Inflection point at: " << last_point << std::endl;
-
-            printf("RAREFACTION_NOT_MONOTONOUS\n");
+            else 
+                IF_DEBUG
+                    printf("Last point discarded.\n");
+                    std::cout << "Rarefaction. Inflection point at: " << last_point << std::endl;
+                    printf("RAREFACTION_NOT_MONOTONOUS\n");
+                END_DEBUG
 
             if (type_of_rarefaction == RAREFACTION_FOR_ITSELF) return RAREFACTION_NOT_MONOTONOUS;
             else if (type_of_rarefaction == RAREFACTION_AS_ENGINE_FOR_INTEGRAL_CURVE) {
@@ -1064,7 +1101,9 @@ int Rarefaction::curve(const RealVector &initial_point,
         }
 
         // Store the point and the eigenvalue and continue.
-        //printf("Rarefaction, size = %d\n", rarcurve.size());
+        IF_DEBUG
+            printf("Rarefaction, size = %d\n", rarcurve.size());
+        END_DEBUG
         rarcurve.push_back(new_point);
         //        }
         //        else rarcurve.push_back(new_point);

@@ -106,7 +106,9 @@ void ContourMethod::allocate_arrays(void){
 
         is_first = false;
 
-        printf("++++++++++++++++ ContourMethod: REMEMBER TO INVOKE deallocate_arrays() AT QUIT-TIME!!!\n++++++++++++++++ DON\'T SAY I DIDN\'T WARN YOU!!!\n");
+        IF_DEBUG
+            printf("++++++++++++++++ ContourMethod: REMEMBER TO INVOKE deallocate_arrays() AT QUIT-TIME!!!\n++++++++++++++++ DON\'T SAY I DIDN\'T WARN YOU!!!\n");
+        END_DEBUG
     }
 
     return;
@@ -166,7 +168,9 @@ int ContourMethod::contour2d(ImplicitFunction *impf, std::vector<RealVector> &vr
 
     GridValues *gv = impf->grid_value();
 
-    printf("BEGINS: Contour2D()\n");
+    IF_DEBUG
+        printf("BEGINS: Contour2D()\n");
+    END_DEBUG
 
 //    deallocate_arrays();
     allocate_arrays();
@@ -324,9 +328,11 @@ if ( method == CONTINUATION_METHOD ) {
                                 // Store the coodinates of the GridValues that have solution, so after
                                 // the sort, a list of order n is used and not the whole grid n^2.
                                 chain_list.push_back(coordinates);
-//                                cout << "Coordinates: " << coordinates[0] << ", " << coordinates[1] << endl;
-//                                cout << "Number of chains: " << number_chains(i,j) << endl;
-//                                cout << "The first point:  " << chains(i,j)[0][0] << endl;
+                                IF_DEBUG
+                                    cout << "Coordinates: " << coordinates[0] << ", " << coordinates[1] << endl;
+                                    cout << "Number of chains: " << number_chains(i,j) << endl;
+                                    cout << "The first point:  " << chains(i,j)[0][0] << endl;
+                                END_DEBUG
                             }
 
                             // The segments are store in pairs
@@ -355,17 +361,19 @@ if ( method == CONTINUATION_METHOD ) {
     }
 
     if ( method == SEGMENTATION_METHOD ) {
-        printf("ENDS:     Contour2D()/For Segments\n\n");
+        IF_DEBUG
+            printf("ENDS:     Contour2D()/For Segments\n\n");
+        END_DEBUG
         return 0;
     }
 
-// TEST
-//   cout << "Cells: ";
-//   for (int i = 0; i < chain_list.size(); i++) {
-//       cout << number_chains(chain_list[i][0],chain_list[i][1]) << " ";
-//   }
-//   cout << endl;
-// End TEST
+    IF_DEBUG
+        cout << "Cells: ";
+        for (int i = 0; i < chain_list.size(); i++) {
+           cout << number_chains(chain_list[i][0],chain_list[i][1]) << " ";
+        }
+        cout << endl;
+    END_DEBUG
 
     // The following integers keep the path of the concatenation
     int prev, middle, next;
@@ -440,12 +448,12 @@ if ( method == CONTINUATION_METHOD ) {
                 i_index = i_start;
                 j_index = j_start;
                 prev = -1;
-//                /* DEBUG... */
-//                cout << " :: FIZ __RESTORE__" << endl;
-//                cout << "index(" << next << "): " << i_index << ", " << j_index << endl;
-//                cout << "i: " << i_index << ", " << i_start << endl;
-//                cout << "j: " << j_index << ", " << j_start << endl;
-//                /* ... END DEBUG */
+                IF_DEBUG
+                     cout << " :: FIZ __RESTORE__" << endl;
+                     cout << "index(" << next << "): " << i_index << ", " << j_index << endl;
+                     cout << "i: " << i_index << ", " << i_start << endl;
+                     cout << "j: " << j_index << ", " << j_start << endl;
+                END_DEBUG
                 goto restore;
             }
 
@@ -495,41 +503,40 @@ if ( method == CONTINUATION_METHOD ) {
         is_circular.push_back(circular_is);
     }
 
-// For DEBUGING, the following lines can be included instead of the two ereasing statements.
-///* DEBUG...
-//cout << "Antes de deletar tenho: "<< endl;
-//for(int ii = 0; ii < chains(i_index,j_index).size(); ii++){
-//    for (int jj = 0; jj < chains(i_index,j_index)[ii].size(); jj++){
-//        cout << " " << chains(i_index,j_index)[ii][jj];
-//    }
-//    cout << endl;
-//}
-//... END DEBUG */
-//                    chains(i_index,j_index).erase( chains(i_index,j_index).begin() + k );
-//                    chain_edges(i_index,j_index).erase( chain_edges(i_index,j_index).begin() + k);
-///* DEBUG...
-//cout << "Depois de deletar tenho: "<< endl;
-//for(int ii = 0; ii < chains(i_index,j_index).size(); ii++){
-//    for (int jj = 0; jj < chains(i_index,j_index)[ii].size(); jj++){
-//        cout << " " << chains(i_index,j_index)[ii][jj];
-//    }
-//    cout << endl;
-//}
-//... END DEBUG */
+    // For DEBUGING, the following lines can be included instead of the two ereasing statements.
+    IF_DEBUG
+        cout << "Antes de deletar tenho: "<< endl;
+        for(int ii = 0; ii < chains(i_index,j_index).size(); ii++){
+            for (int jj = 0; jj < chains(i_index,j_index)[ii].size(); jj++){
+                cout << " " << chains(i_index,j_index)[ii][jj];
+            }
+            cout << endl;
+        }
 
-///*DEBUG: Impressions*/
-//    cout << "Finalizei com " << curves.size() << " curvas :: ::   ";
-//    for (int k = 0; k < curves.size(); k++) cout << "Tamanho de " << k << " es: " << curves[k].size() << " y es circular: " << is_circular[k] << "; ";
-//    cout << endl;
+        chains(i_index,j_index).erase( chains(i_index,j_index).begin() + k );
+        chain_edges(i_index,j_index).erase( chain_edges(i_index,j_index).begin() + k);
 
-//    for (int k = 0; k < curves.size(); k++) {
-//        cout << "Curva " << k << ":";
-//        for (int l = 0; l < curves[k].size(); l++) cout << " " << curves[k][l];
-//        cout << endl;
-//    }
-///*END DEBUG...*/
+        cout << "Depois de deletar tenho: "<< endl;
+        for(int ii = 0; ii < chains(i_index,j_index).size(); ii++){
+            for (int jj = 0; jj < chains(i_index,j_index)[ii].size(); jj++){
+                cout << " " << chains(i_index,j_index)[ii][jj];
+            }
+            cout << endl;
+        }
 
-    printf("ENDS:     Contour2D()/Continuous\n\n");
+        // DEBUG: Impressions
+        cout << "Finalizei com " << curves.size() << " curvas :: ::   ";
+        for (int k = 0; k < curves.size(); k++) cout << "Tamanho de " << k << " es: " << curves[k].size() << " y es circular: " << is_circular[k] << "; ";
+        cout << endl;
+
+        for (int k = 0; k < curves.size(); k++) {
+            cout << "Curva " << k << ":";
+            for (int l = 0; l < curves[k].size(); l++) cout << " " << curves[k][l];
+                cout << endl;
+        }
+
+        printf("ENDS:     Contour2D()/Continuous\n\n");
+    END_DEBUG
 
     return 0;
 }
@@ -586,7 +593,9 @@ int ContourMethod::topological_sort(int i, int j) {
             // iminus(i,j) = iplus(i,j) = jminus(i,j) = jplus(i,j) = true;
         }
         else if ( (edges_[1] + edges_[dime_ + 1]) == 3) {
-            //cout << "Ordem: 0 1 2: 3 = " << edges_[1] << " + " << edges_[dime_ + 1] << endl;
+            IF_DEBUG
+                cout << "Ordem: 0 1 2: 3 = " << edges_[1] << " + " << edges_[dime_ + 1] << endl;
+            END_DEBUG
             // TODO: Podemos inferir quem eh quem
             number_chains(i,j) = 1;
             chains(i,j).resize(1);
@@ -606,7 +615,9 @@ int ContourMethod::topological_sort(int i, int j) {
             chain_edges(i,j)[0][0] = gamb[0]; chain_edges(i,j)[0][1] = gamb[2];
         }
         else {
-            //cout << "Ordem: 1 0 2: 2 = " << edges_[1] << " + " << edges_[dime_ + 1] << endl;
+            IF_DEBUG
+                cout << "Ordem: 1 0 2: 2 = " << edges_[1] << " + " << edges_[dime_ + 1] << endl;
+            END_DEBUG
             // TODO: Sabemos exatamente quem eh quem
             number_chains(i,j) = 1;
             chains(i,j).resize(1);
@@ -645,22 +656,23 @@ int ContourMethod::topological_sort(int i, int j) {
     }
     /* Aqui termina o tsort */
 
-/* DEBUG...
-    cout << "Impressoes para (" << i << ", " << j << "): " << number_chains(i,j) << " Chains" << endl;
-    cout << "sptr_:";
-    for (int j = 0; j < 5; j++) cout << " " << sptr_[j];
-    cout << endl << "gamb: ";
-    for (int j = 0; j < 5; j++) cout << " " << gamb[j];
-    cout << endl;
-
-    for (int ii = 0; ii < number_chains(i,j); ii++) {
-        cout << " cadeia(" << ii+1 << "): ";
-        for (int jj = 0; jj < chains(i,j)[ii].size(); jj++) cout << chains(i,j)[ii][jj] << " ";
+    // DEBUG...
+    IF_DEBUG
+        cout << "Impressoes para (" << i << ", " << j << "): " << number_chains(i,j) << " Chains" << endl;
+        cout << "sptr_:";
+        for (int j = 0; j < 5; j++) cout << " " << sptr_[j];
+        cout << endl << "gamb: ";
+        for (int j = 0; j < 5; j++) cout << " " << gamb[j];
         cout << endl;
-        cout << " finales: " << chain_edges(i,j)[ii][0] << " -- " << chain_edges(i,j)[ii][1] << endl;
-    }
-    cout << endl;
-... DEBUG*/
+
+        for (int ii = 0; ii < number_chains(i,j); ii++) {
+            cout << " cadeia(" << ii+1 << "): ";
+            for (int jj = 0; jj < chains(i,j)[ii].size(); jj++) cout << chains(i,j)[ii][jj] << " ";
+            cout << endl;
+            cout << " finales: " << chain_edges(i,j)[ii][0] << " -- " << chain_edges(i,j)[ii][1] << endl;
+        }
+        cout << endl;
+    END_DEBUG
 
     return 1;
 }

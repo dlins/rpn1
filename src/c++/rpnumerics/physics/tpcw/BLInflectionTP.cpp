@@ -31,7 +31,9 @@ int BLInflectionTP::curve(const FluxFunction *f, const AccumulationFunction *a,
     fh = fluxAdimensional->getHorizontalFlux();
 
  double phi= a->accumulationParams().component(0);
-    cout << "Valor de phi em bl: " << phi << endl;
+    IF_DEBUG
+        cout << "Valor de phi em bl: " << phi << endl;
+    END_DEBUG
 
     g.fill_functions_on_grid(f, a);
     gv = &g;

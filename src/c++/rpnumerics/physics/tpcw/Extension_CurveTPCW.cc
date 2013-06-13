@@ -237,7 +237,9 @@ void Extension_CurveTPCW::compute_extension_curve(int characteristic_where, int 
                                                   std::vector<RealVector> &curve_segments,
                                                   std::vector<RealVector> &domain_segments){
 
-    printf("compute_extension_curve\n");
+    IF_DEBUG
+        printf("compute_extension_curve\n");
+    END_DEBUG
 
     // Clear the output.
     curve_segments.clear();

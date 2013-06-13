@@ -69,7 +69,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_PhysicalBoundaryCalc_calcNative
 
 
     int tamanho = left_vrs.size();
-    cout << "Tamanho do vetor de pontos: " << tamanho << endl;
+    IF_DEBUG
+        cout << "Tamanho do vetor de pontos: " << tamanho << endl;
+    END_DEBUG
 
     if (left_vrs.size()==0)
         return NULL;
@@ -80,8 +82,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_PhysicalBoundaryCalc_calcNative
         jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
 
 
-                cout << "Ponto: " << 2*i << left_vrs[2 * i] << endl;
-                cout << "Ponto: " << 2*i+1 << left_vrs[2 * i +1] << endl;
+        IF_DEBUG
+            cout << "Ponto: " << 2*i << left_vrs[2 * i] << endl;
+            cout << "Ponto: " << 2*i+1 << left_vrs[2 * i +1] << endl;
+        END_DEBUG
 
         double * leftCoords = (double *) left_vrs[2 * i];
         double * rightCoords = (double *) left_vrs[2 * i + 1];

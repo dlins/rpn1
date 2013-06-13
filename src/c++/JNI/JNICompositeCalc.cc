@@ -33,7 +33,9 @@ using std::vector;
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env, jobject obj, jobject initialPoint, jint increase, jint familyIndex) {
 
-    cout << "chamando JNI composite calc" << endl;
+    IF_DEBUG
+        cout << "chamando JNI composite calc" << endl;
+    END_DEBUG
 
     unsigned int i;
 
@@ -67,7 +69,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
     std::vector<RealVector> rarefactionCurve;
     std::vector<RealVector> compositeCurve;
 
-    cout << "Chamando com stone" << endl;
+    IF_DEBUG
+        cout << "Chamando com stone" << endl;
+    END_DEBUG
 
     FluxFunction * stoneflux = (FluxFunction *) RpNumerics::getPhysics().fluxFunction().clone();
 
@@ -75,14 +79,18 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
 
     Boundary * tempBoundary = RpNumerics::getPhysics().boundary().clone();
 
-    cout << "Increase: " << increase << endl;
+    IF_DEBUG
+        cout << "Increase: " << increase << endl;
+    END_DEBUG
 
     //        double deltaxi = 1e-3;
     double deltaxi = 1e-2;
 
     //Compute rarefaction
 
-    cout << "Increase da rarefacao: " << increase << endl;
+    IF_DEBUG
+        cout << "Increase da rarefacao: " << increase << endl;
+    END_DEBUG
     vector<RealVector> inflectionPoints;
 
     Rarefaction::curve(realVectorInput,
@@ -106,7 +114,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
 
         increase = WAVE_BACKWARD;
 
-    cout << "Rarefaction curve" << rarefactionCurve.size() << endl;
+    IF_DEBUG
+        cout << "Rarefaction curve" << rarefactionCurve.size() << endl;
+    END_DEBUG
 
     CompositeCurve::curve(rarefactionCurve, COMPOSITE_FROM_NORMAL_RAREFACTION, familyIndex,
             increase, 0,stoneflux, stoneaccum, tempBoundary, compositeCurve);
@@ -119,7 +129,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
         return NULL;
 
 
-//    cout << "Tamanho da curva: " << compositeCurve.size() << endl;
+    IF_DEBUG
+        cout << "Tamanho da curva: " << compositeCurve.size() << endl;
+    END_DEBUG
 
 
     //Orbit members creation

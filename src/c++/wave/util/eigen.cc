@@ -115,7 +115,9 @@ void Eigen::fill_eigen(int n, struct eigenpair e[], double rp[], double ip[], do
                 i++;
             }
             else{              // This should never happen, but just in case...
-                printf("Problem in fill_eigen! i = %d\n", i);
+                IF_DEBUG
+                    printf("Problem in fill_eigen! i = %d\n", i);
+                END_DEBUG
             }
         }
     }    
@@ -254,7 +256,9 @@ int Eigen::eig(int n, const double *A, const double *B, vector<eigenpair> &vge){
 
     // Success!
     if (info == 0) {
-//        for (int i = 0; i < dim; i++) printf("alphar[%d] = %g, alphai[%d] = %g, beta[%d] = %g\n", i, alphar[i], i, alphai[i], i, beta[i]);
+        IF_DEBUG
+            for (int i = 0; i < dim; i++) printf("alphar[%d] = %g, alphai[%d] = %g, beta[%d] = %g\n", i, alphar[i], i, alphai[i], i, beta[i]);
+        END_DEBUG
 
         // Abort if some beta is smaller than sum_i(abs(alphar(i)) + abs(alphai(i))).
         double sum = 0;
@@ -349,7 +353,9 @@ int Eigen::eig(int n, const double *A, const double *B, vector<eigenpair> &vge){
                 pos++;
             }
             else {
-                //printf("Eigenvalue discarded: %d\n", pos);
+                IF_DEBUG
+                    printf("Eigenvalue discarded: %d\n", pos);
+                END_DEBUG
             }
         }
 

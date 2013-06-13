@@ -98,9 +98,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_InflectionCurveCalc_nativeCalc__I
     jobject result = env->NewObject(inflectionCurveClass, inflectionCurveConstructor, segmentsArray);
 
 
-    if (result == NULL)cout << "Eh nulo" << endl;
-    // Limpando
+    IF_DEBUG
+        if (result == NULL) cout << "Eh nulo" << endl;
+    END_DEBUG
 
+    // Limpando
     env->DeleteLocalRef(realSegmentClass);
     env->DeleteLocalRef(realVectorClass);
     env->DeleteLocalRef(arrayListClass);

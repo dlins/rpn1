@@ -63,7 +63,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionExtensionCalc_nativeCalc(JN
     env->DeleteLocalRef(phasePointArray);
 
     RealVector inputPoint(dimension, input);
-    cout << inputPoint << endl;
+    IF_DEBUG
+        cout << inputPoint << endl;
+    END_DEBUG
 
     jobject leftSegmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
 

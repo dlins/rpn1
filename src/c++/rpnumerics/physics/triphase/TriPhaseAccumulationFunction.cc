@@ -12,18 +12,25 @@ TriPhaseAccumulationFunction::~TriPhaseAccumulationFunction(void) {
 
 int TriPhaseAccumulationFunction::jet(const WaveState &w, JetMatrix &M, int degree) const {
 
-//    cout << "Entrando em jet acc triphase: " << w.stateSpaceDim() << endl;
-//    cout << "Entrando em tamanho m: " << M.size() << endl;
+    IF_DEBUG
+        cout << "Entrando em jet acc triphase: " << w.stateSpaceDim() << endl;
+        cout << "Entrando em tamanho m: " << M.size() << endl;
+    END_DEBUG
     if (degree >= 0) {
         for (int i = 0; i < w.stateSpaceDim(); i++) M(i, w(i));
-//        cout << "Passei por F" << endl;
+
+      IF_DEBUG
+          cout << "Passei por F" << endl;
+      END_DEBUG
 
         if (degree >= 1) {
 //            for (int i = 0; i < w.stateSpaceDim(); i++) {
 //                for (int j = 0; j < w.stateSpaceDim(); j++) {
 //                    M(i, j, 0);
-//                    cout << "i: " << i << endl;
-//                    cout << "j: " << j << endl;
+//                    IF_DEBUG
+//                        cout << "i: " << i << endl;
+//                        cout << "j: " << j << endl;
+//                    END_DEBUG
 //                }
 //
 //                M(i, i, 1);
@@ -32,7 +39,9 @@ int TriPhaseAccumulationFunction::jet(const WaveState &w, JetMatrix &M, int degr
             M(0, 1, 0.0);
             M(1, 0, 0.0);
             M(1, 1, 1.0);
-//            cout << "Passei por J" << endl;
+          IF_DEBUG
+              cout << "Passei por J" << endl;
+          END_DEBUG
             if (degree == 2) {
                 for (int i = 0; i < w.stateSpaceDim(); i++) {
                     for (int j = 0; j < w.stateSpaceDim(); j++) {
@@ -42,7 +51,9 @@ int TriPhaseAccumulationFunction::jet(const WaveState &w, JetMatrix &M, int degr
 
                 }
             }
-//            cout << "Passei por H" << endl;
+            IF_DEBUG
+                cout << "Passei por H" << endl;
+            END_DEBUG
         }
     }
     return 2;

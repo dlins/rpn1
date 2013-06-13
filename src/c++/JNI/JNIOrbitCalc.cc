@@ -143,7 +143,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_nativeCalc(JNIEnv * env, job
 
 
 
-        //        cout << "Segmento de poincare: " << nativePoincarePoint1 << " " << nativePoincarePoint2 << endl;
+        IF_DEBUG
+            cout << "Segmento de poincare: " << nativePoincarePoint1 << " " << nativePoincarePoint2 << endl;
+        END_DEBUG
 
     } else {
 
@@ -158,7 +160,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_nativeCalc(JNIEnv * env, job
     }
 
 
-//    cout << "Tamanho da orbita: " << coords.size() << endl;
+    IF_DEBUG
+        cout << "Tamanho da orbita: " << coords.size() << endl;
+    END_DEBUG
 
     jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(coords.size(), classOrbitPoint, NULL);
 
@@ -171,7 +175,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_nativeCalc(JNIEnv * env, job
         double * dataCoords = tempVector;
 
 
-        //        cout<<coords.at(i)<<endl;
+        IF_DEBUG
+            cout<<coords.at(i)<<endl;
+        END_DEBUG
 
         //Reading only coodinates
         jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size());

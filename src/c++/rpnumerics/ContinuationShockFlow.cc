@@ -70,7 +70,10 @@ int ContinuationShockFlow::shock(int *neq, double *xi, double *in, double *out, 
         // Normalize the field
         normalize(1, *neq, out);
     }
-    else printf("Shock failed!\n");
+    else 
+        IF_DEBUG
+           printf("Shock failed!\n");
+        END_DEBUG
 
     return info;
 }
@@ -151,29 +154,37 @@ int ContinuationShockFlow::shockfield(int n, double Um[], int m, double *Up, int
         // according to the formulae below.
 
         if (diff(n, U, Um) < 1e-5) {
-            //         printf("shockfield: U = Um\n");
+            IF_DEBUG
+                printf("shockfield: U = Um\n");
+            END_DEBUG
             double J[n][n];
             fill_with_jet(shock_flux_object, n, Um, 1, 0, &J[0][0], 0); // DF(n, Um, &J[0][0]);
             // Find the eigenvector
-             vector<eigenpair> e;
-             int info = Eigen::eig(n, &J[0][0], e);
+            vector<eigenpair> e;
+            int info = Eigen::eig(n, &J[0][0], e);
 
-                if (info == ABORTED_PROCEDURE) {
-               printf("Inside shockfield(): cdgeev() aborted!\n");
-               return ABORTED_PROCEDURE;
+            if (info == ABORTED_PROCEDURE) {
+                IF_DEBUG
+                    printf("Inside shockfield(): cdgeev() aborted!\n");
+                END_DEBUG
+                return ABORTED_PROCEDURE;
             }
 
             // STOP CRITERION AT THIS POINT:
             // The i-th eigenvalue must be real.
             if (e[family].i != 0) {
-               printf("Inside shockfield(): Init step, eigenvalue %d is complex: % f %+f.\n", family, e[family].r, e[family].i);
+                IF_DEBUG
+                    printf("Inside shockfield(): Init step, eigenvalue %d is complex: % f %+f.\n", family, e[family].r, e[family].i);
+                END_DEBUG
                 return ABORTED_PROCEDURE;
             }
 
             // Extract the indx-th right-eigenvector of J:
             for (j = 0; j < n; j++) dHdu[i * n + j] = e[family].vrr[j];
         } else {
-            //printf("shockfield: U != Um\n");
+            IF_DEBUG
+                printf("shockfield: U != Um\n");
+            END_DEBUG
             double dHduvec[n];
             dH(n, Um, U, dHduvec);
 
@@ -212,11 +223,15 @@ int ContinuationShockFlow::flux(const RealVector &input, RealVector & output) {
 
 int ContinuationShockFlow::fluxDeriv(const RealVector &, JacobianMatrix &) {
 
-    cout <<"Chamando flux Deriv"<<endl;
+    IF_DEBUG
+        cout <<"Chamando flux Deriv"<<endl;
+    END_DEBUG
     
 }
 int ContinuationShockFlow::fluxDeriv2(const RealVector &, HessianMatrix &) {
-    cout << "Chamando flux Deriv2" << endl;
+    IF_DEBUG
+        cout << "Chamando flux Deriv2" << endl;
+    END_DEBUG
 }
 
 WaveFlow * ContinuationShockFlow::clone()const {

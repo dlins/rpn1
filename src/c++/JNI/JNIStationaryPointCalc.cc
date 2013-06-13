@@ -72,10 +72,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_StationaryPointCalc_nativeCalc(JNIEnv 
     const AccumulationFunction * accumFunction = &RpNumerics::getPhysics().accumulation();
 
 
-//    cout << "Parametros nos estacionarios: " << RpNumerics::getPhysics().fluxFunction().fluxParams().params()<<endl;
-//    
-//    cout <<" Native equipoint: "<<nativeEquiPoint<<endl;
-//    cout <<" Native ref: "<<nativeRefPoint<<endl;
+    IF_DEBUG
+        cout << "Parametros nos estacionarios: " << RpNumerics::getPhysics().fluxFunction().fluxParams().params()<<endl;
+        cout <<" Native equipoint: "<<nativeEquiPoint<<endl;
+        cout <<" Native ref: "<<nativeRefPoint<<endl;
+    END_DEBUG
 
     Viscosity_Matrix v;
     Viscous_Profile::critical_points_linearization(fluxFunction, accumFunction,
@@ -99,7 +100,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_StationaryPointCalc_nativeCalc(JNIEnv 
     double eigenValIBuffer [ep.size()];
 
 
-    //cout <<"Ponto passado: "<<nativeEquiPoint<<endl;
+    IF_DEBUG
+        cout <<"Ponto passado: "<<nativeEquiPoint<<endl;
+    END_DEBUG
 
 
 
@@ -113,8 +116,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_StationaryPointCalc_nativeCalc(JNIEnv 
 
 
 
-        //cout << "Parte real: " << ep[i].r << endl;
-//        cout << "Parte imaginaria: " << ep[i].i << endl;
+        IF_DEBUG
+            cout << "Parte real: " << ep[i].r << endl;
+            cout << "Parte imaginaria: " << ep[i].i << endl;
+        END_DEBUG
 
 
 

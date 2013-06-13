@@ -30,7 +30,9 @@ int CompositeCurve::curve(const std::vector<RealVector> &rarcurve, int origin, i
 
         int i;
         for (i = rarcurve.size() - start; i >= 0; i--){ // This changed from i = rarcurve.size() - 2 to i = rarcurve.size() - 3 to avoid problems with certain points (.422851, .246623)
-//            printf("Rarcuve's index = %d\n", i);
+            IF_DEBUG
+                printf("Rarcuve's index = %d\n", i);
+            END_DEBUG
             std::vector<RealVector> shockcurve, shockcurve_alt;
 
             for (int j = 0; j < dim; j++) rar_point.component(j) = rarcurve[i].component(j);
@@ -45,21 +47,26 @@ int CompositeCurve::curve(const std::vector<RealVector> &rarcurve, int origin, i
             norm_orig = 1.0/sqrt(norm_orig);
             for (int j = 0; j < dim; j++) orig_direction.component(j) *= norm_orig;
 
-//            printf("Inside composite: TESTING 2012/04/17.");
-//            printf("    rar.size() = %d\n", rarcurve.size());
-//            printf("    orig = (%f, %f)\n", orig_direction.component(0), orig_direction.component(1));
-
-//            printf("Before shock: i = %d\n", i);
+            IF_DEBUG
+                printf("Inside composite: TESTING 2012/04/17.");
+                printf("    rar.size() = %d\n", rarcurve.size());
+                printf("    orig = (%f, %f)\n", orig_direction.component(0), orig_direction.component(1));
+                printf("Before shock: i = %d\n", i);
+            END_DEBUG
             int info = SHOCK_OK, info_alt = SHOCK_OK;
 //            int info = Shock::curve(rar_point, true, rar_point, increase, family, SHOCK_AS_ENGINE_FOR_COMPOSITE, &orig_direction, ff, aa, boundary, shockcurve, shockcurve_alt);
             Shock::curve(rar_point, true, rar_point, increase, family, SHOCK_AS_ENGINE_FOR_COMPOSITE, &orig_direction, number_ignore_doub_contact, ff, aa, boundary, 
                          shockcurve, info, 
                          shockcurve_alt, info_alt);
 
-//            printf("Composite. Shock returned: %d and %d\n", info, info_alt);
+            IF_DEBUG
+                printf("Composite. Shock returned: %d and %d\n", info, info_alt);
+            END_DEBUG
 
             if (info == SHOCK_ERROR || info == SHOCK_REACHED_BOUNDARY){
-//                printf("Composite curve. Shock problem, info = %d.\n", info);
+                IF_DEBUG
+                    printf("Composite curve. Shock problem, info = %d.\n", info);
+                END_DEBUG
 //                // TEMPORAL BELOW
 //                shock_curve_temp.clear();
 //                for (int i = 0; i < shockcurve.size(); i++) shock_curve_temp.push_back(shockcurve[i]);
@@ -68,30 +75,40 @@ int CompositeCurve::curve(const std::vector<RealVector> &rarcurve, int origin, i
                 return COMPOSITE_REACHED_BOUNDARY;
             }
             else if (info == SHOCK_OK || info == SHOCK_REACHED_DOUBLE_CONTACT){
-//                printf("Composite curve. Shock ok or reached double contact. shockcurve.size() = %d.\n", shockcurve.size());
-//                printf("    i = %d, compcurve.size() = %d\n", i, compcurve.size());
+                IF_DEBUG
+                    printf("Composite curve. Shock ok or reached double contact. shockcurve.size() = %d.\n", shockcurve.size());
+                    printf("    i = %d, compcurve.size() = %d\n", i, compcurve.size());
+                END_DEBUG
                 RealVector p_boundary;
                 int edge;
                 int info_boundary = boundary->intersection(shockcurve[shockcurve.size() - 1], compcurve[compcurve.size() - 1], p_boundary, edge);
                 if (info_boundary == 1){
                     // Both inside.
-//                    printf("    Composite: Both inside.\n");
+                    IF_DEBUG
+                        printf("    Composite: Both inside.\n");
+                    END_DEBUG
                     compcurve.push_back(shockcurve[shockcurve.size() - 1]);
                 }
                 else if (info_boundary == -1){
                     // Both outside
-//                    printf("    Composite: Both outside.\n");
+                    IF_DEBUG
+                        printf("    Composite: Both outside.\n");
+                    END_DEBUG
                     return COMPOSITE_ERROR;// SHOCK_ERROR;
                 }
                 else {
                     // One inside, one outside
-//                    printf("    Composite: In and out.\n");
+                    IF_DEBUG
+                        printf("    Composite: In and out.\n");
+                    END_DEBUG
                     compcurve.push_back(p_boundary);
                     return COMPOSITE_REACHED_BOUNDARY;// SHOCK_REACHED_BOUNDARY;
                     //return SHOCK_ERROR;
                 }
 
-//                printf("    Composite: Finished checking boundary\n");
+                IF_DEBUG
+                    printf("    Composite: Finished checking boundary\n");
+                END_DEBUG
 
                 if (info == SHOCK_REACHED_DOUBLE_CONTACT){
                     if (i == 0) return COMPOSITE_EXHAUSTED_RAREFACTION_AND_REACHED_DOUBLE_CONTACT;

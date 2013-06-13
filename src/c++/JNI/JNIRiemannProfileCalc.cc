@@ -87,7 +87,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
 
     int forwardListSize = env->CallIntMethod(forwardList, arrayListSizeMethodID);
 
-    //    cout << "Tamanho da lista para frente: " << forwardListSize << endl;
+    IF_DEBUG
+        cout << "Tamanho da lista para frente: " << forwardListSize << endl;
+    END_DEBUG
 
     vector<Curve> forwardCurvesVector;
     vector<Curve> backwardCurvesVector;
@@ -131,7 +133,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
             int curveIndex = (env)->CallIntMethod(waveCurveOrbit, getCurveIndexMethodID);
             int curveType = (env)->CallIntMethod(waveCurveOrbit, getCurveTypeMethodID);
 
-//            cout << "Curva para frente C: " << pointBuffer[0] << " " << pointBuffer[1] << " " << correspondingCurveIndex << " " << correspondingPointIndex << " " << curveIndex << " " << curveType << endl;
+            IF_DEBUG
+                cout << "Curva para frente C: " << pointBuffer[0] << " " << pointBuffer[1] << " " << correspondingCurveIndex << " " << correspondingPointIndex << " " << curveIndex << " " << curveType << endl;
+            END_DEBUG
 
 
         }
@@ -150,7 +154,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
 
     int backwardListSize = env->CallIntMethod(backwardList, arrayListSizeMethodID);
 
-    //    cout << "Tamanho da lista para tras: " << backwardListSize << endl;
+    IF_DEBUG
+        cout << "Tamanho da lista para tras: " << backwardListSize << endl;
+    END_DEBUG
 
 
 
@@ -189,7 +195,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
             int curveIndex = (env)->CallIntMethod(waveCurveOrbit, getCurveIndexMethodID);
             int curveType = (env)->CallIntMethod(waveCurveOrbit, getCurveTypeMethodID);
 
-            //                        cout << "Curva para tras C: " << pointBuffer[0] << " " << pointBuffer[1] << " " << correspondingCurveIndex << " " << correspondingPointIndex << " " << curveIndex << " " << curveType << endl;
+            IF_DEBUG
+                cout << "Curva para tras C: " << pointBuffer[0] << " " << pointBuffer[1] << " " << correspondingCurveIndex << " " << correspondingPointIndex << " " << curveIndex << " " << curveType << endl;
+            END_DEBUG
 
 
         }
@@ -208,7 +216,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
 
     vector<RealVector> profile;
     
-    cout<<"DownLeft: "<<nativeDownLeft<<" TopRight"<<nativeTopRight<<endl;
+    IF_DEBUG
+        cout<<"DownLeft: "<<nativeDownLeft<<" TopRight"<<nativeTopRight<<endl;
+    END_DEBUG
 
 
     int solverOutput = RiemannSolver::saturation_profiles(forwardCurvesVector, // Family 0, forward
@@ -217,17 +227,21 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
             0.45,
             profile);
 
-    cout << "Retorno do perfil: " << solverOutput <<" Tamanho do perfil: "<<profile.size()<< endl;
+    IF_DEBUG
+        cout << "Retorno do perfil: " << solverOutput <<" Tamanho do perfil: "<<profile.size()<< endl;
+    END_DEBUG
     
     if (profile.size()==0)
         return NULL;
 
 
 
-    cout << "Coordenadas do perfil" << endl;
-    for (int i = 0; i < profile.size(); i++) {
-        cout << profile.at(i)(2) << " " << profile.at(i)(0) << " " << profile.at(i)(1) << endl;
-    }
+    IF_DEBUG
+        cout << "Coordenadas do perfil" << endl;
+        for (int i = 0; i < profile.size(); i++) {
+            cout << profile.at(i)(2) << " " << profile.at(i)(0) << " " << profile.at(i)(1) << endl;
+        }
+    END_DEBUG
 
 
     jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(profile.size(), classOrbitPoint, NULL);
@@ -235,7 +249,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
 
         RealVector tempVector = profile.at(i);
 
-        //cout<<tempVector<<endl;
+        IF_DEBUG
+            cout<<tempVector<<endl;
+        END_DEBUG
 
         double * dataCoords = tempVector;
 

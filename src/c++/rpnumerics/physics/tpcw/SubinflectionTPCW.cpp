@@ -9,7 +9,9 @@ td(fluxFunction->getThermo()){
 
 
     phi=params.getPhi();
-    cout << "Valor de phi em sub inf: " << phi << endl;
+    IF_DEBUG
+        cout << "Valor de phi em sub inf: " << phi << endl;
+    END_DEBUG
 }
 
 void SubinflectionTPCW::subinflection_function(double & reduced_lambdae, double & numeratorchiu, double & denominatorchiu, const RealVector &u) {

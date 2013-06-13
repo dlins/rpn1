@@ -133,13 +133,17 @@ int Extension_Curve::function_on_vertices(double *foncub, int domain_i, int doma
 //        red_shock_speed = (Y21 * X12 + Y13 * X31 + Y32 * X23) / den;
 //        }
 //        
-////        cout<<"red : "<<red_shock_speed<<endl;
+//        IF_DEBUG
+////          cout<<"red : "<<red_shock_speed<<endl;
+//        END_DEBUG
 
 
 //        if (characteristic_where == CHARACTERISTIC_ON_CURVE) {
 
 //            lambda = segment_lambda[kl];
-////            cout << "Valor do lambda: " << lambda << endl;
+//            IF_DEBUG
+////              cout << "Valor do lambda: " << lambda << endl;
+//            END_DEBUG
 
 //        } else {
 

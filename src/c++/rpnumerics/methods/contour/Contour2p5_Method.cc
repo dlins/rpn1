@@ -87,8 +87,10 @@ void Contour2p5_Method::allocate_arrays(void){
 
         is_first = false;
 
-        printf("++++++++++++++++ Contour2p5_Method: REMEMBER TO INVOKE deallocate_arrays() AT QUIT-TIME!!!\n++++++++++++++++ DON\'T SAY I DIDN\'T WARN YOU!!!\n");
-        printf("    After allocating arrays, nsface_ = %d, nface_ =  %d\n", nsface_, nface_);
+        IF_DEBUG
+            printf("++++++++++++++++ Contour2p5_Method: REMEMBER TO INVOKE deallocate_arrays() AT QUIT-TIME!!!\n++++++++++++++++ DON\'T SAY I DIDN\'T WARN YOU!!!\n");
+            printf("    After allocating arrays, nsface_ = %d, nface_ =  %d\n", nsface_, nface_);
+        END_DEBUG
     }
 
     return;
@@ -108,7 +110,9 @@ void Contour2p5_Method::deallocate_arrays(void){
         is_first = true;
     }
 
-    printf("++++++++++++++++ Contour2p5_Method: arrays deallocated. ++++++++++++++++\n");
+    IF_DEBUG
+        printf("++++++++++++++++ Contour2p5_Method: arrays deallocated. ++++++++++++++++\n");
+    END_DEBUG
 
     return;
 }

@@ -11,10 +11,14 @@ using namespace std;
 std::string Thermodynamics_SuperCO2_WaterAdimensionalized::dataPath_ = std::string("/src/c++/rpnumerics/physics/tpcw/");
 
 int Thermodynamics_SuperCO2_WaterAdimensionalized::create_spline(const std::string& name, const char *verify, double P, spline1dinterpolant &spline) {
-    //    printf("Dentro de create spline\n");
+    IF_DEBUG
+        printf("Dentro de create spline\n");
+    END_DEBUG
     std::string temp(rpnHomePath_);
     temp.append(dataPath_);
-    //    std::cout << "Valor de temp: " << temp << "\n";
+    IF_DEBUG
+        std::cout << "Valor de temp: " << temp << "\n";
+    END_DEBUG
 
     // Open the file that contains the data needed for the creation of the spline
     FILE *fid;
@@ -94,9 +98,12 @@ U_typical_(copy.U_typical_),
 h_typical_(copy.h_typical_),
 rpnHomePath_(copy.rpnHomePath_) {
 
-    cout << "construtor de copia da termodinamica" << endl;
-    
-    cout<<"No ctr de copia da thermo:" <<T_typical_<<" "<<U_typical_<<" "<<Rho_typical_<<endl;
+    IF_DEBUG
+    IF_DEBUG
+        cout << "construtor de copia da termodinamica" << endl;
+    IF_DEBUG
+        cout<<"No ctr de copia da thermo:" <<T_typical_<<" "<<U_typical_<<" "<<Rho_typical_<<endl;
+    END_DEBUG
     
     
     // Generate the splines

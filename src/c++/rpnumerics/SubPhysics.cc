@@ -68,7 +68,9 @@ void SubPhysics::boundary(const Boundary & newBoundary) {
 void SubPhysics::setParams(vector<string> paramsVector) {
 
     for (int i = 0; i < paramsVector.size(); i++) {
+    IF_DEBUG
         cout << "Param " << i << " :" << paramsVector[i] << endl;
+    END_DEBUG
 
     }
 

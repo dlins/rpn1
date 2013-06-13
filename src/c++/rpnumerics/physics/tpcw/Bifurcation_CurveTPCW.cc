@@ -11,7 +11,9 @@ void Bifurcation_CurveTPCW::create_grid(const RealVector &pmin, const RealVector
 
     for (int i = 0; i < number_of_cells[0]; i++) {
         for (int j = 0; j < number_of_cells[1]; j++) {
-            //            printf("Here\n");
+            IF_DEBUG
+                printf("Here\n");
+            END_DEBUG
 
             p(i, j).resize(dim);
 
@@ -20,7 +22,9 @@ void Bifurcation_CurveTPCW::create_grid(const RealVector &pmin, const RealVector
         }
     }
 
-    //    printf("Inside create_grid()\n");
+    IF_DEBUG
+        printf("Inside create_grid()\n");
+    END_DEBUG
 
     return;
 }
@@ -216,7 +220,9 @@ void Bifurcation_CurveTPCW::fill_with_jet(RpFunction *flux_object, int n, double
     WaveState state_c(r);
     JetMatrix c_jet(n);
 
-    //    if (flux_object==NULL)cout<<"Nulo !"<<endl;
+    IF_DEBUG
+        if (flux_object==NULL)cout<<"Nulo !"<<endl;
+    END_DEBUG
 
     flux_object->jet(state_c, c_jet, degree);
 

@@ -50,7 +50,9 @@ int Utilities::cubic_equation(std::vector<double> &x, double a, double b, double
     for (int i = 1; i < 20; i++){
         root = solve1(x1, -width, width, aa, bb, cc, tol); // solve1 ( x1, -eps, eps, fcub, zero, tol )
 
-        std::cout << "for i = " << i << "...info = " << root << std::endl;
+        IF_DEBUG
+            std::cout << "for i = " << i << "...info = " << root << std::endl;
+        END_DEBUG
 
         if (root == SOLVE1_OK) break;
         else width *= 2.0;
@@ -74,7 +76,9 @@ int Utilities::cubic_equation(std::vector<double> &x, double a, double b, double
         }
     }
     else {
-        std::cout << "Utilities::cubic_equation(): No root was found!" << std::endl;
+        IF_DEBUG
+            std::cout << "Utilities::cubic_equation(): No root was found!" << std::endl;
+        END_DEBUG
     }
 
     // If no root was found it will return 0, otherwise it will return 1 or 3.
@@ -98,7 +102,9 @@ int Utilities::solve1(double &xn, double xa, double xb,
     fl = cubic_polynomial(xa, aa, bb, cc);
 
     if (fl*fr >= 0.0){
-        std::cout << "Utilities::solve1(): fl*fr >= 0.0 (No change in the sign.)" << std::endl;
+        IF_DEBUG
+            std::cout << "Utilities::solve1(): fl*fr >= 0.0 (No change in the sign.)" << std::endl;
+        END_DEBUG
         return SOLVE1_NO_ZERO;
     }
 

@@ -50,8 +50,10 @@ int StoneHugoniot::classified_curve(const FluxFunction *f, const AccumulationFun
     RealVector pmin = g.grid.operator ()(0, 0);
     RealVector pmax = g.grid.operator ()(gridRows - 1, gridCols - 1);
 
-    cout << "Pmin: " << pmin << endl;
-    cout << "Pmax: " << pmax << endl;
+    IF_DEBUG
+        cout << "Pmin: " << pmin << endl;
+        cout << "Pmax: " << pmax << endl;
+    END_DEBUG
 
     Three_Phase_Boundary boundary(pmin, pmax);
 

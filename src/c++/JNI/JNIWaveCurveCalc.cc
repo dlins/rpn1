@@ -106,8 +106,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc(JNIEnv * env,
     const AccumulationFunction * accumulationFunction = &RpNumerics::getPhysics().accumulation();
 
 
-    cout << "Flux params " << fluxFunction->fluxParams().params() << endl;
-    cout << "Accum params " << accumulationFunction->accumulationParams().params() << endl;
+    IF_DEBUG
+        cout << "Flux params " << fluxFunction->fluxParams().params() << endl;
+        cout << "Accum params " << accumulationFunction->accumulationParams().params() << endl;
+    END_DEBUG
 
 
     WaveCurve wc(fluxFunction, accumulationFunction, boundary);
@@ -122,7 +124,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc(JNIEnv * env,
 
         timeDirection = WAVE_BACKWARD;
 
-    cout << "Parametros " << realVectorInput << " " << familyIndex << " " << timeDirection << endl;
+    IF_DEBUG
+        cout << "Parametros " << realVectorInput << " " << familyIndex << " " << timeDirection << endl;
+    END_DEBUG
 
     jobject waveCurve = (env)->NewObject(classWaveCurve, waveCurveConstructor, familyIndex, timeDirection);
 
@@ -139,16 +143,22 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc(JNIEnv * env,
         std::vector<int> correspondingPointIndexVector=curves[i].corresponding_point_in_related_curve;
         if (coords.size() > 0) {
 
-            cout<<"tamanho de coords: "<<coords.size()<<endl;
+            IF_DEBUG
+                cout<<"tamanho de coords: "<<coords.size()<<endl;
+            END_DEBUG
 
             jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(coords.size(), classOrbitPoint, NULL);
-            cout << "Tipo da curva: " << curves[i].type << endl;
+            IF_DEBUG
+                    cout << "Tipo da curva: " << curves[i].type << endl;
+            END_DEBUG
             for (int j = 0; j < coords.size(); j++) {
 
 
                 RealVector tempVector = coords.at(j);
 
-                //cout<<tempVector<<endl;
+                IF_DEBUG
+                    cout<<tempVector<<endl;
+                END_DEBUG
 
                 double * dataCoords = tempVector;
 
@@ -202,12 +212,16 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc(JNIEnv * env,
                     break;
 
                 default:
+                IF_DEBUG
                     cout << "Tipo de curva nao conhecido !!" << endl;
+                END_DEBUG
             }
 
         } else {
 
-            cout << "CURVA " << i << " VAZIA !! tipo: " << curves[i].type << endl;
+            IF_DEBUG
+                cout << "CURVA " << i << " VAZIA !! tipo: " << curves[i].type << endl;
+            END_DEBUG
 
         }
 

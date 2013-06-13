@@ -105,16 +105,11 @@ JNIEXPORT void JNICALL Java_rpnumerics_viscousprofile_ViscousProfileData_updateS
     vector<StationaryPoint*> * sPointList = &RpNumerics::getStationaryPointVector();
 
 
-    for (int i = 0; i < sPointList->size(); i++) {
-        cout << sPointList->at(i)->coords() << " " << sPointList->at(i)->type() << endl;
-
-    }
-
-
-
-
-
-
+    IF_DEBUG
+        for (int i = 0; i < sPointList->size(); i++) {
+            cout << sPointList->at(i)->coords() << " " << sPointList->at(i)->type() << endl;
+        }
+    END_DEBUG
 
 
 

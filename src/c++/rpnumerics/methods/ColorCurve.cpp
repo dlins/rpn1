@@ -152,8 +152,10 @@ void ColorCurve::Left_Newton_improvement(const RealVector &input, const int type
 
     //            // If Newton does not converge, return the original point.
     //            if ((fabs(det) <= (epsilon * anorm)) || (count > 19)) {
-    //                cout << "ColorCurve::Left_Newton does not converge." << endl;
-    //                cout << "count = " << count << " " << input << endl;
+    //                IF_DEBUG
+    //                    cout << "ColorCurve::Left_Newton does not converge." << endl;
+    //                    cout << "count = " << count << " " << input << endl;
+    //                END_DEBUG
     //                for (int i = 0; i < dim; i++) out.component(i) = input.component(i);
     //                return;
     //            }
@@ -166,7 +168,9 @@ void ColorCurve::Left_Newton_improvement(const RealVector &input, const int type
     //            int info = solve(&A[0][0], &b[0], dim, & delta_U[0]);
 
     //            if (info != 0) {
-    //                cout << "ColorCurve::Left_Newton does not converge." << endl;
+    //                IF_DEBUG
+    //                    cout << "ColorCurve::Left_Newton does not converge." << endl;
+    //                END_DEBUG
     //                for (int i = 0; i < dim; i++) out.component(i) = input.component(i);
     //                return;
     //            }
@@ -196,7 +200,9 @@ void ColorCurve::Right_Newton_improvement(const RealVector &input, const int typ
     //    // TODO: For dimension larger than 2, the implementation is missing. The input point is returned
     //    //       as output. (This method pretends to refine the input.)
     //    if (dim > 2) {
-    //        cout << "ColorCurve::Right_Newton was not implemented for dimension larger than two." << endl;
+    //        IF_DEBUG
+    //            cout << "ColorCurve::Right_Newton was not implemented for dimension larger than two." << endl;
+    //        END_DEBUG
     //        for (int i = 0; i < dim; i++) out.component(i) = input.component(i);
     //        return;
     //    }
@@ -302,8 +308,10 @@ void ColorCurve::Right_Newton_improvement(const RealVector &input, const int typ
     //        // If Newton does not converge, return the original point.
 
     //        if ((fabs(det) <= (epsilon * anorm)) || (count > 18)) {
-    //            cout << "ColorCurve::Right_Newton does not converge." << endl;
-    //            cout << "count = " << count << " " << input << endl;
+    //            IF_DEBUG
+    //                cout << "ColorCurve::Right_Newton does not converge." << endl;
+    //                cout << "count = " << count << " " << input << endl;
+    //            END_DEBUG
     //            for (int i = 0; i < dim; i++) out.component(i) = input.component(i);
 
     //            return;
@@ -493,13 +501,15 @@ int ColorCurve::complete_point(RealVector &p, double &s, std::vector<double> &ei
         den += delta_G*delta_G;
     }
 
-    //printf("Em CC::Complete_point. num = %2.6f, den = %2.6f, speed = %2.6f\n", num, den, num/den);
-    //printf("                       F[0] = %2.6f, F[1] = %2.6f, Fref[0] = %2.6f, Fref[1] = %2.6ff\n", F[0], F[1], F_ref[0], F_ref[1]);
-    //printf("                       G[0] = %2.6f, G[1] = %2.6f, Gref[0] = %2.6f, Gref[1] = %2.6ff\n", G[0], G[1], G_ref[0], G_ref[1]);
+    IF_DEBUG
+        printf("Em CC::Complete_point. num = %2.6f, den = %2.6f, speed = %2.6f\n", num, den, num/den);
+        printf("                       F[0] = %2.6f, F[1] = %2.6f, Fref[0] = %2.6f, Fref[1] = %2.6ff\n", F[0], F[1], F_ref[0], F_ref[1]);
+        printf("                       G[0] = %2.6f, G[1] = %2.6f, Gref[0] = %2.6f, Gref[1] = %2.6ff\n", G[0], G[1], G_ref[0], G_ref[1]);
 
-    //cout << "Em CC::Complete_point " << p << ". num = " << num << ", den = " << den << ", speed = " << num/den << endl;
-    //cout << "                       F[0] = " << F[0] << ", F[1] = " << F[1] << ", Fref[0] = " << F_ref[0] << ", Fref[1] = " << F_ref[1] << endl;
-    //cout << "                       G[0] = " << G[0] << ", G[1] = " << F[1] << ", Gref[0] = " << G_ref[0] << ", Gref[1] = " << G_ref[1] << endl;
+        cout << "Em CC::Complete_point " << p << ". num = " << num << ", den = " << den << ", speed = " << num/den << endl;
+        cout << "                       F[0] = " << F[0] << ", F[1] = " << F[1] << ", Fref[0] = " << F_ref[0] << ", Fref[1] = " << F_ref[1] << endl;
+        cout << "                       G[0] = " << G[0] << ", G[1] = " << F[1] << ", Gref[0] = " << G_ref[0] << ", Gref[1] = " << G_ref[1] << endl;
+    END_DEBUG
 
     if (fabs(den) > 1e-20) s = num / den;
     else {
@@ -732,7 +742,9 @@ void ColorCurve::classify_segment_with_data(
                 RealVector out;
                 //                if (zerotype < fam) Left_Newton_improvement(rtemp[i], zerotype, out);
                 //                else Right_Newton_improvement(rtemp[i], zerotype - fam, out);
-                cout << "Quem eh out : " << out << endl;
+                IF_DEBUG
+                    cout << "Quem eh out : " << out << endl;
+                END_DEBUG
                 //                rtemp[i] = out;
             }
         }
@@ -767,7 +779,9 @@ void ColorCurve::classify_segment_with_data(
 
             // If not removed, the transition list increases
             transition_list.push_back(rtemp[k]);
-            cout << "transition_list.size() ::: " << transition_list.size() << endl;
+            IF_DEBUG
+                cout << "transition_list.size() ::: " << transition_list.size() << endl;
+            END_DEBUG
 
             // TODO: Antigamente era um complete_point
             classify_point(rtemp[k], r_p, eigenvalue_r, sigttemp[k]);
@@ -968,7 +982,9 @@ void ColorCurve::classify_continuous_curve(std::deque<RealVector> &original,
                 q, s_q, eigenvalue_q, ct_q, type_q,
                 hpl, segment_classified, transition_list_elements);
 
-        //cout << "Retornou de classify_segment_with_data --- transition_list_elements.size() : " << transition_list_elements.size() << endl;
+        IF_DEBUG
+            cout << "Retornou de classify_segment_with_data --- transition_list_elements.size() : " << transition_list_elements.size() << endl;
+        END_DEBUG
 
         // Set the last segment point as the first segment point of the next segment
         //

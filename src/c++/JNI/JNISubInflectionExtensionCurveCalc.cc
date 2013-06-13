@@ -109,9 +109,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionExtensionCurveCalc_native
         characteristicWhere = 1;
 
 
-        cout << "Resolucao x " << number_of_grid_points[0] << endl;
-
-        cout << "Resolucao y " << number_of_grid_points[1] << endl;
+        IF_DEBUG
+            cout << "Resolucao x " << number_of_grid_points[0] << endl;
+            cout << "Resolucao y " << number_of_grid_points[1] << endl;
+        END_DEBUG
 
 
  SubinflectionTPCW  subInflectionFunction((Flux2Comp2PhasesAdimensionalized*) & tpcw.fluxFunction(), (Accum2Comp2PhasesAdimensionalized*) & tpcw.accumulation());
@@ -127,24 +128,29 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionExtensionCurveCalc_native
             domain_segments);
 
 
-        cout << "Curve: " << curve_segments.size() << endl;
-
-        cout << "Domain: " << domain_segments.size() << endl;
+        IF_DEBUG
+            cout << "Curve: " << curve_segments.size() << endl;
+            cout << "Domain: " << domain_segments.size() << endl;
+        END_DEBUG
 
 
         tpcw.postProcess(curve_segments);
         tpcw.postProcess(domain_segments);
 
-        cout << "Familia da curva" << curveFamily << endl;
-        cout << "Familia do dominio" << domainFamily << endl;
-        cout << "characteristic " << characteristicWhere << endl;
+        IF_DEBUG
+            cout << "Familia da curva" << curveFamily << endl;
+            cout << "Familia do dominio" << domainFamily << endl;
+            cout << "characteristic " << characteristicWhere << endl;
+        END_DEBUG
 
 
     }
 
 
-    printf("curve_segments.size()  = %d\n", curve_segments.size());
-    printf("domain_segments.size() = %d\n", domain_segments.size());
+    IF_DEBUG
+        printf("curve_segments.size()  = %d\n", curve_segments.size());
+        printf("domain_segments.size() = %d\n", domain_segments.size());
+    END_DEBUG
 
 
     for (unsigned int i = 0; i < curve_segments.size() / 2; i++) {

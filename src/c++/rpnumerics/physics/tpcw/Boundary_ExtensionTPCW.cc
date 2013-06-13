@@ -28,7 +28,9 @@ void Boundary_ExtensionTPCW::extension_curve(const Flux2Comp2PhasesAdimensionali
     double s = ((fixed_s == BOUNDARY_EXTENSIONTPCW_S_ZERO) ? 0.0 : 1.0);
 
     for (int i = 0; i < number_of_temperature_steps; i++){
-        printf("i = %d\n", i);
+        IF_DEBUG
+            printf("i = %d\n", i);
+        END_DEBUG
 
         be_segments[2*i].resize(n);
         be_segments[2*i + 1].resize(n);
@@ -42,7 +44,9 @@ void Boundary_ExtensionTPCW::extension_curve(const Flux2Comp2PhasesAdimensionali
 
         // u
 //        be_segments[2*i].component(2) = be_segments[2*i + 1].component(2) = 1.0;
-//        printf(" ---\n");
+        IF_DEBUG
+            printf(" ---\n");
+        END_DEBUG
     }
 
     // Compute the extension curve for the rarefaction

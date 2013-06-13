@@ -73,9 +73,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SecondaryBifurcationCurveCalc_nativeCa
     sb.curve(leftFlux, leftAccum, *gv,
             rightFlux, rightAccum, *gv,
             left_vrs, right_vrs);
-    cout << "left_vrs.size()  = " << left_vrs.size() << endl;
-
-    cout << "right_vrs.size()  = " << right_vrs.size() << endl;
+    IF_DEBUG
+        cout << "left_vrs.size()  = " << left_vrs.size() << endl;
+        cout << "right_vrs.size()  = " << right_vrs.size() << endl;
+    END_DEBUG
 
 
     if (left_vrs.size() == 0 || right_vrs.size() == 0)return NULL;
@@ -226,7 +227,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SecondaryBifurcationCurveCalc_nativeCa
     
     
     
-    cout<<"No JNI LEFT: "<<leftPmin<<" "<<rightPmax<<endl;
+    IF_DEBUG
+        cout<<"No JNI LEFT: "<<leftPmin<<" "<<rightPmax<<endl;
+    END_DEBUG
 
     const Boundary * boundary = RpNumerics::getPhysics().getSubPhysics(0).getPreProcessedBoundary();
 
@@ -274,7 +277,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SecondaryBifurcationCurveCalc_nativeCa
 
 
     
-    cout<<"No JNI RIGHT: "<<leftPminR<<" "<<rightPmaxR<<endl;
+    IF_DEBUG
+        cout<<"No JNI RIGHT: "<<leftPminR<<" "<<rightPmaxR<<endl;
+    END_DEBUG
     
 
     GridValues rightGridValues(boundary, leftPminR, rightPmaxR, rightResolution);
@@ -296,9 +301,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SecondaryBifurcationCurveCalc_nativeCa
     sb.curve(leftFlux, leftAccum, leftGridValues,
             rightFlux, rightAccum, rightGridValues,
             left_vrs, right_vrs);
-    cout << "left_vrs.size()  = " << left_vrs.size() << endl;
 
-    cout << "right_vrs.size()  = " << right_vrs.size() << endl;
+    IF_DEBUG
+        cout << "left_vrs.size()  = " << left_vrs.size() << endl;
+        cout << "right_vrs.size()  = " << right_vrs.size() << endl;
+    END_DEBUG
 
 
     if (left_vrs.size() == 0 || right_vrs.size() == 0)return NULL;

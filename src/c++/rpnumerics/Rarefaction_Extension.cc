@@ -36,7 +36,9 @@ void Rarefaction_Extension::extension_curve(GridValues & gridValues, const FluxF
 
     int n = initial_point.size();
     
-    cout<<"Tamanho do n: "<<n<<endl;
+    IF_DEBUG
+        cout<<"Tamanho do n: "<<n<<endl;
+    END_DEBUG
 
     // Turn the curve of points into a curve of segments.
     vector <RealVector> rarefaction_segments;

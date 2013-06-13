@@ -35,7 +35,9 @@ void RPnPluginManager::unload(RpnPlugin * plugin, const string pluginType) {
         dirPath += pluginMapIterator->first;
         PluginService service(dirPath);
 
-        //        cout << "Unload Lib: " << dirPath << "\n";
+        IF_DEBUG
+            cout << "Unload Lib: " << dirPath << "\n";
+        END_DEBUG
 
 
         // Searching destroy method

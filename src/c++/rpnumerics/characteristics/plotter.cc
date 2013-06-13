@@ -22,7 +22,9 @@ RiemannPlotter::RiemannPlotter(float xmin,float xmax,float ymax,
 		plot_(plot)
 {
 
-    printf("Aqui\n");
+    IF_DEBUG
+        printf("Aqui\n");
+    END_DEBUG
 
 //        RiemannPlotter Temp((float)grid[0], (float)grid[n - 1], (float)time,
 //                            0.045,
@@ -46,7 +48,9 @@ void RiemannPlotter::reset(void)
 
 int RiemannPlotter::setup_next(void)
 {
-    printf("    setup_next:\n");
+    IF_DEBUG
+        printf("    setup_next:\n");
+    END_DEBUG
 
     if (right_)
     {
@@ -146,17 +150,23 @@ void RiemannPlotter::get_interception(void)
 void RiemannPlotter::gen_family(std::vector<std::vector<RealVector> > &c){
 //    c.clear();
 
-    printf("Will generate characterstics.\n");
+    IF_DEBUG
+        printf("Will generate characterstics.\n");
+    END_DEBUG
 
     int shock;
     reset();
     while(setup_next())
     {
-        printf("    ****\n");
+        IF_DEBUG
+            printf("    ****\n");
+        END_DEBUG
         shock=trace();
 	get_interception();
         if (n_points()>1) {
-            printf("n = %d\n", n_points());
+            IF_DEBUG
+                printf("n = %d\n", n_points());
+            END_DEBUG
             std::vector<RealVector> temp;
 
             for (int i = 0; i < n_points(); i++) {

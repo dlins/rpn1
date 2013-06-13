@@ -6,7 +6,9 @@
 Newton_Improvement::Newton_Improvement(const ImplicitFunction *m){
     imp_map = m;
 
-    //printf("imp_map = %p\n", imp_map);
+    IF_DEBUG
+        printf("imp_map = %p\n", imp_map);
+    END_DEBUG
 }
 
 Newton_Improvement::~Newton_Improvement(){
@@ -96,9 +98,11 @@ int Newton_Improvement::newton(const RealVector &p0, const RealVector &p1, const
     else {
        for (int i = 0; i < p0.size(); i++) p_improved.component(i) = p_init.component(i);
 
-       printf("Newton did not converge :p alpha = %lf\n", alpha);
-       printf("Error = %4.20f, ErrorSQR = %4.20f\n", delta_alpha, delta_alpha*delta_alpha);
-       printf("p0 = (%lf, %lf), p1 = (%lf, %lf), p_init = (%lf, %lf)\n", p0.component(0), p0.component(1), p1.component(0), p1.component(1), p_improved.component(0), p_improved.component(1));
+        IF_DEBUG
+           printf("Newton did not converge :p alpha = %lf\n", alpha);
+           printf("Error = %4.20f, ErrorSQR = %4.20f\n", delta_alpha, delta_alpha*delta_alpha);
+           printf("p0 = (%lf, %lf), p1 = (%lf, %lf), p_init = (%lf, %lf)\n", p0.component(0), p0.component(1), p1.component(0), p1.component(1), p_improved.component(0), p_improved.component(1));
+        END_DEBUG
 
        return NEWTON_IMPROVEMENT_ERROR;
     }

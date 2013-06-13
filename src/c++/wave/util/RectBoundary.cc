@@ -69,9 +69,10 @@ void RectBoundary::extension_curve(const FluxFunction *f, const AccumulationFunc
 
     Extension_Curve extension_curve;
 
-    cout<<"Primeiro seg: "<<seg[0]<<endl;
-
-    cout <<"Ultimo seg: "<<seg[seg.size()-1]<<endl;
+    IF_DEBUG
+        cout<<"Primeiro seg: "<<seg[0]<<endl;
+        cout <<"Ultimo seg: "<<seg[seg.size()-1]<<endl;
+    END_DEBUG
 
     extension_curve.curve(f, a, gv, characteristic, singular, fam,
             seg,
@@ -180,7 +181,9 @@ size_(minimums.size()), type_("rect") {
 }
 
 RectBoundary::RectBoundary(const RealVector & minimums, const RealVector & maximums, const std::vector<bool> & test, const double eps) {
-    printf("Here\n");
+    IF_DEBUG
+        printf("Here\n");
+    END_DEBUG
 
     minimums_ = new RealVector(minimums.size());
     maximums_ = new RealVector(minimums.size());
@@ -233,7 +236,9 @@ bool RectBoundary::inside(const RealVector &p) const {
         //        if (p(pos) < minimums()(pos) || p(pos) > maximums()(pos)) in = false;
         pos++;
     }
-    //    cout << "tamanho dentro de inside"<<in<<" "<<p.size() << endl;
+    IF_DEBUG
+        cout << "tamanho dentro de inside"<<in<<" "<<p.size() << endl;
+    END_DEBUG
     return in;
 
 
@@ -258,7 +263,9 @@ bool RectBoundary::inside(const RealVector &p) const {
     //        if (p(pos) < minimums()(pos) || p(pos) > maximums()(pos)) in = false;
     //        pos++;
     //    }
-    //    cout << "tamanho dentro de inside" << in << " " << p.size() << endl;
+    //    IF_DEBUG
+    //        cout << "tamanho dentro de inside" << in << " " << p.size() << endl;
+    //    END_DEBUG
     //    return in;
 }
 
@@ -276,20 +283,28 @@ bool RectBoundary::inside(const RealVector &p) const {
 
 //int RectBoundary::intersection(const RealVector &p, const RealVector &q, RealVector &r)const {
 //
-//    cout << "min" << minimums() << endl;
-//    cout << "max" << maximums() << endl;
+//    IF_DEBUG
+//        cout << "min" << minimums() << endl;
+//        cout << "max" << maximums() << endl;
+//    END_DEBUG
 //
 //    if (inside(p) && inside(q)) {
 //
-//        cout << "tamanho de p " << p.size() << " q" << q.size() << " r" << r.size();
+//        IF_DEBUG
+//            cout << "tamanho de p " << p.size() << " q" << q.size() << " r" << r.size();
+//        END_DEBUG
 //        return 1;
 //
 //    } else if (!inside(p) && !inside(q)) {
-//        cout << "tamanho de p " << p << " q" << q << " r --------------" << r.size();
+//        IF_DEBUG
+//            cout << "tamanho de p " << p << " q" << q << " r --------------" << r.size();
+//        END_DEBUG
 //        return -1;
 //
 //    } else {
-//        cout << "tamanho de p " << p.size() << " q" << q.size() << " r***************" << r.size();
+//        IF_DEBUG
+//            cout << "tamanho de p " << p.size() << " q" << q.size() << " r***************" << r.size();
+//        END_DEBUG
 //        int n = p.size();
 //        double alpha, beta;
 //        int pos = 0;
@@ -306,7 +321,9 @@ bool RectBoundary::inside(const RealVector &p) const {
 //                    for (int i = 0; i < n; i++) r(i) = alpha * p(i) + (1.0 - alpha) * q(i);
 //                    found = true;
 //#ifdef _TEST_HYPERBOX_
-//                    printf("ALPHA = %f, beta = %f, pos = %d\n", alpha, beta, pos);
+//                    IF_DEBUG
+//                        printf("ALPHA = %f, beta = %f, pos = %d\n", alpha, beta, pos);
+//                    END_DEBUG
 //#endif
 //                }
 //
@@ -314,7 +331,9 @@ bool RectBoundary::inside(const RealVector &p) const {
 //                    for (int i = 0; i < n; i++) r(i) = beta * p(i) + (1.0 - beta) * q(i);
 //                    found = true;
 //#ifdef _TEST_HYPERBOX_
-//                    printf("alpha = %f, BETA = %f, pos = %d\n", alpha, beta, pos);
+//                    IF_DEBUG
+//                        printf("alpha = %f, BETA = %f, pos = %d\n", alpha, beta, pos);
+//                    END_DEBUG
 //#endif
 //                }
 //            }
@@ -390,7 +409,9 @@ int RectBoundary::intersection(const RealVector &p, const RealVector &q, RealVec
                     for (int i = 0; i < n; i++) r.component(i) = alpha * p.component(i) + (1.0 - alpha) * q.component(i);
                     found = true;
 #ifdef _TEST_HYPERBOX_
-                    printf("ALPHA = %f, beta = %f, pos = %d\n", alpha, beta, pos);
+                    IF_DEBUG
+                        printf("ALPHA = %f, beta = %f, pos = %d\n", alpha, beta, pos);
+                    END_DEBUG
 #endif
 
                     // Return the index
@@ -401,7 +422,9 @@ int RectBoundary::intersection(const RealVector &p, const RealVector &q, RealVec
                     for (int i = 0; i < n; i++) r.component(i) = beta * p.component(i) + (1.0 - beta) * q.component(i);
                     found = true;
 #ifdef _TEST_HYPERBOX_
-                    printf("alpha = %f, BETA = %f, pos = %d\n", alpha, beta, pos);
+                    IF_DEBUG
+                        printf("alpha = %f, BETA = %f, pos = %d\n", alpha, beta, pos);
+                    END_DEBUG
 #endif
 
                     // Return the index

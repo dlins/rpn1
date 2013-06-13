@@ -37,7 +37,9 @@ Double_ContactTPCW::Double_ContactTPCW(const RealVector &lpmin, const RealVector
 
     create_grid(leftpmin, leftpmax, left_number_of_grid_pnts, leftgrid);
 
-    printf("After create_grid()\n");
+    IF_DEBUG
+        printf("After create_grid()\n");
+    END_DEBUG
 
     fill_values_on_grid(leftpmin, leftpmax,
             leftff, leftaa, 

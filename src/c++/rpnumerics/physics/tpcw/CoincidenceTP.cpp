@@ -64,7 +64,9 @@ double CoincidenceTP::lambdae_function(const RealVector &u) {
 
     td->Diff_Rhoaw(Theta, rhoaw, drhoaw_dT, d2rhoaw_dT2);
 
-    //    cout << rhoaw << drhoaw_dT << d2rhoaw_dT2 << endl;
+    IF_DEBUG
+        cout << rhoaw << drhoaw_dT << d2rhoaw_dT2 << endl;
+    END_DEBUG
 
     td->Diff_AqueousEnthalpyVol(Theta, Ha, dHa_dT, d2Ha_dT2);
     td->Diff_SuperCriticEnthalpyVol(Theta, Hsi, dHsi_dT, d2Hsi_dT2);

@@ -14,7 +14,9 @@ void Integral_Curve::integral_curve(const RealVector &init,
     std::vector<RealVector> inflection_points;
     
     
-    cout <<"Flag: "<<RAREFACTION_SPEED_DECREASE<<" "<< RAREFACTION_AS_ENGINE_FOR_INTEGRAL_CURVE <<" "<< RAREFACTION_GENERAL_ACCUMULATION<<" "<< RAREFACTION_INITIALIZE_YES<<" "<<RAREFACTION_INITIALIZE_YES<<endl;
+    IF_DEBUG
+        cout <<"Flag: "<<RAREFACTION_SPEED_DECREASE<<" "<< RAREFACTION_AS_ENGINE_FOR_INTEGRAL_CURVE <<" "<< RAREFACTION_GENERAL_ACCUMULATION<<" "<< RAREFACTION_INITIALIZE_YES<<" "<<RAREFACTION_INITIALIZE_YES<<endl;
+    END_DEBUG
 
     int info_decrease = Rarefaction::curve(init, 
                                            RAREFACTION_INITIALIZE_YES,
@@ -122,25 +124,33 @@ void Integral_Curve::levels(const std::vector<RealVector> &integral_curve, std::
             lambda_j_first = lambda_last_level;
             lambda_j_last = lambda_first_level;
         }       
-        //printf("lambda_first = %f, lambda_first_level = %d, lambda_last = %f, lambda_last_level = %d\n", lambda_first, lambda_first_level, lambda_last, lambda_last_level);
+        IF_DEBUG
+            printf("lambda_first = %f, lambda_first_level = %d, lambda_last = %f, lambda_last_level = %d\n", lambda_first, lambda_first_level, lambda_last, lambda_last_level);
+        END_DEBUG
 
         if (lambda_first_level == lambda_last_level) continue;
 
-//        int delta_j = (int)sgn(lambda_last_level - lambda_first_level);
-//        printf("delta_j = %d\n", delta_j);
+        int delta_j = (int)sgn(lambda_last_level - lambda_first_level);
+        IF_DEBUG
+            printf("delta_j = %d\n", delta_j);
+        END_DEBUG
         for (int j = lambda_j_first; j <= lambda_j_last; j++){
             double lambda = j*lambda_size;
             double alpha = (lambda - lambda_last)/(lambda_first - lambda_last);
             if (alpha < 0.0 || alpha > 1.0) continue;
             double beta = 1.0 - alpha;
-//            printf("    lambda_first = %f, lambda = %f, lambda_last = %f\n", lambda_first, lambda, lambda_last);
-//            printf("    alpha = %f, beta = %f\n", alpha, beta);
+            IF_DEBUG
+                 printf("    lambda_first = %f, lambda = %f, lambda_last = %f\n", lambda_first, lambda, lambda_last);
+                 printf("    alpha = %f, beta = %f\n", alpha, beta);
+            END_DEBUG
 
             RealVector pos(lp), ornt(lp);
             for (int k = 0; k < lp; k++){
                 pos.component(k) = alpha*integral_curve[i].component(k) + beta*integral_curve[i + 1].component(k);
             }
-//            std::cout << "    First = " << integral_curve[i] << ", pos = " << pos << ", last = " << integral_curve[i + 1] << std::endl;
+            IF_DEBUG
+                std::cout << "    First = " << integral_curve[i] << ", pos = " << pos << ", last = " << integral_curve[i + 1] << std::endl;
+            END_DEBUG
 
             if (lambda_last > lambda_first){
                 for (int k = 0; k < lp; k++){
@@ -152,7 +162,9 @@ void Integral_Curve::levels(const std::vector<RealVector> &integral_curve, std::
                     ornt.component(k) = integral_curve[i].component(k) - integral_curve[i + 1].component(k);
                 }
             }
-//            std::cout << "    Arrow = " << ornt << std::endl;
+            IF_DEBUG
+                std::cout << "    Arrow = " << ornt << std::endl;
+            END_DEBUG
 
             position.push_back(pos);
             orientation.push_back(ornt);

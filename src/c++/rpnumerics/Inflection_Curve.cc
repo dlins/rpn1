@@ -81,7 +81,10 @@ int Inflection_Curve::curve(const FluxFunction *f, const AccumulationFunction *a
                             
     inflection_curve.clear();
     
-    g.fill_dirdrv_on_grid(f, a);printf("Inflection_Curve::curve\n");
+    g.fill_dirdrv_on_grid(f, a);
+    IF_DEBUG
+        printf("Inflection_Curve::curve\n");
+    END_DEBUG
     gv = &g;
 
     // family MUST be a member of Inflection_Curve
@@ -89,7 +92,9 @@ int Inflection_Curve::curve(const FluxFunction *f, const AccumulationFunction *a
 
     int info = ContourMethod::contour2d(this, inflection_curve);
     
-    cout<<"Tamanho da inflexao " <<inflection_curve.size()<<endl;
+    IF_DEBUG
+        cout<<"Tamanho da inflexao " <<inflection_curve.size()<<endl;
+    END_DEBUG
 
     return info;
 }

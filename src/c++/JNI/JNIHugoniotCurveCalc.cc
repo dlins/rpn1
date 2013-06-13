@@ -34,7 +34,9 @@ using namespace std;
 JNIEXPORT void JNICALL Java_rpnumerics_HugoniotCurveCalcND_setUMinus
 (JNIEnv * env, jobject obj, jobject uMinus) {
 
-    printf("Seting UMinus\n");
+    IF_DEBUG
+        printf("Seting UMinus\n");
+    END_DEBUG
 
 }
 JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_PhasePoint_2(JNIEnv * env, jobject obj, jobject uMinus){
@@ -81,13 +83,17 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
 
 
-    cout << "Parametros: " << RpNumerics::getPhysics().fluxFunction().fluxParams().params() << endl;
+    IF_DEBUG
+        cout << "Parametros: " << RpNumerics::getPhysics().fluxFunction().fluxParams().params() << endl;
+    END_DEBUG
 
 
 
     RealVector Uref(dimension, input);
 
-    cout << "URef " << Uref << endl;
+    IF_DEBUG
+        cout << "URef " << Uref << endl;
+    END_DEBUG
 
     RpNumerics::getPhysics().getSubPhysics(0).preProcess(Uref);
 
@@ -97,7 +103,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
     GridValues * gv = RpNumerics::getGridFactory().getGrid("hugoniotcurve");
     
-    cout<<"Resolucao: "<<gv->grid_resolution<<endl;
+    IF_DEBUG
+        cout<<"Resolucao: "<<gv->grid_resolution<<endl;
+    END_DEBUG
 
     vector<bool> isCircular;
     
@@ -114,7 +122,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     
     for (int i = 0; i < transitionList.size(); i++) {
 
-//        cout<<"Ponto de transicao: "<<transitionList[i]<<endl;
+         IF_DEBUG
+             cout<<"Ponto de transicao: "<<transitionList[i]<<endl;
+         END_DEBUG
         
          jdoubleArray transPointArray = env->NewDoubleArray(dimension);
          double * leftCoords = (double *) transitionList[i];

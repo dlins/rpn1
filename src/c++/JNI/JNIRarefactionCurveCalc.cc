@@ -74,11 +74,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
     const AccumulationFunction * accumulationFunction = &RpNumerics::getPhysics().accumulation();
 
 
-    //    
-    //    cout << "Flux params " << fluxFunction->fluxParams().params()<<endl;
-    //    cout << "Accum params " << accumulationFunction->accumulationParams().params() << endl;
-
-
+        
+    IF_DEBUG
+        cout << "Flux params " << fluxFunction->fluxParams().params()<<endl;
+        cout << "Accum params " << accumulationFunction->accumulationParams().params() << endl;
+    END_DEBUG
 
 
     vector<RealVector> inflectionPoints;
@@ -99,7 +99,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
             tempBoundary,
             coords, inflectionPoints);
 
-    cout << "Tamanho da rarefacao: " << coords.size() << endl;
+    IF_DEBUG
+        cout << "Tamanho da rarefacao: " << coords.size() << endl;
+    END_DEBUG
     
     
 
@@ -122,7 +124,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
         double lambda = tempVector.component(tempVector.size() - 1);
 
 
-//        cout << tempVector << endl;
+        IF_DEBUG
+            cout << tempVector << endl;
+        END_DEBUG
 
         double * dataCoords = tempVector;
 

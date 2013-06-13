@@ -30,7 +30,9 @@ DoubleMatrix::DoubleMatrix(const DoubleMatrix &original) : Matrix<double>(origin
 DoubleMatrix::DoubleMatrix(const DoubleMatrix *original) : Matrix<double>(original), w_(DOUBLEMATRIXPRINTWIDTH){}
 
 DoubleMatrix::~DoubleMatrix(){
-   // printf("DoubleMatrix::~DoubleMatrix()\n");
+    IF_DEBUG
+        printf("DoubleMatrix::~DoubleMatrix()\n");
+    END_DEBUG
 }
 
 void DoubleMatrix::print(void) const {
@@ -171,7 +173,9 @@ int inverse(const DoubleMatrix &A, DoubleMatrix &B){
     dgetrf_(&n, &n, B.data(), &lda, ipiv, &lu_info);
     if (lu_info != 0) return lu_info;
 
-    //for (int i = 0; i < n; i++) printf("ipiv(%d) = %d\n", i, ipiv[i]);
+    IF_DEBUG
+        for (int i = 0; i < n; i++) printf("ipiv(%d) = %d\n", i, ipiv[i]);
+    END_DEBUG
 
     // Matrix inversion proper
     //

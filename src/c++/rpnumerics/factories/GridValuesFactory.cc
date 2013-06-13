@@ -28,7 +28,9 @@ GridValuesFactory::GridValuesFactory(const Physics * physics) : gridArray_(new m
 GridValues * GridValuesFactory::getGrid(const string & gridName) {
 
     
-    cout<<"Nome do grid: "<<gridName<<endl;
+    IF_DEBUG
+        cout<<"Nome do grid: "<<gridName<<endl;
+    END_DEBUG
     
     if (gridArray_->count(gridName) == 1) {
         return gridArray_->operator [](gridName);

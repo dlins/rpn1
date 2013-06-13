@@ -132,7 +132,10 @@ void Eigenvalue_Contour::set_levels_from_point(const FluxFunction *f, const Accu
         now_level += delta_l;
     }
 
-    std::sort(levels.begin(), levels.end()); printf("levels.size() = %d\n", levels.size());
+        std::sort(levels.begin(), levels.end());
+        IF_DEBUG
+            printf("levels.size() = %d\n", levels.size());
+        END_DEBUG
 
     return;
 }
@@ -153,7 +156,9 @@ void Eigenvalue_Contour::set_level_from_point(const FluxFunction *f, const Accum
     family = fam;
 
 
-    cout<<"Tamanho do p: "<<p.size()<<endl;
+    IF_DEBUG
+        cout<<"Tamanho do p: "<<p.size()<<endl;
+    END_DEBUG
     double JF[p.size()*p.size()], JG[p.size()*p.size()];
 
     f->fill_with_jet(p.size(), ((RealVector)p).components(), 1, 0, JF, 0);
@@ -161,7 +166,10 @@ void Eigenvalue_Contour::set_level_from_point(const FluxFunction *f, const Accum
 
     std::vector<eigenpair> e;
     Eigen::eig(p.size(), JF, JG, e);
-//    levels.push_back(e[family].r); //printf("Level = %f\n", e[family].r);
+//    levels.push_back(e[family].r);
+//    IF_DEBUG
+//        printf("Level = %f\n", e[family].r);
+//    END_DEBUG
     level = e[family].r;
 
     return;

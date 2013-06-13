@@ -56,7 +56,9 @@
 //
 //    }
 //
-//    //for (int i = 0; i < be_segments.size(); i++) std::cout << "be_segments[" << i << "] = " << be_segments[i] << std::endl;
+//    IF_DEBUG
+//        for (int i = 0; i < be_segments.size(); i++) std::cout << "be_segments[" << i << "] = " << be_segments[i] << std::endl;
+//    END_DEBUG
 //
 //    // Compute the extension curve for the rarefaction
 //    Extension_Curve extension_curve(pmin, pmax, number_of_grid_points,

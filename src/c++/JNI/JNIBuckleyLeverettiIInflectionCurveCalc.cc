@@ -75,7 +75,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BuckleyLeverettinInflectionCurveCalc_n
 
     GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcation");
 
-    cout<<gv<<endl;
+    IF_DEBUG
+        cout<<gv<<endl;
+    END_DEBUG
 
     std::vector< RealVector> outputVector;
 
@@ -84,7 +86,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BuckleyLeverettinInflectionCurveCalc_n
 
     newBLInflection.curve(fluxFunction, accumulationFunction, *gv, outputVector);
     
-    cout<<"Tamanho do buck:"<<outputVector.size()<<endl;
+    IF_DEBUG
+        cout<<"Tamanho do buck:"<<outputVector.size()<<endl;
+    END_DEBUG
 
 
     for (int i = 0; i < outputVector.size() / 2; i++) {
@@ -116,7 +120,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BuckleyLeverettinInflectionCurveCalc_n
         double rightSigma = 0;
 
 
-        //            cout<<"Antes de criar hugoniot segment"<<endl;
+        IF_DEBUG
+            cout<<"Antes de criar hugoniot segment"<<endl;
+        END_DEBUG
         jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, 17);
         env->CallObjectMethod(segmentsArray, arrayListAddMethod, hugoniotSegment);
 

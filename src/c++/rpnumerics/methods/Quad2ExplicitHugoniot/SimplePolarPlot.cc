@@ -78,7 +78,9 @@ void SimplePolarPlot::curve(void *Object,
             (*polarfunc)(Object, theta, point);
 
             first_point_found = boundary->inside(point);
-//            printf("First. pos = %d, theta = %g, found = %d\n", pos, theta, first_point_found);
+            IF_DEBUG
+                printf("First. pos = %d, theta = %g, found = %d\n", pos, theta, first_point_found);
+            END_DEBUG
 
             if (!first_point_found){
                 theta = theta0 + pos*delta_theta;
@@ -189,7 +191,9 @@ void SimplePolarPlot::periodic_curve(void *Object,
             point.component(1) = (num/den)*sin(theta);
 
             first_point_found = boundary->inside(point);
-//            printf("First. pos = %d, theta = %g, found = %d\n", pos, theta, first_point_found);
+            IF_DEBUG
+                printf("First. pos = %d, theta = %g, found = %d\n", pos, theta, first_point_found);
+            END_DEBUG
 
             if (!first_point_found){
                 theta = theta0 + pos*delta_theta;
