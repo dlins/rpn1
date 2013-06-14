@@ -37,7 +37,12 @@ import rpnumerics.RPnCurve;
 /** With this class the calculus made in a previous session can be reloaded. A previous state can be reloaded reading a XML file that is used by this class */
 public class RPnCommandModule {
 
+    public static String SESSION_ID_ = "";
+
     static public class RPnCommandParser implements ContentHandler {
+
+
+        
 
         private String currentElement_;
         private String currentCommand_;
@@ -66,6 +71,14 @@ public class RPnCommandModule {
             // and the COMMAND tag would carry away the phasespace information with it !??
             currentElement_ = name;
 
+
+            if (currentElement_.equals("RPNSESSION")) {
+
+                    SESSION_ID_ = att.getValue("id");
+            }
+
+
+
             if (isChangePhysicsParamsCommand_) {
 
                 if (currentElement_.equals("PHYSICSCONFIG")) {
@@ -74,7 +87,6 @@ public class RPnCommandModule {
                     currentConfiguration_ = currentConfiguration_.getConfiguration(att.getValue("name"));
 
                 }
-
 
                 if (currentElement_.equals("PHYSICSPARAM")) {
 
@@ -191,27 +203,20 @@ public class RPnCommandModule {
             if (name.equals("REALVECTOR")) {
 
                 UIController.instance().userInputComplete(new RealVector(stringBuffer_.toString()));
-                
-                
+                                
                  if (UIController.instance().getState() instanceof FILE_ACTION_SELECTED){
                     
                     FILE_ACTION_SELECTED fileAction = (FILE_ACTION_SELECTED)UIController.instance().getState();
                 
                     if (fileAction.getAction() instanceof RpModelPlotCommand){
-                        System.out.println("Setando id : "+curveId_);
+                        System.out.println("ID Setting : " + curveId_);
                         
                         RpGeometry geometry = UIController.instance().getActivePhaseSpace().getLastGeometry();
                         RPnCurve curve = (RPnCurve) geometry.geomFactory().geomSource();
-                        curve.setId(curveId_);
-
-                        
-                        
-                    }
-                                        
-                }
-                
+                        curve.setId(curveId_);                                               
+                    }                                        
+                }                
             }
-
 
             if (name.equals("PAUSE")) {
                 try {
@@ -283,27 +288,13 @@ public class RPnCommandModule {
 
     //
     // Initializers
-    //
+    //        
     /** Initializes the XML parser to reload a previous session. */
-    public static void init(XMLReader parser, String configFile) {
+    public static void init(XMLReader parser, InputStream inputStream) {
         try {
             parser.setContentHandler(new RPnCommandParser());
             System.out.println("Command Module parsing started...");
-            parser.parse(configFile);
-            System.out.println("Command Module parsing finshed sucessfully !");
-        } catch (Exception saxex) {
-
-            saxex.printStackTrace();
-
-        }
-    }
-
-    /** Initializes the XML parser to reload a previous session. */
-    public static void init(XMLReader parser, InputStream configFileStream) {
-        try {
-            parser.setContentHandler(new RPnCommandParser());
-            System.out.println("Command Module parsing started...");
-            parser.parse(new InputSource((configFileStream)));
+            parser.parse(new InputSource((inputStream)));
             System.out.println("Command Module parsing finished sucessfully !");
         } catch (Exception saxex) {
 

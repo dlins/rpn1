@@ -1,10 +1,9 @@
 <?xml version="1.0"?>
 <!DOCTYPE rpnconfiguration >
-<RPNSESSION>
-    <PHASESPACE name="Phase Space">
-        <RPNCONFIGURATION>
-            <PHYSICS name="CoreyQuad">
-
+<RPNSESSION id="1234">
+ <PHASESPACE name="Phase Space">
+    <RPNCONFIGURATION>
+    <PHYSICS name="CoreyQuad">
                 <PHYSICSCONFIG name="fluxfunction">
                     <PHYSICSPARAM name="grw" position="0" value ="0.0" />
                     <PHYSICSPARAM name="grg" position="1" value ="0.0" />
@@ -59,11 +58,19 @@
             </CURVECONFIGURATION>
 
 
+<<<<<<< HEAD
+    <CURVECONFIGURATION name="doublecontactcurve">
+        <CURVEPARAM name="curvefamily" value="1"/>
+        <CURVEPARAM name="domainfamily" value="1"/>
+        <CURVEPARAM name="resolution" value="30 30"/>
+    </CURVECONFIGURATION>
+=======
             <CURVECONFIGURATION name="doublecontactcurve">
                 <CURVEPARAM name="curvefamily" value="1"/>
                 <CURVEPARAM name="domainfamily" value="1"/>
                 <CURVEPARAM name="resolution" value="60 60"/>
             </CURVECONFIGURATION>
+>>>>>>> b534e68b19e6831710f42e3cd6a6513d38a6f3f1
 
 
             <CURVECONFIGURATION name="hysteresiscurve">

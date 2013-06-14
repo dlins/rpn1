@@ -10,7 +10,8 @@ import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import javax.swing.ImageIcon;
 import rpn.controller.ui.*;
-import rpn.message.RPnActionMediator;
+import rpn.message.RPnNetworkStatus;
+
 
 public abstract class RpModelActionCommand extends RpCommand {
 
@@ -47,11 +48,8 @@ public abstract class RpModelActionCommand extends RpCommand {
 
 
         UIController.instance().setState(action);
-        if (UIController.instance().getNetStatusHandler().isOnline()) { //Sending application state
-            RPnActionMediator.instance().setState(desc_);
 
-            System.out.println(desc_);
-        }
+  
 
     }
 

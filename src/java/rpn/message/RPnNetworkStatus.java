@@ -3,17 +3,8 @@
  * Departamento de Dinamica dos Fluidos
  *
  */
-
 package rpn.message;
 
-import java.io.*;
-import java.util.*;
-
-import javax.management.*;
-import javax.naming.*;
-
-import org.apache.log4j.*;
-import org.apache.log4j.varia.*;
 
 /**
  *
@@ -21,251 +12,123 @@ import org.apache.log4j.varia.*;
  * <p>The class that stores and manages the network communications parameters </p>
 
  */
-
-
 public class RPnNetworkStatus {
 
-    private String clientID_;
-    private MBeanServerConnection server_;
-    private ObjectName nameBean_;
-    private InitialContext ctx;
-    private String[] params_;
-    private String[] sig_;
 
+    private static RPnNetworkStatus instance_= null;
+
+    private String clientID_;
     private boolean isMaster_;
     private boolean isOnline_;
-    private boolean serverOnline_;
+    private RPnConsumerThread consumerThread_ = null;
+    
 
-    private StringBuffer logBuffer_;
+    public static String  SERVERNAME = new String("heitor");
+    public static String  RPN_COMMAND_QUEUE_NAME = new String("jms/queue/rpnCommand");
+    public static String  RPN_CONTROL_QUEUE_NAME = new String("jms/queue/rpnMaster");
 
-     public static int PORTNUMBER = 1099;
+    public static String MASTER_REQUEST_MSG = new String ("MASTER_REQUEST");
+    public static String MASTER_ACK_MSG = new String ("MASTER_ACK");
 
-     public static String SERVERNAME = new String("gluck.fluid.impa.br");
 
-    public RPnNetworkStatus(String clientID) {
+    private RPnNetworkStatus() {
 
-        clientID_ = clientID;
         isOnline_ = false;
-        isMaster_ = false;
-        logBuffer_ = new StringBuffer();
-
-    }
-
-    /**
-     *  Initalization method. This method is used to create a JMX server connection, define MBean names , etc
-     *
-     */
-
-    public void init() {
-
-        try {
-
-            Hashtable env = new Hashtable(2);
-            env.put(Context.INITIAL_CONTEXT_FACTORY,
-                    "org.jnp.interfaces.NamingContextFactory");
-
-            BasicConfigurator.configure(new NullAppender()); // sending server log messages to null
-
-            env.put(Context.PROVIDER_URL,
-                    "jnp://" + RPnNetworkStatus.SERVERNAME + ":" +
-                    RPnNetworkStatus.PORTNUMBER);
-
-            ctx = new InitialContext(env);
-            nameBean_ = new ObjectName(RPnActionMediator.SERVICE);
-
-            server_ = (MBeanServerConnection) ctx.lookup(RPnActionMediator.
-                    RMIADAPTOR);
-
-
-
-            params_ = new String[1];
-            params_[0] = clientID_;
-            sig_ = new String[1];
-            sig_[0] = "java.lang.String";
-            serverOnline_ = true;
-        }
-
-
-        catch (javax.naming.CommunicationException ex) {
-            logBuffer_.append(Calendar.getInstance().getTime()+" "+SERVERNAME+ " is not available\n");
-            logBuffer_.append(Calendar.getInstance().getTime()+" "+ex.getMessage()+"\n");
-            serverOnline_ = false;
-
-        }
-        catch (Exception ex) {
-            logBuffer_.append(Calendar.getInstance().getTime()+ "Error in init de NetWorkStatus\n");
-            logBuffer_.append(Calendar.getInstance().getTime()+" "+ex.getMessage() + "\n");
-            System.out.println(ex);
-        }
-
+        //connect("localhost",false);
     }
 
 
-    /**
-     * Sets the client master status
-     *
-     *
-     * @param isMaster boolean true to set the client as master , false to not set it
-     */
 
-    public void setAsMaster(boolean isMaster) {
+    public void connect(String clientID,boolean isMaster) {
+                       
+        clientID_ = clientID;
+        isMaster_ = isMaster;
+        isOnline_ = true;
 
-        try {
+        if (!isMaster_) {
 
-            if (isMaster) {
-                params_[0] = clientID_;
-                sig_[0] = "java.lang.String";
-                server_.invoke(nameBean_, "setAsMaster", params_, sig_);
+            RPnSender.init(RPN_CONTROL_QUEUE_NAME);
+            consumerThread_ = new RPnConsumerThread(RPN_COMMAND_QUEUE_NAME);
 
+            MASTER_REQUEST_MSG += '|' + clientID_;
+
+        }
+        else {
+
+            RPnSender.init(RPN_COMMAND_QUEUE_NAME);
+            consumerThread_ = new RPnConsumerThread(RPN_CONTROL_QUEUE_NAME);
+        }
+            
+
+        // we will always be listening to either COMMANDs or CONTROLs
+        consumerThread_.start();
+
+        log("Connected to JBoss server : " + SERVERNAME);
+    }
+
+    public void disconnect() {
+
+        if (isMaster_)
+                RPnSender.close();
+            else {               
+                
+                RPnConsumer.end = true;
+
+                try {
+
+                    consumerThread_.join();
+
+                } catch (InterruptedException ex) {
+                    
+                    log("Connection closed for RPnConsumer...");
+                }
             }
 
-            isMaster_ = isMaster;
+        isOnline_ = false;
+        RPnConsumer.stopsListening();
+    }
 
-        } catch (Exception ex) {
+    public boolean isMaster() {
+        return isMaster_;
+    }
 
-            System.out.println("Error in setMaster");
+    public boolean isOnline() {
+        return isOnline_;
+    }
 
-            System.out.println(ex);
-        }
+    public String clientID() {
+        return clientID_;
+    }
+
+    public String log() {
+        return RPnNetworkDialog.infoText.getText();
+    }
+
+    public void log(String logMessage) {
+
+        RPnNetworkDialog.infoText.append(logMessage + '\n');
+    }
+
+      
+    public void sendCommand(String commandDesc) {
+
+        log(commandDesc);
+        RPnSender.send(commandDesc);
+    }
+
+    public void sendMasterRequest() {
+
+        log (MASTER_REQUEST_MSG);
+        RPnSender.send(MASTER_REQUEST_MSG);
 
     }
 
 
-    /**
-     * Sets the client connection status
-     *
-     * @param isOnline boolean true if the client is online, false if not
-     */
+    public static RPnNetworkStatus instance() {
 
+        if (instance_ == null) 
+            instance_ = new RPnNetworkStatus();
 
-    public void online(boolean isOnline) {
-
-        try {
-            params_[0] = clientID_;
-
-            sig_[0] = "java.lang.String";
-
-            if (isOnline == true) {
-
-                server_.invoke(nameBean_, "addClient", params_, sig_);
-
-            }
-            if (isOnline == false) {
-
-                server_.invoke(nameBean_, "removeClient", params_, sig_);
-
-            }
-
-            isOnline_ = isOnline;
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-
-        }
+        return instance_;
     }
-
-
-
-    public void addDomain(String domain) {
-
-        try {
-            params_[0] = domain;
-
-            sig_[0] = "java.lang.String";
-
-            server_.invoke(nameBean_, "addDomain", params_, sig_);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-
-        } catch (ReflectionException ex) {
-            ex.printStackTrace();
-        } catch (MBeanException ex) {
-            ex.printStackTrace();
-        } catch (InstanceNotFoundException ex) {
-
-            ex.printStackTrace();
-        }
-
-    }
-
-    public void removeDomain(String domain) {
-
-           try {
-               params_[0] = domain;
-
-               sig_[0] = "java.lang.String";
-
-               server_.invoke(nameBean_, "removeDomain", params_, sig_);
-           } catch (IOException ex) {
-               ex.printStackTrace();
-
-           } catch (ReflectionException ex) {
-               ex.printStackTrace();
-           } catch (MBeanException ex) {
-               ex.printStackTrace();
-           } catch (InstanceNotFoundException ex) {
-
-               ex.printStackTrace();
-           }
-
-    }
-
-
-    /**
-         * Returns the master status
-         *
-         *
-         * @return boolean true if the client is the master , false if not
-         */
-
-        public boolean isMaster() { return isMaster_;}
-
-        /**
-         *
-         * Returns the connection status
-         *
-         *
-         * @return boolean true if the client is online, false if not
-         */
-        public boolean isOnline() { return isOnline_; }
-
-        /**
-         * Returns the server status
-         *
-         *
-         * @return boolean true if the server to change messages is available, false if not
-         */
-
-        public boolean isServerOnline() { return serverOnline_;  }
-
-        /**
-         *
-         * Retruns the clientID
-         *
-         *
-         * @return String The clientID
-         */
-
-        public String getClientID() {  return clientID_;  }
-
-
-        public ArrayList getDomains() {
-
-            ArrayList returnedList = null;
-
-            try {
-                returnedList= (ArrayList) ctx.lookup("rpnDomains");
-            } catch (NamingException ex) {
-                ex.printStackTrace();
-            }
-
-
-            return returnedList;
-
-        }
-
-    public String getLogMessages() {
-        return logBuffer_.toString();
-    }
-
-    }
+}

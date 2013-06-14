@@ -55,14 +55,9 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
     public void finalizeApplication() {
         try {
 
-            if (UIController.instance().getNetStatusHandler().isServerOnline()
-                    && UIController.instance().getNetStatusHandler().isOnline()) {
-                UIController.instance().getNetStatusHandler().online(false);
-            }
-
-            if (UIController.instance().getNetStatusHandler().isMaster()) {
-                RPnActionMediator.instance().sendMasterOffline();
-            }
+            if (RPnNetworkStatus.instance().isOnline())
+                RPnNetworkStatus.instance().disconnect();
+                        
             RPNUMERICS.clean();
             System.exit(0);
         } catch (Exception ex) {
@@ -70,11 +65,10 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
         }
     }
 
-    public void networkCommand() {
-
-        UIController.instance().getNetStatusHandler().init();
+    public void networkCommand() {       
 
         RPnNetworkDialog netDialog = new RPnNetworkDialog();
+
         netDialog.setVisible(true);
 
     }

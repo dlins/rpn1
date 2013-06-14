@@ -40,8 +40,8 @@ public class FindProfileCommand extends RpModelPlotCommand {
     public void actionPerformed(ActionEvent action) {
 
      findProfile();
-     if (UIController.instance().getNetStatusHandler().isOnline())
-     RPnActionMediator.instance().setState(DESC_TEXT);
+     if (RPnNetworkStatus.instance().isOnline())
+        RPnNetworkStatus.instance().sendCommand(DESC_TEXT);
     }
 
 //    public void execute() {
