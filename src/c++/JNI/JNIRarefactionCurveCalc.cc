@@ -15,6 +15,7 @@
 #include "RpNumerics.h"
 #include "RealVector.h"
 #include "JNIDefs.h"
+#include "Debug.h"
 #include <vector>
 
 #include "TPCW.h"
@@ -75,10 +76,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
 
 
         
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         cout << "Flux params " << fluxFunction->fluxParams().params()<<endl;
         cout << "Accum params " << accumulationFunction->accumulationParams().params() << endl;
-    END_DEBUG
+    }
 
 
     vector<RealVector> inflectionPoints;
@@ -99,9 +100,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
             tempBoundary,
             coords, inflectionPoints);
 
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         cout << "Tamanho da rarefacao: " << coords.size() << endl;
-    END_DEBUG
+    }
     
     
 
@@ -124,9 +125,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
         double lambda = tempVector.component(tempVector.size() - 1);
 
 
-        IF_DEBUG
+        if ( Debug::get_debug_level() == 5 ) {
             cout << tempVector << endl;
-        END_DEBUG
+        }
 
         double * dataCoords = tempVector;
 

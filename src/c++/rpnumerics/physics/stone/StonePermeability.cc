@@ -11,6 +11,7 @@
  * Includes:
  */
 #include "StonePermeability.h"
+#include "Debug.h"
 #include <iostream>
 
 using namespace std;
@@ -320,10 +321,10 @@ void StonePermeability::Diff_PermabilityOil(double sw, double so, double sg,
         d2ko_dso2  = StoneC * ko1den * (2. * dko2den_ds + socno * d2ko2den_ds2)
                    + (1. - epsl_)*(1. - lo_) * expo_ * (expo_ - 1.) * powso2 * denko_;
 
-      IF_DEBUG
+      if ( Debug::get_debug_level() == 5 ) {
           cout << "Dentro de StonePermeability::Diff_PermabilityOil, so = " << socno << " (" << NegativeWaterSaturation << ", " << NegativeGasSaturation << ", " << NegativeOilSaturation << "): " << ko << ", " << dko_dsw << ", " << dko_dso << ", " << d2ko_dsw2 << ", " << d2ko_dswso << ", " << d2ko_dso2 << endl;
           cout << "Params auxiliares: " << StoneC << ", " << powso1 << ", " << powso2 << endl;
-      END_DEBUG
+      }
 
     }
 

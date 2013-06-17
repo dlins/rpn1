@@ -1,4 +1,5 @@
 #include "WaveCurve.h"
+#include "Debug.h"
 
 // Find the intesection between two segments: p1-p2 and q1-q2, store the answer in r.
 // If there is no intersection, return false (and r is useless), otherwise return true.
@@ -86,9 +87,9 @@ int WaveCurve::half_wavecurve(int initial_curve, const RealVector &init, int fam
         int out;
 
         if (curve_to_be_computed == RAREFACTION_CURVE) {
-            IF_DEBUG
+            if ( Debug::get_debug_level() == 5 ) {
                 printf("\n\n\n WAVECURVE: RAREFACTION \n\n\n");
-            END_DEBUG
+            }
 
             std::vector<RealVector> inflection_points;
 
@@ -142,9 +143,9 @@ int WaveCurve::half_wavecurve(int initial_curve, const RealVector &init, int fam
                 // temp_init is not necessary here.
             } else if (out == RAREFACTION_REACHED_BOUNDARY) return WAVE_CURVE_REACHED_BOUNDARY;
         } else if (curve_to_be_computed == SHOCK_CURVE) {
-            IF_DEBUG
+            if ( Debug::get_debug_level() == 5 ) {
                 printf("\n\n\n WAVECURVE: SHOCK \n\n\n");
-            END_DEBUG
+            }
             //          out = shock(temp_init, temp_curve);
             //           std::vector<RealVector> shockcurve_alt;
 
@@ -157,18 +158,18 @@ int WaveCurve::half_wavecurve(int initial_curve, const RealVector &init, int fam
             bool valid_curve_alt_found = false;
 
             if (first_curve) {
-                IF_DEBUG
+                if ( Debug::get_debug_level() == 5 ) {
                     printf("WaveCurve. SHOCK. Firstc.clear(); curve.\n");
-                END_DEBUG
+                }
                 //                out = Shock::curve(init, true, init, increase, family, SHOCK_FOR_ITSELF, orig_direction, (FluxFunction*)ff, (AccumulationFunction*)aa, (Boundary*)boundary, temp_curve, temp_curve_alt);
                 Shock::curve(init, true, init, increase, family, SHOCK_FOR_ITSELF, orig_direction, 0, (FluxFunction*) ff, (AccumulationFunction*) aa, (Boundary*) boundary,
                         temp_curve, info,
                         temp_curve_alt, info_alt);
 
                 // Only temp_curve is filled in this case.
-                IF_DEBUG
+                if ( Debug::get_debug_level() == 5 ) {
                     std::cout << "Before add_sigma" << std::endl;
-                END_DEBUG
+                }
 
                 std::vector<RealVector> temp2(temp_curve.size());
                 for (int i = 0; i < temp2.size(); i++){
@@ -177,9 +178,9 @@ int WaveCurve::half_wavecurve(int initial_curve, const RealVector &init, int fam
                 }
                 Shock::add_sigma(init, (FluxFunction*)ff, (AccumulationFunction*)aa, temp2);
 
-                IF_DEBUG
+                if ( Debug::get_debug_level() == 5 ) {
                     std::cout << "After add_sigma" << std::endl;
-                END_DEBUG
+                }
 
                 c.push_back(Curve(temp2, SHOCK_CURVE, c.size()));
 
@@ -205,18 +206,18 @@ int WaveCurve::half_wavecurve(int initial_curve, const RealVector &init, int fam
                 valid_curve_found = false;
                 valid_curve_alt_found = false;
 
-                IF_DEBUG
+                if ( Debug::get_debug_level() == 5 ) {
                     printf("WaveCurve. SHOCK. Not first curve.\n");
                     printf("    temp_init = (%f, %f)\n", temp_init.component(0), temp_init.component(1));
-                END_DEBUG
+                }
                 //                out = Shock::curve(init, false, temp_init, increase, family, SHOCK_FOR_ITSELF, orig_direction, (FluxFunction*)ff, (AccumulationFunction*)aa, (Boundary*)boundary, temp_curve, temp_curve_alt);
                 Shock::curve(init, false, temp_init, increase, family, SHOCK_FOR_ITSELF, orig_direction, 0, (FluxFunction*) ff, (AccumulationFunction*) aa, (Boundary*) boundary,
                         temp_curve, info,
                         temp_curve_alt, info_alt);
 
-                IF_DEBUG
+                if ( Debug::get_debug_level() == 5 ) {
                     printf("WaveCurve: info = %d, info_alt = %d\n", info, info_alt);
-                END_DEBUG
+                }
                 Shock::add_sigma(init, (FluxFunction*) ff, (AccumulationFunction*) aa, temp_curve);
                 Shock::add_sigma(init, (FluxFunction*) ff, (AccumulationFunction*) aa, temp_curve_alt);
 
@@ -283,21 +284,21 @@ int WaveCurve::half_wavecurve(int initial_curve, const RealVector &init, int fam
                     }
                 }
 
-                IF_DEBUG
+                if ( Debug::get_debug_level() == 5 ) {
                     printf("valid_curve_found = %d, valid_curve_alt_found = %d\n", valid_curve_found, valid_curve_alt_found);
-                END_DEBUG
+                }
 
                 if (!valid_curve_found && !valid_curve_alt_found) {
-                    IF_DEBUG
+                    if ( Debug::get_debug_level() == 5 ) {
                         printf("    temp_curve_alt.size() = %d, check_temp_alt = %d\n", temp_curve_alt.size(), check_temp_alt);
                         printf("    WAVE_CURVE_ERROR\n");
-                    END_DEBUG
+                    }
                     return WAVE_CURVE_ERROR;
                 }
             }
-            IF_DEBUG
+            if ( Debug::get_debug_level() == 5 ) {
                 printf("WaveCurve. SHOCK. out = %d\n", out);
-            END_DEBUG
+            }
 
             //            c.push_back(Curve(temp_curve, SHOCK_CURVE));//modificar segundo a observacao embaixo
             // TODO: IMPORTANTE: Quando o choque for precedido por alguma curva (acho que só poderia ser uma composta) acredito que temos que ver qual das duas curvas: temp_curve ou temp_curve_alt sai na mesma direcao (desde temp_init) que a diferenca entre o ultimo e o penultimo pontos da curva composta anterior, só fariamos o push_back de uma das duas curvas temp_curve o temp_curve_alt. Tal vez precisemos separar os casos de choques precedidos por composta dos casos de choques sem nada antes. (Panters)
@@ -307,16 +308,16 @@ int WaveCurve::half_wavecurve(int initial_curve, const RealVector &init, int fam
             // This is going to change when the recursive or tree-like algorithm for the wavecurve is mature.
             //
             if ((valid_curve_found && info == SHOCK_REACHED_BOUNDARY) || (valid_curve_alt_found && info_alt == SHOCK_REACHED_BOUNDARY)) {
-                IF_DEBUG
+                if ( Debug::get_debug_level() == 5 ) {
                     printf("info == SHOCK_REACHED_BOUNDARY || info_alt == SHOCK_REACHED_BOUNDARY\n");
-                END_DEBUG
+                }
                 return WAVE_CURVE_REACHED_BOUNDARY;
             }                //            else if (out == NON_LAX_AFTER_BECOMING_RIGHT_CHARACTERISTIC_WITH_CURRENT_FAMILY){
             else if ((valid_curve_found && info == NON_LAX_AFTER_BECOMING_RIGHT_CHARACTERISTIC_WITH_CURRENT_FAMILY) ||
                     (valid_curve_alt_found && info_alt == NON_LAX_AFTER_BECOMING_RIGHT_CHARACTERISTIC_WITH_CURRENT_FAMILY)) {
-                IF_DEBUG
+                if ( Debug::get_debug_level() == 5 ) {
                     printf("WaveCurve: NON_LAX_AFTER_BECOMING_RIGHT_CHARACTERISTIC_WITH_CURRENT_FAMILY\n");
-                END_DEBUG
+                }
                 previous_curve = curve_to_be_computed;
                 curve_to_be_computed = RAREFACTION_CURVE;
 
@@ -335,18 +336,18 @@ int WaveCurve::half_wavecurve(int initial_curve, const RealVector &init, int fam
                 return WAVE_CURVE_SHOCK_RIGHT_CHARACTERISTIC_WITH_OTHER_FAMILY;
             }
         } else if (curve_to_be_computed == COMPOSITE_CURVE) {
-            IF_DEBUG
+            if ( Debug::get_debug_level() == 5 ) {
                 printf("\n\n\n WAVECURVE: COMPOSITE \n\n\n");
-            END_DEBUG
+            }
             int number_ignore_doub_contact;
             if (origin == COMPOSITE_FROM_NORMAL_RAREFACTION) number_ignore_doub_contact = 0;
             else {
-                IF_DEBUG
+                if ( Debug::get_debug_level() == 5 ) {
                     printf("    Size of indices in stack: %d\n", rarefaction_stack_indices.size());
                     for (int i = 0; i < rarefaction_stack_indices.size(); i++) printf("rarefaction_stack_indices[%d] = %d\n", i, rarefaction_stack_indices[i]);
                     printf("    Rar stack:\n");
                     for (int i = 0; i < rarefaction_stack.size(); i++) printf("rarefaction_stack[%d].indecx_related_curve = %d\n", i, rarefaction_stack[i].index_related_curve);
-                END_DEBUG
+                }
 
                 int pos = 0;
                 bool found = false;
@@ -358,10 +359,10 @@ int WaveCurve::half_wavecurve(int initial_curve, const RealVector &init, int fam
                 if (found) number_ignore_doub_contact = rarefaction_stack_indices.size() - pos;
                 else number_ignore_doub_contact = 0;
 
-                IF_DEBUG
+                if ( Debug::get_debug_level() == 5 ) {
                     if (found) printf("    Found: number_ignore_doub_contact = %d\n", number_ignore_doub_contact);
                     else printf("    Not found: number_ignore_doub_contact = %d\n", number_ignore_doub_contact);
-                END_DEBUG
+                }
 
                 temp_curve.clear();
 
@@ -374,9 +375,9 @@ int WaveCurve::half_wavecurve(int initial_curve, const RealVector &init, int fam
                 temp_curve.push_back(p);
             }
 
-            IF_DEBUG
+            if ( Debug::get_debug_level() == 5 ) {
                 printf("    WAVECURVE. Composite will be computed with number_ignore_doub_contact = %d\n", number_ignore_doub_contact);
-            END_DEBUG
+            }
             // TEMPORAL BELOW
             std::vector<RealVector> shock_curve_temp;
             // TEMPORAL ABOVE
@@ -418,13 +419,13 @@ int WaveCurve::half_wavecurve(int initial_curve, const RealVector &init, int fam
                 return WAVE_CURVE_REACHED_BOUNDARY;
             } else if (out == COMPOSITE_EXHAUSTED_RAREFACTION) {
 
-                IF_DEBUG
+                if ( Debug::get_debug_level() == 5 ) {
                     printf("WaveCurve. COMPOSITE_EXHAUSTED_RAREFACTION, rarefaction_stack.size() = %d\n", rarefaction_stack.size());
-                END_DEBUG
+                }
                 if (rarefaction_stack.size() > 0) {
-                    IF_DEBUG
+                    if ( Debug::get_debug_level() == 5 ) {
                         printf("            int index_related_curve;rarefaction_stack.size() > 0\n");
-                    END_DEBUG
+                    }
                     // Copy the elements in the stack to the rarefaction curve that will be fed to the next composite.
                     rar_before_composite.clear();
                     rar_before_composite.resize(rarefaction_stack[rarefaction_stack.size() - 1].curve.size());
@@ -447,17 +448,17 @@ int WaveCurve::half_wavecurve(int initial_curve, const RealVector &init, int fam
 
                     //if (rarefaction_stack.size() == 0) rarefaction_stack_indices.clear();
                 } else {
-                    IF_DEBUG
+                    if ( Debug::get_debug_level() == 5 ) {
                         printf("    rarefaction_stack.size() = 0\n");
-                    END_DEBUG
+                    }
                     previous_curve = curve_to_be_computed;
                     curve_to_be_computed = SHOCK_CURVE;
 
                     temp_init.resize(temp_curve[temp_curve.size() - 1].size());
                     for (int i = 0; i < temp_curve[temp_curve.size() - 1].size(); i++) temp_init.component(i) = temp_curve[temp_curve.size() - 1].component(i);
-                    IF_DEBUG
+                    if ( Debug::get_debug_level() == 5 ) {
                         printf("    COMPOSITE. temp_init = (%f, %f)\n", temp_init.component(0), temp_init.component(1));
-                    END_DEBUG
+                    }
 
                     // Last composite vector (previous vector) to establish the direction of the next curve (a shock).
                     previous_vector.resize(temp_curve[temp_curve.size() - 1].size());
@@ -484,9 +485,9 @@ int WaveCurve::half_wavecurve(int initial_curve, const RealVector &init, int fam
                     rar_for_stack_index.push_back(i);
                 }
 
-                IF_DEBUG
+                if ( Debug::get_debug_level() == 5 ) {
                     printf("    Creating the stack: rar_for_stack.size() = %d\n", rar_for_stack.size());
-                END_DEBUG
+                }
 
                 // Notice that the index in this curve is the one of the rarefaction that was not exhacusted.
                 // It will be retrieved after a composite exhausts a rarefaction and a new composite is computed
@@ -498,11 +499,11 @@ int WaveCurve::half_wavecurve(int initial_curve, const RealVector &init, int fam
                     // This will help the SHOCK_AS_ENGINE_FOR_COMPOSITE ignore some double contacts.
                     rarefaction_stack_indices.push_back(index_current_rarefaction); // Only push.
 
-                    IF_DEBUG
+                    if ( Debug::get_debug_level() == 5 ) {
                         printf("    Now in the stack there are: %d curves.\n", rarefaction_stack.size());
                         for (int i = 0; i < rarefaction_stack.size(); i++) printf("    Curve in stack #%d has %d points\n", i, rarefaction_stack[i].curve.size());
                         for (int i = 0; i < rarefaction_stack_indices.size(); i++) printf("    Index of curve in stack #%d is %d\n", i, rarefaction_stack_indices[i]);
-                    END_DEBUG
+                    }
 
                     // Total number of double contacts along the current wave curve to be ignored by the SHOCK_AS_ENGINE_FOR_COMPOSITE
                     //  total_number_of_double_contacts = rarefaction_stack_indices.size();
@@ -544,9 +545,9 @@ int WaveCurve::intersection(const std::vector<Curve> &c1, const std::vector<Curv
     for (int i = 0; i < c1.size(); i++) {
         if (c1[i].curve.size() < 2) continue;
         for (int j = 0; j < c1[i].curve.size() - 1; j++) {
-            IF_DEBUG
+            if ( Debug::get_debug_level() == 5 ) {
                 std::cout << "1, (" <<  c1[i].curve[j] << ")-(" << c1[i].curve[j + 1] << ")" << std::endl;
-            END_DEBUG
+            }
             WaveCurveSegment *wcs = new WaveCurveSegment(c1[i].curve[j], c1[i].curve[j + 1], i, j);
             h1.add(wcs);
         }
@@ -555,9 +556,9 @@ int WaveCurve::intersection(const std::vector<Curve> &c1, const std::vector<Curv
     for (int i = 0; i < c2.size(); i++) {
         if (c2[i].curve.size() < 2) continue;
         for (int j = 0; j < c2[i].curve.size() - 1; j++) {
-            IF_DEBUG
+            if ( Debug::get_debug_level() == 5 ) {
                 std::cout << "2, (" <<  c2[i].curve[j] << ")-(" << c2[i].curve[j + 1] << ")" << std::endl;
-            END_DEBUG
+            }
             WaveCurveSegment *wcs = new WaveCurveSegment(c2[i].curve[j], c2[i].curve[j + 1], i, j);
             h2.add(wcs);
         }
@@ -572,9 +573,9 @@ int WaveCurve::intersection(const std::vector<Curve> &c1, const std::vector<Curv
 
     BoxND box(ppmin, ppmax);
 
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         cout << "ppmin: " << ppmin << " ppmax" << ppmax << endl;
-    END_DEBUG
+    }
 
     std::vector<WaveCurveSegment*> wcs1, wcs2;
     h1.within_box(box, wcs1);

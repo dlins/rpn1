@@ -1,4 +1,5 @@
 #include "Accum2Comp2PhasesAdimensionalized.h"
+#include "Debug.h"
 
 Accum2Comp2PhasesAdimensionalized::Accum2Comp2PhasesAdimensionalized(const Accum2Comp2PhasesAdimensionalized &a):AccumulationFunction(a.accumulationParams()){
     TD =  a.TD;
@@ -13,9 +14,9 @@ Accum2Comp2PhasesAdimensionalized::Accum2Comp2PhasesAdimensionalized(const Accum
 Accum2Comp2PhasesAdimensionalized::Accum2Comp2PhasesAdimensionalized(const Accum2Comp2PhasesAdimensionalized_Params &param):AccumulationFunction(param) {
     TD = param.get_thermodynamics();
     phi = param.component(0);
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         cout <<"Valor de phi no accum2 comp: "<<phi<<endl;
-    END_DEBUG
+    }
     reducedAccum_= new ReducedAccum2Comp2PhasesAdimensionalized(this);
 }
 
@@ -101,11 +102,11 @@ int Accum2Comp2PhasesAdimensionalized::jet(const WaveState &w, JetMatrix &m, int
             out01 = phi * (d_rhosic * s + d_rhoac * (1.0 - s)); // dG1_dTheta
             out02 = 0.; // dG1_dU
 
-            IF_DEBUG
+            if ( Debug::get_debug_level() == 5 ) {
                 printf("out00 = %g\n", out00);
                 printf("out01 = %g\n", out01);
                 printf("out02 = %g\n", out02);
-            END_DEBUG
+            }
 
             out10 = phi * (rhosiw - rhoaw); // dG2_ds
             out11 = phi * (d_rhosiw * s + d_rhoaw * (1.0 - s)); // dG2_dTheta
@@ -128,13 +129,13 @@ int Accum2Comp2PhasesAdimensionalized::jet(const WaveState &w, JetMatrix &m, int
             m(2, 2, out22);
 
 
-            IF_DEBUG
+            if ( Debug::get_debug_level() == 5 ) {
                 for (int i = 0; i < 3; i++){
                     for (int j = 0; j < 3; j++){
                         printf("aa(%d, %d) = %g\n", i, j, m(i, j));
                     }
                 }
-            END_DEBUG
+            }
 
             // Hessian
             if (degree == 2) {
@@ -280,10 +281,10 @@ int Accum2Comp2PhasesAdimensionalized::ReducedAccum2Comp2PhasesAdimensionalized:
             out00 = totalAccum_->phi*(rhosic - rhoac); // dG1_ds
             out01 = totalAccum_->phi*(d_rhosic*s + d_rhoac*(1.0 - s)); // dG1_dTheta
 
-            IF_DEBUG
+            if ( Debug::get_debug_level() == 5 ) {
                 printf("out00 = %g\n", out00);
                 printf("out01 = %g\n", out01);
-            END_DEBUG
+            }
 
             out10 = totalAccum_->phi*(rhosiw - rhoaw); // dG2_ds
             out11 = totalAccum_->phi*(d_rhosiw*s + d_rhoaw*(1.0 - s)); // dG2_dTheta
@@ -300,13 +301,13 @@ int Accum2Comp2PhasesAdimensionalized::ReducedAccum2Comp2PhasesAdimensionalized:
             m(2, 0, out20);
             m(2, 1, out21);
 
-            IF_DEBUG
+            if ( Debug::get_debug_level() == 5 ) {
                 for (int i = 0; i < 3; i++){
                     for (int j = 0; j < 3; j++){
                         printf("aa(%d, %d) = %g\n", i, j, m(i, j));
                     }
                 }
-            END_DEBUG
+            }
 
 
             // Hessian

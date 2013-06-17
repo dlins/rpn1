@@ -25,6 +25,7 @@ NOTE :
 #include <iostream>
 #include "Inflection_Curve.h"
 #include "TPCW.h"
+#include "Debug.h"
 
 
 using std::vector;
@@ -98,9 +99,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_InflectionCurveCalc_nativeCalc__I
     jobject result = env->NewObject(inflectionCurveClass, inflectionCurveConstructor, segmentsArray);
 
 
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         if (result == NULL) cout << "Eh nulo" << endl;
-    END_DEBUG
+    }
 
     // Limpando
     env->DeleteLocalRef(realSegmentClass);

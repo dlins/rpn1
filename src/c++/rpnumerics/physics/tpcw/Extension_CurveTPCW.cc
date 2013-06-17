@@ -1,4 +1,5 @@
 #include "Extension_CurveTPCW.h"
+#include "Debug.h"
 
 Extension_CurveTPCW::Extension_CurveTPCW(const RealVector &dpmin, const RealVector &dpmax, const int *domain_number_of_grid_pnts_input,
                                  const Flux2Comp2PhasesAdimensionalized *dff, const Accum2Comp2PhasesAdimensionalized *daa){
@@ -237,9 +238,9 @@ void Extension_CurveTPCW::compute_extension_curve(int characteristic_where, int 
                                                   std::vector<RealVector> &curve_segments,
                                                   std::vector<RealVector> &domain_segments){
 
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         printf("compute_extension_curve\n");
-    END_DEBUG
+    }
 
     // Clear the output.
     curve_segments.clear();

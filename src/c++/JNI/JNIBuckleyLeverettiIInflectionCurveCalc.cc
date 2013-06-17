@@ -25,6 +25,7 @@ NOTE :
 #include <iostream>
 #include  "BLInflectionTP.h"
 #include "rpnumerics_BuckleyLeverettinInflectionCurveCalc.h"
+#include "Debug.h"
 //#include "ColorCurve.h"
 
 
@@ -75,9 +76,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BuckleyLeverettinInflectionCurveCalc_n
 
     GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcation");
 
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         cout<<gv<<endl;
-    END_DEBUG
+    }
 
     std::vector< RealVector> outputVector;
 
@@ -86,9 +87,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BuckleyLeverettinInflectionCurveCalc_n
 
     newBLInflection.curve(fluxFunction, accumulationFunction, *gv, outputVector);
     
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         cout<<"Tamanho do buck:"<<outputVector.size()<<endl;
-    END_DEBUG
+    }
 
 
     for (int i = 0; i < outputVector.size() / 2; i++) {
@@ -120,9 +121,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BuckleyLeverettinInflectionCurveCalc_n
         double rightSigma = 0;
 
 
-        IF_DEBUG
+        if ( Debug::get_debug_level() == 5 ) {
             cout<<"Antes de criar hugoniot segment"<<endl;
-        END_DEBUG
+        }
         jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, 17);
         env->CallObjectMethod(segmentsArray, arrayListAddMethod, hugoniotSegment);
 

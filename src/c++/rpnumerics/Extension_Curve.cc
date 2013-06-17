@@ -1,4 +1,5 @@
 #include "Extension_Curve.h"
+#include "Debug.h"
 
 int Extension_Curve::species_physic(Extension_Curve *ec, double *foncub, int domain_i, int domain_j, int kl){
     double lambda;
@@ -133,17 +134,17 @@ int Extension_Curve::function_on_vertices(double *foncub, int domain_i, int doma
 //        red_shock_speed = (Y21 * X12 + Y13 * X31 + Y32 * X23) / den;
 //        }
 //        
-//        IF_DEBUG
+//        if ( Debug::get_debug_level() == 5 ) {
 ////          cout<<"red : "<<red_shock_speed<<endl;
-//        END_DEBUG
+//        }
 
 
 //        if (characteristic_where == CHARACTERISTIC_ON_CURVE) {
 
 //            lambda = segment_lambda[kl];
-//            IF_DEBUG
+//            if ( Debug::get_debug_level() == 5 ) {
 ////              cout << "Valor do lambda: " << lambda << endl;
-//            END_DEBUG
+//            }
 
 //        } else {
 

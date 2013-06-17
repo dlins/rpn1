@@ -20,6 +20,7 @@ NOTE :
 #include "rpnumerics_StationaryPointCalc.h"
 #include "JNIDefs.h"
 #include "Viscous_Profile.h"
+#include "Debug.h"
 #include "RpNumerics.h"
 
 //JNIEXPORT jobject JNICALL Java_rpnumerics_StationaryPointCalc_calc(JNIEnv *env, jobject obj, jobject initialPoint) {
@@ -72,11 +73,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_StationaryPointCalc_nativeCalc(JNIEnv 
     const AccumulationFunction * accumFunction = &RpNumerics::getPhysics().accumulation();
 
 
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         cout << "Parametros nos estacionarios: " << RpNumerics::getPhysics().fluxFunction().fluxParams().params()<<endl;
         cout <<" Native equipoint: "<<nativeEquiPoint<<endl;
         cout <<" Native ref: "<<nativeRefPoint<<endl;
-    END_DEBUG
+    }
 
     Viscosity_Matrix v;
     Viscous_Profile::critical_points_linearization(fluxFunction, accumFunction,
@@ -100,9 +101,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_StationaryPointCalc_nativeCalc(JNIEnv 
     double eigenValIBuffer [ep.size()];
 
 
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         cout <<"Ponto passado: "<<nativeEquiPoint<<endl;
-    END_DEBUG
+    }
 
 
 
@@ -116,10 +117,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_StationaryPointCalc_nativeCalc(JNIEnv 
 
 
 
-        IF_DEBUG
+        if ( Debug::get_debug_level() == 5 ) {
             cout << "Parte real: " << ep[i].r << endl;
             cout << "Parte imaginaria: " << ep[i].i << endl;
-        END_DEBUG
+        }
 
 
 

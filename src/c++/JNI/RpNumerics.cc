@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include "rpnumerics_RPNUMERICS.h"
 #include "RpNumerics.h"
+#include "Debug.h"
 
 //-------------------------------------
 // PHYSICS
@@ -74,9 +75,9 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setRPnHome
 
     Physics::setRPnHome(rpnHomeString);
 
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         cout << "RPn home path in physics: " << Physics::getRPnHome() << endl;
-    END_DEBUG
+    }
 
 }
 
@@ -190,9 +191,9 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setMethod
     string nativeMethodName(env->GetStringUTFChars(methodName, NULL));
 
 
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         cout << nativeMethodType << " " << nativeMethodName << endl;
-    END_DEBUG
+    }
 
     delete RpNumerics::getPhysics().getSubPhysics(0).getHugoniotFunction();
 
@@ -217,9 +218,9 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setMethod
 
     if (RpNumerics::getPhysics().ID().compare("QuadraticR2") == 0) {
         
-        IF_DEBUG
+        if ( Debug::get_debug_level() == 5 ) {
             cout <<"Nome do metodo: "<<nativeMethodName<<endl;
-        END_DEBUG
+        }
 
         if (nativeMethodType.compare("hugoniotmethod")==0) {
 
@@ -323,16 +324,16 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setResolution
 
     GridValues * grid = RpNumerics::getGridFactory().getGrid(string(gridNameNative));
 
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         cout <<"Nome do grid: "<<gridNameNative<<endl;
-    END_DEBUG
+    }
     
     const Boundary * boundary = RpNumerics::getPhysics().getSubPhysics(0).getPreProcessedBoundary();
 
 
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         cout << "Chamando set Grid" << gridNameNative << endl;
-    END_DEBUG
+    }
 
     grid->set_grid(boundary, boundary->minimums(), boundary->maximums(), newResolutionVector);
 
@@ -417,10 +418,10 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setBoundary
         RectBoundary nativeBoundary(minNativeRealVector, maxNativeRealVector);
         RpNumerics::getPhysics().boundary(nativeBoundary);
 
-        IF_DEBUG
+        if ( Debug::get_debug_level() == 5 ) {
             cout << "Min nativo: " << nativeBoundary.minimums() << endl;
             cout << "Max nativo: " << nativeBoundary.maximums() << endl;
-        END_DEBUG
+        }
 
     }
 
@@ -431,9 +432,9 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setBoundary
         RealVector maxNativeRealVector(maxSize, maxNativeArray);
 
 
-        IF_DEBUG
+        if ( Debug::get_debug_level() == 5 ) {
             cout << "O tipo eh isotriang boundary" << minNativeRealVector << " " << maxNativeRealVector << endl;
-        END_DEBUG
+        }
 
 
         Three_Phase_Boundary triangBoundary(minNativeRealVector, maxNativeRealVector);
@@ -527,9 +528,9 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initNative(JNIEnv * env, jclas
     if (physicsID == NULL) {
         return; /* OutOfMemoryError already thrown */
     }
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         cout << "Construindo a fisica: " << physicsID << endl;
-    END_DEBUG
+    }
     RpNumerics::setPhysics(Physics(physicsID));
 
 
@@ -607,9 +608,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_boundary(JNIEnv * env, jcla
         const RectBoundary & rectBoundary = (RectBoundary &) boundary;
         int boundaryDimension = rectBoundary.minimums().size();
 
-        IF_DEBUG
+        if ( Debug::get_debug_level() == 5 ) {
             cout <<"Min: "<<rectBoundary.minimums()<<" Max: "<<rectBoundary.maximums()<<endl;
-        END_DEBUG
+        }
 
         double minimum [boundaryDimension];
         double maximum [boundaryDimension];
@@ -697,9 +698,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_boundary(JNIEnv * env, jcla
 
 
     }
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         cout << "Boundary not defined" << endl;
-    END_DEBUG
+    }
 
     return NULL;
 

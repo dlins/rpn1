@@ -11,6 +11,7 @@
  * Includes:
  */
 #include "ContinuationRarefactionFlow.h"
+#include "Debug.h"
 
 /*
  * ---------------------------------------------------------------
@@ -25,9 +26,9 @@ ContinuationRarefactionFlow::~ContinuationRarefactionFlow() {
 
 ContinuationRarefactionFlow::ContinuationRarefactionFlow(const RealVector & referenceVector, const int familyIndex, const int direction, const FluxFunction & fluxFunction) : RarefactionFlow(referenceVector, familyIndex, direction, fluxFunction) {
 
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         cout << "here" << endl;
-    END_DEBUG
+    }
 
 }
 
@@ -139,9 +140,9 @@ int ContinuationRarefactionFlow::rarefaction(int *neq, double *xi, double *in, d
     int i, j, info;
     vector<eigenpair> e;
     int type = RpNumerics::getPhysics().getPhysicsVector().at(0)->type();
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         cout <<"Valor de type: "<<type<<endl;
-    END_DEBUG
+    }
     param[0] = type; // _SIMPLE_ACCUMULATION_; //TODO REMOVE !!
     //    param[0] = _GENERAL_ACCUMULATION_; //TODO REMOVE !!
 
@@ -166,10 +167,10 @@ int ContinuationRarefactionFlow::rarefaction(int *neq, double *xi, double *in, d
         //for (i = 0; i < n; i++){
         if (fabs(e[family].i) > 1e-10) { // TODO Set a good value for this
 #ifdef TEST_RAREFACTION
-            IF_DEBUG
+            if ( Debug::get_debug_level() == 5 ) {
                 printf("At rarefaction(): Imaginary eigenvalue!\n");
                 printf("Eigenvalue %d = % g %+g*i.\n", i, e[i].r, e[i].i);
-            END_DEBUG
+            }
 #endif
             return COMPLEX_EIGENVALUE;
         }
@@ -182,11 +183,11 @@ int ContinuationRarefactionFlow::rarefaction(int *neq, double *xi, double *in, d
         for (i = 0; i < n - 1; i++) {
             if (e[i].r == e[i + 1].r) {
 #ifdef TEST_RAREFACTION
-                IF_DEBUG
+                if ( Debug::get_debug_level() == 5 ) {
                     printf("At rarefaction(): Eigenvalues are equal!\n");
                     printf("Eigenvalue %d = % f %+f*i.\n", i, e[i].r, e[i].i);
                     printf("Eigenvalue %d = % f %+f*i.\n", i + 1, e[i + 1].r, e[i + 1].i);
-                END_DEBUG
+                }
 #endif
                 return ABORTED_PROCEDURE;
             }
@@ -293,14 +294,14 @@ int ContinuationRarefactionFlow::rarefaction(int *neq, double *xi, double *in, d
 void ContinuationRarefactionFlow::fill_with_jet(const RpFunction & flux_object, int n, double *in, int degree, double *F, double *J, double *H) {
     RealVector r(n);
 
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         cout<<"Tamanho em fill: "<<n<<endl;
-    END_DEBUG
+    }
     double *rp = r;
     for (int i = 0; i < n; i++) rp[i] = in[i];
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         cout << "Entrada em fill: " << r << endl;
-    END_DEBUG
+    }
     // Will this work? There is a const somewhere in fluxParams.
     //FluxParams fp(r);
     //flux_object->fluxParams(FluxParams(r)); // flux_object->fluxParams(fp);
@@ -308,9 +309,9 @@ void ContinuationRarefactionFlow::fill_with_jet(const RpFunction & flux_object, 
     WaveState state_c(r);
 
     JetMatrix c_jet(n);
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         cout <<"Depois da linha 296"<<c_jet.size()<<endl;
-    END_DEBUG
+    }
     flux_object.jet(state_c, c_jet, degree);
 
 
@@ -336,9 +337,9 @@ void ContinuationRarefactionFlow::fill_with_jet(const RpFunction & flux_object, 
             }
         }
     }
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         cout <<"Dentro de fill with jet cont rare flow"<<endl;
-    END_DEBUG
+    }
     return;
 }
 
@@ -382,9 +383,9 @@ int ContinuationRarefactionFlow::flux(int n, int family, const FluxFunction &ff,
         fill_with_jet(ff, n, in, 1, 0, &J[0][0], 0);
         info = Eigen::eig(n, &J[0][0], e);
     } else {
-        IF_DEBUG
+        if ( Debug::get_debug_level() == 5 ) {
             cout<<"Rare nao e simple"<<endl;
-        END_DEBUG
+        }
         double A[n][n], B[n][n];
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) A[i][j] = B[i][j] = 0.0;
@@ -393,7 +394,7 @@ int ContinuationRarefactionFlow::flux(int n, int family, const FluxFunction &ff,
         fill_with_jet(ff, n, in, 1, 0, &A[0][0], 0);
         fill_with_jet(gg, n, in, 1, 0, &B[0][0], 0);
 
-        IF_DEBUG
+        if ( Debug::get_debug_level() == 5 ) {
             cout<<"Rare nao e simple"<<endl;
             printf("in = \n");
             printf("[");
@@ -412,37 +413,37 @@ int ContinuationRarefactionFlow::flux(int n, int family, const FluxFunction &ff,
                 for (int j = 0; j < n; j++) printf("%e ", B[i][j]);
                 printf("]\n");
             }
-        END_DEBUG
+        }
 
         info = Eigen::eig(n, &A[0][0], &B[0][0], e);
 
 
 
-        IF_DEBUG
+        if ( Debug::get_debug_level() == 5 ) {
             printf("after eig: info = %d, e.size() = %d\n", info, e.size());
-        END_DEBUG
+        }
     }
     /* NEW ABOVE */
 
     //    Eigen::print_eigen(e);
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         printf("in the middle: e.size() = %d\n", e.size());
         printf("here3.5\n");
-    END_DEBUG
+    }
     if (fabs(e[family].i) > 1e-5) {
-        IF_DEBUG
+        if ( Debug::get_debug_level() == 5 ) {
             printf("Complex eigenvalue\n"); printf("here4\n");
-        END_DEBUG
+        }
         return COMPLEX_EIGENVALUE;
     } else {
         *lambda = e[family].r;
         if (out != 0) for (int i = 0; i < n; i++) {
                 out[i] = e[family].vrr[i];
 
-                IF_DEBUG
+                if ( Debug::get_debug_level() == 5 ) {
                     cout << "out referencia" << out[i] << endl;
                     printf("here5\n");
-                END_DEBUG
+                }
 
             }
         return SUCCESSFUL_PROCEDURE;
@@ -469,9 +470,9 @@ void ContinuationRarefactionFlow::matrixmult(int m, int p, int n, double *A, dou
             }
             C[i * n + j] = ddot_(&pp, &arow[0], &incx, &bcol[0], &incy);
 
-            IF_DEBUG
+            if ( Debug::get_debug_level() == 5 ) {
                 printf("C[%d][%d]: Conventional = % f; ddot_ = % f\n", i, j, sum, C[i*n + j]);
-            END_DEBUG
+            }
 
         }
     }

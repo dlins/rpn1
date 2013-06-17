@@ -11,6 +11,7 @@
  * Includes:
  */
 #include "IsoTriang2DBoundary.h"
+#include "Debug.h"
 using namespace std;
 
 /*
@@ -168,9 +169,9 @@ int Three_Phase_Boundary::intersection(const RealVector &p, const RealVector &q,
 //    return Boundary::intersection(p, q, r, w);
     if (inside(p) && inside(q)) return 1;
     if (!inside(p) && !inside(q)) {
-        IF_DEBUG
+        if ( Debug::get_debug_level() == 5 ) {
             cout << "Both outside, should abort" << endl;
-        END_DEBUG
+        }
         return -1;
     } else {
         RealVector pin(2), pout(2);
@@ -419,14 +420,14 @@ int Three_Phase_Boundary::edge_segments(int where_constant, int number_of_steps,
 //
 //
 //     if ((x >= minimums().component(0)) && (y >= minimums().component(1)) && (x + y <=  maximums().component(0)+minimums().component(1)+0.00000001)) {
-//    IF_DEBUG
+//    if ( Debug::get_debug_level() == 5 ) {
 ////        cout << "(" << x << ", " << y << ") is INSIDE" << endl;
-//    END_DEBUG
+//    }
 //        return true;
 //    } else {
-//    IF_DEBUG
+//    if ( Debug::get_debug_level() == 5 ) {
 ////       cout << "(" << x << ", " << y << ") is OUTSIDE" << endl;
-//    END_DEBUG
+//    }
 //        return false;
 //    }
 //
@@ -435,14 +436,14 @@ int Three_Phase_Boundary::edge_segments(int where_constant, int number_of_steps,
 ////
 ////
 ////    if ((x >= 0.) && (y >= 0.) && (x + y <= 1.)) {
-//    IF_DEBUG
+//    if ( Debug::get_debug_level() == 5 ) {
 //////        cout << "(" << x << ", " << y << ") is INSIDE" << endl;
-//    END_DEBUG
+//    }
 ////        return true;
 ////    } else {
-//    IF_DEBUG
+//    if ( Debug::get_debug_level() == 5 ) {
 //////        cout << "(" << x << ", " << y << ") is OUTSIDE" << endl;
-//    END_DEBUG
+//    }
 ////        return false;
 //
 //// 1.0000000001 is a kludge, in an ideal world it should be 1.0.
@@ -453,14 +454,14 @@ int Three_Phase_Boundary::edge_segments(int where_constant, int number_of_steps,
 //
 //
 //     if ((x >= minimums().component(0)) && (y >= minimums().component(1)) && (x + y <=  maximums().component(0)+minimums().component(1)+0.00000001)) {
-//    IF_DEBUG
+//    if ( Debug::get_debug_level() == 5 ) {
 ////        cout << "(" << x << ", " << y << ") is INSIDE" << endl;
-//    END_DEBUG
+//    }
 //        return true;
 //    } else {
-//    IF_DEBUG
+//    if ( Debug::get_debug_level() == 5 ) {
 ////       cout << "(" << x << ", " << y << ") is OUTSIDE" << endl;
-//    END_DEBUG
+//    }
 //        return false;
 //    }
 //
@@ -469,14 +470,14 @@ int Three_Phase_Boundary::edge_segments(int where_constant, int number_of_steps,
 //
 ////
 ////    if ((x >= 0.) && (y >= 0.) && (x + y <= 1.)) {
-//    IF_DEBUG
+//    if ( Debug::get_debug_level() == 5 ) {
 //////        cout << "(" << x << ", " << y << ") is INSIDE" << endl;
-//    END_DEBUG
+//    }
 ////        return true;
 ////    } else {
-//    IF_DEBUG
+//    if ( Debug::get_debug_level() == 5 ) {
 //////        cout << "(" << x << ", " << y << ") is OUTSIDE" << endl;
-//    END_DEBUG
+//    }
 ////        return false;
 ////    }
 //

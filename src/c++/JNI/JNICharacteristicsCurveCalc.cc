@@ -22,6 +22,7 @@
 #include "JNIDefs.h"
 #include <vector>
 #include "RpNumerics.h"
+#include "Debug.h"
 
 
 using std::vector;
@@ -93,15 +94,15 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CharacteristicsCurveCalc_nativeCalc
 
     std::vector<std::vector<std::vector<RealVector> > > characteristics;
 
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         cout <<"Sampling: "<<samplingRate<<endl;
-    END_DEBUG
+    }
     
     RiemannSolver::characteristics(fluxFunction, accumulationFunction, riemannProfileVector,0.45, samplingRate, characteristics);
     
     
 
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         // Modified below
         FILE *fid = fopen("characteristics.txt", "w");
 
@@ -122,7 +123,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CharacteristicsCurveCalc_nativeCalc
                 }
             }
         }
-    END_DEBUG
+    }
 
     fclose(fid);
 
@@ -150,24 +151,24 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CharacteristicsCurveCalc_nativeCalc
                 jobject linePointPhasePoint = env->NewObject(classPhasePoint, phasePointConstructorID, linePointRealVector);
                 env->SetObjectArrayElement(lineCoordsArray, k, linePointPhasePoint);
 
-                IF_DEBUG
+                if ( Debug::get_debug_level() == 5 ) {
                     cout << linePoint << endl;
-                END_DEBUG
+                }
 
             }
 
             env->CallObjectMethod(familyLinesList, arrayListAddMethod, lineCoordsArray);
-            IF_DEBUG
+            if ( Debug::get_debug_level() == 5 ) {
                 cout << "Fim da linha: " << j << endl;
-            END_DEBUG
+            }
 
         }
 
         env->CallObjectMethod(characteristicsList, arrayListAddMethod, familyLinesList);
 
-        IF_DEBUG
+        if ( Debug::get_debug_level() == 5 ) {
             cout << "Fim da familia: " << i << endl;
-        END_DEBUG
+        }
 
     }
 

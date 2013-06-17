@@ -23,6 +23,7 @@
 #include "PluginService.h"
 #include "RPnPluginManager.h"
 #include "ShockFlowPlugin.h"
+#include "Debug.h"
 #include <iostream>
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_WaveFlow_flux(JNIEnv * env, jobject obj, jobject realVector) {
@@ -165,11 +166,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveFlow_fluxDeriv(JNIEnv * env, jobje
 
         env->GetDoubleArrayRegion(xzeroArray, 0, xzeroLength, nativeXZeroArray);
 
-        IF_DEBUG
+        if ( Debug::get_debug_level() == 5 ) {
             for (int i = 0; i < xzeroLength; i++) {
                 cout << "XZero: " << nativeXZeroArray [i] << "\n";
             }
-        END_DEBUG
+        }
 
         RpnPlugin * plug = RPnPluginManager::getPluginInstance("ShockFlow");
 
@@ -261,11 +262,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveFlow_fluxDeriv2(JNIEnv * env, jobj
 
         env->GetDoubleArrayRegion(xzeroArray, 0, xzeroLength, nativeXZeroArray);
 
-        IF_DEBUG
+        if ( Debug::get_debug_level() == 5 ) {
             for (int i = 0; i < xzeroLength; i++) {
                 cout << "XZero: " << nativeXZeroArray [i] << "\n";
             }
-        END_DEBUG
+        }
 
         RpnPlugin * plug = RPnPluginManager::getPluginInstance("ShockFlow");
 

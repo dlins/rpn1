@@ -1,4 +1,5 @@
 #include "RiemannSolver.h"
+#include "Debug.h"
 #include "plotter.h"
 
 double RiemannSolver::min(double x, double y){
@@ -37,9 +38,9 @@ void RiemannSolver::minmax(const std::vector<Curve> &wave_curve, double &min, do
 //    int pos = subc_point;
 
 //    do {
-//        IF_DEBUG
+//        if ( Debug::get_debug_level() == 5 ) {
 //            printf("Inside RiemannSolver. curvepos = %d, pos = %d\n", curvepos, pos);
-//        END_DEBUG
+//        }
 
 ////        profile.push_back(c[curvepos].curve[pos]);
 
@@ -134,9 +135,9 @@ void RiemannSolver::half_profile(const std::vector<Curve> &c, int subc, int subc
     int pos = subc_point;
 
     do {
-        IF_DEBUG
+        if ( Debug::get_debug_level() == 5 ) {
             printf("Inside RiemannSolver. curvepos = %d, pos = %d\n", curvepos, pos);
-        END_DEBUG
+        }
 
 //        profile.push_back(c[curvepos].curve[pos]);
 
@@ -159,14 +160,14 @@ void RiemannSolver::half_profile(const std::vector<Curve> &c, int subc, int subc
             //c[c[curvepos].index_related_curve - 1].type == SHOCK_CURVE){
             c[c[curvepos].related_curve[pos] - 1].type == SHOCK_CURVE){
 
-            IF_DEBUG
+            if ( Debug::get_debug_level() == 5 ) {
                 printf("RiemannProfile. Two consecutive shocks detected.\n");
                 printf("    curvepos (this curve\'s index) = %d\n", curvepos);
                 printf("    type (1 = R, 2 = S, 3 = C)     = %d\n", c[curvepos].type);
                 printf("    corresponding curve            = %d\n", c[curvepos].index_related_curve);
                 printf("    corresponding curve (other)    = %d\n", c[curvepos].related_curve[pos]);
                 printf("    corresponding point            = %d\n", c[curvepos].corresponding_point_in_related_curve[pos]);
-            END_DEBUG
+            }
 
             // Add the reference point, with the speed of the current point of the composite curve:
             RealVector temp(c[curvepos].curve[pos]);
@@ -279,9 +280,9 @@ int RiemannSolver::saturation_profiles(const std::vector<Curve> &one_wave_curve,
     int found = WaveCurve::intersection(one_wave_curve, two_wave_curve, pmin, pmax, 
                                         p, subc1, subc1_point, subc2, subc2_point);
     
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         cout <<"Intersecao:"<<found<<endl;
-    END_DEBUG
+    }
 
     if (found == WAVE_CURVE_INTERSECTION_NOT_FOUND) return RIEMANNSOLVER_ERROR;
 
@@ -448,13 +449,13 @@ void RiemannSolver::characteristics(const FluxFunction *f, const AccumulationFun
 
     // TEMPORAL
 
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         FILE *file = fopen("riemann_profile_output.txt", "w");
         for (int i = 0; i < n; i++){
             fprintf(file, "%d %f %f %f\n", i, grid[i], lambda[0][i], lambda[1][i]);
         }
         fclose(file);
-    END_DEBUG
+    }
 
     // TEMPORAL
 

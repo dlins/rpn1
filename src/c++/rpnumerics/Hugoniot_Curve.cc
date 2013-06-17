@@ -1,4 +1,5 @@
 #include "Hugoniot_Curve.h"
+#include "Debug.h"
 
 // This is the classified Hugoniot given by segments
 //
@@ -50,9 +51,9 @@ int Hugoniot_Curve::classified_curve(const FluxFunction *f, const AccumulationFu
     transitionList.clear();
     // ---
 
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         cout << "Hugoniot: classified_curve por continuacao" << endl;
-    END_DEBUG
+    }
 
     // The continuous curve is stored by Contour2D
     std::vector< std::deque <RealVector> > curves;
@@ -77,9 +78,9 @@ int Hugoniot_Curve::classified_curve(const FluxFunction *f, const AccumulationFu
         HugoniotPolyLine hugoniot;
         colorCurve.classify_continuous_curve(curves[i],r,hugoniot,testeTransitionalList);
         hugoniot_curve.push_back(hugoniot);
-        IF_DEBUG
+        if ( Debug::get_debug_level() == 5 ) {
             cout << "Size da lista de transicao " << i  <<  "  " << testeTransitionalList.size() << endl;
-        END_DEBUG
+        }
 
         // --- Pablo/Leandro 18FEV
         for (int j=0; j< testeTransitionalList.size(); j++) {
@@ -88,9 +89,9 @@ int Hugoniot_Curve::classified_curve(const FluxFunction *f, const AccumulationFu
         // ---
     }
 
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         cout << "Size da lista total " << transitionList.size() << endl;
-    END_DEBUG
+    }
 
     
     

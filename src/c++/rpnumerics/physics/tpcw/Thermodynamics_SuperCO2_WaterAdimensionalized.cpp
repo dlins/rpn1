@@ -2,6 +2,7 @@
 #include <vector>
 
 #include "Thermodynamics_SuperCO2_WaterAdimensionalized.h"
+#include "Debug.h"
 using namespace std;
 
 // Generate a spline
@@ -11,14 +12,14 @@ using namespace std;
 std::string Thermodynamics_SuperCO2_WaterAdimensionalized::dataPath_ = std::string("/src/c++/rpnumerics/physics/tpcw/");
 
 int Thermodynamics_SuperCO2_WaterAdimensionalized::create_spline(const std::string& name, const char *verify, double P, spline1dinterpolant &spline) {
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         printf("Dentro de create spline\n");
-    END_DEBUG
+    }
     std::string temp(rpnHomePath_);
     temp.append(dataPath_);
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         std::cout << "Valor de temp: " << temp << "\n";
-    END_DEBUG
+    }
 
     // Open the file that contains the data needed for the creation of the spline
     FILE *fid;
@@ -98,12 +99,12 @@ U_typical_(copy.U_typical_),
 h_typical_(copy.h_typical_),
 rpnHomePath_(copy.rpnHomePath_) {
 
-    IF_DEBUG
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
+    if ( Debug::get_debug_level() == 5 ) {
         cout << "construtor de copia da termodinamica" << endl;
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         cout<<"No ctr de copia da thermo:" <<T_typical_<<" "<<U_typical_<<" "<<Rho_typical_<<endl;
-    END_DEBUG
+    }
     
     
     // Generate the splines

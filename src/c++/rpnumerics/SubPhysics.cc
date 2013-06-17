@@ -13,6 +13,7 @@
 #include "SubPhysics.h"
 #include "physics/tpcw/Hugoniot_TP.h"
 #include "ThreeImplicitFunctions.h"
+#include "Debug.h"
 
 /*
  * ---------------------------------------------------------------
@@ -68,9 +69,9 @@ void SubPhysics::boundary(const Boundary & newBoundary) {
 void SubPhysics::setParams(vector<string> paramsVector) {
 
     for (int i = 0; i < paramsVector.size(); i++) {
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         cout << "Param " << i << " :" << paramsVector[i] << endl;
-    END_DEBUG
+    }
 
     }
 

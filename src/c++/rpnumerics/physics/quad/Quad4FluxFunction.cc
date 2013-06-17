@@ -12,6 +12,7 @@
  * Includes:
  */
 #include "Quad4FluxFunction.h"
+#include "Debug.h"
 #include <math.h>
 
 /*
@@ -205,9 +206,9 @@ int Quad4FluxFunction::jet(const WaveState & x, JetMatrix & y, int degree = 2) c
     //    out3 = 0.5*(a3*u*u +2*b3*u*v + c3*v*v) + d3*u + e3*v + 0.5*(f3*w*w + 2*g3*u*w +2*h3*v*w) + i3*w;
 
 
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         printf("Quad3 @ (%f, %f, %f) = (%f, %f, %f)\n", u, v, w, out0, out1, out2);
-    END_DEBUG
+    }
 
     y(0, out0);
     y(1, out1);
@@ -420,9 +421,9 @@ int Quad4FluxFunction::jet(const WaveState & x, JetMatrix & y, int degree = 2) c
 //    RealVector parVector = params.params();
 //    
 //
-//    IF_DEBUG
+//    if ( Debug::get_debug_level() == 5 ) {
 //        cout << parVector << "\n";
-//    END_DEBUG
+//    }
 //
 //
 //    a1 = params.component(0);
@@ -432,13 +433,13 @@ int Quad4FluxFunction::jet(const WaveState & x, JetMatrix & y, int degree = 2) c
 //    e1 = params.component(4);
 //
 //
-//    IF_DEBUG
+//    if ( Debug::get_debug_level() == 5 ) {
 //        cout << "a1 0: " << a1 << "\n";
 //        cout << "b1 1: " << b1 << "\n";
 //        cout << "c1 2: " << c1 << "\n";
 //        cout << "d1 3: " << d1 << "\n";
 //        cout << "e1 4: " << e1 << "\n";
-//    END_DEBUG
+//    }
 //
 //
 //
@@ -449,13 +450,13 @@ int Quad4FluxFunction::jet(const WaveState & x, JetMatrix & y, int degree = 2) c
 //    e2 = params.component(9);
 //    
 //
-//    IF_DEBUG
+//    if ( Debug::get_debug_level() == 5 ) {
 //        cout << "a2 5: " << a2 << "\n";
 //        cout << "b2 6: " << b2 << "\n";
 //        cout << "c2 7: " << c2 << "\n";
 //        cout << "d2 8: " << d2 << "\n";
 //        cout << "e2 9: " << e2 << "\n";
-//    END_DEBUG
+//    }
 //
 //    
 //    
@@ -482,9 +483,9 @@ int Quad4FluxFunction::jet(const WaveState & x, JetMatrix & y, int degree = 2) c
 //    y(1, out1);
 //
 //
-//    IF_DEBUG
+//    if ( Debug::get_debug_level() == 5 ) {
 //        cout << "f (C++): " << y(0) << " "<< y(1)<<"\n";
-//    END_DEBUG
+//    }
 //
 //
 //    

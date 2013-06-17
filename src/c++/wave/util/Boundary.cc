@@ -1,5 +1,6 @@
 
 #include "Boundary.h"
+#include "Debug.h"
 
 
 #include <iostream>
@@ -12,21 +13,21 @@ Boundary::~Boundary() {
 int Boundary::intersection(const RealVector &p, const RealVector &q, RealVector &r, int &w) const {
     w = -1;
 
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         cout<<"Entrando em intersection Boundary"<<endl;
         cout<<"P: "<<p<<"Q: "<<q<<endl;
-    END_DEBUG
+    }
     if (inside(p) && inside(q)) return 1;
     else if (!inside(p) && !inside(q)) {
-        IF_DEBUG
+        if ( Debug::get_debug_level() == 5 ) {
             cout << "Both outside, should abort" << endl;
-        END_DEBUG
+        }
         return -1;
     } else {
         int n = p.size();
-        IF_DEBUG
+        if ( Debug::get_debug_level() == 5 ) {
             cout<<"Dentro "<<endl;
-        END_DEBUG
+        }
 
         // Initialize the temporal points
         double *pp, *qq;
@@ -80,9 +81,9 @@ int Boundary::intersection(const RealVector &p, const RealVector &q, RealVector 
         delete pp;
 
 #ifdef _TEST_BOUNDARY_
-        IF_DEBUG
+        if ( Debug::get_debug_level() == 5 ) {
             printf("Iterations = %d\n", it);
-        END_DEBUG
+        }
 #endif
 
 
@@ -144,9 +145,9 @@ int Boundary::intersection(const RealVector &p, const RealVector &q, RealVector 
         //        delete pp;
         //
         //#ifdef _TEST_DOMAIN_
-        //        IF_DEBUG
+        //        if ( Debug::get_debug_level() == 5 ) {
         //            printf("Iterations = %d\n", it);
-        //        END_DEBUG
+        //        }
         //#endif
         //
         //        return 0;

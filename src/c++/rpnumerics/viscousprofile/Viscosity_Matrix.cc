@@ -1,4 +1,5 @@
 #include "Viscosity_Matrix.h"
+#include "Debug.h"
 
 void Viscosity_Matrix::fill_viscous_matrix(const RealVector &p, ViscosityJetMatrix &m){
     fill_viscous_matrix(p, m, 0);
@@ -13,9 +14,9 @@ void Viscosity_Matrix::fill_viscous_matrix(const RealVector &p, ViscosityJetMatr
         m.M()(1, 1) = 1.0;
 
         if (degree >= 1){
-            IF_DEBUG
+            if ( Debug::get_debug_level() == 5 ) {
                 printf("Viscosity_Matrix::fill_viscous_matrix(): This method is not prepared yet to deal with degrees higher than 0!\n");
-            END_DEBUG
+            }
             exit(0);
 
             if (degree >= 2){

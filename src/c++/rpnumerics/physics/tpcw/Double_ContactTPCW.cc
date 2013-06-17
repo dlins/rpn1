@@ -1,4 +1,5 @@
 #include "Double_ContactTPCW.h"
+#include "Debug.h"
 
 Double_ContactTPCW::Double_ContactTPCW(const RealVector &lpmin, const RealVector &lpmax, const int *l_number_of_grid_pnts,
         const FluxFunction *lff, const AccumulationFunction *laa,
@@ -37,9 +38,9 @@ Double_ContactTPCW::Double_ContactTPCW(const RealVector &lpmin, const RealVector
 
     create_grid(leftpmin, leftpmax, left_number_of_grid_pnts, leftgrid);
 
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         printf("After create_grid()\n");
-    END_DEBUG
+    }
 
     fill_values_on_grid(leftpmin, leftpmax,
             leftff, leftaa, 

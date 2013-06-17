@@ -11,6 +11,7 @@
  * Includes:
  */
 #include "CompositeFlow.h"
+#include "Debug.h"
 
 /*
  * ---------------------------------------------------------------
@@ -169,7 +170,7 @@ int CompositeFlow::composite(int *neq, double *xi, double *in, double *out, int 
     double dU_dxi[n];
     int info_cdgesv = cdgesv(n, &M[0][0], minus_c, dU_dxi); // TODO: The 2x2 case should be done by hand
     if (info_cdgesv != SUCCESSFUL_PROCEDURE) {
-        IF_DEBUG
+        if ( Debug::get_debug_level() == 5 ) {
             printf("Cmp eng.: cdgesv returned with error.\n\n");
 
             // in
@@ -194,7 +195,7 @@ int CompositeFlow::composite(int *neq, double *xi, double *in, double *out, int 
             printf("\n");
             for (int i = 0; i < n; i++) printf("c[%d] = [%f]\n", i, c[i]);
             printf("\n");
-        END_DEBUG
+        }
 
         return info_cdgesv;
     }

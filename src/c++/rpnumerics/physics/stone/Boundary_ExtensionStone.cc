@@ -1,4 +1,5 @@
 #include "Boundary_ExtensionStone.h"
+#include "Debug.h"
 //
 //void Boundary_ExtensionStone::extension_curve(const FluxFunction *curve_flux, const AccumulationFunction *curve_accum,
 //                                              // const FluxFunction *curve_reduced_flux, const AccumulationFunction *curve_reduced_accum,
@@ -56,9 +57,9 @@
 //
 //    }
 //
-//    IF_DEBUG
+//    if ( Debug::get_debug_level() == 5 ) {
 //        for (int i = 0; i < be_segments.size(); i++) std::cout << "be_segments[" << i << "] = " << be_segments[i] << std::endl;
-//    END_DEBUG
+//    }
 //
 //    // Compute the extension curve for the rarefaction
 //    Extension_Curve extension_curve(pmin, pmax, number_of_grid_points,

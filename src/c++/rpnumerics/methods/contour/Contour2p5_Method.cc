@@ -1,4 +1,5 @@
 #include "Contour2p5_Method.h"
+#include "Debug.h"
 
 // Static variables are defined here:
 //
@@ -87,10 +88,10 @@ void Contour2p5_Method::allocate_arrays(void){
 
         is_first = false;
 
-        IF_DEBUG
+        if ( Debug::get_debug_level() == 5 ) {
             printf("++++++++++++++++ Contour2p5_Method: REMEMBER TO INVOKE deallocate_arrays() AT QUIT-TIME!!!\n++++++++++++++++ DON\'T SAY I DIDN\'T WARN YOU!!!\n");
             printf("    After allocating arrays, nsface_ = %d, nface_ =  %d\n", nsface_, nface_);
-        END_DEBUG
+        }
     }
 
     return;
@@ -110,9 +111,9 @@ void Contour2p5_Method::deallocate_arrays(void){
         is_first = true;
     }
 
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         printf("++++++++++++++++ Contour2p5_Method: arrays deallocated. ++++++++++++++++\n");
-    END_DEBUG
+    }
 
     return;
 }

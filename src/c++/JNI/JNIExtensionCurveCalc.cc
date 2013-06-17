@@ -17,6 +17,7 @@
 #include "Stone.h"
 #include "StoneAccumulation.h"
 #include "RectBoundary.h"
+#include "Debug.h"
 #include <vector>
 
 #include "Rarefaction_Extension.h"

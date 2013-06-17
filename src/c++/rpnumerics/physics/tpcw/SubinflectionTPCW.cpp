@@ -1,4 +1,5 @@
 #include "SubinflectionTPCW.h"
+#include "Debug.h"
 
 SubinflectionTPCW::SubinflectionTPCW(const Flux2Comp2PhasesAdimensionalized * fluxFunction, const Accum2Comp2PhasesAdimensionalized * accumFunction) :
 HugoniotFunctionClass(*fluxFunction),
@@ -9,9 +10,9 @@ td(fluxFunction->getThermo()){
 
 
     phi=params.getPhi();
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         cout << "Valor de phi em sub inf: " << phi << endl;
-    END_DEBUG
+    }
 }
 
 void SubinflectionTPCW::subinflection_function(double & reduced_lambdae, double & numeratorchiu, double & denominatorchiu, const RealVector &u) {

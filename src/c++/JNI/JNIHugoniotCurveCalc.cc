@@ -27,6 +27,7 @@ NOTE :
 #include "ColorCurve.h"
 #include "Hugoniot_Curve.h"
 #include "GridValuesFactory.h"
+#include "Debug.h"
 
 using std::vector;
 using namespace std;
@@ -34,9 +35,9 @@ using namespace std;
 JNIEXPORT void JNICALL Java_rpnumerics_HugoniotCurveCalcND_setUMinus
 (JNIEnv * env, jobject obj, jobject uMinus) {
 
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         printf("Seting UMinus\n");
-    END_DEBUG
+    }
 
 }
 JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_PhasePoint_2(JNIEnv * env, jobject obj, jobject uMinus){
@@ -83,17 +84,17 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
 
 
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         cout << "Parametros: " << RpNumerics::getPhysics().fluxFunction().fluxParams().params() << endl;
-    END_DEBUG
+    }
 
 
 
     RealVector Uref(dimension, input);
 
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         cout << "URef " << Uref << endl;
-    END_DEBUG
+    }
 
     RpNumerics::getPhysics().getSubPhysics(0).preProcess(Uref);
 
@@ -103,9 +104,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
     GridValues * gv = RpNumerics::getGridFactory().getGrid("hugoniotcurve");
     
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         cout<<"Resolucao: "<<gv->grid_resolution<<endl;
-    END_DEBUG
+    }
 
     vector<bool> isCircular;
     
@@ -122,9 +123,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     
     for (int i = 0; i < transitionList.size(); i++) {
 
-         IF_DEBUG
+         if ( Debug::get_debug_level() == 5 ) {
              cout<<"Ponto de transicao: "<<transitionList[i]<<endl;
-         END_DEBUG
+         }
         
          jdoubleArray transPointArray = env->NewDoubleArray(dimension);
          double * leftCoords = (double *) transitionList[i];

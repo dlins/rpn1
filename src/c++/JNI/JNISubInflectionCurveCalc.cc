@@ -21,6 +21,7 @@ NOTE :
 #include "rpnumerics_SubInflectionCurveCalc.h"
 #include "JNIDefs.h"
 #include "RpNumerics.h"
+#include "Debug.h"
 #include <vector>
 #include <iostream>
 #include "SubinflectionTP.h"
@@ -32,9 +33,9 @@ using namespace std;
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionCurveCalc_nativeCalc(JNIEnv * env, jobject obj) {
 
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         cout << "Em subinflection nativo: " << endl;
-    END_DEBUG
+    }
 
     jclass classPhasePoint = (env)->FindClass(PHASEPOINT_LOCATION);
 
@@ -78,9 +79,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionCurveCalc_nativeCalc(JNIE
 
     GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcation");
 
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         cout<<gv<<endl;
-    END_DEBUG
+    }
 
     std::vector< RealVector> outputVector;
 

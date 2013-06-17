@@ -11,6 +11,7 @@
  * Includes:
  */
 #include "Quad2Hugoniot.h"
+#include "Debug.h"
 
 /*
  * ---------------------------------------------------------------
@@ -29,9 +30,9 @@ int Quad2Hugoniot::classified_curve(const FluxFunction *f, const AccumulationFun
         std::vector<HugoniotPolyLine> &hugoniot_curve, std::vector<RealVector> &transitionList,
         std::vector<bool> &circular,const Viscosity_Matrix * vm) {
     
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         cout<<"Plotando com o metodo explicito"<<endl;
-    END_DEBUG
+    }
     Quad2_Explicit_Hugoniot *q2eh = new Quad2_Explicit_Hugoniot((Quad2FluxFunction*)f);
     q2eh->set_reference_point(r);
 
@@ -47,10 +48,10 @@ int Quad2Hugoniot::classified_curve(const FluxFunction *f, const AccumulationFun
     RealVector pmin = g.grid.operator ()(0,0);
     RealVector pmax = g.grid.operator ()(gridRows-1,gridCols-1);
     
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         cout <<"Pmin: "<<pmin<<endl;
         cout <<"Pmax: "<<pmax<<endl;
-    END_DEBUG
+    }
 
     
     RectBoundary boundary(pmin,pmax);

@@ -1,4 +1,5 @@
 #include "StoneExplicitHugoniot.h"
+#include "Debug.h"
 
 double StoneExplicitHugoniot::sign(double a, double b){
     if (b >= 0.0) return  fabs(a);
@@ -36,9 +37,9 @@ void StoneExplicitHugoniot::set_reference_point(const RealVector &ref){
 
 void StoneExplicitHugoniot::PolarHugoniot(void *o, double theta, RealVector &out){
 
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         cout<<"Passando pelo polar"<<endl;
-    END_DEBUG
+    }
     StoneExplicitHugoniot *obj = (StoneExplicitHugoniot*)o;
     if (obj->valid_){
         double muw = obj->muw;
@@ -84,9 +85,9 @@ void StoneExplicitHugoniot::PolarHugoniot(void *o, double theta, RealVector &out
         out.component(1) = so + r*s;
     }
     else {
-        IF_DEBUG
+        if ( Debug::get_debug_level() == 5 ) {
             std::cout << "StoneExplicitHugoniot::PolarHugoniot: object at " << obj << " is invalid." << std::endl;
-        END_DEBUG
+        }
     }
 
     return;

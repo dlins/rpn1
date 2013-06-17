@@ -1,4 +1,5 @@
 #include "Bifurcation_Curve.h"
+#include "Debug.h"
 
 void Bifurcation_Curve::create_grid(const RealVector &pmin, const RealVector &pmax, const int *number_of_cells, Matrix<RealVector> &p){
     int dim = pmin.size();
@@ -10,9 +11,9 @@ void Bifurcation_Curve::create_grid(const RealVector &pmin, const RealVector &pm
 
     for (int i = 0; i < number_of_cells[0]; i++){
         for (int j = 0; j < number_of_cells[1]; j++){
-            IF_DEBUG
+            if ( Debug::get_debug_level() == 5 ) {
                 printf("Here\n");
-            END_DEBUG
+            }
 
             p(i, j).resize(dim);
 
@@ -21,9 +22,9 @@ void Bifurcation_Curve::create_grid(const RealVector &pmin, const RealVector &pm
         }
     }
 
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         printf("Inside create_grid()\n");
-    END_DEBUG
+    }
 
     return;
 }
@@ -151,9 +152,9 @@ void Bifurcation_Curve::fill_values_on_grid(const RealVector &pmin, const RealVe
     for (int i = 0; i < grid.rows(); i++){
         for (int j = 0; j < grid.cols(); j++){
             e(i, j).resize(pmin.size());
-            IF_DEBUG
+            if ( Debug::get_debug_level() == 5 ) {
                 printf("temp(%d, %d).size() = %d\n", i, j, temp(i, j).size());
-            END_DEBUG
+            }
             for (int k = 0; k < pmin.size(); k++) e(i, j)[k] = temp(i, j)[k].r;
         }
     }
@@ -403,36 +404,36 @@ bool Bifurcation_Curve::prepare_segment(int i, int family, int where_is_characte
                                         Matrix<double> &flux, 
                                         Matrix<double> &accum){
 
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         printf("Bifurcation_Curve::prepare_segment. eigen.size() = %d\n", eigen.size());
         printf("    Family = %d, eigen[%d].size() = %d, eigen[%d].size() = %d\n", family, i, eigen[i].size(), i + 1, eigen[i + 1].size());
-    END_DEBUG
+    }
 
     if (where_is_characteristic == CHARACTERISTIC_ON_CURVE){
         if (!eig_is_real[i][family] || !eig_is_real[i + 1][family]) return false;
     }
 
     lambda[0] = eigen[i][family];
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         printf("Bifurcation_Curve::prepare_segment. lambda[0] = %g\n", lambda[0]);
-    END_DEBUG
+    }
     flux(0, 0) = flux_values[i].component(0);
     flux(1, 0) = flux_values[i].component(1);
     accum(0, 0) = accum_values[i].component(0);
     accum(1, 0) = accum_values[i].component(1);
 
     lambda[1] = eigen[i + 1][family];
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         printf("Bifurcation_Curve::prepare_segment. lambda[1] = %g\n", lambda[1]);
-    END_DEBUG
+    }
     flux(0, 1) = flux_values[i + 1].component(0);
     flux(1, 1) = flux_values[i + 1].component(1);
     accum(0, 1) = accum_values[i + 1].component(0);
     accum(1, 1) = accum_values[i + 1].component(1);
 
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         printf("Bifurcation_Curve::prepare_segment exit\n");
-    END_DEBUG
+    }
 
     return true;
 }
@@ -569,22 +570,22 @@ void Bifurcation_Curve::fill_values_on_grid(const RealVector &pmin, const RealVe
 
     Matrix< std::vector<eigenpair> > temp(grid.rows(), grid.cols());
     fill_values_on_grid(pmin, pmax, ff, aa, number_of_grid_pnts, grid, ffv, aav, temp, eig_is_real, b, is_inside);
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         printf("temp = %d x %d\n", temp.rows(), temp.cols());
-    END_DEBUG
+    }
 
     for (int i = 0; i < grid.rows(); i++){
         for (int j = 0; j < grid.cols(); j++){
             e(i, j).resize(pmin.size());
-            IF_DEBUG
+            if ( Debug::get_debug_level() == 5 ) {
                 printf("is_inside(%d, %d).size() = %d\n", i, j, is_inside(i, j));
-            END_DEBUG
+            }
             if (is_inside(i, j)) for (int k = 0; k < pmin.size(); k++) e(i, j)[k] = temp(i, j)[k].r;
         }
     }
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         printf("Fill_values_on_grid. Line = %u\n", __LINE__);
-    END_DEBUG
+    }
 
     return;
 }

@@ -1,4 +1,5 @@
 #include "Rarefaction_Extension.h"
+#include "Debug.h"
 
 void Rarefaction_Extension::extension_curve(GridValues & gridValues, const FluxFunction *curve_flux, const AccumulationFunction *curve_accum,
         RealVector &initial_point,
@@ -36,9 +37,9 @@ void Rarefaction_Extension::extension_curve(GridValues & gridValues, const FluxF
 
     int n = initial_point.size();
     
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         cout<<"Tamanho do n: "<<n<<endl;
-    END_DEBUG
+    }
 
     // Turn the curve of points into a curve of segments.
     vector <RealVector> rarefaction_segments;

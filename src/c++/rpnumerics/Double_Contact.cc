@@ -1,4 +1,5 @@
 #include "Double_Contact.h"
+#include "Debug.h"
 
 bool Double_Contact::function_on_cell(double *val, int ir, int jr, int kl, int kr){
     int domain_i, domain_j;
@@ -82,21 +83,21 @@ void Double_Contact::curve(const FluxFunction *lf, const AccumulationFunction *l
     //For the same domain singular must be true
     singular = ( (left_family == right_family) && (lf == rf) && (la==ra) );
     
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         cout<<"Singular: "<<singular<<endl;
-    END_DEBUG
+    }
 
     gv_left->fill_eigenpairs_on_grid(lff, laa);
     
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         cout<<"Acabei left"<<endl;
-    END_DEBUG
+    }
 
     gv_right->fill_eigenpairs_on_grid(rff, raa);
 
-    IF_DEBUG
+    if ( Debug::get_debug_level() == 5 ) {
         cout<<"Acabei right"<<endl;
-    END_DEBUG
+    }
     
     
     left_curve.clear(); 
