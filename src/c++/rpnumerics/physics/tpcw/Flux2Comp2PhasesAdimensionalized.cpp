@@ -29,7 +29,6 @@ Flux2Comp2PhasesAdimensionalized::Flux2Comp2PhasesAdimensionalized(const Flux2Co
 Flux2Comp2PhasesAdimensionalized::Flux2Comp2PhasesAdimensionalized(const Flux2Comp2PhasesAdimensionalized_Params &param) : FluxFunction(param) {
 
     if ( Debug::get_debug_level() == 5 ) {
-    if ( Debug::get_debug_level() == 5 ) {
         cout << "Parametros de fluxo: " << param.params()<< endl;
     }
 

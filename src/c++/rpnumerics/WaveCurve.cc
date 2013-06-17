@@ -167,22 +167,22 @@ int WaveCurve::half_wavecurve(int initial_curve, const RealVector &init, int fam
                         temp_curve_alt, info_alt);
 
                 // Only temp_curve is filled in this case.
-                if ( Debug::get_debug_level() == 5 ) {
-                    std::cout << "Before add_sigma" << std::endl;
-                }
+                //if ( Debug::get_debug_level() == 5 ) {
+                //    std::cout << "Before add_sigma" << std::endl;
+                //}
 
-                std::vector<RealVector> temp2(temp_curve.size());
-                for (int i = 0; i < temp2.size(); i++){
-                    temp2[i].resize(temp_curve[i].size());
-                    for (int j = 0; j < temp_curve[i].size(); j++) temp2[i].component(j) = temp_curve[i].component(j);
-                }
-                Shock::add_sigma(init, (FluxFunction*)ff, (AccumulationFunction*)aa, temp2);
+                //std::vector<RealVector> temp2(temp_curve.size());
+                //for (int i = 0; i < temp2.size(); i++){
+                //    temp2[i].resize(temp_curve[i].size());
+                //    for (int j = 0; j < temp_curve[i].size(); j++) temp2[i].component(j) = temp_curve[i].component(j);
+                //}
+                //Shock::add_sigma(init, (FluxFunction*)ff, (AccumulationFunction*)aa, temp2);
 
-                if ( Debug::get_debug_level() == 5 ) {
-                    std::cout << "After add_sigma" << std::endl;
-                }
+                //if ( Debug::get_debug_level() == 5 ) {
+                //    std::cout << "After add_sigma" << std::endl;
+                //}
 
-                c.push_back(Curve(temp2, SHOCK_CURVE, c.size()));
+                //c.push_back(Curve(temp2, SHOCK_CURVE, c.size()));
 
                 Shock::add_sigma(init, (FluxFunction*) ff, (AccumulationFunction*) aa, temp_curve);
 

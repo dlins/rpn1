@@ -324,11 +324,11 @@ int Viscous_Profile::orbit(const FluxFunction *ff, const AccumulationFunction *a
             else {
                 if ( Debug::get_debug_level() == 5 ) {
                     printf("(%lg, %lg)-(%lg, %lg) not intesecting (%lg, %lg)-(%lg, %lg)\n",
+                         previous_point.component(0), previous_point.component(1),
+                         new_point.component(0), new_point.component(1),
+                         segment->at(0).component(0), segment->at(0).component(1),
+                         segment->at(1).component(0), segment->at(1).component(1));
                 }
-//                         previous_point.component(0), previous_point.component(1),
-//                         new_point.component(0), new_point.component(1),
-//                         segment->at(0).component(0), segment->at(0).component(1),
-//                         segment->at(1).component(0), segment->at(1).component(1));
             }
         }
         // END   Verify that the orbit does not intersect the segment (if given)

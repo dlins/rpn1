@@ -505,6 +505,7 @@ if ( method == CONTINUATION_METHOD ) {
     }
 
     // For DEBUGING, the following lines can be included instead of the two ereasing statements.
+/*
     if ( Debug::get_debug_level() == 5 ) {
         cout << "Antes de deletar tenho: "<< endl;
         for(int ii = 0; ii < chains(i_index,j_index).size(); ii++){
@@ -538,6 +539,7 @@ if ( method == CONTINUATION_METHOD ) {
 
         printf("ENDS:     Contour2D()/Continuous\n\n");
     }
+*/
 
     return 0;
 }

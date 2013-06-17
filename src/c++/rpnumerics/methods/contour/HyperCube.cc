@@ -989,10 +989,10 @@ int HyperCube::mksoln(double *sol_, int dims_, int *sptr_, int nsoln_,
                 v = face[(k) * dimf_ + indf];
                 for (i = 0; i < m_; i++) {
                     g[i * (m_ + 1) + k] = foncub[i * ncvert_ + v];
-//                    gtemp[i][k] = g[i * (m_ + 1) + k];
-                    if ( Debug::get_debug_level() == 5 ) {
-                        printf("v: %d, indf: %d, k: %d, gtemp(i,k): %f\n", v, indf, k, gtemp[i][k]);
-                    }
+                    //gtemp[i][k] = g[i * (m_ + 1) + k];
+                    //if ( Debug::get_debug_level() == 5 ) {
+                    //    printf("v: %d, indf: %d, k: %d, gtemp(i,k): %f\n", v, indf, k, gtemp[i][k]);
+                    //}
                     //putmf("FONCUBdentro", foncub, m_, ncvert_);
                 }
             }

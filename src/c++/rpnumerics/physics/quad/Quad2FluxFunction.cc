@@ -104,10 +104,9 @@ int Quad2FluxFunction::jet(const WaveState & x, JetMatrix & y, int degree = 2) c
     double a1, b1, c1, d1, e1, a2, b2, c2, d2, e2, out0, out1;
 
     const FluxParams params = fluxParams();
-    //        RealVector parVector = params.params();
 
     if ( Debug::get_debug_level() == 5 ) {
-               cout << "Params em jet "<< parVector << "\n";
+               cout << "Params em jet "<< params.params() << "\n";
     }
 
     a1 = params.component(0);

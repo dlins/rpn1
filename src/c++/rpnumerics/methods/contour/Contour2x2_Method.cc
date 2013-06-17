@@ -315,17 +315,15 @@ void Contour2x2_Method::filedg4(Matrix<double> &sol_, Matrix<int> &edges_, int n
     double epsilon = 1e-10;
 
     // START_DEBUG (1/2) */
+    int segmentos = 0;
     if ( Debug::get_debug_level() == 5 ) {
-        bool imprime = false;
-        int segmentos = 0;
         if (nedges_ > 0) {
             cout << "For " << nedges_ << " nedges (" << il << ", " << jl << ", " << ir << ", " << jr << ") : " << endl;
             for(int i = 0; i < nedges_; i++){
                 cout << edges_(0, i) << " " << edges_(1, i) << " :: ";
             }
             cout << endl;
-            imprime = true;
-    }
+        }
     }
     // } (1/2) The second part of DEBUG is not always necessary */
 
@@ -371,7 +369,7 @@ void Contour2x2_Method::filedg4(Matrix<double> &sol_, Matrix<int> &edges_, int n
         }
         if ( (norm1 < epsilon) && (norm2 < epsilon) ) continue;
         p1_old = p1; p2_old = p2; p3_old = p3; p4_old = p4;
-        /* END of GAMBIARRAS!!! */
+        // END of GAMBIARRAS!!!
 
         left_vrs.push_back(p1);
         left_vrs.push_back(p2);
@@ -379,19 +377,17 @@ void Contour2x2_Method::filedg4(Matrix<double> &sol_, Matrix<int> &edges_, int n
         right_vrs.push_back(p3);
         right_vrs.push_back(p4);
 
-        // /* START_DEBUG (2/2) TODO: It needs the first part of the DEBUG */
+        // START_DEBUG (2/2) TODO: It needs the first part of the DEBUG */
         if ( Debug::get_debug_level() == 5 ) {
-            if(imprime){
-                    printf("At points (%2d, %2d, %2d, %2d) [%2d/%2d--%2d]: p1 = %1.6f, %1.6f;  p2 = %1.6f, %1.6f\n",
-                        il, jl, ir, jr, nedges_, edges_(0, nedg), edges_(1, nedg),
-                        p1.component(0), p1.component(1), p2.component(0), p2.component(1));
-                    printf("                           [%2d/%2d--%2d]: p3 = %1.6f, %1.6f;  p4 = %1.6f, %1.6f\n",
-                        nedges_, edges_(0, nedg), edges_(1, nedg),
-                        p3.component(0), p3.component(1), p4.component(0), p4.component(1));
-            }
+                printf("At points (%2d, %2d, %2d, %2d) [%2d/%2d--%2d]: p1 = %1.6f, %1.6f;  p2 = %1.6f, %1.6f\n",
+                    il, jl, ir, jr, nedges_, edges_(0, nedg), edges_(1, nedg),
+                    p1.component(0), p1.component(1), p2.component(0), p2.component(1));
+                printf("                           [%2d/%2d--%2d]: p3 = %1.6f, %1.6f;  p4 = %1.6f, %1.6f\n",
+                    nedges_, edges_(0, nedg), edges_(1, nedg),
+                    p3.component(0), p3.component(1), p4.component(0), p4.component(1));
             segmentos++;
         }
-        // /* } (2/2)*/
+        // (2/2)
 
     }
 

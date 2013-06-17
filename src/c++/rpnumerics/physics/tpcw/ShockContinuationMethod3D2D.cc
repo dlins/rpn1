@@ -660,9 +660,9 @@ void ShockContinuationMethod3D2D::jet_N(double plane_point[], double a1, double 
     N[0] = H1;
     N[1] = H2;
 
-    if ( Debug::get_debug_level() == 5 ) {
-        for (int i = 0; i < n - 1; i++) printf("Inside Newton_plane: N[%d] = %e\n", i, N[i]);
-    }
+    //if ( Debug::get_debug_level() == 5 ) {
+    //    for (int i = 0; i < n - 1; i++) printf("Inside Newton_plane: N[%d] = %e\n", i, N[i]);
+    //}
 
     DN[0] = dotprod(3, nablaH1, v1);
     DN[1] = dotprod(3, nablaH1, v2);
@@ -825,7 +825,7 @@ int ShockContinuationMethod3D2D::init(int family, int increase, Plane &plane, Re
         plane_start(family, Upr, Upl, v1, v2, epsilon); 
         Newton_plane(Upr, v1, v2, pr); 
         Newton_plane(Upl, v1, v2, pl); 
-        }
+        
 
         for (int i = 0; i < n; i++) {
             Upr_pr[i] = Upr[i] - pr[i];
@@ -1106,18 +1106,18 @@ void ShockContinuationMethod3D2D::Newton_plane(double plane_point[], double v1[]
     // double norm_delta_a;
 
 
-    if ( Debug::get_debug_level() == 5 ) {
-       printf("*********** Inside Newton_plane, before while.\n");
-    }
+    //if ( Debug::get_debug_level() == 5 ) {
+    //   printf("*********** Inside Newton_plane, before while.\n");
+    //}
 
     while (iterations < 10 && norm_delta_a > tolerance && norm_delta_a < 10.0) {
 
 
-        if ( Debug::get_debug_level() == 5 ) {
-            printf("Inside Newton_plane: iterations = %d < 10 = %d\n", iterations, iterations < 10);
-            printf("Inside Newton_plane: (norm_delta_a = %e > tolerance = %e) = %d\n", norm_delta_a, tolerance, norm_delta_a > tolerance);
-            printf("Inside Newton_plane: norm_delta_a < 1.0 = %d\n", norm_delta_a < 1.0);
-        }
+        //if ( Debug::get_debug_level() == 5 ) {
+        //    printf("Inside Newton_plane: iterations = %d < 10 = %d\n", iterations, iterations < 10);
+        //    printf("Inside Newton_plane: (norm_delta_a = %e > tolerance = %e) = %d\n", norm_delta_a, tolerance, norm_delta_a > tolerance);
+        //    printf("Inside Newton_plane: norm_delta_a < 1.0 = %d\n", norm_delta_a < 1.0);
+        //}
 
 
         // Now we calculate the jet of N at p, and at xold
@@ -1127,9 +1127,9 @@ void ShockContinuationMethod3D2D::Newton_plane(double plane_point[], double v1[]
         //        int info =
         solver(dimension() - 1, &DN[0][0], &N[0], &err[0]);
 
-        if ( Debug::get_debug_level() == 5 ) {
-            printf("solver.info = %d\n", info);
-        }
+        //if ( Debug::get_debug_level() == 5 ) {
+        //    printf("solver.info = %d\n", info);
+        //}
 
 
         // Approximation given by the Newton Method over the plane
@@ -1137,24 +1137,24 @@ void ShockContinuationMethod3D2D::Newton_plane(double plane_point[], double v1[]
             anew[i] = aold[i] - err[i];
             aold[i] = anew[i];
         }
-        if ( Debug::get_debug_level() == 5 ) {
-            for(int i=0 ; i < n - 1; i++) printf("anew[%d] = %e\n", i, anew[i]);
-        }
+        //if ( Debug::get_debug_level() == 5 ) {
+        //    for(int i=0 ; i < n - 1; i++) printf("anew[%d] = %e\n", i, anew[i]);
+        //}
 
         // Print anew (delete later)
 
         //jet_N(plane_point, aold[0], aold[1], v1, v2, &N[0], &DN[0][0]);
-        if ( Debug::get_debug_level() == 5 ) {
-            for (int i = 0; i < n - 1; i++) printf("After the solver: N[%d] = %e\n", i, N[i]);
-        }
+        //if ( Debug::get_debug_level() == 5 ) {
+        //    for (int i = 0; i < n - 1; i++) printf("After the solver: N[%d] = %e\n", i, N[i]);
+        //}
 
         // Norm of delta_x
         norm_delta_a = 0;
         norm_delta_a = euclidean_norm(dimension() - 1, &err[0]);
 
-        if ( Debug::get_debug_level() == 5 ) {
-            printf("norm_delta_a=%e\n", norm_delta_a);
-        }
+        //if ( Debug::get_debug_level() == 5 ) {
+        //    printf("norm_delta_a=%e\n", norm_delta_a);
+        //}
 
         iterations++;
     }

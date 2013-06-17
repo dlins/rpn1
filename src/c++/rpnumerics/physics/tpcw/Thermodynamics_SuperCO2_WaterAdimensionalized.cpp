@@ -100,9 +100,7 @@ h_typical_(copy.h_typical_),
 rpnHomePath_(copy.rpnHomePath_) {
 
     if ( Debug::get_debug_level() == 5 ) {
-    if ( Debug::get_debug_level() == 5 ) {
         cout << "construtor de copia da termodinamica" << endl;
-    if ( Debug::get_debug_level() == 5 ) {
         cout<<"No ctr de copia da thermo:" <<T_typical_<<" "<<U_typical_<<" "<<Rho_typical_<<endl;
     }
     

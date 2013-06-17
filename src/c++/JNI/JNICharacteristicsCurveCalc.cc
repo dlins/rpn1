@@ -123,9 +123,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CharacteristicsCurveCalc_nativeCalc
                 }
             }
         }
+        fclose(fid);
     }
 
-    fclose(fid);
 
     // Modified above
 
