@@ -28,7 +28,6 @@ import rpn.command.ClassifierCommand;
 import rpn.command.VelocityCommand;
 import rpn.controller.ui.*;
 import rpn.controller.ui.UI_ACTION_SELECTED;
-import rpn.message.*;
 import wave.multid.Space;
 import wave.util.RealVector;
 import wave.util.RectBoundary;
@@ -91,8 +90,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         try {
 
             // TODO may be UIController should control PHASESPACE as well
-            commandMenu_ = command;
-            RPnNetworkStatusController.instance().addPropertyChangeListener(this);
+            commandMenu_ = command;            
             UIController.instance().setStateController(new StateInputController(this));
             propertyChange(new PropertyChangeEvent(command, "aplication state", null, null));
 
@@ -239,6 +237,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     //File | Exit action performed
     public void jMenuFileExit_actionPerformed(ActionEvent e) {
         commandMenu_.finalizeApplication();
+        
+        // TODO : a RPnNetworkModule out of parser (all others as well)
+        rpn.message.RPnSender.close();
     }
 
     //Help | About action performed
@@ -694,7 +695,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 FileWriter writer = new FileWriter(chooser.getSelectedFile().
                         getAbsolutePath());
                 writer.write(RPnConfigReader.XML_HEADER);
-                writer.write("<RPNSESSION>\n");
+                writer.write("<RPNSESSION id=" + '\"' + RPnCommandModule.SESSION_ID_ + '\"' + ">\n");
                 writer.write(" <PHASESPACE name=\"Phase Space\">\n");
                 writer.write("  <RPNCONFIGURATION>\n");
                 RPnNumericsModule.export(writer);
@@ -732,9 +733,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
     void networkMenuItem_actionPerformed(ActionEvent e) {
 
-        RPnNetworkStatusController.instance().actionPerformed(new ActionEvent(this,
-                0, null));
-
+        
         commandMenu_.networkCommand();
     }
 

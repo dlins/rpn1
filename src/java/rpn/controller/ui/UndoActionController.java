@@ -13,12 +13,17 @@ import java.util.Iterator;
 import rpn.command.RpCommand;
 
 public class UndoActionController extends AbstractAction {
+
     static public final String DESC_TEXT = "Undo Last Action";
     static private UndoActionController instance_ = null;
+
 //    private rpn.controller.ui.UndoableAction last_;
+
     private RpCommand lastCommand_;
     private ArrayList<RpCommand> commandArray_;
+
     protected UndoActionController() {
+
         // no ICONS
         super(DESC_TEXT, null);
         lastCommand_ = null;

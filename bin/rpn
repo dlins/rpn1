@@ -14,5 +14,5 @@ cd $PROGDIR
 [ -f ../src/make/env ] && . ../src/make/env
 
 echo $JAVA_HOME/bin/java -DRPHOSTTYPE=$RPHOSTTYPE -Djava.library.path=$RPNDIR/lib/$RPHOSTTYPE -Drpnhome=$RPNDIR -jar $RPNDIR/lib/rpn.jar $IN
-$JAVA_HOME/bin/java -DRPHOSTTYPE=$RPHOSTTYPE -Djava.library.path=$RPNDIR/lib/$RPHOSTTYPE -Drpnhome=$RPNDIR -jar $RPNDIR/lib/rpn.jar $IN
+$JAVA_HOME/bin/java -cp $RPNDIR/lib/jboss-client-7.1.0.Final.jar -DRPHOSTTYPE=$RPHOSTTYPE -Djava.library.path=$RPNDIR/lib/$RPHOSTTYPE -Drpnhome=$RPNDIR -jar $RPNDIR/lib/rpn.jar $IN
 

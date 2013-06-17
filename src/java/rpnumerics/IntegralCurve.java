@@ -16,13 +16,10 @@ public class IntegralCurve extends FundamentalCurve implements RpSolution {
     //
     private List<RealVector>inflectionPoints_;
    
-
     public IntegralCurve(OrbitPoint[] points, int familyIndex, List<RealVector>inflectionPoints) {
         super(points, familyIndex, 0);
         inflectionPoints_ = inflectionPoints;
-    }
-
-  
+    } 
 
     // Methods
     @Override
