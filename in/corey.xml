@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE rpnconfiguration >
+<RPNSESSION id="1234">
+ <PHASESPACE name="Phase Space">
+<RPNCONFIGURATION>
+
+    <PHYSICS name="Corey">
+    </PHYSICS>
+
+    <CURVE name="shock">
+        <CURVEPARAM name="xzero" value="3.4 0.5"/>
+        <CURVEPARAM name="sigma" value="0.03"/>
+    </CURVE>
+
+
+    <VIEWINGPARAMS modeldomain="2">
+        <PROJDESC  projlabel="Axis0 X Axis1" projaxisid="0 1" vpwidth="650" vpheight="650"><ISO2EQUI_TRANSFORM/></PROJDESC>
+    </VIEWINGPARAMS>
+
+
+    <AUXVIEWINGPARAMS modeldomain="2">
+        <PROJDESC  projlabel="AUX Axis0 X Axis1" projaxisid="0 1" vpwidth="650" vpheight="650"><ISO2EQUI_TRANSFORM/></PROJDESC>
+        <PROJDESC  projlabel="AUX Axis0 X Axis1" projaxisid="0 1" vpwidth="650" vpheight="650"><ISO2EQUI_TRANSFORM/></PROJDESC>
+    </AUXVIEWINGPARAMS>
+
+</RPNCONFIGURATION>
+</PHASESPACE>
+</RPNSESSION>

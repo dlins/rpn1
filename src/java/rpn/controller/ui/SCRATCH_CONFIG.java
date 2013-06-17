@@ -7,11 +7,11 @@
 package rpn.controller.ui;
 
 import java.awt.Point;
-import javax.swing.JPanel;
 import rpn.command.ChangeDirectionCommand;
 import wave.multid.Coords2D;
 import wave.multid.view.ViewingTransform;
 import wave.util.RealVector;
+import rpn.message.RPnNetworkStatus;
 
 
 public class SCRATCH_CONFIG extends UI_ACTION_SELECTED {
@@ -32,7 +32,7 @@ public class SCRATCH_CONFIG extends UI_ACTION_SELECTED {
             RealVector userInput) {
         
         
-        if (!ui.getNetStatusHandler().isMaster()){
+        if (!RPnNetworkStatus.instance().isMaster()){
             ViewingTransform transf=  ui.getFocusPanel().scene().getViewingTransform();
             
             Coords2D wcCoords = new Coords2D(userInput.getElement(0),userInput.getElement(1));

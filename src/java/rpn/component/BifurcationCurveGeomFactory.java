@@ -55,12 +55,10 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
         String curve_name = '\"' + geomSource.getClass().getSimpleName() + '\"';
         String dimension = '\"' + Integer.toString(RPNUMERICS.domainDim())  + '\"';
 
-
         //
         // PRINTS OUT THE CURVE ATTS
         //
         buffer.append("<" + BifurcationCurve.XML_TAG + " curve_name=" + ' ' + curve_name + ' ' +  "dimension=" + ' ' +  dimension + ' ' +  "format_desc=\"1 segment per row\">" + "\n");
-
 
         //
         // PRINTS OUT THE CONFIGURATION INFORMATION

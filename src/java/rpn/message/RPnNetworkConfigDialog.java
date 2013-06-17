@@ -42,9 +42,7 @@ public class RPnNetworkConfigDialog extends JDialog implements
 
     public static JTextField serverTextBox = new JTextField(RPnNetworkStatus.
             SERVERNAME);
-    public static JTextField portTextBox = new JTextField((new Integer(
-            RPnNetworkStatus.PORTNUMBER)).toString());
-
+    
 
     JButton okButton = new JButton("OK");
     JButton cancelButton = new JButton("Cancel");
@@ -55,7 +53,7 @@ public class RPnNetworkConfigDialog extends JDialog implements
             jbInit();
 //      this.pack();
 
-            RPnNetworkConfigController.instance().addPropertyChangeListener(this);
+            //RPnNetworkConfigController.instance().addPropertyChangeListener(this);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -92,7 +90,7 @@ public class RPnNetworkConfigDialog extends JDialog implements
         jPanel1.add(serverLabel, 0);
         jPanel1.add(serverTextBox, 1);
         jPanel1.add(portLabel, 2);
-        jPanel1.add(portTextBox, 3);
+
 
         jPanel2.add(okButton, 0);
         jPanel2.add(cancelButton, 1);
@@ -103,9 +101,8 @@ public class RPnNetworkConfigDialog extends JDialog implements
 
         if (evt.getPropertyName().equals("Server Name")) {
             String newServerName = (String) evt.getNewValue();
-            RPnNetworkDialog.infoLabel.setText("Server: " + newServerName +
-                                               " Port: " +
-                                               RPnNetworkStatus.PORTNUMBER);
+            RPnNetworkDialog.infoLabel.setText("Server: " + newServerName);
+                                               
         }
 
         if (evt.getPropertyName().equals("Port Number")) {
@@ -128,8 +125,8 @@ public class RPnNetworkConfigDialog extends JDialog implements
 
 
     void okButton_actionPerformed(ActionEvent e) {
-        RPnNetworkConfigController.instance().actionPerformed(new
-                ActionEvent(this, 0, null));
+       // RPnNetworkConfigController.instance().actionPerformed(new
+           //     ActionEvent(this, 0, null));
         dispose();
 
     }

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE rpnconfiguration >
-<RPNSESSION>
-    <PHASESPACE name="Phase Space">
+<RPNSESSION id="1234">
+ <PHASESPACE name="Phase Space">
         <RPNCONFIGURATION>
             <PHYSICS name="TriPhase">
 
