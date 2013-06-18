@@ -105,6 +105,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     
     Viscosity_Matrix * vm = RpNumerics::getPhysics().getSubPhysics(0).getViscosityMatrix();
     
+    
+    cout<<"Matrix de viscosidade: "<<vm<<endl;
+    
 
     hugoniotCurve->classified_curve(&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(),
             *gv, Uref, hugoniotPolyLineVector,transitionList, isCircular,vm);

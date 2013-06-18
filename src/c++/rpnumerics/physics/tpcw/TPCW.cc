@@ -82,7 +82,7 @@ SubPhysics(*defaultBoundary(), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATIO
 
     RealVector max(getBoundary().maximums());
 
-
+    setViscosityMatrix(new Viscosity_Matrix());
 
 
     preProcess(min);
@@ -178,6 +178,8 @@ TD(new Thermodynamics_SuperCO2_WaterAdimensionalized(*copy.TD)) {
     setDoubleContactFunction(new Double_Contact_TP());
     setShockMethod(new ShockContinuationMethod3D2D());
 
+    
+    setViscosityMatrix(new Viscosity_Matrix());
 
     RealVector min = copy.preProcessedBoundary_->minimums();
     RealVector max = copy.preProcessedBoundary_->maximums();
