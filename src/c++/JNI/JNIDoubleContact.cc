@@ -25,6 +25,7 @@ NOTE :
 #include "Double_Contact_Function.h"
 #include <vector>
 #include <iostream>
+#include "Debug.h"
 
 
 using std::vector;
@@ -82,11 +83,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc__II
             left_vrs, right_vrs);
 
 
-    cout << "left_vrs.size()  = " << left_vrs.size() << endl;
-
-
-
-    cout << "right_vrs.size()  = " << right_vrs.size() << endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout << "left_vrs.size()  = " << left_vrs.size() << endl;
+        cout << "right_vrs.size()  = " << right_vrs.size() << endl;
+    }
 
 
 
@@ -245,7 +245,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc__Lja
     
     
     
-    cout<<"No JNI LEFT: "<<leftPmin<<" "<<rightPmax<<endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout<<"No JNI LEFT: "<<leftPmin<<" "<<rightPmax<<endl;
+    }
 
     const Boundary * boundary = RpNumerics::getPhysics().getSubPhysics(0).getPreProcessedBoundary();
 
@@ -293,7 +295,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc__Lja
 
 
     
-    cout<<"No JNI RIGHT: "<<leftPminR<<" "<<rightPmaxR<<endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout<<"No JNI RIGHT: "<<leftPminR<<" "<<rightPmaxR<<endl;
+    }
     
 
     GridValues rightGridValues(boundary, leftPminR, rightPmaxR, rightResolution);
@@ -317,11 +321,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc__Lja
             left_vrs, right_vrs);
 
 
-    cout << "left_vrs.size()  = " << left_vrs.size() << endl;
-
-
-
-    cout << "right_vrs.size()  = " << right_vrs.size() << endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout << "left_vrs.size()  = " << left_vrs.size() << endl;
+        cout << "right_vrs.size()  = " << right_vrs.size() << endl;
+    }
 
 
 

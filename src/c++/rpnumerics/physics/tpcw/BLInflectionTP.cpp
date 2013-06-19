@@ -1,4 +1,5 @@
 #include "BLInflectionTP.h"
+#include "Debug.h"
 
 int BLInflectionTP::function_on_square(double *foncub, int i, int j) {
     double f_aux[4];
@@ -31,7 +32,9 @@ int BLInflectionTP::curve(const FluxFunction *f, const AccumulationFunction *a,
     fh = fluxAdimensional->getHorizontalFlux();
 
  double phi= a->accumulationParams().component(0);
-    cout << "Valor de phi em bl: " << phi << endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout << "Valor de phi em bl: " << phi << endl;
+    }
 
     g.fill_functions_on_grid(f, a);
     gv = &g;

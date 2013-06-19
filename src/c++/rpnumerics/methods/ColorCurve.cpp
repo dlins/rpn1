@@ -23,7 +23,6 @@
 // There must be a different ColorTable for the reference point at right. It can be obtained from
 // the first one noticing that --++ changes to ++-- or -.-+ to -+-. for example.
 
-
 ColorCurve::ColorCurve(const FluxFunction & fluxFunction,
         const AccumulationFunction & accumulationFunction) :
 fluxFunction_((FluxFunction *) fluxFunction.clone()),
@@ -32,17 +31,21 @@ accFunction_((AccumulationFunction *) accumulationFunction.clone()) {
     sm = std::string("-");
     sc = std::string(".");
     sz = std::string("0");
-
+  if ( Debug::get_debug_level() == 5 ) {
     std::cout << "ColorCurve::ctor: f = " << &fluxFunction << ", a = " << &accumulationFunction << ", this = " << this << std::endl;
+  }
 }
 
 ColorCurve::~ColorCurve() {
-    std::cout << "ColorCurve::dtor: this = " << this << std::endl;
-
+    if (Debug::get_debug_level() == 5) {
+        std::cout << "ColorCurve::dtor: this = " << this << std::endl;
+    }
     delete fluxFunction_;
     delete accFunction_;
 
-    std::cout << "    Destroyed." << std::endl;
+    if (Debug::get_debug_level() == 5) {
+        std::cout << "    Destroyed." << std::endl;
+    }
 }
 
 /**
@@ -97,6 +100,7 @@ int ColorCurve::solve(const double *A, double *bb, int dim, double *x) {
 
 // Newton improvement when the shock is characteristic at Left
 //
+
 void ColorCurve::Left_Newton_improvement(const RealVector &input, const int type, RealVector &out) {
     int dim = input.size();
 
@@ -155,8 +159,11 @@ void ColorCurve::Left_Newton_improvement(const RealVector &input, const int type
 
             // If Newton does not converge, return the original point.
             if ((fabs(det) <= (epsilon * anorm)) || (count > 19)) {
-                cout << "ColorCurve::Left_Newton does not converge." << endl;
-                cout << "count = " << count << " " << input << endl;
+
+                if (Debug::get_debug_level() == 5) {
+                    cout << "ColorCurve::Left_Newton does not converge." << endl;
+                    cout << "count = " << count << " " << input << endl;
+                }
                 for (int i = 0; i < dim; i++) out.component(i) = input.component(i);
                 return;
             }
@@ -169,7 +176,9 @@ void ColorCurve::Left_Newton_improvement(const RealVector &input, const int type
             int info = solve(&A[0][0], &b[0], dim, & delta_U[0]);
 
             if (info != 0) {
-                cout << "ColorCurve::Left_Newton does not converge." << endl;
+                if (Debug::get_debug_level() == 5) {
+                    cout << "ColorCurve::Left_Newton does not converge." << endl;
+                }
                 for (int i = 0; i < dim; i++) out.component(i) = input.component(i);
                 return;
             }
@@ -191,6 +200,7 @@ void ColorCurve::Left_Newton_improvement(const RealVector &input, const int type
 
 // Newton improvement when the shock is characteristic at Right
 //
+
 void ColorCurve::Right_Newton_improvement(const RealVector &input, const int type, RealVector &out) {
     int dim = input.size();
     out.resize(dim);
@@ -198,7 +208,9 @@ void ColorCurve::Right_Newton_improvement(const RealVector &input, const int typ
     // TODO: For dimension larger than 2, the implementation is missing. The input point is returned
     //       as output. (This method pretends to refine the input.)
     if (dim > 2) {
+          if ( Debug::get_debug_level() == 5 ) {
         cout << "ColorCurve::Right_Newton was not implemented for dimension larger than two." << endl;
+          }
         for (int i = 0; i < dim; i++) out.component(i) = input.component(i);
         return;
     }
@@ -304,8 +316,10 @@ void ColorCurve::Right_Newton_improvement(const RealVector &input, const int typ
         // If Newton does not converge, return the original point.
 
         if ((fabs(det) <= (epsilon * anorm)) || (count > 18)) {
+              if ( Debug::get_debug_level() == 5 ) {
             cout << "ColorCurve::Right_Newton does not converge." << endl;
             cout << "count = " << count << " " << input << endl;
+              }
             for (int i = 0; i < dim; i++) out.component(i) = input.component(i);
 
             return;
@@ -333,6 +347,7 @@ void ColorCurve::Right_Newton_improvement(const RealVector &input, const int typ
 
 // For two given segments points with different signature, intermediate points are found by interpolation.
 //
+
 int ColorCurve::interpolate(const RealVector &p, double &s_p,
         const std::vector<double> &eigenvalue_p, const int type_p,
         const RealVector &q, double &s_q,
@@ -438,6 +453,7 @@ int ColorCurve::interpolate(const RealVector &p, double &s_p,
 
 // For a given point in the Hugoniot locus, speed, eigenvalues and if it is real is computed.
 //
+
 int ColorCurve::complete_point(RealVector &p, double &s, std::vector<double> &eigenvalue, int *complex) {
     int dim = p.size();
 
@@ -505,6 +521,7 @@ int ColorCurve::complete_point(RealVector &p, double &s, std::vector<double> &ei
 // This method returns the number associated with the signature, this number is the classification
 // in the ColorTable. [signature] may be slightly different to [type], because of complex eigenvalues.
 //
+
 int ColorCurve::classify_point(RealVector &p, double &s, std::vector<double> &eigenvalue, std::string &signature) {
     signature.clear();
     int dim = ref_eigenvalue.size();
@@ -579,6 +596,7 @@ int ColorCurve::classify_point(RealVector &p, double &s, std::vector<double> &ei
 
 // The classify_segment_with_data method will be call, here the values are filled.
 //
+
 void ColorCurve::classify_segment(RealVector &p, RealVector &q,
         std::vector<HugoniotPolyLine> &classified_curve,
         std::vector<RealVector> &transition_list) {
@@ -631,6 +649,7 @@ void ColorCurve::classify_segment(RealVector &p, RealVector &q,
 
 // It is assumed that p and q are already classified outside; useful for continuous curves.
 //
+
 void ColorCurve::classify_segment_with_data(
         RealVector &p, double &s_p, std::vector<double> &eigenvalue_p, std::string &ct_p, int &type_p,
         RealVector &q, double &s_q, std::vector<double> &eigenvalue_q, std::string &ct_q, int &type_q,
@@ -646,17 +665,13 @@ void ColorCurve::classify_segment_with_data(
     if (type_p == UNCLASSIFIABLE_POINT || type_q == UNCLASSIFIABLE_POINT) {
         hpl.type[0] = UNCLASSIFIABLE_POINT;
         hpl.signature[0] = "0000";
-    }
-
-    // Both points share the same type (the output segment will not be divided).
-    //
+    }// Both points share the same type (the output segment will not be divided).
+        //
     else if (type_p == type_q) {
         hpl.type[0] = type_p;
         hpl.signature[0] = ct_p;
-    }
-
-    // Points have different classification, splitting is needed.
-    //
+    }// Points have different classification, splitting is needed.
+        //
     else {
         // The number of families do not change inside.
         int fam = eigenvalue_p.size();
@@ -802,6 +817,7 @@ void ColorCurve::classify_segment_with_data(
 
 // This method classify a Hugoniot Locus given as a collection of segments, typically from Contour 
 //
+
 void ColorCurve::classify_segmented_curve(std::vector<RealVector> &original,
         /*const RealVector &ref*/ const ReferencePoint &ref,
         std::vector<HugoniotPolyLine> &classified_curve,
@@ -812,37 +828,37 @@ void ColorCurve::classify_segmented_curve(std::vector<RealVector> &original,
 
     // Get the ref point.
     //
-//    int dim = ref.size();
-//    ref_point.resize(dim);
-//    for (int i = 0; i < dim; i++) ref_point.component(i) = ref.component(i);
+    //    int dim = ref.size();
+    //    ref_point.resize(dim);
+    //    for (int i = 0; i < dim; i++) ref_point.component(i) = ref.component(i);
 
     int dim = ref.point.size();
-//    ref_point.resize(dim);
+    //    ref_point.resize(dim);
     ref_point = ref.point;
 
     // Eigenvalues at the reference point.
     //
-//    F_ref.resize(dim);
-//    G_ref.resize(dim);
-//    double JF[dim][dim], JG[dim][dim];
-//    fluxFunction_->fill_with_jet(dim, ref_point.components(), 1, F_ref.components(), &JF[0][0], 0);
-//    accFunction_->fill_with_jet(dim, ref_point.components(), 1, G_ref.components(), &JG[0][0], 0);
+    //    F_ref.resize(dim);
+    //    G_ref.resize(dim);
+    //    double JF[dim][dim], JG[dim][dim];
+    //    fluxFunction_->fill_with_jet(dim, ref_point.components(), 1, F_ref.components(), &JF[0][0], 0);
+    //    accFunction_->fill_with_jet(dim, ref_point.components(), 1, G_ref.components(), &JG[0][0], 0);
 
     F_ref = ref.F;
     G_ref = ref.G;
 
-//    std::vector<eigenpair> e;
-//    Eigen::eig(dim, &JF[0][0], &JG[0][0], e);
+    //    std::vector<eigenpair> e;
+    //    Eigen::eig(dim, &JF[0][0], &JG[0][0], e);
 
-//    ref_eigenvalue.resize(e.size());
-//    ref_e_complex.resize(e.size());
-//    for (int i = 0; i < e.size(); i++) {
-//        ref_eigenvalue[i] = e[i].r;
-//        ref_e_complex[i] = e[i].i;
-//    }
+    //    ref_eigenvalue.resize(e.size());
+    //    ref_e_complex.resize(e.size());
+    //    for (int i = 0; i < e.size(); i++) {
+    //        ref_eigenvalue[i] = e[i].r;
+    //        ref_e_complex[i] = e[i].i;
+    //    }
 
     ref_eigenvalue.resize(ref.e.size());
-    ref_e_complex.resize(ref.e.size());    
+    ref_e_complex.resize(ref.e.size());
 
     for (int i = 0; i < ref.e.size(); i++) {
         ref_eigenvalue[i] = ref.e[i].r;
@@ -860,6 +876,7 @@ void ColorCurve::classify_segmented_curve(std::vector<RealVector> &original,
 
 // This method classify a Hugoniot Locus given as a collection of points, typically from continuation 
 //
+
 void ColorCurve::classify_continuous_curve(std::deque<RealVector> &original,
         const ReferencePoint &ref,
         HugoniotPolyLine &classified_curve,
@@ -875,27 +892,27 @@ void ColorCurve::classify_continuous_curve(std::deque<RealVector> &original,
 
     // Eigenvalues at the reference point.
     //
-//    F_ref.resize(dim);
-//    G_ref.resize(dim);
-//    double JF[dim][dim], JG[dim][dim];
-//    fluxFunction_->fill_with_jet(dim, ref_point.components(), 1, F_ref.components(), &JF[0][0], 0);
-//    accFunction_->fill_with_jet(dim, ref_point.components(), 1, G_ref.components(), &JG[0][0], 0);
+    //    F_ref.resize(dim);
+    //    G_ref.resize(dim);
+    //    double JF[dim][dim], JG[dim][dim];
+    //    fluxFunction_->fill_with_jet(dim, ref_point.components(), 1, F_ref.components(), &JF[0][0], 0);
+    //    accFunction_->fill_with_jet(dim, ref_point.components(), 1, G_ref.components(), &JG[0][0], 0);
 
-//    std::vector<eigenpair> e;
-//    Eigen::eig(dim, &JF[0][0], &JG[0][0], e);
+    //    std::vector<eigenpair> e;
+    //    Eigen::eig(dim, &JF[0][0], &JG[0][0], e);
 
-//    ref_eigenvalue.resize(e.size());
-//    ref_e_complex.resize(e.size());
-//    for (int i = 0; i < e.size(); i++) {
-//        ref_eigenvalue[i] = e[i].r;
-//        ref_e_complex[i] = e[i].i;
-//    }
+    //    ref_eigenvalue.resize(e.size());
+    //    ref_e_complex.resize(e.size());
+    //    for (int i = 0; i < e.size(); i++) {
+    //        ref_eigenvalue[i] = e[i].r;
+    //        ref_e_complex[i] = e[i].i;
+    //    }
 
     F_ref = ref.F;
     G_ref = ref.G;
 
     ref_eigenvalue.resize(ref.e.size());
-    ref_e_complex.resize(ref.e.size());    
+    ref_e_complex.resize(ref.e.size());
 
     for (int i = 0; i < ref.e.size(); i++) {
         ref_eigenvalue[i] = ref.e[i].r;

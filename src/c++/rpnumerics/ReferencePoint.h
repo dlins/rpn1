@@ -10,6 +10,7 @@
 
 #include "Matrix.h"
 #include "DoubleMatrix.h"
+#include "Debug.h"
 
 class ReferencePoint {
     private:

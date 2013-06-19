@@ -12,6 +12,7 @@
  * Includes:
  */
 #include "Quad3FluxFunction.h"
+#include "Debug.h"
 #include <math.h>
 
 /*
@@ -102,7 +103,9 @@ int Quad3FluxFunction::jet(const WaveState & x, JetMatrix & y, int degree = 2) c
     out1 = 0.5*(a1*u*u +2*b1*u*v + c1*v*v) + d1*u + e1*v + 0.5*(f1*w*w + 2*g1*u*w +2*h1*v*w) + i1*w;
     out2 = 0.5*(a2*u*u +2*b2*u*v + c2*v*v) + d2*u + e2*v + 0.5*(f2*w*w + 2*g2*u*w +2*h2*v*w) + i2*w;
 
-//    printf("Quad3 @ (%f, %f, %f) = (%f, %f, %f)\n", u, v, w, out0, out1, out2);
+    if ( Debug::get_debug_level() == 5 ) {
+        printf("Quad3 @ (%f, %f, %f) = (%f, %f, %f)\n", u, v, w, out0, out1, out2);
+    }
 
     y(0, out0);
     y(1, out1);

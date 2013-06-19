@@ -11,14 +11,13 @@
  * Includes:
  */
 #include "ShockContinuationMethod3D2D.h"
+#include "Shock.h"
+#include "Debug.h"
 
 /*
  * ---------------------------------------------------------------
  * Definitions:
  */
-
-#include "ShockContinuationMethod3D2D.h"
-#include "Shock.h"
 
 void ShockContinuationMethod3D2D::print_matrix(const char *name, int m, int n, double *A) {
     printf("%s = \n", name);
@@ -103,26 +102,30 @@ double ShockContinuationMethod3D2D::euclidean_norm(int n, double x[]) {
 void ShockContinuationMethod3D2D::curve(int direction, vector<RealVector> & output) {
     int maxStepsNumber = 10000;
     
-    cout<<"Entrando em curve"<<endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout<<"Entrando em curve"<<endl;
+    }
 
 
     int edge=0;
 
-    cout <<"Familia em curve: "<<family_<<endl;
-    
-    cout <<"Direction em curve: "<<direction<<endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout <<"Familia em curve: "<<family_<<endl;
+        cout <<"Direction em curve: "<<direction<<endl;
+    }
     
     
 //    vector<RealVector> output;
 
     int info = curve(family_, maxStepsNumber, direction, output, edge);
 
-    cout <<"valor de info em curve: "<<info<<endl;
-    
-//    for (int i = 0; i < output.size(); i++) {
-//        cout<<"Saida do curve: "<<output.at(i)<<endl;
-//
-//    }
+    if ( Debug::get_debug_level() == 5 ) {
+        cout <<"valor de info em curve: "<<info<<endl;
+        for (int i = 0; i < output.size(); i++) {
+            cout<<"Saida do curve: "<<output.at(i)<<endl;
+        }
+    }
+
 
 //    vector <vector <RealVector> > unclassifiedCurve;
 
@@ -130,25 +133,33 @@ void ShockContinuationMethod3D2D::curve(int direction, vector<RealVector> & outp
 
 //    sorter_->classify_curve(unclassifiedCurve,input,2,11,hugoniotPolyLineVector);
 
-//    cout<<"Tamanho de hugoniot polyline vector: "<< hugoniotPolyLineVector.size()<<endl;
+//    if ( Debug::get_debug_level() == 5 ) {
+//        cout<<"Tamanho de hugoniot polyline vector: "<< hugoniotPolyLineVector.size()<<endl;
+//    }
 
     //
 //
 //     for (int i = 0; i < hugoniotPolyLineVector.size(); i++) {
-//        printf("classified[i].vec.size() = %d, type = %d\n", hugoniotPolyLineVector[i].vec.size(), hugoniotPolyLineVector[i].type);
+//        if ( Debug::get_debug_level() == 5 ) {
+//            printf("classified[i].vec.size() = %d, type = %d\n", hugoniotPolyLineVector[i].vec.size(), hugoniotPolyLineVector[i].type);
+//        }
 //        for(int j=0;j < hugoniotPolyLineVector.at(i).vec.size()-1;j++) {
 //            int m = (hugoniotPolyLineVector[i].vec[0].size() - dimension() - 1) / 2;
-//            cout << "coordenadas: " << hugoniotPolyLineVector.at(i).vec.at(j) << "----------------" << hugoniotPolyLineVector.at(i).vec.at(j + 1) << endl;
-//            cout << "coordenadas: " << hugoniotPolyLineVector.at(i).vec.at(j) << endl;
-//            cout << "velocidade: " << hugoniotPolyLineVector.at(i).vec.at(j).component(dimension() +m) << endl;
+//            if ( Debug::get_debug_level() == 5 ) {
+//                cout << "coordenadas: " << hugoniotPolyLineVector.at(i).vec.at(j) << "----------------" << hugoniotPolyLineVector.at(i).vec.at(j + 1) << endl;
+//                cout << "coordenadas: " << hugoniotPolyLineVector.at(i).vec.at(j) << endl;
+//                cout << "velocidade: " << hugoniotPolyLineVector.at(i).vec.at(j).component(dimension() +m) << endl;
+//            }
 //
 //       }
 //    }
-//   for (int i = 0; i < hugoniotPolyLineVector.size(); i++) printf("classified[i].vec.size() = %d, type = %d\n", hugoniotPolyLineVector[i].vec.size(), hugoniotPolyLineVector[i].type);
+//    if ( Debug::get_debug_level() == 5 ) {
+//        for (int i = 0; i < hugoniotPolyLineVector.size(); i++) printf("classified[i].vec.size() = %d, type = %d\n", hugoniotPolyLineVector[i].vec.size(), hugoniotPolyLineVector[i].type);
+//    }
 
-//    cout <<"Info retornado "<<info<<endl;
-
-
+//       if ( Debug::get_debug_level() == 5 ) {
+//           cout <<"Info retornado "<<info<<endl;
+//       }
 
 }
 
@@ -189,21 +200,22 @@ double ShockContinuationMethod3D2D::shockspeed(int n, int family, double Um[], d
     fill_with_jet(shock_flux_object, n, Up, 0, Fp, 0, 0);
     fill_with_jet(shock_flux_object, n, Um, 0, Fm, 0, 0);
 
-    /*
-            printf("\nUp = (");
-            for (int i = 0; i < n; i++){
-                printf("%f", Up[i]);
-                if (i < n - 1) printf(", ");
-            }
-            printf(")\n");
+    if ( Debug::get_debug_level() == 5 ) {
+        printf("\nUp = (");
+        for (int i = 0; i < n; i++){
+            printf("%f", Up[i]);
+            if (i < n - 1) printf(", ");
+        }
+        printf(")\n");
 
-            printf("Fp = (");
-            for (int i = 0; i < n; i++){
-                printf("%g", Fp[i]);
-                if (i < n - 1) printf(", ");
-            }
-            printf(")\n");
-     */
+        printf("Fp = (");
+        for (int i = 0; i < n; i++){
+            printf("%g", Fp[i]);
+            if (i < n - 1) printf(", ");
+        }
+        printf(")\n");
+    }
+
     double Gp[n], Gm[n];
     if (type == _SHOCK_SIMPLE_ACCUMULATION_) {
         for (int i = 0; i < n; i++) {
@@ -224,7 +236,9 @@ double ShockContinuationMethod3D2D::shockspeed(int n, int family, double Um[], d
         den += (Gp[i] - Gm[i])*(Gp[i] - Gm[i]);
     }
     // Colocar aqui um error se den = 0
-    //        printf("s = %g, den = %g\n", s, den);
+    if ( Debug::get_debug_level() == 5 ) {
+        printf("s = %g, den = %g\n", s, den);
+    }
     return s / den;
 }
 
@@ -244,7 +258,9 @@ int Shockcurve_Adaptive_Hypersurface_Newton::shock_init(double Uref[], int famil
     // The i-th eigenvalue must be real. // The eigenvalues must be chosen carefully in the n-dimensional case
     if (e[family].i != 0){
         #ifdef TEST_SHOCK
-            printf("Inside shockinit(): Init step, eigenvalue %d is complex: % f %+f.\n", family, e[family].r, e[family].i);
+            if ( Debug::get_debug_level() == 5 ) {
+                printf("Inside shockinit(): Init step, eigenvalue %d is complex: % f %+f.\n", family, e[family].r, e[family].i);
+            }
         #endif
         return ABORTED_PROCEDURE;
     }
@@ -253,7 +269,9 @@ int Shockcurve_Adaptive_Hypersurface_Newton::shock_init(double Uref[], int famil
     int i;
     double r[n];
     for (i = 0; i < n; i++) r[i] = e[family].vrr[i];
-    //for (i = 0; i < n; i++) printf("r(%d) = % f\n", i, r[i]);
+    if ( Debug::get_debug_level() == 5 ) {
+        for (i = 0; i < n; i++) printf("r(%d) = % f\n", i, r[i]);
+    }
 
     // Set epsilon, see Eq. (2.3).
     // double epsilon = 1e-1;
@@ -273,22 +291,24 @@ int Shockcurve_Adaptive_Hypersurface_Newton::shock_init(double Uref[], int famil
 
     // Choose the point according to the increase/decrease of the speed:  // ESTA COMPARACAO DEVE SER FEITA DEPOIS DA CORRECAO PELO METODO DE NEWTON !!!! IMPORTANTE!!!
 
-    printf("\n\n\n");
-    printf("Family: %d, increase = %d\n", family, increase);
-    printf("spr = %f, sm = %f, spl = %f\n", spr, sm, spl);
-    for (i = 0; i < n; i++) printf("Upr[%d] = %f     Upl[%d] = %f\n", i, Upr[i], i, Upl[i]);
+    if ( Debug::get_debug_level() == 5 ) {
+        printf("\n\n\n");
+        printf("Family: %d, increase = %d\n", family, increase);
+        printf("spr = %f, sm = %f, spl = %f\n", spr, sm, spl);
+        for (i = 0; i < n; i++) printf("Upr[%d] = %f     Upl[%d] = %f\n", i, Upr[i], i, Upl[i]);
+    }
 
     // Speed should increase
     if (increase == 1){
-        if (spl > sm && sm > spr)      {for (i = 0; i < n; i++) Unext[i] = Upl[i]; printf("shock init: 1\n");}
-        else if (spl < sm && sm < spr) {for (i = 0; i < n; i++) Unext[i] = Upr[i]; printf("shock init: 2\n");}
-        else if ((spl < sm && sm > spr) || (spl > sm && sm < spr)) { printf("3\n"); return ABORTED_PROCEDURE;}
+            if (spl > sm && sm > spr)      {for (i = 0; i < n; i++) Unext[i] = Upl[i]; printf("shock init: 1\n");}
+            else if (spl < sm && sm < spr) {for (i = 0; i < n; i++) Unext[i] = Upr[i]; printf("shock init: 2\n");}
+            else if ((spl < sm && sm > spr) || (spl > sm && sm < spr)) { printf("3\n"); return ABORTED_PROCEDURE;}
     }
     // Speed should decrease
     else if (increase == -1){
-        if (spl < sm && sm < spr)      {for (i = 0; i < n; i++) Unext[i] = Upl[i]; printf("shock init: 4\n");}
-        else if (spl > sm && sm > spr) {for (i = 0; i < n; i++) Unext[i] = Upr[i]; printf("shock init: 5\n");}
-        else if ((spl < sm && sm > spr) || (spl > sm && sm < spr)) { printf("6\n"); return ABORTED_PROCEDURE;}
+            if (spl < sm && sm < spr)      {for (i = 0; i < n; i++) Unext[i] = Upl[i]; printf("shock init: 4\n");}
+            else if (spl > sm && sm > spr) {for (i = 0; i < n; i++) Unext[i] = Upr[i]; printf("shock init: 5\n");}
+            else if ((spl < sm && sm > spr) || (spl > sm && sm < spr)) { printf("6\n"); return ABORTED_PROCEDURE;}
     }
     else return ABORTED_PROCEDURE;
 
@@ -300,14 +320,18 @@ int Shockcurve_Adaptive_Hypersurface_Newton::shock_init(double Uref[], int famil
 void ShockContinuationMethod3D2D::fill_with_jet(const RpFunction & flux_object, int n, double *in, int degree, double *F, double *J, double *H) {
     RealVector r(n);
 
-//   printf("Valor de fluxobject %p\n",&flux_object);
+    if ( Debug::get_debug_level() == 5 ) {
+        printf("Valor de fluxobject %p\n",&flux_object);
+        cout << "Tamanho em fill: " << n << endl;
+    }
 
-
-
-//    cout << "Tamanho em fill: " << n << endl;
     double *rp = r;
     for (int i = 0; i < n; i++) rp[i] = in[i];
-//    cout << "Entrada em fill: " << r << endl;
+
+    if ( Debug::get_debug_level() == 5 ) {
+        cout << "Entrada em fill: " << r << endl;
+    }
+
     // Will this work? There is a const somewhere in fluxParams.
     //FluxParams fp(r);
     //flux_object->fluxParams(FluxParams(r)); // flux_object->fluxParams(fp);
@@ -315,9 +339,13 @@ void ShockContinuationMethod3D2D::fill_with_jet(const RpFunction & flux_object, 
     WaveState state_c(r);
 
     JetMatrix c_jet(n);
-//    cout << "Depois da linha 296 " << c_jet.size() << endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout << "Depois da linha 296 " << c_jet.size() << endl;
+    }
     flux_object.jet(state_c, c_jet, degree);
-//    cout << "Depois de flux object: " << n << endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout << "Depois de flux object: " << n << endl;
+    }
 
     // Fill F
     if (F != 0) for (int i = 0; i < n; i++) F[i] = c_jet(i);
@@ -341,7 +369,9 @@ void ShockContinuationMethod3D2D::fill_with_jet(const RpFunction & flux_object, 
             }
         }
     }
-//    cout << "Dentro de fill with jet shock" << endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout << "Dentro de fill with jet shock" << endl;
+    }
     return;
 }
 
@@ -361,47 +391,59 @@ int ShockContinuationMethod3D2D::plane_start(int family, double Upr[], double Up
     const AccumulationFunction & shock_accumulation_object = accumulationFunction();
     double A[n][n], B[n][n];
 
-//    cout << "Em  plane start"<< endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout << "Em  plane start"<< endl;
+    }
     fill_with_jet(shock_flux_object, n, Uref, 1, 0, &A[0][0], 0);
-//    cout << "Depois  plane start" << endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout << "Depois  plane start" << endl;
+    }
     fill_with_jet(shock_accumulation_object, n, Uref, 1, 0, &B[0][0], 0); // TODO: Add "type", etc.
-//    cout << "Depois  accum start" << endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout << "Depois  accum start" << endl;
+    }
     // Find the eigenpairs:
     // TODO: Check LAPACK's docs for the case when the number of eigenpairs is insufficient (less than the dimension of space).
     vector<eigenpair> e;
     int info;
-//    cout <<"Valor de type:"<<type<<endl;
-    
-//    cout<<"A: "<<endl;
-//    for (int i = 0; i < n ; i++) {
-//        for (int j = 0; j < n; j++) {
-//            cout<<A[i][j]<<" ";
-//        }
-//                cout<<endl;
-//    }
 
 
-//        cout<<"B: "<<endl;
-//    for (int i = 0; i < n ; i++) {
-//        for (int j = 0; j < n; j++) {
-//            cout<<B[i][j]<<" ";
-//        }
-//        cout<<endl;
-//    }
+    if ( Debug::get_debug_level() == 5 ) {
+        cout <<"Valor de type:"<<type<<endl;
+        cout<<"A: "<<endl;
+        for (int i = 0; i < n ; i++) {
+            for (int j = 0; j < n; j++) {
+                cout<<A[i][j]<<" ";
+            }
+            cout<<endl;
+        }
 
-// for (int i = 0; i < n ; i++) {
-//     cout <<"Uref "<<Uref[i]<<endl;
-// }
+        cout<<"B: "<<endl;
+        for (int i = 0; i < n ; i++) {
+            for (int j = 0; j < n; j++) {
+                cout<<B[i][j]<<" ";
+            }
+            cout<<endl;
+        }
+
+        for (int i = 0; i < n ; i++) {
+            cout <<"Uref "<<Uref[i]<<endl;
+        }
+    }
 
 
     if (type == _SHOCK_SIMPLE_ACCUMULATION_) info = Eigen::eig(n, &A[0][0], e);
     else info = Eigen::eig(n, &A[0][0], &B[0][0], e);
-//    cout <<"Tamanho de e"<<e.size()<<endl;
+        if ( Debug::get_debug_level() == 5 ) {
+            cout <<"Tamanho de e"<<e.size()<<endl;
+        }
 
     // The i-th eigenvalue must be real. // The eigenvalues must be chosen carefully in the n-dimensional case.
     // ALL eigenvalues must be real. Extend this by using a for cycle.
     if (e[family].i != 0) {
-        printf("Inside shockinit(): Init step, eigenvalue %d is complex: % f %+f.\n", family, e[family].r, e[family].i);
+        if ( Debug::get_debug_level() == 5 ) {
+            printf("Inside shockinit(): Init step, eigenvalue %d is complex: % f %+f.\n", family, e[family].r, e[family].i);
+        }
         return ABORTED_PROCEDURE;
     }
 
@@ -409,7 +451,9 @@ int ShockContinuationMethod3D2D::plane_start(int family, double Upr[], double Up
     int i;
     double r[n];
     for (i = 0; i < n; i++) r[i] = e[family].vrr[i];
-    //for (i = 0; i < n; i++) printf("r(%d) = % f\n", i, r[i]);
+        if ( Debug::get_debug_level() == 5 ) {
+            for (i = 0; i < n; i++) printf("r(%d) = % f\n", i, r[i]);
+        }
 
     // Matrix whose rows are the valid eigenvectors (one less than the dimension of space).
     double M[n - 1][n];
@@ -439,8 +483,10 @@ int ShockContinuationMethod3D2D::plane_start(int family, double Upr[], double Up
         v2[j] = M[1][j];
     }
 
-    //    for (int i=0; i < n; i++) printf("v1(%d)=%e\n", i, v1[i]);
-    //    for (int i=0; i < n; i++) printf("v2(%d)=%e\n", i, v2[i]);
+    if ( Debug::get_debug_level() == 5 ) {
+        for (int i=0; i < n; i++) printf("v1(%d)=%e\n", i, v1[i]);
+        for (int i=0; i < n; i++) printf("v2(%d)=%e\n", i, v2[i]);
+    }
 
     // Find U+right and U+left.
     for (i = 0; i < n; i++) {
@@ -598,19 +644,25 @@ void ShockContinuationMethod3D2D::jet_N(double plane_point[], double a1, double 
     double H1, nablaH1[3], H2, nablaH2[3], p[3];
 
     plane_mapping(plane_point, a1, a2, v1, v2, p);
-    //    printf("This is the initial plane_point = (%le, %le, %le)\n", plane_point[0], plane_point[1], plane_point[2]);
-    //    printf("This is the point to be passed to the jets p = (%le, %le, %le)\n", p[0], p[1], p[2]);
+    if ( Debug::get_debug_level() == 5 ) {
+        printf("This is the initial plane_point = (%le, %le, %le)\n", plane_point[0], plane_point[1], plane_point[2]);
+        printf("This is the point to be passed to the jets p = (%le, %le, %le)\n", p[0], p[1], p[2]);
+    }
 
     jet_H1(p, H1, nablaH1);
     jet_H2(p, H2, nablaH2);
 
-    //    printf("This is the nablaH1 for calculating the jacobian = (%le, %le, %le)\n", nablaH1[0], nablaH1[1], nablaH1[2]);
-    //    printf("This is the nablaH2 for calculating the jacobian = (%le, %le, %le)\n", nablaH2[0], nablaH2[1], nablaH2[2]);
+    if ( Debug::get_debug_level() == 5 ) {
+        printf("This is the nablaH1 for calculating the jacobian = (%le, %le, %le)\n", nablaH1[0], nablaH1[1], nablaH1[2]);
+        printf("This is the nablaH2 for calculating the jacobian = (%le, %le, %le)\n", nablaH2[0], nablaH2[1], nablaH2[2]);
+    }
 
     N[0] = H1;
     N[1] = H2;
 
+    //if ( Debug::get_debug_level() == 5 ) {
     //    for (int i = 0; i < n - 1; i++) printf("Inside Newton_plane: N[%d] = %e\n", i, N[i]);
+    //}
 
     DN[0] = dotprod(3, nablaH1, v1);
     DN[1] = dotprod(3, nablaH1, v2);
@@ -624,7 +676,8 @@ int ShockContinuationMethod3D2D::solver(int nn, double *A, double *b, double *x)
     double eps = 1e-10;
     double det, anorm;
 
-    /*    printf("Inside solver:\n");
+    if ( Debug::get_debug_level() == 5 ) {
+        printf("Inside solver:\n");
           printf("    A = ");
           for (int i = 0; i < nn; i++){
               if (i == 0) printf("[");
@@ -633,7 +686,8 @@ int ShockContinuationMethod3D2D::solver(int nn, double *A, double *b, double *x)
                   printf("%e ", A[i*nn + j]);
               }
               printf("]\n");
-          }*/
+          }
+    }
 
     switch (nn) {
         case 1:
@@ -649,7 +703,9 @@ int ShockContinuationMethod3D2D::solver(int nn, double *A, double *b, double *x)
             anorm = 0;
             for (int i = 0; i < nn * nn; i++) anorm += A[i] * A[i];
 
-            //          printf("det = %g, isnan = %d\n", det, isnan(det));
+            if ( Debug::get_debug_level() == 5 ) {
+                printf("det = %g, isnan = %d\n", det, isnan(det));
+            }
 
             if (fabs(det) <= (eps * anorm)) return ABORTED_PROCEDURE;
 
@@ -747,7 +803,9 @@ int ShockContinuationMethod3D2D::init(int family, int increase, Plane &plane, Re
     const AccumulationFunction & shock_accumulation_object = accumulationFunction();
 
     /* In the first step we need to initialize the shock curve in the chosen direction */
-//    cout<<"Inicializando com init inteiro"<<endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout<<"Inicializando com init inteiro"<<endl;
+    }
     double Upr[n], Upl[n]; // These are two possible initial points for the shock curve
     double v1[n], v2[n]; // These are the two vectors on the first plane.  (notice that we use the SAME plane for both Upr and Upl).
     double epsilon = eps;
@@ -764,9 +822,10 @@ int ShockContinuationMethod3D2D::init(int family, int increase, Plane &plane, Re
     double normr, norml;
 
     do {
-        plane_start(family, Upr, Upl, v1, v2, epsilon); //printf("here 1\n");
-        Newton_plane(Upr, v1, v2, pr); //printf("here 2\n");
-        Newton_plane(Upl, v1, v2, pl); //printf("here 3\n");
+        plane_start(family, Upr, Upl, v1, v2, epsilon); 
+        Newton_plane(Upr, v1, v2, pr); 
+        Newton_plane(Upl, v1, v2, pl); 
+        
 
         for (int i = 0; i < n; i++) {
             Upr_pr[i] = Upr[i] - pr[i];
@@ -800,9 +859,11 @@ int ShockContinuationMethod3D2D::init(int family, int increase, Plane &plane, Re
     double sr = shockspeed(n, family, Uref, pr);
     double sl = shockspeed(n, family, Uref, pl);
 
-    /* printf("Family: %d, increase = %d\n", family, increase);
-    printf("sr = %f, sm = %f, sl = %f\n", sr, sm, sl);
-    for (int i = 0; i < n; i++) printf("pr[%d] = %e     pl[%d] = %e\n", i, pr[i], i, pl[i]); */
+    if ( Debug::get_debug_level() == 5 ) {
+        printf("Family: %d, increase = %d\n", family, increase);
+        printf("sr = %f, sm = %f, sl = %f\n", sr, sm, sl);
+        for (int i = 0; i < n; i++) printf("pr[%d] = %e     pl[%d] = %e\n", i, pr[i], i, pl[i]); 
+    }
 
     double Uprevious[n];
 
@@ -810,24 +871,36 @@ int ShockContinuationMethod3D2D::init(int family, int increase, Plane &plane, Re
     if (increase == WAVE_FORWARD) {
         if (sl > sm && sm > sr) {
             for (int i = 0; i < n; i++) Uprevious[i] = pl[i];
-            /*printf("shock init: 1\n");*/
+            if ( Debug::get_debug_level() == 5 ) {
+                printf("shock init: 1\n");
+            }
         } else if (sl < sm && sm < sr) {
             for (int i = 0; i < n; i++) Uprevious[i] = pr[i];
-            /*printf("shock init: 2\n");*/
+            if ( Debug::get_debug_level() == 5 ) {
+                printf("shock init: 2\n");
+            }
         } else if ((sl < sm && sm > sr) || (sl > sm && sm < sr)) {
-            printf("3\n");
+            if ( Debug::get_debug_level() == 5 ) {
+                printf("3\n");
+            }
             return ABORTED_PROCEDURE;
         }
     }// Speed should decrease
     else if (increase == WAVE_BACKWARD) {
         if (sl < sm && sm < sr) {
             for (int i = 0; i < n; i++) Uprevious[i] = pl[i];
-            /*printf("shock init: 4\n");*/
+            if ( Debug::get_debug_level() == 5 ) {
+                printf("shock init: 4\n");
+            }
         } else if (sl > sm && sm > sr) {
             for (int i = 0; i < n; i++) Uprevious[i] = pr[i];
-            /*printf("shock init: 5\n");*/
+            if ( Debug::get_debug_level() == 5 ) {
+                printf("shock init: 5\n");
+            }
         } else if ((sl < sm && sm > sr) || (sl > sm && sm < sr)) {
-            printf("6\n");
+            if ( Debug::get_debug_level() == 5 ) {
+                printf("6\n");
+            }
             return ABORTED_PROCEDURE;
         }
     } else return ABORTED_PROCEDURE;
@@ -941,7 +1014,7 @@ int ShockContinuationMethod3D2D::curve(int family, double maxnum, int increase, 
 
             // Update refvec and do Newton
             for (int i = 0; i < n; i++) old_previous[i] = Uprevious[i];
-            Newton_plane(plane_point, v1, v2, Uprevious); // printf("here 2\n");
+                Newton_plane(plane_point, v1, v2, Uprevious);
 
             double Uprevious_plane_point[n];
             for (int i = 0; i < n; i++) {
@@ -959,8 +1032,10 @@ int ShockContinuationMethod3D2D::curve(int family, double maxnum, int increase, 
             // this happens again.
 
             counter_rebounds++; // This will count the number of points that passed easily through the convergence method.
-            //printf("counter_rebounds   =%d\n", counter_rebounds  );
-            //printf("rebounds_first_step=%d\n",rebounds_first_step);
+            if ( Debug::get_debug_level() == 5 ) {
+                printf("counter_rebounds   =%d\n", counter_rebounds  );
+                printf("rebounds_first_step=%d\n",rebounds_first_step);
+            }
 
             if (counter_rebounds <= rebounds_first_step) { // Whenever the number of re-adjustments is not too big
                 // we can keep using a bigger epsilon_fix for the nextrun.
@@ -977,7 +1052,9 @@ int ShockContinuationMethod3D2D::curve(int family, double maxnum, int increase, 
         // Check for NAN's
         for (int i = 0; i < n; i++) {
             if (isnan(rv.component(i))) {
-                printf("Aborting... num = %d\n", num);
+                if ( Debug::get_debug_level() == 5 ) {
+                    printf("Aborting... num = %d\n", num);
+                }
                 return ABORTED_PROCEDURE;
             }
         }
@@ -993,12 +1070,16 @@ int ShockContinuationMethod3D2D::curve(int family, double maxnum, int increase, 
         if (info_intersect == 1) { // Both inside
             out.push_back(q);
         } else if (info_intersect == -1) { // Both outside
-            //            cout << "No primeiro else" << endl;
+            if ( Debug::get_debug_level() == 5 ) {
+                cout << "No primeiro else" << endl;
+            }
             return ABORTED_PROCEDURE;
         } else { // New point outside
             out.push_back(r);
 
-            cout << "No segundo else" << endl;
+            if ( Debug::get_debug_level() == 5 ) {
+                cout << "No segundo else" << endl;
+            }
             //            edge = out_edge;
             return ABORTED_PROCEDURE;
         }
@@ -1025,16 +1106,18 @@ void ShockContinuationMethod3D2D::Newton_plane(double plane_point[], double v1[]
     // double norm_delta_a;
 
 
+    //if ( Debug::get_debug_level() == 5 ) {
     //   printf("*********** Inside Newton_plane, before while.\n");
+    //}
 
     while (iterations < 10 && norm_delta_a > tolerance && norm_delta_a < 10.0) {
 
 
-        //       printf("Inside Newton_plane: iterations = %d < 10 = %d\n", iterations, iterations < 10);
-
-        //       printf("Inside Newton_plane: (norm_delta_a = %e > tolerance = %e) = %d\n", norm_delta_a, tolerance, norm_delta_a > tolerance);
-
-        //       printf("Inside Newton_plane: norm_delta_a < 1.0 = %d\n", norm_delta_a < 1.0);
+        //if ( Debug::get_debug_level() == 5 ) {
+        //    printf("Inside Newton_plane: iterations = %d < 10 = %d\n", iterations, iterations < 10);
+        //    printf("Inside Newton_plane: (norm_delta_a = %e > tolerance = %e) = %d\n", norm_delta_a, tolerance, norm_delta_a > tolerance);
+        //    printf("Inside Newton_plane: norm_delta_a < 1.0 = %d\n", norm_delta_a < 1.0);
+        //}
 
 
         // Now we calculate the jet of N at p, and at xold
@@ -1044,7 +1127,9 @@ void ShockContinuationMethod3D2D::Newton_plane(double plane_point[], double v1[]
         //        int info =
         solver(dimension() - 1, &DN[0][0], &N[0], &err[0]);
 
-        //       printf("solver.info = %d\n", info);
+        //if ( Debug::get_debug_level() == 5 ) {
+        //    printf("solver.info = %d\n", info);
+        //}
 
 
         // Approximation given by the Newton Method over the plane
@@ -1052,18 +1137,24 @@ void ShockContinuationMethod3D2D::Newton_plane(double plane_point[], double v1[]
             anew[i] = aold[i] - err[i];
             aold[i] = anew[i];
         }
-        //       for(int i=0 ; i < n - 1; i++) printf("anew[%d] = %e\n", i, anew[i]);
+        //if ( Debug::get_debug_level() == 5 ) {
+        //    for(int i=0 ; i < n - 1; i++) printf("anew[%d] = %e\n", i, anew[i]);
+        //}
 
         // Print anew (delete later)
 
         //jet_N(plane_point, aold[0], aold[1], v1, v2, &N[0], &DN[0][0]);
-        //for (int i = 0; i < n - 1; i++) printf("After the solver: N[%d] = %e\n", i, N[i]);
+        //if ( Debug::get_debug_level() == 5 ) {
+        //    for (int i = 0; i < n - 1; i++) printf("After the solver: N[%d] = %e\n", i, N[i]);
+        //}
 
         // Norm of delta_x
         norm_delta_a = 0;
         norm_delta_a = euclidean_norm(dimension() - 1, &err[0]);
 
-        //       printf("norm_delta_a=%e\n", norm_delta_a);
+        //if ( Debug::get_debug_level() == 5 ) {
+        //    printf("norm_delta_a=%e\n", norm_delta_a);
+        //}
 
         iterations++;
     }

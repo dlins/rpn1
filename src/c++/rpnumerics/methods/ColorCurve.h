@@ -8,6 +8,7 @@
 #include "FluxFunction.h"
 #include "AccumulationFunction.h"
 #include "eigen.h"
+#include "Debug.h"
 
 #include "ReferencePoint.h"
 

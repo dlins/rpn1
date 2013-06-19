@@ -27,6 +27,7 @@ NOTE :
 #include "TPCW.h"
 
 #include "CoincidenceTPCW_Extension.h"
+#include "Debug.h"
 
 
 using std::vector;
@@ -72,7 +73,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceExtensionCurveCalc_nativeCa
 
     if (RpNumerics::getPhysics().ID().compare("TPCW") == 0) {
 
-        cout << "Chamando extension com tpcw" << endl;
+        if ( Debug::get_debug_level() == 5 ) {
+            cout << "Chamando extension com tpcw" << endl;
+        }
         dimension = 3;
 
 
@@ -127,20 +130,22 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceExtensionCurveCalc_nativeCa
                 curve_segments,
                 domain_segments);
 
-        cout << "Tamanho da coincidence curve extension: " << curve_segments.size() << endl;
-        cout << "Tamanho da coincidence domain extension: " << domain_segments.size() << endl;
+        if ( Debug::get_debug_level() == 5 ) {
+            cout << "Tamanho da coincidence curve extension: " << curve_segments.size() << endl;
+            cout << "Tamanho da coincidence domain extension: " << domain_segments.size() << endl;
+        }
 
         tpcw.postProcess(curve_segments);
         tpcw.postProcess(domain_segments);
 
 
-        cout << "Resolucao x " << xResolution << endl;
-
-        cout << "Resolucao y " << yResolution << endl;
-
-        cout << "Familia da curva" << curveFamily << endl;
-        cout << "Familia do dominio" << domainFamily << endl;
-        cout << "characteristic " << characteristicWhere << endl;
+        if ( Debug::get_debug_level() == 5 ) {
+            cout << "Resolucao x " << xResolution << endl;
+            cout << "Resolucao y " << yResolution << endl;
+            cout << "Familia da curva" << curveFamily << endl;
+            cout << "Familia do dominio" << domainFamily << endl;
+            cout << "characteristic " << characteristicWhere << endl;
+        }
 
 
         delete number_of_grid_points;

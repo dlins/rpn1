@@ -1,4 +1,5 @@
 #include "SubinflectionTP.h"
+#include "Debug.h"
 
 SubinflectionTP::SubinflectionTP(double p) {
     gv = 0;
@@ -161,7 +162,9 @@ int SubinflectionTP::curve(const FluxFunction *f, const AccumulationFunction *a,
 
     double phi = a->accumulationParams().component(0);
 
-    cout << "Valor de phi em subinflection: " << phi << endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout << "Valor de phi em subinflection: " << phi << endl;
+    }
 
 
     td = fluxAdimensional->getThermo();

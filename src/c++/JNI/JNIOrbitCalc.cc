@@ -23,6 +23,7 @@ NOTE :
 #include "Rarefaction.h"
 #include "RpNumerics.h"
 #include "JNIDefs.h"
+#include "Debug.h"
 #include <vector>
 
 using std::vector;
@@ -143,7 +144,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_nativeCalc(JNIEnv * env, job
 
 
 
-        //        cout << "Segmento de poincare: " << nativePoincarePoint1 << " " << nativePoincarePoint2 << endl;
+        if ( Debug::get_debug_level() == 5 ) {
+            cout << "Segmento de poincare: " << nativePoincarePoint1 << " " << nativePoincarePoint2 << endl;
+        }
 
     } else {
 
@@ -158,7 +161,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_nativeCalc(JNIEnv * env, job
     }
 
 
-//    cout << "Tamanho da orbita: " << coords.size() << endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout << "Tamanho da orbita: " << coords.size() << endl;
+    }
 
     jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(coords.size(), classOrbitPoint, NULL);
 
@@ -171,7 +176,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_OrbitCalc_nativeCalc(JNIEnv * env, job
         double * dataCoords = tempVector;
 
 
-        //        cout<<coords.at(i)<<endl;
+        if ( Debug::get_debug_level() == 5 ) {
+            cout<<coords.at(i)<<endl;
+        }
 
         //Reading only coodinates
         jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size());

@@ -28,6 +28,7 @@ NOTE :
 #include "SubinflectionTPCW_Extension.h"
 #include "Extension_Curve.h"
 #include "SubinflectionTPCW.h"
+#include "Debug.h"
 
 using std::vector;
 using namespace std;
@@ -109,9 +110,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionExtensionCurveCalc_native
         characteristicWhere = 1;
 
 
-        cout << "Resolucao x " << number_of_grid_points[0] << endl;
-
-        cout << "Resolucao y " << number_of_grid_points[1] << endl;
+        if ( Debug::get_debug_level() == 5 ) {
+            cout << "Resolucao x " << number_of_grid_points[0] << endl;
+            cout << "Resolucao y " << number_of_grid_points[1] << endl;
+        }
 
 
  SubinflectionTPCW  subInflectionFunction((Flux2Comp2PhasesAdimensionalized*) & tpcw.fluxFunction(), (Accum2Comp2PhasesAdimensionalized*) & tpcw.accumulation());
@@ -127,24 +129,29 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionExtensionCurveCalc_native
             domain_segments);
 
 
-        cout << "Curve: " << curve_segments.size() << endl;
-
-        cout << "Domain: " << domain_segments.size() << endl;
+        if ( Debug::get_debug_level() == 5 ) {
+            cout << "Curve: " << curve_segments.size() << endl;
+            cout << "Domain: " << domain_segments.size() << endl;
+        }
 
 
         tpcw.postProcess(curve_segments);
         tpcw.postProcess(domain_segments);
 
-        cout << "Familia da curva" << curveFamily << endl;
-        cout << "Familia do dominio" << domainFamily << endl;
-        cout << "characteristic " << characteristicWhere << endl;
+        if ( Debug::get_debug_level() == 5 ) {
+            cout << "Familia da curva" << curveFamily << endl;
+            cout << "Familia do dominio" << domainFamily << endl;
+            cout << "characteristic " << characteristicWhere << endl;
+        }
 
 
     }
 
 
-    printf("curve_segments.size()  = %d\n", curve_segments.size());
-    printf("domain_segments.size() = %d\n", domain_segments.size());
+    if ( Debug::get_debug_level() == 5 ) {
+        printf("curve_segments.size()  = %d\n", curve_segments.size());
+        printf("domain_segments.size() = %d\n", domain_segments.size());
+    }
 
 
     for (unsigned int i = 0; i < curve_segments.size() / 2; i++) {

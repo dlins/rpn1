@@ -22,6 +22,7 @@
 #include "JNIDefs.h"
 #include <vector>
 #include "RpNumerics.h"
+#include "Debug.h"
 
 
 using std::vector;
@@ -93,34 +94,38 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CharacteristicsCurveCalc_nativeCalc
 
     std::vector<std::vector<std::vector<RealVector> > > characteristics;
 
-    cout <<"Sampling: "<<samplingRate<<endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout <<"Sampling: "<<samplingRate<<endl;
+    }
     
     RiemannSolver::characteristics(fluxFunction, accumulationFunction, riemannProfileVector,0.45, samplingRate, characteristics);
     
     
 
-    // Modified below
-    FILE *fid = fopen("characteristics.txt", "w");
+    if ( Debug::get_debug_level() == 5 ) {
+        // Modified below
+        FILE *fid = fopen("characteristics.txt", "w");
 
-    // Number of families
-    fprintf(fid, "%d\n", characteristics.size());
+        // Number of families
+        fprintf(fid, "%d\n", characteristics.size());
 
-    for (int i = 0; i < characteristics.size(); i++){
-        // Number of lines per family
-        fprintf(fid, "%d\n", characteristics[i].size());
-
-        for (int j = 0; j < characteristics[i].size(); j++){
-            // Number of point per line per family
-            fprintf(fid, "%d\n", characteristics[i][j].size());
-
-            for (int k = 0; k < characteristics[i][j].size(); k++){
-                // Points
-                fprintf(fid, "%g %g\n", characteristics[i][j][k].component(0), characteristics[i][j][k].component(1));
+        for (int i = 0; i < characteristics.size(); i++){
+            // Number of lines per family
+            fprintf(fid, "%d\n", characteristics[i].size());
+    
+            for (int j = 0; j < characteristics[i].size(); j++){
+                // Number of point per line per family
+                fprintf(fid, "%d\n", characteristics[i][j].size());
+    
+                for (int k = 0; k < characteristics[i][j].size(); k++){
+                    // Points
+                    fprintf(fid, "%g %g\n", characteristics[i][j][k].component(0), characteristics[i][j][k].component(1));
+                }
             }
         }
+        fclose(fid);
     }
 
-    fclose(fid);
 
     // Modified above
 
@@ -146,18 +151,24 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CharacteristicsCurveCalc_nativeCalc
                 jobject linePointPhasePoint = env->NewObject(classPhasePoint, phasePointConstructorID, linePointRealVector);
                 env->SetObjectArrayElement(lineCoordsArray, k, linePointPhasePoint);
 
-                cout << linePoint << endl;
+                if ( Debug::get_debug_level() == 5 ) {
+                    cout << linePoint << endl;
+                }
 
             }
 
             env->CallObjectMethod(familyLinesList, arrayListAddMethod, lineCoordsArray);
-            cout << "Fim da linha: " << j << endl;
+            if ( Debug::get_debug_level() == 5 ) {
+                cout << "Fim da linha: " << j << endl;
+            }
 
         }
 
         env->CallObjectMethod(characteristicsList, arrayListAddMethod, familyLinesList);
 
-        cout << "Fim da familia: " << i << endl;
+        if ( Debug::get_debug_level() == 5 ) {
+            cout << "Fim da familia: " << i << endl;
+        }
 
     }
 
