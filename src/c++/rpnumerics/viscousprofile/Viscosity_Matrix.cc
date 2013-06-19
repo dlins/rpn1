@@ -5,7 +5,7 @@ void Viscosity_Matrix::fill_viscous_matrix(const RealVector &p, ViscosityJetMatr
     return;
 }
 
-void Viscosity_Matrix::fill_viscous_matrix(const RealVector &p, ViscosityJetMatrix &m, int degree){
+void Viscosity_Matrix::fill_viscous_matrix(const RealVector &p, ViscosityJetMatrix &m, int degree)const{
     if (degree >= 0){
         m.M()(0, 0) = 1.0;
         m.M()(0, 1) = 0.0;

@@ -119,10 +119,10 @@ void ShockContinuationMethod3D2D::curve(int direction, vector<RealVector> & outp
 
     cout <<"valor de info em curve: "<<info<<endl;
     
-    for (int i = 0; i < output.size(); i++) {
-        cout<<"Saida do curve: "<<output.at(i)<<endl;
-
-    }
+//    for (int i = 0; i < output.size(); i++) {
+//        cout<<"Saida do curve: "<<output.at(i)<<endl;
+//
+//    }
 
 //    vector <vector <RealVector> > unclassifiedCurve;
 

@@ -22,6 +22,7 @@
 #include "ImplicitFunction.h"
 #include "ContourMethod.h"
 #include "ColorCurve.h"
+#include "ReferencePoint.h"
 
 /*
  * ---------------------------------------------------------------

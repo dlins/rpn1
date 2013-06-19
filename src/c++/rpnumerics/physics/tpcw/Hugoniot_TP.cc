@@ -22,9 +22,11 @@ int Hugoniot_TP::classified_curve(const FluxFunction *f, const AccumulationFunct
     vector<RealVector> vrs;
 
     int info = curve(f, a, g, r, vrs);
+    
+    ReferencePoint refPoint(r,f,a,vm);
 
-    ColorCurve colorCurve(*f, *a,vm);
-    colorCurve.classify_segmented_curve(vrs, r, hugoniot_curve, transition_list);
+    ColorCurve colorCurve(*f, *a);
+    colorCurve.classify_segmented_curve(vrs, refPoint, hugoniot_curve, transition_list);
 
 
 

@@ -63,12 +63,14 @@ int StoneHugoniot::classified_curve(const FluxFunction *f, const AccumulationFun
             out);
     delete q2eh;
 
-    ColorCurve colorCurve(*f, *a,vm);
+    ColorCurve colorCurve(*f, *a);
+            
+    ReferencePoint refPoint(r,f,a,vm);
 
     for (int i = 0; i < out.size(); i++) {
 
         HugoniotPolyLine polyLine;
-        colorCurve.classify_continuous_curve(out.at(i), r, polyLine, transitionList);
+        colorCurve.classify_continuous_curve(out.at(i), refPoint, polyLine, transitionList);
 
         hugoniot_curve.push_back(polyLine);
 

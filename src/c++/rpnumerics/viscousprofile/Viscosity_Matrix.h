@@ -13,7 +13,7 @@ public:
     virtual ~Viscosity_Matrix();
 
     virtual void fill_viscous_matrix(const RealVector &p, ViscosityJetMatrix &m);
-    virtual void fill_viscous_matrix(const RealVector &p, ViscosityJetMatrix &m, int degree);
+    virtual void fill_viscous_matrix(const RealVector &p, ViscosityJetMatrix &m, int degree)const;
 
     virtual bool is_constant(void) {
         return true;

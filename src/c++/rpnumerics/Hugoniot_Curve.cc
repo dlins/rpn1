@@ -24,8 +24,11 @@ int Hugoniot_Curve::classified_curve(const FluxFunction *f, const AccumulationFu
     //
     int info = curve(f, a, g, r, vrs, curves, circular, method);
 
-    ColorCurve colorCurve(*f, *a,vm);
-    colorCurve.classify_segmented_curve(vrs,r,hugoniot_curve,testeTransitionalList);
+    ColorCurve colorCurve(*f, *a);
+    
+    
+    ReferencePoint refPoint (r,f,a,vm);
+    colorCurve.classify_segmented_curve(vrs,refPoint,hugoniot_curve,testeTransitionalList);
     
     return info;
 }
@@ -69,11 +72,13 @@ int Hugoniot_Curve::classified_curve(const FluxFunction *f, const AccumulationFu
     testeTransitionalList.clear();
     hugoniot_curve.clear();
 
-    ColorCurve colorCurve(*f, *a,vm);
+    ColorCurve colorCurve(*f, *a);
+    
+    ReferencePoint refPoint(r,f,a,vm);
 
     for (int i = 0; i < no_of_curves; i++) {
         HugoniotPolyLine hugoniot;
-        colorCurve.classify_continuous_curve(curves[i],r,hugoniot,testeTransitionalList);
+        colorCurve.classify_continuous_curve(curves[i],refPoint,hugoniot,testeTransitionalList);
         hugoniot_curve.push_back(hugoniot);
         cout << "Size da lista de transicao " << i  <<  "  " << testeTransitionalList.size() << endl;
 
