@@ -57,7 +57,7 @@ public:
 
     virtual int jet(const WaveState &u, JetMatrix &m, int degree) const = 0;
 
-    void fill_with_jet(int n, double *in, int degree, double *F, double *J, double *H) const;
+    void fill_with_jet(int n, const double *in, int degree, double *F, double *J, double *H) const;
 };
 
 

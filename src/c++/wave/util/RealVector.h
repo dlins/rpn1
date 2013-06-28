@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <math.h>
 
 class RealVector {
 private:
@@ -25,18 +26,20 @@ public:
 
     // Access to individual elements
     double & component(int n);
+    const double & component(int n) const;
 
-    const double & component(int n)const;
-
-    operator double *(void);
-
-    double operator()(int comp)const;
-
-
+    double operator()(int comp) const;
     double & operator()(int comp);
+
+    double operator[](int comp) const;
+    double & operator[](int comp);
+
+    // Cast operator
+    operator double *(void);
 
     // Access to data pointer
     double * components(void);
+    const double * components(void) const;
 
     // Assignment
     RealVector operator=(const RealVector &orig);
@@ -48,6 +51,9 @@ public:
     // Multiplication by a scalar
     friend RealVector operator*(const RealVector &r, double alpha);
     friend RealVector operator*(double alpha, const RealVector &r);
+
+    // Division by a scalar
+    friend RealVector operator/(const RealVector &r, double alpha);
 
     // Sum with a scalar
     friend RealVector operator+(const RealVector &r, double alpha);
@@ -65,6 +71,18 @@ public:
 
     // Subtraction of two RealVectors
     friend RealVector operator-(const RealVector &x, const RealVector &y);
+ 
+    // Norm of a RealVector
+    friend double norm(const RealVector &x);
+
+    // Normalize a RealVector
+    friend RealVector normalize(const RealVector &x);
+
+    // Inner product of two RealVectors
+    friend double operator*(const RealVector &x, const RealVector &y);
+
+    // Vector product of two 3D RealVectors
+    friend RealVector vector_product(const RealVector &x, const RealVector &y);
 };
 
 #endif // _REALVECTOR_

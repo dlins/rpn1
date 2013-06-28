@@ -59,21 +59,22 @@ void RealVector::resize(int n) {
 }
 
 // Access to individual elements
-
+//
 double & RealVector::component(int n) {
     if (n < size_) return data[n];
 }
-
-
-// Access to individual elements
 
 const double & RealVector::component(int n)const {
     if (n < size_) return data[n];
 }
 
 // Access to data pointer
-
+//
 double * RealVector::components(void) {
+    return data;
+}
+
+const double * RealVector::components(void) const {
     return data;
 }
 
@@ -100,7 +101,7 @@ bool RealVector::operator==(const RealVector &other){
     return true;
 }
 
-
+// Cast operator
 RealVector::operator double *(void) {
     return data;
 }
@@ -111,6 +112,15 @@ double RealVector::operator()(int comp) const {
 
 
 double & RealVector::operator()(int comp) {
+    return data[comp];
+}
+
+double RealVector::operator[](int comp) const {
+    return data[comp];
+}
+
+
+double & RealVector::operator[](int comp) {
     return data[comp];
 }
 
@@ -139,6 +149,11 @@ RealVector operator*(const RealVector &r, double alpha) {
 
 RealVector operator*(double alpha, const RealVector &r) {
     return r*alpha;
+}
+
+// Division by a scalar
+RealVector operator/(const RealVector &r, double alpha) {
+    return r*(1.0/alpha);
 }
 
 // Sum with a scalar
@@ -192,5 +207,35 @@ RealVector operator-(const RealVector &x, const RealVector &y) {
     for (int i = 0; i < x.size_; i++) temp.data[i] -= y.data[i];
 
     return temp;
+}
+
+// Norm of a RealVector
+double norm(const RealVector &x){
+    return sqrt(x*x);
+}
+
+// Normalize a RealVector
+RealVector normalize(const RealVector &x){
+    return RealVector(x/norm(x));
+}
+
+// Inner product of two RealVectors
+double operator*(const RealVector &x, const RealVector &y){
+    double p = 0.0;
+
+    for (int i = 0; i < x.size(); i++) p += x(i)*y(i);
+
+    return p;
+}
+
+// Vector product of two 3D RealVectors
+RealVector vector_product(const RealVector &x, const RealVector &y){
+    RealVector v(3);
+
+    v(0) = x(1)*y(2) - x(2)*y(1);
+    v(1) = x(2)*y(0) - x(0)*y(2);
+    v(2) = x(0)*y(1) - x(1)*y(0);
+
+    return v;
 }
 
