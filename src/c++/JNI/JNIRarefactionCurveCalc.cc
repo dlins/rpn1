@@ -100,12 +100,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
             tempBoundary,
             coords, inflectionPoints);
 
+
     if ( Debug::get_debug_level() == 5 ) {
         cout << "Tamanho da rarefacao: " << coords.size() << endl;
     }
     
-    
-
 
     if (coords.size() == 0) {
         return NULL;

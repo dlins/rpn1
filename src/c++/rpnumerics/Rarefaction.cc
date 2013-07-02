@@ -488,6 +488,7 @@ double Rarefaction::dirdrv(int n, const RealVector &p, const RealVector &directi
         dir[i] = direction.component(i);
     }
 
+
     if ( Debug::get_debug_level() == 5 ) {
         cout <<"Ponto: "<<p<<" direcao: "<<direction<<endl;
     }

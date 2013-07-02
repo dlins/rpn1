@@ -320,15 +320,15 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setResolution
 
     const char * gridNameNative = env->GetStringUTFChars(gridName, NULL);
     
-
-
     GridValues * grid = RpNumerics::getGridFactory().getGrid(string(gridNameNative));
+
 
     if ( Debug::get_debug_level() == 5 ) {
         cout <<"Nome do grid: "<<gridNameNative<<endl;
     }
     
     const Boundary * boundary = RpNumerics::getPhysics().getSubPhysics(0).getPreProcessedBoundary();
+
 
 
     if ( Debug::get_debug_level() == 5 ) {

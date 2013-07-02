@@ -124,6 +124,12 @@ double & RealVector::operator[](int comp) {
     return data[comp];
 }
 
+RealVector RealVector::zeroes(int m){
+    RealVector z(m);
+    for (int i = 0; i < m; i++) z(i) = 0.0;
+
+    return z;
+}
 
 // Output to stream
 
@@ -237,5 +243,35 @@ RealVector vector_product(const RealVector &x, const RealVector &y){
     v(2) = x(0)*y(1) - x(1)*y(0);
 
     return v;
+}
+
+// Solve the system of linear equations A*x = b
+int solve(const DoubleMatrix &A, const RealVector &b, RealVector &x){
+    int n = A.rows();
+
+    DoubleMatrix bb(n, 1), xx(n, 1);
+    for (int i = 0; i < n; i++) bb(i, 0) = b(i);
+
+    int info = solve(A, bb, xx);
+
+    x.resize(n);
+    for (int i = 0; i < n; i++) x(i) = xx(i, 0);
+
+    if (info == 0) return REALVECTOR_SOLVE_LINEAR_SYSTEM_OK;
+    else           return REALVECTOR_SOLVE_LINEAR_SYSTEM_ERROR;
+}
+
+// Multiplication of a DoubleMatrix by a RealVector
+RealVector operator*(const DoubleMatrix &A, const RealVector &x){
+    int m = A.rows(), n = A.cols();
+
+    RealVector b(m);
+
+    for (int i = 0; i < m; i++){
+        b(i) = 0.0;
+        for (int j = 0; j < n; j++) b(i) += A(i, j)*x(j);
+    }
+
+    return b;
 }
 

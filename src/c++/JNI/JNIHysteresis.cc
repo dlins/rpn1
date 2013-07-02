@@ -91,11 +91,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HysteresisCurveCalc_nativeCalc__I
 
     if (curve_segments.size() == 0 || domain_segments.size() == 0)return NULL;
 
+
     if ( Debug::get_debug_level() == 5 ) {
         cout << "Tamanho da histerese curve : " << curve_segments.size() << endl;
         cout << "Tamanho da histerese domain: " << domain_segments.size() << endl;
     }
-
     for (unsigned int i = 0; i < curve_segments.size() / 2; i++) {
 
 

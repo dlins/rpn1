@@ -366,6 +366,33 @@ int Eigen::eig(int n, const double *A, const double *B, vector<eigenpair> &vge){
     return info;
 }
 
+// Generalized eigenproblem for a given family
+int Eigen::eig(int n, const double *A, const double *B, int family, eigenpair &ep){
+    std::vector<eigenpair> e;
+    int info = eig(n, A, B, e);
+    
+    if (info == SUCCESSFUL_PROCEDURE) ep = e[family];
+    
+    return info;
+}
+
+// Generalized eigenproblem for a given family, returning ONLY the right-eigenvector
+int Eigen::eig(int n, const double *A, const double *B, int family, RealVector &r){
+    eigenpair e;
+    int info = eig(n, A, B, family, e);
+    
+    std::vector<eigenpair> ee;
+    ee.push_back(e);
+    print_eigen(ee);
+    
+    if (info == SUCCESSFUL_PROCEDURE){
+        r.resize(n);
+        for (int i = 0; i < n; i++) r(i) = e.vrr[i];
+    }
+    
+    return info;
+}
+
 void Eigen::print_eigen(const vector<eigenpair> &ve){
     for (int i = 0; i < ve.size(); i++){
         printf("Eigenpair #%d\n", i);

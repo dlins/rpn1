@@ -74,6 +74,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceCurveCalc_nativeCalc(JNIEnv
 
     newCoincidence.curve(fluxFunction, accumulationFunction, *gv, outputVector);
 
+
     if ( Debug::get_debug_level() == 5 ) {
         cout<<"Tamanho da curva de coincidencia: "<<outputVector.size() <<endl;
     }

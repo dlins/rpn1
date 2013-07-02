@@ -93,6 +93,7 @@ int Inflection_Curve::curve(const FluxFunction *f, const AccumulationFunction *a
 
     int info = ContourMethod::contour2d(this, inflection_curve);
     
+
     if ( Debug::get_debug_level() == 5 ) {
         cout<<"Tamanho da inflexao " <<inflection_curve.size()<<endl;
     }

@@ -29,6 +29,7 @@ GridValuesFactory::GridValuesFactory(const Physics * physics) : gridArray_(new m
 GridValues * GridValuesFactory::getGrid(const string & gridName) {
 
     
+
     if ( Debug::get_debug_level() == 5 ) {
         cout<<"Nome do grid: "<<gridName<<endl;
     }
