@@ -313,16 +313,10 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setResolution
 
     const char * gridNameNative = env->GetStringUTFChars(gridName, NULL);
     
-
-
     GridValues * grid = RpNumerics::getGridFactory().getGrid(string(gridNameNative));
-
-    cout <<"Nome do grid: "<<gridNameNative<<endl;
     
     const Boundary * boundary = RpNumerics::getPhysics().getSubPhysics(0).getPreProcessedBoundary();
 
-
-    cout << "Chamando set Grid" << gridNameNative << endl;
 
     grid->set_grid(boundary, boundary->minimums(), boundary->maximums(), newResolutionVector);
 

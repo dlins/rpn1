@@ -84,7 +84,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BuckleyLeverettinInflectionCurveCalc_n
 
     newBLInflection.curve(fluxFunction, accumulationFunction, *gv, outputVector);
     
-    cout<<"Tamanho do buck:"<<outputVector.size()<<endl;
+//    cout<<"Tamanho do buck:"<<outputVector.size()<<endl;
 
 
     for (int i = 0; i < outputVector.size() / 2; i++) {

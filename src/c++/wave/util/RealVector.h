@@ -5,6 +5,16 @@
 #include <fstream>
 #include <math.h>
 
+#include "DoubleMatrix.h"
+
+#ifndef REALVECTOR_SOLVE_LINEAR_SYSTEM_OK
+#define REALVECTOR_SOLVE_LINEAR_SYSTEM_OK 0
+#endif
+
+#ifndef REALVECTOR_SOLVE_LINEAR_SYSTEM_ERROR
+#define REALVECTOR_SOLVE_LINEAR_SYSTEM_ERROR 1
+#endif
+
 class RealVector {
 private:
 protected:
@@ -45,6 +55,9 @@ public:
     RealVector operator=(const RealVector &orig);
     bool operator==(const RealVector &other);
 
+    // Return a vector of zeroes
+    static RealVector zeroes(int m);
+
     // Output to stream
     friend std::ostream & operator<<(std::ostream &out, const RealVector &r);
 
@@ -83,6 +96,12 @@ public:
 
     // Vector product of two 3D RealVectors
     friend RealVector vector_product(const RealVector &x, const RealVector &y);
+
+    // Solve the system of linear equations A*x = b
+    friend int solve(const DoubleMatrix &A, const RealVector &b, RealVector &x);
+
+    // Multiplication of a DoubleMatrix by a RealVector
+    friend RealVector operator*(const DoubleMatrix &A, const RealVector &x);
 };
 
 #endif // _REALVECTOR_

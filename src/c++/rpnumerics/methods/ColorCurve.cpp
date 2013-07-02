@@ -732,7 +732,7 @@ void ColorCurve::classify_segment_with_data(
                 RealVector out;
                 //                if (zerotype < fam) Left_Newton_improvement(rtemp[i], zerotype, out);
                 //                else Right_Newton_improvement(rtemp[i], zerotype - fam, out);
-                cout << "Quem eh out : " << out << endl;
+//                cout << "Quem eh out : " << out << endl;
                 //                rtemp[i] = out;
             }
         }

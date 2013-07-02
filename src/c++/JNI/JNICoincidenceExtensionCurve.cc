@@ -127,8 +127,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceExtensionCurveCalc_nativeCa
                 curve_segments,
                 domain_segments);
 
-        cout << "Tamanho da coincidence curve extension: " << curve_segments.size() << endl;
-        cout << "Tamanho da coincidence domain extension: " << domain_segments.size() << endl;
+//        cout << "Tamanho da coincidence curve extension: " << curve_segments.size() << endl;
+//        cout << "Tamanho da coincidence domain extension: " << domain_segments.size() << endl;
 
         tpcw.postProcess(curve_segments);
         tpcw.postProcess(domain_segments);
