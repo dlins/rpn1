@@ -221,8 +221,12 @@ double norm(const RealVector &x){
 }
 
 // Normalize a RealVector
-RealVector normalize(const RealVector &x){
-    return RealVector(x/norm(x));
+void normalize(RealVector &x){
+    double inv_norm_x = 1.0/norm(x);
+
+    x = x*inv_norm_x;
+    
+    return;
 }
 
 // Inner product of two RealVectors
@@ -273,5 +277,23 @@ RealVector operator*(const DoubleMatrix &A, const RealVector &x){
     }
 
     return b;
+}
+
+RealVector matrix_row(const DoubleMatrix &m, int r){
+    int c = m.cols();
+
+    RealVector v(c);
+    for (int i = 0; i < c; i++) v(i) = m(r, i);
+
+    return v;
+}
+
+RealVector matrix_column(const DoubleMatrix &m, int c){
+    int r = m.rows();
+
+    RealVector v(r);
+    for (int i = 0; i < r; i++) v(i) = m(i, c);
+
+    return v;
 }
 

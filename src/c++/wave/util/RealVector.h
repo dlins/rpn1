@@ -89,7 +89,7 @@ public:
     friend double norm(const RealVector &x);
 
     // Normalize a RealVector
-    friend RealVector normalize(const RealVector &x);
+    friend void normalize(RealVector &x);
 
     // Inner product of two RealVectors
     friend double operator*(const RealVector &x, const RealVector &y);
@@ -102,7 +102,35 @@ public:
 
     // Multiplication of a DoubleMatrix by a RealVector
     friend RealVector operator*(const DoubleMatrix &A, const RealVector &x);
+
+    RealVector& operator+=(const RealVector &v){
+        for (int i = 0; i < size(); i++) component(i) += v(i);
+
+        return *this;
+    }
+
+    RealVector& operator-=(const RealVector &v){
+        for (int i = 0; i < size(); i++) component(i) -= v(i);
+
+        return *this;
+    }
+
+    RealVector& operator+=(double v){
+        for (int i = 0; i < size(); i++) component(i) += v;
+
+        return *this;
+    }
+
+    RealVector& operator-=(double v){
+        for (int i = 0; i < size(); i++) component(i) -= v;
+
+        return *this;
+    }
 };
+
+// Extract rows and columns of a DoubleMatrix and return them as RealVectors.
+RealVector matrix_row(const DoubleMatrix &m, int r);
+RealVector matrix_column(const DoubleMatrix &m, int c);
 
 #endif // _REALVECTOR_
 
