@@ -50,9 +50,14 @@ public class RPnSender {
 
             context = getInitialMDBContext();
 
-            //QueueConnectionFactory cf = (QueueConnectionFactory) context.lookup("java:/ConnectionFactory");
+            
             //cf = (QueueConnectionFactory) context.lookup("java:jboss/exported/jms/RemoteConnectionFactory");
+
+            // REMOTE CONNECTION
             cf = (QueueConnectionFactory) context.lookup("jms/RemoteConnectionFactory");
+
+            // LOCAL CONNECTION
+            //cf = (QueueConnectionFactory) context.lookup("java:/ConnectionFactory");
 
             queue = (javax.jms.Queue) context.lookup(destinationName);
             
@@ -146,24 +151,19 @@ public class RPnSender {
     public static Context getInitialMDBContext()
             throws javax.naming.NamingException {
 
-     /*   Properties p = new Properties();
-        p.put(Context.INITIAL_CONTEXT_FACTORY,
-                "org.jnp.interfaces.NamingContextFactory");
 
-        p.put(Context.URL_PKG_PREFIXES,
-                " org.jboss.naming:org.jnp.interfaces");
-        p.put(Context.PROVIDER_URL, "jnp://heitor:1099");        */
-        
         final Hashtable jndiProperties = new Hashtable();
         //jndiProperties.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
-        jndiProperties.put(Context.INITIAL_CONTEXT_FACTORY,"org.jboss.naming.remote.client.InitialContextFactory");        
-        //jndiProperties.put(Context.PROVIDER_URL, "remote://heitor:4447");
+        jndiProperties.put(Context.INITIAL_CONTEXT_FACTORY,"org.jboss.naming.remote.client.InitialContextFactory");
+        //jndiProperties.put(Context.INITIAL_CONTEXT_FACTORY,"org.hornetq.core.remoting.impl.netty.NettyConnectorFactory");
+
+        
         jndiProperties.put(Context.PROVIDER_URL, "remote://147.65.7.10:4447");
         jndiProperties.put(Context.SECURITY_PRINCIPAL, "rpn");
         jndiProperties.put(Context.SECURITY_CREDENTIALS, "rpn.fluid");
 
-        
-        //return new javax.naming.InitialContext(p);
+
+
         return new InitialContext(jndiProperties);
     }
 }

@@ -22,7 +22,7 @@ public class RPnConsumerThread extends Thread {
 
     public void run() {
 
-        RPnConsumer.init(queueName_);
-        RPnConsumer.startsListening();
+        //RPnHttpConsumer.init(queueName_);
+        RPnHttpConsumer.startsListening();
     }
 }
