@@ -24,6 +24,7 @@ NOTE :
 #include "RpNumerics.h"
 #include <vector>
 #include <iostream>
+#include "Debug.h"
 
 
 using std::vector;
@@ -64,7 +65,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_EllipticBoundaryCalc_nativeCalc
             *gv, left_vrs);
 
 
-    cout << "left_vrs.size()  = " << left_vrs.size() << endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout << "left_vrs.size()  = " << left_vrs.size() << endl;
+    }
 
     if (left_vrs.size() == 0)return NULL;
 

@@ -1,4 +1,5 @@
 #include "DoubleMatrix.h"
+#include "Debug.h"
 
 std::string DoubleMatrix::centered_text(double x, int w){
     std::stringstream s;
@@ -30,7 +31,9 @@ DoubleMatrix::DoubleMatrix(const DoubleMatrix &original) : Matrix<double>(origin
 DoubleMatrix::DoubleMatrix(const DoubleMatrix *original) : Matrix<double>(original), w_(DOUBLEMATRIXPRINTWIDTH){}
 
 DoubleMatrix::~DoubleMatrix(){
-   // printf("DoubleMatrix::~DoubleMatrix()\n");
+    if ( Debug::get_debug_level() == 5 ) {
+        printf("DoubleMatrix::~DoubleMatrix()\n");
+    }
 }
 
 void DoubleMatrix::print(void) const {
@@ -171,7 +174,9 @@ int inverse(const DoubleMatrix &A, DoubleMatrix &B){
     dgetrf_(&n, &n, B.data(), &lda, ipiv, &lu_info);
     if (lu_info != 0) return lu_info;
 
-    //for (int i = 0; i < n; i++) printf("ipiv(%d) = %d\n", i, ipiv[i]);
+    if ( Debug::get_debug_level() == 5 ) {
+        for (int i = 0; i < n; i++) printf("ipiv(%d) = %d\n", i, ipiv[i]);
+    }
 
     // Matrix inversion proper
     //

@@ -14,13 +14,11 @@ import wave.util.RealVector;
  */
 public class RPnCoreyToStone extends RPnFluxParamsSubject {
 
-    
     //*** Leandro teste
     public RPnCoreyToStone(String[] paramsValues, String[] paramsNames) {
         super(new String[RPNUMERICS.getFluxParams().getParams().getSize()], "Corey", paramsNames, paramsValues);
 
     }
-
 
     //*** Leandro teste
     @Override
@@ -28,6 +26,9 @@ public class RPnCoreyToStone extends RPnFluxParamsSubject {
         System.out.println("Entrei no setValues de Corey");
         String[] newState = new String[RPNUMERICS.getFluxParams().getParams().getSize()];
         
+        
+        RealVector fluxParams = RPNUMERICS.getFluxParams().getParams();
+
         newState[0] = "1.5";
         newState[1] = "1";
         newState[2] = "1";
@@ -62,22 +63,26 @@ public class RPnCoreyToStone extends RPnFluxParamsSubject {
         newState[10] = "0";
         newState[11] = "0";
 
-        newState[12] = stringArray[6];
-        newState[13] = stringArray[7];
-        newState[14] = stringArray[8];
+        newState[12] = "0";
+        newState[13] = "0";
+        newState[14] = "0";
 
-        newState[15] = "0";
-        newState[16] = "0";
-        newState[17] = "0";
+        newState[15] = stringArray[6];
+        newState[16] = stringArray[7];
+        newState[17] = stringArray[8];
         newState[18] = "0";
         newState[19] = "0";
 
-//        System.out.println("Valor do newState : ");
-//        for (String string : newState) {
-//            System.out.println(string);
-//        }
+
+        newState[20] = String.valueOf(fluxParams.getElement(20));
+        newState[21] = String.valueOf(fluxParams.getElement(21));
+        newState[22] = String.valueOf(fluxParams.getElement(22));
+        newState[23] = "0";
+        newState[24] = "1";
+        newState[25] = "1";
+        newState[26] = "1";
 
         setState(newState);
-        
+
     }
 }

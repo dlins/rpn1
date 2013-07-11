@@ -13,6 +13,7 @@
 #include "SubPhysics.h"
 #include "physics/tpcw/Hugoniot_TP.h"
 #include "ThreeImplicitFunctions.h"
+#include "Debug.h"
 
 /*
  * ---------------------------------------------------------------
@@ -36,19 +37,6 @@ type_(type) {
 }
 
 
-//
-// SubPhysics::SubPhysics(const FluxFunction & fluxFunction, const AccumulationFunction & accumulationFunction,
-//         const Boundary & boundary,  Viscosity_Matrix * viscosityMatrix,const Space & space, const char * id, int type):fluxFunction_((FluxFunction *) fluxFunction.clone()),
-//accumulationFunction_((AccumulationFunction*) accumulationFunction.clone()), viscosityMatrix_(viscosityMatrix),
-//boundary_(boundary.clone()),
-//space_(new Space(space)),
-//ID_(id),
-//type_(type) {
-//     
-//     
-//     
-//     
-// }
 
 
 
@@ -81,7 +69,9 @@ void SubPhysics::boundary(const Boundary & newBoundary) {
 void SubPhysics::setParams(vector<string> paramsVector) {
 
     for (int i = 0; i < paramsVector.size(); i++) {
+    if ( Debug::get_debug_level() == 5 ) {
         cout << "Param " << i << " :" << paramsVector[i] << endl;
+    }
 
     }
 

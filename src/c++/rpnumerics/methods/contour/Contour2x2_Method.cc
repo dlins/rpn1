@@ -1,4 +1,5 @@
 #include "Contour2x2_Method.h"
+#include "Debug.h"
 
 
 #include <iostream>
@@ -85,8 +86,10 @@ void Contour2x2_Method::allocate_arrays(void){
 
         is_first = false;
 
-        printf("++++++++++++++++ Contour2x2_Method: REMEMBER TO INVOKE deallocate_arrays() AT QUIT-TIME!!!\n++++++++++++++++ DON\'T SAY I DIDN\'T WARN YOU!!!\n");
-        printf("    After allocating arrays, nsface_ = %d, nface_ =  %d\n", nsface_, nface_);
+        if ( Debug::get_debug_level() == 5 ) {
+            printf("++++++++++++++++ Contour2x2_Method: REMEMBER TO INVOKE deallocate_arrays() AT QUIT-TIME!!!\n++++++++++++++++ DON\'T SAY I DIDN\'T WARN YOU!!!\n");
+            printf("    After allocating arrays, nsface_ = %d, nface_ =  %d\n", nsface_, nface_);
+        }
     }
 }
 
@@ -96,7 +99,9 @@ void Contour2x2_Method::deallocate_arrays(void){
         delete [] index;
         is_first = true;
     }
-    printf("++++++++++++++++ Contour2x2_Method: arrays deallocated. ++++++++++++++++\n");
+    if ( Debug::get_debug_level() == 5 ) {
+        printf("++++++++++++++++ Contour2x2_Method: arrays deallocated. ++++++++++++++++\n");
+    }
 }
 
 typedef std::vector<RealVector> rvector;
@@ -284,15 +289,17 @@ bool Contour2x2_Method::filhcub4(ThreeImplicitFunctions *timpf,
             }
         }
     }
-//    // DEBUG: Sufficient condition:
-//    //        Probably next line must be increased becaus index[2] = 3:
-//    //        if (!timpf->function_on_cell(val, ir, jr, 2, 2)) return false;
-//    if ( (refval[0]*val[0] < 0.0) && (refval[1]*val[1] < 0.0) && (refval[2]*val[2] < 0.0) ) {
-//        cout << endl;
-//        cout << "***** Sufficient (" << ir << ", " << jr << "): " << refval[0] << " " << refval[1] << " " << refval[2] << " *****" << endl;
-//        cout << "                 (" << ir << ", " << jr << "): " << val[0]    << " " << val[1]    << " " << val[2] << endl;
-//    }
-//    // END DEBUG
+    // DEBUG: Sufficient condition:
+    //        Probably next line must be increased becaus index[2] = 3:
+    //        if (!timpf->function_on_cell(val, ir, jr, 2, 2)) return false;
+    if ( Debug::get_debug_level() == 5 ) {
+        if ( (refval[0]*val[0] < 0.0) && (refval[1]*val[1] < 0.0) && (refval[2]*val[2] < 0.0) ) {
+            cout << endl;
+            cout << "***** Sufficient (" << ir << ", " << jr << "): " << refval[0] << " " << refval[1] << " " << refval[2] << " *****" << endl;
+            cout << "                 (" << ir << ", " << jr << "): " << val[0]    << " " << val[1]    << " " << val[2] << endl;
+        }
+    }
+    // END DEBUG
      
     if (!zero[0]) return false;
     if (!zero[1]) return false;
@@ -307,18 +314,18 @@ void Contour2x2_Method::filedg4(Matrix<double> &sol_, Matrix<int> &edges_, int n
 
     double epsilon = 1e-10;
 
-//    /* START_DEBUG (1/2) */
-//    bool imprime = false;
-//    int segmentos = 0;
-//    if (nedges_ > 0) {
-//        cout << "For " << nedges_ << " nedges (" << il << ", " << jl << ", " << ir << ", " << jr << ") : " << endl;
-//        for(int i = 0; i < nedges_; i++){
-//            cout << edges_(0, i) << " " << edges_(1, i) << " :: ";
-//        }
-//        cout << endl;
-//        imprime = true;
-//    }
-//    /* END_DEBUG (1/2) The second part of DEBUG is not always necessary */
+    // START_DEBUG (1/2) */
+    int segmentos = 0;
+    if ( Debug::get_debug_level() == 5 ) {
+        if (nedges_ > 0) {
+            cout << "For " << nedges_ << " nedges (" << il << ", " << jl << ", " << ir << ", " << jr << ") : " << endl;
+            for(int i = 0; i < nedges_; i++){
+                cout << edges_(0, i) << " " << edges_(1, i) << " :: ";
+            }
+            cout << endl;
+        }
+    }
+    // } (1/2) The second part of DEBUG is not always necessary */
 
     // Store all pairs of edges that were found
     double temp[2]; temp[0] = 0.0; temp[1] = 0.0;
@@ -362,7 +369,7 @@ void Contour2x2_Method::filedg4(Matrix<double> &sol_, Matrix<int> &edges_, int n
         }
         if ( (norm1 < epsilon) && (norm2 < epsilon) ) continue;
         p1_old = p1; p2_old = p2; p3_old = p3; p4_old = p4;
-        /* END of GAMBIARRAS!!! */
+        // END of GAMBIARRAS!!!
 
         left_vrs.push_back(p1);
         left_vrs.push_back(p2);
@@ -370,21 +377,23 @@ void Contour2x2_Method::filedg4(Matrix<double> &sol_, Matrix<int> &edges_, int n
         right_vrs.push_back(p3);
         right_vrs.push_back(p4);
 
-//        /* START_DEBUG (2/2) TODO: It needs the first part of the DEBUG */
-//        if(imprime){
-//            printf("At points (%2d, %2d, %2d, %2d) [%2d/%2d--%2d]: p1 = %1.6f, %1.6f;  p2 = %1.6f, %1.6f\n",
-//                    il, jl, ir, jr, nedges_, edges_(0, nedg), edges_(1, nedg),
-//                    p1.component(0), p1.component(1), p2.component(0), p2.component(1));
-//            printf("                           [%2d/%2d--%2d]: p3 = %1.6f, %1.6f;  p4 = %1.6f, %1.6f\n",
-//                    nedges_, edges_(0, nedg), edges_(1, nedg),
-//                    p3.component(0), p3.component(1), p4.component(0), p4.component(1));
-//        }
-//        segmentos++;
-//        /* END_DEBUG (2/2)*/
+        // START_DEBUG (2/2) TODO: It needs the first part of the DEBUG */
+        if ( Debug::get_debug_level() == 5 ) {
+                printf("At points (%2d, %2d, %2d, %2d) [%2d/%2d--%2d]: p1 = %1.6f, %1.6f;  p2 = %1.6f, %1.6f\n",
+                    il, jl, ir, jr, nedges_, edges_(0, nedg), edges_(1, nedg),
+                    p1.component(0), p1.component(1), p2.component(0), p2.component(1));
+                printf("                           [%2d/%2d--%2d]: p3 = %1.6f, %1.6f;  p4 = %1.6f, %1.6f\n",
+                    nedges_, edges_(0, nedg), edges_(1, nedg),
+                    p3.component(0), p3.component(1), p4.component(0), p4.component(1));
+            segmentos++;
+        }
+        // (2/2)
 
     }
 
-//    if(nedges_ > 0) cout << "Apos gambiarras, temos " << segmentos << "/" << nedges_ << " segmentos" << endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        if(nedges_ > 0) cout << "Apos gambiarras, temos " << segmentos << "/" << nedges_ << " segmentos" << endl;
+    }
 
     return;
 }

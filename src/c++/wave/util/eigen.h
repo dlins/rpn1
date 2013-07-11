@@ -7,6 +7,8 @@
 #include <stdlib.h>
 #include <math.h>
 
+#include "RealVector.h"
+
 using namespace std;
 
 // When beta is near zero (for the generalized eigenproblem),
@@ -55,24 +57,26 @@ struct eigenpair {
         vector<double> vrr; // Real part of the right-eigenvector
         vector<double> vri; // Imaginary part of the right-eigenvector
         
-       eigenpair & operator=(const eigenpair &original){
-            r = original.r;
-            i = original.i;
+       eigenpair operator=(const eigenpair &original){
+           if (this != &original){
+               r = original.r;
+               i = original.i;
             
-           int n = original.vlr.size();
-            vlr.resize(n);
-            vli.resize(n);
-            vrr.resize(n);
-            vri.resize(n);
+               int n = original.vlr.size();
+               vlr.resize(n);
+               vli.resize(n);
+               vrr.resize(n);
+               vri.resize(n);
             
-            for (int i = 0; i < n; i++){
-                vlr[i] = original.vlr[i];
-                vli[i] = original.vli[i];
-                vrr[i] = original.vrr[i];
-                vri[i] = original.vri[i];
-        }
+               for (int i = 0; i < n; i++){
+                   vlr[i] = original.vlr[i];
+                   vli[i] = original.vli[i];
+                   vrr[i] = original.vrr[i];
+                   vri[i] = original.vri[i];
+               }
+            }
 
-        return *this;
+            return *this;
         }
         
 };
@@ -89,8 +93,11 @@ class Eigen {
         static void sort_eigen(int, eigenpair*);
     protected:
     public:
-        static int eig(int, const double*, vector<eigenpair>&);                // Eigenproblem
-        static int eig(int, const double*, const double*, vector<eigenpair>&); // Generalized eigenproblem
+        static int eig(int n, const double*, vector<eigenpair>&);                // Eigenproblem
+        static int eig(int n, const double*, const double*, vector<eigenpair>&); // Generalized eigenproblem
+        static int eig(int n, const double*, const double*, int family, eigenpair&); // Generalized eigenproblem for a given family
+        static int eig(int n, const double *A, const double *B, int family, RealVector &r); //Generalized eigenproblem for a given family, returning ONLY the right-eigenvector
+
         static void print_eigen(const vector<eigenpair> &);
         static void eps(double);
         static double eps(void);

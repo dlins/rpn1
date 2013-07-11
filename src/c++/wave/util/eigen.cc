@@ -1,4 +1,5 @@
 #include "eigen.h"
+#include "Debug.h"
 
 // Initialize the value of the epsilon
 double Eigen::epsilon(1e-10);
@@ -115,7 +116,9 @@ void Eigen::fill_eigen(int n, struct eigenpair e[], double rp[], double ip[], do
                 i++;
             }
             else{              // This should never happen, but just in case...
-                printf("Problem in fill_eigen! i = %d\n", i);
+                if ( Debug::get_debug_level() == 5 ) {
+                    printf("Problem in fill_eigen! i = %d\n", i);
+                }
             }
         }
     }    
@@ -254,7 +257,9 @@ int Eigen::eig(int n, const double *A, const double *B, vector<eigenpair> &vge){
 
     // Success!
     if (info == 0) {
-//        for (int i = 0; i < dim; i++) printf("alphar[%d] = %g, alphai[%d] = %g, beta[%d] = %g\n", i, alphar[i], i, alphai[i], i, beta[i]);
+        if ( Debug::get_debug_level() == 5 ) {
+            for (int i = 0; i < dim; i++) printf("alphar[%d] = %g, alphai[%d] = %g, beta[%d] = %g\n", i, alphar[i], i, alphai[i], i, beta[i]);
+        }
 
         // Abort if some beta is smaller than sum_i(abs(alphar(i)) + abs(alphai(i))).
         double sum = 0;
@@ -349,13 +354,42 @@ int Eigen::eig(int n, const double *A, const double *B, vector<eigenpair> &vge){
                 pos++;
             }
             else {
-                //printf("Eigenvalue discarded: %d\n", pos);
+                if ( Debug::get_debug_level() == 5 ) {
+                    printf("Eigenvalue discarded: %d\n", pos);
+                }
             }
         }
 
         sort(vge.begin(), vge.end(), eigen_compare);
     }
 
+    return info;
+}
+
+// Generalized eigenproblem for a given family
+int Eigen::eig(int n, const double *A, const double *B, int family, eigenpair &ep){
+    std::vector<eigenpair> e;
+    int info = eig(n, A, B, e);
+    
+    if (info == SUCCESSFUL_PROCEDURE) ep = e[family];
+    
+    return info;
+}
+
+// Generalized eigenproblem for a given family, returning ONLY the right-eigenvector
+int Eigen::eig(int n, const double *A, const double *B, int family, RealVector &r){
+    eigenpair e;
+    int info = eig(n, A, B, family, e);
+    
+    std::vector<eigenpair> ee;
+    ee.push_back(e);
+    print_eigen(ee);
+    
+    if (info == SUCCESSFUL_PROCEDURE){
+        r.resize(n);
+        for (int i = 0; i < n; i++) r(i) = e.vrr[i];
+    }
+    
     return info;
 }
 

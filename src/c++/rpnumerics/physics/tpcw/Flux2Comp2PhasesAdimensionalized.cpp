@@ -1,9 +1,12 @@
 #include "Flux2Comp2PhasesAdimensionalized.h"
+#include "Debug.h"
 
 Flux2Comp2PhasesAdimensionalized::Flux2Comp2PhasesAdimensionalized(const Flux2Comp2PhasesAdimensionalized &a) : FluxFunction(a.FluxFunction::fluxParams()) {
 
     //    const Flux2Comp2PhasesAdimensionalized_Params & fluxParams = (const Flux2Comp2PhasesAdimensionalized_Params &) a.fluxParams();
-    cout << "Construtor de copia de Flux2CompPhasesAdimensionalized "<<a.FluxFunction::fluxParams().params() << endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout << "Construtor de copia de Flux2CompPhasesAdimensionalized "<<a.FluxFunction::fluxParams().params() << endl;
+    }
 
 
     TD = a.TD;
@@ -25,7 +28,9 @@ Flux2Comp2PhasesAdimensionalized::Flux2Comp2PhasesAdimensionalized(const Flux2Co
 
 Flux2Comp2PhasesAdimensionalized::Flux2Comp2PhasesAdimensionalized(const Flux2Comp2PhasesAdimensionalized_Params &param) : FluxFunction(param) {
 
-    cout << "Parametros de fluxo: " << param.params()<< endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout << "Parametros de fluxo: " << param.params()<< endl;
+    }
 
     abs_perm = param.component(0);
     sin_beta = param.component(1);
@@ -68,7 +73,9 @@ void Flux2Comp2PhasesAdimensionalized::fluxParams(const FluxParams & param) {
 
     FluxFunction::fluxParams(param);
 
-    cout <<"Setando parametros de fluxo: "<<endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout <<"Setando parametros de fluxo: "<<endl;
+    }
 
 
     if (param.component(2) == 1.0) {
@@ -96,7 +103,9 @@ void Flux2Comp2PhasesAdimensionalized::fluxParams(const FluxParams & param) {
 
     grav = abs_perm * sin_beta*const_gravity;
 
-    cout <<abs_perm<<" "<< sin_beta<<" "<<has_gravity<<" "<<has_horizontal<<" "<< cnw<<" "<<cng<<" "<<expw<<" "<<expg<<endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout <<abs_perm<<" "<< sin_beta<<" "<<has_gravity<<" "<<has_horizontal<<" "<< cnw<<" "<<cng<<" "<<expw<<" "<<expg<<endl;
+    }
 
 
 }
@@ -268,7 +277,9 @@ int Flux2Comp2PhasesAdimensionalized::jet(const WaveState &w, JetMatrix &m, int 
     double U = w(2);
 //    double U=1.0;
 
-    //    cout <<"s: "<<s<<" Theta:"<<Theta<<" U:"<<U<<endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout <<"s: "<<s<<" Theta:"<<Theta<<" U:"<<U<<endl;
+    }
 
     // Recovering the U_typical_
     //    double U_typical_=TD->U_typical();
@@ -315,7 +326,9 @@ int Flux2Comp2PhasesAdimensionalized::jet(const WaveState &w, JetMatrix &m, int 
     double out220 = 0.0, out221 = 0.0, out222 = 0.0;
 
     // Begin of pure horizontal
-    //    cout <<"aqui"<<endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout <<"aqui"<<endl;
+    }
     if (has_horizontal) {
 
         double f, df_ds, df_dTheta, d2f_ds2, d2f_dsdTheta, d2f_dThetads, d2f_dTheta2; // f=f_{sigma}, s=s_{sigma}
@@ -542,11 +555,13 @@ int Flux2Comp2PhasesAdimensionalized::jet(const WaveState &w, JetMatrix &m, int 
             m(2, 1, out21);
             m(2, 2, out22);
 
-            //            for (int i = 0; i < 3; i++){
-            //                for (int j = 0; j < 3; j++){
-            //                    printf("ff(%d, %d) = %g\n", i, j, m(i, j));
-            //                }
-            //            }
+            if ( Debug::get_debug_level() == 5 ) {
+                        for (int i = 0; i < 3; i++){
+                            for (int j = 0; j < 3; j++){
+                                printf("ff(%d, %d) = %g\n", i, j, m(i, j));
+                            }
+                        }
+	    }
 
             if (degree >= 2) {
                 m(0, 0, 0, out000);
@@ -609,10 +624,11 @@ int Flux2Comp2PhasesAdimensionalized::FracFlow2PhasesHorizontalAdimensionalized:
 
     double T = fluxComplete_->TD->Theta2T(Theta);
 
-    //    cout << "T em flux H: " << T << endl;
-    //    cout << "Theta em flux H: " << Theta << endl;
-    //
-    //    cout <<"Valor de sw: "<<sw<<endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout << "T em flux H: " << T << endl;
+        cout << "Theta em flux H: " << Theta << endl;
+        cout <<"Valor de sw: "<<sw<<endl;
+    }
 
     //    double T = Flux2Comp2PhasesAdimensionalized::getThermo()->Theta2T(Theta);
 
@@ -666,11 +682,12 @@ int Flux2Comp2PhasesAdimensionalized::FracFlow2PhasesHorizontalAdimensionalized:
     //--------------------------------------------------------------------
 
     //
-    //    cout << T << " " << nuw << " " << dnuw_dT << " " << d2nuw_dT2 << endl;
-    //    cout << nug << " " << dnug_dT << " " << d2nug_dT2 << " " << endl;
-    //
-    //    cout << muw << " " << dmuw_dT << " " << d2muw_dT2 << " " << endl;
-    //    cout << mug << " " << dmug_dT << " " << d2mug_dT2 << " " << endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout << T << " " << nuw << " " << dnuw_dT << " " << d2nuw_dT2 << endl;
+        cout << nug << " " << dnug_dT << " " << d2nug_dT2 << " " << endl;
+        cout << muw << " " << dmuw_dT << " " << d2muw_dT2 << " " << endl;
+        cout << mug << " " << dmug_dT << " " << d2mug_dT2 << " " << endl;
+    }
 
 
 

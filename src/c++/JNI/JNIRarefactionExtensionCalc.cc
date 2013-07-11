@@ -17,6 +17,7 @@
 #include "Stone.h"
 #include "StoneAccumulation.h"
 #include "RectBoundary.h"
+#include "Debug.h"
 #include <vector>
 
 #include "Rarefaction_Extension.h"
@@ -63,7 +64,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionExtensionCalc_nativeCalc(JN
     env->DeleteLocalRef(phasePointArray);
 
     RealVector inputPoint(dimension, input);
-    cout << inputPoint << endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout << inputPoint << endl;
+    }
 
     jobject leftSegmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
 

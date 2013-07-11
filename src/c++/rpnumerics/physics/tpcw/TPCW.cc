@@ -13,6 +13,7 @@
 #include "TPCW.h"
 #include "Double_Contact_TP.h"
 #include "ShockContinuationMethod3D2D.h"
+#include "Debug.h"
 
 /*
  * ---------------------------------------------------------------
@@ -69,20 +70,22 @@ SubPhysics(*defaultBoundary(), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATIO
     fluxFunction_ = new Flux2Comp2PhasesAdimensionalized(Flux2Comp2PhasesAdimensionalized_Params(fluxVector, TD));
     accumulationFunction_ = new Accum2Comp2PhasesAdimensionalized(Accum2Comp2PhasesAdimensionalized_Params(TD, paramsVector.component(8)));
 
-    cout << "Flux: " << fluxFunction_ << endl;
-    cout << "Accum: " << accumulationFunction_ << endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout << "Flux: " << fluxFunction_ << endl;
+        cout << "Accum: " << accumulationFunction_ << endl;
+    }
 
 
     setHugoniotFunction(new Hugoniot_TP());
     setDoubleContactFunction(new Double_Contact_TP());
     setShockMethod(new ShockContinuationMethod3D2D());
 
-        
+
     RealVector min(getBoundary().minimums());
 
     RealVector max(getBoundary().maximums());
-    
 
+    setViscosityMatrix(new Viscosity_Matrix());
 
 
     preProcess(min);
@@ -120,11 +123,12 @@ void TPCW::setParams(vector<string> params) {
     TD->UTypical(atof(params[11].c_str()));
 
     RealVector fluxParamVector(8);
-
+    double paramValue;
     //Flux params
     for (int i = 0; i < fluxParamVector.size(); i++) {
+        std::stringstream stream(params[i]);
+        stream >> paramValue;
 
-        double paramValue = atof(params[i].c_str());
         fluxParamVector.component(i) = paramValue;
     }
 
@@ -142,35 +146,31 @@ void TPCW::setParams(vector<string> params) {
 
 }
 
+vector<double> * TPCW::getParams() {
 
 
-vector<double> *  TPCW::getParams(){
-     
-     
-     
-     vector<double> * paramsVector = new vector<double>();
-      
-      for (int i = 0; i < fluxFunction_->fluxParams().params().size(); i++) {
-          paramsVector->push_back(fluxFunction_->fluxParams().params().component(i));
+
+    vector<double> * paramsVector = new vector<double>();
+
+    for (int i = 0; i < fluxFunction_->fluxParams().params().size(); i++) {
+        paramsVector->push_back(fluxFunction_->fluxParams().params().component(i));
 
     }
-     
-     for (int i = 0; i < accumulationFunction_->accumulationParams().params().size(); i++) {
 
-         
-         paramsVector->push_back( accumulationFunction_->accumulationParams().component(i));
+    for (int i = 0; i < accumulationFunction_->accumulationParams().params().size(); i++) {
+
+
+        paramsVector->push_back(accumulationFunction_->accumulationParams().component(i));
 
 
     }
 
-     
 
 
-      return paramsVector;
+
+    return paramsVector;
 
 }
-
-
 
 TPCW::TPCW(const TPCW & copy) :
 SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.getBoundary(), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATION_),
@@ -182,11 +182,13 @@ TD(new Thermodynamics_SuperCO2_WaterAdimensionalized(*copy.TD)) {
     setShockMethod(new ShockContinuationMethod3D2D());
 
     
+    setViscosityMatrix(new Viscosity_Matrix());
+
     RealVector min = copy.preProcessedBoundary_->minimums();
     RealVector max = copy.preProcessedBoundary_->maximums();
-    
-    
-    preProcessedBoundary_ = new RectBoundary(min,max);
+
+
+    preProcessedBoundary_ = new RectBoundary(min, max);
 
 
 }
@@ -194,7 +196,9 @@ TD(new Thermodynamics_SuperCO2_WaterAdimensionalized(*copy.TD)) {
 //void TPCW::setParams(vector<string> params) {
 //
 //    for (int i = 0; i < params.size(); i++) {
-//        cout << "i: "<<i<<" " <<params.at(i) << endl;
+//        if ( Debug::get_debug_level() == 5 ) {
+//            cout << "i: "<<i<<" " <<params.at(i) << endl;
+//        }
 //
 //
 //    }
@@ -208,7 +212,9 @@ TD(new Thermodynamics_SuperCO2_WaterAdimensionalized(*copy.TD)) {
 //
 //    }
 //
-//    cout << "Parametros em setParams:" << fluxParamVector << endl;
+//    if ( Debug::get_debug_level() == 5 ) {
+//        cout << "Parametros em setParams:" << fluxParamVector << endl;
+//    }
 //
 //
 //    fluxFunction_->fluxParams(fluxParamVector); // = new Flux2Comp2PhasesAdimensionalized(Flux2Comp2PhasesAdimensionalized_Params(fluxVector, TD));
@@ -257,9 +263,11 @@ Boundary * TPCW::defaultBoundary()const {
     min.component(2) = 0 * 4.22e-3;
 
 
-    //    cout <<min.component(0)<<"<--------MIN 0"<<endl;
-    //    cout << min.component(1) << "<--------MIN 1" << endl;
-    //    cout << min.component(2) << "<--------MIN 2" << endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout <<min.component(0)<<"<--------MIN 0"<<endl;
+        cout << min.component(1) << "<--------MIN 1" << endl;
+        cout << min.component(2) << "<--------MIN 2" << endl;
+    }
 
     RealVector max(3);
 
@@ -270,9 +278,11 @@ Boundary * TPCW::defaultBoundary()const {
     max.component(2) = 2 * 4.22e-3; // The domain is 20 times as much as U_typical
 
 
-    //    cout <<max.component(0)<<"<----------MAX 0"<<endl;
-    //    cout << max.component(1) << "<-------MAX 1" << endl;
-    //    cout << max.component(2) << "<------MAX 2" << endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout <<max.component(0)<<"<----------MAX 0"<<endl;
+        cout << max.component(1) << "<-------MAX 1" << endl;
+        cout << max.component(2) << "<------MAX 2" << endl;
+    }
 
     return new RectBoundary(min, max);
 

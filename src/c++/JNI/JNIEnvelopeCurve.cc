@@ -21,6 +21,7 @@ NOTE :
 #include "rpnumerics_EnvelopeCurveCalc.h"
 #include "JNIDefs.h"
 #include "RpNumerics.h"
+#include "Debug.h"
 #include <vector>
 #include <iostream>
 
@@ -65,11 +66,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_EnvelopeCurveCalc_nativeCalc
 
     GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcation");
 
-    cout << "constant : " << where_constant << endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout << "constant : " << where_constant << endl;
+        cout << "number of steps : " << number_of_steps << endl;
+    }
 
-    cout << "number of steps : " << number_of_steps << endl;
-
-     Boundary * physicsBoundary = (Boundary *)&RpNumerics::getPhysics().boundary();
+    Boundary * physicsBoundary = (Boundary *)&RpNumerics::getPhysics().boundary();
 
     const char * boundaryType = physicsBoundary->boundaryType();
 
@@ -93,10 +95,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_EnvelopeCurveCalc_nativeCalc
 
 
 
-    cout << "left_vrs.size()  = " << left_vrs.size() << endl;
-
-
-    cout << "right_vrs.size()  = " << right_vrs.size() << endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout << "left_vrs.size()  = " << left_vrs.size() << endl;
+        cout << "right_vrs.size()  = " << right_vrs.size() << endl;
+    }
 
 
     if (left_vrs.size() == 0 || right_vrs.size() == 0)return NULL;

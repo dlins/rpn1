@@ -23,6 +23,7 @@ NOTE :
 #include "WaveCurve.h"
 #include "JNIDefs.h"
 #include "RpNumerics.h"
+#include "Debug.h"
 #include <vector>
 #include <iostream>
 
@@ -87,7 +88,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
 
     int forwardListSize = env->CallIntMethod(forwardList, arrayListSizeMethodID);
 
-    //    cout << "Tamanho da lista para frente: " << forwardListSize << endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout << "Tamanho da lista para frente: " << forwardListSize << endl;
+    }
 
     vector<Curve> forwardCurvesVector;
     vector<Curve> backwardCurvesVector;
@@ -131,7 +134,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
             int curveIndex = (env)->CallIntMethod(waveCurveOrbit, getCurveIndexMethodID);
             int curveType = (env)->CallIntMethod(waveCurveOrbit, getCurveTypeMethodID);
 
-//            cout << "Curva para frente C: " << pointBuffer[0] << " " << pointBuffer[1] << " " << correspondingCurveIndex << " " << correspondingPointIndex << " " << curveIndex << " " << curveType << endl;
+            if ( Debug::get_debug_level() == 5 ) {
+                cout << "Curva para frente C: " << pointBuffer[0] << " " << pointBuffer[1] << " " << correspondingCurveIndex << " " << correspondingPointIndex << " " << curveIndex << " " << curveType << endl;
+            }
 
 
         }
@@ -150,7 +155,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
 
     int backwardListSize = env->CallIntMethod(backwardList, arrayListSizeMethodID);
 
-    //    cout << "Tamanho da lista para tras: " << backwardListSize << endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout << "Tamanho da lista para tras: " << backwardListSize << endl;
+    }
 
 
 
@@ -189,7 +196,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
             int curveIndex = (env)->CallIntMethod(waveCurveOrbit, getCurveIndexMethodID);
             int curveType = (env)->CallIntMethod(waveCurveOrbit, getCurveTypeMethodID);
 
-            //                        cout << "Curva para tras C: " << pointBuffer[0] << " " << pointBuffer[1] << " " << correspondingCurveIndex << " " << correspondingPointIndex << " " << curveIndex << " " << curveType << endl;
+            if ( Debug::get_debug_level() == 5 ) {
+                cout << "Curva para tras C: " << pointBuffer[0] << " " << pointBuffer[1] << " " << correspondingCurveIndex << " " << correspondingPointIndex << " " << curveIndex << " " << curveType << endl;
+            }
 
 
         }
@@ -208,7 +217,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
 
     vector<RealVector> profile;
     
-    cout<<"DownLeft: "<<nativeDownLeft<<" TopRight"<<nativeTopRight<<endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout<<"DownLeft: "<<nativeDownLeft<<" TopRight"<<nativeTopRight<<endl;
+    }
 
 
     int solverOutput = RiemannSolver::saturation_profiles(forwardCurvesVector, // Family 0, forward
@@ -217,16 +228,20 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
             0.45,
             profile);
 
-    cout << "Retorno do perfil: " << solverOutput <<" Tamanho do perfil: "<<profile.size()<< endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout << "Retorno do perfil: " << solverOutput <<" Tamanho do perfil: "<<profile.size()<< endl;
+    }
     
     if (profile.size()==0)
         return NULL;
 
 
 
-    cout << "Coordenadas do perfil" << endl;
-    for (int i = 0; i < profile.size(); i++) {
-        cout << profile.at(i)(2) << " " << profile.at(i)(0) << " " << profile.at(i)(1) << endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout << "Coordenadas do perfil" << endl;
+        for (int i = 0; i < profile.size(); i++) {
+            cout << profile.at(i)(2) << " " << profile.at(i)(0) << " " << profile.at(i)(1) << endl;
+        }
     }
 
 
@@ -235,7 +250,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
 
         RealVector tempVector = profile.at(i);
 
-        //cout<<tempVector<<endl;
+        if ( Debug::get_debug_level() == 5 ) {
+            cout<<tempVector<<endl;
+        }
 
         double * dataCoords = tempVector;
 

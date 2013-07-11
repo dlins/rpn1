@@ -21,6 +21,7 @@
 #include "Quad2FluxParams.h"
 #include "RectBoundary.h"
 #include "Shock.h"
+#include "Quad2_Viscosity_Matrix.h"
 
 class Quad2 : public SubPhysics {
 private:

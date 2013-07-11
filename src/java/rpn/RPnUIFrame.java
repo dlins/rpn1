@@ -480,6 +480,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             }
 
         }
+        
+        createPanelsChooser();
 
     }
 
@@ -554,16 +556,14 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             checkBox.addItemListener(new PanelsSeletectedListener(mainFrame));
             panelsChooserPanel_.add(checkBox);
         }
+        
 
-//        
-//        System.out.println("Tamanho dos aux:"+getAuxFrames().length);
-//        for (RPnPhaseSpaceFrame auxFrame : getAuxFrames()) {
-//            System.out.println(auxFrame);
-//            JCheckBox checkBox = new JCheckBox(auxFrame.getTitle());
-//            checkBox.addItemListener(new PanelsSeletectedListener(auxFrame));
-//            panelsChooserPanel_.add(checkBox);
-//
-//        }
+        for (RPnPhaseSpaceFrame auxFrame : getAuxFrames()) {
+            JCheckBox checkBox = new JCheckBox(auxFrame.getTitle());
+            checkBox.addItemListener(new PanelsSeletectedListener(auxFrame));
+            panelsChooserPanel_.add(checkBox);
+
+        }
 
     }
 
@@ -583,7 +583,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         try {
             String path = chooser.getSelectedFile().getAbsolutePath();
 
-            if (selectectedPanels.size() == 0) {
+            if (selectectedPanels.isEmpty()) {
                 JOptionPane.showMessageDialog(chooser, "Choose a panel", "Error", JOptionPane.ERROR_MESSAGE);
             } else {
 

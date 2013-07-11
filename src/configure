@@ -42,34 +42,34 @@ hostsys=`uname -s | tr '[:upper:]' '[:lower:]'`
 hostmach=`uname -m`
 hosttype=$hostsys"_"$hostmach
 
+ 
+if [ $hostsys == "darwin" ]; then
+	# Fixed path for MacOS
+	javahome="/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home"
+else
+	echo; echo "Choose the JAVA_HOME installation path below: "; echo
 
-echo; echo "Choose the JAVA_HOME installation path below: "; echo
-
-for j in `echo $jni`; do
-	j=`dirname $j`
-	j=`dirname $j`
-	jnidir[$i]=$j
-
-	echo "      "$i") "${jnidir[$i]}
-	i=$(($i + 1))
-done
-
-echo "      "$i") None of the above. Entre JAVA_HOME manually."
-echo -n "      > "; read -n 1 ans; echo
-
-if [ $ans == $i ]; then
-	echo -n "Entre JAVA_HOME path: "
-	read javahome
-else 
-	javahome=${jnidir[$ans]}
+	for j in `echo $jni`; do
+		j=`dirname $j`
+		j=`dirname $j`
+		jnidir[$i]=$j
+	
+		echo "      "$i") "${jnidir[$i]}
+		i=$(($i + 1))
+	done
+	
+	echo "      "$i") None of the above. Enter JAVA_HOME manually."
+	echo -n "      > "; read ans; echo
+	
+	if [ $ans == $i ]; then
+		echo -n "Enter JAVA_HOME path: "
+		read javahome
+	else 
+		javahome=${jnidir[$ans]}
+	fi
 fi
 
 javainc=$javahome/include
-
-if [ $hostsys == "darwin" ]; then
-	javainc=$javahome"/Headers"
-	javahome=$javahome"/Home"
-fi
 
 
 #
@@ -81,7 +81,6 @@ sed -e "s,PRE_CONFIG_HOSTTYPE,$hosttype,g" $srcdir/make/build.xml.in > $srcdir/b
 # Create make/env file
 #
 cat << EOF > $srcdir/make/env
-#
 # env - RPn makefile environment variable settings
 #       If left empty, makefile will get shell settings
 RPGNU=yes
@@ -92,7 +91,6 @@ PATH=$PATH:$rpnhome/bin
 EOF
 
 cat << EOF > $srcdir/make/env.csh
-#
 # env - RPn makefile environment variable settings
 #       If left empty, makefile will get shell settings
 setenv RPGNU yes
@@ -102,8 +100,55 @@ setenv JAVA_INC $javainc
 setenv PATH "$PATH":"$rpnhome/bin"
 EOF
 
+
+# 
+# Choose setup environment file 
+#
+if [ $SHELL == "/bin/csh" ]; then
+	rcFile="$HOME/.cshrc"
+	envFile="$srcdir/make/env.csh"
+
+elif [ $SHELL == "/bin/bash" ]; then
+	if [ $hostsys == "darwin" ]; then
+		rcFile="$HOME/.profile"
+	else
+		rcFile="$HOME/.bashrc"
+	fi
+	envFile="$srcdir/make/env"
+
+else
+	rcFile="$HOME/.bashrc"
+	envFile="$srcdir/make/env"
+fi
+	
+#echo "Select the shell setup file you want to include"
+#echo "the environment variables needed to run RPn:"
+#echo
+#echo "      1) "$rcFile
+#echo "      2) Enter filename manually."
+#echo "      3) None of the above."
+#echo -n "      > "; read ans; echo
+#	
+#if [ "$ans" -lt 3 ]; then
+#	if [ "$ans" -eq 2 ]; then
+#		echo -n "Enter filename with its path: "
+#		read rcFile
+#	fi
+#
+#	cat $envFile >> $rcFile
+#else
+#
+#	echo "Ok. Don't forget to do following command next time you login:"
+#	echo; echo "      > source "$envFile; echo
+#fi
+
+
+#
+# Show final setup
+#
 echo
 echo
+echo "======================================================"
 echo "Final Configuration:"
 echo
 echo -e "\tRPn_HOME:  \033[31m $rpnhome \033[0m"
@@ -111,7 +156,9 @@ echo -e "\tMACHNINE:  \033[31m $hosttype \033[0m"
 echo -e "\tJAVA_HOME: \033[31m $javahome \033[0m"
 echo
 echo
-echo -e "Now, run\033[32m 'ant' \033[0mto build RPn."
-echo -e "Use\033[32m 'ant run' \033[0mto execute the program."
+echo -e "Now, run the command: \033[32m'source "$envFile"'\033[0m"
+echo -e "Run\033[32m 'ant' \033[0mto build RPn."
+echo -e "Use\033[32m 'ant run' \033[0mor \033[32m'rpn <input-file>'\033[0m to execute the program."
+echo "======================================================"
 echo
 
