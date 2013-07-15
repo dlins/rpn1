@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <string>
 #include <sstream>
+#include <iostream>
 #include "Matrix.h"
 
 #define DOUBLEMATRIXPRINTWIDTH 14
@@ -29,9 +30,14 @@ class DoubleMatrix : public Matrix<double> {
         DoubleMatrix(int n, int m);
         DoubleMatrix(const DoubleMatrix &original);
         DoubleMatrix(const DoubleMatrix *original);
-        ~DoubleMatrix();
+        DoubleMatrix(int n, int m, const double *original);
 
-        void print(void) const;
+        virtual ~DoubleMatrix();
+
+        DoubleMatrix operator=(const DoubleMatrix &original);
+
+        // Deprecated:
+        // void print(void) const;
 
         // Create the identity matrix
         static DoubleMatrix eye(int n);
@@ -60,8 +66,15 @@ class DoubleMatrix : public Matrix<double> {
         // Some matrix operations
         friend int solve(const DoubleMatrix &A, const DoubleMatrix &b, DoubleMatrix &x);
         friend int inverse(const DoubleMatrix &A, DoubleMatrix &B);
+        friend DoubleMatrix inverse(const DoubleMatrix &A);
         friend double det(const DoubleMatrix &A);
         friend DoubleMatrix transpose(const DoubleMatrix &A);
+
+        // Trace
+        friend double trace(const DoubleMatrix &A);
+
+        // Output to a stream
+        friend std::ostream& operator<<(std::ostream& stream, const DoubleMatrix &m); 
 };
 
 #endif // _DOUBLEMATRIX_

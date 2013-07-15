@@ -1,5 +1,4 @@
 #include "DoubleMatrix.h"
-#include "Debug.h"
 
 std::string DoubleMatrix::centered_text(double x, int w){
     std::stringstream s;
@@ -22,7 +21,8 @@ std::string DoubleMatrix::centered_text(double x, int w){
     return ss.str();
 }
 
-DoubleMatrix::DoubleMatrix(void) : Matrix<double>(), w_(DOUBLEMATRIXPRINTWIDTH){}
+DoubleMatrix::DoubleMatrix(void) : Matrix<double>(), w_(DOUBLEMATRIXPRINTWIDTH){
+}
 
 DoubleMatrix::DoubleMatrix(int n, int m) : Matrix<double>(n, m), w_(DOUBLEMATRIXPRINTWIDTH){}
 
@@ -30,24 +30,31 @@ DoubleMatrix::DoubleMatrix(const DoubleMatrix &original) : Matrix<double>(origin
 
 DoubleMatrix::DoubleMatrix(const DoubleMatrix *original) : Matrix<double>(original), w_(DOUBLEMATRIXPRINTWIDTH){}
 
+DoubleMatrix::DoubleMatrix(int n, int m, const double *original) : Matrix<double>(n, m, original), w_(DOUBLEMATRIXPRINTWIDTH){}
+
 DoubleMatrix::~DoubleMatrix(){
-    if ( Debug::get_debug_level() == 5 ) {
-        printf("DoubleMatrix::~DoubleMatrix()\n");
-    }
 }
 
-void DoubleMatrix::print(void) const {
-    for (int i = 0; i < rows_; i++){
-        printf("|");
-        for (int j = 0; j < cols_; j++){
-            //printf(" % 14.8g ", vec[i*cols_ + j]);
-            printf("%s", centered_text(vec[i*cols_ + j], w_).c_str());
-            if (j < cols_ - 1) printf(":");
-        }
-        printf("|\n");
-    }
+// Deprecated.
+//
+//void DoubleMatrix::print(void) const {
+//    for (int i = 0; i < rows_; i++){
+//        printf("|");
+//        for (int j = 0; j < cols_; j++){
+//            //printf(" % 14.8g ", vec[i*cols_ + j]);
+//            printf("%s", centered_text(vec[i*cols_ + j], w_).c_str());
+//            if (j < cols_ - 1) printf(":");
+//        }
+//        printf("|\n");
+//    }
 
-    return;
+//    return;
+//}
+
+DoubleMatrix DoubleMatrix::operator=(const DoubleMatrix &original){
+    if (this != &original) copy(original.rows_, original.cols_, original.vec);
+
+    return *this;
 }
 
 // Identity matrix
@@ -55,6 +62,7 @@ void DoubleMatrix::print(void) const {
 DoubleMatrix DoubleMatrix::eye(int n){
     DoubleMatrix e(n, n);
 
+    #pragma omp parallel for schedule(static)
     for (int i = 0; i < n; i++){
         for (int j = 0; j < i; j++) e(i, j) = e(j, i) = 0.0;
         e(i, i) = 1.0;
@@ -68,6 +76,7 @@ DoubleMatrix DoubleMatrix::eye(int n){
 DoubleMatrix sum(const DoubleMatrix &A, const DoubleMatrix &B){
     DoubleMatrix C(A.rows_, A.cols_);
 
+    #pragma omp parallel for schedule(static)
     for (int i = 0; i < A.rows_*A.cols_; i++) C(i) = A(i) + B(i);
 
     return C;
@@ -82,7 +91,9 @@ DoubleMatrix operator+(const DoubleMatrix &A, const DoubleMatrix &B){
 DoubleMatrix sub(const DoubleMatrix &A, const DoubleMatrix &B){
     DoubleMatrix C(A.rows_, A.cols_);
 
+    #pragma omp parallel for schedule(static)
     for (int i = 0; i < A.rows_*A.cols_; i++) C(i) = A(i) - B(i);
+
     return C;
 }
 
@@ -99,6 +110,7 @@ DoubleMatrix mult(const DoubleMatrix &A, const DoubleMatrix &B){
 
     DoubleMatrix C(m, n);
 
+    #pragma omp parallel for schedule(static)
     for (int i = 0; i < m; i++){
         for (int j = 0; j < n; j++){
             double s = 0.0;
@@ -120,6 +132,7 @@ DoubleMatrix operator*(const DoubleMatrix &A, const DoubleMatrix &B){
 DoubleMatrix mult(const DoubleMatrix &A, double alpha){
     DoubleMatrix B(A);
 
+    #pragma omp parallel for schedule(static)
     for (int i = 0; i < B.rows_*B.cols_; i++) B(i) *= alpha;
 
     return B;
@@ -174,9 +187,7 @@ int inverse(const DoubleMatrix &A, DoubleMatrix &B){
     dgetrf_(&n, &n, B.data(), &lda, ipiv, &lu_info);
     if (lu_info != 0) return lu_info;
 
-    if ( Debug::get_debug_level() == 5 ) {
-        for (int i = 0; i < n; i++) printf("ipiv(%d) = %d\n", i, ipiv[i]);
-    }
+    //for (int i = 0; i < n; i++) printf("ipiv(%d) = %d\n", i, ipiv[i]);
 
     // Matrix inversion proper
     //
@@ -190,13 +201,23 @@ int inverse(const DoubleMatrix &A, DoubleMatrix &B){
     return inv_info;
 }
 
+// Only to be used if matrix A is known to be non-singular.
+//
+DoubleMatrix inverse(const DoubleMatrix &A){
+    DoubleMatrix B; 
+    inverse(A, B); 
+
+    return B;
+}
+
 double det(const DoubleMatrix &A){
     int n = A.rows(); 
 
     if (n == 1) return A(0, 0);
     else {
-        double temp = 0.0, power = 1.0;
+        double *det_AA = new double[n];
 
+        #pragma omp parallel for schedule(dynamic)
         for (int i = 0; i < n; i++){
             DoubleMatrix AA(n - 1, n - 1);
             if (i == 0){
@@ -216,11 +237,16 @@ double det(const DoubleMatrix &A){
                 }
             }
 
-            double det_AA = det(AA);
+            det_AA[i] = det(AA);
+        }
 
-            temp += A(0, i)*det_AA*power;
+        double temp = 0.0, power = 1.0;
+        for (int i = 0; i < n; i++){
+            temp += A(0, i)*det_AA[i]*power;
             power *= -1.0;
         }
+
+        delete [] det_AA;
 
         return temp;
     }
@@ -229,10 +255,34 @@ double det(const DoubleMatrix &A){
 DoubleMatrix transpose(const DoubleMatrix &A){
     DoubleMatrix B(A.cols_, A.rows_);
 
+    #pragma omp parallel for schedule(static)
     for (int i = 0; i < A.rows_; i++){
         for (int j = 0; j < A.cols_; j++) B(j, i) = A(i, j);
     }
 
     return B;
 }
+
+double trace(const DoubleMatrix &A){
+    double t = 0.0;
+
+    for (int i = 0; i < A.rows_; i++) t += A(i, i);
+
+    return t;
+}
+
+// Output to a stream
+std::ostream& operator<<(std::ostream& stream, const DoubleMatrix &m){
+    for (int i = 0; i < m.rows_; i++){
+        stream << "|";
+        for (int j = 0; j < m.cols_; j++){
+            stream << DoubleMatrix::centered_text(m(i, j), m.w_);
+            if (j < m.cols_ - 1) stream << ":";
+        }
+        stream << "|" << std::endl;
+    }
+
+    return stream;
+}
+
 
