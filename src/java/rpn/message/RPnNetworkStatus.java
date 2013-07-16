@@ -21,7 +21,9 @@ public class RPnNetworkStatus {
     private boolean isMaster_;
     private boolean isOnline_;
     private RPnConsumerThread consumerThread_ = null;
-    
+    private RPnPublisher publisher_ = null;
+    private RPnSubscriberThread subscriberThread_ = null;
+
 
     public static String  SERVERNAME = new String("heitor");
     public static String  RPN_COMMAND_QUEUE_NAME = new String("jms/queue/rpnCommand");
@@ -29,6 +31,8 @@ public class RPnNetworkStatus {
 
     public static String MASTER_REQUEST_MSG = new String ("MASTER_REQUEST");
     public static String MASTER_ACK_MSG = new String ("MASTER_ACK");
+
+    public static String  RPN_COMMAND_TOPIC_NAME = new String("jms/topic/rpnCommand");
 
 
     private RPnNetworkStatus() {
@@ -47,21 +51,33 @@ public class RPnNetworkStatus {
 
         if (!isMaster_) {
 
-            RPnSender.init(RPN_CONTROL_QUEUE_NAME);
-            consumerThread_ = new RPnConsumerThread(RPN_COMMAND_QUEUE_NAME);
+            // QUEUE
+
+            //RPnSender.init(RPN_CONTROL_QUEUE_NAME);
+            //consumerThread_ = new RPnConsumerThread(RPN_COMMAND_QUEUE_NAME);
 
             MASTER_REQUEST_MSG += '|' + clientID_;
 
+            // TOPIC
+            subscriberThread_ = new RPnSubscriberThread(RPN_COMMAND_TOPIC_NAME);
+            subscriberThread_.start();
+       
         }
         else {
 
-            RPnSender.init(RPN_COMMAND_QUEUE_NAME);
-            consumerThread_ = new RPnConsumerThread(RPN_CONTROL_QUEUE_NAME);
+            // QUEUE
+
+            //RPnSender.init(RPN_COMMAND_QUEUE_NAME);
+            //consumerThread_ = new RPnConsumerThread(RPN_CONTROL_QUEUE_NAME);
+
+            // TOPIC
+            publisher_ = new RPnPublisher(RPN_COMMAND_TOPIC_NAME);
+
         }
-            
+
 
         // we will always be listening to either COMMANDs or CONTROLs
-        consumerThread_.start();
+        //consumerThread_.start();
 
         log("Connected to JBoss server : " + SERVERNAME);
     }
@@ -69,10 +85,12 @@ public class RPnNetworkStatus {
     public void disconnect() {
 
         if (isMaster_)
-                RPnSender.close();
+                //RPnSender.close();
+                publisher_.close();
+        
             else {               
                 
-                RPnConsumer.end = true;
+                /* RPnConsumer.end = true;
 
                 try {
 
@@ -81,11 +99,24 @@ public class RPnNetworkStatus {
                 } catch (InterruptedException ex) {
                     
                     log("Connection closed for RPnConsumer...");
+                } */
+
+                subscriberThread_.unsubscribe();
+
+                try {
+
+                    subscriberThread_.join();
+
+                } catch (InterruptedException ex) {
+
+                    log("Connection closed for RPnSubscriber...");
                 }
+
+
             }
 
         isOnline_ = false;
-        RPnConsumer.stopsListening();
+        //RPnConsumer.stopsListening();
     }
 
     public boolean isMaster() {
@@ -108,21 +139,22 @@ public class RPnNetworkStatus {
 
         RPnNetworkDialog.infoText.append(logMessage + '\n');
     }
-
-      
+     
     public void sendCommand(String commandDesc) {
 
         log(commandDesc);
-        RPnSender.send(commandDesc);
+        // QUEUE
+        //RPnSender.send(commandDesc);
+
+        // TOPIC
+        publisher_.publish(commandDesc);
     }
 
     public void sendMasterRequest() {
 
         log (MASTER_REQUEST_MSG);
         RPnSender.send(MASTER_REQUEST_MSG);
-
     }
-
 
     public static RPnNetworkStatus instance() {
 

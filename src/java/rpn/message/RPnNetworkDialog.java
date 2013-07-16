@@ -212,6 +212,7 @@ public class RPnNetworkDialog extends JDialog implements PropertyChangeListener 
                     infoText.append("RPn user : " +  clientID + " is now following RPNSESSION with ID : " + rpn.parser.RPnCommandModule.SESSION_ID_ + '\n');
 
                 RPnNetworkStatus.instance().connect(clientID,masterCheckBox.isSelected());
+
                 masterCheckBox.setEnabled(false);
 
             }

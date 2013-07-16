@@ -11,7 +11,7 @@ import javax.jms.*;
 import java.io.StringBufferInputStream;
 import rpn.parser.*;
 import org.xml.sax.helpers.XMLReaderFactory;
-import org.hornetq.api.jms.management.JMSServerControl;
+
 
 /**
  *
@@ -42,10 +42,43 @@ public class RPnConsumer  {
             cf = (QueueConnectionFactory) context.lookup("jms/RemoteConnectionFactory");
             queue = (javax.jms.Queue) context.lookup(queueName);
 
-            JMSServerControl controller = (JMSServerControl) context.lookup("jms.server");
-            controller.createQueue("MYQUEUE");
-            
-    
+    /*MBeanServer mBeanServer  = java.lang.management.ManagementFactory.getPlatformMBeanServer();
+    ObjectName on = ObjectNameBuilder.DEFAULT.getJMSServerObjectName();
+    MBeanInfo mbi = mBeanServer.getMBeanInfo(on);
+    System.out.println(mbi.getClassName());
+    MBeanAttributeInfo[] mbas = mbi.getAttributes();
+    for (MBeanAttributeInfo mba : mbas)
+    {
+      System.out.println("attr: " + mba.getName() + " of type " + mba.getType());
+    }
+
+    MBeanOperationInfo[] mbos = mbi.getOperations();
+    for (MBeanOperationInfo mbo : mbos)
+    {
+     System.out.println("oper: " + mbo.getName() );
+     MBeanParameterInfo[] mbps = mbo.getSignature();
+     for (MBeanParameterInfo mbp : mbps)
+     {
+       System.out.println("  param: " + mbp.getName());
+     }
+     System.out.println("   returns: " + mbo.getReturnType());
+    }
+
+//get attributes on the JMSServerControl
+
+String[] qnames = (String[]) mBeanServer.getAttribute(on, "QueueNames");
+
+//invoke methods on the JMSServerControl
+mBeanServer.invoke(on, "createQueue" ...)
+
+            JMXConnector connector = JMXConnectorFactory.connect(new JMXServiceURL(JMX_URL), new HashMap());
+
+            MBeanServerConnection mbsc = connector.getMBeanServerConnection();
+
+            ObjectName name=new ObjectName("org.jboss.messaging:module=JMS,type=Server");
+            JMSServerControlMBean control = (JMSServerControlMBean)MBeanServerInvocationHandler.newProxyInstance(mbsc,name,JMSServerControlMBean.class,false);
+            control.createQueue("TestQ","test");
+    */
         } catch (Exception exc) {
 
             exc.printStackTrace();
