@@ -1,4 +1,5 @@
 #include "CoincidenceTPCW.h"
+#include "Debug.h"
 
 CoincidenceTPCW::CoincidenceTPCW(const Flux2Comp2PhasesAdimensionalized *f, const Accum2Comp2PhasesAdimensionalized * a) : HugoniotFunctionClass(*f), td(f->getThermo()),
 phi(a->accumulationParams().component(0)) {
@@ -65,7 +66,9 @@ double CoincidenceTPCW::lambdae_function(const RealVector &u) {
 
     td->Diff_Rhoaw(Theta, rhoaw, drhoaw_dT, d2rhoaw_dT2);
 
-    //    cout << rhoaw << drhoaw_dT << d2rhoaw_dT2 << endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout << rhoaw << drhoaw_dT << d2rhoaw_dT2 << endl;
+    }
 
     td->Diff_AqueousEnthalpyVol(Theta, Ha, dHa_dT, d2Ha_dT2);
     td->Diff_SuperCriticEnthalpyVol(Theta, Hsi, dHsi_dT, d2Hsi_dT2);

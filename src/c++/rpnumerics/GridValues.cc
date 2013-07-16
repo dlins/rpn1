@@ -1,5 +1,6 @@
 #include "GridValues.h"
 #include "Boundary.h"
+#include "Debug.h"
 //#include "timer.h"
 
 GridValues::GridValues(const Boundary *b, 
@@ -34,13 +35,17 @@ void GridValues::fill_values_on_grid(const Boundary *b,
 //        tm.reset();
         int dim = pmin.size();
 
-        printf("Inside GridValues::fill_values_on_grid\n");
+        if ( Debug::get_debug_level() == 5 ) {
+            printf("Inside GridValues::fill_values_on_grid\n");
+        }
 
         grid_resolution.resize(dim);
         for (int i = 0; i < dim; i++) grid_resolution.component(i) = (fabs(pmax.component(i) - pmin.component(i))) / (double) (number_of_cells[i]);
 
         
-        cout<<"Number of cells: "<<number_of_cells[0]<<" "<<number_of_cells[1]<<endl;
+        if ( Debug::get_debug_level() == 5 ) {
+            cout<<"Number of cells: "<<number_of_cells[0]<<" "<<number_of_cells[1]<<endl;
+        }
         
         grid.resize(number_of_cells[0] + 1, number_of_cells[1] + 1);
 
@@ -102,7 +107,9 @@ void GridValues::fill_functions_on_grid(const FluxFunction *ff, const Accumulati
     if (!functions_on_grid_computed){
 //        tm.reset();
 //        fill_values_on_grid(GridValues &gv);
-//        printf("Inside GridValues::fill_functions_on_grid\n");
+        if ( Debug::get_debug_level() == 5 ) {
+            printf("Inside GridValues::fill_functions_on_grid\n");
+        }
 
         int rows = grid.rows(), cols = grid.cols(); 
         int n = rows*cols;
@@ -157,7 +164,6 @@ void GridValues::fill_Jacobians_on_grid(const FluxFunction *ff, const Accumulati
                 JG_on_grid(i).resize(dim, dim);//printf("GridValues::fill_Jacobians_on_grid. point inside, i = %d\n", i);
 
                 if (functions_on_grid_computed){
-                    //printf("ff = %p\n", ff);
                     ff->fill_with_jet(dim, grid(i).components(), 1, 0, JF_on_grid(i).data(), 0); 
                     aa->fill_with_jet(dim, grid(i).components(), 1, 0, JG_on_grid(i).data(), 0);
                 }
@@ -180,7 +186,9 @@ void GridValues::fill_Jacobians_on_grid(const FluxFunction *ff, const Accumulati
 void GridValues::fill_eigenpairs_on_grid(const FluxFunction *ff, const AccumulationFunction *aa){
     if (!e_computed){
         fill_Jacobians_on_grid(ff, aa);
-        printf("Inside GridValues::fill_eigenpairs_on_grid\n");
+        if ( Debug::get_debug_level() == 5 ) {
+            printf("Inside GridValues::fill_eigenpairs_on_grid\n");
+        }
 
         int rows = grid.rows(), cols = grid.cols(); 
         int n = rows*cols;
@@ -289,15 +297,22 @@ void GridValues::fill_dirdrv_on_grid(const FluxFunction *ff, const AccumulationF
         dd.resize(rows, cols);
 
         for (int i = 0; i < n; i++){
-            //printf("GridValues::fill_dirdrv_on_grid(). i = %d\n", i);
+            if ( Debug::get_debug_level() == 5 ) {
+                printf("GridValues::fill_dirdrv_on_grid(). i = %d\n", i);
+            }
             if (point_inside(i)){
-                //printf("    i = %d\n", i);
+                if ( Debug::get_debug_level() == 5 ) {
+                    printf("    i = %d\n", i);
+                }
                 dd(i).resize(dim);
 
                 double H[dim][dim][dim];
                 double M[dim][dim][dim];
                 aa->fill_with_jet(dim, grid(i).components(), 2, 0, 0, &M[0][0][0]);
-                ff->fill_with_jet(dim, grid(i).components(), 2, 0, 0, &H[0][0][0]); //printf("    i = %d, e(i).size() = %d\n", i, e(i).size());
+                ff->fill_with_jet(dim, grid(i).components(), 2, 0, 0, &H[0][0][0]);
+                if ( Debug::get_debug_level() == 5 ) {
+                    printf("    i = %d, e(i).size() = %d\n", i, e(i).size());
+                }
 
                 for (int fam = 0; fam < e(i).size(); fam++){
                     double norm = 0.0;
@@ -311,7 +326,9 @@ void GridValues::fill_dirdrv_on_grid(const FluxFunction *ff, const AccumulationF
                     double lambda;
 
                     if (fabs(e(i)[fam].i) > epsilon) {
-                        printf("Inside dirdrv(): Init step, eigenvalue %d is complex: % f %+f.\n", fam, e(i)[fam].r, e(i)[fam].i);
+                        if ( Debug::get_debug_level() == 5 ) {
+                            printf("Inside dirdrv(): Init step, eigenvalue %d is complex: % f %+f.\n", fam, e(i)[fam].r, e(i)[fam].i);
+                        }
                         continue;
                     } 
                     else lambda = e(i)[fam].r;
@@ -338,7 +355,9 @@ void GridValues::fill_dirdrv_on_grid(const FluxFunction *ff, const AccumulationF
                     dd(i)[fam] = dirdrv / norm;
 
                 } // End fam
-                //printf("    ****\n");
+                if ( Debug::get_debug_level() == 5 ) {
+                    printf("    ****\n");
+                }
             }
         } // End grid
 

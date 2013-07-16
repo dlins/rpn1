@@ -54,7 +54,6 @@ public class LevelCurvePlotCommand extends RpModelPlotCommand {
         ArrayList<Double> levelValues = processLevels(RPNUMERICS.getParamValue("levelcurve", "levels"));
         LevelCurveGeomFactory factory = null;
         for (Double levelValue : levelValues) {
-            System.out.println("Valor do nivel" + levelValue);
             factory = new LevelCurveGeomFactory(RPNUMERICS.createLevelCurveCalc(levelValue));
             logLevelCurvePlotCommand(factory, levelValue);
             UIController.instance().getActivePhaseSpace().plot(factory.geom());

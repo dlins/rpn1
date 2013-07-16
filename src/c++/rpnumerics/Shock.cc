@@ -1,4 +1,5 @@
 #include "Shock.h"
+#include "Debug.h"
 
 int Shock::reason = 0;
 
@@ -223,14 +224,18 @@ int Shock::shock_step(const RealVector &p, const RealVector &Uref, const RealVec
 
         if (pp_sgn*pm_sgn < 0.0) proceed_to_bisection = true;
         else{
-            //printf("    Had to diminish nrm_eps\n");
+            if ( Debug::get_debug_level() == 5 ) {
+                printf("    Had to diminish nrm_eps\n");
+            }
             nrm_eps_tmp *= .5;
         }
 
         step++;
 
         if (proceed_to_bisection){
-//            printf("    shock_step 1a. steps = %d\n", step);
+            if ( Debug::get_debug_level() == 5 ) {
+                printf("    shock_step 1a. steps = %d\n", step);
+            }
             reason = 1;
         }
     }
@@ -255,7 +260,9 @@ int Shock::shock_step(const RealVector &p, const RealVector &Uref, const RealVec
         step++;
 
         if (proceed_to_bisection){
-//            printf("    shock_step 1a. steps = %d\n", step);
+            if ( Debug::get_debug_level() == 5 ) {
+                printf("    shock_step 1a. steps = %d\n", step);
+            }
             reason = 2;
         }
     }
@@ -278,7 +285,9 @@ int Shock::shock_step(const RealVector &p, const RealVector &Uref, const RealVec
 
         step++;
         if (proceed_to_bisection){
-//            printf("    shock_step 1a. steps = %d\n", step);
+            if ( Debug::get_debug_level() == 5 ) {
+                printf("    shock_step 1a. steps = %d\n", step);
+            }
             reason = 3;
         }
     }
@@ -335,7 +344,9 @@ int Shock::shock_step(const RealVector &p, const RealVector &Uref, const RealVec
 
 
         if (proceed_to_bisection){
-//            printf("    shock_step 1a. steps = %d\n", step);
+            if ( Debug::get_debug_level() == 5 ) {
+                printf("    shock_step 1a. steps = %d\n", step);
+            }
             reason = 4;
         }
     }
@@ -358,16 +369,22 @@ int Shock::shock_step(const RealVector &p, const RealVector &Uref, const RealVec
 
 //        step++;
 //        if (proceed_to_bisection){
-//            printf("    shock_step 3. steps = %d\n", step);
+//            if ( Debug::get_debug_level() == 5 ) {
+//                printf("    shock_step 3. steps = %d\n", step);
+//            }
 //            reason = 5;
 //        }
 //    }
 
 
-//    printf("    Reason = %d. Proceed_to_bisection = %d\n", reason, proceed_to_bisection);
+//    if ( Debug::get_debug_level() == 5 ) {
+//        printf("    Reason = %d. Proceed_to_bisection = %d\n", reason, proceed_to_bisection);
+//    }
 
     if (!proceed_to_bisection){
-//        printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
+        if ( Debug::get_debug_level() == 5 ) {
+            printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
+        }
         return SHOCK_ERROR;
     }
 
@@ -437,8 +454,13 @@ double Shock::hugoniot(const RealVector &U, const RealVector &Uref, FluxFunction
 void Shock::hugoniot_der(const RealVector &U, const RealVector &Uref, FluxFunction *F, AccumulationFunction *G, double *tangent, double *normal){
     int n = U.size(); // = 2
 
-    WaveState Uref_in(Uref); //std::cout << "hugoniot_der, ref.: " << Uref << std::endl;
-    WaveState U_in(U);       //std::cout << "hugoniot_der, in.:  " << U << std::endl;
+    WaveState Uref_in(Uref); 
+    WaveState U_in(U);
+
+    if ( Debug::get_debug_level() == 5 ) {
+        std::cout << "hugoniot_der, ref.: " << Uref << std::endl;
+        std::cout << "hugoniot_der, in.:  " << U << std::endl;
+    }
 
     JetMatrix Fm0(n);
     JetMatrix Fm(n);
@@ -457,9 +479,11 @@ void Shock::hugoniot_der(const RealVector &U, const RealVector &Uref, FluxFuncti
 //        dRH[j] = Fm(0, j) + 
 //                 (Gm(0)-Gm0(0))*((Fm(0,j)+Fm(1,j))*(Gm(0)-Gm0(0)+Gm(1)-Gm0(1)) - 
 //                 (Gm(0,j)+Gm(1,j))*(Fm(0)-Fm0(0)+Fm(1)-Fm0(1))/(Gm(0)-Gm0(0)+Gm(1)-Gm0(1))*(Gm(0)-Gm0(0)+Gm(1)-Gm0(1))) - 
- //                Gm(0,j)*(Fm(0)-Fm0(0)+Fm(1)-Fm0(1))/(Gm(0)-Gm0(0)+Gm(1)-Gm0(1));
+//                 Gm(0,j)*(Fm(0)-Fm0(0)+Fm(1)-Fm0(1))/(Gm(0)-Gm0(0)+Gm(1)-Gm0(1));
         dRH[j] = Gm(0, j)*(Fm(1) - Fm0(1)) + (Gm(0) - Gm0(0))*Fm(1, j) - Fm(0, j)*(Gm(1) - Gm0(1)) - Gm(1, j)*(Fm(0) - Fm0(0));
-        //printf("Fm(1) - Fm0(1) = %f\n", Fm(1) - Fm0(1));
+        if ( Debug::get_debug_level() == 5 ) {
+            printf("Fm(1) - Fm0(1) = %f\n", Fm(1) - Fm0(1));
+        }
    }
 
    tangent[0] = -dRH[1];
@@ -536,8 +560,10 @@ int Shock::verify_lax_shock(RealVector &ref, double lambda_0_ref, double lambda_
     // The i-th eigenvalue must be real. // The eigenvalues must be chosen carefully in the n-dimensional case.
     // ALL eigenvalues must be real. Extend this by using a for cycle.
     if (fabs(e[family].i) > 1e-6){
-//        printf("Shock::curve(): Init step, eigenvalue %d is complex: % f %+f.\n", family, e[family].r, e[family].i);
-//        printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
+        if ( Debug::get_debug_level() == 5 ) {
+            printf("Shock::curve(): Init step, eigenvalue %d is complex: % f %+f.\n", family, e[family].r, e[family].i);
+            printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
+        }
         return SHOCK_ERROR;    
     }
 
@@ -547,9 +573,11 @@ int Shock::verify_lax_shock(RealVector &ref, double lambda_0_ref, double lambda_
     // Sigma
     double sigma = shockspeed(n, ref.components(), p.components(), ff, aa);
 
-//    printf("\n============= New test ===============\n\n");
-//    printf("    lambda[%d] - sigma = %g\n", family, lambda[family] - sigma);
-//    printf("\n============= New test ===============\n\n");
+    if ( Debug::get_debug_level() == 5 ) {
+        printf("\n============= New test ===============\n\n");
+        printf("    lambda[%d] - sigma = %g\n", family, lambda[family] - sigma);
+        printf("\n============= New test ===============\n\n");
+    }
 
     if (increase == WAVE_FORWARD){
         if (family == 0){
@@ -582,7 +610,9 @@ int Shock::verify_lax_shock(RealVector &ref, double lambda_0_ref, double lambda_
             }
         }
         else{
-//            printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
+            if ( Debug::get_debug_level() == 5 ) {
+                printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
+            }
             return SHOCK_ERROR;
         }
     }
@@ -604,7 +634,9 @@ int Shock::verify_lax_shock(RealVector &ref, double lambda_0_ref, double lambda_
             }
         }
         else{
-//            printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
+            if ( Debug::get_debug_level() == 5 ) {
+                printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
+            }
             return SHOCK_ERROR;
         }
     }
@@ -624,10 +656,12 @@ int Shock::curve_constructor(Boundary *boundary, bool local_shock, int type_of_s
     int reached_double_contacts = 0;                          
 
     int n = ref_point.size(); 
-//    printf("Inside curve_constructor: n = %d\n", n);
-//    if (increase == WAVE_FORWARD) printf("    increase = WAVE_FORWARD\n");
-//    else if (increase == WAVE_BACKWARD) printf("    increase = WAVE_BACKWARD\n");
-//    else printf("    increase = ???\n");
+    if ( Debug::get_debug_level() == 5 ) {
+        printf("Inside curve_constructor: n = %d\n", n);
+        if (increase == WAVE_FORWARD) printf("    increase = WAVE_FORWARD\n");
+        else if (increase == WAVE_BACKWARD) printf("    increase = WAVE_BACKWARD\n");
+        else printf("    increase = ???\n");
+    }
     RealVector old_tangent(tangent);
 
     // ONLY FOR SHOCK_AS_ENGINE_FOR_COMPOSITE:
@@ -681,7 +715,9 @@ int Shock::curve_constructor(Boundary *boundary, bool local_shock, int type_of_s
             for (int i = 0; i < n; i++) tangent.component(i) = -tangent.component(i);
         }
        
-       // cout << "Point: " << pnext << ", derivative: " << tangent << endl;
+        if ( Debug::get_debug_level() == 5 ) {
+            cout << "Point: " << pnext << ", derivative: " << tangent << endl;
+        }
         
         // A estimate for eps, which should be the inverse of the curvature of the curve:
         //
@@ -694,13 +730,19 @@ int Shock::curve_constructor(Boundary *boundary, bool local_shock, int type_of_s
 //        if (euclidean_norm(n, delta_tangent.components()) > 1e-2){
 ////            eps = 1.0/euclidean_norm(n, delta_tangent.components());
 //            eps = 1e-4;
-//            printf("First if: norm = %f\n", euclidean_norm(n, delta_tangent.components()));
+//            if ( Debug::get_debug_level() == 5 ) {
+//                printf("First if: norm = %f\n", euclidean_norm(n, delta_tangent.components()));
+//            }
 //        }
 //        else{
 //            eps = 1e-2;
-//            //printf("Second if: eps = %f\n", eps);
+//            if ( Debug::get_debug_level() == 5 ) {
+//                printf("Second if: eps = %f\n", eps);
+//            }
 //        }
-//        printf("eps = %f\n", eps);
+//        if ( Debug::get_debug_level() == 5 ) {
+//            printf("eps = %f\n", eps);
+//        }
 
         double curvature;
         double dRH2[2][2];
@@ -719,12 +761,18 @@ int Shock::curve_constructor(Boundary *boundary, bool local_shock, int type_of_s
 
 
 //        shock_step(p, in, tangent, normal, ff, aa, eps, pnext);
-//        std::cout << "Point: " << p << std::endl;
-//        std::cout << "    Tangent: " << tangent << std::endl;
+//        if ( Debug::get_debug_level() == 5 ) {
+//            std::cout << "Point: " << p << std::endl;
+//            std::cout << "    Tangent: " << tangent << std::endl;
+//        }
         int info_shock_step = shock_step(p, ref_point, tangent, normal, ff, aa, test_eps, pnext);
-        //printf("Curve constructor. After shock_step, pnext = (%lf, %lf), line = %u\n", pnext.component(0), pnext.component(1), __LINE__);
+        if ( Debug::get_debug_level() == 5 ) {
+            printf("Curve constructor. After shock_step, pnext = (%lf, %lf), line = %u\n", pnext.component(0), pnext.component(1), __LINE__);
+        }
         if (info_shock_step == SHOCK_ERROR){
-//            printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
+            if ( Debug::get_debug_level() == 5 ) {
+                printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
+            }
             return SHOCK_ERROR;
         }
 
@@ -744,7 +792,9 @@ int Shock::curve_constructor(Boundary *boundary, bool local_shock, int type_of_s
 
             double lambda_r = e[family].r;
 
-            //printf("    sigma = %g, lambda_r = %g, sigma - lambda_r = %g\n", sigma, lambda_r, sigma - lambda_r);
+            if ( Debug::get_debug_level() == 5 ) {
+                printf("    sigma = %g, lambda_r = %g, sigma - lambda_r = %g\n", sigma, lambda_r, sigma - lambda_r);
+            }
 
 //            if ((sigma - lambda_r)*sigma_minus_lambda_r < 0.0) Bethe_Wendroff_points++;
             
@@ -758,13 +808,17 @@ int Shock::curve_constructor(Boundary *boundary, bool local_shock, int type_of_s
                         // pnext is added to the curve.
                         shockcurve.push_back(pnext);
                         reached_double_contacts++;
-//                 printf("sigma-lambda_r %f\n", sigma - lambda_r);
-//                 printf("reached_double_contacts %d\n", reached_double_contacts);
+                        if ( Debug::get_debug_level() == 5 ) {
+                            printf("sigma-lambda_r %f\n", sigma - lambda_r);
+                            printf("reached_double_contacts %d\n", reached_double_contacts);
+                        }
                         if (reached_double_contacts > number_ignore_doub_contact) return SHOCK_REACHED_DOUBLE_CONTACT;
             }
 
             sigma_minus_lambda_r = sigma - lambda_r;
-               // printf("sigma-lambda_r sempre%f\n", sigma - lambda_r);
+            if ( Debug::get_debug_level() == 5 ) {
+                printf("sigma-lambda_r sempre%f\n", sigma - lambda_r);
+            }
         }
         // END TEST
 
@@ -774,8 +828,10 @@ int Shock::curve_constructor(Boundary *boundary, bool local_shock, int type_of_s
         if (type_of_shock == SHOCK_AS_ENGINE_FOR_COMPOSITE){
             double inner_sign = (double)sgn(lambda - shockspeed(n, ref_point.components(), pnext.components(), ff, aa));
             continue_loop = sign_composite*inner_sign > 0.0;
-            //printf("    sign_composite = %lf, inner_sign = %lf\n", sign_composite, inner_sign);
-        //printf("continue_loop = %d, pnext = (%lf, %lf)\n", continue_loop, pnext.component(0), pnext.component(1));
+            if ( Debug::get_debug_level() == 5 ) {
+                printf("    sign_composite = %lf, inner_sign = %lf\n", sign_composite, inner_sign);
+                printf("continue_loop = %d, pnext = (%lf, %lf)\n", continue_loop, pnext.component(0), pnext.component(1));
+            }
         }
         else {
             int info_verify_lax = verify_lax_shock(ref_point, lambda_0, lambda_1, pnext, increase, family, ff, aa);
@@ -784,7 +840,9 @@ int Shock::curve_constructor(Boundary *boundary, bool local_shock, int type_of_s
                 info_verify_lax == SHOCK_ERROR ||
                 info_verify_lax == NON_LAX_FOR_OTHER_REASON){
 
-//                printf("    Inside curve_constructor, line = %u: NON LAX!!!, error code = %d\n", __LINE__, info_verify_lax);
+                if ( Debug::get_debug_level() == 5 ) {
+                    printf("    Inside curve_constructor, line = %u: NON LAX!!!, error code = %d\n", __LINE__, info_verify_lax);
+                }
                 return info_verify_lax;
             } 
             
@@ -805,13 +863,17 @@ int Shock::curve_constructor(Boundary *boundary, bool local_shock, int type_of_s
             if (!local_shock) continue_loop = continue_loop && (sign_shock*inner_sign[1] > 0.0);
              
             if (!continue_loop){
-                printf("Curve constructor: inner sign failed\n");
+                if ( Debug::get_debug_level() == 5 ) {
+                    printf("Curve constructor: inner sign failed\n");
+                }
                 return SHOCK_OK;
             }
 
             if ((inner_sigma >= inner_sigma_old && increase == WAVE_FORWARD) ||
                 (inner_sigma <= inner_sigma_old && increase == WAVE_BACKWARD)) {
-                printf("Curve constructor: inner sigma failed\n");
+                if ( Debug::get_debug_level() == 5 ) {
+                    printf("Curve constructor: inner sigma failed\n");
+                }
                 return SHOCK_OK;
             }
             else inner_sigma_old = inner_sigma;
@@ -829,20 +891,26 @@ int Shock::curve_constructor(Boundary *boundary, bool local_shock, int type_of_s
             }
             else if (info_boundary == -1){
                 // Both outside
-//                printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
+                if ( Debug::get_debug_level() == 5 ) {
+                    printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
+                }
                 return SHOCK_ERROR;
             }
             else {
                 // One inside, one outside
                 shockcurve.push_back(p_boundary);
-//                printf("Curve constructor reached boundary in file \"%s\", line %u\n", __FILE__, __LINE__);
+                if ( Debug::get_debug_level() == 5 ) {
+                    printf("Curve constructor reached boundary in file \"%s\", line %u\n", __FILE__, __LINE__);
+                }
                 return SHOCK_REACHED_BOUNDARY;
                 //return SHOCK_ERROR;
             }
         }
         else if (type_of_shock == SHOCK_AS_ENGINE_FOR_COMPOSITE){
             if (!boundary->inside(pnext)){
-//                printf("Curve constructor reached boundary in file \"%s\", line %u\n    pnext = (%lf, %lf)\n", __FILE__, __LINE__, pnext.component(0), pnext.component(1));
+                if ( Debug::get_debug_level() == 5 ) {
+                    printf("Curve constructor reached boundary in file \"%s\", line %u\n    pnext = (%lf, %lf)\n", __FILE__, __LINE__, pnext.component(0), pnext.component(1));
+                }
                 if (max_number_after_boundary >= 100) return SHOCK_REACHED_BOUNDARY;
                 else max_number_after_boundary++;
             }
@@ -886,9 +954,11 @@ void Shock::curve(const RealVector &ref, bool local_shock, const RealVector &in,
     // The i-th eigenvalue must be real. // The eigenvalues must be chosen carefully in the n-dimensional case.
     // ALL eigenvalues must be real. Extend this by using a for cycle.
     if (fabs(e[family].i) > 1e-6){
-//        printf("Shock::curve(): Init step, eigenvalue %d is complex: % f %+f.\n", family, e[family].r, e[family].i);
+        if ( Debug::get_debug_level() == 5 ) {
+            printf("Shock::curve(): Init step, eigenvalue %d is complex: % f %+f.\n", family, e[family].r, e[family].i);
+            printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
+        }
 
-//        printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
 
         info_shockcurve = info_shockcurve_alt = SHOCK_ERROR;
 //        return SHOCK_ERROR;    
@@ -922,9 +992,11 @@ void Shock::curve(const RealVector &ref, bool local_shock, const RealVector &in,
     else {
         hugoniot_der(in, ref_point, ff, aa, tangent.components(), normal.components());
 
-//        std::cout << "Init.: " << in << ", ref.: " << ref_point << std::endl;
-//        std::cout << "Tanget (hug.): " << tangent << std::endl;
-//        std::cout << "Tanget (vec.): (" << e[family].vrr[0] << ", " << e[family].vrr[1] << ")" << std::endl;
+        if ( Debug::get_debug_level() == 5 ) {
+            std::cout << "Init.: " << in << ", ref.: " << ref_point << std::endl;
+            std::cout << "Tanget (hug.): " << tangent << std::endl;
+            std::cout << "Tanget (vec.): (" << e[family].vrr[0] << ", " << e[family].vrr[1] << ")" << std::endl;
+        }
     }
 
     // Initialize.
@@ -944,12 +1016,14 @@ void Shock::curve(const RealVector &ref, bool local_shock, const RealVector &in,
 
     RealVector pnext(n);
 
-//    std::cout << "    ref     = " << ref_point << std::endl;
-//    std::cout << "    init    = " << in  << std::endl;
-//    std::cout << "    tangent = " << tangent  << std::endl;
-//    std::cout << "    p_right = " << p_right << std::endl;
-//    std::cout << "    p_left  = " << p_left  << std::endl;
-//    printf("Here. orig_direction = %p\n", orig_direction);
+    if ( Debug::get_debug_level() == 5 ) {
+        std::cout << "    ref     = " << ref_point << std::endl;
+        std::cout << "    init    = " << in  << std::endl;
+        std::cout << "    tangent = " << tangent  << std::endl;
+        std::cout << "    p_right = " << p_right << std::endl;
+        std::cout << "    p_left  = " << p_left  << std::endl;
+        printf("Here. orig_direction = %p\n", orig_direction);
+    }
 //    double orig_direction_double[orig_direction->size()];
 
 //    for (int i = 0; i < orig_direction->size(); i++) orig_direction_double[i] = orig_direction->component(i);
@@ -966,21 +1040,29 @@ void Shock::curve(const RealVector &ref, bool local_shock, const RealVector &in,
                     p_diff_right[i] = p_right.component(i) - ref_point.component(i);
                     p_diff_left[i]  = p_left.component(i) - ref_point.component(i);
                 }
-//                printf("p_diff_right = (%lf, %lf)\n", p_diff_right[0],p_diff_right[1]);
-//                printf("p_diff_left = (%lf, %lf)\n", p_diff_left[0],p_diff_left[1]);
+                if ( Debug::get_debug_level() == 5 ) {
+                    printf("p_diff_right = (%lf, %lf)\n", p_diff_right[0],p_diff_right[1]);
+                    printf("p_diff_left = (%lf, %lf)\n", p_diff_left[0],p_diff_left[1]);
+                }
                 if      (ddot(n, orig_direction_double, p_diff_right) > 0.0){
                     for (int i = 0; i < n; i++) pnext.component(i) = p_right.component(i);
                     eps = eps_right;
-//                    printf("Right\n");
+                    if ( Debug::get_debug_level() == 5 ) {
+                        printf("Right\n");
+                    }
                 }
                 else if (ddot(n, orig_direction_double, p_diff_left) > 0.0){
                     for (int i = 0; i < n; i++) pnext.component(i) = p_left.component(i);
                     eps = eps_left;
-//                    printf("Left\n");
+                    if ( Debug::get_debug_level() == 5 ) {
+                        printf("Left\n");
+                    }
                 }
                 else {
-//                    printf("******Error init. Engine forward");
-//                    printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
+                    if ( Debug::get_debug_level() == 5 ) {
+                        printf("******Error init. Engine forward");
+                        printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
+                    }
 
                     info_shockcurve = info_shockcurve_alt = SHOCK_ERROR;
 //                    return SHOCK_ERROR;
@@ -998,8 +1080,10 @@ void Shock::curve(const RealVector &ref, bool local_shock, const RealVector &in,
                     eps = eps_right;
                  }
                 else {
-//                    printf("******Error init. Itself, forward. sl = %f, lambda = %f, sr = %f\n", s_left, lambda, s_right);
-//                    printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
+                    if ( Debug::get_debug_level() == 5 ) {
+                        printf("******Error init. Itself, forward. sl = %f, lambda = %f, sr = %f\n", s_left, lambda, s_right);
+                        printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
+                    }
 
                     info_shockcurve = info_shockcurve_alt = SHOCK_ERROR;
 //                    return SHOCK_ERROR;
@@ -1026,20 +1110,26 @@ void Shock::curve(const RealVector &ref, bool local_shock, const RealVector &in,
                 if      (ddot(n, orig_direction_double, p_diff_right) > 0.0){
                     for (int i = 0; i < n; i++) pnext.component(i) = p_right.component(i);
                     eps = eps_right;
-//                    printf("*** Right selected. ddot = %g, eps = %g ***\n", ddot(n, orig_direction_double, p_diff_right), eps);
-//                    printf("    p_diff_right = (%g, %g)\n", p_diff_right[0], p_diff_right[1]);
-//                    printf("            orig = (%g, %g)\n", orig_direction_double[0], orig_direction_double[1]);
+                    if ( Debug::get_debug_level() == 5 ) {
+                        printf("*** Right selected. ddot = %g, eps = %g ***\n", ddot(n, orig_direction_double, p_diff_right), eps);
+                        printf("    p_diff_right = (%g, %g)\n", p_diff_right[0], p_diff_right[1]);
+                        printf("            orig = (%g, %g)\n", orig_direction_double[0], orig_direction_double[1]);
+                    }
                 }
                 else if (ddot(n, orig_direction_double, p_diff_left) > 0.0){
                     for (int i = 0; i < n; i++) pnext.component(i) = p_left.component(i);
                     eps = eps_left;
-//                    printf("*** Left selected.  ddot = %g, eps = %g ***\n", ddot(n, orig_direction_double, p_diff_left), eps);
-//                    printf("    p_diff_left = (%g, %g)\n", p_diff_left[0], p_diff_left[1]);
-//                    printf("            orig = (%g, %g)\n", orig_direction_double[0], orig_direction_double[1]);
+                    if ( Debug::get_debug_level() == 5 ) {
+                        printf("*** Left selected.  ddot = %g, eps = %g ***\n", ddot(n, orig_direction_double, p_diff_left), eps);
+                        printf("    p_diff_left = (%g, %g)\n", p_diff_left[0], p_diff_left[1]);
+                        printf("            orig = (%g, %g)\n", orig_direction_double[0], orig_direction_double[1]);
+                    }
                 }
                 else {
-//                    printf("******Error init. Engine forward");
-//                    printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
+                    if ( Debug::get_debug_level() == 5 ) {
+                        printf("******Error init. Engine forward");
+                        printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
+                    }
 
                     info_shockcurve = info_shockcurve_alt = SHOCK_ERROR;
 //                    return SHOCK_ERROR;
@@ -1056,8 +1146,10 @@ void Shock::curve(const RealVector &ref, bool local_shock, const RealVector &in,
                     eps = eps_left;
                 }
                 else {
-//                    printf("******Error init. Itself, backward. sl = %f, lambda = %f, sr = %f\n", s_left, lambda, s_right);
-//                    printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
+                    if ( Debug::get_debug_level() == 5 ) {
+                        printf("******Error init. Itself, backward. sl = %f, lambda = %f, sr = %f\n", s_left, lambda, s_right);
+                        printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
+                    }
 
                     info_shockcurve = info_shockcurve_alt = SHOCK_ERROR;
 //                    return SHOCK_ERROR;
@@ -1069,7 +1161,9 @@ void Shock::curve(const RealVector &ref, bool local_shock, const RealVector &in,
             }
         }
         else {
-//            printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
+            if ( Debug::get_debug_level() == 5 ) {
+                printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
+            }
             info_shockcurve = info_shockcurve_alt = SHOCK_ERROR;
 //                    return SHOCK_ERROR;
 
@@ -1080,7 +1174,9 @@ void Shock::curve(const RealVector &ref, bool local_shock, const RealVector &in,
         }
         
         // While
-        //printf("After init.\n");
+        if ( Debug::get_debug_level() == 5 ) {
+            printf("After init.\n");
+        }
 
         // Verify if pnext is contained within the boundary.
         int info_boundary; int edge;
@@ -1091,7 +1187,9 @@ void Shock::curve(const RealVector &ref, bool local_shock, const RealVector &in,
         }
         else if (info_boundary == -1){
             // Both outside
-//            printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
+            if ( Debug::get_debug_level() == 5 ) {
+                printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
+            }
             info_shockcurve = info_shockcurve_alt = SHOCK_ERROR;
 //                    return SHOCK_ERROR;
 
@@ -1114,7 +1212,9 @@ void Shock::curve(const RealVector &ref, bool local_shock, const RealVector &in,
 //            return SHOCK_REACHED_BOUNDARY;
         }
 
-        //printf("after boundary, size = %d\n", shockcurve.size());
+        if ( Debug::get_debug_level() == 5 ) {
+            printf("after boundary, size = %d\n", shockcurve.size());
+        }
 
         RealVector diff_init_next(2);
         for (int i = 0; i < 2; i++) diff_init_next.component(i) = pnext.component(i) - init.component(i);
@@ -1126,7 +1226,9 @@ tangent.component(i);
         double sign_composite = (double)sgn(lambda   - sigma);
         double sign_shock     = (double)sgn(lambda_0 - sigma);
         
-       // printf("Before curve_constructor(), shockcurve.size() = %d\n", shockcurve.size());
+        if ( Debug::get_debug_level() == 5 ) {
+            printf("Before curve_constructor(), shockcurve.size() = %d\n", shockcurve.size());
+        }
 
         int info_curve_constructor = curve_constructor(boundary, local_shock, type_of_shock, family, increase, ref_point, pnext, 
                                                    tangent, normal, number_ignore_doub_contact,
@@ -1135,8 +1237,10 @@ tangent.component(i);
                                                    sigma, sign_composite, sign_shock,
                                                    shockcurve);
                                                 
-//        printf("After curve_constructor(), info = %d, shockcurve.size() = %d\n", info_curve_constructor, shockcurve.size());
-//        printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
+        if ( Debug::get_debug_level() == 5 ) {
+            printf("After curve_constructor(), info = %d, shockcurve.size() = %d\n", info_curve_constructor, shockcurve.size());
+            printf("Error in file \"%s\", line %u\n", __FILE__, __LINE__);
+        }
 
         info_shockcurve = info_curve_constructor;
         info_shockcurve_alt = -1; //SHOCK_ERROR; 
@@ -1148,11 +1252,15 @@ tangent.component(i);
 //        return info_curve_constructor;
     }
     else { // Non-local. So far, non-local is for itself: SHOCK_FOR_ITSELF (maybe to be modified in the future).
-        printf("Shock. Non-local\n");
+        if ( Debug::get_debug_level() == 5 ) {
+            printf("Shock. Non-local\n");
+        }
 
         int info_lax = verify_lax_shock(ref_point, lambda_0, lambda_1, init, increase, family, ff, aa);
         if (info_lax == NON_LAX_SHOCK){
-//            printf("Initial point does not satisfy Lax condition\n");
+            if ( Debug::get_debug_level() == 5 ) {
+                printf("Initial point does not satisfy Lax condition\n");
+            }
 
             info_shockcurve = info_shockcurve_alt = NON_LAX_SHOCK;
 
@@ -1164,7 +1272,10 @@ tangent.component(i);
 
 //            return NON_LAX_SHOCK;
         }
-//        else printf("Initial point satisfies Lax condition\n"); // TODO: Remove this else and the print above.
+                else
+                    if ( Debug::get_debug_level() == 5 ) {
+                        printf("Initial point satisfies Lax condition\n"); // TODO: Remove this else and the print above.
+                    }
     
         double sigma_init = shockspeed(n, ref_point.components(), init.components(), ff, aa);
         
@@ -1255,13 +1366,19 @@ tangent.component(i);
 //        if (euclidean_norm(n, delta_tangent.components()) > 1e-2){
 ////            eps = 1.0/euclidean_norm(n, delta_tangent.components());
 //            eps = 1e-4;
-//            printf("First if: norm = %f\n", euclidean_norm(n, delta_tangent.components()));
+//            if ( Debug::get_debug_level() == 5 ) {
+//                printf("First if: norm = %f\n", euclidean_norm(n, delta_tangent.components()));
+//            }
 //        }
 //        else{
 //            eps = 1e-2;
-//            //printf("Second if: eps = %f\n", eps);
+//            if ( Debug::get_debug_level() == 5 ) {
+//                printf("Second if: eps = %f\n", eps);
+//            }
 //        }
-//        printf("eps = %f\n", eps);
+//        if ( Debug::get_debug_level() == 5 ) {
+//            printf("eps = %f\n", eps);
+//        }
 
         double curvature;
         double dRH2[2][2];
@@ -1276,8 +1393,10 @@ tangent.component(i);
         double test_eps = sgn(eps)*1e-2;
 
 //        shock_step(p, in, tangent, normal, ff, aa, eps, pnext);
-        std::cout << "Point: " << p << std::endl;
-        std::cout << "    Tangent: " << tangent << std::endl;
+        if ( Debug::get_debug_level() == 5 ) {
+            std::cout << "Point: " << p << std::endl;
+            std::cout << "    Tangent: " << tangent << std::endl;
+        }
         int info_shock_step = shock_step(p, ref_point, tangent, normal, ff, aa, test_eps, pnext);
         if (info_shock_step == SHOCK_ERROR) return SHOCK_ERROR;
 
@@ -1361,28 +1480,33 @@ double Shock::find_initial_epsilon(std::vector<RealVector> &right_eigenvector, s
         norm_r_dot[family] = 0.0;
         for (int j = 0; j < n; j++) norm_r_dot[family] += r_dot[family].component(j)*r_dot[family].component(j);
         norm_r_dot[family] = sqrt(norm_r_dot[family]);
-//        printf("norm_r_dot[%d] = %lf\n", family, norm_r_dot[family]);
+        if ( Debug::get_debug_level() == 5 ) {
+            printf("norm_r_dot[%d] = %lf\n", family, norm_r_dot[family]);
+        }
     }
 
     double k = pow(norm_r_dot[0]/norm_r_dot[1], 1.0/3.0);
     k = 50000.0;
-    //printf("k = %lf\n", k);
+    if ( Debug::get_debug_level() == 5 ) {
+        printf("k = %lf\n", k);
+    }
 
     while(
           sqrt((2*norm_r_dot[0])/(k*k*k*norm_r_dot[1]))*(1.0 + k*cos_alpha*.5) <= (1.0 + cos_alpha/k)
          ){
         k *= .5;
-        //printf("    Iterating... k = %lg\n", k);
+        if ( Debug::get_debug_level() == 5 ) {
+            printf("    Iterating... k = %lg\n", k);
+        }
     }
 
     // Definition of the initial epsilon:
-    // TEST
-//    printf("Test epsilon = %lf\n", pow(1.0/(norm_r_dot[0]*norm_r_dot[0]*norm_r_dot[1]), 1.0/3.0));
-    // TEST
-
-    //printf("<r, r_dot> = %lf\n", ddot(n, right_eigenvector[1].components(), r_dot[0].components()));
-//    printf("<r_1, r_dot_0> = %lg\n", ddot(n, right_eigenvector[1].components(), r_dot[0].components()));
-//    printf("<r_0, r_dot_1> = %lg\n", ddot(n, right_eigenvector[0].components(), r_dot[1].components()));
+    if ( Debug::get_debug_level() == 5 ) {
+        printf("Test epsilon = %lf\n", pow(1.0/(norm_r_dot[0]*norm_r_dot[0]*norm_r_dot[1]), 1.0/3.0));
+        printf("<r, r_dot> = %lf\n", ddot(n, right_eigenvector[1].components(), r_dot[0].components()));
+        printf("<r_1, r_dot_0> = %lg\n", ddot(n, right_eigenvector[1].components(), r_dot[0].components()));
+        printf("<r_0, r_dot_1> = %lg\n", ddot(n, right_eigenvector[0].components(), r_dot[1].components()));
+    }
 
     double init_epsilon = k*ddot(n, right_eigenvector[1].components(), r_dot[0].components())/(norm_r_dot[0]*norm_r_dot[0]*(1.0 + k*cos_alpha*.5)*(1.0 + k*cos_alpha*.5));
     return init_epsilon;
@@ -1434,8 +1558,10 @@ int Shock::compute_r_dot(int n, int fam, const RealVector &p, FluxFunction *flux
         family_index[1] = 0;
     }
 
-//    printf("Family = %d\n", fam);
-//    for (int i = 0; i < n; i++) printf("    family_index[%d] = %d\n", i, family_index[i]);
+    if ( Debug::get_debug_level() == 5 ) {
+        printf("Family = %d\n", fam);
+        for (int i = 0; i < n; i++) printf("    family_index[%d] = %d\n", i, family_index[i]);
+    }
 
 for (int family = 0; family < n; family++){
     d2flux[family_index[family]].resize(n);
@@ -1445,8 +1571,10 @@ for (int family = 0; family < n; family++){
         r[i] = e[family_index[family]].vrr[i];
     }
 
-//    for (int i = 0; i < n; i++) printf("    l[%d] = %f\n", i, l[i]);
-//    for (int i = 0; i < n; i++) printf("    r[%d] = %f\n", i, r[i]);
+    if ( Debug::get_debug_level() == 5 ) {
+        for (int i = 0; i < n; i++) printf("    l[%d] = %f\n", i, l[i]);
+        for (int i = 0; i < n; i++) printf("    r[%d] = %f\n", i, r[i]);
+    }
 
     // Extract lambda.
     // The i-th eigenvalue must be real. 
@@ -1456,7 +1584,9 @@ for (int family = 0; family < n; family++){
     double lambda;
 
     if (e[family_index[family]].i != 0){
-        //printf("Inside dirdrv(): Init step, eigenvalue %d is complex: % f %+f.\n", family, e[family].r, e[family].i);
+        if ( Debug::get_debug_level() == 5 ) {
+            printf("Inside dirdrv(): Init step, eigenvalue %d is complex: % f %+f.\n", family, e[family].r, e[family].i);
+        }
         return ABORTED_PROCEDURE;     
     }
     else lambda = e[family_index[family]].r;
@@ -1549,37 +1679,39 @@ for (int family = 0; family < n; family++){
     for (int i = 0; i < n; i++) AA[n - 1][i] = r[i];
     BB[n - 1] = 0.0;
 
-//    printf("Jac = \n");
-//    for (int i = 0; i < n; i++){
-//        printf("    | ");
-//        for (int j = 0; j < n; j++){
-//            printf(" %lf ", A[i][j]);
-//        }
-//        printf("|\n");
-//    }
+    if ( Debug::get_debug_level() == 5 ) {
+        printf("Jac = \n");
+        for (int i = 0; i < n; i++){
+            printf("    | ");
+            for (int j = 0; j < n; j++){
+                printf(" %lf ", A[i][j]);
+            }
+            printf("|\n");
+        }
 
-//    printf("D = \n");
-//    for (int i = 0; i < n; i++){
-//        printf("    | ");
-//        for (int j = 0; j < n; j++){
-//            printf(" %lf ", D[i][j]);
-//        }
-//        printf("|\n");
-//    }
+        printf("D = \n");
+        for (int i = 0; i < n; i++){
+            printf("    | ");
+            for (int j = 0; j < n; j++){
+                printf(" %lf ", D[i][j]);
+            }
+            printf("|\n");
+        }
 
-//    printf("AA = \n");
-//    for (int i = 0; i < n; i++){
-//        printf("    | ");
-//        for (int j = 0; j < n; j++){
-//            printf(" %lf ", AA[i][j]);
-//        }
-//        printf("|\n");
-//    }
+        printf("AA = \n");
+        for (int i = 0; i < n; i++){
+            printf("    | ");
+            for (int j = 0; j < n; j++){
+                printf(" %lf ", AA[i][j]);
+            }
+            printf("|\n");
+        }
 
-//    printf("BB = \n");
-//    for (int i = 0; i < n; i++){
-//        printf("    | %lf |\n", BB[i]);
-//    }
+        printf("BB = \n");
+        for (int i = 0; i < n; i++){
+            printf("    | %lf |\n", BB[i]);
+        }
+    }
 
 
     int info = cdgesv(n, &AA[0][0], BB, x);

@@ -11,6 +11,7 @@
  * Includes:
  */
 #include "ContinuationRarefactionFlow.h"
+#include "Debug.h"
 
 /*
  * ---------------------------------------------------------------
@@ -25,7 +26,9 @@ ContinuationRarefactionFlow::~ContinuationRarefactionFlow() {
 
 ContinuationRarefactionFlow::ContinuationRarefactionFlow(const RealVector & referenceVector, const int familyIndex, const int direction, const FluxFunction & fluxFunction) : RarefactionFlow(referenceVector, familyIndex, direction, fluxFunction) {
 
-    //    cout << "here" << endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout << "here" << endl;
+    }
 
 }
 
@@ -137,7 +140,9 @@ int ContinuationRarefactionFlow::rarefaction(int *neq, double *xi, double *in, d
     int i, j, info;
     vector<eigenpair> e;
     int type = RpNumerics::getPhysics().getPhysicsVector().at(0)->type();
-    //    cout <<"Valor de type: "<<type<<endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout <<"Valor de type: "<<type<<endl;
+    }
     param[0] = type; // _SIMPLE_ACCUMULATION_; //TODO REMOVE !!
     //    param[0] = _GENERAL_ACCUMULATION_; //TODO REMOVE !!
 
@@ -162,8 +167,10 @@ int ContinuationRarefactionFlow::rarefaction(int *neq, double *xi, double *in, d
         //for (i = 0; i < n; i++){
         if (fabs(e[family].i) > 1e-10) { // TODO Set a good value for this
 #ifdef TEST_RAREFACTION
-            printf("At rarefaction(): Imaginary eigenvalue!\n");
-            printf("Eigenvalue %d = % g %+g*i.\n", i, e[i].r, e[i].i);
+            if ( Debug::get_debug_level() == 5 ) {
+                printf("At rarefaction(): Imaginary eigenvalue!\n");
+                printf("Eigenvalue %d = % g %+g*i.\n", i, e[i].r, e[i].i);
+            }
 #endif
             return COMPLEX_EIGENVALUE;
         }
@@ -176,9 +183,11 @@ int ContinuationRarefactionFlow::rarefaction(int *neq, double *xi, double *in, d
         for (i = 0; i < n - 1; i++) {
             if (e[i].r == e[i + 1].r) {
 #ifdef TEST_RAREFACTION
-                printf("At rarefaction(): Eigenvalues are equal!\n");
-                printf("Eigenvalue %d = % f %+f*i.\n", i, e[i].r, e[i].i);
-                printf("Eigenvalue %d = % f %+f*i.\n", i + 1, e[i + 1].r, e[i + 1].i);
+                if ( Debug::get_debug_level() == 5 ) {
+                    printf("At rarefaction(): Eigenvalues are equal!\n");
+                    printf("Eigenvalue %d = % f %+f*i.\n", i, e[i].r, e[i].i);
+                    printf("Eigenvalue %d = % f %+f*i.\n", i + 1, e[i + 1].r, e[i + 1].i);
+                }
 #endif
                 return ABORTED_PROCEDURE;
             }
@@ -285,10 +294,14 @@ int ContinuationRarefactionFlow::rarefaction(int *neq, double *xi, double *in, d
 void ContinuationRarefactionFlow::fill_with_jet(const RpFunction & flux_object, int n, double *in, int degree, double *F, double *J, double *H) {
     RealVector r(n);
 
-    //    cout<<"Tamanho em fill: "<<n<<endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout<<"Tamanho em fill: "<<n<<endl;
+    }
     double *rp = r;
     for (int i = 0; i < n; i++) rp[i] = in[i];
-    //    cout << "Entrada em fill: " << r << endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout << "Entrada em fill: " << r << endl;
+    }
     // Will this work? There is a const somewhere in fluxParams.
     //FluxParams fp(r);
     //flux_object->fluxParams(FluxParams(r)); // flux_object->fluxParams(fp);
@@ -296,7 +309,9 @@ void ContinuationRarefactionFlow::fill_with_jet(const RpFunction & flux_object, 
     WaveState state_c(r);
 
     JetMatrix c_jet(n);
-    //    cout <<"Depois da linha 296"<<c_jet.size()<<endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout <<"Depois da linha 296"<<c_jet.size()<<endl;
+    }
     flux_object.jet(state_c, c_jet, degree);
 
 
@@ -322,7 +337,9 @@ void ContinuationRarefactionFlow::fill_with_jet(const RpFunction & flux_object, 
             }
         }
     }
-    //    cout <<"Dentro de fill with jet cont rare flow"<<endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout <<"Dentro de fill with jet cont rare flow"<<endl;
+    }
     return;
 }
 
@@ -366,57 +383,67 @@ int ContinuationRarefactionFlow::flux(int n, int family, const FluxFunction &ff,
         fill_with_jet(ff, n, in, 1, 0, &J[0][0], 0);
         info = Eigen::eig(n, &J[0][0], e);
     } else {
-        //        cout<<"Rare nao e simple"<<endl;
+        if ( Debug::get_debug_level() == 5 ) {
+            cout<<"Rare nao e simple"<<endl;
+        }
         double A[n][n], B[n][n];
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) A[i][j] = B[i][j] = 0.0;
         }
 
         fill_with_jet(ff, n, in, 1, 0, &A[0][0], 0);
-        //        printf("here1\n");
         fill_with_jet(gg, n, in, 1, 0, &B[0][0], 0);
-        //        printf("here2\n");
 
-        //        printf("in = \n");
-        //        printf("[");
-        //        for (int j = 0; j < n; j++) printf("%e ", in[j]);
-        //        printf("]\n");
-        //
-        //        printf("A = \n");
-        //        for (int i = 0; i < n; i++) {
-        //            printf("[");
-        //            for (int j = 0; j < n; j++) printf("%e ", A[i][j]);
-        //            printf("]\n");
-        //        }
-        //
-        //        printf("B = \n");
-        //        for (int i = 0; i < n; i++) {
-        //            printf("[");
-        //            for (int j = 0; j < n; j++) printf("%e ", B[i][j]);
-        //            printf("]\n");
-        //        }
+        if ( Debug::get_debug_level() == 5 ) {
+            cout<<"Rare nao e simple"<<endl;
+            printf("in = \n");
+            printf("[");
+            for (int j = 0; j < n; j++) printf("%e ", in[j]);
+            printf("]\n");
+            printf("A = \n");
+            for (int i = 0; i < n; i++) {
+                printf("[");
+                for (int j = 0; j < n; j++) printf("%e ", A[i][j]);
+                printf("]\n");
+            }
+      
+            printf("B = \n");
+            for (int i = 0; i < n; i++) {
+                printf("[");
+                for (int j = 0; j < n; j++) printf("%e ", B[i][j]);
+                printf("]\n");
+            }
+        }
 
         info = Eigen::eig(n, &A[0][0], &B[0][0], e);
 
 
 
-        //        printf("after eig: info = %d, e.size() = %d\n", info, e.size());
+        if ( Debug::get_debug_level() == 5 ) {
+            printf("after eig: info = %d, e.size() = %d\n", info, e.size());
+        }
     }
     /* NEW ABOVE */
 
     //    Eigen::print_eigen(e);
-    //    printf("in the middle: e.size() = %d\n", e.size());
-    //    printf("here3.5\n");
+    if ( Debug::get_debug_level() == 5 ) {
+        printf("in the middle: e.size() = %d\n", e.size());
+        printf("here3.5\n");
+    }
     if (fabs(e[family].i) > 1e-5) {
-        //        printf("Complex eigenvalue\n"); printf("here4\n");
+        if ( Debug::get_debug_level() == 5 ) {
+            printf("Complex eigenvalue\n"); printf("here4\n");
+        }
         return COMPLEX_EIGENVALUE;
     } else {
         *lambda = e[family].r;
         if (out != 0) for (int i = 0; i < n; i++) {
                 out[i] = e[family].vrr[i];
 
-                //                cout << "out referencia" << out[i] << endl;
-                //                printf("here5\n");
+                if ( Debug::get_debug_level() == 5 ) {
+                    cout << "out referencia" << out[i] << endl;
+                    printf("here5\n");
+                }
 
             }
         return SUCCESSFUL_PROCEDURE;
@@ -443,7 +470,9 @@ void ContinuationRarefactionFlow::matrixmult(int m, int p, int n, double *A, dou
             }
             C[i * n + j] = ddot_(&pp, &arow[0], &incx, &bcol[0], &incy);
 
-            //printf("C[%d][%d]: Conventional = % f; ddot_ = % f\n", i, j, sum, C[i*n + j]);
+            if ( Debug::get_debug_level() == 5 ) {
+                printf("C[%d][%d]: Conventional = % f; ddot_ = % f\n", i, j, sum, C[i*n + j]);
+            }
 
         }
     }

@@ -59,21 +59,22 @@ void RealVector::resize(int n) {
 }
 
 // Access to individual elements
-
+//
 double & RealVector::component(int n) {
     if (n < size_) return data[n];
 }
-
-
-// Access to individual elements
 
 const double & RealVector::component(int n)const {
     if (n < size_) return data[n];
 }
 
 // Access to data pointer
-
+//
 double * RealVector::components(void) {
+    return data;
+}
+
+const double * RealVector::components(void) const {
     return data;
 }
 
@@ -100,7 +101,7 @@ bool RealVector::operator==(const RealVector &other){
     return true;
 }
 
-
+// Cast operator
 RealVector::operator double *(void) {
     return data;
 }
@@ -114,6 +115,21 @@ double & RealVector::operator()(int comp) {
     return data[comp];
 }
 
+double RealVector::operator[](int comp) const {
+    return data[comp];
+}
+
+
+double & RealVector::operator[](int comp) {
+    return data[comp];
+}
+
+RealVector RealVector::zeroes(int m){
+    RealVector z(m);
+    for (int i = 0; i < m; i++) z(i) = 0.0;
+
+    return z;
+}
 
 // Output to stream
 
@@ -139,6 +155,11 @@ RealVector operator*(const RealVector &r, double alpha) {
 
 RealVector operator*(double alpha, const RealVector &r) {
     return r*alpha;
+}
+
+// Division by a scalar
+RealVector operator/(const RealVector &r, double alpha) {
+    return r*(1.0/alpha);
 }
 
 // Sum with a scalar
@@ -192,5 +213,87 @@ RealVector operator-(const RealVector &x, const RealVector &y) {
     for (int i = 0; i < x.size_; i++) temp.data[i] -= y.data[i];
 
     return temp;
+}
+
+// Norm of a RealVector
+double norm(const RealVector &x){
+    return sqrt(x*x);
+}
+
+// Normalize a RealVector
+void normalize(RealVector &x){
+    double inv_norm_x = 1.0/norm(x);
+
+    x = x*inv_norm_x;
+    
+    return;
+}
+
+// Inner product of two RealVectors
+double operator*(const RealVector &x, const RealVector &y){
+    double p = 0.0;
+
+    for (int i = 0; i < x.size(); i++) p += x(i)*y(i);
+
+    return p;
+}
+
+// Vector product of two 3D RealVectors
+RealVector vector_product(const RealVector &x, const RealVector &y){
+    RealVector v(3);
+
+    v(0) = x(1)*y(2) - x(2)*y(1);
+    v(1) = x(2)*y(0) - x(0)*y(2);
+    v(2) = x(0)*y(1) - x(1)*y(0);
+
+    return v;
+}
+
+// Solve the system of linear equations A*x = b
+int solve(const DoubleMatrix &A, const RealVector &b, RealVector &x){
+    int n = A.rows();
+
+    DoubleMatrix bb(n, 1), xx(n, 1);
+    for (int i = 0; i < n; i++) bb(i, 0) = b(i);
+
+    int info = solve(A, bb, xx);
+
+    x.resize(n);
+    for (int i = 0; i < n; i++) x(i) = xx(i, 0);
+
+    if (info == 0) return REALVECTOR_SOLVE_LINEAR_SYSTEM_OK;
+    else           return REALVECTOR_SOLVE_LINEAR_SYSTEM_ERROR;
+}
+
+// Multiplication of a DoubleMatrix by a RealVector
+RealVector operator*(const DoubleMatrix &A, const RealVector &x){
+    int m = A.rows(), n = A.cols();
+
+    RealVector b(m);
+
+    for (int i = 0; i < m; i++){
+        b(i) = 0.0;
+        for (int j = 0; j < n; j++) b(i) += A(i, j)*x(j);
+    }
+
+    return b;
+}
+
+RealVector matrix_row(const DoubleMatrix &m, int r){
+    int c = m.cols();
+
+    RealVector v(c);
+    for (int i = 0; i < c; i++) v(i) = m(r, i);
+
+    return v;
+}
+
+RealVector matrix_column(const DoubleMatrix &m, int c){
+    int r = m.rows();
+
+    RealVector v(r);
+    for (int i = 0; i < r; i++) v(i) = m(i, c);
+
+    return v;
 }
 

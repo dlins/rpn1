@@ -31,7 +31,6 @@ import rpn.component.RpCalcBasedGeomFactory;
 import rpn.component.RpGeometry;
 import rpn.component.util.AreaSelected;
 import rpn.controller.ui.UIController;
-import rpn.parser.RPnDataModule;
 import rpnumerics.Area;
 import rpnumerics.BoundaryExtensionCurve;
 import rpnumerics.ContourCurveCalc;

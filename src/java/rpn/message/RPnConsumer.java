@@ -100,10 +100,10 @@ mBeanServer.invoke(on, "createQueue" ...)
         try {
 
             queueConnection = cf.createQueueConnection("rpn", "rpn.fluid");
-            //QueueSession queueSession = queueConnection.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
+            QueueSession queueSession = queueConnection.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
 
             // this will keep the messages on the queue...
-            QueueSession queueSession = queueConnection.createQueueSession(false, Session.CLIENT_ACKNOWLEDGE);
+            //QueueSession queueSession = queueConnection.createQueueSession(false, Session.CLIENT_ACKNOWLEDGE);
 
             receiver = queueSession.createReceiver(queue);
             

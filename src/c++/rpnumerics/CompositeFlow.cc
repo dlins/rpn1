@@ -11,6 +11,7 @@
  * Includes:
  */
 #include "CompositeFlow.h"
+#include "Debug.h"
 
 /*
  * ---------------------------------------------------------------
@@ -169,30 +170,32 @@ int CompositeFlow::composite(int *neq, double *xi, double *in, double *out, int 
     double dU_dxi[n];
     int info_cdgesv = cdgesv(n, &M[0][0], minus_c, dU_dxi); // TODO: The 2x2 case should be done by hand
     if (info_cdgesv != SUCCESSFUL_PROCEDURE) {
-        printf("Cmp eng.: cdgesv returned with error.\n\n");
+        if ( Debug::get_debug_level() == 5 ) {
+            printf("Cmp eng.: cdgesv returned with error.\n\n");
 
-        // in
-        printf("\n");
-        for (int i = 0; i < 2 * n; i++) printf("in[%d] = %f\n", i, in[i]);
-        printf("\n");
+            // in
+            printf("\n");
+            for (int i = 0; i < 2 * n; i++) printf("in[%d] = %f\n", i, in[i]);
+            printf("\n");
 
-        // DeltaU
-        printf("\n");
-        for (int i = 0; i < 2 * n; i++) printf("DeltaU[%d] = %f\n", i, DeltaU[i]);
-        printf("\n");
+            // DeltaU
+            printf("\n");
+            for (int i = 0; i < 2 * n; i++) printf("DeltaU[%d] = %f\n", i, DeltaU[i]);
+            printf("\n");
 
 
-        for (int i = 0; i < n; i++) {
-            printf("M[%d, :] = [", i);
-            for (int j = 0; j < n; j++) {
-                printf(" %f ", M[i][j]);
+            for (int i = 0; i < n; i++) {
+                printf("M[%d, :] = [", i);
+                for (int j = 0; j < n; j++) {
+                    printf(" %f ", M[i][j]);
+                }
+                printf("]\n");
             }
-            printf("]\n");
+    
+            printf("\n");
+            for (int i = 0; i < n; i++) printf("c[%d] = [%f]\n", i, c[i]);
+            printf("\n");
         }
-
-        printf("\n");
-        for (int i = 0; i < n; i++) printf("c[%d] = [%f]\n", i, c[i]);
-        printf("\n");
 
         return info_cdgesv;
     }

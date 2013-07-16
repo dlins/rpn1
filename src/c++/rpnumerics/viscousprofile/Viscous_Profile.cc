@@ -1,4 +1,5 @@
 #include "Viscous_Profile.h"
+#include "Debug.h"
 
 const FluxFunction* Viscous_Profile::f = 0;
 const AccumulationFunction* Viscous_Profile::a = 0;
@@ -8,10 +9,11 @@ Viscosity_Matrix* Viscous_Profile::vmf = 0;
 // If there is no intersection, return false (and r is useless), otherwise return true.
 //
 bool Viscous_Profile::segment_intersection(double *p1, double *p2, double *q1, double *q2, double *r){
-//    {
-//        printf("    Sign(q1) = %lg\n", (p2[1] - p1[1])*q1[0] + (p1[0] - p2[0])*q1[1] + (p1[1]*p2[0] - p2[1]*p1[0]));
-//        printf("    Sign(q2) = %lg\n", (p2[1] - p1[1])*q2[0] + (p1[0] - p2[0])*q2[1] + (p1[1]*p2[0] - p2[1]*p1[0]));
-//    }
+
+    if ( Debug::get_debug_level() == 5 ) {
+        printf("    Sign(q1) = %lg\n", (p2[1] - p1[1])*q1[0] + (p1[0] - p2[0])*q1[1] + (p1[1]*p2[0] - p2[1]*p1[0]));
+        printf("    Sign(q2) = %lg\n", (p2[1] - p1[1])*q2[0] + (p1[0] - p2[0])*q2[1] + (p1[1]*p2[0] - p2[1]*p1[0]));
+    }
 
     double alpha, beta;
 
@@ -33,7 +35,9 @@ bool Viscous_Profile::segment_intersection(double *p1, double *p2, double *q1, d
 
     for (int i = 0; i < 2; i++) r[i] = .5*(alpha*p1[i] + (1.0 - alpha)*p2[i] + beta*q1[i] + (1.0 - beta)*q2[i]);
 
-//    printf("        alpha = %g, beta = %g, delta = %g\n", alpha, beta, delta);
+    if ( Debug::get_debug_level() == 5 ) {
+        printf("        alpha = %g, beta = %g, delta = %g\n", alpha, beta, delta);
+    }
 
     return (alpha >= 0.0 && alpha <= 1.0) && (beta >= 0.0 && beta <= 1.0);
 }
@@ -53,14 +57,18 @@ void Viscous_Profile::Newton_improvement(const FluxFunction *ff, const Accumulat
 
     double U[2];
     for (int i = 0; i < 2; i++) U[i] = p.component(i);
-    //cout << "Newton_U: (" << U[0] << ", " << U[1] << ")" << endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout << "Newton_U: (" << U[0] << ", " << U[1] << ")" << endl;
+    }
     // If this function ever comes to be vectorialized, these lines below are COMMON
     // to all points (since they deal with the ref point).
     //
     double c[2];
     double F_ref[2], G_ref[2];
     for (int i=0; i < 2; i++) c[i] = ref.component(i);
-    //cout << "Newton_R: (" << c[0] << ", " << c[1] << ")" << endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout << "Newton_R: (" << c[0] << ", " << c[1] << ")" << endl;
+    }
     ff->fill_with_jet(2, c, 0, F_ref, 0, 0);
     aa->fill_with_jet(2, c, 0, G_ref, 0, 0);
 //    ff->fill_with_jet(2, ref.components(), 0, F_ref, 0, 0);
@@ -80,7 +88,9 @@ void Viscous_Profile::Newton_improvement(const FluxFunction *ff, const Accumulat
         for (int i = 0; i < 2; i++) {
             // The minus sign is incorporated within the parentesis
             b[i] = (F[i] - sigma * G[i]) + c[i];
-            //cout << "b[i] = " << b[i] << "   c[i] = " << c[i] << endl;
+            if ( Debug::get_debug_level() == 5 ) {
+                cout << "b[i] = " << b[i] << "   c[i] = " << c[i] << endl;
+            }
 
             for (int j = 0; j < 2; j++) {
                 A[i][j] = sigma * JG[i][j] - JF[i][j];
@@ -98,7 +108,9 @@ void Viscous_Profile::Newton_improvement(const FluxFunction *ff, const Accumulat
 
         // If Newton does not converge, return the original point.
         if (fabs(det) <= (epsilon * anorm)) {
-            cout << "Viscous_Profile::Newton does not converges." << endl;
+            if ( Debug::get_debug_level() == 5 ) {
+                cout << "Viscous_Profile::Newton does not converges." << endl;
+            }
             for (int i = 0; i < 2; i++) out.component(i) = p.component(i);
             return;
         }
@@ -156,10 +168,11 @@ void Viscous_Profile::critical_points_linearization(const FluxFunction *ff, cons
     //std::vector<eigenpair> e;
     Eigen::eig(2, RH.data(), viscous.M().data(), ep);
 
-    cout << "Ponto no metodo: " << cp << endl;
-
-    cout << "eigen0RR: " << ep[0].r << endl;
-    cout << "eigen1RR: " << ep[1].r << endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout << "Ponto no metodo: " << cp << endl;
+        cout << "eigen0RR: " << ep[0].r << endl;
+        cout << "eigen1RR: " << ep[1].r << endl;
+    }
 
     //ep.push_back(e);
 
@@ -271,7 +284,9 @@ int Viscous_Profile::orbit(const FluxFunction *ff, const AccumulationFunction *a
     while (true) {
         // TEMPORAL
         if (out.size() > 5000) {
-            printf("Max reached!!!\n");
+            if ( Debug::get_debug_level() == 5 ) {
+                printf("Max reached!!!\n");
+            }
             return ABORTED_PROCEDURE;
         }
         // TEMPORAL
@@ -286,7 +301,7 @@ int Viscous_Profile::orbit(const FluxFunction *ff, const AccumulationFunction *a
         // BEGIN Verify that the orbit does indeed advance, and does not stay at the same point
         {
             double d = distance(new_point, previous_point);
-            if (largest_distance < d) largest_distance = d; //printf("d = %g, largest = %g\n", d, largest_distance);
+            if (largest_distance < d) largest_distance = d;
 
             if (out.size() > 5 && d < 0.01*largest_distance){
                 return ORBIT_STAGNANT;
@@ -304,15 +319,16 @@ int Viscous_Profile::orbit(const FluxFunction *ff, const AccumulationFunction *a
                                      r.components())){
                 out.push_back(r);
 
-               // printf("Reached segment\n");
                 return ORBIT_REACHED_SEGMENT;
             }
             else {
-//               // printf("(%lg, %lg)-(%lg, %lg) not intesecting (%lg, %lg)-(%lg, %lg)\n",
-//                         previous_point.component(0), previous_point.component(1),
-//                         new_point.component(0), new_point.component(1),
-//                         segment->at(0).component(0), segment->at(0).component(1),
-//                         segment->at(1).component(0), segment->at(1).component(1));
+                if ( Debug::get_debug_level() == 5 ) {
+                    printf("(%lg, %lg)-(%lg, %lg) not intesecting (%lg, %lg)-(%lg, %lg)\n",
+                         previous_point.component(0), previous_point.component(1),
+                         new_point.component(0), new_point.component(1),
+                         segment->at(0).component(0), segment->at(0).component(1),
+                         segment->at(1).component(0), segment->at(1).component(1));
+                }
             }
         }
         // END   Verify that the orbit does not intersect the segment (if given)
@@ -332,25 +348,32 @@ int Viscous_Profile::orbit(const FluxFunction *ff, const AccumulationFunction *a
             // Store the point lying in the domain's border and get out.
 //            out.push_back(r);
 
-            printf("Reached boundary\n");
+            if ( Debug::get_debug_level() == 5 ) {
+                printf("Reached boundary\n");
+            }
 
             return SUCCESSFUL_PROCEDURE;
         } else {
             // Both points lie outside the domain. Something went awfully wrong here.
-            printf("Both outside\n");
-            printf("previous_point = (");
-            for (int i = 0; i < n; i++) {
-                printf("%g", previous_point.component(i));
-                if (i < n - 1) printf(", ");
-            }
-            printf(")\n");
+            if ( Debug::get_debug_level() == 5 ) {
+                printf("Both outside\n");
+                printf("previous_point = (");
 
-            printf("new_point      = (");
-            for (int i = 0; i < n; i++) {
-                printf("%g", new_point.component(i));
-                if (i < n - 1) printf(", ");
+                for (int i = 0; i < n; i++) {
+                    printf("%g", previous_point.component(i));
+                    if (i < n - 1) printf(", ");
+                }
+
+                printf(")\n");
+                printf("new_point      = (");
+
+                for (int i = 0; i < n; i++) {
+                    printf("%g", new_point.component(i));
+                    if (i < n - 1) printf(", ");
+                }
+
+                printf(")\n");
             }
-            printf(")\n");
 
             return ABORTED_PROCEDURE;
         }

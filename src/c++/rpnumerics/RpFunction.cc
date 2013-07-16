@@ -18,7 +18,7 @@
  */
 RpFunction::~RpFunction(void){}
 
-void RpFunction::fill_with_jet(int n, double *in, int degree, double *F, double *J, double *H) const {
+void RpFunction::fill_with_jet(int n, const double *in, int degree, double *F, double *J, double *H) const {
     RealVector r(n);
     for (int i = 0; i < n; i++) r.component(i) = in[i];
 

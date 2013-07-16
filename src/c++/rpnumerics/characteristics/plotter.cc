@@ -2,6 +2,7 @@
 //#pragma implementation
 //#endif
 #include "plotter.h"
+#include "Debug.h"
 #include <stdio.h>
 #include <iostream>
 #include <string.h>
@@ -22,7 +23,9 @@ RiemannPlotter::RiemannPlotter(float xmin,float xmax,float ymax,
 		plot_(plot)
 {
 
-    printf("Aqui\n");
+    if ( Debug::get_debug_level() == 5 ) {
+        printf("Aqui\n");
+    }
 
 //        RiemannPlotter Temp((float)grid[0], (float)grid[n - 1], (float)time,
 //                            0.045,
@@ -46,7 +49,9 @@ void RiemannPlotter::reset(void)
 
 int RiemannPlotter::setup_next(void)
 {
-    printf("    setup_next:\n");
+    if ( Debug::get_debug_level() == 5 ) {
+        printf("    setup_next:\n");
+    }
 
     if (right_)
     {
@@ -146,17 +151,23 @@ void RiemannPlotter::get_interception(void)
 void RiemannPlotter::gen_family(std::vector<std::vector<RealVector> > &c){
 //    c.clear();
 
-    printf("Will generate characterstics.\n");
+    if ( Debug::get_debug_level() == 5 ) {
+        printf("Will generate characterstics.\n");
+    }
 
     int shock;
     reset();
     while(setup_next())
     {
-        printf("    ****\n");
+        if ( Debug::get_debug_level() == 5 ) {
+            printf("    ****\n");
+        }
         shock=trace();
 	get_interception();
         if (n_points()>1) {
-            printf("n = %d\n", n_points());
+            if ( Debug::get_debug_level() == 5 ) {
+                printf("n = %d\n", n_points());
+            }
             std::vector<RealVector> temp;
 
             for (int i = 0; i < n_points(); i++) {

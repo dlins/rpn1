@@ -22,6 +22,7 @@
 
 #include "CompositeCurve.h"
 #include "Shock.h"
+#include "Debug.h"
 
 using std::vector;
 
@@ -33,7 +34,9 @@ using std::vector;
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env, jobject obj, jobject initialPoint, jint increase, jint familyIndex) {
 
-    cout << "chamando JNI composite calc" << endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout << "chamando JNI composite calc" << endl;
+    }
 
     unsigned int i;
 
@@ -67,7 +70,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
     std::vector<RealVector> rarefactionCurve;
     std::vector<RealVector> compositeCurve;
 
-    cout << "Chamando com stone" << endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout << "Chamando com stone" << endl;
+    }
 
     FluxFunction * stoneflux = (FluxFunction *) RpNumerics::getPhysics().fluxFunction().clone();
 
@@ -75,14 +80,18 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
 
     Boundary * tempBoundary = RpNumerics::getPhysics().boundary().clone();
 
-    cout << "Increase: " << increase << endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout << "Increase: " << increase << endl;
+    }
 
     //        double deltaxi = 1e-3;
     double deltaxi = 1e-2;
 
     //Compute rarefaction
 
-    cout << "Increase da rarefacao: " << increase << endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout << "Increase da rarefacao: " << increase << endl;
+    }
     vector<RealVector> inflectionPoints;
 
     Rarefaction::curve(realVectorInput,
@@ -106,7 +115,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
 
         increase = WAVE_BACKWARD;
 
-    cout << "Rarefaction curve" << rarefactionCurve.size() << endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout << "Rarefaction curve" << rarefactionCurve.size() << endl;
+    }
 
     CompositeCurve::curve(rarefactionCurve, COMPOSITE_FROM_NORMAL_RAREFACTION, familyIndex,
             increase, 0,stoneflux, stoneaccum, tempBoundary, compositeCurve);
@@ -119,7 +130,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
         return NULL;
 
 
-//    cout << "Tamanho da curva: " << compositeCurve.size() << endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout << "Tamanho da curva: " << compositeCurve.size() << endl;
+    }
 
 
     //Orbit members creation

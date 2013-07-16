@@ -27,12 +27,23 @@ public class RPnNetworkStatus {
 
     public static String  SERVERNAME = new String("heitor");
     public static String  RPN_COMMAND_QUEUE_NAME = new String("jms/queue/rpnCommand");
+    public static String RPN_COMMAND_QUEUE_NAME_LOCAL   = new String("queue/rpnCommand");
     public static String  RPN_CONTROL_QUEUE_NAME = new String("jms/queue/rpnMaster");
 
     public static String MASTER_REQUEST_MSG = new String ("MASTER_REQUEST");
     public static String MASTER_ACK_MSG = new String ("MASTER_ACK");
 
     public static String  RPN_COMMAND_TOPIC_NAME = new String("jms/topic/rpnCommand");
+
+
+    /*
+     * THE COMMAND TAGS FOR CLIENT/SERVER COMMUNICATION
+     */
+    public static String RPN_MEDIATORPROXY_REQ_ID_TAG="REQ_ID";
+    public static String RPN_MEDIATORPROXY_COMMAND_TAG="RPN_COMMAND";
+    public static String RPN_MEDIATORPROXY_CLIENT_ID_TAG="CLIENT_ID";
+    public static String RPN_MEDIATORPROXY_SESSION_ID_TAG="SESSION_ID";
+    public static String RPN_MEDIATORPROXY_POLL_TAG="RPN_POLL";
 
 
     private RPnNetworkStatus() {
@@ -74,8 +85,6 @@ public class RPnNetworkStatus {
             publisher_ = new RPnPublisher(RPN_COMMAND_TOPIC_NAME);
 
         }
-
-
         // we will always be listening to either COMMANDs or CONTROLs
         //consumerThread_.start();
 

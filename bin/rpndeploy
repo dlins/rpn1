@@ -1,0 +1,19 @@
+#!/bin/sh
+
+mkdir deploy_tmp
+cd deploy_tmp
+cp ../rpnmediatorproxy.war .
+jar -xf rpnmediatorproxy.war
+mkdir WEB-INF/classes
+mv rpn rpnmediator rpnumerics wave WEB-INF/classes
+jar -cf rpnmediatorproxy.war WEB-INF
+export SSHPASS=rpn.fluid
+sshpass -e sftp -oBatchMode=no -b - jboss@heitor << !
+   cd oficina/jboss-as-7.1.0.Final/standalone/deployments/
+   put rpn*
+   bye
+!
+cd ..
+rm -rf deploy_tmp
+
+

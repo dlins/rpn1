@@ -1,4 +1,5 @@
 #include "TriPhaseAccumulationFunction.h"
+#include "Debug.h"
 
 TriPhaseAccumulationFunction::TriPhaseAccumulationFunction(void) {
 }
@@ -12,18 +13,25 @@ TriPhaseAccumulationFunction::~TriPhaseAccumulationFunction(void) {
 
 int TriPhaseAccumulationFunction::jet(const WaveState &w, JetMatrix &M, int degree) const {
 
-//    cout << "Entrando em jet acc triphase: " << w.stateSpaceDim() << endl;
-//    cout << "Entrando em tamanho m: " << M.size() << endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout << "Entrando em jet acc triphase: " << w.stateSpaceDim() << endl;
+        cout << "Entrando em tamanho m: " << M.size() << endl;
+    }
     if (degree >= 0) {
         for (int i = 0; i < w.stateSpaceDim(); i++) M(i, w(i));
-//        cout << "Passei por F" << endl;
+
+      if ( Debug::get_debug_level() == 5 ) {
+          cout << "Passei por F" << endl;
+      }
 
         if (degree >= 1) {
 //            for (int i = 0; i < w.stateSpaceDim(); i++) {
 //                for (int j = 0; j < w.stateSpaceDim(); j++) {
 //                    M(i, j, 0);
-//                    cout << "i: " << i << endl;
-//                    cout << "j: " << j << endl;
+//                    if ( Debug::get_debug_level() == 5 ) {
+//                        cout << "i: " << i << endl;
+//                        cout << "j: " << j << endl;
+//                    }
 //                }
 //
 //                M(i, i, 1);
@@ -32,7 +40,9 @@ int TriPhaseAccumulationFunction::jet(const WaveState &w, JetMatrix &M, int degr
             M(0, 1, 0.0);
             M(1, 0, 0.0);
             M(1, 1, 1.0);
-//            cout << "Passei por J" << endl;
+          if ( Debug::get_debug_level() == 5 ) {
+              cout << "Passei por J" << endl;
+          }
             if (degree == 2) {
                 for (int i = 0; i < w.stateSpaceDim(); i++) {
                     for (int j = 0; j < w.stateSpaceDim(); j++) {
@@ -42,7 +52,9 @@ int TriPhaseAccumulationFunction::jet(const WaveState &w, JetMatrix &M, int degr
 
                 }
             }
-//            cout << "Passei por H" << endl;
+            if ( Debug::get_debug_level() == 5 ) {
+                cout << "Passei por H" << endl;
+            }
         }
     }
     return 2;

@@ -11,6 +11,7 @@
  * Includes:
  */
 #include "StoneHugoniot.h"
+#include "Debug.h"
 
 /*
  * ---------------------------------------------------------------
@@ -50,8 +51,10 @@ int StoneHugoniot::classified_curve(const FluxFunction *f, const AccumulationFun
     RealVector pmin = g.grid.operator ()(0, 0);
     RealVector pmax = g.grid.operator ()(gridRows - 1, gridCols - 1);
 
-    cout << "Pmin: " << pmin << endl;
-    cout << "Pmax: " << pmax << endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout << "Pmin: " << pmin << endl;
+        cout << "Pmax: " << pmax << endl;
+    }
 
     Three_Phase_Boundary boundary(pmin, pmax);
 
@@ -63,12 +66,14 @@ int StoneHugoniot::classified_curve(const FluxFunction *f, const AccumulationFun
             out);
     delete q2eh;
 
-    ColorCurve colorCurve(*f, *a,vm);
+    ColorCurve colorCurve(*f, *a);
+            
+    ReferencePoint refPoint(r,f,a,vm);
 
     for (int i = 0; i < out.size(); i++) {
 
         HugoniotPolyLine polyLine;
-        colorCurve.classify_continuous_curve(out.at(i), r, polyLine, transitionList);
+        colorCurve.classify_continuous_curve(out.at(i), refPoint, polyLine, transitionList);
 
         hugoniot_curve.push_back(polyLine);
 

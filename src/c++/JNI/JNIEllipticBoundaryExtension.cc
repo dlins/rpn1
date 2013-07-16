@@ -22,6 +22,7 @@ NOTE :
 #include "EllipticExtension.h"
 #include "JNIDefs.h"
 #include "RpNumerics.h"
+#include "Debug.h"
 #include <vector>
 #include <iostream>
 
@@ -66,13 +67,17 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_EllipticBoundaryExtensionCalc_nativeCa
 
 
 
-    cout << "Familia: " << family << endl;
-    cout << "Charatristic: " << characteristic << endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout << "Familia: " << family << endl;
+        cout << "Charatristic: " << characteristic << endl;
+    }
 
     ellipticBoundaryExtension.curve(&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(), characteristic, family,
             *gv, elliptic_extension_on_curve, elliptic_extension_on_domain);
 
-    cout << "Curva: " << elliptic_extension_on_curve.size() << " " << "Domain:  " << elliptic_extension_on_domain.size() << endl;
+    if ( Debug::get_debug_level() == 5 ) {
+        cout << "Curva: " << elliptic_extension_on_curve.size() << " " << "Domain:  " << elliptic_extension_on_domain.size() << endl;
+    }
 
     if (elliptic_extension_on_curve.size() == 0 || elliptic_extension_on_domain.size() == 0)return NULL;
 
