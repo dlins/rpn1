@@ -1,5 +1,10 @@
 #!/bin/sh
 
+#
+# RPNDEPLOY - deploys the RPn server mediator to a JBoss server located at heitor
+#
+# mvera - should be ran from $RPN_HOME/lib
+#
 mkdir deploy_tmp
 cd deploy_tmp
 cp ../rpnmediatorproxy.war .
