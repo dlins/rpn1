@@ -17,12 +17,12 @@ import java.util.*;
  */
 public class RPnSender {
 
-    public static Connection connection = null;
-    public static Session session = null;
-    public static Context context = null;
-    public static MessageProducer publisher = null;
-    public static javax.jms.Queue queue = null;
-    public static QueueConnectionFactory cf = null;
+    public Connection connection = null;
+    public Session session = null;
+    public Context context = null;
+    public MessageProducer sender = null;
+    public javax.jms.Queue queue = null;
+    public QueueConnectionFactory cf = null;
 
     /**
      * @param args the command line arguments
@@ -35,13 +35,13 @@ public class RPnSender {
     }
 
 
-    public static void init(String destinationName) {
+    public RPnSender(String destinationName) {
                             
 
         try {
 
 
-            RPnNetworkStatus.instance().log("initiating the send context...");                        
+            //RPnNetworkStatus.instance().log("initiating the send context...");
             //String destinationName = ;
 
 
@@ -60,44 +60,30 @@ public class RPnSender {
             //cf = (QueueConnectionFactory) context.lookup("java:/ConnectionFactory");
 
             queue = (javax.jms.Queue) context.lookup(destinationName);
-            
-            
+            connection = cf.createConnection("rpn","rpn.fluid");
+            session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
-            
+            sender = session.createProducer(queue);
+
+            connection.start();                       
 
     
         } catch (Exception exc) {
 
             exc.printStackTrace();
 
-        } finally {
-
-
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (JMSException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        }
+        } 
 
     }
 
-    public static void send(String messageToSend) {
+    public void send(String messageToSend) {
        
         try {
 
-            connection = cf.createConnection("rpn","rpn.fluid");
-            session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);            
             
-            publisher = session.createProducer(queue);
-
-            connection.start();
 
             TextMessage messageTo = session.createTextMessage(messageToSend);
-            publisher.send(messageTo);
+            sender.send(messageTo);
 
             RPnNetworkDialog.infoText.append("Message sent to the JMS Provider : " + messageTo + '\n');
                                        
@@ -105,24 +91,10 @@ public class RPnSender {
 
             exc.printStackTrace();
 
-        } finally {
-
-
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (JMSException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        }
+        } 
     }
-
     
-
-
-    public static void close() {
+    public void close() {
 
         try {
 
@@ -167,6 +139,3 @@ public class RPnSender {
         return new InitialContext(jndiProperties);
     }
 }
-
-
-

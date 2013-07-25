@@ -22,6 +22,7 @@ public class RPnPublisher {
     private MessageProducer publisher = null;
     private TopicConnectionFactory cf = null;
     private javax.jms.Topic topic = null;
+    private TopicSession topicSession = null;
 
 
     public RPnPublisher(String topicName) {
@@ -36,35 +37,27 @@ public class RPnPublisher {
             cf = (TopicConnectionFactory) context.lookup("jms/RemoteConnectionFactory");            
             topic = (Topic) context.lookup(topicName);
 
+            //connection = cf.createTopicConnection("rpn","rpn.fluid");
+            connection = cf.createTopicConnection("rpn","rpn.fluid");
+            //TopicSession topicSession = connection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE);
+            topicSession = connection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE);
+
+            publisher = topicSession.createPublisher(topic);
+
+            connection.start();
+
         } catch (Exception exc) {
 
             exc.printStackTrace();
 
-        } finally {
-
-            if (connection != null) {
-
-                try {
-                    connection.close();
-                } catch (JMSException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+        } 
     }
 
     public void publish(String msg) {
 
        try {
 
-            //connection = cf.createTopicConnection("rpn","rpn.fluid");
-            connection = cf.createTopicConnection("rpn","rpn.fluid");
-            //TopicSession topicSession = connection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE);
-            TopicSession topicSession = connection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE);           
-            
-            publisher = topicSession.createPublisher(topic);
-
-            connection.start();
+  
 
             TextMessage messageTo = topicSession.createTextMessage(msg);
             publisher.send(messageTo);
@@ -75,18 +68,7 @@ public class RPnPublisher {
 
             exc.printStackTrace();
 
-        } finally {
-
-
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-        }
+        } 
     }
 
     public void close() {

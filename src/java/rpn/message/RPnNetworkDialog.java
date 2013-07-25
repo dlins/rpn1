@@ -35,6 +35,7 @@ public class RPnNetworkDialog extends JDialog implements PropertyChangeListener 
     
     BorderLayout gridLayout = new BorderLayout();
     JCheckBox masterCheckBox = new JCheckBox("Master");
+    JCheckBox firewallCheckBox = new JCheckBox("Firewall protected");
     public static JLabel infoLabel = new JLabel();
     
     
@@ -120,9 +121,11 @@ public class RPnNetworkDialog extends JDialog implements PropertyChangeListener 
 
         mainPanel.add(inputPanel,BorderLayout.NORTH);
 
-    
+
+        inputPanel.setLayout(new FlowLayout());
         inputPanel.add(serverTextBox);
         inputPanel.add(masterCheckBox);
+        inputPanel.add(firewallCheckBox);
 
 
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -161,8 +164,8 @@ public class RPnNetworkDialog extends JDialog implements PropertyChangeListener 
             }
         });
        
-        this.setResizable(false);
-        this.setTitle("Network");
+        //this.setResizable(false);
+        setTitle("RPn Network Control");
 
 
         onlineButton.addActionListener(new java.awt.event.ActionListener() {
@@ -184,10 +187,8 @@ public class RPnNetworkDialog extends JDialog implements PropertyChangeListener 
 
         
         try {
-            
-            InetAddress ip_ = InetAddress.getLocalHost();
-            String from2_ = ip_.getHostAddress();
-            String clientID = from2_.replace('.', '_');
+                        
+            String clientID = InetAddress.getLocalHost().getHostName();
                       
 
             if (RPnNetworkStatus.instance().isOnline()) {
@@ -206,12 +207,7 @@ public class RPnNetworkDialog extends JDialog implements PropertyChangeListener 
                 onlineButton.setText("Disconnect");
                 onlineButton.repaint();
 
-                if (masterCheckBox.isSelected())
-                    infoText.append("RPn user : " +  clientID + " is now master of RPNSESSION with ID : " + rpn.parser.RPnCommandModule.SESSION_ID_ + '\n');
-                else
-                    infoText.append("RPn user : " +  clientID + " is now following RPNSESSION with ID : " + rpn.parser.RPnCommandModule.SESSION_ID_ + '\n');
-
-                RPnNetworkStatus.instance().connect(clientID,masterCheckBox.isSelected());
+                RPnNetworkStatus.instance().connect(clientID,masterCheckBox.isSelected(),firewallCheckBox.isSelected());
 
                 masterCheckBox.setEnabled(false);
 

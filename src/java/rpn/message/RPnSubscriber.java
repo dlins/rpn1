@@ -15,7 +15,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  *
  * @author mvera
  */
-public class RPnSubscriber implements MessageListener {
+public class RPnSubscriber implements MessageListener,RPnMessageListener {
 
     private TopicConnection topicConnection = null;
     private MessageConsumer subscriber = null;
@@ -24,8 +24,12 @@ public class RPnSubscriber implements MessageListener {
     
     private boolean end_ = false;
 
+    private String listeningName_;
 
-    public RPnSubscriber(String topicName) {
+
+    public RPnSubscriber(String topicName)  {
+
+        listeningName_ = topicName;
 
         try {
 
@@ -33,27 +37,6 @@ public class RPnSubscriber implements MessageListener {
 
             cf = (TopicConnectionFactory) context.lookup("jms/RemoteConnectionFactory");
             topic = (Topic) context.lookup(topicName);
-
-        } catch (Exception exc) {
-
-            exc.printStackTrace();
-
-        } finally {
-
-            if (topicConnection != null) {
-
-                try {
-                    topicConnection.close();
-                } catch (JMSException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    public void subscribe() {
-
-        try {
 
             topicConnection = cf.createTopicConnection("rpn", "rpn.fluid");
 
@@ -65,6 +48,19 @@ public class RPnSubscriber implements MessageListener {
 
             topicConnection.start();
 
+        } catch (Exception exc) {
+
+            exc.printStackTrace();
+
+        } 
+    }
+
+    public void subscribe() {
+
+        try {
+
+   
+
             while (!end_)
                 Thread.sleep((long)3000);
 
@@ -75,16 +71,7 @@ public class RPnSubscriber implements MessageListener {
 
             exc.printStackTrace();
 
-        } finally {
-
-            if (topicConnection != null) {
-                try {
-                    topicConnection.close();
-                } catch (JMSException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+        } 
     }
 
     public void unsubscribe() {
@@ -110,7 +97,42 @@ public class RPnSubscriber implements MessageListener {
 
                 String text = ((TextMessage) message).getText();
 
-                // parses the stream...
+                parseMessageText(text);
+
+            }
+
+        } catch (Exception exc) {
+
+            exc.printStackTrace();
+
+        } 
+    }
+
+    public void parseMessageText(String text) {
+
+        try {
+
+
+            /*
+             * checks if CONTROL MSG or COMMAND MSG
+             */
+
+            // CONTROL MESSAGES PARSING
+            if (text.startsWith(RPnNetworkStatus.SLAVE_ACK_LOG_MSG)) {
+
+
+                RPnNetworkStatus.instance().ackSlaveRequest(RPnNetworkStatus.filterClientID(text));
+
+
+            } else  if (text.startsWith(RPnNetworkStatus.MASTER_ACK_LOG_MSG)) {
+
+
+                RPnNetworkStatus.instance().ackMasterRequest(RPnNetworkStatus.filterClientID(text));
+
+
+            } else {
+
+                // COMMAND MESSAGES PARSING
                 RPnCommandModule.init(XMLReaderFactory.createXMLReader(), new StringBufferInputStream(text));
 
                 // updates the PhaseSpace Frames...
@@ -126,6 +148,11 @@ public class RPnSubscriber implements MessageListener {
 
             exc.printStackTrace();
 
-        } 
+        }
+    }
+
+
+    public String listeningName() {
+        return listeningName_;
     }
 }

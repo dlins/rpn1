@@ -146,16 +146,17 @@ public class RPnMediatorProxy extends HttpServlet  implements ServletContextList
  
     }
 
-    protected void initJMSConnection(HttpServletResponse response) {
+    protected void initJMS_CommandTopicConnection(HttpServletResponse response) {
+
+        
+    }
+    protected void initJMS_SlaveReqQueueConnection(HttpServletResponse response) {
 
         commandQueue_ = new Vector();
         
 
         try {
 
-            InetAddress ip = InetAddress.getLocalHost();
-            String from2_ = ip.getHostAddress();
-            String clientID = from2_.replace('.', '_');
 
             // starts listening
             System.out.println("Will now listen to " + RPnNetworkStatus.RPN_MEDIATORPROXY_COMMAND_TAG + '\n');
@@ -166,7 +167,7 @@ public class RPnMediatorProxy extends HttpServlet  implements ServletContextList
             QueueConnectionFactory cf = (QueueConnectionFactory) context.lookup("java:/ConnectionFactory");
             
             //javax.jms.Queue queue = (javax.jms.Queue) context.lookup(RPnNetworkStatus.RPN_COMMAND_QUEUE_NAME);
-            javax.jms.Queue queue = (javax.jms.Queue) context.lookup(RPnNetworkStatus.RPN_COMMAND_QUEUE_NAME_LOCAL);
+            javax.jms.Queue queue = (javax.jms.Queue) context.lookup(RPnNetworkStatus.RPN_SLAVE_REQ_QUEUE_NAME_LOCAL);
 
             queueConnection_ = cf.createQueueConnection("rpn","rpn.fluid");
             QueueSession queueSession = queueConnection_.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);

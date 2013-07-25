@@ -17,30 +17,38 @@ import org.xml.sax.helpers.XMLReaderFactory;
  *
  * @author mvera
  */
-public class RPnConsumer  {
+public class RPnConsumer implements RPnMessageListener {
 
-    public static boolean end = false;
-    public static QueueConnection queueConnection = null;
-    public static QueueReceiver receiver = null;
-    public static QueueConnectionFactory cf = null;
-    public static javax.jms.Queue queue = null;
+    private boolean end_ = false;
+    private QueueConnection queueConnection_ = null;
+    private QueueReceiver receiver_ = null;
+    private QueueConnectionFactory cf_ = null;
+    private javax.jms.Queue queue_ = null;
+    private String listeningName_;
+    
     
 
-    public static void main(String[] args) {
-               
-        //RPnConsumer.startsListening("jms/queue/rpnCommand");
-    }
+    public RPnConsumer(String queueName,int ACK_MODEL) {
 
-    public static void init(String queueName) {
-
-
+        listeningName_ = queueName;
 
         try {
 
             final Context context = RPnSender.getInitialMDBContext();
 
-            cf = (QueueConnectionFactory) context.lookup("jms/RemoteConnectionFactory");
-            queue = (javax.jms.Queue) context.lookup(queueName);
+            cf_ = (QueueConnectionFactory) context.lookup("jms/RemoteConnectionFactory");
+            queue_ = (javax.jms.Queue) context.lookup(queueName);
+
+            queueConnection_ = cf_.createQueueConnection("rpn", "rpn.fluid");
+            QueueSession queueSession = queueConnection_.createQueueSession(false, ACK_MODEL);
+
+
+            // this will keep the messages on the queue_...
+            //QueueSession queueSession = queueConnection_.createQueueSession(false, Session.CLIENT_ACKNOWLEDGE);
+
+            receiver_ = queueSession.createReceiver(queue_);
+
+            queueConnection_.start();
 
     /*MBeanServer mBeanServer  = java.lang.management.ManagementFactory.getPlatformMBeanServer();
     ObjectName on = ObjectNameBuilder.DEFAULT.getJMSServerObjectName();
@@ -83,78 +91,30 @@ mBeanServer.invoke(on, "createQueue" ...)
 
             exc.printStackTrace();
 
-        } finally {
-
-            if (queueConnection != null) {
-                try {
-                    queueConnection.close();
-                } catch (JMSException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+        } 
     }
 
-    public static void startsListening() {
+    public void startsListening() {
            
         try {
 
-            queueConnection = cf.createQueueConnection("rpn", "rpn.fluid");
-            QueueSession queueSession = queueConnection.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
+     
 
-            // this will keep the messages on the queue...
-            //QueueSession queueSession = queueConnection.createQueueSession(false, Session.CLIENT_ACKNOWLEDGE);
-
-            receiver = queueSession.createReceiver(queue);
-            
-            queueConnection.start();
-
-            while (!end) {         
+            while (!end_) {
 
                 RPnNetworkDialog.infoText.append("Will now listen to rpn command queue..." + '\n');
 
-                Message message = receiver.receive((long)15000);                        
-                String text;
+                //Message message = receiver_.receive((long)15000);
+                Message message = consume();
+                
 
                 if (message instanceof TextMessage) {
 
                     RPnNetworkDialog.infoText.append("Message recieved from rpn command queue..." + '\n');
                     
-                    text = ((TextMessage) message).getText();
+                    String text = ((TextMessage) message).getText();
+                    parseMessageText(text);
 
-                    // checks if CONTROL MSG or COMMAND MSG
-
-                    if (text.startsWith("MASTER_ACK")) {
-
-                        RPnNetworkStatus.instance().disconnect();
-
-                        // I am Master of the session now...
-                        RPnNetworkStatus.instance().connect(RPnNetworkStatus.instance().clientID(),true);
-
-
-                    } else if (text.startsWith("MASTER_REQUEST")) {
-
-                        // should I give control away... ?
-                        RPnNetworkStatus.instance().disconnect();
-
-                        RPnSender.send(RPnNetworkStatus.MASTER_ACK_MSG);
-
-                        // I am following the new Master now...
-                        RPnNetworkStatus.instance().connect(RPnNetworkStatus.instance().clientID(),false);
-
-                    } else {
-
-                        // parses the stream...
-                        RPnCommandModule.init(XMLReaderFactory.createXMLReader(), new StringBufferInputStream(text));
-
-                        // updates the PhaseSpace Frames...
-                        rpn.RPnPhaseSpaceFrame[] framesList = rpn.RPnUIFrame.getPhaseSpaceFrames();
-
-                        for (int i = 0; i < framesList.length; i++) {
-                            framesList[i].invalidate();
-                            framesList[i].repaint();
-                        }
-                    }
                 } 
             }
 
@@ -162,28 +122,89 @@ mBeanServer.invoke(on, "createQueue" ...)
 
             exc.printStackTrace();
 
-        } finally {
-
-            if (queueConnection != null) {
-                try {
-                    queueConnection.close();
-                } catch (JMSException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+        } 
     }
 
-    public static void stopsListening() {
+    public void stopsListening() {
 
-        end = false;
+        end_ = false;
 
-        if (queueConnection != null) {
+        if (queueConnection_ != null) {
             try {
-                queueConnection.close();
+                queueConnection_.close();
             } catch (JMSException e) {
                 e.printStackTrace();
             }
         }       
+    }
+
+    public Message consume() {
+
+        try {
+                RPnNetworkDialog.infoText.append("Will now consume from queue..." + '\n');
+                return receiver_.receiveNoWait();
+
+        } catch (Exception exc) {
+
+            exc.printStackTrace();
+            return null;
+
+        }
+    }
+
+    public void parseMessageText(String text) {
+
+        try {
+            /*
+             * checks if CONTROL MSG or COMMAND MSG
+             */
+
+
+            // CONTROL MESSAGES PARSING
+            if (text.startsWith(RPnNetworkStatus.MASTER_ACK_LOG_MSG)) {
+
+
+
+            } else if (text.startsWith(RPnNetworkStatus.MASTER_REQUEST_LOG_MSG)) {
+
+                if (RPnNetworkStatus.instance().isMaster()) {
+
+                    RPnMasterReqDialog reqDialog = new RPnMasterReqDialog(RPnNetworkStatus.filterClientID(text));
+                    reqDialog.setVisible(true);
+
+                }
+
+            } else if (text.startsWith(RPnNetworkStatus.SLAVE_REQ_LOG_MSG)) {
+
+                if (RPnNetworkStatus.instance().isMaster()) {
+
+                    RPnSlaveReqDialog reqDialog = new RPnSlaveReqDialog(RPnNetworkStatus.filterClientID(text));
+                    reqDialog.setVisible(true);
+
+                }
+
+            } else {
+
+                // COMMAND MESSAGES PARSING
+                RPnCommandModule.init(XMLReaderFactory.createXMLReader(), new StringBufferInputStream(text));
+
+                // updates the PhaseSpace Frames...
+                rpn.RPnPhaseSpaceFrame[] framesList = rpn.RPnUIFrame.getPhaseSpaceFrames();
+
+                for (int i = 0; i < framesList.length; i++) {
+                    framesList[i].invalidate();
+                    framesList[i].repaint();
+                }
+            }
+
+        } catch (Exception exc) {
+
+            exc.printStackTrace();
+
+        }
+    }
+
+    public String listeningName() {
+        return listeningName_;
     }
 }

@@ -6,23 +6,22 @@
 
 package rpn.message;
 
-/**
- *
- * @author mvera
- */
+import javax.jms.*;
+
 public class RPnConsumerThread extends Thread {
 
-    private String queueName_;
+    private RPnConsumer consumer_ = null;
 
 
     public RPnConsumerThread(String queueName) {
 
-        queueName_ = queueName.toString();
+        consumer_ = new RPnConsumer(queueName,Session.AUTO_ACKNOWLEDGE);
     }
 
     public void run() {
 
-        //RPnHttpConsumer.init(queueName_);
-        RPnHttpConsumer.startsListening();
+        
+        consumer_.startsListening();
+        
     }
 }
