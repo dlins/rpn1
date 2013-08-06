@@ -91,6 +91,7 @@ public class RPnSlaveReqDialog extends JDialog {
 
         RPnPublisher publisher = new RPnPublisher(RPnNetworkStatus.RPN_SLAVE_ACK_TOPIC_NAME);
         publisher.publish(RPnNetworkStatus.SLAVE_ACK_LOG_MSG + '|' + clientID);
+        publisher.close();
 
         dispose();
 

@@ -18,7 +18,7 @@ import java.awt.event.*;
  */
 public class RPnMasterReqDialog extends JDialog {
 
-    private String clientID;
+    private String reqClientID_;
 
     JPanel mainPanel = new JPanel();
     JPanel infoPanel = new JPanel();
@@ -29,7 +29,7 @@ public class RPnMasterReqDialog extends JDialog {
 
     BorderLayout gridLayout = new BorderLayout();
 
-    public JLabel infoLabel = new JLabel("A request for joining the session has arrived from : ");
+    public JLabel infoLabel = new JLabel("A request for MASTER lock has arrived from : ");
 
 
 
@@ -50,12 +50,12 @@ public class RPnMasterReqDialog extends JDialog {
     private void init(String reqClientID) throws Exception {
 
 
-        clientID = new String(reqClientID);
+        reqClientID_ = new String(reqClientID);
 
         setResizable(false);
         setTitle("RPn Session Access Grant");
 
-        infoLabel.setText(infoLabel.getText() + clientID);
+        infoLabel.setText(infoLabel.getText() + reqClientID_);
         infoPanel.add(infoLabel);
 
         buttonsPanel.add(allowButton);
@@ -89,8 +89,16 @@ public class RPnMasterReqDialog extends JDialog {
 
     void allowButton_actionPerformed(ActionEvent e) {
 
+        // MASTER leaves the session...
+        RPnNetworkStatus.instance().disconnect();
+
+        // notifies of the new MASTER...
         RPnPublisher publisher = new RPnPublisher(RPnNetworkStatus.RPN_MASTER_ACK_TOPIC_NAME);
-        publisher.publish(RPnNetworkStatus.MASTER_ACK_LOG_MSG + '|' + clientID);
+        publisher.publish(RPnNetworkStatus.MASTER_ACK_LOG_MSG + '|' + reqClientID_);
+        publisher.close();
+
+        // reconnect as SLAVE
+        RPnNetworkStatus.instance().connect(RPnNetworkStatus.instance().clientID(),false,RPnNetworkStatus.instance().isFirewalled());
 
         dispose();
 

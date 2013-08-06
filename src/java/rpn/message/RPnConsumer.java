@@ -25,12 +25,19 @@ public class RPnConsumer implements RPnMessageListener {
     private QueueConnectionFactory cf_ = null;
     private javax.jms.Queue queue_ = null;
     private String listeningName_;
-    
+    private int ackModel_ = Session.AUTO_ACKNOWLEDGE;
     
 
-    public RPnConsumer(String queueName,int ACK_MODEL) {
+    public RPnConsumer(String queueName) {
+        this(queueName,false);
+    }
+
+    public RPnConsumer(String queueName,boolean persistent) {
 
         listeningName_ = queueName;
+
+        if (persistent)
+            ackModel_ = Session.CLIENT_ACKNOWLEDGE;
 
         try {
 
@@ -40,7 +47,9 @@ public class RPnConsumer implements RPnMessageListener {
             queue_ = (javax.jms.Queue) context.lookup(queueName);
 
             queueConnection_ = cf_.createQueueConnection("rpn", "rpn.fluid");
-            QueueSession queueSession = queueConnection_.createQueueSession(false, ACK_MODEL);
+
+
+            QueueSession queueSession = queueConnection_.createQueueSession(false, ackModel_);
 
 
             // this will keep the messages on the queue_...
@@ -49,6 +58,8 @@ public class RPnConsumer implements RPnMessageListener {
             receiver_ = queueSession.createReceiver(queue_);
 
             queueConnection_.start();
+
+            
 
     /*MBeanServer mBeanServer  = java.lang.management.ManagementFactory.getPlatformMBeanServer();
     ObjectName on = ObjectNameBuilder.DEFAULT.getJMSServerObjectName();
@@ -102,7 +113,7 @@ mBeanServer.invoke(on, "createQueue" ...)
 
             while (!end_) {
 
-                RPnNetworkDialog.infoText.append("Will now listen to rpn command queue..." + '\n');
+                RPnNetworkDialog.infoText.append("Will now listen to " + listeningName_ + '\n');
 
                 //Message message = receiver_.receive((long)15000);
                 Message message = consume();
@@ -110,7 +121,7 @@ mBeanServer.invoke(on, "createQueue" ...)
 
                 if (message instanceof TextMessage) {
 
-                    RPnNetworkDialog.infoText.append("Message recieved from rpn command queue..." + '\n');
+                    RPnNetworkDialog.infoText.append("Message recieved from : " + listeningName_ + '\n');
                     
                     String text = ((TextMessage) message).getText();
                     parseMessageText(text);
@@ -127,7 +138,7 @@ mBeanServer.invoke(on, "createQueue" ...)
 
     public void stopsListening() {
 
-        end_ = false;
+        end_ = true;
 
         if (queueConnection_ != null) {
             try {
@@ -141,8 +152,9 @@ mBeanServer.invoke(on, "createQueue" ...)
     public Message consume() {
 
         try {
-                RPnNetworkDialog.infoText.append("Will now consume from queue..." + '\n');
-                return receiver_.receiveNoWait();
+                RPnNetworkDialog.infoText.append("Will now consume from queue... " + listeningName_ + '\n');
+                //return receiver_.receiveNoWait();
+                return receiver_.receive((long)5000);
 
         } catch (Exception exc) {
 
@@ -163,16 +175,7 @@ mBeanServer.invoke(on, "createQueue" ...)
             // CONTROL MESSAGES PARSING
             if (text.startsWith(RPnNetworkStatus.MASTER_ACK_LOG_MSG)) {
 
-
-
-            } else if (text.startsWith(RPnNetworkStatus.MASTER_REQUEST_LOG_MSG)) {
-
-                if (RPnNetworkStatus.instance().isMaster()) {
-
-                    RPnMasterReqDialog reqDialog = new RPnMasterReqDialog(RPnNetworkStatus.filterClientID(text));
-                    reqDialog.setVisible(true);
-
-                }
+                // DO NOTHING...
 
             } else if (text.startsWith(RPnNetworkStatus.SLAVE_REQ_LOG_MSG)) {
 
@@ -183,7 +186,7 @@ mBeanServer.invoke(on, "createQueue" ...)
 
                 }
 
-            } else {
+            } else if (text.startsWith(RPnNetworkStatus.RPN_COMMAND_PREFIX)) {
 
                 // COMMAND MESSAGES PARSING
                 RPnCommandModule.init(XMLReaderFactory.createXMLReader(), new StringBufferInputStream(text));

@@ -10,12 +10,20 @@ import javax.jms.*;
 
 public class RPnConsumerThread extends Thread {
 
-    private RPnConsumer consumer_ = null;
+    private RPnMessageListener consumer_ = null;
 
 
     public RPnConsumerThread(String queueName) {
 
-        consumer_ = new RPnConsumer(queueName,Session.AUTO_ACKNOWLEDGE);
+        consumer_ = new RPnConsumer(queueName);
+    }
+
+    public RPnConsumerThread(String queueName,boolean persistent) {
+
+        if (persistent)
+            consumer_ = new RPnPersistentConsumer(queueName);
+        else
+            consumer_ = new RPnConsumer(queueName);
     }
 
     public void run() {
@@ -23,5 +31,9 @@ public class RPnConsumerThread extends Thread {
         
         consumer_.startsListening();
         
+    }
+
+    public void stopsListening() {
+        consumer_.stopsListening();
     }
 }

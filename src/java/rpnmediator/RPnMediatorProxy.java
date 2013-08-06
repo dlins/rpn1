@@ -150,7 +150,12 @@ public class RPnMediatorProxy extends HttpServlet  implements ServletContextList
 
         
     }
+
     protected void initJMS_SlaveReqQueueConnection(HttpServletResponse response) {
+    }
+
+
+    protected void initJMSConnection(HttpServletResponse response) {
 
         commandQueue_ = new Vector();
         

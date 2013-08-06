@@ -47,6 +47,7 @@ public class RPnSubscriber implements MessageListener,RPnMessageListener {
             subscriber.setMessageListener(this);
 
             topicConnection.start();
+            
 
         } catch (Exception exc) {
 
@@ -59,8 +60,6 @@ public class RPnSubscriber implements MessageListener,RPnMessageListener {
 
         try {
 
-   
-
             while (!end_)
                 Thread.sleep((long)3000);
 
@@ -72,6 +71,14 @@ public class RPnSubscriber implements MessageListener,RPnMessageListener {
             exc.printStackTrace();
 
         } 
+    }
+
+    public void startsListening() {
+        subscribe();
+    }
+
+    public void stopsListening() {
+        unsubscribe();
     }
 
     public void unsubscribe() {
@@ -124,13 +131,20 @@ public class RPnSubscriber implements MessageListener,RPnMessageListener {
                 RPnNetworkStatus.instance().ackSlaveRequest(RPnNetworkStatus.filterClientID(text));
 
 
-            } else  if (text.startsWith(RPnNetworkStatus.MASTER_ACK_LOG_MSG)) {
-
+            } else if (text.startsWith(RPnNetworkStatus.MASTER_ACK_LOG_MSG)) {
 
                 RPnNetworkStatus.instance().ackMasterRequest(RPnNetworkStatus.filterClientID(text));
 
+            } else if (text.startsWith(RPnNetworkStatus.MASTER_REQUEST_LOG_MSG)) {
 
-            } else {
+                if (RPnNetworkStatus.instance().isMaster()) {
+
+                    RPnMasterReqDialog reqDialog = new RPnMasterReqDialog(RPnNetworkStatus.filterClientID(text));
+                    reqDialog.setVisible(true);
+
+                }
+
+            } else if (text.startsWith(RPnNetworkStatus.RPN_COMMAND_PREFIX)) {
 
                 // COMMAND MESSAGES PARSING
                 RPnCommandModule.init(XMLReaderFactory.createXMLReader(), new StringBufferInputStream(text));
