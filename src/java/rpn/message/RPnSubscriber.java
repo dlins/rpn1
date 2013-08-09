@@ -22,11 +22,13 @@ public class RPnSubscriber implements MessageListener,RPnMessageListener {
     private TopicConnectionFactory cf = null;
     private javax.jms.Topic topic = null;
     
-    private boolean end_ = false;
+    protected boolean end_ = false;
 
     private String listeningName_;
 
 
+    public RPnSubscriber() {}
+    
     public RPnSubscriber(String topicName)  {
 
         listeningName_ = topicName;
@@ -124,6 +126,9 @@ public class RPnSubscriber implements MessageListener,RPnMessageListener {
              * checks if CONTROL MSG or COMMAND MSG
              */
 
+            RPnNetworkStatus.instance().log("Will now parse the message received... " + '\n' + text);
+
+            
             // CONTROL MESSAGES PARSING
             if (text.startsWith(RPnNetworkStatus.SLAVE_ACK_LOG_MSG)) {
 

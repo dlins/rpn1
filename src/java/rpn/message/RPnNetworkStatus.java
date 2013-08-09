@@ -48,14 +48,8 @@ public class RPnNetworkStatus {
     private RPnSender masterSender_ = null;
 
 
-    public static String  SERVERNAME = new String(" heitor.fluid.impa.br ");
-    //public static String  RPN_COMMAND_QUEUE_NAME = new String("jms/queue/rpnCommand");
-    //public static String  RPN_CONTROL_QUEUE_NAME = new String("jms/queue/rpnMaster");
-
-    // LOCAL JNDI DOES NOT USE jms/ prefix...
-    public static String RPN_COMMAND_TOPIC_NAME_LOCAL   = new String("topic/RPN_COMMAND_TOPIC_1234");
-    public static String RPN_SLAVE_REQ_QUEUE_NAME_LOCAL = new String("queue/RPN_SLAVE_REQ_QUEUE_1234");
-
+    public static String  SERVERNAME = new String(" heitor.fluid.impa.br ");   
+    
     /*
      * MASTER command publishing TOPIC
      */
@@ -227,21 +221,18 @@ public class RPnNetworkStatus {
             slaveAckSubscriberThread_ = null;
         }
 
-        if (isMaster_)
+        if (isMaster_) {
+
+            resetMasterQueue();
             log("All Connections closed for MASTER session ...");
+            // TODO notify that SESSION has no MASTER now...
+        }
+            
         else
             log("All Connections closed for SLAVE session ...");
 
-        try {
-            Thread.sleep((long)5000);        
-        } catch (InterruptedException ex) {
-            ex.printStackTrace();
-        }
 
         isOnline_ = false;
-
-
-
 
     }
 
@@ -451,5 +442,12 @@ public class RPnNetworkStatus {
 
         String clientID = text.substring(text.indexOf('|') + 1);
         return clientID;
+    }
+
+
+    public static String trimLocalJmsPrefix(String jmsName) {
+
+        // LOCAL JNDI DOES NOT USE jms/ prefix...
+        return jmsName.substring(3, jmsName.length());
     }
 }

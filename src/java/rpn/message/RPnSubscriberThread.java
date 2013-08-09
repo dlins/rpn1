@@ -17,11 +17,24 @@ public class RPnSubscriberThread extends Thread {
 
     public RPnSubscriberThread(String topicName) {
 
-        subscriber_ = new RPnSubscriber(topicName);
+        if (RPnNetworkStatus.instance().isFirewalled()) {
+
+            RPnNetworkStatus.instance().log("WARN : a Http Polling context will be started...");
+            subscriber_ = new RPnHttpPoller(topicName,new RPnSubscriber());
+        }
+
+        else
+            subscriber_ = new RPnSubscriber(topicName);
 
 
 
     }
+
+    public RPnSubscriberThread(RPnSubscriber subscriber) {
+
+        subscriber_ = subscriber;
+    }
+
 
     public void run() {
 

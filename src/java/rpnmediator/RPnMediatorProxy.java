@@ -33,21 +33,14 @@ public class RPnMediatorProxy extends HttpServlet  implements ServletContextList
     private String reqSession_ = "";
     private String reqInboundMsg_ = "";
     private String reqOutboundMsg_ = "";
-    
-    /*
-     * Queues are java.util.Vector for simplicity. Concurrency ???
-     */
-    private Vector commandQueue_;
 
     /*
      * The listening component
      */
-    private QueueReceiver receiver_;
+    private static RPnHttpSubscriber subscriber_ = null;
+    private static RPnSubscriberThread commandSubscriberThread_ = null;
 
-    /*
-     * Our JMS Queue Connection
-     */
-    private QueueConnection queueConnection_ = null;
+    
     /*
      * a log for init issues...    
      */
@@ -72,11 +65,11 @@ public class RPnMediatorProxy extends HttpServlet  implements ServletContextList
 
         else {
 
-            initJMSConnection(response);
+           
 
             if (reqId_.compareTo(RPnNetworkStatus.RPN_MEDIATORPROXY_COMMAND_TAG) == 0) {
 
-                SEND((String) request.getParameter("RPN_COMMAND_MSG"));
+                //SEND((String) request.getParameter("RPN_COMMAND_MSG"));
             }
 
             if (reqId_.compareTo(RPnNetworkStatus.RPN_MEDIATORPROXY_POLL_TAG) == 0) {
@@ -85,7 +78,10 @@ public class RPnMediatorProxy extends HttpServlet  implements ServletContextList
 
                 //response.setContentType("text/xml");
                 //response.setContentType("text/html");
+
+                // this will enable the browser output...
                 response.setContentType( "text/xml;charset=UTF-8" );
+
                 PrintWriter writer = response.getWriter();
 
                 //writer.println("<html>");
@@ -94,41 +90,23 @@ public class RPnMediatorProxy extends HttpServlet  implements ServletContextList
                 //writer.println("</head>");
                 //writer.println("<body bgcolor=white>");
 
-                if (receiver_ == null) {
-                    responseErrorMsg(response,RECEIVER_INITIALIZATION_ERROR_MSG);                    ;
-                } else {
-                    try {
-                        Message msg = receiver_.receiveNoWait();
-                        //Message msg = receiver_.receive((long)15000);
-                        //Message msg = receiver_.receive();
+        //        if (commandSubscriberThread_ == null) {
+          //          responseErrorMsg(response,RECEIVER_INITIALIZATION_ERROR_MSG);                    ;
+            //    } else {
 
-                        if (msg != null) {
-                            if (msg instanceof TextMessage) {
+                
+                    while (!subscriber_.commandQueue_.isEmpty()) {
 
-                                //writer.println("<h1>There are Messages on queue : " + RPnNetworkStatus.RPN_COMMAND_QUEUE_NAME_LOCAL + " </h1>");
-                                String text = ((TextMessage) msg).getText();
-                                
-                                System.out.println(text.toString());
-                                
-                                writer.println(text.toString());
+                        String command = (String)subscriber_.commandQueue_.remove(subscriber_.commandQueue_.size() - 1);
 
-                            } else {
-                                // DEBUG ONLY
-                                //writer.println("not text message");
-                            }
-                        } else {
-                            // DEBUG ONLY
-                            //writer.println("no message on queue");
-                        }
+                        // for DEBUGING
+                        System.out.println("Message received at RPnMediatorProxy : " + '\n' + command);
+                                                
+                        writer.println(command);
 
-                        queueConnection_.close();
-
-                    } catch (JMSException ex) {
-
-                        responseErrorMsg(response,ex2str(ex));
+                        
                     }
-
-                }               
+                //}
 
                 //writer.println("</body>");
                 //writer.println("</html>");
@@ -143,57 +121,9 @@ public class RPnMediatorProxy extends HttpServlet  implements ServletContextList
 
     @Override
     public void init() throws ServletException {
- 
+
+
     }
-
-    protected void initJMS_CommandTopicConnection(HttpServletResponse response) {
-
-        
-    }
-
-    protected void initJMS_SlaveReqQueueConnection(HttpServletResponse response) {
-    }
-
-
-    protected void initJMSConnection(HttpServletResponse response) {
-
-        commandQueue_ = new Vector();
-        
-
-        try {
-
-
-            // starts listening
-            System.out.println("Will now listen to " + RPnNetworkStatus.RPN_MEDIATORPROXY_COMMAND_TAG + '\n');
-
-            //final Context context = RPnSender.getInitialMDBContext();
-            final Context context = new InitialContext();
-            //QueueConnectionFactory cf = (QueueConnectionFactory) context.lookup("jms/RemoteConnectionFactory");
-            QueueConnectionFactory cf = (QueueConnectionFactory) context.lookup("java:/ConnectionFactory");
-            
-            //javax.jms.Queue queue = (javax.jms.Queue) context.lookup(RPnNetworkStatus.RPN_COMMAND_QUEUE_NAME);
-            javax.jms.Queue queue = (javax.jms.Queue) context.lookup(RPnNetworkStatus.RPN_SLAVE_REQ_QUEUE_NAME_LOCAL);
-
-            queueConnection_ = cf.createQueueConnection("rpn","rpn.fluid");
-            QueueSession queueSession = queueConnection_.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
-
-
-            receiver_ = queueSession.createReceiver(queue);
-
-            queueConnection_.start();
-
-        } catch (Exception exc) {
-            
-            responseErrorMsg(response,ex2str(exc));
-            
-            try {
-                queueConnection_.close();    
-            } catch (JMSException jmsex) {
-                responseErrorMsg(response,ex2str(jmsex));
-            }
-
-        } 
-    }   
 
     protected boolean fillInputParameters(HttpServletRequest request) {
 
@@ -263,45 +193,25 @@ public class RPnMediatorProxy extends HttpServlet  implements ServletContextList
 
     @Override
     public void contextInitialized(ServletContextEvent event) {
-        // Do your job here during webapp startup.
+
+        // SLAVE SUBS to RPN COMMAND TOPIC
+        System.out.println("Will now listen to : " + RPnNetworkStatus.RPN_COMMAND_TOPIC_NAME);
+        subscriber_ = new RPnHttpSubscriber(RPnNetworkStatus.trimLocalJmsPrefix(RPnNetworkStatus.RPN_COMMAND_TOPIC_NAME));
+
+
+        if (commandSubscriberThread_ == null) {
+            commandSubscriberThread_ = new RPnSubscriberThread(subscriber_);
+        }
+
+        commandSubscriberThread_.start();
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent event) {
 
-/*        try {
-
-            if (queueConnection_ != null)
-             queueConnection_.close();
-
-
-        } catch (JMSException ex) {
-
-            ex.printStackTrace();
-        }*/
+        if (commandSubscriberThread_ != null)
+            commandSubscriberThread_.unsubscribe();
     }
 
-    public void REG(String clientID,String sessionID,Boolean isMaster) {
-
-    }
-
-    public void PUB(String cliendID,String topic,String msg) {
-
-    }
-
-    public void SUB(String clientID,String topic) {
-
-    }
-
-    public void SEND(String msg) {
-
-    }
-
-    public void RECEIVE(String clientID,String queue) {
-
-    }
-
-    public void UNREG(String clientID) {
-
-    }
+    
 }

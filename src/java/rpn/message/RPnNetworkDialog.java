@@ -199,6 +199,12 @@ public class RPnNetworkDialog extends JDialog implements PropertyChangeListener 
                 infoText.append("RPn user : " +  clientID + " is now off RPNSESSION with ID : " + rpn.parser.RPnCommandModule.SESSION_ID_ + '\n');
                                
                 onlineButton.setText("Connect");
+
+                // a new connection context can be started...
+                masterCheckBox.setEnabled(true);
+                firewallCheckBox.setEnabled(true);
+
+
                 onlineButton.repaint();
 
             } else {
@@ -209,7 +215,9 @@ public class RPnNetworkDialog extends JDialog implements PropertyChangeListener 
 
                 RPnNetworkStatus.instance().connect(clientID,masterCheckBox.isSelected(),firewallCheckBox.isSelected());
 
+                // once connected ...controls are disabled !
                 masterCheckBox.setEnabled(false);
+                firewallCheckBox.setEnabled(false);
 
             }
 

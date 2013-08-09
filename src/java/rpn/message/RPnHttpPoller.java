@@ -17,31 +17,29 @@ import org.xml.sax.helpers.XMLReaderFactory;
  *
  * @author mvera
  */
-public class RPnHttpPoller {
-
-    public static boolean end = false;
+public class RPnHttpPoller extends RPnSubscriber {
+    
 
     private RPnMessageListener messageParser_ = null;
 
 
-    public RPnHttpPoller(RPnMessageListener messageParser) {
+    public RPnHttpPoller(String topicName,RPnMessageListener messageParser) {
         messageParser_ = messageParser;
     }
 
 
-    public void startsListening() {
+    public void subscribe() {
            
         try {
 
 
-            while (!end) {         
+            while (!end_) {
 
-                RPnNetworkDialog.infoText.append("Will now hit RPn Mediator URL..." + '\n');
+                RPnNetworkStatus.instance().log("Will now hit RPn Mediator URL..." + '\n');
 
-		URL rpnMediatorURL = new URL("http://heitor:8080/rpnmediatorproxy/rpnmediatorproxy?REQ_ID=" + messageParser_.listeningName());
-
+		//URL rpnMediatorURL = new URL("http://heitor:8080/rpnmediatorproxy/rpnmediatorproxy?REQ_ID=" + messageParser_.listeningName());
+                URL rpnMediatorURL = new URL("http://heitor:8080/rpnmediatorproxy/rpnmediatorproxy?REQ_ID=RPN_POLL");
 		URLConnection rpnMediatorConn = rpnMediatorURL.openConnection();
-
 
 		BufferedReader buffReader = new BufferedReader(new InputStreamReader(rpnMediatorConn.getInputStream()));
 
@@ -53,11 +51,12 @@ public class RPnHttpPoller {
 			fullText.append(text);
 		}
 
-		if (buffFlag)               
+		if ((buffFlag) && (fullText.length() > 5))
                     messageParser_.parseMessageText(fullText.toString());
+                else
+                    RPnNetworkStatus.instance().log("no message retrieved from proxy... " + '\n');
 
-                // TODO ? closeConnection URL ???
-                
+
                 // this is for not bringing JBoss down !!!
                 Thread.sleep((long)500);
             }
@@ -67,11 +66,5 @@ public class RPnHttpPoller {
             exc.printStackTrace();
 
         } 
-    }
-
-    public void stopsListening() {
-
-        end = false;
-
-    }
+    }   
 }
