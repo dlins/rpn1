@@ -7,26 +7,34 @@
 
 package rpn.message;
 
+import java.net.MalformedURLException;
+
 /**
  *
  * @author mvera
  */
 public class RPnSubscriberThread extends Thread {
 
-    private RPnSubscriber subscriber_ = null;
+    private RPnMessageListener subscriber_ = null;
 
     public RPnSubscriberThread(String topicName) {
+
+        try {
+
 
         if (RPnNetworkStatus.instance().isFirewalled()) {
 
             RPnNetworkStatus.instance().log("WARN : a Http Polling context will be started...");
-            subscriber_ = new RPnHttpPoller(topicName,new RPnSubscriber());
+            subscriber_ = new RPnHttpPoller(new RPnSubscriber(topicName,false),
+                                            RPnHttpPoller.buildHitURL(topicName));
         }
 
         else
             subscriber_ = new RPnSubscriber(topicName);
 
-
+        } catch (java.net.MalformedURLException ex) {
+            ex.printStackTrace();
+        }
 
     }
 
@@ -37,13 +45,11 @@ public class RPnSubscriberThread extends Thread {
 
 
     public void run() {
-
-        subscriber_.subscribe();
+        subscriber_.startsListening();
     }
 
     public void unsubscribe() {
-
-        subscriber_.unsubscribe();
+        subscriber_.stopsListening();
     }
 }
 

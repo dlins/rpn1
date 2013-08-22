@@ -6,7 +6,7 @@
 
 package rpn.message;
 
-import javax.jms.*;
+import java.net.MalformedURLException;
 
 public class RPnConsumerThread extends Thread {
 
@@ -14,23 +14,33 @@ public class RPnConsumerThread extends Thread {
 
 
     public RPnConsumerThread(String queueName) {
-
-        consumer_ = new RPnConsumer(queueName);
+        this(queueName,false);
     }
 
     public RPnConsumerThread(String queueName,boolean persistent) {
 
-        if (persistent)
-            consumer_ = new RPnPersistentConsumer(queueName);
-        else
-            consumer_ = new RPnConsumer(queueName);
+        try {
+
+
+        if (RPnNetworkStatus.instance().isFirewalled()) {
+
+            RPnNetworkStatus.instance().log("WARN : a Http Polling context will be started for... " + queueName);
+            consumer_ = new RPnHttpPoller(new RPnConsumer(queueName,persistent,false),
+                                          RPnHttpPoller.buildHitURL(queueName));
+        } else
+
+            consumer_ = new RPnConsumer(queueName,persistent,false);
+        } catch (java.net.MalformedURLException ex) {
+            ex.printStackTrace();
+        }
     }
 
-    public void run() {
+    public RPnConsumerThread(RPnConsumer consumer) {
+        consumer_ = consumer;
+    }
 
-        
-        consumer_.startsListening();
-        
+    public void run() {       
+        consumer_.startsListening();        
     }
 
     public void stopsListening() {

@@ -17,7 +17,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  *
  * @author mvera
  */
-public class RPnConsumer implements RPnMessageListener {
+public class RPnConsumer implements RPnResetableListener {
 
     private boolean end_ = false;
     private QueueConnection queueConnection_ = null;
@@ -26,90 +26,122 @@ public class RPnConsumer implements RPnMessageListener {
     private javax.jms.Queue queue_ = null;
     private String listeningName_;
     private int ackModel_ = Session.AUTO_ACKNOWLEDGE;
+
+    private boolean isLocal_ = false;
+    private boolean persistent_ = false;
     
 
     public RPnConsumer(String queueName) {
-        this(queueName,false);
+        this(queueName,false,false);
     }
 
     public RPnConsumer(String queueName,boolean persistent) {
+        this(queueName,persistent,false);
+    }
+
+    public RPnConsumer(String queueName,boolean persistent,boolean isLocal) {
 
         listeningName_ = queueName;
+        persistent_ = persistent;
+        isLocal_ = isLocal;
 
-        if (persistent)
+        if (!RPnNetworkStatus.instance().isFirewalled())
+            connect();
+
+    }
+
+    public void connect() {
+        
+        if (persistent_)
             ackModel_ = Session.CLIENT_ACKNOWLEDGE;
 
-        try {
-
-            final Context context = RPnSender.getInitialMDBContext();
-
-            cf_ = (QueueConnectionFactory) context.lookup("jms/RemoteConnectionFactory");
-            queue_ = (javax.jms.Queue) context.lookup(queueName);
-
-            queueConnection_ = cf_.createQueueConnection("rpn", "rpn.fluid");
+            try {
 
 
-            QueueSession queueSession = queueConnection_.createQueueSession(false, ackModel_);
+              Context context = null;
+
+              if (!isLocal_) {
+
+                    context = RPnSender.getInitialMDBContext();
+                    cf_ = (QueueConnectionFactory) context.lookup("jms/RemoteConnectionFactory");
+                    
+                }
+                else {
+
+                    context = new InitialContext();
+                    cf_ = (QueueConnectionFactory) context.lookup("java:/ConnectionFactory");
+                    
+                }
+
+                queue_ = (javax.jms.Queue) context.lookup(listeningName_);
+
+                queueConnection_ = cf_.createQueueConnection("rpn", "rpn.fluid");
 
 
-            // this will keep the messages on the queue_...
-            //QueueSession queueSession = queueConnection_.createQueueSession(false, Session.CLIENT_ACKNOWLEDGE);
+                QueueSession queueSession = queueConnection_.createQueueSession(false, ackModel_);
 
-            receiver_ = queueSession.createReceiver(queue_);
 
-            queueConnection_.start();
+                // this will keep the messages on the queue_...
+                //QueueSession queueSession = queueConnection_.createQueueSession(false, Session.CLIENT_ACKNOWLEDGE);
 
-            
+                receiver_ = queueSession.createReceiver(queue_);
 
-    /*MBeanServer mBeanServer  = java.lang.management.ManagementFactory.getPlatformMBeanServer();
-    ObjectName on = ObjectNameBuilder.DEFAULT.getJMSServerObjectName();
-    MBeanInfo mbi = mBeanServer.getMBeanInfo(on);
-    System.out.println(mbi.getClassName());
-    MBeanAttributeInfo[] mbas = mbi.getAttributes();
-    for (MBeanAttributeInfo mba : mbas)
-    {
-      System.out.println("attr: " + mba.getName() + " of type " + mba.getType());
-    }
+                queueConnection_.start();
 
-    MBeanOperationInfo[] mbos = mbi.getOperations();
-    for (MBeanOperationInfo mbo : mbos)
-    {
-     System.out.println("oper: " + mbo.getName() );
-     MBeanParameterInfo[] mbps = mbo.getSignature();
-     for (MBeanParameterInfo mbp : mbps)
-     {
-       System.out.println("  param: " + mbp.getName());
-     }
-     System.out.println("   returns: " + mbo.getReturnType());
-    }
 
-//get attributes on the JMSServerControl
 
-String[] qnames = (String[]) mBeanServer.getAttribute(on, "QueueNames");
+                /*MBeanServer mBeanServer  = java.lang.management.ManagementFactory.getPlatformMBeanServer();
+                ObjectName on = ObjectNameBuilder.DEFAULT.getJMSServerObjectName();
+                MBeanInfo mbi = mBeanServer.getMBeanInfo(on);
+                System.out.println(mbi.getClassName());
+                MBeanAttributeInfo[] mbas = mbi.getAttributes();
+                for (MBeanAttributeInfo mba : mbas)
+                {
+                System.out.println("attr: " + mba.getName() + " of type " + mba.getType());
+                }
 
-//invoke methods on the JMSServerControl
-mBeanServer.invoke(on, "createQueue" ...)
+                MBeanOperationInfo[] mbos = mbi.getOperations();
+                for (MBeanOperationInfo mbo : mbos)
+                {
+                System.out.println("oper: " + mbo.getName() );
+                MBeanParameterInfo[] mbps = mbo.getSignature();
+                for (MBeanParameterInfo mbp : mbps)
+                {
+                System.out.println("  param: " + mbp.getName());
+                }
+                System.out.println("   returns: " + mbo.getReturnType());
+                }
 
-            JMXConnector connector = JMXConnectorFactory.connect(new JMXServiceURL(JMX_URL), new HashMap());
+                //get attributes on the JMSServerControl
 
-            MBeanServerConnection mbsc = connector.getMBeanServerConnection();
+                String[] qnames = (String[]) mBeanServer.getAttribute(on, "QueueNames");
 
-            ObjectName name=new ObjectName("org.jboss.messaging:module=JMS,type=Server");
-            JMSServerControlMBean control = (JMSServerControlMBean)MBeanServerInvocationHandler.newProxyInstance(mbsc,name,JMSServerControlMBean.class,false);
-            control.createQueue("TestQ","test");
-    */
-        } catch (Exception exc) {
+                //invoke methods on the JMSServerControl
+                mBeanServer.invoke(on, "createQueue" ...)
 
-            exc.printStackTrace();
+                JMXConnector connector = JMXConnectorFactory.connect(new JMXServiceURL(JMX_URL), new HashMap());
 
-        } 
+                MBeanServerConnection mbsc = connector.getMBeanServerConnection();
+
+                ObjectName name=new ObjectName("org.jboss.messaging:module=JMS,type=Server");
+                JMSServerControlMBean control = (JMSServerControlMBean)MBeanServerInvocationHandler.newProxyInstance(mbsc,name,JMSServerControlMBean.class,false);
+                control.createQueue("TestQ","test");
+                 */
+            } catch (Exception exc) {
+
+                exc.printStackTrace();
+
+            }
+
+        
     }
 
     public void startsListening() {
            
         try {
 
-     
+            if (queueConnection_ == null)
+                connect();
 
             while (!end_) {
 
@@ -152,7 +184,8 @@ mBeanServer.invoke(on, "createQueue" ...)
     public Message consume() {
 
         try {
-                RPnNetworkDialog.infoText.append("Will now consume from queue... " + listeningName_ + '\n');
+                if (RPnNetworkDialog.infoText != null)
+                    RPnNetworkDialog.infoText.append("Will now consume from queue... " + listeningName_ + '\n');
                 //return receiver_.receiveNoWait();
                 return receiver_.receive((long)5000);
 
@@ -162,6 +195,21 @@ mBeanServer.invoke(on, "createQueue" ...)
             return null;
 
         }
+    }
+
+    public void reset() {
+
+        consume();
+        stopsListening();
+
+    }
+
+    public boolean check() {
+
+        if ((persistent_) && (consume() != null))
+                return true;
+
+        return false;
     }
 
     public void parseMessageText(String text) {

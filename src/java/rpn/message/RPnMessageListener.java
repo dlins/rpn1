@@ -11,6 +11,7 @@ package rpn.message;
  */
 public interface RPnMessageListener {
 
+    void connect();
     void parseMessageText(String text);
     String listeningName();
     void startsListening();

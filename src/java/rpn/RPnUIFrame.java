@@ -239,8 +239,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         commandMenu_.finalizeApplication();
         
         // TODO : a RPnNetworkModule out of parser (all others as well)
-        //rpn.message.RPnSender.close();
-        rpn.message.RPnNetworkStatus.instance().disconnect();
+        if (rpn.message.RPnNetworkStatus.instance() != null)
+            rpn.message.RPnNetworkStatus.instance().disconnect();
     }
 
     //Help | About action performed

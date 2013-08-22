@@ -23,56 +23,65 @@ public class RPnSubscriber implements MessageListener,RPnMessageListener {
     private javax.jms.Topic topic = null;
     
     protected boolean end_ = false;
+    protected boolean isLocal_ = false;
 
     private String listeningName_;
 
 
-    public RPnSubscriber() {}
+    public RPnSubscriber(String topicName) {
+
+        this(topicName,false);
+    }
     
-    public RPnSubscriber(String topicName)  {
+    public RPnSubscriber(String topicName,boolean isLocal)  {
 
         listeningName_ = topicName;
+        isLocal_ = isLocal;
 
-        try {
+        if (!RPnNetworkStatus.instance().isFirewalled())
+            connect();
 
-            final Context context = RPnSender.getInitialMDBContext();
-
-            cf = (TopicConnectionFactory) context.lookup("jms/RemoteConnectionFactory");
-            topic = (Topic) context.lookup(topicName);
-
-            topicConnection = cf.createTopicConnection("rpn", "rpn.fluid");
-
-            TopicSession topicSession = topicConnection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE);
-
-            subscriber = topicSession.createSubscriber(topic);
-
-            subscriber.setMessageListener(this);
-
-            topicConnection.start();
-            
-
-        } catch (Exception exc) {
-
-            exc.printStackTrace();
-
-        } 
     }
 
-    public void subscribe() {
+    public void connect() {
+        
+            try {
 
-        try {
-
-            while (!end_)
-                Thread.sleep((long)3000);
-
-            
+                Context context = null;
 
 
-        } catch (Exception exc) {
+                if (!isLocal_) {
 
-            exc.printStackTrace();
+                    context = RPnSender.getInitialMDBContext();
+                    cf = (TopicConnectionFactory) context.lookup("jms/RemoteConnectionFactory");
+                    
+                }
+                else {
 
-        } 
+                    context = new InitialContext();
+                    cf = (TopicConnectionFactory) context.lookup("java:/ConnectionFactory");
+                    
+                }
+
+                topic = (Topic) context.lookup(listeningName_);
+
+                topicConnection = cf.createTopicConnection("rpn", "rpn.fluid");
+
+                TopicSession topicSession = topicConnection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE);
+
+                subscriber = topicSession.createSubscriber(topic);
+
+                subscriber.setMessageListener(this);
+
+                topicConnection.start();
+
+
+            } catch (Exception exc) {
+
+                exc.printStackTrace();
+
+
+        }
     }
 
     public void startsListening() {
@@ -83,7 +92,24 @@ public class RPnSubscriber implements MessageListener,RPnMessageListener {
         unsubscribe();
     }
 
-    public void unsubscribe() {
+    protected void subscribe() {
+
+        try {
+
+            if (topicConnection == null)
+                connect();
+            
+            while (!end_)
+                Thread.sleep((long)3000);
+
+        } catch (Exception exc) {
+
+            exc.printStackTrace();
+
+        }
+    }
+
+    protected void unsubscribe() {
 
         end_ = true;
 
@@ -102,7 +128,8 @@ public class RPnSubscriber implements MessageListener,RPnMessageListener {
 
             if (message instanceof TextMessage) {
 
-                RPnNetworkDialog.infoText.append("Message recieved from rpn command topic..." + '\n');
+                if (!isLocal_)
+                    RPnNetworkDialog.infoText.append("Message recieved from rpn command topic..." + '\n');
 
                 String text = ((TextMessage) message).getText();
 

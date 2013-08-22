@@ -5,7 +5,8 @@
  */
 package rpn.message;
 
-import javax.jms.*;
+import java.net.*;
+import java.io.*;
 
 /**
  *
@@ -43,30 +44,30 @@ public class RPnNetworkStatus {
     private RPnSubscriberThread masterAckSubscriberThread_ = null;
 
     // TODO : this is not necessary
-    private RPnConsumer masterResetConsumer_ = null;
-    private RPnPersistentConsumer masterCheckConsumer_ = null;
+    private RPnResetableListener masterResetConsumer_ = null;
+    private RPnResetableListener masterCheckConsumer_ = null;
     private RPnSender masterSender_ = null;
 
 
-    public static String  SERVERNAME = new String(" heitor.fluid.impa.br ");   
+    public static String  SERVERNAME = new String("147.65.7.10");
     
     /*
      * MASTER command publishing TOPIC
      */
-    public static String  RPN_COMMAND_TOPIC_NAME = new String("jms/topic/RPN_COMMAND_TOPIC_1234");
+    public static String  RPN_COMMAND_TOPIC_NAME = new String("jms/topic/RPN_COMMAND_TOPIC_5678");
     /*
      * MASTER listening on SLAVE REQ QUEUE and publishing on SLAVE ACK
      */
-    public static String RPN_SLAVE_REQ_QUEUE_NAME = new String("jms/queue/RPN_SLAVE_REQ_QUEUE_1234");
-    public static String RPN_MASTER_REQ_TOPIC_NAME = new String("jms/topic/RPN_MASTER_REQ_TOPIC_1234");
+    public static String RPN_SLAVE_REQ_QUEUE_NAME = new String("jms/queue/RPN_SLAVE_REQ_QUEUE_5678");
+    public static String RPN_MASTER_REQ_TOPIC_NAME = new String("jms/topic/RPN_MASTER_REQ_TOPIC_5678");
     /*
      * MASTER ACKNOWLEDGE
      */
-    public static String RPN_MASTER_QUEUE_NAME = new String("jms/queue/RPN_MASTER_QUEUE_1234");
+    public static String RPN_MASTER_QUEUE_NAME = new String("jms/queue/RPN_MASTER_QUEUE_5678");
     
     
-    public static String RPN_SLAVE_ACK_TOPIC_NAME = new String("jms/topic/RPN_SLAVE_ACK_TOPIC_1234");
-    public static String RPN_MASTER_ACK_TOPIC_NAME = new String("jms/topic/RPN_MASTER_ACK_TOPIC_1234");
+    public static String RPN_SLAVE_ACK_TOPIC_NAME = new String("jms/topic/RPN_SLAVE_ACK_TOPIC_5678");
+    public static String RPN_MASTER_ACK_TOPIC_NAME = new String("jms/topic/RPN_MASTER_ACK_TOPIC_5678");
 
     /*
      * RPN CONTROL MESSAGES
@@ -86,7 +87,21 @@ public class RPnNetworkStatus {
     public static String RPN_MEDIATORPROXY_COMMAND_TAG="RPN_COMMAND";
     public static String RPN_MEDIATORPROXY_CLIENT_ID_TAG="CLIENT_ID";
     public static String RPN_MEDIATORPROXY_SESSION_ID_TAG="SESSION_ID";
-    public static String RPN_MEDIATORPROXY_POLL_TAG="RPN_POLL";
+
+    public static String RPN_MEDIATORPROXY_MASTER_UPDATE_TAG="MASTER_UPDATE";
+    public static String RPN_MEDIATORPROXY_MASTER_CHECK_TAG="MASTER_CHECK";
+    public static String RPN_MEDIATORPROXY_MASTER_RESET_TAG="MASTER_RESET";
+    public static String RPN_MEDIATORPROXY_POLL_TAG="POLL";
+
+    public static String RPN_MEDIATORPROXY_SEND_TAG="SEND";
+    public static String RPN_MEDIATORPROXY_PUBLISH_TAG="PUB";
+    
+    public static String RPN_MEDIATORPROXY_LISTENING_NAME_TAG="LISTENING_NAME";
+    public static String RPN_MEDIATORPROXY_LISTENING_TAG="SUBSREC";
+    public static String RPN_MEDIATORPROXY_LOG_MSG_TAG="LOG_MSG";
+
+    //public static String RPN_MEDIATORPROXY_URL="http://" + SERVERNAME + ":8080/rpnmediatorproxy/rpnmediatorproxy?REQ_ID=";
+    public static String RPN_MEDIATORPROXY_URL="http://" + SERVERNAME + ":8080/rpnmediatorproxy/";    
 
     //
     // Constructors/Initializers
@@ -224,6 +239,16 @@ public class RPnNetworkStatus {
         if (isMaster_) {
 
             resetMasterQueue();
+
+            try {
+
+                // needs time for reset
+                Thread.sleep((long)1000);
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+
+
             log("All Connections closed for MASTER session ...");
             // TODO notify that SESSION has no MASTER now...
         }
@@ -233,6 +258,9 @@ public class RPnNetworkStatus {
 
 
         isOnline_ = false;
+
+
+
 
     }
 
@@ -244,7 +272,7 @@ public class RPnNetworkStatus {
         masterAckSubscriberThread_.start();
         
 
-        log("Will be listening to MASTER REQ now...");
+        log("Will be listening to MASTER ACK now...");
 
     }
 
@@ -254,15 +282,49 @@ public class RPnNetworkStatus {
         /*
          *  UPDATES THE MASTER_QUEUE STATUS
          */
+         if (!isFirewalled()) {
+
+            // FILLs UP THE MASTER_QUEUE with proper CONTROL MSGs
+            if (masterSender_ == null) {
+                masterSender_ = new RPnSender(RPN_MASTER_QUEUE_NAME);
+            }
+
+            // CHECK IF FIFO really ??
+            masterSender_.send(MASTER_ACK_LOG_MSG + '|' + clientID_);
+
+         } else {
+
+                try {
+
+                System.out.println("Will now hit RPn Mediator URL..." + '\n');
+
+                URL rpnMediatorURL = new URL(RPN_MEDIATORPROXY_URL + "rpnmasterqueueproxy" + "?" + RPnNetworkStatus.RPN_MEDIATORPROXY_REQ_ID_TAG + '=' +
+                                             RPnNetworkStatus.RPN_MEDIATORPROXY_MASTER_UPDATE_TAG + "&" +
+                                             RPnNetworkStatus.RPN_MEDIATORPROXY_CLIENT_ID_TAG + '=' + clientID());
+
+                URLConnection rpnMediatorConn = rpnMediatorURL.openConnection();
+                BufferedReader buffReader = new BufferedReader(new InputStreamReader(rpnMediatorConn.getInputStream()));
+
+                String text;
+		StringBuffer fullText = new StringBuffer();
+		Boolean buffFlag = false;
+
+		while ((text = buffReader.readLine()) != null) {
+
+		}
 
 
-        // FILLs UP THE MASTER_QUEUE with proper CONTROL MSGs
-        if (masterSender_ == null) {
-            masterSender_ = new RPnSender(RPN_MASTER_QUEUE_NAME);
+
+        } catch (Exception exc) {
+
+            exc.printStackTrace();
+
         }
 
-        // CHECK IF FIFO really ??
-        masterSender_.send(MASTER_ACK_LOG_MSG + '|' + clientID_);
+
+
+         }
+
         
     }
 
@@ -271,16 +333,31 @@ public class RPnNetworkStatus {
 
 
         /*
-         *  RESETs THE MASTER_QUEUE STATUS
+         *  RESETs THE MASTER_QUEUE STATUS // NON PERSISTENT
          */
         if (masterResetConsumer_ == null)
-            // NON PERSISTENT
-            masterResetConsumer_ = new RPnConsumer(RPN_MASTER_QUEUE_NAME);
 
-        masterResetConsumer_.consume();
+            if (isFirewalled()) {
 
-        // releases the MASTER_QUEUE for others to listen to...
-        masterResetConsumer_.stopsListening();
+                try {
+
+                    RPnNetworkStatus.instance().log("WARN : a Http Polling context will be started...");
+                    masterResetConsumer_ = new RPnHttpPoller(new RPnConsumer(RPN_MASTER_QUEUE_NAME,false,false),
+                                          RPnHttpPoller.buildHitURL(RPN_MASTER_QUEUE_NAME));
+                } catch (java.net.MalformedURLException ex) {
+                    
+                    ex.printStackTrace();
+                }
+                
+            } else
+
+                masterResetConsumer_ = new RPnConsumer(RPN_MASTER_QUEUE_NAME);
+
+        // resets and releases the MASTER_QUEUE for others to listen to...
+        masterResetConsumer_.reset();
+
+        
+        
         masterResetConsumer_ = null;
         log("MASTER QUEUE has being reset...");
 
@@ -291,11 +368,27 @@ public class RPnNetworkStatus {
         // REQUESTS TO BECOME MASTER WILL BE A QUICK ACCESS METHOD TO THE MASTER_QUEUE
         boolean gotMaster = false;
         if (masterCheckConsumer_ == null)
-            // PERSISTENT !
-            masterCheckConsumer_ = new RPnPersistentConsumer(RPN_MASTER_QUEUE_NAME);
+
+            if (isFirewalled()) {
+
+                try {
+
+                    System.out.println("WARN : a Http Polling context will be started...");
+                    masterCheckConsumer_ = new RPnHttpPoller(new RPnConsumer(RPN_MASTER_QUEUE_NAME,false,false),
+                                          RPnHttpPoller.buildHitURL(RPN_MASTER_QUEUE_NAME));
+                } catch (java.net.MalformedURLException ex) {
+
+                    ex.printStackTrace();
+                }
+
+            } else
+
+                // PERSISTENT !
+                masterCheckConsumer_ = new RPnConsumer(RPN_MASTER_QUEUE_NAME,true,false);
   
-        if (masterCheckConsumer_.consume() != null)
-                gotMaster = true;
+
+        gotMaster = masterCheckConsumer_.check();
+                
             
         // releases the MASTER_QUEUE for others to listen to...
         masterCheckConsumer_.stopsListening();
@@ -409,7 +502,10 @@ public class RPnNetworkStatus {
         if (slaveAckSubscriberThread_ == null)
             slaveAckSubscriberThread_ = new RPnSubscriberThread(RPN_SLAVE_ACK_TOPIC_NAME);
 
-        slaveAckSubscriberThread_.start();        
+        slaveAckSubscriberThread_.start();
+
+
+        log("Will be listening to SLAVE ACK now...");
     }
 
     public void sendSlaveRequest() {
