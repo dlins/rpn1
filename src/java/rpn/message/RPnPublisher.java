@@ -30,7 +30,7 @@ public class RPnPublisher {
 
         try {
 
-            RPnNetworkStatus.instance().log("initiating the publish context...");
+            System.out.println("initiating the publish context...");
 
             final Context context = RPnSender.getInitialMDBContext();
 
@@ -62,7 +62,7 @@ public class RPnPublisher {
             TextMessage messageTo = topicSession.createTextMessage(msg);
             publisher.send(messageTo);
 
-            RPnNetworkDialog.infoText.append("Message sent to the JMS Provider : " + messageTo + '\n');
+            System.out.println("Message sent to the JMS Provider : " + messageTo + '\n');
 
         } catch (Exception exc) {
 

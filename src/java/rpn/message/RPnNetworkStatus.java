@@ -497,7 +497,7 @@ public class RPnNetworkStatus {
 
             commandSubscriberThread_.start();
 
-            System.out.println("You are now following RPNSESSION with ID : " + rpn.parser.RPnCommandModule.SESSION_ID_ + '\n');
+            log("You are now following RPNSESSION with ID : " + rpn.parser.RPnCommandModule.SESSION_ID_ + '\n');
             RPnNetworkDialog.instance().setTitle(RPnNetworkDialog.TITLE + "PUPIL");
         }
 

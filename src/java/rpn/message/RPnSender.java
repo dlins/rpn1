@@ -85,7 +85,7 @@ public class RPnSender {
             TextMessage messageTo = session.createTextMessage(messageToSend);
             sender.send(messageTo);
 
-            RPnNetworkDialog.infoText.append("Message sent to the JMS Provider : " + messageTo + '\n');
+            System.out.println("Message sent to the JMS Provider : " + messageTo + '\n');
                                        
         } catch (Exception exc) {
 

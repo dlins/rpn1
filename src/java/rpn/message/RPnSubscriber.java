@@ -177,18 +177,26 @@ public class RPnSubscriber implements MessageListener,RPnMessageListener {
 
                 // LOGs
                 String logString = "";
-                String commandName = text.substring(14, text.indexOf("phasespace"));
+                String commandName = text.substring(14, text.indexOf("phasespace")) + '\0';
 
-                logString.concat(commandName);
+                System.out.println(text);
 
-                int c1 = text.indexOf("coords=");
-                if (c1 != 0) {
+                System.out.println(commandName);
+
+                logString = logString.concat(commandName);
 
 
+                System.out.println("DEF = " + logString);
+
+                
+                if (text.contains("coords")) {
+
+                    System.out.println("Got coords...");
+                    int c1 = text.indexOf("coords=");
                     c1 += 7;
                     int c2 = c1 + 15;
-                    String coordsString = text.substring(c1,c2);
-                    logString.concat(' ' + coordsString);
+                    String coordsString = text.substring(c1,c2) + '\0';
+                    logString = logString.concat(' ' + coordsString + '\0');
                 }
                 
                 RPnNetworkStatus.instance().log(logString);

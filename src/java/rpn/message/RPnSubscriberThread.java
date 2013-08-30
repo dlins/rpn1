@@ -24,7 +24,7 @@ public class RPnSubscriberThread extends Thread {
 
         if (RPnNetworkStatus.instance().isFirewalled()) {
 
-            RPnNetworkStatus.instance().log("WARN : a Http Polling context will be started...");
+            System.out.println("WARN : a Http Polling context will be started...");
             subscriber_ = new RPnHttpPoller(new RPnSubscriber(topicName,false),
                                             RPnHttpPoller.buildHitURL(topicName));
         }

@@ -156,7 +156,7 @@ public class RPnHttpPoller implements RPnResetableListener {
 
         try {
 
-                RPnNetworkStatus.instance().log("Will now hit RPn Mediator URL..." + '\n');
+                System.out.println("Will now hit RPn Mediator URL..." + '\n');
 
                 URL rpnMediatorURL = new URL(hitURL_ + "?" + RPnNetworkStatus.RPN_MEDIATORPROXY_REQ_ID_TAG + '=' +
                                              RPnNetworkStatus.RPN_MEDIATORPROXY_MASTER_RESET_TAG);
@@ -190,7 +190,7 @@ public class RPnHttpPoller implements RPnResetableListener {
 
         try {
 
-                RPnNetworkStatus.instance().log("Will now hit RPn Mediator URL..." + '\n');
+                System.out.println("Will now hit RPn Mediator URL..." + '\n');
 
                 URL rpnMediatorURL = new URL(hitURL_ + "?" + RPnNetworkStatus.RPN_MEDIATORPROXY_REQ_ID_TAG + '=' +
                                              RPnNetworkStatus.RPN_MEDIATORPROXY_MASTER_CHECK_TAG);
