@@ -67,7 +67,7 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
 
     public void networkCommand() {       
 
-        RPnNetworkDialog netDialog = new RPnNetworkDialog();
+        RPnNetworkDialog netDialog = RPnNetworkDialog.instance();
 
         netDialog.setVisible(true);
 

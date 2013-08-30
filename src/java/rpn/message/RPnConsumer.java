@@ -145,7 +145,7 @@ public class RPnConsumer implements RPnResetableListener {
 
             while (!end_) {
 
-                RPnNetworkDialog.infoText.append("Will now listen to " + listeningName_ + '\n');
+                System.out.println("Will now listen to " + listeningName_ + '\n');
 
                 //Message message = receiver_.receive((long)15000);
                 Message message = consume();
@@ -153,7 +153,7 @@ public class RPnConsumer implements RPnResetableListener {
 
                 if (message instanceof TextMessage) {
 
-                    RPnNetworkDialog.infoText.append("Message recieved from : " + listeningName_ + '\n');
+                    System.out.println("Message recieved from : " + listeningName_ + '\n');
                     
                     String text = ((TextMessage) message).getText();
                     parseMessageText(text);
@@ -184,8 +184,7 @@ public class RPnConsumer implements RPnResetableListener {
     public Message consume() {
 
         try {
-                if (RPnNetworkDialog.infoText != null)
-                    RPnNetworkDialog.infoText.append("Will now consume from queue... " + listeningName_ + '\n');
+                System.out.println("Will now consume from queue... " + listeningName_ + '\n');
                 //return receiver_.receiveNoWait();
                 return receiver_.receive((long)5000);
 

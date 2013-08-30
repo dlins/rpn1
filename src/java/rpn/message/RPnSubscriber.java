@@ -129,7 +129,7 @@ public class RPnSubscriber implements MessageListener,RPnMessageListener {
             if (message instanceof TextMessage) {
 
                 if (!isLocal_)
-                    RPnNetworkDialog.infoText.append("Message recieved from rpn command topic..." + '\n');
+                    System.out.println("Message recieved from rpn command topic..." + '\n');
 
                 String text = ((TextMessage) message).getText();
 
@@ -152,18 +152,15 @@ public class RPnSubscriber implements MessageListener,RPnMessageListener {
             /*
              * checks if CONTROL MSG or COMMAND MSG
              */
-
-            RPnNetworkStatus.instance().log("Will now parse the message received... " + '\n' + text);
-
+            System.out.println("Will now parse the message received... " + '\n');
             
             // CONTROL MESSAGES PARSING
-            if (text.startsWith(RPnNetworkStatus.SLAVE_ACK_LOG_MSG)) {
-
+            if (text.startsWith(RPnNetworkStatus.SLAVE_ACK_LOG_MSG))
 
                 RPnNetworkStatus.instance().ackSlaveRequest(RPnNetworkStatus.filterClientID(text));
 
 
-            } else if (text.startsWith(RPnNetworkStatus.MASTER_ACK_LOG_MSG)) {
+            else if (text.startsWith(RPnNetworkStatus.MASTER_ACK_LOG_MSG)) {
 
                 RPnNetworkStatus.instance().ackMasterRequest(RPnNetworkStatus.filterClientID(text));
 
@@ -178,6 +175,24 @@ public class RPnSubscriber implements MessageListener,RPnMessageListener {
 
             } else if (text.startsWith(RPnNetworkStatus.RPN_COMMAND_PREFIX)) {
 
+                // LOGs
+                String logString = "";
+                String commandName = text.substring(14, text.indexOf("phasespace"));
+
+                logString.concat(commandName);
+
+                int c1 = text.indexOf("coords=");
+                if (c1 != 0) {
+
+
+                    c1 += 7;
+                    int c2 = c1 + 15;
+                    String coordsString = text.substring(c1,c2);
+                    logString.concat(' ' + coordsString);
+                }
+                
+                RPnNetworkStatus.instance().log(logString);
+                
                 // COMMAND MESSAGES PARSING
                 RPnCommandModule.init(XMLReaderFactory.createXMLReader(), new StringBufferInputStream(text));
 

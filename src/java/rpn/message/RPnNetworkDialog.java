@@ -19,7 +19,9 @@ import javax.swing.JDialog;
  */
 public class RPnNetworkDialog extends JDialog implements PropertyChangeListener {
 
+    private static RPnNetworkDialog instance_= null;
 
+    public static String TITLE = "RPn Network Control - ";
 
     JPanel mainPanel = new JPanel();
     JPanel inputPanel = new JPanel();
@@ -40,7 +42,7 @@ public class RPnNetworkDialog extends JDialog implements PropertyChangeListener 
     
     
 
-    public RPnNetworkDialog() {
+    private RPnNetworkDialog() {
 
         try {
 
@@ -165,7 +167,7 @@ public class RPnNetworkDialog extends JDialog implements PropertyChangeListener 
         });
        
         //this.setResizable(false);
-        setTitle("RPn Network Control");
+        setTitle(TITLE + "OFFLINE ");
 
 
         onlineButton.addActionListener(new java.awt.event.ActionListener() {
@@ -227,5 +229,12 @@ public class RPnNetworkDialog extends JDialog implements PropertyChangeListener 
 
     }
 
+    public static RPnNetworkDialog instance() {
+
+        if (instance_ == null)
+            instance_ = new RPnNetworkDialog();
+
+        return instance_;
+    }
 
 }

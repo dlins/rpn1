@@ -54,20 +54,20 @@ public class RPnNetworkStatus {
     /*
      * MASTER command publishing TOPIC
      */
-    public static String  RPN_COMMAND_TOPIC_NAME = new String("jms/topic/RPN_COMMAND_TOPIC_5678");
+    public static String  RPN_COMMAND_TOPIC_NAME = new String("jms/topic/RPN_COMMAND_TOPIC_1234");
     /*
      * MASTER listening on SLAVE REQ QUEUE and publishing on SLAVE ACK
      */
-    public static String RPN_SLAVE_REQ_QUEUE_NAME = new String("jms/queue/RPN_SLAVE_REQ_QUEUE_5678");
-    public static String RPN_MASTER_REQ_TOPIC_NAME = new String("jms/topic/RPN_MASTER_REQ_TOPIC_5678");
+    public static String RPN_SLAVE_REQ_QUEUE_NAME = new String("jms/queue/RPN_SLAVE_REQ_QUEUE_1234");
+    public static String RPN_MASTER_REQ_TOPIC_NAME = new String("jms/topic/RPN_MASTER_REQ_TOPIC_1234");
     /*
      * MASTER ACKNOWLEDGE
      */
-    public static String RPN_MASTER_QUEUE_NAME = new String("jms/queue/RPN_MASTER_QUEUE_5678");
+    public static String RPN_MASTER_QUEUE_NAME = new String("jms/queue/RPN_MASTER_QUEUE_1234");
     
     
-    public static String RPN_SLAVE_ACK_TOPIC_NAME = new String("jms/topic/RPN_SLAVE_ACK_TOPIC_5678");
-    public static String RPN_MASTER_ACK_TOPIC_NAME = new String("jms/topic/RPN_MASTER_ACK_TOPIC_5678");
+    public static String RPN_SLAVE_ACK_TOPIC_NAME = new String("jms/topic/RPN_SLAVE_ACK_TOPIC_1234");
+    public static String RPN_MASTER_ACK_TOPIC_NAME = new String("jms/topic/RPN_MASTER_ACK_TOPIC_1234");
 
     /*
      * RPN CONTROL MESSAGES
@@ -141,6 +141,8 @@ public class RPnNetworkStatus {
     public void log(String logMessage) {
 
         RPnNetworkDialog.infoText.append(logMessage + '\n');
+
+
     }
 
 
@@ -162,13 +164,13 @@ public class RPnNetworkStatus {
 
         if (!isMaster_) {
 
-            log("RPn user : " +  clientID_ + " will request to follow RPNSESSION with ID : " + rpn.parser.RPnCommandModule.SESSION_ID_ + '\n');            
+            System.out.println("RPn user : " +  clientID_ + " will request to follow RPNSESSION with ID : " + rpn.parser.RPnCommandModule.SESSION_ID_ + '\n');
             sendSlaveRequest();
             
         }
         else {
 
-            log("RPn user : " +  clientID_ + " will request MASTER access to RPNSESSION with ID : " + rpn.parser.RPnCommandModule.SESSION_ID_ + '\n');
+            System.out.println("RPn user : " +  clientID_ + " will request MASTER access to RPNSESSION with ID : " + rpn.parser.RPnCommandModule.SESSION_ID_ + '\n');
             sendMasterRequest();
             
         }
@@ -272,7 +274,7 @@ public class RPnNetworkStatus {
         masterAckSubscriberThread_.start();
         
 
-        log("Will be listening to MASTER ACK now...");
+        System.out.println("Will be listening to MASTER ACK now...");
 
     }
 
@@ -341,7 +343,7 @@ public class RPnNetworkStatus {
 
                 try {
 
-                    RPnNetworkStatus.instance().log("WARN : a Http Polling context will be started...");
+                    System.out.println("WARN : a Http Polling context will be started...");
                     masterResetConsumer_ = new RPnHttpPoller(new RPnConsumer(RPN_MASTER_QUEUE_NAME,false,false),
                                           RPnHttpPoller.buildHitURL(RPN_MASTER_QUEUE_NAME));
                 } catch (java.net.MalformedURLException ex) {
@@ -359,7 +361,7 @@ public class RPnNetworkStatus {
         
         
         masterResetConsumer_ = null;
-        log("MASTER QUEUE has being reset...");
+        System.out.println("MASTER QUEUE has being reset...");
 
     }
 
@@ -393,7 +395,7 @@ public class RPnNetworkStatus {
         // releases the MASTER_QUEUE for others to listen to...
         masterCheckConsumer_.stopsListening();
         masterCheckConsumer_ = null;
-        log("CHECK MASTER QUEUE has returned : " + gotMaster + " for RPNSESSION with ID : " + rpn.parser.RPnCommandModule.SESSION_ID_ + '\n');
+        System.out.println("CHECK MASTER QUEUE has returned : " + gotMaster + " for RPNSESSION with ID : " + rpn.parser.RPnCommandModule.SESSION_ID_ + '\n');
 
 
         return gotMaster;
@@ -418,7 +420,7 @@ public class RPnNetworkStatus {
 
             masterRequestPublisher_.publish(MASTER_REQUEST_LOG_MSG + '|' + clientID_);
 
-            log(clientID_ + " has requested MASTER lock for SESSION with ID : " + rpn.parser.RPnCommandModule.SESSION_ID_ + '\n');
+            System.out.println(clientID_ + " has requested MASTER lock for SESSION with ID : " + rpn.parser.RPnCommandModule.SESSION_ID_ + '\n');
 
         }
     }
@@ -442,7 +444,10 @@ public class RPnNetworkStatus {
 
 
             // and now BECOMES MASTER
-            log(clientID + " is now being configured as MASTER for SESSION with ID : " + rpn.parser.RPnCommandModule.SESSION_ID_ + '\n');
+            log("You are now being configured as MASTER for SESSION with ID : " + rpn.parser.RPnCommandModule.SESSION_ID_ + '\n');
+
+            RPnNetworkDialog.instance().setTitle(RPnNetworkDialog.TITLE + "MASTER");
+
 
             /*
              * RPN COMMAND PUBLISH
@@ -492,7 +497,8 @@ public class RPnNetworkStatus {
 
             commandSubscriberThread_.start();
 
-            log("RPn user : " +  clientID_ + " is now following RPNSESSION with ID : " + rpn.parser.RPnCommandModule.SESSION_ID_ + '\n');
+            System.out.println("You are now following RPNSESSION with ID : " + rpn.parser.RPnCommandModule.SESSION_ID_ + '\n');
+            RPnNetworkDialog.instance().setTitle(RPnNetworkDialog.TITLE + "PUPIL");
         }
 
     }
@@ -505,7 +511,7 @@ public class RPnNetworkStatus {
         slaveAckSubscriberThread_.start();
 
 
-        log("Will be listening to SLAVE ACK now...");
+        System.out.println("Will be listening to SLAVE ACK now...");
     }
 
     public void sendSlaveRequest() {
@@ -515,14 +521,14 @@ public class RPnNetworkStatus {
             slaveRequestSender_ = new RPnSender(RPN_SLAVE_REQ_QUEUE_NAME);
 
         slaveRequestSender_.send(SLAVE_REQ_LOG_MSG + '|' + clientID_);
-        log(SLAVE_REQ_LOG_MSG + '|' + clientID_);
+        System.out.println(SLAVE_REQ_LOG_MSG + '|' + clientID_);
     }
 
     public void sendCommand(String commandDesc) {
 
         
         commandPublisher_.publish(commandDesc);
-        log(commandDesc);
+        System.out.println(commandDesc);
     }
 
 
