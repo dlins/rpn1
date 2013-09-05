@@ -93,7 +93,7 @@ public class RPnMasterReqDialog extends JDialog {
         RPnNetworkStatus.instance().disconnect();
 
         // notifies of the new MASTER...
-        RPnPublisher publisher = new RPnPublisher(RPnNetworkStatus.RPN_MASTER_ACK_TOPIC_NAME);
+        RPnHttpPublisher publisher = new RPnHttpPublisher(RPnNetworkStatus.RPN_MASTER_ACK_TOPIC_NAME);
         publisher.publish(RPnNetworkStatus.MASTER_ACK_LOG_MSG + '|' + reqClientID_);
         publisher.close();
 

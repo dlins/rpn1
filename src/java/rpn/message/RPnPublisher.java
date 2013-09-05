@@ -24,17 +24,34 @@ public class RPnPublisher {
     private javax.jms.Topic topic = null;
     private TopicSession topicSession = null;
 
+    public RPnPublisher() {}
 
     public RPnPublisher(String topicName) {
+        this(topicName,false);
+    }
+    public RPnPublisher(String topicName,boolean isLocal) {
 
 
-        try {
+        try {   
 
-            System.out.println("initiating the publish context...");
+            Context context = null;
 
-            final Context context = RPnSender.getInitialMDBContext();
+            if (!isLocal) {
 
-            cf = (TopicConnectionFactory) context.lookup("jms/RemoteConnectionFactory");            
+                context = RPnSender.getInitialMDBContext();
+                cf = (TopicConnectionFactory) context.lookup("jms/RemoteConnectionFactory");
+
+            } else {
+
+                context = new InitialContext();
+                cf = (TopicConnectionFactory) context.lookup("java:/ConnectionFactory"); 
+            }
+
+
+
+            
+
+
             topic = (Topic) context.lookup(topicName);
 
             //connection = cf.createTopicConnection("rpn","rpn.fluid");

@@ -45,10 +45,10 @@ public class RPnPublishProxy extends RPnMediatorProxy {
         else if (reqId.compareTo(RPnNetworkStatus.RPN_MEDIATORPROXY_PUBLISH_TAG) == 0) {
 
 
-            String topicName = (String) request.getParameter(RPnNetworkStatus.RPN_MEDIATORPROXY_LISTENING_NAME_TAG);
+            String topicName = rpn.message.RPnNetworkStatus.trimLocalJmsPrefix((String) request.getParameter(RPnNetworkStatus.TOPIC_NAME));
             String logMsg = (String) request.getParameter(RPnNetworkStatus.RPN_MEDIATORPROXY_LOG_MSG_TAG);
 
-            RPnPublisher publisher = new RPnPublisher(topicName);
+            RPnPublisher publisher = new RPnPublisher(topicName,true);
             publisher.publish(logMsg);
 
             publisher.close();

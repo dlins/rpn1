@@ -58,5 +58,23 @@
         <servlet-name>RPnMasterQueueProxy</servlet-name>
         <url-pattern>/rpnmasterqueueproxy</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>RPnPublishProxy</servlet-name>
+        <servlet-class>rpnmediator.RPnPublishProxy</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+  <servlet-mapping>
+        <servlet-name>RPnPublishProxy</servlet-name>
+        <url-pattern>/rpnpublishproxy</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>RPnSendProxy</servlet-name>
+        <servlet-class>rpnmediator.RPnSendProxy</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+  <servlet-mapping>
+        <servlet-name>RPnSendProxy</servlet-name>
+        <url-pattern>/rpnsendproxy</url-pattern>
+    </servlet-mapping>
 
 </web-app>

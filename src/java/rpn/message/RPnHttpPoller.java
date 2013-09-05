@@ -122,35 +122,47 @@ public class RPnHttpPoller implements RPnResetableListener {
         messageParser_.parseMessageText(text);
     }
 
-    public static String buildHitURL(String listeningName) throws java.net.MalformedURLException {
+    public static String buildHitURL(String hitTarget) throws java.net.MalformedURLException {
 
-        if (listeningName.startsWith(RPnNetworkStatus.RPN_COMMAND_TOPIC_NAME)) {
+        if (hitTarget.startsWith(RPnNetworkStatus.RPN_COMMAND_TOPIC_NAME)) {
 
             return RPnNetworkStatus.RPN_MEDIATORPROXY_URL + "rpncommandproxy";
             
-        } else if (listeningName.startsWith(RPnNetworkStatus.RPN_MASTER_ACK_TOPIC_NAME)) {
+        } else if (hitTarget.startsWith(RPnNetworkStatus.RPN_MASTER_ACK_TOPIC_NAME)) {
 
             return RPnNetworkStatus.RPN_MEDIATORPROXY_URL + "rpnmasterackproxy";
 
-        } else if (listeningName.startsWith(RPnNetworkStatus.RPN_MASTER_REQ_TOPIC_NAME)) {
+        } else if (hitTarget.startsWith(RPnNetworkStatus.RPN_MASTER_REQ_TOPIC_NAME)) {
 
             return RPnNetworkStatus.RPN_MEDIATORPROXY_URL + "rpnmasterreqproxy";
 
-        } else if (listeningName.startsWith(RPnNetworkStatus.RPN_SLAVE_ACK_TOPIC_NAME)) {
+        } else if (hitTarget.startsWith(RPnNetworkStatus.RPN_SLAVE_ACK_TOPIC_NAME)) {
 
             return RPnNetworkStatus.RPN_MEDIATORPROXY_URL + "rpnslaveackproxy";
 
-        } else if (listeningName.startsWith(RPnNetworkStatus.RPN_SLAVE_REQ_QUEUE_NAME)) {
+        } else if (hitTarget.startsWith(RPnNetworkStatus.RPN_SLAVE_REQ_QUEUE_NAME)) {
 
             return RPnNetworkStatus.RPN_MEDIATORPROXY_URL + "rpnslavereqproxy";
 
-        } else if (listeningName.startsWith(RPnNetworkStatus.RPN_MASTER_QUEUE_NAME)) {
+        } else if (hitTarget.startsWith(RPnNetworkStatus.RPN_MASTER_QUEUE_NAME)) {
 
             return RPnNetworkStatus.RPN_MEDIATORPROXY_URL + "rpnmasterqueueproxy";
         
         } else throw new java.net.MalformedURLException();
 
     }
+    
+    public static String buildHitURL(String mode,String hitTarget) throws java.net.MalformedURLException {
+
+        if (mode.startsWith("SEND"))
+            return RPnNetworkStatus.RPN_MEDIATORPROXY_URL + "rpnsendproxy";
+        else if (mode.startsWith("PUBLISH"))
+            return RPnNetworkStatus.RPN_MEDIATORPROXY_URL + "rpnpublishproxy";
+        
+        else throw new java.net.MalformedURLException();
+    }
+
+
 
     public void reset() {
 

@@ -25,7 +25,7 @@ public class RPnNetworkStatus {
     private boolean isFirewalled_;
 
     // queues up a slave request (SLAVE)
-    private RPnSender slaveRequestSender_ = null;
+    private RPnHttpSender slaveRequestSender_ = null;
     // listens to the slave request queue (MASTER)
     private RPnConsumerThread slaveReqConsumerThread_ = null;
     // subscription for an acknowledge given to a SLAVE to join the session (ALL)
@@ -34,10 +34,10 @@ public class RPnNetworkStatus {
     // subscription to RPn COMMANDs topic (SLAVE)
     private RPnSubscriberThread commandSubscriberThread_ = null;
     // publisher for RPn COMMAND (MASTER)
-    private RPnPublisher commandPublisher_ = null;
+    private RPnHttpPublisher commandPublisher_ = null;
 
     // publisher for MASTER request
-    private RPnPublisher masterRequestPublisher_ = null;
+    private RPnHttpPublisher masterRequestPublisher_ = null;
     // subscription to MASTER request
     private RPnSubscriberThread masterReqSubscriberThread_ = null;
     // subscription to MASTER acknowledge (SLAVE)
@@ -46,10 +46,12 @@ public class RPnNetworkStatus {
     // TODO : this is not necessary
     private RPnResetableListener masterResetConsumer_ = null;
     private RPnResetableListener masterCheckConsumer_ = null;
-    private RPnSender masterSender_ = null;
+    private RPnHttpSender masterSender_ = null;
 
 
     public static String  SERVERNAME = new String("147.65.7.10");
+    public static String  QUEUE_NAME = "QUEUE_NAME";
+    public static String  TOPIC_NAME = "TOPIC_NAME";
     
     /*
      * MASTER command publishing TOPIC
@@ -288,7 +290,7 @@ public class RPnNetworkStatus {
 
             // FILLs UP THE MASTER_QUEUE with proper CONTROL MSGs
             if (masterSender_ == null) {
-                masterSender_ = new RPnSender(RPN_MASTER_QUEUE_NAME);
+                masterSender_ = new RPnHttpSender(RPN_MASTER_QUEUE_NAME);
             }
 
             // CHECK IF FIFO really ??
@@ -416,7 +418,7 @@ public class RPnNetworkStatus {
 
             // THERE IS A MASTER...SO ASK FOR THE LOCK...
             if (masterRequestPublisher_ == null)
-                masterRequestPublisher_ = new RPnPublisher(RPN_MASTER_REQ_TOPIC_NAME);
+                masterRequestPublisher_ = new RPnHttpPublisher(RPN_MASTER_REQ_TOPIC_NAME);
 
             masterRequestPublisher_.publish(MASTER_REQUEST_LOG_MSG + '|' + clientID_);
 
@@ -453,7 +455,7 @@ public class RPnNetworkStatus {
              * RPN COMMAND PUBLISH
              */
             if (commandPublisher_ == null)
-                commandPublisher_ = new RPnPublisher(RPN_COMMAND_TOPIC_NAME);
+                commandPublisher_ = new RPnHttpPublisher(RPN_COMMAND_TOPIC_NAME);
 
             /*
              * SLAVE REQ RECEIVE
@@ -518,7 +520,7 @@ public class RPnNetworkStatus {
 
         // REQUESTS TO BECOME A SLAVE
         if (slaveRequestSender_ == null)
-            slaveRequestSender_ = new RPnSender(RPN_SLAVE_REQ_QUEUE_NAME);
+            slaveRequestSender_ = new RPnHttpSender(RPN_SLAVE_REQ_QUEUE_NAME);
 
         slaveRequestSender_.send(SLAVE_REQ_LOG_MSG + '|' + clientID_);
         System.out.println(SLAVE_REQ_LOG_MSG + '|' + clientID_);
@@ -527,7 +529,8 @@ public class RPnNetworkStatus {
     public void sendCommand(String commandDesc) {
 
         
-        commandPublisher_.publish(commandDesc);
+        commandPublisher_.publish(trimURL(commandDesc));
+        
         System.out.println(commandDesc);
     }
 
@@ -551,5 +554,18 @@ public class RPnNetworkStatus {
 
         // LOCAL JNDI DOES NOT USE jms/ prefix...
         return jmsName.substring(3, jmsName.length());
+    }
+
+    public static String trimURL(String url) {
+
+
+
+        try {
+            return java.net.URLEncoder.encode(url, "UTF-8");
+        } catch (java.io.UnsupportedEncodingException ex) {
+            ex.printStackTrace();
+        }
+
+        return null;
     }
 }

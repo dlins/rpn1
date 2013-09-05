@@ -45,10 +45,10 @@ public class RPnSendProxy extends RPnMediatorProxy {
         else if (reqId.compareTo(RPnNetworkStatus.RPN_MEDIATORPROXY_SEND_TAG) == 0) {
 
 
-            String queueName = (String) request.getParameter(RPnNetworkStatus.RPN_MEDIATORPROXY_LISTENING_NAME_TAG);
+            String queueName = RPnNetworkStatus.trimLocalJmsPrefix((String) request.getParameter(RPnNetworkStatus.QUEUE_NAME));
             String logMsg = (String) request.getParameter(RPnNetworkStatus.RPN_MEDIATORPROXY_LOG_MSG_TAG);
 
-            RPnSender sender = new RPnSender(queueName);
+            RPnSender sender = new RPnSender(queueName,true);
             sender.send(logMsg);
 
             sender.close();

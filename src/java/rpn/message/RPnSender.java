@@ -34,8 +34,13 @@ public class RPnSender {
 
     }
 
+    public RPnSender() {}
 
     public RPnSender(String destinationName) {
+        this(destinationName,false);
+    }
+
+    public RPnSender(String destinationName,boolean isLocal) {
                             
 
         try {
@@ -48,13 +53,22 @@ public class RPnSender {
             //QueueConnectionFactory cf = null;
 
 
-            context = getInitialMDBContext();
+            if (!isLocal) {
 
-            
+                context = getInitialMDBContext();
+                cf = (QueueConnectionFactory) context.lookup("jms/RemoteConnectionFactory");
+
+            } else {
+
+                context = new InitialContext();
+                cf = (QueueConnectionFactory) context.lookup("java:/ConnectionFactory");
+            }
+
+                      
             //cf = (QueueConnectionFactory) context.lookup("java:jboss/exported/jms/RemoteConnectionFactory");
 
-            // REMOTE CONNECTION
-            cf = (QueueConnectionFactory) context.lookup("jms/RemoteConnectionFactory");
+            
+            
 
             // LOCAL CONNECTION
             //cf = (QueueConnectionFactory) context.lookup("java:/ConnectionFactory");
