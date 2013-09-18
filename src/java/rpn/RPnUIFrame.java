@@ -245,6 +245,11 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
     //Help | About action performed
     public void jMenuHelpAbout_actionPerformed(ActionEvent e) {
+
+        RPnAboutDialog dialog = new RPnAboutDialog(this,"About RPn",true);
+                
+        dialog.setVisible(true);
+
     }
 
     //Overridden so we can exit when window is closed
