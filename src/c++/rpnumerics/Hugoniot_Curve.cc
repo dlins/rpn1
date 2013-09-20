@@ -27,7 +27,6 @@ int Hugoniot_Curve::classified_curve(const FluxFunction *f, const AccumulationFu
 
     ColorCurve colorCurve(*f, *a);
     
-    
     ReferencePoint refPoint (r,f,a,vm);
     colorCurve.classify_segmented_curve(vrs,refPoint,hugoniot_curve,testeTransitionalList);
     
