@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.component.RpGeometry;
+import rpn.controller.ui.UIController;
 import rpn.parser.RPnDataModule;
 
 //public abstract class RpCurve extends MultiPolyLine {
@@ -46,49 +47,18 @@ public abstract class RPnCurve implements RpSolution {
 
 
     public RPnCurve() {//TODO REMOVE !!
-        //super(new CoordsArray[3], new ViewingAttr(Color.WHITE));
     }
 
-    public RPnCurve(PointNDimension[][] polyline, ViewingAttr viewAttr) {
-        //super(fromPointNDimensionCurveToSegment(polyline), viewAttr);
-
-//        try {
-//            polyLinesSetList_ = new RelaxedChainedPolylineSet(polyline);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-        this.viewAttr = viewAttr;
-    }
+    
 
     public RPnCurve(List<? extends RealSegment> segments, ViewingAttr viewAttr) {
         
         segments_=segments;
-
-//        PointNDimension[][] polyline = new PointNDimension[1][vertices.length];
-//
-//        for (int pont_point = 0; pont_point < vertices.length; pont_point++) {
-//            polyline[0][pont_point] = new PointNDimension(vertices[pont_point]);
-//        }
-
-//        try {
-//            polyLinesSetList_ = new RelaxedChainedPolylineSet(polyline);
-//        } catch (Exception e) {
-//        }
-
         this.viewAttr = viewAttr;
 
 
     }
-
-    public RPnCurve(AbstractSegment[] segments, ViewingAttr viewAttr) {
-        //super(segments, viewAttr);
-        // converter para chained
-    }
-
-//    @Override
-//    public String toString() {
-//        //return getPath().toString();
-//    }
+    
     //******** Era usado no refinamento local
     public static void remove(SegmentedCurve curve, List indexList, Shape square, double zmin, double zmax, Scene scene) {    // tentar colocar isso na classe SegmentedCurve.java
 
@@ -105,7 +75,7 @@ public abstract class RPnCurve implements RpSolution {
         curve.segments().removeAll(segRem);
 
         scene.update();
-        RPnDataModule.PHASESPACE.update();
+        RPnDataModule.updatePhaseSpaces();
 
         System.out.println("Tamanho da curva depois da remocao : " + curve.segments().size());
 
@@ -168,66 +138,7 @@ public abstract class RPnCurve implements RpSolution {
 //    }
 //    --------------------------------------------------------------------------
 
-    private static AbstractSegment[] fromPointNDimensionCurveToSegment(
-            PointNDimension[][] polyline) {
-        int numberOfPolylines = polyline.length;
-
-        int numberOfSegments = 0;
-        for (int pont_polyline = 0; pont_polyline < numberOfPolylines;
-                pont_polyline++) {
-            numberOfSegments++;
-            numberOfSegments += (polyline[pont_polyline].length - 1);
-        }
-
-        AbstractSegment[] segments = new AbstractSegment[numberOfSegments];
-
-        int segmentCount = 0;
-
-        try {
-
-            for (int pont_polyline = 0; pont_polyline < numberOfPolylines;
-                    pont_polyline++) {
-
-                CoordsArray[] segmentPoints = new CoordsArray[2];
-                segmentPoints[0] = polyline[pont_polyline][0].toCoordsArray();
-                segmentPoints[1] = new CoordsArray(segmentPoints[0].getSpace());
-                segments[segmentCount] = new AbstractSegment(segmentPoints,
-                        new AbstractSegmentAtt(AbstractSegment.SEG_MOVETO));
-                segmentCount++;
-
-                int size = polyline[pont_polyline].length;
-                for (int pont_point = 1; pont_point < size; pont_point++) {
-                    segmentPoints[1] = polyline[pont_polyline][pont_point].toCoordsArray();
-                    segments[segmentCount] = new AbstractSegment(segmentPoints,
-                            new AbstractSegmentAtt(AbstractSegment.SEG_LINETO));
-                    segmentCount++;
-                    segmentPoints[0] = segmentPoints[1];
-                }
-
-            }
-
-        } catch (WrongNumberOfDefPointsEx e) {
-            e.printStackTrace();
-        }
-
-        return segments;
-    }
-//
-//    public RPnCurve(ContourCurve curve, ViewingAttr viewingAttr) {
-//
-//        //super(RpCurve.fromPointNDimensionCurveToSegment(curve.getCurve()), viewingAttr);
-//
-//        viewAttr = viewingAttr;
-//        try {
-//            polyLinesSetList_ = new RelaxedChainedPolylineSet(curve.getCurve());
-//            //TODO Construtor para usar com o contour
-//        } catch (Exception ex) {
-//
-//            ex.printStackTrace();
-//
-//        }
-//
-//    }
+    
 
 
 
@@ -383,124 +294,21 @@ public abstract class RPnCurve implements RpSolution {
 
     }
 
-//    private void updateMultiPolyline() {
-//        (this.getPath()).reset();
-//
-//        PointNDimension[][] polyline = polyLinesSetList_.getPolylines();
-//        int numberOfPolylines = polyline.length;
-//
-//        try {
-//            for (int pont_polyline = 0; pont_polyline < numberOfPolylines;
-//                    pont_polyline++) {
-//
-//                CoordsArray[] segmentPoints = new CoordsArray[2];
-//                segmentPoints[0] = polyline[pont_polyline][0].toCoordsArray();
-//                segmentPoints[1] = new CoordsArray(segmentPoints[0].getSpace());
-//                super.append(new AbstractSegment(segmentPoints,
-//                        new AbstractSegmentAtt(AbstractSegment.SEG_MOVETO)), false);
-//
-//                int size = polyline[pont_polyline].length;
-//                for (int pont_point = 1; pont_point < size; pont_point++) {
-//                    segmentPoints[1] = polyline[pont_polyline][pont_point].toCoordsArray();
-//                    super.append(new AbstractSegment(segmentPoints,
-//                            new AbstractSegmentAtt(AbstractSegment.SEG_LINETO)), false);
-//                    segmentPoints[0] = segmentPoints[1];
-//                }
-//
-//            }
-//        } catch (WrongNumberOfDefPointsEx e) {
-//            e.printStackTrace();
-//        } catch (DimMismatchEx dex) {
-//            dex.printStackTrace();
-//        }
-//
-//    }
-    public PointNDimension[] getPolyLineAt(int index) {
-        PointNDimension[][] polyline = polyLinesSetList_.getPolylines();
-        return polyline[index];
-    }
+
+    
 
     public PointNDimension[][] getPolylines() {
         return polyLinesSetList_.getPolylines();
     }
-
     
 
     public List<RealSegment> segments() {
         return (List<RealSegment>) segments_;
     }
     
-    public int getNumberOfPolylines() {
-        return polyLinesSetList_.size();
-    }
-
-    public MultiPolyLine getMultidPolylineAt(int index, ViewingAttr attributes) {
-
-        PointNDimension[][] polyline = polyLinesSetList_.getPolylines();
-
-        int size = polyline[index].length;
-        
-        CoordsArray[] coordsPolyline = new CoordsArray[size];
-
-        for (int pont_point = 0; pont_point < size; pont_point++) {
-            coordsPolyline[pont_point] = polyline[index][pont_point].toCoordsArray();
-        }
-
-        return new MultiPolyLine(coordsPolyline, attributes);
-    }
-
-//    @Override
-//    public void append(AbstractPathIterator toAppend, boolean connect) throws
-//            DimMismatchEx {
-//        // nao sei como implementar
-//    }
-//    @Override
-//    public void append(AbstractSegment toAppend, boolean connect) throws
-//            DimMismatchEx {
-//        CoordsArray[] definitionPoints = toAppend.getDefinitionPoints();
-//        PointNDimension point1 = new PointNDimension(definitionPoints[0]);
-//        PointNDimension point2 = new PointNDimension(definitionPoints[1]);
-//
-//        try {
-//            polyLinesSetList_.addSegment(point1, point2);
-//        } catch (Exception e) {
-//            return;
-//        }
-//
-//        updateMultiPolyline();
-//    }
-    public void append(PointNDimension point1, PointNDimension point2) {
-        try {
-            polyLinesSetList_.addSegment(point1, point2);
-        } catch (Exception e) {
-            return;
-        }
-
-        //updateMultiPolyline();
-    }
-
-    public void append(PointNDimension[] polyline) throws SegmentAlreadyInList,
-            SegmentDegradesPolyline,
-            SegmentCiclesPolyline {
-        try {
-            polyLinesSetList_.addPolyline(polyline);
-        } catch (SegmentAlreadyInList e) {
-            throw e;
-        } catch (SegmentDegradesPolyline e) {
-            throw e;
-        } catch (SegmentCiclesPolyline e) {
-            throw e;
-        }
-
-        //updateMultiPolyline();
-    }
-
-    // remover segmento e polylines
     public ViewingAttr getViewAttr() {
         return this.viewAttr;
     }
-
-//    abstract public List<RealSegment> segments();
 
     public String toXML() {
         throw new UnsupportedOperationException("Not supported yet.");
