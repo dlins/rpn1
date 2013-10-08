@@ -87,8 +87,6 @@ public class RPnDataModule {
 
     public static Iterator<RPnPhaseSpaceAbstraction> phaseSpaceIterator() {
 
-
-
         return phaseSpaceMap_.values().iterator();
     }
 

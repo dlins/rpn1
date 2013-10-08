@@ -408,9 +408,11 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         myH_ = getHeight();
         myW_ = getWidth();
 
+        
         GeometryGraph geom = new GeometryGraph();
         geom.markPoints(scene());
         geom.paintComponent(g, scene(), this);
+        
 
         if (UIController.instance().getState() instanceof AREASELECTION_CONFIG) {        // acrescentei isso (Leandro)
             getCastedUI().pointMarkBuffer().clear();

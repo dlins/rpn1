@@ -177,7 +177,16 @@ public class RPnSubscriber implements MessageListener,RPnMessageListener {
 
                 // LOGs
                 String logString = "";
-                String commandName = text.substring(14, text.indexOf("phasespace")) + '\0';
+                String commandName = " ";
+
+                if (text.contains("phasespace")) {
+
+
+                    commandName = text.substring(14, text.indexOf("phasespace")) + '\0';
+
+                } else // TOGGLE NOTEBOARD MODE (USE DOM please...)
+
+                    commandName = text.substring(14, text.indexOf("/>")) + '\0';
 
                 logString = logString.concat(commandName);
 

@@ -5,6 +5,7 @@
  */
 package rpn.parser;
 
+import java.awt.Point;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
 
@@ -24,6 +25,8 @@ import org.xml.sax.XMLReader;
 
 import java.io.*;
 import java.util.Iterator;
+import javax.swing.JFrame;
+import rpn.RPnUIFrame;
 
 
 import rpn.component.RpGeomFactory;
@@ -32,6 +35,7 @@ import rpn.configuration.Configuration;
 import rpn.controller.ui.FILE_ACTION_SELECTED;
 import rpn.controller.ui.UndoActionController;
 import rpn.controller.ui.UserInputHandler;
+import rpn.glasspane.RPnGlassPane;
 import rpnumerics.RPnCurve;
 
 /** With this class the calculus made in a previous session can be reloaded. A previous state can be reloaded reading a XML file that is used by this class */
@@ -51,6 +55,9 @@ public class RPnCommandModule {
         private boolean isChangePhysicsParamsCommand_;
         private Integer curveId_;
 
+        private Point glassDragStart_;
+        private Point glassDragEnd_;
+        
         public RPnCommandParser() {
 
 
@@ -125,6 +132,29 @@ public class RPnCommandModule {
                 if (att.getValue("name").equals("curveid")) {
                     curveId_ = new Integer(att.getValue("value"));
                 }
+
+                if (att.getValue("name").equals("start")) {
+                    RealVector startVals = new RealVector(att.getValue("value"));
+                    glassDragStart_ = new Point(new Double(startVals.getElement(0)).intValue(),new Double(startVals.getElement(1)).intValue());
+                            
+                }
+
+                if (att.getValue("name").equals("end")) {
+                    RealVector endVals = new RealVector(att.getValue("value"));
+                    glassDragEnd_ = new Point(new Double(endVals.getElement(0)).intValue(),new Double(endVals.getElement(1)).intValue());
+
+                }
+
+                if (att.getValue("name").equals("paneIndex")) {
+
+                        int paneIndex = Integer.parseInt(att.getValue("value"));
+                        ((RPnGlassPane)RPnUIFrame.getPhaseSpaceFrames()[paneIndex].getGlassPane()).pointStart = glassDragStart_;
+                        ((RPnGlassPane)RPnUIFrame.getPhaseSpaceFrames()[paneIndex].getGlassPane()).pointEnd = glassDragEnd_;
+
+
+                        RPnUIFrame.getPhaseSpaceFrames()[paneIndex].getGlassPane().repaint();
+                }
+
             }
 
 
@@ -139,7 +169,8 @@ public class RPnCommandModule {
 
                 System.out.println("Current command :" + currentCommand_);
 
-                UIController.instance().setActivePhaseSpace(RPnDataModule.getPhaseSpace(att.getValue("phasespace")));
+                if (att.getValue("phasespace") != null)
+                    UIController.instance().setActivePhaseSpace(RPnDataModule.getPhaseSpace(att.getValue("phasespace")));
 
 
                 if (currentCommand_.equalsIgnoreCase("Change Flux Parameters")) {
@@ -186,7 +217,17 @@ public class RPnCommandModule {
                     UIController.instance().setState(new FILE_ACTION_SELECTED(SecondaryBifurcationCurveCommand.instance()));
                     SecondaryBifurcationCurveCommand.instance().execute();
 
+                // MAY BE THIS SHOULD BE A CONFIG PARAM change ... mvera.
+                } else if (currentCommand_.equalsIgnoreCase("TOGGLE_NOTEBOARD_MODE")) {
+
+                    System.out.println("Will now parse the TOGGLE_NOTEBOARD_MODE");
+                    JFrame[] frames = RPnUIFrame.getPhaseSpaceFrames();
+
+                    for (int i = 0; i < frames.length; i++) {
+                        frames[i].getGlassPane().setVisible(!frames[i].getGlassPane().isVisible());
+                    }
                 }
+
             }
 
             if (currentElement_.equals("REALVECTOR")) {

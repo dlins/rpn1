@@ -54,6 +54,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JMenuItem exportMenuItem_ = new JMenuItem("Export results to XML ...");
     private JMenuItem matlabExportMenuItem_ = new JMenuItem("Export results to Matlab ...");
     private JMenuItem jMenuHelpAbout = new JMenuItem();
+    private JMenuItem jMenuHelpUpdate = new JMenuItem();
     private GridBagLayout uiFrameLayout_ = new GridBagLayout();
     private JMenuItem saveSessionMenuItem_ = new JMenuItem("Save Session As ...");
     private JMenuItem inputCoordsMenuItem = new JMenuItem("Input Coords ...");
@@ -76,6 +77,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JMenuItem editMenuItem4 = new JMenuItem("Clears Classifiers");
     private JMenuItem editMenuItem5 = new JMenuItem("Starts with Black Background");
     private JMenuItem editMenuItem6 = new JMenuItem("Starts with White Background");
+    private JMenuItem editMenuItem7 = new JMenuItem("Toggle Noteboard mode");
+
     public static String dir = "";
     private RPnPhaseSpaceFrame frameZoom = null;
     private ArrayList<RPnPhaseSpaceFrame> listFrameZoom = new ArrayList();
@@ -86,6 +89,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
 
     public RPnUIFrame(RPnMenuCommand command) {
+
         enableEvents(AWTEvent.WINDOW_EVENT_MASK);
         try {
 
@@ -93,10 +97,10 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             commandMenu_ = command;            
             UIController.instance().setStateController(new StateInputController(this));
             propertyChange(new PropertyChangeEvent(command, "aplication state", null, null));
+         
+            phaseSpaceFramesInit(RPNUMERICS.boundary());
 
             jbInit();
-
-            phaseSpaceFramesInit(RPNUMERICS.boundary());
 
             associatesPhaseSpaces();
             associatePhaseSpacesAndCurvesList();
@@ -251,6 +255,14 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         dialog.setVisible(true);
 
     }
+
+
+    public void jMenuHelpUpdate_actionPerformed(ActionEvent e) {
+
+        JOptionPane.showMessageDialog(this, "Feature not implemented...","RPn Update", JOptionPane.ERROR_MESSAGE);
+
+    }
+
 
     //Overridden so we can exit when window is closed
     @Override
@@ -429,8 +441,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 wave.multid.view.Scene rightScene = RPnDataModule.RIGHTPHASESPACE.createScene(auxViewingTransf,
                         new wave.multid.view.ViewingAttr(Color.black));
 
-                auxFrames_[2 * i] = new RPnPhaseSpaceFrame(leftScene, commandMenu_);
-                auxFrames_[2 * i + 1] = new RPnPhaseSpaceFrame(rightScene, commandMenu_);
+                auxFrames_[2 * i] = new RPnPhaseSpaceFrame(2*i,leftScene, commandMenu_);
+                auxFrames_[2 * i + 1] = new RPnPhaseSpaceFrame(2*i + 1,rightScene, commandMenu_);
 
                 auxFrames_[2 * i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i)).label());
                 auxFrames_[2 * i + 1].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i + 1)).label());
@@ -462,7 +474,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                         new wave.multid.view.ViewingAttr(Color.black));
 
 
-                frames_[i] = new RPnPhaseSpaceFrame(scene, commandMenu_);
+                frames_[i] = new RPnPhaseSpaceFrame(i,scene, commandMenu_);
                 frames_[i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(i)).label());
 
                  /*
@@ -899,6 +911,17 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                     }
                 });
 
+
+        jMenuHelpUpdate.setText("Update");
+        jMenuHelpUpdate.addActionListener(
+                new ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+                        jMenuHelpUpdate_actionPerformed(e);
+                    }
+                });
+
+
         saveSessionMenuItem_.addActionListener(
                 new ActionListener() {
 
@@ -981,6 +1004,11 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                     }
                 });
 
+
+        editMenuItem7.addActionListener(new rpn.glasspane.RPnToggleNoteboardModeListener(frames_));
+
+                
+
         inputCoordsMenuItem.addActionListener(
                 new java.awt.event.ActionListener() {
 
@@ -1055,6 +1083,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         fileMenu.addSeparator();
         fileMenu.add(jMenuFileExit);
         helpMenu.add(jMenuHelpAbout);
+        helpMenu.add(jMenuHelpUpdate);
         jMenuBar1.add(fileMenu);
         jMenuBar1.add(editMenu);
         jMenuBar1.add(viewMenu_);
@@ -1089,6 +1118,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         editMenu.add(editMenuItem5);
         editMenu.addSeparator();
         editMenu.add(editMenuItem6);
+        editMenu.addSeparator();
+        editMenu.add(editMenuItem7);
         editMenu.addSeparator();
 
         editMenu.add(FillPhaseSpaceCommand.instance());

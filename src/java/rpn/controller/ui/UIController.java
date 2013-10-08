@@ -149,6 +149,7 @@ public class UIController extends ComponentUI {
         public void mouseDragged(MouseEvent event) {
 
 
+
             if (event.getModifiersEx() == MouseEvent.BUTTON1_DOWN_MASK) {
 
 
@@ -156,6 +157,9 @@ public class UIController extends ComponentUI {
                 drag_ = true;
 
                 if (event.getComponent() instanceof RPnPhaseSpacePanel) {
+
+
+
                     RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
 
                     //***  Permite que o input point de uma curva seja exatamente um ponto sobre outra curva
@@ -217,6 +221,7 @@ public class UIController extends ComponentUI {
         public void mousePressed(MouseEvent event) {
 
             drag_ = false;
+
             RPnUIFrame.clearStatusMessage();
             RPnUIFrame.disableSliders();
 
@@ -224,7 +229,9 @@ public class UIController extends ComponentUI {
 
                 RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
 
+                // ?? pra que isso .. me parece mal uso de GLOBAL VAR. mvera
                 RPnPhaseSpaceAbstraction.namePhaseSpace = ((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom()).getName();   //** acrescentei isso (Leandro)
+
                 panel.setName(RPnPhaseSpaceAbstraction.namePhaseSpace);
 
                 //panel.setName(((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom()).getName());
@@ -284,8 +291,11 @@ public class UIController extends ComponentUI {
         return handler_.userInputList(this);
     }
 
-    /** Returns a table with all the points entered by the user. The application holds a table with all points entered by the user. This points are taked by mouse clicks in all panels .*/
+    /** Returns a table with all the points entered by the user. 
+     * The application holds a table with all points entered by the user.
+     * This points are taked by mouse clicks in all panels .*/
     public rpn.controller.ui.UserInputTable globalInputTable() {
+
         return activePhaseSpace_.getUserInputTable();
     }
 

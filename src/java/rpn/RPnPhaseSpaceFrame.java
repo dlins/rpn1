@@ -33,13 +33,28 @@ public class RPnPhaseSpaceFrame extends JFrame {
     private JSlider slider = new JSlider(-5, 5, 0);
     private Hashtable labels_ = new Hashtable();
     private Dimension frameSize_ = null;
+    private int frameIndex_ = 0;
 
     //    int sliderValue_;
     public RPnPhaseSpaceFrame(Scene scene, RPnMenuCommand command) {
+
+        // a non indexed frame has an index of -1
+        this(-1,scene,command);
+    }
+
+    public RPnPhaseSpaceFrame(int frameIndex,Scene scene, RPnMenuCommand command) {
+
+        frameIndex_ = frameIndex;
+
+
         enableEvents(AWTEvent.WINDOW_EVENT_MASK);
         enableEvents(AWTEvent.COMPONENT_EVENT_MASK);
         //	enableEvents(AWTEvent.FOCUS_EVENT_MASK);
         commandMenu_ = command;
+       
+        setGlassPane(new rpn.glasspane.RPnGlassPane(frameIndex));
+        getGlassPane().setVisible(false);
+
         try {
             phaseSpacePanel = new RPnPhaseSpacePanel(scene);
 

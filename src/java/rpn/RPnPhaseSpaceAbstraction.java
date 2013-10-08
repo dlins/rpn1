@@ -36,6 +36,7 @@ public  class RPnPhaseSpaceAbstraction extends AbstractScene {
 
     private UserInputTable userInputTable_;
 
+    // TODO remove this please ! MVERA
     static public String namePhaseSpace = "";
     static public List listResolution = new ArrayList();
     static public int closestCurve;             //indice da curva mais proxima

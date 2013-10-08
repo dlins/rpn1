@@ -33,7 +33,7 @@ public abstract class RpModelConfigChangeCommand extends RpModelActionCommand {
     public void applyChange(PropertyChangeEvent change) {
 
 
-        // --- Comentei em 11/12/12, para testar o perfil viscoso (Leandro)
+        
   
 
         firePropertyChange(change);
