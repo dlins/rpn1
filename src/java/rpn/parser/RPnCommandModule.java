@@ -41,13 +41,11 @@ import rpnumerics.RPnCurve;
 /** With this class the calculus made in a previous session can be reloaded. A previous state can be reloaded reading a XML file that is used by this class */
 public class RPnCommandModule {
 
-    public static String SESSION_ID_ = "";
+        public static String SESSION_ID_ = "";
 
-    static public class RPnCommandParser implements ContentHandler {
+        static public class RPnCommandParser implements ContentHandler {
 
-
-        
-
+       
         private String currentElement_;
         private String currentCommand_;
         private StringBuilder stringBuffer_ = new StringBuilder();
@@ -55,8 +53,9 @@ public class RPnCommandModule {
         private boolean isChangePhysicsParamsCommand_;
         private Integer curveId_;
 
-        private Point glassDragStart_;
-        private Point glassDragEnd_;
+        private RealVector glassPointVals_;
+        private int glassDrawMode_;
+
         
         public RPnCommandParser() {
 
@@ -133,26 +132,20 @@ public class RPnCommandModule {
                     curveId_ = new Integer(att.getValue("value"));
                 }
 
-                if (att.getValue("name").equals("start")) {
-                    RealVector startVals = new RealVector(att.getValue("value"));
-                    glassDragStart_ = new Point(new Double(startVals.getElement(0)).intValue(),new Double(startVals.getElement(1)).intValue());
-                            
+                if (att.getValue("name").equals("lineto")) {
+                    glassPointVals_ = new RealVector(att.getValue("value"));
+                    glassDrawMode_ = RPnGlassPane.LINE_TO;
                 }
 
-                if (att.getValue("name").equals("end")) {
-                    RealVector endVals = new RealVector(att.getValue("value"));
-                    glassDragEnd_ = new Point(new Double(endVals.getElement(0)).intValue(),new Double(endVals.getElement(1)).intValue());
-
+                if (att.getValue("name").equals("moveto")) {
+                    glassPointVals_ = new RealVector(att.getValue("value"));
+                    glassDrawMode_ = RPnGlassPane.MOVE_TO;
                 }
 
                 if (att.getValue("name").equals("paneIndex")) {
 
-                        int paneIndex = Integer.parseInt(att.getValue("value"));
-                        ((RPnGlassPane)RPnUIFrame.getPhaseSpaceFrames()[paneIndex].getGlassPane()).pointStart = glassDragStart_;
-                        ((RPnGlassPane)RPnUIFrame.getPhaseSpaceFrames()[paneIndex].getGlassPane()).pointEnd = glassDragEnd_;
-
-
-                        RPnUIFrame.getPhaseSpaceFrames()[paneIndex].getGlassPane().repaint();
+                        int paneIndex = Integer.parseInt(att.getValue("value"));                  
+                        ((RPnGlassPane)RPnUIFrame.getPhaseSpaceFrames()[paneIndex].getGlassPane()).updatePath(glassDrawMode_,glassPointVals_);
                 }
 
             }
