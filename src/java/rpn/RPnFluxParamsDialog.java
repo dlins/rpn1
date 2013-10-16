@@ -44,6 +44,7 @@ public class RPnFluxParamsDialog extends RPnDialog {
 
         tabsPanel = new JTabbedPane();
         tabsPanel.setPreferredSize(new Dimension(400, 600));
+        setLocation(400, 400);
       
         for (RPnFluxParamsSubject subject : subjectArray) {
             RPnInputComponent inputComponent = null;
@@ -125,6 +126,8 @@ public class RPnFluxParamsDialog extends RPnDialog {
         fluxParamsPanel_ = new JPanel();
 
         removeDefaultApplyBehavior();
+        
+        setLocation(400, 400);
 
 
         Configuration physicsConfiguration = RPNUMERICS.getConfiguration(RPNUMERICS.physicsID());
