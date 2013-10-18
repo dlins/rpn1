@@ -1037,6 +1037,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
                     buffer.append("<COMMAND name=\"TOGGLE_NOTEBOARD_CLEAR\" >\n");
                     buffer.append("</COMMAND>\n");
+
+                    RPnNetworkStatus.instance().sendCommand(buffer.toString());
                 }
 
 
